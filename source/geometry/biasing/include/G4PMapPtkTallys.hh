@@ -5,15 +5,13 @@
 #include "globals.hh"
 #include "G4PTouchableKey.hh"
 
-using namespace std;
-
 class G4Sigma;
 
-typedef map<const char *, G4Sigma> G4PMapNameTally;
+typedef G4std::map<const char *, G4Sigma> G4PMapNameTally;
 
-typedef map<G4PTouchableKey, G4PMapNameTally, G4PTkComp> G4PMapPtkTallys; 
+typedef G4std::map<G4PTouchableKey, G4PMapNameTally, G4PTkComp> G4PMapPtkTallys; 
 
-ostream& operator<<(ostream &out, const G4PMapNameTally &tally);
-ostream& operator<<(ostream &out, const G4PMapPtkTallys &ptktally);
+G4std::ostream& operator<<(G4std::ostream &out, const G4PMapNameTally &tally);
+G4std::ostream& operator<<(G4std::ostream &out, const G4PMapPtkTallys &ptktally);
 
 #endif
