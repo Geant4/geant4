@@ -805,7 +805,7 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
 
   G4int initialBaryon = primary->GetDefinition()->GetBaryonNumber();
   G4int initialCharge(0);
-  initialCharge+=lrint(primary->GetDefinition()->GetPDGCharge());
+  initialCharge+=G4lrint(primary->GetDefinition()->GetPDGCharge());
 
   G4KineticTrackVector * products=0;
   products = collision->GetFinalState();
@@ -837,7 +837,7 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
   for(size_t ig=0;ig<products->size();ig++)
   {
     finalBaryon+=products->operator[](ig)->GetDefinition()->GetBaryonNumber();
-    finalCharge+=lrint(products->operator[](ig)->GetDefinition()->GetPDGCharge());
+    finalCharge+=G4lrint(products->operator[](ig)->GetDefinition()->GetPDGCharge());
 // secondaries are created inside nucleus
     products->operator[](ig)->SetState(G4KineticTrack::inside);
   }
@@ -1575,7 +1575,7 @@ G4KineticTrackVector* G4BinaryCascade::CorrectBarionsOnBoundary(
      for ( iter =in->begin(); iter != in->end(); ++iter)
      {
 	 ++secondaries_in;
-	 secondaryCharge_in += lrint((*iter)->GetDefinition()->GetPDGCharge());
+	 secondaryCharge_in += G4lrint((*iter)->GetDefinition()->GetPDGCharge());
 	 if ((*iter)->GetDefinition()->GetBaryonNumber()==1 )
 	 {
 	    ++secondaryBarions_in;
@@ -1641,7 +1641,7 @@ G4KineticTrackVector* G4BinaryCascade::CorrectBarionsOnBoundary(
      for ( iter =out->begin(); iter != out->end(); ++iter)
      {
 	 ++secondaries_out;
-	 secondaryCharge_out += lrint((*iter)->GetDefinition()->GetPDGCharge());
+	 secondaryCharge_out += G4lrint((*iter)->GetDefinition()->GetPDGCharge());
 	 if ((*iter)->GetDefinition()->GetBaryonNumber()==1 )
 	 {
 	    ++secondaryBarions_out;
