@@ -52,77 +52,26 @@
     
     G4HadronInelasticProcess(
      const G4String &processName,
-     G4ParticleDefinition *aParticle ) :
-      G4HadronicProcess( processName ),
-      theCrossSectionDataStore(new G4CrossSectionDataStore)
-    {
-      theCrossSectionDataStore->AddDataSet(new G4HadronInelasticDataSet);
-      theParticle = aParticle;
-      aScaleFactor = 1;
-      //      BuildThePhysicsTable();
-    }
+     G4ParticleDefinition *aParticle );
     
-    virtual ~G4HadronInelasticProcess()
-    { }
-    
-    G4double GetMeanFreePath(
-     const G4Track &aTrack,
-     G4double previousStepSize,
-     G4ForceCondition *condition );
-    
+    virtual ~G4HadronInelasticProcess();
+        
     void BuildThePhysicsTable();
     
-    void BiasCrossSectionByFactor(G4double aScale) {aScaleFactor = aScale;}
-    
-    G4double GetMicroscopicCrossSection(
-     const G4DynamicParticle *aParticle,
-     const G4Element *anElement,
-     G4double aTemp);
+    G4bool IsApplicable(const G4ParticleDefinition& aP);
 
-    G4VParticleChange *PostStepDoIt(
-     const G4Track &aTrack, const G4Step &aStep )
-    {
-      if(0==theLastCrossSection&&!getenv("DebugNeutronHP"))
-      {
-        G4cerr << "G4HadronInelasticProcess: called for final state, while cross-section was zero"<<G4endl;
-	G4cerr << "                          Returning empty particle change...."<<G4endl;
-	G4double dummy=0;
-	G4ForceCondition condition;
-	G4double it = GetMeanFreePath(aTrack, dummy, &condition);
-	G4cerr << "                          current MeanFreePath is "<<it<<G4endl;
-	theParticleChange.Initialize(aTrack);
-	return &theParticleChange;
-      }
-      SetDispatch( this );
-      return G4HadronicProcess::GeneralPostStepDoIt( aTrack, aStep );
-    }
-    
-   void SetCrossSectionDataStore(G4CrossSectionDataStore* aDataStore)
-   {
-      theCrossSectionDataStore = aDataStore;
-   }
+    G4VParticleChange *PostStepDoIt(const G4Track &aTrack, const G4Step &aStep);
 
-   G4CrossSectionDataStore* GetCrossSectionDataStore()
-   {
-      return theCrossSectionDataStore;
-   }
-   
-   void AddDataSet(G4VCrossSectionDataSet * aDataSet)
-   {
-      theCrossSectionDataStore->AddDataSet(aDataSet);
-   }
+  private:    
+
+    virtual G4double GetMicroscopicCrossSection( const G4DynamicParticle *aParticle, 
+                                                 const G4Element *anElement, 
+						 G4double aTemp );
    
  protected:
 
-   //    G4HadronicCrossSections theCrossSectionData;
-   G4CrossSectionDataStore* theCrossSectionDataStore;
-
     G4ParticleDefinition *theParticle;
-    
- private:
-   G4double aScaleFactor;
-   G4double theLastCrossSection;
-   G4ParticleChange theParticleChange;
+    G4ParticleChange theParticleChange;
  };
  
 #endif

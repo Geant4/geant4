@@ -38,69 +38,52 @@
 #include "G4GenericIon.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
- 
- G4double G4HadronInelasticProcess::GetMeanFreePath(
-  const G4Track &aTrack,
-  G4double ,
-  G4ForceCondition *)
+  
+ void G4HadronInelasticProcess::BuildThePhysicsTable()
   {
-    const G4DynamicParticle *aParticle = aTrack.GetDynamicParticle();
-    if( aParticle->GetDefinition() != theParticle && 
-        theParticle != G4GenericIon::GenericIon())
-    {
-      G4cout << "Unrecoverable error: "<<G4endl;
-      G4ProcessManager * it = aParticle->GetDefinition()->GetProcessManager();
-      G4ProcessVector * itv = it->GetProcessList();
-      G4cout <<aParticle->GetDefinition()->GetParticleName()<< 
-	         " has the following processes:"<<G4endl;
-      for(G4int i=0; i<itv->size(); i++)
-      {
-	G4cout <<"  "<<(*itv)[i]->GetProcessName()<<G4endl;		 
-      }
-      G4cout << "for kinetic energy "<<aParticle->GetKineticEnergy()<<G4endl;
-      G4cout << "and material "<<aTrack.GetMaterial()->GetName()<<G4endl;
-      G4Exception( this->GetProcessName()+
-                   " was called for "+
-                   aParticle->GetDefinition()->GetParticleName() );
-    }
-    G4Material *aMaterial = aTrack.GetMaterial();
-    G4int nElements = aMaterial->GetNumberOfElements();
-    
-    // returns the mean free path in GEANT4 internal units
-    
-    const G4double *theAtomicNumDensityVector =
-      aMaterial->GetAtomicNumDensityVector();
-    
-    G4double aTemp = aMaterial->GetTemperature();
-        
-    G4double sigma = 0.0;
-    for( G4int i=0; i<nElements; ++i )
-    {
-      G4double xSection =
-        GetMicroscopicCrossSection( aParticle, (*aMaterial->GetElementVector())[i], aTemp);
-      sigma += theAtomicNumDensityVector[i] * xSection;
-    }
-    sigma *= aScaleFactor;
-    theLastCrossSection = sigma;
-    if( sigma > 0.0 )
-      return 1.0/sigma;
-    else
-      return DBL_MAX;
-  }
- 
- void 
-  G4HadronInelasticProcess::BuildThePhysicsTable()
-  {
-   if (!theCrossSectionDataStore) {
+    if (!G4HadronicProcess::GetCrossSectionDataStore()) {
      //      G4Exception("G4HadronInelasticProcess::BuildThePhysicsTable: "
      //                  "no CrossSectionDataStore");
       return;
-   }
-
-   theCrossSectionDataStore->BuildPhysicsTable(*theParticle);
-
+    }
+    G4HadronicProcess::GetCrossSectionDataStore()->BuildPhysicsTable(*theParticle);
   }
  
+ G4HadronInelasticProcess::G4HadronInelasticProcess(
+  const G4String &processName,
+  G4ParticleDefinition *aParticle ) :
+   G4HadronicProcess( processName )
+ {
+   G4HadronicProcess::AddDataSet(new G4HadronInelasticDataSet);
+   theParticle = aParticle;
+ }
+
+ G4HadronInelasticProcess::~G4HadronInelasticProcess() { }
+
+ G4VParticleChange *G4HadronInelasticProcess::
+ PostStepDoIt(const G4Track &aTrack, const G4Step &aStep)
+ {
+   if(0==GetLastCrossSection()&&!getenv("DebugNeutronHP"))
+   {
+     G4cerr << "G4HadronInelasticProcess: called for final state, while cross-section was zero"<<G4endl;
+     G4cerr << "                          Returning empty particle change...."<<G4endl;
+     G4double dummy=0;
+     G4ForceCondition condition;
+     G4double it = GetMeanFreePath(aTrack, dummy, &condition);
+     G4cerr << "                          current MeanFreePath is "<<it<<G4endl;
+     theParticleChange.Initialize(aTrack);
+     return &theParticleChange;
+   }
+   SetDispatch( this );
+   return G4HadronicProcess::GeneralPostStepDoIt( aTrack, aStep );
+ }
+
+ G4bool G4HadronInelasticProcess::
+ IsApplicable(const G4ParticleDefinition& aP)
+ {
+    return  theParticle == &aP || theParticle == G4GenericIon::GenericIon();
+ }
+
  G4double G4HadronInelasticProcess::GetMicroscopicCrossSection(
   const G4DynamicParticle *aParticle,
   const G4Element *anElement,
@@ -108,12 +91,12 @@
   {
     // returns the microscopic cross section in GEANT4 internal units
     
-   if (!theCrossSectionDataStore) {
+   if (!G4HadronicProcess::GetCrossSectionDataStore()) {
       G4Exception("G4HadronInelasticProcess::GetMicroscopicCrossSection:"
                   "no CrossSectionDataStore");
       return DBL_MIN;
    }
-   return theCrossSectionDataStore->GetCrossSection(aParticle, anElement, aTemp);
+   return G4HadronicProcess::GetCrossSectionDataStore()->GetCrossSection(aParticle, anElement, aTemp);
 
   }
  

@@ -40,6 +40,8 @@
 #include "G4ParticleChange.hh"
 #include "G4TransportationManager.hh"
 #include "G4Navigator.hh"
+#include "G4ProcessVector.hh"
+#include "G4ProcessManager.hh"
 
 //@@ add model name info, once typeinfo available #include <typeinfo.h>
  
@@ -54,6 +56,8 @@
  { 
    isoIsOnAnyway = 0;
    theTotalResult = new G4ParticleChange();
+   theCrossSectionDataStore = new G4CrossSectionDataStore();
+   aScaleFactor = 1;
  }
 
  G4HadronicProcess::~G4HadronicProcess()
@@ -65,6 +69,52 @@
 
  void G4HadronicProcess::RegisterMe( G4HadronicInteraction *a )
  { GetManagerPointer()->RegisterMe( a ); }
+
+ G4double G4HadronicProcess::
+ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
+  {
+    const G4DynamicParticle *aParticle = aTrack.GetDynamicParticle();
+    if( !IsApplicable(*aParticle->GetDefinition()))
+    {
+      G4cout << "Unrecoverable error: "<<G4endl;
+      G4ProcessManager * it = aParticle->GetDefinition()->GetProcessManager();
+      G4ProcessVector * itv = it->GetProcessList();
+      G4cout <<aParticle->GetDefinition()->GetParticleName()<< 
+	         " has the following processes:"<<G4endl;
+      for(G4int i=0; i<itv->size(); i++)
+      {
+	G4cout <<"  "<<(*itv)[i]->GetProcessName()<<G4endl;		 
+      }
+      G4cout << "for kinetic energy "<<aParticle->GetKineticEnergy()<<G4endl;
+      G4cout << "and material "<<aTrack.GetMaterial()->GetName()<<G4endl;
+      G4Exception( this->GetProcessName()+
+                   " was called for "+
+                   aParticle->GetDefinition()->GetParticleName() );
+    }
+    G4Material *aMaterial = aTrack.GetMaterial();
+    G4int nElements = aMaterial->GetNumberOfElements();
+    
+    // returns the mean free path in GEANT4 internal units
+    
+    const G4double *theAtomicNumDensityVector =
+      aMaterial->GetAtomicNumDensityVector();
+    
+    G4double aTemp = aMaterial->GetTemperature();
+        
+    G4double sigma = 0.0;
+    for( G4int i=0; i<nElements; ++i )
+    {
+      G4double xSection =
+        GetMicroscopicCrossSection( aParticle, (*aMaterial->GetElementVector())[i], aTemp);
+      sigma += theAtomicNumDensityVector[i] * xSection;
+    }
+    sigma *= aScaleFactor;
+    theLastCrossSection = sigma;
+    if( sigma > 0.0 )
+      return 1.0/sigma;
+    else
+      return DBL_MAX;
+  }
 
  G4double G4HadronicProcess::GetDistanceToBoundary(const G4Track & aT)
  {

@@ -47,6 +47,7 @@
 #include "G4VCrossSectionDataSet.hh"
 #include "G4VLeadingParticleBiasing.hh"
 #include "G4Delete.hh"
+#include "G4CrossSectionDataStore.hh"
 
 class G4Track;
 class G4Step;
@@ -69,6 +70,8 @@ class G4ParticleChange;
                                                  const G4Element *anElement, 
 						 G4double aTemp ) = 0;
     
+    G4double GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *);
+
     // Set methods for isotope production
     
     static void EnableIsotopeProductionGlobally();
@@ -88,6 +91,8 @@ class G4ParticleChange;
       return anIsoResult;
     }
 
+    void BiasCrossSectionByFactor(G4double aScale) {aScaleFactor = aScale;}
+    
  protected:
     
     virtual void ResetNumberOfInteractionLengthLeft()
@@ -128,6 +133,17 @@ class G4ParticleChange;
     G4double GetCurrentN()
     { return currentN; }
     
+    G4CrossSectionDataStore* GetCrossSectionDataStore()
+    {
+       return theCrossSectionDataStore;
+    }
+   
+    void AddDataSet(G4VCrossSectionDataSet * aDataSet)
+    {
+       theCrossSectionDataStore->AddDataSet(aDataSet);
+    }
+
+    G4double GetLastCrossSection() {return theLastCrossSection;}
  private:
     
     G4HadFinalState * DoIsotopeCounting(G4HadFinalState * aResult,
@@ -147,6 +163,10 @@ class G4ParticleChange;
 
     void FillTotalResult(G4HadFinalState * aR, const G4Track & aT);
     
+    void SetCrossSectionDataStore(G4CrossSectionDataStore* aDataStore)
+    {
+       theCrossSectionDataStore = aDataStore;
+    }
     
  private:
     
@@ -154,6 +174,8 @@ class G4ParticleChange;
     
     G4HadronicInteraction *theInteraction;
 
+    G4CrossSectionDataStore* theCrossSectionDataStore;
+ 
     G4Nucleus targetNucleus;
     
     G4double currentZ;
@@ -176,6 +198,9 @@ class G4ParticleChange;
     G4ParticleChange * theTotalResult; 
     
     G4double theInitialNumberOfInteractionLength;   
+
+    G4double aScaleFactor;
+    G4double theLastCrossSection;
  };
  
 #endif
