@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Tubs.cc,v 1.3 1999-04-12 17:25:58 davidw Exp $
+// $Id: G4Tubs.cc,v 1.4 1999-04-15 15:20:36 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -138,8 +138,8 @@ G4bool G4Tubs::CalculateExtent(const EAxis pAxis,
 	    xMax=xoffset+fRMax;
 	    if (pVoxelLimit.IsXLimited())
 		{
-		    if (xMin>pVoxelLimit.GetMaxXExtent()
-			||xMax<pVoxelLimit.GetMinXExtent())
+		    if (xMin>pVoxelLimit.GetMaxXExtent()+kCarTolerance
+			||xMax<pVoxelLimit.GetMinXExtent()-kCarTolerance)
 			{
 			    return false;
 			}
@@ -161,8 +161,8 @@ G4bool G4Tubs::CalculateExtent(const EAxis pAxis,
 	    yMax=yoffset+fRMax;
 	    if (pVoxelLimit.IsYLimited())
 		{
-		    if (yMin>pVoxelLimit.GetMaxYExtent()
-			||yMax<pVoxelLimit.GetMinYExtent())
+		    if (yMin>pVoxelLimit.GetMaxYExtent()+kCarTolerance
+			||yMax<pVoxelLimit.GetMinYExtent()-kCarTolerance)
 			{
 			    return false;
 			}
@@ -185,8 +185,8 @@ G4bool G4Tubs::CalculateExtent(const EAxis pAxis,
 	    zMax=zoffset+fDz;
 	    if (pVoxelLimit.IsZLimited())
 		{
-		    if (zMin>pVoxelLimit.GetMaxZExtent()
-			||zMax<pVoxelLimit.GetMinZExtent())
+		    if (zMin>pVoxelLimit.GetMaxZExtent()+kCarTolerance
+			||zMax<pVoxelLimit.GetMinZExtent()-kCarTolerance)
 			{
 			    return false;
 			}
