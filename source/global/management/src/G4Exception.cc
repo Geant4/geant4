@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Exception.cc,v 1.1 1999-01-07 16:09:05 gunter Exp $
+// $Id: G4Exception.cc,v 1.2 1999-05-03 14:17:11 fbehner Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,6 +20,7 @@
 
 #include "G4ios.hh"
 #include <stdlib.h>
+
 void G4Exception(const char* s)
 {
     if (s)
@@ -31,7 +32,13 @@ void G4Exception(const char* s)
    exit(1);
 }
 
-
+#ifdef G4USE_STL
+#include <string>
+void G4Exception(string s)
+{
+  G4Exception(s.c_str());
+}
+#endif
 
 
 
