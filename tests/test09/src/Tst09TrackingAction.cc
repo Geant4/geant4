@@ -25,7 +25,7 @@ void Tst09TrackingAction::PreUserTrackingAction(const G4Track* aTrack )
     G4ThreeVector newPol(cos(phi),sin(phi),0.); 
     G4ParticleMomentum aParticleDirection = aParticle->GetMomentumDirection(); 
     newPol.rotateUz(aParticleDirection);
-    aTrack->SetPolarization(newPol);
+    ((G4Track*)aTrack)->SetPolarization(newPol);
   }
 }
 
