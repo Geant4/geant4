@@ -1,4 +1,4 @@
-$Id: History,v 1.18 1999-05-26 07:23:47 johna Exp $
+$Id: History,v 1.19 1999-05-31 21:16:14 barrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,11 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+31 Mai 1999  Guy Barrand
+- G4XoViewer : remove enabling/disabling XoCamera popup menu logic. 
+  In some situation (N03) we were loosing the XoCamera popup menu. 
+- G4XoViewer : correct ClearStore, ClearTransientStore.
 
 vis-01-00-12a  26th May 1999  John Allison
 - G4TrajectoriesModel.cc: (*TC) [iT] -> DrawTrajectory ();
