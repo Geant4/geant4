@@ -1,4 +1,4 @@
-$Id: History,v 1.44 2002-01-10 15:43:11 gcosmo Exp $
+$Id: History,v 1.45 2002-01-10 15:47:44 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,6 +20,17 @@ committal in the CVS repository !
 Jan 10, 2002   G.Cosmo                   geom-solids-csg-V04-00-00
 - Moved all verbosity mode warnings to G4CSGDEBUG and commented exceptions.
 - Activated G4CSGDEBUG mechanism in GNUmakefile.
+- G4Sphere.cc: fixed a problem with tolerances in the case of large Radius.
+  The case (test18) involves an Rmax = 250 000 000.00 mm
+  The ratio                         -9
+              tolerance       1.0 10              -17
+              ----------- =  ------------ = 0.4 10
+                  Rmax                +8
+                                2.5 10
+  which is smaller than the precision of doubles.
+  Solution (for DistanceToOut(), where problem occured):
+  use a flexible tolerance, equal to the maximum of (kRadTolerance, 10 * R )
+  (J.Apostolakis).
 - Upgraded unit tests and fixed warnings on gcc-2.95-2.
 
 Aug 27, 2001   V.Grichine                geom-solids-csg-V03-02-00
