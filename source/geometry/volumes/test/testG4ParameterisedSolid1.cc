@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4ParameterisedSolid1.cc,v 1.5 2002-01-08 13:15:22 gcosmo Exp $
+// $Id: testG4ParameterisedSolid1.cc,v 1.6 2002-11-18 16:43:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,16 +59,21 @@ class BoxesAndSpheres : public G4VPVParameterisation
 {
  public:
   BoxesAndSpheres(G4double twistAngle, G4int noBoxes, G4int noSpheres)
-              : fBox("Test Box", 10., 10., 10.), 
-                fSphere("Test Sphere", 0., 1., 0*deg, 180*deg, 0*deg, 90*deg )
   { 
+    fRotationVec= new G4RotationMatrix();
     fTwistAngle= twistAngle;
     fNumBoxes= noBoxes;
     fNumSpheres= noSpheres;
-    fRotationVec= new G4RotationMatrix();
+    fBox= new G4Box("Test Box",10.,10.,10.);
+    fSphere= new G4Sphere("Test Sphere",0.,1.,0*deg,180*deg,0*deg,90*deg);
   }
 
-  virtual ~BoxesAndSpheres() { delete fRotationVec; }
+  virtual ~BoxesAndSpheres()
+  {
+//    delete fRotationVec;
+//    delete fBox;
+//    delete fSphere;
+  }
 
   G4double GetTwistAngle() { return fTwistAngle; }
   void     SetTwistAngle(G4double newAngle ) { fTwistAngle= newAngle; }
@@ -79,13 +84,13 @@ class BoxesAndSpheres : public G4VPVParameterisation
     G4VSolid* mySolid=0;
     if( n < fNumBoxes ) {
        if( n >= 0 ) {
-          mySolid = &fBox;
+          mySolid = fBox;
        }else{
 	  G4Exception(" Your Boxes+Spheres replica number was out of range");
        }
     }else{
        if( n < fNumBoxes + fNumSpheres ) {
-          mySolid = &fSphere;
+          mySolid = fSphere;
        }else{
 	  G4Exception(" Your Boxes+Spheres replica number was out of range");
        }
@@ -106,7 +111,7 @@ class BoxesAndSpheres : public G4VPVParameterisation
 				 const G4int n,
 				 const G4VPhysicalVolume* pRep) const
   {
-    if( &pBox != &fBox ){
+    if( &pBox != fBox ){
       G4cerr << " Got another Box in ComputeDimensions(G4Box, , )" << G4endl;
     }
     pBox.SetXHalfLength(10*mm);
@@ -118,8 +123,10 @@ class BoxesAndSpheres : public G4VPVParameterisation
 				 const G4int n,
 				 const G4VPhysicalVolume* pRep) const
   {
-    if( &pSphere != &fSphere ){
-      G4cerr << " Got another sphere in ComputeDimensions(G4Sphere, , )" << G4endl;
+    if( &pSphere != fSphere )
+    {
+      G4cerr << " Got another sphere in ComputeDimensions(G4Sphere, , )"
+             << G4endl;
     }
     G4int nrad= G4std::min(5, n-fNumBoxes+1);
     pSphere.SetInsideRadius( nrad *  5. * mm);
@@ -132,11 +139,11 @@ class BoxesAndSpheres : public G4VPVParameterisation
   
  private:
     G4RotationMatrix *fRotationVec;
-    G4double fTwistAngle;
-    G4int    fNumBoxes;
-    G4int    fNumSpheres;
-    G4Box    fBox;
-    G4Sphere fSphere;
+    G4double  fTwistAngle;
+    G4int     fNumBoxes;
+    G4int     fNumSpheres;
+    G4Box*    fBox;
+    G4Sphere* fSphere;
 };
 
 G4double    angle1= 15.0*deg;          // M_PI/180. ;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4ReplicaNavigation.cc,v 1.6 2001-07-11 10:00:36 gunter Exp $
+// $Id: testG4ReplicaNavigation.cc,v 1.7 2002-11-18 16:43:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,8 +32,12 @@
 #include <assert.h>
 #include "ApproxEqual.hh"
 #include "globals.hh"
+#include "G4Box.hh"
+#include "G4Sphere.hh"
+#include "G4LogicalVolume.hh"
 #include "G4ReplicaNavigation.hh"
 #include "G4PVReplica.hh"
+#include "G4PVPlacement.hh"
 
 class G4ReplicaNavigationTester
 {
@@ -69,14 +73,59 @@ G4bool testG4ReplicaNavigation()
   EInside in;
   G4double Dist;
 
-  G4LogicalVolume *pMotherVol= 0;
+  // Define two worlds
+  //
+  G4Box* hall_box =
+         new G4Box("expHall_box",3000,3000,3000);
+  G4LogicalVolume* hall_log1 =
+         new G4LogicalVolume(hall_box,0,"expHall_log",0,0,0);
+  G4VPhysicalVolume* hall_phys1 =
+         new G4PVPlacement(0,G4ThreeVector(),"expHall1",hall_log1,0,false,0);
+  G4LogicalVolume* hall_log2 =
+         new G4LogicalVolume(hall_box,0,"expHall_log",0,0,0);
+  G4VPhysicalVolume* hall_phys2 =
+         new G4PVPlacement(0,G4ThreeVector(),"expHall2",hall_log2,0,false,0);
+
+  // Define volumes to be sliced
+  //
+  G4Box* fBox = new G4Box("Test Box",120.,120.,120.);
+  G4LogicalVolume *pMotherVol1X= new G4LogicalVolume(fBox, 0, "lmoth1X", 0, 0, 0);
+    new G4PVPlacement(0,G4ThreeVector(),"pmoth1",pMotherVol1X,hall_phys1,false,0);
+  G4LogicalVolume *pMotherVol1Y= new G4LogicalVolume(fBox, 0, "lmoth1Y", 0, 0, 0);
+    new G4PVPlacement(0,G4ThreeVector(),"pmoth1",pMotherVol1Y,hall_phys1,false,0);
+  G4LogicalVolume *pMotherVol1Z= new G4LogicalVolume(fBox, 0, "lmoth1Z", 0, 0, 0);
+    new G4PVPlacement(0,G4ThreeVector(),"pmoth1",pMotherVol1Z,hall_phys1,false,0);
+
+  G4Sphere* fSphere = new G4Sphere("Test Sphere",0.,80.,0*deg,360*deg,0*deg,360*deg);
+  G4LogicalVolume *pMotherVol2P= new G4LogicalVolume(fSphere, 0, "lmoth2P", 0, 0, 0);
+    new G4PVPlacement(0,G4ThreeVector(),"pmoth2",pMotherVol2P,hall_phys2,false,0);
+  G4LogicalVolume *pMotherVol2R= new G4LogicalVolume(fSphere, 0, "lmoth2R", 0, 0, 0);
+    new G4PVPlacement(0,G4ThreeVector(),"pmoth2",pMotherVol2R,hall_phys2,false,0);
 
   G4ReplicaNavigationTester repNav;
-  G4PVReplica xRep("Test",0,pMotherVol,kXAxis,3,40);
-  G4PVReplica yRep("Test",0,pMotherVol,kYAxis,3,40);
-  G4PVReplica zRep("Test",0,pMotherVol,kZAxis,3,40);
-  G4PVReplica phiRep("Test",0,pMotherVol,kPhi,4,M_PI*0.5);
-  G4PVReplica radRep("Test",0,pMotherVol,kRho,4,20);
+
+  // Define the actual slices (cartesian axis)
+  //
+  G4Box* xBoxSlice = new G4Box("Sliced Box X",40.,120.,120.);
+  G4LogicalVolume* xBoxLog= new G4LogicalVolume(xBoxSlice, 0, "xBoxSlice", 0, 0, 0);
+  G4PVReplica xRep("TestX",xBoxLog,pMotherVol1X,kXAxis,3,40);
+
+  G4Box* yBoxSlice = new G4Box("Sliced Box Y",120.,40.,120.);
+  G4LogicalVolume* yBoxLog= new G4LogicalVolume(yBoxSlice, 0, "yBoxSlice", 0, 0, 0);
+  G4PVReplica yRep("TestY",yBoxLog,pMotherVol1Y,kYAxis,3,40);
+
+  G4Box* zBoxSlice = new G4Box("Sliced Box Z",120.,120.,40.);
+  G4LogicalVolume* zBoxLog= new G4LogicalVolume(zBoxSlice, 0, "zBoxSlice", 0, 0, 0);
+  G4PVReplica zRep("TestZ",zBoxLog,pMotherVol1Z,kZAxis,3,40);
+
+  // Define the actual slices (Phi and Rho)
+  //
+  G4Sphere* fSphereP = new G4Sphere("Sliced Sphere Phi",0.,80.,0*deg,90*deg,0*deg,360*deg);
+  G4LogicalVolume* phiSphereLog= new G4LogicalVolume(fSphereP, 0, "PhiSlice", 0, 0, 0);
+  G4PVReplica phiRep("TestPhi",phiSphereLog,pMotherVol2P,kPhi,4,M_PI*0.5);
+  G4Sphere* fSphereR = new G4Sphere("Sliced Sphere Rho",0.,20.,0*deg,360*deg,0*deg,360*deg);
+  G4LogicalVolume* rhoSphereLog= new G4LogicalVolume(fSphereR, 0, "RhoSlice", 0, 0, 0);
+  G4PVReplica radRep("TestRho",rhoSphereLog,pMotherVol2R,kRho,4,20);
 
   in=repNav.Inside(&xRep,0,G4ThreeVector(21,0,0));
   assert(in==kOutside);
