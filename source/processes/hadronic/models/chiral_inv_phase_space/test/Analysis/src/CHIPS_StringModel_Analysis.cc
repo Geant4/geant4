@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: CHIPS_StringModel_Analysis.cc,v 1.7 2001-08-01 17:04:01 hpw Exp $
+// $Id: CHIPS_StringModel_Analysis.cc,v 1.8 2001-09-13 14:56:39 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -790,11 +790,11 @@ class KtoPi
     G4cin >> incomingEnergy;
     incomingEnergy *= GeV/MeV;
 
-    theTheoModel->SetTransport(theCascade);
+//    theTheoModel->SetTransport(theCascade);
 //     G4StringChipsParticleLevelInterface * theChipsCascade = new G4StringChipsParticleLevelInterface();
 //     theTheoModel->SetTransport(theChipsCascade);
-//    G4StringChipsInterface * theChips = new G4StringChipsInterface();
-//    theTheoModel->SetTransport(theChips);
+    G4StringChipsInterface * theChips = new G4StringChipsInterface();
+    theTheoModel->SetTransport(theChips);
 //    G4StringInfoDump * theDummyCascade = new G4StringInfoDump;
 //    G4DymmyINC * theDummyCascade = new G4DymmyINC;
 //    theTheoModel->SetTransport(theDummyCascade);
