@@ -54,7 +54,7 @@ G4AtomicTransitionManager::G4AtomicTransitionManager(G4int minZ, G4int maxZ, G4i
       G4std::vector<G4AtomicShell*> vectorOfShells;  
     
       size_t numberOfShells=shellManager->NumberOfShells(Z);
-      for (G4int shellIndex = 0; shellIndex<numberOfShells; shellIndex++)
+      for (size_t shellIndex = 0; shellIndex<numberOfShells; shellIndex++)
 	{ 
 	  G4int shellId = shellManager->ShellId(Z,shellIndex);
 	  G4double bindingEnergy = shellManager->BindingEnergy(Z,shellIndex);
@@ -153,7 +153,7 @@ G4AtomicTransitionManager* G4AtomicTransitionManager::Instance()
 }
 
 
-const G4AtomicShell* G4AtomicTransitionManager::Shell(G4int Z, G4int shellIndex)
+const G4AtomicShell* G4AtomicTransitionManager::Shell(G4int Z, size_t shellIndex)
 { 
   G4std::map<G4int,G4std::vector<G4AtomicShell*>,std::less<G4int> >::iterator pos;
 
@@ -170,16 +170,16 @@ const G4AtomicShell* G4AtomicTransitionManager::Shell(G4int Z, G4int shellIndex)
     }
     else {
       G4Exception("G4AtomicTransitionManager:shell not found");
-      
+      return 0;
     }
   }
   else{
     G4Exception("G4AtomicTransitionManager:Z not found");
-    
+    return 0;
   } 
 }
 
-const G4AtomicTransition* G4AtomicTransitionManager:: ReachableShell(G4int Z,G4int shellIndex)
+const G4AtomicTransition* G4AtomicTransitionManager:: ReachableShell(G4int Z,size_t shellIndex)
 {
  G4std::map<G4int,G4std::vector<G4AtomicTransition*>,std::less<G4int> >::iterator pos;
 
@@ -196,12 +196,12 @@ const G4AtomicTransition* G4AtomicTransitionManager:: ReachableShell(G4int Z,G4i
     }
     else {
       G4Exception("G4AtomicTransitionManager:reachable shell not found");
-      
+      return 0;
     }
   }
   else{
     G4Exception("G4AtomicTransitionManager:Z not found");
-    
+    return 0;
   } 
 }
 
@@ -221,6 +221,7 @@ G4std::map<G4int,G4std::vector<G4AtomicShell*>,std::less<G4int> >::iterator pos;
 
   else{
     G4Exception( "G4AtomicTransitionManager: Z not found" );
+    return 0;
   } 
 }
 
@@ -239,9 +240,10 @@ G4std::map<G4int,G4std::vector<G4AtomicTransition*>,std::less<G4int> >::iterator
 
   else{
     G4Exception( "G4AtomicTransitionManager: Z not found" );
+    return 0;
   } 
 }
-G4double G4AtomicTransitionManager::TotalRadiativeTransitionProbability(G4int Z, G4int shellIndex)
+G4double G4AtomicTransitionManager::TotalRadiativeTransitionProbability(G4int Z, size_t shellIndex)
 
 {
 
@@ -261,7 +263,7 @@ G4std::map<G4int,G4std::vector<G4AtomicTransition*>,std::less<G4int> >::iterator
 
    G4double totalRadTransProb = 0;
 
-   for(G4int j = 1; j<transProb.size(); j++){
+   for(size_t j = 1; j<transProb.size(); j++){
 
      totalRadTransProb = totalRadTransProb + transProb[j];
 
@@ -272,15 +274,17 @@ G4std::map<G4int,G4std::vector<G4AtomicTransition*>,std::less<G4int> >::iterator
     }
  else {
    G4Exception( "G4AtomicTransitionManager: shell not found" );
+   return 0;
 	
  }
   }
   else{
     G4Exception( "G4AtomicTransitionManager: Z not found");
+    return 0;
   } 
 }
 
-G4double G4AtomicTransitionManager::TotalNonRadiativeTransitionProbability(G4int Z, G4int shellIndex)
+G4double G4AtomicTransitionManager::TotalNonRadiativeTransitionProbability(G4int Z, size_t shellIndex)
 
 {
 
@@ -301,7 +305,7 @@ G4double G4AtomicTransitionManager::TotalNonRadiativeTransitionProbability(G4int
       
       G4double totalRadTransProb = 0;
       
-      for(G4int j = 1; j<transProb.size(); j++){
+      for(size_t j = 1; j<transProb.size(); j++){
 
 	totalRadTransProb = totalRadTransProb + transProb[j];
       }
@@ -312,10 +316,12 @@ G4double G4AtomicTransitionManager::TotalNonRadiativeTransitionProbability(G4int
     
     else {
       G4Exception( "shell not found");
+      return 0;
     }
   }
   else{
     G4Exception("Z not found");
+    return 0;
   } 
 }
 

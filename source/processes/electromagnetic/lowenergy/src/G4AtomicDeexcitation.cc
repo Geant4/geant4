@@ -137,8 +137,8 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateFluorescence(G4int Z,
       G4int shellNum = 0;
       G4int maxNumOfShells = transitionManager->NumberOfReachableShells(Z);
       
-      const G4AtomicTransition* refShell = 
-	transitionManager->ReachableShell(Z,maxNumOfShells-1);
+      //     const G4AtomicTransition* refShell = 
+      //transitionManager->ReachableShell(Z,maxNumOfShells-1);
       
       while (shellId != transitionManager->ReachableShell(Z,shellNum)->FinalShellId())
 	{
@@ -150,7 +150,7 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateFluorescence(G4int Z,
 	}
       size_t transitionSize = transitionManager->ReachableShell(Z,shellNum)->OriginatingShellIds().size();
       
-      G4int index = 0;
+      size_t index = 0;
 
       while (provShellId !=transitionManager->ReachableShell(Z,shellNum)->OriginatingShellId(index))
 	{
