@@ -1,5 +1,5 @@
 
-$Id: History,v 1.2 1999-11-10 16:36:42 japost Exp $
+$Id: History,v 1.3 1999-11-10 16:56:43 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -22,11 +22,16 @@ committal in the CVS repository !
 
  Nov 10   1999                          geom-solid-bool-V00-01-03b
 
-  - Tag with additional methods for Persistency
-
   - Renamed  GetConstituentSolid to GetConstituentMovedSolid in G4DisplacedSolid
      to avoid clashing with method that gets the contituents of a G4BooleanSolid.
 
+ Nov 10   1999                          geom-solid-bool-V00-01-03a
+
+  - Tag with additional methods for Persistency
+
+ Nov 10   1999                          geom-solid-bool-V00-01-03-cand
+
+  New method: Get Object Rotation/Translation methods in Displaced Solid
 
  Nov  9   1999                          geom-solid-bool-V00-01-02-cand
   
@@ -37,7 +42,7 @@ committal in the CVS repository !
       Added methods to access data members:
           Get Constituent Solid  (int) for Boolean   Solid 
           Get Constituent Solid        for Displaced Solid 
-          Get Object/Frame Rotation/Translation methods in Displaced Solid
+          Get Frame Rotation/Translation methods in Displaced Solid
 
 
 
