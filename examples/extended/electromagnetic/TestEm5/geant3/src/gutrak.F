@@ -78,12 +78,12 @@
         call hfill (id,thetz/histUnit(id),0.,1.)	
       endif
 *
-*     radial dispersion at exit
+*     projected position at exit
 *
       if (transmit.and.charged) id = 7
       if (id.ne.0.and.histo(id)) then
-        radius = sqrt(vect(2)**2 + vect(3)**2)
-        call hfill (id,radius/histUnit(id),0.,1.)
+        call hfill (id,vect(2)/histUnit(id),0.,1.)
+        call hfill (id,vect(3)/histUnit(id),0.,1.)	
       endif                        	                  
 *
       END

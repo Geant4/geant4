@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: EventAction.cc,v 1.1 2003-08-11 10:20:19 maire Exp $
+// $Id: EventAction.cc,v 1.2 2004-02-19 18:18:52 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -106,9 +106,9 @@ void EventAction::EndOfEventAction(const G4Event* evt)
    for (G4int i=0; i<n_trajectories; i++) 
       { G4Trajectory* trj = (G4Trajectory*)
                                       ((*(evt->GetTrajectoryContainer()))[i]);
-        if (drawFlag == "all") trj->DrawTrajectory(50);
+        if (drawFlag == "all") trj->DrawTrajectory(1000);
         else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-                               trj->DrawTrajectory(50); 
+                               trj->DrawTrajectory(1000); 
       }
   }  
 }
