@@ -1,4 +1,4 @@
-$Id: History,v 1.48 2002-03-08 10:48:29 maire Exp $
+$Id: History,v 1.49 2002-03-08 10:50:24 maire Exp $
 --------------------------------------------------
 
      =========================================================
@@ -15,7 +15,7 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
-07-03-02 mma
+07-03-02 mma (exampleN03-V04-00-01)
 - remove cutForGamma, cutForElectron ..etc..
      
 14-02-02 mma (exampleN03-V04-00-00)

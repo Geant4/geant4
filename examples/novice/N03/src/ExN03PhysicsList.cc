@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PhysicsList.cc,v 1.12 2002-01-09 17:24:13 ranjard Exp $
+// $Id: ExN03PhysicsList.cc,v 1.13 2002-03-08 10:48:30 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,11 +44,7 @@
 
 ExN03PhysicsList::ExN03PhysicsList():  G4VUserPhysicsList()
 {
-  currentDefaultCut = defaultCutValue = 1.0*mm;
-  cutForGamma       = defaultCutValue;
-  cutForElectron    = defaultCutValue;
-  cutForProton      = defaultCutValue;
-
+ defaultCutValue = 1.0*mm;
  SetVerboseLevel(1);
 }
 
@@ -293,70 +289,27 @@ void ExN03PhysicsList::ConstructGeneral()
 
 void ExN03PhysicsList::SetCuts()
 {
-  // reactualise cutValues
-  if (currentDefaultCut != defaultCutValue)
-    {
-     if(cutForGamma    == currentDefaultCut) cutForGamma    = defaultCutValue;
-     if(cutForElectron == currentDefaultCut) cutForElectron = defaultCutValue;
-     if(cutForProton   == currentDefaultCut) cutForProton   = defaultCutValue;
-     currentDefaultCut = defaultCutValue;
-    }
-    
   if (verboseLevel >0){
     G4cout << "ExN03PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
   }  
 
   // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma 
-  SetCutValue(cutForGamma, "gamma");
-  SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForElectron, "e+");
+  // because some processes for e+/e- need cut values for gamma
+  // 
+  SetCutValue(defaultCutValue, "gamma");
+  SetCutValue(defaultCutValue, "e-");
+  SetCutValue(defaultCutValue, "e+");
  
   // set cut values for proton and anti_proton before all other hadrons
-  // because some processes for hadrons need cut values for proton/anti_proton 
-  SetCutValue(cutForProton, "proton");
-  SetCutValue(cutForProton, "anti_proton");
+  // because some processes for hadrons need cut values for proton/anti_proton
+  // 
+  SetCutValue(defaultCutValue, "proton");
+  SetCutValue(defaultCutValue, "anti_proton");
   
   SetCutValueForOthers(defaultCutValue);
 
   if (verboseLevel>0) DumpCutValuesTable();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-
-void ExN03PhysicsList::SetCutForGamma(G4double cut)
-{
-  ResetCuts();
-  cutForGamma = cut;
-}
-
-void ExN03PhysicsList::SetCutForElectron(G4double cut)
-{
-  ResetCuts();
-  cutForElectron = cut;
-}
-
-void ExN03PhysicsList::SetCutForProton(G4double cut)
-{
-  ResetCuts();
-  cutForProton = cut;
-}
-
-G4double ExN03PhysicsList::GetCutForGamma() const
-{
-  return cutForGamma;
-}
-
-G4double ExN03PhysicsList::GetCutForElectron() const
-{
-  return cutForElectron;
-}
-
-G4double ExN03PhysicsList::GetCutForProton() const
-{
-  return cutForProton;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
