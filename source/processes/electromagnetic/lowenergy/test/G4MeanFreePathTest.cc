@@ -50,7 +50,8 @@
 #include "G4ProcessManager.hh"
 
 #include "G4LowEnergyIonisation.hh"
-#include "G4LowEnergyBremsstrahlung.hh"
+//#include "G4LowEnergyBremsstrahlung.hh"
+#include "G4LowEnergyBremsstrahlungIV.hh"
 #include "G4LowEnergyCompton.hh"
 #include "G4LowEnergyGammaConversion.hh"
 #include "G4LowEnergyPhotoElectric.hh"
@@ -96,6 +97,8 @@
 #include "CLHEP/Hist/HBookFile.h"
 #include "CLHEP/Hist/Histogram.h"
 #include "CLHEP/Hist/Tuple.h"
+
+typedef G4LowEnergyBremsstrahlungIV G4LowEnergyBremsstrahlung;
 
 HepTupleManager* hbookManager;
 
@@ -178,11 +181,11 @@ int main(int argc,char** argv)
  
   static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
-  G4int nMaterials = theMaterialTable->length();
+  G4int nMaterials = G4Material::GetNumberOfMaterials();
   G4cout << "Available materials are: " << G4endl;
   G4int mat;
   for (mat = 0; mat < nMaterials; mat++) {
-    G4cout << mat << ") " << (*theMaterialTable)(mat)->GetName() << G4endl;
+    G4cout << mat << ") " << (*theMaterialTable)[mat]->GetName() << G4endl;
   }
 
   G4cout << "Available processes are: " << G4endl;
@@ -342,7 +345,7 @@ int main(int argc,char** argv)
     }
 
     for (mat = 0; mat < nMaterials; mat++) {
-      material = (*theMaterialTable)(mat);
+      material = (*theMaterialTable)[mat];
       if(nameMat == material->GetName()) break;
     }
 
