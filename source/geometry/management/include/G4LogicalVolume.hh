@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalVolume.hh,v 1.5 2000-04-20 16:49:46 gcosmo Exp $
+// $Id: G4LogicalVolume.hh,v 1.6 2000-11-01 15:39:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -112,33 +112,33 @@ class G4LogicalVolume
       // Destructor. Removes the logical volume from the logical volume Store.
       // NOT virtual, since not meant to act as base class.
 
-    G4String GetName() const;
-    void SetName(const G4String& pName);
+    inline G4String GetName() const;
+    inline void SetName(const G4String& pName);
       // Returns and sets the name of the logical volume.
 
-    G4int GetNoDaughters() const;
+    inline G4int GetNoDaughters() const;
       // Returns the number of daughters (0 to n).
-    G4VPhysicalVolume* GetDaughter(const G4int i) const;
+    inline G4VPhysicalVolume* GetDaughter(const G4int i) const;
       // Return the ith daughter. Note numbering starts from 0,
       // and no bounds checking is performed.
-    void AddDaughter(G4VPhysicalVolume* p);
+    inline void AddDaughter(G4VPhysicalVolume* p);
       // Add the volume p as a daughter of the current logical volume.
-    G4bool IsDaughter(const G4VPhysicalVolume* p) const;
+    inline G4bool IsDaughter(const G4VPhysicalVolume* p) const;
       // Returns true is the volume p is a daughter of the current
       // logical volume.
-    void RemoveDaughter(const G4VPhysicalVolume* p);
+    inline void RemoveDaughter(const G4VPhysicalVolume* p);
       // Remove the volume p from the List of daughter of the current
       // logical volume.
 
-    G4VSolid* GetSolid() const;
-    void SetSolid(G4VSolid *pSolid);
+    inline G4VSolid* GetSolid() const;
+    inline void SetSolid(G4VSolid *pSolid);
       // Gets and sets the current solid.
 
-    G4Material* GetMaterial() const;
-    void SetMaterial(G4Material *pMaterial);
+    inline G4Material* GetMaterial() const;
+    inline void SetMaterial(G4Material *pMaterial);
       // Gets and sets the current material.
 
-    G4FieldManager* GetFieldManager() const;
+    inline G4FieldManager* GetFieldManager() const;
       // Gets current FieldManager.
     void SetFieldManager(G4FieldManager *pFieldMgr, G4bool forceToAllDaughters); 
       // Sets FieldManager and propagates it:
@@ -147,44 +147,44 @@ class G4LogicalVolume
       // ii) to all daughters
       //     if forceToAllDaughters=true
 
-    G4VSensitiveDetector* GetSensitiveDetector() const;
+    inline G4VSensitiveDetector* GetSensitiveDetector() const;
       // Gets current SensitiveDetector.
-    void SetSensitiveDetector(G4VSensitiveDetector *pSDetector);
+    inline void SetSensitiveDetector(G4VSensitiveDetector *pSDetector);
       // Sets SensitiveDetector (can be NULL).
 
-    G4UserLimits* GetUserLimits() const;
-    void SetUserLimits(G4UserLimits *pULimits);
+    inline G4UserLimits* GetUserLimits() const;
+    inline void SetUserLimits(G4UserLimits *pULimits);
       // Gets and sets current UserLimits.
 
-    G4SmartVoxelHeader* GetVoxelHeader() const;
-    void SetVoxelHeader(G4SmartVoxelHeader *pVoxel);
+    inline G4SmartVoxelHeader* GetVoxelHeader() const;
+    inline void SetVoxelHeader(G4SmartVoxelHeader *pVoxel);
       // Gets and sets current VoxelHeader.
     
-    G4double GetSmartless();
-    void SetSmartless(G4double s);
+    inline G4double GetSmartless();
+    inline void SetSmartless(G4double s);
       // Gets and sets user defined optimisation quality.
 
     G4bool operator == ( const G4LogicalVolume& lv) const;
       // Equality defined by address only- return true if objects are at
       // same address, else false.
 
-    const G4VisAttributes* GetVisAttributes () const;
-    void  SetVisAttributes (const G4VisAttributes* pVA);
-    void  SetVisAttributes (const G4VisAttributes& VA);
+    inline const G4VisAttributes* GetVisAttributes () const;
+    inline void  SetVisAttributes (const G4VisAttributes* pVA);
+    inline void  SetVisAttributes (const G4VisAttributes& VA);
       // Gets and sets visualization attributes.
 
-    void BecomeEnvelopeForFastSimulation(G4FastSimulationManager* );
+    inline void BecomeEnvelopeForFastSimulation(G4FastSimulationManager* );
       // Makes this an Envelope for given FastSimulationManager. 
       // Ensures that all its daughter volumes get it too - unless they 
       // have one already.
     void  ClearEnvelopeForFastSimulation(G4LogicalVolume* motherLV= 0);
       // Erase volume's Envelope status and propagate the FastSimulationManager 
       // of its mother volume to itself and its daughters.
-    G4FastSimulationManager* GetFastSimulationManager () const;
+    inline G4FastSimulationManager* GetFastSimulationManager () const;
       // Gets current FastSimulationManager pointer.
 
-    void SetBiasWeight (G4double w);
-    G4double GetBiasWeight() const;
+    inline void SetBiasWeight (G4double w);
+    inline G4double GetBiasWeight() const;
       // Sets and gets bias weight.
 
   private:
@@ -197,6 +197,10 @@ class G4LogicalVolume
       // FastSimulationManager pointer with IsEnvelope = FALSE.
 
     G4LogicalVolume* FindMotherLogicalVolumeForEnvelope(); 
+
+    G4LogicalVolume(const G4LogicalVolume&);
+    G4LogicalVolume& operator=(const G4LogicalVolume&);
+      // Private copy-constructor and assignment operator.
 
   private:
 

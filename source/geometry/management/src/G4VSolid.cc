@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSolid.cc,v 1.4 2000-04-11 16:18:15 johna Exp $
+// $Id: G4VSolid.cc,v 1.5 2000-11-01 15:39:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VSolid
@@ -336,4 +336,14 @@ G4VisExtent G4VSolid::GetExtent () const {
   extent.SetZmin (vmin);
   extent.SetZmax (vmax);
   return extent;
+}
+
+G4Polyhedron* G4VSolid::CreatePolyhedron () const
+{
+  return 0;
+}
+
+G4NURBS* G4VSolid::CreateNURBS () const
+{
+  return 0;
 }

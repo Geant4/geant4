@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSolid.icc,v 1.3 2000-04-20 16:49:48 gcosmo Exp $
+// $Id: G4VSolid.icc,v 1.4 2000-11-01 15:39:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,16 +16,4 @@ inline
 G4bool G4VSolid::operator==( const G4VSolid& s) const
 {
   return (this==&s) ? true : false;
-}
-
-inline
-G4Polyhedron* G4VSolid::CreatePolyhedron () const
-{
-  return 0;
-}
-
-inline
-G4NURBS* G4VSolid::CreateNURBS () const
-{
-  return 0;
 }

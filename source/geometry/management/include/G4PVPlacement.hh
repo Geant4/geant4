@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PVPlacement.hh,v 1.3 2000-04-20 16:49:47 gcosmo Exp $
+// $Id: G4PVPlacement.hh,v 1.4 2000-11-01 15:39:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -93,7 +93,7 @@ class G4PVPlacement : public G4VPhysicalVolume
                   G4int pCopyNo);
       // Utilises both variations above (from 2nd and 3rd constructor).
 
-    ~G4PVPlacement();
+    virtual ~G4PVPlacement();
       // Default destructor.
 
     virtual G4int GetCopyNo() const;
@@ -117,14 +117,21 @@ class G4PVPlacement : public G4VPhysicalVolume
 
   private:
 
-    G4bool fmany;	    // flag for booleans/MANY - not used
-    G4bool fallocatedRotM;  // flag for allocation of Rotation Matrix
-    G4int fcopyNo;	    // for identification
-
     static G4RotationMatrix* NewPtrRotMatrix(const G4RotationMatrix &RotMat);
       // Auxiliary function for 2nd constructor (one with G4Transform3D).
       // Creates a new RotMatrix on the heap (using "new") and copies 
       // its argument into it.
+
+    G4PVPlacement(const G4PVPlacement&);
+    G4PVPlacement& operator=(const G4PVPlacement&);
+      // Private copy constructor and assignement operator.
+
+  private:
+
+    G4bool fmany;	    // flag for booleans/MANY - not used
+    G4bool fallocatedRotM;  // flag for allocation of Rotation Matrix
+    G4int fcopyNo;	    // for identification
+
 };
 
 #endif

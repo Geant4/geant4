@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VoxelLimits.cc,v 1.2 1999-12-15 14:49:54 gunter Exp $
+// $Id: G4VoxelLimits.cc,v 1.3 2000-11-01 15:39:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VoxelLimits
@@ -105,7 +105,7 @@ G4bool G4VoxelLimits::ClipToLimits(G4ThreeVector& pStart,
 	    y2=pEnd.y();
 	    z2=pEnd.z();
 
-	    do
+	    while (sCode!=eCode)
 		{
 
 // Copy vectors to work variables x1-z1,x2-z2
@@ -211,7 +211,7 @@ G4bool G4VoxelLimits::ClipToLimits(G4ThreeVector& pStart,
 		    pEnd=G4ThreeVector(x2,y2,z2);
 		    sCode=OutCode(pStart);
 		    eCode=OutCode(pEnd);
-		} while (sCode!=eCode);
+		}
 
 	    if (sCode==0&&eCode==0)
 		{

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DrawVoxels.cc,v 1.10 2000-01-19 17:26:30 johna Exp $
+// $Id: G4DrawVoxels.cc,v 1.11 2000-11-01 15:39:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

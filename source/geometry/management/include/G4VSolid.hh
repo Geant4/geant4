@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSolid.hh,v 1.6 2000-04-20 16:49:48 gcosmo Exp $
+// $Id: G4VSolid.hh,v 1.7 2000-11-01 15:39:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,7 +76,7 @@ class G4VSolid
     virtual ~G4VSolid();
       // Default destructor.
 
-    G4bool operator==( const G4VSolid& s) const;
+    inline G4bool operator==( const G4VSolid& s) const;
       // Return true only if addresses are the same.
 
     G4String GetName() const;

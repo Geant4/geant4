@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PVParameterised.cc,v 1.2 1999-12-15 14:49:52 gunter Exp $
+// $Id: G4PVParameterised.cc,v 1.3 2000-11-01 15:39:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,6 +34,10 @@ G4PVParameterised::G4PVParameterised(const G4String& pName,
 		         G4VPVParameterisation *pParam) :
   G4PVReplica(pName,pLogical,pMotherLogical,pAxis,nReplicas,0,0),
   fparam(pParam)
+{
+}
+
+G4PVParameterised::~G4PVParameterised()
 {
 }
 

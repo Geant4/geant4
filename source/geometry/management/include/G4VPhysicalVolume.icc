@@ -5,72 +5,87 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VPhysicalVolume.icc,v 1.3 1999-12-15 14:49:51 gunter Exp $
+// $Id: G4VPhysicalVolume.icc,v 1.4 2000-11-01 15:39:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4VPhysicalVolume Inline Implementation
 //
 
-// Define equality by equal addresses only.
-inline G4bool G4VPhysicalVolume::operator == (const G4VPhysicalVolume& p) const
+inline
+G4bool G4VPhysicalVolume::operator == (const G4VPhysicalVolume& p) const
     {
 	return (this==&p) ? true : false;
     }
 
-// Access functions
-inline const G4ThreeVector& G4VPhysicalVolume::GetTranslation() const
+inline
+const G4ThreeVector& G4VPhysicalVolume::GetTranslation() const
     {
 	return ftrans;
     }
-inline void G4VPhysicalVolume::SetTranslation(const G4ThreeVector &v)
+
+inline
+void G4VPhysicalVolume::SetTranslation(const G4ThreeVector &v)
     {
 	ftrans=v;
     }
-inline const G4RotationMatrix* G4VPhysicalVolume::GetRotation() const
+
+inline
+const G4RotationMatrix* G4VPhysicalVolume::GetRotation() const
     {
 	return frot;
     }
-inline G4RotationMatrix* G4VPhysicalVolume::GetRotation()
+
+inline
+G4RotationMatrix* G4VPhysicalVolume::GetRotation()
     {
 	return frot;
     }
-inline void G4VPhysicalVolume::SetRotation(G4RotationMatrix *pRot)
+
+inline
+void G4VPhysicalVolume::SetRotation(G4RotationMatrix *pRot)
     {
 	frot=pRot;
     }
 
-inline G4LogicalVolume* G4VPhysicalVolume::GetLogicalVolume() const
+inline
+G4LogicalVolume* G4VPhysicalVolume::GetLogicalVolume() const
     {
 	return flogical;
     }
 
-inline void G4VPhysicalVolume::SetLogicalVolume(G4LogicalVolume *pLogical)
+inline
+void G4VPhysicalVolume::SetLogicalVolume(G4LogicalVolume *pLogical)
     {
 	flogical=pLogical;
     }
 
-inline G4VPhysicalVolume* G4VPhysicalVolume::GetMother() const
+inline
+G4VPhysicalVolume* G4VPhysicalVolume::GetMother() const
     {
 	return fmother;
     }
 
-inline void G4VPhysicalVolume::SetMother(G4VPhysicalVolume *pMother)
+inline
+void G4VPhysicalVolume::SetMother(G4VPhysicalVolume *pMother)
     {
 	fmother=pMother;
     }
 
-inline G4String G4VPhysicalVolume::GetName() const
+inline
+G4String G4VPhysicalVolume::GetName() const
     {
 	return fname;
     }
 
-inline void G4VPhysicalVolume::SetName(const G4String& pName)
+inline
+void G4VPhysicalVolume::SetName(const G4String& pName)
     {
         fname=pName;
     }
 
-inline G4RotationMatrix G4VPhysicalVolume::GetObjectRotationValue() const
+inline
+G4RotationMatrix G4VPhysicalVolume::GetObjectRotationValue() const
     {
         G4RotationMatrix  aRotM;   // Initialised to identity
 
@@ -81,15 +96,21 @@ inline G4RotationMatrix G4VPhysicalVolume::GetObjectRotationValue() const
 	}
 	return aRotM;
     }
-inline       G4ThreeVector  G4VPhysicalVolume::GetObjectTranslation() const
+
+inline
+G4ThreeVector  G4VPhysicalVolume::GetObjectTranslation() const
     {
 	return  ftrans;
     }
-inline const G4RotationMatrix* G4VPhysicalVolume::GetFrameRotation() const
+
+inline
+const G4RotationMatrix* G4VPhysicalVolume::GetFrameRotation() const
     {
 	return frot;
     }
-inline       G4ThreeVector  G4VPhysicalVolume::GetFrameTranslation() const
+
+inline
+G4ThreeVector  G4VPhysicalVolume::GetFrameTranslation() const
     {
 	return -ftrans;
     }

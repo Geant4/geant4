@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalVolume.cc,v 1.3 1999-12-15 14:49:52 gunter Exp $
+// $Id: G4LogicalVolume.cc,v 1.4 2000-11-01 15:39:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,13 +24,14 @@
 
 // Constructor - set member data and add to logical Store, zero voxel ptr
 //               Initialises daughter vector to 0 length
-G4LogicalVolume::G4LogicalVolume( G4VSolid *pSolid,  G4Material *pMaterial,
+//
+G4LogicalVolume::G4LogicalVolume( G4VSolid *pSolid, G4Material *pMaterial,
 				  const G4String& name,
 				  G4FieldManager *pFieldMgr,
 				  G4VSensitiveDetector *pSDetector,
-				  G4UserLimits *pULimits) : 
-   fDaughters(0), fVoxel(0), fSmartless(2.), fVisAttributes (0) , fFastSimulationManager (0),
-   fIsEnvelope(FALSE), fFieldManager(pFieldMgr)
+				  G4UserLimits *pULimits)
+ : fDaughters(0), fVoxel(0), fSmartless(2.), fVisAttributes (0) ,
+   fFastSimulationManager (0), fIsEnvelope(FALSE), fFieldManager(pFieldMgr)
 {
     SetSolid(pSolid);
     SetMaterial(pMaterial);
@@ -43,6 +44,7 @@ G4LogicalVolume::G4LogicalVolume( G4VSolid *pSolid,  G4Material *pMaterial,
 
 // Destructor - remove from solid Store
 // NOTE: Not virtual
+//
 G4LogicalVolume::~G4LogicalVolume()
 {
     G4LogicalVolumeStore::DeRegister(this);
@@ -51,9 +53,10 @@ G4LogicalVolume::~G4LogicalVolume()
 //  As this method is recursive, inlining it is harder (and asking for it 
 //  is pointless if not counterproductive: it will increase code size)
 //
-void G4LogicalVolume::SetFastSimulationManager (
-	G4FastSimulationManager* pNewFastSimul,
-	G4bool IsEnvelope) 
+void
+G4LogicalVolume::SetFastSimulationManager(
+                         G4FastSimulationManager* pNewFastSimul,
+	                 G4bool IsEnvelope) 
 {
   if(!fIsEnvelope || IsEnvelope) {
      fIsEnvelope=IsEnvelope;
@@ -70,8 +73,8 @@ void G4LogicalVolume::SetFastSimulationManager (
   }
 }
 
-void G4LogicalVolume::
-ClearEnvelopeForFastSimulation( G4LogicalVolume* motherLogVol) 
+void
+G4LogicalVolume::ClearEnvelopeForFastSimulation(G4LogicalVolume* motherLogVol) 
 {
   if( fIsEnvelope ) {
      G4FastSimulationManager* NewFastSimulationVal=NULL;
@@ -104,9 +107,9 @@ ClearEnvelopeForFastSimulation( G4LogicalVolume* motherLogVol)
   }
 }
 
-void G4LogicalVolume::SetFieldManager (
-	G4FieldManager* pNewFieldMgr,
-        G4bool          forceAllDaughters) 
+void
+G4LogicalVolume::SetFieldManager(G4FieldManager* pNewFieldMgr,
+                                 G4bool          forceAllDaughters) 
 {
   fFieldManager = pNewFieldMgr;
 
@@ -124,7 +127,7 @@ void G4LogicalVolume::SetFieldManager (
 //  The following method returns a meaningful result IF and only IF
 //  the current logical volume has exactly one physical volume that
 //  uses it.
-
+//
 G4LogicalVolume* 
 G4LogicalVolume::FindMotherLogicalVolumeForEnvelope()
 {

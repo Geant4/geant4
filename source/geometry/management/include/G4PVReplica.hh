@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PVReplica.hh,v 1.3 2000-04-20 16:49:47 gcosmo Exp $
+// $Id: G4PVReplica.hh,v 1.4 2000-11-01 15:39:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,7 +67,7 @@
 
 class G4PVReplica : public G4VPhysicalVolume
 {
-  public:
+  public:  // with description
 
     G4PVReplica(const G4String& pName,
 		G4LogicalVolume* pLogical,
@@ -85,7 +85,7 @@ class G4PVReplica : public G4VPhysicalVolume
 		const G4double width,
                 const G4double offset=0);
 
-    ~G4PVReplica();
+    virtual ~G4PVReplica();
 
     virtual G4bool IsMany() const;
     virtual G4int GetCopyNo() const;
@@ -106,6 +106,10 @@ class G4PVReplica : public G4VPhysicalVolume
                          const G4int nReplicas,
 		         const G4double width,
                          const G4double offset);
+
+    G4PVReplica(const G4PVReplica&);
+    const G4PVReplica& operator=(const G4PVReplica&);
+
  protected:
 
     EAxis faxis;

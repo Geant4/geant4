@@ -1,4 +1,4 @@
-$Id: History,v 1.11 2000-09-11 11:09:54 gcosmo Exp $
+$Id: History,v 1.12 2000-11-01 15:39:32 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 1, 2000   G.Cosmo                 geommng-V02-00-01
+- QA code revision and cleanup (+fixes from CodeWizard filtering):
+  o Added (private) declarations of copy constructor and assignment
+    operator where needed.
+  o Added "const" qualifier to accessor methods, wherever needed.
+  o Added equality check on operator= where needed.
+  o Made destructor "virtual" for classes having virtual methods,
+    wherever missing.
+  o Changed virtual functions to non-inline wherever's the case.
+  o Added "inline" qualifier to methods' declarations.
+  o Replaced usage of "do-loops" with "while-loops" in
+    G4VoxelLimits::ClipToLimits().
+  o General cosmetics
 
 September 11, 2000   G.Cosmo               geommng-V02-00-00
 - G4SolidStore.cc: fixed bug in destructor causing memory corruption at
