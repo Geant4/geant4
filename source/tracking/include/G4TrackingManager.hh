@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TrackingManager.hh,v 1.8 2000-06-02 05:26:26 asaim Exp $
+// $Id: G4TrackingManager.hh,v 1.9 2000-06-02 09:13:31 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -185,7 +185,7 @@ class G4TrackingManager
      return verboseLevel; 
    }
 
-   inline void SetUserTrackInformation(G4VUserTrackInformation* aValue) {
+   inline void G4TrackingManager::SetUserTrackInformation(G4VUserTrackInformation* aValue) {
      if(fpTrack) fpTrack->SetUserInformation(aValue);
    }
 

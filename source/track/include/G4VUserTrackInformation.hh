@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VUserTrackInformation.hh,v 1.1 2000-06-02 05:36:51 asaim Exp $
+// $Id: G4VUserTrackInformation.hh,v 1.2 2000-06-02 09:09:47 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -44,8 +44,8 @@ class G4VUserTrackInformation
     virtual ~G4VUserTrackInformation() {;}
 
   public:
-    void Print() const = 0;
-}
+    virtual void Print() const = 0;
+};
 
 #endif
 

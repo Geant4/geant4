@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Track.icc,v 1.3 2000-06-02 05:36:50 asaim Exp $
+// $Id: G4Track.icc,v 1.4 2000-06-02 09:09:47 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //-----------------------------------------------------------------
@@ -228,9 +228,9 @@
    { return fWeight; }
 
 // user information
-   inline G4VUserTrackInformation* GetUserInformation() const
+   inline G4VUserTrackInformation* G4Track::GetUserInformation() const
    { return fpUserInformation; }
-   inline void SetUserInformation(G4VUserTrackInformation* aValue)
+   inline void G4Track::SetUserInformation(G4VUserTrackInformation* aValue)
    { fpUserInformation = aValue; }
 
 
