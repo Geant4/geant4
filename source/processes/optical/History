@@ -16,6 +16,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05th August 2004 Peter Gumplinger (op-V06-02-00)
+                Allow for unified model reflectivity parameters 
+                to also work in case of dielectric_metal surfaces;
+                addresses in part problem report 654.
+
 26th April 2004 Peter Gumplinger (op-V06-01-01)
                 Protect against NULL pointers in G4OpRayleigh.
                 Do not overwrite Rayleigh scattering length
