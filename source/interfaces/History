@@ -1,4 +1,4 @@
-$Id: History,v 1.36 2000-08-11 15:31:12 barrand Exp $
+$Id: History,v 1.37 2000-11-27 11:04:07 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27 November 2000 Makoto Asai (interfaces-V02-00-02)
+- G4VUIShell.hh : add virtual keyword to the destructor.
+
 11 August 2000 Guy Barrand
 - G4UIWo.cc : add some cast in order to compile with OSF1/cxx strict_ansi mode.
 
