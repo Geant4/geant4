@@ -283,13 +283,6 @@ if ( `uname -n` == aleph ) then
   setenv OIVFLAGS       "-I$OIVHOME/include -I$HEPVISHOME/include"
   setenv OIVLIBS        "-L$HEPVISHOME/HP-UX-aCC-SF -lHEPVis -L$OIVHOME/HP-UX-aCC -lSoFree"
   setenv SOFREEUSER     $OIVHOME/user/
-  # OPACS :
-  setenv G4UI_BUILD_WO_SESSION       1
-  setenv G4VIS_BUILD_OPACS_DRIVER    1
-  setenv G4UI_USE_WO                 1
-  setenv G4VIS_USE_OPACS             1
-  setenv OCONFIG HP-UX
-  source /lal/OPACS/v3/setup.csh
   # Else :
   #setenv XENVIRONMENT   $G4INSTALL/tests/test201/test201.xrm
   setenv XENVIRONMENT   g4.xrm
@@ -341,13 +334,6 @@ if ( `uname -n` == asc ) then
   setenv OIVLIBS        "-L$HEPVISHOME/OSF1-cxx-TGS -lHEPVis -L$OIVHOME/lib -lInventorXt -lInventor -limage"
   #setenv XENVIRONMENT   $OIVHOME/app-defaults/Inventor
   setenv XENVIRONMENT   g4.xrm
-  # OPACS :
-  setenv G4UI_BUILD_WO_SESSION       1
-  setenv G4VIS_BUILD_OPACS_DRIVER    1
-  setenv G4UI_USE_WO                 1
-  setenv G4VIS_USE_OPACS             1
-  source /lal/OPACS/v3/setup.csh
-  set prompt=${G4INSTALL}-${G4SYSTEM}'> '
   # Else :
   setenv LD_LIBRARY_PATH "$OIVHOME/lib:$HEPVISHOME/OSF1-cxx-TGS:${OGLHOME}/lib"
   setenv PATH "${PATH}:/lal/DAWN/3.72b/OSF1-cxx"
@@ -393,13 +379,6 @@ if ( `uname -n` == "lx1.lal.in2p3.fr" ) then
   setenv OIVFLAGS       "-I$OIVHOME/include -I$HEPVISHOME/include"
   setenv OIVLIBS        "-L$HEPVISHOME/Linux-gxx-SF -lHEPVis -L$OIVHOME/Linux-gxx -lSoFree"
   setenv SOFREEUSER     $OIVHOME/user/
-  # OPACS :
-  setenv G4UI_BUILD_WO_SESSION       1
-  setenv G4VIS_BUILD_OPACS_DRIVER    1
-  setenv G4UI_USE_WO                 1
-  setenv G4VIS_USE_OPACS             1
-  source /lal/OPACS/v3/setup.csh
-  setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$OIVHOME/Linux-gxx:$HEPVISHOME/Linux-gxx-SF:${OGLHOME}/lib"
   # Else :
   #setenv XENVIRONMENT   $G4INSTALL/tests/test201/test201.xrm
   setenv XENVIRONMENT   g4.xrm
@@ -439,13 +418,6 @@ if ( `uname -n` == "papou1" ) then
   setenv OIVFLAGS       "-I$OIVHOME/include -I$HEPVISHOME/include"
   setenv OIVLIBS        "-L$HEPVISHOME/SunOS-CC -lHEPVis -L$OIVHOME/SunOS-CC -lSoFree"
   setenv SOFREEUSER     $OIVHOME/user/
-  # OPACS :
-  #setenv G4UI_BUILD_WO_SESSION       1
-  #setenv G4VIS_BUILD_OPACS_DRIVER    1
-  #setenv G4UI_USE_WO                 1
-  #setenv G4VIS_USE_OPACS             1
-  #source /lal/OPACS/v3/setup.csh
-  #setenv LD_LIBRARY_PATH "$OIVHOME/Linux-gxx:/lal/HEPVis/v5r0/Linux-gxx"
   # Else :
   setenv CPPVERBOSE 1
   set prompt='g4-papou1> ' 
