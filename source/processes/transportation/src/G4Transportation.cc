@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.23 2001-11-06 18:36:39 radoone Exp $
+// $Id: G4Transportation.cc,v 1.24 2001-11-09 15:58:31 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -124,6 +124,9 @@ AlongStepGetPhysicalInteractionLength(  const G4Track&  track,
      // ChordFinder reset internal state
      if ( this->DoesGlobalFieldExist() )
         fFieldPropagator->GetChordFinder()->ResetStepEstimate();
+     // We need to update the current transportation's touchable handle
+     // to the track's one 
+     fCurrentTouchableHandle = track.GetTouchableHandle();
   }
 
   // GPILSelection is set to defaule value of CandidateForSelection
@@ -482,7 +485,8 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
   }
   else
   {                    // fGeometryLimitedStep  is false
-#ifdef G4DEBUG
+//#ifdef G4DEBUG
+#ifdef G4VERBOSE
     // Although the location is changed, we know that the physical 
     //   volume remains constant. 
     // In order to help in checking the user geometry
