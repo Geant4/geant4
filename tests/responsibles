@@ -9,6 +9,7 @@ geometry                     Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 geometry/biasing             Giuseppe.Daquino@cern.ch        Giuseppe Daquino
 geometry/magneticfield       John.Apostolakis@cern.ch        John Apostolakis
 geometry/management          Gabriele Cosmo@cern.ch          Gabriele Cosmo
+geometry/navigation          Gabriele Cosmo@cern.ch          Gabriele Cosmo
 geometry/solids              Gabriele Cosmo@cern.ch          Gabriele Cosmo
 geometry/volumes             Gabriele Cosmo@cern.ch          Gabriele Cosmo
 global                       Gabriele.Cosmo@cern.ch          Gabriele Cosmo
@@ -18,11 +19,13 @@ global/HEPNumerics           Vladimir.Grichine@cern.ch       Vladimir Grichine
 graphics_reps                John.Allison@man.ac.uk          John Allison
 intercoms                    asai@slac.stanford.edu          Makoto Asai
 interfaces                   yoshidah@naruto-u.ac.jp         Hajime Yoshida
+interfaces/basic             yoshidah@naruto-u.ac.jp	     Hajime Yoshida
 interfaces/GAG               yoshidah@naruto-u.ac.jp	     Hajime Yoshida
 interfaces/common            barrand@lal.in2p3.fr            Guy Barrand
-interfaces/OPACS             barrand@lal.in2p3.fr            Guy Barrand
 materials                    Marc.Verderi@in2p3.fr           Marc Verderi
 parameterisations            Vladimir.Grichine@cern.ch       Vladimir Grichine
+"/gflash                     Joanna.Weng@cern.ch             Joanna Weng
+"/trd_clusters               Vladimir.Grichine@cern.ch       Vladimir Grichine
 particles                    kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
 persistency                  Youhei.Morita@cern.ch           Youhei Morita
 processes                    John Apostolakis                John Apostolakis
@@ -38,7 +41,7 @@ processes                    John Apostolakis                John Apostolakis
 "/"/processes                Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 "/"/models/abrasion          flei@space.qinetiq.com          Fan Lei
 "/"/models/binary_cascade    Gunter.Folger@cern.ch           Gunter Folger
-"/"/models/cascade           aatos.heikkinen@cern.ch         Mika Heikkinen
+"/"/models/cascade           aatos.heikkinen@cern.ch         Aatos Heikkinen
 "/"/"/chiral_inv_phase_space Mikhail.Kossov@cern.ch          Mikhail Kossov
 "/"/"/coherent_elastic       fwj@triumf.ca                   Fred Jones
 "/"/"/de_excitation          Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
@@ -87,7 +90,7 @@ visualization/RayTracer      asai@slac.stanford.edu          Makoto Asai
 visualization/Tree           stanaka@cs.ritsumei.ac.jp       Satoshi Tanaka
 visualization/VRML           stanaka@cs.ritsumei.ac.jp       Satoshi Tanaka
 visualization/XXX            John.Allison@man.ac.uk          John Allison
-environments                 John.Allison@man.ac.uk          John Allison
+environments                 yoshidah@naruto-u.ac.jp         Hajime Yoshida
 environments/MOMO            yoshidah@naruto-u.ac.jp         Hajime Yoshida
 examples                     asai@slac.stanford.edu          Makoto Asai
 examples/novice/N01          asai@slac.stanford.edu          Makoto Asai
@@ -121,6 +124,7 @@ examples/extended/electromagnetic:
   MuonProcesses              Michel.Maire@lapp.in2p3.fr      Michel Maire
   PhotonProcesses            Michel.Maire@lapp.in2p3.fr      Michel Maire
 examples/extended/eventgenerator:
+  exgps                      flei@space.qinetiq.com          Fan Lei
   HepMCEx01,02               Koichi.Murakami@kek.jp          Koichi Murakami
 examples/extended/field      John.Apostolakis@cern.ch        John Apostolakis
 examples/extended/g3tog4     Gabriele.Cosmo@cern.ch          Gabriele Cosmo
@@ -130,11 +134,15 @@ examples/extended/geometry   Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 examples/extended/medical    MariaGrazia.Pia@ge.infn.it	     Maria Grazia Pia
   DICOM                      Susanna.Guatelli@ge.infn.it     Susanna Guatelli
   GammaTherapy               Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
-examples/extended/optical    gum@triumf.ca                   Peter Gumplinger
+examples/extended/optical:
+  LXe                        gum@triumf.ca                   Peter Gumplinger
 examples/extended/parallel:
   ParN02, ParN04             gene@ccs.neu.edu                Gene Cooperman
   ExDiane                    Susanna.Guatelli@ge.infn.it     Susanna Guatelli
-examples/extended/persistency  Youhei.Morita@cern.ch         Youhei Morita
+examples/extended/persistency:
+  PersEx01                   Youhei.Morita@kek.jp            Youhei Morita
+examples/extended/radioactivedecay:
+  exrdm                      flei@space.qinetiq.com          Fan Lei
 tests                        Serguei.Sadilov@cern.ch         Serguei Sadilov
       test01                 Gabriele.Cosmo@cern.ch          Gabriele Cosmo
       test02                 Michel.Maire@lapp.in2p3.fr      Michel Maire
@@ -168,6 +176,7 @@ tests                        Serguei.Sadilov@cern.ch         Serguei Sadilov
       test31                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test32                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
       test33                 Michael.Dressel@cern.ch         Michael Dressel
+      test34                 Joanna.Weng@cern.ch             Joanna Weng
       test40                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test50                 MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
       test201                barrand@lal.in2p3.fr            Guy Barrand
