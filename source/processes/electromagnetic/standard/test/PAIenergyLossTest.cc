@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PAIenergyLossTest.cc,v 1.5 2004-08-30 15:48:35 vnivanch Exp $
+// $Id: PAIenergyLossTest.cc,v 1.6 2004-11-10 10:24:30 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,9 +40,9 @@
 #include "G4eEnergyLoss.hh"
 #include "G4eIonisation.hh"
 #include "G4hEnergyLoss.hh"
-#include "G4PAIenergyLoss.hh"
+// #include "G4PAIenergyLoss.hh"
 #include "G4hIonisation.hh"
-#include "G4PAIonisation.hh"
+// #include "G4PAIonisation.hh"
 
 #include "G4DynamicParticle.hh"
 #include "G4Element.hh"

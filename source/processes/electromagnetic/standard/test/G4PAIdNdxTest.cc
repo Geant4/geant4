@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIdNdxTest.cc,v 1.4 2003-06-16 17:02:19 gunter Exp $
+// $Id: G4PAIdNdxTest.cc,v 1.5 2004-11-10 10:24:30 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,7 +46,7 @@
 #include "G4MaterialTable.hh"
 #include "G4SandiaTable.hh"
 
-#include "G4PAIonisation.hh"
+// #include "G4PAIonisation.hh"
 #include "G4PAIxSection.hh"
 
 int main()

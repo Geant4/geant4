@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InitXscPAItest.cc,v 1.3 2004-11-10 07:46:03 grichine Exp $
+// $Id: G4InitXscPAItest.cc,v 1.4 2004-11-10 10:24:29 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,7 +48,7 @@
 #include "G4MaterialTable.hh"
 #include "G4SandiaTable.hh"
 
-#include "G4PAIonisation.hh"
+// #include "G4PAIonisation.hh"
 #include "G4PAIxSection.hh"
 #include "G4InitXscPAI.hh"
 
