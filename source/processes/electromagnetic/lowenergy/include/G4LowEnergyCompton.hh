@@ -1,4 +1,3 @@
-<<<<<<< G4LowEnergyCompton.hh
 // ********************************************************************
 // * DISCLAIMER                                                       *
 // *                                                                  *
@@ -20,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 
-// $Id: G4LowEnergyCompton.hh,v 1.14 2001-08-28 16:09:18 pia Exp $
+// $Id: G4LowEnergyCompton.hh,v 1.15 2001-08-28 16:40:20 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
