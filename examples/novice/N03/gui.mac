@@ -25,4 +25,3 @@
 #
 # To limit the output flow in the "dump" widget :
 /event/printModulo 100
-#
