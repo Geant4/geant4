@@ -1,4 +1,3 @@
-// This code implementation is the intellectual property of
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -22,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCandidate.cc,v 1.17 2001-11-26 14:11:46 hpw Exp $
+// $Id: G4QCandidate.cc,v 1.18 2001-12-13 12:04:17 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCandidate ----------------
