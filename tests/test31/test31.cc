@@ -51,10 +51,15 @@
 #include "test31TrackingAction.hh"
 #include "test31RunAction.hh"
 
+#include "G4Timer.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 int main(int argc,char** argv) {
+
+  G4Timer* timer = new G4Timer();
+  timer->Start();
 
   G4int verbose = 1;
   //choose the Random engine
@@ -142,6 +147,10 @@ int main(int argc,char** argv) {
 #ifdef G4VIS_USE
   delete visManager;
 #endif
+
+  timer->Stop();
+  G4cout << "  "  << *timer << G4endl;
+  delete timer;
 
   //  G4cout << "runManager will be deleted" << G4endl;  
   delete runManager;

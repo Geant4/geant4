@@ -4,7 +4,7 @@
 #================================================
 /control/verbose 2
 /run/verbose 1
-/tracking/verbose 1
+/tracking/verbose 0
 /event/verbose 0
 /test31/verbose 0
 #
@@ -21,7 +21,7 @@
 /test31/HistoNumber          5
 /test31/NumberOfEvents       0
 /test31/gun/beamE            100.0 MeV
-/process/eLoss/verbose  3
+/process/eLoss/verbose  0
 /run/initialize
 #
 /gun/particle mu+
@@ -30,5 +30,5 @@
 #/gun/particle alpha
 #/gun/energy 10.0 MeV
 #
-/run/beamOn 10
+/run/beamOn 1000
 
