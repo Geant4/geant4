@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepMessenger.hh,v 1.3 2003-12-11 21:55:54 duns Exp $
+// $Id: G4HepRepMessenger.hh,v 1.4 2004-05-26 21:25:51 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,6 +45,7 @@ class G4HepRepMessenger : public G4UImessenger {
         virtual G4String getEventNumberSuffix();
         virtual G4bool appendGeometry();
         virtual G4bool addPointAttributes();
+        virtual G4String getCoordinateSystem();
 
 
     private:            
@@ -58,6 +59,9 @@ class G4HepRepMessenger : public G4UImessenger {
 
         G4bool pointAttributes;
         G4UIcmdWithABool* addPointAttributesCommand;
+
+        G4String coordinateSystem;
+        G4UIcmdWithAString* setCoordinateSystemCommand;
 };
 
 #endif

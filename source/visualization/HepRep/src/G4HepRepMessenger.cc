@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepMessenger.cc,v 1.4 2003-12-11 21:55:55 duns Exp $
+// $Id: G4HepRepMessenger.cc,v 1.5 2004-05-26 21:25:52 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4HepRepMessenger.hh"
@@ -52,6 +52,12 @@ G4HepRepMessenger::G4HepRepMessenger() :
     addPointAttributesCommand->SetParameterName("flag",false);
     addPointAttributesCommand->SetDefaultValue(false);
     addPointAttributesCommand->AvailableForStates(G4State_Idle);
+
+    setCoordinateSystemCommand = new G4UIcmdWithAString("/vis/heprep/setCoordinateSystem", this);
+    setCoordinateSystemCommand->SetGuidance("Sets the prefered Coordinate System (e.g. \"xyz\" or \"zxy\".");
+    setCoordinateSystemCommand->SetParameterName("coordinateSystem",false);
+    setCoordinateSystemCommand->SetDefaultValue("xyz");
+    setCoordinateSystemCommand->AvailableForStates(G4State_Idle);    
 }
 
 G4HepRepMessenger::~G4HepRepMessenger() {
@@ -59,6 +65,7 @@ G4HepRepMessenger::~G4HepRepMessenger() {
 //    delete appendGeometryCommand;
     delete addPointAttributesCommand;
     delete heprepDirectory;
+    delete setCoordinateSystemCommand;
 }
 
 G4String G4HepRepMessenger::GetCurrentValue(G4UIcommand * command) {
@@ -68,6 +75,8 @@ G4String G4HepRepMessenger::GetCurrentValue(G4UIcommand * command) {
 //        return appendGeometryCommand->ConvertToString(geometry); 
     } else if (command==addPointAttributesCommand) {
         return addPointAttributesCommand->ConvertToString(pointAttributes); 
+    } else if (command==setCoordinateSystemCommand) {
+        return coordinateSystem;
     } else {
         return "";
     }
@@ -80,6 +89,8 @@ void G4HepRepMessenger::SetNewValue(G4UIcommand * command, G4String newValue) {
 //        geometry = appendGeometryCommand->GetNewBoolValue(newValue);
     } else if (command==addPointAttributesCommand) {
         pointAttributes = addPointAttributesCommand->GetNewBoolValue(newValue);
+    } else if (command==setCoordinateSystemCommand) {
+        coordinateSystem = newValue;
     }
 }
 
@@ -93,4 +104,8 @@ G4bool G4HepRepMessenger::appendGeometry() {
 
 G4bool G4HepRepMessenger::addPointAttributes() {
     return pointAttributes;
+}
+
+G4String G4HepRepMessenger::getCoordinateSystem() {
+    return coordinateSystem;
 }

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.15 2003-11-17 23:13:01 duns Exp $
+# $Id: GNUmakefile,v 1.16 2004-05-26 21:25:51 duns Exp $
 
 name := G4visHepRep
 
@@ -15,6 +15,7 @@ CPPFLAGS += -I$(G4BASE)/visualization/HepRep/include/ref
 CPPFLAGS += -I$(G4BASE)/visualization/HepRep/include/zipios++
 CPPFLAGS += -I$(G4BASE)/visualization/HepRep/include/zlib
 
+CPPFLAGS += -I$(G4BASE)/run/include
 CPPFLAGS += -I$(G4BASE)/digits_hits/hits/include
 CPPFLAGS += -I$(G4BASE)/tracking/include
 CPPFLAGS += -I$(G4BASE)/visualization/management/include

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.71 2004-05-26 06:16:21 duns Exp $
+// $Id: G4HepRepSceneHandler.cc,v 1.72 2004-05-26 21:25:52 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -43,6 +43,8 @@
 #include "HEPREP/HepRep.h"
 
 //G4
+#include "G4Vector3D.hh"
+#include "G4RunManagerKernel.hh"
 #include "G4Types.hh"
 #include "G4Point3D.hh"
 #include "G4Normal3D.hh"
@@ -937,6 +939,43 @@ bool G4HepRepSceneHandler::isEventData () {
     return !currentPV || fReadyForTransients;
 }
 
+void G4HepRepSceneHandler::addTopLevelAttributes(HepRepType* type) {
+    
+    // Some non-standard attributes
+    type->addAttDef(  "Generator", "Generator of the file", "General", "");
+    type->addAttValue("Generator", "Geant4");
+
+    type->addAttDef(  "GeneratorVersion", "Version of the Generator", "General", "");
+    type->addAttValue("GeneratorVersion", G4RunManagerKernel::GetRunManagerKernel()->GetVersionString());
+
+    type->addAttDef(  "CoordinateSystem", "Coordinate System", "Draw", "");
+    type->addAttValue("CoordinateSystem", "xyz");    
+    
+    const G4ViewParameters parameters = GetCurrentViewer()->GetViewParameters();
+    const G4Vector3D& viewPointDirection = parameters.GetViewpointDirection();    
+    type->addAttDef(  "ViewTheta", "Theta of initial suggested viewpoint", "Draw", "rad");
+    type->addAttValue("ViewTheta", viewPointDirection.theta());    
+    
+    type->addAttDef(  "ViewPhi", "Phi of initial suggested viewpoint", "Draw", "rad");
+    type->addAttValue("ViewPhi", viewPointDirection.phi());    
+    
+    type->addAttDef(  "ViewScale", "Scale of initial suggested viewpoint", "Draw", "");
+    type->addAttValue("ViewScale", parameters.GetZoomFactor());    
+    
+// FIXME, no way to set these
+    type->addAttDef(  "ViewTranslateX", "Translate in X of initial suggested viewpoint", "Draw", "");
+    type->addAttValue("ViewTranslateX", 0.0);    
+    
+    type->addAttDef(  "ViewTranslateY", "Translate in Y of initial suggested viewpoint", "Draw", "");
+    type->addAttValue("ViewTranslateY", 0.0);    
+    
+    type->addAttDef(  "ViewTranslateZ", "Translate in Z of initial suggested viewpoint", "Draw", "");
+    type->addAttValue("ViewTranslateZ", 0.0);    
+    
+    type->addAttDef(  "PointUnit", "Length", "Physics", "");
+    type->addAttValue("PointUnit", G4String("m"));
+}           
+
 HepRep* G4HepRepSceneHandler::getHepRep() {
     if (_heprep == NULL) {
         // Create the HepRep that holds the Trees.
@@ -1042,6 +1081,8 @@ HepRepType* G4HepRepSceneHandler::getGeometryRootType() {
         
         _geometryRootType->addAttValue("MarkSizeMultiplier", 4.0);
         _geometryRootType->addAttValue("LineWidthMultiplier", 1.0);
+
+        addTopLevelAttributes(_geometryRootType);       
         
         getGeometryTypeTree()->addType(_geometryRootType);
         
@@ -1144,10 +1185,7 @@ HepRepType* G4HepRepSceneHandler::getEventType() {
         _eventType->addAttValue("MarkSizeMultiplier", 4.0);
         _eventType->addAttValue("LineWidthMultiplier", 1.0);
 
-        // Some non-standard attributes
-        _eventType->addAttDef("PointUnit", "Length", "Physics", "");
-        _eventType->addAttValue("PointUnit", G4String("m"));
-            
+        addTopLevelAttributes(_eventType);
         getEventTypeTree()->addType(_eventType);
     }
     
