@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.hh,v 1.11 2001-07-13 15:57:03 gcosmo Exp $
+// $Id: G4VUserPhysicsList.hh,v 1.12 2001-08-03 05:59:03 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -216,8 +216,13 @@ class G4VUserPhysicsList
    // Cut values will be retrieved from files
    void SetParticleCuts( G4double cut, G4ParticleDefinition* );    
 
-  
-  ///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+  public:   
+   // Get/SetApplyCuts gets/sets the flag for ApplyCuts
+   void SetApplyCuts(G4bool value, const G4String& name); 
+   G4bool GetApplyCuts(const G4String& name) const; 
+
+///////////////////////////////////////////////////////////////////////////////
   protected:  
     // do BuildPhysicsTable for make the integral schema
     void BuildIntegralPhysicsTable(G4VProcess* ,G4ParticleDefinition*  );   
