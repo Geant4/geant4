@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.cc,v 1.7 2002-10-28 11:36:28 gcosmo Exp $
+// $Id: G4BooleanSolid.cc,v 1.8 2002-10-29 14:15:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for the abstract base class for solids created by boolean 
@@ -88,11 +88,14 @@ G4BooleanSolid::G4BooleanSolid( const G4String& pName,
 
 ///////////////////////////////////////////////////////////////
 //
-// Destructor deletes second pointer created by 'new'
+// Destructor deletes transformation contents of the created displaced solid
 
 G4BooleanSolid::~G4BooleanSolid() 
 {
-  if(createdDisplacedSolid) delete fPtrSolidB ;
+  if(createdDisplacedSolid)
+  {
+    ((G4DisplacedSolid*)fPtrSolidB)->CleanTransformations();
+  }
 }
 
 ///////////////////////////////////////////////////////////////
