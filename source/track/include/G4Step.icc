@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.icc,v 1.9 2002-12-16 11:59:12 gcosmo Exp $
+// $Id: G4Step.icc,v 1.10 2003-03-05 04:42:53 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -188,6 +188,7 @@ inline
    fpPreStepPoint->SetStepStatus(fUndefined);
    fpPreStepPoint->SetProcessDefinedStep(0);
    fpPreStepPoint->SetMass(fpTrack->GetDynamicParticle()->GetMass());    
+   fpPreStepPoint->SetCharge(fpTrack->GetDynamicParticle()->GetCharge()); 
    fpPreStepPoint->SetWeight(fpTrack->GetWeight());
    
    
