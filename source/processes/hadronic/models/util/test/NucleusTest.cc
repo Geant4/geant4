@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: NucleusTest.cc,v 1.1 2003-10-08 13:48:24 hpw Exp $
+// $Id: NucleusTest.cc,v 1.2 2004-04-16 14:57:49 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -154,15 +154,21 @@ std::pair<G4double,G4double> AvergeMass(
 	  G4Nucleon * anucleon;
 	  nucleus.StartLoop();
 	  while ( (anucleon=nucleus.GetNextNucleon() ) != NULL ) {
-		  momentum += anucleon->GetMomentum();
+	  	  G4LorentzVector p_nuc=anucleon->GetMomentum();
+		  G4double T=p_nuc.e() - p_nuc.mag();
+		  p_nuc.setE(anucleon->GetDefinition()->GetPDGMass() + T);
+		  p_nuc.setE(sqrt( sqr(anucleon->GetDefinition()->GetPDGMass()) 
+		                    + p_nuc.vect().mag2()));
+		  momentum += p_nuc;
+//		  momentum += anucleon->GetMomentum();
 		  G4double field=
 		  (anucleon->GetParticleType() == G4Proton::Proton())
 		  ? ProtonField.GetField(anucleon->GetPosition()) :
 		    NeutronField.GetField(anucleon->GetPosition());
 		  fieldsum += field;
 	  }
-	  S_average +=momentum.e()+fieldsum;
-	  S_average2+=sqr(momentum.e()+fieldsum);
+	  S_average +=momentum.e() + fieldsum;            // field is negative
+	  S_average2+=sqr(momentum.e() + fieldsum);
 	// 		G4cout << "Total Energy(MeV) : " 
 	// 	      		<< momentum.e()/MeV << " " 
 	// 			<< G4endl;
