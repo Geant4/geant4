@@ -32,7 +32,7 @@ class G4RayTrajectory : public G4VTrajectory
    virtual void ShowTrajectory() const;
    virtual void DrawTrajectory(G4int i_mode=0) const {;}
    virtual int GetPointEntries() const {return positionRecord->entries();}
-   virtual G4RayTrajectoryPoint* GetPoint(G4int i) const 
+   virtual G4VTrajectoryPoint* GetPoint(G4int i) const 
    { return (*positionRecord)[i]; };
    virtual void MergeTrajectory(G4VTrajectory* secondTrajectory);  
 

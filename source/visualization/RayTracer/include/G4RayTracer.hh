@@ -38,8 +38,8 @@ class G4RayTracer : public G4VGraphicsSystem
     void Trace(G4String fileName);
 
   public:
-    virtual G4VSceneHandler* CreateSceneHandler (const G4String& ) {;}
-    virtual G4VViewer* CreateViewer (G4VSceneHandler&, const G4String& ) {;}
+    virtual G4VSceneHandler* CreateSceneHandler (const G4String& ) {return NULL;}
+    virtual G4VViewer* CreateViewer (G4VSceneHandler&, const G4String& ) {return NULL;}
 
   private:
     G4bool CreateBitMap();
