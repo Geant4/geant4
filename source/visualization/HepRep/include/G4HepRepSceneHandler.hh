@@ -119,7 +119,7 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
 
         G4Transform3D transform;
 
-        void SetColour (HEPREP::HepRepAttribute *attribute, const G4Colour& color);
+        void SetColour (HEPREP::HepRepAttribute *attribute, const G4Colour& color,const G4String& key = G4String("Color"));
         void SetLine (HEPREP::HepRepInstance *instance, const G4Visible& visible);
         void SetMarker (HEPREP::HepRepInstance *instance, const G4VMarker& marker);
         HEPREP::HepRepInstance* CreateInstance(HEPREP::HepRepInstance* p, HEPREP::HepRepType* altType);

@@ -59,6 +59,7 @@
 #include "G4VTrajectory.hh"
 #include "G4VHit.hh"
 #include "G4Scene.hh"
+#include "G4Material.hh"
 
 //This
 #include "G4HepRep.hh"
@@ -139,10 +140,12 @@ void G4HepRepSceneHandler::open() {
     geometryType->addAttDef("State", "Material State", "Physics","");
     geometryType->addAttDef("Radlen", "Material Radiation Length", "Physics","");
     geometryType->addAttValue("Layer", G4String("Geometry"));
+    geometryType->addAttValue("HasFrame", true);
     typeTree->addType(geometryType);
 
     eventType = heprepFactory->createHepRepType(NULL, "Event");
     eventType->addAttValue("Layer", G4String("Event"));
+    eventType->addAttValue("HasFrame", true);
     typeTree->addType(eventType);
 
     trackType = heprepFactory->createHepRepType(eventType, "Track");
@@ -150,6 +153,7 @@ void G4HepRepSceneHandler::open() {
 
     calHitType = heprepFactory->createHepRepType(eventType, "Calorimeter Hit");
     calHitType->addAttValue("Layer", G4String("CalHit"));
+    calHitType->addAttValue("Fill", true);
 
     hitType = heprepFactory->createHepRepType(eventType, "Hit");
     hitType->addAttValue("Layer", G4String("Hit"));
@@ -225,7 +229,6 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyline& line) {
     SetLine(instance, line);
 
     instance->addAttValue("DrawAs", G4String("Line"));
-    instance->addAttValue("HasFrame", G4String("True"));
     SetColour(instance, GetColour(line));
     for (size_t i=0; i < line.size(); i++) {
         G4Point3D vertex = transform * line[i];
@@ -245,13 +248,13 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polymarker& line) {
     HepRepInstance* instance = CreateInstance(parent, hitType);
 
     instance->addAttValue("DrawAs", G4String("Point"));
-    instance->addAttValue("HasFrame", G4String("True"));
 
     SetMarker(instance, line);
     switch (line.GetMarkerType()) {
         case line.dots:
             instance->addAttValue("MarkName", G4String("Circle"));
-            instance->addAttValue("Fill", G4String("True"));
+            instance->addAttValue("Fill", true);
+            SetColour(instance, GetColour(line), G4String("FillColor"));
             break;
         case line.circles:
             instance->addAttValue("MarkName", G4String("Circle"));
@@ -283,7 +286,6 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Circle& circle) {
 
     SetColour (instance, GetColour(circle));
     instance->addAttValue("DrawAs", G4String("Point"));
-    instance->addAttValue("HasFrame", G4String("True"));
     instance->addAttValue("MarkName", G4String("Circle"));
 
     SetMarker(instance, circle);
@@ -311,20 +313,18 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     G4Normal3D surfaceNormal;
     G4Point3D vertex;
 
+    if (polyhedron.GetNoFacets()==0) return;
+
     HepRepFactory* factory = GetHepRepFactory();
     HepRepInstance* instance = CreateInstance(parent, calHitType);
 
-
-    if (polyhedron.GetNoFacets()==0) return;
-
     G4bool notLastFace;
     do {
-        HepRepInstance* face = CreateInstance(parent, calHitType);
+        HepRepInstance* face = CreateInstance(instance, calHitType);
         SetLine(face, polyhedron);
         face->addAttValue("DrawAs", G4String("Polygon"));
-        face->addAttValue("HasFrame", G4String("True"));
         SetColour(face, GetColour(polyhedron));
-        face->addAttValue("Fill", G4String("True"));
+        if (IsEventData()) SetColour(face, GetColour(polyhedron), G4String("FillColor"));
 
         notLastFace = polyhedron.GetNextNormal (surfaceNormal);
 
@@ -364,7 +364,6 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Square& square) {
 
     SetColour (instance, GetColour(square));
     instance->addAttValue("DrawAs", G4String("Point"));
-    instance->addAttValue("HasFrame", G4String("True"));
     instance->addAttValue("MarkName", G4String("Box"));
 
     SetMarker(instance, square);
@@ -525,7 +524,7 @@ void G4HepRepSceneHandler::EndPrimitives () {
     G4VSceneHandler::EndPrimitives ();
 }
 
-void G4HepRepSceneHandler::SetColour (HepRepAttribute *attribute, const G4Colour& color) {
+void G4HepRepSceneHandler::SetColour (HepRepAttribute *attribute, const G4Colour& color, const G4String& key) {
 #ifdef DEBUG
     G4cout << "G4HepRepSceneHandler::SetColour : red : " << color.GetRed ()   <<
                                   " green : " << color.GetGreen () <<
@@ -536,7 +535,7 @@ void G4HepRepSceneHandler::SetColour (HepRepAttribute *attribute, const G4Colour
     c.push_back(color.GetGreen());
     c.push_back(color.GetBlue());
     c.push_back(color.GetAlpha());
-    attribute->addAttValue("Color", c);
+    attribute->addAttValue(key, c);
 }
 
 void G4HepRepSceneHandler::SetLine (HepRepInstance *instance, const G4Visible& visible) {
@@ -561,7 +560,12 @@ void G4HepRepSceneHandler::SetMarker (HepRepInstance *instance, const G4VMarker&
 	G4double size = GetMarkerRadius( marker , markerType );
     instance->addAttValue("MarkSize", size);
 	instance->addAttValue("MarkType", (markerType == screen) ? G4String("Symbol") : G4String("Real"));
-    instance->addAttValue("Fill", (marker.GetFillStyle() == G4VMarker::noFill) ? G4String("False") : G4String("True"));
+    if (marker.GetFillStyle() == G4VMarker::noFill) {
+        instance->addAttValue("Fill", false);
+    } else {
+        instance->addAttValue("Fill", true);
+        SetColour(instance, GetColour(marker), G4String("FillColor"));
+    }
 }
 
 HepRepInstance* G4HepRepSceneHandler::CreateInstance(HepRepInstance* p, HepRepType* altType) {
@@ -575,8 +579,23 @@ HepRepInstance* G4HepRepSceneHandler::CreateInstance(HepRepInstance* p, HepRepTy
         instance->addAttValue("EType",    currentLV->GetSolid()->GetEntityType());
         instance->addAttValue("Material", currentLV->GetMaterial()->GetName());
         instance->addAttValue("Density",  currentLV->GetMaterial()->GetDensity());
-        instance->addAttValue("State",    currentLV->GetMaterial()->GetState());
         instance->addAttValue("Radlen",   currentLV->GetMaterial()->GetRadlen());
+
+        switch (currentLV->GetMaterial()->GetState()) {
+            case kStateSolid:
+                instance->addAttValue("State", G4String("Solid"));
+                break;
+            case kStateLiquid:
+                instance->addAttValue("State", G4String("Liquid"));
+                break;
+            case kStateGas:
+                instance->addAttValue("State", G4String("Gas"));
+                break;
+            case kStateUndefined:
+            default:
+                instance->addAttValue("State", G4String("Undefined"));
+                break;
+        }
     }
     return instance;
 }

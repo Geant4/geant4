@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2002-11-26 19:27:14 duns Exp $
+$Id: History,v 1.19 2002-11-27 00:28:04 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -21,6 +21,9 @@ History file for visualization/HepRep sub-category
 ---------------------------------------------------------------------------
 26th November 2002 Mark Donszelmann
 - Fixed FillStyle, LineStyle, LineWidth, HasFrame and Symbol Names
+- Fixed parent-child relationship  for calorimeter hits
+- Fixed material state number, now a string
+- Fixed fillColor to be equal to color
 
 25th November 2002 Mark Donszelmann
 - Fixed HepRep1 warnings in HepRepFileSceneHandler
