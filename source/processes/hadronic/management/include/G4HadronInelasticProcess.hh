@@ -106,7 +106,12 @@
    {
       return theCrossSectionDataStore;
    }
-
+   
+   void AddDataSet(
+   {
+      theCrossSectionDataStore->AddDataSet(aDataSet);
+   }
+   
  protected:
 
    //    G4HadronicCrossSections theCrossSectionData;
