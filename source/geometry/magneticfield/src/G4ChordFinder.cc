@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc,v 1.44 2003-11-13 18:06:37 japost Exp $
+// $Id: G4ChordFinder.cc,v 1.45 2003-11-13 19:46:56 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,6 +45,7 @@ G4ChordFinder::G4ChordFinder(G4MagInt_Driver* pIntegrationDriver)
     fEquation(0), 
     fDriversStepper(0), 
     fFirstFraction(0.999), fFractionLast(1.00),  fFractionNextEstimate(0.98), 
+    fMultipleRadius(15.0), 
     fTotalNoTrials_FNC(0), fNoCalls_FNC(0), fmaxTrials_FNC(0),
     fStatsVerbose(0)
 {
@@ -69,6 +70,7 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
     fEquation(0), 
     fDriversStepper(0), 
     fFirstFraction(0.999), fFractionLast(1.00),  fFractionNextEstimate(0.98), 
+    fMultipleRadius(15.0), 
     fTotalNoTrials_FNC(0), fNoCalls_FNC(0), fmaxTrials_FNC(0),
     fStatsVerbose(0)
 {
@@ -107,8 +109,8 @@ G4ChordFinder::SetFractions_Last_Next( G4double fractLast, G4double fractNext )
   if( fractLast == -1.0 )   fractLast = 1.0;   // 0.9;
   if( fractNext == -1.0 )   fractNext = 0.98;  // 0.9; 
 
-  fFirstFraction  = 0.999;  // Orig 0.999 A safe value,  range: ~ 0.95 - 0.999 
-  fMultipleRadius = 15.0;   // For later use, range: ~  2 - 20 
+  // fFirstFraction  = 0.999;  // Orig 0.999 A safe value,  range: ~ 0.95 - 0.999 
+  // fMultipleRadius = 15.0;   // For later use, range: ~  2 - 20 
 
   if( fStatsVerbose ) { 
     G4cout << " ChordFnd> Trying to set fractions: "
