@@ -1,4 +1,4 @@
-$Id: History,v 1.27 1999-05-14 16:04:42 gcosmo Exp $
+$Id: History,v 1.28 1999-05-17 15:08:31 stesting Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17th May 1999  John Allison
+- Added -DG4NOT_ISO_DELETES for Sun and HP.
+- Changed order of -I$(OSPACEDIR)/ospace/std and -I$(OSPACEDIR)/ospace/stl.
 
 13th May 1999  Gabriele Cosmo (config-01-00-05)
 - architecture.gmk: G4USE_OSPACE setup is now independent from G4USE_STL which
