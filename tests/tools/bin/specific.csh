@@ -451,7 +451,7 @@ if ( `uname -n` == "papou1" ) then
   set prompt='g4-papou1> ' 
 endif
 
-if ( `uname -n` == "VMhost.lal.in2p3.fr" || `uname -n` == "nb-barrand2" ) then
+if ( `uname -n` == "VMhost.lal.in2p3.fr" ) then
   set prompt='g4-pc-gbp> ' 
 # Core :
   setenv CVSROOT :ext:gbarrand@sungeant.cern.ch:/afs/cern.ch/sw/geant4/cvs
@@ -524,6 +524,27 @@ if ( `uname -n` == "VMhost.lal.in2p3.fr" || `uname -n` == "nb-barrand2" ) then
   setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/lib/${G4SYSTEM}
   setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/tmp/${G4SYSTEM}/AnaEx01
   setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/tmp/${G4SYSTEM}/DMX
+endif
+
+if ( `uname -n` == "nb-barrand2" ) then
+  setenv CVSROOT :ext:gbarrand@sungeant.cern.ch:/afs/cern.ch/sw/geant4/cvs
+  setenv CVS_RSH ssh
+  setenv G4INSTALL Z:/geant4/geant4-05-00-ref-01
+  setenv G4SYSTEM WIN32-VC7
+  setenv G4WORKDIR $G4INSTALL
+  setenv G4WORKDIR C:/geant4/geant4-05-00-ref-01
+  setenv G4STTDIR $G4WORKDIR/stt
+  setenv G4LIB $G4WORKDIR/lib
+  setenv G4DEBUG 1
+  setenv CPPVERBOSE 1
+# G4 build flags :
+  setenv G4UI_BUILD_WIN32_SESSION 1
+  setenv G4VIS_BUILD_OPENGLWIN32_DRIVER 1
+# G4 use flags :
+  setenv G4UI_USE_WIN32 1
+  setenv G4VIS_USE_OPENGLWIN32 1
+# Specific :
+  setenv CLHEP_BASE_DIR C:/CLHEP/1.8.0.0
 endif
 
 if ( `uname -n` == "lx-si1.lal.in2p3.fr" ) then
