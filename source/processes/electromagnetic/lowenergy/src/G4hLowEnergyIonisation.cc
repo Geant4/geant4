@@ -40,7 +40,8 @@
 // 04 Sept.  2000 V.Ivanchenko rename fluctuations
 // 05 Sept.  2000 V.Ivanchenko clean up
 // 03 Oct.   2000 V.Ivanchenko CodeWizard clean up
-// --------------------------------------------------------------
+// 03 Nov.   2000 V.Ivanchenko MinKineticEnergy=LowestKineticEnergy=10eV
+// -----------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -84,7 +85,7 @@ void G4hLowEnergyIonisation::InitializeMe()
 {
   LowestKineticEnergy  = 10.0*eV ;
   HighestKineticEnergy = 100.0*TeV ;
-  MinKineticEnergy     = 1.*eV ; 
+  MinKineticEnergy     = 10.0*eV ; 
   TotBin = 200 ;
   protonLowEnergy      = 1.*keV ; 
   protonHighEnergy     = 2.*MeV ;
@@ -473,12 +474,19 @@ G4double G4hLowEnergyIonisation::GetConstraints(
   G4Proton* theProton = G4Proton::Proton();
   G4AntiProton* theAntiProton = G4AntiProton::AntiProton();
 
-  G4double stepLimit ;
+  G4double stepLimit = 0.0 ;
   G4bool isOut ;
   G4double dx, s, highEnergy;
   
   G4double massRatio = proton_mass_c2/(particle->GetMass()) ;
   G4double kineticEnergy = particle->GetKineticEnergy() ;
+
+  if(0.0 == kineticEnergy) {
+    fdEdx = 0.0 ;
+    fRangeNow = 0.0 ;
+    return stepLimit ;
+  }
+
   charge = (particle->GetCharge())/eplus ;
   
   // Scale the kinetic energy
@@ -488,46 +496,69 @@ G4double G4hLowEnergyIonisation::GetConstraints(
   
   if(charge > 0.0) {
     
-    fdEdx = G4EnergyLossTables::GetDEDX(theProton, tscaled, material) 
-          * chargeSquare ;
-
-    // Correction for ions
-    if(theBarkas && 1.0 < charge) {
-      G4double loss = BarkasTerm(material,tscaled)*(charge -1.0) 
-                    * chargeSquare ;
-      loss  += BlochTerm(material,tscaled,chargeSquare) ; 
-      loss  -= BlochTerm(material,tscaled,1.0) ; 
-      fdEdx += loss ;
-    }
-    
-    fRangeNow = G4EnergyLossTables::GetRange(theProton, tscaled, material) ;
     highEnergy = protonHighEnergy ;
-    dx = G4EnergyLossTables::GetRange(theProton, highEnergy, material) ;
-    
-    if(tscaled < highEnergy) {
-      // For Bragg's peak the limit in range is estimated 
-      // in order to be inside linLossLimit on each step
-      fdEdx = ProtonParametrisedDEDX(material, tscaled) * chargeSquare ;
+
+    //Very low energy dE/dx assumed to be according to Free Electron Gas Model
+    if(tscaled < MinKineticEnergy) {
+      fdEdx     = 0.5 * ProtonParametrisedDEDX(material, MinKineticEnergy) * chargeSquare ;
+      fRangeNow = tscaled/fdEdx ;
+      fdEdx    *= chargeSquare ;
+      dx        = fRangeNow ;
+
+      // Normal energy
+    } else {
+
+      fRangeNow = G4EnergyLossTables::GetRange(theProton, tscaled, material) ;
+      dx = G4EnergyLossTables::GetRange(theProton, highEnergy, material) ;
+
+      if(tscaled > highEnergy) {
+        fdEdx = G4EnergyLossTables::GetDEDX(theProton, tscaled, material) 
+              * chargeSquare ;
+        // Correction for positive ions
+        if(theBarkas && 1.0 < charge) {
+          G4double loss = BarkasTerm(material,tscaled)*(charge -1.0) 
+                        * chargeSquare ;
+          loss  += BlochTerm(material,tscaled,chargeSquare) ; 
+          loss  -= BlochTerm(material,tscaled,1.0) ; 
+          fdEdx += loss ;
+	}
+
+	// Parametrisation - recalculate dE/dx
+      } else {    
+        fdEdx = ProtonParametrisedDEDX(material, tscaled) * chargeSquare ;
+      }
     }
     
     // Antiprotons and negative hadrons 
   } else {
-    
-    fdEdx = G4EnergyLossTables::GetDEDX(theAntiProton, tscaled, material) 
-          * chargeSquare ;
-    
-    fRangeNow = G4EnergyLossTables::GetRange(theAntiProton, tscaled, material);
+
     highEnergy = antiProtonHighEnergy ;
-    dx = G4EnergyLossTables::GetRange(theAntiProton, highEnergy, material) ;
+
+    //Very low energy dE/dx assumed to be constant
+    if(tscaled < MinKineticEnergy) {
+      fdEdx     = AntiProtonParametrisedDEDX(material, MinKineticEnergy) * chargeSquare ;
+      fRangeNow = tscaled/fdEdx ;
+      fdEdx    *= chargeSquare ;
+      dx        = fRangeNow/paramStepLimit ;
+
+      // Normal energy
+    } else {
+
+      fRangeNow = G4EnergyLossTables::GetRange(theAntiProton, tscaled, material) ;
+      dx = G4EnergyLossTables::GetRange(theAntiProton, highEnergy, material) ;
+
+      if(tscaled > highEnergy) {
+        fdEdx = G4EnergyLossTables::GetDEDX(theAntiProton, tscaled, material) 
+              * chargeSquare ;
     
-    if(tscaled < highEnergy) {
-      // For Bragg's peak the limit in range is estimated 
-      // in order to be inside linLossLimit on each step
-      fdEdx = AntiProtonParametrisedDEDX(material, tscaled) * chargeSquare ;
+      // For Bragg's peak dE/dx is recalculated
+      } else {
+        fdEdx = AntiProtonParametrisedDEDX(material, tscaled) * chargeSquare ;
+      }
     }
   }
   
-  //
+  // scaling back
   fRangeNow /= (chargeSquare*massRatio) ;
   dx        /= (chargeSquare*massRatio) ;
   stepLimit  = fRangeNow ;
@@ -581,11 +612,11 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
   
     // very small particle energy
   if(kineticEnergy < MinKineticEnergy) {
+
     eloss = kineticEnergy ;  
 
     // particle energy outside tabulated energy range
-  } else if(( kineticEnergy > HighestKineticEnergy) || 
-            ( kineticEnergy <= LowestKineticEnergy)) {
+  } else if( kineticEnergy > HighestKineticEnergy) { 
     eloss = step*fdEdx ; 
  
     // proton parametrisation model  
@@ -601,7 +632,7 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
                ProtonParametrisedDEDX(material,eFinal*massRatio)*chargeSquare)
             *  step * 0.5 ;
     } else {
-      eloss = kineticEnergy - nloss;
+      eloss = kineticEnergy - nloss ;
     }
 
     // antiproton parametrisation model
@@ -655,15 +686,15 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
   
   finalT = kineticEnergy - eloss - nloss ;
 
-  if( EnlossFlucFlag && finalT > MinKineticEnergy && 0.0 < eloss ) {
+  if( EnlossFlucFlag && 0.0 < eloss ) {
     
     //  now the electron loss with fluctuation
     eloss = ElectronicLossFluctuation(particle, material, eloss, step) ;
     finalT = kineticEnergy - eloss - nloss ;    
   }
   
-  //  kill the particle if the kinetic energy <= 0  
-  if (finalT <= 0.0 )
+  //  stop particle if the kinetic energy <= MinKineticEnergy
+  if (finalT <= MinKineticEnergy )
     {
       finalT = 0.0 ;
       if( "proton" == (particle->GetDefinition()->GetParticleName()) )
