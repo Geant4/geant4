@@ -1,8 +1,0 @@
-#
-/vis/sceneHandler/create Xo
-/vis/sceneHandler/attach
-/vis/viewer/create
-/vis/scene/notifyHandlers
-# Attach the just created Go scene graph to the viewer.
-/vis/viewer/update
-#
