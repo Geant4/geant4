@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeCompton.cc,v 1.1 2002-12-06 16:20:38 pandola Exp $
+// $Id: G4PenelopeCompton.cc,v 1.2 2002-12-11 11:27:35 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -71,10 +71,13 @@ G4PenelopeCompton::G4PenelopeCompton(const G4String& processName)
     }
 
   meanFreePathTable = 0;
-
+  IonizationEnergy = new G4std::vector<G4DataVector*>;
+  HartreeFunction  = new G4std::vector<G4DataVector*>;
+  OccupationNumber = new G4std::vector<G4DataVector*>;
   rangeTest = new G4RangeTest;
+ 
   ReadData(); //Legge i dati da file!
-
+ 
   if (verboseLevel > 0) 
     {
       G4cout << GetProcessName() << " is created " << G4endl
@@ -90,6 +93,9 @@ G4PenelopeCompton::~G4PenelopeCompton()
   delete meanFreePathTable;
   delete rangeTest;
   delete matCrossSections;
+  delete IonizationEnergy;
+  delete HartreeFunction;
+  delete OccupationNumber;
 }
 
 void G4PenelopeCompton::BuildPhysicsTable(const G4ParticleDefinition& photon)
@@ -487,7 +493,7 @@ void G4PenelopeCompton::ReadData()
   
   if (!(lsdp->is_open()))
     {
-      G4String excep = "G4PenelopeCompton - data file " + pathFile + "not found!";
+      G4String excep = "G4PenelopeCompton - data file " + pathFile + " not found!";
       G4Exception(excep);
     }
   file.close();
@@ -504,12 +510,16 @@ void G4PenelopeCompton::ReadData()
     u = new G4DataVector;
     j = new G4DataVector;
     G4std::ifstream file(pathFile);
-    file >> k1 >> k2 >> a1 >> a2;
-    if(k1 == Z)
+    k1=1;
+    while (k1>0)
       {
-	f->push_back((G4double) k2);
-	u->push_back(a1);
-	j->push_back(a2);
+	file >> k1 >> k2 >> a1 >> a2;
+	if(k1 == Z)
+	  {
+	    f->push_back((G4double) k2);
+	    u->push_back(a1);
+	    j->push_back(a2);
+	  }
       }
     file.close();
     IonizationEnergy->push_back(u);
