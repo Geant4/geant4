@@ -48,7 +48,6 @@
 //----------------------------------------------------------------------------------
 
 #include "FCALMaterialConsultant.hh"
-#include "PhysicalConstants.h"
 
 #include "globals.hh"
 
