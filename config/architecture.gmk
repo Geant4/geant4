@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.63 2000-03-13 15:23:04 gcosmo Exp $
+# $Id: architecture.gmk,v 1.64 2000-03-30 07:58:47 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -375,6 +375,9 @@ ifeq ($(G4SYSTEM),SUN-CC)
       CCFLAGS := -g
     endif
   endif
+  ifdef G4MAKESHLIB
+    CXXFLAGS += -pic
+  endif
 #  CXXFLAGS += -fnonstd
   CFRONT_G4TEMPLATE_REPOSITORY  := true
   FC     := f77
@@ -423,6 +426,9 @@ ifeq ($(G4SYSTEM),SUN-CC5)
     endif
   endif
 #  CXXFLAGS += -fnonstd
+  ifdef G4MAKESHLIB
+    CXXFLAGS += -pic
+  endif
   G4_HAVE_BOOL := yes
   CFRONT_G4TEMPLATE_REPOSITORY  := true
   FC     := f77

@@ -1,4 +1,4 @@
-$Id: History,v 1.100 2000-03-21 09:07:54 gcosmo Exp $
+$Id: History,v 1.101 2000-03-30 07:58:46 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30th March 2000  Gabriele Cosmo (config-V01-01-01)
+- makeshlib.sh:
+  o added few corrections to the script in order to allow
+    creation of shared libraries without need of the static archive on
+    platforms which allow this.
+  o added section for SunOS systems.
+  (courtesy of I.G.Caballero)
+- architecture.gmk:
+  o on SUN-CC and SUN-CC5, added -pic to CXXFLAGS for building shared
+    libraries.
 
 21st March 2000  Gabriele Cosmo
 - makeshlib.sh: corrected invokation of compiler for HP-aCC setup.
