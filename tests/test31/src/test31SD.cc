@@ -75,7 +75,7 @@ void test31SD::Initialize(G4HCofThisEvent*)
            << evno
            << "  numAbs= " << numAbs 
            << G4endl;
-
+ 
   energy.resize(numAbs);
   for(G4int i=0; i<numAbs; i++) { energy[i] = 0.0; }
   backEnergy = 0.0;

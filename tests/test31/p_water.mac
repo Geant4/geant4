@@ -20,7 +20,7 @@
 /test31/NumberOfAbsorbers    300
 /test31/maxDeltaEnergy       0.5 MeV
 /test31/WorldMaterial        Vacuum
-/test31/HistoName            h2o_st1000.paw
+/test31/HistoName            h2o_st_p200mev.paw
 #/test31/HistoName            h2o_le_1.paw
 #/test31/HistoName            h2o_52_1.paw
 /test31/HistoNumber          5

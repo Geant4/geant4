@@ -233,7 +233,7 @@ void test31Histo::bookHisto()
 
   // Creating a tuple factory, whose tuples will be handled by the tree
   std::auto_ptr< AIDA::ITupleFactory > tpf( af->createTupleFactory( *tree ) );
-
+ 
   // If using Anaphe HBOOK implementation, there is a limitation on the
   // length of the variable names in a ntuple
   if(nTuple) ntup = tpf->create( "100", "Range/Energy",

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StepMax.cc,v 1.4 2004-08-05 10:29:35 vnivanch Exp $
+// $Id: StepMax.cc,v 1.5 2004-08-11 14:09:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,7 +57,7 @@ void StepMax::SetMaxStep(G4double step) {MaxChargedStep = step;}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double StepMax::PostStepGetPhysicalInteractionLength(
-                                              const G4Track& aTrack,
+                                              const G4Track&,
                                                     G4double,
                                                     G4ForceCondition* condition )
 {

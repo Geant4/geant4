@@ -51,6 +51,11 @@
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
 
+#include "G4GeometryManager.hh"
+#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4SolidStore.hh"
+
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 
@@ -88,7 +93,7 @@ test31DetectorConstruction::test31DetectorConstruction():
   WorldSizeZ        = 400.0*mm;
   maxDelta          = 10.0*MeV;
 
-  ComputeGeomParameters();
+  DefineMaterials();
 
   // create commands for interactive definition of the calorimeter  
   detectorMessenger = new test31DetectorMessenger(this);
@@ -105,9 +110,6 @@ test31DetectorConstruction::~test31DetectorConstruction()
 
 G4VPhysicalVolume* test31DetectorConstruction::Construct()
 {
-  if(!detIsConstructed) DefineMaterials();
-  WorldMaterial = GetMaterial(nameMatWorld);
-  AbsorberMaterial = GetMaterial(nameMatAbsorber);
   return ConstructGeometry();
 }
 
@@ -281,7 +283,15 @@ G4VPhysicalVolume* test31DetectorConstruction::ConstructGeometry()
     G4cout << "test31DetectorConstruction: ConstructGeometry starts" << G4endl;
   } 
 
+  // Cleanup old geometry
+  G4GeometryManager::GetInstance()->OpenGeometry();
+  G4PhysicalVolumeStore::GetInstance()->Clean();
+  G4LogicalVolumeStore::GetInstance()->Clean();
+  G4SolidStore::GetInstance()->Clean();
+
   ComputeGeomParameters();
+  WorldMaterial = GetMaterial(nameMatWorld);
+  AbsorberMaterial = GetMaterial(nameMatAbsorber);
 
   //     
   // World
@@ -453,6 +463,7 @@ void test31DetectorConstruction::ComputeGeomParameters()
   (test31Histo::GetPointer())->SetNumberOfAbsorbers(NumberOfAbsorbers);
   (test31Histo::GetPointer())->SetAbsorberThickness(AbsorberThickness);
   (test31Histo::GetPointer())->SetNumAbsorbersSaved(nAbsSaved);
+  (test31Histo::GetPointer())->SetGap(gap);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
