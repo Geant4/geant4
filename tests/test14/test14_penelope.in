@@ -7,7 +7,7 @@
 #
 # ---- Assemble PhysicsList with photon processes a' la Penelope
 lowenergy/addPhysics photon-penelope
-lowenergy/addPhysics electron-eedl
+lowenergy/addPhysics electron-penelope
 lowenergy/addPhysics positron-standard
 #
 /run/initialize
