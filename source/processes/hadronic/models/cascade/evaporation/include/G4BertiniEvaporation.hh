@@ -45,6 +45,7 @@ public:
   virtual G4FragmentVector * BreakItUp(const G4Fragment &theNucleus)
   {
     G4LayeredNucleus aNuc( theNucleus.GetA(), theNucleus.GetZ() );
+    aNuc.AddExcitationEnergy(theNucleus.GetExcitationEnergy());
     return BreakItUp(aNuc);
   }
   G4FragmentVector * BreakItUp( G4LayeredNucleus & nucleus);
