@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.cc,v 1.14 2003-08-01 19:30:37 asaim Exp $
+// $Id: G4EventManager.cc,v 1.15 2003-08-02 00:18:30 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -295,5 +295,17 @@ void G4EventManager::SetUserAction(G4UserSteppingAction* userAction)
   userSteppingAction = userAction;
   trackManager->SetUserAction(userAction);
 }
+
+#ifndef WIN32         // Temporarly disabled on Windows, until CLHEP
+                      // will support the HepMC module
+#include "G4HepMCInterface.hh"
+void G4EventManager::ProcessOneEvent(const HepMC::GenEvent* hepmcevt)
+{
+  G4Event* aDummyEvent = new G4Event();
+  G4HepMCInterface::HepMC2G4(hepmcevt,aDummyEvent);
+  ProcessOneEvent(aDummyEvent);
+  delete aDummyEvent;
+}
+#endif
 
 

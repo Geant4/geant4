@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.hh,v 1.9 2001-07-19 00:14:15 asaim Exp $
+// $Id: G4EventManager.hh,v 1.10 2003-08-02 00:18:30 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -46,6 +46,11 @@ class G4EvManMessenger;
 #include "G4TrackStatus.hh"
 class G4SDManager;
 #include "globals.hh"
+
+#ifndef WIN32         // Temporarly disabled on Windows, until CLHEP
+                      // will support the HepMC module
+#include "CLHEP/HepMC/GenEvent.h"
+#endif
 
 // class description:
 //
@@ -72,8 +77,17 @@ class G4EventManager
 
   public: // with description
       void ProcessOneEvent(G4Event* anEvent);
-      //  This method it the main entry to this class for simulating an event.
-      // This method must be exclusively invoked by G4RunManager.
+      //  This method is the main entry to this class for simulating an event.
+
+#ifndef WIN32         // Temporarly disabled on Windows, until CLHEP
+                      // will support the HepMC module
+      void ProcessOneEvent(const HepMC::GenEvent* hepmcevt);
+      //  This is an alternative entry for large HEP experiments which use
+      // HepMC event class. Note that no output of the simulated event is
+      // returned by this method, but the user must implement some mechanism
+      // of storing output by his/herself, e.g. in his/her UserEventAction and/or
+      // sensitive detectors.
+#endif
 
   private:
       void StackTracks(G4TrackVector *trackVector, G4bool IDhasAlreadySet=false);
