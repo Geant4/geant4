@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.28 2001-12-08 01:17:04 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.29 2001-12-11 16:03:19 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -288,20 +288,18 @@ G4double G4PropagatorInField::
   while( (!intersects ) && (StepTaken + kCarTolerance < CurrentProposedStepLength)  
                         && ( do_loop_count < GetMaxLoopCount() ) );
 
-
-				       
-#ifdef G4VERBOSE
   if( do_loop_count >= GetMaxLoopCount() ){
-
-     G4cerr << "G4PropagateInField: Warning: Particle is looping - " 
+     G4cout << "G4PropagateInField: Warning: Particle is looping - " 
 	    << " tracking in field will be stopped. " << G4endl;
-     G4cerr << " It has performed " << do_loop_count << " steps in Field " 
+#ifdef G4VERBOSE
+     G4cout << " It has performed " << do_loop_count << " steps in Field " 
 	    << " while a maximum of " << GetMaxLoopCount() << " are allowed. "
 	    << G4endl;
+#endif
+     G4cerr << "G4PropagateInField: Warning: Looping particle. " << G4endl; 
      //G4cerr << " In future this will be treated better/quicker. " << G4endl;
      fParticleIsLooping= true;
   }
-#endif
 
   if( ! intersects )
   {
@@ -354,10 +352,14 @@ G4double G4PropagatorInField::
     fNoZeroStep= 0;
 
   if( fNoZeroStep > fAbandonThreshold_NoZeroSteps ) { 
+#ifdef G4VERBOSE
      G4cout << " G4PropagatorInField::ComputeStep : Warning :" 
             << " no progress after "  << fNoZeroStep << " trial steps. "   
             << G4endl;
-     G4cout << "   Particle will be abandoned." ; 
+     G4cout << "   Particle will be killed." << G4endl ; 
+#else
+     G4cout << " G4PropagatorInField: Particle that is stuck will be killed." << G4endl;
+#endif
      fParticleIsLooping= true;
   } 
 
