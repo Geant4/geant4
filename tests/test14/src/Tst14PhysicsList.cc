@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst14PhysicsList.cc,v 1.20 2003-02-23 22:40:43 pia Exp $
+// $Id: Tst14PhysicsList.cc,v 1.21 2003-09-29 01:25:55 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Unknown (contact: Maria.Grazia.Pia@cern.ch)
@@ -44,6 +44,7 @@
 #include "Tst14PositronStandard.hh"
 
 #include "G4ParticleDefinition.hh"
+#include "G4ProductionCutsTable.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
@@ -221,9 +222,7 @@ void Tst14PhysicsList::SetGELowLimit(G4double cut)
       G4cout << "Tst14PhysicsList - Gamma and electron cut in energy = " 
 	     << cut * MeV << " MeV" << G4endl;
     }  
-  G4Gamma::SetEnergyRange(cut,1e5);
-  G4Electron::SetEnergyRange(cut,1e5);
-  G4Positron::SetEnergyRange(cut,1e5);
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(cut,1e5);
 }
 
 
@@ -234,7 +233,7 @@ void Tst14PhysicsList::SetGammaLowLimit(G4double cut)
       G4cout << "Tst14PhysicsList - Gamma cut in energy = " 
 	     << cut * MeV << " MeV" << G4endl;
     }  
-  G4Gamma::SetEnergyRange(cut,1e5);
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(cut,1e5);
 }
 
 void Tst14PhysicsList::SetElectronLowLimit(G4double cut)
@@ -244,7 +243,7 @@ void Tst14PhysicsList::SetElectronLowLimit(G4double cut)
       G4cout << "Tst14PhysicsList - Electron cut in energy = " 
 	     << cut * MeV << " MeV" << G4endl;
     }  
-  G4Electron::SetEnergyRange(cut,1e5);
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(cut,1e5);
 }
 
 void Tst14PhysicsList::SetGammaCut(G4double value)
