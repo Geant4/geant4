@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em10DetectorConstruction.cc,v 1.3 2001-03-23 13:51:43 grichine Exp $
+// $Id: Em10DetectorConstruction.cc,v 1.4 2001-03-28 09:47:09 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -82,7 +82,7 @@ Em10DetectorConstruction::Em10DetectorConstruction()
   fDetGap       = 1.0*mm ;
 
   fStartR       = 40*cm  ;
-  fStartZ       = 10.0*mm  ;
+  fStartZ       = 50.0*mm  ;
 
   fModuleNumber = 1      ;  
 
@@ -382,6 +382,22 @@ G4double temperature, pressure;
   Xe10CH4->AddMaterial( Xe,       fractionmass = 0.987 ) ;
   Xe10CH4->AddMaterial( metane,   fractionmass = 0.013 ) ;
 
+  // 95% Xe + 5% CH4, STP ; NIM A214 (1983) 261-268
+
+  density = 5.601*mg/cm3 ;      
+  G4Material* Xe5CH4 = new G4Material(name="Xe5CH4"  , density, 
+                                                  ncomponents=2);
+  Xe5CH4->AddMaterial( Xe,       fractionmass = 0.994 ) ;
+  Xe5CH4->AddMaterial( metane,   fractionmass = 0.006 ) ;
+
+  // 80% Xe + 20% CH4, STP ; NIM A253 (1987) 235-244
+
+  density = 4.83*mg/cm3 ;      
+  G4Material* Xe20CH4 = new G4Material(name="Xe20CH4"  , density, 
+                                                  ncomponents=2);
+  Xe20CH4->AddMaterial( Xe,       fractionmass = 0.97 ) ;
+  Xe20CH4->AddMaterial( metane,   fractionmass = 0.03 ) ;
+
 
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
@@ -489,22 +505,18 @@ G4VPhysicalVolume* Em10DetectorConstruction::ConstructCalorimeter()
      }                                 
   G4cout<<G4endl ;
 
-  G4Box* solidElectrode = new G4Box("Electrode",AbsorberRadius,
-                                                AbsorberRadius,
-                                                fElectrodeThick/2. ); 
+  G4Box* solidWindow = new G4Box("Window",AbsorberRadius,
+                                          AbsorberRadius,
+                                          fWindowThick/2.  ); 
                           
-  G4LogicalVolume* logicElectrode = new G4LogicalVolume(solidElectrode,
-                                        fElectrodeMat, "Electrode"); 
-
-  G4double zElectrode = zAbsorber - AbsorberThickness/2. - 
-                        fElectrodeThick/2. - 0.01*mm;    
+  G4LogicalVolume* logicWindow = new G4LogicalVolume(solidWindow,
+                                     fWindowMat, "Window"); 
+   
+  G4double zWindow = fStartZ + radThick + fWindowThick/2. + 5.0*mm ;    
       			                  
-  //  G4VPhysicalVolume*    physiElectrode = new G4PVPlacement(0,		   
-  //  		                       G4ThreeVector(0.,0.,zElectrode),        
-  //                                    "Electrode",logicElectrode,
-  //                                     physiWorld,false,0);    
-  
-
+  // G4VPhysicalVolume*    physiWindow = new G4PVPlacement(0,		   
+  // 		                       G4ThreeVector(0.,0.,zWindow),        
+  //                                    "Window",logicWindow,physiWorld,false,0); 
 
   G4Box* solidGap = new G4Box("Gap",AbsorberRadius,
                                     AbsorberRadius,
@@ -512,26 +524,29 @@ G4VPhysicalVolume* Em10DetectorConstruction::ConstructCalorimeter()
                           
   G4LogicalVolume* logicGap = new G4LogicalVolume(solidGap,fGapMat, "Gap"); 
 
-  G4double zGap = zElectrode - fElectrodeThick/2. - fGapThick/2. - 0.01*mm ;    
+  G4double zGap = zWindow + fWindowThick/2. + fGapThick/2. + 0.01*mm ;    
       			                  
   // G4VPhysicalVolume*    physiGap = new G4PVPlacement(0,		   
   // 		                       G4ThreeVector(0.,0.,zGap),        
   //                                    "Gap",logicGap,physiWorld,false,0); 
 
-  G4Box* solidWindow = new G4Box("Window",AbsorberRadius,
-                                          AbsorberRadius,
-                                          fWindowThick/2.  ); 
+  G4Box* solidElectrode = new G4Box("Electrode",AbsorberRadius,
+                                                AbsorberRadius,
+                                                fElectrodeThick/2. ); 
                           
-  G4LogicalVolume* logicWindow = new G4LogicalVolume(solidWindow,
-                                     fWindowMat, "Window"); 
+  G4LogicalVolume* logicElectrode = new G4LogicalVolume(solidElectrode,
+                                        fElectrodeMat, "Electrode"); 
 
-  G4double zWindow = zGap - fGapThick/2. - fWindowThick/2. - 0.01*mm ;    
+  G4double zElectrode = zGap + fGapThick/2. + fElectrodeThick/2. + 0.01*mm;    
       			                  
-  // G4VPhysicalVolume*    physiWindow = new G4PVPlacement(0,		   
-  // 		                       G4ThreeVector(0.,0.,zWindow),        
-  //                                    "Window",logicWindow,physiWorld,false,0); 
-                             
+  //  G4VPhysicalVolume*    physiElectrode = new G4PVPlacement(0,		   
+  //  		                       G4ThreeVector(0.,0.,zElectrode),        
+  //                                    "Electrode",logicElectrode,
+  //                                     physiWorld,false,0);    
+                               
   // Absorber
+
+  zAbsorber = zElectrode + fElectrodeThick/2. + AbsorberThickness/2. + 0.01*mm; 
 
   if (AbsorberThickness > 0.) 
   { 
