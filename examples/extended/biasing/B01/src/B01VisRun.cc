@@ -3,8 +3,8 @@
 #include "B01PhysicsList.hh"
 #include "B01PrimaryGeneratorAction.hh"
 #include "B01DetectorConstruction.hh"
-#include "ExN03EventAction.hh"
-#include "ExN03RunAction.hh"
+#include "B01VisEventAction.hh"
+#include "B01RunAction.hh"
 
 
 
@@ -18,8 +18,8 @@ B01VisRun::B01VisRun()
   if (!fRunManager) {
     G4std::G4Exception("B01VisRun::B01VisRun: new failed to create G4RunManager!");
   }
-  fRunManager->SetUserAction(new ExN03EventAction);
-  fRunManager->SetUserAction(new ExN03RunAction);
+  fRunManager->SetUserAction(new B01VisEventAction);
+  fRunManager->SetUserAction(new B01RunAction);
 }
 B01VisRun::~B01VisRun(){}
 

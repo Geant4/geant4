@@ -7,7 +7,7 @@
 #include "B01VGeometry.hh"
 #include "B01SlobedConcreteShield.hh"
 
-#include "B01EventAction.hh"
+#include "B01TimedEventAction.hh"
 
 
 

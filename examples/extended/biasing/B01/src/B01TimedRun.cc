@@ -3,8 +3,8 @@
 #include "B01PhysicsList.hh"
 #include "B01PrimaryGeneratorAction.hh"
 #include "B01DetectorConstruction.hh"
-#include "B01EventAction.hh"
-#include "ExN03RunAction.hh"
+#include "B01TimedEventAction.hh"
+#include "B01RunAction.hh"
 #include "G4CellScorer.hh"
 
 
@@ -31,7 +31,7 @@ void B01TimedRun::BeamOn(G4int n){
 
 
 void B01TimedRun::SetSpecialG4CellScorer(const G4CellScorer *cellscorer){
-  fRunManager->SetUserAction(new B01EventAction(cellscorer, fTime));
+  fRunManager->SetUserAction(new B01TimedEventAction(cellscorer, fTime));
 }
 
 void B01TimedRun::SetDetector(G4VPhysicalVolume &worldvol){
