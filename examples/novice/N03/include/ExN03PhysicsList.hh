@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03PhysicsList.hh,v 1.2 1999-04-16 11:55:04 kurasige Exp $
+// $Id: ExN03PhysicsList.hh,v 1.3 1999-08-19 11:42:36 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,7 +59,7 @@ class ExN03PhysicsList: public G4VUserPhysicsList
     G4double cutForGamma;
     G4double cutForElectron; 
     G4double cutForProton;
-
+    G4double currentDefaultCut;
 };
 
 #endif
