@@ -35,7 +35,7 @@
 // 
 //      Creation date: 6 August 2001
 //
-//      Modifications: 
+//      Modifications: 26 April 2002 -- AM
 //
 // -------------------------------------------------------------------
 
@@ -49,7 +49,7 @@
 
 int main()
 {
-  G4cout.setf( ios::scientific, ios::floatfield );
+  G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
 
   G4cout << "Enter Z" << G4endl;
   G4int Z;
@@ -92,3 +92,16 @@ delete dataSet;
 
 G4cout << "END OF THE MAIN PROGRAM" << G4endl;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
