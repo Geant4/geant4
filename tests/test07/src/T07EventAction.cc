@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: T07EventAction.cc,v 1.5 2001-07-11 10:09:44 gunter Exp $
+// $Id: T07EventAction.cc,v 1.6 2001-10-23 10:00:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,8 +33,6 @@
 
 #include "T07CalorHit.hh"
 #include "T07EventActionMessenger.hh"
-
-#include "g4rw/tvordvec.h"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
