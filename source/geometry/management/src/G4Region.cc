@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc,v 1.3 2003-01-14 22:34:00 asaim Exp $
+// $Id: G4Region.cc,v 1.4 2003-02-07 11:46:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,18 @@
 G4Region::G4Region(const G4String& pName)
   : fName(pName), fRegionMod(true), fCut(0)
 {
-  G4RegionStore::GetInstance()->Register(this);
+  G4RegionStore* rStore = G4RegionStore::GetInstance();
+  if (rStore->GetRegion(pName,false))
+  {
+    G4cerr << "WARNING - G4Region::G4Region()" << G4endl
+           << "          Region " << pName << " already existing in store !"
+           << G4endl
+           << "          The region has NOT been registered !" << G4endl;
+  }
+  else
+  {
+    rStore->Register(this);
+  }
 }
 
 // *******************************************************************
