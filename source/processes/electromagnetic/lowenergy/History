@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2000-05-07 16:23:56 pia Exp $
+$Id: History,v 1.11 2000-05-07 16:27:55 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-19.04.2000 - MGP, tag emlowen-V01-01-10
+ 7.05.2000 - MGP, tag emlowen-V01-01-11
+             Includes Francesco Longo's fix of missing units in 
+	     G4LowEnergyGammaConversion.cc
+
+ 7.05.2000 - MGP, tag emlowen-V01-01-10
              Includes Vladimir's test/TestEm6 and test/TestP directories
              requires removing two (!) duplicate TestEm6 directories
              elsewhere
