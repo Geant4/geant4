@@ -1,4 +1,4 @@
-$Id: History,v 1.183 2002-03-14 08:15:30 gcosmo Exp $
+$Id: History,v 1.184 2002-03-25 17:19:23 gcosmo Exp $
 $Name: not supported by cvs2svn $
 
 -------------------------------------------------------------------
@@ -17,6 +17,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25th March 2002  Gabriele Cosmo
+- binmake.gmk: added include path to new module geometry/biasing.
 
 14th March 2002  Gabriele Cosmo (config-V04-00-03)
 - liblist.c: replaced usage of function 'gets(buffer)' with the safer
