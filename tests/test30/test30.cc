@@ -280,7 +280,7 @@ int main(int argc, char** argv)
         elim *= MeV;
       } else if(line == "#ebinlog(MeV)") {
         (*fin) >> ebinlog;
-	if (ebinlog < 1.5) ebinlog = 1.5;
+	if (ebinlog < 1.1) ebinlog = 1.1;
         ebinlog *= MeV;
       } else if(line == "#events") {
         (*fin) >> nevt;
@@ -380,7 +380,7 @@ int main(int argc, char** argv)
 	     exit(1);
     }
 
-    G4int maxn = (G4int)((*(material->GetElementVector()))[0]->GetN()) + 1; 
+    G4int maxn = (G4int)((*(material->GetElementVector()))[0]->GetN()) + 1;
     // G4int maxz = (G4int)((*(material->GetElementVector()))[0]->GetZ()) + 1; 
 		
     G4cout << "The particle:  " << part->GetParticleName() << G4endl;
