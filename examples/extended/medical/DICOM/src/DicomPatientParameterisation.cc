@@ -73,12 +73,12 @@ DicomPatientParameterisation::DicomPatientParameterisation(G4int, // NoVoxels,
     {
       dicomConfiguration->ReadG4File( dicomConfiguration->GetListOfFile()[i] );
       G4double sliceLocation = dicomConfiguration->GetSliceLocation();
-      MiddleLocationValue = MiddleLocationValue + sliceLocation;
+      middleLocationValue = middleLocationValue + sliceLocation;
     }
   
   delete dicomConfiguration;
 
-  MiddleLocationValue = MiddleLocationValue/totalNumberOfFile;   
+  middleLocationValue = middleLocationValue/totalNumberOfFile;   
   
   G4double red;
   G4double green;
@@ -193,9 +193,9 @@ DicomPatientParameterisation::~DicomPatientParameterisation()
 
 void DicomPatientParameterisation::ComputeTransformation(const G4int copyNo, G4VPhysicalVolume* physVol) const
 {
-  G4double originZ = PatientPlacementZ[copyNo]*mm-MiddleLocationValue*mm-sliceThickness/2;
-  G4ThreeVector origin( PatientPlacementX[copyNo]*mm, 
-                        PatientPlacementY[copyNo]*mm, 
+  G4double originZ = patientPlacementZ[copyNo]*mm-middleLocationValue*mm-sliceThickness/2;
+  G4ThreeVector origin( patientPlacementX[copyNo]*mm, 
+                        patientPlacementY[copyNo]*mm, 
                         originZ*mm );
 
   physVol->SetTranslation(origin);
@@ -210,55 +210,55 @@ void DicomPatientParameterisation::ComputeDimensions(G4Box& voxels, const G4int,
 
 G4Material*  DicomPatientParameterisation::ComputeMaterial(const G4int copyNo,G4VPhysicalVolume* physVol)
 {
-  if ( Density[copyNo] >= 0.207 && Density[copyNo] <= 0.227 )
+  if ( density[copyNo] >= 0.207 && density[copyNo] <= 0.227 )
     {
       physVol->SetName("Physical_LungINhale");
       physVol->GetLogicalVolume()->SetVisAttributes( attributeLungINhale );
       return lungInhale;
     }
-  else if ( Density[copyNo] >= 0.481 && Density[copyNo] <= 0.534 )
+  else if ( density[copyNo] >= 0.481 && density[copyNo] <= 0.534 )
     {
       physVol->SetName("Physical_LungEXhale");
       physVol->GetLogicalVolume()->SetVisAttributes( attributeLungEXhale );
       return lungExhale;
     }
-  else if ( Density[copyNo] >= 0.919 && Density[copyNo] <= 0.979 )
+  else if ( density[copyNo] >= 0.919 && density[copyNo] <= 0.979 )
     {
       physVol->SetName("Physical_Adipose");
       physVol->GetLogicalVolume()->SetVisAttributes( attributeAdipose );
       return adiposeTissue;
     }
-  else if ( Density[copyNo] > 0.979 && Density[copyNo] <= 1.004 )
+  else if ( density[copyNo] > 0.979 && density[copyNo] <= 1.004 )
     {
       physVol->SetName("Physical_Breast");
       physVol->GetLogicalVolume()->SetVisAttributes( attributeBreast );
       return breastTissue;
     }
-  else if ( Density[copyNo] > 1.004 && Density[copyNo] <= 1.043 )
+  else if ( density[copyNo] > 1.004 && density[copyNo] <= 1.043 )
     {
       physVol->SetName("Physical_Phantom");
       physVol->GetLogicalVolume()->SetVisAttributes( attributePhantom );
       return phantomTissue;
     }
-  else if ( Density[copyNo] > 1.043 && Density[copyNo] <= 1.109 )
+  else if ( density[copyNo] > 1.043 && density[copyNo] <= 1.109 )
     {
       physVol->SetName("Physical_Muscle");
       physVol->GetLogicalVolume()->SetVisAttributes( attributeMuscle );
       return muscleTissue;
     }
-  else if ( Density[copyNo] > 1.109 && Density[copyNo] <= 1.113 )
+  else if ( density[copyNo] > 1.109 && density[copyNo] <= 1.113 )
     {
       physVol->SetName("Physical_Liver");
       physVol->GetLogicalVolume()->SetVisAttributes( attributeLiver );
       return liverTissue;
     }
-  else if ( Density[copyNo] > 1.113 && Density[copyNo] <= 1.217 )
+  else if ( density[copyNo] > 1.113 && density[copyNo] <= 1.217 )
     {
       physVol->SetName("Physical_TrabecularBone");
       physVol->GetLogicalVolume()->SetVisAttributes( attributeTrabecularBone );
       return trabecularBoneTissue;
     }
-  else if ( Density[copyNo] > 1.496 && Density[copyNo] <= 1.654 )
+  else if ( density[copyNo] > 1.496 && density[copyNo] <= 1.654 )
     {
       physVol->SetName("Physical_DenseBone");
       physVol->GetLogicalVolume()->SetVisAttributes( attributeDenseBone );
@@ -293,20 +293,20 @@ void DicomPatientParameterisation::GetDensity(G4double maxdensity, G4double mind
                 {
 		  if ( tissueDensity >= mindensity && tissueDensity <= maxdensity )
                     {
-		      Density.push_back( tissueDensity );
+		      density.push_back( tissueDensity );
 		      copyCounter++;
                       G4int isCompressionUsed = dicomConfiguration->IsCompressionUsed();
                       G4double xPixelSpacing =  dicomConfiguration->GetXPixelSpacing();
                       G4double yPixelSpacing =  dicomConfiguration->GetYPixelSpacing();
 		      G4double slicePosition = dicomConfiguration->GetSliceLocation();      
                       G4double sliceThick =  dicomConfiguration->GetSliceThickness();
-                      PatientPlacementX.push_back( 
-						  ( isCompressionUsed*( ((lenColumns*xPixelSpacing)/2)-(yPixelSpacing/2+(w-1)*yPixelSpacing) ) ) *mm );
-		      
-                      PatientPlacementY.push_back( 
-						  ( isCompressionUsed*( ((lenRows*xPixelSpacing)/2)-(yPixelSpacing/2+(j-1)*yPixelSpacing) ) ) *mm );
-		      
-                      PatientPlacementZ.push_back( ( slicePosition + sliceThick/2) *mm );
+                      G4double xDimension = (lenColumns*xPixelSpacing)/2;
+                      G4double yPixel = (yPixelSpacing/2+(w-1)*yPixelSpacing);
+                      G4double yDimension = ((lenRows*xPixelSpacing)/2)-(yPixelSpacing/2+(j-1)*yPixelSpacing);
+                      
+                      patientPlacementX.push_back( ( isCompressionUsed*(xDimension- yPixel ) ) *mm );
+                      patientPlacementY.push_back( ( isCompressionUsed* yDimension  ) *mm );
+		      patientPlacementZ.push_back( ( slicePosition + sliceThick/2 ) *mm );
                     }
                 }
             }            

@@ -107,20 +107,16 @@ private:
   G4double pixelSpacingY;
   G4double sliceThickness;
   G4double sliceLocation;
- 
-  //G4double PatientX;
-  //G4double PatientY;
-  //G4double PatientZ;
 
-  G4std::vector<G4double> Density;
-  G4std::vector<G4double> PatientPlacementX;
-  G4std::vector<G4double> PatientPlacementY;
-  G4std::vector<G4double> PatientPlacementZ;
+  G4std::vector<G4double> density;
+  G4std::vector<G4double> patientPlacementX;
+  G4std::vector<G4double> patientPlacementY;
+  G4std::vector<G4double> patientPlacementZ;
 
 
-  G4LogicalVolume* LogicalVolumeParam;
+  //G4LogicalVolume* LogicalVolumeParam;
 
-  G4double MiddleLocationValue;
+  G4double middleLocationValue;
 };
 #endif
 

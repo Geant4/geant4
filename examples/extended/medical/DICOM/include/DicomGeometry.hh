@@ -73,6 +73,8 @@ private:
   G4Box* solidWorld;
   G4LogicalVolume* logicWorld;
   G4VPhysicalVolume* physiWorld;
+  G4VPhysicalVolume* parameterisedPhysVolume;  
+  G4VPhysicalVolume*  physicalLungINhale;
 };
 
 #endif

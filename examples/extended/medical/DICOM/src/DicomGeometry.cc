@@ -53,6 +53,11 @@ DicomGeometry::DicomGeometry()
   lungexhale = 0;
   lunginhale = 0;
   air = 0;
+  solidWorld = 0;
+  logicWorld = 0;
+  physiWorld = 0;
+  parameterisedPhysVolume = 0;
+  physicalLungINhale = 0;
 }
 
 DicomGeometry::~DicomGeometry()
@@ -294,13 +299,13 @@ void DicomGeometry::PatientConstruction()
   middleLocationValue = middleLocationValue / totalNumberOfFile;
     
   G4ThreeVector origin( 0.*mm,0.*mm,middleLocationValue*mm );
-  G4VPhysicalVolume* parameterisedPhysVolume =  
-    new G4PVPlacement( 0,origin,
-		       parameterisedLogicalvolume,
-		       "Parameterisation Mother (placement)",
-		       logicWorld,
-		       false,
-		       0);
+    parameterisedPhysVolume =  new G4PVPlacement( 0,
+                                                  origin,
+		                                  parameterisedLogicalvolume,
+		                                  "Parameterisation Mother (placement)",
+		                                  logicWorld,
+		                                  false,
+		                                  0 );
 
   G4Box* LungINhale = new G4Box( "LungINhale", patientX, patientY, patientZ);
 
@@ -322,7 +327,7 @@ void DicomGeometry::PatientConstruction()
       denseBone,
       trabecularBone );
 
-  G4VPhysicalVolume*  physicalLungINhale = 
+  physicalLungINhale = 
     new G4PVParameterised( "Physical_LungINhale" , 
 			   logicLungInHale, 
 			   parameterisedLogicalvolume,
