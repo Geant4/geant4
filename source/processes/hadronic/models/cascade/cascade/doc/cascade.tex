@@ -1,0 +1,164 @@
+\documentclass{hep99}
+%\usepackage{epsfig}
+\usepackage[dvips]{graphicx}
+\begin{document}
+\title{Object-Oriented Reconstruction and Analysis for
+Helsinki Silicon Beam Telescope}
+\author{M.~Haapakorpi, A.~Heikkinen, J.~Heinonen, V.~Karim\"aki,
+J.~Klem and T.~Lamp\'en}
+\address{Helsinki Institute of Physics, University of Helsinki,
+Finland\\[3pt]
+E-mail: {\tt Aatos.Heikkinen@cern.ch}}
+
+\abstract{Object-oriented programming and related new software
+technologies have been applied to the reconstruction and analysis of
+events recorded by Helsinki Silicon Beam Telescope (SiBT) in the
+CERN H2 testbeam.
+Experience obtained on these new tools and methods is reported.}
+\maketitle
+\section{Introduction}
+As the computer industry has moved
+to the object-oriented (OO) technology era, the high energy physics
+community is also following the trend.
+After years of R\&D and feasibility studies the object technology is now
+accepted by the whole HEP community.
+
+We present here how object-based software technologies can be applied
+to the reconstruction and analysis of events recorded by SiBT 
+detector\cite{sibt}
+in the CERN H2 beam. 
+This beam is used by Compact Muon Solenoid (CMS)
+\cite{cms} collaboration to test detector prototypes. New software is
+implemented as part of ORCA (Object-oriented Reconstruction for Cms
+Analysis) testbeam software.
+
+The structure of this paper is as follows:
+section~\ref{sec:tools} lists the tools used in software development,
+section~\ref{sec:design} discusses the software design,
+section~\ref{sec:implementation} describes implementation issues and
+section~\ref{sec:conclusion} provides critical overview of tools used.
+
+\section{Tools for Object-Oriented Programming\label{sec:tools}}
+%\subsection{Starting off: title, author, address and abstract}
+
+The object-oriented programming  paradigm, together with tools from
+LHC++ library (Libraries for HEP Computing) \cite{lhc++},
+has been used in all aspects of our work. 
+The Unified Modelling Language (UML) CASE tool Rational Rose was used
+for software design.
+
+We have used Sun WorkShop development environment. WorkShop makes
+complex development tasks much easier by providing a tightly
+integrated development environment for building, editing, source
+browsing, and debugging. 
+
+Histo-Scope package was used for both online and off-line analysis
+since it is small enough for online applications.
+
+For the detailed coding of mathematical algorithms we 
+used CLHEP (A Class Library for High Energy Physics) \cite{lhc++}. 
+We also fully employ the generic programming capability of the Standard
+Template Library (STL). ObjectSpace implementation of the STL is used. 
+
+Geant4 \cite{geant4} was used for detector description and event simulation.
+An object oriented database management system, Objectivity/DB, was used to
+store the beam telescope geometry information and reconstructed
+events. Finally, IRIS Explorer has been used in data-analysis. Table 1
+%\ref{table:list_of_tools} 
+summarises the tools used.
+
+\begin{table}
+\label{table:list_of_tools}
+\begin{center}
+\caption{Tools used in SiBT software development.}
+\begin{tabular}{ll}
+\br
+Tool &Use  \\
+\mr
+LHC++ & General framework \\
+ORCA& CMS framework \\
+Objectivity/DB& Percistence \\
+CVS& Code management \\
+UML& Software modelling \\
+Rational Rose& Code generation \\
+C++& Programming language \\
+STL& Generic programming  \\
+CLHEP, NAG C& Mathematics \\
+WorkShop& Development environment \\
+Qt, Histo-Scope& User interface \\
+Geant4& Simulation \\
+IRIS Explorer& Data analysis \\
+\br
+\end{tabular}
+\end{center}
+\end{table}
+%------------------------------------------------------------------------
+\section{Software Design\label{sec:design}}
+The new SiBT reconstruction software was designed
+to be highly modular.  Each module has separate compiling, testing and
+documentation facilities allowing independent development of different
+parts of the project. Here we are following the coding rules adopted
+in the CMS community. Figure \ref{fig:uml} represents the general structure
+of SiBT analysis software. Configuration
+module provides general methods to change parameters during interactive
+data analysis.
+
+%-----------------------------------------------------------------------
+\section{Implementation\label{sec:implementation}}
+The Rational Rose CASE tool was used to generate source code directly
+from UML diagrams. All header files are automatically generated. 
+As an example Figure \ref{fig:finder} shows part of 
+the class definition for trackfinders.
+
+%------------------------------------------------------------------------
+\section{Conclusion\label{sec:conclusion}}
+We have used UML CASE tool Rational Rose heavily for code
+generation. In our experience the implementation architecture and header
+files can be conveniently created using this tool. 
+We also conclude that reverse engineering in many cases lacks proper
+tools and is in some cases not feasible. 
+
+We find Histo-Scope as modern, handy histogramming tool.
+We would also like to see
+Objectivity/DB to have more mature tools for interactive data
+analysis. For interactive data-analysis IRIS Explorer is not
+providing the tools we would expect, so as a practical solution
+we also used PAW and Mathematica in our analysis.
+
+\begin{thebibliography}{9}
+\bibitem{sibt} Eklund C et al. 1999 {\it Nucl. Instrum. Meth.} A {\bf
+430} 321
+\bibitem{cms} Muller T 1998 {\it Nucl. Instrum. Meth.} A {\bf 408} 119
+\bibitem{lhc++} LCB Status Report/LHC++ 1998 {CERN/LHC 98-11}
+\bibitem{geant4} GEANT4: LCB Status Report/RD44 1998 {\it CERN/LHCC-98-44} 
+
+\end{thebibliography}
+
+%-----------------------------------------------------------------------
+
+\begin{figure}
+\begin{center}
+%\includegraphics[width=2.5in]{uml.ps}
+\end{center}
+\caption{Modular structure of SiBT analysis software.}
+\label{fig:uml}
+\end{figure}
+
+%If the figure is too large to fit in a column a * is added after
+%\verb"figure" to use the \verb"figure*" environment. Figures should be
+%centred in the column or page.
+
+
+\begin{figure}
+\begin{center}
+%\includegraphics[width=3in]{finder.ps}
+\end{center}
+\caption{Trackfinder classes.}
+\label{fig:finder}
+\end{figure}
+
+\end{document}
+
+
+
+
