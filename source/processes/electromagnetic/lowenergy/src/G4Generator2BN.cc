@@ -37,6 +37,7 @@
 // Modifications: 
 // 21 Jun 2003                                 First implementation acording with new design
 // 05 Nov 2003  MGP                            Fixed compilation warning
+// 14 Mar 2004                                 Code optimization
 //
 // Class Description: 
 //
@@ -201,7 +202,7 @@ G4double G4Generator2BN::Calculatedsdkdt(G4double kout, G4double theta, G4double
   // classic radius (in cm)
   G4double r0 = 2.82E-13;
   //squared classic radius (in barn)
-  G4double r02 = pow(r0,2)*1.0E+24;
+  G4double r02 = r0*r0*1.0E+24;
 
   // Photon energy cannot be greater than electron kinetic energy
   if(kout > (Eel-electron_mass_c2)){
@@ -218,29 +219,42 @@ G4double G4Generator2BN::Calculatedsdkdt(G4double kout, G4double theta, G4double
        return dsdkdt_value;
      }
 
+
      G4double p0 = sqrt(E0*E0-1);
      G4double p = sqrt(E*E-1);
      G4double L = log((E*E0-1+p*p0)/(E*E0-1-p*p0));
      G4double delta0 = E0 - p0*cos(theta);
      G4double epsilon = log((E+p)/(E-p));
-     G4double Q = sqrt(pow(p0,2)+pow(k,2)-2*k*p0*cos(theta));
+     G4double Z2 = Z*Z;
+     G4double sintheta2 = sin(theta)*sin(theta);
+     G4double E02 = E0*E0;
+     G4double E2 = E*E;
+     G4double p02 = E0*E0-1;
+     G4double k2 = k*k;
+     G4double delta02 = delta0*delta0;
+     G4double delta04 =  delta02* delta02;
+     G4double Q = sqrt(p02+k2-2*k*p0*cos(theta));
+     G4double Q2 = Q*Q;
      G4double epsilonQ = log((Q+p)/(Q-p));
 
-     dsdkdt_value = pow(Z,2) * (r02/(8*M_PI*137)) * (1/k) * (p/p0) *
-       ( (8 * (pow(sin (theta),2)*(2*pow(E0,2)+1))/(pow(p0,2)*pow(delta0,4))) -
-	 ((2*(5*pow(E0,2)+2*E*E0+3))/(pow(p0,2) * pow(delta0,2))) -
-	 ((2*(pow(p0,2)-pow(k,2)))/((pow(Q,2)*pow(delta0,2)))) +
-	 ((4*E)/(pow(p0,2)*delta0)) +
-	 (L/(p*p0))*(
-		 ((4*E0*pow(sin(theta),2)*(3*k-pow(p0,2)*E))/(pow(p0,2)*pow(delta0,4))) + 
-		 ((4*pow(E0,2)*(pow(E0,2)+pow(E,2)))/(pow(p0,2)*pow(delta0,2))) +
-		 ((2-2*(7*pow(E0,2)-3*E*E0+pow(E,2)))/(pow(p0,2)*pow(delta0,2))) +
-		 (2*k*(pow(E0,2)+E*E0-1))/((pow(p0,2)*delta0)) 
-		 ) - 
+
+     dsdkdt_value = Z2 * (r02/(8*M_PI*137)) * (1/k) * (p/p0) *
+       ( (8 * (sintheta2*(2*E02+1))/(p02*delta04)) -
+         ((2*(5*E02+2*E*E0+3))/(p02 * delta02)) -
+         ((2*(p02-k2))/((Q2*delta02))) +
+         ((4*E)/(p02*delta0)) +
+         (L/(p*p0))*(
+                 ((4*E0*sintheta2*(3*k-p02*E))/(p02*delta04)) +
+                 ((4*E02*(E02+E2))/(p02*delta02)) +
+                 ((2-2*(7*E02-3*E*E0+E2))/(p02*delta02)) +
+                 (2*k*(E02+E*E0-1))/((p02*delta0))
+                 ) -
          ((4*epsilon)/(p*delta0)) +
          ((epsilonQ)/(p*Q))*
-         (4/pow(delta0,2)-(6*k/delta0)-(2*k*(pow(p0,2)-pow(k,2)))/(pow(Q,2)*delta0))
-	 );
+         (4/delta02-(6*k/delta0)-(2*k*(p02-k2))/(Q2*delta0))
+         );
+
+
 
      dsdkdt_value = dsdkdt_value*sin(theta);
      return dsdkdt_value;
@@ -290,7 +304,7 @@ void G4Generator2BN::ConstructMajorantSurface()
     c = 0;
     A = 0;
   }else{
-    c = 1/pow(thetamax,2);
+    c = 1/(thetamax*thetamax);
     A = 2*sqrt(c)*dsmax/(pow(kmin,-b));
   }
 
@@ -379,7 +393,7 @@ G4double G4Generator2BN::Generate2BN(G4double Ek, G4double k) const
 
   // generate theta accordimg to theta/(1+c*pow(theta,2)
   // Normalization constant
-  cte2 = 2*c/log(1+c*pow(M_PI,2));
+  cte2 = 2*c/log(1+c*M_PI*M_PI);
 
   y = G4UniformRand();
   t = sqrt((exp(2*c*y/cte2)-1)/c);
