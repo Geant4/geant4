@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.48 2000-09-14 11:34:16 barrand Exp $
+# $Id: binmake.gmk,v 1.49 2000-10-24 07:02:59 gunter Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -111,7 +111,15 @@ ifdef G4EXLIB
   include $(G4INSTALL)/config/common.gmk
 endif
 
-GLOBALLIBS := $(shell test -f $(G4LIB)/$(G4SYSTEM)/libG4global.a && echo yes)
+ifndef G4LIB_USE_GRANULAR
+  ifneq ($(G4LIB_USE_ARCHIVE),)
+    GLOBALLIBS := $(shell test -f $(G4LIB)/$(G4SYSTEM)/libG4global.a && echo yes)
+  endif
+  ifneq ($(G4LIB_USE_SHARED),)
+    GLOBALLIBS := $(shell test -f $(G4LIB)/$(G4SYSTEM)/libG4global.$(SHEXT) && echo yes)
+  endif
+  
+endif
 
 ifdef LDLIBS
   USER_DEFINED_LDLIBS := 1

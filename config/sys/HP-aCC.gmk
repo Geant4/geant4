@@ -14,8 +14,10 @@ ifeq ($(G4SYSTEM),HP-aCC)
   endif
   CXXFLAGS += +DAportable +W823
   CPPFLAGS += -I/usr
-  ifdef G4MAKESHLIB
+  ifdef G4LIB_BUILD_SHARED
     CXXFLAGS += +Z
+    FCFLAGS  += +Z
+    CCFLAGS  += +Z
   endif
   G4_HAVE_BOOL := yes
   FC      := f77
@@ -42,4 +44,16 @@ ifeq ($(G4SYSTEM),HP-aCC)
     CPPFLAGS += -DOS_NO_WSTRING -DOS_NO_ALLOCATORS -D__HPACC_NOEH
     CPPFLAGS += $(OSPACEINC) -I$(OSPACE_BASE_DIR)
   endif
+
+  define build-granular-shared-lib
+    @libdir=`(cd $(@D);/bin/pwd)`; \
+     cd $(G4TMPDIR); \
+     $(CXX) -b -o $$libdir/$(@F) *.o
+  endef
+  define build-global-shared-lib
+    @libdir=`(cd $(@D);/bin/pwd)`; \
+     cd $(G4TMP)/$(G4SYSTEM); \
+     $(CXX) -b -o $$libdir/$(@F) $(foreach dir,$(SUBLIBS),$(dir)/*.o);
+  endef
+
 endif

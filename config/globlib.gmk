@@ -1,4 +1,4 @@
-# $Id: globlib.gmk,v 1.11 2000-05-24 15:25:55 gunter Exp $
+# $Id: globlib.gmk,v 1.12 2000-10-24 07:02:59 gunter Exp $
 # --------------------------------------------------------------
 # Script for compound libraries.  Gabriele Cosmo, 25/6/98.
 # --------------------------------------------------------------
@@ -30,12 +30,22 @@ else
 	  $(G4SCHEMA_DIR)/G4SCHEMA $(G4SCHEMA_FDID)
 endif
 
-ifndef G4ODBMS
-glob global: objs wipe_libs $(G4LIBDIR)/lib$(name).a
+ifneq ($(G4LIB_BUILD_SHARED),)
+SHARED_LIB=$(G4LIBDIR)/lib$(name).$(SHEXT)
 else
-glob global: headers d_files objs wipe_libs $(G4LIBDIR)/lib$(name).a $(G4SCHEMA_DIR)/G4SCHEMA.FDDB
+SHARED_LIB=
 endif
 
+ifndef G4ODBMS
+glob global: objs wipe_libs $(G4LIBDIR)/lib$(name).a $(SHARED_LIB)
+else
+glob global: headers d_files objs wipe_libs $(G4LIBDIR)/lib$(name).a $(SHARED_LIB) $(G4SCHEMA_DIR)/G4SCHEMA.FDDB
+endif
+
+##
+## make archive libraries
+##
+ifneq ($(G4LIB_BUILD_ARCHIVE),)
 $(G4LIBDIR)/lib$(name).a: \
   $(foreach dir,$(SUBLIBS),$(G4TMP)/$(G4SYSTEM)/$(dir)/obj.last)
 	@if [ ! -d $(G4LIBDIR) ] ; then mkdir $(G4LIBDIR) ; fi
@@ -68,14 +78,19 @@ $(G4LIBDIR)/lib$(name).a: \
 #
 	@if [ -f /usr/bin/ranlib -o -f /bin/ranlib ] ; then \
 	ranlib $(G4LIBDIR)/lib$(name).a ; fi
+endif
+
 
 ##
 ## make shared libraries
 ##
-ifneq ($(G4MAKESHLIB),)
-	@for lib in $(SUBLIBS); do (cp $(G4TMP)/$(G4SYSTEM)/$$lib/*.o $(G4LIBDIR)/.); done
-	@sh $(G4MAKESHLIB) $(G4LIBDIR) $(name)
-	@$(RM) $(G4LIBDIR)/*.o
+ifneq ($(G4LIB_BUILD_SHARED),)
+$(SHARED_LIB):	$(foreach dir,$(SUBLIBS),$(G4TMP)/$(G4SYSTEM)/$(dir)/obj.last)
+	@if [ ! -d $(G4LIBDIR) ] ; then mkdir $(G4LIBDIR) ; fi
+	@echo Creating global shared library $@
+	@$(RM) $@
+#	use system specific commands to build the library
+	$(build-global-shared-lib)
 endif
 
 ifdef G4ODBMS
@@ -104,13 +119,22 @@ objs:
 
 wipe_libs:
 	@for lib in $(SUBLIBS); do (rm -f $(G4LIBDIR)/lib$$lib.a); done
+	@for lib in $(SUBLIBS); do (rm -f $(G4LIBDIR)/lib$$lib.$(SHEXT)); done
 
 clean:
 	@echo Cleaning up ...
-	@for lib in $(SUBLIBS); do (rm -rf $(G4TMP)/$(G4SYSTEM)/$$lib; rm -f $(G4LIBDIR)/lib$$lib.a); done
+	@for lib in $(SUBLIBS); do ( \
+				 rm -rf $(G4TMP)/$(G4SYSTEM)/$$lib;\
+				 rm -f $(G4LIBDIR)/lib$$lib.a;\
+				 rm -f $(G4LIBDIR)/lib$$lib.$(SHEXT) );\
+				done
 	@rm -f $(G4LIBDIR)/lib$(name).a
 
 clean_libs:
-	@echo Removing lib$(name).a and sub-libraries ...
-	@for lib in $(SUBLIBS); do (rm -f $(G4LIBDIR)/lib$$lib.a); done
+	@echo Removing lib$(name).a/.$(SHEXT) and sub-libraries ...
+	@for lib in $(SUBLIBS); do ( \
+				  rm -f $(G4LIBDIR)/lib$$lib.a;\
+				  rm -f $(G4LIBDIR)/lib$$lib.$(SHEXT) );\
+				done
 	@rm -f $(G4LIBDIR)/lib$(name).a
+	@rm -f $(G4LIBDIR)/lib$(name).$(SHEXT)

@@ -21,7 +21,7 @@ ifeq ($(G4SYSTEM),WIN32-g++)
       CCFLAGS   := -g
     endif
   endif
-  ifdef G4MAKESHLIB
+  ifdef G4LIB_BUILD_SHARED
     CXXFLAGS  += -fPIC
     FCFLAGS   += -fPIC
     CCFLAGS   += -fPIC

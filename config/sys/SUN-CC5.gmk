@@ -13,8 +13,10 @@ ifeq ($(G4SYSTEM),SUN-CC5)
     endif
   endif
 #  CXXFLAGS += -fnonstd
-  ifdef G4MAKESHLIB
+  ifdef G4LIB_BUILD_SHARED
     CXXFLAGS += -KPIC
+    FCFLAGS  += -KPIC
+    CCFLAGS  += -KPIC
   endif
   G4_HAVE_BOOL := yes
   CFRONT_G4TEMPLATE_REPOSITORY  := true
@@ -56,4 +58,17 @@ ifeq ($(G4SYSTEM),SUN-CC5)
       CXXFLAGS += -compat
     endif
   endif
+
+  define build-granular-shared-lib
+    @libdir=`(cd $(@D);/bin/pwd)`; \
+    cd $(G4TMPDIR); \
+     $(CXX) -G $(CXXTEMPLATE_FLAGS) -o $$libdir/$(@F) -h $(@F) *.o
+  endef
+  define build-global-shared-lib
+    @libdir=`(cd $(@D);/bin/pwd)`; \
+    cd $(G4TMP)/$(G4SYSTEM); \
+     $(CXX) -G $(CXXTEMPLATE_FLAGS) -o $$libdir/$(@F) -h $(@F) \
+               $(foreach dir,$(SUBLIBS),$(dir)/*.o);
+endef
+
 endif

@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.15 2000-08-22 19:07:46 johna Exp $
+# $Id: common.gmk,v 1.16 2000-10-24 07:02:59 gunter Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -42,25 +42,35 @@ ifdef G4ODBMS
   objects += $(patsubst include/%.ddl,$(G4TMPDIR)/%_ddl.o,$(schema_ddl))
 endif
 
-ifneq ($(G4MAKESHLIB),)
-# Make shared library.
-$(G4LIBDIR)/lib$(name).$(SHEXT): $(G4LIBDIR)/lib$(name).a
-ifneq ($(G4TMPDIR),$(G4LIBDIR))
-	@cp $(G4TMPDIR)/*.o $(G4LIBDIR)/.
-	@sh $(G4MAKESHLIB) $(G4LIBDIR) $(name)
-	@$(RM) $(G4LIBDIR)/*.o
-else
-	@sh $(G4MAKESHLIB) $(G4LIBDIR) $(name)
+   g4libraries_to_build :=
+ifneq ($(G4LIB_BUILD_SHARED),)
+   g4libraries_to_build += $(G4LIBDIR)/lib$(name).$(SHEXT)
 endif
+ifneq ($(G4LIB_BUILD_ARCHIVE),)
+   g4libraries_to_build += $(G4LIBDIR)/lib$(name).a
 endif
 
-# Make library.
+lib: $(g4libraries_to_build)
+
+ifneq ($(G4LIB_BUILD_SHARED),)
+# Make shared library.
+$(G4LIBDIR)/lib$(name).$(SHEXT): $(G4TMPDIR)/obj.last
+	@if [ ! -d $(G4LIBDIR) ] ; then mkdir $(G4LIBDIR) ;fi
+	@echo Creating shared library $@
+	@$(RM) $@
+#      use architecture specific macro defined in sys/$(G4SYSTEM).gmk
+	$(build-granular-shared-lib)
+endif
+
+ifneq ($(G4LIB_BUILD_ARCHIVE),)
+# Make static (archive) library.
 $(G4LIBDIR)/lib$(name).a: $(G4TMPDIR)/obj.last
 	@if [ ! -d $(G4LIBDIR) ] ; then mkdir $(G4LIBDIR) ;fi
 	@echo Creating/replacing object files in $(G4LIBDIR)/lib$(name).a
 	@rm -f $(G4LIBDIR)/lib$(name).a
 	@$(AR) $(OUT_LIB)$(G4LIBDIR)/lib$(name).a $(G4TMPDIR)/*.o
 	@if [ -f /usr/bin/ranlib -o -f /bin/ranlib ] ; then ranlib $(G4LIBDIR)/lib$(name).a ;fi
+endif
 
 # Touch the versioning file
 $(G4TMPDIR)/obj.last: $(objects)
@@ -127,7 +137,9 @@ endif
 endif
 
 ifdef G4SKIP_DEPEND
-$(G4TMPDIR)/%.d:
+$(G4TMPDIR)/%.d: src/%.cc
+	@if [ ! -d $(G4TMP)/$(G4SYSTEM) ] ; then mkdir $(G4TMP)/$(G4SYSTEM) ;fi
+	@if [ ! -d $(G4TMPDIR) ] ; then mkdir $(G4TMPDIR) ;fi
 	@echo Skip dependency file creation for file $< ...
 else
 $(G4TMPDIR)/%.d: src/%.cc
@@ -160,12 +172,6 @@ install_schema:
 	@echo installing schema header files ...
 	-@(cp -f $(G4TMPDIR)/*.hh $(G4SCHEMA_INCLUDE)/ || \
 	  echo "  schema header file does not exist, so ignore the error message...")
-endif
-
-ifneq ($(G4MAKESHLIB),)
-lib: $(G4LIBDIR)/lib$(name).$(SHEXT)
-else
-lib: $(G4LIBDIR)/lib$(name).a
 endif
 
 ifndef G4EXLIB

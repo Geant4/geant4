@@ -16,7 +16,7 @@ ifeq ($(G4SYSTEM),Linux-g++)
       CCFLAGS   := -g
     endif
   endif
-  ifdef G4MAKESHLIB
+  ifdef G4LIB_BUILD_SHARED
     CXXFLAGS  += -fPIC
     FCFLAGS   += -fPIC
     CCFLAGS   += -fPIC
@@ -25,6 +25,7 @@ ifeq ($(G4SYSTEM),Linux-g++)
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
   FCLIBS := -lg2c -lnsl
   ECHO    := /bin/echo -e
+  SHEXT   := so
   X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
   X11LIBS   := -L/usr/X11R6/lib  -lXmu -lXt -lXext -lX11 -lSM -lICE
   XMFLAGS   := -I/usr/X11R6/include
@@ -45,4 +46,17 @@ ifeq ($(G4SYSTEM),Linux-g++)
   ifdef G4ODBMS
     G4OODDLX_FLAGS += -D__STL_CLASS_PARTIAL_SPECIALIZATION -Dstd=""
   endif
+
+  define build-granular-shared-lib
+    @libdir=`(cd $(@D);/bin/pwd)`; \
+     cd $(G4TMPDIR); \
+     $(CXX) -Wl,-soname,$(@F) -shared -o $$libdir/$(@F) *.o
+  endef
+  define build-global-shared-lib
+    @libdir=`(cd $(@D);/bin/pwd)`; \
+     cd $(G4TMP)/$(G4SYSTEM); \
+     $(CXX) -Wl,-soname,$(@F) -shared -o $$libdir/$(@F) \
+                    $(foreach dir,$(SUBLIBS),$(dir)/*.o);
+  endef
+
 endif

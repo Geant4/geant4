@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.66 2000-05-19 07:29:06 gcosmo Exp $
+# $Id: architecture.gmk,v 1.67 2000-10-24 07:02:59 gunter Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -85,6 +85,20 @@ ifndef G4LIB
 endif
 G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4LIB) ] && mkdir -p $(G4LIB) )
 G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4LIB)/$(G4SYSTEM) ] && mkdir -p $(G4LIB)/$(G4SYSTEM) )
+
+# backwards compatiblity
+ifneq ($(G4MAKESHLIB),)
+  G4LIB_BUILD_SHARED = 1
+endif
+
+# defaults for library BUILD. No default for USE, ie. take what is found.
+ifeq ($(G4LIB_BUILD_SHARED),)
+  ifeq ($(G4LIB_BUILD_ARCHIVE),)
+#    default is building archive libs
+    G4LIB_BUILD_ARCHIVE = 1
+  endif  
+endif
+
 
 # If not specified, the default path for G4 binaries G4BIN is
 # set to $G4WORKDIR/bin/$G4SYSTEM ...
