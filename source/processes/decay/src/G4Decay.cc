@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.cc,v 1.16 2003-04-26 18:54:11 vnivanch Exp $
+// $Id: G4Decay.cc,v 1.17 2004-03-31 00:56:21 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -234,9 +234,9 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
       // decay channel not found
       G4Exception("G4Decay::DoIt  : can not determine decay channel ");
     } else {
-      G4int temp = decaychannel->GetVerboseLevel();
       // execute DecayIt() 
 #ifdef G4VERBOSE
+      G4int temp = decaychannel->GetVerboseLevel();
       if (GetVerboseLevel()>1) {
 	G4cerr << "G4Decay::DoIt  : selected decay channel  addr:" << decaychannel <<G4endl;
 	decaychannel->SetVerboseLevel(GetVerboseLevel());
