@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.2
 #
-# $Id: runVisMode.py,v 1.3 2003-06-20 12:41:06 dressel Exp $
+# $Id: runVisMode.py,v 1.4 2004-06-09 15:04:35 daquinog Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -11,6 +11,7 @@ import os
 
 # importing wrapper modules (see the source/*Wrapper directories)
 # created by swig (from the source/*Wrapper/*.i files).
+import CLHEP
 import Tiara
 import G4Kernel
 

@@ -1,4 +1,4 @@
-# $Id: tiaraDetectors.py,v 1.3 2003-06-20 12:41:07 dressel Exp $
+# $Id: tiaraDetectors.py,v 1.4 2004-06-09 15:04:36 daquinog Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
