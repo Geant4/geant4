@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedDeltaConstructor.cc,v 1.6 2001-07-11 10:02:08 gunter Exp $
+// $Id: G4ExcitedDeltaConstructor.cc,v 1.7 2002-11-19 11:49:24 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -472,13 +472,13 @@ const char* G4ExcitedDeltaConstructor::name[] =
 
 const G4double G4ExcitedDeltaConstructor::mass[] = 
 {
-  1.600*GeV, 1.620*GeV, 1.700*GeV, 1.850*GeV,  1.905*GeV, 
-  1.910*GeV, 1.920*GeV, 1.930*GeV, 1.950*GeV
+  1.700*GeV, 1.675*GeV, 1.750*GeV, 1.840*GeV,  1.880*GeV, 
+  1.900*GeV, 1.920*GeV, 1.970*GeV, 1.990*GeV
 };
 
 const G4double G4ExcitedDeltaConstructor::width[] = {
-  350.0*MeV, 150.0*MeV, 300.0*MeV, 240.0*MeV, 350.0*MeV,
-  250.0*MeV, 200.0*MeV, 350.0*MeV, 300.0*MeV
+  350.0*MeV, 160.0*MeV, 350.0*MeV, 260.0*MeV, 350.0*MeV,
+  250.0*MeV, 200.0*MeV, 350.0*MeV, 350.0*MeV
 };
 
 const G4int G4ExcitedDeltaConstructor::iSpin[] = 

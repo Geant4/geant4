@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedSigmaConstructor.cc,v 1.6 2001-07-11 10:02:08 gunter Exp $
+// $Id: G4ExcitedSigmaConstructor.cc,v 1.7 2002-11-19 11:49:24 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -576,7 +576,7 @@ const G4double G4ExcitedSigmaConstructor::mass[] = {
 
 const G4double G4ExcitedSigmaConstructor::width[] = {
    36.0*MeV, 100.0*MeV,  60.0*MeV,  90.0*MeV, 120.0*MeV,
-  120.0*MeV, 330.0*MeV, 180.0*MeV
+  120.0*MeV, 220.0*MeV, 180.0*MeV
 };
 
 const G4int G4ExcitedSigmaConstructor::iSpin[] = {

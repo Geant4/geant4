@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShortLivedConstructor.cc,v 1.9 2001-07-11 10:02:09 gunter Exp $
+// $Id: G4ShortLivedConstructor.cc,v 1.10 2002-11-19 11:49:24 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -365,7 +365,7 @@ void G4ShortLivedConstructor::ConstructBaryons()
   // delta baryons
   //  delta(1232)++
   particle = new G4ExcitedBaryons(            
-	    "delta++",       1.232*GeV,     120.0*MeV,    +2.0*eplus, 
+	    "delta++",       1.232*GeV,     115.0*MeV,    +2.0*eplus, 
                     3,              +1,             0,          
                     3,              +3,             0,             
              "baryon",               0,            +1,          2224,
@@ -384,7 +384,7 @@ void G4ShortLivedConstructor::ConstructBaryons()
 
   //  delta(1232)+
   particle = new G4ExcitedBaryons(            
-	     "delta+",       1.232*GeV,     120.0*MeV,    +1.0*eplus, 
+	     "delta+",       1.232*GeV,     115.0*MeV,    +1.0*eplus, 
                     3,              +1,             0,          
                     3,              +1,             0,             
              "baryon",               0,            +1,          2214,
@@ -414,7 +414,7 @@ void G4ShortLivedConstructor::ConstructBaryons()
 
   //  delta(1232)0
   particle = new G4ExcitedBaryons(            
-	     "delta0",       1.232*GeV,     120.0*MeV,    +0.0*eplus, 
+	     "delta0",       1.232*GeV,     115.0*MeV,    +0.0*eplus, 
                     3,              +1,             0,          
                     3,              -1,             0,             
              "baryon",               0,            +1,          2114,
@@ -442,7 +442,7 @@ void G4ShortLivedConstructor::ConstructBaryons()
 
   //  delta(1232)-
   particle = new G4ExcitedBaryons(            
-	     "delta-",       1.232*GeV,     120.0*MeV,    -1.0*eplus, 
+	     "delta-",       1.232*GeV,     115.0*MeV,    -1.0*eplus, 
                     3,              +1,             0,          
                     3,              -3,             0,             
              "baryon",               0,            +1,          1114,
@@ -463,7 +463,7 @@ void G4ShortLivedConstructor::ConstructBaryons()
   // anti_delta baryons
   //  anti_delta(1232)++
   particle = new G4ExcitedBaryons(            
-       "anti_delta++",       1.232*GeV,     120.0*MeV,    -2.0*eplus, 
+       "anti_delta++",       1.232*GeV,     115.0*MeV,    -2.0*eplus, 
                     3,              +1,             0,          
                     3,              -3,             0,             
              "baryon",               0,            -1,         -2224,
@@ -482,7 +482,7 @@ void G4ShortLivedConstructor::ConstructBaryons()
 
   //  anti_delta(1232)+
   particle = new G4ExcitedBaryons(            
-	"anti_delta+",       1.232*GeV,     120.0*MeV,    -1.0*eplus, 
+	"anti_delta+",       1.232*GeV,     115.0*MeV,    -1.0*eplus, 
                     3,              +1,             0,          
                     3,              -1,             0,             
              "baryon",               0,            -1,         -2214,
@@ -505,7 +505,7 @@ void G4ShortLivedConstructor::ConstructBaryons()
 
   //  anti_delta(1232)0
   particle = new G4ExcitedBaryons(            
-	"anti_delta0",       1.232*GeV,     120.0*MeV,    +0.0*eplus, 
+	"anti_delta0",       1.232*GeV,     115.0*MeV,    +0.0*eplus, 
                     3,              +1,             0,          
                     3,              +1,             0,             
              "baryon",               0,            -1,         -2114,
@@ -528,7 +528,7 @@ void G4ShortLivedConstructor::ConstructBaryons()
 
   //  anti_delta(1232)-
   particle = new G4ExcitedBaryons(            
-	"anti_delta-",       1.232*GeV,     120.0*MeV,    +1.0*eplus, 
+	"anti_delta-",       1.232*GeV,     115.0*MeV,    +1.0*eplus, 
                     3,              +1,             0,          
                     3,              +3,             0,             
              "baryon",               0,            -1,         -1114,
