@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2000-11-16 13:46:10 nartallo Exp $
+$Id: History,v 1.6 2000-11-16 14:22:57 nartallo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16.11.2000 - RN, tag xraytel-V02-00-06
+             Remove all analysis stuff
+
 16.11.2000 - RN, tag xraytel-V02-00-06 
+             Still includes analysis directory (tryin to get rid of it)
              Replace standard gun with General Particle Source
              Remove all code related to old Histogram implementation
              Modified all macros to work with GPS
