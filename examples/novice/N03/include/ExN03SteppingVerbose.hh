@@ -5,19 +5,12 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03SteppingVerbose.hh,v 1.3 2000-02-28 18:09:58 maire Exp $
+// $Id: ExN03SteppingVerbose.hh,v 1.4 2001-01-22 17:04:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//  
-//---------------------------------------------------------------
 //
-// ExN03SteppingVerbose.hh
-//
-// Description:
-//   This class manages the verbose outputs in G4SteppingManager. 
-//   It inherits from G4SteppingVerbose   
-//
-//---------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class ExN03SteppingVerbose;
 
@@ -26,16 +19,17 @@ class ExN03SteppingVerbose;
 
 #include "G4SteppingVerbose.hh"
 
-class ExN03SteppingVerbose : public G4SteppingVerbose {
-public:   
-// Constructor/Destructor
-  ExN03SteppingVerbose();
- ~ExN03SteppingVerbose();
-//
-  void StepInfo();
-  void TrackingStarted();
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+class ExN03SteppingVerbose : public G4SteppingVerbose
+{
+ public:   
+
+   ExN03SteppingVerbose();
+  ~ExN03SteppingVerbose();
+
+   void StepInfo();
+   void TrackingStarted();
 
 };
 
