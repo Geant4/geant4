@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLoss.cc,v 1.18 2000-03-07 17:33:20 maire Exp $
+// $Id: G4hEnergyLoss.cc,v 1.19 2000-04-10 09:55:05 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------
@@ -441,7 +441,7 @@ G4VParticleChange* G4hEnergyLoss::AlongStepDoIt(
   {
     MeanLoss /= ChargeSquare ;
     finalT = E-GetLossWithFluct(aParticle,aMaterial,MeanLoss)*ChargeSquare ;
-    if (finalT < 0.) finalT = E-MeanLoss ;
+    if (finalT < 0.) finalT = 0.  ;
   }
 
   //  kill the particle if the kinetic energy <= 0  

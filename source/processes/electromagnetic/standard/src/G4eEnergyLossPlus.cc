@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eEnergyLossPlus.cc,v 1.21 2000-03-21 11:24:32 urban Exp $
+// $Id: G4eEnergyLossPlus.cc,v 1.22 2000-04-10 09:55:05 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // -----------------------------------------------------------
@@ -581,7 +581,7 @@ G4VParticleChange* G4eEnergyLossPlus::AlongStepDoIt( const G4Track& trackData,
   if ((EnlossFlucFlag) && (finalT > 0.) && (finalT < E)&&(E > LowerBoundEloss))
   {
     finalT = E-GetLossWithFluct(aParticle,aMaterial,MeanLoss);
-    if (finalT < 0.) finalT = E-MeanLoss;
+    if (finalT < 0.) finalT = 0. ;
   }
 
   // kill the particle if the kinetic energy <= 0  
