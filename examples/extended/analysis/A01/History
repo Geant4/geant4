@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2003-04-04 01:59:57 duns Exp $
+$Id: History,v 1.4 2003-04-04 02:02:46 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -10,10 +10,11 @@ $Id: History,v 1.3 2003-04-04 01:59:57 duns Exp $
      ----------------------------------------------------------
 
 ---------------------------------------------------------------------------
-3rd April 2003 Mark Donszelmann
+3rd April 2003 Mark Donszelmann (examples-V05-00-02)
 - Added 2 more histograms to the example
 - Fixed NullPointerException by letting SDManager delete the detectors created in
   DetectorConstruction.cc
+- Added comment when quitting Geant4 that JAS window still needs closing.
 
 26th November 2002 Mark Donszelmann
 - Fixed DrifChamberHit to have a reasonable screensize (2) rather than 0.1
