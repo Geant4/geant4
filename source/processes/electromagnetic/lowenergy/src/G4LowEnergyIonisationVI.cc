@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisationVI.cc,v 1.1 2001-10-11 12:25:10 pia Exp $
+// $Id: G4LowEnergyIonisationVI.cc,v 1.2 2001-10-11 13:58:49 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -312,13 +312,13 @@ inline G4VParticleChange* G4LowEnergyIonisationVI::PostStepDoIt(const G4Track& t
   G4int shell = crossSectionHandler->SelectRandomShell(Z, kineticEnergy);
   G4double bindingEnergy = (G4AtomicTransitionManager::Instance())->
                            Shell(Z, shell)->BindingEnergy();
-  G4double tdel = energySpectrum->SampleEnergy(Z, tcut, tmax, kineticEnergy, shell);
+  G4double tDelta = energySpectrum->SampleEnergy(Z, tcut, tmax, kineticEnergy, shell);
 
-  if(tdel == 0.0) 
+  if(tDelta == 0.0) 
     return G4VContinuousDiscreteProcess::PostStepDoIt(track, step);
 
   // Transform to shell potential
-  G4double deltaKinE = tdel + 2.0*bindingEnergy; 
+  G4double deltaKinE = tDelta + 2.0*bindingEnergy; 
   G4double primaryKinE = kineticEnergy + 2.0*bindingEnergy;   
 
   // sampling of scattering angle neglecting atomic motion
@@ -363,7 +363,7 @@ inline G4VParticleChange* G4LowEnergyIonisationVI::PostStepDoIt(const G4Track& t
   // create G4DynamicParticle object for delta ray
   aParticleChange.SetNumberOfSecondaries(1);
   G4DynamicParticle* theDeltaRay = new G4DynamicParticle();
-  theDeltaRay->SetKineticEnergy(tdel);
+  theDeltaRay->SetKineticEnergy(tDelta);
   theDeltaRay->SetMomentumDirection(dirx, diry, dirz); 
   theDeltaRay->SetDefinition(G4Electron::Electron());
   aParticleChange.AddSecondary(theDeltaRay);
@@ -431,7 +431,7 @@ inline G4VParticleChange* G4LowEnergyIonisationVI::PostStepDoIt(const G4Track& t
   // fill ParticleChange 
   // changed energy and momentum of the actual particle
 
-  G4double finalKinEnergy = kineticEnergy - tdel - theEnergyDeposit;
+  G4double finalKinEnergy = kineticEnergy - tDelta - theEnergyDeposit;
   if(finalKinEnergy < 0.0) {
     theEnergyDeposit += finalKinEnergy;
     finalKinEnergy    = 0.0;
