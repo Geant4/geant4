@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.8 2003-03-10 08:08:04 asaim Exp $
+// $Id: G4ProductionCutsTable.cc,v 1.9 2003-03-10 08:14:07 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -667,8 +667,9 @@ G4bool  G4ProductionCutsTable::StoreMaterialCutsCoupleInfo(const G4String& direc
   } else {
     /////////////// Binary mode  /////////////////
     // key word
-    for (size_t i=0; i<FixedStringLengthForStore; ++i) temp[i] = '\0'; 
-    for (size_t i=0; i<key.length() && i<FixedStringLengthForStore-1; ++i) temp[i]=key[i];
+    size_t i;
+    for (i=0; i<FixedStringLengthForStore; ++i) temp[i] = '\0'; 
+    for (i=0; i<key.length() && i<FixedStringLengthForStore-1; ++i) temp[i]=key[i];
     fOut.write(temp, FixedStringLengthForStore);
     
     // number of couples in the table   
@@ -724,15 +725,16 @@ G4bool  G4ProductionCutsTable::StoreMaterialCutsCoupleInfo(const G4String& direc
       fOut.write( (char*)(&index), sizeof (G4int));
     
       // material name
-      for (size_t i=0; i<FixedStringLengthForStore; ++i) temp[i] = '\0'; 
-      for (size_t i=0; i<materialName.length() && i<FixedStringLengthForStore-1; ++i) {
+      size_t i;
+      for (i=0; i<FixedStringLengthForStore; ++i) temp[i] = '\0'; 
+      for (i=0; i<materialName.length() && i<FixedStringLengthForStore-1; ++i) {
 	temp[i]=materialName[i];
       }
       fOut.write(temp, FixedStringLengthForStore);
 
       // region name
-      for (size_t i=0; i<FixedStringLengthForStore; ++i) temp[i] = '\0'; 
-      for (size_t i=0; i<regionName.length() && i<FixedStringLengthForStore-1; ++i) {
+      for (i=0; i<FixedStringLengthForStore; ++i) temp[i] = '\0'; 
+      for (i=0; i<regionName.length() && i<FixedStringLengthForStore-1; ++i) {
 	temp[i]=regionName[i];
       }
       fOut.write(temp, FixedStringLengthForStore);
@@ -775,7 +777,6 @@ G4bool  G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& direc
   }
   
   char temp[FixedStringLengthForStore];
-  size_t i;
 
    // key word
   G4String keyword;    
@@ -928,8 +929,9 @@ G4bool   G4ProductionCutsTable::StoreCutsInfo(const G4String& directory,
   } else {
     /////////////// Binary mode  /////////////////
     // key word
-    for (size_t i=0; i<FixedStringLengthForStore; ++i) temp[i] = '\0'; 
-    for (size_t i=0; i<key.length() && i<FixedStringLengthForStore-1; ++i) temp[i]=key[i];
+    size_t i;
+    for (i=0; i<FixedStringLengthForStore; ++i) temp[i] = '\0'; 
+    for (i=0; i<key.length() && i<FixedStringLengthForStore-1; ++i) temp[i]=key[i];
     fOut.write(temp, FixedStringLengthForStore);
     
     // number of couples in the table   
@@ -989,7 +991,6 @@ G4bool   G4ProductionCutsTable::RetrieveCutsInfo(const G4String& directory,
   }
   
   char temp[FixedStringLengthForStore];
-  size_t i;
 
    // key word
   G4String keyword;    
