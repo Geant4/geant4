@@ -87,7 +87,7 @@ MuPairProd:  theoretical cross sections
           Good description up to 1000 TeV.
     PhysicsTables from 1 GeV to 1000 PeV in 50 bins. 
 #
-# Run 100 events
+# Run 1 event
 #
 /run/beamOn 1
 /event/Verbose 1
@@ -96,4 +96,3 @@ MuPairProd:  theoretical cross sections
 # Termination
 #
 exit
-
