@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering52.hh,v 1.1 2003-08-08 11:31:24 vnivanch Exp $
+// $Id: G4MultipleScattering52.hh,v 1.2 2003-09-25 04:29:07 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------- G4MultipleScattering52 physics process --------------------------
@@ -64,7 +64,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4ParticleChangeForMSC.hh"
 #include "G4UnitsTable.hh"
-
+#include "G4MaterialCutsCouple.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4MultipleScattering52 : public G4VContinuousDiscreteProcess
