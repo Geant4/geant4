@@ -1,4 +1,4 @@
-$Id: History,v 1.49 2001-12-06 16:27:22 johna Exp $
+$Id: History,v 1.50 2002-02-26 02:10:27 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25 February 2002, Makoto Asai (interfaces-V04-00-00)
+- fix for odd behavior on Windows in G4UIchs.cc
 
 03 December 2001 Guy Barrand (interfaces-V03-02-04)
 - G4VInteractorManager::RemoveDispatcher : change the "std::remove"
