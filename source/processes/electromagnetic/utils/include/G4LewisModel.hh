@@ -133,7 +133,7 @@ private:
 
   const G4ParticleDefinition* particle;
   G4double mass;
-  G4double chargeSquare;
+  G4double charge;
   G4double massRate;
   G4double highKinEnergy;
   G4double lowKinEnergy;
@@ -167,6 +167,8 @@ private:
 
   G4double stepmin ;
 
+  G4double currentRadLength;
+  G4double currentKinEnergy;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

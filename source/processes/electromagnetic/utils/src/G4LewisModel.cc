@@ -273,8 +273,8 @@ G4double G4LewisModel::ComputeTransportCrossSection(
             1.456,1.412,1.364,1.328,1.307,1.282,1.2026     }};
 
   G4double sigma;
-  if (theParticle != particle ) {
-    particle = theParticle;
+  if (part != particle ) {
+    particle = part;
     mass = particle->GetPDGMass();
     charge = particle->GetPDGCharge()/eplus;
   }
@@ -284,6 +284,8 @@ G4double G4LewisModel::ComputeTransportCrossSection(
   // correction if particle .ne. e-/e+
   // compute equivalent kinetic energy
   // lambda depends on p*beta ....
+
+  G4double eKineticEnergy = KineticEnergy;
 
   if((particle->GetParticleName() != "e-") &&
      (particle->GetParticleName() != "e+") )
@@ -416,8 +418,8 @@ G4double G4LewisModel::GeomPathLength(
     charge = particle->GetPDGCharge()/eplus;
   }
   currentKinEnergy = T0;
-  const G4Material* material = couple->Getmaterial();
-  currentRadLength = material->GetRadlength();
+  const G4Material* material = couple->GetMaterial();
+  currentRadLength = material->GetRadlen();
 
   lambda0 = lambda;
   lambda1 = -1.;
@@ -558,47 +560,108 @@ G4double G4LewisModel::SampleCosineTheta(G4double trueStepLength)
 
         G4double a;
 
-        G4double w = log(currentTau/tau0) ;
-        if (currentTau < tau0) a = (alfa1-alfa2*w)/currentTau ;
-        else            a = (alfa1+alfa3*w)/currentTau ;
+        // for heavy particles take the width of the cetral part
+        //  from the Highland formula
+        // (Particle Physics Booklet, July 2002, eq. 26.10)
+        if(mass > electron_mass_c2) // + other conditions (beta, x/X0,...?)
+        {
+          G4double Q = abs(charge) ;
+          G4double xx0 = trueStepLength/currentRadLength;
+          G4double betacp = currentKinEnergy*(currentKinEnergy+2.*mass)/
+                           (currentKinEnergy+mass) ;
+          G4double theta0 = c_highland*Q*sqrt(xx0)*
+                         (1.+corr_highland*log(xx0))/betacp ;
 
-        G4double x0 = 1.-xsi/a ;
-        if(x0 < 0.) x0 = 0. ;
+          if (theta0 > tausmall) a = 0.5/(1.-cos(theta0)) ;
+          else                   a = 4.0/(theta0*theta0) ;
 
-        // from continuity of the 1st derivatives
-        G4double c = a*(b-x0) ;
-        if(a*currentTau < c0) c = c0*(b-x0)/currentTau ;
+        } 
+        else 
+        {
+          G4double w = log(currentTau/tau0) ;
+          if (currentTau < tau0) a = (alfa1-alfa2*w)/currentTau ;
+          else                   a = (alfa1+alfa3*w)/currentTau ;
+	}
 
-        if(c == 1.) c=1.000001 ;
-        if(c == 2.) c=2.000001 ;
-        if(c == 3.) c=3.000001 ;
+        G4double xmeanth = exp(-currentTau);
 
-        G4double ea = 0.0;
-        if (a*(1.-x0) < amax) ea = exp(-a*(1.-x0)) ;
+        G4double xmean1,xmean2,eaa,b1,bx,ebx,eb1,c,qprob,prob;
 
-        G4double eaa = 1.-ea ;
-        G4double xmean1 = 1.-1./a+(1.-x0)*ea/eaa ;
+        G4double x0 = 1.-xsi/a;
+        G4double ea = 0.;
 
-        G4double b1 = b+1. ;
-        G4double bx = b-x0 ;
-        G4double eb1= exp((c-1.)*log(b1)) ;
-        G4double ebx= exp((c-1.)*log(bx)) ;
+        // 1 model fuction only
+        // in order to have xmean1 > xmeanth -> qprob < 1
+        if (x0 <= -1.) 
+        { 
+          x0 = -1. ;
 
-        G4double xmean2  = (x0*eb1+ebx+(eb1*bx-b1*ebx)/(2.-c))/(eb1-ebx) ;
-        G4double xmeanth = exp(-currentTau) ;
+          if( a < 1./(1.-xmeanth)) a = 1./(1.-xmeanth) ;
 
-        G4double cnorm1 = a/eaa ;
-        G4double cnorm2 = (c-1.)*eb1*ebx/(eb1-ebx) ;
-        G4double f1x0 = cnorm1*exp(-a*(1.-x0)) ;
-        G4double f2x0 = cnorm2/exp(c*log(b-x0)) ;
+          if(a*(1.-x0) < amax) ea = exp(-a*(1.-x0));
+         
+          eaa = 1.-ea ;
+          xmean1 = 1.-1./a+(1.-x0)*ea/eaa ;
 
-        // from continuity at x=x0
-        G4double prob = f2x0/(f1x0+f2x0) ;
-        // from xmean = xmeanth
-        G4double qprob = (f1x0+f2x0)*xmeanth/(f2x0*xmean1+f1x0*xmean2) ;
+          c = 2. ;
+          b1 = b+1. ;
+          bx = b1 ;
+          eb1 = b1 ;
+          ebx = b1 ;
+          xmean2 = 0. ;
 
-        // protection against qprob > 1
-        if(qprob > 1.)
+          prob = 1. ;
+          qprob = xmeanth/xmean1 ;
+        }
+        else
+        {
+          // 2 model fuctions
+          // in order to have xmean1 > xmeanth
+          if((1.-x1fac2/a) < xmeanth)
+          {
+            a = x1fac3*x1fac2/(1.-xmeanth) ;
+
+            if(a*(1.-x0) < amax) ea = exp(-a*(1.-x0));
+
+            eaa = 1.-ea ;
+            xmean1 = 1.-1./a+(1.-x0)*ea/eaa ;
+          }
+          else
+          {
+            ea = x1fac1 ;
+            eaa = 1.-ea ;
+            xmean1 = 1.-x1fac2/a ;
+          }
+
+          // from continuity of the 1st derivatives
+          c = a*(b-x0);
+          if(a*currentTau < c0) c = c0*(b-x0)/currentTau ;
+
+          if(c == 1.) c=1.000001 ;
+          if(c == 2.) c=2.000001 ;
+          if(c == 3.) c=3.000001 ;
+
+          b1 = b+1. ;
+          bx=b-x0 ;
+          eb1=exp((c-1.)*log(b1)) ;
+          ebx=exp((c-1.)*log(bx)) ;
+          xmean2 = (x0*eb1+ebx+(eb1*bx-b1*ebx)/(2.-c))/(eb1-ebx) ;
+
+          G4double cnorm1 = a/eaa ;
+          G4double f1x0 = cnorm1*exp(-a*(1.-x0)) ;
+          G4double cnorm2 = (c-1.)*eb1*ebx/(eb1-ebx) ;
+          G4double f2x0 = cnorm2/exp(c*log(b-x0)) ;
+
+          // from continuity at x=x0
+          prob = f2x0/(f1x0+f2x0) ;
+          // from xmean = xmeanth
+          qprob = (f1x0+f2x0)*xmeanth/(f2x0*xmean1+f1x0*xmean2) ;
+        }
+
+
+        // protection against prob or qprob > 1 and
+        //  prob or qprob < 0
+        if((qprob > 1.) || (qprob < 0.) || (prob > 1.) || (prob < 0.))
         {
           qprob = 1. ;
           prob = (xmeanth-xmean2)/(xmean1-xmean2) ;
