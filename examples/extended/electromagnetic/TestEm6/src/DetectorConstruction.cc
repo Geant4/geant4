@@ -22,7 +22,7 @@
 //
 
 //
-// $Id: DetectorConstruction.cc,v 1.3 2003-01-31 12:54:23 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.4 2003-02-10 17:39:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -115,13 +115,13 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 		   			                      
   lBox = new G4LogicalVolume(sBox,			//its shape
                              aMaterial,			//its material
-                             "Container");		//its name
+                             aMaterial->GetName());	//its name
 			     
   lBox->SetUserLimits(userLimits);			     
                                    
   pBox = new G4PVPlacement(0,				//no rotation
   			   G4ThreeVector(),		//at (0,0,0)
-                           "Container",			//its name
+                           aMaterial->GetName(),	//its name
                            lBox,			//its logical volume
                            0,	       		        //its mother  volume
                            false,			//no boolean operation
