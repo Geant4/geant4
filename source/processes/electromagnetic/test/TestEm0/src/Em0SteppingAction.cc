@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em0SteppingAction.cc,v 1.1 1999-01-08 16:32:37 gunter Exp $
+// $Id: Em0SteppingAction.cc,v 1.2 1999-05-10 16:15:14 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,9 +30,8 @@ Em0SteppingAction::~Em0SteppingAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Em0SteppingAction::UserSteppingAction()
+void Em0SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
- G4Step*  aStep = GetSteppingManager()->GetStep();
  G4double EdepStep = aStep->GetTotalEnergyDeposit();
  if (EdepStep > 0.) eventAction->addEdep(EdepStep);
 }

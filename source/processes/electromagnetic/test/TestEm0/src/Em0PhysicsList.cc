@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em0PhysicsList.cc,v 1.1 1999-01-08 16:32:36 gunter Exp $
+// $Id: Em0PhysicsList.cc,v 1.2 1999-05-10 16:15:13 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -222,8 +222,9 @@ void Em0PhysicsList::ConstructGeneral()
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Em0PhysicsList::SetCuts(G4double cut)
+void Em0PhysicsList::SetCuts() 
 {
+  G4double cut= GetDefaultCutValue();
   if (verboseLevel >0){
     G4cout << "Em0PhysicsList::SetCuts:";
     G4cout << "CutLength : " << cut/mm << " (mm)" << endl;
@@ -241,7 +242,7 @@ void Em0PhysicsList::SetCuts(G4double cut)
   SetCutValue(cut, "anti_proton");
    
   SetCutValueForOthers(cut);
-  
+
   if (verboseLevel>1) DumpCutValuesTable();
 }
 

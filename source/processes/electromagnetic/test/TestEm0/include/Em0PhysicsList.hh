@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em0PhysicsList.hh,v 1.1 1999-01-08 16:32:34 gunter Exp $
+// $Id: Em0PhysicsList.hh,v 1.2 1999-05-10 16:15:10 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,7 @@ class Em0PhysicsList: public G4VUserPhysicsList
     void ConstructParticle();
     void ConstructProcess();
  
-    void SetCuts(G4double);
+    void SetCuts(); // G4double);
     
   protected:
     // these methods Construct particles 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em0RunAction.hh,v 1.1 1999-01-08 16:32:35 gunter Exp $
+// $Id: Em0RunAction.hh,v 1.2 1999-05-10 16:15:11 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,8 +30,8 @@ class Em0RunAction : public G4UserRunAction
    ~Em0RunAction();
 
   public:
-    void BeginOfRunAction(G4Run*);
-    void EndOfRunAction(G4Run*);
+    void BeginOfRunAction(const G4Run*);
+    void EndOfRunAction(const G4Run*);
     
     void CountTraks0(G4int nt) { NbOfTraks0 += nt;}
     void CountTraks1(G4int nt) { NbOfTraks1 += nt;}

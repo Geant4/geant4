@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em0RunAction.cc,v 1.1 1999-01-08 16:32:36 gunter Exp $
+// $Id: Em0RunAction.cc,v 1.2 1999-05-10 16:15:14 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,9 +35,9 @@ Em0RunAction::~Em0RunAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Em0RunAction::BeginOfRunAction(G4Run* aRun)
+void Em0RunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  aRun->SetRunID(runIDcounter++);
+  // aRun->SetRunID(runIDcounter++);
    
   G4cout << "### Run " << aRun->GetRunID() << " start." << endl;
   
@@ -55,7 +55,7 @@ void Em0RunAction::BeginOfRunAction(G4Run* aRun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Em0RunAction::EndOfRunAction(G4Run* aRun)
+void Em0RunAction::EndOfRunAction(const G4Run* aRun)
 {
   //statistic of nb of tracks and steps
   G4int NbOfEvents = aRun->GetNumberOfEvent();

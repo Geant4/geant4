@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em0TrackingAction.hh,v 1.1 1999-01-08 16:32:35 gunter Exp $
+// $Id: Em0TrackingAction.hh,v 1.2 1999-05-10 16:15:12 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -25,7 +25,7 @@ class Em0TrackingAction : public G4UserTrackingAction {
     Em0TrackingAction(Em0RunAction*);
    ~Em0TrackingAction() {};
    
-    void PostUserTrackingAction();
+    void PostUserTrackingAction(const G4Track *aTrack);
     
   private:
     Em0RunAction* runAction;  

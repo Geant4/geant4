@@ -6,7 +6,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em0TrackingAction.cc,v 1.1 1999-01-08 16:32:37 gunter Exp $
+// $Id: Em0TrackingAction.cc,v 1.2 1999-05-10 16:15:15 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,12 +28,10 @@ Em0TrackingAction::Em0TrackingAction(Em0RunAction* RunAct)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Em0TrackingAction::PostUserTrackingAction()
+void Em0TrackingAction::PostUserTrackingAction(const G4Track *aTrack)
 {
   //increase nb of processed tracks 
   //nb of steps of this track
-  G4TrackingManager* trackingManager =  GetOmnipotentTrackingManager();
-  G4Track* aTrack  = trackingManager -> GetTrack();
   
   G4int nbSteps = aTrack->GetCurrentStepNumber();
   

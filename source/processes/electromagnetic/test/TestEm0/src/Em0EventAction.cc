@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em0EventAction.cc,v 1.1 1999-01-08 16:32:36 gunter Exp $
+// $Id: Em0EventAction.cc,v 1.2 1999-05-10 16:15:13 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,7 +53,6 @@ void Em0EventAction::EndOfEventAction()
                                  << G4BestUnit(TotalEnergyDeposit,"Energy")
                                  << endl;
 
-
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
 
   if(pVVisManager)
@@ -63,7 +62,7 @@ void Em0EventAction::EndOfEventAction()
    G4int n_trajectories = 0;
    if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();  
    for(G4int i=0; i<n_trajectories; i++) 
-      { G4Trajectory* trj = (*trajectoryContainer)[i];
+     { G4Trajectory* trj =  (G4Trajectory*) (*trajectoryContainer)[i]; // cast
         if (drawFlag == "all") trj->DrawTrajectory(50);
         else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
                                trj->DrawTrajectory(50); 
