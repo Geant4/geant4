@@ -49,6 +49,8 @@ G4int test();
 
 G4int verboseLevel = 1;
 
+G4InuclElementaryParticle* bull;
+
 int main(int argc, char **argv ) {
 
 
@@ -134,7 +136,7 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
     bulletMomentum[3] = momZ;
 
     //    G4InuclParticle* bull = new G4InuclElementaryParticle(bulletMomentum, bulletType);
-    G4InuclElementaryParticle* bull = new G4InuclElementaryParticle(bulletMomentum, bulletType);
+    bull = new G4InuclElementaryParticle(bulletMomentum, bulletType);
 
 
     if (verboseLevel > 2) {
@@ -145,7 +147,6 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
 				  bulletMomentum[3] * bulletMomentum[3] + bullMass * bullMass) * GeV;
       G4cout << "Bullet total energy: " << bulleTot / GeV  << "GeV"<< G4endl;  
     }
-
 
     G4InuclNuclei* targ = NULL;
     G4InuclParticle* targIsH = NULL;
@@ -219,11 +220,13 @@ G4int printData(G4int i) {
     output.printCollisionOutput();
   }
 
+  sumEnergy = bull->getKineticEnergy(); // In GeV 
 
-    sumBaryon = A;
+  sumBaryon = A;
   if (bulletType == proton || bulletType == neutron) {
     sumBaryon += 1;
   } 
+
 
   // Convert Bertini data to Geant4 format
 
@@ -256,7 +259,8 @@ G4int printData(G4int i) {
       G4int fA = G4int(ifrag->getA());
       G4int fZ = G4int(ifrag->getZ());
 
-	sumBaryon -= fA;
+      sumBaryon -= fA;
+      sumEnergy -= ekin / GeV;
 
       if (verboseLevel > 2) {
 
@@ -305,6 +309,8 @@ G4int printData(G4int i) {
 	sumBaryon -= 1;
       } 
 
+      sumEnergy -= ekin / GeV;
+
       if (verboseLevel > 0) {
 	cout.precision(4);
 
@@ -325,11 +331,16 @@ G4int printData(G4int i) {
       eTot   += sqrt(mom[0] * mom[0]) * GeV;
       eKinTot += ekin;
     }
+  }
 
-  }
   if (sumBaryon != 0) {
-    cout << "ERROR: no baryon number conservation, sum of baryons = " << sumBaryon << endl;
+    cout << "ERROR: no baryon number conservation, sum of baryons = " << sumBaryon << G4endl;
   }
+
+  if (abs(sumEnergy) > 0.1 ) {
+    cout << "ERROR: energy conservation violated by " << sumEnergy << " GeV" << G4endl;
+  }
+
   if (verboseLevel > 2) {
 
     G4cout << "Total energy           : " << eTot / GeV << "GeV" << G4endl; 
