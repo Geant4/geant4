@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ForwardXrayTR.cc,v 1.3 1999-12-15 14:52:05 gunter Exp $
+// $Id: G4ForwardXrayTR.cc,v 1.4 2000-02-09 10:41:18 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ForwardXrayTR class -- implementation file
@@ -238,6 +238,17 @@ G4ForwardXrayTR( const G4String& matName1,   //  G4Material* pMat1,
   }
   //  G4cout<<"G4ForwardXray constructor is called"<<G4endl ;
   BuildXrayTRtables() ;
+}
+
+/////////////////////////////////////////////////////////////////////////
+//
+// Constructor used by X-ray transition radiation parametrisation models
+
+G4ForwardXrayTR::
+G4ForwardXrayTR( const G4String& processName  )
+  :        G4TransitionRadiation(processName) 
+{
+  ;
 }
 
 

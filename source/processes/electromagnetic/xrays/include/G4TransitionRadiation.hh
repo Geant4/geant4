@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TransitionRadiation.hh,v 1.3 1999-12-15 14:52:05 gunter Exp $
+// $Id: G4TransitionRadiation.hh,v 1.4 2000-02-09 10:38:46 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4TransitionRadiation  -- header file
@@ -24,7 +24,8 @@
 // CERN, CN Division, ASD Group
 // History:
 // 18.12.97, V. Grichine (Vladimir.Grichine@cern.ch)
-
+// 02.02.00, V.Grichine, new data fEnergy and fVarAngle for double 
+//                       numerical integration in inherited classes
 
 #ifndef G4TransitionRadiation_h
 #define G4TransitionRadiation_h
@@ -108,9 +109,11 @@ protected :
 G4int fMatIndex1 ;                   // index of the 1st material
 G4int fMatIndex2 ;                   // index of the 2nd material
 
-private :
+// private :
 
 G4double fGamma ;
+G4double fEnergy ;
+G4double fVarAngle ;
 
 // Local constants
 static const G4int fSympsonNumber ; // Accuracy of Sympson integration 10

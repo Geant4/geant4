@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ForwardXrayTR.hh,v 1.3 1999-12-15 14:52:05 gunter Exp $
+// $Id: G4ForwardXrayTR.hh,v 1.4 2000-02-09 10:38:34 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ForwardXrayTR -- header file
@@ -21,7 +21,7 @@
 // CERN, CN Division, ASD Group
 // History:
 // 22.09.97, V. Grichine (Vladimir.Grichine@cern.ch)
-
+// 26.01.00, V.Grichine, new constructor and protected DM for fast sim. models
 
 #ifndef G4FORWARDXRAYTR_H
 #define G4FORWARDXRAYTR_H
@@ -55,8 +55,10 @@ public:
 
 
   G4ForwardXrayTR(  const G4String& matName1,    //  G4Material* pMat1,
-		    const G4String& matName2,   //  G4Material* pMat2,     
+		    const G4String& matName2,    //  G4Material* pMat2,     
                     const G4String& processName="XrayTR"     ) ;
+  
+  G4ForwardXrayTR(  const G4String& processName="XrayTR"     ) ;
 
 //  G4ForwardXrayTR(const G4ForwardXrayTR& right) ;
 
@@ -131,9 +133,9 @@ G4double EnergySum( G4double energy1,
   static G4int           GetTotBin()       { return fTotBin ;       } ;
 
 
-protected :
+protected :  // for access from X-ray TR fast simulation models
 
-private :  ///////////////  Data members   ///////////////////////////
+  // private :  ///////////////  Data members   ///////////////////////////
 
 G4Gamma* fPtrGamma ;  // pointer to TR photon
 
