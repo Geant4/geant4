@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.hh,v 1.3 1999-06-05 13:44:10 aforti Exp $
+// $Id: G4LowEnergyIonisation.hh,v 1.4 1999-06-11 15:45:54 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,7 +66,9 @@ public:
   G4double GetMeanFreePath(const G4Track& track,
 			   G4double previousStepSize,
 			   G4ForceCondition* condition ) ;
-  
+
+  inline G4double GetTransitionShell(G4int k){return(thePrimShVec(k));};
+
   G4VParticleChange *PostStepDoIt(const G4Track& track,         
 				  const G4Step& Step ) ;                 
   
@@ -117,7 +119,8 @@ private:
   allAtomTable* theFluorTransitionTable;
   allAtomTable* theSamplingCoeffTable;
   G4SecondLevel* theBindingEnergyTable;  
-  
+  G4DataVector thePrimShVec;
+
   G4double MeanFreePath;
   G4double LowestKineticEnergy;
   G4double HighestKineticEnergy;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.hh,v 1.6 1999-06-05 13:44:10 aforti Exp $
+// $Id: G4LowEnergyPhotoElectric.hh,v 1.7 1999-06-11 15:45:32 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,7 +84,9 @@ public:
 
   G4double GetCrossSection(G4DynamicParticle* aDynamicGamma,
 			    G4Element* anElement);
-  
+
+  inline G4double GetTransitionShell(G4int k){return(thePrimShVec(k));};
+
   G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep);
   
 protected:  
@@ -117,6 +119,7 @@ private:
 
   allAtomTable* theFluorTransitionTable;
   oneAtomTable* theAugerTransitionTable;
+  G4DataVector thePrimShVec;
 
   G4double LowestEnergyLimit;      
   G4double HighestEnergyLimit;     
