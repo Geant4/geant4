@@ -1,0 +1,88 @@
+//---------------------
+//    Cryostat
+//---------------------
+CryostatRMin        = 0.0*cm;
+CryostatRMax        = 135.0*cm;
+CryostatLenght      = 147.5*cm;
+StartingPhi         = 0.;
+DPhi                = 2*pi;
+
+
+//---------------------
+//    Insulation
+//---------------------
+InsulationRMin   = 127.75*cm;
+InsulationRMax   = 134.75*cm;
+InsulationLenght = 147.5*cm;
+
+
+//---------------------
+//    Inactive LArg
+//---------------------
+LArgRMin   = 0.0;
+LArgRMax   = 127.45*cm;
+LArgLenght = 97.5*cm;
+
+LArgPosX   = 0.0;  
+LArgPosY   = 0.0;  
+LArgPosZ   = -50.*cm;
+
+//----------------------
+//   Front Excluder
+//----------------------
+FrontExcluderSizeX = 31.926*cm;
+FrontExcluderSizeY = 17.218*cm;
+FrontExcluderSizeZ = 31.926*cm;
+
+FrontExcluderPosX = 0.;
+FrontExcluderPosY = -106.168*cm;
+FrontExcluderPosZ = 0.;
+
+//----------------------
+//   Back  Excluder
+//----------------------
+BackExcluderSize1X = 39.53*cm;
+BackExcluderSize2X = 52.29*cm;
+BackExcluderSize1Y = 25.56*cm;
+BackExcluderSize2Y = 51.84*cm;
+BackExcluderSizeZ  = 52.325*cm;
+
+BackExcluderPosX   = 0.;
+BackExcluderPosY   = 63.904*cm;
+BackExcluderPosZ   = 0.;
+BackExcluderRotX   = 90.0*deg;
+
+
+//------------------------
+//    FCAL Enveloppe
+//------------------------
+FCALEnvelopeRMin     = 0.0*cm;  
+FCALEnvelopeRMax     = 45.15*cm;
+FCALEnvelopeLenght   = 45.975*cm;
+FCALEnvelopeStartPhi = pi/4;
+FCALEnvelopeDPhi     = pi/2 + pi/180. ;
+
+FCALEnvelopePosX     = 0.0*cm;
+FCALEnvelopePosY     = -38.156*cm;
+FCALEnvelopePosZ     = -25.341*cm;
+
+FCALEnvelopeRotX     = 2.8291*deg-pi/2;
+FCALEnvelopeRotY     = 0.*deg;
+
+
+//-----------------------------
+// FCAL electromagnetic Module
+//-----------------------------
+FCALEmModulePosX = 0.0*cm;
+FCALEmModulePosY = 0.0*cm;
+FCALEmModulePosZ = 23.675*cm;
+
+ModuleRotZ = -45*deg;
+
+//-----------------------------
+// FCAL Hadronic Module 
+//-----------------------------
+FCALHadModulePosX = 0.;
+FCALHadModulePosY = 0.;
+FCALHadModulePosZ = -23.675*cm;
+
