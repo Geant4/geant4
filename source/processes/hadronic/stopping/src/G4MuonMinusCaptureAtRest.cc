@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuonMinusCaptureAtRest.cc,v 1.2 1999-12-15 14:53:37 gunter Exp $
+// $Id: G4MuonMinusCaptureAtRest.cc,v 1.3 2000-04-07 16:06:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -23,6 +23,8 @@
 //                     E-mail: olin@triumf.ca
 //                            April 1998
 // **************************************************************
+//      V.Ivanchenko   7 Apr 2000 Advance model for electromagnetic
+//                                capture and cascade
 //-----------------------------------------------------------------------------
 
 #include "G4MuonMinusCaptureAtRest.hh"
@@ -35,6 +37,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include "G4He3.hh"
+
 
 #define NINT(x) ((x)>=0 ? (G4int)floor((x) + .5) : -(G4int)floor(.5 - (x)))
 
@@ -116,17 +119,20 @@ G4MuonMinusCaptureAtRest::G4MuonMinusCaptureAtRest(const G4String& processName)
   pdefFragm[4] = G4He3::He3();
   pdefFragm[5] = G4Alpha::Alpha();
 
-  if (verboseLevel>0) {
+  if (verboseLevel>=0) {
     G4cout << GetProcessName() << " is created "<< G4endl;
   }
 
   Fragments   = new G4GHEKinematicsVector [MXFRAG];
-  Secondaries  = new G4GHEKinematicsVector [MXSECS];
-  Evaporates = new G4GHEKinematicsVector [MXEVAP*6];
-  Gkin = new G4GHEKinematicsVector [MXGKIN];
+  Secondaries = new G4GHEKinematicsVector [MXSECS];
+  Evaporates  = new G4GHEKinematicsVector [MXEVAP*6];
+  Gkin        = new G4GHEKinematicsVector [MXGKIN];
+  Cascade     = new G4GHEKinematicsVector [17];
 
   InitializeMuCapture();
 
+  pSelector  = new G4StopElementSelector();
+  pEMCascade = new G4MuMinusCaptureCascade();
 }
 
 // destructor
@@ -137,6 +143,7 @@ G4MuonMinusCaptureAtRest::~G4MuonMinusCaptureAtRest()
   delete [] Secondaries;
   delete [] Evaporates;
   delete [] Gkin;
+  delete [] Cascade;
 
 }
 
@@ -182,7 +189,9 @@ G4double G4MuonMinusCaptureAtRest::AtRestGetPhysicalInteractionLength(
   ResetNumberOfInteractionLengthLeft();
 
   // condition is set to "Not Forced"
-  *condition = NotForced;
+  //  *condition = NotForced;
+  // condition is set to "ExclusivelyForced" by V.Ivanchenko
+       *condition = ExclusivelyForced;
 
   // get mean life time
   currentInteractionLength = GetMeanLifeTime(track, condition);
@@ -195,7 +204,11 @@ G4double G4MuonMinusCaptureAtRest::AtRestGetPhysicalInteractionLength(
     G4cout << "MeanLifeTime = " << currentInteractionLength/ns << "[ns]" <<G4endl;
   }
 
-  return theNumberOfInteractionLengthLeft * currentInteractionLength;
+  // Return 0 interaction length to get for this process
+  // the 100% probability 
+
+  return 0.0;
+  //  return theNumberOfInteractionLengthLeft * currentInteractionLength;
 
 }
 
@@ -220,8 +233,8 @@ G4VParticleChange* G4MuonMinusCaptureAtRest::AtRestDoIt(
 
   G4double globalTime = track.GetGlobalTime()/s;
 
-  if (verboseLevel>1) {
-    G4cout << "G4MuonMinusCaptureAtRest::AtRestDoIt is invoked " <<G4endl;
+  if (verboseLevel > 1) {
+    G4cout << "G4MuonMinusCaptureAtRest::AtRestDoIt is invoked " << G4endl;
   }
 
   G4ParticleMomentum momentum;
@@ -229,24 +242,58 @@ G4VParticleChange* G4MuonMinusCaptureAtRest::AtRestDoIt(
 
   G4ThreeVector   position = track.GetPosition();
 
-  // Generate secondaries
-  DoMuCapture();
+  // Generate secondaries from electromagnetic cascade
+  nCascade = 0;
+  G4double mass = GetIsotopicMass(targetAtomicMass,targetCharge) * GeV;
+  nCascade      = pEMCascade->DoCascade(targetCharge, mass, Cascade);
 
-  aParticleChange.SetNumberOfSecondaries( nGkine );
+  // Decay or Capture?
+  G4double lambdac  = pSelector->GetMuonCaptureRate(targetCharge,targetAtomicMass);
+  G4double lambdad  = pSelector->GetMuonDecayRate(targetCharge,targetAtomicMass);
+  
+  if( G4UniformRand()*(lambdac + lambdad) > lambdac) {
 
-  for ( G4int isec = 0; isec < nGkine; isec++ ) {
-    G4DynamicParticle* aNewParticle = new G4DynamicParticle;
-    aNewParticle->SetDefinition( Gkin[isec].GetParticleDef() );
-    aNewParticle->SetMomentum( Gkin[isec].GetMomentum() * GeV );
+    // Decay
+    pEMCascade->DoBoundMuonMinusDecay(targetCharge,mass,&nCascade,Cascade);
 
-    localtime = globalTime + Gkin[isec].GetTOF();
+    // Generate secondaries from capture
+  } else {
 
-    G4Track* aNewTrack = new G4Track( aNewParticle, localtime*s, position );
-    aParticleChange.AddSecondary( aNewTrack );
+    DoMuCapture();
+  }
+    
+  aParticleChange.SetNumberOfSecondaries( nGkine + nCascade );
 
+  // Store nuclear cascade
+  if(nGkine > 0) {
+    for ( G4int isec = 0; isec < nGkine; isec++ ) {
+      G4DynamicParticle* aNewParticle = new G4DynamicParticle;
+      aNewParticle->SetDefinition( Gkin[isec].GetParticleDef() );
+      aNewParticle->SetMomentum( Gkin[isec].GetMomentum() * GeV );
+
+      localtime = globalTime + Gkin[isec].GetTOF();
+
+      G4Track* aNewTrack = new G4Track( aNewParticle, localtime*s, position );
+      aParticleChange.AddSecondary( aNewTrack );
+    }
   }
 
-  aParticleChange.SetLocalEnergyDeposit( 0.0*GeV );
+  // Store electromagnetic cascade
+
+  if(nCascade > 0) {
+    localtime = globalTime*s + tDelay;
+
+    for ( G4int isec = 0; isec < nCascade; isec++ ) {
+      G4DynamicParticle* aNewParticle = new G4DynamicParticle;
+      aNewParticle->SetDefinition( Cascade[isec].GetParticleDef() );
+      aNewParticle->SetMomentum( Cascade[isec].GetMomentum() );
+
+      G4Track* aNewTrack = new G4Track( aNewParticle, localtime, position );
+      aParticleChange.AddSecondary( aNewTrack );
+    }
+  }
+
+  aParticleChange.SetLocalEnergyDeposit(0.0);
 
   aParticleChange.SetStatusChange(fStopAndKill); // Kill the incident MuonMinus
 
@@ -259,7 +306,6 @@ G4VParticleChange* G4MuonMinusCaptureAtRest::AtRestDoIt(
 }
 
 
-
 void G4MuonMinusCaptureAtRest::CascadeCorrection(G4double zztar,
 						 G4double bbtar)
 {
@@ -3117,78 +3163,23 @@ G4double G4MuonMinusCaptureAtRest::LevelDensity(G4int jz, G4int jn,
 
 void G4MuonMinusCaptureAtRest::GetCaptureIsotope(const G4Track& track)
 {
-  // Initialized data
 
-  static G4double b0a = -.03;
-  static G4double b0b = -.25;
-  static G4double b0c = 3.24;
-  static G4double t1 = 875.;
-  static G4double zeff[100] = {
-    1.,1.98,2.95,3.89,4.8,5.72,6.61,7.49,8.32,9.12,9.95,10.69,11.48,12.22,
-    12.91,13.64,14.24,14.89,15.53,16.15,16.75,17.38,18.04,18.49,
-    19.06,19.59,20.1,20.66,21.12,21.61,22.02,22.43,22.84,23.24,
-    23.65,24.06,24.47,24.85,25.23,25.61,25.99,26.37,26.69,27.,
-    27.32,27.63,27.95,28.2,28.42,28.64,28.79,29.03,29.27,29.51,
-    29.75,29.99,30.2,30.36,30.53,30.69,30.85,31.01,31.18,31.34,
-    31.48,31.62,31.76,31.9,32.05,32.19,32.33,32.47,32.61,32.76,
-    32.94,33.11,33.29,33.46,33.64,33.81,34.21,34.18,34.,34.1,
-    34.21,34.31,34.42,34.52,34.63,34.73,34.84,34.94,35.04,35.15,
-    35.25,35.36,35.46,35.57,35.67,35.78 };
-
-  // System generated locals
-  G4double r__1, r__2;
-
-  // Local variables
-  static G4double xmu, a2ze, rndm[4];
-  static G4double lambdac;
-
-  G4int i;
+  // Ask selector to choose the element
 
   G4Material * aMaterial = track.GetMaterial();
-  const G4int numberOfElements = aMaterial->GetNumberOfElements();
-  const G4ElementVector* theElementVector = aMaterial->GetElementVector();
+  G4Element* theElement  = pSelector->GetElement(aMaterial);
+  targetCharge           = theElement->GetZ();
+  targetAtomicMass       = theElement->GetN();
 
-  const G4double* theAtomicNumberDensity =
-    aMaterial->GetAtomicNumDensityVector();
-  G4double normalization = 0;
-  for ( i=0; i < numberOfElements; i++ ) {
-    normalization += theAtomicNumberDensity[i] ; // change when nucleon specific
-    // probabilities are included.
-  }
-  G4double runningSum= 0.;
-  G4double random = G4UniformRand()*normalization;
-  for ( i=0; i < numberOfElements; i++ ) {
-    runningSum += theAtomicNumberDensity[i]; // change when nucleon specific
-    // probabilities are included.
-    if ( random <= runningSum ) {
-      targetCharge = (*theElementVector)(i)->GetZ();
-      targetAtomicMass = (*theElementVector)(i)->GetN();
-    }
-  }
-  if ( random > runningSum ) {
-    targetCharge = (*theElementVector)(numberOfElements-1)->GetZ();
-    targetAtomicMass = (*theElementVector)(numberOfElements-1)->GetN();
-  }
+  // Calculate total capture velosity
 
-  // == Simulation of Neutrons from muon capture in heavy nuclei.
-  // == Effective charges from Ford and Wills Nucl Phys 35(1962)295.
-  // == Untabulated charges are interpolated.
-  // ==  Look up Zeff from table
-  // ==  Mu capture lifetime (Goulard and Primakoff PRC10(1974)2034.
-  r__1 = zeff[G4int(targetCharge) - 1];
-  zeff2 = r__1 * r__1;
-  xmu = zeff2 * 2.663e-4;
-  a2ze = targetAtomicMass / targetCharge * .5;
-  r__2 = 1 - xmu;
-  lambdac =
-    t1 * zeff2 * zeff2 * (r__2 * r__2) * (1 - (1 - xmu) * .75704) *
-    (a2ze * b0a + 1. - (a2ze - 1.) * b0b -
-     ((targetAtomicMass - targetCharge) / targetAtomicMass *
-      .5 + (r__1 = a2ze - 1., abs(r__1)) /
-      (targetAtomicMass * 4.)) * b0c);
+  G4double lambdac  = pSelector->GetMuonCaptureRate(targetCharge,targetAtomicMass);
+           lambdac += pSelector->GetMuonDecayRate(targetCharge,targetAtomicMass);
+
   // ===  Throw for capture  time.
-  rndm[0] = G4UniformRand();
-  tDelay = -(G4double)log(rndm[0]) / lambdac;
+
+  tDelay = -(G4double)log(G4UniformRand()) / lambdac;
+
   return;
 
 } // GetCaptureIsotope
@@ -3813,3 +3804,4 @@ void G4MuonMinusCaptureAtRest::RanAzimuthalAng(G4double *sfe, G4double *cfe)
   return;
 
 } // RanAzimuthalAng
+
