@@ -62,9 +62,9 @@ G4VParticleChange* DMXSpecialCuts::PostStepDoIt(
 // 			    			    			    
 {
    aParticleChange.Initialize(aTrack);
-   aParticleChange.SetEnergyChange(0.) ;
-   aParticleChange.SetLocalEnergyDeposit (aTrack.GetKineticEnergy()) ;
-   aParticleChange.SetStatusChange(fStopButAlive);
+   aParticleChange.ProposeEnergy(0.) ;
+   aParticleChange.ProposeLocalEnergyDeposit (aTrack.GetKineticEnergy()) ;
+   aParticleChange.ProposeTrackStatus(fStopButAlive);
    return &aParticleChange;
 }
 
