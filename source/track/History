@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2001-02-12 07:56:30 kurasige Exp $
+$Id: History,v 1.26 2001-02-17 07:45:32 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Feb 17, 01  H.Kurashige (track-V03-00-02)
+- Fix G4Track::GetVelocity for Gamma
+
 Feb 12, 01 H.Kurashige (track-V03-00-01)
 - Remove thePolarizationChange from G4ParticleChangeForTransport.hh
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Track.cc,v 1.5 2001-01-18 12:25:12 kurasige Exp $
+// $Id: G4Track.cc,v 1.6 2001-02-17 07:45:36 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -19,7 +19,9 @@
 //     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
 //
 //---------------------------------------------------------------
-
+//   Add copy constructor            Hisaya Feb. 07 01
+//   Fix GetVelocity                 Hisaya Feb. 17 01
+//
 #include "G4Track.hh"
 
 G4Allocator<G4Track> aTrackAllocator;
@@ -139,10 +141,9 @@ G4double G4Track::GetVelocity() const
   // mass less particle  
   if( mass == 0. ){
     velocity = c_light ; 
-    G4String name = fpDynamicParticle->GetDefinition()->GetParticleName();
 
     // special case for photons
-    if(( name=="gamma")||(name=="opticalphoton")){
+    if(fpDynamicParticle->GetDefinition()==G4OpticalPhoton::OpticalPhoton()){
       G4Material*
 	mat=fpTouchable->GetVolume()->GetLogicalVolume()->GetMaterial();
  
