@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.1 2004-05-26 11:39:10 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.2 2004-06-30 16:49:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -52,6 +52,9 @@
 #include "G4EmHadronBuilder52.hh"
 #include "DecaysBuilder.hh"
 #include "StepMaxBuilder.hh"
+#include "PhysListHadronElastic.hh"
+#include "PhysListBinaryCascade.hh"
+#include "PhysListIonBinaryCascade.hh"
 
 #include "G4UnitsTable.hh"
 #include "G4LossTableManager.hh"
@@ -62,7 +65,10 @@
 PhysicsList::PhysicsList() : G4VModularPhysicsList(),
   verbose(0),
   emBuilderIsRegisted(false),
-  decayBuilderIsRegisted(false)
+  decayBuilderIsRegisted(false),
+  bicBuilderIsRegisted(false),
+  ibicBuilderIsRegisted(false),
+  elsBuilderIsRegisted(false)
 {
   G4LossTableManager::Instance();
   defaultCutValue = 1.*mm;
@@ -147,6 +153,21 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   } else if ("decay" == name && !decayBuilderIsRegisted) {
     RegisterPhysics(new DecaysBuilder());
     decayBuilderIsRegisted = true;
+    yes = true;
+
+  } else if ("elastic" == name && !elsBuilderIsRegisted) {
+    RegisterPhysics(new PhysListHadronElastic());
+    elsBuilderIsRegisted = true;
+    yes = true;
+  
+  } else if ("binary" == name && !bicBuilderIsRegisted) {
+    RegisterPhysics(new PhysListBinaryCascade());
+    bicBuilderIsRegisted = true;
+    yes = true;
+
+  } else if ("binary_ion" == name && !ibicBuilderIsRegisted) {
+    RegisterPhysics(new PhysListIonBinaryCascade());
+    ibicBuilderIsRegisted = true;
     yes = true;
 
   } else {
