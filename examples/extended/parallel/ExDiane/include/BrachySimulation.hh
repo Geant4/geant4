@@ -50,8 +50,8 @@ public:
   
    void setSeed(G4int seed);  
    G4bool initialize(int argc, char** argv);
-   void executeMacro(G4String macroFileName);
-   G4String getOutputFilename();
+   void executeMacro(std::string macroFileName);
+   std::string getOutputFilename();
 
 private: 
   G4int seed;

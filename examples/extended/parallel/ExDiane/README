@@ -68,7 +68,7 @@ Two macros are provided as example: iridium.job and iodium.job
 They correspond to the Geant4 macros: IridiumSourceMacro.mac and
 IodiumSourceMacro.mac
 
-- batch mode:
+- batch mode running through DIANE:
   diane.startjob --job=iodium.job -w 3@localhost --wms=xterm                                                ^        ^    
                   input macro        number of machines
 ------------------------------------------------------------------------

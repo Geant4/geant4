@@ -76,7 +76,7 @@ void BrachySimulation::setSeed(G4int sd)
   HepRandom ::setTheSeed(seed);
 }
 
-bool BrachySimulation::initialize(int ,char** )
+G4bool BrachySimulation::initialize(int ,char** )
 { 
   HepRandom::setTheEngine(new RanecuEngine);
  
@@ -114,24 +114,24 @@ bool BrachySimulation::initialize(int ,char** )
 
   return true;
 }
-void BrachySimulation::executeMacro(G4String macroFileName)
+void BrachySimulation::executeMacro(std::string macroFileName)
 {
   G4UImanager* UI = G4UImanager::GetUIpointer();  
 
   // Batch mode
 
-  G4String fileName = macroFileName;
+  std::string fileName = macroFileName;
   G4cout << fileName << " <---------- in batch -----------------" << G4endl;
   G4cout << macroFileName << " executed"<<G4endl;
 
-  G4String command = "/control/execute ";
+  std::string command = "/control/execute ";
 
   if(!UI)
     G4cout << "FATAL ERROR: UI pointer does not exist" << G4endl;
   else
     UI -> ApplyCommand(command+fileName);    
 }
-G4String  BrachySimulation::getOutputFilename()
+std::string  BrachySimulation::getOutputFilename()
 {
   return "brachytherapy.xml";
 }
