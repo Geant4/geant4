@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33TimedApplication.hh,v 1.3 2002-11-20 13:09:16 dressel Exp $
+// $Id: Tst33TimedApplication.hh,v 1.4 2003-11-18 12:46:13 gcosmo Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -38,21 +38,22 @@
 #ifndef Tst33TimedApplication_hh
 #define Tst33TimedApplication_hh Tst33TimedApplication_hh
 
+#include "G4Types.hh"
 #include "Tst33VApplication.hh"
-#include "globals.hh"
 
 class Tst33TimedEventAction;
 
-
-class Tst33TimedApplication : public Tst33VApplication {
-public:
-  explicit Tst33TimedApplication(G4int time);
-  virtual ~Tst33TimedApplication();
+class Tst33TimedApplication : public Tst33VApplication
+{
+  public:
+    explicit Tst33TimedApplication(G4int time);
+    virtual ~Tst33TimedApplication();
   
-  virtual G4UserRunAction *CreateRunAction();
-  virtual Tst33VEventAction *CreateEventAction();
+    virtual G4UserRunAction *CreateRunAction();
+    virtual Tst33VEventAction *CreateEventAction();
+
 private:
-  G4int fTime;
+    G4int fTime;
 };
 
 #endif

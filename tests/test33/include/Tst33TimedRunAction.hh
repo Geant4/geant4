@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33TimedRunAction.hh,v 1.3 2002-11-20 13:09:16 dressel Exp $
+// $Id: Tst33TimedRunAction.hh,v 1.4 2003-11-18 12:46:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -39,21 +39,20 @@
 #ifndef Tst33TimedRunAction_h
 #define Tst33TimedRunAction_h 1
 
+#include "G4Types.hh"
 #include "G4UserRunAction.hh"
-#include "globals.hh"
 
 class G4Run;
 
 class Tst33TimedRunAction : public G4UserRunAction
 {
-public:
-  Tst33TimedRunAction();
-  virtual ~Tst33TimedRunAction();
-  
-  
-  virtual void BeginOfRunAction(const G4Run*);
-  virtual void EndOfRunAction(const G4Run*);
-  
+  public:
+
+    Tst33TimedRunAction();
+    virtual ~Tst33TimedRunAction();
+
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void EndOfRunAction(const G4Run*);
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33AppStarterMessenger.cc,v 1.7 2003-09-16 13:01:11 dressel Exp $
+// $Id: Tst33AppStarterMessenger.cc,v 1.8 2003-11-18 12:46:13 gcosmo Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -61,8 +61,7 @@ Tst33AppStarterMessenger(Tst33AppStarter &appstarter)
 {
 }
 
-Tst33AppStarterMessenger::
-~Tst33AppStarterMessenger(){
+Tst33AppStarterMessenger::~Tst33AppStarterMessenger(){
   delete fMassGeoCmd;
   delete fParallelGeoCmd;
   delete fScoringCmd;
@@ -77,7 +76,6 @@ Tst33AppStarterMessenger::
   delete fRunCmd;
   delete fWeightChangerCmd;
 }
-
 
 void Tst33AppStarterMessenger::SetNewValue(G4UIcommand* pCmd,
 					 G4String szValue) {
@@ -102,7 +100,7 @@ void Tst33AppStarterMessenger::SetNewValue(G4UIcommand* pCmd,
     std::istrstream is(szValue);
     is >> ipoa >>zeroWindow;
 
-    G4PlaceOfAction poa;
+    G4PlaceOfAction poa = onBoundary;
     if (ipoa == 1) {
       poa = onBoundary;
     }
@@ -120,7 +118,7 @@ void Tst33AppStarterMessenger::SetNewValue(G4UIcommand* pCmd,
     fAppStarter.CreateWeightWindowStore(poa, zeroWindow);
   }
   if (pCmd==fWWRCmd) {
-    G4int mode(fWWRCmd->GetNewIntValue(szValue));
+    G4int mode = fWWRCmd->GetNewIntValue(szValue);
     fAppStarter.CreateWeightRoulette(mode);
   }
   if (pCmd==fClearSmaplingCmd) {
@@ -133,18 +131,14 @@ void Tst33AppStarterMessenger::SetNewValue(G4UIcommand* pCmd,
     fAppStarter.CreateVisApplication();
   }
   if (pCmd==fTimedAppComand) {
-    G4int time(fTimedAppComand->GetNewIntValue(szValue));
+    G4int time = fTimedAppComand->GetNewIntValue(szValue);
     fAppStarter.CreateTimedApplication(time);
   }
   if (pCmd==fPostRunCmd) {
     fAppStarter.PostRun();
   }
   if (pCmd==fRunCmd) {
-    G4int nevents(fRunCmd->GetNewIntValue(szValue));
+    G4int nevents = fRunCmd->GetNewIntValue(szValue);
     fAppStarter.Run(nevents);
   }
-  
 }
-
-
-

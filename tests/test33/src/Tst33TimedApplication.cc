@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33TimedApplication.cc,v 1.2 2002-10-29 16:37:10 dressel Exp $
+// $Id: Tst33TimedApplication.cc,v 1.3 2003-11-18 12:46:13 gcosmo Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -35,23 +35,19 @@
 #include "G4RunManager.hh"
 #include "Tst33TimedEventAction.hh"
 
-
-
 Tst33TimedApplication::Tst33TimedApplication(G4int time)
-  :
-  fTime(time)
+  : fTime(time)
 {}
 
 Tst33TimedApplication::~Tst33TimedApplication()
 {}
 
-Tst33VEventAction *Tst33TimedApplication::CreateEventAction() {
+Tst33VEventAction *Tst33TimedApplication::CreateEventAction()
+{
   return new Tst33TimedEventAction(fTime);
 }
 
-
-
-G4UserRunAction *Tst33TimedApplication::CreateRunAction(){
+G4UserRunAction *Tst33TimedApplication::CreateRunAction()
+{
   return 0;
 }
-

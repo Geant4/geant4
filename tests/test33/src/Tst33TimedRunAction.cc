@@ -21,35 +21,21 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33TimedRunAction.cc,v 1.2 2003-09-16 13:01:11 dressel Exp $
+// $Id: Tst33TimedRunAction.cc,v 1.3 2003-11-18 12:46:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #include "Tst33TimedRunAction.hh"
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Tst33TimedRunAction::Tst33TimedRunAction()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 Tst33TimedRunAction::~Tst33TimedRunAction()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void Tst33TimedRunAction::BeginOfRunAction(const G4Run* )
-{
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+{}
 
 void Tst33TimedRunAction::EndOfRunAction(const G4Run* )
-{
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+{}
