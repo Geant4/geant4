@@ -21,11 +21,13 @@ ExamplePrimaryGeneratorAction::~ExamplePrimaryGeneratorAction()
   //  if(verbosityLevel == 2)
   //{
       // Always give the user debug info.
+
   G4cout << "Output of DEBUG stuff" << G4endl;
   G4cout << "positional stuff" << G4endl;
   G4cout << "Scale, X, Scale, Y, Scale, Z" << G4endl;
   G4double scalex, scaley, scalez;
-  for(int i=0; i<100; i++)
+  G4int i;
+  for( i=0; i<100; i++)
     {
       scalex = DebugXmin + (i+1)*DebugXStep;
       scaley = DebugYmin + (i+1)*DebugYStep;
