@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst22EMPhysics.hh,v 1.2 2001-11-26 16:26:51 hpw Exp $
+// $Id: Tst22EMPhysics.hh,v 1.3 2003-02-05 11:04:13 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,6 +54,12 @@
 #include "G4PhotoNuclearProcess.hh"
 #include "G4ElectronNuclearProcess.hh"
 #include "G4PositronNuclearProcess.hh"
+#include "G4StringChipsParticleLevelInterface.hh"
+#include "G4QGSModel.hh"
+#include "G4TheoFSGenerator.hh"
+#include "G4GammaParticipants.hh"
+#include "G4QGSMFragmentation.hh"
+#include "G4ExcitedStringDecay.hh"
 
 class Tst22EMPhysics : public G4VPhysicsConstructor
 {
@@ -76,8 +82,14 @@ class Tst22EMPhysics : public G4VPhysicsConstructor
     G4PhotoElectricEffect thePhotoEffect;
     G4ComptonScattering theComptonEffect;
     G4GammaConversion thePairProduction;
+    
     G4PhotoNuclearProcess thePhotoNuclearProcess;
-    G4GammaNuclearReaction * theGammaReaction;
+    G4GammaNuclearReaction * theGammaReaction;      
+    G4TheoFSGenerator * theModel;
+    G4StringChipsParticleLevelInterface * theCascade;
+    G4QGSModel< G4GammaParticipants > theStringModel;
+    G4QGSMFragmentation theFragmentation;
+    G4ExcitedStringDecay * theStringDecay;
   
     // Electron physics
     G4MultipleScattering theElectronMultipleScattering;
@@ -99,7 +111,6 @@ class Tst22EMPhysics : public G4VPhysicsConstructor
 
 
 #endif
-
 
 
 

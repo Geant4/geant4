@@ -6,18 +6,18 @@
 /run/initialize
 /gun/direction 1 0 0
 #
-# gamma 500 MeV in Al
+# gamma 100 GeV in Al
 #
 /mydet/SelectMaterial Al
 /gun/particle gamma
-/gun/energy 500 MeV
-/run/beamOn 1000
+/gun/energy 100 GeV
+/run/beamOn 100
 #
-# electron 500 MeV in Air
+# electron 100 GeV in Air
 #
 /mydet/SelectMaterial Air
 /gun/particle e-
-/gun/energy 500 MeV
-/run/beamOn 1000
+/gun/energy 100 GeV
+/run/beamOn 100
 #
 exit

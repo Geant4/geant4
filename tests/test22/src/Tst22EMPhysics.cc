@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst22EMPhysics.cc,v 1.2 2001-11-26 16:26:52 hpw Exp $
+// $Id: Tst22EMPhysics.cc,v 1.3 2003-02-05 11:04:13 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -80,7 +80,19 @@ void Tst22EMPhysics::ConstructProcess()
   pManager->AddDiscreteProcess(&thePhotoEffect);
   pManager->AddDiscreteProcess(&theComptonEffect);
   pManager->AddDiscreteProcess(&thePairProduction);
+  
+  theGammaReaction = new G4GammaNuclearReaction;
+  theModel = new G4TheoFSGenerator;
+  theCascade = new G4StringChipsParticleLevelInterface;
+  theModel->SetTransport(theCascade);
+  theModel->SetHighEnergyGenerator(&theStringModel);
+  theStringDecay = new G4ExcitedStringDecay(&theFragmentation);
+  theStringModel.SetFragmentationModel(theStringDecay);
+  theGammaReaction->SetMaxEnergy(3.5*GeV);
   thePhotoNuclearProcess.RegisterMe(theGammaReaction);
+  theModel->SetMinEnergy(3.*GeV);
+  theModel->SetMaxEnergy(100*TeV);
+  thePhotoNuclearProcess.RegisterMe(theModel);
   pManager->AddDiscreteProcess(&thePhotoNuclearProcess);
 
   // Electron Physics
@@ -90,6 +102,7 @@ void Tst22EMPhysics::ConstructProcess()
   pManager->AddProcess(&theElectronIonisation, ordInActive,2, 2);
   pManager->AddProcess(&theElectronMultipleScattering);
   theElectronNuclearProcess.RegisterMe(theElectroReaction);
+  theElectronNuclearProcess.BiasCrossSectionByFactor(1000);
   pManager->AddDiscreteProcess(&theElectronNuclearProcess);
   
   pManager->SetProcessOrdering(&theElectronMultipleScattering, idxAlongStep,  1);
