@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05SpecialCuts.hh,v 1.1 1999-01-07 16:06:14 gunter Exp $
+// $Id: ExN05SpecialCuts.hh,v 1.2 1999-06-09 10:33:08 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,7 +32,7 @@ class ExN05SpecialCuts : public G4VProcess
 
      ExN05SpecialCuts(const G4String& processName ="ExN05SpecialCut" );
 
-     ~ExN05SpecialCuts(){};
+     virtual ~ExN05SpecialCuts();
 
      virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,

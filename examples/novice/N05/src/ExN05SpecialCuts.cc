@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05SpecialCuts.cc,v 1.1 1999-01-07 16:06:19 gunter Exp $
+// $Id: ExN05SpecialCuts.cc,v 1.2 1999-06-09 10:33:18 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,6 +30,10 @@ ExN05SpecialCuts::ExN05SpecialCuts(const G4String& aName)
      G4cout << GetProcessName() << " is created "<< endl;
    }
 }
+
+ExN05SpecialCuts::~ExN05SpecialCuts() 
+{                                     
+}                                     
 
 G4VParticleChange* ExN05SpecialCuts::PostStepDoIt(
 			     const G4Track& aTrack,
