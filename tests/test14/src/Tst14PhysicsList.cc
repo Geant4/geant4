@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst14PhysicsList.cc,v 1.1 1999-05-29 14:12:11 stesting Exp $
+// $Id: Tst14PhysicsList.cc,v 1.2 1999-06-06 10:57:27 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -134,6 +134,7 @@ void Tst14PhysicsList::ConstructProcess()
 #include "G4LowEnergyGammaConversion.hh"
 #include "G4LowEnergyPhotoElectric.hh"
 #include "G4LowEnergyBremsstrahlung.hh"
+#include "G4LowEnergyIonisation.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -166,7 +167,7 @@ void Tst14PhysicsList::ConstructEM()
       
     } else if (particleName == "e-") {
       // Construct processes for electron <---------------------------
-      theeminusIonisation = new G4eIonisation();
+      theeminusIonisation = new G4LowEnergyIonisation();
       theeminusBremsstrahlung = new G4eBremsstrahlung();
       theLowEnergyBremstrahlung = new G4LowEnergyBremsstrahlung();
       theeminusStepCut = new Tst14StepCut();

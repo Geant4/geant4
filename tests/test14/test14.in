@@ -1,5 +1,6 @@
 #
-# Macro file for the initialization phase of "TestEm5.cc"
+# Macro file for the initialization phase of "test14" (EM Low Energy)
+# (Based on electromagnetic/test/TestEm5.)
 #
 # It creates the default geometry (simple absorber cylinder )        
 #
@@ -14,21 +15,24 @@
 /calor/setAbsRad 100.0 mm
 /calor/update
 #
-#  hist file name
-/plots/sethistName geant4.plot04 
-#  PLOT: angle distr. of transmitted particles
-/plots/setnbinTh 60
-/plots/setThlow 0.0 deg
-/plots/setThhigh 6.0 deg
-#
 /calor/cutG 2130.0 micrometer
 /calor/cutE 7.000 micrometer
 /run/initialize
 /run/particle/dumpCutValues
 #
 /gun/particle gamma
-/gun/energy 6 MeV
+/gun/energy 1 keV
+/tracking/verbose 1
+/run/beamOn 1
 #
+/gun/particle gamma
+/gun/energy 10 keV
+/tracking/verbose 1
+/run/beamOn 1
+#
+/gun/particle gamma
+/gun/energy 1 keV
+/tracking/verbose 0
 /run/beamOn 1000
 #
 #

@@ -1,0 +1,12 @@
+#
+# Macro file for the initialization phase of "test14"
+# (Based on electromagnetic/test/TestEm5.)
+#
+# It creates the default geometry (simple absorber cylinder )        
+#
+/control/verbose 2
+#control/saveHistory
+/run/verbose 2
+#
+#
+

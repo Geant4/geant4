@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst14PhysicsList.hh,v 1.1 1999-05-29 14:12:05 stesting Exp $
+// $Id: Tst14PhysicsList.hh,v 1.2 1999-06-06 10:57:18 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -25,6 +25,7 @@ class G4LowEnergyGammaConversion;
 class G4LowEnergyBremsstrahlung;
 
 class G4eIonisation;
+class G4LowEnergyIonisation;
 class G4eBremsstrahlung;
 class G4eplusAnnihilation;
 
@@ -82,7 +83,7 @@ class Tst14PhysicsList: public G4VUserPhysicsList
     G4LowEnergyGammaConversion*     theLowEnergyGammaConversion;
     G4LowEnergyBremsstrahlung*     theLowEnergyBremstrahlung;
     
-    G4eIonisation*         theeminusIonisation;
+    G4LowEnergyIonisation*         theeminusIonisation;
     G4eBremsstrahlung*     theeminusBremsstrahlung;
     
     G4eIonisation*         theeplusIonisation;
