@@ -173,6 +173,8 @@ G4NuclearDecayChannel::G4NuclearDecayChannel
 //
 //
 //
+#include "G4HadTmpUtil.hh"
+
 void G4NuclearDecayChannel::FillDaughterNucleus (G4int index, G4int A, G4int Z,
   G4double theDaughterExcitation)
 {
@@ -187,7 +189,7 @@ void G4NuclearDecayChannel::FillDaughterNucleus (G4int index, G4int A, G4int Z,
     G4cerr <<"Inappropriate values of daughter A, Z or excitation" <<G4endl;
     G4cerr <<"A = " <<A <<" and Z = " <<Z;
     G4cerr <<" Ex = " <<theDaughterExcitation*MeV  <<"MeV" <<G4endl;
-    throw G4HadronicException(__FILE__, __LINE__, "G4NuclearDecayChannel::FillDaughterNucleus");
+    G4Exception(__FILE__, G4inttostring(__LINE__), FatalException, "G4NuclearDecayChannel::FillDaughterNucleus");
   }
   //
   //
@@ -321,7 +323,7 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
     default:
       G4cerr <<"Error in G4NuclearDecayChannel::DecayIt" <<G4endl;
       G4cerr <<"Number of daughters in decay = " <<numberOfDaughters <<G4endl;
-      throw G4HadronicException(__FILE__, __LINE__,  "G4NuclearDecayChannel::DecayIt");
+      G4Exception(__FILE__, G4inttostring(__LINE__), FatalException,  "G4NuclearDecayChannel::DecayIt");
     }
   if ((products == NULL) && (GetVerboseLevel()>0)) {
     G4cerr << "G4NuclearDecayChannel::DecayIt ";
