@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.19 2001-11-28 19:07:38 japost Exp $
+// $Id: G4PropagatorInField.hh,v 1.20 2001-12-08 00:07:23 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -148,7 +148,12 @@ class G4PropagatorInField
 
    inline G4FieldManager*  GetCurrentFieldManager();
 
- private:
+ public:  // no description
+
+   inline void SetThresholdNoZeroStep(G4int noAct, G4int noHarsh, G4int noAbandon);
+   inline G4int GetThresholdNoZeroSteps(G4int i); 
+
+ protected:
 
    G4bool LocateIntersectionPoint( 
 	    const  G4FieldTrack&       CurveStartPointTangent,  //  A
@@ -160,7 +165,12 @@ class G4PropagatorInField
      // with the surface of the current volume (or of one of its daughters). 
      //  (Should use lateral displacement as measure of convergence). 
 
+   void PrintStepLengthDiagnostic(G4double CurrentProposedStepLength,
+				  G4double decreaseFactor,
+				  G4double stepTrial,
+				  const G4FieldTrack& aFieldTrack);
 
+  // ----------------------------------------------------------------------
   //  DATA Members
   // ----------------------------------------------------------------------
 
@@ -202,7 +212,9 @@ class G4PropagatorInField
    //  Variables to keep track of "abnormal" case - which causes loop
    //
    G4int     fNoZeroStep;                //  Counter of zeroStep
-   G4int     fThresholdNo_ZeroSteps;     //  Threshold: above this - action
+   G4int     fActionThreshold_NoZeroSteps;       //  Threshold: above this - act
+   G4int     fSevereActionThreshold_NoZeroSteps; //  Threshold to act harshly
+   G4int     fAbandonThreshold_NoZeroSteps;      //  Threshold to abandon
                        // G4double  fMidPoint_CurveLen_of_LastAttempt= -1;
    G4double  fFull_CurveLen_of_LastAttempt; 
    G4double  fLast_ProposedStepLength; 

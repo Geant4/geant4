@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.icc,v 1.24 2001-11-28 19:05:45 japost Exp $
+// $Id: G4PropagatorInField.icc,v 1.25 2001-12-08 00:07:24 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,7 +55,9 @@ G4PropagatorInField::G4PropagatorInField(G4Navigator    *theNavigator,
 {
      // this->fChordFinder = new G4ChordFinder( (G4MagneticField*)0, 1e-6 );
 
-     fThresholdNo_ZeroSteps= 2; 
+     fActionThreshold_NoZeroSteps= 2; 
+     fSevereActionThreshold_NoZeroSteps= 10; 
+     fAbandonThreshold_NoZeroSteps= 50; 
      // fMidPoint_CurveLen_of_LastAttempt= -1;
      fFull_CurveLen_of_LastAttempt= -1; 
      fLast_ProposedStepLength= -1; 
@@ -199,3 +201,30 @@ inline G4double  G4PropagatorInField::GetLargestAcceptableStep()
 
 inline G4FieldManager*  G4PropagatorInField::GetCurrentFieldManager()
 { return fCurrentFieldMgr; } 
+
+inline void G4PropagatorInField::SetThresholdNoZeroStep( G4int noAct, G4int noHarsh, G4int noAbandon)
+{
+  if(noAct>0) 
+    fActionThreshold_NoZeroSteps= noAct; 
+
+  if( noHarsh > fActionThreshold_NoZeroSteps)
+    fSevereActionThreshold_NoZeroSteps= noHarsh; 
+  else
+    fSevereActionThreshold_NoZeroSteps= 2*(fActionThreshold_NoZeroSteps+1);
+
+  if( noAbandon > fSevereActionThreshold_NoZeroSteps+5)
+    fAbandonThreshold_NoZeroSteps= noAbandon; 
+  else
+    fAbandonThreshold_NoZeroSteps= 2*(fSevereActionThreshold_NoZeroSteps+3); 
+}
+
+inline G4int G4PropagatorInField::GetThresholdNoZeroSteps(G4int i)
+{
+   G4int t=0;
+   if( i==0 )     { t = 3; }     // No of parameters
+   else if (i==1) { t = fActionThreshold_NoZeroSteps; }
+   else if (i==2) { t = fSevereActionThreshold_NoZeroSteps; }
+   else if (i==3) { t = fAbandonThreshold_NoZeroSteps; }
+
+   return t;
+}                     
