@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.cc,v 1.10 2002-05-17 17:59:47 gcosmo Exp $
+// $Id: G4LogicalVolume.cc,v 1.11 2002-11-08 22:45:25 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -168,7 +168,7 @@ G4LogicalVolume::SetFieldManager(G4FieldManager* pNewFieldMgr,
   {
     G4LogicalVolume* DaughterLogVol; 
     DaughterLogVol = GetDaughter(NoDaughters)->GetLogicalVolume();
-    if ( forceAllDaughters || (DaughterLogVol->GetFieldManager() != 0) )
+    if ( forceAllDaughters || (DaughterLogVol->GetFieldManager() == 0) )
     {
       DaughterLogVol->SetFieldManager(pNewFieldMgr, forceAllDaughters);
     }
