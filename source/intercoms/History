@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2000-05-19 06:29:39 johna Exp $
+$Id: History,v 1.14 2000-07-22 10:49:37 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jul 22, 00, M.Asai (tag intercoms-V02-00-00)
+- Making G4UImanager as a state dependent class.
+- Remove G4StateManager and G4VStateDependent classes. They are now in
+  source/global/management.
 
 May 18, 00, J.Allison
 - Small spelling correction in class description of G4VGraphicsScene.hh.

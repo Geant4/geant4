@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UImanager.cc,v 1.5 2000-02-14 08:41:25 asaim Exp $
+// $Id: G4UImanager.cc,v 1.6 2000-07-22 10:49:38 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -21,6 +21,7 @@
 #include "G4UnitsMessenger.hh"
 #include "G4ios.hh"
 #include "G4strstreambuf.hh"
+#include "G4StateManager.hh"
 
 #include "g4std/strstream"
 
@@ -40,8 +41,10 @@ G4UImanager * G4UImanager::GetUIpointer()
   return fUImanager;
 }
 
-G4UImanager::G4UImanager():savedCommand(NULL)
+G4UImanager::G4UImanager()
+:G4VStateDependent(true)
 {
+  savedCommand = 0;
   treeTop = new G4UIcommandTree("/");
   G4String nullString;
   savedParameters = nullString;
@@ -49,6 +52,8 @@ G4UImanager::G4UImanager():savedCommand(NULL)
   saveHistory = false;
   session = NULL;
   SetCoutDestination(session);
+  pauseAtBeginOfEvent = false;
+  pauseAtEndOfEvent = false;
 }
 
 void G4UImanager::CreateMessenger()
@@ -286,6 +291,24 @@ G4UIcommandTree* G4UImanager::FindDirectory(const char* dirName)
     idx = i+1;
   }
   return comTree;
+}
+
+G4bool G4UImanager::Notify(G4ApplicationState requestedState)
+{
+  //G4cout << G4StateManager::GetStateManager()->GetStateString(requestedState) << " <--- " << G4StateManager::GetStateManager()->GetStateString(G4StateManager::GetStateManager()->GetPreviousState()) << G4endl;
+  if(pauseAtBeginOfEvent)
+  {
+    if(requestedState==EventProc &&
+       G4StateManager::GetStateManager()->GetPreviousState()==GeomClosed)
+    { PauseSession("BeginOfEvent"); }
+  }
+  if(pauseAtEndOfEvent)
+  {
+    if(requestedState==GeomClosed &&
+       G4StateManager::GetStateManager()->GetPreviousState()==EventProc)
+    { PauseSession("EndOfEvent"); }
+  }
+  return true;
 }
 
 void G4UImanager::Interact()

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UImanager.hh,v 1.5 2000-02-14 08:41:24 asaim Exp $
+// $Id: G4UImanager.hh,v 1.6 2000-07-22 10:49:37 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -16,6 +16,7 @@
 #include "g4rw/ctoken.h"
 #include "g4rw/tvordvec.h"
 #include "g4std/fstream"
+#include "G4VStateDependent.hh"
 class G4UIcommandTree;
 class G4UIcommand;
 class G4UIsession;
@@ -29,7 +30,7 @@ class G4UnitsMessenger;
 // invoked by the user.
 //
 
-class G4UImanager 
+class G4UImanager : public G4VStateDependent
 {
   public: // with description
       static G4UImanager * GetUIpointer();
@@ -74,14 +75,15 @@ class G4UImanager
              G4String fileName="G4history.macro");
       //  The executed commands will be stored in the defined file. If 
       // "historySwitch" is false, saving will be suspended.
-      void PauseSession(G4String msg);
-      //  This method is exclusively invoked by G4StateManager and the user
-      // must not use this method.
       void ListCommands(G4String direc);
       //  All commands registored under the given directory will be listed to
       // G4cout.
+      virtual G4bool Notify(G4ApplicationState requestedState);
+      //  This method is exclusively invoked by G4StateManager and the user
+      // must not use this method.
  
   private:
+      void PauseSession(G4String msg);
       void CreateMessenger();
       G4UIcommandTree* FindDirectory(const char* dirName);
 
@@ -104,6 +106,10 @@ class G4UImanager
       G4std::ofstream historyFile;
       G4bool saveHistory;
       G4RWTValOrderedVector<G4String> histVec;
+      
+      G4bool pauseAtBeginOfEvent;
+      G4bool pauseAtEndOfEvent;
+
 
   public: // with description
       G4String GetCurrentStringValue(const char * aCommand, 
@@ -126,6 +132,19 @@ class G4UImanager
       // will be sent to the corresponding messenger, while, if it is false,
       // the value stored in G4Umanager will be used. The later case is valid
       // for the sequential invokation for the same command.
+
+      inline void SetPauseAtBeginOfEvent(G4bool vl)
+      { pauseAtBeginOfEvent = vl; }
+      inline G4bool GetPauseAtBeginOfEvent() const
+      { return pauseAtBeginOfEvent; }
+      inline void SetPauseAtEndOfEvent(G4bool vl)
+      { pauseAtEndOfEvent = vl; }
+      inline G4bool GetPauseAtEndOfEvent() const
+      { return pauseAtEndOfEvent; }
+      //  If the boolean flags are true, Pause() method of G4StateManager is invoked
+      // at the very begining (before generating a G4Event object) or at the end of
+      // each event. So that, in case a (G)UI session is defined, the user can interact.
+
 
   public:
       inline G4UIcommandTree * GetTree() const
