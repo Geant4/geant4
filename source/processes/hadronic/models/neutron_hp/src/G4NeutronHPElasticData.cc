@@ -121,7 +121,7 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
       aXsection = (*((*theCrossSections)(index))).GetValue(theEkin, outOfRange);
       // velocity correction.
       G4ThreeVector targetVelocity = 1./aThermalNuc.GetMass()*aThermalNuc.GetMomentum();
-      aXsection *= (targetVelocity+neutronVelocity).mag()/neutronVMag;
+      aXsection *= (targetVelocity-neutronVelocity).mag()/neutronVMag;
       result += aXsection;
     }
     size += size;
