@@ -9,23 +9,16 @@
 // Customer:      ESA/ESTEC
 //
 ///////////////////////////////////////////////////////////////////////////////
+// $Id: G4GeneralParticleSource.hh,v 1.2 2001-06-28 15:05:39 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+///////////////////////////////////////////////////////////////////////////////
 //
-// DESCRIPTION
-// -----------
+// Class Description:
+//
 // The General Particle Source is designed to extend the functionality of the
 // G4ParticleGun class. It is designed to allow specification of input
 // particles in terms of position, direction (or angular) and energy
 // distributions.  This class is derived from G4VPrimaryGenerator.
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-// CHANGE HISTORY
-// --------------
-//
-// Version 1.0, 28 February 2000, C Ferguson, Created.
-//
-// Version 1.1, 18 October 2000, Modified to inherit from G4VPrimaryGenerator.
-// New name at the request of M. Asai.
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -321,9 +314,23 @@
 //
 // void SetVerbosity(G4int)
 //    Sets the verbosity level.
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//
+// CHANGE HISTORY
+// --------------
+//
+// Version 1.0, 28 February 2000, C Ferguson, Created.
+//
+// Version 1.1, 18 October 2000, Modified to inherit from G4VPrimaryGenerator.
+// New name at the request of M. Asai.
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
+#ifndef G4GeneralParticleSource_h
+#define G4GeneralParticleSource_h 1
+
 #include "G4VPrimaryGenerator.hh"
 #include "G4Navigator.hh"
 #include "G4PhysicsOrderedFreeVector.hh"
@@ -607,10 +614,4 @@ private:
   
 };
 
-
-
-
-
-
-
-
+#endif
