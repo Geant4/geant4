@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eplusAnnihilation.cc,v 1.15 2003-05-26 16:13:15 vnivanch Exp $
+// $Id: G4eplusAnnihilation.cc,v 1.16 2004-03-10 16:48:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,8 +49,8 @@
  
 // constructor
  
-G4eplusAnnihilation::G4eplusAnnihilation(const G4String& processName)
-  : G4VRestDiscreteProcess (processName),
+G4eplusAnnihilation::G4eplusAnnihilation(const G4String& processName,
+    G4ProcessType type):G4VRestDiscreteProcess (processName, type),
     theCrossSectionTable(NULL),
     theMeanFreePathTable(NULL),   
     LowestEnergyLimit (10*keV), 

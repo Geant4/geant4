@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eplusAnnihilation.hh,v 1.10 2002-04-09 17:34:41 vnivanch Exp $
+// $Id: G4eplusAnnihilation.hh,v 1.11 2004-03-10 16:48:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -66,7 +66,8 @@ class G4eplusAnnihilation : public G4VRestDiscreteProcess
 {    
   public:  // with description
  
-     G4eplusAnnihilation(const G4String& processName ="annihil");
+     G4eplusAnnihilation(const G4String& processName ="annihil",
+		               G4ProcessType type = fElectromagnetic);
  
     ~G4eplusAnnihilation();
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion.cc,v 1.18 2003-06-16 17:02:09 gunter Exp $
+// $Id: G4GammaConversion.cc,v 1.19 2004-03-10 16:48:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------------ G4GammaConversion physics process -------------------------
@@ -64,8 +64,8 @@
  
 // constructor
  
-G4GammaConversion::G4GammaConversion(const G4String& processName)
-  : G4VDiscreteProcess (processName),            // initialization
+G4GammaConversion::G4GammaConversion(const G4String& processName,
+    G4ProcessType type):G4VDiscreteProcess (processName, type),
     theCrossSectionTable(NULL),
     theMeanFreePathTable(NULL),  
     LowestEnergyLimit (2*electron_mass_c2),

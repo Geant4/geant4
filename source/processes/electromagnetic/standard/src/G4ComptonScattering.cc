@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComptonScattering.cc,v 1.17 2003-06-16 17:02:08 gunter Exp $
+// $Id: G4ComptonScattering.cc,v 1.18 2004-03-10 16:48:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,8 +57,8 @@
 
 // constructor
  
-G4ComptonScattering::G4ComptonScattering(const G4String& processName)
-  : G4VDiscreteProcess (processName),
+G4ComptonScattering::G4ComptonScattering(const G4String& processName, 
+    G4ProcessType type):G4VDiscreteProcess (processName, type),
     theCrossSectionTable(NULL),
     theMeanFreePathTable(NULL),  
     LowestEnergyLimit (  1*keV),              
