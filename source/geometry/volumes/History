@@ -1,4 +1,4 @@
-$Id: History,v 1.92 2002-12-02 11:45:13 gcosmo Exp $
+$Id: History,v 1.93 2003-02-06 16:57:38 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Feb 6th, 2003       G. Cosmo - geomvol-V05-00-00
+- Fix in G4GeometryMessenger to check for geometry closed when commands
+  are applied. Command /geometry/navigator/reset and test commands apply
+  only when system is in "Idle" state.
+  Does NOT include changes in "geomvol-V04-01-08".
+
+Nov 30th, 2002      S. Sadilov - geomvol-V04-01-09
+- Small correction on the top of "geomvol-V04-01-07a" in files: 
+    G4IdentityTrajectoryFilter.cc 
+    G4VCurvedTrajectoryFilter.cc 
+  to fix cout/G4cout, endl/G4endl mistakes.
+  Does NOT include changes in "geomvol-V04-01-08".
+
 Nov 29th, 2002      J. Apostolakis - geomvol-V04-01-08
-- G4PropagatorInField:  Use safety in G4PropagatorInField.
+- G4PropagatorInField:  use safety in G4PropagatorInField.
     (Adds to the state of this class).
 
 Nov 29th, 2002      S. Sadilov - geomvol-V04-01-07a
