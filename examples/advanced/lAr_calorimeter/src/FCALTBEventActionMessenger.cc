@@ -22,13 +22,13 @@ FCALTBEventActionMessenger::FCALTBEventActionMessenger(FCALTBEventAction* EvAct)
   DrawCmd->SetParameterName("choice",true);
   DrawCmd->SetDefaultValue("all");
   DrawCmd->SetCandidates("none charged all");
-  DrawCmd->AvailableForStates(Idle);
+  DrawCmd->AvailableForStates(G4State_Idle);
   
   PrintCmd = new G4UIcmdWithAnInteger("/event/printModulo",this);
   PrintCmd->SetGuidance("Print events modulo n");
   PrintCmd->SetParameterName("EventNb",false);
   PrintCmd->SetRange("EventNb>0");
-  PrintCmd->AvailableForStates(Idle);      
+  PrintCmd->AvailableForStates(G4State_Idle);      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
