@@ -1,4 +1,4 @@
-$Id: README,v 1.7 2000-04-28 14:39:11 johna Exp $
+$Id: README,v 1.8 2000-05-20 10:18:38 johna Exp $
 
 1) Decide which graphics systems drivers you want.  The choice depends
    on what graphics libraries you have access to.  Set the appropriate
@@ -65,7 +65,10 @@ $Id: README,v 1.7 2000-04-28 14:39:11 johna Exp $
      gmake
 
    If you have already built the Geant4 libraries and only wish to
-   include/change visualization:
+   include/change visualization, you need to rebuild visualization and
+   interfaces (since some graphics drivers share resources, such as X
+   event handling, with interfaces) and rebuild the libary map (in
+   case new libraries have been made):
 
      cd $G4INSTALL/source/visualization
      gmake clean
@@ -73,10 +76,12 @@ $Id: README,v 1.7 2000-04-28 14:39:11 johna Exp $
      cd $G4INSTALL/source/interfaces
      gmake clean
      gmake
+     cd $G4INSTALL/source
+     gmake libmap
 
    *******************************************************************
    NOTE THAT IF YOU CHANGE ANY OF THE ABOVE ENVIRONMENT VARIABLES THEN
-   YOU WILL HAVE TO REPEAT THE ABOVE gmake AND gmake clean OPERATIONS.
+   YOU WILL HAVE TO REPEAT THE ABOVE OPERATIONS.
    *******************************************************************
 
 
