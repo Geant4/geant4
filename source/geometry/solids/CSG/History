@@ -1,4 +1,4 @@
-$Id: History,v 1.5 1999-04-19 18:50:31 japost Exp $
+$Id: History,v 1.6 1999-05-21 19:32:36 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 18,   99   David Wiliams
+  Replaced 1/DBL_MAX with DBL_MIN (valid correction, seen in tests for STL) 
+    in G4PolyPhiFace.cc, G4PolyconeSide.cc and G4PolyhedraSide.cc
+
+Apr 29,   99   David Wiliams
+
+  G4Polyhedra and G4Polycone (and G4VCSGfaceted) modified:
+         1. Implemented correct copy constructors and assignment operators.
+         2. Fix some leaks for tracks that pass exactly through an edge. 
+            Some leaks still remain: particularly if a track passes through
+	     a corner and between the curved edges of G4Polycone.
+         3. G4Polyhedra argument numSide changed to G4int (from G4double)
 
 Apr 13,   99   Vladimir Grichine and Simone Giani
 
