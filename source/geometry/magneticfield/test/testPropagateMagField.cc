@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPropagateMagField.cc,v 1.27 2003-11-17 17:57:02 japost Exp $
+// $Id: testPropagateMagField.cc,v 1.28 2004-02-09 12:10:39 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -298,7 +298,7 @@ G4PropagatorInField*  SetupPropagator( G4int type)
 //  The method is now obsolete -- as propagator in Field has this method,
 //    in order to message the correct field manager's chord finder.
 //
-void  SetChargeMomentumMass(G4double charge, G4double MomentumXc, G4double Mass)
+void  ObsoleteSetChargeMomentumMass(G4double charge, G4double MomentumXc, G4double Mass)
 {
     G4ChordFinder*  pChordFinder; 
 
@@ -586,6 +586,7 @@ int main(int argc, char **argv)
     testG4PropagatorInField(myTopNode, type);
 
     pMagFieldPropagator->SetUseSafetyForOptimization(optimiseVoxels); 
+    pMagFieldPropagator->SetVerboseLevel( 1 ); 
 
 // Repeat tests but with full voxels
     G4cout << " Test with full voxels" << G4endl; 
