@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.65 2004-12-13 23:00:34 stesting Exp $
+# $Id: Configure,v 1.66 2004-12-15 23:13:42 stesting Exp $
 #
-# Generated on Mon Dec 13 23:49:20 CET 2004 [metaconfig 3.0 PL70]
+# Generated on Wed Dec 15 23:52:58 CET 2004 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -944,12 +944,37 @@ user=`(logname) 2>/dev/null`
 case "$user" in
 '') user=`whoami 2>&1`;;
 esac
-if [ X$install = Xyes ] ; then
+
+#if [ X$install = Xyes ] ; then
+#
+#echo " "
+#echo " "
+#echo " "
+#echo "                --- Geant4 Toolkit Installation  ---"
+#echo " "
+#echo " "
+#echo " "
+#echo " "
+#
+##if $contains "^$user\$" ../../.config/instruct >/dev/null 2>&1; then
+##	firsttime=false
+##	echo " "
+##	rp='Would you like to see the instructions?'
+##	dflt=n
+##	. ./myread
+##	case "$ans" in
+##	[yY]*) ;;
+##	*) needman=false;;
+##	esac
+##fi
+#fi
+
+if [ X$g4build = Xyes ] ; then
 
 echo " "
 echo " "
 echo " "
-echo "                --- Geant4 Toolkit Installation  ---"
+echo "                --- Geant4 Toolkit Build  ---"
 echo " "
 echo " "
 echo " "
@@ -968,7 +993,11 @@ if $contains "^$user\$" ../../.config/instruct >/dev/null 2>&1; then
 fi
 fi
 
-if [ X$install = X ] ; then
+if [ X$install = Xyes ] ; then
+needman=false
+fi
+
+if [ X$install = X -a X$g4build = X ] ; then
 needman=false
 fi
 
@@ -1645,14 +1674,14 @@ case  "$g4compiler" in
 				g4compiler=CC
 				;;
 		'WIN32')
-				g4compiler=VC7
+				g4compiler=VC
 	clcompiler=`( cl 1>/dev/null || echo "ERROR: There is no 'cl' compiler.") 2>&1`
 				case $clcompiler in
-				*"Version 12"*) g4compiler=VC
+				*"Version 12"*) g4compiler=VC6
 				;;
-				*"Version 13"*) g4compiler=VC7
+				*"Version 13"*) g4compiler=VC
 				;;
-				*) g4compiler=VC7
+				*) g4compiler=VC
 				;;
 				esac				
 				;;
@@ -1831,8 +1860,6 @@ fi
 
 	if [ X$install = Xyes ] ; then
 
-	. $src/.config/bin/$g4system/env.sh
-
 	$rm -rf .config/UU
 	
 	. $src/.config/bin/$g4system/move.sh
@@ -2010,9 +2037,9 @@ echo " "
 echo " "
 
 	echo " "
-	echo "WARNING: Geant4 is NOT installed yet!"
+	echo "WARNING: Geant4 is NOT built yet!"
 	echo "You (or the administrator if you have not enough privileges)"
-	echo "should start with \$G4INSTALL/Configure -install."
+	echo "should start with \$G4INSTALL/Configure -build."
 	echo "(where \$G4INSTALL is Geant4 install directory)."
 	echo " "
 	$rm -rf .config/UU
@@ -2418,10 +2445,11 @@ case "$g4install" in
 if test $g4system = "WIN32-VC" -o $g4system = "WIN32-VC7"; then
 	g4install="c:/geant4"
 else
-	if [ X"$HOME" = X/ ] ; then
-	HOME=""
-	fi
-	g4install="$HOME"/geant4
+#	if [ X"$HOME" = X/ ] ; then
+#	HOME=""
+#	fi
+#	g4install="$HOME"/geant4
+	g4install=$abssrc
 
 fi
 
@@ -2526,7 +2554,11 @@ esac
 #g4include=$ans
 
 # Set constantly!
+if [ X$g4install != X$g4final_install ] ; then
 g4include=$g4final_install/include/geant4
+else
+g4include=$g4final_install/include
+fi
 
 fi
 

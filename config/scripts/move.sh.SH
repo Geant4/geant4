@@ -367,7 +367,7 @@ echo ""
 echo "Installing sources and headers..."
 echo ""
 mkdir -p $g4final_install/src/geant4/
-tar cf - Configure .config/ config/ source/ environments/ physics_lists/ examples/ |(cd $g4final_install/src/geant4/; tar xf -)
+tar cf - Configure config/ source/ environments/ physics_lists/ examples/ |(cd $g4final_install/src/geant4/; tar xf -)
 fi
 fi
 
@@ -381,7 +381,7 @@ echo "Installing sources..."
 echo ""
 
 mkdir -p $g4final_install/src/geant4/
-tar cf - Configure .config/ config/ source/ environments/ physics_lists/ examples/ |(cd $g4final_install/src/geant4/; tar xf -)
+tar cf - Configure config/ source/ environments/ physics_lists/ examples/ |(cd $g4final_install/src/geant4/; tar xf -)
 fi
 
 echo ""
@@ -400,6 +400,12 @@ mkdir -p $g4final_install/lib/geant4
 cd $g4install/lib
 tar cf - $g4system |(cd $g4final_install/lib/geant4; tar xf -)
 fi
+
+# For the reason of strange behaivior for DOTted directory...
+mkdir -p $g4final_install/src/geant4/.config
+cd $g4install/.config
+tar cf - . |(cd $g4final_install/src/geant4/.config; tar xf -)
+
 
 !GROK!THIS!
 
