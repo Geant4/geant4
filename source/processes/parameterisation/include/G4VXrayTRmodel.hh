@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VXrayTRmodel.hh,v 1.1 2000-05-16 13:46:41 grichine Exp $
+// $Id: G4VXrayTRmodel.hh,v 1.2 2000-06-15 17:38:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -142,16 +142,3 @@ protected:
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-

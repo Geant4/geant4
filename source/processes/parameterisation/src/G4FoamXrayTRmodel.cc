@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FoamXrayTRmodel.cc,v 1.2 2000-06-06 08:47:46 mora Exp $
+// $Id: G4FoamXrayTRmodel.cc,v 1.3 2000-06-15 17:38:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -15,9 +15,6 @@
 #include "Randomize.hh"
 
 #include "G4Gamma.hh"
-
-typedef G4std::complex<double> G4complex ;
-
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -54,7 +51,7 @@ G4FoamXrayTRmodel::~G4FoamXrayTRmodel()
 
 G4double 
 G4FoamXrayTRmodel::GetStackFactor( G4double energy, 
-                                         G4double gamma, G4double varAngle )
+                                   G4double gamma, G4double varAngle )
 {
   G4double result, Qa, Qb, Q, Za, Zb, Ma, Mb ;
   
@@ -79,13 +76,13 @@ G4FoamXrayTRmodel::GetStackFactor( G4double energy,
 
   G4complex F2 = (1.0-Ha)*(Qa-Ha)*Hb/(1.0-H)/(Q-H) ;
 
-  F2          *= pow(Q,fPlateNumber) - pow(H,fPlateNumber) ;
+  F2          *= pow(Q,G4double(fPlateNumber)) - G4std::pow(H,fPlateNumber) ;
 
-  result      = ( 1 - pow(Q,fPlateNumber) )/( 1 - Q ) ;
+  result      = ( 1 - pow(Q,G4double(fPlateNumber)) )/( 1 - Q ) ;
 
-  result     *= 2.0*F1.real() ;
+  result     *= 2.0*G4std::real(F1) ;
 
-  result     += 2.0*F2.real() ;
+  result     += 2.0*G4std::real(F2) ;
 
   return      result ;
 }

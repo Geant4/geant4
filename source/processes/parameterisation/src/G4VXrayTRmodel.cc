@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VXrayTRmodel.cc,v 1.2 2000-06-13 15:29:31 grichine Exp $
+// $Id: G4VXrayTRmodel.cc,v 1.3 2000-06-15 17:38:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -675,21 +675,21 @@ void G4VXrayTRmodel::BuildTable()
 
      G4double energySum = 0.0 ;
      G4double angleSum  = 0.0 ;
-     G4Integrator integral ;
+     G4Integrator<G4VXrayTRmodel,G4double(G4VXrayTRmodel::*)(G4double)> integral ;
      energyVector->PutValue(fBinTR-1,energySum) ;
      angleVector->PutValue(fBinTR-1,angleSum)   ;
 
      for(iTR=fBinTR-2;iTR>=0;iTR--)
      {
-        energySum += radiatorCof*fCofTR*integral.Legendre10(this,
-                     &G4VXrayTRmodel::XTRNSpectralDensity, 
+        energySum += radiatorCof*fCofTR*integral.Legendre10(
+	             this,&G4VXrayTRmodel::XTRNSpectralDensity, 
                      energyVector->GetLowEdgeEnergy(iTR),
                      energyVector->GetLowEdgeEnergy(iTR+1) ) ; 
 
-	//    angleSum  += fCofTR*integral.Legendre96(this,
-	//        &G4VXrayTRmodel::XTRNAngleDensity,
+	//    angleSum  += fCofTR*integral.Legendre96(
+	//       this,&G4VXrayTRmodel::XTRNSpectralDensity,
 	//       angleVector->GetLowEdgeEnergy(iTR),
-	//      angleVector->GetLowEdgeEnergy(iTR+1) ) ;
+	//       angleVector->GetLowEdgeEnergy(iTR+1) ) ;
 
         energyVector->PutValue(iTR,energySum) ;
         //  angleVector ->PutValue(iTR,angleSum)   ;
@@ -697,7 +697,7 @@ void G4VXrayTRmodel::BuildTable()
      G4cout<<iTkin<<"\t"
            <<"fGamma = "<<fGamma<<"\t"  //  <<"  fMaxThetaTR = "<<fMaxThetaTR
            <<"sumE = "<<energySum      // <<" ; sumA = "<<angleSum
-           <<endl ;
+           <<G4endl ;
      iPlace = iTkin ;
      fEnergyDistrTable->insertAt(iPlace,energyVector) ;
      //  fAngleDistrTable->insertAt(iPlace,angleVector) ;
@@ -746,11 +746,11 @@ G4double G4VXrayTRmodel::XTRNSpectralAngleDensity(G4double varAngle)
 G4double G4VXrayTRmodel::XTRNSpectralDensity(G4double energy)
 {
   fEnergy = energy ;
-  G4Integrator integral ;
+  G4Integrator<G4VXrayTRmodel,G4double(G4VXrayTRmodel::*)(G4double)> integral ;
   return integral.Legendre96(this,&G4VXrayTRmodel::XTRNSpectralAngleDensity,
-			     0.0,0.2*fMaxThetaTR) +
+                             0.0,0.2*fMaxThetaTR) +
          integral.Legendre10(this,&G4VXrayTRmodel::XTRNSpectralAngleDensity,
-			     0.2*fMaxThetaTR,fMaxThetaTR) ;
+	                     0.2*fMaxThetaTR,fMaxThetaTR) ;
 } 
  
 //////////////////////////////////////////////////////////////////////////
@@ -771,7 +771,7 @@ G4double G4VXrayTRmodel::XTRNAngleSpectralDensity(G4double energy)
 G4double G4VXrayTRmodel::XTRNAngleDensity(G4double varAngle) 
 {
   fVarAngle = varAngle ;
-  G4Integrator integral ;
+  G4Integrator<G4VXrayTRmodel,G4double(G4VXrayTRmodel::*)(G4double)> integral ;
   return integral.Legendre96(this,&G4VXrayTRmodel::XTRNAngleSpectralDensity,
 			     fMinEnergyTR,fMaxEnergyTR) ;
 }

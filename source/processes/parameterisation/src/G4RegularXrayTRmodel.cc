@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RegularXrayTRmodel.cc,v 1.2 2000-06-06 08:47:48 mora Exp $
+// $Id: G4RegularXrayTRmodel.cc,v 1.3 2000-06-15 17:38:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -15,9 +15,6 @@
 #include "Randomize.hh"
 
 #include "G4Gamma.hh"
-
-typedef G4std::complex<double> G4complex ;
-
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -79,22 +76,22 @@ G4RegularXrayTRmodel::GetStackFactor( G4double energy,
 
   G4complex H  = Ha*Hb ;
 
-  G4complex Hs = conj(H) ;
+  G4complex Hs = G4std::conj(H) ;
 
   //  G4complex F1 = ( 0.5*(1+Qa)*(1+H) - Ha - Qa*Hb )/(1-H) ;
 
   G4complex F2 = (1.0-Ha)*(Qa-Ha)*Hb*(1.0-Hs)*(Q-Hs) ;
 
-  F2          *= pow(Q,fPlateNumber) - pow(H,fPlateNumber) ;
+  F2          *= pow(Q,G4double(fPlateNumber)) - G4std::pow(H,fPlateNumber) ;
 
-  result       = ( 1 - pow(Q,fPlateNumber) )/( 1 - Q ) ;
+  result       = ( 1 - pow(Q,G4double(fPlateNumber)) )/( 1 - Q ) ;
 
   result      *= (1 - Qa)*(1 + Qa - 2*sqrt(Qa)*cos(aZa)) ;
 
   result      /= (1 - sqrt(Q))*(1 - sqrt(Q)) + 
                   4*sqrt(Q)*sin(0.5*(aZa+bZb))*sin(0.5*(aZa+bZb)) ;
 
-  I2           = 2.0*F2.real() ;
+  I2           = 2.0*G4std::real(F2) ;
 
   I2           /= (1 - sqrt(Q))*(1 - sqrt(Q)) + 
                   4*sqrt(Q)*sin(0.5*(aZa+bZb))*sin(0.5*(aZa+bZb)) ;

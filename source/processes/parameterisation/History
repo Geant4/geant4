@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2000-06-06 08:47:38 mora Exp $
+$Id: History,v 1.9 2000-06-15 17:38:13 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 15, 2000 G. Cosmo - param-V01-01-04
+- The tag coworks with global-V01-01-04 and materials-V01-01-00:
+  o Fixed usage of G4complex type for ISO and non-ISO compilers.
+    Affected files: G4FoamXrayTRmodel.cc, G4GamDistrXrayTRmodel.cc, G4PlateIrrGasXrayTRmodel.cc
+                    and G4RegularXrayTRmodel.cc.
+    In case of G4complex types passed to mathematical functions, use G4std:: prefix.
+  o Fixed usage of G4Integrator class, now changed to templated to allow porting of the
+    code on SUN-CC compiler which does not implement templated member functions.
+    Affected files: G4VXrayTRmodel[.hh.cc]
 
 Jun  6, 2000 M. Verderi & P. Mora de Freitas
 - fixed compilation errors with HP-aCC for the files G4RegularXrayTRmodel.cc,
