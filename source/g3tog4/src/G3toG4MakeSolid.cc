@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3toG4MakeSolid.cc,v 1.5 2000-07-24 11:32:14 gcosmo Exp $
+// $Id: G3toG4MakeSolid.cc,v 1.6 2000-08-01 09:08:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I.Hrivnacova, V.Berejnoi 27 Sep 99 
@@ -175,7 +175,7 @@ G4VSolid* G3toG4MakeSolid(const G4String& vname, const G4String& shape,
     G4double pRmin2 = Rpar[3]*cm;
     G4double pRmax2 = Rpar[4]*cm;
     G4double pSPhi  = Rpar[5]*deg;
-    G4double pDPhi  = Rpar[6]- pSPhi;
+    G4double pDPhi  = Rpar[6]*deg - pSPhi;
     if ( Rpar[6]*deg <= pSPhi ) pDPhi = pDPhi + 360.*deg;
 
     OKAxis[0]=OKAxis[1]=OKAxis[2]=true;
