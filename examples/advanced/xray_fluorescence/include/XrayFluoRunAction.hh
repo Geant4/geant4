@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoRunAction.hh
-// GEANT4 tag $Name:  xray_fluo-V04-01-03
+// GEANT4 tag $Name:  xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -57,7 +57,7 @@ class XrayFluoRunAction : public G4UserRunAction
   const XrayFluoDataSet* GetSet();
   const XrayFluoDataSet* GetGammaSet();
   const XrayFluoDataSet* GetAlphaSet();
-  const XrayFluoDataSet* GetEfficiencySet();
+  //  const XrayFluoDataSet* GetEfficiencySet();
   G4DataVector* GetEnergies();
   G4DataVector* GetData();
   
@@ -73,13 +73,13 @@ class XrayFluoRunAction : public G4UserRunAction
   //choose from dataMap and energyMap the set of values
   //corresponding to the calculated integer
   //returns a value of energy chosen randomly from this set 
-  G4double GetInfData(G4double energy, G4double random);
+  //  G4double GetInfData(G4double energy, G4double random, G4int posIndex);
 
  //calulates the minimum integer contained in energy
   //choose from dataMap and energyMap the set of values
   //corresponding to the calculated integer
   //returns a value of energy chosen randomly from this set 
-  G4double GetSupData(G4double energy, G4double random);
+  //  G4double GetSupData(G4double energy, G4double random, G4int posIndex);
 
 private:
 
@@ -92,7 +92,7 @@ private:
   const XrayFluoDataSet* dataAlphaSet;
 
   //stores the data of the efficience of the detector
-  const XrayFluoDataSet* efficiencySet;
+  //const XrayFluoDataSet* efficiencySet;
 
   //stores the energy data of the proton and alpha spectra
   G4DataVector* energies;
@@ -102,17 +102,18 @@ private:
 
   //stores the energy data (first column of the file) of the 
   //response function 
-  std::map<G4int,G4DataVector*,std::less<G4int> > energyMap;
+
+  //std::map<G4int,G4DataVector*,std::less<G4int> > energyMap;
   
   //stores the values (second column of the file) of the 
   //response function 
-std::map<G4int,G4DataVector*,std::less<G4int> > dataMap;
+  //std::map<G4int,G4DataVector*,std::less<G4int> > dataMap;
   
   //read the data for protons and alpha spectra
  void ReadData(G4double,G4String);
 
   //read the data for the response function if the detector
- void ReadResponse(const G4String& fileName);
+  //void ReadResponse(const G4String& fileName);
   
  
 

@@ -1,3 +1,7 @@
+/lowenergy/lowlimGE 250 eV
+
+/lowenergy/cutEnergy 250 eV
+
 #isotropic source
 /gun/isoVert on
 
@@ -8,5 +12,5 @@
 
 /gun/particle proton
 
-/run/beamOn 10
+/run/beamOn 100
 

@@ -1,4 +1,4 @@
-$Id: README,v 1.9 2003-12-04 11:01:58 guatelli Exp $
+$Id: README,v 1.10 2004-04-01 09:56:08 mantero Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -47,31 +47,45 @@ _ the example includes the possibility to shoot particles according to a
 In order to be able to use any of these packages, prior installation is 
 necessary and a number of environment variables will have to be set.
 
--------------------------------------------------------------------------
-----> 2.SET-UP 
-                                                                        |
- -example enviroment with the compiler 3.2                              
- -a standard Geant4 example GNUmakefile is provided                     |
 
-setup with:                                                             |
-compiler = gcc-3.2
-G4SYSTEM = linux-g++                                                    |
+#set up VRMLview
+setenv G4VRMLFILE_MAX_FILE_NUM     100
+setenv G4VRMLFILE_VIEWER        vrmlview    #if installed
+setenv PATH ${PATH}:"/afs/cern.ch/sw/contrib/VRML/bin/Linux"
 
-The following environment variables need to be set:                     |
+#set up OpenGL or Mesa 
+setenv G4VIS_BUILD_OPENGLX_DRIVER   1
+setenv G4VIS_USE_OPENGLX            1
+setenv OGLHOME /afs/cern.ch/sw/geant4/dev/Mesa/Linux-g++
 
-G4LEDATA: points to low energy data base - G4EMLOW2.2                   |
+#set up DAWN
+setenv G4VIS_BUILD_DAWN_DRIVER      1
+setenv G4VIS_USE_DAWN               1
+setenv PATH ${PATH}:"/afs/cern.ch/sw/geant4/dev/DAWN/Linux-g++"
 
-setup for analysis with AIDA 3.0/Anaphe 5.0.5 for user with account     |
-on lxplus:
-                                                                        |
-setenv G4ANALYSIS_USE  1
-source /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/scripts/setupAnaphe.csh
-setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/scripts/    |
+# flag that we want to use analysis:
+setenv G4ANALYSIS_USE               1
 
- Please take a look to the Anaphe/Lizard web page                       |
-        http://anaphe.web.cern.ch/anaphe 
- for more info    
--------------------------------------------------------------------------
+#select AIDA implementation: Anaphe 5.0.5 (for cern AFS)
+setenv G4ANALYSIS_BUILD  1
+source /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.6/scripts/setupAnaphe.csh
+setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.6/scripts/
+setenv LD_LIBRARY_PATH $OGLHOME/lib:$LD_LIBRARY_PATH
+setenv ANAPHE5_REL_DIR /afs/cern.ch/sw/lhcxx/specific/redhat73/gcc-3.2/5.0.6/
+setenv LD_LIBRARY_PATH $OGLHOME/lib:$LD_LIBRARY_PATH
+setenv LD_LIBRARY_PATH "/afs/cern.ch/sw/lhcxx/specific/redhat73/gcc-3.2/5.0.6/lib:${LD_LIBRARY_PATH}"
+setenv LD_LIBRARY_PATH "/usr/local/gcc-alt-3.2/lib:${ANAPHE5_REL_DIR}/lib:${LD_LIBRARY_PATH}"
+setenv LD_LIBRARY_PATH "`aida-config --run`:${LD_LIBRARY_PATH}"
+
+#path to the lowEnergy data base
+
+setenv G4LEDATA /afs/cern.ch/sw/geant4/dev/data/G4EMLOW2.3
+
+#path to Xray_Fluorescence data files, if not set, PWD is assumed:
+
+setenv XRAYDATA /afs/cern.ch/user/u/username
+
+1. Run
 To execute a sample simulation with visualisation of tracks
 reaching the detector run:
 
@@ -113,7 +127,20 @@ XrayFluoParticleGeneratorAction.cc
 6. Analysis
 
 At present the analisys is provided by any AIDA-3.0 compliant analysis system. 
-In the example the Anaphe toolkit (version 5.0.5) is used.
+In the example the Anaphe toolkit is used.
+
+AIDA / Anaphe configuration for compilation and link are in GNUmakefile, once 
+is set the environmente as above:
+
+ifdef G4ANALYSIS_USE
+ CPPFLAGS += `aida-config --include`
+ LDFLAGS  += `aida-config --lib`
+ LOADLIBS += `aida-config --lib`
+endif
+
+To build and execute the example on platforms where there is no
+implementation of the analysis system, the environment variables 
+must not be set.
 
 By setting visPlotter variable in XrayFluoAnalysisManager to true, 
 it is possible to display the simulated output of the detector while 
@@ -132,5 +159,3 @@ command, /anaysis/update, must be executed.
 NOTE: if a file named xrayfluo.hbk (default name) is present, it 
 will be deleted, even if /analysis/outputFile command is issued 
 before any run.
-
----- Last modified Susanna Guatelli 3/12/2003=======

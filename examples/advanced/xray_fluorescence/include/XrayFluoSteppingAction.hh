@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoSteppingAction.hh
-// GEANT4 tag $Name:  xray_fluo-V04-01-03
+// GEANT4 tag $Name:  xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -36,8 +36,8 @@
 #define XrayFluoSteppingAction_h 1
 #include "globals.hh"
 #include "G4UserSteppingAction.hh"
-
-class XrayFluoDetectorConstruction;
+#include "XrayFluoMercuryDetectorConstruction.hh"
+//class XrayFluoMercuryDetectorConstruction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -46,11 +46,14 @@ class XrayFluoSteppingAction : public G4UserSteppingAction
   public:
 
   XrayFluoSteppingAction(); 
-   ~XrayFluoSteppingAction();
+  ~XrayFluoSteppingAction();
+  
+  void UserSteppingAction(const G4Step*);
+  void SetMercuryFlag(G4bool val) {mercuryFlag=val;};
 
-    void UserSteppingAction(const G4Step*);
 private:
-
+  
+  G4bool mercuryFlag;
 
 };
 

@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoPhysicsListMessenger.hh
-// GEANT4 tag $Name: xray_fluo-V04-01-03
+// GEANT4 tag $Name: xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -61,7 +61,9 @@ private:
   XrayFluoPhysicsList*          XrayFluoList;
 
   G4UIdirectory* lowEnDir;
-
+//   G4UIcmdWithADoubleAndUnit* cutGLowLimCmd;
+//   G4UIcmdWithADoubleAndUnit* cutELowLimCmd;
+//   G4UIcmdWithADoubleAndUnit* cutGELowLimCmd;
   G4UIcmdWithADoubleAndUnit* cutSecPhotCmd;
   G4UIcmdWithADoubleAndUnit* cutSecElecCmd;
   G4UIcmdWithADoubleAndUnit* cutGCmd;

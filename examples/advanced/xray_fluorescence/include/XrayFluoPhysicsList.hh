@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoPhysicsList.hh
-// GEANT4 tag $Name: xray_fluo-V04-01-03
+// GEANT4 tag $Name: xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -37,17 +37,27 @@
 
 #include "G4VUserPhysicsList.hh"
 #include "globals.hh"
+//#include "XrayFluoPlaneDetectorConstruction.hh"
+//#include "XrayFluoDetectorConstruction.hh"
+//#include "XrayFluoMercuryConstruction.hh"
 
 class XrayFluoPhysicsListMessenger;
 class G4LowEnergyIonisation;
 class G4LowEnergyPhotoElectric;
 class G4LowEnergyBremsstrahlung;
+class G4eIonisation;
 class XrayFluoDetectorConstruction;
+class XrayFluoPlaneDetectorConstruction;
+class XrayFluoMercuryDetectorConstruction;
+
 class XrayFluoPhysicsList: public G4VUserPhysicsList
 {
 public:
 
   XrayFluoPhysicsList(XrayFluoDetectorConstruction*);
+  XrayFluoPhysicsList(XrayFluoPlaneDetectorConstruction*);
+  XrayFluoPhysicsList(XrayFluoMercuryDetectorConstruction*);
+
   virtual ~XrayFluoPhysicsList();
   
 protected:
@@ -75,6 +85,11 @@ public:
   void SetGammaCut(G4double);
   void SetElectronCut(G4double);
 
+//   void SetGammaLowLimit(G4double);
+//   void SetElectronLowLimit(G4double);
+
+  //  void SetGELowLimit(G4double);
+
   void SetLowEnSecPhotCut(G4double);
   void SetLowEnSecElecCut(G4double);
   void SetProtonCut(G4double);
@@ -86,12 +101,14 @@ private:
   G4LowEnergyIonisation*  LeIoprocess;
   G4LowEnergyPhotoElectric* LePeprocess;
   G4LowEnergyBremsstrahlung* LeBrprocess;
+  // G4eIonisation* eIoProcess; // modified
   XrayFluoPhysicsListMessenger* physicsListMessenger;
   G4double cutForGamma;
   G4double cutForElectron;
   G4double cutForProton;
   XrayFluoDetectorConstruction* pDet;
-  
+  XrayFluoPlaneDetectorConstruction* planeDet;
+  XrayFluoMercuryDetectorConstruction* mercuryDet;
 };
 
 #endif

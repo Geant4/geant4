@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoSteppingAction.cc
-// GEANT4 tag $Name: xray_fluo-V04-01-03
+// GEANT4 tag $Name: xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -32,24 +32,31 @@
 //
 // -------------------------------------------------------------------
 
+
+
+
+
 #include "XrayFluoSteppingAction.hh"
-#include "XrayFluoDetectorConstruction.hh"
 #include "G4SteppingManager.hh"
 #include "G4TrackVector.hh"
-#include "G4ios.hh"
 #ifdef G4ANALYSIS_USE
 #include "XrayFluoAnalysisManager.hh"
 #endif
-
+#include "G4ios.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XrayFluoSteppingAction::XrayFluoSteppingAction()
-{ }
+XrayFluoSteppingAction::XrayFluoSteppingAction() 
+    :mercuryFlag(false)
+{
+  G4cout << "XrayFluoSteppingAction created" << G4endl; 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayFluoSteppingAction::~XrayFluoSteppingAction()
-{ }
+{ 
+  G4cout << "XrayFluoSteppingAction deleted" << G4endl;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -59,7 +66,21 @@ void XrayFluoSteppingAction::UserSteppingAction(const G4Step* aStep)
   XrayFluoAnalysisManager* analysis  = XrayFluoAnalysisManager::getInstance();
   analysis->analyseStepping(aStep);
 #endif
-}	 
 
+  if (mercuryFlag){
+    XrayFluoMercuryDetectorConstruction* detector = XrayFluoMercuryDetectorConstruction::GetInstance();
+
+    if(aStep->GetTrack()->GetNextVolume()) { 
+
+    if(aStep->GetTrack()->GetNextVolume()->GetName() == "DetectorOptic") {
+      G4ThreeVector particlePosition = aStep->GetPostStepPoint()->GetPosition();
+      G4ThreeVector detectorPosition = detector->GetOptic()->GetObjectTranslation();
+      G4ThreeVector newDirection = detectorPosition - particlePosition;
+      aStep->GetPostStepPoint()->SetMomentumDirection(newDirection);
+    }
+    }
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+

@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoDAtaSet.cc
-// GEANT4 tag $Name: xray_fluo-V04-01-03
+// GEANT4 tag $Name: xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -47,6 +47,8 @@ XrayFluoDataSet::XrayFluoDataSet(G4int Z,
   numberOfBins = energies->size();
   unit1 = unitE;
   unit2 = unitData;
+
+  G4cout << "XrayFluo FluoDataSet created" << G4endl;
 }
 
 XrayFluoDataSet:: XrayFluoDataSet(G4int Z, 
@@ -61,6 +63,9 @@ XrayFluoDataSet:: XrayFluoDataSet(G4int Z,
   unit2 = unitData;  
   LoadData(dataFile);
   numberOfBins = energies->size();
+
+  G4cout << "XrayFluo FluoDataSet created" << G4endl;
+
 }
 
 
@@ -70,12 +75,12 @@ XrayFluoDataSet::~XrayFluoDataSet()
 { 
   delete energies;
   delete data;
+  G4cout << "XrayFluo FluoDataSet deleted" << G4endl;
 }
 
 
-G4double XrayFluoDataSet::FindValue(G4double e, G4int id) const
+G4double XrayFluoDataSet::FindValue(G4double e, G4int) const
 {
-  id = id;
   G4double value;
   G4double e0 = (*energies)[0];
   // Protections
@@ -133,11 +138,17 @@ void XrayFluoDataSet::LoadData(const G4String& fileName)
   ost << fileName <<".dat";
   
   G4String name(nameChar);
-  
-  char* path = getenv("G4INSTALL");
- 
-  G4String pathString(path);
-  G4String dirFile = pathString + "/" + name;
+
+  G4String dirFile = name;
+
+  if (!(getenv("XRAYDATA"))) { 
+    
+    char* path = getenv("PWD");
+    
+    G4String pathString(path);
+    dirFile = pathString + "/" + name;
+  }
+
   std::ifstream file(dirFile);
   std::filebuf* lsdp = file.rdbuf();
   
@@ -199,6 +210,16 @@ void XrayFluoDataSet::PrintData() const
 	     << G4endl; 
     }
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
