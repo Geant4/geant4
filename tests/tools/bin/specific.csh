@@ -13,7 +13,6 @@
 # Steve O'Neale Birmingham/Cern ( Reactivate persistancy)
 ####################################################
 
-setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/$G4SYSTEM/new
 setenv REF undefined
 if ( `pwd | grep /stt/dev1/` != "" ) then
   setenv REF dev1
