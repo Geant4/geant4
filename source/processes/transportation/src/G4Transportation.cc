@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.50 2004-11-23 17:45:49 japost Exp $
+// $Id: G4Transportation.cc,v 1.51 2004-12-07 08:28:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -175,7 +175,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   }
   else
   {
-     currentSafety = fPreviousSafety - sqrt(MagSqShift) ;
+     currentSafety = fPreviousSafety - std::sqrt(MagSqShift) ;
   }
 
   // Is the particle charged ?
@@ -351,7 +351,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
         G4double  endEnergy= fTransportEndKineticEnergy; 
 
         static G4int no_inexact_steps=0, no_large_ediff;
-        G4double absEdiff = fabs(startEnergy- endEnergy);
+        G4double absEdiff = std::fabs(startEnergy- endEnergy);
         if( absEdiff > perMillion * endEnergy )
         {
           no_inexact_steps++;
@@ -359,7 +359,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
         }
         if( fVerboseLevel > 1 )
         {
-          if( fabs(startEnergy- endEnergy) > perThousand * endEnergy )
+          if( std::fabs(startEnergy- endEnergy) > perThousand * endEnergy )
           {
             static G4int no_warnings= 0, warnModulo=1,  moduloFactor= 10; 
             no_large_ediff ++;
