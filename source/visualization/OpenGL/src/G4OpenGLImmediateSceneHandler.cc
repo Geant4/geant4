@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.10 2004-07-01 15:29:10 johna Exp $
+// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.11 2005-02-23 11:13:50 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -107,12 +107,18 @@ void G4OpenGLImmediateSceneHandler::ClearTransientStore () {
 
   G4VSceneHandler::ClearTransientStore ();
 
+  /*
+  ClearTransientStore should restrict itself to its job.  In other
+  places, a draw command follows, so it is not needed here.  In fact
+  it can cause a double recursive descent into DrawView, so the following
+  has been commented out (JA - 23/Jan/05).
   // For immediate mode, clear screen and re-draw detector.
   if (fpViewer) {
     fpViewer -> SetView ();
     fpViewer -> ClearView ();
     fpViewer -> DrawView ();
   }
+  */
 }
 
 G4int G4OpenGLImmediateSceneHandler::GetSceneCount () {
