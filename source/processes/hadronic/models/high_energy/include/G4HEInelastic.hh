@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HEInelastic.hh,v 1.4 2000-07-09 09:48:10 hpw Exp $
+// $Id: G4HEInelastic.hh,v 1.5 2001-04-17 10:27:58 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -40,7 +40,7 @@ class G4HEInelastic : public G4HadronicInteraction
             { 
               SetMinEnergy(20*GeV);
               SetMaxEnergy(10*TeV);
-              MAXPART = 512;
+              MAXPART = 2048;
               verboseLevel = 0;
               SetParticles();
               conserveEnergy = false;
