@@ -49,7 +49,7 @@
       result.SetName(*theName);
       result.SetA(myA);
       result.SetZ(myZ);
-  G4cout <<"HPWD 1 "<<*theName<<G4endl;
+//  G4cout <<"HPWD 1 "<<*theName<<G4endl;
 #ifdef G4USE_STD_NAMESPACE
       check = new G4std::ifstream(*theName);
 #else
@@ -68,7 +68,7 @@
           *biff = base+"/"+"CrossSection/"+itoa(myZ)+"_"+"nat"+"_"+theString[myZ-1];
           if(theName!=NULL) delete theName;
           theName = biff;
-      G4cout <<"HPWD 2 "<<*theName<<G4endl;
+//      G4cout <<"HPWD 2 "<<*theName<<G4endl;
           result.SetName(*theName);
           G4double natA = myZ/G4SandiaTable::GetZtoA(myZ);
           result.SetA(natA);
@@ -90,7 +90,7 @@
             if(theName!=NULL) delete theName;
             *biff = base+"/"+rest+itoa(myZ)+"_"+"nat"+"_"+theString[myZ-1];  
             theName = biff;
-      G4cout <<"HPWD 3 "<<*theName<<G4endl;
+//      G4cout <<"HPWD 3 "<<*theName<<G4endl;
             result.SetName(*theName);
             G4double natA = myZ/G4SandiaTable::GetZtoA(myZ);
             result.SetA(natA);
@@ -104,7 +104,7 @@
         *biff = base+"/"+rest+itoa(myZ)+"_"+itoa(myA)+"_"+theString[myZ-1];  
         if(theName!=NULL) delete theName;
         theName = biff;
-      G4cout <<"HPWD 4 "<<*theName<<G4endl;
+//      G4cout <<"HPWD 4 "<<*theName<<G4endl;
         result.SetName(*theName);
         result.SetA(myA);
         result.SetZ(myZ);
