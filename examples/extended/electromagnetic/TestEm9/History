@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2003-09-18 08:07:30 vnivanch Exp $
+$Id: History,v 1.6 2003-10-13 16:31:49 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13-10-03 V.Ivanchenko (testem9-V05-02-02)
+- Fix a problem in interactive mode
+- Add EventMessenger
 
 18-09-03 V.Ivanchenko (testem9-V05-02-01)
 - Complete migration to model EM physics

@@ -1,4 +1,5 @@
-# $Id: GNUmakefile,v 1.3 2003-07-14 17:09:53 vnivanch Exp $
+# $Id: GNUmakefile,v 1.4 2003-10-13 16:31:49 vnivanch Exp $
+# GEANT4 tag $Name: not supported by cvs2svn $
 # --------------------------------------------------------------
 # GNUmakefile for examples module with AIDA interface
 # --------------------------------------------------------------
