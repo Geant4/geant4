@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.hh,v 1.19 2001-10-31 12:56:12 maire Exp $
+// $Id: G4Material.hh,v 1.20 2002-02-26 17:34:34 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -74,6 +74,7 @@
 // 17-07-01, migration to STL. M. Verderi.
 // 14-09-01, Suppression of the data member fIndexInTable
 // 31-10-01, new function SetChemicalFormula() (mma)
+// 26-02-02, fIndexInTable renewed
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -238,7 +239,7 @@ public:  // with description
   size_t GetNumberOfMaterials();
   
   //the index of this material in the Table:    
-  size_t GetIndex() const;
+  size_t GetIndex() const {return fIndexInTable;};
     
   //return  pointer to a material, given its name:    
   static  G4Material* GetMaterial(G4String name);
@@ -299,6 +300,7 @@ private:
 
   static
   G4MaterialTable theMaterialTable;       // the material table
+  size_t fIndexInTable;                   // the position in the table 
 
   //
   // Derived data members (computed from the basic data members)
@@ -339,21 +341,6 @@ G4double G4Material::GetA() const
      G4Exception ( " the Atomic mass is not well defined." );
   } 
   return  (*theElementVector)[0]->GetA();      
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline
-size_t G4Material::GetIndex() const
-{  
-  // return the index of this Material in theMaterialTable
-  //
-  size_t J=0, Jmax=theMaterialTable.size();
-  while ((J<Jmax)&&(theMaterialTable[J] != this)) J++;  
-
-  if (J==Jmax) G4Exception("G4Material::GetIndex()  not in MaterialTable");
-  
-  return J;        
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

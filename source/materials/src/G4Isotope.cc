@@ -21,11 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.cc,v 1.11 2001-11-29 15:19:15 gcosmo Exp $
+// $Id: G4Isotope.cc,v 1.12 2002-02-26 17:34:34 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+// 26.02.02: fIndexInTable renewed
 // 14.09.01: fCountUse: nb of elements which use this isotope 
 // 13.09.01: suppression of the data member fIndexInTable
 // 17.07.01: migration to STL. M. Verderi.
@@ -56,6 +57,7 @@ G4Isotope::G4Isotope(const G4String& Name, G4int Z, G4int N, G4double A)
     (" ERROR! Attempt to create an Isotope with N < Z !!!" );
 
   theIsotopeTable.push_back(this);
+  fIndexInTable = theIsotopeTable.size() - 1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,9 +70,7 @@ G4Isotope::~G4Isotope()
 	   << G4endl;
 	     
   //remove this isotope from theIsotopeTable
-  G4IsotopeTable::iterator iter  = theIsotopeTable.begin();
-  while ((iter != theIsotopeTable.end())&&(*iter != this)) iter++;
-  if (iter != theIsotopeTable.end()) theIsotopeTable.erase(iter);
+  theIsotopeTable[fIndexInTable] = 0;
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -81,6 +81,7 @@ G4Isotope::G4Isotope(G4Isotope& right)
   
   //insert this new isotope in table
   theIsotopeTable.push_back(this);
+  fIndexInTable = theIsotopeTable.size() - 1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -186,3 +187,5 @@ G4Isotope* G4Isotope::GetIsotope(G4String isotopeName)
   // the isotope does not exist in the table
   return 0;          
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.cc,v 1.14 2001-11-29 15:19:15 gcosmo Exp $
+// $Id: G4Element.cc,v 1.15 2002-02-26 17:34:34 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,9 +40,10 @@
 // 16-11-98: name Subshell -> Shell; GetBindingEnergy() (mma)
 // 09-03-01: assignement operator revised (mma)
 // 02-05-01: check identical Z in AddIsotope (marc)
-// 03-05-01; flux.precision(prec) at begin/end of operator<<
+// 03-05-01: flux.precision(prec) at begin/end of operator<<
 // 13-09-01: suppression of the data member fIndexInTable
 // 14-09-01: fCountUse: nb of materials which use this element
+// 26-02-02: fIndexInTable renewed
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -87,6 +88,7 @@ G4Element::G4Element(const G4String& name, const G4String& symbol,
 
     // Store in ElementTable
     theElementTable.push_back(this);
+    fIndexInTable = theElementTable.size() - 1;
     
     fCountUse = 0;           //nb of materials which use this element
 }
@@ -160,6 +162,7 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
 
       // Store in table
       theElementTable.push_back(this);
+      fIndexInTable = theElementTable.size() - 1;
      }
 }
 
@@ -192,9 +195,7 @@ G4Element::~G4Element()
   if (fIonisation)              delete    fIonisation;
   
   //remove this element from theElementTable
-  G4ElementTable::iterator iter  = theElementTable.begin();
-  while ((iter != theElementTable.end())&&(*iter != this)) iter++;
-  if (iter != theElementTable.end()) theElementTable.erase(iter);  
+  theElementTable[fIndexInTable] = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -295,6 +296,7 @@ G4Element::G4Element(G4Element& right)
 
       // Store this new element in table and set the index
       theElementTable.push_back(this);
+      fIndexInTable = theElementTable.size() - 1; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

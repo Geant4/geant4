@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.hh,v 1.15 2001-10-17 14:02:15 gcosmo Exp $
+// $Id: G4Element.hh,v 1.16 2002-02-26 17:34:34 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -63,7 +63,8 @@
 // 30-03-01, suppression of the warning message in GetElement
 // 17-07-01, migration to STL, M. Verderi
 // 13-09-01, stl migration. Suppression of the data member fIndexInTable
-// 14-09-01, fCountUse: nb of materials which use this element 
+// 14-09-01, fCountUse: nb of materials which use this element
+// 26-02-02, fIndexInTable renewed 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -151,7 +152,7 @@ public:  // with description
   
   //the index of this element in the Table:
   //
-  size_t GetIndex() const;
+  size_t GetIndex() const {return fIndexInTable;};
     
   //return pointer to an element, given its name:
   //
@@ -222,6 +223,7 @@ private:
   
   // Set up the static Table of Elements
   static G4ElementTable theElementTable;
+  size_t fIndexInTable;
 
   //
   // Derived data members (computed from the basic data members)
@@ -230,21 +232,6 @@ private:
   G4double fRadTsai;             // Tsai formula for the radiation length
   G4IonisParamElm* fIonisation;  // Pointer to ionisation parameters
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline
-size_t G4Element::GetIndex() const
-{  
-  // return the index of this Element in theElementTable
-  //
-  size_t J=0, Jmax=theElementTable.size();
-  while ((J<Jmax)&&(theElementTable[J] != this)) J++;  
-
-  if (J==Jmax) G4Exception("G4Element::GetIndex() Element not in ElementTable");
-  
-  return J;        
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.hh,v 1.13 2001-10-17 07:59:52 gcosmo Exp $
+// $Id: G4Isotope.hh,v 1.14 2002-02-26 17:34:34 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,6 +41,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+// 26.02.02: fIndexInTable renewed 
 // 14.09.01: fCountUse: nb of elements which use this isotope 
 // 13.09.01: stl migration. Suppression of the data member fIndexInTable
 // 30.03.01: suppression of the warning message in GetIsotope
@@ -92,7 +93,7 @@ class G4Isotope
     static 
     size_t GetNumberOfIsotopes();
     
-    size_t GetIndex() const;    
+    size_t GetIndex() const {return fIndexInTable;};    
     
     friend
     G4std::ostream& operator<<(G4std::ostream&, G4Isotope*);
@@ -124,23 +125,11 @@ class G4Isotope
 
     static 
     G4IsotopeTable theIsotopeTable;
+    
+    size_t fIndexInTable;        // index in the Isotope table
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline
-size_t G4Isotope::GetIndex() const
-{  
-  // return the index of this isotope in theIsotopeTable
-  //
-  size_t J=0, Jmax=theIsotopeTable.size();
-  while ((J<Jmax)&&(theIsotopeTable[J] != this)) J++;  
-
-  if (J==Jmax) G4Exception("G4Isotope::GetIndex() Isotope not in IsotopeTable");
-  
-  return J;        
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

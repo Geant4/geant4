@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.cc,v 1.18 2001-11-29 15:19:15 gcosmo Exp $
+// $Id: G4Material.cc,v 1.19 2002-02-26 17:34:34 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,6 +52,7 @@
 // 03-05-01, flux.precision(prec) at begin/end of operator<<
 // 17-07-01, migration to STL. M. Verderi.
 // 14-09-01, Suppression of the data member fIndexInTable
+// 26-02-02, fIndexInTable renewed
 
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -110,6 +111,7 @@ G4Material::G4Material(const G4String& name, G4double z,
   
   // Store in the table of Materials
   theMaterialTable.push_back(this);
+  fIndexInTable = theMaterialTable.size() - 1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -202,6 +204,7 @@ G4Material::G4Material(const G4String& name, const G4String& chFormula,
 
   // Store in the table of Materials
   theMaterialTable.push_back(this);
+  fIndexInTable = theMaterialTable.size() - 1;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -289,6 +292,7 @@ void G4Material::AddElement(G4Element* element, G4int nAtoms)
 
      // Store in the static Table of Materials
      theMaterialTable.push_back(this);
+     fIndexInTable = theMaterialTable.size() - 1;     
   }
 }
 
@@ -344,6 +348,7 @@ void G4Material::AddElement(G4Element* element, G4double fraction)
 
      // Store in the static Table of Materials
      theMaterialTable.push_back(this);
+     fIndexInTable = theMaterialTable.size() - 1;
   }
 }
 
@@ -406,6 +411,7 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
 
      // Store in the static Table of Materials
      theMaterialTable.push_back(this);
+     fIndexInTable = theMaterialTable.size() - 1;
   }
 }
 
@@ -533,6 +539,7 @@ G4Material::G4Material(const G4Material& right)
         
     // Store this new material in the table of Materials
     theMaterialTable.push_back(this);
+    fIndexInTable = theMaterialTable.size() - 1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -551,9 +558,7 @@ G4Material::~G4Material()
   if (fSandiaTable)           delete    fSandiaTable;
   
   //remove this material from theMaterialTable
-  G4MaterialTable::iterator iter  = theMaterialTable.begin();
-  while ((iter != theMaterialTable.end())&&(*iter != this)) iter++;
-  if (iter != theMaterialTable.end()) theMaterialTable.erase(iter);    
+  theMaterialTable[fIndexInTable] = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
