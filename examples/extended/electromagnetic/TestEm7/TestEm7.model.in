@@ -1,4 +1,4 @@
-# $Id: TestEm7.model.in,v 1.1 2003-05-15 11:39:58 vnivanch Exp $
+# $Id: TestEm7.model.in,v 1.2 2003-05-23 07:47:04 vnivanch Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -6,6 +6,7 @@
 #
 /control/verbose 2
 /run/verbose 1
+/tracking/verbose 0
 #
 #
 #  select EM PhysicsList
@@ -27,8 +28,6 @@
 /testem/det/tallyPosition  0.  0. 0. cm
 /testem/det/tallyPosition  5.  0. 0. cm
 #
-#/testem/det/update
-#
 /run/initialize
 #
 /gun/particle proton
@@ -39,3 +38,4 @@
 /testem/event/printModulo 1000
 #
 /run/beamOn 10000
+#
