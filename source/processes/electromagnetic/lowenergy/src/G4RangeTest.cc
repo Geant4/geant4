@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RangeTest.cc,v 1.1 2001-10-08 07:52:15 pia Exp $
+// $Id: G4RangeTest.cc,v 1.2 2001-10-28 10:44:26 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -42,11 +42,10 @@ G4bool G4RangeTest::Escape(const G4ParticleDefinition* particle,
 			   G4double energy, 
 			   G4double safety) const
 {
-  G4bool value = true;
   G4double range = G4EnergyLossTables::GetRange(particle,energy,material);
   G4double cut = particle->GetLengthCuts();
   G4double rMin = G4std::min(cut,safety);
-  if (range < rMin) value = false;
+  G4bool value = (range < rMin);
 
   return value;
 }
