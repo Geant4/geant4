@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2002-03-25 17:09:16 gcosmo Exp $
+# $Id: GNUmakefile,v 1.2 2002-07-11 16:07:07 dressel Exp $
 # --------------------------------------------------------------------
 # GNUmakefile for geometry/biasing library.  Gabriele Cosmo, 25/03/02.
 # --------------------------------------------------------------------
@@ -11,7 +11,9 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-CPPFLAGS += -I$(G4BASE)/graphics_reps/include \
+CPPFLAGS += -I$(G4BASE)/geometry/solids/CSG/include \
+	    -I$(G4BASE)/materials/include \
+	    -I$(G4BASE)/graphics_reps/include \
             -I$(G4BASE)/intercoms/include \
             -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
