@@ -111,11 +111,14 @@ shown in the macro vis.mac.
 The example is provided of:
 - Low Energy electromagnetic processes for photons, e- 
 - Standard electromagnetic processes for e+
-- Low Energy or Standard electromagnetic processes with ICRU parameterisation 
+- Low Energy electromagnetic processes with ICRU parameterisation 
   for p, alpha and ions
 - Muon electromagnetic processes
 - Decay
 - Hadronic processes for p and alpha particles as primary particles.
+
+The user can choose the Bertini cascade approach or the binary cascade approach for
+the modeling of proton hadronic physics.
 
 3. PRIMARY PARTICLES
 
@@ -160,6 +163,7 @@ p: speZ=1.txt
 alpha: speZ=2.txt
 
 3.1 UI
+
 The user can define primary particles with the following command:
 /gun/particleType proton
 /gun/particleType alpha
@@ -248,13 +252,13 @@ example macros are provided:
                                                                         
 - Interative mode:                                                      
   $G4WORDIR/bin/Linux-g++/remsim
-  -> the vis.mac is loaded automatically                                |
+  -> the vis.mac is loaded automatically                                
 
 ------------------------------------------------------------------------
 Author : Susanna Guatelli
 
 for comments, advices, doubts and questions: guatelli@ge.infn.it
 
-last modified: Susanna Guatelli 27/5/2004
+last modified: Susanna Guatelli 23/11/2004
 
 

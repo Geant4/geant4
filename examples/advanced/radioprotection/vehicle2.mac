@@ -4,10 +4,10 @@
 /physics/addPhysics photon-epdl
 /physics/addPhysics electron-eedl
 /physics/addPhysics positron-standard
-#/physics/addPhysics ion-standard
 /physics/addPhysics ion-ICRU
 #### Add Hadronic Physics, muon physics and decay
-/physics/addPhysics hadronic
+/physics/addPhysics hadronic-binary
+#/physics/addPhysics hadronic-bertini
 /physics/addPhysics muon-standard
 /physics/addPhysics decay
 ##############################
@@ -32,15 +32,15 @@
 /run/initialize
 # Generation of primary particles
 /gun/generator Interplanetary
-/gun/particle proton
+/gun/particleType proton
 /run/data gcrZ=1.txt
 # Geometry configuration
 /configuration/choose vehicle
 /configuration/AddShielding On
 #/configuration/AddShielding Off
-#/configuration/AddSPE On
+/configuration/AddSPE On
 #/configuration/AddSPE Off
-/run/beamOn 5000
+/run/beamOn 50
 
 
 

@@ -22,18 +22,18 @@
 //
 //    **************************************
 //    *                                    *
-//    *    RemSimHadronicPhysics.hh        *
+//    *    RemSimHadronicBertini.hh        *
 //    *                                    *
 //    **************************************
 //
-// $Id: RemSimHadronicPhysics.hh,v 1.2 2004-05-22 12:57:04 guatelli Exp $
+// $Id: RemSimHadronicBertini.hh,v 1.1 2004-11-23 14:37:47 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author : Susanna Guatelli, guatelli@ge.infn.it
 // 
 
-#ifndef RemSimHadronicPhysics_h
-#define RemSimHadronicPhysics_h 1
+#ifndef RemSimHadronicBertini_h
+#define RemSimHadronicBertini_h 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
@@ -65,11 +65,11 @@ class G4PreCompoundModel;
 class G4QGSMFragmentation;
 class G4ExcitedStringDecay;
 
-class RemSimHadronicPhysics: public G4VPhysicsConstructor 
+class RemSimHadronicBertini: public G4VPhysicsConstructor 
 {
   public:
-    RemSimHadronicPhysics(const G4String& name = "hadronic");
-    virtual ~RemSimHadronicPhysics();
+    RemSimHadronicBertini(const G4String& name = "hadronic-bertini");
+    virtual ~RemSimHadronicBertini();
 
   protected:
     // Construct particle and physics

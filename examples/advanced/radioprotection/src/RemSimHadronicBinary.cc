@@ -26,12 +26,12 @@
 //    *                                    *
 //    **************************************
 //
-// $Id: RemSimHadronicPhysics.cc,v 1.2 2004-05-22 12:57:06 guatelli Exp $
+// $Id: RemSimHadronicBinary.cc,v 1.1 2004-11-23 14:37:47 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author : Susanna Guatelli, guatelli@ge.infn.it
 // 
-#include "RemSimHadronicPhysics.hh"
+#include "RemSimHadronicBinary.hh"
 #include "G4BinaryLightIonReaction.hh"
 #include "G4TripathiCrossSection.hh"
 #include "G4IonsShenCrossSection.hh"
@@ -61,8 +61,9 @@
 #include "G4PreCompoundModel.hh"
 #include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
+#include "G4BinaryCascade.hh"
 
-RemSimHadronicPhysics::RemSimHadronicPhysics(const G4String& name): 
+RemSimHadronicBinary::RemSimHadronicBinary(const G4String& name): 
 G4VPhysicsConstructor(name)
 {
   // Hadronic cross sections
@@ -78,7 +79,10 @@ G4VPhysicsConstructor(name)
   // Hadronic models
 
   elastic_model = new G4LElastic();
-  bertini_model = new G4CascadeInterface();
+
+  binarycascade_model = new G4BinaryCascade();
+  //bertini_model = new G4CascadeInterface();
+
   binary_ion_model = new G4BinaryLightIonReaction();
  
   LEP_proton_model = new G4LEProtonInelastic();
@@ -101,7 +105,7 @@ G4VPhysicsConstructor(name)
   QGSP_model -> SetHighEnergyGenerator(&theStringModel);
  
 }
-RemSimHadronicPhysics::~RemSimHadronicPhysics()
+RemSimHadronicBinary::~RemSimHadronicBinary()
 {}
 
 #include "G4HadronElasticProcess.hh"
@@ -113,28 +117,28 @@ RemSimHadronicPhysics::~RemSimHadronicPhysics()
 #include "G4PionMinusInelasticProcess.hh"
 #include "G4AlphaInelasticProcess.hh"
 
-void RemSimHadronicPhysics::ConstructProcess()
+void RemSimHadronicBinary::ConstructProcess()
 {
-  // Set model energy regions
-  // 0 - 3.2 GeV: Bertini cascade model for p, n, pi+, pi-
+  // 0- 10. GeV: binary cascade for p, n
 
-  bertini_model -> SetMaxEnergy(3.2*GeV);
+  binarycascade_model -> SetMaxEnergy(10.*GeV);
 
   // 80 MeV - 20 GeV for light ions
 
   binary_ion_model -> SetMinEnergy(80*MeV);
   binary_ion_model -> SetMaxEnergy(110.*GeV);
  
-  // 2.8 - 25 GeV: LEP models for p, n, pi+, pi-
-
-  LEP_proton_model -> SetMinEnergy(2.8*GeV);
+  LEP_proton_model -> SetMinEnergy(8.*GeV);
   LEP_proton_model -> SetMaxEnergy(25*GeV);
-  LEP_neutron_model -> SetMinEnergy(2.8*GeV);
+ 
+  LEP_neutron_model -> SetMinEnergy(8.*GeV);
   LEP_neutron_model -> SetMaxEnergy(25*GeV);
-  LEP_pip_model -> SetMinEnergy(2.8*GeV);
+ 
+  LEP_pip_model -> SetMinEnergy(0.*GeV);
   LEP_pip_model -> SetMaxEnergy(25*GeV);
-  LEP_pim_model -> SetMinEnergy(2.8*GeV);
+  LEP_pim_model -> SetMinEnergy(0.*GeV);
   LEP_pim_model -> SetMaxEnergy(25*GeV);
+ 
   nfission_model -> SetMinEnergy(0*TeV);
   nfission_model -> SetMaxEnergy(100*TeV);
   ncapture_model -> SetMinEnergy(0*TeV);
@@ -143,9 +147,9 @@ void RemSimHadronicPhysics::ConstructProcess()
   // Up to 100 MeV for alphas
   LEP_alpha_model -> SetMaxEnergy(100.*MeV);
 
-  // 15 GeV - 100 TeV: QGSP model for p, n, pi+, pi-
+  // 20 GeV - 100 TeV: QGSP model for p, n, pi+, pi-
 
-  QGSP_model -> SetMinEnergy(15*GeV);
+  QGSP_model -> SetMinEnergy(20*GeV);
   QGSP_model -> SetMaxEnergy(100*TeV);
 
   // ******************************************
@@ -165,7 +169,7 @@ void RemSimHadronicPhysics::ConstructProcess()
 
   G4ProtonInelasticProcess* protinelProc = new G4ProtonInelasticProcess();
   protinelProc -> AddDataSet(proton_XC);
-  protinelProc -> RegisterMe(bertini_model);
+  protinelProc -> RegisterMe(binarycascade_model);
   protinelProc -> RegisterMe(LEP_proton_model);
   protinelProc -> RegisterMe(QGSP_model);
   protMan -> AddDiscreteProcess(protinelProc);
@@ -187,7 +191,7 @@ void RemSimHadronicPhysics::ConstructProcess()
 
   G4NeutronInelasticProcess* neutinelProc = new G4NeutronInelasticProcess();
   neutinelProc -> AddDataSet(neutron_XC);
-  neutinelProc -> RegisterMe(bertini_model);
+  neutinelProc -> RegisterMe(binarycascade_model);
   neutinelProc -> RegisterMe(LEP_neutron_model);
   neutinelProc -> RegisterMe(QGSP_model);
   neutMan -> AddDiscreteProcess(neutinelProc);
@@ -217,7 +221,6 @@ void RemSimHadronicPhysics::ConstructProcess()
 
   G4PionPlusInelasticProcess* pipinelProc = new G4PionPlusInelasticProcess();
   pipinelProc -> AddDataSet(pion_XC);
-  pipinelProc -> RegisterMe(bertini_model);
   pipinelProc -> RegisterMe(LEP_pip_model);
   pipinelProc -> RegisterMe(QGSP_model);
   pipMan -> AddDiscreteProcess(pipinelProc);
@@ -239,7 +242,6 @@ void RemSimHadronicPhysics::ConstructProcess()
 
   G4PionMinusInelasticProcess* piminelProc = new G4PionMinusInelasticProcess();
   piminelProc -> AddDataSet(pion_XC);
-  piminelProc -> RegisterMe(bertini_model);
   piminelProc -> RegisterMe(LEP_pim_model);
   piminelProc -> RegisterMe(QGSP_model);
   pimMan -> AddDiscreteProcess(piminelProc);

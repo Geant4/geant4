@@ -19,9 +19,13 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+// $Id: RemSimIonICRU.hh,v 1.2 2004-11-23 14:37:47 guatelli Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-#ifndef REMSIMPROTONICRU_HH
-#define REMSIMPROTONICRU_HH 1
+// Author: Susanna Guatelli, guatelli@ge.infn.it
+
+#ifndef REMSIMIONICRU_HH
+#define REMSIMIONICRU_HH 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
