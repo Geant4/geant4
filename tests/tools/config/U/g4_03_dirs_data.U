@@ -34,7 +34,7 @@ esac
 
 case "$g4neutronhpcrosssections" in
 '')
-	g4neutronhpcrosssections=$g4install/../G4NDL3.5
+	g4neutronhpcrosssections=$g4install/../G4NDL3.7
 	;;
 esac
 
@@ -91,7 +91,7 @@ gans=$ans
 	4) 
 		dflt=$g4neutronhpcrosssections
 		fn='f~'
-		rp="Where is G4NDL3.5 installed?"
+		rp="Where is G4NDL3.7 installed?"
 		. ./getfile
 		g4neutronhpcrosssections=$ans
 		;;
