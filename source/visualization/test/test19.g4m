@@ -78,5 +78,42 @@ help /vis/sceneHandler/create
 /tracking/storeTrajectory 1
 /run/beamOn 1
 /vis/viewer/update
+#
+# To view replicas...
+/vis/camera/viewpoint 0 0
+/vis/camera/pan -2000 0 0
+/vis/camera/zoom 7
+/vis/viewer/refresh
+/gun/direction 0 1 0
+/gun/position -200 -100 0 cm
+/run/beamOn
+# The following just crash with replicas...
+#.../gun/position -195 -100 0 cm
+#.../run/beamOn
+#.../gun/position -190 -100 0 cm
+#.../run/beamOn
+#.../gun/position -185 -100 0 cm
+#.../run/beamOn
+#.../gun/position -180 -100 0 cm
+#.../run/beamOn
+#...end
+/gun/position -200 0 0 cm
+# The following just crash with replicas...
+#.../gun/direction 1 1 0
+#.../run/beamOn
+#.../gun/direction 0 1 0
+#.../run/beamOn
+#.../gun/direction 1 .2 0
+#.../run/beamOn
+#.../gun/direction -1 1 0
+#.../run/beamOn
+#.../gun/direction -1 -1 0
+#.../run/beamOn
+#.../gun/direction 0 -1 0
+#.../run/beamOn
+#.../gun/direction 1 -1 0
+#.../run/beamOn
+#...end
+/vis/viewer/update
 
 
