@@ -1,7 +1,7 @@
 #ifndef MYGAMMA_H
 #define MYGAMMA_H
 
-
+#include <cmath>
 
 class MyGamma {
 	public:
@@ -26,7 +26,5 @@ class MyGamma {
 	
 	
 };
-
-
 
 #endif
