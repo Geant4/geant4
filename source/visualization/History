@@ -1,4 +1,4 @@
-$Id: History,v 1.93 2000-11-03 22:06:33 allison Exp $
+$Id: History,v 1.94 2001-01-16 18:35:30 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,13 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+16th January 2001  John Allison  (vis-03-00-00)
+- All vis commands "available" in all G4 states.
+- Other small cosmetic changes to commands.
+- OpenGL: square and circle markers correctly rendered.
+  Note: subsequent rotations in stored mode also rotate these markers.
+- Some small changes to test  - see test/History.
 
 2nd November 2000  Gunter Folger  (vis-V02-00-02)
 - Added targets includes and clean_libs to visualization/GNUmakefile.
