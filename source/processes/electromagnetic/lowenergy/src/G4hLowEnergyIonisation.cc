@@ -44,8 +44,10 @@
 // 05 Nov.   2000 MG Pia - Removed const cast previously introduced to get
 //                the code compiled (const G4Material* now introduced in 
 //                electromagnetic/utils utils-V02-00-03 tag)
-// 21 Nov.   2000 V.Ivanchenko Fix a problem in fluctuations
-//
+//                (this is going back and forth, to cope with Michel's
+//                utils tag not being accepted yet by system testing)
+// 21 Nov.  2000 V.Ivanchenko Fix a problem in fluctuations
+// 23 Nov.  2000 V.Ivanchenko Ion type fluctuations only for charge>0
 // -----------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -654,7 +656,7 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
       G4double rscaled= fRangeNow*massRatio*chargeSquare ;
       G4double sscaled=   step   *massRatio*chargeSquare ;
       
-      if(charge>0.) {
+      if(charge > 0.0) {
         eloss = G4EnergyLossTables::GetPreciseEnergyFromRange(
                                     theProton,rscaled, material) -
 	        G4EnergyLossTables::GetPreciseEnergyFromRange(
@@ -1124,7 +1126,7 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
 
   static const G4double minLoss = 1.*eV ;
   static const G4double kappa = 10. ;
-  static const G4double theBohrVelocity2 = 50.0 * keV/proton_mass_c2 ;
+  static const G4double theBohrBeta2 = 50.0 * keV/proton_mass_c2 ;
 
   G4int    imaterial   = material->GetIndex() ; 
   G4double ipotFluct   = material->GetIonisation()->GetMeanExcitationEnergy() ;
@@ -1160,8 +1162,8 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
     siga = tmax * (1.0-0.5*beta2) * step * twopi_mc2_rcl2 
          * electronDensity / beta2 ;
 
-    // High velocity
-    if( 3.0 < beta2/(theBohrVelocity2*zeff)) {
+    // High velocity or negatively charged particle
+    if( beta2 > 3.0*theBohrBeta2*zeff || charge < 0.0) {
       siga = sqrt( siga * chargeSquare ) ;
 
     // Low velocity - additional ion charge fluctuations according to
