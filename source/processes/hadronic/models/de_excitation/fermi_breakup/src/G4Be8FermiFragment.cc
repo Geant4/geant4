@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Be8FermiFragment.cc,v 1.4 2003-12-02 00:36:31 larazb Exp $
+// $Id: G4Be8FermiFragment.cc,v 1.5 2003-12-02 12:22:03 larazb Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -69,11 +69,7 @@ G4Be8FermiFragment::G4Be8FermiFragment(const G4int anA, const G4int aZ, const G4
   : G4UnstableFermiFragment(anA,aZ,Pol,ExE)
 {
   // Be8 ----> alpha + alpha 
-#ifdef SUN_CC_STATIC
-  G4double alpha_mass = 3727.4169999999999;
-#else
   G4double alpha_mass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(2,4);
-#endif
 
   Masses.push_back(alpha_mass);
   Masses.push_back(alpha_mass);

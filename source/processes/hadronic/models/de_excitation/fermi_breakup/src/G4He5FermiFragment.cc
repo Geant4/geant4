@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4He5FermiFragment.cc,v 1.4 2003-12-02 00:36:31 larazb Exp $
+// $Id: G4He5FermiFragment.cc,v 1.5 2003-12-02 12:22:03 larazb Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -70,13 +70,8 @@ G4He5FermiFragment::G4He5FermiFragment(const G4int anA, const G4int aZ, const G4
   : G4UnstableFermiFragment(anA,aZ,Pol,ExE)
 {
   // He5 ----> alpha + neutron
-#ifdef SUN_CC_STATIC
-  G4double alpha_mass = 3727.4169999999999;
-  G4double neutron_mass = 939.56563000000006;
-#else
   G4double alpha_mass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(2,4); 
   G4double neutron_mass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(0,1); 
-#endif
   
   Masses.push_back(alpha_mass);
   Masses.push_back(neutron_mass);
