@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VViewer.hh,v 1.5 1999-12-15 14:54:19 gunter Exp $
+// $Id: G4VViewer.hh,v 1.6 2000-02-21 16:05:21 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -93,6 +93,7 @@ protected:
   G4VSceneHandler&        fSceneHandler;     // Abstract scene for this view.
   G4int            fViewId;    // Id of this instance.
   G4String         fName;
+  G4String         fShortName; // Up to first ' ' character, if any.
   G4ViewParameters fVP;        // Viewing parameters.
 
   //////////////////////////////////////////////////////////////

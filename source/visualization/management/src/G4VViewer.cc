@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VViewer.cc,v 1.5 1999-12-15 14:54:25 gunter Exp $
+// $Id: G4VViewer.cc,v 1.6 2000-02-21 16:05:21 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,6 +41,8 @@ fNeedKernelVisit (true)
   else {
     fName = name;
   }
+  fShortName = fName (0, fName.find (' '));
+  fShortName.strip ();
 }
 
 G4VViewer::~G4VViewer () {}
