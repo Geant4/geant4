@@ -31,9 +31,9 @@
 #ifndef CCalAnalysis_h 
 #define CCalAnalysis_h 1
 
+#include "G4ThreeVector.hh"
 #include "globals.hh"
 #include <vector>
-#include "G4ThreeVector.hh"
 
 namespace AIDA {
   class IAnalysisFactory;
@@ -65,6 +65,7 @@ public:
   void InsertEnergy(float v);
   void InsertLateralProfile(float*);
   void InsertTime(float*); 
+  void InsertTimeProfile(int, double, double); 
 
   void setNtuple(float* hcalE, float* ecalE, float elab, float x, float y, 
 		 float z, float edep, float edec, float edhc);
@@ -80,14 +81,15 @@ private:
   AIDA::ITree* tree;
   AIDA::ITuple* tuple;
 
-  enum {numberOfTimeSlices = 40}; 
+  enum {numberOfTimeSlices = 200}; 
 
   AIDA::IHistogram1D* energy;
-  AIDA::IHistogram1D* hcalE[28];           // 28 hadronic modules
-  AIDA::IHistogram1D* ecalE[49];           // 49 crystal towers
-  AIDA::IHistogram1D* timeHist[40];        // 40 nanoseconds time window
-  AIDA::IHistogram1D* lateralProfile[70];  // 70 centimeters lateral window
+  AIDA::IHistogram1D* hcalE[28];           //  28 hadronic modules
+  AIDA::IHistogram1D* ecalE[49];           //  49 crystal towers
+  AIDA::IHistogram1D* timeHist[200];       // 200 nanoseconds time window
+  AIDA::IHistogram1D* lateralProfile[70];  //  70 centimeters lateral window
                                      // (indeed 64 should be enough)
+  AIDA::IHistogram1D* timeProfile[2];      // at step and in sensitive detector
 };
 
 

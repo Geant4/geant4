@@ -37,10 +37,12 @@
 #include "G4Event.hh"
 #include "G4SDManager.hh"
 #include "G4HCofThisEvent.hh"
-#include <iostream>
-#include <map>
 #include "G4RunManager.hh"
 #include "G4UserSteppingAction.hh"
+
+#include <iostream>
+#include <vector>
+#include <map>
 
 #include "G4TrajectoryContainer.hh"
 #include "G4Trajectory.hh"
@@ -222,6 +224,23 @@ void CCalEndOfEventAction::EndOfEventAction(const G4Event* evt){
   analysis->InsertEnergyEcal(ecalE);
   analysis->setNtuple(hcalE, ecalE, ener, x, y, z, fullE, edec, edhc);
   analysis->EndOfEvent(nhit);
+  for (i = 0; i < numberOfSD; i++){
+    int caloHCid = G4SDManager::GetSDMpointer()->GetCollectionID(SDnames[i]);
+    if (caloHCid >= 0) {
+      CCalG4HitCollection* theHC = 
+	(CCalG4HitCollection*) allHC->GetHC(caloHCid);
+      if (theHC != 0) {
+	G4int nentries = theHC->entries();
+	if (nentries > 0) {
+	  for (G4int k=0; k<nentries; k++) {
+	    CCalG4Hit* aHit =  (*theHC)[k];
+	    analysis->InsertTimeProfile(k,aHit->getTimeSlice(),
+					aHit->getEnergyDeposit()/GeV);
+	  }
+	}
+      }
+    }
+  }
 #endif
 
   //A.R. Add to visualize tracks

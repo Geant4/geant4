@@ -48,19 +48,19 @@
 #include "G4FieldManager.hh"
 #include "G4ChordFinder.hh"
 #include "G4Mag_UsualEqRhs.hh"
+#include "G4PropagatorInField.hh"
+#include "G4TransportationManager.hh"
 
+#include "G4ClassicalRK4.hh"
 #include "G4SimpleRunge.hh"
 #include "G4ExplicitEuler.hh"
 #include "G4ImplicitEuler.hh"
 #include "G4SimpleHeum.hh"
-#include "G4ClassicalRK4.hh"
 #include "G4HelixExplicitEuler.hh"
 #include "G4HelixImplicitEuler.hh"
 #include "G4HelixSimpleRunge.hh"
 #include "G4CashKarpRKF45.hh"
 #include "G4RKG3_Stepper.hh"
-
-#include "G4TransportationManager.hh"
 
 CCalDetectorConstruction::CCalDetectorConstruction() {}
 
@@ -109,23 +109,28 @@ G4VPhysicalVolume* CCalDetectorConstruction::Construct() {
     fieldMgr->SetDetectorField(ccalField);
     G4Mag_UsualEqRhs *fEquation = new G4Mag_UsualEqRhs(ccalField); 
 
-    // ***STEPPER***: by default G4ClassicalRK4 stepper is used.
-    G4MagIntegratorStepper *pStepper;
+    G4MagIntegratorStepper *pStepper = new G4ClassicalRK4 (fEquation);
     //pStepper = new G4ExplicitEuler( fEquation );
     //pStepper = new G4ImplicitEuler( fEquation );      
     //pStepper = new G4SimpleRunge( fEquation );        
     //pStepper = new G4SimpleHeum( fEquation );         
-    pStepper = new G4ClassicalRK4( fEquation );       
     //pStepper = new G4HelixExplicitEuler( fEquation ); 
     //pStepper = new G4HelixImplicitEuler( fEquation ); 
     //pStepper = new G4HelixSimpleRunge( fEquation );   
     //pStepper = new G4CashKarpRKF45( fEquation );      
     //pStepper = new G4RKG3_Stepper( fEquation );       
-    //***endSTEPPER***
 
     G4ChordFinder *pChordFinder = new G4ChordFinder(ccalField,
-						    1.0e-2*mm, pStepper);
+                                                    1.e-1*mm, pStepper);
+    pChordFinder->SetDeltaChord(1.0e-3*mm);
     fieldMgr->SetChordFinder(pChordFinder);
+    fieldMgr->SetDeltaOneStep(1.0e-3*mm);
+    fieldMgr->SetDeltaIntersection(1.0e-4*mm);
+    G4PropagatorInField* fieldPropagator
+      = G4TransportationManager::GetTransportationManager()
+      ->GetPropagatorInField();
+    fieldPropagator->SetMinimumEpsilonStep(1.e-5*mm);
+    fieldPropagator->SetMaximumEpsilonStep(1.e-2*mm);
     fieldIsInitialized = true;
   }
 
