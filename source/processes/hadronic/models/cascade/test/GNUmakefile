@@ -82,11 +82,13 @@ d:	# ::: study cascade model parameters
 h:	# ::: compare h2 h1
 	make h2; make h1
 
-h1:	# ::: (H) A = 1 protiun
-	make t; rm -f cascade.out; cascade  10000 1 585 1 1 > cascade.out; make a;
-#	make t; rm -f cascade.out; cascade  100 1 585 1 1 > cascade.out; cat cascade.out
+h1:	# ::: (H) A = 1 protiun 2 * 585 = 1170
+#	make t; rm -f cascade.out; cascade  10000 1 585 1 1 > cascade.out; make a;
+	make t; rm -f cascade.out; cascade  10 1 585 1 1 > cascade.out; cat cascade.out
+#	make t; rm -f cascade.out; cascade  10000 1 585 1 1 > cascade.out; make a;
 
-h2:	# ::: (H) A = 2 deuterium
+
+h2:	# ::: (H) A = 2 deuterium 
 	rm -f cascade.out; cascade 10000 1 585 2 1 > cascade.out; make a;
 #	make t; rm -f cascade.out; cascade 2 1 585 2 1 > cascade.out; cat cascade.out
 
@@ -117,6 +119,9 @@ b: 	# ::: b(enchmark) testing
 
 t:	# ::: make test cascade
 	rm cascade; make cascade
+
+dox:	# ::: gnerate HTML and latex manuals of source using doxygen 
+	cd $(GI); p clean; cd $(GS); p clean; cd ~/public/html/system/;doxygen doxygen.config; cd $(RELD)/doxygen/latex/;make ps_2on1
 
 eps: 	# ::: generate eps-files for documentation. Naming h1p585k10.eps 
 #         ::: general naming skeme for plots: (subject in plots to be defined, sofar jus general collection)
