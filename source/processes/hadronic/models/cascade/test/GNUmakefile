@@ -76,16 +76,21 @@ p7:	# ::: problem 7 (H)  missing pions ::: CRITICAL, TO BE DONE
 	rm -r cascade.out; cascade 1000 1 585 1 1 > cascade.out; make a; 
 
 H1:	# ::: (H) A = 1 protiun
-	rm -r cascade.out cascade.eps; cascade 1000 1 585 1 1 > cascade.out; make a;
+	rm -r cascade.out cascade.eps; cascade 25 1 585 1 1 > cascade.out; cat cascade.out
+#	rm -r cascade.out cascade.eps; cascade 1000 1 585 1 1 > cascade.out; make a;
 
 H2:	# ::: (H) A = 2 deuterium
-	rm -r cascade.out cascade.eps; cascade 1000 1 585 2 1 > cascade.out; make a;
+	rm -r cascade.out cascade.eps; cascade 25 1 585 2 1 > cascade.out; cat cascade.out
+#	rm -r cascade.out cascade.eps; cascade 1000 1 585 2 1 > cascade.out; make a;
 
 H3:	# ::: (H) A = 3 tritium
 	rm -r cascade.out cascade.eps; cascade 1000 1 585 3 1 > cascade.out; make a;
 
 p8:	# ::: problem 8 (Zr) delta missing ::: general feature in codes, POSTPONED studies
 	rm -r cascade.out cascade.eps; cascade 1000 2 800 91 40 > cascade.out; make a;
+
+leak:	# ::: find memory leaks
+	valgrind cascade 1
 
 time: 	# :: timing for target t
 	time -v gmake t
@@ -97,7 +102,7 @@ b: 	# ::: b(enchmark) testing
 	rm -r benchmarks benchmark.out; make benchmarks; benchmarks > benchmarks.out; diff benchmarks.out benchmarks.data
 
 t:	# ::: make test cascade
-	gmake cascade
+	rm cascade; make cascade
 
 eps: 	# ::: generate eps-files for documentation
 	cp *.eps $(RELD)/pictures/
