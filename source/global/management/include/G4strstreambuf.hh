@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4strstreambuf.hh,v 1.8 2001-07-11 10:00:55 gunter Exp $
+// $Id: G4strstreambuf.hh,v 1.9 2003-03-27 16:41:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,6 +44,9 @@ extern G4strstreambuf G4cerrbuf;
 
 class G4strstreambuf : public G4std::streambuf
 {
+
+  typedef G4std::streambuf std_streambuf;
+
   public:
 
     G4strstreambuf();

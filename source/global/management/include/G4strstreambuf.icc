@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4strstreambuf.icc,v 1.7 2003-03-25 14:56:17 gcosmo Exp $
+// $Id: G4strstreambuf.icc,v 1.8 2003-03-27 16:41:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,7 +49,7 @@ G4strstreambuf::~G4strstreambuf()
 
 inline
 G4strstreambuf::G4strstreambuf(const G4strstreambuf& right)
-   : G4std::streambuf(), destination(right.destination),
+   : std_streambuf(), destination(right.destination),
      buffer(right.buffer), count(right.count), size(right.size)
 {
 }
