@@ -22,52 +22,54 @@
 /tracking/verbose 0
 /process/verbose 0
 /grdm/verbose 0
+/gun/energy   0 MeV
 #
 #
 # FIRST ION IS NA-24 (GND-STATE) BY BETA-DECAY.  THE RANGE OF NUCLEI DOES NOT
 # NEED TO BE RESTRICTED SINCE MG-24 IS THE ONLY PRODUCT AND IS STABLE.
 # 
-/grdm/ion 24 11 0
+/gun/particle ion
+/gun/ion 11 24 11 0
 /run/beamOn 1000
 #
 #
 # NE-24 BETA- DECAY.
 #
-/grdm/nucleusLimits 24 24 10 10
-/grdm/ion 24 10 0
+#/grdm/nucleusLimits 24 24 10 10
+/gun/ion 10 24 10 0
 /run/beamOn 1000
 #
 #
 # F-9 BETA- DECAY.
 #
-/grdm/nucleusLimits 24 24 9 9
-/grdm/ion 24 9 0
+#/grdm/nucleusLimits 24 24 9 9
+/gun/ion 9 24 9 0
 /run/beamOn 1000 
 #
 #
 # AL-24 (GND-STATE) BETA+ DECAY.
 #
-/grdm/nucleusLimits 24 24 13 13
-/grdm/ion 24 13 0
+#/grdm/nucleusLimits 24 24 13 13
+/gun/ion 13 24 13 0
 /run/beamOn 1000 
 #
 #
 # NA-24 (472 KEV METASTABLE STATE) BETA+ DECAY AND IT.
 #
-/grdm/nucleusLimits 24 24 11 11
-/grdm/ion 24 11 472
+#/grdm/nucleusLimits 24 24 11 11
+/gun/ion 11 24 11 472
 /run/beamOn 1000
 #
 #
 # CR-46 BETA+ DECAY.
 #
-/grdm/nucleusLimits 46 46 24 24
-/grdm/ion 46 24 0
+#/grdm/nucleusLimits 46 46 24 24
+/gun/ion 24 46 24 0
 /run/beamOn 1000
 #
 #
 # PO-215 ALPHA DECAY.
 #
-/grdm/nucleusLimits 215 215 84 84
-/grdm/ion 215 84 0
+#/grdm/nucleusLimits 215 215 84 84
+/gun/ion 84 215 84 0
 /run/beamOn 1000
