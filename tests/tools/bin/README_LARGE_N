@@ -1,0 +1,34 @@
+                            Large N running
+                            ===============
+
+Examples and tests directories can optionally have input files such as
+exampleN02.large_N.in.  Hadronic exercisers take "large_N" as an
+argument.
+
+The string "large_N" is used as a key.  The system is extensible, i.e,
+one could, in future, add other keys - "Large_N", "LARGE_N" or
+"very_large_N".  E.g., one could add exampleN02.Large_N.in or
+exampleN02.very_large_N.in
+
+To initiate a large N run:
+
+A) Interactively for run.sh, set environment variable:
+
+     setenv G4LARGE_N <key>  where key="large_N", for example.
+
+B) Remote running using g4allssy.sh, specify, e.g., "large_N" in the action
+   field, e.g.:
+
+     sungeant dev1 deb_NONISO geant4-01-00-ref-02-tags3 large_N all all all
+
+   "large_N" will be interpreted as "run" and G4LARGE_N will be set
+   to "large_N".
+
+Note: cvs branches "large_N" and "LARGE_N_BRANCH" are no longer used.
+For the record, this is how they were made:
+
+echo ../../t*/test[0-9][0-9].in ../../../examples/novice/*/e*.in ../../t*/*exer*cc
+cvs update ../../t*/test[0-9][0-9].in ../../../examples/novice/*/e*.in ../../t*/*exer*cc
+cvs tag -b LARGE_N_BRANCH ../../t*/test[0-9][0-9].in ../../../examples/novice/*/e*.in ../../t*/*exer*cc
+cvs update -r LARGE_N_BRANCH ../../t*/test[0-9][0-9].in ../../../examples/novice/*/e*.in ../../t*/*exer*cc
+cvs ci -m 'NEW LARGE N' ../../t*/test[0-9][0-9].in ../../../examples/novice/*/e*.in ../../t*/*exer*cc
