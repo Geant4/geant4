@@ -20,14 +20,14 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-#include "g4std/fstream"
+#include <fstream>
 #include "Histo.hh"
 
 
 int main(int argc,char* argv[])
 {
   
-  G4std::ifstream in(argv[1]),comp(argv[2]);
+  std::ifstream in(argv[1]),comp(argv[2]);
 
   odHisto hin,hcomp;
   char c,bla[80];

@@ -26,7 +26,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
+#include <fstream>
 
 class G4NeutronHPList
 {
@@ -55,9 +55,9 @@ class G4NeutronHPList
 
   void Dump();
   
-  void Init(G4std::ifstream & aDataFile, G4int nPar, G4double unit=1.);
+  void Init(std::ifstream & aDataFile, G4int nPar, G4double unit=1.);
   
-  void Init(G4std::ifstream & aDataFile, G4double unit=1.);
+  void Init(std::ifstream & aDataFile, G4double unit=1.);
 
   inline void SetLabel(G4double aLabel) { theLabel = aLabel; }
   

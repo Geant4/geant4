@@ -23,7 +23,7 @@
 
 #include "RadioactiveDecayGunmessenger.hh"
 
-#include "g4std/iostream"
+#include <iostream>
 ////////////////////////////////////////////////////////////////////////////////
 //
 RadioactiveDecayGunmessenger::RadioactiveDecayGunmessenger

@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33PhysicsList.cc,v 1.3 2002-11-04 10:57:48 dressel Exp $
+// $Id: Tst33PhysicsList.cc,v 1.4 2003-06-16 17:16:00 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "globals.hh"
-#include "g4std/iomanip"                
+#include <iomanip>                
 
 #include "Tst33PhysicsList.hh"
 #include "G4ParticleDefinition.hh"

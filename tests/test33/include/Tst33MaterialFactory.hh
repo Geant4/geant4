@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33MaterialFactory.hh,v 1.3 2002-11-20 13:09:16 dressel Exp $
+// $Id: Tst33MaterialFactory.hh,v 1.4 2003-06-16 17:15:53 gunter Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -38,13 +38,13 @@
 #define Tst33MaterialFactory_hh Tst33MaterialFactory_hh
 
 #include "globals.hh"
-#include "g4std/map"
+#include <map>
 
 class G4Material;
 class G4Element;
 
-typedef G4std::map< G4String , G4Element* > Tst33MapSymbolElement;
-typedef G4std::map< G4Element* , G4double > Tst33MapElementFraction;
+typedef std::map< G4String , G4Element* > Tst33MapSymbolElement;
+typedef std::map< G4Element* , G4double > Tst33MapElementFraction;
 
 class Tst33MaterialFactory{
 public:

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelTransport.hh,v 1.6 2002-10-16 16:26:58 dressel Exp $
+// $Id: G4ParallelTransport.hh,v 1.7 2003-06-16 17:12:40 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -40,7 +40,7 @@
 #ifndef G4ParallelTransport_hh
 #define G4ParallelTransport_hh G4ParallelTransport_hh
 
-#include "g4std/strstream"
+#include <strstream>
 
 #include "G4VProcess.hh"
 #include "globals.hh"

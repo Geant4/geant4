@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test18.cc,v 1.8 2001-07-11 10:10:10 gunter Exp $
+// $Id: test18.cc,v 1.9 2003-06-16 17:15:18 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,13 +55,13 @@
 #include "Tst18PrimaryGeneratorAction.hh"
 #include "Randomize.hh"
 
-#include "g4std/vector"
+#include <vector>
 
 G4bool drawEvent;
-G4std::vector<G4String> Particles;
-G4std::vector<G4double> Energies;
-G4std::vector<G4double> Weights;
-G4std::vector<G4double> Times;
+std::vector<G4String> Particles;
+std::vector<G4double> Energies;
+std::vector<G4double> Weights;
+std::vector<G4double> Times;
 
 #ifdef G4VIS_USE
 #include "Tst18VisManager.hh"

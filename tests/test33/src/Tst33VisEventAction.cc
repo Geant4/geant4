@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33VisEventAction.cc,v 1.5 2002-11-29 09:35:50 mdressel Exp $
+// $Id: Tst33VisEventAction.cc,v 1.6 2003-06-16 17:16:04 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,7 +97,7 @@ void Tst33VisEventAction::EndOfEventAction(const G4Event* evt)
       trj = dynamic_cast<G4Trajectory*>((*trajectoryContainer)[i]);
       if (trj) {
 	G4bool charged(false);
-	charged = G4std::fabs(trj->GetCharge()) > 0;
+	charged = std::fabs(trj->GetCharge()) > 0;
 	if (drawFlag == "all") {
 	  DrawTrajectory(*trj);
 	}

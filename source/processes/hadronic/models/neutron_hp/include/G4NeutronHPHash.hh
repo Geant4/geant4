@@ -24,7 +24,7 @@
 #define G4NeutronHPHash_h
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 
 class G4NeutronHPHash
 {
@@ -127,7 +127,7 @@ private:
 
   G4bool prepared;
   G4NeutronHPHash * theUpper;
-  G4std::vector<int> theIndex;
-  G4std::vector<G4NeutronHPDataPoint> theData; // the data
+  std::vector<int> theIndex;
+  std::vector<G4NeutronHPDataPoint> theData; // the data
 };
 #endif

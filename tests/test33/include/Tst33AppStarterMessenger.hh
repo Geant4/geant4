@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33AppStarterMessenger.hh,v 1.4 2003-05-20 12:02:02 dressel Exp $
+// $Id: Tst33AppStarterMessenger.hh,v 1.5 2003-06-16 17:15:52 gunter Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -37,14 +37,14 @@
 #ifndef Tst33AppStarterMessenger_hh
 #define Tst33AppStarterMessenger_hh Tst33AppStarterMessenger_hh
 
-#include "g4std/map"
+#include <map>
 #include "G4UImessenger.hh"
 
 class G4UIcmdWithAnInteger;
 class Tst33AppStarter;
 class Tst33VApplication;
 
-typedef G4std::map<G4UIcmdWithAnInteger *, G4String> Tst33SimComands;
+typedef std::map<G4UIcmdWithAnInteger *, G4String> Tst33SimComands;
 
 class Tst33AppStarterMessenger : public G4UImessenger{
 public:

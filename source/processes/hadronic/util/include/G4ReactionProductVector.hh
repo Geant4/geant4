@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReactionProductVector.hh,v 1.8 2002-12-12 19:18:39 gunter Exp $
+// $Id: G4ReactionProductVector.hh,v 1.9 2003-06-16 17:12:22 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,9 +37,9 @@
 #include "G4ios.hh"
 
 #include "G4ReactionProduct.hh"
-#include "g4std/vector"
+#include <vector>
 
-typedef G4std::vector<G4ReactionProduct *> G4ReactionProductVector;
+typedef std::vector<G4ReactionProduct *> G4ReactionProductVector;
 struct DeleteReactionProduct{ void operator()(G4ReactionProduct * aR){delete aR;} };
 
 #endif

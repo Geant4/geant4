@@ -34,7 +34,7 @@
 //#define histo
 
 #include "globals.hh"
-#include <g4std/map>
+#include <map>
 
 class G4Step;
 class Tst20ProcCallSA{
@@ -48,8 +48,8 @@ private:
   void print();
   
 private:
-  typedef G4std::map<G4String, G4int, G4std::less<G4String> > intMap;
-  typedef G4std::map<G4String, G4int, G4std::less<G4String> >::iterator intMapIter;
+  typedef std::map<G4String, G4int, std::less<G4String> > intMap;
+  typedef std::map<G4String, G4int, std::less<G4String> >::iterator intMapIter;
   intMap calls;  
   
 };

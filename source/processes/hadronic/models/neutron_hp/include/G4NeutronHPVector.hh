@@ -28,12 +28,12 @@
 #include "G4NeutronHPInterpolator.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
+#include <fstream>
 #include "G4InterpolationManager.hh"
 #include "G4NeutronHPInterpolator.hh"
 #include "G4NeutronHPHash.hh"
 #include <math.h>
-#include "g4std/vector"
+#include <vector>
 
 class G4NeutronHPVector
 {
@@ -195,12 +195,12 @@ class G4NeutronHPVector
   }
   void Dump();
   
-  inline void InitInterpolation(G4std::ifstream & aDataFile)
+  inline void InitInterpolation(std::ifstream & aDataFile)
   {
     theManager.Init(aDataFile);
   }
   
-  void Init(G4std::ifstream & aDataFile, G4int total, G4double ux=1., G4double uy=1.)
+  void Init(std::ifstream & aDataFile, G4int total, G4double ux=1., G4double uy=1.)
   {
     G4double x,y;
     for (G4int i=0;i<total;i++)
@@ -216,7 +216,7 @@ class G4NeutronHPVector
     }
   }
   
-  void Init(G4std::ifstream & aDataFile,G4double ux=1., G4double uy=1.)
+  void Init(std::ifstream & aDataFile,G4double ux=1., G4double uy=1.)
   {
     G4int total;
     aDataFile >> total;
@@ -486,11 +486,11 @@ class G4NeutronHPVector
     theBuffered.push_back(aX);
   }
   
-  G4std::vector<G4double> GetBlocked() {return theBlocked;}
-  G4std::vector<G4double> GetBuffered() {return theBuffered;}
+  std::vector<G4double> GetBlocked() {return theBlocked;}
+  std::vector<G4double> GetBuffered() {return theBuffered;}
   
-  void SetBlocked(const G4std::vector<G4double> &aBlocked) {theBlocked = aBlocked;}
-  void SetBuffered(const G4std::vector<G4double> &aBuffer) {theBuffered = aBuffer;}
+  void SetBlocked(const std::vector<G4double> &aBlocked) {theBlocked = aBlocked;}
+  void SetBuffered(const std::vector<G4double> &aBuffer) {theBuffered = aBuffer;}
 
   G4double Get15percentBorder();
   G4double Get50percentBorder();
@@ -524,8 +524,8 @@ class G4NeutronHPVector
   G4NeutronHPHash theHash;
   G4double maxValue;
   
-  G4std::vector<G4double> theBlocked;
-  G4std::vector<G4double> theBuffered;
+  std::vector<G4double> theBlocked;
+  std::vector<G4double> theBuffered;
   G4double the15percentBorderCash;
   G4double the50percentBorderCash;
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33Sigma.hh,v 1.1 2002-10-29 15:43:05 dressel Exp $
+// $Id: Tst33Sigma.hh,v 1.2 2003-06-16 17:15:55 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -37,7 +37,7 @@
 #ifndef Tst33Sigma_hh
 #define Tst33Sigma_hh Tst33Sigma_hh
 
-#include "g4std/iostream"
+#include <iostream>
 #include "globals.hh"
 
 class Tst33Sigma
@@ -101,6 +101,6 @@ class Tst33Sigma
 
 };
 
-G4std::ostream& operator<<(G4std::ostream &out, const Tst33Sigma &s);
+std::ostream& operator<<(std::ostream &out, const Tst33Sigma &s);
 
 #endif

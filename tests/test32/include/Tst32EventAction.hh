@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst32EventAction.hh,v 1.1 2002-06-13 12:16:35 jwellisc Exp $
+// $Id: Tst32EventAction.hh,v 1.2 2003-06-16 17:15:49 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -30,7 +30,7 @@
 
 #include "G4UserEventAction.hh"
 #include "globals.hh"
-#include "g4std/fstream"
+#include <fstream>
 
 class G4Event;
 
@@ -45,7 +45,7 @@ public:
   virtual void EndOfEventAction(const G4Event*);
   
 private:
-  G4std::ofstream TallyFile;
+  std::ofstream TallyFile;
 
 };
 

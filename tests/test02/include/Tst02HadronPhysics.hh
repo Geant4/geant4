@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst02HadronPhysics.hh,v 1.2 2001-07-11 10:09:34 gunter Exp $
+// $Id: Tst02HadronPhysics.hh,v 1.3 2003-06-16 17:14:39 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/vector"
+#include <vector>
 
 #include "G4VPhysicsConstructor.hh"
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.cc,v 1.12 2003-02-18 16:07:29 johna Exp $
+// $Id: G4Scene.cc,v 1.13 2003-06-16 17:14:15 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -148,7 +148,7 @@ void G4Scene::Clear () {
   }
 }
 
-G4std::ostream& operator << (G4std::ostream& os, const G4Scene& s) {
+std::ostream& operator << (std::ostream& os, const G4Scene& s) {
 
   size_t i;
 

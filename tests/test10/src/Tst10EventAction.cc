@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst10EventAction.cc,v 1.5 2001-07-11 10:09:49 gunter Exp $
+// $Id: Tst10EventAction.cc,v 1.6 2003-06-16 17:14:51 gunter Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -41,7 +41,7 @@
 #include "G4VVisManager.hh"
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
-#include "g4std/iostream"
+#include <iostream>
 
 Tst10EventAction::Tst10EventAction()
 {;}

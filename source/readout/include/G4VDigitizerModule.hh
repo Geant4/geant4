@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDigitizerModule.hh,v 1.6 2001-07-11 10:08:31 gunter Exp $
+// $Id: G4VDigitizerModule.hh,v 1.7 2003-06-16 17:12:47 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -32,7 +32,7 @@ class G4DigiManager;
 class G4VDigiCollection;
 #include "globals.hh"
 //#include "g4rw/tvordvec.h"
-#include "g4std/vector"
+#include <vector>
 
 // class description:
 //
@@ -69,7 +69,7 @@ class G4VDigitizerModule
   protected:
     G4DigiManager* DigiManager;
     G4String moduleName;
-    G4std::vector<G4String> collectionName;
+    std::vector<G4String> collectionName;
     G4int verboseLevel;
 
   public:

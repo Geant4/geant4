@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneHandler.cc,v 1.23 2003-05-30 13:01:30 johna Exp $
+// $Id: G4VisCommandsSceneHandler.cc,v 1.24 2003-06-16 17:14:24 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
@@ -35,7 +35,7 @@
 #include "G4UIcommand.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4ios.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 G4VVisCommandSceneHandler::G4VVisCommandSceneHandler () {}
 
@@ -206,8 +206,8 @@ G4VisCommandSceneHandlerCreate::~G4VisCommandSceneHandlerCreate () {
 
 G4String G4VisCommandSceneHandlerCreate::NextName () {
   char nextName [20];
-  G4std::ostrstream ost (nextName, 20);
-  ost << "scene-handler-" << fId << G4std::ends;
+  std::ostrstream ost (nextName, 20);
+  ost << "scene-handler-" << fId << std::ends;
   return nextName;
 }
 
@@ -239,7 +239,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand*,
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
   G4String graphicsSystem, newName;
-  G4std::istrstream is ((char*)newValue.data());
+  std::istrstream is ((char*)newValue.data());
   is >> graphicsSystem >> newName;
 
   const G4GraphicsSystemList& gsl =
@@ -354,7 +354,7 @@ G4String G4VisCommandSceneHandlerList::GetCurrentValue (G4UIcommand*) {
 void G4VisCommandSceneHandlerList::SetNewValue (G4UIcommand*,
 						G4String newValue) {
   G4String name, verbosityString;
-  G4std::istrstream is ((char*)newValue.data());
+  std::istrstream is ((char*)newValue.data());
   is >> name >> verbosityString;
   G4VisManager::Verbosity verbosity =
     fpVisManager->GetVerbosityValue(verbosityString);

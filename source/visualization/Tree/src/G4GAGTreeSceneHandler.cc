@@ -24,7 +24,7 @@
 // A scene handler to dump geometry hierarchy to GAG.
 
 #include "G4Types.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 #include "G4GAGTreeSceneHandler.hh"
 
@@ -158,7 +158,7 @@ void G4GAGTreeSceneHandler::RequestPrimitives (const G4VSolid&)
     // Step 1: Initialize the extension
   const int CHAR_LENGTH = 1024;
   char pv_ext [CHAR_LENGTH];  pv_ext[0] = '\0';
-  G4std::ostrstream ost (pv_ext, CHAR_LENGTH);
+  std::ostrstream ost (pv_ext, CHAR_LENGTH);
 
     // Step 2: Generate the extension
       // copy number 

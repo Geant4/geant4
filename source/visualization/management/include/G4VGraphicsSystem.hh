@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsSystem.hh,v 1.9 2001-07-11 10:09:14 gunter Exp $
+// $Id: G4VGraphicsSystem.hh,v 1.10 2003-06-16 17:14:07 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,7 +84,7 @@ protected:
   Functionality  fFunctionality;
 };
 
-G4std::ostream& operator << (G4std::ostream& os, const G4VGraphicsSystem& gs);
+std::ostream& operator << (std::ostream& os, const G4VGraphicsSystem& gs);
 
 #include "G4VGraphicsSystem.icc"
 

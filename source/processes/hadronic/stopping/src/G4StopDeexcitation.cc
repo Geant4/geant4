@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StopDeexcitation.cc,v 1.8 2002-12-12 19:18:39 gunter Exp $
+// $Id: G4StopDeexcitation.cc,v 1.9 2003-06-16 17:12:16 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -40,7 +40,7 @@
 
 
 #include "G4StopDeexcitation.hh"
-#include "g4std/vector"
+#include <vector>
 
 #include "globals.hh"
 #include "Randomize.hh"

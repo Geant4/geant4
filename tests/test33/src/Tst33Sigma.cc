@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33Sigma.cc,v 1.3 2002-11-04 10:57:48 dressel Exp $
+// $Id: Tst33Sigma.cc,v 1.4 2003-06-16 17:16:01 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -83,7 +83,7 @@ G4int Tst33Sigma::Calculate() const {
   if (fcalc==0) {
     if(fWsum>0) {
       fMean=fWXsum/fWsum;
-      fSigma = G4std::sqrt( fWXXsum / fWsum - fMean * fMean);
+      fSigma = std::sqrt( fWXXsum / fWsum - fMean * fMean);
       fcalc = 1;
     } else {
       fcalc = -1;
@@ -124,7 +124,7 @@ void Tst33Sigma::Error(const G4String &m)
   G4cout << "ERROR: Tst33Sigma::" << m << G4endl;
 }
 
-G4std::ostream& operator<<(G4std::ostream &out, const Tst33Sigma &s)
+std::ostream& operator<<(std::ostream &out, const Tst33Sigma &s)
 {
   out << "entries                             : " << s.GetEntries() << "\n";
   out << "Sum(w)                              : " << s.GetSumOfWeights()<<"\n";

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPArbitaryTab.hh,v 1.8 2002-12-12 19:18:10 gunter Exp $
+// $Id: G4NeutronHPArbitaryTab.hh,v 1.9 2003-06-16 17:10:32 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPArbitaryTab_h
@@ -31,7 +31,7 @@
 #include "G4NeutronHPVector.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
+#include <fstream>
 #include "G4VNeutronHPEDis.hh"
 #include "G4InterpolationManager.hh"
 
@@ -49,7 +49,7 @@ class G4NeutronHPArbitaryTab : public G4VNeutronHPEDis
    if(theDistFunc!=NULL) delete [] theDistFunc;
   }
   
-  inline void Init(G4std::ifstream & theData)
+  inline void Init(std::ifstream & theData)
   {
     G4int i;
     theFractionalProb.Init(theData, eV);

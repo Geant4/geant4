@@ -65,7 +65,7 @@ Nucleus::~Nucleus ()
 {;}
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4std::ostream &operator << (G4std::ostream &s, const Nucleus &q)
+std::ostream &operator << (std::ostream &s, const Nucleus &q)
 //
 //
 // Definition of the insertion operator << to provide the nucleus limits to

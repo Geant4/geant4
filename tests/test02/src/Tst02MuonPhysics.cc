@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst02MuonPhysics.cc,v 1.3 2001-07-11 10:09:35 gunter Exp $
+// $Id: Tst02MuonPhysics.cc,v 1.4 2003-06-16 17:14:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,7 +30,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"   
+#include <iomanip>   
 
 
 Tst02MuonPhysics::Tst02MuonPhysics(const G4String& name)

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26EventAction.hh,v 1.4 2003-03-13 12:00:12 maire Exp $
+// $Id: Tst26EventAction.hh,v 1.5 2003-06-16 17:15:45 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,7 +44,7 @@
 
 #include "G4UserEventAction.hh"
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 
 class Tst26RunAction;
 class Tst26EventMessenger;
@@ -79,8 +79,8 @@ class Tst26EventAction : public G4UserEventAction
     G4double          Eabs3;
     G4double          Eabs4;
     G4double          Eth;
-    G4std::vector<G4double> Evert;
-    G4std::vector<G4int>    Nvert;
+    std::vector<G4double> Evert;
+    std::vector<G4int>    Nvert;
     
     Tst26EventMessenger* eventMessenger;
 };

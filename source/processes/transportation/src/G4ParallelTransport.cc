@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelTransport.cc,v 1.10 2003-06-04 15:45:32 gcosmo Exp $
+// $Id: G4ParallelTransport.cc,v 1.11 2003-06-16 17:12:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -32,7 +32,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4Types.hh"
-#include "g4std/strstream"
+#include <strstream>
 #include "G4ParallelTransport.hh"
 #include "G4VPGeoDriver.hh"
 #include "G4VParallelStepper.hh"
@@ -110,7 +110,7 @@ G4ParallelTransport::PostStepDoIt(const G4Track& aTrack,
 {
   if (!(aStep.GetStepLength() > 0.)) {
     char st[1000];
-    G4std::ostrstream os(st,1000);
+    std::ostrstream os(st,1000);
     os << "G4PArallelTransport::InitPostDoIt: StepLength() == 0.\n"
        << "pos: " << aTrack.GetPosition() << ", " 
        << "dir: " << aTrack.GetMomentumDirection() << "\n"

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPPhotonXSection.hh,v 1.7 2002-12-12 19:18:16 gunter Exp $
+// $Id: G4NeutronHPPhotonXSection.hh,v 1.8 2003-06-16 17:11:01 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPPhotonXSection_h
@@ -31,7 +31,7 @@
 #include "G4NeutronHPVector.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
+#include <fstream>
 #include "globals.hh"
 #include "G4VNeutronVector.hh"
 
@@ -57,7 +57,7 @@ class G4NeutronHPPhotonXSection
     if(theExDisFlag != NULL) delete [] theExDisFlag;
   }
   
-  inline void Init(G4std::ifstream & aDataFile)
+  inline void Init(std::ifstream & aDataFile)
   {
     aDataFile  >> nChannels >> targetMass;
     if(nChannels!=1) 

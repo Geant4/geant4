@@ -32,7 +32,7 @@
 #include "G4ParticleTable.hh"
 #include "G4Material.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"                
+#include <iomanip>                
 
 #include "G4Mars5GeV.hh"
 #include "G4HadronInelasticProcess.hh"

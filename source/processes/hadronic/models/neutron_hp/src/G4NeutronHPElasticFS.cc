@@ -51,7 +51,7 @@
       hasXsec = false;
       return;
     }
-    G4std::ifstream theData(filename, G4std::ios::in);
+    std::ifstream theData(filename, std::ios::in);
     theData >> repFlag >> targetMass >> frameFlag;
     if(repFlag==1)
     {

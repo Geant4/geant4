@@ -239,17 +239,17 @@ G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass, G4double tem
       return 0.0;
     }
     G4double ek = kineticEnergy/GeV;
-    G4float ekin = G4std::min( 4.0, G4std::max( 0.1, ek ) );
-    const G4float atno = G4std::min( 120., aEff ); 
+    G4float ekin = std::min( 4.0, std::max( 0.1, ek ) );
+    const G4float atno = std::min( 120., aEff ); 
     const G4float gfa = 2.0*((aEff-1.0)/70.)*exp(-(aEff-1.0)/70.);
     //
     // 0.35 value at 1 GeV
     // 0.05 value at 0.1 GeV
     //
-    G4float cfa = G4std::max( 0.15, 0.35 + ((0.35-0.05)/2.3)*log(ekin) );
+    G4float cfa = std::max( 0.15, 0.35 + ((0.35-0.05)/2.3)*log(ekin) );
     G4float exnu = 7.716 * cfa * exp(-cfa)
       * ((atno-1.0)/120.)*exp(-(atno-1.0)/120.);
-    G4float fpdiv = G4std::max( 0.5, 1.0-0.25*ekin*ekin );
+    G4float fpdiv = std::max( 0.5, 1.0-0.25*ekin*ekin );
     //
     // pnBlackTrackEnergy  is the kinetic energy (in GeV) available for
     //                     proton/neutron black track particles
@@ -273,8 +273,8 @@ G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass, G4double tem
       pnBlackTrackEnergy *= 1.0 + ran1*gfa;
       dtaBlackTrackEnergy *= 1.0 + ran2*gfa;
     }
-    pnBlackTrackEnergy = G4std::max( 0.0, pnBlackTrackEnergy );
-    dtaBlackTrackEnergy = G4std::max( 0.0, dtaBlackTrackEnergy );
+    pnBlackTrackEnergy = std::max( 0.0, pnBlackTrackEnergy );
+    dtaBlackTrackEnergy = std::max( 0.0, dtaBlackTrackEnergy );
     while( pnBlackTrackEnergy+dtaBlackTrackEnergy >= ek )
     {
       pnBlackTrackEnergy *= 1.0 - 0.5*G4UniformRand();
@@ -299,9 +299,9 @@ G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass, G4double tem
     G4double ek = kineticEnergy/GeV;
     G4double ekLog = log( ek );
     G4double aLog = log( aEff );
-    G4double em = G4std::min( 1.0, 0.2390 + 0.0408*aLog*aLog );
-    G4double temp1 = -ek * G4std::min( 0.15, 0.0019*aLog*aLog*aLog );
-    G4double temp2 = exp( G4std::max( expxl, G4std::min( expxu, -(ekLog-em)*(ekLog-em)*2.0 ) ) );
+    G4double em = std::min( 1.0, 0.2390 + 0.0408*aLog*aLog );
+    G4double temp1 = -ek * std::min( 0.15, 0.0019*aLog*aLog*aLog );
+    G4double temp2 = exp( std::max( expxl, std::min( expxu, -(ekLog-em)*(ekLog-em)*2.0 ) ) );
     G4double result = 0.0;
     if( abs( temp1 ) < 1.0 )
     {

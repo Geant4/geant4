@@ -24,7 +24,7 @@
 #define Histo_h
 
 #include "globals.hh"
-#include "g4std/iostream"
+#include <iostream>
 
 // Due to RW-STL transition problems this simpl histo class works only
 // with C++-arrays
@@ -95,7 +95,7 @@ public:
       return entries;
     }
 
-  void output(G4std::ostream& o) const
+  void output(std::ostream& o) const
     {
       //The statistical information
       o << "# Bins " << nbins << G4endl;
@@ -111,7 +111,7 @@ public:
       o << i*binwidth+lowerbound << ' ' << content[i-1] << G4endl;
     }
       
-  void input(G4std::istream& in)
+  void input(std::istream& in)
     {
       char c,dummy[80];
       double average,rms,bla;

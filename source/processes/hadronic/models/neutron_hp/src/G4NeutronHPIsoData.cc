@@ -37,7 +37,7 @@
     filename = aFile.GetName();
 //    if(filename=="") return false;
 #ifdef G4USE_STD_NAMESPACE
-    G4std::ifstream theChannel(filename);
+    std::ifstream theChannel(filename);
 #else
     ifstream theChannel(filename,ios::in|ios::nocreate);
 #endif

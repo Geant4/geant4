@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTrajectory.cc,v 1.11 2003-05-30 15:42:35 asaim Exp $
+// $Id: G4RayTrajectory.cc,v 1.12 2003-06-16 17:13:45 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -46,13 +46,13 @@ G4Allocator<G4RayTrajectory> G4RayTrajectoryAllocator;
 
 G4RayTrajectory :: G4RayTrajectory()
 {
-  positionRecord = new G4std::vector<G4RayTrajectoryPoint*>;
+  positionRecord = new std::vector<G4RayTrajectoryPoint*>;
 }
 
 G4RayTrajectory :: G4RayTrajectory(G4RayTrajectory & right)
 : G4VTrajectory()
 {
-  positionRecord = new G4std::vector<G4RayTrajectoryPoint*>;
+  positionRecord = new std::vector<G4RayTrajectoryPoint*>;
   for(size_t i=0;i<right.positionRecord->size();i++)
   {
     G4RayTrajectoryPoint* rightPoint = (G4RayTrajectoryPoint*)
@@ -112,7 +112,7 @@ void G4RayTrajectory::AppendStep(const G4Step* aStep)
   positionRecord->push_back(trajectoryPoint);
 }
 
-void G4RayTrajectory::ShowTrajectory(G4std::ostream&) const
+void G4RayTrajectory::ShowTrajectory(std::ostream&) const
 { }
 
 void G4RayTrajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPAngularP.hh,v 1.7 2002-12-12 19:18:10 gunter Exp $
+// $Id: G4NeutronHPAngularP.hh,v 1.8 2003-06-16 17:10:31 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPAngularP_h
@@ -45,7 +45,7 @@ class G4NeutronHPAngularP
     if(theProb!=NULL) delete [] theProb;
   }
   
-  inline void Init(G4std::ifstream & aDataFile)
+  inline void Init(std::ifstream & aDataFile)
   {
     G4double eNeu, cosTheta, probDist;
     G4int nProb;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst22GeneralPhysics.cc,v 1.1 2001-11-15 15:10:13 hpw Exp $
+// $Id: Tst22GeneralPhysics.cc,v 1.2 2003-06-16 17:15:35 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,7 +30,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"   
+#include <iomanip>   
 
 Tst22GeneralPhysics::Tst22GeneralPhysics(const G4String& name)
                      :  G4VPhysicsConstructor(name)

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForTransport.cc,v 1.14 2003-01-22 17:54:56 vnivanch Exp $
+// $Id: G4ParticleChangeForTransport.cc,v 1.15 2003-06-16 17:13:04 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -224,7 +224,7 @@ void G4ParticleChangeForTransport::DumpInfo() const
 
   G4cout.precision(3);
   G4cout << "        Touchable (pointer) : " 
-       << G4std::setw(20) << theTouchableHandle()
+       << std::setw(20) << theTouchableHandle()
        << G4endl; 
 }
 

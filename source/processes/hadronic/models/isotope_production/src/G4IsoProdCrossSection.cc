@@ -23,7 +23,7 @@
 #include "G4IsoProdCrossSections.hh"
 
 void G4IsoProdCrossSections::
-Init(G4std::ifstream & aDataSet)
+Init(std::ifstream & aDataSet)
 {
   G4int aNumberOfPoints;
   aDataSet>>aNumberOfPoints;

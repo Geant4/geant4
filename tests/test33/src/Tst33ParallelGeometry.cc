@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33ParallelGeometry.cc,v 1.8 2003-04-09 09:41:11 dressel Exp $
+// $Id: Tst33ParallelGeometry.cc,v 1.9 2003-06-16 17:15:59 gunter Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -33,7 +33,7 @@
 
 #include "Tst33ParallelGeometry.hh"
 
-#include "g4std/strstream"
+#include <strstream>
 
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"

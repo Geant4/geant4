@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FukuiRendererSceneHandler.cc,v 1.9 2002-09-02 04:39:21 stanaka Exp $
+// $Id: G4FukuiRendererSceneHandler.cc,v 1.10 2003-06-16 17:13:31 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,7 @@
 // #define DEBUG_FR_SCENE
 
      //----- header files
-#include "g4std/fstream"
+#include <fstream>
 //#include <strstream.h>
 #include <string.h>
 #include "globals.hh"

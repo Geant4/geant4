@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PiMinusStopC.cc,v 1.8 2002-12-12 19:18:38 gunter Exp $
+// $Id: G4PiMinusStopC.cc,v 1.9 2003-06-16 17:12:05 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -42,7 +42,7 @@
 
 #include "G4PiMinusStopC.hh"
 
-#include "g4std/vector"
+#include <vector>
 
 #include "globals.hh"
 #include "Randomize.hh"
@@ -121,11 +121,11 @@ G4PiMinusStopC::G4PiMinusStopC()
   // R ratio
   theR = 1. / (1. + npRatio);
 
-  _definitions = new G4std::vector<G4ParticleDefinition*>();
-  _momenta = new G4std::vector<G4LorentzVector*>();
+  _definitions = new std::vector<G4ParticleDefinition*>();
+  _momenta = new std::vector<G4LorentzVector*>();
 
-  G4std::vector<double> eKinVector;
-  G4std::vector<double> eKinDataVector;
+  std::vector<double> eKinVector;
+  std::vector<double> eKinDataVector;
   int i;
   for (i=0; i<eKinEntries; i++)
     {
@@ -135,8 +135,8 @@ G4PiMinusStopC::G4PiMinusStopC()
   eKinVector.push_back(eKin[eKinEntries]);
   _distributionE = new G4DistributionGenerator(eKinVector,eKinDataVector);
 
-  G4std::vector<double> angleVector;
-  G4std::vector<double> angleDataVector;
+  std::vector<double> angleVector;
+  std::vector<double> angleDataVector;
   for (i=0; i<angleEntries; i++)
     {
       angleVector.push_back(angle[i]);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPDeExGammas.hh,v 1.8 2002-12-12 19:18:11 gunter Exp $
+// $Id: G4NeutronHPDeExGammas.hh,v 1.9 2003-06-16 17:10:36 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPDeExGammas_h
@@ -29,7 +29,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
+#include <fstream>
 #include "G4ReactionProductVector.hh"
 #include "G4Gamma.hh"
 #include "G4NeutronHPLevel.hh"
@@ -54,7 +54,7 @@ class G4NeutronHPDeExGammas
     if(theLevels!=NULL) delete [] theLevels;
   }
   
-  void Init(G4std::ifstream & aDataFile);
+  void Init(std::ifstream & aDataFile);
 
   inline G4ReactionProductVector * GetDecayGammas(G4int aLevel)
   {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyPhysicsList.cc,v 1.4 2001-07-11 10:10:23 gunter Exp $
+// $Id: MyPhysicsList.cc,v 1.5 2003-06-16 17:15:28 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,7 +45,7 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"                
+#include <iomanip>                
 
 
 MyPhysicsList::MyPhysicsList():  G4VUserPhysicsList()

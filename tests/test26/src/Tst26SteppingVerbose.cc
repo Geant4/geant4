@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26SteppingVerbose.cc,v 1.2 2003-03-26 17:29:30 vnivanch Exp $
+// $Id: Tst26SteppingVerbose.cc,v 1.3 2003-06-16 17:15:48 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -70,27 +70,27 @@ void Tst26SteppingVerbose::StepInfo()
 	                    fN2ndariesPostStepDoIt;
       if(tN2ndariesTot>0){
 	G4cout << "    :----- List of 2ndaries - "
-	       << "#SpawnInStep=" << G4std::setw(3) << tN2ndariesTot
-	       << "(Rest="  << G4std::setw(2) << fN2ndariesAtRestDoIt
-	       << ",Along=" << G4std::setw(2) << fN2ndariesAlongStepDoIt
-	       << ",Post="  << G4std::setw(2) << fN2ndariesPostStepDoIt
+	       << "#SpawnInStep=" << std::setw(3) << tN2ndariesTot
+	       << "(Rest="  << std::setw(2) << fN2ndariesAtRestDoIt
+	       << ",Along=" << std::setw(2) << fN2ndariesAlongStepDoIt
+	       << ",Post="  << std::setw(2) << fN2ndariesPostStepDoIt
 	       << "), "
-	       << "#SpawnTotal=" << G4std::setw(3) << (*fSecondary).size()
+	       << "#SpawnTotal=" << std::setw(3) << (*fSecondary).size()
 	       << " ---------------"
 	       << G4endl;
 
 	for(size_t lp1=(*fSecondary).size()-tN2ndariesTot;
                         lp1<(*fSecondary).size(); lp1++){
 	  G4cout << "    : "
-		 << G4std::setw(6)
+		 << std::setw(6)
 		 << G4BestUnit((*fSecondary)[lp1]->GetPosition().x(),"Length")
-		 << G4std::setw(6)
+		 << std::setw(6)
 		 << G4BestUnit((*fSecondary)[lp1]->GetPosition().y(),"Length")
-		 << G4std::setw(6)
+		 << std::setw(6)
 		 << G4BestUnit((*fSecondary)[lp1]->GetPosition().z(),"Length")
-		 << G4std::setw(6)
+		 << std::setw(6)
 		 << G4BestUnit((*fSecondary)[lp1]->GetKineticEnergy(),"Energy")
-		 << G4std::setw(10)
+		 << std::setw(10)
 		 << (*fSecondary)[lp1]->GetDefinition()->GetParticleName();
 	  G4cout << G4endl;
 	}
@@ -127,27 +127,27 @@ void Tst26SteppingVerbose::PrintStep(G4bool firstStep)
 {
   if( firstStep || verboseLevel >= 3 )
     {
-      G4cout << G4std::setw( 5) << "#Step#"      << " "
-             << G4std::setw( 8) << "X(mm)"      << " " 
-	     << G4std::setw( 8) << "Y(mm)"      << " "
-             << G4std::setw( 8) << "Z(mm)"      << " "
-             << G4std::setw( 9) << "KinE(MeV)"  << " " 
-	     << G4std::setw( 8) << "dE(keV)"    << " "
-             << G4std::setw( 8) << "StepL(mm)"   << " "
-	     << G4std::setw(10) << "TrackL(cm)"  << " "
-             << G4std::setw( 9) << "idxCouple" << " "
-             << G4std::setw( 9) << "Material" << " "
-             << G4std::setw(10) << "NextVolume" << " "
-	     << G4std::setw( 8) << "ProcName"   << G4endl;
+      G4cout << std::setw( 5) << "#Step#"      << " "
+             << std::setw( 8) << "X(mm)"      << " " 
+	     << std::setw( 8) << "Y(mm)"      << " "
+             << std::setw( 8) << "Z(mm)"      << " "
+             << std::setw( 9) << "KinE(MeV)"  << " " 
+	     << std::setw( 8) << "dE(keV)"    << " "
+             << std::setw( 8) << "StepL(mm)"   << " "
+	     << std::setw(10) << "TrackL(cm)"  << " "
+             << std::setw( 9) << "idxCouple" << " "
+             << std::setw( 9) << "Material" << " "
+             << std::setw(10) << "NextVolume" << " "
+	     << std::setw( 8) << "ProcName"   << G4endl;
     }
-    G4cout << G4std::setw( 5) << fTrack->GetCurrentStepNumber() << " "
-                 << G4std::setw( 8) << fTrack->GetPosition().x()/mm  << " "
-                 << G4std::setw( 8) << fTrack->GetPosition().y()/mm  << " "
-                 << G4std::setw( 8) << fTrack->GetPosition().z()/mm  << " "
-                 << G4std::setw( 9) << fTrack->GetKineticEnergy()/MeV << " "
-                 << G4std::setw( 8) << fStep->GetTotalEnergyDeposit()/keV << " "
-                 << G4std::setw( 8) << fStep->GetStepLength()/mm << " "
-                 << G4std::setw(10) << fTrack->GetTrackLength()/cm << "     ";
+    G4cout << std::setw( 5) << fTrack->GetCurrentStepNumber() << " "
+                 << std::setw( 8) << fTrack->GetPosition().x()/mm  << " "
+                 << std::setw( 8) << fTrack->GetPosition().y()/mm  << " "
+                 << std::setw( 8) << fTrack->GetPosition().z()/mm  << " "
+                 << std::setw( 9) << fTrack->GetKineticEnergy()/MeV << " "
+                 << std::setw( 8) << fStep->GetTotalEnergyDeposit()/keV << " "
+                 << std::setw( 8) << fStep->GetStepLength()/mm << " "
+                 << std::setw(10) << fTrack->GetTrackLength()/cm << "     ";
 
   if( firstStep ) {
     G4cout << "                    ";
@@ -155,13 +155,13 @@ void Tst26SteppingVerbose::PrintStep(G4bool firstStep)
     const G4MaterialCutsCouple* couple = fTrack->GetMaterialCutsCouple();
     G4String mate = couple->GetMaterial()->GetName();
     G4int idx = couple->GetIndex();
-    G4cout << G4std::setw(5) << idx << "      " << mate << "       ";
+    G4cout << std::setw(5) << idx << "      " << mate << "       ";
   }
 
   if( fTrack->GetNextVolume() != 0 ) {
-      G4cout << G4std::setw(10) << fTrack->GetVolume()->GetName() << "    ";
+      G4cout << std::setw(10) << fTrack->GetVolume()->GetName() << "    ";
   } else {
-      G4cout << G4std::setw(10) << "OutOfWorld    ";
+      G4cout << std::setw(10) << "OutOfWorld    ";
   }
 
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.8 2003-06-10 17:13:32 gcosmo Exp $
+// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.9 2003-06-16 17:13:39 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,7 +66,7 @@ G4OpenGLImmediateSceneHandler::~G4OpenGLImmediateSceneHandler ()
   fSceneCount--;
 }
 
-#include "g4std/iomanip"
+#include <iomanip>
 
 void G4OpenGLImmediateSceneHandler::BeginPrimitives
 (const G4Transform3D& objectTransformation) {
@@ -79,7 +79,7 @@ void G4OpenGLImmediateSceneHandler::BeginPrimitives
   G4cout << "G4OpenGLTransform3D matrix:";
   for (int i = 0; i < 16; i++) {
     if ((i % 4) == 0) G4cout << '\n';
-    G4cout << G4std::setw (15) << m[i];
+    G4cout << std::setw (15) << m[i];
   }
   G4cout << G4endl;
   *****************************************/

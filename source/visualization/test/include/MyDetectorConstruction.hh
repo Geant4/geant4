@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyDetectorConstruction.hh,v 1.4 2001-07-11 10:09:24 gunter Exp $
+// $Id: MyDetectorConstruction.hh,v 1.5 2003-06-16 17:14:33 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -31,7 +31,7 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 #include "G4Material.hh"
-#include "g4std/vector"
+#include <vector>
 
 class MyDetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -58,7 +58,7 @@ class MyDetectorConstruction : public G4VUserDetectorConstruction
      G4double trackerHight;
      G4double trackerPos;
 
-     G4std::vector<G4Material*> materialPointerStore;
+     std::vector<G4Material*> materialPointerStore;
 
   public:
      inline void SetCalMaterial(G4String name)

@@ -96,7 +96,7 @@
         index = theMaterial->GetElement(i)->GetIndex();
         if(random<=running/sum) break;
       }
-      if(i==n) i=G4std::max(0, n-1);
+      if(i==n) i=std::max(0, n-1);
       delete [] xSec;
     }
     return theCapture[index].ApplyYourself(aTrack);

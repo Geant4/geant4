@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33PVolumeStore.hh,v 1.4 2003-04-09 09:41:10 dressel Exp $
+// $Id: Tst33PVolumeStore.hh,v 1.5 2003-06-16 17:15:54 gunter Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -39,11 +39,11 @@
 #define Tst33PVolumeStore_hh Tst33PVolumeStore_hh
 
 #include "globals.hh"
-#include "g4std/set"
+#include <set>
 #include "G4GeometryCell.hh"
 #include "G4GeometryCellComp.hh"
 
-typedef G4std::set< G4GeometryCell, G4GeometryCellComp > Tst33SetGeometryCell;
+typedef std::set< G4GeometryCell, G4GeometryCellComp > Tst33SetGeometryCell;
 
 class Tst33PVolumeStore {
 public:

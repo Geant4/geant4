@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.hh,v 1.11 2002-11-27 12:33:29 johna Exp $
+// $Id: G4VisCommandsViewerSet.hh,v 1.12 2003-06-16 17:14:13 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -31,7 +31,7 @@
 
 #include "G4VisCommandsViewer.hh"
 
-#include "g4std/vector"
+#include <vector>
 
 class G4UIcommand;
 class G4UIcmdWithAString;

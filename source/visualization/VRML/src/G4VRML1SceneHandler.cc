@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1SceneHandler.cc,v 1.7 2002-06-23 03:31:50 stanaka Exp $
+// $Id: G4VRML1SceneHandler.cc,v 1.8 2003-06-16 17:13:58 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML1SceneHandler.cc
@@ -37,7 +37,7 @@
 //#define DEBUG_FR_SCENE
 
 #include <unistd.h>
-#include "g4std/fstream"
+#include <fstream>
 
 #include "globals.hh"
 #include "G4VPhysicalVolume.hh"

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonC12.cc,v 1.7 2001-10-30 22:02:02 vnivanch Exp $
+// $Id: G4IonC12.cc,v 1.8 2003-06-16 17:15:14 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,8 +33,8 @@
 // **********************************************************************
 // ----------------------------------------------------------------------
 
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4IonC12.hh"
 

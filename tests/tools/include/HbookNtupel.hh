@@ -29,7 +29,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include "HbookType.hh"
-#include "g4std/vector"
+#include <vector>
 
 extern "C"
 {

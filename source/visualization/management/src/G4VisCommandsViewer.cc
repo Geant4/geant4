@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.36 2003-05-30 13:01:30 johna Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.37 2003-06-16 17:14:25 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -38,7 +38,7 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 G4VVisCommandViewer::G4VVisCommandViewer () {}
 
@@ -176,7 +176,7 @@ G4VisCommandViewerCreate::~G4VisCommandViewerCreate () {
 G4String G4VisCommandViewerCreate::NextName () {
   const int charLength = 100;
   char nextName [charLength];
-  G4std::ostrstream ost (nextName, charLength);
+  std::ostrstream ost (nextName, charLength);
   G4VSceneHandler* sceneHandler = fpVisManager -> GetCurrentSceneHandler ();
   ost << "viewer-" << fId << " (";
   if (sceneHandler) {
@@ -185,7 +185,7 @@ G4String G4VisCommandViewerCreate::NextName () {
   else {
     ost << "no_scene_handlers";
   }
-  ost << ")" << G4std::ends;
+  ost << ")" << std::ends;
   return nextName;
 }
 
@@ -215,7 +215,7 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4String sceneHandlerName, newName;
   G4int windowSizeHint;
-  G4std::istrstream is ((char*)newValue.data());
+  std::istrstream is ((char*)newValue.data());
   is >> sceneHandlerName;
 
   // Now need to handle the possibility that the second string
@@ -577,7 +577,7 @@ G4String G4VisCommandViewerList::GetCurrentValue (G4UIcommand*) {
 
 void G4VisCommandViewerList::SetNewValue (G4UIcommand*, G4String newValue) {
   G4String name, verbosityString;
-  G4std::istrstream is ((char*)newValue.data());
+  std::istrstream is ((char*)newValue.data());
   is >> name >> verbosityString;
   G4String shortName = fpVisManager -> ViewerShortName (name);
   G4VisManager::Verbosity verbosity =

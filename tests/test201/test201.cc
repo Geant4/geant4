@@ -22,7 +22,7 @@
 //
 
 //
-// $Id: test201.cc,v 1.12 2001-07-11 10:10:19 gunter Exp $
+// $Id: test201.cc,v 1.13 2003-06-16 17:15:27 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,8 +36,8 @@
 #include <stdlib.h>
 
 #include "globals.hh"
-G4std::ostream& g4cout = G4cout;
-G4std::ostream& g4cerr = G4cerr;
+std::ostream& g4cout = G4cout;
+std::ostream& g4cerr = G4cerr;
 #include "test201DetectorConstruction.hh"
 #include "MyPhysicsList.hh"
 #include "MyRunAction.hh"

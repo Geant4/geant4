@@ -21,19 +21,19 @@
 // ********************************************************************
 //
 //
-// $Id: test16.hadronic.exerciser.cc,v 1.11 2001-10-23 10:57:39 gcosmo Exp $
+// $Id: test16.hadronic.exerciser.cc,v 1.12 2003-06-16 17:15:09 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "globals.hh"
 #include "G4UnitsTable.hh"
-#include "g4std/vector"
+#include <vector>
 
 static void OutputCases
 (G4int N,  // Number of events per case.
- const G4std::vector <G4String> & particleNameList,
- const G4std::vector <G4double> & energyList,
- const G4std::vector <G4String> & materialNameList) {
+ const std::vector <G4String> & particleNameList,
+ const std::vector <G4double> & energyList,
+ const std::vector <G4String> & materialNameList) {
 
   for (size_t iMaterial = 0;
        iMaterial < materialNameList.size ();
@@ -84,16 +84,16 @@ int main (int argc, char** argv) {
     "\n/run/initialize"
     "\n/gun/direction 1 0 0";
 
-  G4std::vector <G4String> particleNameList;
+  std::vector <G4String> particleNameList;
   particleNameList.push_back ("proton");
   particleNameList.push_back ("neutron");
 
-  G4std::vector <G4double> energyList;
+  std::vector <G4double> energyList;
   energyList.push_back (1 * GeV);
   energyList.push_back (10 * GeV);
   energyList.push_back (20 * GeV);
 
-  G4std::vector <G4String> materialNameList;
+  std::vector <G4String> materialNameList;
   materialNameList.push_back ("Pb");
   materialNameList.push_back ("Al");
   materialNameList.push_back ("Air");

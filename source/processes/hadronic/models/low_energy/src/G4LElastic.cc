@@ -174,7 +174,7 @@ G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
    if (verboseLevel > 1)
       G4cout << "rr=" << rr << G4endl;
    G4double cost = 1. - rr;
-   G4double sint = sqrt(G4std::max(rr*(2. - rr), 0.));
+   G4double sint = sqrt(std::max(rr*(2. - rr), 0.));
    if (sint == 0.) return &theParticleChange;
     if (verboseLevel > 1)
       G4cout << "cos(t)=" << cost << "  sin(t)=" << sint << G4endl;
@@ -200,10 +200,10 @@ G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
    b = 2*p*p*(m1*cost*cost-etot);
    c = p*p*p*p*sint*sint;
    
-   G4double de = (-b-sqrt(G4std::max(0.0,b*b-4.*a*c)))/(2.*a);
+   G4double de = (-b-sqrt(std::max(0.0,b*b-4.*a*c)))/(2.*a);
    G4double e1 = sqrt(p*p+m1*m1)-de;
    G4double p12=e1*e1-m1*m1;
-   p1 = sqrt(G4std::max(0.0,p12));
+   p1 = sqrt(std::max(0.0,p12));
    px = p1*sint*sin(phi);
    py = p1*sint*cos(phi);
    pz = p1*cost;

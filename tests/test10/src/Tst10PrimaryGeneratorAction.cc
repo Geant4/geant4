@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst10PrimaryGeneratorAction.cc,v 1.5 2001-07-11 10:09:49 gunter Exp $
+// $Id: Tst10PrimaryGeneratorAction.cc,v 1.6 2003-06-16 17:14:53 gunter Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -37,8 +37,8 @@
 #include "G4ParticleDefinition.hh"
 #include "Randomize.hh"
 #include "globals.hh"
-#include "g4std/iostream"
-#include "g4std/fstream"
+#include <iostream>
+#include <fstream>
 
 Tst10PrimaryGeneratorAction::Tst10PrimaryGeneratorAction()
 {

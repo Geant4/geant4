@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst24PhysicsList.cc,v 1.2 2002-11-26 12:15:09 hpw Exp $
+// $Id: Tst24PhysicsList.cc,v 1.3 2003-06-16 17:15:41 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -41,7 +41,7 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"                
+#include <iomanip>                
 
 
 Tst24PhysicsList::Tst24PhysicsList():  G4VUserPhysicsList()

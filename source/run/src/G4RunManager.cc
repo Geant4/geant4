@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.79 2003-05-22 00:48:18 asaim Exp $
+// $Id: G4RunManager.cc,v 1.80 2003-06-16 17:12:51 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,7 +60,7 @@
 #include "G4Material.hh"
 #include "G4ExceptionHandler.hh"
 #include "G4ios.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 G4RunManager* G4RunManager::fRunManager = 0;
 
@@ -100,7 +100,7 @@ G4RunManager::G4RunManager()
   eventManager = new G4EventManager();
   timer = new G4Timer();
   runMessenger = new G4RunMessenger(this);
-  previousEvents = new G4std::vector<G4Event*>;
+  previousEvents = new std::vector<G4Event*>;
   defaultRegion = new G4Region("DefaultRegionForTheWorld");
   defaultRegion->SetProductionCuts(G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
   G4ParticleTable::GetParticleTable()->CreateMessenger();
@@ -514,7 +514,7 @@ void G4RunManager::DefineWorldVolume(G4VPhysicalVolume* worldVol,
                 FatalException,
                 "Default world region should have a unique logical volume.");
     }
-    G4std::vector<G4LogicalVolume*>::iterator lvItr
+    std::vector<G4LogicalVolume*>::iterator lvItr
      = defaultRegion->GetRootLogicalVolumeIterator();
     defaultRegion->RemoveRootLogicalVolume(*lvItr);
     if(verboseLevel>1) G4cout << (*lvItr)->GetName()
@@ -583,7 +583,7 @@ void G4RunManager::rndmSaveThisRun()
   
   G4String fileIn  = randomNumberStatusDir + "currentRun.rndm";
  
-  G4std::ostrstream os;
+  std::ostrstream os;
   os << "run" << runNumber << ".rndm" << '\0';
   G4String fileOut = randomNumberStatusDir + os.str();  
 
@@ -603,7 +603,7 @@ void G4RunManager::rndmSaveThisEvent()
   
   G4String fileIn  = randomNumberStatusDir + "currentEvent.rndm";
 
-  G4std::ostrstream os;
+  std::ostrstream os;
   os << "run" << currentRun->GetRunID() << "evt" << currentEvent->GetEventID()
      << ".rndm" << '\0';
   G4String fileOut = randomNumberStatusDir + os.str();       
@@ -616,7 +616,7 @@ void G4RunManager::rndmSaveThisEvent()
 void G4RunManager::RestoreRandomNumberStatus(G4String fileN)
 {
   G4String fileNameWithDirectory;
-  if(fileN.index("/")==G4std::string::npos)
+  if(fileN.index("/")==std::string::npos)
   { fileNameWithDirectory = randomNumberStatusDir+fileN; }
   else
   { fileNameWithDirectory = fileN; }
@@ -644,7 +644,7 @@ void G4RunManager::DumpRegion(G4Region* region) const
   {
     G4cout << "Region " << region->GetName() << G4endl;
     G4cout << " Materials : ";
-    G4std::vector<G4Material*>::const_iterator mItr = region->GetMaterialIterator();
+    std::vector<G4Material*>::const_iterator mItr = region->GetMaterialIterator();
     size_t nMaterial = region->GetNumberOfMaterials();
     for(size_t iMate=0;iMate<nMaterial;iMate++)
     {

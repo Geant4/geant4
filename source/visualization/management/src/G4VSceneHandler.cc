@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.26 2003-05-30 13:01:27 johna Exp $
+// $Id: G4VSceneHandler.cc,v 1.27 2003-06-16 17:14:17 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,7 +31,7 @@
 #include "G4VSceneHandler.hh"
 
 #include "G4ios.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 #include "G4VisManager.hh"
 #include "G4VGraphicsSystem.hh"
@@ -88,8 +88,8 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
   fpScene = pVMan -> GetCurrentScene ();
   if (name == "") {
     char charname [50];
-    G4std::ostrstream ost (charname, 50);
-    ost << fSystem.GetName () << '-' << fSceneHandlerId << G4std::ends;
+    std::ostrstream ost (charname, 50);
+    ost << fSystem.GetName () << '-' << fSceneHandlerId << std::ends;
     fName = charname;
   }
   else {
@@ -436,7 +436,7 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
 
   // Traverse geometry tree and send drawing primitives to window(s).
 
-  const G4std::vector<G4VModel*>& runDurationModelList =
+  const std::vector<G4VModel*>& runDurationModelList =
     fpScene -> GetRunDurationModelList ();
 
   if (runDurationModelList.size ()) {
@@ -622,7 +622,7 @@ G4double G4VSceneHandler::GetMarkerSize (const G4VMarker& marker,
   return size;
 }
 
-G4std::ostream& operator << (G4std::ostream& os, const G4VSceneHandler& s) {
+std::ostream& operator << (std::ostream& os, const G4VSceneHandler& s) {
 
   os << "Scene handler " << s.fName << " has "
      << s.fViewerList.size () << " viewer(s):";

@@ -43,13 +43,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileViewer.cc,v 1.8 2002-12-13 11:18:03 gunter Exp $
+// $Id: G4HepRepFileViewer.cc,v 1.9 2003-06-16 17:13:35 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4HepRepFileViewer.hh"
 
 #include "G4ios.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 #include "G4VSceneHandler.hh"
 

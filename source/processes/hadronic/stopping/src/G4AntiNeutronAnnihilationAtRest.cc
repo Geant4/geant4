@@ -279,7 +279,7 @@ void G4AntiNeutronAnnihilationAtRest::GenerateSecondaries()
   }
 
   // --- LIMIT THE VALUE OF NGKINE IN CASE OF OVERFLOW ---
-  ngkine = G4int(G4std::min(ngkine,G4int(MAX_SECONDARIES)));
+  ngkine = G4int(std::min(ngkine,G4int(MAX_SECONDARIES)));
 
 } // GenerateSecondaries
 

@@ -50,7 +50,7 @@
       return;
     }
 #ifdef G4USE_STD_NAMESPACE
-    G4std::ifstream theData(filename, G4std::ios::in);
+    std::ifstream theData(filename, std::ios::in);
 #else
     ifstream theData(filename, ios::in|ios::nocreate);
 #endif

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerViewer.cc,v 1.10 2002-04-22 14:14:38 johna Exp $
+// $Id: G4RayTracerViewer.cc,v 1.11 2003-06-16 17:13:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4RayTracerViewer.hh"
 
 #include "G4ios.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 #include "G4VSceneHandler.hh"
 #include "G4Scene.hh"
@@ -94,8 +94,8 @@ void G4RayTracerViewer::DrawView() {
   G4RayTracer* theTracer = 
     (G4RayTracer*) fSceneHandler.GetGraphicsSystem();
   char fileName [100];
-  G4std::ostrstream ost(fileName, 100);
+  std::ostrstream ost(fileName, 100);
   ost << "g4RayTracer." << fShortName << '_' << fFileCount++ << ".jpeg"
-      << G4std::ends;
+      << std::ends;
   theTracer->Trace(fileName);
 }

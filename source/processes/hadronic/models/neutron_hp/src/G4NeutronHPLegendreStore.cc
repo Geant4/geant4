@@ -29,7 +29,7 @@
 #include "G4NeutronHPInterpolator.hh"
 #include "G4NeutronHPFastLegendre.hh"
 #include "Randomize.hh"
-#include "g4std/iostream"
+#include <iostream>
 
 G4double G4NeutronHPLegendreStore::SampleMax (G4double anEnergy)
 {
@@ -43,7 +43,7 @@ G4double G4NeutronHPLegendreStore::SampleMax (G4double anEnergy)
     high = i0;
     if(theCoeff[i0].GetEnergy()>anEnergy) break;
   }
-  low = G4std::max(0, high-1);
+  low = std::max(0, high-1);
   G4NeutronHPInterpolator theInt;
   G4double x, x1, x2;
   x = anEnergy;
@@ -89,8 +89,8 @@ G4double G4NeutronHPLegendreStore::SampleMax (G4double anEnergy)
       G4double legend = theLeg.Evaluate(l, result); // @@@ done to avoid optimization error on SUN
       v2 += (2.*l+1)/2.*theCoeff[high].GetCoeff(l)*legend;
     } 
-    v1 = G4std::max(0.,v1); // Workaround in case one of the distributions is fully non-physical.
-    v2 = G4std::max(0.,v2); 
+    v1 = std::max(0.,v1); // Workaround in case one of the distributions is fully non-physical.
+    v2 = std::max(0.,v2); 
     value = theInt.Interpolate(theManager.GetScheme(high), x, x1, x2, v1, v2);
     random = G4UniformRand();
     if(0>=theNorm) break; // Workaround for negative cross-section values. @@@@ 31 May 2000
@@ -113,7 +113,7 @@ G4double G4NeutronHPLegendreStore::SampleElastic (G4double anEnergy)
     high = i0;
     if(theCoeff[i0].GetEnergy()>anEnergy) break;
   }
-  low = G4std::max(0, high-1);
+  low = std::max(0, high-1);
   G4NeutronHPInterpolator theInt;
   G4double x, x1, x2;
   x = anEnergy;
@@ -135,7 +135,7 @@ G4double G4NeutronHPLegendreStore::SampleElastic (G4double anEnergy)
   } 
   try1 = theInt.Interpolate(theManager.GetScheme(high), x, x1, x2, try01, try02);
   try2 = theInt.Interpolate(theManager.GetScheme(high), x, x1, x2, try11, try12);
-  theNorm = G4std::max(try1, try2);
+  theNorm = std::max(try1, try2);
   
   G4double value, random;
   G4double v1, v2;
@@ -173,7 +173,7 @@ G4double G4NeutronHPLegendreStore::Sample (G4double energy) // still in interpol
     high = i0;
     if(theCoeff[i0].GetEnergy()>energy) break;
   }
-  low = G4std::max(0, high-1);
+  low = std::max(0, high-1);
 //  G4cout << "G4NeutronHPLegendreStore::Sample high, low: "<<high<<", "<<low<<G4endl;
   G4NeutronHPVector theBuffer;
   G4NeutronHPInterpolator theInt;

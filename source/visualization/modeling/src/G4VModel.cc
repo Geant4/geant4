@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VModel.cc,v 1.8 2003-05-30 13:01:33 johna Exp $
+// $Id: G4VModel.cc,v 1.9 2003-06-16 17:14:32 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,7 +55,7 @@ G4bool G4VModel::Validate (G4bool) {
   return true;
 }
 
-G4std::ostream& operator << (G4std::ostream& os, const G4VModel& m) {
+std::ostream& operator << (std::ostream& os, const G4VModel& m) {
   os << m.fGlobalDescription;
   os << "\n  Modeling parameters:";
   if (m.fpMP) {

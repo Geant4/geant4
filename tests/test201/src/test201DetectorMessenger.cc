@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test201DetectorMessenger.cc,v 1.5 2001-07-11 10:10:24 gunter Exp $
+// $Id: test201DetectorMessenger.cc,v 1.6 2003-06-16 17:15:29 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,7 +78,7 @@ void test201DetectorMessenger::SetNewValue
   if (command == fpDetectorCommand) {
     G4int id;
     const char* aString = newValues;
-    G4std::istrstream is((char*) aString) ; is >> id;
+    std::istrstream is((char*) aString) ; is >> id;
 #ifdef ATLAS
     const G4int idMax = 5;
 #else

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst16PhysicsList.cc,v 1.5 2001-07-11 10:10:03 gunter Exp $
+// $Id: Tst16PhysicsList.cc,v 1.6 2003-06-16 17:15:10 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,7 +44,7 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"   
+#include <iomanip>   
 
 #include "G4FastSimulationManagerProcess.hh"
 #include "G4ProtonInelasticCrossSection.hh"

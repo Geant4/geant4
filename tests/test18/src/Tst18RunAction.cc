@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst18RunAction.cc,v 1.7 2001-07-11 10:10:13 gunter Exp $
+// $Id: Tst18RunAction.cc,v 1.8 2003-06-16 17:15:22 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,18 +38,18 @@
 #include "G4ios.hh"
 //#include "Histo.hh"
 
-#include "g4std/fstream"
-#include "g4std/iomanip"
-#include "g4std/vector"
+#include <fstream>
+#include <iomanip>
+#include <vector>
 
 //using namespace std;
 
 //extern G4String filename;
 
-extern G4std::vector<G4String> Particles;
-extern G4std::vector<G4double> Energies;
-extern G4std::vector<G4double> Weights;
-extern G4std::vector<G4double> Times;
+extern std::vector<G4String> Particles;
+extern std::vector<G4double> Energies;
+extern std::vector<G4double> Weights;
+extern std::vector<G4double> Times;
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -101,18 +101,18 @@ void Tst18RunAction::EndOfRunAction(const G4Run* )
 
     //    outscat 
     G4cout
-      << G4std::setiosflags(G4std::ios::fixed)
-      << G4std::setprecision(3)
-      << G4std::setiosflags(G4std::ios::right)
-      << G4std::setw(12)
+      << std::setiosflags(std::ios::fixed)
+      << std::setprecision(3)
+      << std::setiosflags(std::ios::right)
+      << std::setw(12)
       << Energies[i]
-      << G4std::setw(12)<<G4std::setprecision(4) 
-      << G4std::setiosflags(G4std::ios::scientific)
-      << G4std::setiosflags(G4std::ios::right)
+      << std::setw(12)<<std::setprecision(4) 
+      << std::setiosflags(std::ios::scientific)
+      << std::setiosflags(std::ios::right)
       << Weights[i]
-      << G4std::setw(12)<<G4std::setprecision(4)
-      << G4std::setiosflags(G4std::ios::scientific)
-      << G4std::setiosflags(G4std::ios::right)
+      << std::setw(12)<<std::setprecision(4)
+      << std::setiosflags(std::ios::scientific)
+      << std::setiosflags(std::ios::right)
       << Times[i] << "     "
       << Particles[i]
       << G4endl ;    

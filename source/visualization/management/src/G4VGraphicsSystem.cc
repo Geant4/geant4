@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsSystem.cc,v 1.9 2001-08-05 02:29:09 johna Exp $
+// $Id: G4VGraphicsSystem.cc,v 1.10 2003-06-16 17:14:16 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,7 +58,7 @@ G4VGraphicsSystem::G4VGraphicsSystem (const G4String& name,
   fDescription (description),
   fFunctionality (f) {}
 
-G4std::ostream& operator << (G4std::ostream& os, const G4VGraphicsSystem& gs) {
+std::ostream& operator << (std::ostream& os, const G4VGraphicsSystem& gs) {
   G4VisManager* pVMan = G4VisManager::GetInstance ();
   const G4SceneHandlerList& scenes = pVMan -> GetAvailableSceneHandlers ();
   os << "Graphics System: " << gs.GetName ();

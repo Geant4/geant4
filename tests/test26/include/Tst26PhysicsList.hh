@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26PhysicsList.hh,v 1.6 2003-03-04 19:08:22 vnivanch Exp $
+// $Id: Tst26PhysicsList.hh,v 1.7 2003-06-16 17:15:46 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -76,7 +76,7 @@ class Tst26PhysicsList: public G4VModularPhysicsList
     G4double cutForVertexDetector;
     G4double cutForMuonDetector;
 
-//    typedef G4std::vector<G4VPhysicsConstructor*> G4PhysConstVector;
+//    typedef std::vector<G4VPhysicsConstructor*> G4PhysConstVector;
 //    G4PhysConstVector* physicsVector;
 
     G4VPhysicsConstructor*  emPhysicsList;

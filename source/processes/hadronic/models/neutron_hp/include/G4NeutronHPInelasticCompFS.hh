@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPInelasticCompFS.hh,v 1.8 2002-12-12 19:18:13 gunter Exp $
+// $Id: G4NeutronHPInelasticCompFS.hh,v 1.9 2003-06-16 17:10:47 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPInelasticCompFS_h
@@ -70,7 +70,7 @@ class G4NeutronHPInelasticCompFS : public G4NeutronHPFinalState
   virtual G4NeutronHPFinalState * New() = 0;
   virtual G4double GetXsec(G4double anEnergy)
   {
-    return G4std::max(0., theXsection[50]->GetY(anEnergy));
+    return std::max(0., theXsection[50]->GetY(anEnergy));
   }
   virtual G4NeutronHPVector * GetXsec() { return theXsection[50]; }
   G4int SelectExitChannel(G4double eKinetic);

@@ -34,7 +34,7 @@
 
 #include "G4VUserPhysicsList.hh"
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 
 class Test17DetectorConstruction;
 class Test17PhysicsListMessenger;
@@ -87,7 +87,7 @@ public: // Without description
 
     G4double MaxChargedStep;
 
-    G4std::vector<G4hLowEnergyIonisation*> hionVector;
+    std::vector<G4hLowEnergyIonisation*> hionVector;
 
     Test17DetectorConstruction* pDet;
     Test17PhysicsListMessenger* physicsListMessenger;

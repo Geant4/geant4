@@ -31,7 +31,7 @@ class G4VSolid ;
 class G4Material;
 class Tst01DetectorMessenger;
 
-#include "g4std/vector"
+#include <vector>
 #include "globals.hh"
 
 #include "G4VUserDetectorConstruction.hh"

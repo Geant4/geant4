@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.31 2003-05-30 13:01:28 johna Exp $
+// $Id: G4VisCommandsScene.cc,v 1.32 2003-06-16 17:14:22 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -36,7 +36,7 @@
 #include "G4UIcommand.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4ios.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 G4VVisCommandScene::G4VVisCommandScene () {}
 
@@ -85,8 +85,8 @@ G4VisCommandSceneCreate::~G4VisCommandSceneCreate () {
 
 G4String G4VisCommandSceneCreate::NextName () {
   char nextName [20];
-  G4std::ostrstream ost (nextName, 20);
-  ost << "scene-" << fId  << G4std::ends;
+  std::ostrstream ost (nextName, 20);
+  ost << "scene-" << fId  << std::ends;
   return nextName;
 }
 
@@ -158,7 +158,7 @@ void G4VisCommandSceneEdit::SetNewValue (G4UIcommand*, G4String newValue) {
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
   G4String sceneName;
-  G4std::istrstream is ((char*)newValue.data());
+  std::istrstream is ((char*)newValue.data());
   is >> sceneName;
 
   G4SceneList& sceneList = fpVisManager -> SetSceneList ();
@@ -223,7 +223,7 @@ void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand*,
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
   G4String action;
-  G4std::istrstream is ((char*)newValue.data());
+  std::istrstream is ((char*)newValue.data());
   is >> action;
 
   G4Scene* pScene = fpVisManager->GetCurrentScene();
@@ -291,7 +291,7 @@ G4String G4VisCommandSceneList::GetCurrentValue (G4UIcommand*) {
 
 void G4VisCommandSceneList::SetNewValue (G4UIcommand*, G4String newValue) {
   G4String name, verbosityString;
-  G4std::istrstream is ((char*)newValue.data());
+  std::istrstream is ((char*)newValue.data());
   is >> name >> verbosityString;
   G4VisManager::Verbosity verbosity =
     fpVisManager->GetVerbosityValue(verbosityString);
@@ -387,7 +387,7 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
   G4String sceneName, refresh_flush;
-  G4std::istrstream is ((char*)newValue.data());
+  std::istrstream is ((char*)newValue.data());
   is >> sceneName >> refresh_flush;
   G4bool flush(false);
   if (refresh_flush(0) == 'f') flush = true;

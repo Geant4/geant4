@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst02PhysicsList.cc,v 1.7 2001-07-11 10:09:35 gunter Exp $
+// $Id: Tst02PhysicsList.cc,v 1.8 2003-06-16 17:14:45 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,7 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"   
+#include <iomanip>   
 
 #include "Tst02GeneralPhysics.hh"
 #include "Tst02EMPhysics.hh"

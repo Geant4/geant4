@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.33 2003-05-06 16:31:58 gcosmo Exp $
+// $Id: G4RunManager.hh,v 1.34 2003-06-16 17:12:49 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -86,7 +86,7 @@ class G4ExceptionHandler;
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 ////////#include <signal.h>
 
 class G4RunManager
@@ -245,7 +245,7 @@ class G4RunManager
 
     G4Run* currentRun;
     G4Event* currentEvent;
-    G4std::vector<G4Event*>* previousEvents;
+    std::vector<G4Event*>* previousEvents;
     G4int n_perviousEventsToBeStored;
     G4int numberOfEventToBeProcessed;
 

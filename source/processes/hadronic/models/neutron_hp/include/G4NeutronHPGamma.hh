@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPGamma.hh,v 1.9 2002-12-12 19:18:13 gunter Exp $
+// $Id: G4NeutronHPGamma.hh,v 1.10 2003-06-16 17:10:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPGamma_h
@@ -29,7 +29,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
+#include <fstream>
 #include "G4DynamicParticleVector.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Gamma.hh"
@@ -46,7 +46,7 @@ class G4NeutronHPGamma
   }
   ~G4NeutronHPGamma() {instancecount--;}
   
-  G4bool Init(G4std::ifstream & aDataFile);
+  G4bool Init(std::ifstream & aDataFile);
   
   inline void SetNext(G4NeutronHPLevel * aLevel)
   {

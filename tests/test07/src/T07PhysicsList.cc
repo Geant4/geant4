@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: T07PhysicsList.cc,v 1.6 2001-07-11 10:09:44 gunter Exp $
+// $Id: T07PhysicsList.cc,v 1.7 2003-06-16 17:14:49 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,7 +40,7 @@
 #include "G4ParticleTable.hh"
 #include "G4Material.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"                
+#include <iomanip>                
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -300,7 +300,7 @@ void T07PhysicsList::SetStatusEmProcess()
              << "   " << lstate7 << G4endl;
 
      // update the status of the processes
-        G4cout << "  enter -> a process name, on/off or: ok on : " << G4std::flush;
+        G4cout << "  enter -> a process name, on/off or: ok on : " << std::flush;
         G4cin >> process >> newstate ;
         if (newstate=="on") active = true;
          else active = false;

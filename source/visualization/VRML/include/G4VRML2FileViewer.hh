@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2FileViewer.hh,v 1.8 2002-06-23 03:31:42 stanaka Exp $
+// $Id: G4VRML2FileViewer.hh,v 1.9 2003-06-16 17:13:56 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2FileViewer.hh
@@ -30,7 +30,7 @@
 #ifndef G4VRML2FILE_VIEWER_HH
 #define G4VRML2FILE_VIEWER_HH
 
-#include "g4std/fstream"
+#include <fstream>
 #include "G4VViewer.hh"
 #include "globals.hh"
 
@@ -50,7 +50,7 @@ private:
 
 private:
 	G4VRML2FileSceneHandler& fSceneHandler; // Reference to Graphics Scene for this view.
-	G4std::ofstream&         fDest ;
+	std::ofstream&         fDest ;
 
 	G4double      fViewHalfAngle ;	
 	G4double      fsin_VHA       ;	

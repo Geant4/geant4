@@ -25,14 +25,14 @@
 #include "globals.hh"
 #include "G4SteppingManager.hh"
 
-#include "g4std/vector"
+#include <vector>
 
 extern G4bool drawEvent;
 
-extern G4std::vector<G4String> Particles;
-extern G4std::vector<G4double> Energies;
-extern G4std::vector<G4double> Weights;
-extern G4std::vector<G4double> Times;
+extern std::vector<G4String> Particles;
+extern std::vector<G4double> Energies;
+extern std::vector<G4double> Weights;
+extern std::vector<G4double> Times;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -36,7 +36,7 @@
 #include "G4Positron.hh"
 
 #include "G4ios.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 
 Tst14SteppingAction::Tst14SteppingAction()
 {;}
@@ -57,24 +57,24 @@ void Tst14SteppingAction::UserSteppingAction(const G4Step * theStep)
   // check if it is alive
   if(theTrack->GetTrackStatus()==fAlive) { return; }
 
-      G4cout << G4std::setw( 5) << "#Step#" << " "
-        << G4std::setw( 9) << "X(mm)" << " "
-          << G4std::setw( 9) << "Y(mm)" << " "
-            << G4std::setw( 9) << "Z(mm)" << " "
-              << G4std::setw( 9) << "KineE(MeV)" << " "
-                << G4std::setw( 9) << "dE(MeV)" << " "
-                  << G4std::setw( 9) << "StepLeng" << " "
-                    << G4std::setw( 9) << "TrackLeng" << " "
-                        << G4std::setw(10) << "ProcName" << G4endl;
+      G4cout << std::setw( 5) << "#Step#" << " "
+        << std::setw( 9) << "X(mm)" << " "
+          << std::setw( 9) << "Y(mm)" << " "
+            << std::setw( 9) << "Z(mm)" << " "
+              << std::setw( 9) << "KineE(MeV)" << " "
+                << std::setw( 9) << "dE(MeV)" << " "
+                  << std::setw( 9) << "StepLeng" << " "
+                    << std::setw( 9) << "TrackLeng" << " "
+                        << std::setw(10) << "ProcName" << G4endl;
     G4cout.precision(3);
-    G4cout << G4std::setw( 5) << theTrack->GetCurrentStepNumber() << " "
-      << G4std::setw( 9) << theTrack->GetPosition().x() / mm << " "
-        << G4std::setw( 9) << theTrack->GetPosition().y() / mm << " "
-          << G4std::setw( 9) << theTrack->GetPosition().z() / mm << " "
-             << G4std::setw( 9) << theTrack->GetKineticEnergy() / MeV << " "
-              << G4std::setw( 9) << theStep->GetTotalEnergyDeposit() /MeV << " "
-                << G4std::setw( 9) << theStep->GetStepLength() / mm << " "
-                  << G4std::setw( 9) << theTrack->GetTrackLength() / mm << " ";
+    G4cout << std::setw( 5) << theTrack->GetCurrentStepNumber() << " "
+      << std::setw( 9) << theTrack->GetPosition().x() / mm << " "
+        << std::setw( 9) << theTrack->GetPosition().y() / mm << " "
+          << std::setw( 9) << theTrack->GetPosition().z() / mm << " "
+             << std::setw( 9) << theTrack->GetKineticEnergy() / MeV << " "
+              << std::setw( 9) << theStep->GetTotalEnergyDeposit() /MeV << " "
+                << std::setw( 9) << theStep->GetStepLength() / mm << " "
+                  << std::setw( 9) << theTrack->GetTrackLength() / mm << " ";
     if(theStep->GetPostStepPoint()->GetProcessDefinedStep() != NULL){
       G4cout << theStep->GetPostStepPoint()->GetProcessDefinedStep()
         ->GetProcessName();
@@ -88,17 +88,17 @@ void Tst14SteppingAction::UserSteppingAction(const G4Step * theStep)
          << "(x,y,z,kE,t,PID) --" << G4endl;
        for( G4int lp1=0;lp1<(*fSecondary).entries(); lp1++){
          G4cout << "      "
-           << G4std::setw( 9)
+           << std::setw( 9)
              << (*fSecondary)[lp1]->GetPosition().x() / mm << " "
-               << G4std::setw( 9)
+               << std::setw( 9)
                  << (*fSecondary)[lp1]->GetPosition().y() / mm << " "
-                   << G4std::setw( 9)
+                   << std::setw( 9)
                      << (*fSecondary)[lp1]->GetPosition().z() / mm << " "
-                       << G4std::setw( 9)
+                       << std::setw( 9)
                          << (*fSecondary)[lp1]->GetKineticEnergy() / MeV << " "
-                           << G4std::setw( 9)
+                           << std::setw( 9)
                              << (*fSecondary)[lp1]->GetGlobalTime() / ns << " "
-                               << G4std::setw(18)
+                               << std::setw(18)
                                  << (*fSecondary)[lp1]->GetDefinition()
                                    ->GetParticleName();
          G4cout << G4endl;

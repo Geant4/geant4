@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonAr40.cc,v 1.4 2001-10-29 11:05:56 vnivanch Exp $
+// $Id: G4IonAr40.cc,v 1.5 2003-06-16 17:15:13 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,8 +36,8 @@
 //  Fixed  parameters by H.Kurashige, 25 Apr 1998
 // ----------------------------------------------------------------------
 
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4IonAr40.hh"
 

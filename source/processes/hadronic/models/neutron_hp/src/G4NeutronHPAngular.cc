@@ -26,7 +26,7 @@
 //
 #include "G4NeutronHPAngular.hh"
 
-void G4NeutronHPAngular::Init(G4std::ifstream & aDataFile)
+void G4NeutronHPAngular::Init(std::ifstream & aDataFile)
 {
 //  G4cout << "here we are entering the Angular Init"<<G4endl;
   aDataFile >> theAngularDistributionType >> targetMass;

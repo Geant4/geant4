@@ -601,7 +601,7 @@ G4double G4MuonMinusCaptureAtRest::CalculateIsotopicMass(G4double a,
     a * 8.367 - z * .783 + ev + es + ec + eex + cam2[iz0 - 1] + cam3[n - 1];
   ret_val = (ret_val + a * O16OLD) * O16RAT - a * ( C12NEW - ADJUST );
   d__1 = ret_val, d__2 = z * exhydr + (a - z) * exneut;
-  ret_val = G4std::min(d__1,d__2);
+  ret_val = std::min(d__1,d__2);
   return ret_val;
 
 } // CalculateIsotopicMass
@@ -686,12 +686,12 @@ void G4MuonMinusCaptureAtRest::EvaporationDeexcitation()
       ipar = 2;
     }
   }
-  delpai = G4std::min(eexdum,delta);
+  delpai = std::min(eexdum,delta);
   rnucl = residualNuclearMasses[atMassResidNucl - 1] * R0NUCL;
   ainerm = massResidNucl * .24 * rnucl * rnucl;
   roten0 = 0.5 * PLABRC * PLABRC / ainerm;
   d__1 = delta, d__2 = roten0 * 2.;
-  enmin = G4std::max(d__1,d__2);
+  enmin = std::max(d__1,d__2);
   rnmass = massResidNucl + excitEnResidNucl;
   umo = rnmass;
   gamcm = totEnResidNucl / rnmass;
@@ -730,7 +730,7 @@ void G4MuonMinusCaptureAtRest::EvaporationDeexcitation()
       }
       lexpn = (lmult << 1) + 1;
       ddlexp = (G4double) lexpn;
-      xdismx = G4std::min(ddlexp,hhh);
+      xdismx = std::min(ddlexp,hhh);
       if (xdismx > EXPMAX) {
 	dismx = 0.;
       } else {
@@ -918,8 +918,8 @@ void G4MuonMinusCaptureAtRest::FermiMotion(G4int pidx)
   frndm[0] = G4UniformRand();
   frndm[1] = G4UniformRand();
   frndm[2] = G4UniformRand();
-  r__1 = G4std::max(frndm[0],frndm[1]);
-  p2 = G4std::max(r__1,frndm[2]);
+  r__1 = std::max(frndm[0],frndm[1]);
+  p2 = std::max(r__1,frndm[2]);
   if (atMassTarget <= 1) {
     ferm = 0.;
   }
@@ -1520,9 +1520,9 @@ L1000:
 	case 4:
 	  //  Triton:
 	  d__1 = 0., d__2 = *u + bnmass[2] - bnmass[3];
-	  deuneu = G4std::max(d__1,d__2);
+	  deuneu = std::max(d__1,d__2);
 	  d__1 = 0., d__2 = *u - bnmass[3];
-	  prnene = G4std::max(d__1,d__2);
+	  prnene = std::max(d__1,d__2);
 	  qnorm = deuneu + prnene;
 	  //  If we cannot split then return
 	  if (qnorm <= 0.) {
@@ -1564,9 +1564,9 @@ L1000:
 	case 5:
 	  //  3-He:
 	  d__1 = 0., d__2 = *u + bnmass[2] - bnmass[4];
-	  deupro = G4std::max(d__1,d__2);
+	  deupro = std::max(d__1,d__2);
 	  d__1 = 0., d__2 = *u - bnmass[4];
-	  prprne = G4std::max(d__1,d__2);
+	  prprne = std::max(d__1,d__2);
 	  qnorm = deupro + prprne;
 	  //  If we cannot split then return
 	  if (qnorm <= 0.) {
@@ -1609,11 +1609,11 @@ L1000:
 	  //  Alpha:
 	  //
 	  d__1 = 0., d__2 = *u + bnmass[2] * 2. - bnmass[5];
-	  deudeu = G4std::max(d__1,d__2);
+	  deudeu = std::max(d__1,d__2);
 	  d__1 = 0., d__2 = *u + bnmass[3] - bnmass[5];
-	  protri = G4std::max(d__1,d__2);
+	  protri = std::max(d__1,d__2);
 	  d__1 = 0., d__2 = *u + bnmass[4] - bnmass[5];
-	  ueu3he = G4std::max(d__1,d__2);
+	  ueu3he = std::max(d__1,d__2);
 	  qnorm = deudeu + protri + ueu3he;
 	  //  If we cannot split then return
 	  if (qnorm <= 0.) {
@@ -1667,7 +1667,7 @@ L1000:
       ddjja = (G4double) jja;
       ddjjz = (G4double) jjz;
       d__1 = *u + energ0 - GetIsotopicMass(ddjja, ddjjz) - exmass[k - 1];
-      q[k] = G4std::max(d__1,0.) + q[k - 1];
+      q[k] = std::max(d__1,0.) + q[k - 1];
     }
     //  If no emission channel is open then return
     if (q[6] <= 0.) {
@@ -1889,13 +1889,13 @@ L2600:
       ExcitationEnergyLevel(iaa, izz, &eex1st, &eex2nd, &corr);
       eex1st *= 1e3;
       eex2nd *= 1e3;
-      corr = G4std::max(corr,0.) * 1e3;
+      corr = std::max(corr,0.) * 1e3;
       if (nn == 4 && izz == 4) {
 	if (*u - thresh[j - 1] - 6.1 > 0.) {
 	  corr = 6.;
 	} else {
 	  tmpvar = *u - thresh[j - 1] - .1;
-	  corr = G4std::max(0.,tmpvar);
+	  corr = std::max(0.,tmpvar);
 	}
       }
       if (NINT(pairCorrFlag) == 1) {
@@ -1915,9 +1915,9 @@ L2600:
     }
     n1 = 1;
     d__1 =
-      G4std::max(s[0],s[1]), d__1 = G4std::max(d__1,s[2]), d__1 =
-      G4std::max(d__1,s[3]), d__1 = G4std::max(d__1,s[4]);
-    ses = G4std::max(d__1,s[5]);
+      std::max(s[0],s[1]), d__1 = std::max(d__1,s[2]), d__1 =
+      std::max(d__1,s[3]), d__1 = std::max(d__1,s[4]);
+    ses = std::max(d__1,s[5]);
     for (j = 1; j <= 6; ++j) {
       js = (G4int) (sos[j - 1] + 1.);
       fjs = (G4double) js;
@@ -1925,12 +1925,12 @@ L2600:
       if (s[j - 1] > 0.) {
 	mm = ja - ia[j - 1];
 	d__3 = EXPMIN, d__4 = s[j - 1] - ses;
-	d__1 = EXPMAX, d__2 = G4std::max(d__3,d__4);
-	expsas = G4std::min(d__1,d__2);
+	d__1 = EXPMAX, d__2 = std::max(d__3,d__4);
+	expsas = std::min(d__1,d__2);
 	sas = exp(expsas);
 	d__3 = EXPMIN, d__4 = -s[j - 1];
-	d__1 = EXPMAX, d__2 = G4std::max(d__3,d__4);
-	expsus = G4std::min(d__1,d__2);
+	d__1 = EXPMAX, d__2 = std::max(d__3,d__4);
+	expsus = std::min(d__1,d__2);
 	sus = exp(expsus);
 	d__1 = s[j - 1];
 	d__2 = s[j - 1];
@@ -1950,7 +1950,7 @@ L2600:
 	  r[j - 1] = ccoul[j - 1] * (d__1 * d__1) * eye1[j - 1] * sas;
 	}
 	d__1 = 0., d__2 = r[j - 1];
-	r[j - 1] = G4std::max(d__1,d__2);
+	r[j - 1] = std::max(d__1,d__2);
 	sigma += r[j - 1];
       }
     }
@@ -3538,7 +3538,7 @@ void G4MuonMinusCaptureAtRest::DoMuCapture()
     }
   }
   i__1 = nSecPart, i__2 = MXGKIN - nGkine;
-  nstak1 = G4std::min(i__1,i__2);
+  nstak1 = std::min(i__1,i__2);
   if (nSecPart > nstak1) {
     G4cout << " **** FLUFIN: Stack overflow, "
 	 << nSecPart - nstak1 << " particles lost" << G4endl;
@@ -3558,7 +3558,7 @@ void G4MuonMinusCaptureAtRest::DoMuCapture()
     Gkin[nGkine - 1].SetTOF( tDelay );
   }
   i__1 = nallFragm, i__2 = MXGKIN - nGkine;
-  nstak2 = G4std::min(i__1,i__2);
+  nstak2 = std::min(i__1,i__2);
   if (nallFragm > nstak2) {
     G4cout << " **** FLUFIN: Stack overflow, "
 	 << nallFragm - nstak2 << " heavy particles lost" << G4endl;
@@ -3600,7 +3600,7 @@ void G4MuonMinusCaptureAtRest::MuEvaporation()
   //  The initial excitation energy, mass and charge of the nucleus are
   //  put into Ex, Apr, Zpr (common Hetc5)
   d__1 = excitEnResidNucl * 1000;
-  iniExcitEnEvapNucl = G4std::max(d__1,ANGLGB);
+  iniExcitEnEvapNucl = std::max(d__1,ANGLGB);
   atMassEvapNucl = atMassCurrent;
   chargeEvapNucl = chargeCurrent;
   //  Ammres is the atomic mass of the residual nucleus
@@ -3669,7 +3669,7 @@ void G4MuonMinusCaptureAtRest::MuEvaporation()
       GetIsotopicMass(atMassCurrent, chargeCurrent) * .001;
     excitEnResidNucl = finExcitEnEvapNucl * .001;
     d__1 = recoilEnEvapNucl * .001;
-    recoilEnResidNucl = G4std::max(d__1,0.);
+    recoilEnResidNucl = std::max(d__1,0.);
     totMomResidNucl =
       sqrt(recoilEnResidNucl *
 	   (recoilEnResidNucl + (massResidNucl + excitEnResidNucl) * 2.));

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTrajectory.hh,v 1.10 2003-05-30 13:01:20 johna Exp $
+// $Id: G4RayTrajectory.hh,v 1.11 2003-06-16 17:13:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -46,7 +46,7 @@ class G4Step;
 #include "G4VTrajectory.hh"
 #include "G4Allocator.hh"
 #include <stdlib.h>
-#include "g4std/vector"
+#include <vector>
 #include "globals.hh"
 #include "G4Track.hh"
 #include "G4RayTrajectoryPoint.hh"
@@ -65,7 +65,7 @@ class G4RayTrajectory : public G4VTrajectory
   //   inline int operator == (const G4RayTrajectory& right){return (this==&right);}
 
    virtual void AppendStep(const G4Step*);
-   virtual void ShowTrajectory(G4std::ostream&) const;
+   virtual void ShowTrajectory(std::ostream&) const;
    virtual void DrawTrajectory(G4int) const {;}
    virtual int GetPointEntries() const {return positionRecord->size();}
    virtual G4VTrajectoryPoint* GetPoint(G4int i) const 
@@ -84,7 +84,7 @@ class G4RayTrajectory : public G4VTrajectory
 
    private:
 
-   G4std::vector<G4RayTrajectoryPoint*>* positionRecord;
+   std::vector<G4RayTrajectoryPoint*>* positionRecord;
 };
 
 

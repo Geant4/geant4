@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastStep.cc,v 1.11 2003-05-21 16:32:25 gcosmo Exp $
+// $Id: G4FastStep.cc,v 1.12 2003-06-16 17:12:39 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -397,40 +397,40 @@ void G4FastStep::DumpInfo() const
 
   G4cout.precision(3);
   G4cout << "        Position - x (mm)   : " 
-       << G4std::setw(20) << thePositionChange.x()/mm
+       << std::setw(20) << thePositionChange.x()/mm
        << G4endl; 
   G4cout << "        Position - y (mm)   : " 
-       << G4std::setw(20) << thePositionChange.y()/mm
+       << std::setw(20) << thePositionChange.y()/mm
        << G4endl; 
   G4cout << "        Position - z (mm)   : " 
-       << G4std::setw(20) << thePositionChange.z()/mm
+       << std::setw(20) << thePositionChange.z()/mm
        << G4endl;
   G4cout << "        Time (ns)           : " 
-       << G4std::setw(20) << theTimeChange/ns
+       << std::setw(20) << theTimeChange/ns
        << G4endl;
   G4cout << "        Proper Time (ns)    : " 
-       << G4std::setw(20) << theProperTimeChange/ns
+       << std::setw(20) << theProperTimeChange/ns
        << G4endl;
   G4cout << "        Momentum Direct - x : " 
-       << G4std::setw(20) << theMomentumChange.x()
+       << std::setw(20) << theMomentumChange.x()
        << G4endl;
   G4cout << "        Momentum Direct - y : " 
-       << G4std::setw(20) << theMomentumChange.y()
+       << std::setw(20) << theMomentumChange.y()
        << G4endl;
   G4cout << "        Momentum Direct - z : " 
-       << G4std::setw(20) << theMomentumChange.z()
+       << std::setw(20) << theMomentumChange.z()
        << G4endl;
   G4cout << "        Kinetic Energy (MeV): " 
-       << G4std::setw(20) << theEnergyChange/MeV
+       << std::setw(20) << theEnergyChange/MeV
        << G4endl;
   G4cout << "        Polarization - x    : " 
-       << G4std::setw(20) << thePolarizationChange.x()
+       << std::setw(20) << thePolarizationChange.x()
        << G4endl;
   G4cout << "        Polarization - y    : " 
-       << G4std::setw(20) << thePolarizationChange.y()
+       << std::setw(20) << thePolarizationChange.y()
        << G4endl;
   G4cout << "        Polarization - z    : " 
-       << G4std::setw(20) <<  thePolarizationChange.z()
+       << std::setw(20) <<  thePolarizationChange.z()
        << G4endl;
 }
 

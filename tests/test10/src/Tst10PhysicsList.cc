@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst10PhysicsList.cc,v 1.4 2001-07-11 10:09:49 gunter Exp $
+// $Id: Tst10PhysicsList.cc,v 1.5 2003-06-16 17:14:52 gunter Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -42,7 +42,7 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"                
+#include <iomanip>                
 
 
 Tst10PhysicsList::Tst10PhysicsList():  G4VUserPhysicsList()

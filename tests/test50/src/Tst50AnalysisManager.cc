@@ -28,7 +28,7 @@
 //    *******************************
 //
 
-// $Id: Tst50AnalysisManager.cc,v 1.20 2003-05-28 08:10:11 guatelli Exp $
+// $Id: Tst50AnalysisManager.cc,v 1.21 2003-06-16 17:16:06 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
@@ -39,7 +39,7 @@
 // -------------------------------------------------------------------
  
 #include <stdlib.h>
-#include "g4std/fstream"
+#include <fstream>
 #include "Tst50AnalysisManager.hh"
 
 #include "G4ios.hh"

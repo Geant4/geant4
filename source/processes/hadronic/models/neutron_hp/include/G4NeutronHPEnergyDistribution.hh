@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPEnergyDistribution.hh,v 1.7 2002-12-12 19:18:12 gunter Exp $
+// $Id: G4NeutronHPEnergyDistribution.hh,v 1.8 2003-06-16 17:10:39 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPEnergyDistribution_h
@@ -29,7 +29,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
+#include <fstream>
 #include "G4NeutronHPArbitaryTab.hh"
 #include "G4NeutronHPEvapSpectrum.hh"
 #include "G4NeutronHPSimpleEvapSpectrum.hh"
@@ -62,7 +62,7 @@ class G4NeutronHPEnergyDistribution
     }
   }
   
-  inline void Init(G4std::ifstream & theData)
+  inline void Init(std::ifstream & theData)
   {
     G4double dummy;
     theData >> dummy >> theNumberOfPartials;

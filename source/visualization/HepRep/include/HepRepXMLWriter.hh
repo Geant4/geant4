@@ -44,7 +44,7 @@
 //
 //--------------------------------------------------------------------------
 // File and Version Information:
-// 	$Id: HepRepXMLWriter.hh,v 1.10 2003-01-24 21:18:48 perl Exp $
+// 	$Id: HepRepXMLWriter.hh,v 1.11 2003-06-16 17:13:33 gunter Exp $
 //
 // Description:
 //	Create a HepRep XML File (HepRep version 1).
@@ -64,7 +64,7 @@
 //#define G4HEPREPFILEDEBUG  // Comment this out to suppress debug code.
 
 #include "globals.hh"
-#include "g4std/fstream"
+#include <fstream>
 
 class HepRepXMLWriter
 {
@@ -110,7 +110,7 @@ public:
   char* prevTypeName[50];
   
 private:
-  G4std::ofstream fout;
+  std::ofstream fout;
 
   void init();
 

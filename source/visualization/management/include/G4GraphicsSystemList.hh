@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GraphicsSystemList.hh,v 1.7 2001-07-11 10:09:14 gunter Exp $
+// $Id: G4GraphicsSystemList.hh,v 1.8 2003-06-16 17:14:02 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,17 +30,17 @@
 #ifndef G4GRAPHICSSYSTEMLIST_HH
 #define G4GRAPHICSSYSTEMLIST_HH
 
-#include "g4std/vector"
+#include <vector>
 #include "G4VGraphicsSystem.hh"
 
-class G4GraphicsSystemList: public G4std::vector<G4VGraphicsSystem*> {
+class G4GraphicsSystemList: public std::vector<G4VGraphicsSystem*> {
 public:
   void remove(G4VGraphicsSystem*);
 };
 
-typedef G4std::vector<G4VGraphicsSystem*>::iterator
+typedef std::vector<G4VGraphicsSystem*>::iterator
         G4GraphicsSystemListIterator;
-typedef G4std::vector<G4VGraphicsSystem*>::const_iterator
+typedef std::vector<G4VGraphicsSystem*>::const_iterator
         G4GraphicsSystemListConstIterator;
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.37 2003-05-30 13:01:29 johna Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.38 2003-06-16 17:14:23 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -49,7 +49,7 @@
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4ios.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 // Local function with some frequently used error printing...
 static void G4VisCommandsSceneAddUnsuccessful
@@ -115,7 +115,7 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand*, G4String newValue) {
   G4String unitString;
   G4double x0, y0, z0, length;
   const char* s = newValue;
-  G4std::istrstream is ((char*)s);
+  std::istrstream is ((char*)s);
   is >> x0 >> y0 >> z0 >> length >> unitString;
 
   G4double unit = ValueOf(unitString);
@@ -347,7 +347,7 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
   G4String name;
   G4int requestedDepthOfDescent;
   const char* s = newValue;
-  G4std::istrstream is ((char*)s);
+  std::istrstream is ((char*)s);
   is >> name >> requestedDepthOfDescent;
 
   G4LogicalVolumeStore *pLVStore = G4LogicalVolumeStore::GetInstance();
@@ -454,7 +454,7 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4double userLength, red, green, blue, xmid, ymid, zmid;
   G4String userLengthUnit, direction, auto_manual, positionUnit;
-  G4std::istrstream is (newValue);
+  std::istrstream is (newValue);
   is >> userLength >> userLengthUnit >> direction
      >> red >> green >> blue
      >> auto_manual
@@ -465,8 +465,8 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
   xmid *= unit; ymid *= unit; zmid *= unit;
 
   char tempcharstring [50];
-  G4std::ostrstream ost (tempcharstring, 50);
-  ost << userLength << ' ' << userLengthUnit << G4std::ends;
+  std::ostrstream ost (tempcharstring, 50);
+  ost << userLength << ' ' << userLengthUnit << std::ends;
   G4String annotation(tempcharstring);
 
   G4Scale::Direction scaleDirection (G4Scale::x);
@@ -682,7 +682,7 @@ void G4VisCommandSceneAddText::SetNewValue (G4UIcommand*, G4String newValue) {
   G4String text, unitString;
   G4double x, y, z, font_size, x_offset, y_offset;
   const char* s = newValue;
-  G4std::istrstream is ((char*)s);
+  std::istrstream is ((char*)s);
   is >> x >> y >> z >> unitString >> font_size >> x_offset >> y_offset >> text;
 
   G4double unit = ValueOf(unitString);
@@ -756,7 +756,7 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
 
   G4int drawingMode;
   const char* s = newValue;
-  G4std::istrstream is ((char*)s);
+  std::istrstream is ((char*)s);
   is >> drawingMode;
   G4TrajectoriesModel* model = new G4TrajectoriesModel(drawingMode);
   const G4String& currentSceneName = pScene -> GetName ();
@@ -827,7 +827,7 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
   G4int copyNo;
   G4int requestedDepthOfDescent;
   const char* s = newValue;
-  G4std::istrstream is ((char*)s);
+  std::istrstream is ((char*)s);
   is >> name >> copyNo >> requestedDepthOfDescent;
   G4VPhysicalVolume* world =
     G4TransportationManager::GetTransportationManager ()

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst22EMPhysics.cc,v 1.3 2003-02-05 11:04:13 jwellisc Exp $
+// $Id: Tst22EMPhysics.cc,v 1.4 2003-06-16 17:15:34 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,7 +30,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"   
+#include <iomanip>   
 
 
 Tst22EMPhysics::Tst22EMPhysics(const G4String& name)

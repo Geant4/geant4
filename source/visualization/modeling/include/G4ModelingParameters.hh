@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.hh,v 1.7 2001-08-09 20:06:20 johna Exp $
+// $Id: G4ModelingParameters.hh,v 1.8 2003-06-16 17:14:28 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,7 +45,7 @@ class G4ModelingParameters {
 
 public: // With description
 
-  friend G4std::ostream& operator << (G4std::ostream& os, const G4ModelingParameters&);
+  friend std::ostream& operator << (std::ostream& os, const G4ModelingParameters&);
 
   enum RepStyle {
     wireframe,  // Use G4Wireframe.

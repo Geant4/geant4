@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFissionERelease.hh,v 1.7 2002-12-12 19:18:13 gunter Exp $
+// $Id: G4NeutronHPFissionERelease.hh,v 1.8 2003-06-16 17:10:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPFissionERelease_h
@@ -29,7 +29,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
+#include <fstream>
 
 class G4NeutronHPFissionERelease
 {
@@ -37,7 +37,7 @@ class G4NeutronHPFissionERelease
   G4NeutronHPFissionERelease(){}
   ~G4NeutronHPFissionERelease(){}
   
-  inline void Init(G4std::ifstream & aDataFile)
+  inline void Init(std::ifstream & aDataFile)
   {
     G4double dummy;
     

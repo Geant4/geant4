@@ -34,7 +34,7 @@
 //#define histo
 
 #include "globals.hh"
-#include <g4std/map>
+#include <map>
 
 #ifdef histo
 class HepTupleManager;
@@ -52,16 +52,16 @@ class Tst14ProcCallSA{
      void print();
           
   private:
-     typedef G4std::map<G4String, G4int, G4std::less<G4String> > intMap;
-     typedef G4std::map<G4String, G4int, G4std::less<G4String> >::iterator intMapIter;
+     typedef std::map<G4String, G4int, std::less<G4String> > intMap;
+     typedef std::map<G4String, G4int, std::less<G4String> >::iterator intMapIter;
      intMap calls;  
     
      
 #ifdef histo
 private:
 
-  typedef G4std::map<G4String, HepHistogram*, G4std::less<G4String> > histoMap;
-  typedef G4std::map<G4String, HepHistogram*, G4std::less<G4String> >::iterator histoMapIter;
+  typedef std::map<G4String, HepHistogram*, std::less<G4String> > histoMap;
+  typedef std::map<G4String, HepHistogram*, std::less<G4String> >::iterator histoMapIter;
   HepTupleManager* hbookManager;
   histoMap       hist,start;
 #endif

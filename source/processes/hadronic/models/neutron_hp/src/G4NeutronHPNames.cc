@@ -26,7 +26,7 @@
 //
 #include "G4NeutronHPNames.hh"
 #include "G4SandiaTable.hh"
-#include "g4std/fstream"
+#include <fstream>
 
   const G4String G4NeutronHPNames::theString[99] = {"Hydrogen", "Helium",
  "Lithium", "Berylium", "Boron", "Carbon", "Nitrogen", "Oxygen", "Fluorine",
@@ -63,7 +63,7 @@ if(getenv("NeutronHPNames")) G4cout << "Names::GetName entered"<<G4endl;
     G4String theFileName("");
     G4int inc = 1;
     
-    G4std::ifstream * check = new G4std::ifstream(".dummy");
+    std::ifstream * check = new std::ifstream(".dummy");
     G4bool first = true;
 if(getenv("NeutronHPNames"))  G4cout << "entered GetName!!!"<<G4endl;
      do   
@@ -79,9 +79,9 @@ if(getenv("NeutronHPNames"))  G4cout << "entered GetName!!!"<<G4endl;
       result.SetZ(myZ);
 if(getenv("NeutronHPNames")) G4cout <<"HPWD 1 "<<*theName<<G4endl;
 #ifdef G4USE_STD_NAMESPACE
-      check = new G4std::ifstream(*theName);
+      check = new std::ifstream(*theName);
 #else
-      check = new G4std::ifstream(*theName,G4std::ios::in|G4std::ios::nocreate);
+      check = new std::ifstream(*theName,std::ios::in|std::ios::nocreate);
 #endif
       if(!(*check)) 
       {
@@ -103,9 +103,9 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 2 "<<*theName<<G4endl;
           result.SetA(natA);
           result.SetZ(myZ);
 #ifdef G4USE_STD_NAMESPACE
-      check = new G4std::ifstream(*theName);
+      check = new std::ifstream(*theName);
 #else
-      check = new G4std::ifstream(*theName,G4std::ios::in|G4std::ios::nocreate);
+      check = new std::ifstream(*theName,std::ios::in|std::ios::nocreate);
 #endif
           if (!(*check)) 
           {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33TimedEventAction.hh,v 1.3 2002-11-20 13:09:16 dressel Exp $
+// $Id: Tst33TimedEventAction.hh,v 1.4 2003-06-16 17:15:56 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,7 @@
 
 #include "Tst33VEventAction.hh"
 #include "globals.hh"
-#include "g4std/fstream"
+#include <fstream>
 #include "Tst33Sigma.hh"
 
 class G4CellScorer;
@@ -67,7 +67,7 @@ private:
   const G4CellScorer *fCScorer;
   G4int fEvStartTime;
   G4int fProcessTime;
-  G4std::ofstream fOut;
+  std::ofstream fOut;
   G4int fMaxRunTime;
   Tst33Sigma fSig;
   G4double fOld_lwe;

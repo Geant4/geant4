@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiProtonAnnihilationAtRest.cc,v 1.7 2003-05-30 10:50:52 hpw Exp $
+// $Id: G4AntiProtonAnnihilationAtRest.cc,v 1.8 2003-06-16 17:11:57 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -280,7 +280,7 @@ void G4AntiProtonAnnihilationAtRest::GenerateSecondaries()
   }
 
   // --- LIMIT THE VALUE OF NGKINE IN CASE OF OVERFLOW ---
-  ngkine = G4int(G4std::min(ngkine,G4int(MAX_SECONDARIES)));
+  ngkine = G4int(std::min(ngkine,G4int(MAX_SECONDARIES)));
 
 } // GenerateSecondaries
 

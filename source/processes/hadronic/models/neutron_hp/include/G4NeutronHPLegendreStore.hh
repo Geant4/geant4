@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPLegendreStore.hh,v 1.7 2002-12-12 19:18:14 gunter Exp $
+// $Id: G4NeutronHPLegendreStore.hh,v 1.8 2003-06-16 17:10:51 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPLegendreStore_h
@@ -30,7 +30,7 @@
 #include "G4NeutronHPLegendreTable.hh"
 #include "G4InterpolationManager.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
+#include <fstream>
 
 class G4NeutronHPLegendreStore
 {
@@ -73,7 +73,7 @@ class G4NeutronHPLegendreStore
   G4double SampleMax (G4double energy);
   G4double Integrate(G4int k, G4double costh);
   
-  void InitInterpolation(G4std::ifstream & aDataFile)
+  void InitInterpolation(std::ifstream & aDataFile)
   {
     theManager.Init(aDataFile);
   }
