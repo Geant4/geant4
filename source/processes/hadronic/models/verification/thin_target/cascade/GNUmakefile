@@ -1,8 +1,8 @@
-# $Id: GNUmakefile,v 1.3 2003-11-14 17:39:20 vnivanch Exp $
+# $Id: GNUmakefile,v 1.4 2004-07-02 11:37:38 vnivanch Exp $
 # --------------------------------------------------------------
 
-name := cascade
-G4TARGET := cascade
+name := cascade_test
+G4TARGET := cascade_test
 G4EXLIB  := true
 
 
