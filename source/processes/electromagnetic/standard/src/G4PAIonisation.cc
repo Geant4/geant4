@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIonisation.cc,v 1.3 1999-12-15 14:51:51 gunter Exp $
+// $Id: G4PAIonisation.cc,v 1.4 1999-12-16 09:59:43 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -304,7 +304,9 @@ G4PAIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
 	       tau = 0.01 ;
 	    }
 	    gamma = tau +1. ;
-	    G4cout<<"gamma = "<<gamma<<G4endl ;
+
+	    //   G4cout<<"gamma = "<<gamma<<endl ;
+
             bg2 = tau*(tau+2.) ;
             beta2 = bg2/(gamma*gamma) ;
             Tmax = 2.*electron_mass_c2*bg2
@@ -319,8 +321,8 @@ G4PAIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
 	    
 	    ionloss = protonPAI.GetMeanEnergyLoss() ;   //  total <dE/dx>
 
-	    G4cout<<"ionloss = "<<ionloss*cm/keV<<" keV/cm"<<G4endl ;
-  G4cout<<"n1 = "<<protonPAI.GetIntegralPAIxSection(1)*cm<<" 1/cm"<<G4endl ;
+   // G4cout<<"ionloss = "<<ionloss*cm/keV<<" keV/cm"<<endl ;
+   // G4cout<<"n1 = "<<protonPAI.GetIntegralPAIxSection(1)*cm<<" 1/cm"<<endl ;
 	    // G4cout<<"protonPAI.GetSplineSize() = "<<
             // protonPAI.GetSplineSize()<<G4endl ;
 
@@ -656,10 +658,7 @@ G4VParticleChange* G4PAIonisation::AlongStepDoIt( const G4Track& trackData,
 
   if( Step == 0. || index != fMatIndex ) return &aParticleChange ; 
  
-  G4cout<<"step = "<<Step/mm<<" mm"<<G4endl ;
-
-
-
+  //  G4cout<<"step = "<<Step/mm<<" mm"<<endl ;
 
   // get particle and material pointers from trackData
  
@@ -751,7 +750,7 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
   }
   G4int iPlace = iTkin - 1 ; // index*(G4PAIonisation::GetBinNumber()) +
 
-  G4cout<<"iPlace = "<<iPlace<<G4endl ;
+  //  G4cout<<"iPlace = "<<iPlace<<endl ;
 
   G4PhysicsVector*  firstVector = (*fPAItransferBank)(iPlace)     ;
   G4PhysicsVector* secondVector = (*fPAItransferBank)(iPlace + 1) ;
@@ -812,7 +811,8 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
                      ( (*(*fPAItransferBank)(iPlace))(0)*W1 + 
                      (*(*fPAItransferBank)(iPlace+1))(0)*W2 )*Step) ;
 
-      G4cout<<"numOfCollisions = "<<numOfCollisions<<G4endl ;
+
+      //  G4cout<<"numOfCollisions = "<<numOfCollisions<<endl ;
 
       while(numOfCollisions)
       {
@@ -835,7 +835,8 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
       }
     }
   } 
-  G4cout<<"PAI loss = "<<loss/keV<<" keV"<<G4endl ; 
+  //  G4cout<<"PAI loss = "<<loss/keV<<" keV"<<endl ; 
+
   return loss ;
 }
 
