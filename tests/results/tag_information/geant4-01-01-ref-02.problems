@@ -1,0 +1,120 @@
+                 Problems with geant4-01-01-ref-02
+                 =================================
+
+Same as the problems with geant4-01-01-ref-01.
+
+Here is a more detailed report from Steve O'Neale:
+
+ A full range of platforms have had the "standard" and "Large_N" tests
+ run for geant4-01-01-ref-01-tags22 in dev1.
+
+ Looking through the test02.hadron, test11 and test15 large_N.out
+ files I noted a number of problems which I believe have already been
+ reported.
+
+ 1)
+
+ Error in G4ParticleWithCuts::ConvertCutToKineticEnergy is seen
+ throughout the tests, for example in ionIoni: and eBrem: as below,
+ and execution continues.
+
+ ionIoni: 
+ ******** SetCuts for gamma ******************** 
+ The maximal meaningful cut is 857.187 mm. 
+ All the gammawill be killed ! in the material Aluminium.
+ Error in G4ParticleWithCuts::ConvertCutToKineticEnergy
+ ******** ConvertCutToKineticEnergy for gamma ********************
+ The cut energy is set 1.79769e+305GeV
+
+ (This becuase we set the cuts to a large distance to reduce the time
+ spent in electromagnetic processes in hadron tests.)
+     
+ 2)
+
+  G4NeutronHPNames: Sorry, this material does not come near to any data. 
+  G4NeutronHPNames: Please make sure NeutronHPCrossSections points to the
+                  directory, the neutron scattering data are located in.
+
+  is reported for 
+  DEC-cxx/debug_ISO     test11.out    
+  DEC-cxx/optim_ISO     test11.out        
+  DEC-cxx/debug_ISO     test15.out     
+  DEC-cxx/optim_ISO     test15.out   
+
+  for test11 G4NeutronHPNames: The material was: A=18, Z=8 and
+  for test15 G4NeutronHPNames: The material was: A=204, Z=82.
+
+  execution stops.
+
+3)
+
+  A very large, negative energy deposit (and the termination of the
+  test) is seen in
+
+DEC-cxx/debug_ISO      test02.hadron.large_N  # pi- at 100 GeV in Al Large -ve energy deposit from secondary muon.
+DEC-cxx/debug_NONISO   test02.hadron.large_N  # pi- at 100 GeV in Al Large -ve energy deposit from secondary muon.
+SUN-CC/optim_NONISO    test11.large_N.out     # kaon0S at 10 GeV in U  large negative energy deposit.
+
+ # pi- at 100 GeV in Al
+ /run/beamOn 20
+  G4VParticleChange::CheckIt    : the energy deposit  is negative  !!
+  Difference:  2.40441e+06[MeV] 
+ G4VParticleChange::CheckIt 
+ pointer : 1405c6f88
+      -----------------------------------------------
+        G4ParticleChange Information  
+      -----------------------------------------------
+        # of 2ndaries       :                    0
+      -----------------------------------------------
+        Energy Deposit (MeV):             -2.4e+06
+        Track Status        :                Alive
+        True Path Length (mm) :                  351
+        Stepping Control     :                    0
+        Event Biasing        :  not used 
+        Mass (GeV)   :                0.106
+        Charge (eplus)   :                    1
+        Position - x (mm)   :                  674
+        Position - y (mm)   :                 41.3
+        Position - z (mm)   :                -7.35
+        Time (ns)           :                 2.26
+        Proper Time (ns)    :                    0
+        Momentum Direct - x :                0.994
+        Momentum Direct - y :                0.098
+        Momentum Direct - z :               0.0391
+        Kinetic Energy (MeV):             2.41e+06
+        Polarization - x    :                    0
+        Polarization - y    :                    0
+        Polarization - z    :                    0
+        Track Weight      :                    1
+ 
+ (Executions Stops).
+
+ 
+4)  Execution terminated / Program loops for
+
+DEC-cxx/optim_ISO      test02.hadron.large_N  stuck in a loop on first "beam" 
+SUN-CC/debug_NONISO    test02.hadron.large_N  stuck in a loop  kaon0L at 100 GeV in Pb
+
+The remaining tests ran to completion.
+
+DEC-cxx/optim_NONISO   test02.hadron.large_N  Ran to # alpha at 100 MeV in Air
+HP-aCC/debug                                  Ran to # alpha at 100 MeV in Air
+HP-aCC/optim                                  Ran to # alpha at 100 MeV in Air
+SUN-CC/optim_NONISO                           Ran to # alpha at 100 MeV in Air
+Linux-g++/optim                               Ran to # alpha at 100 MeV in Air
+Linux-g++/debug                               Ran to # alpha at 100 MeV in Air
+
+  DEC-cxx/debug_NONISO                          All OK to kaon0L at 10 GeV in Air
+  DEC-cxx/optim_NONISO                          All OK to kaon0L at 10 GeV in Air
+  HP-aCC/debug                                  All OK to kaon0L at 10 GeV in Air
+  HP-aCC/optim                                  All OK to kaon0L at 10 GeV in Air
+  SUN-CC/debug_NONISO  (not large N)            All OK to kaon0L at 10 GeV in Air
+
+  DEC-cxx/debug_NONISO                  OK to proton at 10 GeV in U  (4 beamon 10/200)
+  DEC-cxx/optim_NONISO
+  HP-aCC/debug
+  HP-aCC/optim        
+  SUN-CC/debug_NONISO
+  SUN-CC/optim_NONISO
+  Linux-g++/optim
+  Linux-g++/debug

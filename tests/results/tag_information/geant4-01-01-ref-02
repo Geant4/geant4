@@ -1,0 +1,42 @@
+                geant4-01-01-ref-02
+                ===================
+
+Note that because of the restructuring of geometry you are advised to
+clean away binaries, use the -d and -P options and rebuild from
+scratch:
+
+  cd $G4INSTALL/source
+  gmake clean
+  cvs update -d -P -r geant4-01-01-ref-02
+  gmake
+
+geant4-01-01-ref-02 is geant4-01-01-ref-01 plus:
+
+testem6-V01-00-02   - Simulation of ranges and straggling of hadrons/ions.
+greps-V01-01-00     - Code Tidy and boolean operations on HepPolyhedron.
+config-V01-01-02    - nmake.gmk add geometry/solids/specific;
+                    - modified g4step_correct.pl.
+g3tog4-V01-01-00    - Modified make files;
+                    - added geometry/solids/specific to include paths.
+geometry-V01-01-00  - Restructured CSG:
+  - Restructured CSG directory:
+    o moved all shapes which are non-pure CSG to solids/specific.
+      See related History files for more details.
+    o moved unit-tests to appropriate test directories.
+    o extracted tests "SBT" and "Fred" and placed one level up in
+      solids/tests (new directory).
+  - Fixes to G4Tubes.cc and G4Hype[.hh.cc].
+  - Added new shape in solids/specific: G4EllipticalTube.
+  - Organised class description comments for the Software Reference Manual
+    in CSG and specific headers. Added CVS headers to files in specific.
+vis-V01-01-00       - make files for Restructured CSG.
+neu-V01-01-01       - Q-values on Lithium-6, gamma production on Iron56,
+                      triton production on B-10.
+geometry-V01-01-01  - Changes for visualization.
+                    - G4DisplacedSolid: fixed and reversed implementation of
+                      GetFrameRotation and GetObjectRotation.
+greps-V01-01-01     - Code Tidy to remove HP Compiler warnings.
+vis-V01-01-01       - boolean solid visualization with G4Polyhedron objects.
+emlowen-V01-01-05   - Improvements.
+emlowen-V01-01-07   - Correction to emlowen-V01-01-05 in
+                      G4LowEnergyBremsstrahlung.cc.
