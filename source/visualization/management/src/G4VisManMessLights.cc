@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessLights.cc,v 1.4 1999-12-15 14:54:27 gunter Exp $
+// $Id: G4VisManMessLights.cc,v 1.5 2000-08-19 18:23:37 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,10 +69,6 @@ void G4VisManMessenger::DoCommandLights (const G4String& commandPath,
 	fpVMan -> PrintCurrentView ();
       }
     }
-    if (ViewValid ()) {
-      fpVMan -> GetCurrentViewer () -> ClearView ();  // Clears buffer only.
-      fpVMan -> Draw ();    
-      fpVMan -> Show ();    
-    }
+    G4cout << "Issue Draw or refresh to see effect." << G4endl;
   }
 }
