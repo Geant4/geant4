@@ -21,8 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: test12.cc,v 1.3 2001-07-11 10:09:52 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "Tst12DetectorConstruction.hh"
@@ -30,6 +28,7 @@
 #include "Tst12PrimaryGeneratorAction.hh"
 #include "Tst12PhysicsList.hh"
 #include "Tst12SteppingAction.hh"
+#include "Tst12StackingAction.hh"
 
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
@@ -53,7 +52,7 @@ int main(int argc,char** argv) {
   // UserAction classes
   runManager->SetUserAction(new Tst12RunAction);
   runManager->SetUserAction(new Tst12PrimaryGeneratorAction);
-  //runManager->SetUserAction(new Tst12SteppingAction);
+  runManager->SetUserAction(new Tst12StackingAction);
 
   if(argc==1)
   {

@@ -21,8 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: test12.hadronic.exerciser.cc,v 1.10 2001-07-11 10:09:52 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "globals.hh"
@@ -65,10 +63,10 @@ static void OutputCases
 
 int main (int argc, char** argv) {
 
-  G4int N = 1;
+  G4int N = 200;
   if (argc > 1) {
     if (strcmp (argv[1], "large_N") == 0) {
-      N = 20;
+      N = 2000;
     }
   }
 
