@@ -1,4 +1,4 @@
-$Id: History,v 1.15 1999-11-10 17:14:16 japost Exp $
+$Id: History,v 1.16 1999-11-10 17:19:52 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+November 10th, 1999   J. Apostolakis - geomvol-01-01-01b
+
+Modified test/GNUmakefile to make it use fully-granular libraries.
+New test code in testG4Volumes for Object/Frame Rotation/Translation.
+
 October  29th, 1999   J. Apostolakis - geomvol-01-01-01a
 
 Moved initialisation of static data members of G4PropagatorInField 
