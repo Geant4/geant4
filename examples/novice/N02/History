@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2002-12-16 16:31:42 maire Exp $
+$Id: History,v 1.26 2003-02-11 14:31:20 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,8 +15,8 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
-17-12-02 mma (exampleN02-V05-00-00)
-- UI directory /N02/
+11-02-03 mma (exampleN02-V05-00-00)
+- a blank in SteppingVerbose
      
 27-11-01 mma (exampleN02-V03-02-04)
 - vis.mac: /vis/viewer/set/viewpointThetaPhi
