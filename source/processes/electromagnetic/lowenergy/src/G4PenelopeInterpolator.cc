@@ -181,7 +181,7 @@ G4double G4PenelopeInterpolator::CalculateMomentum(G4double UpperLimit,
       }
     dx=x2-x1;
     dy=y2-y1;
-    if (G4std::abs(dx) > (1e-14*G4std::abs(dy))) 
+    if (abs(dx) > (1e-14*abs(dy))) 
       {
 	b1=dy/dx;
 	a1=y1-b1*x1;

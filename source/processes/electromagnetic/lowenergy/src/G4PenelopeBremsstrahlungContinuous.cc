@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungContinuous.cc,v 1.2 2003-03-19 10:30:01 pandola Exp $
+// $Id: G4PenelopeBremsstrahlungContinuous.cc,v 1.3 2003-03-27 16:48:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -137,7 +137,7 @@ void G4PenelopeBremsstrahlungContinuous::PrepareInterpolationTable()
     G4double Fact = (millibarn/cm2)*(Energies[i]+electron_mass_c2)*(1.0/fine_structure_const)/
       (pow(classic_electr_radius,2)*(Energies[i]+2.0*electron_mass_c2));
     G4double Normalization = TotalCS[i]/(Rsum*Fact);
-    G4double TST = G4std::abs(Normalization-100.0);
+    G4double TST = abs(Normalization-100.0);
     if (TST > 1.0) {
       G4String excep = "G4PenelopeBremsstrahlungContinuous - Check the bremms data file";
       G4Exception(excep);
