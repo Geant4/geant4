@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForDecay.hh,v 1.7 2004-09-21 21:32:19 gum Exp $
+// $Id: G4ParticleChangeForDecay.hh,v 1.8 2004-10-19 00:51:29 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //
@@ -97,13 +97,6 @@ class G4ParticleChangeForDecay: public G4VParticleChange
     // Get/Propose the final Polarization vector.
 
   public:
-   // Following methods will be removed in release 7.0
-   // Using ProposeXXXX methods is recommended to setting
-   // properties in G4ParticleChangeForDecay   
-    G4double GetTimeChange() const;
-    void     SetTimeChange(G4double t);
-
-  public:
     virtual void DumpInfo() const;
 
   protected:
@@ -135,19 +128,6 @@ inline
 {
   //  Convert the time delay to the global time.
   return theTimeChange + timeDelay;
-}
-
-// Following methods will be removed in release 7.0
-inline 
-  G4double G4ParticleChangeForDecay::GetTimeChange() const
-{
-  return  theTimeChange;
-}
-
-inline 
-  void G4ParticleChangeForDecay::SetTimeChange(G4double t)
-{
-  theTimeChange = t;
 }
 
 inline

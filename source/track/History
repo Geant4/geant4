@@ -1,4 +1,4 @@
-$Id: History,v 1.72 2004-09-21 21:31:32 gum Exp $
+$Id: History,v 1.73 2004-10-19 00:51:29 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Oct. 19, 04 H.Kurashige (track-V06-02-02) 
+- Remove obsolete methods from G4ParticleChange
 
 Sep. 17, 04 P.Gumplinger (track-V06-02-01)
 - Modified G4ParticleChangeForDecay (add thePolarizationChange and methods)

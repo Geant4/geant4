@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForTransport.icc,v 1.11 2004-08-12 00:50:09 asaim Exp $
+// $Id: G4ParticleChangeForTransport.icc,v 1.12 2004-10-19 00:51:30 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -138,47 +138,6 @@ G4ParticleChangeForTransport::GetPointerToVectorOfAuxiliaryPoints() const
 {
   return fpVectorOfAuxiliaryPointsPointer;
 }
-
-
-// Following methods will be removed in release 7.0
-inline 
- void G4ParticleChangeForTransport::SetMaterialChange(G4Material* fMaterial)
-{
-  theMaterialChange =   fMaterial;
-}
-
-inline 
- G4Material* G4ParticleChangeForTransport::GetMaterialChange() const
-{
-  return theMaterialChange;
-}
-
-inline 
- void G4ParticleChangeForTransport::SetMaterialCutsCoupleChange(const G4MaterialCutsCouple* fMaterialCutsCouple)
-{
-  theMaterialCutsCoupleChange =   fMaterialCutsCouple;
-}
-
-inline 
- const G4MaterialCutsCouple* G4ParticleChangeForTransport::GetMaterialCutsCoupleChange() const
-{
-  return theMaterialCutsCoupleChange;
-}
-
-inline 
- void G4ParticleChangeForTransport::SetSensitiveDetectorChange(G4VSensitiveDetector* fSensitiveDetector)
-{
-  theSensitiveDetectorChange =   fSensitiveDetector;
-}
-
-inline 
- G4VSensitiveDetector* G4ParticleChangeForTransport::GetSensitiveDetectorChange() const
-{
-  return theSensitiveDetectorChange;
-}
-
-
-
 
 
 

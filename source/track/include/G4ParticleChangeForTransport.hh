@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForTransport.hh,v 1.14 2004-08-12 00:50:09 asaim Exp $
+// $Id: G4ParticleChangeForTransport.hh,v 1.15 2004-10-19 00:51:29 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -104,17 +104,6 @@ class G4ParticleChangeForTransport: public G4ParticleChange
 
     G4bool GetMomentumChanged() const;
     void SetMomentumChanged(G4bool b);
-
-  public:
-   // Following methods will be removed in release 7.0
-   // Using ProposeXXXX methods is recommended to setting
-   // properties in G4ParticleChangeForDecay   
-  G4Material* GetMaterialChange() const;
-  void SetMaterialChange(G4Material* fMaterial);
-  const G4MaterialCutsCouple* GetMaterialCutsCoupleChange() const;
-  void SetMaterialCutsCoupleChange(const G4MaterialCutsCouple* fMaterialCutsCouple);
-  G4VSensitiveDetector* GetSensitiveDetectorChange() const;
-  void SetSensitiveDetectorChange(G4VSensitiveDetector* fSensitiveDetector);
 
   public:
     virtual void DumpInfo() const;
