@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.cc,v 1.35 2003-08-29 07:33:16 vnivanch Exp $
+// $Id: G4MuIonisation.cc,v 1.36 2003-11-03 19:22:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -106,11 +106,9 @@ void G4MuIonisation::InitialiseProcess()
 
   if(IsIntegral()) {
     flucModel = new G4BohrFluctuations();
-    SetStepFunction(1.0, 1.0*mm);
 
   } else {
     flucModel = new G4UniversalFluctuation();
-    SetStepFunction(0.2, 1.0*mm);
   }
 
   G4double massFactor = mass/proton_mass_c2;

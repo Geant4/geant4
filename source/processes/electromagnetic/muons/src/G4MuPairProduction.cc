@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProduction.cc,v 1.38 2003-09-27 13:29:45 vnivanch Exp $
+// $Id: G4MuPairProduction.cc,v 1.39 2003-11-03 19:22:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -99,9 +99,10 @@ void G4MuPairProduction::InitialiseProcess()
   SetMaxKinEnergy(100.0*TeV);
 
   G4VEmModel* em = new G4MuPairProductionModel();
+  G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
   em->SetLowEnergyLimit(0.1*keV);
   em->SetHighEnergyLimit(100.0*TeV);
-  AddEmModel(1, em);
+  AddEmModel(1, em, fm);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

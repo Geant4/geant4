@@ -1,4 +1,4 @@
-$Id: History,v 1.102 2003-10-27 17:27:42 vnivanch Exp $
+$Id: History,v 1.103 2003-11-03 19:31:41 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03 Nov 03: V.Ivant (stand-V05-02-06)
+- Remove STD processes
 
 24 Oct 03: V.Ivant (stand-V05-02-05)
 -Update defults for processes
