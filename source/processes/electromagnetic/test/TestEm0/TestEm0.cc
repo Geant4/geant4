@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: TestEm0.cc,v 1.1 1999-01-08 16:32:28 gunter Exp $
+// $Id: TestEm0.cc,v 1.2 1999-04-23 17:49:25 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,8 +37,6 @@
 #include "Em0TrackingAction.hh"
 #include "Em0SteppingAction.hh"
 #endif
-// Solve templates.
-#include "g4templates.hh"
 
 int main(int argc,char** argv) {
 
