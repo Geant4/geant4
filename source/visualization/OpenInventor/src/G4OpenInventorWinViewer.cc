@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.cc,v 1.3 2004-11-08 17:33:37 gbarrand Exp $
+// $Id: G4OpenInventorWinViewer.cc,v 1.4 2004-11-08 21:43:50 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -62,8 +62,6 @@ public:
 //
 
 //static void SecondaryLoopPostAction ();
-
-static LRESULT CALLBACK WindowProc (HWND,UINT,WPARAM,LPARAM);
 
 static const char className[] = "G4OpenInventorShellWindow";
 
@@ -226,11 +224,6 @@ G4OpenInventorWinViewer::~G4OpenInventorWinViewer () {
   if(fSelection) fSelection->unref();
 }
 
-Geant4_SoWinExaminerViewer* G4OpenInventorWinViewer::GetInventorViewer(
-) const {
-  return fViewer;
-}
-
 void G4OpenInventorWinViewer::ClearView () {
 }
 
@@ -248,7 +241,7 @@ void G4OpenInventorWinViewer::ShowView () {
   fInteractorManager -> SecondaryLoop ();
 }
 //////////////////////////////////////////////////////////////////////////////
-LRESULT CALLBACK WindowProc ( 
+LRESULT CALLBACK G4OpenInventorWinViewer::WindowProc ( 
  HWND   aWindow
 ,UINT   aMessage
 ,WPARAM aWParam
@@ -268,8 +261,8 @@ LRESULT CALLBACK WindowProc (
     //printf("debug : G4SoWindow : WMS_SIZE : %d %d\n",width,height);
     G4OpenInventorWinViewer* This = 
       (G4OpenInventorWinViewer*)::GetWindowLong(aWindow,GWL_USERDATA);
-    if(This && This->GetInventorViewer()) 
-      This->GetInventorViewer()->sizeChanged(SbVec2s(width,height));
+    if(This && This->fViewer) 
+      This->fViewer->sizeChanged(SbVec2s(width,height));
   }return 0;
   case WM_SETFOCUS:{ // Assume one child window !
     HWND hwnd = ::GetFirstChild(aWindow);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.hh,v 1.3 2004-11-08 17:32:52 gbarrand Exp $
+// $Id: G4OpenInventorWinViewer.hh,v 1.4 2004-11-08 21:43:49 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,13 +50,13 @@ public:
   virtual ~G4OpenInventorWinViewer();
   void DrawView();
   void ShowView();
-  Geant4_SoWinExaminerViewer* GetInventorViewer() const;
 private:
   void ClearView();
   void FinishView();
   void SetView();
   void KernelVisitDecision();
   G4bool CompareForKernelVisit(G4ViewParameters&);
+  static LRESULT CALLBACK WindowProc(HWND,UINT,WPARAM,LPARAM);
 private:
   G4OpenInventorSceneHandler& fG4OpenInventorSceneHandler;
   G4ViewParameters fLastVP;  // Memory for making kernel visit decisions.
