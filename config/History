@@ -1,4 +1,4 @@
-$Id: History,v 1.105 2000-05-23 06:48:25 gcosmo Exp $
+$Id: History,v 1.106 2000-07-24 12:08:13 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24th July 2000  Gabriele Cosmo (config-V02-00-00)
+- Added path to g3tog4 for global libs.
 
 23rd May 2000  John Allison (config-V01-01-04)
 - Added -I$(G4BASE)/processes/hadronic/models/radiative_decay/include to
