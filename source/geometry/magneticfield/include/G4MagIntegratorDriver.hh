@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.hh,v 1.14 2003-06-20 22:40:26 japost Exp $
+// $Id: G4MagIntegratorDriver.hh,v 1.15 2003-06-25 09:02:29 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -78,7 +78,8 @@ class G4MagInt_Driver
 
      G4MagInt_Driver( G4double                hminimum, 
 		      G4MagIntegratorStepper *pItsStepper,
-                      G4int                   numberOfComponents=6);
+                      G4int                   numberOfComponents=6,
+		      G4int                   statisticsVerbosity=1);
      ~G4MagInt_Driver();
         // Constructor, destructor.
 
@@ -233,6 +234,8 @@ class G4MagInt_Driver
      G4double fDyerrPos_smTot, fDyerrVel_smTot, fDyerrPos_lgTot, fDyerrVel_lgTot; 
      G4double fSumH_sm,   fSumH_lg; 
         // Step Statistics 
+
+     G4int    fStatisticsVerboseLevel;
 };
 
 #include "G4MagIntegratorDriver.icc"
