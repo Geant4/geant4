@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BinaryLightIonReaction.cc,v 1.8 2003-10-14 13:38:56 gunter Exp $
+// $Id: BinaryLightIonReaction.cc,v 1.9 2003-11-10 14:00:13 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -81,7 +81,7 @@ extern "C" int ecpt();
  int main()
   {
 
-    ecpt();
+//    ecpt();
     
     G4cout.setf( std::ios::scientific, std::ios::floatfield );
     std::ofstream outFile( "InInelasticAlpha.listing.GetMeanFreePath", std::ios::out);
@@ -338,6 +338,7 @@ int j = 0;
        }  // energy loop
      }  // material loop
    }  // particle loop
+   G4cout << G4endl <<"Light-ION-SUCESS" <<G4endl;
    return EXIT_SUCCESS;
 }
 

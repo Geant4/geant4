@@ -536,10 +536,16 @@ G4bool G4RKPropagation::FieldTransport(G4KineticTrack * kt, const G4double timeS
     kt->SetPosition(track.GetPosition());
     G4LorentzVector mom(track.GetMomentum(),sqrt(track.GetMomentum().mag2() + sqr(kt->GetActualMass())));
     mom *= G4LorentzRotation( boost );
-    theMomentumTranfer += kt->GetTrackingMomentum().vect() - track.GetMomentum();
+    theMomentumTranfer += ( kt->GetTrackingMomentum() - mom ).vect();
     kt->SetTrackingMomentum(mom);
+
 //    G4cout <<"Stepper output"<<kt<<" "<<kt->GetTrackingMomentum()<<" "<<kt->GetPosition()<<G4endl;
 /*
+ *   G4ThreeVector MomentumTranfer2=kt->GetTrackingMomentum().vect() - mom.vect();
+ * G4cout << " MomentumTransfer/corrected" <<    MomentumTranfer << " " <<  MomentumTranfer.mag()
+ *  	    <<  " " <<    MomentumTranfer2 << " " <<  MomentumTranfer2.mag() << " " 
+ *	    << MomentumTranfer-MomentumTranfer2 << " "<<
+ *	    MomentumTranfer-MomentumTranfer2.mag() << " " << G4endl; 
  *      G4cout <<" E/Field/Sum aft : " <<mom.e() << " / "
  *            << " / " << (*theFieldMap)[encoding]->GetField(pos)<< " / "
  * 	   << mom.e()+(*theFieldMap)[encoding]->GetField(pos)

@@ -112,6 +112,8 @@ private:
   G4LorentzVector GetFinalNucleusMomentum();
   G4ReactionProductVector * Propagate1H1(G4KineticTrackVector * secondaries,
 				      G4V3DNucleus * nucleus);
+  G4double GetIonMass(G4int Z, G4int A);
+  
 // utility methods
   G4ThreeVector GetSpherePoint(G4double r, const G4LorentzVector & momentumdirection);
   void ClearAndDestroy(G4KineticTrackVector * ktv);
