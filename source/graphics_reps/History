@@ -1,4 +1,4 @@
-$Id: History,v 1.29 2001-04-11 15:03:29 johna Exp $
+$Id: History,v 1.30 2001-05-03 11:06:08 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3rd May 2001  John Allison  (greps-V03-01-01)
+- Replaced G4RWTValOrderedVector by G4std::vector in G4PlacedPolyhedron
+  and G4Point3DList.  Forces co-working tags in many categories.
 
 11th April 2001  John Allison  (greps-V03-01-00)
 - Some code has been added to cover unforeseen earlier situation

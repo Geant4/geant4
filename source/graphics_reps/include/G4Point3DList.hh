@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Point3DList.hh,v 1.6 1999-12-15 16:46:08 gcosmo Exp $
+// $Id: G4Point3DList.hh,v 1.7 2001-05-03 11:06:09 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,11 +18,11 @@
 #ifndef G4POINT3DLIST_HH
 #define G4POINT3DLIST_HH
 
-#include "g4rw/tvordvec.h"
+#include "g4std/vector"
 #include "G4Point3D.hh"
 #include "g4std/iostream"
 
-class G4Point3DList: public G4RWTValOrderedVector<G4Point3D> {
+class G4Point3DList: public G4std::vector<G4Point3D> {
 
 friend G4std::ostream& operator << (G4std::ostream& os, const G4Point3DList& points);
 
