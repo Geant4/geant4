@@ -16,19 +16,26 @@
 /test31/NumberOfAbsorbers    60
 /test31/maxDeltaEnergy       1.0 MeV
 /test31/WorldMaterial        Vacuum
-/test31/HistoName            t_3Dec04_e_st.paw
 /test31/HistoNumber          5
 /test31/NumberOfEvents       0
 /test31/gun/beamE            1000.0 MeV
 #/process/eLoss/preciseRange  true
 /run/initialize
 #
+/test31/HistoName            t_e_st.paw
 /gun/particle e-
-#/gun/particle proton
-#/gun/particle gamma
-#/gun/particle proton
-#/gun/particle alpha
-#/gun/energy 10.0 MeV
-#
 /run/beamOn 1000
+#
+/test31/HistoName            t_mu_st.paw
+/gun/particle mu-
+/run/beamOn 1000
+#
+/test31/HistoName            t_pi_st.paw
+/gun/particle pi+
+/run/beamOn 1000
+#
+/test31/HistoName            t_p_st.paw
+/gun/particle proton
+/run/beamOn 1000
+#
 

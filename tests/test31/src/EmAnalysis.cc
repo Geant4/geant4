@@ -210,16 +210,16 @@ void EmAnalysis::saveToFile()
       for(G4int j=0; j<nb; j++) {
         G4double s = 0.0;
         if(isdedx) {
-          s = calc.ComputeDEDX(particle[ii],material[ii],process[ii],x,cut);
+          s = calc.ComputeDEDX(x,particle[ii],process[ii],material[ii],cut);
           s *= mm/MeV;
         } else if(iscspe) { 
-          s = calc.ComputeCrossSection(particle[ii],material[ii],process[ii],x,cut);
+          s = calc.ComputeCrossSectionPerVolume(x,particle[ii],process[ii],material[ii],cut);
   	  s /= (unit*mat->GetElectronDensity());
         } else if(ismumu) {
           G4double y = eth/x;
           if(y < 1.0) s = mufac*y*(1.0 + 0.5*y)*std::sqrt(1.0 - y)/unit; 
         } else { 
-          s = calc.ComputeCrossSection(particle[ii],material[ii],process[ii],x,cut);
+          s = calc.ComputeCrossSectionPerVolume(x,particle[ii],process[ii],material[ii],cut);
   	  s /= (unit*mat->GetTotNbOfAtomsPerVolume());
         }
 	histo->fill(i,std::log10(x),s); 

@@ -326,8 +326,7 @@ void test31Histo::TableControl()
 
   const G4ParticleDefinition* part = cal.FindParticle(part_name);
   const G4Material* mat = cal.FindMaterial(mat_name);
-  G4double fact = gram/(MeV*cm2*mat->GetDensity());
-
+  //  G4double fact = gram/(MeV*cm2*mat->GetDensity());
 
   G4double xmin = std::log10(tmin);
   G4double xmax = std::log10(tmax);
@@ -340,10 +339,9 @@ void test31Histo::TableControl()
 
   for(G4int i=0; i<=nbin; i++) {
     G4double e  = std::pow(10.,x);
-    //    G4double dedx0 = cal.GetDEDX(part_name,mat_name,e);
-    G4double dedx0 = cal.GetDEDX(part,mat,e);
-    G4double dedx = cal.ComputeDEDX(part_name,mat_name,proc_name,e,cut);
     /*    
+    G4double dedx0 = cal.GetDEDX(e,part,mat);
+    G4double dedx = cal.ComputeDEDX(e,part_name,proc_name,mat_name,cut);
     G4cout << i << ".   e(MeV)= " << e/MeV 
            << ";  Computed  dedx(MeV*cm^2/g)= " << dedx*fact
            << ";  Tabled  dedx(MeV*cm^2/g)= " << dedx0*fact
