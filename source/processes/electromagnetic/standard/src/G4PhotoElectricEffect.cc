@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.21 2001-09-28 15:38:14 maire Exp $
+// $Id: G4PhotoElectricEffect.cc,v 1.22 2001-10-01 15:00:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,7 +48,8 @@
 // 06-08-01, new methods Store/Retrieve PhysicsTable (mma)
 // 06-08-01, BuildThePhysicsTable() called from constructor (mma)
 // 17-09-01, migration of Materials to pure STL (mma)
-// 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)    
+// 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)
+// 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)       
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,9 +69,7 @@ G4PhotoElectricEffect::G4PhotoElectricEffect(const G4String& processName)
     HighestEnergyLimit(50*MeV),
     NumbBinTable(100),
     fminimalEnergy(1*eV)
-{
- BuildThePhysicsTable();
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
@@ -99,7 +98,7 @@ void G4PhotoElectricEffect::SetPhysicsTableBining(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-void G4PhotoElectricEffect::BuildThePhysicsTable()
+void G4PhotoElectricEffect::BuildPhysicsTable(const G4ParticleDefinition&)
 
 // Build cross section per atom and mean free path tables
 {

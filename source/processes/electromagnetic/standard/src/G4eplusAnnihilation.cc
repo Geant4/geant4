@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eplusAnnihilation.cc,v 1.12 2001-09-28 15:38:15 maire Exp $
+// $Id: G4eplusAnnihilation.cc,v 1.13 2001-10-01 15:00:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,6 +37,7 @@
 // 06-08-01, BuildThePhysicsTable() called from constructor (mma)
 // 17-09-01, migration of Materials to pure STL (mma)
 // 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)
+// 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)   
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,9 +57,7 @@ G4eplusAnnihilation::G4eplusAnnihilation(const G4String& processName)
     HighestEnergyLimit(10*TeV),
     NumbBinTable(100),
     fminimalEnergy(1*eV)
-{
-  BuildThePhysicsTable();
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
@@ -88,7 +87,7 @@ void G4eplusAnnihilation::SetPhysicsTableBining(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-void G4eplusAnnihilation::BuildThePhysicsTable()
+void G4eplusAnnihilation::BuildPhysicsTable(const G4ParticleDefinition& )
 {
  // Build total cross section and mean free path tables
 

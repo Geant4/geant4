@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion.cc,v 1.13 2001-09-28 15:38:14 maire Exp $
+// $Id: G4GammaConversion.cc,v 1.14 2001-10-01 15:00:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------------ G4GammaConversion physics process -------------------------
@@ -51,7 +51,8 @@
 // 06-08-01, new methods Store/Retrieve PhysicsTable (mma)
 // 06-08-01, BuildThePhysicsTable() called from constructor (mma)
 // 17-09-01, migration of Materials to pure STL (mma)
-// 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)      
+// 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)
+// 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)         
 // -----------------------------------------------------------------------------
 
 #include "G4GammaConversion.hh"
@@ -69,9 +70,7 @@ G4GammaConversion::G4GammaConversion(const G4String& processName)
     HighestEnergyLimit(100*GeV),
     NumbBinTable(100),
     fminimalEnergy(1*eV)
-{
- BuildThePhysicsTable(); 
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
@@ -101,7 +100,7 @@ void G4GammaConversion::SetPhysicsTableBining(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-void G4GammaConversion::BuildThePhysicsTable()
+void G4GammaConversion::BuildPhysicsTable(const G4ParticleDefinition&)
 // Build cross section and mean free path tables
 {
    G4double LowEdgeEnergy, Value;

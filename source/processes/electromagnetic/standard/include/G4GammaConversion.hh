@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion.hh,v 1.8 2001-09-21 09:50:53 maire Exp $
+// $Id: G4GammaConversion.hh,v 1.9 2001-10-01 15:00:28 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------------ G4GammaConversion physics process -------------------------
@@ -38,7 +38,8 @@
 // 03-08-01, new methods Store/Retrieve PhysicsTable (mma)
 // 06-08-01, BuildThePhysicsTable() called from constructor (mma)
 // 19-09-01, come back to previous ProcessName: "conv"
-// 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)  
+// 20-09-01, DoIt: fminimalEnergy = 1*eV (mma) 
+// 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)    
 // -----------------------------------------------------------------------------
 
 // class description
@@ -83,12 +84,11 @@ class G4GammaConversion : public G4VDiscreteProcess
        // Allows to define the binning of the PhysicsTables, 
        // before to build them.
      
-     void BuildThePhysicsTable();
+     void BuildPhysicsTable(const G4ParticleDefinition&);
        // It builds the total CrossSectionPerAtom table, for Gamma,
        // and for every element contained in the elementTable.
        // It builds the MeanFreePath table, for Gamma,
        // and for every material contained in the materialTable.       
-       // It is invoked by the constructor.
        
      G4bool StorePhysicsTable(G4ParticleDefinition* ,
 			      const G4String& directory, G4bool);
