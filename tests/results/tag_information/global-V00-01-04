@@ -1,0 +1,35 @@
+The update of G4cout and G4cerr is
+implemented in the following tag.
+
+
+config-V00-01-04       - Removed G4STREAM and
+                         G4STREAM_STREAMBUF_IMPLEMENTATION. 
+                       - Augmented liblist.
+global-V00-01-04       - Removed G4STREAM implementation from G4ios and
+                         G4strstreambuf.
+
+
+The former version of G4cout consisted of two
+parts; one using strstreambuf and another using streambuf.
+The env variable  G4STREAM_STREAMBUF_IMPLEMENTATION was
+necessary to distinguish two implementations.
+(In addition, AIX required G4STREAM variable.)
+
+The one using strstreambuf is limited by the
+available memory of the system. It gave
+impression of memory leakage for users who
+wants to redirect a large volume of
+text outputs.
+
+The revised one adopts only the streambuf implementation with a small
+modification for GUI interfaces.
+Now, a large text file can be output by
+redirection without the memory limit.
+The env variable  G4STREAM_STREAMBUF_IMPLEMENTATION
+is no more required. GUIs can be used as before.
+
+The function of redirection of a stream from
+one session to another is supported in the
+new version, too.
+
+                   Best Regards, Hajime Yoshida
