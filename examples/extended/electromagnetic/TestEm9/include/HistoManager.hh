@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.3 2003-10-31 12:08:50 vnivanch Exp $
+// $Id: HistoManager.hh,v 1.4 2003-11-03 19:19:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef HistoManager_h
@@ -70,26 +70,25 @@ public: // Without description
 
   ~HistoManager();
 
-  void BeginOfEvent();
-  void EndOfEvent();
+  void bookHisto();
 
   void BeginOfRun();
   void EndOfRun();
 
-  void bookHisto();
+  void BeginOfEvent();
+  void EndOfEvent();
 
-  void SaveToTuple(const G4String&, G4double);
-  void SaveToTuple(const G4String&, G4double, G4double);
-  void SaveEvent();
+  void ScoreNewTrack(const G4Track* aTrack);
+  void AddEnergy(G4double edep, G4int idx, G4int copyNo);
+
+  void AddDeltaElectron(const G4DynamicParticle*);
+  void AddPhoton(const G4DynamicParticle*);
+
   G4double GetTrackLength() const {return trackLength;};
   void ResetTrackLength() {trackLength = 0.0, trackAbs = true;};
   void SetTrackOutAbsorber() {trackAbs = false;};
   G4bool GetTrackInAbsorber() const {return trackAbs;};
   void AddTrackLength(G4double x)   {trackLength += x;};
-  void AddEndPoint(G4double);
-  void AddEnergy(G4double, G4double);
-  void AddDeltaElectron(const G4DynamicParticle*);
-  void AddPhoton(const G4DynamicParticle*);
   void AddPositron(const G4DynamicParticle*) {n_posit++;};
   void SetVerbose(G4int val) {verbose = val;};
   G4int GetVerbose() const {return verbose;};
@@ -107,8 +106,6 @@ public: // Without description
   void SetThresholdZ(G4double val) {thPosZ = val;};
   void AddStep() {n_step++;};
 
-  void AddEnergy(G4double edep, G4int idx, G4int copyNo);
-  void ScoreNewTrack(const G4Track* aTrack);
 
 private:
 
@@ -136,7 +133,6 @@ private:
   G4int n_gamph;
   G4int n_gam_tar;
   G4int n_step_target;
-  G4int tCounter;
   G4int nBinsE, nBinsEA, nBinsED;
   G4bool nTuple;
 
@@ -144,9 +140,6 @@ private:
   G4double E[25];
   G4DataVector Evertex;
   G4DataVector Nvertex;
-
-  std::vector<G4int> tScore;
-  std::vector<G4int> tType;
 
   Histo  histo;
 };

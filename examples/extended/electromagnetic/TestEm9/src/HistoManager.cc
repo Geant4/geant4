@@ -116,56 +116,6 @@ void HistoManager::bookHisto()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void HistoManager::BeginOfEvent()
-{
-  n_evt++;
-
-  Eabs1  = 0.0;
-  Eabs2  = 0.0;
-  Eabs3  = 0.0;
-  Eabs4  = 0.0;
-  Evertex.clear();
-  Nvertex.clear();
-  for (int i=0; i<25; i++) {
-    E[i] = 0.0;
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void HistoManager::EndOfEvent()
-{
-  G4double e9 = 0.0;
-  G4double e25= 0.0;
-  for (int i=0; i<25; i++) {
-    e25 += E[i];
-    if( ( 6<=i &&  8>=i) || (11<=i && 13>=i) || (16<=i && 18>=i)) e9 += E[i];
-  }
-  histo.fill(0,E[12],1.0);
-  histo.fill(1,e9,1.0);
-  histo.fill(2,e25,1.0);
-  histo.fill(5,Eabs1,1.0);
-  histo.fill(6,Eabs2,1.0);
-  histo.fill(7,Eabs3,1.0);
-  histo.fill(8,Eabs4,1.0);
-  float nn = (double)(Nvertex.size());
-  histo.fill(9,nn,1.0);
-
-  if(nTuple) histo.addRow();
-
-  Eabs1  = 0.0;
-  Eabs2  = 0.0;
-  Eabs3  = 0.0;
-  Eabs4  = 0.0;
-  Evertex.clear();
-  Nvertex.clear();
-  for (int i=0; i<25; i++) {
-    E[i] = 0.0;
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void HistoManager::BeginOfRun()
 {
   n_evt  = 0;
@@ -215,44 +165,43 @@ void HistoManager::EndOfRun()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void HistoManager::SaveToTuple(const G4String& parname, G4double val)
+void HistoManager::BeginOfEvent()
 {
-  if(nTuple) histo.fillTuple(parname, val);
+  n_evt++;
+
+  Eabs1  = 0.0;
+  Eabs2  = 0.0;
+  Eabs3  = 0.0;
+  Eabs4  = 0.0;
+  Evertex.clear();
+  Nvertex.clear();
+  for (int i=0; i<25; i++) {
+    E[i] = 0.0;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void HistoManager::SaveToTuple(const G4String& parname,G4double val, G4double)
+void HistoManager::EndOfEvent()
 {
-  if(nTuple) histo.fillTuple(parname, val);
-}
+  G4double e9 = 0.0;
+  G4double e25= 0.0;
+  for (int i=0; i<25; i++) {
+    e25 += E[i];
+    if( ( 6<=i &&  8>=i) || (11<=i && 13>=i) || (16<=i && 18>=i)) e9 += E[i];
+  }
+  histo.fill(0,E[12],1.0);
+  histo.fill(1,e9,1.0);
+  histo.fill(2,e25,1.0);
+  histo.fill(5,Eabs1,1.0);
+  histo.fill(6,Eabs2,1.0);
+  histo.fill(7,Eabs3,1.0);
+  histo.fill(8,Eabs4,1.0);
+  float nn = (double)(Nvertex.size());
+  histo.fill(9,nn,1.0);
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  if(nTuple) histo.addRow();
 
-void HistoManager::AddEnergy(G4double, G4double)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void HistoManager::AddEndPoint(G4double )
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void HistoManager::AddDeltaElectron(const G4DynamicParticle* elec)
-{
-  G4double e = elec->GetKineticEnergy()/MeV;
-  if(e > 0.0) n_elec++;
-  histo.fill(3,e,1.0);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void HistoManager::AddPhoton(const G4DynamicParticle* ph)
-{
-  G4double e = ph->GetKineticEnergy()/MeV;
-  if(e > 0.0) n_gam++;
-  histo.fill(4,e,1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -260,27 +209,23 @@ void HistoManager::AddPhoton(const G4DynamicParticle* ph)
 void HistoManager::ScoreNewTrack(const G4Track* aTrack)
 {
   //Save primary parameters
-
   ResetTrackLength();
-  G4ParticleDefinition* particle = aTrack->GetDefinition();
+  const G4ParticleDefinition* particle = aTrack->GetDefinition();
+  const G4DynamicParticle* dynParticle = aTrack->GetDynamicParticle();
   G4String name = particle->GetParticleName();
   G4int pid = aTrack->GetParentID();
-  G4double kinE = aTrack->GetKineticEnergy();
+  G4double kinE = dynParticle->GetKineticEnergy();
   G4ThreeVector pos = aTrack->GetVertexPosition();
 
   if(0 == pid) {
 
-    tCounter = 0;
-    tType.clear();
-    tScore.clear();
-
-    SaveToTuple("TKIN", kinE/MeV);
+    histo.fillTuple("TKIN", kinE/MeV);
 
     G4double mass = 0.0;
     if(particle) {
       mass = particle->GetPDGMass();
-      SaveToTuple("MASS", mass/MeV);
-      SaveToTuple("CHAR",(particle->GetPDGCharge())/eplus);
+      histo.fillTuple("MASS", mass/MeV);
+      histo.fillTuple("CHAR",(particle->GetPDGCharge())/eplus);
       G4double beta = 1.;
 	if(mass > 0.) {
           G4double gamma = kinE/mass + 1.;
@@ -288,7 +233,7 @@ void HistoManager::ScoreNewTrack(const G4Track* aTrack)
 	}
     }
 
-    G4ThreeVector dir = aTrack->GetMomentumDirection();
+    G4ThreeVector dir = dynParticle->GetMomentumDirection();
     if(1 < verbose) {
       G4cout << "TrackingAction: Primary kinE(MeV)= " << kinE/MeV
            << "; m(MeV)= " << mass/MeV
@@ -300,34 +245,21 @@ void HistoManager::ScoreNewTrack(const G4Track* aTrack)
     if(1 < verbose) {
       G4cout << "TrackingAction: Secondary electron " << G4endl;
     }
-    AddDeltaElectron(aTrack->GetDynamicParticle());
+    AddDeltaElectron(dynParticle);
 
   } else if (0 < pid && "e+" == name) {
     if(1 < verbose) {
       G4cout << "TrackingAction: Secondary positron " << G4endl;
     }
-    AddPositron(aTrack->GetDynamicParticle());
+    AddPositron(dynParticle);
 
   } else if (0 < pid && "gamma" == name) {
     if(1 < verbose) {
       G4cout << "TrackingAction: Secondary gamma; parentID= " << pid
-             << " E= " << aTrack->GetKineticEnergy() << G4endl;
+             << " E= " << kinE << G4endl;
     }
-    AddPhoton(aTrack->GetDynamicParticle());
+    AddPhoton(dynParticle);
 
-  }
-
-  // MC truth
-  tCounter++;
-
-  if(kinE > thKinE) {
-    tScore.push_back((G4int)(tType.size()));
-
-    if(pos.z() < thPosZ) tType.push_back(1);
-    else                 tType.push_back(0);
-
-  } else {
-    tScore.push_back(tScore[pid]);
   }
 }
 
@@ -335,6 +267,12 @@ void HistoManager::ScoreNewTrack(const G4Track* aTrack)
 
 void HistoManager::AddEnergy(G4double edep, G4int volIndex, G4int copyNo)
 {
+  if(1 < verbose) {
+    G4cout << "HistoManager::AddEnergy: e(keV)= " << edep/keV 
+           << "; volIdx= " << volIndex
+           << "; copyNo= " << copyNo 
+           << G4endl;
+  }
   if(0 == volIndex) {
     E[copyNo] += edep;
   } else if (1 == volIndex) {
@@ -362,6 +300,24 @@ void HistoManager::AddEnergy(G4double edep, G4int volIndex, G4int copyNo)
       Evertex.push_back(edep);
     }
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void HistoManager::AddDeltaElectron(const G4DynamicParticle* elec)
+{
+  G4double e = elec->GetKineticEnergy()/MeV;
+  if(e > 0.0) n_elec++;
+  histo.fill(3,e,1.0);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void HistoManager::AddPhoton(const G4DynamicParticle* ph)
+{
+  G4double e = ph->GetKineticEnergy()/MeV;
+  if(e > 0.0) n_gam++;
+  histo.fill(4,e,1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

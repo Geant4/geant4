@@ -126,15 +126,6 @@ void Histo::save()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Histo::addRow()
-{
-#ifdef G4ANALYSIS_USE
-  if(ntup) ntup->addRow();
-#endif
-} 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void Histo::add1D(const G4String& id, const G4String& name, G4int nb, 
                   G4double x1, G4double x2, G4double u)
 {
@@ -177,11 +168,20 @@ void Histo::setHisto1D(G4int i, G4int nb, G4double x1, G4double x2, G4double u)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Histo::addTuple(const G4String& w1, const G4String& w2, const G4String& w3)
+void Histo::fill(G4int i, G4double x, G4double w)
 {
-  tupleId = w1;
-  tupleName = w2;
-  tupleList = w3;
+  if(verbose > 1) {
+    G4cout << "fill histogram: #" << i << " at x= " << x 
+           << "  weight= " << w
+           << G4endl;   
+  }
+#ifdef G4ANALYSIS_USE  
+  if(i>=0 && i<nHisto) {
+    histo[i]->fill((float)(x/unit[i]), (float)w);
+  } else {
+    G4cout << "Histo::fill: WARNING! wrong histogram index " << i << G4endl;
+  }
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -202,20 +202,11 @@ void Histo::scale(G4int i, G4double x)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Histo::fill(G4int i, G4double x, G4double w)
+void Histo::addTuple(const G4String& w1, const G4String& w2, const G4String& w3)
 {
-  if(verbose > 1) {
-    G4cout << "fill histogram: #" << i << " at x= " << x 
-           << "  weight= " << w
-           << G4endl;   
-  }
-#ifdef G4ANALYSIS_USE  
-  if(i>=0 && i<nHisto) {
-    histo[i]->fill((float)(x/unit[i]), (float)w);
-  } else {
-    G4cout << "Histo::fill: WARNING! wrong histogram index " << i << G4endl;
-  }
-#endif
+  tupleId = w1;
+  tupleName = w2;
+  tupleList = w3;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -229,6 +220,15 @@ void Histo::fillTuple(const G4String& parname, G4double x)
   if(ntup) ntup->fill(ntup->findColumn(parname), (float)x);
 #endif
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void Histo::addRow()
+{
+#ifdef G4ANALYSIS_USE
+  if(ntup) ntup->addRow();
+#endif
+} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

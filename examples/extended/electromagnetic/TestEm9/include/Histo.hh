@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Histo.hh,v 1.1 2003-10-31 12:09:36 vnivanch Exp $
+// $Id: Histo.hh,v 1.2 2003-11-03 19:19:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef Histo_h
@@ -71,9 +71,6 @@ public:
   void save();
   // Save histogramms to file
 
-  void addRow();
-  // Save tuple event to file
-
   void add1D(const G4String&, const G4String&, G4int nb=100, G4double x1=0., 
                                                G4double x2=1., G4double u=1.);
   // In this method histogramms are predefined
@@ -81,16 +78,19 @@ public:
   void setHisto1D(G4int, G4int, G4double, G4double, G4double);
   // It change bins and boundaries
 
-  void addTuple(const G4String&, const G4String&, const G4String&);
-  // In this method histogramms are booked
-
-  void scale(G4int, G4double);
-
   void fill(G4int, G4double, G4double);
   // Histogramms are filled
 
+  void scale(G4int, G4double);
+
+  void addTuple(const G4String&, const G4String&, const G4String&);
+  // In this method nTuple is booked
+
   void fillTuple(const G4String&, G4double);
-  // Tuples are filled
+  // Fill nTuple parameter
+
+  void addRow();
+  // Save tuple event 
 
   void setFileName(const G4String& nam) {histName = nam;};
 
