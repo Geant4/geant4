@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: globals.hh,v 1.12 1999-12-15 18:05:20 gracia Exp $
+// $Id: globals.hh,v 1.13 2000-01-03 11:39:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -19,11 +19,10 @@
 // 29.11.96 G.Cosmo - Added typedef of HepBoolean to G4bool
 // 22.10.97 M.Maire - Moved PhysicalConstants at the end of the file
 // 04.12.97 G.Cosmo,E.Tcherniaev - Migrated to CLHEP
-// 05.06.98 M.Maire - temporary (for alpha07) restore G4 system of units 
-// 26.08.98 J.Allison,E.Tcherniaev - introduced min/max/sqr/abs functions
-// 22.09.98 G.Cosmo - removed min/max/sqr/abs functions and replaced with
+// 26.08.98 J.Allison,E.Tcherniaev - Introduced min/max/sqr/abs functions
+// 22.09.98 G.Cosmo - Removed min/max/sqr/abs functions and replaced with
 //                    inclusion of CLHEP/config/TemplateFunctions.h for CLHEP-1.3
-// 15/12/99 G.Gracia  Include min, max definitions for NT with ISO standard
+// 15.12.99 G.Gracia - Included min, max definitions for NT with ISO standard
 
 #ifndef GLOBALS_HH
 #define GLOBALS_HH
