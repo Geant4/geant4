@@ -540,6 +540,21 @@ if ( `uname -n` == mac-91114.lal.in2p3.fr || `uname -n` == Ordinateur-de-Guy-Bar
   setenv G4LEVELGAMMADATA $G4WORKDIR/data/PhotonEvaporation
   setenv G4RADIOACTIVEDATA $G4WORKDIR/data/RadiativeDecay
   setenv G4LEDATA $G4WORKDIR/data/G4EMLOW0.3
+# Visualization / OpenInventor :
+  # GUI :
+  setenv G4UI_BUILD_XM_SESSION 1
+  setenv G4UI_USE_XM 1
+  # Inventor :
+  setenv G4VIS_BUILD_OIX_DRIVER 1
+  setenv G4VIS_USE_OIX 1
+  setenv OIVHOME $HOME/OpenScientist/v12r0/CoinGL/v1r200p0
+  setenv OIXHOME $HOME/OpenScientist/v12r0/CoinXt/v1r50p0
+  setenv HEPVISHOME $HOME/OpenScientist/v12r0/HEPVis/v6r4
+  setenv OIVFLAGS "-I$OIVHOME/include -I$OIXHOME/include -I$HEPVISHOME/include"
+  setenv OIVLIBS "-L$HEPVISHOME/Darwin -lHEPVisDetector -lHEPVisGeometry -lHEPVisUtils -L$OIXHOME/Darwin -lSoXt -L$OIVHOME/Darwin -lCoin"
+  setenv DYLD_LIBRARY_PATH "$OIVHOME/Darwin:$OIXHOME/Darwin:$HEPVISHOME/Darwin"
+  setenv XENVIRONMENT visTutor/g4Xt.xrm
+  setenv DYLD_BIND_AT_LAUNCH 1
 # AIDA :
 #  setenv G4ANALYSIS_USE 1
 # Falsetto implementation :
