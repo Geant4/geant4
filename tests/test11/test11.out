@@ -10,7 +10,7 @@ SimpleBox is now made of Pb
 # /run/verbose 2
 /run/particle/setCut 1 m
 /run/initialize
-/afs/cern.ch/sw/geant4/stt/prod/src/geant4/../G4NDL0.2
+/afs/cern.ch/sw/geant4/stt/dev1/src/geant4/../G4NDL0.2
 Tst11PhysicsList::SetCuts:CutLength : 1000 (mm)
 ******** SetCuts for gamma ********************
 The maximal meaningful cut is 857.187 mm.
@@ -67,7 +67,7 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
 
                  Air         86.583
            Aluminium     1.0854e+05
-                Lead     7.0466e+10
+                Lead     7.0465e+10
                 Lead     2.2328e+11
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
@@ -97,7 +97,7 @@ msc:   Tables of transport mean free paths.
 
                  Air         86.583
            Aluminium     1.0854e+05
-                Lead     7.0466e+10
+                Lead     7.0465e+10
                 Lead     2.2328e+11
 
 hIoni:    Knock-on electron cross sections . 
