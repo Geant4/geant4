@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 
   Dist = MyConBox->DistanceToIn(pt2);  
   G4cout << "\nPoint 100000,0,50";
-  G4cout << "\nDist to in: " << Dist ;
+  G4cout << "\nDist to in: " << Dist << endl;
 
 
   return EXIT_SUCCESS;

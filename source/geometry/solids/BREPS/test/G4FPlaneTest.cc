@@ -244,6 +244,7 @@ int main()
     G4cout<<"\n\nNo Intersection"
 	  <<"\n   distance="<<SurfaceVec1.Distance()<<endl;
 
+  G4cout<<endl;
   return EXIT_SUCCESS;
 }
 
