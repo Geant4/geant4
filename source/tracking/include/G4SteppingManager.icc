@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.icc,v 1.6 2000-08-30 07:10:01 tsasaki Exp $
+// $Id: G4SteppingManager.icc,v 1.7 2000-11-03 06:24:21 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -96,7 +96,7 @@ inline void G4SteppingManager::DefinePhysicalStepLength()
       // is defined by the user defined limit.
    }
 
-// GetPhysicalInteractionLength for PostStep
+// GPIL for PostStep
    fPostStepDoItProcTriggered = MAXofPostStepLoops;
 
    for(size_t np=0; np < MAXofPostStepLoops; np++){
@@ -107,7 +107,7 @@ inline void G4SteppingManager::DefinePhysicalStepLength()
      }   // NULL means the process is inactivated by a user on fly.
 
      physIntLength = fCurrentProcess->
-                     PostStepGetPhysicalInteractionLength( *fTrack,
+                     PostStepGPIL( *fTrack,
                                                  fPreviousStepSize,
                                                       &fCondition );
 #ifdef G4VERBOSE
@@ -145,7 +145,7 @@ inline void G4SteppingManager::DefinePhysicalStepLength()
    (*fSelectedPostStepDoItVector)(fPostStepDoItProcTriggered) = 1;
 
 
-// GetPhysicalInteractionLength for AlongStep
+// GPIL for AlongStep
    proposedSafety = DBL_MAX;
    G4double safetyProposedToAndByProcess = proposedSafety;
 
@@ -155,7 +155,7 @@ inline void G4SteppingManager::DefinePhysicalStepLength()
          // NULL means the process is inactivated by a user on fly.
 
      physIntLength = fCurrentProcess->
-                     AlongStepGetPhysicalInteractionLength( *fTrack,
+                     AlongStepGPIL( *fTrack,
                                                   fPreviousStepSize,
                                                        PhysicalStep,
 				       safetyProposedToAndByProcess,
@@ -199,7 +199,7 @@ inline void G4SteppingManager::InvokeAtRestDoItProcs()
 {
 
 // Select the rest process which has the shortest time before
-// it is invoked. In rest processes, GetPhysicalInteractionLength()
+// it is invoked. In rest processes, GPIL()
 // returns the time before a process occurs.
    G4double lifeTime, shortestLifeTime;
 
@@ -216,7 +216,7 @@ inline void G4SteppingManager::InvokeAtRestDoItProcs()
      }   // NULL means the process is inactivated by a user on fly.
 
      lifeTime = 
-       fCurrentProcess->AtRestGetPhysicalInteractionLength( 
+       fCurrentProcess->AtRestGPIL( 
                                                      *fTrack,
                                                 &fCondition );
      if(fCondition==Forced){
