@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIWin32.cc,v 1.11 2004-04-08 08:29:58 gbarrand Exp $
+// $Id: G4UIWin32.cc,v 1.12 2004-06-07 13:33:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
@@ -49,85 +49,24 @@
 
 #define TEXT_MAX_LINES 300
 
-class TextBuffer {
+class TextBuffer
+{
 public:
-  TextBuffer():linei(0),linen(TEXT_MAX_LINES),endOfPage(0),heightOfPage(12) {
-    lines = new G4String[linen];
-    for(int count=0;count<256;count++) spaces[count] = ' ';
-  }
-  ~TextBuffer() {
-    delete [] lines;
-  }
-  int GetNumberOfLines () {
-    return linei;
-  }
-  void SetHeightOfPage (int a_height) {
-    heightOfPage = a_height;
-  }
-  void SetEndOfPage (int a_value) {
-    if( (a_value<0) || (a_value>=linei)) {
-      endOfPage = linei-1;
-    } else {
-      endOfPage = a_value;
-    }
-  }
-  int GetEndOfPage () {
-    return endOfPage;
-  }
-  void IncrementEndOfPage () {
-    endOfPage++;
-    if(endOfPage>=linei) endOfPage = linei-1;
-  }
-  void DecrementEndOfPage () {
-    endOfPage--;
-    if(endOfPage<0) endOfPage = 0;
-  }
-  void JumpDownEndOfPage () {
-    endOfPage += heightOfPage;
-    if(endOfPage>=linei) endOfPage = linei-1;
-  }
-  void JumpUpEndOfPage () {
-    endOfPage -= heightOfPage;
-    if(endOfPage<0) endOfPage = 0;
-  }
-  G4bool AppendString (char* a_string) {
-    G4bool value = false;
-    if( (a_string==NULL) || (a_string[0]=='\0') ) return value;
-    int length = strlen(a_string);
-    if(a_string[length-1]=='\n') {
-      lines[linei] += a_string; 
-      lines[linei] = lines[linei].strip(G4String::trailing,'\n');
-      linei++;
-      value = true;
-    } else {
-      lines[linei] += a_string; 
-    }
-    if(linei>=linen) {
-      for(int count=0;count<linen;count++) {
-	lines[count] = "";
-      }
-      linei = 0;
-    }
-    if(value==true) endOfPage = linei-1;
-    return value;
-  }
-  void Draw (HDC a_hdc,RECT* a_rect) {
-    TEXTMETRIC tm;
-    GetTextMetrics (a_hdc,&tm);
-    short charWidth = (short)tm.tmAveCharWidth;
-    short charHeight = (short)(tm.tmHeight + tm.tmExternalLeading);
-    for(int row=0;row<heightOfPage;row++) {
-      int rowi = endOfPage - row;
-      short y = (short)(a_rect->bottom - charHeight * (row + 1));
-      if((rowi>=0)&&(rowi<linei)) {
-	TextOut (a_hdc,0,y,(char*)spaces,256); //Clear text background first.
-	const char* string = lines[rowi].data();
-	if(string!=NULL) {
-	  TextOut (a_hdc,0,y,(char*)string,strlen((char*)string));
-	}
-      }
-    }
-  }
+   TextBuffer();
+  ~TextBuffer();
+
+  int GetNumberOfLines () { return linei;}
+  void SetHeightOfPage (int a_height) { heightOfPage = a_height; }
+  void SetEndOfPage (int a_value);
+  int GetEndOfPage () { return endOfPage; }
+
+  void IncrementEndOfPage ();
+  void DecrementEndOfPage ();
+  void JumpDownEndOfPage ();
+  void JumpUpEndOfPage ();
+  G4bool AppendString (char* a_string);
+  void Draw (HDC a_hdc,RECT* a_rect);
+
 private:
   G4String* lines;
   int linen;
@@ -136,6 +75,94 @@ private:
   char spaces[256];
 };
 
+TextBuffer::TextBuffer()
+ : linei(0),linen(TEXT_MAX_LINES),endOfPage(0),heightOfPage(12)
+{
+  lines = new G4String[linen];
+  for(int count=0;count<256;count++) spaces[count] = ' ';
+}
+
+TextBuffer::~TextBuffer()
+{
+  delete [] lines;
+}
+
+void TextBuffer::SetEndOfPage (int a_value)
+{
+  if( (a_value<0) || (a_value>=linei)) {
+    endOfPage = linei-1;
+  } else {
+    endOfPage = a_value;
+  }
+}
+
+void TextBuffer::IncrementEndOfPage ()
+{
+  endOfPage++;
+  if(endOfPage>=linei) endOfPage = linei-1;
+}
+
+void TextBuffer::DecrementEndOfPage ()
+{
+  endOfPage--;
+  if(endOfPage<0) endOfPage = 0;
+}
+
+void TextBuffer::JumpDownEndOfPage ()
+{
+  endOfPage += heightOfPage;
+  if(endOfPage>=linei) endOfPage = linei-1;
+}
+
+void TextBuffer::JumpUpEndOfPage ()
+{
+  endOfPage -= heightOfPage;
+  if(endOfPage<0) endOfPage = 0;
+}
+
+G4bool TextBuffer::AppendString (char* a_string)
+{
+  G4bool value = false;
+  if( (a_string==NULL) || (a_string[0]=='\0') ) return value;
+  int length = strlen(a_string);
+  if(a_string[length-1]=='\n') {
+    lines[linei] += a_string; 
+    lines[linei] = lines[linei].strip(G4String::trailing,'\n');
+    linei++;
+    value = true;
+  } else {
+    lines[linei] += a_string; 
+  }
+  if(linei>=linen) {
+    for(int count=0;count<linen;count++) {
+      lines[count] = "";
+    }
+    linei = 0;
+  }
+  if(value==true) endOfPage = linei-1;
+  return value;
+}
+
+void TextBuffer::Draw (HDC a_hdc,RECT* a_rect)
+{
+  TEXTMETRIC tm;
+  GetTextMetrics (a_hdc,&tm);
+  short charWidth = (short)tm.tmAveCharWidth;
+  short charHeight = (short)(tm.tmHeight + tm.tmExternalLeading);
+  for(int row=0;row<heightOfPage;row++) {
+    int rowi = endOfPage - row;
+    short y = (short)(a_rect->bottom - charHeight * (row + 1));
+    if((rowi>=0)&&(rowi<linei)) {
+      TextOut (a_hdc,0,y,(char*)spaces,256); //Clear text background first.
+      const char* string = lines[rowi].data();
+      if(string!=NULL) {
+        TextOut (a_hdc,0,y,(char*)string,strlen((char*)string));
+      }
+    }
+  }
+}
+
+/***************************************************************************/
 static char mainClassName[] = "G4UIWin32";
 static char textClassName[] = "G4UIWin32/Text";
 static G4bool exitSession = true;
