@@ -57,12 +57,19 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMPDIR); \
-     g++ -dynamiclib -flat_namespace -undefined suppress  -dynamic -single_module -o $$libdir/$(@F) $(INTYLIBS) *.o
+     g++ -dynamiclib -twolevel_namespace -undefined error -dynamic \
+         -single_module -o $$libdir/$(@F) *.o -L$(G4LIB)/$(G4SYSTEM) \
+         $(patsubst lib%,-l%,$(patsubst %.lib,%,$(GLOBLIBS))) \
+         -L$(CLHEP_LIB_DIR) -l$(CLHEP_LIB) $(INTYLIBS)
   endef
   define build-global-shared-lib
-    libdir=`(cd $(@D);/bin/pwd)`; \
+    @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMP)/$(G4SYSTEM); \
-     g++ -dynamiclib -flat_namespace -undefined suppress  -dynamic -single_module -o $$libdir/$(@F) $(INTYLIBS) $(foreach dir,$(SUBLIBS),$(dir)/*.o);
+     g++ -dynamiclib -twolevel_namespace -undefined error -dynamic \
+         -single_module -o $$libdir/$(@F) \
+         $(foreach dir,$(SUBLIBS),$(dir)/*.o) -L$(G4LIB)/$(G4SYSTEM) \
+         $(patsubst lib%,-l%,$(patsubst %.lib,%,$(GLOBLIBS))) \
+         -L$(CLHEP_LIB_DIR) -l$(CLHEP_LIB) $(INTYLIBS);
   endef
 
 endif
