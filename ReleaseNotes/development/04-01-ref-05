@@ -1,0 +1,359 @@
+
+                       geant4-04-01-ref-05
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o New data sets for PhotonEvaporation and RadiativeDecay.
+  o New hadronic models (Binary cascade, HETC cascade) and new module
+    of generic scattering term for cascade type models.
+  o New prototype implementation of model-dependent EM-standard processes.
+  o Revised design of G4Scintillation process to allow for fast and slow
+    components and for particle dependent excitation levels.
+  o New design iteration for importance biasing and scoring and
+    reorganisation of classes to proper modules
+  o Revised design of G4VTrajectory and introduction of curved trajectories.
+  o New implementation of HepRep visualization driver (version 2).
+  o Fixes to G4LogicalVolume and G4PropagatorInField for the case of multiple
+    field managers and volume-dependent fields.
+  o Made compilation/installation of 'g3tog4' module optional.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+digits+hits                             digits_hits-V04-01-05
+-----------
+- Added classes for event scoring in module "detector":
+  G4CellScoreComposer[.hh.cc], G4CellScoreValues.hh,
+  G4CellStoreScorer[.hh.cc], G4TrackLogger[.hh.cc].
+- Added methods to G4VHit:
+    virtual const G4std::vector<G4AttDef>* GetAttDefs/Values()
+- Added GetHit() and GetSize() to G4VHitsCollection.
+- Fixed minor memory leak in G4SDManager.
+
+event                                   event-V04-01-07
+-----
+- Added classes for scoring management:
+  G4CellScorer[.hh.cc], G4CellScorerStore[.hh.cc],
+  G4ScoreTable[.hh.cc], G4Scorer[.hh.cc].
+- Introduced first implementation of HepMC interfaces.
+
+geometry/biasing                        geombias-V04-01-04
+----------------
+- New design iteration for importance biasing and scoring and
+  reorganisation of classes to proper modules (digits+hits/detector,
+  event and processes/transportation).
+  o no biasing is applied between cells that are not known by 
+    the G4IStore and its neighbors.
+  o importance value 0 is allowed to flag that no biasing should
+    be done betweeen the cell and its neighbors.
+  o changed G4ParallelNavigator to use G4TouchableHanle and
+    LocateGlobalPointAndSetup().
+  o renamed G4VPScorer to G4VScorer and G4PStep to G4GeometryCellStep 
+  o changes to handle 'pre' and 'post' importance in G4(V)ImportanceAlgorithm,
+    G4ImportanceSplitExaminer and G4ImportanceFinder.
+  o renamed G4PTouchableKey to G4GeometryCell.
+  o removed G4VPrintableScorer.hh G4VPrintableScorerFactory.hh.
+  o added G4VCellScorer.hh and G4VCellScorerStore.hh.
+
+geometry/magneticfield                  field-V04-01-03
+----------------------
+- Fixes for unitialised variables in G4MagIntegratorStepper,
+  G4MagErrorStepper and G4Mag_SpinEqRhs.
+- Fixes to address use of uninitialised variable in setting values of
+  G4FieldTrack. Modified G4MagIntegratorDriver, G4ClassicalRK4 and
+  G4MagErrorStepper
+- G4ChordFinder:
+  o Correction from zero dChord which does not update the 'Unconstrained'
+    step estimate (state).
+  o Added instance variables to store number of calls and chord-trials.
+  o Added new print method for debugging.
+- G4Mag_UsualEqRhs:
+  o Attempted approximations for speedup *overwritten* by full inverse sqrt.
+- Updated unit tests.
+
+geometry/management                     geommng-V04-01-05
+-------------------
+- Fixed bug in G4GeometryManager for the initialisation of
+  fine-grained timer for voxelisation statistics.
+- Correction in G4LogicalVolume to allow correct propagation of the
+  Field Manager to the daughter volumes. Fixes bug report for field
+  by logical volume.
+
+geometry/solids/BREPS                   breps-V04-01-03
+---------------------
+- Implemented virtual StreamInfo(...) method for all concrete BREP
+  solids + G4PlacedSolid.
+- G4Ray[.hh.icc.cc], G4Surface[.hh.icc.cc]: made static inline methods not
+  inlined to allow porting on Windows DLLs.
+
+geometry/solids/STEPinterface           stepinterface-V04-01-01
+-----------------------------
+- Made all static inline methods not inlined, to allow porting on
+  Windows DLLs.
+
+geometry/volumes                        geomvol-V04-01-07a
+----------------
+- G4PropagatorInField: introduced memory of Charge Mass and Momentum into
+  in order for it to message the correct ChordFinder at each step. Fixes
+  problem observed when multiple field managers are used.
+- G4BlockingList.cc: fixed initialisation of fBlockTagNo to 1.
+  Fixes warnings reported by Valgrind to G4BlockingList, G4VoxelNavigation
+  and G4ParameterisedNavigation.
+- Introduced abstract class G4VCurvedTrajectoryFilter, and gave PIF means
+  of manipulating and communicating with it.
+- Created class G4IdentityTrajectoryFilter, concrete filter for trajectory
+  points.
+
+global                                  global-V04-01-02
+------
+- G4UnitsTable[.hh.cc]: made GetUnitsTable() static method not inlined.
+- G4Integrator[.icc]: plugged minor memory leak.
+
+graphics_reps                           greps-V04-01-05
+-------------
+- Introduced classes G4AttDef, G4AttDefStore and G4AttValue.
+- G4Colour class description corrected.
+- Added const G4std::vector<G4AttValue>* fAttValues/Defs to G4VisAttributes.
+- Small revison of G4Scale and improvements in G4VMarker class description.
+- HepPolyhedron:
+  o added methods createTwistedTrap() and createPolyhedron().
+  o changed inline static methods to not inlined.
+  o minor bug fix in method GetFacet().
+  o changed HepDouble/HepBoolean to double/bool.
+- Patched access to public static data in G4Scale and G4VisAttributes.
+  Added static accessors to be used in the kernel to allow porting on
+  Windows DLLs.
+
+intercoms                               intercoms-V04-01-03
+---------
+- Added two new pure virtual functions to G4VGraphicsScene:
+    AddThis(const G4VTrajectory&)
+    AddThis(const G4VHit&)
+- Fixed uninitialized data member and minor memory leak in G4UIcommand.
+- Patched access to public static data in G4VGlobalFastSimulationManager
+  and G4VVisManager. Added static accessors to be used in the kernel to
+  allow porting on Windows DLLs.
+
+interfaces                              interfaces-V04-01-00
+----------
+- Fixed G4UIArrayStrings to work for "konsole" type termcap.
+
+materials                               materials-V04-01-03
+---------
+- G4IonisParamElm: fix in excitation energy interpolation.
+- G4IonisParamMat: added methods to Set/Find the mean excitation energy.
+- Added constant material properties to G4MaterialPropertiesTable.
+
+particles                               particles-V04-01-02
+---------
+- Made static inline method G4VDecayChannel::GetNoName() not inlined
+  for porting on Windows DLLs.
+- Fixed warning in G4VDecayChannel::FillDaughters().
+- Updated mass width for resonace particles.
+
+processes/electromagnetic/lowenergy     emlowen-V04-01-07
+-----------------------------------
+- Bug fix in G4BremsstrahlungParameters, to load EEDL correctly.
+  Fixes problem report #430.
+- New model for angular distribution in Rayleigh.
+  Fixes problem report #406.
+- Optimisation of tables in G4LowEnergyIonisation, G4eLowEnergyLoss,
+  G4hLowEnergyLoss and G4hLowEnergyIonisation.
+
+processes/electromagnetic/muons         muons-V04-01-01
+-------------------------------
+- Introduced new prototype implementation of model-dependent processes:
+  G4MuBremsstrahlungSTD, G4MuIonisationSTD, G4MuPairProductionSTD.
+
+processes/electromagnetic/standard      stand-V04-01-01
+----------------------------------
+- Introduced new prototype implementation of model-dependent processes:
+  G4eBremsstrahlungSTD, G4eIonisationSTD, G4hIonisationSTD.
+- G4eBremsstrahlung::BuiltLossTable(): fixed rare cases of division by 0.
+- G4PAIonisation[.hh.icc.cc]: patched access to public static data.
+  Added static accessor to be used in the kernel for inline functions
+  to allow porting on Windows DLLs.
+
+processes/electromagnetic/utils         utils-V04-01-08
+-------------------------------
+- G4MultipleScattering:
+  o Corrected angle distribution and fixes in the boundary algorithm.
+    This new parameterisation improves the ~100 MeV proton scattering.
+- Fixes in proton scattering and LossTableBuilder.
+- Introduced new prototype implementation of model-dependent processes:
+  G4MultipleScatteringSTD, G4VEnergyLossSTD, G4EnergyLossMessengerSTD.
+
+processes/electromagnetic/xrays         xrays-V04-01-04
+-------------------------------
+- G4Scintillation:
+  o now allowing for fast and slow components. Scintillation properties are
+    stored with the material and retrieved with GetConstProperty().
+  o now allowing for particle dependent excitation levels.
+  o using Poisson distribution (G4Poissin) for small MeanNumPhotons in a step.
+  o using the nearest integer to calculate the number of photons in DoIt().
+
+processes/hadronic                      ghad-V04-01-02
+------------------
+- First release of the binary cascade model (models/kinetic-model module).
+- First release of HETC cascade model (models/cascade/cascade module).
+- First release of a generic scattering term for cascade type models
+  (models/generator/scattering module).
+- Fixes in modules (more detailed information in public release notes):
+  o cross_sections
+    + relaxing the condition for warning cross-section 'non-conservation'
+      in electro-nuclear cross-section.
+    + added protection for low-Z materials. 
+  o management
+  o models/coherent_elastic
+  o models/generator/de_excitation
+    + Fixes for the integration problem in multi-fragmentation.
+  o models/generator/high_energy
+  o models/generator/management
+  o models/generator/pre_equilibrium
+  o models/generator/quark_gluon_string
+  o models/generator/util
+  o models/high_energy
+  o models/leading_particle
+  o models/low_energy
+  o models/neutron_hp
+  o models/radiative_decay
+  o processes
+  o stopping
+  o util
+
+processes/management                    procman-V04-01-01
+--------------------
+- Fixed memory leak in G4ProcessTable::Insert().
+
+processes/optical                       op-V04-01-01
+-----------------
+- Fixed calculation of polarization on dielectric dielectric interfaces.
+  Fixes problem report #427.
+
+processes/parameterisation              param-V04-01-02
+--------------------------
+- Added method to retrieve G4VFastSimulationModel by name.
+  The user's method is in G4GlobalFastSimulationManager:
+      GetFastSimulationModel();
+  it is matched also in G4FastSimulationManager.
+- Added directory for unit testing.
+- Patched access to public static data in G4FastStep.cc and
+  G4GlobalFastSimulationManager.cc to allow porting on Windows DLLs.
+
+processes/transportation                transport-V04-01-05
+------------------------
+- G4Transportation: enable use of smooth (curved) trajectories.
+- Design iteration for standard scoring and class reorganisation
+  o changed sampler concept: instead of separate samplers for
+    all combinations of importance sampling, scoring, weight roulette
+    for parallel and mass geometry, two samplers now are used
+    for the mass and parallel geometry: G4MassGeometrySampler 
+    and G4ParallelGeometrySampler. 
+  o bug fixes in G4MassGeometrySampler, G4ParallelGeometrySampler,
+    and G4MassGeometry.
+  o moved G4CellStoreScorer, G4TrackLogger to digits+hits/detector.
+
+run                                     run-V04-01-04
+---
+- Fixed memory leak in G4RunManager for deletion of G4ExceptionHandler object.
+
+track                                   track-V04-01-02
+-----
+- Added StronglyForced flag to G4ForceCondition.
+- Set 'fUndefined' for the StepStatus in PostStepPoint.
+- Added accessors to auxiliary point vector, in both G4Step and
+  G4ParticleChangeForTransport.
+- Patched access to public static data in G4VParticleChange.
+  Added accessors to be used in the kernel to allow porting on
+  Windows DLLs.
+
+tracking                                tracking-V04-01-10
+--------
+- Extensions of G4VTrajectory and introduction of curved trajectories
+  o Modified: G4VTrajectory, G4VTrajectoryPoint, G4Trajectory,
+              G4TrajectoryPoint.
+  o Added:    G4SmoothTrajectory, G4SmoothTrajectoryPoint.
+  o Implemented default Show/DrawTrajectory() in G4VTrajectory.
+- G4SteppingManager:
+  o implemented new ForceCondition flag StronglyForced.
+  o fixed problem observed with optical processes.
+
+visualization				vis-V04-01-08
+-------------
+- New implementation of HepRep driver version 2.
+- Fix (removal) of ambiguous G4VVisCommand::GetNewDoubleValue().
+- Added /vis/viewer/set/globalMarkerScale.
+- Improved algorithm of CompareForKernelVisit on OpenGL and OpenInventor.
+- Patched access to static data in G4VisCommandsSceneAdd.cc, G4VisManager.cc
+  and G4FlavoredParallelWorldModel.cc to allow porting on Windows DLLs.
+- Corrected inclusion of G4OpenGLXViewer #ifdef X_DRIVER for Windows
+  and other small changes in OpenGL.
+- Added integer argument to /vis/scene/add/trajectories [drawing-mode].
+  drawing-mode is passed to DrawTrajectory.
+- Fixed bug in G4VisManager wich lead to zero G4VModel pointer.
+- Improved handling of models.
+- Fixed division-by-zero cases in G4RayTracer.
+- VRML driver: bug fix for marker size.
+- Improved end of run behaviour for non-post-processing graphics
+  systems by changing false to true in G4VisManager::EndOfRun
+  fpSceneHandler->SetMarkForClearingTransientStore(true);
+- Added two new pure virtual functions to G4VGraphicsScene:
+    AddThis(const G4VTrajectory&)
+    AddThis(const G4VHit&)
+
+config                                  config-V04-01-05
+------
+- liblist.c:
+  o Enhanced script to provide the whole list of installed libraries
+    in the correct order, without requiring parsing of dependencies.
+    The functionality is achieved by invoking "liblist" with option '-m",
+      i.e. - liblist -m [libpath] < libname.map
+    where [libpath] is the path where libraries are placed
+    (i.e. $G4LIB/$G4SYSTEM).
+- binmake.gmk:
+  o Use "liblist -m [libpath]" to retrieve the list of libraries to link in
+    case headers are installed in $G4INCLUDE, and granular libraries are used.
+  o Added include paths to hadronic/models/cascade/cascade and
+    hadronic/models/generator/scattering.
+  o Include path and library for g3tog4 module only if G4USE_G3TOG4 is defined.
+    Implies proper handling of G4USE_G3TOG4 in source/GNUmakefile.
+- G4UI_USE.gmk, G4VIS_USE.gmk:
+  o Protected specification of -I paths for headers, in case $G4INCLUDE is
+    used. A single -I$G4INCLUDE path will be used for compilation in such case.
+- architecture.gmk:
+  o Issue an error if G4SYSTEM is not defined in the environment or not valid.
+  o Define G4LIB_BUILD_G3TOG4 and G4USE_G3TOG4 for optional installation and
+    usage of the g3tog4 module.
+  o Updated list of supported systems/compilers.
+- Removed obsolete OSPACE setup for WIN32-VC, HP-aCC, DEC-cxx.
+- SUN-CC.gmk:
+  o Removed -L/usr/lib path specification from LOADLIBS definition.
+- Darwin-g++.gmk:
+  o Updated setup to support MacOS 10.2.
+
+examples                                examples-V04-01-02
+--------
+- Updated reference outputs
+- novice/N06 (exampleN06-V04-01-02):
+  o Updates according to new interface for G4Scintillation process.
+- advanced/underground_physics (dmx-V04-01-06):
+  o Updates to cope with new interface for G4scintillation process.
+  o Migrated to use AIDA 3.X
+  o Updated geometry for better comparison with data. 
+
+tests                                   tests-V04-01-02
+-----
+- Updated reference outputs
+- Added hadronic tests: test24 and test25.
+- Corrected physics list in test12.
+- Simplified input macro for test22.
+- Added system test for biasing and scoring: test33.
+
+data
+----
+- Updated data-sets for:
+  o PhotonEvaporation (photon-V05-00-00).
+  o RadiativeDecay (radi-V05-00-00).
