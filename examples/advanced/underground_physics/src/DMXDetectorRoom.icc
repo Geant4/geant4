@@ -534,16 +534,16 @@
   G4RotationMatrix rotMatrixDesk4;
   rotMatrixDesk4.rotateZ(0.0*deg);
 
-  for (i=0; i<3; i++)
+  for (G4int j=0; j<3; j++)
     {
-      if( i == 2) 
+      if( j == 2) 
         {
 	  desk_Y += crateWidth;
 	  crate_Y = desk_Y - 0.5*(desk4Width + crateWidth);
 	}
       desk4_phys = new G4PVPlacement
 	(G4Transform3D(rotMatrixDesk4, G4ThreeVector(desk_X, desk_Y, desk_Z)),
-	 "desk4_phys", desk4_log, lab_phys, false, i);
+	 "desk4_phys", desk4_log, lab_phys, false, j);
       desk_Y += desk4Width+2.0*cm;
     }
 
