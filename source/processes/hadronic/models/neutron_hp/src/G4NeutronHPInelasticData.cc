@@ -102,6 +102,7 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
   
   // MC integration loop
   G4int counter = 0;
+  G4int failCount = 0;
   G4double buffer = 0;
   G4int size = G4int(G4std::max(10., aT/60*kelvin));
   G4ThreeVector neutronVelocity = 1./G4Neutron::Neutron()->GetPDGMass()*theNeutron.GetMomentum();
@@ -116,6 +117,19 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
       boosted.Lorentz(theNeutron, aThermalNuc);
       G4double theEkin = boosted.GetKineticEnergy();
       aXsection = (*((*theCrossSections)(index))).GetValue(theEkin, outOfRange);
+      if(aXsection <0) 
+      {
+        if(failCount<1000)
+	{
+	  failCount++;
+	  counter--;
+	  continue;
+	}
+	else
+	{
+	  aXsection = 0;
+	}
+      }
       // velocity correction.
       G4ThreeVector targetVelocity = 1./aThermalNuc.GetMass()*aThermalNuc.GetMomentum();
       aXsection *= (targetVelocity-neutronVelocity).mag()/neutronVMag;

@@ -88,6 +88,7 @@ void G4NeutronHPAngular::SampleAndUpdate(G4ReactionProduct & aHadron)
   if(theIsoFlag)
   {
 //  G4cout << "Angular result "<<aHadron.GetTotalMomentum()<<" ";
+// @@@ add code for isotropic emission in CMS.
       G4double costheta = 2.*G4UniformRand()-1;
       G4double theta = acos(costheta);
       G4double phi = twopi*G4UniformRand();

@@ -183,6 +183,7 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack,
   G4ReactionProduct boosted;
   boosted.Lorentz(theNeutron, theTarget);
   eKinetic = boosted.GetKineticEnergy();
+  G4double orgMomentum = boosted.GetMomentum().mag();
   
 // Take N-body phase-space distribution, if no other data present.
   if(!HasFSData()) // adding the residual is trivial here @@@
@@ -253,6 +254,9 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack,
       }
     }
     G4ReactionProduct * aHadron;
+    G4double localMass = ( G4NucleiPropertiesTable::GetAtomicMass(static_cast<G4int>(theBaseZ+eps), static_cast<G4int>(theBaseA+eps))-
+                            theBaseZ*G4Electron::ElectronDefinition()->GetPDGMass() );
+    G4ThreeVector bufferedDirection(0,0,0);
     for(i0=0; i0<nDef; i0++)
     {
       if(!Done[i0])
@@ -263,11 +267,60 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack,
 	  aHadron->SetDefinition(theDefs[i0]);
 	  aHadron->SetKineticEnergy(theEnergyDistribution->Sample(eKinetic, dummy));
 	}
+	else if(nDef == 1)
+	{
+	  aHadron->SetDefinition(theDefs[i0]);
+	  aHadron->SetKineticEnergy(eKinetic);
+	}
+	else if(nDef == 2)
+	{
+	  aHadron->SetDefinition(theDefs[i0]);
+	  aHadron->SetKineticEnergy(50*MeV);
+	}
 	else
 	{
 	  G4Exception("No energy distribution to sample from in InelasticBaseFS::BaseApply");
 	}
 	theAngularDistribution->SampleAndUpdate(*aHadron);
+	if(theEnergyDistribution==NULL && nDef == 2)
+	{
+	  if(i0==0)
+	  {
+	    G4double m1 = theDefs[0]->GetPDGMass();
+	    G4double m2 = theDefs[1]->GetPDGMass();
+	    G4double mn = G4Neutron::Neutron()->GetPDGMass();
+	    G4int z1 = static_cast<G4int>(theBaseZ+eps-theDefs[0]->GetPDGCharge()-theDefs[1]->GetPDGCharge());
+	    G4int a1 = static_cast<G4int>(theBaseA+eps)-theDefs[0]->GetBaryonNumber()-theDefs[1]->GetBaryonNumber();
+	    G4double concreteMass = G4NucleiPropertiesTable::GetAtomicMass(z1, a1)-z1*G4Electron::ElectronDefinition()->GetPDGMass();
+	    G4double availableEnergy = eKinetic+mn+localMass-m1-m2-concreteMass;
+	    // available kinetic energy in CMS (non relativistic)
+	    G4double emin = availableEnergy+m1+m2 - sqrt((m1+m2)*(m1+m2)+orgMomentum*orgMomentum);
+	    G4double p1=sqrt(2.*m2*emin);
+	    bufferedDirection = p1*aHadron->GetMomentum().unit();
+	    if(getenv("HTOKEN")) // @@@@@ verify the nucleon counting...
+	    { 
+	      G4cout << "HTOKEN "<<z1<<" "<<theBaseZ<<" "<<a1<<" "<<theBaseA<<" "<<availableEnergy<<" "
+	             << emin<<G4endl;
+            }
+	  }
+	  else
+	  {
+	    bufferedDirection = -bufferedDirection;
+	  }
+	  // boost from cms to lab
+	  if(getenv("HTOKEN")) 
+	  {
+	    G4cout << " HTOKEN "<<bufferedDirection.mag2()<<G4endl;
+	  }
+	  aHadron->SetTotalEnergy( sqrt(aHadron->GetMass()*aHadron->GetMass()
+	                              +bufferedDirection.mag2()) );
+	  aHadron->SetMomentum(bufferedDirection);
+          aHadron->Lorentz(*aHadron, -1.*(theTarget+theNeutron)); 
+	  if(getenv("HTOKEN")) 
+	  {
+	    G4cout << "  HTOKEN "<<aHadron->GetTotalEnergy()<<" "<<aHadron->GetMomentum()<<G4endl;
+	  }
+	}
 	tmpHadrons->push_back(aHadron);
       }
     }

@@ -26,6 +26,7 @@
 //
 #include "G4NeutronHPNames.hh"
 #include "G4SandiaTable.hh"
+#include "g4std/fstream"
 
   const G4String G4NeutronHPNames::theString[99] = {"Hydrogen", "Helium",
  "Lithium", "Berylium", "Boron", "Carbon", "Nitrogen", "Oxygen", "Fluorine",
@@ -50,7 +51,7 @@
   {
     G4NeutronHPDataUsed result;
     aFlag = true;
-//    G4cout << "Names::GetName entered"<<G4endl;
+if(getenv("NeutronHPNames")) G4cout << "Names::GetName entered"<<G4endl;
     G4int myA = A;
     G4int myZ = Z;
     G4String * theName = NULL;
@@ -59,7 +60,7 @@
     
     G4std::ifstream * check = new G4std::ifstream(".dummy");
     G4bool first = true;
-//    G4cout << "entered GetName!!!"<<G4endl;
+if(getenv("NeutronHPNames"))  G4cout << "entered GetName!!!"<<G4endl;
      do   
      {
       aFlag = true;
@@ -71,7 +72,7 @@
       result.SetName(*theName);
       result.SetA(myA);
       result.SetZ(myZ);
-//  G4cout <<"HPWD 1 "<<*theName<<G4endl;
+if(getenv("NeutronHPNames")) G4cout <<"HPWD 1 "<<*theName<<G4endl;
 #ifdef G4USE_STD_NAMESPACE
       check = new G4std::ifstream(*theName);
 #else
@@ -90,7 +91,7 @@
           *biff = base+"/"+"CrossSection/"+itoa(myZ)+"_"+"nat"+"_"+theString[myZ-1];
           if(theName!=NULL) delete theName;
           theName = biff;
-//      G4cout <<"HPWD 2 "<<*theName<<G4endl;
+if(getenv("NeutronHPNames"))    G4cout <<"HPWD 2 "<<*theName<<G4endl;
           result.SetName(*theName);
           G4double natA = myZ/G4SandiaTable::GetZtoA(myZ);
           result.SetA(natA);
@@ -112,7 +113,7 @@
             if(theName!=NULL) delete theName;
             *biff = base+"/"+rest+itoa(myZ)+"_"+"nat"+"_"+theString[myZ-1];  
             theName = biff;
-//      G4cout <<"HPWD 3 "<<*theName<<G4endl;
+if(getenv("NeutronHPNames"))    G4cout <<"HPWD 3 "<<*theName<<G4endl;
             result.SetName(*theName);
             G4double natA = myZ/G4SandiaTable::GetZtoA(myZ);
             result.SetA(natA);
@@ -126,7 +127,7 @@
         *biff = base+"/"+rest+itoa(myZ)+"_"+itoa(myA)+"_"+theString[myZ-1];  
         if(theName!=NULL) delete theName;
         theName = biff;
-//      G4cout <<"HPWD 4 "<<*theName<<G4endl;
+if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4 "<<*theName<<G4endl;
         result.SetName(*theName);
         result.SetA(myA);
         result.SetZ(myZ);
@@ -161,9 +162,7 @@
       while(myZ==0 || myA==0);
     }
     while(!(*check));
-//    G4cout << "Names::GetName: last theName proposal = "<< *theName <<" "<<A<<" "<<Z<<G4endl;
-//    G4cout << "File-name: "<<*theName<<G4endl;
-    if(getenv("NeutronHPNamesLogging")) 
+    if(getenv("NeutronHPNamesLogging") || getenv("NeutronHPNames")) 
     {
       G4cout << "Names::GetName: last theName proposal = "<< G4endl;
       G4cout << *theName <<" "<<A<<" "<<Z<<" "<<result.GetName()<<G4endl;

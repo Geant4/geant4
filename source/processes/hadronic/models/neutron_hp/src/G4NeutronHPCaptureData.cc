@@ -52,6 +52,7 @@ void G4NeutronHPCaptureData::BuildPhysicsTable(const G4ParticleDefinition& aP)
   if(&aP!=G4Neutron::Neutron()) 
      G4Exception("Attempt to use NeutronHP data for particles other than neutrons!!!");  
   size_t numberOfElements = G4Element::GetNumberOfElements();
+  // G4cout << "CALLED G4NeutronHPCaptureData::BuildPhysicsTable "<<numberOfElements<<G4endl;
   theCrossSections = new G4PhysicsTable( numberOfElements );
 
   // make a PhysicsVector for each element
@@ -59,6 +60,11 @@ void G4NeutronHPCaptureData::BuildPhysicsTable(const G4ParticleDefinition& aP)
   static const G4ElementTable *theElementTable = G4Element::GetElementTable();
   for( size_t i=0; i<numberOfElements; ++i )
   {
+     if(getenv("CaptureDataIndexDebug"))
+     {
+       G4int index_debug = ((*theElementTable)[i])->GetIndex();
+       G4cout << "IndexDebug "<< i <<" "<<index_debug<<G4endl;
+     }
      G4PhysicsVector* physVec = G4NeutronHPData::
       Instance()->MakePhysicsVector((*theElementTable)[i], this);
      theCrossSections->push_back(physVec);
