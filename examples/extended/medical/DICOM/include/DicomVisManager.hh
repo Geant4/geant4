@@ -35,10 +35,10 @@
 //
 // + Université Laval, Québec (QC) Canada
 //*******************************************************//
+#ifdef G4VIS_USE
+
 #ifndef DicomVisManager_h
 #define DicomVisManager_h 1
-
-#ifdef G4VIS_USE
 
 #include "G4VisManager.hh"
 
