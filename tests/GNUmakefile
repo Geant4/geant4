@@ -1,8 +1,7 @@
-# $Id: GNUmakefile,v 1.36 2001-11-12 17:37:49 stesting Exp $
+# $Id: GNUmakefile,v 1.37 2001-11-21 16:06:32 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
-# Introduce field/field01,02,03 
 
 ifndef G4INSTALL
   G4INSTALL = ..
@@ -62,9 +61,11 @@ SUBDIRS += test16 ## n and p Cross-Sections
 SUBDIRS += test17 ## LowEnergy em (protons, antiprotons and ions). 
 SUBDIRS += test18 ## Radioactive decay.
 SUBDIRS += test20 ## Polarised LowE processes.
+SUBDIRS += test21 ## added nov 2001 (info to come).
+SUBDIRS += test22 ## added nov 2001 (info to come).
 
 # Tests with hadronic exercisers.
-HADEXERDIRS = test02 test11 test12 test13 test15 test16
+HADEXERDIRS = test02 test11 test12 test13 test15 test16 test21 test22
 
 .PHONY : all examples_links clean clean_libs clean_examples_links
 
