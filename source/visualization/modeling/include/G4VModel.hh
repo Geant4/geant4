@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VModel.hh,v 1.11 2001-07-24 21:51:05 johna Exp $
+// $Id: G4VModel.hh,v 1.12 2001-07-25 21:12:19 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,6 +33,8 @@
 // graphics-system-indepedent description of a Geant4 component.
 // The key fuctionality of a model is to know how to describe itself
 // to a scene handler.  A scene is a collection of models.
+// A special case is made for G4PhysicalVolumeModel - a non-null pointer
+// is to be returned by G4PhysicalVolumeModel::GetG4PhysicalVolumeModel().
 
 #ifndef G4VMODEL_HH
 #define G4VMODEL_HH
@@ -43,6 +45,8 @@
 
 class G4VGraphicsScene;
 class G4ModelingParameters;
+
+class G4PhysicalVolumeModel;  // Special case - see above.
 
 class G4VModel {
 
@@ -81,6 +85,10 @@ public: // With description
 
   const G4Transform3D& GetTransformation () const;
   // Model transformation, i.e., position and orientation of model in world.
+
+  virtual const G4PhysicalVolumeModel* GetG4PhysicalVolumeModel () const;
+  virtual       G4PhysicalVolumeModel* GetG4PhysicalVolumeModel ();
+  // Returns 0 unless implemented by derived class.
 
   void SetModelingParameters (const G4ModelingParameters*);
 

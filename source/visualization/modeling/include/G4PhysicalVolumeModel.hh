@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.14 2001-07-22 00:57:15 johna Exp $
+// $Id: G4PhysicalVolumeModel.hh,v 1.15 2001-07-25 21:12:17 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,6 +84,13 @@ public: // With description
 
   G4String GetCurrentTag () const;
   // A tag which depends on the current state of the model.
+
+  const G4PhysicalVolumeModel* GetG4PhysicalVolumeModel () const {
+    return this;
+  }
+  G4PhysicalVolumeModel* GetG4PhysicalVolumeModel () {
+    return this;
+  }
 
   G4bool Validate ();
   // Validate, but allow internal changes (hence non-const function).
