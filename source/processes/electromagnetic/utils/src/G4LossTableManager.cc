@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.29 2003-11-04 09:28:07 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.30 2003-11-10 20:27:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -64,6 +64,7 @@
 #include "G4MaterialCutsCouple.hh"
 #include "G4ProcessManager.hh"
 #include "G4Electron.hh"
+#include "G4Proton.hh"
 #include "G4VMultipleScattering.hh"
 #include "G4VEmProcess.hh"
 #include "G4ProductionCutsTable.hh"
@@ -430,9 +431,12 @@ void G4LossTableManager::RetrievePhysicsTables(const G4ParticleDefinition* aPart
   if(all_tables_are_built) return;
 
   G4bool hasRange = false;
+  G4bool isLast = false;
   G4int i;
   for (i=0; i<n_loss; i++) {
     if ( theLoss == loss_vector[i] ) {
+      if(n_loss-1 == i ||
+         n_loss-2 == i && part_vector[n_loss-1] == G4Proton::Proton()) isLast = true;
       tables_are_built[i] = true;
       if (theLoss->RangeTable()) {
         if (part_vector[i] == theElectron) {
@@ -503,6 +507,8 @@ void G4LossTableManager::RetrievePhysicsTables(const G4ParticleDefinition* aPart
   }
   if(all_tables_are_built) {
       G4cout << "### G4LossTableManager: all dEdx and Range tables are retrieved" << G4endl;
+  } else if(isLast) {
+      G4cout << "### G4LossTableManager: WARNING! not all dEdx and Range tables are retrieved" << G4endl;
   }
 }
 
