@@ -1,0 +1,73 @@
+
+                       geant4-05-01-ref-01
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Fixes problem in G4PropagatorInField notice in release 5.1 and
+    occasionally appearing as "Invalid Enum in [solid-type]".
+  o Fixed behavior of function DefineWorldVolume() in G4RunManager
+    to properly reset navigation history and optimisation in case the
+    topology of the geometry has changed between runs.
+  o Fixed infinite loop in binary-cascade model for hydrogen inelastic
+    scattering.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+
+geometry/solids/Boolean                 geom-bool-V05-01-00
+-----------------------
+- Added set/get methods for scale precision in G4ReflectionFactory.
+
+geometry/volumes                        geomvol-V05-01-00
+----------------
+- G4PropagatorInField.cc: fix in ComputeStep() to avoid step computation
+  if proposed step length is too small. Fixes problem noticed in release
+  5.1 and occasionally appearing as "Invalid Enum in [solid-type]", also
+  registered as problem report #485.
+
+processes/electromagnetic/muons         muons-V05-01-01
+-------------------------------
+- Commented out debug printout in G4MuPairProduction.
+
+processes/hadronic/models/generator/kinetic_model      ghad-bin-V05-01-00
+-------------------------------------------------
+- G4BinaryCascade: fix to cure infinite loop observed in inelastic
+  scattering of hydrogen.
+
+run                                     run-V05-01-01
+---
+- G4RunManager: fixed behavior of function DefineWorldVolume()
+  to properly reset navigation history and optimisation in case the
+  topology of the geometry has changed between runs. Now only a single
+  call to DefineWorldVolume() is necessary when changing the geometry.
+  Fixes also problem report #481.
+  o Added new boolean argument (default set to TRUE) to specify if
+    topology has changed.
+  o Forced open/close geometry in method ResetNavigator() to properly
+    reset G4Navigator status and remove old optimisations.
+
+examples
+--------
+- extended:
+  o electromagnetic
+    + TestEm1 (testem1-V05-01-00)
+      TestEm2 (testem1-V05-01-00)
+      TestEm3 (testem3-V05-01-00)
+      o Simplified mechanism for updating geometries between runs,
+        according to changes in G4RunManager::DefineWorldVolume().
+- novice
+  o N04 (exampleN04-V05-00-02)
+    + Correction to printout.
+
+tests
+-----
+- test01 (test01-V05-01-00)
+  test10 (test10-V05-01-00)
+  test14 (test14-V05-01-00)
+  test20 (test20-V05-01-00)
+  test26 (test26-V05-01-00)
+  o Simplified mechanism for updating geometries between runs,
+    according to changes in G4RunManager::DefineWorldVolume().

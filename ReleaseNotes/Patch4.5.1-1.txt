@@ -1,0 +1,64 @@
+
+                 Geant4 5.1 - patch-01 Release Notes
+                 -----------------------------------
+
+                                                            19 May 2003
+
+List of fixes included in this public patch to release 5.1:
+
+  o Electromagnetic processes (standard):
+    ------------------------------------
+  + muons:
+    - Commented out debug printout in G4MuPairProduction.
+
+  o Geometry:
+    --------
+  + solids/Boolean:
+    - Added set/get methods for scale precision in G4ReflectionFactory.
+  + volumes:
+    - G4PropagatorInField.cc: fix in ComputeStep() to avoid step computation
+      if proposed step length is too small. Fixes problem noticed in release
+      5.1 and occasionally appearing as "Invalid Enum in [solid-type]", also
+      registered as problem report #485.
+
+  o Hadronic processes:
+    ------------------
+  + models/generator/kinetic_model
+    o G4BinaryCascade: fix to cure infinite loop observed in inelastic
+      scattering of hydrogen.
+
+  o Run:
+    ---
+  - G4RunManager: fixed behavior of function DefineWorldVolume()
+    to properly reset navigation history and optimisation in case the
+    topology of the geometry has changed between runs. Now only a single
+    call to DefineWorldVolume() is necessary when changing the geometry.
+    Fixes also problem report #481.
+    o Added new boolean argument (default set to TRUE) to specify if
+      topology has changed.
+    o Forced open/close geometry in method ResetNavigator() to properly
+      reset G4Navigator status and remove old optimisations.
+
+  o Examples:
+    --------
+    - novice/N04
+      o Corrected printout.
+    - extended/electromagnetic - TestEm1, TestEm2, TestEm3
+      o Simplified mechanism for updating geometries between runs,
+        according to changes in G4RunManager::DefineWorldVolume().
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 5.1.
+  o  Technical notes distributed for release 5.1 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 5.1 are available through
+our "Source Code" Web page:  http://cern.ch/geant4
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/G4UsersDocuments/Overview/html
+for further information about using Geant4.
