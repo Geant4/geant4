@@ -68,7 +68,7 @@ if [ $1 = "all" ] ; then
   nice $G4INSTALL/tests/tools/bin/diff.sh test02
   nice $G4INSTALL/tests/tools/bin/diff.sh test02.hadron
   nice $G4INSTALL/tests/tools/bin/diff.sh test03
-#  nice $G4INSTALL/tests/tools/bin/diff.sh test04 ## Persistency
+#  nice $G4INSTALL/tests/tools/bin/diff.sh test04
   nice $G4INSTALL/tests/tools/bin/diff.sh test05
   nice $G4INSTALL/tests/tools/bin/diff.sh test06
   nice $G4INSTALL/tests/tools/bin/diff.sh test07
@@ -82,11 +82,12 @@ if [ $1 = "all" ] ; then
   nice $G4INSTALL/tests/tools/bin/diff.sh test104.EMtest
   nice $G4INSTALL/tests/tools/bin/diff.sh test105
   nice $G4INSTALL/tests/tools/bin/diff.sh test106
-  nice $G4INSTALL/tests/tools/bin/diff.sh test12  ## Multifragmentation
-  nice $G4INSTALL/tests/tools/bin/diff.sh test13  ## Dual parton model
-  nice $G4INSTALL/tests/tools/bin/diff.sh test14  ## EM Low Energy.
-  nice $G4INSTALL/tests/tools/bin/diff.sh test15  ## Isotope Production
-  nice $G4INSTALL/tests/tools/bin/diff.sh test16  ## n and p Cross-Sections
+  nice $G4INSTALL/tests/tools/bin/diff.sh test12
+  nice $G4INSTALL/tests/tools/bin/diff.sh test13
+  nice $G4INSTALL/tests/tools/bin/diff.sh test14
+  nice $G4INSTALL/tests/tools/bin/diff.sh test15
+  nice $G4INSTALL/tests/tools/bin/diff.sh test16
+  nice $G4INSTALL/tests/tools/bin/diff.sh test17
   nice $G4INSTALL/tests/tools/bin/diff.sh test11
 # test11 at end while it crashes on SUN in opt mode.
 

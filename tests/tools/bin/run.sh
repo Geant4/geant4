@@ -68,7 +68,7 @@ if [ $1 = "all" ] ; then
   nice $G4INSTALL/tests/tools/bin/run.sh test02
   nice $G4INSTALL/tests/tools/bin/run.sh test02.hadron
   nice $G4INSTALL/tests/tools/bin/run.sh test03
-#  nice $G4INSTALL/tests/tools/bin/run.sh test04 ## Persistency
+#  nice $G4INSTALL/tests/tools/bin/run.sh test04
   nice $G4INSTALL/tests/tools/bin/run.sh test05
   nice $G4INSTALL/tests/tools/bin/run.sh test06
   nice $G4INSTALL/tests/tools/bin/run.sh test07
@@ -83,12 +83,13 @@ if [ $1 = "all" ] ; then
   nice $G4INSTALL/tests/tools/bin/run.sh test105
   nice $G4INSTALL/tests/tools/bin/run.sh test106
   nice $G4INSTALL/tests/tools/bin/run.sh test11
-  nice $G4INSTALL/tests/tools/bin/run.sh test12  ## Multifragmentation
-  nice $G4INSTALL/tests/tools/bin/run.sh test14  ## EM Low Energy.
-  nice $G4INSTALL/tests/tools/bin/run.sh test15  ## Isotope Production
-  nice $G4INSTALL/tests/tools/bin/run.sh test16  ## n and p Cross-Sections
-  nice $G4INSTALL/tests/tools/bin/run.sh test13  ## Dual parton model
-# test13 at end while it crashes on DEC in opt mode.
+  nice $G4INSTALL/tests/tools/bin/run.sh test12
+  nice $G4INSTALL/tests/tools/bin/run.sh test13
+  nice $G4INSTALL/tests/tools/bin/run.sh test14
+  nice $G4INSTALL/tests/tools/bin/run.sh test15
+  nice $G4INSTALL/tests/tools/bin/run.sh test16
+  nice $G4INSTALL/tests/tools/bin/run.sh test17
+
 
 else
 
