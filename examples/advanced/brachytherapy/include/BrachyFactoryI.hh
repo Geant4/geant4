@@ -19,6 +19,16 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+// $Id: BrachyFactoryI.hh,v 1.3 2002-12-13 09:25:32 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// --------------------------------------------------------------
+#ifndef BrachyFactoryI_h
+#define BrachyFactoryI_h 1
+
+#include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4RadioactiveDecay.hh"
 #include"BrachyDetectorConstructionI.hh"
 #include"BrachyFactory.hh"
