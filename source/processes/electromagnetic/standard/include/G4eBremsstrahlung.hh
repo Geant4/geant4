@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.hh,v 1.24 2004-10-25 13:20:22 vnivanch Exp $
+// $Id: G4eBremsstrahlung.hh,v 1.25 2004-11-04 11:45:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -52,6 +52,7 @@
 // 17-10-03 PrintInfoDefinition - virtual (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 21-01-04 Migrade to G4ParticleChangeForLoss (V.Ivanchenko)
+// 04-11-04 add gamma threshold (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -77,7 +78,7 @@ class G4eBremsstrahlung : public G4VEnergyLossProcess
 
 public:
 
-  G4eBremsstrahlung(const G4String& name = "eBrem");
+  G4eBremsstrahlung(const G4String& name = "eBrem", G4double thresh=DBL_MAX);
 
   virtual ~G4eBremsstrahlung();
 
@@ -104,6 +105,10 @@ public:
   virtual void PrintInfoDefinition();
   // Print out of the class parameters
 
+  void SetGammaThreshold(G4double val);
+
+  G4double GammaThreshold() const;
+
 protected:
 
   virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dynParticle)
@@ -116,6 +121,8 @@ private:
   // hide assignment operator
   G4eBremsstrahlung & operator=(const G4eBremsstrahlung &right);
   G4eBremsstrahlung(const G4eBremsstrahlung&);
+
+  G4double gammaThreshold;
 
 };
 
@@ -131,9 +138,33 @@ inline void G4eBremsstrahlung::SecondariesPostStep(
                                                       G4double& kinEnergy)
 {
   G4DynamicParticle* gamma = model->SampleSecondary(couple, dp, tcut, kinEnergy);
-  fParticleChange.SetNumberOfSecondaries(1);
+  G4double gammaEnergy = gamma->GetKineticEnergy();
+  kinEnergy -= gammaEnergy;
+  G4int nSecond = 1;
+  if(gammaEnergy > gammaThreshold) nSecond = 2;
+  fParticleChange.SetNumberOfSecondaries(nSecond);
   fParticleChange.AddSecondary(gamma);
-  kinEnergy -= gamma->GetKineticEnergy();
+  if(nSecond == 2) {
+    fParticleChange.ProposeTrackStatus(fStopAndKill);
+    G4DynamicParticle* el = new G4DynamicParticle(dp->GetDefinition(),
+                                                  dp->GetMomentumDirection(),
+                                                  kinEnergy);
+    fParticleChange.AddSecondary(el);
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4eBremsstrahlung::SetGammaThreshold(G4double val)
+{
+  gammaThreshold = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4eBremsstrahlung::GammaThreshold() const
+{
+  return gammaThreshold;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
