@@ -637,7 +637,7 @@ please refer to the related History files provided in most packages):
     <UL>
     <LI><TT>G4RunManagerKernel</TT>: added access methods to
         <TT>G4TrackingManager</TT> and <TT>G4StackManager</TT>.</LI>
-    <LI>Use global flag G4RUN_ALLOC_EXPORT to export extern symbols for DLLs.
+    <LI>Adopt DLLIMPORT/EXPORT technique to handle extern simbols for DLLs.
         Modified <TT>GNUmakefile</TT> and rearranged usage of extern symbols in
         <TT>G4Run</TT>.</LI>
     </UL></LI>
@@ -654,7 +654,7 @@ please refer to the related History files provided in most packages):
     <LI><TT>G4ParticleChangeForLoss</TT>: fixed minor energy non-conservation
         problem in case of more than 1 processes changing the energy.
         Fixed initialization of <TT>ParentWeight</TT>.</LI>
-    <LI>Use global flag G4TRACK_ALLOC_EXPORT to export extern symbols for DLLs.
+    <LI>Adopt DLLIMPORT/EXPORT technique to handle extern simbols for DLLs.
         Modified <TT>GNUmakefile</TT> and rearranged usage of extern symbols in
         <TT>G4Track</TT>.</LI>
     </UL></LI>
