@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2002-11-22 17:48:10 dressel Exp $
+$Id: History,v 1.10 2002-11-23 12:29:19 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+
+Nov 23th M. Dressel 
+  change of parallel geometry 
 
 Nov 22th M. Dressel 
   changed geometry for scoring. Cells must not coinside with

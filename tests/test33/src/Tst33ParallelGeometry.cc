@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33ParallelGeometry.cc,v 1.6 2002-11-22 17:48:10 dressel Exp $
+// $Id: Tst33ParallelGeometry.cc,v 1.7 2002-11-23 12:29:20 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -59,7 +59,7 @@ void Tst33ParallelGeometry::Construct(){
   // parallel world solid larger than in the mass geometry
 
   G4double innerRadiusCylinder = 0*cm;
-  G4double outerRadiusCylinder = 100*cm;
+  G4double outerRadiusCylinder = 110*cm;
   G4double hightCylinder       = 110*cm;
   G4double startAngleCylinder  = 0*deg;
   G4double spanningAngleCylinder    = 360*deg;
@@ -91,7 +91,7 @@ void Tst33ParallelGeometry::Construct(){
   // creating 18 slobs of 10 cm thicknes
 
   G4double innerRadiusShield = 0*cm;
-  G4double outerRadiusShield = 110*cm;
+  G4double outerRadiusShield = 100*cm;
   G4double hightShield       = 5*cm;
   G4double startAngleShield  = 0*deg;
   G4double spanningAngleShield    = 360*deg;
