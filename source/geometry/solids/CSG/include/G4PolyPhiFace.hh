@@ -8,10 +8,20 @@
 // the z axis. It has boundaries that are straight lines of arbitrary length
 // and direction, but with corners aways on the same side of the z axis.
 //
+// ----------------------------------------------------------
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
 #ifndef G4PolyPhiFace_hh
 #define G4PolyPhiFace_hh
 
 #include "G4VCSGface.hh"
+
+class G4ReduciblePolygon;
 
 typedef struct {
         G4double r, z;          // position
@@ -30,8 +40,8 @@ typedef struct {
 class G4PolyPhiFace : public G4VCSGface {
 
 	public:
-	G4PolyPhiFace( const G4double *r, const G4double *z, const G4int n,
-		       const G4double phi, const G4double deltaPhi, const G4bool start );
+	G4PolyPhiFace( const G4ReduciblePolygon *rz,
+		       const G4double phi, const G4double deltaPhi, const G4double phiOther );
 	virtual ~G4PolyPhiFace();
 	
 	G4bool Intersect( const G4ThreeVector &p, const G4ThreeVector &v,

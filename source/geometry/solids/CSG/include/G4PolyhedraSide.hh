@@ -3,6 +3,14 @@
 //
 // Declaration of a face that represents one segmented side of a polyhedra
 //
+// ----------------------------------------------------------
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
 #ifndef G4PolyhedraSide_hh
 #define G4PolyhedraSide_hh
 
@@ -70,7 +78,8 @@ class G4PolyhedraSide : public G4VCSGface {
 	G4int	 numSide;	// Number sides
 	G4double r[2], z[2];	// r, z parameters, in specified order
 	G4double startPhi,	// Start phi (0 to 2pi), if phiIsOpen
-		 deltaPhi;	// Delta phi (0 to 2pi), if phiIsOpen
+		 deltaPhi,	// Delta phi (0 to 2pi), if phiIsOpen
+		 endPhi;	// End phi (>startPhi), if phiIsOpen
 	G4bool	 phiIsOpen;	// True if there is a phi slice
 	
 	G4IntersectingCone	*cone;	// Our intersecting cone

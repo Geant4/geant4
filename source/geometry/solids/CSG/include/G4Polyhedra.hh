@@ -4,6 +4,14 @@
 // Declaration of a CSG type "PCON" geant volume, inherited from 
 // class G4CSGSolid
 //
+// ----------------------------------------------------------
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
 
 #ifndef G4Polyhedra_hh
 #define G4Polyhedra_hh
@@ -12,6 +20,7 @@
 #include "G4PolyhedraSide.hh"
 
 class G4EnclosingCylinder;
+class G4ReduciblePolygon;
 
 class G4Polyhedra : public G4VCSGfaceted {
 	public:
@@ -95,9 +104,7 @@ class G4Polyhedra : public G4VCSGfaceted {
 	void Create( const G4double phiStart,	    // initial phi starting angle
             	     const G4double phiTotal,	    // total phi angle
 		     const G4double numSide,	    // number sides
-		     const G4int    numRZ,   	    // number corners in r,z space
-		     const G4double r[],     	    // r coordinate of these corners
-	             const G4double z[]       );    // z coordinate of these corners
+		     G4ReduciblePolygon *rz   );    // rz coordinates
 };
 
 #endif
