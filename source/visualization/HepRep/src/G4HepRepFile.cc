@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFile.cc,v 1.4 2002-02-02 04:00:22 perl Exp $
+// $Id: G4HepRepFile.cc,v 1.5 2002-11-27 12:40:40 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,8 +41,8 @@ static HepRepXMLWriter* hepRepXMLWriter;
 G4HepRepFile::G4HepRepFile():
   G4VGraphicsSystem("G4HepRepFile",
 		    "HepRepFile",
-		    "A template graphics driver",
-		    G4VGraphicsSystem::noFunctionality) {
+		    "A HepRep (format 1) ascii file driver",
+		    G4VGraphicsSystem::threeD) {
         hepRepXMLWriter = new HepRepXMLWriter();
 }
 
