@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Exception.cc,v 1.6 1999-11-16 17:46:51 gcosmo Exp $
+// $Id: G4Exception.cc,v 1.7 1999-11-23 15:00:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,16 +25,16 @@ void G4Exception(const char* s)
 {
     if (s)
 	{
-	    G4cerr << s << endl;
+	    G4cerr << s << G4endl;
 	}
 
-   G4cerr << endl << "*** G4Exception: Aborting execution ***" << endl;
+   G4cerr << G4endl << "*** G4Exception: Aborting execution ***" << G4endl;
    abort();
 }
 
 #ifdef G4USE_STL
-#include <string>
-void G4Exception(string s)
+#include "g4std/string"
+void G4Exception(G4std::string s)
 {
   G4Exception(s.c_str());
 }

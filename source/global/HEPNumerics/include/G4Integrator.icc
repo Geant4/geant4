@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Integrator.icc,v 1.3 1999-11-16 17:30:59 gcosmo Exp $
+// $Id: G4Integrator.icc,v 1.4 1999-11-23 14:59:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of G4Integrator methods. 
@@ -169,9 +169,9 @@ void G4Integrator::AdaptGauss( T& typeT, F f, G4double  xInitial,
 {
    if(depth > 100)
    {
-     G4cout<<"G4Integrator::AdaptGauss: WARNING !!!"<<endl  ;
+     G4cout<<"G4Integrator::AdaptGauss: WARNING !!!"<<G4endl  ;
 G4cout
-<<"Function varies too rapidly to get stated accuracy in 100 steps "<<endl ;
+<<"Function varies too rapidly to get stated accuracy in 100 steps "<<G4endl ;
 
      return ;
    }
@@ -211,9 +211,9 @@ void G4Integrator::AdaptGauss( G4double (*f)(G4double),
 {
    if(depth > 100)
    {
-     G4cout<<"G4SimpleIntegration::AdaptGauss: WARNING !!!"<<endl  ;
-G4cout
-<<"Function varies too rapidly to get stated accuracy in 100 steps "<<endl ;
+     G4cout<<"G4SimpleIntegration::AdaptGauss: WARNING !!!"<<G4endl  ;
+     G4cout<<"Function varies too rapidly to get stated accuracy in 100 steps "
+           <<G4endl ;
 
      return ;
    }

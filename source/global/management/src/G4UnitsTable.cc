@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnitsTable.cc,v 1.6 1999-11-16 17:46:53 gcosmo Exp $
+// $Id: G4UnitsTable.cc,v 1.7 1999-11-23 15:00:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,7 +24,7 @@
  
 #include "G4UnitsTable.hh"
 
-#include <iomanip.h>
+#include "g4std/iomanip"
 
 G4UnitsTable      G4UnitDefinition::theUnitsTable;
 
@@ -107,7 +107,7 @@ G4double G4UnitDefinition::GetValueOf(G4String string)
      }
   G4cout << "Warning from G4UnitDefinition::GetValueOf(" << string << ")."
        << " The unit " << string << " does not exist in UnitsTable."
-       << " Return Value = 0." << endl;     
+       << " Return Value = 0." << G4endl;     
   return 0.;             
 }
 
@@ -127,7 +127,7 @@ G4String G4UnitDefinition::GetCategory(G4String string)
      }
   G4cout << "Warning from G4UnitDefinition::GetCategory(" << string << ")."
        << " The unit " << string << " does not exist in UnitsTable."
-       << " Return category = None" << endl;
+       << " Return category = None" << G4endl;
   name = "None";     
   return name;             
 }
@@ -138,8 +138,8 @@ void G4UnitDefinition::PrintDefinition()
 {
   G4int nameL = theUnitsTable[CategoryIndex]->GetNameMxLen();
   G4int symbL = theUnitsTable[CategoryIndex]->GetSymbMxLen();
-  G4cout << setw(nameL) << Name << " (" 
-         << setw(symbL) << SymbolName << ") = " << Value << endl;
+  G4cout << G4std::setw(nameL) << Name << " (" 
+         << G4std::setw(symbL) << SymbolName << ") = " << Value << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -318,7 +318,7 @@ G4int G4UnitsCategory::operator!=(const G4UnitsCategory &right) const
  
 void G4UnitsCategory::PrintCategory()
 {
-  G4cout << "\n  category: " << Name << endl;
+  G4cout << "\n  category: " << Name << G4endl;
   for(size_t i=0;i<UnitsList.entries();i++)
       UnitsList[i]->PrintDefinition();
 }
@@ -335,7 +335,7 @@ G4BestUnit::G4BestUnit(G4double value,G4String category)
      ((i<nbCat)&&(theUnitsTable[i]->GetName()!=category)) i++;
     if (i == nbCat) 
        { G4cout << " G4BestUnit: the category " << category 
-              << " does not exist; --> G4Exception" << endl;
+              << " does not exist; --> G4Exception" << G4endl;
          G4Exception(" ");
        }  
   //
@@ -350,7 +350,7 @@ G4BestUnit::~G4BestUnit()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
-ostream& operator<<(ostream& flux, G4BestUnit a)
+G4std::ostream& operator<<(G4std::ostream& flux, G4BestUnit a)
 {
   G4UnitsTable& theUnitsTable = G4UnitDefinition::GetUnitsTable();
   G4UnitsContainer& List = theUnitsTable[a.IndexOfCategory]
@@ -378,9 +378,9 @@ ostream& operator<<(ostream& flux, G4BestUnit a)
   G4int index=ksup; if(index==-1) index=kinf; if(index==-1) index=0;
    
   flux << a.Value/(List[index]->GetValue());
-  G4long oldform = G4cout.setf(ios::left,ios::adjustfield);
-  flux << " " << setw(len) << List[index]->GetSymbol();       
-  G4cout.setf(oldform,ios::adjustfield);     
+  G4long oldform = G4cout.setf(G4std::ios::left,G4std::ios::adjustfield);
+  flux << " " << G4std::setw(len) << List[index]->GetSymbol();       
+  G4cout.setf(oldform,G4std::ios::adjustfield);     
   
   return flux;
 }       

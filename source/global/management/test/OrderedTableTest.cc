@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: OrderedTableTest.cc,v 1.2 1999-11-16 17:47:05 gcosmo Exp $
+// $Id: OrderedTableTest.cc,v 1.3 1999-11-23 15:00:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,7 +38,7 @@ G4int main() {
  // Now access the data contained in the table
 
   for (I=0; I<Imax; I++){
-    G4cout << endl << endl << " I= " << I << "  Data= ";
+    G4cout << G4endl << G4endl << " I= " << I << "  Data= ";
     for(G4int J=0; J<=I; J++) {
       G4cout << (*aTable(I))(J) << " ";
     }
@@ -60,12 +60,12 @@ G4int main() {
  // Now access the data contained in the table 
 
   for (I=0; I<Imax; I++){
-    G4cout << endl << endl << " I= " << I << "   Data= ";
+    G4cout << G4endl << G4endl << " I= " << I << "   Data= ";
     for(G4int J=0; J<=I; J++) {
       G4cout << (*(*aTablePtr)(I))(J) << " ";
     }
   }
-  G4cout << endl;
+  G4cout << G4endl;
 
   return EXIT_SUCCESS;
 }

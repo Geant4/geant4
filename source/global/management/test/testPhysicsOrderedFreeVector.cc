@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testPhysicsOrderedFreeVector.cc,v 1.2 1999-11-16 17:47:06 gcosmo Exp $
+// $Id: testPhysicsOrderedFreeVector.cc,v 1.3 1999-11-23 15:00:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "g4templates.hh"
@@ -36,8 +36,8 @@ int main ()
 
 	// Test Vector creation
 	// --------------------
-	G4cout << "Test Vector creation" << endl;
-	G4cout << "--------------------" << endl << endl; 
+	G4cout << "Test Vector creation" << G4endl;
+	G4cout << "--------------------" << G4endl << G4endl; 
 
 	G4PhysicsOrderedFreeVector aVector(PPCKOV, RINDEX, NUMENTRIES);
 	aVector.DumpValues();
@@ -45,54 +45,54 @@ int main ()
 
 	// Test GetEnergy
 	// --------------
-	G4cout << "Test GetEnergy" << endl;
-	G4cout << "--------------" << endl;
-	G4cout << "Input a value within the vector range for which you" << endl;
-	G4cout << "wish to find the corresponding energy:  " << endl;
-	cin >> aValue;
+	G4cout << "Test GetEnergy" << G4endl;
+	G4cout << "--------------" << G4endl;
+	G4cout << "Input a value within the vector range for which you" << G4endl;
+	G4cout << "wish to find the corresponding energy:  " << G4endl;
+	G4cin >> aValue;
 
 	anEnergy = aVector.GetEnergy(aValue);
-	G4cout << "The corresponding energy is " << anEnergy << endl;
+	G4cout << "The corresponding energy is " << anEnergy << G4endl;
 
 	// Test GetMaxValue 
 	// ----------------	
-	G4cout << "Test GetMaxValue" << endl;
-	G4cout << "----------------" << endl << endl; 
+	G4cout << "Test GetMaxValue" << G4endl;
+	G4cout << "----------------" << G4endl << G4endl; 
         LoopUntilPressEnter();
 
 	aValue = aVector.GetMaxValue();
 
-	G4cout << "The Max Value is:  " << aValue << endl;
+	G4cout << "The Max Value is:  " << aValue << G4endl;
 	LoopUntilPressEnter();
 
 	// Test GetMinValue 
 	// ----------------
-	G4cout << "Test GetMinValue" << endl;
-	G4cout << "----------------" << endl << endl;
+	G4cout << "Test GetMinValue" << G4endl;
+	G4cout << "----------------" << G4endl << G4endl;
  
 	aValue = aVector.GetMinValue();
 
-	G4cout << "The Max Value is:  " << aValue << endl;
+	G4cout << "The Max Value is:  " << aValue << G4endl;
 	LoopUntilPressEnter();
 
 	// Test GetMaxLowEdgeEnergy 
 	// ------------------------
-	G4cout << "Test GetMaxLowEdgeEnergy" << endl;
-	G4cout << "------------------------" << endl << endl;
+	G4cout << "Test GetMaxLowEdgeEnergy" << G4endl;
+	G4cout << "------------------------" << G4endl << G4endl;
  
 	anEnergy = aVector.GetMaxLowEdgeEnergy();
 
-	G4cout << "The Max Value is:  " << anEnergy << endl;
+	G4cout << "The Max Value is:  " << anEnergy << G4endl;
 	LoopUntilPressEnter();
 
 	// Test GetMinLowEdgeEnergy 
 	// ------------------------
-	G4cout << "Test GetMinLowEdgeEnergy" << endl;
-	G4cout << "------------------------" << endl << endl;
+	G4cout << "Test GetMinLowEdgeEnergy" << G4endl;
+	G4cout << "------------------------" << G4endl << G4endl;
  
 	anEnergy = aVector.GetMinLowEdgeEnergy();
 
-	G4cout << "The Max Value is:  " << anEnergy << endl;
+	G4cout << "The Max Value is:  " << anEnergy << G4endl;
 
         return EXIT_SUCCESS;
 }
@@ -104,9 +104,9 @@ void LoopUntilPressEnter()
 {
         char ch;
         G4cout << "Press <Enter> to continue ... ";
-        while ( cin.get(ch) )
+        while ( G4cin.get(ch) )
         {
                 if (ch == '\n') break;
         }
-        G4cout << endl;
+        G4cout << G4endl;
 }

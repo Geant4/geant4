@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testIntegration.cc,v 1.2 1999-11-16 17:31:21 gcosmo Exp $
+// $Id: testIntegration.cc,v 1.3 1999-11-23 15:00:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Test program for G4SimpleIntegration class. The function exp(-x)*cos(x) is
@@ -30,7 +30,7 @@ int main()
    G4SimpleIntegration myIntegrand(TestFunction) ;
 
    G4cout<<"Iteration"<<"\t"<<"Trapezoidal"<<"\t"
-       <<"MidPoint"<<"\t"<<"Gauss"<<"\t"<<"Simpson"<<endl ;
+       <<"MidPoint"<<"\t"<<"Gauss"<<"\t"<<"Simpson"<<G4endl ;
    for(i=0;i<13;i++)
    {
       n = (int)pow(2,i) ;
@@ -38,14 +38,14 @@ int main()
 	  <<myIntegrand.Trapezoidal(a,b,n)<<"\t"
 	  <<myIntegrand.MidPoint(a,b,n)<<"\t"
 	  <<myIntegrand.Gauss(a,b,n)<<"\t"
-	  <<myIntegrand.Simpson(a,b,n)<<endl ;
+	  <<myIntegrand.Simpson(a,b,n)<<G4endl ;
    }
-   G4cout<<endl ;
+   G4cout<<G4endl ;
    for(i=0;i<13;i++)
    {
       pTolerance = pow(10.0,-i) ;
       G4SimpleIntegration adaptIntegrand(TestFunction,pTolerance) ;
-      G4cout<<adaptIntegrand.AdaptGaussIntegration(a,b)<<endl;
+      G4cout<<adaptIntegrand.AdaptGaussIntegration(a,b)<<G4endl;
    }
    return 0;
 }

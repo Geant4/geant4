@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ios.hh,v 1.3 1999-11-16 17:40:51 gcosmo Exp $
+// $Id: G4ios.hh,v 1.4 1999-11-23 15:00:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,9 +28,13 @@
 #include <stdlib.h>
 #endif
 
-#include <iostream.h>
+#include "g4std/iostream"
+#include "G4Types.hh"
 
-  extern ostream G4cout;
-  extern ostream G4cerr;
+extern G4std::ostream G4cout;
+extern G4std::ostream G4cerr;
+
+#define G4cin G4std::cin
+#define G4endl G4std::endl
 
 #endif

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnitsTest.cc,v 1.3 1999-11-16 17:47:05 gcosmo Exp $
+// $Id: G4UnitsTest.cc,v 1.4 1999-11-23 15:00:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,89 +16,89 @@
 
 int main()
 {
-   G4cout << "          *** value of units *** " << endl << endl ;
+   G4cout << "          *** value of units *** " << G4endl << G4endl ;
 
-   G4cout << "mm     = " << mm     << endl;
+   G4cout << "mm     = " << mm     << G4endl;
 
-   G4cout << "cm     = " << cm     << endl;
+   G4cout << "cm     = " << cm     << G4endl;
 
-   G4cout << "fermi  = " << fermi  << endl;
+   G4cout << "fermi  = " << fermi  << G4endl;
    
-   G4cout << "cm2    = " << cm2    << endl;
+   G4cout << "cm2    = " << cm2    << G4endl;
 
-   G4cout << "barn   = " << barn   << endl;
+   G4cout << "barn   = " << barn   << G4endl;
 
-   G4cout << "second = " << s      << endl;
+   G4cout << "second = " << s      << G4endl;
 
-   G4cout << "joule  = " << joule  << endl;
+   G4cout << "joule  = " << joule  << G4endl;
 
-   G4cout << "kg     = " << kg     << endl;
+   G4cout << "kg     = " << kg     << G4endl;
 
-   G4cout << "watt   = " << watt   << endl;
+   G4cout << "watt   = " << watt   << G4endl;
 
-   G4cout << "newton = " << newton << endl;
+   G4cout << "newton = " << newton << G4endl;
 
-   G4cout << "pascal = " << pascal << endl;
+   G4cout << "pascal = " << pascal << G4endl;
 
-   G4cout << "bar    = " << bar    << endl;
+   G4cout << "bar    = " << bar    << G4endl;
 
-   G4cout << "coulomb= " << coulomb << endl;
+   G4cout << "coulomb= " << coulomb << G4endl;
 
-   G4cout << "ampere = " << ampere << endl;
+   G4cout << "ampere = " << ampere << G4endl;
 
-   G4cout << "volt   = " << volt   << endl;
+   G4cout << "volt   = " << volt   << G4endl;
 
-   G4cout << "ohm    = " << ohm    << endl;
+   G4cout << "ohm    = " << ohm    << G4endl;
 
-   G4cout << "farad  = " << farad  << endl;
+   G4cout << "farad  = " << farad  << G4endl;
 
-   G4cout << "weber  = " << weber  << endl;
+   G4cout << "weber  = " << weber  << G4endl;
 
-   G4cout << "tesla  = " << tesla  << endl;
+   G4cout << "tesla  = " << tesla  << G4endl;
 
-   G4cout << "gauss  = " << gauss  << endl;
+   G4cout << "gauss  = " << gauss  << G4endl;
 
-   G4cout << "henry  = " << henry  << endl;
+   G4cout << "henry  = " << henry  << G4endl;
 
-   G4cout << "kelvin = " << kelvin << endl;
+   G4cout << "kelvin = " << kelvin << G4endl;
 
-   G4cout << endl ;
+   G4cout << G4endl ;
 //
 // Physical Constants
 //
-   G4cout << "          *** Physical Constants *** " << endl << endl ;
+   G4cout << "          *** Physical Constants *** " << G4endl << G4endl ;
 
-   G4cout << "Avogadro    = " << Avogadro         << endl;
+   G4cout << "Avogadro    = " << Avogadro         << G4endl;
 
-   G4cout << "c_light     = " << c_light          << endl;
+   G4cout << "c_light     = " << c_light          << G4endl;
 
-   G4cout << "h_Planck    = " << h_Planck         << endl;
+   G4cout << "h_Planck    = " << h_Planck         << G4endl;
 
-   G4cout << "hbar_Planck = " << hbar_Planck      << endl;
+   G4cout << "hbar_Planck = " << hbar_Planck      << G4endl;
 
-   G4cout << "hbarc       = " << hbarc            << endl;
+   G4cout << "hbarc       = " << hbarc            << G4endl;
 
-   G4cout << "amu         = " << amu              << endl;
+   G4cout << "amu         = " << amu              << G4endl;
  
-   G4cout << "mu0                     = " << mu0                      << endl;
+   G4cout << "mu0                     = " << mu0                      << G4endl;
 
-   G4cout << "epsilon0                = " << epsilon0                 << endl;
+   G4cout << "epsilon0                = " << epsilon0                 << G4endl;
 
-   G4cout << "elm_coupling            = " << elm_coupling             << endl;
+   G4cout << "elm_coupling            = " << elm_coupling             << G4endl;
 
-   G4cout << "fine_structure_const    = " << fine_structure_const     << endl;
+   G4cout << "fine_structure_const    = " << fine_structure_const     << G4endl;
 
-   G4cout << "classic_electr_radius   = " << classic_electr_radius    << endl;
+   G4cout << "classic_electr_radius   = " << classic_electr_radius    << G4endl;
 
-   G4cout << "electron_Compton_length = " << electron_Compton_length  << endl;
+   G4cout << "electron_Compton_length = " << electron_Compton_length  << G4endl;
 
-   G4cout << "Bohr_radius             = " << Bohr_radius              << endl;
+   G4cout << "Bohr_radius             = " << Bohr_radius              << G4endl;
 
-   G4cout << "alpha_rcl2              = " << alpha_rcl2               << endl;
+   G4cout << "alpha_rcl2              = " << alpha_rcl2               << G4endl;
 
-   G4cout << "twopi_mc2_rcl2          = " << twopi_mc2_rcl2           << endl;
+   G4cout << "twopi_mc2_rcl2          = " << twopi_mc2_rcl2           << G4endl;
 
-   G4cout << "k_Boltzmann             = " << k_Boltzmann              << endl;
+   G4cout << "k_Boltzmann             = " << k_Boltzmann              << G4endl;
 
 //
 // test the UnitsTable class
@@ -115,15 +115,15 @@ int main()
     
    G4UnitDefinition::PrintUnitsTable(); 
    
-   G4cout << " meter = " << G4UnitDefinition::GetValueOf("meter") << endl;
-   G4cout << " cm    = " << G4UnitDefinition::GetValueOf("cm")    << endl;
-   G4cout << " joule = " << G4UnitDefinition::GetValueOf("J")     << endl; 
+   G4cout << " meter = " << G4UnitDefinition::GetValueOf("meter") << G4endl;
+   G4cout << " cm    = " << G4UnitDefinition::GetValueOf("cm")    << G4endl;
+   G4cout << " joule = " << G4UnitDefinition::GetValueOf("J")     << G4endl; 
    
    G4double a = 0.5*GeV, b = 0.15*MeV, c = 4000*MeV;
 
    G4cout << "  a = " << G4BestUnit (a,"Energy") 
         << "  b = " << G4BestUnit (b,"Energy")
-        << "  c = " << G4BestUnit (c,"Energy") << endl;
+        << "  c = " << G4BestUnit (c,"Energy") << G4endl;
 
    return 0;
 }

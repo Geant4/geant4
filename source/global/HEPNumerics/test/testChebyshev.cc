@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testChebyshev.cc,v 1.2 1999-11-16 17:31:20 gcosmo Exp $
+// $Id: testChebyshev.cc,v 1.3 1999-11-23 14:59:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Test program for G4ChebyshevApproximation class. The function exp(-x)*cos(x) is
@@ -56,7 +56,7 @@ main()
       tolerance = 2*(true-test)/(true+test) ;
       G4cout<<"n = "<<i<<"\t"<<"true = "<<true
 	  <<" and n-point ChebEval =  "
-	  <<test<<"\t"<<tolerance<<endl ;
+	  <<test<<"\t"<<tolerance<<G4endl ;
    }
    /* ********************************************************
    n = k*m + 10 ;
@@ -74,7 +74,7 @@ main()
       tolerance = 2*(true-test)/(true+test) ;
       G4cout<<"n = "<<i<<"\t"<<"true = "<<true
 	  <<" and n-point ChebEval =  "
-	  <<test<<"\t"<<tolerance<<endl ;
+	  <<test<<"\t"<<tolerance<<G4endl ;
    }
    G4double test, tolerance, true =  TestFunction(x) ;
    for(i=1;i<n;i++)
@@ -84,7 +84,7 @@ main()
       tolerance = 2*(true-test)/(true+test) ;
       G4cout<<"n = "<<i<<"\t"<<"true = "<<true
 	  <<" and n-point ChebEval =  "
-	  <<test<<"\t"<<tolerance<<endl ;
+	  <<test<<"\t"<<tolerance<<G4endl ;
    }
 */ ///////////////////////////////////////////////////   
   return 0;

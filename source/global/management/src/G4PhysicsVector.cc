@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsVector.cc,v 1.3 1999-11-16 17:46:53 gcosmo Exp $
+// $Id: G4PhysicsVector.cc,v 1.4 1999-11-23 15:00:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -27,9 +27,9 @@
 G4PhysicsVector::G4PhysicsVector()
  : edgeMin(0.), edgeMax(0.), numberOfBin(0),
    lastEnergy(0.), lastValue(0.), lastBin(0),
-   ptrNextTable(0) {};
+   ptrNextTable(0) {}
 
-G4PhysicsVector::~G4PhysicsVector() {};
+G4PhysicsVector::~G4PhysicsVector() {}
 
 G4int G4PhysicsVector::operator==(const G4PhysicsVector &right) const
 {

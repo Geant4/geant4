@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4strstreambuf.hh,v 1.3 1999-11-16 17:40:51 gcosmo Exp $
+// $Id: G4strstreambuf.hh,v 1.4 1999-11-23 15:00:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,12 +18,7 @@
 #ifndef G4STRSTREAM_HH
 #define G4STRSTREAM_HH
 
-#include <iostream.h> 
-#ifdef WIN32
-#include <Strstrea.h>
-#else
-#include <strstream.h>
-#endif
+#include "g4std/strstream"
 #include "globals.hh"     
 #include "G4coutDestination.hh"
 
@@ -31,7 +26,7 @@ class G4strstreambuf;
 extern G4strstreambuf G4coutbuf;
 extern G4strstreambuf G4cerrbuf;
 
-class G4strstreambuf : public streambuf {
+class G4strstreambuf : public G4std::streambuf {
 public:
   G4strstreambuf() {
     destination = NULL;
@@ -80,10 +75,10 @@ public:
     } else if(this == & G4cerrbuf && destination != NULL) {
       result =  destination->ReceiveG4cerr(stringToSend);
     } else if(this == & G4coutbuf && destination == NULL) {
-      cout << stringToSend << flush;
+      G4std::cout << stringToSend << G4std::flush;
       result =0;
     } else if(this == & G4cerrbuf && destination == NULL) {
-      cerr << stringToSend << flush;
+      G4std::cerr << stringToSend << G4std::flush;
       result =0;
     }
     return result;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnitsTable.hh,v 1.6 1999-11-19 09:19:30 gcosmo Exp $
+// $Id: G4UnitsTable.hh,v 1.7 1999-11-23 15:00:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -15,7 +15,7 @@
 //      ------------------- class G4UnitsTable -----------------
 //
 // 17-05-98: first version, M.Maire
-// 13-10-98: Units and symbols printed in fxed length
+// 13-10-98: Units and symbols printed in fixed length
 
 // Class description:
 //
@@ -148,7 +148,7 @@ public:  // without description
 public:  // with description 
    
     friend
-    ostream&  operator<<(ostream&,G4BestUnit VU);
+    G4std::ostream&  operator<<(G4std::ostream&,G4BestUnit VU);
     // Default format to print the objet VU above.
 
 private:

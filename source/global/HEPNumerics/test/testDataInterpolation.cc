@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testDataInterpolation.cc,v 1.2 1999-11-16 17:31:20 gcosmo Exp $
+// $Id: testDataInterpolation.cc,v 1.3 1999-11-23 14:59:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4ios.hh"
@@ -36,7 +36,7 @@ int main()
    // Test PolCof against Polynom
    
    G4cout<<"Test function"<<"\t"<<"Delta Pol"<<"\t"<<"delta      "
-       <<"\t"<<"Delta PolCof"<<"\t"<<"Delta Pol-PolCof"<<endl<<endl ;
+       <<"\t"<<"Delta PolCof"<<"\t"<<"Delta Pol-PolCof"<<G4endl<<G4endl ;
    for(i=1;i<n-1;i++)
    {
       x = deltaX/2 + deltaX*i ;
@@ -51,15 +51,15 @@ int main()
 	  <<TestFunction(x) - pol<<"\t"
 	  <<deltaY<<"\t"
 	  <<TestFunction(x) - polcof<<"\t"
-	  <<pol - polcof<<endl ;
+	  <<pol - polcof<<G4endl ;
    }
-   G4cout<<endl ;
+   G4cout<<G4endl ;
 /* *************************
    
    // Test RationalPol against Polynomial
    
    G4cout<<"Test function"<<"\t"<<"Delta Pol"<<"\t"<<"delta      "
-       <<"\t"<<"Delta RatPol"<<"\t"<<"delta"<<endl<<endl ;
+       <<"\t"<<"Delta RatPol"<<"\t"<<"delta"<<G4endl<<G4endl ;
    for(i=1;i<n-1;i++)
    {
       x = deltaX/2 + deltaX*i ;
@@ -68,7 +68,7 @@ int main()
 	  <<TestFunction(x) - myPolInt.PolynomInterpolation(x,deltaY)<<"\t"
 	  <<deltaY<<"\t"
 	  <<TestFunction(x) - myPolInt.RationalPolInterpolation(x,deltaY)<<"\t"
-	  <<deltaY<<endl ;
+	  <<deltaY<<G4endl ;
    }
    // Test CubicSpline against Polynomial
    // Evaluation of start and finish first derivatives
@@ -78,7 +78,7 @@ int main()
    G4DataInterpolation myPolIntCub(pX,pY,n,deriStart,deriFinish) ; // f''[i] is OK
    
    G4cout<<"Test function"<<"\t"<<"Delta Pol"<<"\t"<<"delta      "
-       <<"\t"<<"Delta CubicSpline"<<"\t"<<"Delta FastCubicSpline"<<endl<<endl ;
+       <<"\t"<<"Delta CubicSpline"<<"\t"<<"Delta FastCubicSpline"<<G4endl<<G4endl ;
    for(i=1;i<n-1;i++)
    {
       x = deltaX/2 + deltaX*i ;
@@ -87,10 +87,10 @@ int main()
 	  <<TestFunction(x) - myPolIntCub.PolynomInterpolation(x,deltaY)<<"\t"
 	  <<deltaY<<"\t"
 	  <<TestFunction(x) - myPolIntCub.CubicSplineInterpolation(x)<<"\t"
-	  <<TestFunction(x) - myPolIntCub.FastCubicSpline(x,i)<<endl ;
+	  <<TestFunction(x) - myPolIntCub.FastCubicSpline(x,i)<<G4endl ;
    }
-   G4cout<<endl ;
-   G4cout<<"j"<<"\t"<<"x[j]"<<"\t"<<"pX"<<"Locate j"<<"\t"<<"Correlated j"<<endl ;
+   G4cout<<G4endl ;
+   G4cout<<"j"<<"\t"<<"x[j]"<<"\t"<<"pX"<<"Locate j"<<"\t"<<"Correlated j"<<G4endl ;
    G4int index ;
    for(i=1;i<n-1;i++)
    {
@@ -98,7 +98,7 @@ int main()
       index = i ;
       myPolInt.CorrelatedSearch(x,index) ;
       G4cout<<i<<"\t"<<pX[i]<<"\t"<<x<<"\t"
-	  <<myPolInt.LocateArgument(x)<<"\t"<<index<<endl ;
+	  <<myPolInt.LocateArgument(x)<<"\t"<<index<<G4endl ;
    }
 */ ///////////////////////////   
    // myPolIntCub.~G4DataInterpolation() ;  

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Timer.cc,v 1.4 1999-11-16 17:46:53 gcosmo Exp $
+// $Id: G4Timer.cc,v 1.5 1999-11-23 15:00:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,7 +60,7 @@ void G4Exception(const char* s=0);
 #endif /* WIN32 */
 
 // Print timer status n ostream
-ostream& operator << (ostream& os, const G4Timer& t)
+G4std::ostream& operator << (G4std::ostream& os, const G4Timer& t)
 {
     if (t.IsValid())
 	{

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Timer.hh,v 1.7 1999-11-16 17:40:47 gcosmo Exp $
+// $Id: G4Timer.hh,v 1.8 1999-11-23 15:00:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,8 +85,7 @@
 #endif  /* WIN32 */
 
 #include "G4Types.hh"
-
-class ostream;
+#include "G4ios.hh"
 
 class G4Timer
 {
@@ -105,7 +104,7 @@ private:
     tms fStartTimes,fEndTimes;
 };
 
-ostream& operator << (ostream& os, const G4Timer& t);
+G4std::ostream& operator << (G4std::ostream& os, const G4Timer& t);
 
 // Inline functions:
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Allocator.hh,v 1.2 1999-11-16 17:40:21 gcosmo Exp $
+// $Id: G4Allocator.hh,v 1.3 1999-11-23 15:00:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,9 +73,9 @@ public:
     }
 /*
     else if  (fUnit->deleted == Deleted) {
-      // cerr << "G4Allocator : This object is already deleted"  << endl;
+      // G4cerr << "G4Allocator : This object is already deleted"  << G4endl;
     } else {
-      // cerr <<  "G4Allocator: This object is allocated not by G4Allocator"<< endl;
+      // G4cerr <<  "G4Allocator: This object is allocated not by G4Allocator"<< G4endl;
     }
 */
   }

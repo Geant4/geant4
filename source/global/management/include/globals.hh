@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: globals.hh,v 1.10 1999-11-16 17:40:52 gcosmo Exp $
+// $Id: globals.hh,v 1.11 1999-11-23 15:00:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,8 +45,8 @@
 #endif
 
 #ifdef G4USE_STL
-#include <algorithm>
-#define CLHEP_MAX_MIN_DEFINED
+  #include "g4std/algorithm"
+  #define CLHEP_MAX_MIN_DEFINED
 #endif
 // min, max, abs and sqr are in TemplateFunctions.h.
 // Includes also CLHEP.h with typedef for numeric types and
@@ -64,7 +64,7 @@
 
 // cbrt() function - define G4_NO_CBRT if the function is not available
 #ifdef G4_NO_CBRT
-static double cbrt(double x) { return pow(x,1./3.); }
+  static double cbrt(double x) { return pow(x,1./3.); }
 #endif
 
 // System of Units and Physical Constants
@@ -74,9 +74,9 @@ static double cbrt(double x) { return pow(x,1./3.); }
 // Global error function
 void G4Exception(const char* s=0);
 #ifdef G4USE_STL
-#include <string>
-void G4Exception(string s);
-void G4Exception(G4String s);
+  void G4Exception(G4std::string s);
+  void G4Exception(G4String s);
 #endif
+
 #endif /* GLOBALS_HH */
 
