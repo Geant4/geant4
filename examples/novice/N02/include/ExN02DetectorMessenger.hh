@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02DetectorMessenger.hh,v 1.6 2002-01-09 17:24:09 ranjard Exp $
+// $Id: ExN02DetectorMessenger.hh,v 1.7 2002-12-16 16:31:43 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,7 +51,8 @@ class ExN02DetectorMessenger: public G4UImessenger
   private:
     ExN02DetectorConstruction* myDetector;
     
-    G4UIdirectory*             mydetDir;
+    G4UIdirectory*             N02Dir;
+    G4UIdirectory*             detDir;
     G4UIcmdWithAString*        TargMatCmd;
     G4UIcmdWithAString*        ChamMatCmd;    
     G4UIcmdWithADoubleAndUnit* FieldCmd;

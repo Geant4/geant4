@@ -1,4 +1,4 @@
-# $Id: run2.mac,v 1.1 2000-12-04 16:24:04 maire Exp $
+# $Id: run2.mac,v 1.2 2002-12-16 16:31:42 maire Exp $
 #
 # Macro file for "exampleN02.cc"
 # 
@@ -17,7 +17,7 @@
 # set a magnetic field
 # 1 events; print the hits
 #
-/mydet/setField 2 tesla
+/N02/det/setField 2 tesla
 /tracking/verbose 0
 /hits/verbose 1
 /run/beamOn 1

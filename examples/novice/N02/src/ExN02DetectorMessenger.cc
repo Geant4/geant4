@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02DetectorMessenger.cc,v 1.8 2002-12-05 01:07:01 asaim Exp $
+// $Id: ExN02DetectorMessenger.cc,v 1.9 2002-12-16 16:31:43 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,21 +40,23 @@
 ExN02DetectorMessenger::ExN02DetectorMessenger(ExN02DetectorConstruction* myDet)
 :myDetector(myDet)
 { 
-
-  mydetDir = new G4UIdirectory("/mydet/");
-  mydetDir->SetGuidance("ExN02 detector control.");
+  N02Dir = new G4UIdirectory("/N02/");
+  N02Dir->SetGuidance("UI commands specific to this example.");
   
-  TargMatCmd = new G4UIcmdWithAString("/mydet/setTargetMate",this);
+  detDir = new G4UIdirectory("/N02/det/");
+  detDir->SetGuidance("detector control.");
+  
+  TargMatCmd = new G4UIcmdWithAString("/N02/det/setTargetMate",this);
   TargMatCmd->SetGuidance("Select Material of the Target.");
   TargMatCmd->SetParameterName("choice",false);
   TargMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  ChamMatCmd = new G4UIcmdWithAString("/mydet/setChamberMate",this);
+  ChamMatCmd = new G4UIcmdWithAString("/N02/det/setChamberMate",this);
   ChamMatCmd->SetGuidance("Select Material of the Target.");
   ChamMatCmd->SetParameterName("choice",false);
   ChamMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
   
-  FieldCmd = new G4UIcmdWithADoubleAndUnit("/mydet/setField",this);  
+  FieldCmd = new G4UIcmdWithADoubleAndUnit("/N02/det/setField",this);  
   FieldCmd->SetGuidance("Define magnetic field.");
   FieldCmd->SetGuidance("Magnetic field will be in X direction.");
   FieldCmd->SetParameterName("Bx",false);
@@ -70,7 +72,8 @@ ExN02DetectorMessenger::~ExN02DetectorMessenger()
   delete TargMatCmd;
   delete ChamMatCmd;
   delete FieldCmd;
-  delete mydetDir;
+  delete detDir;
+  delete N02Dir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
