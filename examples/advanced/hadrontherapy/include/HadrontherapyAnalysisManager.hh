@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 #ifdef G4ANALYSIS_USE
-#ifndef G4PROCESSTESTANALYSIS_HH
-#define G4PROCESSTESTANALYSIS_HH
+#ifndef HADRONTHERAPYANALYSISMANAGER_HH
+#define HADRONTHERAPYANALYSISMANAGER_HH
 
 #include "globals.hh"
 #include <vector>
@@ -44,11 +44,11 @@ private:
 public:
   ~HadrontherapyAnalysisManager();
   static HadrontherapyAnalysisManager* getInstance();
+  
   void book();
-
-  void energyDeposit3D(G4int PointNumber, G4int voxelX, G4int voxelY, 
-                       G4int voxelZ, G4double edep);  
-//Store the energy deposit of the sensitive detector in a DataSet
+  
+  void Energy_Dep(G4double, G4double);
+  void Energy_Event(G4int, G4double);
   
   void finish();
 
@@ -58,9 +58,11 @@ private:
 private:
   AIDA::IAnalysisFactory*  aFact;
   AIDA::ITree*             theTree;
-  AIDA::ITreeFactory      *treeFact;
-  AIDA::IDataPointSetFactory *  dataPointFactory;  
-  AIDA::IDataPointSet *  energyDepositDataPoint; 
+  //  AIDA::ITreeFactory      *treeFact; 
+  AIDA::IHistogramFactory *histFact;
+  AIDA::ITupleFactory     *tupFact;
+  AIDA::IHistogram1D *h1;
+  AIDA::ITuple *ntuple;
 };
 
 #endif

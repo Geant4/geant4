@@ -103,24 +103,20 @@ depth = i*0.002; //the number represents the thickness of the ionization chamber
 #ifdef G4ANALYSIS_USE  
   HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::getInstance();
 
+  //histogram fill
 
+  analysis -> Energy_Event( slice, energy[ slice ]);
 
-   //histogram fill
-
-  analysis -> Energy_Event( slice,energy[ slice ]);
-     
-  
-
-for (slice = 0; slice < 200; slice++)  // It is necessary to set here the Number of slice
+  for (slice = 0; slice < 200; slice++)  
+  // It is necessary to set here the Number of slice
     {
-   
-      //G4cout << "%%%%%%%" << slice << "%%%%%" << energy[ slice ] << "%%%%%" << G4endl;
+      //G4cout << "%%%%%%%" << slice << "%%%%%" << 
+      //energy[ slice ] << "%%%%%" << G4endl;
       
       //n-tuple fill
-
-	    analysis -> Energy_Dep( slice + 0.2, energy[ slice ]);          //slice dependence
+      analysis -> Energy_Dep( slice + 0.2, energy[ slice ]);         
     }
- analysis->finish();
+  analysis -> finish();
 
 #endif
   
