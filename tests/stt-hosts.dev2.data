@@ -2,7 +2,7 @@
 #                                                         all/lib/test
 #                                                             all/test.../
 #                                                                 all/test...
-#                                          absent= incremental      1=remove Fprevious build
+#                                          absent=incremental 1=remove previous build
 # dcosf01  dev2   deb_NONISO    geant4-01-00-ref-02-tags4-dcosf01  all all all all  1
 # dcosf01  dev2   opt_ISO    geant4-01-00-ref-02-tags4-dcosf01  all all all all  1
 dxplus01 dev2   deb_ISO    geant4-01-00-ref-02-tags4  all all all all  1
