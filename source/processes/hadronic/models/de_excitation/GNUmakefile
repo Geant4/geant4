@@ -18,6 +18,7 @@ SUBDIRS += fission
 SUBDIRS += fermi_breakup
 SUBDIRS += multifragmentation
 SUBDIRS += util
+SUBDIRS += ablation
 
 
 SUBLIBS  = G4hadronic_deex_handler
@@ -29,5 +30,6 @@ SUBLIBS += G4hadronic_deex_fission
 SUBLIBS += G4hadronic_deex_fermi_breakup
 SUBLIBS += G4hadronic_deex_multifagmentation
 SUBLIBS += G4hadronic_deex_util
+SUBLIBS += G4hadronic_ablation
 
 include $(G4INSTALL)/config/globlib.gmk
