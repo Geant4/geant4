@@ -76,6 +76,7 @@
     G4double p = vec[0]->GetMomentum().mag();
     theParticleChange.SetMomentumChange( vec[0]->GetMomentum()*(1./p) );
     theParticleChange.SetEnergyChange( vec[0]->GetKineticEnergy() );
+    delete vec[0];
     //
     theParticleChange.SetNumberOfSecondaries( vecLen-1 );
     G4DynamicParticle *pd;
