@@ -1,4 +1,4 @@
-#inlude "G4NeutronElementIsoCrossSections.hh"
+#include "G4NeutronElementIsoCrossSections.hh"
 
 G4NeutronElementIsoCrossSections::
 G4NeutronElementIsoCrossSections()
@@ -18,10 +18,10 @@ G4NeutronElementIsoCrossSections::
 }
 
 void G4NeutronElementIsoCrossSections::
-Init(const G4Element & anElement)
+Init(const G4Element * anElement)
 {
-  G4int Z = theElement->GetZ();
-  nIsotopes = theElement->GetNumberOfIsotopes();
+  G4int Z = anElement->GetZ();
+  nIsotopes = anElement->GetNumberOfIsotopes();
   G4bool useIsotopesFromElement = true;
   if( nIsotopes == 0 ) 
   {
@@ -33,8 +33,8 @@ Init(const G4Element & anElement)
   {
     for (G4int i=0; i<nIsotopes; i++)
     {
-      G4int A = theElement->GetIsotope(i)->GetN();
-      G4double frac = theElement->GetRelativeAbundanceVector()[i]/perCent;
+      G4int A = anElement->GetIsotope(i)->GetN();
+      G4double frac = anElement->GetRelativeAbundanceVector()[i]/perCent;
       theData[i]->Init(A, Z, frac);
     }
   }
@@ -62,10 +62,11 @@ GetCrossSection(G4double anEnergy)
   return result;
 }
 
-G4String G4NeutronElementIsoCrossSections::
+G4IsoResult * G4NeutronElementIsoCrossSections::
 GetProductIsotope(G4double anEnergy)
 {
   G4double running = 0;
+  G4int index;
   G4double random = G4UniformRand();
   for(G4int i=0; i<nIsotopes; i++)
   {
@@ -73,8 +74,10 @@ GetProductIsotope(G4double anEnergy)
     index = i;
     if(running/crossSectionBuffer > random) break;
   }
-  G4String result = theData[index]->GetProductIsotope();
-  return result;
+  G4String result = theData[index]->GetProductIsotope(anEnergy);
+  G4Nucleus nucleus(theData[index]->GetA(), theData[index]->GetZ());
+  G4IsoResult * theResult = new G4IsoResult(result, nucleus);
+  return theResult;
 }
 
 

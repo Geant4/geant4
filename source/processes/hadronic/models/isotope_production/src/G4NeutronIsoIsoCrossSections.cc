@@ -7,6 +7,8 @@ G4NeutronIsoIsoCrossSections()
   theProductionData = NULL;
   hasData = false;
   theNumberOfProducts = 0;
+  theZ = 0;
+  theA = 0;
 }
 
 G4NeutronIsoIsoCrossSections::
@@ -25,6 +27,8 @@ Init(G4int A, G4int Z, G4double frac)
   // First transmution scattering cross-section
   // in our definition inelastic and fission.
   
+  theZ = Z;
+  theA = A;
   theNames.SetMaxOffSet(5);
   G4NeutronHPDataUsed dataUsed;
   G4String rest = "/Inelastic/CrossSections/";
@@ -59,7 +63,7 @@ Init(G4int A, G4int Z, G4double frac)
     {
       theCrossSection = fissionData;
     }
-    elseif(hasInelasticData)
+    else if(hasInelasticData)
     {
       theCrossSection = inelasticData;
     }
@@ -79,7 +83,9 @@ Init(G4int A, G4int Z, G4double frac)
     theProductionData = new G4NeutronIsoProdCrossSections * [theNumberOfProducts];
     for(G4int i=0; i<theNumberOfProducts; i++)
     {
-      theProductionData[i] = new G4NeutronIsoProdCrossSections;
+      G4String aName;
+      aDataSet >> aName;
+      theProductionData[i] = new G4NeutronIsoProdCrossSections(aName);
       theProductionData[i]->Init(aDataSet);
     }
   }
@@ -101,7 +107,7 @@ G4String G4NeutronIsoIsoCrossSections::
 GetProductIsotope(G4double anEnergy)
 {
   G4String result;
-  G4double xSec = new G4double[n];
+  G4double * xSec = new G4double[theNumberOfProducts];
   G4double sum = 0;
   {
   for(G4int i=0; i<theNumberOfProducts; i++)
@@ -112,6 +118,7 @@ GetProductIsotope(G4double anEnergy)
   }
   G4double random = G4UniformRand();
   G4double running = 0;
+  G4int index;
   {
   for(G4int i=0; i<theNumberOfProducts; i++)
   {
@@ -121,7 +128,7 @@ GetProductIsotope(G4double anEnergy)
   }
   }
   delete [] xSec;
-  G4String result = theData[index]->GetProductIsotope();
+  result = theProductionData[index]->GetProductIsotope();
   
   return result;
 }

@@ -9,11 +9,11 @@ Init(ifstream & aDataSet)
 }
 
 G4double G4NeutronIsoProdCrossSections::
-GetCrossSection(G4double anEnergy)
+GetProductionCrossSection(G4double anEnergy)
 {
   G4double result;
   result = theProductionCrossSections.GetY(anEnergy);
-  resurn result;
+  return result;
 }
 
 G4String G4NeutronIsoProdCrossSections::

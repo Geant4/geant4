@@ -8,7 +8,7 @@ G4NeutronIsotopeProduction()
   for(G4int i=0; i< numberOfElements; i++)
   {
     theData[i] = new G4NeutronElementIsoCrossSections;
-    theData[i].Init((*(G4Element::GetElementTable()))(i));
+    theData[i]->Init((*(G4Element::GetElementTable()))(i));
   }
 }
 
@@ -17,31 +17,21 @@ G4NeutronIsotopeProduction::
 {
   for(G4int i=0; i<numberOfElements; i++)
   {
-    delete theData[];
+    delete theData[i];
   }
-  if(theData!=NULL) delete theData;
+  if(theData!=NULL) delete [] theData;
 }
 
-G4double G4NeutronIsotopeProduction::
-PostStepGetPhysicalInteractionLength(const G4Track& track,
-			             G4double   previousStepSize,
-		                     G4ForceCondition* condition)
-{
-  if(track.GetDynamicParticle()->GetDefinition() == G4Neutron::Neutron())
-  // @@@@@@@@ take energy range of cross-sections into account.
-  {
-    condition = Forced;
-  }
-  return DBL_MAX;
-}
 
-G4VParticleChange* G4NeutronIsotopeProduction::
-PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
+G4IsoResult * G4NeutronIsotopeProduction::
+GetIsotope(const G4Track& aTrack,
+           const G4Nucleus & aNucleus)
 {
-  theParticleChange.Initialize(aTrack);
-  G4double nEleInMat = aTrack.GetMaterial->GetNumberOfElements();
+  if(aTrack.GetDynamicParticle()->GetDefinition() != G4Neutron::Neutron()) return NULL;
+  G4Material * theMaterial = aTrack.GetMaterial();
+  G4double nEleInMat = theMaterial->GetNumberOfElements();
   G4int index;
-  G4double xSec = new G4double[n];
+  G4double * xSec = new G4double[nEleInMat];
   G4double sum = 0;
   {
   for(G4int i=0; i<nEleInMat; i++)
@@ -62,8 +52,7 @@ PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
   }
   }
   delete [] xSec;
-  G4String result = theData[index]->GetProductIsotope(aTrack.GetKineticEnergy());
-  theParticleChange.SetProductName(result);
-  return &theParticleChange;
+  G4IsoResult * result = theData[index]->GetProductIsotope(aTrack.GetKineticEnergy());
+  return result;
 }
 

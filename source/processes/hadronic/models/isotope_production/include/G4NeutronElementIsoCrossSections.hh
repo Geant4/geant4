@@ -3,6 +3,7 @@
 
 #include "G4NeutronIsoIsoCrossSections.hh"
 #include "G4StableIsotopes.hh"
+#include "G4IsoResult.hh"
 
 class G4NeutronElementIsoCrossSections
 {
@@ -11,10 +12,10 @@ public:
   
   G4NeutronElementIsoCrossSections();
   ~G4NeutronElementIsoCrossSections();
-  void Init(const G4Element & anElement);
+  void Init(const G4Element * anElement);
   
   G4double GetCrossSection(G4double anEnergy);
-  G4String GetProductIsotope(G4double anEnergy);
+  G4IsoResult * GetProductIsotope(G4double anEnergy);
 
 private:
   

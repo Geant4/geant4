@@ -1,0 +1,13 @@
+ISO-01: There shall be detailed isotope production for incident neutrons
+--> respective class.
+ISO-02: There shall be information available on who (which model)
+        produced the isotope
+--> Use of type-info.name() in HadronicProcess.
+ISO-03: There shall be information available on what was the target
+--> Trivial from hadronic process.
+ISO-04: There shall be information available on energy, direction, and type 
+        of the projectile
+-->trivial from hadronic process
+ISO-05: There shall be information available on time and location of 
+        production
+--> trivial from hadronic process
