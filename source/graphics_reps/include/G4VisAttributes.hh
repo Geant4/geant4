@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.hh,v 1.7 2001-07-11 10:01:04 gunter Exp $
+// $Id: G4VisAttributes.hh,v 1.8 2002-10-23 12:04:31 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -102,8 +102,8 @@ private:
   LineStyle   fLineStyle;
   G4double    fLineWidth;          // Units of "normal" device linewidth, e.g.,
                                    // pixels for screen, 0.1 mm for paper.
-  G4bool      fForceDrawingStyle;  // To override view parameters.
-  ForcedDrawingStyle fForcedStyle;
+  G4bool      fForceDrawingStyle;  // To switch on forced drawing style.
+  ForcedDrawingStyle fForcedStyle; // Value of forced drawing style.
 };
 
 #include "G4VisAttributes.icc"
