@@ -53,6 +53,7 @@ class hTestPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     inline void SetBeamSigmaY(G4double val) {sigmaY = val;};
     inline void SetBeamSigmaZ(G4double val) {sigmaY = val;};
     inline void SetBeamSigmaE(G4double val) {sigmaE = val;};
+    inline void SetBeamEnergy(G4double val) {energy = val;};
     inline void SetBeamMinCosTheta(G4double val) {minCosTheta = val;};
     inline void SetVerbose(G4int val) {verbose = val;};
     inline G4ThreeVector GetBeamPosition() const {return position;}; 

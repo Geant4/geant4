@@ -61,6 +61,7 @@ void hTestCalorimeterSD::Initialize(G4HCofThisEvent*)
   for(G4int i=0; i<numAbs; i++) { energy[i] = 0.0; }
   backEnergy = 0.0;
   leakEnergy = 0.0;
+  zmax = (theHisto->GetAbsorberThickness())*numAbs;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -87,19 +88,19 @@ G4bool hTestCalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
     }
   }
 
-  G4int trIDnow = aStep->GetTrack()->GetTrackID();
-  G4double tkin = aStep->GetTrack()->GetKineticEnergy(); 
+  G4int trIDnow  = aStep->GetTrack()->GetTrackID();
+  G4double tkin  = aStep->GetTrack()->GetKineticEnergy(); 
   G4double theta = (aStep->GetTrack()->GetMomentumDirection()).theta();
+  G4double zend  = aStep->GetPostStepPoint()->GetPosition().z();
+  G4double zstart= aStep->GetPreStepPoint()->GetPosition().z();
 
   G4bool stop = false;
   G4bool primary = false;
-  G4bool outAbs = false;
+  G4bool outAbs  = false;
 
   if(tkin == 0.0) stop = true;
   if(0 == aStep->GetTrack()->GetParentID()) primary = true;
-  if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Absorber" &&
-     aStep->GetPostStepPoint()->GetPhysicalVolume()->GetName()=="World")
-     outAbs = true;
+  if(zstart > 0.0 && zstart < zmax && (zend <= 0.0 || zend >= zmax)) outAbs = true;
 
   // new particle
   if(trIDnow != trIDold || evno != evnOld) {
@@ -109,8 +110,8 @@ G4bool hTestCalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 
   // After step in absorber
   if(outAbs) {
-    if(theta < M_PI * 0.5) leakEnergy += tkin;
-    else                   backEnergy += tkin;
+    if(zend >= zmax) leakEnergy += tkin;
+    else             backEnergy += tkin;
 
     // primary particles
     if(primary) {
@@ -124,10 +125,11 @@ G4bool hTestCalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 
     G4double xend = aStep->GetPostStepPoint()->GetPosition().x();
     G4double yend = aStep->GetPostStepPoint()->GetPosition().y();
-    G4double zend = aStep->GetPostStepPoint()->GetPosition().z();
     theHisto->SaveToTuple("XEND",xend/mm);      
     theHisto->SaveToTuple("YEND",yend/mm);      
     theHisto->SaveToTuple("ZEND",zend/mm);      
+    theHisto->SaveToTuple("TEND",0.0);
+    theHisto->SaveToTuple("TETA",0.0);      
     theHisto->AddEndPoint(zend);      
   }
 

@@ -40,6 +40,7 @@ class hTestPrimaryGeneratorMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* beamXCmd;
     G4UIcmdWithADoubleAndUnit* beamYCmd;
     G4UIcmdWithADoubleAndUnit* beamZCmd;
+    G4UIcmdWithADoubleAndUnit* beamECmd;
     G4UIcmdWithADoubleAndUnit* sigmaXCmd;
     G4UIcmdWithADoubleAndUnit* sigmaYCmd;
     G4UIcmdWithADoubleAndUnit* sigmaZCmd;

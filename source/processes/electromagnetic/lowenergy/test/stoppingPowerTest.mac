@@ -18,6 +18,8 @@ standard
 1000.
 #cutE(mm)
 1000.
+#material
+Water
 //--------Electron_processes
 #particle
 1
@@ -25,7 +27,7 @@ standard
 #process
 2
 #paw
-ionei1st.paw
+ioneh2ost.paw
 #run
 //--------Proton_processes
 #particle
@@ -34,7 +36,7 @@ ionei1st.paw
 #process
 0
 #paw
-ionpi0st.paw
+ionph2ost.paw
 #run
 //--------AntiProton_processes
 #particle
@@ -43,7 +45,7 @@ ionpi0st.paw
 #process
 0
 #paw
-ionai0st.paw
-#run
+ionah2ost.paw
+#run 
 //--------Exit
 #exit

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hTestStoppingPower.cc,v 1.6 2001-01-12 11:14:33 vnivanch Exp $
+// $Id: G4hTestStoppingPower.cc,v 1.7 2001-06-19 16:04:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // -------------------------------------------------------------------
@@ -66,6 +66,7 @@
 #include "G4ParticleWithCuts.hh"
 #include "G4Ions.hh"
 
+
 #include "CLHEP/Hist/TupleManager.h"
 #include "CLHEP/Hist/HBookFile.h"
 #include "CLHEP/Hist/Histogram.h"
@@ -77,7 +78,7 @@ main()
 {
   // ---- HBOOK initialization
 
-  hbookManager = new HBookFile("stopping.paw", 68);
+  hbookManager = new HBookFile("stop85.paw", 58);
   assert (hbookManager != 0);
   
   // ---- Book a histogram and ntuples
@@ -641,11 +642,11 @@ main()
     h[50]->accumulate(log10(tkin),de*fact) ;
     tRed = tkin * (part[4]->GetPDGMass())/mProt ;
     de = hIon[4]->ComputeDEDX(part[4],Al,tRed) ;
-    de += theNuclearStoppingModel->TheValue(part[4],Al,tRed) ;
+    //de += theNuclearStoppingModel->TheValue(part[4],Al,tRed) ;
     h[51]->accumulate(log10(tkin),de*fact) ;
     tRed = tkin * (part[5]->GetPDGMass())/mProt ;
     de = hIon[5]->ComputeDEDX(part[5],Al,tRed) ;
-    de += theNuclearStoppingModel->TheValue(part[5],Al,tRed) ;
+    //de += theNuclearStoppingModel->TheValue(part[5],Al,tRed) ;
     h[52]->accumulate(log10(tkin),de*fact) ;
   }
 
@@ -690,7 +691,7 @@ main()
   }
  
   //---------------------- Fill Ntuple ------------------------
- 
+  /* 
   G4cout << "Fill Ntuple!" << G4endl;
 
   // ---- primary ntuple ------
@@ -743,7 +744,7 @@ main()
       }
     }
   }
-				      
+  */				      
   //----------- End of work -------------------------------------      
 
   G4cout << "Save Ntuple and Hbook" << G4endl;  

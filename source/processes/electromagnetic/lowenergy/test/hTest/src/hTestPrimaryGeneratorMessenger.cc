@@ -67,6 +67,12 @@ hTestPrimaryGeneratorMessenger::hTestPrimaryGeneratorMessenger(
   sigmaECmd->SetUnitCategory("Energy");
   sigmaECmd->AvailableForStates(PreInit,Idle);
 
+  beamECmd = new G4UIcmdWithADoubleAndUnit("/hTest/gun/beamE",this);
+  beamECmd->SetGuidance("Set the beam Gussian width for energy");
+  beamECmd->SetParameterName("beamE",false);
+  beamECmd->SetUnitCategory("Energy");
+  beamECmd->AvailableForStates(PreInit,Idle);
+
   maxThetaCmd = new G4UIcmdWithADoubleAndUnit("/hTest/gun/maxTheta",this);
   maxThetaCmd->SetGuidance("Set the beam maxTheta in degrees.");
   maxThetaCmd->SetParameterName("maxTheta",false);
@@ -86,6 +92,7 @@ hTestPrimaryGeneratorMessenger::~hTestPrimaryGeneratorMessenger()
   delete sigmaYCmd;
   delete sigmaZCmd;
   delete sigmaECmd;
+  delete beamECmd;
   delete maxThetaCmd;
 }
 
@@ -114,6 +121,8 @@ void hTestPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
     {theGen->SetBeamSigmaZ(sigmaZCmd->GetNewDoubleValue(newValue));}
   if(command == sigmaECmd)
     {theGen->SetBeamSigmaE(sigmaECmd->GetNewDoubleValue(newValue));}
+  if(command == beamECmd)
+    {theGen->SetBeamEnergy(beamECmd->GetNewDoubleValue(newValue));}
   if(command == maxThetaCmd)
     {theGen->SetBeamMinCosTheta(cos(maxThetaCmd->GetNewDoubleValue(newValue)));}
   if(0 < theGen->GetVerbose())

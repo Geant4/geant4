@@ -11,10 +11,10 @@
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4IonAr40
+// ClassName:   G4IonC12
 //
 // Class Description:
-// The new static ion Ar40+ is defined as G4VIon.
+// The new static ion C12+ is defined as G4VIon.
 // Each class inheriting from G4VIon
 // corresponds to a particle type; one and only one
 // instance for each class is guaranteed.

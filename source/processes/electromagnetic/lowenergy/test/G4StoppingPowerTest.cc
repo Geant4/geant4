@@ -53,8 +53,6 @@
 
 #include "G4eplusAnnihilation.hh"
 
-//#include "G4VeLowEnergyLoss.hh"
-
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
@@ -82,7 +80,11 @@
 #include "CLHEP/Hist/Histogram.h"
 #include "CLHEP/Hist/Tuple.h"
 
+
 HepTupleManager* hbookManager;
+
+#include "hTest/include/G4IonC12.hh"
+#include "hTest/include/G4IonAr40.hh"
 
 int main(int argc,char** argv)
 {
@@ -107,7 +109,8 @@ int main(int argc,char** argv)
   G4Material* material = 0; 
   G4String name[3] = {"Ionisation", "Bremsstrahlung",
                       "Ionisation+Bremsstrahlung"};
-
+  G4bool setBarkasOff = false;
+  G4bool setNuclearOff= true;
 
   G4cout.setf( ios::scientific, ios::floatfield );
 
@@ -133,10 +136,10 @@ int main(int argc,char** argv)
  
   G4Material* ma[14];
   ma[0] = new G4Material("Be",    4.,  9.01*g/mole, 1.848*g/cm3);
-  ma[1] = new G4Material("Graphite",6., 12.00*g/mole, 2.265*g/cm3 );
+  ma[1] = new G4Material("Graphite","Graphite",6., 12.00*g/mole, 2.265*g/cm3 );
   ma[2] = new G4Material("Al", 13., 26.98*g/mole, 2.7 *g/cm3);
   ma[3] = new G4Material("Si",   14., 28.055*g/mole, 2.33*g/cm3);
-  /*
+  
   ma[4] = new G4Material("LAr",   18., 39.95*g/mole, 1.393*g/cm3);
   ma[5] = new G4Material("Fe",      26., 55.85*g/mole, 7.87*g/cm3);
   ma[6] = new G4Material("Cu",    29., 63.55*g/mole, 8.96*g/cm3);
@@ -151,18 +154,18 @@ int main(int argc,char** argv)
   G4Element*   I  = new G4Element ("Iodide"  , "I", 53. , 126.9044*g/mole);
 
   ma[10] = new G4Material("O2", 8., 16.00*g/mole, 1.1*g/cm3);
-  ma[11] = new G4Material ("Water" , 1.*g/cm3, 2);
+  ma[11] = new G4Material ("Water" , "H_2O", 1.*g/cm3, 2);
   ma[11]->AddElement(H,2);
   ma[11]->AddElement(O,1);
 
-  ma[12] = new G4Material ("Ethane" , 0.4241*g/cm3, 2);
+  ma[12] = new G4Material ("Ethane" , "C_2H_6", 0.4241*g/cm3, 2);
   ma[12]->AddElement(H,6);
   ma[12]->AddElement(C,2);
   
   ma[13] = new G4Material ("CsI" , 4.53*g/cm3, 2);
   ma[13]->AddElement(Cs,1);
   ma[13]->AddElement(I,1);
-  */ 
+  
   static const G4MaterialTable* theMaterialTable = 
                G4Material::GetMaterialTable();
 
@@ -185,11 +188,15 @@ int main(int argc,char** argv)
   G4ParticleDefinition* positron = G4Positron::PositronDefinition();
   G4ParticleDefinition* proton   = G4Proton::ProtonDefinition();
   G4ParticleDefinition* antiproton = G4AntiProton::AntiProtonDefinition();
+  G4ParticleDefinition* c12 = G4IonC12::IonC12Definition();
+  G4ParticleDefinition* ar40 = G4IonAr40::IonAr40Definition();
   G4ParticleDefinition* part = electron;
 
   G4hLowEnergyIonisation* hionle = 0;
+  G4hLowEnergyIonisation* ionle = 0;
   G4LowEnergyIonisation* eionle = 0;
   G4LowEnergyBremsstrahlung* ebrle = 0;
+  G4hIonisation* ionst = 0;
   G4hIonisation* hionst = 0;
   G4eIonisation* eionst = 0;
   G4eBremsstrahlung* ebrst = 0;
@@ -229,9 +236,11 @@ int main(int argc,char** argv)
   G4cout << "#verbose" << G4endl;
   G4cout << "#run" << G4endl;
   G4cout << "#exit" << G4endl;
+  G4cout << "#barkas" << G4endl;
+  G4cout << "#nuclear" << G4endl;
 
-  G4ProcessManager *elecManager, *positManager, 
-                   *protManager, *aprotManager;
+  G4ProcessManager *gmanager, *elecManager, *positManager,  
+                   *protManager, *aprotManager, *ionManager;
 
 
   string line, line1;
@@ -267,6 +276,7 @@ int main(int argc,char** argv)
       } else if(line == "#process") {
         (*fin) >> nProcess;
       } else if(line == "#domain") {
+        line1 = "";
         (*fin) >> line1;
         if(line1 == "lowenergy") {lowE = true;}
         else                     {lowE = false;}
@@ -280,6 +290,18 @@ int main(int argc,char** argv)
       } else if(line == "#exit") {
         end = false;
         break;
+      } else if(line == "#barkas") {
+        line1 = "";
+        (*fin) >> line1;
+        G4cout << line1 << G4endl;
+        if(line1 == "off") setBarkasOff = true;
+        if(line1 == "on")  setBarkasOff = false;
+      } else if(line == "#nuclear") {
+        line1 = "";
+        (*fin) >> line1;
+        G4cout << line1 << G4endl;
+        if(line1 == "off") setNuclearOff = true;
+        if(line1 == "on")  setNuclearOff = false;
       }
     } while(end);
 
@@ -296,14 +318,20 @@ int main(int argc,char** argv)
       part = proton;
     } else if(nPart == 4) {
       part = antiproton;
+    } else if(nPart == 5) {
+      part = c12;
+    } else if(nPart == 6) {
+      part = ar40;
     } else {
       G4cout << "Particle #" << nPart 
              << " is absent in the list of particles: Exit" << G4endl;
+      end = false;
       break;
     }
     if(nProcess < 0 || nProcess > 2) {
       G4cout << "Process #" << nProcess 
              << " is absent in the list of processes: Exit" << G4endl;
+      end = false;
       break;
     }
 
@@ -332,10 +360,12 @@ int main(int argc,char** argv)
     G4double emax10 = log10(emax/MeV);
     G4double bin = (emax10 - emin10) / (G4double)nbin;
 
-    HepHistogram* hist[2];
+    HepHistogram* hist[3];
     hist[0] = hbookManager->histogram("Stopping power (MeV*cm**2/g)", 
                                      nbin,emin10,emax10);
-    hist[1] = hbookManager->histogram("Step limit (mm)", 
+    hist[1] = hbookManager->histogram("Stopping power (MeV/mm)", 
+                                     nbin,emin10,emax10);
+    hist[2] = hbookManager->histogram("Step limit (mm)", 
                                      nbin,emin10,emax10);
     //    assert (hDebug != 0);  
     G4cout<< "Histograms is initialised" << G4endl;
@@ -347,6 +377,10 @@ int main(int argc,char** argv)
     // Processes - all new 
     G4bool success = false;
 
+    gmanager = new G4ProcessManager(gamma);
+    gmanager->AddDiscreteProcess(new G4LowEnergyPhotoElectric());
+    gmanager->AddDiscreteProcess(new G4LowEnergyCompton());
+    gmanager->AddDiscreteProcess(new G4LowEnergyGammaConversion());    
 
     if(lowE) {
 
@@ -370,8 +404,12 @@ int main(int argc,char** argv)
         proton->SetProcessManager(protManager);
         hionle = new G4hLowEnergyIonisation();
         hionle->SetEnlossFluc(false);
-        hionle->SetNuclearStoppingOff();
         protManager->AddProcess(hionle);
+        if(setNuclearOff)  hionle->SetNuclearStoppingOff();
+        if(!setNuclearOff) hionle->SetNuclearStoppingOn();
+        if(setBarkasOff)   hionle->SetBarkasOff();
+        if(!setBarkasOff)  hionle->SetBarkasOn();
+        hionle->SetVerboseLevel(verbose);
         hionle->BuildPhysicsTable(*proton);
         success = true;
 
@@ -380,9 +418,38 @@ int main(int argc,char** argv)
         antiproton->SetProcessManager(aprotManager);
         hionle = new G4hLowEnergyIonisation();
         hionle->SetEnlossFluc(false);
-        hionle->SetNuclearStoppingOff();
         aprotManager->AddProcess(hionle);
+        if(setNuclearOff)  hionle->SetNuclearStoppingOff();
+        if(!setNuclearOff) hionle->SetNuclearStoppingOn();
+        if(setBarkasOff)   hionle->SetBarkasOff();
+        if(!setBarkasOff)  hionle->SetBarkasOn();
+        hionle->SetVerboseLevel(verbose);
         hionle->BuildPhysicsTable(*antiproton);
+        success = true;
+
+      } else if (nPart == 5 || nPart == 6) {
+        protManager = new G4ProcessManager(proton);
+        proton->SetProcessManager(protManager);
+        hionle = new G4hLowEnergyIonisation();
+        hionle->SetEnlossFluc(false);
+        protManager->AddProcess(hionle);
+        if(setNuclearOff)  hionle->SetNuclearStoppingOff();
+        if(!setNuclearOff) hionle->SetNuclearStoppingOn();
+        if(setBarkasOff)   hionle->SetBarkasOff();
+        if(!setBarkasOff)  hionle->SetBarkasOn();
+        hionle->SetVerboseLevel(verbose);
+        hionle->BuildPhysicsTable(*proton);
+        ionManager = new G4ProcessManager(part);
+        part->SetProcessManager(ionManager);
+        ionle = new G4hLowEnergyIonisation();
+        ionle->SetEnlossFluc(false);
+        if(setNuclearOff)  ionle->SetNuclearStoppingOff();
+        if(!setNuclearOff) ionle->SetNuclearStoppingOn();
+        if(setBarkasOff)   ionle->SetBarkasOff();
+        if(!setBarkasOff)  ionle->SetBarkasOn();
+        ionManager->AddProcess(ionle);
+        ionle->SetVerboseLevel(verbose);
+        ionle->BuildPhysicsTable(*part);
         success = true;
       }
 
@@ -435,6 +502,7 @@ int main(int argc,char** argv)
         hionst = new G4hIonisation();
         hionst->SetEnlossFluc(false);
         protManager->AddProcess(hionst);
+        hionst->SetVerboseLevel(verbose);
         hionst->BuildPhysicsTable(*proton);
         success = true;
 
@@ -444,7 +512,25 @@ int main(int argc,char** argv)
         hionst = new G4hIonisation();
         hionst->SetEnlossFluc(false);
         aprotManager->AddProcess(hionst);
+        hionst->SetVerboseLevel(verbose);
         hionst->BuildPhysicsTable(*antiproton);
+        success = true;
+
+      } else if (nPart == 5 || nPart == 6) {
+        protManager = new G4ProcessManager(proton);
+        proton->SetProcessManager(protManager);
+        hionst = new G4hIonisation();
+        hionst->SetEnlossFluc(false);
+        protManager->AddProcess(hionst);
+        hionst->SetVerboseLevel(verbose);
+        hionst->BuildPhysicsTable(*proton);
+        ionManager = new G4ProcessManager(part);
+        part->SetProcessManager(ionManager);
+        ionst = new G4hIonisation();
+        ionst->SetEnlossFluc(false);
+        ionManager->AddProcess(ionst);
+        ionst->SetVerboseLevel(verbose);
+        ionst->BuildPhysicsTable(*part);
         success = true;
       }
     }
@@ -510,16 +596,22 @@ int main(int argc,char** argv)
             aChange = eionle->AlongStepDoIt(*gTrack,*step);
  	  }
 
-        } else if (nPart == 3) {
+        } else if (nPart == 3 ) {
           x = hionle->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
           aChange = hionle->AlongStepDoIt(*gTrack,*step);
 
         } else if (nPart == 4) {
           x = hionle->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
           aChange = hionle->AlongStepDoIt(*gTrack,*step);
+
+        } else if (nPart == 5 || nPart == 6) {
+          x = ionle->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
+          aChange = ionle->AlongStepDoIt(*gTrack,*step);
+
 	}
 
       } else {
+
 
         if(nPart == 1) {
           if(nProcess == 0) {
@@ -554,8 +646,13 @@ int main(int argc,char** argv)
         } else if (nPart == 4) {
           x = hionst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
           aChange = hionst->AlongStepDoIt(*gTrack,*step);
-        }
+
+        } else if (nPart == 5 || nPart == 6) {
+          x = ionst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
+          aChange = ionst->AlongStepDoIt(*gTrack,*step);
+	}
       }
+
 
       G4double de = aChange->GetLocalEnergyDeposit();
       G4int n = aChange->GetNumberOfSecondaries();
@@ -573,7 +670,8 @@ int main(int argc,char** argv)
       }
       G4double st = de/(theStep*(material->GetDensity()));
       st *= gram/(cm*cm*MeV); 
- 
+      G4double s = de*mm/(theStep*MeV); 
+
       if(verbose) {
           G4cout  <<  "Iteration = "  <<  iter 
 	          << "  E = " << e/MeV << " MeV; StepLimit= "
@@ -585,7 +683,8 @@ int main(int argc,char** argv)
       if(x > 1000.0*meter) x = 1000.0*meter;      
 
       hist[0]->accumulate(le,st);
-      hist[1]->accumulate(le,x/mm);
+      hist[1]->accumulate(le,s);
+      hist[2]->accumulate(le,x/mm);
     }
     if(usepaw)hbookManager->write();
     G4cout << "# hbook is writed" << G4endl;
@@ -597,6 +696,9 @@ int main(int argc,char** argv)
   } while(end);
   G4cout << "###### End of test #####" << G4endl;
 }
+
+#include "hTest/src/G4IonC12.cc"
+#include "hTest/src/G4IonAr40.cc"
 
 
 

@@ -95,12 +95,10 @@ void hTestPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   particleGun->SetParticleMomentumDirection(direction.unit());
 
   // Simulation of beam kinetic energy
-  energy = particleGun->GetParticleEnergy();
-  if(0.0 < sigmaE) {
-    energy += G4RandGauss::shoot(0.0,sigmaE);
-    if(0.0 > energy) energy = 0.0;
-    particleGun->SetParticleEnergy(energy);
-  }  
+  G4double kinEnergy = energy;
+  if(0.0 < sigmaE) kinEnergy += G4RandGauss::shoot(0.0,sigmaE);
+  if(0.0 > kinEnergy) kinEnergy = 0.0;
+  particleGun->SetParticleEnergy(kinEnergy);
 
   G4ParticleDefinition* particle = particleGun->GetParticleDefinition();
   G4String particleName = particle->GetParticleName() ;

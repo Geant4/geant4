@@ -58,6 +58,7 @@ public: // Without description
       G4int numAbs;
       G4double backEnergy;
       G4double leakEnergy;
+      G4double zmax;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
