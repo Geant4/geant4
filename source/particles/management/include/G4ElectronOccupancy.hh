@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectronOccupancy.hh,v 1.5 2001-07-11 10:01:55 gunter Exp $
+// $Id: G4ElectronOccupancy.hh,v 1.6 2004-06-07 13:40:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -98,7 +98,7 @@ class G4ElectronOccupancy
 
 };
 
-extern G4Allocator<G4ElectronOccupancy> aElectronOccupancyAllocator;
+G4extern G4Allocator<G4ElectronOccupancy> aElectronOccupancyAllocator;
 
 // ------------------------
 // Inlined operators

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DecayProducts.hh,v 1.8 2001-07-11 10:01:55 gunter Exp $
+// $Id: G4DecayProducts.hh,v 1.9 2004-06-07 13:40:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -104,7 +104,7 @@ class G4DecayProducts
 // ------------------------
 // Inlined operators
 // ------------------------
-extern G4Allocator<G4DecayProducts> aDecayProductsAllocator;
+G4extern G4Allocator<G4DecayProducts> aDecayProductsAllocator;
 
 inline void * G4DecayProducts::operator new(size_t)
 {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.icc,v 1.8 2001-07-11 10:01:55 gunter Exp $
+// $Id: G4DynamicParticle.icc,v 1.9 2004-06-07 13:40:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,7 +33,7 @@
 // ------------------------------------------------------------
 
 
-extern G4Allocator<G4DynamicParticle> aDynamicParticleAllocator;
+G4extern G4Allocator<G4DynamicParticle> aDynamicParticleAllocator;
 
 // ------------------------
 // Inlined operators
