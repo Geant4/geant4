@@ -1,29 +1,7 @@
-//
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#ifndef fluoTestDetectorConstruction_h
-#define fluoTestDetectorConstruction_h 1
+#ifndef FluoTestDetectorConstruction_h
+#define FluoTestDetectorConstruction_h 1
 
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
@@ -33,34 +11,32 @@ class G4Tubs;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
-class fluoTestDetectorMessenger;
-class fluoTestSiSD;
-class fluoTestHPGeSD;
-class fluoTestSampleSD;
+class FluoTestDetectorMessenger;
+class FluoTestHPGeSD;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class fluoTestDetectorConstruction : public G4VUserDetectorConstruction
+class FluoTestDetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
 
-    fluoTestDetectorConstruction();
-   ~fluoTestDetectorConstruction();
+    FluoTestDetectorConstruction();
+   ~FluoTestDetectorConstruction();
 
   public:
-     
+  /*  
      void SetSampleMaterial (G4String);     
      void SetSampleThickness(G4double);     
 
      void SetSiMaterial (G4String);     
      void SetSiThickness(G4double);
    
-     void SetHPGeMaterial (G4String);     
-     void SetHPGeThickness(G4double);
-  
+  // void SetHPGeMaterial (G4String);     
+  // void SetHPGeThickness(G4double);
+  void SetPixelMaterial (G4String);
      void SetSampleSizeYZ (G4double);
      void SetSiSizeYZ (G4double);
-     void SetHPGeSizeYZ (G4double);
+  //  void SetHPGeSizeYZ (G4double);
      void SetDia1SizeYZ (G4double);
      void SetDia2SizeYZ (G4double);
      void SetDia3SizeYZ (G4double);
@@ -86,18 +62,61 @@ class fluoTestDetectorConstruction : public G4VUserDetectorConstruction
      void SetDia2Rotation (G4double);
     void SetDia3Azimuth (G4double);
      void SetDia3Rotation (G4double);
-
-     G4VPhysicalVolume* Construct();
-
-     void UpdateGeometry();
-
- public:
+void SetOhmicNegMaterial(G4String);
+void SetOhmicPosMaterial(G4String);
+void SetOhmicNegThickness(G4double);
+void SetOhmicPosThickness(G4double);
+  void SetPixelSizeYZ(G4double);
+  void SetDeviceSizeZ(G4double);
+ void SetDeviceSizeY(G4double);
+  void SetContactSizeYZ(G4double);
+  void SetNbOfPixelRows(G4int);
+ void SetNbOfPixelColumns(G4int);
+  void SetNbOfPixels(G4int);
+  */
+  //caratterizzazione della risoluzione
+  /* void SetEHPEnergy (G4String);//setta l'energia di creazione di una coppia e-_buca in funzione del materiale
+  void SetFanoDispersion (G4String);//setta il fattore di Fano in funzione del materiale
+  //parametri del trapping:
+  void SetAlpha (G4double);
+  void SetBeta(G4double);
+  //rumore del dispositivo:
+  void SetDevNoise(G4double);
+  */
+  G4VPhysicalVolume* Construct();
+  
+  void UpdateGeometry();
+  
+public:
   
      void PrintApparateParameters(); 
                     
      G4double GetWorldSizeX()           {return WorldSizeX;}; 
      G4double GetWorldSizeYZ()          {return WorldSizeYZ;};
-     
+
+  G4double GetDeviceThickness()      {return DeviceThickness;}; 
+  G4double GetDeviceSizeZ()          {return DeviceSizeZ;};
+  G4double GetDeviceSizeY()          {return DeviceSizeY;};
+  G4double GetPixelSizeYZ()          {return PixelSizeYZ;};
+  G4double GetContactSizeYZ()        {return ContactSizeYZ;};
+  
+  G4int GetNbOfPixels()              {return NbOfPixels;}; 
+  G4int GetNbOfPixelRows()           {return NbOfPixelRows;}; 
+  G4int GetNbOfPixelColumns()        {return NbOfPixelColumns;}; 
+
+ G4Material* GetOhmicPosMaterial()  {return OhmicPosMaterial;};
+  G4double    GetOhmicPosThickness() {return OhmicPosThickness;};      
+
+  G4Material* GetOhmicNegMaterial()  {return OhmicNegMaterial;};
+  G4double    GetOhmicNegThickness() {return OhmicNegThickness;};      
+
+  //G4double    GetEHPEnergy()            {return EHPEnergy;};
+  //G4double    GetFanoValue()            {return FanoValue;};
+
+  // G4double    GetAlpha()                {return Alpha;}; 
+  // G4double    GetBeta()                {return Beta;};
+  // G4double    GetDevNoise()            {return DevNoise;};
+
      const G4VPhysicalVolume* GetphysiWorld() {return physiWorld;};           
      const G4VPhysicalVolume* GetSi()        {return physiSi;};
      const G4VPhysicalVolume* GetHPGe()        {return physiHPGe;};
@@ -106,20 +125,60 @@ class fluoTestDetectorConstruction : public G4VUserDetectorConstruction
      const G4VPhysicalVolume* GetDia2()        {return physiDia2;};
      const G4VPhysicalVolume* GetDia3()        {return physiDia3;};
  
+  const G4VPhysicalVolume* GetphysiPixel()  {return physiPixel;};           
+  const G4VPhysicalVolume* GetOhmicPos()    {return physiOhmicPos;};
+  const G4VPhysicalVolume* GetOhmicNeg()    {return physiOhmicNeg;};
+  
+
   private:
      
-     G4Material*        sampleMaterial;
-     G4Material*        SiMaterial;
-  G4Material*        HPGeMaterial;
+    G4Material*        sampleMaterial;
+    G4Material*        SiMaterial;
+  // G4Material*        HPGeMaterial;
+  G4Material*      pixelMaterial;
   G4Material*        Dia1Material;
   G4Material*        Dia2Material;
   G4Material*        Dia3Material;
+  G4Material*        OhmicPosMaterial;
+  G4double           OhmicPosThickness;
+     
+  G4Material*        OhmicNegMaterial;
+  G4double           OhmicNegThickness;
+  //G4double           EHPEnergy; 
+  //G4double           FanoValue;
+
+  //G4double           Alpha;
+  //G4double           Beta;
+  //G4double           DevNoise;
+
+  G4int              PixelCopyNb;
+  G4int              NbOfPixels;
+  G4int              NbOfPixelRows;
+  G4int              NbOfPixelColumns;
+  G4double           PixelThickness;
+  
+  G4double           PixelSizeYZ;
+  G4double           ContactSizeYZ;
+  G4double           DeviceSizeZ;
+  G4double           DeviceSizeY;
+  G4double           DeviceThickness;
+    
+ G4Box*             solidPixel;   
+  G4LogicalVolume*   logicPixel;  
+  G4VPhysicalVolume* physiPixel;    
+ G4Box*             solidOhmicPos;
+  G4LogicalVolume*   logicOhmicPos; 
+  G4VPhysicalVolume* physiOhmicPos; 
+     
+  G4Box*             solidOhmicNeg;
+  G4LogicalVolume*   logicOhmicNeg; 
+  G4VPhysicalVolume* physiOhmicNeg;     
 
 public:
 
      G4Material* GetSampleMaterial()  {return sampleMaterial;};
      G4Material* GetSiMaterial()  {return SiMaterial;};  
-      G4Material* GetHPGeMaterial()  {return HPGeMaterial;}; 
+      G4Material* GetPixelMaterial()  {return pixelMaterial;}; 
   G4Material* GetDia1Material()  {return Dia1Material;}; 
   G4Material* GetDia2Material()  {return Dia2Material;}; 
   G4Material* GetDia3Material()  {return Dia3Material;}; 
@@ -127,10 +186,10 @@ public:
 private:
      G4double           SampleThickness;
      G4double           SiThickness;
-     G4double           SampleSizeYZ;
+  G4double           SampleSizeYZ;
      G4double           SiSizeYZ; 
-     G4double           HPGeThickness;
-     G4double           HPGeSizeYZ;
+  //   G4double           HPGeThickness;
+  //  G4double           HPGeSizeYZ;
      G4double           Dia1Thickness;
      G4double           Dia1SizeYZ;
      G4double           Dia2Thickness;
@@ -138,15 +197,15 @@ private:
      G4double           Dia3Thickness;
      G4double           Dia3SizeYZ;
      G4double           DiaInnerSize;
-     
+     G4double           Dia3InnerSize;
 
 public: 
      
      G4double GetSiThickness()       {return SiThickness;}; 
      G4double GetSiSizeYZ()          {return SiSizeYZ;};
       
-     G4double GetHPGeThickness()       {return HPGeThickness;}; 
-     G4double GetHPGeSizeYZ()          {return HPGeSizeYZ;};
+  //  G4double GetHPGeThickness()       {return HPGeThickness;}; 
+   
       
      G4double GetSampleThickness()         {return SampleThickness;};
      G4double GetSampleSizeYZ()              {return SampleSizeYZ;};
@@ -163,6 +222,7 @@ public:
 
 private:
 
+ 
   G4Material*        defaultMaterial;
   G4double           ThetaHPGe;
   G4double           ThetaSi;
@@ -172,6 +232,7 @@ private:
 
   G4double           DistDe;
   G4double           DistDia;
+  G4double           Dia3Dist;
   G4double           PhiSi;
   G4double           PhiHPGe;
   G4double           PhiDia1;
@@ -220,13 +281,9 @@ private:
   G4VPhysicalVolume* physiDia3; //pointer to the physical Diaphragm  
 
 
-      fluoTestDetectorMessenger* detectorMessenger; //pointer to the Messenger
+  FluoTestDetectorMessenger* detectorMessenger; //pointer to the Messenger
 
-      fluoTestSiSD* SiSD;  //pointer to the sensitive detector
-
-  fluoTestHPGeSD* HPGeSD; // pointer to the sensitive detector
-     
-      fluoTestSampleSD* sampleSD;  //pointer to the sensitive sample 
+   FluoTestHPGeSD* HPGeSD;  //pointer to the sensitive detector
 
 private:
     
@@ -237,11 +294,15 @@ private:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void fluoTestDetectorConstruction::ComputeApparateParameters()
+inline void FluoTestDetectorConstruction::ComputeApparateParameters()
 {     
   // Compute derived parameters of the apparate
-     WorldSizeX = 2 * (DistDe  +1.4142 * max(SiSizeYZ,SiThickness)); 
-     WorldSizeYZ = 2 * (DistDe +1.4142 *max(SiSizeYZ,SiThickness));
+     WorldSizeX = (2 * (DistDe  +1.4142 * max(SiSizeYZ,SiThickness)))+10*m; 
+     WorldSizeYZ = 2 * (DistDe +1.4142 *max(Dia1SizeYZ,max(SiSizeYZ,SiThickness)));
+     
+     DeviceThickness = PixelThickness+OhmicNegThickness+OhmicPosThickness;
+     DeviceSizeY =NbOfPixelRows*max(ContactSizeYZ,PixelSizeYZ);
+     DeviceSizeZ =NbOfPixelColumns*max(ContactSizeYZ,PixelSizeYZ);
 }
 
 #endif
