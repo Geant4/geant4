@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: checkParticles.cc,v 1.4 2003-06-16 16:58:51 gunter Exp $
+// $Id: checkParticles.cc,v 1.5 2004-02-13 05:51:53 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,7 @@ int main(int argc,char** argv) {
   // PDG computer-readble file for particle properties
   //  see http://www-pdg.lbl.gov/computer_read.html
   std::ifstream pdgFile;
-  G4String pdgFileName = "garren_98.mc";
+  G4String pdgFileName = "mass_width_02.mc";
   if (argc > 1) pdgFileName =  argv[1];
  
   // open the pdg file
