@@ -1,0 +1,16 @@
+ Warning (G4MagIntergratorDriver): The number of steps used in the Integration driver (Runge-Kutta) is too many.  
+Integration of the interval was not completed - only a 36.1606 % fraction of it was Done.
+ Error in G4PropagatorInField: Curve lenght mis-match, is advancement wrong ?  The curve length of the endpoint should be 5120 and is 2610.21 a difference of 2509.79
+ Warning (G4MagIntergratorDriver): The stepsize for the  next iteration=1.95538e-10 is too small - in Step number 1 . Minimum for driver = 0.01
+ Warning (G4MagIntergratorDriver): The stepsize for the  next iteration=0.00211073 is too small - in Step number 380 . Minimum for driver = 0.01
+ Warning (G4MagIntergratorDriver): The stepsize for the  next iteration=0.00396582 is too small - in Step number 349 . Minimum for driver = 0.01
+ Warning (G4MagIntergratorDriver): The stepsize for the  next iteration=0.00591383 is too small - in Step number 432 . Minimum for driver = 0.01
+ Warning (G4MagIntergratorDriver): The stepsize for the  next iteration=0.00232813 is too small - in Step number 544 . Minimum for driver = 0.01
+ Warning (G4MagIntergratorDriver): The number of steps used in the Integration driver (Runge-Kutta) is too many.  
+Integration of the interval was not completed - only a 36.1606 % fraction of it was Done.
+ Error in G4PropagatorInField: Curve lenght mis-match, is advancement wrong ?  The curve length of the endpoint should be 5120 and is 2610.21 a difference of 2509.79
+ Warning (G4MagIntergratorDriver): The stepsize for the  next iteration=1.95538e-10 is too small - in Step number 1 . Minimum for driver = 0.01
+ Warning (G4MagIntergratorDriver): The stepsize for the  next iteration=0.00211073 is too small - in Step number 380 . Minimum for driver = 0.01
+ Warning (G4MagIntergratorDriver): The stepsize for the  next iteration=0.00396582 is too small - in Step number 349 . Minimum for driver = 0.01
+ Warning (G4MagIntergratorDriver): The stepsize for the  next iteration=0.00591383 is too small - in Step number 432 . Minimum for driver = 0.01
+ Warning (G4MagIntergratorDriver): The stepsize for the  next iteration=0.00232813 is too small - in Step number 544 . Minimum for driver = 0.01

@@ -1,0 +1,7 @@
+ Warning (G4MagIntergratorDriver): The stepsize for the  next iteration=0.00376743 is too small - in Step number 72 . Minimum for driver = 0.01
+ Warning (G4MagIntergratorDriver): The stepsize for the  next iteration=0.00845938 is too small - in Step number 1 . Minimum for driver = 0.01
+ ERROR in G4Navigator::ComputeStep: 
+The Step's starting point has moved 23370.2 since the last call to one of the Locate methods 
+ This has resulted in moving 23370.2 from the last point at which the safety was calculated 
+ which is more than the computed safety= 24.1021at that point.
+Assertion failed: shiftOriginSafSq <= sqr(safetyPlus), file src/G4Navigator.cc, line 461

@@ -1,0 +1,4 @@
+ Warning (G4MagIntergratorDriver): The stepsize for the  next iteration=0.000102957 is too small - in Step number 1 . Minimum for driver = 0.01
+ Warning (G4MagIntergratorDriver): The stepsize for the  next iteration=1.36764e-05 is too small - in Step number 1 . Minimum for driver = 0.01
+ Warning (G4MagIntergratorDriver): The stepsize for the  next iteration=0.000102957 is too small - in Step number 1 . Minimum for driver = 0.01
+ Warning (G4MagIntergratorDriver): The stepsize for the  next iteration=1.36764e-05 is too small - in Step number 1 . Minimum for driver = 0.01
