@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.67 2000-10-24 07:02:59 gunter Exp $
+# $Id: architecture.gmk,v 1.68 2000-11-03 16:49:48 gunter Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -85,6 +85,14 @@ ifndef G4LIB
 endif
 G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4LIB) ] && mkdir -p $(G4LIB) )
 G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4LIB)/$(G4SYSTEM) ] && mkdir -p $(G4LIB)/$(G4SYSTEM) )
+
+# If not specified, the default path to install G4 include files is G4INCLUDE 
+# set to $G4INSTALL/include ...
+#
+ifndef G4INCLUDE
+  G4INCLUDE := $(G4INSTALL)/include
+endif
+G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4INCLUDE) ] && mkdir -p $(G4INCLUDE) )
 
 # backwards compatiblity
 ifneq ($(G4MAKESHLIB),)

@@ -1,4 +1,4 @@
-# $Id: globlib.gmk,v 1.13 2000-10-24 07:19:30 gunter Exp $
+# $Id: globlib.gmk,v 1.14 2000-11-03 16:49:48 gunter Exp $
 # --------------------------------------------------------------
 # Script for compound libraries.  Gabriele Cosmo, 25/6/98.
 # --------------------------------------------------------------
@@ -43,9 +43,9 @@ ifneq ($(G4LIB_BUILD_ARCHIVE),)
 endif
 
 ifndef G4ODBMS
-glob global: objs wipe_libs $(g4libraries_to_build)
+glob global: objs wipe_libs includes $(g4libraries_to_build)
 else
-glob global: headers d_files objs wipe_libs $(g4libraries_to_build) $(G4SCHEMA_DIR)/G4SCHEMA.FDDB
+glob global: headers d_files objs wipe_libs includes $(g4libraries_to_build) $(G4SCHEMA_DIR)/G4SCHEMA.FDDB
 endif
 
 ##
@@ -123,6 +123,9 @@ objs:
 	    fi; ) \
 	  done
 
+includes::
+	@for dir in $(SUBDIRS); do (cd $$dir && $(MAKE) $@ ); done
+	
 wipe_libs:
 	@for lib in $(SUBLIBS); do (rm -f $(G4LIBDIR)/lib$$lib.a); done
 	@for lib in $(SUBLIBS); do (rm -f $(G4LIBDIR)/lib$$lib.$(SHEXT)); done

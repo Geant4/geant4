@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.17 2000-11-02 13:55:23 gunter Exp $
+# $Id: common.gmk,v 1.18 2000-11-03 16:49:48 gunter Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -154,9 +154,9 @@ endif
 # .PHONY targets are executed regardless of time-stamp of any file of
 # same name.
 ifdef G4ODBMS_DEPEND
-.PHONY: all obj lib clean clean_libs d_files install_schema
+.PHONY: all obj lib clean clean_libs d_files install_schema includes
 else
-.PHONY: all obj lib clean clean_libs
+.PHONY: all obj lib clean clean_libs includes
 endif
 
 obj: $(G4TMPDIR)/obj.last
@@ -173,6 +173,18 @@ install_schema:
 	-@(cp -f $(G4TMPDIR)/*.hh $(G4SCHEMA_INCLUDE)/ || \
 	  echo "  schema header file does not exist, so ignore the error message...")
 endif
+
+installed_includes:=$(foreach file,$(wildcard include/*),$(shell test -f $(file) && echo $(file)))
+
+installed_includes:=$(patsubst include/%,$(G4INCLUDE)/%,$(installed_includes))
+
+includes::	$(installed_includes)
+	
+$(installed_includes): $(G4INCLUDE)/% : include/%
+	@cp -p $< $@
+	
+
+
 
 ifndef G4EXLIB
 clean:
