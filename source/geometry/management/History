@@ -1,0 +1,29 @@
+$Id: History,v 1.1 1999-03-19 17:21:04 japost Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+March    17, 99      J. Apostolakis        geommng-01-00-02
+
+G4AffineTransform.icc:  
+ 
+  Corrected a typo in InverseProduct (rzy->ryz) that caused the incorrect 
+calculation of a compound transformation (if tf1.tz*tf2.ryz != 0). 
+
+  [ This problem was seen in the code of two Atlas Geant4 collaborators:
+     Andrea del' Acqua and Maya Stavrinakou ] 
+
