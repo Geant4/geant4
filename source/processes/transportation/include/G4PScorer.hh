@@ -21,7 +21,7 @@ private:
   G4PMapPtkTallys fPtkTallys;
 };
 
-ostream& operator<<(ostream &out, const G4PScorer &ps);
+G4std::ostream& operator<<(G4std::ostream &out, const G4PScorer &ps);
 
 #endif
 

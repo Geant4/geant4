@@ -36,7 +36,7 @@ void G4PScorer::Score(const G4Step &aStep, const G4PStep &aPstep){
   }
 }
 
-ostream& operator<<(ostream &out, const G4PScorer &ps) {
+G4std::ostream& operator<<(G4std::ostream &out, const G4PScorer &ps) {
   out << ps.GetMapPtkTallys();
   return out;
 }

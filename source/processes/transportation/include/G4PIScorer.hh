@@ -28,7 +28,7 @@ private:
   bool fCorrectWeight;
 };
 
-ostream& operator<<(ostream &out, const G4PIScorer &ps);
+G4std::ostream& operator<<(G4std::ostream &out, const G4PIScorer &ps);
 
 #endif
 
