@@ -30,3 +30,7 @@
 # if too many tracks cause core dump => storeTrajectory 0
 /tracking/storeTrajectory 1
 #/vis/scene/include/trajectories
+#
+# Flush visualization
+/vis/viewer/update
+
