@@ -1,6 +1,8 @@
 #ifndef RemSimVehicle2_h
 #define RemSimVehicle2_h 1
 
+#include "globals.hh"
+
 class RemSimVGeometryComponent;
 class G4VPhysicalVolume;
 class G4Box;
@@ -16,7 +18,10 @@ public:
   ~RemSimVehicle2();
   void ConstructComponent(G4VPhysicalVolume*);
   void DestroyComponent(); 
-
+  G4double GetDensity(){return 0;};
+  void ChangeMaterial(G4String){ G4cout << 
+                                 "This command is not available for Vehicle2"
+					<<G4endl; }
 private:
   RemSimMaterial* pMaterial;
   G4Tubs* layer1;

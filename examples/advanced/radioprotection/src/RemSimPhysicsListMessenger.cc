@@ -20,60 +20,63 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimPhysicsList.hh,v 1.2 2004-02-03 09:16:45 guatelli Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author: Original author unknown (contact: Maria.Grazia.Pia@cern.ch)
+// $Id: XrayFluoPhysicsListMessenger.cc
+// GEANT4 tag $Name: xray_fluo-V04-01-03
+//
+// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
 // History:
 // -----------
-// 22 Feb 2003 MGP          Redesigned for modular PhysicsList
+// 28 Nov 2001 Elena Guardincerri     Created
 //
 // -------------------------------------------------------------------
 
-// Class description:
-// System test for e/gamma, standard photon processes for PhysicsList
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
+#include "RemSimPhysicsListMessenger.hh"
+#include "RemSimPhysicsList.hh"
 
-// -------------------------------------------------------------------
+#include "G4UIdirectory.hh"
+#include "G4UIcmdWithoutParameter.hh"
+#include "G4UIcmdWithADouble.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithABool.hh"
 
-#ifndef REMSIMPHYSICSLIST_HH
-#define REMSIMPHYSICSLIST_HH 1
+RemSimPhysicsListMessenger::RemSimPhysicsListMessenger(RemSimPhysicsList * List)
+:RemSimList(List)
+{
+  EnDir = new G4UIdirectory("/physics/");
+  EnDir->SetGuidance("physics commands");
 
-#include "G4VModularPhysicsList.hh"
-#include "globals.hh"
+  physicsListCmd = new G4UIcmdWithAString("/physics/addPhysics",this);  
+  physicsListCmd->SetGuidance("Add chunks of PhysicsList");
+  physicsListCmd->SetParameterName("choice",false);
+  physicsListCmd->AvailableForStates(G4State_PreInit);  
 
-class RemSimPhysicsListMessenger;
-
-class RemSimPhysicsList: public G4VModularPhysicsList {
-public:
   
-  RemSimPhysicsList();
+  cutECmd = new G4UIcmdWithADoubleAndUnit("/physics/cutE",this);
+  cutECmd->SetGuidance("Set cut values.");
+  cutECmd->SetParameterName("range",true);
+  cutECmd->SetDefaultValue(1.);
+  cutECmd->SetDefaultUnit("mm");
+  cutECmd->AvailableForStates(G4State_PreInit);
+}
 
-  virtual ~RemSimPhysicsList();
-
-  virtual void SetCuts();
+RemSimPhysicsListMessenger::~RemSimPhysicsListMessenger()
+{  
+  delete cutECmd;
+  delete physicsListCmd;
+  delete EnDir;
+}
   
-  // Register PhysicsList chunks
-  void AddPhysicsList(const G4String& name);
+void RemSimPhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+{
+  if (command == physicsListCmd)
+   { RemSimList->AddPhysicsList(newValue); }
 
-  // Production thresholds, expressed in range
-  void SetGammaCut(G4double cut);
-  void SetElectronCut(G4double cut);
-  void SetParticleCut(G4double value);
-  
-private:
-
-  G4bool electronIsRegistered;
-  G4bool positronIsRegistered;
-  G4bool photonIsRegistered;
-  G4bool protonIsRegistered;
-  G4double cutForGamma;
-  G4double cutForElectron;
-
-  RemSimPhysicsListMessenger* messenger;
-};
-#endif
+ if (command == cutECmd)
+   {RemSimList->SetParticleCut(cutECmd->GetNewDoubleValue(newValue)); }
+}
 
 
 

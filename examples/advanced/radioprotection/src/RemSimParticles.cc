@@ -20,45 +20,34 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-//    *****************************************
-//    *                                       *
-//    *      RemSimDetectrorMessenger.hh      *
-//    *                                       *
-//    *****************************************
-//
-// $Id: RemSimDetectorMessenger.hh,v 1.2 2004-02-03 09:16:44 guatelli Exp $
+// $Id: RemSimParticles.cc,v 1.1 2004-02-03 09:16:46 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-#ifndef RemSimDetectorMessenger_h
-#define RemSimDetectorMessenger_h 1
+// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
+//
+// History:
+// -----------
+// 22 Feb 2003 MGP          Created
+//
+// -------------------------------------------------------------------
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
+#include "RemSimParticles.hh"
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
+#include "G4Proton.hh"
 
-class RemSimDetectorConstruction;
-class RemSimFactoryIr;
-class RemSimRunAction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
+RemSimParticles::RemSimParticles(const G4String& name)
+  :  G4VPhysicsConstructor(name)
+{ }
 
-class RemSimDetectorMessenger: public G4UImessenger
+RemSimParticles::~RemSimParticles()
+{}
+
+void RemSimParticles::ConstructParticle()
 {
-public:
-  RemSimDetectorMessenger(RemSimDetectorConstruction* );
-  ~RemSimDetectorMessenger();
-    
-  void SetNewValue(G4UIcommand*, G4String);
-  
-private:
-  RemSimDetectorConstruction*  detector;//pointer to detector
-  G4UIdirectory*               vehicleDir; 
-  G4UIcmdWithAString*          vehicleCmd; //change vehicle 
-  G4UIcmdWithAString*          materialCmd;//change material
-};
-#endif
-
+  G4Gamma::GammaDefinition();
+  G4Electron::ElectronDefinition();
+  G4Positron::PositronDefinition();
+  G4Proton :: ProtonDefinition();
+}

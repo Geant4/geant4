@@ -20,45 +20,40 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
-//    *****************************************
-//    *                                       *
-//    *      RemSimDetectrorMessenger.hh      *
-//    *                                       *
-//    *****************************************
-//
-// $Id: RemSimDetectorMessenger.hh,v 1.2 2004-02-03 09:16:44 guatelli Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
-#ifndef RemSimDetectorMessenger_h
-#define RemSimDetectorMessenger_h 1
+// History:
+// -----------
+// 17 May     2003 SG          Designed for modular Physics List 
+// -------------------------------------------------------------------
+#include "RemSimProtonStandard.hh"
+#include "G4ProcessManager.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4MultipleScattering.hh"
+#include "G4Proton.hh"
+#include "G4hIonisation.hh"
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
+RemSimProtonStandard::RemSimProtonStandard(const G4String& name): G4VPhysicsConstructor(name)
+{ }
 
-class RemSimDetectorConstruction;
-class RemSimFactoryIr;
-class RemSimRunAction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
+RemSimProtonStandard::~RemSimProtonStandard()
+{ }
 
-class RemSimDetectorMessenger: public G4UImessenger
+void RemSimProtonStandard::ConstructProcess()
 {
-public:
-  RemSimDetectorMessenger(RemSimDetectorConstruction* );
-  ~RemSimDetectorMessenger();
-    
-  void SetNewValue(G4UIcommand*, G4String);
-  
-private:
-  RemSimDetectorConstruction*  detector;//pointer to detector
-  G4UIdirectory*               vehicleDir; 
-  G4UIcmdWithAString*          vehicleCmd; //change vehicle 
-  G4UIcmdWithAString*          materialCmd;//change material
-};
-#endif
+  theParticleIterator->reset();
 
+  while( (*theParticleIterator)() )
+    {
+      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ProcessManager* manager = particle->GetProcessManager();
+      G4String particleName = particle->GetParticleName();
+     
+      if (particleName == "proton") 
+	{
+	  G4VProcess*  multipleScattering= new G4MultipleScattering(); 
+	  manager->AddProcess(new G4hIonisation(),-1,2,2);
+	  manager->AddProcess(multipleScattering,-1,1,1);  	
+	}
+    }
+}

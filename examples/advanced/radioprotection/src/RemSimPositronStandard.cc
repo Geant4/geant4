@@ -20,45 +20,51 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-//    *****************************************
-//    *                                       *
-//    *      RemSimDetectrorMessenger.hh      *
-//    *                                       *
-//    *****************************************
-//
-// $Id: RemSimDetectorMessenger.hh,v 1.2 2004-02-03 09:16:44 guatelli Exp $
+// $Id: RemSimPositronStandard.cc,v 1.1 2004-02-03 09:16:47 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-#ifndef RemSimDetectorMessenger_h
-#define RemSimDetectorMessenger_h 1
+// Author: Maria.Grazia.Pia@cern.ch
+//
+// History:
+// -----------
+// 22 Feb 2003 MGP          Designed for modular Physics List
+//
+// -------------------------------------------------------------------
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
+#include "RemSimPositronStandard.hh"
 
-class RemSimDetectorConstruction;
-class RemSimFactoryIr;
-class RemSimRunAction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
+#include "G4ProcessManager.hh"
+#include "G4Gamma.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4MultipleScattering.hh"
+#include "G4eIonisation.hh"
+#include "G4eBremsstrahlung.hh"
+#include "G4eplusAnnihilation.hh"
 
-class RemSimDetectorMessenger: public G4UImessenger
+RemSimPositronStandard::RemSimPositronStandard(const G4String& name): G4VPhysicsConstructor(name)
+{ }
+
+RemSimPositronStandard::~RemSimPositronStandard()
+{ }
+
+void RemSimPositronStandard::ConstructProcess()
 {
-public:
-  RemSimDetectorMessenger(RemSimDetectorConstruction* );
-  ~RemSimDetectorMessenger();
-    
-  void SetNewValue(G4UIcommand*, G4String);
+  // Add standard processes for positrons
   
-private:
-  RemSimDetectorConstruction*  detector;//pointer to detector
-  G4UIdirectory*               vehicleDir; 
-  G4UIcmdWithAString*          vehicleCmd; //change vehicle 
-  G4UIcmdWithAString*          materialCmd;//change material
-};
-#endif
+  theParticleIterator->reset();
 
+  while( (*theParticleIterator)() )
+    {
+      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ProcessManager* manager = particle->GetProcessManager();
+      G4String particleName = particle->GetParticleName();
+     
+      if (particleName == "e+") 
+	{
+	  manager->AddProcess(new G4MultipleScattering, -1, 1,1);
+	  manager->AddProcess(new G4eIonisation,        -1, 2,2);
+	  manager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
+	  manager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
+	}   
+    }
+}

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimBasicGenerator.hh,v 1.1 2004-01-30 12:18:24 guatelli Exp $
+// $Id: RemSimBasicGenerator.hh,v 1.2 2004-02-03 09:16:44 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -29,21 +29,24 @@
 #define RemSimBasicGenerator_h 1
 
 #include "RemSimVPrimaryGeneratorFactory.hh"
+#include "globals.hh"
 
 class G4ParticleGun;
 class G4Event;
 
 class RemSimBasicGenerator : public RemSimVPrimaryGeneratorFactory
 {
-  public:
-    RemSimBasicGenerator();
-    ~RemSimBasicGenerator();
+public:
+  RemSimBasicGenerator();
+  ~RemSimBasicGenerator();
 
-  public:
-    void GeneratePrimaries(G4Event* anEvent);
-
-  private:
-    G4ParticleGun* particleGun;
+public:
+  void GeneratePrimaries(G4Event* anEvent);
+  void GenerateIsotropicFlux();
+  G4double  GetInitialEnergy();
+private:
+  G4ParticleGun* particleGun;
+  G4String randomDirection;
 };
 #endif
 

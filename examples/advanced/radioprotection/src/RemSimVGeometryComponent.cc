@@ -2,6 +2,5 @@
  
 RemSimVGeometryComponent::RemSimVGeometryComponent()
 {;}
-
 RemSimVGeometryComponent::~RemSimVGeometryComponent()
 {;}

@@ -21,44 +21,55 @@
 // ********************************************************************
 //
 //
-//    *****************************************
-//    *                                       *
-//    *      RemSimDetectrorMessenger.hh      *
-//    *                                       *
-//    *****************************************
+// $Id: RemSimPhysicsListMessenger.hh
+// GEANT4 tag $Name: xray_fluo-V04-01-03
 //
-// $Id: RemSimDetectorMessenger.hh,v 1.2 2004-02-03 09:16:44 guatelli Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
-// 
-#ifndef RemSimDetectorMessenger_h
-#define RemSimDetectorMessenger_h 1
+// History:
+// -----------
+//  28 Nov 2001  Elena Guardincerri   Created
+//
+// -------------------------------------------------------------------
+
+
+#ifndef RemSimPhysicsListMessenger_h
+#define RemSimPhysicsListMessenger_h 1
 
 #include "globals.hh"
 #include "G4UImessenger.hh"
 
-class RemSimDetectorConstruction;
-class RemSimFactoryIr;
-class RemSimRunAction;
+class RemSimPhysicsList;
 class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
+class G4UIcmdWithADouble;
+class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithAString;
+class G4UIcmdWithABool;
 
-class RemSimDetectorMessenger: public G4UImessenger
+class RemSimPhysicsListMessenger: public G4UImessenger
 {
+  
 public:
-  RemSimDetectorMessenger(RemSimDetectorConstruction* );
-  ~RemSimDetectorMessenger();
-    
+
+  RemSimPhysicsListMessenger(RemSimPhysicsList*);
+  ~RemSimPhysicsListMessenger();
   void SetNewValue(G4UIcommand*, G4String);
   
 private:
-  RemSimDetectorConstruction*  detector;//pointer to detector
-  G4UIdirectory*               vehicleDir; 
-  G4UIcmdWithAString*          vehicleCmd; //change vehicle 
-  G4UIcmdWithAString*          materialCmd;//change material
+
+  RemSimPhysicsList*          RemSimList;
+  G4UIdirectory* EnDir;
+   G4UIcmdWithAString*  physicsListCmd;
+  G4UIcmdWithADoubleAndUnit* cutECmd;
 };
+
 #endif
+
+
+
+
+
+
+
 

@@ -21,44 +21,44 @@
 // ********************************************************************
 //
 //
-//    *****************************************
-//    *                                       *
-//    *      RemSimDetectrorMessenger.hh      *
-//    *                                       *
-//    *****************************************
-//
-// $Id: RemSimDetectorMessenger.hh,v 1.2 2004-02-03 09:16:44 guatelli Exp $
+// $Id: RemSimSteppingAction.hh,v 1.1 2004-02-03 09:16:46 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 // 
-#ifndef RemSimDetectorMessenger_h
-#define RemSimDetectorMessenger_h 1
+// Author: Susanna Guatelli (guatelli@ge.infn.it)
+//
+// History:
+// -----------
+// 27 May  2003   S.Guatelli    first code review 
+// 17 May  2003   S. Guatelli   1st implementation
+//
+// -------------------------------------------------------------------
 
+#ifndef RemSimSteppingAction_h
+#define RemSimSteppingAction_h 1
+
+#include "G4UserSteppingAction.hh"
+#include "G4Event.hh"
+#include "G4EventManager.hh"
+#include "G4ios.hh"
 #include "globals.hh"
-#include "G4UImessenger.hh"
 
+class G4Step;
+class RemSimPrimaryGeneratorAction;
 class RemSimDetectorConstruction;
-class RemSimFactoryIr;
 class RemSimRunAction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
-
-class RemSimDetectorMessenger: public G4UImessenger
+class RemSimSteppingAction : public G4UserSteppingAction
 {
 public:
-  RemSimDetectorMessenger(RemSimDetectorConstruction* );
-  ~RemSimDetectorMessenger();
-    
-  void SetNewValue(G4UIcommand*, G4String);
-  
+
+  RemSimSteppingAction(RemSimPrimaryGeneratorAction*,
+		       RemSimRunAction*, 
+		       RemSimDetectorConstruction*);
+  ~RemSimSteppingAction();
+
+  void UserSteppingAction(const G4Step* aStep);
 private:
-  RemSimDetectorConstruction*  detector;//pointer to detector
-  G4UIdirectory*               vehicleDir; 
-  G4UIcmdWithAString*          vehicleCmd; //change vehicle 
-  G4UIcmdWithAString*          materialCmd;//change material
+  RemSimPrimaryGeneratorAction* primaryAction;
+  RemSimRunAction* runAction; 
+  RemSimDetectorConstruction* detector;     
 };
 #endif
-

@@ -26,61 +26,50 @@
 //
 //    *********************************
 //    *                               *
-//    *    RemSimDetectorMessenger.cc *
+//    *    RemSimPrimaryGeneratorMessenger.cc *
 //    *                               *
 //    *********************************
 //
 //
-// $Id: RemSimDetectorMessenger.cc,v 1.2 2004-02-03 09:16:46 guatelli Exp $
+// $Id: RemSimPrimaryGeneratorMessenger.cc,v 1.1 2004-02-03 09:16:47 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-#include "RemSimDetectorMessenger.hh"
+#include "RemSimPrimaryGeneratorMessenger.hh"
 #include "RemSimRunAction.hh"
-#include "RemSimDetectorConstruction.hh"
+#include "RemSimPrimaryGeneratorAction.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
-RemSimDetectorMessenger::RemSimDetectorMessenger( RemSimDetectorConstruction* Det): detector(Det)
+RemSimPrimaryGeneratorMessenger::RemSimPrimaryGeneratorMessenger( RemSimPrimaryGeneratorAction* prim): primary(prim)
 { 
-  vehicleDir = new G4UIdirectory("/vehicle/");
-  vehicleDir->SetGuidance("vehicle control.");
+  primaryDir = new G4UIdirectory("/beam/");
+  primaryDir->SetGuidance("primary particle generator control.");
         
-  vehicleCmd = new G4UIcmdWithAString("/vehicle/switch",this);
-  vehicleCmd->SetGuidance("Assign the selected vehicle to G4RunManager."); 
-  vehicleCmd->SetParameterName("choice",true);
-  vehicleCmd->SetCandidates("Vehicle1 Vehicle2 ");
-  vehicleCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
-
-  materialCmd = new G4UIcmdWithAString("/vehicle/material",this);
-  materialCmd->SetGuidance("Change the material of Vehicle1."); 
-  materialCmd->SetParameterName("choice",true);
-  materialCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
+  isotropicFluxCmd = new G4UIcmdWithAString("/beam/flux",this);
+  isotropicFluxCmd->SetGuidance("Assign the isotropic flux option to primary particles."); 
+  isotropicFluxCmd->SetParameterName("choice",true);
+  isotropicFluxCmd->SetCandidates("isotropic");
+  isotropicFluxCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
  }
 
-RemSimDetectorMessenger::~RemSimDetectorMessenger()
+RemSimPrimaryGeneratorMessenger::~RemSimPrimaryGeneratorMessenger()
 {
-  delete materialCmd;
-  delete vehicleCmd;
-  delete vehicleDir;
+  delete isotropicFluxCmd;
+  delete primaryDir;
 }
 
-void RemSimDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+void RemSimPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
-   if( command == vehicleCmd )
+   if(command == isotropicFluxCmd )
    {
-     if(newValue=="Vehicle1" || newValue=="Vehicle2") 
-       detector->SwitchVehicle(newValue);
-     else G4cout<< "This vehicle concept is not available!"<<G4cout; 
-  }
-
- if( command == materialCmd )
-   {
-       detector->ChangeMaterial(newValue);    
+     if(newValue=="isotropic") 
+       primary->GenerateIsotropicFlux();
+     else G4cout<< newValue<< " option is not available!"<<G4cout; 
   }
 }
 

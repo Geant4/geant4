@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimPrimaryGeneratorAction.hh,v 1.1 2004-01-30 12:18:25 guatelli Exp $
+// $Id: RemSimPrimaryGeneratorAction.hh,v 1.2 2004-02-03 09:16:45 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -29,10 +29,12 @@
 #define RemSimPrimaryGeneratorAction_h 1
 
 #include "G4VUserPrimaryGeneratorAction.hh"
+#include "globals.hh"
 
 class G4ParticleGun;
 class G4Event;
 class RemSimVPrimaryGeneratorFactory;
+class RemSimPrimaryGeneratorMessenger;
 class RemSimPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
 public:
@@ -41,9 +43,11 @@ public:
 
 public:
   void GeneratePrimaries(G4Event* anEvent);
-
+  void GenerateIsotropicFlux();
+  G4double GetInitialEnergy();
 private:
   RemSimVPrimaryGeneratorFactory* primaryFactory;
+  RemSimPrimaryGeneratorMessenger* messenger;
 };
 #endif
 

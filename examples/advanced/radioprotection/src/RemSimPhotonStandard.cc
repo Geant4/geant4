@@ -20,45 +20,40 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-//    *****************************************
-//    *                                       *
-//    *      RemSimDetectrorMessenger.hh      *
-//    *                                       *
-//    *****************************************
-//
-// $Id: RemSimDetectorMessenger.hh,v 1.2 2004-02-03 09:16:44 guatelli Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
-#ifndef RemSimDetectorMessenger_h
-#define RemSimDetectorMessenger_h 1
+#include "RemSimPhotonStandard.hh"
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
+#include "G4ProcessManager.hh"
+#include "G4Gamma.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ComptonScattering.hh"
+#include "G4GammaConversion.hh"
+#include "G4PhotoElectricEffect.hh"
 
-class RemSimDetectorConstruction;
-class RemSimFactoryIr;
-class RemSimRunAction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
+RemSimPhotonStandard::RemSimPhotonStandard(const G4String& name): G4VPhysicsConstructor(name)
+{ }
 
-class RemSimDetectorMessenger: public G4UImessenger
+RemSimPhotonStandard::~RemSimPhotonStandard()
+{ }
+
+void RemSimPhotonStandard::ConstructProcess()
 {
-public:
-  RemSimDetectorMessenger(RemSimDetectorConstruction* );
-  ~RemSimDetectorMessenger();
-    
-  void SetNewValue(G4UIcommand*, G4String);
+  // Add standard processes for photons
   
-private:
-  RemSimDetectorConstruction*  detector;//pointer to detector
-  G4UIdirectory*               vehicleDir; 
-  G4UIcmdWithAString*          vehicleCmd; //change vehicle 
-  G4UIcmdWithAString*          materialCmd;//change material
-};
-#endif
+  theParticleIterator->reset();
 
+  while( (*theParticleIterator)() )
+    {
+      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ProcessManager* manager = particle->GetProcessManager();
+      G4String particleName = particle->GetParticleName();
+
+      if (particleName == "gamma") 
+	{
+          
+	  manager->AddDiscreteProcess(new G4PhotoElectricEffect);
+	  manager->AddDiscreteProcess(new G4ComptonScattering);
+	  manager->AddDiscreteProcess(new G4GammaConversion);
+          G4cout<<"Gamma Processes registered"<<G4endl;
+	}   
+    }
+}

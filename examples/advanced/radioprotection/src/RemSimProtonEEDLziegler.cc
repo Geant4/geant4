@@ -20,49 +20,55 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: RemSimEventAction.cc,v 1.2 2004-02-03 09:16:46 guatelli Exp $
+// $Id: RemSimProtonEEDLziegler.cc,v 1.1 2004-02-03 09:16:47 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
- 
-#include "RemSimEventAction.hh"
-#include "G4Event.hh"
-#include "G4EventManager.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
-#include "G4ios.hh"
+// Author: Susanna Guatelli (guatelli@ge.infn.it)
+//
+// History:
+// -----------
+// 17 May     2003 SG          Designed for modular Physics List with
+// Ziegler model for the Stopping Power and CSDArange and Stopping Power 
+//conditions set
+//
+// -------------------------------------------------------------------
 
+#include "RemSimProtonEEDLziegler.hh"
+#include "G4ProcessManager.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4MultipleScattering.hh"
+#include "G4Proton.hh"
+#include "G4hLowEnergyIonisation.hh"
+#include "G4hLowEnergyLoss.hh"
+#include "G4hZiegler1985p.hh"
 
-RemSimEventAction::RemSimEventAction()
-{  
- 
-}
- 
-RemSimEventAction::~RemSimEventAction()
-{}
- 
-void RemSimEventAction::BeginOfEventAction(const G4Event*)
-{ 
- 
-}
+RemSimProtonEEDLziegler::RemSimProtonEEDLziegler(const G4String& name): G4VPhysicsConstructor(name)
+{ }
 
-void RemSimEventAction::EndOfEventAction(const G4Event* evt)
+RemSimProtonEEDLziegler::~RemSimProtonEEDLziegler()
+{ }
+
+void RemSimProtonEEDLziegler::ConstructProcess()
 {
-  //G4int event_id = evt->GetEventID();
-  
-  // get number of stored trajectories
-  //
-  G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
-  G4int n_trajectories = 0;
-  if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
-  
-  if (G4VVisManager::GetConcreteInstance())
+
+  theParticleIterator->reset();
+
+  while( (*theParticleIterator)() )
     {
-     for (G4int i=0; i<n_trajectories; i++) 
-        { G4Trajectory* trj = (G4Trajectory*)
-	                            ((*(evt->GetTrajectoryContainer()))[i]);
-          trj->DrawTrajectory(50);
-        }
+      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ProcessManager* manager = particle->GetProcessManager();
+      G4String particleName = particle->GetParticleName();
+     
+      if (particleName == "proton") 
+	{
+	  G4VProcess*  multipleScattering= new G4MultipleScattering(); 
+	  G4hLowEnergyIonisation* ion= new G4hLowEnergyIonisation();
+	  manager->AddProcess(ion,-1,2,2);
+
+	  ion ->SetElectronicStoppingPowerModel(particle, "G4hZiegler1985p");
+  
+	  manager->AddProcess(multipleScattering,-1,1,1);  	
+	  ion -> SetEnlossFluc(false);
+	}
     }
 }

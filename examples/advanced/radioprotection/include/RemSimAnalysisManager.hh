@@ -20,23 +20,23 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// Code developed by:
-// S.Guatelli
-//
-//
-// $Id: RemSimAnalysisManager.hh,v 1.1 2004-01-30 12:18:24 guatelli Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 //    **********************************
 //    *                                *
 //    *      RemSimAnalysisManager.hh  *
 //    *                                *
 //    **********************************
 // 
-//
+
 // the class Analysis creates and managed histograms and ntuples
+///
+// Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
+// History:
+// -----------
+// 17 May  2003   S. Guatelli   1st implementation
+//
+// -------------------------------------------------------------------
+ 
 #ifdef G4ANALYSIS_USE
 #ifndef G4PROCESSTESTANALYSIS_HH
 #define G4PROCESSTESTANALYSIS_HH
@@ -44,56 +44,49 @@
 #include "globals.hh"
 #include <vector>
 #include "G4ThreeVector.hh"
-#include "AIDA/IHistogram1D.h"
-#include "AIDA/IHistogram2D.h"
-#include "AIDA/IAnalysisFactory.h"
+# include <AIDA/AIDA.h>
 
-namespace AIDA{
+namespace AIDA 
+{
   class ITree;
   class IHistogramFactory;
   class IAnalysisFactory;
+  class IDataPoint;
   class ITupleFactory;
   class ITuple;
   class ITreeFactory;
 };
 
-class RemSimAnalysisManager
-{
-private:
-  RemSimAnalysisManager();
+
+class RemSimAnalysisManager { 
 
 public:
-
+  
   ~RemSimAnalysisManager();
   static RemSimAnalysisManager* getInstance();
   void book();
-  void FillNtupleWithEnergy(G4double,G4double,G4double,G4double);
-  //void FillHistogramWithEnergy(G4double,G4double,G4float);
-  //void PrimaryParticleEnergySpectrum(G4double);
-  void finish();
+  void StoppingPower(G4int,G4double,G4double);
+  void CSDARange(G4int,G4double,G4double);
+   void finish();
 
-  
 private:
 
-  //  G4double xx,zz,yy;
-  //G4float  en; 
-  //G4double  x,y,z;
   static RemSimAnalysisManager* instance;
+  RemSimAnalysisManager();
 
-private:
-
-  AIDA::IAnalysisFactory*  aFact;
+  AIDA::IAnalysisFactory*  aFact; 
+  AIDA::ITreeFactory*      treeFact;
   AIDA::ITree*             theTree;
-  AIDA::IHistogramFactory *histFact;
-  AIDA::ITupleFactory     *tupFact;
-  AIDA::ITreeFactory      *treeFact;
-  //AIDA::IHistogram2D *h1;
-  //AIDA::IHistogram1D *h2;
-  AIDA::ITuple *ntuple;
-};
 
+  AIDA::IDataPointSetFactory *  dataPointFactory; 
+  AIDA::IHistogramFactory*     histogramFactory;
+
+  AIDA::IDataPointSet *  stoppingPowerDataPoint;  
+  AIDA::IDataPointSet *  CSDARangeDataPoint;
+ };
 #endif
 #endif
+
 
 
 

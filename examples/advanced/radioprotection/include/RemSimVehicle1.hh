@@ -15,6 +15,8 @@ public:
   ~RemSimVehicle1();
   void ConstructComponent(G4VPhysicalVolume*);
   void DestroyComponent(); 
+  G4double GetDensity();
+  void ChangeMaterial(G4String);
 
 private:
   RemSimMaterial* pMaterial;
@@ -24,6 +26,7 @@ private:
   G4LogicalVolume* layer2Log;
   G4VPhysicalVolume* layer2Phys;
   G4VisAttributes* layer1VisAtt;
-  G4VisAttributes* layer2VisAtt; 
+  G4VisAttributes* layer2VisAtt;
+  G4Material* targetMaterial;
 };
 #endif

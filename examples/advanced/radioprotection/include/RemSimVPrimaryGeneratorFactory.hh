@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimVPrimaryGeneratorFactory.hh,v 1.1 2004-01-30 12:18:25 guatelli Exp $
+// $Id: RemSimVPrimaryGeneratorFactory.hh,v 1.2 2004-02-03 09:16:46 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -29,15 +29,18 @@
 #define RemSimVPrimaryGeneratorFactory_h 1
 
 #include "G4VUserPrimaryGeneratorAction.hh"
+#include "globals.hh"
 
 class RemSimVPrimaryGeneratorFactory : public G4VUserPrimaryGeneratorAction
 {
-  public:
-    RemSimVPrimaryGeneratorFactory();
-    virtual ~RemSimVPrimaryGeneratorFactory();
+public:
+  RemSimVPrimaryGeneratorFactory();
+  virtual ~RemSimVPrimaryGeneratorFactory();
 
-  public:
-    virtual void GeneratePrimaries(G4Event* anEvent)=0;
+public:
+  virtual void GeneratePrimaries(G4Event* anEvent)=0;
+  virtual void GenerateIsotropicFlux()=0;
+  virtual G4double GetInitialEnergy()=0;
 };
 #endif
 

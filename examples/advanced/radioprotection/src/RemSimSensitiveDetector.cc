@@ -27,9 +27,6 @@
 #include "G4HCofThisEvent.hh"
 #include "G4TouchableHistory.hh"
 #include "G4ios.hh"
-#ifdef G4ANALYSIS_USE
-#include "RemSimAnalysisManager.hh"
-#endif
 
 RemSimSensitiveDetector::RemSimSensitiveDetector(G4String name)
 :G4VSensitiveDetector(name)
@@ -88,11 +85,6 @@ G4bool RemSimSensitiveDetector::ProcessHits(G4Step* aStep,
     //   <<"indexes"<<i<<":i "<<j<<":j "<<k<<":k "
          <<"voxels: "<<xId/cm<<" "<<yId/cm<<" "<<zId/cm<<" "
          <<G4endl;
-#ifdef G4ANALYSIS_USE
-  RemSimAnalysisManager* analysis = RemSimAnalysisManager::getInstance();
-  analysis->FillNtupleWithEnergy(xId/cm,yId/cm,zId/cm,edep/keV);
-#endif
-
  return true;
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimBasicGenerator.cc,v 1.1 2004-01-30 12:25:43 guatelli Exp $
+// $Id: RemSimBasicGenerator.cc,v 1.2 2004-02-03 09:16:46 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -32,18 +32,19 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
+#include "Randomize.hh"
 
-RemSimBasicGenerator::RemSimBasicGenerator()
+RemSimBasicGenerator::RemSimBasicGenerator():randomDirection("off")
 {
   G4int n_particle = 1;
   particleGun = new G4ParticleGun(n_particle);
 
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4String particleName;
-  particleGun->SetParticleDefinition(particleTable->FindParticle(particleName="e-"));
-  particleGun->SetParticleEnergy(100.0*MeV);
-  particleGun->SetParticlePosition(G4ThreeVector(0., 0., 0.));
-  
+  G4String particleName = "proton";
+  particleGun->SetParticleDefinition(particleTable->FindParticle(particleName));
+  particleGun->SetParticleEnergy(10. *MeV);
+
+  particleGun->SetParticlePosition(G4ThreeVector(0., 0., 0.));  
   G4ThreeVector v(0.0,0.0,1.0);
   particleGun->SetParticleMomentumDirection(v);
 }
@@ -55,7 +56,33 @@ RemSimBasicGenerator::~RemSimBasicGenerator()
 
 void RemSimBasicGenerator::GeneratePrimaries(G4Event* anEvent)
 {
+if(randomDirection == "on")
+    {
+      G4double a,b,c;
+      G4double n;
+      do{
+	a = (G4UniformRand()-0.5)/0.5;
+	b = (G4UniformRand()-0.5)/0.5; 
+	c = (G4UniformRand()-0.5)/0.5;
+	n = a*a+b*b+c*c;
+      }while(n > 1 || n == 0.0);
+      n = sqrt(n);
+      a /= n;
+      b /= n;
+      c /= n;
+      G4ThreeVector direction(a,b,c);
+      particleGun -> SetParticleMomentumDirection(direction);
+    }
   particleGun->GeneratePrimaryVertex(anEvent);
 }
 
+void RemSimBasicGenerator:: GenerateIsotropicFlux()
+{
+  randomDirection = "on";
+}
 
+G4double RemSimBasicGenerator:: GetInitialEnergy()
+{
+ G4double primaryParticleEnergy = particleGun->GetParticleEnergy();
+ return primaryParticleEnergy;
+}

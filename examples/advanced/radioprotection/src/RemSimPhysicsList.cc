@@ -20,103 +20,221 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: RemSimPhysicsList.cc,v 1.1 2004-01-30 12:25:44 guatelli Exp $
+// $Id: RemSimPhysicsList.cc,v 1.2 2004-02-03 09:16:47 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
+// Author: Unknown (contact: Maria.Grazia.Pia@cern.ch)
+//
+// History:
+// -----------
+// 22 Feb 2003 MGP          Re-designed for modular Physics List
+//
+// -------------------------------------------------------------------
 
 #include "RemSimPhysicsList.hh"
-#include "G4ParticleTypes.hh"
+#include "RemSimPhysicsListMessenger.hh"
+#include "RemSimParticles.hh"
+#include "RemSimPhotonStandard.hh"
+#include "RemSimPhotonEPDL.hh"
+#include "RemSimElectronStandard.hh"
+#include "RemSimElectronEEDL.hh"
+#include "RemSimPositronStandard.hh"
+#include "RemSimProtonStandard.hh"
+#include "RemSimProtonEEDL.hh"
+#include "RemSimProtonEEDLziegler.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
 #include "G4ProcessManager.hh"
-#include "G4ParticleTypes.hh"
-#include "G4ParticleTable.hh"
-#include "G4Material.hh"
-#include "G4UnitsTable.hh"
-#include "G4ios.hh"    
+#include "G4ProcessVector.hh"
+#include "G4VProcess.hh"
 
+RemSimPhysicsList::RemSimPhysicsList(): G4VModularPhysicsList(),
+				      electronIsRegistered(false), 
+				      positronIsRegistered(false),
+				      photonIsRegistered(false), 
+                                      protonIsRegistered(false)
+{
+  defaultCutValue = 0.1 * mm;
+  SetVerboseLevel(1);
 
-RemSimPhysicsList::RemSimPhysicsList()
-{;}
+  messenger = new RemSimPhysicsListMessenger(this);
+ 
+  RegisterPhysics( new RemSimParticles("particles") );
+}
+
 
 RemSimPhysicsList::~RemSimPhysicsList()
-{;}
-
-void RemSimPhysicsList::ConstructParticle()
 {
-  // In this method, static member functions should be called
-  // for all particles which you want to use.
-  // This ensures that objects of these particle types will be
-  // created in the program. 
-
-  G4Geantino::GeantinoDefinition();
-  G4Electron::ElectronDefinition();
-  G4Positron::PositronDefinition();
-  G4Gamma::GammaDefinition();
+  delete messenger;
 }
-#include "G4MultipleScattering.hh"
-// gamma
-#include "G4LowEnergyRayleigh.hh" 
-#include "G4LowEnergyPhotoElectric.hh"
-#include "G4LowEnergyCompton.hh"  
-#include "G4LowEnergyGammaConversion.hh" 
-// e-
-#include "G4LowEnergyIonisation.hh" 
-#include "G4LowEnergyBremsstrahlung.hh" 
-// e+
-#include "G4eIonisation.hh" 
-#include "G4eBremsstrahlung.hh" 
-#include "G4eplusAnnihilation.hh"
-void RemSimPhysicsList::ConstructProcess()
-{
-  // Define transportation process
 
-  AddTransportation();
-  ConstructEM();
-}
-void RemSimPhysicsList::ConstructEM()
+
+void RemSimPhysicsList::AddPhysicsList(const G4String& name)
 {
- theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-    G4String particleName = particle->GetParticleName();
-    
-    //processes
-    
-    if (particleName == "gamma") {
-      //gamma  
-      
-      pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh);
-      pmanager->AddDiscreteProcess(new G4LowEnergyPhotoElectric("LowEnPhotoElec"));
-      pmanager->AddDiscreteProcess(new G4LowEnergyCompton);
-      pmanager->AddDiscreteProcess(new G4LowEnergyGammaConversion);
-      
-    } else if (particleName == "e-") {
-      //electron
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(new G4LowEnergyIonisation("LowEnergyIoni"), -1, 2,2);
-      pmanager->AddProcess(new G4LowEnergyBremsstrahlung("LowEnBrem"),-1,-1,3);      
-      
-    } else if (particleName == "e+") {
-      //positron      
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
-      pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);      
-      
+
+  G4cout << "Adding PhysicsList chunk " << name << G4endl;
+
+  // Register standard processes for photons
+  if (name == "photon-standard") 
+    {
+      if (photonIsRegistered) 
+	{
+	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- photon List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  RegisterPhysics( new RemSimPhotonStandard(name) );
+	  photonIsRegistered = true;
+	}
     }
-  }
+  // Register LowE-EPDL processes for photons
+  if (name == "photon-epdl") 
+    {
+      if (photonIsRegistered) 
+	{
+	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- photon List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  RegisterPhysics( new RemSimPhotonEPDL(name) );
+	  photonIsRegistered = true;
+	}
+    } 
+
+  // Register standard processes for electrons
+  if (name == "electron-standard") 
+    {
+      if (electronIsRegistered) 
+	{
+	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- electron List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  RegisterPhysics( new RemSimElectronStandard(name) );	  
+	  electronIsRegistered = true;
+	}
+    }
+  // Register LowE-EEDL processes for electrons
+  if (name == "electron-eedl") 
+    {
+      if (electronIsRegistered) 
+	{
+	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- electron List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  RegisterPhysics( new RemSimElectronEEDL(name) );
+	  electronIsRegistered = true;
+	}
+   } 
+
+  // Register standard processes for positrons
+  if (name == "positron-standard") 
+    {
+      if (positronIsRegistered) 
+	{
+	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- positron List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  RegisterPhysics( new RemSimPositronStandard(name) );
+	  positronIsRegistered = true;
+	}
+    }
+
+ if (name == "proton-eedl") 
+    {
+      if (protonIsRegistered) 
+	{
+	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- proton e.m. List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  RegisterPhysics( new RemSimProtonEEDL(name) );
+	  protonIsRegistered = true;
+	}
+    }
+
+if (name == "proton-eedl-ziegler") 
+    {
+      if (protonIsRegistered) 
+	{
+	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- proton e.m. List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  RegisterPhysics( new RemSimProtonEEDLziegler(name) );
+	  protonIsRegistered = true;
+	}
+    }
+
+if (name == "proton-standard") 
+    {
+      if (protonIsRegistered) 
+	{
+	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- proton e.m. List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  RegisterPhysics( new RemSimProtonStandard(name) );
+	  protonIsRegistered = true;
+	}
+    }
+
+  if (electronIsRegistered && positronIsRegistered && photonIsRegistered)
+    {
+      G4cout << "PhysicsList for electron, positron and photon registered" << G4endl;
+    }
 }
+
+void RemSimPhysicsList::SetGammaCut(G4double value)
+{
+  ResetCuts();
+  cutForGamma = value;
+}
+
+
+void RemSimPhysicsList::SetElectronCut(G4double value)
+{
+  ResetCuts();
+  cutForElectron = value;
+}
+
+void RemSimPhysicsList::SetParticleCut(G4double value)
+{
+  defaultCutValue = value; 
+}
+
 void RemSimPhysicsList::SetCuts()
 {
-  // uppress error messages even in case e/gamma/proton do not exist            
-  G4int temp = GetVerboseLevel();                                                SetVerboseLevel(0);                                                           
-  //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
-  //   the default cut value for all particle types 
-  SetCutsWithDefault();   
-
-  // Retrieve verbose level
-  SetVerboseLevel(temp);  
+ G4VUserPhysicsList::SetCutsWithDefault();
+ if (verboseLevel>0) DumpCutValuesTable();
 }
+
+
+
+
+
+
+
+
+
 

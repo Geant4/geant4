@@ -36,7 +36,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: RemSimRunAction.cc,v 1.1 2004-01-30 12:25:44 guatelli Exp $
+// $Id: RemSimRunAction.cc,v 1.2 2004-02-03 09:16:47 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -64,21 +64,25 @@ RemSimRunAction::RemSimRunAction()
 RemSimRunAction::~RemSimRunAction()
 {   
  }
-void RemSimRunAction::BeginOfRunAction(const G4Run*)
+void RemSimRunAction::BeginOfRunAction(const G4Run* aRun)
 { 
+  /*
 #ifdef G4ANALYSIS_USE
   RemSimAnalysisManager* analysis = RemSimAnalysisManager::getInstance();
   analysis->book();
-#endif  
-
+#endif
+  */  
+ runID = aRun->GetRunID();
  }
 
 void RemSimRunAction::EndOfRunAction(const G4Run*)
 {  
+  /*
 #ifdef G4ANALYSIS_USE      
   RemSimAnalysisManager* analysis = RemSimAnalysisManager::getInstance();
   analysis->finish();
 #endif
+  */
 }
 
 void RemSimRunAction::ReadData(G4double unitE, G4String fileName)
@@ -160,4 +164,3 @@ G4double RemSimRunAction::GetPrimaryParticleEnergyDistributionSum()
     }
   return sum;
 }
-

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimDetectorConstruction.hh,v 1.1 2004-01-30 12:18:24 guatelli Exp $
+// $Id: RemSimDetectorConstruction.hh,v 1.2 2004-02-03 09:16:44 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -47,8 +47,10 @@ public:
   G4VPhysicalVolume* Construct();
   void SwitchVehicle(G4String);
   void ConstructVolume();
-private:
-    
+  G4double GetDensity();
+  void ChangeMaterial(G4String);
+
+private:    
   // Logical volumes
   //
   G4LogicalVolume* experimentalHall_log;

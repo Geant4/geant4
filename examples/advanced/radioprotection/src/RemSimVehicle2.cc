@@ -146,3 +146,4 @@ void RemSimVehicle2::DestroyComponent()
   delete layer1Log;layer1Log =0;
   delete layer1;layer1 =0;
 }
+

@@ -18,4 +18,8 @@ void RemSimDecorator::DestroyComponent()
 {
   //component -> DestroyComponent();
 }
+G4double  RemSimDecorator::GetDensity()
+{;}
 
+void  RemSimDecorator::ChangeMaterial(G4String)
+{;}

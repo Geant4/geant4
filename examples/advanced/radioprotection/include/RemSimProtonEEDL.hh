@@ -20,45 +20,24 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-//    *****************************************
-//    *                                       *
-//    *      RemSimDetectrorMessenger.hh      *
-//    *                                       *
-//    *****************************************
-//
-// $Id: RemSimDetectorMessenger.hh,v 1.2 2004-02-03 09:16:44 guatelli Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
-#ifndef RemSimDetectorMessenger_h
-#define RemSimDetectorMessenger_h 1
+#ifndef REMSIMPROTONEEDL_HH
+#define REMSIMPROTONEEDL_HH 1
 
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
-#include "G4UImessenger.hh"
 
-class RemSimDetectorConstruction;
-class RemSimFactoryIr;
-class RemSimRunAction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
+class RemSimProtonEEDL : public G4VPhysicsConstructor {
 
-class RemSimDetectorMessenger: public G4UImessenger
-{
-public:
-  RemSimDetectorMessenger(RemSimDetectorConstruction* );
-  ~RemSimDetectorMessenger();
-    
-  void SetNewValue(G4UIcommand*, G4String);
+public: 
+
+  RemSimProtonEEDL(const G4String& name = "proton-eedl");
   
-private:
-  RemSimDetectorConstruction*  detector;//pointer to detector
-  G4UIdirectory*               vehicleDir; 
-  G4UIcmdWithAString*          vehicleCmd; //change vehicle 
-  G4UIcmdWithAString*          materialCmd;//change material
+  virtual ~RemSimProtonEEDL();
+  
+  // This method is dummy for physics
+  virtual void ConstructParticle() {};
+  
+  virtual void ConstructProcess();
 };
 #endif
 

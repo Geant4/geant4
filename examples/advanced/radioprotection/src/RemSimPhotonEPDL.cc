@@ -20,45 +20,51 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-//    *****************************************
-//    *                                       *
-//    *      RemSimDetectrorMessenger.hh      *
-//    *                                       *
-//    *****************************************
-//
-// $Id: RemSimDetectorMessenger.hh,v 1.2 2004-02-03 09:16:44 guatelli Exp $
+// $Id: RemSimPhotonEPDL.cc,v 1.1 2004-02-03 09:16:47 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-#ifndef RemSimDetectorMessenger_h
-#define RemSimDetectorMessenger_h 1
+// Author: Maria.Grazia.Pia@cern.ch
+//
+// History:
+// -----------
+// 22 Feb 2003 MGP          Designed for modular Physics List
+//
+// -------------------------------------------------------------------
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
+#include "RemSimPhotonEPDL.hh"
 
-class RemSimDetectorConstruction;
-class RemSimFactoryIr;
-class RemSimRunAction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
+#include "G4ProcessManager.hh"
+#include "G4Gamma.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4LowEnergyCompton.hh"
+#include "G4LowEnergyGammaConversion.hh"
+#include "G4LowEnergyPhotoElectric.hh"
+#include "G4LowEnergyRayleigh.hh"
 
-class RemSimDetectorMessenger: public G4UImessenger
+RemSimPhotonEPDL::RemSimPhotonEPDL(const G4String& name): G4VPhysicsConstructor(name)
+{ }
+
+RemSimPhotonEPDL::~RemSimPhotonEPDL()
+{ }
+
+void RemSimPhotonEPDL::ConstructProcess()
 {
-public:
-  RemSimDetectorMessenger(RemSimDetectorConstruction* );
-  ~RemSimDetectorMessenger();
-    
-  void SetNewValue(G4UIcommand*, G4String);
+  // Add EPDL processes for photons
   
-private:
-  RemSimDetectorConstruction*  detector;//pointer to detector
-  G4UIdirectory*               vehicleDir; 
-  G4UIcmdWithAString*          vehicleCmd; //change vehicle 
-  G4UIcmdWithAString*          materialCmd;//change material
-};
-#endif
+  theParticleIterator->reset();
 
+  while( (*theParticleIterator)() )
+    {
+      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ProcessManager* manager = particle->GetProcessManager();
+      G4String particleName = particle->GetParticleName();
+     
+      if (particleName == "gamma") 
+	{
+	  manager->AddDiscreteProcess(new G4LowEnergyPhotoElectric);
+	  manager->AddDiscreteProcess(new G4LowEnergyCompton);
+	  manager->AddDiscreteProcess(new G4LowEnergyGammaConversion);
+	  manager->AddDiscreteProcess(new G4LowEnergyRayleigh);
+	}   
+    }
+}

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: remsim.cc,v 1.1 2004-01-30 12:11:55 guatelli Exp $
+// $Id: remsim.cc,v 1.2 2004-02-03 09:16:44 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,30 +42,47 @@
 #include "RemSimPrimaryGeneratorAction.hh"
 #include "RemSimEventAction.hh"
 #include "RemSimRunAction.hh"
+#include "RemSimSteppingAction.hh"
 #ifdef G4VIS_USE
 #include "RemSimVisManager.hh"
 #endif
+#ifdef G4ANALYSIS_USE
+#include "RemSimAnalysisManager.hh"
+#endif  
 int main(int argc,char** argv)
 {
   // Construct the default run manager
   G4RunManager* runManager = new G4RunManager;
 
   // set mandatory initialization classes
-  runManager->SetUserInitialization(new RemSimDetectorConstruction);
+  RemSimDetectorConstruction* detector = new RemSimDetectorConstruction();
+  runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new RemSimPhysicsList);
 
   // set mandatory user action class
-  runManager->SetUserAction(new RemSimPrimaryGeneratorAction);
+  RemSimPrimaryGeneratorAction* primary = new RemSimPrimaryGeneratorAction();
+  runManager->SetUserAction(primary);
+
   runManager->SetUserAction(new RemSimEventAction);
-  runManager->SetUserAction(new RemSimRunAction);
+
+  RemSimRunAction* run = new RemSimRunAction();
+  runManager->SetUserAction(run);
+
+  runManager->SetUserAction(new RemSimSteppingAction(primary,run,detector));
+
 #ifdef G4VIS_USE
   // Visualization, if you choose to have it!
   G4VisManager* visManager = new RemSimVisManager;
   visManager->Initialize();
 #endif
-   
+ 
+#ifdef G4ANALYSIS_USE
+  RemSimAnalysisManager* analysis = RemSimAnalysisManager::getInstance();
+  analysis->book();
+#endif   
+
   // Initialize G4 kernel
-  runManager->Initialize();
+  // runManager->Initialize();
 
   // get the pointer to the UI manager and set verbosities
   G4UImanager* UI = G4UImanager::GetUIpointer();
@@ -81,7 +98,7 @@ if(argc==1)
       session = new G4UIterminal();
 #endif    
 
-    UI->ApplyCommand("/control/execute vis.mac");    
+      // UI->ApplyCommand("/control/execute test.mac");    
     session->SessionStart();
     delete session;
   }
@@ -92,6 +109,13 @@ if(argc==1)
     G4String fileName = argv[1];
     UI->ApplyCommand(command+fileName);
   }
+ 
+
+#ifdef G4ANALYSIS_USE
+//  RemSimAnalysisManager* analysis = RemSimAnalysisManager::getInstance();
+  analysis->finish();
+#endif   
+
 #ifdef G4VIS_USE
   delete visManager;
 #endif

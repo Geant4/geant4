@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimRunAction.hh,v 1.1 2004-01-30 12:18:25 guatelli Exp $
+// $Id: RemSimRunAction.hh,v 1.2 2004-02-03 09:16:45 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -55,10 +55,12 @@ public:
   G4DataVector* GetPrimaryParticleEnergy();
   G4DataVector* GetPrimaryParticleEnergyDistribution();
   G4double GetPrimaryParticleEnergyDistributionSum();
+  G4int GetRunID() {return runID;};
 
 private:
   G4DataVector* energies;
   G4DataVector* data;
+  G4int runID;
 };
 #endif
 

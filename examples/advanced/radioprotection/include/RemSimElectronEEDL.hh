@@ -21,44 +21,49 @@
 // ********************************************************************
 //
 //
-//    *****************************************
-//    *                                       *
-//    *      RemSimDetectrorMessenger.hh      *
-//    *                                       *
-//    *****************************************
-//
-// $Id: RemSimDetectorMessenger.hh,v 1.2 2004-02-03 09:16:44 guatelli Exp $
+// $Id: RemSimElectronEEDL.hh,v 1.1 2004-02-03 09:16:45 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-#ifndef RemSimDetectorMessenger_h
-#define RemSimDetectorMessenger_h 1
+// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
+//
+// History:
+// -----------
+// 22 Feb 2003 MGP          Created
+//
+// -------------------------------------------------------------------
 
+// Class description:
+// System test for e/gamma, electron processes based on EEDL for PhysicsList
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
+// -------------------------------------------------------------------
+
+#ifndef REMSIMELECTRONEEDL_HH
+#define REMSIMELECTRONEEDL_HH 1
+
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
-#include "G4UImessenger.hh"
 
-class RemSimDetectorConstruction;
-class RemSimFactoryIr;
-class RemSimRunAction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
+class RemSimElectronEEDL : public G4VPhysicsConstructor {
 
-class RemSimDetectorMessenger: public G4UImessenger
-{
-public:
-  RemSimDetectorMessenger(RemSimDetectorConstruction* );
-  ~RemSimDetectorMessenger();
-    
-  void SetNewValue(G4UIcommand*, G4String);
+public: 
+
+  RemSimElectronEEDL(const G4String& name = "electron-eedl");
   
-private:
-  RemSimDetectorConstruction*  detector;//pointer to detector
-  G4UIdirectory*               vehicleDir; 
-  G4UIcmdWithAString*          vehicleCmd; //change vehicle 
-  G4UIcmdWithAString*          materialCmd;//change material
+  virtual ~RemSimElectronEEDL();
+  
+  // This method is dummy for physics
+  virtual void ConstructParticle() {};
+  
+  virtual void ConstructProcess();
 };
+
 #endif
+
+
+
+
+
+
+
 

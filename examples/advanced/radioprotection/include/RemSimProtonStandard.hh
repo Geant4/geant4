@@ -20,45 +20,31 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
-//    *****************************************
-//    *                                       *
-//    *      RemSimDetectrorMessenger.hh      *
-//    *                                       *
-//    *****************************************
-//
-// $Id: RemSimDetectorMessenger.hh,v 1.2 2004-02-03 09:16:44 guatelli Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
-#ifndef RemSimDetectorMessenger_h
-#define RemSimDetectorMessenger_h 1
+// History:
+// -----------
+// 17 May     2003 SG          Designed for modular Physics List 
+// -------------------------------------------------------------------
 
+#ifndef REMSIMPROTONSTANDARD_HH
+#define REMSIMPROTONSTANDARD_HH 1
+
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
-#include "G4UImessenger.hh"
 
-class RemSimDetectorConstruction;
-class RemSimFactoryIr;
-class RemSimRunAction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
+class RemSimProtonStandard : public G4VPhysicsConstructor {
 
-class RemSimDetectorMessenger: public G4UImessenger
-{
-public:
-  RemSimDetectorMessenger(RemSimDetectorConstruction* );
-  ~RemSimDetectorMessenger();
-    
-  void SetNewValue(G4UIcommand*, G4String);
+public: 
+
+  RemSimProtonStandard(const G4String& name = "proton-standard");
   
-private:
-  RemSimDetectorConstruction*  detector;//pointer to detector
-  G4UIdirectory*               vehicleDir; 
-  G4UIcmdWithAString*          vehicleCmd; //change vehicle 
-  G4UIcmdWithAString*          materialCmd;//change material
+  virtual ~RemSimProtonStandard();
+  
+  // This method is dummy for physics
+  virtual void ConstructParticle() {};
+  
+  virtual void ConstructProcess();
 };
 #endif
 

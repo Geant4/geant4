@@ -19,9 +19,6 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// ********************************************************************
-// Code developed by:
-//  S.Guatelli
 //
 //    *******************************
 //    *                             *
@@ -29,60 +26,52 @@
 //    *                             *
 //    *******************************
 //
-// $Id: RemSimAnalysisManager.cc,v 1.1 2004-01-30 12:25:43 guatelli Exp $
+// $Id: RemSimAnalysisManager.cc,v 1.2 2004-02-03 09:16:46 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+// Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
-#ifdef  G4ANALYSIS_USE
+// History:
+// -----------
+// 17 May  2003   S. Guatelli   1st implementation
+//
+// -------------------------------------------------------------------
+#ifdef  G4ANALYSIS_USE 
 #include <stdlib.h>
 #include <fstream>
 #include "RemSimAnalysisManager.hh"
 
 #include "G4ios.hh"
+#include <AIDA/AIDA.h>
+#include "G4RunManager.hh"
 
-#include "AIDA/IHistogram1D.h"
-#include "AIDA/IHistogram2D.h"
-
-#include "AIDA/IManagedObject.h"
-#include "AIDA/IAnalysisFactory.h"
-#include "AIDA/IHistogramFactory.h"
-#include "AIDA/ITupleFactory.h"
-#include "AIDA/ITreeFactory.h"
-#include "AIDA/ITree.h"
-#include "AIDA/ITuple.h"
 
 RemSimAnalysisManager* RemSimAnalysisManager::instance = 0;
 
-RemSimAnalysisManager::RemSimAnalysisManager() : 
-  aFact(0), theTree(0), histFact(0), tupFact(0)//,h1(0),h2(0)
-  ,ntuple(0)
-  
-{
-  //build up  the  factories
+RemSimAnalysisManager::RemSimAnalysisManager() 
+  :  aFact(0), treeFact(0),theTree(0),dataPointFactory(0), histogramFactory(0),
+  stoppingPowerDataPoint(0),CSDARangeDataPoint(0)
+ 
+{ 
   aFact = AIDA_createAnalysisFactory();
-
-  AIDA::ITreeFactory *treeFact = aFact->createTreeFactory(); 
- 
-  //parameters for the TreeFactory
- 
-  std::string fileName = "remsim.hbk";
-  theTree = treeFact->create(fileName,"hbook",false, true);
-
-  delete treeFact;
- 
-  histFact = aFact->createHistogramFactory( *theTree );
-  tupFact  = aFact->createTupleFactory    ( *theTree ); 
+  treeFact = aFact -> createTreeFactory();
 }
 
 RemSimAnalysisManager::~RemSimAnalysisManager() 
 { 
-  delete tupFact;
-  tupFact = 0;
+  delete CSDARangeDataPoint;
+  CSDARangeDataPoint = 0; 
 
-  delete histFact;
-  histFact = 0;
+  delete stoppingPowerDataPoint;
+  stoppingPowerDataPoint = 0; 
+
+  delete histogramFactory;
+  histogramFactory = 0;
+
+  delete treeFact;
+  treeFact = 0;
 
   delete theTree;
-  histFact = 0;
+  theTree = 0;
 
   delete aFact;
   aFact = 0;
@@ -96,68 +85,53 @@ RemSimAnalysisManager* RemSimAnalysisManager::getInstance()
 
 void RemSimAnalysisManager::book() 
 {
-  //creating a 1D histogram ...
-  //h1 = histFact->createHistogram2D("10","Energy, pos", //histoID,histo name
-  //			    300 ,-150.,150.,   //bins'number,xmin,xmax 
-  //                                  300,-150.,150.    );//bins'number,ymin,ymax 
-  //creating a 2D histogram ...
-  //h2 = histFact->createHistogram1D("20","Initial Energy", //histoID,histo name 
-  // 100,0.,1.); //bins' number, xmin, xmax
-
-  //defining the ntuple columns' name ...
-  std::string columnNames = "float energy; float x; float y; float z";
-  std::string options = "";
+  theTree = treeFact -> create("test50.xml","xml",false, true,"uncompress");
   
-  //creating a ntuple ...
-  if (tupFact) ntuple = tupFact->create("1","1",columnNames, options);
-  // check for non-zero ...
-  if (ntuple) G4cout<<"The Ntuple is non-zero"<<G4endl;
-}
- 
-void RemSimAnalysisManager::FillNtupleWithEnergy(G4double xx,
-                                                 G4double yy, 
-                                                 G4double zz,
-                                                 G4double en)
-{
-  if (ntuple == 0) 
-   {
-     G4cout << "AAAAAAAGH..... The Ntuple is 0" << G4endl;
-     return;
-    }
+  //Create the factories for dataPoint and histograms
+  dataPointFactory = aFact -> createDataPointSetFactory(*theTree); 
+
+  stoppingPowerDataPoint = dataPointFactory -> create("SP","Stopping Power test",2); 
+  CSDARangeDataPoint = dataPointFactory -> create ("CSDARange","CSDA Range test",2);
   
-  G4int indexX = ntuple->findColumn( "x" );
-  G4int indexY = ntuple->findColumn( "y" );
-  G4int indexZ = ntuple->findColumn( "z" );
-  G4int indexEnergy = ntuple->findColumn( "energy" );
-  ntuple->fill(indexEnergy, en);// fill ( int column, double value )
-  ntuple->fill(indexX, xx);
-  ntuple->fill(indexY, yy);
-  ntuple->fill(indexZ, zz);
-
-  ntuple->addRow();
-}
-/*
-void RemSimAnalysisManager::FillHistogramWithEnergy(G4double x,
-                                                    G4double z, 
-                                                    G4float energyDeposit)
+ }
+void RemSimAnalysisManager::StoppingPower(G4int PointNumber,
+                                         G4double primaryParticleEnergy,
+                                         G4double SP)
 {
-  //2DHistrogram: energy deposit in a voxel which center is fixed in position (x,z)  
-  // h1->fill(x,z,energyDeposit);
+  stoppingPowerDataPoint->addPoint();
+  AIDA::IDataPoint* point = stoppingPowerDataPoint->point(PointNumber);
+  AIDA::IMeasurement* coordinateX = point->coordinate( 0 );
+  coordinateX -> setValue(primaryParticleEnergy );
+  coordinateX -> setErrorPlus( 0. );
+  coordinateX -> setErrorMinus( 0. );
+  AIDA::IMeasurement* coordinateY = point->coordinate( 1 );
+  coordinateY -> setValue( SP);
+  coordinateY -> setErrorPlus( 0. );
+  coordinateY -> setErrorMinus( 0. );
 }
 
-void RemSimAnalysisManager::PrimaryParticleEnergySpectrum(G4double primaryParticleEnergy)
+
+void RemSimAnalysisManager::CSDARange(G4int PointNumber,
+                                     G4double primaryParticleEnergy, 
+                                     G4double range)
 {
-  //1DHisotgram: energy spectrum of primary particles  
-  //h2->fill(primaryParticleEnergy);
+  CSDARangeDataPoint -> addPoint();
+  AIDA::IDataPoint* point = CSDARangeDataPoint -> point(PointNumber);
+  AIDA::IMeasurement* coordinateX = point -> coordinate( 0 );
+  coordinateX -> setValue(primaryParticleEnergy );
+  coordinateX -> setErrorPlus( 0. );
+  coordinateX -> setErrorMinus( 0. );
+  AIDA::IMeasurement* coordinateY = point -> coordinate( 1 );
+  coordinateY -> setValue(range);
+  coordinateY -> setErrorPlus( 0. );
+  coordinateY -> setErrorMinus( 0. );
 }
-*/
+
+
 void RemSimAnalysisManager::finish() 
 {  
-  // write all histograms to file ...
-  theTree->commit();
-
-  // close (will again commit) ...
-  theTree->close();
+  theTree -> commit();
+  theTree -> close();
 }
 #endif
 

@@ -21,11 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimPrimaryGeneratorAction.cc,v 1.1 2004-01-30 12:25:44 guatelli Exp $
+// $Id: RemSimPrimaryGeneratorAction.cc,v 1.2 2004-02-03 09:16:47 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "RemSimPrimaryGeneratorAction.hh"
+#include "RemSimPrimaryGeneratorMessenger.hh"
 #include "RemSimBasicGenerator.hh"
 #include "RemSimVPrimaryGeneratorFactory.hh"
 #include "G4Event.hh"
@@ -37,10 +38,12 @@
 RemSimPrimaryGeneratorAction::RemSimPrimaryGeneratorAction()
 {
   primaryFactory = new RemSimBasicGenerator();
+  messenger = new RemSimPrimaryGeneratorMessenger(this);
 }
 
 RemSimPrimaryGeneratorAction::~RemSimPrimaryGeneratorAction()
 {
+  delete messenger;
   delete primaryFactory;
 }
 
@@ -49,4 +52,13 @@ void RemSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   primaryFactory -> GeneratePrimaries(anEvent);
 }
 
-
+void RemSimPrimaryGeneratorAction::GenerateIsotropicFlux()
+{
+  primaryFactory ->GenerateIsotropicFlux();
+}
+G4double RemSimPrimaryGeneratorAction::GetInitialEnergy()
+{
+  G4double initialEnergy = primaryFactory ->GetInitialEnergy();
+  return initialEnergy;
+  G4cout<< initialEnergy<<"<-------Initial energy from primaryPArticleAction"<<G4endl;
+}

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimVPrimaryGeneratorFactory.cc,v 1.1 2004-01-30 12:25:44 guatelli Exp $
+// $Id: RemSimVPrimaryGeneratorFactory.cc,v 1.2 2004-02-03 09:16:47 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 

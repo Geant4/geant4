@@ -17,7 +17,10 @@ public:
   RemSimAstronautDecorator(RemSimVGeometryComponent*);
   ~RemSimAstronautDecorator();
   void ConstructComponent(G4VPhysicalVolume*);
-  void DestroyComponent(); 
+  void DestroyComponent();
+  G4double GetDensity(){return 0;};
+  void  ChangeMaterial(G4String){G4cout<< 
+				  "This command is not available for the astronaut"<<G4endl;};
 
 private:
   void ConstructAstronaut(G4VPhysicalVolume*);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimEventAction.hh,v 1.1 2004-01-30 12:18:25 guatelli Exp $
+// $Id: RemSimEventAction.hh,v 1.2 2004-02-03 09:16:45 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  

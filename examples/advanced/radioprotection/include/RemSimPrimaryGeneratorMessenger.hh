@@ -27,18 +27,17 @@
 //    *                                       *
 //    *****************************************
 //
-// $Id: RemSimDetectorMessenger.hh,v 1.2 2004-02-03 09:16:44 guatelli Exp $
+// $Id: RemSimPrimaryGeneratorMessenger.hh,v 1.1 2004-02-03 09:16:45 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-#ifndef RemSimDetectorMessenger_h
-#define RemSimDetectorMessenger_h 1
+#ifndef RemSimPrimaryGeneratorMessenger_h
+#define RemSimPrimaryGeneratorMessenger_h 1
 
 #include "globals.hh"
 #include "G4UImessenger.hh"
 
-class RemSimDetectorConstruction;
-class RemSimFactoryIr;
+class RemSimPrimaryGeneratorAction;
 class RemSimRunAction;
 class G4UIdirectory;
 class G4UIcmdWithAString;
@@ -46,19 +45,18 @@ class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
 
-class RemSimDetectorMessenger: public G4UImessenger
+class RemSimPrimaryGeneratorMessenger: public G4UImessenger
 {
 public:
-  RemSimDetectorMessenger(RemSimDetectorConstruction* );
-  ~RemSimDetectorMessenger();
+  RemSimPrimaryGeneratorMessenger(RemSimPrimaryGeneratorAction* );
+  ~RemSimPrimaryGeneratorMessenger();
     
   void SetNewValue(G4UIcommand*, G4String);
   
 private:
-  RemSimDetectorConstruction*  detector;//pointer to detector
-  G4UIdirectory*               vehicleDir; 
-  G4UIcmdWithAString*          vehicleCmd; //change vehicle 
-  G4UIcmdWithAString*          materialCmd;//change material
+  RemSimPrimaryGeneratorAction*  primary;//pointer to detector
+  G4UIdirectory*               primaryDir; 
+  G4UIcmdWithAString*          isotropicFluxCmd; //change vehicle 
 };
 #endif
 
