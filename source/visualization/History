@@ -1,4 +1,4 @@
-$Id: History,v 1.35 1999-10-25 10:44:11 johna Exp $
+$Id: History,v 1.36 1999-10-25 10:45:21 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,7 +24,7 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-25th October 1999  John Allison
+vis-V00-01-06  25th October 1999  John Allison
 - No longer update view parameters in /vis/scene/add/volume, etc.
 - Change RWTValHashDictionary to G4std::map in G4OpenGLStoredSceneHandler
   and G4OpenInventorSceneHandler (needs global-V00-01-03).
