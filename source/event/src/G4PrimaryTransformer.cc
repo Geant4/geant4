@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryTransformer.cc,v 1.17 2003-09-12 21:51:34 asaim Exp $
+// $Id: G4PrimaryTransformer.cc,v 1.18 2003-10-01 13:17:34 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -135,6 +135,8 @@ void G4PrimaryTransformer::GenerateSingleTrack
     } 
     // Set decay products to the DynamicParticle
     SetDecayProducts( primaryParticle, DP );
+    // Set primary particle
+    DP->SetPrimaryParticle(primaryParticle);
     // Create G4Track object
     G4Track* track = new G4Track(DP,t0,G4ThreeVector(x0,y0,z0));
     // Set trackID and let primary particle know it
