@@ -1,4 +1,4 @@
-$Id: History,v 1.48 2004-11-13 17:39:34 gcosmo Exp $
+$Id: History,v 1.49 2004-11-24 17:22:47 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24-Nov-2004, O.Link (geom-specific-V06-02-05)
+- Fixed bug in description of twisted trapezoid side.
 
 12-Nov-2004, O.Link (geom-specific-V06-02-04)
 - Added G4TwistedBox  - a twisted box with twist angle alpha,
