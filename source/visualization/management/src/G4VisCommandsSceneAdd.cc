@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.47 2005-03-04 16:25:58 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.48 2005-03-09 16:25:25 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -48,6 +48,7 @@
 #include "G4CallbackModel.hh"
 #include "G4UnionSolid.hh"
 #include "G4SubtractionSolid.hh"
+#include "G4Polyhedron.hh"
 #include "G4UIcommand.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
@@ -506,7 +507,7 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
 
   // Useful constants, etc...
   const G4double halfHeight(height / 2.);
-  const G4double comfort(0.15);
+  const G4double comfort(0.01);  // 0.15 seems too big.  0.05 might be better.
   const G4double onePlusComfort(1. + comfort);
   const G4double freeHeightFraction (1. + 2. * comfort);
 
@@ -559,9 +560,6 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
     }
   }
 
-  G4VisAttributes visAtts(G4Colour(red, green, blue));
-  visAtts.SetForceSolid(true);         // Always solid.
-
   // Now figure out the extent...
   //
   // From the G4Scale.hh:
@@ -612,18 +610,22 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
   case G4Scale::y:
     symin = symid - halfHeight;
     symax = symid + halfHeight;
-    transform = G4RotateZ3D(pi/2.);
+    transform = G4RotateZ3D(halfpi);
     break;
   case G4Scale::z:
     szmin = szmid - halfHeight;
     szmax = szmid + halfHeight;
-    transform = G4RotateY3D(pi/2.);
+    transform = G4RotateY3D(halfpi);
     break;
   }
   transform = G4Translate3D(sxmid,symid,szmid) * transform;
 
-  G4VModel* model = new G4CallbackModel<G4VisCommandSceneAddLogo::G4Logo>
-    (new G4VisCommandSceneAddLogo::G4Logo(height,visAtts));
+  G4VisAttributes visAtts(G4Colour(red, green, blue));
+  visAtts.SetForceSolid(true);         // Always solid.
+
+  G4Logo* logo = new G4Logo(height,visAtts);
+  G4VModel* model =
+    new G4CallbackModel<G4VisCommandSceneAddLogo::G4Logo>(logo);
   model->SetGlobalDescription("G4Logo");
   model->SetGlobalTag("G4Logo");
   model->SetTransformation(transform);
@@ -668,11 +670,7 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
 G4VisCommandSceneAddLogo::G4Logo::G4Logo
 (G4double height,const G4VisAttributes& visAtts):
   fHeight(height),
-  fVisAtts(visAtts) {}
-
-void G4VisCommandSceneAddLogo::G4Logo::operator()
-  (const G4Transform3D& transform) {
-  const G4double& height = fHeight;
+  fVisAtts(visAtts) {
   const G4double& h =  height;
   const G4double h2  = 0.5 * h;   // Half height.
   const G4double ri  = 0.25 * h;  // Inner radius.
@@ -701,29 +699,53 @@ void G4VisCommandSceneAddLogo::G4Logo::operator()
   x9 += xtr; y9 += ytr;
 
   // G...
-  G4Tubs logo1("logo1",ri,ro,d2,0.15*pi,1.85*pi);
-  G4Box  logo2("logo2",w2,ro2,d2);
-  G4UnionSolid logoG("logoG",&logo1,&logo2,G4Translate3D(ri+w2,-ro2,0.));
-  G4Transform3D transformG(transform * G4Translate3D(-1.1*ro,0.,0.));
-  fpVisManager->Draw(logoG,fVisAtts,transformG);
+  G4Tubs tG("tG",ri,ro,d2,0.15*pi,1.85*pi);
+  G4Box bG("bG",w2,ro2,d2);
+  G4UnionSolid logoG("logoG",&tG,&bG,G4Translate3D(ri+w2,-ro2,0.));
+  fpG = logoG.CreatePolyhedron();
+  fpG->SetVisAttributes(&fVisAtts);
+  fpG->Transform(G4Translate3D(-0.55*h,0.,0.));
 
   // 4...
-  G4Box logo3("logo3",h2,h2,d2);
-  G4Box logoS("logoS",s,s,d2+e);  // Subtractor.
-  G4SubtractionSolid logo5("logo5",&logo3,&logoS,
-			   G4Translate3D(f1-s,f2-s,0.));
-  G4SubtractionSolid logo6("logo6",&logo5,&logoS,
-			   G4Translate3D(f1+s+w,f2-s,0.));
-  G4SubtractionSolid logo7("logo7",&logo6,&logoS,
-			   G4Translate3D(f1+s+w,f2+s+w,0.));
-  G4SubtractionSolid logo8("logo8",&logo7,&logoS,
-			   G4Transform3D(rm,G4ThreeVector(x8,y8,0.)));
-  G4SubtractionSolid logo9("logo9",&logoS,&logoS,  // Triangular hole.
-			   G4Transform3D(rm,G4ThreeVector(x9,y9,0.)));
-  G4SubtractionSolid logo4("logo4",&logo8,&logo9,
-			   G4Translate3D(-xtr,-ytr,0.));
-  G4Transform3D transform4(transform * G4Translate3D(1.1*ro,0.,0.));
-  fpVisManager->Draw(logo4,fVisAtts,transform4);
+  G4Box b1("b1",h2,h2,d2);
+  G4Box bS("bS",s,s,d2+e);  // Subtractor.
+  G4Box bS2("bS2",s,s,d2+2.*e);  // 2nd Subtractor.
+  G4SubtractionSolid s1("s1",&b1,&bS,G4Translate3D(f1-s,f2-s,0.));
+  G4SubtractionSolid s2("s2",&s1,&bS,G4Translate3D(f1+s+w,f2-s,0.));
+  G4SubtractionSolid s3("s3",&s2,&bS,G4Translate3D(f1+s+w,f2+s+w,0.));
+  G4SubtractionSolid s4
+    ("s4",&s3,&bS,G4Transform3D(rm,G4ThreeVector(x8,y8,0.)));
+  G4SubtractionSolid s5    // Triangular hole.
+    ("s5",&bS,&bS2,G4Transform3D(rm,G4ThreeVector(x9,y9,0.)));
+  G4SubtractionSolid logo4("logo4",&s4,&s5,G4Translate3D(-xtr,-ytr,0.));
+  fp4 = logo4.CreatePolyhedron();
+  /* Experiment with creating own polyhedron...
+  int nNodes = 4;
+  int nFaces = 4;
+  double xyz[][3] = {{0,0,0},{1*m,0,0},{0,1*m,0},{0,0,1*m}};
+  int faces[][4] = {{1,3,2,0},{1,2,4,0},{1,4,3,0},{2,3,4,0}};
+  fp4 = new G4Polyhedron();
+  fp4->createPolyhedron(nNodes,nFaces,xyz,faces);
+  */
+  fp4->SetVisAttributes(&fVisAtts);
+  fp4->Transform(G4Translate3D(0.55*h,0.,0.));
+}
+
+G4VisCommandSceneAddLogo::G4Logo::~G4Logo() {
+  delete fpG;
+  delete fp4;
+}
+
+void G4VisCommandSceneAddLogo::G4Logo::operator()
+  (const G4Transform3D& transform) {
+  /*
+  G4Transform3D transformG(transform * G4Translate3D(-0.55*fHeight,0.,0.));
+  fpVisManager->Draw(*fpLogoG,*fpVisAtts,transformG);
+  G4Transform3D transform4(transform * G4Translate3D(0.55*fHeight,0.,0.));
+  fpVisManager->Draw(*fpLogo4,*fpVisAtts,transform4);
+  */
+  fpVisManager->Draw(*fpG,transform);
+  fpVisManager->Draw(*fp4,transform);
 }
 
 ////////////// /vis/scene/add/scale //////////////////////////////////
@@ -821,7 +843,7 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
 
   // Useful constants, etc...
   const G4double halfLength(length / 2.);
-  const G4double comfort(0.15);
+  const G4double comfort(0.01);  // 0.15 seems too big.  0.05 might be better.
   const G4double onePlusComfort(1. + comfort);
   const G4double freeLengthFraction (1. + 2. * comfort);
 
@@ -874,9 +896,10 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
     }
   }
 
-  // Let's go ahead a construct a scale and a scale model...
+  // Let's go ahead a construct a scale and a scale model.  Since the
+  // placing is done here, this G4Scale is *not* auto-placed...
   G4Scale scale(length, annotation, scaleDirection,
-		autoPlacing, xmid, ymid, zmid);
+		false, xmid, ymid, zmid);
   G4VisAttributes* pVisAttr = new G4VisAttributes(G4Colour(red, green, blue));
   // Created of the heap because it needs a long lifetime.  This is a
   // mess.  The model determines the life but the vis atttributes are
@@ -911,6 +934,7 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
   // G4VSceneHandler::AddPrimitive(const G4Scale&) - simply has to
   // ensure it's within the new extent.
   //
+
   G4double sxmid(xmid), symid(ymid), szmid(zmid);
   if (autoPlacing) {
     sxmid = xmin + onePlusComfort * (xmax - xmin);
@@ -931,21 +955,34 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
   G4double sxmin(sxmid), sxmax(sxmid);
   G4double symin(symid), symax(symid);
   G4double szmin(szmid), szmax(szmid);
+  G4Transform3D transform;
+  G4VisExtent scaleExtent;
   switch (scaleDirection) {
   case G4Scale::x:
     sxmin = sxmid - halfLength;
     sxmax = sxmid + halfLength;
+    scaleExtent = G4VisExtent(-halfLength,halfLength,0,0,0,0);
     break;
   case G4Scale::y:
     symin = symid - halfLength;
     symax = symid + halfLength;
+    transform = G4RotateZ3D(halfpi);
+    scaleExtent = G4VisExtent(0,0,-halfLength,halfLength,0,0);
     break;
   case G4Scale::z:
     szmin = szmid - halfLength;
     szmax = szmid + halfLength;
+    transform = G4RotateY3D(halfpi);
+    scaleExtent = G4VisExtent(0,0,0,0,-halfLength,halfLength);
     break;
   }
-  G4VisExtent scaleExtent(sxmin, sxmax, symin, symax, szmin, szmax);
+  transform = G4Translate3D(sxmid,symid,szmid) * transform;
+  //////////  G4VisExtent scaleExtent(sxmin, sxmax, symin, symax, szmin, szmax);
+
+
+  model->SetTransformation(transform);
+  // Note: it is the responsibility of the model to act upon this, but
+  // the extent is in local coordinates...
   model->SetExtent(scaleExtent);
   // This extent gets "added" to existing scene extent in
   // AddRunDurationModel below.
@@ -955,8 +992,13 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
   if (successful) {
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Scale of " << annotation
-	     << " has been added to scene \"" << currentSceneName << "\"."
-	     << G4endl;
+	     << " added to scene \"" << currentSceneName << "\".";
+      if (verbosity >= G4VisManager::parameters) {
+	G4cout << "\n  with extent " << scaleExtent
+	       << "\n  at " << transform.getRotation()
+	       << transform.getTranslation();
+      }
+      G4cout << G4endl;
     }
   }
   else G4VisCommandsSceneAddUnsuccessful(verbosity);
@@ -1381,9 +1423,11 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
     const G4double x0 = (param2 + param1) / 2.;
     const G4double y0 = (param4 + param3) / 2.;
     const G4double z0 = (param6 + param5) / 2.;
-    G4Box* clippingBox = new G4Box("_clipping_box",dX,dY,dZ);
-    model->SetClippingSolid(clippingBox);
-    model->SetClippingTransform(G4Translate3D(x0,y0,z0));
+    G4Box clippingBox("_clipping_box",dX,dY,dZ);
+    G4Polyhedron* clippingPolyhedron = new G4PolyhedronBox(dX,dY,dZ);
+    // Created on the heap and left there.
+    clippingPolyhedron->Transform(G4Translate3D(x0,y0,z0));
+    model->SetClippingPolyhedron(clippingPolyhedron);
   }
 
   const G4String& currentSceneName = pScene -> GetName ();

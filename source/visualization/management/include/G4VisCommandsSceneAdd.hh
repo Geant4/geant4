@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.hh,v 1.12 2005-03-03 16:42:46 allison Exp $
+// $Id: G4VisCommandsSceneAdd.hh,v 1.13 2005-03-09 16:25:25 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -99,10 +99,12 @@ private:
   class G4Logo {
   public:
     G4Logo(G4double height, const G4VisAttributes&);
+    ~G4Logo();
     void operator()(const G4Transform3D&);
   private:
     G4double fHeight;
     G4VisAttributes fVisAtts;
+    G4Polyhedron *fpG, *fp4;
   };
   G4UIcommand* fpCommand;
 };
