@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Shoot.hh,v 1.6 2002-01-09 16:17:55 gcosmo Exp $
+// $Id: Shoot.hh,v 1.7 2003-02-05 15:47:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef SHOOT_HH
@@ -91,7 +91,6 @@ void Shoot(const G4int numShoot,
 #include "G4Mag_UsualEqRhs.hh"
 #include "G4CashKarpRKF45.hh"
 #include "G4RKG3_Stepper.hh"
-#include "PhysicalConstants.h"
 
 void MagneticShoot(const G4int numShoot,
 		   G4VPhysicalVolume *pTopNode,

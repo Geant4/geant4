@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTest.cc,v 1.9 2001-11-12 09:14:50 pia Exp $
+// $Id: G4ProcessTest.cc,v 1.10 2003-02-05 15:39:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -52,7 +52,6 @@
 #include "G4eBremsstrahlung.hh"
 #include "G4eIonisation.hh"
 #include "G4eplusAnnihilation.hh"
-#include "SystemOfUnits.h"
 
 #include "G4ProcessTestAnalysis.hh"
 

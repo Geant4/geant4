@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTestAnalysis.cc,v 1.6 2001-11-12 09:52:21 pia Exp $
+// $Id: G4ProcessTestAnalysis.cc,v 1.7 2003-02-05 15:39:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:  A. Pfeiffer (Andreas.Pfeiffer@cern.ch) 
@@ -37,8 +37,6 @@
 #include "globals.hh"
 #include "G4ParticleChange.hh"
 #include "G4Track.hh"
-#include "PhysicalConstants.h"
-#include "SystemOfUnits.h"
 
 G4ProcessTestAnalysis* G4ProcessTestAnalysis::instance = 0;
 
