@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2001-09-11 12:21:38 maire Exp $
+$Id: History,v 1.28 2001-09-13 13:30:24 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+ 13 sep 01: L.Urban (utils-V03-02-03)
+- Unused TrueToGeomTransformation method deleted. Class description
+- corr. in ComputeTransportCrossSection
+    
  11 sep 01: L.Urban (utils-V03-02-02)
 - G4MultipleScatteringx put as the default: G4MultipleScattering
      
