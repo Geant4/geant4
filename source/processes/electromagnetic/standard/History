@@ -1,4 +1,4 @@
-$Id: History,v 1.83 2003-03-25 13:43:50 maire Exp $
+$Id: History,v 1.84 2003-04-07 10:20:27 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,8 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07 Apr 03: V.Ivant (stand-V05-00-08)
+- G4VhEnergyLoss, G4hIonisation - fix problem of several runs with
+  different cuts
+
 25 Mar 03: mma (stand-V05-00-07)
--G4Ve(h)EnergyLoss : add finalRangeRequested
+- G4Ve(h)EnergyLoss : add finalRangeRequested
 
 10 mar 03: V.Ivant (stand-V05-00-06)
 - use SubType for ions in G4hIonisation

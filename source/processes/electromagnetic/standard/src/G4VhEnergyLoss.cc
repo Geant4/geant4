@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.cc,v 1.38 2003-03-25 13:43:51 maire Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.39 2003-04-07 10:20:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -54,6 +54,7 @@
 // 10-06-02 bug fixed for stopping hadrons, V.Ivanchenko
 // 15-01-03 Migrade to cut per region (V.Ivanchenko)
 // 25-03-03 add finalRangeRequested (mma)
+// 07-04-03 add verbosity (V.Ivanchenko)
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -184,6 +185,12 @@ G4int G4VhEnergyLoss::GetNbinEloss()
 void G4VhEnergyLoss::BuildDEDXTable(
                          const G4ParticleDefinition& aParticleType)
 {
+  if(0 < verboseLevel) {
+    G4cout << "G4VhEnergyLoss::BuildDEDXTable() for process "
+           << GetProcessName() << " and particle "
+           << aParticleType.GetParticleName() << G4endl;
+  }
+
   //  calculate data members LOGRTable,RTable first
   G4double lrate = log(UpperBoundEloss/LowerBoundEloss);
   LOGRTable=lrate/NbinEloss;

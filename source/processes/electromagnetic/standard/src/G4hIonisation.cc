@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.cc,v 1.34 2003-03-10 10:50:57 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.35 2003-04-07 10:20:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------- G4hIonisation physics process -------------------------------
@@ -51,6 +51,7 @@
 // 10-06-02 bug fixed for stopping hadrons (V.Ivanchenko)
 // 15-01-03 Migrade to cut per region (V.Ivanchenko)
 // 10-03-03 Use SubType for GenericIons (V.Ivanchenko)
+// 07-04-03 Fix problem of several runs (V.Ivanchenko)
 //
 //------------------------------------------------------------------------------
 
@@ -75,7 +76,9 @@ G4hIonisation::G4hIonisation(const G4String& processName)
    : G4VhEnergyLoss(processName),
      theMeanFreePathTable(0),
      Tmincut(1*keV)
-{}
+{
+  verboseLevel = 0;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -164,7 +167,8 @@ void G4hIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 
   if (aParticleType.GetPDGCharge() > 0.)
    {
-    if( CutsWhereModified() || !theDEDXpTable )
+    if( CutsWhereModified() && aParticleType.GetParticleName() == "proton"  
+        || !theDEDXpTable )
     {
       BuildLossTable(*theProton);
       RecorderOfpProcess[CounterOfpProcess] = (*this).theLossTable;
@@ -174,7 +178,8 @@ void G4hIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
    }
   else
    {
-    if( CutsWhereModified() || !theDEDXpbarTable )
+    if( CutsWhereModified() && aParticleType.GetParticleName() == "anti_proton" 
+        || !theDEDXpbarTable )
     {
       BuildLossTable(*(G4AntiProton::AntiProton())) ;
       RecorderOfpbarProcess[CounterOfpbarProcess] = (*this).theLossTable;
@@ -183,11 +188,9 @@ void G4hIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
     }
    }
 
-  if( !makeTables ) return;
-
   BuildLambdaTable(aParticleType);
 
-  BuildDEDXTable(aParticleType);
+  if( makeTables ) BuildDEDXTable(aParticleType);
 
   if(2 < verboseLevel) {
     G4cout << "MeanFreePathTable is built for "
@@ -204,6 +207,11 @@ void G4hIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 
 void G4hIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
 {
+  if(0 < verboseLevel) {
+    G4cout << "G4hIonisation::BuildLossTable() for process "
+           << GetProcessName() << " and particle "
+           << aParticleType.GetParticleName() << G4endl;
+  }
 
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
