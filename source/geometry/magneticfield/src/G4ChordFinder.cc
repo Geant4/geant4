@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc,v 1.43 2003-11-08 03:58:26 japost Exp $
+// $Id: G4ChordFinder.cc,v 1.44 2003-11-13 18:06:37 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -170,7 +170,10 @@ G4ChordFinder::PrintStatistics()
 G4double 
 G4ChordFinder::AdvanceChordLimited( G4FieldTrack& yCurrent,
                                     G4double      stepMax,
-                                    G4double      epsStep )
+                                    G4double      epsStep,
+				    const G4ThreeVector latestSafetyOrigin,
+				    G4double       latestSafetyRadius
+				    )
 {
   G4double stepPossible;
   G4double dyErr;
@@ -179,7 +182,9 @@ G4ChordFinder::AdvanceChordLimited( G4FieldTrack& yCurrent,
 
   G4double nextStep;
   //            *************
-  stepPossible= FindNextChord(yCurrent, stepMax, yEnd, dyErr, epsStep, &nextStep);
+  stepPossible= FindNextChord(yCurrent, stepMax, yEnd, dyErr, epsStep, &nextStep
+                              , latestSafetyOrigin, latestSafetyRadius
+                             );
   //            *************
   G4bool good_advance;
   if ( dyErr < epsStep * stepPossible )
@@ -218,7 +223,10 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
                                      G4FieldTrack&   yEnd, // Endpoint
                                      G4double&   dyErrPos, // Error of endpoint
                                      G4double    epsStep,
-			             G4double*  pStepForAccuracy)
+                                     G4double*  pStepForAccuracy, 
+			      const  G4ThreeVector, //  latestSafetyOrigin,
+			             G4double       //  latestSafetyRadius 
+					)
   // Returns Length of Step taken
 {
   // G4int       stepRKnumber=0;
