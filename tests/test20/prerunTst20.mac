@@ -11,11 +11,9 @@
 /gun/energy 100 keV
 /gun/vertexRadius 25. cm
 /gun/sourceType 2
-/gun/direction 0 0 -1
+/gun/direction 0 1 1
 /gun/polarization 1 0 0
-/payload/setSiPitch 1. mm
-/payload/update
-/run/beamOn 100
+/run/beamOn 1000
 
 
 
