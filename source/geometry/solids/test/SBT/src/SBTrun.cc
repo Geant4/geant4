@@ -42,7 +42,7 @@
 
 #include <time.h>
 
-#define DEBUG 1
+#define DEBUG 0
 
 //
 // Constructor
@@ -294,6 +294,9 @@ G4int SBTrun::DrawError( const G4VSolid *testVolume, std::istream &logger,
   G4int error = GetLoggedPV( logger, errorIndex, p, v );
   if (error) return error;
 
+  // Now required for drawing
+  G4Transform3D  objectTransformation; 
+
   //
   // Draw away
   //
@@ -308,7 +311,7 @@ G4int SBTrun::DrawError( const G4VSolid *testVolume, std::istream &logger,
   polyline.push_back( p );
   polyline.push_back( p + 4*v*m );
   polyline.SetVisAttributes( blueStuff );
-  visManager->Draw( polyline );
+  visManager->Draw( polyline, objectTransformation);
 
   //
   // This draws the initial point p
@@ -316,13 +319,13 @@ G4int SBTrun::DrawError( const G4VSolid *testVolume, std::istream &logger,
   G4Circle circle(p);
   circle.SetWorldSize( 5*cm );
   circle.SetVisAttributes( blueStuff );
-  visManager->Draw( circle );
+  visManager->Draw( circle, objectTransformation);
 
   //
   // This draws the target solid
   //
   G4VisAttributes redStuff( G4Color(1,0,0) );
-  visManager->Draw( *testVolume, redStuff );
+  visManager->Draw( *testVolume, redStuff, objectTransformation );
 
   // visManager->Show();
 

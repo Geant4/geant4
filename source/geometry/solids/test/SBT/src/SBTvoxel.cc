@@ -154,6 +154,8 @@ void SBTvoxel::Draw( const G4VSolid *testVolume,
 			lvec[1] = limits[1]*axisVectors[i];
 		}
 	}
+
+	G4Transform3D objectTransformation; 
 	
 	for( i=0; i<3 ;i++ ) {
 		G4int bitmask;
@@ -180,7 +182,7 @@ void SBTvoxel::Draw( const G4VSolid *testVolume,
 			inverseTransform.ApplyPointTransform( b );
 			polyline.push_back( a );
 			polyline.push_back( b );
-			visManager->Draw( polyline );
+			visManager->Draw( polyline, objectTransformation);
 			
 			if (drawLimits && axes[i]!=axis) {
 				G4Polyline polyline;
@@ -189,7 +191,7 @@ void SBTvoxel::Draw( const G4VSolid *testVolume,
 				inverseTransform.ApplyPointTransform( d );
 				polyline.push_back( c );
 				polyline.push_back( d );
-				visManager->Draw( polyline );
+				visManager->Draw( polyline, objectTransformation );
 			}
 		}
 	}
@@ -205,7 +207,7 @@ void SBTvoxel::Draw( const G4VSolid *testVolume,
 		G4Circle circle(*thisPoint);
 		circle.SetWorldSize( 5*cm );
 		circle.SetVisAttributes( whiteStuff );
-		visManager->Draw( circle );
+		visManager->Draw( circle, objectTransformation );
 	}
 		
 	
@@ -213,7 +215,7 @@ void SBTvoxel::Draw( const G4VSolid *testVolume,
 	// This draws the target solid
 	//
         G4VisAttributes redStuff( G4Color(1,0,0) );
-	visManager->Draw( *testVolume, redStuff );
+	visManager->Draw( *testVolume, redStuff, objectTransformation );
 
         // visManager->Show();
 }
@@ -630,7 +632,8 @@ G4bool SBTvoxel::GetRandomLimit( G4double x[2], const G4double range ) const
 //
 // Make a random voxel
 //
-G4VoxelLimits *SBTvoxel::NewRandomVoxel( const G4ThreeVector &theWidths ) const
+G4VoxelLimits *SBTvoxel::NewRandomVoxel( const G4ThreeVector & // theWidths 
+					 ) const
 {
 	G4double xlim[2];
 	
