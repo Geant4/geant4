@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepPoint.hh,v 1.14 2004-08-12 00:50:09 asaim Exp $
+// $Id: G4StepPoint.hh,v 1.15 2004-12-02 06:38:01 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -47,6 +47,7 @@
 #define G4StepPoint_h 1
 
 #include "globals.hh"                // Include from 'global'
+#include <cmath>                    // Include from 'system'
 #include "G4Allocator.hh"            // Include from 'global'
 #include "G4ThreeVector.hh"          // Include from 'geometry'
 #include "G4VPhysicalVolume.hh"      // Include from 'geometry'

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.hh,v 1.12 2004-10-19 00:51:30 kurasige Exp $
+// $Id: G4VParticleChange.hh,v 1.13 2004-12-02 06:38:01 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,6 +74,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
+#include <cmath>
 
 class G4Track;
 class G4Step;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepPoint.icc,v 1.9 2004-08-12 00:50:09 asaim Exp $
+// $Id: G4StepPoint.icc,v 1.10 2004-12-02 06:38:01 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -69,7 +69,7 @@
     
    inline G4ThreeVector G4StepPoint::GetMomentum() const
    { 
-     G4double tMomentum = sqrt(fKineticEnergy*fKineticEnergy +
+     G4double tMomentum = std::sqrt(fKineticEnergy*fKineticEnergy +
                                2*fKineticEnergy*fMass);
      return G4ThreeVector(fMomentumDirection.x()*tMomentum,
 			  fMomentumDirection.y()*tMomentum,

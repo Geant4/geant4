@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.hh,v 1.16 2002-12-16 11:59:12 gcosmo Exp $
+// $Id: G4Track.hh,v 1.17 2004-12-02 06:38:01 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,6 +45,7 @@
 #define G4Track_h 1
 
 #include "globals.hh"                 // Include from 'global'
+#include <cmath>                      // Include from 'system'
 #include "G4ThreeVector.hh"           // Include from 'geometry'
 #include "G4LogicalVolume.hh"         // Include from 'geometry'
 #include "G4VPhysicalVolume.hh"       // Include from 'geometry'
