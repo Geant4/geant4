@@ -3,7 +3,7 @@
 #                                 Intel icc 8.0
 ifeq ($(G4SYSTEM),Linux-icc)
   CXX       := icc
-  CXXFLAGS  := -ansi -no-gcc -w1
+  CXXFLAGS  := -ansi -mp -no-gcc -w1
   ifdef G4OPTIMISE
     CXXFLAGS  += -O
     FCFLAGS   := -O
@@ -25,7 +25,7 @@ ifeq ($(G4SYSTEM),Linux-icc)
     FCFLAGS   += -fPIC
     CCFLAGS   += -fPIC
   endif
-  G4RUNPATHOPTION := -Xlinker
+  G4RUNPATHOPTION := -Xlinker -rpath 
   CC := gcc
   FC := g77
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
