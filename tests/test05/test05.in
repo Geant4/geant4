@@ -6,11 +6,10 @@
 #
 /run/initialize
 #
-# Run 100 events
+# Run 1 event
 #
 /run/beamOn 1
 #
 # Termination
 #
 exit
-
