@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewer.cc,v 1.17 2000-05-13 10:52:22 johna Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.18 2000-05-15 11:12:48 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -458,22 +458,9 @@ void G4VisCommandViewerReset::SetNewValue (G4UIcommand* command,
   }
 
   if (fpVisManager -> IsValidView ()) {
-    G4ViewParameters vp = viewer->GetViewParameters();
-    const G4VSceneHandler* sceneHandler = viewer->GetSceneHandler();
-    const G4Scene* scene = sceneHandler->GetScene();
-    vp.SetCurrentTargetPoint (G4Point3D());
-    vp.SetZoomFactor (1.);
-    vp.SetDolly (0.);
-    vp.SetViewpointDirection (G4Vector3D (0., 0., 1.));
-    vp.SetUpVector (G4Vector3D (0., 1., 0.));
+    G4ViewParameters vp;  // Default view parameters.
     viewer->SetViewParameters(vp);
-    G4cout << "Target point reset to centre of scene, "
-           << G4BestUnit (scene->GetStandardTargetPoint (), "Length");
-    G4cout << ".\nZoom factor reset to 1.";
-    G4cout << "\nDolly distance reset to 0.";
-    G4cout << "\nViewpoint direction reset to +z.";
-    G4cout << "\nUp vector reset to +y.";
-    G4cout << "\nViewer \"" << viewer -> GetName () << "\" reset.";
+    G4cout << "Viewer \"" << viewer -> GetName () << "\" reset.";
     G4cout << "\nIssue \"/vis/viewer/refresh\" to see effect." << G4endl;
     // For now...
     fpVisManager->SetCurrentViewParameters() = vp;
