@@ -1,11 +1,9 @@
 \section{Introduction}
 
-% [general inc stuff]
 The intranuclear cascade model (INC) was was first proposed by Serber in 1947 \cite{serber47}.  
 His noticed that, in particle nuclear collisions the deBroglie wavelenght of the incident particle is 
 comparaple (or shorter) than the average intra-nucleon distance.
 Hence, the justification for describing the interactions in terms of particle-particle  collisions.
-
 
 The INC has been succesfully used in the Monte Carlo simulations at intermediate energy region 
 since Goldberger made first calculations by hand in 1947 \cite{goldberger48}. 
@@ -13,12 +11,7 @@ First computer simulations were done by Metropolis et al. in 1958 \cite{metropol
 Standard methods in INC implementations were formed when Bertini published his results in 1968 \cite{bertini68}.
 Important addition to INC was exiton model itroduced by Griffin in 1966 \cite{griffin66}. 
 
-%There are several General Monte Carlo simulation toolkits implementing cascade models with various approachies
-%such as HETC \cite}{}, and FLUKA \cite{}. 
-%Having application such as to simulation of hadron calorimetry the INC description of interactions of protons, neutrons and pions with matter is cruisal.
-
-%[Geant4 stuff]
-Our presentations describes implementation of INC model in {\sc Geant4} hadronic physics framework \cite{geant4collaboration03}.
+Our presentations describes implementation of Bertini INC model in {\sc Geant4} hadronic physics framework \cite{geant4collaboration03}.
 Geant4 is a Monte Carlo particle detector simulation toolkit, having applications also in  medical and space
 science. 
 Geant4 provides a flexible framework for the modular implementation of
@@ -38,10 +31,8 @@ process class for inelastic collisions can use distinct models for different ene
 Process classes utilize model classes to determine the
 secondaries produced in the interaction and to calculate the momenta
 of the particles. Here we preset a collection of such models providing medium-energy
-intranuclear cascades.
+intranuclear cascade treatment.
 
-%Several model classes for different particles and
-%energy regimes can be used by the process classes.
 
 
 
