@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2001-02-22 11:18:07 stesting Exp $
+$Id: History,v 1.18 2001-03-06 10:11:20 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+March 07 2001 H.Kurashige (exampleN04-V03-00-07)
+-  Add G4MuonMinusCaptureAtRest in G4MuonPhysics 
+
 February 25 2001 S.W.O'Neale (exampleN04-V03-00-06)
 - Add exampleN04.EMtest.large_N.out reference output and remove
   some empty "reference" .err files
