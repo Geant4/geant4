@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3MedTable.hh,v 1.10 2001-07-16 15:38:18 gcosmo Exp $
+// $Id: G3MedTable.hh,v 1.11 2003-01-27 10:45:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------
@@ -62,6 +62,8 @@ class G3MedTable
     G3MedTableEntry* get(G4int id) const;
     void put(G4int id, G4Material* material, G4MagneticField* field,
              G4UserLimits* limits, G4int isvol);
+    G4int GetSize() const;
+    G3MedTableEntry*  GetMTE(G4int i) const;
     void Clear();
 
   private:

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3MedTable.cc,v 1.13 2001-07-16 15:38:20 gcosmo Exp $
+// $Id: G3MedTable.cc,v 1.14 2003-01-27 10:45:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, 27 Sep 99
@@ -55,6 +55,19 @@ void G3MedTable::put(G4int id, G4Material* material, G4MagneticField* field,
     = new G3MedTableEntry(id, material, field, limits, isvol);
   fMedVector->push_back(mte);
 }
+
+G3MedTableEntry* G3MedTable::GetMTE(G4int i) const
+{
+  if (i<0 || i>= G4int(fMedVector->size())) 
+    return 0;
+  
+  return (*fMedVector)[i];
+}    
+    
+G4int G3MedTable::GetSize() const
+{
+  return fMedVector->size();
+}    
 
 void G3MedTable::Clear()
 {
