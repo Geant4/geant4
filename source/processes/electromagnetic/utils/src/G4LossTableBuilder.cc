@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableBuilder.cc,v 1.15 2004-12-07 18:03:01 vnivanch Exp $
+// $Id: G4LossTableBuilder.cc,v 1.16 2004-12-07 18:16:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -59,13 +59,9 @@ void G4LossTableBuilder::BuildDEDXTable(G4PhysicsTable* dedxTable,
                                   const std::vector<G4PhysicsTable*>& list)
 {
   size_t n_processes = list.size();
-
-  G4cout << "np= " << n_processes << G4endl;
   if(1 >= n_processes) return;
 
   size_t n_vectors = dedxTable->length();
-  G4cout << "nv= " << n_vectors << G4endl;
-
   if(0 >= n_vectors) return;
 
   G4bool b;
@@ -80,9 +76,7 @@ void G4LossTableBuilder::BuildDEDXTable(G4PhysicsTable* dedxTable,
       G4double energy = pv->GetLowEdgeEnergy(j);
 
       for (size_t k=0; k<n_processes; k++) {
-
 	dedx += ((*(list[k]))[i])->GetValue(energy, b);
-	G4cout << "!!!! e= " << energy << "  dedx= " << dedx << G4endl;
       }
       pv->PutValue(j, dedx);
     }
