@@ -913,8 +913,8 @@ G4VParticleChange* G4hLowEnergyIonisationVI::AlongStepDoIt(
 
   // Deexcitation of ionised atoms
   edep = G4std::min(edep, eloss);  
-  G4double hMass = particle->GetMass();
-  G4double hMomentum = particle->GetTotalMomentum();
+  //  G4double hMass = particle->GetMass();
+  //  G4double hMomentum = particle->GetTotalMomentum();
   G4std::vector<G4DynamicParticle*>* newpart = 0;
 
   //  newpart = DeexciteAtom(material, kineticEnergy, edep, hMass, hMomentum);
@@ -1191,7 +1191,7 @@ G4VParticleChange* G4hLowEnergyIonisationVI::PostStepDoIt(
   size_t totalNumber  = 1;
   G4std::vector<G4DynamicParticle*>* secondaryVector = 0;
   G4DynamicParticle* aSecondary = 0;
-  G4ParticleDefinition* type = 0;
+  //  G4ParticleDefinition* type = 0;
 
   /*
   // Select atom and shell
