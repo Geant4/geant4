@@ -1,4 +1,4 @@
-# $Id: README,v 1.18 2004-06-13 13:35:12 daquinog Exp $
+# $Id: README,v 1.19 2004-06-18 10:15:16 daquinog Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -122,6 +122,8 @@ To remove the files created by swig ( *_wrap.cc, the corresponding
 .py files) use "gmake swigClean".
 To remove the directories of compiled code related to this example under 
 $G4WORKDIR/tmp/$G4SYSTEM/ use "gmake tiaraClean".
+To remove all the files created during the previous compilation, use
+"gmake clean_all". 
 
 
 3) Running the example:

@@ -1,4 +1,4 @@
-# $Id: envCommon.csh,v 1.9 2004-06-09 15:04:34 daquinog Exp $
+# $Id: envCommon.csh,v 1.10 2004-06-18 10:15:16 daquinog Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -6,7 +6,7 @@
 # environment variables according to the description in README.
 # -------------------------------------------------------------------
 
-# setup in case Anaphe is used --------------------------------------
+# setup in case PI is used --------------------------------------
 
 if (${?PI_BASE_DIR} == 1 && ${?SWIG_BASE_DIR} == 1) then
 
@@ -36,7 +36,7 @@ endif
   setenv SWIG_INCDIRS "-I${SWIG_BASE_DIR}/lib/swig-${SWIG_VERSION} -I${SWIG_BASE_DIR}/lib/swig-${SWIG_VERSION}/python"
   setenv SWIG ${SWIG_BASE_DIR}/bin/swig-${SWIG_VERSION}
 
-else   # not using Anaphe
+else   # not using PI
 
   echo "-- WARNING: histograms are not activated !"
   echo "            Either PI_BASE_DIR or SWIG_BASE_DIR are not set."
@@ -64,7 +64,7 @@ else   # not using Anaphe
     else 
       echo -- ERROR: could not find swig executable !
     endif
-  else    # environment not completed in case no Anaphe is used
+  else    # environment not completed in case no PI is used
     echo "-- ERROR: PYTHONVERSION or PYTHON_BASE_DIR or SWIG_BASE_DIR or SWIG_VERSION or CLHEP_BASE_DIR not set!"
     exit
   endif
