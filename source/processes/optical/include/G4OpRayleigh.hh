@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpRayleigh.hh,v 1.5 2001-07-11 10:08:22 gunter Exp $
+// $Id: G4OpRayleigh.hh,v 1.6 2001-08-31 16:44:46 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -87,7 +87,7 @@ public: // Without description
         // Constructors and Destructor
         ////////////////////////////////
  
-        G4OpRayleigh(const G4String& processName = "Rayleigh Scattering");
+        G4OpRayleigh(const G4String& processName = "OpRayleigh");
 
         // G4OpRayleigh(const G4OpRayleigh &right);
 
