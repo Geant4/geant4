@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoNuclearCrossSection.cc,v 1.5 2002-05-22 11:48:46 mkossov Exp $
+// $Id: G4PhotoNuclearCrossSection.cc,v 1.6 2002-05-28 13:37:04 mkossov Exp $
 // The lust update: M.V. Kossov, CERN/ITEP(Moscow) 17-June-02
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -1506,7 +1506,8 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
   }
   if(!r)                                // GDR part is not filled
   {
-    for(G4int k=1; k<nLA; k++) if(a<LA[k]) break;
+    G4int k=0;                          // !! To be good for different compilers !!
+    for(k=1; k<nLA; k++) if(a<LA[k]) break;
     if(k<1) k=1;                        // Extrapolation from the first bin (D/He)
     if(k>=nLA) k=nLA-1;                 // Extrapolation from the last bin (U)
     G4int     k1=k-1;

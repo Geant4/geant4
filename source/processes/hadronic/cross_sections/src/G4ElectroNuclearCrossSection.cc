@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.cc,v 1.8 2002-05-22 11:48:45 mkossov Exp $
+// $Id: G4ElectroNuclearCrossSection.cc,v 1.9 2002-05-28 13:37:03 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -2277,7 +2277,8 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
   }
   if(r<0)                               // Not a basic isotop is not filled
   {
-    for(G4int k=1; k<nN; k++) if(a<A[k]) break;
+    G4int k=0;                          // !! To be good for different compilers !!
+    for(k=1; k<nN; k++) if(a<A[k]) break;
     if(k<1) k=1;                        // Extrapolation from the first bin (D/He)
     if(k>=nN) k=nN-1;                   // Extrapolation from the last bin (U)
     G4int     k1=k-1;
