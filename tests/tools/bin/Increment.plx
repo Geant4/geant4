@@ -4,11 +4,19 @@
 #
 # Increment.plx
 #
-# update the source code then perform an incremental update of the 
-# libraries and executables but write a new stt(results) directory
-# then run the tests.
+# Extract your new bonsai.sdb and other files OnTest
+# update the source code (incrmentally if you wish).
+#
+# This script will then leave the tmp lib and bin directories in
+# place and prepare a new stt(results) directory.
+#
+# Then run the tests incrementally and gmake will only do what is
+# needed (maye).
+#
 
 $ActiveExamination="doit";
+undef($ActiveExamination);
+# ActiveExamination not coded below
 
 open(CONFIG,"OnTest") || die "Failed to open OnTest configuration file $! ";
 ($DevDir,$Tag)=split(' ',<CONFIG>);
@@ -30,6 +38,7 @@ while ( <TEMPLATE> ) {
     if ( /^%/) { next}
     ($rundir,$host,$platform,$option,@fiveargs)=split(' ');
     next if ( "$rundir" ne "$DevDir");
+#   next if ( "$host" eq "pcg4speed" );
     $G4SttWorkdir="/afs/cern.ch/sw/geant4/stt/$DevDir/$platform/$option";
     print "\nHost:      $host   \nWorkDir:      $G4SttWorkdir\n";
     $oldlink=`rsh $host "/bin/ls -l $G4SttWorkdir/stt"`;
@@ -44,6 +53,8 @@ while ( <TEMPLATE> ) {
         if ( "done" ne "$1" ) { 
             print "CHECK status $1 $G4SttWorkdir\n";
             system("rsh $host cat  $G4SttWorkdir/*.stat");
+            print "NEXT Please\n";
+            next;
         }
     } else {
         print "Previous status was not defined\n";
