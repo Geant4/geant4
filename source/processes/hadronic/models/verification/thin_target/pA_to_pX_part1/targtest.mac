@@ -1,0 +1,22 @@
+# $Id: targtest.mac,v 1.1 2003-05-27 13:44:44 hpw Exp $
+#
+# Macro file for "ppinc.cc"
+# 
+# /control/verbose 2
+/control/saveHistory
+/target/setTgtMat Calcium
+/target/setTgtThick 2.0 mm
+/target/setNumEvts 1000000
+# /target/setTgtRadius 5.0 cm
+/target/update 
+#
+/run/verbose 2
+/event/verbose 0
+/event/printModulo 10000
+/tracking/verbose 0
+# 
+# 800 MeV proton in the direction (0.,0.,1.)
+#
+/gun/particle proton
+/gun/energy 800 MeV
+/run/beamOn 1000000
