@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.93 2004-04-08 15:48:25 gbarrand Exp $
+# $Id: architecture.gmk,v 1.94 2004-04-09 10:54:13 gbarrand Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -229,7 +229,7 @@ XAWLIBS    := -lXaw
 #
 
 ifndef OIVHOME
-  OIVHOME  := /usr/local
+  OIVHOME  := /usr/local/Inventor
 endif
 ifndef OIVFLAGS
   OIVFLAGS  := -I$(OIVHOME)/include 
