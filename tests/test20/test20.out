@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (14-Dec-2001)
+                                (31-Jan-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 /run/verbose 2
@@ -271,14 +271,14 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.04s Sys=0.03s
+  User=0.07s Real=0.25s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=10s Real=11s Sys=0.18s
+  User=29s Real=34s Sys=0.17s
 # 
 /gun/energy 2 keV
 /gun/polarization 0. 1. 0.
@@ -292,7 +292,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1        0        0      -50         0  0.00155 0.000261  0.000261    Absorber LowEnPhotoElec
+    1        0        0      -50         0  0.00155  0.00672   0.00672    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
     :         0         0       -50   0.00045                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
@@ -307,14 +307,14 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0.02s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.2s Real=1.2s Sys=0s
+  User=3.1s Real=3.4s Sys=0.02s
 #
 /gun/energy 600 eV
 /gun/polarization 0. 0. 0.
@@ -328,18 +328,29 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0006        0        0         0    Absorber initStep
-    1        0        0      -50         0   0.0006 0.000556  0.000556    Absorber LowEnPhotoElec
+    1        0        0      -50         0 8.07e-05 0.000102  0.000102    Absorber LowEnPhotoElec
+    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
+    :         0         0       -50  0.000519                 e-
+    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50  0.000519        0        0         0    Absorber initStep
+    1        0        0      -50         0 0.000519 1.85e-05  1.85e-05    Absorber LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.69s Real=0.69s Sys=0s
+  User=1.8s Real=1.8s Sys=0s
 #
 /gun/energy 300 eV
 /gun/polarization 0. 0. 1.
@@ -353,18 +364,18 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0003        0        0         0    Absorber initStep
-    1        0        0      -50         0   0.0003 0.000261  0.000261    Absorber LowEnPhotoElec
+    1        0        0      -50         0   0.0003 0.000395  0.000395    Absorber LowEnPhotoElec
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.29s Real=0.29s Sys=0s
+  User=0.68s Real=0.74s Sys=0s
 #
 /calor/setAbsMat Lead      
 #====================
@@ -384,18 +395,18 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50      0.01        0        0         0    Absorber initStep
-    1        0        0      -50         0     0.01   0.0215    0.0215    Absorber LowEnPhotoElec
+    1        0        0      -50         0     0.01    0.007     0.007    Absorber LowEnPhotoElec
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=7.9s Real=8s Sys=0.03s
+  User=23s Real=24s Sys=0.09s
 # 
 /gun/energy 2 keV
 /gun/polarization 0. 1. 0.
@@ -409,9 +420,9 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000634 0.000471  0.000471    Absorber LowEnPhotoElec
+    1        0        0      -50         0 0.000412 0.000438  0.000438    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0       -50   0.00137                 e-
+    :         0         0       -50   0.00159                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
 
 *********************************************************************************************************
@@ -419,43 +430,31 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50   0.00137        0        0         0    Absorber initStep
-    1 1.97e-07 2.73e-06      -50  0.000852 0.000235  5.3e-06   5.3e-06    Absorber LowEnergyIoni
+    0        0        0      -50   0.00159        0        0         0    Absorber initStep
+    1 2.09e-06 -5.16e-06      -50   0.00102 0.000214 1.33e-05  1.33e-05    Absorber LowEnergyIoni
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :  1.97e-07  2.73e-06       -50  0.000278                 e-
+    :  2.09e-06 -5.16e-06       -50  0.000356                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    2 -8.99e-07 3.55e-06      -50  0.000287 0.000278 1.08e-05  1.61e-05    Absorber LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  2 ---------------
-    : -8.99e-07  3.55e-06       -50  0.000287                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    3 5.11e-07 3.89e-06      -50         0 0.000287 5.45e-06  2.15e-05    Absorber LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 2
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 -8.99e-07 3.55e-06      -50  0.000287        0        0         0    Absorber initStep
-    1 -7.06e-07 2.03e-06      -50         0 0.000287 5.45e-06  5.45e-06    Absorber LowEnergyIoni
+    2 1.96e-06 -5.36e-06      -50         0  0.00102 3.59e-05  4.92e-05    Absorber LowEnergyIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 1.97e-07 2.73e-06      -50  0.000278        0        0         0    Absorber initStep
-    1 -2.58e-07 2.88e-06      -50         0 0.000278 5.15e-06  5.15e-06    Absorber LowEnergyIoni
+    0 2.09e-06 -5.16e-06      -50  0.000356        0        0         0    Absorber initStep
+    1 2.78e-06 -3.98e-06      -50         0 0.000356 7.78e-06  7.78e-06    Absorber LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.02s Sys=0.01s
+  User=0s Real=0.02s Sys=0.02s
 /tracking/verbose 0
 /run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.4s Real=1.4s Sys=0.01s
+  User=4.2s Real=4.4s Sys=0s
 #
 /gun/energy 600 eV
 /gun/polarization 0. 0. 0.
@@ -469,18 +468,29 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0006        0        0         0    Absorber initStep
-    1        0        0      -50         0   0.0006 2.49e-05  2.49e-05    Absorber LowEnPhotoElec
+    1        0        0      -50         0 0.000148 2.66e-05  2.66e-05    Absorber LowEnPhotoElec
+    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
+    :         0         0       -50  0.000452                 e-
+    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50  0.000452        0        0         0    Absorber initStep
+    1        0        0      -50         0 0.000452 1.11e-05  1.11e-05    Absorber LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.05s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.1s Real=1.1s Sys=0s
+  User=3.1s Real=3.4s Sys=0s
 #
 /gun/energy 300 eV
 /gun/polarization 0. 0. 1.
@@ -494,18 +504,18 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0003        0        0         0    Absorber initStep
-    1        0        0      -50         0   0.0003 1.63e-05  1.63e-05    Absorber LowEnPhotoElec
+    1        0        0      -50         0   0.0003 1.25e-05  1.25e-05    Absorber LowEnPhotoElec
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.35s Real=0.35s Sys=0s
+  User=0.94s Real=0.96s Sys=0s
 #
 /calor/setAbsMat Water
 #======================
@@ -525,9 +535,9 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50      0.01        0        0         0    Absorber initStep
-    1        0        0    -49.1         0 0.000537    0.855     0.855    Absorber LowEnPhotoElec
+    1        0        0    -46.3         0 0.000537     3.69      3.69    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0     -49.1   0.00946                 e-
+    :         0         0     -46.3   0.00946                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
 
 *********************************************************************************************************
@@ -535,19 +545,19 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0    -49.1   0.00946        0        0         0    Absorber initStep
-    1        0        0    -49.1         0  0.00946  0.00393   0.00393    Absorber LowEnergyIoni
+    0        0        0    -46.3   0.00946        0        0         0    Absorber initStep
+    1        0        0    -46.3         0  0.00946  0.00393   0.00393    Absorber LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0.02s Real=0.05s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=7.8s Real=7.9s Sys=0.04s
+  User=24s Real=27s Sys=0.03s
 # 
 /gun/energy 2 keV
 /gun/polarization 0. 1. 0.
@@ -561,7 +571,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000537   0.0231    0.0231    Absorber LowEnPhotoElec
+    1        0        0      -50         0 0.000537   0.0209    0.0209    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
     :         0         0       -50   0.00146                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
@@ -572,18 +582,30 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50   0.00146        0        0         0    Absorber initStep
-    1        0        0      -50         0  0.00146 0.000121  0.000121    Absorber LowEnergyIoni
+    1 3.04e-05 -7.99e-06      -50  0.000778 0.000193 5.86e-05  5.86e-05    Absorber LowEnergyIoni
+    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
+    :  3.04e-05 -7.99e-06       -50  0.000492                 e-
+    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
+    2 1.95e-05 -1.25e-05      -50         0 0.000778 4.05e-05  9.91e-05    Absorber LowEnergyIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 3.04e-05 -7.99e-06      -50  0.000492        0        0         0    Absorber initStep
+    1 2.78e-05 -4.24e-06      -50         0 0.000492 1.92e-05  1.92e-05    Absorber LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0.01s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.5s Real=1.5s Sys=0s
+  User=4.3s Real=4.7s Sys=0s
 #
 /gun/energy 600 eV
 /gun/polarization 0. 0. 0.
@@ -597,18 +619,18 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0006        0        0         0    Absorber initStep
-    1        0        0      -50         0   0.0006 0.000629  0.000629    Absorber LowEnPhotoElec
+    1        0        0      -50         0   0.0006 3.23e-05  3.23e-05    Absorber LowEnPhotoElec
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.33s Real=0.33s Sys=0s
+  User=0.82s Real=0.85s Sys=0s
 #
 /gun/energy 300 eV
 /gun/polarization 0. 0. 1.
@@ -622,18 +644,18 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0003        0        0         0    Absorber initStep
-    1        0        0      -50         0   0.0003  0.00266   0.00266    Absorber LowEnPhotoElec
+    1        0        0      -50         0   0.0003  0.00182   0.00182    Absorber LowEnPhotoElec
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.27s Real=0.27s Sys=0s
+  User=0.64s Real=1.1s Sys=0s
 #
 /gun/particle gamma
 #------------------
@@ -655,14 +677,14 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.4s Real=1.4s Sys=0.01s
+  User=3.4s Real=3.5s Sys=0.01s
 /gun/energy 100 MeV
 /run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.57s Real=0.57s Sys=0s
+  User=1.4s Real=1.4s Sys=0s
 /calor/setAbsMat Lead
 #======================
 /tracking/verbose 0
@@ -672,14 +694,14 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=8.8s Real=9.1s Sys=0.27s
+  User=19s Real=23s Sys=0.31s
 /gun/energy 100 MeV
 /run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=4.2s Real=4.2s Sys=0.1s
+  User=9.7s Real=10s Sys=0.06s
 /calor/setAbsMat Water
 #======================
 /tracking/verbose 0
@@ -689,14 +711,14 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.63s Real=0.63s Sys=0s
+  User=1.6s Real=2s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.44s Real=0.44s Sys=0s
+  User=1.1s Real=1.2s Sys=0s
 G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.
@@ -706,38 +728,36 @@ UserPrimaryGenerator deleted.
 G4SDManager deleted.
 LowEnBrem for e- in Aluminium : 4 calls
 LowEnBrem for e- in Lead : 4 calls
-LowEnConversion for gamma in Aluminium : 452 calls
-LowEnConversion for gamma in Lead : 1498 calls
-LowEnConversion for gamma in Water : 123 calls
-LowEnPhotoElec for gamma in Air : 21 calls
-LowEnPhotoElec for gamma in Aluminium : 4066 calls
-LowEnPhotoElec for gamma in Lead : 4012 calls
-LowEnPhotoElec for gamma in Water : 4020 calls
-LowEnRayleigh for gamma in Aluminium : 23 calls
+LowEnConversion for gamma in Aluminium : 445 calls
+LowEnConversion for gamma in Lead : 1499 calls
+LowEnConversion for gamma in Water : 117 calls
+LowEnPhotoElec for gamma in Air : 17 calls
+LowEnPhotoElec for gamma in Aluminium : 4068 calls
+LowEnPhotoElec for gamma in Lead : 4011 calls
+LowEnPhotoElec for gamma in Water : 4018 calls
+LowEnRayleigh for gamma in Aluminium : 24 calls
 LowEnRayleigh for gamma in Lead : 40 calls
-LowEnRayleigh for gamma in Water : 37 calls
-LowEnergyIoni for e- in Air : 49 calls
-LowEnergyIoni for e- in Aluminium : 14164 calls
-LowEnergyIoni for e- in Lead : 6059 calls
-LowEnergyIoni for e- in Water : 3198 calls
-Transportation for e+ in Air : 1414 calls
-Transportation for e- in Air : 25950 calls
-Transportation for e- in Aluminium : 527 calls
-Transportation for e- in Lead : 8433 calls
-Transportation for e- in Water : 65 calls
-Transportation for gamma in Air : 5270 calls
-Transportation for gamma in Aluminium : 2040 calls
-Transportation for gamma in Lead : 2293 calls
-Transportation for gamma in Water : 2012 calls
-annihil for e+ in Aluminium : 37 calls
-annihil for e+ in Lead : 617 calls
-annihil for e+ in Water : 5 calls
-msc for e- in Aluminium : 47 calls
-msc for e- in Lead : 88 calls
-polarLowEnCompt for gamma in Air : 5 calls
-polarLowEnCompt for gamma in Aluminium : 3631 calls
-polarLowEnCompt for gamma in Lead : 37955 calls
-polarLowEnCompt for gamma in Water : 852 calls
+LowEnRayleigh for gamma in Water : 42 calls
+LowEnergyIoni for e- in Air : 23 calls
+LowEnergyIoni for e- in Aluminium : 14150 calls
+LowEnergyIoni for e- in Lead : 6094 calls
+LowEnergyIoni for e- in Water : 3200 calls
+Transportation for e+ in Air : 1387 calls
+Transportation for e- in Air : 38067 calls
+Transportation for e- in Aluminium : 1 calls
+Transportation for gamma in Air : 5320 calls
+Transportation for gamma in Aluminium : 2003 calls
+Transportation for gamma in Lead : 2006 calls
+Transportation for gamma in Water : 2006 calls
+annihil for e+ in Aluminium : 33 calls
+annihil for e+ in Lead : 638 calls
+annihil for e+ in Water : 3 calls
+msc for e- in Aluminium : 45 calls
+msc for e- in Lead : 67 calls
+polarLowEnCompt for gamma in Air : 8 calls
+polarLowEnCompt for gamma in Aluminium : 3646 calls
+polarLowEnCompt for gamma in Lead : 38974 calls
+polarLowEnCompt for gamma in Water : 893 calls
 EventManager deleted.
 UImanager deleted.
 StateManager deleted.
