@@ -39,7 +39,7 @@ ifeq ($(G4SYSTEM),HP-aCC)
     OGLLIBS   += -L/opt/graphics/common/lib -lXwindow -lhpgfx -lXhp11 -ldld
   endif
   CPPFLAGS += -DG4NOT_ISO_DELETES
-  CPPFLAGS += -I$(G4STLINC)/wrappers/$(G4SYSTEM)
+  CPPFLAGS += -I$(G4BASE)/global/management/include/g4std/wrappers/$(G4SYSTEM)
   ifdef G4USE_OSPACE
     CPPFLAGS += -DOS_HPUX_10_20 -DOS_NEW_CHECK -DOS_STL_ASSERT
     CPPFLAGS += -DOS_NO_WSTRING -DOS_NO_ALLOCATORS -D__HPACC_NOEH

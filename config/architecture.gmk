@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.73 2001-08-06 07:22:25 gcosmo Exp $
+# $Id: architecture.gmk,v 1.74 2001-10-11 14:34:33 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -200,7 +200,6 @@ endif
 # Native STL is the default
 #
 CPPFLAGS += -DG4USE_STL
-G4STLINC := $(G4BASE)/global/STLInterface
 
 # Path to ObjectSpace STL (or STLport <- only test for Win/NT)
 #
@@ -283,7 +282,7 @@ endif
 
 # Variables for implicit rules, etc., as suggested in GNU Make manual...
 #
-CPPFLAGS  += -Iinclude -I$(G4STLINC)
+CPPFLAGS  += -Iinclude 
 CPPFLAGS  += -I$(CLHEP_INCLUDE_DIR)
 
 # Positional qualifiers in action...

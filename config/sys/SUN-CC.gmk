@@ -46,7 +46,6 @@ ifeq ($(G4SYSTEM),SUN-CC)
   CPPFLAGS += -DSOCKET_IRIX_SOLARIS
   LOADLIBS += -L/usr/lib -lsocket -lnsl
   CPPFLAGS += -DG4NOT_ISO_DELETES
-  CPPFLAGS += -I$(G4STLINC)/wrappers/$(G4SYSTEM)
   ifdef G4ODBMS
     G4DDLX_FLAGS += -noline
   endif
