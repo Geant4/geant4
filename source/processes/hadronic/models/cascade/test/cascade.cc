@@ -23,7 +23,7 @@
 #include "vector"
 #include "G4ThreeVector.hh"
 #include "G4NucleiModel.hh"
-
+#include "G4LorentzConvertor.hh"
 
 typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 typedef G4std::vector<G4InuclNuclei>::iterator nucleiIterator;
@@ -44,9 +44,11 @@ G4int testINCAll(G4int, G4int, G4double, G4double, G4double);
 G4int printData(G4int event);
 G4int test();
 
+  G4int verboseLevel = 1;
+
 int main(int argc, char **argv ) {
 
-  G4int verboseLevel = 1;
+
 
   if (verboseLevel > 1) {
     G4cout << " >>> cascade::main " << G4endl;
@@ -90,16 +92,16 @@ G4int testINCEvap() {
 
 G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A, G4double Z) {
 
-  G4int verboseLevel = 1;
+  G4int verboseLevel = 3;
 
   if (verboseLevel > 1) {
     G4cout << " >>> testINCAll() " << G4endl;
   }
 
-  G4double eMin  = 0.5;   // minimun energy for bullet
-  G4double eMax  = 5.5;   // maximum energy for bullet
+  //G4double eMin  = 0.5;   // minimun energy for bullet
+  //G4double eMax  = 5.5;   // maximum energy for bullet
   G4int    eBins = 1;     // bullet energy bins
-  G4double eStep = (eMax - eMin) / eBins;
+  //  G4double eStep = (eMax - eMin) / eBins;
 
   for(G4int e = 0; e < eBins; e++) { // Scan with different energy
  
@@ -114,20 +116,32 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
     G4BigBanger*                     bigb = new G4BigBanger;
     G4InuclCollider*             collider = new G4InuclCollider(colep, cascade, noneq, eqil, fiss, bigb);
 
-    // Bullet / Target initialisation
-    G4double bulletEnergy = eMin + eStep * e; 
+    //    // Bullet / Target initialisation
+    //G4double bulletEnergy = eMin + eStep * e; 
 
-    if (verboseLevel > 2) {
-      G4cout << "Bullet E =" << bulletEnergy << " GeV" << endl;
-    };
+    //    if (verboseLevel > 2) {
+    //  G4cout << "Bullet E =" << bulletEnergy << " GeV" << endl;
+   //};
 
     // Set target
     G4std::vector<G4double> targetMomentum(4, 0.0);
 
     G4std::vector<G4double>  bulletMomentum(4, 0.0);
+
     bulletMomentum[3] = momZ;
 
-    G4InuclParticle* bull = new G4InuclElementaryParticle(momZ, 1);
+    //    G4InuclParticle* bull = new G4InuclElementaryParticle(bulletMomentum, bulletType);
+    G4InuclElementaryParticle* bull = new G4InuclElementaryParticle(bulletMomentum, bulletType);
+
+    if (verboseLevel > 2) {
+      G4cout << "Bullet:  " << G4endl;  
+      bull->printParticle();
+      G4double bullMass = bull->getParticleMass(bulletType);
+      G4double  bulleTot   = sqrt(bulletMomentum[1] * bulletMomentum[1] + bulletMomentum[2] * bulletMomentum[2] +
+				  bulletMomentum[3] * bulletMomentum[3] + bullMass * bullMass) * GeV;
+      G4cout << "Bullet total energy: " << bulleTot / GeV  << "GeV"<< G4endl;  
+    }
+
     G4InuclNuclei* targ = NULL;
     G4InuclParticle* targIsH = NULL;
 
@@ -136,6 +150,12 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
     if ( !(G4int(A) == 1) ) {
       targ = new G4InuclNuclei(targetMomentum, A, Z);
       targ->setEnergy();      
+
+      if (verboseLevel > 1) {
+	G4cout << "Target:  " << G4endl;  
+targ->printParticle();
+      }
+
     };
 
     //:::::::::::::::
@@ -146,16 +166,26 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
 
     for (G4int i = 1; i <= nCollisions; i++) {
 
-
-  
       if (verboseLevel > 3) {
 	G4cout << "collision " << i << G4endl; 
       }
 
       if ( G4int(A) == 1 ) {
-    targIsH = new G4InuclElementaryParticle((model->generateNucleon(1, 1)).getMomentum(), 1); // get momentum from H model
+	targIsH = new G4InuclElementaryParticle((model->generateNucleon(1, 1)).getMomentum(), 1); // get momentum from H model
+
+      if (verboseLevel > 1) {
+	G4cout << "Target:  " << G4endl;  
+targIsH->printParticle();
+      }
+
+
+      G4int s = 0;
+
 	output = collider->collide(bull, targIsH);
+	s = output.getOutgoingParticles().size();
+
       } else {
+
 	output = collider->collide(bull, targ); 
       }
       printData(i);
@@ -177,9 +207,9 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
 
 G4int printData(G4int i) {
 
-  G4int verboseLevel = 1;
+  G4int verboseLevel = 3;
 
-  if (verboseLevel > 2) {
+  if (verboseLevel > 4) {
     G4cout << " After Cascade " << G4endl;
     output.printCollisionOutput();
   }
@@ -187,6 +217,9 @@ G4int printData(G4int i) {
   // Convert Bertini data to Geant4 format
 
   G4std::vector<G4InuclNuclei> nucleiFragments = output.getNucleiFragments();
+  G4double eTot = 0;
+  G4double eKinTot = 0;
+  G4double ekin = 0;
 
   if(!nucleiFragments.empty()) { 
     nucleiIterator ifrag;
@@ -195,7 +228,7 @@ G4int printData(G4int i) {
     for(ifrag = nucleiFragments.begin(); ifrag != nucleiFragments.end(); ifrag++) {
       G4std::vector<G4double> m = ifrag->getMomentum();
       G4ThreeVector mom(m[1], m[2], m[3]);    
-      G4double ekin = ifrag->getKineticEnergy() * GeV;
+      ekin = ifrag->getKineticEnergy() * GeV;
 
       G4int type = 0; // :::
 
@@ -217,20 +250,26 @@ G4int printData(G4int i) {
       }
 	
       if (verboseLevel > 0) {
-	cout.precision(4);
+	cout.precision(3);
 
 	G4cout << 
-	  setw(6)  << i            << 
-	  setw(6)  << type         << 
-	  setw(11) << ekin         << 
-	  setw(11) << mom[0] * GeV << 
-	  setw(11) << mom[1] * GeV << 
-	  setw(11) << mom[2] * GeV << 
+	  setw(8)  << i            << 
+	  setw(8)  << type         << 
+	  setw(13) << ekin / GeV   << 
+	  setw(13) << mom[0]       << 
+	  setw(13) << mom[1]       << 
+	  setw(13) << mom[2]       << 
 	  setw(13) << fA           << 
 	  setw(13) << fZ           << 
 	  setw(13) << fEx          << G4endl;
       }
+   G4double particleMass = ifrag->getMass();
+
+eTot   += sqrt(mom[0] * mom[0] + mom[1] * mom[1] +
+		       mom[2] * mom[2] + particleMass * particleMass) * GeV;
+    eKinTot += ekin;
     }
+
   }
 
   G4std::vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
@@ -239,25 +278,36 @@ G4int printData(G4int i) {
 
     for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
       G4std::vector<G4double> mom = ipart->getMomentum();
-      G4double ekin = ipart->getKineticEnergy() * GeV;
+      ekin = ipart->getKineticEnergy() * GeV;
       G4int type = ipart->type();
 
       if (verboseLevel > 0) {
 	cout.precision(4);
 
 	G4cout << 
-	  setw(6)  << i            << 
-	  setw(6)  << type         << 
-	  setw(11) << ekin         << 
-	  setw(11) << mom[0] * GeV << 
-	  setw(11) << mom[1] * GeV << 
-	  setw(11) << mom[2] * GeV << 
+	  setw(8)  << i            << 
+	  setw(8)  << type         << 
+	  setw(13) << ekin / GeV   << 
+	  setw(13) << mom[1]       << 
+	  setw(13) << mom[2]       << 
+	  setw(13) << mom[3]       << 
 	  setw(13) << 0            << 
 	  setw(13) << 0            << 
 	  setw(13) << 0.0          << G4endl;
       }
+
+eTot   += sqrt(mom[0] * mom[0]) * GeV;
+    eKinTot += ekin;
     }
+
   }
+
+      if (verboseLevel > 2) {
+
+	G4cout << "Total energy           : " << eTot / GeV << "GeV" << G4endl; 
+	G4cout << "Total kinetice energy  : " << eKinTot / GeV << "GeV" << G4endl; 
+
+     }
 
   return 0;
 };
@@ -276,63 +326,3 @@ G4int test() {
 
   return 0;
 };
-
-//  G4int testINC(G4int nCollisions, G4int bulletType, G4double momZ, G4double A, G4double Z) {
-//    G4int verboseLevel = 1; // eguals 1 for data file production, 2 for testing, 3 all
-
-//    if (verboseLevel > 1) {
-//      G4cout << " >>> testINC" << G4endl;
-//    }
-
-//    G4CollisionOutput TRFoutput;
-
-//    G4InuclParticle* bullet = new G4InuclElementaryParticle(momZ, bulletType); // momentumBullet, bulletType 
-
-//    // Set target
-//    G4std::vector<G4double> targetMomentum(4, 0.0);
-
-//      G4InuclNuclei*   target  = NULL;
-//      G4InuclParticle* targIsH = NULL;
-
-//      if ( G4int(A) == 1 ) {
-//        targIsH = new G4InuclElementaryParticle(0.0, 1);     
-//      } else { 
-//        target = new G4InuclNuclei(0.0, A, Z);
-//        target->setEnergy();
-//      }
-
-//    // Resigister collider
-//    G4ElementaryParticleCollider* collider = new G4ElementaryParticleCollider;
-//    G4IntraNucleiCascader*        cascader = new G4IntraNucleiCascader;
- 
-//    cascader->setElementaryParticleCollider(collider);
-//    cascader->setInteractionCase(1); // Interaction type is particle with nuclei.
-
-//    if (verboseLevel > 1) {
-//      G4cout << 
-//        setw(6)  << "#ev"        << 
-//        setw(6)  << "part"       << 
-//        setw(11) << "Ekin [GeV]" << 
-//        setw(11) << "momx"       << 
-//        setw(11) << "momy"       << 
-//        setw(11) << "momz"       << G4endl;
-//    }
-
-//    for (G4int i = 1; i <= nCollisions; i++) {
-
-//      if (verboseLevel > 0) {
-//        G4cout << "collision " << i << G4endl; 
-//      }
-
-//      if ( A == 1 ) {
-//        output = cascader->collide(bullet, targIsH); // standard method
-//      } else {
-//        cout << "not H";
-//        output = cascader->collide(bullet, target); // Make INC    
-//      }
-    
-//      printData(i);
-//    }
-
-//    return 0;
-//  };
