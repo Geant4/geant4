@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.8 2004-12-13 16:11:53 gcosmo Exp $
+# $Id: GNUmakefile,v 1.9 2004-12-16 09:15:19 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -18,7 +18,7 @@ all:  had_list lib bin
 
 had_list:
 	@echo "This example uses the QGSP 'educated guess physics list'"
-	@echo "(see $G4INSTALL/physics_lists/hadronic)."
+	@echo "(see $(G4INSTALL)/physics_lists/hadronic)."
 	@echo "The hadronic physics lists should be compiled before"
 	@echo "compiling this example."
 
