@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24.11.2004 - Henrique Araujo, tag cosmicray_charging-V06-02-01
+             Migrated to cmath
+             Solved some solid conficts
+
 10.08.2004 - Henrique Araujo, tag cosmicray_charging-V06-02-00
              Removed call by pointer of hadronics classes
              Added MuNuclear interaction
