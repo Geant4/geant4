@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.cc,v 1.14 2004-12-08 17:26:27 gcosmo Exp $
+// $Id: HepPolyhedron.cc,v 1.15 2004-12-10 17:48:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -355,7 +355,7 @@ void HepPolyhedron::SetSideFacets(int ii[4], int vv[4],
 {
   int k1, k2, k3, k4;
   
-  if (std::abs((double)(dphi-M_PI)) < perMillion) {          // half a circle
+  if (std::abs((double)(dphi-pi)) < perMillion) {          // half a circle
     for (int i=0; i<4; i++) {
       k1 = ii[i];
       k2 = (i == 3) ? ii[0] : ii[i+1];
@@ -430,7 +430,7 @@ void HepPolyhedron::RotateAroundZ(int nstep, double phi, double dphi,
  *                                                                     *
  ***********************************************************************/
 {
-  static double wholeCircle   = 2*M_PI;
+  static double wholeCircle   = twopi;
     
   //   S E T   R O T A T I O N   P A R A M E T E R S
 
@@ -1494,7 +1494,7 @@ HepPolyhedronCons::HepPolyhedronCons(double Rmn1,
  *                                                                     *
  ***********************************************************************/
 {
-  static double wholeCircle=2*M_PI;
+  static double wholeCircle=twopi;
 
   //   C H E C K   I N P U T   P A R A M E T E R S
 
@@ -1596,7 +1596,7 @@ HepPolyhedronPgon::HepPolyhedronPgon(double phi,
 {
   //   C H E C K   I N P U T   P A R A M E T E R S
 
-  if (dphi <= 0. || dphi > 2*M_PI) {
+  if (dphi <= 0. || dphi > twopi) {
     std::cerr
       << "HepPolyhedronPgon/Pcon: wrong delta phi = " << dphi
       << std::endl;
@@ -1690,28 +1690,28 @@ HepPolyhedronSphere::HepPolyhedronSphere(double rmin, double rmax,
 {
   //   C H E C K   I N P U T   P A R A M E T E R S
 
-  if (dphi <= 0. || dphi > 2*M_PI) {
+  if (dphi <= 0. || dphi > twopi) {
     std::cerr
       << "HepPolyhedronSphere: wrong delta phi = " << dphi
       << std::endl;
     return;
   }    
 
-  if (the < 0. || the > M_PI) {
+  if (the < 0. || the > pi) {
     std::cerr
       << "HepPolyhedronSphere: wrong theta = " << the
       << std::endl;
     return;
   }    
   
-  if (dthe <= 0. || dthe > M_PI) {
+  if (dthe <= 0. || dthe > pi) {
     std::cerr
       << "HepPolyhedronSphere: wrong delta theta = " << dthe
       << std::endl;
     return;
   }    
 
-  if (the+dthe > M_PI) {
+  if (the+dthe > pi) {
     std::cerr
       << "HepPolyhedronSphere: wrong theta + delta theta = "
       << the << " " << dthe
@@ -1730,7 +1730,7 @@ HepPolyhedronSphere::HepPolyhedronSphere(double rmin, double rmax,
   //   P R E P A R E   T W O   P O L Y L I N E S
 
   int ns = (GetNumberOfRotationSteps() + 1) / 2;
-  int np1 = int(dthe*ns/M_PI+.5) + 1;
+  int np1 = int(dthe*ns/pi+.5) + 1;
   if (np1 <= 1) np1 = 2;
   int np2 = rmin < perMillion ? 1 : np1;
 
@@ -1788,7 +1788,7 @@ HepPolyhedronTorus::HepPolyhedronTorus(double rmin,
 {
   //   C H E C K   I N P U T   P A R A M E T E R S
 
-  if (dphi <= 0. || dphi > 2*M_PI) {
+  if (dphi <= 0. || dphi > twopi) {
     std::cerr
       << "HepPolyhedronTorus: wrong delta phi = " << dphi
       << std::endl;
@@ -1812,7 +1812,7 @@ HepPolyhedronTorus::HepPolyhedronTorus(double rmin,
   zz = new double[np1+np2];
   rr = new double[np1+np2];
 
-  double a = 2*M_PI/np1;
+  double a = twopi/np1;
   double cosa, sina;
   for (int i=0; i<np1; i++) {
     cosa  = std::cos(i*a);

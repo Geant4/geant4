@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBStubesector.cc,v 1.8 2004-12-07 08:42:25 gcosmo Exp $
+// $Id: G4NURBStubesector.cc,v 1.9 2004-12-10 17:48:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,9 +47,9 @@ G4NURBStubesector::G4NURBStubesector(G4double r, G4double R,
 {  
   // check angles
   G4double deltaPHI = PHI2-PHI1;
-  while (deltaPHI <= 0) { PHI2 += 2*M_PI; deltaPHI += 2*M_PI; };
+  while (deltaPHI <= 0) { PHI2 += twopi; deltaPHI += twopi; };
 
-  G4int f = (int)floor(deltaPHI / (M_PI_2));  //number of pi/2 arcs
+  G4int f = (int)floor(deltaPHI / (halfpi));  //number of pi/2 arcs
 
   const G4double mr = (r+R)/2;
 
@@ -82,7 +82,7 @@ G4NURBStubesector::G4NURBStubesector(G4double r, G4double R,
   G4double  srcAngle = PHI1;
   G4double  deltaAngleo2;
 
-  G4double destAngle = M_PI_2 + PHI1;
+  G4double destAngle = halfpi + PHI1;
 
   for(; f > 0; f--)
   {
@@ -119,7 +119,7 @@ G4NURBStubesector::G4NURBStubesector(G4double r, G4double R,
 
     // prepare next arc
     srcAngle = destAngle;
-    destAngle += M_PI_2;
+    destAngle += halfpi;
   }
 
   // f == 0, final Arc
@@ -211,8 +211,8 @@ G4NURBStubesector::DecideNbrCtrlPts(G4double PHI1, G4double PHI2)
 {
   // check angles
   G4double deltaPHI = PHI2-PHI1;
-  while (deltaPHI <= 0) { PHI2 += 2*M_PI; deltaPHI += 2*M_PI; }
-  G4double k = deltaPHI / (M_PI_2);
+  while (deltaPHI <= 0) { PHI2 += twopi; deltaPHI += twopi; }
+  G4double k = deltaPHI / (halfpi);
 
   //    G4cerr << " k " << k << G4endl;
   //    G4cerr << " fk " << std::floor(k) << G4endl;
