@@ -10,8 +10,8 @@ INC model had been implemented in several codes such as HETC \cite{alsmiller90}.
 Our model is based on re-engineering of INUCL code  \cite{titarenko99a}.
 Models included are Bertini intra-nuclear cascade model with exitons, pre-equilibrium model, simple nucleus explosion model, 
 fission model, and evaporation model. 
-
-Fast phase ($10^{-23} -- 10^{-22}$) of initial INC results to highly exited nucleus, and possible fission and pre-equilibrium emission. A slower $10^-18 -- 10^-16$ compound nucleus phase follows with evaportaion.
+A fast phase ($10^{-23} - 10^{-22}$) of INC results to highly exited nucleus, and is followed possible by fission and pre-equilibrium emission. 
+A slower $10^-18 - 10^-16$ compound nucleus phase follows with evaportaion.
 
 %Protons and neurons are assumed to have a zero-temperature ::: Fermi distribution. Hence, their kinetic energy range from zero to the zero-temperature Fermi energies calculated from the dencity of nucleids in ecah region.
 %range of projectiles allowed p, n, pi and nuclei.
@@ -37,7 +37,7 @@ Then conformity with the energy - conservation law is checked.
 % \item the products of the interaction are tracked trough the regions  until the energy drops below a cut-off energy.
 % \end{itemize}
 
-In the following sections we give the overview of submodel basic features.
+%In the following sections we give the overview of submodel basic features.
 
 %Originally the INUCL code was published in 1983 \cite{stepanov}.
 %Comprison of results between INCUL and LAHET, CEM95, HETC, CASCADE,
@@ -45,38 +45,36 @@ In the following sections we give the overview of submodel basic features.
 
 \subsection{Model limits}
 
-
+Reactions from 100~MeV to 5~GeV energy are treated for proton, neutron, pions, photon and nuclear isotopes.
 Range of targets allowed is arbitrary.
-Reactions from $\approx$ 100~MeV to $\approx$ 5~GeV energy are treated for proton, neutron, pions, photon and nuclear isotopes.
 
-The necessary condition of validity og the INC model is $\lambda_{B} / v << \tau_{c} << \Delta t$, 
+
+The necessary condition of validity of the INC model is $\lambda_{B} / v << \tau_{c} << \Delta t$, 
 where $\delta_{B}$ is the de Broglie wavelenth of the nucleons, v is the average relative N-N velocity and $\Delta t$ is the time interval between collisions.
-
 At energies higher than $\approx$ 10 GeV) the INC picture breaks down, 
-also physical foundation comes approximate at energies less than $\approx 200 MeV$, and needs to be supported with pre-quilibrium model.
+also physical foundation comes approximate at energies less than $200 MeV$, and needs to be supported with pre-quilibrium model.
 
 \subsection{Intra nuclear cascade model}
 
 Basic steps of the INC model are summarised below:
 
 \begin{enumerate}
-\item The spatial point where the incident particle enters selcted uniformly over the projected area of the nucleus.
+\item The spatial point, where the incident particle enters, is selected uniformly over the projected area of the nucleus.
 \item Total particle-particle crossections and region-depenent nucleon densities are used to select a path lenght for the projectile particle.
 \item The momentum of the struck nucleon, the type of reaction and four momentum of the reaction products are determined.
 \item Exiton model is updated as the cascade proceeds.
 \item If Pauli exclusion principle allows and $E_{particle} > E_{cutoff}$, step (2) is performed to transport the products.
-\item After INC, the residual excitation energy of the resulting nucleus (A', Z') are used as input for non-equilibrim model.
 \end{enumerate}
 
-In the code the nucleus is composed of three consentric spheres in all cases,
- exept for Hydrogen (H$_1^1$), in which case the direct particle-particle collision is performed.
-\subsection{Nuclei model}
+After INC, the residual excitation energy of the resulting nucleus (A', Z') are used as input for non-equilibrium model.
 
+\subsection{Nuclei model}
 
 \subsubsection{Layers}
 
-Bertini INC is based on layered nuclei model. Our implementation
-consists of three concentric spheres, each with uniform density of neutrons and protons.
+In the code the nucleus is composed of three consentric spheres in all cases,
+ exept for Hydrogen, in which case the direct particle-particle collision is performed.
+Our implementation consists of three concentric spheres, each with uniform density of neutrons and protons.
 Nucleon  are supposed to to move in a radius-dependent well which incorporates both muclear and Coulomb effects.
 
 %[Nuclear radius]
@@ -105,7 +103,6 @@ Nuclear density effects are recalculated after each step.
 Impulse distribution
 
 Distribution of potential energy.
-
 
 %[Mass formula]
 Nucleons binding energies (BE) are calculated using mass formula.
@@ -277,15 +274,14 @@ Angles after collisions are sampled from experimental differential cross section
 
 Path lengths of nucleons in the nucleus are sampled according to the local density and to free N-N cross sections.
 %Total inelastic cross section has to be taken from outside to normalize all data. 
-% \item Total reaction cross-sections [mbarn] were calculated by J.R. Letaw's formulae 
-%$45 A^0.7 (1+0.016 sin(5.3-2.63 log10(A)))^(1-0.62 exp(-E / 200) sin(10.9 E^(-0.28)))
-%S. Pearlstein, The Astrophysical Journal, 346: 1049-1060, 1989 November 15
+% \item 
 
-%Nucleon nucleon cross-sections:
-%Parametrizations based on the experimental data (ED) are used. 
-%They are energy and isospin dependent. 
-%The parameterizations described in ([1] Barashenkov V.S., Toneev V.D. High Energy interactions of particles and nuclei with nuclei. Moscow, 1972 
-%(in Russian, but there is an English translation)) are used.
+Total reaction cross-sections [mbarn] were calculated by J.R. Letaw's formulation \cite{letaw83, letaw93, pearlstein89}
+
+%$45 A^0.7 (1+0.016 sin(5.3-2.63 log10(A)))^(1-0.62 exp(-E / 200) sin(10.9 E^(-0.28)))
+
+For N-N cross-sections parametrizations based on the experimental data (energy and isospin dependent) are used. 
+The parameterizations described in \cite{barashenkov72} are used. 
 
 % interaction crosssections
 % (all data for (N, N) and (pi, N) interactions (dn/dsigma, d3sigma/d3p, 
@@ -295,10 +291,15 @@ Path lengths of nucleons in the nucleus are sampled according to the local densi
 
 \subsubsection{Exiton model}
 
-Importan addition to INC was exiton model itroduced by Griffin in 1966 \cite{griffin66, griffin67}. . The compound nucleon states are characterized by the number of exited particles and holes (the exitons)
-N-N collisions give rise to a sequence of states characterized by increasing exciton number, eventually leading to a equilibrated nucleus.
+Important addition to INC was exiton model itroduced by Griffin in 1966 \cite{griffin66, griffin67}. 
+The his model compound nucleon states are characterized by the number of exited particles and holes (the exitons).
+INC collisions give rise to a sequence of states characterized by increasing exciton number, eventually leading to a equilibrated nucleus.
+{\sc Geant4} cascade model implements exiton model proposed by Griffin \cite{griffin66}.
+For practical implementation of exiton model we use parameters  from \cite{ribansky73}, (level densities) and \cite{kalbach78}  
+(matrix elements).
 
-Posible selection rules in the cource of the cascade are:
+ 
+In exiton model the posible selection rules for a particle-hole configuarations in the cource of the cascade are:
 
 $\Delta p = 0, \pm 1$  $\Delta h = 0, \pm 1$  $\Delta n = 0, \pm 2$,
 
@@ -383,8 +384,7 @@ Implementaion inclues holes and quasiparticles.
 % Parametrixations of the level density, tabulated both with A and Z dependence and with high temperature 
 %behaviour (the nuclei binding energy using smooth liquid high energy formula)
 
-%Main parameters are taken from (Ribansky I. et al, Nucl.Phys.,1973, A205, p.545 (level densities); 
-%Kolbach.C., Z.Phys.,1978, A287, p.319 (matrix elements)). 
+
 %N -> N, N -> N + 2, N -> N -2, N -> N - 1 channels are treated.)
 %The angular distribution is isotropic in the frame of rest of the exiton system.
 

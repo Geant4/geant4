@@ -15,12 +15,10 @@ Standard methods in INC implementations were formed when Bertini published his r
 
 %There are several General Monte Carlo simulation toolkits implementing cascade models with various approachies
 %such as HETC \cite}{}, and FLUKA \cite{}. 
-Having application such as to simulation of hadron calorimetry the INC description of interactions of protons, neutrons and pions with matter is cruisal.
-
-Our presentations describes implementation of INC model in {\sc Geant4} hadronic physics framework \cite{geant4collaboration03}.
-
+%Having application such as to simulation of hadron calorimetry the INC description of interactions of protons, neutrons and pions with matter is cruisal.
 
 %[Geant4 stuff]
+Our presentations describes implementation of INC model in {\sc Geant4} hadronic physics framework \cite{geant4collaboration03}.
 Geant4 is a Monte Carlo particle detector simulation toolkit, having applications also in  medical and space
 science. 
 Geant4 provides a flexible framework for the modular implementation of
@@ -35,10 +33,15 @@ processes and models. While the process is a general concept, models
 are allowed to have restrictions in process type, material, element
 and energy range.  Several models can be utilized by one model class; for instance, a
 process class for inelastic collisions can use distinct models for different energies.
+
+
 Process classes utilize model classes to determine the
 secondaries produced in the interaction and to calculate the momenta
-of the particles.  Several model classes for different particles and
-energy regimes can be used by the process classes.
+of the particles. Here we preset a collection of such models providing medium-energy
+intranuclear cascades.
+
+%Several model classes for different particles and
+%energy regimes can be used by the process classes.
 
 
 
