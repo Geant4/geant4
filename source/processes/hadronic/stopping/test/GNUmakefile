@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999-01-08 16:33:46 gunter Exp $
+# $Id: GNUmakefile,v 1.2 1999-05-26 18:44:51 pia Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -76,14 +76,14 @@ LDLIBS   := \
             -lG4event \
             -lG4tracking \
             -lG4hadronic_stop \
-            -lG4hadronic_util \
             -lG4hadronic_deex \
 	    -lG4hadronic_util_gen \
+            -lG4hadronic_util \
             -lG4hadronic_mgt \
             -lG4procman \
-            -lG4track \
             -lG4particles \
             -lG4materials \
+            -lG4track \
             -lG4geometry \
             -lG4graphics_reps \
             -lG4intercoms \

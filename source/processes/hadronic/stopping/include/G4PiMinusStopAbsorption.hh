@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PiMinusStopAbsorption.hh,v 1.1 1999-01-07 16:13:39 gunter Exp $
+// $Id: G4PiMinusStopAbsorption.hh,v 1.2 1999-05-26 18:44:50 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -76,8 +76,8 @@ private:
   G4PiMinusStopMaterial* _materialAlgo; // owned pointer
   G4DynamicParticleVector* _absorptionProducts;
 
-  G4double _A;
-  G4double _Z;
+  G4double _nucleusA;
+  G4double _nucleusZ;
 
   G4int _level;
 };
