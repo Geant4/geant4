@@ -1,0 +1,111 @@
+fo/file 66 pBe.ps
+meta 66 -111
+*option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BURGOV 79B   ITEP-79-23 (400 GeV)'
+ opt logy
+ve/cr q(004)
+ve/cr v(4,004)
+ve/in v(1:4,001)      1.0000E-01     0.0000E+00     1.2100E+01     7.0000E-01
+ve/in v(1:4,002)      2.8000E-01     0.0000E+00     1.5600E+00     8.0000E-02
+ve/in v(1:4,003)      4.1000E-01     0.0000E+00     4.3900E-01     2.5000E-02
+ve/in v(1:4,004)      5.5000E-01     0.0000E+00     1.1800E-01     7.0000E-03
+ve/copy v(1,1:004) x
+ve/copy v(2,1:004) q
+ve/copy v(3,1:004) y
+ve/copy v(4,1:004) e
+ null    0.   0.900000    1.00000E-05   100.00000
+ exec ../analyse ../../logs/liste.proton.70degree.p_Be
+ atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.250000     25.0000 'P BE --> P X' 0.3
+/GRAPHICS/HPLOT/ERRORS x y q e 004 29 0.2
+ text    0.325000     35.4813 'THETA(P=3,RF=LAB) IN DEG   70.00' 0.3
+ ve/de *
+ve/cr q(007)
+ve/cr v(4,007)
+ve/in v(1:4,001)      1.0000E-01     0.0000E+00     8.6000E+00     4.0000E-01
+ve/in v(1:4,002)      1.3000E-01     0.0000E+00     4.3800E+00     2.1000E-01
+ve/in v(1:4,003)      1.8000E-01     0.0000E+00     1.9200E+00     9.0000E-02
+ve/in v(1:4,004)      2.0000E-01     0.0000E+00     1.2500E+00     6.0000E-02
+ve/in v(1:4,005)      2.2000E-01     0.0000E+00     1.0800E+00     7.0000E-02
+ve/in v(1:4,006)      2.4000E-01     0.0000E+00     7.6000E-01     4.0000E-02
+ve/in v(1:4,007)      3.9000E-01     0.0000E+00     8.2000E-02     4.0000E-03
+ve/copy v(1,1:007) x
+ve/copy v(2,1:007) q
+ve/copy v(3,1:007) y
+ve/copy v(4,1:007) e
+* empty squares
+ null    0.   0.900000    1.00000E-05   100.00000
+ exec ../analyse ../../logs/liste.proton.90degree.p_Be
+ atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.250000     25.0000 'P BE --> P X' 0.3
+/GRAPHICS/HPLOT/ERRORS x y q e 007 25 0.2
+text    0.245000     3.54813 'THETA(P=3,RF=LAB) IN DEG   90.00' 0.3
+ ve/de *
+ve/cr q(008)
+ve/cr v(4,008)
+ve/in v(1:4,001)      8.0000E-02     0.0000E+00     5.0200E+00     2.9000E-01
+ve/in v(1:4,002)      1.2000E-01     0.0000E+00     2.4700E+00     1.8000E-01
+ve/in v(1:4,003)      1.6000E-01     0.0000E+00     9.9000E-01     5.0000E-02
+ve/in v(1:4,004)      2.2000E-01     0.0000E+00     3.5000E-01     5.0000E-02
+ve/in v(1:4,005)      3.3000E-01     0.0000E+00     2.9500E-02     1.8000E-03
+ve/in v(1:4,006)      4.0000E-01     0.0000E+00     9.6000E-03     6.0000E-04
+ve/in v(1:4,007)      4.8000E-01     0.0000E+00     2.8400E-03     2.3000E-04
+ve/in v(1:4,008)      5.6000E-01     0.0000E+00     1.0600E-03     1.1000E-04
+ve/copy v(1,1:008) x
+ve/copy v(2,1:008) q
+ve/copy v(3,1:008) y
+ve/copy v(4,1:008) e
+* full squares
+ null    0.   0.900000    1.00000E-05   100.00000
+ exec ../analyse ../../logs/liste.proton.118degree.p_Be
+ atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.250000     25.0000 'P BE --> P X' 0.3
+/GRAPHICS/HPLOT/ERRORS x y q e 008 21 0.2
+text    0.320000     1.77828 'THETA(P=3,RF=LAB) IN DEG   118.00' 0.3
+ ve/de *
+ve/cr q(004)
+ve/cr v(4,004)
+ve/in v(1:4,001)      8.0000E-02     0.0000E+00     3.6600E+00     2.0000E-01
+ve/in v(1:4,002)      1.7000E-01     0.0000E+00     5.9000E-01     4.0000E-02
+ve/in v(1:4,003)      2.7000E-01     0.0000E+00     5.2200E-02     2.8000E-03
+ve/in v(1:4,004)      4.0000E-01     0.0000E+00     3.5800E-03     2.3000E-04
+ve/copy v(1,1:004) x
+ve/copy v(2,1:004) q
+ve/copy v(3,1:004) y
+ve/copy v(4,1:004) e
+* empty circles
+ null    0.   0.900000    1.00000E-05   100.00000
+ exec ../analyse ../../logs/liste.proton.137degree.p_Be
+ atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.250000     25.0000 'P BE --> P X' 0.3
+/GRAPHICS/HPLOT/ERRORS x y q e 004 24 0.2
+text    0.240000     2.51189 'THETA(P=3,RF=LAB) IN DEG   137.00' 0.3
+ ve/de *
+ve/cr q(008)
+ve/cr v(4,008)
+ve/in v(1:4,001)      8.0000E-02     0.0000E+00     3.1900E+00     1.8000E-01
+ve/in v(1:4,002)      1.2000E-01     0.0000E+00     1.5100E+00     8.0000E-02
+ve/in v(1:4,003)      1.7000E-01     0.0000E+00     4.9500E-01     2.6000E-02
+ve/in v(1:4,004)      2.2000E-01     0.0000E+00     1.4600E-01     8.0000E-03
+ve/in v(1:4,005)      2.9000E-01     0.0000E+00     3.7700E-02     2.5000E-03
+ve/in v(1:4,006)      3.4000E-01     0.0000E+00     9.5000E-03     1.1000E-03
+ve/in v(1:4,007)      3.9000E-01     0.0000E+00     2.3400E-03     1.3000E-04
+ve/in v(1:4,008)      5.4000E-01     0.0000E+00     1.4000E-04     4.0000E-05
+ve/copy v(1,1:008) x
+ve/copy v(2,1:008) q
+ve/copy v(3,1:008) y
+ve/copy v(4,1:008) e
+* full circles
+ null    0.   0.900000    1.00000E-05   100.00000
+ exec ../analyse ../../logs/liste.proton.160degree.p_Be
+ atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.250000     25.0000 'P BE --> P X' 0.3
+/GRAPHICS/HPLOT/ERRORS x y q e 008 20 0.2
+text    0.310000     1.25893 'THETA(P=3,RF=LAB) IN DEG   160.00' 0.3
+close 66

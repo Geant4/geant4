@@ -1,0 +1,12 @@
+ve/cr it(4,20) R
+ve/read it [1]
+ve/cr xxx(20) r
+ve/cr yyy(20) r
+ve/cr errxxx(20) r
+ve/cr erryyy(20) r
+ve/copy it(1,1:20) xxx
+ve/copy it(2,1:20) errxxx
+ve/copy it(3,1:20) yyy
+ve/copy it(4,1:20) erryyy
+/GRAPHICS/HPLOT/ERRORS xxx yyy errxxx erryyy 20 20 0.2
+

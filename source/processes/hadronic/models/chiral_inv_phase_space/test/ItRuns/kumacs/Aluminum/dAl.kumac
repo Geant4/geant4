@@ -1,0 +1,96 @@
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79   ITEP-79-6 (400 GeV)'
+ opt logy
+ve/cr q(004)
+ve/cr v(4,004)
+ve/in v(1:4,001)      1.0000E-01     0.0000E+00     2.3500E+00     2.1000E-01
+ve/in v(1:4,002)      1.6000E-01     0.0000E+00     7.8000E-01     4.0000E-02
+ve/in v(1:4,003)      2.4000E-01     0.0000E+00     2.5700E-01     1.7000E-02
+ve/in v(1:4,004)      3.3000E-01     0.0000E+00     8.7000E-02     7.0000E-03
+ve/copy v(1,1:004) x
+ve/copy v(2,1:004) q
+ve/copy v(3,1:004) y
+ve/copy v(4,1:004) e
+ null    0.   0.6  1.E-4    10.
+ ../analyse ../../logs/liste.deuteron.70degree
+ atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.15     5. 'P AL - D X' 0.3
+/GRAPHICS/HPLOT/ERRORS x y q e 004 29 0.2
+ text    0.215000     2.36160 'THETA(P=3,RF=LAB) IN DEG   70.00' 0.3
+ ve/de *
+ve/cr q(006)
+ve/cr v(4,006)
+ve/in v(1:4,001)      9.0000E-02     0.0000E+00     1.3300E+00     8.0000E-02
+ve/in v(1:4,002)      1.1000E-01     0.0000E+00     9.0000E-01     6.0000E-02
+ve/in v(1:4,003)      1.2000E-01     0.0000E+00     1.0600E+00     6.0000E-02
+ve/in v(1:4,004)      1.2000E-01     0.0000E+00     9.2000E-01     6.0000E-02
+ve/in v(1:4,005)      1.3000E-01     0.0000E+00     7.8000E-01     4.0000E-02
+ve/in v(1:4,006)      2.2000E-01     0.0000E+00     1.4400E-01     1.0000E-02
+ve/copy v(1,1:006) x
+ve/copy v(2,1:006) q
+ve/copy v(3,1:006) y
+ve/copy v(4,1:006) e
+ null    0.   0.6  1.E-4    10.
+ ../analyse ../../logs/liste.deuteron.90degree
+ atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.15     5. 'P AL - D X' 0.3
+/GRAPHICS/HPLOT/ERRORS x y q e 006 25 0.2
+text    0.155000     1.30792 'THETA(P=3,RF=LAB) IN DEG   90.00' 0.3
+ ve/de *
+ve/cr q(005)
+ve/cr v(4,005)
+ve/in v(1:4,001)      6.0000E-02     0.0000E+00     2.4300E+00     1.4000E-01
+ve/in v(1:4,002)      9.0000E-02     0.0000E+00     1.0800E+00     7.0000E-02
+ve/in v(1:4,003)      1.2000E-01     0.0000E+00     4.6000E-01     4.0000E-02
+ve/in v(1:4,004)      1.9000E-01     0.0000E+00     6.7000E-02     5.0000E-03
+ve/in v(1:4,005)      2.4000E-01     0.0000E+00     3.0100E-02     1.9000E-03
+ve/copy v(1,1:005) x
+ve/copy v(2,1:005) q
+ve/copy v(3,1:005) y
+ve/copy v(4,1:005) e
+ null    0.   0.6  1.E-4    10.
+ ../analyse ../../logs/liste.deuteron.118degree
+ atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.15     5. 'P AL - D X' 0.3
+/GRAPHICS/HPLOT/ERRORS x y q e 005 21 0.2
+text    0.150000     2.36666 'THETA(P=3,RF=LAB) IN DEG   118.00' 0.3
+ ve/de *
+ve/cr q(003)
+ve/cr v(4,003)
+ve/in v(1:4,001)      9.0000E-02     0.0000E+00     7.6000E-01     6.0000E-02
+ve/in v(1:4,002)      1.5000E-01     0.0000E+00     1.1900E-01     7.0000E-03
+ve/in v(1:4,003)      2.3000E-01     0.0000E+00     1.6500E-02     1.1000E-03
+ve/copy v(1,1:003) x
+ve/copy v(2,1:003) q
+ve/copy v(3,1:003) y
+ve/copy v(4,1:003) e
+ null    0.   0.6  1.E-4    10.
+ ../analyse ../../logs/liste.deuteron.137degree
+ atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.15     5. 'P AL - D X' 0.3
+/GRAPHICS/HPLOT/ERRORS x y q e 003 24 0.2
+text    0.160000    0.755632 'THETA(P=3,RF=LAB) IN DEG   137.00' 0.3
+ ve/de *
+ve/cr q(006)
+ve/cr v(4,006)
+ve/in v(1:4,001)      6.0000E-02     0.0000E+00     1.5400E+00     9.0000E-02
+ve/in v(1:4,002)      9.0000E-02     0.0000E+00     5.9000E-01     4.0000E-02
+ve/in v(1:4,003)      1.2000E-01     0.0000E+00     2.3700E-01     1.2000E-02
+ve/in v(1:4,004)      1.5000E-01     0.0000E+00     1.0000E-01     6.0000E-03
+ve/in v(1:4,005)      1.9000E-01     0.0000E+00     3.3000E-02     3.0000E-03
+ve/in v(1:4,006)      2.2000E-01     0.0000E+00     1.2700E-02     8.0000E-04
+ve/copy v(1,1:006) x
+ve/copy v(2,1:006) q
+ve/copy v(3,1:006) y
+ve/copy v(4,1:006) e
+ null    0.   0.6  1.E-4    10.
+ ../analyse ../../logs/liste.deuteron.160degree
+ atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.15     5. 'P AL - D X' 0.3
+/GRAPHICS/HPLOT/ERRORS x y q e 006 20 0.2
+text    0.140000     3.54813 'THETA(P=3,RF=LAB) IN DEG   160.00' 0.3
