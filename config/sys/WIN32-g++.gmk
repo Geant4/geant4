@@ -8,7 +8,7 @@
 ifeq ($(G4SYSTEM),WIN32-g++)
   CXX       := g++
   GNU_GCC = 1
-  CXXFLAGS  := -ansi -pipe -fno-for-scope -DGNU_GCC
+  CXXFLAGS  := -Wall -ansi -pedantic -pipe -fno-for-scope -DGNU_GCC
   ifdef G4OPTIMISE
     CXXFLAGS  += -O
     FCFLAGS   := -O
