@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMarker.hh,v 1.7 2001-07-11 10:01:03 gunter Exp $
+// $Id: G4VMarker.hh,v 1.8 2002-11-27 12:23:20 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,9 +31,10 @@
 // Class Description:
 // G4VMarkers are 2-dimensional G4VVisPrims with the special
 // properties (a) of always facing the camera and (b) of having the
-// possibility of a size defined in screen units.  The convention is
+// possibility of a size defined in screen units (pixels) or paper
+// units (points - there are 72 points per inch).  The convention is
 // that if a world size is not specified, then the marker will be
-// drawn to the given screen size or paper size regardless of the
+// drawn to the given screen size or paper size independent of the
 // viewing transformation in effect.
 //
 // "Size" means "overall size", e.g., diameter of circle, side of
@@ -135,7 +136,7 @@ public: // With description
   void SetScreenRadius   (G4double);
   void SetFillStyle      (FillStyle);
 
-  // Access functions to the string for user custimizable information
+  // Access functions to the string for user customizable information
   virtual   const G4String&  GetInfo() const;
   virtual   void             SetInfo( const G4String& info );
 
