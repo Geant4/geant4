@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChange.cc,v 1.2 1999-02-06 10:44:57 kurasige Exp $
+// $Id: G4ParticleChange.cc,v 1.3 1999-02-09 14:20:01 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -21,6 +21,7 @@
 //   Change default debug flag to false             10 May. 1998  H.Kurahige
 //   Add Track weight                               12 Nov. 1998  H.Kurashige
 //   Activate CheckIt method for VERBOSE mode       14 Dec. 1998 H.Kurashige
+//   Modified CheckIt method for time                9 Feb. 1999 H.Kurashige
 // --------------------------------------------------------------
 
 #include "G4ParticleChange.hh"
@@ -406,14 +407,14 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
          << endl;
     itsOK = false;
   }
-  if (theTimeChange < aTrack.GetGlobalTime()) {
+  if (theTimeChange - aTrack.GetGlobalTime() < -1.0*nanosecond*perMillion) {
     G4cout << " !!! the global time goes back  !!!"
          << " :  " << aTrack.GetGlobalTime()/ns
          << " -> " << theTimeChange/ns
          << "[ns] " <<endl;
     itsOK = false;
   }
-  if (theProperTimeChange < aTrack.GetProperTime()) {
+  if (theProperTimeChange - aTrack.GetProperTime() < -1.0*nanosecond*perMillion ) {
     G4cout << " !!! the poper time goes back  !!!"
          << " :  " << aTrack.GetProperTime()/ns
          << " -> " << theProperTimeChange/ns
