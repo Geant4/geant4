@@ -1,4 +1,4 @@
-$Id: History,v 1.63 2000-02-23 16:03:45 johna Exp $
+$Id: History,v 1.64 2000-02-24 12:23:36 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,13 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+24th February 2000  John Allison
+- Minor inmprovement of messages from /vis/viewer/refresh.
+- Cosmetic tidying in G4OpenGLViewer.cc.
+- Added protection for null viewer in G4RTSteppingAction.cc and
+  G4RayTrajectory.cc.
+- Corrected for zoom, etc., in G4RayTracerViewer.cc.
+
 23rd February 2000  John Allison
 - Added G4RayTracerSceneHandler and Viewer.
 - Some modifications to other RayTracer routines for vis compliance.
@@ -34,6 +41,7 @@ History file for visualization category
   ISO compliance.
 
 21st February 2000  John Allison
+- /vis/viewer/refresh no longer invokes ShowView().
 - G4VViewer: introduced data member fShortName.
 - Added G4RTSteppingAction and G4RayTrajectory to list of G4VisManager's
   friends.
