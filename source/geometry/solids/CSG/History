@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2000-10-23 11:05:05 gcosmo Exp $
+$Id: History,v 1.26 2000-10-26 13:10:43 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 26,   00   G. Cosmo                  geom-solids-csg-V02-00-06
+- G4Cons::DistanceToOut(p,v): leave out warning if point is outside.
 
 Oct 23,   00   G. Cosmo                  geom-solids-csg-V02-00-05
 - G4Tubs::DistanceToIn(p,v):
