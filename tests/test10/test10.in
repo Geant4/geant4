@@ -3,7 +3,7 @@
 # for Optical photons geometry test
 #
 /run/initialize
-#/particle/list
+/particle/list
 #/tracking/verbose 1
 
 /mydet/SelectDetector Cone
