@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoNuclearCrossSection.hh,v 1.2 2001-10-26 09:47:35 mkossov Exp $
+// $Id: G4PhotoNuclearCrossSection.hh,v 1.3 2001-10-26 13:12:25 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,13 +57,8 @@ public:
   {
 	//return theHadronCrossSections->IsApplicable(aParticle, anElement);
 	// Possible prototype
-	G4int targetAtomicNumber = static_cast<int>(anElement->GetN()+.499); //@@ Nat mixture
-	G4int targZ = static_cast<int>(anElement->GetZ());
-	G4int targN = targetAtomicNumber-targZ;
 	G4bool result = false;
-	if( aParticle->GetDefinition()->GetPDGEncoding()==22 &&
-		aParticle->GetKineticEnergy()/MeV>ThresholdEnergy(targZ, targN)
-		) result = true;
+	if( aParticle->GetDefinition()->GetPDGEncoding()==22) result = true;
 	return result;
   }
 

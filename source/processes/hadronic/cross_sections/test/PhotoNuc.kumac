@@ -57,7 +57,7 @@ macro phot targ=^12!C file=h1 nth=227 nex=326 xmin=1 _
   ve/del *
   ve/cr de(999) R 999*0.
   clr
-  ***opt zfl
+  opt zfl
   swi gz
   opt utit
 * Switch to high quality picture
@@ -98,7 +98,7 @@ macro phot targ=^12!C file=h1 nth=227 nex=326 xmin=1 _
   itx [xt] [yt]  [targ]
   ve/re e,ap [file].out
   igset PLCI 1
-  igset LWID 4
+  igset LWID 1
   gra/prim/graph [nth] e ap C 
   igset LWID 1
 return

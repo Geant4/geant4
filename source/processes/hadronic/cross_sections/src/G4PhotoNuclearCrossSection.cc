@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoNuclearCrossSection.cc,v 1.2 2001-10-26 09:48:00 mkossov Exp $
+// $Id: G4PhotoNuclearCrossSection.cc,v 1.3 2001-10-26 13:12:26 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -32,14 +32,17 @@
 #include "G4PhotoNuclearCrossSection.hh"
 
 // The main member function giving the gamma-A cross section (E in GeV, CS in mb)
-G4double G4PhotoNuclearCrossSection::GetCrossSection(const G4DynamicParticle* aPart,
-													 const G4Element* anEle, G4double T)
+G4double G4PhotoNuclearCrossSection::GetCrossSection(const G4DynamicParticle* aPart, const G4Element* anEle, G4double T)
 {
   const G4double kinEnergy = aPart->GetKineticEnergy()/MeV;
   const G4double lE=log(kinEnergy);
   const G4int targetAtomicNumber = static_cast<int>(anEle->GetN()+.499); //@@ Nat mixture
   const G4int targZ = static_cast<int>(anEle->GetZ());
   const G4int targN = targetAtomicNumber-targZ;
+  if (kinEnergy<ThresholdEnergy(targZ, targN))
+  {
+    return 0.;
+  }
   // Associative memory for acceleration
   static G4int    lastN;     // The last N of calculated nucleus
   static G4int    lastZ;     // The last Z of calculated nucleus
