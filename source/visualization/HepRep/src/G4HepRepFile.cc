@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFile.cc,v 1.7 2003-06-25 10:19:59 gunter Exp $
+// $Id: G4HepRepFile.cc,v 1.8 2003-07-12 19:48:15 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,20 +29,20 @@
 // HepRep graphics format (HepRep version 1).
 
 //HepRep
-#include "HepRepXMLWriter.hh"
+#include "G4HepRepFileXMLWriter.hh"
 
 #include "G4HepRepFile.hh"
 #include "G4HepRepFileSceneHandler.hh"
 #include "G4HepRepFileViewer.hh"
 
-static HepRepXMLWriter* hepRepXMLWriter;
+static G4HepRepFileXMLWriter* hepRepXMLWriter;
 
 G4HepRepFile::G4HepRepFile():
   G4VGraphicsSystem("G4HepRepFile",
 		    "HepRepFile",
 		    "A HepRep (format 1) ascii file driver",
 		    G4VGraphicsSystem::threeD) {
-        hepRepXMLWriter = new HepRepXMLWriter();
+        hepRepXMLWriter = new G4HepRepFileXMLWriter();
 }
 
 G4HepRepFile::~G4HepRepFile() {}
@@ -77,6 +77,6 @@ G4VViewer* G4HepRepFile::CreateViewer(G4VSceneHandler& scene,
   return pView;
 }
 
-HepRepXMLWriter* G4HepRepFile::GetHepRepXMLWriter () {
+G4HepRepFileXMLWriter* G4HepRepFile::GetHepRepXMLWriter () {
     return hepRepXMLWriter;
 }

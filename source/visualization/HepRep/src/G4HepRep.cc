@@ -43,8 +43,10 @@ using namespace std;
 G4HepRep::G4HepRep ()
         : G4VGraphicsSystem ("G4HepRep",
                              "HepRepXML",
-        "HepRep Generic Driver for XML, RMI and CORBA",
-        G4VGraphicsSystem::threeD) {
+        	             "HepRep Generic Driver for XML, RMI and CORBA",
+                             G4VGraphicsSystem::threeD), 
+          sceneHandler(NULL), 
+          viewer(NULL) {
 }
 
 G4HepRep::~G4HepRep () {

@@ -23,7 +23,7 @@
 //
 //--------------------------------------------------------------------------
 // File and Version Information:
-// 	$Id: HepRepXMLWriter.hh,v 1.1 2003-07-11 06:01:38 duns Exp $
+// 	$Id: G4HepRepFileXMLWriter.hh,v 1.1 2003-07-12 19:48:15 duns Exp $
 //
 // Description:
 //	Create a HepRep XML File (HepRep version 1).
@@ -37,18 +37,18 @@
 // Copyright Information:
 //      Copyright (C) 2001          Stanford Linear Accelerator Center
 //------------------------------------------------------------------------
-#ifndef HepRepXMLWriter_hh
-#define HepRepXMLWriter_hh
+#ifndef G4HepRepFileXMLWriter_hh
+#define G4HepRepFileXMLWriter_hh
 
 //#define G4HEPREPFILEDEBUG  // Comment this out to suppress debug code.
 
 #include "globals.hh"
 #include <fstream>
 
-class HepRepXMLWriter
+class G4HepRepFileXMLWriter
 {
 public:
-  HepRepXMLWriter();
+  G4HepRepFileXMLWriter();
 
   void addType(const char* name, int newTypeDepth);
   void addInstance();

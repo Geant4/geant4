@@ -1,4 +1,4 @@
-$Id: History,v 1.30 2003-07-11 06:01:34 duns Exp $
+$Id: History,v 1.31 2003-07-12 19:47:58 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 ---------------------------------------------------------------------------
+12th July 2003 Mark Donszelmann
+- Renamed XMLHepRepWriter to G4HepRepFileXMLWriter and moved its header to include.
+  Fixed initialization of some variabled in G4HepRep and G4HepRepSceneHandler, found
+  by valgrind. Removed dependency in gzio.cc of fdopen (platform specific).
 
 11th July 2003 Mark Donszelmann
 - Removed the HepRepStreamer and replaced it by a fully functional HepRep implementation

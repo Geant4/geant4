@@ -78,7 +78,8 @@ G4HepRepSceneHandler::G4HepRepSceneHandler (G4VGraphicsSystem& system, const G4S
           eventNumber   (1),
           currentDepth  (0),
           currentPV     (0),
-          currentLV     (0) {
+          currentLV     (0),
+          heprep	(NULL) {
 
 #ifdef DEBUG
     cout << "G4HepRepSceneHandler::G4HepRepSceneHandler: " << system << endl;

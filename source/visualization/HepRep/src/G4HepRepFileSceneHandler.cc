@@ -43,7 +43,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.14 2003-06-19 14:45:14 gunter Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.15 2003-07-12 19:48:15 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -74,7 +74,7 @@
 #include "G4AttValue.hh"
 
 //HepRep
-#include "HepRepXMLWriter.hh"
+#include "G4HepRepFileXMLWriter.hh"
 
 G4int G4HepRepFileSceneHandler::fSceneIdCount = 0;
 // Counter for HepRep scene handlers.
@@ -578,7 +578,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4NURBS&) {
     G4cout << "G4HepRepFileSceneHandler::AddPrimitive G4NURBS : not implemented. " << G4endl;
 }
 
-HepRepXMLWriter *G4HepRepFileSceneHandler::GetHepRepXMLWriter() {
+G4HepRepFileXMLWriter *G4HepRepFileSceneHandler::GetHepRepXMLWriter() {
     return hepRepXMLWriter;
 }
 

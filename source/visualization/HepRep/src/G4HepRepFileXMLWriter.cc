@@ -22,7 +22,7 @@
 //
 //--------------------------------------------------------------------------
 // File and Version Information:
-// 	$Id: HepRepXMLWriter.cc,v 1.11 2003-06-25 10:20:07 gunter Exp $
+// 	$Id: G4HepRepFileXMLWriter.cc,v 1.1 2003-07-12 19:48:15 duns Exp $
 //
 // Description:
 //	Create a HepRep XML File (HepRep version 1).
@@ -37,17 +37,17 @@
 //      Copyright (C) 2001          Stanford Linear Accelerator Center
 //------------------------------------------------------------------------
 
-#include "HepRepXMLWriter.hh"
+#include "G4HepRepFileXMLWriter.hh"
 
 #include "G4ios.hh"
 
-HepRepXMLWriter::HepRepXMLWriter()
+G4HepRepFileXMLWriter::G4HepRepFileXMLWriter()
 {
   isOpen = false;
   init();
 }
 
-void HepRepXMLWriter::init()
+void G4HepRepFileXMLWriter::init()
 {
   typeDepth = -1;
 
@@ -64,7 +64,7 @@ void HepRepXMLWriter::init()
   inPoint = false;
 }
 
-void HepRepXMLWriter::addType(const char* name,int newTypeDepth)
+void G4HepRepFileXMLWriter::addType(const char* name,int newTypeDepth)
 {
   if (fout.good())
   {
@@ -78,7 +78,7 @@ void HepRepXMLWriter::addType(const char* name,int newTypeDepth)
     // Insert any layers that are missing from the hierarchy (protects against
     // callers that skip from, say, layer 1 to layer 3 with no layer 2).
     while (typeDepth < (newTypeDepth-1)) {
-      addType("Layer Inserted by HepRepXMLWriter", typeDepth + 1);
+      addType("Layer Inserted by G4HepRepFileXMLWriter", typeDepth + 1);
       addInstance();
     }
 
@@ -108,12 +108,12 @@ void HepRepXMLWriter::addType(const char* name,int newTypeDepth)
     }
   } else {
 #ifdef G4HEPREPFILEDEBUG
-    G4cout << "HepRepXMLWriter:addType No file is currently open." << G4endl;
+    G4cout << "G4HepRepFileXMLWriter:addType No file is currently open." << G4endl;
 #endif
   }
 }
 
-void HepRepXMLWriter::addInstance()
+void G4HepRepFileXMLWriter::addInstance()
 {
   if (fout.good())
   {
@@ -125,17 +125,17 @@ void HepRepXMLWriter::addInstance()
       fout << "<heprep:instance>" << G4endl;
     } else {
 #ifdef G4HEPREPFILEDEBUG
-      G4cout << "HepRepXMLWriter:addInstance No HepRep Type is currently open" << G4endl;
+      G4cout << "G4HepRepFileXMLWriter:addInstance No HepRep Type is currently open" << G4endl;
 #endif
     }
   } else {
 #ifdef G4HEPREPFILEDEBUG
-    G4cout << "HepRepXMLWriter:addInstance No file is currently open" << G4endl;
+    G4cout << "G4HepRepFileXMLWriter:addInstance No file is currently open" << G4endl;
 #endif
   }
 }
 
-void HepRepXMLWriter::addPrimitive()
+void G4HepRepFileXMLWriter::addPrimitive()
 {
   if (fout.good())
   {
@@ -147,17 +147,17 @@ void HepRepXMLWriter::addPrimitive()
       fout << "<heprep:primitive>" << G4endl;
     } else {
 #ifdef G4HEPREPFILEDEBUG
-      G4cout << "HepRepXMLWriter:addPrimitive No HepRep Instance is currently open" << G4endl;
+      G4cout << "G4HepRepFileXMLWriter:addPrimitive No HepRep Instance is currently open" << G4endl; 
 #endif
     }
   } else {
 #ifdef G4HEPREPFILEDEBUG
-    G4cout << "HepRepXMLWriter:addPrimitive No file is currently open" << G4endl;
+    G4cout << "G4HepRepFileXMLWriter:addPrimitive No file is currently open" << G4endl;
 #endif
   }
 }
 
-void HepRepXMLWriter::addPoint(double x, double y, double z)
+void G4HepRepFileXMLWriter::addPoint(double x, double y, double z)
 {
   if (fout.good())
   {
@@ -169,17 +169,17 @@ void HepRepXMLWriter::addPoint(double x, double y, double z)
       fout << "<heprep:point x=\"" << x << "\" y=\"" << y << "\" z=\"" << z << "\">" << G4endl;
     } else {
 #ifdef G4HEPREPFILEDEBUG
-      G4cout <<	"HepRepXMLWriter:addPoint No HepRep Primitive is currently open" << G4endl;
+      G4cout <<	"G4HepRepFileXMLWriter:addPoint No HepRep Primitive is currently open" << G4endl;
 #endif
     }
   } else {
 #ifdef G4HEPREPFILEDEBUG
-    G4cout << "HepRepXMLWriter:addPoint No file is currently open" << G4endl;
+    G4cout << "G4HepRepFileXMLWriter:addPoint No file is currently open" << G4endl;
 #endif
   }
 }
 
-void HepRepXMLWriter::addAttDef(const char* name,
+void G4HepRepFileXMLWriter::addAttDef(const char* name,
 	       const char* desc,
 	       const char* type,
 	       const char* extra)
@@ -192,13 +192,13 @@ void HepRepXMLWriter::addAttDef(const char* name,
     fout << "  desc=\"" << desc << "\"/>" << G4endl;
   } else {
 #ifdef G4HEPREPFILEDEBUG
-    G4cout << "HepRepXMLWriter:addAttDef No file is currently open" << G4endl;
+    G4cout << "G4HepRepFileXMLWriter:addAttDef No file is currently open" << G4endl;
 #endif
   }
 }
 
 // Four methods to fill attValues
-void HepRepXMLWriter::addAttValue (const char* name,
+void G4HepRepFileXMLWriter::addAttValue (const char* name,
 		  const char* value)
 {
   if (fout.good())
@@ -209,12 +209,12 @@ void HepRepXMLWriter::addAttValue (const char* name,
     fout << "    value=\"" << value << "\"/>" << G4endl;
   } else {
 #ifdef G4HEPREPFILEDEBUG
-    G4cout << "HepRepXMLWriter:addAttValue No file is currently open" << G4endl;
+    G4cout << "G4HepRepFileXMLWriter:addAttValue No file is currently open" << G4endl;
 #endif
   }
 }
 
-void HepRepXMLWriter::addAttValue (const char* name,
+void G4HepRepFileXMLWriter::addAttValue (const char* name,
 		  double value)
 {
   if (fout.good())
@@ -225,12 +225,12 @@ void HepRepXMLWriter::addAttValue (const char* name,
     fout << "    value=\"" << value << "\"/>" << G4endl;
   } else {
 #ifdef G4HEPREPFILEDEBUG
-    G4cout << "HepRepXMLWriter:addAttValue No file is currently open" << G4endl;
+    G4cout << "G4HepRepFileXMLWriter:addAttValue No file is currently open" << G4endl;
 #endif
   }
 }
 
-void HepRepXMLWriter::addAttValue (const char* name,
+void G4HepRepFileXMLWriter::addAttValue (const char* name,
 		  int value)
 {
   if (fout.good())
@@ -241,12 +241,12 @@ void HepRepXMLWriter::addAttValue (const char* name,
     fout << "    value=\"" << value << "\"/>" << G4endl;
   } else {
 #ifdef G4HEPREPFILEDEBUG
-    G4cout << "HepRepXMLWriter:addAttValue No file is currently open" << G4endl;
+    G4cout << "G4HepRepFileXMLWriter:addAttValue No file is currently open" << G4endl;
 #endif
   }
 }
 
-void HepRepXMLWriter::addAttValue (const char* name,
+void G4HepRepFileXMLWriter::addAttValue (const char* name,
 		  bool value)
 {
   if (fout.good())
@@ -260,12 +260,12 @@ void HepRepXMLWriter::addAttValue (const char* name,
       fout << "    value=\"False\"/>" << G4endl;
   } else {
 #ifdef G4HEPREPFILEDEBUG
-    G4cout << "HepRepXMLWriter:addAttValue No file is currently open" << G4endl;
+    G4cout << "G4HepRepFileXMLWriter:addAttValue No file is currently open" << G4endl;
 #endif
   }
 }
 
-void HepRepXMLWriter::addAttValue (const char* name,
+void G4HepRepFileXMLWriter::addAttValue (const char* name,
 				   double value1,
 				   double value2,
 				   double value3)
@@ -281,12 +281,12 @@ void HepRepXMLWriter::addAttValue (const char* name,
     fout << "    value=\"" << redness << "," << greenness << "," << blueness << "\"/>" << G4endl;
   } else {
 #ifdef G4HEPREPFILEDEBUG
-    G4cout << "HepRepXMLWriter:addAttValue No file is currently open" << G4endl;
+    G4cout << "G4HepRepFileXMLWriter:addAttValue No file is currently open" << G4endl;
 #endif
   }
 }
 
-void HepRepXMLWriter::open(const char* fileSpec)
+void G4HepRepFileXMLWriter::open(const char* fileSpec)
 {
   if (isOpen)
     close();
@@ -301,11 +301,11 @@ void HepRepXMLWriter::open(const char* fileSpec)
     isOpen = true;
     init();
   } else {
-    G4cout << "HepRepXMLWriter:open Unable to write to file " << fileSpec << G4endl;
+    G4cout << "G4HepRepFileXMLWriter:open Unable to write to file " << fileSpec << G4endl;
   }
 }
 
-void HepRepXMLWriter::close()
+void G4HepRepFileXMLWriter::close()
 {
   // Close any remaining open Types
   endTypes();
@@ -315,18 +315,18 @@ void HepRepXMLWriter::close()
     fout.close( );
     isOpen = false;
   } else {
-    G4cout << "HepRepXMLWriter:close No file is currently open" << G4endl;
+    G4cout << "G4HepRepFileXMLWriter:close No file is currently open" << G4endl;
   }
 }
 
-void HepRepXMLWriter::endTypes()
+void G4HepRepFileXMLWriter::endTypes()
 {
   // Close any remaining open Types
     while(typeDepth>-1)
       endType();
 }
 
-void HepRepXMLWriter::endType()
+void G4HepRepFileXMLWriter::endType()
 {
   endInstance();
   indent();
@@ -338,7 +338,7 @@ void HepRepXMLWriter::endType()
   typeDepth--;
 }
 
-void HepRepXMLWriter::endInstance()
+void G4HepRepFileXMLWriter::endInstance()
 {
   if (inInstance[typeDepth])
   {
@@ -349,7 +349,7 @@ void HepRepXMLWriter::endInstance()
   }
 }
 
-void HepRepXMLWriter::endPrimitive()
+void G4HepRepFileXMLWriter::endPrimitive()
 {
   if (inPrimitive)
   {
@@ -360,7 +360,7 @@ void HepRepXMLWriter::endPrimitive()
   }
 }
 
-void HepRepXMLWriter::endPoint()
+void G4HepRepFileXMLWriter::endPoint()
 {
   if (inPoint)
   {
@@ -370,7 +370,7 @@ void HepRepXMLWriter::endPoint()
   }
 }
 
-void HepRepXMLWriter::indent()
+void G4HepRepFileXMLWriter::indent()
 {
   if (fout.good())
   {

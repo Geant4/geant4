@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.hh,v 1.12 2003-06-25 10:19:51 gunter Exp $
+// $Id: G4HepRepFileSceneHandler.hh,v 1.13 2003-07-12 19:48:15 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -47,7 +47,7 @@
 #include "G4Polyhedra.hh"
 
 // HepRep
-#include "HepRepXMLWriter.hh"
+#include "G4HepRepFileXMLWriter.hh"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
@@ -116,7 +116,7 @@ public:
 
   static G4int GetSceneCount() {return fSceneCount;}
 
-  HepRepXMLWriter *GetHepRepXMLWriter();
+  G4HepRepFileXMLWriter *GetHepRepXMLWriter();
 
 protected:
   static G4int         fSceneIdCount;  // Counter for HepRep scene handlers.
@@ -126,7 +126,7 @@ protected:
   G4LogicalVolume*     fpCurrentLV;    // Current logical volume.
 
 private:
-  HepRepXMLWriter *hepRepXMLWriter;
+  G4HepRepFileXMLWriter *hepRepXMLWriter;
   void AddHepRepInstance(const char* primName,
 			 const G4Visible visible);
   void CheckFileOpen();
