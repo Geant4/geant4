@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3DetectorConstruction.cc,v 1.9 2003-03-06 11:16:40 vnivanch Exp $
+// $Id: Em3DetectorConstruction.cc,v 1.10 2003-03-10 11:30:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -79,21 +79,18 @@ Em3DetectorConstruction::Em3DetectorConstruction()
 
   // create commands for interactive definition of the calorimeter  
   detectorMessenger = new Em3DetectorMessenger(this);
-  DefineMaterials();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em3DetectorConstruction::~Em3DetectorConstruction()
-{ 
-  delete userLimits; 
-  delete detectorMessenger;
-}
+{ delete userLimits; delete detectorMessenger;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume* Em3DetectorConstruction::Construct()
 {
+  DefineMaterials();
   return ConstructCalorimeter();
 }
 
@@ -131,10 +128,11 @@ G4Element* O  = new G4Element(name="Oxygen"  ,symbol="O" , z= 8., a);
 a = 28.09*g/mole;
 G4Element* Si = new G4Element(name="Silicon",symbol="Si" , z= 14., a);
 
-G4Element*  Cs  = new G4Element ("Cesium"  , "Cs", 55. , 132.905*g/mole);
+a = 126.90*g/mole;
+G4Element* I  = new G4Element(name="Iodine"  ,symbol="I" , z= 53., a);
 
-G4Element*   I  = new G4Element ("Iodide"  , "I", 53. , 126.9044*g/mole);
-
+a = 132.90*g/mole;
+G4Element* Cs = new G4Element(name="Cesium" ,symbol="Cs" , z= 55., a);
 
 //
 // define an Element from isotopes, by relative abundance 
@@ -193,11 +191,9 @@ G4Material* Ur = new G4Material(name="Uranium"  , z=92., a, density);
  
 density = 1.000*g/cm3;
 G4Material* H2O = new G4Material(name="Water", density, ncomponents=2);
-H2O->SetChemicalFormula("H_2O");
 H2O->AddElement(H, natoms=2);
 H2O->AddElement(O, natoms=1);
-G4double exc = ma->GetIonisation()->FindMeanExcitationEnergy("H_2O");
-H2O->GetIonisation()->SetMeanExcitationEnergy(exc);
+H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
 
 density = 1.032*g/cm3;
 G4Material* Sci = new G4Material(name="Scintillator", density, ncomponents=2);
@@ -220,11 +216,11 @@ G10->AddElement(O , natoms=2);
 G10->AddElement(C , natoms=3);
 G10->AddElement(H , natoms=3);
 
-G4Material* ma = new G4Material ("CsI" , 4.51*g/cm3, 2);
-ma->SetChemicalFormula("CsI");
-ma->AddElement(Cs,1);
-ma->AddElement(I,1);
-ma->GetIonisation()->SetMeanExcitationEnergy(415.689*eV);
+density = 4.534*g/cm3;
+G4Material* CsI = new G4Material(name="CsI", density, ncomponents=2);
+CsI->AddElement(Cs, natoms=1);
+CsI->AddElement(I , natoms=1);
+CsI->GetIonisation()->SetMeanExcitationEnergy(415.689*eV);
 
 //
 // define a material from elements.   case 2: mixture by fractional mass
@@ -307,11 +303,6 @@ G4VPhysicalVolume* Em3DetectorConstruction::ConstructCalorimeter()
   //     
   // World
   //
-  if(solidWorld) delete solidWorld;
-  if(logicWorld) delete logicWorld;
-  if(physiWorld) delete physiWorld;
-  
-
   solidWorld = new G4Box("World",				//its name
                    WorldSizeX/2,WorldSizeYZ/2,WorldSizeYZ/2);	//its size
                          
@@ -330,9 +321,7 @@ G4VPhysicalVolume* Em3DetectorConstruction::ConstructCalorimeter()
   //                               
   // Calorimeter
   //  
-  if(solidCalor) delete solidCalor;
-  if(logicCalor) delete logicCalor;
-  if(physiCalor) delete physiCalor;
+  solidCalor=0; logicCalor=0; physiCalor=0;
   
   solidCalor = new G4Box("Calorimeter",				     //its name
     		       CalorThickness/2,CalorSizeYZ/2,CalorSizeYZ/2);//size
@@ -352,9 +341,7 @@ G4VPhysicalVolume* Em3DetectorConstruction::ConstructCalorimeter()
   //                                 
   // Layers
   //
-  if(solidLayer) delete solidLayer;
-  if(logicLayer) delete logicLayer;
-  if(physiLayer) delete physiLayer;
+  solidLayer=0; logicLayer=0; physiLayer=0;
     
   solidLayer = new G4Box("Layer",		                      //its name
                        LayerThickness/2,CalorSizeYZ/2,CalorSizeYZ/2); //size
@@ -382,11 +369,7 @@ G4VPhysicalVolume* Em3DetectorConstruction::ConstructCalorimeter()
   // Absorbers
   //
   for (G4int j=0; j<MaxAbsor; j++)  
-     { 
-  if(solidAbsor[j]) delete solidAbsor[j];
-  if(logicAbsor[j]) delete logicAbsor[j];
-  if(physiAbsor[j]) delete physiAbsor[j];
-     }
+     { solidAbsor[j]=0; logicAbsor[j]=0; physiAbsor[j]=0;}
 
   G4double xfront = -0.5*LayerThickness;  
   for (G4int k=0; k<NbOfAbsor; k++)
@@ -569,13 +552,7 @@ void Em3DetectorConstruction::SetMaxStepSize(G4double val)
   
 void Em3DetectorConstruction::UpdateGeometry()
 {
-  G4bool first = true;
-  if (physiWorld) first = false;
-  G4VPhysicalVolume* v = ConstructCalorimeter();
-  G4RunManager* rm = G4RunManager::GetRunManager();
-  rm->GeometryHasBeenModified();
-  rm->DefineWorldVolume(v);
-  if (!first) rm->ResetNavigator();
+  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructCalorimeter());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

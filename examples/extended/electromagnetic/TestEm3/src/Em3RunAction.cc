@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3RunAction.cc,v 1.20 2003-03-06 11:16:40 vnivanch Exp $
+// $Id: Em3RunAction.cc,v 1.21 2003-03-10 11:30:25 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,6 +81,14 @@ Em3RunAction::Em3RunAction(Em3DetectorConstruction* det)
 Em3RunAction::~Em3RunAction()
 {
   delete runMessenger;
+  
+#ifndef G4NOHIST
+  tree->commit();       // Writing the histograms to the file
+  tree->close();        // and closing the tree (and the file)
+
+  delete hf;
+  delete tree;  
+#endif  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -201,15 +209,6 @@ void Em3RunAction::EndOfRunAction(const G4Run* aRun)
     
   // show Rndm status
   HepRandom::showEngineStatus();
-#ifndef G4NOHIST
-  tree->commit();       // Writing the histograms to the file
-  tree->close();        // and closing the tree (and the file)
-
-  delete hf;
-  delete tree;  
-  G4cout << "Histograms are saved" << G4endl; 
-#endif  
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
