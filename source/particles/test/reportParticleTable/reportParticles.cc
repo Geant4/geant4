@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: reportParticles.cc,v 1.4 2001-07-11 10:02:11 gunter Exp $
+// $Id: reportParticles.cc,v 1.5 2002-03-26 07:34:42 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,12 +83,12 @@ int main(int argc,char** argv) {
   //reporter.Print(*otherContainer);
   
   tst2HtmlReporter html;
-  html.Print( *quarkContainer,  "quarks  7/Apr/01");
-  html.Print( *leptonContainer, "leptons 7/Apr/01");
-  html.Print( *mesonContainer,  "mesons 7/Apr/01");
-  html.Print( *baryonContainer, "baryons 7/Apr/01");
-  html.Print( *ionContainer,    "ions 7/Apr/01");
-  html.Print( *otherContainer,  "others 7/Apr/01");
+  html.Print( *quarkContainer,  "quarks  27/Mar/02");
+  html.Print( *leptonContainer, "leptons 27/Mar/02");
+  html.Print( *mesonContainer,  "mesons 27/Mar/02");
+  html.Print( *baryonContainer, "baryons 27/Mar/02");
+  html.Print( *ionContainer,    "ions 27/Mar/02");
+  html.Print( *otherContainer,  "others 27/Mar/02");
   return EXIT_SUCCESS;
 }
 

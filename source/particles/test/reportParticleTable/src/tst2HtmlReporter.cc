@@ -26,7 +26,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: tst2HtmlReporter.cc,v 1.6 2001-10-25 05:30:58 kurasige Exp $
+// $Id: tst2HtmlReporter.cc,v 1.7 2002-03-26 07:34:44 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -107,8 +107,13 @@ void tst2HtmlReporter::SparseOption(const G4String& option)
     outFile << sTD << GetEncoding(i) << eTD << G4endl;; 
     // column 2  : name 
     G4String name = GetParticle(i)->GetParticleName();
+
+    G4String fname = name +".html";
+    // exception
+    if (name == "J/psi") fname = "jpsi.html";
+
     outFile << sTD;
-	outFile << "<A HREF=" << '"' << name << ".html" << '"' << ">";
+	outFile << "<A HREF=" << '"' << fname << '"' << ">";
     outFile << name << "</A>" << eTD << G4endl;;    
 	// column 3 AntiParticle
 	if  ( (GetAntiParticle(i)!= 0) &&
@@ -130,6 +135,8 @@ void tst2HtmlReporter::SparseOption(const G4String& option)
   G4String name = particle->GetParticleName();
   //--- open index file -----
   G4String fileName = baseDir + name + ".html";
+  // exception
+  if (name == "J/psi") fileName = baseDir +"jpsi.html";
   G4std::ofstream outFile(fileName, G4std::ios::out );
   outFile.setf( G4std::ios:: scientific, G4std::ios::floatfield );
   outFile << G4std::setprecision(7) << G4endl;
