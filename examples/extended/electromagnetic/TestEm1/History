@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2003-02-12 14:53:11 maire Exp $
+$Id: History,v 1.24 2003-02-20 10:41:10 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,10 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+20-02-03 V.Ivant (testem1-V05-00-01)
+- Migrade to cut per region
+
 12-02-03 mma (testem1-V05-00-00)
-- DetectorConstruction: change volume name 
-    
+- DetectorConstruction: change volume name
+
 11-12-02 mma (testem1-V04-01-01)
 - migration to AIDA 3.0
 - UI commands under directory /testem/

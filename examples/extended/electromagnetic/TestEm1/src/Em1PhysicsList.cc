@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em1PhysicsList.cc,v 1.6 2002-03-08 13:43:29 maire Exp $
+// $Id: Em1PhysicsList.cc,v 1.7 2003-02-20 10:41:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -250,25 +250,18 @@ void Em1PhysicsList::SetCuts()
      if(cutForProton   == currentDefaultCut) cutForProton   = defaultCutValue;
      currentDefaultCut = defaultCutValue;
     }
-    
+
   if (verboseLevel >0){
     G4cout << "Em1PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  }  
+  }
 
   // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma 
+  // because some processes for e+/e- need cut values for gamma
   SetCutValue(cutForGamma, "gamma");
   SetCutValue(cutForElectron, "e-");
   SetCutValue(cutForElectron, "e+");
-  
-  // set cut values for proton and anti_proton before all other hadrons
-  // because some processes for hadrons need cut values for proton/anti_proton 
-  SetCutValue(cutForProton, "proton");
-  SetCutValue(cutForProton, "anti_proton");
-   
-  SetCutValueForOthers(defaultCutValue);
-  
+
   if (verboseLevel>0) DumpCutValuesTable();
 }
 
