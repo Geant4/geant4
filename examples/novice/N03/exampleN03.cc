@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: exampleN03.cc,v 1.1 1999-01-07 16:05:51 gunter Exp $
+// $Id: exampleN03.cc,v 1.2 1999-03-03 14:53:34 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,6 +23,7 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
+#include "Randomize.hh"
 
 #ifdef G4VIS_USE
 #include "ExN03VisManager.hh"
@@ -46,6 +47,9 @@ template class G4Allocator <ExN03CalorHit>;
 
 int main(int argc,char** argv) {
 
+  //choose the Random engine
+  HepRandom::setTheEngine(new RanecuEngine);
+  
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 

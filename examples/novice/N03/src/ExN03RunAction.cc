@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03RunAction.cc,v 1.1 1999-01-07 16:05:57 gunter Exp $
+// $Id: ExN03RunAction.cc,v 1.2 1999-03-03 14:53:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,7 +24,7 @@
 
 ExN03RunAction::ExN03RunAction()
 {
-  runIDcounter = 0;
+  runIDcounter = -1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -36,9 +36,9 @@ ExN03RunAction::~ExN03RunAction()
 
 void ExN03RunAction::BeginOfRunAction(G4Run* aRun)
 {
-  aRun->SetRunID(runIDcounter++);
+  aRun->SetRunID(++runIDcounter);
    
-  G4cout << "### Run " << aRun->GetRunID() << " start." << endl;
+  G4cout << "### Run " << runIDcounter << " start." << endl;
 
   if (G4VVisManager::GetConcreteInstance())
     {
