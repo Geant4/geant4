@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ReduciblePolygon.cc,v 1.1 2000-04-07 11:03:04 gcosmo Exp $
+// $Id: G4ReduciblePolygon.cc,v 1.2 2000-11-02 16:54:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,7 +28,8 @@
 //
 // Constructor: with simple arrays
 //
-G4ReduciblePolygon::G4ReduciblePolygon( const G4double a[], const G4double b[], const G4int n )
+G4ReduciblePolygon::G4ReduciblePolygon( const G4double a[], const G4double b[],
+                                              G4int n )
 {
 	//
 	// Do all of the real work in Create
@@ -41,7 +42,7 @@ G4ReduciblePolygon::G4ReduciblePolygon( const G4double a[], const G4double b[], 
 // Constructor: special PGON/PCON case
 //
 G4ReduciblePolygon::G4ReduciblePolygon( const G4double rmin[], const G4double rmax[], 
-					const G4double z[], const G4int n )
+					const G4double z[], G4int n )
 {
 	//
 	// Translate
@@ -74,7 +75,7 @@ G4ReduciblePolygon::G4ReduciblePolygon( const G4double rmin[], const G4double rm
 // To be called by constructors, fill in the list and statistics for a new
 // polygon
 //
-void G4ReduciblePolygon::Create( const G4double a[], const G4double b[], const G4int n )
+void G4ReduciblePolygon::Create( const G4double a[], const G4double b[], G4int n )
 {
 	if (n<3) G4Exception( "G4ReduciblePolygon: less than 3 vertices specified" );
 	
@@ -139,7 +140,7 @@ void G4ReduciblePolygon::CopyVertices( G4double a[], G4double b[] ) const
 //
 // Multiply all a values by a common scale
 //
-void G4ReduciblePolygon::ScaleA( const G4double scale )
+void G4ReduciblePolygon::ScaleA( G4double scale )
 {
 	ABVertex *curr = vertexHead;
 	while( curr ) {
@@ -154,7 +155,7 @@ void G4ReduciblePolygon::ScaleA( const G4double scale )
 //
 // Multiply all b values by a common scale
 //
-void G4ReduciblePolygon::ScaleB( const G4double scale )
+void G4ReduciblePolygon::ScaleB( G4double scale )
 {
 	ABVertex *curr = vertexHead;
 	while( curr ) {
@@ -170,7 +171,7 @@ void G4ReduciblePolygon::ScaleB( const G4double scale )
 // Remove adjacent vertices that are equal. Returns "false" if there
 // is a problem (too few vertices remaining).
 //
-G4bool G4ReduciblePolygon::RemoveDuplicateVertices( const G4double tolerance )
+G4bool G4ReduciblePolygon::RemoveDuplicateVertices( G4double tolerance )
 {
 	ABVertex *curr = vertexHead, 
 		 *prev = 0,
@@ -221,7 +222,7 @@ G4bool G4ReduciblePolygon::RemoveDuplicateVertices( const G4double tolerance )
 // Remove any unneeded vertices, i.e. those vertices which
 // are on the line connecting the previous and next vertices.
 //
-G4bool G4ReduciblePolygon::RemoveRedundantVertices( const G4double tolerance )
+G4bool G4ReduciblePolygon::RemoveRedundantVertices( G4double tolerance )
 {
 	//
 	// Under these circumstances, we can quit now!
@@ -368,7 +369,7 @@ void G4ReduciblePolygon::ReverseOrder()
 //
 // Warning: this routine is not very fast (runs as N**2)
 //
-G4bool G4ReduciblePolygon::CrossesItself( const G4double tolerance )
+G4bool G4ReduciblePolygon::CrossesItself( G4double tolerance )
 {
 	G4double tolerance2 = tolerance*tolerance;
 	G4double one = 1.0-tolerance,
@@ -425,8 +426,8 @@ G4bool G4ReduciblePolygon::CrossesItself( const G4double tolerance )
 //
 // Decide if a line through two points crosses the polygon, within tolerance
 //
-G4bool G4ReduciblePolygon::BisectedBy( const G4double a1, const G4double b1,
-			 	       const G4double a2, const G4double b2, const G4double tolerance )
+G4bool G4ReduciblePolygon::BisectedBy( G4double a1, G4double b1,
+			 	       G4double a2, G4double b2, G4double tolerance )
 {
 	G4int nNeg = 0, nPos = 0;
 	

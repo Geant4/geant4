@@ -1,0 +1,115 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4Hype.icc,v 1.1 2000-11-02 16:54:48 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// --------------------------------------------------------------------
+// GEANT 4 inline definitions file
+//
+// G4Hype.icc
+//
+// Implementation of inline methods of G4Hype
+// --------------------------------------------------------------------
+
+inline
+G4double G4Hype::GetInnerRadius () const
+  {
+    return innerRadius;
+  }
+
+inline
+G4double G4Hype::GetOuterRadius () const
+  {
+    return outerRadius;
+  }
+
+inline
+G4double G4Hype::GetZHalfLength () const
+  {
+    return halfLenZ;
+  }
+
+inline
+G4double G4Hype::GetInnerStereo () const
+  {
+    return innerStereo;
+  }
+
+inline
+G4double G4Hype::GetOuterStereo () const
+  {
+    return outerStereo;
+  }
+
+inline
+void G4Hype::SetInnerRadius (G4double newIRad) 
+  { 
+    innerRadius= newIRad;
+    innerRadius2= newIRad*newIRad;
+    endInnerRadius2=HypeInnerRadius2(halfLenZ);
+    endInnerRadius=sqrt(endInnerRadius2);
+  }
+
+inline
+void G4Hype::SetOuterRadius (G4double newORad) 
+  { 
+    outerRadius= newORad;
+    outerRadius2=newORad*newORad;
+    endOuterRadius2=HypeOuterRadius2(halfLenZ);
+    endOuterRadius=sqrt(endOuterRadius2);
+  } 
+
+inline
+void G4Hype::SetZHalfLength (G4double newHLZ)
+  {
+    halfLenZ   = newHLZ ;
+  }
+
+inline
+void G4Hype::SetInnerStereo (G4double newISte) 
+  { 
+    innerStereo= fabs(newISte);
+    tanInnerStereo=tan(innerStereo);
+    tanInnerStereo2=tanInnerStereo*tanInnerStereo;
+    endInnerRadius2=HypeInnerRadius2(halfLenZ);
+    endInnerRadius=sqrt(endInnerRadius2);
+  }
+
+inline
+void G4Hype::SetOuterStereo (G4double newOSte)
+  { 
+    outerStereo= fabs(newOSte);
+    tanOuterStereo=tan(outerStereo);
+    tanOuterStereo2=tanOuterStereo*tanOuterStereo;
+    endOuterRadius2=HypeOuterRadius2(halfLenZ);
+    endOuterRadius=sqrt(endOuterRadius2);
+  }
+
+inline
+G4GeometryType G4Hype::GetEntityType() const
+  {
+    return G4String("G4Hype");
+  }
+
+inline
+G4bool G4Hype::InnerSurfaceExists() const
+  {
+    return (innerRadius > DBL_MIN) || (innerStereo != 0);
+  }
+
+inline
+G4double G4Hype::HypeInnerRadius2(G4double zVal) const
+  {
+    return (tanInnerStereo2*zVal*zVal+innerRadius2);
+  }
+
+inline
+G4double G4Hype::HypeOuterRadius2(G4double zVal) const
+  {
+    return (tanOuterStereo2*zVal*zVal+outerRadius2);
+  }

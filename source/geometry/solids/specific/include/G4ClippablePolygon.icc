@@ -1,0 +1,41 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4ClippablePolygon.icc,v 1.1 2000-11-02 16:54:48 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// --------------------------------------------------------------------
+// GEANT 4 inline definitions file
+//
+// G4ClippablePolygon.icc
+//
+// Implementation of inline methods of G4ClippablePolygon
+// --------------------------------------------------------------------
+
+inline
+void G4ClippablePolygon::SetNormal( const G4ThreeVector &newNormal )
+{
+   normal = newNormal;
+}
+
+inline
+const G4ThreeVector G4ClippablePolygon::GetNormal() const
+{
+   return normal;
+}
+
+inline
+G4int G4ClippablePolygon::GetNumVertices() const
+{
+   return vertices.entries();
+}
+
+inline
+G4bool G4ClippablePolygon::Empty() const
+{
+   return vertices.entries()==0;
+}

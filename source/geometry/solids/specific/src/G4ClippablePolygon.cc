@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ClippablePolygon.cc,v 1.2 2000-04-18 19:07:11 davidw Exp $
+// $Id: G4ClippablePolygon.cc,v 1.3 2000-11-02 16:54:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,6 +22,17 @@
 #include "G4ClippablePolygon.hh"
 
 #include "G4VoxelLimits.hh"
+
+//
+// Constructor
+//
+
+//
+// Destructor
+//
+G4ClippablePolygon::~G4ClippablePolygon()
+{
+}
 
 //
 // AddVertexInOrder

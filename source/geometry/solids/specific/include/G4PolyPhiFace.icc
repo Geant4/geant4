@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PolyPhiFace.icc,v 1.1 2000-04-07 10:57:03 gcosmo Exp $
+// $Id: G4PolyPhiFace.icc,v 1.2 2000-11-02 16:54:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,6 +16,12 @@
 //
 // Implementation of inline methods of G4PolyPhiFace
 // --------------------------------------------------------------------
+
+inline
+G4VCSGface* G4PolyPhiFace::Clone()
+{
+   return new G4PolyPhiFace(*this);
+}
 
 // ExactZOrder
 //
@@ -29,11 +35,13 @@
 // In 99.9999% of the cases, a trivial calculation is used. In difficult
 // cases, a precise, compliant calculation is relied on.
 //
-inline G4double G4PolyPhiFace::ExactZOrder( const G4double z, 
-					    const G4double qx, const G4double qy, const G4double qz, 
-					    const G4ThreeVector &v, 
-					    const G4double normSign,
-					    const G4PolyPhiFaceVertex *vert ) const {
+inline
+G4double G4PolyPhiFace::ExactZOrder( G4double z, 
+                                     G4double qx, G4double qy, G4double qz, 
+                                     const G4ThreeVector &v, 
+                                     G4double normSign,
+                                     const G4PolyPhiFaceVertex *vert ) const
+{
 	G4double answer = vert->z - z;
 	if (fabs(answer) < kCarTolerance) {
 		G4ThreeVector qa( qx - vert->x + radial.x(),

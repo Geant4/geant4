@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PolyhedraSide.cc,v 1.1 2000-04-07 11:02:42 gcosmo Exp $
+// $Id: G4PolyhedraSide.cc,v 1.2 2000-11-02 16:54:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,11 +35,11 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
 				  const G4PolyhedraSideRZ *tail,
 				  const G4PolyhedraSideRZ *head,
 				  const G4PolyhedraSideRZ *nextRZ,
-				  const G4int theNumSide, 
-				  const G4double thePhiStart, 
-				  const G4double thePhiTotal, 
-				  const G4bool thePhiIsOpen,
-				  const G4bool isAllBehind )
+				        G4int theNumSide, 
+				        G4double thePhiStart, 
+				        G4double thePhiTotal, 
+				        G4bool thePhiIsOpen,
+				        G4bool isAllBehind )
 {
 	//
 	// Record values
@@ -274,9 +274,9 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSide &source )
 //
 // Assignment operator
 //
-G4PolyhedraSide *G4PolyhedraSide::operator=( const G4PolyhedraSide &source )
+G4PolyhedraSide& G4PolyhedraSide::operator=( const G4PolyhedraSide &source )
 {
-	if (this == &source) return this;
+	if (this == &source) return *this;
 	
 	delete cone;
 	delete [] vecs;
@@ -284,7 +284,7 @@ G4PolyhedraSide *G4PolyhedraSide::operator=( const G4PolyhedraSide &source )
 	
 	CopyStuff( source );
 
-	return this;
+	return *this;
 }
 
 
@@ -380,7 +380,7 @@ void G4PolyhedraSide::CopyStuff( const G4PolyhedraSide &source )
 //      
 //
 G4bool G4PolyhedraSide::Intersect( const G4ThreeVector &p, const G4ThreeVector &v,	
-				   const G4bool outgoing, const G4double surfTolerance,
+				   G4bool outgoing, G4double surfTolerance,
 				   G4double &distance, G4double &distFromSurface,
 				   G4ThreeVector &normal, G4bool &isAllBehind )
 {
@@ -492,7 +492,7 @@ G4bool G4PolyhedraSide::Intersect( const G4ThreeVector &p, const G4ThreeVector &
 }
 
 
-G4double G4PolyhedraSide::Distance( const G4ThreeVector &p, const G4bool outgoing )
+G4double G4PolyhedraSide::Distance( const G4ThreeVector &p, G4bool outgoing )
 {
 	G4double normSign = outgoing ? -1 : +1;
 	
@@ -524,7 +524,7 @@ G4double G4PolyhedraSide::Distance( const G4ThreeVector &p, const G4bool outgoin
 //
 // Inside
 //
-EInside G4PolyhedraSide::Inside( const G4ThreeVector &p, const G4double tolerance, 
+EInside G4PolyhedraSide::Inside( const G4ThreeVector &p, G4double tolerance, 
 				 G4double *bestDistance )
 {
 	//
@@ -700,8 +700,8 @@ void G4PolyhedraSide::CalculateExtent( const EAxis axis,
 //
 G4bool G4PolyhedraSide::IntersectSidePlane( const G4ThreeVector &p, const G4ThreeVector &v,
 					    const G4PolyhedraSideVec vec,
-					    const G4double normSign, 
-					    const G4double surfTolerance,
+					          G4double normSign, 
+					          G4double surfTolerance,
 				 	    G4double &distance, G4double &distFromSurface )
 {
 	//
@@ -830,7 +830,7 @@ G4int G4PolyhedraSide::LineHitsSegments( const G4ThreeVector &p, const G4ThreeVe
 // Decide which phi segment is closest in phi to the point.
 // The result is the same as PhiSegment if there is no phi opening.
 //
-G4int G4PolyhedraSide::ClosestPhiSegment( const G4double phi0 )
+G4int G4PolyhedraSide::ClosestPhiSegment( G4double phi0 )
 {
 	G4int iPhi = PhiSegment( phi0 );
 	if (iPhi >= 0) return iPhi;
@@ -858,7 +858,7 @@ G4int G4PolyhedraSide::ClosestPhiSegment( const G4double phi0 )
 // A value of -1 indicates that the phi value is outside the shape
 // (only possible if phiTotal < 360 degrees).
 //
-G4int G4PolyhedraSide::PhiSegment( const G4double phi0 )
+G4int G4PolyhedraSide::PhiSegment( G4double phi0 )
 {
 	//
 	// How far are we from phiStart? Come up with a positive answer

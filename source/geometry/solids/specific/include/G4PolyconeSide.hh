@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PolyconeSide.hh,v 1.2 2000-09-12 07:34:17 gcosmo Exp $
+// $Id: G4PolyconeSide.hh,v 1.3 2000-11-02 16:54:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,7 +18,17 @@
 // Class description:
 //
 //   Class implmenting a face that represents one conical side
-//   of a polycone.
+//   of a polycone:
+//
+//   G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
+//                   const G4PolyconeSideRZ *tail,
+//                   const G4PolyconeSideRZ *head,
+//                   const G4PolyconeSideRZ *nextRZ,
+//                   G4double phiStart, G4double deltaPhi, 
+//                   G4bool phiIsOpen, G4bool isAllBehind=false )
+//
+//   Values for r1,z1 and r2,z2 should be specified in clockwise
+//   order in (r,z).
 
 // Author: 
 //   David C. Williams (davidw@scipp.ucsc.edu)
@@ -35,27 +45,29 @@ typedef struct {
         G4double r, z;  // start of vector
 } G4PolyconeSideRZ;
  
-class G4PolyconeSide : public G4VCSGface {
-	public:
+class G4PolyconeSide : public G4VCSGface
+{
+  public:
+
 	G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
                         const G4PolyconeSideRZ *tail,
                         const G4PolyconeSideRZ *head,
                         const G4PolyconeSideRZ *nextRZ,
-			const G4double phiStart, const G4double deltaPhi, 
-			const G4bool phiIsOpen, const G4bool isAllBehind=false );
+			G4double phiStart, G4double deltaPhi, 
+			G4bool phiIsOpen, G4bool isAllBehind=false );
 	virtual ~G4PolyconeSide();
 	
 	G4PolyconeSide( const G4PolyconeSide &source );
-	G4PolyconeSide *operator=( const G4PolyconeSide &source );
+	G4PolyconeSide& operator=( const G4PolyconeSide &source );
 	
 	G4bool Intersect( const G4ThreeVector &p, const G4ThreeVector &v,	
-			  const G4bool outgoing, const G4double surfTolerance,
+			  G4bool outgoing, G4double surfTolerance,
 			  G4double &distance, G4double &distFromSurface,
 			  G4ThreeVector &normal, G4bool &isAllBehind );
 
-        G4double Distance( const G4ThreeVector &p, const G4bool outgoing );
+        G4double Distance( const G4ThreeVector &p, G4bool outgoing );
 	
-	EInside Inside( const G4ThreeVector &p, const G4double tolerance, 
+	EInside Inside( const G4ThreeVector &p, G4double tolerance, 
 			G4double *bestDistance );
 	
 	G4ThreeVector Normal( const G4ThreeVector &p,  G4double *bestDistance );
@@ -69,7 +81,8 @@ class G4PolyconeSide : public G4VCSGface {
 
 	G4VCSGface *Clone() { return new G4PolyconeSide( *this ); }
 	
-	protected:
+  protected:
+
 	G4double r[2], z[2];	// r, z parameters, in specified order
 	G4double startPhi,	// Start phi (0 to 2pi), if phiIsOpen
 		 deltaPhi;	// Delta phi (0 to 2pi), if phiIsOpen
@@ -91,18 +104,18 @@ class G4PolyconeSide : public G4VCSGface {
 
 	G4ThreeVector *corners;	// The coordinates of the corners (if phiIsOpen)
 				
-	G4double DistanceAway( const G4ThreeVector &p, const G4bool opposite,
+	G4double DistanceAway( const G4ThreeVector &p, G4bool opposite,
 			       G4double &distOutside2, G4double *rzNorm=0 );
 			
-	G4bool PointOnCone( const G4ThreeVector &hit, const G4double normSign,
+	G4bool PointOnCone( const G4ThreeVector &hit, G4double normSign,
 			    const G4ThreeVector &p, const G4ThreeVector &v, G4ThreeVector &normal );
 
 	void CopyStuff( const G4PolyconeSide &source );
 	
-	static void FindLineIntersect( const G4double x1, const G4double y1,
-				       const G4double tx1, const G4double ty1,
-				       const G4double x2, const G4double y2,
-				       const G4double tx2, const G4double ty2,
+	static void FindLineIntersect( G4double x1, G4double y1,
+				       G4double tx1, G4double ty1,
+				       G4double x2, G4double y2,
+				       G4double tx2, G4double ty2,
 				       G4double &x, G4double &y );
 };
 

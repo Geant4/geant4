@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.hh,v 1.4 2000-09-12 07:34:17 gcosmo Exp $
+// $Id: G4VCSGfaceted.hh,v 1.5 2000-11-02 16:54:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,7 +34,8 @@ class G4VisExtent;
 
 class G4VCSGfaceted : public G4VSolid 
 {
-	public:
+  public:
+
 	G4VCSGfaceted( G4String name) : G4VSolid(name) {;}
 	virtual ~G4VCSGfaceted();
 	
@@ -57,7 +58,7 @@ class G4VCSGfaceted : public G4VSolid
 					G4bool *validNorm=0,G4ThreeVector *n=0 ) const;
 	virtual G4double DistanceToOut( const G4ThreeVector& p ) const;
 
-	virtual G4GeometryType  GetEntityType() const { return G4String("G4CSGfaceted"); }
+	G4GeometryType  GetEntityType() const { return G4String("G4CSGfaceted"); }
 
         virtual G4Polyhedron* CreatePolyhedron() const = 0;
 

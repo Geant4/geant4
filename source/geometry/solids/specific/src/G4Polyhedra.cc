@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polyhedra.cc,v 1.1 2000-04-07 11:02:25 gcosmo Exp $
+// $Id: G4Polyhedra.cc,v 1.2 2000-11-02 16:54:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,11 +49,11 @@
 //
 // GEANT3 PGON radii are specified in the distance to the norm of each face.
 //	
-G4Polyhedra::G4Polyhedra( G4String name, 
-                          const G4double phiStart,
-                          const G4double thePhiTotal,
- 		          const G4int theNumSide,	
-                          const G4int numZPlanes,
+G4Polyhedra::G4Polyhedra( const G4String& name, 
+                                G4double phiStart,
+                                G4double thePhiTotal,
+ 		                G4int theNumSide,	
+                                G4int numZPlanes,
                           const G4double zPlane[],
                           const G4double rInner[],
                           const G4double rOuter[]  ) : G4VCSGfaceted( name )
@@ -106,11 +106,11 @@ G4Polyhedra::G4Polyhedra( G4String name,
 //
 // Constructor (generic parameters)
 //
-G4Polyhedra::G4Polyhedra( G4String name, 
-		    	  const G4double phiStart,
-                    	  const G4double phiTotal,
- 		          const G4int    theNumSide,	
-		    	  const G4int    numRZ,
+G4Polyhedra::G4Polyhedra( const G4String& name, 
+		    	        G4double phiStart,
+                    	        G4double phiTotal,
+ 		                G4int    theNumSide,	
+		    	        G4int    numRZ,
 		    	  const G4double r[],
 		    	  const G4double z[]	 ) : G4VCSGfaceted( name )
 {
@@ -129,9 +129,9 @@ G4Polyhedra::G4Polyhedra( G4String name,
 //
 // Generic create routine, called by each constructor after conversion of arguments
 //
-void G4Polyhedra::Create( const G4double phiStart,
-            	     	  const G4double phiTotal,
- 		          const G4int    theNumSide,	
+void G4Polyhedra::Create( G4double phiStart,
+            	     	  G4double phiTotal,
+ 		          G4int    theNumSide,	
 		     	  G4ReduciblePolygon *rz  )
 {
 	//

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PolyhedraSide.hh,v 1.2 2000-09-12 07:34:17 gcosmo Exp $
+// $Id: G4PolyhedraSide.hh,v 1.3 2000-11-02 16:54:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,7 +18,18 @@
 // Class description:
 //
 //   Class implementing a face that represents one segmented side
-//   of a polyhedra.
+//   of a polyhedra:
+//
+//   G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
+//                    const G4PolyhedraSideRZ *tail,
+//                    const G4PolyhedraSideRZ *head,
+//                    const G4PolyhedraSideRZ *nextRZ,
+//                          G4int    numSide,
+//                          G4double phiStart, G4double phiTotal, 
+//                          G4bool phiIsOpen,  G4bool isAllBehind=false )
+//
+//   Values for r1,z1 and r2,z2 should be specified in clockwise
+//   order in (r,z).
 
 // Author: 
 //   David C. Williams (davidw@scipp.ucsc.edu)
@@ -35,28 +46,31 @@ typedef struct {
 	G4double r, z;	// start of vector
 } G4PolyhedraSideRZ;
 
-class G4PolyhedraSide : public G4VCSGface {
-	public:
+class G4PolyhedraSide : public G4VCSGface
+{
+
+  public:
+
 	G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
 			 const G4PolyhedraSideRZ *tail,
 			 const G4PolyhedraSideRZ *head,
 			 const G4PolyhedraSideRZ *nextRZ,
-			 const G4int    numSide,
-			 const G4double phiStart, const G4double phiTotal, 
-			 const G4bool phiIsOpen, const G4bool isAllBehind=false );
+			       G4int    numSide,
+			       G4double phiStart, G4double phiTotal, 
+			       G4bool phiIsOpen,  G4bool isAllBehind=false );
 	virtual ~G4PolyhedraSide();
 	
 	G4PolyhedraSide( const G4PolyhedraSide &source );
-	G4PolyhedraSide *operator=( const G4PolyhedraSide &source );
+	G4PolyhedraSide& operator=( const G4PolyhedraSide &source );
 	
 	G4bool Intersect( const G4ThreeVector &p, const G4ThreeVector &v,	
-			  const G4bool outgoing, const G4double surfTolerance,
+			  G4bool outgoing, G4double surfTolerance,
 			  G4double &distance, G4double &distFromSurface,
 			  G4ThreeVector &normal, G4bool &allBehind );
 
-        G4double Distance( const G4ThreeVector &p, const G4bool outgoing );
+        G4double Distance( const G4ThreeVector &p, G4bool outgoing );
 	
-	EInside Inside( const G4ThreeVector &p, const G4double tolerance, 
+	EInside Inside( const G4ThreeVector &p, G4double tolerance, 
 			G4double *bestDistance );
 	
 	G4ThreeVector Normal( const G4ThreeVector &p,  G4double *bestDistance );
@@ -70,7 +84,8 @@ class G4PolyhedraSide : public G4VCSGface {
 
 	G4VCSGface *Clone() { return new G4PolyhedraSide( *this ); }
 	
-	protected:
+  protected:
+
 	//
 	// A couple internal data structures
 	//
@@ -111,16 +126,16 @@ class G4PolyhedraSide : public G4VCSGface {
 	
 	G4bool IntersectSidePlane( const G4ThreeVector &p, const G4ThreeVector &v,
 				   const G4PolyhedraSideVec vec,
-				   const G4double normSign, 
-				   const G4double surfTolerance,
+				         G4double normSign, 
+				         G4double surfTolerance,
 				   G4double &distance, G4double &distFromSurface );
 
 	G4int LineHitsSegments( const G4ThreeVector &p, const G4ThreeVector &v,
 				G4int *i1, G4int *i2 );
 
-	G4int ClosestPhiSegment( const G4double phi );
+	G4int ClosestPhiSegment( G4double phi );
 	
-	G4int PhiSegment( const G4double phi );
+	G4int PhiSegment( G4double phi );
 	
 	G4double DistanceToOneSide( const G4ThreeVector &p,
 				    const G4PolyhedraSideVec &vec,

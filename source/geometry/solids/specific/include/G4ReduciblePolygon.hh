@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ReduciblePolygon.hh,v 1.2 2000-09-12 07:34:17 gcosmo Exp $
+// $Id: G4ReduciblePolygon.hh,v 1.3 2000-11-02 16:54:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,21 +41,23 @@
 
 #include "globals.hh"
 
-class G4ReduciblePolygon {
-	friend class G4ReduciblePolygonIterator;
+class G4ReduciblePolygon
+{
+  friend class G4ReduciblePolygonIterator;
 
-	public:
+  public:
 	//
 	// Creator: via simple a/b arrays
 	//
-	G4ReduciblePolygon( const G4double a[], const G4double b[], const G4int n );
+	G4ReduciblePolygon( const G4double a[], const G4double b[], G4int n );
 	
 	//
 	// Creator: a special version for G4Polygon and G4Polycone
 	// that takes two a points at planes of b
 	// (where a==r and b==z for the GEANT3 classic PCON and PGON)
 	//
-	G4ReduciblePolygon( const G4double rmin[], const G4double rmax[], const G4double z[], const G4int n );
+	G4ReduciblePolygon( const G4double rmin[], const G4double rmax[],
+	                    const G4double z[], G4int n );
 	
 	virtual ~G4ReduciblePolygon();
 	
@@ -74,11 +76,11 @@ class G4ReduciblePolygon {
 	//
 	// Manipulations
 	//
-	void ScaleA( const G4double scale );
-	void ScaleB( const G4double scale );
+	void ScaleA( G4double scale );
+	void ScaleB( G4double scale );
 	
-	G4bool RemoveDuplicateVertices( const G4double tolerance );
-	G4bool RemoveRedundantVertices( const G4double tolerance );
+	G4bool RemoveDuplicateVertices( G4double tolerance );
+	G4bool RemoveRedundantVertices( G4double tolerance );
 	
 	void ReverseOrder();
 
@@ -86,15 +88,15 @@ class G4ReduciblePolygon {
 	// Tests
 	//
 	G4double Area();
-	G4bool CrossesItself( const G4double tolerance );
-	G4bool BisectedBy( const G4double a1, const G4double b1,
-			   const G4double a2, const G4double b2, const G4double tolerance );
+	G4bool CrossesItself( G4double tolerance );
+	G4bool BisectedBy( G4double a1, G4double b1,
+			   G4double a2, G4double b2, G4double tolerance );
 	
 	void Print();	// Debugging only
 	
-	protected:
+  protected:
 	
-	void Create( const G4double a[], const G4double b[], const G4int n );
+	void Create( const G4double a[], const G4double b[], G4int n );
 	
 	void CalculateMaxMin();
 	
@@ -118,6 +120,12 @@ class G4ReduciblePolygon {
 	};
 	
 	ABVertex *vertexHead;
+
+  private:
+
+        G4ReduciblePolygon(const G4ReduciblePolygon&);
+	G4ReduciblePolygon& operator=(const G4ReduciblePolygon&);
+	  // Private copy constructor and assignment operator.
 };
 
 
@@ -125,21 +133,25 @@ class G4ReduciblePolygon {
 // A companion class for iterating over the vertices of our polygon.
 // It is simple enough that all routines are declared inline here.
 //
-class G4ReduciblePolygonIterator {
-	public:
-	G4ReduciblePolygonIterator( const G4ReduciblePolygon *theSubject ) { subject = theSubject; current=0; }
+class G4ReduciblePolygonIterator
+{
+  public:
+
+	G4ReduciblePolygonIterator( const G4ReduciblePolygon *theSubject )
+	 { subject = theSubject; current=0; }
 	
-	inline void	Begin() { current = subject->vertexHead; }	
-	inline G4bool	Next()  { if (current) current = current->next; return Valid(); }		
+	void	Begin() { current = subject->vertexHead; }	
+	G4bool	Next()  { if (current) current=current->next; return Valid(); }
 	
-	inline G4bool	Valid() const { return current!=0; }	
+	G4bool	Valid() const { return current!=0; }	
 	
-	inline G4double GetA() const { return current->a; }
-	inline G4double GetB() const { return current->b; }
+	G4double GetA() const { return current->a; }
+	G4double GetB() const { return current->b; }
 	
-	protected:
-	const G4ReduciblePolygon	*subject;	// Who are we iterating over
-	G4ReduciblePolygon::ABVertex	*current;	// Current vertex
+  protected:
+
+	const G4ReduciblePolygon	*subject;  // Who are we iterating over
+	G4ReduciblePolygon::ABVertex	*current;  // Current vertex
 };
 
 #endif

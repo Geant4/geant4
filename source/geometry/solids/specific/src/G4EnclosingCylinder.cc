@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnclosingCylinder.cc,v 1.1 2000-04-07 11:00:35 gcosmo Exp $
+// $Id: G4EnclosingCylinder.cc,v 1.2 2000-11-02 16:54:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,8 +26,9 @@
 // Constructor
 //
 G4EnclosingCylinder::G4EnclosingCylinder( const G4ReduciblePolygon *rz,
-					  const G4bool thePhiIsOpen, 
-					  const G4double theStartPhi, const G4double theTotalPhi )
+					        G4bool thePhiIsOpen, 
+					        G4double theStartPhi,
+						G4double theTotalPhi )
 {
 	//
 	// Obtain largest r and smallest and largest z
@@ -39,7 +40,9 @@ G4EnclosingCylinder::G4EnclosingCylinder( const G4ReduciblePolygon *rz,
 	//
 	// Save phi info
 	//
-	if ( phiIsOpen = thePhiIsOpen ) {
+	phiIsOpen = thePhiIsOpen;
+	if ( phiIsOpen )
+        {
 		startPhi = theStartPhi;
 		totalPhi = theTotalPhi;
 		

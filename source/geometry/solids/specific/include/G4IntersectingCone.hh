@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IntersectingCone.hh,v 1.2 2000-09-12 07:34:16 gcosmo Exp $
+// $Id: G4IntersectingCone.hh,v 1.3 2000-11-02 16:54:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,8 +31,10 @@
 #include "geomdefs.hh"
 #include "G4ThreeVector.hh"
 
-class G4IntersectingCone {
-	public:
+class G4IntersectingCone
+{
+  public:
+
 	G4IntersectingCone( const G4double r[2], const G4double z[2] );
 	virtual ~G4IntersectingCone();
 	
@@ -47,7 +49,8 @@ class G4IntersectingCone {
 	inline G4double ZHi() const { return zHi; }
 	
 	
-	protected:
+  protected:
+
 	G4double zLo, zHi,	// Z bounds of side
 		 rLo, rHi;	// R bounds of side
 

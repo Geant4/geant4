@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EllipticalTube.cc,v 1.7 2000-04-19 19:09:07 davidw Exp $
+// $Id: G4EllipticalTube.cc,v 1.8 2000-11-02 16:54:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,8 +35,8 @@
 // Constructor
 //
 G4EllipticalTube::G4EllipticalTube( const G4String &name, 
-			 	    const G4double theDx, const G4double theDy, const G4double theDz )
-			: G4VSolid( name )
+		    G4double theDx, G4double theDy, G4double theDz )
+        : G4VSolid( name )
 {
 	dx = theDx;
 	dy = theDy;

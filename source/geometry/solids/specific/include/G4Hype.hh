@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Hype.hh,v 1.3 2000-04-19 17:56:27 davidw Exp $
+// $Id: G4Hype.hh,v 1.4 2000-11-02 16:54:48 gcosmo Exp $
 // $Original: G4Hype.hh,v 1.0 1998/06/09 16:57:50 safai Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -37,7 +37,7 @@
 //
 //   As inherited from G4VSolid,
 //
-//   G4Hype(const G4String      &pName
+//   G4Hype(const G4String&     pName
 //          const G4double      innerRadius
 //          const G4double      outerRadius
 //          const G4double      innerStereo
@@ -54,7 +54,7 @@
 //   CreateRotatedVertices(const G4AffineTransform& pTransform) const
 //
 //   Create the List of transformed vertices in the format required
-//   for G4VSolid:: ClipCrossSection and ClipBetweenSections.
+//   for G4VSolid::ClipCrossSection and ClipBetweenSections.
 
 // Authors: 
 //      Ernesto Lamanna (Ernesto.Lamanna@roma1.infn.it) &
@@ -75,15 +75,16 @@
 class G4SolidExtentList;
 class G4ClippablePolygon;
 
-class G4Hype : public G4VSolid {
-public:
+class G4Hype : public G4VSolid
+{
+ public:
 
   G4Hype(const G4String &pName,
-	 const G4double newInnerRadius,
-	 const G4double newOuterRadius,
-	 const G4double newInnerStereo,
-	 const G4double newOuterStereo,
-	 const G4double newHalfLenZ);
+	       G4double newInnerRadius,
+	       G4double newOuterRadius,
+	       G4double newInnerStereo,
+	       G4double newOuterStereo,
+	       G4double newHalfLenZ);
 
   virtual ~G4Hype();
     
@@ -96,47 +97,17 @@ public:
 			 const G4AffineTransform& pTransform,
 			 G4double& pmin, G4double& pmax) const;
 
-  G4double    GetInnerRadius () const { return innerRadius; }
-  G4double    GetOuterRadius () const { return outerRadius; }
-  G4double    GetZHalfLength () const { return halfLenZ; }
-  G4double    GetInnerStereo () const { return innerStereo; }
-  G4double    GetOuterStereo () const { return outerStereo; }
+  inline G4double GetInnerRadius () const;
+  inline G4double GetOuterRadius () const;
+  inline G4double GetZHalfLength () const;
+  inline G4double GetInnerStereo () const;
+  inline G4double GetOuterStereo () const;
 
-  void        SetInnerRadius (G4double newIRad) 
-  { 
-    innerRadius= newIRad;
-    innerRadius2= newIRad*newIRad;
-    endInnerRadius2=HypeInnerRadius2(halfLenZ);
-    endInnerRadius=sqrt(endInnerRadius2);
-  }
-
-  void        SetOuterRadius (G4double newORad) 
-  { 
-    outerRadius= newORad;
-    outerRadius2=newORad*newORad;
-    endOuterRadius2=HypeOuterRadius2(halfLenZ);
-    endOuterRadius=sqrt(endOuterRadius2);
-  } 
-
-  void        SetZHalfLength (G4double newHLZ)  { halfLenZ   = newHLZ ; }
-
-  void        SetInnerStereo (G4double newISte) 
-  { 
-    innerStereo= fabs(newISte);
-    tanInnerStereo=tan(innerStereo);
-    tanInnerStereo2=tanInnerStereo*tanInnerStereo;
-    endInnerRadius2=HypeInnerRadius2(halfLenZ);
-    endInnerRadius=sqrt(endInnerRadius2);
-  }
-
-  void        SetOuterStereo (G4double newOSte)
-  { 
-    outerStereo= fabs(newOSte);
-    tanOuterStereo=tan(outerStereo);
-    tanOuterStereo2=tanOuterStereo*tanOuterStereo;
-    endOuterRadius2=HypeOuterRadius2(halfLenZ);
-    endOuterRadius=sqrt(endOuterRadius2);
-  }
+  inline void SetInnerRadius (G4double newIRad);
+  inline void SetOuterRadius (G4double newORad);
+  inline void SetZHalfLength (G4double newHLZ);
+  inline void SetInnerStereo (G4double newISte);
+  inline void SetOuterStereo (G4double newOSte);
 
   EInside Inside(const G4ThreeVector& p) const;
 
@@ -144,36 +115,36 @@ public:
 
   G4double DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) const;
   G4double DistanceToIn(const G4ThreeVector& p) const;
-  G4double DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
+  G4double DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
 			 const G4bool calcNorm=G4bool(false),
-			 G4bool *validNorm=0,G4ThreeVector *n=0) const;
+			 G4bool *validNorm=0, G4ThreeVector *n=0) const;
   G4double DistanceToOut(const G4ThreeVector& p) const;
 
-  virtual G4GeometryType  GetEntityType() const { return G4String("G4Hype"); }
+  inline G4GeometryType  GetEntityType() const;
 
-  void                DescribeYourselfTo (G4VGraphicsScene& scene) const;
-  G4VisExtent         GetExtent        () const;
-  G4Polyhedron*       CreatePolyhedron   () const;
-  G4NURBS*            CreateNURBS        () const;
+  void          DescribeYourselfTo (G4VGraphicsScene& scene) const;
+  G4VisExtent   GetExtent          () const;
+  G4Polyhedron* CreatePolyhedron   () const;
+  G4NURBS*      CreateNURBS        () const;
 
-protected:
+ protected:
   
-  // whether we have an inner surface or not
-  G4bool InnerSurfaceExists() const { return (innerRadius > DBL_MIN) || (innerStereo != 0); }
+  inline G4bool InnerSurfaceExists() const;
+    // whether we have an inner surface or not
 
-  // approximate isotropic distance to hyperbolic surface 
-  static G4double ApproxDistOutside( const G4double pr, const G4double pz,
-  			  	     const G4double r0, const G4double tanPhi );
-  static G4double ApproxDistInside( const G4double pr, const G4double pz,
-  			  	    const G4double r0, const G4double tan2Phi );
+  static G4double ApproxDistOutside( G4double pr, G4double pz,
+  			  	     G4double r0, G4double tanPhi );
+  static G4double ApproxDistInside( G4double pr, G4double pz,
+  			  	    G4double r0, G4double tan2Phi );
+    // approximate isotropic distance to hyperbolic surface 
 
-  // values of hype radius at a given Z
-  G4double HypeInnerRadius2(const G4double zVal) const { return (tanInnerStereo2*zVal*zVal+innerRadius2); }
-  G4double HypeOuterRadius2(const G4double zVal) const { return (tanOuterStereo2*zVal*zVal+outerRadius2); }
+  inline G4double HypeInnerRadius2(G4double zVal) const;
+  inline G4double HypeOuterRadius2(G4double zVal) const;
+    // values of hype radius at a given Z
 
-  // intersection with hyperbolic surface
   static G4int IntersectHype( const G4ThreeVector &p, const G4ThreeVector &v, 
-                              const G4double r2, const G4double tan2Phi, G4double s[2] );
+                              G4double r2, G4double tan2Phi, G4double s[2] );
+    // intersection with hyperbolic surface
 
   static void AddPolyToExtent( const G4ThreeVector &v0,
   			       const G4ThreeVector &v1,
@@ -182,15 +153,17 @@ protected:
 			       const G4VoxelLimits &voxelLimit,
 			       const EAxis axis,
 			       G4SolidExtentList &extentList );
-	
- 
-  G4double innerRadius; // variable names are quite self explanative
+
+ protected:
+
+  G4double innerRadius;
   G4double outerRadius;
   G4double halfLenZ;
   G4double innerStereo;
   G4double outerStereo;
 
   // precalculated parameters, squared quantities
+
   G4double tanInnerStereo;
   G4double tanOuterStereo;
   G4double tanInnerStereo2; // squared tan of Inner Stereo angle
@@ -203,7 +176,10 @@ protected:
   G4double endOuterRadius; // endcap Outer Radius
   
   // Used by distanceToOut
+
   enum ESide {outerFace,innerFace,leftCap, rightCap};
 };
-   	
+
+#include "G4Hype.icc"
+
 #endif

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PolyPhiFace.cc,v 1.1 2000-04-07 11:01:31 gcosmo Exp $
+// $Id: G4PolyPhiFace.cc,v 1.2 2000-11-02 16:54:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,8 +36,8 @@
 //                 |           |          +--> z
 //                [0]---------[3]
 //
-G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz, const G4double phi, 
-			      const G4double deltaPhi, const G4double phiOther )
+G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz, G4double phi, 
+			      G4double deltaPhi, G4double phiOther )
 {
 	numEdges = rz->NumVertices();
 	
@@ -251,16 +251,16 @@ G4PolyPhiFace::G4PolyPhiFace( const G4PolyPhiFace &source )
 //
 // Assignment operator
 //
-G4PolyPhiFace *G4PolyPhiFace::operator=( const G4PolyPhiFace &source )
+G4PolyPhiFace& G4PolyPhiFace::operator=( const G4PolyPhiFace &source )
 {
-	if (this == &source) return this;
+	if (this == &source) return *this;
 
 	delete [] edges;
 	delete [] corners;
 	
 	CopyStuff( source );
 	
-	return this;
+	return *this;
 }
 
 
@@ -313,7 +313,7 @@ void G4PolyPhiFace::CopyStuff( const G4PolyPhiFace &source )
 // Intersect
 //
 G4bool G4PolyPhiFace::Intersect( const G4ThreeVector &p, const G4ThreeVector &v,
-				 const G4bool outgoing, const G4double surfTolerance,
+				 G4bool outgoing, G4double surfTolerance,
 				 G4double &distance, G4double &distFromSurface,
 				 G4ThreeVector &aNormal, G4bool &isAllBehind )
 {
@@ -365,7 +365,7 @@ G4bool G4PolyPhiFace::Intersect( const G4ThreeVector &p, const G4ThreeVector &v,
 //
 // Distance
 //
-G4double G4PolyPhiFace::Distance( const G4ThreeVector &p, const G4bool outgoing )
+G4double G4PolyPhiFace::Distance( const G4ThreeVector &p, G4bool outgoing )
 {
 	G4double normSign = outgoing ? +1 : -1;
 	//
@@ -407,7 +407,7 @@ G4double G4PolyPhiFace::Distance( const G4ThreeVector &p, const G4bool outgoing 
 //
 // Inside
 //
-EInside G4PolyPhiFace::Inside( const G4ThreeVector &p, const G4double tolerance, 
+EInside G4PolyPhiFace::Inside( const G4ThreeVector &p, G4double tolerance, 
 			       G4double *bestDistance )
 {
 	//
@@ -590,8 +590,8 @@ void G4PolyPhiFace::CalculateExtent( const EAxis axis,
 // See: "Computational Geometry in C (Second Edition)"
 // http://cs.smith.edu/~orourke/
 //
-G4bool G4PolyPhiFace::InsideEdgesExact( const G4double r, const G4double z, 
-				        const G4double normSign, const G4ThreeVector &p, const G4ThreeVector &v )
+G4bool G4PolyPhiFace::InsideEdgesExact( G4double r, G4double z, G4double normSign,
+					const G4ThreeVector &p, const G4ThreeVector &v )
 {
 	//
 	// Quick check of extent
@@ -720,7 +720,7 @@ G4bool G4PolyPhiFace::InsideEdgesExact( const G4double r, const G4double z,
 // calculate the distance to the shape. I left it in here because ...
 // well ... to test it better.
 //
-G4bool G4PolyPhiFace::InsideEdges( const G4double r, const G4double z )
+G4bool G4PolyPhiFace::InsideEdges( G4double r, G4double z )
 {
 	//
 	// Quick check of extent
@@ -742,7 +742,7 @@ G4bool G4PolyPhiFace::InsideEdges( const G4double r, const G4double z )
 //
 // Decide if the point in r,z is inside the edges of our face
 //
-G4bool G4PolyPhiFace::InsideEdges( const G4double r, const G4double z,
+G4bool G4PolyPhiFace::InsideEdges( G4double r, G4double z,
 				   G4double *bestDist2, 
 				   G4PolyPhiFaceVertex **base3Dnorm, 
 				   G4ThreeVector **head3Dnorm )

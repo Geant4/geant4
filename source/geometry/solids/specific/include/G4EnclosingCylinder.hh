@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnclosingCylinder.hh,v 1.2 2000-09-12 07:34:16 gcosmo Exp $
+// $Id: G4EnclosingCylinder.hh,v 1.3 2000-11-02 16:54:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -33,17 +33,25 @@
 
 class G4ReduciblePolygon;
 
-class G4EnclosingCylinder {
-	public:
+class G4EnclosingCylinder
+{
+  public:  // with description
+
 	G4EnclosingCylinder( const G4ReduciblePolygon *rz,
-			     const G4bool phiIsOpen, 
-			     const G4double startPhi, const G4double totalPhi );
+			     G4bool phiIsOpen, 
+			     G4double startPhi, G4double totalPhi );
 	~G4EnclosingCylinder();
 	
 	G4bool MustBeOutside( const G4ThreeVector &p ) const;
+	  // Decide very rapidly if the point is outside the cylinder.
+	  // If one is not certain, return false.
+
 	G4bool ShouldMiss( const G4ThreeVector &p, const G4ThreeVector &v ) const;
-	
-	protected:
+	  // Decide very rapidly if the trajectory is going to miss the cylinder.
+	  // If one is not sure, return false.
+
+  protected:
+
 	G4double radius; 	// radius of our cylinder
 	G4double zLo, zHi;	// z extent
 	

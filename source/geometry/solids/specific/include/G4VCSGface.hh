@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGface.hh,v 1.2 2000-09-12 07:34:17 gcosmo Exp $
+// $Id: G4VCSGface.hh,v 1.3 2000-11-02 16:54:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,8 +28,7 @@
 //
 //	-------------------------------------------------------------------
 //      Intersect( const G4ThreeVector &p, const G4ThreeVector &v,
-//		   const G4bool outGoing, const G4double surfTolerance,
-//	           const G4bool outgoing, const G4double surfTolerance,
+//		         G4bool outGoing, G4double surfTolerance,
 //		   G4double &distance, G4double &distFromSurface,
 //		   G4ThreeVector &normal, G4bool &allBehind );
 //
@@ -255,19 +254,21 @@ class G4VoxelLimits;
 class G4AffineTransform;
 class G4SolidExtentList;
 
-class G4VCSGface {
-	public: 
+class G4VCSGface
+{
+  public: 
+
 	G4VCSGface() {;}
 	virtual ~G4VCSGface() {;}
 	
 	virtual G4bool Intersect( const G4ThreeVector &p, const G4ThreeVector &v,	
-				  const G4bool outgoing, const G4double surfTolerance,
+				  G4bool outgoing, G4double surfTolerance,
 				  G4double &distance, G4double &distFromSurface,
 				  G4ThreeVector &normal, G4bool &allBehind ) = 0;
 
-        virtual G4double Distance( const G4ThreeVector &p, const G4bool outgoing ) = 0;
+        virtual G4double Distance( const G4ThreeVector &p, G4bool outgoing ) = 0;
 	
-	virtual EInside Inside( const G4ThreeVector &p, const G4double tolerance, 
+	virtual EInside Inside( const G4ThreeVector &p, G4double tolerance, 
 				G4double *bestDistance ) = 0;
 		
 	virtual G4ThreeVector Normal( const G4ThreeVector &p,  G4double *bestDistance ) = 0;

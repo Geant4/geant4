@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polycone.cc,v 1.3 2000-06-27 16:20:11 gcosmo Exp $
+// $Id: G4Polycone.cc,v 1.4 2000-11-02 16:54:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,10 +31,10 @@
 //
 // Constructor (GEANT3 style parameters)
 //	
-G4Polycone::G4Polycone( G4String name, 
-                        const G4double phiStart,
-                        const G4double phiTotal,
-                        const G4int numZPlanes,
+G4Polycone::G4Polycone( const G4String& name, 
+                        G4double phiStart,
+                        G4double phiTotal,
+                        G4int numZPlanes,
                         const G4double zPlane[],
                         const G4double rInner[],
                         const G4double rOuter[]  ) : G4VCSGfaceted( name )
@@ -74,10 +74,10 @@ G4Polycone::G4Polycone( G4String name,
 //
 // Constructor (generic parameters)
 //
-G4Polycone::G4Polycone( G4String name, 
-		    	const G4double phiStart,
-                    	const G4double phiTotal,
-		    	const G4int    numRZ,
+G4Polycone::G4Polycone( const G4String& name, 
+		    	G4double phiStart,
+                    	G4double phiTotal,
+		    	G4int    numRZ,
 		    	const G4double r[],
 		    	const G4double z[]	 ) : G4VCSGfaceted( name )
 {
@@ -96,8 +96,8 @@ G4Polycone::G4Polycone( G4String name,
 //
 // Generic create routine, called by each constructor after conversion of arguments
 //
-void G4Polycone::Create( const G4double phiStart,
-            	     	 const G4double phiTotal,
+void G4Polycone::Create( G4double phiStart,
+            	     	 G4double phiTotal,
 		     	 G4ReduciblePolygon *rz	  )
 {
 	//

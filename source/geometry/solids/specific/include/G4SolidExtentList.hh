@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SolidExtentList.hh,v 1.2 2000-09-12 07:34:17 gcosmo Exp $
+// $Id: G4SolidExtentList.hh,v 1.3 2000-11-02 16:54:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,8 +34,9 @@
 
 #include "G4ClippablePolygon.hh"
 
-class G4SolidExtentList {
-	public:
+class G4SolidExtentList
+{
+  public:
 	
 	G4SolidExtentList();
 	G4SolidExtentList( const EAxis targetAxis, const G4VoxelLimits &voxelLimits );
@@ -53,10 +54,10 @@ class G4SolidExtentList {
 	G4double minLimit;	// ... min limit
 	G4double maxLimit;	// ... max limit
 
-	G4ClippablePolygon minSurface,		// Minimum surface within limits
-			   maxSurface,		// Maximum
-			   minAbove,		// Minimum surface totally above max limit
-			   maxBelow;		// Maximum surface totally below min limit
+	G4ClippablePolygon minSurface,  // Minimum surface within limits
+			   maxSurface,  // Maximum
+			   minAbove,    // Minimum surface totally above max limit
+			   maxBelow;    // Maximum surface totally below min limit
 };
 
 
