@@ -99,6 +99,7 @@ if [ `uname -n | grep sungeant` ]; then
     export G4SYSTEM=SUN-CC5
     export DEBOPT=${DEBOPT}_ISO
     unset G4USE_OSPACE
+    export PATH=`echo $PATH | sed s/SUNWspro50/SUNWspro/`
     export PATH=`echo $PATH | sed s/SUNWspro/SUNWspro50/`
   fi
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
@@ -120,8 +121,10 @@ if [ `uname -n | grep sungeant` ]; then
   export G4VIS_BUILD_VRML_DRIVER=1
   export G4VIS_BUILD_VRMLFILE_DRIVER=1
 # Persistency...
-  . $G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.sh
-  export G4EXAMPLE_FDID=207
+  if [ X$G4USE_HEPODBMS = X ]; then
+    . $G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.sh
+    export G4EXAMPLE_FDID=207
+  fi
 fi
 
 
