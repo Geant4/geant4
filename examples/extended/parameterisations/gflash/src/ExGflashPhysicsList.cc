@@ -278,6 +278,7 @@ void ExGflashPhysicsList::ConstructGeneral()
   }  
 }
 
+//  WARNING: This methode is mandatory if U want to use GFLASH
 void ExGflashPhysicsList::AddParameterisation()
 {
   G4FastSimulationManagerProcess* 
