@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyVisManager.cc,v 1.9 2001-07-11 10:09:17 gunter Exp $
+// $Id: MyVisManager.cc,v 1.10 2001-07-27 22:33:24 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,20 +31,17 @@
 
 // Supported drivers...
 
-#ifdef G4VIS_USE_ASCIITREE
+// Not needing external packages or libraries...
 #include "G4ASCIITree.hh"
-#endif
+#include "G4DAWNFILE.hh"
+#include "G4GAGTree.hh"
+#include "G4RayTracer.hh"
+#include "G4VRML1File.hh"
+#include "G4VRML2File.hh"
 
+// Needing external packages or libraries...
 #ifdef G4VIS_USE_DAWN
 #include "G4FukuiRenderer.hh"
-#endif
-
-#ifdef G4VIS_USE_DAWNFILE
-#include "G4DAWNFILE.hh"
-#endif
-
-#ifdef G4VIS_USE_GAGTREE
-#include "G4GAGTree.hh"
 #endif
 
 #ifdef G4VIS_USE_OPACS
@@ -75,38 +72,27 @@
 #include "G4OpenInventorWin32.hh"
 #endif
 
-#ifdef G4VIS_USE_RAYTRACER
-#include "G4RayTracer.hh"
-#endif
-
 #ifdef G4VIS_USE_VRML
 #include "G4VRML1.hh"
 #include "G4VRML2.hh"
 #endif
 
-#ifdef G4VIS_USE_VRMLFILE
-#include "G4VRML1File.hh"
-#include "G4VRML2File.hh"
-#endif
 
 MyVisManager::MyVisManager () {}
 
 void MyVisManager::RegisterGraphicsSystems () {
 
-#ifdef G4VIS_USE_ASCIITREE
+  // Graphics Systems not needing external packages or libraries...
   RegisterGraphicsSystem (new G4ASCIITree);
-#endif
+  RegisterGraphicsSystem (new G4DAWNFILE);
+  RegisterGraphicsSystem (new G4GAGTree);
+  RegisterGraphicsSystem (new G4RayTracer);
+  RegisterGraphicsSystem (new G4VRML1File);
+  RegisterGraphicsSystem (new G4VRML2File);
 
+  // Graphics systems needing external packages or libraries...
 #ifdef G4VIS_USE_DAWN
   RegisterGraphicsSystem (new G4FukuiRenderer);
-#endif
-
-#ifdef G4VIS_USE_DAWNFILE
-  RegisterGraphicsSystem (new G4DAWNFILE);
-#endif
-
-#ifdef G4VIS_USE_GAGTREE
-  RegisterGraphicsSystem (new G4GAGTree);
 #endif
 
 #ifdef G4VIS_USE_OPACS
@@ -137,18 +123,9 @@ void MyVisManager::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4OpenInventorWin32);
 #endif
 
-#ifdef G4VIS_USE_RAYTRACER
-  RegisterGraphicsSystem (new G4RayTracer);
-#endif
-
 #ifdef G4VIS_USE_VRML
   RegisterGraphicsSystem (new G4VRML1);
   RegisterGraphicsSystem (new G4VRML2);
-#endif
-
-#ifdef G4VIS_USE_VRMLFILE
-  RegisterGraphicsSystem (new G4VRML1File);
-  RegisterGraphicsSystem (new G4VRML2File);
 #endif
 
   if (fVerbose > 0) {

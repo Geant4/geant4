@@ -21,16 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILESceneHandler.cc,v 1.7 2001-07-11 10:08:45 gunter Exp $
+// $Id: G4DAWNFILESceneHandler.cc,v 1.8 2001-07-27 22:33:00 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
 // DAWNFILE scene.
-
-
-//=================//
-#ifdef G4VIS_BUILD_DAWNFILE_DRIVER
-//=================//
 
 
 #define __G_ANSI_C__
@@ -287,5 +282,3 @@ G4int G4DAWNFILESceneHandler::fSceneIdCount = 0;
 
 G4int G4DAWNFILESceneHandler::fSceneCount = 0;   
 			// num of existing instances
-
-#endif // G4VIS_BUILD_DAWNFILE_DRIVER

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.8 2001-04-10 15:11:05 johna Exp $
+# $Id: GNUmakefile,v 1.9 2001-07-27 22:32:49 johna Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for visualization and modeling.  John Allison, 5/7/95.
 # Modeling is always made.  Others by environment.  John Allison  4/7/98.
@@ -22,28 +22,18 @@ G4TMPDIR := $(G4TMP)/$(G4SYSTEM)/$(name)
 SUBDIRS := modeling
 SUBLIBS := G4modeling
 
+# Libraries which can be used without external packages or libraries...
 ifdef G4VIS_BUILD
   SUBDIRS += management
   SUBLIBS += G4vis_management
-endif
-
-# For DAWN and DAWNFILE drivers
-ifdef G4VIS_BUILD_DAWN_DRIVER
   SUBDIRS += FukuiRenderer
   SUBLIBS += G4FR
-endif
-ifdef G4VIS_BUILD_DAWNFILE_DRIVER
-  ifndef   G4VIS_BUILD_DAWN_DRIVER
-    SUBDIRS += FukuiRenderer
-    SUBLIBS += G4FR
-  endif
-endif
-# End of DAWN and DAWNFILE drivers 
-
-ifdef G4VIS_BUILD_RAYTRACER_DRIVER
   SUBDIRS += RayTracer
   SUBLIBS += G4RayTracer
-endif
+  SUBDIRS += VRML
+  SUBLIBS += G4VRML
+  SUBDIRS += Tree
+  SUBLIBS += G4Tree
 
 ifdef G4VIS_BUILD_OPACS_DRIVER
   SUBDIRS += OPACS
@@ -57,24 +47,7 @@ ifdef G4VIS_BUILD_OI_DRIVER
   SUBDIRS += OpenInventor
   SUBLIBS += G4OpenInventor
 endif
-
-# For VRML and VRMLFILE drivers
-ifdef      G4VIS_BUILD_VRML_DRIVER
-  SUBDIRS += VRML
-  SUBLIBS += G4VRML
-endif
-ifdef      G4VIS_BUILD_VRMLFILE_DRIVER
-  ifndef   G4VIS_BUILD_VRML_DRIVER
-    SUBDIRS += VRML
-    SUBLIBS += G4VRML
-  endif
-endif
-# End of VRML and VRMLFILE drivers
-
-ifdef G4VIS_BUILD_ASCIITREE_DRIVER
-  SUBDIRS += Tree
-  SUBLIBS += G4Tree
-endif
+endif #G4VIS_BUILD
 
 .PHONY: granular glob global clean
 

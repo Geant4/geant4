@@ -21,13 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1FileViewer.hh,v 1.5 2001-07-11 10:09:10 gunter Exp $
+// $Id: G4VRML1FileViewer.hh,v 1.6 2001-07-27 22:33:09 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML1FileViewer.hh
 // Satoshi Tanaka and Yasuhide Sawada
-
-#ifdef  G4VIS_BUILD_VRMLFILE_DRIVER
 
 #ifndef G4VRML1FILE_VIEWER_HH
 #define G4VRML1FILE_VIEWER_HH
@@ -53,4 +51,3 @@ private:
 };
 
 #endif //G4VRML1File_VIEW_HH
-#endif //G4VIS_BUILD_VRMLFILE_DRIVER

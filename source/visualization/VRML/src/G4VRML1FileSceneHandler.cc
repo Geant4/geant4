@@ -21,15 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1FileSceneHandler.cc,v 1.5 2001-07-11 10:09:12 gunter Exp $
+// $Id: G4VRML1FileSceneHandler.cc,v 1.6 2001-07-27 22:33:15 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML1FileSceneHandler.cc
 // Satoshi Tanaka & Yasuhide Sawada
-
-//=================//
-#ifdef G4VIS_BUILD_VRMLFILE_DRIVER
-//=================//
 
 
 //#define DEBUG_FR_SCENE
@@ -205,5 +201,3 @@ void G4VRML1FileSceneHandler::closePort()
 
 G4int G4VRML1FileSceneHandler::fSceneIdCount = 0;
 G4int G4VRML1FileSceneHandler::fSceneCount = 0;
-
-#endif

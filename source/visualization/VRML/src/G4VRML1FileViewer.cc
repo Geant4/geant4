@@ -21,15 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1FileViewer.cc,v 1.5 2001-07-11 10:09:13 gunter Exp $
+// $Id: G4VRML1FileViewer.cc,v 1.6 2001-07-27 22:33:17 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRMLView.cc
 // Satoshi Tanaka & Yasuhide Sawada
-
-//=================//
-#ifdef G4VIS_BUILD_VRMLFILE_DRIVER
-//=================//
 
 
 //#define DEBUG_FR_VIEW
@@ -90,6 +86,3 @@ void G4VRML1FileViewer::FinishView(void)
   G4cerr << "***** G4VRML1FileViewer::FinishView(): No effects" << G4endl;
 #endif
 }
-
-
-#endif

@@ -21,13 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2FileSceneHandler.hh,v 1.6 2001-07-11 10:09:11 gunter Exp $
+// $Id: G4VRML2FileSceneHandler.hh,v 1.7 2001-07-27 22:33:11 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2FileSceneHandler.hh
 // Satoshi Tanaka & Yasuhide Sawada
-
-#ifdef  G4VIS_BUILD_VRMLFILE_DRIVER
 
 #ifndef G4VRML2FILE_SCENE_HANDLER_HH
 #define G4VRML2FILE_SCENE_HANDLER_HH
@@ -135,4 +133,3 @@ public:
 };
 
 #endif //G4VRML2File_SCENE_HH
-#endif //G4VIS_BUILD_VRMLFILE_DRIVER

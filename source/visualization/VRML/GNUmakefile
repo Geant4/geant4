@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2000-04-07 13:32:42 gcosmo Exp $
+# $Id: GNUmakefile,v 1.4 2001-07-27 22:33:05 johna Exp $
 
 # lib name
 name := G4VRML
@@ -27,8 +27,6 @@ ifdef G4VIS_BUILD_VRML_DRIVER
   CPPFLAGS += -DVRML
 endif
 
-ifdef G4VIS_BUILD_VRMLFILE_DRIVER
-  CPPFLAGS += -DVRMLFILE
-endif
+CPPFLAGS += -DVRMLFILE
 
 include $(G4INSTALL)/config/common.gmk

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracer.hh,v 1.7 2001-07-14 19:21:22 johna Exp $
+// $Id: G4RayTracer.hh,v 1.8 2001-07-27 22:33:03 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -53,8 +53,6 @@
 // implementation must contain 
 //           RegisterGraphicsSystem (new G4RayTracer);
 //
-
-#if defined (G4VIS_BUILD_RAYTRACER_DRIVER) || defined (G4VIS_USE_RAYTRACER)
 
 #include "globals.hh"
 #include "G4ThreeVector.hh"
@@ -176,6 +174,3 @@ class G4RayTracer : public G4VGraphicsSystem
 };
 
 #endif
-#endif
-
-

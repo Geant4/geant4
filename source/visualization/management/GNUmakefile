@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2000-04-07 13:32:42 gcosmo Exp $
+# $Id: GNUmakefile,v 1.4 2001-07-27 22:33:22 johna Exp $
 # -------------------------------------------------------------
 # GNUmakefile for visualization library.  John Allison, 5/7/95.
 
@@ -14,12 +14,6 @@ G4TMPDIR = $(G4TMP)/$(G4SYSTEM)/$(name)
 
 CPPFLAGS += -I$(G4BASE)/visualization/management/include
 CPPFLAGS += -I$(G4BASE)/visualization/modeling/include
-CPPFLAGS += -I$(G4BASE)/visualization/FukuiRenderer/include
-CPPFLAGS += -I$(G4BASE)/visualization/G4Ray/include
-CPPFLAGS += -I$(G4BASE)/visualization/OPACS/include
-CPPFLAGS += -I$(G4BASE)/visualization/OpenGL/include
-CPPFLAGS += -I$(G4BASE)/visualization/OpenInventor/include
-CPPFLAGS += -I$(G4BASE)/visualization/VRML/include
 CPPFLAGS += -I$(G4BASE)/graphics_reps/include
 CPPFLAGS += -I$(G4BASE)/global/management/include
 CPPFLAGS += -I$(G4BASE)/global/HEPGeometry/include
@@ -41,9 +35,3 @@ CPPFLAGS += -I$(G4BASE)/particles/management/include
 CPPFLAGS += -I$(G4BASE)/materials/include
 
 include $(G4INSTALL)/config/common.gmk
-
-ifeq ($(G4SYSTEM),WIN32-VC-NICE)
-CXXFLAGS_WITHOUT_O := $(filter-out -O% , $(CXXFLAGS))
-$(G4TMPDIR)/G4VisManMessSet.o: src/G4VisManMessSet.cc
-	$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c $(OUT_OBJ)$@ src/G4VisManMessSet.cc
-endif

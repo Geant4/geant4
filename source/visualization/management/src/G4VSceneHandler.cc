@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.18 2001-07-25 21:21:18 johna Exp $
+// $Id: G4VSceneHandler.cc,v 1.19 2001-07-27 22:33:25 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -113,7 +113,7 @@ void G4VSceneHandler::PostAddThis () {
 }
 
 void G4VSceneHandler::ClearStore () {
-  fpViewer -> NeedKernelVisit ();
+  if (fpViewer) fpViewer -> NeedKernelVisit ();
 }
 
 void G4VSceneHandler::ClearTransientStore () {}

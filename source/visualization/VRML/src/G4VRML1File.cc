@@ -21,16 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1File.cc,v 1.6 2001-07-11 10:09:12 gunter Exp $
+// $Id: G4VRML1File.cc,v 1.7 2001-07-27 22:33:14 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML1File.cc
 // Satoshi Tanaka & Yasuhide Sawada
-
-//=================//
-#ifdef G4VIS_BUILD_VRMLFILE_DRIVER
-//=================//
-
 
 #include <stdio.h> // sscanf
 #include <stdlib.h> // getenv
@@ -75,5 +70,3 @@ G4VViewer* G4VRML1File::CreateViewer(G4VSceneHandler& scene, const G4String& nam
 
 	return pView;
 }
-
-#endif

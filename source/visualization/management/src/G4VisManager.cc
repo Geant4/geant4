@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.29 2001-07-14 21:48:24 johna Exp $
+// $Id: G4VisManager.cc,v 1.30 2001-07-27 22:33:27 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,9 +75,30 @@ G4VisManager::G4VisManager ():
     // No need to delete this; G4StateManager does this.
 
     G4cout << "Constructing Visualization Manager...." << G4endl;
-    // Note: You might think that we could register graphics systems
-    // and messengers here but we have to give the subclass time to
-    // instantiate.  So the user has to invoke Initialise().
+
+    // Note: The specific graphics systems must be instantiated in a
+    // higher level library to avoid circular dependencies.  Also,
+    // some specifically need additional external libararies that the
+    // user must supply.  Therefore we ask the user to implement
+    // RegisterGraphicsSystems() in a subclass.  We have to wait for
+    // the subclass to instantiate so RegisterGraphicsSystems() cannot
+    // be called from this constructor; it is called from
+    // Initialise().  So we ask the user:
+    //   (a) to write a subclass and implement
+    //       RegisterGraphicsSystems().  See
+    //       visualization/include/MyVisManager.hh/cc as an example.
+    //   (b) instantiate the subclass.
+    //   (c) invoke the Initialise() method of the subclass.
+    // For example:
+    //   ...
+    // #ifdef G4VIS_USE
+    //   // Instantiate and initialise Visualization Manager.
+    //   G4VisManager* visManager = new MyVisManager;
+    //   visManager -> SetVerboseLevel (Verbose);
+    //   visManager -> Initialise ();
+    // #endif
+    //   // (Don't forget to delete visManager;)
+    //   ...
   }
 }
 
@@ -120,14 +141,14 @@ void G4VisManager::Initialise () {
     PrintInstalledGraphicsSystems ();
     G4cout <<
       "\nYou have instantiated your own Visualization Manager, inheriting"
-      "\n  G4VisManager and implementing RegisterGraphicsSystems.  An example"
-      "\n  class MyVisManager is provided which is controlled by the"
-      "\n  following environment variables:"
+      "\n  G4VisManager and implementing RegisterGraphicsSystems(), in which"
+      "\n  you should, normally, instantiate drivers which do not need"
+      "\n  external packages or libraries, namely:"
+      "\n    ASCIITree, DAWNFILE, GAGTree, RayTracer, VRMLFILE"
+      "\n  and, optionally, drivers under control of the following"
+      "\n  environment variables:"
 #ifdef G4VIS_BUILD_DAWN_DRIVER
       "\n    G4VIS_USE_DAWN"
-#endif
-#ifdef G4VIS_BUILD_DAWNFILE_DRIVER
-      "\n    G4VIS_USE_DAWNFILE"
 #endif
 #ifdef G4VIS_BUILD_OPACS_DRIVER
       "\n    G4VIS_USE_OPACS"
@@ -147,26 +168,18 @@ void G4VisManager::Initialise () {
 #ifdef G4VIS_BUILD_VRML_DRIVER
       "\n    G4VIS_USE_VRML"
 #endif
-#ifdef G4VIS_BUILD_VRMLFILE_DRIVER
-      "\n    G4VIS_USE_VRMLFILE"
-#endif
-#ifdef G4VIS_BUILD_RAYTRACER_DRIVER
-      "\n    G4VIS_USE_RAYTRACER"
-#endif
-#ifdef G4VIS_BUILD_ASCIITREE_DRIVER
-      "\n    G4VIS_USE_ASCIITREE"
-#endif
-#ifdef G4VIS_BUILD_GAGTREE_DRIVER
-      "\n    G4VIS_USE_GAGTREE"
-#endif
-      "\n  Thus, in your main() you have something like:"
+      "\n  See visualization/include/MyVisManager.hh/cc, for example."
+      "\n  In your main() you will have something like:"
+      "\n  #ifdef G4VIS_USE"
       "\n    G4VisManager* visManager = new MyVisManager;"
+      "\n    visManager -> SetVerboseLevel (Verbose);"
       "\n    visManager -> Initialize ();"
+      "\n  #endif"
       "\n  (Don't forget to delete visManager;)"
 	 << G4endl;
   }
    
-  G4cout << "Registering graphics systems...." << G4endl;
+  G4cout << "Registering additional graphics systems...." << G4endl;
 
   RegisterGraphicsSystems ();
 
@@ -829,38 +842,44 @@ void G4VisManager::PrintCurrentView () const {
 }
 
 void G4VisManager::PrintAllGraphicsSystems () const {
-  G4cout << "\nThe following graphics systems drivers are supported in the"
+  G4cout <<
+    "\nThe following graphics systems drivers are supported in the"
     " GEANT4 distribution:"
-       << "\n\n  DAWN     (socket connection to the Fukui Renderer DAWN) " << G4VisFeaturesOfFukuiRenderer ()
-       << "\n\n  DAWNFILE (file connection to the Fukui Renderer DAWN  ) " << G4VisFeaturesOfDAWNFILE      ()
-       << "\n\n  OPACS (the Orsay Package) "
-       << "\n\n  OpenGLIX (direct/immediate drawing on X Windows)\n"
-       << G4VisFeaturesOfOpenGLIX ()
-       << "\n\n  OpenGLSX (display List/stored drawing on X Windows)\n"
-       << G4VisFeaturesOfOpenGLSX ()
-       << "\n\n  OpenGLIXm (with Motif widgets)\n"
-       << G4VisFeaturesOfOpenGLIXm ()
-       << "\n\n  OpenGLSXm (with Motif widgets)\n"
-       << G4VisFeaturesOfOpenGLSXm ()
-       << "\n\n  Open Inventor"
-       << G4VisFeaturesOfOpenInventor ()
-       << "\n\n  VRML1     (produces VRML 1 file over network)"
-       << "\n\n  VRML1FILE (produces VRML 1 file locally    )"
-       << "\n\n  VRML2     (produces VRML 2 file over network)"
-       << "\n\n  VRML2FILE (produces VRML 2 file locally    )"
-       << "\n\n  RayTracer (produces JPEG file)"
+    "\n\n  ASCIITree (prints geometry hierarchy)"
+    "\n\n  DAWN (socket connection to the Fukui Renderer DAWN) "
+	 << G4VisFeaturesOfFukuiRenderer () <<
+    "\n\n  DAWNFILE (file connection to the Fukui Renderer DAWN  ) "
+	 << G4VisFeaturesOfDAWNFILE () <<
+    "\n\n  GAGTree (prints geometry hierarchy, connectable to GAG"
+    "\n  user interface)"
+    "\n\n  OPACS (the Orsay Package) "
+    "\n\n  OpenGLIX (direct/immediate drawing on X Windows)\n"
+       << G4VisFeaturesOfOpenGLIX () <<
+    "\n\n  OpenGLSX (display List/stored drawing on X Windows)\n"
+       << G4VisFeaturesOfOpenGLSX () <<
+    "\n\n  OpenGLIXm (with Motif widgets)\n"
+       << G4VisFeaturesOfOpenGLIXm () <<
+    "\n\n  OpenGLSXm (with Motif widgets)\n"
+       << G4VisFeaturesOfOpenGLSXm () <<
+    "\n\n  Open Inventor"
+       << G4VisFeaturesOfOpenInventor () <<
+    "\n\n  RayTracer (produces JPEG file)"
+    "\n\n  VRML1     (produces VRML 1 file over network)"
+    "\n\n  VRML1FILE (produces VRML 1 file locally    )"
+    "\n\n  VRML2     (produces VRML 2 file over network)"
+    "\n\n  VRML2FILE (produces VRML 2 file locally    )"
        << G4endl;
 }
 
 void G4VisManager::PrintInstalledGraphicsSystems () const {
   G4cout << "\nThe following graphics systems drivers are installed on your"
     " system:"
+       << "\n  ASCII Tree (produces ASCII file of geometry hierarchy)"
 #ifdef G4VIS_BUILD_DAWN_DRIVER
        << "\n  DAWN     (socket connection to the Fukui Renderer DAWN)"
 #endif
-#ifdef G4VIS_BUILD_DAWNFILE_DRIVER
        << "\n  DAWNFILE (file connection to the Fukui Renderer DAWN)"
-#endif
+       << "\n  GAG Tree (produces ascii file of geometry hierarchy for GAG)"
 #ifdef G4VIS_BUILD_OPACS_DRIVER
        << "\n  OPACS (the Orsay Package)"
 #endif
@@ -878,23 +897,13 @@ void G4VisManager::PrintInstalledGraphicsSystems () const {
 #ifdef G4VIS_BUILD_OIWIN32_DRIVER
        << "\n  Open Inventor Win32"
 #endif
+       << "\n  RayTracer (produces JPEG file)"
 #ifdef G4VIS_BUILD_VRML_DRIVER
        << "\n  VRML1 (produces VRML 1 file over network)"
        << "\n  VRML2 (produces VRML 2 file over network)"
 #endif
-#ifdef G4VIS_BUILD_VRMLFILE_DRIVER
        << "\n  VRML1FILE (produces VRML 1 file locally)"
        << "\n  VRML2FILE (produces VRML 2 file locally)"
-#endif
-#ifdef G4VIS_BUILD_RAYTRACER_DRIVER
-       << "\n  RayTracer (produces JPEG file)"
-#endif
-#ifdef G4VIS_BUILD_ASCIITREE_DRIVER
-       << "\n  ASCII Tree (produces ASCII file of geometry hierarchy)"
-#endif
-#ifdef G4VIS_BUILD_GAGTREE_DRIVER
-       << "\n  GAG Tree (produces ascii file of geometry hierarchy for GAG)"
-#endif
        << G4endl;
 }
 
@@ -1095,58 +1104,6 @@ G4FukuiRenderer::G4FukuiRenderer ():
 
 #endif
 
-#ifndef G4VIS_BUILD_DAWNFILE_DRIVER
-
-class G4DAWNFILE: public G4VGraphicsSystem {
-public:
-  G4DAWNFILE ();
-};
-G4DAWNFILE::G4DAWNFILE ():
-  G4VGraphicsSystem ("FukuiRendererFile",
-                     "DAWNFILE",
-		     G4VGraphicsSystem::noFunctionality) {}
-
-#endif
-
-#ifndef G4VIS_BUILD_RAYTRACER_DRIVER
-
-class G4RayTracer: public G4VGraphicsSystem {
-public:
-  G4RayTracer ();
-};
-G4RayTracer::G4RayTracer ():
-  G4VGraphicsSystem ("RayTracer",
-                     "RayTracer",
-		     G4VGraphicsSystem::noFunctionality) {}
-
-#endif
-
-#ifndef G4VIS_BUILD_ASCIITREE_DRIVER
-
-class G4ASCIITree: public G4VGraphicsSystem {
-public:
-  G4ASCIITree ();
-};
-G4ASCIITree::G4ASCIITree ():
-  G4VGraphicsSystem ("ASCIITree",
-                     "ATree",
-		     G4VGraphicsSystem::noFunctionality) {}
-
-#endif
-
-#ifndef G4VIS_BUILD_GAGTREE_DRIVER
-
-class G4GAGTree: public G4VGraphicsSystem {
-public:
-  G4GAGTree ();
-};
-G4GAGTree::G4GAGTree ():
-  G4VGraphicsSystem ("GAGTree",
-                     "GAGTree",
-		     G4VGraphicsSystem::noFunctionality) {}
-
-#endif
-
 #ifndef G4VIS_BUILD_OPACS_DRIVER
 
 class G4Wo: public G4VGraphicsSystem {
@@ -1255,28 +1212,6 @@ public:
 G4VRML2::G4VRML2 ():
   G4VGraphicsSystem ("VRML2.0",
 		     "VRML2",
-		     G4VGraphicsSystem::noFunctionality) {}
-
-#endif
-
-#ifndef G4VIS_BUILD_VRMLFILE_DRIVER
-
-class G4VRML1File: public G4VGraphicsSystem {
-public:
-  G4VRML1File ();
-};
-G4VRML1File::G4VRML1File ():
-  G4VGraphicsSystem ("VRML1.0File",
-		     "VRML1File",
-		     G4VGraphicsSystem::noFunctionality) {}
-
-class G4VRML2File: public G4VGraphicsSystem {
-public:
-  G4VRML2File ();
-};
-G4VRML2File::G4VRML2File ():
-  G4VGraphicsSystem ("VRML2.0File",
-		     "VRML2File",
 		     G4VGraphicsSystem::noFunctionality) {}
 
 #endif

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: test19.cc,v 1.11 2001-07-11 10:09:24 gunter Exp $
+// $Id: test19.cc,v 1.12 2001-07-27 22:33:29 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
 // Usage: test19 dumb 5
-//   Arguments have defaults: GAG 0
+//   Arguments have defaults: tcsh 0
 //   Second argument is a verbosity-controlling integer flag.
 
 #include <stdio.h>
@@ -64,7 +64,9 @@
 
 #include "G4RunManager.hh"
 
+#ifdef G4VIS_USE
 #include "MyVisManager.cc"
+#endif
 
 #ifdef G4UI_USE_WIN32
 #include <windows.h>
@@ -85,7 +87,7 @@ int main (int argc, char** argv) {
   session = new G4UIWin32 (hInstance,hPrevInstance,lpszCmdLine,nCmdShow);
 #else
   if (argc >= 2) {
-    if (strcmp (argv[1], "dumb")==0)     session =
+    if (strcmp (argv[1], "tcsh")==0)     session =
 					   new G4UIterminal(new G4UItcsh);
 #ifdef G4UI_USE_WO
     else if (strcmp (argv[1], "Wo")==0)  session = new G4UIWo (argc, argv);
@@ -124,10 +126,12 @@ int main (int argc, char** argv) {
   //Initialize G4 kernel
   runManager->Initialize();
 
+#ifdef G4VIS_USE
   // Instantiate and initialise Visualization Manager.
   G4VisManager* visManager = new MyVisManager;
   visManager -> SetVerboseLevel (Verbose);
   visManager -> Initialize ();
+#endif
 
   G4UImanager* UI = G4UImanager::GetUIpointer ();
 
@@ -147,9 +151,11 @@ int main (int argc, char** argv) {
   // Start an interactive session.
   session -> SessionStart();
 
+#ifdef G4VIS_USE
   G4cout << "vis_test19: Deleting vis manager..." << G4endl;
   delete visManager;
   G4cout << "vis_test19: Vis manager deleted." << G4endl;
+#endif
   G4cout << "vis_test19: Deleting run manager..." << G4endl;
   delete runManager;
   G4cout << "vis_test19: Run manager deleted." << G4endl;

@@ -21,16 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILEViewer.hh,v 1.7 2001-07-11 10:08:44 gunter Exp $
+// $Id: G4DAWNFILEViewer.hh,v 1.8 2001-07-27 22:32:57 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
 // DAWNFILE viewer - opens window, hard copy, etc.
-
-//=================//
-#ifdef G4VIS_BUILD_DAWNFILE_DRIVER
-//=================//
-
 
 #ifndef G4DAWNFILE_VIEWER_HH
 #define G4DAWNFILE_VIEWER_HH
@@ -72,4 +67,3 @@ private:
 };
 
 #endif
-#endif //G4VIS_BUILD_DAWNFILE_DRIVER

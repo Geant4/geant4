@@ -1,13 +1,37 @@
-$Id: README,v 1.8 2000-05-20 10:18:38 johna Exp $
+$Id: README,v 1.9 2001-07-27 22:32:52 johna Exp $
 
-1) Decide which graphics systems drivers you want.  The choice depends
-   on what graphics libraries you have access to.  Set the appropriate
-   environment variables.  Here are the current possibilities (see
-   example "rc" script in Appendix A):
+Note: Specific graphics systems must be instantiated in a high level
+library to avoid circular dependencies.  Also, some specifically need
+additional external libararies that the user must supply.  Therefore we
+ask the user to implement RegisterGraphicsSystems() in a subclass of
+G4VisManager.  We have to wait for the subclass to instantiate so
+RegisterGraphicsSystems() cannot be called from G4VisManager's
+constructor; it is called from G4VisManager::Initialise().  So we ask
+the user:
+  (a) to write a subclass of G4VisManager and implement
+      RegisterGraphicsSystems().  See
+      visualization/include/MyVisManager.hh/cc as an example.
+  (b) instantiate the subclass.
+  (c) invoke the Initialise() method of the subclass.
+For example, in your main():
+  ...
+#ifdef G4VIS_USE
+  // Instantiate and initialise Visualization Manager.
+  G4VisManager* visManager = new MyVisManager;
+  visManager -> SetVerboseLevel (Verbose);
+  visManager -> Initialise ();
+#endif
+  // (Don't forget to delete visManager;)
+  ...
+See, for example, examples/novices/N02/exampleN02.cc.
 
-     setenv G4VIS_BUILD_DAWNFILE_DRIVER     1  # Uses Fukui Renderer DAWN 
-                                               #  with file connection 
-                                               #  (recommended) 
+1) Decide which graphics systems drivers you want.  By default you get:
+     ASCIITree, DAWNFILE, GAGTree, RayTracer, VRMLFILE.
+
+   For others, the choice depends on what graphics libraries you have
+   access to.  Set the appropriate environment variables.  Here are
+   the current possibilities (see example "rc" script in Appendix A):
+
      setenv G4VIS_BUILD_DAWN_DRIVER         1  # Uses Fukui Renderer DAWN 
                                                #  with network connection
                                                #  (for remote visualization)
@@ -20,17 +44,13 @@ $Id: README,v 1.8 2000-05-20 10:18:38 johna Exp $
 
      setenv G4VIS_BUILD_OIX_DRIVER          1  # Uses OpenInventor X11
 
-     setenv G4VIS_BUILD_RAYTRACER_DRIVER    1  # Uses G4RayTracer
-
-     setenv G4VIS_BUILD_VRMLFILE_DRIVER     1  # Writes VRML ascii files
-                                               #  to a local host
-                                               #  (recommended)
      setenv G4VIS_BUILD_VRML_DRIVER         1  # Sends  VRML ascii files
                                                #  to a remote host 
                                                #  (for remote visualization)
 
-   Setting any of these sets a C-pre-processor flag of the same name
-   and a C-pre-processor flag G4VIS_BUILD.
+   Unless an environment variable G4VIS_NONE is set, setting any of
+   these sets a C-pre-processor flag of the same name; also
+   C-pre-processor flag G4VIS_BUILD is set.
 
    In some cases you will need additional variables, e.g.:
 
@@ -86,27 +106,29 @@ $Id: README,v 1.8 2000-05-20 10:18:38 johna Exp $
 
 
 3) Decide which graphics systems you want to use in your particular
-   excutable.  Of course, this has to be chosen from the set you
-   installed in (2) above.  Here are the current possibilities:
+   excutable.  By default you get:
+     ASCIITree, DAWNFILE, GAGTree, RayTracer, VRMLFILE.
 
-     setenv G4VIS_USE_DAWNFILE     1
+   Of course, this has to be chosen from the set you
+   installed in (1,2) above.  Here are the current possibilities:
+
      setenv G4VIS_USE_DAWN         1
      setenv G4VIS_USE_OPACS        1
      setenv G4VIS_USE_OPENGLX      1
      setenv G4VIS_USE_OPENGLXM     1
      setenv G4VIS_USE_OIX          1
-     setenv G4VIS_USE_RAYTRACER    1
      setenv G4VIS_USE_VRML         1
 
-   Setting any of these sets a C-pre-processor flag of the same name.
-   Also, setting any of these sets the G4VIS_USE C-pre-processor flag
-   - see examples/novices/N02/exampleN02.cc to see a use of this.
+   Unless an environment variable G4VIS_NONE is set, setting any of
+   these sets a C-pre-processor flag of the same name; also,
+   C-pre-processor flag G4VIS_USE is set.C-pre-processor flag - see
+   examples/novices/N02/exampleN02.cc to see a use of this.
 
-   The default graphics systems are registered when you execute
-   G4VisManager::Initialise() (or G4VisManager::Initialize()).  Note
-   also that you can register graphics systems directly, e.g.,
-   pVisManager->RegisterGraphicsSystem ( new DAWNFILE ).  You can
-   also register your own graphics system, e.g.,
+   The graphics systems are instantiated and registered when you
+   execute MyVisManager::Initialise() (or MyVisManager::Initialize()).
+   Note also that you can register graphics systems directly, e.g.,
+   pVisManager->RegisterGraphicsSystem ( new DAWNFILE ).  You can also
+   register your own graphics system, e.g.,
    pVisManager->RegisterGraphicsSystem (new MyGraphicsSystem).
 
 
@@ -139,18 +161,42 @@ Appendix A: An "rc" example
 ---------------------------
 
 ---------------------- g4rc ------------------------------------------ 
-## Must be installed one level above $G4INSTALL and "sourced", i.e.,
-## using '. g4rc'.
+## Must be run from a directory *containing* geant4/.
+## It must be "sourced" from a Bourne/ksh.bash shell using `. <pathname>'
+##   or `source <pathname>'.
+## G4INSTALL becomes geant4.
+## G4BIN, etc., in some apprpriate subdirectory of $disc1
+
+disc1=/scratch/GEANT4
+if [ ! -e $disc1/$thisbase ]; then
+  mkdir $disc1/$thisbase
+fi
+if [ ! -e $disc1/$thisbase/geant4 ]; then
+  mkdir $disc1/$thisbase/geant4
+fi
+disc2=/mnt/disc2
 
 if [ -e `pwd`/geant4 ]; then
 
-export G4INSTALL=`pwd`/geant4
+thiswd=`pwd`
+thisbase=`basename $thiswd`
+export G4INSTALL=$thiswd/geant4
+env | grep G4INSTALL=
 export G4WORKDIR=$G4INSTALL
-export G4LIB=$G4INSTALL/lib
+export G4BIN=$disc1/$thisbase/geant4/bin
+env | grep G4BIN=
+export G4LIB=$disc1/$thisbase/geant4/lib
+env | grep G4LIB=
+export G4TMP=$disc1/$thisbase/geant4/tmp
+env | grep G4TMP=
 export G4SYSTEM=Linux-g++
 export G4LEVELGAMMADATA=$G4INSTALL/data/PhotonEvaporation
 
+export G4DEBUG=1
 export CLHEP_BASE_DIR=/usr/local
+env | grep G4DEBUG
+env | grep CLHEP
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$CLHEP_BASE_DIR/lib
 
 ##export CVSROOT=:pserver:allison@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
 export CVSROOT=/afs/cern.ch/sw/geant4/cvs
@@ -158,51 +204,43 @@ export CVSEDITOR=emacs
 
 ########## DAWN (Fukui) Renderer
 export G4VIS_BUILD_DAWN_DRIVER=1
-export G4VIS_BUILD_DAWNFILE_DRIVER=1
 export G4VIS_USE_DAWN=1
-export G4VIS_USE_DAWNFILE=1
 export DAWN_BSD_UNIX_DOMAIN=1
 export DAWN_GUI_ALWAYS=1
-export DAWN_HOME=/home/johna/GEANT4/DAWN
-export G4DAWNFILE_VIEWER=NONE
-#export PATH=$PATH:$DAWN_HOME ###### Moved to .g4profile ??????????????
-
-############ Ray Tracer
-export G4VIS_BUILD_RAYTRACER_DRIVER=1
-export G4VIS_USE_RAYTRACER=1
+#export DAWN_HOME=/home/johna/GEANT4/DAWN  # Now in /usr/local.
+#export G4DAWNFILE_VIEWER=NONE # Uncomment if DAWN is not available.
+#export PATH=$PATH:$DAWN_HOME  # Now in /usr/local.
 
 ########## OPACS graphics
-export G4VIS_BUILD_OPACS_DRIVER=1
-export G4VIS_USE_OPACS=1
-export OPACS_HOME=/disc2/OPACS
-export OPACS_VERSION=v3
-export OPACS_SYSTEM=Linux-gxx
-export OCONFIG=Linux
-. /disc2/OPACS/OPACS/$OPACS_VERSION/setup.sh
-LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/disc2/HEPVis/new/Linux-gxx-SF/
-LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/disc2/SoFree/new/Linux-gxx
-OPATH="$OPATH $G4INSTALL/source/visualization/test/OPACS"
+ export G4VIS_BUILD_OPACS_DRIVER=1
+ export G4VIS_USE_OPACS=1
+ export OPACS_HOME=$disc2/OPACS
+ export OPACS_VERSION=v3
+ export OPACS_SYSTEM=Linux-gxx
+ export OCONFIG=Linux
+ . $OPACS_HOME/OPACS/$OPACS_VERSION/setup.sh
+ LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$disc2/HEPVis/new/Linux-gxx-SF/
+ LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$disc2/SoFree/new/Linux-gxx
+ OPATH="$OPATH $G4INSTALL/source/visualization/test/OPACS"
 
 ########### OpenGL
 export G4VIS_BUILD_OPENGLX_DRIVER=1
 export G4VIS_USE_OPENGLX=1
 export G4VIS_BUILD_OPENGLXM_DRIVER=1
 export G4VIS_USE_OPENGLXM=1
-export XKEYSYMDB=/usr/lib/X11/XKeysymDB
+### export XKEYSYMDB=/usr/lib/X11/XKeysymDB
 export OGLHOME=/usr/X11
 
 ########### OpenInventor
 export G4VIS_BUILD_OIX_DRIVER=1
 export G4VIS_USE_OIX=1
-export OIVFLAGS="-I/disc2/HEPVis/new/include -DINVENTOR2_1 -I/disc2/SoFree/new/include"
-export OIVLIBS="-L/disc2/HEPVis/new/Linux-gxx-SF -lHEPVis -L/disc2/SoFree/new/Linux-gxx -lSoFree"
-export SOFREEUSER=/disc2/SoFree/new/user/
+export OIVFLAGS="-I$disc2/HEPVis/new/include -DINVENTOR2_1 -I$disc2/SoFree/new/include"
+export OIVLIBS="-L$disc2/HEPVis/new/Linux-gxx-SF -lHEPVis -L$disc2/SoFree/new/Linux-gxx -lSoFree"
+export SOFREEUSER=$disc2/SoFree/new/user/
 
 ############ VRML
-export G4VIS_BUILD_VRML_DRIVER=1
 export G4VIS_USE_VRML=1
-export G4VIS_BUILD_VRMLFILE_DRIVER=1
-export G4VIS_USE_VRMLFILE=1
+export G4VIS_BUILD_VRML_DRIVER=1
 
 ########### Interfaces
 export G4UI_BUILD_TERMINAL_SESSION=1
@@ -213,8 +251,8 @@ export G4UI_BUILD_XM_SESSION=1
 export G4UI_USE_XM=1
 export G4UI_BUILD_WO_SESSION=1
 export G4UI_USE_WO=1
-#export G4UI_BUILD_XAW_SESSION=1
-#export G4UI_USE_XAW=1
+### #export G4UI_BUILD_XAW_SESSION=1
+### #export G4UI_USE_XAW=1
 
 ############ Persistency
 # export G4USE_HEPODBMS=1
@@ -233,14 +271,25 @@ Appendix B: Sample session
 
 The Visualization Manager has been constructed with verbosity == 1.
 
-$ test19 dumb 1
+$ test19 tcsh 1
 RunManager is constructing....
+**********************************************
+ Geant4 version $Name: not supported by cvs2svn $
+                                (29-Jun-2001)
+             Copyright : Geant4 Collaboration
+**********************************************
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+...
 Constructing Visualization Manager....
 Initialising Visualization Manager....
 
 The following graphics systems drivers are supported in the GEANT4 distribution:
 
-  DAWN     (socket connection to the Fukui Renderer DAWN) High quality technical renderer.
+  ASCIITree (prints geometry hierarchy)
+
+  DAWN (socket connection to the Fukui Renderer DAWN) High quality technical renderer.
     Features:      exact hidden line, hidden surface algorithms.
                    high (unlimited) resolution.
                    renders to PostScript for viewing and/or hardcopy.
@@ -261,7 +310,11 @@ The following graphics systems drivers are supported in the GEANT4 distribution:
                    connection via g4.prim file to Fukui Renderer DAWN etc.
     Disadvantages: compute intensive, takes time (use a fast graphics
                    system, such as OpenGL, to select view, then copy
-                   to this renderer - /vis~/copy/view, /vis~/set/view).
+                   view parameters to this renderer:
+                   "/vis/viewer/set/all <OpenGL-view>".
+
+  GAGTree (prints geometry hierarchy, connectable to GAG
+  user interface)
 
   OPACS (the Orsay Package) 
 
@@ -309,7 +362,10 @@ The following graphics systems drivers are supported in the GEANT4 distribution:
     Advantages:    Open Inventor feature set (interactivity, scene control).
     Disadvantages: Requires Open Inventor license ($$), Hepvis library (Free).
 
+  RayTracer (produces JPEG file)
+
   VRML1     (produces VRML 1 file over network)
+
   VRML1FILE (produces VRML 1 file locally    )
 
   VRML2     (produces VRML 2 file over network)
@@ -317,61 +373,79 @@ The following graphics systems drivers are supported in the GEANT4 distribution:
   VRML2FILE (produces VRML 2 file locally    )
 
 The following graphics systems drivers are installed on your system:
+  ASCII Tree (produces ASCII file of geometry hierarchy)
   DAWN     (socket connection to the Fukui Renderer DAWN)
   DAWNFILE (file connection to the Fukui Renderer DAWN)
+  GAG Tree (produces ascii file of geometry hierarchy for GAG)
   OPACS (the Orsay Package)
   OpenGLIX (direct/immediate drawing on X Windows)
   OpenGLSX (display List/stored drawing on X Windows)
   OpenGLIXm (with Motif widgets)
   OpenGLSXm (with Motif widgets)
+  Open Inventor X11
+  RayTracer (produces JPEG file)
   VRML1 (produces VRML 1 file over network)
-  VRML2 (produces VRML 2 file over network), in preparation
-  VRML1File (produces VRML 1 file locally)
-  VRML2File (produces VRML 2 file locally), in preparation
+  VRML2 (produces VRML 2 file over network)
+  VRML1FILE (produces VRML 1 file locally)
+  VRML2FILE (produces VRML 2 file locally)
 
 You have instantiated your own Visualization Manager, inheriting
-  G4VisManager and implementing RegisterGraphicsSystems.  An example
-  class MyVisManager is provided which is controlled by the
-  following environment variables:
+  G4VisManager and implementing RegisterGraphicsSystems(), in which
+  you should, normally, instantiate drivers which do not need
+  external packages or libraries, namely:
+    ASCIITree, DAWNFILE, GAGTree, RayTracer, VRMLFILE
+  and, optionally, drivers under control of the following
+  environment variables:
     G4VIS_USE_DAWN
-    G4VIS_USE_DAWNFILE
     G4VIS_USE_OPACS
     G4VIS_USE_OPENGLX
     G4VIS_USE_OPENGLXM
+    G4VIS_USE_OIX
     G4VIS_USE_VRML
-    G4VIS_USE_VRMLFILE
-  Thus, in your main() you have something like:
+  See visualization/include/MyVisManager.hh/cc, for example.
+  In your main() you will have something like:
+  #ifdef G4VIS_USE
     G4VisManager* visManager = new MyVisManager;
+    visManager -> SetVerboseLevel (Verbose);
     visManager -> Initialize ();
+  #endif
   (Don't forget to delete visManager;)
-Registering graphics systems....
-G4VisManager::RegisterGraphicsSystem: FukuiRenderer (DAWN) registered.
+Registering additional graphics systems....
+G4VisManager::RegisterGraphicsSystem: ASCIITree (ATree) registered.
 G4VisManager::RegisterGraphicsSystem: DAWNFILE (DAWNFILE) registered.
+G4VisManager::RegisterGraphicsSystem: GAGTree (GAGTree) registered.
+G4VisManager::RegisterGraphicsSystem: RayTracer (RayTracer) registered.
+G4VisManager::RegisterGraphicsSystem: VRML1FILE (VRML1FILE) registered.
+G4VisManager::RegisterGraphicsSystem: VRML2FILE (VRML2FILE) registered.
+G4VisManager::RegisterGraphicsSystem: FukuiRenderer (DAWN) registered.
 G4VisManager::RegisterGraphicsSystem: Wo registered.
 G4VisManager::RegisterGraphicsSystem: Xo registered.
 G4VisManager::RegisterGraphicsSystem: OpenGLImmediateX (OGLIX) registered.
 G4VisManager::RegisterGraphicsSystem: OpenGLStoredX (OGLSX) registered.
 G4VisManager::RegisterGraphicsSystem: OpenGLImmediateXm (OGLIXm) registered.
 G4VisManager::RegisterGraphicsSystem: OpenGLStoredXm (OGLSXm) registered.
+G4VisManager::RegisterGraphicsSystem: OpenInventorX (OIX) registered.
 G4VisManager::RegisterGraphicsSystem: VRML1 (VRML1) registered.
 G4VisManager::RegisterGraphicsSystem: VRML2 (VRML2) registered.
-G4VisManager::RegisterGraphicsSystem: VRML1FILE (VRML1FILE) registered.
-G4VisManager::RegisterGraphicsSystem: VRML2FILE (VRML2FILE) registered.
 
 You have successfully chosen to use the following graphics systems.
 Current available graphics systems are:
-  FukuiRenderer (DAWN)
+  ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  FukuiRenderer (DAWN)
   Wo
   Xo
   OpenGLImmediateX (OGLIX)
   OpenGLStoredX (OGLSX)
   OpenGLImmediateXm (OGLIXm)
   OpenGLStoredXm (OGLSXm)
+  OpenInventorX (OIX)
   VRML1 (VRML1)
   VRML2 (VRML2)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
 Reading test19.g4m file....
 # This is test19.g4m
 #
@@ -380,14 +454,11 @@ Reading test19.g4m file....
 /control/saveHistory
 #
 # John's personal preferences
-/vis/lights/move_with_camera true
-/vis~/lights/move_with_camera true
-Issue Draw or refresh to see effect.
-Current value of lights move flag is 1
-/vis/set/marker_choices 1
-/vis~/set/marker_choices 1
-Marker choice is now:  hidden by surfaces.
-Issue Draw or refresh to see effect.
+/vis/viewer/set/lightsMove true
+G4VisCommandsViewerSet::SetNewValue: no current viewer.
+/vis/viewer/set/hiddenMarker true
+G4VisCommandsViewerSet::SetNewValue: no current viewer.
+#/vis/verbose 10
 #
 # See list of detector possibilities.
 /test19det/detector
@@ -404,51 +475,72 @@ Choose by specifying integer parameter.
 #
 # Initialise run, i.e., create geometry, set cuts, etc.
 /run/initialize
-Detector not established - constructing default detector.
-/test19det/detector 4
-MyPhysicsList::SetCuts:
-...
 #
 # Set gun for demo (detector 1)
 #/gun/particle e+
 #/gun/position 0 -100 0 cm
 #/gun/direction 0 1 0
 #
+# for drawing the tracks
+/tracking/storeTrajectory 1
+# if too many tracks cause core dump =storeTrajectory 0
+#
 # Create empty scene.
 /vis/scene/create
-/vis/camera/reset
-/vis~/camera/reset 
+/vis/scene/notifyHandlers
+G4Scene::AddWorldIfEmpty: The scene was empty,
+   "world" has been added.
 New empty scene "scene-0" created.
 #
 # Add volume to scene - "world" is default.
 /vis/scene/add/volume
-/vis/camera/reset
-/vis~/camera/reset 
-First occurrence of "expHall_P", copy no. 0, found at depth 0,
-  with further requested depth of descent -1, has been added to scene "scene-0"
+G4Scene::AddRunDurationModel: model "G4PhysicalVolumeModel expHall_P.0"
+  is already in the run-duration list of scene "scene-0".
+/vis/scene/notifyHandlers
 #
 # See list of graphics systems possibilities.
 help /vis/sceneHandler/create
 #
 # Create a scene handler for a specific graphics system.
 # Edit the next line(s) to choose another graphic system
-/vis/sceneHandler/create DAWNFILE
-G4VisManager::SetCurrentGraphicsSystem: system now DAWNFILE
-Graphics system set to DAWNFILE
-1 DAWNFILE scenes extanct.
-New scene handler "scene-handler-0" created.
-/vis/sceneHandler/attach 
-Scene "scene-0" attached to scene handler "scene-handler-0.
+#/vis/sceneHandler/create DAWNFILE
 #/vis/sceneHandler/create DAWN
+#/vis/sceneHandler/create OGLIXm
+#/vis/sceneHandler/create OGLSXm
 #/vis/sceneHandler/create OGLIX
-#/vis/sceneHandler/create OGLSX
+/vis/sceneHandler/create OGLSX
+G4VisManager::SetCurrentGraphicsSystem: system now OpenGLStoredX
+Graphics system set to OpenGLStoredX
+1 OpenGLStoredX scene handlers extanct.
+New scene handler "scene-handler-0" created.
+/vis/sceneHandler/attach
+Scene "scene-0" attached to scene handler "scene-handler-0.
 #/vis/sceneHandler/create VRML1
 #/vis/sceneHandler/create VRML1FILE
 #/vis/sceneHandler/create Xo
 #/vis/sceneHandler/create Wo
 #
+# Add world volume.
+/vis/scene/add/volume
+G4Scene::AddRunDurationModel: model "G4PhysicalVolumeModel expHall_P.0"
+  is already in the run-duration list of scene "scene-0".
+/vis/scene/notifyHandlers
+/vis/scene/add/axes 0 0 0 2 m
+/vis/scene/notifyHandlers
+Axes have been added to scene "scene-0".
+/vis/scene/add/text 0 0 0 mm 50 -120 -200   exampleN03
+/vis/scene/notifyHandlers
+Text "exampleN03" has been added to scene "scene-0".
+#
+# Add scale
+/vis/scene/add/scale
+/vis/scene/notifyHandlers
+Scale of 1 m has been added to scene "scene-0".
+#
 # Create a viewer.
 /vis/viewer/create
+Got standard cmap
+Window name: viewer-0 (OpenGLStoredX)
 G4VisManager::CreateViewer: new viewer created: view parameters are:
   View parameters and options:
   Drawing style: wireframe
@@ -467,7 +559,7 @@ G4VisManager::CreateViewer: new viewer created: view parameters are:
   Zoom factor:          1
   Current target point: (0,0,0)
   Dolly distance:       0
-  Light moves with camera
+  Light does not move with camera
   Relative lightpoint direction: (1,1,1)
   Actual lightpoint direction: (1,1,1)
   Derived parameters for standard view of object of unit radius:
@@ -490,30 +582,16 @@ G4VisManager::CreateViewer: new viewer created: view parameters are:
            fill style: no fill
            No Visualization Attributes
   Global marker scale: 1
-  Marker hidden by surfaces.
+  Marker not hidden by surfaces.
   Window size hint: 600x600
+  Auto refresh: false
   NOTE: objects with visibility flag set to "false" will not be drawn!
-  "/vis~/set/culling off" to Draw such objects.
-  Also see other "/vis~/set" commands.
-New viewer "viewer-0 (DAWNFILE)" created.
+  "/vis/set/culling off" to Draw such objects.
+  Also see other "/vis/set" commands.
+New viewer "viewer-0 (OpenGLStoredX)" created.
 #
-# Draw current scene
-/vis/scene/notifyHandlers
-===========================================
-Output file: g4.prim
-Muximal number of file in the destination directory: 1
-  (Customizable as: setenv G4DAWNFILE_MAX_FILE_NUM number) 
-===========================================
-Traversing scene data...
-File  g4.prim  is generated.
-No viewer is invoked.
-Viewer "viewer-0 (DAWNFILE)" of scene handler "scene-handler-0"
-  refreshed at request of scene "scene-0".
-#
-# for drawing the tracks
-# if too many tracks cause core dump => storeTrajectory 0
-/tracking/storeTrajectory 1
-/vis/scene/include/trajectories
-Trajectories will be drawn in scene "scene-0".
-Choose a detector with /test19det/detector (or let default be constructed).
-Idle> 
+/vis/viewer/set/lineSegmentsPerCircle 100
+Number of line segements per circle in polygon approximation is 100
+/vis/viewer/refresh
+Refreshing viewer "viewer-0 (OpenGLStoredX)"...
+...
