@@ -35,6 +35,7 @@ inline void G4Line::InitBounded() {
 
 #include "G4CurveRayIntersection.hh"
 
+/*
 inline void G4Line::IntersectRay2D(const G4Ray& ray,
 				   G4CurveRayIntersection& is)
 {
@@ -71,5 +72,46 @@ inline void G4Line::IntersectRay2D(const G4Ray& ray,
 
   }
 }
+*/
 
+inline G4int G4Line::IntersectRay2D(const G4Ray& ray)
+{
+  const G4Point3D& s= ray.GetStart();
+  const G4Vector3D& d= ray.GetDir();
+
+  G4double num1= (pnt.x()-s.x())*d.y()-(pnt.y()-s.y())*d.x();
+  G4double num2= (pnt.x()-s.x())*dir.y()-(pnt.y()-s.y())*dir.x();
+  G4double denom= d.x()*dir.y()-d.y()*dir.x();
+  
+  G4int nbinter = 0;
+
+  if (fabs(denom) < kCarTolerance) 
+  {
+    if (fabs(num1) < kCarTolerance) 
+    {
+      // identical lines
+    } 
+    else 
+    {
+      // parallel lines
+    }
+  } 
+  else
+  {
+    // properly intersecting lines
+    G4double u = num1/denom;
+    G4double t = num2/denom;
+
+    if( (u > -kCarTolerance/2) && (u < kCarTolerance/2) )
+      u = 0;
+
+    if( (t > -kCarTolerance/2) && (t < kCarTolerance/2) )
+      t = 0;
+    
+    if(t>=0 && u>=0 && u<=1)
+      nbinter = 1;	
+  }
+  
+  return nbinter;
+}
 
