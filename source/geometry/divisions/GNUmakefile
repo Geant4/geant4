@@ -1,9 +1,9 @@
-# $Id: GNUmakefile,v 1.1 2003-06-16 15:11:40 gcosmo Exp $
+# $Id: GNUmakefile,v 1.2 2003-06-16 16:39:13 gcosmo Exp $
 # ----------------------------------------------------------------------
 # GNUmakefile for geometry/divisions library.  Gabriele Cosmo, 16/06/03.
 # ----------------------------------------------------------------------
 
-name :=  G4geomdivision
+name := G4geomdivision
 
 ifndef G4INSTALL
   G4INSTALL = ../../..
