@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03TrackingAction.cc,v 1.1 2002-11-19 16:44:52 jacek Exp $
+// $Id: ExN03TrackingAction.cc,v 1.2 2002-11-20 18:46:24 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,5 +41,5 @@
 void ExN03TrackingAction :: PreUserTrackingAction(const G4Track* aTrack)
 {
   fpTrackingManager->SetTrajectory( new G4SmoothTrajectory( aTrack) );
-  cout << "spong ExN03TrackingAction :: PreUserTrackingAction" << endl;
+  // cout << "spong ExN03TrackingAction :: PreUserTrackingAction" << endl;
 }
