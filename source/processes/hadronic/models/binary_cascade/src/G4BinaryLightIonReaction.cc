@@ -212,7 +212,7 @@
 
     
     // call precompound model
-    G4ReactionProductVector * proFrag(0);
+    G4ReactionProductVector * proFrag = NULL;
     G4LorentzVector pFragment;
     G4LorentzRotation boost_fragments(momentum.boostVector());
 //    G4LorentzRotation boost_spectator_mom(-momentum.boostVector());
@@ -374,8 +374,9 @@ G4bool G4BinaryLightIonReaction::EnergyAndMomentumCorrector(
     G4LorentzVector SumMom(0);
     G4double        SumMass = 0;     
     G4double        TotalCollisionMass = TotalCollisionMom.m(); 
+    size_t i = 0;
     // Calculate sum hadron 4-momenta and summing hadron mass
-    for(unsigned int i = 0; i < Output->size(); i++)
+    for(i = 0; i < Output->size(); i++)
         {
         SumMom  += G4LorentzVector((*Output)[i]->GetMomentum(),(*Output)[i]->GetTotalEnergy());
         SumMass += (*Output)[i]->GetDefinition()->GetPDGMass();
@@ -388,7 +389,7 @@ G4bool G4BinaryLightIonReaction::EnergyAndMomentumCorrector(
      // Compute c.m.s. hadron velocity and boost KTV to hadron c.m.s.
     G4ThreeVector Beta = -SumMom.boostVector();
 //    Output->Boost(Beta);
-      for(unsigned int i = 0; i < Output->size(); i++)
+      for(i = 0; i < Output->size(); i++)
       {
         G4LorentzVector mom = G4LorentzVector((*Output)[i]->GetMomentum(),(*Output)[i]->GetTotalEnergy());
         mom *= Beta;
@@ -405,7 +406,7 @@ G4bool G4BinaryLightIonReaction::EnergyAndMomentumCorrector(
     for(cAttempt = 0; cAttempt < nAttemptScale; cAttempt++)
     {
       Sum = 0;
-      for(unsigned int i = 0; i < Output->size(); i++)
+      for(i = 0; i < Output->size(); i++)
       {
         G4LorentzVector HadronMom = G4LorentzVector((*Output)[i]->GetMomentum(),(*Output)[i]->GetTotalEnergy());
         HadronMom.setVect(HadronMom.vect()+ 10*(Scale-1)*HadronMom.vect());
@@ -434,7 +435,7 @@ G4bool G4BinaryLightIonReaction::EnergyAndMomentumCorrector(
     // Compute c.m.s. interaction velocity and KTV back boost   
     Beta = TotalCollisionMom.boostVector(); 
 //    Output->Boost(Beta);
-      for(unsigned int i = 0; i < Output->size(); i++)
+      for(i = 0; i < Output->size(); i++)
       {
         G4LorentzVector mom = G4LorentzVector((*Output)[i]->GetMomentum(),(*Output)[i]->GetTotalEnergy());
         mom *= Beta;
