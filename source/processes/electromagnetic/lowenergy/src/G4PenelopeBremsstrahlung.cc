@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlung.cc,v 1.13 2003-11-11 17:20:35 pandola Exp $
+// $Id: G4PenelopeBremsstrahlung.cc,v 1.14 2003-11-18 17:29:43 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -422,7 +422,7 @@ void G4PenelopeBremsstrahlung::LoadAngularData()
       //if the material is not present yet --> insert it in the map
       if (!(angularData->count(Z))) {
 	G4PenelopeBremsstrahlungAngular* elementAngular = new G4PenelopeBremsstrahlungAngular(Z);
-	angularData->insert(make_pair(Z,elementAngular));
+	angularData->insert(std::make_pair(Z,elementAngular));
 	//G4cout << "Loaded......... Z= " << Z << G4endl;
       }
     }

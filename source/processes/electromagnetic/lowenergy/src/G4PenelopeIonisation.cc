@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisation.cc,v 1.5 2003-11-06 19:04:10 pia Exp $
+// $Id: G4PenelopeIonisation.cc,v 1.6 2003-11-18 17:29:43 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -766,10 +766,10 @@ void G4PenelopeIonisation::ReadData()
       x3->push_back(a3);
       x4->push_back((G4double) k3);
     }
-    occupationNumber->insert(make_pair(Z,x1));
-    ionizationEnergy->insert(make_pair(Z,x2));
-    resonanceEnergy->insert(make_pair(Z,x3));
-    shellFlag->insert(make_pair(Z,x4));
+    occupationNumber->insert(std::make_pair(Z,x1));
+    ionizationEnergy->insert(std::make_pair(Z,x2));
+    resonanceEnergy->insert(std::make_pair(Z,x3));
+    shellFlag->insert(std::make_pair(Z,x4));
     file >> test >> test1; //-1 -1 close the data for each Z
     if (test > 0) {
       G4String excep = "G4PenelopeIonisation - data file corrupted!";
