@@ -39,7 +39,6 @@ G4int dicomHandler::readHeader(FILE *dicom, char filename2[300])
 
   G4std::fread( buffer, 1, 128, dicom ); // The first 128 bytes 
                                          //are not important
-
   // Reads the "DICOM" letters
   G4std::fread( buffer, 1, 4, dicom );
 
@@ -74,7 +73,7 @@ G4int dicomHandler::readHeader(FILE *dicom, char filename2[300])
           // Reading the information with
 	  // (BIG) buffer : "value"
 	  // Creating a tag to be identified afterward
-	  tag_dictionnary=read_group_id*0x10000 + read_element_id;
+	  tag_dictionnary = read_group_id*0x10000 + read_element_id;
         }
       else  // lenght is 16 bits :
         {

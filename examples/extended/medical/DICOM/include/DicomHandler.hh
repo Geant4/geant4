@@ -42,10 +42,10 @@ public:
 
   dicomHandler()
   {
-    compression=0;
-    max=0;
+    compression = 0;
+    max = 0;
   };
-
+  ~dicomHandler(){;}
   G4int readHeader(FILE *,char[300]);
 
   G4int readData(FILE *,char[300]); // note: always use readHeader 
