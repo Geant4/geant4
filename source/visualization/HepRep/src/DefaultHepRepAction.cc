@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+
+#include "DefaultHepRepAction.h"
+
 using namespace std;
 using namespace HEPREP;
 

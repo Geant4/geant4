@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+#ifndef XMLHEPREPSTREAMER_H
+#define XMLHEPREPSTREAMER_H 1
+
 #include "FreeHepTypes.h"
 
 #include <iostream>

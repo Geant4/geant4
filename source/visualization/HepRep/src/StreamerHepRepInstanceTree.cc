@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+
+#include "StreamerHepRepInstanceTree.h"
+
 using namespace std;
 using namespace HEPREP;
 

@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+
+#include <cstdio>
+
 #include "XMLWriter.h"
 
 using namespace std;

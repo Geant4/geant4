@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+
+#include "StreamerHepRepDefinition.h"
+#include "DefaultHepRepAttDef.h"
 
 using namespace std;
 using namespace HEPREP;

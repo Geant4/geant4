@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+#ifndef STREAMERHEPREPPOINT_H
+#define STREAMERHEPREPPOINT_H 1
+
 #include "FreeHepTypes.h"
 
 #include <string>

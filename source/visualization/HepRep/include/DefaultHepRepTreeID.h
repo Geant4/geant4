@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+#ifndef DEFAULTHEPREPTREEID_H
+#define DEFAULTHEPREPTREEID_H 1
+
 #include "FreeHepTypes.h"
 
 #include <string>

@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+
+#include <iostream>
+#include <fstream>
 
 #include "XMLHepRepStreamerFactory.h"
 #include "XMLHepRepStreamer.h"
