@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07EventAction.cc,v 1.3 2003-04-08 15:47:01 asaim Exp $
+// $Id: ExN07EventAction.cc,v 1.4 2003-05-21 22:01:17 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -53,7 +53,7 @@ ExN07EventAction::ExN07EventAction()
 ExN07EventAction::~ExN07EventAction()
 {;}
 
-void ExN07EventAction::BeginOfEventAction(const G4Event* evt)
+void ExN07EventAction::BeginOfEventAction(const G4Event*)
 {
   for(size_t i=0;i<6;i++)
   {
