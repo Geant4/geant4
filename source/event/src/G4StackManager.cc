@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackManager.cc,v 1.8 2002-12-03 17:04:22 asaim Exp $
+// $Id: G4StackManager.cc,v 1.9 2003-08-13 23:44:39 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -248,7 +248,7 @@ G4int G4StackManager::PrepareNewEvent()
       }
       else
       {
-        aTrack->SetTrackID(++n_passedFromPrevious);
+        aTrack->SetTrackID(-(++n_passedFromPrevious));
         switch (classification)
         {
           case fUrgent:

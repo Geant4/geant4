@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.cc,v 1.16 2003-08-12 02:27:55 asaim Exp $
+// $Id: G4EventManager.cc,v 1.17 2003-08-13 23:44:39 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -87,7 +87,8 @@ G4int G4EventManager::operator!=(const G4EventManager &right) const { }
 */
 
 
-void G4EventManager::ProcessOneEvent(G4Event* anEvent)
+
+void G4EventManager::DoProcessing(G4Event* anEvent)
 {
   G4StateManager* stateManager = G4StateManager::GetStateManager();
   G4ApplicationState currentState = stateManager->GetCurrentState();
@@ -114,7 +115,7 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
   }
 #endif
 
-  trackIDCounter = trackContainer->PrepareNewEvent();
+  trackContainer->PrepareNewEvent();
 
 #ifdef G4_STORE_TRAJECTORY
   trajectoryContainer = 0;
@@ -305,16 +306,43 @@ void G4EventManager::SetUserAction(G4UserSteppingAction* userAction)
   trackManager->SetUserAction(userAction);
 }
 
+void G4EventManager::ProcessOneEvent(G4Event* anEvent)
+{
+  trackIDCounter = 0;
+  DoProcessing(anEvent);
+}
+
 #ifndef WIN32         // Temporarly disabled on Windows, until CLHEP
                       // will support the HepMC module
 #include "G4HepMCInterface.hh"
-void G4EventManager::ProcessOneEvent(const HepMC::GenEvent* hepmcevt)
+void G4EventManager::ProcessOneEvent(const HepMC::GenEvent* hepmcevt,G4Event* anEvent)
 {
-  G4Event* aDummyEvent = new G4Event();
-  G4HepMCInterface::HepMC2G4(hepmcevt,aDummyEvent);
-  ProcessOneEvent(aDummyEvent);
-  delete aDummyEvent;
+  trackIDCounter = 0;
+  G4bool tempEvent = false;
+  if(!anEvent)
+  {
+    anEvent = new G4Event();
+    tempEvent = true;
+  }
+  G4HepMCInterface::HepMC2G4(hepmcevt,anEvent);
+  DoProcessing(anEvent);
+  if(tempEvent)
+  { delete anEvent; }
 }
 #endif
 
+void G4EventManager::ProcessOneEvent(G4TrackVector* trackVector,G4Event* anEvent)
+{
+  trackIDCounter = 0;
+  G4bool tempEvent = false;
+  if(!anEvent)
+  {
+    anEvent = new G4Event();
+    tempEvent = true;
+  }
+  StackTracks(trackVector,false);
+  DoProcessing(anEvent);
+  if(tempEvent)
+  { delete anEvent; }
+}
 
