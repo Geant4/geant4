@@ -55,6 +55,6 @@ G4double G4NeutronHPCaptureData::GetCrossSection(const G4DynamicParticle* aP, co
   G4int index = anE->GetIndex();
     
   result = (*((*theCrossSections)(index))).GetValue(
-                             aP->GetTotalMomentum()/GeV, outOfRange);
+                             aP->GetKineticEnergy(), outOfRange);
   return result;
 }
