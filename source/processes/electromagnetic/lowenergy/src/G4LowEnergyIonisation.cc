@@ -37,17 +37,6 @@
 // by Alessandra Forti, 1999, and Veronique Lefebure, 2000 
 //
 // -------------------------------------------------------------------
-//
-// Class description:
-// Low Energy electromagnetic process,
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
-//
-// Class Description: End 
-//
-// -------------------------------------------------------------------
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4LowEnergyIonisation.hh"
 #include "G4eIonisationElectronSpectrum.hh"
@@ -62,7 +51,6 @@
 #include "G4Electron.hh"
 #include "G4Gamma.hh"
  
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4LowEnergyIonisation::G4LowEnergyIonisation(const G4String& nam)
   : G4eLowEnergyLoss(nam), 
@@ -73,7 +61,6 @@ G4LowEnergyIonisation::G4LowEnergyIonisation(const G4String& nam)
   verboseLevel = 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 
 G4LowEnergyIonisation::~G4LowEnergyIonisation()
 {
@@ -83,7 +70,6 @@ G4LowEnergyIonisation::~G4LowEnergyIonisation()
   cutForDelta.clear();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4LowEnergyIonisation::BuildPhysicsTable(
                          const G4ParticleDefinition& aParticleType)
@@ -169,7 +155,6 @@ void G4LowEnergyIonisation::BuildPhysicsTable(
  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4LowEnergyIonisation::BuildLossTable(
                           const G4ParticleDefinition& aParticleType)
@@ -232,7 +217,11 @@ void G4LowEnergyIonisation::BuildLossTable(
       for (size_t iel=0; iel<NumberOfElements; iel++ ) {
 
         G4int Z = (G4int)((*theElementVector)[iel]->GetZ());
-        G4int nShells = crossSectionHandler->NumberOfComponents(Z);
+
+	// G4int nShells = crossSectionHandler->NumberOfComponents(Z);
+	// - MGP - modified: it is not the responsibility of G4VCrossSectionHandler to provide nShells
+	G4AtomicTransitionManager* transitionManager = G4AtomicTransitionManager::Instance();
+	G4int nShells = transitionManager->NumberOfShells(Z);
 
         for (G4int n=0; n<nShells; n++) {
 
@@ -257,11 +246,9 @@ void G4LowEnergyIonisation::BuildLossTable(
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(
-                                                 const G4Track& track,
-                                                 const G4Step&  step)
+inline G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
+							      const G4Step&  step)
 {
   // Delta electron production mechanism on base of the model
   // J. Stepanek " A program to determine the radiation spectra due 
@@ -343,7 +330,6 @@ inline G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(
 
   // Fluorescence should be implemented here
 
-
   // fill ParticleChange 
   // changed energy and momentum of the actual particle
 
@@ -369,7 +355,6 @@ inline G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(
   return G4VContinuousDiscreteProcess::PostStepDoIt(track, step);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4LowEnergyIonisation::PrintInfoDefinition()
 {
@@ -384,8 +369,6 @@ void G4LowEnergyIonisation::PrintInfoDefinition()
 	   G4cout << G4endl << GetProcessName() << ":  " << comments<<G4endl;
 
 }         
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
 

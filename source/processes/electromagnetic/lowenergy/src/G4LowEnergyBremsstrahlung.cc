@@ -47,11 +47,8 @@
 // 24.04.01 V.Ivanchenko remove RogueWave 
 // 29.09.2001 V.Ivanchenko: revision based on design iteration
 // 10.10.2001 MGP Revision to improve code quality and consistency with design
-// --------------------------------------------------------------
-
 //
 // --------------------------------------------------------------
-
 
 #include "G4LowEnergyBremsstrahlung.hh"
 #include "G4BremsstrahlungElectronSpectrum.hh"

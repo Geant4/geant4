@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationParameters.cc,v 1.4 2001-10-09 11:23:28 vnivanch Exp $
+// $Id: G4eIonisationParameters.cc,v 1.5 2001-10-10 09:49:57 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -102,7 +102,7 @@ G4double G4eIonisationParameters::Parameter(G4int Z, G4int shellIndex,
   } else {
     G4cout << "WARNING: G4IonisationParameters::FindValue "
            << "did not find ID = "
-           << index << G4endl;
+           << shellIndex << G4endl;
   }
 
   return value;
