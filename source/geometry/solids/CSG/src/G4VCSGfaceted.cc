@@ -103,7 +103,7 @@ G4bool G4VCSGfaceted::CalculateExtent( const EAxis axis,
 				       const G4AffineTransform &transform,
 				       G4double &min, G4double &max ) const
 {
-	G4SolidExtentList	extentList;
+	G4SolidExtentList	extentList( axis, voxelLimit );
 
 	//
 	// Loop over all faces, checking min/max extent as we go.
@@ -116,17 +116,7 @@ G4bool G4VCSGfaceted::CalculateExtent( const EAxis axis,
 	//
 	// Return min/max value
 	//
-	G4bool answer;
-	
-	if (voxelLimit.IsLimited(axis)) {
-		max = voxelLimit.GetMaxExtent(axis);
-		min = voxelLimit.GetMinExtent(axis);
-		answer = extentList.UpdateLimitedExtent( min, max );
-	}
-	else 
-		answer = extentList.GetExtent( min, max );
-		
-	return answer;
+	return extentList.GetExtent( min, max );
 }
 
 
