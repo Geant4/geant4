@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MuCrossSections.cc,v 1.1 2004-06-14 10:09:26 maire Exp $
+// $Id: MuCrossSections.cc,v 1.2 2004-06-15 16:33:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -366,8 +366,7 @@ double MuCrossSections::CRP_Mephi(double z,double a,double tkin,double ep)
 	  {
 	    be=(3.-a6+a1*a7)/(2.*xi); // -(6.-5.*a6+3.*bet*a6)/(6.*xi*xi);
 	  }
-//mma	  fe=fmax(0.,(ale-cre)*be);
-	  fe=max(0.,(ale-cre)*be);	  
+	  fe=std::max(0.,(ale-cre)*be);	  
 	  ymu=4.+a6+3.*bet*a7;
 	  ymd=a7*(1.5+a1)*log(3.+xi)+1.-1.5*a6;
 	  ym1=1.+ymu/ymd;
@@ -381,8 +380,7 @@ double MuCrossSections::CRP_Mephi(double z,double a,double tkin,double ep)
 	  {
 	    bm=(5.-a6+bet*a9)*(xi/2.); // -(11.-5.*a6+.5*bet*(5.+a6))*(xi*xi/6.)
 	  }
-//mma	  fm=fmax(0.,(alm_crm)*bm);
-	  fm=max(0.,(alm_crm)*bm);	  
+	  fm=std::max(0.,(alm_crm)*bm);	  
 //***
 	  sum=sum+a4*(fe+fm/(rmass*rmass))*wgi[i];
 	}
