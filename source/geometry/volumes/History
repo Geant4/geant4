@@ -1,4 +1,4 @@
-$Id: History,v 1.6 1999-03-19 11:48:07 japost Exp $
+$Id: History,v 1.7 1999-03-19 11:48:28 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -32,7 +32,7 @@ March    11, 99      J. Apostolakis
 
    G4GRSVolume.icc: corrected G4Exception messages.
 
-February 17, 99      J. Apostolakis        geomvol-01-00-01
+February 17, 99      J. Apostolakis
 
  include/G4VoxelNavigation.hh
  src/G4VoxelNavigation.cc    : overwrote versions 1.2 with production version
