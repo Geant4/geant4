@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst14PhysicsList.cc,v 1.8 1999-12-15 14:54:51 gunter Exp $
+// $Id: Tst14PhysicsList.cc,v 1.9 2000-01-20 17:34:53 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -156,6 +156,7 @@ void Tst14PhysicsList::SetGELowLimit(G4double lowcut)
 
   G4Gamma::SetEnergyRange(lowcut,1e5);
   G4Electron::SetEnergyRange(lowcut,1e5);
+  G4Positron::SetEnergyRange(lowcut,1e5);
 
 }
 
@@ -200,6 +201,7 @@ void Tst14PhysicsList::SetCuts(){
 
    SetCutValue(cutForGamma,"gamma");
    SetCutValue(cutForElectron,"e-");
+   SetCutValue(cutForElectron,"e+");
 
 }
 
