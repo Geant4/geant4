@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering.cc,v 1.28 2002-10-30 12:48:19 vnivanch Exp $
+// $Id: G4MultipleScattering.cc,v 1.29 2002-12-11 10:53:34 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -52,6 +52,8 @@
 // 30-10-02 modified angle distribution,mods in boundary algorithm,
 //          changes in data members, L.Urban
 // 30-10-02 rename variable cm - Ecm, V.Ivanchenko
+// 11-12-02 precision problem in ComputeTransportCrossSection 
+//          for small Tkin/for heavy particles cured, L.Urban
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -318,10 +320,14 @@ G4double G4MultipleScattering::ComputeTransportCrossSection(
    if((aParticleType.GetParticleName() != "e-") &&    
       (aParticleType.GetParticleName() != "e+") )     
    {
-     G4double Ecm = KineticEnergy*(KineticEnergy+2.*ParticleMass)/
-          (KineticEnergy+ParticleMass) ;   
-     KineticEnergy = 0.5*(Ecm - 2.*electron_mass_c2+
-                     sqrt(Ecm*Ecm + 2.*electron_mass_c2*electron_mass_c2)) ; 
+     //  TAU = Tkin/ParticleMass , tau = Tkin_scaled/electronmass
+     //  p*beta = Mass*TAU*(TAU+2.)/(TAU+1.) =
+     //           electron_mass_c2*tau*(tau+2.)/(tau+1.)
+     G4double TAU = KineticEnergy/Mass ;
+     G4double c = Mass*TAU*(TAU+2.)/(electron_mass_c2*(TAU+1.)) ;
+     G4double w = c-2. ;
+     G4double tau = 0.5*(w+sqrt(w*w+4.*c)) ;
+     KineticEnergy = electron_mass_c2*tau ;
      Mass = electron_mass_c2 ;
    }
 
@@ -420,7 +426,6 @@ G4double G4MultipleScattering::ComputeTransportCrossSection(
   if((aParticleType.GetParticleName() != "e-") &&
      (aParticleType.GetParticleName() != "e+")   )
      sigma /= corrnuclsize;
-
 
   return sigma;
 
