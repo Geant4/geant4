@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.9 2004-01-16 10:13:14 vnivanch Exp $
+// $Id: RunAction.cc,v 1.10 2004-01-16 11:13:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -77,14 +77,6 @@ RunAction::RunAction(DetectorConstruction* det)
 RunAction::~RunAction()
 {
   delete runMessenger;
-
-#ifdef G4ANALYSIS_USE
-  tree->commit();       // Writing the histograms to the file
-  tree->close();        // and closing the tree (and the file)
-
-  delete hf;
-  delete tree;
-#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
