@@ -73,7 +73,8 @@
     theReactionDynamics.NuclearReaction( vec, vecLen, originalIncident,
                                          targetNucleus, theAtomicMass, massVec );
     //
-    theParticleChange.SetMomentumChange( vec[0]->GetMomentum() );
+    G4double p = vec[0]->GetMomentum().mag();
+    theParticleChange.SetMomentumChange( vec[0]->GetMomentum() * (1.0/p)  );
     theParticleChange.SetEnergyChange( vec[0]->GetKineticEnergy() );
     //
     theParticleChange.SetNumberOfSecondaries( vecLen-1 );
