@@ -9,6 +9,9 @@
 
 // Copyright 2002, Freehep.
 
+#include <string>
+#include <vector>
+
 namespace HEPREP {
 
 class HepRep;
@@ -49,6 +52,14 @@ public:
      * @return false in case of a stream problem.
      */
     virtual bool write(HepRep * heprep) = 0;
+
+    /**
+     * Writes the layerOrder.
+     *
+     * @param layerOrder to be written.
+     * @return false in case of a stream problem.
+     */
+    virtual bool write(std::vector<std::string>  * layerOrder) = 0;
 
     /**
      * Writes a HepRepTypeTree.

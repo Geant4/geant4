@@ -25,6 +25,8 @@
  * @author Mark Donszelmann, Joseph Perl
  */
 
+#include <stdio.h>
+
 #include "globals.hh"
 #include "g4std/vector"
 #include "g4std/strstream"
@@ -146,6 +148,8 @@ void G4HepRepSceneHandler::open() {
     heprep->addLayer("Trajectory");
     heprep->addLayer("TrajectoryPoint");
     heprep->addLayer("Hit");
+
+    writer->write(heprep->getLayerOrder());
 }
 
 
@@ -384,7 +388,7 @@ void G4HepRepSceneHandler::mergeAndDelete(char* fname) {
     ifile.close();
 
     // delete file
-    if (unlink(fname) != 0) {
+    if (remove(fname) != 0) {
         G4cerr << "Failed to delete: " << fname << G4endl;
     }
 }

@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <stack>
+#include <vector>
 
 #include "HEPREP/HepRep.h"
 #include "HEPREP/HepRepFactory.h"
@@ -43,6 +44,7 @@ class XMLHepRepStreamer : public XMLWriter, public virtual HEPREP::HepRepWriter 
 
         bool close();
         bool write(HEPREP::HepRep* heprep);
+        bool write(std::vector<std::string> *layers);
         bool write(HEPREP::HepRepTypeTree* typeTree);
         bool write(HEPREP::HepRepType* type);
         bool write(HEPREP::HepRepTreeID* treeID);

@@ -5,10 +5,10 @@
 
 using namespace std;
 
-XMLWriter::XMLWriter(ostream* out, string, string defaultNameSpace)
+XMLWriter::XMLWriter(ostream* out, string indentString, string defaultNameSpace)
     : defaultNameSpace(defaultNameSpace) {
     writer = new IndentPrintWriter(out);
-    writer->setIndentString("  ");
+    writer->setIndentString(indentString);
     closed = false;
     dtdName = NULL;
 }

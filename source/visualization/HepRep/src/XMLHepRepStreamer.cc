@@ -9,8 +9,8 @@
 using namespace std;
 using namespace HEPREP;
 
-XMLHepRepStreamer::XMLHepRepStreamer(ostream* out, bool writeTreesOnly)
-    : writeTreesOnly(writeTreesOnly), XMLWriter(out, "  ", NAMESPACE) {
+XMLHepRepStreamer::XMLHepRepStreamer(ostream* out, bool treesOnly)
+    : XMLWriter(out, "  ", NAMESPACE), writeTreesOnly(treesOnly) {
 
     this->nameSpace = NAMESPACE;
     if (!writeTreesOnly) openDoc();
@@ -31,10 +31,26 @@ bool XMLHepRepStreamer::write(HepRep* root) {
         setAttribute("xmlns", "xsi", "http://www.w3.org/2001/XMLSchema-instance");
         setAttribute("xsi", "schemaLocation", "HepRep.xsd");
         openTag(nameSpace, "heprep");
-        writtenLayers = false;
     }
     hepreps.push(root);
     this->heprep = root;
+    return true;
+}
+
+bool XMLHepRepStreamer::write(vector<string> *layers) {
+    if (!writeTreesOnly) {
+        string layerOrder = "";
+        bool comma = false;
+        for (vector<string>::iterator i=layers->begin(); i != layers->end(); i++) {
+            if (comma) {
+                layerOrder.append(", ");
+            }
+            layerOrder.append(*i);
+            comma = true;
+        }
+        setAttribute("order", layerOrder);
+        printTag(nameSpace, "layer");
+    }
     return true;
 }
 
@@ -47,22 +63,6 @@ bool XMLHepRepStreamer::write(HepRepTypeTree* typeTree) {
         hepreps.pop();
         closeTag();
     }
-    if ((!writtenLayers) && (!writeTreesOnly)) {
-        writtenLayers = true;
-        string layerOrder = "";
-        bool comma = false;
-        vector<string> *layers = heprep->getLayerOrder();
-        for (vector<string>::iterator i=layers->begin(); i != layers->end(); i++) {
-            if (comma) {
-                layerOrder.append(", ");
-            }
-            layerOrder.append(*i);
-            comma = true;
-        }
-        setAttribute("order", layerOrder);
-        printTag(nameSpace, "layer");
-    }
-
     setAttribute("name", typeTree->getName());
     setAttribute("version", typeTree->getVersion());
     openTag(nameSpace, "typetree");
