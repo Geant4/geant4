@@ -109,8 +109,8 @@ void G4VDataFile::GetLine(){
 
   if(strlen(buf) >= _bufSize){
 
-    G4cout<<"G4VDataFile::GetLine() Error: buffer out of boundaries"<<endl;
-    exit(0);
+    G4String excep = "Error!!!! G4VDataFile::GetLine() buffer out of boundaries";
+    G4Exception(excep);
   }
 }
 

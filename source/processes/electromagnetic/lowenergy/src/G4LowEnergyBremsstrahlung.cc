@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.6 1999-06-04 14:01:09 aforti Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.7 1999-06-05 13:43:14 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -481,7 +481,7 @@ void G4LowEnergyBremsstrahlung::BuildMeanFreePathTable()
        ptrVector->PutValue( i , Value ) ;
      }
      
-     theMeanFreePathTable->insertAt( J , ptrVector );
+     theMeanFreePathTable->insert( ptrVector );
      
      // Compute the PartialSumSigma table at a given fixed energy
      ComputePartialSumSigma(FixedEnergy, material) ;       
@@ -557,7 +557,7 @@ void G4LowEnergyBremsstrahlung::BuildATable(){
 
     else{
 
-      ATable->insertAt(k,OneElementATable);
+      ATable->insert(OneElementATable);
       OneElementATable = new G4FirstLevel();
       OneElementATable->insert(new G4Data());
       OneElementATable->insert(new G4Data());
@@ -629,7 +629,6 @@ void G4LowEnergyBremsstrahlung::ComputePartialSumSigma(G4double KineticEnergy,
    G4int NbOfElements = aMaterial->GetNumberOfElements();
    const G4ElementVector* theElementVector = aMaterial->GetElementVector(); 
    const G4double* theAtomNumDensityVector = aMaterial->GetAtomicNumDensityVector();
-   //   G4double GammaEnergyCut = (G4Gamma::GetCutsInEnergy())[Imate];
 
    PartialSumSigma(Imate) = new G4ValVector(NbOfElements);
 
@@ -643,7 +642,7 @@ void G4LowEnergyBremsstrahlung::ComputePartialSumSigma(G4double KineticEnergy,
      
      SIGMA += theAtomNumDensityVector[Ielem]*interCrsSec;
 	 
-     PartialSumSigma(Imate)->insertAt(Ielem, SIGMA);
+     PartialSumSigma(Imate)->insert(SIGMA);
    }
 }
 

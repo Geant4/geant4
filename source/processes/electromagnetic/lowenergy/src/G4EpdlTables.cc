@@ -286,17 +286,11 @@ G4SecondLevel* G4EpdlTables::FillTheTable(G4int numEl) {
 	lvl = values.length(); 
 
 	if(!vecList->entries()){
-
-	  for(G4int k = 0; k < lvl; k++){
 	
+	  for(G4int k = 0; k < lvl; k++){
+		
 	    vecList->insert(new G4Data);
-	    if(subSh){
-	      (*vecList)[k]->append(subSh);
-	    }
-	    else{
 
-	      (*vecList)[k]->append(numAtom);
-	    }
 	  }
 	}
 
@@ -304,6 +298,7 @@ G4SecondLevel* G4EpdlTables::FillTheTable(G4int numEl) {
 
 	  (*vecList)[h]->insert(values[h]);
 	}
+
 	// Clear the temporary list
 	values.clear();
       }
@@ -317,6 +312,8 @@ G4SecondLevel* G4EpdlTables::FillTheTable(G4int numEl) {
 	allElementList->insert(vecList);
 	numTable++;
 	lineMatch = FALSE;
+	vecList = new G4FirstLevel();
+
 	if(numTable == 99){
 	  break;
 	}

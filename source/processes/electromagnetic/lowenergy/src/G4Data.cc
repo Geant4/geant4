@@ -32,13 +32,13 @@ G4Data::~G4Data(){
 
 G4bool G4Data::operator == (const G4Data& input) const {
 
-  return(length() == input.length());
+  return(this->length() == input.length());
 
 }
 
 G4bool G4Data::operator < (const G4Data& input) const {
 
-  return(length() < input.length());
+  return(this->length() < input.length());
 
 }
 

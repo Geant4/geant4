@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.9 1999-06-04 14:01:11 aforti Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.10 1999-06-05 13:43:15 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -175,7 +175,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
       
       G4bool ThereAreShells = TRUE;
       oneAtomTable* oneAtomFluorTrans = (*theFluorTransitionTable)[AtomNum-6]; 
-
+      
       while(ThereAreShells == TRUE){
 	
 	// Select the second transition from another subshell
@@ -226,8 +226,6 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
 	}
       }
      
-      // oneAtomFluorTrans->clearAndDestroy();
-      delete oneAtomFluorTrans;
     } //END OF THE CHECK ON ATOMIC NUMBER
     
     //controllare se il setnumberofsecondaries  si puo' cambiare
@@ -284,7 +282,7 @@ void G4LowEnergyPhotoElectric::BuildCrossSectionTable(){
   G4Epdl97File File(name,par);
   G4EpdlTables table(File);
   table.FillDataTable();
-  theCrossSectionTable = new G4PhysicsTable(*(table.GetFstDataTable())) ;
+  theCrossSectionTable = table.GetFstDataTable();
 
 }
 
@@ -300,7 +298,7 @@ void G4LowEnergyPhotoElectric::BuildBindingEnergyTable(){
   G4Epdl89File File(name,par);
   G4EpdlTables table(File);
   table.FillDataTable();
-  theBindingEnergyTable = new G4PhysicsTable(*(table.GetFstDataTable())) ;
+  theBindingEnergyTable = table.GetFstDataTable();
 
 }
 
@@ -316,11 +314,10 @@ void G4LowEnergyPhotoElectric::BuildFluorTransitionTable(){
  
    for(G4int TableInd = 5; TableInd < 100; TableInd++){
 
-     oneAtomTable* oneAtomShellFL = new oneAtomTable();
-     oneAtomShellFL = BuildTables(TableInd, dataNum, "fl-tr-pr-");
+     oneAtomTable* oneAtomShellFL = BuildTables(TableInd, dataNum, "fl-tr-pr-");
      
      theFluorTransitionTable->insert(oneAtomShellFL);
-     oneAtomTable* oneAtomFluorTrans = (*theFluorTransitionTable)[TableInd-5]; 
+
    }//end for on atoms
 }
 

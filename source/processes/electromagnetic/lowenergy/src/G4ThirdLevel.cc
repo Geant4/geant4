@@ -32,13 +32,13 @@ G4ThirdLevel::~G4ThirdLevel(){
 
 G4bool G4ThirdLevel::operator == (const G4ThirdLevel& input) const{
 
-  return( length() == input.length());
+  return( this->entries() == input.entries());
 
 }
 
 G4bool G4ThirdLevel::operator < (const G4ThirdLevel& input) const{
 
-  return(length() < input.length());
+  return(this->entries() < input.entries());
 
 }
 

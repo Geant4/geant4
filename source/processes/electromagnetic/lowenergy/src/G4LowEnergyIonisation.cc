@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.7 1999-06-04 14:01:11 aforti Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.8 1999-06-05 13:43:15 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -104,7 +104,9 @@ void G4LowEnergyIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParti
 
     BuildFluorTransitionTable();
 
-    //BuildSamplingCoeffTable();
+    BuildBindingEnergyTable();
+    
+    //   BuildSamplingCoeffTable();
 
 }
 
@@ -217,46 +219,29 @@ void G4LowEnergyIonisation::BuildShellCrossSectionTable(){
    if (allAtomShellCrossSec) {
 
     delete allAtomShellCrossSec;
-  }
-
-   if(theBindingEnergyTable){
-
-     delete theBindingEnergyTable;
    }
 
    allAtomShellCrossSec = new allAtomTable();
-   theBindingEnergyTable = new G4SecondLevel();
-
    G4int dataNum = 2;
  
    for(G4int TableInd = 0; TableInd < 100; TableInd++){
 
      oneAtomTable* oneAtomShellCS = BuildTables(TableInd, dataNum, "ion-ss-cs-");
      
-     G4FirstLevel* oneAtomBindingTable 
-       = new G4FirstLevel();
-    
-     oneAtomBindingTable->insert(new G4Data());
-     oneAtomBindingTable->insert(new G4Data());
-    
-     for(G4int g = 0; g < oneAtomShellCS->entries(); g++){
-
-       oneShellTable* oneShellCS = (*oneAtomShellCS)[g];
-       G4Data* ShellIDVec = (*oneShellCS)[0];
-
-       G4double ShellID = (*ShellIDVec)[0];
-       G4double Binding = (*ShellIDVec)[1];
-
-       (*oneAtomBindingTable)[0]->insert(ShellID);
-       (*oneAtomBindingTable)[1]->insert(Binding);
-     }
-	
-     theBindingEnergyTable->insert(oneAtomBindingTable);
      allAtomShellCrossSec->insert(oneAtomShellCS);
    
    }//end for on atoms
 }
+void G4LowEnergyIonisation::BuildBindingEnergyTable(){
 
+  if (theBindingEnergyTable) {
+
+    delete theBindingEnergyTable;
+  }
+
+  G4int dataNum = 2;
+  theBindingEnergyTable = BuildTables(0,dataNum,"binding-");
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -272,7 +257,6 @@ void G4LowEnergyIonisation::BuildFluorTransitionTable(){
    
    for(G4int TableInd = 5; TableInd < 100; TableInd++){
 
-     //     oneAtomTable* oneAtomShellFL = new oneAtomTable();
      oneAtomTable* oneAtomShellFL = BuildTables(TableInd, dataNum, "fl-tr-pr-");
      
      theFluorTransitionTable->insert(oneAtomShellFL);
@@ -368,7 +352,6 @@ oneAtomTable* G4LowEnergyIonisation::BuildTables(const G4int TableInd,
 
     else if(a == -2){
       
-      //      oneShellPar->clearAndDestroy();
       delete oneShellPar;
     }
 
@@ -419,17 +402,12 @@ G4double G4LowEnergyIonisation::ComputeCrossSection(const G4double AtomIndex,
 
     else{
 
-      EnergyVector->removeFirst();
-      CrossSecVector->removeFirst();
       crossSec = DataLogInterpolation(IncEnergy, (*EnergyVector), (*CrossSecVector));
     }
 
     TotalCrossSection += crossSec;
 
-    //    EnergyVector->clear();
     delete EnergyVector;
-
-    // CrossSecVector->clear();
     delete CrossSecVector;
   }
   
@@ -496,6 +474,11 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
   G4double BindingEn = (*(*theBindEnVec)[1])[subShellIndex];
   G4double theEnergyDeposit = BindingEn; // inc energy - deltaray energy = binding energy
 
+  cout<<"theBindingEnergyTable length: "<<theBindingEnergyTable->entries()<<endl;
+  cout<<"theBindEnVec length: "<<theBindEnVec->entries()<<endl;
+  cout<<"subShell index: "<<subShellIndex<<endl;
+  cout<<"thePrimaryShell: "<<thePrimaryShell<<endl;
+  cout<<"theBindEnergy: "<<BindingEn<<endl;
   // delta ray kinematics
   G4double DeltaTotalMomentum = sqrt(DeltaKineticEnergy * (DeltaKineticEnergy +
                                                        2. * electron_mass_c2 ));
@@ -604,7 +587,6 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
 	}
       }
 
-      //      delete oneAtomFluorTrans;
     } //END OF THE CHECK ON ATOMIC NUMBER
     
     //controllare se il setnumberofsecondaries  si puo' cambiare
