@@ -13,10 +13,17 @@
 // CHANGE HISTORY
 // --------------
 //
-// Version 1.0, 28 February 2000, C Ferguson, Created.
+// 10-Nov-2000 F. Lei
+//    changed 
+//       #include <iostream.h>
+//    to
+//       #include "g4std/fstream"
 //
 // Version 1.1, 18 October 2000, Modified to inherit from G4VPrimaryGenerator.
 // New name at the request of M. Asai.
+//
+// Version 1.0, 28 February 2000, C Ferguson, Created.
+//
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -34,7 +41,8 @@
 #include "G4UIcmdWithABool.hh"
 #include "G4ios.hh"
 
-#include <iostream.h>
+//#include <iostream.h>
+#include "g4std/fstream"
 
 #include "g4std/iomanip"               
 #include "g4rw/ctoken.h"               

@@ -1,0 +1,18 @@
+/control/verbose 0
+/tracking/verbose 0
+/event/verbose 0
+/run/initialize
+/gps/verbose 2
+/gps/particle geantino
+/gps/type Surface
+/gps/shape Cylinder
+/gps/centre 2. 2. 2. cm
+/gps/radius 2. cm
+/gps/halfz 4. cm
+/gps/posrot2 0. 1. -0.57735
+/gps/angtype iso
+/gps/energytype Brem
+/gps/emin 1. MeV
+/gps/emax 20. MeV
+/gps/temp 2e11
+/run/beamOn 10000

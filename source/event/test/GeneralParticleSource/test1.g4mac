@@ -1,0 +1,12 @@
+/control/verbose 0
+/tracking/verbose 2
+/event/verbose 2
+/run/initialize
+/gps/verbose 2
+/gps/particle proton
+/gps/type Point
+/gps/centre 1. 2. 1. cm
+/gps/angtype iso
+/gps/energytype Mono
+/gps/monoenergy 2. MeV
+/run/beamOn 10000

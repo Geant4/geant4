@@ -1,0 +1,43 @@
+/control/verbose 0
+/tracking/verbose 0
+/event/verbose 0
+/run/initialize
+/gps/verbose 2
+/gps/particle geantino
+/gps/type Volume
+/gps/shape Sphere
+/gps/centre 1. 2. 1. cm
+/gps/radius 2. cm
+/gps/angtype iso
+/gps/energytype Arb
+/gps/histname arb
+/gps/diffspec 0
+/gps/histpoint 0.0 0.
+/gps/histpoint 1.0 1.
+/gps/histpoint 2.0 3.
+/gps/histpoint 3.0 6.
+/gps/histpoint 4.0 8.
+/gps/histpoint 5.0 9.
+/gps/histpoint 6.0 10.
+/gps/histpoint 7.0 12.
+/gps/histpoint 8.0 15.
+/gps/histpoint 9.0 19.
+/gps/histpoint 10. 24.
+/gps/arbint Lin
+/gps/histname biasz
+/gps/histpoint 0. 0.
+/gps/histpoint 0.4 0.
+/gps/histpoint 0.6 1.
+/gps/histpoint 1. 0.
+/gps/histname biast
+/gps/histpoint 0. 0.
+/gps/histpoint 0.9 0.
+/gps/histpoint 1. 1.
+/gps/histname biasp
+/gps/histpoint 0. 0.
+/gps/histpoint 0.125 1.
+/gps/histpoint 0.375 4.
+/gps/histpoint 0.625 1.
+/gps/histpoint 0.875 4.
+/gps/histpoint 1. 1.
+/run/beamOn 10000

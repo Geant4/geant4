@@ -1,0 +1,118 @@
+This README file details what the various macros test.
+
+test1.g4mac
+-----------
+point source, isotropic radiation, monoenergetic
+
+test2.g4mac
+-----------
+square plane source, cosine-law radiation, linear energy
+
+test3.g4mac
+-----------
+rectangular plane source, isotropic radiation, power-law energy
+ 
+test4.g4mac
+-----------
+circular plane source, cosine-law radiation, exponential energy
+
+test5.g4mac
+-----------
+elliptical plane source, isotropic radiation, bremsstrahlung energy
+
+test6.g4mac
+-----------
+spherical surface source, isotropic radiation, black-body energy
+
+test7.g4mac
+-----------
+cylindrical surface source, cosine-law radiation, Cosmic diffuse energy
+
+test8.g4mac
+-----------
+elliptical surface source, isotropic radiation, linear energy
+
+test9.g4mac
+-----------
+parallepiped surface source, isotropic radiation, linear energy
+
+test10.g4mac
+------------
+spherical volume source, isotropic radiation, linear energy
+
+test11.g4mac
+------------
+cylindrical volume source, isotropic radiation, power-law energy
+
+test12.g4mac
+------------
+elliptical volume source, isotropic radiation, power-law energy
+
+test13.g4mac
+------------
+parallelepiped volume source, cosine-law radiation, exponential energy
+
+test14.g4mac
+------------
+rotated circular plane source, isotropic radiation, exponential energy
+
+test15.g4mac
+------------
+rotated surface cylinder source, isotropic radiation, bremsstrahlung energy
+
+test16.g4mac
+------------
+rotated parallelepiped volume source, isotropic radiation, bremsstrahlung energy
+
+test17.g4mac
+------------
+confined spherical volume source, isotropic radiation, exponential energy
+
+test18.g4mac
+------------
+square plane source, cosine-law radiation, user-defined energy histogram
+
+test19.g4mac
+------------
+square plane source, cosine-law radiation, arbitrary point-wise energy function with linear interpolation.
+
+test20.g4mac
+------------
+square plane source, cosine-law radiation, arbitrary point-wise energy function with logarithmic interpolation.
+
+test21.g4mac
+------------
+square plane source, cosine-law radiation, arbitrary point-wise energy function with exponential interpolation.
+
+test22.g4mac
+------------
+square plane source, cosine-law radiation, arbitrary point-wise energy function with spline interpolation.
+
+test23.g4mac
+------------
+square plane source with x and y biasing, user-defined theta and phi distributions, user-defined EPN energy distribution.
+
+test24.g4mac
+------------
+spherical volume source with z biasing, isotropic radiation with theta and phi biasing, arbitrary point-wise energy function with linear interpolation.
+
+test25.g4mac
+------------
+spherical volume source, isotropic radiation with theta and phi biasing, user-defined energy histogram
+
+test26.g4mac
+------------
+square plane source, cosine-law radiation with lower and upper theta and phi limits, linear energy with biasing.
+
+test27.g4mac
+------------
+square plane source, user-defined theta, arbitrary point-wise energy function with linear interpolation.
+
+test28.g4mac
+------------
+particle=ion, square plane source, isotropic radiation, monoenergetic energy.
+
+test29.g4mac
+------------
+plane source of type annulus, cosine-law radiation, exponential energy
+

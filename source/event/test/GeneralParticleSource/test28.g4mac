@@ -1,0 +1,18 @@
+/control/verbose 0
+/tracking/verbose 0
+/event/verbose 0
+/run/initialize
+/gps/verbose 2
+/gps/particle ion
+/gps/ion 2 3 1 0.
+/gps/type Plane
+/gps/shape Square
+/gps/centre 1. 2. 1. cm
+/gps/halfx 2. cm
+/gps/halfy 2. cm
+/gps/angtype iso
+/gps/energytype Mono
+/gps/monoenergy 100 MeV
+/run/beamOn 10000
+
+

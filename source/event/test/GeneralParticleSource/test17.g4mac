@@ -1,0 +1,18 @@
+/control/verbose 0
+/tracking/verbose 0
+/event/verbose 0
+/run/initialize
+/gps/verbose 2
+/gps/particle geantino
+/gps/type Volume
+/gps/shape Sphere
+/gps/centre 0. 0. 0. cm
+/gps/radius 1.5 cm
+/gps/confine v2_sol
+/gps/angtype iso
+/gps/energytype Exp
+/gps/emin 2. MeV
+/gps/emax 10. MeV
+/gps/ezero 1.
+/run/beamOn 10000
+

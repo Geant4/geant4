@@ -8,15 +8,33 @@
 // Organisation: University of Southampton / DERA
 // Customer:     ESA/ESTEC
 //
+// Documentation avaialable at http://www.space.dera.gov.uk/space_env/gspm.html
+//   These include:
+//       User Requirement Document (URD)
+//       Software Specification Documents (SSD)
+//       Software User Manual (SUM)
+//       Technical Note (TN) on the physics and algorithms
+//
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // CHANGE HISTORY
 // --------------
 //
-// Version 1.0, 28 February 2000, C Ferguson, Created.
+// 10-Nov-2000, F. Lei
+//    some bug fixing:
+//          i) dclared ' G4int count' in all ****Interpolation functions
+//          ii) added ' return (0.) ' to GenerateUserDefTheta and GenerateUserDefPhi 
+//              as default.
+//
+// 09-Nov-2000, F Lei
+//    Changed to a fast mplementation for generating iso and cos angular directions 
 //
 // Version 1.1, 18 October 2000, Modified to inherit from G4VPrimaryGenerator.
 // New name at the request of M. Asai.
+//
+//
+// Version 1.0, 28 February 2000, C Ferguson, Created.
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -33,7 +51,6 @@
 #include "G4Ions.hh"
 #include "G4TrackingManager.hh"
 #include "G4Track.hh"
-
 #include "G4GeneralParticleSource.hh"
 
 G4GeneralParticleSource::G4GeneralParticleSource()
@@ -1028,10 +1045,11 @@ void G4GeneralParticleSource::GenerateIsotropicFlux()
   G4double px, py, pz, pmag;
 
   // generate rand nos. but make sure in theta/phi limits
+  /*  Colin's old stuff
   Theta = 10.;  // This is well above the pi upper limit.
   Phi = 10.;    // Still well above 2pi upper limit.
 
-  while(Theta > MaxTheta || Theta < MinTheta)
+    while(Theta > MaxTheta || Theta < MinTheta)
     {
       rndm = GenRandTheta();
       Theta = acos(1. - 2.*rndm);
@@ -1046,6 +1064,25 @@ void G4GeneralParticleSource::GenerateIsotropicFlux()
   px = sin(Theta) * cos(Phi);
   py = sin(Theta) * sin(Phi);
   pz = cos(Theta);
+
+  */
+  // More efficient implementation by F. Lei
+  //
+  G4double sintheta, sinphi,costheta,cosphi;
+  rndm = GenRandTheta();
+  costheta = cos(MinTheta) - rndm * (cos(MinTheta) - cos(MaxTheta));
+  sintheta = sqrt(1. - costheta*costheta);
+  
+  rndm2 = GenRandPhi();
+  Phi = MinPhi + (MaxPhi - MinPhi) * rndm2; 
+  sinphi = sin(Phi);
+  cosphi = cos(Phi);
+
+  px = sintheta * cosphi;
+  py = sintheta * sinphi;
+  pz = costheta;
+
+  // end of F.Lei implementation
 
   px = -px;
   py = -py;
@@ -1100,13 +1137,15 @@ void G4GeneralParticleSource::GenerateCosineLawFlux()
   G4double rndm, rndm2;
   G4double resultx, resulty, resultz;
 
+  /*  Colin's old implementation which is very slow
+
   Theta = 10.; // Well above MaxTheta
   Phi = 10.;   // Well above MaxPhi
 
   while(Theta > MaxTheta || Theta < MinTheta)
     {
       rndm = GenRandTheta();
-      Theta = asin(sqrt(rndm));
+      Theta = asin(sqrt(MaxTheta*rndm));
     }
 
   while(Phi > MaxPhi || Phi < MinPhi)
@@ -1118,6 +1157,24 @@ void G4GeneralParticleSource::GenerateCosineLawFlux()
   px = sin(Theta) * cos(Phi);
   py = sin(Theta) * sin(Phi);
   pz = cos(Theta);
+  */
+  // More efficient implementation by F. Lei
+  //
+  G4double sintheta, sinphi,costheta,cosphi;
+  rndm = GenRandTheta();
+  sintheta = sqrt( rndm * (sin(MaxTheta)*sin(MaxTheta) - sin(MinTheta)*sin(MinTheta) ) );
+  costheta = sqrt(1. -sintheta*sintheta);
+  
+  rndm2 = GenRandPhi();
+  Phi = MinPhi + (MaxPhi - MinPhi) * rndm2; 
+  sinphi = sin(Phi);
+  cosphi = cos(Phi);
+
+  px = sintheta * cosphi;
+  py = sintheta * sinphi;
+  pz = costheta;
+
+  // end of F.Lei implementation
 
   px = -px;
   py = -py;
@@ -1247,6 +1304,7 @@ G4double G4GeneralParticleSource::GenerateUserDefTheta()
       // No user defined theta distribution
       G4cout << "Error ***********************" << G4endl;
       G4cout << "UserDistType = " << UserDistType << G4endl;
+      return (0.);
     }
   else
     {
@@ -1292,6 +1350,7 @@ G4double G4GeneralParticleSource::GenerateUserDefPhi()
       // No user defined phi distribution
       G4cout << "Error ***********************" << G4endl;
       G4cout << "UserDistType = " << UserDistType << G4endl;
+      return(0.);
     }
   else
     {
@@ -1557,7 +1616,7 @@ void G4GeneralParticleSource::LinearInterpolation()
   // Create a cumulative array which is then normalised Arb_Cum_Area
   G4double Area_seg[256]; // Stores area under each segment
   G4double sum = 0., Arb_x[256], Arb_y[256], Arb_Cum_Area[256];
-  G4int i;
+  G4int i, count;
   G4int maxi = ArbEnergyH.GetVectorLength();
   for(i=0;i<maxi;i++)
     {
@@ -1582,7 +1641,7 @@ void G4GeneralParticleSource::LinearInterpolation()
 	  // multiply the function (Arb_y) up by the bin width
 	  // to make the function counts/s (i.e. get rid of momentum
 	  // dependence).
-	  for(int count=0;count<maxi;count++)
+	  for(count=0;count<maxi;count++)
 	    {
 	      Arb_y[count] = Arb_y[count] * (Arb_x[count+1] - Arb_x[count]);
 	    }
@@ -1602,7 +1661,7 @@ void G4GeneralParticleSource::LinearInterpolation()
   if(DiffSpec == false)
     {
       // Converts integral point-wise spectra to Differential
-      for(int count=1;count<=maxi;count++)
+      for( count=1;count<=maxi;count++)
 	{
 	  Arb_y[count] = Arb_y[count] - Arb_y[count-1];
 	}
@@ -1675,7 +1734,7 @@ void G4GeneralParticleSource::LogInterpolation()
   if(verbosityLevel == 2)
     ArbEnergyH.DumpValues();
 
-  G4int i;
+  G4int i, count;
   G4int maxi = ArbEnergyH.GetVectorLength();
   for(i=0;i<maxi;i++)
     {
@@ -1700,7 +1759,7 @@ void G4GeneralParticleSource::LogInterpolation()
 	  // multiply the function (Arb_y) up by the bin width
 	  // to make the function counts/s (i.e. get rid of momentum
 	  // dependence).
-	  for(int count=0;count<maxi;count++)
+	  for(count=0;count<maxi;count++)
 	    {
 	      Arb_y[count] = Arb_y[count] * (Arb_x[count+1] - Arb_x[count]);
 	    }
@@ -1720,7 +1779,7 @@ void G4GeneralParticleSource::LogInterpolation()
   if(DiffSpec == false)
     {
       // Converts integral point-wise spectra to Differential
-      for(int count=1;count<=maxi;count++)
+      for(count=1;count<=maxi;count++)
 	{
 	  Arb_y[count] = Arb_y[count] - Arb_y[count-1];
 	}
@@ -1788,7 +1847,7 @@ void G4GeneralParticleSource::ExpInterpolation()
   if(verbosityLevel == 2)
     ArbEnergyH.DumpValues();
 
-  G4int i;
+  G4int i, count;
   G4int maxi = ArbEnergyH.GetVectorLength();
   for(i=0;i<maxi;i++)
     {
@@ -1813,7 +1872,7 @@ void G4GeneralParticleSource::ExpInterpolation()
 	  // multiply the function (Arb_y) up by the bin width
 	  // to make the function counts/s (i.e. get rid of momentum
 	  // dependence).
-	  for(int count=0;count<maxi;count++)
+	  for( count=0;count<maxi;count++)
 	    {
 	      Arb_y[count] = Arb_y[count] * (Arb_x[count+1] - Arb_x[count]);
 	    }
@@ -1833,7 +1892,7 @@ void G4GeneralParticleSource::ExpInterpolation()
   if(DiffSpec == false)
     {
       // Converts integral point-wise spectra to Differential
-      for(int count=1;count<=maxi;count++)
+      for(count=1;count<=maxi;count++)
 	{
 	  Arb_y[count] = Arb_y[count] - Arb_y[count-1];
 	}
@@ -1885,7 +1944,7 @@ void G4GeneralParticleSource::SplineInterpolation()
   // the function (Energy)
   G4double Arb_x[256], Arb_y[256];
   G4double sum = 0.;
-  G4int i;
+  G4int i, count;
   if(verbosityLevel == 2)
     ArbEnergyH.DumpValues();
 
@@ -1917,7 +1976,7 @@ void G4GeneralParticleSource::SplineInterpolation()
 	  // multiply the function (Arb_y) up by the bin width
 	  // to make the function counts/s (i.e. get rid of momentum
 	  // dependence).
-	  for(int count=0;count<maxi;count++)
+	  for(count=0;count<maxi;count++)
 	    {
 	      Arb_y[count] = Arb_y[count] * (Arb_x[count+1] - Arb_x[count]);
 	    }
@@ -1937,7 +1996,7 @@ void G4GeneralParticleSource::SplineInterpolation()
   if(DiffSpec == false)
     {
       // Converts integral point-wise spectra to Differential
-      for(int count=1;count<=maxi;count++)
+      for(count=1;count<=maxi;count++)
 	{
 	  Arb_y[count] = Arb_y[count] - Arb_y[count-1];
 	}
