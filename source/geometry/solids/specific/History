@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2000-11-20 18:18:57 gcosmo Exp $
+$Id: History,v 1.16 2001-01-08 16:13:39 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-20-Nov-2000, G. Cosmo    (geom-solids-specific-V02-00-04)
+08-Jan-2001, D.Williams  (geom-solids-specific-V03-00-00)
+-----------------------
+- G4Hype.cc: Added protecton against zero v.z in DistanceToOut.
+
+20-Nov-2000, G.Cosmo     (geom-solids-specific-V02-00-04)
 ---------------------
 - Fixes to remove warnings from "-Wall -ansi -pedantic" g++ compiler options:
   o commented out variables declared and not used.
