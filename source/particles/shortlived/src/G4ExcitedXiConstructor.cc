@@ -5,14 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedXiConstructor.cc,v 1.3 1999-12-15 14:51:17 gunter Exp $
+// $Id: G4ExcitedXiConstructor.cc,v 1.4 2001-05-18 16:40:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
 //	GEANT 4 class implementation file 
-//      For information related to this code contact:
-//      CERN, IT Division, ASD Group
+//
 //      History: first implementation, based on object model of
 //      10 oct 1998  H.Kurashige
 // ---------------------------------------------------------------
@@ -100,7 +99,7 @@ G4DecayTable*  G4ExcitedXiConstructor::AddLambdaKMode(
 
   G4String lambda = "lambda";
   G4String daughterK;
-  G4double r;
+  G4double r = 0.;
 
   // ------------ Lambda K- ------------ 
   // determine daughters
@@ -139,7 +138,7 @@ G4DecayTable*  G4ExcitedXiConstructor::AddSigmaKMode(
 
   G4String daughterH;
   G4String daughterK;
-  G4double r;
+  G4double r = 0.;
 
   // ------------ Sigma K- ------------ 
   // determine daughters
@@ -198,7 +197,7 @@ G4DecayTable*  G4ExcitedXiConstructor::AddXiPiMode(
 
   G4String daughterXi;
   G4String daughterPi;
-  G4double r;
+  G4double r = 0.;
 
   // ------------ Xi pi-  ------------ 
   // determine daughters

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedMesonConstructor.cc,v 1.8 2000-02-27 07:48:51 kurasige Exp $
+// $Id: G4ExcitedMesonConstructor.cc,v 1.9 2001-05-18 16:40:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,10 +29,9 @@
 
 
 G4ExcitedMesonConstructor::G4ExcitedMesonConstructor(G4int nStates,
-						       G4int isoSpin):
-         leptonNumber(0), baryonNumber(0),type("meson")
+						       G4int isoSpin)
+    :   type("meson"), leptonNumber(0), baryonNumber(0)
 {
- 
 }
 
 G4ExcitedMesonConstructor::~G4ExcitedMesonConstructor()
@@ -171,7 +170,6 @@ G4int  G4ExcitedMesonConstructor::GetQuarkContents(G4int iQ,
 
 G4double  G4ExcitedMesonConstructor::GetCharge(G4int iIsoSpin3, G4int idxType )
 {
-  G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   static G4double quark_charge[7] = 
   {
     0., -1./3., +2./3., -1./3., +2./3., -1./3., +2./3.

@@ -5,17 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EtaPrime.cc,v 1.4 2000-02-27 05:57:44 kurasige Exp $
+// $Id: G4EtaPrime.cc,v 1.5 2001-05-18 16:40:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// ----------------------------------------------------------------------
+// ----------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
-//      For information related to this code contact:
-//      CERN, CN Division, ASD Group
 //      History: first implementation, 8 June 1998 Hisaya Kurashige
-// ****************************************************************
 // ----------------------------------------------------------------
 
 #include "g4std/fstream"
@@ -111,9 +108,8 @@ void G4EtaPrime::SetCuts(G4double aCut)
 
   // Build range vector for every material, convert cut into energy-cut,
   // fill theKineticEnergyCuts and delete the range vector
-  for (G4int J=0; J<materialTable->length(); J++)
+  for (size_t J=0; J<materialTable->length(); J++)
   {
-    G4Material* aMaterial = (*materialTable)[J];
     theKineticEnergyCuts[J] = LowestEnergy;
   }
   theEtaPrimeLengthCut = theCutInMaxInteractionLength;  

@@ -5,15 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AntiNeutron.cc,v 1.4 2000-02-27 06:17:03 kurasige Exp $
+// $Id: G4AntiNeutron.cc,v 1.5 2001-05-18 16:40:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
-//      For information related to this code contact:
-//      CERN, CN Division, ASD Group
 //      History: first implementation, based on object model of
 //      4th April 1996, G.Cosmo
 //                          H.Kurashige 7 July 1996
@@ -84,9 +82,8 @@ void G4AntiNeutron::SetCuts(G4double aCut)
 
   // Build range vector for every material, convert cut into energy-cut,
   // fill theKineticEnergyCuts and delete the range vector
-  for (G4int J=0; J<materialTable->length(); J++)
+  for (size_t J=0; J<materialTable->length(); J++)
   {
-    G4Material* aMaterial = (*materialTable)[J];
     theKineticEnergyCuts[J] = LowestEnergy;
   }
   theAntiNeutronLengthCut = theCutInMaxInteractionLength;  
@@ -94,13 +91,3 @@ void G4AntiNeutron::SetCuts(G4double aCut)
   // Rebuild the physics tables for every process for this particle type
   
 }
-
-
-
-
-
-
-
-
-
-

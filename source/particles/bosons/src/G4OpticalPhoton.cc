@@ -5,15 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpticalPhoton.cc,v 1.3 2000-02-27 06:27:12 kurasige Exp $
+// $Id: G4OpticalPhoton.cc,v 1.4 2001-05-18 16:40:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
-//      For information related to this code contact:
-//      CERN, CN Division, ASD Group
 //      History: first implementation, based on object model of
 //      4th April 1996, G.Cosmo 
 //      by             H.Kurashige,17 Oct. 1996
@@ -93,9 +91,8 @@ void G4OpticalPhoton::SetCuts(G4double aCut)
 
   // Build range vector for every material, convert cut into energy-cut,
   // fill theKineticEnergyCuts and delete the range vector
-  for (G4int J=0; J<materialTable->length(); J++)
+  for (size_t J=0; J<materialTable->length(); J++)
   {
-    G4Material* aMaterial = (*materialTable)[J];
     theKineticEnergyCuts[J] = 0.0;
   }
   theOpticalPhotonLengthCut = theCutInMaxInteractionLength;  

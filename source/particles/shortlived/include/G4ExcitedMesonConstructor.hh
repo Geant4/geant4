@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedMesonConstructor.hh,v 1.5 2000-02-27 07:48:50 kurasige Exp $
+// $Id: G4ExcitedMesonConstructor.hh,v 1.6 2001-05-18 16:40:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -13,7 +13,7 @@
 //	GEANT 4 class implementation file 
 //
 //      For information related to this code contact:
-//      CERN, IT Division, ASD Group
+//      GEANT4 Collaboration
 //      History: first implementation, based on object model of
 //      10 oct 1998  H.Kurashige
 // ---------------------------------------------------------------
@@ -184,29 +184,3 @@ inline
 }
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -5,14 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedSigmaConstructor.cc,v 1.4 1999-12-15 14:51:17 gunter Exp $
+// $Id: G4ExcitedSigmaConstructor.cc,v 1.5 2001-05-18 16:40:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
 //	GEANT 4 class implementation file 
-//      For information related to this code contact:
-//      CERN, IT Division, ASD Group
+//
 //      History: first implementation, based on object model of
 //      10 oct 1998  H.Kurashige
 // ---------------------------------------------------------------
@@ -118,7 +117,7 @@ G4DecayTable*  G4ExcitedSigmaConstructor::AddNKMode(
 
   G4String daughterN;
   G4String daughterK;
-  G4double r;
+  G4double r = 0.;
 
   // ------------ N K- ------------ 
   // determine daughters
@@ -182,7 +181,7 @@ G4DecayTable*  G4ExcitedSigmaConstructor::AddDeltaKMode(
 
   G4String daughterN;
   G4String daughterK;
-  G4double r;
+  G4double r = 0.;
 
   // ------------ N K- ------------ 
   // determine daughters
@@ -250,7 +249,7 @@ G4DecayTable*  G4ExcitedSigmaConstructor::AddNKStarMode(
 
   G4String daughterN;
   G4String daughterK;
-  G4double r;
+  G4double r = 0.;
 
   // ------------ N K- ------------ 
   // determine daughters
@@ -314,7 +313,7 @@ G4DecayTable*  G4ExcitedSigmaConstructor::AddSigmaPiMode(
 
   G4String daughterSigma;
   G4String daughterPi;
-  G4double r;
+  G4double r = 0.;
 
   // ------------ Sigma+ pi - ------------ 
   // determine daughters
@@ -401,7 +400,7 @@ G4DecayTable*  G4ExcitedSigmaConstructor::AddSigmaStarPiMode(
 
   G4String daughterSigma;
   G4String daughterPi;
-  G4double r;
+  G4double r = 0.;
 
   // ------------ Sigma+ pi - ------------ 
   // determine daughters
