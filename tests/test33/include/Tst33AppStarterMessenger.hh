@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33AppStarterMessenger.hh,v 1.3 2002-11-20 09:38:25 dressel Exp $
+// $Id: Tst33AppStarterMessenger.hh,v 1.4 2003-05-20 12:02:02 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -60,7 +60,7 @@ private:
   G4UIcommand *fParallelGeoCmd;
   G4UIcommand *fScoringCmd;
   G4UIcommand *fImpCmd;
-  G4UIcommand *fWWRCmd;
+  G4UIcmdWithAnInteger *fWWRCmd;
   G4UIcommand *fClearSmaplingCmd;
   G4UIcommand *fConfigureSamplingCmd;
   G4UIcommand *fVisAppComand;

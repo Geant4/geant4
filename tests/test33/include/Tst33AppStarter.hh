@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33AppStarter.hh,v 1.4 2002-11-20 13:09:15 dressel Exp $
+// $Id: Tst33AppStarter.hh,v 1.5 2003-05-20 12:02:02 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -52,6 +52,8 @@ class G4CellScorer;
 class G4CellScorerStore;
 class G4UserRunAction;
 class Tst33VEventAction;
+class G4ProcessPlacer;
+class Tst33WeightChangeProcess;
 
 class Tst33AppStarter {
 public:
@@ -65,10 +67,10 @@ public:
   void PostRun();
   void CreateScorer();
   void CreateIStore();
-  void CreateWeightRoulette();
+  void CreateWeightRoulette(G4int mode);
   void ClearSampling();
   void Run(G4int nevents);
-
+  void AddWeightChanger();
 
 private:
   Tst33AppStarter(const Tst33AppStarter &);
@@ -99,6 +101,8 @@ private:
   G4bool fConfigured;
   G4bool fWeightroulette;
   G4int fTime;
+  G4ProcessPlacer *fChangeWeightPlacer;
+  Tst33WeightChangeProcess *fWeightChangeProcess;;
 };
 
 #endif

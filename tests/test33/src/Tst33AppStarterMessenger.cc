@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33AppStarterMessenger.cc,v 1.3 2002-10-31 08:32:44 dressel Exp $
+// $Id: Tst33AppStarterMessenger.cc,v 1.4 2003-05-20 12:02:02 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -45,7 +45,7 @@ Tst33AppStarterMessenger(Tst33AppStarter &appstarter)
   fParallelGeoCmd(new G4UIcommand("/Tst33/ParallelGeometry",this)),
   fScoringCmd(new G4UIcommand("/Tst33/Scoring",this)),
   fImpCmd(new G4UIcommand("/Tst33/ImportanceSampling",this)),
-  fWWRCmd(new G4UIcommand("/Tst33/WeightRoulette",this)),
+  fWWRCmd(new G4UIcmdWithAnInteger("/Tst33/WeightRoulette",this)),
   fClearSmaplingCmd(new G4UIcommand("/Tst33/ClearSampling",this)),
   fConfigureSamplingCmd(new G4UIcommand("/Tst33/ConfigureSampling",this)),
   fVisAppComand(new G4UIcommand("/Tst33/Visualization",this)),
@@ -86,7 +86,8 @@ void Tst33AppStarterMessenger::SetNewValue(G4UIcommand* pCmd,
     fAppStarter.CreateIStore();
   }
   if (pCmd==fWWRCmd) {
-    fAppStarter.CreateWeightRoulette();
+    G4int mode(fWWRCmd->GetNewIntValue(szValue));
+    fAppStarter.CreateWeightRoulette(mode);
   }
   if (pCmd==fClearSmaplingCmd) {
     fAppStarter.ClearSampling();

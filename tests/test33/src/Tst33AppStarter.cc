@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33AppStarter.cc,v 1.6 2002-11-20 13:09:17 dressel Exp $
+// $Id: Tst33AppStarter.cc,v 1.7 2003-05-20 12:02:02 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -55,6 +55,8 @@
 #include "G4ScoreTable.hh"
 #include "Tst33TimedApplication.hh"
 #include "Tst33VisApplication.hh"
+#include "G4ProcessPlacer.hh"
+#include "Tst33WeightChangeProcess.hh"
 
 
 Tst33AppStarter::Tst33AppStarter()
@@ -71,7 +73,9 @@ Tst33AppStarter::Tst33AppStarter()
   fIStore(0),
   fConfigured(false),
   fWeightroulette(false),
-  fTime(0)
+  fTime(0),
+  fChangeWeightPlacer(0),
+  fWeightChangeProcess(0)
 {
   if (!fDetectorConstruction) {
     NewFailed("Tst33AppStarter", "Tst33DetectorConstruction");
@@ -87,6 +91,13 @@ Tst33AppStarter::~Tst33AppStarter()
   }
   if (fParallelGeometry) {
     delete fParallelGeometry;
+  }
+  if (fWeightroulette) {
+    fChangeWeightPlacer->RemoveProcess(fWeightChangeProcess);
+    delete fWeightChangeProcess;
+    fWeightChangeProcess = 0;
+    delete fChangeWeightPlacer;
+    fChangeWeightPlacer = 0;
   }
 }
 
@@ -216,11 +227,25 @@ G4bool Tst33AppStarter::CheckCreateWeightRoulette() {
   return createWR;
 }
 
+void Tst33AppStarter::AddWeightChanger(){
+  
+  fWeightChangeProcess = new Tst33WeightChangeProcess;
+  fChangeWeightPlacer = new G4ProcessPlacer("neutron");
+  fChangeWeightPlacer->AddProcessAsLastDoIt(fWeightChangeProcess);
+}
 
-void Tst33AppStarter::CreateWeightRoulette() {
+void Tst33AppStarter::CreateWeightRoulette(G4int mode) {
   if (CheckCreateWeightRoulette()) {
     fWeightroulette = true;
-    fSampler->PrepareWeightRoulett();
+    AddWeightChanger();
+    if (mode==1) {
+      // make sure that no relative weights below 1 occur
+      fSampler->PrepareWeightRoulett(1, 1, 1);
+    }
+    else {
+      // apply default weight eoulette:  see G4VSampler.hh
+      fSampler->PrepareWeightRoulett();
+    }
   }
 }
 
@@ -281,6 +306,13 @@ void Tst33AppStarter::ClearSampling() {
       fIStore = 0;
     }
     fEventAction->Clear();
+    if (fWeightroulette) {
+      fChangeWeightPlacer->RemoveProcess(fWeightChangeProcess);
+      delete fWeightChangeProcess;
+      fWeightChangeProcess = 0;
+      delete fChangeWeightPlacer;
+      fChangeWeightPlacer = 0;
+    }
     fWeightroulette = false;
     fConfigured = false;
   }
