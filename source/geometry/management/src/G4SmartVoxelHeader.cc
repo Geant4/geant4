@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.6 2000-11-01 15:39:35 gcosmo Exp $
+// $Id: G4SmartVoxelHeader.cc,v 1.7 2000-11-20 17:31:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -323,7 +323,8 @@ void G4SmartVoxelHeader::BuildVoxelsWithinLimits(G4LogicalVolume* pVolume,
 
     G4ProxyVector *pGoodSlices=0,*pTestSlices,*tmpSlices;
     G4double goodSliceScore=kInfinity,testSliceScore;
-    EAxis goodSliceAxis,testAxis;
+    EAxis goodSliceAxis=kXAxis;
+    EAxis testAxis     =kXAxis;
     G4int node,maxNode,iaxis;
     G4VoxelLimits noLimits;
 
@@ -642,8 +643,8 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
 			       EAxis pAxis)
 {
     G4double motherMinExtent,motherMaxExtent,targetMinExtent,targetMaxExtent;
-    G4VPhysicalVolume *pDaughter;
-    G4VPVParameterisation *pParam;
+    G4VPhysicalVolume *pDaughter=0;
+    G4VPVParameterisation *pParam=0;
     G4VSolid *targetSolid;
     G4AffineTransform targetTransform;
     G4bool replicated;
@@ -1120,7 +1121,9 @@ G4std::ostream& operator << (G4std::ostream&s, const G4SmartVoxelHeader& h)
 {
     s << "Axis = " << h.faxis << G4endl;
     G4SmartVoxelProxy *collectNode=0,*collectHead=0;
-    G4int collectNodeNo,collectHeadNo,i,j;
+    G4int collectNodeNo=0;
+    G4int collectHeadNo=0;
+    size_t i,j;
     G4bool haveHeaders=false;
 
     for (i=0;i<h.fslices.entries();i++)

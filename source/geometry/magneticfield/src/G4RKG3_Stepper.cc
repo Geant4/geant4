@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RKG3_Stepper.cc,v 1.4 2000-11-01 15:15:53 gcosmo Exp $
+// $Id: G4RKG3_Stepper.cc,v 1.5 2000-11-20 17:29:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4RKG3_Stepper.hh"
@@ -212,7 +212,6 @@ void G4RKG3_Stepper::StepNoErr(const G4double tIn[7],
    //  Calculates y-deriv(atives) & returns B too!
    GetEquationOfMotion()->EvaluateRhsReturnB(tTemp,yderiv,B) ;  
 
-   G4double drds2 = 0 ;
    for(i=0;i<3;i++)        // Output trajectory vector
    {
       K4[i] = Step * yderiv[i+3];

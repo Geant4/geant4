@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2000-11-16 16:21:56 gcosmo Exp $
+$Id: History,v 1.15 2000-11-20 17:31:33 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 20, 2000  G. Cosmo                geommng-V02-00-04
+- Fixes to remove warnings from "-Wall -ansi -pedantic" g++ compiler options:
+  o commented out variables declared and not used.
+  o fixed declaration of variables used before being initialised.
+  o fixed order of initialisation of member data in constructors.
+  o fixed usage of unsigned-int (size_t) for array indeces.
 
 November 16, 2000  V.Grichine              geommng-V02-00-03
 - Fix in G4VSolid::CalculateClippedPoligonExtent(): removed assumption

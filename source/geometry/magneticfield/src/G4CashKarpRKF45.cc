@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CashKarpRKF45.cc,v 1.5 2000-11-01 15:15:52 gcosmo Exp $
+// $Id: G4CashKarpRKF45.cc,v 1.6 2000-11-20 17:29:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // The Cash-Karp Runge-Kutta-Fehlberg 4/5 method is an embedded fourth
@@ -72,11 +72,10 @@ G4CashKarpRKF45::Stepper(const G4double yInput[],
 			       G4double yErr[])
 {
   // const G4int nvar = 6 ;
+  // const G4double a2 = 0.2 , a3 = 0.3 , a4 = 0.6 , a5 = 1.0 , a6 = 0.875;
  G4int i;
 
- const G4double a2 = 0.2 , a3 = 0.3 , a4 = 0.6 , a5 = 1.0 , a6 = 0.875 ,
-
-                 b21 = 0.2 ,
+ const G4double  b21 = 0.2 ,
                  b31 = 3.0/40.0 , b32 = 9.0/40.0 ,
                  b41 = 0.3 , b42 = -0.9 , b43 = 1.2 ,
 

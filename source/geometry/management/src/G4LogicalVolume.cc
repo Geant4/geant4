@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalVolume.cc,v 1.4 2000-11-01 15:39:35 gcosmo Exp $
+// $Id: G4LogicalVolume.cc,v 1.5 2000-11-20 17:31:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,8 +30,8 @@ G4LogicalVolume::G4LogicalVolume( G4VSolid *pSolid, G4Material *pMaterial,
 				  G4FieldManager *pFieldMgr,
 				  G4VSensitiveDetector *pSDetector,
 				  G4UserLimits *pULimits)
- : fDaughters(0), fVoxel(0), fSmartless(2.), fVisAttributes (0) ,
-   fFastSimulationManager (0), fIsEnvelope(FALSE), fFieldManager(pFieldMgr)
+ : fDaughters(0), fFieldManager(pFieldMgr), fVoxel(0), fSmartless(2.),
+   fVisAttributes (0), fFastSimulationManager (0), fIsEnvelope(FALSE)
 {
     SetSolid(pSolid);
     SetMaterial(pMaterial);
@@ -136,7 +136,7 @@ G4LogicalVolume::FindMotherLogicalVolumeForEnvelope()
 
   // Look for the current volume's mother volume.
 
-  for (G4int LV=0;LV < Store->entries(); LV++){
+  for (size_t LV=0;LV < Store->entries(); LV++){
      G4LogicalVolume *aLogVol;
     
      aLogVol= Store->at(LV);

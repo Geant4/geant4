@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DrawVoxels.cc,v 1.11 2000-11-01 15:39:35 gcosmo Exp $
+// $Id: G4DrawVoxels.cc,v 1.12 2000-11-20 17:31:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,7 +56,6 @@ void  G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,
   
    G4double dx=kInfinity,dy=kInfinity,dz=kInfinity;
    G4double xmax=0,xmin=0,ymax=0,ymin=0,zmax=0,zmin=0;
-   G4Transform3D translation_for_voxel_plane;	// According to the solid's own frame
    
    if (lv->GetNoDaughters()<=0) {
      #ifdef G4DrawVoxelsDebug
@@ -84,7 +83,7 @@ void  G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,
    ppl->insert(G4PlacedPolyhedron(bounding_polyhedronBox,G4Translate3D(t_centerofBoundingBox)));
    
    G4ThreeVector t_FirstCenterofVoxelPlane;
-   const G4VisAttributes* voxelsVisAttributes;
+   const G4VisAttributes* voxelsVisAttributes=0;
 
    G4ThreeVector unit_translation_vector;
    G4ThreeVector current_translation_vector;
@@ -216,21 +215,9 @@ void G4DrawVoxels::DrawVoxels(const G4LogicalVolume* lv) const{
    G4PlacedPolyhedronList* pplist=CreatePlacedPolyhedra(lv);
    if(pVVisManager) {
 	//Drawing the bounding and voxel polyhedra for the pVolume
-	for (G4int i=0;i<pplist->entries();i++)
+	for (size_t i=0;i<pplist->entries();i++)
 	   pVVisManager->Draw((*pplist)(i).GetPolyhedron(),(*pplist)(i).GetTransform()*transf3D);	
    }
    else G4cout << "@@@@ void G4DrawVoxels::DrawVoxels(const G4LogicalVolume*) pVVisManager is null! @@@@" <<G4endl; 	
    delete pplist;
 }
-
-
-
-
-
-
-
-
-
-
-
-

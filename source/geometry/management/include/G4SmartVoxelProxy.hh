@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SmartVoxelProxy.hh,v 1.3 2000-04-20 16:49:47 gcosmo Exp $
+// $Id: G4SmartVoxelProxy.hh,v 1.4 2000-11-20 17:31:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4SmartVoxelProxy
@@ -67,8 +67,8 @@ class G4SmartVoxelProxy
 
   private:
 
-    G4SmartVoxelNode* fNode;
     G4SmartVoxelHeader* fHeader;
+    G4SmartVoxelNode* fNode;
 };
 
 #include "G4SmartVoxelProxy.icc"

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.13 2000-11-01 15:15:53 gcosmo Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.14 2000-11-20 17:29:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -100,7 +100,7 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
 
   G4bool  lastStep= false;
   nstp=1;
-  G4double  lastStepThreshold = G4std::min( eps * hstep, Hmin() ); 
+  // G4double  lastStepThreshold = G4std::min( eps * hstep, Hmin() ); 
 
   do{
      G4ThreeVector StartPos( y[0], y[1], y[2] );   

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagHelicalStepper.cc,v 1.5 2000-11-01 15:15:53 gcosmo Exp $
+// $Id: G4MagHelicalStepper.cc,v 1.6 2000-11-20 17:29:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4MagHelicalStepper.hh"
@@ -138,7 +138,7 @@ G4MagHelicalStepper::Stepper( const G4double yInput[],
 
    G4int i;
    // correction for Richardson Extrapolation.
-   G4double  correction = 1. / ( (1 << IntegratorOrder()) -1 );
+   // G4double  correction = 1. / ( (1 << IntegratorOrder()) -1 );
    
    G4double      yTemp[7], yIn[7] ;
    G4ThreeVector Bfld_initial, Bfld_midpoint;

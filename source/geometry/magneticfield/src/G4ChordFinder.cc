@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ChordFinder.cc,v 1.15 2000-11-01 15:15:52 gcosmo Exp $
+// $Id: G4ChordFinder.cc,v 1.16 2000-11-20 17:29:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -138,7 +138,7 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
   //  2.)  Evaluate if resulting chord gives d_chord that is good enough.
   //     2a.)  If d_chord is not good enough, find one that is.
   
-  G4bool    validEndPoint= false,  dbg= false;
+  G4bool    validEndPoint= false;
   G4double  dChordStep, oldStepTrial, stepOfLastGoodChord;
 
   fIntgrDriver-> GetDerivatives( yCurrent, dydx )  ;

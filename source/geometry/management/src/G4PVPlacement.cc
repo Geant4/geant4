@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PVPlacement.cc,v 1.2 1999-12-15 14:49:53 gunter Exp $
+// $Id: G4PVPlacement.cc,v 1.3 2000-11-20 17:31:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,7 +23,7 @@ G4PVPlacement::G4PVPlacement(G4RotationMatrix *pRot,
 			     G4bool pMany,
 			     G4int pCopyNo) :
   G4VPhysicalVolume(pRot,tlate,pName,pLogical,pMother),
-  fcopyNo(pCopyNo), fmany(pMany), fallocatedRotM(false)
+  fmany(pMany), fallocatedRotM(false), fcopyNo(pCopyNo)
 {
 }
 
@@ -36,7 +36,7 @@ G4PVPlacement::G4PVPlacement(const G4Transform3D &Transform3D,
   G4VPhysicalVolume( NewPtrRotMatrix(Transform3D.getRotation().inverse()),
 		    Transform3D.getTranslation(),
 		    pName,pLogical,pMother),
-  fcopyNo(pCopyNo), fmany(pMany)
+  fmany(pMany), fcopyNo(pCopyNo)
 {
   fallocatedRotM= (this->GetRotation() != 0);
 }
@@ -54,7 +54,7 @@ G4PVPlacement::G4PVPlacement(G4RotationMatrix *pRot,
 			     G4bool pMany,
 			     G4int pCopyNo) :
   G4VPhysicalVolume(pRot,tlate,pName,pCurrentLogical,0),
-  fcopyNo(pCopyNo), fmany(pMany), fallocatedRotM(false)
+  fmany(pMany), fallocatedRotM(false), fcopyNo(pCopyNo)
 {
   if (pMotherLogical) pMotherLogical->AddDaughter(this);
 }
@@ -71,8 +71,7 @@ G4PVPlacement::G4PVPlacement( const G4Transform3D &Transform3D,
 		      pName,
                       pCurrentLogical,
                       0),
-    fcopyNo(pCopyNo), 
-    fmany(pMany)
+    fmany(pMany), fcopyNo(pCopyNo)
 {
   this->SetRotation( NewPtrRotMatrix(Transform3D.getRotation().inverse()) );
   fallocatedRotM= (this->GetRotation() != 0);
