@@ -35,6 +35,8 @@
 // CHANGE HISTORY
 // --------------
 //
+// 26/10/2004 F Lei
+//    Created separated the theta, phi generators for position distributions.
 //
 // Version 1.0, 05/02/2004, Fan Lei, Created.
 //    Based on the G4GeneralParticleSource class in Geant4 v6.0
@@ -77,6 +79,14 @@
 //    Allows the user to re-distribute the random
 //    numbers used to generate values of phi.
 //
+// void SetPosThetaBias(G4ThreeVector)
+//    Allows the user to re-distribute the random
+//    numbers used to generate values of theta for position distribution.
+//
+// void SetPosPhiBias(G4ThreeVector)
+//    Allows the user to re-distribute the random
+//    numbers used to generate values of phi for position distribution.
+//
 // void SetEnergyBias(G4ThreeVector)
 //    Allows the user to re-distribute the random
 //    numbers used to generate the energies.
@@ -98,6 +108,12 @@
 //
 // G4double GenRandEnergy()
 //    Generates the random number for energy, with or without biasing.
+//
+// G4double GenRandPosTheta()
+//    Generates the random number for theta, with or without biasing for position distribution.
+//
+// G4double GenRandPosPhi()
+//    Generates the random number for phi, with or without biasing for position distribution.
 //
 //  inline G4double GetBiasWeight()
 //    Returns the weight change after biasing
@@ -131,15 +147,19 @@ public:
   void SetThetaBias(G4ThreeVector);
   void SetPhiBias(G4ThreeVector);
   void SetEnergyBias(G4ThreeVector);
+  void SetPosThetaBias(G4ThreeVector);
+  void SetPosPhiBias(G4ThreeVector);
   G4double GenRandX();
   G4double GenRandY();
   G4double GenRandZ();
   G4double GenRandTheta();
   G4double GenRandPhi();
   G4double GenRandEnergy();
+  G4double GenRandPosTheta();
+  G4double GenRandPosPhi();
 
   inline G4double GetBiasWeight() 
-  { return bweights[0]*bweights[1]*bweights[2]*bweights[3]*bweights[4]*bweights[5];};
+  { return bweights[0]*bweights[1]*bweights[2]*bweights[3]*bweights[4]*bweights[5]*bweights[6]*bweights[7];};
  
  // method to re-set the histograms
   void ReSetHist(G4String);
@@ -169,8 +189,14 @@ private:
   G4bool EnergyBias, IPDFEnergyBias;
   G4PhysicsOrderedFreeVector EnergyBiasH;
   G4PhysicsOrderedFreeVector IPDFEnergyBiasH;
+  G4bool PosThetaBias, IPDFPosThetaBias;
+  G4PhysicsOrderedFreeVector PosThetaBiasH;
+  G4PhysicsOrderedFreeVector IPDFPosThetaBiasH;
+  G4bool PosPhiBias, IPDFPosPhiBias;
+  G4PhysicsOrderedFreeVector PosPhiBiasH;
+  G4PhysicsOrderedFreeVector IPDFPosPhiBiasH;
 
-  G4double bweights[6]; //record x,y,z,theta,phi,energy weights
+  G4double bweights[8]; //record x,y,z,theta,phi,energy,posThet, posPhi weights
 
   // Verbosity
   G4int verbosityLevel;

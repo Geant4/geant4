@@ -129,6 +129,7 @@ private: //commands
   G4UIcmdWithAnInteger       *setsourceCmd;  
   G4UIcmdWithADouble         *setintensityCmd;
   G4UIcmdWithAnInteger       *deletesourceCmd;
+  G4UIcmdWithABool           *multiplevertexCmd;
   // positional commands
   G4UIdirectory              *positionDirectory;
   G4UIcmdWithAString         *typeCmd1;
@@ -178,6 +179,7 @@ private: //commands
   G4UIcmdWithADoubleAndUnit  *angsigmarCmd1;
   G4UIcmdWithADoubleAndUnit  *angsigmaxCmd1;
   G4UIcmdWithADoubleAndUnit  *angsigmayCmd1;
+  G4UIcmdWith3VectorAndUnit  *angfocusCmd;
   G4UIcmdWithABool           *useuserangaxisCmd1;
   G4UIcmdWithABool           *surfnormCmd1;
   // old ones, will be removed soon

@@ -436,9 +436,8 @@ void G4SPSPosDistribution::GeneratePointsOnSurface()
   if(Shape == "Sphere")
     {
       G4double tantheta;
-      theta = posRndm->GenRandTheta();
-      phi = posRndm->GenRandPhi();
-
+      theta = posRndm->GenRandPosTheta();
+      phi = posRndm->GenRandPosPhi();
       theta = acos(1. - 2.*theta); // theta isotropic
       phi = phi * 2. * pi;
       tantheta = tan(theta);
@@ -469,9 +468,9 @@ void G4SPSPosDistribution::GeneratePointsOnSurface()
 	twopi/(halfz*halfz);
       
       // simplified approach
-      theta = posRndm->GenRandTheta();
-      phi = posRndm->GenRandPhi();
-
+      theta = posRndm->GenRandPosTheta();
+      phi = posRndm->GenRandPosPhi();
+      
       theta = acos(1. - 2.*theta);
       minphi = 0.;
       maxphi = twopi;
@@ -636,7 +635,7 @@ void G4SPSPosDistribution::GeneratePointsOnSurface()
 	  G4double rand;
 	  //Point on Lateral Surface
 
-	  rand = G4UniformRand();
+	  rand = posRndm->GenRandPosPhi();
 	  rand = rand * 2. * pi;
 
 	  x = Radius * cos(rand);

@@ -35,7 +35,9 @@
 //
 // CHANGE HISTORY
 // --------------
-//
+// 26/10/2004  F Lei
+//    Added a "focused" option to allow all primary particles pointing to 
+//    a user specified focusing point. 
 //
 // Version 1.0, 05/02/2004, Fan Lei, Created.
 //    Based on the G4GeneralParticleSource class in Geant4 v6.0
@@ -92,6 +94,10 @@
 // void GenerateCosineLawFlux()
 //    This method generates momentum vectors for particles according
 //    to a cosine-law distribution.
+//
+// void GenerateFocusedFlux()
+//    This method generates momentum vectors for particles pointing to
+//    an user specified focusing point.
 //
 // void GenerateUserDefFlux()
 //    Controls generation of momentum vectors according to user-defined
@@ -161,6 +167,7 @@ public:
   void SetBeamSigmaInAngY(G4double);
   void UserDefAngTheta(G4ThreeVector);
   void UserDefAngPhi(G4ThreeVector);
+  void SetFocusPoint(G4ThreeVector);
   inline void SetParticleMomentumDirection
   (G4ParticleMomentum aMomentumDirection)
   { particle_momentum_direction =  aMomentumDirection.unit(); }
@@ -179,6 +186,7 @@ public:
   
 private:
   // These methods generate the momentum vectors for the particles.
+  void GenerateFocusedFlux();
   void GenerateIsotropicFlux();
   void GenerateCosineLawFlux();
   void GenerateBeamFlux();
@@ -195,6 +203,7 @@ private:
   G4double MinTheta, MaxTheta, MinPhi, MaxPhi; // min/max theta/phi
   G4double DR,DX,DY ; // Standard deviations for beam divergence 
   G4double Theta, Phi; // Store these for use with DEBUG
+  G4ThreeVector FocusPoint ; // the focusing point in mother coordinates
   G4bool IPDFThetaExist, IPDFPhiExist; // tell whether IPDF histos exist
   G4PhysicsOrderedFreeVector UDefThetaH; // Theta histo data
   G4PhysicsOrderedFreeVector IPDFThetaH; //Cumulative Theta histogram.

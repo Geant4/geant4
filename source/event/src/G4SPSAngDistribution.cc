@@ -64,6 +64,7 @@ G4SPSAngDistribution::G4SPSAngDistribution()
   DR = 0.;
   DX = 0.;
   DY = 0.;
+  FocusPoint = G4ThreeVector(0., 0., 0.);
   UserDistType = "NULL";
   UserWRTSurface = true;
   UserAngRef = false;
@@ -79,8 +80,8 @@ G4SPSAngDistribution::~G4SPSAngDistribution()
 void G4SPSAngDistribution::SetAngDistType(G4String atype)
 {
   if(atype != "iso" && atype != "cos" && atype != "user" && atype != "planar"
-     && atype != "beam1d" && atype != "beam2d")
-    G4cout << "Error, distribution must be iso, cos, planar, beam1d, beam2d or user" << G4endl;
+     && atype != "beam1d" && atype != "beam2d"  && atype != "focused")
+    G4cout << "Error, distribution must be iso, cos, planar, beam1d, beam2d, focused or user" << G4endl;
   else
     AngDistType = atype;
   if (AngDistType == "cos") MaxTheta = pi/2. ;
@@ -172,6 +173,11 @@ void G4SPSAngDistribution::UserDefAngPhi(G4ThreeVector input)
   UDefPhiH.InsertValues(phhi, val); 
 }
 
+void G4SPSAngDistribution::SetFocusPoint(G4ThreeVector input)
+{
+  FocusPoint = input;
+}
+
 void G4SPSAngDistribution::SetUserWRTSurface(G4bool wrtSurf)
 {
   // This is only applied in user mode?
@@ -235,6 +241,15 @@ void G4SPSAngDistribution::GenerateBeamFlux()
   // particle_momentum_direction now holds unit momentum vector.
   if(verbosityLevel >= 1)
     G4cout << "Generating beam vector: " << particle_momentum_direction << G4endl;
+}
+
+void G4SPSAngDistribution::GenerateFocusedFlux()
+{
+  particle_momentum_direction = (FocusPoint - posDist->particle_position).unit();
+  // 
+  // particle_momentum_direction now holds unit momentum vector.
+  if(verbosityLevel >= 1)
+    G4cout << "Generating focused vector: " << particle_momentum_direction << G4endl;
 }
 
 void G4SPSAngDistribution::GenerateIsotropicFlux()
@@ -592,6 +607,8 @@ G4ParticleMomentum G4SPSAngDistribution::GenerateOne()
     GenerateBeamFlux();
   else if(AngDistType == "user")
     GenerateUserDefFlux();
+  else if(AngDistType == "focused")
+    GenerateFocusedFlux();
   else
     G4cout << "Error: AngDistType has unusual value" << G4endl;
   return particle_momentum_direction;

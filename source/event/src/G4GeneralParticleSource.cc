@@ -59,6 +59,7 @@
 #include "G4GeneralParticleSource.hh"
 
 G4GeneralParticleSource::G4GeneralParticleSource()
+  : multiple_vertex(false)
 {
   sourceVector.clear();
   sourceIntensity.clear();
@@ -161,12 +162,19 @@ void G4GeneralParticleSource::DeleteaSource(G4int aV)
 
 void G4GeneralParticleSource::GeneratePrimaryVertex(G4Event* evt)
 {
-  if (sourceIntensity.size() > 1) {
-    if (!normalised) IntensityNormalization();
-    G4double rndm = G4UniformRand();
-    size_t i = 0 ;
-    while ( rndm > sourceProbability[i] ) i++;
-    (currentSource = sourceVector[i]);
-  }
+  if (!multiple_vertex){
+    if (sourceIntensity.size() > 1) {
+      if (!normalised) IntensityNormalization();
+      G4double rndm = G4UniformRand();
+      size_t i = 0 ;
+      while ( rndm > sourceProbability[i] ) i++;
+      (currentSource = sourceVector[i]);
+    }
   currentSource-> GeneratePrimaryVertex(evt);
+  } 
+  else {
+    for (size_t i = 0; i <  sourceIntensity.size(); i++) {
+      sourceVector[i]->GeneratePrimaryVertex(evt); 
+    }
+  }
 }
