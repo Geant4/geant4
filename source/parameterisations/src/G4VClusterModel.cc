@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VClusterModel.cc,v 1.4 2001-09-18 09:30:31 gcosmo Exp $
+// $Id: G4VClusterModel.cc,v 1.5 2001-11-07 10:32:15 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -38,7 +38,6 @@
 #include "G4Gamma.hh"
 #include "G4TransportationManager.hh"
 #include "G4VSensitiveDetector.hh"
-#include "G4VTouchable.hh"
 
 
 ////////////////////////////////////////////////////////////////////////////
@@ -63,7 +62,6 @@ G4VClusterModel::G4VClusterModel(const G4String& modelName,G4Envelope *anEnvelop
 G4VClusterModel::~G4VClusterModel()
 {
   delete fFakeStep ;
-  delete fTouchable ;
   delete fNavigator ; 
 }
 
@@ -97,8 +95,7 @@ void G4VClusterModel::AssignClusterHit(const G4ThreeVector& position,
   // call sensitive part: taken/adapted from the stepping:
   // Send G4Step information to Hit/Dig if the volume is sensitive
   
-  G4VPhysicalVolume* pCurrentVolume = fFakeStep->GetPreStepPoint()->
-                                      GetPhysicalVolume() ;
+  G4VPhysicalVolume* pCurrentVolume = fFakeStep->GetPreStepPoint()->GetPhysicalVolume() ;
   G4VSensitiveDetector* pSensitive ;
   
   if( pCurrentVolume != 0 )
@@ -116,26 +113,25 @@ void G4VClusterModel::AssignClusterHit(const G4ThreeVector& position,
 void G4VClusterModel::FillFakeStep(const G4ThreeVector& position, 
                                                G4double energy           )
 {
+  G4ThreeVector dummyDirection;
   // find in which volume the spot is.
 
   if (!fNavigatorSetup)
   {
-    fNavigator->SetWorldVolume(G4TransportationManager::GetTransportationManager()->
-		       GetNavigatorForTracking()->GetWorldVolume()) ;
-
-    fNavigator->LocateGlobalPointAndUpdateTouchable(position,fTouchable,false);
+    fNavigator->SetWorldVolume(G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume()) ;
+    fNavigator->LocateGlobalPointAndUpdateTouchableHandle(position,dummyDirection,fTouchable,false);
     fNavigatorSetup = true;
   }
   else
   {
-    fNavigator->LocateGlobalPointAndUpdateTouchable(position,fTouchable);
+    fNavigator->LocateGlobalPointAndUpdateTouchableHandle(position,dummyDirection,fTouchable, false);
   }
   // Fills attribute of the G4Step needed
   // by our sensitive detector:
   //
   // set touchable volume at PreStepPoint:
 
-  fFakePreStepPoint->SetTouchable(fTouchable) ;
+  fFakePreStepPoint->SetTouchableHandle(fTouchable) ;
 
   // set total energy deposit:
 

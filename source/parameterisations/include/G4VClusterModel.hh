@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VClusterModel.hh,v 1.3 2001-09-18 09:30:28 gcosmo Exp $
+// $Id: G4VClusterModel.hh,v 1.4 2001-11-07 10:27:21 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,8 +44,8 @@
 #include "G4PAIonisation.hh"
 #include "G4VFastSimulationModel.hh"
 #include "G4Step.hh"
-#include "G4VTouchable.hh"
-#include "G4TouchableHistory.hh"
+#include "G4TouchableHandle.hh"
+#include "G4TouchableHistoryHandle.hh"
 #include "g4std/vector"
 
 
@@ -78,7 +78,8 @@ protected:
   G4StepPoint*    fFakePreStepPoint ; 
   G4StepPoint*    fFakePostStepPoint ; 
 
-  G4VTouchable*   fTouchable ;
+  G4TouchableHandle   fTouchable ;
+  
   G4Navigator*    fNavigator ;
   G4bool          fNavigatorSetup ;
 
