@@ -1,0 +1,165 @@
+                EXFOR: Experimental Nuclear Reaction Data Retrievals
+                                         HELP
+               Other Databases: EVA, CINDA, Program abstracts
+
+  ------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+ENTRY            O0654   20001117
+SUBENT        O0654001   20001117
+BIB                 12         36
+TITLE      Production of Medium-Energy Neutrons from Proton
+           Bombardment of Light Elements.
+AUTHOR     (J.A.JUNGERMAN,F.P.BRADY,W.J.KNOX,T.MONTGOMERY,
+           M.R.MCGIE,J.L.ROMERO,Y.ISHIZAKI)
+INSTITUTE  (1USADAV)
+           (1USAUSA) Chico State College, Chico, California.
+           (3CHLSAN)
+           (2JPNTOK)
+REFERENCE  (J,NIM,94,421,1971)
+FACILITY   (CYCLO,1USADAV) 76-Inchs Cyclotron.
+METHOD     (EXTB,SITA,TOF,COINC,PHD,EDE,BCINT).
+           (MOSEP) 0.38- Or 0.76-Mm Thick Polyethylene Converters
+           Were Used to Produce Recoil Protons For the Purposes
+           Of Neutron Spectrum Measurements and Relative Beam
+           Monitoring.
+DETECTOR   (TELES,SCIN,SCIN,NAICR) A Telescope of Two Plastic
+           Scintillators and a Sodium Iodide Counter =3D Variant 1
+           (TELES,SOLST,SOLST) A De-E Si-Li Detector Telescope =3D
+           Variant 2.
+           One of Variants 1 or 2 was Used in Different Runs. The
+           Telescope was Placed at 24 Deg. To the Beam Axis.
+           The Similar Telescope Placed at 20 Deg. To the Beam
+           Axis was Used For Relative Beam Monitoring
+PART-DET   (P) Recoil Protons Produced by Neutrons in a Thin
+           Polyethylene Converter were Detected.
+MONITOR    The Absolute Proton Beam Current was Measured by a
+           Faraday Cup.
+ERR-ANALYS (EN-ERR) Uncertainty in the Incident Proton Energy.
+ADD-RES    (E-DIS) Similar Data are Given For Deuterium, Lithium-
+           6,Berillium, Carbon and Aluminium Targets.
+HISTORY    (19990404C) By Khlopin Radium Institute - A.P.
+           (19990515A) Misprints in Bib Section Corrected - A.P.
+           (19990527A) Date is Corrected
+           (20001116A) Subentries O0654004,011-013 are Corrected
+           According to O.Schwerer'S Remarks.
+           (20001117U) Last checking has been done.
+ENDBIB              36
+COMMON               2          3
+ANG         EN-ERR
+ADEG        PER-CENT
+         0.         0.5
+ENDCOMMON             3
+ENDSUBENT           43
+------------------------------------------------------------------------
+SUBENT        O0654007   20001117
+BIB                  6         10
+REACTION   (13-AL-27(P,X)0-NN-1,,DA/DE)
+SAMPLE     Aluminium Foil. The Target Thickness is not Given.
+EN-SEC     (E,N)
+ERR-ANALYS (E-ERR) Data-Point Reader Uncertainty.
+           (DATA-ERR) Data-Point Reader Uncertainty.
+           No Complete Error Analysis is Given by Authors.
+STATUS     (CURVE) By CAJAD.
+COMMENT    *by Compiler* the Angle Between X and Y Axes
+           On this Figure is not Equal 90 Ang. Degree.
+            This Deviation is -2.01E-02 Radians.
+ENDBIB              10
+COMMON               3          3
+EN          E-ERR       DATA-ERR
+MEV         MEV         MB/SR/MEV
+       39.3         0.1       0.004
+ENDCOMMON             3
+DATA                 2         24
+E           DATA
+MEV         MB/SR/MEV
+      13.27     9.8E-02
+      14.29     2.5E-02
+      15.38     7.7E-02
+       16.4       0.497
+      17.42       0.753
+      18.48       0.715
+      19.41       0.741
+      20.54       0.843
+      21.55       0.801
+      22.46       0.846
+      23.52       0.669
+      24.49       0.563
+      25.42       0.726
+      26.47       0.403
+      27.25       0.355
+       28.5       0.457
+      29.48       0.307
+      30.44       0.405
+      31.52       0.491
+      32.47       0.607
+      33.52       0.616
+      34.41       0.562
+      35.39       0.103
+      36.64     3.7E-02
+ENDDATA              26
+ENDSUBENT           45
+------------------------------------------------------------------------
+SUBENT        O0654013   20001117
+BIB                  6         18
+REACTION   (13-AL-27(P,X)0-NN-1,PAR,DA)
+CORRECTION Performed: For Losses Due to Nuclear Interactions in
+           The Proton Recoil Detectors - A Few Percent; For
+           Multiple Scattering of the Protons in the Neutron
+           Production Target That Influences the Faraday Cup
+           Measurements.
+ERR-ANALYS (DATA-ERR) Quoted Errors are Due to Statistics
+           Combined with Uncertainties in Target Thickness
+           Determination, Energy Calibration, and Solid Angles
+           Subtended by the Neutron Collimator and the Proton
+           Telescope.
+EN-SEC     (E-MIN,N)
+           (E-MAX,N)
+COMMENT    - By Authors - The Average Cross Section Over a 2 MeV
+           Interval is Reported.  The Data have Been Corrected For
+           Multiple Scattering in the Target- 13% For 29.2 MeV and
+           3% For 39.2 MeV Incident Protons.
+STATUS     (TABLE) From Table 4.
+ENDBIB              18
+NOCOMMON
+DATA                 5         36
+EN          E-MIN       E-MAX       DATA        DATA-ERR
+MEV         MEV         MEV         MB/SR       MB/SR
+       29.2         16.         18.        0.19        0.15
+       29.2         18.         20.        0.41         0.3
+       29.2         20.         22.        0.86        0.17
+       29.2         22.         24.          1.         0.7
+       29.2         24.         26.         0.2        0.25
+       29.2         26.         28.        0.05         0.1
+       39.2         16.         18.        0.63        0.11
+       39.2         18.         20.        0.72        0.11
+       39.2         20.         22.        0.79        0.13
+       39.2         22.         24.        0.71        0.14
+       39.2         24.         26.        0.61        0.34
+       39.2         26.         28.        0.35        0.05
+       39.2         28.         30.        0.37        0.09
+       39.2         30.         32.        0.45        0.12
+       39.2         32.         34.        0.57        0.45
+       39.2         34.         36.        0.25        0.37
+       39.2         36.         38.        0.04        0.07
+       39.2         38.         40.        0.01        0.03
+       39.2         40.         42.        0.01        0.04
+       50.6         16.         18.        1.87        0.29
+       50.6         18.         20.        1.69        0.42
+       50.6         20.         22.        2.11        0.26
+       50.6         22.         24.        2.02        0.26
+       50.6         24.         26.        1.92        0.24
+       50.6         26.         28.        1.85        0.27
+       50.6         28.         30.         1.7        0.25
+       50.6         30.         32.        1.56         0.3
+       50.6         32.         34.        1.35        0.71
+       50.6         34.         36.         0.8        0.11
+       50.6         36.         38.         0.8        0.39
+       50.6         38.         40.         0.5        0.08
+       50.6         40.         42.         0.5         0.2
+       50.6         42.         44.        0.73        0.14
+       50.6         44.         46.        0.83         0.6
+       50.6         46.         48.        0.14        0.25
+       50.6         48.         50.        0.01        0.02
+ENDDATA              38
+ENDSUBENT           61

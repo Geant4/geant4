@@ -8,6 +8,19 @@ source run_fast.csh
 setenv TARGET pn_zr_022
 source run_fast.csh
 
+setenv TARGET pn_zr_035
+source run_fast.csh
+
+setenv TARGET pn_pb_035
+source run_fast.csh
+
+setenv TARGET pn_al_039
+source run_fast.csh
+
+setenv TARGET pn_zr_050
+source run_fast.csh
+
+
 setenv TARGET pn_fe_065
 source run_fast.csh
 

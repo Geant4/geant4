@@ -13,11 +13,11 @@
 proton
 //--------
 #material
-Zr
+Al
 #energy(MeV)
-50.
+39.3
 #emax(MeV)
-50
+40
 #elim(MeV)
 1.
 #nangle

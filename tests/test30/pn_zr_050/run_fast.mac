@@ -7,7 +7,7 @@
 #verbose
 0
 #events
-10000
+1000
 //--------Proton_processes
 #particle
 proton
@@ -15,17 +15,17 @@ proton
 #material
 Zr
 #energy(MeV)
-22.2
+50
 #emax(MeV)
-25
+50
 #elim(MeV)
 1.
 #nangle
-5
+1
 #angles
-30. 60. 90. 120. 150.  
+0.  
 #dangle
-10.
+5.
 //--------
 #generator
 LEparametrisation
