@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4TouchableHandle.cc,v 1.2 2001-07-11 10:00:37 gunter Exp $
+// $Id: testG4TouchableHandle.cc,v 1.3 2001-12-20 20:13:05 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -207,21 +207,22 @@ G4bool testTouchableHistory(G4Navigator& nav)
   assert(!touch3->GetRotation()||touch3->GetRotation()->isIdentity());
   assert(touch3->GetHistory()->GetDepth()==2);
   
-  pvol=nav.LocateGlobalPointAndSetup(pos,*touch);
+  G4ThreeVector dir(0,0,0);
+  pvol=nav.LocateGlobalPointAndSetup(pos, dir, *((G4TouchableHistory*)touch()) );
   assert(ApproxEqual(nav.GetCurrentLocalCoordinate(),G4ThreeVector(1,1,1)));
   assert(pvol->GetName()=="PosPhys2");
   assert(pvol->GetMother()->GetName()=="PosPhys1");
   assert(pvol->GetMother()->GetMother()->GetName()=="WorldPhys");
   assert(ApproxEqual(nav.NetTranslation(),G4ThreeVector(10,11,12)));
 
-  pvol=nav.LocateGlobalPointAndSetup(-pos,*touch2);
+  pvol=nav.LocateGlobalPointAndSetup(-pos, dir, *((G4TouchableHistory*)touch2()) );
   assert(ApproxEqual(nav.GetCurrentLocalCoordinate(),G4ThreeVector(-1,-1,-1)));
   assert(pvol->GetName()=="RepPhys");
   assert(pvol->GetMother()->GetName()=="PosPhys3");
   assert(pvol->GetMother()->GetMother()->GetName()=="WorldPhys");
   assert(ApproxEqual(nav.NetTranslation(),G4ThreeVector(-10,-11,-12)));
 
-  pvol=nav.LocateGlobalPointAndSetup(pos2,*touch3);
+  pvol=nav.LocateGlobalPointAndSetup(pos2, dir, *((G4TouchableHistory*)touch3()));
   assert(pvol->GetName()=="ParamPhys");
   assert(pvol->GetMother()->GetName()=="PosPhys4");
   assert(pvol->GetMother()->GetMother()->GetName()=="WorldPhys");
