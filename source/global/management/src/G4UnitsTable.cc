@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.cc,v 1.25 2005-03-21 18:28:29 gcosmo Exp $
+// $Id: G4UnitsTable.cc,v 1.26 2005-03-21 18:34:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
@@ -40,6 +40,7 @@
 #include "G4UnitsTable.hh"
 
 #include <iomanip>
+#include <sstream>
 
 G4UnitsTable G4UnitDefinition::theUnitsTable;
 
