@@ -1,4 +1,4 @@
-$Id: History,v 1.86 2002-08-06 10:37:45 gcosmo Exp $
+$Id: History,v 1.87 2002-10-29 18:40:25 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 29th, 2002       J. Apostolakis - geomvol-V04-01-05
+- G4PropagatorInField
+  Re-introduced memory of Charge Mass and Momentum into PropagatorInField,
+  in order for it to message the correct ChordFinder at each step with this
+  information.  It now does this task.
 
 Aug  6th, 2002       G. Cosmo - geomvol-V04-01-04
 - Formatting cleanup in source implementation files.
