@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScatteringx.icc,v 1.1 2001-05-15 10:20:51 urban Exp $
+// $Id: G4MultipleScatteringx.icc,v 1.2 2001-05-18 13:57:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -21,6 +21,11 @@
 //---------------------------------------------------------------
 //            New version of MSC model
 //---------------------------------------------------------------
+// Modified:
+// 18/05/01 V.Ivanchenko Clean up againist Linux ANSI compilation 
+//
+//---------------------------------------------------------------
+
 
 inline G4double G4MultipleScatteringx::AlongStepGetPhysicalInteractionLength(
                              const G4Track& track,
@@ -263,8 +268,6 @@ inline G4double G4MultipleScatteringx::GetLambda(
                               G4Material* material)
 {
   G4bool isOut;
-  const G4MaterialTable* theMaterialTable =
-                       G4Material::GetMaterialTable() ;
   
   G4double lambda = (*theTransportMeanFreePathTable)
                     (material->GetIndex())->

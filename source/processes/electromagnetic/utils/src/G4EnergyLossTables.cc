@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnergyLossTables.cc,v 1.13 2000-11-04 16:47:29 maire Exp $
+// $Id: G4EnergyLossTables.cc,v 1.14 2001-05-18 13:57:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------------- 

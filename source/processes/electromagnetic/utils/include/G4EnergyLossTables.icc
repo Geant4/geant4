@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnergyLossTables.icc,v 1.12 2000-11-04 16:47:28 maire Exp $
+// $Id: G4EnergyLossTables.icc,v 1.13 2001-05-18 13:57:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id:
@@ -17,6 +17,7 @@
 // cache mechanism , L.Urban , 11/02/99
 // bug fixed , L.Urban , 12/04/99
 // 10/11/99: moved from RWT hash dictionary to STL map, G.Barrand, M.Maire
+// 18/05/01 V.Ivanchenko Clean up againist Linux ANSI compilation 
 //
 // -------------------------------------------------------------------
 
@@ -457,7 +458,6 @@ inline G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
                     QQPositron ;
     oldIndex = -1 ;
   }
-  const G4PhysicsTable* rangeTable= t.theRangeTable;
   const G4PhysicsTable*  dEdxTable= t.theDEDXTable;
   const G4PhysicsTable*  inverseRangeTable= t.theInverseRangeTable;
 

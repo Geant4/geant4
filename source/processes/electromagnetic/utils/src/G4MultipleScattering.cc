@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScattering.cc,v 1.7 2001-05-16 10:14:13 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.8 2001-05-18 13:57:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -29,6 +29,7 @@
 // 10/08/00 values of some data members has been changed, L.Urban
 // 09/11/00 bug corrected in sigma computation, L.Urban
 // 16/05/01 value of cpar changed back to the old value, L.Urban
+// 18/05/01 V.Ivanchenko Clean up againist Linux ANSI compilation 
 // --------------------------------------------------------------
 
 #include "G4MultipleScattering.hh"
@@ -37,10 +38,7 @@
 
   G4MultipleScattering::G4MultipleScattering(const G4String& processName)
      : G4VContinuousDiscreteProcess(processName),
-       theTransportMeanFreePathTable(NULL),
-       lastMaterial(NULL),
-       lastKineticEnergy(0.),
-       materialIndex(0),
+       theTransportMeanFreePathTable(0),
        fTransportMeanFreePath (1.e12),
        range(1.e10*mm),
        alpha1(5.),
@@ -51,14 +49,18 @@
        TotBin(100),
        theElectron(G4Electron::Electron()),
        thePositron(G4Positron::Positron()),
+       lastMaterial(0),
+       lastKineticEnergy(0.),
+       materialIndex(0),
        tLast (0.0),
        zLast (0.0),
        Tlimit(1.*keV),
        scatteringparameter(0.9),
        tuning (1.00),
        cpar (1.50),
-       NuclCorrPar (0.0615),FactPar(0.40),
-       fLatDisplFlag(true) 
+       fLatDisplFlag(true), 
+       NuclCorrPar (0.0615),
+       FactPar(0.40)
   { }
 
   G4MultipleScattering::~G4MultipleScattering()
@@ -421,10 +423,8 @@
     static const G4double tausmall = 5.e-5,taubig =50.,
           kappa = 2.5, kappapl1 = kappa+1., kappami1 = kappa-1. ;
     const G4DynamicParticle* aParticle ;
-    G4Material* aMaterial ;
     G4double KineticEnergy,truestep,tau,prob,cth,sth,phi,
-             dirx,diry,dirz,w,w1,etau,rmean,safetyminustolerance,
-             xnew,ynew,znew ;
+             dirx,diry,dirz,w,w1,etau,rmean,safetyminustolerance;
     G4double rand ;
     G4bool isOut;
 

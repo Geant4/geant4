@@ -5,11 +5,12 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScatteringx.cc,v 1.3 2001-05-16 14:28:14 maire Exp $
+// $Id: G4MultipleScatteringx.cc,v 1.4 2001-05-18 13:57:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
 // 16/05/01  value of cparm changed , L.Urban
+// 18/05/01  V.Ivanchenko Clean up againist Linux ANSI compilation 
 // --------------------------------------------------------------
 
 #include "G4MultipleScatteringx.hh"
@@ -18,10 +19,7 @@
 
   G4MultipleScatteringx::G4MultipleScatteringx(const G4String& processName)
      : G4VContinuousDiscreteProcess(processName),
-       theTransportMeanFreePathTable(NULL),
-       lastMaterial(NULL),
-       lastKineticEnergy(0.),
-       materialIndex(0),
+       theTransportMeanFreePathTable(0),
        fTransportMeanFreePath (1.e12),
        range(1.e10*mm),
        alpha1(5.),
@@ -32,16 +30,21 @@
        TotBin(100),
        theElectron(G4Electron::Electron()),
        thePositron(G4Positron::Positron()),
+       lastMaterial(0),
+       lastKineticEnergy(0.),
+       materialIndex(0),
        tLast (0.0),
        zLast (0.0),
        Tlimit(1.*keV),
        scatteringparameter1(0.9),
        scatteringparameter2(5.0),
        scatteringparameter3(1.0),
+       boundary(false),
        tuning (1.00),
        cparm (1.5),
-       NuclCorrPar (0.0615),FactPar(0.40),
-       fLatDisplFlag(true),boundary(false) 
+       fLatDisplFlag(true),
+       NuclCorrPar (0.0615),
+       FactPar(0.40)
   { }
 
   G4MultipleScatteringx::~G4MultipleScatteringx()
@@ -404,12 +407,9 @@
     static const G4double tausmall = 5.e-5,taubig =10.,
           kappa = 2.5, kappapl1 = kappa+1., kappami1 = kappa-1. ;
     const G4DynamicParticle* aParticle ;
-    G4Material* aMaterial ;
-    G4double KineticEnergy,truestep,tau,prob,cth,sth,phi,
-             dirx,diry,dirz,w,etau,rmean,safetyminustolerance,
-             xnew,ynew,znew ;
-
-    G4double rand ;
+    G4double KineticEnergy,truestep,tau,cth,sth,phi,
+             dirx,diry,dirz,w,etau,rmean,safetyminustolerance;
+    G4double prob = 0.0;
     G4bool isOut;
 
     fParticleChange.Initialize(trackData) ;

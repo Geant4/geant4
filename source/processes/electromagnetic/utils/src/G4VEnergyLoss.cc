@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VEnergyLoss.cc,v 1.20 2001-03-27 12:16:35 urban Exp $
+// $Id: G4VEnergyLoss.cc,v 1.21 2001-05-18 13:57:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -16,6 +16,7 @@
 //  bug fixed in fluct., L.Urban 22/11/00
 //  bugfix in fluct.
 //  (some variables are doubles instead of ints now),L.Urban 23/03/01
+//  18/05/01 V.Ivanchenko Clean up againist Linux ANSI compilation 
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -140,8 +141,6 @@ void G4VEnergyLoss::BuildRangeVector(G4PhysicsTable* theDEDXTable,
   G4double oldValue,tauold ;
 
   G4PhysicsVector* physicsVector= (*theDEDXTable)[materialIndex];
-  const G4MaterialTable* theMaterialTable =
-                                G4Material::GetMaterialTable() ;
 
   // cure 'accidental' 0. dE/dx vales first .....
   G4double lossmin = +1.e10 ;
@@ -409,8 +408,6 @@ void G4VEnergyLoss::BuildLabTimeVector(G4PhysicsTable* theDEDXTable,
            LowEdgeEnergy,tau,Value ;
 
   G4PhysicsVector* physicsVector= (*theDEDXTable)[materialIndex];
-  const G4MaterialTable* theMaterialTable =
-                                G4Material::GetMaterialTable() ;
 
   // low energy part first...
   losslim = physicsVector->GetValue(tlim,isOut);
@@ -471,8 +468,6 @@ void G4VEnergyLoss::BuildProperTimeVector(G4PhysicsTable* theDEDXTable,
            LowEdgeEnergy,tau,Value ;
 
   G4PhysicsVector* physicsVector= (*theDEDXTable)[materialIndex];
-  const G4MaterialTable* theMaterialTable =
-                                G4Material::GetMaterialTable() ;
 
   // low energy part first...
   losslim = physicsVector->GetValue(tlim,isOut);
@@ -911,7 +906,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   G4double p1,p2,p3 ;
   G4int nb;
   G4double Corrfac, na,alfa,rfac,namean,sa,alfa1,ea,sea;
-  G4double dp1,dp3;
+  G4double dp3;
   G4double siga ;
 
   // shortcut for very very small loss 
