@@ -1,0 +1,27 @@
+# $Id: TestEm9.in,v 1.1 2003-07-14 17:10:11 vnivanch Exp $
+#
+# Macro file for "test26.cc"
+# V.Ivanchenko
+#
+#
+/control/verbose 2
+/run/verbose 1
+#/tracking/verbose 1
+#
+#  select EM PhysicsList
+#
+#/testem/phys/addPhysics  model
+/testem/phys/addPhysics  standard
+#
+/testem/phys/setCuts    5.0 mm
+/testem/phys/VertexCuts 0.01 mm
+/testem/phys/MuonCuts  10.0 mm
+#
+/run/initialize
+#
+/testem/histoName
+/gun/particle e-
+/gun/energy 1 GeV
+/run/beamOn 100
+#
+

@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm9.cc,v 1.2 2003-07-08 17:12:18 vnivanch Exp $
+// $Id: TestEm9.cc,v 1.3 2003-07-14 17:10:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -41,61 +41,66 @@
 #include "RunAction.hh"
 #include "EventAction.hh"
 #include "SteppingAction.hh"
+#include "TrackingAction.hh"
 
 #ifdef G4VIS_USE
  #include "VisManager.hh"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 int main(int argc,char** argv) {
- 
+
   //choose the Random engine
   HepRandom::setTheEngine(new RanecuEngine);
-  
+
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);
-    
+
   //Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 
   //set mandatory initialization classes
-   DetectorConstruction* det;
-   PhysicsList* phys;
-   PrimaryGeneratorAction* kin;
-  runManager->SetUserInitialization(det  = new DetectorConstruction);
+  DetectorConstruction* det = new DetectorConstruction();
+  PhysicsList* phys;
+  PrimaryGeneratorAction* kin;
+  runManager->SetUserInitialization(det);
   runManager->SetUserInitialization(phys = new PhysicsList);
   runManager->SetUserAction(kin = new PrimaryGeneratorAction(det));
-  
+
 #ifdef G4VIS_USE
   //visualization manager
   G4VisManager* visManager = new VisManager;
   visManager->Initialize();
 #endif
-    
+
   //set user action classes
-   RunAction* run;
-  
-  runManager->SetUserAction(run = new RunAction(det,phys,kin)); 
-  runManager->SetUserAction(new EventAction);
-  runManager->SetUserAction(new SteppingAction(det,run));
+  RunAction* run        = new RunAction();
+  EventAction* event    = new EventAction();
+  TrackingAction* track = new TrackingAction();
+  SteppingAction* step  = new SteppingAction();
 
-  //get the pointer to the User Interface manager 
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
+  runManager->SetUserAction(run);
+  runManager->SetUserAction(event);
+  runManager->SetUserAction(track);
+  runManager->SetUserAction(step);
 
-  if (argc==1)   // Define UI terminal for interactive mode  
-    { 
+  //get the pointer to the User Interface manager
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+
+  if (argc==1)   // Define UI terminal for interactive mode
+    {
      G4UIsession* session = 0;
 #ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);      
+      session = new G4UIterminal(new G4UItcsh);
 #else
       session = new G4UIterminal();
-#endif                      
+#endif
      session->SessionStart();
      delete session;
     }
   else           // Batch mode
-    { 
+    {
      G4String command = "/control/execute ";
      G4String fileName = argv[1];
      UI->ApplyCommand(command+fileName);
@@ -105,10 +110,9 @@ int main(int argc,char** argv) {
 #ifdef G4VIS_USE
   delete visManager;
 #endif
- 
   delete runManager;
 
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
