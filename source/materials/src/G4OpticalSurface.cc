@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpticalSurface.cc,v 1.1 1999-01-07 16:09:45 gunter Exp $
+// $Id: G4OpticalSurface.cc,v 1.2 1999-04-14 12:49:04 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,10 +34,20 @@
         // Operators
         //////////////
 
-const G4OpticalSurface & 
-      G4OpticalSurface::operator=(const G4OpticalSurface &right)
+const G4OpticalSurface& 
+      G4OpticalSurface::operator=(const G4OpticalSurface& right)
 {
-	return right;
+  if (this != &right)
+    {
+      theName                    = right.theName;
+      theModel                   = right.theModel;
+      theFinish                  = right.theFinish;
+      theType                    = right.theType;
+      sigma_alpha                = right.sigma_alpha;
+      polish                     = right.polish;
+      theMaterialPropertiesTable = right.theMaterialPropertiesTable;
+     } 
+  return *this;
 }
 
         /////////////////

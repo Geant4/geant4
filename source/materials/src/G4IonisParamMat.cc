@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonisParamMat.cc,v 1.1 1999-01-07 16:09:44 gunter Exp $
+// $Id: G4IonisParamMat.cc,v 1.2 1999-04-14 12:49:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -187,9 +187,30 @@ G4IonisParamMat::G4IonisParamMat(const G4IonisParamMat &right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-const G4IonisParamMat & G4IonisParamMat::operator=(const G4IonisParamMat &right)
+const G4IonisParamMat& G4IonisParamMat::operator=(const G4IonisParamMat& right)
 {
-  return right;
+  if (this != &right)
+    {
+      fMaterial              = right.fMaterial;
+      fMeanExcitationEnergy  = right.fMeanExcitationEnergy;
+      fLogMeanExcEnergy      = right.fLogMeanExcEnergy;
+      fShellCorrectionVector = right.fShellCorrectionVector;
+      fTaul                  = right.fTaul;
+      fCdensity              = right.fCdensity;
+      fMdensity              = right.fMdensity;
+      fAdensity              = right.fAdensity;
+      fX0density             = right.fX0density;
+      fX1density             = right.fX1density;
+      fF1fluct               = right.fF1fluct;
+      fF2fluct               = right.fF2fluct;
+      fEnergy1fluct          = right.fEnergy1fluct;
+      fLogEnergy1fluct       = right.fLogEnergy1fluct;      
+      fEnergy2fluct          = right.fEnergy2fluct;
+      fLogEnergy2fluct       = right.fLogEnergy2fluct;      
+      fEnergy0fluct          = right.fEnergy0fluct;
+      fRateionexcfluct       = right.fRateionexcfluct;
+     } 
+  return *this;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

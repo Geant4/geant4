@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Element.cc,v 1.1 1999-01-07 16:09:43 gunter Exp $
+// $Id: G4Element.cc,v 1.2 1999-04-14 12:49:01 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -40,6 +40,7 @@ G4ElementTable G4Element::theElementTable;
 
 G4Element::G4Element(const G4String& name, const G4String& symbol,
                      G4double zeff, G4double aeff)
+:fName(name),fSymbol(symbol)		     
 {
     if (zeff<1.) G4Exception
       (" ERROR! It is not allowed to create an Element with Z < 1" );
@@ -54,8 +55,6 @@ G4Element::G4Element(const G4String& name, const G4String& symbol,
 
     InitializePointers();
 
-    fName   = name;
-    fSymbol = symbol;
     fZeff   = zeff;
     fNeff   = aeff/(g/mole);
     fAeff   = aeff;
@@ -81,13 +80,12 @@ G4Element::G4Element(const G4String& name, const G4String& symbol,
 // via AddIsotope
 
 G4Element::G4Element(const G4String& name, const G4String& symbol, G4int nIsotopes)
+:fName(name),fSymbol(symbol)
 {
     InitializePointers();
 
     size_t n = size_t(nIsotopes);
 
-    fName   = name;
-    fSymbol = symbol;
     fNumberOfIsotopes = 0;
 
     theIsotopeVector         = new G4IsotopeVector(n);
@@ -171,9 +169,26 @@ G4Element::G4Element(G4Element &right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-const G4Element & G4Element::operator=(const G4Element &right)
+const G4Element& G4Element::operator=(const G4Element& right)
 {
-  return right;
+  if (this != &right)
+    {
+      fName                    = right.fName;
+      fSymbol                  = right.fSymbol;
+      fZeff                    = right.fZeff;
+      fNeff                    = right.fNeff;
+      fAeff                    = right.fAeff;
+      fNbOfAtomicShells        = right.fNbOfAtomicShells;
+      fAtomicShells            = right.fAtomicShells;
+      fNumberOfIsotopes        = right.fNumberOfIsotopes;
+      theIsotopeVector         = right.theIsotopeVector;
+      fRelativeAbundanceVector = right.fRelativeAbundanceVector;
+      fIndexInTable            = right.fIndexInTable;
+      fCoulomb                 = right.fCoulomb;
+      fRadTsai                 = right.fRadTsai;
+      fIonisation              = right.fIonisation;
+     } 
+  return *this;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

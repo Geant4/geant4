@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonisParamElm.hh,v 1.1 1999-01-07 16:09:40 gunter Exp $
+// $Id: G4IonisParamElm.hh,v 1.2 1999-04-14 12:48:58 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -44,7 +44,7 @@ public:
     G4double  GetAlow() const {return fAlow;};
     G4double  GetBlow() const {return fBlow;};
     G4double  GetClow() const {return fClow;};
-    G4double  GetMeanExcitationEnergy()  const {return fMeanExcitationEnergy;};    
+    G4double  GetMeanExcitationEnergy()  const {return fMeanExcitationEnergy;};  
     G4double* GetShellCorrectionVector() const {return fShellCorrectionVector;};
    
     G4int operator==(const G4IonisParamElm&) const;
@@ -52,8 +52,8 @@ public:
      
 private:
 
-    G4IonisParamElm(G4IonisParamElm &right);
-    const G4IonisParamElm & operator=(const G4IonisParamElm &right);
+    G4IonisParamElm(G4IonisParamElm&);
+    const G4IonisParamElm& operator=(const G4IonisParamElm&);
 
 
 private:

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Material.hh,v 1.1 1999-01-07 16:09:41 gunter Exp $
+// $Id: G4Material.hh,v 1.2 1999-04-14 12:48:59 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -140,6 +140,7 @@ public:
 
     void SetMaterialPropertiesTable(G4MaterialPropertiesTable* anMPT)
                                        {fMaterialPropertiesTable = anMPT;};
+    				       
     G4MaterialPropertiesTable* GetMaterialPropertiesTable() const
                                        {return fMaterialPropertiesTable;};
 
@@ -163,7 +164,7 @@ public:
     G4double  GetElectronDensity()        const {return TotNbOfElectPerVolume;};
     
     G4double         GetRadlen()          const {return fRadlen;};
-    G4IonisParamMat* GetIonisation()      const {return fIonisation;};   
+    G4IonisParamMat* GetIonisation()      const {return fIonisation;};
     G4SandiaTable*   GetSandiaTable()     const {return fSandiaTable;};
     
     G4double GetZ() const;

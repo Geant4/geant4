@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Element.hh,v 1.1 1999-01-07 16:09:39 gunter Exp $
+// $Id: G4Element.hh,v 1.2 1999-04-14 12:48:57 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -112,27 +112,20 @@ public:
     G4double* GetRelativeAbundanceVector() const {return fRelativeAbundanceVector;};
     const G4Isotope* GetIsotope(G4int iso) const {return (*theIsotopeVector)[iso];};
 
-    static 
-    const G4ElementTable* GetElementTable()      {return &theElementTable;};
-    static 
-    size_t GetNumberOfElements() {return theElementTable.length();};
-    size_t GetIndex()      const {return fIndexInTable;};
+    static const  G4ElementTable* GetElementTable() {return &theElementTable;};
+    static size_t GetNumberOfElements() {return theElementTable.length();};
+    size_t GetIndex() const             {return fIndexInTable;};
     
     static  G4Element* GetElement(G4String name);
 
     G4double GetfCoulomb() const {return fCoulomb;};
     G4double GetfRadTsai() const {return fRadTsai;};
-    
+
     G4IonisParamElm* GetIonisation() const {return fIonisation;};
    
-    friend
-    ostream& operator<<(ostream&, G4Element*);
-    
-    friend
-    ostream& operator<<(ostream&, G4Element&);
-    
-    friend
-    ostream& operator<<(ostream&, G4ElementTable);
+    friend ostream& operator<<(ostream&, G4Element*);    
+    friend ostream& operator<<(ostream&, G4Element&);    
+    friend ostream& operator<<(ostream&, G4ElementTable);
     
     G4int operator==(const G4Element&) const;
     G4int operator!=(const G4Element&) const;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MPVEntry.cc,v 1.1 1999-01-07 16:09:44 gunter Exp $
+// $Id: G4MPVEntry.cc,v 1.2 1999-04-14 12:49:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,11 +61,12 @@ G4bool G4MPVEntry::operator <(const G4MPVEntry &right) const
 // -----------------------
 // Well defined = semantics required by RWTPtrSortedVector
 //
-G4MPVEntry& G4MPVEntry::operator =(const G4MPVEntry &right)
+G4MPVEntry& G4MPVEntry::operator =(const G4MPVEntry& right)
 {
+        if (this == &right) return *this;
+	
         thePhotonMomentum = right.thePhotonMomentum;
         theProperty = right.theProperty;
-
         return *this;
 }
 

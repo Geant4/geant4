@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonisParamElm.cc,v 1.1 1999-01-07 16:09:44 gunter Exp $
+// $Id: G4IonisParamElm.cc,v 1.2 1999-04-14 12:49:01 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -65,16 +65,31 @@ G4IonisParamElm::~G4IonisParamElm()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-G4IonisParamElm::G4IonisParamElm(G4IonisParamElm &right)
+G4IonisParamElm::G4IonisParamElm(G4IonisParamElm& right)
 {
     *this = right;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-const G4IonisParamElm & G4IonisParamElm::operator=(const G4IonisParamElm &right)
+const G4IonisParamElm& G4IonisParamElm::operator=(const G4IonisParamElm& right)
 {
-  return right;
+  if (this != &right)
+    {
+      fZ                     = right.fZ;
+      fZ3                    = right.fZ3;
+      fZZ3                   = right.fZZ3;
+      flogZ3                 = right.flogZ3;
+      fTau0                  = right.fTau0;
+      fTaul                  = right.fTaul;
+      fBetheBlochLow         = right.fBetheBlochLow;
+      fAlow                  = right.fAlow;
+      fBlow                  = right.fBlow;
+      fClow                  = right.fClow;
+      fMeanExcitationEnergy  = right.fMeanExcitationEnergy;
+      fShellCorrectionVector = right.fShellCorrectionVector;
+     } 
+  return *this;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonisParamMat.hh,v 1.1 1999-01-07 16:09:40 gunter Exp $
+// $Id: G4IonisParamMat.hh,v 1.2 1999-04-14 12:48:59 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
