@@ -1,4 +1,4 @@
-$Id: History,v 1.86 1999-12-01 15:47:44 gcosmo Exp $
+$Id: History,v 1.87 1999-12-03 16:23:51 morita Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3rd December 1999  Youhei Morita
+- fixed minor typo in G4OODDLX_SCHEMA_NAME
 
 1st December 1999  Gabriele Cosmo (config-V00-01-15)
 - architecture.gmk:
