@@ -1,0 +1,50 @@
+
+#
+# Macro file for the initialization phase of "test17" based on "TestEm6.cc"
+#
+# It creates the default geometry (simple absorber cylinder )        
+#
+/control/verbose 1
+/event/setverbose 0
+/tracking/verbose 0
+#
+/run/initialize
+#
+/gun/particle proton
+/calor/setAbsMat Aluminum
+/gun/energy 500 keV
+/run/beamOn 10000
+/gun/energy 50  MeV
+/run/beamOn 10000
+/calor/setAbsMat Water
+/gun/energy 500 keV
+/run/beamOn 10000
+/gun/energy 50  MeV 
+/run/beamOn 10000
+#
+#
+/gun/particle anti_proton
+/calor/setAbsMat Aluminum
+/gun/energy 500 keV
+/run/beamOn 10000
+/gun/energy 50  MeV 
+/run/beamOn 10000
+/calor/setAbsMat Water   
+/gun/energy 500 keV
+/run/beamOn 10000 
+/gun/energy 50  MeV
+/run/beamOn 10000
+#
+#
+/gun/particle IonC12
+/calor/setAbsMat Aluminum
+/gun/energy 500 keV
+/run/beamOn 10000
+/gun/energy 50  MeV 
+/run/beamOn 10000
+/calor/setAbsMat Water   
+/gun/energy 500 keV
+/run/beamOn 10000   
+/gun/energy 50  MeV
+/run/beamOn 10000
+
