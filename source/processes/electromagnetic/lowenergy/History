@@ -1,4 +1,4 @@
-$Id: History,v 1.116 2001-10-25 03:05:07 pia Exp $
+$Id: History,v 1.117 2001-10-26 00:33:48 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26.10.2001 - MGP, tag emlowen-V03-02-35
+             Swapped old/new electron processes
+
+25.10.2001 - MGP, tag emlowen-V03-02-34
+             Bug fixes in the new classes related to Bremsstrahlung and 
+             e/h Ionisation             
 
 25.10.2001 - MGP, tag emlowen-V03-02-33
              G4LowEnergyPolarizedCompton moved to new design
