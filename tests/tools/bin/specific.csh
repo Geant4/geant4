@@ -28,7 +28,7 @@ else
   setenv DEBOPT optim
 endif
 
-# Generaal G4 build flags :
+# General G4 build flags :
 setenv G4UI_BUILD_TERMINAL_SESSION 1
 setenv G4UI_BUILD_GAG_SESSION      1
 setenv G4VIS_BUILD_DAWN_DRIVER     1
@@ -58,10 +58,10 @@ if ( `uname -n | grep dxplus` != "" || \
   if ( $?G4STTNONISO ) then
     setenv DEBOPT ${DEBOPT}_NONISO
     setenv G4USE_OSPACE 1
-    setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/pro
+    setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/new
   else
     setenv DEBOPT ${DEBOPT}_ISO
-    setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/iso
+    setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/newiso
   endif
   if ( `uname -n | grep dcosf01` != "" ) then
     setenv CLHEP_LIB CLHEP-cxx62
@@ -94,6 +94,7 @@ if ( `uname -n | grep pcgeant`   != "" || \
   setenv XKEYSYMDB /usr/lib/X11/XKeysymDB
   setenv OGLHOME /afs/cern.ch/sw/geant4/dev/Mesa/Mesa-1.2.8
   ##### setenv G4VIS_BUILD_OIX_DRIVER      1
+  setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/Linux-g++/new
 endif
 
 if ( `uname -n | grep sgmedia` != "" ) then
@@ -113,6 +114,7 @@ endif
 if ( `uname -n | grep sun` != "" ) then
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC/new
   if ( $?G4STTNONISO ) then
     setenv G4SYSTEM SUN-CC
     setenv DEBOPT ${DEBOPT}_NONISO
@@ -146,6 +148,7 @@ if ( `uname -n | grep hp` != "" ) then
   setenv G4USE_OSPACE 1
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
   setenv G4SYSTEM HP-aCC
+  setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/HP-aCC/new
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
   setenv G4WORKDIR  /afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   setenv G4LIB $G4WORKDIR/lib
