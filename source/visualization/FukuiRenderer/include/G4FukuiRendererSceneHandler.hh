@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FukuiRendererSceneHandler.hh,v 1.8 2001-08-24 21:16:37 johna Exp $
+// $Id: G4FukuiRendererSceneHandler.hh,v 1.9 2001-09-17 07:40:32 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -92,7 +92,7 @@ public:
   }
   void AddThis ( const G4VSolid& solid  );
 
-  void ClearStore (){}
+  void ClearTransientStore();  // Used for triggering detector re-drawing.
 
 	//----- methods inherent to this class
   static G4int GetSceneCount   ();

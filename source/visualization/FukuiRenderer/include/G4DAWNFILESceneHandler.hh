@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILESceneHandler.hh,v 1.9 2001-08-24 21:13:51 johna Exp $
+// $Id: G4DAWNFILESceneHandler.hh,v 1.10 2001-09-17 07:40:32 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -87,7 +87,7 @@ public:
   }
   void AddThis ( const G4VSolid& solid  );
 
-  void ClearStore (){}
+  void ClearTransientStore();  // Used for triggering detector re-drawing.
 
 	//----- public methods inherent to this class
   static G4int GetSceneCount   ();
