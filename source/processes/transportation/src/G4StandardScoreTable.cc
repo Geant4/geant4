@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StandardScoreTable.cc,v 1.1 2002-07-10 15:51:04 dressel Exp $
+// $Id: G4StandardScoreTable.cc,v 1.2 2002-07-11 07:51:01 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -55,6 +55,7 @@ Print(const G4MapPtkStandardCellScorer &mptkscorer,
 void G4StandardScoreTable::PrintHeader(G4std::ostream *out)
 {
   G4std::vector<G4String> vecScoreName;
+  vecScoreName.push_back("Importance");
   vecScoreName.push_back("Tr.Entering");
   vecScoreName.push_back("Population");
   vecScoreName.push_back("Collisions");
@@ -120,7 +121,8 @@ void G4StandardScoreTable::PrintLine(G4String &name,
 {
   G4std::string fname = FillString(name, '.', FieldName);
   *out << fname << " |";
-
+  *out << G4std::setw(FieldValue) << sc_scores.fImportance 
+       << " |";
   *out << G4std::setw(FieldValue) << sc_scores.fSumTracksEntering 
        << " |"; 
   *out << G4std::setw(FieldValue) << sc_scores.fSumPopulation << " |"; 
