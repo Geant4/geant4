@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolycone.cc,v 1.4 2003-11-04 17:03:03 gcosmo Exp $
+// $Id: G4ParameterisationPolycone.cc,v 1.5 2003-11-05 17:42:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationPolycone Implementation file
@@ -110,24 +110,17 @@ G4ParameterisationPolyconeRho::
 ComputeDimensions( G4Polycone& pcone, const G4int copyNo,
                    const G4VPhysicalVolume* ) const
 {
-  G4cout << "G4ParameterisationPolyconeRho::ComputeDimensions()" << G4endl
-           << copyNo << G4endl;
-
   G4Polycone* msol = (G4Polycone*)(fmotherSolid);
 
   G4PolyconeHistorical* origparamMother = msol->GetOriginalParameters();
   G4PolyconeHistorical origparam( *origparamMother );
   G4int nZplanes = origparamMother->Num_z_planes;
-  origparam.Z_values = new G4double[nZplanes];
-  origparam.Rmin = new G4double[nZplanes];
-  origparam.Rmax = new G4double[nZplanes];
 
   G4double width = 0.;
   for( G4int ii = 0; ii < nZplanes; ii++ )
   {
     width = CalculateWidth( origparamMother->Rmax[ii]
                           - origparamMother->Rmin[ii], fnDiv, foffset );
-    origparam.Z_values[ii] = origparamMother->Z_values[ii];
     origparam.Rmin[ii] = origparamMother->Rmin[ii]+foffset+width*copyNo;
     origparam.Rmax[ii] = origparamMother->Rmin[ii]+foffset+width*(copyNo+1);
   }
@@ -138,7 +131,7 @@ ComputeDimensions( G4Polycone& pcone, const G4int copyNo,
   if( verbose >= -2 )
   {
     G4cout << "G4ParameterisationPolyconeRho::ComputeDimensions()" << G4endl
-           << copyNo << G4endl;
+           << "-- Parametrised pcone copy-number: " << copyNo << G4endl;
     pcone.DumpInfo();
   }
 }
@@ -223,17 +216,6 @@ ComputeDimensions( G4Polycone& pcone, const G4int copyNo,
   origparam.Start_angle = foffset + origparamMother->Start_angle
                         + copyNo *width;
   origparam.Opening_angle = width;
-  G4int nZplanes = origparamMother->Num_z_planes;
-  origparam.Z_values = new G4double[nZplanes];
-  origparam.Rmin = new G4double[nZplanes];
-  origparam.Rmax = new G4double[nZplanes];
-
-  for( G4int ii = 0; ii < nZplanes; ii++ )
-  {
-    origparam.Z_values[ii] = origparamMother->Z_values[ii];
-    origparam.Rmin[ii] = origparamMother->Rmin[ii];
-    origparam.Rmax[ii] = origparamMother->Rmax[ii];
-  }
 
   pcone.SetOriginalParameters(&origparam);  // copy values & transfer pointers
   pcone.Reset();                            // reset to new solid parameters
@@ -241,7 +223,7 @@ ComputeDimensions( G4Polycone& pcone, const G4int copyNo,
   if( verbose >= -2 )
   {
     G4cout << "G4ParameterisationPolyconePhi::ComputeDimensions()" << G4endl
-           << copyNo << G4endl;
+           << "-- Parametrised pcone copy-number: " << copyNo << G4endl;
     pcone.DumpInfo();
   }
 }
@@ -335,7 +317,6 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol) const
            << " Position: " << origin << " - Width: " << fwidth
            << " - Axis: " << faxis  << G4endl;
   }
-
 }
 
 //---------------------------------------------------------------------
@@ -360,11 +341,6 @@ ComputeDimensions( G4Polycone& pcone, const G4int copyNo,
   G4double xMinusZ = zFirst + foffset + fwidth*copyNo;
   G4double xPlusZ = zFirst + foffset + fwidth*(copyNo+1);
 
-  G4int nZplanes = 2; // origparamMother->Num_z_planes;
-  origparam.Z_values = new G4double[nZplanes];
-  origparam.Rmin = new G4double[nZplanes];
-  origparam.Rmax = new G4double[nZplanes];
-
   origparam.Z_values[0] = xMinusZ;
   origparam.Z_values[1] = xPlusZ;
   origparam.Rmin[0] = aRInner * xMinusZ + bRInner;
@@ -378,7 +354,7 @@ ComputeDimensions( G4Polycone& pcone, const G4int copyNo,
   if( verbose >= -2 )
   {
     G4cout << "G4ParameterisationPolyconeZ::ComputeDimensions()" << G4endl
-           << copyNo << G4endl;
+           << "-- Parametrised pcone copy-number: " << copyNo << G4endl;
     pcone.DumpInfo();
   }
 }

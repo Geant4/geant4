@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolyhedra.cc,v 1.3 2003-11-04 17:03:03 gcosmo Exp $
+// $Id: G4ParameterisationPolyhedra.cc,v 1.4 2003-11-05 17:42:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationPolyhedra Implementation file
@@ -120,16 +120,12 @@ ComputeDimensions( G4Polyhedra& phedra, const G4int copyNo,
   G4PolyhedraHistorical* origparamMother = msol->GetOriginalParameters();
   G4PolyhedraHistorical origparam( *origparamMother );
   G4int nZplanes = origparamMother->Num_z_planes;
-  origparam.Z_values = new G4double[nZplanes];
-  origparam.Rmin = new G4double[nZplanes];
-  origparam.Rmax = new G4double[nZplanes];
 
   G4double width = 0.;
   for( G4int ii = 0; ii < nZplanes; ii++ )
   {
     width = CalculateWidth( origparamMother->Rmax[ii]
                           - origparamMother->Rmin[ii], fnDiv, foffset );
-    origparam.Z_values[ii] = origparamMother->Z_values[ii];
     origparam.Rmin[ii] = origparamMother->Rmin[ii]+foffset+width*copyNo;
     origparam.Rmax[ii] = origparamMother->Rmin[ii]+foffset+width*(copyNo+1);
   }
@@ -140,7 +136,7 @@ ComputeDimensions( G4Polyhedra& phedra, const G4int copyNo,
   if( verbose >= -2 )
   {
     G4cout << "G4ParameterisationPolyhedraRho::ComputeDimensions()" << G4endl
-           << copyNo << G4endl;
+           << "-- Parametrised phedra copy-number: " << copyNo << G4endl;
     phedra.DumpInfo();
   }
 }
