@@ -49,8 +49,8 @@ if [ `uname -n | grep dxplus` ]; then
 # system people see no problems - lets use it for dev1 and dev2 too.
 # we might even use /pool for optim and /tmp for debug (bigger)
 # 
-    if [ ! -d /tmp/g4${REFTREE}tmp ]; then
-      mkdir /tmp/g4${REFTREE}tmp
-    fi
-    export TMPDIR=/tmp/g4${REFTREE}tmp
+##    if [ ! -d /tmp/g4${REFTREE}tmp ]; then
+##     mkdir /tmp/g4${REFTREE}tmp
+##    fi
+##    export TMPDIR=/tmp/g4${REFTREE}tmp
 fi
