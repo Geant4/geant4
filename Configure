@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.27 2002-06-26 17:32:01 stesting Exp $
+# $Id: Configure,v 1.28 2002-06-28 15:37:59 stesting Exp $
 #
-# Generated on Wed Jun 26 19:31:36 CEST 2002 [metaconfig 3.0 PL70]
+# Generated on Fri Jun 28 17:36:41 CEST 2002 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -1576,6 +1576,8 @@ case "$g4osname" in
 		'irix')		g4osname=SGI
 				;;
 		'sunos')	g4osname=SUN
+				;;
+		'solaris')	g4osname=SUN
 				;;
 		'win32')	g4osname=WIN32
 				;;
