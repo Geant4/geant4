@@ -1,5 +1,5 @@
 
-$Id: History,v 1.19 2001-01-31 16:59:21 gcosmo Exp $
+$Id: History,v 1.20 2001-03-19 10:30:34 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,7 +20,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ Mar 19  2001  Gabriele Cosmo       geom-solid-bool-V03-00-03
+
+  - G4IntersectionSolid:
+    o fix in CalculateExtent() for computation of pMin and pMax, to avoid
+      assignment in case CalculateExtent() of one component solid fails.
+    o fix in Inside() to return kOutside in case first component solid's
+      Inside() returns kOutside.
+  - G4UnionSolid:
+    o fix in CalculateExtent() for computation of pMin and pMax: initialised
+      local variables.
+
  Jan 31  2001  Gabriele Cosmo       geom-solid-bool-V03-00-02
+
   - Fix in G4UnionSolid::DistanceToOut(p,v,...) for assignment of
     argument *n. Previous fix was incomplete!
 
