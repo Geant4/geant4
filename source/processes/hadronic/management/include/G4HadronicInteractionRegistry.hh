@@ -10,6 +10,7 @@ class G4HadronicInteractionRegistry
   public:
   
   ~G4HadronicInteractionRegistry();
+  G4HadronicInteractionRegistry(){nModels = 0;}
   
   static void RegisterMe(G4HadronicInteraction * aModel);
   static void RemoveMe(G4HadronicInteraction * aModel){};
