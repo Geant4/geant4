@@ -652,8 +652,8 @@ HepRepInstance* G4HepRepSceneHandler::CreateGeometryInstance(G4String typeName, 
 
 
 HepRepInstance* G4HepRepSceneHandler::CreateEventInstance(G4String typeName, G4int depth,
-                                                          const map<G4String,G4AttDef>* attDefs,
-                                                          vector<G4AttValue>* attValues) {
+                                                          const map<G4String,G4AttDef>* /* attDefs */,
+                                                          vector<G4AttValue>* /* attValues */) {
 
     cout << "typeName " << typeName << endl;
     cout << "depth " << depth << endl;

@@ -15,12 +15,12 @@ XMLHepRepFactory::XMLHepRepFactory() {
 XMLHepRepFactory::~XMLHepRepFactory() {
 }
 
-HepRepReader* XMLHepRepFactory::createHepRepReader (istream* in) {
+HepRepReader* XMLHepRepFactory::createHepRepReader (istream*) {
     cerr << "XMLHepRepFactory::createHepRepReader not implemented" << endl;
     return NULL;
 }
 
-HepRepReader* XMLHepRepFactory::createHepRepReader (std::string filename) {
+HepRepReader* XMLHepRepFactory::createHepRepReader (std::string) {
     cerr << "XMLHepRepFactory::createHepRepReader not implemented" << endl;
     return NULL;
 }
