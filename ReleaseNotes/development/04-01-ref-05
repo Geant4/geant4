@@ -200,7 +200,7 @@ processes/hadronic                      ghad-V04-01-02
 - First release of the binary cascade model (models/kinetic-model module).
 - First release of HETC cascade model (models/cascade/cascade module).
 - First release of a generic scattering term for cascade type models
-  (models/generator/scattering module).
+  (models/generator/scattering module - ghad-scatt-V04-01-03).
 - Fixes in modules (more detailed information in public release notes):
   o cross_sections
     + relaxing the condition for warning cross-section 'non-conservation'
