@@ -1,4 +1,4 @@
-$Id: History,v 1.113 2001-10-18 14:39:31 pia Exp $
+$Id: History,v 1.114 2001-10-18 15:47:25 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18.10.2001 - MGP, tag emlowen-V03-02-31
+             Added member function in G4eLowEnergyLoss and G4VLowEnergyIonisationVI
+             for generation of atomic deexcitation products in the continuous part
 
 18.10.2001 - MGP, tag emlowen-V03-02-30
              Electron processes: contributions to the implementation by V.I.
