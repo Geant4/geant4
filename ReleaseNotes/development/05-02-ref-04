@@ -1,0 +1,219 @@
+
+                       geant4-05-02-ref-04
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Structural changes of categories:
+    - Added subcategory "processes/cuts" and migrated related
+      classes from "particles/management".
+    - Added subcategory "geometry/navigation" and reorganisation
+      of classes within the geometry modules.
+    - Archived STEP reader and related interface module.
+    - Removed "digits+hits" directory, replaced by "digits_hits".
+  o Removed pointer to mother physical volume and related accessor
+    methods in G4VPhysicalVolume.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config/Configure                        config-V05-02-02/Configure-V05-02-00
+----------------
+- architecture.gmk, binmake.gmk:
+  o Added geometry/navigation module.
+  o Removed setup for STEP, now archived.
+  o Adopt new module and library "digits_hits", replacing "digits+hits".
+- Configure installation script:
+  o Fixed correct default name for data sets.
+  o Implemented automatic detection of OpenGL and CLHEP installations.
+  o Fixed behavior of script on Windows system, corrected definition of
+    paths and defaults.
+  o Cleared not allowed configuration drivers.
+
+digits_hits                             digits_hits-V05-02-00
+-----------
+- Imported files from directory digits+hits.
+- Changed name of global library to G4digits_hits.
+- GNUmakefile: corrected dependencies according to new reorganisation.
+
+event                                   event-V05-02-07
+-----
+- Set in G4DynamicParticle the pointer to the corresponding primary particle.
+- GNUmakefile: corrected dependencies according to new reorganisation.
+
+geometry                                geometry-V05-02-00
+--------
+- Logical reorganisation and restructure of modules:
+  o Added new module "navigation" for navigation-releated classes.
+  o Removed module "verification" and merged classes in "navigation".
+  o Archived solids/STEP and solids/STEPinterface modules.
+  o Modified GNUmakefiles in the various modules to cope with these changes.
+- management:
+  ----------
+  o Moved classes to geometry/volumes:
+      G4AssemblyVolume, G4PVParameterised, G4PVPlacement, G4PVReplica.
+  o Moved classes to new module geometry/navigation:
+      G4DrawVoxels
+  o Imported files from geometry/volumes:
+      G4BlockingList, G4IdentityTrajectoryFilter, G4VCurvedTrajectoryFilter.
+  o G4VPhysicalVolume:
+    + Removed pointer to mother physical volume and related accessor
+      methods: SetMother()/GetMother().
+    + Removed pure virtual method Setup(G4VPhysicalVolume*), no longer
+      necessary. Subclasses will require modification as well.
+  o G4LogicalVolume:
+    + Updated/fixed initialisation of data and fast-simulation manager
+      according to above changes.
+  o G4SmartVoxelHeader:
+    + Cleared usage of PV-Setup(), according to above changes.
+- navigation:
+  ----------
+  o Imported classes from "volumes", and "management" modules:
+      G4AuxiliaryNavServices, G4GeometryMessenger, G4Navigator,
+      G4NormalNavigation, G4ParameterisedNavigation, G4PropagatorInField,
+      G4ReplicaNavigation, G4TransportationManager, G4VoxelNavigation,
+      G4DrawVoxels.
+  o Imported all classes from "verification" module.
+  o Cleared call to PV->Setup() according to changes in G4VPhysicalVolume.
+    Affected classes: G4Navigator, G4ParameterisedNavigation,
+                      G4VoxelNavigation, G4ReplicaNavigation,
+                      G4NormalNavigation.
+  o G4DrawVoxels: retrieve top transformation through touchable history in
+    method DrawVoxels(). Removed old method GetAbsoluteTransformation().
+  o G4GeomTestErrorList.cc: retrieve top transformation through touchable
+    history in method FindGlobalCoordinateSystem().
+  o Fixed logic in G4GeomTestSegment::FindSomePoints() in case a point gets
+    stuck in a loop while along a curved surface.
+    Addresses also problem report #499.
+- volumes:
+  -------
+  o Moved classes to geometry/management:
+      G4BlockingList, G4IdentityTrajectoryFilter,
+      G4VCurvedTrajectoryFilter.
+  o Moved classes to new module geometry/navigation:
+      G4AuxiliaryNavServices, G4GeometryMessenger, G4Navigator,
+      G4NormalNavigation, G4ParameterisedNavigation, G4PropagatorInField,
+      G4ReplicaNavigation, G4TransportationManager, G4VoxelNavigation.
+  o Imported files from geometry/management:
+      G4AssemblyVolume, G4PVParameterised, G4PVPlacement, G4PVReplica.
+  o Removed implementation of method Setup() and updated initialisation of
+    data, according to changes in the base class G4VPhysicalVolume.
+    Affected classes: G4PVPlacement, G4PVReplica.
+- solids
+  ------
+  o Archived solids/STEP and solids/STEPinterface modules.
+
+parameterisations                       parmodels-V05-02-01
+-----------------
+- GNUmakefile: corrected dependencies according to new reorganisation.
+
+particles                               particles-V05-02-04
+---------
+- Moved classes related to cuts to new "processes/cuts" subcategory.
+- Fixed compilation problem in G4ParticleDefinition with G4_NO_VERBOSE
+  installation setup (partman-V05-02-00).
+- Removed obsolete cut methods.
+
+persistency                             persistency-V05-02-00
+-----------
+- GNUmakefile: corrected dependencies according to new reorganisation.
+
+processes/cuts                          procuts-V05-02-00
+--------------
+- New sub-category: moved classes from "particles/management".
+
+processes/electromagnetic/lowenergy     emlowen-V05-02-00
+-----------------------------------
+- GNUmakefile: corrected dependencies according to new reorganisation.
+
+processes/electromagnetic/muons         muons-V05-02-06
+-------------------------------
+- Changed secondary particle from e- to e+ for G4MuPairProduction to
+  avoid problems with custom physics lists.
+- Updated energy intervals for ionisation models.
+- GNUmakefile: corrected dependencies according to new reorganisation.
+
+processes/electromagnetic/standard      stand-V05-02-04
+----------------------------------
+- Updated energy intervals for ionisation models.
+- GNUmakefile: corrected dependencies according to new reorganisation.
+
+processes/electromagnetic/utils         utils-V05-02-06
+-------------------------------
+- Throw warning for obsolete interfaces which uses G4Material instead of
+  G4MaterialCutsCouple
+- Updated initialization of energy loss processes.
+- Fixed numerical error for small stepsize in G4MscModel (z sampling).
+- GNUmakefile: corrected dependencies according to new reorganisation.
+
+processes/electromagnetic/xrays         xrays-V05-02-01
+-------------------------------
+- GNUmakefile: corrected dependencies according to new reorganisation.
+
+processes/optical                       op-V05-02-01
+-----------------
+- GNUmakefile: corrected dependencies according to new reorganisation.
+
+processes/parameterisation              param-V05-02-00
+--------------------------
+- GNUmakefile: corrected dependencies according to new reorganisation.
+
+processes/transportation                transport-V05-02-05
+------------------------
+- Migrated G4UserSpecialCuts to model variant of EM physics.
+- Cleanup of header file inclusions in scorer/biasing classes.
+- GNUmakefile: corrected dependencies according to new reorganisation.
+
+readout                                 readout-V05-02-00
+-------
+- GNUmakefile: corrected dependencies according to new reorganisation.
+
+run                                     run-V05-02-04
+---
+- GNUmakefile: corrected dependencies according to new reorganisation.
+
+track                                   track-V05-02-02
+-----
+- GNUmakefile: corrected dependencies according to new reorganisation.
+
+tracking                                tracking-V05-02-02
+--------
+- GNUmakefile: corrected dependencies according to new reorganisation.
+
+visualization                           vis-V05-02-01
+-------------
+- GNUmakefiles: corrected dependencies according to new reorganisation.
+
+g3tog4                                  g3tog4-V05-02-00
+------
+- GNUmakefiles: corrected dependencies according to new reorganisation.
+
+examples                                examples-V05-02-03
+--------
+- Updated reference outputs.
+- extended:
+  o electromagnetic/TestEm3 (testem3-V05-02-02)
+    + General revision. Renamed classes.
+  o electromagnetic/TestEm4 (testem4-V05-02-00)
+    + General revision. Renamed classes.
+    + Substituted obsolete interface to cut energy range.
+  o geometry (exgeometry-V05-02-00)
+    + Archived "cad" example.
+- novice:
+  o N04 (exampleN04-V05-02-00)
+    + Included DefineMaterials() method in the constructor
+      of DetectorConstruction class.
+    + Clean up Physics List.
+
+tests                                                 tests-V05-02-02
+-----
+- Updated reference outputs.
+- Archived test05.
+- test14 (test14-V05-02-00)
+  + Substituted obsolete interface to energy limits of cuts.
+- test17 (test17-V05-02-01)
+  + Substituted obsolete interface to cuts energy range.
+- test20 (test20-V05-02-00)
+  + Substituted obsolete interface to cuts energy range.
