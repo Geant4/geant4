@@ -2,7 +2,10 @@
 //
 // History:
 //
-// 12.09.98 V.Grichine 
+// 12.09.98 V.Grichine, implementation
+// 28.11.98 V.Grichine, J. Apostolakis, while loops in DistToIn/Out 
+// 27.07.99 V.Grichine, modifications in Distance ToOut(p,v,...)
+//                      while -> do-while
 
 #include "G4UnionSolid.hh"
 // #include "G4PlacedSolid.hh"
@@ -95,9 +98,8 @@ G4UnionSolid::CalculateExtent(const EAxis pAxis,
 /////////////////////////////////////////////////////
 //
 // Important comment: When solids A and B touch together along flat
-// surface the surface points will be considered as kSurface. To avoid
-// infinite loops it is better to combine solids with intersection/gap
-// thicker than 3 kCarTolerance
+// surface the surface points will be considered as kSurface, while points 
+// located around will correspond to kInside
 
 EInside G4UnionSolid::Inside(const G4ThreeVector& p) const
 {
@@ -200,7 +202,7 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p,
 			           G4bool *validNorm,
 			           G4ThreeVector *n      ) const 
 {
-  G4double disTmp = 0.0, dist = 0.0 ;
+  G4double  dist = 0.0, disTmp = 0.0 ;
   G4ThreeVector normTmp;
   G4ThreeVector* nTmp= &normTmp;
 
@@ -212,7 +214,7 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p,
   {
     EInside positionA = fPtrSolidA->Inside(p) ;
     EInside positionB = fPtrSolidB->Inside(p) ;
-  
+
     if( positionA != kOutside )
     { 
       do
@@ -220,39 +222,37 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p,
         disTmp = fPtrSolidA->DistanceToOut(p+dist*v,v,calcNorm,
                                            validNorm,nTmp)        ;
         dist += disTmp ;
-        if( Inside(p+dist*v) == kInside )
+
+        if(fPtrSolidB->Inside(p+dist*v) != kOutside)
 	{ 
           disTmp = fPtrSolidB->DistanceToOut(p+dist*v,v,calcNorm,
                                             validNorm,nTmp)         ;
           dist += disTmp ;
 	}
-        else
-	{
-          break ;
-	}
       }
-      while( Inside(p+dist*v) == kInside ) ;
+      //     while( Inside(p+dist*v) == kInside ) ;
+           while( fPtrSolidA->Inside(p+dist*v) != kOutside && 
+                  disTmp > 0.5*kCarTolerance ) ;
       *n = *nTmp ; 
     }
-    else
+    else // if( positionB != kOutside )
     {
       do
       {
         disTmp = fPtrSolidB->DistanceToOut(p+dist*v,v,calcNorm,
-                                           validNorm,nTmp)        ;
+                                           validNorm,nTmp)        ; 
         dist += disTmp ;
-        if( Inside(p+dist*v) == kInside )
+
+        if(fPtrSolidA->Inside(p+dist*v) != kOutside)
 	{ 
           disTmp = fPtrSolidA->DistanceToOut(p+dist*v,v,calcNorm,
                                             validNorm,nTmp)         ;
           dist += disTmp ;
 	}
-        else
-	{
-          break ;
-	}
       }
-      while( Inside(p+dist*v) == kInside ) ;
+      //  while( Inside(p+dist*v) == kInside ) ;
+        while( fPtrSolidB->Inside(p+dist*v) != kOutside && 
+              disTmp > 0.5*kCarTolerance ) ;
       *n = *nTmp ;   
     }
   }
