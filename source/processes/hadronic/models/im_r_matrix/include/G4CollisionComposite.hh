@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionComposite.hh,v 1.2 2003-11-03 17:53:27 hpw Exp $
+// $Id: G4CollisionComposite.hh,v 1.3 2003-12-12 11:33:11 hpw Exp $
 // -------------------------------------------------------------------
 //      GEANT4 Class file
 //
@@ -70,8 +70,14 @@ protected:
   virtual const G4VAngularDistribution* GetAngularDistribution() const { return 0; }
 
   void AddComponent(G4VCollision * aC) {components.push_back(aC);}
-  virtual const G4CollisionVector* GetComponents() const 
-  { return &components;}
+  virtual const G4CollisionVector* GetComponents() const  { return &components;}
+  struct Register
+  {
+    template <class T> void operator()(T*, G4CollisionComposite * aC)
+    {
+      aC->AddComponent(new T());
+    }
+  };
 
 private:  
 
