@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TrajectoriesModel.cc,v 1.4 1999-05-12 14:08:02 barrand Exp $
+// $Id: G4TrajectoriesModel.cc,v 1.5 1999-05-26 02:11:42 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,7 +36,7 @@ void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& scene) {
         // Representation with a circle at each step should be an option 
         // choosable from a command.
 	// (*TC) [iT] -> DrawTrajectory (50);
-	(*TC) [iT] -> DrawTrajectory (0);
+	(*TC) [iT] -> DrawTrajectory ();
       }
     }
   }
