@@ -1,4 +1,4 @@
-$Id: History,v 1.135 2001-07-14 21:50:38 johna Exp $
+$Id: History,v 1.136 2001-07-18 18:49:18 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+18th July 2001  John Allison  (vis-V03-02-02)
+- Ensured rotation and translation of replica is restored (modeling-V03-02-00)
+  (fixes crashes in replica tracking).
 
 14th July 2001  John Allison  (vis-V03-02-01)
 - Included raytracer-V03-02-00 (minor cosmetics).
