@@ -1,14 +1,15 @@
-# $Id: hadronic_lists.gmk,v 1.1 2003-12-04 11:20:34 gcosmo Exp $
+# $Id: hadronic_lists.gmk,v 1.2 2003-12-04 13:22:50 gcosmo Exp $
 # --------------------------------------------------------------
 # hadronic physics-lists setup - H.P.Wellisch
 # --------------------------------------------------------------
 
 ifndef LISTS_BASE
+  EXTRALIBS += -L$(G4LIB)/.lists_build/$(G4SYSTEM)
   LISTS_BASE = $(G4INSTALL)/hadronic_lists
+else
+  EXTRALIBS += -L$(LISTS_BASE)/lists/.lists_build/lib/$(G4SYSTEM)
 endif
 
-EXTRALIBS += -L$(LISTS_BASE)/../.lists_build/lib/$(G4SYSTEM)
-# EXTRALIBS += -L$(LISTS_BASE)/.lists_build/lib/$(G4SYSTEM)
 # EXTRALIBS += -lFTFC
 EXTRALIBS += -lFTFP
 # EXTRALIBS += -lLBE
