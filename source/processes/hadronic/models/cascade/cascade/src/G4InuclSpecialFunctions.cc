@@ -75,7 +75,9 @@ G4double G4InuclSpecialFunctions::inuclRndm() {
   if (verboseLevel > 3) {
     G4cout << " >>> G4InuclSpecialFunctions::inuclRndm" << G4endl;
   }
-  return drand48(); 
+    return drand48();
+  //G4double rnd = G4UniformRand(); 
+  //return rnd;
 } 
 
 G4double G4InuclSpecialFunctions::randomGauss(G4double sigma) {
@@ -125,7 +127,7 @@ pair<G4double, G4double> G4InuclSpecialFunctions::randomCOS_SIN() {
   return pair<G4double, G4double>(CT, sqrt(1.0 - CT * CT));
 }
 
-vector<G4double> G4InuclSpecialFunctions::generateWithFixedTheta(G4double ct,
+G4std::vector<G4double> G4InuclSpecialFunctions::generateWithFixedTheta(G4double ct,
 								 G4double p) {
 
   G4int verboseLevel = 2;
@@ -133,13 +135,13 @@ vector<G4double> G4InuclSpecialFunctions::generateWithFixedTheta(G4double ct,
     G4cout << " >>> G4InuclSpecialFunctions::generateWithFixedTheta" << G4endl;
   }
 
-  vector<G4double> momr(4);
+  G4std::vector<G4double> momr(4);
 
   G4double phi = randomPHI();
 
   G4double pt = p * sqrt(fabs(1.0 - ct * ct));
 
-  vector<G4double> mom1(4);
+  G4std::vector<G4double> mom1(4);
 
   momr[1] = pt * cos(phi);
   momr[2] = pt * sin(phi);
@@ -147,6 +149,3 @@ vector<G4double> G4InuclSpecialFunctions::generateWithFixedTheta(G4double ct,
 
   return momr;
 }
-
-
-

@@ -2,7 +2,7 @@
 #include "G4ParticleLargerEkin.hh"
 #include "algorithm"
 
-typedef vector<G4InuclElementaryParticle>::iterator particleIterator;
+typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
 G4CollisionOutput::G4CollisionOutput()
   : verboseLevel(2) {
@@ -23,13 +23,13 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
 
   on_shell = false;
     
-  vector<G4double> ini_mom = bullet->getMomentum();
-  vector<G4double> momt = target->getMomentum();
+  G4std::vector<G4double> ini_mom = bullet->getMomentum();
+  G4std::vector<G4double> momt = target->getMomentum();
 
   for(G4int i = 0; i < 4; i++) ini_mom[i] += momt[i];
   
-  vector<G4double> out_mom = getTotalOutputMomentum();
-  vector<G4double> mon_non_cons(4);
+  G4std::vector<G4double> out_mom = getTotalOutputMomentum();
+  G4std::vector<G4double> mon_non_cons(4);
 
   for(i = 0; i < 4; i++) mon_non_cons[i] = ini_mom[i] - out_mom[i];
 
@@ -51,7 +51,7 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
  
     if(npart > 0) {
 
-      vector<G4double> last_mom = outgoingParticles[npart - 1].getMomentum(); 
+      G4std::vector<G4double> last_mom = outgoingParticles[npart - 1].getMomentum(); 
 
       for(G4int i = 1; i < 4; i++) last_mom[i] += mon_non_cons[i];
       outgoingParticles[npart - 1].setMomentum(last_mom);
@@ -62,7 +62,7 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
  
       if(nnuc > 0) {
 
-        vector<G4double> last_mom = nucleiFragments[nnuc - 1].getMomentum();
+        G4std::vector<G4double> last_mom = nucleiFragments[nnuc - 1].getMomentum();
 
         for(G4int i = 1; i < 4; i++) last_mom[i] += mon_non_cons[i];
 	nucleiFragments[nnuc - 1].setMomentum(last_mom);
@@ -112,8 +112,8 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
       if(tune_particles.first >= 0 && tune_particles.second >= 0 &&
 	 mom_ind >= 1) { // tunning possible
 
-        vector<G4double> mom1 = outgoingParticles[tune_particles.first].getMomentum();
-        vector<G4double> mom2 = outgoingParticles[tune_particles.second].getMomentum();
+        G4std::vector<G4double> mom1 = outgoingParticles[tune_particles.first].getMomentum();
+        G4std::vector<G4double> mom2 = outgoingParticles[tune_particles.second].getMomentum();
         G4double newE12 = mom1[0] + mom2[0] + mon_non_cons[0];
         G4double R = 0.5 * (newE12 * newE12 + mom2[0] * mom2[0] - mom1[0] * mom1[0]) / newE12;
         G4double Q = -(mom1[mom_ind] + mom2[mom_ind]) / newE12;
@@ -228,11 +228,11 @@ pair<pair<G4int, G4int>, G4int> G4CollisionOutput::selectPairToTune(G4double de)
    
     for(G4int i = 0; i < G4int(outgoingParticles.size()) - 1; i++) {
 
-      vector<G4double> mom1 = outgoingParticles[i].getMomentum();
+      G4std::vector<G4double> mom1 = outgoingParticles[i].getMomentum();
 
       for(G4int j = i+1; j < G4int(outgoingParticles.size()); j++) {
 
-	vector<G4double> mom2 = outgoingParticles[j].getMomentum();
+	G4std::vector<G4double> mom2 = outgoingParticles[j].getMomentum();
 
 	for(G4int l = 1; l < 4; l++) {
 	  if(mom1[l] * mom2[l] < 0.0) { 

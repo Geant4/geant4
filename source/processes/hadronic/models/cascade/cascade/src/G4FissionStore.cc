@@ -19,7 +19,7 @@ G4FissionConfiguration G4FissionStore::generateConfiguration(G4double amax,
   const G4double small = -30.0;
 
   G4double totProb = 0.0;
-  vector<G4double> probs(configurations.size());
+  G4std::vector<G4double> probs(configurations.size());
 
 // G4cout << " amax " << amax << " ic " << configurations.size() << G4endl;
 

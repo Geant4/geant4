@@ -4,9 +4,7 @@
 #include "G4LorentzConvertor.hh"
 #include "algorithm"
 
-
-
-typedef vector<G4InuclElementaryParticle>::iterator particleIterator;
+typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
 G4BigBanger::G4BigBanger()
   : verboseLevel(2) {
@@ -27,14 +25,14 @@ G4CollisionOutput G4BigBanger::collide(G4InuclParticle* bullet,
   const G4double small_ekin = 1.0e-6;
 
   G4CollisionOutput output;
-  vector<G4double> totscm;
-  vector<G4double> totlab;
+  G4std::vector<G4double> totscm;
+  G4std::vector<G4double> totlab;
 
   if(G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
   
     G4double A = nuclei_target->getA();
     G4double Z = nuclei_target->getZ();
-    vector<G4double> PEX = nuclei_target->getMomentum();
+    G4std::vector<G4double> PEX = nuclei_target->getMomentum();
     G4double EEXS = nuclei_target->getExitationEnergy();
     G4InuclElementaryParticle dummy(small_ekin, 1);
     G4LorentzConvertor toTheNucleiSystemRestFrame;
@@ -52,7 +50,7 @@ G4CollisionOutput G4BigBanger::collide(G4InuclParticle* bullet,
 	etot << " nm " << nuclei_target->getMass() << G4endl;
     }
   
-    vector<G4InuclElementaryParticle> particles = 	    
+    G4std::vector<G4InuclElementaryParticle> particles = 	    
       generateBangInSCM(etot, A, Z, dummy.getParticleMass(1), dummy.getParticleMass(2));
 
     if (verboseLevel > 2) {
@@ -62,18 +60,18 @@ G4CollisionOutput G4BigBanger::collide(G4InuclParticle* bullet,
     }
     if(!particles.empty()) { // convert back to Lab
       if (verboseLevel > 2) {
-	vector<G4double> totscm(4, 0.0);
-	vector<G4double> totlab(4, 0.0);
+	G4std::vector<G4double> totscm(4, 0.0);
+	G4std::vector<G4double> totlab(4, 0.0);
       }
       particleIterator ipart;
 
       for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
 	if (verboseLevel > 2) {
-	  vector<G4double> mom_scm = ipart->getMomentum();
+	  G4std::vector<G4double> mom_scm = ipart->getMomentum();
 
 	  for(G4int i = 0; i < 4; i++) totscm[i] += mom_scm[i];
 	}
-	vector<G4double> mom = 
+	G4std::vector<G4double> mom = 
 	  toTheNucleiSystemRestFrame.backToTheLab(ipart->getMomentum());
 	ipart->setMomentum(mom); 
 
@@ -103,7 +101,7 @@ G4CollisionOutput G4BigBanger::collide(G4InuclParticle* bullet,
   return output;
 }		     
 
-vector<G4InuclElementaryParticle>  	    
+G4std::vector<G4InuclElementaryParticle>  	    
 G4BigBanger::generateBangInSCM(G4double etot, 
 			       G4double a, 
 			       G4double z, 
@@ -123,13 +121,13 @@ G4BigBanger::generateBangInSCM(G4double etot,
   if (verboseLevel > 2) {
     G4cout << " ia " << ia << " iz " << iz << G4endl;
   }
-  vector<G4InuclElementaryParticle> particles;
+  G4std::vector<G4InuclElementaryParticle> particles;
   
   if(ia == 1) {
     // abnormal situation
     G4double m = iz > 0 ? mp : mn;
     G4double pmod = sqrt((etot + 2.0 * m) * etot);
-    vector<G4double> mom(4);
+    G4std::vector<G4double> mom(4);
     pair<G4double, G4double> COS_SIN = randomCOS_SIN();
     G4double FI = randomPHI();
     G4double Pt = pmod * COS_SIN.second;
@@ -145,17 +143,17 @@ G4BigBanger::generateBangInSCM(G4double etot,
     return particles;
   };  
      
-  vector<G4double> pmod = generateMomentumModules(etot, a, z, mp, mn);
+  G4std::vector<G4double> pmod = generateMomentumModules(etot, a, z, mp, mn);
   G4bool bad = true;
   G4int itry = 0;
 
   while(bad && itry < itry_max) {
     itry++;
-    vector<vector<G4double> > scm_momentums;
-    vector<G4double> tot_mom(4);
+    G4std::vector<G4std::vector<G4double> > scm_momentums;
+    G4std::vector<G4double> tot_mom(4);
 
     if(ia == 2) {
-      vector<G4double> mom(4);
+      G4std::vector<G4double> mom(4);
       pair<G4double, G4double> COS_SIN = randomCOS_SIN();
       double FI = randomPHI();
       double Pt = pmod[0] * COS_SIN.second;
@@ -168,7 +166,7 @@ G4BigBanger::generateBangInSCM(G4double etot,
 
       scm_momentums.push_back(mom);
 
-      vector<G4double> mom1(4);
+      G4std::vector<G4double> mom1(4);
 
       for(G4int i = 1; i < 4; i++) mom1[i] = - mom[i];
 
@@ -177,7 +175,7 @@ G4BigBanger::generateBangInSCM(G4double etot,
     }
     else {
       for(G4int i = 0; i < ia - 2; i++) {
-	vector<G4double> mom(4);
+	G4std::vector<G4double> mom(4);
 	pair<G4double, G4double> COS_SIN = randomCOS_SIN();
 	G4double FI = randomPHI();
 	G4double Pt = pmod[i] * COS_SIN.second;
@@ -203,18 +201,18 @@ G4BigBanger::generateBangInSCM(G4double etot,
       }
   
       if(fabs(ct) < ang_cut) {
-	vector<G4double> mom2 = generateWithFixedTheta(ct, pmod[ia - 2]);
+	G4std::vector<G4double> mom2 = generateWithFixedTheta(ct, pmod[ia - 2]);
 	//       rotate to the normal system
-	vector<G4double> apr = tot_mom;
+	G4std::vector<G4double> apr = tot_mom;
 	for(G4int i = 1; i < 4; i++) apr[i] /= tot_mod;
 	G4double a_tr = sqrt(apr[1] * apr[1] + apr[2] * apr[2]);
-	vector<G4double> mom(4);
+	G4std::vector<G4double> mom(4);
 	mom[1] = mom2[3] * apr[1] + ( mom2[1] * apr[2] + mom2[2] * apr[3] * apr[1]) / a_tr; // ::: replace with clhep tools?
 	mom[2] = mom2[3] * apr[2] + (-mom2[1] * apr[1] + mom2[2] * apr[3] * apr[2]) / a_tr;      
 	mom[3] = mom2[3] * apr[3] - mom2[2] * a_tr;      
 	scm_momentums.push_back(mom);
 	//               and the last one
-	vector<G4double> mom1(4);
+	G4std::vector<G4double> mom1(4);
 	for(i = 1; i < 4; i++) mom1[i] = - mom[i] - tot_mom[i];
 	scm_momentums.push_back(mom1);  
 	bad = false;
@@ -236,7 +234,7 @@ G4BigBanger::generateBangInSCM(G4double etot,
   
 }
 	   
-vector<G4double> G4BigBanger::generateMomentumModules(G4double etot, 
+G4std::vector<G4double> G4BigBanger::generateMomentumModules(G4double etot, 
 						      G4double a, 
 						      G4double z, 
 						      G4double mp, 
@@ -249,7 +247,7 @@ vector<G4double> G4BigBanger::generateMomentumModules(G4double etot,
 
   G4int ia = int(a + 0.1);
   G4int iz = int(z + 0.1);
-  vector<G4double> pmod;
+  G4std::vector<G4double> pmod;
   G4double xtot = 0.0;
   G4double promax = maxProbability(a);
   

@@ -52,9 +52,9 @@ if (verboseLevel > 3) {
 
     G4double Z = nuclei_target->getZ();
 
-    vector<G4double> PEX = nuclei_target->getMomentum();
+    G4std::vector<G4double> PEX = nuclei_target->getMomentum();
 
-    vector<G4double> pin = PEX;
+    G4std::vector<G4double> pin = PEX;
 
     G4double EEXS = nuclei_target->getExitationEnergy();
 
@@ -99,7 +99,7 @@ if (verboseLevel > 3) {
 
     G4int NEX = int(QEX + 0.5);
 
-    vector<G4double> ppout(4, 0.0);
+    G4std::vector<G4double> ppout(4, 0.0);
   
     G4bool try_again = NEX > 0 ? true : false;
   
@@ -180,7 +180,7 @@ if (verboseLevel > 3) {
 
 		G4double M1 = 2.77 * MELE * PL;
 
-		vector<G4double> D(3, 0.0);
+		G4std::vector<G4double> D(3, 0.0);
 
 		D[0] = M1 * F2 * F2 * pow(F, NEX - 1) / (QEX + 1.0);
 
@@ -314,7 +314,7 @@ if (verboseLevel > 3) {
 			  // generate particle momentum
 			  G4double pmod = sqrt(EPART * (2.0 * mass + EPART));
 		    
-			  vector<G4double> mom(4);
+			  G4std::vector<G4double> mom(4);
 
 			  pair<G4double, G4double> COS_SIN = randomCOS_SIN();
 
@@ -326,7 +326,7 @@ if (verboseLevel > 3) {
 			  mom[2] = P1 * sin(FI);
 			  mom[3] = pmod * COS_SIN.first;
 
-			  vector<G4double> mom_at_rest(4);
+			  G4std::vector<G4double> mom_at_rest(4);
 
 			  for(G4int i = 1; i < 4; i++) mom_at_rest[i] = -mom[i];
 
@@ -355,14 +355,14 @@ if (verboseLevel > 3) {
 			  mom[0] = sqrt(mom[1] * mom[1] + mom[2] * mom[2] +
 					mom[3] * mom[3] + mass * mass);
 
-			  vector<G4double> part_mom = 
+			  G4std::vector<G4double> part_mom = 
 		            toTheExitonSystemRestFrame.backToTheLab(mom);
 
 			  part_mom[0] = sqrt(part_mom[1] * part_mom[1] +
 					     part_mom[2] * part_mom[2] + part_mom[3] * part_mom[3] +
 					     mass * mass);
 
-			  vector<G4double> ex_mom = 
+			  G4std::vector<G4double> ex_mom = 
 			    toTheExitonSystemRestFrame.backToTheLab(mom_at_rest);
 
 			  ex_mom[0] = sqrt(ex_mom[1] * ex_mom[1] + ex_mom[2] * ex_mom[2]
@@ -453,7 +453,7 @@ if (verboseLevel > 3) {
     //   the exitation energy has to be re-set properly for the energy
     //   conservation
 
-    vector<G4double> pnuc(4);
+    G4std::vector<G4double> pnuc(4);
 
     for(G4int i = 1; i < 4; i++) pnuc[i] = pin[i] - ppout[i];
 

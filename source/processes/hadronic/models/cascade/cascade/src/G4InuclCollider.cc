@@ -4,8 +4,8 @@
 #include "G4ParticleLargerEkin.hh"
 #include "algorithm"
 
-typedef vector<G4InuclElementaryParticle>::iterator particleIterator;
-typedef vector<G4InuclNuclei>::iterator nucleiIterator;
+typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
+typedef G4std::vector<G4InuclNuclei>::iterator nucleiIterator;
 	 
 G4InuclCollider::G4InuclCollider()
   : verboseLevel(1) {
@@ -101,12 +101,12 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 	  G4cout << " degenerated? " << convertToTargetRestFrame.trivial() << G4endl;
 	}
 
-	vector<G4double> bmom(4, 0.0);
+	G4std::vector<G4double> bmom(4, 0.0);
 
 	bmom[3] = convertToTargetRestFrame.getTRSMomentum();
 
 	G4InuclNuclei ntarget(at, zt);
-	vector<G4double> tmom(4, 0.0);
+	G4std::vector<G4double> tmom(4, 0.0);
 
 	ntarget.setMomentum(tmom);
 	ntarget.setEnergy();
@@ -192,14 +192,14 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 	 
 	  // convert to the LAB       
 	  G4bool withReflection = convertToTargetRestFrame.reflectionNeeded();       
-	  vector<G4InuclElementaryParticle> particles = 
+	  G4std::vector<G4InuclElementaryParticle> particles = 
 	    TRFoutput.getOutgoingParticles();
 
 	  if(!particles.empty()) { 
 	    particleIterator ipart;
 	    for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
 
-	      vector<G4double> mom = ipart->getMomentum();
+	      G4std::vector<G4double> mom = ipart->getMomentum();
 
 	      if(withReflection) mom[3] = -mom[3];
 	      mom = convertToTargetRestFrame.rotate(mom);
@@ -210,12 +210,12 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 	    sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
 	  };
            
-	  vector<G4InuclNuclei> nucleus = TRFoutput.getNucleiFragments();
+	  G4std::vector<G4InuclNuclei> nucleus = TRFoutput.getNucleiFragments();
 
 	  if(!nucleus.empty()) { 
 	    nucleiIterator inuc;
 	    for(inuc = nucleus.begin(); inuc != nucleus.end(); inuc++) {
-	      vector<G4double> mom = inuc->getMomentum(); 
+	      G4std::vector<G4double> mom = inuc->getMomentum(); 
 	      if(withReflection) mom[3] = -mom[3];
 	      mom = convertToTargetRestFrame.rotate(mom);
 	      inuc->setMomentum(mom);

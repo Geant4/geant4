@@ -44,8 +44,7 @@ void G4Analyser::setInelCsec(G4double csec,
   }
 }
 
- 
-void G4Analyser::setWatchers(const vector<G4NuclWatcher>& watchers) {
+void G4Analyser::setWatchers(const G4std::vector<G4NuclWatcher>& watchers) {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4Analyser::setWatchers" << G4endl;
@@ -84,7 +83,7 @@ void G4Analyser::analyse(const G4CollisionOutput& output) {
   }
 
   if(withNuclei) {
-    vector<G4InuclNuclei> nucleus = output.getNucleiFragments();
+    G4std::vector<G4InuclNuclei> nucleus = output.getNucleiFragments();
 
     if(nucleus.size() >= 0) {
       G4int nbig = 0;
@@ -105,7 +104,7 @@ void G4Analyser::analyse(const G4CollisionOutput& output) {
       };
       if(nbig > 1) fissy_prob += 1.0;
       eventNumber += 1.0;
-      vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
+      G4std::vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
       averageMultiplicity += particles.size();
 
       for(G4int i = 0; i < particles.size(); i++) {
@@ -151,7 +150,7 @@ void G4Analyser::analyse(const G4CollisionOutput& output) {
   }
   else {
     eventNumber += 1.0;
-    vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
+    G4std::vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
     averageMultiplicity += particles.size();
 
     for(G4int i = 0; i < particles.size(); i++) {

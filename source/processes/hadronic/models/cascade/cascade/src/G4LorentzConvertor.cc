@@ -74,13 +74,13 @@ void G4LorentzConvertor::toTheCenterOfMass() {
   gapp = ga * pscm;
 }
 
-vector<G4double> G4LorentzConvertor::rotate(const vector<G4double> mom) const {
+G4std::vector<G4double> G4LorentzConvertor::rotate(const G4std::vector<G4double> mom) const {
 
   if (verboseLevel > 3) {
-    G4cout << " >>> G4LorentzConvertor::rotate(vector<G4double>)" << G4endl;
+    G4cout << " >>> G4LorentzConvertor::rotate(G4std::vector<G4double>)" << G4endl;
   }
 
-  vector<G4double> mom_rot(4);
+  G4std::vector<G4double> mom_rot(4);
 
   if (verboseLevel > 3) {
     G4cout << " ga " << ga << " gbpp " << gbpp << " gapp " << gapp << G4endl;  
@@ -111,16 +111,16 @@ vector<G4double> G4LorentzConvertor::rotate(const vector<G4double> mom) const {
   return mom_rot;
 }
 
-vector<G4double> G4LorentzConvertor::rotate(const vector<G4double> mom1, 
-					    const vector<G4double> mom) const {
+G4std::vector<G4double> G4LorentzConvertor::rotate(const G4std::vector<G4double> mom1, 
+					    const G4std::vector<G4double> mom) const {
 
   if (verboseLevel > 3) {
-    G4cout << " >>> G4LorentzConvertor::rotate(vector<G4double>,vector<G4double>)" << G4endl;
+    G4cout << " >>> G4LorentzConvertor::rotate(G4std::vector<G4double>,G4std::vector<G4double>)" << G4endl;
   }
 
   const G4double small = 1.0e-10;
 
-  vector<G4double> mom_rot(4);
+  G4std::vector<G4double> mom_rot(4);
 
   G4double pp = 0.0;
 
@@ -213,7 +213,7 @@ void G4LorentzConvertor::toTheTargetRestFrame() {
   gapp = ga * pscm;   
 }
 
-vector<G4double> G4LorentzConvertor::backToTheLab(const vector<G4double>& mom) const {
+G4std::vector<G4double> G4LorentzConvertor::backToTheLab(const G4std::vector<G4double>& mom) const {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4LorentzConvertor::backToTheLab" << G4endl;
@@ -227,7 +227,7 @@ vector<G4double> G4LorentzConvertor::backToTheLab(const vector<G4double>& mom) c
     G4cout << " v2 " << v2 << G4endl;   
   }
 
-  vector<G4double> mom1(4);
+  G4std::vector<G4double> mom1(4);
 
   if(v2 < small) {
     mom1 = mom;
