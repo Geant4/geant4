@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEInelasticTest.cc,v 1.13 2003-03-05 12:46:39 jwellisc Exp $
+// $Id: G4LEInelasticTest.cc,v 1.14 2003-03-12 16:53:07 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -191,7 +191,7 @@
       
    // ----------- needed to Build a Step, and a track -------------------
    
-   G4ParticleMomentum theDirection(0.,0.,1.);
+   G4ParticleMomentum theDirection(1.,0.,0.);
    G4ThreeVector aPosition(0.,0.,0.);
    G4double aTime = 0.0;
    
