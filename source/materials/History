@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2001-01-16 16:13:06 maire Exp $
+$Id: History,v 1.10 2001-01-16 17:17:02 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Nov     27, 00 V.Ivanchenko - materials-?
-               ionisation potential is tabulated according to 
-               ICRU Report #37.
+Jan     16, 01 V.Ivanchenko - materials-V03-00-01
+               IonisParamElm.cc : excitation potential is tabulated
+               according ICRU Report #37.
 	       
 Jan     16, 01 L.Urban  - materials-V03-00-00
                bug fixed in IonisParamMat.cc : E100eV instead of E100keV
