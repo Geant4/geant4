@@ -22,7 +22,7 @@ typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 typedef G4std::vector<G4InuclNuclei>::iterator nucleiIterator;
 
 G4CascadeInterface::G4CascadeInterface()
-  :verboseLevel(1)  {
+  :verboseLevel(3)  {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4CascadeInterface::G4CascadeInterface" << G4endl;
@@ -70,7 +70,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 
   // Code momentum and energy.
   G4std::vector<G4double> momentumBullet(4);
-  momentumBullet[0] =aTrack.GetDynamicParticle()->Get4Momentum().e()  / GeV;
+  momentumBullet[0] =0.;
   momentumBullet[1] =aTrack.GetDynamicParticle()->Get4Momentum().px() / GeV;
   momentumBullet[2] =aTrack.GetDynamicParticle()->Get4Momentum().py() / GeV;
   momentumBullet[3] =aTrack.GetDynamicParticle()->Get4Momentum().pz() / GeV;
@@ -88,7 +88,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 
   G4std::vector<G4double> targetMomentum(4, 0.0);
 
-  G4double theNucleusA = theNucleus.GetN() + theNucleus.GetZ();
+  G4double theNucleusA = theNucleus.GetN();
 
   if ( !(G4int(theNucleusA) == 1) ) {
     target  = new G4InuclNuclei(targetMomentum, 
@@ -98,6 +98,10 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 
     sumBaryon += theNucleusA;
 
+    if (verboseLevel > 2) {
+      G4cout << "Bullet:  " << G4endl;  
+      bullet->printParticle();
+    }
     if (verboseLevel > 2) {
       G4cout << "Target:  " << G4endl;  
       target->printParticle();
@@ -121,11 +125,6 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
     { 
       sumBaryon += 1;
 
-      if (verboseLevel > 2) {
-	G4cout << "Target:  " << G4endl;  
-	targetH->printParticle();
-      }
-
       do
 	{
 	  // Get momentum from H model
@@ -135,6 +134,11 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 	  output = collider->collide(bullet, targetH); 
 	} 
       while(output.getOutgoingParticles().size() < 2.5);
+      if (verboseLevel > 2) {
+	G4cout << "Target:  " << G4endl;  
+	targetH->printParticle();
+      }
+
     } 
   else 
     {
