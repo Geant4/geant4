@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagneticField.hh,v 1.8 2001-11-08 17:31:07 grichine Exp $
+// $Id: G4MagneticField.hh,v 1.9 2001-12-04 17:35:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -53,8 +53,8 @@ class G4MagneticField : public G4Field
      G4MagneticField& operator = (const G4MagneticField &);
        // Copy constructor & assignment operator.
 
-     virtual void  GetFieldValue( const  double Point[4],
-					 double *Bfield ) const = 0;
+     virtual void  GetFieldValue( const G4double Point[4],
+					G4double *Bfield ) const = 0;
 };
 
 // Inline implementations
