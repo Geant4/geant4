@@ -1,4 +1,4 @@
-$Id: History,v 1.70 1999-11-12 19:23:36 morita Exp $
+$Id: History,v 1.71 1999-11-14 16:10:23 morita Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14th November 1999  Youhei Morita
+- globlib.gmk: moved libmap to source/GNUmakefile
 
 12th November 1999  Youhei Morita
 - common.gmk: introduced G4ODBMS_DEPEND and G4SKIP_DEPEND for
