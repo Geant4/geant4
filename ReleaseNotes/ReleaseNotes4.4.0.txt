@@ -221,29 +221,74 @@ to the related History files):
 
   o Hadronic Processes:
     ------------------
-  - New cascade models (evaporation & utils modules).
-  - New chiral_inv_phase_space model (body & interface modules). 
-  - New coherent_elastic model.
-  - General updates, fixes, new development: cross_sections, management,
-    kinetic_model, quark_gluon_string, string_common, string_fragmentation,
-    generator/util, processes and util modules
-  - Performance optimization to improve the speed for doppler broadening.
-  - models/neutron_hp:
-    o Fixed asymmetry in the angular distributions for elastic scattering
-      in the case of isotropic distributions.
-  - models/generator/quark_gluon_String:
-    o Fixed semi-infinite loop in sampling the parton density distributions. 
-  - models/isotope_production:
-    o Fixed exception in cases where this is used on materials that
-      are mixtures.
-  - models/generator:
-    o Resolved case, where multiple soft and diffractive collisions in
-      one single interaction lead, due to energy transfer in diffraction,
-      to a case, where the parton density functions could not be sampled
-      any more to satisfy the pre-calculated number of pomeron exchanged
-      in soft collisions, energy conservation, and the minimum
-      string-mass constraint. 
-  - Cleared compilation warnings and minor fixes for gcc-2.95.2 compiler.
+  - Doppler broadening of low energy neutron cross-sections on the fly,
+    enabling to simulate setups with mixed temperatures from 0K data files.
+  - First release of chiral invariant phase-cpace decay.
+    Usable now for electron and gamma nuclear reactions, and for pi- 
+    and anti-proton absorption. Also a cascade back-end replacement for 
+    string models.
+  - First release of specialized models for neutron and proton scattering
+    off Hydrogene, with particular focus on recoils.
+  - First release of the evaporation and utilities parts of the HETC
+    re-write.
+  - Optimized memory usage of the neutron_hp transport code (gained an
+    integer factor)
+  - Maximized robustness: system tests now at O(5000) LHC event of hadronic
+    energy flow; large-N tests with about a factor 100 more statistics.
+  - Addition of gamma nuclar and electro nuclear reaction cross-sections.
+  - Checking for tracking consistancy.
+  - Added possibility to activate models for single elements/materials in
+    one call
+  - Now calling ResetNumberOfInteractionLengthLeft() rather than 
+    ClearNumberOfInteractionLengthLeft().
+  - Enabled logging in various places.
+  - Fix for final state rotation from z; this can be done in general in
+    the hadronic process framework layer.
+  - Added G4PhotoNuclearProcess, G4PositronNuclearProcess, and
+    G4ElectronNuclearProcess.
+  - Optimised sampling of gaussian distributions.
+  - Fixed a missing initialization of strangeness in the high energy
+    models.
+  - Fixed the particle production for low energy light ion reactions.
+  - Bug fix for beta+ decay in radioactive decay (corrected Q-value).
+  - Bug-fix in neutron induced isotope production code to allow for mixtures.
+  - Bug-fix in the vector hash to allow for re-use of the hash tables.
+  - Getting rid of the strstream portability problem between SUN and Linux.
+  - Some conservative programming in the sampling vector, to allow for
+    binary re-use of the hash.
+  - Minor bug fix on gamma distributions in very special cases (yields and
+    integral energy was correct, but distribution had a slight bias before).
+  - Fix on elastic scattering final states: getting rid of a bias that was
+    there for a particular data representation. Affects Xenon.
+  - Fix for inelastic n->b+m*gamma channel; for the case of 4 gammas in the
+    final state, the mass of the recoil was of by one under certain condition.
+    (Mildly relevant for activation when simulating earth.)
+  - Fix in Names finding for scattering off Hydrogen.
+  - New calculation for compound radius in coulomb barrier calculation.
+  - Reduced default vector size.
+  - Added delete structs to the vectors.
+  - Getting rid of the E-11ev gamma problem, and a few memory leaks
+    introduced in the STL transition.
+  - Templated qgs models with the type of participants to enable heavy ion
+    collision simulation; heavy ion participants still to be fixed for
+    impact of fermi momentum.
+  - qgs model now also for kaons.
+  - Enabled 'meson' splitting for incident gammas in quark gluon string
+    model.
+  - First tuning of pomeron trajectory and vertex parameters for incident
+    gammas, assuming vector meson dominance; based on total reaction
+    cross-section only; further improvement scheduled.
+  - Fixed minimum mass constraint on string fragmentation in the
+    presence of zeitgleiche multiple and multi pomoron exchange, and
+    diffractive collisions.
+  - Design iteration on string fragmentation.
+  - Traced an elusing charge non-conservation to isotopic composition of
+    Hydrogene, which is taken care of internally.
+  - Bug-fix for splitting Omega- into partons.
+  - Added transformation in pre-equilibrium decay.
+  - Enabled tracing of colour, spin and iso-spin in the parton.
+  - Some improvement on folding two resonance collision cross-section.
+  - Cleared most compilation warnings and minor fixes for gcc-2.95.2 compiler.
   - Fixes to comply with removal of STLInterface.
 
   o Materials:
