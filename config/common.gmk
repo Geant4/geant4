@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.9 1999-11-20 15:49:30 morita Exp $
+# $Id: common.gmk,v 1.10 1999-11-30 09:32:46 morita Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -12,12 +12,11 @@ endif
 G4TMPDIR := $(G4TMP)/$(G4SYSTEM)/$(name)
 
 ifdef G4ODBMS_INSTALLATION
-  G4SCHEMA_HEADER_DIR := $(G4TMPSCHEMA_INCLUDE)
   G4OODDLX_SCHEMA_NAME := "-schema Geant4"
 else
-  G4SCHEMA_HEADER_DIR := $(G4TMPDIR)
   G4OODDLX_SCHEMA_NAME := " "
 endif
+G4SCHEMA_HEADER_DIR := $(G4TMPDIR)
 G4SCHEMA_SRC_DIR    := $(G4TMPDIR)
 
 sources := $(wildcard src/*.cc)
