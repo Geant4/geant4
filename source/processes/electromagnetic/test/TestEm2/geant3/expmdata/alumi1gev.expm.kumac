@@ -1,0 +1,63 @@
+macro alumi1gev.expm.kumac
+
+*            Al  L=13.5 radl   R=1.35 radl
+*            e- 1 GeV
+*
+*     Experimental results: Electron-induced cascade showers
+*                           J&H Crannel - Phys. Rev. 184-2 - August69
+
+
+* longitudinal profile
+*
+nlbin=12
+vector/create vect1([nlbin])
+
+vector/input vect1 7.30 15.28 17.87 14.76 10.49 7.11 _ 
+                   4.53  3.02  1.78  1.07  0.53 0.44
+
+dlx0=1.1245
+zmin=0.
+zmax= [zmin]+[nlbin]*[dlx0]		  
+create/1dhisto 4 'longit energy profile' [nlbin] [zmin] [zmax]
+put/contents 4 vect1
+
+* cumulative longitudinal profile
+*
+vector/input vect1  8.21 25.4 45.5 62.1 73.9 81.9 _ 
+                   87.0  90.4 92.4 93.6 94.2 94.7
+		   
+zmin=0.5*[dlx0]
+zmax= [zmin]+[nlbin]*[dlx0]			   
+create/1dhisto 5 'cumul longit energy profile' [nlbin] [zmin] [zmax]
+put/contents 5 vect1
+
+* radial profile
+*
+nrbin=12
+vector/create vect2([nrbin])
+
+vector/input vect2 365.5 185.0 97.8  58.7  37.35 25.8 _
+                    19.56 16.0 10.67 10.67  8.0   1.11 
+		    
+drx0=0.11245
+rmin=0.
+rmax= [rmin]+[nrbin]*[drx0]		    
+create/1dhisto 10 'radial energy profile' [nrbin] [rmin] [rmax]
+put/contents 10 vect2
+
+* cumulative radial profile
+*
+vector/input vect2 41.1 61.9 72.9 79.5 83.7 86.6 _
+                   88.8 90.6 91.8 93.0 93.9 94.7 
+		   
+rmin=0.5*[drx0]
+rmax= [rmin]+[nrbin]*[drx0]			   
+create/1dhisto 11 'cumul radial energy profile' [nrbin] [rmin] [rmax]
+put/contents 11 vect2
+
+* save histo
+*
+/file 1 ../results/run02.expmdat.paw ! n
+hrout 0
+ 
+return 	     

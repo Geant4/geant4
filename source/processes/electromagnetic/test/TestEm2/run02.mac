@@ -1,0 +1,30 @@
+# $Id: run02.mac,v 1.1 1999-03-16 11:22:44 maire Exp $
+#
+# Macro file for "TestEm2.cc" 
+# (can be run in batch, without graphic)
+#
+# Al L = 13.5 radl  R = 1.35 radl; electron 1 GeV
+#
+#  Experimental results: Electron-induced cascade showers
+#                        J&H Crannel - Phys. Rev. 184-2 - August69
+#
+/control/verbose 2
+#
+/calor/setMat Al
+/calor/setLbin 12 1.1245
+/calor/setRbin 12 0.11245
+/calor/update
+#
+/run/particle/setCut 2.0 mm
+/run/initialize
+#
+/run/verbose 2
+/event/drawTracks none
+/event/printModulo 10
+/run/save on
+#
+/gun/particle electron
+/gun/energy 1 GeV
+/run/beamOn 500
+
+

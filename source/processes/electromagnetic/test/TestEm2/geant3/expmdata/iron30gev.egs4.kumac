@@ -1,0 +1,52 @@
+macro iron30gev.egs4
+
+*            Fe  L=20 radl   R=5 radl
+*            e- 30 GeV
+*
+*     EGS4 simulation: Particle Data Group - Phys.Rev.D 50-3 - August94
+*
+
+* longitudinal profile
+*
+nlbin=40
+vector/create vect1([nlbin])
+
+vector/input vect1  0.0  0.4  0.8  1.75 2.8  4.2  5.6 7.0 8.5  9.6 _
+                   10.5 11.2 11.4 11.3 11.3 10.9 10.4 9.5 8.6  8.0 _
+	            7.4  6.5  5.9  5.3  4.7  4.1  3.5 3.1 2.75 2.4 _
+                    2.0  1.6  1.5  1.3  1.1  1.0  0.8 0.7 0.6  0.5
+		    
+dlx0=0.5
+zmin=0.
+zmax= [zmin]+[nlbin]*[dlx0]		     
+create/1dhisto 4 'longit energy profile' [nlbin] [zmin] [zmax]
+put/contents 4 vect1
+
+* gamma flux
+*
+vector/input vect1   6.8  20.4  40.8  68.0 108.8 163.2 217.6 272.0 340.0 394.4 _
+                   448.8 489.6 516.8 530.4 544.0 544.0 530.4 516.8 489.6 462.4 _
+	           435.2 394.4 353.6 326.2 299.2 272.0 244.8 217.6 190.4 163.2 _
+                   149.6 136.0 108.8 102.0  81.6  74.8  68.0  54.4  47.6  34.0
+		    
+zmin=0.5*[dlx0]
+zmax= [zmin]+[nlbin]*[dlx0]		     
+create/1dhisto 7 'nb of gammas per plane' [nlbin] [zmin] [zmax]
+put/contents 7 vect1
+
+* electron flux
+*
+vector/input vect1  2.  7. 13. 24. 33. 47. 57. 70. 79. 88. _
+                   91. 92. 90. 88. 85. 80. 72. 64. 58. 53. _
+                   45. 42. 37. 32. 29. 24. 21. 19. 15. 12. _
+	           10.  9.  8.  7.  6.  6.  4.  3.  3.  2.		    
+	     
+create/1dhisto 9 'nb of e- per plane' [nlbin] [zmin] [zmax]
+put/contents 9 vect1
+
+* save histo
+*
+* h/file 1 ../results/iron30gev.egs4.paw ! n
+* hrout 0
+ 
+return 	     
