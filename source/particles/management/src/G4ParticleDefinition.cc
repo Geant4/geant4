@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc,v 1.12 2001-07-11 10:02:03 gunter Exp $
+// $Id: G4ParticleDefinition.cc,v 1.13 2003-03-10 08:43:53 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -96,7 +96,7 @@ G4ParticleDefinition::G4ParticleDefinition(
 		   thePDGLifeTime(lifetime), 
                    theDecayTable(decaytable),
 		   theProcessManager(0),
-		   fApplyCutsFlag(false),
+//		   fApplyCutsFlag(false),
                    verboseLevel(1)
 {
    // check name and register this particle into ParticleTable
@@ -247,11 +247,6 @@ void G4ParticleDefinition::DumpTable() const
     }
   }
 
-  if ( fApplyCutsFlag ){
-    G4cout << " ApplyCuts : ON" << G4endl;
-  } else {
-    G4cout << " ApplyCuts : OFF" << G4endl;
-  }
 }
 
 
