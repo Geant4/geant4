@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiProperties.cc,v 1.9 2001-10-16 08:16:21 kurasige Exp $
+// $Id: G4NucleiProperties.cc,v 1.10 2002-05-30 02:13:10 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -236,10 +236,12 @@ G4double G4NucleiProperties::GetAtomicMass(const G4double A, const G4double Z)
     return AtomicMass(A,Z);
 
   } else {
-    if (G4NucleiPropertiesTable::IsInTable(Z,A)) {
-      return G4NucleiPropertiesTable::GetAtomicMass(Z,A);
-    } else if (G4NucleiPropertiesTheoreticalTable::IsInTable(Z,A)){
-      return G4NucleiPropertiesTheoreticalTable::GetAtomicMass(Z,A);
+    G4int iA = G4int(A);
+    G4int iZ = G4int(Z);
+    if (G4NucleiPropertiesTable::IsInTable(iZ,iA)) {
+      return G4NucleiPropertiesTable::GetAtomicMass(iZ,iA);
+    } else if (G4NucleiPropertiesTheoreticalTable::IsInTable(iZ,iA)){
+      return G4NucleiPropertiesTheoreticalTable::GetAtomicMass(iZ,iA);
     } else {
       return AtomicMass(A,Z);
     }
