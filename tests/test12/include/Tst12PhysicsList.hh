@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst12PhysicsList.hh,v 1.1 1999-01-08 16:35:41 gunter Exp $
+// $Id: Tst12PhysicsList.hh,v 1.2 1999-04-17 08:34:14 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef Tst12PhysicsList_h
@@ -26,7 +26,7 @@ class Tst12PhysicsList: public G4VUserPhysicsList
     virtual void ConstructProcess();
 
     // 
-    virtual void SetCuts(G4double aCut);
+    virtual void SetCuts();
     
   protected:
   // these methods Construct physics processes and register them
@@ -34,6 +34,13 @@ class Tst12PhysicsList: public G4VUserPhysicsList
     virtual void ConstructEM();
     virtual void ConstructHad();
     virtual void ConstructLeptHad();
+ //
+    void  ConstructAllBosons();
+    void  ConstructAllLeptons();
+    void  ConstructAllMesons();
+    void  ConstructAllBarions();
+    void  ConstructAllIons();
+    void  ConstructAllShortLiveds();
 
 };
 
