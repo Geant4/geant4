@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hLowEnergyLoss.cc,v 1.18 2003-01-22 18:47:30 vnivanch Exp $
+// $Id: G4hLowEnergyLoss.cc,v 1.19 2003-01-23 11:39:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------
@@ -47,6 +47,7 @@
 // 23/11/01   V.Ivanchenko Move static member-functions from header to source
 // 28/10/02   V.Ivanchenko Optimal binning for dE/dx
 // 21/01/03   V.Ivanchenko Cut per region
+// 23/01/03   V.Ivanchenko Fix in table build
 // --------------------------------------------------------------
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -231,16 +232,6 @@ void G4hLowEnergyLoss::BuildDEDXTable(
                          const G4ParticleDefinition& aParticleType)
 {
   //  calculate data members TotBin,LOGRTable,RTable first
-  /*
-  G4double binning = dRoverRange;
-  G4double lrate = log(HighestKineticEnergy/LowestKineticEnergy);
-  G4int    nbin =  G4int(lrate/log(1.+binning) + 0.5 );
-  nbin = (nbin+25)/50;
-  LOGRTable=lrate/TotBin;
-  RTable   =exp(LOGRTable);
-  */
-  // create table if there is no table or there is a new cut value
-  G4bool MakeTable = true ;
 
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
@@ -253,7 +244,9 @@ void G4hLowEnergyLoss::BuildDEDXTable(
   if (Charge>0.) {theDEDXTable= theDEDXpTable;}
   else           {theDEDXTable= theDEDXpbarTable;}
 
-  if( MakeTable )
+  if( ((Charge>0.) && (theDEDXTable==0)) ||
+      ((Charge<0.) && (theDEDXTable==0)) 
+    )
   {
 
   // Build energy loss table as a sum of the energy loss due to the
