@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.34 2001-11-06 12:56:48 johna Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.35 2002-04-26 21:23:31 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -456,8 +456,8 @@ void G4VisCommandViewerFlush::SetNewValue (G4UIcommand* command,
   if (keepVerbose >= 2 || verbosity >= G4VisManager::confirmations)
     newVerbose = 2;
   ui->SetVerboseLevel(newVerbose);
-  ui->ApplyCommand("/vis/viewer/refresh " + flushName);
-  ui->ApplyCommand("/vis/viewer/update " + flushName);
+  ui->ApplyCommand(G4String("/vis/viewer/refresh " + flushName));
+  ui->ApplyCommand(G4String("/vis/viewer/update " + flushName));
   ui->SetVerboseLevel(keepVerbose);
   if (verbosity >= G4VisManager::confirmations) {
     G4cout << "Viewer \"" << viewer -> GetName () << "\""
@@ -532,8 +532,8 @@ void G4VisCommandViewerLights::SetNewValue (G4UIcommand* command,
 	"WARNING: DEPRECATED: use \"/vis/viewer/set/LightsThetaPhi\"."
 	     << G4endl;
     }
-    G4UImanager::GetUIpointer()->ApplyCommand
-      ("/vis/viewer/set/LightsThetaPhi " + newValue);
+    G4UImanager::GetUIpointer()->ApplyCommand(
+      G4String("/vis/viewer/set/LightsThetaPhi " + newValue));
   }
   else if (command == fpCommandLightsVector) {
     if (verbosity >= G4VisManager::warnings) {
@@ -541,8 +541,8 @@ void G4VisCommandViewerLights::SetNewValue (G4UIcommand* command,
 	"WARNING: DEPRECATED: use \"/vis/viewer/set/LightsVector\"."
 	     << G4endl;
     }
-    G4UImanager::GetUIpointer()->ApplyCommand
-      ("/vis/viewer/set/LightsVector " + newValue);
+    G4UImanager::GetUIpointer()->ApplyCommand(
+      G4String("/vis/viewer/set/LightsVector " + newValue));
   }
 }
 
@@ -1170,8 +1170,8 @@ void G4VisCommandViewerViewpoint::SetNewValue (G4UIcommand* command,
 	"WARNING: DEPRECATED: use \"/vis/viewer/set/viewpointThetaPhi\"."
 	     << G4endl;
     }
-    G4UImanager::GetUIpointer()->ApplyCommand
-      ("/vis/viewer/set/viewpointThetaPhi " + newValue);
+    G4UImanager::GetUIpointer()->ApplyCommand(
+      G4String("/vis/viewer/set/viewpointThetaPhi " + newValue));
   }
   else if (command == fpCommandViewpointVector) {
     if (verbosity >= G4VisManager::warnings) {
@@ -1179,8 +1179,8 @@ void G4VisCommandViewerViewpoint::SetNewValue (G4UIcommand* command,
 	"WARNING: DEPRECATED: use \"/vis/viewer/set/viewpointVector\"."
 	     << G4endl;
     }
-    G4UImanager::GetUIpointer()->ApplyCommand
-      ("/vis/viewer/set/viewpointVector " + newValue);
+    G4UImanager::GetUIpointer()->ApplyCommand(
+      G4String("/vis/viewer/set/viewpointVector " + newValue));
   }
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.44 2002-04-22 14:26:52 johna Exp $
+// $Id: G4VisManager.cc,v 1.45 2002-04-26 21:23:31 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -496,8 +496,7 @@ void G4VisManager::CreateViewer (G4String name) {
 	  G4cout <<
 	    "WARNING: objects with visibility flag set to \"false\""
 	    " will not be drawn!"
-	    "\n  \"/vis/viewer/set/culling g[lobal] false\""
-	    " to Draw such objects."
+	    "\n  \"/vis/set/culling off\" to Draw such objects."
 		 << G4endl;
 	}
       }
@@ -513,14 +512,13 @@ void G4VisManager::CreateViewer (G4String name) {
 	  G4cout <<
 	    "WARNING: covered objects in solid mode will not be part of"
 	    " the scene!"
-	    "\n  \"/vis/viewer/set/culling c[overedDaughters] false\""
-	    " to reverse this."
+	    "\n  \"/vis/set/cull_covered_daughters off\" to reverse this."
 		 << G4endl;
 	}
       }
       if (warn) {
 	if (fVerbosity >= warnings) {
-	  G4cout << "  Also see other \"/vis/viewer/set\" commands."
+	  G4cout << "  Also see other \"/vis/set\" commands."
 		 << G4endl;
 	}
       }
@@ -691,7 +689,7 @@ void G4VisManager::GeometryHasChanged () {
       else {
 	pScene->CalculateExtent();
 	G4UImanager::GetUIpointer () ->
-	  ApplyCommand ("/vis/scene/notifyHandlers " + pScene->GetName());
+	  ApplyCommand (G4String("/vis/scene/notifyHandlers " + pScene->GetName()));
       }
     }
   }
@@ -1143,7 +1141,7 @@ G4VisManager::GetVerbosityValue(const G4String& verbosityString) {
       G4cout << "ERROR: G4VisManager::GetVerbosityValue: invalid verbosity \""
 	     << verbosityString << "\"\n"
 	     << VerbosityGuidanceString
-	     << "\n  Returning \"warnings\" == " << warnings
+	     << "\n  Returning \"warnings\" == " << (G4int)warnings
 	     << G4endl;
       verbosity = warnings;
     }
