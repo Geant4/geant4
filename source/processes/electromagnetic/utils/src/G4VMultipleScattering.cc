@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.15 2003-11-04 09:28:07 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.16 2003-11-04 15:12:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -152,8 +152,8 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
   }
 
   G4String num = part.GetParticleName();
-  if (verboseLevel>0 || num == "e-" || num == "mu+" || num == "proton")
-           PrintInfoDefinition();
+  if (verboseLevel>0 || num == "e-" || num == "mu+" || num == "proton" 
+                     || num == "pi-") PrintInfoDefinition();
 
   if(0 < verboseLevel) {
     G4cout << "### G4VMultipleScattering::BuildPhysicsTable() done for "
@@ -341,8 +341,8 @@ G4bool G4VMultipleScattering::RetrievePhysicsTable(G4ParticleDefinition* part,
     }
   }
 
-  if (verboseLevel>0 || num == "e-" || num == "mu+" || num == "proton")
-           PrintInfoDefinition();
+  if (verboseLevel>0 || num == "e-" || num == "mu+" || num == "proton" 
+                     || num == "pi-") PrintInfoDefinition();
   return res;
 }
 

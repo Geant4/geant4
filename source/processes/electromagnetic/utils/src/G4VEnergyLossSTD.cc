@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossSTD.cc,v 1.57 2003-11-04 09:28:07 vnivanch Exp $
+// $Id: G4VEnergyLossSTD.cc,v 1.58 2003-11-04 15:12:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -1127,9 +1127,11 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
       size_t numOfCouples = theCoupleTable->GetTableSize();
 
       filename = GetPhysicsTableFileName(part,directory,"DEDX",ascii);
+      
       table = new G4PhysicsTable(numOfCouples);
-      yes = table->RetrievePhysicsTable(filename,ascii);
-      if ( yes ) {
+      yes = table->ExistPhysicsTable(filename);
+      if(yes) yes = table->RetrievePhysicsTable(filename,ascii);
+      if(yes) {
         SetDEDXTable(table);
         if (-1 < verboseLevel) {
           G4cout << "DEDX table for " << particleName << " is retrieved from <"
@@ -1148,10 +1150,10 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
 
       filename = GetPhysicsTableFileName(part,directory,"Range",ascii);
       table = new G4PhysicsTable(numOfCouples);
-      yes = table->RetrievePhysicsTable(filename,ascii);
-      if ( yes ) {
+      yes = table->ExistPhysicsTable(filename);
+      if(yes) yes = table->RetrievePhysicsTable(filename,ascii);
+      if(yes) {
         SetRangeTable(table);
-        //if(!fpi) res = false;
         if (-1 < verboseLevel) {
           G4cout << "Range table for " << particleName << " is retrieved from <"
                  << filename << ">"
@@ -1161,20 +1163,18 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
         table->clearAndDestroy();
         if(fpi) {
           res = false;
-          if (-1 < verboseLevel) {
-            G4cout << "Range table for " << particleName << " in file <"
-                   << filename << "> is not retrieved"
-                   << G4endl;
-	  }
+	  G4cout << "Range table for " << particleName << " in file <"
+		 << filename << "> is not retrieved"
+		 << G4endl;
         }
       }
 
       filename = GetPhysicsTableFileName(part,directory,"InverseRange",ascii);
       table = new G4PhysicsTable(numOfCouples);
-      yes = table->RetrievePhysicsTable(filename,ascii);
-      if ( yes ) {
+      yes = table->ExistPhysicsTable(filename);
+      if(yes)  yes = table->RetrievePhysicsTable(filename,ascii);
+      if(yes) {
         SetInverseRangeTable(table);
-        //if(!fpi) res = false;
         if (-1 < verboseLevel) {
           G4cout << "InverseRange table for " << particleName << " is retrieved from <"
                  << filename << ">"
@@ -1184,20 +1184,19 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
         table->clearAndDestroy();
         if(fpi) {
           res = false;
-          if (-1 < verboseLevel) {
-            G4cout << "InverseRange table for " << particleName << " in file <"
-                   << filename << "> is not retrieved"
-                   << G4endl;
-	  }
+          G4cout << "InverseRange table for " << particleName << " in file <"
+                 << filename << "> is not retrieved"
+                 << G4endl;
+
         }
       }
 
       filename = GetPhysicsTableFileName(part,directory,"Lambda",ascii);
       table = new G4PhysicsTable(numOfCouples);
-      yes = table->RetrievePhysicsTable(filename,ascii);
-      if ( yes ) {
+      yes = table->ExistPhysicsTable(filename);
+      if(yes) yes = table->RetrievePhysicsTable(filename,ascii);
+      if(yes) {
         SetLambdaTable(table);
-        //if(!fpi) res = false;
         if (-1 < verboseLevel) {
           G4cout << "Lambda table for " << particleName << " is retrieved from <"
                  << filename << ">"
@@ -1207,18 +1206,17 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
         table->clearAndDestroy();
         if(fpi) {
           res = false;
-          if (-1 < verboseLevel) {
-            G4cout << "Lambda table for " << particleName << " in file <"
-                   << filename << "> is not retrieved"
-                   << G4endl;
-	  }
+          G4cout << "Lambda table for " << particleName << " in file <"
+                 << filename << "> is not retrieved"
+                 << G4endl;
         }
       }
 
       filename = GetPhysicsTableFileName(part,directory,"SubLambda",ascii);
       table = new G4PhysicsTable(numOfCouples);
-      yes = table->RetrievePhysicsTable(filename,ascii);
-      if ( yes ) {
+      yes = table->ExistPhysicsTable(filename);
+      if(yes) yes = table->RetrievePhysicsTable(filename,ascii);
+      if(yes) {
         SetSubLambdaTable(table);
         if (-1 < verboseLevel) {
           G4cout << "SubLambda table for " << particleName << " is retrieved from <"
@@ -1229,11 +1227,9 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
         table->clearAndDestroy();
         if(nSCoffRegions) {
           res=false;
-          if (-1 < verboseLevel) {
-           G4cout << "SubLambda table for " << particleName << " in file <"
-                  << filename << "> is not retrieved"
-                  << G4endl;
-	  }
+          G4cout << "SubLambda table for " << particleName << " in file <"
+                 << filename << "> is not retrieved"
+                 << G4endl;
 	}
       }
       PrintInfoDefinition();
