@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em2RunActionMessenger.cc,v 1.3 2000-01-21 10:56:16 maire Exp $
+// $Id: Em2RunActionMessenger.cc,v 1.4 2001-02-20 15:58:36 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,8 +35,8 @@ Em2RunActionMessenger::Em2RunActionMessenger(Em2RunAction* run)
   RndmSaveCmd->SetGuidance("set frequency to save rndm status on external files.");
   RndmSaveCmd->SetGuidance("freq = 0 not saved");
   RndmSaveCmd->SetGuidance("freq > 0 saved on: beginOfRun.rndm");
-  RndmSaveCmd->SetGuidance("freq = 1 saved on:   endOfRun.rndm");
-  RndmSaveCmd->SetGuidance("freq = 2 saved on: endOfEvent.rndm");    
+  RndmSaveCmd->SetGuidance("freq > 0 saved on:   endOfRun.rndm");
+  RndmSaveCmd->SetGuidance("freq = 2 saved on: beginOfEvent.rndm");    
   RndmSaveCmd->SetParameterName("frequency",false);
   RndmSaveCmd->SetRange("frequency>=0 && frequency<=2");
   RndmSaveCmd->AvailableForStates(PreInit,Idle); 

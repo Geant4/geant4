@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em2RunAction.cc,v 1.6 2000-12-07 12:14:07 maire Exp $
+// $Id: Em2RunAction.cc,v 1.7 2001-02-20 15:58:35 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -297,7 +297,7 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout.precision(oldprec);
 
   // save Rndm status
-  if (saveRndm == 1)
+  if (saveRndm > 0)
     { HepRandom::showEngineStatus();
       HepRandom::saveEngineStatus("endOfRun.rndm");
     }                           
