@@ -9,6 +9,12 @@
 
 echo " "
 
+case "$g4ui_none" in
+'')
+	g4ui_none=n
+	;;
+esac
+
 # Set by default!
 case "$g4ui_build_terminal_session" in
 '')
@@ -93,6 +99,34 @@ case "$g4ui_use_tcsh" in
 esac
 
 echo ""
+
+g4message=`cat << EOM
+
+  G4UI_NONE
+
+If set, no UI sessions nor any UI libraries are built. This can be useful
+when running a pure batch job or in a user framework having its own UI system.
+
+EOM`
+
+dflt=$g4ui_none
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4ui_none=n
+		;;
+	y*|Y*) 
+		g4ui_none=y
+		;;
+	esac
+
+case $g4ui_none in
+
+n)
 
 g4message=`cat << EOM
 
@@ -287,3 +321,5 @@ gans=y
 		;;
 	esac
 
+;;
+esac
