@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DAWNFILEViewer.cc,v 1.4 1999-11-01 02:40:47 stanaka Exp $
+// $Id: G4DAWNFILEViewer.cc,v 1.5 1999-11-02 03:23:19 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -40,7 +40,8 @@
 
 
 	//----- constants
-const char  FR_ENV_MULTI_WINDOW[] = "G4DAWN_MULTI_WINDOW" ;
+const char  FR_ENV_MULTI_WINDOW [] = "G4DAWN_MULTI_WINDOW" ;
+const char  FR_ENV_MULTI_WINDOW2[] = "G4DAWNFILE_MULTI_WINDOW" ;
 
 	//----- G4DAWNFILEViewer, constructor
 G4DAWNFILEViewer::G4DAWNFILEViewer (G4DAWNFILESceneHandler& scene,
@@ -315,13 +316,16 @@ void G4DAWNFILEViewer::SendViewParameters ()
 	//######### P4
                //----- drawing device
   //	enum {PS=1, XWIN=2, PS2=3, XWIN2=4, OPEN_GL=5, DEVICE_END=6};
-        if( ( getenv( FR_ENV_MULTI_WINDOW ) != NULL      )   && \
-            ( strcmp( getenv( FR_ENV_MULTI_WINDOW ),"0"  )      )  )
+        if( ( ( getenv( FR_ENV_MULTI_WINDOW ) != NULL        ) && \
+              ( strcmp( getenv( FR_ENV_MULTI_WINDOW ),"0"  ) )       ) || \
+            ( ( getenv( FR_ENV_MULTI_WINDOW2 ) != NULL        ) && \
+              ( strcmp( getenv( FR_ENV_MULTI_WINDOW2 ),"0"  ) )      )     )
         {
                 gui_out << 2 << endl; // OpenWindow
         } else {
                 gui_out << 1 << endl; // Invoke PS viewer
         }
+
 	gui_out << GetPSViewer() << endl; // PS viewer
 	gui_out << 0 << endl            ; // Do not add showpage 
 	gui_out << 0 << endl            ; // Non-append mode

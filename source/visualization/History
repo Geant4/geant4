@@ -1,4 +1,4 @@
-$Id: History,v 1.38 1999-11-01 02:39:41 stanaka Exp $
+$Id: History,v 1.39 1999-11-02 03:25:13 stanaka Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,8 +24,16 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+DAWN-V00-01-03  02nd November 1999 Satoshi TANAKA
+- Updation and tagging of visualization/FukuiRenderer/
+  and this History file
+- Environmental variable G4DAWN_MULTI_WINDOW is	
+  renamed to G4DAWNFILE_MULTI_WINDOW for DAWN-file driver.
+  (G4DAWN_MULTI_WINDOW	still works for a while.)
+
 DAWN-V00-01-02  01st November 1999 Satoshi TANAKA
 - Updation and tagging of visualization/FukuiRenderer/
+  and this History file
 - Separation of BeginModeling() and FRBeginModeling().
   Co-workable with /run/beamOn with the new vis commands.
 
