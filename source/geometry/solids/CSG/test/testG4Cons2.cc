@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4Cons2.cc,v 1.3 2000-07-27 13:06:01 grichine Exp $
+// $Id: testG4Cons2.cc,v 1.4 2000-08-10 10:01:59 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Simple test of G4Cons
@@ -47,7 +47,7 @@ G4bool OutRange(G4ThreeVector actual,G4ThreeVector wanted)
 
 int main(void)
 {
-	double Dist,low,high;
+	double dist,low,high;
 
 	G4ThreeVector   pzero(0,0,0);
 	
@@ -111,6 +111,7 @@ int main(void)
 	//	G4cout << "G4Cons:"<< c4.GetName()
 	//   << " ID=" << c4.GetIdentifier() << "\n";
 
+        G4cout.precision(16) ;
 	G4cout << "Testing G4Cons::Inside...\n";
 	if (c1.Inside(pzero)!=kOutside)
 		G4cout << "Error A" << G4endl;
@@ -183,347 +184,434 @@ int main(void)
 	    G4cout << "Errot H " << norm << G4endl;
 
 	G4cout << "Testing G4Cons::DistanceToOut...\n";
-	Dist=c4.DistanceToOut(ponphi1);
-	if (OutRange(Dist,0))
-		G4cout << "Error A " << Dist << G4endl;
+	dist=c4.DistanceToOut(ponphi1);
+	if (OutRange(dist,0))
+		G4cout << "Error A " << dist << G4endl;
 
-	Dist=c1.DistanceToOut(ponphi1);
-	if (OutRange(Dist,10))
-		G4cout << "Error B " << Dist << G4endl;
+	dist=c1.DistanceToOut(ponphi1);
+	if (OutRange(dist,10))
+		G4cout << "Error B " << dist << G4endl;
 
-	Dist=c1.DistanceToOut(pnearplz);
-	if (OutRange(Dist,5))
-		G4cout << "Error C " << Dist << G4endl;
-	Dist=c1.DistanceToOut(pnearmiz);
-	if (OutRange(Dist,5))
-		G4cout << "Error D " << Dist << G4endl;
+	dist=c1.DistanceToOut(pnearplz);
+	if (OutRange(dist,5))
+		G4cout << "Error C " << dist << G4endl;
+	dist=c1.DistanceToOut(pnearmiz);
+	if (OutRange(dist,5))
+		G4cout << "Error D " << dist << G4endl;
 
-	Dist=c1.DistanceToOut(ponr1);
-	if (OutRange(Dist,0))
-	    G4cout << "Error E " << Dist << G4endl;
-	Dist=c1.DistanceToOut(ponr2);
-	if (OutRange(Dist,0))
-	    G4cout << "Error F " << Dist << G4endl;
+	dist=c1.DistanceToOut(ponr1);
+	if (OutRange(dist,0))
+	    G4cout << "Error E " << dist << G4endl;
+	dist=c1.DistanceToOut(ponr2);
+	if (OutRange(dist,0))
+	    G4cout << "Error F " << dist << G4endl;
 
-	Dist=c6.DistanceToOut(pzero);
-	if (OutRange(Dist,50))
-	    G4cout << "Error G " << Dist << G4endl;
+	dist=c6.DistanceToOut(pzero);
+	if (OutRange(dist,50))
+	    G4cout << "Error G " << dist << G4endl;
 
-	Dist=c5.DistanceToOut(G4ThreeVector(0,-70,0));
-	if (OutRange(Dist,0))
-	    G4cout << "Error H " << Dist << G4endl;
+	dist=c5.DistanceToOut(G4ThreeVector(0,-70,0));
+	if (OutRange(dist,0))
+	    G4cout << "Error H " << dist << G4endl;
 	
        	G4cout << "Testing G4Cons::DistanceToOut...\n";
-	Dist=c4.DistanceToOut(pplx,vx,calcNorm,pgoodNorm,pNorm);
+	dist=c4.DistanceToOut(pplx,vx,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(Dist,30)||OutRange(*pNorm,vxmz)||!*pgoodNorm)
-	    G4cout << "Error Rmax1 " << Dist << G4endl;
+	if (OutRange(dist,30)||OutRange(*pNorm,vxmz)||!*pgoodNorm)
+	    G4cout << "Error Rmax1 " << dist << G4endl;
 
-	Dist=c2.DistanceToOut(pplx,vx,calcNorm,pgoodNorm,pNorm);
+	dist=c2.DistanceToOut(pplx,vx,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(Dist,30)||OutRange(*pNorm,vxmz)||!*pgoodNorm)
-	    G4cout << "Error Rmax2 " << Dist << G4endl;
+	if (OutRange(dist,30)||OutRange(*pNorm,vxmz)||!*pgoodNorm)
+	    G4cout << "Error Rmax2 " << dist << G4endl;
 
-	Dist=c4.DistanceToOut(pplx,vmx,calcNorm,pgoodNorm,pNorm);
+	dist=c4.DistanceToOut(pplx,vmx,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(Dist,70)||*pgoodNorm)
-	    G4cout << "Error Rmin1 " << Dist << G4endl;
+	if (OutRange(dist,70)||*pgoodNorm)
+	    G4cout << "Error Rmin1 " << dist << G4endl;
 
 
-	Dist=c2.DistanceToOut(pplx,vmx,calcNorm,pgoodNorm,pNorm);
+	dist=c2.DistanceToOut(pplx,vmx,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(Dist,70)||*pgoodNorm)
-	    G4cout << "Error Rmin2 " << Dist << G4endl;
+	if (OutRange(dist,70)||*pgoodNorm)
+	    G4cout << "Error Rmin2 " << dist << G4endl;
 
-	Dist=c3.DistanceToOut(ponphi1,vmy,calcNorm,pgoodNorm,pNorm);
+	dist=c3.DistanceToOut(ponphi1,vmy,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(Dist,0)||
+	if (OutRange(dist,0)||
 	    OutRange(*pNorm,vnphi1)||
 	    !*pgoodNorm)
-	    G4cout << "Error PhiS 1" << Dist << G4endl;
-	Dist=c3.DistanceToOut(ponphi1,vy,calcNorm,pgoodNorm,pNorm);
+	    G4cout << "Error PhiS 1" << dist << G4endl;
+	dist=c3.DistanceToOut(ponphi1,vy,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(Dist,2*60*sin(M_PI/6))||
+	if (OutRange(dist,2*60*sin(M_PI/6))||
 	    OutRange(*pNorm,vnphi2)||
 	    !*pgoodNorm)
-	    G4cout << "Error PhiS 2" << Dist << G4endl;
+	    G4cout << "Error PhiS 2" << dist << G4endl;
 
-	Dist=c3.DistanceToOut(ponphi2,vy,calcNorm,pgoodNorm,pNorm);
+	dist=c3.DistanceToOut(ponphi2,vy,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(Dist,0)||
+	if (OutRange(dist,0)||
 	    OutRange(*pNorm,vnphi2)||
 	    !*pgoodNorm)
-	    G4cout << "Error PhiE 1" << Dist << G4endl;
-	Dist=c3.DistanceToOut(ponphi2,vmy,calcNorm,pgoodNorm,pNorm);
+	    G4cout << "Error PhiE 1" << dist << G4endl;
+	dist=c3.DistanceToOut(ponphi2,vmy,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(Dist,2*60*sin(M_PI/6))||
+	if (OutRange(dist,2*60*sin(M_PI/6))||
 	    OutRange(*pNorm,vnphi1)||
 	    !*pgoodNorm)
-	    G4cout << "Error PhiS 2" << Dist << G4endl;
+	    G4cout << "Error PhiS 2" << dist << G4endl;
 
 
-	Dist=c6.DistanceToOut(ponplz,vmz,calcNorm,pgoodNorm,pNorm);
+	dist=c6.DistanceToOut(ponplz,vmz,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(Dist,100)||
+	if (OutRange(dist,100)||
 	    OutRange(*pNorm,vmz)||
 	    !*pgoodNorm)
-	    G4cout << "Error Top Z 1" << Dist << G4endl;
-	Dist=c6.DistanceToOut(ponplz,vz,calcNorm,pgoodNorm,pNorm);
+	    G4cout << "Error Top Z 1" << dist << G4endl;
+	dist=c6.DistanceToOut(ponplz,vz,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(Dist,0)||
+	if (OutRange(dist,0)||
 	    OutRange(*pNorm,vz)||
 	    !*pgoodNorm)
-	    G4cout << "Error Top Z 2" << Dist << G4endl;
+	    G4cout << "Error Top Z 2" << dist << G4endl;
 
-	Dist=c6.DistanceToOut(ponmiz,vz,calcNorm,pgoodNorm,pNorm);
+	dist=c6.DistanceToOut(ponmiz,vz,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(Dist,100)||
+	if (OutRange(dist,100)||
 	    OutRange(*pNorm,vz)||
 	    !*pgoodNorm)
-	    G4cout << "Error Lower Z 1" << Dist << G4endl;
-	Dist=c6.DistanceToOut(ponmiz,vmz,calcNorm,pgoodNorm,pNorm);
+	    G4cout << "Error Lower Z 1" << dist << G4endl;
+	dist=c6.DistanceToOut(ponmiz,vmz,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(Dist,0)||
+	if (OutRange(dist,0)||
 	    OutRange(*pNorm,vmz)||
 	    !*pgoodNorm)
-	    G4cout << "Error Lower Z 2" << Dist << G4endl;
+	    G4cout << "Error Lower Z 2" << dist << G4endl;
 
 // Test case for rmax root bug
-	Dist=c7.DistanceToOut(ponr2,vmx,calcNorm,pgoodNorm,pNorm);
-	if (OutRange(Dist,100/sqrt(2.)-sqrt(95*95-100*100/2.))||*pgoodNorm)
-	    G4cout << "Error rmax root bug" << Dist << G4endl;
+	dist=c7.DistanceToOut(ponr2,vmx,calcNorm,pgoodNorm,pNorm);
+	if (OutRange(dist,100/sqrt(2.)-sqrt(95*95-100*100/2.))||*pgoodNorm)
+	    G4cout << "Error rmax root bug" << dist << G4endl;
 
 // Parallel radii test cases
-	Dist=c8a.DistanceToOut(pparr2,vparr,calcNorm,pgoodNorm,pNorm);
+	dist=c8a.DistanceToOut(pparr2,vparr,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(Dist,100.*sqrt(5.)/2.)||
+	if (OutRange(dist,100.*sqrt(5.)/2.)||
                      !*pgoodNorm||
                      OutRange(*pNorm,vz))
-	    G4cout << "Error solid parr2a " <<Dist << G4endl;
-	Dist=c8a.DistanceToOut(pparr2,-vparr,calcNorm,pgoodNorm,pNorm);
+	    G4cout << "Error solid parr2a " <<dist << G4endl;
+	dist=c8a.DistanceToOut(pparr2,-vparr,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(Dist,0)||
+	if (OutRange(dist,0)||
 	    !*pgoodNorm||
 	    OutRange(*pNorm,vmz))
-	    G4cout << "Error solid parr2b " <<Dist << G4endl;
+	    G4cout << "Error solid parr2b " <<dist << G4endl;
 
-	Dist=c8a.DistanceToOut(pparr2,vz,calcNorm,pgoodNorm,pNorm);
+	dist=c8a.DistanceToOut(pparr2,vz,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(Dist,100)||
+	if (OutRange(dist,100)||
 	    !*pgoodNorm||
 	    OutRange(*pNorm,vz))
-	    G4cout << "Error solid parr2c " <<Dist << G4endl;
-	Dist=c8a.DistanceToOut(pparr2,vmz,calcNorm,pgoodNorm,pNorm);
+	    G4cout << "Error solid parr2c " <<dist << G4endl;
+	dist=c8a.DistanceToOut(pparr2,vmz,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(Dist,0)||
+	if (OutRange(dist,0)||
 	    !*pgoodNorm||
 	    OutRange(*pNorm,vmz))
-	    G4cout << "Error solid parr2d " <<Dist << G4endl;
+	    G4cout << "Error solid parr2d " <<dist << G4endl;
 
-	Dist=c8a.DistanceToOut(pparr3,vparr,calcNorm,pgoodNorm,pNorm);
+	dist=c8a.DistanceToOut(pparr3,vparr,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(Dist,0)||
+	if (OutRange(dist,0)||
 	    !*pgoodNorm||
 	    OutRange(*pNorm,vz))
-	    G4cout << "Error solid parr3a " <<Dist << G4endl;
-	Dist=c8a.DistanceToOut(pparr3,-vparr,calcNorm,pgoodNorm,pNorm);
+	    G4cout << "Error solid parr3a " <<dist << G4endl;
+	dist=c8a.DistanceToOut(pparr3,-vparr,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(Dist,100*sqrt(5.)/2.)||
+	if (OutRange(dist,100*sqrt(5.)/2.)||
 	    !*pgoodNorm||
 	    OutRange(*pNorm,vmz))
-	    G4cout << "Error solid parr3b " <<Dist << G4endl;
-	Dist=c8a.DistanceToOut(pparr3,vz,calcNorm,pgoodNorm,pNorm);
+	    G4cout << "Error solid parr3b " <<dist << G4endl;
+	dist=c8a.DistanceToOut(pparr3,vz,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(Dist,0)||
+	if (OutRange(dist,0)||
 	    !*pgoodNorm||
 	    OutRange(*pNorm,vz))
-	    G4cout << "Error solid parr3c " <<Dist << G4endl;
+	    G4cout << "Error solid parr3c " <<dist << G4endl;
 
-	Dist=c8a.DistanceToOut(pparr3,vmz,calcNorm,pgoodNorm,pNorm);
+	dist=c8a.DistanceToOut(pparr3,vmz,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(Dist,50)||
+	if (OutRange(dist,50)||
 	    !*pgoodNorm||
 	    OutRange(*pNorm,G4ThreeVector(0,2./sqrt(5.0),-1./sqrt(5.0))))
-	    G4cout << "Error solid parr3d " <<Dist << G4endl;
+	    G4cout << "Error solid parr3d " <<dist << G4endl;
 
 
-	Dist=c8b.DistanceToOut(pparr2,vparr,calcNorm,pgoodNorm,pNorm);
+	dist=c8b.DistanceToOut(pparr2,vparr,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(Dist,100*sqrt(5.)/2.)||
+	if (OutRange(dist,100*sqrt(5.)/2.)||
                      !*pgoodNorm||
                      OutRange(*pNorm,vz))
-	    G4cout << "Error hollow parr2a " <<Dist << G4endl;
-	Dist=c8b.DistanceToOut(pparr2,-vparr,calcNorm,pgoodNorm,pNorm);
+	    G4cout << "Error hollow parr2a " <<dist << G4endl;
+	dist=c8b.DistanceToOut(pparr2,-vparr,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(Dist,0)||
+	if (OutRange(dist,0)||
 	    !*pgoodNorm||
 	    OutRange(*pNorm,vmz))
-	    G4cout << "Error hollow parr2b " <<Dist << G4endl;
+	    G4cout << "Error hollow parr2b " <<dist << G4endl;
 
-	Dist=c8b.DistanceToOut(pparr2,vz,calcNorm,pgoodNorm,pNorm);
+	dist=c8b.DistanceToOut(pparr2,vz,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(Dist,50)||*pgoodNorm)
-	    G4cout << "Error hollow parr2c " <<Dist << G4endl;
-	Dist=c8b.DistanceToOut(pparr2,vmz,calcNorm,pgoodNorm,pNorm);
+	if (OutRange(dist,50)||*pgoodNorm)
+	    G4cout << "Error hollow parr2c " <<dist << G4endl;
+	dist=c8b.DistanceToOut(pparr2,vmz,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(Dist,0)||
+	if (OutRange(dist,0)||
 	    !*pgoodNorm||
 	    OutRange(*pNorm,vmz))
-	    G4cout << "Error hollow parr2d " <<Dist << G4endl;
+	    G4cout << "Error hollow parr2d " <<dist << G4endl;
 
 
-	Dist=c8b.DistanceToOut(pparr3,vparr,calcNorm,pgoodNorm,pNorm);
+	dist=c8b.DistanceToOut(pparr3,vparr,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(Dist,0)||
+	if (OutRange(dist,0)||
 	    !*pgoodNorm||
 	    OutRange(*pNorm,vz))
-	    G4cout << "Error hollow parr3a " <<Dist << G4endl;
-	Dist=c8b.DistanceToOut(pparr3,-vparr,calcNorm,pgoodNorm,pNorm);
+	    G4cout << "Error hollow parr3a " <<dist << G4endl;
+	dist=c8b.DistanceToOut(pparr3,-vparr,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(Dist,100.*sqrt(5.)/2.)||
+	if (OutRange(dist,100.*sqrt(5.)/2.)||
 	    !*pgoodNorm||
 	    OutRange(*pNorm,vmz))
-	    G4cout << "Error hollow parr3b " <<Dist << G4endl;
-	Dist=c8b.DistanceToOut(pparr3,vz,calcNorm,pgoodNorm,pNorm);
+	    G4cout << "Error hollow parr3b " <<dist << G4endl;
+	dist=c8b.DistanceToOut(pparr3,vz,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(Dist,0)||
+	if (OutRange(dist,0)||
 	    !*pgoodNorm||
 	    OutRange(*pNorm,vz))
-	    G4cout << "Error hollow parr3c " <<Dist << G4endl;
+	    G4cout << "Error hollow parr3c " <<dist << G4endl;
 
-	Dist=c8b.DistanceToOut(pparr3,vmz,calcNorm,pgoodNorm,pNorm);
+	dist=c8b.DistanceToOut(pparr3,vmz,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(Dist,50)||
+	if (OutRange(dist,50)||
 	    !*pgoodNorm||
 	    OutRange(*pNorm,G4ThreeVector(0,2./sqrt(5.),-1.0/sqrt(5.))))
-	    G4cout << "Error hollow parr3d " <<Dist << G4endl;
+	    G4cout << "Error hollow parr3d " <<dist << G4endl;
 
-	Dist=cms.DistanceToOut(
+	dist=cms.DistanceToOut(
         G4ThreeVector(0.28628920024909,-0.43438111004815,-2949.0),
         G4ThreeVector(6.0886686196674e-05,-9.2382200635766e-05,0.99999999387917),
         calcNorm,pgoodNorm,pNorm);
-	G4cout << "cms.DistToOut() =  " <<Dist << G4endl;
+	if (OutRange(dist,5898.0))
+	G4cout << "Error:cms.DistToOut() =  " <<dist << G4endl;
 
-	Dist=cms.DistanceToOut(
+	dist=cms.DistanceToOut(
         G4ThreeVector(0.28628920024909,-0.43438111004815,
                      -2949.0 + kCarTolerance*0.25),
         G4ThreeVector(6.0886686196674e-05,-9.2382200635766e-05,0.99999999387917),
         calcNorm,pgoodNorm,pNorm);
-	G4cout << "cms.DistToOut(+) =  " <<Dist << G4endl;
+	if (OutRange(dist,5898.0))
+	G4cout << "Error:cms.DistToOut(+) =  " <<dist << G4endl;
 
-	Dist=cms.DistanceToOut(
+	dist=cms.DistanceToOut(
         G4ThreeVector(0.28628920024909,-0.43438111004815,
                       -2949.0 - kCarTolerance*0.25),
         G4ThreeVector(6.0886686196674e-05,-9.2382200635766e-05,0.99999999387917),
         calcNorm,pgoodNorm,pNorm);
-	G4cout << "cms.DistToOut(-) =  " <<Dist << G4endl;
+	if (OutRange(dist,5898.0))
+	G4cout << "Error:cms.DistToOut(-) =  " <<dist << G4endl;
+
+	/////////////////////////////////////////////
+	//
 
 	G4cout << "Testing G4Cons::DistanceToIn...\n";
-	Dist=c1.DistanceToIn(pzero);
-	if (OutRange(Dist,50))
-	  G4cout << "Error A " << Dist << G4endl;
+	dist=c1.DistanceToIn(pzero);
+	if (OutRange(dist,50))
+	  G4cout << "Error A " << dist << G4endl;
 
-	Dist=c1.DistanceToIn(pplx);
-	if (OutRange(Dist,20))
-	  G4cout << "Error B " << Dist << G4endl;
+	dist=c1.DistanceToIn(pplx);
+	if (OutRange(dist,20))
+	  G4cout << "Error B " << dist << G4endl;
 
-	Dist=c1.DistanceToIn(pply);
-	if (OutRange(Dist,20))
-	  G4cout << "Error C " << Dist << G4endl;
+	dist=c1.DistanceToIn(pply);
+	if (OutRange(dist,20))
+	  G4cout << "Error C " << dist << G4endl;
 
-	Dist=c4.DistanceToIn(pply);
-	if (OutRange(Dist,120*sin(M_PI/3)))
-	  G4cout << "Error D " << Dist << G4endl;
+	dist=c4.DistanceToIn(pply);
+	if (OutRange(dist,120*sin(M_PI/3)))
+	  G4cout << "Error D " << dist << G4endl;
 
-	Dist=c4.DistanceToIn(pmiy);
-	if (OutRange(Dist,120*sin(M_PI/3)))
-	  G4cout << "Error D " << Dist << G4endl;
+	dist=c4.DistanceToIn(pmiy);
+	if (OutRange(dist,120*sin(M_PI/3)))
+	  G4cout << "Error D " << dist << G4endl;
 
-	Dist=c1.DistanceToIn(pplz);
-	if (OutRange(Dist,70))
-	    G4cout << "Error E " << Dist << G4endl;
+	dist=c1.DistanceToIn(pplz);
+	if (OutRange(dist,70))
+	    G4cout << "Error E " << dist << G4endl;
 // Check with both rmins=0
-	Dist=c5.DistanceToIn(pplx);
-	if (OutRange(Dist,20./sqrt(2.)))
-	  G4cout << "Error F " << Dist << G4endl;
+	dist=c5.DistanceToIn(pplx);
+	if (OutRange(dist,20./sqrt(2.)))
+	  G4cout << "Error F " << dist << G4endl;
+
+	/////////////////////////////////////////////////////
+	//
 
 	G4cout << "Testing G4Cons::DistanceToIn...\n";
 
-	Dist=c1.DistanceToIn(pplz,vmz);
-	if (OutRange(Dist,kInfinity))
-	  G4cout << "Error A " << Dist << G4endl;
-	Dist=c1.DistanceToIn(pplx,vmx);
-	if (OutRange(Dist,20))
-	  G4cout << "Error B " << Dist << G4endl;
-	Dist=c1.DistanceToIn(pplz,vx);
-	if (OutRange(Dist,kInfinity))
-	  G4cout << "Error C " << Dist << G4endl;
-	Dist=c4.DistanceToIn(pply,vmy);
-	if (OutRange(Dist,kInfinity))
-	  G4cout << "Error D " << Dist << G4endl;
+	dist=c1.DistanceToIn(pplz,vmz);
+	if (OutRange(dist,kInfinity))
+	  G4cout << "Error A " << dist << G4endl;
 
-	Dist=c1.DistanceToIn(pydx,vmy);
-	if (OutRange(Dist,70))
-	  G4cout << "Error E " << Dist << G4endl;
-	Dist=c3.DistanceToIn(pydx,vmy);
-	if (OutRange(Dist,150-60*tan(M_PI/6)))
-	  G4cout << "Error F " << Dist << G4endl;
+	dist=c2.DistanceToIn(pplz,vmz);
+	if (OutRange(dist,kInfinity))
+	G4cout << "Error:c2.DistanceToIn(pplz,vmz) = " << dist << G4endl;
 
-	Dist=c1.DistanceToIn(pplx,vmx);
-	if (OutRange(Dist,20))
-	  G4cout << "Error G " << Dist << G4endl;
-	Dist=c1.DistanceToIn(pplx,vx);
-	if (OutRange(Dist,kInfinity))
-	  G4cout << "Error G2 " << Dist << G4endl;
+	dist=c3.DistanceToIn(pplz,vmz);
+	if (OutRange(dist,kInfinity))
+	G4cout << "Error:c3.DistanceToIn(pplz,vmz) = " << dist << G4endl;
 
-	Dist=c4.DistanceToIn(pbigx,vmx);
-	if (OutRange(Dist,350))
-	    G4cout << "Error G3 " << Dist << G4endl;
+	dist=c4.DistanceToIn(pplz,vmz);
+	if (OutRange(dist,kInfinity))
+	G4cout << "Error:c4.DistanceToIn(pplz,vmz) = " << dist << G4endl;
 
-	Dist=c4.DistanceToIn(pzero,vx);
-	if (OutRange(Dist,50))
-	  G4cout << "Error H " << Dist << G4endl;
+	dist=c5.DistanceToIn(pplz,vmz);
+	if (OutRange(dist,kInfinity))
+	G4cout << "Error:c5.DistanceToIn(pplz,vmz) = " << dist << G4endl;
 
-	Dist=c1.DistanceToIn(ponr2,vx);
-	if (OutRange(Dist,kInfinity))
-	    G4cout << "Error I" << Dist << G4endl;
-	Dist=c1.DistanceToIn(ponr2,vmx);
-	if (OutRange(Dist,0))
-	    G4cout << "Error I2" << Dist << G4endl;
+	dist=c6.DistanceToIn(pplz,vmz);
+	if (OutRange(dist,70.0))
+	G4cout << "Error:c6.DistanceToIn(pplz,vmz) = " << dist << G4endl;
+
+	dist=c7.DistanceToIn(pplz,vmz);
+	if (OutRange(dist,kInfinity))
+	G4cout << "Error:c7.DistanceToIn(pplz,vmz) = " << dist << G4endl;
+
+	dist=c8a.DistanceToIn(pplz,vmz);
+	if (OutRange(dist,70.0))
+	G4cout << "Error:c8a.DistanceToIn(pplz,vmz) = " << dist << G4endl;
+
+	dist=c8b.DistanceToIn(pplz,vmz);
+	if (OutRange(dist,kInfinity))
+	G4cout << "Error:c8b.DistanceToIn(pplz,vmz) = " << dist << G4endl;
+
+	dist=c8c.DistanceToIn(pplz,vmz);
+	if (OutRange(dist,kInfinity))
+	G4cout << "Error:c8c.DistanceToIn(pplz,vmz) = " << dist << G4endl;
+
+	dist=c1.DistanceToIn(pmiz,vz);
+	if (OutRange(dist,kInfinity))
+	  G4cout << "Error A " << dist << G4endl;
+
+	dist=c2.DistanceToIn(pmiz,vz);
+	if (OutRange(dist,kInfinity))
+	G4cout << "Error:c2.DistanceToIn(pmiz,vz) = " << dist << G4endl;
+
+	dist=c3.DistanceToIn(pmiz,vz);
+	if (OutRange(dist,kInfinity))
+	G4cout << "Error:c3.DistanceToIn(pmiz,vz) = " << dist << G4endl;
+
+	dist=c4.DistanceToIn(pmiz,vz);
+	if (OutRange(dist,kInfinity))
+	G4cout << "Error:c4.DistanceToIn(pmiz,vz) = " << dist << G4endl;
+
+	dist=c5.DistanceToIn(pmiz,vz);
+	if (OutRange(dist,kInfinity))
+	G4cout << "Error:c5.DistanceToIn(pmiz,vz) = " << dist << G4endl;
+
+	dist=c6.DistanceToIn(pmiz,vz);
+	if (OutRange(dist,70.0))
+	G4cout << "Error:c6.DistanceToIn(pmiz,vz) = " << dist << G4endl;
+
+	dist=c7.DistanceToIn(pmiz,vz);
+	if (OutRange(dist,kInfinity))
+	G4cout << "Error:c7.DistanceToIn(pmiz,vz) = " << dist << G4endl;
+
+	dist=c8a.DistanceToIn(pmiz,vz);
+	if (OutRange(dist,70.0))
+	G4cout << "Error:c8a.DistanceToIn(pmiz,vz) = " << dist << G4endl;
+
+	dist=c8b.DistanceToIn(pmiz,vz);
+	if (OutRange(dist,kInfinity))
+	G4cout << "Error:c8b.DistanceToIn(pmiz,vz) = " << dist << G4endl;
+
+	dist=c8c.DistanceToIn(pmiz,vz);
+	if (OutRange(dist,kInfinity))
+	G4cout << "Error:c8c.DistanceToIn(pmiz,vz) = " << dist << G4endl;
+
+
+	dist=c1.DistanceToIn(pplx,vmx);
+	if (OutRange(dist,20))
+	  G4cout << "Error B " << dist << G4endl;
+	dist=c1.DistanceToIn(pplz,vx);
+	if (OutRange(dist,kInfinity))
+	  G4cout << "Error C " << dist << G4endl;
+	dist=c4.DistanceToIn(pply,vmy);
+	if (OutRange(dist,kInfinity))
+	  G4cout << "Error D " << dist << G4endl;
+
+	dist=c1.DistanceToIn(pydx,vmy);
+	if (OutRange(dist,70))
+	  G4cout << "Error E " << dist << G4endl;
+	dist=c3.DistanceToIn(pydx,vmy);
+	if (OutRange(dist,150-60*tan(M_PI/6)))
+	  G4cout << "Error F " << dist << G4endl;
+
+	dist=c1.DistanceToIn(pplx,vmx);
+	if (OutRange(dist,20))
+	  G4cout << "Error G " << dist << G4endl;
+	dist=c1.DistanceToIn(pplx,vx);
+	if (OutRange(dist,kInfinity))
+	  G4cout << "Error G2 " << dist << G4endl;
+
+	dist=c4.DistanceToIn(pbigx,vmx);
+	if (OutRange(dist,350))
+	    G4cout << "Error G3 " << dist << G4endl;
+
+	dist=c4.DistanceToIn(pzero,vx);
+	if (OutRange(dist,50))
+	  G4cout << "Error H " << dist << G4endl;
+
+	dist=c1.DistanceToIn(ponr2,vx);
+	if (OutRange(dist,kInfinity))
+	    G4cout << "Error I" << dist << G4endl;
+	dist=c1.DistanceToIn(ponr2,vmx);
+	if (OutRange(dist,0))
+	    G4cout << "Error I2" << dist << G4endl;
 	
-	Dist=c1.DistanceToIn(ponr1,vx);
-	if (OutRange(Dist,0))
-	    G4cout << "Error J" << Dist << G4endl;
-	Dist=c1.DistanceToIn(ponr1,vmx);
-	if (OutRange(Dist,2.0*sqrt(50*50/2.)))
-	    G4cout << "Error J2" << Dist << G4endl;
+	dist=c1.DistanceToIn(ponr1,vx);
+	if (OutRange(dist,0))
+	    G4cout << "Error J" << dist << G4endl;
+	dist=c1.DistanceToIn(ponr1,vmx);
+	if (OutRange(dist,2.0*sqrt(50*50/2.)))
+	    G4cout << "Error J2" << dist << G4endl;
 
-	Dist=c1.DistanceToIn(ponr2,vmxmy);
-	if (OutRange(Dist,0))
-	    G4cout << "Error K" << Dist << G4endl;
+	dist=c1.DistanceToIn(ponr2,vmxmy);
+	if (OutRange(dist,0))
+	    G4cout << "Error K" << dist << G4endl;
 
 // Parallel test case -> parallel to both radii
-	Dist=c8b.DistanceToIn(pparr1,vparr);
-	if (OutRange(Dist,100*sqrt(5.)/2.))
-	    G4cout << "Error parr1 " << Dist << G4endl;
-	Dist=c8b.DistanceToIn(pparr2,-vparr);
-	if (OutRange(Dist,kInfinity))
-	    G4cout << "Error parr2 " << Dist << G4endl;
-	Dist=c8b.DistanceToIn(pparr3,vparr);
-	if (OutRange(Dist,kInfinity))
-	    G4cout << "Error parr3a " << Dist << G4endl;
-	Dist=c8b.DistanceToIn(pparr3,-vparr);
-	if (OutRange(Dist,0))
-	    G4cout << "Error parr3b " << Dist << G4endl;
+	dist=c8b.DistanceToIn(pparr1,vparr);
+	if (OutRange(dist,100*sqrt(5.)/2.))
+	    G4cout << "Error parr1 " << dist << G4endl;
+	dist=c8b.DistanceToIn(pparr2,-vparr);
+	if (OutRange(dist,kInfinity))
+	    G4cout << "Error parr2 " << dist << G4endl;
+	dist=c8b.DistanceToIn(pparr3,vparr);
+	if (OutRange(dist,kInfinity))
+	    G4cout << "Error parr3a " << dist << G4endl;
+	dist=c8b.DistanceToIn(pparr3,-vparr);
+	if (OutRange(dist,0))
+	    G4cout << "Error parr3b " << dist << G4endl;
 
 // Check we don't Hit `shadow cone' at `-ve radius' on rmax or rmin
-	Dist=c8a.DistanceToIn(proot1,vz);
-	if (OutRange(Dist,1000))
-	    G4cout << "Error shadow rmax root problem " << Dist << G4endl;
+	dist=c8a.DistanceToIn(proot1,vz);
+	if (OutRange(dist,1000))
+	    G4cout << "Error shadow rmax root problem " << dist << G4endl;
 
-	Dist=c8c.DistanceToIn(proot2,vz);
-	if (OutRange(Dist,1000))
-	    G4cout << "Error shadow rmin root problem " << Dist << G4endl;
+	dist=c8c.DistanceToIn(proot2,vz);
+	if (OutRange(dist,1000))
+	    G4cout << "Error shadow rmin root problem " << dist << G4endl;
 
 	G4cout << "NOT Checking G4Cons::ScopeCar...\n";
 	G4cout << "NOT Checking G4Cons::ScopePhi...\n";
