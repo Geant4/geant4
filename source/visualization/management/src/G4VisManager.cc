@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.43 2001-12-03 11:46:38 stesting Exp $
+// $Id: G4VisManager.cc,v 1.44 2002-04-22 14:26:52 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -496,7 +496,8 @@ void G4VisManager::CreateViewer (G4String name) {
 	  G4cout <<
 	    "WARNING: objects with visibility flag set to \"false\""
 	    " will not be drawn!"
-	    "\n  \"/vis/set/culling off\" to Draw such objects."
+	    "\n  \"/vis/viewer/set/culling g[lobal] false\""
+	    " to Draw such objects."
 		 << G4endl;
 	}
       }
@@ -512,13 +513,14 @@ void G4VisManager::CreateViewer (G4String name) {
 	  G4cout <<
 	    "WARNING: covered objects in solid mode will not be part of"
 	    " the scene!"
-	    "\n  \"/vis/set/cull_covered_daughters off\" to reverse this."
+	    "\n  \"/vis/viewer/set/culling c[overedDaughters] false\""
+	    " to reverse this."
 		 << G4endl;
 	}
       }
       if (warn) {
 	if (fVerbosity >= warnings) {
-	  G4cout << "  Also see other \"/vis/set\" commands."
+	  G4cout << "  Also see other \"/vis/viewer/set\" commands."
 		 << G4endl;
 	}
       }
