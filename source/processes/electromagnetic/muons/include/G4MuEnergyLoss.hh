@@ -5,10 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuEnergyLoss.hh,v 1.4 1999-12-15 14:51:42 gunter Exp $
+// $Id: G4MuEnergyLoss.hh,v 1.5 2000-02-10 08:22:28 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
-// $Id: 
 // -------------------------------------------------------------------
 //      GEANT 4 class header file 
 //
@@ -31,6 +29,7 @@
 // ************************************************************
 // some corrections by L.Urban on 27/05/98 , (but other corrections come soon!) 
 // cleanup L.Urban on 23/10/98
+// corrections due to new e.m. structure L.Urban 10/02/00
 // ------------------------------------------------------------
  
 #ifndef G4MuEnergyLoss_h
@@ -41,7 +40,7 @@
 #include "g4std/iomanip"
 #include "globals.hh"
 #include "Randomize.hh"
-#include "G4VContinuousDiscreteProcess.hh"
+#include "G4VEnergyLoss.hh"
 #include "G4Material.hh"
 #include "G4Element.hh"
 #include "G4VParticleChange.hh"
@@ -58,7 +57,7 @@
  
 class G4EnergyLossMessenger ;
  
-class G4MuEnergyLoss : public G4VContinuousDiscreteProcess
+class G4MuEnergyLoss : public G4VEnergyLoss
  
 {
   public:
@@ -96,44 +95,9 @@ class G4MuEnergyLoss : public G4VContinuousDiscreteProcess
     G4MuEnergyLoss(G4MuEnergyLoss &);
     G4MuEnergyLoss & operator=(const G4MuEnergyLoss &right);
 
-    void BuildRangeTable(const G4ParticleDefinition& aParticleType);
-
-    void BuildInverseRangeTable(
-                                const G4ParticleDefinition& aParticleType);
-
-    void BuildTimeTables(const G4ParticleDefinition& aParticleType);
-
-    void BuildLabTimeVector(G4int materialIndex,
-                          G4PhysicsLogVector* rangeVector);
-
-    void BuildProperTimeVector(G4int materialIndex,
-                          G4PhysicsLogVector* rangeVector);
-
-    void InvertRangeVector(G4int materialIndex,
-                          G4PhysicsLogVector* rangeVector);
-
-
-    void BuildRangeVector(G4int materialIndex,
-                          G4PhysicsLogVector* rangeVector);
-
-    G4double LabTimeIntLog(G4PhysicsVector* physicsVector,G4int nbin);
-
-    G4double ProperTimeIntLog(G4PhysicsVector* physicsVector,G4int nbin);
-
-    G4double RangeIntLin(G4PhysicsVector* physicsVector,G4int nbin);
-
-    G4double RangeIntLog(G4PhysicsVector* physicsVector,G4int nbin);
-
-    void BuildRangeCoeffATable(const G4ParticleDefinition& aParticleType);
-    void BuildRangeCoeffBTable(const G4ParticleDefinition& aParticleType);
-    void BuildRangeCoeffCTable(const G4ParticleDefinition& aParticleType);
-
     G4double GetConstraints(const G4DynamicParticle *aParticle,
                             G4Material *aMaterial);
                                        
-    G4double GetLossWithFluct(const G4DynamicParticle *aParticle,
-                              G4Material *aMaterial,G4double MeanLoss) ;
-
   // =====================================================================
   public:
 
@@ -149,37 +113,17 @@ class G4MuEnergyLoss : public G4VContinuousDiscreteProcess
     const G4MuonPlus* theMuonPlus;
     const G4MuonMinus* theMuonMinus;
 
-    // particle mass
-    G4double ParticleMass;
-
-    // LowestKineticEnergy = lower limit of particle kinetic energy
-    // HighestKineticEnergy = upper limit of particle kinetic energy 
-    // TotBin = number of bins 
-    //  ---------in the energy loss/range tables-------------------
-    G4double LowestKineticEnergy;
-    G4double HighestKineticEnergy;
-    G4int TotBin;// number of bins in table, calculated in BuildPhysicsTable
-                 //  from LowestKineticEnergy,HighestKineticEnergy and  
-                 //  dToverTini
-    G4double RTable,LOGRTable; // LOGRTable=log(HighestKineticEnergy
-                               //          /LowestKineticEnergy)/TotBin
-                               //   RTable = exp(LOGRTable)
   private:
 
-    G4PhysicsTable* theDEDXTable;
-
-    G4PhysicsTable* theRangeTable;
-    G4PhysicsTable* theInverseRangeTable;
-
-    G4PhysicsTable* theLabTimeTable;
-    G4PhysicsTable* theProperTimeTable;
+    G4PhysicsTable* theDEDXTable ;
+    G4PhysicsTable* theRangeTable ;
+    G4PhysicsTable* theRangeCoeffATable ;
+    G4PhysicsTable* theRangeCoeffBTable ;
+    G4PhysicsTable* theRangeCoeffCTable ;
 
     G4PhysicsTable** RecorderOfProcess;
     G4int CounterOfProcess;
  
-    G4PhysicsTable* theRangeCoeffATable;
-    G4PhysicsTable* theRangeCoeffBTable;
-    G4PhysicsTable* theRangeCoeffCTable;
 
     // fdEdx=(-dE/dx)
     // computed in GetConstraints at every call;
@@ -194,32 +138,32 @@ class G4MuEnergyLoss : public G4VContinuousDiscreteProcess
     G4double RangeCoeffA,RangeCoeffB,RangeCoeffC ;
 
 
-    // variables for the integration routines
-    G4double taulow,tauhigh,ltaulow,ltauhigh;
-
-    // data members to speed up the fluctuation calculation
-    G4int imat ;
-    G4Material *lastMaterial ;
-    G4double f1Fluct,f2Fluct,e1Fluct,e2Fluct,rateFluct,ipotFluct;
-    G4double e1LogFluct,e2LogFluct,ipotLogFluct;
-    const G4double MaxExcitationNumber ;
-    const G4double probLimFluct ;
-    const long nmaxDirectFluct,nmaxCont1,nmaxCont2 ;
-
   //    static part of the class
-  public:
+  public:  // With description
 
-    static G4int GetNbOfProcesses()            { return NbOfProcesses; }; 
-    static void  SetNbOfProcesses(G4int number){ NbOfProcesses=number ; };
-    static void  PlusNbOfProcesses()           { NbOfProcesses++  ; };
-    static void  MinusNbOfProcesses()          { NbOfProcesses--  ; };
+    static void  SetNbOfProcesses(G4int nb) {NbOfProcesses=nb;};
+    // Sets number of processes giving contribution to the energy loss
 
-    static void SetRndmStep     (G4bool   value) {rndmStepFlag   = value;}
-    static void SetEnlossFluc   (G4bool   value) {EnlossFlucFlag = value;}
-    static void SetStepFunction (G4double c1, G4double c2)
-                                {dRoverRange = c1; finalRange = c2;}
+    static void  PlusNbOfProcesses()        {NbOfProcesses++ ;};
+    // Increases number of processes giving contribution to the energy loss
+
+    static void  MinusNbOfProcesses()       {NbOfProcesses-- ;};
+    // Decreases number of processes giving contribution to the energy loss
+
+    static G4int GetNbOfProcesses()         {return NbOfProcesses;};
+    // Gets number of processes giving contribution to the energy loss
+    // ( default value = 3)
+
 
   protected:
+
+    static void SetLowerBoundEloss(G4double val) {LowerBoundEloss=val;};
+    static void SetUpperBoundEloss(G4double val) {UpperBoundEloss=val;};
+    static void SetNbinEloss(G4int nb)           {NbinEloss=nb;};
+
+    static G4double GetLowerBoundEloss() {return LowerBoundEloss;};
+    static G4double GetUpperBoundEloss() {return UpperBoundEloss;};
+    static G4int    GetNbinEloss()       {return NbinEloss;};
 
     static G4PhysicsTable* theDEDXmuplusTable ;
     static G4PhysicsTable* theDEDXmuminusTable ;
@@ -238,8 +182,7 @@ class G4MuEnergyLoss : public G4VContinuousDiscreteProcess
 
   //  processes inherited from G4muEnergyLoss 
   //   register themselves  in the static array Recorder
-  //  nb of contributing processes = NbOfProcesses
-    static G4int NbOfProcesses ;  
+    static G4int NbOfProcesses  ;
     static G4PhysicsTable** RecorderOfmuplusProcess;
     static G4PhysicsTable** RecorderOfmuminusProcess;
     static G4int CounterOfmuplusProcess ;
@@ -247,19 +190,19 @@ class G4MuEnergyLoss : public G4VContinuousDiscreteProcess
 
   private:
 
+    static G4int NbinEloss;               // number of bins in table
+    static G4double LowerBoundEloss;
+    static G4double UpperBoundEloss;
+    static G4double RTable,LOGRTable;    // LOGRTable=log(UpperBoundEloss-
+                                         // LowerBoundEloss)/NbinEloss
+                                         // RTable = exp(LOGRTable)
+
     static G4PhysicsTable* themuplusRangeCoeffATable;
     static G4PhysicsTable* themuplusRangeCoeffBTable;
     static G4PhysicsTable* themuplusRangeCoeffCTable;
     static G4PhysicsTable* themuminusRangeCoeffATable;
     static G4PhysicsTable* themuminusRangeCoeffBTable;
     static G4PhysicsTable* themuminusRangeCoeffCTable;
-
-    static G4double dRoverRange;     // dRoverRange is the maximum allowed
-                                     // deltarange/range in one Step
-    static G4double finalRange;      // final step before stopping
-
-    static G4bool   rndmStepFlag;    // control the randomization of the step
-    static G4bool   EnlossFlucFlag;  // control the energy loss fluctuation
 
     static G4EnergyLossMessenger* eLossMessenger;
 
