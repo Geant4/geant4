@@ -40,9 +40,8 @@ fi
 export G4ANALYSIS_USE=1
 cp $JDK_HOME/lib/jvm.lib $GEANT4_HOME/extlib/$G4SYSTEM
 export G4ANALYSIS_AIDA_CONFIG_LIBS="'-libpath:'$GEANT4_HOME/extlib/$G4SYSTEM AIDAJNI.lib FHJNI.lib jvm.lib"
-touch src/DummyAnalysisFactory.cc
 
-export JVM_ARGS="-Dhep.aida.IAnalysisFactory=jas.aida.gui.JASGUIAnalysisFactory"
+export JVM_ARGS="-Dhep.aida.IAnalysisFactory=hep.aida.ref.AnalysisFactory"
 export PATH=$PATH:$JDK_HOME/jre/bin/client
 
 export CLASSPATH="$JLIBPATH/JASAIDA.jar"
@@ -51,7 +50,8 @@ CLASSPATH="$CLASSPATH;$JLIBPATH/aida-dev.jar"
 CLASSPATH="$CLASSPATH;$JLIBPATH/freehep-hep.jar"
 CLASSPATH="$CLASSPATH;$JLIBPATH/freehep-base.jar"
 CLASSPATH="$CLASSPATH;$JLIBPATH/openide-lookup.jar"
-CLASSPATH="$CLASSPATH;$JLIBPATH/jas.jar"
+CLASSPATH="$CLASSPATH;$JLIBPATH/jas-plotter.jar"
+CLASSPATH="$CLASSPATH;$JLIBPATH/optimizers.jar"
 CLASSPATH="$CLASSPATH;$JLIBPATH/jel.jar"
 
 echo "JDK_HOME set to $JDK_HOME"

@@ -34,9 +34,8 @@ endif
 
 setenv G4ANALYSIS_USE 1
 setenv G4ANALYSIS_AIDA_CONFIG_LIBS "-L$GEANT4_HOME/extlib/$G4SYSTEM -lAIDAJNI -lFHJNI"
-touch src/DummyAnalysisFactory.cc
 
-setenv JVM_ARGS "-Dhep.aida.IAnalysisFactory=jas.aida.gui.JASGUIAnalysisFactory"
+setenv JVM_ARGS "-Dhep.aida.IAnalysisFactory=hep.aida.ref.AnalysisFactory"
 switch ($G4SYSTEM)
     case "Linux*":
         setenv LD_LIBRARY_PATH $JDK_HOME/jre/lib/i386:${LD_LIBRARY_PATH}
@@ -63,7 +62,8 @@ setenv CLASSPATH "${CLASSPATH}:$JLIBPATH/aida-dev.jar"
 setenv CLASSPATH "${CLASSPATH}:$JLIBPATH/freehep-hep.jar"
 setenv CLASSPATH "${CLASSPATH}:$JLIBPATH/freehep-base.jar"
 setenv CLASSPATH "${CLASSPATH}:$JLIBPATH/openide-lookup.jar"
-setenv CLASSPATH "${CLASSPATH}:$JLIBPATH/jas.jar"
+setenv CLASSPATH "${CLASSPATH}:$JLIBPATH/jas-plotter.jar"
+setenv CLASSPATH "${CLASSPATH}:$JLIBPATH/optimizers.jar"
 setenv CLASSPATH "${CLASSPATH}:$JLIBPATH/jel.jar"
 
 echo "JDK_HOME set to $JDK_HOME"
