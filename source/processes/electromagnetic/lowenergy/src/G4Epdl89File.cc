@@ -33,13 +33,12 @@ G4Epdl89File::G4Epdl89File(const G4String& filename, G4int* paramVec):
   G4VDataFile(filename),
   _flags(paramVec)
 {   
-  SetBufferSize(73);
+  SetBufferSize(74);
 }
 
 // Destructor  
 G4Epdl89File::~G4Epdl89File()
 {
-  cout<<"Epdl89File destructor"<<endl;
 }
 
 G4bool G4Epdl89File::FindTheElement(G4int numZ){
@@ -53,6 +52,7 @@ G4bool G4Epdl89File::FindTheElement(G4int numZ){
       
     }
   }
+  return elementFound;
 }
 
 G4bool G4Epdl89File::FindTheProcess(){
@@ -68,31 +68,23 @@ G4bool G4Epdl89File::FindTheProcess(){
       
       if(_flags[1] == flag(2,3).toInt()){
 	
-	if(_flags[2] == 0){
+	if(_flags[2] == flag(5,3).toInt()){
 	  
-	  tableFound = TRUE;
-	}
-	
-	else{
+	  G4int subsh;
+	  G4int Xi3 = flag(31,1).toInt();
 	  
-	  if(_flags[2] == flag(5,3).toInt()){
+	  if(Xi3 == 0){
 	    
-	    G4int subsh;
-	    G4int Xi3 = flag(31,1).toInt();
+	    subsh = flag(22,1).toInt();
+	  }
+	  else if(Xi3 == 1){
 	    
-	    if(Xi3 == 0){
-	      
-	      subsh = flag(22,1).toInt();
-	    }
-	    else if(Xi3 == 1){
-
-	      subsh = (flag(22,1) + flag(24,1)).toInt();
-	    }
+	    subsh = (flag(22,1) + flag(24,1)).toInt();
+	  }
+	  
+	  if(_flags[3] == subsh){
 	    
-	    if(_flags[3] == subsh){
-
-	      tableFound = TRUE;
-	    }
+	    tableFound = TRUE;
 	  }
 	}
       }
@@ -115,28 +107,20 @@ G4bool G4Epdl89File::FindOneElemProc(G4int& subsh){
       
       if(_flags[1] == flag(2,3).toInt()){
 
-	if(_flags[2] == 0){
-
-          tableFound = TRUE;
-        }
-	
-        else{
-
-          if(_flags[2] == flag(5,3).toInt()){
-	
-	    G4int Xi3 = flag(31,1).toInt();
-	    
-	    if(Xi3 == 0){
-	      
-	      subsh = flag(22,1).toInt();
-	    }
-	    else if(Xi3 == 1){
+	if(_flags[2] == flag(5,3).toInt()){
 	  
-	      subsh = (flag(22,1) + flag(24,1)).toInt();
-	      
-	    }
-	    tableFound = TRUE;
+	  G4int Xi3 = flag(31,1).toInt();
+	  
+	  if(Xi3 == 0){
+	    
+	    subsh = flag(22,1).toInt();
 	  }
+	  else if(Xi3 == 1){
+	    
+	    subsh = (flag(22,1) + flag(24,1)).toInt();
+	      
+	  }
+	  tableFound = TRUE;
 	}
       }
     }
