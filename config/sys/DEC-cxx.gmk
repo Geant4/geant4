@@ -1,6 +1,6 @@
 #
-# -------- DEC ---------
-#
+# -------- DEC ---------    !!! not supported !!!
+#                         OSF V4.0, cxx C++ V6.1-027
 ifeq ($(G4SYSTEM),DEC-cxx)
   CXX		:= cxx
   ifdef G4OPTIMISE

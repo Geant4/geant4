@@ -1,6 +1,6 @@
 #
-# ------ GNU/LINUX ------ egcs-1.1.2 (gcc-2.91.66)
-#
+# ------ GNU/LINUX ------    !!! not supported !!!
+#                    Red-Hat 6.1, egcs-1.1.2 (gcc-2.91.66)
 ifeq ($(G4SYSTEM),Linux-egcs)
   CXX       := g++
   GNU_GCC = 1
