@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc,v 1.41 2003-11-08 01:12:47 japost Exp $
+// $Id: G4ChordFinder.cc,v 1.42 2003-11-08 02:18:28 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -44,13 +44,18 @@ G4ChordFinder::G4ChordFinder(G4MagInt_Driver* pIntegrationDriver)
     fAllocatedStepper(false),
     fEquation(0), 
     fDriversStepper(0), 
-    fTotalNoTrials_FNC(0), fNoCalls_FNC(0), fmaxTrials_FNC(0)
+    fFirstFraction(0.999), fFractionLast(1.00),  fFractionNextEstimate(0.98), 
+    fTotalNoTrials_FNC(0), fNoCalls_FNC(0), fmaxTrials_FNC(0),
+    fStatsVerbose(0)
 {
   // Simple constructor which does not create equation, ..
       // fDeltaChord= fDefaultDeltaChord; 
   fIntgrDriver= pIntegrationDriver;
   fAllocatedStepper= false;
   fLastStepEstimate_Unconstrained = DBL_MAX;          // Should move q, p to
+
+  SetFractions_Last_Next( fFractionLast, fFractionNextEstimate);  
+    // check the values and set the other parameters
 }
 
 // ..........................................................................
@@ -63,14 +68,20 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
     fAllocatedStepper(false),
     fEquation(0), 
     fDriversStepper(0), 
-    fTotalNoTrials_FNC(0), fNoCalls_FNC(0), fmaxTrials_FNC(0)
+    fFirstFraction(0.999), fFractionLast(1.00),  fFractionNextEstimate(0.98), 
+    fTotalNoTrials_FNC(0), fNoCalls_FNC(0), fmaxTrials_FNC(0),
+    fStatsVerbose(0)
 {
   //  Construct the Chord Finder
   //  by creating in inverse order the  Driver, the Stepper and EqRhs ...
   G4Mag_EqRhs *pEquation = new G4Mag_UsualEqRhs(theMagField);
   fEquation = pEquation;                            
   fLastStepEstimate_Unconstrained = DBL_MAX;          // Should move q, p to
-                                                      //    G4FieldTrack ??
+                                                     //    G4FieldTrack ??
+
+  SetFractions_Last_Next( fFractionLast, fFractionNextEstimate);  
+    // check the values and set the other parameters
+
   // --->>  Charge    Q = 0 
   // --->>  Momentum  P = 1       NOMINAL VALUES !!!!!!!!!!!!!!!!!!
 
@@ -89,6 +100,41 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
 
 // ......................................................................
 
+void   
+G4ChordFinder::SetFractions_Last_Next( G4double fractLast, G4double fractNext )
+{ 
+  // Use -1.0 as request for Default.
+  if( fractLast == -1.0 )   fractLast = 1.0;   // 0.9;
+  if( fractNext == -1.0 )   fractNext = 0.98;  // 0.9; 
+
+  fFirstFraction  = 0.999;  // Orig 0.999 A safe value,  range: ~ 0.95 - 0.999 
+  fMultipleRadius = 15.0;   // For later use, range: ~  2 - 20 
+
+  if( fStatsVerbose ) { 
+    G4cout << " ChordFnd> Trying to set fractions: "
+	   << " first " << fFirstFraction
+	   << " last " <<  fractLast
+	   << " next " <<  fractNext
+	   << " and multiple " << fMultipleRadius
+	   << G4endl;
+  } 
+
+  if( (fractLast > 0.0) && (fractLast <=1.0) ) 
+    { fFractionLast= fractLast; }
+  else
+    G4cerr << "G4ChordFinder:: SetFractions_Last_Next: Invalid "
+	   << " fraction Last = " << fractLast
+	   << " must be  0 <  fractionLast <= 1 " << G4endl;
+  if( (fractNext > 0.0) && (fractNext <1.0) )
+    { fFractionNextEstimate = fractNext; }
+  else
+    G4cerr << "G4ChordFinder:: SetFractions_Last_Next: Invalid "
+	   << " fraction Next = " << fractNext
+	   << " must be  0 <  fractionNext < 1 " << G4endl;
+}
+
+// ......................................................................
+
 G4ChordFinder::~G4ChordFinder()
 {
   delete   fEquation; // fIntgrDriver->pIntStepper->theEquation_Rhs;
@@ -97,6 +143,26 @@ G4ChordFinder::~G4ChordFinder()
      delete fDriversStepper; 
   }                                //  fIntgrDriver->pIntStepper;}
   delete   fIntgrDriver; 
+
+  if( fStatsVerbose ) { PrintStatistics();  }
+}
+
+void
+G4ChordFinder::PrintStatistics()
+{
+  // Print Statistics
+  G4cout << "G4ChordFinder statistics report: " << G4endl;
+  G4cout 
+    << "  No trials: " << fTotalNoTrials_FNC
+    << "  No Calls: "  << fNoCalls_FNC
+    << "  Max-trial: " <<  fmaxTrials_FNC
+    << G4endl; 
+  G4cout 
+    << "  Parameters: " 
+    << "  fFirstFraction "  << fFirstFraction
+    << "  fFractionLast "   << fFractionLast
+    << "  fFractionNextEstimate " << fFractionNextEstimate
+    << G4endl; 
 }
 
 // ......................................................................
@@ -170,7 +236,7 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
   fIntgrDriver-> GetDerivatives( yCurrent, dydx )  ;
 
   G4int     noTrials=0;
-  const  G4double safetyFactor= (1-perThousand);  // TO-DO:  = 0.975 or 0.95;
+  const G4double safetyFactor= fFirstFraction; //  0.975 or 0.99 ? was 0.999
 
   stepTrial = std::min( stepMax, 
                           safetyFactor * fLastStepEstimate_Unconstrained );
@@ -196,8 +262,12 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
      stepForChord = NewStep(stepTrial, dChordStep, newStepEst_Uncons );
 
      if( ! validEndPoint ) {
-        if( (stepForChord <= lastStepLength) || (stepTrial<=0.0) )
-          stepTrial = stepForChord;
+        if( stepTrial<=0.0 )
+	  stepTrial = stepForChord; 
+        else if (stepForChord <= stepTrial) 
+	  // Reduce by a fraction, possibly up to 20% 
+	  stepTrial = std::min( stepForChord, 
+	             		fFractionLast * stepTrial); 
         else
           stepTrial *= 0.1;
 
@@ -285,7 +355,8 @@ G4double G4ChordFinder::NewStep(G4double  stepTrialOld,
   if (dChordStep > 0.0)
   {
     stepEstimate_Unconstrained = stepTrialOld*sqrt( fDeltaChord / dChordStep );
-    stepTrial =  0.98 * stepEstimate_Unconstrained;
+    // stepTrial =  0.98 * stepEstimate_Unconstrained;
+    stepTrial =  fFractionNextEstimate * stepEstimate_Unconstrained;
   }
   else
   {
