@@ -485,10 +485,33 @@ void G4OpBoundaryProcess::DielectricMetal()
            }
            else {
 
-	     DoReflection();
+             if ( theModel == glisur || theFinish == polished || 
+                                        prob_ss+prob_sl+prob_bs == 0.0 ) {
 
-             OldMomentum = NewMomentum;
-             OldPolarization = NewPolarization;
+                DoReflection();
+                                                                                                                      
+                OldMomentum = NewMomentum;
+                OldPolarization = NewPolarization;
+
+             } else {
+
+                ChooseReflection();
+                                                                                
+                if ( theStatus == LambertianReflection ) {
+                   DoReflection();
+                }
+                else if ( theStatus == BackScattering ) {
+                   NewMomentum = -OldMomentum;
+                   NewPolarization = -OldPolarization;
+                }
+                else {
+                                                                                
+                   G4double PdotN = OldMomentum * theFacetNormal;
+                   NewMomentum = OldMomentum - (2.*PdotN)*theFacetNormal;
+                   G4double EdotN = OldPolarization * theFacetNormal;
+                   NewPolarization = -OldPolarization + (2.*EdotN)*theFacetNormal;                                                                                
+                }
+             }
 
 	   }
 
