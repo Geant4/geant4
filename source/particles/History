@@ -1,4 +1,4 @@
-$Id: History,v 1.78 2003-01-21 09:51:44 vnivanch Exp $
+$Id: History,v 1.79 2003-01-24 16:12:45 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- Jan 24, 2003     (particles-V05-00-04)
+- Fix in G4ProductionCutsTable::DumpCouples(). Added increment to
+  material iterator when dumping materials (V.Ivantchenko).
 
 - Jan 21, 2003     (particles-V05-00-03)
 - Fix for cuts-per-region in management/src/G4IonTable.cc
