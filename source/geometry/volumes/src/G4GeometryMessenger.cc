@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryMessenger.cc,v 1.11 2003-05-20 07:52:22 gcosmo Exp $
+// $Id: G4GeometryMessenger.cc,v 1.12 2003-06-16 16:54:52 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -33,7 +33,7 @@
 //
 // ********************************************************************
 
-#include "g4std/iomanip"
+#include <iomanip>
 #include "G4GeometryMessenger.hh"
 
 #include "G4TransportationManager.hh"
@@ -246,7 +246,7 @@ G4GeometryMessenger::Init()
 
   // Create a logger to send errors/output to cout
   //
-  tlogger = new G4GeomTestStreamLogger(G4std::cout);
+  tlogger = new G4GeomTestStreamLogger(std::cout);
 
   // Get the world volume
   //

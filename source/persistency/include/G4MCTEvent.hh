@@ -26,8 +26,8 @@
 #define MCT_EVENT_H
 
 #include "G4Types.hh"
-#include "g4std/iostream"
-#include "g4std/map"
+#include <iostream>
+#include <map>
 #include "G4MCTGenParticle.hh"
  
 // ====================================================================
@@ -41,8 +41,8 @@ class G4MCTSimParticle;
 class HepMC::GenEvent;
 class HepMC::GenParticle;
 
-typedef G4std::map<G4MCTGenParticle, G4MCTSimParticle*> MCTGen2SimParticleMap;
-typedef G4std::map<G4MCTSimParticle*, G4MCTGenParticle> MCTSim2GenParticleMap;
+typedef std::map<G4MCTGenParticle, G4MCTSimParticle*> MCTGen2SimParticleMap;
+typedef std::map<G4MCTSimParticle*, G4MCTGenParticle> MCTSim2GenParticleMap;
 
 class G4MCTEvent {
 protected:
@@ -76,7 +76,7 @@ public:
   int AddPrimaryPair(const G4MCTGenParticle& genp, 
 		     const G4MCTSimParticle* simp); 
   void ClearEvent();
-  void Print(G4std::ostream& ostr= G4std::cout) const;
+  void Print(std::ostream& ostr= std::cout) const;
 
   // iterators
   typedef MCTGen2SimParticleMap::const_iterator genprimary_const_iterator;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.icc,v 1.6 2003-04-18 17:50:32 vnivanch Exp $
+// $Id: G4eLowEnergyLoss.icc,v 1.7 2003-06-16 16:59:56 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------
@@ -63,7 +63,7 @@ inline G4double G4eLowEnergyLoss::GetConstraints(
   fRangeNow =
            G4EnergyLossTables::GetRange(ParticleType,KineticEnergy,couple);
 
-  G4double r = G4std::min(finalRange, couple->GetProductionCuts()
+  G4double r = std::min(finalRange, couple->GetProductionCuts()
                  ->GetProductionCut(idxG4ElectronCut));
 
   if (fRangeNow > r) {

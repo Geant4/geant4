@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ClippablePolygon.hh,v 1.7 2002-10-28 11:47:49 gcosmo Exp $
+// $Id: G4ClippablePolygon.hh,v 1.8 2003-06-16 16:53:50 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -42,7 +42,7 @@
 #ifndef G4ClippablePolygon_hh
 #define G4ClippablePolygon_hh
 
-#include "g4std/vector"
+#include <vector>
 
 #include "globals.hh"
 #include "geomdefs.hh"
@@ -56,7 +56,7 @@ class G4VoxelLimits;
 
 class G4ClippablePolygon
 {
-  typedef G4std::vector<G4ThreeVector> G4ThreeVectorList;
+  typedef std::vector<G4ThreeVector> G4ThreeVectorList;
 
   public:  // with description
 

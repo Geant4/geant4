@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02RunAction.hh,v 1.2 2002-02-01 11:07:36 grichine Exp $
+// $Id: F02RunAction.hh,v 1.3 2003-06-16 16:51:34 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,7 +34,7 @@
 
 #include "G4UserRunAction.hh"
 #include "globals.hh"
-#include "g4std/iostream"
+#include <iostream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

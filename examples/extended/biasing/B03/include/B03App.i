@@ -16,7 +16,7 @@
 #include "G4ScoreTable.hh"
 #include "G4VIStore.hh"
 #include <string>
-#include "g4std/strstream"
+#include <strstream>
 #include <memory>
 #include "G4VPhysicalVolume.hh"
 #include "B03ImportanceDetectorConstruction.hh"
@@ -89,7 +89,7 @@ public:
   G4CellScoreValues GetCellScoreValues() const;
 };
 
-typedef G4std::map<G4GeometryCell, G4CellScorer *, G4PTkComp> G4MapGeometryCellCellScorer;
+typedef std::map<G4GeometryCell, G4CellScorer *, G4PTkComp> G4MapGeometryCellCellScorer;
 
 class G4VCellScorerStore{
 };
@@ -138,10 +138,10 @@ public:
   G4ScoreTable(const G4VIStore *aIStore = 0);
   ~G4ScoreTable(){}
   void Print(const G4MapGeometryCellCellScorer &cs, 
-	     G4std::ostream *out = 0);
+	     std::ostream *out = 0);
   %extend {
     const char *Write(const G4MapGeometryCellCellScorer &cs){
-      G4std::ostrstream tmpout;
+      std::ostrstream tmpout;
       self->Print(cs, &tmpout);
       string *value = new string(tmpout.str());
       return value->c_str();

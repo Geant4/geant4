@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTel.cc,v 1.10 2003-05-30 15:07:45 flongo Exp $
+// $Id: GammaRayTel.cc,v 1.11 2003-06-16 16:46:19 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,7 +63,7 @@
 
 /* This global file is used to store relevant data for
    analysis with external tools */
-G4std::ofstream outFile;
+std::ofstream outFile;
 
 // This is the main function 
 int main(int argc, char** argv)

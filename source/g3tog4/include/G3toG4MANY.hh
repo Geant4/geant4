@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3toG4MANY.hh,v 1.1 2001-11-08 16:07:59 gcosmo Exp $
+// $Id: G3toG4MANY.hh,v 1.2 2003-06-16 16:50:46 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------
@@ -60,11 +60,11 @@
 #ifndef G3TOG4_MANY_HH
 #define G3TOG4_MANY_HH 1
 
-#include "g4std/vector"
+#include <vector>
 #include "G3VolTableEntry.hh"
 #include "G4Transform3D.hh"
 
-typedef G4std::vector<G3VolTableEntry*>  G3VolTableEntryVector;
+typedef std::vector<G3VolTableEntry*>  G3VolTableEntryVector;
 
 void G3toG4MANY(G3VolTableEntry* curVTE);
 

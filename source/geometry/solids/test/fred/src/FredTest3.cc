@@ -32,8 +32,8 @@
 #include "G4UImanager.hh"
 
 #include <time.h>
-#include "g4std/iomanip"
-#include "g4std/strstream"
+#include <iomanip>
+#include <strstream>
 
 //
 // Constructor
@@ -126,7 +126,7 @@ G4double FredTest3::GaussianRandom(const G4double cutoff) const {
 //
 // Do your stuff!
 //
-void FredTest3::RunTest( const G4VSolid *testVolume, G4std::ostream &logger )
+void FredTest3::RunTest( const G4VSolid *testVolume, std::ostream &logger )
 {
 	//
 	// Clear error list
@@ -159,7 +159,7 @@ void FredTest3::RunTest( const G4VSolid *testVolume, G4std::ostream &logger )
 	//
 	// Set iostream precision to 14 digits
 	//
-	logger << G4std::setprecision(14);
+	logger << std::setprecision(14);
 	
 	//
 	// Set clock
@@ -240,7 +240,7 @@ void FredTest3::RunTest( const G4VSolid *testVolume, G4std::ostream &logger )
 //
 // Recover previously logged error and setup particle gun appropriately
 //
-G4int FredTest3::DebugError( const G4VSolid *testVolume, G4std::istream &logger, const G4int errorIndex ) const
+G4int FredTest3::DebugError( const G4VSolid *testVolume, std::istream &logger, const G4int errorIndex ) const
 {
 	G4ThreeVector p, v;
 	
@@ -266,13 +266,13 @@ G4int FredTest3::DebugError( const G4VSolid *testVolume, G4std::istream &logger,
 	
 	UI->ApplyCommand( "/gun/particle geantino" );
 	
-	G4std::ostrstream formatter1( commandBuffer, 255 );
-	formatter1 << G4std::setprecision(14);
+	std::ostrstream formatter1( commandBuffer, 255 );
+	formatter1 << std::setprecision(14);
 	formatter1 << "/gun/position "  << p.x() << " " << p.y() << " " << p.z() << " mm" << G4endl;
 	UI->ApplyCommand( commandBuffer );
 	
-	G4std::ostrstream formatter2( commandBuffer, 255 );
-	formatter2 << G4std::setprecision(14);
+	std::ostrstream formatter2( commandBuffer, 255 );
+	formatter2 << std::setprecision(14);
 	formatter2 << "/gun/direction " << v.x() << " " << v.y() << " " << v.z() << " mm" << G4endl;
 	UI->ApplyCommand( commandBuffer );
 	return 0;
@@ -284,7 +284,7 @@ G4int FredTest3::DebugError( const G4VSolid *testVolume, G4std::istream &logger,
 //
 // Recover previously logged error and invoke G4VSolid::Inside
 //
-G4int FredTest3::DebugInside( const G4VSolid *testVolume, G4std::istream &logger, const G4int errorIndex ) const
+G4int FredTest3::DebugInside( const G4VSolid *testVolume, std::istream &logger, const G4int errorIndex ) const
 {	
 	G4ThreeVector p, v;
 	
@@ -307,7 +307,7 @@ G4int FredTest3::DebugInside( const G4VSolid *testVolume, G4std::istream &logger
 //
 // Recover previously logged error and invoke G4VSolid::DistanceToIn(p)
 //
-G4int FredTest3::DebugToInP( const G4VSolid *testVolume, G4std::istream &logger, const G4int errorIndex ) const
+G4int FredTest3::DebugToInP( const G4VSolid *testVolume, std::istream &logger, const G4int errorIndex ) const
 {	
 	G4ThreeVector p, v;
 	
@@ -330,7 +330,7 @@ G4int FredTest3::DebugToInP( const G4VSolid *testVolume, G4std::istream &logger,
 //
 // Recover previously logged error and invoke G4VSolid::DistanceToIn(p,v)
 //
-G4int FredTest3::DebugToInPV( const G4VSolid *testVolume, G4std::istream &logger, const G4int errorIndex ) const
+G4int FredTest3::DebugToInPV( const G4VSolid *testVolume, std::istream &logger, const G4int errorIndex ) const
 {	
 	G4ThreeVector p, v;
 	
@@ -357,7 +357,7 @@ G4int FredTest3::DebugToInPV( const G4VSolid *testVolume, G4std::istream &logger
 //
 // Recover previously logged error and invoke G4VSolid::DistanceToOut(p)
 //
-G4int FredTest3::DebugToOutP( const G4VSolid *testVolume, G4std::istream &logger, const G4int errorIndex ) const
+G4int FredTest3::DebugToOutP( const G4VSolid *testVolume, std::istream &logger, const G4int errorIndex ) const
 {	
 	G4ThreeVector p, v;
 	
@@ -380,7 +380,7 @@ G4int FredTest3::DebugToOutP( const G4VSolid *testVolume, G4std::istream &logger
 //
 // Recover previously logged error and invoke G4VSolid::DistanceToOut(p,v)
 //
-G4int FredTest3::DebugToOutPV( const G4VSolid *testVolume, G4std::istream &logger, const G4int errorIndex ) const
+G4int FredTest3::DebugToOutPV( const G4VSolid *testVolume, std::istream &logger, const G4int errorIndex ) const
 {	
 	G4ThreeVector p, v;
 	
@@ -411,7 +411,7 @@ G4int FredTest3::DebugToOutPV( const G4VSolid *testVolume, G4std::istream &logge
 // TestOutsidePoint
 //
 void FredTest3::TestOutsidePoint( const G4VSolid *testVolume, G4int *nError,
-				  const FredTest3PointList *inside, const G4ThreeVector point, G4std::ostream &logger )
+				  const FredTest3PointList *inside, const G4ThreeVector point, std::ostream &logger )
 {
 	G4int i, n = inside->NumPoints();
 	
@@ -521,7 +521,7 @@ void FredTest3::TestOutsidePoint( const G4VSolid *testVolume, G4int *nError,
 // TestInsidePoint
 //
 void FredTest3::TestInsidePoint( const G4VSolid *testVolume, G4int *nError,
-				 const FredTest3PointList *outside, const G4ThreeVector point, G4std::ostream &logger )
+				 const FredTest3PointList *outside, const G4ThreeVector point, std::ostream &logger )
 {
 	G4int i, n = outside->NumPoints();
 	
@@ -581,7 +581,7 @@ void FredTest3::TestInsidePoint( const G4VSolid *testVolume, G4int *nError,
 // times already.
 //
 void FredTest3::ReportError( G4int *nError, const G4ThreeVector p, 
-			     const G4ThreeVector v, const G4String comment, G4std::ostream &logger )
+			     const G4ThreeVector v, const G4String comment, std::ostream &logger )
 {
 	//
 	// Have we encountered this error message before?
@@ -652,10 +652,10 @@ void FredTest3::ClearErrors()
 //
 // Get the p and v vectors stored in a test3 log file
 //
-G4int FredTest3::GetLoggedPV( G4std::istream &logger, const G4int errorIndex,
+G4int FredTest3::GetLoggedPV( std::istream &logger, const G4int errorIndex,
 			      G4ThreeVector &p, G4ThreeVector &v        ) const
 {
-	logger >> G4std::setprecision(14);		// I wonder if this is necessary?
+	logger >> std::setprecision(14);		// I wonder if this is necessary?
 
 	//
 	// Search for the requested error index, skipping comments along the way

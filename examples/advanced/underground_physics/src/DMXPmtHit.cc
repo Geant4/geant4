@@ -44,7 +44,7 @@
 #include "G4Colour.hh"
 #include "G4VisAttributes.hh"
 
-#include "g4std/iomanip"
+#include <iomanip>
 
 G4Allocator<DMXPmtHit> DMXPmtHitsAllocator;
 
@@ -108,7 +108,7 @@ void DMXPmtHit::Print() {
 
   //  G4cout << "      PMT hit: " << G4BestUnit(pos,"Length") << G4endl;
 
-  G4cout << "      PMT hit: " << G4std::setw(5) << G4BestUnit(time,"Time") 
+  G4cout << "      PMT hit: " << std::setw(5) << G4BestUnit(time,"Time") 
 	 << ", at " << G4BestUnit(pos,"Length") << G4endl;
 
 

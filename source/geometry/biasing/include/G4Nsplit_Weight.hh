@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Nsplit_Weight.hh,v 1.9 2002-11-20 13:18:47 gcosmo Exp $
+// $Id: G4Nsplit_Weight.hh,v 1.10 2003-06-16 16:51:01 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -51,7 +51,7 @@ class G4Nsplit_Weight
     // the weight to be given to the tracks
 };
 
-G4std::ostream& operator<<(G4std::ostream &out, 
+std::ostream& operator<<(std::ostream &out, 
 			   const G4Nsplit_Weight &nw);
 
 

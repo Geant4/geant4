@@ -42,8 +42,8 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4Material.hh"
 #include "G4VContinuousDiscreteProcess.hh"
@@ -367,17 +367,17 @@ int main(int argc,char** argv)
     // ---- HBOOK initialization
 
     // Creating the analysis factory
-    G4std::auto_ptr< IAnalysisFactory > af( AIDA_createAnalysisFactory() );
+    std::auto_ptr< IAnalysisFactory > af( AIDA_createAnalysisFactory() );
 
     // Creating the tree factory
-    G4std::auto_ptr< ITreeFactory > tf( af->createTreeFactory() );
+    std::auto_ptr< ITreeFactory > tf( af->createTreeFactory() );
 
     // Creating a tree mapped to a new hbook file.
-    G4std::auto_ptr< ITree > tree( tf->create( hFile, false,false, "hbook" ) );
-    G4std::cout << "Tree store : " << tree->storeName() << G4std::endl;
+    std::auto_ptr< ITree > tree( tf->create( hFile, false,false, "hbook" ) );
+    std::cout << "Tree store : " << tree->storeName() << std::endl;
  
     // Creating a tuple factory, whose tuples will be handled by the tree
-    //  G4std::auto_ptr< ITupleFactory > tpf(af->createTupleFactory( *tree ));
+    //  std::auto_ptr< ITupleFactory > tpf(af->createTupleFactory( *tree ));
 
     IHistogram1D* hist[6];
 
@@ -391,7 +391,7 @@ int main(int argc,char** argv)
 
     if(usepaw) {
 
-      G4std::auto_ptr< IHistogramFactory > hf(af->createHistogramFactory(*tree));
+      std::auto_ptr< IHistogramFactory > hf(af->createHistogramFactory(*tree));
 
       // Creating an 1-dimensional histogram in the root directory of the tree
 
@@ -545,7 +545,7 @@ int main(int argc,char** argv)
     }
     if(usepaw) {
       tree->commit();
-      G4std::cout << "Closing the tree..." << G4std::endl;
+      std::cout << "Closing the tree..." << std::endl;
       tree->close();
       G4cout << "# hbook is writed" << G4endl;
     }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4ParameterisedSolid1.cc,v 1.6 2002-11-18 16:43:06 gcosmo Exp $
+// $Id: testG4ParameterisedSolid1.cc,v 1.7 2003-06-16 16:55:02 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -128,7 +128,7 @@ class BoxesAndSpheres : public G4VPVParameterisation
       G4cerr << " Got another sphere in ComputeDimensions(G4Sphere, , )"
              << G4endl;
     }
-    G4int nrad= G4std::min(5, n-fNumBoxes+1);
+    G4int nrad= std::min(5, n-fNumBoxes+1);
     pSphere.SetInsideRadius( nrad *  5. * mm);
     pSphere.SetOuterRadius ( nrad * 10. * mm);
     pSphere.SetStartPhiAngle  (0.);

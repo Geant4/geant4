@@ -39,10 +39,10 @@
 // the final shell in wich the electron goes is needed, to know the data for the auger electron emitted
 // (i.e. originating shell id, electron energy and transition probability) 
 
-G4AugerTransition::G4AugerTransition(G4int finalShell, G4std::vector<G4int> transIds,
-				     const G4std::map<G4int,G4std::vector<G4int>,G4std::less<G4int> >* idMap,
-				     const G4std::map<G4int,G4DataVector,G4std::less<G4int> >* energyMap,
-				     const G4std::map<G4int,G4DataVector,G4std::less<G4int> >* probabilityMap)
+G4AugerTransition::G4AugerTransition(G4int finalShell, std::vector<G4int> transIds,
+				     const std::map<G4int,std::vector<G4int>,std::less<G4int> >* idMap,
+				     const std::map<G4int,G4DataVector,std::less<G4int> >* energyMap,
+				     const std::map<G4int,G4DataVector,std::less<G4int> >* probabilityMap)
 {
   finalShellId = finalShell;
   augerOriginatingShellIdsMap = *idMap;
@@ -61,12 +61,12 @@ G4AugerTransition::~G4AugerTransition()
 // Returns the ids of the shells from wich an auger electron culd came from, given th shell
 // from wich the transition electron cames from.
 
-const G4std::vector<G4int>* G4AugerTransition::AugerOriginatingShellIds(G4int startShellId) const
+const std::vector<G4int>* G4AugerTransition::AugerOriginatingShellIds(G4int startShellId) const
 {
-  G4std::map<G4int,G4std::vector<G4int>,G4std::less<G4int> >::const_iterator shellId = augerOriginatingShellIdsMap.find(startShellId);
+  std::map<G4int,std::vector<G4int>,std::less<G4int> >::const_iterator shellId = augerOriginatingShellIdsMap.find(startShellId);
 
-  const G4std::vector<G4int>* dataSet = &(*shellId).second;
-  //const G4std::vector<G4int>* dataOut = 0;
+  const std::vector<G4int>* dataSet = &(*shellId).second;
+  //const std::vector<G4int>* dataOut = 0;
 
   if (dataSet->size() == 0) {G4cout << "Error: no auger Id found"<< G4endl;}
   else {
@@ -80,10 +80,10 @@ const G4std::vector<G4int>* G4AugerTransition::AugerOriginatingShellIds(G4int st
 
 // Returns the ids of the shells from wich an electron cuuld fill the vacancy in finalShellId
 
-const G4std::vector<G4int>* G4AugerTransition::TransitionOriginatingShellIds() const
+const std::vector<G4int>* G4AugerTransition::TransitionOriginatingShellIds() const
 {
 
-  const G4std::vector<G4int>* dataSet = &transitionOriginatingShellIds;
+  const std::vector<G4int>* dataSet = &transitionOriginatingShellIds;
   return dataSet;
 }
 
@@ -92,7 +92,7 @@ const G4std::vector<G4int>* G4AugerTransition::TransitionOriginatingShellIds() c
 
 const G4DataVector* G4AugerTransition::AugerTransitionEnergies(G4int startShellId) const
 {
-  G4std::map<G4int,G4DataVector,G4std::less<G4int> >::const_iterator shellId = augerTransitionEnergiesMap.find(startShellId);
+  std::map<G4int,G4DataVector,std::less<G4int> >::const_iterator shellId = augerTransitionEnergiesMap.find(startShellId);
   const G4DataVector* dataSet = &(*shellId).second;
 
 
@@ -104,7 +104,7 @@ const G4DataVector* G4AugerTransition::AugerTransitionEnergies(G4int startShellI
 
 const G4DataVector* G4AugerTransition::AugerTransitionProbabilities(G4int startShellId) const
 {
-  G4std::map<G4int,G4DataVector,G4std::less<G4int> >::const_iterator shellId = augerTransitionProbabilitiesMap.find(startShellId);
+  std::map<G4int,G4DataVector,std::less<G4int> >::const_iterator shellId = augerTransitionProbabilitiesMap.find(startShellId);
   const G4DataVector* dataSet = &(*shellId).second;
   return dataSet; 
 }
@@ -119,9 +119,9 @@ const G4int G4AugerTransition::FinalShellId() const
 
 G4int G4AugerTransition::AugerOriginatingShellId(G4int index, G4int startShellId) const
 {
-  const G4std::vector<G4int>* ids = AugerOriginatingShellIds(startShellId);
+  const std::vector<G4int>* ids = AugerOriginatingShellIds(startShellId);
   // G4int i = 
-  G4std::vector<G4int>::const_iterator pos = ids->begin();
+  std::vector<G4int>::const_iterator pos = ids->begin();
   G4int n = *(pos+index);
   return n;
 }

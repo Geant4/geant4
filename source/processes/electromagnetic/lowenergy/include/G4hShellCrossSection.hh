@@ -58,7 +58,7 @@ public:
 
 protected:
 
-  virtual G4std::vector<G4double> Probabilities(G4int Z,
+  virtual std::vector<G4double> Probabilities(G4int Z,
 						G4double incidentEnergy,
 						G4double mass,
 						G4double deltaEnergy) const;

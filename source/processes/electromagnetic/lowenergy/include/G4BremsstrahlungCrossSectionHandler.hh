@@ -68,7 +68,7 @@ public:
  
 protected:
 
-  G4std::vector<G4VEMDataSet*>* BuildCrossSectionsForMaterials(const G4DataVector& energyVector, 
+  std::vector<G4VEMDataSet*>* BuildCrossSectionsForMaterials(const G4DataVector& energyVector, 
 							       const G4DataVector* energyCuts);
 
 private:

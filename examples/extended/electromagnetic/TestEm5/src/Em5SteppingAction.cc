@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5SteppingAction.cc,v 1.12 2003-06-06 15:55:52 maire Exp $
+// $Id: Em5SteppingAction.cc,v 1.13 2003-06-16 16:47:52 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,7 @@
 #include "G4EventManager.hh"
 #include "Em5SteppingMessenger.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 #include "G4UImanager.hh"
 
 #ifndef G4NOHIST

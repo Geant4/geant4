@@ -116,7 +116,7 @@ void CCalAMaterial::computeAeff(int nconst,
     aEff += weights[i] * constituents[i]->Aeff();
 }
 
-G4std::ostream& operator<<(G4std::ostream& os, const CCalAMaterial& mat) {
+std::ostream& operator<<(std::ostream& os, const CCalAMaterial& mat) {
   os << mat.name << G4endl;
   os << "Density= " << mat.density << " g/cm3. Number of Elements: "
      << mat.nElem 

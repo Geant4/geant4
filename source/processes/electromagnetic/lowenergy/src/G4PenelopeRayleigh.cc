@@ -22,7 +22,7 @@
 //
 // --------------------------------------------------------------------
 //
-// $Id: G4PenelopeRayleigh.cc,v 1.8 2003-05-20 20:16:13 pia Exp $
+// $Id: G4PenelopeRayleigh.cc,v 1.9 2003-06-16 17:00:23 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: L. Pandola (luciano.pandola@cern.ch)
@@ -112,7 +112,7 @@ void G4PenelopeRayleigh::BuildPhysicsTable(const G4ParticleDefinition& )
 
   G4VDataSetAlgorithm* algo = new G4LogLogInterpolation();
   G4VEMDataSet* materialSet = new G4CompositeEMDataSet(algo,1.,1.);
-  G4std::vector<G4VEMDataSet*> matCrossSections;
+  std::vector<G4VEMDataSet*> matCrossSections;
 
   G4int m;
   for (m=0; m<nMaterials; m++)
@@ -139,7 +139,7 @@ void G4PenelopeRayleigh::BuildPhysicsTable(const G4ParticleDefinition& )
       for (bin=0; bin<nOfBins; bin++)
 	{
 	  energies->push_back(energyVector[bin]);
-	  G4double ec=G4std::min(energyVector[bin],0.5*IZZ);
+	  G4double ec=std::min(energyVector[bin],0.5*IZZ);
 	  facte=k1*pow(ec/electron_mass_c2,2);
 	  G4double cs=0;
 	  G4PenelopeIntegrator<G4PenelopeRayleigh,G4double(G4PenelopeRayleigh::*)(G4double)> theIntegrator;
@@ -474,7 +474,7 @@ G4double G4PenelopeRayleigh::MolecularFormFactor(G4double y)
 	Pg=sqrt(1-pow(Pa,2));
 	Pq=k2*x/Pa;
 	fb=sin(2*Pg*atan(Pq))/(Pg*Pq*pow((1+Pq*Pq),Pg));
-	fa=G4std::max(fa,fb);
+	fa=std::max(fa,fb);
       }
     if (stechiometric)
       {

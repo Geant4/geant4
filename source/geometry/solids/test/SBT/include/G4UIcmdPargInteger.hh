@@ -43,7 +43,7 @@ class G4UIcmdPargInteger : public G4UIcmdParg {
 	
 	inline char GetTypeCode() const { return 'i'; }
 	
-	G4std::istream &FetchValue( G4std::istream &ios );
+	std::istream &FetchValue( std::istream &ios );
 	
 	protected:
 	G4int value;

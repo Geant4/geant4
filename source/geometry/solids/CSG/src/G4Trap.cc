@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.16 2002-10-28 15:18:18 gcosmo Exp $
+// $Id: G4Trap.cc,v 1.17 2003-06-16 16:53:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Trap
@@ -1628,7 +1628,7 @@ G4GeometryType G4Trap::GetEntityType() const
 //
 // Stream object contents to an output stream
 
-G4std::ostream& G4Trap::StreamInfo( G4std::ostream& os ) const
+std::ostream& G4Trap::StreamInfo( std::ostream& os ) const
 {
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TstVADetectorConstruction.hh,v 1.4 2001-07-11 09:59:24 gunter Exp $
+// $Id: TstVADetectorConstruction.hh,v 1.5 2003-06-16 16:52:13 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -35,7 +35,7 @@ class G4Material;
 class TstVADetectorMessenger;
 class G4AssemblyVolume;
 
-#include "g4std/vector"
+#include <vector>
 #include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
 
@@ -45,7 +45,7 @@ class TstVADetectorConstruction : public G4VUserDetectorConstruction
     struct sClassic
     {
       G4LogicalVolume*                    caloLV;
-      G4std::vector<G4VPhysicalVolume*>   PVs;
+      std::vector<G4VPhysicalVolume*>   PVs;
     };
     
   public:

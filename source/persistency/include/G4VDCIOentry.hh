@@ -37,7 +37,7 @@
 class G4VDCIOentry
 {
     public: // With description
-      G4VDCIOentry(G4std::string n);
+      G4VDCIOentry(std::string n);
       // Constructor
 
       virtual ~G4VDCIOentry() {}
@@ -47,17 +47,17 @@ class G4VDCIOentry
       void SetVerboseLevel(G4int v) { m_verbose = v; }
       // Set verbose level.
 
-      G4std::string GetName() { return m_name; }
+      std::string GetName() { return m_name; }
       // Returns the name of the DC I/O manager entry
 
-      virtual void CreateDCIOmanager(G4std::string, G4std::string) {}
+      virtual void CreateDCIOmanager(std::string, std::string) {}
       // virtual method for creating DC I/O manager for the detector
 
     protected:
       G4int m_verbose;
 
     private:
-      G4std::string m_name;
+      std::string m_name;
 
 }; // End of class G4VDCIOentry
 

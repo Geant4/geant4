@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.hh,v 1.10 2002-10-28 11:30:57 gcosmo Exp $
+// $Id: G4BREPSolid.hh,v 1.11 2003-06-16 16:52:22 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -113,7 +113,7 @@ public: // with description
     // Returns identifier for solid type entity.
     // A generic BREP solid is considered a "Closed_Shell".
 
-  virtual G4std::ostream& StreamInfo(G4std::ostream& os) const;
+  virtual std::ostream& StreamInfo(std::ostream& os) const;
     // Streams solid contents to output stream.
 
   void DescribeYourselfTo (G4VGraphicsScene& scene) const;

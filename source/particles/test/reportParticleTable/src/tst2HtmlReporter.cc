@@ -26,7 +26,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: tst2HtmlReporter.cc,v 1.7 2002-03-26 07:34:44 kurasige Exp $
+// $Id: tst2HtmlReporter.cc,v 1.8 2003-06-16 16:58:55 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,8 +36,8 @@
 #include "globals.hh"
 #include "G4DecayTable.hh"  
 #include "G4Tokenizer.hh"
-#include "g4std/iomanip"               
-#include "g4std/strstream"
+#include <iomanip>               
+#include <strstream>
 
  tst2HtmlReporter::tst2HtmlReporter():tst2VParticleReporter()
 {
@@ -81,8 +81,8 @@ void tst2HtmlReporter::SparseOption(const G4String& option)
 {
   //--- open index file -----
   G4String fileName = baseDir + "index.html";
-  G4std::ofstream outFile(fileName, G4std::ios::out );
-  outFile.setf( G4std::ios:: scientific, G4std::ios::floatfield );
+  std::ofstream outFile(fileName, std::ios::out );
+  outFile.setf( std::ios:: scientific, std::ios::floatfield );
 
   // header
   PrintHeader(outFile);
@@ -137,9 +137,9 @@ void tst2HtmlReporter::SparseOption(const G4String& option)
   G4String fileName = baseDir + name + ".html";
   // exception
   if (name == "J/psi") fileName = baseDir +"jpsi.html";
-  G4std::ofstream outFile(fileName, G4std::ios::out );
-  outFile.setf( G4std::ios:: scientific, G4std::ios::floatfield );
-  outFile << G4std::setprecision(7) << G4endl;
+  std::ofstream outFile(fileName, std::ios::out );
+  outFile.setf( std::ios:: scientific, std::ios::floatfield );
+  outFile << std::setprecision(7) << G4endl;
 
   PrintHeader(outFile);
    
@@ -292,7 +292,7 @@ void tst2HtmlReporter::SparseOption(const G4String& option)
   PrintFooter(outFile); 
 }
 
- void tst2HtmlReporter::PrintHeader(G4std::ofstream& outFile)
+ void tst2HtmlReporter::PrintHeader(std::ofstream& outFile)
 {
   outFile << "<HTML>" << G4endl;
   outFile << "<HEAD>" << G4endl;
@@ -305,7 +305,7 @@ void tst2HtmlReporter::SparseOption(const G4String& option)
   outFile << "<BODY>" << G4endl;
 }
 
- void tst2HtmlReporter::PrintFooter(G4std::ofstream& outFile)
+ void tst2HtmlReporter::PrintFooter(std::ofstream& outFile)
 {
   outFile << "<HR>" << G4endl;
   outFile << "</BODY>" << G4endl;

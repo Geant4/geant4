@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlung.cc,v 1.9 2003-05-24 16:44:52 pia Exp $
+// $Id: G4PenelopeBremsstrahlung.cc,v 1.10 2003-06-16 17:00:16 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -268,7 +268,7 @@ void G4PenelopeBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParti
     const G4Material* material= couple->GetMaterial();
     // the cut cannot be below lowest limit
     G4double tCut = (*(theCoupleTable->GetEnergyCutsVector(0)))[j];
-    tCut = G4std::min(highKineticEnergy, tCut);
+    tCut = std::min(highKineticEnergy, tCut);
     cutForSecondaryPhotons.push_back(tCut);
    
     const G4ElementVector* theElementVector = material->GetElementVector();
@@ -357,7 +357,7 @@ G4VParticleChange* G4PenelopeBremsstrahlung::PostStepDoIt(const G4Track& track,
   // Sample gamma angle (Z - axis along the parent particle).
   G4double dirZ = finalAngularData->ExtractCosTheta(kineticEnergy,tGamma);
 
-  //G4std::ofstream fff("prova.dat",G4std::ios::app);
+  //std::ofstream fff("prova.dat",std::ios::app);
   //fff << dirZ << G4endl;
   //fff.close();
 

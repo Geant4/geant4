@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidSphere.cc,v 1.6 2002-11-06 23:29:39 radoone Exp $
+// $Id: G4BREPSolidSphere.cc,v 1.7 2003-06-16 16:52:50 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -136,7 +136,7 @@ G4double G4BREPSolidSphere::DistanceToOut(const G4ThreeVector& Pt) const
 }
 
 // Streams solid contents to output stream.
-G4std::ostream& G4BREPSolidSphere::StreamInfo(G4std::ostream& os) const
+std::ostream& G4BREPSolidSphere::StreamInfo(std::ostream& os) const
 {
   G4BREPSolid::StreamInfo( os )
   << "\n origin: " << constructorParams.origin

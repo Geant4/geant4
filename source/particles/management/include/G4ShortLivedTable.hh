@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShortLivedTable.hh,v 1.10 2001-07-11 10:01:58 gunter Exp $
+// $Id: G4ShortLivedTable.hh,v 1.11 2003-06-16 16:58:22 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,7 +40,7 @@
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
 
-#include "g4std/vector"
+#include <vector>
 
 class G4ParticleTable;
 
@@ -53,7 +53,7 @@ class G4ShortLivedTable
 
  public:
    // Use STL Vector as list of shortlives
-   typedef G4std::vector<G4ParticleDefinition*>  G4ShortLivedList;
+   typedef std::vector<G4ParticleDefinition*>  G4ShortLivedList;
 
  public:
    G4ShortLivedTable();

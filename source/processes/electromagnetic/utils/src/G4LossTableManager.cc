@@ -451,9 +451,9 @@ G4VEnergyLossSTD* G4LossTableManager::BuildTables(const G4ParticleDefinition* aP
   }
 
   // Check is it new particle or all tables have to be rebuilt
-  G4std::vector<G4PhysicsTable*> list;
+  std::vector<G4PhysicsTable*> list;
   list.clear();
-  G4std::vector<G4VEnergyLossSTD*> loss_list;
+  std::vector<G4VEnergyLossSTD*> loss_list;
   loss_list.clear();
   G4VEnergyLossSTD* em = 0;
   G4int iem = 0;
@@ -503,7 +503,7 @@ G4VEnergyLossSTD* G4LossTableManager::BuildTables(const G4ParticleDefinition* aP
   inv_range_vector[iem] = invrange;
   if(buildPreciseRange) {
     range->clearAndDestroy();
-    G4std::vector<G4PhysicsTable*> newlist;
+    std::vector<G4PhysicsTable*> newlist;
     for (G4int i=0; i<n_dedx; i++) {
       newlist.push_back(loss_list[i]->BuildDEDXTableForPreciseRange());
     }

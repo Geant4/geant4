@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3RunActionMessenger.cc,v 1.11 2003-04-01 10:40:21 maire Exp $
+// $Id: Em3RunActionMessenger.cc,v 1.12 2003-06-16 16:47:45 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,7 +84,7 @@ void Em3RunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if (command == HistoCmd)
    { G4int idh,nbins; G4double vmin,vmax;
      const char* t = newValue;
-     G4std::istrstream is((char*)t);
+     std::istrstream is((char*)t);
      is >> idh >> nbins >> vmin >> vmax;
      Em3Run->SetHisto (idh,nbins,vmin,vmax);
    }         

@@ -28,7 +28,7 @@
 
 #include "G4UIcmdPargDouble.hh"
 
-#include "g4std/strstream"
+#include <strstream>
 
 //
 // Constructor
@@ -45,7 +45,7 @@ G4UIcmdPargDouble::G4UIcmdPargDouble( const G4String &theName,
 //
 // Fetch argument value from input stream
 //
-G4std::istream &G4UIcmdPargDouble::FetchValue( G4std::istream &istr )
+std::istream &G4UIcmdPargDouble::FetchValue( std::istream &istr )
 {
 	G4double newValue;
 	istr >> newValue;
@@ -62,7 +62,7 @@ G4std::istream &G4UIcmdPargDouble::FetchValue( G4std::istream &istr )
 G4String G4UIcmdPargDouble::ConvertToString()
 {
 	char buff[20];
-	G4std::ostrstream os(buff,20);
+	std::ostrstream os(buff,20);
 	
 	os << value << '\0';
 	

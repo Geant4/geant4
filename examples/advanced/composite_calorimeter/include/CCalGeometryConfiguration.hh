@@ -28,7 +28,7 @@
 #ifndef CCalGeometryConfiguration_h
 #define CCalGeometryConfiguration_h 1
 
-#include "g4std/map"
+#include <map>
 #include "CCalutils.hh"
 
 class CCalGeometryConfiguration {
@@ -38,8 +38,8 @@ class CCalGeometryConfiguration {
     int      ConstructFlag;
   };
 
-  typedef G4std::map<G4String, GCInfo, G4std::less<G4String> > CCalGeometryConfTable;
-  typedef G4std::map<G4String, GCInfo, G4std::less<G4String> >::iterator CCalGeometryConfIterator;
+  typedef std::map<G4String, GCInfo, std::less<G4String> > CCalGeometryConfTable;
+  typedef std::map<G4String, GCInfo, std::less<G4String> >::iterator CCalGeometryConfIterator;
 		    
   
 public:

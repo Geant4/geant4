@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiQuarks.cc,v 1.4 2001-07-11 10:02:07 gunter Exp $
+// $Id: G4DiQuarks.cc,v 1.5 2003-06-16 16:58:45 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,8 +32,8 @@
 //      4th April 1996, G.Cosmo
 // **********************************************************************
 
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4DiQuarks.hh"
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticlePropertyMessenger.cc,v 1.5 2002-12-04 18:36:45 asaim Exp $
+// $Id: G4ParticlePropertyMessenger.cc,v 1.6 2003-06-16 16:58:33 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -52,7 +52,7 @@
 #include "G4ParticlePropertyMessenger.hh"
 #include "G4ParticleTable.hh"
 #include "G4ios.hh"                 // Include from 'system'
-#include "g4std/iomanip"                  // Include from 'system'
+#include <iomanip>                  // Include from 'system'
 
 G4ParticlePropertyMessenger::G4ParticlePropertyMessenger(G4ParticleTable* pTable)
                         :theParticleTable(pTable),

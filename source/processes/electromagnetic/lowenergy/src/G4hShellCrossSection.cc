@@ -51,7 +51,7 @@ G4hShellCrossSection::~G4hShellCrossSection()
 { }
 
 
-G4std::vector<G4double> G4hShellCrossSection::Probabilities(
+std::vector<G4double> G4hShellCrossSection::Probabilities(
                                               G4int Z, 
 			                      G4double incidentEnergy, 
 					      G4double hMass, 
@@ -71,7 +71,7 @@ G4std::vector<G4double> G4hShellCrossSection::Probabilities(
   size_t nShells = transitionManager->NumberOfShells(Z);
 
   // Vector that stores the calculated cross-sections for each shell:
-  G4std::vector<G4double> crossSections;
+  std::vector<G4double> crossSections;
 
   // Partial and total cross-section used for normalization of crossSections:
   G4double totalCrossSection = 0.;

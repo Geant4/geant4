@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Nsplit_Weight.cc,v 1.8 2002-12-13 11:54:19 gcosmo Exp $
+// $Id: G4Nsplit_Weight.cc,v 1.9 2003-06-16 16:51:06 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -32,7 +32,7 @@
 // ----------------------------------------------------------------------
 #include "G4Nsplit_Weight.hh"
 
-G4std::ostream& operator<<(G4std::ostream &out, 
+std::ostream& operator<<(std::ostream &out, 
 			   const G4Nsplit_Weight &nw)
 {
   out << "nw.fN = " << nw.fN << ", nw.fW = " << nw.fW;

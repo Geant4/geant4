@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MySession.hh,v 1.4 2002-11-09 07:17:09 yhajime Exp $
+// $Id: MySession.hh,v 1.5 2003-06-16 16:56:11 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $id$
@@ -32,7 +32,7 @@
 #include "globals.hh"
 #include "G4UIsession.hh"
 #include "G4UImanager.hh"
-#include "g4std/fstream"
+#include <fstream>
 
 class MySession : public G4UIsession 
 {
@@ -54,7 +54,7 @@ class MySession : public G4UIsession
       G4int ReceiveG4cerr(G4String cerrString);
       // These two methods will be invoked by G4strstreambuf.
       
-      G4std::ofstream logFile;
+      std::ofstream logFile;
       G4String logFileName;
   private:
 

@@ -26,7 +26,7 @@
 #include "globals.hh"
 #endif
 
-#include "g4std/vector"
+#include <vector>
 
 class G4LorentzConvertor {
 
@@ -34,9 +34,9 @@ public:
 
   G4LorentzConvertor();
 
-  G4LorentzConvertor(const G4std::vector<G4double>& bmom, 
+  G4LorentzConvertor(const std::vector<G4double>& bmom, 
 		     G4double bmass, 
-		     const G4std::vector<G4double>& tmom, 
+		     const std::vector<G4double>& tmom, 
 		     G4double tmass) {
 
     setBullet(bmom, bmass);
@@ -44,7 +44,7 @@ public:
     degenerated = false;  
   }; 
 
-  void setBullet(const G4std::vector<G4double>& bmom, 
+  void setBullet(const std::vector<G4double>& bmom, 
 		 G4double bmass) {
 
     bullet_mom = bmom;
@@ -52,7 +52,7 @@ public:
     //  G4cout << " bullet: e " << bmom[0] << " mass " << bmass << G4endl;
   };
 
-  void setTarget(const G4std::vector<G4double>& tmom, 
+  void setTarget(const std::vector<G4double>& tmom, 
 		 G4double tmass) {
 
     target_mom = tmom;
@@ -64,7 +64,7 @@ public:
  
   void toTheTargetRestFrame(); 
 
-  G4std::vector<G4double> backToTheLab(const G4std::vector<G4double>& mom) const; 
+  std::vector<G4double> backToTheLab(const std::vector<G4double>& mom) const; 
 
   G4double getKinEnergyInTheTRS() const {
 
@@ -91,10 +91,10 @@ public:
     return plab; 
   };
  
-  G4std::vector<G4double> rotate(const G4std::vector<G4double> mom) const; 
+  std::vector<G4double> rotate(const std::vector<G4double> mom) const; 
 
-  G4std::vector<G4double> rotate(const G4std::vector<G4double> mom1,
-			    const G4std::vector<G4double> mom) const; 
+  std::vector<G4double> rotate(const std::vector<G4double> mom1,
+			    const std::vector<G4double> mom) const; 
 
   G4bool reflectionNeeded() const; 
 
@@ -104,15 +104,15 @@ public:
 
 private: 
 G4int verboseLevel;
-  G4std::vector<G4double> bullet_mom;
+  std::vector<G4double> bullet_mom;
   G4double bullet_mass;
 
-  G4std::vector<G4double> target_mom;
+  std::vector<G4double> target_mom;
   G4double target_mass;
 
-  G4std::vector<G4double> velocity;
+  std::vector<G4double> velocity;
 
-  G4std::vector<G4double> scm_momentum;
+  std::vector<G4double> scm_momentum;
 
   G4double ecm_tot;
 

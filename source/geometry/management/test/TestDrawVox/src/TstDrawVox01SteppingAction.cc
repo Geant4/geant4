@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TstDrawVox01SteppingAction.cc,v 1.3 2001-07-11 09:59:29 gunter Exp $
+// $Id: TstDrawVox01SteppingAction.cc,v 1.4 2003-06-16 16:52:20 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,7 +32,7 @@
 #include "TstDrawVox01SteppingAction.hh"
 #include "G4SteppingManager.hh"
 #include "math.h"
-#include "g4std/fstream"
+#include <fstream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -44,7 +44,7 @@ SteplengthProfile(100,0.,2*M_PI)
 
 TstDrawVox01SteppingAction::~TstDrawVox01SteppingAction()
 {
-  G4std::ofstream o("test01.stepLength.plt");
+  std::ofstream o("test01.stepLength.plt");
   Steplength.output(o);
   o.close();
   o.open("test01.stepLengthProfile.plt");

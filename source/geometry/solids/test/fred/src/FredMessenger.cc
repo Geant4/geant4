@@ -259,7 +259,7 @@ DrawType FredMessenger::SelectedDrawing()
 //
 void FredMessenger::PauseInput()
 {
-	G4cout << "Press <return> to continue: " << G4std::flush;
+	G4cout << "Press <return> to continue: " << std::flush;
 	char c;
 	G4cin.get(c);
 }

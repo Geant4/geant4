@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeEnergyLoss.cc,v 1.31 2003-05-09 17:49:07 vnivanch Exp $
+// $Id: G4VeEnergyLoss.cc,v 1.32 2003-06-16 17:02:12 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -520,7 +520,7 @@ G4VParticleChange* G4VeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
       postsafety =
           navigator->ComputeSafety(stepData.GetPostStepPoint()->GetPosition());
 
-      safety=G4std::min(presafety,postsafety);
+      safety=std::min(presafety,postsafety);
 
       if(safety<rcut)
       {

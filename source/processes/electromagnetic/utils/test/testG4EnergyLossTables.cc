@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: testG4EnergyLossTables.cc,v 1.3 2001-07-11 10:03:41 gunter Exp $
+// $Id: testG4EnergyLossTables.cc,v 1.4 2003-06-16 17:02:52 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //-------------------------------------------------------------------
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 #include "globals.hh"
 #include "G4Timer.hh"
 #include "G4MultipleScattering.hh"
@@ -91,10 +91,10 @@ G4VPhysicalVolume* BuildVolume(G4Material* matworld)
 int main()
 {
   //-------- set output format-------
-   G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
+   G4cout.setf( std::ios::scientific, std::ios::floatfield );
   //---write results to the file msc.out-----
-   G4std::ofstream outFile("msc.out", G4std::ios::out ) ;
-   outFile.setf( G4std::ios::scientific, G4std::ios::floatfield );
+   std::ofstream outFile("msc.out", std::ios::out ) ;
+   outFile.setf( std::ios::scientific, std::ios::floatfield );
 
   //--------- Material definition ---------
   G4Timer theTimer ;
@@ -255,7 +255,7 @@ int main()
   // loop until no particle is selected
   while (1) {
 
-  G4cout << "Do you want the electron as particle (yes/no)?" << G4std::flush;
+  G4cout << "Do you want the electron as particle (yes/no)?" << std::flush;
   G4cin >> confirm ;
   if(confirm == "yes")
   {
@@ -266,7 +266,7 @@ int main()
   }
   else
   {    
-    G4cout << "Do you want the positron as particle (yes/no)?" << G4std::flush;
+    G4cout << "Do you want the positron as particle (yes/no)?" << std::flush;
     G4cin >> confirm ;
     if(confirm == "yes")
     {
@@ -277,7 +277,7 @@ int main()
     }
     else
     {
-      G4cout << "Do you want the mu+ as particle (yes/no)?" << G4std::flush;
+      G4cout << "Do you want the mu+ as particle (yes/no)?" << std::flush;
       G4cin >> confirm ;
       if(confirm == "yes")
       {
@@ -288,7 +288,7 @@ int main()
       }
       else
       {
-        G4cout << "Do you want the mu- as particle (yes/no)?" << G4std::flush;
+        G4cout << "Do you want the mu- as particle (yes/no)?" << std::flush;
         G4cin >> confirm ;
         if(confirm == "yes")
         {
@@ -299,7 +299,7 @@ int main()
       }
       else
   {
-  G4cout << " Do you want the proton as particle (yes/no)? " << G4std::flush;
+  G4cout << " Do you want the proton as particle (yes/no)? " << std::flush;
   G4cin >> confirm ;
   if(confirm == "yes")
   {
@@ -310,7 +310,7 @@ int main()
   }
   else
   {
-     G4cout << " Do you want the antiproton as particle (yes/no)? " << G4std::flush;
+     G4cout << " Do you want the antiproton as particle (yes/no)? " << std::flush;
      G4cin >> confirm ;
      if(confirm == "yes")
      {
@@ -321,7 +321,7 @@ int main()
      }
      else
      {
-      G4cout << " Do you want the pi+ as particle (yes/no)? " << G4std::flush;
+      G4cout << " Do you want the pi+ as particle (yes/no)? " << std::flush;
       G4cin >> confirm ;
       if(confirm == "yes")
       {
@@ -332,7 +332,7 @@ int main()
       }
       else
       {
-        G4cout << " Do you want the pi- as particle (yes/no)? " << G4std::flush;
+        G4cout << " Do you want the pi- as particle (yes/no)? " << std::flush;
         G4cin >> confirm ;
         if(confirm == "yes")
         {
@@ -343,7 +343,7 @@ int main()
         } 
         else
         {
-          G4cout << " Do you want the K+ as particle (yes/no)? " << G4std::flush;
+          G4cout << " Do you want the K+ as particle (yes/no)? " << std::flush;
           G4cin >> confirm ;
           if(confirm == "yes")
           {
@@ -354,7 +354,7 @@ int main()
           }
           else
           {
-            G4cout << " Do you want the K- as particle (yes/no)? " << G4std::flush;
+            G4cout << " Do you want the K- as particle (yes/no)? " << std::flush;
             G4cin >> confirm ;
             if(confirm == "yes")
             {

@@ -339,7 +339,7 @@ void CCalG4Hcal::constructSensitive(){
   if (allSensitiveLogs.size()>0) {
     CCalSensitiveDetectors* sensDets = CCalSensitiveDetectors::getInstance();
     G4String SDname = Name();
-    for (G4std::vector<ptrG4Log>::iterator iter=allSensitiveLogs.begin(); 
+    for (std::vector<ptrG4Log>::iterator iter=allSensitiveLogs.begin(); 
          iter<allSensitiveLogs.end(); iter++) {
       sensDets->registerVolume(SDname, (*iter));
 #ifdef sdebug

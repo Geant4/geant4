@@ -27,7 +27,7 @@
 
 #include "CCalDetector.hh"
 
-#include "g4std/fstream"
+#include <fstream>
 #include "CCalGeometryConfiguration.hh"
 #include "CCalutils.hh"
 
@@ -99,7 +99,7 @@ int CCalDetector::buildFromFile() {
 
 //========================================================================
 //Global operators
-G4std::ostream& operator<<(G4std::ostream& os, const CCalDetector& det) {
+std::ostream& operator<<(std::ostream& os, const CCalDetector& det) {
   os << "Detector \"" << det.detectorName 
      << "\" read from " << det.fileName << "." << G4endl;
 

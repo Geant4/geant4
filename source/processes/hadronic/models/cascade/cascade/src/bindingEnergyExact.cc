@@ -22,7 +22,7 @@
 
 #include "G4InuclSpecialFunctions.hh"
 
-#include "g4std/iostream"
+#include <iostream>
 
 G4double G4InuclSpecialFunctions::bindingEnergyExact(G4double A, 
 						     G4double Z) {

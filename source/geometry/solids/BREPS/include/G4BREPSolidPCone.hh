@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidPCone.hh,v 1.11 2002-12-03 14:32:45 gcosmo Exp $
+// $Id: G4BREPSolidPCone.hh,v 1.12 2003-06-16 16:52:27 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -118,7 +118,7 @@ public:
   G4Polyhedron* CreatePolyhedron () const;
     // Creates a G4Polyhedron
 
-  virtual G4std::ostream& StreamInfo(G4std::ostream& os) const;
+  virtual std::ostream& StreamInfo(std::ostream& os) const;
     // Streams solid contents to output stream.
 
 private:

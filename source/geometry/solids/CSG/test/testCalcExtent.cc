@@ -81,22 +81,22 @@ int main()
   answer3 = test3.CalculateExtent( kYAxis, voxel1, transform, min3, max3 );
   answer4 = test4.CalculateExtent( kYAxis, voxel1, transform, min4, max4 );
 	
-  G4cout << "-----------------" << G4std::endl;
-  G4cout << "Voxel test 1 " << G4std::endl;
+  G4cout << "-----------------" << std::endl;
+  G4cout << "Voxel test 1 " << std::endl;
   /*
   G4cout << "Should be: "
-	 << G4std::setw(7) << true
-	 << G4std::setw(10) << 800
-	 << G4std::setw(10) << ">1000" << G4std::endl;
+	 << std::setw(7) << true
+	 << std::setw(10) << 800
+	 << std::setw(10) << ">1000" << std::endl;
   
   G4cout << "G4Tubs:    "
-	 << G4std::setw(7) << answer3
-	 << G4std::setw(10) << min3
-	 << G4std::setw(10) << max3 << G4std::endl;
+	 << std::setw(7) << answer3
+	 << std::setw(10) << min3
+	 << std::setw(10) << max3 << std::endl;
   G4cout << "G4Hype:    "
-	 << G4std::setw(7) << answer4
-	 << G4std::setw(10) << min4
-	 << G4std::setw(10) << max4 << G4std::endl;
+	 << std::setw(7) << answer4
+	 << std::setw(10) << min4
+	 << std::setw(10) << max4 << std::endl;
   */
 
 	
@@ -119,22 +119,22 @@ int main()
   answer3 = test3.CalculateExtent( kYAxis, voxel2, transform, min3, max3 );
   answer4 = test4.CalculateExtent( kYAxis, voxel2, transform, min4, max4 );
 	
-	G4cout << "-----------------" << G4std::endl;
-	G4cout << "Voxel test 2 " << G4std::endl;
+	G4cout << "-----------------" << std::endl;
+	G4cout << "Voxel test 2 " << std::endl;
 	/*
 	G4cout << "Should be: "
-	       << G4std::setw(7) << true
-	       << G4std::setw(10) << -800
-	       << G4std::setw(10) << 800 << G4std::endl;
+	       << std::setw(7) << true
+	       << std::setw(10) << -800
+	       << std::setw(10) << 800 << std::endl;
 	
 	G4cout << "G4Tubs:    "
-	       << G4std::setw(7) << answer3
-	       << G4std::setw(10) << min3
-	       << G4std::setw(10) << max3 << G4std::endl;
+	       << std::setw(7) << answer3
+	       << std::setw(10) << min3
+	       << std::setw(10) << max3 << std::endl;
 	G4cout << "G4Hype:    "
-	       << G4std::setw(7) << answer4
-	       << G4std::setw(10) << min4
-	       << G4std::setw(10) << max4 << G4std::endl;
+	       << std::setw(7) << answer4
+	       << std::setw(10) << min4
+	       << std::setw(10) << max4 << std::endl;
 	*/
 	
 	
@@ -158,21 +158,21 @@ int main()
   answer3 = test3.CalculateExtent( kYAxis, voxel3, transform, min3, max3 );
   answer4 = test4.CalculateExtent( kYAxis, voxel3, transform, min4, max4 );
 	
-        G4cout << "-----------------" << G4std::endl;
-	G4cout << "Voxel test 3 " << G4std::endl;
+        G4cout << "-----------------" << std::endl;
+	G4cout << "Voxel test 3 " << std::endl;
 	/*
 	G4cout << "Should be: "
-	       << G4std::setw(7) << true
-	       << G4std::setw(10) << 998
-	       << G4std::setw(10) << ">1000" << G4std::endl;
+	       << std::setw(7) << true
+	       << std::setw(10) << 998
+	       << std::setw(10) << ">1000" << std::endl;
 	G4cout << "G4Tubs:    "
-	       << G4std::setw(7) << answer3
-	       << G4std::setw(10) << min3
-	       << G4std::setw(10) << max3 << G4std::endl;
+	       << std::setw(7) << answer3
+	       << std::setw(10) << min3
+	       << std::setw(10) << max3 << std::endl;
 	G4cout << "G4Hype:    "
-	       << G4std::setw(7) << answer4
-	       << G4std::setw(10) << min4
-	       << G4std::setw(10) << max4 << G4std::endl;
+	       << std::setw(7) << answer4
+	       << std::setw(10) << min4
+	       << std::setw(10) << max4 << std::endl;
 	*/
 
 }

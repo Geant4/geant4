@@ -39,7 +39,7 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
-#include "g4std/fstream"
+#include <fstream>
 
 //
 // Constructor
@@ -196,7 +196,7 @@ void SBTMessenger::InvokeTest3()
 	//
 	// Open output file
 	//
-	G4std::ofstream logFile( errorFile );
+	std::ofstream logFile( errorFile );
 	
 	//
 	// Run the test
@@ -230,7 +230,7 @@ void SBTMessenger::Debug( const G4int errorIndex,  SBTMessenger::Debugger *debug
 	//
 	// Open output file
 	//
-	G4std::ifstream logFile( errorFile );
+	std::ifstream logFile( errorFile );
 	if (!logFile) {
 		G4cerr << "Cannot open input file " << errorFile << G4endl;
 		return;
@@ -248,7 +248,7 @@ void SBTMessenger::Debug( const G4int errorIndex,  SBTMessenger::Debugger *debug
 //
 // DebugMe (various classes)
 //
-G4int SBTMessenger::DrawError::DebugMe( G4std::ifstream &logFile, const G4int errorIndex )
+G4int SBTMessenger::DrawError::DebugMe( std::ifstream &logFile, const G4int errorIndex )
 {
 	if (visManager) {
 		//
@@ -264,27 +264,27 @@ G4int SBTMessenger::DrawError::DebugMe( G4std::ifstream &logFile, const G4int er
 	return 1;
 }
 
-G4int SBTMessenger::DebugInside::DebugMe( G4std::ifstream &logFile, const G4int errorIndex )
+G4int SBTMessenger::DebugInside::DebugMe( std::ifstream &logFile, const G4int errorIndex )
 {
 	return tester->DebugInside( testSolid, logFile, errorIndex );
 }
 
-G4int SBTMessenger::DebugToInP::DebugMe( G4std::ifstream &logFile, const G4int errorIndex )
+G4int SBTMessenger::DebugToInP::DebugMe( std::ifstream &logFile, const G4int errorIndex )
 {
 	return tester->DebugToInP( testSolid, logFile, errorIndex );
 }
 
-G4int SBTMessenger::DebugToInPV::DebugMe( G4std::ifstream &logFile, const G4int errorIndex )
+G4int SBTMessenger::DebugToInPV::DebugMe( std::ifstream &logFile, const G4int errorIndex )
 {
 	return tester->DebugToInPV( testSolid, logFile, errorIndex );
 }
 
-G4int SBTMessenger::DebugToOutP::DebugMe( G4std::ifstream &logFile, const G4int errorIndex )
+G4int SBTMessenger::DebugToOutP::DebugMe( std::ifstream &logFile, const G4int errorIndex )
 {
 	return tester->DebugToOutP( testSolid, logFile, errorIndex );
 }
 
-G4int SBTMessenger::DebugToOutPV::DebugMe( G4std::ifstream &logFile, const G4int errorIndex )
+G4int SBTMessenger::DebugToOutPV::DebugMe( std::ifstream &logFile, const G4int errorIndex )
 {
 	return tester->DebugToOutPV( testSolid, logFile, errorIndex );
 }
@@ -345,7 +345,7 @@ void SBTMessenger::SetNewValue( G4UIcommand *command, G4String newValues )
 	else if (command == pauseCmd) {
 	  char c;
 	  
-	  G4cout << "Press ENTER to continue..." << G4std::flush ;
+	  G4cout << "Press ENTER to continue..." << std::flush ;
 	  G4cin.get(c);
 	}
 	else {

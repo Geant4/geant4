@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.cc,v 1.28 2002-12-12 19:14:35 gunter Exp $
+// $Id: G4QPDGCode.cc,v 1.29 2003-06-16 17:04:26 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
@@ -74,7 +74,7 @@ const G4QPDGCode& G4QPDGCode::operator=(const G4QPDGCode& rhs)
 G4QPDGCode::~G4QPDGCode() {}
 
 // Standard output for QPDGCode
-G4std::ostream& operator<<(G4std::ostream& lhs, G4QPDGCode& rhs)
+std::ostream& operator<<(std::ostream& lhs, G4QPDGCode& rhs)
 //       =========================================
 {
   lhs << "[ PDG=" << rhs.GetPDGCode() << ", Q=" << rhs.GetQCode() << "]";
@@ -82,7 +82,7 @@ G4std::ostream& operator<<(G4std::ostream& lhs, G4QPDGCode& rhs)
 }
 
 // Standard output for const QPDGCode
-G4std::ostream& operator<<(G4std::ostream& lhs, const G4QPDGCode& rhs)
+std::ostream& operator<<(std::ostream& lhs, const G4QPDGCode& rhs)
 //       ===============================================
 {
   lhs << "[ PDG=" << rhs.GetPDGCode() << ", Q=" << rhs.GetQCode() << "]";

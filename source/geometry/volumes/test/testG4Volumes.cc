@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Volumes.cc,v 1.7 2002-01-08 13:15:22 gcosmo Exp $
+// $Id: testG4Volumes.cc,v 1.8 2003-06-16 16:55:04 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -205,7 +205,7 @@ G4bool testG4Volumes()
     assert(G4LogicalVolumeStore::GetInstance()->size()==2);
     G4SolidStore* solidStore = G4SolidStore::GetInstance();
     G4bool exists = 0;
-    G4std::vector<G4VSolid*>::const_iterator i;
+    std::vector<G4VSolid*>::const_iterator i;
     assert(solidStore->size()==2);
     for (i=solidStore->begin(); i!=solidStore->end(); ++i) {
       if (**i==myBox) {

@@ -22,7 +22,7 @@
 
 #include "G4CascadSpecialFunctions.hh"
 
-  G4std::pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScale2(G4double e) {
+  std::pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScale2(G4double e) {
   G4int verboseLevel = 2;
 
   if (verboseLevel > 3) {
@@ -48,10 +48,10 @@
     };
   };
 
-  return G4std::pair<G4int, G4double>(ik, sk);
+  return std::pair<G4int, G4double>(ik, sk);
 }
 
-G4std::pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScale1(G4double e) {
+std::pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScale1(G4double e) {
   G4int verboseLevel = 2;
 
   if (verboseLevel > 3) {
@@ -92,7 +92,7 @@ G4std::pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScale1
     G4cout << " e " << e << " ik " << ik << " sk " << sk << G4endl;
   }
 
-  return G4std::pair<G4int, G4double>(ik, sk);
+  return std::pair<G4int, G4double>(ik, sk);
 }
 
 G4double G4CascadSpecialFunctions::absorptionCrosSection(G4double e, 
@@ -122,7 +122,7 @@ G4double G4CascadSpecialFunctions::absorptionCrosSection(G4double e,
   return corr_fac * csec;
 }
 
-G4std::pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScaleEMS(G4double e) {
+std::pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScaleEMS(G4double e) {
   G4int verboseLevel = 2;
 
   if (verboseLevel > 3) {
@@ -162,7 +162,7 @@ G4std::pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScaleE
     sk = 1.0;
   };
 
-  return G4std::pair<G4int, G4double>(ik, sk);
+  return std::pair<G4int, G4double>(ik, sk);
 }
 
 G4double G4CascadSpecialFunctions::crossSection(G4double e, 
@@ -347,7 +347,7 @@ G4double G4CascadSpecialFunctions::crossSection(G4double e,
 	}; 
 
       } else {
-        G4std::pair<G4int, G4double> iksk = getPositionInEnergyScaleEMS(e);
+        std::pair<G4int, G4double> iksk = getPositionInEnergyScaleEMS(e);
         G4int ik = iksk.first;
         G4double sk = iksk.second;
 
@@ -363,7 +363,7 @@ G4double G4CascadSpecialFunctions::crossSection(G4double e,
     };  
 
   } else {
-    G4std::pair<G4int, G4double> iksk = getPositionInEnergyScale2(e);
+    std::pair<G4int, G4double> iksk = getPositionInEnergyScale2(e);
     G4int ik = iksk.first;
     G4double sk = iksk.second;
 

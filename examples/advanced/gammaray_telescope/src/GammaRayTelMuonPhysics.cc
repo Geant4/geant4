@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelMuonPhysics.cc,v 1.1 2003-05-28 13:53:52 flongo Exp $
+// $Id: GammaRayTelMuonPhysics.cc,v 1.2 2003-06-16 16:46:29 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,7 +30,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"   
+#include <iomanip>   
 
 
 GammaRayTelMuonPhysics::GammaRayTelMuonPhysics(const G4String& name)

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc,v 1.8 2003-05-22 00:50:13 asaim Exp $
+// $Id: G4Region.cc,v 1.9 2003-06-16 16:52:07 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -86,7 +86,7 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
   if (region)
   {
     currentRegion = this;
-    pos = G4std::find(fMaterials.begin(),fMaterials.end(),volMat);
+    pos = std::find(fMaterials.begin(),fMaterials.end(),volMat);
     if (pos == fMaterials.end())
     {
       fMaterials.push_back(volMat);
@@ -114,7 +114,7 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
     for (register size_t rep=0; rep<repNo; rep++)
     {
       volMat = pParam->ComputeMaterial(rep, daughterPVol);
-      pos = G4std::find(fMaterials.begin(),fMaterials.end(),volMat);
+      pos = std::find(fMaterials.begin(),fMaterials.end(),volMat);
       if (pos == fMaterials.end())
       {
         fMaterials.push_back(volMat);
@@ -151,7 +151,7 @@ void G4Region::AddRootLogicalVolume(G4LogicalVolume* lv)
   // Check the logical volume is not already in the list
   //
   G4RootLVList::iterator pos;
-  pos = G4std::find(fRootVolumes.begin(),fRootVolumes.end(),lv);
+  pos = std::find(fRootVolumes.begin(),fRootVolumes.end(),lv);
   if (pos == fRootVolumes.end())
   {
     // Insert the root volume in the list and set it as root region
@@ -180,7 +180,7 @@ void G4Region::RemoveRootLogicalVolume(G4LogicalVolume* lv)
   // Find and remove logical volume from the list
   //
   G4RootLVList::iterator pos;
-  pos = G4std::find(fRootVolumes.begin(),fRootVolumes.end(),lv);
+  pos = std::find(fRootVolumes.begin(),fRootVolumes.end(),lv);
   if (pos != fRootVolumes.end())
   {
     fRootVolumes.erase(pos);

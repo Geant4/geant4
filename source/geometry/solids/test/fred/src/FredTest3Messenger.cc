@@ -37,7 +37,7 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
-#include "g4std/fstream"
+#include <fstream>
 
 //
 // Constructor
@@ -162,7 +162,7 @@ void FredTest3Messenger::InvokeTest3()
 	//
 	// Open output file
 	//
-	G4std::ofstream logFile( errorFile );
+	std::ofstream logFile( errorFile );
 	
 	//
 	// Run the test
@@ -195,7 +195,7 @@ void FredTest3Messenger::Debug( const G4int errorIndex,  FredTest3Messenger::Deb
 	//
 	// Open output file
 	//
-	G4std::ifstream logFile( errorFile );
+	std::ifstream logFile( errorFile );
 	if (!logFile) {
 		G4cerr << "Cannot open input file " << errorFile << G4endl;
 		return;
@@ -213,32 +213,32 @@ void FredTest3Messenger::Debug( const G4int errorIndex,  FredTest3Messenger::Deb
 //
 // DebugMe (various classes)
 //
-G4int FredTest3Messenger::DebugError::DebugMe( G4std::ifstream &logFile, const G4int errorIndex )
+G4int FredTest3Messenger::DebugError::DebugMe( std::ifstream &logFile, const G4int errorIndex )
 {
 	return tester->DebugError( testVolume, logFile, errorIndex );
 }
 
-G4int FredTest3Messenger::DebugInside::DebugMe( G4std::ifstream &logFile, const G4int errorIndex )
+G4int FredTest3Messenger::DebugInside::DebugMe( std::ifstream &logFile, const G4int errorIndex )
 {
 	return tester->DebugInside( testVolume, logFile, errorIndex );
 }
 
-G4int FredTest3Messenger::DebugToInP::DebugMe( G4std::ifstream &logFile, const G4int errorIndex )
+G4int FredTest3Messenger::DebugToInP::DebugMe( std::ifstream &logFile, const G4int errorIndex )
 {
 	return tester->DebugToInP( testVolume, logFile, errorIndex );
 }
 
-G4int FredTest3Messenger::DebugToInPV::DebugMe( G4std::ifstream &logFile, const G4int errorIndex )
+G4int FredTest3Messenger::DebugToInPV::DebugMe( std::ifstream &logFile, const G4int errorIndex )
 {
 	return tester->DebugToInPV( testVolume, logFile, errorIndex );
 }
 
-G4int FredTest3Messenger::DebugToOutP::DebugMe( G4std::ifstream &logFile, const G4int errorIndex )
+G4int FredTest3Messenger::DebugToOutP::DebugMe( std::ifstream &logFile, const G4int errorIndex )
 {
 	return tester->DebugToOutP( testVolume, logFile, errorIndex );
 }
 
-G4int FredTest3Messenger::DebugToOutPV::DebugMe( G4std::ifstream &logFile, const G4int errorIndex )
+G4int FredTest3Messenger::DebugToOutPV::DebugMe( std::ifstream &logFile, const G4int errorIndex )
 {
 	return tester->DebugToOutPV( testVolume, logFile, errorIndex );
 }

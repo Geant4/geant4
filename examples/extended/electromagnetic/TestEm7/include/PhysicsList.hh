@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.2 2003-05-15 11:23:52 vnivanch Exp $
+// $Id: PhysicsList.hh,v 1.3 2003-06-16 16:47:56 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -70,7 +70,7 @@ class PhysicsList: public G4VModularPhysicsList
     G4VPhysicsConstructor*  emPhysicsList;
     G4VPhysicsConstructor*  generalPhysicsList;
     G4VPhysicsConstructor*  particleList;
-    G4std::vector<G4VPhysicsConstructor*>  hadronPhys;
+    std::vector<G4VPhysicsConstructor*>  hadronPhys;
     G4String emName;
     
     StepMax* stepMaxProcess;

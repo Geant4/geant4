@@ -24,8 +24,8 @@
 
 #include "globals.hh"
 #include <math.h>
-#include "g4std/algorithm"
-#include "g4std/vector"
+#include <algorithm>
+#include <vector>
 
 
 namespace G4InuclSpecialFunctions {
@@ -46,9 +46,9 @@ namespace G4InuclSpecialFunctions {
 		       G4double Z, 
 		       G4int ntype);
   
-  G4std::pair<G4std::vector<G4double>, G4std::vector<G4double> > paraMaker(G4double Z);
+  std::pair<std::vector<G4double>, std::vector<G4double> > paraMaker(G4double Z);
 
-  G4std::pair<G4double, G4double> paraMakerTruncated(G4double Z); 
+  std::pair<G4double, G4double> paraMakerTruncated(G4double Z); 
 
   G4double getAL(G4double A);
  
@@ -62,11 +62,11 @@ namespace G4InuclSpecialFunctions {
 
   G4double randomPHI();
 
-  G4std::pair<G4double, G4double> randomCOS_SIN();
+  std::pair<G4double, G4double> randomCOS_SIN();
 
   G4double nucleiLevelDensity(G4double a);
 
-  G4std::vector<G4double> generateWithFixedTheta(G4double ct, 
+  std::vector<G4double> generateWithFixedTheta(G4double ct, 
 					  G4double p);
 }
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonPlus.cc,v 1.7 2001-10-16 08:16:18 kurasige Exp $
+// $Id: G4MuonPlus.cc,v 1.8 2003-06-16 16:57:55 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,8 +37,8 @@
 //  Add MuonPlusDefinition(), H.Kurashige 4 July 1996
 // ----------------------------------------------------------------------
 
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4MuonPlus.hh"
 

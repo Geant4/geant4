@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPIOtest.cc,v 1.4 2003-03-28 13:12:24 gcosmo Exp $
+// $Id: G4BREPIOtest.cc,v 1.5 2003-06-16 16:53:02 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -36,7 +36,7 @@
 #include "G4BREPSolidSphere.hh"
 #include "G4BREPSolidTorus.hh"
 
-#include "g4std/iostream"
+#include <iostream>
 
 
 int main()

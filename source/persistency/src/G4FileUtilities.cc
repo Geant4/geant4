@@ -39,7 +39,7 @@ G4FileUtilities::~G4FileUtilities()
 }
 
 // Implementation of FileExists
-G4bool G4FileUtilities::FileExists(const G4std::string file)
+G4bool G4FileUtilities::FileExists(const std::string file)
 {
   char* c = (char *) file.c_str();
 
@@ -54,16 +54,16 @@ G4bool G4FileUtilities::FileExists(const G4std::string file)
 }
 
 // Implementation of CopyFile
-int G4FileUtilities::CopyFile(const G4std::string srcFile, const G4std::string dstFile)
+int G4FileUtilities::CopyFile(const std::string srcFile, const std::string dstFile)
 {
-  G4std::string cmd = "cp " + srcFile + " " + dstFile;
+  std::string cmd = "cp " + srcFile + " " + dstFile;
   return Shell( cmd );
 }
 
 // Implementation of DeleteFile
-int G4FileUtilities::DeleteFile(const G4std::string file, const G4std::string option)
+int G4FileUtilities::DeleteFile(const std::string file, const std::string option)
 {
-  G4std::string cmd = "rm " + option + " " + file;
+  std::string cmd = "rm " + option + " " + file;
   return Shell( cmd );
 }
 

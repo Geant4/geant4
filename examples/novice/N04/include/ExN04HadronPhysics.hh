@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: ExN04HadronPhysics.hh,v 1.5 2003-03-28 09:35:11 gcosmo Exp $
+// $Id: ExN04HadronPhysics.hh,v 1.6 2003-06-16 16:49:51 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -34,7 +34,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/vector"
+#include <vector>
 
 #include "G4VPhysicsConstructor.hh"
 

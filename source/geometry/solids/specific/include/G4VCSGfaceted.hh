@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCSGfaceted.hh,v 1.7 2002-10-28 11:47:51 gcosmo Exp $
+// $Id: G4VCSGfaceted.hh,v 1.8 2003-06-16 16:53:56 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -79,7 +79,7 @@ class G4VCSGfaceted : public G4VSolid
 
   virtual G4GeometryType GetEntityType() const;
 
-  virtual G4std::ostream& StreamInfo(G4std::ostream& os) const;
+  virtual std::ostream& StreamInfo(std::ostream& os) const;
 
   virtual G4Polyhedron* CreatePolyhedron() const = 0;
 

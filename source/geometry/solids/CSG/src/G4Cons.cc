@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.24 2003-02-03 14:22:01 grichine Exp $
+// $Id: G4Cons.cc,v 1.25 2003-06-16 16:53:36 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Cons
@@ -2203,7 +2203,7 @@ G4GeometryType G4Cons::GetEntityType() const
 //
 // Stream object contents to an output stream
 
-G4std::ostream& G4Cons::StreamInfo(G4std::ostream& os) const
+std::ostream& G4Cons::StreamInfo(std::ostream& os) const
 {
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"

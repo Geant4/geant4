@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPCone.cc,v 1.31 2003-06-04 15:58:36 gcosmo Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.32 2003-06-16 16:52:48 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -37,7 +37,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4Types.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 #include "G4BREPSolidPCone.hh"
 #include "G4FCylindricalSurface.hh"
@@ -153,7 +153,7 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
         // where i in in interval 0 < i < num_z_planes-1. So:
         if( RMIN[a] > RMAX[a+1] || RMAX[a] < RMIN[a+1] ) {
           char msgbuf[512];
-          G4std::ostrstream os(msgbuf,512);
+          std::ostrstream os(msgbuf,512);
           os << G4endl << "G4BREPSolidPCone::G4BREPSolidPCone() - The values "
                        << "of RMIN[" << a << "] & RMAX[" << a+1 << "] or RMAX[" << a << "] & RMIN[" << a+1 << "] "
                        << "make an invalid configuration of G4BREPSolidPCone " << name.c_str() << "!" << G4endl;
@@ -785,7 +785,7 @@ G4double G4BREPSolidPCone::DistanceToOut(const G4ThreeVector& Pt) const
 }
 
 // Streams solid contents to output stream.
-G4std::ostream& G4BREPSolidPCone::StreamInfo(G4std::ostream& os) const
+std::ostream& G4BREPSolidPCone::StreamInfo(std::ostream& os) const
 {  
   G4BREPSolid::StreamInfo( os )
   << "\n start_angle:   " << constructorParams.start_angle

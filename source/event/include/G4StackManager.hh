@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackManager.hh,v 1.10 2002-08-24 17:36:23 asaim Exp $
+// $Id: G4StackManager.hh,v 1.11 2003-06-16 16:50:30 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -109,7 +109,7 @@ class G4StackManager
       G4TrackStack * waitingStack;
       G4TrackStack * postponeStack;
       G4StackingMessenger* theMessenger;
-      G4std::vector<G4TrackStack*> additionalWaitingStacks;
+      std::vector<G4TrackStack*> additionalWaitingStacks;
       G4int numberOfAdditionalWaitingStacks;
 
   public:

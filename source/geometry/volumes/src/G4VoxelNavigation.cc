@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.cc,v 1.13 2003-03-31 14:39:02 gcosmo Exp $
+// $Id: G4VoxelNavigation.cc,v 1.14 2003-06-16 16:55:00 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -279,7 +279,7 @@ G4VoxelNavigation::ComputeVoxelSafety(const G4ThreeVector& localPoint) const
         else    // (maxCurNodeNoDelta == minCurNodeNoDelta)
         {
           voxelSafety = minCurNodeNoDelta*curNodeWidth;
-          voxelSafety += G4std::min(minCurCommonDelta,maxCurCommonDelta);
+          voxelSafety += std::min(minCurCommonDelta,maxCurCommonDelta);
         }
 
   // Compute isotropic safety to boundaries of previous levels

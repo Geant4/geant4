@@ -34,7 +34,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "hTestHisto.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 
 #include <memory> // for the auto_ptr(T>
 
@@ -118,7 +118,7 @@ void hTestHisto::EndOfHisto()
    // Write histogram file
   if(0 < nHisto || ntup) {
     tree->commit();
-    G4std::cout << "Closing the tree..." << G4std::endl;
+    std::cout << "Closing the tree..." << std::endl;
     tree->close();
     G4cout << "Histograms and Ntuples are saved" << G4endl;
   }
@@ -162,10 +162,10 @@ void hTestHisto::bookHisto()
          << G4endl;
 
   // Creating the analysis factory
-  G4std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
+  std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
 
   // Creating the tree factory
-  G4std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
+  std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
 
   // Creating a tree mapped to a new hbook file.
   tree = tf->create(histName,false,false,"hbook");
@@ -174,7 +174,7 @@ void hTestHisto::bookHisto()
   histo.resize(nHisto);
 
   // Creating a histogram factory, whose histograms will be handled by the tree
-  G4std::auto_ptr< AIDA::IHistogramFactory > hf(af->createHistogramFactory( *tree ));
+  std::auto_ptr< AIDA::IHistogramFactory > hf(af->createHistogramFactory( *tree ));
 
   // Creating an 1-dimensional histograms in the root directory of the tree
 
@@ -194,7 +194,7 @@ void hTestHisto::bookHisto()
     "Theta (degrees) of secondary gamma",36,0.0,180.);
 
   // Creating a tuple factory, whose tuples will be handled by the tree
-  G4std::auto_ptr< AIDA::ITupleFactory > tpf( af->createTupleFactory( *tree ) );
+  std::auto_ptr< AIDA::ITupleFactory > tpf( af->createTupleFactory( *tree ) );
 
   // If using Anaphe HBOOK implementation, there is a limitation on the 
   // length of the variable names in a ntuple

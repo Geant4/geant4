@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05PionShowerModel.hh,v 1.7 2002-01-09 17:24:18 ranjard Exp $
+// $Id: ExN05PionShowerModel.hh,v 1.8 2003-06-16 16:50:00 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,7 +36,7 @@
 #include "G4VFastSimulationModel.hh"
 #include "G4Step.hh"
 #include "G4TouchableHandle.hh"
-#include "g4std/vector"
+#include <vector>
 
 class ExN05PionShowerModel : public G4VFastSimulationModel
 {
@@ -73,7 +73,7 @@ private:
   G4Navigator                    *fpNavigator;
   G4bool                         fNaviSetup;
 
-  G4std::vector<ExN05EnergySpot> feSpotList;
+  std::vector<ExN05EnergySpot> feSpotList;
 
 };
 #endif

@@ -47,7 +47,7 @@
 #include "G4UIcmdPargDouble.hh"
 #include "G4UIcmdPargInteger.hh"
 
-#include "g4std/fstream"
+#include <fstream>
 
 //
 // Constructor
@@ -234,7 +234,7 @@ void SBTvoxelMessenger::InvokeTest()
 	//
 	// Open output file
 	//
-	G4std::ofstream logFile( errorFile );
+	std::ofstream logFile( errorFile );
 	
 	//
 	// Run the test

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TestUI.hh,v 1.3 2001-11-01 17:26:18 pia Exp $
+// $Id: G4TestUI.hh,v 1.4 2003-06-16 17:01:33 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -40,7 +40,7 @@
 #define G4TESTUI_HH
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 
 class G4ProcessTest;
 class G4Material;
@@ -99,9 +99,9 @@ class G4TestUI
   G4bool polarised;
   G4double eMin;
   G4double eMax;
-  G4std::vector<G4String> types;
-  G4std::vector<G4String> topics;
-  G4std::vector<G4String> categories;
+  std::vector<G4String> types;
+  std::vector<G4String> topics;
+  std::vector<G4String> categories;
 
 };
 

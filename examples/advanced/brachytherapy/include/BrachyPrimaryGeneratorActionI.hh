@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyPrimaryGeneratorActionI.hh,v 1.4 2003-05-22 17:20:42 guatelli Exp $
+// $Id: BrachyPrimaryGeneratorActionI.hh,v 1.5 2003-06-16 16:45:00 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,7 +39,7 @@
 #define BrachyPrimaryGeneratorActionI_h 1
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "BrachyPrimaryGeneratorAction.hh"
 
@@ -62,7 +62,7 @@ class BrachyPrimaryGeneratorActionI : public  G4VUserPrimaryGeneratorAction
  private:
       G4ParticleGun* particleGun;
       G4double primaryParticleEnergy;
-      G4std::vector<G4double> energySpectrum;
+      std::vector<G4double> energySpectrum;
 };
 
 #endif

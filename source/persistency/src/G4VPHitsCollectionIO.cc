@@ -27,8 +27,8 @@
 #include "G4VPHitsCollectionIO.hh"
 
 // Implementation of Constructor #1
-G4VPHitsCollectionIO::G4VPHitsCollectionIO( G4std::string detName,
-                                            G4std::string colName )
+G4VPHitsCollectionIO::G4VPHitsCollectionIO( std::string detName,
+                                            std::string colName )
  : m_verbose(0), f_detName(detName), f_colName(colName)
 {}
 

@@ -28,26 +28,26 @@
 #ifndef CCalG4Able_h
 #define CCalG4Able_h 1
 
-#include "g4std/vector"
+#include <vector>
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "globals.hh"
 
 #include "CCalVisualisable.hh"
 
-#include "g4std/iostream"
+#include <iostream>
 
 //Forward declartion for the CCalG4AbleTable typedef
 class CCalG4Able;
 
 //A table to hold a list of pointers to CMS Detectors
-typedef  G4std::vector<CCalG4Able*> CCalG4AbleTable;
+typedef  std::vector<CCalG4Able*> CCalG4AbleTable;
 
 ////////////////////
 //At last the class
 class CCalG4Able {
 
-  friend G4std::ostream& operator<<(G4std::ostream&, const CCalG4Able&);
+  friend std::ostream& operator<<(std::ostream&, const CCalG4Able&);
 
 public:
   //////////////////////////////////////////////////////////////////////////

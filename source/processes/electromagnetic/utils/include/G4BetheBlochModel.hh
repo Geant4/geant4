@@ -93,7 +93,7 @@ public:
                                       G4double tmin,
                                       G4double maxEnergy);
 
-  G4std::vector<G4DynamicParticle*>* SampleSecondaries(
+  std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,

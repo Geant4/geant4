@@ -25,7 +25,7 @@
 #ifndef G4VInteractiveSession_H
 #define G4VInteractiveSession_H 1
 
-#include "g4std/map"
+#include <map>
 
 #include "G4VInteractorManager.hh"
 
@@ -52,7 +52,7 @@ class G4VInteractiveSession
   private:
 
   G4UImessenger* messenger;
-  typedef G4std::map<G4String,G4Interactor, G4std::less<G4String> > G4interactor_map;
+  typedef std::map<G4String,G4Interactor, std::less<G4String> > G4interactor_map;
   G4interactor_map interactors;
 };
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: processTest.cc,v 1.10 2001-11-12 09:14:50 pia Exp $
+// $Id: processTest.cc,v 1.11 2003-06-16 17:01:31 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -38,8 +38,8 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4VProcess.hh"
 #include "G4Step.hh"

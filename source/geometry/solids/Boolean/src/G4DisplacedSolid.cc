@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.cc,v 1.16 2002-10-29 14:13:53 gcosmo Exp $
+// $Id: G4DisplacedSolid.cc,v 1.17 2003-06-16 16:53:15 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for G4DisplacedSolid class for boolean 
@@ -325,7 +325,7 @@ G4DisplacedSolid::ComputeDimensions(       G4VPVParameterisation*,
 //
 // Stream object contents to an output stream
 
-G4std::ostream& G4DisplacedSolid::StreamInfo(G4std::ostream& os) const
+std::ostream& G4DisplacedSolid::StreamInfo(std::ostream& os) const
 {
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for Displaced solid - " << GetName() << " ***\n"

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Point3DVector.hh,v 1.6 2001-07-11 09:59:36 gunter Exp $
+// $Id: G4Point3DVector.hh,v 1.7 2003-06-16 16:52:40 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -36,9 +36,9 @@
 #ifndef included_G4Point3DVector
 #define included_G4Point3DVector
 
-#include "g4std/vector"
+#include <vector>
 #include "G4Point3D.hh"
 
-typedef G4std::vector<G4Point3D> G4Point3DVector;
+typedef std::vector<G4Point3D> G4Point3DVector;
 
 #endif

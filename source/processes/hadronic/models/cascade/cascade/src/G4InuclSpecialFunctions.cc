@@ -134,7 +134,7 @@ G4double G4InuclSpecialFunctions::randomPHI() {
   return twopi * inuclRndm();
 } 
 
-G4std::pair<G4double, G4double> G4InuclSpecialFunctions::randomCOS_SIN() {
+std::pair<G4double, G4double> G4InuclSpecialFunctions::randomCOS_SIN() {
   G4int verboseLevel = 2;
 
   if (verboseLevel > 3) {
@@ -143,10 +143,10 @@ G4std::pair<G4double, G4double> G4InuclSpecialFunctions::randomCOS_SIN() {
 
   G4double CT = 1.0 - 2.0 * inuclRndm();
 
-  return G4std::pair<G4double, G4double>(CT, sqrt(1.0 - CT * CT));
+  return std::pair<G4double, G4double>(CT, sqrt(1.0 - CT * CT));
 }
 
-G4std::vector<G4double> G4InuclSpecialFunctions::generateWithFixedTheta(G4double ct,
+std::vector<G4double> G4InuclSpecialFunctions::generateWithFixedTheta(G4double ct,
 									G4double p) {
   G4int verboseLevel = 2;
 
@@ -154,10 +154,10 @@ G4std::vector<G4double> G4InuclSpecialFunctions::generateWithFixedTheta(G4double
     G4cout << " >>> G4InuclSpecialFunctions::generateWithFixedTheta" << G4endl;
   }
 
-  G4std::vector<G4double> momr(4);
+  std::vector<G4double> momr(4);
   G4double phi = randomPHI();
   G4double pt = p * sqrt(fabs(1.0 - ct * ct));
-  G4std::vector<G4double> mom1(4);
+  std::vector<G4double> mom1(4);
   momr[1] = pt * cos(phi);
   momr[2] = pt * sin(phi);
   momr[3] = p * ct;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIaliasList.hh,v 1.4 2002-04-26 22:03:34 asaim Exp $
+// $Id: G4UIaliasList.hh,v 1.5 2003-06-16 16:55:30 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -30,7 +30,7 @@
 
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 
 // class description:
 //
@@ -59,8 +59,8 @@ class G4UIaliasList
       G4int FindAliasID(const char* aliasName);
 
   private:
-      G4std::vector<G4String*> alias;
-      G4std::vector<G4String*> value;
+      std::vector<G4String*> alias;
+      std::vector<G4String*> value;
 
 };
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionHandlerTest.cc,v 1.2 2001-10-12 13:10:55 pia Exp $
+// $Id: G4CrossSectionHandlerTest.cc,v 1.3 2003-06-16 17:00:48 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -46,8 +46,8 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4CrossSectionHandler.hh"
 #include "G4VEMDataSet.hh"

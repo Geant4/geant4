@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: B02CellScorer.hh,v 1.1 2002-11-08 14:52:16 dressel Exp $
+// $Id: B02CellScorer.hh,v 1.2 2003-06-16 16:47:12 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -42,7 +42,7 @@
 #include "G4CellScoreComposer.hh"
 #include "G4CellScorer.hh"
 
-#include "g4std/vector"
+#include <vector>
 
 #include "AIDA/IHistogram1D.h"
 

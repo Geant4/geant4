@@ -7,7 +7,7 @@
 #include "G4ProtonInelasticProcess.hh"
 #include "G4VPiKBuilder.hh"
 
-#include "g4std/vector"
+#include <vector>
 
 class G4PiKBuilder
 {
@@ -34,7 +34,7 @@ class G4PiKBuilder
     G4KaonZeroLInelasticProcess theKaonZeroLInelastic;
     G4KaonZeroSInelasticProcess theKaonZeroSInelastic;
      
-    G4std::vector<G4VPiKBuilder *> theModelCollections;
+    std::vector<G4VPiKBuilder *> theModelCollections;
 
 };
 

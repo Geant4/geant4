@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidCone.cc,v 1.11 2003-03-28 13:11:50 gcosmo Exp $
+// $Id: G4BREPSolidCone.cc,v 1.12 2003-06-16 16:52:45 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -209,7 +209,7 @@ G4double G4BREPSolidCone::DistanceToOut(const G4ThreeVector& Pt) const
 }
 
 // Streams solid contents to output stream.
-G4std::ostream& G4BREPSolidCone::StreamInfo(G4std::ostream& os) const
+std::ostream& G4BREPSolidCone::StreamInfo(std::ostream& os) const
 {
   G4BREPSolid::StreamInfo( os )
   << "\n origin:       " << constructorParams.origin

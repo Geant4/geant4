@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01SteppingAction.cc,v 1.1 2001-10-11 07:12:57 grichine Exp $
+// $Id: F01SteppingAction.cc,v 1.2 2003-06-16 16:51:32 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,7 @@
 #include "G4EventManager.hh"
 #include "F01SteppingMessenger.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 #include "G4UImanager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

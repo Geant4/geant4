@@ -26,7 +26,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: tst2ParticleContainer.hh,v 1.5 2001-10-25 05:30:53 kurasige Exp $
+// $Id: tst2ParticleContainer.hh,v 1.6 2003-06-16 16:58:54 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,7 +36,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/vector"
+#include <vector>
 
 #include "tst2ContainerElement.hh"
 
@@ -46,7 +46,7 @@
 class tst2ParticleContainer
 {
  public:
-   typedef G4std::vector<tst2ContainerElement*> tst2ParticleVector;
+   typedef std::vector<tst2ContainerElement*> tst2ParticleVector;
 
  public:
   //constructors

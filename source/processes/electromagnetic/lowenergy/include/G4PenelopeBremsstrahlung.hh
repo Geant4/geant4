@@ -22,7 +22,7 @@
 //
 // 
 // -------------------------------------------------------------------
-// $Id: G4PenelopeBremsstrahlung.hh,v 1.5 2003-05-25 10:13:01 pia Exp $
+// $Id: G4PenelopeBremsstrahlung.hh,v 1.6 2003-06-16 16:59:45 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: L.Pandola
@@ -55,7 +55,7 @@ class G4VEnergySpectrum;
 class G4VCrossSectionHandler;
 class G4PenelopeBremsstrahlung : public G4eLowEnergyLoss
 { 
-  typedef G4std::vector<G4PenelopeBremsstrahlungAngular*> G4AngularData;
+  typedef std::vector<G4PenelopeBremsstrahlungAngular*> G4AngularData;
   //vector of pointers to the angular factors of the elements in each material
 
 public:
@@ -103,7 +103,7 @@ private:
 
   // Vector of pointers to the vectors containing tha angular data 
   // one element = one material
-  G4std::vector<G4AngularData*> materialAngularData;
+  std::vector<G4AngularData*> materialAngularData;
  
   // Lower limit for generation of gamma in this model
   G4DataVector cutForSecondaryPhotons;

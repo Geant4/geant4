@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.hh,v 1.8 2003-06-06 17:42:52 vnivanch Exp $
+// $Id: G4MuPairProductionModel.hh,v 1.9 2003-06-16 17:01:43 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -96,7 +96,7 @@ public:
                                       G4double tmin,
                                       G4double maxEnergy);
 
-  G4std::vector<G4DynamicParticle*>* SampleSecondaries(
+  std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,
@@ -147,7 +147,7 @@ private:
   static G4double zdat[5],adat[5],tdat[8];
   G4double ya[1001],proba[5][8][1001];
 
-  G4std::vector<G4DataVector*> partialSumSigma;
+  std::vector<G4DataVector*> partialSumSigma;
   G4bool  samplingTablesAreFilled;
 };
 

@@ -8,7 +8,7 @@
 #ifndef RichTbMaterial_h
 #define RichTbMaterial_h 1
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4Element.hh"

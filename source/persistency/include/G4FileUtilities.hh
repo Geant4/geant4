@@ -36,7 +36,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <string>
-#include "g4std/iostream"
+#include <iostream>
 
 
 // Class Description:
@@ -52,22 +52,22 @@ class G4FileUtilities
       // Destructor
 
     public: // With description
-      G4bool FileExists(const G4std::string file);
+      G4bool FileExists(const std::string file);
       // checks if the "file" exists.  returns true if it does.
 
-      G4std::string StrErrNo() const { return ::strerror(errno); };
+      std::string StrErrNo() const { return ::strerror(errno); };
       // returns the error message of the last system call as string.
 
-      int Shell(G4std::string s) { return ::system(s.c_str()); };
+      int Shell(std::string s) { return ::system(s.c_str()); };
       // execute the shell command.  returns zero if success.
 
-      int CopyFile(const G4std::string srcFile, const G4std::string dstFile);
+      int CopyFile(const std::string srcFile, const std::string dstFile);
       // copies the "srcFile" to "dstFile".  returns zero if success.
 
-      int DeleteFile(const G4std::string file, const G4std::string option);
+      int DeleteFile(const std::string file, const std::string option);
       // deletes the "file" with the "option".  returns zero if success.
 
-      G4std::string GetEnv(const G4std::string env) { return ::getenv(env.c_str()); };
+      std::string GetEnv(const std::string env) { return ::getenv(env.c_str()); };
       // retuns the value of environment variable as string.
 
 }; // End of class G4FileUtilities

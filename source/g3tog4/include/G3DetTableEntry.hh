@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3DetTableEntry.hh,v 1.4 2001-07-11 09:58:57 gunter Exp $
+// $Id: G3DetTableEntry.hh,v 1.5 2003-06-16 16:50:38 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G3DetTableEntry class
@@ -29,7 +29,7 @@
 #ifndef DETTABLEENTRY_HH
 #define DETTABLEENTRY_HH 1
 
-#include "g4std/map"
+#include <map>
 #include "globals.hh"
 #include "G4VSensitiveDetector.hh"
 

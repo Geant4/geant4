@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc,v 1.32 2003-04-02 08:53:20 gcosmo Exp $
+// $Id: G4ChordFinder.cc,v 1.33 2003-06-16 16:51:10 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,7 +35,7 @@
 // #include "G4Field.hh"
                                        // #include "G4MagIntegratorStepper.hh"
 #include "G4MagIntegratorDriver.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 
 //  For the moment fDeltaChord is a constant!
 
@@ -159,7 +159,7 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
 
   G4int     noTrials=0;
 
-  stepTrial = G4std::min( stepMax, 
+  stepTrial = std::min( stepMax, 
                           (1-perThousand)*fLastStepEstimate_Unconstrained );
 
   do
@@ -193,30 +193,30 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
         stepForAccuracy =
             fIntgrDriver->ComputeNewStepSize( dyErr/(epsStep*oldStepTrial), 
                                               stepTrial );
-        stepTrial = G4std::min(stepForChord, stepForAccuracy);
+        stepTrial = std::min(stepForChord, stepForAccuracy);
 #endif
 
         // if(dbg) G4cerr<<"Dchord too big. Try new hstep="<<stepTrial<<G4endl;
      }
 #ifdef  TEST_CHORD_PRINT
      G4cout.precision(5);
-     G4cout << " ChF/fnc: notrial " << G4std::setw( 3) << noTrials 
-            << " this_step= "       << G4std::setw(10) << oldStepTrial;
+     G4cout << " ChF/fnc: notrial " << std::setw( 3) << noTrials 
+            << " this_step= "       << std::setw(10) << oldStepTrial;
      if( fabs( (dChordStep / fDeltaChord) - 1.0 ) < 0.001 ){
        G4cout.precision(8);
-       G4cout << " dChordStep=  "     << G4std::setw(12) << dChordStep;
+       G4cout << " dChordStep=  "     << std::setw(12) << dChordStep;
      }else{
        G4cout.precision(6);
-       G4cout << " dChordStep=  "     << G4std::setw(12) << dChordStep;
+       G4cout << " dChordStep=  "     << std::setw(12) << dChordStep;
      }
      if( dChordStep > fDeltaChord )
        G4cout << " d+";
      else
        G4cout << " d-";
      G4cout.precision(5);
-     G4cout <<  " new_step= "       << G4std::setw(10)
+     G4cout <<  " new_step= "       << std::setw(10)
             << fLastStepEstimate_Unconstrained
-            << " new_step_constr= " << G4std::setw(10)
+            << " new_step_constr= " << std::setw(10)
             << stepTrial << G4endl;
 #endif
      noTrials++; 
@@ -228,7 +228,7 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
   static int dbg=0;
   if( dbg ) 
     G4cout << "ChordF/FindNextChord:  NoTrials= " << noTrials 
-           << " StepForGoodChord=" << G4std::setw(10) << stepTrial << G4endl;
+           << " StepForGoodChord=" << std::setw(10) << stepTrial << G4endl;
 #endif
 
   yEnd=  yCurrent;  
@@ -359,7 +359,7 @@ G4ChordFinder::ApproxCurvePointV( const G4FieldTrack& CurveA_PointVelocity,
               - CurveA_PointVelocity.GetCurveLength();  
 
   // const 
-  G4double  integrationInaccuracyLimit= G4std::max( perMillion, 0.5*eps_step ); 
+  G4double  integrationInaccuracyLimit= std::max( perMillion, 0.5*eps_step ); 
   if( curve_length < ABdist * (1. - integrationInaccuracyLimit) ){ 
 #ifdef G4DEBUG_FIELD
     G4cerr << " Warning in G4ChordFinder::ApproxCurvePoint: "

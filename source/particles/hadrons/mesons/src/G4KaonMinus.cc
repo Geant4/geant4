@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonMinus.cc,v 1.8 2002-02-12 01:07:21 kurasige Exp $
+// $Id: G4KaonMinus.cc,v 1.9 2003-06-16 16:57:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,8 +33,8 @@
 //                              H.Kurashige   7 Jul 96
 // **********************************************************************
 
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4KaonMinus.hh"
 

@@ -46,10 +46,10 @@ class G4VTransactionManager
       void SetVerboseLevel(int v) { m_verbose = v; };
       // Set verbose level.
 
-      virtual G4bool SelectReadFile(G4std::string obj, G4std::string file)=0;
+      virtual G4bool SelectReadFile(std::string obj, std::string file)=0;
       // Set the input file name and open it for the object type "obj".
 
-      virtual G4bool SelectWriteFile(G4std::string obj, G4std::string file)=0;
+      virtual G4bool SelectWriteFile(std::string obj, std::string file)=0;
       // Set the output file name and open it for the object type "obj".
 
       virtual G4bool StartUpdate()=0;

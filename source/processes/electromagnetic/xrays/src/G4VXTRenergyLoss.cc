@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc,v 1.9 2003-06-03 08:11:01 vnivanch Exp $
+// $Id: G4VXTRenergyLoss.cc,v 1.10 2003-06-16 17:02:58 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -795,8 +795,8 @@ G4double G4VXTRenergyLoss::GetPlateZmuProduct( G4double omega ,
 
 void G4VXTRenergyLoss::GetPlateZmuProduct() 
 {
-  G4std::ofstream outPlate("plateZmu.dat", G4std::ios::out ) ;
-  outPlate.setf( G4std::ios::scientific, G4std::ios::floatfield );
+  std::ofstream outPlate("plateZmu.dat", std::ios::out ) ;
+  outPlate.setf( std::ios::scientific, std::ios::floatfield );
 
   G4int i ;
   G4double omega, varAngle, gamma ;
@@ -830,8 +830,8 @@ G4double G4VXTRenergyLoss::GetGasZmuProduct( G4double omega ,
 
 void G4VXTRenergyLoss::GetGasZmuProduct() 
 {
-  G4std::ofstream outGas("gasZmu.dat", G4std::ios::out ) ;
-  outGas.setf( G4std::ios::scientific, G4std::ios::floatfield );
+  std::ofstream outGas("gasZmu.dat", std::ios::out ) ;
+  outGas.setf( std::ios::scientific, std::ios::floatfield );
   G4int i ;
   G4double omega, varAngle, gamma ;
   gamma = 10000. ;
@@ -933,11 +933,11 @@ void G4VXTRenergyLoss::GetNumberOfPhotons()
   G4int iTkin ;
   G4double gamma, numberE ;
 
-  G4std::ofstream outEn("numberE.dat", G4std::ios::out ) ;
-  outEn.setf( G4std::ios::scientific, G4std::ios::floatfield );
+  std::ofstream outEn("numberE.dat", std::ios::out ) ;
+  outEn.setf( std::ios::scientific, std::ios::floatfield );
 
-  G4std::ofstream outAng("numberAng.dat", G4std::ios::out ) ;
-  outAng.setf( G4std::ios::scientific, G4std::ios::floatfield );
+  std::ofstream outAng("numberAng.dat", std::ios::out ) ;
+  outAng.setf( std::ios::scientific, std::ios::floatfield );
 
   for(iTkin=0;iTkin<fTotBin;iTkin++)      // Lorentz factor loop
   {

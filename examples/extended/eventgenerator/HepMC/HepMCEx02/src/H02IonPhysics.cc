@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: H02IonPhysics.cc,v 1.2 2002-11-19 10:25:49 murakami Exp $
+// $Id: H02IonPhysics.cc,v 1.3 2003-06-16 16:48:36 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,7 +30,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"   
+#include <iomanip>   
 
 
 H02IonPhysics::H02IonPhysics(const G4String& name)

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComplexTest.cc,v 1.18 2003-02-28 08:00:30 vnivanch Exp $
+// $Id: G4ComplexTest.cc,v 1.19 2003-06-16 17:00:46 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -44,8 +44,8 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4ProductionCuts.hh"
 #include "G4ProductionCutsTable.hh"
@@ -377,17 +377,17 @@ int main(int argc,char** argv)
     // ---- HBOOK initialization
 
     // Creating the analysis factory
-    G4std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
+    std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
 
     // Creating the tree factory
-    G4std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
+    std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
 
     // Creating a tree mapped to a new hbook file.
-    G4std::auto_ptr< AIDA::ITree > tree( tf->create( hFile,"hbook" ,false,false ) );
+    std::auto_ptr< AIDA::ITree > tree( tf->create( hFile,"hbook" ,false,false ) );
     G4cout << "Tree store : " << tree->storeName() << G4endl;
 
     // Creating a tuple factory, whose tuples will be handled by the tree
-    //    G4std::auto_ptr< AIDA::ITupleFactory > tpf( af->createTupleFactory( *tree ) );
+    //    std::auto_ptr< AIDA::ITupleFactory > tpf( af->createTupleFactory( *tree ) );
 
     AIDA::IHistogram1D* hist[4];
     //AIDA::ITuple* ntuple1 = 0;
@@ -403,7 +403,7 @@ int main(int argc,char** argv)
 
 
       // Creating a histogram factory, whose histograms will be handled by the tree
-      G4std::auto_ptr< AIDA::IHistogramFactory > hf( af->createHistogramFactory( *tree ) );
+      std::auto_ptr< AIDA::IHistogramFactory > hf( af->createHistogramFactory( *tree ) );
 
       // Creating an 1-dimensional histogram in the root directory of the tree
 
@@ -746,7 +746,7 @@ int main(int argc,char** argv)
 
     if(usepaw) {
       tree->commit();
-      G4std::cout << "Closing the tree..." << G4std::endl;
+      std::cout << "Closing the tree..." << std::endl;
       tree->close();
       G4cout << "# hbook is writed" << G4endl;
     }

@@ -72,7 +72,7 @@ void G4DCIOcatalog::RegisterDCIOmanager(G4VPDigitsCollectionIO* d)
 }
 
 // Implementation of GetEntry
-G4VDCIOentry* G4DCIOcatalog::GetEntry(G4std::string name)
+G4VDCIOentry* G4DCIOcatalog::GetEntry(std::string name)
 {
   if ( theCatalog.find(name) == theCatalog.end() ) {
     G4cout << "Digit Collection I/O manager entry \"" << name
@@ -85,7 +85,7 @@ G4VDCIOentry* G4DCIOcatalog::GetEntry(G4std::string name)
 }
 
 // Implementation of GetDCIOmanager
-G4VPDigitsCollectionIO* G4DCIOcatalog::GetDCIOmanager(G4std::string name)
+G4VPDigitsCollectionIO* G4DCIOcatalog::GetDCIOmanager(std::string name)
 {
   if ( theStore.find(name) == theStore.end() ) {
     G4cout << "Digit Collection I/O manager \"" << name
@@ -109,9 +109,9 @@ void G4DCIOcatalog::PrintEntries()
 }
 
 // Implementation of CurrentDCIOmanager
-G4std::string G4DCIOcatalog::CurrentDCIOmanager()
+std::string G4DCIOcatalog::CurrentDCIOmanager()
 {
-  G4std::string list = "";
+  std::string list = "";
   DCIOstore::const_iterator it;
   for ( it=theStore.begin(); it != theStore.end(); it++ ) {
     list += (*it).first + " ";

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryManager.hh,v 1.6 2002-04-26 16:23:34 gcosmo Exp $
+// $Id: G4GeometryManager.hh,v 1.7 2003-06-16 16:51:47 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GeometryManager
@@ -44,7 +44,7 @@
 #ifndef G4GEOMETRYMANAGER_HH
 #define G4GEOMETRYMANAGER_HH
 
-#include "g4std/vector"
+#include <vector>
 #include "globals.hh"
 
 // Needed for building optimisations
@@ -83,7 +83,7 @@ class G4GeometryManager
 
     void BuildOptimisations(G4bool allOpt, G4bool verbose=false);
     void DeleteOptimisations();
-    static void ReportVoxelStats( G4std::vector<G4SmartVoxelStat> & stats,
+    static void ReportVoxelStats( std::vector<G4SmartVoxelStat> & stats,
                                   G4double totalCpuTime );
     static G4GeometryManager* fgInstance;
     G4bool fIsClosed;

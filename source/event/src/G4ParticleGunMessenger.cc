@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGunMessenger.cc,v 1.8 2002-02-26 16:34:06 gcosmo Exp $
+// $Id: G4ParticleGunMessenger.cc,v 1.9 2003-06-16 16:50:35 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -41,8 +41,8 @@
 #include "G4ios.hh"
 #include "G4Tokenizer.hh"
 
-#include "g4std/iomanip"               
-#include "g4std/strstream"
+#include <iomanip>               
+#include <strstream>
 
 G4ParticleGunMessenger::G4ParticleGunMessenger(G4ParticleGun * fPtclGun)
   :fParticleGun(fPtclGun),fShootIon(false)

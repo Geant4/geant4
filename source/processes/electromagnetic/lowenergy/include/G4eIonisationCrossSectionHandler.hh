@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationCrossSectionHandler.hh,v 1.4 2002-05-28 09:15:26 pia Exp $
+// $Id: G4eIonisationCrossSectionHandler.hh,v 1.5 2003-06-16 16:59:53 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -71,7 +71,7 @@ public:
  
 protected:
 
-  G4std::vector<G4VEMDataSet*>* BuildCrossSectionsForMaterials(
+  std::vector<G4VEMDataSet*>* BuildCrossSectionsForMaterials(
                                 const G4DataVector& energyVector, 
 				const G4DataVector* energyCuts);
 

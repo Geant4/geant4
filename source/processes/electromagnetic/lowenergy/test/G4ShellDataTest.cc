@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellDataTest.cc,v 1.1 2001-08-20 17:28:51 pia Exp $
+// $Id: G4ShellDataTest.cc,v 1.2 2003-06-16 17:01:02 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -42,8 +42,8 @@
 #include "globals.hh"
 #include "G4DataVector.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4ShellData.hh"
 

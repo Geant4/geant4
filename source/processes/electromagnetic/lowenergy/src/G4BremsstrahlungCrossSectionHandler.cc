@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BremsstrahlungCrossSectionHandler.cc,v 1.7 2003-05-20 20:16:12 pia Exp $
+// $Id: G4BremsstrahlungCrossSectionHandler.cc,v 1.8 2003-06-16 17:00:03 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -65,11 +65,11 @@ G4BremsstrahlungCrossSectionHandler::~G4BremsstrahlungCrossSectionHandler()
 }
 
 
-G4std::vector<G4VEMDataSet*>*
+std::vector<G4VEMDataSet*>*
 G4BremsstrahlungCrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector& energyVector,
 								    const G4DataVector* energyCuts)
 {
-  G4std::vector<G4VEMDataSet*>* set = new G4std::vector<G4VEMDataSet*>;
+  std::vector<G4VEMDataSet*>* set = new std::vector<G4VEMDataSet*>;
 
   G4DataVector* energies;
   G4DataVector* cs;

@@ -64,7 +64,7 @@
 // **********************************************************************
 
 
-#include "g4std/fstream"
+#include <fstream>
 
 #include "G4ios.hh"
 #include "G4Run.hh"

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungSTD.hh,v 1.7 2003-06-06 17:42:52 vnivanch Exp $
+// $Id: G4MuBremsstrahlungSTD.hh,v 1.8 2003-06-16 17:01:39 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -78,7 +78,7 @@ public:
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
                                     const G4Material*, G4double cut);
 
-  virtual G4std::vector<G4Track*>* SecondariesAlongStep(
+  virtual std::vector<G4Track*>* SecondariesAlongStep(
                              const G4Step&,
 			           G4double&,
 			           G4double&,

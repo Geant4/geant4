@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionSTD.hh,v 1.8 2003-06-06 17:42:52 vnivanch Exp $
+// $Id: G4MuPairProductionSTD.hh,v 1.9 2003-06-16 17:01:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -79,7 +79,7 @@ public:
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
                                     const G4Material*, G4double cut);
 
-  virtual G4std::vector<G4Track*>* SecondariesAlongStep(
+  virtual std::vector<G4Track*>* SecondariesAlongStep(
                              const G4Step&,
 			           G4double&,
 			           G4double&,
@@ -125,7 +125,7 @@ inline G4double G4MuPairProductionSTD::MinPrimaryEnergy(const G4ParticleDefiniti
                                                         const G4Material*,
                                                               G4double cut)
 {
-  return G4std::max(cut, 2.0*electron_mass_c2);
+  return std::max(cut, 2.0*electron_mass_c2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -139,13 +139,13 @@ inline G4double G4MuPairProductionSTD::MaxSecondaryEnergy(const G4DynamicParticl
 
 #include "G4VSubCutoffProcessor.hh"
 
-inline G4std::vector<G4Track*>*  G4MuPairProductionSTD::SecondariesAlongStep(
+inline std::vector<G4Track*>*  G4MuPairProductionSTD::SecondariesAlongStep(
                            const G4Step&   step,
 	             	         G4double& tmax,
 			         G4double& eloss,
                                  G4double& kinEnergy)
 {
-  G4std::vector<G4Track*>* newp = 0;
+  std::vector<G4Track*>* newp = 0;
   if(subCutoff) {
     G4VSubCutoffProcessor* sp = SubCutoffProcessor(CurrentMaterialCutsCoupleIndex());
     if (sp) {
@@ -167,7 +167,7 @@ inline void G4MuPairProductionSTD::SecondariesPostStep(
                                    G4double& tcut,
                                    G4double& kinEnergy)
 {
-  G4std::vector<G4DynamicParticle*>* newp =
+  std::vector<G4DynamicParticle*>* newp =
          model->SampleSecondaries(couple, dp, tcut, kinEnergy);
   if(newp) {
     aParticleChange.SetNumberOfSecondaries(2);

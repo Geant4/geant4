@@ -26,7 +26,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.cc,v 1.9 2002-10-30 13:52:24 gcosmo Exp $
+// $Id: G4VCSGfaceted.cc,v 1.10 2003-06-16 16:54:01 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -409,7 +409,7 @@ G4GeometryType G4VCSGfaceted::GetEntityType() const
 //
 // Stream object contents to an output stream
 //
-G4std::ostream& G4VCSGfaceted::StreamInfo( G4std::ostream& os ) const
+std::ostream& G4VCSGfaceted::StreamInfo( std::ostream& os ) const
 {
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"

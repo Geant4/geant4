@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst01PhysicsList.cc,v 1.2 2001-07-11 10:02:28 gunter Exp $
+// $Id: Tst01PhysicsList.cc,v 1.3 2003-06-16 16:59:32 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,7 +37,7 @@
 #include "G4ParticleTable.hh"
 
 #include "G4ios.hh"
-#include "g4std/iomanip"   
+#include <iomanip>   
 
 #include "Tst01GeneralPhysics.hh"
 

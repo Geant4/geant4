@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTableTest.cc,v 1.5 2001-07-17 15:54:43 verderi Exp $
+// $Id: G4SandiaTableTest.cc,v 1.6 2003-06-16 16:56:27 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,7 +37,7 @@
 //
 
 #include "G4ios.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 #include "globals.hh"
 #include "G4UnitsTable.hh"
 
@@ -48,7 +48,7 @@ int main()
 {
   // set output format
 
-  G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
+  G4cout.setf( std::ios::scientific, std::ios::floatfield );
 
   G4String name, symbol;             // a=mass of a mole;
   G4double a, z, density;            // z=mean number of protons;  

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSectionTest.cc,v 1.9 2002-10-14 17:36:41 maire Exp $
+// $Id: G4PAIxSectionTest.cc,v 1.10 2003-06-16 17:02:20 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,7 +35,7 @@
 // 21.10.99, V. Grichine implementation based on G4PAIonisationTest
 
 #include "G4ios.hh"
-#include "g4std/fstream"
+#include <fstream>
 #include <math.h>
 #include "globals.hh"
 #include "Randomize.hh"
@@ -51,20 +51,20 @@
 
 int main()
 {
-   G4std::ofstream outFile("PAIdEdx.out", G4std::ios::out ) ;
-   outFile.setf( G4std::ios::scientific, G4std::ios::floatfield );
+   std::ofstream outFile("PAIdEdx.out", std::ios::out ) ;
+   outFile.setf( std::ios::scientific, std::ios::floatfield );
 
-   G4std::ofstream fileOut("PAIdistribution.out", G4std::ios::out ) ;
-   fileOut.setf( G4std::ios::scientific, G4std::ios::floatfield );
+   std::ofstream fileOut("PAIdistribution.out", std::ios::out ) ;
+   fileOut.setf( std::ios::scientific, std::ios::floatfield );
 
-   //  G4std::ifstream fileRead("exp.dat", G4std::ios::out ) ;
-   //  fileRead.setf( G4std::ios::scientific, G4std::ios::floatfield );
+   //  std::ifstream fileRead("exp.dat", std::ios::out ) ;
+   //  fileRead.setf( std::ios::scientific, std::ios::floatfield );
 
-   G4std::ofstream fileWrite("exp.dat", G4std::ios::out ) ;
-   fileWrite.setf( G4std::ios::scientific, G4std::ios::floatfield );
+   std::ofstream fileWrite("exp.dat", std::ios::out ) ;
+   fileWrite.setf( std::ios::scientific, std::ios::floatfield );
 
-   G4std::ofstream fileWrite1("mprrpai.dat", G4std::ios::out ) ;
-   fileWrite1.setf( G4std::ios::scientific, G4std::ios::floatfield );
+   std::ofstream fileWrite1("mprrpai.dat", std::ios::out ) ;
+   fileWrite1.setf( std::ios::scientific, std::ios::floatfield );
 
 // Create materials  
    
@@ -430,7 +430,7 @@ int main()
  outFile <<k<<"\t"<< "  Material : " <<(*theMaterialTable)[k]->GetName() << G4endl ;
   }
   G4String testName ;
-  G4cout<<"Enter material name for test : "<<G4std::flush ;
+  G4cout<<"Enter material name for test : "<<std::flush ;
   //  G4cin>>testName ;
 
   for(k=0;k<numOfMaterials;k++)
@@ -578,7 +578,7 @@ int main()
 
   G4String confirm ;
   G4cout<<"Enter 'y' , if you would like to get dE/dx-distribution : "
-        <<G4std::flush ;
+        <<std::flush ;
 
   G4cin>>confirm ;
   if(confirm != "y" ) return 1 ;
@@ -588,7 +588,7 @@ int main()
   {
     G4cout <<k<< "  Material : " <<(*theMaterialTable)[k]->GetName() << G4endl ;
   } 
-  G4cout<<"Enter material name for dE/dx-distribution : "<<G4std::flush ;
+  G4cout<<"Enter material name for dE/dx-distribution : "<<std::flush ;
   G4cin>>testName ;
   G4cout<<G4endl ;
 
@@ -599,7 +599,7 @@ int main()
   G4double alphaCrossTalk = -0.055, betaS = 0.2*0.4*keV ;
   G4int    spectrum[50] ;
 
-  G4cout << " Enter nGamma 1<nGamma<10 : "  <<G4std::flush ;
+  G4cout << " Enter nGamma 1<nGamma<10 : "  <<std::flush ;
   G4cin>>nGamma ;
   G4cout<<G4endl ;
 
@@ -610,21 +610,21 @@ int main()
      G4cout << "Material : " <<(*theMaterialTable)[k]->GetName() << G4endl<<G4endl ;
 
 
-     G4cout << " Enter Lorentz factor : "  <<G4std::flush ;
+     G4cout << " Enter Lorentz factor : "  <<std::flush ;
      G4cin>>gamma ;
      G4cout<<G4endl ;
 
-     G4cout << " Enter step in mm : " <<G4std::flush ;
+     G4cout << " Enter step in mm : " <<std::flush ;
      G4cin>>step ;
      G4cout<<G4endl ;
      step *= mm ;
 
-     G4cout << " Enter energy bin in keV : " <<G4std::flush ;
+     G4cout << " Enter energy bin in keV : " <<std::flush ;
      G4cin>>Ebin ;
      G4cout<<G4endl ;
      Ebin *= keV ;
 
-     G4cout << " Enter number of events : " <<G4std::flush ;
+     G4cout << " Enter number of events : " <<std::flush ;
      G4cin>>iStatMax ;
 
      G4cout<<G4endl<<"Start dE/dx distribution"<<G4endl<<G4endl ;
@@ -692,7 +692,7 @@ int main()
 
   while(exit)
   {
-     G4cout<<"Enter 'y' , if you would like to compare with exp. data : "<<G4std::flush ;
+     G4cout<<"Enter 'y' , if you would like to compare with exp. data : "<<std::flush ;
      G4cin>>confirm ;
      if(confirm != "y" ) break ;
      G4cout<<G4endl ;
@@ -703,15 +703,15 @@ int main()
      G4int numberOfExpPoints ;
 
      G4cout<<G4endl ;
-     G4cout << " Enter number of experimental points : " <<G4std::flush ;
+     G4cout << " Enter number of experimental points : " <<std::flush ;
      G4cin>>numberOfExpPoints ;
      G4cout<<G4endl ;
-     G4cout << " Enter energy bin in keV : " <<G4std::flush ;
+     G4cout << " Enter energy bin in keV : " <<std::flush ;
      G4cin>>deltaBin ;
      G4cout<<G4endl ;
      deltaBin *= keV ;
 
-     G4std::ifstream fileRead ;
+     std::ifstream fileRead ;
      fileRead.open("input.dat") ;
      for(i=0;i<numberOfExpPoints;i++)
      {
@@ -741,7 +741,7 @@ int main()
      exit = 0 ;
   }
 
-  G4cout<<"Enter 'y' , if you would like to get most probable delta : "<<G4std::flush ;
+  G4cout<<"Enter 'y' , if you would like to get most probable delta : "<<std::flush ;
   G4cin>>confirm ;
   if(confirm != "y" ) return 1 ;
   G4cout<<G4endl ;
@@ -762,7 +762,7 @@ int main()
   {
     G4cout <<k<< "  Material : " <<(*theMaterialTable)[k]->GetName() << G4endl ;
   } 
-  G4cout<<"Enter material name for dE/dx-distribution : "<<G4std::flush ;
+  G4cout<<"Enter material name for dE/dx-distribution : "<<std::flush ;
   G4cin>>testName ;
   G4cout<<G4endl ;
 
@@ -773,27 +773,27 @@ int main()
 
      G4cout << "Material : " <<(*theMaterialTable)[k]->GetName() << G4endl<<G4endl ;
 
-     G4cout << " Enter nGamma 1<nGamma<10 : "  <<G4std::flush ;
+     G4cout << " Enter nGamma 1<nGamma<10 : "  <<std::flush ;
      G4cin>>nGamma ;
      G4cout<<G4endl ;
 
 
-     G4cout << " Enter step in mm : " <<G4std::flush ;
+     G4cout << " Enter step in mm : " <<std::flush ;
      G4cin>>step ;
      G4cout<<G4endl ;
      step *= mm ;
 
-     G4cout << " Enter energy bin in keV : " <<G4std::flush ;
+     G4cout << " Enter energy bin in keV : " <<std::flush ;
      G4cin>>Ebin ;
      G4cout<<G4endl ;
      Ebin *= keV ;
 
-     G4cout << " Enter trancated mean ration <1.0 : "  <<G4std::flush ;
+     G4cout << " Enter trancated mean ration <1.0 : "  <<std::flush ;
      G4cin>>tmRatio ;
      G4cout<<G4endl ;
 
 
-     G4cout << " Enter number of events : " <<G4std::flush ;
+     G4cout << " Enter number of events : " <<std::flush ;
      G4cin>>iStatMax ;
      G4cout<<G4endl ;
 

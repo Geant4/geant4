@@ -67,7 +67,7 @@ void DMXStackingActionMessenger::SetNewValue
   if(command==KillGammasCmd) {
     G4int vl;
     const char* t = newValue;
-    G4std::istrstream is((char*)t);
+    std::istrstream is((char*)t);
     is >> vl;
     DMXAction->SetKillGammasFlag(vl!=0);
   }

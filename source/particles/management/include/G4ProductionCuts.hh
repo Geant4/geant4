@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCuts.hh,v 1.9 2003-05-22 16:05:37 asaim Exp $
+// $Id: G4ProductionCuts.hh,v 1.10 2003-06-16 16:58:08 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4ParticleDefinition.hh"
 
 enum G4ProductionCutsIndex
@@ -86,10 +86,10 @@ class G4ProductionCuts
   G4double          GetProductionCut(const G4String& name) const;
   // Get the productionCut in range with a name of particle type
   
-  void              SetProductionCuts(G4std::vector<G4double>&);
+  void              SetProductionCuts(std::vector<G4double>&);
   // Set the vector of production cuts in range for all particles
 
-  const G4std::vector<G4double>&   GetProductionCuts() const;
+  const std::vector<G4double>&   GetProductionCuts() const;
   // Get the vector of production cuts in range for all particles
 
   G4bool           IsModified() const;
@@ -104,7 +104,7 @@ class G4ProductionCuts
   static G4int GetIndex(const G4ParticleDefinition* ptcl);
 
   protected:
-  G4std::vector<G4double>         fRangeCuts;
+  std::vector<G4double>         fRangeCuts;
   G4bool                          isModified;
 
   private:
@@ -189,7 +189,7 @@ G4double  G4ProductionCuts::GetProductionCut(const G4String& name) const
 }
 
 inline
-void  G4ProductionCuts::SetProductionCuts(G4std::vector<G4double>& cut)
+void  G4ProductionCuts::SetProductionCuts(std::vector<G4double>& cut)
 {
   for(G4int i = 0; (i<NumberOfG4CutIndex); i++) {
     fRangeCuts[i] = cut[i];
@@ -198,7 +198,7 @@ void  G4ProductionCuts::SetProductionCuts(G4std::vector<G4double>& cut)
 }
 
 inline
-const G4std::vector<G4double>&   G4ProductionCuts::GetProductionCuts() const
+const std::vector<G4double>&   G4ProductionCuts::GetProductionCuts() const
 {
   return fRangeCuts;
 }

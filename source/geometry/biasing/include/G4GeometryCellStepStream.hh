@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryCellStepStream.hh,v 1.1 2002-10-22 13:18:44 dressel Exp $
+// $Id: G4GeometryCellStepStream.hh,v 1.2 2003-06-16 16:51:00 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -39,7 +39,7 @@
 #include "G4GeometryCell.hh"
 #include "G4GeometryCellStep.hh"
 
-G4std::ostream& operator<<(G4std::ostream &out, const G4GeometryCell &tk);
-G4std::ostream& operator<<(G4std::ostream &out, const G4GeometryCellStep &ps);
+std::ostream& operator<<(std::ostream &out, const G4GeometryCell &tk);
+std::ostream& operator<<(std::ostream &out, const G4GeometryCellStep &ps);
 
 #endif

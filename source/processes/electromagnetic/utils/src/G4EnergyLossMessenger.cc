@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.8 2003-05-13 14:16:27 vnivanch Exp $
+// $Id: G4EnergyLossMessenger.cc,v 1.9 2003-06-16 17:02:45 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -40,7 +40,7 @@
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 
-#include "g4std/strstream"
+#include <strstream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -166,7 +166,7 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
      G4double v1,v2;
      char unts[30];
      const char* t = newValue;
-     G4std::istrstream is((char*)t);
+     std::istrstream is((char*)t);
      is >> v1 >> v2 >> unts;
      G4String unt = unts;
      v2 *= G4UIcommand::ValueOf(unt);

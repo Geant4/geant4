@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForPositron.hh,v 1.2 2002-12-16 11:15:43 gcosmo Exp $
+// $Id: G4RToEConvForPositron.hh,v 1.3 2003-06-16 16:58:20 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,7 +41,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/vector"
+#include <vector>
 
 #include "G4VRangeToEnergyConverter.hh"
 

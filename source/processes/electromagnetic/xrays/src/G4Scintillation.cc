@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc,v 1.17 2003-06-03 08:11:01 vnivanch Exp $
+// $Id: G4Scintillation.cc,v 1.18 2003-06-16 17:02:57 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -234,10 +234,10 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                  G4double YieldRatio = aMaterialPropertiesTable->
                                           GetConstProperty("YIELDRATIO");
                  if ( ExcitationRatio == 1.0 ) {
-                    Num = G4int (G4std::min(YieldRatio,1.0) * NumPhotons);
+                    Num = G4int (std::min(YieldRatio,1.0) * NumPhotons);
                  }
                  else {
-                    Num = G4int (G4std::min(ExcitationRatio,1.0) * NumPhotons);
+                    Num = G4int (std::min(ExcitationRatio,1.0) * NumPhotons);
                  }
                  ScintillationTime   = aMaterialPropertiesTable->
                                           GetConstProperty("FASTTIMECONSTANT");

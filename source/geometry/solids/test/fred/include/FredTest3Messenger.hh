@@ -30,7 +30,7 @@
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
-#include "g4std/fstream"
+#include <fstream>
 
 class FredTest3;
 class G4VSolid;
@@ -61,7 +61,7 @@ class FredTest3Messenger : public G4UImessenger
 					{ testVolume = aVolume; tester = aTester; }
 		virtual ~Debugger() {;}
 
-		virtual G4int DebugMe( G4std::ifstream &logFile, const G4int errorIndex ) = 0;
+		virtual G4int DebugMe( std::ifstream &logFile, const G4int errorIndex ) = 0;
 
 		protected:
 		const G4VSolid *testVolume;
@@ -71,32 +71,32 @@ class FredTest3Messenger : public G4UImessenger
 	class DebugError : public FredTest3Messenger::Debugger {
 		public:
 		DebugError( const G4VSolid *aVolume, const FredTest3 *aTester ) : Debugger(aVolume,aTester) {;}
-		G4int DebugMe( G4std::ifstream &logFile, const G4int errorIndex );
+		G4int DebugMe( std::ifstream &logFile, const G4int errorIndex );
 	};
 	class DebugInside : public FredTest3Messenger::Debugger {
 		public:
 		DebugInside( const G4VSolid *aVolume, const FredTest3 *aTester ) : Debugger(aVolume,aTester) {;}
-		G4int DebugMe( G4std::ifstream &logFile, const G4int errorIndex );
+		G4int DebugMe( std::ifstream &logFile, const G4int errorIndex );
 	};
 	class DebugToInP : public FredTest3Messenger::Debugger {
 		public:
 		DebugToInP( const G4VSolid *aVolume, const FredTest3 *aTester ) : Debugger(aVolume,aTester) {;}
-		G4int DebugMe( G4std::ifstream &logFile, const G4int errorIndex );
+		G4int DebugMe( std::ifstream &logFile, const G4int errorIndex );
 	};
 	class DebugToInPV : public FredTest3Messenger::Debugger {
 		public:
 		DebugToInPV( const G4VSolid *aVolume, const FredTest3 *aTester ) : Debugger(aVolume,aTester) {;}
-		G4int DebugMe( G4std::ifstream &logFile, const G4int errorIndex );
+		G4int DebugMe( std::ifstream &logFile, const G4int errorIndex );
 	};
 	class DebugToOutP : public FredTest3Messenger::Debugger {
 		public:
 		DebugToOutP( const G4VSolid *aVolume, const FredTest3 *aTester ) : Debugger(aVolume,aTester) {;}
-		G4int DebugMe( G4std::ifstream &logFile, const G4int errorIndex );
+		G4int DebugMe( std::ifstream &logFile, const G4int errorIndex );
 	};
 	class DebugToOutPV : public FredTest3Messenger::Debugger  {
 		public:
 		DebugToOutPV( const G4VSolid *aVolume, const FredTest3 *aTester ) : Debugger(aVolume,aTester) {;}
-		G4int DebugMe( G4std::ifstream &logFile, const G4int errorIndex );
+		G4int DebugMe( std::ifstream &logFile, const G4int errorIndex );
 	};
 	
         void InvokeTest3();

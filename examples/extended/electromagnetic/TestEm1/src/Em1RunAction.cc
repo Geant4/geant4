@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em1RunAction.cc,v 1.18 2002-12-11 14:19:24 maire Exp $
+// $Id: Em1RunAction.cc,v 1.19 2003-06-16 16:47:31 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,7 +38,7 @@
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 
 #include "Randomize.hh"
 
@@ -149,34 +149,34 @@ void Em1RunAction::EndOfRunAction(const G4Run* aRun)
       G4double dNbOfEvents = double(NbOfEvents);
     
 #ifdef G4USE_STD_NAMESPACE
-      G4std::ios::fmtflags mode = G4cout.flags();
-      G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
+      std::ios::fmtflags mode = G4cout.flags();
+      G4cout.setf(std::ios::fixed,std::ios::floatfield);
 #else 
-      G4long mode = G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
+      G4long mode = G4cout.setf(std::ios::fixed,std::ios::floatfield);
 #endif
 
       G4int  prec = G4cout.precision(4);
       
       G4cout << "\n nb tracks/event"
-             << "   neutral: " << G4std::setw(10) << NbOfTraks0/dNbOfEvents
-             << "   charged: " << G4std::setw(10) << NbOfTraks1/dNbOfEvents
+             << "   neutral: " << std::setw(10) << NbOfTraks0/dNbOfEvents
+             << "   charged: " << std::setw(10) << NbOfTraks1/dNbOfEvents
              << "\n nb  steps/event"
-             << "   neutral: " << G4std::setw(10) << NbOfSteps0/dNbOfEvents
-             << "   charged: " << G4std::setw(10) << NbOfSteps1/dNbOfEvents
+             << "   neutral: " << std::setw(10) << NbOfSteps0/dNbOfEvents
+             << "   charged: " << std::setw(10) << NbOfSteps1/dNbOfEvents
              << G4endl;
       
       //frequency of processes call       
       G4cout << "\n nb of process calls per event: \n   ";       
       for (size_t i=0; i< ProcCounter->size();i++)
-           G4cout << G4std::setw(12) << (*ProcCounter)[i]->GetName();
+           G4cout << std::setw(12) << (*ProcCounter)[i]->GetName();
            
       G4cout << "\n   ";       
       for (size_t j=0; j< ProcCounter->size();j++)
-      G4cout << G4std::setw(12) << ((*ProcCounter)[j]->GetCounter())
+      G4cout << std::setw(12) << ((*ProcCounter)[j]->GetCounter())
                                                                /dNbOfEvents;
       G4cout << G4endl;    
                          
-      G4cout.setf(mode,G4std::ios::floatfield);
+      G4cout.setf(mode,std::ios::floatfield);
       G4cout.precision(prec);       
     }         
 

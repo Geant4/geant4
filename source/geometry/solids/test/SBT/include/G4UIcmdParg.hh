@@ -31,7 +31,7 @@
 #define G4UIcmdParg_hh
 
 #include "globals.hh"
-#include "g4std/iostream"
+#include <iostream>
 
 class G4UIcmdParg {
 	public: 
@@ -43,7 +43,7 @@ class G4UIcmdParg {
 	virtual char GetTypeCode() const = 0;
 	inline G4String GetName() const { return name; }
 	
-	virtual G4std::istream &FetchValue( G4std::istream &ios ) = 0;
+	virtual std::istream &FetchValue( std::istream &ios ) = 0;
 	
 	protected:
 	G4String name;

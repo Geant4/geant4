@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeStore.cc,v 1.11 2003-05-14 09:33:16 gcosmo Exp $
+// $Id: G4PhysicalVolumeStore.cc,v 1.12 2003-06-16 16:52:06 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PhysicalVolumeStore
@@ -49,7 +49,7 @@ G4bool G4PhysicalVolumeStore::locked = false;
 // ***************************************************************************
 //
 G4PhysicalVolumeStore::G4PhysicalVolumeStore()
-  : G4std::vector<G4VPhysicalVolume*>()
+  : std::vector<G4VPhysicalVolume*>()
 {
   reserve(100);
 }
@@ -86,7 +86,7 @@ void G4PhysicalVolumeStore::Clean(G4bool notifyLV)
 
   size_t i=0;
   G4PhysicalVolumeStore* store = GetInstance();
-  G4std::vector<G4VPhysicalVolume*>::iterator pos;
+  std::vector<G4VPhysicalVolume*>::iterator pos;
 
 #ifdef G4GEOMETRY_VOXELDEBUG
   G4cout << "Deleting Physical Volumes ... ";

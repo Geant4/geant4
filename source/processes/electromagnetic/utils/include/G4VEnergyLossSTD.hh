@@ -94,7 +94,7 @@ public:
 
   G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
-  virtual G4std::vector<G4Track*>* SecondariesAlongStep(
+  virtual std::vector<G4Track*>* SecondariesAlongStep(
                              const G4Step&,
 			           G4double& tmax,
 			           G4double& eloss,
@@ -315,10 +315,10 @@ private:
 private:
 
   G4EmModelManager*                     modelManager;
-  G4std::vector<G4VSubCutoffProcessor*> scoffProcessors;
-  G4std::vector<const G4Region*>        scoffRegions;
+  std::vector<G4VSubCutoffProcessor*> scoffProcessors;
+  std::vector<const G4Region*>        scoffRegions;
   G4int                                 nSCoffRegions;
-  G4std::vector<G4int>                  idxSCoffRegions;
+  std::vector<G4int>                  idxSCoffRegions;
 
   // tables and vectors
   G4PhysicsTable*  theDEDXTable;
@@ -452,7 +452,7 @@ inline G4double G4VEnergyLossSTD::GetDEDXDispersion(
 {
   DefineMaterial(couple);
   G4double tmax = MaxSecondaryEnergy(dp);
-  tmax = G4std::min(tmax,(*theCuts)[currentMaterialIndex]);
+  tmax = std::min(tmax,(*theCuts)[currentMaterialIndex]);
   return modelManager->GetDEDXDispersion(currentMaterial, dp, tmax, length,
                        currentMaterialIndex);
 }
@@ -492,7 +492,7 @@ inline G4double G4VEnergyLossSTD::GetContinuousStepLimit(const G4Track&,
     fRange = ((*theRangeTable)[currentMaterialIndex])->
             GetValue(preStepScaledEnergy, b)*reduceFactor;
     x = fRange;
-    G4double r = G4std::min(finalRange, currentCouple->GetProductionCuts()
+    G4double r = std::min(finalRange, currentCouple->GetProductionCuts()
                  ->GetProductionCut(idxG4ElectronCut));
     if( integral ) {
       if(x < currentMinimumStep && x > r) x *= rangeCoeff;

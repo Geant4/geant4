@@ -48,7 +48,7 @@
 #define G4VHSHELLCROSSSECTION_HH 1
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 
 class G4VhShellCrossSection 
 {
@@ -66,7 +66,7 @@ public:
 
 protected:
 
-  virtual G4std::vector<G4double> Probabilities(G4int Z,
+  virtual std::vector<G4double> Probabilities(G4int Z,
 						G4double incidentEnergy,
 						G4double mass,
 						G4double deltaEnergy) const = 0;

@@ -36,7 +36,7 @@
 #include "G4FluoTransition.hh"
 
 G4FluoTransition::G4FluoTransition(G4int finalShell,
-				       const G4std::vector<G4int>& ids,
+				       const std::vector<G4int>& ids,
 				       const G4DataVector& energies,
 				       const G4DataVector& prob)
   :finalShellId(finalShell),
@@ -48,7 +48,7 @@ G4FluoTransition::G4FluoTransition(G4int finalShell,
 G4FluoTransition::~G4FluoTransition()
 { }
 
-const G4std::vector<G4int>& G4FluoTransition::OriginatingShellIds() const
+const std::vector<G4int>& G4FluoTransition::OriginatingShellIds() const
 {
   return  originatingShellIds;
 }

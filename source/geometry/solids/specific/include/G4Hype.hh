@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.hh,v 1.6 2002-10-28 11:47:50 gcosmo Exp $
+// $Id: G4Hype.hh,v 1.7 2003-06-16 16:53:52 gunter Exp $
 // $Original: G4Hype.hh,v 1.0 1998/06/09 16:57:50 safai Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -138,7 +138,7 @@ class G4Hype : public G4VSolid
 
   G4GeometryType  GetEntityType() const;
 
-  G4std::ostream& StreamInfo(G4std::ostream& os) const;
+  std::ostream& StreamInfo(std::ostream& os) const;
 
   void          DescribeYourselfTo (G4VGraphicsScene& scene) const;
   G4VisExtent   GetExtent          () const;

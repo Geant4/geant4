@@ -13,7 +13,7 @@
 
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4ThreeVector.hh"
 #ifdef G4ANALYSIS_USE
 #include "AIDA/AIDA.h"

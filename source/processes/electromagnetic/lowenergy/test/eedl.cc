@@ -53,8 +53,8 @@
 #include "G4VEMDataSet.hh"
 #include "G4EMDataSet.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 #include <string>
 #include <iostream.h>
 #include <stdlib.h>
@@ -267,7 +267,7 @@ int main(int argc,char** argv)
             shell = 0;
             Zold = Z;
             char nameChar[20] = {""};
-            G4std::ostrstream ost(nameChar, 20, G4std::ios::out);
+            std::ostrstream ost(nameChar, 20, std::ios::out);
             ost << fname2 << Z << ".dat";
             string fname3(nameChar);  
             fout_b->open(fname3.c_str(), std::ios::out|std::ios::trunc);
@@ -391,7 +391,7 @@ int main(int argc,char** argv)
 
           if(yy > ymax) ymax = yy;
 
-          dy = G4std::abs(p[i] - yy*a)/p[i];
+          dy = std::abs(p[i] - yy*a)/p[i];
 
           if(1 < verbose) {
             cout << "x= " << x   

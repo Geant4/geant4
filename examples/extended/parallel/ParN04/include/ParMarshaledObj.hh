@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: ParMarshaledObj.hh,v 1.1 2002-03-05 15:22:13 gcosmo Exp $
+// $Id: ParMarshaledObj.hh,v 1.2 2003-06-16 16:49:36 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -33,7 +33,7 @@
 #define ParMarshaledObj_h
 
 #include <stdlib.h>
-#include "g4std/iostream"
+#include <iostream>
 
 // Geant4 types
 #include "globals.hh"

@@ -170,7 +170,7 @@ G4double G4BraggModel::CrossSection(const G4Material* material,
 {
 
   G4double cross = 0.0;
-  G4double tmax = G4std::min(MaxSecondaryEnergy(p, kineticEnergy), maxEnergy);
+  G4double tmax = std::min(MaxSecondaryEnergy(p, kineticEnergy), maxEnergy);
   if(cutEnergy < tmax) {
     
     G4double x      = cutEnergy/tmax;
@@ -196,7 +196,7 @@ G4DynamicParticle* G4BraggModel::SampleSecondary(
 {
   G4double tmax = MaxSecondaryEnergy(dp);
   G4double xmin = tmin/tmax;
-  G4double xmax = G4std::min(tmax, maxEnergy)/tmax;
+  G4double xmax = std::min(tmax, maxEnergy)/tmax;
   if(xmin >= xmax) return 0;
 
   G4double kineticEnergy = dp->GetKineticEnergy();
@@ -248,13 +248,13 @@ G4DynamicParticle* G4BraggModel::SampleSecondary(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4std::vector<G4DynamicParticle*>* G4BraggModel::SampleSecondaries(
+std::vector<G4DynamicParticle*>* G4BraggModel::SampleSecondaries(
                              const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* dp,
                                    G4double tmin,
                                    G4double maxEnergy)
 {
-  G4std::vector<G4DynamicParticle*>* vdp = new G4std::vector<G4DynamicParticle*>;
+  std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
   G4DynamicParticle* delta = SampleSecondary(couple, dp, tmin, maxEnergy);
   vdp->push_back(delta);
 

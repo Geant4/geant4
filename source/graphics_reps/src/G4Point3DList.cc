@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Point3DList.cc,v 1.5 2001-07-11 10:01:08 gunter Exp $
+// $Id: G4Point3DList.cc,v 1.6 2003-06-16 16:55:22 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,7 +33,7 @@
 
 G4Point3DList::~G4Point3DList () {}
 
-G4std::ostream& operator << (G4std::ostream& os, const G4Point3DList& points)
+std::ostream& operator << (std::ostream& os, const G4Point3DList& points)
 {
   os << "G4Point3DList[" << points.size() << "]: ";
   for (size_t i = 0; i < points.size(); i++) os << points[i];

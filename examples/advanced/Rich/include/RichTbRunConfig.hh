@@ -8,7 +8,7 @@
 #define RichTbRunConfig_h 1
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 #include "AerogelTypeSpec.hh"
 #include "FilterTypeSpec.hh"
 #include "AerogelRefData.hh"

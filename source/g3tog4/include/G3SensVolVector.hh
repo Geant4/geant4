@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3SensVolVector.hh,v 1.5 2001-07-16 15:38:18 gcosmo Exp $
+// $Id: G3SensVolVector.hh,v 1.6 2003-06-16 16:50:43 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // vector of logical volumes that were defined with
@@ -32,10 +32,10 @@
 #ifndef G3SENSVOLVECTOR_HH
 #define G3SENSVOLVECTOR_HH 1
 
-#include "g4std/vector"
+#include <vector>
 #include "G4LogicalVolume.hh"
 
-typedef G4std::vector<G4LogicalVolume*> G3SensVolVector;
+typedef std::vector<G4LogicalVolume*> G3SensVolVector;
 
 extern G3SensVolVector G3SensVol;
 #endif

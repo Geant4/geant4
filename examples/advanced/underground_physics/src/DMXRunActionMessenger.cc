@@ -110,7 +110,7 @@ void DMXRunActionMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   if(command == PlotEventCmd) {
     G4int vl;
     const char* t = newValue;
-    G4std::istrstream is((char*)t);
+    std::istrstream is((char*)t);
     is >> vl;
     DMXRun->Setplotevent(vl!=0);
   }
@@ -118,7 +118,7 @@ void DMXRunActionMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   if(command == InteractPlotCmd) {
     G4int vl;
     const char* t = newValue;
-    G4std::istrstream is((char*)t);
+    std::istrstream is((char*)t);
     is >> vl;
     DMXRun->Setinteractplot(vl!=0);
   }

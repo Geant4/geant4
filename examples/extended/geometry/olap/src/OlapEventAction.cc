@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: OlapEventAction.cc,v 1.2 2003-06-12 12:24:32 gcosmo Exp $
+// $Id: OlapEventAction.cc,v 1.3 2003-06-16 16:49:26 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,8 +33,8 @@
 // --------------------------------------------------------------
 //
 #include "globals.hh"
-#include "g4std/vector"
-#include "g4std/strstream"
+#include <vector>
+#include <strstream>
 
 #include "G4VVisManager.hh"
 #include "G4Trajectory.hh"
@@ -53,8 +53,8 @@
 //#define OLAP_DEBUG
 //#define OLAP_DEBUG_2
 
-G4std::ostream & 
-   operator<<(G4std::ostream& flux, OlapInfo & oi)
+std::ostream & 
+   operator<<(std::ostream& flux, OlapInfo & oi)
 {
     OlapStepInfo si;
     si.thePoint = oi.v1;
@@ -272,7 +272,7 @@ void OlapEventAction::EndOfEventAction(const G4Event* anEvent)
      oi->probNot = true; // probably not an overlap, just numerics ....
      dontDelete = true;
           
-     G4std::ostrstream os;
+     std::ostrstream os;
      os << "A,B diff. steps AB:" << ABSteps.size()
                       << " BA:"  << BASteps.size() << '\0';
 
@@ -330,7 +330,7 @@ void OlapEventAction::EndOfEventAction(const G4Event* anEvent)
 
 G4bool OlapEventAction::InsertOI(OlapInfo * oi)
 {
-   G4std::vector<OlapInfo*>::iterator it = theRunAction->theOlaps.begin();
+   std::vector<OlapInfo*>::iterator it = theRunAction->theOlaps.begin();
    G4bool flag(false);
    while (it != theRunAction->theOlaps.end())
    {

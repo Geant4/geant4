@@ -59,7 +59,7 @@
 #include "DMXSteppingAction.hh"
 #include "DMXStackingAction.hh"
 
-#include "g4std/vector"
+#include <vector>
 
 int main(int argc,char** argv) {
 

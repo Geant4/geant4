@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.50 2003-05-20 20:16:13 pia Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.51 2003-06-16 17:00:15 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -170,8 +170,8 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
 
   // Create lists of pointers to DynamicParticles (photons and electrons)
   // (Is the electron vector necessary? To be checked)
-  G4std::vector<G4DynamicParticle*>* photonVector = 0;
-  G4std::vector<G4DynamicParticle*> electronVector;
+  std::vector<G4DynamicParticle*>* photonVector = 0;
+  std::vector<G4DynamicParticle*> electronVector;
 
   G4double energyDeposit = 0.0;
 
@@ -211,10 +211,10 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
 
   size_t index = couple->GetIndex();
   G4double cutg = (*(theCoupleTable->GetEnergyCutsVector(0)))[index];
-  cutg = G4std::min(cutForLowEnergySecondaryPhotons,cutg);
+  cutg = std::min(cutForLowEnergySecondaryPhotons,cutg);
   
   G4double cute = (*(theCoupleTable->GetEnergyCutsVector(1)))[index];
-  cute = G4std::min(cutForLowEnergySecondaryPhotons,cute);
+  cute = std::min(cutForLowEnergySecondaryPhotons,cute);
 
   G4DynamicParticle* aPhoton;
 

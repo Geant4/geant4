@@ -35,7 +35,7 @@
 class G4VPDigitsCollectionIO
 {
     public: // With description
-      G4VPDigitsCollectionIO( G4std::string detName, G4std::string colName );
+      G4VPDigitsCollectionIO( std::string detName, std::string colName );
       // Constructor
 
       virtual ~G4VPDigitsCollectionIO() {};
@@ -55,10 +55,10 @@ class G4VPDigitsCollectionIO
       G4bool operator== (const G4VPDigitsCollectionIO& right) const;
       // virtual operator for comparing digit collections with names.
 
-      G4std::string DMname() { return f_detName; };
+      std::string DMname() { return f_detName; };
       // Returns the digitizer module name.
 
-      G4std::string CollectionName() { return f_colName; };
+      std::string CollectionName() { return f_colName; };
       // Returns the digit collection name.
 
       void SetVerboseLevel(int v) { m_verbose = v; };
@@ -66,8 +66,8 @@ class G4VPDigitsCollectionIO
 
     protected:
       G4int m_verbose;
-      G4std::string f_detName;
-      G4std::string f_colName;
+      std::string f_detName;
+      std::string f_colName;
 
 }; // End of class G4VPDigitsCollectionIO
 

@@ -29,7 +29,7 @@
 #ifndef CCalSensitiveConfiguration_h
 #define CCalSensitiveConfiguration_h 1
 
-#include "g4std/map"
+#include <map>
 #include "CCalutils.hh"
 
 class CCalSensitiveConfiguration {
@@ -39,8 +39,8 @@ class CCalSensitiveConfiguration {
     int      SensitiveFlag;
   };
 
-   typedef G4std::map<G4String, GCInfo, G4std::less<G4String> > CCalSensitiveConfTable;
-   typedef G4std::map<G4String, GCInfo, G4std::less<G4String> >::iterator CCalSensitiveConfIterator;
+   typedef std::map<G4String, GCInfo, std::less<G4String> > CCalSensitiveConfTable;
+   typedef std::map<G4String, GCInfo, std::less<G4String> >::iterator CCalSensitiveConfIterator;
 		    
   
 public:

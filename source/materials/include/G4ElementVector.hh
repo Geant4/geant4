@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElementVector.hh,v 1.4 2001-10-17 07:59:52 gcosmo Exp $
+// $Id: G4ElementVector.hh,v 1.5 2003-06-16 16:56:15 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,9 +36,9 @@
 #ifndef G4ELEMENTVECTOR_HH
 #define G4ELEMENTVECTOR_HH
 
-#include "g4std/vector"
+#include <vector>
 #include "G4Element.hh"
 
-typedef G4std::vector<G4Element*> G4ElementVector;
+typedef std::vector<G4Element*> G4ElementVector;
 
 #endif

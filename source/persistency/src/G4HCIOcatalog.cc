@@ -72,11 +72,11 @@ void G4HCIOcatalog::RegisterHCIOmanager(G4VPHitsCollectionIO* d)
 }
 
 // Implementation of GetEntry
-G4VHCIOentry* G4HCIOcatalog::GetEntry(G4std::string name)
+G4VHCIOentry* G4HCIOcatalog::GetEntry(std::string name)
 {
   if ( theCatalog.find(name) == theCatalog.end() ) {
     G4cout << "Hit Collection I/O manager entry \"" << name
-           << "\" not found!" << G4std::endl;
+           << "\" not found!" << std::endl;
     return 0;
   } else {
     G4VHCIOentry* ds = theCatalog[name];
@@ -85,7 +85,7 @@ G4VHCIOentry* G4HCIOcatalog::GetEntry(G4std::string name)
 }
 
 // Implementation of GetHCIOmanager
-G4VPHitsCollectionIO* G4HCIOcatalog::GetHCIOmanager(G4std::string name)
+G4VPHitsCollectionIO* G4HCIOcatalog::GetHCIOmanager(std::string name)
 {
   if ( theStore.find(name) == theStore.end() ) {
     G4cout << "Hit Collection I/O manager \"" << name
@@ -109,9 +109,9 @@ void G4HCIOcatalog::PrintEntries()
 }
 
 // Implementation of CurrentHCIOmanager
-G4std::string G4HCIOcatalog::CurrentHCIOmanager()
+std::string G4HCIOcatalog::CurrentHCIOmanager()
 {
-  G4std::string list = "";
+  std::string list = "";
   HCIOstore::const_iterator it;
   for ( it=theStore.begin(); it != theStore.end(); it++ ) {
     list += (*it).first + " ";

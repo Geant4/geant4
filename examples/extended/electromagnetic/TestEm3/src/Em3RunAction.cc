@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3RunAction.cc,v 1.23 2003-06-03 10:36:34 vnivanch Exp $
+// $Id: Em3RunAction.cc,v 1.24 2003-06-16 16:47:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,7 +41,7 @@
 #include "G4UnitsTable.hh"
 
 #include "Randomize.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 #include "G4ProductionCutsTable.hh"
 
 #ifndef G4NOHIST
@@ -173,16 +173,16 @@ void Em3RunAction::EndOfRunAction(const G4Run* aRun)
   G4double MeanEAbs,rmsEAbs,MeanLAbs,rmsLAbs;
 
 #ifdef G4USE_STD_NAMESPACE
-  G4std::ios::fmtflags mode = G4cout.flags();
-  G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
+  std::ios::fmtflags mode = G4cout.flags();
+  G4cout.setf(std::ios::fixed,std::ios::floatfield);
 #else
-  G4long mode = G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
+  G4long mode = G4cout.setf(std::ios::fixed,std::ios::floatfield);
 #endif
   G4int  prec = G4cout.precision(2);
 
   G4cout << "\n-------------------------------------------------------------\n"
-         << G4std::setw(51) << "total energy dep"
-	 << G4std::setw(30) << "total tracklen \n \n";
+         << std::setw(51) << "total energy dep"
+	 << std::setw(30) << "total tracklen \n \n";
 
   for (G4int k=0; k<Detector->GetNbOfAbsor(); k++)
     {
@@ -196,18 +196,18 @@ void Em3RunAction::EndOfRunAction(const G4Run* aRun)
      //
      G4cout
      << " Absorber" << k
-     << " (" << G4std::setw(12) << Detector->GetAbsorMaterial(k)->GetName()
+     << " (" << std::setw(12) << Detector->GetAbsorMaterial(k)->GetName()
      << ") :"
-     << G4std::setw( 7) << G4BestUnit(MeanEAbs,"Energy") << " +- "
-     << G4std::setw( 5) << G4BestUnit( rmsEAbs,"Energy")
-     << G4std::setw(12) << G4BestUnit(MeanLAbs,"Length") << " +- "
-     << G4std::setw( 5) << G4BestUnit( rmsLAbs,"Length")
+     << std::setw( 7) << G4BestUnit(MeanEAbs,"Energy") << " +- "
+     << std::setw( 5) << G4BestUnit( rmsEAbs,"Energy")
+     << std::setw(12) << G4BestUnit(MeanLAbs,"Length") << " +- "
+     << std::setw( 5) << G4BestUnit( rmsLAbs,"Length")
      << G4endl;
     }
 
   G4cout << "\n-------------------------------------------------------------";
   G4cout << G4endl;
-  G4cout.setf(mode,G4std::ios::floatfield);
+  G4cout.setf(mode,std::ios::floatfield);
   G4cout.precision(prec);
 
   // show Rndm status
@@ -245,10 +245,10 @@ void Em3RunAction::PrintDedxTables()
   //print the kinetic energies
   //
 #ifdef G4USE_STD_NAMESPACE
-  G4std::ios::fmtflags mode = G4cout.flags();
-  G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
+  std::ios::fmtflags mode = G4cout.flags();
+  G4cout.setf(std::ios::fixed,std::ios::floatfield);
 #else
-  long mode = G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
+  long mode = G4cout.setf(std::ios::fixed,std::ios::floatfield);
 #endif
   G4int  prec = G4cout.precision(3);
 
@@ -261,7 +261,7 @@ void Em3RunAction::PrintDedxTables()
 
   //print the dE/dx tables
   //
-  G4cout.setf(G4std::ios::scientific,G4std::ios::floatfield);
+  G4cout.setf(std::ios::scientific,std::ios::floatfield);
 
   G4ParticleDefinition*
   part = G4ParticleTable::GetParticleTable()->FindParticle("mu+");
@@ -307,7 +307,7 @@ void Em3RunAction::PrintDedxTables()
      }
 
   G4cout.precision(prec);
-  G4cout.setf(mode,G4std::ios::floatfield);
+  G4cout.setf(mode,std::ios::floatfield);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

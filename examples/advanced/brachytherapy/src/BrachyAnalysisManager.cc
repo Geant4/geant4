@@ -29,12 +29,12 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyAnalysisManager.cc,v 1.10 2003-05-22 17:20:42 guatelli Exp $
+// $Id: BrachyAnalysisManager.cc,v 1.11 2003-06-16 16:45:02 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifdef  G4ANALYSIS_USE
 #include <stdlib.h>
-#include "g4std/fstream"
+#include <fstream>
 #include "BrachyAnalysisManager.hh"
 
 #include "G4ios.hh"

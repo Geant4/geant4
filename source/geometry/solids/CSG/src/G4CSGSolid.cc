@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CSGSolid.cc,v 1.4 2002-10-28 11:43:05 gcosmo Exp $
+// $Id: G4CSGSolid.cc,v 1.5 2003-06-16 16:53:35 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4CSGSolid.hh"
@@ -38,7 +38,7 @@ G4CSGSolid::~G4CSGSolid()
 {
 }
 
-G4std::ostream& G4CSGSolid::StreamInfo(G4std::ostream& os) const
+std::ostream& G4CSGSolid::StreamInfo(std::ostream& os) const
 {
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"

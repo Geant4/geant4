@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: B03PhysicsList.cc,v 1.3 2002-11-08 17:35:19 dressel Exp $
+// $Id: B03PhysicsList.cc,v 1.4 2003-06-16 16:47:29 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "globals.hh"
-#include "g4std/iomanip"                
+#include <iomanip>                
 
 #include "B03PhysicsList.hh"
 

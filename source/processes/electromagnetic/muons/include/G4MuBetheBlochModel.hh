@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBetheBlochModel.hh,v 1.6 2003-06-06 17:42:52 vnivanch Exp $
+// $Id: G4MuBetheBlochModel.hh,v 1.7 2003-06-16 17:01:36 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -96,7 +96,7 @@ public:
                                       G4double tmin,
                                       G4double maxEnergy);
 
-  virtual G4std::vector<G4DynamicParticle*>* SampleSecondaries(
+  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,

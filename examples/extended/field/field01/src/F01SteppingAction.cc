@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01SteppingAction.cc,v 1.5 2001-11-07 16:36:31 gcosmo Exp $
+// $Id: F01SteppingAction.cc,v 1.6 2003-06-16 16:48:58 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,7 +32,7 @@
 #include "F01SteppingAction.hh"
 #include "F01SteppingMessenger.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

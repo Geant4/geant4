@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PlacedSolid.icc,v 1.6 2002-11-06 23:28:54 radoone Exp $
+// $Id: G4PlacedSolid.icc,v 1.7 2003-06-16 16:52:38 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -57,7 +57,7 @@ G4ThreeVector* G4PlacedSolid::GetTranslation() const
 } 
 
 inline
-G4std::ostream& G4PlacedSolid::StreamInfo(G4std::ostream& os) const
+std::ostream& G4PlacedSolid::StreamInfo(std::ostream& os) const
 {
   return solid->StreamInfo( os );
 }

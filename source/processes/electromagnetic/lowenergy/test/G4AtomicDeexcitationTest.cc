@@ -23,7 +23,7 @@
 #include "G4AtomicDeexcitation.hh"
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4DynamicParticle.hh"
 
 
@@ -45,7 +45,7 @@ int main() {
 
   for(G4int i = 0; i<numberOfRun;i++){ 
     G4cout<<"begin of run "<<i<<G4endl;
-    G4std::vector<G4DynamicParticle*>* vectorOfParticles;
+    std::vector<G4DynamicParticle*>* vectorOfParticles;
     
     vectorOfParticles = deexcitation-> GenerateParticles(Z,vacancyId);
     

@@ -27,15 +27,15 @@
 #ifndef DCIO_CATALOG_HH
 #define DCIO_CATALOG_HH 1
 
-#include "g4std/map"
+#include <map>
 #include "G4Types.hh"
 #include "G4VPDigitsCollectionIO.hh"
 
 class G4VDCIOentry;
 
-typedef G4std::map<G4std::string, G4VDCIOentry*, G4std::less<G4std::string> > DCIOmap;
+typedef std::map<std::string, G4VDCIOentry*, std::less<std::string> > DCIOmap;
 
-typedef G4std::map<G4std::string, G4VPDigitsCollectionIO*, G4std::less<G4std::string> > DCIOstore;
+typedef std::map<std::string, G4VPDigitsCollectionIO*, std::less<std::string> > DCIOstore;
 
 // Class Description:
 //   Catalog for the I/O manager of digits collection for each detector.
@@ -62,16 +62,16 @@ class G4DCIOcatalog
       void RegisterDCIOmanager(G4VPDigitsCollectionIO* d);
       // Register I/O manager
 
-      G4VDCIOentry* GetEntry(G4std::string name);
+      G4VDCIOentry* GetEntry(std::string name);
       // Returns the I/O manager entry
 
-      G4VPDigitsCollectionIO* GetDCIOmanager(G4std::string name);
+      G4VPDigitsCollectionIO* GetDCIOmanager(std::string name);
       // Returns the registered I/O manager entry
 
       void PrintEntries();
       // Prints the list of I/O manager entries
 
-      G4std::string CurrentDCIOmanager();
+      std::string CurrentDCIOmanager();
       // Returns the list of I/O managers
 
       void PrintDCIOmanager();

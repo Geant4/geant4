@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Deuteron.cc,v 1.7 2003-02-18 01:49:58 kurasige Exp $
+// $Id: G4Deuteron.cc,v 1.8 2003-06-16 16:57:22 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,8 +36,8 @@
 //  Fixed parameters H. Kurashige, 25 Apr 1998
 // ----------------------------------------------------------------------
 
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4Deuteron.hh"
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TestSetup.cc,v 1.6 2001-10-30 08:35:52 pia Exp $
+// $Id: G4TestSetup.cc,v 1.7 2003-06-16 17:01:35 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -36,8 +36,8 @@
 #include "G4TestSetup.hh"
 #include "G4VProcess.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4Electron.hh"
 #include "G4Positron.hh"

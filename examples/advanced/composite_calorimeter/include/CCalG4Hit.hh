@@ -34,7 +34,7 @@
 
 class CCalG4Hit : public G4VHit, public CCalHit {
 
-  friend G4std::ostream& operator<< (G4std::ostream& os, const CCalG4Hit& hit);
+  friend std::ostream& operator<< (std::ostream& os, const CCalG4Hit& hit);
 
 public:
 

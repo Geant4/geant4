@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelHadronPhysics.cc,v 1.1 2003-05-28 13:53:52 flongo Exp $
+// $Id: GammaRayTelHadronPhysics.cc,v 1.2 2003-06-16 16:46:27 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -29,7 +29,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"   
+#include <iomanip>   
 
 
 GammaRayTelHadronPhysics::GammaRayTelHadronPhysics(const G4String& name)

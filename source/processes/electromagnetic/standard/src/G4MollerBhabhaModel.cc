@@ -150,7 +150,7 @@ G4double G4MollerBhabhaModel::ComputeDEDX(const G4Material* material,
   eexc          /= electron_mass_c2;
   G4double eexc2 = eexc*eexc; 
 
-  G4double d = G4std::min(cutEnergy, MaxSecondaryEnergy(p, tkin))/electron_mass_c2;
+  G4double d = std::min(cutEnergy, MaxSecondaryEnergy(p, tkin))/electron_mass_c2;
   G4double dedx;
 
   // electron
@@ -211,7 +211,7 @@ G4double G4MollerBhabhaModel::CrossSection(const G4Material* material,
   if(!particle) SetParticle(p);
   G4double cross = 0.0;
   G4double tmax = MaxSecondaryEnergy(p, kineticEnergy);
-  tmax = G4std::min(maxEnergy, tmax);
+  tmax = std::min(maxEnergy, tmax);
 
   if(cutEnergy < tmax) {
     
@@ -260,7 +260,7 @@ G4DynamicParticle* G4MollerBhabhaModel::SampleSecondary(
                                    G4double tmin,
                                    G4double maxEnergy)
 {
-  G4double tmax = G4std::min(maxEnergy, MaxSecondaryEnergy(dp));
+  G4double tmax = std::min(maxEnergy, MaxSecondaryEnergy(dp));
   if(tmin >= tmax) return 0;
 
   G4double kineticEnergy = dp->GetKineticEnergy();
@@ -365,13 +365,13 @@ G4DynamicParticle* G4MollerBhabhaModel::SampleSecondary(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4std::vector<G4DynamicParticle*>* G4MollerBhabhaModel::SampleSecondaries(
+std::vector<G4DynamicParticle*>* G4MollerBhabhaModel::SampleSecondaries(
                              const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* dp,
                                    G4double tmin,
                                    G4double maxEnergy)
 {
-  G4std::vector<G4DynamicParticle*>* vdp = new G4std::vector<G4DynamicParticle*>;
+  std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
   G4DynamicParticle* delta = SampleSecondary(couple, dp, tmin, maxEnergy);
   vdp->push_back(delta);
 

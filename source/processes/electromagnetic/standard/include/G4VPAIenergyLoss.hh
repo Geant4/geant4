@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPAIenergyLoss.hh,v 1.9 2003-03-10 12:22:02 vnivanch Exp $
+// $Id: G4VPAIenergyLoss.hh,v 1.10 2003-06-16 17:01:57 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -55,8 +55,8 @@
 #define G4VPAIenergyLoss_h 1
 
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "globals.hh"
 #include "Randomize.hh"

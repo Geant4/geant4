@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.hh,v 1.9 2003-05-30 10:36:48 hpw Exp $
+// $Id: G4ElectroNuclearCrossSection.hh,v 1.10 2003-06-16 17:03:00 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,7 +39,7 @@
 #include "G4ParticleTable.hh"
 #include "G4NucleiProperties.hh"
 #include "G4NucleiPropertiesTable.hh"
-#include "g4std/vector"
+#include <vector>
 #include "Randomize.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiSigmacPlusPlus.cc,v 1.6 2001-10-15 10:10:54 kurasige Exp $
+// $Id: G4AntiSigmacPlusPlus.cc,v 1.7 2003-06-16 16:56:59 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,8 +35,8 @@
 //  Change both methods to get the pointer into non-inlined H.Kurashige 4 Aug. 1998
 // ----------------------------------------------------------------------
 
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4AntiSigmacPlusPlus.hh"
 

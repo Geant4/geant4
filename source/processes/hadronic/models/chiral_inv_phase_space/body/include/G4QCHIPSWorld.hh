@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCHIPSWorld.hh,v 1.11 2002-12-12 19:14:31 gunter Exp $
+// $Id: G4QCHIPSWorld.hh,v 1.12 2003-06-16 17:03:59 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCHIPSWorld ----------------
@@ -32,7 +32,7 @@
 #ifndef G4QCHIPSWorld_h
 #define G4QCHIPSWorld_h 1
 
-#include "g4std/iostream"
+#include <iostream>
 #include "globals.hh"
 #include "G4QParticleVector.hh"
 

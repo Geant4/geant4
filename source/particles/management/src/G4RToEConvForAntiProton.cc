@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForAntiProton.cc,v 1.2 2002-12-16 11:15:45 gcosmo Exp $
+// $Id: G4RToEConvForAntiProton.cc,v 1.3 2003-06-16 16:58:37 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,8 +36,8 @@
 #include "G4PhysicsLogVector.hh"
 
 #include "G4ios.hh"
-#include "g4std/iomanip"
-#include "g4std/strstream"
+#include <iomanip>
+#include <strstream>
 
 G4RToEConvForAntiProton::G4RToEConvForAntiProton() : G4VRangeToEnergyConverter()
 {    

@@ -53,12 +53,12 @@ public:
   
 private:  
   G4int verboseLevel;
-  G4std::vector< G4BertiniEvaporationChannel * > channelVector;
-  void fillResult( G4std::vector< G4DynamicParticle * > secondaryParticleVector,
+  std::vector< G4BertiniEvaporationChannel * > channelVector;
+  void fillResult( std::vector< G4DynamicParticle * > secondaryParticleVector,
 		   G4FragmentVector * aResult );
   void splitBe8( const G4double E, 
 		 const G4ThreeVector boost,
-		 G4std::vector< G4DynamicParticle * > & secondaryParticleVector);
+		 std::vector< G4DynamicParticle * > & secondaryParticleVector);
   void isotropicCosines( G4double & u, G4double & v,G4double & w );
 };
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelEventAction.cc,v 1.16 2003-05-30 15:09:00 flongo Exp $
+// $Id: GammaRayTelEventAction.cc,v 1.17 2003-06-16 16:46:25 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -67,7 +67,7 @@
 // and other relevant information
 
 #ifdef G4STORE_DATA
-extern G4std::ofstream outFile;
+extern std::ofstream outFile;
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -156,7 +156,7 @@ void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
 	  IsX = (*THC)[i]->GetPlaneType();
 	  
 #ifdef G4STORE_DATA
-	  outFile << G4std::setw(7) << event_id << " " << 
+	  outFile << std::setw(7) << event_id << " " << 
 	    ESil/keV << " " << NStrip << 
 	    " " << NPlane << " " << IsX << " " <<
 	    (*THC)[i]->GetPos().x()/mm <<" "<<
@@ -164,7 +164,7 @@ void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
 	    (*THC)[i]->GetPos().z()/mm <<" "<<
 	    G4endl;
 #else 	  
-	  G4cout << G4std::setw(7) << event_id << " " << 
+	  G4cout << std::setw(7) << event_id << " " << 
 	    ESil/keV << " " << NStrip << 
 	    " " << NPlane << " " << IsX << " " <<
 	    (*THC)[i]->GetPos().x()/mm <<" "<<
@@ -234,7 +234,7 @@ void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
       NPlane = (*DC)[i]->GetPlaneNumber();
       IsX = (*DC)[i]->GetPlaneType();
       
-      //      outFile << G4std::setw(7) << event_id << " " << NStrip << 
+      //      outFile << std::setw(7) << event_id << " " << NStrip << 
       //	" " << NPlane << " " << IsX << " " << G4endl;	
     }
   }

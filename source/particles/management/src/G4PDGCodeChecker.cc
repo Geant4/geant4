@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PDGCodeChecker.cc,v 1.5 2001-07-11 10:02:03 gunter Exp $
+// $Id: G4PDGCodeChecker.cc,v 1.6 2003-06-16 16:58:30 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,8 +32,8 @@
 //      17 Aug 1999 H.Kurashige
 // **********************************************************************
 
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4PDGCodeChecker.hh"
 

@@ -71,7 +71,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4RegionModels::G4RegionModels(G4int nMod, G4std::vector<G4int>& list, G4DataVector& lowE)
+G4RegionModels::G4RegionModels(G4int nMod, std::vector<G4int>& list, G4DataVector& lowE)
 {
   nModelsForRegion      = nMod;
   theListOfModelIndexes = new G4int [nModelsForRegion];
@@ -213,7 +213,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 
   // Identify the list of regions with different set of models
   nRegions = 1;
-  G4std::vector<const G4Region*> set;
+  std::vector<const G4Region*> set;
   set.push_back(world);
 
   for (G4int ii=0; ii<nEmModels; ii++) {
@@ -246,7 +246,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 
     G4int n = 0;
 
-    G4std::vector<G4int>    modelAtRegion;
+    std::vector<G4int>    modelAtRegion;
     G4DataVector            eLow;
     G4DataVector            eHigh;
     modelAtRegion.clear();
@@ -262,7 +262,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 
         G4double tmin = model->LowEnergyLimit(particle);
         G4double tmax = model->HighEnergyLimit(particle);
-        if (n) tmin = G4std::max(tmin, eHigh[n-1]);
+        if (n) tmin = std::max(tmin, eHigh[n-1]);
 
         if(1 < verboseLevel) {
           G4cout << "Model # " << ii << " for region <"
@@ -323,9 +323,9 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 
       G4double tcutmin = model->MinEnergyCut(particle, couple);
 
-      cut = G4std::max(cut, tcutmin);
-      G4double x = G4std::max(cut*minSubRange, tcutmin);
-      subcut = G4std::max(subcut, x);
+      cut = std::max(cut, tcutmin);
+      G4double x = std::max(cut*minSubRange, tcutmin);
+      subcut = std::max(subcut, x);
       if(1 < verboseLevel) {
             G4cout << "The model # " << j
                    << "; tcutmin(MeV)= " << tcutmin/MeV

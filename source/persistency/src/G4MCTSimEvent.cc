@@ -54,7 +54,7 @@ G4bool G4MCTSimEvent::AddParticle(const G4MCTSimParticle* aparticle)
   int trackID= aparticle-> GetTrackID();
   int nc= particleMap.count(trackID);
   if(nc==0) {
-    particleMap.insert(G4std::make_pair(trackID, qpart));
+    particleMap.insert(std::make_pair(trackID, qpart));
     return true;
   } else {
     return false;
@@ -148,7 +148,7 @@ int G4MCTSimEvent::GetNofStoredVertices() const
 
 
 /////////////////////////////////////////////////
-void G4MCTSimEvent::Print(G4std::ostream& ostr) const
+void G4MCTSimEvent::Print(std::ostream& ostr) const
 /////////////////////////////////////////////////
 {
   ostr << "____________________________________________________"

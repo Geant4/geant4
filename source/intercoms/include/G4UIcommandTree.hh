@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommandTree.hh,v 1.13 2002-04-26 22:03:35 asaim Exp $
+// $Id: G4UIcommandTree.hh,v 1.14 2003-06-16 16:55:33 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -31,7 +31,7 @@
 
 #include "G4UIcommand.hh"
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 
 // class description:
 //
@@ -61,8 +61,8 @@ class G4UIcommandTree
       G4String CreateFileName(const char* pName);
       G4String ModStr(const char* strS);
 
-      G4std::vector<G4UIcommand*> command;
-      G4std::vector<G4UIcommandTree*> tree;
+      std::vector<G4UIcommand*> command;
+      std::vector<G4UIcommandTree*> tree;
       G4UIcommand *guidance;
       G4String pathName;
 

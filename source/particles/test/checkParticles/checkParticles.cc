@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: checkParticles.cc,v 1.3 2001-07-11 10:02:10 gunter Exp $
+// $Id: checkParticles.cc,v 1.4 2003-06-16 16:58:51 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,8 +29,8 @@
 #include "G4ios.hh"
 #include "globals.hh"
 #include "tstParticleConstructor.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 void CheckMass(const char*);
 void CheckWidth(const char*);
@@ -38,7 +38,7 @@ void CheckWidth(const char*);
 int main(int argc,char** argv) {
   // PDG computer-readble file for particle properties
   //  see http://www-pdg.lbl.gov/computer_read.html
-  G4std::ifstream pdgFile;
+  std::ifstream pdgFile;
   G4String pdgFileName = "garren_98.mc";
   if (argc > 1) pdgFileName =  argv[1];
  
@@ -77,14 +77,14 @@ int main(int argc,char** argv) {
   return EXIT_SUCCESS;
 }
 
-#include "g4std/strstream"
+#include <strstream>
 
 #include "G4ParticleTable.hh"
 
 void CheckMass(const char* inputString)
 {
   const char* t = inputString;
-  G4std::istrstream is((char*)t);
+  std::istrstream is((char*)t);
  
   G4int     encoding;
   G4double  mass;
@@ -94,7 +94,7 @@ void CheckMass(const char* inputString)
   is >> encoding;
 
   t = &inputString[33];
-  G4std::istrstream is2((char*)t);
+  std::istrstream is2((char*)t);
   is2 >> mass >> massRange >> name;
 
   // get a pointer to G4ParticleDefinition with encoding
@@ -135,7 +135,7 @@ void CheckMass(const char* inputString)
 void CheckWidth(const char* inputString)
 {
   const char* t = inputString;
-  G4std::istrstream is((char*)t);
+  std::istrstream is((char*)t);
  
   G4int     encoding;
   G4double  width;
@@ -145,7 +145,7 @@ void CheckWidth(const char* inputString)
   is >> encoding;
 
    t = &inputString[33];
-   G4std::istrstream is2((char*)t);
+   std::istrstream is2((char*)t);
    is2 >> width >> widthRange >> name;
 
   // get a pointer to G4ParticleDefinition with encoding

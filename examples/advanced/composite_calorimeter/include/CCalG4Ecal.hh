@@ -29,7 +29,7 @@
 
 #include "CCalEcal.hh"
 #include "CCalG4Able.hh"
-#include "g4std/vector"
+#include <vector>
 
 typedef G4LogicalVolume* ptrG4Log;
 
@@ -67,7 +67,7 @@ private:
   static G4LogicalVolume* crystalmatrixLog;
 
   // Logical volumes for sensitive detectors
-  G4std::vector<ptrG4Log> sensitiveLogs;
+  std::vector<ptrG4Log> sensitiveLogs;
 
 };
 

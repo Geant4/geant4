@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.cc,v 1.8 2002-10-29 14:15:52 gcosmo Exp $
+// $Id: G4BooleanSolid.cc,v 1.9 2003-06-16 16:53:14 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for the abstract base class for solids created by boolean 
@@ -155,7 +155,7 @@ G4GeometryType G4BooleanSolid::GetEntityType() const
 //
 // Stream object contents to an output stream
 
-G4std::ostream& G4BooleanSolid::StreamInfo(G4std::ostream& os) const
+std::ostream& G4BooleanSolid::StreamInfo(std::ostream& os) const
 {
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for Boolean solid - " << GetName() << " ***\n"

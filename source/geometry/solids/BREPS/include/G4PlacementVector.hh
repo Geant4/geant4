@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PlacementVector.hh,v 1.5 2001-07-11 09:59:36 gunter Exp $
+// $Id: G4PlacementVector.hh,v 1.6 2003-06-16 16:52:39 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -37,9 +37,9 @@
 #ifndef included_G4PlacementVector
 #define included_G4PlacementVector
 
-#include "g4std/vector"
+#include <vector>
 #include "G4Axis2Placement3D.hh"
 
-typedef G4std::vector<G4Axis2Placement3D*> G4PlacementVector;
+typedef std::vector<G4Axis2Placement3D*> G4PlacementVector;
 
 #endif

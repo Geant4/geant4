@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelDigitizer.cc,v 1.3 2001-12-04 11:40:28 flongo Exp $
+// $Id: GammaRayTelDigitizer.cc,v 1.4 2003-06-16 16:46:23 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -45,7 +45,7 @@
 #include "G4ios.hh"
 
 //#include "G4CollectionNameVector.hh"
-#include "g4std/vector"
+#include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

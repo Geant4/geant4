@@ -2,7 +2,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"   
+#include <iomanip>   
 
 
 MuonModelPhysics::MuonModelPhysics(const G4String& name)

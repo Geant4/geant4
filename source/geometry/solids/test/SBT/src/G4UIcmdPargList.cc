@@ -28,8 +28,8 @@
 
 #include "G4UIcmdPargList.hh"
 
-#include "g4std/strstream"
-#include "g4std/iomanip"
+#include <strstream>
+#include <iomanip>
 
 //
 // Constructor
@@ -45,7 +45,7 @@ G4UIcmdPargList::G4UIcmdPargList( const  G4String &theName, G4int theMaxItem )
 //
 // Fetch argument value from input stream
 //
-G4std::istream &G4UIcmdPargList::FetchValue( G4std::istream &istr )
+std::istream &G4UIcmdPargList::FetchValue( std::istream &istr )
 {
 	//
 	// Because of limitations of G4UIcommand, we must avoid
@@ -92,7 +92,7 @@ G4std::istream &G4UIcmdPargList::FetchValue( G4std::istream &istr )
 	//
 	if (a != '(') {
 		G4cerr << "Listed argument must begin with '(' or consist of only '-'" << G4endl;
-		istr.clear(G4std::ios::failbit|istr.rdstate());	// Is there a better way to do this???
+		istr.clear(std::ios::failbit|istr.rdstate());	// Is there a better way to do this???
 		return istr;
 	}
 
@@ -126,7 +126,7 @@ G4std::istream &G4UIcmdPargList::FetchValue( G4std::istream &istr )
 			//
 			if (++b > buffer+255) {
 				G4cerr << "Listed argument item must be less than 255 characters" << G4endl;
-				istr.clear(G4std::ios::failbit|istr.rdstate());
+				istr.clear(std::ios::failbit|istr.rdstate());
 				return istr;
 			}
 		} 
@@ -136,12 +136,12 @@ G4std::istream &G4UIcmdPargList::FetchValue( G4std::istream &istr )
 		//
 		if (nItemFetched >= maxItem) {
 			G4cerr << "Maximum of " << maxItem << " items exceeded in listed argument" << G4endl;
-			istr.clear(G4std::ios::failbit|istr.rdstate());
+			istr.clear(std::ios::failbit|istr.rdstate());
 			return istr;
 		}
 		
 		if (!FetchItem( buffer, nItemFetched++ )) {
-			istr.clear(G4std::ios::failbit|istr.rdstate());
+			istr.clear(std::ios::failbit|istr.rdstate());
 			return istr;
 		}
 	} while( a == ',' );
@@ -173,7 +173,7 @@ G4String G4UIcmdPargList::ConvertToString()
 	G4int buffSize = 255*nItem+4;
 	
 	char *buff = new char[buffSize];
-	G4std::ostrstream os(buff,buffSize);
+	std::ostrstream os(buff,buffSize);
 	
 	//
 	// Write out everything in turn

@@ -66,7 +66,7 @@ public:
 
   ~G4SCProcessorStand();
 
-  virtual G4std::vector<G4Track*>* SampleSecondaries(const G4Step&,
+  virtual std::vector<G4Track*>* SampleSecondaries(const G4Step&,
 						           G4double& tmax,
 						           G4double& meanLoss,
                                                            G4VEmModel*) = 0;

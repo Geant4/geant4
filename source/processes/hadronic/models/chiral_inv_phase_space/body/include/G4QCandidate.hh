@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCandidate.hh,v 1.15 2002-12-12 19:14:31 gunter Exp $
+// $Id: G4QCandidate.hh,v 1.16 2003-06-16 17:04:00 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCandidate ----------------
@@ -34,7 +34,7 @@
 
 #include "G4QHadron.hh"
 #include "G4QParentClusterVector.hh"
-#include "g4std/algorithm"
+#include <algorithm>
 
 class G4QCandidate : public G4QHadron
 {
@@ -112,7 +112,7 @@ inline G4double G4QCandidate::GetSecondIntProb()          const {return secondIn
 
 inline void G4QCandidate::ClearParClustVector()                 
 {
-  G4std::for_each(thePClusters.begin(), thePClusters.end(), DeleteQParentCluster());
+  std::for_each(thePClusters.begin(), thePClusters.end(), DeleteQParentCluster());
   thePClusters.clear();
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeEnergyLoss.icc,v 1.12 2003-05-09 17:49:07 vnivanch Exp $
+// $Id: G4VeEnergyLoss.icc,v 1.13 2003-06-16 17:01:58 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,7 +54,7 @@ inline G4double G4VeEnergyLoss::GetConstraints(
            G4EnergyLossTables::GetRange(ParticleType,KineticEnergy,couple);
 
   // compute the Step limit
-  G4double r = G4std::min(finalRange, couple->GetProductionCuts()
+  G4double r = std::min(finalRange, couple->GetProductionCuts()
                  ->GetProductionCut(idxG4ElectronCut));
   if (fRangeNow>r)
   {

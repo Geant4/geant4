@@ -42,8 +42,8 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4Material.hh"
 #include "G4VContinuousDiscreteProcess.hh"
@@ -385,17 +385,17 @@ int main(int argc,char** argv)
     G4double bin = (emax10 - emin10) / (G4double)(nbin-1);
 
     // Creating the analysis factory
-    G4std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
+    std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
 
     // Creating the tree factory
-    G4std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
+    std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
 
     // Creating a tree mapped to a new hbook file.
-    G4std::auto_ptr< AIDA::ITree > tree( tf->create( hFile,"hbook",false,false ) );
-    G4std::cout << "Tree store : " << tree->storeName() << G4std::endl;
+    std::auto_ptr< AIDA::ITree > tree( tf->create( hFile,"hbook",false,false ) );
+    std::cout << "Tree store : " << tree->storeName() << std::endl;
  
     // Creating a tuple factory, whose tuples will be handled by the tree
-    G4std::auto_ptr< AIDA::ITupleFactory > tpf( af->createTupleFactory( *tree ) );
+    std::auto_ptr< AIDA::ITupleFactory > tpf( af->createTupleFactory( *tree ) );
 
     AIDA::IHistogram1D* hist[4];
     AIDA::ITuple* ntuple1 = 0;
@@ -409,7 +409,7 @@ int main(int argc,char** argv)
 
 
       // Creating a histogram factory, whose histograms will be handled by the tree
-      G4std::auto_ptr< AIDA::IHistogramFactory > hf( af->createHistogramFactory( *tree ) );
+      std::auto_ptr< AIDA::IHistogramFactory > hf( af->createHistogramFactory( *tree ) );
 
       // Creating an 1-dimensional histogram in the root directory of the tree
 
@@ -787,9 +787,9 @@ int main(int argc,char** argv)
 
     // Committing the transaction with the tree
     if(usepaw) {
-      G4std::cout << "Committing..." << G4std::endl;
+      std::cout << "Committing..." << std::endl;
       tree->commit();
-      G4std::cout << "Closing the tree..." << G4std::endl;
+      std::cout << "Closing the tree..." << std::endl;
       tree->close();
     }
     G4cout << "###### End of run # " << run << "     ######" << G4endl;

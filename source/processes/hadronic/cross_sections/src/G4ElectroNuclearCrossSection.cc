@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.cc,v 1.17 2003-05-30 10:36:48 hpw Exp $
+// $Id: G4ElectroNuclearCrossSection.cc,v 1.18 2003-06-16 17:03:04 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -69,14 +69,14 @@ G4double G4ElectroNuclearCrossSection::GetCrossSection(const G4DynamicParticle* 
   static const G4double mel=0.5109989;       // Mass of electron in MeV
   static const G4double lmel=log(mel);       // Log of electron mass
   // Associative memory for acceleration
-  static G4std::vector <G4int> colN;       // Vector of N for calculated nucleus
-  static G4std::vector <G4int> colZ;       // Vector of Z for calculated nucleus
-  static G4std::vector <G4int> colF;       // Vector of LastZeroPosition in the J-functions
-  static G4std::vector <G4double> colTH;   // Vector of energy thresholds
-  static G4std::vector <G4double> colH;    // Vector of high energy coefficient
-  static G4std::vector <G4double*> J1;    // Vector of pointers to the J1 functions
-  static G4std::vector <G4double*> J2;    // Vector of pointers to the J2 functions
-  static G4std::vector <G4double*> J3;    // Vector of pointers to the J3 functions
+  static std::vector <G4int> colN;       // Vector of N for calculated nucleus
+  static std::vector <G4int> colZ;       // Vector of Z for calculated nucleus
+  static std::vector <G4int> colF;       // Vector of LastZeroPosition in the J-functions
+  static std::vector <G4double> colTH;   // Vector of energy thresholds
+  static std::vector <G4double> colH;    // Vector of high energy coefficient
+  static std::vector <G4double*> J1;    // Vector of pointers to the J1 functions
+  static std::vector <G4double*> J2;    // Vector of pointers to the J2 functions
+  static std::vector <G4double*> J3;    // Vector of pointers to the J3 functions
   // *** End of Static Definitions (Associative Memory) ***
   const G4double Energy = aPart->GetKineticEnergy()/MeV; // Energy of the electron
   const G4int targetAtomicNumber = static_cast<int>(anEle->GetN()+.499); //@@ Nat mixture (?!)

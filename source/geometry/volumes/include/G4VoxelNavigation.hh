@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.hh,v 1.11 2002-07-23 08:50:37 gcosmo Exp $
+// $Id: G4VoxelNavigation.hh,v 1.12 2003-06-16 16:54:51 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,7 +55,7 @@
 
 // Required for voxel handling & voxel stack
 //
-#include "g4std/vector"
+#include <vector>
 #include "G4SmartVoxelProxy.hh"
 #include "G4SmartVoxelNode.hh"
 #include "G4SmartVoxelHeader.hh"
@@ -111,19 +111,19 @@ class G4VoxelNavigation
       // Note: fVoxelDepth==0+ => fVoxelAxisStack(0+) contains axes of voxel
       //       fVoxelDepth==-1 -> not in voxel
 
-    G4std::vector<EAxis> fVoxelAxisStack;
+    std::vector<EAxis> fVoxelAxisStack;
       // Voxel axes
 
-    G4std::vector<G4int> fVoxelNoSlicesStack;
+    std::vector<G4int> fVoxelNoSlicesStack;
       // No slices per voxel at each level
 
-    G4std::vector<G4double> fVoxelSliceWidthStack; 
+    std::vector<G4double> fVoxelSliceWidthStack; 
       // Width of voxels at each level 
 
-    G4std::vector<G4int> fVoxelNodeNoStack;    
+    std::vector<G4int> fVoxelNodeNoStack;    
       // Node no point is inside at each level 
 
-    G4std::vector<G4SmartVoxelHeader*> fVoxelHeaderStack;
+    std::vector<G4SmartVoxelHeader*> fVoxelHeaderStack;
       // Voxel headers at each level
 
     G4SmartVoxelNode* fVoxelNode;

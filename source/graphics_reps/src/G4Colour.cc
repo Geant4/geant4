@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Colour.cc,v 1.4 2001-07-11 10:01:07 gunter Exp $
+// $Id: G4Colour.cc,v 1.5 2003-06-16 16:55:19 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,7 +30,7 @@
 #include "G4Colour.hh"
 #include "G4ios.hh"
 
-G4std::ostream& operator << (G4std::ostream& os, const G4Colour& c) {
+std::ostream& operator << (std::ostream& os, const G4Colour& c) {
   return os << '(' << c.red << ',' << c.green << ',' << c.blue
 	    << ',' << c.alpha << ')';
 }

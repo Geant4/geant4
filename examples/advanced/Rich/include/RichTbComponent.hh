@@ -8,7 +8,7 @@
 #define RichTbComponent_h 1
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 #include "RichTbMaterial.hh"
 #include "RichTbHall.hh"
 #include "RichTbRunConfig.hh"

@@ -232,7 +232,7 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
   // Helium ion case
   if( ionCharge < 2.5 ) {
 
-    G4double e = log(G4std::max(1.0, kineticEnergy / (keV*theHeMassAMU) )) ; 
+    G4double e = log(std::max(1.0, kineticEnergy / (keV*theHeMassAMU) )) ; 
     G4double x = c[0] ;
     G4double y = 1.0 ;
     for (G4int i=1; i<6; i++) {
@@ -265,7 +265,7 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
                             0.38157*y - 0.008983*y*y ) ;     
     if( q < 0.0 ) q = 0.0 ;
 
-    G4double s = 7.6 -  log(G4std::max(1.0, reducedEnergy/keV)) ; 
+    G4double s = 7.6 -  log(std::max(1.0, reducedEnergy/keV)) ; 
     s = 1.0 + ( 0.18 + 0.0015 * z ) * exp( -s*s )/ (ionCharge*ionCharge) ;
 
     // Screen length according to

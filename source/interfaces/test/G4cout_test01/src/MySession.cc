@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MySession.cc,v 1.4 2002-11-09 07:17:09 yhajime Exp $
+// $Id: MySession.cc,v 1.5 2003-06-16 16:56:12 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,14 +47,14 @@ MySession * MySession::SessionStart() { return NULL; }
 
 G4int MySession::ReceiveG4cout(G4String coutString)
 {
-  //  G4cout << coutString << G4std::flush;
-  logFile << coutString << G4std::flush;
+  //  G4cout << coutString << std::flush;
+  logFile << coutString << std::flush;
   return 0;
 }
 
 G4int MySession::ReceiveG4cerr(G4String cerrString)
 {
-  G4cerr << cerrString << G4std::flush;
-  logFile << cerrString << G4std::flush;
+  G4cerr << cerrString << std::flush;
+  logFile << cerrString << std::flush;
   return 0;
 }                                                                       

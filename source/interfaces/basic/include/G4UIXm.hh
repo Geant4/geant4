@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIXm.hh,v 1.11 2001-07-11 10:01:20 gunter Exp $
+// $Id: G4UIXm.hh,v 1.12 2003-06-16 16:55:55 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4UIXm_h
@@ -29,7 +29,7 @@
 
 #if defined(G4UI_BUILD_XM_SESSION) || defined(G4UI_USE_XM)
 
-#include "g4std/map"
+#include <map>
 
 #include <X11/Intrinsic.h>
 
@@ -89,7 +89,7 @@ private:
   void ExitHelp();
 private:
   Widget form,shell,command,menuBar,text;
-  G4std::map<Widget,G4String, G4std::less<Widget> > commands;
+  std::map<Widget,G4String, std::less<Widget> > commands;
   static void commandEnteredCallback(Widget,XtPointer,XtPointer);
   static void keyHandler(Widget,XtPointer,XEvent*,Boolean*);
   G4bool fHelp;

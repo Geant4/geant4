@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.cc,v 1.46 2002-12-12 13:25:54 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.47 2003-06-16 17:04:29 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -148,11 +148,11 @@ G4Quasmon::~G4Quasmon()
 #ifdef sdebug
   G4cout<<"G4Quasmon::Destructor before theQCandidates delete"<<G4endl;
 #endif
-  G4std::for_each(theQCandidates.begin(), theQCandidates.end(), DeleteQCandidate());
+  std::for_each(theQCandidates.begin(), theQCandidates.end(), DeleteQCandidate());
 #ifdef sdebug
   G4cout<<"G4Quasmon::Destructor before theQHadrons"<<G4endl;
 #endif
-  G4std::for_each(theQHadrons.begin(), theQHadrons.end(), DeleteQHadron());
+  std::for_each(theQHadrons.begin(), theQHadrons.end(), DeleteQHadron());
 #ifdef sdebug
   G4cout<<"G4Quasmon::Destructor === DONE ==="<<G4endl;
 #endif

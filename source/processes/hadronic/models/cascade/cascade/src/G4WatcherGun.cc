@@ -38,9 +38,9 @@ void G4WatcherGun::setWatchers() {
     G4cout << " >>> G4WatcherGun::setWatchers" << G4endl;
   }
 
-  G4std::vector<G4double> as;
-  G4std::vector<G4double> cs;
-  G4std::vector<G4double> errs;
+  std::vector<G4double> as;
+  std::vector<G4double> cs;
+  std::vector<G4double> errs;
 
   // specific stuff to monitor the difference with fortran
   // particle type

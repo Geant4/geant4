@@ -50,7 +50,7 @@
 
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 
 class G4Step;
 class G4Track;
@@ -68,7 +68,7 @@ public:
 
   virtual ~G4VSubCutoffProcessor() {};
 
-  virtual G4std::vector<G4Track*>* SampleSecondaries(const G4Step&,
+  virtual std::vector<G4Track*>* SampleSecondaries(const G4Step&,
 						           G4double& tmax,
 						           G4double& meanLoss,
                                                            G4VEmModel*) = 0;

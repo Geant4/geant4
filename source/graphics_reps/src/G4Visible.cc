@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Visible.cc,v 1.4 2001-07-11 10:01:09 gunter Exp $
+// $Id: G4Visible.cc,v 1.5 2003-06-16 16:55:29 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,7 +44,7 @@ G4bool G4Visible::operator == (const G4Visible& right) const{
   return fpVisAttributes == right.fpVisAttributes;
 }
 
-G4std::ostream& operator << (G4std::ostream& os, const G4Visible& v) {
+std::ostream& operator << (std::ostream& os, const G4Visible& v) {
   if (v.fpVisAttributes) return os << *(v.fpVisAttributes);
   else return os << "No Visualization Attributes";
 }

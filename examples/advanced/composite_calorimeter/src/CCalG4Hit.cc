@@ -26,7 +26,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "CCalG4Hit.hh"
-#include "g4std/iostream"
+#include <iostream>
 
 
 CCalG4Hit::CCalG4Hit() : CCalHit(), 
@@ -73,7 +73,7 @@ void CCalG4Hit::Print() {
 }
 
 
-G4std::ostream& operator<< (G4std::ostream& os, const CCalG4Hit& hit) {
+std::ostream& operator<< (std::ostream& os, const CCalG4Hit& hit) {
   os << static_cast<CCalHit>(hit);
   os << " Data specific of this CCalG4Hit are:" << G4endl
      << " \t EnergyDeposit of EM particles = " << hit.getEM() 

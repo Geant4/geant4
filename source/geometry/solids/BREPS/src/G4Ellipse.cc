@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ellipse.cc,v 1.8 2003-03-28 13:11:58 gcosmo Exp $
+// $Id: G4Ellipse.cc,v 1.9 2003-06-16 16:52:55 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -149,7 +149,7 @@ void G4Ellipse::InitBounded()
 {
   // original implementation
   // const G4Point3D& center = position.GetLocation();
-  // G4double maxEntent      = G4std::max(semiAxis1, semiAxis2);
+  // G4double maxEntent      = std::max(semiAxis1, semiAxis2);
   // G4Vector3D halfExtent(maxEntent, maxEntent, maxEntent);
   // bBox.Init(center+halfExtent, center-halfExtent);
 

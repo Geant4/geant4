@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //////////////////////////////////////////////////////////////////////////
-// $Id: CurveTestFunction.hh,v 1.5 2001-07-20 16:07:38 gcosmo Exp $
+// $Id: CurveTestFunction.hh,v 1.6 2003-06-16 16:53:01 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //////////////////////////////////////////////////////////////////////////
 //
@@ -55,7 +55,7 @@
 
 
 // Printing debug info
-G4std::ostream& operator<<(G4std::ostream& os, const G4Axis2Placement3D& p)
+std::ostream& operator<<(std::ostream& os, const G4Axis2Placement3D& p)
 {
   os << "(" << p.GetLocation()
      << ", " << p.GetAxis()
@@ -64,7 +64,7 @@ G4std::ostream& operator<<(G4std::ostream& os, const G4Axis2Placement3D& p)
 }
 
 
-G4std::ostream& operator<<(G4std::ostream& os, const G4BoundingBox3D& b)
+std::ostream& operator<<(std::ostream& os, const G4BoundingBox3D& b)
 {
   os << "(" << b.GetBoxMin()
      << ", " << b.GetBoxMax() << ")";

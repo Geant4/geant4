@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoNuclearCrossSection.cc,v 1.10 2003-05-30 10:36:48 hpw Exp $
+// $Id: G4PhotoNuclearCrossSection.cc,v 1.11 2003-06-16 17:03:07 gunter Exp $
 // The lust update: M.V. Kossov, CERN/ITEP(Moscow) 17-June-02
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -71,12 +71,12 @@ G4double G4PhotoNuclearCrossSection::GetCrossSection(const G4DynamicParticle* aP
   //static const G4double shp=1.075;                  // HE PomShadowing(P)
   //
   // Associative memory for acceleration
-  static G4std::vector <G4int> colN;       // N of calculated nuclei
-  static G4std::vector <G4int> colZ;       // Z of calculated nuclei
-  static G4std::vector <G4double> spA;     // shadowing coefficients (A-dependent)
-  static G4std::vector <G4double> eTH;     // energy threshold (A-dependent)
-  static G4std::vector <G4double*> GDR;    // Vector of pointers to the GDRPhotonuclearCrossSection
-  static G4std::vector <G4double*> HEN;    // Vector of pointers to the HighEnPhotonuclearCrossSect
+  static std::vector <G4int> colN;       // N of calculated nuclei
+  static std::vector <G4int> colZ;       // Z of calculated nuclei
+  static std::vector <G4double> spA;     // shadowing coefficients (A-dependent)
+  static std::vector <G4double> eTH;     // energy threshold (A-dependent)
+  static std::vector <G4double*> GDR;    // Vector of pointers to the GDRPhotonuclearCrossSection
+  static std::vector <G4double*> HEN;    // Vector of pointers to the HighEnPhotonuclearCrossSect
   //
   const G4double Energy = aPart->GetKineticEnergy()/MeV;
   const G4int targetAtomicNumber = static_cast<int>(anEle->GetN()+.499); //@@ Nat mixture (?!)

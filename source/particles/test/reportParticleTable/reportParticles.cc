@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: reportParticles.cc,v 1.6 2002-11-20 00:30:20 kurasige Exp $
+// $Id: reportParticles.cc,v 1.7 2003-06-16 16:58:52 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,8 +32,8 @@
 #include "tst2ParticleContainer.hh"
 #include "tst2SimpleReporter.hh"
 #include "tst2HtmlReporter.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 
 int main(int argc,char** argv) {

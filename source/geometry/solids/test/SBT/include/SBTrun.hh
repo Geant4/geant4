@@ -29,7 +29,7 @@
 #ifndef SBTrun_hh
 #define SBTrun_hh
 
-#include "g4std/iostream"
+#include <iostream>
 #include "G4VSolid.hh"
 #include "G4ThreeVector.hh"
 
@@ -65,15 +65,15 @@ class SBTrun {
 	~SBTrun();
 	void SetDefaults();
 	
-	void RunTest( const G4VSolid *testVolume, G4std::ostream &logger );
+	void RunTest( const G4VSolid *testVolume, std::ostream &logger );
 
-	G4int DrawError( const G4VSolid *testVolume, G4std::istream &logger, const G4int errorIndex,
+	G4int DrawError( const G4VSolid *testVolume, std::istream &logger, const G4int errorIndex,
 			 SBTVisManager *visManager ) const;
-	G4int DebugInside( const G4VSolid *testVolume, G4std::istream &logger, const G4int errorIndex ) const;
-	G4int DebugToInP( const G4VSolid *testVolume, G4std::istream &logger, const G4int errorIndex ) const;
-	G4int DebugToInPV( const G4VSolid *testVolume, G4std::istream &logger, const G4int errorIndex ) const;
-	G4int DebugToOutP( const G4VSolid *testVolume, G4std::istream &logger, const G4int errorIndex ) const;
-	G4int DebugToOutPV( const G4VSolid *testVolume, G4std::istream &logger, const G4int errorIndex ) const;
+	G4int DebugInside( const G4VSolid *testVolume, std::istream &logger, const G4int errorIndex ) const;
+	G4int DebugToInP( const G4VSolid *testVolume, std::istream &logger, const G4int errorIndex ) const;
+	G4int DebugToInPV( const G4VSolid *testVolume, std::istream &logger, const G4int errorIndex ) const;
+	G4int DebugToOutP( const G4VSolid *testVolume, std::istream &logger, const G4int errorIndex ) const;
+	G4int DebugToOutPV( const G4VSolid *testVolume, std::istream &logger, const G4int errorIndex ) const;
 
 	inline void SetTarget( const G4ThreeVector &newTarget ) { target = newTarget; }
 	inline G4ThreeVector GetTarget() const { return target; }
@@ -99,17 +99,17 @@ class SBTrun {
 	
 	void	TestOutsidePoint( const G4VSolid *testVolume, G4int *nError,
 				  const SBTrunPointList *inside, const SBTrunPointList *outside, 
-				  const G4ThreeVector point, G4std::ostream &logger );
+				  const G4ThreeVector point, std::ostream &logger );
 	void	TestInsidePoint(  const G4VSolid *testVolume, G4int *nError,
-				  const SBTrunPointList *inside, const G4ThreeVector point, G4std::ostream &logger );
+				  const SBTrunPointList *inside, const G4ThreeVector point, std::ostream &logger );
 
 	void	ReportError( G4int *nError, const G4ThreeVector p, 
 			     const G4ThreeVector v, G4double distance,
-			     const G4String comment, G4std::ostream &logger );
+			     const G4String comment, std::ostream &logger );
 	void 	ClearErrors();		
 	G4int 	CountErrors() const;		
 	
-	G4int	GetLoggedPV( G4std::istream &logger, const G4int errorIndex,
+	G4int	GetLoggedPV( std::istream &logger, const G4int errorIndex,
 			     G4ThreeVector &p, G4ThreeVector &v        ) const;
 	
 	protected:

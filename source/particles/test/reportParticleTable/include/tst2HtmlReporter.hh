@@ -26,7 +26,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: tst2HtmlReporter.hh,v 1.3 2001-07-11 10:02:11 gunter Exp $
+// $Id: tst2HtmlReporter.hh,v 1.4 2003-06-16 16:58:53 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,7 +36,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
+#include <fstream>
 
 #include "tst2VParticleReporter.hh"
 
@@ -58,8 +58,8 @@ class tst2HtmlReporter: public tst2VParticleReporter
     void GenerateIndex();
     void GeneratePropertyTable(G4ParticleDefinition* );
 
-    void PrintHeader(G4std::ofstream& );
-    void PrintFooter(G4std::ofstream& );
+    void PrintHeader(std::ofstream& );
+    void PrintFooter(std::ofstream& );
 
 
  private:

@@ -31,7 +31,7 @@ public:
   G4CascadParticle();
 
   G4CascadParticle(const G4InuclElementaryParticle& particle, 
-		   const G4std::vector<G4double>& pos,
+		   const std::vector<G4double>& pos,
 		   G4int izone, 
 		   G4double cpath) 
 
@@ -44,11 +44,11 @@ public:
     reflectionCounter = 0;   
   };
 
-  void updateParticleMomentum(const G4std::vector<G4double>& mom) {
+  void updateParticleMomentum(const std::vector<G4double>& mom) {
     theParticle.setMomentum(mom);
   };
 
-  void updatePosition(const G4std::vector<G4double>& pos) {
+  void updatePosition(const std::vector<G4double>& pos) {
     position = pos;
   };
 
@@ -76,7 +76,7 @@ public:
   G4double getPathToTheNextZone(G4double rz_in, 
 				G4double rz_out);
 
-  G4std::vector<G4double> getMomentum() const { 
+  std::vector<G4double> getMomentum() const { 
     return theParticle.getMomentum(); 
   };
 
@@ -84,7 +84,7 @@ public:
     return theParticle; 
   };
 
-  G4std::vector<G4double> getPosition() const { 
+  std::vector<G4double> getPosition() const { 
     return position; 
   };
 
@@ -126,7 +126,7 @@ private:
 
   G4int verboseLevel;
   G4InuclElementaryParticle theParticle;
-  G4std::vector<G4double> position;
+  std::vector<G4double> position;
   G4int current_zone;
   G4double current_path;
   G4bool movingIn;

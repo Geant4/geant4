@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiXicZero.cc,v 1.12 2002-12-16 11:15:38 gcosmo Exp $
+// $Id: G4AntiXicZero.cc,v 1.13 2003-06-16 16:57:04 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,8 +36,8 @@
 //  Modified PDG encoding           H.Kurashige 24 Sep. 98
 // ----------------------------------------------------------------------
 
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4AntiXicZero.hh"
 

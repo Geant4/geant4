@@ -23,7 +23,7 @@
 #include "G4AtomicTransitionManager.hh"
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/vector"
+#include <vector>
 
 int main() {
 
@@ -59,9 +59,9 @@ int main() {
   G4cin>> shellIndex; 
   
   G4cout << "Testing G4FluoTransition "<<G4endl;
-  G4std::vector<G4double> transEnergies = transManager->ReachableShell(Z,shellIndex)->TransitionEnergies();
-  G4std::vector<G4int> transIds = transManager->ReachableShell(Z,shellIndex)->OriginatingShellIds();
-  G4std::vector<G4double> transProbs = transManager->ReachableShell(Z,shellIndex)->TransitionProbabilities();
+  std::vector<G4double> transEnergies = transManager->ReachableShell(Z,shellIndex)->TransitionEnergies();
+  std::vector<G4int> transIds = transManager->ReachableShell(Z,shellIndex)->OriginatingShellIds();
+  std::vector<G4double> transProbs = transManager->ReachableShell(Z,shellIndex)->TransitionProbabilities();
 
   for (G4int trans=0; trans<transIds.size(); trans++) {
 
@@ -99,14 +99,14 @@ int main() {
 
   const G4AugerTransition* augerTransition = transManager->ReachableAugerShell(Z, augerVacancyIndex);
   
-  const G4std::vector<G4int> augerTransIds = *(augerTransition->TransitionOriginatingShellIds());
+  const std::vector<G4int> augerTransIds = *(augerTransition->TransitionOriginatingShellIds());
   for (G4int transIndex = 0; transIndex<(augerTransIds.size() ); transIndex++) {
  
     G4cout << "Questo e' augerTransIds[transIndex]: "<< augerTransIds[transIndex] << G4endl;
 
-    G4std::vector<G4double> augerProbs = *augerTransition->AugerTransitionProbabilities(augerTransIds[transIndex]);
-    G4std::vector<G4int> augerIds = *augerTransition->AugerOriginatingShellIds(augerTransIds[transIndex]);
-    G4std::vector<G4double> augerEnergies = *augerTransition->AugerTransitionEnergies(augerTransIds[transIndex]);
+    std::vector<G4double> augerProbs = *augerTransition->AugerTransitionProbabilities(augerTransIds[transIndex]);
+    std::vector<G4int> augerIds = *augerTransition->AugerOriginatingShellIds(augerTransIds[transIndex]);
+    std::vector<G4double> augerEnergies = *augerTransition->AugerTransitionEnergies(augerTransIds[transIndex]);
     
     // we r comparing the vectors elements given by G4AugerTransition with the values of the single functions.
     

@@ -27,7 +27,7 @@
 
 #include "CCalGeometryConfiguration.hh"
 
-#include "g4std/fstream"
+#include <fstream>
 
 //Comment/Uncomment next line to hide/show debug information
 //#define debug
@@ -86,7 +86,7 @@ CCalGeometryConfiguration::CCalGeometryConfiguration():
   }
 
   G4cout << " ==> Opening file " << fileenv << "..." << G4endl;
-  G4std::ifstream is;
+  std::ifstream is;
   bool ok = openGeomFile(is, pathName, fileenv);
   if (!ok)
     exit(-1);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImessenger.cc,v 1.4 2003-05-21 21:13:30 asaim Exp $
+// $Id: G4UImessenger.cc,v 1.5 2003-06-16 16:55:46 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -31,7 +31,7 @@
 #include <string.h>
 #include "G4ios.hh"
 
-#include "g4std/strstream"
+#include <strstream>
 
 
 G4UImessenger::G4UImessenger() { }
@@ -54,7 +54,7 @@ G4bool G4UImessenger::operator == (const G4UImessenger& messenger) const {
 G4String G4UImessenger::ItoS(G4int i)
 {
   char defVal[20];
-  G4std::ostrstream os(defVal,20);
+  std::ostrstream os(defVal,20);
   os << i << '\0';
   return G4String(defVal);
 }
@@ -62,7 +62,7 @@ G4String G4UImessenger::ItoS(G4int i)
 G4String G4UImessenger::DtoS(G4double a)
 {
   char defVal[40];
-  G4std::ostrstream os(defVal,40);
+  std::ostrstream os(defVal,40);
   os << a << '\0';
   return G4String(defVal);
 }
@@ -78,7 +78,7 @@ G4int G4UImessenger::StoI(G4String s)
 {
   G4int vl;
   const char* t = s;
-  G4std::istrstream is((char*)t);
+  std::istrstream is((char*)t);
   is >> vl;
   return vl;
 }
@@ -87,7 +87,7 @@ G4double G4UImessenger::StoD(G4String s)
 {
   G4double vl;
   const char* t = s;
-  G4std::istrstream is((char*)t);
+  std::istrstream is((char*)t);
   is >> vl;
   return vl;
 }

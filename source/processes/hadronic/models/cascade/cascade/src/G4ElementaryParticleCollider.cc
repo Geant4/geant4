@@ -23,9 +23,9 @@
 #include "G4Collider.hh"
 #include "G4ElementaryParticleCollider.hh"
 #include "G4ParticleLargerEkin.hh"
-#include "g4std/algorithm"
+#include <algorithm>
 
-typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
+typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
 G4ElementaryParticleCollider::G4ElementaryParticleCollider()
   : verboseLevel(1) {
@@ -43,8 +43,8 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
     G4cout << " >>> G4ElementaryParticleCollider::collide" << G4endl;
   }
 
-  G4std::vector<G4double> totscm(4, 0.0); //::: fix
-  G4std::vector<G4double> totlab(4, 0.0);
+  std::vector<G4double> totscm(4, 0.0); //::: fix
+  std::vector<G4double> totlab(4, 0.0);
 
   // generate nucleon or pion collission with NUCLEON 
   // or pion with quasideutron
@@ -70,8 +70,8 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
 	  particle1->printParticle();
 	  particle2->printParticle();
 
-	  G4std::vector<G4double> momb = particle1->getMomentum();
-	  G4std::vector<G4double> momt = particle2->getMomentum();
+	  std::vector<G4double> momb = particle1->getMomentum();
+	  std::vector<G4double> momt = particle2->getMomentum();
 
 	  for(G4int i = 0; i < 4; i++) momb[i] += momt[i];
 	  G4cout << " total input: px " << momb[1] << " py " << momb[2] 
@@ -102,7 +102,7 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
 	    pscm << G4endl;
 	}
 
-        G4std::vector<G4InuclElementaryParticle> particles = 	    
+        std::vector<G4InuclElementaryParticle> particles = 	    
 	  generateSCMfinalState(ekin, etot_scm, pscm, particle1, particle2, &convertToSCM);
 
 	if(verboseLevel > 2){
@@ -120,7 +120,7 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
 	  for(ipart = particles.begin(); ipart != particles.end(); ipart++) {	
 
 	    if(verboseLevel > 2){
-	      G4std::vector<G4double> mom_scm = ipart->getMomentum();
+	      std::vector<G4double> mom_scm = ipart->getMomentum();
 	      G4cout << mom_scm[0] << " " <<  mom_scm[1] << " "
 	             << mom_scm[2] << " " <<  mom_scm[3] << G4endl;
 
@@ -131,7 +131,7 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
 
 	    }
 
-	    G4std::vector<G4double> mom = 
+	    std::vector<G4double> mom = 
 	      convertToSCM.backToTheLab(ipart->getMomentum());
 	
 	    if(verboseLevel > 2){
@@ -141,7 +141,7 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
 	    ipart->setMomentum(mom); 
 	  };
 
-	  G4std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
+	  std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
 
 	  if(verboseLevel > 2){
 	    G4cout << " In SCM: total outgoing momentum " << G4endl 
@@ -180,7 +180,7 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
 	      G4cout << " etot_scm " << etot_scm << G4endl;
 	    }
 
-            G4std::vector<G4InuclElementaryParticle> particles = 
+            std::vector<G4InuclElementaryParticle> particles = 
 	      generateSCMpionAbsorption(etot_scm, particle1, particle2);
 
 	    if(verboseLevel > 2){
@@ -197,19 +197,19 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
 	      for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
 
 		if(verboseLevel > 2){
-		  G4std::vector<G4double> mom_scm = ipart->getMomentum();
+		  std::vector<G4double> mom_scm = ipart->getMomentum();
 
 		  for(G4int i = 0; i < 4; i++) totscm[i] += mom_scm[i];
 
 		}
 
-	        G4std::vector<G4double> mom = 
+	        std::vector<G4double> mom = 
 	          convertToSCM.backToTheLab(ipart->getMomentum());
 
 	        ipart->setMomentum(mom); 
 	      };
 
-	      G4std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
+	      std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
 
 	      if(verboseLevel > 2){
 		G4cout << " In SCM: total outgoing momentum " << G4endl 
@@ -350,7 +350,7 @@ G4int G4ElementaryParticleCollider::generateMultiplicity(G4int is,
   };
 
   const G4double large_cut = 4.0;
-  G4std::pair<G4int, G4double> iksk = getPositionInEnergyScale2(ekin);
+  std::pair<G4int, G4double> iksk = getPositionInEnergyScale2(ekin);
   G4int ik = iksk.first;
   G4double sk = iksk.second;
   G4int l = is;
@@ -359,7 +359,7 @@ G4int G4ElementaryParticleCollider::generateMultiplicity(G4int is,
   if (l == 10) l = 3; 
   if (l == 5 || l == 6) l = 4; 
 
-  G4std::vector<G4double> sigm(5);
+  std::vector<G4double> sigm(5);
   G4double stot = 0.0;
 
   if (l == 7 || l == 14) { // pi0 P or pi0 N
@@ -404,7 +404,7 @@ G4int G4ElementaryParticleCollider::generateMultiplicity(G4int is,
   return mul + 2;
 }
 
-G4std::vector<G4InuclElementaryParticle> G4ElementaryParticleCollider:: 
+std::vector<G4InuclElementaryParticle> G4ElementaryParticleCollider:: 
 generateSCMfinalState(G4double ekin, 
 		      G4double etot_scm, 
 		      G4double pscm,
@@ -420,8 +420,8 @@ generateSCMfinalState(G4double ekin,
   const G4double difr_const = 0.3678794;   
   const G4int itry_max = 10;
   G4InuclElementaryParticle dummy;
-  G4std::vector<G4InuclElementaryParticle> particles;
-  G4std::vector<G4int> particle_kinds;
+  std::vector<G4InuclElementaryParticle> particles;
+  std::vector<G4int> particle_kinds;
   G4int type1 = particle1->type();
   G4int type2 = particle2->type();
   G4int is = type1 * type2;
@@ -487,7 +487,7 @@ generateSCMfinalState(G4double ekin,
 	particle_kinds.push_back(type2);       
       };
 
-      G4std::vector<G4double> mom;
+      std::vector<G4double> mom;
 
       if (kw == 2) { // need to rescale momentum
 	G4double m1 = dummy.getParticleMass(particle_kinds[0]);
@@ -514,7 +514,7 @@ generateSCMfinalState(G4double ekin,
 	G4cout << " after rotation px " << mom[1] << " py " << mom[2] <<
 	  " pz " << mom[3] << G4endl;
       }
-      G4std::vector<G4double> mom1(4);
+      std::vector<G4double> mom1(4);
 
       for (G4int i = 1; i < 4; i++) mom1[i] = -mom[i];
 
@@ -542,13 +542,13 @@ generateSCMfinalState(G4double ekin,
 	  G4cout << " itry in while " << itry << G4endl;
 	}
 
-	G4std::vector<G4double> modules = 
+	std::vector<G4double> modules = 
 	  generateMomModules(particle_kinds, multiplicity, is, ekin, etot_scm);
 
 	if (G4int(modules.size()) == multiplicity) {
 
 	  if (multiplicity == 3) { 
-	    G4std::vector<G4double> mom3 = 
+	    std::vector<G4double> mom3 = 
 	      particleSCMmomentumFor2to3(is, knd_last, ekin, modules[2]);
 
 	    mom3 = toSCM->rotate(mom3);
@@ -565,11 +565,11 @@ generateSCMfinalState(G4double ekin,
 		G4cout << " ok for mult " << multiplicity << G4endl;
 	      }
 
-	      G4std::vector<G4double> mom1 = generateWithFixedTheta(ct, modules[0]);
+	      std::vector<G4double> mom1 = generateWithFixedTheta(ct, modules[0]);
 
 	      mom1 = toSCM->rotate(mom3, mom1);
 
-	      G4std::vector<G4double> mom2(4);
+	      std::vector<G4double> mom2(4);
 
 	      for(G4int i = 1; i < 4; i++) mom2[i] = - (mom3[i] + mom1[i]);
 
@@ -584,8 +584,8 @@ generateSCMfinalState(G4double ekin,
 	  } else { // multiplicity > 3
 
 	    // generate first mult - 2 momentums
-	    G4std::vector<G4std::vector<G4double> > scm_momentums;
-	    G4std::vector<G4double> tot_mom(4);
+	    std::vector<std::vector<G4double> > scm_momentums;
+	    std::vector<G4double> tot_mom(4);
 
 	    for (G4int i = 0; i < multiplicity - 2; i++) {
 	      G4double p0 = particle_kinds[i] < 3 ? 0.36 : 0.25;
@@ -628,7 +628,7 @@ generateSCMfinalState(G4double ekin,
 	      G4double pt = modules[i]*st;
 	      G4double phi = randomPHI();
 
-	      G4std::vector<G4double> mom(4);
+	      std::vector<G4double> mom(4);
 
 	      mom[1] = pt * cos(phi);
 	      mom[2] = pt * sin(phi);
@@ -659,14 +659,14 @@ generateSCMfinalState(G4double ekin,
 
 	      tot_mom = toSCM->rotate(tot_mom);  
 
-	      G4std::vector<G4double> mom = 
+	      std::vector<G4double> mom = 
 		generateWithFixedTheta(ct, modules[multiplicity - 2]);
 
 	      mom = toSCM->rotate(tot_mom, mom);
 	      scm_momentums.push_back(mom);
 
 	      // and the last one
-	      G4std::vector<G4double> mom1(4);
+	      std::vector<G4double> mom1(4);
 
 	      for (i = 1; i < 4; i++) mom1[i] = -mom[i] - tot_mom[i];
 
@@ -705,9 +705,9 @@ generateSCMfinalState(G4double ekin,
   return particles;
 }
 
-G4std::vector<G4double> G4ElementaryParticleCollider::
+std::vector<G4double> G4ElementaryParticleCollider::
 generateMomModules(
-		   const G4std::vector<G4int>& kinds, 
+		   const std::vector<G4int>& kinds, 
 		   G4int mult, 
 		   G4int is, 
 		   G4double ekin, 
@@ -727,8 +727,8 @@ generateMomModules(
   G4InuclElementaryParticle dummy;
   G4int itry = 0;
 
-  G4std::vector<G4double> modules(mult);
-  G4std::vector<G4double> masses2(mult);
+  std::vector<G4double> modules(mult);
+  std::vector<G4double> masses2(mult);
 
   for (G4int i = 0; i < mult; i++) {
     G4double mass = dummy.getParticleMass(kinds[i]);
@@ -801,7 +801,7 @@ generateMomModules(
 }
 
 G4bool G4ElementaryParticleCollider::satisfyTriangle(
-						     const G4std::vector<G4double>& modules) const {
+						     const std::vector<G4double>& modules) const {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4ElementaryParticleCollider::satisfyTriangle" << G4endl;
@@ -852,7 +852,7 @@ G4int G4ElementaryParticleCollider::getIL(G4int is,
   return ifdef[mult - 3][l - 1];
 }
 
-G4std::vector<G4int> G4ElementaryParticleCollider::
+std::vector<G4int> G4ElementaryParticleCollider::
 generateOutgoingKindsFor2toMany(
 				G4int is, 
 				G4int mult, 
@@ -1085,7 +1085,7 @@ generateOutgoingKindsFor2toMany(
      {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}}
   };
 
-  G4std::vector<G4int> kinds;
+  std::vector<G4int> kinds;
 
   G4int l = is;
 
@@ -1102,7 +1102,7 @@ generateOutgoingKindsFor2toMany(
   };
 
   G4int il = getIL(is, mult);
-  G4std::pair<G4int, G4double> iksk = getPositionInEnergyScale1(ekin);
+  std::pair<G4int, G4double> iksk = getPositionInEnergyScale1(ekin);
   G4int ik = iksk.first;
   G4double sk = iksk.second;
   G4int n;      
@@ -1130,7 +1130,7 @@ generateOutgoingKindsFor2toMany(
     n = 13;
   };      
 
-  G4std::vector<G4double> sig;
+  std::vector<G4double> sig;
   G4double stot = 0.0;
 
   if(l == 7 || l == 14) {
@@ -1303,7 +1303,7 @@ G4double G4ElementaryParticleCollider::getMomModuleFor2toMany(
   return fabs(PRA);
 }
 
-G4std::vector<G4double> G4ElementaryParticleCollider::
+std::vector<G4double> G4ElementaryParticleCollider::
 particleSCMmomentumFor2to3(
 			   G4int is, 
 			   G4int knd, 
@@ -1367,7 +1367,7 @@ particleSCMmomentumFor2to3(
   G4double pt = pmod * sqrt(1.0 - ct * ct);
   G4double phi = randomPHI();
 
-  G4std::vector<G4double> mom(4);
+  std::vector<G4double> mom(4);
 
   mom[1] = pt * cos(phi);
   mom[2] = pt * sin(phi);
@@ -1490,7 +1490,7 @@ G4bool G4ElementaryParticleCollider::reChargering(G4double ekin,
   G4bool rech = false;
 
   if (is == 6 || is == 5 || is == 7 || is == 14) {
-    G4std::pair<G4int, G4double> iksk = getPositionInEnergyScale2(ekin);
+    std::pair<G4int, G4double> iksk = getPositionInEnergyScale2(ekin);
     G4int ik = iksk.first;
     G4double sk = iksk.second;
     G4double chrg;
@@ -1509,14 +1509,14 @@ G4bool G4ElementaryParticleCollider::reChargering(G4double ekin,
   return rech;
 }
 
-G4std::pair<G4double, G4double> G4ElementaryParticleCollider::
+std::pair<G4double, G4double> G4ElementaryParticleCollider::
 adjustIntervalForElastic(
 			 G4double ekin, 
 			 G4double ak, 
 			 G4double ae, 
 			 G4int k, 
 			 G4int l, 
-			 const G4std::vector<G4double>& ssv,
+			 const std::vector<G4double>& ssv,
 			 G4double st) const {
 
   if (verboseLevel > 3) {
@@ -1645,10 +1645,10 @@ adjustIntervalForElastic(
     };
   };
 
-  return G4std::pair<G4double, G4double>(a, b);
+  return std::pair<G4double, G4double>(a, b);
 }  
 
-G4std::vector<G4double> G4ElementaryParticleCollider::
+std::vector<G4double> G4ElementaryParticleCollider::
 particleSCMmomentumFor2to2(
 			   G4int is, 
 			   G4int kw, 
@@ -1727,7 +1727,7 @@ particleSCMmomentumFor2to2(
 
     G4int k1 = k - 1;
     // first set all coefficients
-    G4std::vector<G4double> ssv(4);
+    std::vector<G4double> ssv(4);
     G4double st = 0.0;
 
     for(G4int i = 0; i < 4; i++) {
@@ -1742,7 +1742,7 @@ particleSCMmomentumFor2to2(
     G4double b = 0.0;
 
     if(k <= 3) {
-      G4std::pair<G4double, G4double> ab = adjustIntervalForElastic(ekin, ak, ae, k, is, ssv, st);
+      std::pair<G4double, G4double> ab = adjustIntervalForElastic(ekin, ak, ae, k, is, ssv, st);
 
       a = ab.first;
       b = ab.second;
@@ -1771,7 +1771,7 @@ particleSCMmomentumFor2to2(
 
   G4double pt = pscm * sqrt(1.0 - ct * ct);
   G4double phi = randomPHI();
-  G4std::vector<G4double> mom(4);
+  std::vector<G4double> mom(4);
 
   mom[1] = pt * cos(phi);
   mom[2] = pt * sin(phi);
@@ -1870,7 +1870,7 @@ G4int G4ElementaryParticleCollider::getElasticCase(G4int is,
   return k;
 }
 
-G4std::vector<G4InuclElementaryParticle> G4ElementaryParticleCollider:: 
+std::vector<G4InuclElementaryParticle> G4ElementaryParticleCollider:: 
 generateSCMpionAbsorption(G4double etot_scm,
 			  G4InuclElementaryParticle* particle1,
 			  G4InuclElementaryParticle* particle2) const { 
@@ -1883,8 +1883,8 @@ generateSCMpionAbsorption(G4double etot_scm,
   // the nucleon distribution assumed to be isotropic in SCM
 
   G4InuclElementaryParticle dummy;
-  G4std::vector<G4InuclElementaryParticle> particles;
-  G4std::vector<G4int> particle_kinds;
+  std::vector<G4InuclElementaryParticle> particles;
+  std::vector<G4int> particle_kinds;
   G4int type1 = particle1->type();
   G4int type2 = particle2->type();
 
@@ -1949,8 +1949,8 @@ generateSCMpionAbsorption(G4double etot_scm,
   G4double a = 0.5 * (etot_scm * etot_scm - m1 - m2);
 
   G4double pmod = sqrt((a * a - m1 * m2) / (m1 + m2 + 2.0 * a));
-  G4std::vector<G4double> mom(4);
-  G4std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
+  std::vector<G4double> mom(4);
+  std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
   G4double FI = randomPHI();
   G4double pt = pmod * COS_SIN.second;
 
@@ -1958,7 +1958,7 @@ generateSCMpionAbsorption(G4double etot_scm,
   mom[2] = pt * sin(FI);
   mom[3] = pmod * COS_SIN.first;
 
-  G4std::vector<G4double> mom1 = mom;
+  std::vector<G4double> mom1 = mom;
 
   for(G4int i = 1; i < 4; i++) mom1[i] *= -1.0;
   particles.push_back(G4InuclElementaryParticle(mom , particle_kinds[0]));

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.cc,v 1.17 2003-03-31 14:18:51 gcosmo Exp $
+// $Id: G4VSolid.cc,v 1.18 2003-06-16 16:52:11 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VSolid
@@ -72,7 +72,7 @@ G4VSolid::~G4VSolid()
 //
 // Streaming operator dumping solid contents
 
-G4std::ostream& operator<< ( G4std::ostream& os, const G4VSolid& e )
+std::ostream& operator<< ( std::ostream& os, const G4VSolid& e )
 {
     return e.StreamInfo(os);
 }

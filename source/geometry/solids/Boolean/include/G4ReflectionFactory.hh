@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.hh,v 1.4 2003-06-12 12:47:25 gcosmo Exp $
+// $Id: G4ReflectionFactory.hh,v 1.5 2003-06-16 16:53:13 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,16 +67,16 @@
 #include "globals.hh"
 #include "geomdefs.hh"
 
-#include "g4std/map"
+#include <map>
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4VSolid;
 
-typedef G4std::pair<G4VPhysicalVolume*,
+typedef std::pair<G4VPhysicalVolume*,
                     G4VPhysicalVolume*> G4PhysicalVolumesPair;  
-typedef G4std::map<G4LogicalVolume*, G4LogicalVolume*,  
-                   G4std::less<G4LogicalVolume*> > G4ReflectedVolumesMap;
+typedef std::map<G4LogicalVolume*, G4LogicalVolume*,  
+                   std::less<G4LogicalVolume*> > G4ReflectedVolumesMap;
 
 class G4ReflectionFactory 
 {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConicalSurface.cc,v 1.7 2003-03-28 13:11:57 gcosmo Exp $
+// $Id: G4ConicalSurface.cc,v 1.8 2003-06-16 16:52:53 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -109,9 +109,9 @@ void G4ConicalSurface::CalcBBox()
                             surfaceBoundary.BBox().GetBoxMax());
 }
 
-void G4ConicalSurface::PrintOn( G4std::ostream& os ) const
+void G4ConicalSurface::PrintOn( std::ostream& os ) const
 { 
-  // printing function using C++ G4std::ostream class
+  // printing function using C++ std::ostream class
   os << "G4ConicalSurface surface with origin: " << origin << "\t"
      << "angle: " << angle << " radians \tand axis " << axis << "\n";
 }

@@ -7,7 +7,7 @@
 // -------------------------------------------------------------------
 #include <stdlib.h>
 #include "G4VProcess.hh"
-#include "g4std/fstream"
+#include <fstream>
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
 #ifdef G4ANALYSIS_USE

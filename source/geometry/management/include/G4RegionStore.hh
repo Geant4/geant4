@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegionStore.hh,v 1.3 2003-02-07 11:32:20 gcosmo Exp $
+// $Id: G4RegionStore.hh,v 1.4 2003-06-16 16:51:56 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4RegionStore
@@ -53,10 +53,10 @@
 
 class G4Region;
 
-#include "g4std/vector"
+#include <vector>
 #include "globals.hh"
 
-class G4RegionStore : public G4std::vector<G4Region*>
+class G4RegionStore : public std::vector<G4Region*>
 {
   public:  // with description
 

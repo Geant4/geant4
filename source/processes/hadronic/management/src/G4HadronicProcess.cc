@@ -23,8 +23,8 @@
 //
 //
  // HPW to implement the choosing of an element for scattering.
-#include "g4std/fstream"
-#include "g4std/strstream"
+#include <fstream>
+#include <strstream>
 #include <stdlib.h>
 #include "G4HadronicProcess.hh"
 #include "G4EffectiveCharge.hh"
@@ -58,7 +58,7 @@
     G4double aTemp = aMaterial->GetTemperature();
     G4double crossSectionTotal = 0;
     G4int i;
-    G4std::vector<G4double> runningSum;
+    std::vector<G4double> runningSum;
     for( i=0; i < numberOfElements; ++i )
     {
       runningSum.push_back(theAtomicNumberDensity[i] *
@@ -214,7 +214,7 @@
     
     // prepare the IsoResult.
     char the1[100] = {""};
-    G4std::ostrstream ost1(the1, 100, G4std::ios::out);
+    std::ostrstream ost1(the1, 100, std::ios::out);
     ost1 <<Z<<"_"<<A<<"\0";
     G4String * biff = new G4String(the1);
     G4IsoResult * theResult = new G4IsoResult(*biff, aNucleus);

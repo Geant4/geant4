@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyPrimaryGeneratorActionIr.hh,v 1.4 2003-05-22 17:20:42 guatelli Exp $
+// $Id: BrachyPrimaryGeneratorActionIr.hh,v 1.5 2003-06-16 16:45:01 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    *************************************************
@@ -38,7 +38,7 @@
 #define BrachyPrimaryGeneratorActionIr_h 1
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "BrachyPrimaryGeneratorAction.hh"
 

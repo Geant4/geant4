@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4ReplicaNavigation.cc,v 1.7 2002-11-18 16:43:06 gcosmo Exp $
+// $Id: testG4ReplicaNavigation.cc,v 1.8 2003-06-16 16:55:03 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -236,7 +236,7 @@ G4bool testG4ReplicaNavigation()
   Dist=repNav.DistanceToOut(&radRep,1,G4ThreeVector(0,21,0));
   assert(Dist==1);
   Dist=repNav.DistanceToOut(&radRep,1,G4ThreeVector(21,21,0));
-  G4std::cout.precision(8);
+  std::cout.precision(8);
   // G4cout << " Dist is " << Dist << " and expected= " << sqrt(2.*441.)-20. << G4endl;
   // G4cout << "   a difference of " << Dist-(sqrt(2.*441.)-20.) << G4endl;
   assert( Dist - (sqrt(2.*441.)-20.) < 1.e-14 );

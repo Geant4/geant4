@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMarker.hh,v 1.8 2002-11-27 12:23:20 johna Exp $
+// $Id: G4VMarker.hh,v 1.9 2003-06-16 16:55:12 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -88,7 +88,7 @@
 
 class G4VMarker: public G4VVisPrim {
 
-  friend G4std::ostream& operator << (G4std::ostream& os, const G4VMarker& marker);
+  friend std::ostream& operator << (std::ostream& os, const G4VMarker& marker);
 
 public: // With description
 

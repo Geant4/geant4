@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //////////////////////////////////////////////////////////////////////////
-// $Id: testG4BREPSolidOpenPCone.cc,v 1.4 2001-07-11 09:59:50 gunter Exp $
+// $Id: testG4BREPSolidOpenPCone.cc,v 1.5 2003-06-16 16:53:09 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //////////////////////////////////////////////////////////////////////////
 //
@@ -33,14 +33,14 @@
 
 #include <stdio.h>
 #include <math.h>
-#include "g4std/fstream"
+#include <fstream>
 #include <stdlib.h>
 #include "G4ios.hh" 
 #include "G4BREPSolid.hh"
 #include "G4BREPSolidOpenPCone.hh"
 #include "G4Timer.hh"
 
-#include "g4std/iomanip"
+#include <iomanip>
 
 G4int main(G4int argc, char **argv)
 {
@@ -102,9 +102,9 @@ G4int main(G4int argc, char **argv)
   // Temporary
   for (G4int x = 0; x < noZplanes; x++)
   {
-    G4cout <<    " Z[" << x << "]=" << G4std::setw(5) << Z_Values[x];
-    G4cout << " Rmin[" << x << "]=" << G4std::setw(5) << RMINVec[x];
-    G4cout << " Rmax[" << x << "]=" << G4std::setw(5) << RMAXVec[x]<<G4endl;
+    G4cout <<    " Z[" << x << "]=" << std::setw(5) << Z_Values[x];
+    G4cout << " Rmin[" << x << "]=" << std::setw(5) << RMINVec[x];
+    G4cout << " Rmax[" << x << "]=" << std::setw(5) << RMAXVec[x]<<G4endl;
   }
 
   G4cout<<" start   angle ="<<start_angle<<G4endl;

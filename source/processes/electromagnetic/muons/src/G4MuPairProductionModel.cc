@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.cc,v 1.10 2003-06-06 17:42:33 vnivanch Exp $
+// $Id: G4MuPairProductionModel.cc,v 1.11 2003-06-16 17:01:50 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -161,7 +161,7 @@ void G4MuPairProductionModel::Initialise(const G4ParticleDefinition*,
     const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
     const G4Material* material = couple->GetMaterial();
     G4DataVector* dv = ComputePartialSumSigma(material, fixedEnergy,
-                             G4std::min(cuts[i], 0.25*highKinEnergy));
+                             std::min(cuts[i], 0.25*highKinEnergy));
     partialSumSigma.push_back(dv);
   }
   if(!samplingTablesAreFilled) MakeSamplingTables();
@@ -487,7 +487,7 @@ G4double G4MuPairProductionModel::CrossSection(const G4Material* material,
 {
   G4double cross = 0.0;
 
-  G4double tmax = G4std::min(maxEnergy, kineticEnergy);
+  G4double tmax = std::min(maxEnergy, kineticEnergy);
   if(cutEnergy >= tmax) return cross;
 
   const G4ElementVector* theElementVector = material->GetElementVector() ;
@@ -620,7 +620,7 @@ G4DynamicParticle* G4MuPairProductionModel::SampleSecondary(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4std::vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
+std::vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
                              const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* aDynamicParticle,
                                    G4double minEnergy,
@@ -755,7 +755,7 @@ G4std::vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
    aParticle2->SetKineticEnergy(PositKineEnergy);
 
 
-  G4std::vector<G4DynamicParticle*>* vdp = new G4std::vector<G4DynamicParticle*>;
+  std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
   vdp->push_back(aParticle1);
   vdp->push_back(aParticle2);
 

@@ -23,7 +23,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALTBEventAction.cc,v 1.6 2003-05-26 12:51:18 pmendez Exp $
+// $Id: FCALTBEventAction.cc,v 1.7 2003-06-16 16:46:35 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,7 @@
 
 #include "FCALCalorHit.hh"
 
-#include "g4std/vector"
+#include <vector>
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"

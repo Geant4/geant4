@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIWin32.cc,v 1.8 2003-06-11 07:03:42 gcosmo Exp $
+// $Id: G4UIWin32.cc,v 1.9 2003-06-16 16:55:59 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
@@ -32,7 +32,7 @@
 
 #include <string.h>
 
-#include "g4std/strstream"
+#include <strstream>
 
 #include "G4UImanager.hh"
 #include "G4StateManager.hh"

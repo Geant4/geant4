@@ -185,7 +185,7 @@ class G4PAIonisation : public G4VPAIenergyLoss
     const G4Proton* theProton;
     const G4AntiProton* theAntiProton;
 
-    const G4std::vector<G4double>* DeltaCutInKineticEnergy ;
+    const std::vector<G4double>* DeltaCutInKineticEnergy ;
 
     G4double DeltaCutInKineticEnergyNow ;
 

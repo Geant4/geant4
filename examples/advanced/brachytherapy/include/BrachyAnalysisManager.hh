@@ -25,7 +25,7 @@
 // S.Guatelli
 //
 //
-// $Id: BrachyAnalysisManager.hh,v 1.7 2003-05-22 17:20:40 guatelli Exp $
+// $Id: BrachyAnalysisManager.hh,v 1.8 2003-06-16 16:44:59 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    **********************************
@@ -42,7 +42,7 @@
 #define G4PROCESSTESTANALYSIS_HH
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4ThreeVector.hh"
 #include "AIDA/IHistogram1D.h"
 #include "AIDA/IHistogram2D.h"

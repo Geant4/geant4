@@ -21,16 +21,16 @@
 // ********************************************************************
 //
 //
-// $Id: G3PartTable.cc,v 1.11 2003-06-04 16:40:14 gcosmo Exp $
+// $Id: G3PartTable.cc,v 1.12 2003-06-16 16:50:51 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4Types.hh"
-#include "g4std/strstream"
-#include "g4std/iomanip"
+#include <strstream>
+#include <iomanip>
 #include "G3PartTable.hh"
 
-typedef G4std::map<G4String, G4ParticleDefinition*, G4std::less<G4String> >
+typedef std::map<G4String, G4ParticleDefinition*, std::less<G4String> >
 ::iterator PTDiterator;
 
 G3PartTable::G3PartTable(){
@@ -64,8 +64,8 @@ G3PartTable::Put(G4int partid, G4ParticleDefinition *partpt){
 void
 G3PartTable::HashID(G4int partid, G4String& theHashID){
   char s[20];
-  G4std::ostrstream ostr(s, sizeof s);
-  ostr << "Part" << partid << G4std::ends;
+  std::ostrstream ostr(s, sizeof s);
+  ostr << "Part" << partid << std::ends;
   theHashID = s;
 }
 
@@ -82,7 +82,7 @@ G3PartTable::PrintAll(){
     for (PTDiterator i=PTD.begin(); i != PTD.end(); i++) {
       count++;
       G4ParticleDefinition* aPTD = (*i).second;
-      G4cout << "PTD entry " << G4std::setw(3) << count << " particle name: " 
+      G4cout << "PTD entry " << std::setw(3) << count << " particle name: " 
 	     << aPTD->GetParticleName() << G4endl;
     }
   }

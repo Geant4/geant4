@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyline.hh,v 1.9 2001-08-20 23:28:43 johna Exp $
+// $Id: G4Polyline.hh,v 1.10 2003-06-16 16:55:10 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,7 +44,7 @@
 
 class G4Polyline: public G4VVisPrim, public G4Point3DList {
 
-  friend G4std::ostream& operator << (G4std::ostream& os, const G4Polyline& line);
+  friend std::ostream& operator << (std::ostream& os, const G4Polyline& line);
 
 public: // With description
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em8PhysicsList.cc,v 1.7 2003-05-05 10:59:02 grichine Exp $
+// $Id: Em8PhysicsList.cc,v 1.8 2003-06-16 16:48:01 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -41,7 +41,7 @@
 #include "G4EnergyLossTables.hh"
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"
+#include <iomanip>
                
 #include "G4FastSimulationManagerProcess.hh"
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Gamma.cc,v 1.9 2002-12-16 11:15:36 gcosmo Exp $
+// $Id: G4Gamma.cc,v 1.10 2003-06-16 16:56:46 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,8 +39,8 @@
 // ----------------------------------------------------------------------
 
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
  
 #include "G4Gamma.hh"
 

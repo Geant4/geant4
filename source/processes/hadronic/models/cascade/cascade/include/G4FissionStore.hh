@@ -24,7 +24,7 @@
 
 #include "G4FissionConfiguration.hh"
 
-#include "g4std/vector"
+#include <vector>
 
 class G4FissionStore {
 
@@ -52,7 +52,7 @@ public:
 private:
   G4int verboseLevel;
 
-  G4std::vector<G4FissionConfiguration> configurations;
+  std::vector<G4FissionConfiguration> configurations;
 
 };
 

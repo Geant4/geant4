@@ -50,9 +50,9 @@ G4AtomicDeexcitation::G4AtomicDeexcitation():
 G4AtomicDeexcitation::~G4AtomicDeexcitation()
 {}
 
-G4std::vector<G4DynamicParticle*>* G4AtomicDeexcitation::GenerateParticles(G4int Z,G4int givenShellId)
+std::vector<G4DynamicParticle*>* G4AtomicDeexcitation::GenerateParticles(G4int Z,G4int givenShellId)
 { 
-  G4std::vector<G4DynamicParticle*>* vectorOfParticles = new G4std::vector<G4DynamicParticle*>;
+  std::vector<G4DynamicParticle*>* vectorOfParticles = new std::vector<G4DynamicParticle*>;
   G4DynamicParticle* aParticle;
   G4int provShellId = 0;
   G4int counter = 0;
@@ -304,7 +304,7 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
             (anAugerTransition->TransitionOriginatingShellIds())->size();
       while (transitionLoopShellIndex < transitionSize) {
 
-        G4std::vector<G4int>::const_iterator pos = 
+        std::vector<G4int>::const_iterator pos = 
                anAugerTransition->TransitionOriginatingShellIds()->begin();
 
         G4int transitionLoopShellId = *(pos+transitionLoopShellIndex);
@@ -345,7 +345,7 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
       
       while (transitionRandomShellIndex < transitionSize) {
 
-        G4std::vector<G4int>::const_iterator pos = 
+        std::vector<G4int>::const_iterator pos = 
                anAugerTransition->TransitionOriginatingShellIds()->begin();
 
         transitionRandomShellId = *(pos+transitionRandomShellIndex);

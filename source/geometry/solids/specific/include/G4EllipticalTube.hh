@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.hh,v 1.10 2002-10-28 11:47:49 gcosmo Exp $
+// $Id: G4EllipticalTube.hh,v 1.11 2003-06-16 16:53:51 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -84,7 +84,7 @@ class G4EllipticalTube : public G4VSolid
 
   G4GeometryType GetEntityType() const;
 
-  G4std::ostream& StreamInfo(G4std::ostream& os) const;
+  std::ostream& StreamInfo(std::ostream& os) const;
 
   // Visualisation methods
 

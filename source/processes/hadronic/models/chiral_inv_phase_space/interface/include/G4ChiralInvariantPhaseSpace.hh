@@ -107,7 +107,7 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus, G4ParticleChange
   G4QHadron* iH = new G4QHadron(projectilePDGCode, 1./MeV*proj4Mom);
   projHV.push_back(iH);
   G4QEnvironment* pan= new G4QEnvironment(projHV, targetPDGCode);
-  G4std::for_each(projHV.begin(), projHV.end(), DeleteQHadron());
+  std::for_each(projHV.begin(), projHV.end(), DeleteQHadron());
   projHV.clear();
   //G4Quasmon* pan= new G4Quasmon(projectilePDGCode, targetPDGCode, 1./MeV*proj4Mom, 1./MeV*targ4Mom, nop);
   G4QHadronVector* output = pan->Fragment();

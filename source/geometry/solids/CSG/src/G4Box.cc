@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.19 2002-10-28 15:18:16 gcosmo Exp $
+// $Id: G4Box.cc,v 1.20 2003-06-16 16:53:34 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -831,7 +831,7 @@ G4GeometryType G4Box::GetEntityType() const
 //
 // Stream object contents to an output stream
 
-G4std::ostream& G4Box::StreamInfo(G4std::ostream& os) const
+std::ostream& G4Box::StreamInfo(std::ostream& os) const
 {
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"

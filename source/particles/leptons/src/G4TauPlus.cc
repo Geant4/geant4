@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TauPlus.cc,v 1.8 2002-03-08 08:48:31 kurasige Exp $
+// $Id: G4TauPlus.cc,v 1.9 2003-06-16 16:58:01 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,8 +33,8 @@
 //      7 July 1996                   H.Kurashige 
 // **********************************************************************
 
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4TauPlus.hh"
 

@@ -35,8 +35,8 @@
 #include "G4Circle.hh"
 #include "G4Color.hh"
 #include "G4VisAttributes.hh"
-#include "g4std/iomanip"
-#include "g4std/strstream"
+#include <iomanip>
+#include <strstream>
 
 #include "G4SolidStore.hh"
 
@@ -136,7 +136,7 @@ G4double SBTrun::GaussianRandom(const G4double cutoff) const {
 //
 // Do your stuff!
 //
-void SBTrun::RunTest( const G4VSolid *testVolume, G4std::ostream &logger )
+void SBTrun::RunTest( const G4VSolid *testVolume, std::ostream &logger )
 {
   //
   // Clear error list
@@ -187,7 +187,7 @@ void SBTrun::RunTest( const G4VSolid *testVolume, G4std::ostream &logger )
   //
   // Set iostream precision to 14 digits
   //
-  logger << G4std::setprecision(14);
+  logger << std::setprecision(14);
 
   //
   // Set clock
@@ -202,7 +202,7 @@ void SBTrun::RunTest( const G4VSolid *testVolume, G4std::ostream &logger )
   G4int nPoint = 0;
   G4int nError = 0;
 
-  G4std::setprecision(16);
+  std::setprecision(16);
 
   for(;;) {
     //
@@ -211,7 +211,7 @@ void SBTrun::RunTest( const G4VSolid *testVolume, G4std::ostream &logger )
     G4ThreeVector	point = GetRandomPoint();
 
 #if DEBUG
-    G4cerr << G4std::setprecision(32);
+    G4cerr << std::setprecision(32);
     G4cerr << "Current point is : " << point* (1/cm) << G4endl ;
 #endif
 		  //
@@ -283,7 +283,7 @@ void SBTrun::RunTest( const G4VSolid *testVolume, G4std::ostream &logger )
 //
 // Recover previously logged error and display it
 //
-G4int SBTrun::DrawError( const G4VSolid *testVolume, G4std::istream &logger, 
+G4int SBTrun::DrawError( const G4VSolid *testVolume, std::istream &logger, 
 			 const G4int errorIndex, SBTVisManager *visManager ) const
 {
   G4ThreeVector p, v;
@@ -335,7 +335,7 @@ G4int SBTrun::DrawError( const G4VSolid *testVolume, G4std::istream &logger,
 //
 // Recover previously logged error and invoke G4VSolid::Inside
 //
-G4int SBTrun::DebugInside( const G4VSolid *testVolume, G4std::istream &logger, const G4int errorIndex ) const
+G4int SBTrun::DebugInside( const G4VSolid *testVolume, std::istream &logger, const G4int errorIndex ) const
 {	
   G4ThreeVector p, v;
 
@@ -358,7 +358,7 @@ G4int SBTrun::DebugInside( const G4VSolid *testVolume, G4std::istream &logger, c
 //
 // Recover previously logged error and invoke G4VSolid::DistanceToIn(p)
 //
-G4int SBTrun::DebugToInP( const G4VSolid *testVolume, G4std::istream &logger, const G4int errorIndex ) const
+G4int SBTrun::DebugToInP( const G4VSolid *testVolume, std::istream &logger, const G4int errorIndex ) const
 {	
   G4ThreeVector p, v;
 
@@ -381,7 +381,7 @@ G4int SBTrun::DebugToInP( const G4VSolid *testVolume, G4std::istream &logger, co
 //
 // Recover previously logged error and invoke G4VSolid::DistanceToIn(p,v)
 //
-G4int SBTrun::DebugToInPV( const G4VSolid *testVolume, G4std::istream &logger, const G4int errorIndex ) const
+G4int SBTrun::DebugToInPV( const G4VSolid *testVolume, std::istream &logger, const G4int errorIndex ) const
 {	
   G4ThreeVector p, v;
 
@@ -408,7 +408,7 @@ G4int SBTrun::DebugToInPV( const G4VSolid *testVolume, G4std::istream &logger, c
 //
 // Recover previously logged error and invoke G4VSolid::DistanceToOut(p)
 //
-G4int SBTrun::DebugToOutP( const G4VSolid *testVolume, G4std::istream &logger, const G4int errorIndex ) const
+G4int SBTrun::DebugToOutP( const G4VSolid *testVolume, std::istream &logger, const G4int errorIndex ) const
 {	
   G4ThreeVector p, v;
 
@@ -431,7 +431,7 @@ G4int SBTrun::DebugToOutP( const G4VSolid *testVolume, G4std::istream &logger, c
 //
 // Recover previously logged error and invoke G4VSolid::DistanceToOut(p,v)
 //
-G4int SBTrun::DebugToOutPV( const G4VSolid *testVolume, G4std::istream &logger, const G4int errorIndex ) const
+G4int SBTrun::DebugToOutPV( const G4VSolid *testVolume, std::istream &logger, const G4int errorIndex ) const
 {	
   G4ThreeVector p, v;
 
@@ -463,7 +463,7 @@ G4int SBTrun::DebugToOutPV( const G4VSolid *testVolume, G4std::istream &logger, 
 //
 void SBTrun::TestOutsidePoint( const G4VSolid *testVolume, G4int *nError,
 			       const SBTrunPointList *inside, const SBTrunPointList *outside,
-			       const G4ThreeVector point, G4std::ostream &logger )
+			       const G4ThreeVector point, std::ostream &logger )
 {
   G4int i, n = inside->NumPoints();
   
@@ -620,7 +620,7 @@ void SBTrun::TestOutsidePoint( const G4VSolid *testVolume, G4int *nError,
     G4ThreeVector v = vr.unit();
 
 #if DEBUG    
-    G4cerr << G4std::setprecision(32);
+    G4cerr << std::setprecision(32);
     G4cerr << "point = " << point << G4endl ;
     G4cerr << "v = " << v << G4endl ;
 #endif
@@ -661,7 +661,7 @@ void SBTrun::TestOutsidePoint( const G4VSolid *testVolume, G4int *nError,
 // TestInsidePoint
 //
 void SBTrun::TestInsidePoint( const G4VSolid *testVolume, G4int *nError,
-			      const SBTrunPointList *outside, const G4ThreeVector point, G4std::ostream &logger )
+			      const SBTrunPointList *outside, const G4ThreeVector point, std::ostream &logger )
 {
   G4int i, n = outside->NumPoints();
 
@@ -742,7 +742,7 @@ void SBTrun::TestInsidePoint( const G4VSolid *testVolume, G4int *nError,
 //
 void SBTrun::ReportError( G4int *nError, const G4ThreeVector p, 
 			  const G4ThreeVector v, G4double distance,
-			  const G4String comment, G4std::ostream &logger )
+			  const G4String comment, std::ostream &logger )
 {
   //
   // Have we encountered this error message before?
@@ -834,10 +834,10 @@ G4int SBTrun::CountErrors() const
 //
 // Get the p and v vectors stored in a test3 log file
 //
-G4int SBTrun::GetLoggedPV( G4std::istream &logger, const G4int errorIndex,
+G4int SBTrun::GetLoggedPV( std::istream &logger, const G4int errorIndex,
 			   G4ThreeVector &p, G4ThreeVector &v        ) const
 {
-  logger >> G4std::setprecision(14);		// I wonder if this is necessary?
+  logger >> std::setprecision(14);		// I wonder if this is necessary?
 
   //
   // Search for the requested error index, skipping comments along the way

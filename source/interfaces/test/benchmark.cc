@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: benchmark.cc,v 1.3 2001-07-11 10:01:23 gunter Exp $
+// $Id: benchmark.cc,v 1.4 2003-06-16 16:56:10 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -148,7 +148,7 @@ G4VPhysicalVolume* BuildCalorimeter(G4Material* Air,
 int main()
 {
 //-------- set output format-------
-    G4cout.setf( G4std::ios:: scientific, G4std::ios :: floatfield );
+    G4cout.setf( std::ios:: scientific, std::ios :: floatfield );
 
 //--------- Material definition ---------
 

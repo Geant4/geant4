@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelPhysicsList.cc,v 1.4 2003-05-28 13:53:52 flongo Exp $
+// $Id: GammaRayTelPhysicsList.cc,v 1.5 2003-06-16 16:46:30 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,7 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"   
+#include <iomanip>   
 
 #include "GammaRayTelGeneralPhysics.hh"
 #include "GammaRayTelEMPhysics.hh"

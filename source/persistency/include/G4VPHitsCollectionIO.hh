@@ -35,7 +35,7 @@
 class G4VPHitsCollectionIO
 {
     public: // With description
-      G4VPHitsCollectionIO( G4std::string detName, G4std::string colName );
+      G4VPHitsCollectionIO( std::string detName, std::string colName );
       // Constructor
 
       virtual ~G4VPHitsCollectionIO() {};
@@ -55,10 +55,10 @@ class G4VPHitsCollectionIO
       G4bool operator== (const G4VPHitsCollectionIO& right) const;
       // virtual operator for comparing hit collections with names.
 
-      G4std::string SDname() { return f_detName; };
+      std::string SDname() { return f_detName; };
       // Returns the sensitive detector name.
 
-      G4std::string CollectionName() { return f_colName; };
+      std::string CollectionName() { return f_colName; };
       // Returns the hit collection name.
 
       void SetVerboseLevel(int v) { m_verbose = v; };
@@ -66,8 +66,8 @@ class G4VPHitsCollectionIO
 
     protected:
       G4int m_verbose;
-      G4std::string f_detName;
-      G4std::string f_colName;
+      std::string f_detName;
+      std::string f_colName;
 
 }; // End of class G4VPHitsCollectionIO
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN04HadronPhysics.cc,v 1.9 2003-05-28 10:59:41 gcosmo Exp $
+// $Id: ExN04HadronPhysics.cc,v 1.10 2003-06-16 16:49:54 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -29,7 +29,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"   
+#include <iomanip>   
 
 
 ExN04HadronPhysics::ExN04HadronPhysics(const G4String& name)

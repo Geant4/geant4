@@ -32,7 +32,7 @@
 #include "G4UImessenger.hh"
 #include "SBTvoxel.hh"
 #include "G4RotationMatrix.hh"
-#include "g4std/fstream"
+#include <fstream>
 
 class G4VSolid;
 class G4SolidQuery;

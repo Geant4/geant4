@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: OlapLogManager.cc,v 1.1 2002-06-04 07:40:21 gcosmo Exp $
+// $Id: OlapLogManager.cc,v 1.2 2003-06-16 16:49:27 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,7 +35,7 @@
 #include "OlapLogManager.hh"
 
 #include "globals.hh"
-#include "g4std/fstream"
+#include <fstream>
 
 OlapLogManager * OlapLogManager::theInstance = 0;
 

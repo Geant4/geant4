@@ -644,7 +644,7 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
 
   const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
   G4double tmax = MaxSecondaryEnergy(dynParticle);
-  tmax = G4std::min(tmax,(*theCuts)[currentMaterialIndex]);
+  tmax = std::min(tmax,(*theCuts)[currentMaterialIndex]);
 
 /*
   //G4double eloss0 = eloss;
@@ -684,7 +684,7 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
   */
 
   // Subcutoff and/or deexcitation
-  G4std::vector<G4Track*>* newp =
+  std::vector<G4Track*>* newp =
            SecondariesAlongStep(step, tmax, eloss, preStepScaledEnergy);
 
   if(newp) {
@@ -922,7 +922,7 @@ G4PhysicsVector* G4VEnergyLossSTD::LambdaPhysicsVector(const G4MaterialCutsCoupl
   G4double cut  = (*theCuts)[couple->GetIndex()];
   G4int nbins = 3;
   if( couple->IsUsed() ) nbins = nLambdaBins;
-  G4double tmin = G4std::max(MinPrimaryEnergy(particle, couple->GetMaterial(), cut),
+  G4double tmin = std::max(MinPrimaryEnergy(particle, couple->GetMaterial(), cut),
                                minKinEnergy);
   if(tmin >= maxKinEnergy) tmin = 0.5*maxKinEnergy;
   //  G4double xmax = maxKinEnergy*exp(log(maxKinEnergy/tmin)/((G4double)(nbins-1)) );
@@ -1210,7 +1210,7 @@ G4double G4VEnergyLossSTD::GetContinuousStepLimit(const G4Track&,
     fRange = ((*theRangeTable)[currentMaterialIndex])->
             GetValue(preStepScaledEnergy, b)*reduceFactor;
     x = fRange;
-    G4double r = G4std::min(finalRange, currentCouple->GetProductionCuts()
+    G4double r = std::min(finalRange, currentCouple->GetProductionCuts()
                  ->GetProductionCut(idxG4ElectronCut));
     if( integral ) {
       if(x < currentMinimumStep && x > r) x *= 0.8;

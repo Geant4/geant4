@@ -33,8 +33,8 @@
 #include "G4FluoData.hh"
 #include "G4DataVector.hh"
 #include "G4FluoTransition.hh"
-#include "g4std/fstream"
-#include "g4std/strstream"
+#include <fstream>
+#include <strstream>
 
 G4FluoData::G4FluoData()
 {
@@ -43,7 +43,7 @@ G4FluoData::G4FluoData()
 
 G4FluoData::~G4FluoData()
 { 
- G4std::map<G4int,G4DataVector*,G4std::less<G4int> >::iterator pos;
+ std::map<G4int,G4DataVector*,std::less<G4int> >::iterator pos;
 
   for (pos = idMap.begin(); pos != idMap.end(); ++pos)
     {
@@ -74,7 +74,7 @@ G4int G4FluoData::VacancyId(G4int vacancyIndex) const
     {G4Exception("G4FluoData::vacancyIndex outside boundaries");}
   else
     {
-      G4std::map<G4int,G4DataVector*,G4std::less<G4int> >::const_iterator pos;
+      std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator pos;
       pos = idMap.find(vacancyIndex);
       if (pos!= idMap.end())
 	{ G4DataVector dataSet = (*(*pos).second);
@@ -107,7 +107,7 @@ G4int G4FluoData::StartShellId(G4int initIndex, G4int vacancyIndex) const
     {G4Exception("G4FluoData::vacancyIndex outside boundaries");}
  else
    {
-     G4std::map<G4int,G4DataVector*,G4std::less<G4int> >::const_iterator pos;
+     std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator pos;
     
      pos = idMap.find(vacancyIndex);
      
@@ -131,7 +131,7 @@ G4double G4FluoData::StartShellEnergy(G4int initIndex, G4int vacancyIndex) const
     {G4Exception("G4FluoData::vacancyIndex outside boundaries");}
  else
    {
-     G4std::map<G4int,G4DataVector*,G4std::less<G4int> >::const_iterator pos;
+     std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator pos;
      
      pos = energyMap.find(vacancyIndex);
      
@@ -155,7 +155,7 @@ G4double G4FluoData::StartShellProb(G4int initIndex, G4int vacancyIndex) const
     {G4Exception("G4FluoData::vacancyIndex outside boundaries");}
   else
     {
-     G4std::map<G4int,G4DataVector*,G4std::less<G4int> >::const_iterator pos;
+     std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator pos;
      
      pos = probabilityMap.find(vacancyIndex);
      
@@ -176,7 +176,7 @@ void G4FluoData::LoadData(G4int Z)
   // Build the complete string identifying the file with the data set
   
   char nameChar[100] = {""};
-  G4std::ostrstream ost(nameChar, 100, G4std::ios::out);
+  std::ostrstream ost(nameChar, 100, std::ios::out);
   if(Z != 0){
     ost << "fl-tr-pr-"<< Z << ".dat";
   }
@@ -195,8 +195,8 @@ void G4FluoData::LoadData(G4int Z)
   G4String pathString(path);
   G4String fluor("/fluor/");
   G4String dirFile = pathString + fluor + name;
-  G4std::ifstream file(dirFile);
-  G4std::filebuf* lsdp = file.rdbuf();
+  std::ifstream file(dirFile);
+  std::filebuf* lsdp = file.rdbuf();
   
   if (! (lsdp->is_open()) )
     {

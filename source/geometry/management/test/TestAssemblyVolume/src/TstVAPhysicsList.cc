@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: TstVAPhysicsList.cc,v 1.4 2001-07-11 09:59:25 gunter Exp $
+// $Id: TstVAPhysicsList.cc,v 1.5 2003-06-16 16:52:17 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"                
+#include <iomanip>                
 
 #include "TstVAPhysicsList.hh"
 #include "G4ParticleDefinition.hh"

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3DetectorConstruction.cc,v 1.16 2003-05-16 16:57:24 vnivanch Exp $
+// $Id: Em3DetectorConstruction.cc,v 1.17 2003-06-16 16:47:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -455,8 +455,8 @@ void Em3DetectorConstruction::PrintCalorParameters()
          << "\n ---> The calorimeter is " << NbOfLayers << " layers of:";
   for (G4int i=0; i<NbOfAbsor; i++)
      {
-      G4cout << "\n \t" << G4std::setw(12) << AbsorMaterial[i]->GetName() <<": "
-              << G4std::setw(6) << G4BestUnit(AbsorThickness[i],"Length");
+      G4cout << "\n \t" << std::setw(12) << AbsorMaterial[i]->GetName() <<": "
+              << std::setw(6) << G4BestUnit(AbsorThickness[i],"Length");
      }
   G4cout << "\n-------------------------------------------------------------\n";
 }

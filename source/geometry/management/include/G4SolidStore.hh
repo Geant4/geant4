@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SolidStore.hh,v 1.7 2002-04-19 08:20:18 gcosmo Exp $
+// $Id: G4SolidStore.hh,v 1.8 2003-06-16 16:52:00 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4SolidStore
@@ -52,11 +52,11 @@
 #ifndef G4VSOLIDSTORE_HH
 #define G4VSOLIDSTORE_HH
 
-#include "g4std/vector"
+#include <vector>
 
 #include "G4VSolid.hh"
 
-class G4SolidStore : public G4std::vector<G4VSolid*>
+class G4SolidStore : public std::vector<G4VSolid*>
 {
   public:  // with description
 

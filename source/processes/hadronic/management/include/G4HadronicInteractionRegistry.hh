@@ -23,7 +23,7 @@
 #ifndef G4HadronicInteractionRegistry_h
 #define G4HadronicInteractionRegistry_h 1
 
-#include "g4std/vector"
+#include <vector>
 #include "globals.hh"
 class G4HadronicInteraction;
 
@@ -55,7 +55,7 @@ class G4HadronicInteractionRegistry
   void AddModel(G4HadronicInteraction * aModel);
   
   G4int nModels;
-  G4std::vector <G4HadronicInteraction *> allModels;
+  std::vector <G4HadronicInteraction *> allModels;
   static G4HadronicInteractionRegistry theRegistry;
 
 };

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopeRayleighTest.cc,v 1.2 2003-03-13 17:33:41 pandola Exp $
+// $Id: G4PenelopeRayleighTest.cc,v 1.3 2003-06-16 17:00:59 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -44,8 +44,8 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
@@ -109,18 +109,18 @@ G4int main()
   G4int nIterations = 100000;
   G4int materialId = 3;
 
-  //G4cout.setf(G4std::ios::scientific,G4std::ios::floatfield );
+  //G4cout.setf(std::ios::scientific,std::ios::floatfield );
 
   // -------------------------------------------------------------------
 
   // ---- HBOOK initialization
 
-  G4std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
-  G4std::auto_ptr< AIDA::ITreeFactory > tf (af->createTreeFactory());
-  G4std::auto_ptr< AIDA::ITree > tree (tf->create("pen_ray_test.hbook","hbook",false,true));
+  std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
+  std::auto_ptr< AIDA::ITreeFactory > tf (af->createTreeFactory());
+  std::auto_ptr< AIDA::ITree > tree (tf->create("pen_ray_test.hbook","hbook",false,true));
   G4cout << "Tree store: " << tree->storeName() << G4endl;
-  G4std::auto_ptr< AIDA::ITupleFactory > tpf (af->createTupleFactory(*tree));
-  G4std::auto_ptr< AIDA::IHistogramFactory > hf (af->createHistogramFactory(*tree));
+  std::auto_ptr< AIDA::ITupleFactory > tpf (af->createTupleFactory(*tree));
+  std::auto_ptr< AIDA::IHistogramFactory > hf (af->createHistogramFactory(*tree));
  
   // ---- primary ntuple ------
   AIDA::ITuple* ntuple1 = tpf->create("1","Primary Ntuple","double eprimary,energyf,de,dedx,pxch,pych,pzch,pch,thetach");

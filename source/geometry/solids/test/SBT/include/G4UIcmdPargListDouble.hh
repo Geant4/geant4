@@ -41,7 +41,7 @@ class G4UIcmdPargListDouble : public G4UIcmdPargList {
 	
 	protected:
 	virtual G4bool FetchItem( const char *string, const G4int item );
-	virtual G4std::ostream &WriteItem( G4std::ostream &ios, const G4int item );
+	virtual std::ostream &WriteItem( std::ostream &ios, const G4int item );
 	
 	G4double units, *storage;
 };

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.hh,v 1.13 2003-05-13 18:35:47 gcosmo Exp $
+// $Id: G4LogicalVolume.hh,v 1.14 2003-06-16 16:51:48 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,7 +55,7 @@
 //
 // Data members:
 //
-//    G4std::vector<G4VPhysicalVolume*> fDaughters
+//    std::vector<G4VPhysicalVolume*> fDaughters
 //    - Vector of daughters. Given initial size of 0.
 //    G4FieldManager* fFieldManager
 //    - Pointer (possibly 0) to (magnetic or other) field manager object.
@@ -110,7 +110,7 @@
 #include "globals.hh"
 #include "G4Region.hh"
 #include "G4VPhysicalVolume.hh"  // Need operator == for vector fdaughters
-#include "g4std/vector"
+#include <vector>
 #include <assert.h>
 
 // Forward declarations
@@ -127,7 +127,7 @@ class G4MaterialCutsCouple;
 
 class G4LogicalVolume
 {
-  typedef G4std::vector<G4VPhysicalVolume*> G4PhysicalVolumeList;
+  typedef std::vector<G4VPhysicalVolume*> G4PhysicalVolumeList;
 
   public:  // with description
   

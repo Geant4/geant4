@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionSTD.cc,v 1.9 2003-06-06 17:42:53 vnivanch Exp $
+// $Id: G4MuPairProductionSTD.cc,v 1.10 2003-06-16 17:01:51 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -37,7 +37,7 @@
 // Modifications:
 //
 // 04-06-98 in DoIt,secondary production condition:
-//          range>G4std::min(threshold,safety)
+//          range>std::min(threshold,safety)
 // 26-10-98 new stuff from R. Kokoulin + cleanup , L.Urban
 // 06-05-99 bug fixed , L.Urban
 // 10-02-00 modifications+bug fix , new e.m. structure, L.Urban

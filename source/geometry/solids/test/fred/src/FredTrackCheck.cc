@@ -55,7 +55,7 @@ void FredTrackCheck::AddInHit( const G4Track *track )
 	FredTrackData	*trackData = 0;
 	FredTrackData	*target = new FredTrackData( track->GetTrackID() );
 	
-        G4std::vector<FredTrackData*>::const_iterator i;
+        std::vector<FredTrackData*>::const_iterator i;
 	for (i=hitList.begin(); i!=hitList.end(); ++i) {
 	  if (**i==*target) {
 	     trackData = *i;
@@ -92,7 +92,7 @@ void FredTrackCheck::AddOutHit( const G4Track *track )
 	FredTrackData	*trackData = 0;
 	FredTrackData	*target = new FredTrackData( track->GetTrackID() );
 	
-        G4std::vector<FredTrackData*>::const_iterator i;
+        std::vector<FredTrackData*>::const_iterator i;
 	for (i=hitList.begin(); i!=hitList.end(); ++i) {
 	  if (**i==*target) {
 	     trackData = *i;
@@ -136,7 +136,7 @@ void FredTrackCheck::GetTrackStatID( G4int trackID, G4int *nIn, G4int *nOut )
 	FredTrackData	*trackData = 0;
 	FredTrackData	target( trackID );
 	
-        G4std::vector<FredTrackData*>::const_iterator i;
+        std::vector<FredTrackData*>::const_iterator i;
 	for (i=hitList.begin(); i!=hitList.end(); ++i) {
 	  if (**i==target) {
 	     trackData = *i;
@@ -162,7 +162,7 @@ void FredTrackCheck::GetTrackStatID( G4int trackID, G4int *nIn, G4int *nOut )
 void FredTrackCheck::Clear()
 {
   FredTrackData* a = 0;
-  G4std::vector<FredTrackData*>::iterator i;
+  std::vector<FredTrackData*>::iterator i;
   while (hitList.size()>0)
   {
     a = hitList.back();

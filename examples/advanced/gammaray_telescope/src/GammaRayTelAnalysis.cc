@@ -22,7 +22,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelAnalysis.cc,v 1.17 2003-05-30 15:09:00 flongo Exp $
+// $Id: GammaRayTelAnalysis.cc,v 1.18 2003-06-16 16:46:22 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -48,7 +48,7 @@
 // - Adaptation to AIDA
 //
 // ************************************************************
-#include "g4std/fstream"
+#include <fstream>
 
 #include "G4RunManager.hh" 
 

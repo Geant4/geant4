@@ -50,7 +50,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4PhysicsTable* G4LossTableBuilder::BuildDEDXTable(
-                const G4std::vector<G4PhysicsTable*>& list)    
+                const std::vector<G4PhysicsTable*>& list)    
 {   
   size_t n_processes = list.size();
 

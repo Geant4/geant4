@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ComptonTest.cc,v 1.21 2002-12-13 12:26:00 gcosmo Exp $
+// $Id: G4ComptonTest.cc,v 1.22 2003-06-16 17:00:47 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -64,8 +64,8 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4Material.hh"
 #include "G4VContinuousDiscreteProcess.hh"
@@ -108,21 +108,21 @@ int main()
   // ---- HBOOK initialization
 
   // Creating the analysis factory
-  G4std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
+  std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
 
   // Creating the tree factory
-  G4std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
+  std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
 
   // Creating a tree mapped to a new hbook file.
   bool readOnly = false;
   bool createFile = true;
-  G4std::auto_ptr< AIDA::ITree > tree( tf->create( "comptonhisto.hbook", "hbook", readOnly, createFile ) );
-  G4std::cout << "Tree store : " << tree->storeName() << G4std::endl;
+  std::auto_ptr< AIDA::ITree > tree( tf->create( "comptonhisto.hbook", "hbook", readOnly, createFile ) );
+  std::cout << "Tree store : " << tree->storeName() << std::endl;
 
 
   // Next create the nTuples using the factory and open it for writing
   // Creating a tuple factory, whose tuples will be handled by the tree
-  G4std::auto_ptr< AIDA::ITupleFactory > tpf( af->createTupleFactory( *tree ) );
+  std::auto_ptr< AIDA::ITupleFactory > tpf( af->createTupleFactory( *tree ) );
 
   // ---- primary ntuple ------
   // If using Anaphe HBOOK implementation, there is a limitation on the length of the
@@ -138,7 +138,7 @@ int main()
 
   // ---- secondaries histos ----
   // Creating a histogram factory, whose histograms will be handled by the tree
-  G4std::auto_ptr< AIDA::IHistogramFactory > hf( af->createHistogramFactory( *tree ) );
+  std::auto_ptr< AIDA::IHistogramFactory > hf( af->createHistogramFactory( *tree ) );
 
   // Creating an 1-dimensional histogram in the root directory of the tree
 
@@ -530,9 +530,9 @@ int main()
 
 
   // Committing the transaction with the tree
-  G4std::cout << "Committing..." << G4std::endl;
+  std::cout << "Committing..." << std::endl;
   tree->commit();
-  G4std::cout << "Closing the tree..." << G4std::endl;
+  std::cout << "Closing the tree..." << std::endl;
   tree->close();
 
   delete touche;

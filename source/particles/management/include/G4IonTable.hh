@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.hh,v 1.19 2003-03-10 08:43:51 kurasige Exp $
+// $Id: G4IonTable.hh,v 1.20 2003-06-16 16:58:03 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,7 +45,7 @@
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
 
-#include "g4std/vector"
+#include <vector>
 
 class G4ParticleTable;
 class G4VIsotopeTable; 
@@ -60,7 +60,7 @@ class G4IonTable
 
  public:
    // Use STL Vector as list of ions
-   typedef G4std::vector<G4ParticleDefinition*> G4IonList;
+   typedef std::vector<G4ParticleDefinition*> G4IonList;
 
  public:
   // constructor

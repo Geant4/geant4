@@ -40,8 +40,8 @@
 #include "G4VSolid.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
-#include "g4std/iomanip"
-#include "g4std/strstream"
+#include <iomanip>
+#include <strstream>
 
 #include <time.h>
 
@@ -224,7 +224,7 @@ void SBTvoxel::Draw( const G4VSolid *testVolume,
 //
 // Perform a test on the specified solid
 //
-void SBTvoxel::RunTest( const G4VSolid *testVolume, G4std::ostream &logger )
+void SBTvoxel::RunTest( const G4VSolid *testVolume, std::ostream &logger )
 {
 	//
 	// Output test parameters
@@ -342,7 +342,7 @@ G4bool SBTvoxel::TestOneVoxel( const G4VSolid *testVolume,
 			       const G4VoxelLimits &voxel,
 			       const G4AffineTransform &transform,
 			       const G4ThreeVector inside[], const G4int numInside,
-			       G4std::ostream &logger ) const
+			       std::ostream &logger ) const
 {
 	static const EAxis axes[3] = { kXAxis, kYAxis, kZAxis };
 	G4int numError = 0;
@@ -499,7 +499,7 @@ G4bool SBTvoxel::TestOneVoxel( const G4VSolid *testVolume,
 //
 // DumpVoxel
 //
-void SBTvoxel::DumpVoxel( const G4VoxelLimits &voxel, G4std::ostream &logger ) const
+void SBTvoxel::DumpVoxel( const G4VoxelLimits &voxel, std::ostream &logger ) const
 {
 	logger << "VOXEL =";
 	
@@ -523,7 +523,7 @@ void SBTvoxel::DumpVoxel( const G4VoxelLimits &voxel, G4std::ostream &logger ) c
 //
 // DumpTransform
 //
-void SBTvoxel::DumpTransform( const G4AffineTransform &transform, G4std::ostream &logger ) const
+void SBTvoxel::DumpTransform( const G4AffineTransform &transform, std::ostream &logger ) const
 {
 	G4RotationMatrix rotate = transform.NetRotation();
   

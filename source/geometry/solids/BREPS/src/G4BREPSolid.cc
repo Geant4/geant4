@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.cc,v 1.23 2003-03-28 13:11:48 gcosmo Exp $
+// $Id: G4BREPSolid.cc,v 1.24 2003-06-16 16:52:43 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -1486,7 +1486,7 @@ G4Point3D G4BREPSolid::Scope() const
 }
 
 
-G4std::ostream& G4BREPSolid::StreamInfo(G4std::ostream& os) const
+std::ostream& G4BREPSolid::StreamInfo(std::ostream& os) const
 {
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"

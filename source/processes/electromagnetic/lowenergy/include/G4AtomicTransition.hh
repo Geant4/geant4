@@ -45,14 +45,14 @@
 
 #include "G4DataVector.hh"
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 
 class G4AtomicTransition {
 
 public:
 
   G4AtomicTransition(G4int finalShell,
-		     const G4std::vector<G4int>& ids,
+		     const std::vector<G4int>& ids,
 		     const G4DataVector& energies,
 		     const G4DataVector& probabilities);
   ~G4AtomicTransition();
@@ -62,7 +62,7 @@ public:
   // in an atom of a given material
 
   // Returns the identities of the originating shells for the transitions 
-  const G4std::vector<G4int>& OriginatingShellIds() const;
+  const std::vector<G4int>& OriginatingShellIds() const;
   
   // Return the energies of the transitions
   const G4DataVector& TransitionEnergies() const;
@@ -87,7 +87,7 @@ public:
 private:
 
   G4int finalShellId;
-  G4std::vector<G4int> originatingShellIds;
+  std::vector<G4int> originatingShellIds;
   G4DataVector transitionEnergies;
   G4DataVector transitionProbabilities;
   

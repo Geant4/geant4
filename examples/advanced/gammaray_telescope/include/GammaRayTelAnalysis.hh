@@ -22,7 +22,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelAnalysis.hh,v 1.14 2003-05-30 15:08:47 flongo Exp $
+// $Id: GammaRayTelAnalysis.hh,v 1.15 2003-06-16 16:46:20 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -47,7 +47,7 @@
 #define GammaRayTelAnalysis_h 1
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4ThreeVector.hh"
 
 #include <AIDA/AIDA.h>

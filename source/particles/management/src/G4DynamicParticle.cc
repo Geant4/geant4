@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.cc,v 1.13 2003-06-12 10:06:19 vnivanch Exp $
+// $Id: G4DynamicParticle.cc,v 1.14 2003-06-16 16:58:25 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -161,7 +161,7 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
       if (etot2 > pModule2) {
         G4double mass = sqrt(etot2 - pModule2);
         theDynamicalMass = mass;
-        SetKineticEnergy(G4std::max(0.,totalenergy-mass));
+        SetKineticEnergy(std::max(0.,totalenergy-mass));
       } else {
         theDynamicalMass = 0.;
         SetKineticEnergy(totalenergy);
@@ -203,7 +203,7 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
       if (etot2 > pModule2) {
         G4double mass = sqrt(etot2 - pModule2);
         theDynamicalMass = mass;
-        SetKineticEnergy(G4std::max(0.,totalEnergy-mass));
+        SetKineticEnergy(std::max(0.,totalEnergy-mass));
       } else {
         theDynamicalMass = 0.;
         SetKineticEnergy(totalEnergy);
@@ -381,7 +381,7 @@ void G4DynamicParticle::Set4Momentum(const G4LorentzVector &momentum )
       if (etot2 > pModule2) {
         G4double mass = sqrt(etot2 - pModule2);
         theDynamicalMass = mass;
-        SetKineticEnergy(G4std::max(0.,totalenergy-mass));
+        SetKineticEnergy(std::max(0.,totalenergy-mass));
       } else {
         theDynamicalMass = 0.;
         SetKineticEnergy(totalenergy);

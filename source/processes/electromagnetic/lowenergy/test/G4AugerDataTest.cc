@@ -39,14 +39,14 @@
 #include "globals.hh"
 #include "G4DataVector.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4AugerData.hh"
 
 int main()
 {
-  G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
+  G4cout.setf( std::ios::scientific, std::ios::floatfield );
 
   G4cout << "Enter Z" << G4endl;
   G4int Z;

@@ -694,14 +694,14 @@ static swig_type_info *swig_types[22];
 #include "G4ScoreTable.hh"
 #include "G4VIStore.hh"
 #include <string>
-#include "g4std/strstream"
+#include <strstream>
 #include <memory>
 #include "G4VPhysicalVolume.hh"
 #include "B03ImportanceDetectorConstruction.hh"
 #include "G4VImportanceAlgorithm.hh"
 
 char const *G4ScoreTable_Write(G4ScoreTable *self,G4MapGeometryCellCellScorer const &cs){
-      G4std::ostrstream tmpout;
+      std::ostrstream tmpout;
       self->Print(cs, &tmpout);
       string *value = new string(tmpout.str());
       return value->c_str();
@@ -1900,7 +1900,7 @@ static PyObject *_wrap_G4ScoreTable_Print(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     G4ScoreTable *arg1 ;
     G4MapGeometryCellCellScorer *arg2 ;
-    G4std::ostream *arg3 = 0 ;
+    std::ostream *arg3 = 0 ;
     PyObject * obj0  = 0 ;
     PyObject * obj1  = 0 ;
     PyObject * obj2  = 0 ;
@@ -2239,7 +2239,7 @@ static swig_type_info _swigt__p_G4ParallelGeometrySampler[] = {{"_p_G4ParallelGe
 static swig_type_info _swigt__p_G4CellScorerStore[] = {{"_p_G4CellScorerStore", 0, "G4CellScorerStore *", 0},{"_p_G4CellScorerStore"},{0}};
 static swig_type_info _swigt__p_G4VCellScorerStore[] = {{"_p_G4VCellScorerStore", 0, "G4VCellScorerStore *", 0},{"_p_G4VCellScorerStore"},{"_p_G4CellScorerStore", _p_G4CellScorerStoreTo_p_G4VCellScorerStore},{0}};
 static swig_type_info _swigt__p_B03AppBase[] = {{"_p_B03AppBase", 0, "B03AppBase *", 0},{"_p_B03AppBase"},{0}};
-static swig_type_info _swigt__p_G4std__ostream[] = {{"_p_G4std__ostream", 0, "G4std::ostream *", 0},{"_p_G4std__ostream"},{0}};
+static swig_type_info _swigt__p_G4std__ostream[] = {{"_p_G4std__ostream", 0, "std::ostream *", 0},{"_p_G4std__ostream"},{0}};
 static swig_type_info _swigt__p_G4CellStoreScorer[] = {{"_p_G4CellStoreScorer", 0, "G4CellStoreScorer *", 0},{"_p_G4CellStoreScorer"},{0}};
 static swig_type_info _swigt__p_G4CellScoreComposer[] = {{"_p_G4CellScoreComposer", 0, "G4CellScoreComposer *", 0},{"_p_G4CellScoreComposer"},{0}};
 static swig_type_info _swigt__p_G4GeometryCell[] = {{"_p_G4GeometryCell", 0, "G4GeometryCell *", 0},{"_p_G4GeometryCell"},{0}};

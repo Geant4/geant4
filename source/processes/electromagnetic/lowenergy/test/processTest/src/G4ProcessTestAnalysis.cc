@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTestAnalysis.cc,v 1.7 2003-02-05 15:39:43 gcosmo Exp $
+// $Id: G4ProcessTestAnalysis.cc,v 1.8 2003-06-16 17:01:34 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:  A. Pfeiffer (Andreas.Pfeiffer@cern.ch) 
@@ -51,7 +51,7 @@ G4ProcessTestAnalysis::~G4ProcessTestAnalysis()
   delete ntFactory;
   ntFactory = 0;
 
-  //  G4std::map< G4String,IHistogram1D*,G4std::less<G4String> >::iterator pos1;
+  //  std::map< G4String,IHistogram1D*,std::less<G4String> >::iterator pos1;
   //  for (pos1 = histo1D.begin(); pos1 != histo1D.end(); ++pos1)
   //    {
   //    IHistogram* h = pos1->second;
@@ -146,7 +146,7 @@ void G4ProcessTestAnalysis::finish()
   delete ntuple2;
 
   /*
-  G4std::map< G4String,Lizard::NTuple*,G4std::less<G4String> >::iterator pos;
+  std::map< G4String,Lizard::NTuple*,std::less<G4String> >::iterator pos;
   Lizard::NTuple* ntuple;
   pos = ntuples.find("primary");
   if (pos != ntuples.end()) 
@@ -207,7 +207,7 @@ void G4ProcessTestAnalysis::analyseSecondaries(const G4ParticleChange* particleC
       h->fill(phi);
 
       /*      
-      G4std::map< G4String,Lizard::NTuple*,G4std::less<G4String> >::iterator pos;
+      std::map< G4String,Lizard::NTuple*,std::less<G4String> >::iterator pos;
       pos = ntuples.find("secondaries");
       if (pos != ntuples.end()) 
 	{
@@ -215,7 +215,7 @@ void G4ProcessTestAnalysis::analyseSecondaries(const G4ParticleChange* particleC
 	  ntuple2->addRow();
 	}
 
-        G4std::map< G4String,IHistogram1D*,G4std::less<G4String> >::iterator pos1;
+        std::map< G4String,IHistogram1D*,std::less<G4String> >::iterator pos1;
 
       pos1 = histo1D.find("eKin");
       if (pos1 != histo1D.end()) 
@@ -296,14 +296,14 @@ void G4ProcessTestAnalysis::analyseGeneral(const G4Track& track,
   h->fill(eDeposit);
 
   /*
-  G4std::map< G4String,Lizard::NTuple*,G4std::less<G4String> >::iterator pos;
+  std::map< G4String,Lizard::NTuple*,std::less<G4String> >::iterator pos;
   pos = ntuples.find("primary");
   if (pos != ntuples.end()) 
     {
       Lizard::NTuple* ntuple1 = pos->second;
       ntuple1->addRow();
     }
-  G4std::map< G4String,IHistogram1D*,G4std::less<G4String> >::iterator pos1;
+  std::map< G4String,IHistogram1D*,std::less<G4String> >::iterator pos1;
   pos1 = histo1D.find("nSec");
   if (pos1 != histo1D.end()) 
     {

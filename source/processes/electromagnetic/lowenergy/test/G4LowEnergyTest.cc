@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyTest.cc,v 1.6 2001-10-12 13:10:55 pia Exp $
+// $Id: G4LowEnergyTest.cc,v 1.7 2003-06-16 17:00:53 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // KaonMinusAtRestTest.cc 
@@ -44,8 +44,8 @@
 // -------------------------------------------------------------------
 
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4Material.hh"
 
@@ -92,9 +92,9 @@ main()
   G4cout << "How many interactions? [10], Which material? [3], which Verbose Level? [1]" << G4endl;
   G4cin >> niter >> imat >> verboseLevel;
 
-  G4cout<<"which process?"<<G4endl<<G4std::setw(60)<<"[1] = G4LowEnergyPhotoElectric, [2] = G4LowEnergyCompton"<<G4endl;
-  G4cout<<G4std::setw(60)<<"[3] = G4LowEnergyRayleigh, [4] = G4LowEnergyGammaconversion"<<G4endl;
-  G4cout<<G4std::setw(60)<<"[5] = G4LowEnergyBremstrahlung"<<"[6] = G4LowEnergyIonisation"<<G4endl;
+  G4cout<<"which process?"<<G4endl<<std::setw(60)<<"[1] = G4LowEnergyPhotoElectric, [2] = G4LowEnergyCompton"<<G4endl;
+  G4cout<<std::setw(60)<<"[3] = G4LowEnergyRayleigh, [4] = G4LowEnergyGammaconversion"<<G4endl;
+  G4cout<<std::setw(60)<<"[5] = G4LowEnergyBremstrahlung"<<"[6] = G4LowEnergyIonisation"<<G4endl;
 
   G4cin >> processID;
 
@@ -108,19 +108,19 @@ main()
 
   //-------- write results onto a file --------
  
-  //  G4std::ofstream outFile1( "lowenergypri.out", G4std::ios::out);
-  //  G4std::ofstream outFile2( "lowenergysec.out", G4std::ios::out);
-  //  G4std::ofstream outFile3( "lowenergymfp.out", G4std::ios::out);
+  //  std::ofstream outFile1( "lowenergypri.out", std::ios::out);
+  //  std::ofstream outFile2( "lowenergysec.out", std::ios::out);
+  //  std::ofstream outFile3( "lowenergymfp.out", std::ios::out);
 
-  //  outFile1.setf( G4std::ios::scientific, G4std::ios::floatfield);
-  //  outFile2.setf( G4std::ios::scientific, G4std::ios::floatfield);
-  //  outFile3.setf( G4std::ios::scientific, G4std::ios::floatfield);
+  //  outFile1.setf( std::ios::scientific, std::ios::floatfield);
+  //  outFile2.setf( std::ios::scientific, std::ios::floatfield);
+  //  outFile3.setf( std::ios::scientific, std::ios::floatfield);
 
-  //  outFile1.setf(G4std::ios::left);
-  //  outFile2.setf(G4std::ios::left);
-  //  outFile3.setf(G4std::ios::left);
+  //  outFile1.setf(std::ios::left);
+  //  outFile2.setf(std::ios::left);
+  //  outFile3.setf(std::ios::left);
 
-  G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
+  G4cout.setf( std::ios::scientific, std::ios::floatfield );
   // -------------------------------------------------------------------
 
   // ALE ---- HBOOK initialization
@@ -474,7 +474,7 @@ main()
        ntuple3->column("mfp",meanFreePath);
        ntuple3->dumpData();
 
-      //      outFile3<<G4std::setw(4)<<J<<G4std::setw(14)<<Tkin[i]<<G4std::setw(14)<<meanFreePath<<G4endl;    
+      //      outFile3<<std::setw(4)<<J<<std::setw(14)<<Tkin[i]<<std::setw(14)<<meanFreePath<<G4endl;    
     }
   }// for loop on materials
   //END OF COMMENT */
@@ -557,8 +557,8 @@ main()
     ntuple1->column("pzch", pzChange);
     ntuple1->column("pch", PChange);
     
-    //    outFile1<<G4std::setw(13)<<pEnChange<<G4std::setw(13)<<pxChange<<G4std::setw(13)
-    //	    <<pyChange<<G4std::setw(13)<<pzChange<<G4endl;
+    //    outFile1<<std::setw(13)<<pEnChange<<std::setw(13)<<pxChange<<std::setw(13)
+    //	    <<pyChange<<std::setw(13)<<pzChange<<G4endl;
     
     ntuple1->dumpData(); 
     
@@ -619,10 +619,10 @@ main()
       ntuple2->dumpData(); 
 
       // Print secondaries on a file
-      //      outFile2<<G4std::setw(3)<<aParticleChange->GetNumberOfSecondaries()<<G4std::setw(14)
-      //	      <<aParticleChange->GetLocalEnergyDeposit()<<G4std::setw(14)<<e<<G4std::setw(14)
-      //	      <<eKin<<G4std::setw(14)<<sqrt(Px*Px+Py*Py+Pz*Pz)<<G4std::setw(14)<<Px<<G4std::setw(14)
-      //	      <<Py<<G4std::setw(14)<<Pz<<G4std::setw(3)<<ptype<<G4endl;
+      //      outFile2<<std::setw(3)<<aParticleChange->GetNumberOfSecondaries()<<std::setw(14)
+      //	      <<aParticleChange->GetLocalEnergyDeposit()<<std::setw(14)<<e<<std::setw(14)
+      //	      <<eKin<<std::setw(14)<<sqrt(Px*Px+Py*Py+Pz*Pz)<<std::setw(14)<<Px<<std::setw(14)
+      //	      <<Py<<std::setw(14)<<Pz<<std::setw(3)<<ptype<<G4endl;
 
       delete aParticleChange->GetSecondary(i);
     }

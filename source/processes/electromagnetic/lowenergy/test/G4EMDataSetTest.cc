@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EMDataSetTest.cc,v 1.1 2001-08-20 17:28:50 pia Exp $
+// $Id: G4EMDataSetTest.cc,v 1.2 2003-06-16 17:00:49 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -41,8 +41,8 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 #include "G4CompositeEMDataSet.hh"
 #include "G4ShellEMDataSet.hh"
 #include "G4EMDataSet.hh"

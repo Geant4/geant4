@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEnergyLoss.cc,v 1.41 2003-05-26 17:17:43 vnivanch Exp $
+// $Id: G4VEnergyLoss.cc,v 1.42 2003-06-16 17:02:50 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -1001,7 +1001,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
         if(a3>alim)
         {
           siga=sqrt(a3) ;
-          p3 = G4std::max(0.,G4RandGauss::shoot(a3,siga)+0.5);
+          p3 = std::max(0.,G4RandGauss::shoot(a3,siga)+0.5);
         }
         else
           p3 = G4float(G4Poisson(a3));
@@ -1020,7 +1020,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
         if(a3>alim)
         {
           siga=sqrt(a3) ;
-          p3 = G4std::max(0.,G4RandGauss::shoot(a3,siga)+0.5);
+          p3 = std::max(0.,G4RandGauss::shoot(a3,siga)+0.5);
         }
         else
           p3 = G4float(G4Poisson(a3));
@@ -1049,7 +1049,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       if(a1>alim)
       {
         siga=sqrt(a1) ;
-        p1 = G4std::max(0.,G4RandGauss::shoot(a1,siga)+0.5);
+        p1 = std::max(0.,G4RandGauss::shoot(a1,siga)+0.5);
       }
       else
        p1 = G4float(G4Poisson(a1));
@@ -1058,7 +1058,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       if(a2>alim)
       {
         siga=sqrt(a2) ;
-        p2 = G4std::max(0.,G4RandGauss::shoot(a2,siga)+0.5);
+        p2 = std::max(0.,G4RandGauss::shoot(a2,siga)+0.5);
       }
       else
         p2 = G4float(G4Poisson(a2));
@@ -1076,7 +1076,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       if(a3>alim)
       {
         siga=sqrt(a3) ;
-        p3 = G4std::max(0.,G4RandGauss::shoot(a3,siga)+0.5);
+        p3 = std::max(0.,G4RandGauss::shoot(a3,siga)+0.5);
       }
       else
         p3 = G4float(G4Poisson(a3));

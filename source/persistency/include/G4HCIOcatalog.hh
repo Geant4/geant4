@@ -27,15 +27,15 @@
 #ifndef HCIO_CATALOG_HH
 #define HCIO_CATALOG_HH 1
 
-#include "g4std/map"
+#include <map>
 #include "G4Types.hh"
 #include "G4VPHitsCollectionIO.hh"
 
 class G4VHCIOentry;
 
-typedef G4std::map<G4std::string, G4VHCIOentry*, G4std::less<G4std::string> > HCIOmap;
+typedef std::map<std::string, G4VHCIOentry*, std::less<std::string> > HCIOmap;
 
-typedef G4std::map<G4std::string, G4VPHitsCollectionIO*, G4std::less<G4std::string> > HCIOstore;
+typedef std::map<std::string, G4VPHitsCollectionIO*, std::less<std::string> > HCIOstore;
 
 // Class Description:
 //   Catalog for the I/O manager of hits collection for each detector.
@@ -62,16 +62,16 @@ class G4HCIOcatalog
       void RegisterHCIOmanager(G4VPHitsCollectionIO* d);
       // Register I/O manager
 
-      G4VHCIOentry* GetEntry(G4std::string name);
+      G4VHCIOentry* GetEntry(std::string name);
       // Returns the I/O manager entry
 
-      G4VPHitsCollectionIO* GetHCIOmanager(G4std::string name);
+      G4VPHitsCollectionIO* GetHCIOmanager(std::string name);
       // Returns the registered I/O manager entry
 
       void PrintEntries();
       // Prints the list of I/O manager entries
 
-      G4std::string CurrentHCIOmanager();
+      std::string CurrentHCIOmanager();
       // Returns the list of I/O managers
 
       void PrintHCIOmanager();

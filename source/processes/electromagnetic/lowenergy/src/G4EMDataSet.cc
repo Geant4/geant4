@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EMDataSet.cc,v 1.8 2003-05-20 20:16:12 pia Exp $
+// $Id: G4EMDataSet.cc,v 1.9 2003-06-16 17:00:07 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -34,8 +34,8 @@
 
 #include "G4EMDataSet.hh"
 #include "G4VDataSetAlgorithm.hh"
-#include "g4std/fstream"
-#include "g4std/strstream"
+#include <fstream>
+#include <strstream>
 
 // Constructor
 
@@ -144,7 +144,7 @@ void G4EMDataSet::LoadData(const G4String& fileName)
   // Build the complete string identifying the file with the data set
   
   char nameChar[100] = {""};
-  G4std::ostrstream ost(nameChar, 100, G4std::ios::out);
+  std::ostrstream ost(nameChar, 100, std::ios::out);
   
   ost << fileName << z << ".dat";
   
@@ -161,8 +161,8 @@ void G4EMDataSet::LoadData(const G4String& fileName)
   G4String separator("/");
 
   G4String dirFile = pathString + separator + name;
-  G4std::ifstream file(dirFile);
-  G4std::filebuf* lsdp = file.rdbuf();
+  std::ifstream file(dirFile);
+  std::filebuf* lsdp = file.rdbuf();
   
   if (! (lsdp->is_open()) )
 	{

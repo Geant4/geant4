@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuPairProduction.hh,v 1.13 2003-01-17 18:54:40 vnivanch Exp $
+// $Id: G4MuPairProduction.hh,v 1.14 2003-06-16 17:01:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //--------------- G4MuPairProduction physics process ------------------
@@ -152,8 +152,8 @@ class G4MuPairProduction : public G4VMuEnergyLoss
      G4double LowestKineticEnergy,HighestKineticEnergy;
      G4int    TotBin;
 
-     const G4std::vector<G4double>* electronEnergyCuts;
-     const G4std::vector<G4double>* positronEnergyCuts;
+     const std::vector<G4double>* electronEnergyCuts;
+     const std::vector<G4double>* positronEnergyCuts;
 
      // tables for sampling
      static G4int nzdat,ntdat,NBIN;

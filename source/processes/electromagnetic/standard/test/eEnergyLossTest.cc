@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: eEnergyLossTest.cc,v 1.3 2001-07-11 10:03:33 gunter Exp $
+// $Id: eEnergyLossTest.cc,v 1.4 2003-06-16 17:02:25 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //-----------------------------------------------------------------
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 #include "g4templates.hh"
 #include "globals.hh"
 #include "G4Timer.hh"     
@@ -81,10 +81,10 @@ G4VPhysicalVolume* BuildVolume(G4Material* matworld)
 int main()
 {
   //-------- set output format-------
-   G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
+   G4cout.setf( std::ios::scientific, std::ios::floatfield );
   //---write results to the file  ion.out-----
-   G4std::ofstream outFile("eloss", G4std::ios::out ) ;
-   outFile.setf( G4std::ios::scientific, G4std::ios::floatfield );
+   std::ofstream outFile("eloss", std::ios::out ) ;
+   outFile.setf( std::ios::scientific, std::ios::floatfield );
 
   //--------- Material definition ---------
   G4double a, z, ez, density ,temperature,pressure;

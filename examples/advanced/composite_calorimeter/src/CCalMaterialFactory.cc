@@ -27,7 +27,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalMaterialFactory.hh"
 #include "CCalutils.hh"
-#include "g4std/fstream"
+#include <fstream>
 #include <stdlib.h>
 
 #include "G4Material.hh"
@@ -183,7 +183,7 @@ void CCalMaterialFactory::readElements(const G4String& matfile) {
 
   G4String path = getenv("CCAL_GLOBALPATH");
   G4cout << " ==> Opening file " << matfile << " to read elements..." << G4endl;
-  G4std::ifstream is;
+  std::ifstream is;
   bool ok = openGeomFile(is, path, matfile);
   if (!ok) {
     G4cerr << "ERROR: Could not open file " << matfile << G4endl;
@@ -203,7 +203,7 @@ void CCalMaterialFactory::readMaterials(const G4String& matfile) {
 
   G4String path = getenv("CCAL_GLOBALPATH");
   G4cout << " ==> Opening file " << matfile << " to read materials..." << G4endl;
-  G4std::ifstream is;
+  std::ifstream is;
   bool ok = openGeomFile(is, path, matfile);
   if (!ok) {
     G4cerr << "ERROR: Could not open file " << matfile << G4endl;
@@ -329,7 +329,7 @@ CCalMaterial* CCalMaterialFactory::addCCalMaterial(const G4String& name,
 }
 
 
-void CCalMaterialFactory::readElements(G4std::ifstream& is){
+void CCalMaterialFactory::readElements(std::ifstream& is){
   G4String name, symbol;
   
   G4cout << "     ==> Reading elements... " << G4endl;
@@ -356,7 +356,7 @@ void CCalMaterialFactory::readElements(G4std::ifstream& is){
 }
 
 
-void CCalMaterialFactory::readMaterials(G4std::ifstream& is){
+void CCalMaterialFactory::readMaterials(std::ifstream& is){
   G4String name, matname;
 
   G4cout << "     ==> Reading materials... " << G4endl;

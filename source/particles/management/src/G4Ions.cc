@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ions.cc,v 1.8 2003-03-11 05:49:41 kurasige Exp $
+// $Id: G4Ions.cc,v 1.9 2003-06-16 16:58:27 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,8 +32,8 @@
 //      4th April 1996, G.Cosmo
 // **********************************************************************
 
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4Ions.hh"
 

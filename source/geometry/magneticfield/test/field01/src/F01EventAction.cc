@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01EventAction.cc,v 1.1 2001-10-11 07:12:56 grichine Exp $
+// $Id: F01EventAction.cc,v 1.2 2003-06-16 16:51:29 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -118,9 +118,9 @@ void F01EventAction::EndOfEventAction(const G4Event* evt)
       }
   if(verboselevel==2)
     G4cout
-       << "   Absorber: total energy: " << G4std::setw(7) << 
+       << "   Absorber: total energy: " << std::setw(7) << 
                              G4BestUnit(totEAbs,"Energy")
-       << "       total track length: " << G4std::setw(7) <<
+       << "       total track length: " << std::setw(7) <<
                              G4BestUnit(totLAbs,"Length")
        << G4endl;           
 

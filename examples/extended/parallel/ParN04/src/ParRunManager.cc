@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: ParRunManager.cc,v 1.4 2002-12-05 01:07:01 asaim Exp $
+// $Id: ParRunManager.cc,v 1.5 2003-06-16 16:49:43 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -62,7 +62,7 @@
 #include "ParRandomState.hh"
 
 #include "G4ios.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 // Define static data members of ParRunManager
 // They are set by ImportDoEventLoopLocals

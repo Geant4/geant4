@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.62 2003-05-20 23:33:31 pia Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.63 2003-06-16 17:00:10 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -245,7 +245,7 @@ void G4LowEnergyBremsstrahlung::BuildLossTable(const G4ParticleDefinition& )
 
     // the cut cannot be below lowest limit
     G4double tCut = (*(theCoupleTable->GetEnergyCutsVector(0)))[j];
-    tCut = G4std::min(highKineticEnergy, tCut);
+    tCut = std::min(highKineticEnergy, tCut);
     cutForSecondaryPhotons.push_back(tCut);
 
     const G4ElementVector* theElementVector = material->GetElementVector();

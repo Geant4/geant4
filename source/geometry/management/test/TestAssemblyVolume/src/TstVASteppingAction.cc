@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: TstVASteppingAction.cc,v 1.4 2001-07-11 09:59:26 gunter Exp $
+// $Id: TstVASteppingAction.cc,v 1.5 2003-06-16 16:52:18 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
 
 #include "TstVASteppingAction.hh"
 #include "G4SteppingManager.hh"
-#include "g4std/fstream"
+#include <fstream>
 
 TstVASteppingAction::TstVASteppingAction() : Steplength(100,0.,100.),
 SteplengthProfile(100,0.,2*M_PI)
@@ -36,7 +36,7 @@ SteplengthProfile(100,0.,2*M_PI)
 
 TstVASteppingAction::~TstVASteppingAction()
 {
-  G4std::ofstream o("test01.stepLength.plt");
+  std::ofstream o("test01.stepLength.plt");
   Steplength.output(o);
   o.close();
   o.open("test01.stepLengthProfile.plt");

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XicPlus.cc,v 1.7 2001-10-15 10:10:58 kurasige Exp $
+// $Id: G4XicPlus.cc,v 1.8 2003-06-16 16:57:19 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,8 +36,8 @@
 //  Modified PDG encoding           H.Kurashige 24 Sep. 98
 // ----------------------------------------------------------------------
 
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4XicPlus.hh"
 

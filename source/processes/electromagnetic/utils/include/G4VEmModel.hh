@@ -52,7 +52,7 @@
 #define G4VEmModel_h 1
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Material.hh"
@@ -102,7 +102,7 @@ public:
                                       G4double tmin,
                                       G4double tmax) = 0;
 
-  virtual G4std::vector<G4DynamicParticle*>* SampleSecondaries(
+  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,

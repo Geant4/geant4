@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4He3.cc,v 1.7 2003-02-18 01:49:58 kurasige Exp $
+// $Id: G4He3.cc,v 1.8 2003-06-16 16:57:24 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,8 +32,8 @@
 //      24th April 1998, H.Kurashige
 // **********************************************************************
 // ----------------------------------------------------------------------
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4He3.hh"
 

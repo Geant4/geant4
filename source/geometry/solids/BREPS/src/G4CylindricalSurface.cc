@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CylindricalSurface.cc,v 1.4 2001-07-11 09:59:44 gunter Exp $
+// $Id: G4CylindricalSurface.cc,v 1.5 2003-06-16 16:52:54 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -95,9 +95,9 @@ const char* G4CylindricalSurface::NameOf() const
   return "G4CylindricalSurface";
 }
 
-void G4CylindricalSurface::PrintOn( G4std::ostream& os ) const
+void G4CylindricalSurface::PrintOn( std::ostream& os ) const
 {
-  // printing function using C++ G4std::ostream class
+  // printing function using C++ std::ostream class
   os << "G4CylindricalSurface surface with origin: " << origin << "\t"
      << "radius: " << radius << "\tand axis " << axis << "\n";
 }

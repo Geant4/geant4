@@ -5,7 +5,7 @@
 // Revision and changes: Patricia Mendez (Patricia.Mendez@cern.ch)
 /////////////////////////////////////////////////////////////////////////////
 #include "G4ios.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 
 #include "globals.hh"
 #include "RichTbPhysicsList.hh"

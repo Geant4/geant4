@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryCellImportance.hh,v 1.2 2002-10-22 13:18:44 dressel Exp $
+// $Id: G4GeometryCellImportance.hh,v 1.3 2003-06-16 16:50:59 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -37,14 +37,14 @@
 #ifndef G4GeometryCellImportance_hh
 #define G4GeometryCellImportance_hh G4GeometryCellImportance_hh 
 
-#include "g4std/map"
+#include <map>
 #include "globals.hh"
 #include "G4GeometryCell.hh"
 #include "G4GeometryCellComp.hh"
 
-typedef G4std::map<G4GeometryCell, G4double, G4GeometryCellComp> G4GeometryCellImportance;
+typedef std::map<G4GeometryCell, G4double, G4GeometryCellComp> G4GeometryCellImportance;
   // implement container G4GeometryCellImportance as map
 
-G4std::ostream& operator<<(G4std::ostream &out, const G4GeometryCellImportance &gCelli);
+std::ostream& operator<<(std::ostream &out, const G4GeometryCellImportance &gCelli);
 
 #endif

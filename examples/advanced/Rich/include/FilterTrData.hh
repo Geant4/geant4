@@ -8,7 +8,7 @@
 #define FilterTrData_h 1
 #include "G4ios.hh" 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 #include "FilterTypeSpec.hh"
 
 class FilterTrData {

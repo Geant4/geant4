@@ -67,10 +67,10 @@
 #include "G4ios.hh"
 
 //#include <iostream.h>
-#include "g4std/fstream"
+#include <fstream>
 
-#include "g4std/iomanip"
-#include "g4std/strstream"
+#include <iomanip>
+#include <strstream>
 
 #include "G4Tokenizer.hh"
 #include "G4GeneralParticleSourceMessenger.hh"

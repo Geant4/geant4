@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FCylindricalSurface.hh,v 1.11 2001-07-11 09:59:34 gunter Exp $
+// $Id: G4FCylindricalSurface.hh,v 1.12 2003-06-16 16:52:36 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -113,7 +113,7 @@ class G4FCylindricalSurface : public G4Surface
   virtual const char* NameOf() const; 
     // Returns the class name.
 
-  virtual void PrintOn( G4std::ostream& os = G4cout ) const;
+  virtual void PrintOn( std::ostream& os = G4cout ) const;
     // Printing function.
 
   virtual G4int WithinBoundary( const G4Vector3D& x ) const;

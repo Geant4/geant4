@@ -8,7 +8,7 @@
 #define AerogelRefData_h 1
 #include "G4ios.hh" 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 #include "AerogelTypeSpec.hh"
 
 class AerogelRefData {

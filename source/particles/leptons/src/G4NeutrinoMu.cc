@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutrinoMu.cc,v 1.12 2002-12-16 14:06:29 gcosmo Exp $
+// $Id: G4NeutrinoMu.cc,v 1.13 2003-06-16 16:57:57 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,8 +33,8 @@
 //      by             H.Kurashige,7  July 1996
 // **********************************************************************
 
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4NeutrinoMu.hh"
 

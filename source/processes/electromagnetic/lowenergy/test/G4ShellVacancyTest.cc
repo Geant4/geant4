@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellVacancyTest.cc,v 1.3 2001-10-24 20:23:43 elena Exp $
+// $Id: G4ShellVacancyTest.cc,v 1.4 2003-06-16 17:01:03 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -41,8 +41,8 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 #include "G4CompositeEMDataSet.hh"
 #include "G4ShellEMDataSet.hh"
 #include "G4EMDataSet.hh"
@@ -171,7 +171,7 @@ int main()
   manager->AddXsiTable(dataSet5);
   manager->AddXsiTable(dataSet6);
 
-  G4std::vector<G4int> vector = manager->GenerateNumberOfIonisations(material,
+  std::vector<G4int> vector = manager->GenerateNumberOfIonisations(material,
 								    e,eLoss);				    
   size_t vectorSize = vector.size();
   for (size_t p=0; p<vectorSize; p++)

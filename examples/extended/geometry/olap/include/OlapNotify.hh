@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: OlapNotify.hh,v 1.1 2002-06-04 07:40:19 gcosmo Exp $
+// $Id: OlapNotify.hh,v 1.2 2003-06-16 16:49:20 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,7 @@
 #ifndef OlapNotify_h
 #define OlapNotify_h
 
-#include "g4std/vector"
+#include <vector>
 
 #include "OlapEventAction.hh"
 
@@ -52,7 +52,7 @@ public:
   virtual ~OlapNotify();
   
   virtual void worldChanged(G4LogicalVolume* newWorld) = 0;
-  virtual void overlaps(const G4std::vector<OlapInfo*> &)=0;
+  virtual void overlaps(const std::vector<OlapInfo*> &)=0;
 				  
 };								  		  		  
 #endif

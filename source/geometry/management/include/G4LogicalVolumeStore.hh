@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolumeStore.hh,v 1.7 2002-04-19 08:20:18 gcosmo Exp $
+// $Id: G4LogicalVolumeStore.hh,v 1.8 2003-06-16 16:51:52 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4LogicalVolumeStore
@@ -52,11 +52,11 @@
 #ifndef G4VLOGICALVOLUMESTORE_HH
 #define G4VLOGICALVOLUMESTORE_HH
 
-#include "g4std/vector"
+#include <vector>
 
 #include "G4LogicalVolume.hh"
 
-class G4LogicalVolumeStore : public G4std::vector<G4LogicalVolume*>
+class G4LogicalVolumeStore : public std::vector<G4LogicalVolume*>
 {
   public:  // with description
 

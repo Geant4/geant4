@@ -27,12 +27,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef CCalMaterial_h
 #define CCalMaterial_h 1
-#include "g4std/iostream"
+#include <iostream>
 #include "globals.hh"
 
 class CCalMaterial {
 
-friend G4std::ostream& operator<<(G4std::ostream&, const CCalMaterial&);
+friend std::ostream& operator<<(std::ostream&, const CCalMaterial&);
   
 public:
   enum FractionType {FTWeight, FTVolume};

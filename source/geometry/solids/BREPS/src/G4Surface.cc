@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Surface.cc,v 1.11 2003-03-28 13:12:02 gcosmo Exp $
+// $Id: G4Surface.cc,v 1.12 2003-06-16 16:52:59 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -235,7 +235,7 @@ G4double G4Surface::ClosestDistanceToPoint(const G4Point3D& Pt)
 }
 
 
-G4std::ostream& operator<<( G4std::ostream& os, const G4Surface& )
+std::ostream& operator<<( std::ostream& os, const G4Surface& )
 {
   // overwrite output operator << to Print out Surface objects
   // using the PrintOn function defined below

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4AtomicShells.cc,v 1.3 2001-07-11 10:01:29 gunter Exp $
+// $Id: testG4AtomicShells.cc,v 1.4 2003-06-16 16:56:28 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -33,7 +33,7 @@
 
 
 #include "G4ios.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 
 #include "globals.hh"
 #include "G4UnitsTable.hh"
@@ -60,7 +60,7 @@ int main()
         for (shell=0; shell<NbOfShells; shell++)
            { 
             BindingEnergy = G4AtomicShells::GetBindingEnergy(Z,shell);            
-            G4cout << G4std::setw(12) << G4BestUnit(BindingEnergy, "Energy");
+            G4cout << std::setw(12) << G4BestUnit(BindingEnergy, "Energy");
             if ((shell+1)%5 == 0) G4cout << G4endl;
            }
       }      
@@ -75,7 +75,7 @@ int main()
    for (shell=0; shell<NbOfShells; shell++)
       { 
         BindingEnergy = van->GetAtomicShell(shell);            
-        G4cout << G4std::setw(12) << G4BestUnit(BindingEnergy, "Energy");
+        G4cout << std::setw(12) << G4BestUnit(BindingEnergy, "Energy");
         if ((shell+1)%5 == 0) G4cout << G4endl;
       }
 //
@@ -86,7 +86,7 @@ int main()
    for (shell=0; shell<NbOfShells; shell++)
       { 
         BindingEnergy = xe.GetAtomicShell(shell);            
-        G4cout << G4std::setw(12) << G4BestUnit(BindingEnergy, "Energy");
+        G4cout << std::setw(12) << G4BestUnit(BindingEnergy, "Energy");
         if ((shell+1)%5 == 0) G4cout << G4endl;
       }
 //
@@ -97,7 +97,7 @@ int main()
    for (shell=0; shell<NbOfShells; shell++)
       { 
         BindingEnergy = fm->GetAtomicShell(shell);            
-        G4cout << G4std::setw(12) << G4BestUnit(BindingEnergy, "Energy");
+        G4cout << std::setw(12) << G4BestUnit(BindingEnergy, "Energy");
         if ((shell+1)%5 == 0) G4cout << G4endl;
       }   
   

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTable.cc,v 1.15 2003-05-19 13:00:50 gcosmo Exp $
+// $Id: G4SandiaTable.cc,v 1.16 2003-06-16 16:56:26 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -114,7 +114,7 @@ void G4SandiaTable::ComputeMatSandiaMatrix()
      {
        IonizationPot = GetIonizationPot(Z[elm]);
        for (G4int row=fCumulInterval[Z[elm]-1];row<fCumulInterval[Z[elm]];row++)
-         tmp1[interval1++] = G4std::max(fSandiaTable[row][0]*keV,IonizationPot);
+         tmp1[interval1++] = std::max(fSandiaTable[row][0]*keV,IonizationPot);
      }
         
   //       

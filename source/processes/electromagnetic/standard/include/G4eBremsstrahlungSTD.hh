@@ -82,7 +82,7 @@ public:
                                     const G4Material*, G4double cut)
   {return cut;};
 
-  virtual G4std::vector<G4Track*>* SecondariesAlongStep(
+  virtual std::vector<G4Track*>* SecondariesAlongStep(
                              const G4Step&, 
 			           G4double&,
 			           G4double&,

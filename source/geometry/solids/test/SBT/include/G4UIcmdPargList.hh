@@ -45,13 +45,13 @@ class G4UIcmdPargList : public G4UIcmdParg {
 	virtual G4String ConvertToString();
 
 	virtual char GetTypeCode() const { return 's'; }
-	virtual G4std::istream &FetchValue( G4std::istream &ios );
+	virtual std::istream &FetchValue( std::istream &ios );
 	
 	inline G4int GetNItem() const { return nItem; }
 	
 	protected:
 	virtual G4bool FetchItem( const char *string, const G4int item ) = 0;
-	virtual G4std::ostream &WriteItem( G4std::ostream &ios, const G4int item ) = 0;
+	virtual std::ostream &WriteItem( std::ostream &ios, const G4int item ) = 0;
 	
 	G4int	nItem, maxItem;
 };	

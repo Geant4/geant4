@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiSigmaMinus.cc,v 1.9 2002-06-14 05:55:42 kurasige Exp $
+// $Id: G4AntiSigmaMinus.cc,v 1.10 2003-06-16 16:56:55 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,8 +34,8 @@
 //  Added particle definitions, H.Kurashige, 14 Feb 1997
 // ----------------------------------------------------------------------
 
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4AntiSigmaMinus.hh"
 

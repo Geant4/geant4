@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eBremsstrahlung.hh,v 1.15 2003-01-17 18:55:42 vnivanch Exp $
+// $Id: G4eBremsstrahlung.hh,v 1.16 2003-06-16 17:01:59 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -172,7 +172,7 @@ class G4eBremsstrahlung : public G4VeEnergyLoss
      static G4double probsup;
      static G4bool LPMflag;
 
-     const G4std::vector<G4double>* secondaryEnergyCuts;
+     const std::vector<G4double>* secondaryEnergyCuts;
 
   public:
 

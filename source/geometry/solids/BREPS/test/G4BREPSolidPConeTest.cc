@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //////////////////////////////////////////////////////////////////////////
-// $Id: G4BREPSolidPConeTest.cc,v 1.13 2003-03-28 13:12:25 gcosmo Exp $
+// $Id: G4BREPSolidPConeTest.cc,v 1.14 2003-06-16 16:53:05 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //////////////////////////////////////////////////////////////////////////
 //
@@ -39,8 +39,8 @@
 #include "G4BREPSolid.hh"
 #include "G4BREPSolidPCone.hh"
 
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 void checkNormal( G4BREPSolid* solid, G4ThreeVector& position )
 {
@@ -146,9 +146,9 @@ int main()
   // Temporary
   for (G4int x = 0; x < noZplanes; x++)
   {
-    G4cout <<    " Z[" << x << "]=" << G4std::setw(5) << Z_Values[x];
-    G4cout << " Rmin[" << x << "]=" << G4std::setw(5) << RMINVec[x];
-    G4cout << " Rmax[" << x << "]=" << G4std::setw(5) << RMAXVec[x]<<G4endl;
+    G4cout <<    " Z[" << x << "]=" << std::setw(5) << Z_Values[x];
+    G4cout << " Rmin[" << x << "]=" << std::setw(5) << RMINVec[x];
+    G4cout << " Rmax[" << x << "]=" << std::setw(5) << RMAXVec[x]<<G4endl;
   }
 
   G4cout<<" start   angle ="<<start_angle<<G4endl;

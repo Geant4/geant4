@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.cc,v 1.4 2003-05-19 17:10:26 kurasige Exp $
+// $Id: G4VRangeToEnergyConverter.cc,v 1.5 2003-06-16 16:58:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,8 +36,8 @@
 #include "G4PhysicsLogVector.hh"
 
 #include "G4ios.hh"
-#include "g4std/iomanip"
-#include "g4std/strstream"
+#include <iomanip>
+#include <strstream>
 
 // energy range
 G4double  G4VRangeToEnergyConverter::LowestEnergy = 0.99e-3*MeV;

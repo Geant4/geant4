@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.cc,v 1.8 2003-03-31 14:39:02 gcosmo Exp $
+// $Id: G4ParameterisedNavigation.cc,v 1.9 2003-06-16 16:54:56 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -359,7 +359,7 @@ ComputeVoxelSafety(const G4ThreeVector& localPoint,
   maxCurCommonDelta = fVoxelSliceWidth-minCurCommonDelta;
   plusVoxelSafety   = minCurNodeNoDelta*fVoxelSliceWidth+minCurCommonDelta;
   minusVoxelSafety  = maxCurNodeNoDelta*fVoxelSliceWidth+maxCurCommonDelta;
-  voxelSafety = G4std::min(plusVoxelSafety,minusVoxelSafety);
+  voxelSafety = std::min(plusVoxelSafety,minusVoxelSafety);
 
   if ( voxelSafety<0 )
   {

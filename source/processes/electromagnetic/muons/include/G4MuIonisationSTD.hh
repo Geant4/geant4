@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuIonisationSTD.hh,v 1.13 2003-06-06 17:42:52 vnivanch Exp $
+// $Id: G4MuIonisationSTD.hh,v 1.14 2003-06-16 17:01:41 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -89,7 +89,7 @@ public:
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
                                     const G4Material*, G4double cut);
 
-  virtual G4std::vector<G4Track*>* SecondariesAlongStep(
+  virtual std::vector<G4Track*>* SecondariesAlongStep(
                              const G4Step&,
 			           G4double&,
 			           G4double&,
@@ -160,13 +160,13 @@ inline G4double G4MuIonisationSTD::MaxSecondaryEnergy(const G4DynamicParticle* d
 
 #include "G4VSubCutoffProcessor.hh"
 
-inline G4std::vector<G4Track*>*  G4MuIonisationSTD::SecondariesAlongStep(
+inline std::vector<G4Track*>*  G4MuIonisationSTD::SecondariesAlongStep(
                            const G4Step&   step, 
 	             	         G4double& tmax,
 			         G4double& eloss,
                                  G4double& kinEnergy)
 {
-  G4std::vector<G4Track*>* newp = 0;
+  std::vector<G4Track*>* newp = 0;
   if(subCutoff) {
     G4VSubCutoffProcessor* sp = SubCutoffProcessor(CurrentMaterialCutsCoupleIndex());
     if (sp) {

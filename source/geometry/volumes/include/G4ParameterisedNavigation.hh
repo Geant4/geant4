@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.hh,v 1.6 2002-07-23 08:50:35 gcosmo Exp $
+// $Id: G4ParameterisedNavigation.hh,v 1.7 2003-06-16 16:54:47 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,7 @@
 
 #include "globals.hh"
 
-#include "g4std/vector"
+#include <vector>
 
 #include "G4VoxelNavigation.hh"
 #include "G4NavigationHistory.hh"

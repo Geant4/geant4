@@ -37,7 +37,7 @@
 class G4VHCIOentry
 {
     public: // With description
-      G4VHCIOentry(G4std::string n);
+      G4VHCIOentry(std::string n);
       // Constructor
 
       virtual ~G4VHCIOentry() {}
@@ -47,17 +47,17 @@ class G4VHCIOentry
       void SetVerboseLevel(G4int v) { m_verbose = v; }
       // Set verbose level.
 
-      G4std::string GetName() { return m_name; }
+      std::string GetName() { return m_name; }
       // Returns the name of the HC I/O manager entry
 
-      virtual void CreateHCIOmanager(G4std::string, G4std::string) {}
+      virtual void CreateHCIOmanager(std::string, std::string) {}
       // virtual method for creating HC I/O manager for the detector
 
     protected:
       G4int m_verbose;
 
     private:
-      G4std::string m_name;
+      std::string m_name;
 
 }; // End of class G4VHCIOentry
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 
-// $Id: G4PenelopeCompton.hh,v 1.6 2003-04-16 16:25:41 pandola Exp $
+// $Id: G4PenelopeCompton.hh,v 1.7 2003-06-16 16:59:46 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -102,15 +102,15 @@ private:
   G4double energyForIntegration; //for numerical integration of
   G4int ZForIntegration;// analytical cross section
 
-  G4std::vector<G4DataVector*> *ionizationEnergy;
-  G4std::vector<G4DataVector*> *hartreeFunction;
-  G4std::vector<G4DataVector*> *occupationNumber;
+  std::vector<G4DataVector*> *ionizationEnergy;
+  std::vector<G4DataVector*> *hartreeFunction;
+  std::vector<G4DataVector*> *occupationNumber;
   
   G4int SelectRandomAtomForCompton(const G4Material* material,G4double e) const;
 
   const G4int nBins; //for building cross section table
 
-  G4std::vector<G4VEMDataSet*>* matCrossSections; //for random choice of atom
+  std::vector<G4VEMDataSet*>* matCrossSections; //for random choice of atom
   G4double cutForLowEnergySecondaryPhotons;
 };
 

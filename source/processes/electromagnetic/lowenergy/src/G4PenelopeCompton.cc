@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeCompton.cc,v 1.15 2003-05-24 16:42:51 pia Exp $
+// $Id: G4PenelopeCompton.cc,v 1.16 2003-06-16 17:00:19 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -87,9 +87,9 @@ G4PenelopeCompton::G4PenelopeCompton(const G4String& processName)
     }
 
   meanFreePathTable = 0;
-  ionizationEnergy = new G4std::vector<G4DataVector*>;
-  hartreeFunction  = new G4std::vector<G4DataVector*>;
-  occupationNumber = new G4std::vector<G4DataVector*>;
+  ionizationEnergy = new std::vector<G4DataVector*>;
+  hartreeFunction  = new std::vector<G4DataVector*>;
+  occupationNumber = new std::vector<G4DataVector*>;
   rangeTest = new G4RangeTest;
 
   ReadData(); //Read data from file
@@ -149,7 +149,7 @@ void G4PenelopeCompton::BuildPhysicsTable(const G4ParticleDefinition& )
   G4DataVector* energies;
   G4DataVector* data;
 
-  matCrossSections = new G4std::vector<G4VEMDataSet*>;
+  matCrossSections = new std::vector<G4VEMDataSet*>;
 
   
   G4int m;
@@ -405,7 +405,7 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 	    {
 	      fpzmax = 1.0-AF*0.2;
 	    }
-	  fpz = 1.0+AF*G4std::max(G4std::min(pzomc,0.2),-0.2);
+	  fpz = 1.0+AF*std::max(std::min(pzomc,0.2),-0.2);
 	}while ((fpzmax*G4UniformRand())>fpz);
   
       //Energy of the scattered photon
@@ -472,7 +472,7 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
   G4double bindingEnergy = shell->BindingEnergy();
   G4int shellId = shell->ShellId();
   //G4cout << bindingEnergy/keV << " " << ionEnergy/keV << " keV" << G4endl;
-  ionEnergy = G4std::max(bindingEnergy,ionEnergy); //protection against energy non-conservation 
+  ionEnergy = std::max(bindingEnergy,ionEnergy); //protection against energy non-conservation 
   G4double eKineticEnergy = diffEnergy - ionEnergy;
 
   size_t nTotPhotons=0;
@@ -482,12 +482,12 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
     G4ProductionCutsTable::GetProductionCutsTable();
   size_t indx = couple->GetIndex();
   G4double cutg = (*(theCoupleTable->GetEnergyCutsVector(0)))[indx];
-  cutg = G4std::min(cutForLowEnergySecondaryPhotons,cutg);
+  cutg = std::min(cutForLowEnergySecondaryPhotons,cutg);
 
   G4double cute = (*(theCoupleTable->GetEnergyCutsVector(1)))[indx];
-  cute = G4std::min(cutForLowEnergySecondaryPhotons,cute);
+  cute = std::min(cutForLowEnergySecondaryPhotons,cute);
   
-  G4std::vector<G4DynamicParticle*>* photonVector=0;
+  std::vector<G4DynamicParticle*>* photonVector=0;
   G4DynamicParticle* aPhoton;
   G4AtomicDeexcitation deexcitationManager;
 
@@ -591,8 +591,8 @@ void G4PenelopeCompton::ReadData()
     }
   G4String pathString(path);
   G4String pathFile = pathString + "/penelope/compton-pen.dat";
-  G4std::ifstream file(pathFile);
-  G4std::filebuf* lsdp = file.rdbuf();
+  std::ifstream file(pathFile);
+  std::filebuf* lsdp = file.rdbuf();
   
   if (!(lsdp->is_open()))
     {

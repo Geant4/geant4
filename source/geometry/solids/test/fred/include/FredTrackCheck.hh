@@ -32,7 +32,7 @@
 #include "globals.hh"
 #include "G4Track.hh"
 
-#include "g4std/vector"
+#include <vector>
 
 
 class FredTrackData {
@@ -68,7 +68,7 @@ class FredTrackCheck {
 	void Clear( );
 
 	private:
-	G4std::vector<FredTrackData*> hitList;
+	std::vector<FredTrackData*> hitList;
 };
 
 #endif

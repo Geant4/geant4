@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: volumeSubscriber.cc,v 1.5 2002-08-19 07:39:29 radoone Exp $
+// $Id: volumeSubscriber.cc,v 1.6 2003-06-16 16:49:15 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,7 +48,7 @@
 
 #include <iostream>
 
-#include "g4std/strstream"
+#include <strstream>
 
 class volumeSubscriber : virtual public SAXSubscriber
 {

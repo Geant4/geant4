@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: assemblySubscriber.cc,v 1.3 2002-06-03 12:09:35 radoone Exp $
+// $Id: assemblySubscriber.cc,v 1.4 2003-06-16 16:49:14 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,7 +46,7 @@
 
 #include <iostream>
 
-#include "g4std/strstream"
+#include <strstream>
 
 class assemblySubscriber : virtual public SAXSubscriber
 {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Colour.hh,v 1.7 2002-10-23 12:03:38 johna Exp $
+// $Id: G4Colour.hh,v 1.8 2003-06-16 16:55:06 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,10 +71,10 @@
 #define G4COLOUR_HH
 
 #include "globals.hh"
-#include "g4std/iostream"
+#include <iostream>
 
 class G4Colour {
-  friend G4std::ostream& operator << (G4std::ostream& os, const G4Colour& c);
+  friend std::ostream& operator << (std::ostream& os, const G4Colour& c);
 
 public: // With description
 

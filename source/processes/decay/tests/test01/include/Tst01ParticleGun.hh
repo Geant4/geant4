@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst01ParticleGun.hh,v 1.2 2001-07-11 10:02:28 gunter Exp $
+// $Id: Tst01ParticleGun.hh,v 1.3 2003-06-16 16:59:30 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -32,7 +32,7 @@
 #include "globals.hh"
 #include "G4ParticleGun.hh"
 #include "G4PrimaryParticle.hh"
-#include "g4std/vector"
+#include <vector>
 
 class G4Event;
 class G4DecayProducts;
@@ -65,7 +65,7 @@ class Tst01ParticleGun : public G4ParticleGun
     virtual              void SetInitialValues();
     G4double             particle_decay_time;
 
-    G4std::vector<const G4PrimaryParticle*>  decay_products;  
+    std::vector<const G4PrimaryParticle*>  decay_products;  
 
   private:
     Tst01ParticleGunMessenger* theMessenger;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BremsstrahlungTest.cc,v 1.11 2001-10-12 13:10:55 pia Exp $
+// $Id: G4BremsstrahlungTest.cc,v 1.12 2003-06-16 17:00:45 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -41,8 +41,8 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4Material.hh"
 #include "G4VContinuousDiscreteProcess.hh"

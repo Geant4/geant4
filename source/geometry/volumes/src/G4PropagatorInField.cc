@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.46 2003-05-08 00:39:38 asaim Exp $
+// $Id: G4PropagatorInField.cc,v 1.47 2003-06-16 16:54:57 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -38,7 +38,7 @@
 
 #include "G4PropagatorInField.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 #include "G4ThreeVector.hh"
 #include "G4VCurvedTrajectoryFilter.hh"
  
@@ -139,7 +139,7 @@ G4PropagatorInField::ComputeStep(
     G4double trialProposedStep = 1.e2 * ( 10.0 * cm + 
       fNavigator->GetWorldVolume()->GetLogicalVolume()->
                   GetSolid()->DistanceToOut(StartPointA, VelocityUnit) );
-    CurrentProposedStepLength= G4std::min( trialProposedStep,
+    CurrentProposedStepLength= std::min( trialProposedStep,
                                            fLargestAcceptableStep ); 
   }
   epsilon = GetDeltaOneStep() / CurrentProposedStepLength;
@@ -604,20 +604,20 @@ G4PropagatorInField::printStatus( const G4FieldTrack&        StartFT,
     static G4int noPrecision= 4;
     G4cout.precision(noPrecision);
     // G4cout.setf(ios_base::fixed,ios_base::floatfield);
-    G4cout << G4std::setw( 6)  << " " 
-           << G4std::setw( 25) << " Current Position  and  Direction" << " "
+    G4cout << std::setw( 6)  << " " 
+           << std::setw( 25) << " Current Position  and  Direction" << " "
            << G4endl; 
-    G4cout << G4std::setw( 5) << "Step#" << " "
-           << G4std::setw( 9) << "X(mm)" << " "
-           << G4std::setw( 9) << "Y(mm)" << " "  
-           << G4std::setw( 9) << "Z(mm)" << " "
-           << G4std::setw( 7) << " N_x " << " "
-           << G4std::setw( 7) << " N_y " << " "
-           << G4std::setw( 7) << " N_z " << " "
-           << G4std::setw( 9) << "StepLen" << " "  
-           << G4std::setw(12) << "PhsStep" << " "  
-           << G4std::setw(12) << "StartSafety" << " "  
-           << G4std::setw(18) << "NextVolume" << " "
+    G4cout << std::setw( 5) << "Step#" << " "
+           << std::setw( 9) << "X(mm)" << " "
+           << std::setw( 9) << "Y(mm)" << " "  
+           << std::setw( 9) << "Z(mm)" << " "
+           << std::setw( 7) << " N_x " << " "
+           << std::setw( 7) << " N_y " << " "
+           << std::setw( 7) << " N_z " << " "
+           << std::setw( 9) << "StepLen" << " "  
+           << std::setw(12) << "PhsStep" << " "  
+           << std::setw(12) << "StartSafety" << " "  
+           << std::setw(18) << "NextVolume" << " "
            << G4endl;
 
      // Recurse to print the start values
@@ -628,32 +628,32 @@ G4PropagatorInField::printStatus( const G4FieldTrack&        StartFT,
    {
      G4cout.precision(3);
      if( stepNo >= 0)
-       G4cout << G4std::setw( 5) << stepNo << " ";
+       G4cout << std::setw( 5) << stepNo << " ";
      else
-       G4cout << G4std::setw( 5) << "Start" << " ";
-     G4cout << G4std::setw( 9) << CurrentPosition.x() << " "
-            << G4std::setw( 9) << CurrentPosition.y() << " "
-            << G4std::setw( 9) << CurrentPosition.z() << " "
-            << G4std::setw( 7) << CurrentUnitVelocity.x() << " "
-            << G4std::setw( 7) << CurrentUnitVelocity.y() << " "
-            << G4std::setw( 7) << CurrentUnitVelocity.z() << " ";
-     G4cout << G4std::setw( 9) << step_len << " "; 
+       G4cout << std::setw( 5) << "Start" << " ";
+     G4cout << std::setw( 9) << CurrentPosition.x() << " "
+            << std::setw( 9) << CurrentPosition.y() << " "
+            << std::setw( 9) << CurrentPosition.z() << " "
+            << std::setw( 7) << CurrentUnitVelocity.x() << " "
+            << std::setw( 7) << CurrentUnitVelocity.y() << " "
+            << std::setw( 7) << CurrentUnitVelocity.z() << " ";
+     G4cout << std::setw( 9) << step_len << " "; 
      if( requestStep != -1.0 ) 
-       G4cout << G4std::setw( 12) << requestStep << " ";
+       G4cout << std::setw( 12) << requestStep << " ";
      else
-       G4cout << G4std::setw( 12) << "InitialStep" << " "; 
-     G4cout << G4std::setw(12) << safety << " ";
+       G4cout << std::setw( 12) << "InitialStep" << " "; 
+     G4cout << std::setw(12) << safety << " ";
 
      if( startVolume != 0)
      {
-       G4cout << G4std::setw(12) << startVolume->GetName() << " ";
+       G4cout << std::setw(12) << startVolume->GetName() << " ";
      }
      else
      {
        if( step_len != -1 )
-         G4cout << G4std::setw(12) << "OutOfWorld" << " ";
+         G4cout << std::setw(12) << "OutOfWorld" << " ";
        else
-         G4cout << G4std::setw(12) << "NotGiven" << " ";
+         G4cout << std::setw(12) << "NotGiven" << " ";
      }
 
      G4cout << G4endl;
@@ -737,7 +737,7 @@ G4PropagatorInField::IntersectChord( G4ThreeVector  StartPointA,
        intersects = (LinearStepLength <= ChordAB_Length); 
        // G4Navigator contracts to return k_infinity if len==asked
        // and it did not find a surface boundary at that length
-       LinearStepLength = G4std::min( LinearStepLength, ChordAB_Length);
+       LinearStepLength = std::min( LinearStepLength, ChordAB_Length);
 
        // Save the last calculated safety!
        fPreviousSftOrigin = StartPointA;
@@ -754,13 +754,13 @@ G4PropagatorInField::IntersectChord( G4ThreeVector  StartPointA,
     // printIntersection( 
     // StartPointA, EndPointB, LinearStepLength, IntersectionPoint, NewSafety
 
-    G4cout << "Start="  << G4std::setw(12) << StartPointA       << " "
-	   << "End= "   << G4std::setw(8) << EndPointB         << " "
-	   << "StepIn=" << G4std::setw(8) << LinearStepLength  << " "
-	   << "NewSft=" << G4std::setw(8) << NewSafety
+    G4cout << "Start="  << std::setw(12) << StartPointA       << " "
+	   << "End= "   << std::setw(8) << EndPointB         << " "
+	   << "StepIn=" << std::setw(8) << LinearStepLength  << " "
+	   << "NewSft=" << std::setw(8) << NewSafety
 	   << "NavCall" << doCallNav      << "  "
 	   << "In T/F " << intersects     << "  " 
-	   << "IntrPt=" << G4std::setw(8) << IntersectionPoint << " " 
+	   << "IntrPt=" << std::setw(8) << IntersectionPoint << " " 
 	   << G4endl;
 #endif
 
@@ -810,7 +810,7 @@ ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,
 // METHOD MUST BE CALLED EXACTLY ONCE PER STEP. (jacek 08/11/2002)
 
 
-G4std::vector<G4ThreeVector>*
+std::vector<G4ThreeVector>*
 G4PropagatorInField::GimmeTrajectoryVectorAndForgetIt() const {
   // NB, GimmeThePointsAndForgetThem really forgets them, so it can
   // only be called (exactly) once for each step.

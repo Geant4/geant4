@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: OlapSteppingAction.hh,v 1.1 2002-06-04 07:40:19 gcosmo Exp $
+// $Id: OlapSteppingAction.hh,v 1.2 2003-06-16 16:49:22 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,8 +35,8 @@
 #ifndef OlapSteppingAction_h
 #define OlapSteppingAction_h
 
-#include "g4std/vector"
-#include "g4std/iostream"
+#include <vector>
+#include <iostream>
 
 #include "globals.hh"
 #include "G4UserSteppingAction.hh"
@@ -52,8 +52,8 @@ struct OlapStepInfo
    
 };
 
-G4std::ostream& operator << (G4std::ostream &, const OlapStepInfo &);
-G4std::ostream& operator << (G4std::ostream &, G4std::vector<OlapStepInfo*> &);
+std::ostream& operator << (std::ostream &, const OlapStepInfo &);
+std::ostream& operator << (std::ostream &, std::vector<OlapStepInfo*> &);
 
 class OlapSteppingAction : public G4UserSteppingAction
 {

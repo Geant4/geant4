@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialTable.hh,v 1.4 2001-10-17 14:02:16 gcosmo Exp $
+// $Id: G4MaterialTable.hh,v 1.5 2003-06-16 16:56:21 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,6 +38,6 @@
 
 class G4Material;
 
-typedef G4std::vector<G4Material*> G4MaterialTable;
+typedef std::vector<G4Material*> G4MaterialTable;
 
 #endif

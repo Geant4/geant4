@@ -86,7 +86,7 @@ public:
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
                                     const G4Material*, G4double cut);
 
-  virtual G4std::vector<G4Track*>* SecondariesAlongStep(
+  virtual std::vector<G4Track*>* SecondariesAlongStep(
                              const G4Step&,
 			           G4double&,
 			           G4double&,
@@ -166,13 +166,13 @@ inline G4double G4hIonisationSTD::MaxSecondaryEnergy(const G4DynamicParticle* dy
 
 #include "G4VSubCutoffProcessor.hh"
 
-inline G4std::vector<G4Track*>*  G4hIonisationSTD::SecondariesAlongStep(
+inline std::vector<G4Track*>*  G4hIonisationSTD::SecondariesAlongStep(
                            const G4Step&   step,
 	             	         G4double& tmax,
 			         G4double& eloss,
                                  G4double& kinEnergy)
 {
-  G4std::vector<G4Track*>* newp = 0;
+  std::vector<G4Track*>* newp = 0;
   if(subCutoff) {
     G4VSubCutoffProcessor* sp = SubCutoffProcessor(CurrentMaterialCutsCoupleIndex());
     if (sp) {

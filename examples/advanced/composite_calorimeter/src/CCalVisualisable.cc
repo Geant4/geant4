@@ -26,7 +26,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalVisualisable.hh"
 
-#include "g4std/fstream"
+#include <fstream>
 #include "CCalutils.hh"
 
 //Comment/Uncomment next line to unset/set debug information printing
@@ -86,7 +86,7 @@ bool CCalVisualisable::readFile() {
        << G4endl;
 
   G4String pathname(pathName);
-  G4std::ifstream is;
+  std::ifstream is;
 #ifdef debug
   G4cout << "Viualisable : Path " << pathname << " FIle " << visFile << G4endl;
 #endif

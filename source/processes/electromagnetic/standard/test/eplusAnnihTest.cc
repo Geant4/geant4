@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: eplusAnnihTest.cc,v 1.3 2001-07-11 10:03:33 gunter Exp $
+// $Id: eplusAnnihTest.cc,v 1.4 2003-06-16 17:02:28 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------------
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "g4templates.hh"
 
@@ -56,10 +56,10 @@
 int main()
 {
   //-------- set output format-------
-   G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
+   G4cout.setf( std::ios::scientific, std::ios::floatfield );
   //-------- write results onto a file --------
-   G4std::ofstream outFile( "Annihilation.out", G4std::ios::out);
-   outFile.setf( G4std::ios::scientific, G4std::ios::floatfield );
+   std::ofstream outFile( "Annihilation.out", std::ios::out);
+   outFile.setf( std::ios::scientific, std::ios::floatfield );
 
   //
   //--------- Materials definition ---------

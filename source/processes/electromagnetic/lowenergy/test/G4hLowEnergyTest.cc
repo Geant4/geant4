@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hLowEnergyTest.cc,v 1.7 2001-10-12 13:10:56 pia Exp $
+// $Id: G4hLowEnergyTest.cc,v 1.8 2003-06-16 17:01:06 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // KaonMinusAtRestTest.cc 
@@ -42,8 +42,8 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4Material.hh"
 #include "G4ProcessManager.hh"
@@ -85,9 +85,9 @@ main()
   //G4cout << "How many interactions? [10], Which material? [3], which Verbose Level? [1]" << G4endl;
   //G4cin >> niter >> imat >> verboseLevel;
 
-  //G4cout<<"which process?"<<G4endl<<G4std::setw(60)<<"[1] = G4LowEnergyPhotoElectric, [2] = G4LowEnergyCompton"<<G4endl;
-  //G4cout<<G4std::setw(60)<<"[3] = G4LowEnergyRayleigh, [4] = G4LowEnergyGammaconversion"<<G4endl;
-  //G4cout<<G4std::setw(60)<<"[5] = G4LowEnergyBremstrahlung"<<"[6] = G4LowEnergyIonisation"<<G4endl;
+  //G4cout<<"which process?"<<G4endl<<std::setw(60)<<"[1] = G4LowEnergyPhotoElectric, [2] = G4LowEnergyCompton"<<G4endl;
+  //G4cout<<std::setw(60)<<"[3] = G4LowEnergyRayleigh, [4] = G4LowEnergyGammaconversion"<<G4endl;
+  //G4cout<<std::setw(60)<<"[5] = G4LowEnergyBremstrahlung"<<"[6] = G4LowEnergyIonisation"<<G4endl;
 
   //G4cin >> processID;
 
@@ -95,7 +95,7 @@ main()
   //G4cout<<"Enter the initial particle energy E and its direction"<<G4endl; 
   //G4cin >> InitEnergy >> InitX >> InitY >> InitZ;
 
-  G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
+  G4cout.setf( std::ios::scientific, std::ios::floatfield );
   // -------------------------------------------------------------------
 
   // ---- HBOOK initialization

@@ -7,7 +7,7 @@
 #include "G4ProtonInelasticProcess.hh"
 #include "G4VProtonBuilder.hh"
 
-#include "g4std/vector"
+#include <vector>
 
 class G4ProtonBuilder
 {
@@ -23,7 +23,7 @@ class G4ProtonBuilder
     G4HadronElasticProcess theProtonElasticProcess;
     G4ProtonInelasticProcess  theProtonInelastic;
     
-    G4std::vector<G4VProtonBuilder *> theModelCollections;
+    std::vector<G4VProtonBuilder *> theModelCollections;
 
 };
 

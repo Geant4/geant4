@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidCylinder.cc,v 1.8 2002-11-06 23:29:35 radoone Exp $
+// $Id: G4BREPSolidCylinder.cc,v 1.9 2003-06-16 16:52:46 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -102,7 +102,7 @@ G4BREPSolidCylinder::~G4BREPSolidCylinder()
 }
 
 // Streams solid contents to output stream.
-G4std::ostream& G4BREPSolidCylinder::StreamInfo(G4std::ostream& os) const
+std::ostream& G4BREPSolidCylinder::StreamInfo(std::ostream& os) const
 {
   G4BREPSolid::StreamInfo( os )
   << "\n origin:       " << constructorParams.origin
