@@ -6,7 +6,8 @@
 # The user has to make the following choices (in practice, 
 # commenting/uncommeting few lines below):
 #  1) Choice of the  * Particle Type * :
-#       mu-, mu+, e-, e+, pi-, pi+, kaon-, kaon+, kaon0L, 
+#       mu-, mu+, e-, e+, gamma, 
+#       pi-, pi+, kaon-, kaon+, kaon0L, 
 #       neutron, proton.
 #  2) Choice of the  * Beam Energy * :
 #       1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30, 40, 50, 60, 80,
@@ -48,6 +49,7 @@
 #/gun/particle mu+
 #/gun/particle e-
 #/gun/particle e+
+#/gun/particle gamma
 #/gun/particle pi-
 #/gun/particle pi+
 #/gun/particle kaon-
@@ -59,7 +61,7 @@
 #=======================  BEAM ENERGY  ====================
 #
 #/gun/energy    1 GeV
-/gun/energy    2 GeV
+#/gun/energy    2 GeV
 #/gun/energy    3 GeV
 #/gun/energy    4 GeV
 #/gun/energy    5 GeV
@@ -68,7 +70,7 @@
 #/gun/energy    8 GeV
 #/gun/energy    9 GeV
 #/gun/energy   10 GeV
-#/gun/energy   20 GeV
+/gun/energy   20 GeV
 #/gun/energy   30 GeV
 #/gun/energy   40 GeV
 #/gun/energy   50 GeV
@@ -134,9 +136,9 @@
 #=======================  NUMBER OF EVENTS  ====================
 #
 #/run/beamOn    10
-/run/beamOn   100
+#/run/beamOn   100
 #/run/beamOn  1000
-#/run/beamOn  5000
+/run/beamOn  5000
 #/run/beamOn 10000
 #
 

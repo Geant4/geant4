@@ -51,12 +51,15 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization( new StatAccepTestDetectorConstruction );
 
   //***LOOKHERE***
-  runManager->SetUserInitialization( new LHEP );
-  // runManager->SetUserInitialization( new QGSP );
-  // runManager->SetUserInitialization( new QGSC );
-  // runManager->SetUserInitialization( new QGSP_BERT );
-  // runManager->SetUserInitialization( new QGSP_BIC );
+  LHEP       *thePL = new LHEP;
+  // QGSP       *thePL = new QGSP;
+  // QGSC       *thePL = new QGSC;
+  // QGSP_BERT  *thePL = new QGSP_BERT;
+  // QGSP_BIC   *thePL = new QGSP_BIC;
+  // thePL->SetDefaultCutValue( 100.0*cm );
   //***endLOOKHERE***
+
+  runManager->SetUserInitialization( thePL );
 
   // Set mandatory user action class.
   runManager->SetUserAction( new StatAccepTestPrimaryGeneratorAction );
