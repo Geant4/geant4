@@ -3,9 +3,9 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="../schema/gdml_1.0.xsd">
  <define>
-  <constant name="PI" value="pi"/>
-  <constant name="TWOPI" value="2.*PI"/>
   <constant name="HALFPI" value="pi/2."/>
+  <constant name="PI" value="1.*pi"/>
+  <constant name="TWOPI" value="2.*pi"/>
   <position name="center"/>
   <rotation name="identity"/>
   <position name="shiftbyx" x="20"/>
@@ -48,7 +48,7 @@
   <box name="b500" x="500.0" y="500.0" z="500.0"/>
   <cone name="c1" z="111.0" rmax1="22.0" rmax2="33.0" deltaphi="TWOPI"/>
   <para name="p1" x="10.0" y="10.0" z="10.0" alpha="30.0" theta="30.0" phi="30.0"/>
-  <sphere name="s1" rmax="200.0" deltaphi="6.28" deltatheta="3.14"/>
+  <sphere name="s1" rmax="200.0" deltaphi="TWOPI" deltatheta="PI"/>
   <trap name="trap1" z="100.0" theta="60.0" phi="60.0"
                              y1="10.0"    x1="10.0" x2="10.0"
                              alpha1="30.0"  y2="10.0" x3="10.0"
