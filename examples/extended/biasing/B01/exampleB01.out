@@ -1,0 +1,208 @@
+**********************************************
+ Geant4 version $Name: not supported by cvs2svn $
+                                (28-Feb-2002)
+             Copyright : Geant4 Collaboration
+**********************************************
+
+phot:  Total cross sections from Sandia parametrisation. 
+B01PhysicsList::SetCuts:CutLength : 1 (mm)
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
++++ G4ProcessPlacer::G4ProcessPlacer: for: neutron
+=== G4ProcessPlacer::AddProcessAsSecondDoIt ===
+  ProcessName: MScoreProcess
+The initial GPILVec: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+The initial DoItVec: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+The final GPIL Vec: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   MScoreProcess
+   Transportation
+The final DoIt Vec: 
+   Transportation
+   MScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+output mScorer, mass geometry, neutron
+Volume name = worldCylinder_phys, Replica number = -1
+HistorysEntering
+entries                             : 327
+Sum(w)                              : 327
+Sum(w*x)                            : 327
+Sum(w*x*x)                          : 327
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 327
+Sum(x^2)                            : 327
+EnergyEnteringHistory
+entries                             : 327
+Sum(w)                              : 327
+Sum(w*x)                            : 2758.31
+Sum(w*x*x)                          : 24999.1
+mean=Sum(w*x) / Sum(w)              : 8.43521
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 2.30157
+Sum(x)                              : 2758.31
+Sum(x^2)                            : 24999.1
+Volume name = cell: 02, shield, Replica number = 0
+HistorysEntering
+entries                             : 1080
+Sum(w)                              : 1080
+Sum(w*x)                            : 1080
+Sum(w*x*x)                          : 1080
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 1080
+Sum(x^2)                            : 1080
+EnergyEnteringHistory
+entries                             : 1080
+Sum(w)                              : 1080
+Sum(w*x)                            : 10552
+Sum(w*x*x)                          : 104339
+mean=Sum(w*x) / Sum(w)              : 9.77041
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.07195
+Sum(x)                              : 10552
+Sum(x^2)                            : 104339
+Collisions
+entries                             : 1321
+Sum(w)                              : 1321
+Sum(w*x)                            : 1321
+Sum(w*x*x)                          : 1321
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 1321
+Sum(x^2)                            : 1321
+Volume name = cell: 03, shield, Replica number = 0
+HistorysEntering
+entries                             : 686
+Sum(w)                              : 686
+Sum(w*x)                            : 686
+Sum(w*x*x)                          : 686
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 686
+Sum(x^2)                            : 686
+EnergyEnteringHistory
+entries                             : 686
+Sum(w)                              : 686
+Sum(w*x)                            : 6577.61
+Sum(w*x*x)                          : 64241.1
+mean=Sum(w*x) / Sum(w)              : 9.58835
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.30743
+Sum(x)                              : 6577.61
+Sum(x^2)                            : 64241.1
+Collisions
+entries                             : 951
+Sum(w)                              : 951
+Sum(w*x)                            : 951
+Sum(w*x*x)                          : 951
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 951
+Sum(x^2)                            : 951
+Volume name = cell: 04, shield, Replica number = 0
+HistorysEntering
+entries                             : 376
+Sum(w)                              : 376
+Sum(w*x)                            : 376
+Sum(w*x*x)                          : 376
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 376
+Sum(x^2)                            : 376
+EnergyEnteringHistory
+entries                             : 376
+Sum(w)                              : 376
+Sum(w*x)                            : 3596.31
+Sum(w*x*x)                          : 34979
+mean=Sum(w*x) / Sum(w)              : 9.56464
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.24371
+Sum(x)                              : 3596.31
+Sum(x^2)                            : 34979
+Collisions
+entries                             : 514
+Sum(w)                              : 514
+Sum(w*x)                            : 514
+Sum(w*x*x)                          : 514
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 514
+Sum(x^2)                            : 514
+
+----------------------------------------------
+Volume name               |  AV E/Track | sigma       |  Coll_Ent.Tr|
+worldCylinder_phys....... |     8.43521 |     2.30157 |           0 |
+cell: 02, shield......... |     9.77041 |     1.07195 |     1.22315 |
+cell: 03, shield......... |     9.58835 |     1.30743 |      1.3863 |
+cell: 04, shield......... |     9.56464 |     1.24371 |     1.36702 |

@@ -1,0 +1,275 @@
+**********************************************
+ Geant4 version $Name: not supported by cvs2svn $
+                                (28-Feb-2002)
+             Copyright : Geant4 Collaboration
+**********************************************
+
+phot:  Total cross sections from Sandia parametrisation. 
+B02PhysicsList::SetCuts:CutLength : 1 (mm)
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
++++ G4ProcessPlacer::G4ProcessPlacer: for: neutron
+=== G4ProcessPlacer::AddProcessAsSecondDoIt ===
+  ProcessName: PScoreProcess
+The initial GPILVec: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+The initial DoItVec: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+The final GPIL Vec: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   Transportation
+The final DoIt Vec: 
+   Transportation
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
++++ G4ProcessPlacer::G4ProcessPlacer: for: neutron
+=== G4ProcessPlacer::AddProcessAsSecondDoIt ===
+  ProcessName: ParallelTransport
+The initial GPILVec: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   Transportation
+The initial DoItVec: 
+   Transportation
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+The final GPIL Vec: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   ParallelTransport
+   Transportation
+The final DoIt Vec: 
+   Transportation
+   ParallelTransport
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+output pScorer, scoring detector, neutron
+Volume name = score_worldCylinder_phys, Replica number = -1
+HistorysEntering
+entries                             : 327
+Sum(w)                              : 327
+Sum(w*x)                            : 327
+Sum(w*x*x)                          : 327
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 327
+Sum(x^2)                            : 327
+EnergyEnteringHistory
+entries                             : 327
+Sum(w)                              : 327
+Sum(w*x)                            : 2758.31
+Sum(w*x*x)                          : 24999.1
+mean=Sum(w*x) / Sum(w)              : 8.43521
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 2.30157
+Sum(x)                              : 2758.31
+Sum(x^2)                            : 24999.1
+Volume name = scorecell: M1, Replica number = 0
+HistorysEntering
+entries                             : 1816
+Sum(w)                              : 1816
+Sum(w*x)                            : 1816
+Sum(w*x*x)                          : 1816
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 1816
+Sum(x^2)                            : 1816
+EnergyEnteringHistory
+entries                             : 1816
+Sum(w)                              : 1816
+Sum(w*x)                            : 17580.9
+Sum(w*x*x)                          : 172729
+mean=Sum(w*x) / Sum(w)              : 9.68112
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.1794
+Sum(x)                              : 17580.9
+Sum(x^2)                            : 172729
+Collisions
+entries                             : 1383
+Sum(w)                              : 1383
+Sum(w*x)                            : 1383
+Sum(w*x*x)                          : 1383
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 1383
+Sum(x^2)                            : 1383
+Volume name = scorecell: D1, Replica number = 0
+HistorysEntering
+entries                             : 879
+Sum(w)                              : 879
+Sum(w*x)                            : 879
+Sum(w*x*x)                          : 879
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 879
+Sum(x^2)                            : 879
+EnergyEnteringHistory
+entries                             : 879
+Sum(w)                              : 879
+Sum(w*x)                            : 8411.06
+Sum(w*x*x)                          : 82210
+mean=Sum(w*x) / Sum(w)              : 9.5689
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.40104
+Sum(x)                              : 8411.06
+Sum(x^2)                            : 82210
+Collisions
+entries                             : 479
+Sum(w)                              : 479
+Sum(w*x)                            : 479
+Sum(w*x*x)                          : 479
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 479
+Sum(x^2)                            : 479
+Volume name = scorecell: M2, Replica number = 0
+HistorysEntering
+entries                             : 821
+Sum(w)                              : 821
+Sum(w*x)                            : 821
+Sum(w*x*x)                          : 821
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 821
+Sum(x^2)                            : 821
+EnergyEnteringHistory
+entries                             : 821
+Sum(w)                              : 821
+Sum(w*x)                            : 7751.12
+Sum(w*x*x)                          : 75044.5
+mean=Sum(w*x) / Sum(w)              : 9.44107
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.50749
+Sum(x)                              : 7751.12
+Sum(x^2)                            : 75044.5
+Collisions
+entries                             : 692
+Sum(w)                              : 692
+Sum(w*x)                            : 692
+Sum(w*x*x)                          : 692
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 692
+Sum(x^2)                            : 692
+Volume name = scorecell: D2, Replica number = 0
+HistorysEntering
+entries                             : 387
+Sum(w)                              : 387
+Sum(w*x)                            : 387
+Sum(w*x*x)                          : 387
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 387
+Sum(x^2)                            : 387
+EnergyEnteringHistory
+entries                             : 387
+Sum(w)                              : 387
+Sum(w*x)                            : 3646.1
+Sum(w*x*x)                          : 35124
+mean=Sum(w*x) / Sum(w)              : 9.42146
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.41271
+Sum(x)                              : 3646.1
+Sum(x^2)                            : 35124
+Collisions
+entries                             : 232
+Sum(w)                              : 232
+Sum(w*x)                            : 232
+Sum(w*x*x)                          : 232
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 232
+Sum(x^2)                            : 232
+
+----------------------------------------------
+Volume name               |  AV E/Track | sigma       |  Coll_Ent.Tr|
+score_worldCylinder_phys. |     8.43521 |     2.30157 |           0 |
+scorecell: M1............ |     9.68112 |      1.1794 |    0.761564 |
+scorecell: D1............ |      9.5689 |     1.40104 |    0.544937 |
+scorecell: M2............ |     9.44107 |     1.50749 |    0.842875 |
+scorecell: D2............ |     9.42146 |     1.41271 |    0.599483 |
