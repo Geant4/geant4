@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedMesonConstructor.cc,v 1.3 1999-06-09 17:28:16 kurasige Exp $
+// $Id: G4ExcitedMesonConstructor.cc,v 1.4 1999-06-16 00:55:27 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1378,12 +1378,12 @@ const G4double G4ExcitedMesonConstructor::mass[G4ExcitedMesonConstructor::NMulti
   {         0.0, 1.815*GeV, 2.010*GeV, 1.973*GeV,  1.973*GeV }
 };
 
-const G4double  G4ExcitedMesonConstructor::massKdiff[ NMultiplets ] = {
+const G4double  G4ExcitedMesonConstructor::massKdiff[ G4ExcitedMesonConstructor::NMultiplets ] = {
 	0.0*MeV,  0.0*MeV, 0.0*MeV, 6.8*MeV, 0.0*MeV, 
     0.0*MeV,  0.0*MeV, 0.0*MeV, 0.0*MeV, 0.0*MeV
 };
 
-const G4double  G4ExcitedMesonConstructor::widthKdiff[ NMultiplets ] = {
+const G4double  G4ExcitedMesonConstructor::widthKdiff[ G4ExcitedMesonConstructor::NMultiplets ] = {
 	0.0*MeV,  0.0*MeV, 0.0*MeV, 10.5*MeV, 0.0*MeV, 
     0.0*MeV,  0.0*MeV, 0.0*MeV, 0.0*MeV, 0.0*MeV
 };
