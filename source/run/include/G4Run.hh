@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Run.hh,v 1.8 2004-06-07 13:57:22 gcosmo Exp $
+// $Id: G4Run.hh,v 1.9 2004-06-09 07:34:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -90,7 +90,11 @@ class G4Run
     { DCtable = DCtbl; }
 };
 
-G4extern G4Allocator<G4Run> aRunAllocator;
+#if defined G4RUN_EXPORT
+  extern G4DLLEXPORT G4Allocator<G4Run> aRunAllocator;
+#else
+  extern G4DLLIMPORT G4Allocator<G4Run> aRunAllocator;
+#endif
 
 inline void* G4Run::operator new(size_t)
 {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.cc,v 1.18 2003-12-01 15:15:36 vnivanch Exp $
+// $Id: G4DynamicParticle.cc,v 1.19 2004-06-09 07:31:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,6 +57,11 @@
 //         take into account the case of virtual photons
 //
 //--------------------------------------------------------------
+
+// Export extern symbols for DLLs build
+//
+#define G4DYNAMIC_PARTICLE_EXPORT 1
+
 #include "G4DynamicParticle.hh"
 #include "G4DecayProducts.hh"
 #include "G4LorentzVector.hh"

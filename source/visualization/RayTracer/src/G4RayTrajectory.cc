@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTrajectory.cc,v 1.12 2003-06-16 17:13:45 gunter Exp $
+// $Id: G4RayTrajectory.cc,v 1.13 2004-06-09 07:40:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -31,6 +31,9 @@
 //G4RayTrajectory.cc
 ///////////////////
 
+// Export extern symbols for DLLs build
+//
+#define G4RAY_TRAJECTORY_EXPORT 1
 
 #include "G4RayTrajectory.hh"
 #include "G4RayTrajectoryPoint.hh"

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HCofThisEvent.hh,v 1.2 2004-06-07 12:03:01 gcosmo Exp $
+// $Id: G4HCofThisEvent.hh,v 1.3 2004-06-09 07:22:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -84,7 +84,11 @@ class G4HCofThisEvent
       }
 };
 
-G4extern G4Allocator<G4HCofThisEvent> anHCoTHAllocator;
+#if defined G4HCOF_THIS_EVENT_EXPORT
+  extern G4DLLEXPORT G4Allocator<G4HCofThisEvent> anHCoTHAllocator;
+#else
+  extern G4DLLIMPORT G4Allocator<G4HCofThisEvent> anHCoTHAllocator;
+#endif
 
 inline void* G4HCofThisEvent::operator new(size_t)
 {

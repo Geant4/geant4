@@ -21,12 +21,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackedTrack.cc,v 1.6 2003-05-21 20:52:54 asaim Exp $
+// $Id: G4StackedTrack.cc,v 1.7 2004-06-09 07:24:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //  Last Modification : 02/Feb/96 M.Asai
 //
+
+// Export extern symbols for DLLs build
+//
+#define G4STACKED_TRACK_EXPORT 1
 
 #include "G4StackedTrack.hh"
 

@@ -21,9 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4TDigiCollection.cc,v 1.1 2003-10-03 10:15:24 gcosmo Exp $
+// $Id: G4TDigiCollection.cc,v 1.2 2004-06-09 07:22:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+
+// Export extern symbols for DLLs build
+//
+#define G4TDIGI_COLLECTION_EXPORT 1
 
 #include "G4TDigiCollection.hh"
 

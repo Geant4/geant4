@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DecayProducts.cc,v 1.10 2003-09-12 19:21:07 asaim Exp $
+// $Id: G4DecayProducts.cc,v 1.11 2004-06-09 07:31:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,6 +33,10 @@
 //      21 Oct  1996 H.Kurashige
 //      12 Dec 1997 H.Kurashige
 // ------------------------------------------------------------
+
+// Export extern symbols for DLLs build
+//
+#define G4DECAY_PRODUCTS_EXPORT 1
 
 #include "G4ios.hh"
 #include "globals.hh"

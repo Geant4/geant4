@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4strstreambuf.hh,v 1.11 2004-06-07 12:11:42 gcosmo Exp $
+// $Id: G4strstreambuf.hh,v 1.12 2004-06-09 07:30:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,8 +40,14 @@
 #include "G4coutDestination.hh"
 
 class G4strstreambuf;
-G4extern G4strstreambuf G4coutbuf;
-G4extern G4strstreambuf G4cerrbuf;
+
+#if defined G4IOS_EXPORT
+  extern G4DLLEXPORT G4strstreambuf G4coutbuf;
+  extern G4DLLEXPORT G4strstreambuf G4cerrbuf;
+#else
+  extern G4DLLIMPORT G4strstreambuf G4coutbuf;
+  extern G4DLLIMPORT G4strstreambuf G4cerrbuf;
+#endif
 
 class G4strstreambuf : public std::streambuf
 {

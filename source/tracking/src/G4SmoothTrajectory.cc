@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectory.cc,v 1.10 2003-06-16 17:13:17 gunter Exp $
+// $Id: G4SmoothTrajectory.cc,v 1.11 2004-06-09 07:37:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,6 +37,9 @@
 //
 // ---------------------------------------------------------------
 
+// Export extern symbols for DLLs build
+//
+#define G4SMOOTH_TRAJECTORY_EXPORT 1
 
 #include "G4SmoothTrajectory.hh"
 #include "G4SmoothTrajectoryPoint.hh"

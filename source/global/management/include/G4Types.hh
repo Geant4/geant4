@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Types.hh,v 1.8 2004-06-07 12:11:42 gcosmo Exp $
+// $Id: G4Types.hh,v 1.9 2004-06-09 07:30:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -40,12 +40,18 @@
   #pragma warning ( disable : 4786 )
   //
   // Define DLL export macro for WIN32 systems for
-  // importing external symbols to DLLs
+  // importing/exporting external symbols to DLLs
   //
-  #define G4extern extern __declspec( dllimport )
-  #pragma warning ( disable : 4273 )
+  #if defined G4LIB_BUILD_DLL
+    #define G4DLLEXPORT __declspec( dllexport )
+    #define G4DLLIMPORT __declspec( dllimport )
+  #else
+    #define G4DLLEXPORT
+    #define G4DLLIMPORT
+  #endif
 #else
-  #define G4extern extern
+  #define G4DLLEXPORT
+  #define G4DLLIMPORT
 #endif
 
 // Disable deprecated warnings for usage of strstream on Linux
