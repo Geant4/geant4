@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.37 1999-07-27 07:38:36 gracia Exp $
+# $Id: architecture.gmk,v 1.38 1999-09-17 13:20:49 morita Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -108,6 +108,17 @@ ifndef G4SCHEMA_DIR
 endif
 ifdef G4ODBMS
   G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4SCHEMA_DIR) ] && mkdir -p $(G4SCHEMA_DIR) )
+endif
+
+# If not specified, the default path for G4 temporary schema G4TMPSCHEMA_DIR is
+# set to $G4WORKDIR/tmp/schema (for building persistency library)...
+#
+ifndef G4TMPSCHEMA_DIR
+  G4TMPSCHEMA_DIR := $(G4WORKDIR)/tmp/schema
+  G4TMPSCHEMA_BOOT := $(G4TMPSCHEMA_DIR)/G4SCHEMA
+endif
+ifdef G4ODBMS
+  G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4TMPSCHEMA_DIR) ] && mkdir -p $(G4TMPSCHEMA_DIR) )
 endif
 
 # If not specified, the default path for G4 example federated database is
@@ -412,6 +423,9 @@ ifeq ($(G4SYSTEM),AIX-xlC)
     ifeq ($(OBJY_VERS),4.0.2)
       OBJY_LDLIB := oo_shar.4.02
     endif
+    ifeq ($(OBJY_VERS),5.1)
+      OBJY_LDLIB := oo
+    endif
   endif
   CPPFLAGS += -DG4NOT_ISO_DELETES
   ifdef G4USE_STL
@@ -455,6 +469,9 @@ ifeq ($(G4SYSTEM),SUN-CC)
   endif
   ifdef G4ODBMS
     ifeq ($(OBJY_VERS),4.0.2)
+      OBJY_LDLIB := oo
+    endif
+    ifeq ($(OBJY_VERS),5.1)
       OBJY_LDLIB := oo
     endif
   endif
@@ -505,6 +522,9 @@ ifeq ($(G4SYSTEM),HP-aCC)
   endif
   ifdef G4ODBMS
     ifeq ($(OBJY_VERS),4.0.2)
+      OBJY_LDLIB := oo
+    endif
+    ifeq ($(OBJY_VERS),5.1)
       OBJY_LDLIB := oo
     endif
   endif
