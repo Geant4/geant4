@@ -1,4 +1,5 @@
 // 18-Sep-2003 First version is written by T. Koi
+// 12-Nov-2003 Add energy check at lower side T. Koi
 
 #include "G4IonsShenCrossSection.hh"
 #include "G4ParticleTable.hh"
@@ -10,11 +11,17 @@ GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, 
 {
    G4double xsection = 0.0;
 
+   G4int Ap = aParticle->GetDefinition()->GetBaryonNumber();
+   G4int Zp = int ( aParticle->GetDefinition()->GetPDGCharge() / eplus + 0.5 ); 
+   G4double ke_per_N = aParticle->GetKineticEnergy() / Ap; 
+
+// Apply energy check, if less than lower limit then 0 value is returned
+   if (  ke_per_N < lowerLimit )
+      return xsection;
+
    G4int At = int ( anElement->GetN() + 0.5 );
    G4int Zt = int ( anElement->GetZ() + 0.5 );  
 
-   G4int Ap = aParticle->GetDefinition()->GetBaryonNumber();
-   G4int Zp = int ( aParticle->GetDefinition()->GetPDGCharge() / eplus + 0.5 ); 
  
    G4double one_third = 1.0 / 3.0;
 
@@ -29,7 +36,7 @@ GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, 
 
    G4double B = 1.44 * Zt * Zp / r - b * Rt * Rp / ( Rt + Rp ); 
 
-   G4double ke_per_N = aParticle->GetKineticEnergy() / Ap; 
+   //G4double ke_per_N = aParticle->GetKineticEnergy() / Ap; 
 
    G4double c = calCeValue ( ke_per_N / MeV  );  
 

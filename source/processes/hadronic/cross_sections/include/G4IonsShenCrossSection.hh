@@ -9,6 +9,9 @@
 //
 // Class Description - End
 // 18-Sep-2003 First version is written by T. Koi
+// 12-Nov-2003 Set upper limit at 10 GeV/n
+// 12-Nov-2003 Insted of the lower limit,
+//             0 is returned to a partilce with energy lowae than 10 MeV/n
 
 #include "globals.hh"
 #include "G4Proton.hh"
@@ -19,6 +22,8 @@ class G4IonsShenCrossSection : public G4VCrossSectionDataSet
 {
    public:
       G4IonsShenCrossSection ():
+         upperLimit ( 10 * GeV ),
+         lowerLimit ( 10 * MeV ),
          r0 ( 1.1 )
       {
       }
@@ -28,7 +33,7 @@ class G4IonsShenCrossSection : public G4VCrossSectionDataSet
    {
       G4int baryonNumber = aDP->GetDefinition()->GetBaryonNumber();
       G4double kineticEnergy = aDP->GetKineticEnergy(); 
-      if ( kineticEnergy / baryonNumber >= 10*MeV ) 
+      if ( kineticEnergy / baryonNumber <= upperLimit ) 
          return true;
       return false;
    }
@@ -46,6 +51,8 @@ class G4IonsShenCrossSection : public G4VCrossSectionDataSet
    {G4cout << "G4IonsShenCrossSection: uses Shen formula"<<G4endl;}
 
    private:
+      const G4double upperLimit;
+      const G4double lowerLimit; 
       const G4double r0;
 
       G4double calEcmValue ( const G4double , const G4double , const G4double ); 

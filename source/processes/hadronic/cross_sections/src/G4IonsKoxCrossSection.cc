@@ -1,5 +1,6 @@
 // 18-Sep-2003 First version is written by T. Koi
-// 10-Nov-2003 Bug Fix at Cal. ke_per_n and D T. Koi
+// 10-Nov-2003 Bug fix at Cal. ke_per_n and D T. Koi
+// 12-Nov-2003 Add energy check at lower side T. Koi
 
 #include "G4IonsKoxCrossSection.hh"
 #include "G4ParticleTable.hh"
@@ -11,12 +12,17 @@ GetCrossSection(const G4DynamicParticle* aParticle,
 {
    G4double xsection = 0.0;
 
+   G4int Ap = aParticle->GetDefinition()->GetBaryonNumber();
+   G4int Zp = int ( aParticle->GetDefinition()->GetPDGCharge() / eplus + 0.5); 
+   G4double ke_per_N = aParticle->GetKineticEnergy() / Ap;
+
+// Apply energy check, if less than lower limit then 0 value is returned
+   if (  ke_per_N < lowerLimit )
+      return xsection;
+
    G4int At = int ( anElement->GetN() + 0.5 );
    G4int Zt = int ( anElement->GetZ() + 0.5 );  
 
-   G4int Ap = aParticle->GetDefinition()->GetBaryonNumber();
-   G4int Zp = int ( aParticle->GetDefinition()->GetPDGCharge() / eplus + 0.5); 
- 
    G4double one_third = 1.0 / 3.0;
 
    G4double cubicrAt = pow ( At , one_third );  
@@ -27,7 +33,7 @@ GetCrossSection(const G4DynamicParticle* aParticle,
 
    G4double Rvol = r0 * (  cubicrAp + cubicrAt );
 
-   G4double ke_per_N = aParticle->GetKineticEnergy() / Ap;
+//   G4double ke_per_N = aParticle->GetKineticEnergy() / Ap;
    G4double c = calCeValue ( ke_per_N / MeV  );  
 
    G4double a = 1.85;
