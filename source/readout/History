@@ -1,4 +1,4 @@
-$Id: History,v 1.3 1999-11-09 00:33:45 asaim Exp $
+$Id: History,v 1.4 2001-02-08 06:18:28 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Feb 8, 2001, M.Asai (readout-V03-00-01)
+- Migration to STL vector classes
+  affected files :
+./readout/include/G4DCtable.hh
+./readout/include/G4DigiManager.hh
+./readout/include/G4VDigitizerModule.hh
+./readout/src/G4DCtable.cc
+./readout/src/G4DigiManager.cc
 
 Nov 4, 99, M.Asai (tag readout-V00-01-00)
 - entries() method is added to G4TDigiCollection
