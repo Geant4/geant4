@@ -1,4 +1,4 @@
-$Id: NEW_APP_INSTALL,v 1.1 2002-03-09 07:51:08 cooperma Exp $
+$Id: NEW_APP_INSTALL,v 1.2 2002-03-09 08:07:55 cooperma Exp $
 ------------------------------------------------------------------------------
 These are instructions for parallelizing a new application.  Before
 doing so, try out the examples, ParN02 and ParN04, which have
@@ -111,6 +111,21 @@ TO INSTALL:
     For more information, see:
       http://cern.ch/geant4/G4UsersDocuments/UsersGuides/  (cont.)
               InstallationGuide/html/UnixMachines/unixMachines.html
+
+    As always, if you are using shared libaries (.so) under Linux, you may
+      have to update your LD_LIBRARY_PATH .  Since you will be running
+      a parallel application, put this in your shell initialization file
+      (in my case, in ~.tcshrc), so it will also be availabe for the remote
+      processes that are generated.
+    I use the original Geant4 libraries (lib-gent4), the application
+      libraries (lib), and the CLHEP library.  So, I do:
+    setenv LD_LIBRARY_PATH \
+      ${LD_LIBRARY_PATH}:$HOME/geant4-cern/geant4.4.0/lib-geant4/Linux-g++
+    setenv LD_LIBRARY_PATH \
+      ${LD_LIBRARY_PATH}:$HOME/geant4-cern/geant4.4.0/lib/Linux-g++
+    setenv LD_LIBRARY_PATH \
+   ${LD_LIBRARY_PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat61/CLHEP/1.7.0.0/lib
+
 
 11. Modify ParGNUmakefile according to your goals.
     It may be enough to only change:
