@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03TrackingAction.hh,v 1.2 2002-12-18 15:17:56 maire Exp $
+// $Id: ExN03TrackingAction.hh,v 1.3 2003-05-28 10:08:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -44,7 +44,7 @@ class ExN03TrackingAction : public G4UserTrackingAction
   ~ExN03TrackingAction() {;}
 
    void PreUserTrackingAction (const G4Track* aTrack);
-   void PostUserTrackingAction(const G4Track* aTrack) {;}
+   void PostUserTrackingAction(const G4Track*) {;}
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
