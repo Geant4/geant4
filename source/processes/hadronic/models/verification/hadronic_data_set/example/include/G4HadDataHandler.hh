@@ -29,7 +29,7 @@
 #include "globals.hh"
 #include <vector>
 #include <map>
-#include "G4AugerTransition.hh"
+
 
 class G4DataVector;
 
@@ -44,7 +44,7 @@ public:
 private:
 
   typedef std::map<G4int,std::
-                 vector<G4AugerTransition>,std::less<G4int> > trans_Table;
+                 vector<G4double>,std::less<G4int> > trans_Table;
 
   trans_Table augerTransitionTable;
 
