@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.cc,v 1.14 2004-03-01 12:17:07 urban Exp $
+// $Id: G4MscModel.cc,v 1.15 2004-03-10 08:38:39 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -54,7 +54,8 @@
 //          trueLength <= currentRange (L.Urban) 
 // 01-03-04 signature changed in SampleCosineTheta,
 //          energy dependence calculations has been simplified,
-//
+// 11-03-04 corrections in GeomPathLength,TrueStepLength,
+//          SampleCosineTheta
 
 // Class Description:
 //
@@ -417,7 +418,7 @@ G4double G4MscModel::GeomPathLength(
   currentRadLength = couple->GetMaterial()->GetRadlen();
 
   lambda0 = lambda;
-  lambda1 = lambda;
+  parlowen = 0. ;  
   tPathLength = truePathLength;
 
   // this correction needed to run MSC with eIoni and eBrem inactivated
@@ -433,10 +434,13 @@ G4double G4MscModel::GeomPathLength(
   if (tPathLength < range*dtrl) {
     zmean = lambda0*(1.-exp(-tau));
     if(tau < taulim) zmean = tPathLength*(1.-0.5*tPathLength/lambda0) ;
+  } else if((T0 < mass) || (tPathLength > 0.9*range)) {
+    parlowen = 1.+range/lambda0 ;
+    zmean = range*(1.-exp(parlowen*log(1.-tPathLength/range)))/parlowen ;
   } else {
     G4LossTableManager* theManager = G4LossTableManager::Instance();
     G4double T1 = theManager->GetEnergy(particle,range-tPathLength,couple);
-
+    G4double lambda1 ;
     if (theLambdaTable) {
       G4bool bb;
       lambda1 = ((*theLambdaTable)[couple->GetIndex()])->GetValue(T1,bb);
@@ -447,7 +451,8 @@ G4double G4MscModel::GeomPathLength(
     G4double lambdaeff = 2./(1./lambda0+1./lambda1) ;
     zmean = lambdaeff*(1.-exp(-tPathLength/lambdaeff));
   }
-    //  sample z
+
+  //  sample z
   G4double zPathLength = zmean ;
   G4double zt = zmean/tPathLength ;
   if (tPathLength >= stepmin && samplez && zt > 0.5 && zt < ztmax)
@@ -472,9 +477,19 @@ G4double G4MscModel::TrueStepLength(G4double geomStepLength)
 {
   G4double trueLength = geomStepLength;
   trueLength = geomStepLength;
-  if(geomStepLength > lambda0*tausmall) 
-    trueLength = -lambda0*log(1.-geomStepLength/lambda0) ;
-
+  if(geomStepLength > lambda0*tausmall)
+  {
+    if(parlowen == 0.)
+      trueLength = -lambda0*log(1.-geomStepLength/lambda0) ;
+    else 
+    {
+      if(parlowen*geomStepLength/currentRange < 1.)
+        trueLength = currentRange*
+                     (1.-exp(log(1.-parlowen*geomStepLength/currentRange)/parlowen)) ;
+      else 
+        trueLength = currentRange ;
+    }  
+  }
   if(trueLength > tPathLength) trueLength = tPathLength;
   if(trueLength < geomStepLength) trueLength = geomStepLength;
   if(trueLength > currentRange) trueLength = currentRange ;
@@ -507,6 +522,7 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength, G4double Kinetic
       else
       {
         const G4double c_highland = 13.6*MeV, corr_highland=0.038 ;
+        const G4double xx0low = 1.e-6;
 
         G4double a ;
 
@@ -517,31 +533,13 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength, G4double Kinetic
         G4double xx0 = trueStepLength/currentRadLength;
         G4double betacp = currentKinEnergy*(currentKinEnergy+2.*mass)/
                          (currentKinEnergy+mass) ;
-        G4double theta0 = c_highland*Q*sqrt(xx0)*
-                       (1.+corr_highland*log(xx0))/betacp ;
-        G4double beta=sqrt(currentKinEnergy*(currentKinEnergy+2.*mass))/
-                      (currentKinEnergy+mass) ;
+        G4double theta0 = c_highland*Q*sqrt(xx0)/betacp ;
 
-        // corr to Highland for small thickness (t/X0)
-        const G4double xx0lim1=1.e-3,xx0lim2=0.055,
-                       corr1=0.88, corr2=-0.03 ;
-        G4double corr = 1. ;
-        if(xx0 < xx0lim2)
-        {
-            corr = corr1/(1.+corr2*log(xx0/xx0lim1)) ;
-          theta0 *= corr ;
-        }
-
-
-        // corr to Highland for nonrelativistic particles
-        const G4double blim = 0.400, corr3 = 1.733 ,
-                   corr4 = 1.+blim*corr3 ;
-        G4double corrbeta = 1. ;
-        if(beta < blim)
-        {
-          corrbeta = corr4/(1.+beta*corr3) ;
-          theta0 *= corrbeta ;
-        }
+        if(xx0 > xx0low)
+             theta0 *= (1.+corr_highland*log(xx0)) ;
+        else
+        // protection for small thickness 
+             theta0 *= (1.+corr_highland*log(xx0low)) ;
 
         if (theta0 > taulim) a = 0.5/(1.-cos(theta0)) ;
         else                   a = 1.0/(theta0*theta0) ;

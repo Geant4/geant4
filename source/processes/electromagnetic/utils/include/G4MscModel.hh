@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.hh,v 1.8 2004-03-01 12:17:06 urban Exp $
+// $Id: G4MscModel.hh,v 1.9 2004-03-10 08:38:39 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -43,6 +43,7 @@
 // 05-08-03 angle distribution has been modified (L.Urban)
 // 26-11-03 new data member currentRange (L.Urban)
 // 01-03-04 changes in data members + signature changed in SampleCosineTheta
+// 11-03-04 changes in data members (L.Urban)
 //
 // Class Description:
 //
@@ -158,7 +159,7 @@ private:
   G4double xsi;
 
   G4double lambda0;
-  G4double lambda1;
+  G4double parlowen ;
   G4double tPathLength;
 
   G4bool   samplez;
