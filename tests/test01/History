@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2000-06-17 11:53:02 stesting Exp $
+$Id: History,v 1.6 2001-02-07 17:54:59 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+February 07, 2001  Gabriele Cosmo  (test01-V03-00-00)
+- Added geometry setup for testing G4AssemblyVolume.
+- Extended all input macros. Reference outputs will need to be updated.
 
 June 17, 2000  John Allison  (test01-V01-01-01)
 - Updated test01.out for geant4-01-01-ref-06.

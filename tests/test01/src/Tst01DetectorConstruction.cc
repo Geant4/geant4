@@ -39,8 +39,6 @@
 #include "G4ios.hh"
 #include "G4TransportationManager.hh"
 
-#include <strstream>
-
 //////////////////////////////////////////////////////////////////
 //
 // Constructor/Destructor

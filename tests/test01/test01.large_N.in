@@ -1,6 +1,6 @@
 #
-# Macro file of "skeleton.cc"
-# for tracking performance test
+# Macro file test01.large_N.in
+# for geometry/tracking performance test
 #
 /control/verbose 2
 # /run/verbose 2
