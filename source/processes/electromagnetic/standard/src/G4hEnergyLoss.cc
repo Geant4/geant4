@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLoss.cc,v 1.7 1999-05-10 13:25:34 urban Exp $
+// $Id: G4hEnergyLoss.cc,v 1.8 1999-06-17 12:16:00 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -1197,7 +1197,7 @@ G4double G4hEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   threshold =((*G4Electron::Electron()).GetCutsInEnergy())[imat];
   
   // ************************************************************************
-  if((Tkin < threshold)||(Tkin < Tlow))  return MeanLoss ;
+  if((Tkin < threshold)&&(Tkin < Tlow))  return MeanLoss ;
   // ************************************************************************
 
   G4double rmass = electron_mass_c2/ParticleMass;
