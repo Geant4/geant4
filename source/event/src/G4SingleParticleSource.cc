@@ -127,7 +127,7 @@ void G4SingleParticleSource::GeneratePrimaryVertex(G4Event *evt)
     // create new primaries and set them to the vertex
     G4double mass =  particle_definition->GetPDGMass();
     G4double energy = particle_energy + mass;
-    G4double pmom = sqrt(energy*energy-mass*mass);
+    G4double pmom = std::sqrt(energy*energy-mass*mass);
     G4double px = pmom*particle_momentum_direction.x();
     G4double py = pmom*particle_momentum_direction.y();
     G4double pz = pmom*particle_momentum_direction.z();

@@ -1,4 +1,4 @@
-$Id: History,v 1.83 2004-10-28 10:29:26 flei Exp $
+$Id: History,v 1.84 2004-12-02 06:40:37 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 02, 2004, M.Asai (event-V06-02-04)
+- Migration to <cmath>.
+
 Oct 28, 2004, F.Lei  (event-V06-02-03)
 - Added new features, focused beam and multiple vertexes, to GeneralParticleSource.
 
