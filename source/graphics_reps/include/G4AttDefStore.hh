@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttDefStore.hh,v 1.5 2004-03-31 06:50:19 gcosmo Exp $
+// $Id: G4AttDefStore.hh,v 1.6 2004-06-07 08:54:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4ATTDEFSTORE_HH
@@ -43,10 +43,12 @@ class G4AttDefStore
       // The store keeps the ownership of the returned
       // pointer to the map.
 
+    ~G4AttDefStore();
+      // Destructor.
+
   protected:
 
     G4AttDefStore();
-    ~G4AttDefStore();
 
   private:
 
