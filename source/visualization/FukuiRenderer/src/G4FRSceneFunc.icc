@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FRSceneFunc.icc,v 1.7 1999-11-23 06:39:07 stanaka Exp $
+// $Id: G4FRSceneFunc.icc,v 1.8 1999-11-30 02:57:59 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -745,6 +745,11 @@ void G4FRSCENE::AddThis (const G4Trap& trap)
 
 		//----- send coordinates to Fukui Renderer
 	SendTransformedCoordinates();
+
+		//----- Change sign of alpha for compatibility 
+		//      with the DAWN format
+	G4int  alpha_sign = -1 ;
+	alpha1 *= alpha_sign ;		alpha2 *= alpha_sign ;
 
 		//----- send box to Fukui Renderer
 	SendStrDouble11(	FR_TRAP ,
