@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02ElectroMagneticField.hh,v 1.5 2001-12-04 16:12:12 gcosmo Exp $
+// $Id: F02ElectroMagneticField.hh,v 1.6 2001-12-04 17:53:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -62,7 +62,7 @@ public:
 
  ~F02ElectroMagneticField() ;  
       
-  void GetFieldValue( const G4double [], G4double * ) const {;}
+  void GetFieldValue( const G4double [4], G4double * ) const {;}
   
   void SetStepperType( G4int i) { fStepperType = i ; }
 
