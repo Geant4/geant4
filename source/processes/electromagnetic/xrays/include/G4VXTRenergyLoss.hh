@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.hh,v 1.6 2004-08-11 14:41:31 vnivanch Exp $
+// $Id: G4VXTRenergyLoss.hh,v 1.7 2005-01-25 08:41:19 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -141,7 +141,19 @@ public:
   G4double  GetGasZmuProduct(G4double,G4double,G4double) ;
 
   G4double GetXTRrandomEnergy( G4double scaledTkin, G4int iTkin ) ;
-  G4double GetXTRenergy( G4int iPlace, G4double position, G4int iTransfer  ) ;
+  G4double GetXTRenergy( G4int iPlace, G4double position, G4int iTransfer  );
+
+  G4double GetGamma()   {return fGamma;}; 
+  G4double GetEnergy()  {return fEnergy;};                
+  G4double GetVarAngle(){return fVarAngle;};
+               
+  void SetGamma(G4double gamma)      {fGamma    = gamma;}; 
+  void SetEnergy(G4double energy)    {fEnergy   = energy;};                
+  void SetVarAngle(G4double varAngle){fVarAngle = varAngle;};               
+
+
+  static G4PhysicsLogVector* GetProtonVector(){ return fProtonEnergyVector;};
+  static G4int GetTotBin(){return fTotBin;};           
 
 protected:
 
