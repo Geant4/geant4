@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em5RunAction.cc,v 1.7 2001-02-21 14:44:34 maire Exp $
+// $Id: Em5RunAction.cc,v 1.8 2001-03-27 09:24:00 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,7 +48,10 @@ Em5RunAction::Em5RunAction()
 Em5RunAction::~Em5RunAction()
 {
   delete runMessenger;
-#ifndef G4NOHIST  
+#ifndef G4NOHIST   
+   // Write histogram file
+   hbookManager->write();
+  
   if(histo1)  delete histo1 ;
   if(histo2) {delete histo2 ; delete hi2bis;}
   if(histo3)  delete histo3 ;
@@ -726,11 +729,6 @@ void Em5RunAction::EndOfRunAction(const G4Run* aRun)
   
   if (G4VVisManager::GetConcreteInstance())
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-
-#ifndef G4NOHIST    
-   // Write histogram file
-   hbookManager->write();
-#endif
    
   // save Rndm status
   if (saveRndm > 0)

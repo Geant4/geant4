@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em5DetectorConstruction.cc,v 1.4 2000-01-20 15:34:39 maire Exp $
+// $Id: Em5DetectorConstruction.cc,v 1.5 2001-03-27 09:24:00 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -129,6 +129,10 @@ G4Material* Fe = new G4Material(name="Iron"   , z=26., a, density);
 density = 8.960*g/cm3;
 a = 63.55*g/mole;
 G4Material* Cu = new G4Material(name="Copper"   , z=29., a, density);
+
+density = 19.30*g/cm3;
+a =183.85*g/mole;
+G4Material* W = new G4Material(name="Tungsten"  , z=74., a, density);
 
 density = 19.32*g/cm3;
 a =196.97*g/mole;

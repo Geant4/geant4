@@ -98,7 +98,7 @@ C
         PAXIS =   0.
         SAXIS =   0.1*max(XWORLD,YZWORL)
         CALL GDRAWC ('worl',IX,0.,10.,9.3,SCALE,SCALE)
-        CALL GDAXIS (PAXIS,PAXIS,PAXIS,SAXIS)
+CCC        CALL GDAXIS (PAXIS,PAXIS,PAXIS,SAXIS)
         CALL GDSCAL (10., 0.3)
         CALL GDCLOS
       END DO

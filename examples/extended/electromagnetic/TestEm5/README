@@ -1,4 +1,4 @@
-$Id: README,v 1.1 1999-10-12 12:23:17 maire Exp $
+$Id: README,v 1.2 2001-03-27 09:24:00 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -130,3 +130,6 @@ $Id: README,v 1.1 1999-10-12 12:23:17 maire Exp $
         9.   z distribution of the secondary charged vertices (mm)
        10.   kinetic energy of the photons escaping the absorber (MeV)
         
+    	   
+ Note that, for time being (on 26.03.2001), the histograms in G4
+ are disabled  wia the cpp flag g4nohist := true in the gnumakefile 
