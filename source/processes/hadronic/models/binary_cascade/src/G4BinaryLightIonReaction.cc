@@ -52,12 +52,7 @@
       G4Nucleon * aNuc;
       while( (aNuc=projectile->GetNextNucleon()) )
       {
-	G4LorentzVector p4 = aNuc->GetMomentum();
-	// testing @@@@@
-	// p4.setX(0);
-	// p4.setY(0);
-	// end testing @@@@@
-	
+	G4LorentzVector p4 = aNuc->GetMomentum();	
 	G4KineticTrack * it = new G4KineticTrack(aNuc->GetDefinition(), 0, aNuc->GetPosition()+pos, p4 );
 	initalState->push_back(it);
       }
