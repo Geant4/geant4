@@ -8,7 +8,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3MatTable.hh,v 1.4 1999-07-20 14:16:20 lockman Exp $
+// $Id: G3MatTable.hh,v 1.5 1999-07-21 08:39:43 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -27,6 +27,7 @@ public:
   ~G3MatTable();
   G4Material* get(G4int matid);
   void put(G4int matid, G4Material* matpt);
+  void print(G4int matid=-99999);
 };
 
 extern G3MatTable G3Mat;

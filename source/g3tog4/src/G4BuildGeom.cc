@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BuildGeom.cc,v 1.7 1999-05-26 03:47:49 lockman Exp $
+// $Id: G4BuildGeom.cc,v 1.8 1999-07-21 08:40:13 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 
@@ -48,6 +48,10 @@ G4LogicalVolume* G4BuildGeom(G4String& inFile){
   G3Vol.VTEStat();
 
   G4cout << "Call List file read completed. Build geometry" << endl;
+
+  // Print the materials
+
+  // G3Mat.print();
 
   // Build the geometry
 
