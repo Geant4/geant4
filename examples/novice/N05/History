@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2000-08-03 09:11:39 gcosmo Exp $
+$Id: History,v 1.9 2000-11-24 10:05:12 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25th November 2000 Steve O'Neale (tagset210)
+- Update test outputs for min.delta energy cut
+- Update test outputs for moderate changes in deposited energy and number of hits
 
 August 03, 2000  Gabriele Cosmo (exampleN05-V02-00-01r)
 - Changed RandGauss to G4RandGauss in ExN05PionShowerModel.cc to fix problem
