@@ -1,4 +1,4 @@
-$Id: History,v 1.42 1999-11-05 16:34:10 johna Exp $
+$Id: History,v 1.43 1999-11-05 16:39:56 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -37,8 +37,11 @@ vis-V00-01-07  5th November  John Allison
 - G4VisCommandsSceneAdd: respect the above G4bool return value.
 - G4Scene::AddRunDurationModel(): remove temporary workaround for old CLHEP
   non-const problem.
-- Added 3rd template argument of map (to keep Sun CC 4.2 happy) in G4OpenGLStoredSceneHandler.hh and G4OpenInventorSceneHandler.hh.
-- G4OpenGLStoredSceneHandler::ClearStore() and G4OpenInventorSceneHandler::ClearStore() invoke base class function G4VSceneHandler::ClearStore().
+- Added 3rd template argument of map (to keep Sun CC 4.2 happy) in
+  G4OpenGLStoredSceneHandler.hh and G4OpenInventorSceneHandler.hh.
+- G4OpenGLStoredSceneHandler::ClearStore() and
+  G4OpenInventorSceneHandler::ClearStore() invoke base class function
+  G4VSceneHandler::ClearStore().
 
 VRML-V00-01-01 4th November 1999  Satoshi Tanaka
 - Introduction of VRMLBeginModeling() for new vis commands  
