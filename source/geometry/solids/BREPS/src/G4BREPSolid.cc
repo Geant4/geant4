@@ -11,7 +11,7 @@
 #include "G4SphericalSurface.hh"
 
 G4Ray G4BREPSolid::Track;
-G4double G4BREPSolid::ShortestDistance=1000000;
+G4double G4BREPSolid::ShortestDistance= kInfinity;
 int G4BREPSolid::NumberOfSolids=0;
 InstMgr G4BREPSolid::InstanceList;
 
@@ -69,7 +69,7 @@ void G4BREPSolid::Initialize()
   {
     // Calc bounding box for solids and surfaces
     // Convert concave planes to convex     
-    ShortestDistance=1000000;
+    ShortestDistance= kInfinity;
     IsBox();	
     CheckSurfaceNormals();
     
