@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.5 1999-06-05 13:05:51 stesting Exp $
+// $Id: G4PhotoElectricEffect.cc,v 1.6 1999-06-05 14:17:58 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -238,11 +238,12 @@ G4VParticleChange* G4PhotoElectricEffect::PostStepDoIt(const G4Track& aTrack,
   //  protection !
    if(PhotonEnergy <= veryLowEnergy)
    {
-     if (++veryLowEnergyCount == 1)
+     if (++veryLowEnergyCount < 100)
        {
-	 G4cerr <<
-	   "WARNING: G4PhotoElectricEffect::PostStepDoIt:"
-	   " a very low energy photon encountered and killed."
+	 G4cerr << "WARNING: G4PhotoElectricEffect::PostStepDoIt:"
+	   " a very low energy photon, "
+		<< PhotonEnergy / eV
+		<< " eV, encountered and killed."
 		<< endl;
        }
      if (veryLowEnergyCount%1000 == 0)
