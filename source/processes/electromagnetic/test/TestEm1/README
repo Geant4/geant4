@@ -1,4 +1,4 @@
-$Id: README,v 1.1 1999-01-08 16:32:38 gunter Exp $
+$Id: README,v 1.2 1999-06-22 09:49:17 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -87,6 +87,16 @@ $Id: README,v 1.1 1999-01-08 16:32:38 gunter Exp $
  		Idle> type your commands
  		....
  		Idle> exit
+ 	
+ 7- HISTOGRAMS
+ 
+     Testem1 produces several histo which are saved as testem1.histo
+     
+     Content of these histo:
+  
+      1 : track length of a charged particle
+      2 : number of steps per track (charged particle)
+      3 : step length (charged particle)
  	
  	  
  	

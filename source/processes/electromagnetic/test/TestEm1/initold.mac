@@ -6,14 +6,14 @@
 #
 /control/verbose 2
 #
-####/run/initialize
+/run/initialize
 #
-####/process/eLoss/StepFunction 0.183  170 micrometer
-####/calor/cutG 2.2 mm
-####/calor/cutE 1.4 micrometer    #before beta03-00  (17.11.98)
-####/calor/cutE 6.05 micrometer     #from beta03-00  (17.11.98)
-####/run/initialize
-####/run/particle/dumpCutValues
+/process/eLoss/StepFunction 0.183  170 micrometer
+/calor/cutG 2.2 mm
+####/calor/cutE 1.4 micrometer     #before beta03-00  (17.11.98)
+/calor/cutE 6.05 micrometer     #from beta03-00  (17.11.98)
+/run/initialize
+/run/particle/dumpCutValues
 #
 # Create empty scene ("world" is default)
 /vis/scene/create
