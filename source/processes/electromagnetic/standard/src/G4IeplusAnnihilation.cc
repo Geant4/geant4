@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IeplusAnnihilation.cc,v 1.1 1999-01-07 16:11:21 gunter Exp $
+// $Id: G4IeplusAnnihilation.cc,v 1.2 1999-04-09 10:42:54 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -174,9 +174,10 @@ void G4IeplusAnnihilation::BuildPhysicsTable(const G4ParticleDefinition& Positro
              LowEdgeEnergy = ptrVector->GetLowEdgeEnergy( i ) ;
              Value = ComputeMeanFreePath( LowEdgeEnergy, material);  
              ptrVector->PutValue( i , Value ) ;
-           }
 
         theMeanFreePathTable->insertAt( J , ptrVector ) ;
+
+           }
 
       }
 
@@ -264,7 +265,6 @@ void G4IeplusAnnihilation::TestOfInversion(
               setw(14)<< setprecision(6) << Nlambda << "  " <<
       setw(14) << setprecision(6) << Tprime << "      " <<
               setw(12) << setprecision(3) << del << endl;
-            //  setw(12) << setprecision(3) << del  ;
     }
      }
     }
@@ -325,6 +325,9 @@ void G4IeplusAnnihilation::BuildNlambdaVector(
   G4bool isOut ;
   const G4double small = 1.e-100;
   const G4double plowloss = 0.5 ;  //this should be a data member of en.loss!
+  const G4double BIGSTEP=1.e10 ;
+
+  
 
   const G4MaterialTable* theMaterialTable=
                           G4Material::GetMaterialTable();
@@ -340,6 +343,7 @@ void G4IeplusAnnihilation::BuildNlambdaVector(
      Value = 0. ;
 
   nlambdaVector->PutValue(0,Value) ;
+
   Tlast = LowestKineticEnergy ;
   Vlast = Value ;
 
