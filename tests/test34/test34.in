@@ -1,5 +1,5 @@
 #
-# Macro file for the initialization phase of "exampleN02.cc"
+# Macro file for the initialization phase of "test34"
 # when runing in interactive mode
 #
 # Sets some default verbose
@@ -26,3 +26,4 @@
 /run/beamOn 10
 exit
 quit
+
