@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: VolTableEntry.cc,v 1.6 1999-05-28 02:19:41 lockman Exp $
+// $Id: VolTableEntry.cc,v 1.7 1999-05-28 23:03:47 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -27,7 +27,7 @@ VolTableEntry::VolTableEntry(G4String& Vname, G4String& Shape,
 			     G4bool Deferred, G4bool NegVolPars, 
 			     G4bool* OKAxis)
   : _Rpar(0), _Npar(0), _Nmed(0), _Mat(0), _Solid(0), _LV(0), _Deferred(0), 
-    _NegVolPars(0), _Daughters(0), _G3Pos(0), _DivisionAxis(0)
+    _NegVolPars(0), _Daughters(0), _G3Pos(0), _DivisionAxis(0), _Mother(0)
 {
   _Nmed = Nmed;
   _Vname = Vname;
@@ -129,6 +129,16 @@ VolTableEntry::AddDaughter(VolTableEntry* aDaughter){
     _Daughters.resize(_Daughters.length()+1);
     _Daughters.insert(aDaughter);
   }
+};
+
+void
+VolTableEntry::AddMother(VolTableEntry* itsMother){
+  _Mother = itsMother;
+};
+
+VolTableEntry*
+VolTableEntry::GetMother(){
+  return _Mother;
 };
 
 VolTableEntry*

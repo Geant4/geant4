@@ -24,6 +24,7 @@ private:
   G4bool _NegVolPars;
   G4bool _OKAxis[3];
   G4int _DivisionAxis;
+  VolTableEntry* _Mother;
   RWTPtrOrderedVector <VolTableEntry> _Daughters; // VolTableEntry Daughters
   RWTPtrOrderedVector <G3Pos> _G3Pos; // associated G3Pos objects
 
@@ -68,6 +69,10 @@ public:
   G4int GetNoDaughters();
 
   VolTableEntry* GetDaughter(G4int i);
+
+  VolTableEntry* GetMother();
+  
+  void AddMother(VolTableEntry* itsMother);
 
   VolTableEntry* FindDaughter(const G4String& vname);
 

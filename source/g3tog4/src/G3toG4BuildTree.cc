@@ -14,15 +14,11 @@ G3toG4BuildTree(VolTableEntry* CurVTE){
 			CurVTE->GetMaterial(),// material pointer
 			CurVTE->GetName());; // lv name
   CurVTE->SetLV(CurLog);
-  // place current VTE if required
-  //  G4cout << "Defining LV " << CurVTE->GetName() << " with " 
-  // << CurVTE->NPCopies() << " physical volumes and "
-  // << CurVTE->GetNoDaughters() << " daughters " << endl;
   
   for (int ICopy=0; ICopy < CurVTE->NPCopies(); ICopy++){
     G3Pos* TheG3Pos = CurVTE->GetG3PosCopy(ICopy); 
     // pointer to mother
-    G4LogicalVolume* MothLV = TheG3Pos->GetMotherVTE()->GetLV();
+    G4LogicalVolume* MothLV = CurVTE->GetMother()->GetLV();
     // rotation matrix
     G4int irot = TheG3Pos->GetIrot();
     //G4cout << "Positioning PV " << TheG3Pos->GetName() << " irot " << irot

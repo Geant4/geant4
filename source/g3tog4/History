@@ -1,7 +1,20 @@
-$Id: History,v 1.16 1999-05-27 21:38:54 gcosmo Exp $
+$Id: History,v 1.17 1999-05-28 23:03:16 lockman Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-01-00-06 28-May-1999 Lockman
+- ~G3Mat,MedTable: do not destroy G4Material Objects in list. Do a clear()
+  of the list, not clearAndDestroy, then delete the list.
+- ~G3Rot,Vol,Part,EleTable: standardize printout, fix deallocation
+- G3VolTable: changed PutVTE to take a VolTableEntry*; added ListVTE method
+- G3toG4MakeSolid: added G4bool* OKAxis
+- VolTableEntry: added _OKAxis[3] to store which axes may be divided;
+- G3toG4MakeSolid: set OKAxis
+- G3toG4EventAction: BeginOfEventAction, EndOfEventAction signature mods
+- G3toG4RunAction: BeginOfRunAction, EndOfRunAction signature mods
+- G3toG4PhysicsList: SetCuts signature mod
+- G3toG4PrimaryGeneratorAction: randomize paricle direction
 
 27-May-1999 Cosmo
 - Fixed circular dependencies in G3Pos - VolTableEntry - G3VolTable.

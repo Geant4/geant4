@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3Pos.cc,v 1.3 1999-05-27 21:38:58 gcosmo Exp $
+// $Id: G3Pos.cc,v 1.4 1999-05-28 23:03:31 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -15,27 +15,19 @@
 
 extern G3VolTable G3Vol;
 
-G3Pos::G3Pos(G4String& LV, G4int C, G4String& Mother, 
-	     G4ThreeVector* Position, G4int irot, 
+G3Pos::G3Pos(G4String& LV, G4int C, G4ThreeVector* Position, G4int irot, 
 	     G4String& Only) 
   : _VTE(0),_Copy(0), _LV(" "),
-    _Mother(" "), _VTEMother(0),_Position(0),_Irot(0),_Only(" "){
+    _Position(0),_Irot(0),_Only(" "){
       _VTE = G3Vol.GetVTE(LV);
       _LV = LV;
       _Copy = C;
-      _Mother = Mother;
-      _VTEMother = G3Vol.GetVTE(_Mother);
       _Position = Position;
       _Irot = irot;
       _Only = Only;
 };
 
 G3Pos::~G3Pos(){;};
-
-VolTableEntry*
-G3Pos::GetMotherVTE() {
-  return _VTEMother;
-};
 
 VolTableEntry*
 G3Pos::GetVTE() {
@@ -50,11 +42,6 @@ G3Pos::operator == ( const G3Pos& lv) const {
 G4String&
 G3Pos::GetName() {
   return _LV;
-};
-
-G4String&
-G3Pos::GetMotherName() {
-  return _Mother;
 };
 
 G4int

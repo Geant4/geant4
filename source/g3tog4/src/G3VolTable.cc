@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3VolTable.cc,v 1.11 1999-05-28 21:09:10 lockman Exp $
+// $Id: G3VolTable.cc,v 1.12 1999-05-28 23:03:35 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -22,7 +22,7 @@ G3VolTable::G3VolTable()
 G3VolTable::~G3VolTable(){
   _VTD->clearAndDestroy();
   delete _VTD;
-  G4cout << "Deleted VolTable Hash Dictionary..." << endl;
+  G4cout << "Deleted G3VolTable..." << endl;
 };
 
 VolTableEntry*
@@ -72,7 +72,7 @@ void
 G3VolTable::SetFirstVTE(){
   G3toG4TopVTE = _VTD->findValue(&_FirstKey);
   if (G3toG4TopVTE->NPCopies() > 0) {
-    _FirstKey = G3toG4TopVTE->GetG3PosCopy(0)->GetMotherVTE()->GetName();
+    _FirstKey = G3toG4TopVTE->GetMother()->GetName();
     SetFirstVTE();
   }
 }

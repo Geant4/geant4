@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gspos.cc,v 1.8 1999-05-26 03:50:00 lockman Exp $
+// $Id: G4gspos.cc,v 1.9 1999-05-28 23:03:43 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -52,11 +52,14 @@ void G4gspos(G4String& vname, G4int num, G4String& vmoth,
     
     // create a G3Pos object and add it to the G3VolTable
 
-    G3Pos* aG3Pos = new G3Pos(vname, num, vmoth, offset, irot, vonly);
+    G3Pos* aG3Pos = new G3Pos(vname, num, offset, irot, vonly);
     _VTE->AddG3Pos(aG3Pos);
 
     // add the VolTableEntry as a daughter to its mother if not there already
     MVTE->AddDaughter(_VTE);
+
+    // add the mother to the VTE
+    _VTE->AddMother(MVTE);
   }
 }
 
