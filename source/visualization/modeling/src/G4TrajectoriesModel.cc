@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoriesModel.cc,v 1.9 2001-08-14 18:43:33 johna Exp $
+// $Id: G4TrajectoriesModel.cc,v 1.10 2002-02-24 01:35:52 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,7 +48,6 @@ void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
     G4TrajectoryContainer* TC = event -> GetTrajectoryContainer ();
     if (TC) {
       G4int nT = TC -> entries ();
-      sceneHandler.BeginPrimitives ();
       for (int iT = 0; iT < nT; iT++) {
 	// GB : default representation should be the most efficent one.
         // Representation with a circle at each step should be an option 
@@ -56,7 +55,6 @@ void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
 	// (*TC) [iT] -> DrawTrajectory (50);
 	(*TC) [iT] -> DrawTrajectory ();
       }
-      sceneHandler.EndPrimitives ();
     }
   }
 }

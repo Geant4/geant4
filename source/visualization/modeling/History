@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2001-08-24 20:36:11 johna Exp $
+$Id: History,v 1.17 2002-02-24 01:35:26 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,13 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+23rd February 2002  John Allison (vis-V04-00-02)
+- Removed Begin/EndPrimitives from G4HitsModel and
+  G4TrajectoriesModel.  This was causing nested calls to
+  Begin/EndPrimitives (and thus to glNewList/EndList in OpenGL stored
+  mode), since the trajectories and hits Draw methods themselves have
+  Begin/EndPrimitives.
 
 24th August 2001  John Allison  (vis-V03-02-13)
 - Intoduced argument for printing in G4VModel::Validate(G4bool warn).

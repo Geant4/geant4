@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HitsModel.cc,v 1.7 2001-08-14 18:43:30 johna Exp $
+// $Id: G4HitsModel.cc,v 1.8 2002-02-24 01:35:50 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,11 +51,9 @@ void G4HitsModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
       G4HCofThisEvent* HCE = event -> GetHCofThisEvent ();
       if (HCE) {
 	G4int nHC = HCE -> GetCapacity ();
-	sceneHandler.BeginPrimitives ();
 	for (int iHC = 0; iHC < nHC; iHC++) {
 	  HCE -> GetHC (iHC) -> DrawAllHits ();
 	}
-	sceneHandler.EndPrimitives ();
       }
     }
   }
