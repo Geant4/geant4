@@ -24,7 +24,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.98 2005-02-17 17:13:55 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.99 2005-02-21 18:47:56 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -1027,6 +1027,7 @@ void G4QEnvironment::PrepareInteractionProbabilities(const G4QContent& projQC, G
       ////////////////////////else if((pPDG==-211&&AP<10.)&&ac<2) probab=0;//PiCapAtRest(D)
       //else if(pPDG==-211&&AP<10.)            probab=nOfCl*fact;// special PiCaptureAtRest
       //else if(pPDG==-211&&AP<10.)            probab=nOfCl*ac*(ac-1)*fact;
+      //else                                   probab=nOfCl*fact;
       else                                   probab=nOfCl*ac*fact;
       //else                                      probab=dOfCl*ac*fact;
       //if(ac>1) probab=0.;                       // Suppress clusters
@@ -1452,9 +1453,10 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
     G4int cbR     =0;                      // Counter of the "Stoped by Coulomb Barrier"
     G4int cbRM    =3;                      // MaxCounter of the "Stoped by Coulomb Barrier"
     G4int totC    = 0;                     // Counter to break the "infinit" loop
-    G4int totCM   = 227;                   // Limit for this counter
+    G4int totCM   = 227;                   // Limit for the "infinit" loop counter
     //G4int totCM   = 27;                    // Limit for this counter
-    G4int nCnMax = 7;                      // MaxCounterOfHadrFolts to open shortCutSolut's
+    //G4int nCnMax = 3;                      // MaxCounterOfHadrFolts for shortCutSolutions
+    G4int nCnMax = 7;                      // MaxCounterOfHadrFolts for shortCutSolutions
     while (sumstat||totC<totCM)            // ===***=== The MAIN "FOREVER" LOOP ===***===
 	   {
 #ifdef chdebug
@@ -10085,15 +10087,19 @@ G4bool G4QEnvironment::CheckGroundState(G4Quasmon* quasm, G4bool corFlag)
       if(resEMa)                                // => "NonVacuumEnvironment exists" case
       {
         G4LorentzVector quas4M = G4LorentzVector(0.,0.,0.,resQMa); // GS Mass of Quasmon
+        G4LorentzVector enva4M = G4LorentzVector(0.,0.,0.,resEMa); // GS Mass of ResidEnvir
         if(tmpTM>=resQMa+resEMa+hadrMa && G4QHadron(tmpTLV).DecayIn3(hadr4M,quas4M,enva4M))
         {
           //@@CHECK CoulBar (only for ResQuasmon in respect to ResEnv) and may be evaporate
+#ifdef pdebug
+          G4cout<<"G4QE::CGS: Modify the Last 4-momentum to "<<hadr4M<<G4endl;
+#endif
           theLast->Set4Momentum(hadr4M);
           G4QHadron* quasH = new G4QHadron(valQ, quas4M);
           G4QContent theEQC=theEnvironment.GetQCZNS();
           G4QHadron* envaH = new G4QHadron(theEQC,enva4M);
 #ifdef pdebug
-          G4cout<<"G4QE::CGS: fill state "<<valQ<<quas4M<<" in any form"<<G4endl;
+          G4cout<<"G4QE::CGS: Fill Quasm "<<valQ<<quas4M<<" in any form"<<G4endl;
 #endif
           // @@ Substitute by EvaporateResidual (if it is not used in the evaporateResid)
           if(resQPDG==92000000||resQPDG==90002000||resQPDG==90000002)DecayDibaryon(quasH);
@@ -10104,7 +10110,7 @@ G4bool G4QEnvironment::CheckGroundState(G4Quasmon* quasm, G4bool corFlag)
           else if(resQPDG==90004004) DecayAlphaAlpha(quasH); //DelEqu
           else theQHadrons.push_back(quasH);    // Fill ResidQ as QHadron (delete equiv.)
 #ifdef pdebug
-          G4cout<<"G4QE::CGS: fill envir "<<theEQC<<enva4M<<" in any form"<<G4endl;
+          G4cout<<"G4QE::CGS: Fill envir "<<theEQC<<enva4M<<" in any form"<<G4endl;
 #endif
           // @@ Substitute by EvaporateResidual (if it is not used in the evaporateResid)
           envaH->Set4Momentum(enva4M);
@@ -10115,6 +10121,8 @@ G4bool G4QEnvironment::CheckGroundState(G4Quasmon* quasm, G4bool corFlag)
           else if(envPDG==90004002) DecayAlphaDiN(envaH);//Decay alph+2p(alph+2n IsStable)
           else if(envPDG==90004004) DecayAlphaAlpha(envaH); //DelEqu
           else theQHadrons.push_back(envaH);    // Fill 2nd Hadron (delete equivalent)
+          // Kill environment as it is already included in the decay
+          theEnvironment=G4QNucleus(G4QContent(0,0,0,0,0,0), G4LorentzVector(0.,0.,0.,0.));
 		      }
         else
         {

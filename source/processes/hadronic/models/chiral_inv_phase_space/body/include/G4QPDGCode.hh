@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.hh,v 1.23 2005-02-17 17:13:55 mkossov Exp $
+// $Id: G4QPDGCode.hh,v 1.24 2005-02-21 18:47:56 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
@@ -67,6 +67,7 @@ public:
   G4QPDGCode        operator/=(const G4int& rhs);
 
   // Selectors
+  G4int      GetNQHadr();                              // Return # of predefined hadrons
   G4double   GetMass();                                // GS Mass for the QHadron
   G4double   GetMass2();                               // Squared GS Mass for the QHadron
   G4double   GetWidth();                               // Width for the QHadron
@@ -84,9 +85,9 @@ public:
   G4int      GetTotNumOfComb(G4int i)           const; // Get total#ofCombinations for q_i 
 
   // Modifiers
-  void  SetPDGCode(G4int newPDGCode);               // Set PDG code of the Hadron
-  void  InitByQCont(G4QContent QCont);              // Init existing QPDG by Quark Content
-  void  InitByQCode(G4int QCode);                   // Init existing QPDG by Q Code
+  void       SetPDGCode(G4int newPDGCode);             // Set PDG code of the Hadron
+  void       InitByQCont(G4QContent QCont);            // Init ExistingQPDG by QuarkContent
+  void       InitByQCode(G4int QCode);                 // Init ExistingQPDG by Q Code
 
   // General
   G4bool     TestRealNeutral();
@@ -131,6 +132,8 @@ inline G4bool G4QPDGCode::operator==(const G4QPDGCode& rhs) const {return this==
 inline G4bool G4QPDGCode::operator==(const G4int&      rhs) const {return thePDGCode==rhs;}
 inline G4bool G4QPDGCode::operator!=(const G4QPDGCode& rhs) const {return this!=&rhs;}
 inline G4bool G4QPDGCode::operator!=(const G4int&      rhs) const {return thePDGCode!=rhs;}
+
+inline G4int  G4QPDGCode::GetNQHadr() {return nQHM;} // Return # of predefined hadrons
 
 inline G4QPDGCode G4QPDGCode::operator+=(const G4QPDGCode& rhs)
 {

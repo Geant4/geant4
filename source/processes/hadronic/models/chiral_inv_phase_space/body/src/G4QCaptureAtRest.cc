@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.11 2005-02-17 17:13:55 mkossov Exp $
+// $Id: G4QCaptureAtRest.cc,v 1.12 2005-02-21 18:47:56 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
@@ -51,7 +51,7 @@ G4QCaptureAtRest::G4QCaptureAtRest(const G4String& processName)
   G4Quasmon::SetParameters(Temperature,SSin2Gluons,EtaEtaprime);  // Hadronic parameters
   G4QEnvironment::SetParameters(SolidAngle); // SolAngle of pbar-A secondary mesons capture
 }
-
+G4bool   G4QCaptureAtRest::manualFlag=false; // If false then standard parameters are used
 G4double G4QCaptureAtRest::Temperature=180.; // Critical Temperature (sensitive at High En)
 G4double G4QCaptureAtRest::SSin2Gluons=0.1;  // Supression of s-quarks (in respect to u&d)
 G4double G4QCaptureAtRest::EtaEtaprime=0.3;  // Supression of eta mesons (gg->qq/3g->qq)
@@ -65,6 +65,9 @@ G4bool   G4QCaptureAtRest::EnergyFlux=false; // Flag for Energy Flux use (not Mu
 G4double G4QCaptureAtRest::PiPrThresh=141.4; // Pion Production Threshold for gammas
 G4double G4QCaptureAtRest::M2ShiftVir=20000.;// Shift for M2=-Q2=m_pi^2 of the virtualGamma
 G4double G4QCaptureAtRest::DiNuclMass=1880.; // DoubleNucleon Mass for VirtualNormalization
+
+void G4QCaptureAtRest::SetManual()   {manualFlag=true;}
+void G4QCaptureAtRest::SetStandard() {manualFlag=false;}
 
 // Fill the private parameters
 void G4QCaptureAtRest::SetParameters(G4double temper, G4double ssin2g, G4double etaetap,
@@ -209,8 +212,9 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
   }
   G4int N = G4QIsotope::Get()->GetNeutrons(Z);
   nOfNeutrons=N;                                       // Remember it for energy-mom. check
-  if(Z+N>20) G4QNucleus::SetParameters(.18,.06,6.,1.); // HeavyNuclei NuclearClusterization
-  else       G4QNucleus::SetParameters(0.0,0.0,1.,1.); // LightNuclei NuclearClusterization
+  if(manualFlag) G4QNucleus::SetParameters(freeNuc,freeDib,clustProb,mediRatio); // ManualP
+		else if(Z+N>20) G4QNucleus::SetParameters(.18,.06,6.,1.); //HeavyNuclei ClusterizationPar
+  else       G4QNucleus::SetParameters(0.0,0.0,1.,1.);      //LightNuclei ClusterizationPar
 #ifdef debug
   G4cout<<"G4QCaptureAtRest::AtRestDoIt: N="<<N<<" for element with Z="<<Z<<G4endl;
 #endif

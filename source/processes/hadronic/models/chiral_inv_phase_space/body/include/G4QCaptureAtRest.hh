@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.hh,v 1.6 2005-02-17 17:13:55 mkossov Exp $
+// $Id: G4QCaptureAtRest.hh,v 1.7 2005-02-21 18:47:56 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest header ----------------
@@ -125,6 +125,8 @@ public:
   G4int GetNumberOfNeutronsInTarget();
 
   // Static functions
+  static void SetManual();
+  static void SetStandard();
   static void SetParameters(G4double temper=180., G4double ssin2g=.1, G4double etaetap=.3,
                             G4double fN=0., G4double fD=0., G4double cP=1., G4double mR=1.,
                             G4int npCHIPSWorld=234, G4double solAn=.5, G4bool efFlag=false,
@@ -146,7 +148,8 @@ private:
 // BODY
 private:
   // Static Parameters
-  static G4int nPartCWorld;    // The#of particles for hadronization (limit of A of fragm.)
+  static G4bool   manualFlag;  // If false then standard parameters are used
+  static G4int    nPartCWorld; // The#of particles for hadronization (limit of A of fragm.)
   // -> Parameters of the G4Quasmon class:
   static G4double Temperature; // Quasmon Temperature
   static G4double SSin2Gluons; // Percent of ssbar sea in a constituen gluon
