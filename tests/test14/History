@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2000-04-26 14:02:37 stesting Exp $
+$Id: History,v 1.5 2000-05-03 14:33:06 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3rd May 2000  John Allison  (test14-V01-01-02)
+- Updated test14.out for em-V01-01-01.
 
 26th April 2000  John Allison  (test14-V01-01-01)
 - Updated test14.out for emlowen-V01-01-09.
