@@ -617,12 +617,14 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
 		 <<G4endl;*/
 	track->SetWeight(newWeight);
 	G4double trackDeb = track->GetKineticEnergy();
-	if(   trackDeb<0 
-	   || (trackDeb>aT.GetKineticEnergy()+1*GeV))
+	if( (  trackDeb<0 
+	   || (trackDeb>aT.GetKineticEnergy()+1*GeV) ) && getenv("GHADEnergyBalanceDebug") )
 	{
 	  G4cout << "Debugging hadronic processes: "<<track->GetKineticEnergy()
 	         <<" "<<aT.GetKineticEnergy()
-		 <<" "<<GetProcessName()<<G4endl;
+		 <<" "<<GetProcessName()
+		 <<" "<<aT.GetDefinition()->GetParticleName() 
+		 <<G4endl;
 	}
 	/*if(GetProcessName()=="PhotonInelastic")
 	{
