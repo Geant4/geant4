@@ -1,0 +1,259 @@
+
+                       geant4-06-00-ref-00
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o New hadronic_lists module for hadronic physics lists by use case.
+    The module can only be built and installed separately in addition
+    to the standard libraries installation.
+  o Includes validation of hadronic physics for release 6.0.
+  o Introduced G4SurfaceProperty base class for materials and adapted
+    G4LogicalSurface and G4OpticalSurface to use the new generic interface.
+  o Revision of advanced and extended examples.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+environments                            envs-V05-02-03
+------------
+- New version of MOMO and removed archives for GGE and GPE now
+  included in MOMO.
+
+geometry/management                     geommng-V05-02-05
+-------------------
+- G4LogicalSurface: modified to use generic G4SurfaceProperty
+  instead of G4OpticalSurface.
+
+geometry/navigation                     geomnav-V05-02-12
+-------------------
+- G4PropagatorInField:
+  o Added argument to method LocateIntersectionPoint(G4bool& recalculatedEndPt)
+    to return 'true' if the endpoint has been recalculated.
+    This fixes a problem that can occasionally cause the skipping of a volume
+    boundary - in the case when a re-integration was done near a boundary.
+  o ComputeStep() also changed to accept above recalculation.
+  o New method GetVerboseLevel(), closer to std naming than Verbose()
+  o Fixed LocateIntersectionPoint() for long-standing error.
+    A section of the chord was not considered in use case where
+    a previous chord at first appeared to have an intersection, but did not.
+  o Corrected placement of #endif for an #ifdef VERBOSE.
+- G4TransportationManager:
+  o removed initialisation of allocators for navigation levels, where they
+    were introduced as workaround for solving static initialisation a long
+    time ago. Now moved to "volumes" module, where they should belong, in
+    G4TouchableHistory.
+- Restored original unit-tests, using inherited navigator.
+
+geometry/solids/Boolean                 geombool-V05-02-04
+-----------------------
+- G4ReflectedSolid: fixed trivial leak in constructor.
+
+geometry/solids/CSG                     geom-csg-V05-02-05
+-------------------
+- G4Trap: fixed initialisation of planes in default constructor.
+- Added new unit test for G4Sphere and new test case for G4Cons.
+
+geometry/solids/tests                   geom-solids-tests-V05-02-00
+---------------------
+- Brought up-to-date SBT unit test.
+
+geometry/volumes                        geomvol-V05-02-08
+----------------
+- G4TouchableHistory: added initialisation of allocators for navigation
+  levels, moved from G4TransportationManager, where they were introduced
+  as workaround for solving static initialisation a long time ago.
+- G4NavigationHistory: fixed redundant calls and initialisations.
+- G4NavigationLevel, G4NavigationLevelRep: fixed implementation of
+  operator=() for inlining.
+- G4LogicalBorderSurface, G4LogicalSkinSurface:
+  o modified to use generic G4SurfaceProperty instead of G4OpticalSurface.
+- Updated unit tests to use inherited navigator.
+
+materials                               materials-V05-02-00
+---------
+- Added base class G4SurfaceProperty.
+- G4OpticalSurface: now inheriting from G4SurfaceProperty.
+
+processes/hadronic/management                    ghad-V05-02-05
+-----------------------------
+- Added protection for event-biasing.
+- Fixed memory leaks.
+
+processes/.../binary_cascade                     ghad-bin-V05-02-09
+----------------------------
+- Fixed a energy conservation problem.
+- Fixed loop for hydrogen, and a small (once per run) leak.
+
+processes/.../cascade/cascade                    ghad-bert-cas-V05-02-05
+-----------------------------
+- Fixed loops for hydrogen and iron.
+- Fixed a memory overwrite problem detected by Insure++.
+- Fix for a segmentation fault in QGSP_BERT physics list.
+
+processes/.../chiral_inv_phase_space/body        ghad-chips-body-V05-02-23
+-----------------------------------------
+- Introduced G4QCHIPSWorld as singleton.
+- Bug fix for a loop seen in robustness testing.
+- Cleanup and fixed some run-time warnings.
+
+processes/.../chiral_inv_phase_space/interface   ghad-chips-int-V05-02-01
+----------------------------------------------
+- Introduced workaround for NULL pointer in particle-definition
+  detected in test21.
+
+processes/.../models/de_excitation/fermi_breakup ghad-fermi-breakup-V05-02-05
+------------------------------------------------
+- Fixed run-time problem detected on SUN-CC for Air. 
+
+processes/.../models/low_energy                  ghad-lowe-V05-02-00
+-------------------------------
+- Low energy protection for elastic scattering.
+  Should avoid a precision problem.
+
+processes/.../models/management                  ghad-mod-man-V05-02-00
+-------------------------------
+- Avoid deletion of 3DNucleus in base class G4VIntraNuclearTransportModel.
+
+processes/.../pre_equilibrium/exciton_model      ghad-preeq-V05-02-01
+  -----------------------------------------
+- Fixed a once per reaction type leak.
+
+processes/.../models/util                        ghad-mod-util-V05-02-04
+-------------------------
+- G4KineticTrack: making sure decay works with Pauli blocking.
+
+processes/hadronic/util                          ghad_util-V05-02-02
+-----------------------
+- Improved delete struct.
+
+processes/optical                                op-V05-02-02
+-----------------
+- G4OpBoundaryProcess: now adopting G4SurfaceProperty from "materials".
+- Replaced usage of NULL with 0.
+
+run                                              run-V05-02-10
+---
+- G4RunManagerKernel: changed date for release 6.0.
+
+track                                            track-V05-02-03
+-----
+- Fixed problem of setting default momentum direction for stoppped
+  particle in G4ParticleChange.
+
+tracking                                tracking-V05-02-05
+--------
+- G4SteppingManager: fixed problem in setting pointer to user
+  stepping action.
+
+visualization                           vis-V05-02-06
+-------------
+- Added command /vis/scene/endOfRunAction.
+- G4VisManager: Removed PrintAllGraphicsSystems() and
+  PrintInstalledGraphicsSystems().
+
+visualization/HepRep                    vis-HepRep-V05-02-10
+--------------------
+- Fixed bug with CalHits by moving faces to separate HepRepType.
+
+hadronic_lists                          ghad-lists-V05-02-01
+--------------
+- New module of physics lists for hadronic physics lists by use case.
+  The module can only be built and installed separately in addition
+  to the standard libraries installation.
+
+examples                                examples-V05-02-08
+--------
+- Updated reference outputs.
+- advanced:
+  o composite_calorimeter (ccal-V05-02-07)
+    + Added some recent modifications and improvements.
+    + Removed hadronics physics-lists. Now using default setup
+      provided in $G4INSTALL/hadronic_lists.
+  o lAr_calorimeter (lAr_calorimeter-V05-02-01)
+    + Fixed compilation errors if histograms disabled.
+    + Fixed compilation warnings.
+    + Updated vis-manager.
+  o Rich (Rich-V05-02-00)
+    + Fixed compilation errors and warnings.
+    + Updated vis-manager.    
+  o Tiara (Tiara-V05-02-06)
+    + Removed hadronics physics-lists. Now using default setup
+      provided in $G4INSTALL/hadronic_lists.
+    + Fixed build setup. Added references to new physics-lists structure.
+    + Fixed implementation of TiaraPrimaryGeneratorAction, where copy
+      constructor and operator=() definitions were commented by mistake.
+  o underground_physics (DMX-V05-02-01)
+    + Migrated to new hadronic processes for release 6.0.
+    + Fixed compilation warnings.
+    + Updated vis-manager.
+  o xray_fluorescence (XrayFluo-V05-02-08)
+    + Removed obsolete classes.
+    + Cleared compilation errors and warnings.
+    + Introduced usage of VRML viewer.
+  o xray_telescope (xraytel-V05-02-02)
+    + Removed OPACS from the vis-manager.
+- extended:
+  o analysis/A01 (exampleA01-V05-02-01)
+    + Removed endOfEventAction.mac since according to new vis policy
+      which now provides such a flush automatically.
+    + Updated README to include more information about HepRep2 macros.
+  o analysis/AnaEx01 (AnaEx01-V05-02-01)
+    + Fixed minor compilation warnings and added 'aida-config' in
+      GNUmakefile, activated through G4ANALYSIS_USE.
+    + Removed OPACS from the vis-manager.
+  o electromagnetic
+    + TestEm7 (testem7-V05-02-05)
+      * Updated hadronic physics according to new hadronics_lists module.
+    + TestEm9 (testem9-V05-02-10)
+      * Updated hadronic physics according to new hadronics_lists module.
+      * Fixed StepMax.
+  o eventgenerator/HepMC (exHepMC-V05-02-01)
+      * Brought up-to-date with original novice examples.
+      * Updated vis-managers.
+  o field (fieldex-V05-02-02)
+    + field01
+      * Deleted forgotten inheritance from G4MagneticField
+      * Fixed SetFieldValue() method
+      * New output format in F01SteppingVerbose.
+      * Fully deleted F01ElectroMagneticField.
+      * field01.in: different energies, 1 track each in place
+        of 100 events of 1 energy.
+    + field03
+      * Renamed F03ElectroMagneticField into F03FieldSetup (as it is
+        a creator, not a field).
+      * FieldSetup is now called only in Detector Construction, not in main.
+  o g3tog4 (g3tog4Tests-V05-02-01)
+    + Removed OPACS from vis-manager.
+  o gdml (exgdml-V05-02-01)
+    + Updated to adopt XercesC 2.x family.
+    + Brought up-to-date GNUmakefiles with the latest Geant4 tags.
+    + Removed OPACS from vis-manager.
+  o geometry/olap (olapex-V05-02-00)
+    + Reconstructed vis-manager.
+  o parallel (exparallel-V05-02-01)
+    + Brought up-to-date with original novice examples.
+    + Updated vis-managers.
+- novice:
+  o N03 (exampleN03-V05-02-06)
+    + Removed OPACS script from visTutor. renamed scripts 6/7/8/9 to
+      5/6/7/8 respectively. Added scripts to gui.mac.
+    + Removed extraneous flushes from visTutor/heprep.mac to match new
+      endOfRunAction behavior.
+    + Cleaned up vis.mac.
+    + Updated README.
+  o N05 (exampleN05-V05-02-02)
+    + Added protection for negative proposed step in ExN05MinEkineCuts.
+  o N06 (exampleN06-V05-02-02)
+    + DetectorConstruction: use G4SurfaceProperty.
+  o N07 (exampleN07-V05-02-01)
+    + Removed OPACS from vis-manager.
+
+tests                                                 tests-V05-02-06
+-----
+- Updated reference outputs.
+- Removed all references to OPACS driver.
+- tests/test27 (test27-V05-02-02)
+  o Lower energy range limit for light ions.
+  o Cleared compilation warnings.
