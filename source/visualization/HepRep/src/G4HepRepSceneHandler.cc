@@ -254,57 +254,66 @@ void G4HepRepSceneHandler::openHepRep() {
 /**
  * Returns true if the HepRep was (already) closed, false if the HepRep is still open
  */
-bool G4HepRepSceneHandler::closeHepRep() {
+bool G4HepRepSceneHandler::closeHepRep(bool final) {
     if (_heprep == NULL) return true;
 
 #ifdef SDEBUG
     cout << "G4HepRepSceneHandler::CloseHepRep() start" << endl;
 #endif
 
-    // add geometry to the heprep if there is an event (separate geometries are written
-    // using DrawView() called from /vis/viewer/flush)
-    if (_eventInstanceTree != NULL) {
-        GetCurrentViewer()->DrawView();
-
-        // couple geometry to event if geometry was written
-        if ((_geometryInstanceTree != NULL)) {
-            getEventInstanceTree()->addInstanceTree(getGeometryInstanceTree());
+    // if this is the final close, then there should not be any event pending to be written.
+    if (final) {
+        if (_eventInstanceTree != NULL) {
+            cerr << "WARNING: you probably use '/vis/viewer/endOfEventAction accumulate' and "
+                 << "forgot to call /vis/viewer/update before exit. No event written." << endl;
         }
-    }
-    
-    // force inclusion of all subtypes of event
-    if (_eventInstanceTree != NULL) {
-        getEventType();
-        getTrajectoryType();
-        getHitType();
-        getCalHitType();
-    }
-    
-    // Give this HepRep all of the layer order info for both geometry and event,
-    // since these will both end up in a single HepRep.
-    if (_geometryRootType    != NULL) _heprep->addLayer(geometryLayer);
-    if (_eventType           != NULL) _heprep->addLayer(eventLayer);
-    if (_calHitType          != NULL) _heprep->addLayer(calHitLayer);
-    if (_trajectoryType      != NULL) _heprep->addLayer(trajectoryLayer);
-    if (_hitType             != NULL) _heprep->addLayer(hitLayer);
+    } else {
 
-    // open heprep file
-    if (writer == NULL) {
-        open((GetScene() == NULL) ? G4String("G4HepRepOutput.heprep.zip") : GetScene()->GetName());
+        // add geometry to the heprep if there is an event (separate geometries are written
+        // using DrawView() called from /vis/viewer/flush)
+        if (_eventInstanceTree != NULL) {
+            GetCurrentViewer()->DrawView();
+    
+            // couple geometry to event if geometry was written
+            if ((_geometryInstanceTree != NULL)) {
+                getEventInstanceTree()->addInstanceTree(getGeometryInstanceTree());
+            }
+        }
+    
+        // force inclusion of all subtypes of event
+        if (_eventInstanceTree != NULL) {
+            getEventType();
+            getTrajectoryType();
+            getHitType();
+            getCalHitType();
+        }
+    
+        // Give this HepRep all of the layer order info for both geometry and event,
+        // since these will both end up in a single HepRep.
+        if (_geometryRootType    != NULL) _heprep->addLayer(geometryLayer);
+        if (_eventType           != NULL) _heprep->addLayer(eventLayer);
+        if (_calHitType          != NULL) _heprep->addLayer(calHitLayer);
+        if (_trajectoryType      != NULL) _heprep->addLayer(trajectoryLayer);
+        if (_hitType             != NULL) _heprep->addLayer(hitLayer);
+
+        // open heprep file
+        if (writer == NULL) {
+            open((GetScene() == NULL) ? G4String("G4HepRepOutput.heprep.zip") : GetScene()->GetName());
+        }
+    
+        if (writeMultipleFiles) {
+            stringstream fileName;
+            fileName << baseName << eventNumberPrefix << setw(eventNumberWidth) << setfill('0') << eventNumber << eventNumberSuffix << extension;
+            openFile(fileName.str());
+        }
+            
+        // write out the heprep
+        stringstream eventName;
+        eventName << "event-" << setw(eventNumberWidth) << setfill('0') << eventNumber << ".heprep";
+        writer->write(_heprep, eventName.str());
+        eventNumber++;
     }
     
-    if (writeMultipleFiles) {
-        stringstream fileName;
-        fileName << baseName << eventNumberPrefix << setw(eventNumberWidth) << setfill('0') << eventNumber << eventNumberSuffix << extension;
-        openFile(fileName.str());
-    }
-        
-    // write out the heprep
-    stringstream eventName;
-    eventName << "event-" << setw(eventNumberWidth) << setfill('0') << eventNumber << ".heprep";
-    writer->write(_heprep, eventName.str());
-    eventNumber++;
-
     delete _heprep;
     _heprep = NULL;
 
@@ -323,7 +332,7 @@ void G4HepRepSceneHandler::close() {
     if (writer == NULL) return;
 
     if (!writeMultipleFiles) {
-        closeHepRep();
+        closeHepRep(true);
         closeFile();
     }
 }
@@ -565,19 +574,8 @@ void G4HepRepSceneHandler::AddThis (const G4VTrajectory& trajectory) {
 
         if (messenger.addPointAttributes()) {
             vector<G4AttValue>* pointAttValues = trajectoryPoint->CreateAttValues();
-// FIXME
-// We cannot call addAttVals since it will only accept an instance and not a point.
-// For now we just copy the attvals on a point and do not search the instance or type.
-//            addAttVals(point, pointAttDefs, pointAttValues);
-            if (pointAttValues != NULL) {
-                // Copy the point's G4AttValues to HepRepAttValues.
-                for (vector<G4AttValue>::iterator attValIterator = pointAttValues->begin(); attValIterator != pointAttValues->end(); attValIterator++) {
-                    // Pos already in points being written
-                    if (attValIterator->GetName() == "Pos") continue;
-                    
-                    point->addAttValue(attValIterator->GetName(), attValIterator->GetValue());
-                }
-            }
+            const map<G4String,G4AttDef>* pointAttDefs = trajectoryPoint->GetAttDefs();
+            addAttVals(point, pointAttDefs, pointAttValues);
             delete pointAttValues;
         }
     }
@@ -585,8 +583,7 @@ void G4HepRepSceneHandler::AddThis (const G4VTrajectory& trajectory) {
 
 
 
-void
-G4HepRepSceneHandler::PreAddThis (const G4Transform3D& objectTransformation,
+void G4HepRepSceneHandler::PreAddThis (const G4Transform3D& objectTransformation,
 				  const G4VisAttributes& visAttribs) {
 
     G4VSceneHandler::PreAddThis (objectTransformation, visAttribs);
@@ -624,7 +621,7 @@ void G4HepRepSceneHandler::EndPrimitives () {
 }
 
 
-void G4HepRepSceneHandler::setColor (HepRepInstance *instance,
+void G4HepRepSceneHandler::setColor (HepRepAttribute *attribute,
 				      const G4Color& color,
 				      const G4String& key) {
 #ifdef CDEBUG
@@ -633,7 +630,7 @@ void G4HepRepSceneHandler::setColor (HepRepInstance *instance,
                                   " blue : " << color.GetBlue ()   << endl;
 #endif
 
-    setAttribute(instance, key, color.GetRed(), color.GetGreen(), color.GetBlue(),color.GetAlpha());
+    setAttribute(attribute, key, color.GetRed(), color.GetGreen(), color.GetBlue(),color.GetAlpha());
 }
 
 G4Color G4HepRepSceneHandler::getColor (G4double charge) {
@@ -646,98 +643,136 @@ G4Color G4HepRepSceneHandler::getColor (G4double charge) {
     return G4Color(red, green, blue);
 }
 
-void G4HepRepSceneHandler::setVisibility (HepRepInstance *instance, const G4Visible& visible) {
+void G4HepRepSceneHandler::setVisibility (HepRepAttribute *attribute, const G4Visible& visible) {
     const G4VisAttributes* atts = visible.GetVisAttributes();
 
-    setAttribute(instance, "Visibility", (atts && (atts->IsVisible()==0)) ? false : true);
+    setAttribute(attribute, "Visibility", (atts && (atts->IsVisible()==0)) ? false : true);
 }
 
-void G4HepRepSceneHandler::setLine (HepRepInstance *instance, const G4Visible& visible) {
-    G4VisAttributes atts = visible.GetVisAttributes();
+void G4HepRepSceneHandler::setLine (HepRepAttribute *attribute, const G4Visible& visible) {
+    const G4VisAttributes* atts = visible.GetVisAttributes();
     
-    setAttribute(instance, "LineWidth", atts.GetLineWidth());
+    setAttribute(attribute, "LineWidth", (atts != NULL) ? atts->GetLineWidth() : 1.0);
     
-    switch (atts.GetLineStyle()) {
-        case G4VisAttributes::dotted:
-            setAttribute(instance, "LineStyle", G4String("Dotted"));
-            break;
-        case G4VisAttributes::dashed:
-            setAttribute(instance, "LineStyle", G4String("Dashed"));
-            break;
-        case G4VisAttributes::unbroken:
-        default:
-            break;
+    if (atts != NULL) {
+        switch (atts->GetLineStyle()) {
+            case G4VisAttributes::dotted:
+                setAttribute(attribute, "LineStyle", G4String("Dotted"));
+                break;
+            case G4VisAttributes::dashed:
+                setAttribute(attribute, "LineStyle", G4String("Dashed"));
+                break;
+            case G4VisAttributes::unbroken:
+            default:
+                break;
+        }
     }
 }
 
-void G4HepRepSceneHandler::setMarker (HepRepInstance *instance, const G4VMarker& marker) {
+void G4HepRepSceneHandler::setMarker (HepRepAttribute *attribute, const G4VMarker& marker) {
     MarkerSizeType markerType;
     G4double size = GetMarkerRadius( marker , markerType );
 
-    setAttribute(instance, "MarkSize", size);
+    setAttribute(attribute, "MarkSize", size);
 
-    if (markerType == screen) setAttribute(instance, "MarkType", G4String("Symbol"));
+    if (markerType == screen) setAttribute(attribute, "MarkType", G4String("Symbol"));
     if (marker.GetFillStyle() == G4VMarker::noFill) {
-        setAttribute(instance, "Fill", false);
+        setAttribute(attribute, "Fill", false);
     } else {
-        setColor(instance, GetColor(marker), G4String("FillColor"));
+        setColor(attribute, GetColor(marker), G4String("FillColor"));
     }
 }
 
-void G4HepRepSceneHandler::setAttribute(HepRepInstance *instance, G4String name, G4String value) {
-    HepRepAttValue* attValue = instance->getAttValue(name);
+void G4HepRepSceneHandler::setAttribute(HepRepAttribute* attribute, G4String name, G4String value) {
+    HepRepAttValue* attValue = attribute->getAttValue(name);
     if ((attValue == NULL) || (attValue->getString() != value)) {
-        HepRepAttribute* attribute = instance;
-        // look for definition on type (node only)
-        if (instance->getType()->getAttValueFromNode(name) == NULL) {
-            attribute = instance->getType();
-        }   
+        HepRepPoint* point = dynamic_cast<HepRepPoint*>(attribute);
+        if (point != NULL) {
+            if (point->getInstance()->getAttValueFromNode(name) == NULL) {
+                attribute = point->getInstance();
+            }
+        }
+        
+        HepRepInstance* instance = dynamic_cast<HepRepInstance*>(attribute);
+        if (instance != NULL) {
+            // look for definition on type (node only)
+            if (instance->getType()->getAttValueFromNode(name) == NULL) {
+                attribute = instance->getType();
+            }   
+        }
         
         attribute->addAttValue(name, value);
     }
 }
 
-void G4HepRepSceneHandler::setAttribute(HepRepInstance *instance, G4String name, bool value) {
-    HepRepAttValue* attValue = instance->getAttValue(name);
+void G4HepRepSceneHandler::setAttribute(HepRepAttribute* attribute, G4String name, bool value) {
+    HepRepAttValue* attValue = attribute->getAttValue(name);
     if ((attValue == NULL) || (attValue->getBoolean() != value)) {
-        HepRepAttribute* attribute = instance;
-        // look for definition on type (node only)
-        if (instance->getType()->getAttValueFromNode(name) == NULL) {
-            attribute = instance->getType();
-        }   
+        HepRepPoint* point = dynamic_cast<HepRepPoint*>(attribute);
+        if (point != NULL) {
+            if (point->getInstance()->getAttValueFromNode(name) == NULL) {
+                attribute = point->getInstance();
+            }
+        }
+        
+        HepRepInstance* instance = dynamic_cast<HepRepInstance*>(attribute);
+        if (instance != NULL) {
+            // look for definition on type (node only)
+            if (instance->getType()->getAttValueFromNode(name) == NULL) {
+                attribute = instance->getType();
+            }   
+        }
         
         attribute->addAttValue(name, value);
     }
 }
 
-void G4HepRepSceneHandler::setAttribute(HepRepInstance *instance, G4String name, double value) {
-    HepRepAttValue* attValue = instance->getAttValue(name);
+void G4HepRepSceneHandler::setAttribute(HepRepAttribute* attribute, G4String name, double value) {
+    HepRepAttValue* attValue = attribute->getAttValue(name);
     if ((attValue == NULL) || (attValue->getDouble() != value)) {
-        HepRepAttribute* attribute = instance;
-        // look for definition on type (node only)
-        if (instance->getType()->getAttValueFromNode(name) == NULL) {
-            attribute = instance->getType();
-        }   
+        HepRepPoint* point = dynamic_cast<HepRepPoint*>(attribute);
+        if (point != NULL) {
+            if (point->getInstance()->getAttValueFromNode(name) == NULL) {
+                attribute = point->getInstance();
+            }
+        }
+        
+        HepRepInstance* instance = dynamic_cast<HepRepInstance*>(attribute);
+        if (instance != NULL) {
+            // look for definition on type (node only)
+            if (instance->getType()->getAttValueFromNode(name) == NULL) {
+                attribute = instance->getType();
+            }   
+        }
         
         attribute->addAttValue(name, value);
     }
 }
 
-void G4HepRepSceneHandler::setAttribute(HepRepInstance *instance, G4String name, int value) {
-    HepRepAttValue* attValue = instance->getAttValue(name);
+void G4HepRepSceneHandler::setAttribute(HepRepAttribute* attribute, G4String name, int value) {
+    HepRepAttValue* attValue = attribute->getAttValue(name);
     if ((attValue == NULL) || (attValue->getInteger() != value)) {
-        HepRepAttribute* attribute = instance;
-        // look for definition on type (node only)
-        if (instance->getType()->getAttValueFromNode(name) == NULL) {
-            attribute = instance->getType();
-        }   
+        HepRepPoint* point = dynamic_cast<HepRepPoint*>(attribute);
+        if (point != NULL) {
+            if (point->getInstance()->getAttValueFromNode(name) == NULL) {
+                attribute = point->getInstance();
+            }
+        }
+        
+        HepRepInstance* instance = dynamic_cast<HepRepInstance*>(attribute);
+        if (instance != NULL) {
+            // look for definition on type (node only)
+            if (instance->getType()->getAttValueFromNode(name) == NULL) {
+                attribute = instance->getType();
+            }   
+        }
         
         attribute->addAttValue(name, value);
     }
 }
 
-void G4HepRepSceneHandler::setAttribute(HepRepInstance *instance, G4String name, double red, double green, double blue, double alpha) {
-    HepRepAttValue* attValue = instance->getAttValue(name);
+void G4HepRepSceneHandler::setAttribute(HepRepAttribute* attribute, G4String name, double red, double green, double blue, double alpha) {
+    HepRepAttValue* attValue = attribute->getAttValue(name);
     vector<double> color;
     if (attValue != NULL) color = attValue->getColor();
     if ((color.size() == 0) ||
@@ -746,11 +781,20 @@ void G4HepRepSceneHandler::setAttribute(HepRepInstance *instance, G4String name,
         (color[2] != blue) ||
         ((color.size() > 3) && (color[3] != alpha))) {
         
-        HepRepAttribute* attribute = instance;
-        // look for definition on type (node only)
-        if (instance->getType()->getAttValueFromNode(name) == NULL) {
-            attribute = instance->getType();
-        }   
+        HepRepPoint* point = dynamic_cast<HepRepPoint*>(attribute);
+        if (point != NULL) {
+            if (point->getInstance()->getAttValueFromNode(name) == NULL) {
+                attribute = point->getInstance();
+            }
+        }
+        
+        HepRepInstance* instance = dynamic_cast<HepRepInstance*>(attribute);
+        if (instance != NULL) {
+            // look for definition on type (node only)
+            if (instance->getType()->getAttValueFromNode(name) == NULL) {
+                attribute = instance->getType();
+            }   
+        }
         
         attribute->addAttValue(name, red, green, blue, alpha);
     }
@@ -778,7 +822,7 @@ void G4HepRepSceneHandler::addAttDefs(HepRepDefinition* definition, const map<G4
     }
 }
 
-void G4HepRepSceneHandler::addAttVals(HepRepInstance* instance, const map<G4String,G4AttDef>* attDefs, vector<G4AttValue>* attValues) {
+void G4HepRepSceneHandler::addAttVals(HepRepAttribute* attribute, const map<G4String,G4AttDef>* attDefs, vector<G4AttValue>* attValues) {
     if (attValues == NULL) return;
 
     // Copy the instance's G4AttValues to HepRepAttValues.
@@ -788,25 +832,26 @@ void G4HepRepSceneHandler::addAttVals(HepRepInstance* instance, const map<G4Stri
         
         G4String name = attValIterator->GetName();
 
-        const map<G4String,G4AttDef>::const_iterator attDefIterator = attDefs->find(name);
-        G4String type = attDefIterator->second.GetValueType();
-        
-        G4String value = attValIterator->GetValue();
-        
-//        cout << name << ":'" << type << "':'" << value << "'" << endl;
-
-        // Pos already in points being written
-        if (name == "Pos") continue;
-        
+        if (name == "Pos") {
+            // Preparations for GEANT-34
+//            setAttribute(attribute, G4String("PointUnit"), G4String("cm"));
+            continue;
+        }
+                
         // NTP already in points being written
         if (name == "NTP") continue;
         
+        // find type of attribute using def
+        const map<G4String,G4AttDef>::const_iterator attDefIterator = attDefs->find(name);
+        G4String type = attDefIterator->second.GetValueType();
+                
+        // set based on type
         if ((type == "G4double") || (type == "double")) {   
-            setAttribute(instance, attValIterator->GetName(), atof(attValIterator->GetValue()));           
+            setAttribute(attribute, attValIterator->GetName(), atof(attValIterator->GetValue()));           
         } else if ((type == "G4int") || (type == "int")) {  
-            setAttribute(instance, attValIterator->GetName(), atoi(attValIterator->GetValue()));           
+            setAttribute(attribute, attValIterator->GetName(), atoi(attValIterator->GetValue()));           
         } else { // G4String, string and others
-            setAttribute(instance, attValIterator->GetName(), attValIterator->GetValue());
+            setAttribute(attribute, attValIterator->GetName(), attValIterator->GetValue());
         }
     }
 }
@@ -1018,6 +1063,10 @@ HepRepType* G4HepRepSceneHandler::getEventType() {
 
         _eventType->addAttValue("MarkSizeMultiplier", 4.0);
         _eventType->addAttValue("LineWidthMultiplier", 1.0);
+
+        // Some non-standard attributes
+        _eventType->addAttDef("PointUnit", "Length", "Physics", "");
+        _eventType->addAttValue("PointUnit", G4String("m"));
             
         getEventTypeTree()->addType(_eventType);
     }
