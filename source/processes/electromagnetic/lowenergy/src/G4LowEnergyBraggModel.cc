@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyBraggModel.cc,v 1.1 2004-05-04 10:50:55 vnivanch Exp $
+// $Id: G4LowEnergyBraggModel.cc,v 1.2 2004-09-13 16:21:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -60,11 +60,12 @@ G4LowEnergyBraggModel::G4LowEnergyBraggModel(const G4ParticleDefinition* p, cons
   : G4VEmModel(nam),
   particle(0),
   parameterization(0),
-  highKinEnergy(10.0*MeV),
-  lowKinEnergy(0.0*MeV),
   isIon(false)
 {
   if(p) SetParticle(p);
+  highKinEnergy = 10.0*MeV;
+  lowKinEnergy = 0.0*MeV;
+  lowestKinEnergy = 1.0*keV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -148,7 +149,14 @@ G4double G4LowEnergyBraggModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
 {
   const G4Material* material = couple->GetMaterial();
   G4double tmax  = MaxSecondaryEnergy(p, kineticEnergy);
-  G4double dedx  = parameterization->TheValue(p, material, kineticEnergy);
+  G4double tkin  = kineticEnergy*massRate;
+  G4double dedx;
+  if(tkin >= lowestKinEnergy) 
+    dedx  = parameterization->TheValue(p, material, kineticEnergy);
+  else {
+    G4double e = lowestKinEnergy/massRate;
+    dedx  = (parameterization->TheValue(p, material, e))*sqrt(kineticEnergy/e);
+  }
 
   if (cutEnergy < tmax) {
 

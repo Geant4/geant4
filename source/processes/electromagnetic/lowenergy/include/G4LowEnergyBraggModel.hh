@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 // 
-// $Id: G4LowEnergyBraggModel.hh,v 1.1 2004-05-04 10:50:54 vnivanch Exp $
+// $Id: G4LowEnergyBraggModel.hh,v 1.2 2004-09-13 16:21:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -125,6 +125,7 @@ private:
   G4double ratio;
   G4double highKinEnergy;
   G4double lowKinEnergy;
+  G4double lowestKinEnergy;
 
   G4bool   isIon;
 };
