@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyGammaConversionTest.cc,v 1.2 2001-07-11 10:02:49 gunter Exp $
+// $Id: G4LowEnergyGammaConversionTest.cc,v 1.3 2001-08-20 17:28:50 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -88,12 +88,14 @@
 #include "CLHEP/Hist/Histogram.h"
 #include "CLHEP/Hist/Tuple.h"
 
+#include "G4LowEnergyGammaConversionMG.hh"
+
 
 HepTupleManager* hbookManager;
 
+
 G4int main()
 {
-
   // Setup
 
   G4int nIterations = 100000;
@@ -143,26 +145,32 @@ G4int main()
   
 
   //--------- Materials definition ---------
-
+  
+  G4Material* Be = new G4Material("Beryllium",    4.,  9.01*g/mole, 1.848*g/cm3);
+  G4Material* Graphite = new G4Material("Graphite",6., 12.00*g/mole, 2.265*g/cm3 );
+  G4Material* Al  = new G4Material("Aluminium", 13., 26.98*g/mole, 2.7 *g/cm3);
   G4Material* Si  = new G4Material("Silicon",   14., 28.055*g/mole, 2.33*g/cm3);
+  G4Material* LAr = new G4Material("LArgon",   18., 39.95*g/mole, 1.393*g/cm3);
   G4Material* Fe  = new G4Material("Iron",      26., 55.85*g/mole, 7.87*g/cm3);
   G4Material* Cu  = new G4Material("Copper",    29., 63.55*g/mole, 8.96*g/cm3);
   G4Material*  W  = new G4Material("Tungsten", 74., 183.85*g/mole, 19.30*g/cm3);
   G4Material* Pb  = new G4Material("Lead",      82., 207.19*g/mole, 11.35*g/cm3);
   G4Material*  U  = new G4Material("Uranium", 92., 238.03*g/mole, 18.95*g/cm3);
-
+  
   G4Element*   H  = new G4Element ("Hydrogen", "H", 1. ,  1.01*g/mole);
   G4Element*   O  = new G4Element ("Oxygen"  , "O", 8. , 16.00*g/mole);
+  
   G4Element*   C  = new G4Element ("Carbon"  , "C", 6. , 12.00*g/mole);
   G4Element*  Cs  = new G4Element ("Cesium"  , "Cs", 55. , 132.905*g/mole);
   G4Element*   I  = new G4Element ("Iodide"  , "I", 53. , 126.9044*g/mole);
 
   G4Material*  maO = new G4Material("Oxygen", 8., 16.00*g/mole, 1.1*g/cm3);
-
+  
   G4Material* water = new G4Material ("Water" , 1.*g/cm3, 2);
   water->AddElement(H,2);
   water->AddElement(O,1);
 
+  
   G4Material* ethane = new G4Material ("Ethane" , 0.4241*g/cm3, 2);
   ethane->AddElement(H,6);
   ethane->AddElement(C,2);
@@ -170,7 +178,7 @@ G4int main()
   G4Material* csi = new G4Material ("CsI" , 4.53*g/cm3, 2);
   csi->AddElement(Cs,1);
   csi->AddElement(I,1);
-
+  
 
   // Interactive set-up
 
@@ -253,9 +261,9 @@ G4int main()
   
   
   G4int processType;
-  G4cout << "LowEnergy [1] or Standard [2] Gamma Conversion?" << G4endl;
+  G4cout << "LowEnergy [1] or Standard [2] or MG [3] Gamma Conversion?" << G4endl;
   G4cin >> processType;
-  if ( !(processType == 1 || processType == 2))
+  if ( processType < 1 || processType > 3)
     {
       G4Exception("Wrong input");
     }
@@ -265,6 +273,10 @@ G4int main()
   if (processType == 1)
     {
       gammaProcess = new G4LowEnergyGammaConversion();
+    }
+   else if (processType == 3)
+    {
+      gammaProcess = new G4LowEnergyGammaConversionMG;
     }
   else
     {
@@ -357,7 +369,6 @@ G4int main()
   // pProcessManager->
   //        SetProcessOrdering(&IonisationPlusProcess,idxAlongStep,1);
   // pProcessManager->SetProcessOrdering(&IonisationPlusProcess,idxPostStep,1);
-
 
 
   // Create a DynamicParticle  

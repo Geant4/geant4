@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoelectricTest.cc,v 1.5 2001-07-11 10:02:50 gunter Exp $
+// $Id: G4PhotoelectricTest.cc,v 1.6 2001-08-20 17:28:50 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -73,6 +73,8 @@
 #include "CLHEP/Hist/HBookFile.h"
 #include "CLHEP/Hist/Histogram.h"
 #include "CLHEP/Hist/Tuple.h"
+
+#include "G4LowEnergyPhotoElectricMG.hh"
 
 HepTupleManager* hbookManager;
 
@@ -226,9 +228,9 @@ int main()
   // Processes 
 
   G4int processType;
-  G4cout << "LowEnergy [1] or Standard [2] Bremsstrahlung?" << G4endl;
+  G4cout << "LowEnergy [1] or Standard [2] or MG [3] Photoelectric?" << G4endl;
   cin >> processType;
-  if ( !(processType == 1 || processType == 2))
+  if ( (processType < 1 || processType > 3))
     {
       G4Exception("Wrong input");
     }
@@ -236,7 +238,7 @@ int main()
   G4VContinuousDiscreteProcess* bremProcess;
   G4VContinuousDiscreteProcess* ioniProcess;
 
-  if (processType == 1)
+  if (processType == 1 || processType == 3)
     {
       bremProcess = new G4LowEnergyBremsstrahlung;
       ioniProcess = new G4LowEnergyIonisation;
@@ -265,11 +267,15 @@ int main()
     {
       photonProcess = new G4LowEnergyPhotoElectric;
     }
-    else
-      {
-        photonProcess = new G4PhotoElectricEffect;
-      }
-
+  else if (processType == 3)
+    {
+      photonProcess = new G4LowEnergyPhotoElectricMG;
+    }
+  else
+    {
+      photonProcess = new G4PhotoElectricEffect;
+    }
+  
   G4ProcessManager* gProcessManager = new G4ProcessManager(gamma);
   gamma->SetProcessManager(gProcessManager);
   gProcessManager->AddProcess(photonProcess);

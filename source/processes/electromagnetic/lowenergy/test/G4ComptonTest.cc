@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComptonTest.cc,v 1.7 2001-07-11 10:02:49 gunter Exp $
+// $Id: G4ComptonTest.cc,v 1.8 2001-08-20 17:28:50 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -50,6 +50,7 @@
 #include "G4LowEnergyBremsstrahlung.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4LowEnergyCompton.hh"
+#include "G4LowEnergyComptonMG.hh"
 #include "G4LowEnergyPolarizedCompton.hh"
 #include "G4ComptonScattering.hh"
 #include "G4LowEnergyIonisation.hh"
@@ -79,7 +80,6 @@ HepTupleManager* hbookManager;
 
 int main()
 {
-
   // Setup
 
   G4int nIterations = 100000;
@@ -229,10 +229,10 @@ int main()
 
   G4int processType;
   G4cout 
-    << "LowEnergy [1] or Standard [2] or LowEnergyPolarized [3]?" 
+    << "LowEnergy [1] or Standard [2] or LowEnergyPolarized [3] or MG [4]?" 
     << G4endl;
   cin >> processType;
-  if (processType <1 || processType >3 )
+  if (processType <1 || processType >4 )
     {
       G4Exception("Wrong input");
     }
@@ -240,7 +240,7 @@ int main()
   G4VContinuousDiscreteProcess* bremProcess;
   G4VContinuousDiscreteProcess* ioniProcess;
 
-  if (processType == 1 || processType == 3)
+  if (processType == 1 || processType >= 3)
     {
       bremProcess = new G4LowEnergyBremsstrahlung;
       ioniProcess = new G4LowEnergyIonisation;
@@ -273,9 +273,13 @@ int main()
     {
       photonProcess = new G4ComptonScattering;
     }
-  else
+  else if (processType == 3)
     {
       photonProcess = new G4LowEnergyPolarizedCompton;
+    }
+  else if (processType == 4)
+    {
+      photonProcess = new G4LowEnergyComptonMG;
     }
 
   G4ProcessManager* gProcessManager = new G4ProcessManager(gamma);
@@ -310,14 +314,15 @@ int main()
   G4StepPoint* aPoint = new G4StepPoint();
   aPoint->SetPosition(aPosition);
   aPoint->SetMaterial(material);
-  G4double safety = 10000.*cm;
+  G4double safety = 100.*cm;
   aPoint->SetSafety(safety);
   step->SetPreStepPoint(aPoint);
   G4StepPoint* newPoint = new G4StepPoint();
   newPoint->SetPosition(newPosition);
   newPoint->SetMaterial(material);
+  newPoint->SetSafety(safety);
   step->SetPostStepPoint(newPoint);
-  
+
   // Check applicability
   
   if (! (photonProcess->IsApplicable(*gamma)))
@@ -480,7 +485,7 @@ int main()
       
     } 
   
-  
+
   cout  << "End of iteration "  <<  G4endl;
   hbookManager->write();
   delete hbookManager;

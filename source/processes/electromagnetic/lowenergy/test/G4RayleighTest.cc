@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayleighTest.cc,v 1.4 2001-07-11 10:02:50 gunter Exp $
+// $Id: G4RayleighTest.cc,v 1.5 2001-08-20 17:28:51 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -72,6 +72,8 @@
 #include "CLHEP/Hist/HBookFile.h"
 #include "CLHEP/Hist/Histogram.h"
 #include "CLHEP/Hist/Tuple.h"
+
+#include "G4LowEnergyRayleighMG.hh"
 
 HepTupleManager* hbookManager;
 
@@ -225,6 +227,16 @@ int main()
   
   // Processes 
 
+  G4int processType;
+  G4cout 
+    << "LowEnergy [1] or MG [2]?" 
+    << G4endl;
+  cin >> processType;
+  if (processType <1 || processType >2 )
+    {
+      G4Exception("Wrong input");
+    }
+
   G4VContinuousDiscreteProcess* bremProcess = new G4LowEnergyBremsstrahlung;
   G4VContinuousDiscreteProcess* ioniProcess = new G4LowEnergyIonisation;
 
@@ -241,7 +253,16 @@ int main()
   ioniProcess->BuildPhysicsTable(*electron);
 
   // Photon process 
-  G4VDiscreteProcess* photonProcess = new G4LowEnergyRayleigh;
+  G4VDiscreteProcess* photonProcess;
+
+  if (processType == 1)
+    {
+      photonProcess = new G4LowEnergyRayleigh;
+    }
+  else if (processType == 2)
+    {
+      photonProcess = new G4LowEnergyRayleighMG;
+    }
 
   G4ProcessManager* gProcessManager = new G4ProcessManager(gamma);
   gamma->SetProcessManager(gProcessManager);
@@ -348,7 +369,7 @@ int main()
 	     << pzChange/MeV << ") MeV"
 	     << G4endl;
 
-      G4cout << "---- Energy loss (dE) = " << dedx/keV << " keV" << G4endl;
+      //  G4cout << "---- Energy loss (dE) = " << dedx/keV << " keV" << G4endl;
       //      G4cout << "Stopping power (dE/dx)=" << dedxNow << G4endl;
       
       // Secondaries 
