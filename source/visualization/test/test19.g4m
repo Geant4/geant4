@@ -150,6 +150,25 @@ help /vis/sceneHandler/create
 /run/beamOn 1
 /vis/viewer/update
 #
+# Rotated tracker tube
+/vis/viewer/reset
+#/vis/viewer/panTo 0 -200 cm
+/vis/viewer/set/upVector 1 0 0
+/vis/viewer/set/viewpointVector 0 1 0
+#/vis/viewer/zoom 5
+/vis/viewer/set/auxiliaryEdge true
+/vis/viewer/refresh
+/gun/direction 1 0 0
+/gun/position -200 -200 150 cm
+/run/beamOn
+/gun/position -200 -200 200 cm
+/run/beamOn
+/gun/position -200 -200 250 cm
+/run/beamOn
+/gun/position -200 -200 300 cm
+/run/beamOn
+/vis/viewer/update
+#
 # G4Trap1
 /vis/viewer/reset
 #/vis/viewer/panTo -200 200 cm  # Originally intended to be absolute coords.
