@@ -26,8 +26,11 @@
 #include "G4OpenInventorViewer.hh"
 
 #include <Inventor/nodes/SoSelection.h>
+#include <Inventor/nodes/SoShape.h>
+#include <Inventor/actions/SoCallbackAction.h>
 
 #include "HEPVis/nodes/SoImageWriter.h"
+#include "HEPVis/actions/SoGL2PSAction.h"
 
 #include "G4OpenInventor.hh"
 #include "G4OpenInventorSceneHandler.hh"
@@ -41,6 +44,7 @@ G4OpenInventorViewer::G4OpenInventorViewer(
 ,fInteractorManager(0)
 ,fSoSelection(0)
 ,fSoImageWriter(0)
+,fGL2PSAction(0) //To be set be suclass.
 {
   fNeedKernelVisit = true;  //?? Temporary, until KernelVisitDecision fixed.
 
@@ -128,5 +132,59 @@ void G4OpenInventorViewer::DrawView () {
 void G4OpenInventorViewer::ShowView () {
   fInteractorManager -> SecondaryLoop ();
 }
+
+void G4OpenInventorViewer::Escape(){
+  G4cout << "Escape..." <<G4endl;
+  fInteractorManager->RequireExitSecondaryLoop (OIV_EXIT_CODE);
+}
+
+void G4OpenInventorViewer::WritePostScript(const G4String& aFile) {
+  if(!fGL2PSAction) return;
+  fGL2PSAction->setFileName(aFile.c_str());
+  G4cout << "Produce " << aFile << "..." << G4endl;
+  fGL2PSAction->enableFileWriting();
+  ViewerRender();
+  fGL2PSAction->disableFileWriting();
+}
+
+void G4OpenInventorViewer::WritePixmapPostScript(const G4String& aFile) {
+  fSoImageWriter->fileName.setValue(aFile.c_str());
+  //imageWriter->format.setValue(SoImageWriter::POST_SCRIPT);
+  fSoImageWriter->enable();
+  ViewerRender();
+  fSoImageWriter->disable();
+  if(fSoImageWriter->getStatus()) {
+    G4cout << G4String(fSoImageWriter->fileName.getValue().getString()) 
+           << " produced."
+           << G4endl;
+  } else {
+    G4cout << G4String(fSoImageWriter->fileName.getValue().getString()) 
+           << " not produced."
+           << G4endl;
+  }
+}  
+
+static void CountTriangleCB(
+ void* userData
+,SoCallbackAction*
+,const SoPrimitiveVertex*
+,const SoPrimitiveVertex*
+,const SoPrimitiveVertex*)
+{
+  int* number = (int*)userData;
+  (*number)++;
+}
+
+void G4OpenInventorViewer::CountTriangles() {
+  SoCallbackAction callbackAction;
+  int trianglen = 0;
+  fSoSelection->ref();
+  callbackAction.addTriangleCallback
+    (SoShape::getClassTypeId(),CountTriangleCB,(void*)&trianglen);
+  callbackAction.apply(fSoSelection);
+  fSoSelection->unrefNoDelete();
+  G4cout << "Number of triangles : " << trianglen << G4endl;
+}
+
 
 #endif

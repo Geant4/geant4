@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.hh,v 1.3 2004-11-14 11:34:02 gbarrand Exp $
+// $Id: G4OpenInventorXtViewer.hh,v 1.4 2004-11-14 14:32:18 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,19 +42,20 @@ class SoXtExaminerViewer;
 class G4OpenInventorXtViewer: public G4OpenInventorViewer {
 public: //G4VViewer
   virtual void FinishView();
+protected:
+  virtual void ViewerRender();
 public:
   G4OpenInventorXtViewer(G4OpenInventorSceneHandler& scene,
 		         const G4String& name = "");
   virtual ~G4OpenInventorXtViewer();
 private:
-  void WritePostScript(const G4String& file = "g4out.ps");
-  void WritePixmapPostScript(const G4String& file = "g4out.ps");
   Widget AddMenu(Widget,const G4String&,const G4String&);
   void AddButton(Widget,const G4String&,XtCallbackProc);
 private:
   static void PostScriptButtonCbk(Widget,XtPointer,XtPointer);
   static void PixmapPostScriptButtonCbk(Widget,XtPointer,XtPointer);
   static void EscapeButtonCbk(Widget,XtPointer,XtPointer);
+  static void CountTrianglesButtonCbk(Widget,XtPointer,XtPointer);
 private:
   Widget fShell;
   SoXtExaminerViewer* fViewer;

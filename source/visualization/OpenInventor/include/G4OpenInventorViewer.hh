@@ -32,6 +32,8 @@
 
 class SoSelection;
 class Geant4_SoImageWriter;
+class Geant4_SoGL2PSAction;
+
 class G4OpenInventorSceneHandler;
 class G4VInteractorManager;
 
@@ -49,6 +51,12 @@ public:
   G4OpenInventorViewer(G4OpenInventorSceneHandler& scene,
 		       const G4String& name = "");
   virtual ~G4OpenInventorViewer();
+protected:
+  virtual void ViewerRender() = 0;
+  void Escape();
+  void WritePostScript(const G4String& file = "g4out.ps");
+  void WritePixmapPostScript(const G4String& file = "g4out.ps");
+  void CountTriangles();
 private:
   G4bool CompareForKernelVisit(G4ViewParameters&);
 private:
@@ -58,6 +66,7 @@ protected:
   G4VInteractorManager* fInteractorManager;
   SoSelection* fSoSelection;
   Geant4_SoImageWriter* fSoImageWriter;
+  Geant4_SoGL2PSAction* fGL2PSAction;
 };
 
 #endif

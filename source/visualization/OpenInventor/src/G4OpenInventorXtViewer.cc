@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.cc,v 1.10 2004-11-14 11:35:14 gbarrand Exp $
+// $Id: G4OpenInventorXtViewer.cc,v 1.11 2004-11-14 14:31:21 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -56,7 +56,6 @@
 #include <Xm/RowColumn.h>
 
 #include "HEPVis/actions/SoGL2PSAction.h"
-#include "HEPVis/nodes/SoImageWriter.h"
 
 #include "G4OpenInventor.hh"
 #include "G4OpenInventorSceneHandler.hh"
@@ -103,10 +102,13 @@ G4OpenInventorXtViewer::G4OpenInventorXtViewer(
     Widget menuBar = XmCreateMenuBar (form,(char*)"menuBar",args,3);
     XtManageChild(menuBar);
 
-    Widget menu = AddMenu(menuBar,"File","File");
+   {Widget menu = AddMenu(menuBar,"File","File");
     AddButton(menu,"PS (gl2ps)",PostScriptButtonCbk);
     AddButton(menu,"PS (pixmap)",PixmapPostScriptButtonCbk);
-    AddButton(menu,"Escape",EscapeButtonCbk);
+    AddButton(menu,"Escape",EscapeButtonCbk);}
+
+   {Widget menu = AddMenu(menuBar,"Etc","Etc");
+    AddButton(menu,"Triangles",CountTrianglesButtonCbk);}
 
     fViewer = new SoXtExaminerViewer(form,wName.c_str(),TRUE);
     
@@ -129,8 +131,8 @@ G4OpenInventorXtViewer::G4OpenInventorXtViewer(
 
   // Have a GL2PS render action :
   const SbViewportRegion& vpRegion = fViewer->getViewportRegion();
-  SoGL2PSAction* action = new SoGL2PSAction(vpRegion);
-  fViewer->setGLRenderAction(action);
+  fGL2PSAction = new SoGL2PSAction(vpRegion);
+  fViewer->setGLRenderAction(fGL2PSAction);
 
   // Else :
   fViewer->setSceneGraph(fSoSelection);
@@ -162,52 +164,9 @@ void G4OpenInventorXtViewer::FinishView () {
   fViewer->saveHomePosition();
 }
 
-void G4OpenInventorXtViewer::WritePostScript(const G4String& aFile) {
+void G4OpenInventorXtViewer::ViewerRender () {
   if(!fViewer) return;
-  SoGLRenderAction* glAction = fViewer->getGLRenderAction();
-  if(glAction->isOfType(SoGL2PSAction::getClassTypeId())==FALSE) return;
-  SoGL2PSAction* action = (SoGL2PSAction*)glAction;
-  action->setFileName(aFile.c_str());
-  G4cout << "Produce " << aFile << "..." << G4endl;
-  action->enableFileWriting();
   fViewer->render();
-  action->disableFileWriting();
-}
-
-void G4OpenInventorXtViewer::WritePixmapPostScript(const G4String& aFile) {
-  if(!fViewer) return;
-  fSoImageWriter->fileName.setValue(aFile.c_str());
-  //imageWriter->format.setValue(SoImageWriter::POST_SCRIPT);
-  fSoImageWriter->enable();
-  fViewer->render();
-  fSoImageWriter->disable();
-  if(fSoImageWriter->getStatus()) {
-    G4cout << G4String(fSoImageWriter->fileName.getValue().getString()) 
-           << " produced."
-           << G4endl;
-  } else {
-    G4cout << G4String(fSoImageWriter->fileName.getValue().getString()) 
-           << " not produced."
-           << G4endl;
-  }
-}  
-
-void G4OpenInventorXtViewer::EscapeButtonCbk(
- Widget,XtPointer aData,XtPointer) {
- G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
- This->fInteractorManager->RequireExitSecondaryLoop (OIV_EXIT_CODE);
-}
-
-void G4OpenInventorXtViewer::PostScriptButtonCbk(
- Widget,XtPointer aData,XtPointer) {
- G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
- This->WritePostScript();
-}
-
-void G4OpenInventorXtViewer::PixmapPostScriptButtonCbk(
- Widget,XtPointer aData,XtPointer) {
- G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
- This->WritePixmapPostScript();
 }
 
 Widget G4OpenInventorXtViewer::AddMenu(
@@ -240,5 +199,31 @@ void G4OpenInventorXtViewer::AddButton (
   XtAddCallback(widget,XmNactivateCallback,aCallback,(XtPointer)this);
 }
 
+void G4OpenInventorXtViewer::EscapeButtonCbk(
+  Widget,XtPointer aData,XtPointer) {
+  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+  This->Escape();
+}
+
+void G4OpenInventorXtViewer::PostScriptButtonCbk(
+  Widget,XtPointer aData,XtPointer) {
+  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+  This->WritePostScript();
+}
+
+void G4OpenInventorXtViewer::PixmapPostScriptButtonCbk(
+  Widget,XtPointer aData,XtPointer) {
+  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+  This->WritePixmapPostScript();
+}
+
+void G4OpenInventorXtViewer::CountTrianglesButtonCbk(
+  Widget,XtPointer aData,XtPointer) {
+  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+  This->CountTriangles();
+}
+
 
 #endif
+
+
