@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eBremsstrahlungPlus.cc,v 1.3 1999-03-03 16:05:48 urban Exp $
+// $Id: G4eBremsstrahlungPlus.cc,v 1.4 1999-03-04 07:54:54 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -237,10 +237,19 @@ void G4eBremsstrahlungPlus::BuildLossTable(const G4ParticleDefinition& aParticle
                uu = u*u ;
                if(u<=kmax)
                {
-                 s2lpm=sqrt(LPMEnergy*u/TotalEnergysquare) ;
                  sp=uu/(uu+MigdalConstant*TotalEnergysquare*
                            (material->GetElectronDensity())) ;
-                 if(s2lpm<sp)  fac=s2lpm ;     
+                 s2lpm=LPMEnergy*u/TotalEnergysquare ;
+                 if(s2lpm<1.)
+                 {
+                   w=s2lpm*(1.+sp) ;
+                   fac=sp*(sqrt(w*w+4.*s2lpm*sp*sp)-w)/
+                          (sqrt(1.+2.*sp+5.*sp*sp)-1.-sp) ;
+                 }
+                 else
+                 {
+                   fac=sp ;
+                 }
                }
                else
                {
@@ -839,11 +848,14 @@ G4VParticleChange* G4eBremsstrahlungPlus::PostStepDoIt(const G4Track& trackData,
    // now comes the supression due to the LPM effect
    if(GammaEnergy < LPMGammaEnergyLimit)
    {
-     G4double SLPM = sqrt(LPMEnergy*GammaEnergy/TotalEnergysquare) ;
+     G4double S2LPM = LPMEnergy*GammaEnergy/TotalEnergysquare ;
      G4double Spol  = GammaEnergy*GammaEnergy/(GammaEnergy*GammaEnergy +
                       MigdalConstant*(aMaterial->GetElectronDensity())*
                       TotalEnergysquare) ;
-     if ((SLPM<Spol) && (G4UniformRand() > SLPM))
+     G4double w=S2LPM*(1.+Spol) ;
+     G4double Supr=Spol*(sqrt(w*w+4.*S2LPM*Spol*Spol)-w)/
+                   (sqrt(1.+2.*Spol+5.*Spol*Spol)-1.-Spol) ;
+     if (G4UniformRand() > Supr)
        GammaEnergy = 0. ;
    }
 
