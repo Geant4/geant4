@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Tubs.cc,v 1.2 1999-03-24 09:37:48 grichine Exp $
+// $Id: G4Tubs.cc,v 1.3 1999-04-12 17:25:58 davidw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -319,144 +319,225 @@ G4bool G4Tubs::CalculateExtent(const EAxis pAxis,
 	}
 }
 
-// Return whether point inside/outside/on surface
-EInside G4Tubs::Inside(const G4ThreeVector& p) const
-{
-    G4double r2,pPhi,tolRMin,tolRMax;
-    EInside in=kOutside;
-    if (fabs(p.z())<=fDz-kCarTolerance*0.5)
-	{
-	    r2=p.x()*p.x()+p.y()*p.y();
-	    if (fRMin) tolRMin=fRMin+kRadTolerance*0.5;
-	    else tolRMin=0;
-	    tolRMax=fRMax-kRadTolerance*0.5;
-	    
-	    if (r2>=tolRMin*tolRMin && r2<=tolRMax*tolRMax)
-		{
-		    if (fDPhi==2*M_PI||r2==0)
-			{
-			    in=kInside;
-			}
-		    else
-			{
-// Try inner tolerant phi boundaries (=>inside)
-// if not inside, try outer tolerant phi boundaries
-			    pPhi=atan2(p.y(),p.x());
-			    if (pPhi<0) pPhi+=2*M_PI; // 0<=pPhi<2pi
-			    if (fSPhi>=0)
-				{
-				    if (pPhi>=fSPhi+kAngTolerance*0.5 &&
-					pPhi<=fSPhi+fDPhi-kAngTolerance*0.5)
-					{
-					    in=kInside;
-					}
-				    else if (pPhi>=fSPhi-kAngTolerance*0.5 &&
-					     pPhi<=fSPhi+fDPhi+kAngTolerance*0.5)
-					{
-					    in=kSurface;
-					}
-				}
-			    else
-				{
-				    if (pPhi<fSPhi+2*M_PI) pPhi+=2*M_PI;
-				    if (pPhi>=fSPhi+2*M_PI+kAngTolerance*0.5 &&
-					pPhi<=fSPhi+fDPhi+2*M_PI-kAngTolerance*0.5)
-					{
-					    in=kInside;
-					}
-				    else if (pPhi>=fSPhi+2*M_PI-kAngTolerance*0.5 &&
-					     pPhi<=fSPhi+fDPhi+2*M_PI+kAngTolerance*0.5)
-					{
-					    in=kSurface;
-					}
-				}
-			    
-			    
-			}
-		}
-	    else
-		{
-// Try generous boundaries
-		    tolRMin=fRMin-kRadTolerance*0.5;
-		    tolRMax=fRMax+kRadTolerance*0.5;
-		    if (tolRMin<0) tolRMin=0;
-		    if (r2>=tolRMin*tolRMin && r2 <= tolRMax*tolRMax)
-			{
-			    if (fDPhi==2*M_PI||r2==0)
-				{
-// Continuous in phi or on z-axis
-				    in=kSurface;
-				}
-			    else
-				{
-// Try outer tolerant phi boundaries only
-				    pPhi=atan2(p.y(),p.x());
-				    if (pPhi<0) pPhi+=2*M_PI; // 0<=pPhi<2pi
-				    if (fSPhi>=0)
-					{
-					    if (pPhi>=fSPhi-kAngTolerance*0.5 &&
-						pPhi<=fSPhi+fDPhi+kAngTolerance*0.5)
-						{
-						    in=kSurface;
-						}
-					}
-				    else
-					{
-					    if (pPhi<fSPhi+2*M_PI) pPhi+=2*M_PI;
-					    if (pPhi>=fSPhi+2*M_PI-kAngTolerance*0.5 &&
-						pPhi<=fSPhi+fDPhi+2*M_PI+kAngTolerance*0.5)
-						{
-						    in=kSurface;
-						}
-					}
-				    
 
-				}
-			}
+//
+// EInside
+//
+// New version: DCW  9/4/99
+//
+EInside G4Tubs::Inside( const G4ThreeVector &p ) const
+{
+	//
+	// Easy stuff first
+	//
+	G4double absz = fabs(p.z());
+	
+	if (absz > fDz+kCarTolerance*0.5) return kOutside;
+
+	G4double r = p.perp();
+	
+	if (r > fRMax+kCarTolerance*0.5) return kOutside;
+	
+	if (r < fRMin-kCarTolerance*0.5) return kOutside;
+	
+	//
+	// It is a bit more work if we have a phi segment
+	//
+	if (fDPhi < 2*M_PI-kRadTolerance*0.5) {
+
+		G4double phi = p.phi();
+		
+		//
+		// Decide if we are close to the first phi segment.
+		//
+		G4double deltaPhi = phi - fSPhi;
+		while(deltaPhi < -M_PI) deltaPhi += 2*M_PI;
+		while(deltaPhi >  M_PI) deltaPhi -= 2*M_PI;
+		
+		if (fabs(deltaPhi) < kRadTolerance*0.5) return kSurface;
+
+		//
+		// Reflect to a positive value, if necessary, to check on
+		// the ending phi face.
+		//
+		// Observation: this test will *fail* if the application 
+		// has asked for fDphi < kRadTolerance*0.5. It would be wise
+		// to check for this in the constructor.
+		//
+		if (deltaPhi < 0) deltaPhi += 2*M_PI;
+		if (fabs(deltaPhi-fDPhi) < kRadTolerance*0.5) return kSurface;
+		
+		//
+		// See if we are outside.
+		//
+		if (deltaPhi > fDPhi) return kOutside;
+		
+		//
+		// It is a bit subtle, but for fRMin = 0, we want to
+		// declare anything on the z axis as "surface"
+		//
+		if (fRMin <= 0) {
+			if (r < kCarTolerance*0.5) return kSurface;
 		}
 	}
-    else if (fabs(p.z())<=fDz+kCarTolerance*0.5)
-	{
-// Check within tolerant r limits
-	    r2=p.x()*p.x()+p.y()*p.y();
-	    tolRMin=fRMin-kRadTolerance*0.5;
-	    tolRMax=fRMax+kRadTolerance*0.5;
-	    if (tolRMin<0) tolRMin=0;
-	    if (r2>=tolRMin*tolRMin && r2 <= tolRMax*tolRMax)
-		{
-		    if (fDPhi==2*M_PI||r2==0)
-			{
-// Continuous in phi or on z-axis
-			    in=kSurface;
-			}
-		    else
-			{
-// Try outer tolerant phi boundaries
-			    pPhi=atan2(p.y(),p.x());
-			    if (pPhi<0) pPhi+=2*M_PI;		// 0<=pPhi<2pi
-			    if (fSPhi>=0)
-				{
-				    if (pPhi>=fSPhi-kAngTolerance*0.5 &&
-					pPhi<=fSPhi+fDPhi+kAngTolerance*0.5)
-					{
-					    in=kSurface;
-					}
-				}
-			    else
-				{
-				    if (pPhi<fSPhi+2*M_PI) pPhi+=2*M_PI;
-				    if (pPhi>=fSPhi+2*M_PI-kAngTolerance*0.5 &&
-					pPhi<=fSPhi+fDPhi+2*M_PI+kAngTolerance*0.5)
-					{
-					    in=kSurface;
-					}
-				}
-			    
-			}
-		}
+	
+	//
+	// Okay, we've dispensed with the phi segment, and we know
+	// that we are either on the surface of the tube or inside.
+	//
+	if (absz > fDz-kCarTolerance*0.5) return kSurface;
+	
+	if (r > fRMax-kCarTolerance*0.5) return kSurface;
+	
+	if (fRMin > 0) {
+		if (r < fRMin+kCarTolerance*0.5) return kSurface;
 	}
-    return in;
+	
+	return kInside;
 }
+	
+		
+
+
+
+//// Return whether point inside/outside/on surface
+//EInside G4Tubs::Inside(const G4ThreeVector& p) const
+//{
+//    G4double r2,pPhi,tolRMin,tolRMax;
+//    EInside in=kOutside;
+//    if (fabs(p.z())<=fDz-kCarTolerance*0.5)
+//	{
+//	    r2=p.x()*p.x()+p.y()*p.y();
+//	    if (fRMin) tolRMin=fRMin+kRadTolerance*0.5;
+//	    else tolRMin=0;
+//	    tolRMax=fRMax-kRadTolerance*0.5;
+//	    
+//	    if (r2>=tolRMin*tolRMin && r2<=tolRMax*tolRMax)
+//		{
+//		    if (fDPhi==2*M_PI||r2==0)
+//			{
+//			    in=kInside;
+//			}
+//		    else
+//			{
+//// Try inner tolerant phi boundaries (=>inside)
+//// if not inside, try outer tolerant phi boundaries
+//			    pPhi=atan2(p.y(),p.x());
+//			    if (pPhi<0) pPhi+=2*M_PI; // 0<=pPhi<2pi
+//			    if (fSPhi>=0)
+//				{
+//				    if (pPhi>=fSPhi+kAngTolerance*0.5 &&
+//					pPhi<=fSPhi+fDPhi-kAngTolerance*0.5)
+//					{
+//					    in=kInside;
+//					}
+//				    else if (pPhi>=fSPhi-kAngTolerance*0.5 &&
+//					     pPhi<=fSPhi+fDPhi+kAngTolerance*0.5)
+//					{
+//					    in=kSurface;
+//					}
+//				}
+//			    else
+//				{
+//				    if (pPhi<fSPhi+2*M_PI) pPhi+=2*M_PI;
+//				    if (pPhi>=fSPhi+2*M_PI+kAngTolerance*0.5 &&
+//					pPhi<=fSPhi+fDPhi+2*M_PI-kAngTolerance*0.5)
+//					{
+//					    in=kInside;
+//					}
+//				    else if (pPhi>=fSPhi+2*M_PI-kAngTolerance*0.5 &&
+//					     pPhi<=fSPhi+fDPhi+2*M_PI+kAngTolerance*0.5)
+//					{
+//					    in=kSurface;
+//					}
+//				}
+//			    
+//			    
+//			}
+//		}
+//	    else
+//		{
+//// Try generous boundaries
+//		    tolRMin=fRMin-kRadTolerance*0.5;
+//		    tolRMax=fRMax+kRadTolerance*0.5;
+//		    if (tolRMin<0) tolRMin=0;
+//		    if (r2>=tolRMin*tolRMin && r2 <= tolRMax*tolRMax)
+//			{
+//			    if (fDPhi==2*M_PI||r2==0)
+//				{
+//// Continuous in phi or on z-axis
+//				    in=kSurface;
+//				}
+//			    else
+//				{
+//// Try outer tolerant phi boundaries only
+//				    pPhi=atan2(p.y(),p.x());
+//				    if (pPhi<0) pPhi+=2*M_PI; // 0<=pPhi<2pi
+//				    if (fSPhi>=0)
+//					{
+//					    if (pPhi>=fSPhi-kAngTolerance*0.5 &&
+//						pPhi<=fSPhi+fDPhi+kAngTolerance*0.5)
+//						{
+//						    in=kSurface;
+//						}
+//					}
+//				    else
+//					{
+//					    if (pPhi<fSPhi+2*M_PI) pPhi+=2*M_PI;
+//					    if (pPhi>=fSPhi+2*M_PI-kAngTolerance*0.5 &&
+//						pPhi<=fSPhi+fDPhi+2*M_PI+kAngTolerance*0.5)
+//						{
+//						    in=kSurface;
+//						}
+//					}
+//				    
+//
+//				}
+//			}
+//		}
+//	}
+//    else if (fabs(p.z())<=fDz+kCarTolerance*0.5)
+//	{
+//// Check within tolerant r limits
+//	    r2=p.x()*p.x()+p.y()*p.y();
+//	    tolRMin=fRMin-kRadTolerance*0.5;
+//	    tolRMax=fRMax+kRadTolerance*0.5;
+//	    if (tolRMin<0) tolRMin=0;
+//	    if (r2>=tolRMin*tolRMin && r2 <= tolRMax*tolRMax)
+//		{
+//		    if (fDPhi==2*M_PI||r2==0)
+//			{
+//// Continuous in phi or on z-axis
+//			    in=kSurface;
+//			}
+//		    else
+//			{
+//// Try outer tolerant phi boundaries
+//			    pPhi=atan2(p.y(),p.x());
+//			    if (pPhi<0) pPhi+=2*M_PI;		// 0<=pPhi<2pi
+//			    if (fSPhi>=0)
+//				{
+//				    if (pPhi>=fSPhi-kAngTolerance*0.5 &&
+//					pPhi<=fSPhi+fDPhi+kAngTolerance*0.5)
+//					{
+//					    in=kSurface;
+//					}
+//				}
+//			    else
+//				{
+//				    if (pPhi<fSPhi+2*M_PI) pPhi+=2*M_PI;
+//				    if (pPhi>=fSPhi+2*M_PI-kAngTolerance*0.5 &&
+//					pPhi<=fSPhi+fDPhi+2*M_PI+kAngTolerance*0.5)
+//					{
+//					    in=kSurface;
+//					}
+//				}
+//			    
+//			}
+//		}
+//	}
+//    return in;
+//}
 
 // Return unit normal of surface closest to p
 // - note if point on z axis, ignore phi divided sides
@@ -730,7 +811,12 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 	{
 	   s = -b-sqrt(d) ;
 
-	   if (s >= 0)	// If 'forwards'
+// DCW: See comments below
+//
+//	   if (s >= 0)	// If 'forwards'
+//
+	   G4double normDist = (t3 + s*(p.x()*v.x() + p.y()*v.y()) )/fRMax - fRMax;
+	   if (normDist > -kCarTolerance) 
 	   {
 // Check z intersection
 	      zi=p.z()+s*v.z();
@@ -741,7 +827,9 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 
 		  if (!seg)
 		  { 
-                     return s; 
+// DCW: We should return 0 if the normal distance is within kCarTolerance
+//                    return s; 
+		      return (normDist < kCarTolerance) ? 0 : s;
                   }
 		  else
 		  {
@@ -817,10 +905,33 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 // Always want 2nd root - we are outside and know rmax Hit was bad
 // - If on surface of rmin also need farthest root
 
+//
+// DCW: This line may introduce serious round-off problems.
+//      However, we already have t3-fRMin*fRMin, so perhaps we have already
+//      lost double precision in any case.
+//
 	      s=-b+sqrt(d);
 
-	      if (s >= 0)	// check forwards
-	      {
+//
+// DCW: Be careful. The comparison below is problematic. We must consider
+// possible intersections even if the point is slightly in front of
+// fRMin. Specifically, we must allow the point to be kCarTolerance in front.
+//
+//	      if (s >= 0)	// check forwards
+//	      {
+//
+// So, what to do? We might be tempted to check the radius t3 < tolIRMin2,
+// but this does not work either, since p could be on the other side of the
+// x/y origin (and we could have a phi slice). Instead, the safest thing
+// is to use the dot product of the normal at the intersecting point.
+//
+//        ( p.x*(p.x + s*v.x) + p.y*(p.y + s*v.y) )/fRMin - fRMin
+//
+//         ( t3 + s*(v.x*p.x + v.y*p.y) )/fRMin - fRMin
+//
+	       G4double normDist = (t3 + s*(p.x()*v.x() + p.y()*v.y()) )/fRMin - fRMin;
+	       if (normDist < kCarTolerance) {
+
 // Check z intersection
 
 		 zi=p.z()+s*v.z();
@@ -830,7 +941,9 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 // Z ok. Check phi 
 		    if (!seg)
 		    { 
-                       return s; 
+// DCW: We should return 0 if the normal distance is within kCarTolerance
+//                     return s; 
+		       return (normDist > -kCarTolerance) ? 0 : s;
                     }
 		    else
 		    {
@@ -899,7 +1012,11 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 
 		      if ((yi*cosCPhi-xi*sinCPhi) <= 0)
 		      {
-			 snxt=s;
+//
+// DCW: we must return exactly zero if the point is within tolerance
+//      of the surface.
+//			 snxt=s;
+			 snxt = (Dist > -kCarTolerance*0.5) ? 0 : s;
 		      }
  		   }    
 	        }
@@ -944,7 +1061,11 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 
 		      if ((yi*cosCPhi-xi*sinCPhi)>=0)
 		      {
-			 snxt=s;
+//
+// DCW: we must return exactly zero if the point is within tolerance
+//      of the surface.
+//			 snxt=s;
+			 snxt = (Dist > -kCarTolerance*0.5) ? 0 : s;
 		      }
  		   }    
 		}
