@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4BremsstrahlungCrossSectionHandler.cc,v 1.3 2001-10-10 11:59:35 pia Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -33,13 +35,12 @@
 // Creation date: 25 September 2001
 //
 // Modifications: 
-//
+// 10.10.2001 MGP Revision to improve code quality and consistency with design
 //
 // -------------------------------------------------------------------
-//
 
 #include "G4BremsstrahlungCrossSectionHandler.hh"
-#include "G4BremsstrahlungElectronSpectrum.hh"
+#include "G4eBremsstrahlungSpectrum.hh"
 #include "G4DataVector.hh"
 #include "G4CompositeEMDataSet.hh"
 #include "G4VDataSetAlgorithm.hh"
@@ -48,7 +49,6 @@
 #include "G4EMDataSet.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
-
 
 G4BremsstrahlungCrossSectionHandler::G4BremsstrahlungCrossSectionHandler(const G4VEnergySpectrum* spec, 
 									 G4VDataSetAlgorithm* alg)
@@ -121,8 +121,3 @@ G4BremsstrahlungCrossSectionHandler::BuildCrossSectionsForMaterials(const G4Data
  
   return set;
 }
-
-
-
-
-

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.43 2001-10-10 11:48:40 pia Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.44 2001-10-10 11:59:35 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -51,7 +51,7 @@
 // --------------------------------------------------------------
 
 #include "G4LowEnergyBremsstrahlung.hh"
-#include "G4BremsstrahlungElectronSpectrum.hh"
+#include "G4eBremsstrahlungSpectrum.hh"
 #include "G4BremsstrahlungCrossSectionHandler.hh"
 #include "G4VDataSetAlgorithm.hh"
 #include "G4LogLogInterpolation.hh"
@@ -92,7 +92,7 @@ void G4LowEnergyBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aP
 
   // Create and fill BremsstrahlungParameters once
   if( energySpectrum ) delete energySpectrum;
-  energySpectrum = new G4BremsstrahlungElectronSpectrum();
+  energySpectrum = new G4eBremsstrahlungSpectrum();
 
   if(verboseLevel > 0) {
     G4cout << "G4LowEnergyBremsstrahlungSpectrum is initialized"
