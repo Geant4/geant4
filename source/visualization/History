@@ -1,4 +1,4 @@
-$Id: History,v 1.211 2002-12-11 16:11:04 johna Exp $
+$Id: History,v 1.212 2002-12-11 16:11:44 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -27,6 +27,8 @@ History file for visualization category
 11th December 2002  John Allison  (vis-V04-01-10)
 - Fix for SUN-CC warnings: AddThis hides the virtual function...
 - Fix memory leak in RayTracer.
+- Fixed /vis/scene/add/trajectories command.
+- Some fixes in HepRep.
 
 4th December 2002  Makoto Asai (vis-V04-01-09)
 - Migration to new G4ApplicationState
