@@ -1,4 +1,4 @@
-$Id: History,v 1.38 2002-10-23 12:08:16 johna Exp $
+$Id: History,v 1.39 2002-10-24 14:33:51 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24th October 2002  John Allison  (greps-V04-01-00)
+- Added G4AttDefStore.
+- Further improved G4AttDef/Value.
+- Added const G4std::vector<G4AttValue>* fAttValues/Defs to G4VisAttributes.
 
 23rd October 2002  John Allison
 - G4Colour class description corrected.
