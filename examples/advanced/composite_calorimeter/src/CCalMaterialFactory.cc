@@ -21,6 +21,7 @@ CCalMaterialFactory * CCalMaterialFactory::instance = 0;
 G4String CCalMaterialFactory::elementfile = "";
 G4String CCalMaterialFactory::mixturefile = "";
 
+
 CCalMaterialFactory* CCalMaterialFactory::getInstance(const G4String& matfile,
 						      const G4String& mixfile){
   if ((matfile=="" || matfile==elementfile) &&
@@ -41,9 +42,11 @@ CCalMaterialFactory* CCalMaterialFactory::getInstance(const G4String& matfile,
   }
 }
 
+
 CCalMaterialFactory* CCalMaterialFactory::getInstance(const G4String& matfile){
   return getInstance(matfile,matfile);
 }
+
 
 CCalMaterialFactory* CCalMaterialFactory::getInstance(){
   if (elementfile=="" || mixturefile=="") {
@@ -61,6 +64,7 @@ CCalMaterialFactory* CCalMaterialFactory::getInstance(){
     return instance;
 }
 
+
 CCalMaterialFactory::~CCalMaterialFactory(){
   CCalMaterialTable::iterator ite;
   for(ite = theCCalMaterials.begin(); ite != theCCalMaterials.end(); ite++ ){
@@ -74,6 +78,7 @@ CCalMaterialFactory::~CCalMaterialFactory(){
   }
   theCCalAMaterials.clear();
 }
+
   
 G4Material* CCalMaterialFactory::findMaterial(const G4String & mat) const {
   G4Material* theMat=findG4Material(mat);
@@ -110,6 +115,7 @@ G4Material* CCalMaterialFactory::findMaterial(const G4String & mat) const {
   }
 }
 
+
 G4Element* CCalMaterialFactory::findElement(const G4String & mat) const {
   const G4ElementTable  theElements = *(G4Element::GetElementTable());
   for (unsigned int i=0; i<theElements.size(); i++)
@@ -121,6 +127,7 @@ G4Element* CCalMaterialFactory::findElement(const G4String & mat) const {
     }
   return 0;
 }
+
 
 G4Element* CCalMaterialFactory::addElement(const G4String & name,
 					   const G4String & symbol,
@@ -138,6 +145,7 @@ G4Element* CCalMaterialFactory::addElement(const G4String & name,
   return theEl;
 }
 
+
 G4Material* CCalMaterialFactory::addMaterial(const G4String& name,
 					     G4double density,
 					     G4int nconst,
@@ -147,6 +155,7 @@ G4Material* CCalMaterialFactory::addMaterial(const G4String& name,
   addCCalMaterial(name, density, nconst, mats, prop, md);
   return findMaterial(name);
 }
+
 
 void CCalMaterialFactory::readElements(const G4String& matfile) {
 
@@ -167,6 +176,7 @@ void CCalMaterialFactory::readElements(const G4String& matfile) {
   is.close();
 }
 
+
 void CCalMaterialFactory::readMaterials(const G4String& matfile) {
 
   G4String path = getenv("CCAL_GLOBALPATH");
@@ -186,8 +196,10 @@ void CCalMaterialFactory::readMaterials(const G4String& matfile) {
   is.close();
 }
 
+
 //===========================================================================
 // Protected & private methods ==============================================
+
 
 G4Material* CCalMaterialFactory::findG4Material(const G4String & mat) const {
   const G4MaterialTable theG4Materials = *(G4Material::GetMaterialTable());
@@ -198,6 +210,7 @@ G4Material* CCalMaterialFactory::findG4Material(const G4String & mat) const {
   }
   return 0;
 }
+
 
 CCalMaterial* CCalMaterialFactory::findCCalMaterial(const G4String & mat) 
   const {
@@ -211,6 +224,7 @@ CCalMaterial* CCalMaterialFactory::findCCalMaterial(const G4String & mat)
   return (CCalMaterial*) findCCalAMaterial(mat);
 }
 
+
 CCalAMaterial* CCalMaterialFactory::findCCalAMaterial(const G4String & mat) 
   const {
   for (unsigned int i=0; i<theCCalAMaterials.size(); i++)
@@ -222,8 +236,6 @@ CCalAMaterial* CCalMaterialFactory::findCCalAMaterial(const G4String & mat)
     }
   return 0;
 }
-
-
 
 
 CCalMaterial* CCalMaterialFactory::addCCalMaterial(const G4String& name, 
@@ -239,7 +251,7 @@ CCalMaterial* CCalMaterialFactory::addCCalMaterial(const G4String& name,
     amatcol = new ptrCCalAMaterial[nconst];
   else
     matcol = new ptrCCalMaterial[nconst];
-    
+
   for (G4int i=0; i<nconst; i++){
     if (md==byAtomic) {
       CCalAMaterial* amat = findCCalAMaterial(mats[i]);
@@ -309,15 +321,12 @@ void CCalMaterialFactory::readElements(G4std::ifstream& is){
   while (name != "*ENDDO") {
     //It should be an element definition
     G4double A, Z, density;
-    is >> symbol >> A >> Z >> density >> jump;
-    
+    is >> symbol >> A >> Z >> density >> jump;    
 #ifdef debug
     G4cout << "       " << name << "    \t" << symbol << "\t" 
 	 << A << "\t" << Z << "\t" << density << G4endl;
-#endif
-    
+#endif    
     addElement(name, symbol, Z, A, density);
-    
     readName(is,name);
   };
   G4cout << "     " << G4Element::GetElementTable()->size() 
@@ -352,9 +361,9 @@ void CCalMaterialFactory::readMaterials(G4std::ifstream& is){
 
 #ifdef debug
     G4cout <<"       " << matname
-	 << " made of " << nElem 
-	 << " elements. Density=" << density 
-	 << G4endl;
+	   << " made of " << nElem 
+	   << " elements. Density=" << density 
+	   << G4endl;
 #endif
 
     G4int absnelem = abs(nElem);
@@ -365,9 +374,7 @@ void CCalMaterialFactory::readMaterials(G4std::ifstream& is){
     G4double prop;
     for(int i=0; i<absnelem; i++) {
       readName(is, name);
-      
       is >> prop >> jump;
-
       mats[i]=name;
       weights[i]=abs(prop);
     } //for...
@@ -386,10 +393,10 @@ void CCalMaterialFactory::readMaterials(G4std::ifstream& is){
     readName(is,name);
   };  //while
 
-
   G4cout << "     " << theCCalMaterials.size() << " materials read from " 
        << mixturefile << G4endl << G4endl;
 }
+
 
 CCalMaterialFactory::CCalMaterialFactory() {
   readElements (elementfile);

@@ -4,7 +4,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalVisualisable.hh"
 
-#include <fstream.h>
+#include "g4std/fstream"
 #include "CCalutils.hh"
 
 //Comment/Uncomment next line to unset/set debug information printing

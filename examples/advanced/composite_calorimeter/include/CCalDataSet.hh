@@ -3,7 +3,6 @@
 
 #include "G4NeutronHPInterpolator.hh"
 #include "g4std/vector"
-#include <utility>
 
 // by JPW, working, but to be cleaned up. @@@@
 

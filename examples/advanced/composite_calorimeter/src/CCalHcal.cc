@@ -4,7 +4,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalHcal.hh"
 
-#include <fstream.h>
+#include "g4std/fstream"
 #include "CCalutils.hh"
 
 //#define debug

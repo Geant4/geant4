@@ -10,28 +10,26 @@
 #include "globals.hh"
 
 
-// "number " + i = "number i"
 G4String operator+(const G4String&, const int);
 G4String operator+(const G4String&, const double);
+// "number " + i = "number i"
 
-//readName(G4std::ifstream& is, G4String& name) reads a name into G4String between 
-//                                             quotes and skips lines begining 
-//                                             with #. and if found *ENDDO returns
 G4std::ifstream& readName(G4std::ifstream&, G4String&);
+// It reads a name into G4String between quotes and skips lines 
+// beginning with #. and if found *ENDDO returns.
 
-//findDO(G4std::ifstream& is, const G4String& str) reads until a *DO str is found
 G4std::ifstream& findDO(G4std::ifstream&, const G4String&);
+// It reads until a *DO str is found.
 
-//tabs
 G4std::ostream& tab(G4std::ostream&);
+// It add a tab.
 
-//ignores character until end of line
 G4std::istream& jump(G4std::istream&);
+// It ignores character until the end of line.
 
-//Opens the geometry file, either locally (if it exists) or "remotely"
-bool openGeomFile(G4std::ifstream& is, const G4String& pathname, const G4String& filename);
+bool openGeomFile(G4std::ifstream& is, const G4String& pathname, 
+		  const G4String& filename);
+// It opens the geometry file, either locally (if it exists) or "remotely".
 
-//extracts value from a number*dimension (e.g. 10*mm)
-G4double getDoubleValue( G4String paramString );
 
 #endif

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.7 2002-12-06 18:26:29 gcosmo Exp $
+$Id: History,v 1.8 2002-12-11 14:32:29 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,11 @@ $Id: History,v 1.7 2002-12-06 18:26:29 gcosmo Exp $
 
                       Example History file
                       ---------------------
+
+11.12.2002 - A.Ribon (ccal-V04-01-04)
+- Some clean up and fixes, but unfortunately not yet fixed
+  the problem of reading the material in the Sun platform
+  (it looks like a problem with file stream).
 
 06.12.2002 - G.Cosmo (ccal-V04-01-03)
 - Migrated messenger to new G4ApplicationState.
