@@ -65,6 +65,7 @@
 #include "G4BetheBlochModel.hh"
 #include "G4MuBetheBlochModel.hh"
 #include "G4UniversalFluctuation.hh"
+#include "G4BohrFluctuations.hh"
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -94,20 +95,21 @@ void G4MuIonisationSTD::InitialiseProcess()
   SetMinKinEnergy(0.1*keV);
   SetMaxKinEnergy(100.0*TeV);
 
-  G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
+  if(IsIntegral()) flucModel = new G4BohrFluctuations();
+  else             flucModel = new G4UniversalFluctuation();
 
   G4VEmModel* em = new G4BraggModel();
   em->SetLowEnergyLimit(0.1*keV);
   em->SetHighEnergyLimit(2.*MeV);
-  AddEmModel(1, em, fm);
+  AddEmModel(1, em, flucModel);
   G4VEmModel* em1 = new G4BetheBlochModel();
   em1->SetLowEnergyLimit(2.*MeV);
   em1->SetHighEnergyLimit(10.0*GeV);
-  AddEmModel(2, em1, fm);
+  AddEmModel(2, em1, flucModel);
   G4VEmModel* em2 = new G4MuBetheBlochModel();
   em2->SetLowEnergyLimit(10.0*GeV);
   em2->SetHighEnergyLimit(100.0*TeV);
-  AddEmModel(3, em2, fm);
+  AddEmModel(3, em2, flucModel);
 
   mass = (G4MuonPlus::MuonPlus())->GetPDGMass();
   ratio = electron_mass_c2/mass;
@@ -125,7 +127,7 @@ const G4ParticleDefinition* G4MuIonisationSTD::DefineBaseParticle(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4MuIonisationSTD::PrintInfoDefinition() const
+void G4MuIonisationSTD::PrintInfoDefinition() 
 {
   G4VEnergyLossSTD::PrintInfoDefinition();
 
@@ -139,6 +141,20 @@ void G4MuIonisationSTD::PrintInfoDefinition() const
 void G4MuIonisationSTD::SetSubCutoff(G4bool val)
 {
   subCutoff = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4MuIonisationSTD::SetIntegral(G4bool val)
+{ 
+  // Fluctuation model can be changed only before BuildPhysicsTable
+  if (!theParticle) {
+    delete  flucModel;
+    if(val) flucModel = new G4BohrFluctuations();
+    else    flucModel = new G4UniversalFluctuation();
+  }
+    
+  G4VEnergyLossSTD::SetIntegral(val); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 

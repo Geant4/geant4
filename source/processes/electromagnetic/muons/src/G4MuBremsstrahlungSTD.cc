@@ -103,7 +103,7 @@ const G4ParticleDefinition* G4MuBremsstrahlungSTD::DefineBaseParticle(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4MuBremsstrahlungSTD::PrintInfoDefinition() const
+void G4MuBremsstrahlungSTD::PrintInfoDefinition() 
 {
   G4VEnergyLossSTD::PrintInfoDefinition();
 

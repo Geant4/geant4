@@ -89,7 +89,7 @@ public:
                                    G4double&,
                                    G4double&);
 
-  void PrintInfoDefinition() const;
+  void PrintInfoDefinition();
   // Print out of the class parameters
 
 protected:

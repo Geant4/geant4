@@ -92,7 +92,7 @@ public:
 
   void SetSubCutoff(G4bool val);
 
-  void PrintInfoDefinition() const;
+  void PrintInfoDefinition();
   // Print out of the class parameters
 
 protected:

@@ -48,6 +48,7 @@
 // 24-01-03 Make models region aware (V.Ivanchenko)
 // 05-02-03 Fix compilation warnings (V.Ivanchenko)
 // 13-02-03 SubCutoff regime is assigned to a region (V.Ivanchenko)
+// 23-05-03 Add fluctuation model as a member function (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -67,6 +68,7 @@
 #include "globals.hh"
 
 class G4Material;
+class G4VEmFluctuationModel;
 
 class G4MuIonisationSTD : public G4VEnergyLossSTD
 {
@@ -98,7 +100,9 @@ public:
 
   void SetSubCutoff(G4bool val);
 
-  void PrintInfoDefinition() const;
+  void SetIntegral(G4bool val); 
+
+  void PrintInfoDefinition();
   // Print out of the class parameters
 
 protected:
@@ -120,6 +124,7 @@ private:
 
   const G4ParticleDefinition* theParticle;
   const G4ParticleDefinition* theBaseParticle;
+  G4VEmFluctuationModel*      flucModel;
 
   G4bool                 subCutoff;
 };
