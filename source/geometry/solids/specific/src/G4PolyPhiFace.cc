@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyPhiFace.cc,v 1.5 2002-10-28 11:47:52 gcosmo Exp $
+// $Id: G4PolyPhiFace.cc,v 1.6 2003-03-28 09:52:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -271,6 +271,7 @@ G4PolyPhiFace::~G4PolyPhiFace()
 // Copy constructor
 //
 G4PolyPhiFace::G4PolyPhiFace( const G4PolyPhiFace &source )
+  : G4VCSGface()
 {
   CopyStuff( source );
 }
