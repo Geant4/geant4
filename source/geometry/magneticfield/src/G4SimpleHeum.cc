@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SimpleHeum.cc,v 1.1 1999-01-07 16:07:12 gunter Exp $
+// $Id: G4SimpleHeum.cc,v 1.2 1999-03-04 13:52:30 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  Simple Heum:
@@ -43,10 +43,10 @@ G4SimpleHeum::G4SimpleHeum(G4Mag_EqRhs *EqRhs, G4int num_variables):
 
 G4SimpleHeum::~G4SimpleHeum()
 {
-  delete dydxTemp;
-  delete dydxTemp2;
-  delete yTemp;
-  delete yTemp2;
+  delete[] dydxTemp;
+  delete[] dydxTemp2;
+  delete[] yTemp;
+  delete[] yTemp2;
 }
 
 

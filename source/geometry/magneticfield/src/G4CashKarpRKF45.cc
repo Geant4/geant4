@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CashKarpRKF45.cc,v 1.2 1999-02-12 12:39:09 japost Exp $
+// $Id: G4CashKarpRKF45.cc,v 1.3 1999-03-04 13:52:31 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // The Cash-Karp Runge-Kutta-Fehlberg 4/5 method is an embedded fourth
@@ -44,14 +44,14 @@ G4MagIntegratorStepper(EqRhs, numberOfVariables)
 
 G4CashKarpRKF45::~G4CashKarpRKF45()
 {
-  delete ak2;
-  delete ak3;
-  delete ak4;
-  delete ak5;
-  delete ak6;
-  delete ak7;
-  delete yTemp;
-  delete yIn;
+  delete[] ak2;
+  delete[] ak3;
+  delete[] ak4;
+  delete[] ak5;
+  delete[] ak6;
+  delete[] ak7;
+  delete[] yTemp;
+  delete[] yIn;
 }
 
 //////////////////////////////////////////////////////////////////////
