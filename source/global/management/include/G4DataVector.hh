@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DataVector.hh,v 1.7 2001-03-06 15:56:47 gcosmo Exp $
+// $Id: G4DataVector.hh,v 1.8 2001-06-06 09:18:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,6 +37,10 @@ class G4DataVector : public G4std::vector<G4double>
   G4DataVector(size_t capacity);
    // Constructor given a 'capacity' defining the initial number of elements.
 
+  G4DataVector(size_t capacity, G4double value);
+   // Constructor given a 'capacity' defining the initial number of elements
+   // and initialising them to 'value'.
+
   virtual ~G4DataVector(){;}
    // Empty destructor
 
@@ -65,6 +69,12 @@ G4DataVector::G4DataVector()
 inline
 G4DataVector::G4DataVector(size_t capacity)
   : G4std::vector<G4double>(capacity)
+{
+}
+
+inline
+G4DataVector::G4DataVector(size_t capacity, G4double value)
+  : G4std::vector<G4double>(capacity, value)
 {
 }
 
