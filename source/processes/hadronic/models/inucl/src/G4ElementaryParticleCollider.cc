@@ -1354,29 +1354,29 @@ const G4int itry_max = 100;
 const G4double ct_cut = 0.9999;
 const G4double huge = 60.0;
 
-int k = getElasticCase(is,kw,ekin);
+int k = getElasticCase(is, kw, ekin);
 
-double ae = -1.;
-double ak = 2.;
+G4double ae = -1.0;
+G4double ak = 2.0;
 
 if(k == 1) { 
-  if(is != 2) { ak = 1.; ae = 0.;};
+  if(is != 2) { ak = 1.0; ae = 0.0;};
 }
  else if(k == 2) {
-    if(is != 2) { ak = 0.5; ae = 0.; };
+    if(is != 2) { ak = 0.5; ae = 0.0; };
 };    
 
-double ct = 2.;
-double ab;
-double ac;
-double ad;
+G4double ct = 2.0;
+G4double ab;
+G4double ac;
+G4double ad;
 
 int itry = 0;  
 if(k == 14) {
   ab = 7.5;
   if(is == 1 || is == 2 || is == 4) ab = 8.7;
-  ac = -2.*ab*pscm*pscm;
-  ad = 2.*ac;
+  ac = -2.0 * ab * pscm * pscm;
+  ad = 2.0 * ac;
   if(ad < -huge) {
     ad = exp(ad);
   }
@@ -1385,61 +1385,61 @@ if(k == 14) {
   };   
   while(fabs(ct) > ct_cut && itry < itry_max) {
     itry++;
-    ct = 1. - log(inuclRndm()*(1. - ad) + ad)/ac;
+    ct = 1.0 - log(inuclRndm() * (1.0 - ad) + ad) / ac;
   };      
 }
  else if(k == 0) {
-  ct = 2.*inuclRndm() - 1;
+  ct = 2.0 * inuclRndm() - 1;
 }
  else { 
-  int k1 = k - 1;
+  G4int k1 = k - 1;
 // first set all coefficients
-  vector<double> ssv(4);
-  double st = 0.;
-  for(int i = 0; i < 4; i++) {
-    double ss = 0.;
-    for(int m = 0; m < 4; m++) ss += ang[m][i][k1]*pow(ekin,m);
+  vector<G4double> ssv(4);
+  G4double st = 0.0;
+  for(G4int i = 0; i < 4; i++) {
+    G4double ss = 0.0;
+    for(G4int m = 0; m < 4; m++) ss += ang[m][i][k1] * pow(ekin, m);
     st += ss;
     ssv[i] = ss;
   };
-  double a = 1.;
-  double b = 0.;
+  G4double a = 1.0;
+  G4double b = 0.0;
   if(k <= 3) {
-    pair<double,double> ab = adjustIntervalForElastic(ekin,ak,ae,k,is,ssv,st);
+    pair<G4double, G4double> ab = adjustIntervalForElastic(ekin, ak, ae, k, is, ssv, st);
     a = ab.first;
     b = ab.second;
   };
   while(fabs(ct) > ct_cut && itry < itry_max) {
     itry++;
-    double mrand = a*inuclRndm() + b;
-    double su = 0.;
-    for(int i = 0; i < 4; i++) su += ssv[i]*pow(mrand,i);
-    ct = ak*sqrt(mrand)*(su + (1. - st)*pow(mrand,4)) + ae;
+    G4double mrand = a * inuclRndm() + b;
+    G4double su = 0.0;
+    for(G4int i = 0; i < 4; i++) su += ssv[i] * pow(mrand, i);
+    ct = ak * sqrt(mrand) * (su + (1.0 - st) * pow(mrand, 4)) + ae;
   }; 
 };
 
 if(itry == itry_max) {
 #ifdef REPORT
-  cout << " particleSCMmomentumFor2to2 -> itry = itry_max " << itry << endl;
+  G4cout << " particleSCMmomentumFor2to2 -> itry = itry_max " << itry << G4endl;
 #endif
-  ct = 2.*inuclRndm() - 1.;
+  ct = 2.0 * inuclRndm() - 1.0;
 };
 
-double pt = pscm*sqrt(1. - ct*ct);
-double phi = randomPHI();
-vector<double> mom(4);
-mom[1] = pt*cos(phi);
-mom[2] = pt*sin(phi);
-mom[3] = pscm*ct;
+G4double pt = pscm * sqrt(1.0 - ct * ct);
+G4double phi = randomPHI();
+vector<G4double> mom(4);
+mom[1] = pt * cos(phi);
+mom[2] = pt * sin(phi);
+mom[3] = pscm * ct;
   
 return mom;
   
 }
 
-int ElementaryParticleCollider::getElasticCase(int is, int kw, 
-                           double ekin) const {
-  int l = is;
-  int k = 0; // isotropic
+G4int G4ElementaryParticleCollider::getElasticCase(G4int is, G4int kw, 
+                           G4double ekin) const {
+  G4int l = is;
+  G4int k = 0; // isotropic
   if(l == 4) {
     l = 1;
   } 
@@ -1452,7 +1452,7 @@ int ElementaryParticleCollider::getElasticCase(int is, int kw,
   if(l < 3) { // nucleon nucleon
     if(ekin > 2.8) {
       k = 2;
-      if(ekin > 10.) k = 14;
+      if(ekin > 10.0) k = 14;
     }
      else {    
       if(l == 1) { // PP or NN
@@ -1469,7 +1469,7 @@ int ElementaryParticleCollider::getElasticCase(int is, int kw,
       k = 8;
       if(ekin > 0.08) k = 9;
       if(ekin > 0.3) k = 10;
-      if(ekin > 1.) k = 11;
+      if(ekin > 1.0) k = 11;
       if(ekin > 2.4) k = 14;
     }
      else { // pi- P, pi+ N
@@ -1477,14 +1477,14 @@ int ElementaryParticleCollider::getElasticCase(int is, int kw,
         k = 4;
         if(ekin > 0.08) k = 5;
         if(ekin > 0.3) k = 6;
-        if(ekin > 1.) k = 7;
+        if(ekin > 1.0) k = 7;
         if(ekin > 2.4) k = 14;
       }
        else {
         k = 12;
 	if(ekin > 0.08) k = 13;
         if(ekin > 0.3) k = 6;
-        if(ekin > 1.) k = 7;
+        if(ekin > 1.0) k = 7;
         if(ekin > 2.4) k = 14;
       }; 
     };   
@@ -1493,24 +1493,24 @@ int ElementaryParticleCollider::getElasticCase(int is, int kw,
   return k;
 }
 
-vector<InuclElementaryParticle> ElementaryParticleCollider:: 
-       generateSCMpionAbsorption(double etot_scm,
-                      InuclElementaryParticle* particle1,
-                             InuclElementaryParticle* particle2) const { 
+vector<G4InuclElementaryParticle> G4ElementaryParticleCollider:: 
+       generateSCMpionAbsorption(G4double etot_scm,
+                      G4InuclElementaryParticle* particle1,
+                             G4InuclElementaryParticle* particle2) const { 
 
 // generate nucleons momenta for pion absorption
 // the nucleon distribution assumed to be isotropic in SCM
 
-InuclElementaryParticle dummy;
-vector<InuclElementaryParticle> particles;
-vector<int> particle_kinds;
-int type1 = particle1->type();
-int type2 = particle2->type();
+G4InuclElementaryParticle dummy;
+vector<G4InuclElementaryParticle> particles;
+vector<G4int> particle_kinds;
+G4int type1 = particle1->type();
+G4int type2 = particle2->type();
 
 // generate kinds
 if(type1 == 3) {
   if(type2 == 111) { // pi+ + PP -> ? 
-    cout << " pion absorption: pi+ + PP -> ? " << endl;
+    G4cout << " pion absorption: pi+ + PP -> ? " << G4endl;
     return particles;
   }
    else if(type2 == 112) { // pi+ + PN -> PP
@@ -1532,7 +1532,7 @@ if(type1 == 3) {
      particle_kinds.push_back(2);
   }
    else if(type2 == 122) { // pi- + NN -> ?
-    cout << " pion absorption: pi- + NN -> ? " << endl;
+    G4cout << " pion absorption: pi- + NN -> ? " << G4endl;
     return particles;
   };     
 }
@@ -1551,25 +1551,25 @@ if(type1 == 3) {
  };     
 };
     
-double m1 = dummy.getParticleMass(particle_kinds[0]);
+G4double m1 = dummy.getParticleMass(particle_kinds[0]);
 m1 *= m1;
-double m2 = dummy.getParticleMass(particle_kinds[1]);
+G4double m2 = dummy.getParticleMass(particle_kinds[1]);
 m2 *= m2;	 
-double a = 0.5*(etot_scm*etot_scm - m1 - m2);
-double pmod = sqrt((a*a - m1*m2)/(m1 + m2 + 2.*a));
+G4double a = 0.5 * (etot_scm * etot_scm - m1 - m2);
+double pmod = sqrt((a * a - m1 * m2) / (m1 + m2 + 2.0 * a));
 
-vector<double> mom(4);
-pair<double,double> COS_SIN = randomCOS_SIN();
-double FI = randomPHI();
-double pt = pmod*COS_SIN.second;
-mom[1] = pt*cos(FI);
-mom[2] = pt*sin(FI);
-mom[3] = pmod*COS_SIN.first;
+vector<G4double> mom(4);
+pair<G4double, G4double> COS_SIN = randomCOS_SIN();
+G4double FI = randomPHI();
+G4double pt = pmod * COS_SIN.second;
+mom[1] = pt * cos(FI);
+mom[2] = pt * sin(FI);
+mom[3] = pmod * COS_SIN.first;
 
-vector<double> mom1 = mom;
-for(int i = 1; i < 4; i++) mom1[i] *= -1.;
-particles.push_back(InuclElementaryParticle(mom,particle_kinds[0]));
-particles.push_back(InuclElementaryParticle(mom1,particle_kinds[1]));
+vector<G4double> mom1 = mom;
+for(G4int i = 1; i < 4; i++) mom1[i] *= -1.0;
+particles.push_back(InuclElementaryParticle(mom, particle_kinds[0]));
+particles.push_back(InuclElementaryParticle(mom1, particle_kinds[1]));
 
 return particles;
 
