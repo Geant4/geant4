@@ -35,3 +35,6 @@
      10 : radial energy profile    
      11 : cumulated radial energy profile
      12 : rms of cumulated radial energy profile  
+
+     21 : edep distrib as function of kine energy of contributing particle
+     22 : cumulative distrib of 21 

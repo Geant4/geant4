@@ -29,7 +29,7 @@
 * *** achieve initialization                                                    
       NLTOT = MIN(NLTOT,NBIN)                                                   
       NRTOT = MIN(NRTOT,NBIN)                                                   
-      CALL VZERO(SEL1,13*NBIN+6)                                                  
+      CALL VZERO(SEL1,13*NBIN+8)                                                  
 *                                                                               
       CALL GZINIT                                                               
       CALL GPART 

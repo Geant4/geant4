@@ -31,11 +31,13 @@
          DEDL(NL) = DEDL(NL) + DESTEP                                                                                    
       ENDIF
 *
-* *** track length                                                                          
+* *** track length and total energy deposit                                                                         
       IF (CHARGE.NE.0.) THEN
-         STRCH = STRCH + STEP 
+         STRCH  = STRCH  + STEP
+	 EDEPCH = EDEPCH + DESTEP 
       ELSE
-         STRNE = STRNE + STEP
+         STRNE  = STRNE  + STEP
+	 EDEPNE = EDEPNE + DESTEP
       ENDIF	 	                                                                                                     
 *                                                                               
 * ***  Particle's flux                                                          
@@ -46,5 +48,10 @@
 	 IF (IPART.LE.3) FNPAT(NPL,IPART) = FNPAT(NPL,IPART) + 1.                                   
          NLOLD = NL                                                             
        ENDIF                                                                    
-*                                                                               
+*
+* *** energy of particles contributing to edep
+      IF ((DESTEP).GT.0.)THEN
+         elog = log10((gekin+destep)/pkine(3))
+	 call hfill (21,elog,0.,destep)
+      ENDIF 	                                                                                 
       END                                                                       
