@@ -1,12 +1,15 @@
 #
 # Macro file for A01app
 #
+# This file does visualization using the HepRep2 format.
+# This format is not yet ready for general use (still being debugged).
+#
 /run/verbose 2
 #
 #
 # Create empty scene ("world" is default)
 #
-/vis/scene/create A01Output.heprep
+/vis/scene/create A01Output-000.heprep.zip
 #
 # Create a scene handler for a specific graphics system
 # Edit the next line(s) to choose another graphic system
@@ -34,4 +37,4 @@
 /mydet/fieldValue 4. tesla
 /mydet/momentum 2. GeV
 /gun/particle e+
-/run/beamOn 1
+/run/beamOn 10
