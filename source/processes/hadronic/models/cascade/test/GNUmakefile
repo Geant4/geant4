@@ -1,6 +1,7 @@
 all: 	# :::              	GEANT4 CASCADE TESTING 
 	grep ":::" GNUmakefile
 # 	  ::: GNUmakefile collects tools for Geant4 hadronic cascade testing.  
+#         ::: Tested in CERN lxplus Linux cluster.
 
 ifndef G4TARGET
   G4TARGET := $(TESTTARGET)
@@ -75,28 +76,35 @@ p5:	# ::: problem 5 (Al) too many n's in medium energy ::: hunt using history da
 p7:	# ::: problem 7 (H)  missing pions ::: CRITICAL, TO BE DONE
 	rm -r cascade.out; cascade 1000 1 585 1 1 > cascade.out; make a; 
 
-H1:	# ::: (H) A = 1 protiun
-	rm -r cascade.out cascade.eps; cascade 25 1 585 1 1 > cascade.out; cat cascade.out
-#	rm -r cascade.out cascade.eps; cascade 1000 1 585 1 1 > cascade.out; make a;
+h:	# ::: compare h2 h1
+	make h2; make h1
 
-H2:	# ::: (H) A = 2 deuterium
-	rm -r cascade.out cascade.eps; cascade 25 1 585 2 1 > cascade.out; cat cascade.out
-#	rm -r cascade.out cascade.eps; cascade 1000 1 585 2 1 > cascade.out; make a;
+h1:	# ::: (H) A = 1 protiun
+	rm -f cascade.out; cascade 2 1 585 1 1 > cascade.out; cat cascade.out
+#	rm -f cascade.out; cascade 1000 1 585 1 1 > cascade.out; make a;
 
-H3:	# ::: (H) A = 3 tritium
-	rm -r cascade.out cascade.eps; cascade 1000 1 585 3 1 > cascade.out; make a;
+h2:	# ::: (H) A = 2 deuterium
+	make t; rm -f cascade.out; cascade 2 1 585 2 1 > cascade.out; cat cascade.out
+#	rm -f cascade.out; cascade 1000 1 585 2 1 > cascade.out; make a;
+
+h3:	# ::: (H) A = 3 tritium
+	rm -f cascade.out; cascade 1000 1 585 3 1 > cascade.out; make a;
 
 p8:	# ::: problem 8 (Zr) delta missing ::: general feature in codes, POSTPONED studies
-	rm -r cascade.out cascade.eps; cascade 1000 2 800 91 40 > cascade.out; make a;
+	rm -f cascade.out; cascade 1000 2 800 91 40 > cascade.out; make a;
+
+p9:	# ::: problem 9 (Be) wrong spectrum, maybe too little energy goes to evaporation? (500 MeV ok)
+	rm -r cascade.out; cascade 10000 1 130 9 4 > cascade.out; gmake a; 
+#	rm -r cascade.out; cascade 10000 1 585 9 4 > cascade.out; gmake a; 
 
 leak:	# ::: find memory leaks
-	valgrind cascade 1
+	valgrind -v --leak-check=yes  --show-reachable=yes cascade 1
 
 time: 	# :: timing for target t
 	time -v gmake t
 
 a: 	# ::: a(nalysis) of data in  cascade.dat with batch run of Root
-	rm cascade.eps; root -b -q cascade.C; gv cascade.eps; 
+	rm -f cascade.eps; root -b -q cascade.C; gv cascade.eps; 
 
 b: 	# ::: b(enchmark) testing
 	rm -r benchmarks benchmark.out; make benchmarks; benchmarks > benchmarks.out; diff benchmarks.out benchmarks.data
