@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.16 2002-06-06 14:35:47 johna Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.17 2002-06-25 13:18:57 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,8 +97,10 @@ static const char* gouraudtriangleEPS[] =
 XVisualInfo*  G4OpenGLXViewer::vi_single_buffer = 0;
 XVisualInfo*  G4OpenGLXViewer::vi_double_buffer = 0;
 
-Bool G4OpenGLXViewer::WaitForNotify (Display*, XEvent* e, char* arg) {
-  return (e->type == MapNotify) && (e->xmap.window == (Window) arg);
+extern "C" {
+  Bool G4OpenGLXViewerWaitForNotify (Display*, XEvent* e, char* arg) {
+    return (e->type == MapNotify) && (e->xmap.window == (Window) arg);
+  }
 }
 
 void G4OpenGLXViewer::SetView () {
@@ -265,7 +267,7 @@ void G4OpenGLXViewer::CreateMainWindow () {
   XMapWindow (dpy, win);
 
 // Wait for window to appear (wait for an "expose" event).
-  XIfEvent (dpy, &event, WaitForNotify, (char*) win);
+  XIfEvent (dpy, &event, G4OpenGLXViewerWaitForNotify, (char*) win);
 
 // connect the context to a window
   glXMakeCurrent (dpy, win, cx);
@@ -733,18 +735,20 @@ typedef struct _DepthIndex {
   GLfloat depth;
 } DepthIndex;
 
-int G4OpenGLXViewer::compare(const void *a, const void *b)
-{
-  const DepthIndex *p1 = (DepthIndex *) a;
-  const DepthIndex *p2 = (DepthIndex *) b;
-  GLfloat diff = p2->depth - p1->depth;
-
-  if (diff > 0.0) {
-    return 1;
-  } else if (diff < 0.0) {
-    return -1;
-  } else {
-    return 0;
+extern "C" {
+  int G4OpenGLXViewercompare(const void *a, const void *b)
+  {
+    const DepthIndex *p1 = (DepthIndex *) a;
+    const DepthIndex *p2 = (DepthIndex *) b;
+    GLfloat diff = p2->depth - p1->depth;
+    
+    if (diff > 0.0) {
+      return 1;
+    } else if (diff < 0.0) {
+      return -1;
+    } else {
+      return 0;
+    }
   }
 }
 
@@ -836,7 +840,7 @@ void G4OpenGLXViewer::spewSortedFeedback(FILE * file, GLint size, GLfloat * buff
   assert(item == nprimitives);
 
   /* Sort the primitives back to front. */
-  qsort(prims, nprimitives, sizeof(DepthIndex), compare);
+  qsort(prims, nprimitives, sizeof(DepthIndex), G4OpenGLXViewercompare);
 
   /* Understand that sorting by a primitives average depth
      doesn't allow us to disambiguate some cases like self

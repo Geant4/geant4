@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2002-06-19 15:48:00 johna Exp $
+$Id: History,v 1.19 2002-06-25 13:18:55 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+24th June 2002  John Allison  (opengl-V04-01-00)
+- Further cosmetic changes in G4OpenGLXViewer.cc for DEC compiler.
 
 10th June 2002  John Allison  (opengl-V04-00-03)
 - Cosmetic changes for SUN-CC in G4OpenGLXmConvenienceRoutines.cc.

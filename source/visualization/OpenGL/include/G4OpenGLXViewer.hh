@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.hh,v 1.14 2002-06-06 14:35:46 johna Exp $
+// $Id: G4OpenGLXViewer.hh,v 1.15 2002-06-25 13:18:57 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,9 +62,6 @@ protected:
   void GetXConnection ();
   void CreateGLXContext (XVisualInfo* vi);
   virtual void CreateMainWindow ();
-
-  static Bool WaitForNotify (Display*, XEvent* e, char* arg);
-  static int compare(const void *a, const void *b);
 
   static int snglBuf_RGBA[10];
   static int dblBuf_RGBA[11];
