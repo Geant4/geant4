@@ -1,11 +1,12 @@
-# $Id: GNUmakefile,v 1.15 2004-05-28 12:44:41 hpw Exp $
+# $Id: GNUmakefile,v 1.16 2004-06-01 05:37:56 hpw Exp $
 # --------------------------------------------------------------
 # GNUmakefile for hadronic models library. G.Folger 10-Dec-97
 # --------------------------------------------------------------
 
 name := G4hadronic_models
 
-SUBDIRS = binary_cascade
+SUBDIRS  = abrasion
+SUBDIRS += binary_cascade
 SUBDIRS += cascade/evaporation
 SUBDIRS += cascade/utils
 SUBDIRS += cascade/cascade
@@ -40,7 +41,8 @@ SUBDIRS += radioactive_decay
 SUBDIRS += theo_high_energy
 SUBDIRS += util
 
-SUBLIBS  =  G4hadronic_binary
+SUBLIBS  =  G4hadronic_abrasion
+SUBLIBS +=  G4hadronic_binary
 SUBLIBS +=  G4hadronic_coherent_elastic
 SUBLIBS +=  G4hadronic_HE
 SUBLIBS +=  G4had_im_r_matrix
