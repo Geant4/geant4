@@ -1,4 +1,4 @@
-$Id: History,v 1.39 2003-11-25 18:38:51 vnivanch Exp $
+$Id: History,v 1.40 2003-11-27 18:20:15 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27-11-03 V.Ivanchenko (testem3-V05-02-07)
+- Fix memory corruption in the test
 
 25-11-03 V.Ivanchenko (testem3-V05-02-06)
 - Fix geometry (G.Cosmo)

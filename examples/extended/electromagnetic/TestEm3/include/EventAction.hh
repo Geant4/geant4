@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: EventAction.hh,v 1.2 2003-11-03 16:42:50 maire Exp $
+// $Id: EventAction.hh,v 1.3 2003-11-27 18:20:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,6 +35,7 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 #include "DetectorConstruction.hh"
+#include "G4DataVector.hh"
 
 class RunAction;
 class EventActionMessenger;
@@ -62,9 +63,9 @@ class EventAction : public G4UserEventAction
     DetectorConstruction* detector;
     RunAction*            runAct;
     
-    G4double              energyDeposit[MaxAbsor];
-    G4double              energyLeaving[MaxAbsor];
-    G4double              trackLengthCh[MaxAbsor];    
+    G4DataVector          energyDeposit;
+    G4DataVector          energyLeaving;
+    G4DataVector          trackLengthCh;    
     G4String              drawFlag;           // draw the event
     G4int                 printModulo;         
     EventActionMessenger* eventMessenger;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: SteppingAction.hh,v 1.1 2003-09-22 14:06:43 maire Exp $
+// $Id: SteppingAction.hh,v 1.2 2003-11-27 18:20:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,9 +43,9 @@ class SteppingAction : public G4UserSteppingAction
 {
   public:
     SteppingAction(DetectorConstruction*, EventAction*);
-   ~SteppingAction();
+    virtual ~SteppingAction();
 
-    void UserSteppingAction(const G4Step*);
+    virtual void UserSteppingAction(const G4Step*);
     
     G4double BirkAttenuation(const G4Step*);
     
