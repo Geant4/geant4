@@ -28,18 +28,9 @@ ifeq ($(G4SYSTEM),DEC-cxx)
 #   OGLLIBS   := -lMesaGLU -lMesaGL
   endif
   CPPFLAGS += -I$(G4BASE)/global/management/include/g4std/wrappers/$(G4SYSTEM)
-  ifdef G4USE_OSPACE
-    CPPFLAGS += -DG4USE_OSPACE -DOS_OSF1_4 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING
-    CPPFLAGS += -DOS_NO_ALLOCATORS -D__NO_EDG_EXCEPTION_CLASSES
-    CPPFLAGS += $(OSPACEINC) -I$(OSPACE_BASE_DIR)
-    CXXFLAGS += -nostdnew
-  else
-    ifndef G4NO_STD_NAMESPACE
-      G4USE_STD_NAMESPACE := yes
-      CXXFLAGS += -std strict_ansi
-      CPPFLAGS += -DG4USE_STD_NAMESPACE
-    endif
-  endif
+  G4USE_STD_NAMESPACE := yes
+  CXXFLAGS += -std strict_ansi
+  CPPFLAGS += -DG4USE_STD_NAMESPACE
 
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
