@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXViewer.cc,v 1.7 2000-02-21 16:02:42 johna Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.8 2000-05-22 08:07:20 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,6 +43,9 @@
 
 #define USE_DEFAULT_COLORMAP 1
 #define USE_STANDARD_COLORMAP 0
+
+XVisualInfo*  G4OpenGLXViewer::vi_single_buffer = 0;
+XVisualInfo*  G4OpenGLXViewer::vi_double_buffer = 0;
 
 extern "C"
 {
@@ -237,16 +240,34 @@ vectored_ps (true)
   
   // Try for a visual suitable for OpenGLImmediate..
   // first try for a single buffered RGB window
-  if (vi_immediate =
-      glXChooseVisual (dpy, XDefaultScreen (dpy), snglBuf_RGBA)) {
+  if (!vi_single_buffer) {
+    vi_single_buffer =
+      glXChooseVisual (dpy, XDefaultScreen (dpy), snglBuf_RGBA);
+  }
+  if (!vi_single_buffer) {
+    G4cout <<
+    "G4OpenGLXViewer::G4OpenGLXViewer: unable to get a single buffer visual."
+	   << G4endl;
+  }
+
+  if (!vi_double_buffer) {
+    vi_double_buffer =
+      glXChooseVisual (dpy, XDefaultScreen (dpy), dblBuf_RGBA);
+  }
+  if (!vi_double_buffer) {
+    G4cout <<
+    "G4OpenGLXViewer::G4OpenGLXViewer: unable to get a double buffer visual."
+	   << G4endl;
+  }
+
+  if (vi_immediate = vi_single_buffer) {
     attributeList = snglBuf_RGBA;
     doublebuffer = false;
   }
   
   if (!vi_immediate){
     // next try for a double buffered RGB, but Draw to top buffer
-    if (vi_immediate =
-	glXChooseVisual (dpy, XDefaultScreen (dpy), dblBuf_RGBA)) {
+    if (vi_immediate = vi_double_buffer) {
       attributeList = dblBuf_RGBA;
       doublebuffer = true;
     }
@@ -254,7 +275,7 @@ vectored_ps (true)
 
   // Now try for a visual suitable for OpenGLStored...
   // Try for a double buffered RGB window
-  if (vi_stored = glXChooseVisual (dpy, XDefaultScreen (dpy), dblBuf_RGBA)) {
+  if (vi_stored = vi_double_buffer) {
     attributeList = dblBuf_RGBA;
     doublebuffer = true;
   }
@@ -269,7 +290,8 @@ G4OpenGLXViewer::~G4OpenGLXViewer () {
     //Close a window from here
     glXDestroyContext (dpy, cx);
     glXMakeCurrent (dpy, None, NULL);
-    XDestroyWindow (dpy, win);
+    if (win) XDestroyWindow (dpy, win); // ...if already deleted in
+    // sub-class G4OpenGLXmViewer.
     XFlush (dpy);
   }
 }
