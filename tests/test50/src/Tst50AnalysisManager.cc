@@ -30,7 +30,7 @@
 //    *******************************
 //
 
-// $Id: Tst50AnalysisManager.cc,v 1.16 2003-05-15 16:00:59 guatelli Exp $
+// $Id: Tst50AnalysisManager.cc,v 1.17 2003-05-17 11:59:43 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 
@@ -91,25 +91,23 @@ void Tst50AnalysisManager::book()
   theTree = treeFact->create("test50.xml","xml",false, true,"uncompress");
   dpsf = aFact->createDataPointSetFactory(*theTree); 
   dpsa = dpsf->create("Stopping Power test",2); 
-  dpsa1 =  dpsf->create ("CSDA Range test",2);
-  dpsa2 =  dpsf->create ("Transmission test",3);
+  dpsa1 = dpsf->create ("CSDA Range test",2);
+  dpsa2 = dpsf->create ("Transmission test",3);
   dpsa3 = dpsf->create ("Gamma attenuation coefficient test",2); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Tst50AnalysisManager::attenuation_coeffiecient(G4int PointNumber,G4double energy, G4double coeff)
+void Tst50AnalysisManager::attenuation_coeffiecient(G4int PointNumber,G4double energy, G4double coeff, G4double coeff_error )
 {
   dpsa3->addPoint();
   AIDA::IDataPoint* point = dpsa3->point(PointNumber);
   AIDA::IMeasurement* mX= point->coordinate( 0 );
   mX->setValue(energy );
-  // set errors if different from zero
-  mX->setErrorPlus( 0. );
-  mX->setErrorMinus( 0. );
   AIDA::IMeasurement* mY= point->coordinate( 1 );
   mY->setValue( coeff );
-  //mY->setErrorPlus( ey[PointNumber] );
+  mY->setErrorPlus(coeff_error );
+  mY->setErrorMinus(coeff_error);
  }
 void Tst50AnalysisManager::StoppingPower(G4int PointNumber,G4double energy, G4double SP)
 {
@@ -117,13 +115,11 @@ void Tst50AnalysisManager::StoppingPower(G4int PointNumber,G4double energy, G4do
   AIDA::IDataPoint* point = dpsa->point(PointNumber);
   AIDA::IMeasurement* mX= point->coordinate( 0 );
   mX->setValue(energy );
-  // set errors if different from zero
   mX->setErrorPlus( 0. );
   mX->setErrorMinus( 0. );
   AIDA::IMeasurement* mY= point->coordinate( 1 );
   mY->setValue( SP);
-  //mY->setErrorPlus( ey[PointNumber] );
- }
+}
 void Tst50AnalysisManager::CSDARange(G4int PointNumber,G4double energy, G4double range)
 {
   dpsa1->addPoint();
@@ -133,7 +129,7 @@ void Tst50AnalysisManager::CSDARange(G4int PointNumber,G4double energy, G4double
   AIDA::IMeasurement* mY= point->coordinate( 1 );
   mY->setValue(range);
 }
-void Tst50AnalysisManager::trasmission(G4int PointNumber,G4double energy, G4double TransFraction, G4double BackFraction)
+void Tst50AnalysisManager::trasmission(G4int PointNumber,G4double energy, G4double TransFraction, G4double BackFraction, G4double TransError, G4double BackError)
 {
   dpsa2->addPoint();
   AIDA::IDataPoint* point = dpsa2->point(PointNumber);
@@ -141,16 +137,17 @@ void Tst50AnalysisManager::trasmission(G4int PointNumber,G4double energy, G4doub
   mX->setValue(energy );
   AIDA::IMeasurement* mY= point->coordinate( 1 );
   mY->setValue(TransFraction);
+  mY->setErrorPlus(TransError);
+  mY->setErrorMinus(TransError);
   AIDA::IMeasurement* mZ= point->coordinate( 2 );
   mZ->setValue(BackFraction);
-
+  mZ->setErrorPlus(BackError);
+  mZ->setErrorMinus(BackError);
 }
 
 void Tst50AnalysisManager::finish() 
 {  
-  // write all histograms to file
   theTree->commit();
-  // close (will again commit)
   theTree->close();
 }
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50RunAction.cc,v 1.15 2003-05-17 11:32:48 guatelli Exp $
+// $Id: Tst50RunAction.cc,v 1.16 2003-05-17 11:59:53 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -108,10 +108,11 @@ void Tst50RunAction::EndOfRunAction(const G4Run* aRun)
   
   if (particle_name =="gamma")
     {
-      G4double trans=(fg/numberEvents); 
-      G4double tran_coeff= -(log(trans))/(thickness*density);
+      G4double trans=(fg/numberEvents);
+      G4double trans_error=-(log(sqrt(fg)/numberEvents)/(thickness*density)); 
+      G4double trans_coeff= -(log(trans))/(thickness*density);
       Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
-      analysis -> attenuation_coeffiecient(runID,energy/MeV,tran_coeff/(cm2/g));
+      analysis -> attenuation_coeffiecient(runID,energy/MeV,trans_coeff/(cm2/g),trans_error/(cm2/g));
     }
  
   if(flag)
@@ -119,9 +120,11 @@ void Tst50RunAction::EndOfRunAction(const G4Run* aRun)
      if (particle_name =="e-" || particle_name =="e+")
       {
        G4double ft=(number/numberEvents) ;
+       G4double ft_error= (sqrt(number))/numberEvents;
        G4double fb=(numberB/numberEvents);
+       G4double fb_error= (sqrt(numberB))/numberEvents;
        Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
-       analysis-> trasmission(runID,energy/MeV,ft,fb);
+       analysis-> trasmission(runID,energy/MeV,ft,fb,ft_error,fb_error);
       }
     }
 }

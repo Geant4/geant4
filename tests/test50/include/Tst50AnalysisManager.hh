@@ -25,7 +25,7 @@
 // S.Guatelli
 //
 //
-// $Id: Tst50AnalysisManager.hh,v 1.13 2003-05-15 16:00:58 guatelli Exp $
+// $Id: Tst50AnalysisManager.hh,v 1.14 2003-05-17 11:59:35 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    **********************************
@@ -65,10 +65,10 @@ public:
   ~Tst50AnalysisManager();
   static Tst50AnalysisManager* getInstance();
   void book();
-  void attenuation_coeffiecient(G4int,G4double, G4double);
-  void StoppingPower(G4int,G4double, G4double);
-  void CSDARange(G4int,G4double, G4double);
-  void trasmission(G4int,G4double,G4double, G4double); 
+  void attenuation_coeffiecient(G4int,G4double,G4double,G4double);
+  void StoppingPower(G4int,G4double,G4double);
+  void CSDARange(G4int,G4double,G4double);
+  void trasmission(G4int,G4double,G4double,G4double,G4double,G4double); 
   void finish();
 
 private:
