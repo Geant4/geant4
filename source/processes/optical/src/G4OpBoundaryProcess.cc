@@ -337,14 +337,14 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 	theGlobalNormal = theNavigator->GetLocalToGlobalTransform().
 	                                TransformAxis(theLocalNormal);
-
         if (OldMomentum * theGlobalNormal > 0.0) {
+#ifdef G4DEBUG_OPTICAL
            G4cerr << " G4OpBoundaryProcess/PostStepDoIt(): "
                   << " theGlobalNormal points the wrong direction "
                   << G4endl;
+#endif
            theGlobalNormal = -theGlobalNormal;
         }
-
 	if (type == dielectric_metal) {
 
 	  DielectricMetal();
