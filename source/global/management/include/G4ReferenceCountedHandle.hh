@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ReferenceCountedHandle.hh,v 1.2 2001-04-18 19:43:41 radoone Exp $
+// $Id: G4ReferenceCountedHandle.hh,v 1.3 2001-06-01 10:31:13 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,137 +40,143 @@
 
 template <class X>
 class G4ReferenceCountedHandle
-   {
-   private: // with description
-      struct CountedObject {
-         unsigned int fCount;
-         // Reference counter
-         X*           fRep;
-         // The counted object
-      
-         CountedObject::CountedObject( X* pObj = 0 )
-         : fCount(1), fRep( pObj ) {
-         } // Constructor
-         
-         CountedObject::~CountedObject() {
-            delete fRep;
-            fRep = 0;
-         } // Destructor
-      };
+{
+private: // with description
+  struct CountedObject {
+    unsigned int fCount;
+    // Reference counter
+    X*           fRep;
+    // The counted object
 
-    public: // with description
-      G4ReferenceCountedHandle( X* rep = 0 )
-      : fObj( new G4ReferenceCountedHandle::CountedObject(rep) ) {
-      } // Constructor
-   
-      ~G4ReferenceCountedHandle()       {
-         if( 0 == Release() )       {
-            if( fObj->fRep != 0 ) {
-               delete fObj;
-            }
-         }
-      } // Destructor
-   
-      G4ReferenceCountedHandle( const G4ReferenceCountedHandle& right )
-      : fObj( new G4ReferenceCountedHandle::CountedObject() ) {
-         fObj = right.fObj;
-         AddRef();
-      } // Copy constructor
-      
-      template <class T>
-      G4ReferenceCountedHandle( const G4ReferenceCountedHandle<T>& right )
-      : fObj( new G4ReferenceCountedHandle::CountedObject() ) {
-         fObj = right.fObj;
-         AddRef();
-      } // Copy constructor
-   
-      G4ReferenceCountedHandle& operator =( const G4ReferenceCountedHandle& right ) {
-         if( &right != this )            {
-            if( 0 == Release() ) {
-               if( fObj->fRep != 0 ) {
-                  delete fObj;
-               }
-            }
-            fObj = right.fObj;
-            AddRef();
-         }
-         return *this;
-      } // Assignment operator by reference
-      
-      template <class T>
-      G4ReferenceCountedHandle& operator =( const G4ReferenceCountedHandle<T>& right ) {
-         if( &right != this )            {
-            if( 0 == Release() ) {
-               if( fObj->fRep != 0 ) {
-                  delete fObj;
-               }
-            }
-            fObj = right.fObj;
-            AddRef();
-         }
-         return *this;
-      } // Assignment operator by reference
-   
-      G4ReferenceCountedHandle& operator =( const G4ReferenceCountedHandle* right ) {
-         if( this != right )           {
-            if( 0 == Release() )      {
-               if( fObj->fRep != 0 ) {
-                  delete fObj;
-               }
-            }
-            fObj = right->fObj;
-            AddRef();
-         }
-         return *this;
-      } // Assignment operator by pointer
-   
-      G4ReferenceCountedHandle& operator =( X* pRefObj ) {
-         if( 0 == Release() )      {
-            if( fObj->fRep != 0 ) {
-               delete fObj;
-            }
-         }
-         fObj = new G4ReferenceCountedHandle::CountedObject( pRefObj );
-         return *this;
-      } // Assignment operator by pointer to the counted class object
-   
-      inline unsigned int AddRef() {
-         return ++fObj->fCount;
-      } // Forward to Counter class
-   
-      inline unsigned int Release() {
-         return --fObj->fCount;
-      } // Forward to Counter class
-   
-      inline unsigned int Count() const {
-         return fObj->fCount;
-      } // Forward to Counter class
-   
-      X* operator ->() const {
-         return fObj->fRep;
-      } // Operator -> allowing the access to counted object
-   
-      bool operator !() const {
-         return fObj->fRep == 0 ? true : false;
-      } // Validity test operator
-      
-      operator bool() const {
-        return fObj->fRep != 0 ? true : false;
+    CountedObject::CountedObject( X* pObj = 0 )
+    : fCount(1), fRep( pObj ) {
+    } // Constructor
+
+    CountedObject::~CountedObject() {
+      delete fRep;
+      fRep = 0;
+    } // Destructor
+  };
+
+public: // with description
+  G4ReferenceCountedHandle( X* rep = 0 )
+  : fObj( 0 ) {
+    if( rep != 0 ) {
+	    fObj = new G4ReferenceCountedHandle::CountedObject( rep );
+	  }
+  } // Constructor
+
+  ~G4ReferenceCountedHandle() {
+    if( 0 == Release() )    {
+      if( fObj != 0 )     {
+        delete fObj;
       }
-   
-      X& operator *() const {
-         return *fObj->fRep;
-      } // Dereference operator to make the feeling of dereferencing a pointer to
-        // the counted object
-   
-      X* operator ()() const {
-         return fObj->fRep;
-      } // Functor operator (for covinience)
-   
+    }
+  } // Destructor
+
+  G4ReferenceCountedHandle( const G4ReferenceCountedHandle& right )
+  : fObj( 0 ) {
+    fObj = right.fObj;
+    AddRef();
+  } // Copy constructor
   
-   private:
-      G4ReferenceCountedHandle::CountedObject*     fObj;
-     // Object being the subject to reference counting
-   };
+  template <class T>
+  G4ReferenceCountedHandle( const G4ReferenceCountedHandle<T>& right )
+  : fObj( 0 ) {
+    fObj = right.fObj;
+    AddRef();
+  } // Copy constructor
+
+  G4ReferenceCountedHandle& operator =( const G4ReferenceCountedHandle& right ) {
+    if( &right != this )              {
+      if( 0 == Release() )          {
+        if( fObj != 0 )           {
+          delete fObj;
+        }
+      }
+      fObj = right.fObj;
+      AddRef();
+    }
+    return *this;
+  } // Assignment operator by reference
+  
+  template <class T>
+  G4ReferenceCountedHandle& operator =( const G4ReferenceCountedHandle<T>& right ) {
+    if( &right != this )              {
+      if( 0 == Release() )          {
+        if( fObj != 0 )           {
+          delete fObj;
+        }
+      }
+      fObj = right.fObj;
+      AddRef();
+    }
+    return *this;
+  } // Assignment operator by reference
+
+  G4ReferenceCountedHandle& operator =( const G4ReferenceCountedHandle* right ) {
+    if( this != right )               {
+      if( 0 == Release() )          {
+        if( fObj != 0 )           {
+          delete fObj;
+        }
+      }
+      fObj = right->fObj;
+      AddRef();
+    }
+    return *this;
+  } // Assignment operator by pointer, should not be ever called 
+
+  G4ReferenceCountedHandle& operator =( X* pRefObj ) {
+    if( 0 == Release() )          {
+      if( fObj != 0 )           {
+        delete fObj;
+      }
+    }
+    fObj = new G4ReferenceCountedHandle::CountedObject( pRefObj );
+    return *this;
+  } // Assignment operator by pointer to the counted class object
+
+  inline unsigned int AddRef() {
+     return( ( fObj != 0 ) ? ++fObj->fCount : 0  );
+  } // Forward to Counter class
+
+  inline unsigned int Release() {
+     return( (fObj != 0 ) ? --fObj->fCount : 0 );
+  } // Forward to Counter class
+
+  inline unsigned int Count() const {
+     return( ( fObj != 0 ) ? fObj->fCount : 0 );
+  } // Forward to Counter class
+
+  X* operator ->() const {
+     return fObj->fRep;
+  } // Operator -> allowing the access to counted object
+    // The check for 0-ness is left out for performance reasons, see operator () bellow
+    // May be called on initialized smart-pointer only!
+
+  bool operator !() const {
+     return( ( fObj == 0 || fObj->fRep == 0 ) ? true : false );
+  } // Validity test operator
+  
+  operator bool() const {
+    return( ( fObj != 0 && fObj->fRep != 0 ) ? true : false );
+  }
+
+  X& operator *() const {
+     return *fObj->fRep;
+  } // Dereference operator to make the feeling of dereferencing a pointer to
+    // the counted object
+    // May be called on initialized smart-pointer only!
+
+  X* operator ()() const {
+     return( ( fObj != 0 ) ? fObj->fRep : 0 );
+  } // Functor operator (for covinience)
+
+
+private:
+  G4ReferenceCountedHandle::CountedObject*     fObj;
+ // Object being the subject to reference counting
+};
 
 #endif // _G4REFERENCECOUNTEDHANDLE_H_
