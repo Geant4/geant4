@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.4 2003-11-03 19:19:46 vnivanch Exp $
+// $Id: HistoManager.hh,v 1.5 2004-04-02 15:13:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef HistoManager_h
@@ -50,9 +50,11 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4DataVector.hh"
 #include "G4Track.hh"
-#include "Histo.hh"
+//#include "Histo.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+class Histo;
 
 class HistoManager
 {
@@ -141,7 +143,7 @@ private:
   G4DataVector Evertex;
   G4DataVector Nvertex;
 
-  Histo  histo;
+  Histo*  histo;
 };
 
 #endif

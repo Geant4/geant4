@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Histo.hh,v 1.2 2003-11-03 19:19:46 vnivanch Exp $
+// $Id: Histo.hh,v 1.3 2004-04-02 15:13:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef Histo_h
@@ -92,9 +92,9 @@ public:
   void addRow();
   // Save tuple event 
 
-  void setFileName(const G4String& nam) {histName = nam;};
+  void setFileName(const G4String&);
 
-  void setFileType(const G4String& nam) {if(nam == "XML") histType = "XML";};
+  void setFileType(const G4String&);
 
 private:
 
@@ -117,7 +117,7 @@ private:
   std::vector<G4double>  xmax;
   std::vector<G4double>  unit;
   std::vector<G4String>  ids;
-  std::vector<G4String>  tittles;
+  std::vector<G4String>  titles;
 };
 
 #endif

@@ -36,12 +36,12 @@
 #include "Histo.hh"
 
 #ifdef G4ANALYSIS_USE
+
 #include <memory> // for the auto_ptr(T>
 #include "AIDA/AIDA.h"
 #include "HistoMessenger.hh"
-#endif
 
-//#include <iomanip>
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -84,14 +84,16 @@ void Histo::book()
   G4cout << "### Histo books " << nHisto << " histograms " << G4endl;
   // Creating the analysis factory
   std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
-
   // Creating the tree factory
   std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
 
   // Creating a tree mapped to a new hbook file.
-  //tree = tf->create(histName,histType,false,false);
-  tree = tf->create(histName,histType,false,false,"uncompress");
-  G4cout << "Tree store : " << tree->storeName() << G4endl;
+
+  tree = tf->create(histName,histType,false,true,"uncompress");
+  if(tree) 
+    G4cout << "Tree store  : " << tree->storeName() << G4endl;
+  else
+    G4cout << "ERROR: Tree store " << histName  << " is not created!" << G4endl;
 
   // Creating a histogram factory, whose histograms will be handled by the tree
   std::auto_ptr< AIDA::IHistogramFactory > hf(af->createHistogramFactory( *tree ));
@@ -100,7 +102,7 @@ void Histo::book()
   for(G4int i=0; i<nHisto; i++) {
     if(active[i]) {
 
-      histo[i] = hf->createHistogram1D(ids[i], tittles[i], bins[i], xmin[i], xmax[i]);
+      histo[i] = hf->createHistogram1D(ids[i], titles[i], bins[i], xmin[i], xmax[i]);
     }
   }
   // Creating a tuple factory, whose tuples will be handled by the tree
@@ -143,7 +145,7 @@ void Histo::add1D(const G4String& id, const G4String& name, G4int nb,
   xmax.push_back(x2);
   unit.push_back(u);
   ids.push_back(id);
-  tittles.push_back(name);
+  titles.push_back(name);
   histo.push_back(0);
 }
 
@@ -229,6 +231,20 @@ void Histo::addRow()
   if(ntup) ntup->addRow();
 #endif
 } 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void Histo::setFileName(const G4String& nam) 
+{
+  histName = nam;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void Histo::setFileType(const G4String& nam) 
+{
+  histType = nam;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
