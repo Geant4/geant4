@@ -201,7 +201,7 @@ applications.
 For the future releases, an interface change to the class
 <TT>G4VParticleChange</TT> is foreseen. The required changes are already
 implemented in this release while still keeping valid the old interface.<BR>
-The following methods will be removed in release 7.0:
+The following methods will be removed in the future:
 <PRE>
       void  SetTrueStepLength(G4double truePathLength);
       void  SetLocalEnergyDeposit(G4double anEnergyPart);
@@ -219,6 +219,14 @@ They will have to be replaced by the following methods, respectively:
       void ProposeSteppingControl(G4SteppingControl StepControlFlag);
       void ProposeParentWeight(G4double);
 </PRE>
+<P> </P>
+<B>Future migration for <TT>G4GeneralParticleSource</TT> class</B>
+<P> </P>
+A 'tree-structured' command format is implemented in this release for
+<TT>G4GeneralParticleSource</TT>. The old UI commands have been kept
+for backward compatibility but will be removed in the future.<BR>
+For more information, please consult:
+<A HREF="http://reat.space.qinetiq.com/gps">http://reat.space.qinetiq.com/gps</A>.
 
 <P> </P>
 <A NAME="8."></A>
@@ -400,7 +408,7 @@ please refer to the related History files provided in most packages):
 <LI><B>Cuts</B>:
     <UL>
     <LI>Enabled the user to retrieve from a file tables with materials and
-        couples which are in a different order to that in memory.
+        couples which are in a different order to that in memory.<BR>
         Modified <TT>G4ProductionCutsTable::RetrieveCutsTable()</TT> to enable this.</LI>
     <LI><TT>G4ProductionCuts</TT>: moved usage of statics in inline functions
         to non-inline for porting to DLLs on Windows.</LI>
