@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ions.cc,v 1.6 2001-07-11 10:02:00 gunter Exp $
+// $Id: G4Ions.cc,v 1.7 2003-02-18 01:55:00 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,6 +55,7 @@ G4Ions::G4Ions(
            iConjugation,iIsospin,iIsospin3,gParity,pType,
            lepton,baryon,encoding,stable,lifetime,decaytable )
 {
+  SetParticleSubType("generic");
   // initialize excitation energy/level
    theExcitationEnergy = 0.0;
 }
