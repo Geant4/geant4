@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DecayProducts.cc,v 1.2 1999-02-06 10:10:13 kurasige Exp $
+// $Id: G4DecayProducts.cc,v 1.3 1999-04-13 08:00:15 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,13 +31,13 @@ G4Allocator<G4DecayProducts> aDecayProductsAllocator;
 
 
 G4DecayProducts::G4DecayProducts()
-                :numberOfProducts(0),theParentParticle(NULL)
+                :numberOfProducts(0),theParentParticle(0)
 { 
 
 }
 
 G4DecayProducts::G4DecayProducts(const G4DynamicParticle &aParticle)
-                :numberOfProducts(0),theParentParticle(NULL)
+                :numberOfProducts(0),theParentParticle(0)
 {
   theParentParticle = new G4DynamicParticle(aParticle);
 }
@@ -62,7 +62,7 @@ G4DecayProducts & G4DecayProducts::operator=(const G4DecayProducts &right)
   if (this != &right)
   { 
     // recreate parent
-    if (theParentParticle != NULL) delete theParentParticle;
+    if (theParentParticle != 0) delete theParentParticle;
     theParentParticle = new G4DynamicParticle(*right.theParentParticle);
 
     // delete G4DynamicParticle objects
@@ -84,7 +84,7 @@ G4DecayProducts & G4DecayProducts::operator=(const G4DecayProducts &right)
 G4DecayProducts::~G4DecayProducts()
 {
   //delete parent
-  if (theParentParticle != NULL) delete theParentParticle;
+  if (theParentParticle != 0) delete theParentParticle;
   
   // delete G4DynamicParticle object
   for (G4int index=0; index < numberOfProducts; index++)
@@ -100,7 +100,7 @@ G4DynamicParticle* G4DecayProducts::PopProducts()
      numberOfProducts -= 1;   
      return  theProductVector[numberOfProducts];
    } else {
-     return NULL;
+     return 0;
    }
 }
 
@@ -124,13 +124,13 @@ G4DynamicParticle* G4DecayProducts::operator[](G4int anIndex) const
    if ((numberOfProducts > anIndex) && (anIndex >=0) ) {
      return  theProductVector[anIndex];
    } else {
-     return NULL;
+     return 0;
    }
 }
 
 void  G4DecayProducts::SetParentParticle(const G4DynamicParticle &aParticle)
 {
-  if (theParentParticle != NULL) delete theParentParticle;
+  if (theParentParticle != 0) delete theParentParticle;
   theParentParticle = new G4DynamicParticle(aParticle);
 }
 
@@ -263,7 +263,7 @@ void G4DecayProducts::DumpInfo()
 {
    G4cout << " ----- List of DecayProducts  -----" << endl;
    G4cout << " ------ Parent Particle ----------" << endl;
-   if (theParentParticle != NULL) theParentParticle->DumpInfo();
+   if (theParentParticle != 0) theParentParticle->DumpInfo();
    G4cout << " ------ Daughter Particles  ------" << endl;  
    for (G4int index=0; index < numberOfProducts; index++) 
    {

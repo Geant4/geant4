@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuonDecayChannel.cc,v 1.2 1999-02-06 10:10:15 kurasige Exp $
+// $Id: G4MuonDecayChannel.cc,v 1.3 1999-04-13 08:00:21 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,8 +78,8 @@ G4DecayProducts *G4MuonDecayChannel::DecayIt(G4double)
   if (GetVerboseLevel()>1) G4cout << "G4MuonDecayChannel::DecayIt ";
 #endif
 
-  if (parent == NULL) FillParent();  
-  if (daughters == NULL) FillDaughters();
+  if (parent == 0) FillParent();  
+  if (daughters == 0) FillDaughters();
  
   // parent mass
   G4double parentmass = parent->GetPDGMass();

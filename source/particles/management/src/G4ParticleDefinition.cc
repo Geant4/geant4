@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleDefinition.cc,v 1.1 1999-01-07 16:10:35 gunter Exp $
+// $Id: G4ParticleDefinition.cc,v 1.2 1999-04-13 08:00:29 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,7 +77,7 @@ G4ParticleDefinition::G4ParticleDefinition(
 		   thePDGStable(stable), 
 		   thePDGLifeTime(lifetime), 
                    theDecayTable(decaytable),
-		   theProcessManager(NULL),
+		   theProcessManager(0),
 		   fShortLivedFlag(shortlived),
 		   fApplyCutsFlag(false),
                    verboseLevel(1)
@@ -88,7 +88,7 @@ G4ParticleDefinition::G4ParticleDefinition(
    //#ifdef G4VERBOSE
    //if (ptr != this) {
    //  // Fail to register to ParticleTable
-   //  if (ptr != NULL) {
+   //  if (ptr != 0) {
    //    // particle with same name already exists in ParticleTable 
    //    if (verboseLevel>0) {
    //      G4cerr << "Particle name of " << aName << " has already defined " <<endl;
@@ -134,7 +134,7 @@ G4ParticleDefinition::G4ParticleDefinition()
 
 G4ParticleDefinition::~G4ParticleDefinition() 
 {
-  if (theDecayTable!= NULL) delete theDecayTable;
+  if (theDecayTable!= 0) delete theDecayTable;
 }
 
 
@@ -497,7 +497,7 @@ void G4ParticleDefinition::DumpTable() const
   if ( thePDGStable ){
     G4cout << " Stable : stable" << endl;
   } else {
-    if( theDecayTable != NULL ){
+    if( theDecayTable != 0 ){
       theDecayTable->DumpInfo();
     } else {
       G4cout << "Decay Table is not defined !!" <<endl;

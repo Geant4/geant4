@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DecayTable.cc,v 1.1 1999-01-07 16:10:32 gunter Exp $
+// $Id: G4DecayTable.cc,v 1.2 1999-04-13 08:00:16 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,7 +22,7 @@
 #include "G4DecayTable.hh"
 #include "Randomize.hh"
 
-G4DecayTable::G4DecayTable():parent(NULL)
+G4DecayTable::G4DecayTable():parent(0)
 {
   channels =  new G4VDecayChannelVector;
 }
@@ -34,7 +34,7 @@ G4DecayTable::~G4DecayTable()
 }    
 
 void G4DecayTable::Insert( G4VDecayChannel * aChannel){
-  if (parent == NULL) { parent = aChannel->GetParent(); }
+  if (parent == 0) { parent = (G4ParticleDefinition*)(aChannel->GetParent()); }
   if (parent != aChannel->GetParent()) {
 #ifdef G4VERBOSE
     G4cerr << " G4DecayTable::Insert :: bad   G4VDecayChannel (mismatch parent) ";

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhaseSpaceDecayChannel.cc,v 1.2 1999-02-06 10:10:15 kurasige Exp $
+// $Id: G4PhaseSpaceDecayChannel.cc,v 1.3 1999-04-13 08:00:34 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,10 +64,10 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::DecayIt(G4double parentMass)
   if (GetVerboseLevel()>1) G4cout << "G4PhaseSpaceDecayChannel::DecayIt ";
 #endif
   
-  G4DecayProducts * products = NULL;
+  G4DecayProducts * products = 0;
  
-  if (parent == NULL) FillParent();  
-  if (daughters == NULL) FillDaughters();
+  if (parent == 0) FillParent();  
+  if (daughters == 0) FillDaughters();
 
   if (parentMass >0.0) parent_mass = parentMass;  
   switch (numberOfDaughters){
@@ -93,7 +93,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::DecayIt(G4double parentMass)
     break;
   }
 #ifdef G4VERBOSE
-  if ((products == NULL) && (GetVerboseLevel()>0)) {
+  if ((products == 0) && (GetVerboseLevel()>0)) {
     G4cout << "G4PhaseSpaceDecayChannel::DecayIt ";
     G4cout << *parent_name << " can not decay " << endl;
     DumpInfo();
@@ -381,7 +381,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
 	delete [] sm;
 	delete [] daughtermass;
 	delete [] daughtermomentum;
-	return NULL;   // Error detection
+	return 0;   // Error detection
 
       } else {
 	// calculate weight of this events
@@ -405,7 +405,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
       delete [] sm;
       delete [] daughtermass;
       delete [] daughtermomentum;
-      return NULL;  // Error detection
+      return 0;  // Error detection
     }
   } while ( weight > G4UniformRand());
 

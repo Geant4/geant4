@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleMessenger.cc,v 1.1 1999-01-07 16:10:35 gunter Exp $
+// $Id: G4ParticleMessenger.cc,v 1.2 1999-04-13 08:00:30 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -40,7 +40,7 @@
 G4ParticleMessenger::G4ParticleMessenger(G4ParticleTable* pTable)
 {
   // get the pointer to ParticleTable
-  if ( pTable == NULL) {
+  if ( pTable == 0) {
     theParticleTable = G4ParticleTable::GetParticleTable();
   } else {
     theParticleTable = pTable;
@@ -70,7 +70,7 @@ G4ParticleMessenger::G4ParticleMessenger(G4ParticleTable* pTable)
   findCmd->SetDefaultValue(0);
   findCmd->SetParameterName("encoding", false);
 
-  currentParticle = NULL;
+  currentParticle = 0;
 
   //UI messenger for Particle Properties
   fParticlePropertyMessenger = new G4ParticlePropertyMessenger(theParticleTable);
@@ -112,13 +112,13 @@ void G4ParticleMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
   } else if( command==selectCmd ){
     //Commnad   /particle/select
     currentParticle = theParticleTable->FindParticle(newValues);
-    if(currentParticle == NULL) {
+    if(currentParticle == 0) {
       G4cout << "Unknown particle [" << newValues << "]. Command ignored." << endl;
     }   
   } else if( command==findCmd ){
     //Commnad   /particle/find
     G4ParticleDefinition* tmp = theParticleTable->FindParticle( findCmd->GetNewIntValue(newValues));
-    if(tmp == NULL) {
+    if(tmp == 0) {
       G4cout << "Unknown particle [" << newValues << "]. Command ignored." << endl;
     } else {
       G4cout << tmp->GetParticleName() << endl;
@@ -139,12 +139,13 @@ G4String G4ParticleMessenger::GetCurrentValue(G4UIcommand * command)
       G4ParticleDefinition *particle = piter->value();
       candidates += " " + particle->GetParticleName();
     }
-    selectCmd->SetCandidates(candidates);   
+    selectCmd->SetCandidates((const char *)(candidates));   
 
+    static G4String noName("none");
     // current value
-    if(currentParticle == NULL) {
+    if(currentParticle == 0) {
       // no particle is selected. return null 
-      return "none";
+      return noName;
     } else {
       return currentParticle->GetParticleName();
     }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DecayTableMessenger.cc,v 1.1 1999-01-07 16:10:32 gunter Exp $
+// $Id: G4DecayTableMessenger.cc,v 1.2 1999-04-13 08:00:17 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -40,9 +40,9 @@
 G4DecayTableMessenger::G4DecayTableMessenger(G4ParticleTable* pTable)
                      :theParticleTable(pTable)
 {
-  if ( theParticleTable == NULL) theParticleTable = G4ParticleTable::GetParticleTable();
+  if ( theParticleTable == 0) theParticleTable = G4ParticleTable::GetParticleTable();
 
-  currentParticle = NULL;
+  currentParticle = 0;
 
   //Commnad   /particle/property/decay/
   thisDirectory = new G4UIdirectory("/particle/property/decay/");
@@ -54,7 +54,7 @@ G4DecayTableMessenger::G4DecayTableMessenger(G4ParticleTable* pTable)
   selectCmd->SetParameterName("mode", true);
   selectCmd->SetDefaultValue(0);
   selectCmd->SetRange("mode >=0");
-  currentChannel = NULL;
+  currentChannel = 0;
 
   //Commnad   /particle/property/decay/dump
   dumpCmd = new G4UIcmdWithoutParameter("/particle/property/decay/dump",this);
@@ -78,11 +78,11 @@ G4DecayTableMessenger::~G4DecayTableMessenger()
 
 void G4DecayTableMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
 {
-  if (SetCurrentParticle()==NULL) {
+  if (SetCurrentParticle()==0) {
     G4cout << "Particle is not selected yet !! Command ignored." << endl;
     return;
   }
-  if (currentDecayTable==NULL) {
+  if (currentDecayTable==0) {
     G4cout << "The particle has no decay table !! Command ignored." << endl;
     return;
   }
@@ -95,14 +95,14 @@ void G4DecayTableMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
     //Commnad   /particle/property/decay/select
     G4int index = selectCmd->GetNewIntValue(newValue) ;
     currentChannel = currentDecayTable->GetDecayChannel(index);
-    if ( currentChannel == NULL ) {
+    if ( currentChannel == 0 ) {
       G4cout << "Invalid index. Command ignored." << endl;
     } else {
       idxCurrentChannel = index;
     }
 
   } else {
-    if ( currentChannel == NULL ) {
+    if ( currentChannel == 0 ) {
       G4cout << "Select a decay channel. Command ignored." << endl;
       return;
     }
@@ -127,12 +127,12 @@ G4ParticleDefinition* G4DecayTableMessenger::SetCurrentParticle()
 
   G4String particleName = G4UImanager::GetUIpointer()->GetCurrentStringValue("/particle/select");
 
-  if (currentParticle != NULL ){
+  if (currentParticle != 0 ){
     // check whether selection is changed 
     if (currentParticle->GetParticleName() != particleName) {
       currentParticle = theParticleTable->FindParticle(particleName);
       idxCurrentChannel = -1;
-      currentDecayTable = NULL;
+      currentDecayTable = 0;
     } else {
       // no change 
       return currentParticle;
@@ -140,16 +140,16 @@ G4ParticleDefinition* G4DecayTableMessenger::SetCurrentParticle()
   } else {
     currentParticle = theParticleTable->FindParticle(particleName);
     idxCurrentChannel = -1;
-    currentDecayTable = NULL;
+    currentDecayTable = 0;
   }
 
-  if (currentParticle != NULL ){
+  if (currentParticle != 0 ){
     currentDecayTable = currentParticle->GetDecayTable();
-    if ((currentDecayTable != NULL ) && (idxCurrentChannel >0) ) {
+    if ((currentDecayTable != 0 ) && (idxCurrentChannel >0) ) {
       currentChannel = currentDecayTable->GetDecayChannel(idxCurrentChannel);
     } else {
       idxCurrentChannel = -1;
-      currentChannel = NULL;
+      currentChannel = 0;
     }
   }
   return currentParticle;
@@ -159,7 +159,7 @@ G4String G4DecayTableMessenger::GetCurrentValue(G4UIcommand * command)
 {
   G4String returnValue('\0');
 
-  if (SetCurrentParticle()==NULL) {
+  if (SetCurrentParticle()==0) {
     // no particle is selected. return null 
     return returnValue;
   }
@@ -169,7 +169,7 @@ G4String G4DecayTableMessenger::GetCurrentValue(G4UIcommand * command)
     returnValue = selectCmd->ConvertToString(idxCurrentChannel);
 
   } else if( command == brCmd ){
-    if ( currentChannel != NULL) {
+    if ( currentChannel != 0) {
       returnValue = brCmd->ConvertToString(currentChannel->GetBR());
     } 
   }

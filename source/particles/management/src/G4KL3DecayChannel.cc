@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4KL3DecayChannel.cc,v 1.2 1999-02-06 10:10:14 kurasige Exp $
+// $Id: G4KL3DecayChannel.cc,v 1.3 1999-04-13 08:00:20 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -91,13 +91,13 @@ G4DecayProducts* G4KL3DecayChannel::DecayIt(G4double)
   if (GetVerboseLevel()>1) G4cout << "G4KL3DecayChannel::DecayIt " << endl;
 #endif
   // fill parent particle and its mass
-  if (parent == NULL) {
+  if (parent == 0) {
     FillParent();
   }
   massK = parent->GetPDGMass();
 
   // fill daughter particles and their mass
-  if (daughters == NULL) {
+  if (daughters == 0) {
     FillDaughters();
   }
   daughterM[idPi] = daughters[idPi]->GetPDGMass();

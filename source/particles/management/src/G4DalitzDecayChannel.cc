@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DalitzDecayChannel.cc,v 1.2 1999-02-06 10:10:12 kurasige Exp $
+// $Id: G4DalitzDecayChannel.cc,v 1.3 1999-04-13 08:00:14 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,7 +44,8 @@ G4DalitzDecayChannel::G4DalitzDecayChannel(
   SetParent(theParentName);
   SetBR(theBR);
   SetNumberOfDaughters(3);
-  SetDaughter(idGamma, "gamma");
+  G4String gammaName = "gamma";
+  SetDaughter(idGamma, gammaName);
   SetDaughter(idLepton, theLeptonName);
   SetDaughter(idAntiLepton, theAntiLeptonName);
   //
@@ -62,8 +63,8 @@ G4DecayProducts *G4DalitzDecayChannel::DecayIt(G4double)
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) G4cout << "G4DalitzDecayChannel::DecayIt ";
 #endif 
-  if (parent == NULL) FillParent();  
-  if (daughters == NULL) FillDaughters();
+  if (parent == 0) FillParent();  
+  if (daughters == 0) FillDaughters();
 
   // parent mass
   G4double parentmass = parent->GetPDGMass();

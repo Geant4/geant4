@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NucleiProperties.cc,v 1.1 1999-01-07 16:10:33 gunter Exp $
+// $Id: G4NucleiProperties.cc,v 1.2 1999-04-13 08:00:22 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,7 +59,7 @@ G4double  G4NucleiProperties::AtomicMass(G4double Z, G4double A)
   G4ParticleDefinition* proton = G4ParticleTable::GetParticleTable()->FindParticle("proton");
   G4ParticleDefinition* neutron = G4ParticleTable::GetParticleTable()->FindParticle("neutron");
   G4ParticleDefinition* electron = G4ParticleTable::GetParticleTable()->FindParticle("e-");
-  if ((proton == NULL)||(neutron == NULL)||(electron == NULL)) {
+  if ((proton == 0)||(neutron == 0)||(electron == 0)) {
     G4Exception("G4NucleiProperties: G4Proton or G4Neutron is not defined !!"); 
   }
   const G4double proton_mass = proton->GetPDGMass();

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NucleiPropertiesTable.cc,v 1.1 1999-01-07 16:10:34 gunter Exp $
+// $Id: G4NucleiPropertiesTable.cc,v 1.2 1999-04-13 08:00:25 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -32,6 +32,7 @@
 
 // Class G4NucleiPropertiesTable 
 
+G4String G4NucleiPropertiesTable::noName = " ";
 //+----------------------+
 //| Table of Mass Excess |
 //+----------------------+
@@ -2006,7 +2007,7 @@ G4NucleiPropertiesTable::G4NucleiPropertiesTable(G4double dummy)
 
 // Determine the table index for a Nuclide with Z protons and A nucleons
 
-G4int G4NucleiPropertiesTable::GetIndex(G4int Z, G4int A)
+G4int G4NucleiPropertiesTable::GetIndex(G4int Z, G4int A) 
 {
 
   if(A>273) G4Exception(
@@ -2042,4 +2043,11 @@ G4int G4NucleiPropertiesTable::MaxZ(G4int A)
   G4int i = shortTable[A] - 1;
   return indexArray[0][i];
 }
+
+
+
+
+
+
+
 

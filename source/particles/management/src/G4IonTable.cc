@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.cc,v 1.4 1999-03-15 08:14:39 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.5 1999-04-13 08:00:19 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,8 +22,6 @@
 //      use G4NucleiPropoerties to get nuceli Mass 17  Nov.,98 H.Kurashige
 //      use G4GenericIon for process List
 //      modify fomula of Ion mass       09 Dec., 98 H.Kurashige 
-//      fix mass formula in GetIon and add GetNucleusMass 
-//                                       15 Mar. 99  H.Kurashige
 #include "G4IonTable.hh"
 #include "G4ParticleTable.hh"
 #include "G4Ions.hh"
@@ -96,13 +94,13 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int J, G4int Q)
   if (protonMass<=0.0) {
     G4ParticleDefinition* proton = G4ParticleTable::GetParticleTable()->FindParticle("proton");
     G4ParticleDefinition* neutron = G4ParticleTable::GetParticleTable()->FindParticle("neutron");
-    if ((proton == NULL)||(neutron == NULL)) {
+    if ((proton == 0)||(neutron == 0)) {
       G4Exception("G4IonTable: G4Proton or G4Neutron is not defined !!"); 
     }
     protonMass = proton->GetPDGMass();
     neutronMass = neutron->GetPDGMass();
     G4ParticleDefinition* electron = G4ParticleTable::GetParticleTable()->FindParticle("e-");
-    if (electron == NULL) {
+    if (electron == 0) {
       G4Exception("G4IonTable: G4Electron is not defined !!"); 
     }
     electronMass = electron->GetPDGMass();
@@ -133,9 +131,9 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int J, G4int Q)
 	G4cerr << " Z =" << Z << "  A = " << A <<  endl;
       }
 #endif
-      return NULL;
+      return 0;
     } 
-    G4double mass = GetNucleusMass(Z, A) + electronMass*G4double(Z-Q);
+    G4double mass = GetIonMass(Z, A) + electronMass*G4double(Q);
     G4double charge =  G4double(Q)*eplus;
     // create an ion
     //   spin, parity, isospin values are fixed
@@ -144,7 +142,7 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int J, G4int Q)
 			    J,              +1,             0,          
 			    0,               0,             0,             
 		    "nucleus",       0,             A,           0,
-			 true,            -1.0,          NULL);
+			 true,            -1.0,          0);
 
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>1) {
@@ -157,7 +155,7 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int J, G4int Q)
     G4UImanager::GetUIpointer()->ApplyCommand(cmd);
     
     G4ParticleDefinition* alpha=G4ParticleTable::GetParticleTable()->FindParticle("GenericIon");
-    if (alpha->GetEnergyCuts() != NULL) {
+    if (alpha->GetEnergyCuts() != 0) {
       ion->SetCuts( alpha->GetLengthCuts());
     }
   }
@@ -179,10 +177,10 @@ G4String G4IonTable::GetIonName(G4int Z, G4int A, G4int J, G4int Q) const
   return name;
 }
 
-G4double  G4IonTable::GetNucleusMass(G4int Z, G4int A) const
+G4double  G4IonTable::GetIonMass(G4int Z, G4int A) const
 {
-  G4ParticleDefinition* ion=NULL;
-  G4double mass;  
+  G4ParticleDefinition* ion=0;
+  G4double mass;
   if ( (Z<=2) ) {
     if ( (Z==1)&&(A==1) ) {
 	  ion = G4ParticleTable::GetParticleTable()->FindParticle("proton"); // proton 
@@ -198,24 +196,14 @@ G4double  G4IonTable::GetNucleusMass(G4int Z, G4int A) const
 	  ion = G4ParticleTable::GetParticleTable()->FindParticle("He3"); // He3 
 	}
   }
-  if (ion!=NULL) {
+  if (ion!=0) {
 	mass = ion->GetPDGMass();
   }else {
     // This routine returns mass of nuclei (w/o including electron mass) 
-    //   mass = Z*proton_mass + (A-Z)*neutron_mass - binding energy
-    G4double bindingEnergy = G4NucleiPropertiesTable::GetBindingEnergy(Z, A);
-    mass = G4double(Z)*protonMass + G4double(A-Z)*neutronMass - bindingEnergy;
-//      
-//    mass =  G4NucleiProperties::GetAtomicMass(G4double(A),G4double(Z));
-//    mass -= electronMass*G4double(Z);
+    mass =  G4NucleiProperties::GetAtomicMass(G4double(A),G4double(Z));
+    mass -= electronMass*G4double(Z);
   }
   return mass;
-}
-
-
-G4double  G4IonTable::GetIonMass(G4int Z, G4int A) const
-{
-  return GetNucleusMass(Z,A);
 }
 
 G4bool G4IonTable::IsIon(G4ParticleDefinition* particle) const

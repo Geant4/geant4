@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticlePropertyMessenger.cc,v 1.1 1999-01-07 16:10:35 gunter Exp $
+// $Id: G4ParticlePropertyMessenger.cc,v 1.2 1999-04-13 08:00:31 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -40,10 +40,10 @@
 
 G4ParticlePropertyMessenger::G4ParticlePropertyMessenger(G4ParticleTable* pTable)
                         :theParticleTable(pTable),
-			 currentParticle(NULL),
-			 fDecayTableMessenger(NULL)
+			 currentParticle(0),
+			 fDecayTableMessenger(0)
 {
-  if ( theParticleTable == NULL) theParticleTable = G4ParticleTable::GetParticleTable();
+  if ( theParticleTable == 0) theParticleTable = G4ParticleTable::GetParticleTable();
   //Commnad   /particle/property/
   thisDirectory = new G4UIdirectory("/particle/property/");
   thisDirectory->SetGuidance("Paricle Table control commands.");
@@ -89,8 +89,8 @@ G4ParticlePropertyMessenger::G4ParticlePropertyMessenger(G4ParticleTable* pTable
 
 G4ParticlePropertyMessenger::~G4ParticlePropertyMessenger()
 {
-  if (fDecayTableMessenger !=NULL) delete  fDecayTableMessenger;
-  fDecayTableMessenger = NULL;
+  if (fDecayTableMessenger !=0) delete  fDecayTableMessenger;
+  fDecayTableMessenger = 0;
 
   delete stableCmd; 
   delete verboseCmd;
@@ -101,7 +101,7 @@ G4ParticlePropertyMessenger::~G4ParticlePropertyMessenger()
 
 void G4ParticlePropertyMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
 {
-  if (SetCurrentParticle()==NULL) {
+  if (SetCurrentParticle()==0) {
       G4cout << "Particle is not selected yet !! Command ignored." << endl;
       return;
   }
@@ -138,7 +138,7 @@ G4ParticleDefinition* G4ParticlePropertyMessenger::SetCurrentParticle()
 
   G4String particleName = G4UImanager::GetUIpointer()->GetCurrentStringValue("/particle/select");
 	
-  if (currentParticle != NULL ){
+  if (currentParticle != 0 ){
     // check whether selection is changed 
     if (currentParticle->GetParticleName() != particleName) {
       currentParticle = theParticleTable->FindParticle(particleName);
@@ -153,7 +153,7 @@ G4String G4ParticlePropertyMessenger::GetCurrentValue(G4UIcommand * command)
 {
   G4String returnValue('\0');
 
-  if (SetCurrentParticle()==NULL) {
+  if (SetCurrentParticle()==0) {
     // no particle is selected. return null 
     return returnValue;
   }
