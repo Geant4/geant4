@@ -26,7 +26,7 @@
 // Created: Sajan Easo (Sajan.Easo@cern.ch)
 // Revision and changes: Patricia Mendez (Patricia.Mendez@cern.ch)
 /////////////////////////////////////////////////////////////////////////////
-#include <iostream.h>
+#include <iostream>
 #include "globals.hh"
 #include "G4Box.hh"
 #include "G4Trd.hh"

@@ -126,6 +126,7 @@ prepare some environment variables by source-ing one of the following
 startup scripts:
 
 (THIS EXAMPLE HAS BEEN DEVELOPED AND TESTED WITH THE gcc-2.95.5  COMPILER)
+(A.R. 12-Mar-2004 : TESTED ALSO WITH  gcc-3.2 or Linux RH 7.3)
 
 o Setup the environment variable: G4ANALYSIS_USE     1
 o setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat73/gcc-2.95.2/5.0.5/bin

@@ -26,7 +26,7 @@
 // Created: Sajan Easo (Sajan.Easo@cern.ch)
 // Revision and changes: Patricia Mendez (Patricia.Mendez@cern.ch)
 /////////////////////////////////////////////////////////////////////////////
-#include <iostream.h>
+#include <iostream>
 #include <math.h>
 #include "globals.hh"
 #include "RichTbMaterial.hh"
@@ -47,8 +47,8 @@
 
 
 RichTbMaterial::RichTbMaterial(RichTbRunConfig* RConfig):
-   RichTbAerogelMaterial(vector<G4Material*> (MaxNumberOfAerogelTypes)),
-   RichTbFilterMaterial(vector<G4Material*>(MaxNumberOfFilterTypes)){ 
+   RichTbAerogelMaterial(std::vector<G4Material*> (MaxNumberOfAerogelTypes)),
+   RichTbFilterMaterial(std::vector<G4Material*>(MaxNumberOfFilterTypes)){ 
 
   rConfig=RConfig;
 
@@ -212,8 +212,8 @@ RichTbMaterial::RichTbMaterial(RichTbRunConfig* RConfig):
   G4double* NitrogenGasPhotW=new G4double[NumPhotWaveLengthBins];
   
 
-  vector<G4double>N2RefInd= InitN2RefIndex(pressure,temperature);
-  vector<G4double>N2RefPhotW=InitN2RefPhotW();
+  std::vector<G4double>N2RefInd= InitN2RefIndex(pressure,temperature);
+  std::vector<G4double>N2RefPhotW=InitN2RefPhotW();
 
   for (ibin=0; ibin<NumPhotWaveLengthBins; ibin++){
     NitrogenGasAbsorpLength[ibin]=1.E32*mm;
@@ -394,8 +394,8 @@ RichTbMaterial::RichTbMaterial(RichTbRunConfig* RConfig):
  G4double* GlassD263MomValue = new G4double[NumPhotBinGlassD263Trans+2];
  G4double* currBulkTransFilter = new G4double[NumPhotBinGlassD263Trans+2];
  FilterTrData* CurFil = RConfig->GetFilterTrData();
-  vector<G4double>GlassD263TransWL = CurFil-> GetTransWL();
-  vector<G4double>GlassD263Transmis = CurFil->GetTransTotValue();
+  std::vector<G4double>GlassD263TransWL = CurFil-> GetTransWL();
+  std::vector<G4double>GlassD263Transmis = CurFil->GetTransTotValue();
   G4double FilterHalfZ= CurFil->GetCurFilterThickness();
   
   for (ibin=0; ibin<NumPhotBinGlassD263Trans+2; ibin++){
@@ -493,7 +493,7 @@ RichTbMaterial::RichTbMaterial(RichTbRunConfig* RConfig):
   G4double* AerogTypeARScatLength = new G4double[NumPhotWaveLengthBins];
   G4double* currentAgelTrans = new G4double[NumPhotWaveLengthBins];
 
-  vector<G4double>AerogelTypeASLength = GetAerogelRScatLength(AerogelTypeA);
+  std::vector<G4double>AerogelTypeASLength = GetAerogelRScatLength(AerogelTypeA);
   G4int AerogNumber=0;
   G4double AerogelLength=GetCurAerogelLength(AerogNumber);
   G4double MaxTotTransmission=AerogelTypeATotTrans;
@@ -875,11 +875,11 @@ RichTbMaterial::RichTbMaterial(RichTbRunConfig* RConfig):
    OpRichTbEnclosureSurfaceMPT->AddProperty("REFLECTIVITY",
                             RichEnclosureSurfacePhotMom,
 			   RichTbEnclosureSurfaceReflectivity,
-                           NumPhotonRichEnclosureSurfaceWaveLengthBins);
+                           static_cast<int>(NumPhotonRichEnclosureSurfaceWaveLengthBins));
    OpRichTbEnclosureSurfaceMPT->AddProperty("EFFICIENCY",
                            RichEnclosureSurfacePhotMom,
 			   RichTbEnclosureSurfaceEfficiency,
-                           NumPhotonRichEnclosureSurfaceWaveLengthBins);
+                           static_cast<int>(NumPhotonRichEnclosureSurfaceWaveLengthBins));
 
   OpRichTbEnclosureSurface->
         SetMaterialPropertiesTable(OpRichTbEnclosureSurfaceMPT);
@@ -913,11 +913,11 @@ RichTbMaterial::RichTbMaterial(RichTbRunConfig* RConfig):
    OpHpdQuartzWTSurfaceMPT->AddProperty("REFLECTIVITY",
                             HpdQuartzWTSurfacePhotMom,
 			   HpdQuartzWTSurfaceReflectivity,
-                           NumPhotonHpdQuartzWTSurfaceWaveLengthBins);
+                           static_cast<int>(NumPhotonHpdQuartzWTSurfaceWaveLengthBins));
    OpHpdQuartzWTSurfaceMPT->AddProperty("EFFICIENCY",
                            HpdQuartzWTSurfacePhotMom,
 			   HpdQuartzWTSurfaceEfficiency,
-                           NumPhotonHpdQuartzWTSurfaceWaveLengthBins);
+                           static_cast<int>(NumPhotonHpdQuartzWTSurfaceWaveLengthBins));
 
   OpHpdQuartzWTSurface->
         SetMaterialPropertiesTable(OpHpdQuartzWTSurfaceMPT);
@@ -953,11 +953,11 @@ RichTbMaterial::RichTbMaterial(RichTbRunConfig* RConfig):
    OpHpdQuartzWPSurfaceMPT->AddProperty("REFLECTIVITY",
                             HpdQuartzWPSurfacePhotMom,
 			   HpdQuartzWPSurfaceReflectivity,
-                           NumPhotonHpdQuartzWPSurfaceWaveLengthBins);
+                           static_cast<int>(NumPhotonHpdQuartzWPSurfaceWaveLengthBins));
    OpHpdQuartzWPSurfaceMPT->AddProperty("EFFICIENCY",
                            HpdQuartzWPSurfacePhotMom,
 			   HpdQuartzWPSurfaceEfficiency,
-                           NumPhotonHpdQuartzWPSurfaceWaveLengthBins);
+                           static_cast<int>(NumPhotonHpdQuartzWPSurfaceWaveLengthBins));
 
   OpHpdQuartzWPSurface->
         SetMaterialPropertiesTable(OpHpdQuartzWPSurfaceMPT);
@@ -998,11 +998,11 @@ RichTbMaterial::RichTbMaterial(RichTbRunConfig* RConfig):
    OpPhCathodeSurfaceMPT->AddProperty("REFLECTIVITY",
                            PhCathodeSurfacePhotMom,
 			   PhCathodeSurfaceReflectivity,
-                           NumPhotonPhCathodeSurfaceWaveLengthBins);
+                           static_cast<int>(NumPhotonPhCathodeSurfaceWaveLengthBins));
    OpPhCathodeSurfaceMPT->AddProperty("EFFICIENCY",
                            PhCathodeSurfacePhotMom,
 			   PhCathodeSurfaceEfficiency,
-                           NumPhotonPhCathodeSurfaceWaveLengthBins);
+                           static_cast<int>(NumPhotonPhCathodeSurfaceWaveLengthBins));
 
   OpPhCathodeSurface->
         SetMaterialPropertiesTable(OpPhCathodeSurfaceMPT);
@@ -1044,15 +1044,15 @@ RichTbMaterial::RichTbMaterial(RichTbRunConfig* RConfig):
    OpHpdSiCoatSurfaceMPT->AddProperty("REFLECTIVITY",
                             HpdSiCoatSurfacePhotMom,
 			   HpdSiCoatSurfaceReflectivity,
-                           NumPhotonHpdSiCoatSurfaceWaveLengthBins);
+                           static_cast<int>(NumPhotonHpdSiCoatSurfaceWaveLengthBins));
    OpHpdSiCoatSurfaceMPT->AddProperty("EFFICIENCY",
                            HpdSiCoatSurfacePhotMom,
 			   HpdSiCoatSurfaceEfficiency,
-                           NumPhotonHpdSiCoatSurfaceWaveLengthBins);
+                           static_cast<int>(NumPhotonHpdSiCoatSurfaceWaveLengthBins));
    OpHpdSiCoatSurfaceMPT->AddProperty("RINDEX",
                            HpdSiCoatSurfacePhotMom,
 			   HpdSiCoatSurfaceRefInd,
-                           NumPhotonHpdSiCoatSurfaceWaveLengthBins);
+                           static_cast<int>(NumPhotonHpdSiCoatSurfaceWaveLengthBins));
 
   OpHpdSiCoatSurface->
         SetMaterialPropertiesTable(OpHpdSiCoatSurfaceMPT);
@@ -1086,11 +1086,11 @@ RichTbMaterial::RichTbMaterial(RichTbRunConfig* RConfig):
    OpRichTbHpdMetalSurfaceMPT->AddProperty("REFLECTIVITY",
                             RichHpdMetalSurfacePhotMom,
 			   RichHpdMetalSurfaceReflectivity,
-                           NumPhotonHpdMetalSurfaceWaveLengthBins);
+                           static_cast<int>(NumPhotonHpdMetalSurfaceWaveLengthBins));
    OpRichTbHpdMetalSurfaceMPT->AddProperty("EFFICIENCY",
                            RichHpdMetalSurfacePhotMom,
 			   RichHpdMetalSurfaceEfficiency,
-                           NumPhotonHpdMetalSurfaceWaveLengthBins);
+                           static_cast<int>(NumPhotonHpdMetalSurfaceWaveLengthBins));
 
   OpRichTbHpdMetalSurface->
         SetMaterialPropertiesTable(OpRichTbHpdMetalSurfaceMPT);

@@ -56,7 +56,7 @@ class RichTbSD : public G4VSensitiveDetector
       G4int NumberOfSensitiveHpds;
       G4int NumberOfSensitiveSectorsInHpd;
       G4int NumberOfSensitivePixelsInSector;
-      vector<G4int> HpdSDID;
+      std::vector<G4int> HpdSDID;
 
      
       G4int HCID;

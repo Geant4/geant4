@@ -26,17 +26,17 @@
 // Created: Sajan Easo (Sajan.Easo@cern.ch)
 // Revision and changes: Patricia Mendez (Patricia.Mendez@cern.ch)
 /////////////////////////////////////////////////////////////////////////////
-#include <iostream.h>
-#include <fstream.h>
+#include <iostream>
+#include <fstream>
 #include "FilterTrData.hh"
 #include "RichTbGeometryParameters.hh"
 #include "RichTbMaterialParameters.hh"
 
 FilterTrData::FilterTrData(G4int FilterTypeNum, G4String FilterDataFileName )
    :NumberOfTrBins(NumFilterTransBins),
-    TransWaveL(vector<G4double>(NumFilterTransBins)),
-    TransValue(vector<G4double>(NumFilterTransBins)),
-    TransTotValue(vector<G4double>(NumFilterTransBins))
+    TransWaveL(std::vector<G4double>(NumFilterTransBins)),
+    TransValue(std::vector<G4double>(NumFilterTransBins)),
+    TransTotValue(std::vector<G4double>(NumFilterTransBins))
     {
       // In the G4example the same type of filter is used
       // for all types of filters. 
@@ -72,7 +72,7 @@ void FilterTrData::ReadFilterTrans() {
         TransValue.resize(NumberOfTrBins);
         TransTotValue.resize(NumberOfTrBins);
       }
-      ifstream finpga(D263FilterTransFile);
+      std::ifstream finpga(D263FilterTransFile);
       G4double wa,trn;
       //set the order to have increasing in wavelength after reading in.
       //the data file is with  decreasing order of wavelength. 

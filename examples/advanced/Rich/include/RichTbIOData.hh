@@ -30,7 +30,7 @@
 #define RichTbIOData_h 1
 #include "globals.hh"
 #include <iostream>
-#include <fstream.h>
+#include <fstream>
 #include "RichTbRunConfig.hh"
 #include "G4Event.hh"
 class RichTbIOData {
@@ -43,7 +43,7 @@ public:
   void WriteOutHitData(const G4Event* );
   
 private:
-  ofstream OutputDataFS;
+  std::ofstream OutputDataFS;
   G4String aOutFileString;
 };
 #endif

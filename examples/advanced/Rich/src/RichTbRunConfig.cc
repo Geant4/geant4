@@ -27,13 +27,13 @@
 // Revision and changes: Patricia Mendez (Patricia.Mendez@cern.ch)
 /////////////////////////////////////////////////////////////////////////////
 #include <iostream>
-#include <fstream.h>
+#include <fstream>
 #include "RichTbRunConfig.hh"
 #include "RichTbMaterialParameters.hh"
 #include "globals.hh"
 RichTbRunConfig::RichTbRunConfig()
- :CurAerogelTNumber(vector<G4int>(MaxNumberOfAerogelTiles)),
-  CurAerogelType(vector<AerogelType>(MaxNumberOfAerogelTiles)){ 
+ :CurAerogelTNumber(std::vector<G4int>(MaxNumberOfAerogelTiles)),
+  CurAerogelType(std::vector<AerogelType>(MaxNumberOfAerogelTiles)){ 
 
   const char* RunConfigFile = "RunConfig.dat" ;
  G4cout<<" Run Configuration Input is from "<< RunConfigFile<<G4endl; 
@@ -104,7 +104,7 @@ RichTbRunConfig::RichTbRunConfig()
   G4cout<<"Now getting the run configuration file. "
         << "the Runconfig file name is "<< RunConfigFile <<G4endl;
 
-  ifstream finp(RunConfigFile);
+  std::ifstream finp(RunConfigFile);
 
  finp>>RichTbHall_visib;
  finp>>RichTbEnclosure_visib;

@@ -41,7 +41,7 @@ public:
   virtual ~AerogelRefData();
 
   void ReadStdAerogelRefIndex();
-  vector<G4double> GetCurAerogelRefIndValueVect(G4int AerogelTypenum );
+  std::vector<G4double> GetCurAerogelRefIndValueVect(G4int AerogelTypenum );
   G4double GetCurAerogelRefIndValue( G4int rbinw , G4int AerogelTypenum );
   G4double GetRefnominal(G4int);
   AerogelType GetAerogelType(G4int);
@@ -50,9 +50,9 @@ public:
        {return StdAerogelRefphotE[BinNumw]; }
   G4double GetStdAerogelRefIndValue(G4int BinNumv ) 
        {return StdAerogelRefIndexValue[BinNumv];} 
-  vector<G4double> GetAerogelRefphotEVect() 
+  std::vector<G4double> GetAerogelRefphotEVect() 
          { return StdAerogelRefphotE ; }
-  vector<G4double> GetStdAerogelRefIndValueVect() 
+  std::vector<G4double> GetStdAerogelRefIndValueVect() 
          {return StdAerogelRefIndexValue ; }
 
   G4double GetAerogelRefIndShift(G4int iAgtype) 
@@ -65,11 +65,11 @@ private:
 
   G4String AerogelRefIndexFileName;
   G4int NumberOfRefIndBins;
-  vector<G4double>StdAerogelRefphotE ;
-  vector<G4double>StdAerogelRefIndexValue ;
+  std::vector<G4double>StdAerogelRefphotE ;
+  std::vector<G4double>StdAerogelRefIndexValue ;
   G4double StdAerogelNominalRefractiveIndex;
-  vector<G4double> AerogelRefIndShift;
-  vector<G4double> AerogelWavelengthRef;
+  std::vector<G4double> AerogelRefIndShift;
+  std::vector<G4double> AerogelWavelengthRef;
 };
 
 #endif 

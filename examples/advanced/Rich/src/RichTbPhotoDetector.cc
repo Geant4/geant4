@@ -26,8 +26,8 @@
 // Created: Sajan Easo (Sajan.Easo@cern.ch)
 // Revision and changes: Patricia Mendez (Patricia.Mendez@cern.ch)
 /////////////////////////////////////////////////////////////////////////////
-#include <iostream.h>
-#include <fstream.h>
+#include <iostream>
+#include <fstream>
 #include "globals.hh"
 #include "RichTbPhotoDetector.hh"
 #include "G4VPhysicalVolume.hh"
