@@ -1,6 +1,10 @@
 # Prevent any core dumps.  (You have to run indepently to get one.)
 ulimit -c 0
 
+if [ `uname -n | grep pcgeant` ]; then
+limit coredumpsize 0
+fi
+
 if [ `uname -n | grep rsplus` ]; then
 ulimit -d 400000
 ulimit -s 100000
