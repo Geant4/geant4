@@ -1,0 +1,24 @@
+#
+# Macro file test09.in
+# for tests of basic e.m. processes +polarised Compton + new p.e. + synchrotron radiation
+#
+/control/verbose 2
+# /run/verbose 2
+/run/initialize
+/gun/direction 1 0 0
+#
+# gamma 500 MeV in Al
+#
+/mydet/SelectMaterial Al
+/gun/particle gamma
+/gun/energy 500 MeV
+/run/beamOn 10000
+#
+# electron 500 MeV in Air
+#
+/mydet/SelectMaterial Air
+/gun/particle e-
+/gun/energy 500 MeV
+/run/beamOn 10000
+#
+exit
