@@ -1,4 +1,4 @@
-$Id: History,v 1.64 2002-10-14 17:39:14 maire Exp $
+$Id: History,v 1.65 2002-10-15 12:12:37 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
-14 oct 02: mma
+15 oct 02: V.Ivant (stand-V04-01-02)
+-redesign for a Model approach: files processNameSTD and processNameModel
+     
+14 oct 02: mma (stand-V04-01-01)
 -G4PAIxSection and G4PAIonisation : put back on the HEAD the versions as they
  are in Geant4-04-01-ref-03, namely:
   G4PAIxSection  hh:1.7             cc:1.10
