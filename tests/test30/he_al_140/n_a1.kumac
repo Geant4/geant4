@@ -1,0 +1,38 @@
+
+opt zfl
+opt nfit
+opt nsta
+opt nbox
+opt ngri
+set MSCF 0.80
+set XLAB 1.2
+set NDVX 010206
+set NDVY 010205
+ zone
+ opt logy
+
+ null 0 150 0.001 100
+ atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr) theta = 30 deg'
+
+
+ hi/file 1 bin.paw
+ set dmod 1
+ hi/pl 29 shist
+ line 100 1.6 110 1.6
+ itx 115 35 'Binary'
+ close 1
+
+ve/create X(13) R 41.2 44.4 48 52 56.5 61.6 67.3 73.9 81.4 90.2 100.4 112.5 127
+ve/create Y(13) R 1.75 1.58 1.34 1.15 0.899 0.683 0.447 0.323 0.163 0.0932 0.0449 0.0015 0.000683
+ve/create Z(13) R 6.5 6.4 6.3 6.4 6.4 6.7 6.9 7.2 8.3 9.5 11.9 53.8 72.4
+ve/create Z0(13) R 0
+
+gr/h/error X Y Z0 Z 13 25 0.2
+
+exe ../prf n_a1 eps
+
+opt liny
+
+
+
+

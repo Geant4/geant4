@@ -21,9 +21,9 @@ Al
 #emax(MeV)
 30.
 #nbinse
-60
+30
 #nbinsd
-60
+30
 #elim(MeV)
 1.
 #nangle
@@ -31,7 +31,7 @@ Al
 #angles
 30. 60. 90. 120. 150.
 #dangle
-10.
+5.
 //--------
 #generator
 binary

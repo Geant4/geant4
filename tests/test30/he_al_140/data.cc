@@ -33,7 +33,7 @@
 //
 //      Creation date: 12 March 2002
 //
-//      Modifications: 
+//      Modifications:
 //
 // -------------------------------------------------------------------
 
@@ -76,7 +76,7 @@ int main(int argc, char** argv)
   fout_c->open(fname3.c_str(), std::ios::out|std::ios::trunc);
 
   (*fout_c) << "#####..Result.of.parcing..#######.. "
-            << " Angle(degree)= 0" << G4endl;
+            << G4endl;
 
 
   //there can't be lines longer than nmax characters
@@ -84,19 +84,23 @@ int main(int argc, char** argv)
   char line[nmax];
   std::string line1, line2, word1, word2, word3;
   G4bool end = true;
+  double ebeam = 0.0;
+  std::vector<int>    inn;
+  std::vector<double> angle;
+  std::vector<double> energy;
+  std::vector<double> cross;
+  std::vector<double> err;
 
   // main loop
+  int counter = 0;
 
   do {
-
-    // read next line
-
     counter++;
     for(int ii = 0; ii < nmax; ii++) {line[ii] = ' ';}
     fin->getline( line, nmax);
     line1 = std::string("");
     line1 = std::string(line, nmax);
-    if(2 < verbose) {
+    if(1 < verbose) {
       cout << "Next line # " << counter << ": " << line1 << endl;
       cout << "First symbols= " << line[0] << line[1] << line[2] << endl;
     }
@@ -107,120 +111,71 @@ int main(int argc, char** argv)
     if(fin->eof() || line[0] == 'E' && line[1] == 'N' && line[2] == 'D') {
       end = false;
     } else if(line[0] == 'M' && line[1] == 'E' && line[2] == 'V') {
-      end = false;
+      (*fin) >> ebeam;
 
-      double e0, e, s, s1;
-      double ebeam = 0.0;
-
-      for(int i=0; i<1080; i++) {
-        (*fin) >> e0 >> e >> s >> s1;
+      double an, a, e, s, s1;
+      int i, j, jj, nbin;
+      (*fin) >> word1 >> word2 >> nbin;
+      (*fin) >> word1 >> word2 >> word3 >> line1;
+      (*fin) >> word1 >> word2 >> word3 >> line1;
+      inn.clear();
+      angle.clear();
+      energy.clear();
+      cross.clear();
+      err.clear();
+      an = 0.;
+      j = 0;
+      for(i=0; i<nbin; i++) {
+        (*fin) >> a >> e >> s >> s1;
+	s1 *= 0.01*s;
         if(1 < verbose) {
-          cout << "e0= " << e0 << " e= " << e << " cross= " << s << endl;
+          cout << "an= " << a << "e= " << e << " cross= " << s << " +- " << s1 << endl;
         }
-	if(ebeam != e0) {
-	  if(ebeam > 0.0) {
-	    int nbin = cross.size();
-            (*fout_b) << "#####..Ebeam(MeV) = " << ebeam/MeV << G4endl;
-            (*fout_b) << "ve/create X(" << nbin << ") R ";
-            (*fout_c) << "#####..Ebeam(MeV) = " << ebeam/MeV << G4endl;
-
-	    int j;
-	    for(j=0; j<nbin; j++) {
-              (*fout_b) << (*energy)[i] << " ";
-              (*fout_c) << "e(MeV)= " << (*energy)[i]
-                        << " cross(mb/MeV/sr)= " << (*cross)[i] << endl;
-	    }
-            (*fout_b) << endl;
-            (*fout_b) << "ve/create Y(" << nbin << ") R ";
-	    for(j=0; j<nbin; j++) {
-              (*fout_b) << (*cross)[i] << " ";
-	    }
-            (*fout_b) << endl;
-          }
-	  if(e0 == 0.0) break;
-	  ebeam = e0;
-          G4DataVector* energy = new G4DataVector();
-          G4DataVector* cross = new G4DataVector();
+	if(an != a) {
+          if(an>0.) inn.push_back(j);
+	  j = 0;
+          (*fout_c) << "#####..Ebeam(MeV)= " << ebeam/MeV << " Theta(deg)= " << a << G4endl;
+	  an = a;
+ 	  angle.push_back(a);
 	}
-	energy->push_back(e);
-	cross->push_back(s);
+	j++;
+	energy.push_back(e);
+	cross.push_back(s);
+	err.push_back(s1);
+
+        (*fout_c) << j << ".   e(MeV)= " << e
+	          << "  cross(mb/sr/MeV)= "
+	          << s << " +- " << s1 << endl;
       }
-    }
-  }
-}
+      inn.push_back(j);
+      int jbin = inn.size();
+      i = 0;
+      for(j=0; j<jbin; j++) {
+        int k = inn[j];
+        (*fout_b) << "#####..Ebeam(MeV)= " << ebeam/MeV << " Theta(deg)= " << angle[j] << G4endl;
+        (*fout_b) << "ve/create X(" << k << ") R ";
+        for(jj=0; jj<k; jj++) {
+          (*fout_b) << energy[i+jj] << " ";
+        }
+        (*fout_b) << endl;
+        (*fout_b) << "ve/create Y(" << k << ") R ";
 
-
+        for(jj=0; jj<k; jj++) {
+          (*fout_b) << cross[i+jj] << " ";
+	}
+        (*fout_b) << endl;
+        (*fout_b) << "ve/create Z(" << k << ") R ";
+        for(jj=0; jj<k; jj++) {
+          (*fout_b) << err[i+jj] << " ";
+	}
+        (*fout_b) << endl;
+	i += k;
+      }
+      (*fout_b) << endl;
     }
   } while (end);
+  (*fout_b) << "#####..End..#####" << G4endl;
   (*fout_c) << "#####..End..#####" << G4endl;
-
-  angle->push_back(pi);
-  int na = angle->size();
-  G4DataVector* f1;
-  G4DataVector* f2;
-  
-  if(0 < verbose) {
-     (*fout_a) << "#####..Result.of.integration..#####.."
-               << G4endl;
-     (*fout_b) << "#####..Result.of.integration..#####.." 
-               << " Elim(MeV)= " << elim
-               << G4endl;
-     for(i=0; i<nbin; i++) {
-        
-       x = 0.0;
-       for(int j=0; j<na-1; j++) {
-         f1  = cs[j];  
-         y1  = (*f1)[i];  
-         ct1 = cos((*angle)[j]);
-            if(j == 0) {
-              f2  = cs[j+1]; 
-              y2  = (*f2)[i]; 
-              ct2 = cos((*angle)[j+1]);
-              y1 += (y2 - y1)*(1.0 - ct1)/(ct2 - ct1);
-              ct1 = 1.0;
-              if(y1 < 0.0) y1 = 0.0;
-	    } else if (j == na-2) {
-              f2  = cs[j-1]; 
-              y2  = (*f2)[i]; 
-              ct2 = cos((*angle)[j-1]);
-              y2 -= (y2 - y1)*(ct2 + 1.0)/(ct2 - ct1);
-              ct2 = -1.0;
-              if(y2 < 0.0) y2 = 0.0;
-            } else {
-              f2  = cs[j+1]; 
-              y2  = (*f2)[i]; 
-              ct2 = cos((*angle)[j+1]);
-	    }
-	 //         cout << "f1= " << f1 << " f2= " << f2 << endl;
-	 //         cout << "y1= " << y1 << " y2= " << y2 << endl;
-	 //         cout << "ct1= " << ct1 << " ct2= " << ct2 << endl;
-         x  += 0.5*(y1 + y2)*(ct1 - ct2);  
-       }        
-       x *= twopi;
-       (*fout_a) << "e(MeV)= " << 0.5*((*energy)[i] + (*energy)[i+1]) 
-            << " cross(mb/MeV)= " << x << endl;
-     }
-     (*fout_a) << "#####..End..#####" << G4endl;
-     for(int j=0; j<na-1; j++) {
-       f1  = cs[j];  
-       an  = cos((*angle)[j]);
-       x   = 0.0;
-       for(i=0; i<nbin; i++) {
-         y1  = (*f1)[i];
-         e1  = (*energy)[i];
-         e2  = (*energy)[i+1];
-         if(e2 < elim) {
-           y1 = 0.0;
-         } else if (e1 < elim) {
-           y1 *= (e2 - elim)/(e2 - e1);
-	 }
-         x += y1*(e2 - e1);
-       }
-       (*fout_b) << "cos(theta)= " << an 
-                 << " cross(mb/sr)= " << x << endl;
-     }
-     (*fout_b) << "#####..End..#####" << G4endl;
-  }  
 }
 
 
