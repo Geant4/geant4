@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectricMG.cc,v 1.2 2001-09-16 09:24:58 elena Exp $
+// $Id: G4LowEnergyPhotoElectricMG.cc,v 1.3 2001-09-16 09:42:47 elena Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -91,7 +91,7 @@ G4LowEnergyPhotoElectricMG::G4LowEnergyPhotoElectricMG(const G4String& processNa
 
   meanFreePathTable = 0;
 
-  G4String shellDataFile = "binding";
+  G4String shellDataFile = "/fluor/binding";
   shellData.LoadData(shellDataFile);
 
    if (verboseLevel > 0) 

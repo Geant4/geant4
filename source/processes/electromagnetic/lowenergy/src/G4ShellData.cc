@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellData.cc,v 1.2 2001-08-23 19:54:58 stesting Exp $
+// $Id: G4ShellData.cc,v 1.3 2001-09-16 09:42:47 elena Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -145,10 +145,10 @@ void G4ShellData::PrintData() const
       for (G4int i=0; i<nSh; i++)
 	{
 	  G4int id = (G4int) (*ids)[i];
-	  G4double e = (*energies)[i] / keV;
+	  G4double e = (*energies)[i] / MeV;
 	  G4cout << i <<") Shell id: " << id 
 		 << " - Binding energy = "
-		 << e << " keV " << G4endl;
+		 << e << " MeV " << G4endl;
 	}
       G4cout << "-------------------------------------------------" 
 	     << G4endl;
@@ -175,7 +175,7 @@ void G4ShellData::LoadData(const G4String& fileName)
     }
   
   G4String pathString(path);
-  G4String dirFile = pathString + "/" + name;
+  G4String dirFile = pathString + name;
   G4std::ifstream file(dirFile);
   G4std::filebuf* lsdp = file.rdbuf();
 

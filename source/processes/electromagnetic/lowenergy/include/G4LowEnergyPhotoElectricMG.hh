@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectricMG.hh,v 1.1 2001-08-21 10:45:50 pia Exp $
+// $Id: G4LowEnergyPhotoElectricMG.hh,v 1.2 2001-09-16 09:45:01 elena Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -46,6 +46,7 @@
 #include "globals.hh"
 #include "G4VDiscreteProcess.hh"
 #include "G4ShellData.hh"
+#include "G4AtomicDeexcitation.hh"
 
 class G4Track;
 class G4Step;
@@ -105,6 +106,7 @@ private:
   G4double cutForLowEnergySecondaryPhotons;
 
   G4ShellData shellData;
+  G4AtomicDeexcitation deexcitationManager;
 };
 
 #endif

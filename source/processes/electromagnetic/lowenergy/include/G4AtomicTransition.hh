@@ -21,11 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4AtomicShell.hh,v 1.2 ????
+// $Id: G4AtomicTransition.hh,v 1.2 ????
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
-//          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
+// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
 // History:
 // -----------
@@ -33,33 +32,37 @@
 //
 // -------------------------------------------------------------------
 
-
-#ifndef G4AtomicShell_h 
-#define G4AtomicShell_h 1
+#ifndef G4AtomicTransition_h 
+#define G4AtomicTransition_h 1
 
 #include "G4DataVector.hh"
 #include "globals.hh"
 #include "g4std/vector"
 
-class G4AtomicShell {
+class G4AtomicTransition {
 
 public:
 
- 
-  G4AtomicShell(G4int,G4double);
- 
-  ~G4AtomicShell();
+  G4AtomicTransition(G4int,const G4std::vector<G4int>&,const G4DataVector&,
+		     const G4DataVector&);
+  ~G4AtomicTransition();
 
-  G4double BindingEnergy() const; 
-  G4int ShellId() const;
+  const G4std::vector<G4int>& OriginatingShellIds() const;
+  const G4DataVector& TransitionEnergies() const;
+  const G4DataVector& TransitionProbabilities() const;
+  const G4int FinalShellId() const;
+  G4int OriginatingShellId(G4int index) const;
+  G4double TransitionEnergy(G4int index) const;
+  G4double TransitionProbability(G4int index) const;
 
 private:
-  
-  G4int identifier;
-  G4double bindingEnergy;
 
+  G4int finalShellId;
+  G4std::vector<G4int> originatingShellIds;
+  G4DataVector transitionEnergies;
+  G4DataVector transitionProbabilities;
+  
 };
 
 #endif
-
 
