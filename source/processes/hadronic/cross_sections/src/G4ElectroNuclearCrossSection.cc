@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.cc,v 1.2 2001-11-09 15:59:49 mkossov Exp $
+// $Id: G4ElectroNuclearCrossSection.cc,v 1.3 2001-11-09 17:48:26 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -150,7 +150,15 @@ G4double G4ElectroNuclearCrossSection::GetCrossSection(const G4DynamicParticle* 
       G4double YN1=lE*lastPhi[lastL-1]-lastFun[lastL-1];
       if(YNj<0.||YN1<0.)G4cerr<<",lE="<<lE<<",P1="<<lastPhi[lastL]<<",F1="<<lastPhi[lastL]
                               <<",P2="<<lastPhi[lastL-1]<<",F2="<<lastPhi[lastL-1]<<G4endl;
+      //if(abs(lE-Xj)<.001)      lastSig=YNj;
+      //else if(abs(lE-Xp)<.001)
+      //{
+      //  lastSig=YN1;
+      //  lastL--;
+      //}
+      //else                     
       lastSig= YNj-(Xj-lE)*(YNj-YN1)/(Xj-Xp);
+      if(lastSig>YNj)lastSig=YNj;
       //G4cout<<"S="<<lastSig<<",E="<<lE<<",Xj="<<Xj<<",Yj="<<YNj<<",Y1="<<YN1<<",M="<<lEMa<<G4endl;
     }
     else
@@ -1551,6 +1559,7 @@ G4double G4ElectroNuclearCrossSection::GetEffectivePhotonEnergy()
 {
   // !! This should be identical to the begining of the GetCrossSection member-function !!
   static const G4int nL=228; // !!  If you change this, change it in GetFunctions() (*.hh) !!
+  static const G4int mL=nL-1;
   static const G4double X[nL]={
  .6931472, .7235778, .7540085, .7844391, .8148697, .8453004, .8757310, .9061617, .9365923, .9670229,
  .9974536, 1.027884, 1.058315, 1.088746, 1.119176, 1.149607, 1.180037, 1.210468, 1.240899, 1.271329,
@@ -1582,6 +1591,8 @@ G4double G4ElectroNuclearCrossSection::GetEffectivePhotonEnergy()
   G4cout<<"G4ElectroNuclearCrossSection::GetEffectivePhotonEnergy: called B="<<lastF<<",End="<<lastL
         <<",Phi="<<lastPhi[lastL]<<",Fun="<<lastFun[lastL]<<",S="<<lastSig<<",lE="<<lastLE<<G4endl;
 #endif
+  //G4double lY=lastLE*lastPhi[lastL]-lastFun[lastL];
+  //if(lastSig>lY && lastL<mL) lastL++;
   for (G4int i=lastF; i<=lastL; i++) Y[i]=lastLE*lastPhi[i]-lastFun[i];
   G4double ris=lastSig*G4UniformRand();
 #ifdef debug
@@ -1604,6 +1615,7 @@ G4double G4ElectroNuclearCrossSection::GetEffectivePhotonEnergy()
   }
   else                                  // Search with the function
   {
+    if(lastL<mL) G4cerr<<"***HighEnergy: L="<<lastL<<",S="<<lastSig<<",Y="<<Y[lastL]<<G4endl;
     G4double f=(ris-Y[lastL])/lastH;    // The scaling residual value
 #ifdef pdebug
 	G4cout<<"High Energy f="<<f<<",ris="<<ris<<",lastH="<<lastH<<G4endl;
@@ -1614,7 +1626,7 @@ G4double G4ElectroNuclearCrossSection::GetEffectivePhotonEnergy()
 #endif
   }
   if(phLE>lastLE)G4cerr<<"***G4ElectroNuclearCrossSection::GetEffPhotE:"<<phLE<<">"<<lastLE<<",S="
-   <<lastSig<<",ris="<<ris<<",B="<<lastF<<",E="<<lastL<<",Y="<<Y[lastL]<<",Y="<<Y[lastL]<<G4endl;
+   <<lastSig<<",ris="<<ris<<",B="<<lastF<<",E="<<lastL<<",X="<<X[lastL]<<",Y="<<Y[lastL]<<G4endl;
   return exp(phLE);
 }
 
