@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.62 2005-03-26 22:37:14 allison Exp $
+cvs log $Id: History,v 1.63 2005-03-28 10:35:32 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28th March 2005  John Allison  (johna-050328)
+- G4AttCheck: Added check of Extra field.
 
 26th March 2005  John Allison  (johna-050326)
 - G4AttCheck: Implemented prototype conversion from G4AttValue/Defs to

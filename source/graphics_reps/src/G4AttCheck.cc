@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttCheck.cc,v 1.2 2005-03-26 22:37:14 allison Exp $
+// $Id: G4AttCheck.cc,v 1.3 2005-03-28 10:35:32 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4AttCheck.hh"
@@ -112,8 +112,79 @@ void G4AttCheck::Check() const {
 	  "\n*******************************************************"
 	       << G4endl;
       }
+      G4String extra = iDef->second.GetExtra();
+      if (extra != "") {
+	transform(extra.begin(),extra.end(),extra.begin(),::tolower);
+	if (extra.find("vector") == string::npos) {
+	  G4cerr <<
+	    "\n*******************************************************"
+	    "\nERROR: Unrecognised extra field \""
+		 << iDef->second.GetExtra()
+		 << "\" for G4AttValue \""
+		 <<  iValue->GetName()
+		 << "\": "
+		 << iValue->GetValue() <<
+	    "\n  Extra must contain \"vector\" (upper or lower case)."
+	    "\n*******************************************************"
+		 << G4endl;
+	}
+      }
     }
   }
+}
+
+std::ostream& operator<< (std::ostream& os, const G4AttCheck& ac) {
+  using namespace std;
+  vector<G4AttValue>::const_iterator iValue;
+  for (iValue = ac.fpValues->begin(); iValue != ac.fpValues->end(); ++iValue) {
+    map<G4String,G4AttDef>::const_iterator iDef =
+      ac.fpDefinitions->find(iValue->GetName());
+    G4bool error = false;
+    if (iDef == ac.fpDefinitions->end()) {
+      error = true;
+      os << "ERROR: No G4AttDef for G4AttValue \""
+	 <<  iValue->GetName() << "\": " << iValue->GetValue() << endl;
+    } else {
+      if (ac.fValueTypes.find(iDef->second.GetValueType()) ==
+	  ac.fValueTypes.end()) {
+	error = true;
+	os << "ERROR: Illegal value type \""
+	   << iDef->second.GetValueType()
+	   << "\" for G4AttValue \""
+	   <<  iValue->GetName()
+	   << "\": "
+	   << iValue->GetValue() <<
+	  "\n  Possible value types:";
+	std::set<G4String>::iterator i;
+	for (i = ac.fValueTypes.begin(); i != ac.fValueTypes.end(); ++i) {
+	  os << ' ' << *i;
+	}
+	os << endl;
+	G4String extra = iDef->second.GetExtra();
+	if (extra != "") {
+	  transform(extra.begin(),extra.end(),extra.begin(),::tolower);
+	  if (extra.find("vector") == string::npos) {
+	    error = true;
+	    os << "ERROR: Unrecognised extra field \""
+	       << iDef->second.GetExtra()
+	       << "\" for G4AttValue \""
+	       <<  iValue->GetName()
+	       << "\": "
+	       << iValue->GetValue() <<
+	      "\n  Extra must contain \"vector\" (upper or lower case)."
+	       << endl;
+	  }
+	}
+      }
+    }
+    if (!error) {
+      os << iDef->second.GetDesc() << ": "
+	 << iValue->GetValue() << " ("
+	 << iDef->second.GetValueType() << ")"
+	 << endl;
+    }
+  }
+  return os;
 }
 
 void G4AttCheck::AddValuesAndDefs
@@ -219,39 +290,4 @@ G4AttCheck G4AttCheck::Standard() const {
     }
   }
   return G4AttCheck(pValues,pDefinitions);
-}
-
-std::ostream& operator<< (std::ostream& os, const G4AttCheck& ac) {
-  using namespace std;
-  vector<G4AttValue>::const_iterator iValue;
-  for (iValue = ac.fpValues->begin(); iValue != ac.fpValues->end(); ++iValue) {
-    map<G4String,G4AttDef>::const_iterator iDef =
-      ac.fpDefinitions->find(iValue->GetName());
-    if (iDef == ac.fpDefinitions->end()) {
-      os << "ERROR: No G4AttDef for G4AttValue \""
-	 <<  iValue->GetName() << "\": " << iValue->GetValue() << endl;
-    } else {
-      if (ac.fValueTypes.find(iDef->second.GetValueType()) ==
-	  ac.fValueTypes.end()) {
-	os << "ERROR: Illegal value type \""
-	   << iDef->second.GetValueType()
-	   << "\" for G4AttValue \""
-	   <<  iValue->GetName()
-	   << "\": "
-	   << iValue->GetValue() <<
-	  "\n  Possible value types:";
-	std::set<G4String>::iterator i;
-	for (i = ac.fValueTypes.begin(); i != ac.fValueTypes.end(); ++i) {
-	  os << ' ' << *i;
-	}
-	os << endl;
-     } else {
-	os << iDef->second.GetDesc() << ": "
-	   << iValue->GetValue() << " ("
-	   << iDef->second.GetValueType() << ")"
-	   << endl;
-      }
-    }
-  }
-  return os;
 }
