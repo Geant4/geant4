@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.8 2001-11-16 14:19:19 hpw Exp $
+# $Id: GNUmakefile,v 1.9 2002-06-13 18:02:03 jwellisc Exp $
 # --------------------------------------------------------------
 # GNUmakefile for hadronic models library. G.Folger 10-Dec-97
 # --------------------------------------------------------------
@@ -25,6 +25,7 @@ SUBDIRS += chiral_inv_phase_space/interface
 SUBDIRS += coherent_elastic
 SUBDIRS += cascade/evaporation
 SUBDIRS += cascade/utils
+SUBDIRS += leading_particle
 
 SUBLIBS  = G4hadronic_HE G4hadronic_LE G4hadronic_neu G4hadronic_iso
 SUBLIBS += G4hadronic_deex G4hadronic_diffstring G4hadronic_HE_gen G4hadronic_kinetic
@@ -36,6 +37,7 @@ SUBLIBS += G4hadronic_interface_ci
 SUBLIBS += G4hadronic_coherent_elastic
 SUBLIBS += G4hadronic_hetcpp_evaporation
 SUBLIBS += G4hadronic_hetcpp_utils
+SUBLIBS += G4hadronic_leading_particle
 
 ifndef G4INSTALL
   G4INSTALL = ../../../..
