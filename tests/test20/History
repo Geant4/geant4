@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2001-10-12 15:46:26 pia Exp $
+$Id: History,v 1.4 2001-10-19 05:03:32 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 18, 2001  Steve O'Neale (tests-V03-02-03)
+- Update reference output
 
 12 Oct 2001 - MGP, tag test20-V03-02-00
               Fixes for STL migration of materials
