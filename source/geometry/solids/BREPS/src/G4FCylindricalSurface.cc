@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FCylindricalSurface.cc,v 1.6 1999-01-27 16:12:03 broglia Exp $
+// $Id: G4FCylindricalSurface.cc,v 1.7 1999-05-19 16:57:48 magni Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*  /usr/local/gismo/repo/geometry/FG4Cylinder.cc,v 1.1 1992/10/27 22:02:29 alanb Exp  */
@@ -143,6 +143,9 @@ int G4FCylindricalSurface::Intersect( const G4Ray& ry )
   // cylindrical surfsace. After, count the intersections within the
   // finite cylindrical surface boundaries, and set "distance" to the 
   // closest distance from the start point to the nearest intersection
+  // If the point is on the surface it returns or the intersection with
+  // the opposite surface or kInfinity
+
   // If no intersection is founded, set distance = kInfinity and
   // return 0
 
@@ -201,24 +204,16 @@ int G4FCylindricalSurface::Intersect( const G4Ray& ry )
 
   for ( G4int i = 0; i < 2; i++ ) 
   {  
-    if(s[i] < kInfinity)
-      if ( s[i] >= kCarTolerance*0.5 ) 
-      {   
-	// real intersection
-	// set the distance if it is the smallest
-	if( distance > s[i]*s[i])
-	  distance = s[i]*s[i];
-
-	// increase the number of real intersections
+    if(s[i] < kInfinity) {
+      if ( s[i] >= kCarTolerance*0.5 ) {
 	nbinter ++;
-      }    
-      else if ( s[i] >= -kCarTolerance*0.5 ) 
-      {
-	// the point is on the surface
-	// set the distance to 0 and return 1
-	distance = 0;
-	return 1;
-      }   
+       	// real intersection
+	// set the distance if it is the smallest
+	if( distance > s[i]*s[i]) {
+	  distance = s[i]*s[i];
+	}
+      }
+    }    
   }
 
   return nbinter;
@@ -228,28 +223,28 @@ int G4FCylindricalSurface::Intersect( const G4Ray& ry )
 G4double G4FCylindricalSurface::HowNear( const G4Vector3D& x ) const
 {
   // Shortest distance from the point x to the G4FCylindricalSurface.
-  // The distance will be positive if the point is outside 
-  // the G4FCylindricalSurface, negative if the point is inside.
+  // The distance will be always positive 
 
-  
-  G4Vector3D d   = x - origin;
-  G4double   dA  = d * Position.GetAxis();
-  G4double   rad = sqrt( d.mag2() - dA*dA );
   G4double   hownear;
 
-  // solve problem of tolerance
-  if(fabs(dA) < kCarTolerance)
-    dA = 0;
+  G4Vector3D upcorner = G4Vector3D ( radius, 0 , origin.z()+length);
+  G4Vector3D downcorner = G4Vector3D ( radius, 0 , origin.z());
+  G4Vector3D xd;  
   
-  if(dA > length)
-    // point outside, so hownear must be positive
-    hownear = dA - length;
-  else if(dA < 0)
-    // point outside, so hownear must be positive
-    hownear = -dA; 
-  else
-    hownear = rad - radius;
- 
+  xd = G4Vector3D ( sqrt ( x.x()*x.x() + x.y()*x.y() ) , 0 , x.z() );
+    
+  
+  G4double Zinter = (xd.z()) ;
+  
+  if ( ((Zinter >= downcorner.z()) && (Zinter <=upcorner.z())) ) {
+    hownear = fabs( radius - xd.x() );
+    return hownear;
+  } else {
+    hownear = min ( (xd-upcorner).mag() , (xd-downcorner).mag() );
+    return hownear;
+  }
+
+
   return hownear;
 }
 

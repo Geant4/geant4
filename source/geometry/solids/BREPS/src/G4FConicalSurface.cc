@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FConicalSurface.cc,v 1.7 1999-01-27 16:12:02 broglia Exp $
+// $Id: G4FConicalSurface.cc,v 1.8 1999-05-19 16:57:11 magni Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*  /usr/local/gismo/repo/geometry/G4FConicalSurface.cc,v 1.2 1993/02/05 00:38:39 alanb Exp  */
@@ -46,6 +46,7 @@ G4FConicalSurface::G4FConicalSurface(const G4Point3D&  o,
   // value used above in the initialization.
  
   // Create the position with origin o, axis a, and a direction
+
   G4Vector3D dir(1,1,1);
   Position.Init(dir, a, o);
   origin = o;
@@ -256,6 +257,8 @@ int G4FConicalSurface::Intersect(const G4Ray& ry )
   // conical surfsace. After, count the intersections within the
   // finite conical surface boundaries, and set "distance" to the 
   // closest distance from the start point to the nearest intersection
+  // If the point is on the surface it returns or the intersection with
+  // the opposite surface or kInfinity
   // If no intersection is founded, set distance = kInfinity and
   // return 0
 
@@ -318,24 +321,14 @@ int G4FConicalSurface::Intersect(const G4Ray& ry )
 
   for ( G4int i = 0; i < 2; i++ ) 
   {  
-    if(s[i] < kInfinity)
-      if ( s[i] >= kCarTolerance*0.5 ) 
-      { 
-	// real intersection
-	// set the distance if it is the smallest
-	if( distance > s[i]*s[i])
+    if(s[i] < kInfinity) {
+      if ( (s[i] > kCarTolerance*0.5)  ) {
+	nbinter++;
+  	if ( distance > (s[i]*s[i]) ) {
 	  distance = s[i]*s[i];
-	
-	// increase the number of real intersections
-	nbinter ++;
-      }    
-      else if ( s[i] >= -kCarTolerance*0.5 ) 
-      {
-	// the point is on the surface
-	// set the distance to 0 and return 1
-	distance = 0;
-	return 1;
-      }   
+	}
+      }
+    }
   }
 
   return nbinter;
@@ -344,31 +337,36 @@ int G4FConicalSurface::Intersect(const G4Ray& ry )
 
 G4double G4FConicalSurface::HowNear( const G4Vector3D& x ) const
 { 
-  // Shortest distance from the point x to the G4FConicalSurface.
-  // The distance will be positive if the point is outside 
-  // the G4ConicalSurface, negative if the point is inside.
+//  Shortest distance from the point x to the G4FConicalSurface.
+//  The distance will be always positive
+//  This function works only with Cone axis equal (0,0,1) or (0,0,-1), it project
+//  the surface and the point on the x,z plane and compute the distance in analytical
+//  way
   
-  G4Vector3D d       = x - origin;
-  G4double   dA      = d * Position.GetAxis();
-  G4double   rad     = sqrt( d.mag2() - dA*dA );
-  G4double   teta    = atan2( (large_radius - small_radius) , length );
-  G4double   radiu   = rad - (large_radius - dA*tan_angle) ;
   G4double   hownear ;
 
-  // solve problem of tolerance
-  if(fabs(dA) < kCarTolerance)
-    dA = 0;
+  G4Vector3D upcorner = G4Vector3D ( small_radius, 0 , origin.z()+Position.GetAxis().z()*length);
+  G4Vector3D downcorner = G4Vector3D ( large_radius, 0 , origin.z());
+  G4Vector3D xd;  
+  
+  xd = G4Vector3D ( sqrt ( x.x()*x.x() + x.y()*x.y() ) , 0 , x.z() );
+    
+  G4double m = (upcorner.z() - downcorner.z()) / (upcorner.x() - downcorner.x());
+  G4double q = (downcorner.z()*upcorner.x() - upcorner.z()*downcorner.x()) /
+               (upcorner.x() - downcorner.x());
+  
+  G4double Zinter = (xd.z()*m*m + xd.x()*m +q)/(1+m*m) ;
+  
+  if ( ((Zinter >= downcorner.z()) && (Zinter <=upcorner.z())) ||
+       ((Zinter >= upcorner.z()) && (Zinter <=downcorner.z())) ) {
+    hownear = fabs(m*xd.x()-xd.z()+q)/sqrt(1+m*m);
+    return hownear;
+  } else {
+    hownear = min ( (xd-upcorner).mag() , (xd-downcorner).mag() );
+    return hownear;
+  }
 
-  if (dA > length)
-    // point outside, so hownear must be positive
-    hownear = dA - length;
-  else if (dA < 0)
-    // point outside, so hownear must be positive
-    hownear = -dA;
-  else
-    hownear = radiu * cos(teta);
 
-  return hownear;
 }
 
 
@@ -380,7 +378,7 @@ G4Vector3D G4FConicalSurface::SurfaceNormal( const G4Point3D& p ) const
   G4double   da = s * Position.GetAxis();
   G4double   r  = sqrt( s*s - da*da);
   G4double   z  = tan_angle * r; 
-
+  
   if (Position.GetAxis().z() < 0)
     z = -z; 
 
@@ -396,8 +394,6 @@ G4Vector3D G4FConicalSurface::SurfaceNormal( const G4Point3D& p ) const
 int G4FConicalSurface::Inside ( const G4Vector3D& x ) const
 { 
   // Return 0 if point x is outside G4ConicalSurface, 1 if Inside.
-  // Outside means that the distance to the G4ConicalSurface would be negative.
-  // Use the HowNear function to calculate this distance.
   if ( HowNear( x ) >= -0.5*kCarTolerance )
     return 1;
   else
