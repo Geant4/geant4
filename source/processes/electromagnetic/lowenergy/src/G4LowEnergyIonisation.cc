@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.28 2000-02-18 10:28:47 lefebure Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.29 2000-02-18 12:39:18 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1161,6 +1161,7 @@ void G4LowEnergyIonisation::PrintInfoDefinition()
 {
   G4String comments = "First version of low energy ionisation code,";
            comments += "\n At present it can be used for electrons only ";
+	   comments += "\n To be used as a **PURE DISCRETE** process for now";
            comments += " in the energy range [250 eV,100 GeV]";
   G4cout << G4endl << GetProcessName() << ":  " << comments << G4endl;
 
