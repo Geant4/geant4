@@ -3,9 +3,8 @@
 #include "G4PTouchableKey.hh"
 #include "G4PStep.hh"
 
-using namespace std;
 
-ostream& operator<<(ostream &out, const G4PTouchableKey &tk);
-ostream& operator<<(ostream &out, const G4PStep &ps);
+G4std::ostream& operator<<(G4std::ostream &out, const G4PTouchableKey &tk);
+G4std::ostream& operator<<(G4std::ostream &out, const G4PStep &ps);
 
 #endif

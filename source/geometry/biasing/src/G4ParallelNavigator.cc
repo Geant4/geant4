@@ -6,7 +6,6 @@
 #include "G4VParallelStepper.hh"
 #include "g4std/strstream"
 
-using namespace std;
 
 G4ParallelNavigator::G4ParallelNavigator(G4VPhysicalVolume &aWorldVolume): 
   fNavigator(*(new G4Navigator)),
@@ -135,7 +134,7 @@ ComputeStepLengthShifted(const G4String &m,
   G4double stepLength  = fNavigator.ComputeStep( shift_pos, aDirection,
 					kInfinity, newSafety);
   if (stepLength<=0.0) {
-    ostrstream os;
+    G4std::ostrstream os;
     os << "ComputeStepLengthShifted: called by " << m << "\n";
     os << "shifted positio in second try: " << shift_pos << '\0' << G4endl;
     Error(os.str() , aPosition, aDirection);

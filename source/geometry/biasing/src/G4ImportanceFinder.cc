@@ -13,10 +13,11 @@ GetIPre_over_IPost(const G4PTouchableKey &prekey,
   G4double ipost = fIStore.GetImportance(postkey);
 
   if (ipre <= 0 || ipost <=0 ) {
-    ostrstream os;
+    G4std::ostrstream os;
     os << "ipre <= 0 || ipost <=0, preTouchableKey = " << prekey 
        << ", postTouchableKey = " << postkey << '\0';
     Error(os.str());
   }
   return ipre/ipost;
 }
+

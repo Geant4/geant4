@@ -3,7 +3,6 @@
 #include "globals.hh"
 #include <iostream>
 
-using namespace std;
 
 class G4Sigma { 
   
@@ -37,7 +36,7 @@ class G4Sigma {
 
 };
 
-ostream& operator<<(ostream &out, const G4Sigma &s);
+G4std::ostream& operator<<(G4std::ostream &out, const G4Sigma &s);
 
 #endif
 

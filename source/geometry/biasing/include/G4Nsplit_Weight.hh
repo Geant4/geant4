@@ -3,7 +3,6 @@
 
 #include "globals.hh"
 
-using namespace std;
 
 struct G4Nsplit_Weight {
   G4Nsplit_Weight(G4int an, G4double aw): fN(an), fW(aw){}
@@ -11,7 +10,7 @@ struct G4Nsplit_Weight {
   G4double fW;
 };
 
-ostream& operator<<(ostream &out, const G4Nsplit_Weight  &nw);
+G4std::ostream& operator<<(G4std::ostream &out, const G4Nsplit_Weight  &nw);
 
 
 #endif

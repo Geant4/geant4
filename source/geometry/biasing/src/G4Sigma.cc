@@ -77,7 +77,7 @@ void G4Sigma::Error(G4String m){
 }
 
 
-ostream& operator<<(ostream &out, const G4Sigma &s){
+G4std::ostream& operator<<(G4std::ostream &out, const G4Sigma &s){
   out << "entries                             : " << s.GetEntries() << "\n";
   out << "Sum(w)                              : " << s.GetSumOfWeights()<<"\n";
   out << "Sum(w*x)                            : " << s.GetWeightedXsum() << "\n";

@@ -4,11 +4,10 @@
 #include "g4std/map"
 #include "globals.hh"
 #include "G4PTouchableKey.hh"
-using namespace std;
 
-typedef map<G4PTouchableKey, G4double, G4PTkComp> G4PtkImportance;
+typedef G4std::map<G4PTouchableKey, G4double, G4PTkComp> G4PtkImportance;
 
-ostream& operator<<(ostream &out, const G4PtkImportance &ptki);
+G4std::ostream& operator<<(G4std::ostream &out, const G4PtkImportance &ptki);
 
 
 #endif

@@ -26,7 +26,7 @@ void G4ImportancePostStepDoIt::DoIt(const G4Track& aTrack,
   }
   else {
     // wrong answer
-    ostrstream os;
+    G4std::ostrstream os;
     os << "G4ImportancePostStepDoIt::DoIt: sampler returned nw = " 
        << nw << '\0' << G4endl;
     G4Exception(os.str());

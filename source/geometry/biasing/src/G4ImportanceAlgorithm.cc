@@ -2,8 +2,6 @@
 #include "Randomize.hh"
 #include "g4std/strstream"
 
-using namespace std;
-
 G4ImportanceAlgorithm::G4ImportanceAlgorithm(): fWorned(false) {}
 G4ImportanceAlgorithm::~G4ImportanceAlgorithm(){
   if(fWorned) {
@@ -18,7 +16,7 @@ G4ImportanceAlgorithm::
 Calculate(G4double ipre_over_ipost, G4double init_w) const{
 
   if ((ipre_over_ipost<0.25 || ipre_over_ipost> 4) && !fWorned) {
-    ostrstream os;
+    G4std::ostrstream os;
     os << "Calculate: ipre_over_ipost ! in [0.25, 4]: ipre_over_ipost = "
        << ipre_over_ipost << '\0' << G4endl;
     Warning(os.str());
