@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Quasmon.cc,v 1.4 2000-08-17 13:53:20 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.5 2000-08-22 07:26:16 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -29,6 +29,10 @@ G4Quasmon::G4Quasmon(const G4int projPDG, const G4int targPDG, const G4LorentzVe
                      const G4LorentzVector targ4Mom, G4int nP) :
   theEnvironment(90000000)
 {
+#ifdef pdebug
+  cout<<"G4Quasmon: ***BEG*** pPDG "<<projPDG<<" tPDG="<<targPDG<<", p4M="<<proj4M
+      <<",t4M="<<targ4Mom<<endl;
+#endif
   if(!projPDG||projPDG==10)
   {
     cout<<"***G4Quasmon::Constructor: wrong projPDG="<<projPDG<<". Use other constructor"<<endl;
@@ -38,6 +42,18 @@ G4Quasmon::G4Quasmon(const G4int projPDG, const G4int targPDG, const G4LorentzVe
   {
     G4QPDGCode pQPDG(projPDG);                     // QPDG for the projectile
     G4int projQ=pQPDG.GetQCode();
+    G4int targetPDG=targPDG;
+    if(targPDG==90001000||targPDG==90000001)
+    {
+#ifdef pdebug
+      cout<<"G4Quasmon: (PDG) Change targPDG="<<targPDG<<endl;
+#endif
+      if(targPDG==90000001)targetPDG=2112;
+      else                 targetPDG=2212;
+#ifdef pdebug
+      cout<<"G4Quasmon: (PDG) >>Now targetPDG="<<targetPDG<<endl;
+#endif
+    }
     if(projQ<0)
 	{
       cout<<"***G4Quasmon::Constructor: Q<0,projPDG="<<projPDG<<". Use other constructor"<<endl;
@@ -46,7 +62,10 @@ G4Quasmon::G4Quasmon(const G4int projPDG, const G4int targPDG, const G4LorentzVe
     else
     {
       G4QContent projQC=pQPDG.GetQuarkContent();
-      InitQuasmon(projQC, targPDG, proj4M, targ4Mom, nP);
+#ifdef pdebug
+      cout<<"G4Quasmon: (PDG) Before InitQuasmon targetPDG="<<targetPDG<<endl;
+#endif
+      InitQuasmon(projQC, targetPDG, proj4M, targ4Mom, nP);
     }
   }
 }
@@ -55,7 +74,22 @@ G4Quasmon::G4Quasmon(const G4QContent projQC, const G4int targPDG, const G4Loren
                      const G4LorentzVector targ4Mom, G4int nP) :
   theEnvironment(90000000)
 {
-  InitQuasmon(projQC, targPDG, proj4M, targ4Mom, nP);
+  G4int targetPDG=targPDG;
+  if(targPDG==90001000||targPDG==90000001)
+  {
+#ifdef pdebug
+    cout<<"G4Quasmon: (QC) Change targPDG="<<targPDG<<endl;
+#endif
+    if(targPDG==90000001)targetPDG=2112;
+    else                 targetPDG=2212;
+#ifdef pdebug
+    cout<<"G4Quasmon: (QC) >>Now targetPDG="<<targetPDG<<endl;
+#endif
+  }
+#ifdef pdebug
+  cout<<"G4Quasmon: (QC) Before InitQuasmon targetPDG="<<targetPDG<<endl;
+#endif
+  InitQuasmon(projQC, targetPDG, proj4M, targ4Mom, nP);
 }
 
 G4Quasmon::G4Quasmon(const G4Quasmon &right) {}
@@ -106,6 +140,7 @@ void G4Quasmon::InitQuasmon(const G4QContent projQC,      const G4int targPDG,
   G4QPDGCode tQPDG(targPDG);                       // QPDG for the target
   G4double  tgMass=tQPDG.GetMass();                // mass of the target
 #ifdef pdebug
+  cout<<"G4Quasm::IniQ:targPDG="<<targPDG<<endl;
   cout<<"G4Quasm::IniQ:Interact of "<<projQC<<projM2<<"(p="<<projP<<") + "<<tQPDG<<tgMass<<endl;
 #endif
   InitCandidateVector(nMesons,nBaryons,nClusters);
@@ -116,11 +151,11 @@ void G4Quasmon::InitQuasmon(const G4QContent projQC,      const G4int targPDG,
   if(targPDG>90000000)                             // Interaction with a nuclear target
   {
     theEnvironment.InitByPDG(targPDG);
-    G4double envZ=theEnvironment.GetZ();           // A#of protons in the nucleus
-    G4double envN=theEnvironment.GetN();           // A#of neutrons in the nucleus
-    G4double envS=theEnvironment.GetS();           // A#of lambdas in the nucleus
+    G4double envZ=theEnvironment.GetZ();         // A#of protons in the nucleus
+    G4double envN=theEnvironment.GetN();         // A#of neutrons in the nucleus
+    G4double envS=theEnvironment.GetS();         // A#of lambdas in the nucleus
     if(nClusters<0)cerr<<"G4Quasmon::InitQ: nP="<<nP<<" for NuclTargetPDG="<<targPDG<<endl;
-    if     (nClusters<3) nBarClust=1;              // Fix the maximum Baryon Number for clusters
+    if     (nClusters<3) nBarClust=1;            // Fix the maximum Baryon Number for clusters
     else if(nClusters<9) nBarClust=2;
     else
 	{
@@ -129,7 +164,7 @@ void G4Quasmon::InitQuasmon(const G4QContent projQC,      const G4int targPDG,
       G4int r=v%15;
       if(r<7) nBarClust=3+d+d;
       else    nBarClust=4+d+d;
-	}
+    }
 #ifdef pdebug
 	cout<<"G4Quasmon::InitQ: TargetNucleus="<<theEnvironment<<endl;
 #endif
@@ -399,6 +434,9 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon()
   static const G4double third =1./3.;
   static const G4double conCon=197.327;          // Conversion constant (hc)
   static const G4double rCB   = 1.09;            // R=r_CB*(a^1/3+A^1/3) - CoulBarrierRadius(fm)
+#ifdef pdebug
+  cout<<"G4Quasm::HadrQuasm: ***===>>> START HADRONIZATION <<<===***"<<endl;
+#endif
   if(q4Mom==G4LorentzVector(0.,0.,0.,0.))
   {
     if(theEnvironment.GetPDG()>NUCPDG)FillNEnvInVector();// Fill residual Environment
