@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.41 2004-11-17 15:26:42 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.42 2004-11-17 18:22:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -349,7 +349,8 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
     G4cout << "### G4VEnergyLossProcess::BuildPhysicsTable() for "
            << GetProcessName()
            << " and particle " << part.GetParticleName()
-           << "; native particle " << particle->GetParticleName()
+           << "; local: " << particle->GetParticleName()
+           << "; base: " << baseParticle->GetParticleName()
            << G4endl;
   }
 
