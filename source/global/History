@@ -1,4 +1,4 @@
-$Id: History,v 1.29 1999-11-16 17:28:30 gcosmo Exp $
+$Id: History,v 1.30 1999-11-19 09:31:35 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 19, 99 G.Cosmo (global-V00-01-10)
+- Addition of comments for the Software Reference Manual (by M.Maire):
+  G4UnitsTable.hh, G4UnitsTest.hh, PhysicalConstants.h, SystemOfUnits.h.
 
 November 16, 99 G.Cosmo (global-V00-01-09)
 - STLInterface: removed wrappers for Dictionaries.
