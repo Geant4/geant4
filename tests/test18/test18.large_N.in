@@ -1,0 +1,72 @@
+################################################################################
+#                                                                              #
+# ESA-CERN GEANT4 RADIOACTIVE DECAY MODULE                                     #
+# VALIDATION TEST NUMBER 01                                                    #
+#                                                                              #
+# THIS TEST GENERATES NUCLEI OF NA-24 (GND-STATE), NE-24, F-24, AL-24          #
+# NA-24 (METASTABLE), CR-46, AND PO-215 AND DECAYS THEM.  THE NUCLEAR LIMITS   #
+# ARE RESTRICTED SO THAT DAUGHTERS ARE NOT DECAYED.  THE GEOMETRY COMPRISES    #
+# A SPHERE OF RADIUS 125,000. KM, WITHIN A BOX OF SIDE 500,000. KM WITHIN A    #
+# BOX OF SIDE 10,000,000. KM.  ALL VOLUMES ARE CENTRED ON THE COORDINATE       #
+# ORIGIN AND CONTAIN A VACUUM.  PARTICLES ARE STARTED OFF FROM THE ORIGIN WITH #
+# AN ENERGY OF 1 EV.                                                           #
+#                                                                              #
+# F LEI, DERA FARNBOROUGH, 8 MARCH 2000                                        #
+#                                                                              #
+################################################################################
+#
+#
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+/process/verbose 0
+/grdm/verbose 0
+#
+#
+# FIRST ION IS NA-24 (GND-STATE) BY BETA-DECAY.  THE RANGE OF NUCLEI DOES NOT
+# NEED TO BE RESTRICTED SINCE MG-24 IS THE ONLY PRODUCT AND IS STABLE.
+# 
+/grdm/ion 24 11 0
+/run/beamOn 1000
+#
+#
+# NE-24 BETA- DECAY.
+#
+/grdm/nucleusLimits 24 24 10 10
+/grdm/ion 24 10 0
+/run/beamOn 1000
+#
+#
+# F-9 BETA- DECAY.
+#
+/grdm/nucleusLimits 24 24 9 9
+/grdm/ion 24 9 0
+/run/beamOn 1000 
+#
+#
+# AL-24 (GND-STATE) BETA+ DECAY.
+#
+/grdm/nucleusLimits 24 24 13 13
+/grdm/ion 24 13 0
+/run/beamOn 1000 
+#
+#
+# NA-24 (472 KEV METASTABLE STATE) BETA+ DECAY AND IT.
+#
+/grdm/nucleusLimits 24 24 11 11
+/grdm/ion 24 11 472
+/run/beamOn 1000
+#
+#
+# CR-46 BETA+ DECAY.
+#
+/grdm/nucleusLimits 46 46 24 24
+/grdm/ion 46 24 0
+/run/beamOn 1000
+#
+#
+# PO-215 ALPHA DECAY.
+#
+/grdm/nucleusLimits 215 215 84 84
+/grdm/ion 215 84 0
+/run/beamOn 1000
