@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.cc,v 1.36 2003-04-07 16:55:39 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.37 2003-04-07 17:07:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------- G4hIonisation physics process -------------------------------
@@ -167,8 +167,7 @@ void G4hIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 
   if (aParticleType.GetPDGCharge() > 0.)
    {
-     if( (CutsWhereModified() && aParticleType.GetParticleName() == "proton")  
-        || !theDEDXpTable )
+     if( CutsWhereModified() || !theDEDXpTable )
     {
       BuildLossTable(*theProton);
       RecorderOfpProcess[CounterOfpProcess] = (*this).theLossTable;
@@ -178,8 +177,7 @@ void G4hIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
    }
   else
    {
-     if( (CutsWhereModified() && aParticleType.GetParticleName() == "anti_proton") 
-        || !theDEDXpbarTable )
+     if( CutsWhereModified() || !theDEDXpbarTable )
     {
       BuildLossTable(*(G4AntiProton::AntiProton())) ;
       RecorderOfpbarProcess[CounterOfpbarProcess] = (*this).theLossTable;
