@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Hype.cc,v 1.2 2000-04-11 16:03:40 johna Exp $
+// $Id: G4Hype.cc,v 1.3 2000-04-19 17:56:44 davidw Exp $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -46,6 +46,7 @@
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
+#include "G4VisExtent.hh"
 #include "G4NURBS.hh"
 #include "G4NURBStube.hh"
 #include "G4NURBScylinder.hh"
@@ -57,7 +58,7 @@ G4Hype::G4Hype(const G4String& pName,
 	   const G4double newOuterRadius,
 	   const G4double newInnerStereo,
 	   const G4double newOuterStereo,
-	   const G4double newHalfLenZ) : G4CSGSolid(pName)
+	   const G4double newHalfLenZ) : G4VSolid(pName)
 {
 // Check z-len
     if (newHalfLenZ>0)
@@ -982,6 +983,14 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p) const
 void G4Hype::DescribeYourselfTo (G4VGraphicsScene& scene) const 
 {
   scene.AddThis (*this);
+}
+
+G4VisExtent G4Hype::GetExtent() const 
+{
+  // Define the sides of the box into which the G4Tubs instance would fit.
+  return G4VisExtent( -endOuterRadius, endOuterRadius, 
+  		      -endOuterRadius, endOuterRadius, 
+		      -halfLenZ, halfLenZ );
 }
 
 G4Polyhedron* G4Hype::CreatePolyhedron () const 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EllipticalTube.hh,v 1.4 2000-04-18 19:06:42 davidw Exp $
+// $Id: G4EllipticalTube.hh,v 1.5 2000-04-19 17:56:24 davidw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -25,9 +25,9 @@
 #ifndef G4EllipticalTube_hh
 #define G4EllipticalTube_hh
 
-#include "G4CSGSolid.hh"
+#include "G4VSolid.hh"
 
-class G4EllipticalTube : public G4CSGSolid {
+class G4EllipticalTube : public G4VSolid {
 	public:
 	G4EllipticalTube( const G4String &name, 
 			  const G4double theDx, const G4double theDy, const G4double theDz );

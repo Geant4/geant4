@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Hype.hh,v 1.2 2000-04-11 16:03:39 johna Exp $
+// $Id: G4Hype.hh,v 1.3 2000-04-19 17:56:27 davidw Exp $
 // $Original: G4Hype.hh,v 1.0 1998/06/09 16:57:50 safai Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -69,13 +69,13 @@
 #ifndef G4HYPE_HH
 #define G4HYPE_HH
 
-#include "G4CSGSolid.hh"
+#include "G4VSolid.hh"
 #include "G4ThreeVector.hh"
 
 class G4SolidExtentList;
 class G4ClippablePolygon;
 
-class G4Hype : public G4CSGSolid {
+class G4Hype : public G4VSolid {
 public:
 
   G4Hype(const G4String &pName,
@@ -152,6 +152,7 @@ public:
   virtual G4GeometryType  GetEntityType() const { return G4String("G4Hype"); }
 
   void                DescribeYourselfTo (G4VGraphicsScene& scene) const;
+  G4VisExtent         GetExtent        () const;
   G4Polyhedron*       CreatePolyhedron   () const;
   G4NURBS*            CreateNURBS        () const;
 

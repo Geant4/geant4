@@ -4,7 +4,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.cc,v 1.2 2000-04-11 16:03:40 johna Exp $
+// $Id: G4VCSGfaceted.cc,v 1.3 2000-04-19 17:56:47 davidw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,6 +30,7 @@
 #include "G4VGraphicsScene.hh"
 #include "G4NURBS.hh"
 #include "G4NURBSbox.hh"
+#include "G4VisExtent.hh"
 
 //
 // Destructor
@@ -43,7 +44,7 @@ G4VCSGfaceted::~G4VCSGfaceted()
 //
 // Copy constructor
 //
-G4VCSGfaceted::G4VCSGfaceted( const G4VCSGfaceted &source ) : G4CSGSolid( source )
+G4VCSGfaceted::G4VCSGfaceted( const G4VCSGfaceted &source ) : G4VSolid( source )
 {
 	CopyStuff( source );
 }
@@ -309,4 +310,38 @@ G4double G4VCSGfaceted::DistanceTo( const G4ThreeVector &p, const G4bool outgoin
 void G4VCSGfaceted::DescribeYourselfTo( G4VGraphicsScene& scene ) const
 {
    scene.AddThis( *this );
+}
+
+
+//
+// GetExtent
+//
+// Define the sides of the box into which our solid instance would fit.
+//
+G4VisExtent G4VCSGfaceted::GetExtent() const 
+{
+	static const G4ThreeVector xMax(1,0,0), xMin(-1,0,0),
+	                           yMax(0,1,0), yMin(0,-1,0),
+	                           zMax(0,0,1), zMin(0,0,-1);
+	static const G4ThreeVector *axes[6] = { &xMin, &xMax, &yMin, &yMax, &zMin, &zMax };
+	
+	G4double answers[6] = {-kInfinity, -kInfinity, -kInfinity, -kInfinity, -kInfinity, -kInfinity};
+
+	G4VCSGface **face = faces;
+	do {
+		G4double vmax;
+		
+		const G4ThreeVector **axis(axes+5);
+		G4double *answer(answers+5);
+		do {
+			G4double testFace = (*face)->Extent( **axis );
+			if (testFace > *answer) *answer = testFace;
+		}
+		while( --axis, --answer >= answers );
+		
+	} while( ++face < faces + numFace );
+  
+  	return G4VisExtent( -answers[0], answers[1], 
+			    -answers[2], answers[3]
+			    -answers[4], answers[5]  );
 }

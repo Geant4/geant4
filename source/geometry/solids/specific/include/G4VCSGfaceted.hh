@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.hh,v 1.2 2000-04-11 16:03:39 johna Exp $
+// $Id: G4VCSGfaceted.hh,v 1.3 2000-04-19 17:56:29 davidw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,14 +25,15 @@
 #ifndef G4VCSGfaceted_hh
 #define G4VCSGfaceted_hh
 
-#include "G4CSGSolid.hh"
+#include "G4VSolid.hh"
 
 class G4VCSGface;
+class G4VisExtent;
 
-class G4VCSGfaceted : public G4CSGSolid 
+class G4VCSGfaceted : public G4VSolid 
 {
 	public:
-	G4VCSGfaceted( G4String name) : G4CSGSolid(name) {;}
+	G4VCSGfaceted( G4String name) : G4VSolid(name) {;}
 	virtual ~G4VCSGfaceted();
 	
 	G4VCSGfaceted( const G4VCSGfaceted &source );
@@ -59,6 +60,8 @@ class G4VCSGfaceted : public G4CSGSolid
         virtual G4Polyhedron* CreatePolyhedron() const = 0;
 
 	virtual void DescribeYourselfTo( G4VGraphicsScene& scene ) const;
+
+	virtual G4VisExtent GetExtent() const;
 
 	protected:
 	G4int	  numFace;
