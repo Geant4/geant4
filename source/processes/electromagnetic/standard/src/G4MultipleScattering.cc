@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScattering.cc,v 1.8 1999-07-29 08:44:31 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.9 1999-08-02 07:42:13 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -73,8 +73,6 @@
     if((&aParticleType == G4Electron::Electron()) ||
        (&aParticleType == G4Positron::Positron())   )
        Tlimit = 100.*keV ;
-    else if(aParticleType.GetPDGMass() < 1.*GeV)
-       Tlimit=100.*keV;
     
     const G4double sigmafactor = twopi*classic_electr_radius*
                                        classic_electr_radius ;
