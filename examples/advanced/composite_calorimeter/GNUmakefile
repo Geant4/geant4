@@ -9,16 +9,10 @@ ifndef G4INSTALL
   G4INSTALL = ../../../
 endif
 
+include $(G4INSTALL)/config/architecture.gmk
 
 ifndef LISTS_BASE
   LISTS_BASE = $(G4INSTALL)/hadronic_lists
-  ifndef G4WORKDIR
-    G4WORKDIR = $(G4INSTALL)
-  endif
-endif
-
-ifndef G4WORKDIR
-  G4WORKDIR = $(LISTS_BASE)/lists/.lists_build
 endif
 
 EXTRALIBS += -L$(LISTS_BASE)/../.lists_build/lib/$(G4SYSTEM)
