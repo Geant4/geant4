@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DataVector.cc,v 1.1 2001-09-17 08:17:58 kurasige Exp $
+// $Id: G4DataVector.cc,v 1.2 2001-11-28 10:51:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -86,7 +86,7 @@ G4bool G4DataVector::Retrieve(G4std::ifstream& fIn, G4bool ascii)
  
   G4double* value = new G4double[sizeV];
   fIn.read((char*)(value),  sizeV*(sizeof(G4double)) );
-  if (fIn.gcount() != sizeV*(sizeof(G4double)) ){
+  if (fIn.gcount() != G4int(sizeV*(sizeof(G4double))) ){
     delete [] value;
     return false;
   }
