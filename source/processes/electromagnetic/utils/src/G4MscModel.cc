@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.cc,v 1.6 2003-08-05 14:35:19 urban Exp $
+// $Id: G4MscModel.cc,v 1.7 2003-08-15 12:25:23 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -413,6 +413,12 @@ G4double G4MscModel::GeomPathLength(
   zm      = 1.;
   cthm    = 1.;
   tPathLength = truePathLength;
+
+  // this correction needed to run MSC with eIoni and eBrem inactivated
+  // and makes no harm for a normal run
+  if(tPathLength > range)
+    tPathLength = range ;
+
   G4double tau   = tPathLength/lambda0 ;
 
   if (tau <= tausmall) return tPathLength;
