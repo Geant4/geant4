@@ -62,6 +62,7 @@
     G4double m_nucl;      // to check energy balance 
     G4LorentzVector it;
     
+    G4FermiMomentum theFermi;
     while(!result)
     {
       projectile = new G4Fancy3DNucleus;
@@ -97,7 +98,6 @@
       debug.push_back(" projectile nucleon momentum");
       debug.push_back(nucleonMom);
       debug.dump();
-      G4FermiMomentum theFermi;
       theFermi.Init(a1,z1);
       while( (aNuc=projectile->GetNextNucleon()) )
       {
@@ -143,6 +143,8 @@
     G4Nucleon * aNuc;
     G4ReactionProductVector * spectators= new G4ReactionProductVector;
     debug.push_back("getting at the hits"); debug.dump();
+    // the projectile excitation energy estimate...
+    G4double theStatisticalExEnergy = 0;
     while( (aNuc=projectile->GetNextNucleon()) )
     {
       debug.push_back("getting the hits"); debug.dump();
@@ -154,6 +156,13 @@
       else
       {
         debug.push_back(" ##### a hit ##### "); debug.dump();
+	G4ThreeVector aPosition(aNuc->GetPosition());
+        G4double localDensity = projectile->GetNuclearDensity()->GetDensity(aPosition);
+	G4double localPfermi = theFermi.GetFermiMomentum(localDensity);
+	G4double nucMass = aNuc->GetDefinition()->GetPDGMass();
+	G4double localFermiEnergy = sqrt(nucMass*nucMass + localPfermi*localPfermi) - nucMass;
+	G4double deltaE = localFermiEnergy - aNuc->GetMomentum().t();
+	theStatisticalExEnergy += deltaE;
       }
       debug.push_back("collected a hit"); debug.dump();
     }
