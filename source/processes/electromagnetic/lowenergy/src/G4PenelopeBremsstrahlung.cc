@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlung.cc,v 1.11 2003-07-01 13:29:10 pandola Exp $
+// $Id: G4PenelopeBremsstrahlung.cc,v 1.12 2003-11-07 12:27:21 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -36,6 +36,7 @@
 // 20.05.2003 MGP          - Removed compilation warnings
 //                           Restored NotForced in GetMeanFreePath
 // 23.05.2003 MGP          - Removed memory leak (fix in destructor)
+// 07.11.2003 L.Pandola    - Bug fixed in LoadAngularData()
 //
 //----------------------------------------------------------------
 
@@ -61,10 +62,10 @@ G4PenelopeBremsstrahlung::G4PenelopeBremsstrahlung(const G4String& nam)
   theMeanFreePath(0),
   energySpectrum(0)
 {
-  // materialAngularData.clear();
+  materialAngularData.clear();
   cutForPhotons = 0.;
   verboseLevel = 0;
-  LoadAngularData();
+  
 }
 
 
@@ -94,7 +95,10 @@ void G4PenelopeBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aPa
   }
 
   cutForSecondaryPhotons.clear();
-
+  LoadAngularData();
+  if(verboseLevel > 0) {
+    G4cout << "G4PenelopeBremsstrahlung: Angular data loaded" << G4endl;
+  }
   // Create and fill BremsstrahlungParameters once
   if ( energySpectrum != 0 ) delete energySpectrum;
   //grid of reduced energy bins for photons  
@@ -336,10 +340,10 @@ G4VParticleChange* G4PenelopeBremsstrahlung::PostStepDoIt(const G4Track& track,
   }while(Z_try != Z);
  
   G4PenelopeBremsstrahlungAngular* finalAngularData = (*elementData)[indexEl];
-  
+  //Check if the loaded angular data are right
+  // G4cout << "Material Z: " << finalAngularData->GetAtomicNumber() << G4endl;
   // Sample gamma angle (Z - axis along the parent particle).
   G4double dirZ = finalAngularData->ExtractCosTheta(kineticEnergy,tGamma);
-
   G4double totalEnergy = kineticEnergy + electron_mass_c2;
   G4double phi   = twopi * G4UniformRand();
   G4double sinTheta  = sqrt(1. - dirZ*dirZ);
@@ -391,8 +395,8 @@ void G4PenelopeBremsstrahlung::PrintInfoDefinition()
   comments += "\n      Gamma energy sampled from a data-driven histogram.";
   comments += "\n      Implementation of the continuous dE/dx part.";  
   comments += "\n      It can be used for electrons and positrons";
-  comments += "in the energy range [250eV,100GeV].";
-  comments += "\n      The process must work with G4LowEnergyIonisation.";
+  comments += " in the energy range [250eV,100GeV].";
+  comments += "\n      The process must work with G4PenelopeIonisation.";
 
   G4cout << G4endl << GetProcessName() << ":  " << comments << G4endl;
 }
@@ -421,13 +425,16 @@ void G4PenelopeBremsstrahlung::SetCutForLowEnSecPhotons(G4double cut)
 
 void G4PenelopeBremsstrahlung::LoadAngularData()
 {
-  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  const size_t numOfMaterials = G4Material::GetNumberOfMaterials();
-  materialAngularData.clear();
   
-  for (size_t j=0; j<numOfMaterials; j++) {
+  const G4ProductionCutsTable* theCoupleTable=
+        G4ProductionCutsTable::GetProductionCutsTable();
+  size_t numOfCouples = theCoupleTable->GetTableSize();
+  materialAngularData.clear();
+  for (size_t j=0; j<numOfCouples; j++) {
     // get material parameters needed for the energy loss calculation
-    const G4Material* material= (*theMaterialTable)[j];
+    const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(j);
+    const G4Material* material= couple->GetMaterial();
+    // get material parameters needed for the energy loss calculation
     const G4ElementVector* theElementVector = material->GetElementVector();
     size_t NumberOfElements = material->GetNumberOfElements();
     // loop for elements in the material
