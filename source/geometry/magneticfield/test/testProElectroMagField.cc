@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testProElectroMagField.cc,v 1.7 2002-06-07 18:22:50 japost Exp $
+// $Id: testProElectroMagField.cc,v 1.8 2002-11-01 21:11:11 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -277,8 +277,10 @@ G4PropagatorInField*  SetupPropagator( G4int type)
 }
 
 //  This is Done only for this test program ... the transportation does it.
+//  The method is now obsolete -- as propagator in Field has this method,
+//    in order to message the correct field manager's chord finder.
 //
-void  SetChargeMomentumMass(G4double charge, G4double MomentumXc, G4double Mass)
+void  ObsoleteSetChargeMomentumMass(G4double charge, G4double MomentumXc, G4double Mass)
 {
     G4ChordFinder*  pChordFinder; 
 
@@ -312,7 +314,8 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
                     GetTransportationManager()-> GetNavigatorForTracking();
     G4PropagatorInField *pMagFieldPropagator= SetupPropagator(type);
 
-    SetChargeMomentumMass(  +1.,                    // charge in e+ units
+    pMagFieldPropagator->SetChargeMomentumMass(  
+			    +1.,                    // charge in e+ units
 			   0.5 * proton_mass_c2,    // Momentum in Mev/c ?
 			    proton_mass_c2 );
     pNavig->SetWorldVolume(pTopNode);
@@ -348,8 +351,6 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
        UnitMomentum = (G4ThreeVector(0.,0.6,0.8) 
 		    + (float)iparticle * G4ThreeVector(0.1, 0.2, 0.3)).unit();
 
-
-       // ->GetChordFinder().SetChargeAndMomentum(
        G4double momentum = (0.5+iparticle*10.0) * proton_mass_c2; 
 
        G4double kineticEnergy =  momentum*momentum /
@@ -359,7 +360,7 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
        G4double labTof= 10.0*ns, properTof= 0.1*ns;
        G4ThreeVector Spin(1.0, 0.0, 0.0);
                                                    // Momentum in Mev/c ?
-       SetChargeMomentumMass(
+       pMagFieldPropagator->SetChargeMomentumMass(
 		      +1,                    // charge in e+ units
 		      momentum, 
 		      proton_mass_c2); 
