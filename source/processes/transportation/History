@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2001-08-27 18:01:30 japost Exp $
+$Id: History,v 1.15 2001-11-06 15:27:48 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov   6, 2001   J. Apostolakis - transport-V03-02-02
+------------------------------
+Added protection in G4Transportation::AlongStepGPIL for messaging
+"ResestStepEstimate" of ChordFinder for the case there is no global field.
+** NOTE this is not a perfect resolution (see NOTE in log file). **
+
+--> Thanks to Radovan Chytracek for reporting this problem (move to file log)
 
 Aug  16, 2001   J. Apostolakis - transport-V03-02-01
 ------------------------------
