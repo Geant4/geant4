@@ -25,6 +25,8 @@
 // A prototype of the low energy neutron transport model.
 //
 #include "G4NeutronHPEnAngCorrelation.hh"
+#include "G4LorentzRotation.hh"
+#include "G4LorentzVector.hh"
 
 G4ReactionProduct * G4NeutronHPEnAngCorrelation::SampleOne(G4double anEnergy)
 {  
@@ -57,6 +59,7 @@ G4ReactionProductVector * G4NeutronHPEnAngCorrelation::Sample(G4double anEnergy)
   G4int i;
   G4ReactionProductVector * it;
   G4ReactionProduct theCMS;
+  G4LorentzRotation toZ;
   if(frameFlag==2)
   {
     // simplify and double check @
@@ -74,8 +77,14 @@ G4ReactionProductVector * G4NeutronHPEnAngCorrelation::Sample(G4double anEnergy)
     G4ReactionProduct aNeutron;
     aNeutron.Lorentz(theNeutron, theCMS);
     anEnergy = aNeutron.GetKineticEnergy();
+
+    G4LorentzVector Ptmp (aNeutron.GetMomentum(), aNeutron.GetTotalEnergy());
+    toZ.rotateZ(-1*Ptmp.phi());
+    toZ.rotateY(-1*Ptmp.theta());
+
   }
   theTotalMeanEnergy=0;
+  G4LorentzRotation toLab(toZ.inverse());
   for(i=0; i<nProducts; i++)
   {
     it = theProducts[i].Sample(anEnergy);
@@ -92,6 +101,11 @@ G4ReactionProductVector * G4NeutronHPEnAngCorrelation::Sample(G4double anEnergy)
     {
       for(unsigned int ii=0; ii<it->size(); ii++)
       {
+        G4LorentzVector pTmp1 (it->operator[](ii)->GetMomentum(),
+	                       it->operator[](ii)->GetTotalEnergy());
+	pTmp1 = toLab*pTmp1;
+	it->operator[](ii)->SetMomentum(pTmp1.vect());
+	it->operator[](ii)->SetTotalEnergy(pTmp1.e());
 	if(frameFlag==1) // target rest
 	{
           it->operator[](ii)->Lorentz(*(it->operator[](ii)), -1.*theTarget);
