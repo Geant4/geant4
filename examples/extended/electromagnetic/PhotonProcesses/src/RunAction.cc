@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.1 2004-04-28 11:12:39 maire Exp $
+// $Id: RunAction.cc,v 1.2 2004-06-10 15:55:38 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,6 +32,7 @@
 
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
+#include "HistoManager.hh"
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
@@ -42,8 +43,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
-  : detector(det), primary(prim), ProcCounter(0)
+RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim,
+                     HistoManager* histo)
+  : detector(det), primary(prim), ProcCounter(0), histoManager(histo)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,6 +66,10 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   ProcCounter = new ProcessesCount;
   totalCount = 0;
   sumTrack = sumTrack2 = 0.;
+  
+#ifdef G4ANALYSIS_USE
+  histoManager->SetFactory();
+#endif  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -146,6 +152,10 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     delete aProcCount;
   }
   delete ProcCounter;
+  
+#ifdef G4ANALYSIS_USE
+  histoManager->SaveFactory();
+#endif  
 
   // show Rndm status
   HepRandom::showEngineStatus();

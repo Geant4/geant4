@@ -21,11 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: HistoManager.hh,v 1.1 2004-04-28 11:11:55 maire Exp $
+// $Id: HistoManager.hh,v 1.2 2004-06-10 15:55:36 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -53,23 +51,36 @@ class HistoMessenger;
 class HistoManager
 {
   public:
+  
     HistoManager();
    ~HistoManager();
    
-    void SetFactory(G4String);
-    void SetHisto  (G4int, G4int, G4double, G4double, G4String unit="none");
+    void SetFileName (G4String name) { fileName = name;};
+    void SetFactory  ();
+    void SaveFactory ();    
+    void SetHisto (G4int, G4int, G4double, G4double, G4String unit="none");
+    void RemoveHisto (G4int);
     
     AIDA::ITree*             GetTree()              {return tree;}
     AIDA::IHistogramFactory* GetHistogramFactory()  {return hf;}        
     AIDA::IHistogram1D*      GetHisto(G4int id)     {return histo[id];}
-    G4double                 GetHistoUnit(G4int id) {return histoUnit[id];}
-    G4double                 GetBinWidth (G4int id) {return binWidth[id];}
+    G4double                 GetHistoUnit(G4int id) {return Unit[id];}
+    G4double                 GetBinWidth (G4int id) {return Width[id];}
+    
   private:
+  
+    G4String                 fileName;
     AIDA::ITree*             tree;
     AIDA::IHistogramFactory* hf;    
     AIDA::IHistogram1D*      histo[MaxHisto];
-    G4double                 histoUnit[MaxHisto];
-    G4double                 binWidth[MaxHisto];
+    G4bool                   exist[MaxHisto];
+    G4String                 Label[MaxHisto];
+    G4String                 Title[MaxHisto];
+    G4int                    Nbins[MaxHisto];
+    G4double                 Vmin [MaxHisto];
+    G4double                 Vmax [MaxHisto];        
+    G4double                 Unit [MaxHisto];
+    G4double                 Width[MaxHisto];
     G4bool                   factoryOn;        
     HistoMessenger*          histoMessenger;
 };

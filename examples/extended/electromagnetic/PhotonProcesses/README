@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2004-04-28 11:09:05 maire Exp $
+$Id: README,v 1.2 2004-06-10 15:55:35 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -67,7 +67,10 @@ $Id: README,v 1.1 2004-04-28 11:09:05 maire Exp $
 
 	The histograms can be viewed using PAW. See below the note on 
 	ANAPHE+AIDA.
- 	
+	
+ 	One can control the name of the histograms file with the command:
+ 	/testem/histo/setFileName  name  (default photonprocesses.paw)
+   	
 	Note that, by default, histograms are disabled. To activate them, 
 	uncomment the flag G4ANALYSIS_USE in GNUmakefile. 	
  	 				

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhotonProcesses.cc,v 1.1 2004-04-28 11:09:05 maire Exp $
+// $Id: PhotonProcesses.cc,v 1.2 2004-06-10 15:55:35 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -80,7 +80,7 @@ int main(int argc,char** argv) {
       
   // set user action classes
   RunAction* run;  
-  runManager->SetUserAction(run = new RunAction(det,prim)); 
+  runManager->SetUserAction(run = new RunAction(det,prim,histo)); 
   runManager->SetUserAction(new EventAction);
   runManager->SetUserAction(new SteppingAction(run,histo));
    

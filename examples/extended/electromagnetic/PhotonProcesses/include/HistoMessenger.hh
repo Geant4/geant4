@@ -20,13 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-
-//
-// $Id: HistoMessenger.hh,v 1.1 2004-04-28 11:11:55 maire Exp $
+// $Id: HistoMessenger.hh,v 1.2 2004-06-10 15:55:36 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -44,6 +40,7 @@ class HistoManager;
 class G4UIdirectory;
 class G4UIcommand;
 class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -62,7 +59,8 @@ class HistoMessenger: public G4UImessenger
    
    G4UIdirectory*          histoDir;   
    G4UIcmdWithAString*     factoryCmd;
-   G4UIcommand*            histoCmd;    
+   G4UIcommand*            histoCmd;
+   G4UIcmdWithAnInteger*   rmhistoCmd;    
  
 };
 

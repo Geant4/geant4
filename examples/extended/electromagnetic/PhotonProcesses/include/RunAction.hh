@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.hh,v 1.1 2004-04-28 11:11:55 maire Exp $
+// $Id: RunAction.hh,v 1.2 2004-06-10 15:55:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,6 +40,7 @@
 
 class DetectorConstruction;
 class PrimaryGeneratorAction;
+class HistoManager;
 class G4Run;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,7 +48,7 @@ class G4Run;
 class RunAction : public G4UserRunAction
 {
   public:
-    RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
+    RunAction(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
    ~RunAction();
 
   public:
@@ -62,7 +63,8 @@ class RunAction : public G4UserRunAction
     DetectorConstruction*   detector;
     PrimaryGeneratorAction* primary;
     ProcessesCount*         ProcCounter;
-    
+    HistoManager*           histoManager;
+        
     G4int totalCount;      //all processes counter
     G4double sumTrack;     //sum of trackLength
     G4double sumTrack2;    //sum of trackLength*trackLength
