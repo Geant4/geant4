@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.hh,v 1.8 1999-12-15 14:51:29 gunter Exp $
+// $Id: G4LowEnergyBremsstrahlung.hh,v 1.9 2000-01-26 09:32:06 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -15,15 +15,9 @@
 //
 //      For information related to this code contact:
 //      CERN, IT Division, ASD group
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
 //      ------------ G4LowEnergyBremsstrahlung physics process ------
-//                     by Michel Maire, 24 July 1996
+//                     by A.Forti  1999/03/27 19:18:13
 // ************************************************************
-// 1-10-96 : new type G4OrderedTable;  ComputePartialSumSigma()
-// 20/03/97: new energy loss+ionisation+brems scheme, L.Urban
-// 01-09-98, new methods SetBining()  and PrintInfo() 
-// ------------------------------------------------------------
 
 #ifndef G4LowEnergyBremsstrahlung_h
 #define G4LowEnergyBremsstrahlung_h 1
