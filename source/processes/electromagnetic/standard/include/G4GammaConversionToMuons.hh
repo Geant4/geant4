@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversionToMuons.hh,v 1.1 2002-04-19 14:44:32 hbu Exp $
+// $Id: G4GammaConversionToMuons.hh,v 1.2 2002-05-06 09:32:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //         ------------ G4GammaConversionToMuons physics process ------
@@ -75,7 +75,7 @@ class G4GammaConversionToMuons : public G4VDiscreteProcess
        // Invoked by BuildThePhysicsTable().
 
      void SetCrossSecFactor(G4double fac);
-       // Set the factor to artificially increase the cross section (by default 1)
+       // Set the factor to artificially increase the crossSection (default 1)
 
      G4double inline GetCrossSecFactor() { return CrossSecFactor;}
        // Get the factor to artificially increase the cross section
@@ -128,7 +128,8 @@ class G4GammaConversionToMuons : public G4VDiscreteProcess
      G4double fminimalEnergy;         // minimalEnergy of produced particles
 
      G4double MeanFreePath;           // actual MeanFreePath (current medium)
-     G4double CrossSecFactor;         // factor to artificially increase the cross section
+     G4double CrossSecFactor;         // factor to artificially increase
+                                      // the cross section
 
 };
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.56 2002-04-29 13:39:00 maire Exp $
+$Id: History,v 1.57 2002-05-06 09:32:39 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,11 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
- 29 apr 02: mma (stand-V04-00-09)
+06 may 02: mma (stand-V04-00-10)
+- compilation error in G4GammaConversionToMuons
+     
+29 apr 02: mma (stand-V04-00-09)
 - G4PhotoElectric: Generate theta angle of the photoelectron from Sauter-Gravila
   distribution  
-
-      
+     
 18 apr 02: mma (stand-V04-00-08)
 - new process: G4GammaConversionToMuons
      

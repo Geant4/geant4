@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversionToMuons.cc,v 1.2 2002-04-30 13:54:29 hbu Exp $
+// $Id: G4GammaConversionToMuons.cc,v 1.3 2002-05-06 09:32:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //         ------------ G4GammaConversionToMuons physics process ------
 //         by H.Burkhardt, S. Kelner and R. Kokoulin, April 2002
-// -----------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
 #include "G4GammaConversionToMuons.hh"
 #include "G4EnergyLossTables.hh"
@@ -34,25 +34,25 @@
 #include "G4MuonPlus.hh"
 #include "G4MuonMinus.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 // constructor
 
 G4GammaConversionToMuons::G4GammaConversionToMuons(const G4String& processName)
   : G4VDiscreteProcess (processName),
     LowestEnergyLimit (4*G4MuonPlus::MuonPlus()->GetPDGMass()), // 4*Mmuon
-    HighestEnergyLimit(1e21*eV), // ok to 1e21 eV = 1e12 GeV, then LPM suppression
+    HighestEnergyLimit(1e21*eV), // ok to 1e21eV=1e12GeV, then LPM suppression
     CrossSecFactor(1.)
 { }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 // destructor
 
 G4GammaConversionToMuons::~G4GammaConversionToMuons() // (empty) destructor
 { }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void G4GammaConversionToMuons::BuildPhysicsTable(const G4ParticleDefinition&)
 // Build cross section and mean free path tables
@@ -60,16 +60,16 @@ void G4GammaConversionToMuons::BuildPhysicsTable(const G4ParticleDefinition&)
    PrintInfoDefinition();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void G4GammaConversionToMuons::SetCrossSecFactor(G4double fac)
 // Set the factor to artificially increase the cross section
 { CrossSecFactor=fac;
-  G4cout << "The cross section for GammaConversionToMuons is artificially " <<
-   " increased by the CrossSecFactor=" << CrossSecFactor << G4endl;
+  G4cout << "The cross section for GammaConversionToMuons is artificially "
+         << "increased by the CrossSecFactor=" << CrossSecFactor << G4endl;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4double G4GammaConversionToMuons::ComputeCrossSectionPerAtom(
                          G4double Egam, G4double Z, G4double A)
@@ -120,10 +120,11 @@ G4double G4GammaConversionToMuons::ComputeCrossSectionPerAtom(
   return CrossSection;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(const G4Track& aTrack,
-                                                  const G4Step&  aStep)
+G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
+                                                        const G4Track& aTrack,
+                                                        const G4Step&  aStep)
 //
 // generation of gamma->mu+mu-
 //
@@ -138,7 +139,7 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(const G4Track& aTrack,
   // current Gamma energy and direction, return if energy too low
   const G4DynamicParticle *aDynamicGamma = aTrack.GetDynamicParticle();
   G4double Egam = aDynamicGamma->GetKineticEnergy();
-  if ( Egam < 4*Mmuon ) return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep );
+  if (Egam < 4*Mmuon) return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
   G4ParticleMomentum GammaDirection = aDynamicGamma->GetMomentumDirection();
 
   // select randomly one element constituting the material
@@ -247,7 +248,8 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(const G4Track& aTrack,
   } while ( abs(thetaPlus)>pi | abs(thetaMinus) >pi);
 
   // now construct the vectors
-  G4double phi0=2.*pi*G4UniformRand(); // azimuthal symmetry, take phi0 at random between 0 and 2 pi
+  // azimuthal symmetry, take phi0 at random between 0 and 2 pi
+  G4double phi0=2.*pi*G4UniformRand(); 
   G4double EPlus=xPlus*Egam;
   G4double EMinus=xMinus*Egam;
 
@@ -259,15 +261,15 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(const G4Track& aTrack,
   // rotate to actual gamma direction
   MuPlusDirection.rotateUz(GammaDirection);
   MuMinusDirection.rotateUz(GammaDirection);
-  aParticleChange.SetNumberOfSecondaries(2) ;
+  aParticleChange.SetNumberOfSecondaries(2);
   // create G4DynamicParticle object for the particle1
-  G4DynamicParticle* aParticle1= new G4DynamicParticle(G4MuonPlus::MuonPlus(),
-                                                  MuPlusDirection,EPlus-Mmuon);
-  aParticleChange.AddSecondary( aParticle1 ) ;
+  G4DynamicParticle* aParticle1= new G4DynamicParticle(
+                           G4MuonPlus::MuonPlus(),MuPlusDirection,EPlus-Mmuon);
+  aParticleChange.AddSecondary(aParticle1);
   // create G4DynamicParticle object for the particle2
-  G4DynamicParticle* aParticle2= new G4DynamicParticle(G4MuonMinus::MuonMinus(),
-                                                MuMinusDirection,EMinus-Mmuon);
-  aParticleChange.AddSecondary( aParticle2 ) ;
+  G4DynamicParticle* aParticle2= new G4DynamicParticle(
+                       G4MuonMinus::MuonMinus(),MuMinusDirection,EMinus-Mmuon);
+  aParticleChange.AddSecondary(aParticle2);
   //
   // Kill the incident photon
   //
@@ -275,14 +277,14 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(const G4Track& aTrack,
   aParticleChange.SetEnergyChange( 0. ) ;
   aParticleChange.SetStatusChange( fStopAndKill ) ;
   //  Reset NbOfInteractionLengthLeft and return aParticleChange
-   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep );
+  return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep );
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4Element* G4GammaConversionToMuons::SelectRandomAtom(
-                                         const G4DynamicParticle* aDynamicGamma,
-                                               G4Material* aMaterial)
+                                        const G4DynamicParticle* aDynamicGamma,
+                                              G4Material* aMaterial)
 {
   // select randomly 1 element within the material, invoked by PostStepDoIt
 
@@ -298,7 +300,7 @@ G4Element* G4GammaConversionToMuons::SelectRandomAtom(
 
   for ( G4int i=0 ; i < NumberOfElements ; i++ )
       { PartialSumSigma += NbOfAtomsPerVolume[i] *
-                  GetCrossSectionPerAtom(aDynamicGamma, (*theElementVector)[i]);
+                 GetCrossSectionPerAtom(aDynamicGamma, (*theElementVector)[i]);
         if (rval <= PartialSumSigma) return ((*theElementVector)[i]);
       }
   G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
@@ -306,7 +308,7 @@ G4Element* G4GammaConversionToMuons::SelectRandomAtom(
   return NULL;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void G4GammaConversionToMuons::PrintInfoDefinition()
 {
