@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StepMax.hh,v 1.2 2004-07-27 09:17:05 vnivanch Exp $
+// $Id: StepMax.hh,v 1.3 2004-08-05 10:23:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,8 +34,6 @@
 #include "G4ParticleDefinition.hh"
 #include "G4Step.hh"
 
-class Histo;
-class G4VPhysicalVolume;
 class StepMaxMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,14 +63,8 @@ class StepMax : public G4VDiscreteProcess
   private:
 
      G4double MaxChargedStep;
-     G4double ProposedStep;
-     G4double thDensity;
-
      StepMaxMessenger*  pMess;
-     Histo*             histo;
-     G4VPhysicalVolume* checkVolume;
-     G4VPhysicalVolume* gasVolume;
-     G4bool             first;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -104,10 +104,6 @@ int main(int argc,char** argv) {
   G4UImanager* UI = G4UImanager::GetUIpointer();
   if(1 < verbose) UI->ListCommands("/test31/");
      
-  // Initialize G4 kernel
-  G4cout << "Start initialisation for test31" << G4endl;
-//  runManager->Initialize();
-
   if (argc==1)   // Define UI terminal for interactive mode
     {
 
@@ -122,7 +118,7 @@ int main(int argc,char** argv) {
      G4String command = "/control/execute ";
      G4String fileName = argv[1];
      UI->ApplyCommand(command+fileName);
-
+     /*
      // Initialize G4 kernel
      G4int nev = det->GetNumberOfEvents();
      if(nev > 0) {
@@ -134,12 +130,7 @@ int main(int argc,char** argv) {
 
        runManager->BeamOn(nev);
      }
-
-     // next file
-     if(argc==3) {
-       if(verbose >0) G4cout << "Second mac file is applied" << G4endl; 
-       UI->ApplyCommand(command+argv[2]);
-     }
+     */
     }
     
   // job termination
@@ -154,8 +145,6 @@ int main(int argc,char** argv) {
 
   //  G4cout << "runManager will be deleted" << G4endl;  
   delete runManager;
-  //  G4cout << "runManager is deleted" << G4endl;  
-
   return 0;
 }
 
