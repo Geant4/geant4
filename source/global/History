@@ -1,4 +1,4 @@
-$Id: History,v 1.54 2000-08-02 10:52:29 gcosmo Exp $
+$Id: History,v 1.55 2000-11-01 15:23:10 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 1, 2000 G.Cosmo (global-V02-00-03)
+- Moved geometry constants kHistoryMax, kHistoryStride and 
+  kNavigatorVoxelStackMax to geomdefs.hh.
+
+August 22, 2000 H.P.Wellisch
+- Added <list> wrapper in management/g4std.
 
 August 02, 2000 G.Cosmo (global-V02-00-02)
 - Added <queue> wrapper in management/g4std.

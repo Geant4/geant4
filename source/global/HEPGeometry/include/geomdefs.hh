@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: geomdefs.hh,v 1.2 1999-11-16 17:29:14 gcosmo Exp $
+// $Id: geomdefs.hh,v 1.3 2000-11-01 15:23:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,5 +58,17 @@ enum EInside {kOutside,kSurface,kInside};
 //                           => Distance & location computed to volumes
 //                              after setup/modification via user object
 enum EVolume {kNormal,kReplica,kParameterised};
+
+// Default max size of Navigation history
+//
+static const G4int kHistoryMax    = 15;
+
+// History increase stride of Navigation history
+//
+static const G4int kHistoryStride = 16;
+
+// Voxel stack depth maximum [no resizing]
+//
+static const G4int kNavigatorVoxelStackMax = 3;
 
 #endif /* GeomDefs_hh */
