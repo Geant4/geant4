@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Xt.cc,v 1.2 1999-04-13 01:26:33 yhajime Exp $
+// $Id: G4Xt.cc,v 1.3 1999-10-21 14:40:47 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
@@ -30,6 +30,7 @@ G4Xt* G4Xt::instance    = NULL;
 static G4bool XtInited  = FALSE;
 static int    argn      = 0;
 static char** args      = NULL;
+static XtAppContext appContext = NULL;
 static Widget topWidget = NULL;
 /***************************************************************************/
 G4Xt* G4Xt::getInstance (
@@ -79,7 +80,6 @@ G4Xt::G4Xt (
     int          argc;
     argc         = a_argn;
 #endif
-    XtAppContext appContext;
     topWidget    = XtAppInitialize (&appContext,a_class,
 				    NULL,(Cardinal)0,
 				    &argc,a_args,NULL,
@@ -131,7 +131,6 @@ void* G4Xt::GetEvent (
 {
   static XEvent  event;
   if(topWidget==NULL) return NULL;
-  XtAppContext   appContext = XtWidgetToApplicationContext(topWidget);
   XtAppNextEvent (appContext, &event);
   return         &event;
 }
