@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em1DetectorConstruction.hh,v 1.5 2001-12-07 11:49:09 maire Exp $
+// $Id: Em1PrimaryGeneratorMessenger.cc,v 1.1 2001-12-07 11:49:10 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,65 +29,52 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef Em1DetectorConstruction_h
-#define Em1DetectorConstruction_h 1
+#include "Em1PrimaryGeneratorMessenger.hh"
 
-#include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"
-
-class G4LogicalVolume;
-class G4Material;
-class G4UniformMagField;
-class Em1DetectorMessenger;
+#include "Em1PrimaryGeneratorAction.hh"
+#include "G4UIcmdWithAnInteger.hh"
+#include "G4UIcmdWithADouble.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Em1DetectorConstruction : public G4VUserDetectorConstruction
+Em1PrimaryGeneratorMessenger::Em1PrimaryGeneratorMessenger(
+                                             Em1PrimaryGeneratorAction* Em1Gun)
+:Em1Action(Em1Gun)
+{ 
+  DefaultCmd = new G4UIcmdWithAnInteger("/gun/setDefault",this);
+  DefaultCmd->SetGuidance("set/reset kinematic defined in PrimaryGenerator");
+  DefaultCmd->SetGuidance("0=boxCenter, else=frontFace");
+  DefaultCmd->SetParameterName("position",true);
+  DefaultCmd->SetDefaultValue(0);
+  DefaultCmd->AvailableForStates(PreInit,Idle);
+  
+  RndmCmd = new G4UIcmdWithADouble("/gun/rndm",this);
+  RndmCmd->SetGuidance("random lateral extension on the beam");
+  RndmCmd->SetGuidance("in fraction of 0.5*sizeYZ");
+  RndmCmd->SetParameterName("rBeam",false);
+  RndmCmd->SetRange("rBeam>=0.&&rBeam<=1.");
+  RndmCmd->AvailableForStates(Idle);  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+Em1PrimaryGeneratorMessenger::~Em1PrimaryGeneratorMessenger()
 {
-  public:
-  
-    Em1DetectorConstruction();
-   ~Em1DetectorConstruction();
-
-  public:
-  
-     G4VPhysicalVolume* Construct();
-     
-     void SetSize     (G4double);              
-     void SetMaterial (G4String);            
-     void SetMagField (G4double);
-
-     void UpdateGeometry();
-     
-  public:
-  
-     const
-     G4VPhysicalVolume* GetWorld()      {return pBox;};           
-                    
-     G4double           GetSize()       {return BoxSize;};      
-     G4Material*        GetMaterial()   {return aMaterial;};
-     
-     void               PrintParameters();
-                       
-  private:
-  
-     G4VPhysicalVolume*    pBox;
-     G4LogicalVolume*      lBox;
-     
-     G4double              BoxSize;
-     G4Material*           aMaterial;     
-     G4UniformMagField*    magField;
-     
-     Em1DetectorMessenger* detectorMessenger;
-
-  private:
-    
-     void               DefineMaterials();
-     G4VPhysicalVolume* ConstructVolumes();     
-};
+  delete DefaultCmd;
+  delete RndmCmd;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void Em1PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
+                                               G4String newValue)
+{ 
+  if (command == DefaultCmd)
+   {Em1Action->SetDefaultKinematic(DefaultCmd->GetNewIntValue(newValue));}
+   
+  if (command == RndmCmd)
+   {Em1Action->SetRndmBeam(RndmCmd->GetNewDoubleValue(newValue));}   
+}
 
-#endif
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

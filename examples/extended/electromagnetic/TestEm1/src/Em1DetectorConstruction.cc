@@ -22,7 +22,7 @@
 //
 
 //
-// $Id: Em1DetectorConstruction.cc,v 1.7 2001-11-29 11:28:07 maire Exp $
+// $Id: Em1DetectorConstruction.cc,v 1.8 2001-12-07 11:49:09 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -128,6 +128,10 @@ G4Material* Al  = new G4Material(name="Aluminium"  , z=13., a, density);
 density = 2.330*g/cm3;
 a = 28.09*g/mole;
 G4Material* Si  = new G4Material(name="Silicon"    , z=14., a, density);
+
+density = 5.323*g/cm3;
+a = 72.61*g/mole;
+G4Material* Ge  = new G4Material(name="Germanium"  , z=32., a, density);
 
 density = 7.870*g/cm3;
 a = 55.85*g/mole;

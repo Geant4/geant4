@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em1DetectorConstruction.hh,v 1.5 2001-12-07 11:49:09 maire Exp $
+// $Id: Em1PrimaryGeneratorMessenger.hh,v 1.1 2001-12-07 11:49:09 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,65 +29,33 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef Em1DetectorConstruction_h
-#define Em1DetectorConstruction_h 1
+#ifndef Em1PrimaryGeneratorMessenger_h
+#define Em1PrimaryGeneratorMessenger_h 1
 
-#include "G4VUserDetectorConstruction.hh"
+#include "G4UImessenger.hh"
 #include "globals.hh"
 
-class G4LogicalVolume;
-class G4Material;
-class G4UniformMagField;
-class Em1DetectorMessenger;
+class Em1PrimaryGeneratorAction;
+class G4UIcmdWithAnInteger;
+class G4UIcmdWithADouble;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Em1DetectorConstruction : public G4VUserDetectorConstruction
+class Em1PrimaryGeneratorMessenger: public G4UImessenger
 {
   public:
-  
-    Em1DetectorConstruction();
-   ~Em1DetectorConstruction();
-
-  public:
-  
-     G4VPhysicalVolume* Construct();
-     
-     void SetSize     (G4double);              
-     void SetMaterial (G4String);            
-     void SetMagField (G4double);
-
-     void UpdateGeometry();
-     
-  public:
-  
-     const
-     G4VPhysicalVolume* GetWorld()      {return pBox;};           
-                    
-     G4double           GetSize()       {return BoxSize;};      
-     G4Material*        GetMaterial()   {return aMaterial;};
-     
-     void               PrintParameters();
-                       
-  private:
-  
-     G4VPhysicalVolume*    pBox;
-     G4LogicalVolume*      lBox;
-     
-     G4double              BoxSize;
-     G4Material*           aMaterial;     
-     G4UniformMagField*    magField;
-     
-     Em1DetectorMessenger* detectorMessenger;
-
-  private:
+    Em1PrimaryGeneratorMessenger(Em1PrimaryGeneratorAction*);
+   ~Em1PrimaryGeneratorMessenger();
     
-     void               DefineMaterials();
-     G4VPhysicalVolume* ConstructVolumes();     
+    void SetNewValue(G4UIcommand*, G4String);
+    
+  private:
+    Em1PrimaryGeneratorAction* Em1Action; 
+    G4UIcmdWithAnInteger*      DefaultCmd;
+    G4UIcmdWithADouble*        RndmCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 
 #endif
 

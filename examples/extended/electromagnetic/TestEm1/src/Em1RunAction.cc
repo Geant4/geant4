@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em1RunAction.cc,v 1.13 2001-11-29 11:28:07 maire Exp $
+// $Id: Em1RunAction.cc,v 1.14 2001-12-07 11:49:10 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -136,24 +136,24 @@ void Em1RunAction::EndOfRunAction(const G4Run* aRun)
       G4double dNbOfEvents = double(NbOfEvents);
     
       G4long oldform = G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
-      G4int  oldprec = G4cout.precision(2);
+      G4int  oldprec = G4cout.precision(4);
       
       G4cout << "\n nb tracks/event"
-             << "   neutral: " << G4std::setw(7) << NbOfTraks0/dNbOfEvents
-             << "   charged: " << G4std::setw(7) << NbOfTraks1/dNbOfEvents
+             << "   neutral: " << G4std::setw(10) << NbOfTraks0/dNbOfEvents
+             << "   charged: " << G4std::setw(10) << NbOfTraks1/dNbOfEvents
              << "\n nb  steps/event"
-             << "   neutral: " << G4std::setw(7) << NbOfSteps0/dNbOfEvents
-             << "   charged: " << G4std::setw(7) << NbOfSteps1/dNbOfEvents
+             << "   neutral: " << G4std::setw(10) << NbOfSteps0/dNbOfEvents
+             << "   charged: " << G4std::setw(10) << NbOfSteps1/dNbOfEvents
              << G4endl;
       
       //frequency of processes call       
       G4cout << "\n nb of process calls per event: \n   ";       
       for (size_t i=0; i< ProcCounter->size();i++)
-           G4cout << G4std::setw(9) << (*ProcCounter)[i]->GetName();
+           G4cout << G4std::setw(12) << (*ProcCounter)[i]->GetName();
            
       G4cout << "\n   ";       
       for (size_t j=0; j< ProcCounter->size();j++)
-      G4cout << G4std::setw(9) << ((*ProcCounter)[j]->GetCounter())
+      G4cout << G4std::setw(12) << ((*ProcCounter)[j]->GetCounter())
                                                                /dNbOfEvents;
       G4cout << G4endl;    
                          
