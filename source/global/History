@@ -1,4 +1,4 @@
-$Id: History,v 1.134 2004-11-01 13:15:10 gcosmo Exp $
+$Id: History,v 1.135 2004-11-12 17:38:58 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 12, 2004  G.Cosmo (global-V06-02-04)
+- Migrated code to use 'std' namespace for mathematical functions
+  included from <cmath>. Removed explicit inclusion of CLHEP.h and
+  therefore also implicit inclusions of system headers <math.h>,
+  <stdlib.h> and <limits.h>.
+- Removed implicit inclusion of CLHEP's template function abs(), use
+  now standard function std::abs() instead.
 
 Nov 01, 2004  H.Kurasige (global-V06-02-03)
 - Code cleanup in G4PhysicsTable implementation.
