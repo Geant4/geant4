@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.hh,v 1.12 2004-07-28 15:44:27 johna Exp $
+// $Id: G4VisAttributes.hh,v 1.13 2005-03-09 16:34:50 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,6 +72,8 @@ public: // With description
   G4VisAttributes (G4bool visibility);
   G4VisAttributes (const G4Colour& colour);
   G4VisAttributes (G4bool visibility, const G4Colour& colour);
+
+  // Compiler defaults for copy constructor and assigment operator are OK.
 
   static const G4VisAttributes Invisible;
 
