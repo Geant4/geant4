@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RayTracer.cc,v 1.4 2000-03-09 15:36:38 asaim Exp $
+// $Id: G4RayTracer.cc,v 1.5 2000-05-02 10:05:36 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -213,6 +213,10 @@ G4bool G4RayTracer::CreateBitMap()
       }
       else {  // Ray does not intercept world at all.
 	// Generate background colour...
+	G4int iEvent = anEvent->GetEventID();
+	colorR[iEvent] = 0;
+	colorG[iEvent] = 0;
+	colorB[iEvent] = 0;
 	succeeded = true;
       }
       delete anEvent;
