@@ -749,7 +749,7 @@ int main(void)
 	  //  if( distIn < kCarTolerance && distOut < kCarTolerance )
           if( 
 	     // distIn1 !=  distIn2
-	     abs( distIn1 -  distIn2 ) > 100*kCarTolerance
+	     std::abs( distIn1 -  distIn2 ) > 100*kCarTolerance
               //   distIn1 ==  distOut 
                                           )
 	  {
