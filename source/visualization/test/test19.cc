@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test19.cc,v 1.3 1999-12-16 14:13:24 johna Exp $
+// $Id: test19.cc,v 1.4 2000-01-17 10:33:00 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,8 +19,6 @@
 #include <stdlib.h>
 
 #include "globals.hh"
-G4std::ostream& g4cout = G4cout;
-G4std::ostream& g4cerr = G4cerr;
 #include "test19DetectorConstruction.hh"
 #include "MyPhysicsList.hh"
 #include "MyRunAction.hh"
@@ -101,7 +99,7 @@ int main (int argc, char** argv) {
   G4UImanager::GetUIpointer()->SetSession(session);  //So that Pause works..
 
   // Run manager
-  g4cout << "RunManager is constructing...." << G4endl;
+  G4cout << "RunManager is constructing...." << G4endl;
   G4RunManager * runManager = new G4RunManager;
 
   // User initialization classes
@@ -121,14 +119,14 @@ int main (int argc, char** argv) {
   G4UImanager* UI = G4UImanager::GetUIpointer ();
 
 #ifdef G4UI_USE_WIN32
-  g4cout << "Reading win32.g4m file...." << G4endl;
+  G4cout << "Reading win32.g4m file...." << G4endl;
   UI -> ApplyCommand ("/control/execute win32.g4m");
 #else
-  g4cout << "Reading test19.g4m file...." << G4endl;
+  G4cout << "Reading test19.g4m file...." << G4endl;
   UI -> ApplyCommand ("/control/execute test19.g4m");
 #endif
 
-  g4cout << 
+  G4cout << 
     "Choose a detector with /test19det/detector (or let default be"
     " constructed)."
        << G4endl;
@@ -136,15 +134,15 @@ int main (int argc, char** argv) {
   // Start an interactive session.
   session -> SessionStart();
 
-  g4cout << "vis_test19: Deleting vis manager..." << endl;
+  G4cout << "vis_test19: Deleting vis manager..." << G4endl;
   delete visManager;
-  g4cout << "vis_test19: Vis manager deleted." << endl;
-  g4cout << "vis_test19: Deleting run manager..." << endl;
+  G4cout << "vis_test19: Vis manager deleted." << G4endl;
+  G4cout << "vis_test19: Deleting run manager..." << G4endl;
   delete runManager;
-  g4cout << "vis_test19: Run manager deleted." << endl;
-  g4cout << "vis_test19: Deleting session..." << endl;
+  G4cout << "vis_test19: Run manager deleted." << G4endl;
+  G4cout << "vis_test19: Deleting session..." << G4endl;
   delete session;
-  g4cout << "vis_test19: Session deleted." << endl;
+  G4cout << "vis_test19: Session deleted." << G4endl;
 
   return 0;
 }
