@@ -1,4 +1,4 @@
-?RCS: $Id: Oldconfig.U,v 1.17 2004-12-02 20:39:05 sadilov Exp $
+?RCS: $Id: Oldconfig.U,v 1.18 2004-12-06 02:44:40 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,6 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.17  2004/12/02 20:39:05  sadilov
+?RCS: Win splitting to 6 and 7
+?RCS:
 ?RCS: Revision 1.16  2003/02/21 16:04:15  sadilov
 ?RCS: Add Darwin.
 ?RCS:
@@ -648,7 +651,7 @@ case  "$g4compiler" in
 	esac
 esac
 
-if [ X$install = Xyes ] ; then
+if [ X$g4build = Xyes ] ; then
 while test 1 = 1  ; do
 
 g4message=`cat << EOM
@@ -813,8 +816,9 @@ newmyuname="$myuname"
 dflt=n
 
 cd ../..
-if [ X$install = X ] ; then
 
+
+if [ X$g4build = X ] ; then
 
 	if test -f $src/.config/bin/$g4system/env.sh; then
 
@@ -824,6 +828,18 @@ if [ X$g4ldlibs != X -o X$g4ldflags != X -o X$g4cxxflags != X -o X$g4cppflags !=
 	g4non_display=yes
 #	echo g4non_display=$g4non_display
 fi
+
+	if [ X$install = Xyes ] ; then
+
+	. $src/.config/bin/$g4system/env.sh
+
+	$rm -rf .config/UU
+	
+	. $src/.config/bin/$g4system/move.sh
+
+	exit 1
+
+	fi #end of cppflags
 
 	if [ X$g4cppflags = Xyes ] ; then
 
