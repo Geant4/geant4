@@ -208,7 +208,7 @@ Cut in energy
            Galactic         990 eV          990 eV          990 eV          990 eV          990 eV 
                Beam         990 eV          990 eV          990 eV          990 eV          990 eV 
 ===================================================
-# $Id: TestEm3.out,v 1.4 2000-06-17 12:49:00 stesting Exp $
+# $Id: TestEm3.out,v 1.5 2000-06-24 08:03:09 stesting Exp $
 #
 # Macro file for "exampleN03.cc" 
 # (can be run in batch, without graphic)
@@ -241,19 +241,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=245.22s Real=266.8s Sys=18.67s
+  User=246.78s Real=267.56s Sys=18.96s
 
 -------------------------------------------------------------
                                    total energy dep            total tracklen 
  
- Absorber0 (        Lead) : 809.43 MeV +- 15.49 MeV       52.53 cm  +-  1.18 cm 
- Absorber1 ( liquidArgon) : 180.05 MeV +- 13.02 MeV       90.31 cm  +-  6.77 cm 
+ Absorber0 (        Lead) : 810.99 MeV +- 15.00 MeV       52.93 cm  +-  1.19 cm 
+ Absorber1 ( liquidArgon) : 178.27 MeV +- 13.28 MeV       89.49 cm  +-  7.03 cm 
 
 -------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 915103625, 1965593171
+ Current couple of seeds = 793891110, 646288150
 ----------------------------------------
 G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
