@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMuEnergyLoss.cc,v 1.17 2001-10-29 13:53:19 maire Exp $
+// $Id: G4VMuEnergyLoss.cc,v 1.18 2001-11-08 08:25:04 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -45,6 +45,7 @@
 // 17-09-01 migration of Materials to pure STL (mma)
 // 28-09-01 suppression of theMuonPlus ..etc..data members (mma)
 // 29-10-01 all static functions no more inlined (mma) 
+// 08-11-01 some small cosmetics , L.Urban
 // --------------------------------------------------------------
  
 
@@ -490,7 +491,7 @@ G4VParticleChange* G4VMuEnergyLoss::AlongStepDoIt(
   // get particle and material pointers from trackData
   const G4DynamicParticle* aParticle = trackData.GetDynamicParticle();
   G4double E      = aParticle->GetKineticEnergy() ;
-  G4double charge = aParticle->GetDefinition()->GetPDGCharge();
+  G4double Charge = aParticle->GetDefinition()->GetPDGCharge();
  
   G4Material* aMaterial = trackData.GetMaterial();
   G4int index = aMaterial->GetIndex();
@@ -521,7 +522,7 @@ G4VParticleChange* G4VMuEnergyLoss::AlongStepDoIt(
     if(Step/fRangeNow < linLossLimit) finalT = E-Step*fdEdx ;
     else
     {
-       if (charge<0.) finalT = G4EnergyLossTables::GetPreciseEnergyFromRange(
+       if (Charge<0.) finalT = G4EnergyLossTables::GetPreciseEnergyFromRange(
                              G4MuonMinus::MuonMinus(),fRangeNow-Step,aMaterial);
        else           finalT = G4EnergyLossTables::GetPreciseEnergyFromRange(
                              G4MuonPlus::MuonPlus(),fRangeNow-Step,aMaterial);
