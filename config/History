@@ -1,4 +1,4 @@
-$Id: History,v 1.23 1999-05-10 15:09:02 barrand Exp $
+$Id: History,v 1.24 1999-05-11 18:20:13 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11th May 1999  Gabriele Cosmo
+- architecture.gmk: merged Isidro's OSPACE setup for HP-aCC.
+  Reorganised OSPACE options by introducing OSPACEINC variable.
+
 10th May 1999  Guy Barrand
 - interactivity.gmk ; put OpenGL things after OPACS things to have 
   correct link order.
@@ -24,15 +28,9 @@ committal in the CVS repository !
 10th May 1999  John Allison
 - Added -I$(OSPACEDIR)/ospace/stl for Sun.
 
-8th May 1999  John Allison
-- Added STLInterface/wrappers directory for SUN.
-
-8th May 1999  Gabriele Cosmo
-- Added STLInterface/wrappers directory for DEC.
-
 7th May 1999  John Allison
 - Added GREP := grep except for SUN.
-- Introduced STLInterface/wrappers directory. Testing on OSF+ObjectSpace.
+- Introduced STLInterface/wrappers directory. Testing on OSF+ObjectSpace (G.Cosmo).
 
 6th May 1999  Gabriele Cosmo
 - Introduced G4USE_OSPACE for ObjectSpace STL. If defined G4USE_STL is

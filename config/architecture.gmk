@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.17 1999-05-10 11:19:56 stesting Exp $
+# $Id: architecture.gmk,v 1.18 1999-05-11 18:20:14 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -383,7 +383,7 @@ ifeq ($(G4SYSTEM),AIX-xlC)
   endif
   ifdef G4USE_OSPACE
     CPPFLAGS += -DOS_AIX_4 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING  -DOS_NO_ALLOCATORS
-    CPPFLAGS += -I$(OSPACEDIR)/ospace/std -I$(OSPACEDIR)
+    CPPFLAGS += $(OSPACEINC) -I$(OSPACEDIR)
   endif
 endif
 
@@ -426,11 +426,12 @@ ifeq ($(G4SYSTEM),SUN-CC)
   endif
   CPPFLAGS += -DSOCKET_IRIX_SOLARIS
   VISLIBS  +=  -L/usr/lib -lsocket -lnsl
-  ifdef G4USE_OSPACE
+  ifdef G4USE_STL
     CPPFLAGS += -I$(G4BASE)/global/STLInterface/wrappers
+  endif
+  ifdef G4USE_OSPACE
     CPPFLAGS += -DOS_SOLARIS_2_5 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
-    CPPFLAGS += -I$(OSPACEDIR)/ospace/std -I$(OSPACEDIR)
-    CPPFLAGS += -I$(OSPACEDIR)/ospace/stl 
+    CPPFLAGS += $(OSPACEINC) -I$(OSPACEDIR)
   endif
 endif
 
@@ -472,9 +473,12 @@ ifeq ($(G4SYSTEM),HP-aCC)
       OBJY_LDLIB := oo
     endif
   endif
+  ifdef G4USE_STL
+    CPPFLAGS += -I$(G4BASE)/global/STLInterface/wrappers
+  endif
   ifdef G4USE_OSPACE
-    CPPFLAGS += -DOS_HPUX_10_20 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING  -DOS_NO_ALLOCATORS
-    CPPFLAGS += -I$(OSPACEDIR)/ospace/std -I$(OSPACEDIR)
+    CPPFLAGS += -DOS_HPUX_10_20 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING  -DOS_NO_ALLOCATORS -D__HPACC_NOEH
+    CPPFLAGS += $(OSPACEINC) -I$(OSPACEDIR)
   endif
 endif
 
@@ -505,7 +509,7 @@ ifeq ($(G4SYSTEM),SGI-CC)
   CPPFLAGS += -DSOCKET_IRIX_SOLARIS
   ifdef G4USE_OSPACE
     CPPFLAGS += -DOS_IRIX_6_2 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING  -DOS_NO_ALLOCATORS
-    CPPFLAGS += -I$(OSPACEDIR)/ospace/std -I$(OSPACEDIR)
+    CPPFLAGS += $(OSPACEINC) -I$(OSPACEDIR)
   endif
 endif
 
@@ -541,7 +545,7 @@ ifeq ($(G4SYSTEM),DEC-cxx)
   endif
   ifdef G4USE_OSPACE
     CPPFLAGS += -DOS_OSF1_4 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING -DOS_NO_ALLOCATORS -D__NO_EDG_EXCEPTION_CLASSES
-    CPPFLAGS += -I$(OSPACEDIR) $(OSPACEINC)
+    CPPFLAGS += $(OSPACEINC) -I$(OSPACEDIR)
   endif
 endif
 
