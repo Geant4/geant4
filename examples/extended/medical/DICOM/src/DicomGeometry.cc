@@ -261,22 +261,31 @@ void DicomGeometry::PatientConstruction()
   
   G4int compressionUsed = ReadConfiguration->IsCompressionUsed();	
   G4double sliceThickness = ReadConfiguration->GetSliceThickness();
-	
-  PatientX = (compressionUsed*(ReadConfiguration->GetXPixelSpacing())/2.0) *mm;
-  PatientY = (compressionUsed*(ReadConfiguration->GetYPixelSpacing())/2.0) *mm;
-  PatientZ = ((sliceThickness/2.0) *mm);
-
-  // Logical Box to place Parameteristion inside it
-  Attributes_param = new G4VisAttributes();
-  Attributes_param->SetForceSolid(false);
-  Attributes_param->SetColour(red=1.,green=0.,blue=0.,alpha=1.);
+  G4double xPixelSpacing = ReadConfiguration->GetXPixelSpacing(); 
+  G4double yPixelSpacing = ReadConfiguration->GetYPixelSpacing(); 	
   G4int totalNumberOfFile = ReadConfiguration->GetTotalNumberOfFile(); 
   G4int totalRows = ReadConfiguration->GetTotalRows(); 
   G4int totalColumns = ReadConfiguration->GetTotalColumns();
-  Parameterisation_Box = new G4Box("Parameterisation Mother", totalColumns*(ReadConfiguration->GetXPixelSpacing())/2.*mm, totalRows*(ReadConfiguration->GetYPixelSpacing())/2.*mm, totalNumberOfFile*(ReadConfiguration->GetSliceThickness())/2.*mm);
-  logical_param = new G4LogicalVolume(Parameterisation_Box,air,"Parameterisation Mother (logical)");
-  logical_param->SetVisAttributes(Attributes_param);
 
+  PatientX = (compressionUsed*(xPixelSpacing)/2.0) *mm;
+  PatientY = (compressionUsed*(yPixelSpacing)/2.0) *mm;
+  PatientZ = ((sliceThickness/2.0) *mm);
+
+  G4VisAttributes* visualisationAttribute = new G4VisAttributes();
+  visualisationAttribute->SetForceSolid(false);
+  visualisationAttribute->SetColour( red = 1., 
+                                     green = 0., 
+                                     blue= 0., 
+                                     alpha = 1.);
+  
+ G4Box*  parameterisedBox = new G4Box( "Parameterisation Mother", 
+                                       totalColumns*(xPixelSpacing)/2.*mm, 
+                                       totalRows*(yPixelSpacing)/2.*mm,
+                                       totalNumberOfFile*(sliceThickness)/2.*mm);
+  logical_param = new G4LogicalVolume(parameterisedBox,air,"Parameterisation Mother (logical)");
+  logical_param->SetVisAttributes(visualisationAttribute);
+  
+ 
   G4double MiddleLocationValue=0;
   for (G4int i=0;i< totalNumberOfFile;i++)
     {

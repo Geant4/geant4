@@ -140,8 +140,7 @@ private:
   G4VPVParameterisation* Param_DenseBone;
 
   // Logical Box to place Parameteristion inside it
-  G4VisAttributes* Attributes_param;
-  G4Box* Parameterisation_Box;
+ 
   G4LogicalVolume* logical_param;
   G4VPhysicalVolume* physical_param;
   G4double alpha,red,green,blue;
@@ -151,7 +150,7 @@ private:
   G4double world_z_width;
 
   G4String theFileName;	// for the histogram
-  static DicomGeometry* theDetector;
+  //static DicomGeometry* theDetector;
 
   G4ThreeVector theWorldDim;
 
