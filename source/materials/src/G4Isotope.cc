@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.cc,v 1.10 2001-10-17 07:59:54 gcosmo Exp $
+// $Id: G4Isotope.cc,v 1.11 2001-11-29 15:19:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -115,7 +115,12 @@ G4int G4Isotope::operator!=(const G4Isotope &right) const
 
 G4std::ostream& operator<<(G4std::ostream& flux, G4Isotope* isotope)
 {
+#ifdef G4USE_STD_NAMESPACE
+  G4std::ios::fmtflags mode = flux.flags();
+  flux.setf(G4std::ios::fixed,G4std::ios::floatfield);
+#else
   long mode = flux.setf(G4std::ios::fixed,G4std::ios::floatfield);
+#endif
   long prec = flux.precision(3);
     
   flux

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.cc,v 1.17 2001-10-31 12:56:12 maire Exp $
+// $Id: G4Material.cc,v 1.18 2001-11-29 15:19:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -627,7 +627,12 @@ G4int G4Material::operator!=(const G4Material& right) const
 
 G4std::ostream& operator<<(G4std::ostream& flux, G4Material* material)
 {
+#ifdef G4USE_STD_NAMESPACE
+  G4std::ios::fmtflags mode = flux.flags();
+  flux.setf(G4std::ios::fixed,G4std::ios::floatfield);
+#else
   long mode = flux.setf(G4std::ios::fixed,G4std::ios::floatfield);
+#endif
   long prec = flux.precision(3);
   
   flux
