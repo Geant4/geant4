@@ -19,6 +19,17 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+//
+// $Id: Tst33VEventAction.cc,v 1.3 2002-12-13 08:48:27 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// --------------------------------------------------------------
+
+#include "Tst33VEventAction.hh"
+
+Tst33VEventAction::Tst33VEventAction()
 {}
 
 Tst33VEventAction::~Tst33VEventAction()
