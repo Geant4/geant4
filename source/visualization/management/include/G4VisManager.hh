@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.23 2001-08-05 02:29:03 johna Exp $
+// $Id: G4VisManager.hh,v 1.24 2001-08-09 20:13:42 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -300,6 +300,9 @@ protected:
   void PrintInvalidPointers            () const;
   G4bool IsValidView ();
   // True if view is valid.  Prints messages and sanitises various data.
+  void ClearTransientStoreIfMarked();
+  // Clears transient store of current scene handler if it is marked
+  // for clearing.  Assumes view is valid.
 
   static G4VisManager*  fpInstance;         // Pointer to single instance.
   G4bool                fInitialised;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.icc,v 1.11 2001-07-25 21:21:52 johna Exp $
+// $Id: G4VSceneHandler.icc,v 1.12 2001-08-09 20:13:40 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -79,6 +79,10 @@ inline G4VViewer* G4VSceneHandler::GetCurrentViewer () const {
   return fpViewer;
 }
 
+inline G4bool G4VSceneHandler::GetMarkForClearingTransientStore () const {
+  return fMarkForClearingTransientStore;
+}
+
 inline void G4VSceneHandler::SetCurrentViewer (G4VViewer* pViewer) {
   fpViewer = pViewer;
 }
@@ -90,6 +94,10 @@ inline G4ViewerList& G4VSceneHandler::SetViewerList () {
 inline void
 G4VSceneHandler::SetModel (G4VModel* pModel) {
   fpModel = pModel;
+}
+
+inline void G4VSceneHandler::SetMarkForClearingTransientStore (G4bool mark) {
+  fMarkForClearingTransientStore = mark;
 }
 
 inline const G4Colour& G4VSceneHandler::GetColor (const G4Visible& visible) {

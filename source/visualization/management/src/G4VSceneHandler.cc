@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.20 2001-08-05 02:29:10 johna Exp $
+// $Id: G4VSceneHandler.cc,v 1.21 2001-08-09 20:13:44 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,6 +71,8 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
   fSceneHandlerId        (id),
   fViewCount             (0),
   fpViewer               (0),
+  fpScene                (0),
+  fMarkForClearingTransientStore (false),
   fReadyForTransients    (false),
   fpModel                (0),
   fpObjectTransformation (&G4Transform3D::Identity),
@@ -116,7 +118,8 @@ void G4VSceneHandler::ClearStore () {
   if (fpViewer) fpViewer -> NeedKernelVisit ();
 }
 
-void G4VSceneHandler::ClearTransientStore () {}
+void G4VSceneHandler::ClearTransientStore () {
+}
 
 void G4VSceneHandler::AddThis (const G4Box& box) {
   RequestPrimitives (box);
@@ -401,20 +404,6 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
       }
     }
     break;
-  case G4ModelingParameters::hierarchy:
-      G4VisManager::Verbosity verbosity =
-	G4VisManager::GetInstance()->GetVerbosity();
-      if (verbosity >= G4VisManager::errors) {
-	G4cout <<
-	  "ERROR: G4VSceneHandler::RequestPrimitives"
-	  "\n  G4ModelingParameters::hierarchy no longer used."
-	  //"Geometry hierarchy requested: tag " 
-	  //<< GetModel () -> GetCurrentTag ()
-	  //<< ", depth "
-	  //<< fCurrentDepth
-	       << G4endl;
-      }
-    break;
   }
   EndPrimitives ();
 }
@@ -502,10 +491,6 @@ G4ModelingParameters* G4VSceneHandler::CreateModelingParameters () {
 	vp.GetDrawingStyle () == G4ViewParameters::hsr ||
 	vp.GetDrawingStyle () == G4ViewParameters::hlhsr
 	);
-
-  /////////////// TESTING TESTING
-  //modelRepStyle = G4ModelingParameters::hierarchy;
-  ///////////////////////////////
 
   G4ModelingParameters* pModelingParams = new G4ModelingParameters
     (vp.GetDefaultVisAttributes (),

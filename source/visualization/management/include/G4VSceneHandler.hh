@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.16 2001-07-25 21:21:50 johna Exp $
+// $Id: G4VSceneHandler.hh,v 1.17 2001-08-09 20:13:39 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -132,7 +132,8 @@ public: // With description
   //   G4VSceneHandler::EndModeling ();
   // }
 
-  virtual void BeginPrimitives (const G4Transform3D& objectTransformation);
+  virtual void BeginPrimitives
+  (const G4Transform3D& objectTransformation = G4Transform3D::Identity);
   // IMPORTANT: invoke this from your polymorphic versions, e.g.:
   // void MyXXXSceneHandler::BeginPrimitives
   // (const G4Transform3D& objectTransformation) {
@@ -169,10 +170,14 @@ public: // With description
   const G4ViewerList& GetViewerList     () const;
   G4VModel*           GetModel          () const;
   G4VViewer*          GetCurrentViewer  () const;
+  G4bool              GetMarkForClearingTransientStore () const;
   void          SetCurrentViewer (G4VViewer*);
   void          SetScene         (G4Scene*);
   G4ViewerList& SetViewerList    ();  // Non-const so you can change.
   void          SetModel         (G4VModel*);
+  void          SetMarkForClearingTransientStore (G4bool);
+  // Sets flag which will cause transient store to be cleared at the
+  // next call to BeginPrimitives().
 
   //////////////////////////////////////////////////////////////
   // Public utility functions.
@@ -257,6 +262,7 @@ protected:
   G4ViewerList           fViewerList;      // Viewers.
   G4VViewer*             fpViewer;         // Current viewer.
   G4Scene*               fpScene;          // Scene for this scene handler.
+  G4bool                 fMarkForClearingTransientStore;
 
   //////////////////////////////////////////////////////////////
   // Workspace...
