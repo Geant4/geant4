@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPropagateSpin.cc,v 1.5 2002-06-07 18:23:49 japost Exp $
+// $Id: testPropagateSpin.cc,v 1.6 2002-10-22 12:36:31 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -244,7 +244,7 @@ G4FieldManager* SetupField(G4int type)
       case 2: pStepper = new G4SimpleRunge( fEquation, ncompspin ); break;
       case 3: pStepper = new G4SimpleHeum( fEquation, ncompspin ); break;
       case 4: pStepper = new G4ClassicalRK4( fEquation, ncompspin ); break;
-      // case 8: pStepper = new G4CashKarpRKF45( fEquation, ncompspin );    break;
+      case 8: pStepper = new G4CashKarpRKF45( fEquation, ncompspin );    break;
       default: pStepper = new G4ClassicalRK4( fEquation, ncompspin ); break;
     }
     
