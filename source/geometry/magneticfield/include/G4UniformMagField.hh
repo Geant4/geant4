@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UniformMagField.hh,v 1.5 2001-07-11 09:59:09 gunter Exp $
+// $Id: G4UniformMagField.hh,v 1.6 2001-11-08 17:31:07 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,7 +62,7 @@ class G4UniformMagField : public G4MagneticField
     G4UniformMagField& operator = (const G4UniformMagField &p);
       // Copy constructor and assignment operator.
 
-    void GetFieldValue(const G4double yTrack[3] ,
+    void GetFieldValue(const G4double yTrack[4] ,
 	                     G4double *MagField) const ;
 
     void SetFieldValue(const G4ThreeVector& newFieldValue);
@@ -76,3 +76,5 @@ class G4UniformMagField : public G4MagneticField
 };
 
 #endif
+
+

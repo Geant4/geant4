@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Field.hh,v 1.5 2001-07-11 09:59:07 gunter Exp $
+// $Id: G4Field.hh,v 1.6 2001-11-08 17:31:07 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -43,7 +43,7 @@ class G4Field
 {
   public:  // with description
 
-      virtual void  GetFieldValue( const  double Point[3],
+      virtual void  GetFieldValue( const  double Point[4],
 					  double *Bfield ) const = 0;
       G4Field(){;}
       virtual ~G4Field(){;}
@@ -55,3 +55,10 @@ class G4Field
 
 
 #endif /* G4FIELD_HH */
+
+
+
+
+
+
+

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UniformElectricField.cc,v 1.4 2001-07-11 09:59:13 gunter Exp $
+// $Id: G4UniformElectricField.cc,v 1.5 2001-11-08 17:32:21 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -86,7 +86,7 @@ G4UniformElectricField& G4UniformElectricField::operator = (const G4UniformElect
 // ------------------------------------------------------------------------
 
 
-void G4UniformElectricField::GetFieldValue (const G4double [3],
+void G4UniformElectricField::GetFieldValue (const G4double [4],
                                              G4double fieldBandE[6]  ) const 
 {
    fieldBandE[0]= 0.0;
