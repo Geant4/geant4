@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OmegacZero.hh,v 1.6 2001-10-15 10:09:27 kurasige Exp $
+// $Id: G4OmegacZero.hh,v 1.7 2001-10-24 10:04:52 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,7 +74,7 @@ class G4OmegacZero : public G4VBaryon
    static G4OmegacZero* OmegacZeroDefinition();
    static G4OmegacZero* OmegacZero();
 
-   virtual void SetCuts(G4double aCut); 
+   virtual void CalcEnergyCuts(); 
 };
 
 

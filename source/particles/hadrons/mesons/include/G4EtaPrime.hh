@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EtaPrime.hh,v 1.6 2001-10-16 08:16:09 kurasige Exp $
+// $Id: G4EtaPrime.hh,v 1.7 2001-10-24 10:05:16 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,7 +71,7 @@ class G4EtaPrime : public G4VMeson
    static G4EtaPrime*      EtaPrimeDefinition();
    static G4EtaPrime*      EtaPrime();
 
-   virtual void        SetCuts(G4double aCut);
+   virtual void        CalcEnergyCuts();
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiSigmaZero.cc,v 1.10 2001-10-16 08:15:56 kurasige Exp $
+// $Id: G4AntiSigmaZero.cc,v 1.11 2001-10-24 10:04:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -110,9 +110,9 @@ G4AntiSigmaZero* G4AntiSigmaZero::AntiSigmaZero()
 // **********************************************************************
 //  In this version Input Cut Value is meaning less
 //  theKineticEnergyCuts for all materials are set to LowestEnergy
-void G4AntiSigmaZero::SetCuts(G4double aCut)
+void G4AntiSigmaZero::CalcEnergyCuts()
 {
-  SetCutInMaxInteractionLength( aCut );
+  
 
   // Set Energy Cut values to lowest  for all materials
   SetEnergyCutValues(LowestEnergy); 

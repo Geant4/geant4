@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4JPsi.cc,v 1.8 2001-10-15 10:08:25 kurasige Exp $
+// $Id: G4JPsi.cc,v 1.9 2001-10-24 10:05:31 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -94,9 +94,9 @@ G4JPsi*  G4JPsi::JPsi(){return &theJPsi;}
 //  In this version Input Cut Value is meaning less
 //  theKineticEnergyCuts for all materials are set to LowestEnergy
 
-void G4JPsi::SetCuts(G4double aCut)
+void G4JPsi::CalcEnergyCuts()
 {
-  SetCutInMaxInteractionLength( aCut );
+  
 
   // Set Energy Cut values to lowest  for all materials
   SetEnergyCutValues(LowestEnergy);

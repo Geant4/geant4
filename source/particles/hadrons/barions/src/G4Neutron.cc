@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Neutron.cc,v 1.11 2001-10-16 08:15:57 kurasige Exp $
+// $Id: G4Neutron.cc,v 1.12 2001-10-24 10:05:00 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -99,9 +99,9 @@ G4Neutron* G4Neutron::Neutron(){return &theNeutron;}
 // **********************************************************************
 //  In this version Input Cut Value is meaning less
 //  theKineticEnergyCuts for all materials are set to LowestEnergy
-void G4Neutron::SetCuts(G4double aCut)
+void G4Neutron::CalcEnergyCuts()
 {
-  SetCutInMaxInteractionLength( aCut );
+  
 
   // Set Energy Cut values to lowest  for all materials
   SetEnergyCutValues(LowestEnergy);

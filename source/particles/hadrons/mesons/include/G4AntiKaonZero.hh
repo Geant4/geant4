@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiKaonZero.hh,v 1.7 2001-10-16 08:16:09 kurasige Exp $
+// $Id: G4AntiKaonZero.hh,v 1.8 2001-10-24 10:05:15 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,7 +76,7 @@ class G4AntiKaonZero : public G4VMeson
    static G4AntiKaonZero* AntiKaonZeroDefinition();
    static G4AntiKaonZero* AntiKaonZero();
 
-   void SetCuts(G4double aCut);
+   void CalcEnergyCuts();
 };
 
 #endif

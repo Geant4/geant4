@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Neutron.hh,v 1.9 2001-10-16 08:15:49 kurasige Exp $
+// $Id: G4Neutron.hh,v 1.10 2001-10-24 10:04:51 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,7 +83,7 @@ class G4Neutron : public G4VBaryon
    // These two methods are dummy because all particles derived from 
    // G4Neutron is "groud state" nuclei  
 
-   virtual void SetCuts(G4double aCut); 
+   virtual void CalcEnergyCuts(); 
 };
 
 inline

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4JPsi.hh,v 1.5 2001-10-15 10:06:13 kurasige Exp $
+// $Id: G4JPsi.hh,v 1.6 2001-10-24 10:05:16 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,7 +74,7 @@ class G4JPsi : public G4VMeson
    static G4JPsi* JPsiDefinition();
    static G4JPsi* JPsi();
 
-   virtual void SetCuts(G4double aCut); 
+   virtual void CalcEnergyCuts(); 
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Geantino.cc,v 1.8 2001-10-16 08:15:42 kurasige Exp $
+// $Id: G4Geantino.cc,v 1.9 2001-10-24 10:04:58 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -91,14 +91,11 @@ G4Geantino* G4Geantino::GeantinoDefinition() {return &theGeantino;}
 // **************************** SetCuts *********************************
 // **********************************************************************
 
-void G4Geantino::SetCuts(G4double aCut)
+void G4Geantino::CalcEnergyCuts()
 {
-  SetCutInMaxInteractionLength( aCut );
-
   // Set Energy Cut values to zero  for all materials
   SetEnergyCutValues( 0.0*keV);
 }
-
 
 G4Geantino* G4Geantino::Geantino()
 {

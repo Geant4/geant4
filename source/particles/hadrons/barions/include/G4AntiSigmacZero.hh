@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiSigmacZero.hh,v 1.6 2001-10-15 10:09:26 kurasige Exp $
+// $Id: G4AntiSigmacZero.hh,v 1.7 2001-10-24 10:04:48 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,7 +74,7 @@ class G4AntiSigmacZero : public G4VBaryon
    static G4AntiSigmacZero* AntiSigmacZeroDefinition();
    static G4AntiSigmacZero* AntiSigmacZero();
 
-   virtual void SetCuts(G4double aCut); 
+   virtual void CalcEnergyCuts(); 
 };
 
 #endif

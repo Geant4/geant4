@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonZeroLong.cc,v 1.9 2001-10-16 08:16:12 kurasige Exp $
+// $Id: G4KaonZeroLong.cc,v 1.10 2001-10-24 10:05:31 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -116,9 +116,9 @@ G4KaonZeroLong* G4KaonZeroLong::KaonZeroLong(){return &theKaonZeroLong;}
 //  In this version Input Cut Value is meaning less
 //  theKineticEnergyCuts for all materials are set to LowestEnergy
 
-void G4KaonZeroLong::SetCuts(G4double aCut)
+void G4KaonZeroLong::CalcEnergyCuts()
 {
-  SetCutInMaxInteractionLength( aCut );
+  
 
   // Set Energy Cut values to lowest  for all materials
   SetEnergyCutValues(LowestEnergy);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiBsMesonZero.cc,v 1.8 2001-10-15 10:08:22 kurasige Exp $
+// $Id: G4AntiBsMesonZero.cc,v 1.9 2001-10-24 10:05:22 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,9 +84,9 @@ G4AntiBsMesonZero G4AntiBsMesonZero::theAntiBsMesonZero(
 G4AntiBsMesonZero*  G4AntiBsMesonZero::AntiBsMesonZeroDefinition(){return &theAntiBsMesonZero;}
 G4AntiBsMesonZero*  G4AntiBsMesonZero::AntiBsMesonZero(){return &theAntiBsMesonZero;}
 
-void G4AntiBsMesonZero::SetCuts(G4double aCut)
+void G4AntiBsMesonZero::CalcEnergyCuts()
 {
-  SetCutInMaxInteractionLength( aCut );
+  
 
   // Set Energy Cut values to lowest  for all materials
   SetEnergyCutValues(LowestEnergy);

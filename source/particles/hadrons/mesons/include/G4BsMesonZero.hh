@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BsMesonZero.hh,v 1.5 2001-10-15 10:06:12 kurasige Exp $
+// $Id: G4BsMesonZero.hh,v 1.6 2001-10-24 10:05:15 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,7 +73,7 @@ class G4BsMesonZero : public G4VMeson
    static G4BsMesonZero* BsMesonZeroDefinition();
    static G4BsMesonZero* BsMesonZero();
 
-   virtual void SetCuts(G4double aCut); 
+   virtual void CalcEnergyCuts(); 
 };
 
 #endif

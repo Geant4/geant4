@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DMesonZero.cc,v 1.8 2001-10-15 10:08:24 kurasige Exp $
+// $Id: G4DMesonZero.cc,v 1.9 2001-10-24 10:05:24 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -90,9 +90,9 @@ G4DMesonZero*  G4DMesonZero::DMesonZero(){return &theDMesonZero;}
 //  In this version Input Cut Value is meaning less
 //  theKineticEnergyCuts for all materials are set to LowestEnergy
 
-void G4DMesonZero::SetCuts(G4double aCut)
+void G4DMesonZero::CalcEnergyCuts()
 {
-  SetCutInMaxInteractionLength( aCut );
+  
 
   // Set Energy Cut values to lowest  for all materials
   SetEnergyCutValues(LowestEnergy);

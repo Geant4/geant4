@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiNeutron.hh,v 1.8 2001-10-16 08:15:44 kurasige Exp $
+// $Id: G4AntiNeutron.hh,v 1.9 2001-10-24 10:04:45 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,7 +74,7 @@ class G4AntiNeutron : public G4VBaryon
    static G4AntiNeutron* AntiNeutronDefinition();
    static G4AntiNeutron* AntiNeutron();
 
-   virtual void SetCuts(G4double aCut); 
+   virtual void CalcEnergyCuts(); 
 };
 
 #endif

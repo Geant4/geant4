@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XicZero.cc,v 1.9 2001-10-15 10:10:58 kurasige Exp $
+// $Id: G4XicZero.cc,v 1.10 2001-10-24 10:05:07 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -92,9 +92,9 @@ G4XicZero* G4XicZero::XicZero(){return &theXicZero;}
 // **********************************************************************
 //  In this version Input Cut Value is meaning less
 //  theKineticEnergyCuts for all materials are set to LowestEnergy
-void G4XicZero::SetCuts(G4double aCut)
+void G4XicZero::CalcEnergyCuts()
 {
-  SetCutInMaxInteractionLength( aCut );
+  
 
   // Set Energy Cut values to lowest  for all materials
   SetEnergyCutValues(LowestEnergy);
