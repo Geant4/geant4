@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidPCone.cc,v 1.3 1999-01-15 14:28:12 broglia Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.4 1999-01-19 13:18:16 broglia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4BREPSolidPCone.hh"
@@ -367,13 +367,12 @@ EInside G4BREPSolidPCone::Inside(register const G4ThreeVector& Pt) const
   Reset();
 
   G4Vector3D v(1, 0, 0.01);
-  G4double Dist;
   G4double halfTolerance = kCarTolerance*0.5;
   G4Vector3D Pttmp(Pt);
   G4Vector3D Vtmp(v);
   G4Ray r(Pttmp, Vtmp);
   //TestSurfaceBBoxes(r);
-  G4int hits=0;
+  G4int hits=0, samehit=0;
 
   for(G4int a=0; a < nb_of_surfaces; a++)
   {
@@ -383,7 +382,16 @@ EInside G4BREPSolidPCone::Inside(register const G4ThreeVector& Pt) const
 	if(SurfaceVec[a]->Distance() < kCarTolerance)
 	  return kSurface;
 	
-	hits++;
+	// test if this intersection was founded before
+	for(G4int i=0; i<a; i++)
+	  if(SurfaceVec[a]->Distance() == SurfaceVec[i]->Distance())
+	  {
+	    samehit++;
+	    break;
+	  }
+	
+	if(!samehit)
+	  hits++;
       }
   }
 
