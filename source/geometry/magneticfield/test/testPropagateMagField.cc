@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPropagateMagField.cc,v 1.14 2002-10-29 13:58:14 japost Exp $
+// $Id: testPropagateMagField.cc,v 1.15 2002-10-29 14:57:37 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -375,7 +375,7 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
             << " Starting New Particle with Position " << Position << G4endl 
 	    << " and UnitVelocity " << UnitMomentum << G4endl;
        G4cout << " Momentum in GeV/c is " << momentum / GeV
-	      << " = " << (0.5+iparticle*10.0)*proton_mass_c2 / MeV 
+	      << " = " << (0.5+iparticle*10.0)*proton_mass_c2 / MeV << " MeV"
               << G4endl;
 
 
