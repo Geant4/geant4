@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundEmission.cc,v 1.7 2003-11-05 15:03:47 lara Exp $
+// $Id: G4PreCompoundEmission.cc,v 1.8 2003-11-26 00:26:23 lara Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear Preequilibrium
@@ -51,8 +51,7 @@ const G4PreCompoundEmission & G4PreCompoundEmission::operator=(const G4PreCompou
   return true;
 }
 
-
-      G4PreCompoundEmission::G4PreCompoundEmission()
+G4PreCompoundEmission::G4PreCompoundEmission()
 {
   theFragmentsFactory = new G4PreCompoundEmissionFactory();
   theFragmentsVector = new G4PreCompoundFragmentVector(theFragmentsFactory->GetFragmentVector());
@@ -61,6 +60,7 @@ const G4PreCompoundEmission & G4PreCompoundEmission::operator=(const G4PreCompou
 G4PreCompoundEmission::~G4PreCompoundEmission()
 {
   if (theFragmentsFactory) delete theFragmentsFactory;
+  if (theFragmentsVector) delete theFragmentsVector;
 }
 
 void G4PreCompoundEmission::SetDefaultModel()
