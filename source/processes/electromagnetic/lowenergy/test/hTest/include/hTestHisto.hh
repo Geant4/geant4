@@ -47,9 +47,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class IHistogram1D;
-class ITuple;
-class ITree;
+class AIDA::IHistogram1D;
+class AIDA::ITuple;
+class AIDA::ITree;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -114,9 +114,9 @@ private:
 
     G4String histName;
     G4String theName;
-    G4std::vector<IHistogram1D*> histo;
-    ITuple* ntup;
-    ITree* tree;
+    G4std::vector<AIDA::IHistogram1D*> histo;
+    AIDA::ITuple* ntup;
+    AIDA::ITree* tree;
     G4int nHisto;
     G4int verbose; 
     G4double zend;

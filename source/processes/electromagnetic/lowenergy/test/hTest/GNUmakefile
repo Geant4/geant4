@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2002-07-24 16:45:34 vnivanch Exp $
+# $Id: GNUmakefile,v 1.6 2002-12-18 14:29:27 vnivanch Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # G4NOHIST variable is checked.  Vladimir Ivanchenko, 2000/01/18
@@ -15,17 +15,16 @@ endif
 .PHONY: all
 all: lib bin
 
+ifndef G4ANALYSIS_USE
+  G4ANALYSIS_USE = 1
+endif
+
+CPPFLAGS += -DG4ANALYSIS_USE
+
 include $(G4INSTALL)/config/architecture.gmk
 
-#
-# NEW: this requires the env-var LHCXX_REL_DIR to be set up correctly,
-# see the first lines in G4ComptonTest.cc
-#
-OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
-LOADLIBS += $(OGLLIBS)
-CPPFLAGS += `aida-config --useHBook --include`
-LDFLAGS  += `aida-config --useHBook --lib`
-#EXTRALIBS += -L$(OGLHOME)/lib -lGL
+CPPFLAGS += `aida-config --include`
+LDFLAGS  += `aida-config --lib`
 
 include $(G4INSTALL)/config/binmake.gmk
 
