@@ -84,7 +84,7 @@ h:	# ::: compare h2 h1
 
 h1:	# ::: (H) A = 1 protiun
 	make t; rm -f cascade.out; cascade  10000 1 585 1 1 > cascade.out; make a;
-#	make t; rm -f cascade.out; cascade  1000 1 585 1 1 > cascade.out; cat cascade.out
+#	make t; rm -f cascade.out; cascade  100 1 585 1 1 > cascade.out; cat cascade.out
 
 h2:	# ::: (H) A = 2 deuterium
 	rm -f cascade.out; cascade 10000 1 585 2 1 > cascade.out; make a;

@@ -36,7 +36,7 @@ G4double        Z = 13.0;      // target atomic number
 
 G4CollisionOutput output;
 
-G4int testINC(G4int, G4int, G4double, G4double, G4double);
+//G4int testINC(G4int, G4int, G4double, G4double, G4double);
 G4int testINCEvap();
 G4int testINCAll(G4int, G4int, G4double, G4double, G4double);
 G4int printData(G4int event);
@@ -57,7 +57,7 @@ int main(int argc, char **argv ) {
   A           = G4double(((argc > 4) ? atoi(argv[4]) : A));
   Z           = G4double(((argc > 5) ? atoi(argv[5]) : Z));
 
-  if (verboseLevel > 1) {
+  if (verboseLevel > 2) {
     G4cout << " nCollisions " << nCollisions << G4endl;
     G4cout << "  bulletType " << bulletType  << G4endl;
     G4cout << "        momZ " << momZ        << G4endl;
@@ -85,64 +85,6 @@ G4int testINCEvap() {
   return 0;
 };
 
-G4int testINC(G4int nCollisions, G4int bulletType, G4double momZ, G4double A, G4double Z) {
-  G4int verboseLevel = 1; // eguals 1 for data file production, 2 for testing, 3 all
-
-  if (verboseLevel > 1) {
-    G4cout << " >>> testINC" << G4endl;
-  }
-
-  G4CollisionOutput TRFoutput;
-
-  G4InuclParticle* bullet = new G4InuclElementaryParticle(momZ, bulletType); // momentumBullet, bulletType 
-
-  // Set target
-  G4std::vector<G4double> targetMomentum(4, 0.0);
-
-    G4InuclNuclei*   target  = NULL;
-    G4InuclParticle* targIsH = NULL;
-
-    if ( A == 1 ) {
-      targIsH = new G4InuclElementaryParticle(0.0, 1);     
-    } else { 
-      target = new G4InuclNuclei(0.0, A, Z);
-      target->setEnergy();
-    }
-
-  // Resigister collider
-  G4ElementaryParticleCollider* collider = new G4ElementaryParticleCollider;
-  G4IntraNucleiCascader*        cascader = new G4IntraNucleiCascader;
- 
-  cascader->setElementaryParticleCollider(collider);
-  cascader->setInteractionCase(1); // Interaction type is particle with nuclei.
-
-  if (verboseLevel > 1) {
-    G4cout << 
-      setw(6)  << "#ev"        << 
-      setw(6)  << "part"       << 
-      setw(11) << "Ekin [GeV]" << 
-      setw(11) << "momx"       << 
-      setw(11) << "momy"       << 
-      setw(11) << "momz"       << G4endl;
-  }
-
-  for (G4int i = 1; i <= nCollisions; i++) {
-
-    if (verboseLevel > 0) {
-      G4cout << "collision " << i << G4endl; 
-    }
-
-    if ( A == 1 ) {
-      output = cascader->collide(bullet, targIsH); // standard method
-    } else {
-      output = cascader->collide(bullet, target); // Make INC    
-    }
-    
-    printData(i);
-  }
-
-  return 0;
-};
 
 G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A, G4double Z) {
 
@@ -180,17 +122,21 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
     // Set target
     G4std::vector<G4double> targetMomentum(4, 0.0);
 
-    G4InuclParticle* bull = new G4InuclElementaryParticle(momZ, proton);  
+    G4std::vector<G4double>  bulletMomentum(4, 0.0);
+    bulletMomentum[3] = momZ;
 
+    G4InuclParticle* bull = new G4InuclElementaryParticle(momZ, 1);
     G4InuclNuclei* targ = NULL;
     G4InuclParticle* targIsH = NULL;
 
-    if ( A == 1 ) {
-      targIsH = new G4InuclElementaryParticle(0.0, 2.0);     
+    if ( G4int(A) == 1 ) {
+      targIsH = new G4InuclElementaryParticle(targetMomentum, 1); // hydrogen nucleus     
     } else { 
-      targ = new G4InuclNuclei(0.0, A, Z);
+      targ = new G4InuclNuclei(targetMomentum, A, Z);
       targ->setEnergy();      
-    }
+    };
+
+    //:::::::::::::::
 
     if (verboseLevel > 2) {
       G4cout << " Event " << e+1 <<":" << G4endl;
@@ -202,17 +148,16 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
 	G4cout << "collision " << i << G4endl; 
       }
 
-    if ( A == 1 ) {
-      output = collider->collide(bull, targIsH); // standard method
-    } else {
-      output = collider->collide(bull, targ); // standard method
-    }
+      if ( G4int(A) == 1 ) {
+	output = collider->collide(bull, targIsH); 
+      } else {
+	output = collider->collide(bull, targ); 
+      }
       printData(i);
     }
 
     delete bull;
     delete targ;
-
     delete colep;
     delete cascade; 
     delete noneq;
@@ -299,9 +244,9 @@ G4int printData(G4int i) {
 	  setw(6)  << i            << 
 	  setw(6)  << type         << 
 	  setw(11) << ekin         << 
+	  setw(11) << mom[0] * GeV << 
 	  setw(11) << mom[1] * GeV << 
 	  setw(11) << mom[2] * GeV << 
-	  setw(11) << mom[3] * GeV << 
 	  setw(13) << 0            << 
 	  setw(13) << 0            << 
 	  setw(13) << 0.0          << G4endl;
@@ -327,8 +272,62 @@ G4int test() {
   return 0;
 };
 
+//  G4int testINC(G4int nCollisions, G4int bulletType, G4double momZ, G4double A, G4double Z) {
+//    G4int verboseLevel = 1; // eguals 1 for data file production, 2 for testing, 3 all
 
+//    if (verboseLevel > 1) {
+//      G4cout << " >>> testINC" << G4endl;
+//    }
 
+//    G4CollisionOutput TRFoutput;
 
+//    G4InuclParticle* bullet = new G4InuclElementaryParticle(momZ, bulletType); // momentumBullet, bulletType 
 
+//    // Set target
+//    G4std::vector<G4double> targetMomentum(4, 0.0);
 
+//      G4InuclNuclei*   target  = NULL;
+//      G4InuclParticle* targIsH = NULL;
+
+//      if ( G4int(A) == 1 ) {
+//        targIsH = new G4InuclElementaryParticle(0.0, 1);     
+//      } else { 
+//        target = new G4InuclNuclei(0.0, A, Z);
+//        target->setEnergy();
+//      }
+
+//    // Resigister collider
+//    G4ElementaryParticleCollider* collider = new G4ElementaryParticleCollider;
+//    G4IntraNucleiCascader*        cascader = new G4IntraNucleiCascader;
+ 
+//    cascader->setElementaryParticleCollider(collider);
+//    cascader->setInteractionCase(1); // Interaction type is particle with nuclei.
+
+//    if (verboseLevel > 1) {
+//      G4cout << 
+//        setw(6)  << "#ev"        << 
+//        setw(6)  << "part"       << 
+//        setw(11) << "Ekin [GeV]" << 
+//        setw(11) << "momx"       << 
+//        setw(11) << "momy"       << 
+//        setw(11) << "momz"       << G4endl;
+//    }
+
+//    for (G4int i = 1; i <= nCollisions; i++) {
+
+//      if (verboseLevel > 0) {
+//        G4cout << "collision " << i << G4endl; 
+//      }
+
+//      if ( A == 1 ) {
+//        output = cascader->collide(bullet, targIsH); // standard method
+//      } else {
+//        cout << "not H";
+//        output = cascader->collide(bullet, target); // Make INC    
+//      }
+    
+//      printData(i);
+//    }
+
+//    return 0;
+//  };
