@@ -8,6 +8,7 @@ Some of the development/fixes included since the last reference tag are:
     The module can only be built and installed separately in addition
     to the standard libraries installation.
   o Includes validation of hadronic physics for release 6.0.
+  o In environments: new version of MOMO with XML import/export abilities.
   o Introduced G4SurfaceProperty base class for materials and adapted
     G4LogicalSurface and G4OpticalSurface to use the new generic interface.
   o Revision of advanced and extended examples.
@@ -16,17 +17,12 @@ Some of the development/fixes included since the last reference tag are:
 
 Summarised, the list of changes is the following:
 
-environments                            envs-V05-02-03
-------------
-- New version of MOMO and removed archives for GGE and GPE now
-  included in MOMO.
-
 geometry/management                     geommng-V05-02-05
 -------------------
 - G4LogicalSurface: modified to use generic G4SurfaceProperty
   instead of G4OpticalSurface.
 
-geometry/navigation                     geomnav-V05-02-12
+geometry/navigation                     geomnav-V05-02-15
 -------------------
 - G4PropagatorInField:
   o Added argument to method LocateIntersectionPoint(G4bool& recalculatedEndPt)
@@ -38,6 +34,11 @@ geometry/navigation                     geomnav-V05-02-12
   o Fixed LocateIntersectionPoint() for long-standing error.
     A section of the chord was not considered in use case where
     a previous chord at first appeared to have an intersection, but did not.
+    Refined re-setting of finalSection (Endpoint recalculation is returned
+    only for final section).
+  o Fixed ReEstimateEndPoint() which ignored return code of AccurateAdvance()
+    and moved to short end-point for long requests.
+    It now leaves the endpoint unchanged, when it cannot improve it.
   o Corrected placement of #endif for an #ifdef VERBOSE.
 - G4TransportationManager:
   o removed initialisation of allocators for navigation levels, where they
@@ -124,6 +125,10 @@ processes/.../models/util                        ghad-mod-util-V05-02-04
 -------------------------
 - G4KineticTrack: making sure decay works with Pauli blocking.
 
+processes/hadronic/stopping                      ghad-stop-V05-02-01
+---------------------------
+- Fixed error reported by Valgrind in G4MuonMinusCaptureAtRest.
+
 processes/hadronic/util                          ghad_util-V05-02-02
 -----------------------
 - Improved delete struct.
@@ -142,28 +147,33 @@ track                                            track-V05-02-03
 - Fixed problem of setting default momentum direction for stoppped
   particle in G4ParticleChange.
 
-tracking                                tracking-V05-02-05
+tracking                                         tracking-V05-02-05
 --------
 - G4SteppingManager: fixed problem in setting pointer to user
   stepping action.
 
-visualization                           vis-V05-02-06
+visualization                                    vis-V05-02-06
 -------------
 - Added command /vis/scene/endOfRunAction.
 - G4VisManager: Removed PrintAllGraphicsSystems() and
   PrintInstalledGraphicsSystems().
 
-visualization/HepRep                    vis-HepRep-V05-02-10
+visualization/HepRep                             vis-HepRep-V05-02-10
 --------------------
 - Fixed bug with CalHits by moving faces to separate HepRepType.
 
-hadronic_lists                          ghad-lists-V05-02-01
+environments                                     envs-V05-02-03
+------------
+- New version of MOMO with XML import/export abilities and removed
+  archives for GGE and GPE now included in MOMO.
+
+hadronic_lists                                   ghad-lists-V05-02-01
 --------------
 - New module of physics lists for hadronic physics lists by use case.
   The module can only be built and installed separately in addition
   to the standard libraries installation.
 
-examples                                examples-V05-02-08
+examples                                         examples-V05-02-08
 --------
 - Updated reference outputs.
 - advanced:
@@ -188,7 +198,7 @@ examples                                examples-V05-02-08
     + Migrated to new hadronic processes for release 6.0.
     + Fixed compilation warnings.
     + Updated vis-manager.
-  o xray_fluorescence (XrayFluo-V05-02-08)
+  o xray_fluorescence (XrayFluo-V05-02-10)
     + Removed obsolete classes.
     + Cleared compilation errors and warnings.
     + Introduced usage of VRML viewer.
