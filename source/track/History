@@ -1,4 +1,4 @@
-$Id: History,v 1.6 1999-04-26 08:12:42 asaim Exp $
+$Id: History,v 1.7 1999-04-27 04:53:07 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,15 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Apr 26, 1999 M.Asai (track-01-00-05)
--  Protect proton mass against glanular libraly for G4Mars5Gev...
+Apr 27, 1999 H.Kurashige (track-01-00-05a)
+-  Protect proton mass against glanular libraly for G4Mars5Gev...(Makoto)
+-  Fixed error messages in G4ParticleChange::CheckIt (Hisaya)
 
 Apr 13, 1999 H.Kurashige (track-01-00-04)
--  clean up codes (Hisaya)
+- Code polishing according to the messages by CodeWizard 
+- Added new virtual method of G4bool CheckIt(const G4Track&) in G4VParticleChange
 
 Feb 17, 1999 H.Kurashige (track-01-00-03)
 -  Removed G4Step::ShowStep() (Takashi)
--  Fixed sum bugs in G4ParticleChange.icc (Hisaya)
+-  Fixed bugs in G4ParticleChange.icc (Hisaya)
 
 Feb 9, 1999 H.Kurashige (track-01-00-02)
 -  Modified G4TrackFastVector (Hisaya)
