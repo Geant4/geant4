@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserRegionInformation.hh,v 1.2 2003-10-24 10:47:59 gcosmo Exp $
+// $Id: G4VUserRegionInformation.hh,v 1.3 2003-11-02 14:01:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-//---------------------------------------------------------------
+// --------------------------------------------------------------------
 //
 // G4VUserRegionInformation
 //
@@ -39,13 +39,15 @@
 // The concrete class object is deleted by Geant4 kernel when
 // associated G4Region object is deleted.
 
-
+// History:
+// 21/10/2003 - M.Asai, Created.
+// --------------------------------------------------------------------
 #ifndef G4VUserRegionInformation_H
 #define G4VUserRegionInformation_H 1
 
 class G4VUserRegionInformation
 {
-  public:
+  public:  // with description
   
     G4VUserRegionInformation() {}
     virtual ~G4VUserRegionInformation() {}

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: meshdefs.hh,v 1.4 2001-07-11 09:59:19 gunter Exp $
+// $Id: meshdefs.hh,v 1.5 2003-11-02 14:01:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -29,11 +29,11 @@
 
 // History:
 // 13.08.95 P.Kent Created separate file
-
+// --------------------------------------------------------------------
 #ifndef MESHDEFS_HH
 #define MESHDEFS_HH
 
-#include "globals.hh"
+#include "G4Types.hh"
 
 const G4double kMeshAngleDefault=(M_PI/4); // Angle for mesh `wedges' in rads
                                  // Works best when simple fraction of M_PI/2

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IdentityTrajectoryFilter.hh,v 1.1 2003-10-01 15:01:38 gcosmo Exp $
+// $Id: G4IdentityTrajectoryFilter.hh,v 1.2 2003-11-02 14:01:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -40,11 +40,11 @@
 //
 // - First version: Nov 19, 2002  Jacek Generowicz
 // ------------------------------------------------------------------------
-
 #ifndef G4IdentityTrajectoryFilter_hh
 #define G4IdentityTrajectoryFilter_hh
 
 #include "G4VCurvedTrajectoryFilter.hh"
+#include "G4ThreeVector.hh"
 
 class G4IdentityTrajectoryFilter : public G4VCurvedTrajectoryFilter
 {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.hh,v 1.12 2003-06-16 16:52:01 gunter Exp $
+// $Id: G4VSolid.hh,v 1.13 2003-11-02 14:01:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,11 +57,12 @@
 // 26.07.96 P.Kent        Added ComputeDimensions for replication mechanism
 // 27.03.96 J.Allison     Methods for visualisation 
 // 30.06.95 P.Kent        Initial version, no scoping or visualisation functions
-
+// --------------------------------------------------------------------
 #ifndef G4VSOLID_HH
 #define G4VSOLID_HH
 
-#include "globals.hh"
+#include "G4Types.hh"
+#include "G4String.hh"
 #include "geomdefs.hh"
 
 class G4AffineTransform;

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4BlockingList.icc,v 1.1 2003-10-01 15:01:15 gcosmo Exp $
+// $Id: G4BlockingList.icc,v 1.2 2003-11-02 14:01:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4BlockingList  Inlined Implementation
 //
-// ********************************************************************
+// --------------------------------------------------------------------
 
 inline G4int G4BlockingList::Length() const
 {

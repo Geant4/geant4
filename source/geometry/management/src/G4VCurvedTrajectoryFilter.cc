@@ -21,8 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCurvedTrajectoryFilter.cc,v 1.1 2003-10-01 15:02:27 gcosmo Exp $
+// $Id: G4VCurvedTrajectoryFilter.cc,v 1.2 2003-11-02 14:01:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+// --------------------------------------------------------------------
 
 #include "G4VCurvedTrajectoryFilter.hh"
 

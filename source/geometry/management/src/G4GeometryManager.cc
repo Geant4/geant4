@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryManager.cc,v 1.14 2003-10-24 10:47:59 gcosmo Exp $
+// $Id: G4GeometryManager.cc,v 1.15 2003-11-02 14:01:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GeometryManager
@@ -30,11 +30,22 @@
 //
 // Author:
 // 26.07.95 P.Kent Initial version, including optimisation Build
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include <iomanip>
 #include "G4Timer.hh"
 #include "G4GeometryManager.hh"
+
+#ifdef  G4GEOMETRY_VOXELDEBUG
+#include "G4ios.hh"
+#endif
+
+// Needed for building optimisations
+//
+#include "G4LogicalVolumeStore.hh"
+#include "G4LogicalVolume.hh"
+#include "G4SmartVoxelHeader.hh"
+#include "voxeldefs.hh"
 
 // ***************************************************************************
 // Static class variable: ptr to single instance of class

@@ -21,14 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPhysicalVolume.cc,v 1.8 2003-10-01 15:03:43 gcosmo Exp $
+// $Id: G4VPhysicalVolume.cc,v 1.9 2003-11-02 14:01:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4VPhysicalVolume Implementation
-// 09.11.99 J.Apostolakis  Made GetObjectRotation() non-inline (it uses static)
-//                         To be made obsolecent, in favour of more robust
-//                           GetObjectRotationValue()
+//
+// --------------------------------------------------------------------
 
 #include "G4VPhysicalVolume.hh"
 

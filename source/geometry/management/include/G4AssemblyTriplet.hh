@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyTriplet.hh,v 1.5 2001-07-11 09:59:16 gunter Exp $
+// $Id: G4AssemblyTriplet.hh,v 1.6 2003-11-02 14:01:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,9 +44,10 @@
 #ifndef G4_ASSEMBLYTRIPLET_H
 #define G4_ASSEMBLYTRIPLET_H 
 
-#include "G4LogicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4RotationMatrix.hh"
+
+class G4LogicalVolume;
 
 class G4AssemblyTriplet
 {

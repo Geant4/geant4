@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.icc,v 1.14 2003-10-24 10:47:58 gcosmo Exp $
+// $Id: G4LogicalVolume.icc,v 1.15 2003-11-02 14:01:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,7 +33,7 @@
 // 12.02.99 - S.Giani: Added set/get methods for voxelization quality
 // 18.04.01 - G.Cosmo: Migrated to STL vector
 // 17.05.02 - G.Cosmo: Added IsToOptimise() method
-// ********************************************************************
+// --------------------------------------------------------------------
 
 // ********************************************************************
 // GetName

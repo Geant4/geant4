@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCurvedTrajectoryFilter.hh,v 1.1 2003-10-01 15:04:19 gcosmo Exp $
+// $Id: G4VCurvedTrajectoryFilter.hh,v 1.2 2003-11-02 14:01:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,7 +45,6 @@
 //
 // - First version: Oct 30, 2002  Jacek Generowicz
 // ------------------------------------------------------------------------
-
 #ifndef G4VCurvedTrajectoryFilter_hh
 #define G4VCurvedTrajectoryFilter_hh
 

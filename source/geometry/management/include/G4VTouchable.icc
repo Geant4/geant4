@@ -21,12 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTouchable.icc,v 1.6 2003-10-24 10:47:58 gcosmo Exp $
+// $Id: G4VTouchable.icc,v 1.7 2003-11-02 14:01:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4VTouchable Inline implementation
 //
+// --------------------------------------------------------------------
 
 inline
 G4VTouchable::G4VTouchable()
@@ -41,7 +42,7 @@ G4VTouchable::~G4VTouchable()
 inline
 G4VPhysicalVolume* G4VTouchable::GetVolume(G4int) const
 {
-  G4Exception("G4VTouchable::GetVolume()", "Undefined",
+  G4Exception("G4VTouchable::GetVolume()", "NotApplicable",
               FatalException, "Undefined call to base class.");
   return 0;
 }
@@ -49,7 +50,7 @@ G4VPhysicalVolume* G4VTouchable::GetVolume(G4int) const
 inline
 G4VSolid* G4VTouchable::GetSolid(G4int) const
 {
-  G4Exception("G4VTouchable::GetSolid()", "Undefined",
+  G4Exception("G4VTouchable::GetSolid()", "NotApplicable",
               FatalException, "Undefined call to base class.");
   return 0;
 }
@@ -57,7 +58,7 @@ G4VSolid* G4VTouchable::GetSolid(G4int) const
 inline
 G4int G4VTouchable::GetReplicaNumber(G4int) const
 {
-  G4Exception("G4VTouchable::GetReplicaNumber()", "Undefined",
+  G4Exception("G4VTouchable::GetReplicaNumber()", "NotApplicable",
               FatalException, "Undefined call to base class.");
   return 0;
 }
@@ -65,7 +66,7 @@ G4int G4VTouchable::GetReplicaNumber(G4int) const
 inline
 G4int G4VTouchable::MoveUpHistory(G4int)
 {
-  G4Exception("G4VTouchable::MoveUpHistory()", "Undefined",
+  G4Exception("G4VTouchable::MoveUpHistory()", "NotApplicable",
               FatalException, "Undefined call to base class.");
   return 0;
 }
@@ -74,14 +75,14 @@ inline
 void G4VTouchable::UpdateYourself(G4VPhysicalVolume*,
 			          const G4NavigationHistory* ) 
 {
-  G4Exception("G4VTouchable::UpdateYourself()", "Undefined",
+  G4Exception("G4VTouchable::UpdateYourself()", "NotApplicable",
               FatalException, "Undefined call to base class.");
 }
 
 inline
 G4int G4VTouchable::GetHistoryDepth() const
 {
-  G4Exception("G4VTouchable::GetHistoryDepth()", "Undefined",
+  G4Exception("G4VTouchable::GetHistoryDepth()", "NotApplicable",
               FatalException, "Undefined call to base class.");
   return  0;
 }
@@ -89,7 +90,7 @@ G4int G4VTouchable::GetHistoryDepth() const
 inline
 const G4NavigationHistory* G4VTouchable::GetHistory() const
 {
-  G4Exception("G4VTouchable::GetHistory()", "Undefined",
+  G4Exception("G4VTouchable::GetHistory()", "NotApplicable",
               FatalException, "Undefined call to base class.");
   return 0;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegionStore.cc,v 1.5 2003-06-16 16:52:08 gunter Exp $
+// $Id: G4RegionStore.cc,v 1.6 2003-11-02 14:01:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4RegionStore
@@ -30,11 +30,13 @@
 //
 // History:
 // 18.09.02 G.Cosmo Initial version
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
 #include "G4GeometryManager.hh"
+
+#include "G4ios.hh"
 
 // ***************************************************************************
 // Static class variables

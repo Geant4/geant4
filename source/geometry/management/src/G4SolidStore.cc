@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SolidStore.cc,v 1.10 2003-06-16 16:52:10 gunter Exp $
+// $Id: G4SolidStore.cc,v 1.11 2003-11-02 14:01:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4SolidStore
@@ -30,7 +30,7 @@
 //
 // History:
 // 10.07.95 P.Kent Initial version
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "globals.hh"
 #include "G4SolidStore.hh"

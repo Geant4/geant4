@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelProxy.hh,v 1.6 2002-04-19 08:20:18 gcosmo Exp $
+// $Id: G4SmartVoxelProxy.hh,v 1.7 2003-11-02 14:01:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4SmartVoxelProxy
@@ -39,11 +39,11 @@
 // 12.07.95 P.Kent Initial version
 // 03.08.95 P.Kent Updated to become non abstract class, removing
 //                 HeaderProxy and NodeProxy derived classes
-
+// --------------------------------------------------------------------
 #ifndef G4SMARTVOXELPROXY_HH
 #define G4SMARTVOXELPROXY_HH
 
-#include "globals.hh"
+#include "G4Types.hh"
 #include <assert.h>
 
 class G4SmartVoxelNode;

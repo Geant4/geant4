@@ -21,13 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelProxy.cc,v 1.1 2002-04-19 08:20:22 gcosmo Exp $
+// $Id: G4SmartVoxelProxy.cc,v 1.2 2003-11-02 14:01:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class G4SmartVoxelProxy
 //
 // Implementation
 //
+// --------------------------------------------------------------------
 
 #include "G4SmartVoxelProxy.hh"
 

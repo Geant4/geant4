@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelLimits.hh,v 1.7 2003-06-16 16:52:02 gunter Exp $
+// $Id: G4VoxelLimits.hh,v 1.8 2003-11-02 14:01:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VoxelLimits
@@ -46,15 +46,14 @@
 
 // History:
 // 13.07.95 P.Kent Initial version.
-
+// --------------------------------------------------------------------
 #ifndef G4VOXELLIMITS_HH
 #define G4VOXELLIMITS_HH
 
-#include "globals.hh"
+#include "G4Types.hh"
 #include "geomdefs.hh"
 
 #include "G4ThreeVector.hh"
-#include <iostream>
 
 #include <assert.h>
 

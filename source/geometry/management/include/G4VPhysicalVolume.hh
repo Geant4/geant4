@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPhysicalVolume.hh,v 1.9 2003-10-01 15:03:43 gcosmo Exp $
+// $Id: G4VPhysicalVolume.hh,v 1.10 2003-11-02 14:01:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,11 +39,13 @@
 // 28.08.96 P.Kent Replaced transform by rotmat + vector
 // 25.07.96 P.Kent Modified interface for new `Replica' capable geometry 
 // 24.07.95 P.Kent First non-stub version
-
+// --------------------------------------------------------------------
 #ifndef G4VPHYSICALVOLUME_HH
 #define G4VPHYSICALVOLUME_HH
 
-#include "globals.hh"
+#include "G4Types.hh"
+#include "G4String.hh"
+
 #include "geomdefs.hh"
 
 #include "G4RotationMatrix.hh"

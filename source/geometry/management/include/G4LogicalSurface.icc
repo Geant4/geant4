@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalSurface.icc,v 1.5 2001-07-11 09:59:16 gunter Exp $
+// $Id: G4LogicalSurface.icc,v 1.6 2003-11-02 14:01:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -30,15 +30,10 @@
 //
 // File:        G4LogicalSurface.icc
 // Description: A Surface class 
-// Version:     1.0
 // Created:     1997-06-26
 // Author:      John Apostolakis
 //
-////////////////////////////////////////////////////////////////////////
-
-/////////////////////////
-// Class Inline Methods
-/////////////////////////
+// ------------------------------------------------------------------------
 
 inline G4OpticalSurface*
 G4LogicalSurface::GetOpticalSurface() const

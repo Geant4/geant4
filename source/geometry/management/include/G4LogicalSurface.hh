@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalSurface.hh,v 1.6 2001-07-11 09:59:16 gunter Exp $
+// $Id: G4LogicalSurface.hh,v 1.7 2003-11-02 14:01:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -52,15 +52,12 @@
 //   G4OpticalSurface*              theOpticalSurface
 //   G4TransitionRadiationSurface*  theTransRadSurface
 
-// Version:     1.0
 // Created:     1997, June, 4th to 17th
 // Author:      John Apostolakis, (with help of Peter Gumplinger)
 // mail:        japost@mail.cern.ch
 // Modified:    1997, June 26th  John Apostolakis
 //
-// Id tag:      
-////////////////////////////////////////////////////////////////////////
-
+// ------------------------------------------------------------------------
 #ifndef G4LogicalSurface_h
 #define G4LogicalSurface_h 1
 
@@ -68,7 +65,8 @@
 // Includes
 /////////////
 
-#include "globals.hh"
+#include "G4Types.hh"
+#include "G4String.hh"
 
 class G4OpticalSurface;
 class G4TransitionRadiationSurface;
@@ -79,10 +77,8 @@ class G4TransitionRadiationSurface;
 
 class G4LogicalSurface
 {
-	////////////
-	// Methods
-        ////////////
- public:
+ public:  // with description
+
    G4OpticalSurface*  GetOpticalSurface() const;
    void     SetOpticalSurface(G4OpticalSurface* ptrOpticalSurface);
 
@@ -91,10 +87,6 @@ class G4LogicalSurface
 
    G4TransitionRadiationSurface*  GetTransitionRadiationSurface() const;
    void SetTransitionRadiationSurface(G4TransitionRadiationSurface* transRadSurf);
-
-        ////////////////////////////////
-        // Constructors and Destructor
-        ////////////////////////////////
 
  protected:
 
@@ -116,10 +108,6 @@ class G4LogicalSurface
 
    G4LogicalSurface(const G4LogicalSurface &right); // Copying restricted
    const G4LogicalSurface& operator=(const G4LogicalSurface& right);
-
-	// ------------------
-	// Basic data members ( To define a 'logical' surface)
-	// ------------------
 
  private:
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.23 2003-10-24 10:47:59 gcosmo Exp $
+// $Id: G4SmartVoxelHeader.cc,v 1.24 2003-11-02 14:01:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,14 +38,17 @@
 // 11.02.99 Voxels at lower levels are now built for collapsed slices      S.G.
 // 21.07.95 Full implementation, supporting non divided physical volumes
 // 14.07.95 Initial version - stubb definitions only
-// ***************************************************************************
+// --------------------------------------------------------------------
 
 #include "G4SmartVoxelHeader.hh"
+
+#include "G4ios.hh"
 
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4VoxelLimits.hh"
 
+#include "voxeldefs.hh"
 #include "G4AffineTransform.hh"
 #include "G4VSolid.hh"
 #include "G4VPVParameterisation.hh"

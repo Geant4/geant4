@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BlockingList.hh,v 1.1 2003-10-01 15:01:07 gcosmo Exp $
+// $Id: G4BlockingList.hh,v 1.2 2003-11-02 14:01:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4BlockingList
@@ -41,12 +41,11 @@
 // History:
 //
 // 24.7.96 P.Kent Separated from G4Navigator
-// ********************************************************************
-
+// --------------------------------------------------------------------
 #ifndef G4BLOCKINGLIST_HH
 #define G4BLOCKINGLIST_HH
 
-#include "globals.hh"
+#include "G4Types.hh"
 #include <vector>
 
 const G4int kBlockingListMaxDefault = 500; // Block up to 511 daughters

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4BlockingList.cc,v 1.1 2003-10-01 15:00:53 gcosmo Exp $
+// $Id: G4BlockingList.cc,v 1.2 2003-11-02 14:01:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4BlockingList Implementation
 //
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4BlockingList.hh"
 

@@ -21,11 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc,v 1.10 2003-10-21 20:23:27 asaim Exp $
+// $Id: G4Region.cc,v 1.11 2003-11-02 14:01:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4Region Implementation
+//
+// --------------------------------------------------------------------
 
 #include "G4RegionStore.hh"
 #include "G4LogicalVolume.hh"
@@ -47,8 +49,9 @@ G4Region::G4Region(const G4String& pName)
   {
     G4cerr << "WARNING - G4Region::G4Region()" << G4endl
            << "          Region " << pName << " already existing in store !"
-           << G4endl
-           << "          The region has NOT been registered !" << G4endl;
+           << G4endl;
+    G4Exception("G4Region::G4Region()", "InvalidSetup", JustWarning,
+                "The region has NOT been registered !");
   }
   else
   {

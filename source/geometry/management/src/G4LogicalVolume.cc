@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.cc,v 1.17 2003-10-24 10:47:59 gcosmo Exp $
+// $Id: G4LogicalVolume.cc,v 1.18 2003-11-02 14:01:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,7 +33,7 @@
 // 04.08.97 P.M.DeFreitas: Added methods for parameterised simulation 
 // 19.08.96 P.Kent: Modified for G4VSensitive Detector
 // 11.07.95 P.Kent: Initial version
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4LogicalVolume.hh"
 #include "G4LogicalVolumeStore.hh"

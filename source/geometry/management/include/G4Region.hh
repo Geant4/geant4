@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.hh,v 1.6 2003-10-21 20:22:06 asaim Exp $
+// $Id: G4Region.hh,v 1.7 2003-11-02 14:01:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Region
@@ -37,8 +37,7 @@
 
 // History:
 // 18.09.02 G.Cosmo Initial version
-// ********************************************************************
-
+// --------------------------------------------------------------------
 #ifndef G4REGION_HH
 #define G4REGION_HH
 
@@ -49,7 +48,8 @@ class G4VUserRegionInformation;
 
 #include <vector>
 
-#include "globals.hh"
+#include "G4Types.hh"
+#include "G4String.hh"
 
 class G4Region
 {

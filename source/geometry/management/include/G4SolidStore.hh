@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SolidStore.hh,v 1.8 2003-06-16 16:52:00 gunter Exp $
+// $Id: G4SolidStore.hh,v 1.9 2003-11-02 14:01:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4SolidStore
@@ -48,7 +48,7 @@
 // History:
 // 18.04.01 G.Cosmo Migrated to STL vector
 // 10.07.95 P.Kent  Initial version
-
+// --------------------------------------------------------------------
 #ifndef G4VSOLIDSTORE_HH
 #define G4VSOLIDSTORE_HH
 
