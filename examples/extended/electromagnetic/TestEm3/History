@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2003-03-10 11:30:23 maire Exp $
+$Id: History,v 1.24 2003-03-10 18:16:45 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,9 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-07-03-03 mma
+10-03-03 mma
 - change in all macros: /run/particle/setCut -> /testem/phys/setCuts
-- material CsI and example of SetMeanExcitationEnergy();
+- material CsI and example of SetMeanExcitationEnergy()
+- example of static ion: IonC12 class and ionC12.mac
 
 20-02-03 V.Ivant (testem3-V05-00-01)
 - Migrade to cut per region

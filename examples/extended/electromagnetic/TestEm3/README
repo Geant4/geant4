@@ -1,4 +1,4 @@
-$Id: README,v 1.9 2003-03-10 11:30:24 maire Exp $
+$Id: README,v 1.10 2003-03-10 18:16:46 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -41,6 +41,9 @@ $Id: README,v 1.9 2003-03-10 11:30:24 maire Exp $
     2. "general" - decays and transportation  
     3. "standard" (alternative) - standard EM physics
     4. "model"    (alternative) - standard EM physics using model approach
+    
+    Notice that there is an example of definition of a static ion : IonC12
+    (see PhysListParticle.cc) and an example of use : ionC12.mac
      	    
  3- AN EVENT : THE PRIMARY GENERATOR
  
