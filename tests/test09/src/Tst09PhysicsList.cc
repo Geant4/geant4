@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst09PhysicsList.cc,v 1.1 1999-01-08 16:35:25 gunter Exp $
+// $Id: Tst09PhysicsList.cc,v 1.2 1999-04-08 14:18:35 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -136,7 +136,7 @@ void Tst09PhysicsList::ConstructProcess()
 
 #include "G4PolarizedComptonScattering.hh"
 #include "G4GammaConversion.hh"
-#include "G4PhotoAbsorption.hh"
+#include "G4PhotoElectricEffect.hh"
 
 #include "G4MultipleScattering.hh"
 
@@ -163,7 +163,7 @@ void Tst09PhysicsList::ConstructEM()
      
     if (particleName == "gamma") {
       // gamma         
-      pmanager->AddDiscreteProcess(new G4PhotoAbsorption);
+      pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
       pmanager->AddDiscreteProcess(new G4PolarizedComptonScattering);
       pmanager->AddDiscreteProcess(new G4GammaConversion);
       
