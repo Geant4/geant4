@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommand.cc,v 1.19 2002-04-26 22:03:35 asaim Exp $
+// $Id: G4UIcommand.cc,v 1.20 2002-10-30 00:50:26 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,11 +35,13 @@
 #include "G4Tokenizer.hh"
 #include "G4ios.hh"
 
-G4UIcommand::G4UIcommand():paramERR(0) { }
+G4UIcommand::G4UIcommand()
+:messenger(0),token(IDENTIFIER),paramERR(0)
+{;}
 
 G4UIcommand::G4UIcommand(const char * theCommandPath,
 			 G4UImessenger * theMessenger)
-:messenger(theMessenger), paramERR(0)
+:messenger(theMessenger),token(IDENTIFIER),paramERR(0)
 {
   G4String comStr = theCommandPath;
   if(!theMessenger)
