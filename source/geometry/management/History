@@ -1,4 +1,4 @@
-$Id: History,v 1.71 2004-10-10 10:14:56 johna Exp $
+$Id: History,v 1.72 2004-10-10 10:17:34 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,7 +18,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 Oct 10, 2004  J.Allison                    geommng-V06-02-03
-- Added GetPolyhedron.
+- Added GetPolyhedron, a smart access function that creates a G4Polyhedron
+  on request and stores for future access.  A null pointer means "not
+  available".
 
 Sep 28, 2004  M.Asai                       geommng-V06-02-02
 - G4Region:

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.cc,v 1.24 2004-09-22 08:16:07 gcosmo Exp $
+// $Id: G4VSolid.cc,v 1.25 2004-10-10 10:15:27 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VSolid
@@ -55,7 +55,7 @@
 //  - Add ourselves to solid Store
 
 G4VSolid::G4VSolid(const G4String& name)
-  : fshapeName(name) 
+  : fshapeName(name)
 {
     G4SolidStore::GetInstance()->Register(this);
 }
@@ -414,6 +414,11 @@ G4Polyhedron* G4VSolid::CreatePolyhedron () const
 }
 
 G4NURBS* G4VSolid::CreateNURBS () const
+{
+  return 0;
+}
+
+G4Polyhedron* G4VSolid::GetPolyhedron () const
 {
   return 0;
 }
