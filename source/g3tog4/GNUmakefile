@@ -69,13 +69,13 @@ vpath %.hh  $(patsubst -I%,%,$(filter -I%,$(CPPFLAGS)))
 vpath %.inc $(patsubst -I%,%,$(filter -I%,$(CPPFLAGS)))
 
 G4LIBDIR := $(G4LIB)/$(G4SYSTEM)
-G4TMPDIR := $(G4TMP)/$(G4SYSTEM)
+G4TMPDIR := $(G4TMP)/$(G4SYSTEM)/$(name)
 G4BINDIR := $(G4BIN)/$(G4SYSTEM)
 
 Fbinsources = src/$(G4TARGET).F
-Fbinobjects = $(patsubst src/%.F,$(G4TMPDIR)/$(name)/%.o,$(Fbinsources))
+Fbinobjects = $(patsubst src/%.F,$(G4TMPDIR)/%.o,$(Fbinsources))
 Flibsources = $(filter-out $(Fbinsources),$(wildcard src/*.F))
-Flibobjects = $(patsubst src/%.F,$(G4TMPDIR)/$(name)/%.o,$(Flibsources))
+Flibobjects = $(patsubst src/%.F,$(G4TMPDIR)/%.o,$(Flibsources))
 Fdependencies = $(patsubst %.o,%.d,$(Fbinobjects) $(Flibobjects))
 
 ###############################################################################
@@ -144,14 +144,14 @@ $(G4BINDIR)/$(G4TARGET) : $(Fbinobjects) $(G4LIBDIR)/lib$(name)F.a
 ###-------------------- locally defined pattern rules ------------------------
 
 ### Make the .o files from src/*.F
-$(G4TMPDIR)/$(name)/%.o : src/%.F
-	$(FC) $(FCFLAGS) -o $(G4TMPDIR)/$(name)/$(*F).o -c src/$(*F).F
+$(G4TMPDIR)/%.o : src/%.F
+	$(FC) $(FCFLAGS) -o $(G4TMPDIR)/$(*F).o -c src/$(*F).F
 	@file=$(dotf_prepend)$(*F).f;\
-	if [ -f $$file ]; then echo Moving $$file to $(G4TMPDIR)/$(name)/$$file; \
-	mv $$file $(G4TMPDIR)/$(name)/$$file; fi	
+	if [ -f $$file ]; then echo Moving $$file to $(G4TMPDIR)/$$file; \
+	mv $$file $(G4TMPDIR)/$$file; fi	
 
 ### Move the .f files
-$(G4TMPDIR)/$(name)/%.f : %.f
+$(G4TMPDIR)/%.f : %.f
 	@echo Moving $< to $@
 	@mv $< $@
 
@@ -161,9 +161,9 @@ $(G4TMPDIR)/$(name)/%.f : %.f
 ### g++ -MM is good at this, except it forgets the subdirectory (hence
 ###  the echo $(@D)/).
 
-$(G4TMPDIR)/$(name)/%.d: src/%.F
+$(G4TMPDIR)/%.d: src/%.F
 	@if [ ! -d $(G4TMP)/$(G4SYSTEM) ] ; then mkdir $(G4TMP)/$(G4SYSTEM) ;fi
-	@if [ ! -d $(G4TMPDIR)/$(name) ] ; then mkdir $(G4TMPDIR)/$(name) ;fi
+	@if [ ! -d $(G4TMPDIR) ] ; then mkdir $(G4TMPDIR) ;fi
 	@if test -f $@ ; then rm -f $@; fi
 	@echo $(G4LIBDIR)/lib$(name)F.a\($*.o\) $@ " : " $? "\\" > $@
 	@if test -f $< ; then awk '$$1=="#include" { print $$2 " \\" }' $< | tr -d \"\>\< >> $@ ; echo >> $@ ; fi

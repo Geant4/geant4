@@ -1,7 +1,12 @@
-$Id: History,v 1.34 2000-07-24 11:43:20 gcosmo Exp $
+$Id: History,v 1.35 2000-07-26 14:54:50 gcosmo Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V02-00-02 26-Jul-2000 G.Cosmo
+- Fixed definition of G4TMPDIR in GNUmakefile.
+  (The GNUmakefile needs to be completely rewritten to conform to the
+  standard format in G4...)
 
 g3tog4-V02-00-01 24-Jul-2000 G.Cosmo
 - Moved tests clGeometry and cltog4 from source/g3tog4/test to
