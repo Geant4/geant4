@@ -45,7 +45,7 @@ G4Curve* G4CompositeCurve::Project(const G4Transform3D& tr)
   return r;
 }
 
-
+/*
 void G4CompositeCurve::IntersectRay2D(const G4Ray& ray,
 				      G4CurveRayIntersection& is)
 {
@@ -62,7 +62,20 @@ void G4CompositeCurve::IntersectRay2D(const G4Ray& ray,
   
   lastIntersection= is;
 }
+*/
 
+G4int G4CompositeCurve::IntersectRay2D(const G4Ray& ray)
+{
+  G4int nbinter = 0;
+ 
+  for (G4int i=0; i<segments.entries(); i++) 
+  {
+    G4Curve& c= *(segments(i));
+    nbinter+= c.IntersectRay2D(ray); 
+  }
+ 
+  return nbinter;
+}
 
 G4bool G4CompositeCurve::Tangent(G4CurvePoint& cp, G4Vector3D& v)
 {

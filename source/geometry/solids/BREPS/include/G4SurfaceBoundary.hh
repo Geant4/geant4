@@ -44,9 +44,8 @@ public:
   // no intersection: return false
   // intersection: return true, and set intersection0
   //   the intersection point is ray.start+ray.dir*intersection0
-
-  void IntersectRay2D(const G4Ray& ray, G4CurveRayIntersection& is);
-  
+  //void IntersectRay2D(const G4Ray& ray, G4CurveRayIntersection& is);
+  G4int IntersectRay2D(const G4Ray& ray);
 
   // tangent vector to a curve at the point with parameter u
   // true if exists
