@@ -6,28 +6,28 @@
 /control/verbose 2
 /run/verbose 2
 #
-/run/particle/setGCut 1. mm    
-/run/particle/setECut 1. mm
+/testem/phys/setGCut 1. mm    
+/testem/phys/setECut 1. mm
 /run/initialize
 #
-/calor/setAbsMat XenonMethanePropane   
-/calor/setAbsThick 23 mm  
-/calor/setAbsYZ    60 mm
-/calor/update
-/gun/setDefault
+/testem/det/setAbsMat XenonMethanePropane   
+/testem/det/setAbsThick 23 mm  
+/testem/det/setAbsYZ    60 mm
+/testem/det/update
+/testem/gun/setDefault
 #
 #
 #  hist file name
-/plots/sethistName run18.1mm.paw
+/testem/plots/sethistName run18.1mm.paw
 #  PLOT: energy deposit distribution in Gas
-/plots/setnbinEn 50
-/plots/setEnlow   0. keV
-/plots/setEnhigh  20. keV  
+/testem/plots/setnbinEn 50
+/testem/plots/setEnlow   0. keV
+/testem/plots/setEnhigh  20. keV  
 #
 /gun/particle proton 
 /gun/energy 2.20 GeV
 
-/event/printModulo 1000
+/testem/event/printModulo 1000
 #
 /run/beamOn 100000
 #

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5PhysicsListMessenger.hh,v 1.6 2002-06-05 15:43:42 urban Exp $
+// $Id: Em5PhysicsListMessenger.hh,v 1.7 2002-12-16 16:30:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,7 +57,7 @@ class Em5PhysicsListMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* cutECmd;
     G4UIcmdWithADoubleAndUnit* cutPCmd;
     G4UIcmdWithADoubleAndUnit* rCmd;
-    G4UIcmdWithADoubleAndUnit* setMaxStepCmd;     
+    G4UIcmdWithADoubleAndUnit* MaxStepCmd;     
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5DetectorMessenger.hh,v 1.4 2001-10-16 11:56:27 maire Exp $
+// $Id: Em5DetectorMessenger.hh,v 1.5 2002-12-16 16:30:07 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,7 +55,7 @@ class Em5DetectorMessenger: public G4UImessenger
   private:
     Em5DetectorConstruction*   Em5Detector;
     
-    G4UIdirectory*             Em5detDir;
+    G4UIdirectory*             testemDir;
 
     G4UIcmdWithAString*        AbsMaterCmd;
     G4UIcmdWithADoubleAndUnit* AbsThickCmd;

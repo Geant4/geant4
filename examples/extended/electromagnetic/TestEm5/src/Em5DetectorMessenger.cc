@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5DetectorMessenger.cc,v 1.6 2002-12-05 00:24:25 asaim Exp $
+// $Id: Em5DetectorMessenger.cc,v 1.7 2002-12-16 16:30:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,60 +43,60 @@
 Em5DetectorMessenger::Em5DetectorMessenger(Em5DetectorConstruction * Em5Det)
 :Em5Detector(Em5Det)
 { 
-  Em5detDir = new G4UIdirectory("/calor/");
-  Em5detDir->SetGuidance("Em5 detector control.");
+  testemDir = new G4UIdirectory("/testem/");
+  testemDir->SetGuidance("UI commands specific to this example.");
       
-  AbsMaterCmd = new G4UIcmdWithAString("/calor/setAbsMat",this);
+  AbsMaterCmd = new G4UIcmdWithAString("/testem/det/setAbsMat",this);
   AbsMaterCmd->SetGuidance("Select Material of the Absorber.");
   AbsMaterCmd->SetParameterName("choice",false);
   AbsMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  WorldMaterCmd = new G4UIcmdWithAString("/calor/setWorldMat",this);
+  WorldMaterCmd = new G4UIcmdWithAString("/testem/det/setWorldMat",this);
   WorldMaterCmd->SetGuidance("Select Material of the World.");
   WorldMaterCmd->SetParameterName("wchoice",false);
   WorldMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  AbsThickCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsThick",this);
+  AbsThickCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setAbsThick",this);
   AbsThickCmd->SetGuidance("Set Thickness of the Absorber");
   AbsThickCmd->SetParameterName("SizeZ",false);  
   AbsThickCmd->SetRange("SizeZ>0.");
   AbsThickCmd->SetUnitCategory("Length");  
   AbsThickCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  AbsSizYZCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsYZ",this);
+  AbsSizYZCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setAbsYZ",this);
   AbsSizYZCmd->SetGuidance("Set sizeYZ of the Absorber");
   AbsSizYZCmd->SetParameterName("SizeYZ",false);
   AbsSizYZCmd->SetRange("SizeYZ>0.");
   AbsSizYZCmd->SetUnitCategory("Length");
   AbsSizYZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  AbsXposCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsXpos",this);
+  AbsXposCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setAbsXpos",this);
   AbsXposCmd->SetGuidance("Set X pos. of the Absorber");
   AbsXposCmd->SetParameterName("Xpos",false);
   AbsXposCmd->SetUnitCategory("Length");
   AbsXposCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  WorldXCmd = new G4UIcmdWithADoubleAndUnit("/calor/setWorldX",this);
+  WorldXCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setWorldX",this);
   WorldXCmd->SetGuidance("Set X size of the World");
   WorldXCmd->SetParameterName("WSizeX",false);
   WorldXCmd->SetRange("WSizeX>0.");
   WorldXCmd->SetUnitCategory("Length");
   WorldXCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  WorldYZCmd = new G4UIcmdWithADoubleAndUnit("/calor/setWorldYZ",this);
+  WorldYZCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setWorldYZ",this);
   WorldYZCmd->SetGuidance("Set sizeYZ of the World");
   WorldYZCmd->SetParameterName("WSizeYZ",false);
   WorldYZCmd->SetRange("WSizeYZ>0.");
   WorldYZCmd->SetUnitCategory("Length");
   WorldYZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  UpdateCmd = new G4UIcmdWithoutParameter("/calor/update",this);
+  UpdateCmd = new G4UIcmdWithoutParameter("/testem/det/update",this);
   UpdateCmd->SetGuidance("Update calorimeter geometry.");
   UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
   UpdateCmd->AvailableForStates(G4State_Idle);
       
-  MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/calor/setField",this);  
+  MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setField",this);  
   MagFieldCmd->SetGuidance("Define magnetic field.");
   MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
   MagFieldCmd->SetParameterName("Bz",false);
@@ -118,7 +118,7 @@ Em5DetectorMessenger::~Em5DetectorMessenger()
   delete WorldYZCmd;
   delete UpdateCmd;
   delete MagFieldCmd;
-  delete Em5detDir;
+  delete testemDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

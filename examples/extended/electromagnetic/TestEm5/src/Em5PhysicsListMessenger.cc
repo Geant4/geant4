@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5PhysicsListMessenger.cc,v 1.8 2002-12-05 00:24:25 asaim Exp $
+// $Id: Em5PhysicsListMessenger.cc,v 1.9 2002-12-16 16:30:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,39 +39,39 @@
 Em5PhysicsListMessenger::Em5PhysicsListMessenger(Em5PhysicsList * List)
 :Em5List(List)
 {
-  cutGCmd = new G4UIcmdWithADoubleAndUnit("/run/particle/setGCut",this);
+  cutGCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setGCut",this);
   cutGCmd->SetGuidance("Set gamma cut.");
   cutGCmd->SetParameterName("Gcut",false);
   cutGCmd->SetRange("Gcut>0.");
   cutGCmd->SetUnitCategory("Length");
   cutGCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  cutECmd = new G4UIcmdWithADoubleAndUnit("/run/particle/setECut",this);
+  cutECmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setECut",this);
   cutECmd->SetGuidance("Set electron cut.");
   cutECmd->SetParameterName("Ecut",false);
   cutECmd->SetRange("Ecut>0.");
   cutECmd->SetUnitCategory("Length");  
   cutECmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  cutPCmd = new G4UIcmdWithADoubleAndUnit("/run/particle/setPCut",this);
+  cutPCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setPCut",this);
   cutPCmd->SetGuidance("Set proton cut.");
   cutPCmd->SetParameterName("Pcut",false);
   cutPCmd->SetRange("Pcut>0.");
   cutPCmd->SetUnitCategory("Length");    
   cutPCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  rCmd = new G4UIcmdWithADoubleAndUnit("/run/particle/getRange",this);
+  rCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/getRange",this);
   rCmd->SetGuidance("get the electron cut for the current material.");
   rCmd->SetParameterName("energy",false);
   rCmd->SetRange("energy>0.");
   rCmd->SetUnitCategory("Energy");     
   rCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  setMaxStepCmd = new G4UIcmdWithADoubleAndUnit("/step/setMaxStep",this);
-  setMaxStepCmd->SetGuidance("Set max. step length in the detector");
-  setMaxStepCmd->SetParameterName("mxStep",false);
-  setMaxStepCmd->SetRange("mxStep>0.");
-  setMaxStepCmd->SetUnitCategory("Length");
+  MaxStepCmd = new G4UIcmdWithADoubleAndUnit("/testem/tracking/stepMax",this);
+  MaxStepCmd->SetGuidance("Set max allowed step length");
+  MaxStepCmd->SetParameterName("mxStep",false);
+  MaxStepCmd->SetRange("mxStep>0.");
+  MaxStepCmd->SetUnitCategory("Length");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,7 +82,7 @@ Em5PhysicsListMessenger::~Em5PhysicsListMessenger()
   delete cutECmd;
   delete cutPCmd;
   delete rCmd;
-  delete setMaxStepCmd;
+  delete MaxStepCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -98,8 +98,8 @@ void Em5PhysicsListMessenger::SetNewValue(G4UIcommand* command,
     { Em5List->SetProtonCut(cutPCmd->GetNewDoubleValue(newValue));}
   if(command == rCmd)
     { Em5List->GetRange(rCmd->GetNewDoubleValue(newValue));}
-  if(command == setMaxStepCmd)
-    { Em5List->SetMaxStep(setMaxStepCmd->GetNewDoubleValue(newValue));}
+  if(command == MaxStepCmd)
+    { Em5List->SetMaxStep(MaxStepCmd->GetNewDoubleValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

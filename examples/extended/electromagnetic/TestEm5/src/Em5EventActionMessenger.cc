@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5EventActionMessenger.cc,v 1.5 2002-12-05 00:24:25 asaim Exp $
+// $Id: Em5EventActionMessenger.cc,v 1.6 2002-12-16 16:30:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,12 +42,12 @@
 Em5EventActionMessenger::Em5EventActionMessenger(Em5EventAction* EvAct)
 :eventAction(EvAct)
 { 
-  setVerboseCmd = new G4UIcmdWithAnInteger("/event/setverbose",this);
+  setVerboseCmd = new G4UIcmdWithAnInteger("/testem/event/setverbose",this);
   setVerboseCmd->SetGuidance("Set verbose level ." );
   setVerboseCmd->SetParameterName("level",true);
   setVerboseCmd->SetDefaultValue(0);
   
-  DrawCmd = new G4UIcmdWithAString("/event/drawTracks",this);
+  DrawCmd = new G4UIcmdWithAString("/testem/event/drawTracks",this);
   DrawCmd->SetGuidance("Draw the tracks in the event");
   DrawCmd->SetGuidance("  Choice : none,charged, all");
   DrawCmd->SetParameterName("choice",true);
@@ -55,7 +55,7 @@ Em5EventActionMessenger::Em5EventActionMessenger(Em5EventAction* EvAct)
   DrawCmd->SetCandidates("none charged all");
   DrawCmd->AvailableForStates(G4State_Idle);
   
-  PrintCmd = new G4UIcmdWithAnInteger("/event/printModulo",this);
+  PrintCmd = new G4UIcmdWithAnInteger("/testem/event/printModulo",this);
   PrintCmd->SetGuidance("Print events modulo n");
   PrintCmd->SetParameterName("EventNb",false);
   PrintCmd->SetRange("EventNb>0");

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5PrimaryGeneratorMessenger.cc,v 1.8 2002-12-05 00:24:25 asaim Exp $
+// $Id: Em5PrimaryGeneratorMessenger.cc,v 1.9 2002-12-16 16:30:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,11 +41,11 @@ Em5PrimaryGeneratorMessenger::Em5PrimaryGeneratorMessenger(
                                              Em5PrimaryGeneratorAction* Em5Gun)
 :Em5Action(Em5Gun)
 { 
- DefaultCmd = new G4UIcmdWithoutParameter("/gun/setDefault",this);
+ DefaultCmd = new G4UIcmdWithoutParameter("/testem/gun/setDefault",this);
  DefaultCmd->SetGuidance("set/reset the kinematic defined in PrimaryGenerator");
  DefaultCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  RndmCmd = new G4UIcmdWithADouble("/gun/rndm",this);
+  RndmCmd = new G4UIcmdWithADouble("/testem/gun/rndm",this);
   RndmCmd->SetGuidance("random lateral extension on the beam");
   RndmCmd->SetGuidance("in fraction of 0.5*sizeYZ");
   RndmCmd->SetParameterName("rBeam",false);

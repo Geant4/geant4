@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5RunMessenger.cc,v 1.6 2001-11-28 16:08:19 maire Exp $
+// $Id: Em5RunMessenger.cc,v 1.7 2002-12-16 16:30:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,133 +45,133 @@
 Em5RunMessenger::Em5RunMessenger(Em5RunAction* RA)
 :runAction (RA)
 {
-  plotDir = new G4UIdirectory("/plots/");
+  plotDir = new G4UIdirectory("/testem/plots/");
   plotDir->SetGuidance("plot control");
 
-  sethistNameCmd = new G4UIcmdWithAString("/plots/sethistName",this);
+  sethistNameCmd = new G4UIcmdWithAString("/testem/plots/sethistName",this);
   sethistNameCmd->SetGuidance("set name for the histogram file"); 
 
-  setnbinStepCmd = new G4UIcmdWithAnInteger("/plots/setnbinStep",this);
+  setnbinStepCmd = new G4UIcmdWithAnInteger("/testem/plots/setnbinStep",this);
   setnbinStepCmd->SetGuidance("set nb of bins in #step plot");
   setnbinStepCmd->SetParameterName("nbinStep",false);
 
-  setSteplowCmd = new G4UIcmdWithADouble("/plots/setSteplow",this);
+  setSteplowCmd = new G4UIcmdWithADouble("/testem/plots/setSteplow",this);
   setSteplowCmd->SetGuidance("set lower limit for #step plot ");
   setSteplowCmd->SetParameterName("Steplow",false);
 
-  setStephighCmd = new G4UIcmdWithADouble("/plots/setStephigh",this);
+  setStephighCmd = new G4UIcmdWithADouble("/testem/plots/setStephigh",this);
   setStephighCmd->SetGuidance("set upper limit for #step plot ");
   setStephighCmd->SetParameterName("Stephigh",false);
 
-  setnbinEnCmd = new G4UIcmdWithAnInteger("/plots/setnbinEn",this);
+  setnbinEnCmd = new G4UIcmdWithAnInteger("/testem/plots/setnbinEn",this);
   setnbinEnCmd->SetGuidance("set nb of bins in Edep plot");
   setnbinEnCmd->SetParameterName("nbinE",false);
 
-  setEnlowCmd = new G4UIcmdWithADoubleAndUnit("/plots/setEnlow",this);
+  setEnlowCmd = new G4UIcmdWithADoubleAndUnit("/testem/plots/setEnlow",this);
   setEnlowCmd->SetGuidance("set lower limit for Edep plot ");
   setEnlowCmd->SetParameterName("Elow",false);
   setEnlowCmd->SetUnitCategory("Energy");
   
-  setEnhighCmd = new G4UIcmdWithADoubleAndUnit("/plots/setEnhigh",this);
+  setEnhighCmd = new G4UIcmdWithADoubleAndUnit("/testem/plots/setEnhigh",this);
   setEnhighCmd->SetGuidance("set upper limit for Edep plot ");
   setEnhighCmd->SetParameterName("Ehigh",false);
   setEnhighCmd->SetUnitCategory("Energy");
 
-  setnbinGammaCmd = new G4UIcmdWithAnInteger("/plots/setnbinGamma",this);
+  setnbinGammaCmd = new G4UIcmdWithAnInteger("/testem/plots/setnbinGamma",this);
   setnbinGammaCmd->SetGuidance("set nb of bins in gamma spectrum plot");
   setnbinGammaCmd->SetParameterName("nbinGamma",false);
 
-  setElowGammaCmd = new G4UIcmdWithADoubleAndUnit("/plots/setElowGamma",this);
+  setElowGammaCmd = new G4UIcmdWithADoubleAndUnit("/testem/plots/setElowGamma",this);
   setElowGammaCmd->SetGuidance("set lower limit for gamma spectrum plot ");
   setElowGammaCmd->SetParameterName("ElowGamma",false);
   setElowGammaCmd->SetUnitCategory("Energy");
 
-  setEhighGammaCmd = new G4UIcmdWithADoubleAndUnit("/plots/setEhighGamma",this);
+  setEhighGammaCmd = new G4UIcmdWithADoubleAndUnit("/testem/plots/setEhighGamma",this);
   setEhighGammaCmd->SetGuidance("set upper limit for gamma spectrum plot ");
   setEhighGammaCmd->SetParameterName("EhighGamma",false);
   setEhighGammaCmd->SetUnitCategory("Energy");
 
-  setnbinTtCmd = new G4UIcmdWithAnInteger("/plots/setnbinTt",this);
+  setnbinTtCmd = new G4UIcmdWithAnInteger("/testem/plots/setnbinTt",this);
   setnbinTtCmd->SetGuidance("set nb of bins in Etransmitted plot");
   setnbinTtCmd->SetParameterName("nbinTt",false);
 
-  setTtlowCmd = new G4UIcmdWithADoubleAndUnit("/plots/setTtlow",this);
+  setTtlowCmd = new G4UIcmdWithADoubleAndUnit("/testem/plots/setTtlow",this);
   setTtlowCmd->SetGuidance("set lower limit for Etransmitted plot ");
   setTtlowCmd->SetParameterName("Ttlow",false);
 
-  setTthighCmd = new G4UIcmdWithADoubleAndUnit("/plots/setTthigh",this);
+  setTthighCmd = new G4UIcmdWithADoubleAndUnit("/testem/plots/setTthigh",this);
   setTthighCmd->SetGuidance("set upper limit for Etransmitted plot ");
   setTthighCmd->SetParameterName("Tthigh",false);
 
-  setnbinTbCmd = new G4UIcmdWithAnInteger("/plots/setnbinTb",this);
+  setnbinTbCmd = new G4UIcmdWithAnInteger("/testem/plots/setnbinTb",this);
   setnbinTbCmd->SetGuidance("set nb of bins in Ebackscattering plot");
   setnbinTbCmd->SetParameterName("nbinTb",false);
 
-  setTblowCmd = new G4UIcmdWithADoubleAndUnit("/plots/setTblow",this);
+  setTblowCmd = new G4UIcmdWithADoubleAndUnit("/testem/plots/setTblow",this);
   setTblowCmd->SetGuidance("set lower limit for Ebackscattered plot ");
   setTblowCmd->SetParameterName("Tblow",false);
 
-  setTbhighCmd = new G4UIcmdWithADoubleAndUnit("/plots/setTbhigh",this);
+  setTbhighCmd = new G4UIcmdWithADoubleAndUnit("/testem/plots/setTbhigh",this);
   setTbhighCmd->SetGuidance("set upper limit for Ebackscattered plot ");
   setTbhighCmd->SetParameterName("Tbhigh",false);
 
-  setnbinTsecCmd = new G4UIcmdWithAnInteger("/plots/setnbinTsec",this);
+  setnbinTsecCmd = new G4UIcmdWithAnInteger("/testem/plots/setnbinTsec",this);
   setnbinTsecCmd->SetGuidance("set nb of bins in charged Tsecondary plot");
   setnbinTsecCmd->SetParameterName("nbinTsec",false);
 
-  setTseclowCmd = new G4UIcmdWithADoubleAndUnit("/plots/setTseclow",this);
+  setTseclowCmd = new G4UIcmdWithADoubleAndUnit("/testem/plots/setTseclow",this);
   setTseclowCmd->SetGuidance("set lower limit for charged Tsecondary plot ");
   setTseclowCmd->SetParameterName("Tseclow",false);
 
-  setTsechighCmd = new G4UIcmdWithADoubleAndUnit("/plots/setTsechigh",this);
+  setTsechighCmd = new G4UIcmdWithADoubleAndUnit("/testem/plots/setTsechigh",this);
   setTsechighCmd->SetGuidance("set upper limit for charged Tsecondary plot ");
   setTsechighCmd->SetParameterName("Tsechigh",false);
 
-  setnbinRCmd = new G4UIcmdWithAnInteger("/plots/setnbinR",this);
+  setnbinRCmd = new G4UIcmdWithAnInteger("/testem/plots/setnbinR",this);
   setnbinRCmd->SetGuidance("set nb of bins in R plot");
   setnbinRCmd->SetParameterName("nbinR",false);
 
-  setRlowCmd = new G4UIcmdWithADoubleAndUnit("/plots/setRlow",this);
+  setRlowCmd = new G4UIcmdWithADoubleAndUnit("/testem/plots/setRlow",this);
   setRlowCmd->SetGuidance("set lower limit for R plot ");
   setRlowCmd->SetParameterName("Rlow",false);
 
-  setRhighCmd = new G4UIcmdWithADoubleAndUnit("/plots/setRhigh",this);
+  setRhighCmd = new G4UIcmdWithADoubleAndUnit("/testem/plots/setRhigh",this);
   setRhighCmd->SetGuidance("set upper limit for R plot ");
   setRhighCmd->SetParameterName("Rhigh",false);
 
-  setnbinzvertexCmd = new G4UIcmdWithAnInteger("/plots/setnbinzvertex",this);
+  setnbinzvertexCmd = new G4UIcmdWithAnInteger("/testem/plots/setnbinzvertex",this);
   setnbinzvertexCmd->SetGuidance("set nb of bins in Z vertex plot");
   setnbinzvertexCmd->SetParameterName("nbinZ",false);
 
-  setzlowCmd = new G4UIcmdWithADoubleAndUnit("/plots/setzlow",this);
+  setzlowCmd = new G4UIcmdWithADoubleAndUnit("/testem/plots/setzlow",this);
   setzlowCmd->SetGuidance("set lower limit for Z vertex plot ");
   setzlowCmd->SetParameterName("zlow",false);
 
-  setzhighCmd = new G4UIcmdWithADoubleAndUnit("/plots/setzhigh",this);
+  setzhighCmd = new G4UIcmdWithADoubleAndUnit("/testem/plots/setzhigh",this);
   setzhighCmd->SetGuidance("set upper limit for Z vertex plot ");
   setzhighCmd->SetParameterName("zhigh",false);
 
-  setnbinThCmd = new G4UIcmdWithAnInteger("/plots/setnbinTh",this);
+  setnbinThCmd = new G4UIcmdWithAnInteger("/testem/plots/setnbinTh",this);
   setnbinThCmd->SetGuidance("set nb of bins in Theta transmitted plot");
   setnbinThCmd->SetParameterName("nbinTh",false);
 
-  setThlowCmd = new G4UIcmdWithADoubleAndUnit("/plots/setThlow",this);
+  setThlowCmd = new G4UIcmdWithADoubleAndUnit("/testem/plots/setThlow",this);
   setThlowCmd->SetGuidance("set lower limit for Theta transmitted plot ");
   setThlowCmd->SetParameterName("Thlow",false);
 
-  setThhighCmd = new G4UIcmdWithADoubleAndUnit("/plots/setThhigh",this);
+  setThhighCmd = new G4UIcmdWithADoubleAndUnit("/testem/plots/setThhigh",this);
   setThhighCmd->SetGuidance("set upper limit for Theta transmitted plot ");
   setThhighCmd->SetParameterName("Thhigh",false);
 
-  setnbinThbackCmd = new G4UIcmdWithAnInteger("/plots/setnbinThback",this);
+  setnbinThbackCmd = new G4UIcmdWithAnInteger("/testem/plots/setnbinThback",this);
   setnbinThbackCmd->SetGuidance("set nb of bins in backscattering Theta plot");
   setnbinThbackCmd->SetParameterName("nbinThback",false);
 
-  setThlowbackCmd = new G4UIcmdWithADoubleAndUnit("/plots/setThlowback",this);
+  setThlowbackCmd = new G4UIcmdWithADoubleAndUnit("/testem/plots/setThlowback",this);
   setThlowbackCmd->SetGuidance("set lower limit for backscattering Theta plot");
   setThlowbackCmd->SetParameterName("Thlowback",false);
 
-  setThhighbackCmd = new G4UIcmdWithADoubleAndUnit("/plots/setThhighback",this);
+  setThhighbackCmd = new G4UIcmdWithADoubleAndUnit("/testem/plots/setThhighback",this);
   setThhighbackCmd->SetGuidance("set upper limit for backscattering Teta plot");
   setThhighbackCmd->SetParameterName("Thhighback",false);
 }

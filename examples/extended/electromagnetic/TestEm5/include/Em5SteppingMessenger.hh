@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5SteppingMessenger.hh,v 1.3 2001-07-11 09:57:49 gunter Exp $
+// $Id: Em5SteppingMessenger.hh,v 1.4 2002-12-16 16:30:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -38,25 +38,19 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class Em5SteppingAction;
-class G4UIdirectory;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class Em5SteppingMessenger: public G4UImessenger
 {
   public:
-
    Em5SteppingMessenger(Em5SteppingAction* );
   ~Em5SteppingMessenger();
 
    void SetNewValue(G4UIcommand* ,G4String );
 
   private:
-
    Em5SteppingAction* steppingAction;
-
-   G4UIdirectory*     steppingDir;
-
 };
 
 #endif
