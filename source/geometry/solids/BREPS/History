@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2001-04-20 19:55:24 gcosmo Exp $
+$Id: History,v 1.24 2001-04-27 14:20:25 gcosmo Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27/04/2001 : G. Cosmo            breps-V03-01-01
+- G4BSplineCurve.cc: fixed compilation warnings on HP-UX, concerning
+  potential uninitialised vector elements.
 
 20/04/2001 : G. Cosmo            breps-V03-01-00
 - Migration to STL vector:

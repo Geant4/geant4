@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalVolume.cc,v 1.6 2001-04-20 20:13:54 gcosmo Exp $
+// $Id: G4LogicalVolume.cc,v 1.7 2001-04-27 14:18:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,8 +30,8 @@ G4LogicalVolume::G4LogicalVolume( G4VSolid *pSolid, G4Material *pMaterial,
 				  G4FieldManager *pFieldMgr,
 				  G4VSensitiveDetector *pSDetector,
 				  G4UserLimits *pULimits)
- : fDaughters(0), fFieldManager(pFieldMgr), fVoxel(0), fSmartless(2.),
-   fVisAttributes (0), fFastSimulationManager (0), fIsEnvelope(FALSE)
+ : fDaughters(0,(G4VPhysicalVolume*)0), fFieldManager(pFieldMgr), fVoxel(0),
+   fSmartless(2.), fVisAttributes (0), fFastSimulationManager (0), fIsEnvelope(FALSE)
 {
     SetSolid(pSolid);
     SetMaterial(pMaterial);

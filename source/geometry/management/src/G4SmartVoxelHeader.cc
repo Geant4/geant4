@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.8 2001-04-20 20:13:55 gcosmo Exp $
+// $Id: G4SmartVoxelHeader.cc,v 1.9 2001-04-27 14:18:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -689,8 +689,10 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
       outerSolid->CalculateExtent(pAxis,noLimits,origin,motherMinExtent,motherMaxExtent);
     };
 
-    G4VolumeExtentVector minExtents(nCandidates);
-    G4VolumeExtentVector maxExtents(nCandidates);
+    G4VolumeExtentVector minExtents;
+    G4VolumeExtentVector maxExtents;
+    minExtents.reserve(nCandidates);
+    maxExtents.reserve(nCandidates);
 
     if (pVolume->GetNoDaughters()==1 &&
         pVolume->GetDaughter(0)->IsReplicated()==true)

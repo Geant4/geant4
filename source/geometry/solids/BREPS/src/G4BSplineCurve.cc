@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineCurve.cc,v 1.6 2001-04-20 19:55:26 gcosmo Exp $
+// $Id: G4BSplineCurve.cc,v 1.7 2001-04-27 14:20:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -31,7 +31,8 @@ void G4BSplineCurve::Init(G4int degree0, G4Point3DVector* controlPointsList0,
   degree= degree0;
    
   G4int nbpoints =  controlPointsList0->size();
-  controlPointsList = new G4Point3DVector(nbpoints);
+  controlPointsList = new G4Point3DVector();
+  controlPointsList->reserve(nbpoints);
 
   G4int a;  
   for(a = 0; a < nbpoints; a++)
@@ -40,14 +41,16 @@ void G4BSplineCurve::Init(G4int degree0, G4Point3DVector* controlPointsList0,
   }
  
   G4int nbknots = knots0->size();
-  knots = new G4doubleVector(nbknots);
+  knots = new G4doubleVector();
+  knots->reserve(nbknots);
   for(a = 0; a < nbknots; a++)
   {
     (*knots)[a] = (*knots0)[a];
   }
 
   G4int nbweights = weightsData0->size();
-  weightsData  = new G4doubleVector(nbweights);
+  weightsData  = new G4doubleVector();
+  weightsData->reserve(nbweights);
   for(a = 0; a < nbweights; a++)
   {
     (*weightsData)[a] = (*weightsData0)[a];
