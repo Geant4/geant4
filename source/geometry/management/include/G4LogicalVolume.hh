@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.hh,v 1.17 2004-09-26 01:18:17 asaim Exp $
+// $Id: G4LogicalVolume.hh,v 1.18 2004-11-12 09:05:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -185,6 +185,17 @@ class G4LogicalVolume
       // Set material and corresponding MaterialCutsCouple.
       // This method is invoked by G4Navigator while it is navigating through 
       // material parameterization.
+    G4double GetMass(G4bool forced=false, G4Material* parMaterial=0);
+      // Returns the mass of the logical volume tree computed from the
+      // estimated geometrical volume of each solid and material associated
+      // to the logical volume and its daughters.
+      // NOTE: the computation may require a considerable amount of time,
+      //       depending from the complexity of the geometry tree.
+      //       The returned value is cached and can be used for successive
+      //       calls (default), unless recomputation is forced by providing
+      //       'true' for the boolean argument in input. Computation should
+      //       be forced if the geometry setup has changed after the previous
+      //       call. An optional argument to specify a material is provided.
 
     inline G4FieldManager* GetFieldManager() const;
       // Gets current FieldManager.
@@ -302,6 +313,8 @@ class G4LogicalVolume
     G4double fSmartless;
       // Quality for optimisation, average number of voxels to be spent
       // per content.
+    G4double fMass;
+      // Mass of the logical volume tree.
     const G4VisAttributes* fVisAttributes;
       // Pointer (possibly 0) to visualization attributes.
     G4FastSimulationManager* fFastSimulationManager;
