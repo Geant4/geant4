@@ -1,4 +1,4 @@
-# $Id: stt-ref+.sdb,v 1.29 1999-05-10 16:16:45 stesting Exp $
+# $Id: stt-ref+.sdb,v 1.30 1999-05-10 16:47:05 stesting Exp $
 # .sdb files are read by checkout.sh and update.sh
 # Lines beginning "# " are ignored (the space after the '#' is important!
 # Blank lines are not allowed!
@@ -14,7 +14,7 @@ geant4/examples         geant4-00-ref-07
 geant4/source/GNUmakefile      geant4-00-ref-07
 geant4/source/digits+hits      geant4-00-ref-07
 geant4/source/event            geant4-00-ref-07
-geant4/source/g3tog4           geant4-00-ref-07
+geant4/source/g3tog4           g3tog4-01-00-03
 geant4/source/geometry/GNUmakefile   geant4-00-ref-07
 geant4/source/geometry/History       geant4-00-ref-07
 geant4/source/geometry/magneticfield geant4-00-ref-07
@@ -41,4 +41,4 @@ geant4/source/readout          geant4-00-ref-07
 geant4/source/run              geant4-00-ref-07
 geant4/source/track            geant4-00-ref-07
 geant4/source/tracking         geant4-00-ref-07
-geant4/source/visualization    geant4-00-ref-07
+geant4/source/visualization    vis-01-00-10
