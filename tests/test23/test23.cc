@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test23.cc,v 1.4 2004-03-18 11:02:24 mkossov Exp $
+// $Id: test23.cc,v 1.5 2004-06-03 16:34:46 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  Test of the G4QCaptureAtRest CHIPS process in GEANT4
@@ -80,7 +80,7 @@ int main(int argc,char** argv) {
   }
 
   trackingAction->PrintResult(); // Print the result
-  G4cerr<<"Test23 is done"<<G4endl;
+  G4cout<<"Test23 is done"<<G4endl;
 
   delete runManager;
   //G4cerr<<"Test23:RunManager is deleted: if not reached, don't delete UserAct's"<<G4endl;
