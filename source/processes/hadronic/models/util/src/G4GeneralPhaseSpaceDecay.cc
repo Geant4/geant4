@@ -43,7 +43,8 @@
 
 
 G4GeneralPhaseSpaceDecay::G4GeneralPhaseSpaceDecay(G4int Verbose) : 
-                          G4VDecayChannel("Phase Space", Verbose)
+                          G4VDecayChannel("Phase Space", Verbose),
+			  theDaughterMasses(0)
 {
   if (GetVerboseLevel()>1) G4cout << "G4GeneralPhaseSpaceDecay:: constructor " << G4endl;
 }
