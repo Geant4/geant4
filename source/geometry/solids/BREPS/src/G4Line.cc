@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Line.cc,v 1.2 1999-01-14 16:06:46 broglia Exp $
+// $Id: G4Line.cc,v 1.3 1999-05-20 09:35:35 sgiani Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4Line.hh"
@@ -17,8 +17,11 @@ G4Curve* G4Line::Project(const G4Transform3D& tr)
 {
   G4Vector3D newDir= tr*dir;
   
-  if (abs(newDir.x())+abs(newDir.y()) < kCarTolerance) 
-    return 0;
+  if (abs(newDir.x())+abs(newDir.y()) < kCarTolerance){
+  
+     newDir.setX(kCarTolerance);
+     newDir.setY(kCarTolerance);
+  };
   
   G4Point3D newPnt= tr*pnt;
   newDir.setZ(0);
