@@ -1,0 +1,32 @@
+# $Id: exo6q2.mac,v 1.1 2002-02-14 14:20:45 maire Exp $
+#
+# Macro file for "TestEm3.cc" 
+#
+# Iron 1 layer;
+#
+/control/verbose 2
+#
+/run/particle/setCut 10 cm
+/run/initialize
+#
+/calor/setNbOfLayers 1
+/calor/setNbOfAbsor 1
+/calor/setAbsor 0 Iron 10 m
+/calor/setSizeYZ 10 m
+/calor/update
+#
+/gun/setDefault
+#
+/control/execute vis.mac
+#
+/process/list
+/process/inactivate MuIoni
+/process/inactivate MuPairProd
+#
+/gun/particle mu+
+/gun/energy 1 TeV
+#
+#/run/beamOn
+#
+#/process/activate MuPairProd
+#/run/beamOn

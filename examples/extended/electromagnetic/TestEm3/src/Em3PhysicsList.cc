@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3PhysicsList.cc,v 1.7 2001-10-22 10:58:57 maire Exp $
+// $Id: Em3PhysicsList.cc,v 1.8 2002-02-14 14:20:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,6 +73,7 @@ void Em3PhysicsList::ConstructParticle()
   ConstructLeptons();
   ConstructMesons();
   ConstructBarions();
+  ConstructIons();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -135,7 +136,13 @@ void Em3PhysicsList::ConstructBarions()
   G4AntiNeutron::AntiNeutronDefinition();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void Em3PhysicsList::ConstructIons()
+{
+//  Ions
+  G4Alpha::AlphaDefinition();
+}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3PhysicsList::ConstructProcess()

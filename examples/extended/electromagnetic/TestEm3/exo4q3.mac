@@ -1,0 +1,39 @@
+# $Id: exo4q3.mac,v 1.1 2002-02-14 14:20:45 maire Exp $
+#
+# Macro file for "TestEm3.cc" 
+#
+#Aluminium 1 layer; 
+#
+/control/verbose 2
+#
+/run/particle/setCut 10 mum
+/run/initialize
+#
+/calor/setNbOfLayers 1
+/calor/setNbOfAbsor 1
+/calor/setAbsor 0 Aluminium 1 cm
+/calor/setSizeYZ 1 cm
+/calor/update
+#
+/gun/setDefault
+#
+/control/execute vis.mac
+#
+/process/list
+/process/inactivate msc
+/process/inactivate eBrem
+#
+/gun/particle e-
+/gun/energy 200 MeV
+/gun/position -6. +2.5 0. mm 
+#/run/beamOn 50
+#
+#/gun/particle proton
+#/gun/energy 200 MeV
+#/gun/position -6. -2.5 0. mm 
+#/run/beamOn 50
+#
+#/gun/particle alpha
+#/gun/energy 200 MeV
+#/gun/position -6. -2.5 0. mm 
+#/run/beamOn 50
