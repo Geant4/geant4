@@ -1,0 +1,40 @@
+?RCS: $Id: lns.U,v 1.1 2001-11-06 15:21:31 sadilov Exp $
+?RCS:
+?RCS: Copyright (c) 1991-1993, Raphael Manfredi
+?RCS: 
+?RCS: You may redistribute only under the terms of the Artistic Licence,
+?RCS: as specified in the README file that comes with the distribution.
+?RCS: You may reuse parts of this distribution only within the terms of
+?RCS: that same Artistic Licence; a copy of which may be found at the root
+?RCS: of the source tree for dist 3.0.
+?RCS:
+?RCS: Original Author: Andy Dougherty <doughera@lafcol.lafayette.edu>
+?RCS:
+?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 3.0.1.1  1994/06/20  07:05:52  ram
+?RCS: patch30: created by ADO
+?RCS:
+?X:
+?X: This unit checks whether symbolic links are really supported.
+?X: We can't rely on d_symlink because that may be listed in the
+?X: C library but unimplemented.
+?X:
+?MAKE:lns: ln rm touch
+?MAKE:	-pick add $@ %<
+?S:lns:
+?S:	This variable holds the name of the command to make 
+?S:	symbolic links (if they are supported).  It can be used
+?S:	in the Makefile. It is either 'ln -s' or 'ln'
+?S:.
+: determine whether symbolic links are supported
+#echo " "
+$touch blurfl
+if $ln -s blurfl sym > /dev/null 2>&1 ; then
+#	echo "Symbolic links are supported." >&4
+	lns="$ln -s"
+else
+#	echo "Symbolic links are NOT supported." >&4
+	lns="$ln"
+fi
+$rm -f blurfl sym
+

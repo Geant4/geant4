@@ -1,4 +1,4 @@
-?RCS: $Id: Loc.U,v 1.1 2001-05-17 10:12:22 sadilov Exp $
+?RCS: $Id: Loc.U,v 1.2 2001-11-06 15:21:20 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,6 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.1  2001/05/17 10:12:22  sadilov
+?RCS: Import 'config'.
+?RCS:
 ?RCS: Revision 1.1  2000/12/12 23:31:33  sadilov
 ?RCS: Was added due to Gabriele's modification of Configure...
 ?RCS:
@@ -66,7 +69,7 @@
 ?X:
 ?MAKE:Loc Mcc awk ar bash bison byacc cat chgrp chmod chown \
 	comm compress cp cpio cpp csh date echo egrep emacs expr find flex \
-	gcc gzip grep inews ksh less line lint ln lp lpr ls mail mailx \
+	"g++" gcc gzip grep inews ksh less line lint ln lp lpr ls mail mailx \
 	make mkdir more mv nroff perl pg pmake pr rm rmail sed sendmail \
 	shar sleep smail sort submit tail tar tbl test touch tr troff \
 	uname uniq uuname vi zcat zip:  eunicefix n c Instruct Myread \
@@ -74,7 +77,7 @@
 ?MAKE:	-pick weed $@ %<
 ?LINT:describe Loc Mcc awk ar bash bison byacc cat chgrp chmod chown \
 	comm compress cp cpio cpp csh date echo egrep emacs expr find flex \
-	gcc gzip grep inews ksh less line lint ln lp lpr ls mail mailx \
+	"g++" gcc gzip grep inews ksh less line lint ln lp lpr ls mail mailx \
 	make mkdir more mv nroff perl pg pmake pr rm rmail sed sendmail \
 	shar sleep smail sort submit tail tar tbl test touch tr troff \
 	uname uniq uuname vi zcat zip
@@ -83,8 +86,8 @@
 ?T:thisthing thing xxx dir file say _test
 ?LINT:change PATH
 : find out where common programs are
-echo " "
-echo "Locating common programs..." >&4
+#echo " "
+#echo "Locating common programs..." >&4
 cat <<EOSC >loc
 $startsh
 case \$# in
@@ -169,6 +172,7 @@ trylist="
 ?egrep:egrep
 ?emacs:emacs
 ?flex:flex
+?"g++":"g++"
 ?gcc:gcc
 ?gzip:gzip
 ?inews:inews
@@ -204,7 +208,7 @@ trylist="
 "
 ?LINT:set Loc Mcc awk ar bash bison byacc cat chgrp chmod chown \
 	comm compress cp cpio cpp csh date echo egrep emacs expr find flex \
-	gcc gzip grep inews ksh less line lint ln lp lpr ls mail mailx \
+	"g++" gcc gzip grep inews ksh less line lint ln lp lpr ls mail mailx \
 	make mkdir more mv nroff perl pg pmake pr rm rmail sed sendmail \
 	shar sleep smail sort submit tail tar tbl test touch tr troff \
 	uname uniq uuname vi zcat zip
@@ -235,11 +239,11 @@ for file in $loclist; do
 	eval _$file=$xxx
 	case "$xxx" in
 	/*)
-		echo $file is in $xxx.
+		echo "$file is in $xxx." > /dev/null
 		;;
 ?X: Under OS/2, we have PC-like paths
 	?:[\\/]*)
-		echo $file is in $xxx.
+		echo "$file is in $xxx." > /dev/null
 		;;
 	*)
 		echo "I don't know where '$file' is." >&4
@@ -248,8 +252,8 @@ for file in $loclist; do
 		;;
 	esac
 done
-echo " "
-echo "Don't worry if any of the following aren't found..."
+#echo " "
+#echo "Don't worry if any of the following aren't found..."
 say=offhand
 for file in $trylist; do
 ?X: Allow them to -Dmake=pmake on the command line for instance (see above)
@@ -270,11 +274,11 @@ for file in $trylist; do
 	eval _$file=$xxx
 	case "$xxx" in
 	/*)
-		echo $file is in $xxx.
+		echo "$file is in $xxx." > /dev/null
 		;;
 ?X: Under OS/2, we have PC-like paths
 	?:[\\/]*)
-		echo $file is in $xxx.
+		echo "$file is in $xxx." > /dev/null
 		;;
 	*)
 		echo "I don't see $file out there, $say."
@@ -284,25 +288,25 @@ for file in $trylist; do
 done
 case "$egrep" in
 egrep)
-	echo "Substituting grep for egrep."
+#	echo "Substituting grep for egrep."
 	egrep=$grep
 	;;
 esac
 @if ln
 case "$ln" in
 ln)
-	echo "Substituting cp for ln."
+#	echo "Substituting cp for ln."
 	ln=$cp
 	;;
 esac
 @end
 case "$test" in
 test)
-	echo "Hopefully test is built into your sh."
+	echo "Hopefully test is built into your sh." > /dev/null
 	;;
 *)
 	if `sh -c "PATH= test true" >/dev/null 2>&1`; then
-		echo "Using the test built into your sh."
+		echo "Using the test built into your sh." > /dev/null
 ?X:
 ?X: We need to set both test and _test, since Oldconfig.U will use the _test
 ?X: value to systematically restore computed paths, which may be wrong if
@@ -316,17 +320,17 @@ esac
 ?LINT:change n c
 case "$echo" in
 echo)
-	echo "Hopefully echo is built into your sh."
+	echo "Hopefully echo is built into your sh." > /dev/null
 	;;
 ?X: For those rare cases where we don't need $echo...
 '') ;;
 *)
-	echo " "
-echo "Checking compatibility between $echo and builtin echo (if any)..." >&4
+#	echo " "
+#echo "Checking compatibility between $echo and builtin echo (if any)..." >&4
 	$echo $n "hi there$c" >foo1
 	echo $n "hi there$c" >foo2
 	if cmp foo1 foo2 >/dev/null 2>&1; then
-		echo "They are compatible.  In fact, they may be identical."
+		echo "They are compatible.  In fact, they may be identical." > /dev/null
 	else
 		case "$n" in
 		'-n') n='' c='\c';;

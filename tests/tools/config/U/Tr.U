@@ -1,0 +1,60 @@
+?RCS: $Id: Tr.U,v 1.1 2001-11-06 15:21:27 sadilov Exp $
+?RCS:
+?RCS: Copyright (c) 1991-1993, Raphael Manfredi
+?RCS: 
+?RCS: You may redistribute only under the terms of the Artistic Licence,
+?RCS: as specified in the README file that comes with the distribution.
+?RCS: You may reuse parts of this distribution only within the terms of
+?RCS: that same Artistic Licence; a copy of which may be found at the root
+?RCS: of the source tree for dist 3.0.
+?RCS:
+?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 3.0.1.2  1994/10/29  18:00:54  ram
+?RCS: patch43: forgot to quote $@ to protect against "evil" characters
+?RCS:
+?RCS: Revision 3.0.1.1  1994/10/29  15:58:35  ram
+?RCS: patch36: created
+?RCS:
+?X: 
+?X: This unit produces a bit of shell code that must be dotted in in order
+?X: to do a character translation. It catches translations to uppercase or
+?X: to lowercase, and then invokes the real tr to perform the job.
+?X:
+?X: This unit is necessary on HP machines (HP strikes again!) with non-ascii
+?X: ROMAN8-charset, where normal letters are not arranged in a row, so a-z
+?X: covers not the whole alphabet but lots of special chars. This was reported
+?X: by Andreas Sahlbach <a.sahlbach@tu-bs.de>.
+?X:
+?X: Units performing a tr '[A-Z]' '[a-z]' or the other way round should include
+?X: us in their dependency and use ./tr instead.
+?X:
+?MAKE:Tr: startsh tr eunicefix
+?MAKE:	-pick add $@ %<
+?F:./tr
+?T:up low
+: see whether [:lower:] and [:upper:] are supported character classes
+#echo " "
+up='[A-Z]'
+low='[a-z]'
+case "`echo AbyZ | $tr '[:lower:]' '[:upper:]' 2>/dev/null`" in
+ABYZ)
+#	echo "Good, your tr supports [:lower:] and [:upper:] to convert case." >&4
+	up='[:upper:]'
+	low='[:lower:]'
+	;;
+*)
+#	echo "Your tr only supports [a-z] and [A-Z] to convert case." >&4
+	;;
+esac
+: set up the translation script tr, must be called with ./tr of course
+cat >tr <<EOSC
+$startsh
+case "\$1\$2" in
+'[A-Z][a-z]') exec $tr '$up' '$low';;
+'[a-z][A-Z]') exec $tr '$low' '$up';;
+esac
+exec $tr "\$@"
+EOSC
+chmod +x tr
+$eunicefix tr
+
