@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.10 2001-07-11 09:59:56 gunter Exp $
+// $Id: G4Sphere.cc,v 1.11 2001-08-27 08:04:08 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -668,7 +668,7 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p) const
 	case kNETheta:
 	    norm=G4ThreeVector(-cos(fSTheta+fDTheta)*cos(fSPhi+fDPhi),
 			       -cos(fSTheta+fDTheta)*sin(fSPhi+fDPhi),
-			       -sin(fSTheta+fSTheta));
+			       -sin(fSTheta+fDTheta));
 	    break;
 
 	default:
