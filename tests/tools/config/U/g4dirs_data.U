@@ -28,13 +28,13 @@ esac
 
 case "$g4ledata" in
 '')
-	g4ledata=$g4install/../G4EMLOW
+	g4ledata=$g4install/../G4EMLOW0.5
 	;;
 esac
 
 case "$g4neutronhpcrosssections" in
 '')
-	g4neutronhpcrosssections=$g4install/../G4NDL
+	g4neutronhpcrosssections=$g4install/../G4NDL3.5
 	;;
 esac
 
@@ -84,14 +84,14 @@ gans=$ans
 	3) 
 		dflt=$g4ledata
 		fn='f~'
-		rp="Where is G4EMLOW0.3 data installed ?"
+		rp="Where is G4EMLOW0.5 data installed ?"
 		. ./getfile
 		g4ledata=$ans
 		;;
 	4) 
 		dflt=$g4neutronhpcrosssections
 		fn='f~'
-		rp="Where is G4NDL0.2 installed?"
+		rp="Where is G4NDL3.5 installed?"
 		. ./getfile
 		g4neutronhpcrosssections=$ans
 		;;
