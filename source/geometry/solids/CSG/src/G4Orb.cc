@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Orb.cc,v 1.8 2003-11-04 13:56:24 grichine Exp $
+// $Id: G4Orb.cc,v 1.9 2003-11-05 10:56:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Orb
@@ -561,7 +561,6 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p ) const
   return safe;
 }
 
-
 //////////////////////////////////////////////////////////////////////////
 //
 // G4EntityType
@@ -608,22 +607,6 @@ G4NURBS* G4Orb::CreateNURBS () const
   return new G4NURBSbox (fRmax, fRmax, fRmax);       // Box for now!!!
 }
 
-
 // End of G4Orb.cc 
 //
 /////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
