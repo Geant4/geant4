@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.6 1999-06-05 14:17:58 stesting Exp $
+// $Id: G4PhotoElectricEffect.cc,v 1.7 1999-06-08 13:29:23 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,7 +31,8 @@
 // 13-08-98, new methods SetBining() PrintInfo()
 // 17-11-98, use table of Atomic shells in PostStepDoIt
 // 06-01-99, use Sandia crossSection below 50 keV, V.Grichine mma
-// 20/05/99, protection against very low energy photons ,L.Urban
+// 20-05-99, protection against very low energy photons ,L.Urban
+// 08-06-99, removed this above protection from the DoIt. mma
 // --------------------------------------------------------------
 
 #include "G4PhotoElectricEffect.hh"
@@ -223,47 +224,13 @@ G4VParticleChange* G4PhotoElectricEffect::PostStepDoIt(const G4Track& aTrack,
 // GEANT4 internal units
 //
  
-{ //  protection !
-   static const G4double veryLowEnergy = 1.*eV ;
-   static G4int veryLowEnergyCount = 0;
-
-   aParticleChange.Initialize(aTrack);
+{  aParticleChange.Initialize(aTrack);
    G4Material* aMaterial = aTrack.GetMaterial();
 
    const G4DynamicParticle* aDynamicPhoton = aTrack.GetDynamicParticle();
 
    G4double PhotonEnergy = aDynamicPhoton->GetKineticEnergy();
    G4ParticleMomentum PhotonDirection = aDynamicPhoton->GetMomentumDirection();
-
-  //  protection !
-   if(PhotonEnergy <= veryLowEnergy)
-   {
-     if (++veryLowEnergyCount < 100)
-       {
-	 G4cerr << "WARNING: G4PhotoElectricEffect::PostStepDoIt:"
-	   " a very low energy photon, "
-		<< PhotonEnergy / eV
-		<< " eV, encountered and killed."
-		<< endl;
-       }
-     if (veryLowEnergyCount%1000 == 0)
-       {
-	 G4cerr << "WARNING: G4PhotoElectricEffect::PostStepDoIt:"
-		<< veryLowEnergyCount
-		<< " very low energy photons encountered and killed."
-		<< endl;
-       }
-     if (veryLowEnergyCount > 100000)
-       {
-	 G4Exception
-	   ("G4PhotoElectricEffect::PostStepDoIt:"
-	    " over 100000 very low energy photons"
-		" encountered and killed.");
-       }
-     aParticleChange.SetLocalEnergyDeposit(PhotonEnergy);  
-     aParticleChange.SetStatusChange(fStopAndKill); 
-     return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
-   }
    
    // select randomly one element constituing the material.
    G4Element* anElement = SelectRandomAtom(aDynamicPhoton, aMaterial);
@@ -321,17 +288,15 @@ G4PhotoElectricEffect::SelectRandomAtom(const G4DynamicParticle* aDynamicPhoton,
   const G4double* NbOfAtomsPerVolume = aMaterial->GetVecNbOfAtomsPerVolume();
 
   G4double PartialSumSigma = 0. ;
-  G4double rval = G4UniformRand()/MeanFreePath;
+  G4double rval = G4UniformRand();
  
   for ( G4int elm=0 ; elm < NumberOfElements ; elm++ )
       { PartialSumSigma += NbOfAtomsPerVolume[elm] *
                    GetCrossSectionPerAtom(aDynamicPhoton,
                                           (*theElementVector)(elm));
-        if (rval <= PartialSumSigma) return ((*theElementVector)(elm));
+        if (rval <= PartialSumSigma*MeanFreePath) return ((*theElementVector)(elm));
       }
-  G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
-       << "' has no elements, NULL pointer returned." << endl;
-  return NULL;
+  return ((*theElementVector)(NumberOfElements-1));    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
