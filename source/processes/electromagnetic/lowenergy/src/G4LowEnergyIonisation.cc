@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.42 2001-04-24 16:02:44 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.43 2001-04-29 01:23:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -80,7 +80,6 @@ G4LowEnergyIonisation::G4LowEnergyIonisation(const G4String& processName)
     LowestKineticEnergy  = GetLowerBoundEloss();
     HighestKineticEnergy = GetUpperBoundEloss();
     TotBin = GetNbinEloss();
-    G4cout << ">>>>>>>>> New G4LowEnergyIonisation " << this << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

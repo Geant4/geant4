@@ -736,7 +736,7 @@ G4double G4hLowEnergyIonisation::AntiProtonParametrisedDEDX(
 {
   G4AntiProton* theAntiProton = G4AntiProton::AntiProton();
   G4double eloss = 0.0 ;
-  G4double goldenRule = 1.0 ;
+  //  G4double goldenRule = 1.0 ;
 
   // Choose the model
   G4VLowEnergyModel * theModel ;
@@ -758,7 +758,7 @@ G4double G4hLowEnergyIonisation::AntiProtonParametrisedDEDX(
   }
     
   // Taken into account golden rule for antiprotons
-  eloss *= goldenRule ;
+  //eloss *= goldenRule ;
 
     // Proton model is used
   if(theBarkas && (theModel == theProtonModel)) 
@@ -959,6 +959,7 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
   
   //ResetNumberOfInteractionLengthLeft();
   return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
+  //  return &aParticleChange ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

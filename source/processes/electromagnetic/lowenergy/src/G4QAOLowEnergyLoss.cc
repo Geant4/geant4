@@ -16,11 +16,11 @@
 //                  by Stephane Chauvie, 5 May 2000 
 // Modified:
 //
-// 16/09/2000 S. Chauvie  Oscillator for all materials
 // 24/05/2000 MGP  Modified to remove compilation warnings on Linux and DEC
 //                 Introduced sizes of L0, L1, L2 arrays
 // 23/05/2000 MGP  Made compliant to design
 // 02/08/2000 V.Ivanchenko Clean up according new design
+// 16/09/2000 S. Chauvie  Oscillator for all materials
 // 03/10/2000 V.Ivanchenko CodeWizard clean up
 // 05/11/2000 V.Ivanchenko "Aluminum" - correct name, end of cycle
 //            over shells, and two bugs from previous edition
