@@ -52,6 +52,14 @@ XrayFluoDetectorMessenger::XrayFluoDetectorMessenger(XrayFluoDetectorConstructio
   UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
   UpdateCmd->AvailableForStates(Idle);
+
+  sampleCmd = new G4UIcmdWithAString("/apparate/sample",this);
+  sampleCmd->SetGuidance("select a diferent material for the sample");
+  sampleCmd->SetGuidance("The command /apparate/update command MUST be applied after this one");
+  sampleCmd->SetParameterName("choice",true);
+  sampleCmd->SetDefaultValue("dolorite");
+  sampleCmd->SetCandidates("dolorite iron silicon aluminium titanium tin neodimium magnesium germanium copper");
+  sampleCmd->AvailableForStates(Idle);
   
 }
 
@@ -69,8 +77,18 @@ void XrayFluoDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newVal
 {
  if( command == UpdateCmd )
    { Detector->UpdateGeometry(); }
+
+ else if ( command == sampleCmd )
+   { Detector->SetSampleMaterial(newValue);}
  }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+
+
+
+
+
 
 

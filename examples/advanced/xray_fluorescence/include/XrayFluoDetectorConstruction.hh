@@ -60,6 +60,8 @@ public:
   G4VPhysicalVolume* Construct();
   
   void UpdateGeometry();
+
+  void SetSampleMaterial(G4String newMaterial);
   
 public:
   
@@ -141,6 +143,23 @@ private:
   G4Material*        Dia1Material;
   G4Material*        Dia3Material;
   G4Material*        defaultMaterial;
+  
+  G4Material*        dolorite;
+  G4Material*        FeMaterial;
+  G4Material*        Al;
+  G4Material*        Si;
+  G4Material*        Cu;
+  G4Material*        HPGe;
+  G4Material*        materialMg;
+  G4Material*        materialNd;
+  G4Material*        Sn;
+  G4Material*        Ti;
+
+
+
+
+
+
   G4double           OhmicPosThickness;
   
   G4double           OhmicNegThickness;
@@ -221,6 +240,7 @@ private:
 
   //calculates some quantities used to construct geometry
   void ComputeApparateParameters();
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
