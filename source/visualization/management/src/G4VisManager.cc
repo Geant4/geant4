@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.41 2001-11-12 18:22:13 johna Exp $
+// $Id: G4VisManager.cc,v 1.42 2001-11-15 14:51:55 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,6 +29,13 @@
 
 #include "G4VisManager.hh"
 
+#include "G4VisCommands.hh"
+#include "G4VisCommandsCompound.hh"
+#include "G4VisCommandsScene.hh"
+#include "G4VisCommandsSceneAdd.hh"
+#include "G4VisCommandsSceneHandler.hh"
+#include "G4VisCommandsViewer.hh"
+#include "G4VisCommandsViewerSet.hh"
 #include "G4UImanager.hh"
 #include "G4VisStateDependent.hh"
 #include "G4UIdirectory.hh"
@@ -832,6 +839,85 @@ void G4VisManager::SetCurrentViewer (G4VViewer* pViewer) {
   IsValidView ();  // Checks.
 }
 
+void G4VisManager::RegisterMessengers () {
+
+  // Instantiate individual messengers/commands (often one command per
+  // messenger).
+
+  G4VVisCommand::SetVisManager (this);  // Sets shared pointer to vis manager.
+
+  G4UIcommand* directory;
+
+  directory = new G4UIdirectory ("/vis/");
+  directory -> SetGuidance ("Visualization commands.");
+  fDirectoryList.push_back (directory);
+  fMessengerList.push_back (new G4VisCommandEnable);
+  fMessengerList.push_back (new G4VisCommandVerbose);
+
+  directory = new G4UIdirectory ("/vis/scene/");
+  directory -> SetGuidance ("Operations on Geant4 scenes.");
+  fDirectoryList.push_back (directory);
+  fMessengerList.push_back (new G4VisCommandSceneCreate);
+  fMessengerList.push_back (new G4VisCommandSceneEndOfEventAction);
+  fMessengerList.push_back (new G4VisCommandSceneList);
+  fMessengerList.push_back (new G4VisCommandSceneNotifyHandlers);
+  fMessengerList.push_back (new G4VisCommandSceneRemove);
+  fMessengerList.push_back (new G4VisCommandSceneSelect);
+
+  directory = new G4UIdirectory ("/vis/scene/add/");
+  directory -> SetGuidance ("Add model to current scene.");
+  fDirectoryList.push_back (directory);
+  fMessengerList.push_back (new G4VisCommandSceneAddAxes);
+  fMessengerList.push_back (new G4VisCommandSceneAddGhosts);
+  fMessengerList.push_back (new G4VisCommandSceneAddHits);
+  fMessengerList.push_back (new G4VisCommandSceneAddLogicalVolume);
+  fMessengerList.push_back (new G4VisCommandSceneAddScale);
+  fMessengerList.push_back (new G4VisCommandSceneAddText);
+  fMessengerList.push_back (new G4VisCommandSceneAddTrajectories);
+  fMessengerList.push_back (new G4VisCommandSceneAddVolume);
+
+  directory = new G4UIdirectory ("/vis/sceneHandler/");
+  directory -> SetGuidance ("Operations on Geant4 scene handlers.");
+  fDirectoryList.push_back (directory);
+  fMessengerList.push_back (new G4VisCommandSceneHandlerAttach);
+  fMessengerList.push_back (new G4VisCommandSceneHandlerCreate);
+  fMessengerList.push_back (new G4VisCommandSceneHandlerList);
+  fMessengerList.push_back (new G4VisCommandSceneHandlerRemove);
+  fMessengerList.push_back (new G4VisCommandSceneHandlerSelect);
+
+  directory = new G4UIdirectory ("/vis/viewer/");
+  directory -> SetGuidance ("Operations on Geant4 viewers.");
+  fDirectoryList.push_back (directory);
+  fMessengerList.push_back (new G4VisCommandViewerClear);
+  fMessengerList.push_back (new G4VisCommandViewerCreate);
+  fMessengerList.push_back (new G4VisCommandViewerDolly);
+  fMessengerList.push_back (new G4VisCommandViewerFlush);
+  fMessengerList.push_back (new G4VisCommandViewerLights);
+  // DEPRECATED - moved to /vis/viewer/set/.
+  fMessengerList.push_back (new G4VisCommandViewerList);
+  fMessengerList.push_back (new G4VisCommandViewerPan);
+  fMessengerList.push_back (new G4VisCommandViewerRefresh);
+  fMessengerList.push_back (new G4VisCommandViewerRemove);
+  fMessengerList.push_back (new G4VisCommandViewerReset);
+  fMessengerList.push_back (new G4VisCommandViewerSelect);
+  fMessengerList.push_back (new G4VisCommandViewerUpdate);
+  fMessengerList.push_back (new G4VisCommandViewerViewpoint);
+  // DEPRECATED - moved to /vis/viewer/set/.
+  fMessengerList.push_back (new G4VisCommandViewerZoom);
+
+  directory = new G4UIdirectory ("/vis/viewer/set/");
+  directory -> SetGuidance ("Set view parameters of current viewer.");
+  fDirectoryList.push_back (directory);
+  fMessengerList.push_back (new G4VisCommandsViewerSet);
+
+  // Compound commands...
+  fMessengerList.push_back (new G4VisCommandDrawTree);
+  fMessengerList.push_back (new G4VisCommandDrawVolume);
+  fMessengerList.push_back (new G4VisCommandDrawView);
+  fMessengerList.push_back (new G4VisCommandOpen);
+  fMessengerList.push_back (new G4VisCommandSpecify);
+}
+
 void G4VisManager::PrintAllGraphicsSystems () const {
   G4cout <<
     "\nThe following graphics systems drivers are supported in the"
@@ -953,8 +1039,10 @@ void G4VisManager::EndOfEvent () {
     for (size_t i = 0; i < EOEModelList.size (); i++) {
       G4VModel* pModel = EOEModelList [i];
       pModel -> SetModelingParameters (pMP);
+      fpSceneHandler -> SetModel (pModel);
       pModel -> DescribeYourselfTo (*fpSceneHandler);
       pModel -> SetModelingParameters (0);
+      fpSceneHandler -> SetModel (0);
     }
     delete pMP;
     if (fpScene->GetRefreshAtEndOfEvent()) {
