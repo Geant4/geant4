@@ -15,6 +15,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+4 July, 01    Y.Morita (persistency-V03-02-00)
+- STL migration: 
+   modified: G4Pglobals.hh, G4PGeometryObjectMap.ddl, G4PGeometryObjectMap.cc
+   removed: G4VPhysVolRefArray.hh, G4LogVolRefArray.hh G4VSolidRefArray.hh
+
 21 June, 01    Y.Morita (persistency-V03-01-00)
 - new tag for release 3.2
 
