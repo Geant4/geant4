@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.30 2003-05-19 17:31:27 japost Exp $
+// $Id: G4PropagatorInField.hh,v 1.31 2003-05-26 16:31:13 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PropagatorInField 
@@ -237,10 +237,6 @@ class G4PropagatorInField
 
 
 public:
-  // Added smooth (curved) trajectory for display (jacek 30/10/2002)
-  // 
-  void SetTrajectoryFilter(G4VCurvedTrajectoryFilter* filter);
-
    // Last safety origin & value: for optimisation
    G4ThreeVector  fPreviousSftOrigin;
    G4double       fPreviousSafety; 
