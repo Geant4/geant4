@@ -514,7 +514,7 @@ G4double G4LewisModel::TrueStepLength(G4double geomStepLength)
 
 G4double G4LewisModel::SampleCosineTheta(G4double trueStepLength)
 {
-  G4double cth = 1.0;
+  G4double cth = 1.;
   currentTau = trueStepLength/lambda0;
 //  G4cout << "tau= " << currentTau << " lambda1= " << lambda1 << " lambdam= " << lambdam << G4endl;
   if (currentTau > taubig) cth = -1.+2.*G4UniformRand();
@@ -580,13 +580,13 @@ G4double G4LewisModel::SampleCosineTheta(G4double trueStepLength)
         qprob = 1. ;
         prob = (xmeanth-xmean2)/(xmean1-xmean2) ;
       }
-      /*
+/*
       G4cout << "tau= " << currentTau << " prob= " << prob << " qprob= " << qprob << G4endl;
       G4cout << "ea= " << ea << " eaa= " << eaa << " a= " << a
               << " b= " << b << " b1= " << b1 << " bx= " << bx
 	      << " ebx= " << ebx << " eb1= " << eb1 << " c= " << c
 	      << G4endl;
-	      */
+*/
       // sampling of costheta
       if (G4UniformRand() < qprob)
       {
@@ -597,10 +597,11 @@ G4double G4LewisModel::SampleCosineTheta(G4double trueStepLength)
       }
       else
       {
-        cth = -1.+2.*G4UniformRand() ;
+        cth = -1.+2.*G4UniformRand();
       }
     }
   }
+//   G4cout << "cth= " << cth << G4endl;
   return cth;
 }
 
@@ -626,7 +627,7 @@ G4double G4LewisModel::SampleDisplacement()
     }
     if (rmean>0.) rmean = 2.*lambda0*sqrt(rmean/3.0);
     else          rmean = 0.;
-         G4cout << "rmean= " << rmean << G4endl;
+    //     G4cout << "rmean= " << rmean << G4endl;
  }
   return rmean;
 }

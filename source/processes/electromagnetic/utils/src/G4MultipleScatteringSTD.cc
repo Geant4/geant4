@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScatteringSTD.cc,v 1.12 2003-04-17 17:40:42 vnivanch Exp $
+// $Id: G4MultipleScatteringSTD.cc,v 1.13 2003-04-17 21:51:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -534,8 +534,8 @@ G4double G4MultipleScatteringSTD::GetContinuousStepLimit(
 
   tau   = tPathLength/lambda0 ;
 
-  G4cout << "StepLimit: tpl= " << tPathLength << " lambda0= " << lambda0
-         << " range= " << range << " currentMinStep= " << currentMinimumStep << G4endl;
+//  G4cout << "StepLimit: tpl= " << tPathLength << " lambda0= " << lambda0
+//         << " range= " << range << " currentMinStep= " << currentMinimumStep << G4endl;
 
   if(tau < tausmall) zPathLength = tPathLength;
   else
@@ -652,8 +652,8 @@ G4VParticleChange* G4MultipleScatteringSTD::AlongStepDoIt(
   }
   //VI truePath length cannot be smaller than geomPathLength
   if (truePathLength < geomPathLength) truePathLength = geomPathLength;
-  G4cout << "AlongStep: trueLength= " << truePathLength << " geomLength= "
-         << geomPathLength << " zlast= " << zLast << G4endl;
+  //G4cout << "AlongStep: trueLength= " << truePathLength << " geomLength= "
+  //       << geomPathLength << " zlast= " << zLast << G4endl;
   fParticleChange.SetTrueStepLength(truePathLength);
   return &fParticleChange;
 
@@ -675,10 +675,10 @@ G4VParticleChange* G4MultipleScatteringSTD::PostStepDoIt(
   G4double KineticEnergy = aParticle->GetKineticEnergy();
 
   // do nothing for stopped particles !
-  if(KineticEnergy > 0.)
+  if(KineticEnergy > 0.0)
   {
     //  change direction first ( scattering )
-    G4double cth = 1. ;
+    G4double cth = 1.;
     G4double tau = truestep/lambda0 ;
     //G4cout << "tau= " << tau << " lambda1= " << lambda1 << " lambdam= " << lambdam << G4endl;
 
@@ -688,108 +688,110 @@ G4VParticleChange* G4MultipleScatteringSTD::PostStepDoIt(
     {
       if(lambda1 > 0.)
       {
-       if(lambdam < 0.)
-        tau = -alam*log(1.-truestep/alam)/lambda0 ;
-       else
-        tau = -log(cthm)-alam*log(1.-(truestep-0.5*tLast)/alam)/lambdam ;
+        if(lambdam < 0.)
+          tau = -alam*log(1.-truestep/alam)/lambda0 ;
+        else
+          tau = -log(cthm)-alam*log(1.-(truestep-0.5*tLast)/alam)/lambdam ;
       }
 
       if(tau > taubig)   cth = -1.+2.*G4UniformRand();
       else
       {
-       const G4double amax=25. ;
-       const G4double tau0 = 0.02  ;
+        const G4double amax=25. ;
+        const G4double tau0 = 0.02  ;
 
-       G4double a,x0,c,xmean1,xmean2,
+        G4double a,x0,c,xmean1,xmean2,
                  xmeanth,prob,qprob ;
-       G4double ea,eaa,b1,bx,eb1,ebx,cnorm1,cnorm2,f1x0,f2x0,w ;
+        G4double ea,eaa,b1,bx,eb1,ebx,cnorm1,cnorm2,f1x0,f2x0,w ;
 
-       w = log(tau/tau0) ;
-       if(tau < tau0)
-         a = (alfa1-alfa2*w)/tau ;
-       else
-         a = (alfa1+alfa3*w)/tau ;
+        w = log(tau/tau0) ;
+        if(tau < tau0)
+          a = (alfa1-alfa2*w)/tau ;
+        else
+          a = (alfa1+alfa3*w)/tau ;
 
-       x0 = 1.-xsi/a ;
-       if(x0 < 0.) x0 = 0. ;
+        x0 = 1.-xsi/a ;
+        if(x0 < 0.) x0 = 0. ;
 
-       // from continuity of the 1st derivatives
-       c = a*(b-x0) ;
-       if(a*tau < c0)
-        c = c0*(b-x0)/tau ;
+        // from continuity of the 1st derivatives
+        c = a*(b-x0) ;
+        if(a*tau < c0)
+          c = c0*(b-x0)/tau ;
 
-       if(c == 1.) c=1.000001 ;
-       if(c == 2.) c=2.000001 ;
-       if(c == 3.) c=3.000001 ;
+        if(c == 1.) c=1.000001 ;
+        if(c == 2.) c=2.000001 ;
+        if(c == 3.) c=3.000001 ;
 
-       if(a*(1.-x0) < amax)
-         ea = exp(-a*(1.-x0)) ;
-       else
-         ea = 0. ;
-       eaa = 1.-ea ;
-       xmean1 = 1.-1./a+(1.-x0)*ea/eaa ;
+        if(a*(1.-x0) < amax)
+          ea = exp(-a*(1.-x0)) ;
+        else
+          ea = 0. ;
 
-       b1 = b+1. ;
-       bx=b-x0 ;
-       eb1=exp((c-1.)*log(b1)) ;
-       ebx=exp((c-1.)*log(bx)) ;
-       xmean2 = (x0*eb1+ebx+(eb1*bx-b1*ebx)/(2.-c))/(eb1-ebx) ;
+	eaa = 1.-ea ;
+        xmean1 = 1.-1./a+(1.-x0)*ea/eaa ;
 
-       xmeanth = exp(-tau) ;
+        b1 = b+1. ;
+        bx=b-x0 ;
+        eb1=exp((c-1.)*log(b1)) ;
+        ebx=exp((c-1.)*log(bx)) ;
+        xmean2 = (x0*eb1+ebx+(eb1*bx-b1*ebx)/(2.-c))/(eb1-ebx) ;
 
-       cnorm1 = a/eaa ;
-       cnorm2 = (c-1.)*eb1*ebx/(eb1-ebx) ;
-       f1x0 = cnorm1*exp(-a*(1.-x0)) ;
-       f2x0 = cnorm2/exp(c*log(b-x0)) ;
+        xmeanth = exp(-tau) ;
 
-       // from continuity at x=x0
-       prob = f2x0/(f1x0+f2x0) ;
-       // from xmean = xmeanth
-       qprob = (f1x0+f2x0)*xmeanth/(f2x0*xmean1+f1x0*xmean2) ;
+        cnorm1 = a/eaa ;
+        cnorm2 = (c-1.)*eb1*ebx/(eb1-ebx) ;
+        f1x0 = cnorm1*exp(-a*(1.-x0)) ;
+        f2x0 = cnorm2/exp(c*log(b-x0)) ;
 
-       // protection against qprob > 1
-       // *******************************************
-       if(qprob > 1.)
-       {
-         qprob = 1. ;
-         prob = (xmeanth-xmean2)/(xmean1-xmean2) ;
-       }
-       // *******************************************
+        // from continuity at x=x0
+        prob = f2x0/(f1x0+f2x0) ;
+        // from xmean = xmeanth
+        qprob = (f1x0+f2x0)*xmeanth/(f2x0*xmean1+f1x0*xmean2) ;
 
-       // sampling of costheta
-       /*
+        // protection against qprob > 1
+        // *******************************************
+        if(qprob > 1.)
+        {
+          qprob = 1. ;
+          prob = (xmeanth-xmean2)/(xmean1-xmean2) ;
+        }
+        // *******************************************
+
+        // sampling of costheta
+/*
        G4cout << "tau= " << tau << " prob= " << prob << " qprob= " << qprob << G4endl;
        G4cout << "ea= " << ea << " eaa= " << eaa << " a= " << a
               << " b= " << b << " b1= " << b1 << " bx= " << bx
 	      << " ebx= " << ebx << " eb1= " << eb1 << " c= " << c
 	      << G4endl;
-	      */
-       if(G4UniformRand() < qprob)
-       {
-         if(G4UniformRand() < prob)
-          cth = 1.+log(ea+G4UniformRand()*eaa)/a ;
-         else
-          cth = b-b1*bx/exp(log(ebx-G4UniformRand()*(ebx-eb1))/(c-1.)) ;
-       }
-       else
-         cth = -1.+2.*G4UniformRand() ;
+*/
+        if(G4UniformRand() < qprob)
+        {
+          if(G4UniformRand() < prob)
+            cth = 1.+log(ea+G4UniformRand()*eaa)/a ;
+          else
+            cth = b-b1*bx/exp(log(ebx-G4UniformRand()*(ebx-eb1))/(c-1.)) ;
+        }
+        else
+          cth = -1.+2.*G4UniformRand() ;
       }
     }
+    // G4cout << "cth= " << cth << G4endl;
 
-  G4double sth  = sqrt(1.-cth*cth);
-  G4double phi  = twopi*G4UniformRand();
-  G4double dirx = sth*cos(phi), diry = sth*sin(phi), dirz = cth;
+    G4double sth  = sqrt(1.-cth*cth);
+    G4double phi  = twopi*G4UniformRand();
+    G4double dirx = sth*cos(phi), diry = sth*sin(phi), dirz = cth;
 
-  G4cout << "PostStep: sth= " << sth << " trueLength= " << truestep << " tLast= " << tLast << G4endl;
+    //G4cout << "PostStep: sth= " << sth << " trueLength= " << truestep << " tLast= " << tLast << G4endl;
 
-  G4ParticleMomentum ParticleDirection = aParticle->GetMomentumDirection();
+    G4ParticleMomentum ParticleDirection = aParticle->GetMomentumDirection();
 
-  G4ThreeVector newDirection(dirx,diry,dirz);
-  newDirection.rotateUz(ParticleDirection);
-  fParticleChange.SetMomentumChange(newDirection.x(),
+    G4ThreeVector newDirection(dirx,diry,dirz);
+    newDirection.rotateUz(ParticleDirection);
+    fParticleChange.SetMomentumChange(newDirection.x(),
                                     newDirection.y(),
                                     newDirection.z());
-  if (fLatDisplFlag)
+    if (fLatDisplFlag)
     {
       // compute mean lateral displacement, only for safety > tolerance !
       G4double safetyminustolerance = stepData.GetPostStepPoint()->GetSafety();
@@ -810,14 +812,14 @@ G4VParticleChange* G4MultipleScatteringSTD::PostStepDoIt(
 
         if (rmean>0.) rmean = 2.*lambda0*sqrt(rmean/3.0);
         else          rmean = 0.;
-        G4cout << "rmean= " << rmean << G4endl;
+      //  G4cout << "rmean= " << rmean << G4endl;
 
         // for rmean > 0) only
         if (rmean > 0.)
         {
           if (rmean>safetyminustolerance) rmean = safetyminustolerance;
 
-          G4cout << "r= " << rmean << " safety= " << safetyminustolerance << G4endl;
+        //  G4cout << "r= " << rmean << " safety= " << safetyminustolerance << G4endl;
           // sample direction of lateral displacement
           phi  = twopi*G4UniformRand();
           dirx = cos(phi); diry = sin(phi); dirz = 0.;
