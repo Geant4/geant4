@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIonisation.cc,v 1.28 2002-06-19 13:32:16 grichine Exp $
+// $Id: G4PAIonisation.cc,v 1.29 2002-06-21 14:01:00 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -513,6 +513,7 @@ G4PAIonisation::PostStepDoIt( const G4Track& trackData,
  else
  {
    Edep = finalKineticEnergy;
+   if(Edep < 0.) Edep = 0.;
    finalKineticEnergy = 0.;
 
    if (!aParticle->GetDefinition()->GetProcessManager()->GetAtRestProcessVector())
