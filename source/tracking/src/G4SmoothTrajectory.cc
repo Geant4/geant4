@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectory.cc,v 1.8 2002-11-11 13:13:02 johna Exp $
+// $Id: G4SmoothTrajectory.cc,v 1.9 2003-05-23 15:18:41 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -73,7 +73,7 @@ G4SmoothTrajectory::G4SmoothTrajectory(const G4Track* aTrack)
    positionRecord->push_back(new G4SmoothTrajectoryPoint(aTrack->GetPosition(), NULL));
 }
 
-G4SmoothTrajectory::G4SmoothTrajectory(G4SmoothTrajectory & right)
+G4SmoothTrajectory::G4SmoothTrajectory(G4SmoothTrajectory & right):G4VTrajectory()
 {
   ParticleName = right.ParticleName;
   PDGCharge = right.PDGCharge;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trajectory.cc,v 1.20 2002-11-08 18:27:40 johna Exp $
+// $Id: G4Trajectory.cc,v 1.21 2003-05-23 15:18:41 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -69,7 +69,7 @@ G4Trajectory::G4Trajectory(const G4Track* aTrack)
    positionRecord->push_back(new G4TrajectoryPoint(aTrack->GetPosition()));
 }
 
-G4Trajectory::G4Trajectory(G4Trajectory & right)
+G4Trajectory::G4Trajectory(G4Trajectory & right):G4VTrajectory()
 {
   ParticleName = right.ParticleName;
   PDGCharge = right.PDGCharge;

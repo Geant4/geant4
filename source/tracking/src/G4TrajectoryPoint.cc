@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoryPoint.cc,v 1.10 2002-11-08 18:28:29 johna Exp $
+// $Id: G4TrajectoryPoint.cc,v 1.11 2003-05-23 15:18:41 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -52,7 +52,7 @@ G4TrajectoryPoint::G4TrajectoryPoint(G4ThreeVector pos)
 }
 
 G4TrajectoryPoint::G4TrajectoryPoint(const G4TrajectoryPoint &right)
- : fPosition(right.fPosition)
+ : G4VTrajectoryPoint(),fPosition(right.fPosition)
 {
 }
 

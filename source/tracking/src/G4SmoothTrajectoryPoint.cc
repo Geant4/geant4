@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectoryPoint.cc,v 1.8 2002-12-06 12:16:44 johna Exp $
+// $Id: G4SmoothTrajectoryPoint.cc,v 1.9 2003-05-23 15:18:41 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -60,7 +60,8 @@ G4SmoothTrajectoryPoint::G4SmoothTrajectoryPoint(G4ThreeVector pos,
 {}
 
 G4SmoothTrajectoryPoint::G4SmoothTrajectoryPoint(const G4SmoothTrajectoryPoint &right)
-: fPosition(right.fPosition),fAuxiliaryPointVector(right.fAuxiliaryPointVector)
+: G4VTrajectoryPoint(),
+  fPosition(right.fPosition),fAuxiliaryPointVector(right.fAuxiliaryPointVector)
 {
 }
 
