@@ -59,12 +59,17 @@ void G4DrawVoxels::DrawVoxels(const G4LogicalVolume* lv,const G4SmartVoxelHeader
 //Notice that the voxel_width should perhaps( ??) be parameterisable
 //Notice that it would be better not to draw equivalent slices.
 //Notice that nothing is coded to check if step and voxels' thin voxels_width allow intercrosses of slices.
-
+ 
+ #ifdef G4DrawVoxelsDebug
+ 	G4cout << "**** !!! G4DrawVoxels::Draw_Voxels : a query for drawing voxelisation";
+ 	G4cout << "	Logical Volume:" << lv->GetName() <<endl;
+ #endif
+ 
  if (fLogicalVolumes.contains(lv)){
    G4VSolid* solid=lv->GetSolid();
    //G4SmartVoxelHeader* header=lv->GetVoxelHeader();
-   G4Translate3D t_centeroflimits((limit.GetMaxXExtent()+limit.GetMinXExtent())*0.5,\
-   				  (limit.GetMaxYExtent()+limit.GetMinYExtent())*0.5,\
+   G4Translate3D t_centeroflimits((limit.GetMaxXExtent()+limit.GetMinXExtent())*0.5,
+   				  (limit.GetMaxYExtent()+limit.GetMinYExtent())*0.5,
    				  (limit.GetMaxZExtent()+limit.GetMinZExtent())*0.5);
    
    G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
@@ -74,8 +79,10 @@ void G4DrawVoxels::DrawVoxels(const G4LogicalVolume* lv,const G4SmartVoxelHeader
    G4Transform3D translation_for_voxel_plane;	// According to the world volume
    
    if (lv->GetNoDaughters()<=0) {
-      G4cout << "**** !!! G4DrawVoxels::Draw_Voxels : a query for drawing voxelisation \
-      of a logical volume that has no (or <=0) daughter has been detected !!! ****";
+ #ifdef G4DrawVoxelsDebug
+      G4cout << "**** !!! G4DrawVoxels::Draw_Voxels : a query for drawing voxelisation" << endl;
+      G4cout << "	of a logical volume that has no (or <=0) daughter has been detected !!! ****" <<endl;
+ #endif
       return;
    }
    //Computing the transformation according to the world volume 
@@ -132,21 +139,25 @@ void G4DrawVoxels::DrawVoxels(const G4LogicalVolume* lv,const G4SmartVoxelHeader
    voxel_plane.SetVisAttributes(G4VisAttributes(voxelcolour));
    
    if(pVVisManager) {
-        G4cout << "**** G4DrawVoxels::DrawVoxels(const G4LogicalVolume*,...) -Drawing \
-	Voxels- pVVisManager is OK! ****";
+  #ifdef G4DrawVoxelsDebug
+ 	//G4cout << "  ** G4DrawVoxels::DrawVoxels(const G4LogicalVolume*,...) -DrawingVoxels- pVVisManager is OK! **" <<endl;
+	G4cout << "	Axis of the voxelisation:" << header->GetAxis();
+	G4cout << "	No slices of the voxelisation:" << header->GetNoSlices();
+	G4cout << "	Colour of the slices:" << voxelcolour <<endl;	
+  #endif
 		//Drawing the green bounding polyhedronBox for the pVolume
 		pVVisManager->Draw(bounding_polyhedronBox,t_centeroflimits*transf3D);  //modified
 		
 		G4SmartVoxelProxy* slice=header->GetSlice(0);
 		G4int slice_no=0,no_slices=header->GetNoSlices();
-		G4double beginning=header->GetMinExtent(),/*end=header->GetMaxExtent()*/\
+		G4double beginning=header->GetMinExtent(),/*end=header->GetMaxExtent()*/
             		 step=(header->GetMaxExtent()-beginning)/no_slices;
 		current_translation_vector=unit_translation_vector;
 		
 		while (slice_no<no_slices){
 		  if (slice->IsHeader()){
 		     G4VoxelLimits newlimit(limit);
-		     newlimit.AddLimit(header->GetAxis(),beginning+step*slice_no,\
+		     newlimit.AddLimit(header->GetAxis(),beginning+step*slice_no,
 		     	beginning+step*slice->GetHeader()->GetMaxEquivalentSliceNo());
 		     DrawVoxels(lv,slice->GetHeader(),newlimit);
 		     }
@@ -154,13 +165,13 @@ void G4DrawVoxels::DrawVoxels(const G4LogicalVolume* lv,const G4SmartVoxelHeader
 		  pVVisManager->Draw(voxel_plane,G4Translate3D(current_translation_vector)*t_centeroflimits*transf3D);
 		  current_translation_vector=unit_translation_vector;
 		  slice=header->GetSlice(slice_no);
-		  slice_no=(slice->IsHeader()?slice->GetHeader()->GetMaxEquivalentSliceNo()+1\
+		  slice_no=(slice->IsHeader()?slice->GetHeader()->GetMaxEquivalentSliceNo()+1
 		  			     :slice->GetNode()->GetMaxEquivalentSliceNo()+1);
 		}
 	}
-   else G4cout << "**** G4DrawVoxels::DrawVoxels(const G4LogicalVolume*,...) pVVisManager is null! ****"; 
+   else G4cout << "@@@@ G4DrawVoxels::DrawVoxels(const G4LogicalVolume*,...) pVVisManager is null! @@@@"; 
  } //endif (fLogicalVolumes.contains(lv))
- else G4cout << "**** G4DrawVoxels::DrawVoxels(const G4LogicalVolume*,...) lv is not inscribed I cannot draw it ****";
+ else G4cout << "@@@@ G4DrawVoxels::DrawVoxels(const G4LogicalVolume*,...) lv is not inscribed I cannot draw it @@@@";
 }//end of Draw_Voxels...
 //######################################################################################################################
 
@@ -168,10 +179,10 @@ void G4DrawVoxels::DrawVoxels(const G4LogicalVolume* lv,const G4SmartVoxelHeader
 G4DrawVoxels::G4DrawVoxels(){
 	fgInstance=0;
 	fLogicalVolumes(0);
-	fvoxelcolours[0]=G4Colour(1.,0.,0.);
+	fvoxelcolours[0]=G4Colour(0.,0.,0.);
 	fvoxelcolours[1]=G4Colour(0.,1.,0.);
-	fvoxelcolours[2]=G4Colour(0.,0.,1.);
-	fboundingboxcolour=G4Colour(0.,1.,1.);
+	fvoxelcolours[2]=G4Colour(0.,0.,0.);
+	fboundingboxcolour=G4Colour(0.3,0.5,0.);
 }
 
 
