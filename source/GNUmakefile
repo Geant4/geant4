@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.24 2000-12-11 08:34:43 gcosmo Exp $
+# $Id: GNUmakefile,v 1.25 2000-12-13 08:25:34 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -107,7 +107,7 @@ $(G4LIBDIR)/liblist: $(G4INSTALL)/config/liblist.c
 	$(CC) $(CCFLAGS) -o $(G4LIBDIR)/liblist $(G4INSTALL)/config/liblist.c
 
 includes:
-	@echo Installing includes files in $(G4INCLUDE)
+	@echo Installing includes files in $(G4INCLUDE) ...
 	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE) $@); done
 	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE) $@); done
 	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE) $@); done
