@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hTestStoppingPower.cc,v 1.1 2000-08-02 16:25:23 vnivanch Exp $
+// $Id: G4hTestStoppingPower.cc,v 1.2 2000-08-02 20:45:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // -------------------------------------------------------------------
@@ -531,7 +531,7 @@ main()
 
   for (j = 0 ; j < num-1 ; j++) {
     tkin = pow(10.0,(log10(minE) + (G4double(j)+0.5)*s));
-    //    de = theIonEffChargeModel->TheValue(part[3],Cu,tkin) ;
+    de = theIonEffChargeModel->TheValue(part[3],Cu,tkin) ;
     //  G4cout << "E = " << tkin << "; dedx = " << de << G4endl;
     h[48]->accumulate(log10(tkin),de) ;
     de = theIonEffChargeModel->TheValue(part[4],Cu,tkin) ;
