@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIxSectionTest.cc,v 1.2 1999-10-27 09:24:43 grichine Exp $
+// $Id: G4PAIxSectionTest.cc,v 1.3 1999-12-10 15:08:30 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,6 +20,10 @@
 
 #include "G4ios.hh"
 #include <fstream.h>
+#include <math.h>
+#include "globals.hh"
+#include "Randomize.hh"
+
 #include "G4Isotope.hh"
 #include "G4Element.hh"
 #include "G4Material.hh"
@@ -35,9 +39,18 @@ int main()
    outFile.setf( ios::scientific, ios::floatfield );
 
    ofstream fileOut("PAIdistribution.out", ios::out ) ;
-   //  fileOut.setf( ios::scientific, ios::floatfield );
+   fileOut.setf( ios::scientific, ios::floatfield );
 
-// -------------------------- Create materials -------------------------------  
+   //  ifstream fileRead("exp.dat", ios::out ) ;
+   //  fileRead.setf( ios::scientific, ios::floatfield );
+
+   ofstream fileWrite("exp.dat", ios::out ) ;
+   fileWrite.setf( ios::scientific, ios::floatfield );
+
+   ofstream fileWrite1("mprrpai.dat", ios::out ) ;
+   fileWrite1.setf( ios::scientific, ios::floatfield );
+
+// Create materials  
    
 
   G4int iz , n,  nel, ncomponents ;
@@ -80,6 +93,12 @@ int main()
   
   a = 19.00*g/mole;
   G4Element* elF  = new G4Element(name="Fluorine", symbol="F", z=9., a);
+
+  a = 69.723*g/mole;
+  G4Element* elGa  = new G4Element(name="Ga", symbol="Ga", z=31., a);
+
+  a = 74.9216*g/mole;
+  G4Element* elAs  = new G4Element(name="As", symbol="As", z=33., a);
 
  
 // G4Isotope::DumpInfo();
@@ -169,6 +188,25 @@ int main()
   a = 28.09*g/mole;
   G4Material* Si = new G4Material(name="Silicon", z=14., a, density);
 
+  // Germanium as detector material
+
+  density = 5.323*g/cm3;
+  a = 72.59*g/mole;
+  G4Material* Ge = new G4Material(name="Ge", z=32., a, density);
+
+  // GaAs detectors
+
+  density = 5.32*g/cm3;
+  G4Material* GaAs = new G4Material(name="GaAs",density, nel=2);
+  GaAs->AddElement(elGa,1);
+  GaAs->AddElement(elAs,1);
+
+  // Diamond detectors
+
+  density = 3.5*g/cm3;
+  G4Material* Diamond = new G4Material(name="Diamond",density, nel=1);
+  Diamond->AddElement(elC,1);
+
   G4double TRT_Xe_density = 5.485*mg/cm3;
   G4Material* TRT_Xe = new G4Material(name="TRT_Xe", TRT_Xe_density, nel=1,
 				      kStateGas,293.15*kelvin,1.*atmosphere);
@@ -197,7 +235,7 @@ int main()
   XeCO2CF4->AddMaterial(TRT_CF4,0.154);
 
   // TRT_CH2
-      
+    
   density = 0.935*g/cm3;
   G4Material* TRT_CH2 = new G4Material(name="TRT_CH2",density, nel=2);
   TRT_CH2->AddElement(elC,1);
@@ -244,6 +282,28 @@ int main()
   a = 131.29*g/mole ;
   G4Material* Xe  = new G4Material(name="Xenon",z=54., a, density );
 
+  // Helium as detector gas, STP
+
+  density = 0.178*mg/cm3 ;
+  a = 4.0026*g/mole ;
+  G4Material* He  = new G4Material(name="He",z=2., a, density );
+
+  // Neon as detector gas, STP
+
+  density = 0.900*mg/cm3 ;
+  a = 20.179*g/mole ;
+  G4Material* Ne  = new G4Material(name="Ne",z=10., a, density );
+
+  // Krypton as detector gas, STP
+
+  density = 3.700*mg/cm3 ;
+  a = 83.80*g/mole ;
+  G4Material* Kr  = new G4Material(name="Kr",z=36., a, density );
+
+
+
+  // Carbone dioxide, CO2 STP
+
   density = 1.977*mg/cm3 ;
   G4Material* CarbonDioxide = new G4Material(name="CO2", density, nel=2) ;
   CarbonDioxide->AddElement(elC,1) ;
@@ -282,7 +342,8 @@ int main()
 
   // Propane in MWPC, 2 atm, 20 C
 
-  density = 3.758*mg/cm3 ;
+  //  density = 3.758*mg/cm3 ;
+  density = 3.736*mg/cm3 ;
   G4Material* propaneDet = new G4Material(name="detC3H8",density,nel=2) ;
   propaneDet->AddElement(elC,3) ;
   propaneDet->AddElement(elH,8) ;
@@ -290,10 +351,10 @@ int main()
   // 80% Ar + 20% CO2, STP
 
   density = 1.8223*mg/cm3 ;      
-  G4Material* Ar_80CO2_20 = new G4Material(name="Ar20CO2"  , density, 
+  G4Material* Ar20CO2 = new G4Material(name="Ar20CO2"  , density, 
                                                              ncomponents=2);
-  Ar_80CO2_20->AddMaterial( Argon,           fractionmass = 0.783 ) ;
-  Ar_80CO2_20->AddMaterial( CarbonDioxide,   fractionmass = 0.217 ) ;
+  Ar20CO2->AddMaterial( Argon,           fractionmass = 0.783 ) ;
+  Ar20CO2->AddMaterial( CarbonDioxide,   fractionmass = 0.217 ) ;
 
   // 93% Ar + 7% CH4, STP
 
@@ -306,10 +367,26 @@ int main()
   // 80% Xe + 20% CO2, STP
 
   density = 5.0818*mg/cm3 ;      
-  G4Material* Xe_80CO2_20 = new G4Material(name="Xe20CO2"  , density, 
+  G4Material* Xe20CO2 = new G4Material(name="Xe20CO2"  , density, 
                                                              ncomponents=2);
-  Xe_80CO2_20->AddMaterial( Xe,              fractionmass = 0.922 ) ;
-  Xe_80CO2_20->AddMaterial( CarbonDioxide,   fractionmass = 0.078 ) ;
+  Xe20CO2->AddMaterial( Xe,              fractionmass = 0.922 ) ;
+  Xe20CO2->AddMaterial( CarbonDioxide,   fractionmass = 0.078 ) ;
+
+  // 80% Kr + 20% CO2, STP
+
+  density = 3.601*mg/cm3 ;      
+  G4Material* Kr20CO2 = new G4Material(name="Kr20CO2"  , density, 
+                                                             ncomponents=2);
+  Kr20CO2->AddMaterial( Kr,              fractionmass = 0.89 ) ;
+  Kr20CO2->AddMaterial( CarbonDioxide,   fractionmass = 0.11 ) ;
+
+  // 80% He + 20% CO2, STP
+
+  density = 0.5378*mg/cm3 ;      
+  G4Material* He20CO2 = new G4Material(name="He20CO2"  , density, 
+                                                             ncomponents=2);
+  He20CO2->AddMaterial( He,              fractionmass = 0.265 ) ;
+  He20CO2->AddMaterial( CarbonDioxide,   fractionmass = 0.735 ) ;
 
 
 
@@ -342,7 +419,7 @@ int main()
 
   for(k=0;k<numOfMaterials;k++)
   {
-     if((*theMaterialTable)[k]->GetName() != testName) continue ;
+    if((*theMaterialTable)[k]->GetName() != testName) continue ;
 
      outFile << "Material : " <<(*theMaterialTable)[k]->GetName() << endl ;
      G4cout << "Material : " <<(*theMaterialTable)[k]->GetName() << endl ;
@@ -419,11 +496,11 @@ int main()
 
      //   G4PAIxSection testPAIproton(k,maxEnergyTransfer) ;
 
-     kineticEnergy = 100*MeV ;
+     kineticEnergy = 110*MeV ;
 
      //     for(j=1;j<testPAIproton.GetNumberOfGammas();j++)
 
-     for(j=1;j<20;j++)
+     for(j=1;j<30;j++)
      {
        tau      = kineticEnergy/proton_mass_c2 ;
        gamma    = tau +1.0 ;
@@ -454,7 +531,7 @@ int main()
        //          <<testPAIproton.GetPAItable(0,j)*cm/keV<<"\t\t"
        //  	      <<testPAIproton.GetPAItable(1,j)*cm<<"\t\t"<<endl ;
 
-       kineticEnergy *= 2.0 ;
+       kineticEnergy *= 1.5 ;
      }
      G4cout<<endl ;
      outFile<<endl ;
@@ -465,24 +542,32 @@ int main()
   cin>>confirm ;
   if(confirm != "y" ) return 1 ;
   G4cout<<endl ;
+
   for(k=0;k<numOfMaterials;k++)
   {
     G4cout <<k<< "  Material : " <<(*theMaterialTable)[k]->GetName() << endl ;
-  }
- 
+  } 
   G4cout<<"Enter material name for dE/dx-distribution : "<<flush ;
   cin>>testName ;
   G4cout<<endl ;
+
+  G4int    iLoss, iStat, iStatMax, nGamma ;
+  G4double energyLoss[50], Ebin, delta, delta1, delta2, delta3, step, y, pos ;
+  G4double intProb[200], colDist, sum, fact, GF, lambda, aaa ;
+
+  G4double alphaCrossTalk = -0.055, betaS = 0.2*0.4*keV ;
+  G4int    spectrum[50] ;
+
+  G4cout << " Enter nGamma 1<nGamma<10 : "  <<flush ;
+  cin>>nGamma ;
+  G4cout<<endl ;
+
   for(k=0;k<numOfMaterials;k++)
   {
      if((*theMaterialTable)[k]->GetName() != testName) continue ;
 
      G4cout << "Material : " <<(*theMaterialTable)[k]->GetName() << endl<<endl ;
-     G4cout<<"Start dE/dx distribution"<<endl<<endl ;
 
-     G4int    iLoss, iStat, iStatMax ;
-     G4double energyLoss[50], Ebin, delta, step ;
-     G4int    spectrum[50] ;
 
      G4cout << " Enter Lorentz factor : "  <<flush ;
      cin>>gamma ;
@@ -500,6 +585,8 @@ int main()
 
      G4cout << " Enter number of events : " <<flush ;
      cin>>iStatMax ;
+
+     G4cout<<endl<<"Start dE/dx distribution"<<endl<<endl ;
 
      maxEnergyTransfer = 100*keV ;
      bg2               = gamma*gamma - 1 ;
@@ -519,7 +606,25 @@ int main()
      }
      for(iStat=0;iStat<iStatMax;iStat++)
      {
-       delta = testPAIenergyLoss.GetStepEnergyLoss(step) ;
+
+       //   aaa = (G4double)nGamma ;
+       //   lambda = aaa/step ;
+       //   colDist = RandGamma::shoot(aaa,lambda) ;
+
+       //  delta = testPAIenergyLoss.GetStepEnergyLoss(colDist) ;
+
+       //  delta = testPAIenergyLoss.GetStepEnergyLoss(step) ;
+
+          delta1 = testPAIenergyLoss.GetStepEnergyLoss(step) ;
+
+          delta = RandGauss::shoot(delta1,0.3*delta1) ;
+          if( delta < 0.0 ) delta = 0.0 ;
+
+       //   delta2 = testPAIenergyLoss.GetStepEnergyLoss(step) ;
+       //   delta3 = testPAIenergyLoss.GetStepEnergyLoss(step) ;
+ 
+       //   delta = alphaCrossTalk*delta1 + 
+       //         delta2 + alphaCrossTalk*delta3 - betaS ;
 
        for(iLoss=0;iLoss<50;iLoss++)
        {
@@ -540,11 +645,228 @@ int main()
      }
      G4cout<<endl ;
      G4cout<<"Mean loss over spectrum = "<<meanLoss/keV/iStatMax<<" keV"<<endl ;
-   }
+  }
+
+  G4int exit = 1 ;
+
+  while(exit)
+  {
+     G4cout<<"Enter 'y' , if you would like to compare with exp. data : "<<flush ;
+     cin>>confirm ;
+     if(confirm != "y" ) break ;
+     G4cout<<endl ;
+
+     // Read experimental data file
+
+     G4double delExp[200], distr[200], deltaBin, sumPAI, sumExp ;
+     G4int numberOfExpPoints ;
+
+     G4cout<<endl ;
+     G4cout << " Enter number of experimental points : " <<flush ;
+     cin>>numberOfExpPoints ;
+     G4cout<<endl ;
+     G4cout << " Enter energy bin in keV : " <<flush ;
+     cin>>deltaBin ;
+     G4cout<<endl ;
+     deltaBin *= keV ;
+
+     ifstream fileRead ;
+     fileRead.open("input.dat") ;
+     for(i=0;i<numberOfExpPoints;i++)
+     {
+       fileRead>>delExp[i]>>distr[i] ;
+       delExp[i] *= keV ;
+       G4cout<<i<<"\t"<<delExp[i]<<"\t"<<distr[i]<<endl ;
+     }
+     fileRead.close() ;
+
+     // Adjust statistics of experiment to PAI simulation
+
+     sumExp = 0.0 ;
+     for(i=0;i<numberOfExpPoints;i++) sumExp +=distr[i] ;
+     sumExp *= deltaBin ;
+
+     sumPAI = 0.0 ;
+     for(i=0;i<49;i++) sumPAI +=spectrum[i] ;
+     sumPAI *= Ebin ;
+
+     for(i=0;i<numberOfExpPoints;i++) distr[i] *= sumPAI/sumExp ;
+
+     for(i=0;i<numberOfExpPoints;i++)
+     {
+       fileWrite<<delExp[i]/keV<<"\t"<<distr[i]<<endl ;
+       G4cout<<delExp[i]/keV<<"\t"<<distr[i]<<endl ;
+     }
+     exit = 0 ;
+  }
+
+  G4cout<<"Enter 'y' , if you would like to get most probable delta : "<<flush ;
+  cin>>confirm ;
+  if(confirm != "y" ) return 1 ;
+  G4cout<<endl ;
+
+  G4int kGamma, iMPLoss, maxSpectrum, iMax ;
+  G4double mpDelta[50], meanDelta[50], rrMP[50], rrMean[50] ; 
+  G4double mpLoss, tmRatio, mpSum, mpStat ;
+
+  G4double aGamma[33] = 
+  {
+    4.0, 1.5, 1.8, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 6.0, 8.0, 10.0, // 13
+    20., 40.0, 60.0, 80.0, 100.0, 200.0, 400.0, 600.0, 800.0, 1000.0, // 23
+    2000.0, 4000.0, 6000.0, 8000.0, 100000.0, 20000.0,                // 29
+    40000.0, 60000.0, 80000.0, 100000.0                               // 33
+  } ;
+
+  for(k=0;k<numOfMaterials;k++)
+  {
+    G4cout <<k<< "  Material : " <<(*theMaterialTable)[k]->GetName() << endl ;
+  } 
+  G4cout<<"Enter material name for dE/dx-distribution : "<<flush ;
+  cin>>testName ;
+  G4cout<<endl ;
+
+
+  for(k=0;k<numOfMaterials;k++)
+  {
+     if((*theMaterialTable)[k]->GetName() != testName) continue ;
+
+     G4cout << "Material : " <<(*theMaterialTable)[k]->GetName() << endl<<endl ;
+
+     G4cout << " Enter nGamma 1<nGamma<10 : "  <<flush ;
+     cin>>nGamma ;
+     G4cout<<endl ;
+
+
+     G4cout << " Enter step in mm : " <<flush ;
+     cin>>step ;
+     G4cout<<endl ;
+     step *= mm ;
+
+     G4cout << " Enter energy bin in keV : " <<flush ;
+     cin>>Ebin ;
+     G4cout<<endl ;
+     Ebin *= keV ;
+
+     G4cout << " Enter trancated mean ration <1.0 : "  <<flush ;
+     cin>>tmRatio ;
+     G4cout<<endl ;
+
+
+     G4cout << " Enter number of events : " <<flush ;
+     cin>>iStatMax ;
+     G4cout<<endl ;
+
+     G4cout<<"no."<<"\t"<<"Gamma"<<"\t"<<"Rel. rise"<<"\t"<<"M.P. loss, keV"
+           <<"\t"<<"Mean loss, keV"<<endl<<endl ;
+     //   outFile<<"no."<<"\t"<<"Gamma"<<"\t"<<"M.P. loss, keV"
+     //      <<"\t"<<"Mean loss, keV"<<endl<<endl ;
+     
+
+     // gamma = 1.1852 ;
+
+     for(kGamma=0;kGamma<33;kGamma++)
+     {
+       //    G4cout<<endl<<"Start dE/dx distribution"<<endl<<endl ;
+
+       gamma = aGamma[kGamma] ;
+       maxEnergyTransfer = 100*keV ;
+       bg2               = gamma*gamma - 1 ;
+       rateMass          = electron_mass_c2/proton_mass_c2 ;
+
+       Tmax              = 2.0*electron_mass_c2*bg2
+                          /(1.0+2.0*gamma*rateMass+rateMass*rateMass) ;
+
+       if ( maxEnergyTransfer > Tmax)         maxEnergyTransfer = Tmax ;
+       
+       G4PAIxSection testPAIenergyLoss(k,maxEnergyTransfer,bg2) ;
+ 
+       for( iLoss = 0 ; iLoss < 50 ; iLoss++ )
+       {
+         energyLoss[iLoss] = Ebin*iLoss ;
+         spectrum[iLoss] = 0 ;
+       }
+       for(iStat=0;iStat<iStatMax;iStat++)
+       {
+
+         //   aaa = (G4double)nGamma ;
+         //   lambda = aaa/step ;
+         //   colDist = RandGamma::shoot(aaa,lambda) ;
+
+         //  delta = testPAIenergyLoss.GetStepEnergyLoss(colDist) ;
+
+         delta = testPAIenergyLoss.GetStepEnergyLoss(step) ;
+
+         //   delta1 = testPAIenergyLoss.GetStepEnergyLoss(step) ;
+         //   delta2 = testPAIenergyLoss.GetStepEnergyLoss(step) ;
+         //   delta3 = testPAIenergyLoss.GetStepEnergyLoss(step) ;
+ 
+         //   delta = alphaCrossTalk*delta1 + 
+         //         delta2 + alphaCrossTalk*delta3 - betaS ;
+
+         for(iLoss=0;iLoss<50;iLoss++)
+         {
+           if(delta <= energyLoss[iLoss]) break ;
+         }
+         spectrum[iLoss-1]++ ;
+       }
+       G4int sumStat = 0 ;
+       for(iLoss=0;iLoss<49;iLoss++) // without last bin
+       {
+         sumStat += spectrum[iLoss] ;
+         if( sumStat > tmRatio*iStatMax  ) break ;
+       }
+       if(iLoss == 50) iLoss-- ;
+       iMPLoss = iLoss ;
+       G4double meanLoss = 0.0 ;
+       maxSpectrum = 0 ;
+
+       for(iLoss=0;iLoss<iMPLoss;iLoss++) // without last bin
+       {
+	 // fileOut<<energyLoss[iLoss]/keV<<"\t\t"<<spectrum[iLoss]<<endl ;
+	 //  G4cout<<energyLoss[iLoss]/keV<<"\t\t"<<spectrum[iLoss]<<endl ;
+
+         meanLoss += energyLoss[iLoss]*spectrum[iLoss] ;
+
+         if( spectrum[iLoss] > maxSpectrum )
+	 {
+           maxSpectrum = spectrum[iLoss]   ;
+           mpLoss      = energyLoss[iLoss] ;
+           iMax = iLoss ;
+	 }
+       }
+       mpSum  = 0. ;
+       mpStat = 0 ;
+       for(iLoss = iMax-5;iLoss<=iMax+5;iLoss++)
+       {
+         mpSum += energyLoss[iLoss]*spectrum[iLoss] ;
+         mpStat += spectrum[iLoss] ;
+       }
+       mpLoss = mpSum/mpStat ;
+       mpLoss /= keV ;
+       meanLoss /= keV*sumStat ;
+       meanDelta[kGamma] = meanLoss ;
+       mpDelta[kGamma] = mpLoss ;
+
+       if(kGamma > 0)
+       {
+         rrMP[kGamma] = mpLoss/mpDelta[0] ;
+         G4cout<<kGamma<<"\t"<<gamma<<"\t"<<rrMP[kGamma]<<"\t"<<mpLoss<<endl ;
+	 //  outFile<<gamma<<"\t"<<rrMP[kGamma]<<endl ;
+         fileWrite1<<gamma<<"\t"<<rrMP[kGamma]<<endl ;
+       }
+
+       //  gamma *= 1.5 ;
+    }
+    G4cout<<endl ;
+    outFile<<endl ;
+  }   
 
    return EXIT_SUCCESS;
 
 }
+
+
+
 
 
 
