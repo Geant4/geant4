@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VInteractorManager.hh,v 1.4 1999-11-02 20:07:08 barrand Exp $
+// $Id: G4VInteractorManager.hh,v 1.5 1999-11-02 21:16:16 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
@@ -19,6 +19,16 @@
 typedef void*  G4Interactor;
 typedef G4bool (*G4DispatchFunction)(void*);
 typedef void   (*G4SecondaryLoopAction)();
+
+// Class description :
+//
+//  G4VInteractorManager : a base class to isolate common things
+// to various GUI "toolkits" like WIndows, Xt.
+//  The word "interactor" is for "piece of user interface" or
+// "widget" (which means nothing). Then a GUI "toolkit" could be 
+// defined as a manager of interactors.
+//
+// Class description - end :
 
 class G4VInteractorManager {
 public:

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIXm.hh,v 1.5 1999-11-02 20:07:28 barrand Exp $
+// $Id: G4UIXm.hh,v 1.6 1999-11-02 21:15:54 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4UIXm_h
@@ -22,18 +22,50 @@
 
 class G4UIsession;
 
+// Class description :
+//
+//  G4UIXm : class to handle a Motif interactive session.
+// G4UIXm is the Motif version of G4UIterminal.
+//
+//  A command box is at disposal for entering/recalling Geant4 commands.
+//  A menubar could be customized through the AddMenu, AddButton methods.
+//  Note that there are corresponding Geant4 commands to add a 
+// menus in the menubar and add buttons in a menu.
+//  Ex : 
+//    /interactor/addMenu   test Test
+//    /interactor/addButton test Init /run/initialize
+//    /interactor/addButton test "Set gun" "/control/execute gun.g4m"
+//    /interactor/addButton test "Run one event" "/run/beamOn 1"
+//
+//  Command completion, by typing "tab" key, is available on the 
+// command line.
+//
+// Class description - end :
+
 class G4UIXm : public G4VBasicShell, public G4VInteractiveSession {
-public:
+public: // With description
   G4UIXm(int,char**);
-  ~G4UIXm();
+  // (argv, argc) or (0, NULL) had to be given.
   G4UIsession* SessionStart();
+  // To enter interactive X loop ; waiting/executing command,...
+  void AddMenu(const char*,const char*);
+  // To add a pulldown menu in the menu bar. 
+  // First argument is the name of the menu.
+  // Second argument is the label of the cascade button.
+  // Ex : AddMenu("my_menu","My menu")
+  void AddButton(const char*,const char*,const char*);
+  // To add a push button in a pulldown menu.
+  // First argument is the name of the menu.
+  // Second argument is the label of the button.
+  // Third argument is the Geant4 command executed when the button is fired.
+  // Ex : AddButton("my_menu","Run","/run/beamOn 1"); 
+public:
+  ~G4UIXm();
   void Prompt(G4String);
   void SessionTerminate();
   void PauseSessionStart(G4String);
   G4int ReceiveG4cout(G4String);
   G4int ReceiveG4cerr(G4String);
-  void AddMenu(const char*,const char*);
-  void AddButton(const char*,const char*,const char*);
   G4String GetCommand(Widget);
 private:
   void SecondaryLoop(G4String);

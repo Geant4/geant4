@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIXaw.hh,v 1.2 1999-04-13 01:26:24 yhajime Exp $
+// $Id: G4UIXaw.hh,v 1.3 1999-11-02 21:15:52 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4UIXaw_h
@@ -19,6 +19,19 @@
 
 class G4UIsession;
 class G4UImanager;
+
+// Class description :
+//
+//  G4UIXaw : class to handle an interactive session.
+// G4UIXaw is the "Athena" version of G4UIterminal.
+// It has been provided at a time where no free Motif
+// where available. Now that some exists (lesstif), 
+// G4UIXm should be prefered. The look and feel of 
+// G4UIXaw is hugly...
+//
+//  No command completion is available.
+//
+// Class description - end :
 
 class G4UIXaw : public G4VBasicShell {
 public:

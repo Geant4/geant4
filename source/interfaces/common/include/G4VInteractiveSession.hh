@@ -15,6 +15,16 @@
 
 class G4UImessenger;
 
+// Class description :
+//
+//  G4VInteractiveSession : a base class to isolate common things
+// to various graphical "basic" G4UI sessions ; AddMenu, AddButton,
+// a dictionnary for widgets.
+//  The word "interactor" is for "piece of user interface" or
+// "widget" (which means nothing).
+//
+// Class description - end :
+
 class G4VInteractiveSession {
 public:
   G4VInteractiveSession();
