@@ -7,8 +7,7 @@ printf(" ::: Reading cascade data ...\n");
 
 ifstream in;
 in.open("data.out", ios::in);
-
-Float_t e[100], xc[8][100];
+Float_t e[150], xc[6][150];
 Int_t nlines = 0;
 
 for (Int_t j = 1; j < 100; j++) {
@@ -16,7 +15,7 @@ for (Int_t j = 1; j < 100; j++) {
   in >> e[j];
   printf("j = %1i, e = %4f\n",j, e[j]);
 
-  for (Int_t i = 1; i < 7; i++) {
+  for (Int_t i = 1; i < 6; i++) {
     in >> xc[i][j];
 
     printf("i = %1i, xc = %4f\n",i, xc[i][j]);
@@ -32,31 +31,44 @@ gPad->SetBorderMode(0);
 c1->SetFillColor(11);
 c1->SetGrid();
 
-const Int_t n = 100;
-Double_t x[n], y[n];
+ Int_t n = 86;
+Double_t x[n], y1[n], y2[n], y3[n], y5[n], y7[n];
 
 for (Int_t i=0;i<n;i++) {
   x[i] = e[i];
-  y[i] = xc[1][i];
-  printf(" e =  %i %f %f \n", i, x[i], y[i]);
+  y1[i] = xc[1][i];
+ y2[i] = xc[2][i];
+ y3[i] = xc[3][i];
+ y5[i] = xc[4][i];
+ y7[i] = xc[5][i];
+  printf(" e =  %i %f %f \n", i, x[i], y1[i]);
 }
 
-gr = new TGraph(n,x,y);
-gr->SetLineColor(1);
-gr->SetLineWidth(1);
-gr->SetMarkerColor(17);
-gr->SetMarkerStyle(1);
-gr->SetTitle("");
-gr->Draw("ACP");
+gr1 = new TGraph(n, x, y1);
+gr2 = new TGraph(n, x, y2);
+gr3 = new TGraph(n, x, y3);
+gr4 = new TGraph(n, x, y5);
+gr5 = new TGraph(n, x, y7);
+
+gr1->SetLineColor(1);
+gr1->SetLineWidth(1);
+gr1->SetMarkerColor(17);
+gr1->SetMarkerStyle(1);
+gr1->SetTitle("");
+gr1->Draw("AC");
+gr2->Draw("C");
+gr3->Draw("C");
+gr4->Draw("C");
+gr5->Draw("C");
 
 c1->Update();
 c1->GetFrame()->SetFillColor(13);
 c1->GetFrame()->SetBorderSize(0);
-gr->GetHistogram()->SetXTitle("Particle energy [GeV]");
-gr->GetHistogram()->SetYTitle("cross-section mb");
+gr1->GetHistogram()->SetXTitle("Particle energy [GeV]");
+gr1->GetHistogram()->SetYTitle("cross-section mb");
 TLatex l;
-l->DrawLatex(0.5,  65, "Cross-section p-:::");
-l->DrawLatex(5,  18, "Pb");
+l->DrawLatex(0.5,  65, "Cross-sections");
+l->DrawLatex(5,  18, "");
 c1->Modified();
 
 // Timing plot
