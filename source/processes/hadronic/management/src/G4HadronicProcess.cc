@@ -33,6 +33,13 @@
 #include "G4EffectiveCharge.hh"
 #include "G4NoModelFound.hh"
 #include "G4HadProjectile.hh"
+#include "G4ElementVector.hh"
+#include "G4Track.hh"
+#include "G4Step.hh"
+#include "G4Element.hh"
+#include "G4ParticleChange.hh"
+#include "G4TransportationManager.hh"
+#include "G4Navigator.hh"
 
 //@@ add model name info, once typeinfo available #include <typeinfo.h>
  
@@ -42,6 +49,36 @@
  void G4HadronicProcess::EnableIsotopeProductionGlobally()  {isoIsEnabled = true;}
  void G4HadronicProcess::DisableIsotopeProductionGlobally() {isoIsEnabled = false;}
  
+ G4HadronicProcess::G4HadronicProcess( const G4String &processName) :
+      G4VDiscreteProcess( processName )
+ { 
+   isoIsOnAnyway = 0;
+   theTotalResult = new G4ParticleChange();
+ }
+
+ G4HadronicProcess::~G4HadronicProcess()
+ { 
+   delete theTotalResult;
+   for_each(theProductionModels.begin(), theProductionModels.end(), Delete<G4VIsotopeProduction>());
+   for_each(theBias.begin(), theBias.end(), Delete<G4VLeadingParticleBiasing>());
+ }
+
+ void G4HadronicProcess::RegisterMe( G4HadronicInteraction *a )
+ { GetManagerPointer()->RegisterMe( a ); }
+
+ G4double G4HadronicProcess::GetDistanceToBoundary(const G4Track & aT)
+ {
+   G4TransportationManager * aTM = 
+   G4TransportationManager::GetTransportationManager();
+   G4Navigator * aN = aTM->GetNavigatorForTracking();
+   G4ThreeVector pGlobalPoint = aT.GetStep()->GetPreStepPoint()->GetPosition();
+   G4ThreeVector pDirection = aT.GetMomentumDirection();
+   G4double dummy(0);
+   G4double result = aN->ComputeStep(pGlobalPoint, pDirection, DBL_MAX, dummy);
+   aN->LocateGlobalPointAndSetup(pGlobalPoint);
+   return result;
+ }
+
  G4Element * G4HadronicProcess::ChooseAandZ(
   const G4DynamicParticle *aParticle, const G4Material *aMaterial )
   {
@@ -90,7 +127,7 @@
  G4VParticleChange *G4HadronicProcess::GeneralPostStepDoIt(
   const G4Track &aTrack, const G4Step &)
   {
-      theTotalResult.SetNumberOfSecondaries(9);
+    // G4cout << theNumberOfInteractionLengthLeft<<G4endl;
     const G4DynamicParticle *aParticle = aTrack.GetDynamicParticle();
     G4Material *aMaterial = aTrack.GetMaterial();
     G4double kineticEnergy = aParticle->GetKineticEnergy();
@@ -150,9 +187,13 @@
         result = DoIsotopeCounting(result, aTrack, targetNucleus);
       }
     }
-    if(getenv("LeadingParticleBiasingActivated")) result = theBias->Bias(result);
+    
+    for(size_t i=0; i<theBias.size(); i++)
+    {
+      result = theBias[i]->Bias(result);
+    }
     FillTotalResult(result, aTrack);
-    return &theTotalResult;
+    return theTotalResult;
   }
 
   G4HadFinalState * G4HadronicProcess::
@@ -240,35 +281,35 @@
 
     void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
 {
-      theTotalResult.Clear();
-      theTotalResult.Initialize(aT);
-      theTotalResult.SetSecondaryWeightByProcess(true);
-      theTotalResult.SetStatusChange(fAlive);
+      theTotalResult->Clear();
+      theTotalResult->Initialize(aT);
+      theTotalResult->SetSecondaryWeightByProcess(true);
+      theTotalResult->SetStatusChange(fAlive);
       G4double rotation = 2.*pi*G4UniformRand();
       G4ThreeVector it(0., 0., 1.);
       if(aR->GetStatusChange()==stopAndKill)
       {
-        theTotalResult.SetStatusChange(fStopAndKill);
-        theTotalResult.SetEnergyChange( 0.0 );
+        theTotalResult->SetStatusChange(fStopAndKill);
+        theTotalResult->SetEnergyChange( 0.0 );
       }
       if(aR->GetStatusChange()==suspend)
       {
-        theTotalResult.SetStatusChange(fSuspend);
+        theTotalResult->SetStatusChange(fSuspend);
       }
       if(aR->GetStatusChange()!=stopAndKill )
       {
-	theTotalResult.SetWeightChange(aR->GetWeightChange()); // This is multiplicative
-	if(aR->GetEnergyChange()>-.5) theTotalResult.SetEnergyChange(aR->GetEnergyChange());
+	theTotalResult->SetWeightChange(aR->GetWeightChange()); // This is multiplicative
+	if(aR->GetEnergyChange()>-.5) theTotalResult->SetEnergyChange(aR->GetEnergyChange());
 	G4LorentzVector newDirection(aR->GetMomentumChange().unit(), 1.);
 	//G4cout << "Token before "<<
         //       " "<< "in="<<aT.GetMomentum().unit()<<" out="<<newDirection.vect()<<G4endl;
 	newDirection*=aR->GetTrafoToLab();
 	//G4cout << "Token after "<<aT.GetMomentum().unit()-newDirection.vect()<<
         //       " "<< "in="<<aT.GetMomentum().unit()<<" out="<<newDirection.vect()<<G4endl;
-	theTotalResult.SetMomentumDirectionChange(newDirection.vect());
+	theTotalResult->SetMomentumDirectionChange(newDirection.vect());
       }
-      theTotalResult.SetLocalEnergyDeposit(aR->GetLocalEnergyDeposit());
-      theTotalResult.SetNumberOfSecondaries(aR->GetNumberOfSecondaries());
+      theTotalResult->SetLocalEnergyDeposit(aR->GetLocalEnergyDeposit());
+      theTotalResult->SetNumberOfSecondaries(aR->GetNumberOfSecondaries());
       for(G4int i=0; i<aR->GetNumberOfSecondaries(); i++)
       {
         G4LorentzVector theM = aR->GetSecondary(i)->GetParticle()->Get4Momentum();
@@ -281,8 +322,8 @@
 				     aT.GetGlobalTime(),
 				     aT.GetPosition());
 	track->SetWeight(aT.GetWeight()*aR->GetSecondary(i)->GetWeight());
-	theTotalResult.AddSecondary(track);
+	theTotalResult->AddSecondary(track);
       }
       return;
-    }
+}
  /* end of file */

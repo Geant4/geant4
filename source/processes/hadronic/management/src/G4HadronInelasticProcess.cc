@@ -99,16 +99,6 @@
 
    theCrossSectionDataStore->BuildPhysicsTable(*theParticle);
 
-   //    G4int numberOfElements = G4Element::GetNumberOfElements();
-   //    thePhysicsTable = new G4PhysicsTable( numberOfElements );
-   //    
-   //    // make a PhysicsVector for each element
-   //    
-   //    static const G4ElementTable *theElementTable = G4Element::GetElementTable();
-   //    for( G4int i=0; i<numberOfElements; ++i )
-   //      (*thePhysicsTable)(i) =
-   //        theCrossSectionData.MakePhysicsVector( *this, *theParticle,
-   //                                               (*theElementTable)[i] );
   }
  
  G4double G4HadronInelasticProcess::GetMicroscopicCrossSection(
@@ -125,12 +115,6 @@
    }
    return theCrossSectionDataStore->GetCrossSection(aParticle, anElement, aTemp);
 
-   //    G4bool isOutRange;
-   //    G4int j = anElement->GetIndex();
-   //    
-   //    G4double s = (*((*thePhysicsTable)(j))).GetValue(
-   //     aParticle->GetTotalMomentum()/GeV, isOutRange );
-   //    return s;
   }
  
  /* end of file */
