@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.4 1999-04-01 07:32:43 aforti Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.5 1999-05-05 09:09:26 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -112,20 +112,20 @@ void G4LowEnergyPhotoElectric::BuildPhysicsTable(const G4ParticleDefinition& Pho
    // Build microscopic cross section tables for the Photo Electric Effect
    BuildCrossSectionTable();
 
-   // Build Binding Energy Table
-   BuildBindingEnergyTable();
-
    // Build mean free path table for the Compton Scattering process
    BuildMeanFreePathTable();
 
-
+   // Build Binding Energy Table
+   BuildBindingEnergyTable();
 }
 
 G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack, const G4Step&  aStep){
 
   cout<<"************** Starting PE DoIt ****************"<<endl;
   // incoming particle initialization
-  aParticleChange.Initialize(aTrack);
+  if(getenv("GENERAL")) aParticleChange.Initialize(aTrack);
+
+
   G4Material* aMaterial = aTrack.GetMaterial();
 
   const G4DynamicParticle* aDynamicPhoton = aTrack.GetDynamicParticle();
@@ -162,9 +162,17 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
   G4double ElecKineEnergy = (PhotonEnergy - (*theBindEnVec)(g))*MeV;
   G4double theEnergyDeposit = (PhotonEnergy - ElecKineEnergy)*MeV;
 
+    cout<<"The electron enloss range is: "
+	<<G4EnergyLossTables::GetRange(G4Electron::Electron(),ElecKineEnergy,aMaterial)
+	<<endl;
+
+    cout<<"The electron energy cut is: "<<G4Electron::GetCuts()<<endl;
+
+    cout<<"The safety cut is: "<<aStep.GetPostStepPoint()->GetSafety()<<endl;
+
   if (G4EnergyLossTables::GetRange(G4Electron::Electron(),ElecKineEnergy,aMaterial)
       >= min(G4Electron::GetCuts(), aStep.GetPostStepPoint()->GetSafety()) ){
-    
+
     // the electron is created in the direction of the incident photon ...  
     G4DynamicParticle* aElectron = new G4DynamicParticle (G4Electron::Electron(), 
 							  PhotonDirection, ElecKineEnergy) ;
@@ -254,6 +262,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
     ElecKineEnergy = 0. ;
     aParticleChange.SetNumberOfSecondaries(0) ;
   }
+
   // Kill the incident photon 
   aParticleChange.SetMomentumChange( 0., 0., 0. );
   aParticleChange.SetEnergyChange( 0. );
@@ -268,6 +277,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
   
   // Reset NbOfInteractionLengthLeft and return aParticleChange
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep );
+  cout<<"END OF PE POSTSTEPDOIT"<<endl;
 }
 
 void G4LowEnergyPhotoElectric::BuildCrossSectionTable(){
@@ -421,7 +431,7 @@ G4LowEnergyPhotoElectric::SelectRandomAtom(const G4DynamicParticle* aDynamicPhot
   }
 
   G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
-       << "' has no elements, NULL pointer returned." << endl;
+	 << "' has no elements, NULL pointer returned." << endl;
   return (*theElementVector)(0);
 }
 

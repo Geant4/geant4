@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyCompton.cc,v 1.3 1999-04-01 06:40:47 aforti Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.4 1999-05-05 09:09:25 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -100,11 +100,11 @@ void G4LowEnergyCompton::BuildPhysicsTable(const G4ParticleDefinition& GammaType
   // Build microscopic cross section table and mean free path table
   BuildCrossSectionTable();
 
-  // build the scattering function table
-  BuildScatteringFunctionTable();
-
   // Build mean free path table for the Compton Scattering process
   BuildMeanFreePathTable();
+
+  // build the scattering function table
+  BuildScatteringFunctionTable();
 }
 
 G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const G4Step&  aStep){
@@ -116,8 +116,9 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const
 // GEANT4 internal units
 //
   cout<<"************** Starting CE DoIt ****************"<<endl;
-  aParticleChange.Initialize(aTrack);
 
+  if(getenv("GENERAL")) aParticleChange.Initialize(aTrack);
+ 
   // Dynamic particle quantities  
   const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
   G4double GammaEnergy0 = aDynamicGamma->GetKineticEnergy();
@@ -159,7 +160,7 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const
     ScatteringFunction = DataLogInterpolation(x, elementZ - 1, theScatteringFunctionTable)/cm;
     greject = (1. - epsilon*sint2/(1.+ epsilonsq))*ScatteringFunction;
     
-  }  while(greject < elementZ*G4UniformRand());
+  }  while(2*greject < elementZ*G4UniformRand());
   
   G4double cosTeta = 1. - onecost , sinTeta = sqrt (sint2);
   G4double Phi     = twopi * G4UniformRand() ;

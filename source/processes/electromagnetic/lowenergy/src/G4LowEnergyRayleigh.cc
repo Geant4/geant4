@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyRayleigh.cc,v 1.3 1999-04-01 06:40:50 aforti Exp $
+// $Id: G4LowEnergyRayleigh.cc,v 1.4 1999-05-05 09:09:26 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,18 +81,15 @@ G4LowEnergyRayleigh::~G4LowEnergyRayleigh()
  
 void G4LowEnergyRayleigh::BuildPhysicsTable(const G4ParticleDefinition& GammaType){
 
-// Build microscopic cross section table and mean free path table
-   G4double LowEdgeEnergy, Value;
-   G4PhysicsFreeVector* ptrVector;
-
    // Build microscopic cross section tables for the Rayleigh process
    BuildCrossSectionTable();
+
+   // Build mean free path table for the Rayleigh Scattering process
+   BuildMeanFreePathTable();
 
    // build the scattering function table
    BuildFormFactorTable();
    
-   // Build mean free path table for the Rayleigh Scattering process
-   BuildMeanFreePathTable();
 }
 
 G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack, const G4Step&  aStep){
@@ -104,7 +101,8 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack, cons
 // (Nuc Phys 20(1960),15). GEANT4 internal units
 //
   cout<<"************** Starting RE DoIt ****************"<<endl;
-  aParticleChange.Initialize(aTrack);
+  if(getenv("GENERAL")) aParticleChange.Initialize(aTrack);
+
   
   // Dynamic particle quantities  
   const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
@@ -129,8 +127,6 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack, cons
   G4double sinTheta;
   do{
     
-    //    do{
-    
     Theta_Half = G4UniformRand()*pi/2;
     SinThHalf = sin(Theta_Half);
     x = SinThHalf/wlGamma;
@@ -139,8 +135,6 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack, cons
     
     RandomFormFactor = G4UniformRand()*elementZ;
       
-      //  }while(DataFormFactor < RandomFormFactor);
-
     Theta = Theta_Half*2;
     cosTheta = cos(Theta);
     sinTheta = sin(Theta);

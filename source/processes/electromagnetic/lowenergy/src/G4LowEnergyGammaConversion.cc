@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyGammaConversion.cc,v 1.3 1999-04-01 06:40:48 aforti Exp $
+// $Id: G4LowEnergyGammaConversion.cc,v 1.4 1999-05-05 09:09:26 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -104,7 +104,9 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
 // pair creation in both nuclear and atomic electron fields. However triplet 
 // prodution is not generated.
  cout<<"************** Starting PP DoIt ****************"<<endl;
-  aParticleChange.Initialize(aTrack);
+
+  if(getenv("GENERAL")) aParticleChange.Initialize(aTrack);
+
   G4Material* aMaterial = aTrack.GetMaterial();
   
   const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
@@ -207,7 +209,7 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
   aParticleChange.SetNumberOfSecondaries(2) ; 
   
   G4double ElectKineEnergy = max(0.,ElectTotEnergy - electron_mass_c2) ;
-  
+  cout<<"GetSafety"<<aStep.GetPostStepPoint()->GetSafety()<<endl;
   if (G4EnergyLossTables::GetRange(G4Electron::Electron(),ElectKineEnergy,aMaterial)
       >= min(G4Electron::GetCuts(), aStep.GetPostStepPoint()->GetSafety()) ){
 

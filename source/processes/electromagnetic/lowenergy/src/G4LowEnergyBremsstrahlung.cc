@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.1 1999-04-01 06:40:46 aforti Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.2 1999-05-05 09:09:25 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,6 +47,7 @@ G4LowEnergyBremsstrahlung::G4LowEnergyBremsstrahlung(const G4String& processName
     theMeanFreePathTable(NULL),
     LowestKineticEnergy (100.*eV),
     HighestKineticEnergy(100.*TeV),
+    lowEnergyCut(0.1*eV),
     TotBin(100)
 { 
    theCrossSectionTable = 0;
@@ -636,7 +637,9 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
 
   const G4double LPMconstant = fine_structure_const*electron_mass_c2*
                                 electron_mass_c2/(8.*pi*hbarc) ;
-  aParticleChange.Initialize(trackData);
+
+  if(getenv("GENERAL")) aParticleChange.Initialize(trackData);
+
   G4Material* aMaterial=trackData.GetMaterial() ;
   
   G4double LPMEnergy = LPMconstant*(aMaterial->GetRadlen()) ;
@@ -649,6 +652,7 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
 
   // Gamma production cut in this material
   G4double GammaEnergyCut = (G4Gamma::GetCutsInEnergy())[aMaterial->GetIndex()];
+  cout<<"GammaEnergyCut: "<<GammaEnergyCut<<endl;
 
   // check against insufficient energy
   if (ElectKinEn < GammaEnergyCut){
@@ -679,9 +683,6 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
   G4int AtomicNum = anElement->GetZ();
   coeffA = ComputeA(AtomicNum, ElectKinEn);
   coeffB = ComputeB(AtomicNum, ElectKinEn);
-
-  // Formula is not valid below this energy
-  G4double lowEnergyCut = 0.1*eV;
 
   p1 = coeffA*log(ElectKinEn/lowEnergyCut);
   p2 = coeffB*(ElectKinEn - lowEnergyCut); 
