@@ -1,0 +1,60 @@
+opt zfl
+opt nfit
+opt nsta
+opt nbox
+opt ngri
+set lwid 6
+igset MTYP 21
+set txfp -20
+set CHHE 0.5
+set VSIZ 0.5
+set CSIZ 0.5
+set asiz 0.5
+set lfon -20
+set vfon -20
+set HWID 6
+set YWIN 1.1
+set xmgl 3.0
+set YLAB 0.8
+set XLAB 1.8
+set NDVX 010206
+set NDVY 010205
+zone
+
+
+opt logy
+null -3 3 1.0 200.
+
+close 1
+hi/file 1 stop_p_pb_st.paw
+set dmod 1
+hi/pl 1 CS
+
+close 1
+hi/file 1 stop_p_pb_stn.paw
+set dmod 2
+hi/pl 1 CS
+
+ ve/del X Y Y1
+ ve/create X(6) R -2 -1 0 1 2 3 
+ ve/create Y2(6) R 48.71 121.1 62.92 17.78 3.551 1.185
+ gr/h/symb X Y2 6 21 0.3
+
+
+atitle 'log?10!(E?kin!(MeV))' 'dE/dx (MeV*cm**2/g)'
+
+itx -2 225 'Proton Ionisation Losses in Lead'
+
+*set ltyp 1
+*line 1.0 50.0 1.5 50.0
+itx 0.5 70 'solid line - standard'
+
+*set ltyp 2
+*line 1.0 50.0 1.5 50.0
+itx 0.5 50 'dashed line - new'
+
+exe hTest/prf dedx_p_pb_n ps
+
+opt liny
+set dmod 1
+
