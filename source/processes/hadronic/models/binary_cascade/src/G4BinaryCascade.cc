@@ -58,7 +58,7 @@
 #include <typeinfo>
 
 //   turn on general debugging info, and consistency checks
-#define debug_G4BinaryCascade 1
+//#define debug_G4BinaryCascade 1
 
 //  more detailed debugging -- deprecated  
 //#define debug_1_BinaryCascade 1
@@ -969,7 +969,7 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
 	     delete products;
 	     return false;
 	  }
-	  G4cout << " correct resonance from /to " << mom.e() << " / " << newEnergy<< G4endl;
+//	  G4cout << " correct resonance from /to " << mom.e() << " / " << newEnergy<< G4endl;
 	  G4ThreeVector mom3=std::sqrt(newEnergy2 - mass2) * mom.vect().unit();
 	  (*res)->Set4Momentum(G4LorentzVector(mom3,newEnergy));
       }
