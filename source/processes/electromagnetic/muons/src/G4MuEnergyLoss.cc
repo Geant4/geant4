@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuEnergyLoss.cc,v 1.2 1999-03-09 13:21:45 urban Exp $
+// $Id: G4MuEnergyLoss.cc,v 1.3 1999-05-07 12:25:12 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -74,6 +74,8 @@ G4PhysicsTable* G4MuEnergyLoss::themuplusRangeCoeffCTable = NULL ;
 G4PhysicsTable* G4MuEnergyLoss::themuminusRangeCoeffATable = NULL ;
 G4PhysicsTable* G4MuEnergyLoss::themuminusRangeCoeffBTable = NULL ;
 G4PhysicsTable* G4MuEnergyLoss::themuminusRangeCoeffCTable = NULL ;
+ 
+G4EnergyLossMessenger* G4MuEnergyLoss::eLossMessenger = NULL ;
 
 // constructor and destructor
  
