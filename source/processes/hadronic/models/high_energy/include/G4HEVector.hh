@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEVector.hh,v 1.8 2002-12-12 19:17:59 gunter Exp $
+// $Id: G4HEVector.hh,v 1.9 2003-07-01 15:42:22 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -34,7 +34,7 @@
 
 #include "G4ParticleMomentum.hh"
 #include "Randomize.hh"
-#include "G4DynamicParticle.hh"
+#include "G4HadProjectile.hh"
 
 class G4HEVector
  {
@@ -60,7 +60,7 @@ class G4HEVector
 
   public:
 
-  G4HEVector(const G4DynamicParticle * aParticle);
+  G4HEVector(const G4HadProjectile * aParticle);
   
   G4HEVector()
    {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEAntiSigmaZeroInelastic.hh,v 1.9 2002-12-12 19:17:58 gunter Exp $
+// $Id: G4HEAntiSigmaZeroInelastic.hh,v 1.10 2003-07-01 15:42:22 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,7 +57,7 @@ class G4HEAntiSigmaZeroInelastic : public G4HEInelastic
            { MAXPART = maxnumber; };
         void SetVerboseLevel(G4int verbose)
            { verboseLevel = verbose;};
-        G4VParticleChange * ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus );
+        G4HadFinalState * ApplyYourself( const G4HadProjectile &aTrack, G4Nucleus &targetNucleus );
         G4int  GetNumberOfSecondaries()
                { return vecLength; }         
 };

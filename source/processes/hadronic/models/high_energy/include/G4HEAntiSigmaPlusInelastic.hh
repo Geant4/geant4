@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEAntiSigmaPlusInelastic.hh,v 1.9 2002-12-12 19:17:58 gunter Exp $
+// $Id: G4HEAntiSigmaPlusInelastic.hh,v 1.10 2003-07-01 15:42:21 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,7 +51,7 @@ class G4HEAntiSigmaPlusInelastic : public G4HEInelastic
          
         G4int vecLength;
         
-        G4VParticleChange * ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus );
+        G4HadFinalState * ApplyYourself( const G4HadProjectile &aTrack, G4Nucleus &targetNucleus );
 
         G4int  GetNumberOfSecondaries()
                { return vecLength; }         
