@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorSceneHandler.hh,v 1.7 1999-12-15 14:54:11 gunter Exp $
+// $Id: G4OpenInventorSceneHandler.hh,v 1.8 1999-12-16 17:25:08 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,6 +55,8 @@ public:
   void AddThis (const G4Sphere&);
   void AddThis (const G4Para&);
   void AddThis (const G4Torus&);
+  void AddThis (const G4Polycone&);
+  void AddThis (const G4Polyhedra&);
   void AddThis (const G4VSolid&);
 
   void BeginPrimitives (const G4Transform3D& objectTransformation);

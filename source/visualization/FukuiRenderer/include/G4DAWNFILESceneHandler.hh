@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DAWNFILESceneHandler.hh,v 1.4 1999-12-15 14:54:00 gunter Exp $
+// $Id: G4DAWNFILESceneHandler.hh,v 1.5 1999-12-16 17:24:48 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -64,6 +64,12 @@ public:
   void AddThis ( const G4Sphere& sphere );
   void AddThis ( const G4Para&   para   );
   void AddThis ( const G4Torus&  torus  );
+  void AddThis ( const G4Polycone& polycone ) {
+    G4VSceneHandler::AddThis (polycone);
+  }
+  void AddThis ( const G4Polyhedra& polyhedra) {
+    G4VSceneHandler::AddThis (polyhedra);
+  }
   void AddThis ( const G4VSolid& solid  );
 
   void ClearStore (){}

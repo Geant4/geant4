@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLSceneHandler.hh,v 1.4 1999-12-15 14:54:04 gunter Exp $
+// $Id: G4OpenGLSceneHandler.hh,v 1.5 1999-12-16 17:25:05 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,6 +47,8 @@ public:
   void AddThis (const G4Sphere&);
   void AddThis (const G4Para&);
   void AddThis (const G4Torus&);
+  void AddThis (const G4Polycone&);
+  void AddThis (const G4Polyhedra&);
   void AddThis (const G4VSolid&);
 
 protected:
