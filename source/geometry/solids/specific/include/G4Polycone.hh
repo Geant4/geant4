@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.hh,v 1.10 2003-10-20 11:06:40 gcosmo Exp $
+// $Id: G4Polycone.hh,v 1.11 2003-11-04 17:10:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -130,7 +130,8 @@ class G4Polycone : public G4VCSGfaceted
   inline G4int  GetNumRZCorner() const;
   inline G4PolyconeSideRZ GetCorner(G4int index) const;
   inline G4PolyconeHistorical* GetOriginalParameters() const;
-  
+  inline void SetOriginalParameters(G4PolyconeHistorical* pars);
+
   protected:  // without description
 
   // Here are our parameters

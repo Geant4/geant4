@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.icc,v 1.2 2003-06-16 13:09:02 gcosmo Exp $
+// $Id: G4Polyhedra.icc,v 1.3 2003-11-04 17:10:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -72,4 +72,22 @@ inline
 G4PolyhedraHistorical* G4Polyhedra::GetOriginalParameters() const
 {
   return original_parameters;
+}
+
+inline
+void G4Polyhedra::SetOriginalParameters(G4PolyhedraHistorical* pars)
+{
+  if (!pars)
+    G4Exception("G4Polyhedra::SetOriginalParameters()", "InvalidSetup",
+                FatalException, "NULL pointer to parameters!");
+  original_parameters->Start_angle = pars->Start_angle;
+  original_parameters->Opening_angle = pars->Opening_angle;
+  original_parameters->numSide = pars->numSide;
+  original_parameters->Num_z_planes = pars->Num_z_planes;
+  delete [] original_parameters->Z_values;
+  delete [] original_parameters->Rmin;
+  delete [] original_parameters->Rmax;
+  original_parameters->Z_values = pars->Z_values;
+  original_parameters->Rmin = pars->Rmin;
+  original_parameters->Rmax = pars->Rmax;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.hh,v 1.9 2003-10-20 11:06:40 gcosmo Exp $
+// $Id: G4Polyhedra.hh,v 1.10 2003-11-04 17:10:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -137,7 +137,8 @@ class G4Polyhedra : public G4VCSGfaceted
   inline G4int GetNumRZCorner() const;
   inline G4PolyhedraSideRZ GetCorner( const G4int index ) const;
   inline G4PolyhedraHistorical* GetOriginalParameters() const;
-  
+  inline void SetOriginalParameters(G4PolyhedraHistorical* pars);
+
   protected:  // without description
 
   // Here are our parameters
