@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 // 
-// $Id: G4eIonisationSpectrum.hh,v 1.3 2001-11-29 19:01:45 vnivanch Exp $
+// $Id: G4eIonisationSpectrum.hh,v 1.4 2002-05-30 19:52:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -38,6 +38,7 @@
 // 10.10.01 MGP             Revision to improve code quality and 
 //                          consistency with design
 // 29.11.01  V.Ivanchenko   Parametrisation is updated
+// 30.05.02  VI             Add inline functions
 //
 // -------------------------------------------------------------------
 
@@ -50,11 +51,12 @@
 // -------------------------------------------------------------------
 
 #ifndef G4EIONISATIONSPECTRUM_HH
-#define GG4EIONISATIONSPECTRUM_HH 1
+#define G4EIONISATIONSPECTRUM_HH 1
 
 #include "G4VEnergySpectrum.hh"
+#include "G4eIonisationParameters.hh"
  
-class G4eIonisationParameters;
+//class G4eIonisationParameters;
 class G4DataVector;
 
 class G4eIonisationSpectrum : public G4VEnergySpectrum
@@ -108,8 +110,25 @@ private:
   G4eIonisationParameters* theParam;
   G4double                 lowestE;
   G4double                 factor;
-  G4int                    verbose;            
+  G4int                    iMax;            
+  G4int                    verbose;
 };
+
+
+inline G4double G4eIonisationSpectrum::Function(G4double x, 
+				          const G4DataVector& p) const
+{
+  G4double f = 1.0 - p[0] - p[iMax]*x 
+             + x*x*(1.0 - p[iMax] + (1.0/(1.0 - x) - p[iMax])/(1.0 - x))
+             + 0.5*p[0]/x;
+
+  return f;
+} 
+
+inline G4double G4eIonisationSpectrum::Excitation(G4int Z, G4double e) const 
+{
+  return theParam->Excitation(Z, e);
+}
 
 
 #endif
