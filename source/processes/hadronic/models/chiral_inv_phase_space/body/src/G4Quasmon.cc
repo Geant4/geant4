@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.cc,v 1.44 2002-12-10 15:55:11 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.45 2002-12-11 08:05:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -2607,8 +2607,8 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
   if(thePDG==113) G4cerr<<"G4Q::FillHadronVector: PDG="<<thePDG<<",M="<<t.m()<<G4endl;
   if(thePDG==113&&fabs(t.m()-770.)<.001) G4Exception("G4Quasmon::FillHadronVector: Zero rho");
 #endif
-#ifdef ppdebug
-  G4cout<<"G4Quasmon::FillHadronVector:Hadron's PDG="<<thePDG<<",4Mom="<<t<<G4endl;
+#ifdef tdebug
+  G4cout<<"G4Quasmon::FillHadronVector:Hadron's PDG="<<thePDG<<",4Mom="<<t<<",m="<<t.m()<<G4endl;
 #endif
   if(thePDG>80000000 && (thePDG<90000000 || thePDG%1000>500 || thePDG%1000000>500000)
 	 && thePDG!=90002999 && thePDG!=89999003 && thePDG!=90003998 && thePDG!=89998004
@@ -2673,15 +2673,15 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
       FillHadronVector(sHadr);                 // Fill 2nd Hadron (delete equivalent)
     }
   }
-  // pD++,nD-,ppD++,nnD-,D++D++,D-D-,pD++D++,nD-D- "nuclear states"
-  else if(thePDG>80000000 && 
-          thePDG==90002999&&thePDG==89999003&&thePDG==90003999&&thePDG==89999004&&thePDG==90003998&&
-          thePDG==89998004&&thePDG==90004998&&thePDG==89998005 && !DecayOutHadron(qH))
-  {
-#ifdef pdebug
-    G4cout<<"***G4Quasmon::FillHadronVector: Emergency OUTPUT, PDGcode= "<<thePDG<<G4endl;
+  // pD++,nD-,ppD++,nnD-,D++D++,D-D-,pD++D++,nD-D- "iso nuclear states"
+  //else if(thePDG>80000000 && (thePDG==90002999 || thePDG==89999003 || thePDG==90003999 ||
+  //                            thePDG==89999004 || thePDG==90003998 || thePDG==89998004 ||
+  //                            thePDG==90004998 || thePDG==89998005) && !DecayOutHadron(qH))
+  //{
+#ifdef tdebug
+  //  G4cout<<"G4Quasmon::FillHadronVector: Decay of isonuclear state, PDGcode= "<<thePDG<<G4endl;
 #endif
-  }
+  //}
   else if(thePDG>80000000&&thePDG!=90000000)   // === Decay-Evaporation of the BarionicFragment ===
   {
     G4double fragMas=qH->GetMass();            // Real Mass of the nuclear fragment
@@ -2925,16 +2925,19 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
         delete rHadron;
         theQHadrons.push_back(qH);                // Fill hadron in the HadronVector as it is
 	  }
+      else
+	  {
 #ifdef pdebug
       G4cout<<"G4Quasm::FillHadrVec:Done b="<<bHadron->GetQPDG()<<",r="<<rHadron->GetQPDG()<<G4endl;
 #endif
-      //qH->SetNFragments(2);                    // Fill a#of fragments to decaying Hadron
-      //theQHadrons.push_back(qH);                  // Fill hadron with nf=2 (delete equivalent)
-      // Instead
-      delete qH;
-      //
-      FillHadronVector(bHadron);               // Fill Evapor. Baryon (delete equivalent)
-      FillHadronVector(rHadron);               // Fill Residual Nucl. (delete equivalent)
+        //qH->SetNFragments(2);                    // Fill a#of fragments to decaying Hadron
+        //theQHadrons.push_back(qH);                  // Fill hadron with nf=2 (delete equivalent)
+        // Instead
+        delete qH;
+        //
+        FillHadronVector(bHadron);               // Fill Evapor. Baryon (delete equivalent)
+        FillHadronVector(rHadron);               // Fill Residual Nucl. (delete equivalent)
+      }
 	}
   }
   else if(!DecayOutHadron(qH))                 // (delete equivalent)
@@ -4419,7 +4422,7 @@ G4bool G4Quasmon::DecayOutHadron(G4QHadron* qHadron, G4int DFlag)
   }
   else
   {
-#ifdef pdebug
+#ifdef tdebug
     G4cout<<"G4Quasmon::DecayOutHadron: Fill PDG= "<<thePDG<<t<<m<<" as it is ***0***>>>>"<<G4endl;
 #endif
     if(thePDG==89999003||thePDG==90002999) G4cerr<<"***(1)***G4Q::DOH:8999003/90002999"<<G4endl;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCHIPSWorld.cc,v 1.17 2001-11-26 14:11:46 hpw Exp $
+// $Id: G4QCHIPSWorld.cc,v 1.18 2002-12-11 08:05:56 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCHIPSWorld ----------------
@@ -73,7 +73,7 @@ G4QParticleVector* G4QCHIPSWorld::InitCHIPSWorld(G4int nOfParts)
 {
   static G4int mnofParts = 486;                 // max number of particles (up to A=80)
   static G4QParticleVector theWorld;            // *** A body of the CHIPS World *** 
-  static int init = 0;                          // Initialization counter (private)
+  static G4int init = 0;                        // Initialization counter (private)
 #ifdef debug
   G4cout<<"G4QCHIPSWorld::InitCHIPSWorld: n="<<nOfParts<<" particles, init="<<init<<G4endl;
 #endif
@@ -84,12 +84,12 @@ G4QParticleVector* G4QCHIPSWorld::InitCHIPSWorld(G4int nOfParts)
 #endif
     G4int curNP=theWorld.size();
     if(curNP<0) curNP=0;
-    if(!init++||nOfParts>curNP)                 // Initialize for increasing CHIPS World
+    if(!init++||nOfParts>curNP)                 // Initialization for increasing CHIPS World
     {
       if (nOfParts>mnofParts)
       {
-        nOfParts=mnofParts;
         G4cerr<<"***G4QCHIPSWorld::InitCHIPSWorld: nOfParts="<<nOfParts<<" >"<<mnofParts<<G4endl;
+        nOfParts=mnofParts;
       }
       if (nOfParts<10) nOfParts=10;             // Minimal number of particles for Vacuum
 #ifdef debug
@@ -99,19 +99,19 @@ G4QParticleVector* G4QCHIPSWorld::InitCHIPSWorld(G4int nOfParts)
       {
         G4QParticle* curPart = new G4QParticle; // Created
         curPart->InitQParticle(i);              //   ||
-        theWorld.push_back(curPart);               // Filled (forever but once)
+        theWorld.push_back(curPart);            // Filled (forever but only once)
 #ifdef debug
         G4cout<<"G4QCHIPSWorld::InitCHIPSWorld: Particle#"<<i<<"(of "<<nOfParts<<") done"<<endl;
 #endif
       }
     }
-    else if (nOfParts<0)
-	{
-      G4std::for_each(theWorld.begin(), theWorld.end(), DeleteQParticle());
-      theWorld.clear();
-      init=0;
-	}
-    else init--;
+    else init--;                                // Recover the init pointer if nothing was done
+  }
+  else if (nOfParts<0)                          // Cleaning up the CHIPS Word (a possibility)
+  {
+    G4std::for_each(theWorld.begin(), theWorld.end(), DeleteQParticle());
+    theWorld.clear();
+    init=0;
   }
   return &theWorld;
 }
