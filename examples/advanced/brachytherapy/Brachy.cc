@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this
 // statement, and all its terms.
 //
-// $Id: Brachy.cc,v 1.2 2000-11-16 21:54:19 sgarelli Exp $
+// $Id: Brachy.cc,v 1.3 2000-12-10 08:38:15 chauvie Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -42,7 +42,7 @@
 int main()
 {
  // Number of generated photons
- G4int NumberOfEvents = 10000000;
+ G4int NumberOfEvents = 10;
 
  // Define number of voxels in X-Z plane
  G4int NumVoxelX = 101;
