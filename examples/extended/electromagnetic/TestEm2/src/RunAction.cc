@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.1 2003-10-08 17:28:47 maire Exp $
+// $Id: RunAction.cc,v 1.2 2004-03-15 14:26:00 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,8 +38,6 @@
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
-#include "G4UImanager.hh"
-#include "G4VVisManager.hh"
 #include "G4UnitsTable.hh"
 
 #include <iomanip>
@@ -47,9 +45,15 @@
 
 #include "Randomize.hh"
 
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
  #include "AIDA/AIDA.h"
 #endif
+
+#ifdef USE_ROOT
+ #include "TFile.h"
+ #include "TH1F.h"
+#endif
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -87,7 +91,7 @@ RunAction::~RunAction()
 
 void RunAction::bookHisto()
 {
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
  // Creating the analysis factory
  AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
  
@@ -147,15 +151,68 @@ void RunAction::bookHisto()
   delete tf;
   delete af;				    
 #endif
+
+#ifdef USE_ROOT
+ // Create a ROOT file
+ tree = new TFile("testem2.root","recreate");
+ 
+ // Create the histograms
+  G4double Ekin = Kin->GetParticleGun()->GetParticleEnergy();
+  G4double dLradl = Det->GetdLradl();
+  G4double dRradl = Det->GetdRradl();
+  
+  histo[0] = new TH1F( "1","total energy deposit(percent of Einc)",
+                                    100,0.,100.);
+                                    
+  histo[1] = new TH1F( "2","total charged tracklength (radl)",
+                                    100,0.,100.*Ekin/GeV);
+                                    
+  histo[2] = new TH1F( "3","total neutral tracklength (radl)",
+                                    100,0.,1000.*Ekin/GeV);
+                                    
+  histo[3] = new TH1F( "4","longit energy profile (% of E inc)",
+                                    nLbin,0.,nLbin*dLradl);
+                                    
+  G4double Zmin=0.5*dLradl, Zmax=Zmin+nLbin*dLradl;
+  histo[4] = new TH1F( "5","cumul longit energy dep (% of E inc)",
+                                    nLbin,Zmin,Zmax);
+                                    
+  histo[5] = new TH1F( "6","rms on cumul longit Edep (% of E inc)",
+                                    nLbin,Zmin,Zmax);
+                                    
+  histo[6] = new TH1F( "7","nb of gamma per plane",
+                                    nLbin,Zmin,Zmax);
+                                    
+  histo[7] = new TH1F( "8","nb of positron per plane",
+                                    nLbin,Zmin,Zmax);
+                                    
+  histo[8] = new TH1F( "9","nb of electron per plane",
+                                    nLbin,Zmin,Zmax);
+                                    
+  histo[9] = new TH1F("10","radial energy profile (% of E inc)",
+                                    nRbin,0.,nRbin*dRradl);
+                                    
+  G4double Rmin=0.5*dRradl, Rmax=Rmin+nRbin*dRradl;
+  histo[10]= new TH1F("11","cumul radial energy dep (% of E inc)",
+                                    nRbin,Rmin,Rmax);
+                                    
+  histo[11]= new TH1F("12","rms on cumul radial Edep (% of E inc)",
+                                    nRbin,Rmin,Rmax);
+#endif    
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::cleanHisto()
 {
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
   tree->commit();       // Writing the histograms to the file
   tree->close();        // and closing the tree (and the file)
-
+  delete tree;
+#endif 
+  
+#ifdef USE_ROOT
+  tree->Write();        // Writing the histograms to the file
+  tree->Close();        // and closing the file  
   delete tree;
 #endif  
 }
@@ -212,11 +269,6 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   //
   if (aRun->GetRunID() == 0) bookHisto();
   else if (rebin) {cleanHisto(); bookHisto();}
-  
-  //drawing
-  // 
-  if (G4VVisManager::GetConcreteInstance())
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -250,7 +302,7 @@ void RunAction::fillPerEvent()
   sumNeutrTrLength  += NeutrTrLength;
   sum2NeutrTrLength += NeutrTrLength*NeutrTrLength;
   
-#ifdef G4ANALYSIS_USE  
+#ifdef USE_AIDA  
   //fill histograms
   //
   G4double Ekin=Kin->GetParticleGun()->GetParticleEnergy();
@@ -260,16 +312,25 @@ void RunAction::fillPerEvent()
   histo[0]->fill(100.*dLCumul/(Ekin+mass));
   histo[1]->fill(ChargTrLength/radl);
   histo[2]->fill(NeutrTrLength/radl);
-#endif      
+#endif
+
+#ifdef USE_ROOT  
+  //fill histograms
+  //
+  G4double Ekin=Kin->GetParticleGun()->GetParticleEnergy();
+  G4double mass=Kin->GetParticleGun()->GetParticleDefinition()->GetPDGMass();
+  G4double radl=Det->GetMaterial()->GetRadlen();
+  
+  histo[0]->Fill(100.*dLCumul/(Ekin+mass));
+  histo[1]->Fill(ChargTrLength/radl);
+  histo[2]->Fill(NeutrTrLength/radl);
+#endif     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::EndOfRunAction(const G4Run* aRun)
-{
-  if (G4VVisManager::GetConcreteInstance())
-     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-     
+{     
   //compute and print statistic
   //     
   G4int NbOfEvents = aRun->GetNumberOfEvent();
@@ -301,7 +362,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     electronFlux[i] /= NbOfEvents;
     positronFlux[i] /= NbOfEvents;                                    
 
-#ifdef G4ANALYSIS_USE                                    
+#ifdef USE_AIDA                                    
     G4double bin = i*dLradl;                                
     histo[3]->fill(bin,MeanELongit[i]/dLradl);
     bin = (i+1)*dLradl;
@@ -311,7 +372,19 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     histo[6]->fill(bin, gammaFlux[i]);
     histo[7]->fill(bin, positronFlux[i]);
     histo[8]->fill(bin, electronFlux[i]);
-#endif                                            
+#endif
+
+#ifdef USE_ROOT                                    
+    G4double bin = i*dLradl;                                
+    histo[3]->Fill(bin,MeanELongit[i]/dLradl);
+    bin = (i+1)*dLradl;
+    histo[4]->Fill(bin,MeanELongitCumul[i]);
+    histo[5]->Fill(bin, rmsELongitCumul[i]);
+    
+    histo[6]->Fill(bin, gammaFlux[i]);
+    histo[7]->Fill(bin, positronFlux[i]);
+    histo[8]->Fill(bin, electronFlux[i]);
+#endif                                           
    }
    
   //radial
@@ -331,12 +404,20 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
      rmsERadialCumul[i] = norme*sqrt(abs(NbOfEvents*sumE2RadialCumul[i] 
                                     - sumERadialCumul[i]*sumERadialCumul[i]));
                                  
-#ifdef G4ANALYSIS_USE                                     
+#ifdef USE_AIDA                                     
     G4double bin = i*dRradl;                                
     histo[ 9]->fill(bin,MeanERadial[i]/dRradl);
     bin = (i+1)*dRradl;
     histo[10]->fill(bin,MeanERadialCumul[i]);
     histo[11]->fill(bin, rmsERadialCumul[i]);
+#endif
+
+#ifdef USE_ROOT                                     
+    G4double bin = i*dRradl;                                
+    histo[ 9]->Fill(bin,MeanERadial[i]/dRradl);
+    bin = (i+1)*dRradl;
+    histo[10]->Fill(bin,MeanERadialCumul[i]);
+    histo[11]->Fill(bin, rmsERadialCumul[i]);
 #endif                                           
    }
 
