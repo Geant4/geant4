@@ -249,7 +249,7 @@ void Tst01DetectorConstruction::SwitchBoolean()
   // NOTE: xRot = rotation such that x axis->y axis & y axis->-x axis
   //
   // G4RotationMatrix xRot ;
-  // xRot.rotateZ(-M_PI*0.5) ;
+  // xRot.rotateZ(-pi*0.5) ;
   // G4Transform3D transform(xRot,G4ThreeVector()) ;
   
 

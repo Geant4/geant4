@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BuildShapes.cc,v 1.5 2004-03-21 12:42:01 gcosmo Exp $
+// $Id: BuildShapes.cc,v 1.6 2004-12-10 22:36:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -123,7 +123,7 @@ G4VPhysicalVolume* BuildCylinder()
 	G4VisAttributes* pVA  = new G4VisAttributes (G4Colour(0,1,0));
 
 		//----- Solid
-	G4Tubs *tubs = new G4Tubs ("Tubs", 0. , 1.5, 2.0 , 0., 2.*M_PI);
+	G4Tubs *tubs = new G4Tubs ("Tubs", 0. , 1.5, 2.0 , 0., twopi);
 
 		//----- Logical Volume
 	G4LogicalVolume *tubsLog=new G4LogicalVolume( tubs, &myMaterial,
@@ -292,7 +292,7 @@ G4VPhysicalVolume* BuildSphereFull()
 	G4VisAttributes* pVA  = new G4VisAttributes (G4Colour(1,1,0));
 
 		//----- Solid
-	G4Sphere *Sphere = new G4Sphere ("Sphere", 1.6, 1.8, 0.0, (2.0*M_PI), 0.0, (2.0*M_PI) );
+	G4Sphere *Sphere = new G4Sphere ("Sphere", 1.6, 1.8, 0.0, (twopi), 0.0, (twopi) );
 
 		//----- Logical Volume
 	G4LogicalVolume *SphereLog=new G4LogicalVolume( Sphere, &myMaterial,
@@ -360,7 +360,7 @@ G4VPhysicalVolume* BuildPara()
 
 		//----- Solid
 //	G4Para *para = new G4Para ("Para", 1.0 ,1.0, 3.0, 0.0, 0.0, 0.0 );
-	G4Para *para = new G4Para ("Para", 1.0 ,1.0, 3.0, M_PI/6.0, M_PI/12.0, M_PI/12.0 );
+	G4Para *para = new G4Para ("Para", 1.0 ,1.0, 3.0, pi/6.0, pi/12.0, pi/12.0 );
 
 		//----- Logical Volume
 	G4LogicalVolume *paraLog=new G4LogicalVolume( para, &myMaterial,
