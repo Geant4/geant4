@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectoryPoint.cc,v 1.1 2002-09-04 02:09:38 asaim Exp $
+// $Id: G4SmoothTrajectoryPoint.cc,v 1.2 2002-09-16 13:38:32 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -55,10 +55,6 @@ G4SmoothTrajectoryPoint::G4SmoothTrajectoryPoint(const G4SmoothTrajectoryPoint &
 G4SmoothTrajectoryPoint::~G4SmoothTrajectoryPoint()
 {
   if(!fAuxiliaryPointVector) {
-    for(size_t i=0;i<fAuxiliaryPointVector->size();i++) {
-     delete (*fAuxiliaryPointVector)[i];
-    }
-    fAuxiliaryPointVector->clear();
     delete fAuxiliaryPointVector;
   }
 }
