@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleWithCuts.cc,v 1.6 1999-12-15 14:51:14 gunter Exp $
+// $Id: G4ParticleWithCuts.cc,v 1.7 2001-03-05 08:39:55 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -174,8 +174,9 @@ void G4ParticleWithCuts::BuildLossTable()
   if (NumberOfElements ==0) 
   {
     NumberOfElements = G4Element::GetNumberOfElements();
-    theLossTable = new
-               G4LossTable(G4Element::GetNumberOfElements());
+    theLossTable = new G4LossTable();
+    theLossTable->reserve(G4Element::GetNumberOfElements());
+
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>2) {
       G4cout << "G4ParticleWithCuts::BuildLossTable() ";
