@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIWin32.cc,v 1.7 2001-07-11 10:01:21 gunter Exp $
+// $Id: G4UIWin32.cc,v 1.8 2003-06-11 07:03:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
@@ -32,10 +32,6 @@
 
 #include <string.h>
 
-#include <windows.h>
-#include <windowsx.h>
-#include <wingdi.h>
-
 #include "g4std/strstream"
 
 #include "G4UImanager.hh"
@@ -45,6 +41,8 @@
 #include "G4Win32.hh"
 
 #include "G4UIWin32.hh"
+
+#include <wingdi.h>
 
 #define TEXT_MAX_LINES 300
 
