@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnionSolid.cc,v 1.24 2003-11-03 17:48:46 gcosmo Exp $
+// $Id: G4UnionSolid.cc,v 1.25 2004-02-27 08:38:09 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -188,14 +188,17 @@ G4UnionSolid::SurfaceNormal( const G4ThreeVector& p ) const
     {
       normal= fPtrSolidA->SurfaceNormal(p) ;
 #ifdef G4BOOLDEBUG
-      G4cout << "WARNING - Invalid call in "
+      if(Inside(p)==kInside)
+      {
+        G4cout << "WARNING - Invalid call in "
              << "G4UnionSolid::SurfaceNormal(p)" << G4endl
              << "  Point p is inside !" << G4endl;
-      G4cout << "          p = " << p << G4endl;
-      G4cerr << "WARNING - Invalid call in "
+        G4cout << "          p = " << p << G4endl;
+        G4cerr << "WARNING - Invalid call in "
              << "G4UnionSolid::SurfaceNormal(p)" << G4endl
              << "  Point p is inside !" << G4endl;
-      G4cerr << "          p = " << p << G4endl;
+        G4cerr << "          p = " << p << G4endl;
+      }
 #endif
     }
     return normal;
