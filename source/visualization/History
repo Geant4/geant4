@@ -1,4 +1,4 @@
-$Id: History,v 1.20 1999-06-01 17:22:44 johna Exp $
+$Id: History,v 1.21 1999-06-19 16:30:01 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,11 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+vis-01-00-14  19th June 1999  John Allison
+- Removed references to G4Ray from GNUmakefile.
+- Archived (cvs removed) all G4Ray files.
+- Cosmetic change to an output statement in G4VisToOldVisCommands.cc/
 
 vis-01-00-13  1st June 1999  John Allison
 - Updated README for May Release (Satoshi, John).
