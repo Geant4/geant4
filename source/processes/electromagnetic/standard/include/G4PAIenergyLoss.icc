@@ -5,8 +5,6 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIenergyLoss.icc,v 1.4 1999-12-15 14:51:47 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
 // ---------------------------------------------------------------
@@ -23,7 +21,7 @@
 // It calculates the energy loss of charged hadrons.
 // ***************************************************************
 // corrected by L.Urban on 24/09/97
-//
+// 06.01.00 V.Grichine, modifications in GetConstraints
 //
 
 ////////////////////////////////////////////////////////////////////
@@ -34,9 +32,17 @@ inline G4double
  G4PAIenergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
                                               G4Material *aMaterial    ) 
 {
-  //  G4cout<<"G4PAIenergyLoss::GetConstraints is called"<<G4endl ; 
-  return   2*mm ;
- 
+  //  G4cout<<"G4PAIenergyLoss::GetConstraints is called"<<endl ; 
+  //  return   2*mm ;
+     if(aMaterial->GetState() == kStateGas) 
+    {
+      return 100*mm ;
+    }
+    else
+    {
+      return 0.1*mm ;
+    }
+
 }
 
 //////////////////////////////////////////////////////////////////////////
