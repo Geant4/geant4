@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversionToMuons.cc,v 1.1 2002-04-19 14:44:33 hbu Exp $
+// $Id: G4GammaConversionToMuons.cc,v 1.2 2002-04-30 13:54:29 hbu Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //         ------------ G4GammaConversionToMuons physics process ------
@@ -65,8 +65,8 @@ void G4GammaConversionToMuons::BuildPhysicsTable(const G4ParticleDefinition&)
 void G4GammaConversionToMuons::SetCrossSecFactor(G4double fac)
 // Set the factor to artificially increase the cross section
 { CrossSecFactor=fac;
-  G4cout << "The cross section for GammaConversionToMuons is artificially
-   increased by the CrossSecFactor=" << CrossSecFactor << G4endl;
+  G4cout << "The cross section for GammaConversionToMuons is artificially " <<
+   " increased by the CrossSecFactor=" << CrossSecFactor << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -249,9 +249,7 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(const G4Track& aTrack,
   // now construct the vectors
   G4double phi0=2.*pi*G4UniformRand(); // azimuthal symmetry, take phi0 at random between 0 and 2 pi
   G4double EPlus=xPlus*Egam;
-  G4double pPlus=sqrt(EPlus*EPlus-Mmuon*Mmuon);
   G4double EMinus=xMinus*Egam;
-  G4double pMinus=sqrt(EMinus*EMinus-Mmuon*Mmuon);
 
   // mu+ mu- directions for gamma in z-direction
   G4ThreeVector MuPlusDirection  ( sin(thetaPlus) *cos(phi0+phiHalf),
