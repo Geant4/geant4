@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Quasmon.hh,v 1.16 2001-10-04 20:00:22 hpw Exp $
+// $Id: G4Quasmon.hh,v 1.17 2001-10-26 14:43:39 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -127,7 +127,9 @@ inline G4QContent      G4Quasmon::GetQC()        const {return valQ;}
 inline G4QPDGCode      G4Quasmon::GetQPDG()      const {return G4QPDGCode(valQ);}
 inline G4int           G4Quasmon::GetStatus()    const {return status;}
 inline void            G4Quasmon::ClearOutput()        
-      {G4std::for_each(theQHadrons.begin(), theQHadrons.end(), DeleteQHadron());}
+      {G4std::for_each(theQHadrons.begin(), theQHadrons.end(), DeleteQHadron());
+       theQHadrons.clear();
+      }
 inline void            G4Quasmon::KillEnvironment()
                                     {theEnvironment=G4QNucleus(0,0,0,G4LorentzVector(0.,0.,0.,0.));}
 inline G4double        G4Quasmon::GetRandomMass(G4int PDG, G4double maxM)

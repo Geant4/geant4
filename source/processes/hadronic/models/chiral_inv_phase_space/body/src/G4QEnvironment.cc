@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QEnvironment.cc,v 1.30 2001-10-04 20:00:22 hpw Exp $
+// $Id: G4QEnvironment.cc,v 1.31 2001-10-26 14:43:39 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -531,6 +531,7 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
 	    G4cout<<"G4QEnvironment::CreateQ: before input.clearAndDestroy()"<<G4endl; //      ^     ^
 #endif
         G4std::for_each(input.begin(), input.end(), DeleteQHadron());// Here we are DESTROING input >--------^-----^
+        input.clear();
         theEnvironment =muq->GetEnvironment();     // Get residual Environment after interaction
         G4QuasmonVector* outQ = muq->GetQuasmons();// Copy of quasmons **!!DESTROY!!** <---^-----+
         G4QHadronVector* outH = muq->GetQHadrons();// Copy of hadrons **!!DESTROY!!** <----^--+  ^
@@ -769,6 +770,7 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
     if(nPDG==90000000)
     {
       G4std::for_each(theQHadrons.begin(), theQHadrons.end(), DeleteQHadron());
+      theQHadrons.clear();
       return theQHadrons;
     }
     if(nPDG>80000000)

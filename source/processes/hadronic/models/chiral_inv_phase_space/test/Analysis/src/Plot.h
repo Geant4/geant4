@@ -66,7 +66,11 @@ class ANAPlot : public TVANAPlot<DataPointType>
       }
     }
     
-    G4bool Filter(ANAParticle * aPart) {return theFilter->Accept(aPart->GetCosTheta());}
+    G4bool Filter(ANAParticle * aPart) 
+    {
+      G4double cosTheta = aPart->GetCosTheta();
+      return theFilter->Accept(cosTheta);
+    }
     
   private:
     G4int thePDG;

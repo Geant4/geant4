@@ -32,7 +32,8 @@ class TVANAFilter
   virtual G4bool Accept(Type & anInput) = 0;
   virtual G4double RelativeGeometricalAcceptance() { return 1;}
   G4String GetName() {return theName;}
-  
+  virtual  ~TVANAFilter() {}
+ 
   private:
   
   TVANAFilter() {}

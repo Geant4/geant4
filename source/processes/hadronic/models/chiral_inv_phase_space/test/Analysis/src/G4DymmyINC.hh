@@ -56,7 +56,7 @@ public:
    G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
    {
      G4ReactionProductVector * theFinalResult = new G4ReactionProductVector(0);
-     theSecondaries->clearAndDestroy();
+     for_each(theSecondaries->begin(), theSecondaries->end(), DeleteKineticTrack());
      delete theSecondaries;
      return theFinalResult;
    }

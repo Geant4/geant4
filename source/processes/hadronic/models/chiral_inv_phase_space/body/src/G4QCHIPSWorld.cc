@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QCHIPSWorld.cc,v 1.12 2001-10-04 20:00:22 hpw Exp $
+// $Id: G4QCHIPSWorld.cc,v 1.13 2001-10-26 14:43:39 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -97,6 +97,7 @@ G4QParticleVector* G4QCHIPSWorld::InitCHIPSWorld(G4int nOfParts)
     else if (nOfParts<0)
 	{
       G4std::for_each(theWorld.begin(), theWorld.end(), DeleteQParticle());
+      theWorld.clear();
       init=0;
 	}
     else init--;

@@ -248,6 +248,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   {
     G4QEnvironment* pan= new G4QEnvironment(projHV, targetPDGCode);
     G4std::for_each(projHV.begin(), projHV.end(), DeleteQHadron());
+    projHV.clear();
     output = pan->Fragment();
     delete pan;
   }

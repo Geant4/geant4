@@ -37,6 +37,8 @@ class DoubleBandFilter : public TVANAFilter<G4double>
     theHigh = lowerEquals;
   }
   
+  virtual ~DoubleBandFilter(){}
+  
   G4bool Accept(G4double & anInput)
   {
     if(anInput<=theHigh && anInput>theLow) return true;

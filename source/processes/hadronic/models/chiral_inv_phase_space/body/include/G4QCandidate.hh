@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QCandidate.hh,v 1.10 2001-10-04 20:00:21 hpw Exp $
+// $Id: G4QCandidate.hh,v 1.11 2001-10-26 14:43:38 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -103,6 +103,7 @@ inline G4double G4QCandidate::GetSecondIntProb()          const {return secondIn
 inline void G4QCandidate::ClearParClustVector()                 
 {
   G4std::for_each(thePClusters.begin(), thePClusters.end(), DeleteQParentCluster());
+  thePClusters.clear();
 }
 
 inline void G4QCandidate::FillPClustVec(G4QParentCluster* pCl)

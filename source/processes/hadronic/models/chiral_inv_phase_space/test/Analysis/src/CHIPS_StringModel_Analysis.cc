@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: CHIPS_StringModel_Analysis.cc,v 1.9 2001-09-13 15:13:13 hpw Exp $
+// $Id: CHIPS_StringModel_Analysis.cc,v 1.10 2001-10-26 14:44:32 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -76,6 +76,7 @@
 #include "G4VPreCompoundModel.hh"
 #include "G4FTFModel.hh"
 #include "G4QGSModel.hh"
+#include "G4QGSParticipants.hh"
 #include "G4LundStringFragmentation.hh"
 #include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
@@ -464,7 +465,7 @@ class KtoPi
       G4cout << "Please select String Model to test(1-FTF, 2-QGS): " << G4std::flush;
       G4cin >> choice;
       if(choice==1) theStringModel = new G4FTFModel;
-      if(choice==2) theStringModel = new G4QGSModel;
+      if(choice==2) theStringModel = new G4QGSModel<G4QGSParticipants>;
     }while(choice!=1&&choice!=2);
 
     theTheoModel->SetHighEnergyGenerator(theStringModel);
