@@ -1,4 +1,4 @@
-# $Id: stt-prod.sdb,v 1.5 1999-10-29 17:50:41 stesting Exp $
+# $Id: stt-prod.sdb,v 1.6 1999-10-30 11:18:55 stesting Exp $
 # .sdb files are read by checkout.sh and update.sh
 # Lines beginning "# " are ignored (the space after the '#' is important!
 # Blank lines are not allowed!
@@ -32,6 +32,7 @@ geant4/source/processes/GNUmakefile         geant4-00-01
 geant4/source/processes/History             geant4-00-01
 geant4/source/processes/decay	            geant4-00-01
 geant4/source/processes/electromagnetic	    geant4-00-01
+geant4/source/processes/electromagnetic/xrays xrays-V00-01-00
 geant4/source/processes/hadronic            geant4-00-01
 geant4/source/processes/hadronic/models/generator/string_fragmentation string_fragmentation-V00-01-00
 geant4/source/processes/management          geant4-00-01
