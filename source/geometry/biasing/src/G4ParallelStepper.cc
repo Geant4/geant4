@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelStepper.cc,v 1.5 2002-09-02 13:25:26 dressel Exp $
+// $Id: G4ParallelStepper.cc,v 1.6 2002-10-14 12:36:03 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -40,26 +40,45 @@ G4ParallelStepper::G4ParallelStepper()
 
 G4ParallelStepper::~G4ParallelStepper()
 {
-  if (fPStep) delete fPStep;
+  if (fPStep) {
+    delete fPStep;
+  }
 }
 
 G4ParallelStepper::G4ParallelStepper(const G4ParallelStepper &rhs)
+  :
+  fPStep(new G4PStep(rhs.GetPStep()))
 {
-  fPStep = new G4PStep(rhs.GetPStep());
+  if (!fPStep) {
+    Error("G4ParallelStepper:: new failed to create a G4PStep!");
+  }
 }
 
 G4ParallelStepper &G4ParallelStepper::operator=(const G4ParallelStepper &rhs)
 {
   if (this != &rhs) {
     fPStep = new G4PStep(rhs.GetPStep());
+    if (!fPStep) {
+      Error("operator=: new failed to create a G4PStep!");
+    }
   }
   return *this;
 }
+
+G4PStep G4ParallelStepper::GetPStep() const {
+  G4PStep p = *fPStep;
+  return p;
+}
+
 
 void G4ParallelStepper::Init(const G4GeometryCell &agCell)
 {
   if (!fPStep) {
     fPStep = new G4PStep(agCell, agCell);
+      if (!fPStep) {
+	Error("Init new failed to create a G4PStep!");
+      }
+
   }
   else {
     fPStep->SetPreGeometryCell(agCell);
@@ -88,6 +107,6 @@ void G4ParallelStepper::UnSetCrossBoundary()
 
 void G4ParallelStepper::Error(const G4String &m)
 {
-  G4cout << "ERROR: in G4ParallelStepper::" << m << G4endl;
-  G4Exception("Program aborted.");
+  G4std::G4cout << "ERROR: in G4ParallelStepper::" << m << G4endl;
+  G4std::G4Exception("Program aborted.");
 }

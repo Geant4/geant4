@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IStore.hh,v 1.7 2002-09-02 13:25:25 dressel Exp $
+// $Id: G4IStore.hh,v 1.8 2002-10-14 12:36:00 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -55,8 +55,20 @@ public:  // with description
   G4IStore(const G4VPhysicalVolume &worldvolume);
     // initialise the importance store for the given geometry
 
-  ~G4IStore();
+  virtual ~G4IStore();
     // destruct
+
+  virtual G4double GetImportance(const G4GeometryCell &gCell) const;
+    // derive a importance value of a "cell" addresed by a G4GeometryCell
+    // from the store.
+
+  virtual G4bool IsKnown(const G4GeometryCell &gCell) const;
+    // returns true if the gCell is in the store, else false 
+
+
+  virtual const G4VPhysicalVolume &GetWorldVolume() const;
+    // return a reference to the wolrd volume of the 
+    // "importance" geometry
 
   void AddImportanceGeometryCell(G4double importance,
 			   const G4GeometryCell &gCell);
@@ -74,17 +86,6 @@ public:  // with description
 
   G4double GetImportance(const G4VPhysicalVolume &,
 			 G4int aRepNum = 0) const ;
-  G4double GetImportance(const G4GeometryCell &gCell) const;
-    // derive a importance value of a "cell" addresed by a G4GeometryCell
-    // from the store.
-
-  G4bool IsKnown(const G4GeometryCell &gCell) const;
-    // returns true if the gCell is in the store, else false 
-
-
-  const G4VPhysicalVolume &GetWorldVolume() const;
-    // return a reference to the wolrd volume of the 
-    // "importance" geometry
   
 private:
 

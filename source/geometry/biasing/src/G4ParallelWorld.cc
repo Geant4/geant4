@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWorld.cc,v 1.4 2002-09-02 13:25:26 dressel Exp $
+// $Id: G4ParallelWorld.cc,v 1.5 2002-10-14 12:36:03 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -39,7 +39,14 @@
 G4ParallelWorld::G4ParallelWorld(G4VPhysicalVolume &worldvolume)
  : fPstepper(new G4ParallelStepper),
    fPdriver(new G4ParallelNavigator(worldvolume))
-{}
+{
+  if (!fPstepper) {
+    G4std::G4Exception("ERROR: G4ParallelWorld::G4ParallelWorld: new failed to create a G4ParallelStepper");
+  }
+  if (!fPdriver) {
+     G4std::G4Exception("ERROR: G4ParallelWorld::G4ParallelWorld: new failed to create a G4ParallelNavigator");
+  }
+}
 
 G4ParallelWorld::~G4ParallelWorld()
 {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightWindowAlgorithm.cc,v 1.3 2002-08-29 15:30:52 dressel Exp $
+// $Id: G4WeightWindowAlgorithm.cc,v 1.4 2002-10-14 12:36:04 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -38,6 +38,10 @@ G4WeightWindowAlgorithm::G4WeightWindowAlgorithm() :
   fUpper(1),
   fLower(1)
 {}
+
+G4WeightWindowAlgorithm::~G4WeightWindowAlgorithm()
+{}
+
 
 void G4WeightWindowAlgorithm::SetUpperLimit(G4double Upper){
   fUpper = Upper;
@@ -64,9 +68,9 @@ G4WeightWindowAlgorithm::Calculate(G4double init_w,
     nw.fW/=f; 
 
     // calculate the number of coppies
-    nw.fN = int(f);
+    nw.fN = static_cast<G4int>(f);
     // correct the number of coppies in case f is not an integer
-    if (G4double(nw.fN) != f) {
+    if (static_cast<G4double>(nw.fN) != f) {
       // probabillity p for splitting into nw.fN+1 particles
       G4double p = f - nw.fN;
       // get a random number out of [0,1)

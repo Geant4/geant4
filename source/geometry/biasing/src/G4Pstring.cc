@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Pstring.cc,v 1.4 2002-09-02 15:22:33 dressel Exp $
+// $Id: G4Pstring.cc,v 1.5 2002-10-14 12:36:03 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -36,14 +36,14 @@
 G4String str(const int &i)
 {
   char s[200];
-  sprintf(s,"%d",i);
+  G4std::sprintf(s,"%d",i);
   return s;
 }
 
 G4String str(const double &d)
 {
   char s[200];
-  sprintf(s,"%f",d);
+  G4std::sprintf(s,"%f",d);
   return s;
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPScorer.hh,v 1.4 2002-08-29 15:30:50 dressel Exp $
+// $Id: G4VPScorer.hh,v 1.5 2002-10-14 12:36:01 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -50,7 +50,8 @@ class G4VPScorer
 
 public:  // with description
 
-  virtual ~G4VPScorer() {}
+  G4VPScorer();
+  virtual ~G4VPScorer();
   virtual void Score(const G4Step &step, const G4PStep &pstep) = 0;
     // perform scoring for the G4Step and G4PStep
 };

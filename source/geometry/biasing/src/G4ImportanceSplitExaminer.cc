@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceSplitExaminer.cc,v 1.4 2002-10-10 13:18:00 dressel Exp $
+// $Id: G4ImportanceSplitExaminer.cc,v 1.5 2002-10-14 12:36:03 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -32,7 +32,6 @@
 // ----------------------------------------------------------------------
 
 #include "G4ImportanceSplitExaminer.hh"
-#include "G4ImportanceFinder.hh"
 #include "G4VParallelStepper.hh"
 #include "G4VImportanceAlgorithm.hh"
 
@@ -42,19 +41,19 @@ G4ImportanceSplitExaminer(const G4VImportanceAlgorithm &aIalg,
 		    const G4VIStore &istore)
  : fIalgorithm(aIalg),
    fPStepper(astepper),
-   fIfinder(new G4ImportanceFinder(istore))
+   fIfinder(istore)
 {}
 
 G4ImportanceSplitExaminer::~G4ImportanceSplitExaminer()
-{
-  delete fIfinder;
-}
+{}
+
   
 G4Nsplit_Weight G4ImportanceSplitExaminer::Examine(G4double w) const
 {
   G4PStep pstep = fPStepper.GetPStep();
-  return fIalgorithm.
-    Calculate(fIfinder->GetImportance(pstep.GetPreGeometryCell()),
-	      fIfinder->GetImportance(pstep.GetPostGeometryCell()), 
+  G4Nsplit_Weight nw = fIalgorithm.
+    Calculate(fIfinder.GetImportance(pstep.GetPreGeometryCell()),
+	      fIfinder.GetImportance(pstep.GetPostGeometryCell()), 
 	      w);
+  return nw;
 }

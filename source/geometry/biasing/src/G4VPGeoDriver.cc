@@ -21,91 +21,21 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sigma.hh,v 1.8 2002-07-10 14:52:42 dressel Exp $
+// $Id: G4VPGeoDriver.cc,v 1.1 2002-10-14 12:36:50 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4Sigma
+// GEANT 4 class source file
 //
-// Class description:
+// G4VPGeoDriver.cc
 //
-// A class for simple Gaussian statistics taking into account 
-// weights.
-
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4Sigma_hh
-#define G4Sigma_hh G4Sigma_hh
 
-#include "g4std/iostream"
-#include "globals.hh"
 
-class G4Sigma
-{ 
-  
- public:  // with description
+#include "G4VPGeoDriver.hh"
+G4VPGeoDriver::G4VPGeoDriver()
+{}
 
-  G4Sigma();
-    // call Init()
+G4VPGeoDriver::~G4VPGeoDriver()
+{}
 
-  ~G4Sigma();
-    // simple deonstruction
-
-  void Init();
-    // initialisation
-
-  G4int Xin(G4double x, G4double w = 1.);
-   // enter a value [with a weight] 
-
-  G4int GetEntries() const;
-    // get the number of entries
-
-  G4double GetMean() const;
-    // get the weighted mean value: Sum(w*x)/Sum(w)
-
-  G4double GetSigma() const;
-    // get the weighted sigma: sqrt(Sum(w*x*x)/Sum(w)-mean^2)
-
-  G4double GetXsum() const;
-    // get sum over x: Sum(x) 
-
-  G4double GetXXsum() const;
-    // get sum over squared x: Sum(x*x)
-
-  G4double GetWsum() const;
-    // get sum over weights: Sum(w) 
-
-  G4double GetWWsum() const;
-    // get sum over squared weights: Sum(w*w) 
-
-  G4double GetWXsum() const;
-    // get weighted sum over x*w: Sum(w*x)
-
-  G4double GetWXXsum() const;
-    // get weighted sum over squarted x: Sum(W*x*x)
-
- private:
-
-  G4int GetCalc() const;
-  G4int Calculate() const;
-  void Error(const G4String &m);
-
- private:
-
-  G4int fEntries;
-  mutable G4double fMean;
-  mutable G4double fSigma;
-
-  G4double fXsum;
-  G4double fXXsum;
-  G4double fWsum;
-  G4double fWWsum;
-  G4double fWXsum;
-  G4double fWXXsum;
-  mutable G4int fcalc;
-
-};
-
-G4std::ostream& operator<<(G4std::ostream &out, const G4Sigma &s);
-
-#endif

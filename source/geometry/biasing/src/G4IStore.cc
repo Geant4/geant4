@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IStore.cc,v 1.7 2002-09-02 13:25:26 dressel Exp $
+// $Id: G4IStore.cc,v 1.8 2002-10-14 12:36:03 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -111,9 +111,9 @@ G4double G4IStore::GetImportance(const G4GeometryCell &gCell) const
 {
   SetInternalIterator(gCell);
   if (fCurrentIterator==fGeometryCelli.end()) {
-    G4cout << "PGeometryCell gCell: " << gCell << G4endl;
-    G4cout << "Not found in: " << G4endl;
-    G4cout << fGeometryCelli << G4endl;
+    G4std::G4std::G4cout << "PGeometryCell gCell: " << gCell << G4endl;
+    G4std::G4std::G4cout << "Not found in: " << G4endl;
+    G4std::G4std::G4cout << fGeometryCelli << G4endl;
     Error("GetImportance(gCell): Region does not exist");
   }
   return (*fCurrentIterator).second;
@@ -139,6 +139,6 @@ G4bool G4IStore::IsInWorld(const G4VPhysicalVolume &aVolume) const
 
 void G4IStore::Error(const G4String &m) const
 {
-  G4cout << "ERROR - G4IStore::" << m << G4endl;
-  G4Exception("Program aborted.");
+  G4std::G4std::G4cout << "ERROR - G4IStore::" << m << G4endl;
+  G4std::G4std::G4Exception("Program aborted.");
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPGeoDriver.hh,v 1.5 2002-09-02 13:25:26 dressel Exp $
+// $Id: G4VPGeoDriver.hh,v 1.6 2002-10-14 12:36:01 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -50,7 +50,8 @@ class G4VPGeoDriver
 
 public:  // with description
 
-  virtual ~G4VPGeoDriver(){}
+  G4VPGeoDriver();
+  virtual ~G4VPGeoDriver();
   
   virtual G4GeometryCell LocateOnBoundary(const G4ThreeVector &aPosition, 
 					  const G4ThreeVector &aDirection) = 0;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCellScorerStore.hh,v 1.3 2002-09-02 13:25:26 dressel Exp $
+// $Id: G4VCellScorerStore.hh,v 1.4 2002-10-14 12:36:01 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -44,8 +44,9 @@ class G4GeometryCell;
 
 class G4VCellScorerStore {
 public:
-  virtual ~G4VCellScorerStore() {}
-  virtual G4VCellScorer *GetCellScore(G4GeometryCell gCell) = 0;
+  G4VCellScorerStore();
+  virtual ~G4VCellScorerStore();
+  virtual G4VCellScorer *GetCellScore(const G4GeometryCell &gCell) = 0;
 };
 
 

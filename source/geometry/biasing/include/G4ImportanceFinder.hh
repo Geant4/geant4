@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceFinder.hh,v 1.5 2002-10-10 13:17:59 dressel Exp $
+// $Id: G4ImportanceFinder.hh,v 1.6 2002-10-14 12:36:00 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -49,7 +49,7 @@ class G4ImportanceFinder
 
 public:  // with description
 
-  G4ImportanceFinder(const G4VIStore &aIStore);
+  explicit G4ImportanceFinder(const G4VIStore &aIStore);
     // initialise fIStore
 
   ~G4ImportanceFinder();

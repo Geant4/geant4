@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceAlgorithm.hh,v 1.5 2002-10-10 13:17:59 dressel Exp $
+// $Id: G4ImportanceAlgorithm.hh,v 1.6 2002-10-14 12:36:00 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -47,12 +47,12 @@ public:  // with description
   G4ImportanceAlgorithm();
     // simple construction
 
-  ~G4ImportanceAlgorithm();
+  virtual ~G4ImportanceAlgorithm();
     // repeate warning if triggered
 
-  G4Nsplit_Weight Calculate(G4double ipre, 
-			    G4double ipost, 
-			    G4double init_w) const;
+  virtual G4Nsplit_Weight Calculate(G4double ipre, 
+				    G4double ipost, 
+				    G4double init_w) const;
     // calculate the number of tracks and their weight according 
     // to the pre and post importance value and the weight of
     // the mother track.  

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PStep.hh,v 1.5 2002-09-02 13:25:25 dressel Exp $
+// $Id: G4PStep.hh,v 1.6 2002-10-14 12:36:00 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -49,29 +49,23 @@
 class G4PStep
 {
 public:
-  G4PStep(const G4GeometryCell &preCell, const G4GeometryCell &postCell)
-   : fPreGeometryCell(preCell), fPostGeometryCell(postCell), 
-     fCrossBoundary(false) {}
+  G4PStep(const G4GeometryCell &preCell, 
+	  const G4GeometryCell &postCell);
     // initialise pre and post G4GeometryCell 
 
-  ~G4PStep(){}
+  ~G4PStep();
 
-  void SetPreGeometryCell(const G4GeometryCell &preCell)  
-  {fPreGeometryCell = preCell;}
+  void SetPreGeometryCell(const G4GeometryCell &preCell); 
 
-  void SetPostGeometryCell(const G4GeometryCell &postCell)  
-  {fPostGeometryCell = postCell;}
+  void SetPostGeometryCell(const G4GeometryCell &postCell);
   
-  void SetCrossBoundary(G4bool b) {fCrossBoundary = b;}
+  void SetCrossBoundary(G4bool b);
 
-  G4GeometryCell GetPreGeometryCell() const 
-  {return fPreGeometryCell;}
+  const G4GeometryCell &GetPreGeometryCell() const; 
 
-  G4GeometryCell GetPostGeometryCell() const 
-  {return fPostGeometryCell;}
+  const G4GeometryCell &GetPostGeometryCell() const; 
   
-  G4bool GetCrossBoundary() const 
-  {return fCrossBoundary;}
+  G4bool GetCrossBoundary() const; 
 
 private:
   G4GeometryCell fPreGeometryCell;
@@ -83,5 +77,38 @@ private:
   G4bool fCrossBoundary;
     // true if step crosses boundary of the geometry it refers to
 };
+
+
+
+inline void G4PStep::SetPreGeometryCell(const G4GeometryCell &preCell) 
+{
+  fPreGeometryCell = preCell;
+}
+
+inline void G4PStep::SetPostGeometryCell(const G4GeometryCell &postCell)  
+{
+  fPostGeometryCell = postCell;
+}
+  
+inline void G4PStep::SetCrossBoundary(G4bool b) 
+{
+  fCrossBoundary = b;
+}
+
+inline const G4GeometryCell &G4PStep::GetPreGeometryCell() const 
+{
+  return fPreGeometryCell;
+}
+
+inline const G4GeometryCell &G4PStep::GetPostGeometryCell() const 
+{
+  return fPostGeometryCell;
+}
+  
+inline G4bool G4PStep::GetCrossBoundary() const 
+{
+  return fCrossBoundary;
+}
+
 
 #endif

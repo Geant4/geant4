@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2002-10-10 13:17:58 dressel Exp $
+$Id: History,v 1.22 2002-10-14 12:38:35 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct, 14th 2002 M.Dressel 
+     cleanup according to codewizzard
 
 Oct, 10th 2002 M.Dressel geombias-V04-01-01-internal-5
      change in G4(V)ImportanceAlgorithm, G4ImportanceSplitExaminer

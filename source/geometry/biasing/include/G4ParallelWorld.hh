@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWorld.hh,v 1.5 2002-09-02 13:25:26 dressel Exp $
+// $Id: G4ParallelWorld.hh,v 1.6 2002-10-14 12:36:00 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -51,7 +51,7 @@ class G4ParallelWorld
 
 public:  // with description
 
-  G4ParallelWorld(G4VPhysicalVolume &worldvolume);
+  explicit G4ParallelWorld(G4VPhysicalVolume &worldvolume);
     // initialisation and create G4ParallelStepper and a G4VPGeoDriver
 
   ~G4ParallelWorld();
