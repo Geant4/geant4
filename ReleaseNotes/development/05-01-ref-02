@@ -1,0 +1,178 @@
+
+                       geant4-05-01-ref-02
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Enhanced commands in G4GeometryMessenger for controlling geometry
+    overlaps: added possibility to control recursion depth and resolution
+    of the test.
+  o Improved design on EM low-energy module to allow for multiple models
+    of Bremsstrahlung angular distribution. Updated data-set to version 2.2.
+  o Important fix in MultipleScattering algorithms: fixed angle
+    distribution for muons/hadrons to have the distribution width to
+    correspond to the value from the HighLand formula.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config                                  config-V05-01-00
+------
+- Added more strict compiler options for warnings on Linux-g++ platform.
+- Removed obsolete usage of GNU_GCC specific option for g++ compilers.
+
+digits+hits                             digits_hits-V05-01-00
+-----------
+- Cleared pedantic warnings on Linux-g++ platform.
+
+event                                   event-V05-01-00
+-----
+- Cleared pedantic warnings on Linux-g++ platform.
+
+geometry/management                     geommng-V05-01-01
+-------------------
+- G4LogicalVolume: notify removal of root-logical-volume from G4Region
+  in case of deletion of a logical-volume from the destructor, instead
+  that from DeRegister() method.
+- G4LogicalVolumeStore: removed redundant check and call to
+  RemoveRootLogicalVolume() from Clean() method.
+- G4Region: removed redundant calls to ScanVolumeTree() and
+  UpdateMaterials() from RemoveRootLogicalVolume() method.
+
+geometry/solids/Boolean                 geom-bool-V05-01-01
+-----------------------
+- Implementations for Set/GetScalePrecision() in G4ReflectionFactory
+  were missing! Now fixed.
+
+geometry/solids/BREPS                   breps-V05-01-00
+---------------------
+- G4BREPSolidPCone: commented out verbose-mode in SurfaceNormal().
+  Temporary solution to problem reports #425, #431 and #474.
+
+geometry/verification                   geomver-V05-01-00
+---------------------
+- G4GeomTestVolume:
+  o Added methods TestRecursiveLine() and TestRecursiveCylinder() for
+    allowing recursion on line_test and cylinder_test respectively.
+  o Introduced ability to control depth and starting level of recursion.
+
+geometry/volumes                        geomvol-V05-01-01
+----------------
+- G4GeometryMessenger:
+  o Added new commands for controlling geometry overlaps: added recursion
+    to line_test and cylinder_test; added possibility to customise the
+    resolution and shape of grid/cylinder for the test; added ability to
+    select depth of recursion in the geometry tree.
+  o Added explicit call to OpenGeometry() in method CheckGeometry() to
+    force cleanup of voxelisation when command navigator/reset is called.
+
+global                                  global-V05-01-00
+------
+- G4PhysicsVector: moved copy costructor and assignment operator to
+  public. Fixes problem report #486.
+
+intercoms                               intercoms-V05-01-00
+---------
+- Cleared pedantic warnings on Linux-g++ platform.
+
+materials                               materials-V05-01-00
+---------
+- G4Isotope: fixed bug in operator=. Fixes problem report #429
+- G4SandiaTable: cleared trivial pedantic warning.
+
+parameterisations                       parmodels-V05-01-00
+-----------------
+- Cleared pedantic warnings on Linux-g++ platform.
+
+particles                               particles-V05-01-02
+---------
+- Added utility method to G4ProductionCuts.
+- Cleared pedantic warnings on Linux-g++ platform.
+
+processes/GNUmakefile                   processes-gmk-V05-01-00
+---------------------
+- Added missing module Bertini-Cascade to list of libraries for
+  compound build.
+
+processes/electromagnetic/lowenergy     emlowen-V05-01-03
+-----------------------------------
+- Improved design to allow for multiple models of Bremsstrahlung angular 
+  distribution; currently the model for modified Tsai is provided.
+- G4PenelopeCompton triggers atomic relaxation.
+- Removed two memory leaks in Penelope processes and design flaw in
+  private interface of G4eBremsstrahlungSpectrum.
+- Cleared pedantic warnings on Linux-g++ platform.
+- Requires a new version of the data-set: G4EMLOW2.2. 
+
+processes/electromagnetic/utils         utils-V05-01-01
+-------------------------------
+- MultipleScattering and MultipleScatteringSTD :
+  o IMPORTANT change in the angle distribution for muons/hadrons
+    the width of the central part now is corresponds to the value
+    can be computed from the HighLand formula (no change of this
+    kind for e+/e-) --> small change in the width for low to
+    medium energy (protons - 1 MeV - few hundred MeV) but change
+    up to 20 -25 % for high energy.
+  o minor correction in the angle sampling algorithm, affects 
+    e+/e- too --> small change for very small and very big
+    stepsize/range values.
+- Added precise range calculation for prototype STD processes.
+- Default step parameters for prototype STD processes set to be the
+  same as for standard processes.
+
+processes/parameterisation              parmodels-V05-01-00
+--------------------------
+- Cleared pedantic warnings on Linux-g++ platform.
+
+processes/transportation                transport-V05-01-00
+------------------------
+- Fixes to G4Transportation to accomodate incorrect and missing
+  functionality for the following use cases:
+  o setting of a local field when no global field exists.
+  o overriding of an existing global field with a 'zero' field
+    by creating a local field manager that has a null G4Field pointer.
+
+run                                     run-V05-01-03
+---
+- G4RunManager: fixed case of removal of logical volume from default
+  region, when the whole geometry setup is cleared between runs.
+- Cleared pedantic warnings on Linux-g++ platform.
+
+track                                   track-V05-01-02
+-----
+- Fixed copy operator of G4Track not to copy the pointer to user
+  information.
+- Cleared pedantic warnings on Linux-g++ platform.
+
+tracking                                tracking-V05-01-00
+--------
+- Cleared some pedantic warnings on Linux-g++ platform.
+
+examples                                examples-V05-01-00
+--------
+- Updated reference outputs.
+- advanced:
+  o composite_calorimeter (ccal-V05-01-01)
+    + Cleared pedantic warnings on Linux-g++ platform.
+- extended:
+  o electromagnetic
+    + TestEm1 (testem1-V05-01-01)
+      TestEm2 (testem1-V05-01-01)
+      TestEm3 (testem3-V05-01-01)
+      o Corrected deletion of volumes/solids when geometry is updated.
+    + TestEm8 (testem8-V05-01-00)
+      o Fixed warnings and changed input parameters for updated PAI.
+- novice
+  o N03 (exampleN03-V05-01-00)
+    + Properly delete volumes/solids when geometry is updated.
+  o N07 (exampleN07-V05-01-00)
+    + Cleared pedantic warnings on Linux-g++ platform.
+
+tests                                   tests-V05-01-00
+-----
+- Updated reference outputs.
+- test14 (test14-V05-01-01)
+  test20 (test20-V05-01-01)
+  o Corrected deletion of volumes/solids when geometry is updated.
