@@ -1,4 +1,4 @@
-# $Id: stt-ref+.sdb,v 1.35 1999-05-17 16:39:03 stesting Exp $
+# $Id: stt-ref+.sdb,v 1.36 1999-05-18 15:36:56 stesting Exp $
 # .sdb files are read by checkout.sh and update.sh
 # Lines beginning "# " are ignored (the space after the '#' is important!
 # Blank lines are not allowed!
@@ -19,6 +19,7 @@ geant4/source/geometry/GNUmakefile   geant4-00-ref-08
 geant4/source/geometry/History       geant4-00-ref-08
 geant4/source/geometry/magneticfield geant4-00-ref-08
 geant4/source/geometry/management    geant4-00-ref-08
+geant4/source/geometry/management/src/G4SolidStore.cc        HEAD
 geant4/source/geometry/solids        geant4-00-ref-08
 geant4/source/geometry/volumes       geant4-00-ref-08
 geant4/source/geometry/volumes/include/G4NavigationLevel.hh  HEAD
@@ -30,6 +31,8 @@ geant4/source/intercoms        geant4-00-ref-08
 geant4/source/interfaces       geant4-00-ref-08
 geant4/source/materials        geant4-00-ref-08
 geant4/source/particles        geant4-00-ref-08
+geant4/source/particlesmanagement/include/G4NucleiPropertiesTable.hh HEAD
+geant4/source/particlesmanagement/src/G4ParticleTable.cc             HEAD
 geant4/source/persistency      geant4-00-ref-08
 geant4/source/processes/GNUmakefile         geant4-00-ref-08
 geant4/source/processes/History             geant4-00-ref-08
