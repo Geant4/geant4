@@ -1,4 +1,4 @@
-$Id: README,v 1.4 2002-06-16 15:05:45 mantero Exp $
+$Id: README,v 1.5 2003-07-17 14:16:05 mantero Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,13 +9,14 @@ $Id: README,v 1.4 2002-06-16 15:05:45 mantero Exp $
                             -----------------
 XrayFluo is an advanced Geant4 example based on a realistic simulation of 
 a test beam. 
-The aim of the test beam was to characterize the response function of an
-HPGe detector used to measure fluorescence emissions from samples composed
+The aim of the test beam was to characterize the response function of various
+X-Rays detectors used to measure fluorescence emissions from samples composed
 of different materials irradiated with a monochromatic beam of photons.
 In this example the geometry of the detector is simplified:
-one single pixel is used instead of an array of pixels.
-The response function is tabulated for ten different values of incident 
-energy and stored in the file response.dat.
+one single pixel is used, since the test beams has used monolithic detectors.
+The response function is tabulated for different values of incident 
+energy and stored in the file response.dat and SILIresponse.dat.
+At the moment, two kinds of detectors are available: HPGe and Si(Li).
 The sample, a simple box whose material can be selected, can be irradiated
 with different particles, with different spectra for the incident energy and
 with different shapes of the primary generator. 
@@ -39,7 +40,7 @@ _ the example includes the possibility to shoot particles according to a
   conditions.
 
  - histograming facilities are presently provided for the Linux environment 
-   either by using the AIDA interfaces, or through the Anaphe/Lizard system.
+   by using the AIDA3 interfaces.
    The AIDA compliant version has not been tested by the developers and is
    here as a example of "forward compatibility" on how to use analysis.
 
@@ -65,23 +66,24 @@ setenv PATH ${PATH}:"/afs/cern.ch/sw/geant4/dev/DAWN/Linux-g++"
 # flag that we want to use analysis:
 setenv G4ANALYSIS_USE               1
 
-# select analysis system: any AIDA 2.2 compliant system or Anaphe 3.6.5
-
-# set up for AIDA 2.2 compliancy:
-# Compilation and link flags to hook and AIDA compliant system 
-# are passed to the Geant4 GNUmakefile system by using the "aida-config" tool
-# that should come with any AIDA compliant system. Examples are:
-# setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --include`
-# setenv G4ANALYSIS_AIDA_CONFIG_LIBS   `aida-config --libs`
-
-#set up Anaphe/Lizard for the gcc-2.95 compiler
-setenv G4ANALYSIS_SYSTEM Lizard
-setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/3.6.5/bin
-source /afs/cern.ch/sw/lhcxx/share/LHCXX/3.6.5/install/sharedstart.csh
+#select AIDA implementation: Anaphe 5.0.5 (for cern AFS)
+setenv G4ANALYSIS_BUILD  1
+source /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/scripts/setupAnaphe.csh
+setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/scripts/
+setenv LD_LIBRARY_PATH $OGLHOME/lib:$LD_LIBRARY_PATH
+setenv ANAPHE5_REL_DIR /afs/cern.ch/sw/lhcxx/specific/redhat73/gcc-3.2/5.0.5/
+setenv LD_LIBRARY_PATH $OGLHOME/lib:$LD_LIBRARY_PATH
+setenv LD_LIBRARY_PATH "/afs/cern.ch/sw/lhcxx/specific/redhat73/gcc-3.2/5.0.5/lib:${LD_LIBRARY_PATH}"
+setenv LD_LIBRARY_PATH "/usr/local/gcc-alt-3.2/lib:${ANAPHE5_REL_DIR}/lib:${LD_LIBRARY_PATH}"
+setenv LD_LIBRARY_PATH "`aida-config --run`:${LD_LIBRARY_PATH}"
 
 #path to the lowEnergy data base
 
-setenv G4LEDATA /afs/cern.ch/sw/geant4/stt/dev1/src/G4EMLOW1.1
+setenv G4LEDATA /afs/cern.ch/sw/geant4/dev/data/G4EMLOW2.2
+
+#path to Xray_Fluorescence data files, if not set, PWD is assumed:
+
+setenv XRAYDATA /afs/cern.ch/user/s/surname
 
 1. Run
 To execute a sample simulation with visualisation of tracks
@@ -92,8 +94,8 @@ XrayFluo
 execute command "/control/execute xxxxx.mac"
 
 
-If the Lizard analysis options are set, histograming windows will
-automatically stored in the corresponding files
+If the analysis options are set, histograms will
+automatically stored in the corresponding files (hbook or XML)
 
 2. Detector description
 
@@ -112,13 +114,12 @@ XrayFluoParticleGeneratorAction.cc
 
 5. Analysis
 
-At present the analisys is provided by any AIDA-2.2 compliant analysis system. 
+At present the analisys is provided by any AIDA-3.0 compliant analysis system. 
 In the example the Anaphe toolkit is used.
 
 To build and execute the example on platforms where there is no
 implementation of the analysis system, the environment variables 
 must not be set.
-
-The example provides also two Python files used to display and fit the 
-histograms with Lizard 1.3.x.
+The example provides also a simple Python file used to display
+histograms with Lizard 3.0.0.x 
 

@@ -1,34 +1,33 @@
-# $Id: GNUmakefile,v 1.13 2002-06-16 15:05:45 mantero Exp $
+# $Id: GNUmakefile,v 1.14 2003-07-17 14:16:05 mantero Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
+# G4LIB_BUILD_SHARED = 1
+
+ifndef G4TARGET
 name := XrayFluo
 G4TARGET := $(name)
+endif
+
 G4EXLIB := true
 
-G4ANALYSIS_USE = 1
+G4ANALYSIS_USE = 0
 
 ifndef G4INSTALL
   G4INSTALL = ../../..
 endif
 
-include $(G4INSTALL)/config/architecture.gmk
-
 .PHONY: all visclean
 all:  lib bin 
-
+include $(G4INSTALL)/config/architecture.gmk
 include $(G4INSTALL)/config/binmake.gmk
 
-# Copy the XrayFluoAnalysisManage files according to which version
-# is selected.
-# As the dependency is checked before "all" is reached, we need
-# to do some tricks here ...
-
-CPPFLAGS += -I${LHCXX_REL_DIR}/include -I/afs/cern.ch/sw/contrib/AIDA/2.2/cpp
-LOADLIBS  += -L/usr/local/gcc-alt-2.95.2
-
-
+ifdef G4ANALYSIS_USE
+ CPPFLAGS += `aida-config --include`
+ LDFLAGS  += `aida-config --lib`
+ LOADLIBS += `aida-config --lib`
+endif
 
 visclean:
 	rm -f g4*.prim g4*.eps g4*.wrl
