@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.hh,v 1.14 2003-11-08 02:10:20 japost Exp $
+// $Id: G4ChordFinder.hh,v 1.15 2003-11-08 03:29:45 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,7 +57,7 @@ class G4ChordFinder
                      G4MagIntegratorStepper* pItsStepper = 0 );  
         // A constructor that creates defaults for all "children" classes.
       
-      ~G4ChordFinder();
+      virtual ~G4ChordFinder();
 
 
       G4double    AdvanceChordLimited( G4FieldTrack& yCurrent,
@@ -92,20 +92,24 @@ class G4ChordFinder
       inline G4int GetNoMaxTrials();     // Maximum # of trials for one call
         // Get statistics about number of calls & trials in FindNextChord
 
-      void   PrintStatistics();  // virtual ? 
+      virtual void   PrintStatistics(); 
         // A report with the above -- and possibly other stats
       inline G4int SetVerbose( G4int newvalue=1); 
        // Set verbosity and return old value
 
    protected:   // .........................................................
 
+      inline  void    AccumulateStatistics( G4int noTrials ); 
+        // Accumulate the basic statistics 
+        //   - other specialised ones must be kept by derived classes
+ 
       inline G4bool AcceptableMissDist(G4double dChordStep) const;
 
       G4double NewStep( G4double stepTrialOld, 
                         G4double dChordStep,     // Current dchord estimate
                         G4double& stepEstimate_Unconstrained ) ;  
       
-      G4double FindNextChord( const  G4FieldTrack  yStart,
+      virtual G4double FindNextChord( const  G4FieldTrack  yStart,
                               G4double     stepMax,
                               G4FieldTrack& yEnd,
                               G4double&    dyErr,      //  Error of endpoint 
