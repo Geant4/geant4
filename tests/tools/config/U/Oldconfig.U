@@ -1,4 +1,4 @@
-?RCS: $Id: Oldconfig.U,v 1.11 2002-07-01 11:07:26 sadilov Exp $
+?RCS: $Id: Oldconfig.U,v 1.12 2002-12-12 22:53:17 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,6 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.11  2002/07/01 11:07:26  sadilov
+?RCS: Correction for 'solaris' system.
+?RCS:
 ?RCS: Revision 1.10  2002/06/26 09:48:56  sadilov
 ?RCS: Adding WIN32-VC system.
 ?RCS:
@@ -547,7 +550,7 @@ fi
 ?X: fi
 	: Sadilov: g4system.U - inserted here.
 	: 'current' directory is where 'Configure' is started 
-echo " "
+#echo " "
 case "$g4osname" in
 
 '')
@@ -571,7 +574,7 @@ case "$g4osname" in
 	esac
 esac
 
-echo " "
+#echo " "
 
 case  "$g4compiler" in
 
@@ -739,6 +742,7 @@ EOM
 		;;
 	esac
 done
+
 fi
 
 #
@@ -746,11 +750,11 @@ fi
 #
 g4system=$g4osname-$g4compiler
 
-cat << EOM
-
-G4SYSTEM is now set to $g4system.
-
-EOM
+#cat << EOM
+#
+#G4SYSTEM is now set to $g4system.
+#
+#EOM
 
 cd .config/UU
 
@@ -773,7 +777,68 @@ dflt=n
 
 cd ../..
 if [ X$install = X ] ; then
+
+
 	if test -f $src/.config/bin/$g4system/env.sh; then
+
+	if [ X$g4liblist = Xyes ] ; then
+
+#	cat >&2 <<EOM
+#---------------------------------------------------
+#LibList mode :)
+#---------------------------------------------------
+#EOM
+	
+	. $src/.config/bin/$g4system/env.sh
+
+	echo TEST
+
+	ls -l $G4INSTALL/config/scripts/GNUmakefile
+	gmake -n -p -f $G4INSTALL/config/scripts/GNUmakefile > $G4INSTALL/config/scripts/GNUmakefile.db
+	
+grep LOADLIBS= $G4INSTALL/config/scripts/GNUmakefile.db
+	LOADLIBS=`grep 'LOADLIBS :=' $G4INSTALL/config/scripts/GNUmakefile.db | awk -F := '{print $2}'`
+
+	echo LOADLIBS=$LOADLIBS
+	echo TEST
+
+	if [ X$G4LIB_USE_GRANULAR = X ] ; then
+	
+# Global libs
+
+	echo "-L$G4WORKDIR/lib/$G4SYSTEM -lG4persistency -lG4readout -lG4run -lG4event -lG4tracking -lG4parmodels -lG4processes -lG4digits+hits -lG4track -lG4particles -lG4geometry -lG4materials -lG4graphics_reps -lG4intercoms -lG4global $c"
+
+	$rm -rf .config/UU
+	exit 1
+
+	else 
+
+# Granular libs
+
+	echo $n "-L$G4WORKDIR/lib/$G4SYSTEM $c" ; $G4WORKDIR/lib/$G4SYSTEM/liblist -m $G4WORKDIR/lib/$G4SYSTEM < $G4WORKDIR/lib/$G4SYSTEM/libname.map
+	$rm -rf .config/UU
+
+	exit 1
+	fi
+
+	else
+
+# header for User
+echo " "
+echo " "
+echo " "
+echo "                --- Geant4 Toolkit Installation  ---"
+echo "                  (setting environments for USER )"
+echo " "
+echo " "
+echo " "
+
+#cat << EOM
+#
+#G4SYSTEM is now set to $g4system.
+#
+#EOM
+
 	cat >&2 <<EOM
 ---------------------------------------------------
 The Geant4 toolkit installation was found.
@@ -798,7 +863,19 @@ cp -i $src/.config/bin/$g4system/env.csh .
 cp -i $src/.config/bin/$g4system/env.sh  .
 
 	exit 1
+	fi
 else
+
+# header for Installer
+echo " "
+echo " "
+echo " "
+echo "                --- Geant4 Toolkit Installation  ---"
+echo " "
+echo " "
+echo " "
+echo " "
+
 	echo " "
 	echo "WARNING: Geant4 is NOT installed yet!"
 	echo "You (or the administrator if you have not enough privileges)"
