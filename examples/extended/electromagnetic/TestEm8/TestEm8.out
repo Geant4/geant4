@@ -118,7 +118,7 @@ Irregular X-ray TR model is called
 48	fGamma = 8.085e+04	sumE = 8.377
 49	fGamma = 9.283e+04	sumE = 8.504
 
-total time for build X-ray TR tables = 23.59 s
+total time for build X-ray TR tables = 28.94 s
 Em8PhysicsList::SetCuts:CutLength : 1 mm 
 
 phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
@@ -141,20 +141,21 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
 
            material       min.delta energy(keV) 
 
-           Aluminium         125.07
-               Mylar            118
-       Polypropelene         111.38
+           Aluminium         125.06
+               Mylar         117.99
+       Polypropelene         111.37
                   Kr         1.0737
                Argon           0.99
                   N2           0.99
                   O2           0.99
                  Air           0.99
-               Xenon         1.8735
+               Xenon         1.8725
                  CO2           0.99
              Xe20CO2         1.6715
              Kr20CO2          1.088
 
-eBrem:  Total cross sections from a parametrisation. Good description from 10 KeV to 100 GeV.
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
@@ -163,15 +164,15 @@ eBrem:  Total cross sections from a parametrisation. Good description from 10 Ke
 
            material        min.delta energy(keV) 
 
-           Aluminium         125.07
-               Mylar            118
-       Polypropelene         111.38
+           Aluminium         125.06
+               Mylar         117.99
+       Polypropelene         111.37
                   Kr         1.0737
                Argon           0.99
                   N2           0.99
                   O2           0.99
                  Air           0.99
-               Xenon         1.8735
+               Xenon         1.8725
                  CO2           0.99
              Xe20CO2         1.6715
              Kr20CO2          1.088
@@ -181,7 +182,7 @@ hIoni:    Knock-on electron cross sections .
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-total time(SetCuts)=54.43 s 
+total time(SetCuts)=41.06 s 
 #
 # Macro file 'run11.mac' for the initialization phase of "TestEm8.cc"
 #
@@ -258,28 +259,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=89.31s Real=91.75s Sys=2.33s
+  User=467.44s Real=470.69s Sys=2.67s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=71.192 +- 1.0047  mm  
+    mean charged track length   in absorber=43.072 +- 0.139551  mm  
 
-            mean energy deposit in absorber=0.0535616 +- 0.000926094  MeV 
+            mean energy deposit in absorber=0.107715 +- 0.00114862  MeV 
 
- mean number of steps in absorber (charged) =2.352 +- 0.0377372      
- mean number of steps in absorber (neutral) =5.338 +- 0.0727857      
+ mean number of steps in absorber (charged) =511.939 +- 3.34097      
+ mean number of steps in absorber (neutral) =5.368 +- 0.0717814      
 
-   mean number of charged secondaries = 1.32 +- 0.0371699
+   mean number of charged secondaries = 1.319 +- 0.0355139
 
-   mean number of neutral secondaries = 0.012 +- 0.00344325
+   mean number of neutral secondaries = 0.016 +- 0.00396787
 
-   mean number of e-s =1.32  and e+s =0
+   mean number of e-s =1.319  and e+s =0
 
-(number) transmission coeff=0.736  reflection coeff=0.001
+(number) transmission coeff=0.089  reflection coeff=0
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 705959451, 1388635366
+ Current couple of seeds = 1882867964, 1322437216
 ----------------------------------------
 #
 #

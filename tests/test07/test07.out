@@ -85,21 +85,22 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
 
            material       min.delta energy(keV) 
 
-           Aluminium         191.94
-         liquidArgon         118.71
-              Copper         380.88
-                Lead         370.43
-               Water         122.64
-        Scintillator         124.53
-              quartz         175.88
+           Aluminium         191.93
+         liquidArgon          118.7
+              Copper          380.8
+                Lead         370.88
+               Water         122.62
+        Scintillator         124.52
+              quartz         175.86
                  Air           0.99
-             Aerogel         44.699
-         CarbonicGas         14.052
+             Aerogel          44.69
+         CarbonicGas         14.049
           WaterSteam           0.99
             Galactic           0.99
                 Beam           0.99
 
-eBrem:  Total cross sections from a parametrisation. Good description from 10 KeV to 100 GeV.
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
@@ -117,16 +118,16 @@ msc:   Tables of transport mean free paths.
 
            material        min.delta energy(keV) 
 
-           Aluminium         191.94
-         liquidArgon         118.71
-              Copper         380.88
-                Lead         370.43
-               Water         122.64
-        Scintillator         124.53
-              quartz         175.88
+           Aluminium         191.93
+         liquidArgon          118.7
+              Copper          380.8
+                Lead         370.88
+               Water         122.62
+        Scintillator         124.52
+              quartz         175.86
                  Air           0.99
-             Aerogel         44.699
-         CarbonicGas         14.052
+             Aerogel          44.69
+         CarbonicGas         14.049
           WaterSteam           0.99
             Galactic           0.99
                 Beam           0.99

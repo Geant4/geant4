@@ -58,12 +58,9 @@ G4VUserPhysicsList::Construct()
 Construct particles 
 Construct processes 
 Ionic processes for IonC12
-New ion with Q = 6; MassR = 0.084
 Ionic processes for alpha
-New ion with Q = 2; MassR = 0.25
 Hadronic processes for anti_proton
 Ionic processes for deuteron
-New ion with Q = 1; MassR = 0.5
 Hadronic processes for kaon+
 Hadronic processes for kaon-
 MuonMinusCaptureAtRest is created 
@@ -100,21 +97,22 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
 
            material       min.delta energy(keV) 
 
-           Beryllium         104.76
-            Aluminum         125.07
-              Carbon         113.96
-             Silicon         116.08
-         liquidArgon         78.381
-                Iron         224.11
-              Copper          238.3
-                Gold         334.58
-                Lead         229.65
-               Water         81.518
+           Beryllium         104.75
+            Aluminum         125.06
+              Carbon         113.94
+             Silicon         116.06
+         liquidArgon         78.362
+                Iron         224.07
+              Copper         238.25
+                Gold         334.83
+                Lead         229.53
+               Water         81.507
              Methane        0.11903
-            Graphite         122.95
+            Graphite         122.93
                  Air        0.18052
 
-eBrem:  Total cross sections from a parametrisation. Good description from 10 KeV to 100 GeV.
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
@@ -154,11 +152,8 @@ hLowEIoni:    Knock-on electron cross sections .
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 10 eV  to 100 TeV  in 150 bins.
-        Low energy losses approximation is taken from  ICRU_R49p
+        Low energy losses approximation is taken from  Ziegler1977H
         from 1 keV  to 2 MeV .
-        Parametrization of the Barkas effect is switched on.
-        Quantal Harmonic Oscillator Model is switched on 
-        Simulation of nuclear stopping is switched on.
 Set cuts for proton
 Set cuts for anti_proton
 G4VUserPhysicsList::SetCutValueForOthers   :1[mm]
@@ -214,95 +209,36 @@ Cut in energy
 ### Run 0 start.
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    Range in absorber = 0.0092009 +- 4.1913e-06  mm  
+    Range in absorber = 0.00964644 +- 4.56247e-06  mm  
 
     Energy deposit in absorber = 0.5 +- 0  MeV 
 
 (number) transmission coeff=0  reflection coeff=0
 
-   step number/event distribution 
-#entries=0    #underflows=0    #overflows=0
- energy deposit distribution 
-#entries=0    #underflows=0    #overflows=0
- transmitted energy distribution 
-#entries=0    #underflows=0    #overflows=0
- backscattered energy distribution 
-#entries=0    #underflows=0    #overflows=0
- energy distribution of charged secondaries 
-#entries=0    #underflows=0    #overflows=0
-  R  distribution 
-#entries=0    #underflows=0    #overflows=0
-      angle   distribution 
-#entries=0    #underflows=0    #overflows=0
- backscattering angle   distribution 
-#entries=0    #underflows=0    #overflows=0
- gamma energy distribution 
-#entries=0    #underflows=0    #overflows=0
- vertex Z  distribution 
-#entries=0    #underflows=0    #overflows=0
 #
 /gun/particle anti_proton
 /run/beamOn 1000
 ### Run 1 start.
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    Range in absorber = 0.0126686 +- 9.00263e-06  mm  
+    Range in absorber = 0.0112642 +- 8.49301e-06  mm  
 
     Energy deposit in absorber = 0.5 +- 0  MeV 
 
 (number) transmission coeff=0  reflection coeff=0
 
-   step number/event distribution 
-#entries=0    #underflows=0    #overflows=0
- energy deposit distribution 
-#entries=0    #underflows=0    #overflows=0
- transmitted energy distribution 
-#entries=0    #underflows=0    #overflows=0
- backscattered energy distribution 
-#entries=0    #underflows=0    #overflows=0
- energy distribution of charged secondaries 
-#entries=0    #underflows=0    #overflows=0
-  R  distribution 
-#entries=0    #underflows=0    #overflows=0
-      angle   distribution 
-#entries=0    #underflows=0    #overflows=0
- backscattering angle   distribution 
-#entries=0    #underflows=0    #overflows=0
- gamma energy distribution 
-#entries=0    #underflows=0    #overflows=0
- vertex Z  distribution 
-#entries=0    #underflows=0    #overflows=0
 
-
+#scaled energy
 /gun/particle IonC12
+/gun/energy 6000 keV
 /run/beamOn 1000
 ### Run 2 start.
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    Range in absorber = 0.00335775 +- 2.68324e-11  mm  
+    Range in absorber = 0.0107379 +- 2.05076e-05  mm  
 
-    Energy deposit in absorber = 0.5 +- 0  MeV 
+    Energy deposit in absorber = 6 +- 0  MeV 
 
 (number) transmission coeff=0  reflection coeff=0
 
-   step number/event distribution 
-#entries=0    #underflows=0    #overflows=0
- energy deposit distribution 
-#entries=0    #underflows=0    #overflows=0
- transmitted energy distribution 
-#entries=0    #underflows=0    #overflows=0
- backscattered energy distribution 
-#entries=0    #underflows=0    #overflows=0
- energy distribution of charged secondaries 
-#entries=0    #underflows=0    #overflows=0
-  R  distribution 
-#entries=0    #underflows=0    #overflows=0
-      angle   distribution 
-#entries=0    #underflows=0    #overflows=0
- backscattering angle   distribution 
-#entries=0    #underflows=0    #overflows=0
- gamma energy distribution 
-#entries=0    #underflows=0    #overflows=0
- vertex Z  distribution 
-#entries=0    #underflows=0    #overflows=0
 

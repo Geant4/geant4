@@ -33,9 +33,10 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
 
            material       min.delta energy(keV) 
 
-      FluorCarbonate         96.463
+      FluorCarbonate         96.449
 
-eBrem:  Total cross sections from a parametrisation. Good description from 10 KeV to 100 GeV.
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
@@ -51,7 +52,7 @@ Cut in energy
  Cuts in energy have not calculated yet !!
  Enter /run/initialize command to calculate cuts 
 ===================================================
-# $Id: TestEm4.out,v 1.5 2000-08-09 09:07:33 stesting Exp $
+# $Id: TestEm4.out,v 1.6 2000-08-28 13:57:25 stesting Exp $
 #
 # Macro file for "TestEm4.cc"
 # 
@@ -87,11 +88,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=90.94s Real=100.03s Sys=8.93s
+  User=96.56s Real=105.98s Sys=9.31s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2005584844, 1008873398
+ Current couple of seeds = 2064117093, 708866461
 ----------------------------------------
 G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.

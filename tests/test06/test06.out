@@ -87,7 +87,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=34.8s Real=36.38s Sys=1.12s
+  User=34.91s Real=36.12s Sys=0.93s
 #
 # electron 500 MeV in Air
 #
@@ -100,7 +100,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.68s Real=2.73s Sys=0.02s
+  User=2.64s Real=2.86s Sys=0.03s
 #
 exit
 G4 kernel has come to Quit state.

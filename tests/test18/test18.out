@@ -36,10 +36,11 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
            material       min.delta energy(keV) 
 
               Vacuum           0.99
-           aluminium          75786
-       silicon oxide          72236
+           aluminium     1.0853e+05
+       silicon oxide          99053
 
-eBrem:  Total cross sections from a parametrisation. Good description from 10 KeV to 100 GeV.
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
@@ -58,8 +59,8 @@ msc:   Tables of transport mean free paths.
            material        min.delta energy(keV) 
 
               Vacuum           0.99
-           aluminium          75786
-       silicon oxide          72236
+           aluminium     1.0853e+05
+       silicon oxide          99053
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
@@ -117,7 +118,7 @@ MuPairProd:  theoretical cross sections
 /run/beamOn
 ### Run : 0
 /gun/direction 1.0 0.0 0.0
-G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /afs/cern.ch/sw/geant4/stt/dev2/src/geant4/data/RadiativeDecay/z12.a24
+G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /afs/cern.ch/sw/geant4/stt/prod/src/geant4/data/RadiativeDecay/z12.a24
 The nucleus is assumed to be stable 
        0.001           1           0     Na24[0.0]
          227           1   3.189e+04     e-

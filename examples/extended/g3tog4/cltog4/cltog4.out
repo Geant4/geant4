@@ -3,13 +3,13 @@
                                 (30-Jun-2000)
              Copyright : Geant4 Collaboration
 **********************************************
-Instantiated G3toG4DetectorConstruction using call list file "/afs/cern.ch/sw/geant4/stt/dev2/src/geant4/examples/extended/g3tog4/data/testmodel.dat"
+Instantiated G3toG4DetectorConstruction using call list file "/afs/cern.ch/sw/geant4/stt/prod/src/geant4/examples/extended/g3tog4/data/testmodel.dat"
 /run/verbose 1
 /tracking/verbose 1
 /tracking/storeTrajectory 1
 /run/initialize
 Instantiated unit rotation matrix irot=0
-Reading the call List file /afs/cern.ch/sw/geant4/stt/dev2/src/geant4/examples/extended/g3tog4/data/testmodel.dat...
+Reading the call List file /afs/cern.ch/sw/geant4/stt/prod/src/geant4/examples/extended/g3tog4/data/testmodel.dat...
 G4ggclos: setting top-level VolTableEntry
 Dump of VTD - 26 entries:
 Instantiated 26 volume table entries 
@@ -75,24 +75,25 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
 
            material       min.delta energy(keV) 
 
-HYDROGEN                     42.188
-DEUTERIUM                    67.152
-HELIUM                       37.603
-LITHIUM                      76.534
-BERILLIUM                    158.48
-CARBON                       187.37
-NITROGEN                     99.234
-NEON                         121.67
-ALUMINIUM                    191.93
-IRON                         356.55
-COPPER                        380.9
-TUNGSTEN                      559.7
-LEAD                         370.42
-URANIUM                      527.66
+HYDROGEN                     42.186
+DEUTERIUM                    67.149
+HELIUM                         37.6
+LITHIUM                      76.527
+BERILLIUM                    158.47
+CARBON                       187.35
+NITROGEN                      99.22
+NEON                         121.65
+ALUMINIUM                    191.92
+IRON                         356.49
+COPPER                       380.82
+TUNGSTEN                     561.12
+LEAD                         370.87
+URANIUM                      529.59
                  AIR           0.99
 VACUUM                         0.99
 
-eBrem:  Total cross sections from a parametrisation. Good description from 10 KeV to 100 GeV.
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
@@ -110,20 +111,20 @@ msc:   Tables of transport mean free paths.
 
            material        min.delta energy(keV) 
 
-HYDROGEN                     42.188
-DEUTERIUM                    67.152
-HELIUM                       37.603
-LITHIUM                      76.534
-BERILLIUM                    158.48
-CARBON                       187.37
-NITROGEN                     99.234
-NEON                         121.67
-ALUMINIUM                    191.93
-IRON                         356.55
-COPPER                        380.9
-TUNGSTEN                      559.7
-LEAD                         370.42
-URANIUM                      527.66
+HYDROGEN                     42.186
+DEUTERIUM                    67.149
+HELIUM                         37.6
+LITHIUM                      76.527
+BERILLIUM                    158.47
+CARBON                       187.35
+NITROGEN                      99.22
+NEON                         121.65
+ALUMINIUM                    191.92
+IRON                         356.49
+COPPER                       380.82
+TUNGSTEN                     561.12
+LEAD                         370.87
+URANIUM                      529.59
                  AIR           0.99
 VACUUM                         0.99
 
@@ -297,7 +298,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.04s Real=0.06s Sys=0s
+  User=0.04s Real=0.05s Sys=0.01s
 Idle> #
 Idle> # Termination
 Idle> #

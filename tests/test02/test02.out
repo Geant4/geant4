@@ -11,10 +11,6 @@ SimpleBox is now made of Pb
 # /run/verbose 2
 /run/initialize
 
-ionIoni:    Knock-on electron cross sections . 
-         MeanFreePath is computed at tracking time.
-         delta ray energy sampled from  differential Xsection.
-
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
         PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
@@ -41,10 +37,11 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
            material       min.delta energy(keV) 
 
                  Air           0.99
-           Aluminium         125.07
-                Lead         229.66
+           Aluminium         125.06
+                Lead         229.54
 
-eBrem:  Total cross sections from a parametrisation. Good description from 10 KeV to 100 GeV.
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
@@ -58,8 +55,8 @@ annihil:  Total cross section from Heilter formula (annihilation into 2 photons)
            material        min.delta energy(keV) 
 
                  Air           0.99
-           Aluminium         125.07
-                Lead         229.66
+           Aluminium         125.06
+                Lead         229.54
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.

@@ -87,21 +87,22 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
 
            material       min.delta energy(keV) 
 
-           Aluminium         125.07
-         liquidArgon         78.381
-              Copper          238.3
-                Lead         229.66
-               Water         81.518
-        Scintillator         82.869
-              quartz         115.31
+           Aluminium         125.06
+         liquidArgon         78.362
+              Copper         238.25
+                Lead         229.54
+               Water         81.507
+        Scintillator         82.859
+              quartz         115.29
                  Air           0.99
-             Aerogel         30.103
-         CarbonicGas         9.4284
+             Aerogel         30.097
+         CarbonicGas          9.427
           WaterSteam           0.99
             Galactic           0.99
                 Beam           0.99
 
-eBrem:  Total cross sections from a parametrisation. Good description from 10 KeV to 100 GeV.
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
@@ -114,16 +115,16 @@ annihil:  Total cross section from Heilter formula (annihilation into 2 photons)
 
            material        min.delta energy(keV) 
 
-           Aluminium         125.07
-         liquidArgon         78.381
-              Copper          238.3
-                Lead         229.66
-               Water         81.518
-        Scintillator         82.869
-              quartz         115.31
+           Aluminium         125.06
+         liquidArgon         78.362
+              Copper         238.25
+                Lead         229.54
+               Water         81.507
+        Scintillator         82.859
+              quartz         115.29
                  Air           0.99
-             Aerogel         30.103
-         CarbonicGas         9.4284
+             Aerogel         30.097
+         CarbonicGas          9.427
           WaterSteam           0.99
             Galactic           0.99
                 Beam           0.99
@@ -183,10 +184,10 @@ Cut in energy
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy:  273.63 MeV       total track length:  16.804 cm 
-        Gap: total energy:  8.6535 MeV       total track length:  4.3941 cm 
+   Absorber: total energy:  283.74 MeV       total track length:  17.305 cm 
+        Gap: total energy:  8.7024 MeV       total track length:  4.3137 cm 
 
-     6 hits are stored in ExN03CalorHitsCollection.
+     10 hits are stored in ExN03CalorHitsCollection.
 #
 # list the existing physics processes
      Transportation,              hIoni,                msc,              eIoni
@@ -201,11 +202,11 @@ Cut in energy
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1018070348, 54426648
+ Current couple of seeds = 1070040020, 1579813191
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy:  279.37 MeV       total track length:  14.971 cm 
-        Gap: total energy:   19.38 MeV       total track length:  9.2205 cm 
+   Absorber: total energy:  275.36 MeV       total track length:  15.251 cm 
+        Gap: total energy:  19.635 MeV       total track length:  9.6753 cm 
 
      10 hits are stored in ExN03CalorHitsCollection.
 #
@@ -230,10 +231,10 @@ Cut in energy
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 191071928, 1973215037
+ Current couple of seeds = 1781348142, 2095441265
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy:  216.51 MeV       total track length:  51.308 cm 
-        Gap: total energy:  53.547 MeV       total track length:  1.5095 m  
+   Absorber: total energy:  385.88 MeV       total track length:  88.482 cm 
+        Gap: total energy:  73.394 MeV       total track length:  2.0259 m  
 
-     22 hits are stored in ExN03CalorHitsCollection.
+     30 hits are stored in ExN03CalorHitsCollection.
