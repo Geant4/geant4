@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.56 2004-06-24 15:21:22 stesting Exp $
+# $Id: Configure,v 1.57 2004-06-24 16:36:32 stesting Exp $
 #
-# Generated on Thu Jun 24 17:20:19 CEST 2004 [metaconfig 3.0 PL70]
+# Generated on Thu Jun 24 18:30:33 CEST 2004 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -171,6 +171,7 @@ g4ledata=''
 g4levelgammadata=''
 g4neutronhpcrosssections=''
 g4radioactivedata=''
+clhep_dirs=''
 g4clhep_base_dir=''
 g4clhep_include_dir=''
 g4clhep_lib=''
@@ -2402,10 +2403,15 @@ esac
 
 case "$g4install" in
 '')
+if test $g4system = "WIN32-VC" -o $g4system = "WIN32-VC7"; then
+	g4install="c:/geant4/"
+else
 	if [ X"$HOME" = X/ ] ; then
 	HOME=""
 	fi
 	g4install="$HOME"/geant4
+
+fi
 
 # Check for Windows!
 if test $g4system = "WIN32-VC" -o $g4system = "WIN32-VC7"; then
@@ -3026,7 +3032,7 @@ done
 
 fi
 
-if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
+if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7" -a "X$g4system" != "XDarwin-g++" ; then
 
 while test 1 = 1  ; do
 
@@ -3179,7 +3185,7 @@ case "$g4lib_use_granular" in
 	;;
 esac
 
-if test \( "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7" \) -a "X$g4lib_build_dll" = "Xy"  ; then
+if test \( \( "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7" \) -a "X$g4lib_build_dll" = "Xy" \) -o  \( "X$g4system" = "XDarwin-g++"  -a "X$g4lib_build_dyn" = "Xy" \) ; then
 
 	g4global=n
 	g4granular=n
@@ -3187,7 +3193,7 @@ if test \( "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7" \) -a "X$g4
 
 fi
 
-if test \( "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7" \) -o \( \( "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7" \) -a "X$g4lib_build_dll" = "Xn" \) ; then
+if test \( "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7" \) -o    \( \( "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7" \) -a "X$g4lib_build_dll" = "Xn" \) -o \( "X$g4system" = "XDarwin-g++" -a "X$g4lib_build_dyn" = "Xn" \) ; then
 
 #
 # Ask about g4global - default "(empty)". 
@@ -4505,6 +4511,7 @@ State='$State'
 c='$c'
 cf_by='$cf_by'
 cf_time='$cf_time'
+clhep_dirs='$clhep_dirs'
 contains='$contains'
 d_portable='$d_portable'
 eunicefix='$eunicefix'
