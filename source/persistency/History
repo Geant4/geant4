@@ -15,6 +15,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+9 June, 00   Y.Morita (persistency-V01-00-02)
+- added material in G4PersistentGeomMan::Retrieve()
+
 11 May, 00   Y.Morita (persistency-V01-00-01)
 - moved G4PHype from geometry/solids/CSG to geometry/solids/specific
 - modified GNUmakefile's to add G4pspecsolids
