@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.hh,v 1.4 2002-02-15 15:41:23 grichine Exp $
+// $Id: G4ReflectedSolid.hh,v 1.5 2002-02-15 15:55:25 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -106,18 +106,6 @@ class G4ReflectedSolid : public G4VSolid
     void       SetDirectTransform3D(G4Transform3D&);
       // Accessors methods.
 
-    G4RotationMatrix         GetFrameRotation() const;
-    void  SetFrameRotation(const G4RotationMatrix&);
-    G4ThreeVector            GetFrameTranslation() const; 
-    void  SetFrameTranslation(const G4ThreeVector&); 
-      // Get/Set the rotation/translation, as applied to the
-      // frame of reference.
-
-    G4RotationMatrix         GetObjectRotation() const;
-    void  SetObjectRotation(const G4RotationMatrix&);
-    G4ThreeVector            GetObjectTranslation() const; 
-    void  SetObjectTranslation(const G4ThreeVector&); 
-      // Get/Set the rotation/translation, as applied to the object.
 
   public:  // without description
 
@@ -132,6 +120,18 @@ class G4ReflectedSolid : public G4VSolid
     void       SetTransform(G4AffineTransform&);
     G4AffineTransform        GetDirectTransform() const; 
     void       SetDirectTransform(G4AffineTransform&);
+    G4RotationMatrix         GetFrameRotation() const;
+    void  SetFrameRotation(const G4RotationMatrix&);
+    G4ThreeVector            GetFrameTranslation() const; 
+    void  SetFrameTranslation(const G4ThreeVector&); 
+      // Get/Set the rotation/translation, as applied to the
+      // frame of reference.
+
+    G4RotationMatrix         GetObjectRotation() const;
+    void  SetObjectRotation(const G4RotationMatrix&);
+    G4ThreeVector            GetObjectTranslation() const; 
+    void  SetObjectTranslation(const G4ThreeVector&); 
+      // Get/Set the rotation/translation, as applied to the object.
 
     G4VSolid*          fPtrSolid        ;
     G4AffineTransform* fPtrTransform    ;
