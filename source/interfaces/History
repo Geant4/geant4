@@ -1,4 +1,4 @@
-$Id: History,v 1.38 2000-11-28 08:13:24 barrand Exp $
+$Id: History,v 1.39 2000-11-29 10:19:19 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29 November 2000 Makoto Asai (interfaces-V02-00-03)
+- Tag for Guy's correction.
 
 28 November 2000 Guy Barrand
 - G4Xt.cc ; SUN-CC : correct warning : argc hides G4VInteractorManager::argc.
