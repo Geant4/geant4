@@ -1,4 +1,4 @@
-$Id: History,v 1.51 2000-07-21 10:47:46 gcosmo Exp $
+$Id: History,v 1.52 2000-07-22 10:45:33 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+July 22, 2000 M.Asai 
+- Move G4VStateDependent and G4StateManager classes into global/management
+  from intercoms.
+- "Abort" state is added to G4ApplicationState.
+- Modify G4Exception to change Geant4 status to "Abort".
+- Fix a bug of "double deleting" in the destructor of G4StateManager.
 
 July 21, 2000 G.Cosmo (global-V02-00-00)
 - STLInterface/cstring.icc: extended buffer for G4String::readLine from
