@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Torus.cc,v 1.11 2000-10-04 12:50:24 medernac Exp $
+// $Id: G4Torus.cc,v 1.12 2000-10-11 12:05:01 medernac Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,7 @@
 #include "G4NURBScylinder.hh"
 #include "G4NURBStubesector.hh"
 
-#define DEBUGTORUS 0
+#define DEBUGTORUS 1
 
 
 ///////////////////////////////////////////////////////////////
@@ -2281,9 +2281,9 @@ G4double G4Torus::SolveNumeric(const G4ThreeVector& p,const G4ThreeVector& v,G4b
 	Ly = p.y() + lambda*v.y();
 	Lz = p.z() + lambda*v.z();
 	/* Scalar product */
-	scal  = v.x()*TorusDerivativeX(Lx,Ly,Lz,GetRtor(),GetRmax());
-	scal += v.y()*TorusDerivativeY(Lx,Ly,Lz,GetRtor(),GetRmax());
-	scal += v.z()*TorusDerivativeZ(Lx,Ly,Lz,GetRtor(),GetRmax());
+	scal  = v.x()*TorusDerivativeX(Lx,Ly,Lz,GetRtor(),GetRmin());
+	scal += v.y()*TorusDerivativeY(Lx,Ly,Lz,GetRtor(),GetRmin());
+	scal += v.z()*TorusDerivativeZ(Lx,Ly,Lz,GetRtor(),GetRmin());
 	/* if entering and if it is DistToIn it is 0.0,  */
 	/* but in fact it is the opposite because it is the interior torus */
 	/* beware that this could be DistanceToOut */
@@ -2299,10 +2299,15 @@ G4double G4Torus::SolveNumeric(const G4ThreeVector& p,const G4ThreeVector& v,G4b
 	  G4cout << "G4Torus::SolveNumeric    Recursive call lambda..." << lambda << G4endl << G4endl;
 #endif
 	  /* else it is not necessary infinity !! (we could reach the opposite side..) */
-	  /* To reach the opposite side we remark that from Surface the sphere of radius (Rmax - Rmin)/2 
+	  /* To reach the opposite side we remark that from Surface the sphere of radius min((Rmax - Rmin)/2, Rmin)
 	     does not hit 2 surface of the torus so it is safe to do that way */
+	  
+	  if ((GetRmax() - GetRmin())/2.0 < GetRmin()) {
+	    lambda = SolveNumeric(p+((GetRmax() - GetRmin())/2.0)*v,v,IsDistanceToIn) + (GetRmax() - GetRmin())/2.0;
+	  } else {
+	    lambda = SolveNumeric(p+GetRmin()*v,v,IsDistanceToIn) + GetRmin();
+	  }
 
-	  lambda = SolveNumeric(p+((GetRmax() - GetRmin())/2.0)*v,v,IsDistanceToIn) + (GetRmax() - GetRmin())/2.0;
 #if DEBUGTORUS
 	  G4cout << "G4Torus::SolveNumeric    --> Recursive call: lambda = " << lambda << G4endl;
 #endif
@@ -3155,13 +3160,13 @@ G4double G4Torus::Newton (G4double guess,
     Gradient += dy*TorusDerivativeY(Lx,Ly,Lz,Rmax,Rmin);
     Gradient += dz*TorusDerivativeZ(Lx,Ly,Lz,Rmax,Rmin);
 
-    /***
-	if (Gradient > -EPSILON) then the current point is repulsive and may not converge
-	But seems to be solved by SafeNewton
-    ***/
-
+    /**
+    if (Gradient > -EPSILON) { //then the current point is repulsive and may not converge
+    Seems to be solved by SafeNewton
+    **/
     Lambda = Lambda - Value/Gradient ;
-
+    
+    
 #if DEBUGTORUS
     G4cout << "G4Torus::Newton    Iteration " << i << G4endl ;
     G4cout << "G4Torus::Newton     Lambda = " << Lambda << " Value = " << Value << " Grad = " << Gradient << G4endl;
