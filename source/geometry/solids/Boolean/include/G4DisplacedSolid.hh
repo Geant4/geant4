@@ -60,6 +60,19 @@ public:
     virtual G4GeometryType  GetEntityType() const 
     { return G4String("G4DisplacedSolid"); }
 
+    // If the Solid is a "G4DisplacedSolid", return a self pointer
+    //  else return 0
+    virtual const G4DisplacedSolid* GetDisplacedSolidPtr() const   ;
+    virtual       G4DisplacedSolid* GetDisplacedSolidPtr();
+
+    // Access methods
+    G4VSolid*                GetConstituentSolid();
+    const G4AffineTransform  GetTransform() const; 
+    
+    G4RotationMatrix         GetFrameRotation() const;
+    G4ThreeVector            GetFrameTranslation() const; 
+
+    // For creating graphical representations   (ie for visualisation)
     void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;
     G4VisExtent   GetExtent        () const ;
     G4Polyhedron* CreatePolyhedron () const ;

@@ -1,9 +1,12 @@
+// Class Description 
+//
 // Abstract base class for solids created by boolean operations
 // between other solids
-//
+
 // History:
 //
 // 10.09.98 V.Grichine, creation according J. Apostolakis's recommendations
+
 
 #ifndef G4BOOLEANSOLID_HH
 #define G4BOOLEANSOLID_HH
@@ -19,7 +22,7 @@
 
 class G4BooleanSolid: public G4VSolid
 {
-public:
+public:  // With Description 
                   G4BooleanSolid( const G4String& pName,
                                         G4VSolid* pSolidA ,
                                         G4VSolid* pSolidB   ) ;
@@ -37,6 +40,12 @@ public:
 
                  virtual ~G4BooleanSolid() ;
 
+public:  // With Description 
+    // If Solid is made up from a Boolean operation of two solids,
+    //   return the corresponding solid (for no=0 and 1)
+    // If the solid is not a "Boolean", return 0
+    virtual const G4VSolid* GetConstituentSolid(G4int no) const;
+    virtual       G4VSolid* GetConstituentSolid(G4int no);
 
 protected:
                   G4VSolid* fPtrSolidA ;
