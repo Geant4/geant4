@@ -21,11 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTable.cc,v 1.18 2004-03-08 16:35:17 grichine Exp $
+// $Id: G4SandiaTable.cc,v 1.19 2004-04-14 10:19:06 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 //
+// 05.03.04 New methods for old sorting algorithm for PAI model. V.Grichine
 // 03.02.04 Update distructor V.Ivanchenko
 // 10.07.01 Migration to STL. M. Verderi.
 // 03.04.01 fnulcof returned if energy < emin
