@@ -1,8 +1,41 @@
-$Id: History,v 1.14 1999-05-22 07:00:38 lockman Exp $
+$Id: History,v 1.15 1999-05-27 16:49:51 lockman Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
 
+g3tog4-01-00-05 Lockman
+- G3G4Interface: G4Strings passed by reference in G4gspos, G4gsposp
+- G3PartTable: now uses RWTPtrHashDictionary instead of RWGDList
+- G3RotTable: method name "get" changed to "Get". Space for unit rotation
+  matrix at element 0 in RWTPtrOrderedVector. This matrix is instantiated
+  in G4BuildGeom prior to call list read.
+- G3VolTable: many new methods to handle VolTableEntry and G3Pos objects.
+  removed GetPV method.
+- G3toG4.hh: removed G3NegVolPars method
+- G3DetTable: commented out some G4cerr's
+- G3EleTable: some minor internal changes
+- G3PartTable: convert to use RWTPtrHashDictionary
+- Added G3Pos class
+- Added G3toG4BuildTree which calls G4LogicalVolume and G4PVPlacement based on
+  G3VolTable
+- G4BuildGeom: invokes G3toG4BuildTree to build VolTableEntry tree
+- G4ggclos: invokes G3Vol.SetFirstVTE() to find top-level VolTableEntry
+- G4makevol: Broke off creation of solids into G3toG4MakeSolid
+- G4gsatt: currently a stub
+- G4gsdvn: currently a stub
+- G4gsdvn2 currently a stub
+- G4gsdvt: currently a stub
+- G4gsdvt2 currently a stub
+- G4gsmixt:added some messages to warn about faulty mixt weights
+- G4gspos: removed G4PVPlacement calls (now done in G3toG4BuildTree)
+- G4gsposp:removed some unneeded headers
+- G4makevol: broke off solids stuff into G3toG4BuildTree
+- G4gsvolu: G4makevol(...) now returns void
+- G4VolTableEntry: now is a node tree
+- clparse: remove some commented out lines
+- cltog4:  minor changes
+- G3toG4.hh make SSVT the mother. Its also not the first volume
+- Added testmodel.dat to test divided/deferred volumes.
 
 17-May-1999 Lockman
 - converted G3PartTable to RWTPtrhaswhDictionary
