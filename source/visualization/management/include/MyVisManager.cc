@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyVisManager.cc,v 1.15 2001-11-06 13:03:05 johna Exp $
+// $Id: MyVisManager.cc,v 1.16 2001-11-15 14:39:27 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,6 +41,7 @@
 #include "G4VRML2File.hh"
 
 // Needing external packages or libraries...
+
 #ifdef G4VIS_USE_DAWN
 #include "G4FukuiRenderer.hh"
 #endif
@@ -93,6 +94,7 @@ void MyVisManager::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4VRML2File);
 
   // Graphics systems needing external packages or libraries...
+
 #ifdef G4VIS_USE_DAWN
   RegisterGraphicsSystem (new G4FukuiRenderer);
 #endif
