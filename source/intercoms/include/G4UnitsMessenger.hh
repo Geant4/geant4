@@ -5,10 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnitsMessenger.hh,v 1.1 1999-01-07 16:09:24 gunter Exp $
+// $Id: G4UnitsMessenger.hh,v 1.2 1999-11-17 18:43:01 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
+// class description
+//
+// This class is the messenger of the class which maintain the table of Units.
+// (located in global/management/include/G4UnitsTable.hh)
+// Its contains the commands to interact with the table of Units 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -5,12 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: SystemOfUnits.h,v 1.2 1999-11-16 17:40:52 gcosmo Exp $
+// $Id: SystemOfUnits.h,v 1.3 1999-11-17 18:43:28 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
-// -*- C++ -*-
 // 
 // ----------------------------------------------------------------------
+//
+// class description
+//
 // HEP coherent system of Units
 //
 // This file has been provided by Geant4 (simulation toolkit for HEP).
@@ -36,6 +37,7 @@
 // The others physical constants are defined in the header file :
 //			PhysicalConstants.h
 //
+
 // Authors: M.Maire, S.Giani
 //
 // History:
