@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationSpectrum.cc,v 1.17 2002-06-01 03:14:55 vnivanch Exp $
+// $Id: G4eIonisationSpectrum.cc,v 1.18 2002-06-03 17:41:14 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -305,6 +305,7 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
     a1 = 1./a1;
     a2 = 1./a2;
 
+    size_t i;
     do {
 
       x = 1./(a2 + G4UniformRand()*(a1 - a2));
@@ -312,7 +313,7 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
       z2 = p[3];
       dx = (p[2] - p[1]) / 3.0;
       dx1= exp(log(p[3]/p[2]) / 16.0);
-      for (size_t i=5; i<23; i++) {
+      for (i=5; i<23; i++) {
 
         if (i <= 8) {
           z2 = z1 + dx;
