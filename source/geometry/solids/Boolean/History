@@ -1,5 +1,5 @@
 
-$Id: History,v 1.49 2005-03-01 17:11:54 gcosmo Exp $
+$Id: History,v 1.50 2005-03-10 11:36:07 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ Mar 10, 2005  V.Grichine                 geom-bool-V07-00-01
+  - Modified Inside(p) G4SubtractionSolid and G4UnionSolid, to fix
+    inconsistency for non-zero sum of surface-normals.
+    Available only through activation of G4NEW_SURF_NORMAL compilation flag.
+  - Updated unit tests.
+
+ Mar 03, 2005  J.Allison
+  - Changed AddThis() to AddSolid() in the concrete implementations of
+    DescribeYourselfTo(G4VGraphicsScene&) for all solids. Use the
+    newly available CreatePolyhedron() for components of Boolean
+    solids, instead of GetPolyhedron().
 
  Feb 22, 2005  V.Grichine                 geom-bool-V07-00-00
   - Fix in G4IntersectionSolid::DistanceToIn(p,v) to allow for correct
