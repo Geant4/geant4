@@ -11,6 +11,8 @@
 #include "G4InuclParticle.hh"
 #include "G4CollisionOutput.hh"
 #include "G4V3DNucleus.hh"
+#include "G4Track.hh"
+#include "G4Nucleus.hh"
 
 typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
@@ -23,47 +25,48 @@ G4CascadeInterface::G4CascadeInterface()
 };
    
 G4ReactionProductVector* G4CascadeInterface::Propagate(G4KineticTrackVector* theSecondaries, 
-						       G4V3DNucleus* theNucleus) {
+						       G4V3DNucleus* theNucleus) 
+{
+  return NULL;
+}
 
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4CascadeInterface::Propagate" << G4endl;
+G4VParticleChange* G4CascadeInterface::
+ApplyYourself(const G4Track& aTrack, G4Nucleus& theNucleus)
+{
+  if (verboseLevel > 3) 
+  {
+    G4cout << " >>> G4CascadeInterface::ApplyYourself" << G4endl;
   }
 
   // We make conversion between native Geant4 and Bertini cascade classes.
-
-  G4ReactionProductVector * theTotalResult = new G4ReactionProductVector;
+  theResult.Initialize(aTrack);
 
   enum particleType { proton = 1, neutron = 2, pionPlus = 3, pionMinus = 5, pionZero = 7 };
   G4int bulletType = 0;
 
-  for (G4int list = 0; list < G4int(theSecondaries->entries()); list++) {
-    G4KineticTrack *aTrack = theSecondaries->at(list);
-
     // Coding particles 
-    if(aTrack->GetDefinition() ==    G4Proton::Proton()    ) bulletType = proton;
-    if(aTrack->GetDefinition() ==   G4Neutron::Neutron()   ) bulletType = neutron;
-    if(aTrack->GetDefinition() ==  G4PionPlus::PionPlus()  ) bulletType = pionPlus;
-    if(aTrack->GetDefinition() == G4PionMinus::PionMinus() ) bulletType = pionMinus;
-    if(aTrack->GetDefinition() ==  G4PionZero::PionZero()  ) bulletType = pionZero;
+    if(aTrack.GetDefinition() ==    G4Proton::Proton()    ) bulletType = proton;
+    if(aTrack.GetDefinition() ==   G4Neutron::Neutron()   ) bulletType = neutron;
+    if(aTrack.GetDefinition() ==  G4PionPlus::PionPlus()  ) bulletType = pionPlus;
+    if(aTrack.GetDefinition() == G4PionMinus::PionMinus() ) bulletType = pionMinus;
+    if(aTrack.GetDefinition() ==  G4PionZero::PionZero()  ) bulletType = pionZero;
 
     // Code momentum and energy 
     // NOTE: Geant4 units are MeV = 1 and GeV = 1000. Cascade codes by default use MeV.
     G4std::vector<G4double> momentumBullet(4);
-    momentumBullet[0] =aTrack->Get4Momentum().e();
-    momentumBullet[1] =aTrack->Get4Momentum().px();
-    momentumBullet[2] =aTrack->Get4Momentum().py();
-    momentumBullet[3] =aTrack->Get4Momentum().pz();
+    momentumBullet[0] =aTrack.GetDynamicParticle()->Get4Momentum().e();
+    momentumBullet[1] =aTrack.GetDynamicParticle()->Get4Momentum().px();
+    momentumBullet[2] =aTrack.GetDynamicParticle()->Get4Momentum().py();
+    momentumBullet[3] =aTrack.GetDynamicParticle()->Get4Momentum().pz();
 
     G4InuclParticle *  bullet = new G4InuclElementaryParticle(momentumBullet, bulletType); 
 
     // Set target
     G4std::vector<G4double> targetMomentum(4, 0.0);
-    //targetMomentum[0] = theNucleus->Get4Momentum().e();
 
-    G4InuclNuclei * target = new G4InuclNuclei(
-					       targetMomentum, 
-					       theNucleus->GetMassNumber(), 
-        				       theNucleus->GetCharge());
+    G4InuclNuclei * target = new G4InuclNuclei(targetMomentum, 
+					       theNucleus.GetN(), 
+        				       theNucleus.GetZ());
     target->setEnergy();
 
     // Resigister collider
@@ -76,7 +79,8 @@ G4ReactionProductVector* G4CascadeInterface::Propagate(G4KineticTrackVector* the
     // Make INC
     G4CollisionOutput output =  cascader->collide(bullet, target); 
 
-    if (verboseLevel > 1) {
+    if (verboseLevel > 1) 
+    {
       G4cout << " Bertini cascade: " << G4endl;
       output.printCollisionOutput();
     }
@@ -84,11 +88,14 @@ G4ReactionProductVector* G4CascadeInterface::Propagate(G4KineticTrackVector* the
     // Convert Bertini data to Geant4 format
     G4std::vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
 
-    if(!particles.empty()) { 
+    if(!particles.empty()) 
+    { 
       particleIterator ipart;
       G4int outgoingParticle;
 
-      for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
+      theResult.SetNumberOfSecondaries(particles.size());
+      for(ipart = particles.begin(); ipart != particles.end(); ipart++) 
+      {
 	outgoingParticle = ipart->type();
 	G4std::vector<G4double> mom = ipart->getMomentum();
 	G4double ekin = ipart->getKineticEnergy();
@@ -125,24 +132,10 @@ G4ReactionProductVector* G4CascadeInterface::Propagate(G4KineticTrackVector* the
 	  default: cout << " ERROR: G4CascadeInterface::Propagate undefined particle type";
 	  }
 
-	theParticleChange.AddSecondary(cascadeParticle); 
+	theResult.AddSecondary(cascadeParticle); 
+      }
+    }
 
-        // ::: update here theTotalResult
-      };
-    };
-  };
-
-  return theTotalResult;
+  return &theResult;
 }
 
-G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack, G4Nucleus& theNucleus) {
-
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4CascadeInterface::ApplyYourself" << G4endl;
-  }
-
-  G4std::cout << "Please remove from your physics list."<<G4endl;
-  G4Exception("SEVERE: G4CascadeInterface model interface called stand-allone.");
-
-  return new G4ParticleChange;
-}
