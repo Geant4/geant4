@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eIonisationPlus.cc,v 1.7 2000-03-01 09:06:36 urban Exp $
+// $Id: G4eIonisationPlus.cc,v 1.8 2000-03-24 11:25:30 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -211,6 +211,17 @@ void G4eIonisationPlus::BuildLambdaTable(const G4ParticleDefinition& aParticleTy
   theMeanFreePathTable = new G4PhysicsTable(numOfMaterials);
 
   // get electron  cuts in kinetic energy
+  // The electron cuts needed in the case of the positron , too!
+  // This is the reason why SetCut has to be called for electron first !!!!!!!
+
+  if((G4Electron::Electron()->GetCutsInEnergy() == 0) &&
+     ( &aParticleType == G4Positron::Positron()))
+  {
+     G4cout << " The ELECTRON energy cuts needed to compute energy loss/mean free path "
+               " for POSITRON , too. " << endl;
+     G4Exception(" Call SetCut for e- first !!!!!!") ;
+  }
+
   G4double* DeltaCutInKineticEnergy = G4Electron::Electron()->GetCutsInEnergy() ;
  
 

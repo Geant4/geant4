@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eIonisation.cc,v 1.6 2000-02-22 10:39:05 urban Exp $
+// $Id: G4eIonisation.cc,v 1.7 2000-03-24 11:25:30 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -142,9 +142,19 @@ void G4eIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
 
       // now comes the loop for the kinetic energy values
 
+  //G4double Tmin = 1.*keV ;
+  //G4double Tsav ;
       for (G4int i = 0 ; i < TotBin ; i++)
          {
           LowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;      
+    //    if(LowEdgeEnergy < Tmin)
+    //    {
+    //      Tsav = LowEdgeEnergy ;
+    //      LowEdgeEnergy = Tmin ;
+    //    }
+    //    else
+    //      Tsav = 0. ;
+
           tau = LowEdgeEnergy/ParticleMass ;
 
           // Seltzer-Berger formula 
@@ -183,6 +193,9 @@ void G4eIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
           ionloss *= Factor*ElectronDensity/beta2 ;
           if (ionloss <= 0.) ionloss = 0.;
    
+        // if(Tsav > 0.)
+        //   ionloss *= sqrt(Tsav/LowEdgeEnergy) ; 
+
           aVector->PutValue(i,ionloss) ;
          }          
       theLossTable->insert(aVector);
@@ -209,9 +222,19 @@ void G4eIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
   theMeanFreePathTable = new G4PhysicsTable(numOfMaterials);
 
   // get electron  cuts in kinetic energy
+  // The electron cuts needed in the case of the positron , too!
+  // This is the reason why SetCut has to be called for electron first !!!!!!!
+
+  if((G4Electron::Electron()->GetCutsInEnergy() == 0) &&
+     ( &aParticleType == G4Positron::Positron()))
+  {
+     G4cout << " The ELECTRON energy cuts needed to compute energy loss/mean free path "
+               " for POSITRON , too. " << endl;
+     G4Exception(" Call SetCut for e- first !!!!!!") ;
+  }
+   
   G4double* DeltaCutInKineticEnergy = G4Electron::Electron()->GetCutsInEnergy() ;
  
-
   // loop for materials 
 
  for (G4int J=0 ; J < numOfMaterials; J++)
