@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.14 1999-12-05 22:41:38 morita Exp $
+# $Id: common.gmk,v 1.15 2000-08-22 19:07:46 johna Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -116,7 +116,7 @@ endif
 endif
 
 # Make the .d file(s) and include it(them).
-# g++ -MM is good at this, except it forgets the subdirectory
+# g++ -MM (or -M) is good at this, except it forgets the subdirectory
 # (hence the use of $G4TMP/).
 
 # define G4SKIP_DEPEND for simplicity
@@ -135,7 +135,7 @@ $(G4TMPDIR)/%.d: src/%.cc
 	@if [ ! -d $(G4TMPDIR) ] ; then mkdir $(G4TMPDIR) ;fi
 	@echo Making dependency for file $< ...
 	@($(ECHO) $(G4TMPDIR)/\\c ; \
-	g++ -MM $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/$*.o!& $@!' >$@
+	g++ -M $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/$*.o!& $@!' >$@
 -include $(dependencies)
 endif
 

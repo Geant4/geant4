@@ -1,4 +1,4 @@
-$Id: History,v 1.108 2000-08-22 06:34:43 gcosmo Exp $
+$Id: History,v 1.109 2000-08-22 19:07:41 johna Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22nd August 2000  John Allison
+- Changed -MM to -M in dependency file making in binmake.gmk and common.gmk.
+  This causes dependencies of both #include "..." and #include <...> to be
+  followed.  This is the safer option, since some users might/should use,
+  e.g., #include <g4std/...>, but even these files change sometime.
 
 22nd August 2000  Gunter Folger
 - globlib.gmk: fix for protection from infinite loops when a dir does
