@@ -30,9 +30,17 @@ G4ReactionProductVector* G4CascadeInterface::Propagate(G4KineticTrackVector* the
   return NULL;
 }
 
+#define debug_G4CascadeInterface
+
 G4VParticleChange* G4CascadeInterface::
 ApplyYourself(const G4Track& aTrack, G4Nucleus& theNucleus)
 {
+  #ifdef debug_G4CascadeInterface
+  static G4int counter(0);
+  counter++;
+  G4cerr << "Reaction number "<<counter<<G4endl;
+  #endif
+  
   if (verboseLevel > 3) 
   {
     G4cout << " >>> G4CascadeInterface::ApplyYourself" << G4endl;
@@ -54,10 +62,10 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& theNucleus)
     // Code momentum and energy 
     // NOTE: Geant4 units are MeV = 1 and GeV = 1000. Cascade codes by default use MeV.
     G4std::vector<G4double> momentumBullet(4);
-    momentumBullet[0] =aTrack.GetDynamicParticle()->Get4Momentum().e();
-    momentumBullet[1] =aTrack.GetDynamicParticle()->Get4Momentum().px();
-    momentumBullet[2] =aTrack.GetDynamicParticle()->Get4Momentum().py();
-    momentumBullet[3] =aTrack.GetDynamicParticle()->Get4Momentum().pz();
+    momentumBullet[0] =aTrack.GetDynamicParticle()->Get4Momentum().e()/GeV;
+    momentumBullet[1] =aTrack.GetDynamicParticle()->Get4Momentum().px()/GeV;
+    momentumBullet[2] =aTrack.GetDynamicParticle()->Get4Momentum().py()/GeV;
+    momentumBullet[3] =aTrack.GetDynamicParticle()->Get4Momentum().pz()/GeV;
 
     G4InuclParticle *  bullet = new G4InuclElementaryParticle(momentumBullet, bulletType); 
 
@@ -98,7 +106,9 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& theNucleus)
       {
 	outgoingParticle = ipart->type();
 	G4std::vector<G4double> mom = ipart->getMomentum();
-	G4double ekin = ipart->getKineticEnergy();
+	G4double ekin = ipart->getKineticEnergy()*GeV;
+	G4ThreeVector aMom(mom[1], mom[2], mom[3]);
+	aMom = aMom.unit();
 
 	G4DynamicParticle* cascadeParticle = NULL;
 
@@ -107,27 +117,27 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& theNucleus)
 	  case proton: 
 	    cascadeParticle = 
 	      new G4DynamicParticle(G4Proton::ProtonDefinition(), 
-				    G4ParticleMomentum(mom[1], mom[2], mom[3]), ekin);
+				    aMom, ekin);
 	    break; 
 	  case neutron: 
 	    cascadeParticle = 
 	      new G4DynamicParticle(G4Neutron::NeutronDefinition(), 
-				    G4ParticleMomentum(mom[1], mom[2], mom[3]), ekin);
+				    aMom, ekin);
 	    break;
 	  case pionPlus: 
 	    cascadeParticle = 
 	      new G4DynamicParticle(G4PionPlus::PionPlusDefinition(), 
-				    G4ParticleMomentum(mom[1], mom[2], mom[3]), ekin);
+				    aMom, ekin);
 	    break;
 	  case pionMinus:
 	    cascadeParticle = 
 	      new G4DynamicParticle(G4PionMinus::PionMinusDefinition(), 
-				    G4ParticleMomentum(mom[1], mom[2], mom[3]), ekin);
+				    aMom, ekin);
 	    break;
 	  case pionZero: 
 	    cascadeParticle = 
 	      new G4DynamicParticle(G4PionZero::PionZeroDefinition(), 
-				    G4ParticleMomentum(mom[1], mom[2], mom[3]), ekin);
+				    aMom, ekin);
 	    break;
 	  default: cout << " ERROR: G4CascadeInterface::Propagate undefined particle type";
 	  }

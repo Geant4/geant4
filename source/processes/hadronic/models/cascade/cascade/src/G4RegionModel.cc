@@ -130,7 +130,7 @@ G4double G4RegionModel::GetMaximumNucleonMomentum(G4double r,
      }
   }
   G4Exception("G4RegionModel::GetMaximumNucleonMomentum - return value undefined");
-
+  return 0;
 
 }
 
