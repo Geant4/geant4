@@ -1,40 +1,32 @@
 #
-# Macro file for the initialization phase of "test14" (EM Low Energy)
-# (Based on electromagnetic/test/TestEm5.)
-#
-# It creates the default geometry (simple absorber cylinder )        
+# Macro file test14.in
+# for tests of basic low energy e.m. processes (based on test09) 
 #
 /control/verbose 2
-#control/saveHistory
+# /run/verbose 2
+/run/initialize
+/gun/direction 1 0 0
+#
+# gamma 1 keV in Al
+#
+/mydet/SelectMaterial Al
+/tracking/verbose 2
 /run/verbose 2
-#
-/run/initialize
-#
-/calor/setAbsMat Aluminium
-/calor/setAbsThick 92.600 mm  
-/calor/setAbsRad 100.0 mm
-/calor/update
-#
-/calor/cutG 2130.0 micrometer
-/calor/cutE 7.000 micrometer
-/run/initialize
-/run/particle/dumpCutValues
-#
 /gun/particle gamma
 /gun/energy 1 keV
-/tracking/verbose 1
-/run/beamOn 1
+/run/beamOn 100
 #
-/gun/particle gamma
-/gun/energy 10 keV
-/tracking/verbose 1
-/run/beamOn 1
+# electron 1 keV in Al
 #
-/gun/particle gamma
+/gun/particle e-
 /gun/energy 1 keV
-/tracking/verbose 0
-/run/beamOn 1000
+/run/beamOn 100
 #
-#
+exit
+
+
+
+
+
 
 
