@@ -173,7 +173,7 @@ else
           rm -f $dir/$1$dot_G4LARGE_N.err
           time $G4WORKDIR/bin/$G4SYSTEM/$shortname \
             $G4INSTALL/examples/extended/g3tog4/data/testmodel.dat \
-          < $G4INSTALL/tests/$shortname/$1$dot_G4LARGE_N.in \
+            $G4INSTALL/tests/$shortname/$1$dot_G4LARGE_N.in \
           > $dir/$1$dot_G4LARGE_N.out 2> $dir/$1$dot_G4LARGE_N.err
         else
           echo "tests/$shortname/$1$dot_G4LARGE_N.in does not exist."
