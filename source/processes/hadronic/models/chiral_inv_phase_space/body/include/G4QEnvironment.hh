@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.hh,v 1.15 2003-11-17 16:58:40 mkossov Exp $
+// $Id: G4QEnvironment.hh,v 1.16 2003-11-19 11:35:11 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -33,7 +33,7 @@
 #define G4QEnvironment_h 1
 
 // Standard G4-headers
-#include "G4HadronicException.hh"
+//#include "G4HadronicException.hh"
 
 // CHIPS headers
 #include "G4QuasmonVector.hh"
