@@ -1,4 +1,4 @@
-$Id: README,v 1.15 2002-06-18 20:01:56 griccard Exp $
+$Id: README,v 1.16 2002-06-18 21:15:13 griccard Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -81,10 +81,8 @@ The main features of this example are
   setenv G4ANALYSIS_USE               1 # Use the analysis tools
   setenv G4ANALYSIS_USE_NTUPLE        1 # Use the ntuple
 
-  (IMPORTANT: Do not set G4UI_USE_XM when using Ntuples!)
-
-  and be sure to have the right path to the Anaphne library, inserting this
-  on the .tcshrc:
+  and be sure to have the right path to the Anaphe library (or to another AIDA
+  compliant implementation), inserting this on the .tcshrc:
 
  (on a CERN machine with the gcc-2.95 compiler)
 
@@ -119,17 +117,6 @@ The main features of this example are
  your local G4 installation (see geant4/source/visualization/README for
  more information).
 
-
- ATTENTION:
- If you use analysis, you have to remove any hbook file in the 
- example directory obtained in previous Geant4 sessions. This issues will be 
- solved in future releases. Note also that the following error can be reported
- during run with analysis activated
-
- ***** ERROR in HLNEXT : Bad sequence for RZ : ID=       1 
-	
- Ignore this message; histograms (and ntuples) are correctly saved in the hbook files.
-			
 	
 3. Detector description
 -----------------------
@@ -191,26 +178,33 @@ The main features of this example are
 8. Analysis
 ----------------
 
- At present there are two options for analysis packages: either 
- explicitely the Anaphe 3.6.5 (or compatible) version is selected, 
- or any AIDA-2.2 compliant analysis system is chosen.  This dual
- approach will be removed in the next release when only the AIDA
- compliant version will be present. Presently, the OpenScientist 
- package (version 8) provides an implementation of AIDA 2.2, 
- other packages as Anaphe and JAS will follow soon. The AIDA 
- compliant version has not been tested by the developers and is
- here as a example of "forward compatibility" on how to use analysis.
+ The analysis part of GammaRayTel is based on the AIDA interfaces and their
+ implementation in Anaphe; please look at their documentation for more details.
+ Keep in mind that the actual implementation of the analysis tools in GammaRayTel
+ is of a pedagogical nature, so we kept it as simple as possible. 
+ Further improvements will follow in future releases. The actual analysis produces  
+ some histograms (see next section) and an ntuple. Both the histograms and 
+ the ntuple are saved at the end of the run in the file "gammaraytel.hbook". You 
+ can than analyze offline the contents of such a file; the GammaRayTel contains
+ also a very simple python script that can be used with Lizard to plot the
+ histograms  See the Lizard documentation on how to access the ntuple.
+ Please note that in a multiple run session, the last run always override the 
+ hbook file.
+
+
 
 9. Histogramming
 ----------------
 
- Some hits information can be visualized runtime using Lizard (if it is 
- available on the user platform); two 2D histograms and two 1D histograms 
- can be visualized and saved (as PostScript files) during the simulation
- run. The 2D histograms contain the hits positions on the TKR projected on 
+ Some hits information can be visualized runtime using the Anaphe QPlotter 
+ (if it is available on the user platform); two 2D histograms and two
+ 1D histograms can be visualized and saved (as PostScript files)
+ during the simulation run. 
+
+ The 2D histograms contain the hits positions on the TKR projected on
  the XZ plane and the YZ plane; the 1D histograms contain the energy 
  deposition in the last X plane of the TKR and the hits distribution along 
- the X planes of the TKR (note that this histograms have been chosen more 
+ the X planes of the TKR (note again that this histograms have been chosen more 
  for pedagogical motivation than for physical one).
 
  These histograms are filled and updated at every event and are initialized 

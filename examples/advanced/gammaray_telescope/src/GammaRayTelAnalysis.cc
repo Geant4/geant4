@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelAnalysis.cc,v 1.13 2002-06-18 20:01:57 griccard Exp $
+// $Id: GammaRayTelAnalysis.cc,v 1.14 2002-06-18 21:15:13 griccard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -92,7 +92,7 @@ GammaRayTelAnalysis::GammaRayTelAnalysis(int argc,char** argv)
     if(treeFactory) {
       // Tree in memory :
       // Create a "tree" associated to an hbook
-      tree = treeFactory->create("GammaRayTel.hbook", false, false,"hbook");
+      tree = treeFactory->create("gammaraytel.hbook", false, false,"hbook");
       if(tree) {
 	// Get a tuple factory :
 	ITupleFactory* tupleFactory = analysisFactory->createTupleFactory(*tree);
@@ -164,6 +164,7 @@ GammaRayTelAnalysis::GammaRayTelAnalysis(int argc,char** argv)
     }
 
   }
+
 
 
 #endif
@@ -260,12 +261,13 @@ void GammaRayTelAnalysis::setNtuple(float E, float p, float x, float y, float z)
 void GammaRayTelAnalysis::BeginOfRun(G4int n) 
 { 
 #ifdef  G4ANALYSIS_USE
-
+  
+  /*
   if(energy) energy->reset();
   if(hits) hits->reset();
   if(posXZ) posXZ->reset();
   if(posYZ) posYZ->reset();
-
+  */
 #endif
 }
 
@@ -288,11 +290,13 @@ void GammaRayTelAnalysis::EndOfRun(G4int n)
       plotter->createRegions(1,1);
       sprintf(name,"posxz_%d.ps", n);
       plotter->plot(*posXZ);
+      plotter->refresh();
       plotter->write(name,"ps");
 
       plotter->createRegions(1,1);
       sprintf(name,"posyz_%d.ps", n);
       plotter->plot(*posYZ);
+      plotter->refresh();
       plotter->write(name,"ps");
     }
 
@@ -301,12 +305,14 @@ void GammaRayTelAnalysis::EndOfRun(G4int n)
       char name[15];
       sprintf(name,"energy_%d.ps", n);
       plotter->plot(*energy);
+      plotter->refresh();
       plotter->write(name,"ps");
 
       plotter->createRegions(1,1);      
       sprintf(name,"hits_%d.ps", n);
       plotter->clearRegion();
       plotter->plot(*hits);
+      plotter->refresh();
       plotter->write(name,"ps");
     }
 
