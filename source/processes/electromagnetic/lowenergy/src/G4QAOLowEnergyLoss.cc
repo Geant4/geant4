@@ -15,6 +15,8 @@
 //      ---------- G4QAOLowEnergyLoss physics process -------
 //                  by Stephane Chauvie, 5 May 2000 
 // Modified:
+//
+// 16/09/2000 S. Chauvie  Oscillator for all materials
 // 24/05/2000 MGP  Modified to remove compilation warnings on Linux and DEC
 //                 Introduced sizes of L0, L1, L2 arrays
 // 23/05/2000 MGP  Made compliant to design
@@ -124,7 +126,8 @@ G4bool G4QAOLowEnergyLoss::IsInCharge(
   for (G4int m = 0; m < numberOfMaterials; m++)
     {
       G4String matName = material->GetName();
-      if (matName == materialAvailable[m]){ 
+      if (matName == materialAvailable[m] || 
+          material->GetNumberOfElements() == 1){ 
 	hasMaterial = true;
 	break;}
     }
@@ -219,6 +222,8 @@ G4int G4QAOLowEnergyLoss::GetNumberOfShell(const G4Material* material) const
   else if  (material->GetName() == "Tantalum") nShell = nbofShellForMaterial[3];
   else if  (material->GetName() == "Gold" )  nShell = nbofShellForMaterial[4];  
   else if  (material->GetName() == "Platinum") nShell = nbofShellForMaterial[5];
+  else if  (material->GetNumberOfElements() == 1) 
+  	nShell = material->GetElement(0)->GetNbOfAtomicShells();
   else G4cout << "WARNING - G4QAOLowEnergyLoss::GetNumberOfShell - "
 	      << "The model is not available for "
 	      << material->GetName() 
@@ -240,6 +245,8 @@ G4double G4QAOLowEnergyLoss::GetShellEnergy(const G4Material* material,G4int nbO
   else if  (material->GetName() == "Tantalum") shellEnergy =  taShellEnergy[nbOfTheShell];
   else if  (material->GetName() == "Gold" )  shellEnergy =  auShellEnergy[nbOfTheShell];   
   else if  (material->GetName() == "Platinum") shellEnergy =  ptShellEnergy[nbOfTheShell];
+  else if  (material->GetNumberOfElements() == 1)
+    shellEnergy = GetOscillatorEnergy(material, nbOfTheShell);
   else G4cout << "WARNING - G4QAOLowEnergyLoss::GetShellEnergy - "
 	      << "The model is not available for "
 	      << material->GetName() 
@@ -247,6 +254,50 @@ G4double G4QAOLowEnergyLoss::GetShellEnergy(const G4Material* material,G4int nbO
 
   return  shellEnergy;
   }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4QAOLowEnergyLoss::GetOscillatorEnergy(const G4Material* material,G4int nbOfTheShell) const
+{ 
+  G4double oscShellEnergy = 0;
+  
+  const G4Element* element ;
+  element = material->GetElement(0);
+  
+  G4int Z = G4int(element->GetZ());
+  
+  G4double a = 0;
+  a = exp(0.5);
+  
+  G4double squaredPlasmonEnergy = 1;
+  squaredPlasmonEnergy = pow(28.16,2) 
+			* material->GetDensity()/g/cm3
+			* ( Z / element->GetN()) * 1e-6  ;
+  
+  G4double plasmonTerm = 0 ;
+  plasmonTerm = 2./3. ; 
+  plasmonTerm *= GetOccupationNumber(Z,nbOfTheShell) / Z ; 
+  plasmonTerm *= squaredPlasmonEnergy;
+  plasmonTerm /= Z ;
+    
+  G4double ionTerm = 0;
+  ionTerm = a ;
+  ionTerm *= element->GetAtomicShell(nbOfTheShell);
+  ionTerm = pow(ionTerm,2);
+   
+  oscShellEnergy = sqrt( ionTerm + plasmonTerm );
+ 
+  if(Z==14){ 
+  G4cout << "Z : "<< Z << G4endl; 
+  G4cout << "Z/A.: "<< Z / element->GetN() << G4endl ;
+  G4cout << "Plasmon energy.: "<< sqrt(squaredPlasmonEnergy)<< G4endl ;
+  G4cout << "Plasmon term "<< plasmonTerm << G4endl; 
+  G4cout << "Ion term "<< ionTerm << G4endl; 
+  G4cout << "Energy excitation of shell "<< nbOfTheShell 
+         << " : "<< oscShellEnergy << G4endl; }
+
+  return  oscShellEnergy;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -260,6 +311,9 @@ G4double G4QAOLowEnergyLoss::GetShellStrength(const G4Material* material,G4int n
   else if  (material->GetName() == "Tantalum") shellStrength = taShellStrength[nbOfTheShell];
   else if  (material->GetName() == "Gold" )  shellStrength = auShellStrength[nbOfTheShell];   
   else if  (material->GetName() == "Platinum") shellStrength = ptShellStrength[nbOfTheShell];
+  else if  (material->GetNumberOfElements() == 1){
+    G4int Z = G4int(material->GetZ());
+    shellStrength = GetOccupationNumber(Z,nbOfTheShell) / Z ;}
   else G4cout << "WARNING - G4QAOLowEnergyLoss::GetShellEnergy - "
 	      << "The model is not available for "
 	      << material->GetName() 
@@ -268,6 +322,17 @@ G4double G4QAOLowEnergyLoss::GetShellStrength(const G4Material* material,G4int n
   return shellStrength;
 
 }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4QAOLowEnergyLoss::GetOccupationNumber(G4int Z,
+			     G4int ShellNb) const
+{
+  G4int indice = 1;
+  for (G4int z = 1 ; z < Z ; z++) indice += fNumberOfShells[z];
+  indice += ShellNb;  
+  return nbOfElectronPerSubShell[indice];
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4QAOLowEnergyLoss::GetL0(G4double normEnergy) const 
@@ -470,4 +535,140 @@ const G4double G4QAOLowEnergyLoss::L2[14][2] =
   20.00,  -0.88409,	
   40.00,  -1.13902
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+const G4int G4QAOLowEnergyLoss::nbOfElectronPerSubShell[1540] = 
+{
+  0, // consistency with G4AtomicShells
+  1,//------ H
+  2,//------ He
+  2,  1,//------ Li
+  2,  2,//------ Be
+  2,  2,  1,//------ B
+  2,  2,  2,//------ C
+  2,  2,  2,  1,//------ N
+  2,  2,  2,  2,//------ O
+  2,  2,  5,//------ F
+  2,  2,  2,  4,//------ Ne
+  2,  2,  2,  4,  1,//------ Na
+  2,  2,  2,  4,  2,//------ Mg
+  2,  2,  2,  4,  2,  1,//------ Al
+  2,  2,  2,  4,  2,  2,//------ Si
+  2,  2,  2,  4,  2,  3,//------ P
+  2,  2,  2,  4,  2,  4,//------
+  2,  2,  2,  4,  2,  5,//------
+  2,  2,  2,  4,  2,  2,  4,//------
+  2,  2,  2,  4,  2,  2,  4,  1,//------
+  2,  2,  2,  4,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  1,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  2,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  3,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  5,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  6,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  7,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  5,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  1,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  3,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  4,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  5,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  1,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  1,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  2,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  3,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  5,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  6,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  7,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  5,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  2,  1,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  2,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  2,  3,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  2,  4,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  2,  5,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  2,  2,  4,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  2,  2,  4,  1,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  2,  2,  4,  1,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  2,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  3,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  4,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  5,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  7,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  7,  2,  2,  4,  1,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  9,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6, 10,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6, 11,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6, 12,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6, 13,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  1,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  2,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  3,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  5,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  6,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  7,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  9,  1,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  1,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  2,  1,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  2,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  2,  3,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  2,  4,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  2,  2,  3,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  2,  2,  4,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  2,  2,  4,  1,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  2,  2,  4,  1,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  2,  2,  4,  2,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  2,  2,  2,  4,  1,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  3,  2,  2,  4,  1,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  4,  2,  2,  4,  1,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  6,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  7,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  7,  2,  2,  4,  1,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  8,  2,  2,  4,  1,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6, 10,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6, 11,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6, 12,  2,  2,  4,  2 //-----
+};
+
+const G4int G4QAOLowEnergyLoss::fNumberOfShells[101] =
+{
+ 0 ,  // nonexisting zero element
+
+ 1 ,  1 ,  2 ,  2 ,  3 ,    3 ,  4 ,  4 ,  3 ,  4 ,  //  1 - 10
+
+ 5 ,  5 ,  6 ,  6 ,  6 ,    6 ,  6 ,  7 ,  8 ,  8 ,  // 11 - 20
+
+ 9 ,  9 ,  9 ,  9 ,  9 ,    9 ,  9 , 10 , 10 , 10 ,  // 21 - 30
+
+11 , 11 , 11 , 11 , 11 ,   12 , 13 , 13 , 14 , 14 ,  // 31 - 40
+
+14 , 14 , 14 , 14 , 14 ,   15 , 15 , 15 , 16 , 16 ,  // 41 - 50
+
+// ----------------------------------------------------------
+
+16 , 16 , 16 , 17 , 18 ,   18 , 19 , 19 , 19 , 19 ,  // 51 - 60
+
+19 , 19 , 19 , 20 , 19 ,   19 , 19 , 19 , 19 , 20 ,  // 61 - 70
+
+21 , 21 , 21 , 21 , 21 ,   21 , 21 , 21 , 22 , 22 ,  // 71 - 80
+
+23 , 23 , 23 , 23 , 24 ,   24 , 25 , 25 , 26 , 26 ,  // 81 - 90
+
+27 , 27 , 27 , 26 , 26 ,   27 , 27 , 26 , 26 , 26    // 91 - 100
+
+};
+
 

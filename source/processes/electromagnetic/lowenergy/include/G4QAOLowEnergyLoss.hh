@@ -16,6 +16,7 @@
 //                  by Stephane Chauvie, 21 May 2000 
 //
 // Modified:
+// 16/09/2000 S. Chauvie  Oscillator for all materials
 // 23/05/2000 MGP  Made compliant to design
 //  
 // Class Description:
@@ -83,8 +84,10 @@ private:
   G4int GetNumberOfShell(const G4Material* material) const;
 
   G4double GetShellEnergy(const G4Material* material,G4int nbOfTheShell) const; 
+  G4double GetOscillatorEnergy(const G4Material* material,G4int nbOfTheShell) const; 
   G4double GetShellStrength(const G4Material* material,G4int nbOfTheShell) const;
-  
+  G4double GetOccupationNumber(G4int Z, G4int ShellNb) const;
+
   // calculate stopping number for L's term
   G4double GetL0(G4double normEnergy) const;
   // terms in Z^2
@@ -118,7 +121,9 @@ private:
   static const G4double L0[67][2];
   static const G4double L1[22][2];
   static const G4double L2[14][2];
-
+  static const G4int nbOfElectronPerSubShell[1540];
+  static const G4int fNumberOfShells[101];
+  
   G4int sizeL0;
   G4int sizeL1;
   G4int sizeL2;
