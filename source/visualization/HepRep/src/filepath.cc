@@ -8,6 +8,10 @@
 
 #include "zipios++/filepath.h"
 
+// MD: some platforms do not have S_ISSOCK
+#undef S_ISSOCK
+#define S_ISSOCK(mode) 0
+
 namespace zipios {
 
 using namespace std ;
@@ -19,21 +23,21 @@ FilePath::FilePath( const string &path, bool check_exists )
   : _checked( false ),
     _path( path ) {
   pruneTrailingSeparator() ;
-  if ( check_exists ) 
+  if ( check_exists )
     exists() ;
 }
 
 
 void FilePath::check() const {
-  _checked     = true  ;  
+  _checked     = true  ;
   _exists      = false ;
   _is_reg      = false ;
   _is_dir      = false ;
-  _is_char     = false ; 
+  _is_char     = false ;
   _is_block    = false ;
   _is_socket   = false ;
   _is_fifo     = false ;
-  
+
   struct stat buf ;
   if ( stat( _path.c_str(), &buf ) != -1 ) {
     _exists    = true ;
@@ -43,7 +47,7 @@ void FilePath::check() const {
     _is_block  = S_ISBLK ( buf.st_mode ) ;
     _is_socket = S_ISSOCK( buf.st_mode ) ;
     _is_fifo   = S_ISFIFO( buf.st_mode ) ;
-  } 
+  }
 }
 
 } // namespace
@@ -55,17 +59,17 @@ void FilePath::check() const {
 /*
   Zipios++ - a small C++ library that provides easy access to .zip files.
   Copyright (C) 2000  Thomas Søndergaard
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
   version 2 of the License, or (at your option) any later version.
-  
+
   This library is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
