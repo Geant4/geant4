@@ -8,27 +8,27 @@ These are the main new features/fixes included in this release since the
 last public release (for the detailed list of fixes/additions, please refer
 to the related History files):
 
+  o Analysis:
+    --------
+  - Removed analysis module. AIDA 2.2 or higher should now be adopted.
+
   o Configuration:
     -------------
-- Linux-g++.gmk, SUN-CC.gmk, SUN-CC5.gmk: added -DG4std in G4DDLX_FLAGS
-- Minor fixes for 'Configure' script.
-
-- architecture.gmk:
-  o updated list of supported systems/compilers.
-  o made Linux-g++ architecture the default G4SYSTEM.
-- Added Linux-egcs for old Linux architectures based on egcs-1.1.2 compiler.
-- Made Linux-g++.gmk specific to gcc-2.95.2 compiler, from now on the default
-  compiler on Linux systems.
-- Added SUN-CC4.gmk for old SUN architectures based on CC-4.2 compiler.
-- Made SUN-CC.gmk a copy of SUN-CC5.gmk (kept for backwards compatibility,
-  will be removed soon). CC-5.2 compiler is now the default compiler on
-  SUN systems.
-- Introduced environment variable G4VIS_NONE that, if set, no visualization
-  drivers are built and no vis libraries are built, not even
-  libG4vis_management.  (libG4modeling is still built.)  The C-pre-processor
-  variables G4VIS_BUILD and G4VIS_USE are *not* set.
-- Removed the need to specify environment variables for visualization drivers
-  which do not need external packages or libraries, namely :
+  - New version of the 'Configure' script for installation.
+  - architecture.gmk:
+    o made Linux-g++ architecture the default G4SYSTEM.
+    o removed references to STLInterface.
+  - Added Linux-egcs for old Linux architectures based on egcs-1.1.2 compiler.
+  - Made Linux-g++ specific to gcc-2.95.2 compiler or higher.
+  - Made SUN-CC specific to CC-5.2 compiler, the default compiler on SUN
+    systems. CC-4.2 is no longer supported.
+  - Introduced environment variable G4VIS_NONE that, if set, no visualization
+    drivers are built and no vis libraries are built.
+  - Introduced environment variable G4UI_NONE that, if set, no UI
+    sessions nor any UI libraries are built.
+  - Re-engineered G4VIS variables: removed the need to specify environment
+    variables for visualization drivers which do not need external packages
+    or libraries, namely :
       G4VIS_BUILD_DAWNFILE_DRIVER
       G4VIS_BUILD_RAYTRACER_DRIVER
       G4VIS_BUILD_VRMLFILE_DRIVER
@@ -40,680 +40,382 @@ to the related History files):
       G4VIS_USE_VRMLFILE
       G4VIS_USE_ASCIITREE
       G4VIS_USE_GAGTREE
-  For backwards compatibility, unless G4VIS_NONE is set, the corresponding
-  C-pre-processor variables are automatically set.  Also, the C-pre-processor
-  variables G4VIS_BUILD and G4VIS_USE are set.
-- As before, environment variables for other drivers (depending on
-  external packages) still need positive setting of their G4VIS_BUILD and
-  G4VIS_USE environment variables.  In this category are:
-      G4VIS_BUILD_DAWN_DRIVER
-      G4VIS_BUILD_OPACS_DRIVER
-      G4VIS_BUILD_OPENGLX_DRIVER
-      G4VIS_BUILD_OPENGLWIN32_DRIVER
-      G4VIS_BUILD_OPENGLXM_DRIVER
-      G4VIS_BUILD_OIX_DRIVER
-      G4VIS_BUILD_OIWIN32_DRIVER
-      G4VIS_BUILD_VRML_DRIVER
-    with associated G4VIS_USE environment variables:
-      G4VIS_USE_DAWN
-      G4VIS_USE_OPACS
-      G4VIS_USE_OPENGLX
-      G4VIS_USE_OPENGLWIN32
-      G4VIS_USE_OPENGLXM
-      G4VIS_USE_OIX
-      G4VIS_USE_OIWIN32
-      G4VIS_USE_VRML
-  In this case G4VIS_NONE must *not* be set.
-- Added binmake.EXTRALIBS.README.
-
-- Re-engineered G4UI variables.
-- Introduced environment variable G4UI_NONE that, if set, no UI
-  sessions nor any UI libraries are built.
-  (This would only happen in a pure batch job or, perhaps, in a user
-  framework having its own UI system.)
-- Removed the need to specify environment variables for UI sessions
-  which do not need external packages or libraries, namely :
-    G4UI_BUILD_GAG_SESSION, G4UI_BUILD_TERMINAL_SESSION
-  with associated G4UI_USE environment variables:
-    G4UI_USE_GAG, G4UI_USE_TCSH, G4UI_USE_TERMINAL
-  The above environment variables become redundant and are ignored.
-- As before, environment variables for other sessions still need
-  positive setting of their G4UI_BUILD and G4UI_USE environment
-  variables. In this category are:
-    G4UI_BUILD_WIN32_SESSION, G4UI_BUILD_WO_SESSION,
-    G4UI_BUILD_XAW_SESSION, G4UI_BUILD_XM_SESSION
-  with associated G4UI_USE environment variables:
-    G4UI_USE_WIN32, G4UI_USE_WO, G4UI_USE_XAW, G4UI_USE_XM
-- Note: The user must still instantiate and SessionStart only *one*
-  session, but if it is to be one in the category needing external
-  packages or libraries, the corresponding G4UI_USE must be set to
-  trigger inclusion of libraries.  Otherwise the user needs not set any
-  environment variables.
-
-- Introduced HepRep graphics driver environment setup:
-  G4VIS_BUILD_HEPREP_DRIVER, G4VIS_USE_HEPREP.
-- binmake.gmk: removed include path for processes/electromagnetic/integral
-  according to tag "em-V03-02-02".
-- Removed references to STLInterface module in architecture.gmk
-  and architecture setups. 
-- binmake.gmk: added include path for geometry/verification module.
-- Added paths in binmake.gmk including new hadronic models for cascade,
-  CHIPS and coherent_elastic.
-- Included references to HepRepFile.
+  - Re-engineered G4UI variables: removed the need to specify environment
+    variables for UI sessions which do not need external packages or
+    libraries, namely :
+      G4UI_BUILD_GAG_SESSION, G4UI_BUILD_TERMINAL_SESSION
+    with associated G4UI_USE environment variables:
+      G4UI_USE_GAG, G4UI_USE_TCSH, G4UI_USE_TERMINAL
+  - Removed references to STLInterface module in architecture.gmk
+    and architecture setups. 
+  - analysis.gmk: added flags to use an AIDA 2.2 compliant analysis system. 
 
   o Event:
     -----
-- Cleanup of pedantic warnings in Linux-g++ ANSI setup. 
-- Corrected "int" to "G4int".
-- Corrected "NULL" to "0". 
-- Synchronised all files with HEAD after inclusion of the disclaimer of
-  warranty. 
-
-- G4PrimaryParticle now stores the proper trackID.
-- Added a new feature for the user to increase the number of waiting
-  stacks.
-- In G4GeneralParticleSource (GPS):
-  Most commands under G4ParticleGun class are now available.
-  Implemented co-ordinates rotation for angular distribution.
-  User defined co-ordinates was an option available to user in the
-  messenger but not implemented internally in the older version gps.
-  Source angular distribution coupled with positional distribution can
-  lead to rather strange combinations. To avoid this I used a simple
-  scheme in this implementation:
-  o For cos-law angular distribution the default maxtheta is set to
-    pi/2. instead of pi. The user can of course re-set this to any
-    number between 0 - pi.
-  o Added user defined histogram re-set method. After re-set user can
-    redefine all the histograms. To use: /gps/resethist  'histname'
-  o Bug fixed in generating theta, and in calculating the weight.
-  o Added further guidance in the messenger for the definition of
-    pre-defined energy distributions.
-- Bug fix in G4EventManager in case G4_STORETRAJECTORY is off. 
-  Fixes problem report #289.
-- Minor fixes to comply with removal of STLInterface.
-
-- Code changes to remove compilation warnings un gcc-2.95.2
-- Added Beam option for generating accelerator beams
-- Add check whether the primary vertex is inside of the world volume.
-- Move set method of position and time from G4ParticleGun to
-  G4VPrimaryGenerator so that G4HEPEvtInterface can accept the primary
-  vertex position
-- G4PrimaryTransformer.cc: now considering case where a primary is
-  placed on the boundary of the world volume. Added units.
+  - Cleared compilation warnings on gcc-2.95.2. 
+  - Fixes to comply with removal of STLInterface.
+  - G4PrimaryParticle now stores the proper trackID.
+  - Added a new feature for the user to increase the number of waiting stacks.
+  - G4GeneralParticleSource (GPS): implemented co-ordinates rotation for
+    angular distribution.
+  - Bug fix in G4EventManager in case G4_STORETRAJECTORY is off. 
+  - Added Beam option for generating accelerator beams.
+  - Add check whether the primary vertex is inside of the world volume.
+  - Move set method of position and time from G4ParticleGun to
+    G4VPrimaryGenerator so that G4HEPEvtInterface can accept the primary
+    vertex position
+  - G4PrimaryTransformer: now considering case where a primary is
+    placed on the boundary of the world volume.
 
   o Electromagnetic Processes (Low-energy):
     --------------------------------------
-- Fixed a problem of continuity of ion effective charge.
-- Fix to GammaConversion process.
-- First step of design iteration in fluorescence.
-- Fixed energy conservation problems for small range cuts in
-  G4LowEnergyIonisation.
-- Added files resulting from design iteration in the data domain.
-
-- Modifications to cope with migration of Materials to STL vector.
-- Cleared compilation warnings in G4AtomicTransitionManager
-- Bug fix in G4CrossSectionHandler.
-- Major revision of G4LowEnergyCompton, G4LowEnergyRayleigh and
-  G4LowEnergyGammaConversion: re-implementation according to the design
-  iteration in the data domain.
-- Fix in G4CrossSectionHandler::Clear() curing an infinite loop occurring
-  in test14.
-- Update to the fluorescence domain consistent with the new design.
-- New class to generate shell vacancies in continuous part of processes.
-- Added protection in G4LowEnergyPhotoElectric to avoid generation of
-  photons causing negative energy balance.
-
-- Introduced fluorescence according to the new design into e- ionisation.
-- Modified G4CrossSectionHandler to inherit from base class
-- Minor design iteration in G4VEMDataSet and G4VDataSetAlgorithm
-- Encapsulated range test to generate secondaries into a strategy pattern;
-  implemented in photon processes
-
-- Minor fixes to comply with removal of STLInterface.
-- Included implementation of design iteration for electrons.
-- Added member function in G4eLowEnergyLoss and G4VLowEnergyIonisationVI
-  for generation of atomic deexcitation products in the continuous part.
-- G4LowEnergyPolarizedCompton process moved to new design.
-- Bug fixes in G4eIonisationParameters and G4BremsstrahlungParameters.
-- New classes for shell cross sections for proton-induced fluorescence. 
-- Fluorescence introduced in G4hLowEnergyIonisation, in the continuous
-  part of electron ionisation in G4eLowEnergyLoss and in
-  G4LowEnergyIonisationVI.
-
-- New database version G4EMLOW0.4 required.
-- Fix for compilation on Windows/VC++.
-- Removed static inline methods to non inline.
-- Bug fix in G4FluoData.
-- Physics improvement in Bremsstrahlung.
-- Introduced changes to allow multiple cuts per material (temporary). 
-- Performance improvement in electron processes.
-- Some code clean up.
-- First implementation of a generic unit test with AIDA/Lizard
-  analysis.
-- Introduced PIXE in G4hLowEnergyIonisation.
+  - Fixed a problem of continuity of ion effective charge.
+  - First implementation of fluorescence process.
+  - Fixed energy conservation problems for small range cuts in
+    G4LowEnergyIonisation.
+  - Cleared compilation warnings on gcc-2.95.2.
+  - Fixes to comply with removal of STLInterface.
+  - Major revision of G4LowEnergyCompton, G4LowEnergyRayleigh and
+    G4LowEnergyGammaConversion: re-implementation according to the design
+    iteration in the data domain.
+  - Added protection in G4LowEnergyPhotoElectric to avoid generation of
+    photons causing negative energy balance.
+  - New classes for shell cross sections for proton-induced fluorescence. 
+  - Removed static inline methods to non inline.
+  - Introduced changes to allow multiple cuts per material (temporary). 
+  - Introduced PIXE in G4hLowEnergyIonisation.
+  - Significant physics an performance improvement in electron processes.
+  - New version of data G4EMLOW0.5 required.
+  - Added method to deactivate fluorescence in ionisation if needed.
 
   o Electromagnetic Processes (Standard):
     ------------------------------------
-- Clean up compilation warnings for Linux ANSI mode.
-- GammaConversion::PostStepDoIt : sample epsil->power (rndm,0.333333).
-- Suppression of the production threshold in phot, compt, conv, annih
-  processes.
-- Removed obsolete "integral" module. 
-
-- Modifications to cope with migration of Materials to STL vector. 
-- Implemented store/retrieve PhysicsTables in MuIonis, MuBrems, MuPairProd. 
-- G4MuIonisation: new function ComputeRestrictedMeandEdx() and cleanup. 
-- G4VMuEnergyLoss: subcutoff delta-rays mechanism implemented. 
-- G4VxEnergyLoss: min.delta cut is set as rcut/100 + some optimisation. 
-- Fix in MuPairProduction::ComputeMicroscopicCrossSection().
-- Modifications to cope with migration of Materials to STL vector. 
-- Implemented store/retrieve PhysicsTables in photelec, compton,
-  gamaconv, annihil, eIonisa, eBrems, mulscat, hIonisa processes. 
-- G4eIonisation: new function ComputeRestrictedMeandEdx(). 
-- G4hIonisation: new function ComputeRestrictedMeandEdx() and cleanup. 
-- G4hIonisation::PostStepDoIt() modified 'grecj' term for spin to 1/2. 
-- G4VhEnergyLoss+G4VeEnergyLoss: bugfix in subcutoff delta generation. 
-- G4VxEnergyLoss: min.delta cut is set as rcut/100 + some optimisation. 
-- DoIt: fminimalEnergy = 1*eV in phot,comp,conv,anni processes.
-- Activated buildDEDXTable() in G4hIonisation::retrievePhysicsTable()
-- Modifications to cope with migration of Materials to STL vector. 
-- G4MultipleScattering: added methods to store/retrieve PhysicsTable. 
-- New angle and z(geom. pathlength) distributions, energy (step)
-  dependence has been reduced. 
-- Deleted obsolete TrueToGeomTransformation() method. 
-- Fixed old outstanding bug in G4EnergyLossTables, responsible for
-  causing negative energy deposit in some occasions. 
-- Changed value of data member 'factlim' in msc process.
-- Modifications to cope with migration of Materials to STL vector.
-- Minor fixes to comply with removal of STLInterface.
-
-- Moved ParticleMass and Charge to local variables.
-- Code cleanup in G4hEnergyLoss[.hh.cc].
-- Removed static inline methods to non inline.
-- Introduced changes to allow multiple cuts per material (temporary).
-  Modified: Ve(h)EnergyLoss, e(h)Ionisation, eBremsstrahlung,
-  PAIEnergyLoss, PAIonisation, SynchrotronRadiation.
-- Moved ParticleMass and Charge to local variables.
-- Added correction to Tmax+xsection computation.
-- Removed static inline methods to non inline.
-- Introduced changes to allow multiple cuts per material (temporary).
-- Introduced changes to G4VMuEnergyLoss.cc for reference-counted
-  touchables.
-- G4VEnergyLoss: some data members and functions are no more static.
-- Bug fixed in G4MultipleScattering::PostStepDoIt().
-- Removed static inline methods to non inline.
-- Introduced changes to allow multiple cuts per material (temporary).
-- StorePhysicsTable: ParticleName included in FileName.
-- Introduced changes to allow multiple cuts per material (temporary).
-  Modified G4ForwardXrayTR.cc.
-- Modified G4Cerenkov.cc and G4Scintillator.cc for reference-counted
-  touchables.
-- G4Cerenkov.cc: added check on
-  CerenkovAngleIntegrals->IsFilledVectorExist()
-  in method GetAverageNumberOfPhotons() and a test for MeanNumPhotons
-  in DoIt().
+  - Cleared compilation warnings on gcc-2.95.2.
+  - Fixes to comply with removal of STLInterface.
+  - Suppression of the production threshold in phot, compt, conv, annih
+    processes.
+  - Removed obsolete "integral" module. 
+  - Implemented mechanism for storing and retrieving Physics Tables.
+  - Implemented new function ComputeRestrictedMeandEdx() for ionisation
+    processes. 
+  - Implemented subcutoff delta-rays mechanism in G4VMuEnergyLoss.
+  - Fixed old outstanding bug in G4EnergyLossTables, responsible for
+    causing negative energy deposit in some occasions. 
+  - Removed static inline methods to non inline.
+  - Introduced changes to allow multiple cuts per material (temporary).
+  - Introduced changes for reference-counted touchables.
 
   o General Processes, Parameterisation, Decay, Optical:
     ---------------------------------------------------
-management:
-- Extended arguments for Retrieve/StorePhysicsTable methods.
-- Fixed bug in copy constructor of G4ProcessManager.
-- Modifications to cope with migration of Materials to STL vector.
-- Added Set/GetProcessManager() to G4VProcess and modified 
-  G4ProcessManager::AddProcess() to invoke SetProcessManager().
-- Minor fixes to comply with removal of STLInterface.
-
-parameterisations:
-- Added new classes describing X-ray transition radiation generation
-  inside radiators (i.e. just along incident particle track):
-  G4FoamXTRdEdx[.hh.cc], G4GamDistrXTRdEdx[.hh.cc], G4IrregularXTRdEdx[.hh.cc],
-  G4PlateIrrGasXTRdEdx[.hh.cc], G4RegularXTRdEdx[.hh.cc], G4VXTRdEdx[.hh.cc]
-  and G4VXrayTRadModel[.hh.cc]
-- Removed all references to RW wrappers. Migrated to STL vectors.
-- Introduced changes in G4VClusterModel[.hh.cc] for reference-counted
-  touchables.
-- Fixed warnings detected on gcc-2.95.2 compiler.
-
-optical:
-- Changed process name for G4OpRayleigh, G4OpBoundary and G4OpAbsorption;
-  changed to 'OpRayleigh', 'OpBoundary' and 'OpAbsorption' respectively.
-  This addresses problem report #293.
-- Fixed warnings detected on gcc-2.95.2 compiler.
-- Minor fixes to comply with removal of STLInterface.
-
-photolepton_hadron:
-- Minor fixes to comply with removal of STLInterface.
-- Fixed warnings detected on gcc-2.95.2 compiler.
-- Synchronised files with CVS HEAD.
+  - Cleared compilation warnings on gcc-2.95.2 compiler.
+  - Fixes to comply with removal of STLInterface.
+  - management:
+    o Fixed bug in copy constructor of G4ProcessManager.
+    o Added Set/GetProcessManager() to G4VProcess and modified 
+      G4ProcessManager::AddProcess() to invoke SetProcessManager().
+  - parameterisation(s):
+    o Added new classes describing X-ray transition radiation generation
+      inside radiators (i.e. just along incident particle track):
+      G4FoamXTRdEdx, G4GamDistrXTRdEdx, G4IrregularXTRdEdx,
+      G4PlateIrrGasXTRdEdx, G4RegularXTRdEdx, G4VXTRdEdx, G4VXrayTRadModel.
+    o Introduced changes in G4VClusterModel for reference-counted
+      touchables.
+  - optical:
+    o Changed process name for G4OpRayleigh, G4OpBoundary and G4OpAbsorption.
 
   o Geometry:
     --------
-- Introduced geometry/verification module for checking geometry for
-  volumes overlaps.
-
-Magnetic field:
-- added method in G4ChordFinder to erase/reset the state of the
-  StepEstimate. This is unwanted internal state that was carried
-  between tracks and events as a side effect.
-  Calling this at the start of each track, it is now possible to
-  eliminate a reported problem of non-repeatability.
-- Fixes in G4MagIntegratorDriver:
-  o Now respecting its minimum driver step size in AccurateAdvance.
-  o Modified maximum number of steps, lowering by factor of 10;
-    it should reduce the time spent integrating low energy particles.
-- Motivated by the use case of an Electric Field in order to achieve
-  reasonable accuracy in time integration, and to enable fields that
-  vary with the global time:
-  o Modified G4Field to allow the time in the GetFieldValue method.
-  o Modified EquationOfMotion to provide the time to the GetFieldValue
-    method of G4Field.
-- Added the global time as variable to be integrated over in the 
-  case of an Electric Field.
-- Fixed warnings on gcc-2.95.2.
-- Included unit tests field01, field02, field03.
-- Protected verbose warnings with G4DEBUG_FIELD flag in G4ChordFinder
-  and G4MagIntegratorDriver.
-
-Management:
-  o Added definition of G4TouchableHandle.
-  o Added class G4SmartVoxelStat for statistics on geometry optimisation
-    of volumes through voxelisation.
-  o Modified G4GeometryManager to make use of G4SmartVoxelStat when run
-    in verbose mode:
-    - added argument to CloseGeometry() method for verbosity
-    - added ReportVoxelStats() method for reporting optimisation statistics.
-- Fixed comments for reference manual in G4TouchableHandle.hh.
-- Initialise noNodes to 1 in G4SmartVoxelHeader::BuildNodes() in case
-  computed nodes for smartless happen to be zero.
-
-Volumes:
-  o Fixed initialisation of fEpsilonMin in G4PropagatorInField 
-    constructor.
-  o Introduced G4GeometryMessenger associated to G4TransportationManager
-    with following commands defined:
-    - geometry/test/run - to start verification of geometry for overlapping
-                          regions based on standard grid setup.
-    - geometry/test/line_test - to activate test along a specified direction
-                                and position user defined.
-    - geometry/test/position - to specify position for the line_test.
-    - geometry/test/direction - to specify direction for the line_test.
-    - geometry/test/tolerance - to customise test precision.
-    - geometry/navigator/reset - for resetting navigation history
-                                 and position.
-- Added handles for reference counting: G4GRSSolidHandle,
-  G4GRSVolumeHandle, G4TouchableHistoryHandle.
-- Modified G4Navigator for reference counted touchables.
-  Introduced new methods CreateTouchableHistoryHandle() and
-  LocateGlobalPointAndUpdateTouchableHandle(...).
-- New unit tests testG4ParameterisedMaterial.cc and
-  testG4TouchableHandle.cc.
-
-solids/Boolean:
-- Introduced G4BOOLDEBUG flag and relaxed G4Exception calls with
-  warnings to G4cerr for rare occurences of anomalous conditions.
-o Introduced first implementation of classes G4ReflectedSolid and
-  G4ReflectionFactory for reflections of positioned volumes.
-o Fixed bug in G4ReflectedSolid::CreatePolyhedron().
-- Fix for verbosity in G4ReflectionFactory. Reduced of one level.
-
-solids/BREPS:
-- Fixes in BREPS (breps-V03-02-02) for overloading ambiguity on SUN-CC
-  with new CLHEP-1.7. Fix in G4BSplineCurve::Init() for initialisation
-  of point vector. 
-- Synchronised files with HEAD after inclusion of the disclaimer of
-  warranty.
-- G4BREPSolidPolyhedra.cc: fixed situation when phi1 = 0 dphi1 = 2*pi
-  and all RMINs = 0.0. In this case the inner planes are not created.
-  More than 2 z-planes and inner planes are not created whenever two
-  consecutive RMINs are = 0.0.
-  Fixes problem report #266.
-
-solids/CSG:
-- G4Sphere.cc: bug fixed in G4Sphere::SurfaceNormal for the case
-  kNETheta. Fixes problem report #290.
-
-solids/STEP & STEPinterface:
-- SdaiCONFIG_CONTROL_DESIGN.cc: cleaned up warnings issued on SUN-CC. 
-- dirobj.cc: restored usage of strdup() and forced non-ANSI setup.
-- G4Axis2Placement3dCreator::CreateG4Geometry(): added check to attribute
-  validity for 'direction'.
+  - Introduced geometry/verification module for checking geometry for
+    volumes overlaps.
+  - Cleared compilation warnings on gcc-2.95.2 compiler.
+  - Fixes to comply with removal of STLInterface.
+  - Magnetic field:
+    o Added method in G4ChordFinder to erase/reset the state of the
+      StepEstimate. This is unwanted internal state that was carried
+      between tracks and events as a side effect.
+      Calling this at the start of each track, it is now possible to
+      eliminate a reported problem of non-repeatability.
+    o Reduced maximum number of steps in G4MagIntegratorDriver.
+    o Handling Electric Field and time-dependent fields.
+    o Introduced ability to set field per volume.
+    o New extended examples for field in examples/extended.
+    o Protected verbose warnings with G4DEBUG_FIELD flag in G4ChordFinder
+      and G4MagIntegratorDriver.
+    o G4FieldManager: added fFieldChangesEnergy data member and get/set
+      methods.
+    o Fixed interface to virtual functions in the inheritance chain of
+      G4Field and subclasses.
+  - Management:
+    o Added definition of G4TouchableHandle.
+    o Added class G4SmartVoxelStat for statistics on geometry optimisation
+      of volumes through voxelisation.
+    o Modified G4GeometryManager to make use of G4SmartVoxelStat when run
+      in verbose mode:
+      - added argument to CloseGeometry() method for verbosity
+      - added ReportVoxelStats() method for reporting optimisation statistics.
+    o Initialise noNodes to 1 in G4SmartVoxelHeader::BuildNodes() in case
+      computed nodes for smartless happen to be zero.
+  - Volumes:
+    o Introduced G4GeometryMessenger associated to G4TransportationManager
+      with following commands defined:
+      - geometry/test/run - to start verification of geometry for overlapping
+                            regions based on standard grid setup.
+      - geometry/test/line_test  - to activate test along a specified
+                                   direction and position user defined.
+      - geometry/test/position   - to specify position for the line_test.
+      - geometry/test/direction  - to specify direction for the line_test.
+      - geometry/test/tolerance  - to customise test precision.
+      - geometry/navigator/reset - for resetting navigation history
+                                   and position.
+    o Added handles for reference counting: G4GRSSolidHandle,
+      G4GRSVolumeHandle, G4TouchableHistoryHandle.
+    o Modified G4Navigator for reference counted touchables.
+      Introduced new methods CreateTouchableHistoryHandle() and
+      LocateGlobalPointAndUpdateTouchableHandle(...).
+    o G4PropagatorInField:
+      - Added thresholds for number of steps with get/Set methods.
+      - Modified choice of subsequent step size in case of zero steps.
+      - Added GetCurrentFieldManager() method.
+      - Added 'maximum' epsilon value.
+    o G4Navigator:
+      - fix for LocateGlobalPointWithinVolume(): clear state variables.
+      - Fixed mirroring of the input argument for global direction into
+        local variable in LocateGlobalPointAndSetup().
+      - Added ResetState() method (that only reset state - not stack).
+      - Added optional argument for direction to LocateGlobalPointAndSetup().
+      - State is now resetted when touchable history is used to
+        re-initialise it.
+      - Direction in LocateGlobalPointAndSetup() methods is now used.
+  - solids/Boolean:
+    o Introduced first implementation of classes G4ReflectedSolid and
+      G4ReflectionFactory for reflections of positioned volumes based
+      on simple CSG solids.
+    o Introduced G4BOOLDEBUG flag and relaxed G4Exception calls with
+      warnings to G4cerr for rare occurences of anomalous conditions.
+  - solids/BREPS:
+    o Fix in G4BSplineCurve::Init() for initialisation of point vector. 
+    o G4BREPSolidPolyhedra.cc: fixed situation when phi1 = 0 dphi1 = 2*pi
+      and all RMINs = 0.0. In this case the inner planes are not created.
+  - solids/CSG:
+    o G4Sphere: bug fix in SurfaceNormal() for the case kNETheta.
+  - solids/STEP & STEPinterface:
+    o SdaiCONFIG_CONTROL_DESIGN.cc: cleaned up warnings issued on SUN-CC. 
+    o dirobj.cc: restored usage of strdup() and forced non-ANSI setup.
+    o Fixes for compilation on gcc-2.96.98 and gcc-3.0.2 compilers.
+    o G4Axis2Placement3dCreator::CreateG4Geometry(): added check to
+      attribute validity for 'direction'.
 
   o Global:
     ------
-- Modified G4Exception behavior, now setting G4StateManager to
-  "abort" state instead of aborting the application.
-- Synchronised all files with HEAD after inclusion of the disclaimer of
-  warranty.
-- Removed STLinterface module:
-  o renamed cstring[.h.icc] to G4String[.hh.icc] and placed
-    in management/include.
-  o renamed ctoken.h to G4Tokenizer.hh and placed in management/include.
-- Introduced G4ReferenceCountedHandle templated class.
-- Added  wrapper in include/g4std.
-- New optimised revision of G4ReferenceCountedHandle to reflect
-  new design. Updated also unit test testReferenceCountedHandle.cc.
+  - Modified G4Exception behavior, now setting G4StateManager to
+    "abort" state instead of aborting the application.
+  - Removed STLinterface module:
+    o renamed cstring[.h.icc] to G4String[.hh.icc].
+    o renamed ctoken.h to G4Tokenizer.hh.
+  - Introduced G4ReferenceCountedHandle templated class.
 
   o Graphics Representations:
     ------------------------
-- Improvements to comments and layout in G4VisExtent.
-- Added G4Scale class.
-- Added G4Polyline::transform.                       
-- Fixed pedantic warnings in G4NURBS.
-- Made typedef's public in G4Point3DList.hh and G4Polyline.hh.
-- Added G4Scale::GuidanceString.
+  - Added G4Scale class.
+  - Added G4Polyline::transform.                       
+  - Cleared compilation warnings on gcc-2.95.2 compiler.
 
   o Hadronic Processes:
     ------------------
-- Fix in G4VGammaDeexcitation.cc for overloading ambiguity on SUN-CC
-  with new CLHEP-1.7.
-- Minor fix in G4NeutronHPVector.cc for porting on gcc-2.95-2. 
-- Sychronized all files with HEAD after inclusion of the disclaimer of
-  warranty.
-- Migration to STL vector implemented in all modules
-- General updates, fixes, new development.
-- New cascade models (evaporation & utils modules).
-- New chiral_inv_phase_space model (body & interface modules). 
-- New coherent_elastic model.
-- Fixes in: cross_sections, management, kinetic_model,
-  quark_gluon_string, string_common, string_fragmentation,
-  generator/util, processes and util. 
-- Includes "radiative_decay-V03-02-03" 
-- models/neutron_hp:
-  o Fixed asymmetry in the angular distributions for elastic scattering
-    in the case of isotropic distributions.
-- models/generator/quark_gluon_String:
-  o Fixed semi-infinite loop in sampling the parton density distributions. 
-- models/chiral_inv_space:
-  o Fixed miscalculation on masses for strange nuclei. 
-- models/isotope_production:
-  o Fixed exception in cases where this is used on materials that
-    are mixtures.
-- models/generator:
-  o Resolved case, where multiple soft and diffractive collisions in
-    one single interaction lead, due to energy transfer in diffraction,
-    to a case, where the parton density functions could not be sampled
-    any more to satisfy the pre-calculated number of pomeron exchanged
-    in soft collisions, energy conservation, and the minimum
-    string-mass constraint. 
-- Performance optimization to improve the speed for doppler broadening
-  by an integer factor.
+  - Cleared compilation warnings and minor fixes for gcc-2.95.2 compiler.
+  - Fixes to comply with removal of STLInterface.
+  - General updates, fixes, new development: cross_sections, management,
+    kinetic_model, quark_gluon_string, string_common, string_fragmentation,
+    generator/util, processes and util modules
+  - New cascade models (evaporation & utils modules).
+  - New chiral_inv_phase_space model (body & interface modules). 
+  - New coherent_elastic model.
+  - Performance optimization to improve the speed for doppler broadening.
+  - models/neutron_hp:
+    o Fixed asymmetry in the angular distributions for elastic scattering
+      in the case of isotropic distributions.
+  - models/generator/quark_gluon_String:
+    o Fixed semi-infinite loop in sampling the parton density distributions. 
+  - models/isotope_production:
+    o Fixed exception in cases where this is used on materials that
+      are mixtures.
+  - models/generator:
+    o Resolved case, where multiple soft and diffractive collisions in
+      one single interaction lead, due to energy transfer in diffraction,
+      to a case, where the parton density functions could not be sampled
+      any more to satisfy the pre-calculated number of pomeron exchanged
+      in soft collisions, energy conservation, and the minimum
+      string-mass constraint. 
 
   o Materials:
     ---------
-- Removed references to RW wrappers. STL migration completed.
-- Fixed printing of property name and check for NULL property vector 
-  pointer in G4MaterialPropertiesTable:DumpTable. Corrected warning
-  message in RemoveEntry() method.
-- Improved printing in G4MaterialPropertyVector::DumpVector().
-- G4Isotope, G4Element, G4Material: IndexInTable is now obtained
-  dynamically via GetIndex().
-- An Isotope, Element, Material can be deleted.
-  Added fCountUse to count the # of materials referencing a given element.
-  (similarly for elements with isotopes) 
-- Removed all static inline methods in G4Isotope, G4Element, G4Material
-  and G4SandiaTable.
-- Fixed memory leak in G4SandiaTable::ComputeMatSandiaMatrix(),
-  for deletion of temporary vectors Z, tmp1, tmp2.
-- Moved definitions of G4IsotopeVector and G4ElementVector
-  G4ElementTable and G4MaterialTable to the appropriate headers.
-- Replaced NULL with 0 whereever needed.
-- Added new function G4Materials::SetChemicalFormula().
-- Fixed pointer initialisation in
-  G4MaterialPropertyVector::RemoveElement().
-  Fixes compilation problem on Windows/VC++.
+  - Cleared compilation warnings on gcc-2.95.2 compiler.
+  - Fixes to comply with removal of STLInterface.
+  - G4Isotope, G4Element, G4Material: IndexInTable is now obtained
+    dynamically via GetIndex().
+  - An Isotope, Element, Material can be deleted.
+  - Removed static inline methods in G4Isotope, G4Element, G4Material
+    and G4SandiaTable.
+  - Fixed memory leak in G4SandiaTable::ComputeMatSandiaMatrix(),
+    for deletion of temporary vectors Z, tmp1, tmp2.
+  - Moved definitions of G4IsotopeVector and G4ElementVector
+    G4ElementTable and G4MaterialTable to the appropriate headers.
+  - Added new function G4Materials::SetChemicalFormula().
 
   o Particles:
     ---------
-- Fixed bugs in copy constructor of G4DecayProduct.
-- Synchronised files with CVS head.
-- Modifications to cope with migration of Materials to STL vector.
-- Introduced G4NeutronBetaDecayChannel and added to G4Neutron.
-- Allow MassDifference in case of nucleon decay.
-- Modify to use G4Material::GetNumberOfMaterials().
-- Made all static inline methods from particles/management, boson and
-  leptons non-inlined.
-- Introduced changes to allow multiple cuts per material (temporary). 
+  - Cleared compilation warnings and minor fixed for gcc-2.95.2 compiler.
+  - Fixes to comply with removal of STLInterface.
+  - Fixed bugs in copy constructor of G4DecayProduct.
+  - Introduced G4NeutronBetaDecayChannel and added to G4Neutron.
+  - Allow MassDifference in case of nucleon decay.
+  - Removed static inline methods to non-inlined.
+  - Introduced changes to allow multiple cuts per material (temporary). 
 
   o Persistency:
     -----------
-- Migration to STL vector, removed usage of Rogue-Wave wrappers.
-  Modified files: G4Pglobals.hh, G4PGeometryObjectMap.ddl,
-                  G4PGeometryObjectMap.cc.
-  Removed files: G4VPhysVolRefArray.hh, G4LogVolRefArray.hh,
-                 G4VSolidRefArray.hh.
+  - Fixes to comply with removal of STLInterface.
+  - Fixed porting problems on gcc-2.95.2.
 
   o Run, Intercoms and Interfaces
     -----------------------------
-run:
-- Cleanup of pedantic warnings in Linux-g++ ANSI setup. 
-- Corrected "NULL" to "0". 
-- Synchronised all files with HEAD after inclusion of the disclaimer of
-  warranty.
-- Fixed bugs in G4VUserPhysicsList.
-- Modify Store/RetrievePhysicsTable for new G4VProcess.
-- Fixed bugs in StoreMaterialInfor and StoreCutValues methods
-  when used in binary mode.
-- Added a new feature for the user to increase the number of waiting
-  stacks.
-- Added Set/GetApplyCuts methods in G4VUserPhysicsList.
-- Added /run/particle/applyCuts command in G4UserPhysicsListMessenger.
-- Modifications to cope with migration of Materials to STL vector.
-- Modified G4VUserPhysicsList to fix retrieving of physics tables for muons. 
-- Minor fixes to comply with removal of STLInterface.
-- Modified call to G4GeometryManager::CloseGeometry() to add verbosity
-  level argument.
-- Added GetVersionString() method to G4RunManager.
-
-intercoms:
-- Introduced new feature of suppressing the program abortion due to
-  G4Exception.
-- Fixed parsing of quoted (") tokens in current value for null or
-  defaulted parameters in loop over previous parameters in
-  G4UIcommand::DoIt().
-- Added G4VGraphicsScene::AddPrimitive(const G4Scale&).
-- Moved default value of argument G4Transform3D::Identity from
-  G4VSceneHandler::BeginPrimitives to G4VGraphicsScene::BeginPrimitives.
-- Added G4VisManager::Draw(const G4Scale&,...).
-- G4UIbatch now displays (G4cerr) the error message.
-  Fixes problem report #294.
-- In Batch mode, comment lines are now displayed only for verbose level=2. 
-  Fixes problem report #296. 
-- Introduced "Shell variables" for UI command handling. Added
-  class G4UIaliasList.
-- Included correction for string parameter starting with a space.
-- Renamed CVT method in G4UIcommandTree to avoid conflicts.
-- Introduced loop execution of a macro file, recursive expansion of aliased 
-  variables, and some other new features in G4UImanager and related classes.
-  New commands: /control/shell, /control/foreach, /control/loop,
-                /control/createHTML.
-- Minor fixes to comply with removal of STLInterface.
-- Fixed a problem for commands with doubled slash.
-
-interfaces:
-- Re-engineered G4UI variables:
-  o Changed GNUmakefile so that GAG, TERMINAL and TCSH built by default.
-  o Nothing built if G4UI_NONE is set.
-- Fix G4UIterminal to display a command line AFTER solving aliases
-  in case the command caused "command not found".
-
+  - Cleared compilation warnings on gcc-2.95.2 compiler.
+  - Fixes to comply with removal of STLInterface.
+  - run:
+    o Fixed bugs in G4VUserPhysicsList.
+    o Added a new feature for the user to increase the number of waiting
+      stacks.
+    o Added Set/GetApplyCuts methods in G4VUserPhysicsList.
+    o Added /run/particle/applyCuts command in G4UserPhysicsListMessenger.
+    o Added GetVersionString() method to G4RunManager.
+    o Added rndmSaveThisRun() and rndmSaveThisEvent() methods to G4RunManager.
+    o Added /random/ commands to G4RunMessenger.
+  - intercoms:
+    o Introduced new feature of suppressing the program abortion due to
+      G4Exception.
+    o Fixed parsing of quoted (") tokens.
+    o Added G4VGraphicsScene::AddPrimitive(const G4Scale&).
+    o Added G4VisManager::Draw(const G4Scale&,...).
+    o Modified G4UIbatch to display (G4cerr) the error message.
+      Comment lines are now displayed only for verbose level=2. 
+    o Introduced "Shell variables" for UI command handling. Added
+      class G4UIaliasList.
+    o Included correction for string parameter starting with a space.
+    o Introduced loop execution of a macro file, recursive expansion of
+      aliased  variables, and some other new features in G4UImanager and
+      related classes.
+      New commands: /control/shell, /control/foreach, /control/loop,
+                    /control/createHTML.
+    o Fixed a problem for commands with doubled slash.
+  - interfaces:
+    o Re-engineered G4UI variables:
+      changed GNUmakefile so that GAG, TERMINAL and TCSH built by default.
+      Nothing built if G4UI_NONE is set.
+    o G4VInteractorManager::RemoveDispatcher : change the remove logic in
+      order to fix a disfunctionning with vis/OpenInventor driver.
 
   o Tracking & Track:
     ----------------
-track:
-- Code cleanup.
-- Fixed bug for velocity in method G4Step::UpdateTrack().
-- Modifications to cope with migration of Materials to STL vector.
-- Added implementation to assignment operator in
-  G4ParticleChangeForRadDecay.hh
-- Fixed bug in assignment operator of G4Track.
-- Added SetParentWeightByProcess() method.
-- Added SetSecondaryWeightByProcess() method.
-- Removed static inline methods to non inline.
-- Introduced changes for reference-counted touchables mechanism.
-
-tracking:
-- Added protection for tracks placed outside the world volume
-  at the initial point. This addresses problem report #265. 
-- Minor fix to comply with removal of STLInterface.
-- Introduced changes for reference-counted touchables.
-- Cleaned warnings from gcc-2.95.2.
-- Some code reformatting.
+  - Cleared compilation warnings on gcc-2.95.2 compiler.
+  - Fixes to comply with removal of STLInterface.
+  - Introduced changes for reference-counted touchables mechanism.
+  - track:
+    o Fixed bug for velocity in method G4Step::UpdateTrack().
+    o Implemented assignment operator for G4ParticleChangeForRadDecay.
+    o Fixed bug in assignment operator of G4Track.
+    o Added SetParentWeightByProcess() and SetSecondaryWeightByProcess()
+      methods.
+    o Removed static inline methods to non inline.
+  - tracking:
+    o Added protection for tracks placed outside the world volume
+      at the initial point.
+    o Correction to the use the touchable Handle for secondary tracks,
+      when it is available. Now the direction is used in locating a particle
+      (primary or secondary) in SetInitialStep(). This is in order to assist
+      in starting particles that are on/near-to boundaries in the correct
+      volume. 
 
   o Transportation:
     --------------
-processes/transportation:
-- Motivated by the use case of an Electric Field, in order to achieve
-  reasonable accuracy in time integration, and to enable fields that
-  vary with the global time:
-  o G4Transportation now try obtaining the delta_time from
-    G4FieldTrack.
-- Introduced changes to G4Transportation for reference-counted
-  touchables. Added methods GetFreeTouchable() and
-  SetTheOtherTouchableFree(G4VTouchable*).
-- Added protection in G4Transportation::AlongStepGPIL for messaging
-  "ResestStepEstimate" of G4ChordFinder for the case there is no global
-  field.
+  - Motivated by the use case of an Electric Field, in order to achieve
+    reasonable accuracy in time integration, and to enable fields that
+    vary with the global time:
+    o G4Transportation now try obtaining the delta_time from G4FieldTrack.
+  - Introduced changes to G4Transportation for reference-counted touchables.
+    Added methods GetFreeTouchable() and SetTheOtherTouchableFree().
+  - Added protection in G4Transportation::AlongStepGPIL for messaging
+    "ResestStepEstimate" of G4ChordFinder for the case there is no global
+    field.
 
   o Visualization:
     -------------
-- Removed old-style commands. 
-- Minor cosmetics to raytracer module.
-- Minor changes in G4OpenGLXViewer.cc to eliminate pedantic ISO C++
-  warnings. 
-- Fixed crash in optimised mode: added Initialise() to viewers so 
-  that windows are opened after viewers are fully constructed. 
-- Removed maintenance of G4VisManager's G4ViewParameters object (this 
-  will be removed soon). 
-- Corrected mistake which could cause crash if user specified a
-  non-existent scene handler in /vis/sceneHandler/remove. 
-- Fix for replica rotation matrix. It Fixes observed crashes in replica
-  tracking with visualisation.
-- Synchronised files with HEAD after inclusion of the disclaimer of
-  warranty. 
-
-- Minor fix to G4DAWNFILEViewer.
-- PostScript command "showpage" is always added to g4_XX.eps
-  so that it is printable (it can also be inserted into
-  LaTeX documents).
-- Added /vis/scene/add/scale command.
-- Added G4ScaleModel.
-- Fixed bug in G4BoundingSphereScene::::Accrue().
-- Added G4VModel::SetExtent(const G4VisExtent&).
-- Cosmetic improvements to G4BoundingSphereScene.
-- Improved auto-refreshing.
-- Force rebuild of graphics "stores" (graphical databases) and,
-  if auto-refresh is true, refresh of all views
-  (/vis/scene/notifyHandlers) after an addition to scene.
-- Improved access to models (modeling-V03-02-03).
-- Made G4VSceneHandler::fpModel non-const G4VModel* for convenience.
-- Removed the need to specify environment variables for visualization drivers
-  which do not need external packages or libraries. According
-  to "config" tag above.
-
-
-- Eliminated view parameters from G4VisManager.
-  Now, each view maintains its own parameters.
-  Can be copied from one view to another with:
+  - Cleared compilation warnings on gcc-2.95.2 compiler.
+  - Fixes to comply with removal of STLInterface.
+  - Removed old-style commands. 
+  - Fixed crash in optimised mode: added Initialise() to viewers so 
+    that windows are opened after viewers are fully constructed. 
+  - Corrected mistake which could cause crash if user specified a
+    non-existent scene handler in /vis/sceneHandler/remove. 
+  - Fix for replica rotation matrix. It Fixes observed crashes in replica
+    tracking with visualisation.
+  - Added /vis/scene/add/scale command.
+  - Added G4ScaleModel.
+  - Added G4VModel::SetExtent(const G4VisExtent&).
+  - Improved auto-refreshing.
+  - Force rebuild of graphics "stores" (graphical databases) and,
+    if auto-refresh is true, refresh of all views
+    (/vis/scene/notifyHandlers) after an addition to scene.
+  - Removed the need to specify environment variables for visualization
+    drivers which do not need external packages or libraries.
+  - Eliminated view parameters from G4VisManager.
+    Paramenters can be copied from one view to another with:
     /vis/viewer/set/all 
-    Copies view parameters from from-viewer to current viewer.
-    Affects current viewer.
-- Removed redundant methods from G4VisManager, mostly to do with
-  old-style commands.
-- Added README.quick, a quick installation guide.
-- Re-implemented verbosity control.  Output statements wherever possible
-  are controlled by the verbosity in a simple graded message scheme:
-    enum Verbosity {
-      quiet,         // Nothing is printed.
-      startup,       // Startup and endup messages are printed...
-      errors,        // ...and errors...
-      warnings,      // ...and warnings...
-      confirmations, // ...and confirming messages...
-      parameters,    // ...and parameters of scenes and views...
-      all            // ...and everything available.
-    };
-- Moved default value G4Transform3D::Identity of argument from
-  G4VSceneHandler::BeginPrimitives to G4VGraphicsScene::BeginPrimitives.
-- Fixed bug in G4VSceneHandler::AddPrimitive(const G4Scale&).
-- Added sceneHandler.Begin/EndPrimitives messages to models.
-- Removed "dummy" graphics systems in G4VisManager.
-- Improved robustness and timeliness of invocation of some commands.
-- Improved support for multiple viewers (see OpenGL/History).
-- Added G4VisManager::Draw(const G4Scale&,...).
-- Added template graphics system XXX.
-- Improved verbosity guidance and READMEs.
-- Fixed bugs in G4VisManager::GeometryHasChanged.                        
-- Separated out G4Scene::CalculateExtent.                                
-- Reduced warnings from OpenGL - see OpenGL/History.
-- Added explicit invocation of base class methods to avoid warnings
-  about hiding of base class methods.
-
-- First development release of HepRep graphics driver.
-
-- Added commands:
-  - /vis/viewer/flush = refresh + update.
-  - /vis/viewer/set/upThetaPhi and upVector.
-  - refresh|flush option to /vis/scene/notifyHandlers.
-- Moved /vis/viewer/lights and viewpoint to /vis/viewer/set.
-- Moved HepRepFile classes to HepRep/ directory and removed HepRep
-  classes therein.
-- Updated G4RTJpegMaker for porting Windows systems. 
-- New HepRepFile driver:
-  o HepRep Type names now come from Physical Volume names.
-  o Added many HepRep Attributes for other volume properties.
-- OpenInventor : move HEPVis/SoWindow under vis/OpenInventor/G4SoWindow
-  to prepare HEPVis/6.0. (HEPVis/SoWindow will disappear from
-  HEPVis/6.0).
-- Added README.built_in_commands file.
-- Fixed bug in G4VisManager::EndOfEvent.
-- Moved code from G4VisManagerRegisterMessengers.cc to G4VisManager.cc
-  and removed G4VisManagerRegisterMessengers.cc.
-- Fix for compilation error on Windows/VC++: fixed initialisation of
-  local pointer in G4VisCommandsSceneAdd.cc 
+  - Added README.quick, a quick installation guide.
+  - Re-implemented verbosity control.  Output statements wherever possible
+    are controlled by the verbosity in a simple graded message scheme.
+  - Fixed bug in G4VSceneHandler::AddPrimitive(const G4Scale&).
+  - Added G4VisManager::Draw(const G4Scale&,...).
+  - Added template graphics system XXX.
+  - Improved verbosity guidance and READMEs.
+  - Introduced new HepRep graphics driver.
+  - Added commands:
+    o /vis/viewer/flush = refresh + update.
+    o /vis/viewer/set/upThetaPhi and upVector.
+    o refresh|flush option to /vis/scene/notifyHandlers.
+  - Moved /vis/viewer/lights and viewpoint to /vis/viewer/set.
+  - Updated G4RTJpegMaker for porting Windows systems. 
+  - OpenInventor : move HEPVis/SoWindow under vis/OpenInventor/G4SoWindow
+    to prepare HEPVis/6.0. (HEPVis/SoWindow will disappear from HEPVis/6.0).
+  - Fixed bug in G4VisManager::EndOfEvent.
 
   o G4toG4 Tool:
     -----------
-- Migration to STL vector, removed references to Rogue-Wave Tools.h++ 
-  wrappers. Modified files: 
-  G3EleTable[.hh.cc], G3MatTable[.hh.cc], G3MedTable[.hh.cc], 
-  G3RotTable[.hh.cc], G3VolTableEntry[.hh.cc], G3SensVolVector.hh, 
-  G3toG4BuildTree.cc, G4gsatt.cc, clparse.cc. 
-- Replaced usage of "NULL" with "0". 
-- Replaced usage of "int" with "G4int".
-- Minor fixes to comply with removal of STLInterface.
-- Implemented reflection of CSG solids through G4ReflectionFactory
-  class and G4ReflectedSolid. Added G3G4_NO_REFLECTION flag to exclude
-  it if needed for cases not yet covered.
-- Added limited support for MANY volumes through adoption of boolean
-  solids. New files: G3toG4MANY[.hh.cc], G4gsbool.cc.
-- Changed G3Division::CreatePVReplica() to return a
-  G4PhysicalVolumesPair.
-
+  - Cleared compilation warnings on gcc-2.95.2 compiler.
+  - Fixes to comply with removal of STLInterface.
+  - Implemented reflection of CSG solids through G4ReflectionFactory
+    class and G4ReflectedSolid. Added G3G4_NO_REFLECTION flag to exclude
+    it if needed for cases not yet covered.
+  - Added limited support for MANY volumes through adoption of boolean solids.
+  - Changed G3Division::CreatePVReplica() to return a G4PhysicalVolumesPair.
 
   o Examples:
     --------
-- advanced/xray_telescope (xraytel-v02-00-11)
-  o minor updates.
-- extended/analysis/AnaEx01
-  o minor updates.
-- extended/persistency (PersistentEx01-V03-01-00, PersistentEx02-V03-01-00)
-  o Updated to new 'config' scheme.
-- Updated reference outputs.
-- exampleN03: synchronised with CVS HEAD and updated vis macros.
-- Minor fixes to comply with removal of STLInterface.
-- Synchronised with HEAD of repository.
-- Novice:
-  o cleared warnings on gcc-2.95.2.
-  o updated visualization macros.
-  o updated vis-managers.
-- Extended:
-  o new electromagnetic example "TestEm10" for exercising
-    specific parameterisation models.    
-  o general cleanup of field tests: field01, field02, field03.
-  o updated vis-managers.
-- Advanced:
-  o new release of "brachytherapy" application (brachy-V03-02-00).
-  o updated vis-managers.
-
+  - Cleared most compilation warnings on gcc-2.95.2 compiler.
+  - Fixes to comply with removal of STLInterface.
+  - Updated reference outputs.
+  - Novice:
+    o updated visualization macros.
+    o updated vis-managers.
+  - Extended:
+    o new electromagnetic example "TestEm10" for exercising
+      specific parameterisation models.    
+    o new examples for electro-magnetic field: field01, field02, field03.
+    o updated vis-managers.
+  - Advanced:
+    o underground_physics: new example for simulation of an underground
+      dark matter experiment.
+    o xray_fluorescence: new simulation setup for the study the elemental
+      composition of a planet through the measurement of the X-rays emitted.
 
 Notes: 
 
@@ -797,7 +499,7 @@ NOTES:
   o DEC:   Native STL is required for ISO/ANSI setup.
   o SUN:   Native STL is required for ISO/ANSI setup (CC 5.2 only).
   o Linux: Native STL is required (non ISO/ANSI setup for egcs compiler only).
-  o W2000: Native STL and ISO/ANSI setup required.
+  o W2000: Native STL and ISO/ANSI setup required (VC++ 6.0).
 
 
 4. Persistency
