@@ -1,0 +1,193 @@
+
+                       geant4-06-01-ref-02
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Added utility methods for explicitely deallocate storage and
+    print total allocated pages size in G4Allocator.
+  o First implementation of a framework for twisted surfaces.
+  o Added support for reflection of divided volumes.
+  o Fixed problem of calculation of maximum energy transfer for compound
+    materials in G4MuPairProduction.
+  o Fix in multiple-scattering model to avoid observed crashes in case of
+    use with hLowEnergyIonisation for ions.
+  o Added photon emission in PAI models.
+  o Corrected setup for MacOS to build shared libraries (.dyn).
+  o New examples: advanced/medical_linac and
+    extended/electromagnetic/PhotonProcesses.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config                                           config-V06-01-03
+------
+- binmake.gmk: fixed problem for WIN32 such that also LDLIBS (including
+  EXTRALIBS) will be mangled to replace -L by its WIN32 correspondance
+  libpath.
+- Added new experimental setup for Linux-g++ using -O2 optimisation
+  as default. To trigger this setup G4SYSTEM must be set to "Linux-gO2".
+  It also includes (deactivated by default) Pentium4 chip specific options
+  for using chips-specific floating-point arithmetics based on the SSE unit.
+- architecture.gmk: revisited Inventor default. Removed HEPVis dependencies
+  (Inventor visualization driver does not need these libraries any longer).
+- Darwin-g++.gmk:
+  o Corrected options to build shared libraries (.dyn); now using
+    "-dynamic -single_module" to have faster startup when Geant4 is
+    embedded in an external framework.
+  o Corrected options to retrieve Motif.
+
+digits_hits                                      digits_hits-V06-01-00
+-----------
+- G4SDManager, G4SDStructure: added optional argument 'warning' to
+  FindSensitiveDetector(pathName, warning), defaulted to "true", to
+  eventually exclude warning issued by G4SDManager when sensitive
+  detector is not found.
+
+event                                            events-V06-01-03
+-----
+- G4EventManager: added access methods to G4TrackingManager and
+  G4StackManager.
+
+geometry/divisions                               geomdiv-V06-01-01 
+------------------
+- Added support for reflection of divided volumes:
+  o Added concrete istance of division-factory G4PVDivisionFactory
+    for the creation of volume divisions on demand.
+  o Enhanced unit-test suite "ExDivisions" to support reflections with
+    additional input argument for positioning type (normal/reflected).
+
+geometry/management                              geommng-V06-01-00 
+-------------------
+- Imported G4ReflectedSolid class from solids/Boolean.
+- Added abstract factory G4VPVDivisionFactory defining interfaces
+  for the creation of volumes divisions.
+
+geometry/navigation                              geomnav-V06-01-00 
+-------------------
+- Added more verbosity on solids response for navigators (optimised/not
+  optimised) if "check_mode" state is combined with verbose level-1.
+
+geometry/solids/Boolean                          geom-bool-V06-01-00 
+-----------------------
+- Moved G4ReflectedSolid class to "management" module.
+- Moved G4ReflectionFactory class to "volumes" module.
+- Moved unit test for reflection to "volumes" module.
+
+geometry/solids/specific                         geom-specific-V06-01-02
+------------------------
+- First implementation of a framework for twisted surfaces.
+  o Includes new specific twisted shape: G4TwistedTubs.
+  o New classes: G4VSurface, G4TwistedSurface, G4HyperbolicSurface,
+                 G4FlatSurface, G4TwistedTubs.
+
+geometry/volumes                                 geomvol-V06-01-01
+----------------
+- Added CleanSurfaceTable() static methods in G4LogicalBorderSurface and
+  G4LogicalSkinSurface classes for the clearing of the surface tables in
+  case of dynamic geometries.
+- Imported G4ReflectionFactory and unit test 'testG4ReflectedSolid' from
+  module "solids/Boolean".
+- Enhanced G4ReflectionFactory to support reflection of divided volumes:
+  added Divide(...) set of methods.
+
+global                                           global-V06-01-01
+------
+- G4Allocator: added utility methods for explicitely deallocate storage
+  and print total allocated pages size: ResetStorage(), GetAllocatedSize().
+- Added unit test for deallocation.
+
+intercoms                                        intercoms-V06-01-01
+---------
+- Introduced static methods in G4UIcommand class for conversion between
+  a string and a value. Some implementation of derived classes are modified
+  accordingly.
+- Introduced utility methods ConvertToStringWithBestUnit() and
+  ConvertToStringWithDefaultUnit() for command classes taking a unit
+  parameter.
+
+materials                                        materials-V06-01-01
+---------
+- Added new utility method ConstPropertyExists(const char * key)
+  returning true/false according to the existance of the 'key' in
+  the table G4MaterialPropertiesTable.
+
+processes/electromagnetic/muons                  muons-V06-01-00
+-------------------------------
+- MuPairProduction:
+  o Fixed minor energy non-conservation problem.
+  o Fixed problem of calculation of maximum energy transfer for compounds.
+
+processes/electromagnetic/standard               stand-V06-01-00
+----------------------------------
+- Updated PAI model:
+  o Using precise integrator.
+  o Added photon emission (G4PAIwithPhotons and  G4PAIxSection classes).
+
+processes/electromagnetic/utils                  utils-V06-01-07
+-------------------------------
+- Multiple scattering model:
+  o Critical fix to avoid observed crashes in case of use of
+    G4hLowEnergyIonisation for ions with multiple-scattering.
+  o Use dynamic change for simulation of multiple scattering angle.
+  o Use truncate range table for estimation of energy loss.
+- Updated integral method taking into account 1 peak in cross section
+- Added options to G4EmProcessOptions.
+- Fixed minor problem at initialisation.
+- Add method GetCurrentRange
+- Add additional initialisation to fluctuations
+- Fix in printout format
+
+processes/management                             procman-V06-01-00
+--------------------
+- Fixed a bug in G4ProcessManager::RemoveProcess() for the case
+  in which the removed process is inactive.
+
+run                                              run-V06-01-01
+---
+- G4RunManagerKernel: added access methods to G4TrackingManager and
+  G4StackManager.
+
+g3tog4                                           g3tog4-V06-01-01
+------
+- G4gsrotm.cc: commented warning about left-handled coordinates for
+  rotation axes.
+
+examples                                         examples-V06-01-01
+--------
+- Updated reference outputs.
+- advanced
+  o brachytheraphy (brachy-V06-01-01)
+    + Implemented migration to AIDA 3.2.1 and PI 1.2.1.
+  o composite_calorimeter (ccal-V06-01-00)
+    + Implemented migration to AIDA 3.2.1 and PI 1.2.1.
+  o lAr_calorimeter (lAr_calorimeter-V06-01-00)
+    + Implemented migration to AIDA 3.2.1 and PI 1.2.1.
+  o medical_linac (medical_linac-V06-01-03)
+    + New example simulating energy deposit in a Phantom filled with
+      water for a typical linac used for intensity modulated radiation
+      therapy. The experimental set-up is very similar to one used in
+      clinical practice.
+- extended
+  o electromagnetic/PhotonProcesses (photonprocesses-V06-01-00)
+    + New example devoted to photon processes: gamma conversion, coherent
+      and incoherent scattering, photoelectric effect. The setup allows
+      to compute absorption coefficients and to plot final state.
+  o electromagnetic/TestEm2 (testem2-V06-01-02)
+    + Updated PhysicsList: using mechanism of builders per package.
+    + Added acceptance control.
+    + Added UI commands for histogram's name and output type, and for
+      activating acceptance printout
+  o electromagnetic/TestEm3 (testem3-V06-01-01)
+    + Print resolution at EndOfRun.
+    + Suppressed PhysListParticles and General.
+  o electromagnetic/TestEm5 (testem5-V06-01-00)
+    + Added physicsLists: HadronElastic, BinaryCascade, IonBinaryCascade.
+    + Suppressed PhysListParticles and General.
+  o medical/DICOM (DICOM-V06-01-00)
+    + Updated README.
+
+tests                                            tests-V06-01-01
+-----
+- Updated reference outputs.
