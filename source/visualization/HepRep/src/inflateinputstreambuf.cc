@@ -3,7 +3,7 @@
 
 #include "zipios++/meta-iostreams.h"
 
-#include <zlib.h>
+#include <HepRep-zlib.h>
 
 #include "zipios++/fcollexceptions.h"
 #include "zipios++/inflateinputstreambuf.h"
@@ -120,7 +120,7 @@ bool InflateInputStreambuf::reset( int stream_position ) {
   }
 
   // _zs.next_in and avail_in must be set according to
-  // zlib.h (inline doc).
+  // HepRep-zlib.h (inline doc).
   _zs.next_in  = reinterpret_cast< unsigned char * >( &( _invec[0] ) ) ;
   _zs.avail_in = 0 ;
   

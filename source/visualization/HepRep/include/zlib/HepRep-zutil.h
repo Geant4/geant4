@@ -1,19 +1,19 @@
-/* zutil.h -- internal interface and configuration of the compression library
+/* HepRep-zutil.h -- internal interface and configuration of the compression library
  * Copyright (C) 1995-1998 Jean-loup Gailly.
- * For conditions of distribution and use, see copyright notice in zlib.h
+ * For conditions of distribution and use, see copyright notice in HepRep-zlib.h
  */
 
 /* WARNING: this file should *not* be used by applications. It is
    part of the implementation of the compression library and is
-   subject to change. Applications should only use zlib.h.
+   subject to change. Applications should only use HepRep-zlib.h.
  */
 
-/* @(#) $Id: zutil.h,v 1.5 2004-01-28 23:14:56 duns Exp $ */
+/* @(#) $Id: HepRep-zutil.h,v 1.1 2004-02-03 19:34:43 duns Exp $ */
 
-#ifndef _Z_UTIL_H
-#define _Z_UTIL_H
+#ifndef _HEPREP_Z_UTIL_H
+#define _HEPREP_Z_UTIL_H
 
-#include "zlib.h"
+#include "HepRep-zlib.h"
 
 #ifdef STDC
 #  include <stddef.h>
@@ -225,4 +225,4 @@ typedef uLong (ZEXPORT *check_func) OF((uLong check, const Bytef *buf,
 #define ZFREE(strm, addr)  (*((strm)->zfree))((strm)->opaque, (voidpf)(addr))
 #define TRY_FREE(s, p) {if (p) ZFREE(s, p);}
 
-#endif /* _Z_UTIL_H */
+#endif /* _HEPREP_Z_UTIL_H */

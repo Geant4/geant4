@@ -5,7 +5,7 @@
 
 #include <vector>
 
-#include <zlib.h>
+#include <HepRep-zlib.h>
 
 #include "zipios++/deflateoutputstreambuf.h"
 

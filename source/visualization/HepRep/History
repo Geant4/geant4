@@ -1,4 +1,4 @@
-.$Id: History,v 1.59 2004-01-29 00:56:43 duns Exp $
+.$Id: History,v 1.60 2004-02-03 19:34:30 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,8 +19,14 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+3 February 2004 Mark Donszelmann (vis-HepRep-V06-00-03)
+- Further fix to GEANT-40, renamed zutil.h, zlib.h and zconf.h
+  into HepRep-zutil.h, ... to avoid conflicts with those files
+  on Unix systems if /usr/include or /usr/local/include is
+  on the include search path.
+
 28 January 2004 Mark Donszelmann (vis-HepRep-V06-00-01)
-- Fixed GEANT-40. For some unclear reason the symbols zcalloc and zcfree
+- Attempted to fix GEANT-40. For some unclear reason the symbols zcalloc and zcfree
   of the zlib library were being called as C++ mangled names. 
   To get rid of the situation of a mix of C++ and C names, we took
   out the 'extern "C"' declarations from our zlib.h and zutil.h.

@@ -1,4 +1,4 @@
-/* zlib.h -- interface of the 'zlib' general purpose compression library
+/* HepRep-zlib.h -- interface of the 'zlib' general purpose compression library
   version 1.1.3, July 9th, 1998
 
   Copyright (C) 1995-1998 Jean-loup Gailly and Mark Adler
@@ -28,10 +28,10 @@
   (zlib format), rfc1951.txt (deflate format) and rfc1952.txt (gzip format).
 */
 
-#ifndef _ZLIB_H
-#define _ZLIB_H
+#ifndef _HEPREP_ZLIB_H
+#define _HEPREP_ZLIB_H
 
-#include "zconf.h"
+#include "HepRep-zconf.h"
 
 #ifdef __cplusplus
 // MD: make all functions C++ mangled
@@ -107,12 +107,12 @@ typedef z_stream FAR *z_streamp;
 
    On 16-bit systems, the functions zalloc and zfree must be able to allocate
    exactly 65536 bytes, but will not be required to allocate more than this
-   if the symbol MAXSEG_64K is defined (see zconf.h). WARNING: On MSDOS,
+   if the symbol MAXSEG_64K is defined (see HepRep-zconf.h). WARNING: On MSDOS,
    pointers returned by zalloc for objects of exactly 65536 bytes *must*
    have their offset normalized to zero. The default allocation function
    provided by this library ensures this (see zutil.c). To reduce memory
    requirements and avoid any allocation of 64K objects, at the expense of
-   compression ratio, compile the library with -DMAX_WBITS=14 (see zconf.h).
+   compression ratio, compile the library with -DMAX_WBITS=14 (see HepRep-zconf.h).
 
    The fields total_in and total_out can be used for statistics or
    progress reports. After compression, total_in holds the total size of
@@ -172,7 +172,7 @@ typedef z_stream FAR *z_streamp;
 ZEXTERN const char * ZEXPORT zlibVersion OF((void));
 /* The application can compare zlibVersion and ZLIB_VERSION for consistency.
    If the first character differs, the library code actually used is
-   not compatible with the zlib.h header file used by the application.
+   not compatible with the HepRep-zlib.h header file used by the application.
    This check is automatically made by deflateInit and inflateInit.
  */
 
@@ -422,7 +422,7 @@ ZEXTERN int ZEXPORT deflateInit2 OF((z_streamp strm,
      The memLevel parameter specifies how much memory should be allocated
    for the internal compression state. memLevel=1 uses minimum memory but
    is slow and reduces compression ratio; memLevel=9 uses maximum memory
-   for optimal speed. The default value is 8. See zconf.h for total memory
+   for optimal speed. The default value is 8. See HepRep-zconf.h for total memory
    usage as a function of windowBits and memLevel.
 
      The strategy parameter is used to tune the compression algorithm. Use the
@@ -892,4 +892,4 @@ ZEXTERN const uLongf * ZEXPORT get_crc_table    OF((void));
 /* } */
 #endif
 
-#endif /* _ZLIB_H */
+#endif /* _HEPREP_ZLIB_H */

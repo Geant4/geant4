@@ -1,12 +1,12 @@
-/* zconf.h -- configuration of the zlib compression library
+/* HepRep-zconf.h -- configuration of the zlib compression library
  * Copyright (C) 1995-1998 Jean-loup Gailly.
- * For conditions of distribution and use, see copyright notice in zlib.h 
+ * For conditions of distribution and use, see copyright notice in HepRep-zlib.h 
  */
 
-/* @(#) $Id: zconf.h,v 1.1 2003-07-11 06:01:42 duns Exp $ */
+/* @(#) $Id: HepRep-zconf.h,v 1.1 2004-02-03 19:34:43 duns Exp $ */
 
-#ifndef _ZCONF_H
-#define _ZCONF_H
+#ifndef _HEPREP_ZCONF_H
+#define _HEPREP_ZCONF_H
 
 /* for _LP64 */
 #include <sys/types.h>
@@ -283,4 +283,4 @@ typedef uLong FAR uLongf;
 #   pragma map(inflate_trees_free,"INTRFR")
 #endif
 
-#endif /* _ZCONF_H */
+#endif /* _HEPREP_ZCONF_H */

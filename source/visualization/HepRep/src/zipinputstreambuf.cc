@@ -4,7 +4,7 @@
 #include <algorithm>
 #include "zipios++/meta-iostreams.h"
 
-#include <zlib.h>
+#include <HepRep-zlib.h>
 
 #include "zipios++/zipinputstreambuf.h"
 #include "zipios_common.h"
