@@ -12,7 +12,7 @@
 /gps/maxtheta 1. deg
 /gps/energytype Mono
 /gps/monoenergy 0.5 MeV
-/run/beamOn 30000
+/run/beamOn 100000
 
 
 
