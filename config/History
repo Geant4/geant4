@@ -1,4 +1,4 @@
-$Id: History,v 1.149 2001-06-29 12:49:25 gcosmo Exp $
+$Id: History,v 1.150 2001-07-05 08:39:55 morita Exp $
 $Name: not supported by cvs2svn $
 
 -------------------------------------------------------------------
@@ -17,6 +17,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+5th July 2001 Youhei Morita (config-V03-02-00)
+- Linux-g++.gmk: Use -pedantic (G.Cosmo)
+- Linux-g++.gmk, SUN-CC.gmk, SUN-CC5.gmk: added -DG4std in G4DDLX_FLAGS
 
 29th June 2001 Gabriele Cosmo (config-V03-01-10)
 - Updated source scripts for 'Configure'.
