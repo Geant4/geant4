@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalPhoton.cc,v 1.6 2001-09-19 11:15:37 kurasige Exp $
+// $Id: G4OpticalPhoton.cc,v 1.7 2001-10-15 10:02:36 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,9 +83,6 @@ G4OpticalPhoton G4OpticalPhoton::theOpticalPhoton(
       "opticalphoton",               0,             0,         0,
                  true,             0.0,          NULL
 );
-// initialization for static cut values
-G4double   G4OpticalPhoton::theOpticalPhotonLengthCut = -1.0;
-G4double*  G4OpticalPhoton::theOpticalPhotonKineticEnergyCuts = NULL;
 
 G4OpticalPhoton* G4OpticalPhoton::OpticalPhotonDefinition()
 					{return &theOpticalPhoton;}
@@ -97,11 +94,16 @@ G4OpticalPhoton* G4OpticalPhoton::OpticalPhotonDefinition()
 //  theKineticEnergyCuts for all materials are set to Zero.
 void G4OpticalPhoton::SetCuts(G4double aCut)
 {
-  theCutInMaxInteractionLength = aCut;
+  SetCutInMaxInteractionLength( aCut );
 
   // Set Energy Cut values to zero  for all materials
   SetEnergyCutValues( 0.0*keV);
-
-  theOpticalPhotonLengthCut = theCutInMaxInteractionLength;  
-  theOpticalPhotonKineticEnergyCuts = theKineticEnergyCuts;
 }
+
+
+
+
+
+
+
+

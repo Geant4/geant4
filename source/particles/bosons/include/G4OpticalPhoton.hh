@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalPhoton.hh,v 1.5 2001-07-11 10:01:32 gunter Exp $
+// $Id: G4OpticalPhoton.hh,v 1.6 2001-10-15 10:02:34 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,8 +55,6 @@ class G4OpticalPhoton: public G4VBoson
 {
  private:
    static G4OpticalPhoton theOpticalPhoton;
-   static G4double  theOpticalPhotonLengthCut;
-   static G4double* theOpticalPhotonKineticEnergyCuts;
 
  private:
    G4OpticalPhoton (
@@ -76,21 +74,8 @@ class G4OpticalPhoton: public G4VBoson
 
    static G4OpticalPhoton* OpticalPhotonDefinition();
    static G4OpticalPhoton* OpticalPhoton();
-   static G4double  GetCuts() {return theOpticalPhotonLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theOpticalPhotonKineticEnergyCuts;}
-
    virtual void SetCuts(G4double aCut); 
-   virtual void RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy );
 };
-
-inline void G4OpticalPhoton::RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy )
-{
-  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
-  theOpticalPhotonLengthCut = theCutInMaxInteractionLength;  
-  theOpticalPhotonKineticEnergyCuts = theKineticEnergyCuts;
-}
 
 inline G4OpticalPhoton* G4OpticalPhoton::OpticalPhoton()
 { return &theOpticalPhoton; }

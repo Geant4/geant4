@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Geantino.hh,v 1.4 2001-07-11 10:01:32 gunter Exp $
+// $Id: G4Geantino.hh,v 1.5 2001-10-15 10:02:34 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,8 +55,6 @@ class G4Geantino : public G4VBoson
 {
  private:
    static G4Geantino theGeantino;
-   static G4double  theGeantinoLengthCut;
-   static G4double* theGeantinoKineticEnergyCuts;
 
  private:
    G4Geantino(
@@ -76,8 +74,6 @@ class G4Geantino : public G4VBoson
  
    static G4Geantino* GeantinoDefinition();
    static G4Geantino* Geantino();
-   static G4double  GetCuts() {return theGeantinoLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theGeantinoKineticEnergyCuts;};
 
    virtual void SetCuts(G4double aCut); 
 };

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Gamma.cc,v 1.5 2001-09-19 11:15:37 kurasige Exp $
+// $Id: G4Gamma.cc,v 1.6 2001-10-15 10:02:35 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -96,9 +96,6 @@ G4Gamma G4Gamma::theGamma(
 		 true,             0.0,          NULL
 );
 G4Gamma*  G4Gamma::GammaDefinition() {return &theGamma;}
-// initialization for static cut values
-G4double   G4Gamma::theGammaLengthCut = -1.0;
-G4double*  G4Gamma::theGammaKineticEnergyCuts = NULL;
 
 // ***********************************************************************
 // ******************* BuildAbsorptionLengthVector ***********************
@@ -124,7 +121,7 @@ void G4Gamma::BuildAbsorptionLengthVector(
     aErrorMessage += " NULL pointer is found in absorptionLengthVector \n";
     G4Exception((const char*)aErrorMessage);
   }
-  G4int NumEl = aMaterial->GetNumberOfElements();
+  G4int NumEl = G4Element::GetNumberOfElements();
   G4double absorptionLengthMax = 0.0;
   for (G4int ibin=0; ibin<TotBin; ibin++)
   {
@@ -142,7 +139,16 @@ void G4Gamma::BuildAbsorptionLengthVector(
     absorptionLengthVector->PutValue(ibin, 5./SIGMA);
     if (absorptionLengthMax < 5./SIGMA ) absorptionLengthMax = 5./SIGMA;
   }
-  if ( theCutInMaxInteractionLength >= absorptionLengthMax ) {
+
+   //----- Get maximum cut in length
+  G4int ii,siz = G4Material::GetNumberOfMaterials();
+  G4double maxCut = 0;
+  for( ii = 0; ii < siz; ii++ ){
+    if( theCutInMaxInteractionLength[ii] > maxCut ) maxCut = theCutInMaxInteractionLength[ii]
+; 
+  }
+
+  if ( maxCut >= absorptionLengthMax ) {
       G4cout << "******** SetCuts for " << GetParticleName(); 
       G4cout << " ********************" << G4endl;
       G4cout << "The maximal meaningful cut is ";
@@ -214,8 +220,11 @@ G4double G4Gamma::ComputeCrossSection(G4double AtomicNumber,
 // ******************** ConvertCutToKineticEnergy ***********************
 // **********************************************************************
 
-G4double G4Gamma::ConvertCutToKineticEnergy(
-                   G4RangeVector* absorptionLengthVector) const
+G4double 
+  G4Gamma::ConvertCutToKineticEnergy(
+				     G4RangeVector* absorptionLengthVector,
+				     size_t         materialIndex
+				     ) const
 {
   const G4double epsilon=0.01;
   const G4int NBIN=200;
@@ -239,9 +248,9 @@ G4double G4Gamma::ConvertCutToKineticEnergy(
   }
   G4double T1 = LowestEnergy;
   G4double r1 = absorptionLengthVector->GetValue(T1,isOut);
-  if ( theCutInMaxInteractionLength <= r1 ) {
+  if ( theCutInMaxInteractionLength[materialIndex] <= r1 ) {
      return T1;
-  } else if ( theCutInMaxInteractionLength >= rmax ) {
+  } else if ( theCutInMaxInteractionLength[materialIndex] >= rmax ) {
       G4cout << "******** ConvertCutToKineticEnergy for " << GetParticleName(); 
       G4cout << " ********************" << G4endl;
       G4cout << "The cut energy is set " << DBL_MAX/GeV << "GeV " <<G4endl; 
@@ -250,8 +259,8 @@ G4double G4Gamma::ConvertCutToKineticEnergy(
     G4double T2 = Tmax;
     G4double T3 = sqrt(T1*T2);
     G4double r3 = absorptionLengthVector->GetValue(T3,isOut);
-    while ( abs(1.-r3/theCutInMaxInteractionLength)>epsilon ) {
-      if ( theCutInMaxInteractionLength <= r3 ) 
+    while ( abs(1.-r3/theCutInMaxInteractionLength[materialIndex])>epsilon ) {
+      if ( theCutInMaxInteractionLength[materialIndex] <= r3 ) 
         T2 = T3;
       else 
         T1 = T3;

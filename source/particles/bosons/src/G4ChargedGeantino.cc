@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargedGeantino.cc,v 1.6 2001-09-19 11:15:37 kurasige Exp $
+// $Id: G4ChargedGeantino.cc,v 1.7 2001-10-15 10:02:35 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,9 +85,6 @@ G4ChargedGeantino G4ChargedGeantino::theChargedGeantino(
 );
 
 G4ChargedGeantino* G4ChargedGeantino::ChargedGeantinoDefinition(){return &theChargedGeantino;}
-// initialization for static cut values
-G4double   G4ChargedGeantino::theChargedGeantinoLengthCut = -1.0;
-G4double*  G4ChargedGeantino::theChargedGeantinoKineticEnergyCuts = NULL;
 
 // **********************************************************************
 // **************************** SetCuts *********************************
@@ -95,12 +92,9 @@ G4double*  G4ChargedGeantino::theChargedGeantinoKineticEnergyCuts = NULL;
 
 void G4ChargedGeantino::SetCuts(G4double aCut)
 {
-  theCutInMaxInteractionLength = aCut;
+  SetCutInMaxInteractionLength( aCut );
 
   // Set Energy Cut values to zero  for all materials
   SetEnergyCutValues( 0.0*keV);
 
-  theChargedGeantinoLengthCut = theCutInMaxInteractionLength;  
-  theChargedGeantinoKineticEnergyCuts = theKineticEnergyCuts;
-  // Rebuild the physics tables for every process for this particle type
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargedGeantino.hh,v 1.4 2001-07-11 10:01:32 gunter Exp $
+// $Id: G4ChargedGeantino.hh,v 1.5 2001-10-15 10:02:33 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,8 +55,6 @@ class G4ChargedGeantino : public G4VBoson
 {
  private:
    static G4ChargedGeantino theChargedGeantino;
-   static G4double  theChargedGeantinoLengthCut;
-   static G4double* theChargedGeantinoKineticEnergyCuts;
 
  private:
    G4ChargedGeantino(
@@ -76,10 +74,9 @@ class G4ChargedGeantino : public G4VBoson
  
    static G4ChargedGeantino* ChargedGeantinoDefinition();
    static G4ChargedGeantino* ChargedGeantino();
-   static G4double  GetCuts() {return theChargedGeantinoLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theChargedGeantinoKineticEnergyCuts;};
 
-   virtual void   SetCuts(G4double aCut);
+  virtual void SetCuts(G4double aCut);
+
 };
 
 inline G4ChargedGeantino* G4ChargedGeantino::ChargedGeantino()

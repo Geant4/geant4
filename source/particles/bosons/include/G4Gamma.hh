@@ -1,4 +1,3 @@
-//
 // ********************************************************************
 // * DISCLAIMER                                                       *
 // *                                                                  *
@@ -20,14 +19,15 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: G4Gamma.hh,v 1.5 2001-07-11 10:01:32 gunter Exp $
+//// $Id: G4Gamma.hh,v 1.6 2001-10-15 10:02:34 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
+//      For information related to this code contact:
+//      CERN, CN Division, ASD group
 //      History: first implementation, based on object model of
 //      4-th April 1996, G.Cosmo
 // ****************************************************************
@@ -56,8 +56,6 @@ class G4Gamma : public G4VBoson
 {
  private:
    static G4Gamma theGamma;
-   static G4double  theGammaLengthCut;
-   static G4double* theGammaKineticEnergyCuts;
    
    //-------- the followings are used privately in G4Gamma ----
  private:
@@ -93,10 +91,10 @@ class G4Gamma : public G4VBoson
                                     maxEnergy, aMass, rangeVector);
     }
 
-    G4double ConvertCutToKineticEnergy(
-                                 G4RangeVector* absorptionLengthVector
+  G4double ConvertCutToKineticEnergy(
+				     G4RangeVector* absorptionLengthVector,
+				     size_t materialIndex
                                 ) const;
-
 
  private: // hide conxtructor as private
    G4Gamma(
@@ -116,37 +114,12 @@ class G4Gamma : public G4VBoson
 
    static G4Gamma* GammaDefinition();
    static G4Gamma* Gamma();
-   static G4double  GetCuts() {return theGammaLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theGammaKineticEnergyCuts;};
-
-   virtual void SetCuts(G4double aCut); 
-   virtual void RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy );
 };
-
-inline void G4Gamma::SetCuts(G4double aCut)
-{
-  CalcEnergyCuts(aCut);
-  theGammaLengthCut = theCutInMaxInteractionLength;  
-  theGammaKineticEnergyCuts = theKineticEnergyCuts;
-}
-
-inline void G4Gamma::RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy )
-{
-  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
-  theGammaLengthCut = theCutInMaxInteractionLength;  
-  theGammaKineticEnergyCuts = theKineticEnergyCuts;
-}
 
 
 inline G4Gamma* G4Gamma::Gamma()
 { return &theGamma; }
 
 #endif
-
-
-
-
 
 
