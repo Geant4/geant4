@@ -1,5 +1,6 @@
-#include "Tst05DetectorMessenger.hh"
 #include "Tst05DetectorConstruction.hh"
+
+#include "Tst05DetectorMessenger.hh"
 
 Tst05DetectorConstruction::Tst05DetectorConstruction():detectorChoice(0)
 {

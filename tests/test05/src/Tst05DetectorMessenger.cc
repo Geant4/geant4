@@ -1,5 +1,5 @@
-#include "Tst05DetectorMessenger.hh"
 #include "Tst05DetectorConstruction.hh"
+#include "Tst05DetectorMessenger.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "globals.hh"

@@ -2,8 +2,8 @@
 #ifndef Tst05RunAction_h
 #define Tst05RunAction_h 1
 
-#include "G4UserRunAction.hh"
 #include "G4Timer.hh"
+#include "G4UserRunAction.hh"
 #include "globals.hh"
 
 class G4Run;
