@@ -14,6 +14,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class G4Run;
+class FluoTestDataSet;
 
 class FluoTestRunAction : public G4UserRunAction
 {
@@ -21,19 +22,23 @@ class FluoTestRunAction : public G4UserRunAction
    
 #ifdef G4ANALYSIS_USE
     FluoTestRunAction(FluoTestAnalysisManager* analysisMgr);
+ FluoTestRunAction();
 #else 
    FluoTestRunAction();
 #endif 
  ~FluoTestRunAction();
+  const FluoTestDataSet* GetSet(); 
 
   public:
     void BeginOfRunAction(const G4Run*);
     void EndOfRunAction(const G4Run*);
+
 private:
 #ifdef G4ANALYSIS_USE
     FluoTestAnalysisManager* analysisManager;
-#endif  
 
+#endif  
+ const FluoTestDataSet* dataSet;
 };
 
 #endif

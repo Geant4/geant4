@@ -6,6 +6,8 @@
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
+#include "FluoTestDataSet.hh"
+#include "FluoTestNormalization.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -15,6 +17,20 @@ FluoTestRunAction::FluoTestRunAction(FluoTestAnalysisManager* aMgr)
   :analysisManager(aMgr)
 {
  
+   
+}
+FluoTestRunAction::FluoTestRunAction()
+{
+      G4double min = 0.*keV;
+      G4double max = 10.*keV;
+      G4int nBins = 100;
+
+      FluoTestNormalization* normalization = new FluoTestNormalization();
+    
+      dataSet = normalization->Normalize(min, max, nBins);
+
+ delete normalization;
+
 }
 #else
 FluoTestRunAction::FluoTestRunAction()
@@ -25,7 +41,11 @@ FluoTestRunAction::FluoTestRunAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 FluoTestRunAction::~FluoTestRunAction()
-{}
+{
+  //delete normalization;
+  delete dataSet;
+  dataSet = 0;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -42,6 +62,7 @@ G4cout << "### Run " << aRun << " start." << G4endl;
 #ifdef G4ANALYSIS_USE
   analysisManager->BeginOfRun();
 #endif
+ 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -58,12 +79,16 @@ if (G4VVisManager::GetConcreteInstance()) {
 #ifdef G4ANALYSIS_USE
   analysisManager->EndOfRun(aRun->GetRunID());
 #endif
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
-
+const FluoTestDataSet* FluoTestRunAction::GetSet()
+{
+  return  dataSet;
+}
 
 
 

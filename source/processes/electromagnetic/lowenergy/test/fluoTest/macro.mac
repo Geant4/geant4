@@ -1,10 +1,9 @@
 
-/lowenergy/lowlimGE 250 eV
-/lowenergy/cutG 0.01 mum
-/lowenergy/cutE 0.01 mum
+#/lowenergy/lowlimGE 250 eV
+#/lowenergy/cutG 0.01 mum
+#/lowenergy/cutE 0.01 mum
 
 /gun/randomVert on
 /gun/particle gamma
-/gun/energy 3.5 keV
-#/run/beamOn 1000000
-/run/beamOn 100
+#/gun/energy 3.5 keV
+/run/beamOn 10000000

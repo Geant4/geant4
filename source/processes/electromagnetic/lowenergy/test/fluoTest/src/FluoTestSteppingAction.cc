@@ -16,7 +16,7 @@ FluoTestSteppingAction::FluoTestSteppingAction(
   :
     analysisManager(aMgr)
 {
-  gamma=0;
+  
  }
 
 #else

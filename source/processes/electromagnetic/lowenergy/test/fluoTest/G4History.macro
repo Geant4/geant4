@@ -14,5 +14,5 @@
 /gun/randomVert on
 /gun/particle gamma
 /gun/energy 3.5 keV
-/run/beamOn 1000000
+/run/beamOn 1
 /vis/scene/notifyHandlers

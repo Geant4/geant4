@@ -37,10 +37,10 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new FluoTestPhysicsList);
   
- G4UIsession* session=0;
+  G4UIsession* session=0;
   
   if (argc==1)   // Define UI session for interactive mode.
-{
+    {
       // G4UIterminal is a (dumb) terminal.
 #ifdef G4UI_USE_XM
       session = new G4UIXm(argc,argv);
@@ -52,20 +52,19 @@ int main(int argc,char** argv) {
 #endif
 #endif
     }
-    
+  
 #ifdef G4VIS_USE
   //visualization manager
-   G4VisManager* visManager = new FluoTestVisManager;
+  G4VisManager* visManager = new FluoTestVisManager;
   visManager->Initialize();
 #endif
   
-  #ifdef G4ANALYSIS_USE
+#ifdef G4ANALYSIS_USE
   // Creation of the analysis manager
   FluoTestAnalysisManager* analysisMgr = new FluoTestAnalysisManager(detector);
-  G4cout<<"000000000000000000000000000"<<G4endl;
-  #endif
+#endif
   
- // Set optional user action classes
+  // Set optional user action classes
 #ifdef G4ANALYSIS_USE
   FluoTestEventAction* eventAction = 
     new FluoTestEventAction(analysisMgr);
@@ -73,27 +72,31 @@ int main(int argc,char** argv) {
     new FluoTestRunAction(analysisMgr);
   // FluoTestSteppingAction* stepAction = 
   // new FluoTestSteppingAction(detector,analysisMgr);
- FluoTestSteppingAction* stepAction = 
-  new FluoTestSteppingAction(analysisMgr);
- #else 
- FluoTestEventAction* eventAction = new FluoTestEventAction();
+  FluoTestSteppingAction* stepAction = 
+    new FluoTestSteppingAction(analysisMgr);
+#else 
+  FluoTestEventAction* eventAction = new FluoTestEventAction();
   FluoTestRunAction* runAction = new FluoTestRunAction();
   FluoTestSteppingAction* stepAction = new FluoTestSteppingAction();
 #endif 
-
-// set user action classes
+  
+  // set user action classes
+#ifdef G4ANALYSIS_USE
+  runManager->SetUserAction(new FluoTestPrimaryGeneratorAction(detector,analysisMgr));
+#else
   runManager->SetUserAction(new FluoTestPrimaryGeneratorAction(detector));
+#endif
   
   runManager->SetUserAction(eventAction); 
   runManager->SetUserAction(runAction);
   runManager->SetUserAction(stepAction);
-
- //Initialize G4 kernel
+  
+  //Initialize G4 kernel
   runManager->Initialize();
-    
+  
   // get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();
- 
+  
   if (session)   // Define UI session for interactive mode.
     {
       // G4UIterminal is a (dumb) terminal.
@@ -118,10 +121,9 @@ int main(int argc,char** argv) {
    delete visManager;
 #endif
   
-   #ifdef G4ANALYSIS_USE
-  
+#ifdef G4ANALYSIS_USE
   delete analysisMgr;  
-  #endif
+#endif
 delete runManager;
   return 0;
 }

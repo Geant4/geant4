@@ -10,8 +10,10 @@
 #include "Interfaces/IHistoManager.h"
 #include "Interfaces/IHistogram1D.h"
 #include "Interfaces/IHistogram2D.h"
+
 #include "NtupleTag/LizardNTupleFactory.h"
 using namespace Lizard;
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -22,98 +24,77 @@ FluoTestAnalysisManager::FluoTestAnalysisManager(FluoTestDetectorConstruction* F
   ntuple(0),
   Detector(FluoTestDC),
   histoGamDet(0),
-  //histoDetETot(0),
   histoGamDetPre(0),
-  //histoGamDetPost(0),
   histoGamLeavSam(0),
   histoEleLeavSam(0),
-    histoGamLS(0),
+  histoGamLS(0),
   histoGamLSP(0),
   histoGamBornSam(0),
   histoEleBornSam(0)
-  // histoOtherPartDet(0),
- 
+  histoSpectrum(0)
 {
-  // Define the messenger and the analysis system
+   // Define the messenger and the analysis system
   analysisMessenger = new FluoTestAnalysisMessenger(this);
  
   histoManager = createIHistoManager(); 
   assert (histoManager != 0);
   histoManager->selectStore("fluoTestHisto.hbook");
-
   factory = createNTupleFactory();
-  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+FluoTestAnalysisManager::~FluoTestAnalysisManager() 
+{
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-FluoTestAnalysisManager::~FluoTestAnalysisManager() {
- 
   delete analysisMessenger; 
-   delete  histoManager;
-   delete ntuple;
+  delete  histoManager;
+  delete ntuple;
   delete factory;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-  void FluoTestAnalysisManager::InsGamDet(G4double gD)
-  {
+void FluoTestAnalysisManager::InsGamDet(double gD)
+{
   histoGamDet->fill(gD);
-  }
-/* 
-  void FluoTestAnalysisManager::InsDetETot(G4double dEt)
-  {
-  histoDetETot->fill(dEt);
-  }
-*/
-void FluoTestAnalysisManager::InsGamBornSample(G4double gBs)
+}
+
+void FluoTestAnalysisManager::InsGamBornSample(double gBs)
 {
   histoGamBornSam->fill(gBs);
 }
-void FluoTestAnalysisManager::InsEleBornSample(G4double eBs)
+void FluoTestAnalysisManager::InsEleBornSample(double eBs)
 {
   histoEleBornSam->fill(eBs);
 }
 
-void FluoTestAnalysisManager::InsGamLS(G4double gS)
+void FluoTestAnalysisManager::InsGamLS(double gS)
 {
   histoGamLS->fill(gS);
 }
-void FluoTestAnalysisManager::InsGamLSP(G4double gSP)
+void FluoTestAnalysisManager::InsGamLSP(double gSP)
 {
   histoGamLSP->fill(gSP);
 }
-void FluoTestAnalysisManager::InsGamLeavSam(G4double gLs)
+void FluoTestAnalysisManager::InsGamLeavSam(double gLs)
 {
   histoGamLeavSam->fill(gLs);
 }
-void FluoTestAnalysisManager::InsEleLeavSam(G4double eLs)
+void FluoTestAnalysisManager::InsEleLeavSam(double eLs)
 {
   histoEleLeavSam->fill(eLs);
 }
 
-  void FluoTestAnalysisManager::InsGamDetPre(G4double gDpr)
-  {
-   histoGamDetPre->fill(gDpr);
-   }
-/*
-
-  void FluoTestAnalysisManager::InsGamDetPost(G4double gDps)
-  {
-  histoGamDetPost->fill(gDps);
-  }
-  
-void FluoTestAnalysisManager::InsOtherPart(G4double oP)
+void FluoTestAnalysisManager::InsGamDetPre(double gDpr)
 {
-histoOtherPartDet->fill(oP);
+  histoGamDetPre->fill(gDpr);
 }
-*/
+
+void FluoTestAnalysisManager::InsSpectrum(double sp)
+{
+  histoSpectrum->fill(sp);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -122,19 +103,19 @@ histoOtherPartDet->fill(oP);
 // always the right dimensions depending from the detector geometry
 
 void FluoTestAnalysisManager::BeginOfRun() 
-{
+{ 
   ntuple = factory->createC( "fluoTestHisto1.hbook::1" );
   assert ( ntuple != 0 );
-  histoGamDet = histoManager->create1D("10","Energy deposit in the detector", 100,0.,10.);
-  histoGamDetPre = histoManager->create1D("20","Gammas reaching the detector", 100,0.,10.);
-  histoGamLeavSam = histoManager->create1D("30","Gammas leaving the sample", 100,0.,10.);
-  histoEleLeavSam = histoManager->create1D("40","Electrons leaving the sample", 100,0.,10.);
-  histoGamLS = histoManager->create1D("50","Theta of gammas leaving the sample", 100,0.,pi);
-  histoGamLSP = histoManager->create1D("60","Phi of gammas leaving the sample", 100,-pi,pi);
-  histoGamBornSam = histoManager->create1D("70"," Gammas born in the sample", 100,0.,10.);
-  histoEleBornSam = histoManager->create1D("80"," Electrons born in the sample", 100,0.,10.);
-
-
+  histoGamDet = histoManager->create1D("10","Energy deposit in the detector", 700,0.,2.);
+  histoGamDetPre = histoManager->create1D("20","Gammas reaching the detector", 700,0.,2.);
+  histoGamLeavSam = histoManager->create1D("30","Gammas leaving the sample", 700,0.,2.);
+  histoEleLeavSam = histoManager->create1D("40","Electrons leaving the sample", 700,0.,2.);
+  histoGamLS = histoManager->create1D("50","Theta of gammas leaving the sample", 700,0.,pi);
+  histoGamLSP = histoManager->create1D("60","Phi of gammas leaving the sample", 700,-pi,pi);
+  histoGamBornSam = histoManager->create1D("70"," Gammas born in the sample", 700,0.,2.);
+  histoEleBornSam = histoManager->create1D("80"," Electrons born in the sample", 700,0.,2.);
+  histoSpectrum =  histoManager->create1D("90","Spectrum of the infident photons",700,0.,10.);
+ 
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
@@ -143,14 +124,14 @@ void FluoTestAnalysisManager::BeginOfRun()
 void FluoTestAnalysisManager::EndOfRun(G4int n) 
 {
   histoManager->store("10");
-    histoManager->store("20");
- histoManager->store("30");
- histoManager->store("40");
- histoManager->store("50");
- histoManager->store("60");
- histoManager->store("70");
- histoManager->store("80");
-
+  histoManager->store("20");
+  histoManager->store("30");
+  histoManager->store("40");
+  histoManager->store("50");
+  histoManager->store("60");
+  histoManager->store("70");
+  histoManager->store("80");
+  histoManager->store("90");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -158,7 +139,7 @@ void FluoTestAnalysisManager::EndOfRun(G4int n)
 //  This member is called at the end of every event 
 void FluoTestAnalysisManager::EndOfEvent(G4int flag) 
 {
-
+  
 }
 
 #endif

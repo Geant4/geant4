@@ -16,7 +16,7 @@ class FluoTestSteppingAction : public G4UserSteppingAction
 {
   public:
 #ifdef G4ANALYSIS_USE    
-  //  FluoTestSteppingAction(FluoTestDetectorConstruction*,FluoTestAnalysisManager*);
+ 
  FluoTestSteppingAction(FluoTestAnalysisManager*);
 #else
   FluoTestSteppingAction();   
@@ -26,8 +26,7 @@ class FluoTestSteppingAction : public G4UserSteppingAction
     void UserSteppingAction(const G4Step*);
 private:
 
-  G4int gamma;
-  //FluoTestDetectorConstruction* detector;
+  
 #ifdef G4ANALYSIS_USE   
     FluoTestAnalysisManager* analysisManager;
 #endif
