@@ -1,4 +1,4 @@
-$Id: History,v 1.58 2004-11-25 15:35:35 gbarrand Exp $
+$Id: History,v 1.59 2004-11-26 08:38:51 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+26th November 2004  Guy Barrand  (openinventor-V07-00-00)
+- G4OpenInventorXtViewer, SoPolyhedron, SoCounterAction.h : 
+  correct some warnings on g++-3.2.1 (reported by Tom Roberts).
 
 25th November 2004  Guy Barrand
 - G4OpenInventor[Viewer,SceneHandle] : handle aux edges.

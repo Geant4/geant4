@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.cc,v 1.20 2004-11-25 13:39:54 gbarrand Exp $
+// $Id: G4OpenInventorXtViewer.cc,v 1.21 2004-11-26 08:38:51 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -136,11 +136,11 @@ G4OpenInventorXtViewer::G4OpenInventorXtViewer(
     XtSetArg(args[4],XmNbottomAttachment,XmATTACH_FORM);
     XtSetValues(fViewer->getWidget(),args,5);
 
-    fHelpForm = XmCreateFormDialog(fShell,"help",NULL,0);
+    fHelpForm = XmCreateFormDialog(fShell,(char*)"help",NULL,0);
     XtSetArg(args[0],XmNleftAttachment  ,XmATTACH_FORM);
     XtSetArg(args[1],XmNrightAttachment ,XmATTACH_FORM);
     XtSetArg(args[2],XmNbottomAttachment,XmATTACH_FORM);
-    Widget cancel = XmCreatePushButton(fHelpForm,"helpCancel",args,3);
+    Widget cancel = XmCreatePushButton(fHelpForm,(char*)"helpCancel",args,3);
     XtAddCallback(cancel,XmNactivateCallback,HelpCancelCbk,(XtPointer)this);
     XtManageChild(cancel);
     XtSetArg(args[0],XmNtopAttachment   ,XmATTACH_FORM);
@@ -148,7 +148,7 @@ G4OpenInventorXtViewer::G4OpenInventorXtViewer(
     XtSetArg(args[2],XmNrightAttachment ,XmATTACH_FORM);
     XtSetArg(args[3],XmNbottomAttachment,XmATTACH_WIDGET);
     XtSetArg(args[4],XmNbottomWidget    ,cancel);
-    fHelpText = XmCreateScrolledText(fHelpForm,"helpText",args,5);
+    fHelpText = XmCreateScrolledText(fHelpForm,(char*)"helpText",args,5);
     XtManageChild(fHelpText);
 
     fInteractorManager->AddShell(fShell);

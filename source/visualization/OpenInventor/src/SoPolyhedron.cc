@@ -229,9 +229,9 @@ void Geant4_SoPolyhedron::computeBBox(
     aCenter.setValue(0,0,0);
   } else {
     SbBool first = TRUE;
-    float xmn,ymn,zmn;
-    float xmx,ymx,zmx;
-    float xct,yct,zct;
+    float xmn = 0,ymn = 0,zmn = 0;
+    float xmx = 0,ymx = 0,zmx = 0;
+    float xct = 0,yct = 0,zct = 0;
     SbVec3f point;
     int count = 0;
     // Assume all facets are convex quadrilaterals :
