@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.hh,v 1.13 2001-05-15 14:51:47 grichine Exp $
+// $Id: G4PropagatorInField.hh,v 1.14 2001-05-23 18:22:55 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -163,15 +163,8 @@ class G4PropagatorInField
    G4int  fVerboseLevel;
      // For debuging purposes
 
-   //  Values for the required accuracies
-   //
-   G4double  fDelta_One_Step_Value;      //  for one tracking/physics step
-   G4double  fDelta_Intersection_Val;    //  for boundary intersection
-
-   //  Their default values ...  (set in G4PropagatemagField.cc)
-   //
-   static const G4double  fDefault_Delta_One_Step_Value;   // = 0.25 * mm;
-   static const G4double  fDefault_Delta_Intersection_Val; // = 0.1 * mm;
+   //  Values for the small possible relative accuracy of a step
+   //       (corresponding to the greatest possible integration accuracy)
 
    static const G4double  fEpsilonMin ;                     // 1.0e-10 ;  
 
