@@ -52,11 +52,44 @@ ExN04DetectorConstruction::ExN04DetectorConstruction()
 {
 
 #include "ExN04DetectorParameterDef.icc"
+  DefineMaterials();
 
 }
 
 ExN04DetectorConstruction::~ExN04DetectorConstruction()
 {;}
+
+void ExN04DetectorConstruction::DefineMaterials()
+{
+  //-------------------------------------------------------------------------
+  // Materials
+  //-------------------------------------------------------------------------
+
+  G4double a, z, density;
+  G4int nel;
+
+  G4Element* H = new G4Element("Hydrogen", "H", z=1., a=  1.01*g/mole);
+  G4Element* C = new G4Element("Carbon",   "C", z=6., a= 12.01*g/mole);
+  G4Element* N = new G4Element("Nitrogen", "N", z=7., a= 14.01*g/mole);
+  G4Element* O = new G4Element("Oxygen",   "O", z=8., a= 16.00*g/mole);
+
+  Air = new G4Material("Air", density= 1.29*mg/cm3, nel=2);
+  Air->AddElement(N, 70.*perCent);
+  Air->AddElement(O, 30.*perCent);
+
+  Lead = 
+  new G4Material("Lead", z=82., a= 207.19*g/mole, density= 11.35*g/cm3);
+
+  Ar = 
+  new G4Material("ArgonGas",z=18., a= 39.95*g/mole, density=1.782*mg/cm3);
+
+  Silicon = 
+  new G4Material("Silicon", z=14., a= 28.09*g/mole, density= 2.33*g/cm3);
+
+  Scinti = new G4Material("Scintillator", density= 1.032*g/cm3, nel=2);
+  Scinti->AddElement(C, 9);
+  Scinti->AddElement(H, 10);
+}
 
 G4VPhysicalVolume* ExN04DetectorConstruction::Construct()
 {
@@ -76,47 +109,6 @@ G4VPhysicalVolume* ExN04DetectorConstruction::Construct()
     fieldIsInitialized = true;
   }
 
-  //-------------------------------------------------------------------------
-  // Materials
-  //-------------------------------------------------------------------------
-
-  G4double a, iz, z, density;
-  G4String name, symbol;
-  G4int nel;
-
-  a = 1.01*g/mole;
-  G4Element* elH = new G4Element(name="Hydrogen", symbol="H", iz=1., a);
-
-  a = 12.01*g/mole;
-  G4Element* elC = new G4Element(name="Carbon", symbol="C", iz=6., a);
-
-  a = 14.01*g/mole;
-  G4Element* elN = new G4Element(name="Nitrogen", symbol="N", iz=7., a);
-
-  a = 16.00*g/mole;
-  G4Element* elO = new G4Element(name="Oxygen", symbol="O", iz=8., a);
-
-  density = 1.29e-03*g/cm3;
-  G4Material* Air = new G4Material(name="Air", density, nel=2);
-  Air->AddElement(elN, .7);
-  Air->AddElement(elO, .3);
-
-  a = 207.19*g/mole;
-  density = 11.35*g/cm3;
-  G4Material* Lead = new G4Material(name="Lead", z=82., a, density);
-
-  a = 39.95*g/mole;
-  density = 1.782e-03*g/cm3;
-  G4Material* Ar = new G4Material(name="ArgonGas", z=18., a, density);
-
-  a = 28.09*g/mole;
-  density = 2.33*g/cm3;
-  G4Material * Silicon = new G4Material(name="Silicon", z=14., a, density);
-
-  density = 1.032*g/cm3;
-  G4Material* Scinti = new G4Material(name="Scintillator", density, nel=2);
-  Scinti->AddElement(elC, 9);
-  Scinti->AddElement(elH, 10);
 
   //-------------------------------------------------------------------------
   // Detector geometry
@@ -128,8 +120,8 @@ G4VPhysicalVolume* ExN04DetectorConstruction::Construct()
   G4LogicalVolume * experimentalHall_log
     = new G4LogicalVolume(experimentalHall_box,Air,"expHall_L",0,0,0);
   G4VPhysicalVolume * experimentalHall_phys
-    = new G4PVPlacement(0,G4ThreeVector(),"expHall_P",
-                        experimentalHall_log,0,false,0);
+    = new G4PVPlacement(0,G4ThreeVector(),experimentalHall_log,"expHall_P",
+                        0,false,0);
   G4VisAttributes* experimentalHallVisAtt
     = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
   experimentalHallVisAtt->SetForceWireframe(true);
@@ -141,9 +133,9 @@ G4VPhysicalVolume* ExN04DetectorConstruction::Construct()
                  trkTubs_sphi,trkTubs_dphi);
   G4LogicalVolume * tracker_log
     = new G4LogicalVolume(tracker_tubs,Ar,"trackerT_L",0,0,0);
-  G4VPhysicalVolume * tracker_phys
-    = new G4PVPlacement(0,G4ThreeVector(),"tracker_phys",tracker_log,
-			experimentalHall_phys,false,0);
+  // G4VPhysicalVolume * tracker_phys =
+      new G4PVPlacement(0,G4ThreeVector(),tracker_log,"tracker_phys",
+			experimentalHall_log,false,0);
   G4VisAttributes* tracker_logVisAtt
     = new G4VisAttributes(G4Colour(1.0,0.0,1.0));
   tracker_logVisAtt->SetForceWireframe(true);
@@ -161,7 +153,7 @@ G4VPhysicalVolume* ExN04DetectorConstruction::Construct()
     = new ExN04TrackerParametrisation;
   // dummy value : kXAxis -- modified by parameterised volume
   // G4VPhysicalVolume *trackerLayer_phys =
-      new G4PVParameterised("trackerLayer_phys",trackerLayer_log,tracker_phys,
+      new G4PVParameterised("trackerLayer_phys",trackerLayer_log,tracker_log,
 			   kXAxis, notrkLayers, trackerParam);
   G4VisAttributes* trackerLayer_logVisAtt
     = new G4VisAttributes(G4Colour(0.5,0.0,1.0));
@@ -174,9 +166,9 @@ G4VPhysicalVolume* ExN04DetectorConstruction::Construct()
 		  caloTubs_dz,caloTubs_sphi,caloTubs_dphi);
   G4LogicalVolume * calorimeter_log
     = new G4LogicalVolume(calorimeter_tubs,Scinti,"caloT_L",0,0,0);
-  G4VPhysicalVolume * calorimeter_phys
-    = new G4PVPlacement(0,G4ThreeVector(),"caloM_P",calorimeter_log,
-			experimentalHall_phys,false,0);
+  // G4VPhysicalVolume * calorimeter_phys =
+      new G4PVPlacement(0,G4ThreeVector(),calorimeter_log,"caloM_P",
+			experimentalHall_log,false,0);
   G4VisAttributes* calorimeter_logVisATT
     = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
   calorimeter_logVisATT->SetForceWireframe(true);
@@ -194,7 +186,7 @@ G4VPhysicalVolume* ExN04DetectorConstruction::Construct()
     = new ExN04CalorimeterParametrisation;
   // dummy value : kXAxis -- modified by parameterised volume
   // G4VPhysicalVolume * caloLayer_phys =
-      new G4PVParameterised("caloLayer_phys",caloLayer_log,calorimeter_phys,
+      new G4PVParameterised("caloLayer_phys",caloLayer_log,calorimeter_log,
 			   kXAxis, nocaloLayers, calorimeterParam);
   G4VisAttributes* caloLayer_logVisAtt
     = new G4VisAttributes(G4Colour(0.7,1.0,0.0));
@@ -220,8 +212,8 @@ G4VPhysicalVolume* ExN04DetectorConstruction::Construct()
     rm.rotateZ(phi);
     muoncounter_phys
       = new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(x,y,z)),
-                          "muoncounter_P",muoncounter_log,
-                          experimentalHall_phys,false,i);
+                          muoncounter_log, "muoncounter_P",
+                          experimentalHall_log,false,i);
   }
   G4VisAttributes* muoncounter_logVisAtt
     = new G4VisAttributes(G4Colour(0.0,1.0,1.0));

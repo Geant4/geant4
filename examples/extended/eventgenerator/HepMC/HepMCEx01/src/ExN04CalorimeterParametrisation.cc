@@ -29,9 +29,7 @@
 
 ExN04CalorimeterParametrisation::ExN04CalorimeterParametrisation()
 {
-
 #include "ExN04DetectorParameterDef.icc"
-
 }
 
 ExN04CalorimeterParametrisation::~ExN04CalorimeterParametrisation()
@@ -45,8 +43,7 @@ void ExN04CalorimeterParametrisation::ComputeTransformation
 }
 
 void ExN04CalorimeterParametrisation::ComputeDimensions
-(G4Tubs & calorimeterLayer, const G4int copyNo,
- const G4VPhysicalVolume *) const
+(G4Tubs & calorimeterLayer, const G4int copyNo, const G4VPhysicalVolume*) const
 {
   G4double innerRad = caloTubs_rmin
               + copyNo*(absorber_thick+scinti_thick);
