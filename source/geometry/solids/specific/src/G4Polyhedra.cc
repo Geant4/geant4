@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.16 2003-11-18 21:32:02 gcosmo Exp $
+// $Id: G4Polyhedra.cc,v 1.17 2003-11-22 10:11:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -110,7 +110,7 @@ G4Polyhedra::G4Polyhedra( const G4String& name,
   G4int i;
   for (i=0; i<numZPlanes; i++)
   {
-    if ( zPlane[i] == zPlane[i+1] )
+    if (( i < numZPlanes-1) && ( zPlane[i] == zPlane[i+1] ))
     {
       if( (rInner[i]   > rOuter[i+1])
         ||(rInner[i+1] > rOuter[i])   )
