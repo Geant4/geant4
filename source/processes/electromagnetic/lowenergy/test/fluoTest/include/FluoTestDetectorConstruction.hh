@@ -132,25 +132,63 @@ public:
 
   private:
      
-    G4Material*        sampleMaterial;
-    G4Material*        SiMaterial;
-  // G4Material*        HPGeMaterial;
+ G4double           DeviceSizeZ;
+  G4double           DeviceSizeY;
+  G4double           DeviceThickness;
+  
+  G4Box*             solidWorld;    //pointer to the solid World 
+  G4LogicalVolume*   logicWorld;    //pointer to the logical World
+  G4VPhysicalVolume* physiWorld;    //pointer to the physical World
+
+  G4Box*             solidSi; //pointer to the solid Sensor
+  G4LogicalVolume*   logicSi; //pointer to the logical Sensor
+  G4VPhysicalVolume* physiSi; //pointer to the physical Sensor
+ 
+  G4Box*             solidHPGe; //pointer to the solid Sensor
+  G4LogicalVolume*   logicHPGe; //pointer to the logical Sensor
+  G4VPhysicalVolume* physiHPGe; //pointer to the physical Sensor
+   
+  G4Box*             solidSample;    //pointer to the solid Sample
+  G4LogicalVolume*   logicSample;    //pointer to the logical Sample
+  G4VPhysicalVolume* physiSample;    //pointer to the physical Sample
+  
+  G4Tubs*             solidDia1; //pointer to the solid  Diaphragm
+  G4LogicalVolume*   logicDia1; //pointer to the logical  Diaphragm
+  G4VPhysicalVolume* physiDia1; //pointer to the physical Diaphragm  
+
+  G4Tubs*            solidDia2; //pointer to the solid  Diaphragm
+  G4LogicalVolume*   logicDia2; //pointer to the logical  Diaphragm
+  G4VPhysicalVolume* physiDia2; //pointer to the physical Diaphragm  
+
+  G4Tubs*             solidDia3; //pointer to the solid  Diaphragm
+  G4LogicalVolume*   logicDia3; //pointer to the logical  Diaphragm
+  G4VPhysicalVolume* physiDia3; //pointer to the physical Diaphragm  
+ 
+  G4Box*             solidOhmicPos;
+  G4LogicalVolume*   logicOhmicPos; 
+  G4VPhysicalVolume* physiOhmicPos; 
+     
+  G4Box*             solidOhmicNeg;
+  G4LogicalVolume*   logicOhmicNeg; 
+  G4VPhysicalVolume* physiOhmicNeg;     
+
+ G4Box*             solidPixel;   
+  G4LogicalVolume*   logicPixel;  
+  G4VPhysicalVolume* physiPixel;    
+
+  G4Material*        OhmicPosMaterial;
+ G4Material*        OhmicNegMaterial;  
+  G4Material*        SiMaterial;
   G4Material*      pixelMaterial;
+    G4Material*        sampleMaterial;
   G4Material*        Dia1Material;
   G4Material*        Dia2Material;
   G4Material*        Dia3Material;
-  G4Material*        OhmicPosMaterial;
+ G4Material*        defaultMaterial;
   G4double           OhmicPosThickness;
-     
-  G4Material*        OhmicNegMaterial;
+ 
   G4double           OhmicNegThickness;
-  //G4double           EHPEnergy; 
-  //G4double           FanoValue;
-
-  //G4double           Alpha;
-  //G4double           Beta;
-  //G4double           DevNoise;
-
+ 
   G4int              PixelCopyNb;
   G4int              NbOfPixels;
   G4int              NbOfPixelRows;
@@ -159,21 +197,7 @@ public:
   
   G4double           PixelSizeYZ;
   G4double           ContactSizeYZ;
-  G4double           DeviceSizeZ;
-  G4double           DeviceSizeY;
-  G4double           DeviceThickness;
-    
- G4Box*             solidPixel;   
-  G4LogicalVolume*   logicPixel;  
-  G4VPhysicalVolume* physiPixel;    
- G4Box*             solidOhmicPos;
-  G4LogicalVolume*   logicOhmicPos; 
-  G4VPhysicalVolume* physiOhmicPos; 
-     
-  G4Box*             solidOhmicNeg;
-  G4LogicalVolume*   logicOhmicNeg; 
-  G4VPhysicalVolume* physiOhmicNeg;     
-
+ 
 public:
 
      G4Material* GetSampleMaterial()  {return sampleMaterial;};
@@ -188,8 +212,6 @@ private:
      G4double           SiThickness;
   G4double           SampleSizeYZ;
      G4double           SiSizeYZ; 
-  //   G4double           HPGeThickness;
-  //  G4double           HPGeSizeYZ;
      G4double           Dia1Thickness;
      G4double           Dia1SizeYZ;
      G4double           Dia2Thickness;
@@ -223,7 +245,6 @@ public:
 private:
 
  
-  G4Material*        defaultMaterial;
   G4double           ThetaHPGe;
   G4double           ThetaSi;
   G4double           ThetaDia1;
@@ -251,35 +272,7 @@ private:
   G4RotationMatrix   zRotPhiDia3;
      G4double           WorldSizeYZ;
      G4double           WorldSizeX;
-   
-  G4Box*             solidWorld;    //pointer to the solid World 
-  G4LogicalVolume*   logicWorld;    //pointer to the logical World
-  G4VPhysicalVolume* physiWorld;    //pointer to the physical World
-
-  G4Box*             solidSample;    //pointer to the solid Sample
-  G4LogicalVolume*   logicSample;    //pointer to the logical Sample
-  G4VPhysicalVolume* physiSample;    //pointer to the physical Sample
  
-  G4Box*             solidSi; //pointer to the solid Sensor
-  G4LogicalVolume*   logicSi; //pointer to the logical Sensor
-  G4VPhysicalVolume* physiSi; //pointer to the physical Sensor
- 
-  G4Box*             solidHPGe; //pointer to the solid Sensor
-  G4LogicalVolume*   logicHPGe; //pointer to the logical Sensor
-  G4VPhysicalVolume* physiHPGe; //pointer to the physical Sensor
-  
-  G4Tubs*             solidDia1; //pointer to the solid  Diaphragm
-  G4LogicalVolume*   logicDia1; //pointer to the logical  Diaphragm
-  G4VPhysicalVolume* physiDia1; //pointer to the physical Diaphragm  
-
-  G4Tubs*            solidDia2; //pointer to the solid  Diaphragm
-  G4LogicalVolume*   logicDia2; //pointer to the logical  Diaphragm
-  G4VPhysicalVolume* physiDia2; //pointer to the physical Diaphragm  
-
-  G4Tubs*             solidDia3; //pointer to the solid  Diaphragm
-  G4LogicalVolume*   logicDia3; //pointer to the logical  Diaphragm
-  G4VPhysicalVolume* physiDia3; //pointer to the physical Diaphragm  
-
 
   FluoTestDetectorMessenger* detectorMessenger; //pointer to the Messenger
 

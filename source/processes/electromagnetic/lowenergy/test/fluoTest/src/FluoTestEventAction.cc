@@ -65,8 +65,8 @@ FluoTestEventAction::~FluoTestEventAction()
 void FluoTestEventAction::BeginOfEventAction(const G4Event* evt)
 {
   
-  G4int evtNb = evt->GetEventID(); // Returns the event ID
-  /*   if (evtNb%printModulo == 0)
+  /*G4int evtNb = evt->GetEventID(); // Returns the event ID
+     if (evtNb%printModulo == 0)
    { 
   G4cout << "\n---> Begin of event: " << evtNb << G4endl;
   HepRandom::showEngineStatus();

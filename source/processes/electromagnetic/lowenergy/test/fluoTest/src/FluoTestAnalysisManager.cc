@@ -19,8 +19,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 FluoTestAnalysisManager::FluoTestAnalysisManager(FluoTestDetectorConstruction* FluoTestDC): 
-  Detector(FluoTestDC),
  
+  pl(0), histoFactory(0), Detector(FluoTestDC),
+  histo1DDraw("disenable"),histo1DSave("enable"),
   histoGamDet(0),
   //histoDetETot(0),
   histoGamDetPre(0),
@@ -30,12 +31,9 @@ FluoTestAnalysisManager::FluoTestAnalysisManager(FluoTestDetectorConstruction* F
     histoGamLS(0),
   histoGamLSP(0),
   histoGamBornSam(0),
-  histoEleBornSam(0),
+  histoEleBornSam(0)
   // histoOtherPartDet(0),
-  
-  histoFactory(0), pl(0),
-  histo1DDraw("disenable"),histo1DSave("enable")
-  
+ 
 {
   // Define the messenger and the analysis system
   analysisMessenger = new FluoTestAnalysisMessenger(this);

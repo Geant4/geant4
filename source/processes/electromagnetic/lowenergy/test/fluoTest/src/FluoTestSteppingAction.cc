@@ -73,7 +73,7 @@ G4double gammaphi = 0;
 	    analysisManager->InsGamLeavSam(gammaLeavingSample/keV);  
 	    analysisManager->InsGamLS(gammaTheta);
 	    analysisManager->InsGamLSP(gammaPhi);
-#endif; 
+#endif 
 	  }
       }
   }
@@ -90,7 +90,7 @@ G4double gammaphi = 0;
 	    
 #ifdef G4ANALYSIS_USE
 	    analysisManager->InsEleLeavSam(eleLeavingSample/keV);  
-#endif; 
+#endif
 	  }
       }
   }
@@ -110,7 +110,7 @@ G4double gammaphi = 0;
 	     
 #ifdef G4ANALYSIS_USE
 	     analysisManager->InsGamBornSample(gammaBornInSample/keV);  
-#endif; 
+#endif 
 	     
 	   }
 	 }
@@ -130,7 +130,7 @@ G4double gammaphi = 0;
 	     
 #ifdef G4ANALYSIS_USE
 	     analysisManager->InsEleBornSample(eleBornInSample/keV);  
-#endif; 
+#endif 
 	     
 	   }
 	 }
@@ -153,7 +153,7 @@ G4double gammaphi = 0;
 	    
 #ifdef G4ANALYSIS_USE
 	    analysisManager->InsGamDetPre(gammaAtTheDetPre/keV);  
-#endif; 
+#endif 
 	  }
       }
   }

@@ -53,7 +53,11 @@ private:
   IPlotter* pl;
   IVectorFactory* fVectorFactory;
   IHistogramFactory* histoFactory;
+  FluoTestDetectorConstruction*    Detector;
+  G4String histo1DDraw;
+  G4String histo1DSave;
 
+  IHistogram1D* histoGamDet;
   IHistogram1D*  histoGamDetPre;
   // IHistogram1D* histoGamDetPost;
   IHistogram1D*  histoGamLeavSam;
@@ -64,14 +68,7 @@ private:
   IHistogram1D*  histoEleBornSam;
   //IHistogram1D*  histoOtherPartDet;
   //IHistogram1D*  histoDetETot;
-  IHistogram1D* histoGamDet;
-
-  FluoTestDetectorConstruction*    Detector;
-
-  G4String histo1DDraw;
-  G4String histo1DSave;
  
-
   FluoTestAnalysisMessenger* analysisMessenger;
 };
 

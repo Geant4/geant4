@@ -796,7 +796,7 @@ void FluoTestDetectorConstruction::SetSiSizeYZ(G4double val)
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-/*
+
 void FluoTestDetectorConstruction::SetHPGeSizeYZ(G4double val)
 {
   // change the transverse size of the sensor and recompute the world size
