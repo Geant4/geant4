@@ -1,4 +1,4 @@
-$Id: History,v 1.90 2001-08-29 18:34:16 pia Exp $
+$Id: History,v 1.91 2001-08-29 18:44:05 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29.08.2001 - MGP, tag emlowen-V03-02-10
+             Major revision of G4LowEnergyCompton, G4LowEnergyRayleigh and
+             G4LowEnergyGammaConversion: re-implementation according to
+             the design iteration in the data domain
+             Temporary re-implementation of G4LowEnergyPhotoElectricMG,
+             without fluorescence yet
 
 29.08.2001 - MGP, tag emlowen-V03-02-09
              Bug fix in G4CrossSectionHandler
