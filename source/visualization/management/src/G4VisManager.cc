@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.cc,v 1.24 2001-05-21 14:04:53 johna Exp $
+// $Id: G4VisManager.cc,v 1.25 2001-06-05 09:58:48 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,7 +50,9 @@ G4VisManager::G4VisManager ():
   fpScene          (0),
   fpSceneHandler   (0),
   fpViewer         (0),
-  fVerbose         (0)  // All other objects use default constructors.
+  fVerbose         (0),
+  fpMessenger      (0),
+  fpStateDependent (0)   // All other objects use default constructors.
 {
   if (fpInstance) {
     G4Exception
