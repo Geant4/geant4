@@ -93,6 +93,7 @@
     {
 //      G4cout << "Using pre-compound only, E= "<<mom.t()-mom.mag()<<G4endl;
 //      m_nucl = mom.mag();
+      delete cascaders;
       G4Fragment aPreFrag;
       aPreFrag.SetA(a1+a2);
       aPreFrag.SetZ(z1+z2);
@@ -372,6 +373,11 @@
 //   		<< momentum.mag() <<" "<< momentum.mag() - mFragment 
 //   	   << " "<<theStatisticalExEnergy 
 // 	   << " "<< boost_fragments*pFragment<< G4endl;
+        G4ReactionProductVector::iterator ispectator;
+	for (ispectator=spectators->begin();ispectator!=spectators->end();ispectator++)
+	{
+	    delete *ispectator;
+	}
       }
       else if(resA!=0)
       {
@@ -471,6 +477,7 @@
 // 	      <<" "<<  aNew->GetTotalEnergy()
 // 	      << G4endl;
       }
+      delete (*cascaders)[i];
     }
     if(cascaders) delete cascaders;
     
