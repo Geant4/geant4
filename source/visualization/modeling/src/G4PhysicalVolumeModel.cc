@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.14 2001-03-15 12:20:53 johna Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.15 2001-05-18 10:03:14 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,6 +42,7 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
   fCurrentDepth   (0),
   fpCurrentPV     (0),
   fpCurrentLV     (0),
+  fCurtailDescent (false),
   fpCurrentDepth  (0),
   fppCurrentPV    (0),
   fppCurrentLV    (0)
@@ -315,6 +316,12 @@ void G4PhysicalVolumeModel::DescribeAndDescend
     const G4VisAttributes* pVisAttribs = pLV -> GetVisAttributes ();
     if (!pVisAttribs) pVisAttribs = fpMP -> GetDefaultVisAttributes ();
     DescribeSolid (theNewAT, pSol, pVisAttribs, sceneHandler);
+  }
+
+  if (fCurtailDescent) {
+    fCurtailDescent = false;
+    // Reset for normal descending of next volume at this level.
+    return;
   }
 
   // First check if mother covers...

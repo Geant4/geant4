@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ASCIITreeSceneHandler.hh,v 1.1 2001-04-10 15:08:47 johna Exp $
+// $Id: G4ASCIITreeSceneHandler.hh,v 1.2 2001-05-18 10:03:12 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,13 +19,21 @@
 
 #include "G4VTreeSceneHandler.hh"
 
+#include "g4std/set"
+
+class G4VPhysicalVolume;
+
 class G4ASCIITreeSceneHandler: public G4VTreeSceneHandler {
 public:
   G4ASCIITreeSceneHandler(G4VGraphicsSystem& system,
 			  const G4String& name);
-  virtual ~G4ASCIITreeSceneHandler ();
+  virtual ~G4ASCIITreeSceneHandler();
+  void BeginModeling();
+  void EndModeling();
 protected:
-  void Dump (const G4VSolid&);
+  void Dump(const G4VSolid&);
+  G4std::set<G4VPhysicalVolume*> fReplicaSet;
+  typedef G4std::set<G4VPhysicalVolume*>::iterator ReplicaSetIterator;
 };
 
 #endif

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.11 2001-02-03 18:39:58 johna Exp $
+// $Id: G4PhysicalVolumeModel.hh,v 1.12 2001-05-18 10:03:13 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,6 +78,8 @@ public: // With description
   // For use (optional) by the scene handler if it needs to know about
   // the current information maintained through these pointers.
 
+  void CurtailDescent() {fCurtailDescent = true;}
+
 protected:
 
   void VisitGeometryAndGetVisReps (G4VPhysicalVolume*,
@@ -114,6 +116,7 @@ protected:
   G4int              fCurrentDepth;  // Current depth of geom. hierarchy.
   G4VPhysicalVolume* fpCurrentPV;    // Current physical volume.
   G4LogicalVolume*   fpCurrentLV;    // Current logical volume.
+  G4bool             fCurtailDescent;// Can be set to curtail descent.
 
   ////////////////////////////////////////////////////////////
   // Pointers to working space in scene, if required.

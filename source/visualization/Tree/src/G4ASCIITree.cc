@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ASCIITree.cc,v 1.1 2001-04-10 15:09:33 johna Exp $
+// $Id: G4ASCIITree.cc,v 1.2 2001-05-18 10:03:12 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -15,21 +15,26 @@
 #include "G4ASCIITree.hh"
 #include "G4ASCIITreeSceneHandler.hh"
 #include "G4ASCIITreeViewer.hh"
+#include "G4ASCIITreeMessenger.hh"
 
 G4ASCIITree::G4ASCIITree ():
   G4VTree ("ASCIITree",
 	   "ATree",
 	   "A graphics system to dump geometry hierarchy"
 	   "\n  to standard output as an ASCII stream.",
-	   G4VGraphicsSystem::nonEuclidian) {}
+	   G4VGraphicsSystem::nonEuclidian) {
+  fpMessenger = new G4ASCIITreeMessenger(this);
+}
 
-G4ASCIITree::~G4ASCIITree () {}
+G4ASCIITree::~G4ASCIITree () {
+  delete fpMessenger;
+}
 
 G4VSceneHandler* G4ASCIITree::CreateSceneHandler (const G4String& name) {
   G4VSceneHandler* pScene = new G4ASCIITreeSceneHandler (*this, name);
   G4cout << G4ASCIITreeSceneHandler::GetSceneCount ()
 	 << ' ' << fName << " scene handlers extanct." << G4endl;
-  return  pScene;
+  return pScene;
 }
 
 G4VViewer* G4ASCIITree::CreateViewer (G4VSceneHandler& scene,
