@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.8 2004-08-06 11:30:59 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.9 2004-08-08 12:09:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -140,15 +140,8 @@ public:
                                    G4double previousStepSize,
                                    G4ForceCondition* condition);
 
-  G4double PostStepGetPhysicalInteractionLength(
-                             const G4Track& track,
-                                   G4double   previousStepSize,
-                                   G4ForceCondition* condition);
-
   const G4ParticleDefinition* Particle() const;
   const G4ParticleDefinition* SecondaryParticle() const;
-  
-  void SetDEDXTable(G4PhysicsTable*);
 
   virtual void ActivateFluorescence(G4bool, const G4Region* r = 0);
   virtual void ActivateAugerElectronProduction(G4bool, const G4Region* r = 0);
@@ -169,9 +162,6 @@ protected:
 
   virtual G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*) = 0;
 
-  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
-                                    const G4Material*, G4double cut) = 0;
-
   G4VEmModel* SelectModel(G4double& kinEnergy);
 
   size_t CurrentMaterialCutsCoupleIndex() const {return currentMaterialIndex;};
@@ -190,6 +180,8 @@ private:
 
   void ComputeLambda(G4double kinEnergy);
 
+  void FindLambdaMax();
+
   // hide  assignment operator
 
   G4VEmProcess(G4VEmProcess &);
@@ -206,7 +198,6 @@ private:
   G4EmModelManager*            modelManager;
 
   // tables and vectors
-  G4PhysicsTable*              theDEDXTable;
   G4PhysicsTable*              theLambdaTable;
   G4double*                    theEnergyOfCrossSectionMax;
   G4double*                    theCrossSectionMax;
@@ -232,10 +223,10 @@ private:
   G4double                     mfpKinEnergy;
   G4double                     preStepKinEnergy;
   G4double                     preStepLambda;
-  G4double                     preStepMFP;
 
   G4bool                       integral;
   G4bool                       meanFreePath;
+  G4bool                       aboveCSmax;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -247,8 +238,7 @@ inline void G4VEmProcess::DefineMaterial(const G4MaterialCutsCouple* couple)
     currentCouple   = couple;
     currentMaterial = couple->GetMaterial();
     currentMaterialIndex = couple->GetIndex();
-    if(integral && (!meanFreePath || preStepKinEnergy < mfpKinEnergy))
-      ResetNumberOfInteractionLengthLeft();
+    if(!meanFreePath) ResetNumberOfInteractionLengthLeft();
   }
 }
 
@@ -276,17 +266,17 @@ inline G4double G4VEmProcess::GetLambda(G4double e)
 inline void G4VEmProcess::ComputeLambda(G4double e)
 {
   meanFreePath  = false;
-  G4double emax = theEnergyOfCrossSectionMax[currentMaterialIndex];
-  if (e <= emax) {
-    mfpKinEnergy  = 0.0;
+  aboveCSmax    = false;
+  mfpKinEnergy  = theEnergyOfCrossSectionMax[currentMaterialIndex];
+  if (e <= mfpKinEnergy) {
     preStepLambda = GetLambda(e);
   } else {
+    aboveCSmax  = true;
     e *= lambdaFactor;
-    if(e > emax) {
+    if(e > mfpKinEnergy) {
       mfpKinEnergy = e;
       preStepLambda = GetLambda(e);
     } else {
-      mfpKinEnergy = emax;
       preStepLambda = theCrossSectionMax[currentMaterialIndex];
     }
   }
@@ -299,34 +289,17 @@ inline G4double G4VEmProcess::GetMeanFreePath(const G4Track& track,
                                                     G4ForceCondition* condition)
 {
   *condition = NotForced;
+  G4double mfp = DBL_MAX;
   preStepKinEnergy = track.GetKineticEnergy();
+  if(aboveCSmax && preStepKinEnergy < mfpKinEnergy) meanFreePath = false;
   DefineMaterial(track.GetMaterialCutsCouple());
   if (meanFreePath) {
     if (integral) ComputeLambda(preStepKinEnergy);
     else          preStepLambda = GetLambda(preStepKinEnergy);
-    if(0.0 < preStepLambda) preStepMFP = 1.0/preStepLambda;
-    else                    preStepMFP = DBL_MAX;
+    if(0.0 < preStepLambda) mfp = 1.0/preStepLambda;
   }
   //  G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<<" mfp= "<<preStepMFP<<G4endl;
-  return preStepMFP;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
-                             const G4Track& track,
-                             G4double   previousStepSize,
-                             G4ForceCondition* condition)
-{
-  double pil = G4VDiscreteProcess::PostStepGetPhysicalInteractionLength(track, 
-                                                                        previousStepSize,
-                                                                        condition);
-  if(integral && theDEDXTable && preStepKinEnergy > mfpKinEnergy) {
-    G4bool b;
-    G4double dedx = ((*theDEDXTable)[currentMaterialIndex])->GetValue(preStepKinEnergy, b);
-    if(dedx > 0.0) pil = std::min(pil,(preStepKinEnergy - mfpKinEnergy)/dedx);
-  }
-  return pil;
+  return mfp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -349,6 +322,7 @@ inline G4VEmModel* G4VEmProcess::SelectModelForMaterial(
 inline void G4VEmProcess::ResetNumberOfInteractionLengthLeft()
 {
   meanFreePath = true;
+  aboveCSmax   = false;
   G4VProcess::ResetNumberOfInteractionLengthLeft();
 }
 

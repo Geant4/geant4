@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.27 2004-08-06 11:30:59 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.28 2004-08-08 12:09:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -379,9 +379,7 @@ private:
   G4double chargeSqRatio;
 
   G4double preStepLambda;
-  G4double preStepMFP;
   G4double fRange;
-  G4double fDEDX;
   G4double preStepKinEnergy;
   G4double preStepScaledEnergy;
   G4double linLossLimit;
@@ -399,6 +397,7 @@ private:
   G4bool   tablesAreBuilt;
   G4bool   integral;
   G4bool   meanFreePath;
+  G4bool   aboveCSmax;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -412,8 +411,7 @@ inline void G4VEnergyLossProcess::DefineMaterial(const G4MaterialCutsCouple* cou
     currentMaterialIndex = couple->GetIndex();
     minStepLimit = std::min(finalRange,
            currentCouple->GetProductionCuts()->GetProductionCut(idxG4ElectronCut));
-    if(integral && (!meanFreePath || preStepScaledEnergy < mfpKinEnergy))
-      ResetNumberOfInteractionLengthLeft();
+    if(!meanFreePath) ResetNumberOfInteractionLengthLeft();
   }
 }
 
@@ -555,17 +553,17 @@ inline G4double G4VEnergyLossProcess::GetLambdaForScaledEnergy(G4double e)
 inline void G4VEnergyLossProcess::ComputeLambdaForScaledEnergy(G4double e)
 {
   meanFreePath  = false;
-  G4double emax = theEnergyOfCrossSectionMax[currentMaterialIndex];
-  if (e <= emax) {
-    mfpKinEnergy  = 0.0;
+  aboveCSmax    = false;
+  mfpKinEnergy  = theEnergyOfCrossSectionMax[currentMaterialIndex];
+  if (e <= mfpKinEnergy) {
     preStepLambda = GetLambdaForScaledEnergy(e);
   } else {
+    aboveCSmax  = true;
     e *= lambdaFactor;
-    if(e > emax) {
+    if(e > mfpKinEnergy) {
       mfpKinEnergy = e;
       preStepLambda = GetLambdaForScaledEnergy(e);
     } else {
-      mfpKinEnergy = emax;
       preStepLambda = chargeSqRatio*theCrossSectionMax[currentMaterialIndex];
     }
   }
@@ -578,17 +576,18 @@ inline G4double G4VEnergyLossProcess::GetMeanFreePath(const G4Track& track,
                                                             G4ForceCondition* condition)
 {
   *condition = NotForced;
+  G4double mfp = DBL_MAX;
   preStepKinEnergy = track.GetKineticEnergy();
   preStepScaledEnergy = preStepKinEnergy*massRatio;
+  if(aboveCSmax && preStepScaledEnergy < mfpKinEnergy) meanFreePath = false;
   DefineMaterial(track.GetMaterialCutsCouple());
   if (meanFreePath) {
     if (integral) ComputeLambdaForScaledEnergy(preStepScaledEnergy);
     else          preStepLambda = GetLambdaForScaledEnergy(preStepScaledEnergy);
-    if(0.0 < preStepLambda) preStepMFP = 1.0/preStepLambda;
-    else                    preStepMFP = DBL_MAX;
+    if(0.0 < preStepLambda) mfp = 1.0/preStepLambda;
   }
-  //G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<<" mfp= "<<preStepMFP<<G4endl;
-  return preStepMFP;
+  //G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<<" mfp= "<<mfp<<G4endl;
+  return mfp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -597,7 +596,6 @@ inline G4double G4VEnergyLossProcess::GetContinuousStepLimit(const G4Track&,
                                       G4double, G4double currentMinStep, G4double&)
 {
   G4double x = DBL_MAX;
-  fDEDX  = GetDEDXForScaledEnergy(preStepScaledEnergy);
   if(theRangeTableForLoss) {
     fRange = GetScaledRangeForScaledEnergy(preStepScaledEnergy)*reduceFactor;
 
@@ -610,9 +608,6 @@ inline G4double G4VEnergyLossProcess::GetContinuousStepLimit(const G4Track&,
     //    <<" cMinSt="<<currentMinStep <<" minStepLimit= " << minStepLimit<< G4endl;
     }
   }
-  if(integral && fDEDX>0.0 && preStepScaledEnergy > mfpKinEnergy)
-              x = std::min(x,(preStepScaledEnergy - mfpKinEnergy)/fDEDX);
-
   //G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<<" stepLimit= "<<x<<G4endl;
   return x;
 }
@@ -622,6 +617,7 @@ inline G4double G4VEnergyLossProcess::GetContinuousStepLimit(const G4Track&,
 inline void G4VEnergyLossProcess::ResetNumberOfInteractionLengthLeft()
 {
   meanFreePath = true;
+  aboveCSmax   = false;
   G4VProcess::ResetNumberOfInteractionLengthLeft();
 }
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.45 2004-08-06 11:30:59 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.46 2004-08-08 12:09:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -428,7 +428,6 @@ void G4LossTableManager::BuildPhysicsTable(const G4ParticleDefinition* aParticle
   }
   if(all_tables_are_built) {
       G4cout << "### All dEdx and Range tables are built #####" << G4endl;
-      CopyDEDXTables();
   }
 }
 
@@ -503,13 +502,7 @@ void G4LossTableManager::RetrievePhysicsTables(const G4ParticleDefinition* aPart
                  << " tables_are_built= " << tables_are_built[j]
                  << G4endl;
         }
-
-      } else if( part_vector[j] == aParticle && theLoss != loss_vector[j] ) {
-         loss_vector[j]->SetDEDXTable(theLoss->DEDXTable());
       }
-    } else if(   part_vector[j] == aParticle && theLoss != loss_vector[j] &&
-                 loss_vector[j]->RangeTableForLoss() ) {
-         theLoss->SetDEDXTable(loss_vector[j]->DEDXTable());
     }
   }
 
@@ -529,29 +522,8 @@ void G4LossTableManager::RetrievePhysicsTables(const G4ParticleDefinition* aPart
   }
   if(all_tables_are_built) {
       G4cout << "##### All dEdx and Range tables are retrieved #####" << G4endl;
-      CopyDEDXTables();
   } else if(isLast) {
       G4Exception("G4LossTableManager ERROR: not all dEdx and Range tables are retrieved");
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4LossTableManager::CopyDEDXTables()
-{
-  G4int n = emp_vector.size();
-  if(n > 0) {
-    for(G4int i=0; i<n; i++) {
-      G4VEmProcess* emp = emp_vector[i];
-      PD part = emp->Particle();
-      for(G4int j=0; j<n_loss; j++) {
-        G4VEnergyLossProcess* p = loss_vector[j];
-        if(part_vector[j] == part && p->RangeTableForLoss()) {
-          emp->SetDEDXTable(p->DEDXTable());
-	  break;
-        }
-      }
-    }
   }
 }
 
@@ -609,9 +581,8 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(const G4ParticleDefinition
       list[i]->clearAndDestroy();
     }
   }
-  for(G4int i=0; i<n_dedx; i++) {
-    loss_list[i]->SetDEDXTable(dedx);
-  }
+  em->SetDEDXTable(dedx);
+ 
   dedx_vector[iem] = dedx;
   G4PhysicsTable* range = tableBuilder->BuildRangeTable(dedx);
   G4PhysicsTable* invrange = tableBuilder->BuildInverseRangeTable(dedx, range);
@@ -638,7 +609,6 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(const G4ParticleDefinition
     em->SetPreciseRangeTable(range);
     delete dedxForRange;
   }
-
 
   loss_map[aParticle] = em;
   for (G4int j=0; j<n_dedx; j++) {

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.26 2004-08-06 11:30:59 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.27 2004-08-08 12:09:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -146,7 +146,9 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name, G4ProcessType t
   rndmStepFlag(false),
   hasRestProcess(false),
   tablesAreBuilt(false),
-  integral(true)
+  integral(true),
+  meanFreePath(false),
+  aboveCSmax(true)
 {
 
   lowestKinEnergy      = 1.*eV;
@@ -306,8 +308,7 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
   currentCouple = 0;
   preStepLambda = 0.0;
-  preStepMFP    = DBL_MAX;
-  mfpKinEnergy  = 0.0;
+  mfpKinEnergy  = DBL_MAX;
 
   if(0 < verboseLevel) {
     G4cout << "========================================================" << G4endl;
@@ -616,7 +617,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 
   // Short step
   } else if( length <= linLossLimit * fRange ) {
-    eloss = fDEDX*length;
+    eloss = GetDEDXForScaledEnergy(preStepScaledEnergy)*length;
 
   // Long step
   } else {
@@ -733,8 +734,13 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
   // Integral approach
   if (integral) {
     G4double lx = GetLambdaForScaledEnergy(postStepScaledEnergy);
-    //G4cout << "PS: preLambda= " << preStepLambda << " post= " << lx << G4endl;
-    //    if(preStepLambda*G4UniformRand() > GetLambda(postStepScaledEnergy))
+    if(preStepLambda<lx && 0 < verboseLevel) {
+      G4cout << "WARING: for " << particle->GetParticleName() 
+             << " and " << GetProcessName() 
+             << " E(MeV)= " << finalT/MeV
+             << " preLambda= " << preStepLambda << " < " << lx << " (postLambda) "
+	     << G4endl;  
+    }
     if(preStepLambda*G4UniformRand() > lx)
       return G4VContinuousDiscreteProcess::PostStepDoIt(track,step);
   }
@@ -885,11 +891,8 @@ void G4VEnergyLossProcess::SetLambdaTable(G4PhysicsTable* p)
     G4cout << "### Set Lambda table " << p << " for " << particle->GetParticleName() 
            << " and process " << GetProcessName() << G4endl; 
   }
-  if(theLambdaTable && !baseParticle) theLambdaTable->clearAndDestroy();
   theLambdaTable = p;
   tablesAreBuilt = true;
-  if(theEnergyOfCrossSectionMax) delete [] theEnergyOfCrossSectionMax;
-  if(theCrossSectionMax) delete [] theCrossSectionMax;
 
   if(p) {
     size_t n = p->length();
@@ -914,11 +917,11 @@ void G4VEnergyLossProcess::SetLambdaTable(G4PhysicsTable* p)
       }
       theEnergyOfCrossSectionMax[i] = emax;
       theCrossSectionMax[i] = smax;
-      /*
-      G4cout << "For " << particle->GetParticleName() 
-             << " Max CS at i= " << i << " emax(MeV)= " << emax/MeV
-             << " lambda= " << smax << G4endl;
-      */
+      if(2 < verboseLevel) {
+        G4cout << "For " << particle->GetParticleName() 
+               << " Max CS at i= " << i << " emax(MeV)= " << emax/MeV
+               << " lambda= " << smax << G4endl;
+      }
     }
   }
 }
@@ -1124,8 +1127,7 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(G4ParticleDefinition* part,
 
   currentCouple = 0;
   preStepLambda = 0.0;
-  preStepMFP    = DBL_MAX;
-  mfpKinEnergy  = 0.0;
+  mfpKinEnergy  = DBL_MAX;
 
   if(0 < verboseLevel) {
     G4cout << "========================================================" << G4endl;

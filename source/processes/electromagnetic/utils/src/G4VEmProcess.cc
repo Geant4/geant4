@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.8 2004-08-06 11:30:59 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.9 2004-08-08 12:09:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -68,7 +68,6 @@
 
 G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
                       G4VDiscreteProcess(name, type),
-  theDEDXTable(0),
   theLambdaTable(0),
   theEnergyOfCrossSectionMax(0),
   theCrossSectionMax(0),
@@ -78,7 +77,8 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   lambdaFactor(0.1),
   currentCouple(0),
   integral(false),
-  meanFreePath(true)
+  meanFreePath(true),
+  aboveCSmax(true)
 {
 
   minKinEnergy    = 0.1*keV;
@@ -131,8 +131,12 @@ void G4VEmProcess::Clear()
 
 void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
-  if( !particle ) particle = &part;
   currentCouple = 0;
+  preStepLambda = 0.0;
+  mfpKinEnergy  = DBL_MAX;
+
+  if( !particle ) particle = &part;
+
   if(0 < verboseLevel) {
     G4cout << "G4VEmProcess::BuildPhysicsTable() for "
            << GetProcessName()
@@ -154,6 +158,7 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 
   Initialise();
   theLambdaTable = BuildLambdaTable();
+  FindLambdaMax();
   PrintInfoDefinition();
 
   if(0 < verboseLevel) {
@@ -182,8 +187,6 @@ G4PhysicsTable* G4VEmProcess::BuildLambdaTable()
   size_t numOfCouples = theCoupleTable->GetTableSize();
 
   G4PhysicsTable* theTable = new G4PhysicsTable(numOfCouples);
-  theEnergyOfCrossSectionMax = new G4double [numOfCouples];
-  theCrossSectionMax = new G4double [numOfCouples];
 
   for(size_t i=0; i<numOfCouples; i++) {
 
@@ -191,20 +194,6 @@ G4PhysicsTable* G4VEmProcess::BuildLambdaTable()
     const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
     G4PhysicsVector* aVector = LambdaPhysicsVector(couple);
     modelManager->FillLambdaVector(aVector, couple);
-
-    G4double e, s, emax = 0.0;
-    G4bool b;
-    G4double smax = 0.0;
-    for (G4int j=0; j<nLambdaBins; j++) {
-      e = aVector->GetLowEdgeEnergy(j);
-      s = aVector->GetValue(e,b);
-      if(s > smax) {
-        smax = s;
-        emax = e;
-      }
-    }
-    theEnergyOfCrossSectionMax[i] = emax;
-    theCrossSectionMax[i] = smax;
 
     // Insert vector for this material into the table
     theTable->insert(aVector) ;
@@ -266,8 +255,14 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
   // Integral approach
   if (integral) {
     G4double lx = GetLambda(finalT);
-    //G4cout << "PS: preLambda= " << preStepLambda << " post= " << lx << G4endl;
-    //    if(preStepLambda*G4UniformRand() > GetLambda(finalT))
+    if(preStepLambda<lx && 0 < verboseLevel) {
+      G4cout << "WARING: for " << particle->GetParticleName() 
+             << " and " << GetProcessName() 
+             << " E(MeV)= " << finalT/MeV
+             << " preLambda= " << preStepLambda << " < " << lx << " (postLambda) "
+	     << G4endl;  
+    }
+
     if(preStepLambda*G4UniformRand() > lx)
       return G4VDiscreteProcess::PostStepDoIt(track,step);
   }
@@ -412,6 +407,9 @@ G4bool G4VEmProcess::RetrievePhysicsTable(G4ParticleDefinition* part,
 			  	              G4bool ascii)
 {
   currentCouple = 0;
+  preStepLambda = 0.0;
+  mfpKinEnergy  = DBL_MAX;
+
   if(0 < verboseLevel) {
     G4cout << "G4VEmProcess::RetrievePhysicsTable() for "
            << part->GetParticleName() << " and process "
@@ -438,6 +436,7 @@ G4bool G4VEmProcess::RetrievePhysicsTable(G4ParticleDefinition* part,
                << filename << ">"
                << G4endl;
       }
+      FindLambdaMax();
       PrintInfoDefinition();
   } else {
       theLambdaTable->clearAndDestroy();
@@ -452,6 +451,43 @@ G4bool G4VEmProcess::RetrievePhysicsTable(G4ParticleDefinition* part,
   return yes;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEmProcess::FindLambdaMax()
+{
+  if(1 < verboseLevel) {
+    G4cout << "### FindLambdaMax: " << particle->GetParticleName() 
+           << " and process " << GetProcessName() << G4endl; 
+  }
+  size_t n = theLambdaTable->length();
+  G4PhysicsVector* pv = (*theLambdaTable)[0];
+  size_t nb = pv->GetVectorLength();
+  G4double emax = pv->GetLowEdgeEnergy(nb);
+  G4double e, s, smax = 0.0;
+  theEnergyOfCrossSectionMax = new G4double [n];
+  theCrossSectionMax = new G4double [n];
+  G4bool b;
+
+  for (size_t i=0; i<n; i++) {
+    pv = (*theLambdaTable)[i];
+    smax = 0.0;
+    for (size_t j=0; j<nb; j++) {
+      e = pv->GetLowEdgeEnergy(j);
+      s = pv->GetValue(e,b);
+      if(s > smax) {
+	smax = s;
+	emax = e;
+      }
+    }
+    theEnergyOfCrossSectionMax[i] = emax;
+    theCrossSectionMax[i] = smax;
+    if(2 < verboseLevel) {
+      G4cout << "For " << particle->GetParticleName() 
+	     << " Max CS at i= " << i << " emax(MeV)= " << emax/MeV
+	     << " lambda= " << smax << G4endl;
+    }
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -524,13 +560,6 @@ void G4VEmProcess::SetIntegral(G4bool val)
 G4bool G4VEmProcess::IsIntegral() const
 {
   return integral;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4VEmProcess::SetDEDXTable(G4PhysicsTable* table)
-{
-  theDEDXTable = table;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
