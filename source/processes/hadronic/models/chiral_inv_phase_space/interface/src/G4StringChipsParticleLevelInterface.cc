@@ -82,7 +82,17 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   // Protection for non physical conditions
   
   if(theSecondaries->size() == 1) 
-    G4Exception("G4StringChipsParticleLevelInterface: Only one particle from String models!");
+  {
+    G4ReactionProductVector * theFastResult = new G4ReactionProductVector;
+    G4ReactionProduct * theFastSec;
+    theFastSec = new G4ReactionProduct((*theSecondaries)[0]->GetDefinition());
+    G4LorentzVector current4Mom = (*theSecondaries)[0]->Get4Momentum();
+    theFastSec->SetTotalEnergy(current4Mom.t());
+    theFastSec->SetMomentum(current4Mom.vect());
+    theFastResult->push_back(theFastSec);
+    return theFastResult;
+//    G4Exception("G4StringChipsParticleLevelInterface: Only one particle from String models!");
+  }
   
   // target properties needed in constructor of quasmon, and for boosting to
   // target rest frame
