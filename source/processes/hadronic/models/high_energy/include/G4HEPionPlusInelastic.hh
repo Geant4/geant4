@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEPionPlusInelastic.hh,v 1.8 2001-08-01 17:09:43 hpw Exp $
+// $Id: G4HEPionPlusInelastic.hh,v 1.9 2002-06-13 07:14:40 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,7 +41,7 @@ class G4HEPionPlusInelastic : public G4HEInelastic
  public: 
         G4HEPionPlusInelastic() : G4HEInelastic()
            {
-              theMinEnergy =  20*GeV;
+              theMinEnergy =  45*GeV;
               theMaxEnergy = 10*TeV;
               MAXPART      = 2048;
               verboseLevel = 0; 
