@@ -1,4 +1,4 @@
-$Id: History,v 1.47 2002-11-20 14:46:17 gcosmo Exp $
+$Id: History,v 1.48 2002-11-27 18:06:41 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 27, 2002, M.Asai (intercoms-V04-01-03)
+- Fix memory leak in G4UIcommand.hh.
 
 Nov 20, 2002, G.Cosmo (intercoms-V04-01-02)
 - Patched access to public static data in G4VGlobalFastSimulationManager
