@@ -15,6 +15,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+7 December, 01    Y.Morita (persistency-V03-02-02)
+- added G4Pglobals.hh to G4PVHits and G4PVDigits for g++ 2.95.2 headers
+
 6 July, 01    Y.Morita (persistency-V03-02-01)
 - added more SRM descriptions
 
