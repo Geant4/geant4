@@ -46,8 +46,13 @@
 #ifndef G4hNuclearStoppingModel_h
 #define G4hNuclearStoppingModel_h 1
 
+#include "globals.hh"
 #include "G4VLowEnergyModel.hh"
 #include "G4VhNuclearStoppingPower.hh"
+
+class G4ParticleDefinition;
+class G4Material;
+class G4DynamicParticle;
 
 class G4hNuclearStoppingModel : public G4VLowEnergyModel
 {

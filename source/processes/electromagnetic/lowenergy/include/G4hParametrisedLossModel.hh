@@ -46,8 +46,13 @@
 #ifndef G4hParametrisedLossModel_h
 #define G4hParametrisedLossModel_h 1
 
+#include "globals.hh"
 #include "G4VLowEnergyModel.hh"
 #include "G4VhElectronicStoppingPower.hh"
+
+class G4DynamicParticle;
+class G4ParticleDefinition;
+class G4Material;
 
 class G4hParametrisedLossModel : public G4VLowEnergyModel
 {

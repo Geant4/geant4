@@ -65,6 +65,7 @@
 #ifndef G4hLowEnergyIonisation_h
 #define G4hLowEnergyIonisation_h 1
  
+#include "globals.hh"
 #include "G4hLowEnergyLoss.hh"
 #include "G4VLowEnergyModel.hh"
 #include "G4Track.hh"

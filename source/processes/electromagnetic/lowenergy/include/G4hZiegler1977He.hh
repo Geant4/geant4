@@ -48,7 +48,10 @@
 #ifndef G4hZiegler1977He_h
 #define G4hZiegler1977He_h 1
 
+#include "globals.hh"
 #include "G4VhElectronicStoppingPower.hh"
+
+class G4Material;
 
 class G4hZiegler1977He : public G4VhElectronicStoppingPower
 {

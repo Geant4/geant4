@@ -46,7 +46,12 @@
 #ifndef G4hBetheBlochModel_h
 #define G4hBetheBlochModel_h 1
 
+#include "globals.hh"
 #include "G4VLowEnergyModel.hh"
+
+class G4Material;
+class G4ParticleDefinition;
+class G4DynamicParticle;
 
 class G4hBetheBlochModel : public G4VLowEnergyModel
 {

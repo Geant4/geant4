@@ -48,6 +48,7 @@
 #ifndef G4hZiegler1977Nuclear_h
 #define G4hZiegler1977Nuclear_h 1
 
+#include "globals.hh"
 #include "G4VhNuclearStoppingPower.hh"
 
 class G4hZiegler1977Nuclear : public G4VhNuclearStoppingPower

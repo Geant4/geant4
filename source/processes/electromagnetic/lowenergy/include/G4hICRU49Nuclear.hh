@@ -48,6 +48,7 @@
 #ifndef G4hICRU49Nuclear_h
 #define G4hICRU49Nuclear_h 1
 
+#include "globals.hh"
 #include "G4VhNuclearStoppingPower.hh"
 
 class G4hICRU49Nuclear : public G4VhNuclearStoppingPower
