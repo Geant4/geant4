@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonMinusCaptureAtRest.cc,v 1.12 2003-02-26 17:13:50 vnivanch Exp $
+// $Id: G4MuonMinusCaptureAtRest.cc,v 1.13 2003-05-02 10:00:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -339,16 +339,16 @@ void G4MuonMinusCaptureAtRest::CascadeCorrection(G4double zztar,
   G4double d__1;
 
   // Local variables
-   G4int i;
-   G4double hkap;
-   G4double p2help;
-   G4double efrmmx, ato1o3;
-   G4double hhlp[2];
+  static G4int i;
+  static G4double hkap;
+  static G4double p2help;
+  static G4double efrmmx, ato1o3;
+  static G4double hhlp[2];
 
   const G4double onethird = 1./3.;
   const G4double apfrmx = pow(9.*M_PI/8.,onethird) * PLABRC / R0NUCL;
-   G4double bbold = -1e10;
-   G4double zzold = -1e10;
+  static G4double bbold = -1e10;
+  static G4double zzold = -1e10;
 
   //  Reduction factors for intran. cascade energy, taken from Alsmiller
   //  Incoming baryons
@@ -383,8 +383,8 @@ G4double G4MuonMinusCaptureAtRest::CoulombBarrier(G4int i, G4double z)
   G4double ret_val;
 
   // Local variables
-   G4int n;
-   G4double x;
+  static G4int n;
+  static G4double x;
 
   static G4double t[28] = {
      0.36, 0.77, 0.08, 0.00, 0.51, 0.81, 0.00,
@@ -417,12 +417,12 @@ void G4MuonMinusCaptureAtRest::ExcitationEnergyLevel(G4int ja, G4int jz,
 {
   // Initialized data
 
-   G4int jaold = 0;
+  static G4int jaold = 0;
 
   // Local variables
-   G4double dja;
-   G4int iodd, inodd, izodd;
-   G4double sqatar;
+  static G4double dja;
+  static G4int iodd, inodd, izodd;
+  static G4double sqatar;
 
   static G4double cam4[130] = {
     0.00, 5.44, 0.00, 2.76, 0.00, 3.34, 0.00, 2.70, 0.00, 1.90,
@@ -488,7 +488,6 @@ void G4MuonMinusCaptureAtRest::ExcitationEnergyLevel(G4int ja, G4int jz,
   izodd = 1 - jz % 2;
   inodd = 1 - (ja - jz) % 2;
   iodd = izodd + inodd;
-  sqatar = sqrt((G4double)ja);
   if (iodd >= 2) {
     //  Even-even nucleus
     if (ja != jaold) {
@@ -522,17 +521,17 @@ G4double G4MuonMinusCaptureAtRest::CalculateIsotopicMass(G4double a,
 {
   // Initialized data
 
-   G4bool lfirst = true;
+  static G4bool lfirst = true;
 
   // System generated locals
   G4double ret_val, d__1, d__2;
 
   // Local variables
-   G4int n;
-   G4double a13, ec, es, ev;
-   G4int iz0;
-   G4double am13, eex, am2zoa;
-   G4double exhydr, exneut;
+  static G4int n;
+  static G4double a13, ec, es, ev;
+  static G4int iz0;
+  static G4double am13, eex, am2zoa;
+  static G4double exhydr, exneut;
 
   static G4double cam2[130] = {
     26.17, 19.25, 24.21, 20.92, 23.15, 18.01, 19.55, 16.94, 19.73, 17.07,
@@ -617,27 +616,27 @@ void G4MuonMinusCaptureAtRest::EvaporationDeexcitation()
   G4double d__1, d__2;
 
   // Local variables
-   G4double etapcm, aiamom, egroun, deltae, hhh, umo, bre2;
-   G4int ipar, jpar;
-   G4double rndm[2];
-   G4double etax, etay, etaz, pcms, umev, p2res, cfe2e1, cfm1e1,
+  static G4double etapcm, aiamom, egroun, deltae, hhh, umo, bre2;
+  static G4int ipar, jpar;
+  static G4double rndm[2];
+  static G4double etax, etay, etaz, pcms, umev, p2res, cfe2e1, cfm1e1,
     echck, eegcm, gamcm, bre1m1, delta, ahelp, freje;
-   G4int jamin;
-   G4double energ;
-   G4int iamin, jamom;
-   G4double enmin;
-   G4double erncm, hhhsq, phelp, plbgx, plbgy, rnucl;
-   G4int lexpn;
-   G4double dismx, pcmsx, pcmsy, echck0;
-   G4int lmult;
-   G4double xtent, pcmsz, plbgz, energ0, eex2nd, roten0, eex1st,
+  static G4int jamin;
+  static G4double energ;
+  static G4int iamin, jamom;
+  static G4double enmin;
+  static G4double erncm, hhhsq, phelp, plbgx, plbgy, rnucl;
+  static G4int lexpn;
+  static G4double dismx, pcmsx, pcmsy, echck0;
+  static G4int lmult;
+  static G4double xtent, pcmsz, plbgz, energ0, eex2nd, roten0, eex1st,
     delpai, cosgam[3];
-   G4int ibhelp;
-   G4double eexdum;
-   G4int ichelp;
-   G4double ainerm, rnmass, asmall, aogmax, aogmin, tempsq, temper,
+  static G4int ibhelp;
+  static G4double eexdum;
+  static G4int ichelp;
+  static G4double ainerm, rnmass, asmall, aogmax, aogmin, tempsq, temper,
     ddlexp, xdismx;
-   G4int naiam;
+  static G4int naiam;
 
   // ---------------------------------------------------------------------*
   //                                                                      *
@@ -909,14 +908,14 @@ void G4MuonMinusCaptureAtRest::FermiMotion(G4int pidx)
   G4double r__1;
 
   // Local variables
-   G4int iztemp;
-   G4double delctr;
-   G4double p2;
-   G4double cfe, sfe, p2sq, ferm, polc;
-   G4double pols;
-   G4double frndm[3];
-   G4double atemp, ztemp;
-   G4double tveuz, v0extr;
+  static G4int iztemp;
+  static G4double delctr;
+  static G4double p2;
+  static G4double cfe, sfe, p2sq, ferm, polc;
+  static G4double pols;
+  static G4double frndm[3];
+  static G4double atemp, ztemp;
+  static G4double tveuz, v0extr;
 
   ferm = nucleonMaxFermiEn[pidx - 1];
   frndm[0] = G4UniformRand();
@@ -964,61 +963,61 @@ void G4MuonMinusCaptureAtRest::ResidualNucleusCascade(G4int m2, G4int m3,
 {
   // Initialized data
 
-   G4int ievevp = 0;
-   G4bool lfirst = true;
+  static G4int ievevp = 0;
+  static G4bool lfirst = true;
 
   // System generated locals
   G4int i__1;
   G4double d__1, d__2, d__3, d__4;
 
   // Local variables
-   G4double a, c[3];
-   G4int i, j, k;
-   G4double q[7], r[6], s[6], v, z, e1, e2;
-   G4int n1;
-   G4double aa;
-   G4int ja;
-   G4double ar;
-   G4int jj, kk, mm, nn, js;
-   G4double um;
-   G4int jz;
-   G4double zr, zz;
-   G4int iaa, jja;
-   G4double emh, arg;
-   G4int jat;
-   G4double emn;
-   G4int jjn;
-   G4double fjs, sas, eps, ses;
-   G4int jjz;
-   G4double umo, sos[6], sum;
-   G4int jzt;
-   G4double sus;
-   G4int izz;
-   G4double eye1[6], eye0[6], umo2, ajja, fact;
-   G4double emhn, ecms;
-   G4double rndm[2];
-   G4double etax, pcms, etay, etaz;
-   G4double corr, uran, unew, umax, umin;
-   G4int ipro, ineu;
-   G4double zjjz, ccou2, umin2, p2res, smom1[6], ddjja, gamcm,
+  static G4double a, c[3];
+  static G4int i, j, k;
+  static G4double q[7], r[6], s[6], v, z, e1, e2;
+  static G4int n1;
+  static G4double aa;
+  static G4int ja;
+  static G4double ar;
+  static G4int jj, kk, mm, nn, js;
+  static G4double um;
+  static G4int jz;
+  static G4double zr, zz;
+  static G4int iaa, jja;
+  static G4double emh, arg;
+  static G4int jat;
+  static G4double emn;
+  static G4int jjn;
+  static G4double fjs, sas, eps, ses;
+  static G4int jjz;
+  static G4double umo, sos[6], sum;
+  static G4int jzt;
+  static G4double sus;
+  static G4int izz;
+  static G4double eye1[6], eye0[6], umo2, ajja, fact;
+  static G4double emhn, ecms;
+  static G4double rndm[2];
+  static G4double etax, pcms, etay, etaz;
+  static G4double corr, uran, unew, umax, umin;
+  static G4int ipro, ineu;
+  static G4double zjjz, ccou2, umin2, p2res, smom1[6], ddjja, gamcm,
     etacm, eepcm, sigma, ccoul[6];
-   G4double deltu, emnum, erncm, ddjjz, pcmsx, qnorm, zmass[6],
+  static G4double deltu, emnum, erncm, ddjjz, pcmsx, qnorm, zmass[6],
     pcmsy, pcmsz, phelp, plbpx, plbpy, plbpz;
-   G4int itemp;
-   G4double strun[6];
-   G4double epsav;
-   G4double energ0;
-   G4int imass;
-   G4double eex2nd, ueu3he, rnmas0, ratio2, eex1st, z2mass[6],
+  static G4int itemp;
+  static G4double strun[6];
+  static G4double epsav;
+  static G4double energ0;
+  static G4int imass;
+  static G4double eex2nd, ueu3he, rnmas0, ratio2, eex1st, z2mass[6],
     flkcou[6], thresh[6], smalla[6], bnmass[6], corrrr[6];
-   G4double rnmass, elbtot;
-   G4int jresid, jemiss;
-   G4double deudeu, protri, deupro, prprne, deuneu, prnene, etapcm;
-   G4double umxres, asmmax, asmmin;
-   G4double tmpvar, expsas, expsus;
-   G4int ncount;
-   G4double coslbp[3];
-   G4double exmass[6];
+  static G4double rnmass, elbtot;
+  static G4int jresid, jemiss;
+  static G4double deudeu, protri, deupro, prprne, deuneu, prnene, etapcm;
+  static G4double umxres, asmmax, asmmin;
+  static G4double tmpvar, expsas, expsus;
+  static G4int ncount;
+  static G4double coslbp[3];
+  static G4double exmass[6];
 
   static G4int ia[6] = { 1, 1, 2, 3, 3, 4 };
   static G4int iz[6] = { 0, 1, 1, 1, 2, 2 };
@@ -2260,7 +2259,7 @@ G4double G4MuonMinusCaptureAtRest::GetIsotopicMass(G4double a, G4double z)
   G4double ret_val;
 
   // Local variables
-  G4int n, ka0, iz0, kz0, izz;
+  static G4int n, ka0, iz0, kz0, izz;
 
   ka0 = NINT(a);
   kz0 = NINT(z);
@@ -2294,10 +2293,10 @@ G4double G4MuonMinusCaptureAtRest::GetIsotopicMass(G4double a, G4double z)
 void G4MuonMinusCaptureAtRest::Erup()
 {
   // Local variables
-   G4int i, m2, m3;
-   G4double fpart[6];
-   G4bool loppar;
-   G4double fpartt;
+  static G4int i, m2, m3;
+  static G4double fpart[6];
+  static G4bool loppar;
+  static G4double fpartt;
 
   // ---------------------------------------------------------------------*
   //                                                                      *
@@ -2352,7 +2351,7 @@ void G4MuonMinusCaptureAtRest::Erup()
 
 void G4MuonMinusCaptureAtRest::InitializeMuCapture()
 {
-   G4int i, j;
+  static G4int i, j;
 
   static G4double rmass[297] = {
     1.00000000000000, 1.25992104989487, 1.44224957030741,
@@ -3147,10 +3146,10 @@ G4double G4MuonMinusCaptureAtRest::LevelDensity(G4int jz, G4int jn,
   G4double ret_val, d__1;
 
   // Local variables
-   G4double aa;
-   G4int ja;
-   G4double zz, temp;
-   G4bool lasmll;
+  static G4double aa;
+  static G4int ja;
+  static G4double zz, temp;
+  static G4bool lasmll;
 
   // ---------------------------------------------------------------------*
   //                                                                      *
@@ -3221,7 +3220,7 @@ void G4MuonMinusCaptureAtRest::NuclearExcitation(G4double txi, G4double tyi,
   G4double d__1, d__2, d__3;
 
   // Local variables
-   G4double pnu, delm1, delm2, ekfer, pfcos, etest;
+  static G4double pnu, delm1, delm2, ekfer, pfcos, etest;
 
   // =======
   // === this routine interfaces to FLUKA routines to evaporate
@@ -3273,20 +3272,20 @@ void G4MuonMinusCaptureAtRest::DoMuCapture()
   G4int i__1, i__2;
 
   // Local variables
-   G4double emubnd;
-   G4double rndiso;
-   G4int ibtarm;
-   G4int nstak1;
-   G4int nstak2;
-   G4int k;
-   G4int is;
-   G4double cfe;
-   G4double eke;
-   G4double sfe, enu;
-   G4double txi, tyi, tzi;
-   G4double rndm[3];
-   G4double delm, polc, pols;
-   G4double bbtar, zztar, amntar1, amntar2;
+  static G4double emubnd;
+  static G4double rndiso;
+  static G4int ibtarm;
+  static G4int nstak1;
+  static G4int nstak2;
+  static G4int k;
+  static G4int is;
+  static G4double cfe;
+  static G4double eke;
+  static G4double sfe, enu;
+  static G4double txi, tyi, tzi;
+  static G4double rndm[3];
+  static G4double delm, polc, pols;
+  static G4double bbtar, zztar, amntar1, amntar2;
 
   static G4double abuiso[304] = {
     9.998500000000000e-01, 1.500000000000000e-04, 9.999987000000000e-01
@@ -3467,7 +3466,6 @@ void G4MuonMinusCaptureAtRest::DoMuCapture()
   atMassTarget = isomnm[is - 1];
   bbtar = (G4double) atMassTarget;
   zztar = (G4double) chargeTarget;
-  amntar1 = 0.0;
   if (atMassTarget != 1) {
     //  The following should be Done with the proper mass of the nuclide
     //        AMNTAR = BBTAR * AMUC12
@@ -3586,8 +3584,8 @@ void G4MuonMinusCaptureAtRest::MuEvaporation()
   G4double d__1;
 
   // Local variables
-   G4double eotest, etevap;
-   G4int ip, jp, itemp;
+  static G4double eotest, etevap;
+  static G4int ip, jp, itemp;
 
   // ---------------------------------------------------------------------*
   //                                                                      *
@@ -3700,7 +3698,7 @@ void G4MuonMinusCaptureAtRest::MuEvaporation()
 void G4MuonMinusCaptureAtRest::RanPolarAng(G4double *cs, G4double *si)
 {
   // Local variables
-   G4double rndm[1];
+  static G4double rndm[1];
 
   // --------------------------------------------------
   // *** RANDOM CHOICE OF ANGLE TETA (CS = COS(TETA),SI = SIN(TETA)
@@ -3722,8 +3720,8 @@ G4double G4MuonMinusCaptureAtRest::NuclearBindingEnergy(G4double a1,
   G4double ret_val;
 
   // Local variables
-   G4int n1, n2, ka1, ka2, iz1, iz2, kz1, kz2, izz1, izz2;
-   G4double enrg1, enrg2;
+  static G4int n1, n2, ka1, ka2, iz1, iz2, kz1, kz2, izz1, izz2;
+  static G4double enrg1, enrg2;
 
   ka1 = NINT(a1);
   kz1 = NINT(z1);
@@ -3769,8 +3767,8 @@ void G4MuonMinusCaptureAtRest::RanDirCos(G4double *wx, G4double *wy,
 					 G4double *wz)
 {
   // Local variables
-   G4double x, y, z, x2, y2, z2, cfe, sfe;
-   G4double rndm[2];
+  static G4double x, y, z, x2, y2, z2, cfe, sfe;
+  static G4double rndm[2];
 
   // ********************************************************************
   //     VERSION JUNE 81 BY             PERTTI AARNIO
@@ -3806,8 +3804,8 @@ void G4MuonMinusCaptureAtRest::RanDirCos(G4double *wx, G4double *wy,
 
 void G4MuonMinusCaptureAtRest::RanAzimuthalAng(G4double *sfe, G4double *cfe)
 {
-   G4double x, y, x2, y2;
-   G4double rndm[2];
+  static G4double x, y, x2, y2;
+  static G4double rndm[2];
 
   // ********************************************************************
   //     VERSION JUNE 81 BY             PERTTI AARNIO
