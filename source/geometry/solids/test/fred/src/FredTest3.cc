@@ -115,7 +115,10 @@ void FredTest3::RunTest( const G4VSolid *testVolume, G4std::ostream &logger )
 	// Output test parameters
 	//
 	time_t now = time(0);
-	G4String dateTime( ctime(&now) );		// AFAIK, this is standard c++
+        char timebuf[25];
+        timebuf[24]=0;
+        strncpy( ctime(&now), timebuf, 24 );
+	G4String dateTime( timebuf );
 	
 	logger << "% Fred test3 logged output " << dateTime << G4endl;
 	logger << "% target =    " << target << G4endl;
@@ -194,7 +197,10 @@ void FredTest3::RunTest( const G4VSolid *testVolume, G4std::ostream &logger )
 	}
 
 	now = time(0);
-	G4String dateTime2( ctime(&now) );		
+        char timebuf2[25];
+        timebuf2[24]=0;
+        strncpy( ctime(&now), timebuf2, 24 );
+	G4String dateTime2( timebuf2 );
 	logger << dateTime2 << G4endl;
 
 	logger << "% Statistics: points=" << nPoint << " errors reported=" << nError << G4endl;
@@ -247,6 +253,7 @@ G4int FredTest3::DebugError( const G4VSolid *testVolume, G4std::istream &logger,
 	formatter2 << G4std::setprecision(14);
 	formatter2 << "/gun/direction " << v.x() << " " << v.y() << " " << v.z() << " mm" << G4endl;
 	UI->ApplyCommand( commandBuffer );
+	return 0;
 }
 
 
@@ -269,6 +276,7 @@ G4int FredTest3::DebugInside( const G4VSolid *testVolume, G4std::istream &logger
 	// Call
 	//
 	EInside answer = testVolume->Inside( p );
+	return 0;
 }
 
 
@@ -291,6 +299,7 @@ G4int FredTest3::DebugToInP( const G4VSolid *testVolume, G4std::istream &logger,
 	// Call
 	//
 	G4double answer = testVolume->DistanceToIn( p );
+	return 0;
 }
 
 
@@ -317,6 +326,7 @@ G4int FredTest3::DebugToInPV( const G4VSolid *testVolume, G4std::istream &logger
 	p += answer*v;
 	
 	EInside inside = testVolume->Inside(p);
+	return 0;
 }
 
 
@@ -339,6 +349,7 @@ G4int FredTest3::DebugToOutP( const G4VSolid *testVolume, G4std::istream &logger
 	// Call
 	//
 	G4double answer = testVolume->DistanceToOut( p );
+	return 0;
 }
 
 
@@ -365,6 +376,7 @@ G4int FredTest3::DebugToOutPV( const G4VSolid *testVolume, G4std::istream &logge
 	p += answer*v;
 	
 	EInside inside = testVolume->Inside(p);
+	return 0;
 }
 
 

@@ -316,5 +316,6 @@ G4String FredTest3Messenger::GetCurrentValue( G4UIcommand *command )
 	}
 	
 	G4Exception( "Unrecognized command" );
+	return "";
 }
 	
