@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Quasmon.cc,v 1.24 2001-09-13 14:05:40 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.25 2001-09-13 15:16:06 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -3171,9 +3171,9 @@ void G4Quasmon::CalculateHadronizationProbabilities(G4double E, G4double kVal, G
                       //G4double Em=(E-nDelta)*(1.-frM/totMass);
                       //G4double Em=(E-nDelta-CB)*(1.-frM/totMass);
                       // *** START LIMITS ***
-                      G4double ne=1.-dked/(boundM+dkLS); // q_min=DEFOULT=bndM*(k-delta)/(bndM+2k)
+                      //G4double ne=1.-dked/(boundM+dkLS); // q_min=DEFOULT=bndM*(k-delta)/(bndM+2k)
                       //G4double ne=1.-dkd/(nucBM+dkLS); // q_min=DEFOULT=bndM*(k-delta)/(bndM+2k)
-                      //G4double ne=1.-dkedC/(boundM+dkLS); // q_min=DEFOULT=bM*(k-delta-CB)/(bM+2k)
+                      G4double ne=1.-dkedC/(boundM+dkLS); // q_min=DEFOULT=bM*(k-delta-CB)/(bM+2k)
                       //G4double ne=1.-dkdC/(nucBM+dkLS); // q_min=DEFOULT=bndM*(k-del-CB)/(bndM+2k)
 #ifdef pdebug
                       if(baryn<5) G4cout<<"G4Q::CHP:<qi_DEF>="<<ne<<",dked="<<dked<<",dkLS="<<dkLS
@@ -3365,9 +3365,9 @@ void G4Quasmon::CalculateHadronizationProbabilities(G4double E, G4double kVal, G
                       if(baryn<5)
 						G4cout<<"G4Q::CHP:kf="<<kf<<",mM2="<<minM2<<",rQ2="<<rQ2<<G4endl;
 #endif
-                      G4double lz=1.-dked/boundM;            // q_max=DEFAULT=k-delta
+                      //G4double lz=1.-dked/boundM;            // q_max=DEFAULT=k-delta
                       //G4double lz=1.-dkd/nucBM;              // q_max=DEFAULT=k-delta
-                      //G4double lz=1.-dkedC/boundM;           // q_max=DEFAULT=k-delta-CB
+                      G4double lz=1.-dkedC/boundM;           // q_max=DEFAULT=k-delta-CB
                       //G4double lz=1.-dkdC/nucBM;             // q_max=DEFAULT=k-delta-CB
 #ifdef pdebug
                       if(baryn<5)

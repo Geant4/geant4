@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QEnvironment.cc,v 1.24 2001-09-13 14:05:34 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.25 2001-09-13 15:16:04 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -2812,8 +2812,8 @@ G4QHadronVector* G4QEnvironment::Fragment()
   //G4double p2cut2=0.; // No cut for only two baryons
   //G4double p2cut2=0.; // No cut for only two baryons
   //if(envA>4) p2cut2=2700.*apa2;
-  //G4double p2cut2=2700.; //cut for only two baryons
-  //if(envA<16) p2cut2=0.;
+  G4double p2cut2=2700.; //cut for only two baryons
+  if(envA<16) p2cut2=0.;
   //
   G4int bfCountM=1;
   if(envA>8) bfCountM=(envA-1)/4;
@@ -2893,8 +2893,8 @@ G4QHadronVector* G4QEnvironment::Fragment()
 #ifdef pdebug
           if(nHadr==3)G4cout<<"G4QE::F:"<<pt<<",B="<<bB<<",f="<<bF<<",p="<<pCM2<<">"<<p2cut<<G4endl;
 #endif
-          if(!bF&&(bB==1||hB==1)&&bM+hM>tM+.001&&pCM2<p2cut)           // Only baryons == pcut
-		  //if(!bF&&(bB==1||hB==1)&&bM+hM>tM+.001&&(pCM2<p2cut&&nHadr>3||pCM2<p2cut2&&nHadr==3))
+          //if(!bF&&(bB==1||hB==1)&&bM+hM>tM+.001&&pCM2<p2cut)           // Only baryons == pcut
+		  if(!bF&&(bB==1||hB==1)&&bM+hM>tM+.001&&(pCM2<p2cut&&nHadr>3||pCM2<p2cut2&&nHadr==3))
 		  //if(!bF&&(bB==1||hB==1)&&bM+hM>tM+.001&&(pCM2<p2cut&&nHadr>3 ||
 		  //   pCM2<p2cut2&&nHadr==3&&bPDG>90000000))
           //if(!bF&&(bB<3||hB<3)&&bM+hM>tM+.001&&pCM2<p2cut)           // Only baryons == pcut

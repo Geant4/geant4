@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QNucleus.cc,v 1.14 2001-09-13 14:27:51 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.15 2001-09-13 15:16:05 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------
@@ -2806,13 +2806,10 @@ G4double G4QNucleus::CoulBarPenProb(const G4double& CB, const G4double& E,
   if(E<CB) return 0.;
   //else     return 1.;           // @@@@@ Over barrier reflection is closed @@@ !!! @@@
   //      Li6      C12           Al27
-  //else if(nA<7||nA>8&&nA<12) return 1.; // "OverBarrierReflection is closed" cond
-  //else if(nA<7||nA>8&&nA<12||nA>16&&nA<40) return 1.; // "OverBarrierReflection is closed" cond
+  else if(nA<7||nA>8&&nA<12||nA>16&&nA<40) return 1.; // "OverBarrierReflection is closed" cond
   //else if(nA>8&&nA<12||nA>16&&nA<40) return 1.; // "OverBarrierReflection is closed" Condition
   //else if(nA<12||nA>16&&nA<40) return 1.; // "OverBarrierReflection is closed" Condition
-  else if(nA<40) return 1.; // "OverBarrierReflection is closed" Condition
   //else if(nA<12) return 1.;    // @@@@@ Over barrier reflection is closed @@@ !!! @@@
-  //else if(nA>27) return 1.;    // @@@@@ Over barrier reflection is closed @@@ !!! @@@
   //if(B+B>Z+N+S) return 1.;
   //G4double wD=wellDebth*B;
   G4double wD=wellDebth;
@@ -2850,8 +2847,8 @@ G4double G4QNucleus::CoulBarPenProb(const G4double& CB, const G4double& E,
   G4double sR=0.;
   //if(nA<27) sR=sqrt(wD/(E+wD));
   //else      sR=sqrt((CB+wD)/(E+wD));
-  //sR=sqrt((CB+wD)/(E+wD));
-  sR=sqrt(wD/(E+wD));
+  sR=sqrt((CB+wD)/(E+wD));
+  //sR=sqrt(wD/(E+wD));
 #ifdef ppdebug
   G4cout<<"G4QN::CBPP:sR="<<sR<<",E="<<E<<",wD="<<wD<<",CB="<<CB<<",B="<<B<<",C="<<C<<G4endl;
 #endif
