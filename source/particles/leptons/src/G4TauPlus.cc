@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TauPlus.cc,v 1.1 1999-01-07 16:10:26 gunter Exp $
+// $Id: G4TauPlus.cc,v 1.2 1999-06-09 15:37:35 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -100,7 +100,7 @@ G4TauPlus::G4TauPlus(
 //             stable         lifetime    decay table 
 //
 G4TauPlus G4TauPlus::theTauPlus(
-		"tau+",     1.7771*GeV,       0.0*MeV,     1.*eplus, 
+		"tau+",    1.77705*GeV,   2.27e-9*MeV,     1.*eplus, 
 		    1,               0,             0,          
 		    0,               0,             0,             
 	     "lepton",              -1,             0,         -15,

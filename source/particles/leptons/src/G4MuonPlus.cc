@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuonPlus.cc,v 1.1 1999-01-07 16:10:25 gunter Exp $
+// $Id: G4MuonPlus.cc,v 1.2 1999-06-09 15:37:33 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,7 +74,7 @@ G4MuonPlus::G4MuonPlus(
 //               type    lepton number  baryon number   PDG encoding
 //             stable         lifetime    decay table 
 G4MuonPlus G4MuonPlus::theMuonPlus(
-		 "mu+",  0.1056584*GeV,       0.0*MeV,    +1.*eplus, 
+		 "mu+",  0.1056584*GeV, 2.99591e-16*MeV,   +1.*eplus, 
 		    1,               0,             0,          
 		    0,               0,             0,             
 	     "lepton",              -1,             0,         -13,
