@@ -1,0 +1,21 @@
+# $Id: testMars01.in,v 1.1 2001-12-13 14:58:40 kurasige Exp $
+#
+/control/verbose 2
+#
+/mydet/SelectMaterial Pb
+/run/particle/setCut 10 cm
+#
+/run/initialize
+/gun/direction 0. 0. 1.
+/gun/position 0. 0. -400. cm 
+/gun/particle neutron
+/gun/energy 1 GeV
+#
+#/event/verbose 1
+#/tracking/verbose 1
+/run/beamOn 1000
+#
+
+
+
+
