@@ -34,7 +34,7 @@
 //    *                                      *
 //    ****************************************
 //
-// $Id: BrachyDetectorConstructionIr.cc,v 1.5 2003-05-22 17:20:42 guatelli Exp $
+// $Id: BrachyDetectorConstructionIr.cc,v 1.6 2003-11-18 13:31:46 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -151,6 +151,7 @@ void BrachyDetectorConstructionIr::ConstructIridium(G4VPhysicalVolume* mother)
 
 void BrachyDetectorConstructionIr::CleanIridium()
 { 
+  
   delete simpleIridiumVisAtt; 
   simpleIridiumVisAtt = 0;
   

@@ -30,7 +30,7 @@
 //    *                                  *
 //    ************************************
 //
-// $Id: BrachyPhantomROGeometry.cc,v 1.6 2003-05-27 08:37:55 guatelli Exp $
+// $Id: BrachyPhantomROGeometry.cc,v 1.7 2003-11-18 13:31:46 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPhantomROGeometry.hh"
@@ -166,9 +166,9 @@ G4VPhysicalVolume* BrachyPhantomROGeometry::Build()
   // ...then Y  division
 
   G4Box *ROPhantomYDivision = new G4Box("ROPhantomYDivision",
-					halfZVoxelDimensionX, 
-					halfZVoxelDimensionX,
-					halfZVoxelDimensionX);
+					halfZVoxelDimensionZ, 
+					halfZVoxelDimensionZ,
+					halfZVoxelDimensionZ);
 
   G4LogicalVolume *ROPhantomYDivisionLog = new G4LogicalVolume(ROPhantomYDivision,
 							       dummyMat,
