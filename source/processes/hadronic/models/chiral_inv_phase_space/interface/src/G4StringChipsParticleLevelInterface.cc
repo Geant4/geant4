@@ -30,6 +30,8 @@
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 #include "G4LorentzRotation.hh"
+// #define CHIPSdebug
+// #define CHIPSdebug_1
 
 G4StringChipsParticleLevelInterface::G4StringChipsParticleLevelInterface()
 {
@@ -261,11 +263,22 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     nAU = (*current).second->GetDefinition()->GetAntiQuarkContent(2);
     nAS = (*current).second->GetDefinition()->GetAntiQuarkContent(3);
     G4QContent aProjectile(nD, nU, nS, nAD, nAU, nAS);
-//    G4cout << "Quark content: d="<<nD<<", u="<<nU<< ", s="<< nS << G4endl;
-//    G4cout << "Anti-quark content: anit-d="<<nAD<<", anti-u="<<nAU<< ", anti-s="<< nAS << G4endl;
-//    G4cout << "G4QContent is constructed"<<endl;
+
+#ifdef CHIPSdebug_1
+    G4cout << G4endl;
+    G4cout << "Quark content: d="<<nD<<", u="<<nU<< ", s="<< nS << G4endl;
+    G4cout << "Anti-quark content: anit-d="<<nAD<<", anti-u="<<nAU<< ", anti-s="<< nAS << G4endl;
+    G4cout << "G4QContent is constructed"<<endl;
+#endif
+
     theContents.push_back(aProjectile);
     G4LorentzVector * aVec = new G4LorentzVector(1./MeV*proj4Mom);
+
+#ifdef CHIPSdebug_1
+    G4cout << "projectile momentum = "<<*aVec<<G4endl;
+    G4cout << G4endl;
+#endif
+   
     theMomenta.push_back(aVec);
   }
   G4std::vector<G4QContent> theFinalContents;
