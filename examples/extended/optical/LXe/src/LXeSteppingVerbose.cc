@@ -31,13 +31,13 @@ void LXeSteppingVerbose::StepInfo()
     if( verboseLevel >= 3 ){
       G4cout << G4endl;    
       G4cout << std::setw( 5) << "Step#"      
-           << std::setw( 6) << "X" << std::setw(lengthLen+1)<<"." 
-	   << std::setw( 6) << "Y" << std::setw(lengthLen+1)<<"."
-	   << std::setw( 6) << "Z" << std::setw(lengthLen+1)<<"."
-	   << std::setw( 7) << "KineE" << std::setw(energyLen+1)<<"."
-	   << std::setw( 7) << "dEStep"<< std::setw(energyLen+1)<<"."
-	   << std::setw(10) << "StepLeng"<< std::setw(lengthLen+1)<<"."
-	   << std::setw(10) << "TrakLeng"<< std::setw(lengthLen+1)<<"."
+           << std::setw( 6) << "X" << std::setw(lengthLen+1)<<" " 
+	   << std::setw( 6) << "Y" << std::setw(lengthLen+1)<<" "
+	   << std::setw( 6) << "Z" << std::setw(lengthLen+1)<<" "
+	   << std::setw( 7) << "KineE" << std::setw(energyLen+1)<<" "
+	   << std::setw( 7) << "dEStep"<< std::setw(energyLen+1)<<" "
+	   << std::setw(10) << "StepLeng"<< std::setw(lengthLen+1)<<" "
+	   << std::setw(10) << "TrakLeng"<< std::setw(lengthLen+1)<<" "
 	   << std::setw(10) << "Volume"     
 	   << std::setw(10) << "Process"    << G4endl;	     
     }
@@ -142,13 +142,13 @@ G4int prec = G4cout.precision(3);
    G4int energyLen=+G4UnitDefinition::GetUnitsTable()[G4BestUnit(0,"Energy").GetIndexOfCategory()]->GetSymbMxLen();
 
    G4cout << std::setw( 5) << "Step#"      
-           << std::setw( 6) << "X" << std::setw(lengthLen+1)<<"." 
-	   << std::setw( 6) << "Y" << std::setw(lengthLen+1)<<"."
-	   << std::setw( 6) << "Z" << std::setw(lengthLen+1)<<"."
-	   << std::setw( 7) << "KineE" << std::setw(energyLen+1)<<"."
-	   << std::setw( 7) << "dEStep"<< std::setw(energyLen+1)<<"."
-	   << std::setw(10) << "StepLeng"<< std::setw(lengthLen+1)<<"."
-	   << std::setw(10) << "TrakLeng"<< std::setw(lengthLen+1)<<"."
+           << std::setw( 6) << "X" << std::setw(lengthLen+1)<<" " 
+	   << std::setw( 6) << "Y" << std::setw(lengthLen+1)<<" "
+	   << std::setw( 6) << "Z" << std::setw(lengthLen+1)<<" "
+	   << std::setw( 7) << "KineE" << std::setw(energyLen+1)<<" "
+	   << std::setw( 7) << "dEStep"<< std::setw(energyLen+1)<<" "
+	   << std::setw(10) << "StepLeng"<< std::setw(lengthLen+1)<<" "
+	   << std::setw(10) << "TrakLeng"<< std::setw(lengthLen+1)<<" "
 	   << std::setw(10) << "Volume"     
 	   << std::setw(10) << "Process"    << G4endl;	     
 
@@ -192,3 +192,4 @@ G4int prec = G4cout.precision(3);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
