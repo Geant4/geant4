@@ -264,7 +264,7 @@ bool G4HepRepSceneHandler::closeHepRep(bool final) {
     // if this is the final close, then there should not be any event pending to be written.
     if (final) {
         if (_eventInstanceTree != NULL) {
-            cerr << "WARNING: you probably use '/vis/viewer/endOfEventAction accumulate' and "
+            cerr << "WARNING: you probably used '/vis/viewer/endOfEventAction accumulate' and "
                  << "forgot to call /vis/viewer/update before exit. No event written." << endl;
         }
     } else {
