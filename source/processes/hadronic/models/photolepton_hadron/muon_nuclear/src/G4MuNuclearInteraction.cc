@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuNuclearInteraction.cc,v 1.1 2003-11-11 19:08:58 hpw Exp $
+// $Id: G4MuNuclearInteraction.cc,v 1.2 2004-11-09 14:17:53 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -503,7 +503,7 @@ G4VParticleChange* G4MuNuclearInteraction::PostStepDoIt(
 
    G4VParticleChange* aHadronicFS;
    aHadronicFS = theHadronicVertex.ApplyYourself(theTarget, gammaTrack);
-   delete aGamma;
+   // delete aGamma;
 
    G4int numSecondaries = aHadronicFS->GetNumberOfSecondaries();
    aParticleChange.SetNumberOfSecondaries(numSecondaries);
