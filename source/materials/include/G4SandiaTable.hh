@@ -5,9 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SandiaTable.hh,v 1.4 1999-12-15 14:50:50 gunter Exp $
+// $Id: G4SandiaTable.hh,v 1.5 1999-12-16 18:11:09 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+
+// class description
 //
+// This class is an interface to G4StaticSandiaData.
+// it provides - Sandia coeff for an element, given its Z
+//             - sandia coeff for a material, given a pointer to it
+//
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 //
 // 18.11.98 simplified public interface; new methods for materials.  mma
@@ -29,21 +36,25 @@ class G4Material;
 
 class G4SandiaTable
 {
-public:
+public:  // with description
 
     G4SandiaTable(G4int);	         
     G4SandiaTable(G4Material*);	         
    ~G4SandiaTable();
-   
+
+    //per atom of an Element:   
     static G4int     GetNbOfIntervals   (G4int Z);
     static G4double  GetSandiaCofPerAtom(G4int Z, G4int, G4int);
     static G4double* GetSandiaCofPerAtom(G4int Z, G4double energy);
     static G4double  GetIonizationPot   (G4int Z);
     static G4double  GetZtoA            (G4int Z);
     
+    //per volume of a material:
            G4int     GetMatNbOfIntervals()  {return fMatNbOfIntervals;};
            G4double  GetSandiaCofForMaterial(G4int,G4int);
            G4double* GetSandiaCofForMaterial(G4double energy);
+	   
+public:  // without description
 
 /////////////////////////////////////////////////////////////////////
 //

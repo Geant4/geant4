@@ -5,13 +5,11 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Element.hh,v 1.4 1999-12-15 14:50:49 gunter Exp $
+// $Id: G4Element.hh,v 1.5 1999-12-16 18:11:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
-//      ------------------- class G4Element -------------------
-//
-//                   Torre Wenaus, November 1995
+
+// class description
 //
 // An element is a chemical element either directly defined in terms of
 // its charactaristics: its name, symbol,
@@ -29,6 +27,7 @@
 //
 // Elements can be assembled singly or in mixtures into materials used
 // in volume definitions via the G4Material class.
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -69,7 +68,7 @@ typedef G4RWTPtrOrderedVector<G4Element> G4ElementTable;
 
 class G4Element
 {
-public:
+public:  // with description
 
     //
     // Constructor to Build an element directly; no reference to isotopes
@@ -100,32 +99,52 @@ public:
     //
     G4String GetName()   const {return fName;};
     G4String GetSymbol() const {return fSymbol;};
-    G4double GetZ()      const {return fZeff;};
-    G4double GetN()      const {return fNeff;};
-    G4double GetA()      const {return fAeff;};
+    G4double GetZ()      const {return fZeff;};     //atomic number
+    G4double GetN()      const {return fNeff;};     //number of nucleons
+    G4double GetA()      const {return fAeff;};     //mass of a mole
     
+    //the number of atomic shells in this element:
     G4int    GetNbOfAtomicShells() const {return fNbOfAtomicShells;};
+    //the binding energy of the shell :
     G4double GetAtomicShell(G4int) const;
-
+    
+    //number of isotopes constituing this element:
+    size_t  GetNumberOfIsotopes() const {return fNumberOfIsotopes;};
+    
+    //vector of pointers to isotopes constituing this element:
     G4IsotopeVector* GetIsotopeVector()    const {return theIsotopeVector;};
-    size_t           GetNumberOfIsotopes() const {return fNumberOfIsotopes;};
+    
+    //vector of relative abundance of each isotope:
     G4double* GetRelativeAbundanceVector() const {return fRelativeAbundanceVector;};
+    
     const G4Isotope* GetIsotope(G4int iso) const {return (*theIsotopeVector)[iso];};
 
+    //the (static) Table of Elements:
     static const  G4ElementTable* GetElementTable() {return &theElementTable;};
     static size_t GetNumberOfElements() {return theElementTable.length();};
+    //the index of this element in the Table:
     size_t GetIndex() const             {return fIndexInTable;};
     
+    //return  pointer to an element, given its name:
     static  G4Element* GetElement(G4String name);
-
+    
+    //Coulomb correction factor:
     G4double GetfCoulomb() const {return fCoulomb;};
+    
+    //Tsai formula for the radiation length:
     G4double GetfRadTsai() const {return fRadTsai;};
-
+    
+    //pointer to ionisation parameters:
     G4IonisParamElm* GetIonisation() const {return fIonisation;};
-   
+    
+    //
+    // printing methods
+    //    
     friend G4std::ostream& operator<<(G4std::ostream&, G4Element*);    
     friend G4std::ostream& operator<<(G4std::ostream&, G4Element&);    
     friend G4std::ostream& operator<<(G4std::ostream&, G4ElementTable);
+
+public:  // without description
     
     G4int operator==(const G4Element&) const;
     G4int operator!=(const G4Element&) const;

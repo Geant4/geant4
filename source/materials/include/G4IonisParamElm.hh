@@ -5,12 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonisParamElm.hh,v 1.3 1999-12-15 14:50:49 gunter Exp $
+// $Id: G4IonisParamElm.hh,v 1.4 1999-12-16 18:11:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+
+// class description
 //
-//      ------------------- class G4IonisParamElm -------------------
+// The class contains few (physical) quantities related to the Ionisation
+// process, for the Element defined by its atomic number Z
 //
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 // 09-07-98, data moved from G4Element. M.Maire
@@ -27,25 +31,35 @@
 
 class G4IonisParamElm
 {
-public:
+public:  // with description
 
     G4IonisParamElm(G4double Z);
    ~G4IonisParamElm();
 
     // retrieval methods
     
-    G4double  GetZ()        const {return fZ;};
-    G4double  GetZ3()       const {return fZ3;};
-    G4double  GetZZ3()      const {return fZZ3;};
-    G4double  GetlogZ3()    const {return flogZ3;};
+    G4double  GetZ()        const {return fZ;};       // atomic number Z
+    G4double  GetZ3()       const {return fZ3;};      // pow (Z,1/3)
+    G4double  GetZZ3()      const {return fZZ3;};     // pow (Z(Z+1),1/3)
+    G4double  GetlogZ3()    const {return flogZ3;};   // log(Z)/3
 
     G4double  GetTau0() const {return fTau0;};
-    G4double  GetTaul() const {return fTaul;};
+                       // 0.1*pow(Z,1/3)*MeV/proton_mass_c2
+    
+    G4double  GetTaul() const {return fTaul;};        // 2*MeV/proton mass
+    
     G4double  GetAlow() const {return fAlow;};
     G4double  GetBlow() const {return fBlow;};
     G4double  GetClow() const {return fClow;};
-    G4double  GetMeanExcitationEnergy()  const {return fMeanExcitationEnergy;};  
+                       // parameters for the low energy ion.loss
+    
+    G4double  GetMeanExcitationEnergy()  const {return fMeanExcitationEnergy;};
+                                        // 16*pow(Z,0.9)*eV 
+      
     G4double* GetShellCorrectionVector() const {return fShellCorrectionVector;};
+                                       // shell correction coefficients
+   
+public:  // without description
    
     G4int operator==(const G4IonisParamElm&) const;
     G4int operator!=(const G4IonisParamElm&) const;

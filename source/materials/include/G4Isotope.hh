@@ -5,19 +5,12 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Isotope.hh,v 1.3 1999-12-15 14:50:49 gunter Exp $
+// $Id: G4Isotope.hh,v 1.4 1999-12-16 18:11:09 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 // 
 // ------------------------------------------------------------
-//	GEANT 4 class header file 
-//
-//	For information related to this code contact:
-//	CERN, CN Division, ASD group
-//
-//      ----------------- class G4Isotope ------------------
-//
-//                 Torre Wenaus, November 1995
+
+// class description
 //
 // An isotope is a chemical isotope defined by its name,
 //                                                 Z (atomic number),
@@ -28,6 +21,7 @@
 // isotopes (an ordered vector of isotopes).
 //
 // Isotopes can be assembled into elements via the G4Element class.
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -51,7 +45,7 @@ typedef G4RWTPtrOrderedVector<G4Isotope> G4IsotopeTable;
 
 class G4Isotope
 {
- public:
+ public:  // with description
 
     // Make an isotope
     G4Isotope(const G4String& name,		//its name
@@ -83,6 +77,8 @@ class G4Isotope
     friend
     G4std::ostream& operator<<(G4std::ostream&, G4IsotopeTable);
      
+ public:  // without description
+ 
     G4int operator==(const G4Isotope &right) const;
     G4int operator!=(const G4Isotope &right) const;
          

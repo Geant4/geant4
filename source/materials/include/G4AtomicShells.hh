@@ -5,12 +5,23 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AtomicShells.hh,v 1.2 1999-12-15 14:50:49 gunter Exp $
+// $Id: G4AtomicShells.hh,v 1.3 1999-12-16 18:11:07 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+
+// class description
 //
-// Class consists of atomic subshell binding energies in   eV !!!
-// for first 100 elements
+// Class consists of atomic subshell binding energies for first 100 elements.
 //
+// The data were given from:
+//
+// I	from	Janni J.F. 1982 (I for F from estimation with formula).
+//
+// I(i)	from	T.A.Carlson, Photoelectron and Auger Spectroscopy,
+//		Plenum, New York, 1976, p.337.
+//
+//		a) CRC, Handbook of Chemistry and Physics, 73rd Edition,
+//	        	1992-1993
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 // 24-04-98, implementation of the first version, V. Grichine
@@ -29,7 +40,7 @@
 
 class G4AtomicShells 
 {
-public :
+public :  //with description
 
 static G4int    GetNumberOfShells(G4int Z);
 static G4double GetBindingEnergy (G4int Z, G4int SubshellNb);

@@ -5,13 +5,10 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StaticSandiaData.hh,v 1.3 1999-12-15 14:50:50 gunter Exp $
+// $Id: G4StaticSandiaData.hh,v 1.4 1999-12-16 18:11:09 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-// 
-// file G4StaticSandiaData.hh
-// File for static data of PhotoAbsorption cross section coefficients 
-// according Sandia parametrisation
 //
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 //
 // 09.11.98 simplified public interface; removed mixting stuf.  MMA
@@ -22,6 +19,13 @@
 #include"G4SandiaTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+// class description 
+// 
+// File for static data of PhotoAbsorption cross section coefficients 
+// according Sandia parametrisation
+//
+// const G4double G4SandiaTable::fSandiaTable[981][5]
 //
 // These are the coefficients from F. Biggs, R. Lighthill 'Analytical
 // Approximation for X-ray Cross Sections III', SAND-0070, May 1990.
@@ -55,7 +59,19 @@
 // Absolute Photoionization Cross-section Tables for Helium, Neon, Argon,
 // and Krypton in the VUV Spectral Regions, Atomic Data and Nuclear Data
 // Tables, 18(1976)497-508.
+//------------------------------------------------------------------------------
 //
+// Ionization potentials of first 100 elements in eV   
+//
+// const G4double G4SandiaTable::fIonizationPotentials[101]
+//
+// The most of ionization energies are taken from S. Ruben, Handbook of the
+// Elements, 3rd ed. (Open Court, La Salle, IL, 1985). 28 of the ionization
+// energies have been changed slightly to bring them up to date (changes
+// from W.C. Martin and B.N. Taylor of the National Institute os Standards
+// and Technology, January 1990). Here the ionization energy is the least
+// energy necessary to remove to infinity one electron from an atom of the
+// element.
 
 const G4double G4SandiaTable::fSandiaTable[981][5] = 
 {
