@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Transportation.cc,v 1.15 2001-04-13 01:07:26 gum Exp $
+// $Id: G4Transportation.cc,v 1.16 2001-06-01 13:26:59 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -208,10 +208,11 @@ AlongStepGetPhysicalInteractionLength(  const G4Track&  track,
 
      fTransportEndPosition = startPosition + geometryStepLength*startMomentumDir ;
 
-     // Momentum (& its direction) is unchanged
+     // Momentum direction, energy and polarisation are unchanged by transport
 
      fTransportEndMomentumDir   = startMomentumDir ; 
      fTransportEndKineticEnergy = track.GetKineticEnergy() ;
+     fTransportEndSpin          = track.GetPolarization();
      fParticleIsLooping         = false ;
      fMomentumChanged           = false ; 
   }
