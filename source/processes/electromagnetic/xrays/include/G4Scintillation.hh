@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Scintillation.hh,v 1.2 1999-10-30 00:40:01 gum Exp $
+// $Id: G4Scintillation.hh,v 1.3 1999-11-05 01:58:15 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,7 +18,7 @@
 // Version:     1.0
 // Created:     1998-11-07
 // Author:      Peter Gumplinger
-// Updated:     1999-10-29 add method and class decriptors
+// Updated:     1999-10-29 add method and class descriptors
 //
 // mail:        gum@triumf.ca
 //
