@@ -106,7 +106,7 @@ G4JpegProperty{
   int nColumn;
   int Dimension;
   int SamplePrecision;
-  char *Comment;
+  const char * Comment;
   int Format;
   u_char MajorRevisions;
   u_char MinorRevisions;
@@ -123,40 +123,40 @@ G4JpegProperty{
 class G4MemoryError
 {
   public:
-    G4MemoryError(int size, char* message)
+    G4MemoryError(int size, const char* message)
         {mSize = size;          mMessage = message;};
         int mSize;
-        char* mMessage;
+        const char* mMessage;
 };
 
 //IndexError
 class G4IndexError
 {
   public:
-    G4IndexError(int maxIndex, int errorIndex, char* mes)
+    G4IndexError(int maxIndex, int errorIndex, const char* mes)
         {mMaxIndex = maxIndex;  mErrorIndex = errorIndex;  mMessage = mes;};
         int mMaxIndex;
         int mErrorIndex;
-        char* mMessage;
+        const char* mMessage;
 };
 
 //BufferError
 class G4BufferError
 {
   public:
-    G4BufferError(char* mes)
+    G4BufferError(const char* mes)
         {mMessage = mes;};
-        char* mMessage;
+        const char* mMessage;
 };
 
 //DataFormatError
 class G4DataFormatError
 {
   public:
-    G4DataFormatError(void* address, char* message)
+    G4DataFormatError(void* address, const char* message)
         {mAddress = address;            mMessage = message;};
         void* mAddress;
-        char* mMessage;
+        const char* mMessage;
 };
 
 

@@ -1,7 +1,7 @@
 #include "G4RTJpeg.hh"
 #include "G4RTJpegMaker.hh"
 #include "G4RTJpegCoder.hh"
-#include <fstream.h>
+#include <g4std/fstream>
 
 G4RTJpegMaker::G4RTJpegMaker()
 {;}
@@ -23,7 +23,7 @@ void G4RTJpegMaker::CreateFigureFile(G4String fileName,
         aProperty.HDensity = 1;
         aProperty.VDensity = 1;
         aProperty.ExtensionCode = 0;
-				aProperty.Comment = "Geant4 Ray Tracer Version 1.0 by M.Asai K.Minamimoto C.Kishinaga";
+        aProperty.Comment = "Geant4 Ray Tracer Version 1.0 by M.Asai K.Minamimoto C.Kishinaga";
 
         aFigure.SetJpegProperty(aProperty);
         aFigure.DoCoding();
