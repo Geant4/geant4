@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RepresentationRelationshipWithTransformationCreator.hh,v 1.2 2000-01-21 13:45:30 gcosmo Exp $
+// $Id: G4RepresentationRelationshipWithTransformationCreator.hh,v 1.3 2000-11-09 16:35:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -40,7 +40,7 @@ class G4RepresentationRelationshipWithTransformationCreator
 
     void CreateG4Geometry(STEPentity&);
     void CreateSTEPGeometry(void*);
-    G4String Name()
+    const char* Name() const
       { return "Representation_Relationship_With_Transformation"; }
     static G4RepresentationRelationshipWithTransformationCreator GetInstance()
       { return csc; }

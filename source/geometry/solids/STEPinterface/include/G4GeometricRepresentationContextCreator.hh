@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GeometricRepresentationContextCreator.hh,v 1.2 2000-01-21 13:45:25 gcosmo Exp $
+// $Id: G4GeometricRepresentationContextCreator.hh,v 1.3 2000-11-09 16:35:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -39,7 +39,7 @@ class G4GeometricRepresentationContextCreator: private G4GeometryCreator
 
     void CreateG4Geometry(STEPentity&);
     void CreateSTEPGeometry(void*);
-    G4String Name() { return "Geometric_Representation_Context"; }
+    const char* Name() const { return "Geometric_Representation_Context"; }
     static G4GeometricRepresentationContextCreator GetInstance() { return csc; }
 
   // Members

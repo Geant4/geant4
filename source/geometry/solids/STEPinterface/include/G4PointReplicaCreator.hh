@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PointReplicaCreator.hh,v 1.2 2000-01-21 13:45:29 gcosmo Exp $
+// $Id: G4PointReplicaCreator.hh,v 1.3 2000-11-09 16:35:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -39,7 +39,7 @@ class G4PointReplicaCreator: private G4GeometryCreator
 
     void CreateG4Geometry(STEPentity&);
     void CreateSTEPGeometry(void* G4obj);
-    G4String Name() { return "Point_Replica"; }
+    const char* Name() const { return "Point_Replica"; }
     static G4PointReplicaCreator GetInstance() { return csc; }
 
   // Members

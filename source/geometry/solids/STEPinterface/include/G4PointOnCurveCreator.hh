@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PointOnCurveCreator.hh,v 1.2 2000-01-21 13:45:29 gcosmo Exp $
+// $Id: G4PointOnCurveCreator.hh,v 1.3 2000-11-09 16:35:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -39,7 +39,7 @@ class G4PointOnCurveCreator: private G4GeometryCreator
 
     void CreateG4Geometry(STEPentity&);
     void CreateSTEPGeometry(void* G4obj);
-    G4String Name() { return "Point_On_Curve"; }
+    const char* Name() const { return "Point_On_Curve"; }
     static G4PointOnCurveCreator GetInstance() { return csc; }
 
   // Members

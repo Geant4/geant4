@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AssemblyCreator.cc,v 1.5 2000-02-25 16:36:17 gcosmo Exp $
+// $Id: G4AssemblyCreator.cc,v 1.6 2000-11-09 16:35:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -35,16 +35,34 @@ G4AssemblyCreator::G4AssemblyCreator()
   G4GeometryTable::RegisterObject(this);
 }
 
-G4AssemblyCreator::G4AssemblyCreator(G4String fileName, G4String readerName)
+G4AssemblyCreator::G4AssemblyCreator(const G4AssemblyCreator& c)
 {
-  // Name of STEP file to read in, existance of file should be checked
-  //here also...
+  index = c.index;
+  StepReader = c.StepReader;
+  STEPfileName = c.STEPfileName;
+}
+
+G4AssemblyCreator& G4AssemblyCreator::operator=(const G4AssemblyCreator& c)
+{
+  if (&c == this) return *this;
+  
+  index = c.index;
+  StepReader = c.StepReader;
+  STEPfileName = c.STEPfileName;
+  
+  return *this;
+}
+
+G4AssemblyCreator::G4AssemblyCreator(const G4String& fileName,
+                                     const G4String& readerName)
+{
+  // Name of STEP file to read in, existance of file should be checked...
+  //
   STEPfileName = fileName;
 
-  // define type of STEP file reader to use
-  if(readerName == "NIST")
-    StepReader = new G4NISTStepReader();
-  //else...
+  // define type of STEP file reader to use (use else...)
+  //
+  if (readerName == "NIST")  StepReader = new G4NISTStepReader();
   
 }
 
@@ -144,7 +162,7 @@ void G4AssemblyCreator::CreateG4Geometry(STEPentity& sEntity)
     }
 
   }
-  else
+  else if (ShapeDefReps>0)
   {       
 
     const char* key = "Shape_Definition_Representation";

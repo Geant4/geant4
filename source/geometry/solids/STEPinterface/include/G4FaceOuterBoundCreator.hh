@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FaceOuterBoundCreator.hh,v 1.2 2000-01-21 13:45:20 gcosmo Exp $
+// $Id: G4FaceOuterBoundCreator.hh,v 1.3 2000-11-09 16:35:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -38,7 +38,7 @@ class G4FaceOuterBoundCreator: public G4FaceBoundCreator
   // Member functions
 
   void CreateSTEPGeometry(void* G4obj);
-  G4String Name() { return "Face_Outer_Bound"; }
+  const char* Name() const { return "Face_Outer_Bound"; }
   static G4FaceOuterBoundCreator GetInstance() { return csc; }
 
   // Members

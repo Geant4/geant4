@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StepFileReader.hh,v 1.3 2000-01-21 13:45:31 gcosmo Exp $
+// $Id: G4StepFileReader.hh,v 1.4 2000-11-09 16:35:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -30,10 +30,13 @@
 class G4StepFileReader
 {
   public:
-    virtual void ReadSTEPFile(G4String)=0;
+    G4StepFileReader(){;}
+    virtual ~G4StepFileReader(){;}
+
+    virtual void ReadSTEPFile(const char*)=0;
     virtual void SaveSTEPFile()=0;
     virtual void UpdateSTEPFile()=0;
-    virtual InstMgr GetInstanceManager()=0;
+    virtual InstMgr GetInstanceManager() const=0;
 };
 
 #endif

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineCurveWithKnotsCreator.hh,v 1.2 2000-01-21 13:45:10 gcosmo Exp $
+// $Id: G4BSplineCurveWithKnotsCreator.hh,v 1.3 2000-11-09 16:35:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -39,7 +39,7 @@ class G4BSplineCurveWithKnotsCreator: private G4GeometryCreator
 
       void CreateG4Geometry(STEPentity&);
       void CreateSTEPGeometry(void* G4obj);
-      G4String Name() { return "B_Spline_Curve_With_Knots"; }
+      const char* Name() const { return "B_Spline_Curve_With_Knots"; }
       static G4BSplineCurveWithKnotsCreator GetInstance() { return csc; }
 
     // Members

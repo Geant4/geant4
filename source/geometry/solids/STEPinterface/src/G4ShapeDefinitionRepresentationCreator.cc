@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ShapeDefinitionRepresentationCreator.cc,v 1.4 2000-02-25 16:36:20 gcosmo Exp $
+// $Id: G4ShapeDefinitionRepresentationCreator.cc,v 1.5 2000-11-09 16:35:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,6 +39,12 @@ void G4ShapeDefinitionRepresentationCreator::CreateG4Geometry(STEPentity& Ent)
   G4String attrName("used_representation");
   STEPattribute *Attr = GetNamedAttribute(attrName, Ent);
   STEPentity* TmpEnt = *Attr->ptr.c;
+
+#ifdef G4_STEPINTERFACE_DEBUG
+  G4cout << "G4ShapeDefinitionRepresentationCreator: "
+         << TmpEnt->EntityName() << G4endl;
+#endif
+
   void *tmp =G4GeometryTable::CreateObject(*TmpEnt);
   G4PlacedSolid* ps = (G4PlacedSolid*)tmp;
   if (!tmp)
@@ -47,23 +53,21 @@ void G4ShapeDefinitionRepresentationCreator::CreateG4Geometry(STEPentity& Ent)
 	   << "\tEntity NOT created." << G4endl;
 
   createdObject = ps;
-
 /*
   // Output messages
-  G4cout<<"Shape definition representation created with "
-	<<"the Advanced Brep shape :"<<G4endl;
+  G4cout << "Shape definition representation created with "
+         << "the Advanced Brep shape :" << G4endl;
 
-  G4cout<<" - BBox of the solid :"<<G4endl;
-  G4cout<< "    box min: "
-	<< ((G4BREPSolid*)ps->GetSolid())->GetBBox()->GetBoxMin().x()<< " "
-	<< ((G4BREPSolid*)ps->GetSolid())->GetBBox()->GetBoxMin().y()<< " "
-	<< ((G4BREPSolid*)ps->GetSolid())->GetBBox()->GetBoxMin().z()<< G4endl;
+  G4cout <<" - BBox of the solid :" << G4endl;
+  G4cout << "    box min: "
+	 << ((G4BREPSolid*)ps->GetSolid())->GetBBox()->GetBoxMin().x() << " "
+	 << ((G4BREPSolid*)ps->GetSolid())->GetBBox()->GetBoxMin().y() << " "
+	 << ((G4BREPSolid*)ps->GetSolid())->GetBBox()->GetBoxMin().z() << G4endl;
 
-  G4cout<< "    box max: "
-	<< ((G4BREPSolid*)ps->GetSolid())->GetBBox()->GetBoxMax().x()<< " "
-	<< ((G4BREPSolid*)ps->GetSolid())->GetBBox()->GetBoxMax().y()<< " "
-	<< ((G4BREPSolid*)ps->GetSolid())->GetBBox()->GetBoxMax().z()<< G4endl;
-
+  G4cout << "    box max: "
+	 << ((G4BREPSolid*)ps->GetSolid())->GetBBox()->GetBoxMax().x() << " "
+	 << ((G4BREPSolid*)ps->GetSolid())->GetBBox()->GetBoxMax().y() << " "
+	 << ((G4BREPSolid*)ps->GetSolid())->GetBBox()->GetBoxMax().z() << G4endl;
 */
 }
 

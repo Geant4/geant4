@@ -1,5 +1,6 @@
 #include "includes"
 #include "G4AssemblyCreator.hh"
+#include "G4Assembly.hh"
 
 int main(int argc,char** argv) 
 {
@@ -24,15 +25,19 @@ int main(int argc,char** argv)
   }
   G4AssemblyCreator MyAC(filename);
 
-  //  G4AssemblyCreator MyAC("stepfiles/CMSTracker.Step");
-  //G4AssemblyCreator MyAC("stepfiles/coil1.Step");    
   MyAC.ReadStepFile();
   STEPentity *ent=0;
   MyAC.CreateG4Geometry(*ent);
-  
+
+  void *tmp =  MyAC.GetCreatedObject();
+  G4Assembly assembly;
+  assembly.SetPlacedVector(*(G4PlacedVector*)tmp);
+  G4int solids = assembly.GetNumberOfSolids();
+  G4cout << "Total number of solids: " << solids << "." << G4endl;
+
     /*
-       // G4Placement* place = new G4Placement();
-    //MyAC.CreateSTEPGeometry(place);    
+    // G4Placement* place = new G4Placement();
+    // MyAC.CreateSTEPGeometry(place);    
 
     G4ThreeVec o(0,0,0);
     G4ThreeVec a(1,0,0);
@@ -44,7 +49,4 @@ int main(int argc,char** argv)
     MyAC.CreateSTEPGeometry(tor);
     */
     //  G4GeometryTable::PrintObjectNames();
-
-  
 }
-

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NISTStepReader.hh,v 1.3 2000-01-21 13:45:28 gcosmo Exp $
+// $Id: G4NISTStepReader.hh,v 1.4 2000-11-09 16:35:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -68,14 +68,14 @@ extern STEPentity *GetEntity (STEPnode *node, InstMgr *im);
 // This needs to be defined for the STEPfile reader
 extern void SchemaInit (Registry &);
 
-class G4NISTStepReader: public G4StepFileReader
+class G4NISTStepReader : public G4StepFileReader
 {
   public:
 
-    void ReadSTEPFile(G4String);
+    void ReadSTEPFile(const char*);
     void SaveSTEPFile();
     void UpdateSTEPFile();
-    InstMgr GetInstanceManager() { return InstanceList; }
+    InstMgr GetInstanceManager() const { return InstanceList; }
 
   private:
 

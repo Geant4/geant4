@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProductDefinitionShapeCreator.hh,v 1.2 2000-01-21 13:45:29 gcosmo Exp $
+// $Id: G4ProductDefinitionShapeCreator.hh,v 1.3 2000-11-09 16:35:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -40,7 +40,7 @@ class G4ProductDefinitionShapeCreator: private G4GeometryCreator
 
     void CreateG4Geometry(STEPentity&);
     void CreateSTEPGeometry(void*);
-    G4String Name() { return "Product_Definition_Shape"; }
+    const char* Name() const { return "Product_Definition_Shape"; }
     static G4ProductDefinitionShapeCreator GetInstance() { return csc; }
 
   // Members

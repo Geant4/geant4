@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GeometryCreator.cc,v 1.3 2000-01-21 13:46:02 gcosmo Exp $
+// $Id: G4GeometryCreator.cc,v 1.4 2000-11-09 16:35:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,8 +28,21 @@
 InstMgr G4GeometryCreator::instanceManager;
 G4int G4GeometryCreator::objectId = 0;
 
+G4GeometryCreator::G4GeometryCreator() {}
+G4GeometryCreator::~G4GeometryCreator() {}
+
+G4bool G4GeometryCreator::operator==(const G4GeometryCreator&)
+{
+  return 0;
+}
+
+void* G4GeometryCreator::GetCreatedObject()
+{
+  return createdObject;
+}
+
 STEPattribute*
-G4GeometryCreator::GetNamedAttribute(G4String& attrName, STEPentity& Ent)
+G4GeometryCreator::GetNamedAttribute(const G4String& attrName, STEPentity& Ent)
 {
   STEPattribute* attr;
 
@@ -43,13 +56,14 @@ G4GeometryCreator::GetNamedAttribute(G4String& attrName, STEPentity& Ent)
 	return attr;
     }
       
-   G4String err = "\nCannot find attribute " + attrName + " in entity " + Ent.EntityName();
+  G4String err = "\nCannot find attribute " + G4String(attrName)
+                 + " in entity " + Ent.EntityName();
   G4Exception(err);
   return 0; // NULL
 }
 
 STEPentity*
-G4GeometryCreator::GetNamedEntity(G4String& entName, STEPentity& Ent)
+G4GeometryCreator::GetNamedEntity(const G4String& entName, STEPentity& Ent)
 {
   // Ent is a complex entity
 
@@ -68,7 +82,8 @@ G4GeometryCreator::GetNamedEntity(G4String& entName, STEPentity& Ent)
 	    return subEnt;
 	}
      } 
-  G4String err = "\nCannot find entity " + entName + " in complex entity " + Ent.EntityName();
+  G4String err = "\nCannot find entity " + G4String(entName)
+                 + " in complex entity " + Ent.EntityName();
   G4Exception(err);
 
   return 0;    
@@ -82,6 +97,6 @@ G4int[][] G4GeometryCreator::GetIds(GenericAggregate& aggr)
     GenericAggrNode* gNode = (GenericAggrNode*)aggr->GetHead();
 
   SCLstring str;
-  G4String aggrStr = gNode->asStr(str); 
+  const char* aggrStr = gNode->asStr(str); 
 }
 */

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BoundedSurfaceCreator.hh,v 1.2 2000-01-21 13:45:12 gcosmo Exp $
+// $Id: G4BoundedSurfaceCreator.hh,v 1.3 2000-11-09 16:35:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -39,7 +39,7 @@ class G4BoundedSurfaceCreator: private G4GeometryCreator
 
     void CreateG4Geometry(STEPentity&);
     void CreateSTEPGeometry(void*);
-    G4String Name() { return "Bounded_Surface"; }
+    const char* Name() const { return "Bounded_Surface"; }
     static G4BoundedSurfaceCreator GetInstance() { return csc; }
 
   // Members

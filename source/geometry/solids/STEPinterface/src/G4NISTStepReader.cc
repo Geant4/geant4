@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NISTStepReader.cc,v 1.3 2000-01-21 13:46:03 gcosmo Exp $
+// $Id: G4NISTStepReader.cc,v 1.4 2000-11-09 16:35:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,7 +30,7 @@
   #include <OpenOODB.h>
 #endif
 
-void G4NISTStepReader::ReadSTEPFile(G4String STEPfilename)
+void G4NISTStepReader::ReadSTEPFile(const char* STEPfilename)
 {
   // Reads the Step file into the nist toolkit class library 
     
