@@ -1,7 +1,7 @@
-# $Id: binmake.gmk,v 1.62 2001-06-22 06:27:09 morita Exp $
+# $Id: binmake.gmk,v 1.63 2001-06-22 16:11:21 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
-#                          Gabriele Cosmo, 25/06/1998.
+#    First implementation: Gabriele Cosmo, 25/06/1998.
 # ----------------------------------------------------------
 
 ifndef LDFLAGS
@@ -10,12 +10,20 @@ endif
 
 G4LIBDIR := $(G4LIB)/$(G4SYSTEM)
 
+# Define variable checking for existence of centrally installed headers.
+# If check will be true, avoid explicit definition of paths to INCFLAGS.
+#
+# G4INCLUDE_EXEC := $(shell [ -r $(G4INCLUDE)/globals.hh ] && echo 1)
+
 include $(G4INSTALL)/config/G4UI_USE.gmk
 include $(G4INSTALL)/config/G4VIS_USE.gmk
 include $(G4INSTALL)/config/interactivity.gmk
 include $(G4INSTALL)/config/analysis.gmk
 
 ifndef INCFLAGS
+# ifeq ($(G4INCLUDE_EXEC),1)
+#   INCFLAGS := -I$(G4INCLUDE)
+# else
   INCFLAGS := \
               -I$(G4BASE)/global/management/include \
               -I$(G4BASE)/global/HEPRandom/include \
@@ -83,9 +91,11 @@ ifndef INCFLAGS
               -I$(G4BASE)/graphics_reps/include \
               -I$(G4BASE)/intercoms/include \
               -I$(G4BASE)/g3tog4/include
+# endif
 endif
 
 ifdef G4ODBMS
+# ifneq ($(G4INCLUDE_EXEC),1)
   INCFLAGS += \
               -I$(G4BASE)/persistency/global/include \
               -I$(G4BASE)/persistency/digits+hits/hits/include \
@@ -95,8 +105,9 @@ ifdef G4ODBMS
               -I$(G4BASE)/persistency/geometry/solids/CSG/include \
               -I$(G4BASE)/persistency/geometry/solids/Boolean/include \
               -I$(G4BASE)/persistency/geometry/management/include \
-              -I$(G4BASE)/persistency/management/include \
-              -I$(G4SCHEMA_INCLUDE) \
+              -I$(G4BASE)/persistency/management/include
+# endif
+  INCFLAGS += -I$(G4SCHEMA_INCLUDE) \
               -I$(OBJY_DIR)/include \
               -I$(HEP_ODBMS_DIR)/include \
               -DHep_HAS_BUILDIN_BOOL_CONSTANTS
@@ -125,8 +136,8 @@ ifdef G4EXLIB
   LDFLAGS += -L$(G4LIBDIR)
   ifdef SHAREDLIBS
     ifdef G4RUNPATHOPTION
-#        for the example dependant directory, keep the path to the shared lib 
-#          in the executable.
+#         For the example dependent directory, keep the 
+#         path to the shared lib in the executable.
       LDFLAGS += $(G4RUNPATHOPTION)$(G4LIBDIR)
     endif
   endif
