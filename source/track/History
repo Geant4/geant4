@@ -1,4 +1,4 @@
-$Id: History,v 1.50 2002-12-16 11:59:36 gcosmo Exp $
+$Id: History,v 1.51 2003-01-24 16:20:21 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jan. 24, 02  G.Cosmo  (track-V05-00-01)
+- Fix in G4ParticleChangeForTransport::UpdateStepForPostStep().
+  Added call for setting the material-cuts-couple for pPostStepPoint
+  (V.Ivantchenko).
 
 Dec. 16, 02  G.Cosmo  (track-V05-00-00)
 - Merged branch "geant4-04-01-ref-02-cuts-branch" to HEAD.
