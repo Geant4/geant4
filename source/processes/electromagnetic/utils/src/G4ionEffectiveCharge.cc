@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.cc,v 1.3 2004-08-26 17:59:52 vnivanch Exp $
+// $Id: G4ionEffectiveCharge.cc,v 1.4 2004-09-13 09:19:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,6 +35,7 @@
 // Creation date: 07.05.2002
 //
 // Modifications:
+// 12.09.2004 Set low energy limit to 1 keV (V.Ivanchenko) 
 //
 
 // -------------------------------------------------------------------
@@ -53,7 +54,8 @@ G4ionEffectiveCharge::G4ionEffectiveCharge()
 {
   chargeCorrection = 1.0;
   energyHighLimit  = 25.*MeV;
-  energyLowLimit   = 3.25*keV;
+  //  energyLowLimit   = 3.25*keV;
+  energyLowLimit   = 1.0*keV;
   energyBohr       = 25.*keV;
   massFactor       = amu_c2/(proton_mass_c2*keV);
 }

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.12 2004-08-11 14:13:52 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.13 2004-09-13 09:19:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -38,6 +38,7 @@
 // 30-06-04 make destructor virtual (V.Ivanchenko)
 // 09-08-04 optimise integral option (V.Ivanchenko)
 // 11-08-04 add protected methods to access cuts (V.Ivanchenko)
+// 09-09-04 Bug fix for the integral mode with 2 peaks (V.Ivanchneko)
 //
 // Class Description:
 //
@@ -277,10 +278,14 @@ inline void G4VEmProcess::ComputeLambda(G4double e)
     preStepLambda = GetLambda(e);
   } else {
     aboveCSmax  = true;
-    e *= lambdaFactor;
-    if(e > mfpKinEnergy) {
-      mfpKinEnergy = e;
-      preStepLambda = GetLambda(e);
+    G4double e1 = e*lambdaFactor;
+    if(e1 > mfpKinEnergy) {
+      preStepLambda  = GetLambda(e);
+      G4double preStepLambda1 = GetLambda(e1);
+      if(preStepLambda1 > preStepLambda) {
+        mfpKinEnergy = e1;
+        preStepLambda = preStepLambda1;
+      }
     } else {
       preStepLambda = theCrossSectionMax[currentMaterialIndex];
     }
