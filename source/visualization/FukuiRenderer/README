@@ -1,12 +1,11 @@
 << Portability >>
 
-(1) --- Linux, DEC, HP, AIX, Solaris, IRIX ---
+Compilation of DAWN-file and DAWN-network drivers 
+are confirmed at the following platforms:
 
-    OK by default.
-    For Solaris, we assume that you use SUN-CC as G4SYSTEM. 
-    For IRIX,    we assume that you use SGI-CC as G4SYSTEM. 
+  Linux, DEC, HP, AIX, Solaris, IRIX 
 
-#endif
+
 
 
 
