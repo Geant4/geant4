@@ -21,6 +21,7 @@
 #
 #/mydet/SelectDetector b1Sb2
 #
+/mydet/SelectDetector TwistedBox
 #
 /event/printModulo 100000
 /run/beamOn 1000000
