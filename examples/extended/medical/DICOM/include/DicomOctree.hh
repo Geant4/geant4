@@ -4,6 +4,7 @@
 #include "globals.hh"
 #include "DicomOctreeNode.hh"
 #include "DicomOctreeMiddleNode.hh"
+#include "DicomOctreeTerminalNode.hh"
 //---------------------------------------------------------------------------
 ///  Octree encapsulates a volumetric compressed representation of the
 /// vector field used for the reconstruction of a 3D model from multiple
@@ -16,9 +17,9 @@
 /// that the resolution = 2^mNoLevels.
 
 class DicomOctreeMiddleNode;
+class DicomOctreeTerminalNode;
 class Octree
 {
-
 public:
   
   Octree( G4int noLevels, G4double size );
