@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test19.cc,v 1.5 2000-05-22 07:26:20 johna Exp $
+// $Id: test19.cc,v 1.6 2000-05-22 07:43:37 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,6 +25,10 @@
 #include "MyPrimaryGeneratorAction.hh"
 #include "MyEventAction.hh"
 #include "MySteppingAction.hh"
+
+#include "G4VTreeGraphicsScene.hh"
+#include "G4PhysicalVolumeModel.hh"
+#include "G4ModelingParameters.hh"
 
 #include "G4StateManager.hh"
 
@@ -114,6 +118,20 @@ int main (int argc, char** argv) {
   runManager -> SetUserAction (new MyEventAction);
   runManager -> SetUserAction (new MySteppingAction);
 
+  //Initialize G4 kernel
+  runManager->Initialize();
+
+  // Demonstration of G4VTreeGraphicsScene (DTREE).
+  G4VTreeGraphicsScene treeDump;
+  G4VPhysicalVolume* world =
+    G4TransportationManager::GetTransportationManager()
+    ->GetNavigatorForTracking()->GetWorldVolume();
+  G4PhysicalVolumeModel worldModel(world);
+  G4ModelingParameters modelingParams;  // Default modeling parameters.
+  worldModel.SetModelingParameters(&modelingParams);
+  worldModel.DescribeYourselfTo(treeDump);
+
+  // Instantiate and initialise Visualization Manager.
   G4VisManager* visManager = new MyVisManager;
   visManager -> SetVerboseLevel (Verbose);
   visManager -> Initialize ();

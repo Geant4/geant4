@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2000-05-22 07:28:22 johna Exp $
+$Id: History,v 1.6 2000-05-22 07:43:33 johna Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
@@ -8,6 +8,7 @@ History file for visualization/test subdirectory
 - Evgeni's node positions to avoid shared faces/edges in
   MyDetectorConstruction.cc.
 - Changed colour of intercepts in MySteppingAction.cc.
+- Demonstrated G4VTreeGraphicsScene in test19.cc.
 
 12th April 2000  John Allison  vis-V01-01-01
 - Added more boolean shapes and window to test.
