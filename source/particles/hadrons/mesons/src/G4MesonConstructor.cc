@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MesonConstructor.cc,v 1.2 1999-12-15 14:51:06 gunter Exp $
+// $Id: G4MesonConstructor.cc,v 1.3 2000-02-25 11:38:03 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,7 +23,6 @@
 #include "G4PionZero.hh"
 #include "G4Eta.hh"
 #include "G4EtaPrime.hh"
-#include "G4RhoZero.hh"
 
 #include "G4KaonPlus.hh"
 #include "G4KaonMinus.hh"
@@ -70,7 +69,6 @@ void G4MesonConstructor::ConstructLightMesons()
   G4PionZero::PionZeroDefinition();
   G4Eta::EtaDefinition();
   G4EtaPrime::EtaPrimeDefinition();
-  G4RhoZero::RhoZeroDefinition();
   G4KaonPlus::KaonPlusDefinition();
   G4KaonMinus::KaonMinusDefinition();
   G4KaonZero::KaonZeroDefinition();
