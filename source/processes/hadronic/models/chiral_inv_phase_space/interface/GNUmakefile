@@ -21,7 +21,12 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/util/include \
             -I$(G4BASE)/processes/hadronic/cross_sections/include/ \
             -I$(G4BASE)/processes/hadronic/models/generator/util/include \
+            -I$(G4BASE)/processes/hadronic/models/generator/high_energy/include \
             -I$(G4BASE)/processes/hadronic/models/generator/management/include \
+            -I$(G4BASE)/processes/hadronic/models/generator/quark_gluon_string/include \
+            -I$(G4BASE)/processes/hadronic/models/generator/string_common/include \
+            -I$(G4BASE)/processes/hadronic/models/generator/string_fragmentation/include \
+            -I$(G4BASE)/processes/hadronic/models/generator/diffractive_string/include \
             -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/interface/include \
             -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/body/include \
             -I$(G4BASE)/particles/management/include \
