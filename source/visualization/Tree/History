@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2004-09-13 20:57:02 johna Exp $
+$Id: History,v 1.15 2004-09-13 21:04:10 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -35,6 +35,8 @@ History file for visualization/Tree sub-category
     each daughter and then adding the mass of the daughter, and so on
     down the heirarchy.  Uses G4PhysicalVolumeMassScene.
   Added option to write to file (/vis/ASCIITree/set/outFile).
+- Minor changes to comments in header files of G4VTreeScenehandler and
+  G4GAGTreeScenehandler.
 
 6th November 2003  John Allison  (vis-V05-02-03)
 - Improved printing.
