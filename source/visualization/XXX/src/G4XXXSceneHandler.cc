@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.cc,v 1.7 2002-10-24 15:18:24 johna Exp $
+// $Id: G4XXXSceneHandler.cc,v 1.8 2002-10-28 11:14:56 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -209,24 +209,34 @@ void G4XXXSceneHandler::AddThis(const G4VTrajectory& traj) {
     "G4XXXSceneHandler::AddThis(const G4VTrajectory& traj) called."
 	 << G4endl;
 #endif
-  const G4std::vector<G4AttDef>* attDefs = traj.GetAttDefs();
-  G4std::vector<G4AttValue>* attValues = traj.GetAttValues();
-  G4std::vector<G4AttValue>::iterator i;
-  for (i = attValues->begin(); i != attValues->end(); ++i) {
-    G4std::vector<G4AttDef>::const_iterator j;
-    for (j = attDefs->begin(); j != attDefs->end(); ++j) {
-      if (j->GetName() == i->GetName()) break;
-    }
-    if (j == attDefs->end()) {
-      G4cout << "WARNING: No matching G4AttDef for "
-	     << i->GetName() << ": " << i->GetValue()
+  G4std::vector<G4AttValue>* attValues = traj.CreateAttValues();
+  if (attValues) {
+    const G4std::map<G4String,G4AttDef>* attDefs = traj.GetAttDefs();
+    if (!attDefs) {
+      G4cout <<
+	"  ERROR: no attribute definitions for attribute values."
 	     << G4endl;
     }
     else {
-      G4cout << "  " << j->GetDesc() << ": " << i->GetValue() << G4endl;
+      G4std::vector<G4AttValue>::iterator iAttVal;
+      for (iAttVal = attValues->begin();
+	   iAttVal != attValues->end(); ++iAttVal) {
+	G4std::map<G4String,G4AttDef>::const_iterator iAttDef =
+	  attDefs->find(iAttVal->GetName());
+	if (iAttDef == attDefs->end()) {
+	  G4cout <<
+	    "  WARNING: no matching definition for attribute \""
+		 << iAttVal->GetName() << "\", value: "
+		 << iAttVal->GetValue() << G4endl;
+	}
+	else {
+	  G4cout << "  " << iAttDef->second.GetDesc() << ": "
+		 << iAttVal->GetValue() << G4endl;
+	}
+      }
     }
+    delete attValues;  // AttValues must be deleted by the user.
   }
-  delete attValues;  // AttValues must be deleted by the user.
 }
 
 void G4XXXSceneHandler::AddThis(const G4VHit& hit) {
