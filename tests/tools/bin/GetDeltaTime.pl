@@ -24,15 +24,36 @@ print "TestName = $TestName\n";
     
     while(<ERRFILE>) {
 	if ($ENV{'G4SYSTEM'} eq 'Linux-g++' || $ENV{'G4SYSTEM'} eq 'Linux-egcs') {
+	    
+#	    print "OK\n";
 # It's very dependent on CPU load! Need to use user+system.
 #	    if (/(\d+)\:(\d+)\.(\d+)elapsed/) {
 	    if (/(\d+)\.(\d+)user/) {
 		
-		$sec = $1*60+$2;
-		$deltatime = "$sec.$3";
+		$usertime = "$1.$2";
 		
-		print "deltatime=$deltatime\n";
+#		print "usertime=$usertime\n";
+#		print "usertime-1=",$usertime-1,"\n";
+	    } else {
+		$usertime=0;
 	    }
+
+	    if (/(\d+)\.(\d+)system/) {
+		
+		$systemtime = "$1.$2";
+		
+#		print "systemtime=$systemtime\n";
+#		print "systemtime-1=",$systemtime-1,"\n";
+	    } else {
+		$systemtime=0;
+	    }
+	    
+	    $deltatime = $usertime + $systemtime;
+#	    print "$deltatime\n";
+	    if ( $deltatime ne 0) {
+		print "$TestName: deltatime = ",$deltatime,"\n";
+	    }
+
 	} else {
 	    if (/^real(\s+)(\d+)\.(\d+)/) {
 		
@@ -45,7 +66,6 @@ print "TestName = $TestName\n";
     
     close(ERRFILE);
 
-print "$TestName: deltatime=$deltatime\n";
 
 }
     
