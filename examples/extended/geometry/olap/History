@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2002-06-05 16:01:49 gcosmo Exp $
+$Id: History,v 1.4 2003-02-19 07:59:32 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+February, 19th, 2003  G.Cosmo - olapex-V05-00-00
+- Removed redundant inclusion of SystemOfUnits.h.
+  Now using CLHEP headers.
 
 June 5th, 2002  M.Liendl - olapex-V04-00-01
 - Updated README.
