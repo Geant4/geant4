@@ -25,26 +25,18 @@
 // from: geant4/source/processes/electromagnetic/lowenergy/test/
 //
 // execute the following lines _before_ gmake, 
-// select the Anaphe version you want to use (4.0.1-sec for RH61 "old" compiler,
-// 4.0.1 for RH61, new compiler (gcc-2.95.2)):
+// source /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/setupAnaphe
 //
-// export PATH=$PATH:/afs/cern.ch/sw/lhcxx/specific/redhat61/egcs_1.1.2/4.0.1-sec/bin
-// source /afs/cern.ch/sw/lhcxx/share/LHCXX/4.0.1-sec/install/sharedstart.sh
+// or, for [t]csh fans:
 //
-// (for the new compiler, use (sh derivates):
-// export PATH=$PATH:/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/4.0.1/bin
-// source /afs/cern.ch/sw/lhcxx/share/LHCXX/4.0.1/install/sharedstart.sh
-// )
+// source /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/setupAnaphe.csh
 //
-// or, for [t]csh fans (still "old" compiler):
-//
-// setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat61/egcs_1.1.2/4.0.1-sec/bin
-// source /afs/cern.ch/sw/lhcxx/share/LHCXX/4.0.1-sec/install/sharedstart.csh
+// both assume that you have the correct PATH to the compiler
 //
 // [gmake and run your simulation]
 //
 // to start Lizard:
-// startLizard.sh --noLicense  
+// /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/lizard
 //
 // see also: http://cern.ch/Anaphe 
 //
@@ -70,7 +62,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ComptonTest.cc,v 1.18 2002-06-25 13:12:56 gunter Exp $
+// $Id: G4ComptonTest.cc,v 1.19 2002-11-28 13:17:17 pfeiffer Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -86,6 +78,7 @@
 //      Creation date: 2 May 2001
 //
 //      Modifications: 
+//      28 Nov 2002  AP  update to AIDA 3 
 //      14 Sep 2001  AP  Moved histograms to Lizard 
 //      16 Sep 2001  AP  Moved ntuples to Lizard 
 //
@@ -123,18 +116,7 @@
 // New Histogramming (from AIDA and Anaphe):
 #include <memory> // for the auto_ptr(T>
 
-#include "AIDA/IAnalysisFactory.h"
-
-#include "AIDA/ITreeFactory.h"
-#include "AIDA/ITree.h"
-
-#include "AIDA/IHistogramFactory.h"
-#include "AIDA/IHistogram1D.h"
-#include "AIDA/IHistogram2D.h"
-#include "AIDA/IHistogram3D.h"
-
-#include "AIDA/ITupleFactory.h"
-#include "AIDA/ITuple.h"
+#include "AIDA/AIDA.h"
 
 int main()
 {
@@ -148,55 +130,57 @@ int main()
   // ---- HBOOK initialization
 
   // Creating the analysis factory
-  G4std::auto_ptr< IAnalysisFactory > af( AIDA_createAnalysisFactory() );
+  G4std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
 
   // Creating the tree factory
-  G4std::auto_ptr< ITreeFactory > tf( af->createTreeFactory() );
+  G4std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
 
   // Creating a tree mapped to a new hbook file.
-  G4std::auto_ptr< ITree > tree( tf->create( "comptonhisto.hbook", false, false, "hbook" ) );
+  bool readOnly = false;
+  bool createFile = true;
+  G4std::auto_ptr< AIDA::ITree > tree( tf->create( "comptonhisto.hbook", "hbook", readOnly, createFile ) );
   G4std::cout << "Tree store : " << tree->storeName() << G4std::endl;
 
 
   // Next create the nTuples using the factory and open it for writing
   // Creating a tuple factory, whose tuples will be handled by the tree
-  G4std::auto_ptr< ITupleFactory > tpf( af->createTupleFactory( *tree ) );
+  G4std::auto_ptr< AIDA::ITupleFactory > tpf( af->createTupleFactory( *tree ) );
 
   // ---- primary ntuple ------
   // If using Anaphe HBOOK implementation, there is a limitation on the length of the
   // variable names in a ntuple
-  ITuple* ntuple1 = tpf->create( "1", "Primary tuple", 
+  AIDA::ITuple* ntuple1 = tpf->create( "1", "Primary tuple", 
 			     "float initen, eChng, dedx, dedxNow, pxChng, pyChng, pzChng, pChng, thChng, nElec, nPos, nPhot" );
 
 
   // ---- secondary ntuple ------   
-  ITuple* ntuple2 = tpf->create( "2", "Secondary tuple", 
+  AIDA::ITuple* ntuple2 = tpf->create( "2", "Secondary tuple", 
 			     "float px,py,pz,p,e,eKin,theta,phi,partTyp" );
 
 
   // ---- secondaries histos ----
   // Creating a histogram factory, whose histograms will be handled by the tree
-  G4std::auto_ptr< IHistogramFactory > hf( af->createHistogramFactory( *tree ) );
+  G4std::auto_ptr< AIDA::IHistogramFactory > hf( af->createHistogramFactory( *tree ) );
 
   // Creating an 1-dimensional histogram in the root directory of the tree
 
-  IHistogram1D* hEKin;
-  hEKin = hf->create1D("10","Kinetic Energy", 100,0.,10.);
+  AIDA::IHistogram1D* hEKin;
+  hEKin = hf->createHistogram1D("10","Kinetic Energy", 100,0.,10.);
   
-  IHistogram1D* hP;
-  hP = hf->create1D("20","Momentum", 100,0.,10.);
+  AIDA::IHistogram1D* hP;
+  hP = hf->createHistogram1D("20","Momentum", 100,0.,10.);
   
-  IHistogram1D* hNSec;
-  hNSec = hf->create1D("30","Number of secondaries", 10,0.,10.);
+  AIDA::IHistogram1D* hNSec;
+  hNSec = hf->createHistogram1D("30","Number of secondaries", 10,0.,10.);
   
-  IHistogram1D* hDeposit;
-  hDeposit = hf->create1D("40","Local energy deposit", 100,0.,10.);
+  AIDA::IHistogram1D* hDeposit;
+  hDeposit = hf->createHistogram1D("40","Local energy deposit", 100,0.,10.);
  
-  IHistogram1D* hTheta;
-  hTheta = hf->create1D("50","Theta", 100,0.,pi);
+  AIDA::IHistogram1D* hTheta;
+  hTheta = hf->createHistogram1D("50","Theta", 100,0.,pi);
 
-  IHistogram1D* hPhi;
-  hPhi = hf->create1D("60","Phi", 100,-pi,pi);
+  AIDA::IHistogram1D* hPhi;
+  hPhi = hf->createHistogram1D("60","Phi", 100,-pi,pi);
 
   // end NEW
   // ================================================================================
