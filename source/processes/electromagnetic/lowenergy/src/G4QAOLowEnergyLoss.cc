@@ -172,13 +172,12 @@ G4double G4QAOLowEnergyLoss::EnergyLoss(const G4Material* material,
                                               G4double zParticle) const 
 {
   G4int nbOfShell = GetNumberOfShell(material);
-
+  if(nbOfShell < 1) nbOfShell = 1;
+  
   //G4int iz = (G4int)(material->GetZ());
   //if(iz < 1) iz = 1;
   //else if(iz > 100) iz = 100;
   //G4int nbOfShell = fNumberOfShells[iz];
-  
-  if(nbOfShell < 1) nbOfShell = 1;
   
   //  G4cout << " E(MeV)= " << kineticEnergy/MeV << " n= " 
   //       << nbOfShell 
@@ -186,17 +185,17 @@ G4double G4QAOLowEnergyLoss::EnergyLoss(const G4Material* material,
 
   G4double dedx=0;
 
-  //  G4double v = c_light * sqrt( 2.0 * kineticEnergy / proton_mass_c2 );
-  //G4double coeff = twopi * proton_mass_c2 * 
-  //                (material-> GetTotNbOfElectPerVolume()) / 
-  //                 electron_mass_c2 ;
-  //  G4double fBetheVelocity = fine_structure_const * c_light / v;
-  //coeff *= fine_structure_const * fine_structure_const * hbarc_squared / 
-  //         kineticEnergy ;
+  G4double v = c_light * sqrt( 2.0 * kineticEnergy / proton_mass_c2 );
+  G4double coeff = twopi * proton_mass_c2 * 
+                  (material-> GetTotNbOfElectPerVolume()) / 
+                   electron_mass_c2 ;
+  G4double fBetheVelocity = fine_structure_const * c_light / v;
+  coeff *= fine_structure_const * fine_structure_const * hbarc_squared / 
+           kineticEnergy ;
 
-  G4double beta = sqrt( 2.0 * kineticEnergy / proton_mass_c2 );
-  G4double fBetheVelocity = sqrt( 2.0 * 25.0 * keV / proton_mass_c2 )/beta;
-  G4double coeff= twopi_mc2_rcl2*(material->GetElectronDensity())/(beta*beta);
+  //G4double beta = sqrt( 2.0 * kineticEnergy / proton_mass_c2 );
+  //G4double fBetheVelocity = sqrt( 2.0 * 25.0 * keV / proton_mass_c2 )/beta;
+  //G4double coeff= twopi_mc2_rcl2*(material->GetElectronDensity())/(beta*beta);
 
   
   G4double l0Term = 0, l1Term = 0, l2Term = 0;
@@ -204,10 +203,10 @@ G4double G4QAOLowEnergyLoss::EnergyLoss(const G4Material* material,
   for (G4int nos = 0 ; nos < nbOfShell ; nos++){
     
     G4double l0 = 0, l1 = 0, l2 = 0;
-    // G4double NormalizedEnergy = ( 2.0 * electron_mass_c2 * v * v  ) / 
-    //                      ( c_squared * GetShellEnergy(material,nos) );
-    G4double NormalizedEnergy = ( 2.0 * electron_mass_c2 * beta * beta  ) / 
-                                  GetShellEnergy(material,nos);
+    G4double NormalizedEnergy = ( 2.0 * electron_mass_c2 * v * v  ) / 
+                          ( c_squared * GetShellEnergy(material,nos) );
+    //G4double NormalizedEnergy = ( 2.0 * electron_mass_c2 * beta * beta  ) / 
+    //                              GetShellEnergy(material,nos);
     G4double shStrength = GetShellStrength(material,nos);
 
     l0 = GetL0(NormalizedEnergy);
@@ -254,18 +253,15 @@ G4int G4QAOLowEnergyLoss::GetNumberOfShell(const G4Material* material) const
   // Set return value if in material available from Aahrus
   for(G4int i=0; i<numberOfMaterials; i++) {
 
-    if(materialAvailable[i] == material->GetZ()){
+    if(materialAvailable[i] == Z){
     	nShell = nbofShellForMaterial[i];
-    }
-    //    if(nShell) break;
+	break;}
+    else nShell = fNumberOfShells[Z];
   }
-  //	break;}
-  //  else nShell = fNumberOfShells[Z];
-  //  }
-   if(0 == nShell) nShell = fNumberOfShells[Z];
   
    return nShell;
 }
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
