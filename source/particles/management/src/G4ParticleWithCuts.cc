@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleWithCuts.cc,v 1.11 2001-09-19 11:13:30 kurasige Exp $
+// $Id: G4ParticleWithCuts.cc,v 1.12 2001-09-20 01:57:34 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -298,12 +298,11 @@ void  G4ParticleWithCuts::RestoreCuts(G4double cutInLength,
   // Set cut in stopping range
   theCutInMaxInteractionLength = cutInLength;
 
-  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-
+  size_t numberOfMaterials = G4Material::GetNumberOfMaterials();
   // Restore the vector of cuts in energy corresponding to the range cut
   if(theKineticEnergyCuts) delete [] theKineticEnergyCuts;
-  theKineticEnergyCuts = new G4double [materialTable->size()];
-  for (size_t j=0; j<materialTable->size(); j +=1) {
+  theKineticEnergyCuts = new G4double [numberOfMaterials];
+  for (size_t j=0; j<numberOfMaterials; j +=1) {
     theKineticEnergyCuts[j] = cutInEnergy[j];
   } 
 }
@@ -335,12 +334,12 @@ void  G4ParticleWithCuts::CalcEnergyCuts(G4double aCut)
   // Set cut in stopping range
   theCutInMaxInteractionLength = aCut;
 
-  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
+  size_t numberOfMaterials = G4Material::GetNumberOfMaterials();
 
   // Create the vector of cuts in energy
   // corresponding to the stopping range cut
   if(theKineticEnergyCuts) delete [] theKineticEnergyCuts;
-  theKineticEnergyCuts = new G4double [materialTable->size()];
+  theKineticEnergyCuts = new G4double [numberOfMaterials];
                     
   G4double Charge = this->GetPDGCharge() ;
 
@@ -392,7 +391,7 @@ void  G4ParticleWithCuts::CalcEnergyCuts(G4double aCut)
     G4double ChargeSquare = Charge*Charge/(eplus*eplus) ;
     G4double massRatio = proton_mass_c2/(this->GetPDGMass()) ;
     
-    for (size_t J=0; J<materialTable->size(); J +=1) {
+    for (size_t J=0; J<numberOfMaterials; J +=1) {
       G4double protonEnergyCut = (theProton->GetEnergyCuts())[J] ;           
       // cut energy is rescaled by using charge and mass ratio
       theKineticEnergyCuts[J] = ChargeSquare*protonEnergyCut/massRatio ; 
@@ -414,7 +413,8 @@ void  G4ParticleWithCuts::CalcEnergyCuts(G4double aCut)
     // fill theKineticEnergyCuts and delete the range vector
     G4double tune = 0.025*mm*g/cm3 ,lowen = 30.*keV ; 
     G4double density ;
-    for (size_t J=0; J<materialTable->size(); J +=1){
+    const G4MaterialTable * materialTable = G4Material::GetMaterialTable();
+    for (size_t J=0; J<numberOfMaterials; J +=1){
       G4RangeVector* rangeVector = new
 	G4RangeVector(LowestEnergy, HighestEnergy, TotBin);
       G4Material* aMaterial = (*materialTable)[J];
@@ -595,14 +595,13 @@ void G4ParticleWithCuts::BuildRangeVector(
 
 void G4ParticleWithCuts::SetEnergyCutValues(G4double energyCut)
 {
-  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-
-  // Create the vector of cuts in energy
+  size_t numberOfMaterials = G4Material::GetNumberOfMaterials();
+   
   if(theKineticEnergyCuts) delete [] theKineticEnergyCuts;
-  theKineticEnergyCuts = new G4double [materialTable->size()];
+  theKineticEnergyCuts = new G4double [numberOfMaterials];
 
   // fill theKineticEnergyCuts and delete the range vector
-  for (size_t J=0; J<materialTable->size(); J++)
+  for (size_t J=0; J<numberOfMaterials; J++)
   {
     theKineticEnergyCuts[J] = energyCut;
   }
