@@ -1,4 +1,4 @@
-$Id: History,v 1.41 1999-11-04 08:31:54 stanaka Exp $
+$Id: History,v 1.42 1999-11-05 16:34:10 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,22 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+vis-V00-01-07  5th November  John Allison
+- Added /vis/viewer/update [<viewer-name>].
+- Some groundwork for /vis/scene/edit.
+- Added additional check in G4VisManager::IsValidView().
+- G4VSceneHandler::ClearStore() invokes fpViewer -> NeedKernelVisit().
+  (After a clear of the graphical database it is necessary to do this.
+  So if a derived class redefines, it must still invoke this base
+  class method.
+- G4Scene::AddRunDurationModel(), AddWorldIfEmpty(), AddEndOfEventModel():
+  avoid duplicate models and flag with G4bool return argument.
+- G4VisCommandsSceneAdd: respect the above G4bool return value.
+- G4Scene::AddRunDurationModel(): remove temporary workaround for old CLHEP
+  non-const problem.
+- Added 3rd template argument of map (to keep Sun CC 4.2 happy) in G4OpenGLStoredSceneHandler.hh and G4OpenInventorSceneHandler.hh.
+- G4OpenGLStoredSceneHandler::ClearStore() and G4OpenInventorSceneHandler::ClearStore() invoke base class function G4VSceneHandler::ClearStore().
 
 VRML-V00-01-01 4th November 1999  Satoshi Tanaka
 - Introduction of VRMLBeginModeling() for new vis commands  
