@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Torus.hh,v 1.5 2000-05-26 13:20:40 grichine Exp $
+// $Id: G4Torus.hh,v 1.6 2000-10-11 09:01:24 medernac Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,6 +71,7 @@
 // 21.04.98 J.Apostolakis  Added SetAllParameters function
 // 26.05.00 V.Grichine, new SolveBiQuadratic/Cubic developed by O.Cremonesi were
 //          added     
+// 31.08.00 E.Medernach    Add SolveNumeric Functions 
 // --------------------------------------------------------------------
 
 #ifndef G4Torus_HH
@@ -80,77 +81,145 @@
 
 class G4Torus : public G4CSGSolid {
 public:
-G4Torus(const G4String &pName,
-	  G4double pRmin,
-	  G4double pRmax,
-	  G4double pRtor,
-	  G4double pSPhi,
-	  G4double pDPhi);
+  G4Torus(const G4String &pName,
+		  G4double pRmin,
+		  G4double pRmax,
+		  G4double pRtor,
+		  G4double pSPhi,
+		  G4double pDPhi);
 
-    virtual ~G4Torus();
+  virtual ~G4Torus();
     
-    void SetAllParameters(G4double pRmin, G4double pRmax, G4double pRtor,
-	       G4double pSPhi, G4double pDPhi);
+  void SetAllParameters(G4double pRmin, G4double pRmax, G4double pRtor,
+						G4double pSPhi, G4double pDPhi);
  
-    void ComputeDimensions(G4VPVParameterisation* p,
-                           const G4int n,
-                           const G4VPhysicalVolume* pRep);
+  void ComputeDimensions(G4VPVParameterisation* p,
+						 const G4int n,
+						 const G4VPhysicalVolume* pRep);
 			   
-    G4int TorusRoots(G4double Ri,
-		     const G4ThreeVector& p,
-		     const G4ThreeVector& v) const ;
+  G4int TorusRoots(G4double Ri,
+				   const G4ThreeVector& p,
+				   const G4ThreeVector& v) const ;
 
-    G4bool CalculateExtent(const EAxis pAxis,
-			   const G4VoxelLimits& pVoxelLimit,
-			   const G4AffineTransform& pTransform,
-			   G4double& pmin, G4double& pmax) const;
+  G4bool CalculateExtent(const EAxis pAxis,
+						 const G4VoxelLimits& pVoxelLimit,
+						 const G4AffineTransform& pTransform,
+						 G4double& pmin, G4double& pmax) const;
 
-    G4double    GetRmin() const { return fRmin ; }
-    G4double    GetRmax() const { return fRmax ; } 
-    G4double    GetRtor  () const { return fRtor   ; }
-    G4double    GetSPhi() const { return fSPhi ; }
-    G4double    GetDPhi() const { return fDPhi ; }
+  G4double    GetRmin() const { return fRmin ; }
+  G4double    GetRmax() const { return fRmax ; } 
+  G4double    GetRtor  () const { return fRtor   ; }
+  G4double    GetSPhi() const { return fSPhi ; }
+  G4double    GetDPhi() const { return fDPhi ; }
 
-    EInside Inside(const G4ThreeVector& p) const;
+  EInside Inside(const G4ThreeVector& p) const;
 
-    G4ThreeVector SurfaceNormal( const G4ThreeVector& p) const;
+  G4ThreeVector SurfaceNormal( const G4ThreeVector& p) const;
 
-    G4double DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) const;
-    G4double DistanceToIn(const G4ThreeVector& p) const;
-    G4double DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
-			   const G4bool calcNorm=G4bool(false),
-			   G4bool *validNorm=0,G4ThreeVector *n=0) const;
-    G4double DistanceToOut(const G4ThreeVector& p) const;
+  G4double DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) const;
+  G4double DistanceToIn(const G4ThreeVector& p) const;
+  G4double DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
+						 const G4bool calcNorm=G4bool(false),
+						 G4bool *validNorm=0,G4ThreeVector *n=0) const;
+  G4double DistanceToOut(const G4ThreeVector& p) const;
 
-    // Naming method (pseudo-RTTI : run-time type identification)
-    virtual G4GeometryType  GetEntityType() const { return G4String("G4Torus"); }
+  // Naming method (pseudo-RTTI : run-time type identification)
+  virtual G4GeometryType  GetEntityType() const { return G4String("G4Torus"); }
 
-    // Visualisation functions
-    void                DescribeYourselfTo (G4VGraphicsScene& scene) const;
-    G4Polyhedron*       CreatePolyhedron   () const;
-    G4NURBS*            CreateNURBS        () const;
+  // Visualisation functions
+  void                DescribeYourselfTo (G4VGraphicsScene& scene) const;
+  G4Polyhedron*       CreatePolyhedron   () const;
+  G4NURBS*            CreateNURBS        () const;
 
 protected:
 
-    G4int SolveBiQuadratic(G4double c[], G4double s[]  ) const ;
-    G4int SolveCubic(G4double c[], G4double s[]  ) const ;
+  G4int SolveBiQuadratic(G4double c[], G4double s[]  ) const ;
+  G4int SolveCubic(G4double c[], G4double s[]  ) const ;
 
-    G4int SolveBiQuadraticNew(G4double c[], G4double s[]  ) const ;
-    G4int SolveCubicNew(G4double c[], G4double s[], G4double& cd  ) const ;
+  G4int SolveBiQuadraticNew(G4double c[], G4double s[]  ) const ;
+  G4int SolveCubicNew(G4double c[], G4double s[], G4double& cd  ) const ;
 
-    G4int SolveQuadratic(double c[], double s[]  ) const ;
+  G4int SolveQuadratic(G4double c[], G4double s[]  ) const ;
+
+  G4double SolveNumeric(const G4ThreeVector& p,const G4ThreeVector& v,G4bool IsDistanceToIn) ;
     
-    G4ThreeVectorList*
-    CreateRotatedVertices(const G4AffineTransform& pTransform,
-                          G4int& noPolygonVertices) const;
+  G4ThreeVectorList*
+  CreateRotatedVertices(const G4AffineTransform& pTransform,
+						G4int& noPolygonVertices) const;
 
-    G4double fRmin,fRmax,fRtor,fSPhi,fDPhi;
+  G4double fRmin,fRmax,fRtor,fSPhi,fDPhi;
 
   // Used by distanceToOut
   enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi};
   // used by normal
   enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi};
 
+private:
+  inline G4double TorusEquation (G4double x,G4double y,G4double z,G4double R0,G4double R1) {
+	/* R0 : Radius of all little circles
+	   R1 : Radius of little circles
+	*/
+	/*
+	  An interesting property is that the sign
+	  tell if the point is inside or outside
+	  or if > EPSILON on the surface
+	*/
+	G4double temp;
+
+	temp = ((x*x + y*y + z*z) + R0*R0 - R1*R1) ;
+	temp = temp*temp ;
+	temp = temp - 4*R0*R0*(x*x + y*y) ;
+
+	/*
+	  > 0 Outside
+	  < 0 Inside
+	*/
+	return temp ;
+  }
+  
+  inline G4double TorusDerivativeX (G4double x,G4double y,G4double z,G4double R0,G4double R1) 
+  {
+	return 4*x*(x*x + y*y + z*z +  R0*R0 - R1*R1) - 8*R0*R0*x ;
+  }
+  inline G4double TorusDerivativeY (G4double x,G4double y,G4double z,G4double R0,G4double R1) 
+  {
+	return 4*y*(x*x + y*y + z*z +  R0*R0 - R1*R1) - 8*R0*R0*y ;
+  }
+  inline G4double TorusDerivativeZ (G4double x,G4double y,G4double z,G4double R0,G4double R1) 
+  {
+	return 4*z*(x*x + y*y + z*z +  R0*R0 - R1*R1) ;
+  }
+
+  inline G4double G4Torus::TorusGradient(G4double dx,
+							  G4double dy,
+							  G4double dz,
+							  G4double x,
+							  G4double y,
+							  G4double z,
+							  G4double Rmax,
+										 G4double Rmin) ;
+
+  void BVMIntersection (G4double x,G4double y,G4double z,
+			G4double dx,G4double dy,G4double dz,
+			G4double Rmax, G4double Rmin,
+			G4double *NewL,int *valid);
+  
+  void SortIntervals (G4double *SortL,G4double *NewL,int *valid,int *NbIntersection);
+  
+  
+  G4double DistanceToTorus (G4double x,G4double y,G4double z,G4double dx,G4double dy,G4double dz
+							,G4double R0,G4double R1);
+  G4int SafeNewton(G4double x, G4double y, G4double z,
+		   G4double dx, G4double dy, G4double dz,
+		   G4double Rmax, G4double Rmin,
+		   G4double *Lmin,G4double *Lmax);
+  
+  G4double Newton (G4double guess,
+		   G4double x, G4double y, G4double z,
+		   G4double dx, G4double dy, G4double dz,
+		   G4double Rmax, G4double Rmin,
+		   G4double Lmin,G4double Lmax);
+  
 };
    	
 #endif
