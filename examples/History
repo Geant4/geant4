@@ -1,4 +1,4 @@
-$Id: History,v 1.35 1999-12-03 18:29:37 gcosmo Exp $
+$Id: History,v 1.36 1999-12-06 16:20:14 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+6th December 1999  Gabriele Cosmo  (examples-V00-01-18)
+- Temporarily backed muon out of exampleN02.
+- Included PersistentEx01-V00-01-05, PersistentEx02-V00-01-03.
 
 3rd December 1999  Gabriele Cosmo  (examples-V00-01-17)
 - Fixed definition of vacuum in exampleN02 and updated reference
