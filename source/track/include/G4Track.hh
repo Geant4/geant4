@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Track.hh,v 1.3 1999-10-06 01:21:49 kurasige Exp $
+// $Id: G4Track.hh,v 1.4 1999-10-06 03:06:56 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -159,9 +159,6 @@ class G4Track
 
    G4double GetStepLength() const;
    void SetStepLength(G4double value);
-
-   G4Step* GetStep() const;
-   void SetStep(G4Step* aValue);
 
   // vertex (,where this track was created) information  
    const G4ThreeVector& GetVertexPosition() const;
