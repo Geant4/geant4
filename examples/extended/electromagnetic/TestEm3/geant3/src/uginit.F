@@ -35,7 +35,8 @@
       CALL GFFGO 
 *
       CALL GZINIT
-      CALL GPART 
+      CALL GPART
+      CALL GPIONS 
 *
       CALL GDINIT
 *

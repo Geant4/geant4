@@ -12,7 +12,8 @@
       DIMENSION ACO2(2),ZCO2(2),WCO2(2)
       DIMENSION AH2O(2),ZH2O(2),WH2O(2)
       DIMENSION AG10(4),ZG10(4),WG10(4)
-      DIMENSION Asci(2),Zsci(2),Wsci(2)                                              
+      DIMENSION Asci(2),Zsci(2),Wsci(2)
+      DIMENSION ACsI(2),ZCsI(2),WCsI(2)                                                    
 *
       CHARACTER*4  volnam
       CHARACTER*20 matnam
@@ -41,7 +42,11 @@
       DATA Asci/12.01,  1.01/
       DATA Zsci/ 6.  ,  1.  /
       DATA Wsci/ 9.  , 10.  /                                                                               
-
+*                                                                               
+* *** CsI compound parameters
+      DATA ACsI/ 126.90, 132.90/
+      DATA ZCsI/ 53.   , 55.   /
+      DATA WCsI/ 1.    , 1.    /     
 *
 * *** Defines USER perticular materials
       CALL GSMIXT( 1,'Air'      , Aair ,Zair, 1.29E-3, 2   , Wair)
@@ -58,7 +63,8 @@
       CALL GSMIXT(12,'NemaG10'  , AG10 ,ZG10, 1.7    ,-4   , WG10)
       CALL GSMATE(13,'Copper   ', 63.55, 29., 8.96   , 1.43, 15.0, 0,0)
       CALL GSMIXT(14,'Scintilla', Asci ,Zsci, 1.032  ,-2   , Wsci)
-      CALL GSMATE(15,'Gold     ',196.97, 79., 19.32  , 0.33,  9.6, 0,0)      
+      CALL GSMATE(15,'Gold     ',196.97, 79., 19.32  , 0.33,  9.6, 0,0)
+      CALL GSMIXT(16,'CsI      ', ACsI ,ZCsI, 4.534  ,-2   , WCsI)            
 * 
 * *** overwrite the computed radlength of some mixture
       JMA = LQ(JMATE-14)
