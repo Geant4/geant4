@@ -6,6 +6,7 @@
 #include "QGSC.hh"
 #include "QGSP_BERT.hh"
 #include "QGSP_BIC.hh"
+#include "QGSP_GN.hh"
 #include "StatAccepTestPrimaryGeneratorAction.hh"
 
 #include "StatAccepTestEventAction.hh"
@@ -56,6 +57,7 @@ int main(int argc,char** argv) {
   // QGSC       *thePL = new QGSC;
   // QGSP_BERT  *thePL = new QGSP_BERT;
   // QGSP_BIC   *thePL = new QGSP_BIC;
+  // QGSP_GN    *thePL = new QGSP_GN;
   // thePL->SetDefaultCutValue( 100.0*cm );
   //***endLOOKHERE***
 

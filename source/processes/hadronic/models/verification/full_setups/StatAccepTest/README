@@ -65,7 +65,7 @@
 
     1)  mainScript.py 
          ---> 2)  simuDriver.sh  
-                  ---> 3a)  writeSetup.py
+                  ---> 3a)  build.py
                   ---> 3b)  execute mainAcceptanceTest
                   ---> 3c)  dirStat/driver.py        
                             ---> 4)  drivePlot.py

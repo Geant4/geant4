@@ -16,7 +16,7 @@
 import os
 import sys
 
-print '  ========== BEGIN driver.py ========== '
+print '   ========== BEGIN driver.py ========== '
 
 caseA = sys.argv[1]
 caseB = sys.argv[2]
@@ -24,4 +24,4 @@ generalCase = sys.argv[3]
 
 os.system( "python2.2 drivePlot.py " + caseA + " " + caseB + " " + generalCase )
 
-print '  ========== END driver.py ========== '
+print '   ========== END driver.py ========== '

@@ -22,17 +22,17 @@
 import os
 import sys
  
-print '    ========== BEGIN plot.py ========== '
+print '     ========== BEGIN plot.py ========== '
 
 inputFile = ""
 
 if ( len( sys.argv ) > 1 ) :
     inputFile = sys.argv[1]
     if ( len( sys.argv ) > 2 ) :
-        print ' TOO MANY ARGUMENTS: all but the first are ignored '
+        print '     TOO MANY ARGUMENTS: all but the first are ignored '
 
 if ( not os.path.exists(inputFile) ) :
-    print '***ERROR*** : input file', inputFile, '  NOT found!'
+    print '     ***ERROR*** in plot.py : input file', inputFile, '  NOT found!'
     sys.exit(0)
 
 pfile = open(inputFile, 'r')
@@ -44,18 +44,18 @@ label = ""
 if ( inputFile.find( ".log" ) ) :
     pos = inputFile.find( ".log" )
     label = inputFile[pos+4:]
-###print ' label = ', label 
+###print '     label = ', label 
 
 # --------------------------------------------------------
 # Parse the specified file to find the failing comparisons 
 # --------------------------------------------------------
 
 for line in pfile :
-###    print ' line = ', line
+###    print '     line = ', line
     if ( line.find ("***WARNING***") >= 0 ) :
-###        print " line.split() = ", line.split()
+###        print "     line.split() = ", line.split()
         numObservable = line.split()[1]
-###        print 'numObservable =', numObservable
+###        print '     numObservable =', numObservable
 
         # Schema for the id of the observables:
         #     Observable   1   ->   Histogram   11
@@ -85,9 +85,9 @@ for line in pfile :
             else :
                 id = "20" + numObservable[1]
 
-        print ' id = ', id 
+        print '     id = ', id 
         if ( not id ) :
-            print '***ERROR*** SOMETHING WRONG WITH THE ID : id = ', id
+            print '     ***ERROR*** in plot.py : SOMETHING WRONG WITH THE ID : id = ', id
         else :
 
             #----------------------------------------------
@@ -111,4 +111,4 @@ for line in pfile :
             # Rename the .ps file to remember the observable
             os.rename( "plot.ps" , "plot.ps-" + numObservable + label )
 
-print '    ========== END plot.py ========== '
+print '     ========== END plot.py ========== '

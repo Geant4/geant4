@@ -11,7 +11,7 @@ source /afs/cern.ch/sw/geant4/dev/scripts/gcc-alt.csh 3.2.3
 #
 setenv G4SYSTEM Linux-g++
 #
-setenv RELEASE geant4.6.2.ref01
+setenv RELEASE geant4.6.2.ref03
 setenv PLATFORM rh73_gcc323/
 setenv DIR_SPECIFIC /afs/cern.ch/sw/geant4/releases/specific/$PLATFORM
 setenv G4INSTALL /afs/cern.ch/sw/geant4/releases/share/$RELEASE
@@ -44,13 +44,10 @@ setenv PATH ${PATH}:$G4WORKDIR/bin/$G4SYSTEM
 setenv G4ANALYSIS_USE 1
 #
 # --- Aida / PI ---
-setenv PI_DIR /afs/cern.ch/sw/lcg/app/releases/PI/PI_1_2_3/rh73_gcc323
+setenv PI_DIR /afs/cern.ch/sw/lcg/app/releases/PI/PI_1_2_4/rh73_gcc323
 setenv PATH $PI_DIR/bin:${PATH}
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$PI_DIR/lib
 eval `aida-config --runtime csh`
-#
-#***LOOKHERE*** TEMPORARY LORENZO FIX: CLOUD CACHE SETS TO 10,000 .
-setenv LD_LIBRARY_PATH /afs/cern.ch/user/r/ribon/ExtraSpace/myPiDir/lib:${LD_LIBRARY_PATH}
 #
 # --- GSL : this is needed only for  dirStat/pvalue.cpp ---
 setenv GSL_DIR /afs/cern.ch/sw/lcg/external/GSL/1.4/rh73_gcc323

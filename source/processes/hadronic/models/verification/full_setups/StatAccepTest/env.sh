@@ -11,7 +11,7 @@
 #
 export G4SYSTEM=Linux-g++
 #
-RELEASE=geant4.6.2.ref01
+RELEASE=geant4.6.2.ref03
 PLATFORM=rh73_gcc323/
 DIR_SPECIFIC=/afs/cern.ch/sw/geant4/releases/specific/$PLATFORM
 export G4INSTALL=/afs/cern.ch/sw/geant4/releases/share/$RELEASE
@@ -44,13 +44,10 @@ export PATH=$PATH:$G4WORKDIR/bin/$G4SYSTEM
 export G4ANALYSIS_USE=1
 #
 # --- Aida / PI ---
-export PI_DIR=/afs/cern.ch/sw/lcg/app/releases/PI/PI_1_2_3/rh73_gcc323
+export PI_DIR=/afs/cern.ch/sw/lcg/app/releases/PI/PI_1_2_4/rh73_gcc323
 export PATH=$PI_DIR/bin:$PATH
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PI_DIR/lib
 eval `aida-config --runtime sh`
-#
-#***LOOKHERE*** TEMPORARY LORENZO FIX: CLOUD CACHE SETS TO 10,000 .
-export LD_LIBRARY_PATH=/afs/cern.ch/user/r/ribon/ExtraSpace/myPiDir/lib:$LD_LIBRARY_PATH
 #
 # --- GSL : this is needed only for  dirStat/pvalue.cpp ---
 export GSL_DIR=/afs/cern.ch/sw/lcg/external/GSL/1.4/rh73_gcc323

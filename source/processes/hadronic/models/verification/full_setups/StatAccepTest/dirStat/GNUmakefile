@@ -14,10 +14,6 @@ C_INCLUDES += `aida-config --includes`
 
 GSL_LIBS=-L${GSL_DIR}/lib -lgsl -lgslcblas
 
-#***LOOKHERE*** TEMPORARY LORENZO FIX: CLOUD CACHE SETS TO 10,000 .
-LIBS += -L/afs/cern.ch/user/r/ribon/ExtraSpace/myPiDir/lib -llcg_AIDA_Histogram_native
-#LIBS += -L/afs/cern.ch/user/r/ribon/ExtraSpace/myPiDir/lib_gdb -llcg_AIDA_Histogram_native
-
 LIBS += -llcg_StatisticsTesting `aida-config --libs` ${GSL_LIBS} 
 
 C_FLAGS += --pic 

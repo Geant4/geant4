@@ -1,6 +1,13 @@
                  History file
                  ------------
 
+8-Nov-2004 - A.Ribon (statAccepTest-V06-02-02)
+- Migration to PI_1_2_4 (so the temporary bug fix in 
+  PI_1_2_3 has been removed).
+  More automatization has been introduced: now it 
+  builds the executable, and it is possible to run
+  separately the simulation and the statistical tests.
+
 3-Nov-2004 - A.Ribon (statAccepTest-V06-02-01)
-- Fully automized.
+- Fully automatized.
 
