@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCHIPSWorld.hh,v 1.18 2003-12-02 18:44:01 mkossov Exp $
+// $Id: G4QCHIPSWorld.hh,v 1.19 2003-12-04 15:59:26 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCHIPSWorld ----------------
@@ -38,11 +38,13 @@
 
 class G4QCHIPSWorld
 {
-protected:
   // Constructor/Destructor
-  G4QCHIPSWorld();               // default construction
-  ~G4QCHIPSWorld();                                // Destructor is protected - Singeltone
+protected:
+  G4QCHIPSWorld();             // the Default Construction is protected - Singelton
+public:
+  ~G4QCHIPSWorld();            // Destructor is public because of Windows compilation error
 
+  // Member Functions
 private:
   G4QCHIPSWorld(const G4QCHIPSWorld& right);       // copy QCHIPSWorld by value
   G4QCHIPSWorld(G4QCHIPSWorld* right);             // copy QCHIPSWorld by pointer
