@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyCalorimeterHit.cc,v 1.1 1999-04-16 10:32:35 johna Exp $
+// $Id: MyCalorimeterHit.cc,v 1.2 1999-08-27 10:19:07 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -16,7 +16,7 @@
 #include "G4VisAttributes.hh"
 #include "G4LogicalVolume.hh"
 
-G4Allocator<MyCalorimeterHit> MyCalorimeterHitAllocator;
+//G4Allocator<MyCalorimeterHit> MyCalorimeterHitAllocator;
 
 MyCalorimeterHit::MyCalorimeterHit()
 {pPhys=NULL;}

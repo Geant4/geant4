@@ -34,11 +34,11 @@ help /vis/sceneHandler/create
 #
 # Create a scene handler for a specific graphics system.
 # Edit the next line(s) to choose another graphic system
-/vis/sceneHandler/create DAWNFILE
+#/vis/sceneHandler/create DAWNFILE
 #/vis/sceneHandler/create DAWN
 #/vis/sceneHandler/create RayX
 #/vis/sceneHandler/create OGLIX
-#/vis/sceneHandler/create OGLSX
+/vis/sceneHandler/create OGLSX
 #/vis/sceneHandler/create VRML1
 #/vis/sceneHandler/create VRML1FILE
 #/vis/sceneHandler/create Xo
@@ -49,7 +49,14 @@ help /vis/sceneHandler/create
 #
 # Draw current scene
 /vis/scene/notifyHandlers
-/vis/show/view
+#
+# Test logical volume model...
+#/run/beamOn 1
+#/vis/scene/create
+#/vis/sceneHandler/create OGLSX
+#/vis/scene/add/logicalVolume expHall_L
+#/vis/viewer/create
+#/vis/scene/notifyHandlers
 #
 # for drawing the tracks
 # if too many tracks cause core dump => storeTrajectory 0

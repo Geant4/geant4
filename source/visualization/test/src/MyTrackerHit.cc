@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyTrackerHit.cc,v 1.1 1999-04-16 10:32:37 johna Exp $
+// $Id: MyTrackerHit.cc,v 1.2 1999-08-27 10:19:08 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -16,7 +16,7 @@
 #include "G4Colour.hh"
 #include "G4VisAttributes.hh"
 
-G4Allocator<MyTrackerHit> MyTrackerHitAllocator;
+//G4Allocator<MyTrackerHit> MyTrackerHitAllocator;
 
 MyTrackerHit::MyTrackerHit()
 {;}
@@ -52,7 +52,7 @@ void MyTrackerHit::Draw()
     circle.SetFillStyle(G4Circle::filled);
     G4Colour colour(1.,0.,0.);
     G4VisAttributes attribs(colour);
-    circle.SetVisAttributes(attribs);
+    circle.SetVisAttributes(&attribs);
     pVVisManager->Draw(circle);
   }
 }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyTrackerHit.hh,v 1.1 1999-04-16 10:32:30 johna Exp $
+// $Id: MyTrackerHit.hh,v 1.2 1999-08-27 10:19:06 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -13,7 +13,7 @@
 #define MyTrackerHit_h 1
 
 #include "G4VHit.hh"
-#include "G4Allocator.hh"
+//#include "G4Allocator.hh"
 #include "G4ThreeVector.hh"
 
 class MyTrackerHit : public G4VHit
@@ -27,8 +27,8 @@ class MyTrackerHit : public G4VHit
       int operator==(const MyTrackerHit &right) const;
 
 
-      inline void *operator new(size_t);
-      inline void operator delete(void *aHit);
+  //    inline void *operator new(size_t);
+  //  inline void operator delete(void *aHit);
 
       void Draw();
       void Print();
@@ -49,10 +49,11 @@ class MyTrackerHit : public G4VHit
 
 };
 
-extern G4Allocator<MyTrackerHit> MyTrackerHitAllocator;
+//extern G4Allocator<MyTrackerHit> MyTrackerHitAllocator;
 
+/*
 inline void* MyTrackerHit::operator new(size_t)
-{
+
   void *aHit;
   aHit = (void *) MyTrackerHitAllocator.MallocSingle();
   return aHit;
@@ -62,7 +63,7 @@ inline void MyTrackerHit::operator delete(void *aHit)
 {
   MyTrackerHitAllocator.FreeSingle((MyTrackerHit*) aHit);
 }
-
+*/
 #endif
 
 
