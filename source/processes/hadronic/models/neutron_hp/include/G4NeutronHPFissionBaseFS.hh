@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPFissionBaseFS.hh,v 1.2 1999-06-29 18:43:59 stesting Exp $
+// $Id: G4NeutronHPFissionBaseFS.hh,v 1.3 1999-07-02 09:59:02 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPFissionBaseFS_h
@@ -26,8 +26,15 @@ class G4NeutronHPFissionBaseFS : public G4NeutronHPFinalState
 {
   public:
   
-  G4NeutronHPFissionBaseFS();
-  virtual ~G4NeutronHPFissionBaseFS();
+  G4NeutronHPFissionBaseFS()
+  { 
+    hasXsec = true; 
+    theXsection = new G4NeutronHPVector;
+  }
+  virtual ~G4NeutronHPFissionBaseFS()
+  {
+    delete theXsection;
+  }
 
   void Init (G4double A, G4double Z, G4String & dirName, G4String & bit);
 

@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPList.hh,v 1.2 1999-06-29 18:44:05 stesting Exp $
+// $Id: G4NeutronHPList.hh,v 1.3 1999-07-02 09:59:25 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPList_h
@@ -21,9 +21,17 @@ class G4NeutronHPList
 {
   public:
   
-  G4NeutronHPList();
+  G4NeutronHPList()
+  {
+    theData = new G4double[100]; 
+    nPoints=100;
+    nEntries=0;
+  }
   
-  ~G4NeutronHPList();
+  ~G4NeutronHPList()
+  {
+    delete [] theData;
+  }
   
   inline void SetValue(G4int i, G4double y) 
   { 

@@ -4,25 +4,6 @@
 //
 #include "G4InterpolationManager.hh"
 
-   G4InterpolationManager::G4InterpolationManager()
-   {
-     nRanges = 1;
-     start = new G4int[1];
-     start[0] = 0;
-     range = new G4int[1];
-     range [0] = 100000;
-     scheme = new G4InterpolationScheme[1];
-     scheme[0] = LINLIN;
-     nEntries = 0;
-   }
-   
-   G4InterpolationManager::~G4InterpolationManager()
-   {
-     if(start!=NULL) delete [] start;
-     if(range!=NULL) delete [] range;
-     if(scheme!=NULL) delete [] scheme;
-   }
-
    G4InterpolationScheme G4InterpolationManager::MakeScheme(G4int it)
    {
      G4InterpolationScheme result;

@@ -4,13 +4,6 @@
 //
 #include "G4NeutronHPAngular.hh"
 
-  G4NeutronHPAngular::G4NeutronHPAngular()
-  {
-    theAngularDistributionType = 0;
-    theIsoFlag = false;
-  } 
-  G4NeutronHPAngular::~G4NeutronHPAngular(){}
-
 void G4NeutronHPAngular::Init(ifstream & aDataFile)
 {
 //  G4cout << "here we are entering the Angular Init"<<endl;

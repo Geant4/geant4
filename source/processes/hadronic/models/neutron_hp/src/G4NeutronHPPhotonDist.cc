@@ -8,50 +8,6 @@
 #include "G4NeutronHPLegendreStore.hh"
 #include "G4Electron.hh"
 
-  G4NeutronHPPhotonDist::G4NeutronHPPhotonDist()
-  {
-     disType = NULL;
-     energy = NULL;
-     theYield = NULL;
-     thePartialXsec = NULL;
-     isPrimary = NULL;
-     theShells = NULL;
-     theGammas = NULL;
-     nNeu = NULL;
-     theLegendre = NULL;
-     theAngular = NULL;
-     distribution = NULL;
-     probs = NULL;
-     partials = NULL;
-     actualMult = NULL;
-
-     theLevelEnergies = NULL;
-     theTransitionProbabilities = NULL;
-     thePhotonTransitionFraction = NULL;
-  }
-
-  G4NeutronHPPhotonDist::~G4NeutronHPPhotonDist()
-  {
-     if(disType != NULL) delete [] disType;
-     if(energy != NULL) delete [] energy;
-     if(theYield != NULL) delete [] theYield;
-     if(thePartialXsec != NULL) delete [] thePartialXsec;
-     if(isPrimary != NULL) delete [] isPrimary;
-     if(theShells != NULL) delete [] theShells;
-     if(theGammas != NULL) delete [] theGammas;
-     if(nNeu != NULL) delete [] nNeu;
-     if(theLegendre != NULL) delete [] theLegendre;
-     if(theAngular != NULL) delete [] theAngular;
-     if(distribution != NULL) delete [] distribution;
-     if(probs != NULL) delete [] probs;
-     if(partials != NULL) delete [] partials;
-     if(actualMult != NULL) delete [] actualMult;
-
-     if(theLevelEnergies != NULL) delete theLevelEnergies;
-     if(theTransitionProbabilities != NULL) delete theTransitionProbabilities;
-     if(thePhotonTransitionFraction != NULL) delete thePhotonTransitionFraction;
-  }
-
 G4bool G4NeutronHPPhotonDist::InitMean(ifstream & aDataFile)
 {
   G4bool result = true;

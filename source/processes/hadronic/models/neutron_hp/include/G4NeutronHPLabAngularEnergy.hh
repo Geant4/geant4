@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPLabAngularEnergy.hh,v 1.2 1999-06-29 18:44:03 stesting Exp $
+// $Id: G4NeutronHPLabAngularEnergy.hh,v 1.3 1999-07-02 09:59:20 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPLabAngularEnergy_h
@@ -27,8 +27,25 @@ class G4NeutronHPLabAngularEnergy : public G4VNeutronHPEnergyAngular
 {
   public:
   
-  G4NeutronHPLabAngularEnergy();
-  ~G4NeutronHPLabAngularEnergy();
+  G4NeutronHPLabAngularEnergy()
+  {
+    theEnergies = NULL;
+    theData = NULL;
+    nCosTh = NULL;
+    theSecondManager = NULL;
+  }
+  ~G4NeutronHPLabAngularEnergy()
+  {
+    if(theEnergies != NULL) delete [] theEnergies;
+    if(nCosTh != NULL) delete [] nCosTh;
+    if(theData != NULL) 
+    {
+      for(G4int i=0; i<nEnergies; i++)
+        delete [] theData[i];
+      delete [] theData;
+    }
+    if(theSecondManager != NULL) delete [] theSecondManager;
+  }
   
   public:
   

@@ -5,10 +5,6 @@
 #include "G4NeutronHPIsoData.hh"
 #include "G4NeutronHPDataUsed.hh"
 
-  G4NeutronHPIsoData::G4NeutronHPIsoData(){theChannelData = NULL;}
-  
-  G4NeutronHPIsoData::~G4NeutronHPIsoData(){if(theChannelData!=NULL) delete theChannelData;}
-  
   G4bool G4NeutronHPIsoData::Init(G4int A, G4int Z, G4double abun, G4String dirName, G4String aFSType)
   {
     theChannelData = NULL;

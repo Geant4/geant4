@@ -4,20 +4,6 @@
 //
 #include "G4NeutronHPDeExGammas.hh"
 
-  G4NeutronHPDeExGammas::G4NeutronHPDeExGammas() 
-  {
-    levelStart = NULL;
-    levelSize = NULL;
-    nLevels = 0;
-    theLevels = NULL;
-  }
-  G4NeutronHPDeExGammas::~G4NeutronHPDeExGammas() 
-  {
-    if(levelStart!=NULL) delete [] levelStart;
-    if(levelSize!=NULL) delete [] levelSize;
-    if(theLevels!=NULL) delete [] theLevels;
-  }
-
 void G4NeutronHPDeExGammas::Init(ifstream & aDataFile)
 {
   G4NeutronHPGamma ** theGammas = new G4NeutronHPGamma * [50];

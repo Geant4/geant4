@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInelasticData.hh,v 1.1 1999-01-07 16:13:01 gunter Exp $
+// $Id: G4NeutronHPInelasticData.hh,v 1.2 1999-07-02 09:59:14 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPInelasticData_h

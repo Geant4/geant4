@@ -5,14 +5,6 @@
 #include "G4NeutronHPArbitaryTab.hh"
 #include "G4ios.hh"
 
-  G4NeutronHPArbitaryTab::G4NeutronHPArbitaryTab()
-  {
-   theDistFunc = NULL;
-  }
-  G4NeutronHPArbitaryTab::~G4NeutronHPArbitaryTab()
-  {
-   if(theDistFunc!=NULL) delete [] theDistFunc;
-  }
   G4double G4NeutronHPArbitaryTab::Sample(G4double anEnergy) 
   {
     G4int i;

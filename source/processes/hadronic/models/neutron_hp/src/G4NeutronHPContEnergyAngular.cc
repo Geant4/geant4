@@ -4,17 +4,6 @@
 //
 #include "G4NeutronHPContEnergyAngular.hh"
 
-  G4NeutronHPContEnergyAngular::G4NeutronHPContEnergyAngular()
-  {
-    theAngular = NULL;
-    currentMeanEnergy = -2;
-  }
-  
-  G4NeutronHPContEnergyAngular::~G4NeutronHPContEnergyAngular()
-  {
-    if(theAngular!=NULL) delete [] theAngular;
-  }
-
 G4ReactionProduct * G4NeutronHPContEnergyAngular::Sample(G4double anEnergy, G4double massCode, G4double mass)
 {
    G4ReactionProduct * result;

@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInelastic.hh,v 1.1 1999-01-07 16:13:01 gunter Exp $
+// $Id: G4NeutronHPInelastic.hh,v 1.2 1999-07-02 09:59:10 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: High Precision low E neutron tracking

@@ -7,23 +7,29 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPAngularP.hh,v 1.2 1999-06-29 18:43:48 stesting Exp $
+// $Id: G4NeutronHPAngularP.hh,v 1.3 1999-07-02 09:58:25 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPAngularP_h
 #define G4NeutronHPAngularP_h 1
 
 #include "globals.hh"
-#include "Randomize.hh"
-#include "G4NeutronHPInterpolator.hh"
 #include "G4InterpolationManager.hh"
 
 class G4NeutronHPAngularP
 {
   public:
   
-  G4NeutronHPAngularP();
-  ~G4NeutronHPAngularP();
+  G4NeutronHPAngularP()
+  {
+    theCosTh = NULL;
+    theProb = NULL;
+  }
+  ~G4NeutronHPAngularP()
+  {
+    if(theCosTh!=NULL) delete [] theCosTh;
+    if(theProb!=NULL) delete [] theProb;
+  }
   
   inline void Init(ifstream & aDataFile)
   {

@@ -14,18 +14,6 @@
 #include "G4ParticleTable.hh"
 #include "G4NeutronHPDataUsed.hh"
 
-  G4NeutronHPElasticFS::G4NeutronHPElasticFS()
-  {
-    hasXsec = false; 
-    theCoefficients = NULL;
-    theProbArray = NULL;
-  }
-  G4NeutronHPElasticFS::~G4NeutronHPElasticFS()
-  {
-    if(theCoefficients!=NULL) delete theCoefficients;
-    if(theProbArray!=NULL) delete theProbArray;
-  }
-
   void G4NeutronHPElasticFS::Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType)
   {
     G4String tString = "/FS/";

@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPFSFissionFS.hh,v 1.2 1999-06-29 18:43:57 stesting Exp $
+// $Id: G4NeutronHPFSFissionFS.hh,v 1.3 1999-07-02 09:58:55 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPFSFissionFS_h
@@ -29,8 +29,8 @@ class G4NeutronHPFSFissionFS : public G4NeutronHPFinalState
 {
   public:
   
-  G4NeutronHPFSFissionFS();
-  ~G4NeutronHPFSFissionFS();
+  G4NeutronHPFSFissionFS(){ hasXsec = true; }
+  ~G4NeutronHPFSFissionFS(){}
   
   void Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType);
   

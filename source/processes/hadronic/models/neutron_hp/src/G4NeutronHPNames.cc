@@ -5,10 +5,6 @@
 #include "G4NeutronHPNames.hh"
 #include "G4SandiaTable.hh"
 
-  G4NeutronHPNames::G4NeutronHPNames(){theMaxOffSet = 5;}
-  G4NeutronHPNames::G4NeutronHPNames(G4int maxOffSet){theMaxOffSet = maxOffSet;}
-  G4NeutronHPNames::~G4NeutronHPNames(){}
-
   const G4String G4NeutronHPNames::theString[99] = {"Hydrogen", "Helium",
  "Lithium", "Berylium", "Boron", "Carbon", "Nitrogen", "Oxygen", "Fluorine",
  "Neon", "Sodium", "Magnesium", "Aluminum", "Silicon", "Phosphorous", 

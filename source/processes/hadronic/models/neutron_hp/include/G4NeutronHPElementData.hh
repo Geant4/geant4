@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPElementData.hh,v 1.1 1999-01-07 16:12:57 gunter Exp $
+// $Id: G4NeutronHPElementData.hh,v 1.2 1999-07-02 09:58:49 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections

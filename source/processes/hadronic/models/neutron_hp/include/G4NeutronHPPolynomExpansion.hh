@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPPolynomExpansion.hh,v 1.2 1999-06-29 18:44:13 stesting Exp $
+// $Id: G4NeutronHPPolynomExpansion.hh,v 1.3 1999-07-02 09:59:53 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPPolynomExpansion_h
@@ -20,8 +20,15 @@
 class G4NeutronHPPolynomExpansion
 {
   public:
-  G4NeutronHPPolynomExpansion();
-  ~G4NeutronHPPolynomExpansion();
+  G4NeutronHPPolynomExpansion()
+  {
+    theCoeff = NULL;
+    nPoly=0;
+  }
+  ~G4NeutronHPPolynomExpansion()
+  {
+    if(theCoeff!=NULL) delete [] theCoeff;
+  }
   
   inline void Init(ifstream & theData)
   {

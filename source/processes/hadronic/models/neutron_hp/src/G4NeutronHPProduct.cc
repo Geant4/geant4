@@ -5,16 +5,6 @@
 #include "Randomize.hh"
 #include "G4Proton.hh"
 
-  G4NeutronHPProduct::G4NeutronHPProduct()
-  {
-    theDist = NULL;
-  }
-  
-  G4NeutronHPProduct::~G4NeutronHPProduct()
-  {
-    if(theDist != NULL) delete theDist;
-  }
-
 G4ReactionProductVector * G4NeutronHPProduct::Sample(G4double anEnergy)
 {
   if(theDist == NULL) return NULL;

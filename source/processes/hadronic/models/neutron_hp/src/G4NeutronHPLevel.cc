@@ -5,12 +5,6 @@
 #include "G4NeutronHPLevel.hh"
 #include "G4NeutronHPGamma.hh"
 
-  G4NeutronHPLevel::G4NeutronHPLevel() 
-  {
-    nGammas = 0;
-    theGammas = NULL;
-  }
-
   G4NeutronHPLevel::~G4NeutronHPLevel() 
   {
     if(theGammas != NULL)

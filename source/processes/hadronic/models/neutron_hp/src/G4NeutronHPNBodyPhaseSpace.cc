@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPNBodyPhaseSpace.cc,v 1.1 1999-01-07 16:13:26 gunter Exp $
+// $Id: G4NeutronHPNBodyPhaseSpace.cc,v 1.2 1999-07-02 10:01:14 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4NeutronHPNBodyPhaseSpace.hh"

@@ -5,13 +5,6 @@
 
 #include "G4NeutronHPFieldPoint.hh"
 
-  G4NeutronHPFieldPoint::G4NeutronHPFieldPoint()
-  {
-    X = 0;
-    nP = 0;
-    Y = NULL;
-  }
-
 G4NeutronHPFieldPoint::G4NeutronHPFieldPoint(G4int n)
   {
     nP = n;

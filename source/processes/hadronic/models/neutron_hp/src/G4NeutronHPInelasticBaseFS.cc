@@ -10,25 +10,6 @@
 #include "G4Electron.hh"
 #include "G4NeutronHPDataUsed.hh"
 
-   G4NeutronHPInelasticBaseFS::G4NeutronHPInelasticBaseFS()
-  {
-    hasXsec = true; 
-    theXsection = new G4NeutronHPVector;
-    
-    theEnergyDistribution = NULL;
-    theFinalStatePhotons = NULL;
-    theEnergyAngData = NULL;
-    theAngularDistribution = NULL;
-  }
-   G4NeutronHPInelasticBaseFS::~G4NeutronHPInelasticBaseFS()
-  {
-    delete theXsection;
-    if(theEnergyDistribution!=NULL) delete theEnergyDistribution;
-    if(theFinalStatePhotons!=NULL) delete theFinalStatePhotons;
-    if(theEnergyAngData!=NULL) delete theEnergyAngData;
-    if(theAngularDistribution!=NULL) delete theAngularDistribution;
-  }
-
 void G4NeutronHPInelasticBaseFS::InitGammas(G4double AR, G4double ZR)
 {
    char the[100] = {""};

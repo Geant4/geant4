@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPKallbachMannSyst.hh,v 1.2 1999-06-29 18:44:03 stesting Exp $
+// $Id: G4NeutronHPKallbachMannSyst.hh,v 1.3 1999-07-02 09:59:18 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPKallbachMannSyst_h
@@ -23,9 +23,22 @@ class G4NeutronHPKallbachMannSyst
                                G4double anIncidentEnergy, G4double anIncidentMass,
                                G4double aProductEnergy, G4double aProductMass,
                                G4double aResidualMass, G4int aResidualA, G4int aResidualZ,
-                               G4double aTargetMass, G4int aTargetA, G4int aTargetZ);
+                               G4double aTargetMass, G4int aTargetA, G4int aTargetZ)
+  {
+    theCompoundFraction = aCompoundFraction;
+    theIncidentEnergy = anIncidentEnergy;
+    theIncidentMass = anIncidentMass;
+    theProductEnergy = aProductEnergy;
+    theProductMass = aProductMass;
+    theResidualMass = aResidualMass;
+    theResidualA = aResidualA;
+    theResidualZ = aResidualZ;
+    theTargetMass = aTargetMass;
+    theTargetA = aTargetA;
+    theTargetZ = aTargetZ;
+  }
   
-  ~G4NeutronHPKallbachMannSyst();
+  ~G4NeutronHPKallbachMannSyst() {};
   
   G4double Sample(G4double anEnergy);
   

@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPContEnergyAngular.hh,v 1.2 1999-06-29 18:43:50 stesting Exp $
+// $Id: G4NeutronHPContEnergyAngular.hh,v 1.3 1999-07-02 09:58:34 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPContEnergyAngular_h
@@ -26,8 +26,16 @@ class G4NeutronHPContEnergyAngular : public G4VNeutronHPEnergyAngular
 {
   public:
   
-  G4NeutronHPContEnergyAngular();
-  ~G4NeutronHPContEnergyAngular();
+  G4NeutronHPContEnergyAngular()
+  {
+    theAngular = NULL;
+    currentMeanEnergy = -2;
+  }
+  
+  ~G4NeutronHPContEnergyAngular()
+  {
+    if(theAngular!=NULL) delete [] theAngular;
+  }
   
   public:
   

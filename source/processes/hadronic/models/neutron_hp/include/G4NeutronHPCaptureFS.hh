@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPCaptureFS.hh,v 1.2 1999-06-29 18:43:49 stesting Exp $
+// $Id: G4NeutronHPCaptureFS.hh,v 1.3 1999-07-02 09:58:29 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPCaptureFS_h
@@ -25,9 +25,14 @@ class G4NeutronHPCaptureFS : public G4NeutronHPFinalState
 {
   public:
   
-  G4NeutronHPCaptureFS();
+  G4NeutronHPCaptureFS()
+  {
+    hasXsec = false; 
+  }
   
-  ~G4NeutronHPCaptureFS();
+  ~G4NeutronHPCaptureFS()
+  {
+  }
   
   void Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType);
   G4ParticleChange * ApplyYourself(const G4Track & theTrack);

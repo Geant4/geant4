@@ -4,8 +4,6 @@
 //
 #include "G4NeutronHPFCFissionFS.hh"
 
-  G4NeutronHPFCFissionFS::G4NeutronHPFCFissionFS(){ hasXsec = false; }
-  G4NeutronHPFCFissionFS::~G4NeutronHPFCFissionFS(){}
   void G4NeutronHPFCFissionFS::Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType)
   {
     G4String aString = "/FC/";

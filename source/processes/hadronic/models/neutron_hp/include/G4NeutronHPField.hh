@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPField.hh,v 1.2 1999-06-29 18:43:58 stesting Exp $
+// $Id: G4NeutronHPField.hh,v 1.3 1999-07-02 09:58:58 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPField_h
@@ -21,6 +21,7 @@ class G4NeutronHPField
   public:
   
   G4NeutronHPField();
+  
   ~G4NeutronHPField();
   
   inline void InitY(G4int i, G4int n)

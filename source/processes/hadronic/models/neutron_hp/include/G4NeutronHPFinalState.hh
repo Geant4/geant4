@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPFinalState.hh,v 1.2 1999-06-29 18:43:59 stesting Exp $
+// $Id: G4NeutronHPFinalState.hh,v 1.3 1999-07-02 09:59:00 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPFinalState_h
@@ -23,9 +23,16 @@ class G4NeutronHPFinalState
 {
 public:
 
-  G4NeutronHPFinalState();
+  G4NeutronHPFinalState()
+  { 
+    hasFSData = true; 
+    hasXsec = true;
+    hasAnyData = true;
+    theBaseZ = 0;
+    theBaseA = 0;
+  };
   
-  virtual ~G4NeutronHPFinalState();
+  virtual ~G4NeutronHPFinalState(){};
 
   virtual void Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType) = 0;
   virtual G4ParticleChange * ApplyYourself(const G4Track & theTrack) 

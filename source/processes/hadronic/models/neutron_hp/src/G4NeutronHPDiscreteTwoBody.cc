@@ -15,15 +15,6 @@
 #include "G4NeutronHPVector.hh"
 #include "G4NeutronHPLegendreStore.hh"
 
-  G4NeutronHPDiscreteTwoBody::G4NeutronHPDiscreteTwoBody()
-  {
-    theCoeff = NULL;
-  }
-  G4NeutronHPDiscreteTwoBody::~G4NeutronHPDiscreteTwoBody()
-  {
-    if(theCoeff!=NULL) delete [] theCoeff;
-  }
-  
 G4ReactionProduct * G4NeutronHPDiscreteTwoBody::Sample(G4double anEnergy, G4double massCode, G4double mass)
 { // Interpolation still only for the most used parts; rest to be Done @@@@@
    G4ReactionProduct * result = new G4ReactionProduct;

@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPAngular.hh,v 1.2 1999-06-29 18:43:48 stesting Exp $
+// $Id: G4NeutronHPAngular.hh,v 1.3 1999-07-02 09:58:23 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPAngular_h
@@ -25,8 +25,12 @@ class G4NeutronHPAngular
 {
     public:
     
-  G4NeutronHPAngular(); 
-  ~G4NeutronHPAngular();
+  G4NeutronHPAngular()
+  {
+    theAngularDistributionType = 0;
+    theIsoFlag = false;
+  } 
+  ~G4NeutronHPAngular(){}
   
   void Init(ifstream & aDataFile);
   

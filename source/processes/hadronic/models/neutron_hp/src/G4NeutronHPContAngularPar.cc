@@ -18,16 +18,6 @@
 #include "G4NeutronHPKallbachMannSyst.hh"
 #include "G4ParticleTable.hh"
  
-  G4NeutronHPContAngularPar::G4NeutronHPContAngularPar()
-  {
-    theAngular = NULL;
-    currentMeanEnergy = -2;
-  }
-  G4NeutronHPContAngularPar::~G4NeutronHPContAngularPar()
-  {
-    if(theAngular!=NULL) delete [] theAngular;
-  }
-
   void G4NeutronHPContAngularPar::Init(ifstream & aDataFile)
   {
     aDataFile >> theEnergy >> nEnergies >> nDiscreteEnergies >> nAngularParameters;
