@@ -91,12 +91,12 @@ G4std::istream& jump(G4std::istream& is) {
 bool openGeomFile(G4std::ifstream& is, 
 		  const G4String& pathname, const G4String& filename) {
   //Check first if the file exists loacally
-  is.open(filename);
+  is.open(filename.c_str());
   if (!is) { //if filename does not exist or is not readable...
 
     //Try the "remote" loacation for the file    
     G4String fullname = pathname+"/"+filename;
-    is.open(fullname);
+    is.open(fullname.c_str());
     if (!is) {
       G4cerr << "ERROR: Could not open file " << filename << G4endl;
       return false;

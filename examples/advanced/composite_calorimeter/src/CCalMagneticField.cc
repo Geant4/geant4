@@ -5,7 +5,7 @@
 #include "CCalMagneticField.hh"
 #include "CCalutils.hh"
 #include "G4FieldManager.hh"
-#include <fstream.h>
+#include "g4std/fstream"
 
 //#define ddebug
 //#define debug
@@ -16,18 +16,18 @@ CCalMagneticField::CCalMagneticField(const G4String &filename) :
   fval(0), pos(0), slope(0), intercept(0) {
 
   //Let's open the file
-  cout << " ==> Opening file " << filename << " to read magnetic field..."
-       << endl;
+  G4cout << " ==> Opening file " << filename << " to read magnetic field..."
+       << G4endl;
   G4String pathName = getenv("CCAL_GLOBALPATH");
-  ifstream is;
+  G4std::ifstream is;
   bool ok = openGeomFile(is, pathName, filename);
 
   if (ok) {
     findDO(is, G4String("FLDM"));
     is >> fval >> npts >> xoff;
 #ifdef debug
-    cout << "Field value " << fval << " # points " << npts << " offset in x "
-	 << xoff*mm << endl;
+    G4cout << "Field value " << fval << " # points " << npts << " offset in x "
+	 << xoff*mm << G4endl;
 #endif
 
     if (npts > 0) {
@@ -38,15 +38,15 @@ CCalMagneticField::CCalMagneticField(const G4String &filename) :
       for (G4int i = 0; i < npts; i++) {
 	is >> pos[i] >> slope[i] >> intercept[i];
 #ifdef debug
-	cout << tab << "Position " << i << " " << pos[i] << " Slope "
-	     << slope[i] << " Intercept " << intercept[i] << endl;
+	G4cout << tab << "Position " << i << " " << pos[i] << " Slope "
+	     << slope[i] << " Intercept " << intercept[i] << G4endl;
 #endif
       }
     }
 
     ///////////////////////////////////////////////////////////////
     // Close the file
-    cout << " ==> Closing file " << filename << endl;
+    G4cout << " ==> Closing file " << filename << G4endl;
     is.close();
   }
 }
@@ -85,10 +85,10 @@ void CCalMagneticField::MagneticField(const double x[3], double B[3]) const {
   }
   G4double scor = c + m*xnew;
   if (scor < 0.) scor = 0.;
-  //  cout << "X: " << xnew << " Slope " << m << " " << c << " " << scor << endl;
+  //  G4cout << "X: " << xnew << " Slope " << m << " " << c << " " << scor << G4endl;
   B[2] = scor*fval*kilogauss;
 #ifdef ddebug
-  cout << "Field at x: " << x[0]/mm << "mm = " << B[2]/tesla << "T" << endl;
+  G4cout << "Field at x: " << x[0]/mm << "mm = " << B[2]/tesla << "T" << G4endl;
 #endif
 }
 

@@ -49,10 +49,10 @@ CCalHcal::~CCalHcal() {
 int CCalHcal::readFile() {
   ///////////////////////////////////////////////////////////////
   //Let's open the file
-  cout << " ==> Opening file " << File() << " to read elements..."
-       << endl;
+  G4cout << " ==> Opening file " << File() << " to read elements..."
+       << G4endl;
 
-  ifstream is;
+  G4std::ifstream is;
   bool ok = openGeomFile(is, pathName, File());
   if (!ok)
     return 0;
@@ -64,8 +64,8 @@ int CCalHcal::readFile() {
   readName(is,genMaterial);
   is >> dy_2Cal >> dx_2Cal >> xposCal >> jump;
 #ifdef debug
-  cout << tab << "General material: " << genMaterial  << " Size " << dy_2Cal
-       << ", " << dx_2Cal << " Position " << xposCal << endl;
+  G4cout << tab << "General material: " << genMaterial  << " Size " << dy_2Cal
+       << ", " << dx_2Cal << " Position " << xposCal << G4endl;
 #endif
 
   // Boxes
@@ -76,12 +76,12 @@ int CCalHcal::readFile() {
   for (i=0; i<nBox; i++)
     is >> xposBox[i];
 #ifdef debug
-  cout << tab << "Box material: " << boxMaterial  << " Size " << dy_2Box
+  G4cout << tab << "Box material: " << boxMaterial  << " Size " << dy_2Box
        << ", " << dx_2Box << " Wall Thickness " << wallThickBox << " number "
        << nBox << " position ";
   for (i=0; i<nBox; i++)
-    cout << i << " " << xposBox[i] << " ";
-  cout << endl;
+    G4cout << i << " " << xposBox[i] << " ";
+  G4cout << G4endl;
 #endif
 
   // Layers of scintillators
@@ -94,11 +94,11 @@ int CCalHcal::readFile() {
   for (i=0; i<nLayerScnt; i++)
     is >> typeLayerScnt[i] >> mothLayerScnt[i] >> xposLayerScnt[i];
 #ifdef debug
-  cout << tab << nLayerScnt << " Layers of scintillators of type/mother box/"
-       << "position" << endl;
+  G4cout << tab << nLayerScnt << " Layers of scintillators of type/mother box/"
+       << "position" << G4endl;
   for (i=0; i<nLayerScnt; i++)
-    cout << tab << i << " " << typeLayerScnt[i] << " " << mothLayerScnt[i] 
-	 << " " << xposLayerScnt[i] << endl;
+    G4cout << tab << i << " " << typeLayerScnt[i] << " " << mothLayerScnt[i] 
+	 << " " << xposLayerScnt[i] << G4endl;
 #endif
 
   // Layers of absorbers
@@ -110,11 +110,11 @@ int CCalHcal::readFile() {
   for (i=0; i<nLayerAbs; i++)
     is >> typeLayerAbs[i] >> mothLayerAbs[i] >> xposLayerAbs[i];
 #ifdef debug
-  cout << tab << nLayerAbs << " Layers of absorbers of type/mother box/"
-       << "position" << endl;
+  G4cout << tab << nLayerAbs << " Layers of absorbers of type/mother box/"
+       << "position" << G4endl;
   for (i=0; i<nLayerAbs; i++)
-    cout << tab << i << " " << typeLayerAbs[i] << " " << mothLayerAbs[i] 
-	 << " " << xposLayerAbs[i] << endl;
+    G4cout << tab << i << " " << typeLayerAbs[i] << " " << mothLayerAbs[i] 
+	 << " " << xposLayerAbs[i] << G4endl;
 #endif
 
   // Absorber parameters
@@ -124,11 +124,11 @@ int CCalHcal::readFile() {
   for (i=0; i<nAbsorber; i++)
     is >> dx_2Absorber[i];
 #ifdef debug
-  cout << "\tAbsorber mad of " << absMaterial << " with " << nAbsorber
+  G4cout << "\tAbsorber mad of " << absMaterial << " with " << nAbsorber
        << " types and size " << dy_2Absorber;
   for (i=0;  i<nAbsorber; i++)
-    cout << "  " << i << " " << dx_2Absorber[i];
-  cout << endl;
+    G4cout << "  " << i << " " << dx_2Absorber[i];
+  G4cout << G4endl;
 #endif
 
   // Scintillator parameters
@@ -146,18 +146,18 @@ int CCalHcal::readFile() {
     is >> dy_2ScntLayer[i] >> dx_2ScntLayer[i] >> dx_2Wrapper[i]
        >> dx_2FrontPlastic[i] >> dx_2BackPlastic[i] >> dx_2Scintillator[i];
 #ifdef debug
-  cout << tab << nScintillator << " Scintillator layers made of " 
+  G4cout << tab << nScintillator << " Scintillator layers made of " 
        << scntMaterial << " " << wrapMaterial << " and " << plasMaterial 
-       << " of sizes " << endl;
+       << " of sizes " << G4endl;
   for (i=0; i<nScintillator; i++)
-    cout << tab << i << " " << dy_2ScntLayer[i] << " " << dx_2ScntLayer[i] 
+    G4cout << tab << i << " " << dy_2ScntLayer[i] << " " << dx_2ScntLayer[i] 
 	 << " " << dx_2Wrapper[i] << " " << dx_2FrontPlastic[i] << " " 
-	 << dx_2BackPlastic[i] << " " << dx_2Scintillator[i] << endl;
+	 << dx_2BackPlastic[i] << " " << dx_2Scintillator[i] << G4endl;
 #endif
   
   ///////////////////////////////////////////////////////////////
   // Close the file
-  cout << " ==> Closing file " << File() << endl;
+  G4cout << " ==> Closing file " << File() << G4endl;
   is.close();
 
   return 1;

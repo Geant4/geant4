@@ -43,35 +43,35 @@ void CCalVisualisable::setColor(visType v, double r, double g, double b){
 void CCalVisualisable::setPath() {
   pathName = getenv(visEnvName);
   if (!pathName) {
-    cerr << "ERROR: " << visEnvName << " environmental variable not set!" 
-	 << endl;
-    cerr << "       Set it and restart." << endl;
+    G4cerr << "ERROR: " << visEnvName << " environmental variable not set!" 
+	 << G4endl;
+    G4cerr << "       Set it and restart." << G4endl;
     exit(-333);
   }
 }
 
 bool CCalVisualisable::readFile() {
   if (visFile=="") {
-    cerr << "ERROR: No file was specified from which to read Visualisation parameters" 
-	 << endl;
+    G4cerr << "ERROR: No file was specified from which to read Visualisation parameters" 
+	 << G4endl;
     return false;
   }
 
   ///////////////////////////////////////////////////////////////
   //Let's open the file
-  cout << " ==> Opening file " << visFile 
+  G4cout << " ==> Opening file " << visFile 
        << " to read visualisation parameters..."
-       << endl;
+       << G4endl;
 
   G4String pathname(pathName);
-  ifstream is;
+  G4std::ifstream is;
 #ifdef debug
-  cout << "Viualisable : Path " << pathname << " FIle " << visFile << endl;
+  G4cout << "Viualisable : Path " << pathname << " FIle " << visFile << G4endl;
 #endif
   bool ok = openGeomFile(is, pathname, visFile);
   if (!ok) {
-    cout << "WARNING: Could not read " << visFile << endl;
-    cout << "         Default visualization parameters will be used." << endl;
+    G4cout << "WARNING: Could not read " << visFile << G4endl;
+    G4cout << "         Default visualization parameters will be used." << G4endl;
     return false;
   }
   
@@ -96,8 +96,8 @@ bool CCalVisualisable::readFile() {
       vt=PseudoVolumes;
     else {
       vt=Undefined;
-      cerr << "WARNING: Unknown type of visualisable object \"" << viewvol
-	   << "\"." << endl;
+      G4cerr << "WARNING: Unknown type of visualisable object \"" << viewvol
+	   << "\"." << G4endl;
     }
 
 
@@ -112,9 +112,9 @@ bool CCalVisualisable::readFile() {
 
     if (vt!=Undefined) {
 #ifdef debug
-      cout << tab << viewvol << tab << isvisible << tab 
+      G4cout << tab << viewvol << tab << isvisible << tab 
 	   << r << " " << g << " "<< b << tab
-	   << wireframe << endl;
+	   << wireframe << G4endl;
 #endif
       theParameters[vt]=visParameters(isvisible, r, g, b, wireframe);
     }
@@ -123,7 +123,7 @@ bool CCalVisualisable::readFile() {
 
   ///////////////////////////////////////////////////////////////
   // Close the file
-  cout << " ==> Closing file " << visFile << endl;
+  G4cout << " ==> Closing file " << visFile << G4endl;
   is.close();
 
   return true;
@@ -131,15 +131,15 @@ bool CCalVisualisable::readFile() {
 
 double CCalVisualisable::checkColorRange(double cvalue, char ctype) const {
   if (cvalue>1) {
-    cerr << "ERROR: In " << visFile << ". Color " << ctype << "=" 
-	 << cvalue << " > 1" << endl;
-    cerr << "       It will be reset to 1." << endl;
+    G4cerr << "ERROR: In " << visFile << ". Color " << ctype << "=" 
+	 << cvalue << " > 1" << G4endl;
+    G4cerr << "       It will be reset to 1." << G4endl;
     return 1.;
   }
   if (cvalue<0) {
-    cerr << "ERROR: In " << visFile << ". Color " << ctype << "=" 
-	 << cvalue << " < 0" << endl;
-    cerr << "       It will be reset to 0." << endl;
+    G4cerr << "ERROR: In " << visFile << ". Color " << ctype << "=" 
+	 << cvalue << " < 0" << G4endl;
+    G4cerr << "       It will be reset to 0." << G4endl;
     return 0.;
   }
   return cvalue;

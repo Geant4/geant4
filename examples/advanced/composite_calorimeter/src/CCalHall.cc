@@ -4,7 +4,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalHall.hh"
 
-#include <fstream.h>
+#include "g4std/fstream"
 #include "CCalutils.hh"
 
 #include "CCalHcal.hh"
@@ -19,10 +19,10 @@ CCalHall::~CCalHall() {}
 int CCalHall::readFile() {
   ///////////////////////////////////////////////////////////////
   //Let's open the file
-  cout << " ==> Opening file " << File() << " to read elements..."
-       << endl;
+  G4cout << " ==> Opening file " << File() << " to read elements..."
+       << G4endl;
 
-  ifstream is;
+  G4std::ifstream is;
   bool ok = openGeomFile(is, pathName, File());
   if (!ok)
     return 0;
@@ -34,13 +34,13 @@ int CCalHall::readFile() {
   readName(is,genMaterial);
   is >> dy_2Hall >> dx_2Hall >> jump;
 #ifdef debug
-  cout << tab << "General material: " << genMaterial  << " Size " << dy_2Hall
-       << ", " << dx_2Hall << endl;
+  G4cout << tab << "General material: " << genMaterial  << " Size " << dy_2Hall
+       << ", " << dx_2Hall << G4endl;
 #endif
   
   ///////////////////////////////////////////////////////////////
   // Close the file
-  cout << " ==> Closing file " << File() << endl;
+  G4cout << " ==> Closing file " << File() << G4endl;
   is.close();
 
   return 1;
