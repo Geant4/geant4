@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.50 2003-06-16 17:14:27 gunter Exp $
+// $Id: G4VisManager.cc,v 1.51 2003-10-17 09:30:45 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -163,9 +163,6 @@ void G4VisManager::Initialise () {
       "\n  environment variables:"
 #ifdef G4VIS_BUILD_DAWN_DRIVER
       "\n    G4VIS_USE_DAWN"
-#endif
-#ifdef G4VIS_BUILD_OPACS_DRIVER
-      "\n    G4VIS_USE_OPACS"
 #endif
 #ifdef G4VIS_BUILD_OPENGLX_DRIVER
       "\n    G4VIS_USE_OPENGLX"
@@ -908,7 +905,6 @@ void G4VisManager::PrintAllGraphicsSystems () const {
     "\n\n  GAGTree (prints geometry hierarchy, connectable to GAG"
     "\n  user interface)"
     "\n\n  HepRepFile (file connection to HepRep viewers, e.g., WIRED)"
-    "\n\n  OPACS (the Orsay Package) "
     "\n\n  OpenGLIX (direct/immediate drawing on X Windows)\n"
        << G4VisFeaturesOfOpenGLIX () <<
     "\n\n  OpenGLSX (display List/stored drawing on X Windows)\n"
@@ -936,9 +932,6 @@ void G4VisManager::PrintInstalledGraphicsSystems () const {
 #endif
        << "\n  DAWNFILE (file connection to the Fukui Renderer DAWN)"
        << "\n  GAG Tree (produces ascii file of geometry hierarchy for GAG)"
-#ifdef G4VIS_BUILD_OPACS_DRIVER
-       << "\n  OPACS (the Orsay Package)"
-#endif
 #ifdef G4VIS_BUILD_OPENGLX_DRIVER
        << "\n  OpenGLIX (direct/immediate drawing on X Windows)"
        << "\n  OpenGLSX (display List/stored drawing on X Windows)"
