@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.hh,v 1.14 2004-07-01 10:16:14 gcosmo Exp $
+// $Id: G4VViewer.hh,v 1.15 2005-02-23 11:24:52 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -103,8 +103,8 @@ public: // With description
   const G4VisAttributes*  GetApplicableVisAttributes
                                             (const G4VisAttributes*) const;
 
-  void SetNeedKernelVisit ();
-  // Sets individual need-visit flags.
+  void SetNeedKernelVisit (G4bool need);
+  // Sets individual need-visit flag.
 
   void NeedKernelVisit ();
   // Flags all views the need to re-visit the GEANT4 kernel to refresh

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmStyleCallbacks.cc,v 1.7 2004-07-23 15:23:58 johna Exp $
+// $Id: G4OpenGLXmStyleCallbacks.cc,v 1.8 2005-02-23 11:24:52 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -129,7 +129,7 @@ void G4OpenGLXmViewer::background_color_callback (Widget w,
     if (!pView->white_background) {
       pView->white_background = true;
       if (pView->GetViewParameters().GetDrawingStyle() == G4ViewParameters::hlr) {
-	pView->SetNeedKernelVisit ();
+	pView->SetNeedKernelVisit (true);
       }
     }
     break;
@@ -138,7 +138,7 @@ void G4OpenGLXmViewer::background_color_callback (Widget w,
     if (pView->white_background) {
       pView->white_background = false;
       if (pView->GetViewParameters().GetDrawingStyle() == G4ViewParameters::hlr) {
-	pView->SetNeedKernelVisit ();
+	pView->SetNeedKernelVisit (true);
       }
     }
     break;
@@ -273,7 +273,7 @@ void G4OpenGLXmViewer::aux_edge_callback (Widget w,
     G4Exception("Unrecognised case in aux_edge_callback.");
   }
 
-  pView->SetNeedKernelVisit ();
+  pView->SetNeedKernelVisit (true);
   pView->SetView ();
   pView->ClearView ();
   pView->DrawView ();
