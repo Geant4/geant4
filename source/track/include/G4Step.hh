@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Step.hh,v 1.1 1999-01-07 16:14:23 gunter Exp $
+// $Id: G4Step.hh,v 1.2 1999-02-17 12:49:09 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -96,7 +96,8 @@ class G4Step
 
    void CopyPostToPreStepPoint( );
 
-   void ShowStep() const ;
+//TS moved to SteppingVerbose
+//   void ShowStep() const ;
      // Print all information of the Step to stdout
 
    G4Polyline* CreatePolyline () const;
