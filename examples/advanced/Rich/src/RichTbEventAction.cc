@@ -44,49 +44,41 @@
 #include "RichTbAnalysisManager.hh"
 #include "RichTbIOData.hh"
 
-RichTbEventAction::RichTbEventAction(){
+RichTbEventAction::RichTbEventAction()
+{
   RichTbCollID = -1;
-
 }
 
 RichTbEventAction::RichTbEventAction(RichTbRunConfig* RConfig, 
-    RichTbVisManager* RVisManager, RichTbIOData* RIOData){
+    RichTbVisManager* RVisManager, RichTbIOData* RIOData)
+{
   RichTbCollID = -1;
   runConfiguration=RConfig;
 
   pVisManager=RVisManager;
   rTbIOData = RIOData;
-  
-  
 }
-RichTbEventAction::~RichTbEventAction(){
 
-
+RichTbEventAction::~RichTbEventAction()
+{
 }
-void RichTbEventAction::BeginOfEventAction(const G4Event* evt){
 
-
-
+void RichTbEventAction::BeginOfEventAction(const G4Event* evt)
+{
 
   G4SDManager * SDman = G4SDManager::GetSDMpointer();
   if(RichTbCollID<0){
-
-
-
     RichTbCollID = SDman->GetCollectionID("RichTbHitsCollection");
-
   }
 
 #ifdef G4ANALYSIS_USE
   RichTbAnalysisManager * analysis = RichTbAnalysisManager::getInstance();
   analysis->BeginOfEventAnalysis(evt);
-
 #endif
-
-
 }
-void RichTbEventAction::EndOfEventAction(const G4Event* evt){
 
+void RichTbEventAction::EndOfEventAction(const G4Event* evt)
+{
   RichTbRunConfig* RConfig =  runConfiguration;
 
   // first get the trajectories
@@ -115,52 +107,36 @@ void RichTbEventAction::EndOfEventAction(const G4Event* evt){
 
   }
 
-  
-
   if(RHC)
   {
-
-
-
     n_hit = RHC->entries();
-
-
     for(G4int i=0;i<n_hit;i++)
-
       {
-
 	totalhits += i;
-
       }
-
-
-
-
     //    G4cout << "     " << n_hit
     //   << " hits are stored in RichTbHitsCollection." << G4endl;
   }
+  if(RConfig->getRichTbDrawTrajectory() > 0)
+  {    
+    for (G4int i=0; i<n_trajectories; i++)
+    {
+      (*(evt->GetTrajectoryContainer()))[i]->DrawTrajectory();
+    }
+  }
 
-    if(RConfig->getRichTbDrawTrajectory() > 0){    
-     for (G4int i=0; i<n_trajectories; i++){
-     (*(evt->GetTrajectoryContainer()))[i]->DrawTrajectory();
-     }
-   }
-  
+  //now for the hits.
 
-    //now for the hits.
-
-    if(RHC) {
+  if(RHC)
+  {
      G4int n_hith = RHC->entries();
-    
-
-
-
-     for (G4int ih=0; ih<n_hith; ih++ ) {
+     for (G4int ih=0; ih<n_hith; ih++ )
+     {
        RichTbHit* aHit = (*RHC)[ih];
        aHit->DrawWithVisM(pVisManager);
      }
+  }
 
-    }
   //Now to Fill the Histograms
 
 #ifdef G4ANALYSIS_USE
@@ -169,21 +145,10 @@ void RichTbEventAction::EndOfEventAction(const G4Event* evt){
 #endif
 
    // Now to write out the data
-   if(RConfig -> DoWriteOutputFile() ) {
-
-   rTbIOData -> WriteOutEventHeaderData(evt);
-   rTbIOData -> WriteOutHitData(evt);
-   G4cout << ">>> End of Event  Number  " << evt->GetEventID() << G4endl;
-
+   if(RConfig -> DoWriteOutputFile() )
+   {
+     rTbIOData -> WriteOutEventHeaderData(evt);
+     rTbIOData -> WriteOutHitData(evt);
+     G4cout << ">>> End of Event  Number  " << evt->GetEventID() << G4endl;
    }
-
 }
-
-
-
-
-
-
-
-
-
