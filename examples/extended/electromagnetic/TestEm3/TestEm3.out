@@ -163,7 +163,7 @@ Cut in energy
            Galactic         990 eV          990 eV 
                Beam         990 eV          990 eV 
 ===================================================
-# $Id: TestEm3.out,v 1.14 2001-04-19 19:34:52 stesting Exp $
+# $Id: TestEm3.out,v 1.15 2001-04-19 19:36:53 stesting Exp $
 #
 # Macro file for "exampleN03.cc" 
 # (can be run in batch, without graphic)

@@ -112,7 +112,7 @@ Cut in energy
                Lead         101 keV        1.38 MeV
             Uranium         110 keV        1.92 MeV
 ===================================================
-# $Id: TestEm1.out,v 1.13 2001-04-19 19:34:37 stesting Exp $
+# $Id: TestEm1.out,v 1.14 2001-04-19 19:36:36 stesting Exp $
 #
 # Macro file for "TestEm1.cc"
 # (can be run in batch, without graphic)
