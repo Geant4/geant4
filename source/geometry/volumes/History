@@ -1,4 +1,4 @@
-$Id: History,v 1.37 2001-04-27 14:19:35 gcosmo Exp $
+$Id: History,v 1.38 2001-05-15 08:43:18 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 15th, 2001       G. Cosmo - geomvol-V03-01-03
+- G4AuxiliaryNavServices::CheckPointOnSurface(): added additional check to resolve
+  endless looping of G4Navigator in case the track is passing through a point, edge
+  or surface shared by two solids.
+  This problem occured when G4Navigator was trying to transport a particle when
+  exiting a solid. Transportation will now perform a few zero steps and continues
+  stepping instead of looping around the same point. Fixes problem report #185.
 
 April 27th, 2001     G. Cosmo - geomvol-V03-01-02
 - G4VoxelNavigation.icc: fixed compilation warnings on HP-UX, concerning
