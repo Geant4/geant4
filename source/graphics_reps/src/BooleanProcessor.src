@@ -202,6 +202,9 @@ class FaceList {
 //                       its members from the BooleanProcessor class ---
 class ExtPolyhedron : public HepPolyhedron {
   friend class BooleanProcessor;
+  virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
+    return HepPolyhedron::operator = (from);
+  }
 };
 
 // ----------------------------------------- Boolean processor class ---
