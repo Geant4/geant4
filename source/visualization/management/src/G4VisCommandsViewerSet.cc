@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.28 2004-12-07 23:41:02 perl Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.29 2005-01-26 16:30:50 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -139,7 +139,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
     ("/vis/viewer/set/hiddenMarker [true|false]");
   fpCommandHiddenMarker->SetGuidance("  default: true");
   fpCommandHiddenMarker->SetGuidance
-    ("Markers are hidden by/seen though closer objects.");
+    ("Markers are hidden by (if true) or seen through (if false) closer objects.");
   fpCommandHiddenMarker->SetParameterName("hidden-marker",omitable = true);
   fpCommandHiddenMarker->SetDefaultValue(true);
 
@@ -825,7 +825,7 @@ void G4VisCommandsViewerSet::SetNewValue
   }
 
   else if (command == fpCommandUpVector) {
-    fUpVector = G4UIcommand::ConvertTo3Vector(newValue);
+    fUpVector = G4UIcommand::ConvertTo3Vector(newValue).unit();
     vp.SetUpVector(fUpVector);
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Up direction set to " << vp.GetUpVector() << G4endl;
@@ -851,7 +851,7 @@ void G4VisCommandsViewerSet::SetNewValue
   }
 
   else if (command == fpCommandViewpointVector) {
-    fViewpointVector = G4UIcommand::ConvertTo3Vector(newValue);
+    fViewpointVector = G4UIcommand::ConvertTo3Vector(newValue).unit();
     vp.SetViewAndLights(fViewpointVector);
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Viewpoint direction set to "
