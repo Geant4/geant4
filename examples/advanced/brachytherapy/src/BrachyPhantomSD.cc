@@ -30,7 +30,7 @@
 //    *                              *
 //    ********************************
 //
-// $Id: BrachyPhantomSD.cc,v 1.6 2004-03-11 15:38:43 guatelli Exp $
+// $Id: BrachyPhantomSD.cc,v 1.7 2004-03-11 16:05:03 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPhantomSD.hh"
@@ -48,34 +48,18 @@
 
 //....
 
-BrachyPhantomSD::BrachyPhantomSD(G4String name, G4int NumVoxelX, G4int NumVoxelZ)
-	:G4VSensitiveDetector(name),numberOfVoxelsX(NumVoxelX),numberOfVoxelsZ(NumVoxelZ)
+BrachyPhantomSD::BrachyPhantomSD(G4String name):G4VSensitiveDetector(name)
 {
-  /*
- G4String HCname;
- collectionName.insert(HCname = "PhantomHitsCollection");
- voxelID = new G4int[numberOfVoxelsX * numberOfVoxelsZ * numberOfVoxelsZ];
-  phantomHitsCollection = NULL;
-  */
+ 
 }
 
 BrachyPhantomSD::~BrachyPhantomSD()
 {
-  //delete[] voxelID;
 }
 
 void BrachyPhantomSD::Initialize(G4HCofThisEvent*)
 {
-  /*
-  G4int numberOfVoxelsY = 300;
-  phantomHitsCollection = new BrachyPhantomHitsCollection(SensitiveDetectorName,collectionName[0]);
-
-  for(G4int k=0;k<numberOfVoxelsZ;k++)
-    for(G4int i=0;i<numberOfVoxelsX;i++)
-      for(G4int j=0;j<numberOfVoxelsY;j++)
-	voxelID[i+k*numberOfVoxelsX+j*numberOfVoxelsY*numberOfVoxelsY] = -1;
-  */
-}
+ }
 
 G4bool BrachyPhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
 {
@@ -89,9 +73,6 @@ G4bool BrachyPhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
   if(energyDeposit == 0.)
     return false;
 
-  G4VPhysicalVolume* physVol = ROhist->GetVolume();
-  //G4VPhysicalVolume* mothVol = ROhist->GetVolume(1);
-  
   // Read Voxel indexes: i is the x index, k is the z index
   G4int k = ROhist->GetReplicaNumber(1);
   G4int i = ROhist->GetReplicaNumber(2);
@@ -104,64 +85,28 @@ G4bool BrachyPhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
   G4double y = (- numberOfVoxelZ+1+2*j)*voxelWidthZ/2;
   G4double z = (- numberOfVoxelZ+1+2*k)*voxelWidthZ/2;
 
-  G4double xx = aStep->GetPreStepPoint()->GetPosition().x();
-  G4double yy = aStep->GetPreStepPoint()->GetPosition().y();
-  G4double zz= aStep->GetPreStepPoint()->GetPosition().z();
-  /*
-  G4cout<<"EnergyDep"<<energyDeposit<<" "<<xx<<" "<<yy<< " "<<zz
-	<<","<<i<<" "<<j<<" "<<k<<" corresponding to"
-        <<x << " "<<y <<" "<<z
-        <<G4endl;
-  */
+ 
  if(energyDeposit != 0)                       
 	    { 
             
 #ifdef G4ANALYSIS_USE	
                  BrachyAnalysisManager* analysis = 
                                       BrachyAnalysisManager::getInstance();   
-	         //analysis -> FillNtupleWithEnergy(x,y,z,energyDeposit);
-                 if (yy<0.5*mm && yy> -0.5*mm)
+	         analysis -> FillNtupleWithEnergy(x,y,z,energyDeposit);
+                 if (y<0.8*mm && y> -0.8*mm)
 	         { 
                  analysis -> FillHistogramWithEnergy(x,z,energyDeposit/MeV);
    
-                   if (zz<0.5*mm && zz> -0.5*mm)
-		 // G4cout<< energyDeposit <<" "<<x <<" "<<yy <<" "<<zz<<G4endl;
+                   if (z<0.8*mm && z> -0.8*mm)                
                    analysis -> DoseDistribution(x,energyDeposit/MeV);
 		 }
 #endif  
 	    }
-/*
-  if(voxelID[i+k*numberOfVoxelsX+j*numberOfVoxelsX*numberOfVoxelsX] == -1)
-    {
-      BrachyPhantomHit* PhantomHit = new BrachyPhantomHit(physVol->GetLogicalVolume(),i,j,k);
-      
-      G4RotationMatrix rotM;
-      if(physVol->GetObjectRotation())
-	rotM = *(physVol->GetObjectRotation());
-      
-      PhantomHit->SetEdep(energyDeposit);
-      PhantomHit->SetPos(physVol->GetTranslation());
-      PhantomHit->SetRot(rotM);
-
-      G4int VoxelID = phantomHitsCollection->insert(PhantomHit);
-      voxelID[i+k*numberOfVoxelsX+j*numberOfVoxelsX*numberOfVoxelsX] = VoxelID - 1;
-    }
-  else
-    (*phantomHitsCollection)
-         [voxelID[i+k*numberOfVoxelsX+j*numberOfVoxelsX*numberOfVoxelsX]]->AddEdep(energyDeposit);
-  */
   return true;
 }
 
-void BrachyPhantomSD::EndOfEvent(G4HCofThisEvent*HCE)
-{/*
-  static G4int HCID = -1;
-  if(HCID<0)
-    { 
-      HCID = GetCollectionID(0); 
-    }
-  HCE->AddHitsCollection(HCID,phantomHitsCollection);
- */
+void BrachyPhantomSD::EndOfEvent(G4HCofThisEvent*)
+{
 }
 
 void BrachyPhantomSD::clear()

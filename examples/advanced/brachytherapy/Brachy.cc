@@ -114,7 +114,7 @@ int main(int argc ,char ** argv)
       session = new G4UIterminal();
     }
 
-  BrachyEventAction *pEventAction = new BrachyEventAction(sensitiveDetectorName);
+  BrachyEventAction *pEventAction = new BrachyEventAction();
   pRunManager->SetUserAction(pEventAction );
 
   BrachyRunAction *pRunAction = new BrachyRunAction(sensitiveDetectorName);

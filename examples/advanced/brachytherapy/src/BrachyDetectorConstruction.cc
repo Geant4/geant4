@@ -34,7 +34,7 @@
 //    *                                      *
 //    ****************************************
 //
-// $Id: BrachyDetectorConstruction.cc,v 1.23 2004-03-11 15:38:42 guatelli Exp $
+// $Id: BrachyDetectorConstruction.cc,v 1.24 2004-03-11 16:05:02 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPhantomROGeometry.hh"
@@ -207,7 +207,7 @@ void  BrachyDetectorConstruction::ConstructSensitiveDetector()
 
   if(!phantomSD)
   {
-    phantomSD = new BrachyPhantomSD(sensitiveDetectorName,numberOfVoxelsAlongX,numberOfVoxelsAlongZ);
+    phantomSD = new BrachyPhantomSD(sensitiveDetectorName);
     G4String ROGeometryName = "PhantomROGeometry";
     phantomROGeometry = new BrachyPhantomROGeometry(ROGeometryName,phantomDimensionX,phantomDimensionZ,numberOfVoxelsAlongX,numberOfVoxelsAlongZ);
     phantomROGeometry->BuildROGeometry();
