@@ -1,4 +1,4 @@
-$Id: README,v 1.8 2001-12-07 19:20:15 pfeiffer Exp $
+$Id: README,v 1.9 2002-06-18 23:46:12 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -29,10 +29,13 @@ in Geant4:
 
  - the generation of particles is done via the new General Particle Source
 
- - histograming facilities are presently provided for the Linux environment 
-   either by using the AIDA interfaces, or through the Anaphe/Lizard system.
-   The AIDA compliant version has not been tested by the developers and is
-   here as a example of "forward compatibility" on how to use analysis.
+ - histograming facilities are available through the AIDA interfaces.
+   The implementation shown in this example is obsolete, and will be
+   updated in a future release; for an up-to-date illustration of how to
+   embed an AIDA-compliant analysis in a Geant4-based simulation
+   application, please see the other advanced examples in this
+   Geant4 release (brachytherapy, gammaray_telescope, underground_physics,
+   xray_fluorescence).
 
 In order to be able to use any of these packages, prior installation is 
 necessary and a number of environment variables will have to be set.
