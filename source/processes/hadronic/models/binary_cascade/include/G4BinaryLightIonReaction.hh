@@ -1,7 +1,7 @@
 #ifndef G4BinaryLightIonReaction_h
 #define G4BinaryLightIonReaction_h
 
-#include "G4IonBinaryCascade.hh"
+#include "G4BinaryCascade.hh"
 #include "G4PreCompoundModel.hh"
 #include "G4HadFinalState.hh"
 #include "G4ExcitationHandler.hh"
@@ -15,7 +15,7 @@ class G4BinaryLightIonReaction : public G4HadronicInteraction
                                               G4Nucleus& theNucleus);
   
   private:
-    G4IonBinaryCascade theModel;
+    G4BinaryCascade theModel;
     G4ExcitationHandler theHandler;
     G4PreCompoundModel theProjectileFragmentation;
     G4HadFinalState theResult;
