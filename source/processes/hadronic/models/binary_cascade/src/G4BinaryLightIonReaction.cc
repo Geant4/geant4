@@ -152,16 +152,16 @@
       if( (*result)[i]->GetNewlyAdded() ) 
       {
         fState += G4LorentzVector( (*result)[i]->GetMomentum(), (*result)[i]->GetTotalEnergy() );
-        G4cout <<" secondary ... ";
+//        G4cout <<" secondary ... ";
       }
       else {
-        G4cout <<" spectator ... "; 
+//        G4cout <<" spectator ... "; 
       }
 	
-       G4cout << (*result)[i]<< " "
-		<< (*result)[i]->GetDefinition()->GetParticleName() << " " 
-		<< (*result)[i]->GetMomentum()<< " " 
-		<< (*result)[i]->GetTotalEnergy() << G4endl;
+//        G4cout << (*result)[i]<< " "
+// 		<< (*result)[i]->GetDefinition()->GetParticleName() << " " 
+// 		<< (*result)[i]->GetMomentum()<< " " 
+// 		<< (*result)[i]->GetTotalEnergy() << G4endl;
     }
     G4LorentzVector momentum(iState-fState);
     debug.push_back("the momentum balance");
@@ -179,8 +179,8 @@
     aProRes.SetNumberOfHoles(a1-resA);
     aProRes.SetMomentum(momentum);
     G4ParticleDefinition * resDef(0);
-    G4cout << "G4BinaryLiightIonReaction: spectator particles A Z : " 
-           << resA << " " << resZ << G4endl;
+//    G4cout << "G4BinaryLiightIonReaction: spectator particles A Z : " 
+//           << resA << " " << resZ << G4endl;
     
     // call precompound model
     G4ReactionProductVector * proFrag(0);
