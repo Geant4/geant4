@@ -1,4 +1,4 @@
-$Id: History,v 1.11 2003-11-12 16:42:43 japost Exp $
+$Id: History,v 1.12 2003-11-12 16:43:21 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,7 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-Nov 12th, 2003 - J.Apostolakis (fieldex-V05-02-00)
+Nov 12th, 2003 - J.Apostolakis (fieldex-V05-02-01)
 --------------
 - Created helper class F02ElectricFieldSetup,
       using nearly all of F02ElectroMagneticField,
