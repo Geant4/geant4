@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VEnergyLoss.cc,v 1.5 2000-03-07 17:16:53 maire Exp $
+// $Id: G4VEnergyLoss.cc,v 1.6 2000-03-21 11:17:06 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -848,12 +848,12 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
 //  calculate actual loss from the mean loss
 //  The model used to get the fluctuation is essentially the same as in Glandz in Geant3.
 {
-   static const G4double minLoss = 5.*eV ;
+   static const G4double minLoss = 1.*eV ;
    static const G4double probLim = 0.01 ;
    static const G4double sumaLim = -log(probLim) ;
    static const G4double alim=10.;
-   static const G4double cprob = 3. ;
    static const G4double kappa = 10. ;
+
 
   // check if the material has changed ( cache mechanism)
 
@@ -891,9 +891,8 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   G4double tau   = Tkin/ParticleMass, tau1 = tau+1., tau2 = tau*(tau+2.);
   G4double Tm    = 2.*electron_mass_c2*tau2/(1.+2.*tau1*rmass+rmass*rmass);
 
-  // no fluctuation for very low energy particle !
-  if (Tm <= ipotFluct) return MeanLoss ;
-
+  if (Tm <= ipotFluct) Tm = ipotFluct ;
+  
   if(Tm > threshold) Tm = threshold;
   beta2 = tau2/(tau1*tau1);
 
@@ -913,32 +912,69 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
 
   a1 = C*f1Fluct*(w2-e1LogFluct-beta2)/e1Fluct;
   a2 = C*f2Fluct*(w2-e2LogFluct-beta2)/e2Fluct;
-  a3 = rateFluct*MeanLoss*(Tm-ipotFluct)/(ipotFluct*Tm*log(w1));
+  if(Tm > ipotFluct)
+    a3 = rateFluct*MeanLoss*(Tm-ipotFluct)/(ipotFluct*Tm*log(w1));
+  else
+  {
+     a1 /= 1.-rateFluct ;
+     a2 /= 1.-rateFluct ;
+     a3  = 0. ;
+  } 
 
   suma = a1+a2+a3;
 
   loss = 0. ;
 
-  // if (prob > probLim)         // very small Step
   if(suma < sumaLim)             // very small Step
     {
-      if( G4UniformRand() > exp(-cprob*a1) )
-      {
-        e0 = aMaterial->GetIonisation()->GetEnergy0fluct();
-        a1 = MeanLoss/e0;
+      e0 = aMaterial->GetIonisation()->GetEnergy0fluct();
 
-        if(a1>alim)
+      if(Tm == ipotFluct)
+      {
+        a3 = MeanLoss/e0;
+
+        if(a3>alim)
         {
-          siga=sqrt(a1) ;
-          p1 = G4std::max(0,int(RandGauss::shoot(a1,siga)+0.5));
+          siga=sqrt(a3) ;
+          p3 = G4std::max(0,int(RandGauss::shoot(a3,siga)+0.5));
         }
         else
-          p1 = G4Poisson(a1);
+          p3 = G4Poisson(a3);
 
-        loss = p1*e0 ;
+        loss = p3*e0 ;
 
-        if(p1 > 0)
+        if(p3 > 0)
           loss += (1.-2.*G4UniformRand())*e0 ;
+
+      }
+      else
+      {
+        Tm = Tm-ipotFluct+e0 ;
+        a3 = MeanLoss*(Tm-e0)/(Tm*e0*log(Tm/e0));
+
+        if(a3>alim)
+        {
+          siga=sqrt(a3) ;
+          p3 = G4std::max(0,int(RandGauss::shoot(a3,siga)+0.5));
+        }
+        else
+          p3 = G4Poisson(a3);
+
+        if(p3 > 0)
+        {
+          w = (Tm-e0)/Tm ;
+          if(p3 > nmaxCont2)
+          {
+            dp3 = G4float(p3) ;
+            Corrfac = dp3/G4float(nmaxCont2) ;
+            p3 = nmaxCont2 ;
+          }
+          else
+            Corrfac = 1. ;
+
+          for(G4int i=0; i<p3; i++) loss += 1./(1.-w*G4UniformRand()) ;
+          loss *= e0*Corrfac ;  
+        }        
       }
     }
     
@@ -971,6 +1007,8 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
         loss += (1.-2.*G4UniformRand())*e1Fluct;   
 
       // ionisation .......................................
+     if(a3 > 0.)
+     {
       if(a3>alim)
       {
         siga=sqrt(a3) ;
@@ -1010,6 +1048,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
         }
       }        
       loss += lossc;  
+     }
     } 
 
   return loss ;
