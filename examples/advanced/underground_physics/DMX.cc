@@ -95,6 +95,20 @@ int main(int argc,char** argv) {
   G4VisManager* visManager = new DMXVisManager;
   visManager->Initialize();
 #endif
+
+  // output environment variables:
+#ifdef G4ANALYSIS_USE
+  G4cout << " Using AIDA 2.2 analysis " << G4endl;
+#else
+  G4cout << " G4ANALYSIS_USE environment variable not set, NO ANALYSIS " 
+	 << G4endl;
+#endif
+
+#ifdef DMXENV_GPS_USE
+  G4cout << " Using GPS and not DMX gun " << G4endl;
+#else
+  G4cout << " Using the DMX gun " << G4endl;
+#endif
     
   // set user action classes
   DMXPrimaryGeneratorAction* DMXGenerator = new DMXPrimaryGeneratorAction;
