@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2001-09-17 17:05:39 maire Exp $
+$Id: History,v 1.19 2001-09-19 12:30:35 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+19 sep 01: mma (muons-V03-02-04)
+- come back to previous process name "MuIoni"
+     
 17 sep 01: mma (muons-V03-02-03)
 - modifs in all classes for the migration of Materials to pure STL,
   but backward compatible with g4rw

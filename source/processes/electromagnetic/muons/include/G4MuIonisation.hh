@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuIonisation.hh,v 1.11 2001-08-29 16:38:04 maire Exp $
+// $Id: G4MuIonisation.hh,v 1.12 2001-09-19 12:30:35 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------- G4MuIonisation physics process -----------
@@ -30,7 +30,8 @@
 //
 // 10-02-00 modifications , new e.m. structure, L.Urban
 // 10-08-01 new methods Store/Retrieve PhysicsTable (mma)
-// 29-08-01 new function ComputeRestrictedMeandEdx() + 'cleanup' (mma) 
+// 29-08-01 new function ComputeRestrictedMeandEdx() + 'cleanup' (mma)
+// 19-09-01 come back to the old process name 'MuIoni' 
 //
 // ------------------------------------------------------------
 
@@ -56,7 +57,7 @@ class G4MuIonisation : public G4VMuEnergyLoss
 {
   public:   // with description
  
-    G4MuIonisation(const G4String& processName = "MuIonis"); 
+    G4MuIonisation(const G4String& processName = "MuIoni"); 
 
    ~G4MuIonisation();
 
