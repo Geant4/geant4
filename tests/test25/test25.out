@@ -112,53 +112,53 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2.6s Real=3s Sys=0.26s
+  User=0.73s Real=0.89s Sys=0.07s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=8.9s Real=9.3s Sys=0.27s
+  User=1.5s Real=1.6s Sys=0.07s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=11s Real=12s Sys=0.29s
+  User=1.8s Real=1.8s Sys=0.03s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=26s Real=29s Sys=1s
+  User=3.9s Real=4.1s Sys=0.16s
 SimpleBox is now made of Cu
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.6s Real=2.4s Sys=0.08s
+  User=0.28s Real=0.31s Sys=0.02s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=3.1s Real=3.3s Sys=0.12s
+  User=0.49s Real=0.51s Sys=0.02s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=8.9s Real=9.3s Sys=0.32s
+  User=1.4s Real=1.4s Sys=0.05s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=20s Real=21s Sys=0.56s
+  User=2.9s Real=3s Sys=0.12s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=19s Real=21s Sys=0.86s
+  User=2.5s Real=2.5s Sys=0.06s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=20s Real=22s Sys=0.56s
+  User=2.7s Real=2.8s Sys=0.08s
 SimpleBox is now made of U
 Start Run processing.
 Run terminated.
@@ -174,59 +174,105 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.6s Real=1.8s Sys=0.07s
+  User=0s Real=0s Sys=0s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=4.5s Real=4.8s Sys=0.17s
+  User=0s Real=0s Sys=0s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=6.9s Real=8s Sys=0.2s
+  User=5s Real=5.6s Sys=0.3s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=21s Real=22s Sys=0.63s
+  User=9.4s Real=9.6s Sys=0.14s
 SimpleBox is now made of U
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.47s Real=0.52s Sys=0.01s
+  User=0.31s Real=0.31s Sys=0s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.22s Real=0.24s Sys=0.02s
+  User=0.58s Real=0.62s Sys=0.01s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2s Real=2s Sys=0.06s
+  User=2.8s Real=2.9s Sys=0.04s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=6.8s Real=6.9s Sys=0.13s
+  User=2.1s Real=2.2s Sys=0.04s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=15s Real=16s Sys=0.4s
+  User=5s Real=5.2s Sys=0.12s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=18s Real=19s Sys=0.42s
+  User=0.34s Real=0.34s Sys=0s
 SimpleBox is now made of Si
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.7s Real=0.82s Sys=0.06s
+  User=0s Real=0s Sys=0s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.03s Real=0.03s Sys=0s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=1.2s Real=1.4s Sys=0.13s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.63s Real=0.64s Sys=0.01s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=2.5s Real=2.6s Sys=0.17s
+SimpleBox is now made of Si
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.06s Real=0.07s Sys=0.01s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.1s Real=0.1s Sys=0s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.99s Real=1s Sys=0.04s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.06s Real=0.07s Sys=0.01s
 Start Run processing.
 Run terminated.
 Run Summary
@@ -236,53 +282,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.71s Real=0.78s Sys=0.01s
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.04s Real=0.04s Sys=0s
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=4.9s Real=5.2s Sys=0.12s
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=8s Real=8.4s Sys=0.27s
-SimpleBox is now made of Si
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=1.4s Real=1.4s Sys=0.04s
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.33s Real=0.41s Sys=0.01s
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=2s Real=2.1s Sys=0.06s
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=12s Real=13s Sys=0.27s
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=15s Real=15s Sys=0.38s
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=13s Real=13s Sys=0.38s
+  User=2.5s Real=2.6s Sys=0.1s
 SimpleBox is now made of H
 Start Run processing.
 Run terminated.

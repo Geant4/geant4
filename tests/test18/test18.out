@@ -129,7 +129,7 @@ MuPairProd:  theoretical cross sections
     3.37e+03           1      0.0718     e-
     9.35e+03           1      0.0718     anti_nu_e
     1.98e+03           1      0.0718     gamma
-        2.04           1      0.0718     Ne24[0.1]
+        2.04           1      0.0718     Ne24[0.0]
 
 #
 #
