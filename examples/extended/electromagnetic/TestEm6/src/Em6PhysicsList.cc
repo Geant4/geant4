@@ -10,6 +10,10 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
    
+// Always place it in front!
+//
+#include "G4Timer.hh"
+
 #include "Em6PhysicsList.hh"
 #include "Em6DetectorConstruction.hh"
 #include "Em6PhysicsListMessenger.hh"
@@ -25,7 +29,6 @@
 #include "G4ParticleTable.hh"
 #include "G4Material.hh"
 #include "G4EnergyLossTables.hh"
-////#include "G4Timer.hh"
 #include "G4ios.hh"
 #include "g4std/iomanip"                
 

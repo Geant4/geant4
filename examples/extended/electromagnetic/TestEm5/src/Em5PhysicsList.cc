@@ -5,12 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em5PhysicsList.cc,v 1.3 1999-12-15 14:49:10 gunter Exp $
+// $Id: Em5PhysicsList.cc,v 1.4 2000-01-06 14:55:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-   
+
+// Always place it in front!
+//   
+#include "G4Timer.hh"
+
 #include "Em5PhysicsList.hh"
 #include "Em5DetectorConstruction.hh"
 #include "Em5PhysicsListMessenger.hh"
@@ -23,7 +27,6 @@
 #include "G4ParticleTable.hh"
 #include "G4Material.hh"
 #include "G4EnergyLossTables.hh"
-////#include "G4Timer.hh"
 #include "G4ios.hh"
 #include "g4std/iomanip"                
 
