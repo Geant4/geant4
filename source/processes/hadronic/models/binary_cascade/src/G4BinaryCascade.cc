@@ -54,7 +54,7 @@
 #include <algorithm>
 #include "G4ShortLivedConstructor.hh"
 // #define debug_1_BinaryCascade 1
-// #define debug_G4BinaryCascade 1
+#define debug_G4BinaryCascade 1
 //
 //  C O N S T R U C T O R S   A N D   D E S T R U C T O R S
 //
@@ -69,12 +69,10 @@ G4BinaryCascade::G4BinaryCascade() : G4VIntraNuclearTransportModel()
   
   theImR.push_back(new G4BCDecay);
   theImR.push_back(new G4Scatterer);
-  if(getenv("I_Am_G4BinaryCascade_Developer") ) theImR.push_back(new G4MesonAbsorption);
-
-//  theScatterer = new G4ScattererStub;
+  theImR.push_back(new G4MesonAbsorption);
   thePropagator = new G4RKPropagation;
   theCurrentTime = 0.;
-  theCutOnP = 70*MeV;  //GF was 150..
+  theCutOnP = 90*MeV; 
   theCutOnPAbsorb= 0*MeV;
 //  G4ExcitationHandler *
   theExcitationHandler = new G4ExcitationHandler;
@@ -273,6 +271,9 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 
 // if called stand alone, build theTargetList and find first collisions
 
+  if(nucleus->GetMass()>30) theCutOnP = 70*MeV;
+  if(nucleus->GetMass()>60) theCutOnP = 50*MeV;
+  if(nucleus->GetMass()>120) theCutOnP = 45*MeV;
   if(theCollisionMgr->Entries() == 0)
   {
     the3DNucleus = nucleus;
@@ -975,21 +976,22 @@ G4bool G4BinaryCascade::Capture(G4bool verbose)
 	               -RKprop->GetBarrier(kt->GetDefinition()->GetPDGEncoding());
 	 G4double energy= kt->Get4Momentum().e() - kt->GetActualMass() + field;
          if (verbose ) G4cout << "Capture: .e(), mass, field, energy" << kt->Get4Momentum().e() <<" "<<kt->GetActualMass()<<" "<<field<<" "<<energy<< G4endl;
-	 if( energy < theCutOnP )
-	 {
+//	 if( energy < theCutOnP )
+//	 {
 	    capturedEnergy+=energy;
 	    ++particlesBelowCut;
-	 } else
-	 {
-	    ++particlesAboveCut;
-	 }
+//	 } else
+//	 {
+//	    ++particlesAboveCut;
+//	 }
      }
     }
   }
   if (verbose) G4cout << "Capture particlesAboveCut,particlesBelowCut, capturedEnergy,capturedEnergy/particlesBelowCut <? 0.2*theCutOnP "
 			 << particlesAboveCut << " " << particlesBelowCut << " " << capturedEnergy
 			 << " " << capturedEnergy/particlesBelowCut << " " << 0.2*theCutOnP << G4endl;
-  if(particlesAboveCut==0 && particlesBelowCut>0 && capturedEnergy/particlesBelowCut<0.2*theCutOnP)
+//  if(particlesAboveCut==0 && particlesBelowCut>0 && capturedEnergy/particlesBelowCut<0.2*theCutOnP)
+  if(capturedEnergy/particlesBelowCut<0.2*theCutOnP)
   {
     capture=true;
     for(i = theSecondaryList.begin(); i != theSecondaryList.end(); ++i)
