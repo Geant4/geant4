@@ -1,4 +1,4 @@
-$Id: History,v 1.89 2003-04-29 07:14:13 vnivanch Exp $
+$Id: History,v 1.90 2003-05-15 09:54:13 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15 May 03: V.Ivant (stand-V05-01-00)
+- fix in SuprssionFunction in bremsstrahlung STD
+- fix in dedx for e- ionisation STD for E<1keV
+- set default number 120 bins for dedx table in G4eIonisation
+- updated PAI model: include high energy transfers
 
 29 Apr 03: V.Ivant (stand-V05-00-13)
 - fix leak in restore tables
