@@ -12,10 +12,10 @@
 #
 
 ifndef G4LISTS_BASE
-  EXTRALIBS += -L$(G4LIB)/.lists_build/$(G4SYSTEM)
-  G4LISTS_BASE = $(G4INSTALL)/hadronic_lists
+  EXTRALIBS += -L$(G4LIB)/plists/$(G4SYSTEM)
+  G4LISTS_BASE = $(G4INSTALL)/physics_lists
 else
-  EXTRALIBS += -L$(G4LISTS_BASE)/lists/.lists_build/lib/$(G4SYSTEM)
+  EXTRALIBS += -L$(G4LISTS_BASE)/hadronic/plists/lib/$(G4SYSTEM)
 endif
 
 # Select your physics lists to link against.
@@ -24,9 +24,9 @@ EXTRALIBS += -lQGSP_BERT
 EXTRALIBS += -lQGSP_BIC
 EXTRALIBS += -lPackaging
 
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/Packaging/include
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/QGSP_BERT/include
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/QGSP_BIC/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/Packaging/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSP_BERT/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSP_BIC/include
 
 CXXFLAGS_WITHOUT_O := $(filter-out -O% , $(CXXFLAGS))
 CXXFLAGS_WITHOUT_O := $(filter-out +O% , $(CXXFLAGS_WITHOUT_O))

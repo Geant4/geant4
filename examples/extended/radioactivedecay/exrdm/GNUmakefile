@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2004-11-10 14:57:28 flei Exp $
+# $Id: GNUmakefile,v 1.2 2004-12-13 16:06:02 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module
 # --------------------------------------------------------------
@@ -17,10 +17,10 @@ all: lib bin
 # PhysicsList use hadronic-lists, so it needs below include command.
 
 ifndef G4LISTS_BASE
-  EXTRALIBS += -L$(G4LIB)/.lists_build/$(G4SYSTEM)
-  G4LISTS_BASE = $(G4INSTALL)/hadronic_lists
+  EXTRALIBS += -L$(G4LIB)/plists/$(G4SYSTEM)
+  G4LISTS_BASE = $(G4INSTALL)/physics_lists
 else
-  EXTRALIBS += -L$(G4LISTS_BASE)/lists/.lists_build/lib/$(G4SYSTEM)
+  EXTRALIBS += -L$(G4LISTS_BASE)/hadronic/plists/lib/$(G4SYSTEM)
 endif
 
 # Select your physics lists to link against.
@@ -34,15 +34,14 @@ EXTRALIBS += -lLHEP_BERT
 EXTRALIBS += -lLHEP_BERT_HP
 EXTRALIBS += -lPackaging
 
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/Packaging/include
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/QGSP_BERT/include
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/QGSP_BIC/include
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/QGSP_HP/include
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/LHEP_BERT/include
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/LHEP_BERT_HP/include
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/LHEP_BIC/include
-CPPFLAGS += -I$(G4LISTS_BASE)/lists/LHEP_BIC_HP/include
-
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/Packaging/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSP_BERT/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSP_BIC/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSP_HP/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_BERT/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_BERT_HP/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_BIC/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_BIC_HP/include
 
 include $(G4INSTALL)/config/binmake.gmk
 
