@@ -41,8 +41,8 @@
      do   
      {
       aFlag = true;
-      char the1[100] = {""};
-      G4std::ostrstream ost1(the1, 100, G4std::ios::out);
+      char the1[1000] = {""};
+      G4std::ostrstream ost1(the1, 1000, G4std::ios::out);
       ost1 <<base<<"/"<<"CrossSection/"<<myZ<<"_"<<myA<<"_"<<theString[myZ-1];
       G4String * biff = new G4String(the1); // delete here as theName
       if(theName!=NULL) delete theName;
@@ -63,8 +63,8 @@
         {
           aFlag = true;
           first = false;
-          char the1[100] = {""};
-          G4std::ostrstream ost1(the1, 100, G4std::ios::out);
+          char the1[1000] = {""};
+          G4std::ostrstream ost1(the1, 1000, G4std::ios::out);
           ost1 <<base<<"/"<<"CrossSection/"<<myZ<<"_"<<"nat"<<"_"<<theString[myZ-1];
           biff = new G4String(the1); // delete here as theName
           if(theName!=NULL) delete theName;
@@ -85,8 +85,8 @@
           }
           else
           {
-            char the1[100] = {""};
-            G4std::ostrstream ost1(the1, 100, G4std::ios::out);
+            char the1[1000] = {""};
+            G4std::ostrstream ost1(the1, 1000, G4std::ios::out);
             ost1 <<base<<"/"<<rest<<myZ<<"_"<<"nat"<<"_"<<theString[myZ-1];  
             biff = new G4String(the1); // delete here as theName
             if(theName!=NULL) delete theName;
@@ -100,8 +100,8 @@
       }
       else
       {
-        char the1[100] = {""};
-        G4std::ostrstream ost1(the1, 100, G4std::ios::out);
+        char the1[1000] = {""};
+        G4std::ostrstream ost1(the1, 1000, G4std::ios::out);
         ost1 <<base<<"/"<<rest<<myZ<<"_"<<myA<<"_"<<theString[myZ-1];  
         biff = new G4String(the1); // delete here as theName
         if(theName!=NULL) delete theName;
