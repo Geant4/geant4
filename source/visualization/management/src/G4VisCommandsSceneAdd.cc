@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.11 2000-05-19 09:17:56 johna Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.12 2001-01-16 18:31:40 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -38,7 +38,6 @@
 G4VisCommandSceneAddGhosts::G4VisCommandSceneAddGhosts () {
   G4bool omitable;
   fpCommand = new G4UIcmdWithAString ("/vis/scene/add/ghosts", this);
-  fpCommand -> AvailableForStates (Idle, GeomClosed);
   fpCommand -> SetGuidance
     ("/vis/scene/add/ghosts [<particle-name>]");
   fpCommand -> SetGuidance
@@ -122,7 +121,6 @@ void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
 
 G4VisCommandSceneAddHits::G4VisCommandSceneAddHits () {
   fpCommand = new G4UIcmdWithoutParameter ("/vis/scene/add/hits", this);
-  fpCommand -> AvailableForStates (Idle, GeomClosed);
   fpCommand -> SetGuidance
     ("Adds hits to current scene.");
   fpCommand -> SetGuidance
@@ -161,7 +159,6 @@ void G4VisCommandSceneAddHits::SetNewValue (G4UIcommand* command,
 G4VisCommandSceneAddLogicalVolume::G4VisCommandSceneAddLogicalVolume () {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/scene/add/logicalVolume", this);
-  fpCommand -> AvailableForStates (Idle, GeomClosed);
   fpCommand -> SetGuidance
     ("/vis/scene/add/logicalVolume <logical-volume-name>"
      " [<depth-of-descending>]");
@@ -237,7 +234,6 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand* command,
 G4VisCommandSceneAddTrajectories::G4VisCommandSceneAddTrajectories () {
   fpCommand = new G4UIcmdWithoutParameter
     ("/vis/scene/add/trajectories", this);
-  fpCommand -> AvailableForStates (Idle, GeomClosed);
   fpCommand -> SetGuidance
     ("Adds trajectories to current scene.");
   fpCommand -> SetGuidance
@@ -276,7 +272,6 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand* command,
 G4VisCommandSceneAddVolume::G4VisCommandSceneAddVolume () {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/scene/add/volume", this);
-  fpCommand -> AvailableForStates (Idle, GeomClosed);
   fpCommand -> SetGuidance
     ("/vis/scene/add/volume [<physical-volume-name>] [<copy-no>] [<depth-of-descending>]");
   fpCommand -> SetGuidance ("Adds a physical volume to the current scene.");

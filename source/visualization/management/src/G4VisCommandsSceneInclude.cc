@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneInclude.cc,v 1.5 2000-05-19 09:18:01 johna Exp $
+// $Id: G4VisCommandsSceneInclude.cc,v 1.6 2001-01-16 18:32:45 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -21,7 +21,6 @@
 
 G4VisCommandSceneIncludeHits::G4VisCommandSceneIncludeHits () {
   fpCommand = new G4UIcmdWithoutParameter ("/vis/scene/include/hits", this);
-  fpCommand -> AvailableForStates (Idle, GeomClosed);
   fpCommand -> SetGuidance
     ("Deprecated command - please use /vis/scene/add/hits.");
   fpCommand -> SetGuidance
@@ -69,7 +68,6 @@ G4VisCommandSceneIncludeTrajectories::G4VisCommandSceneIncludeTrajectories () {
     ("/vis/scene/include/trajectories", this);
   fpCommand -> SetGuidance
     ("Deprecated command - please use /vis/scene/add/trajectories.");
-  fpCommand -> AvailableForStates (Idle, GeomClosed);
   fpCommand -> SetGuidance
     ("Includes trajectories in current scene.");
   fpCommand -> SetGuidance

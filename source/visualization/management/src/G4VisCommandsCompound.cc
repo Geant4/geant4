@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsCompound.cc,v 1.6 2000-10-18 14:02:35 allison Exp $
+// $Id: G4VisCommandsCompound.cc,v 1.7 2001-01-16 18:32:18 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Compound /vis/ commands - John Allison  15th May 2000
@@ -21,7 +21,6 @@
 G4VisCommandDrawVolume::G4VisCommandDrawVolume() {
   G4bool omitable;
   fpCommand = new G4UIcmdWithAString("/vis/drawVolume", this);
-  fpCommand->AvailableForStates(Idle, GeomClosed);
   fpCommand->SetGuidance("/vis/drawVolume [<physical-volume-name>]");
   fpCommand->SetGuidance("Default: world volume");
   fpCommand->SetGuidance
@@ -53,12 +52,13 @@ void G4VisCommandDrawVolume::SetNewValue
 G4VisCommandOpen::G4VisCommandOpen() {
   G4bool omitable;
   fpCommand = new G4UIcmdWithAString("/vis/open", this);
-  fpCommand->SetGuidance("/vis/open <graphics-system-name>");
+  fpCommand->SetGuidance("/vis/open [<graphics-system-name>]");
   fpCommand->SetGuidance
     ("For this graphics system, creates a scene handler ready for drawing.");
   fpCommand->SetGuidance("The scene handler becomes current.");
   fpCommand->SetGuidance("The scene handler name is auto-generated.");
-  fpCommand->SetParameterName("graphics-system-name", omitable = false);
+  fpCommand->SetParameterName("graphics-system-name", omitable = true);
+  fpCommand->SetDefaultValue("error");
   const G4GraphicsSystemList& gslist =
     fpVisManager->GetAvailableGraphicsSystems();
   G4String candidates;
@@ -95,7 +95,6 @@ void G4VisCommandOpen::SetNewValue (G4UIcommand* command, G4String newValue) {
 G4VisCommandSpecify::G4VisCommandSpecify() {
   G4bool omitable;
   fpCommand = new G4UIcmdWithAString("/vis/specify", this);
-  fpCommand->AvailableForStates(Idle, GeomClosed);
   fpCommand->SetGuidance("/vis/specify <logical-volume-name>");
   fpCommand->SetGuidance
     ("Creates a scene consisting of this logical volume and asks the"
