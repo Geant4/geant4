@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedSurface.cc,v 1.5 2004-05-28 13:13:36 gcosmo Exp $
+// $Id: G4TwistedSurface.cc,v 1.6 2004-06-07 08:46:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -452,9 +452,9 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
                                                 G4int          areacode[])
 {  
    fCurStat.ResetfDone(kDontValidate, &gp);
-
+   G4int i = 0;
    if (fCurStat.IsDone()) {
-      for (G4int i=0; i<fCurStat.GetNXX(); i++) {
+      for (i=0; i<fCurStat.GetNXX(); i++) {
          gxx[i] = fCurStat.GetXX(i);
          distance[i] = fCurStat.GetDistance(i);
          areacode[i] = fCurStat.GetAreacode(i);
@@ -462,7 +462,7 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
       return fCurStat.GetNXX();
    } else {
       // initialize
-      for (G4int i=0; i<2; i++) {
+      for (i=0; i<2; i++) {
          distance[i] = kInfinity;
          areacode[i] = sOutside;
          gxx[i].set(kInfinity, kInfinity, kInfinity);
@@ -484,7 +484,7 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
    
    G4ThreeVector  lastgxx[2];
    G4double       distfromlast[2];
-   for (G4int i=0; i<2; i++) {
+   for (i=0; i<2; i++) {
       lastgxx[i] = fCurStatWithV.GetXX(i);
       distfromlast[i] = (gp - lastgxx[i]).mag();
    } 
@@ -557,7 +557,7 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
    G4ThreeVector  x0[2];    // foot of normal from line to p 
    G4int          btype[2]; // boundary type
 
-   for (G4int i=0; i<2; i++) {
+   for (i=0; i<2; i++) {
       if (i == 0) {
          GetBoundaryParameters((sAxis0 & sAxisMax), d[i], x0[i], btype[i]);
          B = x0[i] + ((A.z() - x0[i].z()) / d[i].z()) * d[i]; 
