@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.2 2003-10-24 12:51:02 gcosmo Exp $
+// $Id: G4PropagatorInField.hh,v 1.3 2003-10-29 10:44:38 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PropagatorInField 
@@ -160,6 +160,11 @@ class G4PropagatorInField
 
   inline void SetDetectorFieldManager( G4FieldManager* newGlobalFieldManager );
       // Update this (dangerous) state -- for the time being
+  
+  inline void   SetUseSafetyForOptimization( G4bool );
+  inline G4bool GetUseSafetyForOptimization();
+      // Toggle & view parameter for using safety to discard 
+      //   unneccesary calls to navigator (thus 'optimising' performance)
 
  protected:  // with description
 
@@ -248,6 +253,7 @@ class G4PropagatorInField
    // Last safety origin & value: for optimisation
    G4ThreeVector  fPreviousSftOrigin;
    G4double       fPreviousSafety; 
+   G4bool         fUseSafetyForOptimisation;
 
    // Flag whether field manager has been set for the current step
    G4bool fSetFieldMgr; 

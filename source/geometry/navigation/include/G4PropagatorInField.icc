@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.icc,v 1.1 2003-10-01 15:12:52 gcosmo Exp $
+// $Id: G4PropagatorInField.icc,v 1.2 2003-10-29 10:44:38 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -244,3 +244,18 @@ void G4PropagatorInField::SetDetectorFieldManager(G4FieldManager* newDetectorFie
 {
    fDetectorFieldMgr = newDetectorFieldManager; 
 }
+
+  
+inline
+void  G4PropagatorInField:: SetUseSafetyForOptimization( G4bool value )
+{
+   fUseSafetyForOptimisation= value;
+}
+
+inline 
+G4bool G4PropagatorInField::GetUseSafetyForOptimization() 
+{ 
+   return fUseSafetyForOptimisation; 
+}
+
+

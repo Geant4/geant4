@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.2 2003-10-24 12:51:03 gcosmo Exp $
+// $Id: G4PropagatorInField.cc,v 1.3 2003-10-29 10:44:38 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -60,6 +60,7 @@ G4PropagatorInField::G4PropagatorInField( G4Navigator    *theNavigator,
     fMax_loop_count(1000),
     fNoZeroStep(0), 
     fCharge(0.0), fInitialMomentumModulus(0.0), fMass(0.0),
+    fUseSafetyForOptimisation(true),   // (false) is less sensitive to incorrect safety
     fSetFieldMgr(false),
     fpTrajectoryFilter( 0 )
 {
@@ -730,7 +731,7 @@ G4PropagatorInField::IntersectChord( G4ThreeVector  StartPointA,
 	currentSafety = fPreviousSafety - sqrt(MagSqShift) ;
     }
 
-    if( ChordAB_Length <= currentSafety )
+    if( fUseSafetyForOptimisation && (ChordAB_Length <= currentSafety) )
     {
        // The Step is guaranteed to be taken
 
