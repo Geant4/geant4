@@ -99,7 +99,7 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
   px=aTrack.Get4Momentum().px() / GeV;
   py=aTrack.Get4Momentum().py() / GeV;
   pz=aTrack.Get4Momentum().pz() / GeV;
-  
+
   G4LorentzVector projectileMomentum = aTrack.Get4Momentum();
   G4LorentzRotation toZ;
   toZ.rotateZ(-projectileMomentum.phi());
@@ -126,8 +126,6 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
   std::vector<G4double> targetMomentum(4, 0.0);
 
   G4double theNucleusA = theNucleus.GetN();
-
-
 
   if ( !(G4int(theNucleusA) == 1) ) {
     target  = new G4InuclNuclei(targetMomentum, 
@@ -165,12 +163,11 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
   G4BigBanger*                     bigb = new G4BigBanger;
   G4InuclCollider*             collider = new G4InuclCollider(colep, inc, noneq, eqil, fiss, bigb);
 
-
       G4int  maxTries = 10; // maximum tries for inelastic collision to avoid infinite loop
       G4int  nTries   = 0;  // try counter
 
-
       if (G4int(theNucleusA) == 1) { // special treatment for target H(1,1) (proton)
+
 	targetH = new G4InuclElementaryParticle(targetMomentum, 1);
 
 	G4float cutElastic[8];
@@ -216,10 +213,12 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
 	    output = collider->collide(bullet, target );
 	    nTries++;
 	  } while(
-		  (nTries < maxTries)                                                               &&
-		  (output.getOutgoingParticles().size() + output.getNucleiFragments().size() < 2.5) &&
-		  output.getOutgoingParticles().begin()->type()==bullet->type()
+		   (nTries < maxTries)                                                               &&
+		   (output.getOutgoingParticles().size() + output.getNucleiFragments().size() < 2.5) &&
+		   (output.getOutgoingParticles().size()!=0) &&
+                   (output.getOutgoingParticles().begin()->type()==bullet->type())
 		  );
+
       }
 
   if (verboseLevel > 1) 
@@ -377,5 +376,6 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
              << sumEnergy * GeV << " MeV" << G4endl;
     }
   }
+
   return &theResult;
 }
