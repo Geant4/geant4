@@ -165,7 +165,9 @@ CCalAnalysis* CCalAnalysis::getInstance() {
 
 // This function fill the 1d histogram of the energies in HCal layers
 void CCalAnalysis::InsertEnergyHcal(float* v) {
+#ifdef debug
   double totalFilledEnergyHcal = 0.0;
+#endif      
   for (int i=0; i<28; i++) {
     if (hcalE[i]) {
       double x = v[i];
@@ -184,7 +186,9 @@ void CCalAnalysis::InsertEnergyHcal(float* v) {
 
 // This function fill the 1d histogram of the energies in ECal layers
 void CCalAnalysis::InsertEnergyEcal(float* v) {
+#ifdef debug
   double totalFilledEnergyEcal = 0.0;
+#endif      
   for (int i=0; i<49; i++) {
     if (ecalE[i]) {
       double x = v[i];
@@ -203,7 +207,9 @@ void CCalAnalysis::InsertEnergyEcal(float* v) {
 
 // This function fill the 1d histogram of the lateral profile
 void CCalAnalysis::InsertLateralProfile(float* v) {
+#ifdef debug
   double totalFilledProfileHcal = 0.0;
+#endif
   for (int i=0; i<70; i++) {
     if (lateralProfile[i]) {
       double x = v[i];
@@ -234,7 +240,9 @@ void CCalAnalysis::InsertEnergy(float v) {
 
 // This function fill the 1d histograms of time profiles
 void CCalAnalysis::InsertTime(float* v) {
+#ifdef debug
   double totalFilledTimeProfile = 0.0;
+#endif
   for (int j=0; j<numberOfTimeSlices; j++) {
     if (timeHist[j]) {
       double x = v[j];
