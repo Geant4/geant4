@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuIonisation.cc,v 1.29 2003-01-24 11:28:58 vnivanch Exp $
+// $Id: G4MuIonisation.cc,v 1.30 2003-04-26 02:06:36 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------- G4MuIonisation physics process ------------------------------
@@ -611,6 +611,8 @@ G4bool G4MuIonisation::RetrievePhysicsTable(G4ParticleDefinition* particle,
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
+
+  secondaryEnergyCuts = theCoupleTable->GetEnergyCutsVector(0);
 
   // retreive stopping power table
   filename = GetPhysicsTableFileName(particle,directory,"StoppingPower",ascii);

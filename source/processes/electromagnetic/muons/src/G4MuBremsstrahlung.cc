@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuBremsstrahlung.cc,v 1.24 2003-01-20 18:16:25 vnivanch Exp $
+// $Id: G4MuBremsstrahlung.cc,v 1.25 2003-04-26 02:06:36 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -757,6 +757,7 @@ G4bool G4MuBremsstrahlung::RetrievePhysicsTable(G4ParticleDefinition* particle,
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
 
+  secondaryEnergyCuts = theCoupleTable->GetEnergyCutsVector(0);
 
   // retreive stopping power table
   filename = GetPhysicsTableFileName(particle,directory,"StoppingPower",ascii);
