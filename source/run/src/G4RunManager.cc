@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.74 2003-04-23 17:54:32 asaim Exp $
+// $Id: G4RunManager.cc,v 1.75 2003-04-24 17:42:06 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -219,6 +219,9 @@ void G4RunManager::RunInitialization()
   currentRun = 0;
   if(userRunAction) currentRun = userRunAction->GenerateRun();
   if(!currentRun) currentRun = new G4Run();
+
+  G4StateManager* stateManager = G4StateManager::GetStateManager();
+  stateManager->SetNewState(G4State_GeomClosed);
   currentRun->SetRunID(runIDCounter);
   currentRun->SetNumberOfEventToBeProcessed(numberOfEventToBeProcessed);
 
@@ -238,8 +241,6 @@ void G4RunManager::RunInitialization()
     geomManager->CloseGeometry(geometryToBeOptimized, verboseLevel>1);
     geometryNeedsToBeClosed = false;
   }
-  G4StateManager* stateManager = G4StateManager::GetStateManager();
-  stateManager->SetNewState(G4State_GeomClosed);
 
   //previousEvents->clearAndDestroy();
   for(size_t itr=0;itr<previousEvents->size();itr++)
