@@ -385,9 +385,12 @@ void G4Fissioner::potentialMinimization(G4double& VP,
     if (DSOL < DSOL1) break;
   };
 
+  if (verboseLevel > 3) {
   if (itry == itry_max) 
     G4cout << " maximal number of iterations in potentialMinimization " << G4endl
 	   << " A1 " << AF << " Z1 " << ZF << G4endl; 
+
+  };
 
   for (i = 0; i < 2; i++) ED[i] = F[i] * BET1[i] * BET1[i] + C[i] * AL1[i] * AL1[i]; 
 
