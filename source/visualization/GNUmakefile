@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 2000-11-03 16:41:10 gunter Exp $
+# $Id: GNUmakefile,v 1.8 2001-04-10 15:11:05 johna Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for visualization and modeling.  John Allison, 5/7/95.
 # Modeling is always made.  Others by environment.  John Allison  4/7/98.
@@ -71,6 +71,11 @@ ifdef      G4VIS_BUILD_VRMLFILE_DRIVER
 endif
 # End of VRML and VRMLFILE drivers
 
+ifdef G4VIS_BUILD_ASCIITREE_DRIVER
+  SUBDIRS += Tree
+  SUBLIBS += G4Tree
+endif
+
 .PHONY: granular glob global clean
 
 granular:
@@ -84,4 +89,3 @@ glob global:
 
 clean clean_libs:
 	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) $@); done
-	
