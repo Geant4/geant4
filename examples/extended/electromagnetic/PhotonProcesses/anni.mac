@@ -1,4 +1,4 @@
-# $Id: anni.mac,v 1.1 2004-08-13 11:16:07 maire Exp $
+# $Id: anni.mac,v 1.2 2004-08-17 09:47:30 maire Exp $
 #
 # Macro file for "PhotonProcesses.cc"
 # (can be run in batch, without graphic)
@@ -20,7 +20,7 @@
 /gun/energy 100 MeV
 #
 /testem/histo/setFileName anni.paw
-/testem/histo/setHisto 5  100 0. 100. MeV	#energy  of gamma  
+/testem/histo/setHisto 5  210  0. 105. MeV	#energy  of gamma  
 /testem/histo/setHisto 6  200 -1. +1. none	#costeta of gamma
 #
 /testem/event/printModulo 10000
