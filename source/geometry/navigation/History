@@ -1,4 +1,4 @@
-$Id: History,v 1.29 2004-06-29 16:14:59 gcosmo Exp $
+$Id: History,v 1.30 2004-09-02 14:45:59 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      --------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Aug 31st, 2004 - D.C.Williams  (geomnav-V06-02-01)
+-----------------------------
+- G4GeomTestSegment: fix to correctly determine whether starting trajectory
+  is entering or exiting the solid when the starting point is on a surface.
+  Added additional tests on solid consistencies (from roundoff sometimes) to
+  avoid incorrect overlap warnings. Addresses problem reports #610 and #652.
 
 Jun 29th, 2004 - G.Cosmo  (geomnav-V06-02-00)
 ------------------------
