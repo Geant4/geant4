@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsScene.cc,v 1.4 1999-02-07 17:31:28 johna Exp $
+// $Id: G4VisCommandsScene.cc,v 1.5 1999-03-29 16:39:11 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -32,30 +32,30 @@ void G4VVisCommandScene::UpdateCandidateLists () {
 
   G4SceneList& sceneList = fpVisManager -> SetSceneList ();
   G4int iScene, nScenes = sceneList.entries ();
-  G4String fSceneNameList;
+  G4String nameList;
   for (iScene = 0; iScene < nScenes; iScene++) {
-    fSceneNameList += sceneList [iScene] -> GetName () + " ";
+    nameList += sceneList [iScene] -> GetName () + " ";
   }
-  fSceneNameList = fSceneNameList.strip ();
+  nameList = nameList.strip ();
 
   if (fpCommandSceneNotifyHandlers) {
     fpCommandSceneNotifyHandlers -> GetParameter (0) ->
-      SetParameterCandidates (fSceneNameList);
+      SetParameterCandidates (nameList);
   }
 
   if (fpCommandSceneRemove) {
     fpCommandSceneRemove -> GetParameter (0) ->
-      SetParameterCandidates (fSceneNameList);
+      SetParameterCandidates (nameList);
   }
 
   if (fpCommandSceneSelect) {
     fpCommandSceneSelect -> GetParameter (0) ->
-      SetParameterCandidates (fSceneNameList);
+      SetParameterCandidates (nameList);
   }
 
   if (fpCommandSceneHandlerAttach) {
     fpCommandSceneHandlerAttach -> GetParameter (0) ->
-      SetParameterCandidates (fSceneNameList);
+      SetParameterCandidates (nameList);
   }
 }
 
@@ -233,7 +233,8 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand* command,
 
   // Check scene name.
   const G4int nScenes = sceneList.entries ();
-  for (G4int iScene = 0; iScene < nScenes; iScene++) {
+  G4int iScene;
+  for (iScene = 0; iScene < nScenes; iScene++) {
     G4Scene* scene = sceneList [iScene];
     if (sceneName == scene -> GetName ()) {
       scene -> AddWorldIfEmpty ();
