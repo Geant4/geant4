@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.13 2003-10-28 17:15:57 gcosmo Exp $
+// $Id: G4Polycone.cc,v 1.14 2003-11-05 17:01:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,7 +43,7 @@
 #include "G4Polyhedron.hh"
 #include "G4EnclosingCylinder.hh"
 #include "G4ReduciblePolygon.hh"
-
+#include "G4VPVParameterisation.hh"
 
 //
 // Constructor (GEANT3 style parameters)
@@ -456,10 +456,11 @@ G4double G4Polycone::DistanceToIn( const G4ThreeVector &p ) const
 //
 // ComputeDimensions
 //
-void G4Polycone::ComputeDimensions(       G4VPVParameterisation*,
-                                    const G4int,
-                                    const G4VPhysicalVolume* )
+void G4Polycone::ComputeDimensions(       G4VPVParameterisation* p,
+                                    const G4int n,
+                                    const G4VPhysicalVolume* pRep )
 {
+  p->ComputeDimensions(*this,n,pRep);
 }
 
 //
