@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepPoint.hh,v 1.12 2003-05-07 20:08:36 asaim Exp $
+// $Id: G4StepPoint.hh,v 1.13 2003-09-19 19:08:14 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -55,9 +55,9 @@ class G4VProcess;
 #include "G4StepStatus.hh"           // Include from 'track'
 #include "G4TouchableHandle.hh"      // Include from 'geometry'
 #include "G4Material.hh"
-#include "G4MaterialCutsCouple.hh"
 #include "G4LogicalVolume.hh"
 
+class G4MaterialCutsCouple;
 /////////////////
 class G4StepPoint
 ///////////////// 
