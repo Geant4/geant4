@@ -1,5 +1,5 @@
 
-$Id: History,v 1.40 2003-10-01 14:51:39 gcosmo Exp $
+$Id: History,v 1.41 2003-10-28 10:22:42 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+ Oct 28, 2003   J.Apostolakis
+  - Modified test GNUmakefile to delete un-neccesary directories.
+    It no longer refers to navigator (old volumes), but 
+    includes intercoms (for G4VVisManager ).
+
+ Oct  9, 2003   V.Grichine                geom-bool-V05-02-01
+  - Fixes to default safety to zero in DistIn/Out(p) methods.
+  Note: Using previous test GNUmakefile (to be corrected)
 
  Sep 30, 2003   G.Cosmo                   geom-bool-V05-02-00
   - Updated GNUmakefile for unit tests, according to new structure
