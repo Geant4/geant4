@@ -1,0 +1,7 @@
+/vis/scene/create
+/vis/open OGLIX
+/vis/viewer/set/style  w
+/vis/viewer/flush
+/vis/viewer/set/viewpointThetaPhi -70 -20
+/tracking/storeTrajectory 1
+/vis/scene/endOfEventAction accumulate
