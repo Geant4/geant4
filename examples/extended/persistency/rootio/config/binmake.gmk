@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.1 2002-12-04 02:44:27 morita Exp $
+# $Id: binmake.gmk,v 1.2 2002-12-04 09:38:31 morita Exp $
 # =====================================================================
 # binmake.gmk: GNUmakefile variables for creating the binary executable
 #
@@ -79,9 +79,6 @@ bin: $(G4PEX_BIN)/$(TARGET)
 lib: $(libraries_to_build) 
 
 # ---------------------------------------------------------------------
-# make ROOT I/O files
-#include $(G4PEX_DIR)/config/rootio.gmk
-# ---------------------------------------------------------------------
 
 CPPFLAGS += $(shell root-config --cflags)
 
@@ -99,6 +96,9 @@ rootio_hh   += $(patsubst rootio/%.rootio, include/%RootIO.hh, $(rootio_file))
 rootio_cc   := $(patsubst rootio/%.rootio, src/%Root.cc, $(rootio_file))
 rootio_cc   += $(patsubst rootio/%.rootio, src/%sRoot.cc, $(rootio_file))
 rootio_cc   += $(patsubst rootio/%.rootio, src/%RootIO.cc, $(rootio_file))
+rootio_d  := $(patsubst rootio/%.rootio, $(G4PEX_TMP)/%Root.d, $(rootio_file))
+rootio_d  += $(patsubst rootio/%.rootio, $(G4PEX_TMP)/%sRoot.d, $(rootio_file))
+rootio_d  += $(patsubst rootio/%.rootio, $(G4PEX_TMP)/%RootIO.d, $(rootio_file))
 
 root_hh   := $(shell grep 'public.*TObject' include/*.hh|awk -F: '{print $$1}'|sort|uniq)
 ifneq ($(rootio_file),)
@@ -109,7 +109,7 @@ root_tmp  := $(patsubst include/%,%,$(root_hh))
 root_tmp  += $(patsubst include/%,%,$(root_def))
 root_name := $(patsubst include/%.hh,%,$(root_hh))
 
-.PRECIOUS: $(dependencies) $(rootio_hh) $(rootio_cc)
+.PRECIOUS: $(dependencies) $(rootio_hh) $(rootio_cc) $(rootio_d)
 
 ifneq ($(rootio_file),)
 
@@ -176,6 +176,9 @@ $(G4PEX_TMP)/$(TARGET).d: $(TARGET).cc
 	@echo "Making dependency file for $< ..."
 	@($(ECHO) $(G4PEX_TMP)/\\c ; \
 	g++ $(GPPFLAGS) $(CPPFLAGS) $< ) | sed 's!$(G4PEX_TMP)/$*.o!& $@!' >$@
+ifneq ($(dependencies),)
+-include $(dependencies)
+endif
 
 $(libraries_to_build): $(objects)
 ifneq ($(G4LIB_BUILD_SHARED),)
@@ -210,4 +213,7 @@ endif
 	@rm -f $(G4PEX_DIR)/bin/$(G4SYSTEM)/$(TARGET)
 	@rm -f -r $(G4PEX_DIR)/lib/$(G4SYSTEM)/$(libraries_to_build)
 	@rm -f -r $(G4PEX_DIR)/tmp/$(G4SYSTEM)/$(TARGET)
+
+distclean: clean
+	@rm -f G4defaultOutput G4run0001.root G4History.macro core* .DAWN*.history g4_*.prim
 
