@@ -1,4 +1,4 @@
-$Id: History,v 1.33 2003-08-27 16:57:48 vnivanch Exp $
+$Id: History,v 1.34 2003-09-29 09:05:30 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29 Aug 2003  V.Ivanchenko (test17-V05-02-01)
+             Substitute obsolete interface to cuts energy range
 
 27 Aug 2003  V.Ivanchenko (test17-V05-02-00)
              Migrade to cut per region

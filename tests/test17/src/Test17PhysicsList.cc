@@ -339,12 +339,11 @@ void Test17PhysicsList::SetCuts()
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma
 
-      G4cout << "Set cuts for all particles! " << G4endl;
+  G4cout << "Set cuts for all particles! " << G4endl;
 
-   SetCutValue(cutForGamma,"gamma");
-
-   SetCutValue(cutForElectron,"e-");
-   SetCutValue(cutForElectron,"e+");
+  SetCutValue(cutForGamma,"gamma");
+  SetCutValue(cutForElectron,"e-");
+  SetCutValue(cutForElectron,"e+");
 
   if (verboseLevel>0) DumpCutValuesTable();
 

@@ -5,19 +5,23 @@
 /control/verbose 2
 /run/verbose 1
 /event/verbose 0
-/tracking/verbose 0
+/tracking/verbose 1
 #
 #/run/initialize
 #
 /gun/particle proton
 /gun/energy 500 keV
-#/run/beamOn 10000
+/run/beamOn 2
 #
-/gun/particle anti_proton
+#/gun/particle anti_proton
 #/run/beamOn 10000
 
 #scaled energy
 /gun/particle IonC12
 /gun/energy 6000 keV
-/run/beamOn 15
+/run/beamOn 10
 #
+#scaled energy
+/gun/particle ion
+/gun/ion 6 12 6
+/run/beamOn 10
