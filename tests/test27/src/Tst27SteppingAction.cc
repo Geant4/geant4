@@ -66,7 +66,7 @@ void Tst27SteppingAction::UserSteppingAction(const G4Step * theStep)
               << std::setw( 9) << theStep->GetTotalEnergyDeposit() /MeV << " "
                 << std::setw( 9) << theStep->GetStepLength() / mm << " "
                   << std::setw( 9) << theTrack->GetTrackLength() / mm << " ";
-    if(theStep->GetPostStepPoint()->GetProcessDefinedStep() != NULL){
+    if(theStep->GetPostStepPoint()->GetProcessDefinedStep() != 0){
       G4cout << theStep->GetPostStepPoint()->GetProcessDefinedStep()
         ->GetProcessName();
     } else {

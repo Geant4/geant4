@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonAr40.cc,v 1.5 2003-06-16 17:15:13 gunter Exp $
+// $Id: G4IonAr40.cc,v 1.6 2004-03-21 12:42:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,7 +81,7 @@ G4IonAr40 G4IonAr40::theIonAr40(
 		    0,              +1,             0,          
 		    0,               0,             0,             
 	    "static_nucleus",        0,            +40,           0,
-		 true,            -1.0,          NULL
+		 true,            -1.0,             0 
 );
 
 G4IonAr40* G4IonAr40::IonAr40Definition(){return &theIonAr40;}

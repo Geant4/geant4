@@ -100,7 +100,7 @@ inline G4double Test17StepCut::PostStepGetPhysicalInteractionLength(
    G4double ProposedStep = DBL_MAX;
 
    if((MaxChargedStep > 0.) &&
-      (aTrack.GetVolume() != NULL) &&
+      (aTrack.GetVolume() != 0) &&
       (aTrack.GetVolume()->GetName() == "Absorber") &&
       (aTrack.GetDynamicParticle()->GetDefinition()->GetPDGCharge() != 0.))
         ProposedStep = MaxChargedStep;

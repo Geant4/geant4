@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingVerbose.cc,v 1.8 2003-06-16 17:16:07 gunter Exp $
+// $Id: Tst50SteppingVerbose.cc,v 1.9 2004-03-21 12:42:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -91,7 +91,7 @@ void Tst50SteppingVerbose::StepInfo()
 	->GetName();}
     else{ G4cout << std::setw(10) << "OutOfWorld";}
 
-    if(fStep->GetPostStepPoint()->GetProcessDefinedStep() != NULL){
+    if(fStep->GetPostStepPoint()->GetProcessDefinedStep() != 0){
       G4cout << "  " 
 	     << std::setw(10) << fStep->GetPostStepPoint()->GetProcessDefinedStep()
 	->GetProcessName()<<"   ";

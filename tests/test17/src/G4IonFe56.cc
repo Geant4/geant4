@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonFe56.cc,v 1.5 2003-06-16 17:15:15 gunter Exp $
+// $Id: G4IonFe56.cc,v 1.6 2004-03-21 12:42:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,7 +81,7 @@ G4IonFe56 G4IonFe56::theIonFe56(
 		    0,              +1,             0,          
 		    0,               0,             0,             
 	    "static_nucleus",        0,            +56,           0,
-		 true,            -1.0,          NULL
+		 true,            -1.0,             0
 );
 
 G4IonFe56* G4IonFe56::IonFe56Definition(){return &theIonFe56;}

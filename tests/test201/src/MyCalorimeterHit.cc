@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyCalorimeterHit.cc,v 1.5 2001-07-11 10:10:23 gunter Exp $
+// $Id: MyCalorimeterHit.cc,v 1.6 2004-03-21 12:42:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -37,7 +37,7 @@
 G4Allocator<MyCalorimeterHit> MyCalorimeterHitAllocator;
 
 MyCalorimeterHit::MyCalorimeterHit()
-{pPhys=NULL;}
+{pPhys=0;}
 
 MyCalorimeterHit::MyCalorimeterHit(G4VPhysicalVolume* physVol)
 :pPhys(physVol)

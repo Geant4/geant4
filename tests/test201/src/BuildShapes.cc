@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BuildShapes.cc,v 1.4 2001-08-02 23:55:46 johna Exp $
+// $Id: BuildShapes.cc,v 1.5 2004-03-21 12:42:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -422,7 +422,7 @@ G4VPhysicalVolume* BuildPCon()
 	return theWorld;
 
 #else 
-	return NULL ;
+	return 0 ;
 #endif
 
 } // BuildPCon
@@ -470,7 +470,7 @@ G4VPhysicalVolume* BuildPGon()
 	
 	return theWorld;
 #else
-	return NULL ;
+	return 0 ;
 #endif
 } // BuildPGon
 
