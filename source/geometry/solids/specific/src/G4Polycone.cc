@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polycone.cc,v 1.2 2000-06-26 09:54:35 gcosmo Exp $
+// $Id: G4Polycone.cc,v 1.3 2000-06-27 16:20:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -400,7 +400,7 @@ G4Polycone::G4PolyconeHistorical::~G4PolyconeHistorical()
 	delete [] Rmax;
 }
 
-G4Polycone::G4PolyconeHistorical::G4PolyconeHistorical( const G4Polycone::G4PolyconeHistorical &source )
+G4Polycone::G4PolyconeHistorical::G4PolyconeHistorical( const G4PolyconeHistorical &source )
 {
 	Start_angle 	= source.Start_angle;
 	Opening_angle	= source.Opening_angle;

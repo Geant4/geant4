@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polycone.hh,v 1.2 2000-06-26 15:35:56 gcosmo Exp $
+// $Id: G4Polycone.hh,v 1.3 2000-06-27 16:20:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,14 +97,12 @@ class G4Polycone : public G4VCSGfaceted
 	//
 	// The following is temporary until graphics_reps is brought up to this design
 	//
-	class G4PolyconeHistorical;
-	friend class G4PolyconeHistorical;
-	
-	struct G4PolyconeHistorical {
+	class G4PolyconeHistorical
+	{
+	  public:
 		G4PolyconeHistorical() {;}
 		~G4PolyconeHistorical();
 		G4PolyconeHistorical( const G4PolyconeHistorical &source );
-	
 		G4double Start_angle;
 		G4double Opening_angle;
 		G4int	 Num_z_planes;

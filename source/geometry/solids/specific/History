@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2000-06-26 16:23:41 gcosmo Exp $
+$Id: History,v 1.10 2000-06-27 16:20:11 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27-Jun-2000, G.Cosmo  (geom-solids-specific-V01-01-02)
+--------------------
+- G4Polycone[.hh.cc]: better fix for bug-report #110.
+  Removed struct and replaced with class.
 
 26-Jun-2000, G.Cosmo  (geom-solids-specific-V01-01-01)
 --------------------
