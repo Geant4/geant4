@@ -20,65 +20,53 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: Em2PhysicsList.hh,v 1.6 2002-10-14 15:56:11 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 // 
 //
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 // Class Description:
 //      This class is an derived class of G4VPhysicsConstructor
+//      It is provide the EM PhysicsList based on the prototype
+//      of design of model approach for EM physics
 //
-// --------------------------------------------------------------------------- 
+// ------------------------------------------------------------ 
 //	History
-//        Created:       14.10.02  V.Ivanchenko provide modular list on base 
-//                                 of old Em2PhysicsList
+//        Created:       14.10.02  V.Ivanchenko
 //
-//        Modified:      
+//        Modified:
 // 
-// ---------------------------------------------------------------------------
+// ------------------------------------------------------------
 //
+#ifndef Em2ModelEM_h
+#define Em2ModelEM_h 1
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#ifndef Em2PhysicsList_h
-#define Em2PhysicsList_h 1
-
-#include "G4VModularPhysicsList.hh"
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-class Em2PhysicsListMessenger;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class Em2PhysicsList: public G4VModularPhysicsList
+class Em2ModelEM : public G4VPhysicsConstructor
 {
-  public:
+  public: 
+    Em2ModelEM(const G4String& name = "model");
+    virtual ~Em2ModelEM();
 
-    Em2PhysicsList();
-   ~Em2PhysicsList();
-
-    void AddPhysicsList(const G4String& name);
-    void SetCuts();
-    void SetCutForGamma(G4double);
-    void SetCutForElectron(G4double);
-    void SetCutForPositron(G4double);
-       
-  private:
-    G4double cutForGamma;
-    G4double cutForElectron; 
-    G4double cutForPositron;
-    G4double currentDefaultCut;
-
-    G4bool   emPhysicsListIsRegistered;
-    
-    Em2PhysicsListMessenger* pMessenger;         
+  public: 
+    // This method will be invoked in the Construct() method. 
+    // each particle type will be instantiated
+    virtual void ConstructParticle();
+ 
+    // This method will be invoked in the Construct() method.
+    // each physics process will be instantiated and
+    // registered to the process manager of each particle type 
+    virtual void ConstructProcess();
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
+
+
+
+
+
+
 

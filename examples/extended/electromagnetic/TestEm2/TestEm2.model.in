@@ -1,4 +1,4 @@
-# $Id: run03.mac,v 1.6 2002-10-14 16:00:08 vnivanch Exp $
+# $Id: TestEm2.model.in,v 1.1 2002-10-14 16:00:07 vnivanch Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -9,6 +9,12 @@
 #                        J&H Crannel - Phys. Rev. 184-2 - August69
 #
 /control/verbose 2
+/run/verbose 1
+#
+#  select EM PhysicsList
+#
+/em2/addPhysics      model
+#/em2/addPhysics      standard
 #
 /em2/setCut 5.0 mm
 /run/initialize
@@ -18,11 +24,10 @@
 /em2/setRbin 6 0.111
 /em2/update
 #
-/run/verbose 2
-/em2/printModulo 10
+/em2/printModulo 20
 #
 /gun/particle e-
 /gun/energy 1 GeV
-/run/beamOn 500
+/run/beamOn 100
 
 

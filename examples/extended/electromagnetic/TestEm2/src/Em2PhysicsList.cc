@@ -20,10 +20,6 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: Em2PhysicsList.cc,v 1.7 2001-10-25 15:12:07 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -31,215 +27,94 @@
 
 #include "Em2PhysicsList.hh"
 #include "Em2PhysicsListMessenger.hh"
+ 
+#include "G4UnitsTable.hh"
+#include "Em2Particles.hh"
+#include "Em2GeneralPhysics.hh"
+#include "Em2StandardEM.hh"
+#include "Em2ModelEM.hh"
+#include "Em2HadronElastic.hh"
 
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
-#include "G4ProcessManager.hh"
-#include "G4ParticleTypes.hh"
-#include "G4ParticleTable.hh"
-#include "G4Material.hh"
-#include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em2PhysicsList::Em2PhysicsList()
-: G4VUserPhysicsList()
-{
-  currentDefaultCut = defaultCutValue = 1.0*mm;
-  cutForGamma       = defaultCutValue;
-  cutForElectron    = defaultCutValue;
-  cutForProton      = defaultCutValue;
-  
+Em2PhysicsList::Em2PhysicsList() : G4VModularPhysicsList(),
+  emPhysicsListIsRegistered(false)
+{   
+  currentDefaultCut   = 1.0*mm;
+  cutForGamma         = currentDefaultCut;
+  cutForElectron      = currentDefaultCut;
+  cutForPositron      = currentDefaultCut;
+
   pMessenger = new Em2PhysicsListMessenger(this);
 
   SetVerboseLevel(1);
+
+  // Particles
+  RegisterPhysics( new Em2Particles("particles") );
+
+  // General Physics
+  RegisterPhysics( new Em2GeneralPhysics("general") );
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em2PhysicsList::~Em2PhysicsList()
-{delete pMessenger;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void Em2PhysicsList::ConstructParticle()
 {
-  // In this method, static member functions should be called
-  // for all particles which you want to use.
-  // This ensures that objects of these particle types will be
-  // created in the program. 
-
-  ConstructBosons();
-  ConstructLeptons();
-  ConstructMesons();
-  ConstructBarions();
+  delete pMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2PhysicsList::ConstructBosons()
+void Em2PhysicsList::AddPhysicsList(const G4String& name)
 {
-  // pseudo-particles
-  G4Geantino::GeantinoDefinition();
-  G4ChargedGeantino::ChargedGeantinoDefinition();
-  
-  // gamma
-  G4Gamma::GammaDefinition();
-  
-  // optical photon
-  G4OpticalPhoton::OpticalPhotonDefinition();
-}
- //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+  if (verboseLevel>1) {
+    G4cout << "Em2PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
+  }
 
-void Em2PhysicsList::ConstructLeptons()
-{
-  // leptons
-  G4Electron::ElectronDefinition();
-  G4Positron::PositronDefinition();
-  G4MuonPlus::MuonPlusDefinition();
-  G4MuonMinus::MuonMinusDefinition();
+  if("standard" == name) {
 
-  G4NeutrinoE::NeutrinoEDefinition();
-  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
-  G4NeutrinoMu::NeutrinoMuDefinition();
-  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();  
-}
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    if (emPhysicsListIsRegistered) {
 
-void Em2PhysicsList::ConstructMesons()
-{
- //  mesons
-  G4PionPlus::PionPlusDefinition();
-  G4PionMinus::PionMinusDefinition();
-  G4PionZero::PionZeroDefinition();
-  G4Eta::EtaDefinition();
-  G4EtaPrime::EtaPrimeDefinition();
-  G4KaonPlus::KaonPlusDefinition();
-  G4KaonMinus::KaonMinusDefinition();
-  G4KaonZero::KaonZeroDefinition();
-  G4AntiKaonZero::AntiKaonZeroDefinition();
-  G4KaonZeroLong::KaonZeroLongDefinition();
-  G4KaonZeroShort::KaonZeroShortDefinition();
-}
+      G4cout << "Em2PhysicsList::AddPhysicsList: <" << name << ">" 
+             << " cannot be register additionally to existing one"
+             << G4endl;
+    } else {
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void Em2PhysicsList::ConstructBarions()
-{
-//  barions
-  G4Proton::ProtonDefinition();
-  G4AntiProton::AntiProtonDefinition();
-  G4Neutron::NeutronDefinition();
-  G4AntiNeutron::AntiNeutronDefinition();
-}
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void Em2PhysicsList::ConstructProcess()
-{
-  AddTransportation();
-  ConstructEM();
-  ConstructGeneral();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4ComptonScattering.hh"
-#include "G4GammaConversion.hh"
-#include "G4PhotoElectricEffect.hh"
-
-#include "G4MultipleScattering.hh"
-
-#include "G4eIonisation.hh"
-#include "G4eBremsstrahlung.hh"
-#include "G4eplusAnnihilation.hh"
-
-#include "G4MuIonisation.hh"
-#include "G4MuBremsstrahlung.hh"
-#include "G4MuPairProduction.hh"
-
-#include "G4hIonisation.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void Em2PhysicsList::ConstructEM()
-{
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-    G4String particleName = particle->GetParticleName();
-     
-    if (particleName == "gamma") {
-      // gamma         
-      pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
-      pmanager->AddDiscreteProcess(new G4ComptonScattering);
-      pmanager->AddDiscreteProcess(new G4GammaConversion);
-      
-    } else if (particleName == "e-") {
-      //electron
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
-	    
-    } else if (particleName == "e+") {
-      //positron
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
-      pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
-      
-    } else if( particleName == "mu+" || 
-               particleName == "mu-"    ) {
-      //muon  
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
-      pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
-      pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-1,3);
-      pmanager->AddProcess(new G4MuPairProduction,  -1,-1,4);       
-     
-    } else if ((!particle->IsShortLived()) &&
-	       (particle->GetPDGCharge() != 0.0) && 
-	       (particle->GetParticleName() != "chargedgeantino")) {
-      //all others charged particles except geantino
-      pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
-      pmanager->AddProcess(new G4hIonisation,       -1,2,2);                  
+      RegisterPhysics( new Em2StandardEM(name) );
+      emPhysicsListIsRegistered = true;
     }
+
+  } else if("model" == name) {
+
+    if (emPhysicsListIsRegistered) {
+
+      G4cout << "Em2PhysicsList::AddPhysicsList: <" << name << ">" 
+             << " cannot be register additionally to existing one"
+             << G4endl;
+    } else {
+
+      RegisterPhysics( new Em2ModelEM(name) );
+      emPhysicsListIsRegistered = true;
+    }
+
+  } else if("elastic" == name) {
+
+    RegisterPhysics( new Em2HadronElastic(name) );
+
+  } else {
+
+    G4cout << "Em2PhysicsList::AddPhysicsList: <" << name << ">" 
+           << " is not defined"
+           << G4endl;
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4Decay.hh"
-
-void Em2PhysicsList::ConstructGeneral()
-{
-  // Add Decay Process
-  G4Decay* theDecayProcess = new G4Decay();
-  theParticleIterator->reset();
-  while ((*theParticleIterator)()){
-      G4ParticleDefinition* particle = theParticleIterator->value();
-      G4ProcessManager* pmanager = particle->GetProcessManager();
-      if (theDecayProcess->IsApplicable(*particle)) { 
-        pmanager ->AddProcess(theDecayProcess);
-        // set ordering for PostStepDoIt and AtRestDoIt
-        pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
-        pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
-      }
-  }
-}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2PhysicsList::SetCuts()
 {
-  // reactualise cutValues
-  if (currentDefaultCut != defaultCutValue)
-    {
-     if(cutForGamma    == currentDefaultCut) cutForGamma    = defaultCutValue;
-     if(cutForElectron == currentDefaultCut) cutForElectron = defaultCutValue;
-     if(cutForProton   == currentDefaultCut) cutForProton   = defaultCutValue;
-     currentDefaultCut = defaultCutValue;
-    }
      
   if (verboseLevel >0){
     G4cout << "Em2PhysicsList::SetCuts:";
@@ -250,14 +125,14 @@ void Em2PhysicsList::SetCuts()
   // because some processes for e+/e- need cut values for gamma
   SetCutValue(cutForGamma, "gamma");
   SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForElectron, "e+");   
+  SetCutValue(cutForPositron, "e+");   
   
   // set cut values for proton and anti_proton before all other hadrons
   // because some processes for hadrons need cut values for proton/anti_proton
-  SetCutValue(cutForProton, "proton");
-  SetCutValue(cutForProton, "anti_proton");
+  SetCutValue(currentDefaultCut, "proton");
+  SetCutValue(currentDefaultCut, "anti_proton");
      
-  SetCutValueForOthers(defaultCutValue);
+  SetCutValueForOthers(currentDefaultCut);
   
   if (verboseLevel>0) DumpCutValuesTable();
 }
@@ -270,16 +145,20 @@ void Em2PhysicsList::SetCutForGamma(G4double cut)
   cutForGamma = cut;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void Em2PhysicsList::SetCutForElectron(G4double cut)
 {
   ResetCuts();
   cutForElectron = cut;
 }
 
-void Em2PhysicsList::SetCutForProton(G4double cut)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void Em2PhysicsList::SetCutForPositron(G4double cut)
 {
   ResetCuts();
-  cutForProton = cut;
+  cutForPositron = cut;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

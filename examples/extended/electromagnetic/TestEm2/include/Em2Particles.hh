@@ -21,64 +21,51 @@
 // ********************************************************************
 //
 //
-// $Id: Em2PhysicsList.hh,v 1.6 2002-10-14 15:56:11 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
 //
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 // Class Description:
 //      This class is an derived class of G4VPhysicsConstructor
 //
-// --------------------------------------------------------------------------- 
+// ------------------------------------------------------------ 
 //	History
-//        Created:       14.10.02  V.Ivanchenko provide modular list on base 
-//                                 of old Em2PhysicsList
+//        Created:       14.10.02  V.Ivanchenko
 //
-//        Modified:      
+//        Modified:
 // 
-// ---------------------------------------------------------------------------
+// ------------------------------------------------------------
 //
+#ifndef Em2Particles_h
+#define Em2Particles_h 1
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#ifndef Em2PhysicsList_h
-#define Em2PhysicsList_h 1
-
-#include "G4VModularPhysicsList.hh"
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-class Em2PhysicsListMessenger;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class Em2PhysicsList: public G4VModularPhysicsList
+class Em2Particles : public G4VPhysicsConstructor
 {
-  public:
+  public: 
+    Em2Particles(const G4String& name = "particles");
+    virtual ~Em2Particles();
 
-    Em2PhysicsList();
-   ~Em2PhysicsList();
+  public: 
+    // This method will be invoked in the Construct() method. 
+    // each particle type will be instantiated
+    virtual void ConstructParticle();
+ 
+    // This method will be invoked in the Construct() method.
+    // each physics process will be instantiated and
+    // registered to the process manager of each particle type 
+    virtual void ConstructProcess();
 
-    void AddPhysicsList(const G4String& name);
-    void SetCuts();
-    void SetCutForGamma(G4double);
-    void SetCutForElectron(G4double);
-    void SetCutForPositron(G4double);
-       
-  private:
-    G4double cutForGamma;
-    G4double cutForElectron; 
-    G4double cutForPositron;
-    G4double currentDefaultCut;
-
-    G4bool   emPhysicsListIsRegistered;
-    
-    Em2PhysicsListMessenger* pMessenger;         
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
+
+
+
+
+
+
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2RunAction.cc,v 1.15 2002-06-03 14:07:13 maire Exp $
+// $Id: Em2RunAction.cc,v 1.16 2002-10-14 15:56:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -293,7 +293,7 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
   MyVector MeanELongit(nLbin),      rmsELongit(nLbin);
   MyVector MeanELongitCumul(nLbin), rmsELongitCumul(nLbin);
    
-  G4int i; G4double bin;  
+  G4int i;   
   for (i=0; i<nLbin; i++)
    {
     MeanELongit[i] = norme*sumELongit[i];
@@ -309,7 +309,7 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
     positronFlux[i] /= NbOfEvents;                                    
 
 #ifndef G4NOHIST                                    
-    bin = i*dLradl;                                
+    G4double bin = i*dLradl;                                
     histo[3]->fill(bin,MeanELongit[i]/dLradl);
     bin = (i+1)*dLradl;
     histo[4]->fill(bin,MeanELongitCumul[i]);
@@ -339,7 +339,7 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
                                     - sumERadialCumul[i]*sumERadialCumul[i]));
                                  
 #ifndef G4NOHIST                                     
-    bin = i*dRradl;                                
+    G4double bin = i*dRradl;                                
     histo[ 9]->fill(bin,MeanERadial[i]/dRradl);
     bin = (i+1)*dRradl;
     histo[10]->fill(bin,MeanERadialCumul[i]);
@@ -417,7 +417,6 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
          << G4std::setw(7)  << MeanNeutrTrLength << " radl +- "
          << G4std::setw(7)  <<  rmsNeutrTrLength << " radl" << G4endl;
                  
-                
   G4cout.setf(oldform,G4std::ios::floatfield);
   G4cout.precision(oldprec);
 

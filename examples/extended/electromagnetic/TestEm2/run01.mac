@@ -1,4 +1,4 @@
-# $Id: run01.mac,v 1.6 2002-05-31 16:06:54 maire Exp $
+# $Id: run01.mac,v 1.7 2002-10-14 16:00:07 vnivanch Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -7,13 +7,13 @@
 #
 /control/verbose 2
 #
-#/run/particle/setCut 1 mm
+#/em2/setCut 1 mm
 /run/initialize
 #
 /run/particle/applyCuts
 #
-/run/verbose 2
-/event/printModulo 10
+/run/verbose 1
+/em2/printModulo 10
 #
 /gun/particle e-
 /gun/energy 5 GeV

@@ -29,5 +29,5 @@
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
 #
-/event/drawTracks charged
+/em2/drawTracks charged
 

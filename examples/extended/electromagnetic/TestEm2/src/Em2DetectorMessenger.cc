@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: Em2DetectorMessenger.cc,v 1.5 2001-10-31 17:34:13 maire Exp $
+// $Id: Em2DetectorMessenger.cc,v 1.6 2002-10-14 15:56:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-
+ 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -43,36 +43,36 @@
 Em2DetectorMessenger::Em2DetectorMessenger(Em2DetectorConstruction * Det)
 :Em2Detector(Det)
 { 
-  Em2detDir = new G4UIdirectory("/calor/");
+  Em2detDir = new G4UIdirectory("/em2/");
   Em2detDir->SetGuidance("Em2 detector control.");
       
-  MaterCmd = new G4UIcmdWithAString("/calor/setMat",this);
+  MaterCmd = new G4UIcmdWithAString("/em2/setMat",this);
   MaterCmd->SetGuidance("Select Material.");
   MaterCmd->SetParameterName("material",false);
   MaterCmd->AvailableForStates(Idle);
   
-  LBinCmd = new G4UIcmdWith3Vector("/calor/setLbin",this);
+  LBinCmd = new G4UIcmdWith3Vector("/em2/setLbin",this);
   LBinCmd->SetGuidance("set longitudinal bining");
   LBinCmd->SetGuidance("nb of bins; bin thickness (in radl)");
   LBinCmd->SetParameterName("nLtot","dLradl"," ",true);
   LBinCmd->SetRange("nLtot>=1 && dLradl>0");
   LBinCmd->AvailableForStates(PreInit,Idle);
   
-  RBinCmd = new G4UIcmdWith3Vector("/calor/setRbin",this);
+  RBinCmd = new G4UIcmdWith3Vector("/em2/setRbin",this);
   RBinCmd->SetGuidance("set radial bining");
   RBinCmd->SetGuidance("nb of bins; bin thickness (in radl)");
   RBinCmd->SetParameterName("nRtot","dRradl"," ",true);
   RBinCmd->SetRange("nRtot>=1 && dRradl>0");
   RBinCmd->AvailableForStates(PreInit,Idle);
   
-  FieldCmd = new G4UIcmdWithADoubleAndUnit("/calor/setField",this);  
+  FieldCmd = new G4UIcmdWithADoubleAndUnit("/em2/setField",this);  
   FieldCmd->SetGuidance("Define magnetic field.");
   FieldCmd->SetGuidance("Magnetic field will be in Z direction.");
   FieldCmd->SetParameterName("Bz",false);
   FieldCmd->SetUnitCategory("Magnetic flux density");
   FieldCmd->AvailableForStates(Idle);
   
-  UpdateCmd = new G4UIcmdWithoutParameter("/calor/update",this);
+  UpdateCmd = new G4UIcmdWithoutParameter("/em2/update",this);
   UpdateCmd->SetGuidance("Update geometry.");
   UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");

@@ -21,60 +21,49 @@
 // ********************************************************************
 //
 //
-// $Id: Em2EventActionMessenger.cc,v 1.6 2002-10-14 15:56:26 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "Em2EventActionMessenger.hh"
-
-#include "Em2EventAction.hh"
-#include "G4UIcmdWithAString.hh" 
-#include "G4UIcmdWithAnInteger.hh"
-#include "globals.hh"
+#include "Em2GeneralPhysics.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ProcessManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em2EventActionMessenger::Em2EventActionMessenger(Em2EventAction* EvAct)
-:eventAction(EvAct)
-{ 
-  DrawCmd = new G4UIcmdWithAString("/em2/drawTracks",this);
-  DrawCmd->SetGuidance("Draw the tracks in the event");
-  DrawCmd->SetGuidance("  Choice : none, charged, all");
-  DrawCmd->SetParameterName("choice",true);
-  DrawCmd->SetDefaultValue("all");
-  DrawCmd->SetCandidates("none charged all");
-  DrawCmd->AvailableForStates(Idle);
-  
-  PrintCmd = new G4UIcmdWithAnInteger("/em2/printModulo",this);
-  PrintCmd->SetGuidance("Print events modulo n");
-  PrintCmd->SetParameterName("EventNb",false);
-  PrintCmd->SetRange("EventNb>0");
-  PrintCmd->AvailableForStates(Idle);  
-}
+Em2GeneralPhysics::Em2GeneralPhysics(const G4String& name)
+   :  G4VPhysicsConstructor(name)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em2EventActionMessenger::~Em2EventActionMessenger()
+Em2GeneralPhysics::~Em2GeneralPhysics()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void Em2GeneralPhysics::ConstructParticle()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void Em2GeneralPhysics::ConstructProcess()
 {
-  delete DrawCmd;
-  delete PrintCmd;
+  // Add Decay Process
+  theParticleIterator->reset();
+  while( (*theParticleIterator)() ){
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
+
+    if (fDecayProcess.IsApplicable(*particle)) { 
+
+      pmanager ->AddProcess(&fDecayProcess);
+
+      // set ordering for PostStepDoIt and AtRestDoIt
+      pmanager ->SetProcessOrdering(&fDecayProcess, idxPostStep);
+      pmanager ->SetProcessOrdering(&fDecayProcess, idxAtRest);
+
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2EventActionMessenger::SetNewValue(G4UIcommand* command,
-                                          G4String newValue)
-{ 
-  if(command == DrawCmd)
-    {eventAction->SetDrawFlag(newValue);}
-    
-  if(command == PrintCmd)
-    {eventAction->SetPrintModulo(PrintCmd->GetNewIntValue(newValue));}    
-   
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

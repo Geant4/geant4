@@ -1,4 +1,4 @@
-# $Id: run02.mac,v 1.4 2001-10-31 17:34:12 maire Exp $
+# $Id: run02.mac,v 1.5 2002-10-14 16:00:08 vnivanch Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -10,16 +10,16 @@
 #
 /control/verbose 2
 #
-/run/particle/setCut 2.0 mm
+/em2/setCut 2.0 mm
 /run/initialize
 #
-/calor/setMat Al
-/calor/setLbin 12 1.1245
-/calor/setRbin 12 0.11245
-/calor/update
+/em2/setMat Al
+/em2/setLbin 12 1.1245
+/em2/setRbin 12 0.11245
+/em2/update
 #
 /run/verbose 2
-/event/printModulo 10
+/em2/printModulo 10
 #
 /gun/particle e-
 /gun/energy 1 GeV

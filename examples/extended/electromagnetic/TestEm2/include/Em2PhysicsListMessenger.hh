@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2PhysicsListMessenger.hh,v 1.3 2001-10-25 15:12:06 maire Exp $
+// $Id: Em2PhysicsListMessenger.hh,v 1.4 2002-10-14 15:56:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,6 +37,7 @@
 
 class Em2PhysicsList;
 class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithAString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -56,6 +57,9 @@ class Em2PhysicsListMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* gammaCutCmd;
     G4UIcmdWithADoubleAndUnit* electCutCmd;
     G4UIcmdWithADoubleAndUnit* protoCutCmd;    
+    G4UIcmdWithADoubleAndUnit* allCutCmd;    
+    G4UIcmdWithAString*        pListCmd;
+    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
