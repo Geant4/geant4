@@ -1,0 +1,19 @@
+# select GRID gun
+/fred/gun GRID
+# select SHADOW draw mode
+/fred/draw SHADOW
+# select BOX test volume
+/fred/volume BOX
+# initialize
+/run/initialize
+# initialize x-windows OpenGL viewer
+/control/execute draw.script
+# select a large but not too time consuming number of tracks
+/gridGun/n1 40
+/gridGun/n2 40
+# run script 1
+/control/execute grids1.script
+# run script 2
+/control/execute grids2.script
+# run script 3
+/control/execute grids3.script
