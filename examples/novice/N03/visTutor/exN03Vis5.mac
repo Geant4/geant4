@@ -48,11 +48,9 @@
 /vis/viewer/reset
 /vis/viewer/set/viewpointThetaPhi   45 45 
 
-/vis/viewer/update
 /vis/scene/notifyHandlers
 
-/run/beamOn 1
-
+/control/verbose 2
 #######################################################################
 #   Controls on an Inventor examiner viewer are :                     #
 #  - in picking mode (cursor is the upper left arrow)                 #
@@ -65,3 +63,8 @@
 #   Middle-button + pointer move : pane.                              #
 #                                                                     #
 #######################################################################
+
+/vis/viewer/update
+
+/run/beamOn 1
+
