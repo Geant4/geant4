@@ -1,4 +1,4 @@
-?RCS: $Id: Oldconfig.U,v 1.10 2002-06-26 09:48:56 sadilov Exp $
+?RCS: $Id: Oldconfig.U,v 1.11 2002-07-01 11:07:26 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,6 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.10  2002/06/26 09:48:56  sadilov
+?RCS: Adding WIN32-VC system.
+?RCS:
 ?RCS: Revision 1.9  2001/12/14 12:19:30  sadilov
 ?RCS: Some corrections.
 ?RCS:
@@ -561,6 +564,8 @@ case "$g4osname" in
 				;;
 		'sunos')	g4osname=SUN
 				;;
+		'solaris')	g4osname=SUN
+				;;
 		'win32')	g4osname=WIN32
 				;;
 	esac
@@ -614,13 +619,14 @@ while test 1 = 1  ; do
 
 g4message=`cat << EOM
 
-Definition of G4SYSTEM variable.
+Definition of G4SYSTEM variable is $g4osname-$g4compiler.
+That stands for:
 
 1) OS		: $g4osname
 
 2) Compiler	: $g4compiler
 
-Select from list above (e.g. 2) 
+To modify default settings, select number above (e.g. 2) 
 EOM`
 
 dflt="Press [Enter] for default settings"
