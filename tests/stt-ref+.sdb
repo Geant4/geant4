@@ -1,4 +1,4 @@
-# $Id: stt-ref+.sdb,v 1.39 1999-05-19 15:19:39 stesting Exp $
+# $Id: stt-ref+.sdb,v 1.40 1999-05-19 17:45:26 stesting Exp $
 # .sdb files are read by checkout.sh and update.sh
 # Lines beginning "# " are ignored (the space after the '#' is important!
 # Blank lines are not allowed!
@@ -19,27 +19,27 @@ geant4/source/geometry/GNUmakefile   geant4-00-ref-08
 geant4/source/geometry/History       geant4-00-ref-08
 geant4/source/geometry/magneticfield geant4-00-ref-08
 geant4/source/geometry/management    geant4-00-ref-08
-geant4/source/geometry/management/src/G4SolidStore.cc        HEAD
+geant4/source/geometry/management/src/G4SolidStore.cc        geant4-00-ref-08STL
 geant4/source/geometry/solids        geant4-00-ref-08
 geant4/source/geometry/volumes       geant4-00-ref-08
-geant4/source/geometry/volumes/include/G4NavigationLevel.hh  HEAD
-geant4/source/geometry/volumes/include/G4NavigationLevel.icc HEAD
-geant4/source/geometry/volumes/src/G4Navigator.cc            HEAD
+geant4/source/geometry/volumes/include/G4NavigationLevel.hh  geant4-00-ref-08STL
+geant4/source/geometry/volumes/include/G4NavigationLevel.icc geant4-00-ref-08STL
+geant4/source/geometry/volumes/src/G4Navigator.cc            geant4-00-ref-08STL
 geant4/source/global           HEAD
 geant4/source/graphics_reps    greps-01-00-06
-geant4/source/intercoms        geant4-00-ref-08
-geant4/source/interfaces       geant4-00-ref-08
+geant4/source/intercoms        intercoms-01-00-05
+geant4/source/interfaces       interfaces-01-00-03
 geant4/source/materials        geant4-00-ref-08
 geant4/source/particles        geant4-00-ref-08
-geant4/source/particlesmanagement/include/G4NucleiPropertiesTable.hh HEAD
-geant4/source/particlesmanagement/src/G4ParticleTable.cc             HEAD
+geant4/source/particles/management/include/G4NucleiPropertiesTable.hh geant4-00-ref-08STL
+geant4/source/particles/management/src/G4ParticleTable.cc geant4-00-ref-08STL
 geant4/source/persistency      geant4-00-ref-08
 geant4/source/processes/GNUmakefile         geant4-00-ref-08
 geant4/source/processes/History             geant4-00-ref-08
 geant4/source/processes/decay	            geant4-00-ref-08
 geant4/source/processes/electromagnetic	    geant4-00-ref-08
 geant4/source/processes/hadronic            geant4-00-ref-08
-geant4/source/processes/hadronic/models/generator/de_excitation/src/G4NuclearLevelManager.cc  HEAD
+geant4/source/processes/hadronic/models/generator/de_excitation/src/G4NuclearLevelManager.cc  geant4-00-ref-08STL
 geant4/source/processes/management          geant4-00-ref-08
 geant4/source/processes/optical	            geant4-00-ref-08
 geant4/source/processes/parameterisation    geant4-00-ref-08
@@ -47,7 +47,7 @@ geant4/source/processes/photolepton_hadron  geant4-00-ref-08
 geant4/source/processes/transportation      geant4-00-ref-08
 geant4/source/readout          geant4-00-ref-08
 geant4/source/run              geant4-00-ref-08
-geant4/source/run/src/G4RunManager.cc  HEAD
+geant4/source/run/src/G4RunManager.cc  geant4-00-ref-08STL
 geant4/source/track            geant4-00-ref-08
 geant4/source/tracking         geant4-00-ref-08
 geant4/source/visualization    geant4-00-ref-08
