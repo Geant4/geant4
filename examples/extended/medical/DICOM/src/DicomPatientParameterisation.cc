@@ -145,7 +145,7 @@ DicomPatientParameterisation::DicomPatientParameterisation(G4int, // NoVoxels,
   G4std::fscanf(readData,"%s",compressionBuf);
   compression = atoi(compressionBuf);
     
-  GetDensity( maxDensity , minDensity );
+  GetDensity( maxDensity,minDensity );
 }
 
 DicomPatientParameterisation::~DicomPatientParameterisation()

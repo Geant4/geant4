@@ -55,19 +55,6 @@ private:
  
   DicomPatientConstructor* patientConstructor;
 
-  //Materials ...
- 
-  G4Material* trabecularBone; 
-  G4Material* denseBone;
-  G4Material* liver; 
-  G4Material* muscle; 
-  G4Material* phantom; 
-  G4Material* breast; 
-  G4Material* adiposeTissue; 
-  G4Material* lungexhale; 
-  G4Material* lunginhale;
-  G4Material* air; 
-
   // World ...
 
   G4Box* solidWorld;
