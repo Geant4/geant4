@@ -21,28 +21,28 @@
 // ********************************************************************
 //
 //
-// $Id: test11.hadronic.exerciser.cc,v 1.11 2001-07-11 10:09:49 gunter Exp $
+// $Id: test11.hadronic.exerciser.cc,v 1.12 2001-10-23 10:56:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "globals.hh"
 #include "G4UnitsTable.hh"
-#include "g4rw/tvordvec.h"
+#include "g4std/vector"
 
 static void OutputCases
 (G4int N,  // Number of events per case.
- const G4RWTValOrderedVector <G4String> & particleNameList,
- const G4RWTValOrderedVector <G4double> & energyList,
- const G4RWTValOrderedVector <G4String> & materialNameList) {
+ const G4std::vector <G4String> & particleNameList,
+ const G4std::vector <G4double> & energyList,
+ const G4std::vector <G4String> & materialNameList) {
 
-  for (int iMaterial = 0;
-       iMaterial < materialNameList.entries ();
+  for (size_t iMaterial = 0;
+       iMaterial < materialNameList.size ();
        iMaterial++) {
-    for (int iEnergy = 0;
-	 iEnergy < energyList.entries ();
+    for (size_t iEnergy = 0;
+	 iEnergy < energyList.size ();
 	 iEnergy++) {
-      for (int iParticle = 0;
-	   iParticle < particleNameList.entries ();
+      for (size_t iParticle = 0;
+	   iParticle < particleNameList.size ();
 	   iParticle++) {
 
 	G4cout
@@ -84,24 +84,24 @@ int main (int argc, char** argv) {
     "\n/run/initialize"
     "\n/gun/direction 1 0 0";
 
-  G4RWTValOrderedVector <G4String> particleNameList;
-  particleNameList.append ("proton");
-  particleNameList.append ("neutron");
-  particleNameList.append ("pi+");
-  particleNameList.append ("pi-");
-  particleNameList.append ("kaon+");
-  particleNameList.append ("kaon-");
-  particleNameList.append ("kaon0S");
-  particleNameList.append ("kaon0L");
+  G4std::vector <G4String> particleNameList;
+  particleNameList.push_back ("proton");
+  particleNameList.push_back ("neutron");
+  particleNameList.push_back ("pi+");
+  particleNameList.push_back ("pi-");
+  particleNameList.push_back ("kaon+");
+  particleNameList.push_back ("kaon-");
+  particleNameList.push_back ("kaon0S");
+  particleNameList.push_back ("kaon0L");
 
-  G4RWTValOrderedVector <G4double> energyList;
-  energyList.append (10 * GeV);
+  G4std::vector <G4double> energyList;
+  energyList.push_back (10 * GeV);
 
-  G4RWTValOrderedVector <G4String> materialNameList;
-  materialNameList.append ("U");
-  materialNameList.append ("Pb");
-  materialNameList.append ("Al");
-  materialNameList.append ("Air");
+  G4std::vector <G4String> materialNameList;
+  materialNameList.push_back ("U");
+  materialNameList.push_back ("Pb");
+  materialNameList.push_back ("Al");
+  materialNameList.push_back ("Air");
 
   OutputCases (N, particleNameList, energyList, materialNameList);
 

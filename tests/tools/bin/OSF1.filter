@@ -5,10 +5,6 @@ ar: Warning: creating
 ar r 
 is up to date.
 Merging object files in
-######### rogue #################
-rw/toolerr.h, line 
-extern const RWMsgId rwexport RWTOOL_
-------------------------------^
 ######### X11 #######################
 cxx: Warning: /usr/include/X11/X
 extern X

@@ -162,7 +162,6 @@ if [ `uname -n | grep suncmsb` ]; then
 #
   export CLHEP_BASE_DIR=/afs/cern.ch/user/s/stesting/work/clhep
   export CLHEP_LIB=CLHEP-CC
-  export RWBASE=/afs/cern.ch/user/s/stesting/work/rogue
   # G4 build flags :
   #######export G4UI_BUILD_XM_SESSION=1
   #######export G4VIS_BUILD_OPENGLXM_DRIVER=1
@@ -417,8 +416,6 @@ export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/Linux-g++/pro
 #/usr/local/CLHEP1.3/CLHEP
 export CLHEP_LIB=CLHEP
 #CLHEP-c++
-export RWBASE=/usr/local
-export RWINC=/usr/local/include
 export OGLHOME=/usr/local
 fi
 export XM_INSTALLED=1
@@ -473,7 +470,6 @@ export G4VIS_USE_OPENGLXM=1
 export G4VIS_USE_OPENGLX=1
 export G4VIS_USE_OIX=1
 # Specific :
-export RWBASE=/geant4/OSF1
 export CLHEP_BASE_DIR=/geant4/OSF1
 export OGLHOME=/geant4/OSF1
 export OIVHOME=/geant4/OpenInventor2.4.1
