@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungSpectrum.cc,v 1.3 2001-11-29 19:01:37 vnivanch Exp $
+// $Id: G4eBremsstrahlungSpectrum.cc,v 1.4 2001-11-29 22:39:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -94,7 +94,6 @@ G4double G4eBremsstrahlungSpectrum::Probability(G4int Z,
 
     G4int iMax = 16;
     G4DataVector p;
-    p.clear();
 
     // Access parameters
     for (G4int i=0; i<iMax; i++) {
@@ -103,6 +102,8 @@ G4double G4eBremsstrahlungSpectrum::Probability(G4int Z,
  
     x  = IntSpectrum(t0, tm, p);
     y  = IntSpectrum(z, 1.0, p); 
+    p.clear();
+
 
     // Above Bethe-Heitler formula
   } else {
@@ -156,7 +157,6 @@ G4double G4eBremsstrahlungSpectrum::AverageEnergy(G4int Z,
 
     G4int iMax = 16;
     G4DataVector p;
-    p.clear();
 
     // Access parameters
     for (G4int i=0; i<iMax; i++) {
@@ -166,6 +166,7 @@ G4double G4eBremsstrahlungSpectrum::AverageEnergy(G4int Z,
     x  = AverageValue(t0, tm, p);
     y  = IntSpectrum(z, 1.0, p);
     f  = Function(z, p);
+    p.clear();
 
     // Above Bethe-Heitler formula
   } else {
@@ -216,7 +217,6 @@ G4double G4eBremsstrahlungSpectrum::SampleEnergy(G4int Z,
 
   G4int iMax = 16;
   G4DataVector p;
-  p.clear();
 
   G4double amaj, k;
 
@@ -254,6 +254,8 @@ G4double G4eBremsstrahlungSpectrum::SampleEnergy(G4int Z,
   } while (q > fun);
 
   tgam *= e;
+
+  p.clear();
 
   return tgam; 
 }

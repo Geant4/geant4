@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationSpectrum.cc,v 1.9 2001-11-29 19:01:37 vnivanch Exp $
+// $Id: G4eIonisationSpectrum.cc,v 1.10 2001-11-29 22:39:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -62,7 +62,6 @@ G4eIonisationSpectrum::G4eIonisationSpectrum():G4VEnergySpectrum(),
 G4eIonisationSpectrum::~G4eIonisationSpectrum() 
 {
   delete theParam;
-  theParam = 0;
 }
 
 
@@ -85,7 +84,7 @@ G4double G4eIonisationSpectrum::Probability(G4int Z,
   G4double bindingEnergy = (G4AtomicTransitionManager::Instance())->
                            Shell(Z, shell)->BindingEnergy();
 
-  G4double x1 = (t0 + bindingEnergy)/(e + bindingEnergy);
+  G4double x1 = G4std::min(0.5,(t0 + bindingEnergy)/(e + bindingEnergy));
   G4double x2 = G4std::min(0.5,(tm + bindingEnergy)/(e + bindingEnergy));
 
   if(verbose > 1) {
@@ -99,7 +98,6 @@ G4double G4eIonisationSpectrum::Probability(G4int Z,
 
   G4int iMax = 7;
   G4DataVector p;
-  p.clear();
 
   // Access parameters
   for (G4int i=0; i<iMax; i++) 
@@ -129,6 +127,8 @@ G4double G4eIonisationSpectrum::Probability(G4int Z,
            << G4endl;
   }
 
+  p.clear();
+
   if(nor > 0.0) val /= nor;
   else          val  = 0.0;
   if(val < 0.0) val  = 0.0;
@@ -156,7 +156,7 @@ G4double G4eIonisationSpectrum::AverageEnergy(G4int Z,
   G4double bindingEnergy = (G4AtomicTransitionManager::Instance())->
                            Shell(Z, shell)->BindingEnergy();
 
-  G4double x1 = (t0 + bindingEnergy)/(e + bindingEnergy);
+  G4double x1 = G4std::min(0.5,(t0 + bindingEnergy)/(e + bindingEnergy));
   G4double x2 = G4std::min(0.5,(tm + bindingEnergy)/(e + bindingEnergy));
 
   if(verbose > 1) {
@@ -171,7 +171,6 @@ G4double G4eIonisationSpectrum::AverageEnergy(G4int Z,
 
   G4int iMax = 7;
   G4DataVector p;
-  p.clear();
 
   // Access parameters
   for (G4int i=0; i<iMax; i++) 
@@ -202,6 +201,8 @@ G4double G4eIonisationSpectrum::AverageEnergy(G4int Z,
            << G4endl;
   }
 
+  p.clear();
+
   if(nor > 0.0) val /= nor;
   else          val  = 0.0;
   if(val < 0.0) val  = 0.0;
@@ -226,8 +227,9 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
   G4double bindingEnergy = (G4AtomicTransitionManager::Instance())->
                            Shell(Z, shell)->BindingEnergy();
 
-  G4double x1 = (t0 + bindingEnergy)/(e + bindingEnergy);
+  G4double x1 = G4std::min(0.5,(t0 + bindingEnergy)/(e + bindingEnergy));
   G4double x2 = G4std::min(0.5,(tm + bindingEnergy)/(e + bindingEnergy));
+  if(x1 >= x2) return tDelta;
 
   if(verbose > 1) {
     G4cout << "G4eIonisationSpectrum::SampleEnergy: Z= " << Z
@@ -239,7 +241,6 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
   // Access parameters
   G4int iMax = 7;
   G4DataVector p;
-  p.clear();
 
   // Access parameters
   for (G4int i=0; i<iMax; i++) 
@@ -300,6 +301,21 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
   p.clear();
 
   tDelta = x*(e + bindingEnergy) - bindingEnergy;
+
+  if(verbose > 1) {
+    G4cout << "tcut(MeV)= " << tMin/MeV 
+           << "; tMax(MeV)= " << tMax/MeV 
+           << "; x1= " << x1 
+           << "; x2= " << x2 
+           << "; a1= " << a1 
+           << "; a2= " << a2 
+           << "; x= " << x 
+           << "; be= " << bindingEnergy 
+           << "; e= " << e 
+           << "; tDelta= " << tDelta 
+           << G4endl;
+  }
+
 
   return tDelta; 
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationParameters.cc,v 1.15 2001-11-29 19:01:37 vnivanch Exp $
+// $Id: G4eIonisationParameters.cc,v 1.16 2001-11-29 22:39:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -62,13 +62,16 @@ G4eIonisationParameters::~G4eIonisationParameters()
   // Reset the map of data sets: remove the data sets from the map 
   G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::iterator pos;
 
-  G4int counter = 0;
   for (pos = param.begin(); pos != param.end(); ++pos)
     {
-      counter ++;
       G4VEMDataSet* dataSet = (*pos).second;
       delete dataSet;
-      dataSet = 0;
+    }
+
+  for (pos = excit.begin(); pos != excit.end(); ++pos)
+    {
+      G4VEMDataSet* dataSet = (*pos).second;
+      delete dataSet;
     }
 
   activeZ.clear();
