@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionPN.cc,v 1.2 2003-11-03 17:53:28 hpw Exp $ //
+// $Id: G4CollisionPN.cc,v 1.3 2003-12-15 16:18:29 hpw Exp $ //
 // -------------------------------------------------------------------
 //      GEANT4 Class file
 //
@@ -76,18 +76,7 @@ G4CollisionPN::~G4CollisionPN()
 { 
   delete crossSectionSource;
   crossSectionSource = 0;
-
-  if (components != 0)
-    {
-      G4int nComponents = components->size();
-      for (G4int i = 0; i < nComponents; i++)
-	{
-	  G4CollisionPtr componentPtr = (*components)[i];
-	  G4VCollision* component = componentPtr();
-	  delete component;
-	  component = 0;
-	}
-    }
+  if (components) for_each(components->begin(), components->end(), Delete());
   delete components;
   components = 0; 
 }
