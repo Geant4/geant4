@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03RunAction.cc,v 1.2 1999-03-03 14:53:37 maire Exp $
+// $Id: ExN03RunAction.cc,v 1.3 1999-04-12 14:30:54 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,8 +43,8 @@ void ExN03RunAction::BeginOfRunAction(G4Run* aRun)
   if (G4VVisManager::GetConcreteInstance())
     {
       G4UImanager* UI = G4UImanager::GetUIpointer(); 
-      UI->ApplyCommand("/vis~/clear/view");
-      UI->ApplyCommand("/vis~/draw/current");
+      UI->ApplyCommand("/vis/clear/view");
+      UI->ApplyCommand("/vis/draw/current");
     } 
 }
 
@@ -53,7 +53,7 @@ void ExN03RunAction::BeginOfRunAction(G4Run* aRun)
 void ExN03RunAction::EndOfRunAction(G4Run* aRun)
 {
   if (G4VVisManager::GetConcreteInstance())
-     G4UImanager::GetUIpointer()->ApplyCommand("/vis~/show/view");
+     G4UImanager::GetUIpointer()->ApplyCommand("/vis/show/view");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
