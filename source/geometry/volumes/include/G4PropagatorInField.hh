@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.hh,v 1.2 1999-02-17 17:35:59 japost Exp $
+// $Id: G4PropagatorInField.hh,v 1.3 1999-02-17 17:41:55 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -119,6 +119,7 @@ class G4PropagatorInField {
    //  The Field Manager of the Detector
    // 
    // void  SetGlobalFieldMgr( G4FieldManager *detectorFieldMgr );
+   G4FieldTrack    GetEndState() { return End_PointAndTangent; }
 
  private:
 
