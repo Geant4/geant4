@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestOvershootList.cc,v 1.1 2003-10-01 14:37:17 gcosmo Exp $
+// $Id: G4GeomTestOvershootList.cc,v 1.2 2003-11-03 17:15:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -30,6 +30,7 @@
 // G4GeomTestOvershootList
 //
 // Author: D.C.Williams, UCSC (davidw@scipp.ucsc.edu)
+// --------------------------------------------------------------------
 
 #include "G4GeomTestOvershootList.hh"
 
@@ -44,7 +45,7 @@ G4GeomTestOvershootList::G4GeomTestOvershootList(
                                    G4int theDaughterIndex  )
   : G4GeomTestErrorList(theMother),
     daughter(theDaughterIndex)
-{;}
+{}
 
 
 //
@@ -53,13 +54,14 @@ G4GeomTestOvershootList::G4GeomTestOvershootList(
 G4GeomTestOvershootList::G4GeomTestOvershootList()
   : G4GeomTestErrorList(0),
     daughter(0)
-{;}
+{}
 
 
 //
 // Destructor
 //
-G4GeomTestOvershootList::~G4GeomTestOvershootList() {;}
+G4GeomTestOvershootList::~G4GeomTestOvershootList()
+{}
 
 
 //

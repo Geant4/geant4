@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.hh,v 1.1 2003-10-01 15:14:39 gcosmo Exp $
+// $Id: G4VoxelNavigation.hh,v 1.2 2003-11-03 17:15:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,8 +34,7 @@
 
 // History:
 // - Created. Paul Kent, Aug 96
-// ********************************************************************
-
+// --------------------------------------------------------------------
 #ifndef G4VOXELNAVIGATION_HH
 #define G4VOXELNAVIGATION_HH
 

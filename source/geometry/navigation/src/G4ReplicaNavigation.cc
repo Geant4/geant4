@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.cc,v 1.2 2003-10-24 12:51:03 gcosmo Exp $
+// $Id: G4ReplicaNavigation.cc,v 1.3 2003-11-03 17:15:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -29,9 +29,14 @@
 //
 // Author: P.Kent, 1996
 //
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4ReplicaNavigation.hh"
+
+#include "G4AffineTransform.hh"
+#include "G4SmartVoxelProxy.hh"
+#include "G4SmartVoxelNode.hh"
+#include "G4VSolid.hh"
 
 #include <assert.h>
 
@@ -372,7 +377,7 @@ G4ReplicaNavigation::DistanceToOutPhi(const G4ThreeVector &localPoint,
         }
         else
         {
-	  Dist = kInfinity;
+          Dist = kInfinity;
         }
       }
       else

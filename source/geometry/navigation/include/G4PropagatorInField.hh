@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.3 2003-10-29 10:44:38 japost Exp $
+// $Id: G4PropagatorInField.hh,v 1.4 2003-11-03 17:15:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PropagatorInField 
@@ -44,12 +44,16 @@
 #ifndef G4PropagatorInField_hh 
 #define G4PropagatorInField_hh  1
 
-#include "globals.hh"
+#include "G4Types.hh"
+
+#include <vector>
+
 #include "G4FieldTrack.hh"
-#include "G4Navigator.hh"
 #include "G4ChordFinder.hh"
 #include "G4FieldManager.hh"
 
+class G4Navigator;
+class G4VPhysicalVolume;
 class G4VCurvedTrajectoryFilter;
 
 class G4PropagatorInField

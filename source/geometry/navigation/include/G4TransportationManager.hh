@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.hh,v 1.1 2003-10-01 15:14:10 gcosmo Exp $
+// $Id: G4TransportationManager.hh,v 1.2 2003-11-03 17:15:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4TransportationManager
@@ -35,9 +35,8 @@
 // The class instance is created before main() is called, and
 // in turn creates the navigator and the rest.
 
-// =======================================================================
 // Created:  10 March 1997, J. Apostolakis
-// =======================================================================
+// --------------------------------------------------------------------
 
 #ifndef  G4TransportationManager_hh
 #define  G4TransportationManager_hh

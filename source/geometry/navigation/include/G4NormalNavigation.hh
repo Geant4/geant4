@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NormalNavigation.hh,v 1.1 2003-10-01 15:10:28 gcosmo Exp $
+// $Id: G4NormalNavigation.hh,v 1.2 2003-11-03 17:15:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,18 +34,16 @@
 
 // History:
 // - Created. Paul Kent, Aug 96
-// ********************************************************************
-
+// --------------------------------------------------------------------
 #ifndef G4NORMALNAVIGATION_HH
 #define G4NORMALNAVIGATION_HH
 
-#include "geomdefs.hh"
 #include "G4NavigationHistory.hh"
-#include "G4AffineTransform.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VSolid.hh"
 #include "G4ThreeVector.hh"
+#include "G4AuxiliaryNavServices.hh"    // Needed for inline methods
 
 class G4NormalNavigation
 {
@@ -81,8 +79,6 @@ class G4NormalNavigation
                             const G4NavigationHistory &history,
                             const G4double pMaxLength=DBL_MAX );
 };
-
-#include "G4AuxiliaryNavServices.hh"    // Needed for inline methods
 
 #include "G4NormalNavigation.icc"
 

@@ -21,18 +21,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.2 2003-10-24 12:51:03 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.3 2003-11-03 17:15:21 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
 //
 // Author: Paul Kent, July 95/96
 //
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4Navigator.hh"
 #include "G4ios.hh"
 #include <iomanip>
+
+#include "G4VPhysicalVolume.hh"
 
 // ********************************************************************
 // Constructor
@@ -129,7 +131,7 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
         }
         else
         {
-	  fLastLocatedPointLocal = localPoint;
+          fLastLocatedPointLocal = localPoint;
           return 0;           // Have exited world volume
         }
         // A fix for the case where a volume is "entered" at an edge
@@ -233,7 +235,7 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
       }
       else
       {
-	fLastLocatedPointLocal = localPoint;
+        fLastLocatedPointLocal = localPoint;
         return 0;         // Have exited world volume
       }
     }
@@ -270,7 +272,7 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
           } 
           else
           {
-	    fLastLocatedPointLocal = localPoint;
+            fLastLocatedPointLocal = localPoint;
             return 0;          // Have exited world volume
           }
         }

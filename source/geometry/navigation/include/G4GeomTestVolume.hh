@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestVolume.hh,v 1.1 2003-10-01 14:42:24 gcosmo Exp $
+// $Id: G4GeomTestVolume.hh,v 1.2 2003-11-03 17:15:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -35,7 +35,7 @@
 // volume and the boundaries of all its immediate daughters.
 
 // Author: D.C.Williams, UCSC (davidw@scipp.ucsc.edu)
-
+// --------------------------------------------------------------------
 #ifndef G4GeomTestVolume_hh
 #define G4GeomTestVolume_hh
 

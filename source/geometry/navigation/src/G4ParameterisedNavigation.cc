@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.cc,v 1.1 2003-10-01 15:11:24 gcosmo Exp $
+// $Id: G4ParameterisedNavigation.cc,v 1.2 2003-11-03 17:15:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -29,7 +29,7 @@
 //
 // Author: P.Kent, 1996
 //
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4ParameterisedNavigation.hh"
 

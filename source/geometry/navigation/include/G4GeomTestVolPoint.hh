@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestVolPoint.hh,v 1.1 2003-10-01 14:42:10 gcosmo Exp $
+// $Id: G4GeomTestVolPoint.hh,v 1.2 2003-11-03 17:15:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -36,7 +36,7 @@
 // A negative daughter index indicates the mother volume itself.
 
 // Author: D.C.Williams, UCSC (davidw@scipp.ucsc.edu)
-
+// --------------------------------------------------------------------
 #ifndef G4GeomTestVolPoint_hh
 #define G4GeomTestVolPoint_hh
 

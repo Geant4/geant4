@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.3 2003-10-29 10:44:38 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.4 2003-11-03 17:15:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -34,14 +34,17 @@
 // 14.10.96 John Apostolakis,   design and implementation
 // 17.03.97 John Apostolakis,   renaming new set functions being added
 //
-// ********************************************************************
+// ---------------------------------------------------------------------------
 
 #include "G4PropagatorInField.hh"
 #include "G4ios.hh"
 #include <iomanip>
+
 #include "G4ThreeVector.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4Navigator.hh"
 #include "G4VCurvedTrajectoryFilter.hh"
- 
+
 ///////////////////////////////////////////////////////////////////////////
 //
 // Constructors and destructor
@@ -248,7 +251,7 @@ G4PropagatorInField::ComputeStep(
  
     // Intersect chord AB with geometry
     intersects= IntersectChord( SubStartPoint, EndPointB, NewSafety,
-				LinearStepLength, InterSectionPointE );
+                                LinearStepLength, InterSectionPointE );
     // E <- Intersection Point of chord AB and either volume A's surface 
     //                                  or a daughter volume's surface ..
 
@@ -268,7 +271,7 @@ G4PropagatorInField::ComputeStep(
        // intersects = intersects & found_intersection;
        if( found_intersection ) {        
           End_PointAndTangent= IntersectPointVelct_G;  // G is our EndPoint ...
-	  StepTaken = TruePathLength = IntersectPointVelct_G.GetCurveLength()
+          StepTaken = TruePathLength = IntersectPointVelct_G.GetCurveLength()
                                       - OriginalState.GetCurveLength();
        } else {
           intersects= false;  // "Minor" chords do not intersect
@@ -311,9 +314,9 @@ G4PropagatorInField::ComputeStep(
               << " after " << do_loop_count << " field substeps "
               << " totaling " << StepTaken / mm << " mm " ;
        if( pPhysVol )
-	  G4cout << " in the volume " << pPhysVol->GetName() ; 
+          G4cout << " in the volume " << pPhysVol->GetName() ; 
        else
-	 G4cout << " in unknown or null volume. " ; 
+         G4cout << " in unknown or null volume. " ; 
        G4cout << G4endl;
     }
   }
@@ -355,8 +358,8 @@ G4PropagatorInField::ComputeStep(
      // ZeroStepNumberHist[fNoZeroStep]++; 
      if( fNoZeroStep > fActionThreshold_NoZeroSteps ){
         G4cout << " PiF: Step returning=" << StepTaken << G4endl;
-	G4cout << " ------------------------------------------------------- "
-	       << G4endl;
+        G4cout << " ------------------------------------------------------- "
+               << G4endl;
      }
   }
 #endif
@@ -373,7 +376,7 @@ G4PropagatorInField::ComputeStep(
   if( fNoZeroStep > fAbandonThreshold_NoZeroSteps ) { 
      G4cout << " WARNING - G4PropagatorInField::ComputeStep():" << G4endl
             << " Zero progress for "  << fNoZeroStep << " attempted steps." 
-	    << G4endl;
+            << G4endl;
 #ifdef G4VERBOSE
      G4cout << " Particle that is stuck will be killed." << G4endl;
 #endif
@@ -487,9 +490,9 @@ G4PropagatorInField::LocateIntersectionPoint(
       G4ThreeVector PointG;   // Candidate intersection point
       G4double stepLengthAF; 
       G4bool Intersects_AF = IntersectChord( Point_A,   CurrentF_Point,
-					     NewSafety, stepLengthAF,
-					     PointG
-					     );
+                                             NewSafety, stepLengthAF,
+                                             PointG
+                                             );
       if( Intersects_AF )
       {
         // G is our new Candidate for the intersection point.
@@ -507,13 +510,13 @@ G4PropagatorInField::LocateIntersectionPoint(
          // We must continue the search in the segment FB!
          fNavigator->LocateGlobalPointWithinVolume( CurrentF_Point );
 
-	 G4double stepLengthFB;
-	 G4ThreeVector PointH;
+         G4double stepLengthFB;
+         G4ThreeVector PointH;
          // Check whether any volumes are encountered by the chord FB
          // ---------------------------------------------------------
-	 G4bool Intersects_FB = 
-	   IntersectChord( CurrentF_Point, Point_B, 
-			   NewSafety,      stepLengthFB,  PointH );
+         G4bool Intersects_FB = 
+           IntersectChord( CurrentF_Point, Point_B, 
+                           NewSafety,      stepLengthFB,  PointH );
 
          if( Intersects_FB )
          { 
@@ -557,11 +560,11 @@ G4PropagatorInField::LocateIntersectionPoint(
           // Re-integrate to obtain a new B
           //
           G4FieldTrack newEndPoint=
-	          ReEstimateEndpoint( CurrentA_PointVelocity,
-				      CurrentB_PointVelocity,
-				      linDistSq,    // to avoid recalculation
-				      curveDist );
- 	  CurrentB_PointVelocity = newEndPoint;
+                  ReEstimateEndpoint( CurrentA_PointVelocity,
+                                      CurrentB_PointVelocity,
+                                      linDistSq,    // to avoid recalculation
+                                      curveDist );
+           CurrentB_PointVelocity = newEndPoint;
        }
        if( curveDist < 0.0 )
        {
@@ -707,11 +710,11 @@ G4PropagatorInField::PrintStepLengthDiagnostic(
 
 G4bool
 G4PropagatorInField::IntersectChord( G4ThreeVector  StartPointA, 
-				     G4ThreeVector  EndPointB,
-				     G4double      &NewSafety,
-				     G4double      &LinearStepLength,
-				     G4ThreeVector &IntersectionPoint
-				   )
+                                     G4ThreeVector  EndPointB,
+                                     G4double      &NewSafety,
+                                     G4double      &LinearStepLength,
+                                     G4ThreeVector &IntersectionPoint
+                                   )
 {
     // Calculate the direction and length of the chord AB
     G4ThreeVector  ChordAB_Vector = EndPointB - StartPointA;
@@ -726,9 +729,9 @@ G4PropagatorInField::IntersectChord( G4ThreeVector  StartPointA,
 
     if( MagSqShift >= sqr(fPreviousSafety) )
     {
-	currentSafety = 0.0 ;
+        currentSafety = 0.0 ;
     }else{
-	currentSafety = fPreviousSafety - sqrt(MagSqShift) ;
+        currentSafety = fPreviousSafety - sqrt(MagSqShift) ;
     }
 
     if( fUseSafetyForOptimisation && (ChordAB_Length <= currentSafety) )
@@ -768,13 +771,13 @@ G4PropagatorInField::IntersectChord( G4ThreeVector  StartPointA,
     // StartPointA, EndPointB, LinearStepLength, IntersectionPoint, NewSafety
 
     G4cout << "Start="  << std::setw(12) << StartPointA       << " "
-	   << "End= "   << std::setw(8) << EndPointB         << " "
-	   << "StepIn=" << std::setw(8) << LinearStepLength  << " "
-	   << "NewSft=" << std::setw(8) << NewSafety
-	   << "NavCall" << doCallNav      << "  "
-	   << "In T/F " << intersects     << "  " 
-	   << "IntrPt=" << std::setw(8) << IntersectionPoint << " " 
-	   << G4endl;
+           << "End= "   << std::setw(8) << EndPointB         << " "
+           << "StepIn=" << std::setw(8) << LinearStepLength  << " "
+           << "NewSft=" << std::setw(8) << NewSafety
+           << "NavCall" << doCallNav      << "  "
+           << "In T/F " << intersects     << "  " 
+           << "IntrPt=" << std::setw(8) << IntersectionPoint << " " 
+           << G4endl;
 #endif
 
     return intersects;
@@ -789,7 +792,7 @@ ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,
                           G4double,
 #endif
                           G4double      curveDist
-		  )
+                  )
 {
   G4FieldTrack newEndPoint( CurrentStateA );
   GetChordFinder()->GetIntegrationDriver()
@@ -802,16 +805,16 @@ ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,
        || (Verbose() > 1) )
     {
       G4cerr << "G4PropagatorInField::LocateIntersectionPoint():"
-	     << G4endl
-	     << " Warning: Integration inaccuracy requires" 
-	     <<   " an adjustment in the step's endpoint."  << G4endl
-	     << "   Two mid-points are further apart than their"
-	     <<   " curve length difference"                << G4endl 
-	     << "   Dist = "       << sqrt(linearDistSq)
-	     << " curve length = " << curveDist             << G4endl; 
+             << G4endl
+             << " Warning: Integration inaccuracy requires" 
+             <<   " an adjustment in the step's endpoint."  << G4endl
+             << "   Two mid-points are further apart than their"
+             <<   " curve length difference"                << G4endl 
+             << "   Dist = "       << sqrt(linearDistSq)
+             << " curve length = " << curveDist             << G4endl; 
       G4cerr << " Correction applied is " 
-	     << (newEndPoint.GetPosition()-EstimatedEndStateB.GetPosition()).mag()
-	     << G4endl;
+             << (newEndPoint.GetPosition()-EstimatedEndStateB.GetPosition()).mag()
+             << G4endl;
     }
 #else
   // Statistics on the RMS value of the corrections
@@ -819,7 +822,7 @@ ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,
   static G4double sumCorrectionsSq = 0;
   noCorrections++; 
   sumCorrectionsSq += (EstimatedEndStateB.GetPosition() - 
-		       newEndPoint.GetPosition()).mag2();
+                       newEndPoint.GetPosition()).mag2();
 
 #endif
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NormalNavigation.cc,v 1.1 2003-10-01 15:10:14 gcosmo Exp $
+// $Id: G4NormalNavigation.cc,v 1.2 2003-11-03 17:15:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -29,9 +29,10 @@
 //
 // Author: P.Kent, 1996
 //
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4NormalNavigation.hh"
+#include "G4AffineTransform.hh"
 
 // ********************************************************************
 // ComputeStep
@@ -108,7 +109,7 @@ G4NormalNavigation::ComputeStep(const G4ThreeVector &localPoint,
       {
         sampleDirection = sampleTf.TransformAxis(localDirection);
         const G4double sampleStep =
-	        sampleSolid->DistanceToIn(samplePoint,sampleDirection);
+                sampleSolid->DistanceToIn(samplePoint,sampleDirection);
         if ( sampleStep<=ourStep )
         {
           ourStep  = sampleStep;

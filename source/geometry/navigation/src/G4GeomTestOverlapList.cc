@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestOverlapList.cc,v 1.1 2003-10-01 14:36:28 gcosmo Exp $
+// $Id: G4GeomTestOverlapList.cc,v 1.2 2003-11-03 17:15:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -30,6 +30,7 @@
 // G4GeomTestOverlapList
 //
 // Author: D.C.Williams, UCSC (davidw@scipp.ucsc.edu)
+// --------------------------------------------------------------------
 
 #include "G4GeomTestOverlapList.hh"
 
@@ -46,7 +47,7 @@ G4GeomTestOverlapList::G4GeomTestOverlapList(
   : G4GeomTestErrorList(theMother),
     daughter1(theDaughter1),
     daughter2(theDaughter2)
-{;}
+{}
 
 
 //
@@ -56,13 +57,14 @@ G4GeomTestOverlapList::G4GeomTestOverlapList()
   : G4GeomTestErrorList(0),
     daughter1(0),
     daughter2(0)
-{;}
+{}
 
 
 //
 // Destructor
 //
-G4GeomTestOverlapList::~G4GeomTestOverlapList() {;}
+G4GeomTestOverlapList::~G4GeomTestOverlapList()
+{}
 
 
 //

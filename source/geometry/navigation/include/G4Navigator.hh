@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.1 2003-10-01 15:09:31 gcosmo Exp $
+// $Id: G4Navigator.hh,v 1.2 2003-11-03 17:15:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -94,14 +94,10 @@
 #include "G4AffineTransform.hh"
 #include "G4RotationMatrix.hh"
 
-#include "G4VPhysicalVolume.hh"
-#include "G4VPVParameterisation.hh"
-#include "G4LogicalVolume.hh"
-#include "G4VSolid.hh"
-
-#include "G4GRSVolume.hh"
-#include "G4GRSSolid.hh"
-#include "G4TouchableHandle.hh"
+#include "G4LogicalVolume.hh"             // Used in inline methods
+#include "G4GRSVolume.hh"                 //    "         "
+#include "G4GRSSolid.hh"                  //    "         "
+#include "G4TouchableHandle.hh"           //    "         "
 #include "G4TouchableHistoryHandle.hh"
 
 #include "G4NavigationHistory.hh"
@@ -111,6 +107,8 @@
 #include "G4ReplicaNavigation.hh"
 
 #include <iostream>
+
+class G4VPhysicalVolume;
 
 class G4Navigator
 {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryMessenger.hh,v 1.1 2003-10-01 15:09:01 gcosmo Exp $
+// $Id: G4GeometryMessenger.hh,v 1.2 2003-11-03 17:15:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -36,11 +36,10 @@
 
 // Author: G.Cosmo, CERN.
 // --------------------------------------------------------------------
-
 #ifndef G4GeometryMessenger_hh
 #define G4GeometryMessenger_hh
 
-#include "globals.hh"
+#include "G4Types.hh"
 #include "G4UImessenger.hh"
 #include "G4ThreeVector.hh"
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestSegment.hh,v 1.1 2003-10-01 14:41:33 gcosmo Exp $
+// $Id: G4GeomTestSegment.hh,v 1.2 2003-11-03 17:15:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -35,11 +35,11 @@
 // and return them in no particular order
 
 // Author: D.C.Williams, UCSC (davidw@scipp.ucsc.edu)
-
+// --------------------------------------------------------------------
 #ifndef G4GeomTestSegment_hh
 #define G4GeomTestSegment_hh
 
-#include "globals.hh"
+#include "G4Types.hh"
 #include "G4ThreeVector.hh"
 #include "G4GeomTestPoint.hh"
 

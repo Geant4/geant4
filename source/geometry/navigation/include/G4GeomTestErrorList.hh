@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestErrorList.hh,v 1.1 2003-10-01 14:40:07 gcosmo Exp $
+// $Id: G4GeomTestErrorList.hh,v 1.2 2003-11-03 17:15:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -38,13 +38,13 @@
 // and assignment operator.
 
 // Author: D.C.Williams, UCSC (davidw@scipp.ucsc.edu)
-
+// --------------------------------------------------------------------
 #ifndef G4GeomTestErrorList_hh
 #define G4GeomTestErrorList_hh
 
 #include <vector>
 
-#include "globals.hh"
+#include "G4Types.hh"
 #include "G4ThreeVector.hh"
 #include "G4RotationMatrix.hh"
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.hh,v 1.1 2003-10-01 15:13:11 gcosmo Exp $
+// $Id: G4ReplicaNavigation.hh,v 1.2 2003-11-03 17:15:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,26 +35,22 @@
 
 // History:
 // - Created. Paul Kent, Aug 96
-// ********************************************************************
-
+// --------------------------------------------------------------------
 #ifndef G4REPLICANAVIGATION_HH
 #define G4REPLICANAVIGATION_HH
 
-#include "globals.hh"
+#include "G4Types.hh"
 #include "G4NavigationHistory.hh"
-#include "G4AffineTransform.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4VPVParameterisation.hh"
 #include "G4LogicalVolume.hh"
-#include "G4VSolid.hh"
+#include "G4VPhysicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4BlockingList.hh"
 
 // Required for voxel handling
 //
-#include "G4SmartVoxelProxy.hh"
-#include "G4SmartVoxelNode.hh"
 #include "G4SmartVoxelHeader.hh"
+
+class G4VSolid;
 
 class G4ReplicaNavigation
 {
@@ -62,14 +58,14 @@ class G4ReplicaNavigation
 
  public:  // with description
 
-   G4ReplicaNavigation();
-   G4bool LevelLocate( G4NavigationHistory& history,
-                 const G4VPhysicalVolume *blockedVol,
-                 const G4int blockedNum,
-                 const G4ThreeVector &globalPoint,
-                 const G4ThreeVector* globalDirection,
-                 const G4bool pLocatedOnEdge, 
-                       G4ThreeVector &localPoint );
+  G4ReplicaNavigation();
+  G4bool LevelLocate( G4NavigationHistory& history,
+                const G4VPhysicalVolume *blockedVol,
+                const G4int blockedNum,
+                const G4ThreeVector &globalPoint,
+                const G4ThreeVector* globalDirection,
+                const G4bool pLocatedOnEdge, 
+                      G4ThreeVector &localPoint );
 
   G4double ComputeStep( const G4ThreeVector &globalPoint,
                         const G4ThreeVector &globalDirection,

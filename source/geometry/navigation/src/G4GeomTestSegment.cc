@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestSegment.cc,v 1.1 2003-10-01 14:38:04 gcosmo Exp $
+// $Id: G4GeomTestSegment.cc,v 1.2 2003-11-03 17:15:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -30,6 +30,7 @@
 // G4GeomTestSegment
 //
 // Author: D.C.Williams, UCSC (davidw@scipp.ucsc.edu)
+// --------------------------------------------------------------------
 
 #include "G4GeomTestSegment.hh"
 

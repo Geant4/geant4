@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestLogger.hh,v 1.1 2003-10-01 14:40:25 gcosmo Exp $
+// $Id: G4GeomTestLogger.hh,v 1.2 2003-11-03 17:15:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -36,11 +36,11 @@
 //
 
 // Author: D.C.Williams, UCSC (davidw@scipp.ucsc.edu)
-
+// --------------------------------------------------------------------
 #ifndef G4GeomTestLogger_hh
 #define G4GeomTestLogger_hh
 
-#include "globals.hh"
+#include "G4Types.hh"
 #include "G4ThreeVector.hh"
 
 class G4VSolid;
@@ -51,8 +51,8 @@ class G4GeomTestLogger
 {
   public:  // with description
 
-    G4GeomTestLogger() {;}
-    virtual ~G4GeomTestLogger() {;}
+    G4GeomTestLogger() {}
+    virtual ~G4GeomTestLogger() {}
       // Constructor and virtual destructor
 
     virtual void SolidProblem( const G4VSolid *solid, 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.cc,v 1.2 2003-10-24 12:51:03 gcosmo Exp $
+// $Id: G4TransportationManager.cc,v 1.3 2003-11-03 17:15:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -29,7 +29,7 @@
 //
 // Author: J.Apostolakis (John.Apostolakis@cern.ch), 1997
 //
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4TransportationManager.hh"
 

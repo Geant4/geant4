@@ -20,13 +20,12 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4AuxiliaryNavServices.cc,v 1.1 2003-10-01 15:06:52 gcosmo Exp $
+// $Id: G4AuxiliaryNavServices.cc,v 1.2 2003-11-03 17:15:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4AuxiliaryNavServices.hh"
-#include "globals.hh"
 
 // This method currently exists only to allow compilers to find
 // the inline method (which are the core of this class)

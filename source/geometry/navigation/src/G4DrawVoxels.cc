@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DrawVoxels.cc,v 1.1 2003-10-01 14:59:33 gcosmo Exp $
+// $Id: G4DrawVoxels.cc,v 1.2 2003-11-03 17:15:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,12 +35,19 @@
 // 03/08/1999 The G4VisAttributes have been made member data for
 //            lifetime reasons / visualisation  L.G
 // 29/07/1999 first comitted version L.G.
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4DrawVoxels.hh"
+#include "G4AffineTransform.hh"
+#include "G4SmartVoxelHeader.hh"
+#include "G4LogicalVolume.hh"
+#include "G4VSolid.hh"
 #include "G4VVisManager.hh"
+#include "G4Colour.hh"
 #include "G4TransportationManager.hh"
 #include "G4TouchableHistoryHandle.hh"
+
+#define voxel_width 0
 
 // Private Constructor
 //
