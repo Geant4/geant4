@@ -93,7 +93,7 @@ processes/electromagnetic/utils                  utils-V06-00-08
   [lowestKinEnergy = 1.*eV].
 - Added G4EmProcessOptions class.
 
-processes/hadronic                               ghad-V06-00-05
+processes/hadronic                               ghad-V06-00-06
 ------------------
 - management (ghad-man-V06-00-02)
   o Fixed bug in G4HadronicProcess for run-time errors reported by
@@ -115,6 +115,8 @@ processes/hadronic                               ghad-V06-00-05
   o Fixed bug for Delta-,Delta-,n under 3n+2pi- together with all possible
     Delta-Delta-,(k*n) under (k+2)*n+2pi- threshold and Delta++,Delta++,(k*p)
     under  (k+2)*p+2pi+ threshold possible fragmentation states. 
+- models/neutron_hp
+  o Fixed Valgrind run-time error on G4NeutronHPVector.
 
 processes/optical                                op-V06-00-03
 -----------------
