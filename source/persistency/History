@@ -15,6 +15,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 21, 99  Y.Morita (persistency-V00-01-01)
+- One more bug fix in G4PEvent.cc (thePrimaryVertex)
+
 October 8, 99  Y.Morita (persistency-V00-01-00)
 - GNUmakefile changes for G4TMPSCHEMA_BOOT (requires config-V00-01-01)
 - Bug fix in G4PEvent.cc (thePrimaryVertex)
