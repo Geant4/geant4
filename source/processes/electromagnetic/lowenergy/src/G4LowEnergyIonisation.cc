@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.49 2001-07-11 10:02:43 gunter Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.50 2001-07-31 14:51:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1754,12 +1754,12 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
   else if(rand1 > area1 && rand1 <= areaDue){
     
     //Sampling from the second function only 9 subshells
-    G4double expon = Parms[13]+1;
+    G4double expon = Parms[13]+1.0;
     G4double low = fstCut;
     if(minEn>low) low = minEn;
     G4double norm = (pow(sndCut,expon)-pow(low,expon));
     G4double sum = norm*G4UniformRand()+pow(low,expon);
-    G4double exponInv = 1/expon;
+    G4double exponInv = 1.0/expon;
     sample = pow(sum,exponInv);
     which = 2;
   }
