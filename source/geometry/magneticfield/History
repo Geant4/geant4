@@ -1,4 +1,4 @@
-$Id: History,v 1.74 2003-06-20 12:09:15 japost Exp $
+$Id: History,v 1.75 2003-06-20 12:45:10 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,17 +16,22 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-Jun 19th, 2003  J.Apostolakis - field-V05-01-01
+Jun 20th, 2003  J.Apostolakis - field-V05-01-02
+-----------------------------
+G4MagIntegratorDriver Quick Advance:
+- Took out two unneccessary square roots and two divisions.
+
+* Pure magnetic, electric, spin field test are completed.
+
+Jun 20th, 2003  J.Apostolakis - field-V05-01-01
 -----------------------------
 G4MagIntegratorDriver
 - Corrected neglected conversion to <std> from "G4std"
 
 tests
 - Migrated to <std>
-- Pure magnetic & electric field tested.
 
 Note: Although tests / field01,2,3 are migrated to <std>, but not yet checked.
-Note [2]:  Spin tests to be completed.
 
 Jun 19th, 2003  J.Apostolakis - field-V05-01-00
 ----------------------------- 
