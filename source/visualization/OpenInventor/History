@@ -1,4 +1,4 @@
-$Id: History,v 1.51 2004-11-22 22:10:05 gbarrand Exp $
+$Id: History,v 1.52 2004-11-22 22:57:00 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -21,6 +21,8 @@ History file for visualization/OpenInventor
 -------------------------------------------
 
 22th November 2004  Guy Barrand
+- G4OpenInventor[Xt,Win]Viewer : "Set preview", "Set preview and full" 
+  menu items.
 - G4OpenInventorViewer : count nodes and shapes.
 - SoCounterAction : to count nodes.
 - G4OpenInventorViewer : SetSolid, SetWireFrame : arrange to avoid a SetView

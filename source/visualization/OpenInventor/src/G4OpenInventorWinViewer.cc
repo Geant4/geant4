@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.cc,v 1.17 2004-11-22 15:00:47 gbarrand Exp $
+// $Id: G4OpenInventorWinViewer.cc,v 1.18 2004-11-22 22:57:01 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -72,8 +72,10 @@ public:
 #define ID_ETC_ERASE_EVENT 102
 #define ID_ETC_SET_SOLID 103
 #define ID_ETC_SET_WIRE_FRAME 104
-#define ID_ETC_UPDATE_SCENE 105
-#define ID_ETC_STATS 106
+#define ID_ETC_SET_PREVIEW 105
+#define ID_ETC_SET_PREVIEW_AND_FULL 106
+#define ID_ETC_UPDATE_SCENE 107
+#define ID_ETC_STATS 108
 // Help :
 #define ID_HELP_CONTROLS 201
 
@@ -130,6 +132,8 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer(
     ::AppendMenu(casc,MF_STRING,ID_ETC_ERASE_EVENT,"Erase event");
     ::AppendMenu(casc,MF_STRING,ID_ETC_SET_SOLID,"Set solid");
     ::AppendMenu(casc,MF_STRING,ID_ETC_SET_WIRE_FRAME,"Set (G4) wire frame");
+    ::AppendMenu(casc,MF_STRING,ID_ETC_SET_PREVIEW,"Set preview");
+    ::AppendMenu(casc,MF_STRING,ID_ETC_SET_PREVIEW_AND_FULL,"Set preview and full");
     ::AppendMenu(casc,MF_STRING,ID_ETC_UPDATE_SCENE,"Update scene");
     ::AppendMenu(casc,MF_STRING,ID_ETC_STATS,"Scene graph stats");}
 
@@ -258,6 +262,10 @@ LRESULT CALLBACK G4OpenInventorWinViewer::WindowProc (
           This->SetSolid();
         } else if(aWParam==ID_ETC_SET_WIRE_FRAME) {
           This->SetWireFrame();
+        } else if(aWParam==ID_ETC_SET_PREVIEW) {
+          This->SetPreview();
+        } else if(aWParam==ID_ETC_SET_PREVIEW_AND_FULL) {
+          This->SetPreviewAndFull();
         } else if(aWParam==ID_ETC_UPDATE_SCENE) {
           This->UpdateScene();
         } else if(aWParam==ID_ETC_STATS) {

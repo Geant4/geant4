@@ -398,12 +398,30 @@ void G4OpenInventorViewer::EraseEvent() {
   fG4OpenInventorSceneHandler.fTransientRoot->removeAllChildren();
 }
 
-/*
-void G4OpenInventorViewer::SetAllPreviewAndFull() {
-  yyy
-  //fG4OpenInventorSceneHandler.fDetectorRoot->removeAllChildren();
+void G4OpenInventorViewer::SetPreviewAndFull() {
+  fG4OpenInventorSceneHandler.fPreviewAndFull = true;
+
+  NeedKernelVisit();
+  // DrawView does a ClearStore. Do not clear the transient store :
+  SoSeparator* tmp = fG4OpenInventorSceneHandler.fTransientRoot;
+  fG4OpenInventorSceneHandler.fTransientRoot = new SoSeparator;
+  DrawView();  
+  fG4OpenInventorSceneHandler.fTransientRoot->unref();
+  fG4OpenInventorSceneHandler.fTransientRoot = tmp;
 }
-*/
+
+void G4OpenInventorViewer::SetPreview() {
+  fG4OpenInventorSceneHandler.fPreviewAndFull = false;
+
+  NeedKernelVisit();
+  // DrawView does a ClearStore. Do not clear the transient store :
+  SoSeparator* tmp = fG4OpenInventorSceneHandler.fTransientRoot;
+  fG4OpenInventorSceneHandler.fTransientRoot = new SoSeparator;
+  DrawView();  
+  fG4OpenInventorSceneHandler.fTransientRoot->unref();
+  fG4OpenInventorSceneHandler.fTransientRoot = tmp;
+}
+
 void G4OpenInventorViewer::SetSolid() {
   G4ViewParameters vp = GetViewParameters();
   G4ViewParameters::DrawingStyle existingStyle = vp.GetDrawingStyle();

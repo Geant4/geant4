@@ -64,6 +64,8 @@ protected:
   void SceneGraphStatistics();
   void EraseDetector();
   void EraseEvent();
+  void SetPreviewAndFull();
+  void SetPreview();
   void SetSolid();
   void SetWireFrame();
   void UpdateScene();

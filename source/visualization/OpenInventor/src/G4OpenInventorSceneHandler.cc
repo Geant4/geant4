@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.31 2004-11-22 14:20:19 gbarrand Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.32 2004-11-22 22:57:01 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -112,6 +112,7 @@ G4OpenInventorSceneHandler::G4OpenInventorSceneHandler (G4OpenInventor& system,
 ,fCurrentSeparator(0)
 ,fModelingSolid(false)
 ,fStyleCache(0)
+,fPreviewAndFull(false)
 {
   fSceneCount++;
 
@@ -583,27 +584,30 @@ void G4OpenInventorSceneHandler::PreAddThis
     // This block of code is executed for non-leaf parts:
 
     // Make the detector tree kit:
-    SoDetectorTreeKit* g4DetectorTreeKit = new SoDetectorTreeKit();  
+    SoDetectorTreeKit* detectorTreeKit = new SoDetectorTreeKit();  
 
     SoSeparator* previewSeparator   =  
-      (SoSeparator*) g4DetectorTreeKit->getPart("previewSeparator",TRUE);
+      (SoSeparator*) detectorTreeKit->getPart("previewSeparator",TRUE);
     previewSeparator->renderCaching = SoSeparator::OFF;
 
     SoSeparator* fullSeparator =  
-      (SoSeparator*) g4DetectorTreeKit->getPart("fullSeparator",   TRUE);
+      (SoSeparator*) detectorTreeKit->getPart("fullSeparator",   TRUE);
     fullSeparator->renderCaching = SoSeparator::OFF;
+
+    if(fPreviewAndFull) detectorTreeKit->setPreviewAndFull();
+    else detectorTreeKit->setPreview(TRUE);
 
     SoMaterial* material = 
       fStyleCache->getMaterial((float)red,
                                (float)green,
                                (float)blue,
                                (float)transparency);
-    g4DetectorTreeKit->setPart("appearance.material",material);
+    detectorTreeKit->setPart("appearance.material",material);
 
     SoLightModel* lightModel = 
       fModelingSolid ? fStyleCache->getLightModelPhong() : 
                        fStyleCache->getLightModelBaseColor();
-    g4DetectorTreeKit->setPart("appearance.lightModel",lightModel);
+    detectorTreeKit->setPart("appearance.lightModel",lightModel);
 
     // Add the full separator to the dictionary; it is indexed by the 
     // address of the logical volume!
@@ -619,14 +623,14 @@ void G4OpenInventorSceneHandler::PreAddThis
     if (MotherVolume) {
       if (fSeparatorMap.find(MotherVolume) != fSeparatorMap.end()) {
         //printf("debug : PreAddThis : mother found in map\n");
-        fSeparatorMap[MotherVolume]->addChild(g4DetectorTreeKit);
+        fSeparatorMap[MotherVolume]->addChild(detectorTreeKit);
       } else {
         //printf("debug : PreAddThis : mother not found in map !!!\n");
-        fDetectorRoot->addChild(g4DetectorTreeKit);
+        fDetectorRoot->addChild(detectorTreeKit);
       }
     } else {
       //printf("debug : PreAddThis : has no mother\n");
-      fDetectorRoot->addChild(g4DetectorTreeKit);
+      fDetectorRoot->addChild(detectorTreeKit);
     }
 
     fCurrentSeparator = previewSeparator;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: SoDetectorTreeKit.cc,v 1.2 2004-06-14 09:27:40 gcosmo Exp $
+// $Id: SoDetectorTreeKit.cc,v 1.3 2004-11-22 22:57:01 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*-----------------------------Hepvis----------------------------------------*/
@@ -113,16 +113,16 @@ void SoDetectorTreeKit::expand(void *userData, SoEventCallback *eventCB){
   if (!event->wasCtrlDown()) return;
   if (event->wasShiftDown()) return;
 
-  // Which Strip Detector is this being called for?
-  SoDetectorTreeKit *This = (SoDetectorTreeKit *) userData;
+  // Which Detector is this being called for?
+  SoDetectorTreeKit* This = (SoDetectorTreeKit *) userData;
 
-  // Find out whether that's the one that has been picked.  This is the lowest detector
-  // tree kit in the hierarchy.
+  // Find out whether that's the one that has been picked.  
+  // "This' is the lowest detector tree kit in the hierarchy.
   SoHandleEventAction *handleEventAction = eventCB->getAction();
   const SoPickedPoint *pickedPoint = handleEventAction->getPickedPoint();
   if (!pickedPoint) return;
 
-  SoFullPath          *path        = (SoFullPath *) pickedPoint->getPath();
+  SoFullPath* path = (SoFullPath*)pickedPoint->getPath();
   SoNode *ancestorNode=NULL;
   for (int i=0;i<path->getLength();i++) {
     ancestorNode  = path->getNodeFromTail(i);
@@ -146,17 +146,17 @@ void SoDetectorTreeKit::contract(void *userData, SoEventCallback *eventCB){
   if (event->wasCtrlDown()) return;
   if (!event->wasShiftDown()) return;
 
-  // Which Strip Detector is this being called for?
-  SoDetectorTreeKit *This = (SoDetectorTreeKit *) userData;
+  // Which Detector is this being called for?
+  SoDetectorTreeKit* This = (SoDetectorTreeKit *) userData;
 
   // Find out whether that's the one that has been picked
   SoHandleEventAction *handleEventAction = eventCB->getAction();
   const SoPickedPoint *pickedPoint = handleEventAction->getPickedPoint();
   if (!pickedPoint) return;
  
-  // Find out whether that's the one that has been picked.  This is the lowest detector
-  // tree kit in the hierarchy.
-  SoFullPath          *path        = (SoFullPath *) pickedPoint->getPath();
+  // Find out whether that's the one that has been picked.  
+  // "This" is the lowest detector tree kit in the hierarchy.
+  SoFullPath* path = (SoFullPath*)pickedPoint->getPath();
   SoNode *ancestorNode=NULL;
   SbBool firstTreeFound=FALSE;
   for (int i=0;i<path->getLength();i++) {
@@ -192,6 +192,11 @@ SbBool SoDetectorTreeKit::getPreview() const {
   return FALSE;
 }
 
+
+void SoDetectorTreeKit::setPreviewAndFull() {
+  SoSwitch *theChildList = (SoSwitch *) childList.getValue();
+  theChildList->whichChild.setValue(SO_SWITCH_ALL);
+}
 
 SoSeparator *SoDetectorTreeKit::getPreviewSeparator() const {
   return (SoSeparator *) previewSeparator.getValue();

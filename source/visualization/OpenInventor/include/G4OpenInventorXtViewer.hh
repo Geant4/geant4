@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.hh,v 1.9 2004-11-22 15:00:47 gbarrand Exp $
+// $Id: G4OpenInventorXtViewer.hh,v 1.10 2004-11-22 22:57:01 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,6 +64,8 @@ private:
   static void UpdateSceneCbk(Widget,XtPointer,XtPointer);
   static void HelpCbk(Widget,XtPointer,XtPointer);
   static void HelpCancelCbk(Widget,XtPointer,XtPointer);
+  static void SetPreviewCbk(Widget,XtPointer,XtPointer);
+  static void SetPreviewAndFullCbk(Widget,XtPointer,XtPointer);
 private:
   Widget fShell;
   SoXtExaminerViewer* fViewer;

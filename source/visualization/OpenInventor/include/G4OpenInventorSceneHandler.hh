@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.hh,v 1.21 2004-11-18 15:10:24 johna Exp $
+// $Id: G4OpenInventorSceneHandler.hh,v 1.22 2004-11-22 22:57:01 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,6 +97,7 @@ private:
   SoSeparator* fCurrentSeparator;
   G4bool fModelingSolid;
   Geant4_SoStyleCache* fStyleCache;
+  bool fPreviewAndFull;
 };
 
 #include "G4OpenInventorSceneHandler.icc"
