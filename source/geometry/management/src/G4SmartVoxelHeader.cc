@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.17 2002-04-22 16:30:12 gcosmo Exp $
+// $Id: G4SmartVoxelHeader.cc,v 1.18 2002-05-15 10:06:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,6 +32,7 @@
 // Define G4GEOMETRY_VOXELDEBUG for debugging information on G4cout
 //
 // History:
+// 29.04.02 Use 3D voxelisation for non consuming replication - G.C.
 // 18.04.01 Migrated to STL vector - G.C.
 // 12.02.99 Introduction of new quality/smartless: max for (slices/candid) S.G.
 // 11.02.99 Voxels at lower levels are now built for collapsed slices      S.G.
@@ -60,7 +61,8 @@
 G4SmartVoxelHeader::G4SmartVoxelHeader(G4LogicalVolume* pVolume,
                                        G4int pSlice)
   : fminEquivalent(pSlice),
-    fmaxEquivalent(pSlice)
+    fmaxEquivalent(pSlice),
+    fparamAxis(kUndefined)
 {
   G4int nDaughters = pVolume->GetNoDaughters();
   G4VoxelLimits limits;   // Create `unlimited' limits object
@@ -95,7 +97,8 @@ G4SmartVoxelHeader::G4SmartVoxelHeader(G4LogicalVolume* pVolume,
                const G4VolumeNosVector* pCandidates,
                G4int pSlice)
   : fminEquivalent(pSlice),
-    fmaxEquivalent(pSlice)
+    fmaxEquivalent(pSlice),
+    fparamAxis(kUndefined)
 {
 #ifdef G4GEOMETRY_VOXELDEBUG
   G4cout << "**** G4SmartVoxelHeader::G4SmartVoxelHeader" << G4endl
@@ -252,11 +255,13 @@ void G4SmartVoxelHeader::BuildVoxels(G4LogicalVolume* pVolume)
 
 // ***************************************************************************
 // Builds voxels for specified volume containing a single replicated volume.
+// If axis is not specified (i.e. "kUndefined"), 3D voxelisation is applied,
+// and the best axis is determined according to heuristics as for placements.
 // ***************************************************************************
 //
 void G4SmartVoxelHeader::BuildReplicaVoxels(G4LogicalVolume* pVolume)
 {
-  G4VPhysicalVolume *pDaughter;
+  G4VPhysicalVolume *pDaughter=0;
 
   // Replication data
   //
@@ -274,6 +279,7 @@ void G4SmartVoxelHeader::BuildReplicaVoxels(G4LogicalVolume* pVolume)
     //
     pDaughter=pVolume->GetDaughter(0);
     pDaughter->GetReplicationData(axis,nReplicas,width,offset,consuming);
+    fparamAxis = axis;
     if ( consuming==false )
     {
       G4VoxelLimits limits;   // Create `unlimited' limits object
@@ -283,20 +289,32 @@ void G4SmartVoxelHeader::BuildReplicaVoxels(G4LogicalVolume* pVolume)
       {
         targetList.push_back(i);
       }
-      G4ProxyVector* pSlices=BuildNodes(pVolume,limits,&targetList,axis);
-      faxis = axis;
-      fslices = *pSlices;
-      delete pSlices;
+      if (axis != kUndefined)
+      {
+        // Apply voxelisation along the specified axis only
 
-      // Calculate and set min and max extents given our axis
-      //
-      const G4AffineTransform origin;
-      pVolume->GetSolid()->CalculateExtent(faxis, limits, origin,
-                                           fminExtent, fmaxExtent);
-      // Calculate equivalent nos
-      //
-      BuildEquivalentSliceNos();
-      CollectEquivalentNodes();   // Collect common nodes
+        G4ProxyVector* pSlices=BuildNodes(pVolume,limits,&targetList,axis);
+        faxis = axis;
+        fslices = *pSlices;
+        delete pSlices;
+
+        // Calculate and set min and max extents given our axis
+        //
+        const G4AffineTransform origin;
+        pVolume->GetSolid()->CalculateExtent(faxis, limits, origin,
+                                             fminExtent, fmaxExtent);
+        // Calculate equivalent nos
+        //
+        BuildEquivalentSliceNos();
+        CollectEquivalentNodes();   // Collect common nodes
+      }
+      else
+      {
+        // Build voxels similarly as for normal placements considering
+        // all three cartesian axes.
+
+        BuildVoxelsWithinLimits(pVolume, limits, &targetList);
+      }
     }
     else
     {
@@ -345,8 +363,8 @@ void G4SmartVoxelHeader::BuildReplicaVoxels(G4LogicalVolume* pVolume)
         if ( (fabs((min-fminExtent)/fminExtent) +
               fabs((max-fmaxExtent)/fmaxExtent)) > 0.05)
         {
-    G4cout << "ERROR - Replicated geometry, logical volume: "
-           << pVolume->GetName() << G4endl;
+          G4cout << "ERROR - Replicated geometry, logical volume: "
+                 << pVolume->GetName() << G4endl;
           G4Exception("ERROR - G4SmartVoxelHeader::BuildReplicaVoxels");
         }
       }
