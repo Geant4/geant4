@@ -68,7 +68,7 @@ void* G4GeometryTable::CreateObject(STEPentity& Ent)
       G4cout << "G4 object of type " << gctmp->Name() 
 	     << " not necessary" << endl;
     else 
-      G4cout << "Created G4 object of type " << gctmp->Name() << endl;
+      //G4cout << "Created G4 object of type " << gctmp->Name() << endl;
 #endif
 
     return obj;
