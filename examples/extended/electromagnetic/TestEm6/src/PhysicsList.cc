@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.2 2003-01-27 09:46:20 hbu Exp $
+// $Id: PhysicsList.cc,v 1.3 2003-01-30 16:32:48 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -219,7 +219,3 @@ void PhysicsList::SetAnnihiToMuPairFac(G4double fac)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4GammaConversionToMuons* PhysicsList::theGammaToMuPairProcess  = 0;
-G4AnnihiToMuPair*         PhysicsList::theAnnihiToMuPairProcess = 0;
-

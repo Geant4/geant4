@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.2 2003-01-27 09:46:19 hbu Exp $
+// $Id: PhysicsList.hh,v 1.3 2003-01-30 16:32:47 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,7 +37,7 @@
 
 class PhysicsListMessenger;
 class G4GammaConversionToMuons;
-class G4AnnihiToMuPair; // forward declare, class defined in G4AnnihiToMuPair.hh
+class G4AnnihiToMuPair; 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -64,8 +64,8 @@ class PhysicsList: public G4VUserPhysicsList
         
   private:
      PhysicsListMessenger*  pMes;    
-     static G4GammaConversionToMuons* theGammaToMuPairProcess;
-	 static G4AnnihiToMuPair*         theAnnihiToMuPairProcess;
+     G4GammaConversionToMuons* theGammaToMuPairProcess;
+     G4AnnihiToMuPair*         theAnnihiToMuPairProcess;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
