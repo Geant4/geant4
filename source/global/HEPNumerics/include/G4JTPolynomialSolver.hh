@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4JTPolynomialSolver.hh,v 1.4 2005-03-15 19:11:35 gcosmo Exp $
+// $Id: G4JTPolynomialSolver.hh,v 1.5 2005-03-21 18:27:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class description:
@@ -92,7 +92,7 @@ class G4JTPolynomialSolver
     G4double e,f,g,h;
     G4double szr,szi;
     G4double lzr,lzi;
-    G4int n,nn,nmi,zerok;
+    G4int n,nmi;
   
     /*  The following statements set machine constants */
 

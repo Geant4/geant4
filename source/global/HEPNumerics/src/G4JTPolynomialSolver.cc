@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4JTPolynomialSolver.cc,v 1.3 2005-03-16 13:45:16 gcosmo Exp $
+// $Id: G4JTPolynomialSolver.cc,v 1.4 2005-03-21 18:27:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------------
@@ -813,93 +813,93 @@ ComputeNewEstimate(G4int type, G4double *uu, G4double *vv)
 }
 
 void G4JTPolynomialSolver::
-QuadraticSyntheticDivision(G4int nn, G4double *u, G4double *v,
-                           std::vector<G4double> &p, std::vector<G4double> &q,  
-                           G4double *a, G4double *b)
+QuadraticSyntheticDivision(G4int nn, G4double *uu, G4double *vv,
+                           std::vector<G4double> &pp, std::vector<G4double> &qq,  
+                           G4double *aa, G4double *bb)
 {
-  // Divides p by the quadratic 1,u,v placing the quotient
-  // in q and the remainder in a,b.
+  // Divides pp by the quadratic 1,uu,vv placing the quotient
+  // in qq and the remainder in aa,bb.
 
-  G4double c=0.0;
-  *b = p[0];
-  q[0] = *b;
-  *a = p[1] - (*b)*(*u);
-  q[1] = *a;
+  G4double cc=0.0;
+  *bb = pp[0];
+  qq[0] = *bb;
+  *aa = pp[1] - (*bb)*(*uu);
+  qq[1] = *aa;
   for (G4int i=2;i<=nn;i++)
   {
-    c = p[i] - (*a)*(*u) - (*b)*(*v);
-    q[i] = c;
-    *b = *a;
-    *a = c;
+    cc = pp[i] - (*aa)*(*uu) - (*bb)*(*vv);
+    qq[i] = cc;
+    *bb = *aa;
+    *aa = cc;
   }
 }
 
-void G4JTPolynomialSolver::Quadratic(G4double a,G4double b1,
-                                     G4double c,G4double *sr,G4double *si,
+void G4JTPolynomialSolver::Quadratic(G4double aa,G4double b1,
+                                     G4double cc,G4double *ssr,G4double *ssi,
                                      G4double *lr,G4double *li)
 {
 
-  // Calculate the zeros of the quadratic a*z^2 + b1*z + c.
+  // Calculate the zeros of the quadratic aa*z^2 + b1*z + cc.
   // The quadratic formula, modified to avoid overflow, is used 
   // to find the larger zero if the zeros are real and both
   // are complex. The smaller real zero is found directly from 
   // the product of the zeros c/a.
 
-  G4double b=0.0, d=0.0, e=0.0;
+  G4double bb=0.0, dd=0.0, ee=0.0;
 
-  if (!(a != 0.0))     // less than two roots
+  if (!(aa != 0.0))     // less than two roots
   {
     if (b1 != 0.0)     
-      { *sr = -c/b1; }
+      { *ssr = -cc/b1; }
     else 
-      { *sr = 0.0; }
+      { *ssr = 0.0; }
     *lr = 0.0;
-    *si = 0.0;
+    *ssi = 0.0;
     *li = 0.0;
     return;
   }
-  if (!(c != 0.0))     // one real root, one zero root
+  if (!(cc != 0.0))     // one real root, one zero root
   {
-    *sr = 0.0;
-    *lr = -b1/a;
-    *si = 0.0;
+    *ssr = 0.0;
+    *lr = -b1/aa;
+    *ssi = 0.0;
     *li = 0.0;
     return;
   }
 
   // Compute discriminant avoiding overflow.
   //
-  b = b1/2.0;
-  if (std::fabs(b) < std::fabs(c))
+  bb = b1/2.0;
+  if (std::fabs(bb) < std::fabs(cc))
   { 
-    if (c < 0.0) 
-      { e = -a; }
+    if (cc < 0.0) 
+      { ee = -aa; }
     else
-      { e = a; }
-    e = b*(b/std::fabs(c)) - e;
-    d = std::sqrt(std::fabs(e))*std::sqrt(std::fabs(c));
+      { ee = aa; }
+    ee = bb*(bb/std::fabs(cc)) - ee;
+    dd = std::sqrt(std::fabs(ee))*std::sqrt(std::fabs(cc));
   }
   else
   {
-    e = 1.0 - (a/b)*(c/b);
-    d = std::sqrt(std::fabs(e))*std::fabs(b);
+    ee = 1.0 - (aa/bb)*(cc/bb);
+    dd = std::sqrt(std::fabs(ee))*std::fabs(bb);
   }
-  if (e < 0.0)      // complex conjugate zeros
+  if (ee < 0.0)      // complex conjugate zeros
   {
-    *sr = -b/a;
-    *lr = *sr;
-    *si = std::fabs(d/a);
-    *li = -(*si);
+    *ssr = -bb/aa;
+    *lr = *ssr;
+    *ssi = std::fabs(dd/aa);
+    *li = -(*ssi);
   }
   else
   {
-    if (b >= 0.0)   // real zeros.
-      { d = -d; }
-    *lr = (-b+d)/a;
-    *sr = 0.0;
+    if (bb >= 0.0)   // real zeros.
+      { dd = -dd; }
+    *lr = (-bb+dd)/aa;
+    *ssr = 0.0;
     if (*lr != 0.0) 
-      { *sr = (c/ *lr)/a; }
-    *si = 0.0;
+      { *ssr = (cc/ *lr)/aa; }
+    *ssi = 0.0;
     *li = 0.0;
   }
 }
