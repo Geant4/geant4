@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2004-10-29 12:24:30 kurasige Exp $
+$Id: History,v 1.5 2004-12-01 17:56:39 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+1st December 2004 Gabriele Cosmo (test32-V06-02-01)
+- Fix for migration to new G4VParticleChange interface in
+  Tst32EminCut::PostStepDoIt(). Missed in the previous tag.
+
 29th October 2004 Hisaya Kurashige (test32-V06-02-00)
 - Migrated Tst32EminCut to new G4VParticleChange interface. 
 
