@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLImmediateXmViewer.cc,v 1.2 1999-12-15 14:54:08 gunter Exp $
+// $Id: G4OpenGLImmediateXmViewer.cc,v 1.3 2000-05-22 08:16:29 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,9 +45,9 @@ G4VViewer (scene, scene.IncrementViewCount (), name) {
 
   CreateGLXContext (vi_immediate);
 
-  InitializeGLView ();
-
   CreateMainWindow ();
+
+  InitializeGLView ();
 
   // clear the buffers and window.
   ClearView ();

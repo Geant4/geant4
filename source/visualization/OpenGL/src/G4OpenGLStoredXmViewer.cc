@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredXmViewer.cc,v 1.2 1999-12-15 14:54:08 gunter Exp $
+// $Id: G4OpenGLStoredXmViewer.cc,v 1.3 2000-05-22 08:16:42 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,9 +43,9 @@ G4VViewer (scene, scene.IncrementViewCount (), name) {
 
   CreateGLXContext (vi_stored);
 
-  InitializeGLView ();
-
   CreateMainWindow ();
+
+  InitializeGLView ();
 
 // clear the buffers and window.
   ClearView ();
@@ -57,7 +57,6 @@ G4VViewer (scene, scene.IncrementViewCount (), name) {
   glEnable (GL_BLEND);
   glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glShadeModel (GL_FLAT);
-
 }
 
 void G4OpenGLStoredXmViewer::DrawView () {
