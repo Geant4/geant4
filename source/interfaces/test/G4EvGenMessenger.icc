@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvGenMessenger.icc,v 1.4 2003-06-16 16:56:09 gunter Exp $
+// $Id: G4EvGenMessenger.icc,v 1.5 2004-12-08 13:13:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -173,7 +173,7 @@ void G4EvGenMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
     G4double pz;
     std::istrstream is((char*)t);
     is >> px >> py >> pz;
-    G4double pp = sqrt( sqr(px) + sqr(py) + sqr(pz) );
+    G4double pp = std::sqrt( sqr(px) + sqr(py) + sqr(pz) );
     if( pp == 0.0 )
     { G4cout << "Zero vector! command ignored." << G4endl; }
     else
