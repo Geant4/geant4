@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: HepPolyhedron.h,v 1.5 2001-02-06 22:07:49 johna Exp $
+// $Id: HepPolyhedron.h,v 1.6 2001-04-10 15:30:43 evc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -132,7 +132,6 @@
 
 #include <CLHEP/config/CLHEP.h>
 #include <CLHEP/config/iostream.h>
-#include <CLHEP/config/TemplateFunctions.h>
 #include <CLHEP/Units/SystemOfUnits.h>
 #include <CLHEP/Geometry/Point3D.h>
 #include <CLHEP/Geometry/Vector3D.h>
