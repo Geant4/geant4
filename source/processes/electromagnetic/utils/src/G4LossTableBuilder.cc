@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableBuilder.cc,v 1.13 2004-12-01 18:01:01 vnivanch Exp $
+// $Id: G4LossTableBuilder.cc,v 1.14 2004-12-07 17:39:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -73,9 +73,9 @@ void G4LossTableBuilder::BuildDEDXTable(G4PhysicsTable* dedxTable,
       G4PhysicsVector* pv = (*dedxTable)[i];
       size_t nbins = pv->GetVectorLength();
 
-      G4double elow = pv->GetLowEdgeEnergy(0);
-      G4double ehigh = pv->GetLowEdgeEnergy(nbins);
-      G4PhysicsLogVector* v = new G4PhysicsLogVector(elow, ehigh, nbins);
+      //G4double elow = pv->GetLowEdgeEnergy(0);
+      //G4double ehigh = pv->GetLowEdgeEnergy(nbins);
+      //      G4PhysicsLogVector* v = new G4PhysicsLogVector(elow, ehigh, nbins);
 
       for (size_t j=0; j<nbins; j++) {
         G4double dedx = 0.0;
@@ -86,7 +86,7 @@ void G4LossTableBuilder::BuildDEDXTable(G4PhysicsTable* dedxTable,
           dedx += ((*(list[k]))[i])->GetValue(energy, b);
 
         }
-        v->PutValue(j, dedx);
+        pv->PutValue(j, dedx);
       }
       G4PhysicsTableHelper::SetPhysicsVector(dedxTable, i, v);
     }
