@@ -2,7 +2,6 @@
 #define __SOLID_H
 
 #include "G4VSolid.hh"	      
-#include "G4VisExtent.hh"      
 #include "G4Surface.hh"
 #include "G4Axis2Placement3D.hh"
 #include "G4PointRat.hh"	 
@@ -47,7 +46,6 @@ public:
   G4Point3D Scope(); // ???
 
   void DescribeYourselfTo (G4VGraphicsScene& scene) const;
-  G4VisExtent   GetExtent        () const;
   G4Polyhedron* CreatePolyhedron () const;
   G4NURBS*      CreateNURBS      () const;
 

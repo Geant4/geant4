@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolid.cc,v 1.11 2000-01-21 13:47:49 gcosmo Exp $
+// $Id: G4BREPSolid.cc,v 1.12 2000-04-11 16:15:17 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4BREPSolid.hh"
@@ -1013,14 +1013,6 @@ G4double G4BREPSolid::DistanceToOut(const G4ThreeVector& Pt)const
 void G4BREPSolid::DescribeYourselfTo (G4VGraphicsScene& scene) const 
 {
   scene.AddThis (*this);
-}
-
-
-G4VisExtent G4BREPSolid::GetExtent() const 
-{
-  G4Point3D Min = bbox->GetBoxMin();
-  G4Point3D Max = bbox->GetBoxMax();  
-  return G4VisExtent (Min.x(), Max.x(), Min.y(), Max.y(), Min.z(), Max.z());
 }
 
 
