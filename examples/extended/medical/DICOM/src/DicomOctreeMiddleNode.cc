@@ -16,7 +16,6 @@ MiddleNode::~MiddleNode()
 }
 void MiddleNode::ResetFamily()
 {
-  // ---- MGP ---- Remove explicit numbers in code
   for ( G4int i = 0; i < 8; i++ ) mChildren[i] = 0;
 }
 

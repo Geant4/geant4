@@ -15,9 +15,18 @@ class DicomPatientParameterisation : public G4VPVParameterisation
 {
 public:
 
-  DicomPatientParameterisation(G4int nVoxels, 
+  DicomPatientParameterisation(G4int NoVoxels, 
 			       G4double maxDensity, 
-			       G4double minDensity);
+			       G4double minDensity ,
+			       G4Material* lunginhale,
+			       G4Material* lungexhale,
+			       G4Material* adipose_tissue,
+			       G4Material* breast,
+			       G4Material* phantom,
+			       G4Material* muscle,
+			       G4Material* liver,
+			       G4Material* dense_bone,
+			       G4Material* trabecular_bone);
 
   virtual ~DicomPatientParameterisation();
 
@@ -29,37 +38,37 @@ public:
 				  const G4int, 
 				  const G4VPhysicalVolume* ) const;
 
-  virtual void ComputeDimensions(G4Tubs &,
-				 const G4int,
-				 const G4VPhysicalVolume *) const {}
+   virtual void ComputeDimensions(G4Tubs &,
+                                   const G4int,
+                                   const G4VPhysicalVolume *) const {}
 
-  virtual void ComputeDimensions(G4Trd &,
-				 const G4int,
-				 const G4VPhysicalVolume *) const {}
+    virtual void ComputeDimensions(G4Trd &,
+                                   const G4int,
+                                   const G4VPhysicalVolume *) const {}
 	
-  virtual void ComputeDimensions(G4Trap &,
-				 const G4int,
-				 const G4VPhysicalVolume *) const {}
+    virtual void ComputeDimensions(G4Trap &,
+                                   const G4int,
+                                   const G4VPhysicalVolume *) const {}
 	
-  virtual void ComputeDimensions(G4Cons &,
-				 const G4int,
-				 const G4VPhysicalVolume *) const {}
+    virtual void ComputeDimensions(G4Cons &,
+                                   const G4int,
+                                   const G4VPhysicalVolume *) const {}
 
-  virtual void ComputeDimensions(G4Sphere &,
-				 const G4int,
-				 const G4VPhysicalVolume *) const {}
+    virtual void ComputeDimensions(G4Sphere &,
+                                   const G4int,
+                                   const G4VPhysicalVolume *) const {}
 
-  virtual void ComputeDimensions(G4Torus &,
-				 const G4int,
-				 const G4VPhysicalVolume *) const {}
+    virtual void ComputeDimensions(G4Torus &,
+                                   const G4int,
+                                   const G4VPhysicalVolume *) const {}
 
-  virtual void ComputeDimensions(G4Para &,
-				 const G4int,
-				 const G4VPhysicalVolume *) const {}
+    virtual void ComputeDimensions(G4Para &,
+                                   const G4int,
+                                   const G4VPhysicalVolume *) const {}
 
-  virtual void ComputeDimensions(G4Hype &,
-				 const G4int,
-				 const G4VPhysicalVolume *) const {}
+    virtual void ComputeDimensions(G4Hype &,
+                                   const G4int,
+                                   const G4VPhysicalVolume *) const {}
 
   virtual G4Material* ComputeMaterial(const G4int copyNo, G4VPhysicalVolume* physVol);
 
@@ -67,6 +76,17 @@ public:
 
 private:
  
+  //materials ...
+  G4Material* lungExhale;
+  G4Material* lungInhale;
+  G4Material* adiposeTissue;
+  G4Material* breastTissue;
+  G4Material* phantomTissue;
+  G4Material* muscleTissue;
+  G4Material* liverTissue;
+  G4Material* denseBoneTissue;
+  G4Material* trabecularBoneTissue;
+
   G4VisAttributes* attributeAir;
   G4VisAttributes* attributeLungINhale;
   G4VisAttributes* attributeLungEXhale;
@@ -78,8 +98,10 @@ private:
   G4VisAttributes* attributeTrabecularBone;
   G4VisAttributes* attributeDenseBone;
 
+  G4int max;
   G4int compression;
   
+  FILE* readData; 
   G4int columns,rows;
   G4double pixelSpacingX;
   G4double pixelSpacingY;

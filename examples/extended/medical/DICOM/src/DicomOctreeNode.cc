@@ -1,5 +1,5 @@
 
-//#include <stddef.h>
+#include <stddef.h>
 #include "DicomOctreeNode.hh"
 
 G4int OctreeNode::mInstanceCounter = 0;
@@ -15,7 +15,7 @@ OctreeNode::~OctreeNode()
   mInstanceCounter--;
 }
 
-OctreeNode::OctreeNode( const OctreeNode* pParent )
+OctreeNode::OctreeNode( OctreeNode* pParent )
 {
   mParent = pParent;
   mInstanceCounter++;

@@ -1,3 +1,4 @@
+
 //   08/05/03
 
 //*******************************************************
@@ -24,6 +25,8 @@
 // fax (418) 691 5268
 //*******************************************************
 
+
+
 #ifndef DicomConfiguration_h
 #define DicomConfiguration_h 1
 
@@ -38,10 +41,9 @@ public:
   ~DicomConfiguration() { }
 
   // This function reads <Data.dat>, return 0/1 if successfull or not
-  // ---- MGP ---- G4bool
   G4bool ReadDataFile();
 
-  G4int ReadG4File(const G4String& g4File);
+  G4int ReadG4File(G4String g4File);
 
   G4int GetCompressionValue() {return compressionValue;}
 
@@ -53,13 +55,13 @@ public:
 
   G4int GetTotalColumns() {return totalColumns;}  
 
-  G4double GetXPixelSpacing() {return xPixelSpacing;}
+  G4double GetXPixelSpacing() {return  xPixelSpacing;}
 
-  G4double GetYPixelSpacing() {return yPixelSpacing;}
+  G4double GetYPixelSpacing() {return  yPixelSpacing;}
 
   G4double GetSliceThickness() {return sliceTickness;} 
 
-  G4double GetSliceLocation() {return sliceLocation;} 
+  G4double GetSliceLocation() {return  sliceLocation;} 
 
   G4int IsCompressionUsed() {return compressionUsed;}
 
