@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2002-05-08 13:51:26 johna Exp $
+$Id: History,v 1.22 2002-10-28 11:48:17 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28-Oct-2002, G.Cosmo (geom-specific-V04-01-00)
+- Added implementation of StreamInfo() to comply with new interface for
+  G4VSolid in "geommng-V04-01-03".
+- Created .icc files for G4EllipticalTube, G4Polyhedra and G4Polycone.
+- Some cosmetic changes to code formatting: removed <TAB> characters and adopt
+  uniform code indentation.
 
 08-May-2002, J.Allison (geom-solids-specific-V04-00-01)
 - Implemented G4EllipticalTube::CreatePolyhedron.
