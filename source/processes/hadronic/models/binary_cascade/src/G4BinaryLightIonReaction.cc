@@ -91,7 +91,7 @@
       projectile->StartLoop();
       G4Nucleon * aNuc;
       G4LorentzVector tmpV(0,0,0,0);
-      G4LorentzVector nucleonMom(1./a1*mom);    // ctor setting only E
+      G4LorentzVector nucleonMom(1./a1*mom);
       nucleonMom.setZ(nucleonMom.vect().mag());
       nucleonMom.setX(0);
       nucleonMom.setY(0);
@@ -147,6 +147,7 @@
     G4double theStatisticalExEnergy = 0;
     while( (aNuc=projectile->GetNextNucleon()) )
     {
+//      G4cout << " Nucleon : " << aNuc->AreYouHit() <<" "<<aNuc->GetMomentum()<<G4endl;
       debug.push_back("getting the hits"); debug.dump();
       if(!aNuc->AreYouHit())
       {
@@ -211,25 +212,24 @@
     // call precompound model
     G4ReactionProductVector * proFrag(0);
     G4LorentzVector pFragment;
-    G4LorentzRotation boost_fragments;
+    G4LorentzRotation boost_fragments(mom.boostVector());
+    G4LorentzRotation boost_spectator_mom(-mom.boostVector());
     if(resZ>0 && resA>1) 
     {
       //  Make the fragment
 //      G4double m_fragment=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(resZ,resA);
+//      G4cout << " Fragment a,z, Mass Fragment, mass spect-mom, exitationE " 
+//             << resA <<" "<< resZ <<" "<< m_fragment <<" "
+//             << momentum.mag() <<" "<< momentum.mag() - m_fragment << G4endl;
       G4Fragment aProRes;
       aProRes.SetA(resA);
       aProRes.SetZ(resZ);
       aProRes.SetNumberOfParticles(0);
       aProRes.SetNumberOfCharged(0);
       aProRes.SetNumberOfHoles(G4lrint(a1)-resA);
-//      aProRes.SetMomentum(momentum);
-//      G4LorentzVector pFragment(G4ThreeVector(0),pspectators.mag());
-      pFragment = G4LorentzVector(G4ThreeVector(0),pspectators.mag());
-      boost_fragments=G4LorentzRotation(pspectators.boostVector());
-      aProRes.SetMomentum(pFragment);
-      G4ParticleDefinition * resDef(0);
-//       G4cout << "G4BinaryLiightIonReaction: spectator particles A Z : " 
-//           << resA << " " << resZ << G4endl;
+      momentum *= boost_spectator_mom;
+      aProRes.SetMomentum(momentum);
+      G4ParticleDefinition * resDef;
       resDef = G4ParticleTable::GetParticleTable()->FindIon(resZ,resA,0,resZ);  
       aProRes.SetParticleDefinition(resDef);
       proFrag = theProjectileFragmentation.DeExcite(aProRes);
