@@ -1,4 +1,4 @@
-$Id: History,v 1.86 2001-08-20 17:08:35 pia Exp $
+$Id: History,v 1.87 2001-08-28 16:14:47 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28.08.2001 - MGP, tag emlowen-V03-02-06
+             Cleaned up std/G4std
+             Re-implemented Compton, Rayleigh and GammaConversion 
+             according to new data design
+             Added tempoarary G4LowEnergyPhotoElectricMG 
+             (implemented according to new design, but without fluorescence yet)
 
 20.08.2001 - MGP, tag emlowen-V03-02-05
              Added files resulting from design iteration in the data domain   
