@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4NestedParameterisedNav.cc,v 1.1 2005-02-18 18:23:16 japost Exp $
+// $Id: testG4NestedParameterisedNav.cc,v 1.2 2005-03-03 17:15:31 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,6 +50,11 @@
 #include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
 
+#include "G4Material.hh"
+#include "G4Element.hh"
+
+G4Material *darkMaterial, *brightMaterial, *defaultMaterial;  // Chessboard
+
 // Sample First level Parameterisation -- host to nested 2nd
 class XTopParam: public G4VPVParameterisation
 {
@@ -67,9 +72,8 @@ class XTopParam: public G4VPVParameterisation
   }
   
   virtual void ComputeDimensions(G4Box &pBox,
-				 const G4int n,
-				 const G4VPhysicalVolume*,
-				 const G4VTouchable * ) const
+				 const G4int,
+				 const G4VPhysicalVolume*) const
   {
     pBox.SetXHalfLength(fXfullWidth*0.5);
     pBox.SetYHalfLength(fYfullWidth*0.5);
@@ -125,44 +129,53 @@ class YSecondNestedParam: public G4VNestedParameterisation
   //    with different sizes on the odd-even diagonals.
   // 
 public:
-  YSecondNestedParam( G4int numCols, G4double fullBoxSize, G4double smallBoxSize ) 
+  YSecondNestedParam( G4int numCols, G4double fullBoxSize ) 
    : fNumCols( numCols ) , 
-     fFullBoxWidth(fullBoxSize),
-     fFullBoxHalfWidth(fullBoxSize*0.5), 
-     fSmallBoxHalfWidth(smallBoxSize*0.5)
+     fBoxHalfWidth(fullBoxSize*0.5), 
+     fFullBoxWidth(fullBoxSize)
    {}
 
   virtual void ComputeTransformation(const G4int n,
-				     G4VPhysicalVolume* pRep,
-				     const G4VTouchable * ) const
+				     G4VPhysicalVolume* pRep) const
   {
-    pRep->SetTranslation(G4ThreeVector(0., (n-((fNumCols+1.0)/2.))*fFullBoxWidth, 0.) );
-  }
+    pRep->SetTranslation(G4ThreeVector(0., 
+				       (n-((fNumCols+1)/2.))*fFullBoxWidth, 
+				       0.) );
+    pRep->SetRotation(0);  
+ }
   
-  virtual void ComputeDimensions(G4Box &pBox,
-				 const G4int no_lev,
-				 const G4VPhysicalVolume*,
-				 const G4VTouchable *parentTouch) const
+  virtual G4Material* ComputeMaterial(const G4int no_lev, 
+				      G4VPhysicalVolume *currentVol,
+				      const G4VTouchable *parentTouch) 
   {
     // Get the information about the parent volume
-    G4int no_parent= parentTouch->GetCopyNumber(); 
+    G4int no_parent= parentTouch->GetReplicaNumber(); 
 
-    // Rule: Odd ones are small, even ones are full size
+    // Rule: Odd ones are one material, even ones are another
     G4int num, odd; 
     num= no_lev + no_parent;
     odd= ( num % 2 ); 
 
-    G4double boxHalfWidth= 0.0; 
+    G4Material *material;
     if( odd == 1 ) { 
-      boxHalfWidth= fSmallBoxHalfWidth; 
+      material= darkMaterial;
     } else {
-      boxHalfWidth= fFullBoxHalfWidth; 
+      material= brightMaterial;
     } 
-    pBox.SetXHalfLength(boxHalfWidth);
-    pBox.SetYHalfLength(boxHalfWidth);
-    pBox.SetZHalfLength(boxHalfWidth);
+    G4LogicalVolume* currentLogVol= currentVol->GetLogicalVolume(); 
+    currentLogVol->SetMaterial( material ); 
+
+    return material;
   }
 
+  virtual void ComputeDimensions(G4Box &pBox,
+				 const G4int,
+				 const G4VPhysicalVolume*) const
+  {
+    pBox.SetXHalfLength(fBoxHalfWidth);
+    pBox.SetYHalfLength(fBoxHalfWidth);
+    pBox.SetZHalfLength(fBoxHalfWidth);
+  }
   virtual void ComputeDimensions(G4Tubs &,
 				 const G4int ,
                                  const G4VPhysicalVolume*) const {}
@@ -199,8 +212,7 @@ public:
 
 private:
   G4int    fNumCols; 
-  G4double fFullBoxHalfWidth, fFullBoxWidth;
-  G4double fSmallBoxHalfWidth; 
+  G4double fBoxHalfWidth, fFullBoxWidth;
 
 } ; // level2NestedParam;
 
@@ -208,13 +220,38 @@ private:
 // 4 small cubes + 1 slab (all G4Boxes) are positioned inside a larger cuboid
 G4VPhysicalVolume* BuildGeometry()
 {
+    // Materials 
+    // --------------------------------
+    //   for use in world and parameterisation 
+    G4double a, fractionmass, density; 
+    G4int  z, ncomponents; 
 
+    G4Element* N = new G4Element("Nitrogen", "N", z=7, a= 14.01*g/mole);
+    G4Element* O = new G4Element("Oxygen"  , "O", z=8, a= 16.00*g/mole);
+
+    G4Material* Air = 
+      new G4Material("Air"  , density= 1.290*mg/cm3, ncomponents=2);
+    Air->AddElement(N, fractionmass=0.7);
+    Air->AddElement(O, fractionmass=0.3);
+
+    //Lead
+    G4Material* Pb = 
+      new G4Material("Lead", z=82, a= 207.19*g/mole, density= 11.35*g/cm3);
+    G4Material* Al = 
+     new G4Material("Aluminium", z=13, a=26.98*g/mole, density=2.700*g/cm3);
+
+    // Define standard materials
+    darkMaterial= Pb;
+    brightMaterial= Al;
+    defaultMaterial= Air; 
+
+    // Solids
+    // --------------------------------
     G4Box *myWorldBox= new G4Box ("WorldBox",1000.*cm,1000.*cm,1000.*cm);
     G4Box *myTopBox=new G4Box("cube",100.*cm,100.*cm,100.*cm);
-    G4Box *mySlab= new G4Box("slab",10.0*cm,100.*cm,100.*cm);
-    G4Box *myVariableBox=new G4Box("Variable Box",10.*cm,10.*cm,10.*cm);
+    G4Box *mySmallestBox=new G4Box("Smallest Box",10.*cm,10.*cm,10.*cm);
 
-    G4LogicalVolume *worldLog=new G4LogicalVolume(myWorldBox,0,
+    G4LogicalVolume *worldLog=new G4LogicalVolume(myWorldBox,defaultMaterial,
 						  "World",0,0,0);
 				// Logical with no material,field,
                                 // sensitive detector or user limits
@@ -224,77 +261,87 @@ G4VPhysicalVolume* BuildGeometry()
 					       0,false,0);
 				// Note: no mother pointer set
 
-    G4LogicalVolume *topLog=new G4LogicalVolume(myTopBox,0,
+    G4LogicalVolume *topLog=new G4LogicalVolume(myTopBox,defaultMaterial,
 						 "Level0 Top-LV"); // ,0,0,0);
-    G4LogicalVolume *slabLog=new G4LogicalVolume(mySlab,0,
-						 "Level1 Slab-LV"); // ,0,0,0);
-    G4LogicalVolume *variLog=new G4LogicalVolume(myVariableBox,0,
-						"Level2 Variable Box-LV"); // ,0,0,0);
+    G4LogicalVolume *variLog=new G4LogicalVolume(mySmallestBox,defaultMaterial,
+						"Level2 Smallest Box-LV"); // ,0,0,0);
 
  
-    // Place two 'Top' Boxes
+    // Place two 'Top' Boxes in world
+    // ------------------------------
     new G4PVPlacement(0, G4ThreeVector(-250.*cm, 0., 0.),
-		      "Target 1", topLog, worldPhys, false, 0);
+		      "Top 1-pv", topLog, worldPhys, false, 0);
 
     new G4PVPlacement(0, G4ThreeVector( 250.*cm, 0., 0.), 
-		      "Target 2", topLog, worldPhys, false, 0);
+		      "Top 2-pv", topLog, worldPhys, false, 1);
 
 
     // Place slabs inside Top Box
     // --------------------------
-
     G4int    numSlabs= 10; 
-    G4double xTopFullWidth=100.*cm, yTopFullWidth=100.*cm, zTopFullWidth=100.*cm; 
+    G4double xTopHalfWidth=100.*cm, yTopHalfWidth=100.*cm, zTopHalfWidth=100.*cm; 
+    G4double xSlabHalfWidth= xTopHalfWidth / numSlabs; 
+    G4double ySlabHalfWidth= yTopHalfWidth;
+    // G4double zSlabHalfWidth= zTopHalfWidth;
 
-    G4double xSlabFullWidth= xTopFullWidth / numSlabs; 
+    G4Box *mySlab= new G4Box("slab", xSlabHalfWidth, yTopHalfWidth, zTopHalfWidth);
+                           // Original: 10.0*cm, 100.*cm, 100.*cm);
+    G4LogicalVolume *slabLog=new G4LogicalVolume(mySlab,defaultMaterial,
+						 "Level1 Slab-LV"); // ,0,0,0);
+
     XTopParam* pFirstLevelParam = 
-      new XTopParam( numSlabs, xSlabFullWidth, yTopFullWidth, zTopFullWidth ); 
+      new XTopParam( numSlabs, xSlabHalfWidth*2., yTopHalfWidth*2., zTopHalfWidth*2. ); 
  
-   // myFirstLevParam = new XTopParam( 10, 10.*cm, 100.*cm, 100.*cm ); 
-
     // G4PVParameterised *paramLevelOnePhys=
-                                 new G4PVParameterised("Slab Blocks in X",
-						       slabLog,
-						       topLog,
-						       kXAxis,
-						       numSlabs,
-						       pFirstLevelParam);
+       new G4PVParameterised("Slab Blocks in X",
+			     slabLog,
+			     topLog,
+			     kXAxis,
+			     numSlabs,
+			     pFirstLevelParam);
 
     // Place inner-boxes inside Slabs Box
     // ----------------------------------
 
     G4int    numBoxesY= 10; 
 
-    G4double ySlabFullWidth= yTopFullWidth;
-    G4double zSlabFullWidth= zTopFullWidth;
-    // G4double xBoxFullWidth==100.*cm, yBoxFullWidth=100.*cm, zBoxFullWidth=100.*cm; 
+    // G4double xBoxHalfWidth==100.*cm, yBoxHalfWidth=100.*cm, zBoxHalfWidth=100.*cm; 
 
-    G4double xBoxFullWidth= xSlabFullWidth; 
-    G4double yBoxFullWidth= ySlabFullWidth / numBoxesY; 
-    G4double zBoxFullWidth= zSlabFullWidth;
+    G4double xBoxHalfWidth= xSlabHalfWidth; 
+    G4double yBoxHalfWidth= ySlabHalfWidth / numBoxesY; 
+    // G4double zBoxHalfWidth= zSlabHalfWidth;
 
-    G4VNestedParameterisation* pSecondLevParam =  
-      new YSecondNestedParam( numBoxesY, zBoxFullWidth, 0.9*zBoxFullWidth ); 
+    G4VNestedParameterisation* pSecondLevelParam =  
+      new YSecondNestedParam( numBoxesY, yBoxHalfWidth*2.0 ); 
 
     // G4PVParameterised *paramLevelTwoPhys=
-                                 new G4PVParameterised("Slab Blocks in X",
-						       topLog,
+                                 new G4PVParameterised("Level 2 blocks in y",
 						       variLog,
+						       slabLog, 
 						       kYAxis,
 						       numBoxesY,
 						       pSecondLevelParam);
 
-    G4cout << " Slab dimensions (full-width) are: " << G4endl
-	   << " x= " << xSlabFullWidth/cm << " cm  "
-	   << " y= " << ySlabFullWidth/cm << " cm  "
-	   << " z= " << ySlabFullWidth/cm << " cm  " << G4endl << G4endl; 
+    G4cout << " Slab dimensions (half-width) are: " << G4endl
+	   << " x= " << xSlabHalfWidth/cm << " cm  "
+	   << " y= " << ySlabHalfWidth/cm << " cm  "
+	   << " z= " << ySlabHalfWidth/cm << " cm  " << G4endl << G4endl; 
 
-    G4cout << " Box dimensions (full-width) are: " << G4endl
-	   << " x= " << xBoxFullWidth/cm << " cm  "
-	   << " y= " << yBoxFullWidth/cm << " cm  "
-	   << " z= " << yBoxFullWidth/cm << " cm  " << G4endl << G4endl; 
+    G4cout << " Box dimensions (half-width) are: " << G4endl
+	   << " x= " << xBoxHalfWidth/cm << " cm  "
+	   << " y= " << yBoxHalfWidth/cm << " cm  "
+	   << " z= " << yBoxHalfWidth/cm << " cm  " << G4endl << G4endl; 
 
-  
+
+    // Other volumes
+    G4Box *myMediumBox=new G4Box("Med Box", 25.*cm,25.*cm,25.*cm);
+    G4LogicalVolume *medLog=new G4LogicalVolume(myMediumBox,Al,
+						 "medBox-LV"); // ,0,0,0);
+    new G4PVPlacement(0, G4ThreeVector(-500.*cm,  500.*cm, 0.),
+		      "Target-X+Y", medLog, worldPhys, false, 1);
+    new G4PVPlacement(0, G4ThreeVector( 500.*cm, -500.*cm, 0.),
+		      "Target+X-Y", medLog, worldPhys, false, 1);
+
     return worldPhys;
 }
 
@@ -315,34 +362,47 @@ G4bool testG4Navigator1(G4VPhysicalVolume *pTopNode)
 
 // Check relative search that causes backup one level and then search down:
 // Nonrel' finds Target 3, then rel' with point in Target 5 finds Target 5
-    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(15,0,-10),0,false);
-    assert(located->GetName()=="Vari' Blocks");
+    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(151.*cm,0,-10),0,false);
+    assert(located->GetName()=="Level 2 blocks in y");
 
-    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(0,-15,20));
-    assert(located->GetName()=="Target 5");
-    assert(ApproxEqual(myNav.CurrentLocalCoordinate(),G4ThreeVector(0,0,10)));
+    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(500.*cm,-510.*cm,0));
+    assert(located->GetName()=="Target+X-Y");
+    assert(ApproxEqual(myNav.CurrentLocalCoordinate(),G4ThreeVector(0.,-10.*cm,0.)));
 // Check that outside point causes stack to unwind
     assert(!myNav.LocateGlobalPointAndSetup(G4ThreeVector(kInfinity,0,0)));
-
+    G4int copyNo= -1; 
 // Check parameterised volumes
-
+// ---------------------------------------------------------
 // Replication 0
-    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(15,-15,-10));
-    assert(located->GetName()=="Vari' Blocks");
-    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(15,-15,-16));
-    assert(located->GetName()=="Target 3");
+    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(-340.*cm,-95.*cm,-2.5*cm));
+    assert(located->GetName()=="Level 2 blocks in y");
+
+    copyNo= located->GetCopyNo();
+    assert(located->GetCopyNo() == 0 ); 
+    // Mother copy/replica number should be 0 
+    assert(located->GetLogicalVolume()->GetMaterial()==brightMaterial); 
+    assert(ApproxEqual(myNav.CurrentLocalCoordinate(),
+		       G4ThreeVector(10.*cm,-15.*cm,2.5*cm)));
+    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(500.*cm,-510.*cm,0));
+    assert(located->GetName()=="Target+X-Y");
+
 
 // Replication 1
-    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(15,0,-10));
-    assert(located->GetName()=="Vari' Blocks");
-    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(15,0,-17));
-    assert(located->GetName()=="Target 3");
+    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(-340.*cm,-75.*cm,-2.5*cm));
+    assert(located->GetName()=="Level 2 blocks in y");
+    // copyNo= located->GetCopyNo();
+    assert(located->GetCopyNo() == 1 ); 
+    // Mother copy/replica number should be 0
+    //
+    assert(located->GetLogicalVolume()->GetMaterial()==darkMaterial); 
+    assert(ApproxEqual(myNav.CurrentLocalCoordinate(),
+		       G4ThreeVector(10.*cm,-15.*cm,2.5*cm)));
+
+    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(500.*cm,-510.*cm,0));
+    assert(located->GetName()=="Target+X-Y");
 
 // Replication 2
-    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(15,15,-10));
-    assert(located->GetName()=="Vari' Blocks");
-    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(15,15,-18));
-    assert(located->GetName()=="Target 3");
+    /// ....
 
     return true;
 }
