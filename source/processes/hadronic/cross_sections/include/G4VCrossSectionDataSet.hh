@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCrossSectionDataSet.hh,v 1.3 2000-12-14 08:33:04 hpw Exp $
+// $Id: G4VCrossSectionDataSet.hh,v 1.4 2000-12-14 11:25:57 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -53,7 +53,7 @@ public: //with description
    virtual
    void DumpPhysicsTable(const G4ParticleDefinition&) = 0;
 
-public: Without Description
+public: // Without Description
 
    void SetVerboseLevel(G4int value)
    {
