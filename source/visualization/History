@@ -1,4 +1,4 @@
-$Id: History,v 1.172 2001-12-01 21:07:26 stanaka Exp $
+$Id: History,v 1.173 2002-01-15 02:35:51 stanaka Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,7 +24,10 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-01th December 2001 vis-V03-02-21 
+14th January 2002  vis-V03-02-22 Joseph Perl
+- Corrected handling for already open file in HepRepXMLWriter.
+
+01th December 2001 vis-V03-02-21 Satoshi Tanaka
 - Code refinements in FukuiRenderer/ directory:
   * Noisy warnings for Linux-g++ are suppressed.
     (%lg ==> %g etc)
