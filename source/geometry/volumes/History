@@ -1,4 +1,4 @@
-$Id: History,v 1.110 2003-11-10 15:47:28 gcosmo Exp $
+$Id: History,v 1.111 2003-11-17 11:29:46 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 17th, 2003  G. Cosmo - geomvol-V05-02-05
+- Added protection to placement and replica constructors for cases
+  where a volume is placed inside itself.
 
 November 10th, 2003  G. Cosmo - geomvol-V05-02-04
 - Migrated unit tests to new G4Navigator interface.
