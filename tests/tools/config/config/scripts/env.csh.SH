@@ -124,7 +124,7 @@ endif
 #
 if ( X$g4use_hepodbms == Xy ) then
 setenv G4USE_HEPODBMS 1
-.  \$G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.sh
+source  \$G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.csh
 echo "On this machine the G4USE_HEPODBMS=\$G4USE_HEPODBMS"
 endif
 
@@ -183,6 +183,12 @@ echo "On this machine the G4VIS_BUILD_OPACS_DRIVER=\$G4VIS_BUILD_OPACS_DRIVER"
 endif
 
 #+
+if ( X$g4vis_build_wo_session == Xy ) then
+setenv G4VIS_BUILD_WO_SESSION 1
+echo "On this machine the G4VIS_BUILD_WO_SESSION=\$G4VIS_BUILD_WO_SESSION"
+endif
+
+#+
 if ( X$g4vis_build_openglx_driver == Xy ) then
 setenv G4VIS_BUILD_OPENGLX_DRIVER 1
 echo "On this machine the G4VIS_BUILD_OPENGLX_DRIVER=\$G4VIS_BUILD_OPENGLX_DRIVER"
@@ -228,6 +234,12 @@ endif
 if ( X$g4vis_use_opacs == Xy ) then
 setenv G4VIS_USE_OPACS 1
 echo "On this machine the G4VIS_USE_OPACS=\$G4VIS_USE_OPACS"
+endif
+
+#+
+if ( X$g4vis_use_wo == Xy ) then
+setenv G4VIS_USE_WO 1
+echo "On this machine the G4VIS_USE_WO=\$G4VIS_USE_WO"
 endif
 
 #+

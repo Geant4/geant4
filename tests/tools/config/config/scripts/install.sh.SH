@@ -215,6 +215,13 @@ echo "On this machine the G4VIS_BUILD_OPACS_DRIVER=\$G4VIS_BUILD_OPACS_DRIVER"
 fi 
 
 #+
+if [ X$g4vis_build_wo_session = Xy ] ; then
+G4VIS_BUILD_WO_SESSION=1
+export G4VIS_BUILD_WO_SESSION
+echo "On this machine the G4VIS_BUILD_WO_SESSION=\$G4VIS_BUILD_WO_SESSION"
+fi 
+
+#+
 if [ X$g4vis_build_openglx_driver = Xy ] ; then
 G4VIS_BUILD_OPENGLX_DRIVER=1
 export G4VIS_BUILD_OPENGLX_DRIVER
@@ -268,6 +275,13 @@ if [ X$g4vis_use_opacs = Xy ] ; then
 G4VIS_USE_OPACS=1
 export G4VIS_USE_OPACS
 echo "On this machine the G4VIS_USE_OPACS=\$G4VIS_USE_OPACS"
+fi 
+
+#+
+if [ X$g4vis_use_wo = Xy ] ; then
+G4VIS_USE_WO=1
+export G4VIS_USE_WO
+echo "On this machine the G4VIS_USE_WO=\$G4VIS_USE_WO"
 fi 
 
 #+
