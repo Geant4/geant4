@@ -5,19 +5,11 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst20DetectorMessenger.hh,v 1.1 2001-05-24 19:49:21 flongo Exp $
+// $Id: Tst20DetectorMessenger.hh,v 1.2 2001-05-25 12:50:05 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// ------------------------------------------------------------
-//      GEANT 4 class header file
-//      CERN Geneva Switzerland
-//
-//      For information related to this code contact:
-//      CERN, IT Division, ASD group
-//
-//      ------------ Tst20DetectorMessenger  ------
-//
-// ************************************************************
+// 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -38,54 +30,31 @@ class G4UIcmdWithoutParameter;
 
 class Tst20DetectorMessenger: public G4UImessenger
 {
-public:
-  Tst20DetectorMessenger(Tst20DetectorConstruction* );
-  ~Tst20DetectorMessenger();
-  
-  void SetNewValue(G4UIcommand*, G4String);
-  
-private:
-  Tst20DetectorConstruction* Tst20Detector;
-  
-  G4UIdirectory*             Tst20detDir;
-  
-  // Converter
-  
-  G4UIcmdWithAString*        ConverterMaterCmd;
-  G4UIcmdWithADoubleAndUnit* ConverterThickCmd;
-  
-  // Silicon Tile
-  
-  G4UIcmdWithADoubleAndUnit* SiliconThickCmd;
-  G4UIcmdWithADoubleAndUnit* SiliconTileXYCmd;
-  G4UIcmdWithAnInteger*      NbSiTilesCmd;    
-  G4UIcmdWithADoubleAndUnit* SiliconPitchCmd;
+  public:
+    Tst20DetectorMessenger(Tst20DetectorConstruction* );
+   ~Tst20DetectorMessenger();
+    
+    void SetNewValue(G4UIcommand*, G4String);
+    
+  private:
+    Tst20DetectorConstruction*   Tst20Detector;
+    
+    G4UIdirectory*             Tst20detDir;
 
-  // Tracker
-  
-  G4UIcmdWithAnInteger*      NbTKRLayersCmd;    
-  G4UIcmdWithADoubleAndUnit* LayerDistanceCmd;
-  G4UIcmdWithADoubleAndUnit* TileDistanceCmd;
-  
-  // Anticoincidence
+    G4UIcmdWithAString*        AbsMaterCmd;
+    G4UIcmdWithADoubleAndUnit* AbsThickCmd;
+    G4UIcmdWithADoubleAndUnit* AbsRadCmd;
 
-  G4UIcmdWithADoubleAndUnit* ACDThickCmd;
-  G4UIcmdWithAString*        ACDMaterialCmd;
+    G4UIcmdWithADoubleAndUnit* AbsZposCmd;
 
-  // Total
-  
-  G4UIcmdWithADoubleAndUnit* MagFieldCmd;
-  G4UIcmdWithoutParameter*   UpdateCmd;
+    G4UIcmdWithAString*        WorldMaterCmd;
+    G4UIcmdWithADoubleAndUnit* WorldZCmd;
+    G4UIcmdWithADoubleAndUnit* WorldRCmd;
+
+    G4UIcmdWithADoubleAndUnit* MagFieldCmd;
+    G4UIcmdWithoutParameter*   UpdateCmd;
+
 };
 
 #endif
-
-
-
-
-
-
-
-
-
 
