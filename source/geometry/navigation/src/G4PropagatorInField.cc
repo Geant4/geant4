@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.7 2003-11-26 17:00:44 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.8 2003-12-02 17:21:41 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -443,7 +443,7 @@ G4PropagatorInField::LocateIntersectionPoint(
 
   G4FieldTrack ApproxIntersecPointV(CurveEndPointVelocity); // FT-Def-Construct
   G4double    NewSafety= -0.0;   
-  G4bool      first_step = true;
+  G4bool final_section= true;  // Shows whether current section is last (ie B=full end)
 
   recalculatedEndPoint= false; 
 
@@ -492,15 +492,10 @@ G4PropagatorInField::LocateIntersectionPoint(
     {
       // Check whether any volumes are encountered by the chord AF
       // ---------------------------------------------------------
-      // First restore any Voxel etc information in the Navigator
-      // before calling ComputeStep   --  not just if (!first_step)
-       
+      // First relocate to restore any Voxel etc information in the Navigator
+      //   before calling ComputeStep 
       fNavigator->LocateGlobalPointWithinVolume( Point_A );
-      // This locate is needed in all cases except for the 
-      // original point A, because - presumably - that was 
-      // called at the start of the physical Step
 
-      first_step = false;
       G4ThreeVector PointG;   // Candidate intersection point
       G4double stepLengthAF; 
       G4bool Intersects_AF = IntersectChord( Point_A,   CurrentF_Point,
@@ -516,6 +511,19 @@ G4PropagatorInField::LocateIntersectionPoint(
         //       E    <- G
         CurrentB_PointVelocity = ApproxIntersecPointV;
         CurrentE_Point = PointG;  
+
+        // By moving point B, must take care if current AF has no intersection
+	//  to try current FB!!
+	final_section= false; 
+
+#ifdef G4VERBOSE
+	if( fVerboseLevel > 2 ){
+	  G4cout << "G4PiF::LI> Investigating intermediate point"
+		 << " at s=" << ApproxIntersecPointV.GetCurveLength()
+		 << " on way to full s=" << CurveEndPointVelocity.GetCurveLength()
+		 << G4endl;
+#endif
+	}
       }
       else  // not Intersects_AF
       {  
@@ -531,7 +539,6 @@ G4PropagatorInField::LocateIntersectionPoint(
          G4bool Intersects_FB = 
            IntersectChord( CurrentF_Point, Point_B, 
                            NewSafety,      stepLengthFB,  PointH );
-
          if( Intersects_FB )
          { 
            // There is an intersection of FB with a volume boundary
@@ -551,12 +558,28 @@ G4PropagatorInField::LocateIntersectionPoint(
          else  // not Intersects_FB
          {
            // There is NO intersection of FB with a volume boundary
-           // This means that somehow a volume intersected the original 
-           // chord but misses the chord (or series of chords) 
-           // we have used.
-           // The value of IntersectedOrRecalculatedFT returned is not valid 
-           //
-           there_is_no_intersection = true;
+	   if( final_section  ){
+	     // If B is the original endpoint, this means that whatever volume(s)
+	     // intersected the original chord, none touch the smaller chords 
+	     // we have used.
+	     // The value of IntersectedOrRecalculatedFT returned is likely not valid 
+	     //
+	     there_is_no_intersection = true;
+	   }else{
+	     // We must restore the original endpoint
+	     CurrentA_PointVelocity= CurrentB_PointVelocity;  // We have got to B
+	     CurrentB_PointVelocity= CurveEndPointVelocity;
+	     final_section= true;
+
+#ifdef G4VERBOSE
+	     if( fVerboseLevel > 2 ){
+	       G4cout << "G4PiF::LI> Restoring full end point"
+		      << " at s=" << CurrentA_PointVelocity.GetCurveLength()
+		      << " on way to full s=" << CurveEndPointVelocity.GetCurveLength()
+		      << G4endl;
+#endif
+	     }
+	   }
 
          } // Endif (Intersects_FB)
        } // Endif (Intersects_AF)
