@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DeallocatorTest.cc,v 1.1 2004-05-14 17:39:33 gcosmo Exp $
+// $Id: DeallocatorTest.cc,v 1.2 2004-05-26 14:44:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -87,7 +87,7 @@ int main()
              << " bytes" << G4endl;
     }
   }
-  for (size_t i=0; i<maxiter; i++)
+  for (size_t j=0; j<maxiter; j++)
   {
     delete pObj;
   }
