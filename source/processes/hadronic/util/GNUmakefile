@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 1999-06-08 12:09:17 stesting Exp $
+# $Id: GNUmakefile,v 1.4 1999-12-06 10:27:51 gracia Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic management library.  G.Folger 10-Dec-97
 # ----------------------------------------------------------------
@@ -35,7 +35,8 @@ include $(G4INSTALL)/config/common.gmk
 
 ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
 
-  CXXFLAGS_WITH_ZM = $(CXXFLAGS) -Zm500
+CXXFLAGS_WITH_ZM = $(filter-out -Zm%,$(CXXFLAGS)) -Zm500
+
 
 $(G4TMPDIR)/G4NucleiPropertiesTable.o: src/G4NucleiPropertiesTable.cc
 	$(CXX) $(CXXFLAGS_WITH_ZM) $(CPPFLAGS) -c $(OUT_OBJ)$@ \
