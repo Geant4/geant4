@@ -2548,7 +2548,7 @@
      G4double ran;
      
      if( x > 9.9 )    // use normal distribution with sigma^2 = <x>
-       iran = G4std::max( 0.0, x+normal()*sqrt(x) );
+       iran = static_cast<G4int>(G4std::max( 0.0, x+normal()*sqrt(x) ) );
      else {
       G4int mm = G4int(5.0*x);
       if( mm <= 0 )   // for very small x try iran=1,2,3
