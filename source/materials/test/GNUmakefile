@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2001-01-28 16:58:59 maire Exp $
+# $Id: GNUmakefile,v 1.3 2005-02-22 10:11:09 maire Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -15,5 +15,16 @@ G4EXEC_BUILD = true
 
 include $(G4INSTALL)/config/architecture.gmk
 
-
+INCFLAGS := \
+	    -I$(G4BASE)/global/management/include \
+            -I$(G4BASE)/global/HEPRandom/include \
+            -I$(G4BASE)/global/HEPGeometry/include \
+            -I$(G4BASE)/materials/include \
+	    -I$(G4BASE)/intercoms/include
+	    
+LDLIBS   := \
+            -lG4materials \
+            -lG4intercoms \
+            -lG4globman
+	    	    
 include $(G4INSTALL)/config/binmake.gmk

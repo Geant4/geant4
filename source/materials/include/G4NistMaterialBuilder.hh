@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.hh,v 1.1 2005-02-11 17:30:23 maire Exp $
+// $Id: G4NistMaterialBuilder.hh,v 1.2 2005-02-22 10:11:09 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4NistMaterialBuilder_h
@@ -48,14 +48,14 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4NistMaterialManager;
+class G4NistManager;
 class G4NistElementBuilder;
 
 class G4NistMaterialBuilder
 {
 public:
 
-  G4NistMaterialBuilder(G4NistMaterialManager* mm=0, G4NistElementBuilder* eb=0,
+  G4NistMaterialBuilder(G4NistManager* mm=0, G4NistElementBuilder* eb=0,
                         G4int verb=0);
 			
  ~G4NistMaterialBuilder();
@@ -64,22 +64,22 @@ public:
   //
   G4Material* FindOrBuildMaterial (const G4String& name, G4bool isotopes=true);
 					    
-  // construct a G4Material from scratch by list of symbol-elements
+  // construct a G4Material from scratch by atome count
   // 
   G4Material* ConstructNewMaterial (const G4String& name,
                                       const std::vector<G4String>& elm,
-                                      const std::vector<G4double>& atomFraction,
+                                      const std::vector<G4int>& nbAtoms,
 				      G4double dens, G4bool isotopes=true);
-					      
-  // construct a G4Material from scratch by list of Z-elements
-  //
+				      
+  // construct a G4Material from scratch by fraction mass
+  // 
   G4Material* ConstructNewMaterial (const G4String& name,
-                                      const std::vector<G4int>& Z,
-                                      const std::vector<G4double>& atomFraction,
+                                      const std::vector<G4String>& elm,
+                                      const std::vector<G4double>& weight,
 				      G4double dens, G4bool isotopes=true);
 					    
   void SetVerbose(G4int val);
-  void Print();
+  void ListMaterials(const G4String&);
   void ListNistSimpleMaterials();
   void ListNistCompoundMaterials();
   void ListHepMaterials();
@@ -96,10 +96,10 @@ private:
                          G4State=kStateSolid);
 
   void AddElementByWeightFraction(G4int Z, G4double);
-  void AddElementByAtomFraction  (G4int Z, G4double);
+  void AddElementByAtomCount     (G4int Z, G4int);
     
   void AddElementByWeightFraction(const G4String& name, G4double);
-  void AddElementByAtomFraction  (const G4String& name, G4double);
+  void AddElementByAtomCount     (const G4String& name, G4int);
 
   // build a G4Material from dataBase
   G4Material* BuildMaterial(const G4String& name, G4bool isotopes);
@@ -109,7 +109,7 @@ private:
   
 private:
 
-  G4NistMaterialManager* matManager;
+  G4NistManager*         matManager;
   G4NistElementBuilder*  elmBuilder;
 
   G4int                  verbose;

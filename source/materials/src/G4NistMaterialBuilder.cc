@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.1 2005-02-11 17:30:25 maire Exp $
+// $Id: G4NistMaterialBuilder.cc,v 1.2 2005-02-22 10:11:09 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -40,13 +40,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include "G4NistManager.hh"
 #include "G4NistMaterialBuilder.hh"
-#include "G4NistMaterialManager.hh"
 #include "G4NistElementBuilder.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4NistMaterialBuilder::G4NistMaterialBuilder(G4NistMaterialManager* mm,
+G4NistMaterialBuilder::G4NistMaterialBuilder(G4NistManager* mm,
                                              G4NistElementBuilder* eb, G4int vb)
 : matManager(mm),
   elmBuilder(eb),
@@ -150,21 +150,25 @@ G4Material* G4NistMaterialBuilder::BuildMaterial(const G4String& name,
 
 G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
                                       const G4String& name,
-                                      const std::vector<G4int>& Z,
-                                      const std::vector<G4double>& atomFraction,
-				      G4double dens, G4bool isotopes)
+                                      const std::vector<G4String>& elm,
+                                      const std::vector<G4int>& nbAtoms,
+				            G4double dens, G4bool isotopes)
 {
-  G4int nm = Z.size();
-  if(nm == 1) {
-    AddMaterial(name,dens,Z[0]);
-  } else if(nm > 1) {
+  G4int Z;
+  G4int nm = elm.size();
+  if (nm == 1) {
+    Z = G4int((elmBuilder->FindOrBuildElement(elm[0]))->GetZ());
+    AddMaterial(name,dens,Z);
+  }
+  else if (nm > 1) {
     AddMaterial(name,dens,0,0.0,nm);
-    for(G4int i=0; i<nm; i++) {
-      AddElementByAtomFraction(Z[i], atomFraction[i]);
+    for (G4int i=0; i<nm; i++) {
+      Z = G4int((elmBuilder->FindOrBuildElement(elm[i]))->GetZ());
+      AddElementByAtomCount(Z, nbAtoms[i]);
     }
   }
-  G4Material* mat = BuildMaterial(name, isotopes);
-  return mat;
+  
+  return BuildMaterial(name, isotopes);    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -172,18 +176,25 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
 G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
                                       const G4String& name,
                                       const std::vector<G4String>& elm,
-                                      const std::vector<G4double>& atomFraction,
+                                      const std::vector<G4double>& w,
 				            G4double dens, G4bool isotopes)
 {
+  G4int Z;
   G4int nm = elm.size();
-  std::vector<G4int> zz;
-  for(G4int i=0; i<nm; i++) {
-    G4int iz = G4int((elmBuilder->FindOrBuildElement(elm[i]))->GetZ());
-    zz.push_back(iz);
+  if (nm == 1) {
+    Z = G4int((elmBuilder->FindOrBuildElement(elm[0]))->GetZ());
+    AddMaterial(name,dens,Z);
   }
-  return ConstructNewMaterial(name, zz, atomFraction, dens, isotopes);
+  else if (nm > 1) {
+    AddMaterial(name,dens,0,0.0,nm);
+    for (G4int i=0; i<nm; i++) {
+      Z = G4int((elmBuilder->FindOrBuildElement(elm[i]))->GetZ());
+      AddElementByWeightFraction(Z, w[i]);
+    }
+  }
+  
+  return BuildMaterial(name, isotopes);    
 }
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4NistMaterialBuilder::SetVerbose(G4int val)
@@ -194,11 +205,17 @@ void G4NistMaterialBuilder::SetVerbose(G4int val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4NistMaterialBuilder::Print()
+void G4NistMaterialBuilder::ListMaterials(const G4String& list)
 {
-  ListNistSimpleMaterials();
-  ListNistCompoundMaterials();
-  ListHepMaterials();
+ if (list == "simple")   ListNistSimpleMaterials();
+ if (list == "compound") ListNistCompoundMaterials();
+ if (list == "hep")      ListHepMaterials();
+ 
+ if (list == "all") {
+   ListNistSimpleMaterials();
+   ListNistCompoundMaterials();
+   ListHepMaterials();
+ }    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -338,19 +355,19 @@ void G4NistMaterialBuilder::AddElementByWeightFraction(const G4String& name,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4NistMaterialBuilder::AddElementByAtomFraction(G4int Z, G4double w)
+void G4NistMaterialBuilder::AddElementByAtomCount(G4int Z, G4int nb)
 {
-  w *= elmBuilder->GetA(Z);
+  G4double w = nb*elmBuilder->GetA(Z);
   AddElementByWeightFraction(Z, w);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4NistMaterialBuilder::AddElementByAtomFraction(const G4String& name,
-                                                     G4double w)
+void G4NistMaterialBuilder::AddElementByAtomCount(const G4String& name,
+                                                     G4int nb)
 {
   G4int Z = elmBuilder->GetZ(name);
-  w *= elmBuilder->GetA(Z);
+  G4double w = nb*elmBuilder->GetA(Z);
   AddElementByWeightFraction(Z, w);
 }
 
@@ -364,7 +381,7 @@ void G4NistMaterialBuilder::Initialise()
     
   if (!matManager) {
     G4cout << "G4NistMaterialBuilder::Initialise(): Warning : "
-           << "G4NistMaterialManager is not exist" << G4endl;
+           << "G4NistManager do not exist" << G4endl;
     ///exit(1);
   }
 
@@ -372,7 +389,7 @@ void G4NistMaterialBuilder::Initialise()
   NistCompoundMaterials();
   HepAndNuclearMaterials();
   
-  if (verbose > 1) Print();
+  if (verbose > 1) ListMaterials("all");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -844,647 +861,647 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction(17, 3.4e-05 );
   AddElementByWeightFraction(26, 5.4e-05 );
 
-  AddMaterial("G4_FREON-12",1.12,0,143.,3);
-  AddElementByWeightFraction(6,0.099335);
-  AddElementByWeightFraction(9,0.314247);
-  AddElementByWeightFraction(17,0.586418);
-
-  AddMaterial("G4_FREON-12B2",1.8,0,284.9,3);
-  AddElementByWeightFraction(6,0.057245);
-  AddElementByWeightFraction(9,0.181096);
-  AddElementByWeightFraction(35,0.761659);
-
-  AddMaterial("G4_FREON-13",0.95,0,126.6,3);
-  AddElementByWeightFraction(6,0.114983);
-  AddElementByWeightFraction(9,0.545622);
-  AddElementByWeightFraction(17,0.339396);
-
-  AddMaterial("G4_FREON-13B1",1.5,0,210.5,3);
-  AddElementByWeightFraction(6,0.080659);
-  AddElementByWeightFraction(9,0.382749);
-  AddElementByWeightFraction(35,0.536592);
-
-  AddMaterial("G4_FREON-13I1",1.8,0,293.5,3);
-  AddElementByWeightFraction(6,0.061309);
-  AddElementByWeightFraction(9,0.290924);
-  AddElementByWeightFraction(53,0.647767);
-
-  AddMaterial("G4_GADOLINIUM_OXYSULFIDE",7.44,0,493.3,3);
-  AddElementByWeightFraction(8,0.084528);
-  AddElementByWeightFraction(16,0.08469);
-  AddElementByWeightFraction(64,0.830782);
-
-  AddMaterial("G4_GALLIUM_ARSENIDE",5.31,0,384.9,2);
-  AddElementByWeightFraction(31,0.482019);
-  AddElementByWeightFraction(33,0.517981);
-
-  AddMaterial("G4_GEL_PHOTO_EMULSION",1.2914,0,74.8,5);
-  AddElementByWeightFraction(1,0.08118);
-  AddElementByWeightFraction(6,0.41606);
-  AddElementByWeightFraction(7,0.11124);
-  AddElementByWeightFraction(8,0.38064);
-  AddElementByWeightFraction(16,0.01088);
-
-  AddMaterial("G4_Pyrex_Glass",2.23,0,134.,6);
-  AddElementByWeightFraction(5,0.040064);
-  AddElementByWeightFraction(8,0.539562);
-  AddElementByWeightFraction(11,0.028191);
-  AddElementByWeightFraction(13,0.011644);
-  AddElementByWeightFraction(14,0.37722);
-  AddElementByWeightFraction(19,0.003321);
-
-  AddMaterial("G4_GLASS_LEAD",6.22,0,526.4,5);
-  AddElementByWeightFraction(8,0.156453);
-  AddElementByWeightFraction(14,0.080866);
-  AddElementByWeightFraction(22,0.008092);
-  AddElementByWeightFraction(33,0.002651);
-  AddElementByWeightFraction(82,0.751938);
-
-  AddMaterial("G4_GLASS_PLATE",2.4,0,145.4,4);
-  AddElementByWeightFraction(8,0.4598);
-  AddElementByWeightFraction(11,0.096441);
-  AddElementByWeightFraction(14,0.336553);
-  AddElementByWeightFraction(20,0.107205);
-
-  AddMaterial("G4_GLUCOSE",1.54,0,77.2,3);
-  AddElementByWeightFraction(1,0.071204);
-  AddElementByWeightFraction(6,0.363652);
-  AddElementByWeightFraction(8,0.565144);
-
-  AddMaterial("G4_GLUTAMINE",1.46,0,73.3,4);
-  AddElementByWeightFraction(1,0.068965);
-  AddElementByWeightFraction(6,0.410926);
-  AddElementByWeightFraction(7,0.191681);
-  AddElementByWeightFraction(8,0.328427);
-
-  AddMaterial("G4_GLYCEROL",1.2613,0,72.6,3);
-  AddElementByWeightFraction(1,0.087554);
-  AddElementByWeightFraction(6,0.391262);
-  AddElementByWeightFraction(8,0.521185);
-
-  AddMaterial("G4_GUANINE",1.58,0,75.,4);
-  AddElementByWeightFraction(1,0.033346);
-  AddElementByWeightFraction(6,0.39738);
-  AddElementByWeightFraction(7,0.463407);
-  AddElementByWeightFraction(8,0.105867);
-
-  AddMaterial("G4_GYPSUM",2.32,0,129.7,4);
-  AddElementByWeightFraction(1,0.023416);
-  AddElementByWeightFraction(8,0.557572);
-  AddElementByWeightFraction(16,0.186215);
-  AddElementByWeightFraction(20,0.232797);
-
-  AddMaterial("G4_N-HEPTANE",0.68376,0,54.4,2);
-  AddElementByWeightFraction(1,0.160937);
-  AddElementByWeightFraction(6,0.839063);
-
-  AddMaterial("G4_N-HEXANE",0.6603,0,54.,2);
-  AddElementByWeightFraction(1,0.163741);
-  AddElementByWeightFraction(6,0.836259);
-
-  AddMaterial("G4_KAPTON",1.42,0,79.6,4);
-  AddElementByWeightFraction(1,0.026362);
-  AddElementByWeightFraction(6,0.691133);
-  AddElementByWeightFraction(7,0.07327);
-  AddElementByWeightFraction(8,0.209235);
-
-  AddMaterial("G4_LANTHANUM_OXYBROMIDE",6.28,0,439.7,3);
-  AddElementByWeightFraction(8,0.068138);
-  AddElementByWeightFraction(35,0.340294);
-  AddElementByWeightFraction(57,0.591568);
-
-  AddMaterial("G4_LANTHANUM_OXYSULFIDE",5.86,0,421.2,3);
-  AddElementByWeightFraction(8,0.0936);
-  AddElementByWeightFraction(16,0.093778);
-  AddElementByWeightFraction(57,0.812622);
-
-  AddMaterial("G4_LEAD_OXIDE",9.53,0,766.7,2);
-  AddElementByWeightFraction(8,0.071682);
-  AddElementByWeightFraction(82,0.928318);
-
-  AddMaterial("G4_LITHIUM_AMIDE",1.178,0,55.5,3);
-  AddElementByWeightFraction(1,0.087783);
-  AddElementByWeightFraction(3,0.302262);
-  AddElementByWeightFraction(7,0.609955);
-
-  AddMaterial("G4_LITHIUM_CARBONATE",2.11,0,87.9,3);
-  AddElementByWeightFraction(3,0.187871);
-  AddElementByWeightFraction(6,0.16255);
-  AddElementByWeightFraction(8,0.649579);
-
-  AddMaterial("G4_LITHIUM_FLUORIDE",2.635,0,94.,2);
-  AddElementByWeightFraction(3,0.267585);
-  AddElementByWeightFraction(9,0.732415);
-
-  AddMaterial("G4_LITHIUM_HYDRIDE",0.82,0,36.5,2);
-  AddElementByWeightFraction(1,0.126797);
-  AddElementByWeightFraction(3,0.873203);
-
-  AddMaterial("G4_LITHIUM_IODIDE",3.494,0,485.1,2);
-  AddElementByWeightFraction(3,0.051858);
-  AddElementByWeightFraction(53,0.948142);
-
-  AddMaterial("G4_LITHIUM_OXIDE",2.013,0,73.6,2);
-  AddElementByWeightFraction(3,0.46457);
-  AddElementByWeightFraction(8,0.53543);
-
-  AddMaterial("G4_LITHIUM_TETRABORATE",2.44,0,94.6,3);
-  AddElementByWeightFraction(3,0.082085);
-  AddElementByWeightFraction(5,0.25568);
-  AddElementByWeightFraction(8,0.662235);
-
-  AddMaterial("G4_LUNG_ICRP",1.05,0,75.3,13);
-  AddElementByWeightFraction(1,0.101278);
-  AddElementByWeightFraction(6,0.10231);
-  AddElementByWeightFraction(7,0.02865);
-  AddElementByWeightFraction(8,0.757072);
-  AddElementByWeightFraction(11,0.00184);
-  AddElementByWeightFraction(12,0.00073);
-  AddElementByWeightFraction(15,0.0008);
-  AddElementByWeightFraction(16,0.00225);
-  AddElementByWeightFraction(17,0.00266);
-  AddElementByWeightFraction(19,0.00194);
-  AddElementByWeightFraction(20,9e-05);
-  AddElementByWeightFraction(26,0.00037);
-  AddElementByWeightFraction(30,1e-05);
-
-  AddMaterial("G4_M3_WAX",1.05,0,67.9,5);
-  AddElementByWeightFraction(1,0.114318);
-  AddElementByWeightFraction(6,0.655823);
-  AddElementByWeightFraction(8,0.092183);
-  AddElementByWeightFraction(12,0.134792);
-  AddElementByWeightFraction(20,0.002883);
-
-  AddMaterial("G4_MAGNESIUM_CARBONATE",2.958,0,118.,3);
-  AddElementByWeightFraction(6,0.142455);
-  AddElementByWeightFraction(8,0.569278);
-  AddElementByWeightFraction(12,0.288267);
-
-  AddMaterial("G4_MAGNESIUM_FLUORIDE",3,0,134.3,2);
-  AddElementByWeightFraction(9,0.609883);
-  AddElementByWeightFraction(12,0.390117);
-
-  AddMaterial("G4_MAGNESIUM_OXIDE",3.58,0,143.8,2);
-  AddElementByWeightFraction(8,0.396964);
-  AddElementByWeightFraction(12,0.603036);
-
-  AddMaterial("G4_MAGNESIUM_TETRABORATE",2.53,0,108.3,3);
-  AddElementByWeightFraction(5,0.240837);
-  AddElementByWeightFraction(8,0.62379);
-  AddElementByWeightFraction(12,0.135373);
-
-  AddMaterial("G4_MERCURIC_IODIDE",6.36,0,684.5,2);
-  AddElementByWeightFraction(53,0.55856);
-  AddElementByWeightFraction(80,0.44144);
-
-  AddMaterial("G4_METHANE",0.000667151,0,41.7,2,kStateGas);
-  AddElementByWeightFraction(1,0.251306);
-  AddElementByWeightFraction(6,0.748694);
-
-  AddMaterial("G4_METHANOL",0.7914,0,67.6,3);
-  AddElementByWeightFraction(1,0.125822);
-  AddElementByWeightFraction(6,0.374852);
-  AddElementByWeightFraction(8,0.499326);
-
-  AddMaterial("G4_MIX_D_WAX",0.99,0,60.9,5);
-  AddElementByWeightFraction(1,0.13404);
-  AddElementByWeightFraction(6,0.77796);
-  AddElementByWeightFraction(8,0.03502);
-  AddElementByWeightFraction(12,0.038594);
-  AddElementByWeightFraction(22,0.014386);
-
-  AddMaterial("G4_MS20_TISSUE",1,0,75.1,6);
-  AddElementByWeightFraction(1,0.081192);
-  AddElementByWeightFraction(6,0.583442);
-  AddElementByWeightFraction(7,0.017798);
-  AddElementByWeightFraction(8,0.186381);
-  AddElementByWeightFraction(12,0.130287);
-  AddElementByWeightFraction(17,0.0009);
-
-  AddMaterial("G4_MUSCLE_SKELETAL_ICRP",1.04,0,75.3,13);
-  AddElementByWeightFraction(1,0.100637);
-  AddElementByWeightFraction(6,0.10783);
-  AddElementByWeightFraction(7,0.02768);
-  AddElementByWeightFraction(8,0.754773);
-  AddElementByWeightFraction(11,0.00075);
-  AddElementByWeightFraction(12,0.00019);
-  AddElementByWeightFraction(15,0.0018);
-  AddElementByWeightFraction(16,0.00241);
-  AddElementByWeightFraction(17,0.00079);
-  AddElementByWeightFraction(19,0.00302);
-  AddElementByWeightFraction(20,3e-05);
-  AddElementByWeightFraction(26,4e-05);
-  AddElementByWeightFraction(30,5e-05);
-
-  AddMaterial("G4_MUSCLE_STRIATED_ICRU",1.04,0,74.7,9);
-  AddElementByWeightFraction(1,0.101997);
-  AddElementByWeightFraction(6,0.123);
-  AddElementByWeightFraction(7,0.035);
-  AddElementByWeightFraction(8,0.729003);
-  AddElementByWeightFraction(11,0.0008);
-  AddElementByWeightFraction(12,0.0002);
-  AddElementByWeightFraction(15,0.002);
-  AddElementByWeightFraction(16,0.005);
-  AddElementByWeightFraction(19,0.003);
-
-  AddMaterial("G4_MUSCLE_WITH_SUCROSE",1.11,0,74.3,4);
-  AddElementByWeightFraction(1,0.098234);
-  AddElementByWeightFraction(6,0.156214);
-  AddElementByWeightFraction(7,0.035451);
-  AddElementByWeightFraction(8,0.7101);
-
-  AddMaterial("G4_MUSCLE_WITHOUT_SUCROSE",1.07,0,74.2,4);
-  AddElementByWeightFraction(1,0.101969);
-  AddElementByWeightFraction(6,0.120058);
-  AddElementByWeightFraction(7,0.035451);
-  AddElementByWeightFraction(8,0.742522);
-
-  AddMaterial("G4_NAPHTHALENE",1.145,0,68.4,2);
-  AddElementByWeightFraction(1,0.062909);
-  AddElementByWeightFraction(6,0.937091);
-
-  AddMaterial("G4_NITROBENZENE",1.19867,0,75.8,4);
-  AddElementByWeightFraction(1,0.040935);
-  AddElementByWeightFraction(6,0.585374);
-  AddElementByWeightFraction(7,0.113773);
-  AddElementByWeightFraction(8,0.259918);
-
-  AddMaterial("G4_NITROUS_OXIDE",0.00183094,0,84.9,2,kStateGas);
-  AddElementByWeightFraction(7,0.636483);
-  AddElementByWeightFraction(8,0.363517);
-
-  AddMaterial("G4_NYLON-8062",1.08,0,64.3,4);
-  AddElementByWeightFraction(1,0.103509);
-  AddElementByWeightFraction(6,0.648415);
-  AddElementByWeightFraction(7,0.099536);
-  AddElementByWeightFraction(8,0.148539);
-
-  AddMaterial("G4_NYLON-6/6",1.14,0,63.9,4);
-  AddElementByWeightFraction(1,0.097976);
-  AddElementByWeightFraction(6,0.636856);
-  AddElementByWeightFraction(7,0.123779);
-  AddElementByWeightFraction(8,0.141389);
-
-  AddMaterial("G4_NYLON-6/10",1.14,0,63.2,4);
-  AddElementByWeightFraction(1,0.107062);
-  AddElementByWeightFraction(6,0.680449);
-  AddElementByWeightFraction(7,0.099189);
-  AddElementByWeightFraction(8,0.1133);
-
-  AddMaterial("G4_NYLON-11_RILSAN",1.425,0,61.6,4);
-  AddElementByWeightFraction(1,0.115476);
-  AddElementByWeightFraction(6,0.720819);
-  AddElementByWeightFraction(7,0.076417);
-  AddElementByWeightFraction(8,0.087289);
-
-  AddMaterial("G4_OCTANE",0.7026,0,54.7,2);
-  AddElementByWeightFraction(1,0.158821);
-  AddElementByWeightFraction(6,0.841179);
-
-  AddMaterial("G4_PARAFFIN",0.93,0,55.9,2);
-  AddElementByWeightFraction(1,0.148605);
-  AddElementByWeightFraction(6,0.851395);
-
-  AddMaterial("G4_N-PENTANE",0.6262,0,53.6,2);
-  AddElementByWeightFraction(1,0.167635);
-  AddElementByWeightFraction(6,0.832365);
-
-  AddMaterial("G4_PHOTO_EMULSION",3.815,0,331.,8);
-  AddElementByWeightFraction(1,0.0141);
-  AddElementByWeightFraction(6,0.072261);
-  AddElementByWeightFraction(7,0.01932);
-  AddElementByWeightFraction(8,0.066101);
-  AddElementByWeightFraction(16,0.00189);
-  AddElementByWeightFraction(35,0.349103);
-  AddElementByWeightFraction(47,0.474105);
-  AddElementByWeightFraction(53,0.00312);
-
-  AddMaterial("G4_PLASTIC_SC_VINYLTOLUENE",1.032,0,64.7,2);
-  AddElementByWeightFraction(1,0.085);
-  AddElementByWeightFraction(6,0.915);
-
-  AddMaterial("G4_PLUTONIUM_DIOXIDE",11.46,0,746.5,2);
-  AddElementByWeightFraction(8,0.118055);
-  AddElementByWeightFraction(94,0.881945);
-
-  AddMaterial("G4_POLYACRYLONITRILE",1.17,0,69.6,3);
-  AddElementByWeightFraction(1,0.056983);
-  AddElementByWeightFraction(6,0.679056);
-  AddElementByWeightFraction(7,0.263962);
-
-  AddMaterial("G4_POLYCARBONATE",1.2,0,73.1,3);
-  AddElementByWeightFraction(1,0.055491);
-  AddElementByWeightFraction(6,0.755751);
-  AddElementByWeightFraction(8,0.188758);
-
-  AddMaterial("G4_POLYCHLOROSTYRENE",1.3,0,81.7,3);
-  AddElementByWeightFraction(1,0.061869);
-  AddElementByWeightFraction(6,0.696325);
-  AddElementByWeightFraction(17,0.241806);
-
-  AddMaterial("G4_POLYETHYLENE",0.94,0,57.4,2);
-  AddElementByWeightFraction(1,0.143711);
-  AddElementByWeightFraction(6,0.856289);
-
-  AddMaterial("G4_MYLAR",1.4,0,78.7,3);
-  AddElementByWeightFraction(1,0.041959);
-  AddElementByWeightFraction(6,0.625017);
-  AddElementByWeightFraction(8,0.333025);
-
-  AddMaterial("G4_PLEXIGLASS",1.19,0,74.,3);
-  AddElementByWeightFraction(1,0.080538);
-  AddElementByWeightFraction(6,0.599848);
-  AddElementByWeightFraction(8,0.319614);
-
-  AddMaterial("G4_POLYOXYMETHYLENE",1.425,0,77.4,3);
-  AddElementByWeightFraction(1,0.067135);
-  AddElementByWeightFraction(6,0.400017);
-  AddElementByWeightFraction(8,0.532848);
-
-  AddMaterial("G4_POLYPROPYLENE",0.9,0,56.5,2);
-  AddElementByWeightFraction(1,0.143711);
-  AddElementByWeightFraction(6,0.856289);
-
-  AddMaterial("G4_POLYSTYRENE",1.06,0,68.7,2);
-  AddElementByWeightFraction(1,0.077418);
-  AddElementByWeightFraction(6,0.922582);
-
-  AddMaterial("G4_TEFLON",2.2,0,99.1,2);
-  AddElementByWeightFraction(6,0.240183);
-  AddElementByWeightFraction(9,0.759817);
-
-  AddMaterial("G4_POLYTRIFLUOROCHLOROETHYLENE",2.1,0,120.7,3);
-  AddElementByWeightFraction(6,0.20625);
-  AddElementByWeightFraction(9,0.489354);
-  AddElementByWeightFraction(17,0.304395);
-
-  AddMaterial("G4_POLYVINYL_ACETATE",1.19,0,73.7,3);
-  AddElementByWeightFraction(1,0.070245);
-  AddElementByWeightFraction(6,0.558066);
-  AddElementByWeightFraction(8,0.371689);
-
-  AddMaterial("G4_POLYVINYL_ALCOHOL",1.3,0,69.7,3);
-  AddElementByWeightFraction(1,0.091517);
-  AddElementByWeightFraction(6,0.545298);
-  AddElementByWeightFraction(8,0.363185);
-
-  AddMaterial("G4_POLYVINYL_BUTYRAL",1.12,0,67.2,3);
-  AddElementByWeightFraction(1,0.092802);
-  AddElementByWeightFraction(6,0.680561);
-  AddElementByWeightFraction(8,0.226637);
-
-  AddMaterial("G4_POLYVINYL_CHLORIDE",1.3,0,108.2,3);
-  AddElementByWeightFraction(1,0.04838);
-  AddElementByWeightFraction(6,0.38436);
-  AddElementByWeightFraction(17,0.56726);
-
-  AddMaterial("G4_POLYVINYLIDENE_CHLORIDE",1.7,0,134.3,3);
-  AddElementByWeightFraction(1,0.020793);
-  AddElementByWeightFraction(6,0.247793);
-  AddElementByWeightFraction(17,0.731413);
-
-  AddMaterial("G4_POLYVINYLIDENE_FLUORIDE",1.76,0,88.8,3);
-  AddElementByWeightFraction(1,0.03148);
-  AddElementByWeightFraction(6,0.375141);
-  AddElementByWeightFraction(9,0.593379);
-
-  AddMaterial("G4_POLYVINYL_PYRROLIDONE",1.25,0,67.7,4);
-  AddElementByWeightFraction(1,0.081616);
-  AddElementByWeightFraction(6,0.648407);
-  AddElementByWeightFraction(7,0.126024);
-  AddElementByWeightFraction(8,0.143953);
-
-  AddMaterial("G4_POTASSIUM_IODIDE",3.13,0,431.9,2);
-  AddElementByWeightFraction(19,0.235528);
-  AddElementByWeightFraction(53,0.764472);
-
-  AddMaterial("G4_POTASSIUM_OXIDE",2.32,0,189.9,2);
-  AddElementByWeightFraction(8,0.169852);
-  AddElementByWeightFraction(19,0.830148);
-
-  AddMaterial("G4_PROPANE",0.00187939,0,47.1,2,kStateGas);
-  AddElementByWeightFraction(1,0.182855);
-  AddElementByWeightFraction(6,0.817145);
-
-  AddMaterial("G4_lPROPANE",0.43,0,52.,2);
-  AddElementByWeightFraction(1,0.182855);
-  AddElementByWeightFraction(6,0.817145);
-
-  AddMaterial("G4_N-PROPYL_ALCOHOL",0.8035,0,61.1,3);
-  AddElementByWeightFraction(1,0.134173);
-  AddElementByWeightFraction(6,0.599595);
-  AddElementByWeightFraction(8,0.266232);
-
-  AddMaterial("G4_PYRIDINE",0.9819,0,66.2,3);
-  AddElementByWeightFraction(1,0.06371);
-  AddElementByWeightFraction(6,0.759217);
-  AddElementByWeightFraction(7,0.177073);
-
-  AddMaterial("G4_RUBBER_BUTYL",0.92,0,56.5,2);
-  AddElementByWeightFraction(1,0.143711);
-  AddElementByWeightFraction(6,0.856289);
-
-  AddMaterial("G4_RUBBER_NATURAL",0.92,0,59.8,2);
-  AddElementByWeightFraction(1,0.118371);
-  AddElementByWeightFraction(6,0.881629);
-
-  AddMaterial("G4_RUBBER_NEOPRENE",1.23,0,93.,3);
-  AddElementByWeightFraction(1,0.05692);
-  AddElementByWeightFraction(6,0.542646);
-  AddElementByWeightFraction(17,0.400434);
-
-  AddMaterial("G4_SILICON_DIOXIDE",2.32,0,139.2,2);
-  AddElementByWeightFraction(8,0.532565);
-  AddElementByWeightFraction(14,0.467435);
-
-  AddMaterial("G4_SILVER_BROMIDE",6.473,0,486.6,2);
-  AddElementByWeightFraction(35,0.425537);
-  AddElementByWeightFraction(47,0.574463);
-
-  AddMaterial("G4_SILVER_CHLORIDE",5.56,0,398.4,2);
-  AddElementByWeightFraction(17,0.247368);
-  AddElementByWeightFraction(47,0.752632);
-
-  AddMaterial("G4_SILVER_HALIDES",6.47,0,487.1,3);
-  AddElementByWeightFraction(35,0.422895);
-  AddElementByWeightFraction(47,0.573748);
-  AddElementByWeightFraction(53,0.003357);
-
-  AddMaterial("G4_SILVER_IODIDE",6.01,0,543.5,2);
-  AddElementByWeightFraction(47,0.459458);
-  AddElementByWeightFraction(53,0.540542);
-
-  AddMaterial("G4_SKIN_ICRP",1.1,0,72.7,13);
-  AddElementByWeightFraction(1,0.100588);
-  AddElementByWeightFraction(6,0.22825);
-  AddElementByWeightFraction(7,0.04642);
-  AddElementByWeightFraction(8,0.619002);
-  AddElementByWeightFraction(11,7e-05);
-  AddElementByWeightFraction(12,6e-05);
-  AddElementByWeightFraction(15,0.00033);
-  AddElementByWeightFraction(16,0.00159);
-  AddElementByWeightFraction(17,0.00267);
-  AddElementByWeightFraction(19,0.00085);
-  AddElementByWeightFraction(20,0.00015);
-  AddElementByWeightFraction(26,1e-05);
-  AddElementByWeightFraction(30,1e-05);
-
-  AddMaterial("G4_SODIUM_CARBONATE",2.532,0,125.,3);
-  AddElementByWeightFraction(6,0.113323);
-  AddElementByWeightFraction(8,0.452861);
-  AddElementByWeightFraction(11,0.433815);
-
-  AddMaterial("G4_SODIUM_IODIDE",3.667,0,452.,2);
-  AddElementByWeightFraction(11,0.153373);
-  AddElementByWeightFraction(53,0.846627);
-
-  AddMaterial("G4_SODIUM_MONOXIDE",2.27,0,148.8,2);
-  AddElementByWeightFraction(8,0.258143);
-  AddElementByWeightFraction(11,0.741857);
-
-  AddMaterial("G4_SODIUM_NITRATE",2.261,0,114.6,3);
-  AddElementByWeightFraction(7,0.164795);
-  AddElementByWeightFraction(8,0.56472);
-  AddElementByWeightFraction(11,0.270485);
-
-  AddMaterial("G4_STILBENE",0.9707,0,67.7,2);
-  AddElementByWeightFraction(1,0.067101);
-  AddElementByWeightFraction(6,0.932899);
-
-  AddMaterial("G4_SUCROSE",1.5805,0,77.5,3);
-  AddElementByWeightFraction(1,0.064779);
-  AddElementByWeightFraction(6,0.42107);
-  AddElementByWeightFraction(8,0.514151);
-
-  AddMaterial("G4_TERPHENYL",1.234,0,71.7,2);
-  AddElementByWeightFraction(1,0.044543);
-  AddElementByWeightFraction(6,0.955457);
-
-  AddMaterial("G4_TESTES_ICRP",1.04,0,75.,13);
-  AddElementByWeightFraction(1,0.104166);
-  AddElementByWeightFraction(6,0.09227);
-  AddElementByWeightFraction(7,0.01994);
-  AddElementByWeightFraction(8,0.773884);
-  AddElementByWeightFraction(11,0.00226);
-  AddElementByWeightFraction(12,0.00011);
-  AddElementByWeightFraction(15,0.00125);
-  AddElementByWeightFraction(16,0.00146);
-  AddElementByWeightFraction(17,0.00244);
-  AddElementByWeightFraction(19,0.00208);
-  AddElementByWeightFraction(20,0.0001);
-  AddElementByWeightFraction(26,2e-05);
-  AddElementByWeightFraction(30,2e-05);
-
-  AddMaterial("G4_TETRACHLOROETHYLENE",1.625,0,159.2,2);
-  AddElementByWeightFraction(6,0.144856);
-  AddElementByWeightFraction(17,0.855144);
-
-  AddMaterial("G4_THALLIUM_CHLORIDE",7.004,0,690.3,2);
-  AddElementByWeightFraction(17,0.147822);
-  AddElementByWeightFraction(81,0.852178);
-
-  AddMaterial("G4_TISSUE_SOFT_ICRP",1,0,72.3,13);
-  AddElementByWeightFraction(1,0.104472);
-  AddElementByWeightFraction(6,0.23219);
-  AddElementByWeightFraction(7,0.02488);
-  AddElementByWeightFraction(8,0.630238);
-  AddElementByWeightFraction(11,0.00113);
-  AddElementByWeightFraction(12,0.00013);
-  AddElementByWeightFraction(15,0.00133);
-  AddElementByWeightFraction(16,0.00199);
-  AddElementByWeightFraction(17,0.00134);
-  AddElementByWeightFraction(19,0.00199);
-  AddElementByWeightFraction(20,0.00023);
-  AddElementByWeightFraction(26,5e-05);
-  AddElementByWeightFraction(30,3e-05);
-
-  AddMaterial("G4_TISSUE_SOFT_ICRU-4",1,0,74.9,4);
-  AddElementByWeightFraction(1,0.101172);
-  AddElementByWeightFraction(6,0.111);
-  AddElementByWeightFraction(7,0.026);
-  AddElementByWeightFraction(8,0.761828);
-
-  AddMaterial("G4_TISSUE-METHANE",0.00106409,0,61.2,4,kStateGas);
-  AddElementByWeightFraction(1,0.101869);
-  AddElementByWeightFraction(6,0.456179);
-  AddElementByWeightFraction(7,0.035172);
-  AddElementByWeightFraction(8,0.40678);
-
-  AddMaterial("G4_TISSUE-PROPANE",0.00182628,0,59.5,4,kStateGas);
-  AddElementByWeightFraction(1,0.102672);
-  AddElementByWeightFraction(6,0.56894);
-  AddElementByWeightFraction(7,0.035022);
-  AddElementByWeightFraction(8,0.293366);
-
-  AddMaterial("G4_TITANIUM_DIOXIDE",4.26,0,179.5,2);
-  AddElementByWeightFraction(8,0.400592);
-  AddElementByWeightFraction(22,0.599408);
-
-  AddMaterial("G4_TOLUENE",0.8669,0,62.5,2);
-  AddElementByWeightFraction(1,0.08751);
-  AddElementByWeightFraction(6,0.91249);
-
-  AddMaterial("G4_TRICHLOROETHYLENE",1.46,0,148.1,3);
-  AddElementByWeightFraction(1,0.007671);
-  AddElementByWeightFraction(6,0.182831);
-  AddElementByWeightFraction(17,0.809498);
-
-  AddMaterial("G4_TRIETHYL_PHOSPHATE",1.07,0,81.2,4);
-  AddElementByWeightFraction(1,0.082998);
-  AddElementByWeightFraction(6,0.395628);
-  AddElementByWeightFraction(8,0.351334);
-  AddElementByWeightFraction(15,0.17004);
-
-  AddMaterial("G4_TUNGSTEN_HEXAFLUORIDE",2.4,0,354.4,2);
-  AddElementByWeightFraction(9,0.382723);
-  AddElementByWeightFraction(74,0.617277);
-
-  AddMaterial("G4_URANIUM_DICARBIDE",11.28,0,752.,2);
-  AddElementByWeightFraction(6,0.091669);
-  AddElementByWeightFraction(92,0.908331);
-
-  AddMaterial("G4_URANIUM_MONOCARBIDE",13.63,0,862.,2);
-  AddElementByWeightFraction(6,0.048036);
-  AddElementByWeightFraction(92,0.951964);
-
-  AddMaterial("G4_URANIUM_OXIDE",10.96,0,720.6,2);
-  AddElementByWeightFraction(8,0.118502);
-  AddElementByWeightFraction(92,0.881498);
-
-  AddMaterial("G4_UREA",1.323,0,72.8,4);
-  AddElementByWeightFraction(1,0.067131);
-  AddElementByWeightFraction(6,0.199999);
-  AddElementByWeightFraction(7,0.466459);
-  AddElementByWeightFraction(8,0.266411);
-
-  AddMaterial("G4_VALINE",1.23,0,67.7,4);
-  AddElementByWeightFraction(1,0.094641);
-  AddElementByWeightFraction(6,0.512645);
-  AddElementByWeightFraction(7,0.119565);
-  AddElementByWeightFraction(8,0.27315);
-
-  AddMaterial("G4_VITON",1.8,0,98.6,3);
-  AddElementByWeightFraction(1,0.009417);
-  AddElementByWeightFraction(6,0.280555);
-  AddElementByWeightFraction(9,0.710028);
-
-  AddMaterial("G4_WATER",1,0,75.,2);
-  AddElementByWeightFraction(1,0.111894);
-  AddElementByWeightFraction(8,0.888106);
-
-  AddMaterial("G4_WATER_VAPOR",0.000756182,0,71.6,2,kStateGas);
-  AddElementByWeightFraction(1,0.111894);
-  AddElementByWeightFraction(8,0.888106);
-
-  AddMaterial("G4_XYLENE",0.87,0,61.8,2);
-  AddElementByWeightFraction(1,0.094935);
-  AddElementByWeightFraction(6,0.905065);
-
-  AddMaterial("G4_GRAPHITE",1.7,0,78.,1);
+  AddMaterial("G4_FREON-12", 1.12, 0, 143., 3);
+  AddElementByWeightFraction( 6, 0.099335);
+  AddElementByWeightFraction( 9, 0.314247);
+  AddElementByWeightFraction(17, 0.586418);
+
+  AddMaterial("G4_FREON-12B2", 1.8, 0, 284.9, 3);
+  AddElementByWeightFraction( 6, 0.057245);
+  AddElementByWeightFraction( 9, 0.181096);
+  AddElementByWeightFraction(35, 0.761659);
+
+  AddMaterial("G4_FREON-13", 0.95, 0, 126.6, 3);
+  AddElementByWeightFraction( 6, 0.114983);
+  AddElementByWeightFraction( 9, 0.545622);
+  AddElementByWeightFraction(17, 0.339396);
+
+  AddMaterial("G4_FREON-13B1", 1.5, 0, 210.5, 3);
+  AddElementByWeightFraction( 6, 0.080659);
+  AddElementByWeightFraction( 9, 0.382749);
+  AddElementByWeightFraction(35, 0.536592);
+
+  AddMaterial("G4_FREON-13I1", 1.8, 0, 293.5, 3);
+  AddElementByWeightFraction( 6, 0.061309);
+  AddElementByWeightFraction( 9, 0.290924);
+  AddElementByWeightFraction(53, 0.647767);
+
+  AddMaterial("G4_GADOLINIUM_OXYSULFIDE", 7.44, 0, 493.3, 3);
+  AddElementByWeightFraction( 8, 0.084528);
+  AddElementByWeightFraction(16, 0.08469 );
+  AddElementByWeightFraction(64, 0.830782);
+
+  AddMaterial("G4_GALLIUM_ARSENIDE", 5.31, 0, 384.9, 2);
+  AddElementByWeightFraction(31, 0.482019);
+  AddElementByWeightFraction(33, 0.517981);
+
+  AddMaterial("G4_GEL_PHOTO_EMULSION", 1.2914, 0, 74.8, 5);
+  AddElementByWeightFraction( 1, 0.08118);
+  AddElementByWeightFraction( 6, 0.41606);
+  AddElementByWeightFraction( 7, 0.11124);
+  AddElementByWeightFraction( 8, 0.38064);
+  AddElementByWeightFraction(16, 0.01088);
+
+  AddMaterial("G4_Pyrex_Glass", 2.23, 0, 134., 6);
+  AddElementByWeightFraction( 5, 0.040064);
+  AddElementByWeightFraction( 8, 0.539562);
+  AddElementByWeightFraction(11, 0.028191);
+  AddElementByWeightFraction(13, 0.011644);
+  AddElementByWeightFraction(14, 0.37722 );
+  AddElementByWeightFraction(19, 0.003321);
+
+  AddMaterial("G4_GLASS_LEAD", 6.22, 0, 526.4, 5);
+  AddElementByWeightFraction( 8, 0.156453);
+  AddElementByWeightFraction(14, 0.080866);
+  AddElementByWeightFraction(22, 0.008092);
+  AddElementByWeightFraction(33, 0.002651);
+  AddElementByWeightFraction(82, 0.751938);
+
+  AddMaterial("G4_GLASS_PLATE", 2.4, 0, 145.4, 4);
+  AddElementByWeightFraction( 8, 0.4598  );
+  AddElementByWeightFraction(11, 0.096441);
+  AddElementByWeightFraction(14, 0.336553);
+  AddElementByWeightFraction(20, 0.107205);
+
+  AddMaterial("G4_GLUCOSE", 1.54, 0, 77.2, 3);
+  AddElementByWeightFraction( 1, 0.071204);
+  AddElementByWeightFraction( 6, 0.363652);
+  AddElementByWeightFraction( 8, 0.565144);
+
+  AddMaterial("G4_GLUTAMINE", 1.46, 0, 73.3, 4);
+  AddElementByWeightFraction( 1, 0.068965);
+  AddElementByWeightFraction( 6, 0.410926);
+  AddElementByWeightFraction( 7, 0.191681);
+  AddElementByWeightFraction( 8, 0.328427);
+
+  AddMaterial("G4_GLYCEROL", 1.2613, 0, 72.6, 3);
+  AddElementByWeightFraction( 1, 0.087554);
+  AddElementByWeightFraction( 6, 0.391262);
+  AddElementByWeightFraction( 8, 0.521185);
+
+  AddMaterial("G4_GUANINE", 1.58, 0, 75. ,4);
+  AddElementByWeightFraction( 1, 0.033346);
+  AddElementByWeightFraction( 6, 0.39738 );
+  AddElementByWeightFraction( 7, 0.463407);
+  AddElementByWeightFraction( 8, 0.105867);
+
+  AddMaterial("G4_GYPSUM", 2.32, 0, 129.7, 4);
+  AddElementByWeightFraction( 1, 0.023416);
+  AddElementByWeightFraction( 8, 0.557572);
+  AddElementByWeightFraction(16, 0.186215);
+  AddElementByWeightFraction(20, 0.232797);
+
+  AddMaterial("G4_N-HEPTANE", 0.68376, 0, 54.4, 2);
+  AddElementByWeightFraction( 1, 0.160937);
+  AddElementByWeightFraction( 6, 0.839063);
+
+  AddMaterial("G4_N-HEXANE", 0.6603, 0, 54., 2);
+  AddElementByWeightFraction( 1, 0.163741);
+  AddElementByWeightFraction( 6, 0.836259);
+
+  AddMaterial("G4_KAPTON", 1.42, 0, 79.6, 4);
+  AddElementByWeightFraction( 1, 0.026362);
+  AddElementByWeightFraction( 6, 0.691133);
+  AddElementByWeightFraction( 7, 0.07327 );
+  AddElementByWeightFraction( 8, 0.209235);
+
+  AddMaterial("G4_LANTHANUM_OXYBROMIDE", 6.28, 0, 439.7, 3);
+  AddElementByWeightFraction( 8, 0.068138);
+  AddElementByWeightFraction(35, 0.340294);
+  AddElementByWeightFraction(57, 0.591568);
+
+  AddMaterial("G4_LANTHANUM_OXYSULFIDE", 5.86, 0, 421.2, 3);
+  AddElementByWeightFraction( 8, 0.0936  );
+  AddElementByWeightFraction(16, 0.093778);
+  AddElementByWeightFraction(57, 0.812622);
+
+  AddMaterial("G4_LEAD_OXIDE", 9.53, 0, 766.7, 2);
+  AddElementByWeightFraction( 8, 0.071682);
+  AddElementByWeightFraction(82, 0.928318);
+
+  AddMaterial("G4_LITHIUM_AMIDE", 1.178, 0, 55.5, 3);
+  AddElementByWeightFraction( 1, 0.087783);
+  AddElementByWeightFraction( 3, 0.302262);
+  AddElementByWeightFraction( 7, 0.609955);
+
+  AddMaterial("G4_LITHIUM_CARBONATE", 2.11, 0, 87.9, 3);
+  AddElementByWeightFraction( 3, 0.187871);
+  AddElementByWeightFraction( 6, 0.16255 );
+  AddElementByWeightFraction( 8, 0.649579);
+
+  AddMaterial("G4_LITHIUM_FLUORIDE", 2.635, 0, 94., 2);
+  AddElementByWeightFraction( 3, 0.267585);
+  AddElementByWeightFraction( 9, 0.732415);
+
+  AddMaterial("G4_LITHIUM_HYDRIDE", 0.82, 0, 36.5, 2);
+  AddElementByWeightFraction( 1, 0.126797);
+  AddElementByWeightFraction( 3, 0.873203);
+
+  AddMaterial("G4_LITHIUM_IODIDE", 3.494, 0, 485.1, 2);
+  AddElementByWeightFraction( 3, 0.051858);
+  AddElementByWeightFraction(53, 0.948142);
+
+  AddMaterial("G4_LITHIUM_OXIDE", 2.013, 0, 73.6, 2);
+  AddElementByWeightFraction( 3, 0.46457);
+  AddElementByWeightFraction( 8, 0.53543);
+
+  AddMaterial("G4_LITHIUM_TETRABORATE", 2.44, 0, 94.6, 3);
+  AddElementByWeightFraction( 3, 0.082085);
+  AddElementByWeightFraction( 5, 0.25568 );
+  AddElementByWeightFraction( 8, 0.662235);
+
+  AddMaterial("G4_LUNG_ICRP", 1.05, 0, 75.3, 13);
+  AddElementByWeightFraction( 1, 0.101278);
+  AddElementByWeightFraction( 6, 0.10231 );
+  AddElementByWeightFraction( 7, 0.02865 );
+  AddElementByWeightFraction( 8, 0.757072);
+  AddElementByWeightFraction(11, 0.00184 );
+  AddElementByWeightFraction(12, 0.00073 );
+  AddElementByWeightFraction(15, 0.0008  );
+  AddElementByWeightFraction(16, 0.00225 );
+  AddElementByWeightFraction(17, 0.00266 );
+  AddElementByWeightFraction(19, 0.00194 );
+  AddElementByWeightFraction(20, 9e-05   );
+  AddElementByWeightFraction(26, 0.00037 );
+  AddElementByWeightFraction(30, 1e-05   );
+
+  AddMaterial("G4_M3_WAX", 1.05, 0, 67.9, 5);
+  AddElementByWeightFraction( 1, 0.114318);
+  AddElementByWeightFraction( 6, 0.655823);
+  AddElementByWeightFraction( 8, 0.092183);
+  AddElementByWeightFraction(12, 0.134792);
+  AddElementByWeightFraction(20, 0.002883);
+
+  AddMaterial("G4_MAGNESIUM_CARBONATE", 2.958, 0, 118., 3);
+  AddElementByWeightFraction( 6, 0.142455);
+  AddElementByWeightFraction( 8, 0.569278);
+  AddElementByWeightFraction(12, 0.288267);
+
+  AddMaterial("G4_MAGNESIUM_FLUORIDE", 3.0, 0, 134.3, 2);
+  AddElementByWeightFraction( 9, 0.609883);
+  AddElementByWeightFraction(12, 0.390117);
+
+  AddMaterial("G4_MAGNESIUM_OXIDE", 3.58, 0, 143.8, 2);
+  AddElementByWeightFraction( 8, 0.396964);
+  AddElementByWeightFraction(12, 0.603036);
+
+  AddMaterial("G4_MAGNESIUM_TETRABORATE", 2.53, 0, 108.3, 3);
+  AddElementByWeightFraction( 5, 0.240837);
+  AddElementByWeightFraction( 8, 0.62379);
+  AddElementByWeightFraction(12, 0.135373);
+
+  AddMaterial("G4_MERCURIC_IODIDE", 6.36, 0, 684.5, 2);
+  AddElementByWeightFraction(53, 0.55856);
+  AddElementByWeightFraction(80, 0.44144);
+
+  AddMaterial("G4_METHANE", 0.000667151, 0, 41.7, 2, kStateGas);
+  AddElementByWeightFraction( 1, 0.251306);
+  AddElementByWeightFraction( 6, 0.748694);
+
+  AddMaterial("G4_METHANOL", 0.7914, 0, 67.6, 3);
+  AddElementByWeightFraction( 1, 0.125822);
+  AddElementByWeightFraction( 6, 0.374852);
+  AddElementByWeightFraction( 8, 0.499326);
+
+  AddMaterial("G4_MIX_D_WAX", 0.99, 0, 60.9, 5);
+  AddElementByWeightFraction( 1, 0.13404 );
+  AddElementByWeightFraction( 6, 0.77796 );
+  AddElementByWeightFraction( 8, 0.03502 );
+  AddElementByWeightFraction(12, 0.038594);
+  AddElementByWeightFraction(22, 0.014386);
+
+  AddMaterial("G4_MS20_TISSUE", 1.0, 0, 75.1, 6);
+  AddElementByWeightFraction( 1, 0.081192);
+  AddElementByWeightFraction( 6, 0.583442);
+  AddElementByWeightFraction( 7, 0.017798);
+  AddElementByWeightFraction( 8, 0.186381);
+  AddElementByWeightFraction(12, 0.130287);
+  AddElementByWeightFraction(17, 0.0009  );
+
+  AddMaterial("G4_MUSCLE_SKELETAL_ICRP", 1.04, 0, 75.3, 13);
+  AddElementByWeightFraction( 1, 0.100637);
+  AddElementByWeightFraction( 6, 0.10783 );
+  AddElementByWeightFraction( 7, 0.02768 );
+  AddElementByWeightFraction( 8, 0.754773);
+  AddElementByWeightFraction(11, 0.00075 );
+  AddElementByWeightFraction(12, 0.00019 );
+  AddElementByWeightFraction(15, 0.0018  );
+  AddElementByWeightFraction(16, 0.00241 );
+  AddElementByWeightFraction(17, 0.00079 );
+  AddElementByWeightFraction(19, 0.00302 );
+  AddElementByWeightFraction(20, 3e-05   );
+  AddElementByWeightFraction(26, 4e-05   );
+  AddElementByWeightFraction(30, 5e-05   );
+
+  AddMaterial("G4_MUSCLE_STRIATED_ICRU", 1.04, 0, 74.7, 9);
+  AddElementByWeightFraction( 1, 0.101997);
+  AddElementByWeightFraction( 6, 0.123   );
+  AddElementByWeightFraction( 7, 0.035   );
+  AddElementByWeightFraction( 8, 0.729003);
+  AddElementByWeightFraction(11, 0.0008  );
+  AddElementByWeightFraction(12, 0.0002  );
+  AddElementByWeightFraction(15, 0.002   );
+  AddElementByWeightFraction(16, 0.005   );
+  AddElementByWeightFraction(19, 0.003   );
+
+  AddMaterial("G4_MUSCLE_WITH_SUCROSE", 1.11, 0, 74.3, 4);
+  AddElementByWeightFraction( 1, 0.098234);
+  AddElementByWeightFraction( 6, 0.156214);
+  AddElementByWeightFraction( 7, 0.035451);
+  AddElementByWeightFraction( 8, 0.7101  );
+
+  AddMaterial("G4_MUSCLE_WITHOUT_SUCROSE", 1.07, 0, 74.2, 4);
+  AddElementByWeightFraction( 1, 0.101969);
+  AddElementByWeightFraction( 6, 0.120058);
+  AddElementByWeightFraction( 7, 0.035451);
+  AddElementByWeightFraction( 8, 0.742522);
+
+  AddMaterial("G4_NAPHTHALENE", 1.145, 0, 68.4, 2);
+  AddElementByWeightFraction( 1, 0.062909);
+  AddElementByWeightFraction( 6, 0.937091);
+
+  AddMaterial("G4_NITROBENZENE", 1.19867, 0, 75.8, 4);
+  AddElementByWeightFraction( 1, 0.040935);
+  AddElementByWeightFraction( 6, 0.585374);
+  AddElementByWeightFraction( 7, 0.113773);
+  AddElementByWeightFraction( 8, 0.259918);
+
+  AddMaterial("G4_NITROUS_OXIDE", 0.00183094, 0, 84.9, 2, kStateGas);
+  AddElementByWeightFraction( 7, 0.636483);
+  AddElementByWeightFraction( 8, 0.363517);
+
+  AddMaterial("G4_NYLON-8062", 1.08, 0, 64.3, 4);
+  AddElementByWeightFraction( 1, 0.103509);
+  AddElementByWeightFraction( 6, 0.648415);
+  AddElementByWeightFraction( 7, 0.099536);
+  AddElementByWeightFraction( 8, 0.148539);
+
+  AddMaterial("G4_NYLON-6/6", 1.14, 0, 63.9, 4);
+  AddElementByWeightFraction( 1, 0.097976);
+  AddElementByWeightFraction( 6, 0.636856);
+  AddElementByWeightFraction( 7, 0.123779);
+  AddElementByWeightFraction( 8, 0.141389);
+
+  AddMaterial("G4_NYLON-6/10", 1.14, 0, 63.2, 4);
+  AddElementByWeightFraction( 1, 0.107062);
+  AddElementByWeightFraction( 6, 0.680449);
+  AddElementByWeightFraction( 7, 0.099189);
+  AddElementByWeightFraction( 8, 0.1133  );
+
+  AddMaterial("G4_NYLON-11_RILSAN", 1.425, 0, 61.6, 4);
+  AddElementByWeightFraction( 1, 0.115476);
+  AddElementByWeightFraction( 6, 0.720819);
+  AddElementByWeightFraction( 7, 0.076417);
+  AddElementByWeightFraction( 8, 0.087289);
+
+  AddMaterial("G4_OCTANE", 0.7026, 0, 54.7, 2);
+  AddElementByWeightFraction( 1, 0.158821);
+  AddElementByWeightFraction( 6, 0.841179);
+
+  AddMaterial("G4_PARAFFIN", 0.93, 0, 55.9, 2);
+  AddElementByWeightFraction( 1, 0.148605);
+  AddElementByWeightFraction( 6, 0.851395);
+
+  AddMaterial("G4_N-PENTANE", 0.6262, 0, 53.6, 2);
+  AddElementByWeightFraction( 1, 0.167635);
+  AddElementByWeightFraction (6, 0.832365);
+
+  AddMaterial("G4_PHOTO_EMULSION", 3.815, 0, 331., 8);
+  AddElementByWeightFraction( 1, 0.0141  );
+  AddElementByWeightFraction( 6, 0.072261);
+  AddElementByWeightFraction( 7, 0.01932 );
+  AddElementByWeightFraction( 8, 0.066101);
+  AddElementByWeightFraction(16, 0.00189 );
+  AddElementByWeightFraction(35, 0.349103);
+  AddElementByWeightFraction(47, 0.474105);
+  AddElementByWeightFraction(53, 0.00312 );
+
+  AddMaterial("G4_PLASTIC_SC_VINYLTOLUENE", 1.032, 0, 64.7, 2);
+  AddElementByWeightFraction( 1, 0.085);
+  AddElementByWeightFraction( 6, 0.915);
+
+  AddMaterial("G4_PLUTONIUM_DIOXIDE", 11.46, 0, 746.5, 2);
+  AddElementByWeightFraction( 8, 0.118055);
+  AddElementByWeightFraction(94, 0.881945);
+
+  AddMaterial("G4_POLYACRYLONITRILE", 1.17, 0, 69.6, 3);
+  AddElementByWeightFraction( 1, 0.056983);
+  AddElementByWeightFraction( 6, 0.679056);
+  AddElementByWeightFraction( 7, 0.263962);
+
+  AddMaterial("G4_POLYCARBONATE", 1.2, 0, 73.1, 3);
+  AddElementByWeightFraction( 1, 0.055491);
+  AddElementByWeightFraction( 6, 0.755751);
+  AddElementByWeightFraction( 8, 0.188758);
+
+  AddMaterial("G4_POLYCHLOROSTYRENE", 1.3, 0, 81.7, 3);
+  AddElementByWeightFraction( 1, 0.061869);
+  AddElementByWeightFraction( 6, 0.696325);
+  AddElementByWeightFraction(17, 0.241806);
+
+  AddMaterial("G4_POLYETHYLENE", 0.94, 0, 57.4, 2);
+  AddElementByWeightFraction( 1, 0.143711);
+  AddElementByWeightFraction( 6, 0.856289);
+
+  AddMaterial("G4_MYLAR", 1.4, 0, 78.7, 3);
+  AddElementByWeightFraction( 1, 0.041959);
+  AddElementByWeightFraction( 6, 0.625017);
+  AddElementByWeightFraction( 8, 0.333025);
+
+  AddMaterial("G4_PLEXIGLASS", 1.19, 0, 74., 3);
+  AddElementByWeightFraction( 1, 0.080538);
+  AddElementByWeightFraction( 6, 0.599848);
+  AddElementByWeightFraction( 8, 0.319614);
+
+  AddMaterial("G4_POLYOXYMETHYLENE", 1.425 ,0, 77.4, 3);
+  AddElementByWeightFraction( 1, 0.067135);
+  AddElementByWeightFraction( 6, 0.400017);
+  AddElementByWeightFraction( 8, 0.532848);
+
+  AddMaterial("G4_POLYPROPYLENE", 0.9, 0, 56.5, 2);
+  AddElementByWeightFraction( 1, 0.143711);
+  AddElementByWeightFraction( 6, 0.856289);
+
+  AddMaterial("G4_POLYSTYRENE", 1.06, 0, 68.7, 2);
+  AddElementByWeightFraction( 1, 0.077418);
+  AddElementByWeightFraction( 6, 0.922582);
+
+  AddMaterial("G4_TEFLON", 2.2, 0, 99.1, 2);
+  AddElementByWeightFraction( 6, 0.240183);
+  AddElementByWeightFraction( 9, 0.759817);
+
+  AddMaterial("G4_POLYTRIFLUOROCHLOROETHYLENE", 2.1, 0, 120.7, 3);
+  AddElementByWeightFraction( 6, 0.20625 );
+  AddElementByWeightFraction( 9, 0.489354);
+  AddElementByWeightFraction(17, 0.304395);
+
+  AddMaterial("G4_POLYVINYL_ACETATE", 1.19, 0, 73.7, 3);
+  AddElementByWeightFraction( 1, 0.070245);
+  AddElementByWeightFraction( 6, 0.558066);
+  AddElementByWeightFraction( 8, 0.371689);
+
+  AddMaterial("G4_POLYVINYL_ALCOHOL", 1.3, 0, 69.7, 3);
+  AddElementByWeightFraction( 1, 0.091517);
+  AddElementByWeightFraction( 6, 0.545298);
+  AddElementByWeightFraction( 8, 0.363185);
+
+  AddMaterial("G4_POLYVINYL_BUTYRAL", 1.12, 0, 67.2, 3);
+  AddElementByWeightFraction( 1, 0.092802);
+  AddElementByWeightFraction( 6, 0.680561);
+  AddElementByWeightFraction( 8, 0.226637);
+
+  AddMaterial("G4_POLYVINYL_CHLORIDE", 1.3, 0, 108.2, 3);
+  AddElementByWeightFraction( 1, 0.04838);
+  AddElementByWeightFraction( 6, 0.38436);
+  AddElementByWeightFraction(17, 0.56726);
+
+  AddMaterial("G4_POLYVINYLIDENE_CHLORIDE", 1.7, 0, 134.3, 3);
+  AddElementByWeightFraction( 1, 0.020793);
+  AddElementByWeightFraction( 6, 0.247793);
+  AddElementByWeightFraction(17, 0.731413);
+
+  AddMaterial("G4_POLYVINYLIDENE_FLUORIDE", 1.76, 0, 88.8, 3);
+  AddElementByWeightFraction( 1, 0.03148 );
+  AddElementByWeightFraction( 6, 0.375141);
+  AddElementByWeightFraction( 9, 0.593379);
+
+  AddMaterial("G4_POLYVINYL_PYRROLIDONE", 1.25, 0, 67.7, 4);
+  AddElementByWeightFraction( 1, 0.081616);
+  AddElementByWeightFraction( 6, 0.648407);
+  AddElementByWeightFraction( 7, 0.126024);
+  AddElementByWeightFraction( 8, 0.143953);
+
+  AddMaterial("G4_POTASSIUM_IODIDE", 3.13, 0, 431.9, 2);
+  AddElementByWeightFraction(19, 0.235528);
+  AddElementByWeightFraction(53, 0.764472);
+
+  AddMaterial("G4_POTASSIUM_OXIDE", 2.32, 0, 189.9, 2);
+  AddElementByWeightFraction( 8, 0.169852);
+  AddElementByWeightFraction(19, 0.830148);
+
+  AddMaterial("G4_PROPANE", 0.00187939, 0, 47.1, 2, kStateGas);
+  AddElementByWeightFraction( 1, 0.182855);
+  AddElementByWeightFraction( 6, 0.817145);
+
+  AddMaterial("G4_lPROPANE", 0.43, 0, 52., 2);
+  AddElementByWeightFraction( 1, 0.182855);
+  AddElementByWeightFraction( 6, 0.817145);
+
+  AddMaterial("G4_N-PROPYL_ALCOHOL", 0.8035, 0, 61.1, 3);
+  AddElementByWeightFraction( 1, 0.134173);
+  AddElementByWeightFraction( 6, 0.599595);
+  AddElementByWeightFraction( 8, 0.266232);
+
+  AddMaterial("G4_PYRIDINE", 0.9819, 0, 66.2, 3);
+  AddElementByWeightFraction( 1, 0.06371 );
+  AddElementByWeightFraction( 6, 0.759217);
+  AddElementByWeightFraction( 7, 0.177073);
+
+  AddMaterial("G4_RUBBER_BUTYL", 0.92, 0, 56.5, 2);
+  AddElementByWeightFraction( 1, 0.143711);
+  AddElementByWeightFraction( 6, 0.856289);
+
+  AddMaterial("G4_RUBBER_NATURAL", 0.92, 0, 59.8, 2);
+  AddElementByWeightFraction( 1, 0.118371);
+  AddElementByWeightFraction( 6, 0.881629);
+
+  AddMaterial("G4_RUBBER_NEOPRENE", 1.23, 0, 93., 3);
+  AddElementByWeightFraction( 1, 0.05692 );
+  AddElementByWeightFraction( 6, 0.542646);
+  AddElementByWeightFraction(17, 0.400434);
+
+  AddMaterial("G4_SILICON_DIOXIDE", 2.32, 0, 139.2, 2);
+  AddElementByWeightFraction( 8, 0.532565);
+  AddElementByWeightFraction(14, 0.467435);
+
+  AddMaterial("G4_SILVER_BROMIDE", 6.473, 0, 486.6, 2);
+  AddElementByWeightFraction(35, 0.425537);
+  AddElementByWeightFraction(47, 0.574463);
+
+  AddMaterial("G4_SILVER_CHLORIDE", 5.56, 0, 398.4, 2);
+  AddElementByWeightFraction(17, 0.247368);
+  AddElementByWeightFraction(47, 0.752632);
+
+  AddMaterial("G4_SILVER_HALIDES", 6.47, 0, 487.1, 3);
+  AddElementByWeightFraction(35, 0.422895);
+  AddElementByWeightFraction(47, 0.573748);
+  AddElementByWeightFraction(53, 0.003357);
+
+  AddMaterial("G4_SILVER_IODIDE", 6.01, 0, 543.5, 2);
+  AddElementByWeightFraction(47, 0.459458);
+  AddElementByWeightFraction(53, 0.540542);
+
+  AddMaterial("G4_SKIN_ICRP", 1.1, 0, 72.7, 13);
+  AddElementByWeightFraction( 1, 0.100588);
+  AddElementByWeightFraction( 6, 0.22825 );
+  AddElementByWeightFraction( 7, 0.04642 );
+  AddElementByWeightFraction( 8, 0.619002);
+  AddElementByWeightFraction(11, 7e-05   );
+  AddElementByWeightFraction(12, 6e-05   );
+  AddElementByWeightFraction(15, 0.00033 );
+  AddElementByWeightFraction(16, 0.00159 );
+  AddElementByWeightFraction(17, 0.00267 );
+  AddElementByWeightFraction(19, 0.00085 );
+  AddElementByWeightFraction(20, 0.00015 );
+  AddElementByWeightFraction(26, 1e-05   );
+  AddElementByWeightFraction(30, 1e-05   );
+
+  AddMaterial("G4_SODIUM_CARBONATE", 2.532, 0, 125., 3);
+  AddElementByWeightFraction( 6, 0.113323);
+  AddElementByWeightFraction( 8, 0.452861);
+  AddElementByWeightFraction(11, 0.433815);
+
+  AddMaterial("G4_SODIUM_IODIDE", 3.667, 0, 452., 2);
+  AddElementByWeightFraction(11, 0.153373);
+  AddElementByWeightFraction(53, 0.846627);
+
+  AddMaterial("G4_SODIUM_MONOXIDE", 2.27, 0, 148.8, 2);
+  AddElementByWeightFraction( 8, 0.258143);
+  AddElementByWeightFraction(11, 0.741857);
+
+  AddMaterial("G4_SODIUM_NITRATE", 2.261, 0, 114.6, 3);
+  AddElementByWeightFraction( 7, 0.164795);
+  AddElementByWeightFraction( 8, 0.56472 );
+  AddElementByWeightFraction(11, 0.270485);
+
+  AddMaterial("G4_STILBENE", 0.9707, 0, 67.7, 2);
+  AddElementByWeightFraction( 1, 0.067101);
+  AddElementByWeightFraction( 6, 0.932899);
+
+  AddMaterial("G4_SUCROSE", 1.5805, 0, 77.5, 3);
+  AddElementByWeightFraction( 1, 0.064779);
+  AddElementByWeightFraction( 6, 0.42107);
+  AddElementByWeightFraction( 8, 0.514151);
+
+  AddMaterial("G4_TERPHENYL", 1.234, 0, 71.7, 2);
+  AddElementByWeightFraction( 1, 0.044543);
+  AddElementByWeightFraction( 6, 0.955457);
+
+  AddMaterial("G4_TESTES_ICRP", 1.04, 0, 75., 13);
+  AddElementByWeightFraction( 1, 0.104166);
+  AddElementByWeightFraction( 6, 0.09227 );
+  AddElementByWeightFraction( 7, 0.01994 );
+  AddElementByWeightFraction( 8, 0.773884);
+  AddElementByWeightFraction(11, 0.00226 );
+  AddElementByWeightFraction(12, 0.00011 );
+  AddElementByWeightFraction(15, 0.00125 );
+  AddElementByWeightFraction(16, 0.00146 );
+  AddElementByWeightFraction(17, 0.00244 );
+  AddElementByWeightFraction(19, 0.00208 );
+  AddElementByWeightFraction(20, 0.0001  );
+  AddElementByWeightFraction(26, 2e-05   );
+  AddElementByWeightFraction(30, 2e-05   );
+
+  AddMaterial("G4_TETRACHLOROETHYLENE", 1.625, 0, 159.2, 2);
+  AddElementByWeightFraction( 6, 0.144856);
+  AddElementByWeightFraction(17, 0.855144);
+
+  AddMaterial("G4_THALLIUM_CHLORIDE", 7.004, 0, 690.3, 2);
+  AddElementByWeightFraction(17, 0.147822);
+  AddElementByWeightFraction(81, 0.852178);
+
+  AddMaterial("G4_TISSUE_SOFT_ICRP", 1.0, 0, 72.3, 13);
+  AddElementByWeightFraction( 1, 0.104472);
+  AddElementByWeightFraction( 6, 0.23219 );
+  AddElementByWeightFraction( 7, 0.02488 );
+  AddElementByWeightFraction( 8, 0.630238);
+  AddElementByWeightFraction(11, 0.00113 );
+  AddElementByWeightFraction(12, 0.00013 );
+  AddElementByWeightFraction(15, 0.00133 );
+  AddElementByWeightFraction(16, 0.00199 );
+  AddElementByWeightFraction(17, 0.00134 );
+  AddElementByWeightFraction(19, 0.00199 );
+  AddElementByWeightFraction(20, 0.00023 );
+  AddElementByWeightFraction(26, 5e-05   );
+  AddElementByWeightFraction(30, 3e-05   );
+
+  AddMaterial("G4_TISSUE_SOFT_ICRU-4", 1.0, 0, 74.9, 4);
+  AddElementByWeightFraction( 1, 0.101172);
+  AddElementByWeightFraction( 6, 0.111   );
+  AddElementByWeightFraction( 7, 0.026   );
+  AddElementByWeightFraction( 8, 0.761828);
+
+  AddMaterial("G4_TISSUE-METHANE", 0.00106409, 0, 61.2, 4, kStateGas);
+  AddElementByWeightFraction( 1, 0.101869);
+  AddElementByWeightFraction( 6, 0.456179);
+  AddElementByWeightFraction( 7, 0.035172);
+  AddElementByWeightFraction( 8, 0.40678 );
+
+  AddMaterial("G4_TISSUE-PROPANE", 0.00182628, 0, 59.5, 4, kStateGas);
+  AddElementByWeightFraction( 1, 0.102672);
+  AddElementByWeightFraction( 6, 0.56894 );
+  AddElementByWeightFraction( 7, 0.035022);
+  AddElementByWeightFraction( 8, 0.293366);
+
+  AddMaterial("G4_TITANIUM_DIOXIDE", 4.26, 0, 179.5, 2);
+  AddElementByWeightFraction( 8, 0.400592);
+  AddElementByWeightFraction(22, 0.599408);
+
+  AddMaterial("G4_TOLUENE", 0.8669, 0, 62.5, 2);
+  AddElementByWeightFraction( 1, 0.08751);
+  AddElementByWeightFraction( 6, 0.91249);
+
+  AddMaterial("G4_TRICHLOROETHYLENE", 1.46, 0, 148.1, 3);
+  AddElementByWeightFraction( 1, 0.007671);
+  AddElementByWeightFraction( 6, 0.182831);
+  AddElementByWeightFraction(17, 0.809498);
+
+  AddMaterial("G4_TRIETHYL_PHOSPHATE", 1.07, 0, 81.2, 4);
+  AddElementByWeightFraction( 1, 0.082998);
+  AddElementByWeightFraction( 6, 0.395628);
+  AddElementByWeightFraction( 8, 0.351334);
+  AddElementByWeightFraction(15, 0.17004 );
+
+  AddMaterial("G4_TUNGSTEN_HEXAFLUORIDE", 2.4, 0, 354.4, 2);
+  AddElementByWeightFraction( 9, 0.382723);
+  AddElementByWeightFraction(74, 0.617277);
+
+  AddMaterial("G4_URANIUM_DICARBIDE", 11.28, 0, 752., 2);
+  AddElementByWeightFraction( 6, 0.091669);
+  AddElementByWeightFraction(92, 0.908331);
+
+  AddMaterial("G4_URANIUM_MONOCARBIDE", 13.63, 0, 862., 2);
+  AddElementByWeightFraction( 6, 0.048036);
+  AddElementByWeightFraction(92, 0.951964);
+
+  AddMaterial("G4_URANIUM_OXIDE", 10.96, 0, 720.6, 2);
+  AddElementByWeightFraction( 8, 0.118502);
+  AddElementByWeightFraction(92, 0.881498);
+
+  AddMaterial("G4_UREA", 1.323, 0, 72.8, 4);
+  AddElementByWeightFraction( 1, 0.067131);
+  AddElementByWeightFraction( 6, 0.199999);
+  AddElementByWeightFraction( 7, 0.466459);
+  AddElementByWeightFraction( 8, 0.266411);
+
+  AddMaterial("G4_VALINE", 1.23, 0, 67.7, 4);
+  AddElementByWeightFraction( 1, 0.094641);
+  AddElementByWeightFraction( 6, 0.512645);
+  AddElementByWeightFraction( 7, 0.119565);
+  AddElementByWeightFraction( 8, 0.27315 );
+
+  AddMaterial("G4_VITON", 1.8, 0, 98.6, 3);
+  AddElementByWeightFraction( 1, 0.009417);
+  AddElementByWeightFraction( 6, 0.280555);
+  AddElementByWeightFraction( 9, 0.710028);
+
+  AddMaterial("G4_WATER", 1,0, 75., 2);
+  AddElementByWeightFraction( 1, 0.111894);
+  AddElementByWeightFraction( 8, 0.888106);
+
+  AddMaterial("G4_WATER_VAPOR", 0.000756182, 0, 71.6, 2, kStateGas);
+  AddElementByWeightFraction( 1, 0.111894);
+  AddElementByWeightFraction( 8, 0.888106);
+
+  AddMaterial("G4_XYLENE", 0.87, 0, 61.8, 2);
+  AddElementByWeightFraction( 1, 0.094935);
+  AddElementByWeightFraction( 6, 0.905065);
+
+  AddMaterial("G4_GRAPHITE", 1.7, 0, 78., 1);
   nNIST = nMaterials;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4NistMaterialBuilder::HepAndNuclearMaterials()
 {
@@ -1494,10 +1511,10 @@ void G4NistMaterialBuilder::HepAndNuclearMaterials()
   AddMaterial("G4_lXe", 2.953 , 54, 482. , 1, kStateLiquid);
 
   AddMaterial("G4_PbWO4", 8.28, 0, 0.0, 3);
-  AddElementByAtomFraction("O" , 4.0);
-  AddElementByAtomFraction("Pb", 1.0);
-  AddElementByAtomFraction("W" , 1.0);
+  AddElementByAtomCount("O" , 4);
+  AddElementByAtomCount("Pb", 1);
+  AddElementByAtomCount("W" , 1);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

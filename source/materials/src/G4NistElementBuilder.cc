@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.cc,v 1.1 2005-02-09 16:03:49 maire Exp $
+// $Id: G4NistElementBuilder.cc,v 1.2 2005-02-22 10:11:09 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -147,7 +147,7 @@ const G4Element* G4NistElementBuilder::BuildElement(G4int Z,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
-void G4NistElementBuilder::PrintElement(G4int Z, G4bool iso)
+void G4NistElementBuilder::PrintElement(G4int Z)
 {
   G4int imin = Z;
   G4int imax = Z+1;
@@ -163,7 +163,7 @@ void G4NistElementBuilder::PrintElement(G4int Z, G4bool iso)
 	   << "  A= " << atomicMass[i] << "  "
 	   << nc << " isotopes:"
            << G4endl;
-    if(iso) {
+    if(verbose > 1) {
       G4int j;
       G4int idx = idxIsotopes[i];
       G4int n0  = nFirstIsotope[i];
@@ -228,8 +228,7 @@ void G4NistElementBuilder::AddElement(const G4String& name, G4int Z, G4int nc,
     for(G4int j=0; j<nc; j++) {relAbundance[idx + j] /= ww;}
   }
 
-  if (verbose == 1) PrintElement(Z, false);
-  if (verbose >  1) PrintElement(Z, true);
+  if (verbose > 0) PrintElement(Z);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

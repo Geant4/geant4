@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistMaterialManager.cc,v 1.1 2005-02-11 17:30:25 maire Exp $
+// $Id: G4NistManager.cc,v 1.1 2005-02-22 10:11:09 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -28,7 +28,7 @@
 // GEANT4 Class file
 //
 //
-// File name:     G4NistMaterialManager
+// File name:     G4NistManager
 //
 // Author:        Vladimir Ivanchenko
 //
@@ -44,28 +44,41 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4NistMaterialManager.hh"
+#include "G4NistManager.hh"
 
 #include "G4NistMaterialBuilder.hh"
-///#include "G4NistMaterialMessenger.hh"
+#include "G4NistMessenger.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+G4NistManager* G4NistManager::instance = 0;
 
-G4NistMaterialManager::G4NistMaterialManager(G4int vb)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+G4NistManager* G4NistManager::Instance()
 {
-  nElements  = 0;
-  nMaterials = 0;
-  verbose    = vb;
-
-  elmBuilder = new G4NistElementBuilder(verbose);
-  matBuilder = new G4NistMaterialBuilder(this,elmBuilder,verbose);
-  
-  ///messenger  = new G4NistMaterialMessenger();  
+  if (instance == 0) {
+    static G4NistManager manager;
+    instance = &manager;
+  }
+  return instance;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4NistMaterialManager::~G4NistMaterialManager()
+G4NistManager::G4NistManager()
+{
+  nElements  = 0;
+  nMaterials = 0;
+  verbose    = 0;
+
+  elmBuilder = new G4NistElementBuilder(verbose);
+  matBuilder = new G4NistMaterialBuilder(this,elmBuilder,verbose);
+  
+  messenger  = new G4NistMessenger(this);  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4NistManager::~G4NistManager()
 {
   for (size_t i=0; i<nMaterials; i++) {
     if( materials[i] ) delete materials[i];
@@ -73,14 +86,16 @@ G4NistMaterialManager::~G4NistMaterialManager()
   for (size_t j=0; j<nElements; j++) {
     if( elements[j] ) delete elements[j];
   }
-  ///delete messenger;
+  
+  delete messenger;
   delete matBuilder;
   delete elmBuilder;
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4NistMaterialManager::RegisterElement(const G4Element* elm)
+void G4NistManager::RegisterElement(G4Element* elm)
 {
   if(elm) {
     elements.push_back(elm);
@@ -90,7 +105,7 @@ void G4NistMaterialManager::RegisterElement(const G4Element* elm)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4NistMaterialManager::DeRegisterElement(const G4Element* elm)
+void G4NistManager::DeRegisterElement(G4Element* elm)
 {
   for(size_t i=0; i<nElements; i++) {
     if(elm == elements[i]) {
@@ -102,45 +117,34 @@ void G4NistMaterialManager::DeRegisterElement(const G4Element* elm)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4NistMaterialManager::PrintElement(const G4String& name)
+void G4NistManager::PrintElement(const G4String& symbol)
 {
-  G4int Z = elmBuilder->GetZ(name);
+  if (symbol == "all") elmBuilder->PrintElement(0);
+  else                 elmBuilder->PrintElement(elmBuilder->GetZ(symbol));
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4NistManager::PrintElement(G4int Z)
+{
   elmBuilder->PrintElement(Z);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4NistMaterialManager::PrintElement(G4int Z)
+void G4NistManager::PrintG4Element(const G4String& name)
 {
-  elmBuilder->PrintElement(Z);
+ for (size_t i=0; i<nElements; i++) {
+  if ((name==(elements[i])->GetName()) || (name==(elements[i])->GetSymbol())) {
+     G4cout << *(elements[i]) << G4endl;
+     return;
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4NistMaterialManager::PrintIsotopes(const G4String& name)
-{
-  G4int Z = elmBuilder->GetZ(name);
-  elmBuilder->PrintElement(Z, true);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4NistMaterialManager::PrintIsotopes(G4int Z)
-{
-  elmBuilder->PrintElement(Z, true);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4NistMaterialManager::ListElements(G4bool isotopes)
-{
-  G4int nz = elmBuilder->GetMaxNumElements();
-  for(G4int i=1; i<=nz; i++) {elmBuilder->PrintElement(i, isotopes);}
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4NistMaterialManager::RegisterMaterial(G4Material* mat)
+void G4NistManager::RegisterMaterial(G4Material* mat)
 {
   if(mat) {
     materials.push_back(mat);
@@ -150,7 +154,7 @@ void G4NistMaterialManager::RegisterMaterial(G4Material* mat)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4NistMaterialManager::DeRegisterMaterial(G4Material* mat)
+void G4NistManager::DeRegisterMaterial(G4Material* mat)
 {
   for (size_t i=0; i<nMaterials; i++) {
     if (mat == materials[i]) { materials[i] = 0; return; }
@@ -159,10 +163,10 @@ void G4NistMaterialManager::DeRegisterMaterial(G4Material* mat)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4Material* G4NistMaterialManager::FindOrBuildMaterial(const G4String& name,
+G4Material* G4NistManager::FindOrBuildMaterial(const G4String& name,
                                                        G4bool isotopes)
 {
-  if (verbose>1) G4cout << "G4NistMaterialManager::FindMaterial " << name 
+  if (verbose>1) G4cout << "G4NistManager::FindMaterial " << name 
                         << G4endl;
 			
   G4Material* mat = 0;
@@ -177,32 +181,39 @@ G4Material* G4NistMaterialManager::FindOrBuildMaterial(const G4String& name,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4Material* G4NistMaterialManager::ConstructNewMaterial(
-                                      const G4String& name,
-                                      const std::vector<G4int>& Z,
-                                      const std::vector<G4double>& atomFraction,
-				      G4double dens, G4bool isotopes)
-{
-  return matBuilder->ConstructNewMaterial(name,Z,atomFraction,dens,isotopes);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4Material* G4NistMaterialManager::ConstructNewMaterial(
+G4Material* G4NistManager::ConstructNewMaterial(
                                       const G4String& name,
                                       const std::vector<G4String>& elm,
-                                      const std::vector<G4double>& atomFraction,
+                                      const std::vector<G4int>& nbAtoms,
 				      G4double dens, G4bool isotopes)
 {
-  return matBuilder->ConstructNewMaterial(name,elm,atomFraction,dens,isotopes);
+  return matBuilder->ConstructNewMaterial(name,elm,nbAtoms,dens,isotopes);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4NistMaterialManager::PrintMaterial(const G4String& name)
+G4Material* G4NistManager::ConstructNewMaterial(
+                                      const G4String& name,
+                                      const std::vector<G4String>& elm,
+                                      const std::vector<G4double>& w,
+				      G4double dens, G4bool isotopes)
 {
-  for(size_t i=0; i<nMaterials; i++) {
-    if(name == (materials[i])->GetName()) {
+  return matBuilder->ConstructNewMaterial(name,elm,w,dens,isotopes);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4NistManager::ListMaterials(const G4String& list)
+{
+  matBuilder->ListMaterials(list);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4NistManager::PrintG4Material(const G4String& name)
+{
+  for (size_t i=0; i<nMaterials; i++) {
+    if (name == (materials[i])->GetName()) {
       G4cout << *(materials[i]) << G4endl;
       return;
     }
@@ -211,28 +222,7 @@ void G4NistMaterialManager::PrintMaterial(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4NistMaterialManager::ListNistSimpleMaterials()
-{
-  matBuilder->ListNistSimpleMaterials();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4NistMaterialManager::ListNistCompoundMaterials()
-{
-  matBuilder->ListNistCompoundMaterials();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4NistMaterialManager::ListHepMaterials()
-{
-  matBuilder->ListHepMaterials();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4NistMaterialManager::SetVerbose(G4int val)
+void G4NistManager::SetVerbose(G4int val)
 {
   verbose = val;
   elmBuilder->SetVerbose(val);

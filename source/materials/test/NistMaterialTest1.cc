@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: NistMaterialTest1.cc,v 1.1 2005-02-11 17:30:26 maire Exp $
+// $Id: NistMaterialTest1.cc,v 1.2 2005-02-22 10:11:09 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,6 +81,27 @@ nistMat.FindOrBuildMaterial ("G4_POLYSTYRENE");
 nistMat.FindOrBuildMaterial ("G4_SILICON_DIOXIDE");
 nistMat.FindOrBuildMaterial ("G4_AIR", buildIsotopes=false);
 
+// build new materials from scratch
+//
+G4String gelSiElm[3]  = {"H", "O", "Si"};
+G4int    gelSiAtom[3] = { 4,   4,   1};
+G4double gelSiW[3]    = {0.0416, 0.6661, 0.2923};
+
+std::vector<G4String> elm;
+std::vector<G4int> atom;
+std::vector<G4double> w;
+for (G4int j=0; j<3; j++) { 
+   elm.push_back(gelSiElm[j]); atom.push_back(gelSiAtom[j]);
+   w.push_back(gelSiW[j]);
+}
+
+// by atom count
+G4Material* Aerog =    
+nistMat.ConstructNewMaterial ("gel_silicate1", elm, atom, 0.2);
+
+// by mass fraction
+nistMat.ConstructNewMaterial ("gel_silicate2", elm, w,    0.2);
+
 // print G4MaterialTable
 //
 G4cout << *(G4Material::GetMaterialTable()) << G4endl;
@@ -95,6 +116,9 @@ G4cout << " Nuclear interaction length of Lead: "
               
 G4cout << " Nuclear interaction length of Water: " 
        << H2O->GetNuclearInterLength()/cm << " cm" << G4endl;
-                    
+       
+G4cout << " Nuclear interaction length of Aerogel: " 
+       << Aerog->GetNuclearInterLength()/cm << " cm" << G4endl;
+                           
 return EXIT_SUCCESS;
 }

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.hh,v 1.2 2005-02-11 17:30:22 maire Exp $
+// $Id: G4NistElementBuilder.hh,v 1.3 2005-02-22 10:11:09 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4NistElementBuilder_h
@@ -63,7 +63,7 @@ public:
   G4int    GetMaxNumElements() {return maxNumElements-1;};
     
   void SetVerbose   (G4int vb) {verbose = vb;};
-  void PrintElement (G4int Z, G4bool isotopes = false);
+  void PrintElement (G4int Z);
     
   // Find or build a G4Element by atomic number  
   const G4Element* FindOrBuildElement (G4int Z, G4bool buildIsotopes = true);
