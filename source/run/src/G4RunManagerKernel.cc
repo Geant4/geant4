@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.10 2004-02-09 10:09:56 gcosmo Exp $
+// $Id: G4RunManagerKernel.cc,v 1.11 2004-03-16 00:08:16 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -34,7 +34,7 @@
 #include "G4EventManager.hh"
 #include "G4GeometryManager.hh"
 #include "G4TransportationManager.hh"
-#include "G4Navigator.hh"
+//#include "G4Navigator.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VUserPhysicsList.hh"
@@ -278,11 +278,13 @@ void G4RunManagerKernel::ResetNavigator()
   if(verboseLevel>1) G4cout << "Start closing geometry." << G4endl;
   geomManager->OpenGeometry();
   geomManager->CloseGeometry(geometryToBeOptimized, verboseLevel>1);
-  
-  G4ThreeVector center(0,0,0);
-  G4Navigator* navigator =
-      G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
-  navigator->LocateGlobalPointAndSetup(center,0,false);
+ 
+  // Reseting Navigator has been moved to G4Eventmanager, so that resetting
+  // is now done for every event.  
+  // G4ThreeVector center(0,0,0);
+  // G4Navigator* navigator =
+  //     G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
+  // navigator->LocateGlobalPointAndSetup(center,0,false);
 
   geometryNeedsToBeClosed = false;
 }
