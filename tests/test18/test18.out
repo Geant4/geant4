@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (25-June-2004)
+ Geant4 version $Name: not supported by cvs2svn $   (17-December-2004)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -157,7 +157,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.09s Real=0.11s Sys=0.02s
+  User=0.09s Real=0.1s Sys=0.01s
     1000.000           1           0     Na24[0.0]
          259           1   6.089e+04     e-
     1.13e+03           1   6.089e+04     anti_nu_e
@@ -359,7 +359,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
        1e+03           1           0     Na24[472.0]
          472           1     0.02466     gamma
            0           1     0.02466     Na24[0.0]
