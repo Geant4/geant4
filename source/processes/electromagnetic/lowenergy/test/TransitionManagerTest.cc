@@ -1,3 +1,25 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// -------------------------------------------------------------------
+//      GEANT 4 class implementation file 
+//
+//      For information related to this code contact:
+//      Geant4 Collaboration
+//
+//      File name:     TransitionManagerTest.cc
+//
+//      Authors:        Alfonso Mantero (alfonso.mantero@ge.infn.it)
+//                      Elena Guardincerri (elena.guardincerri@ge.infn.it) 
+//
+//      Creation date: 1/05/2001
+// -------------------------------------------------------------------
+
+
 #include "globals.hh"
 #include "G4ios.hh"
 #include "g4std/fstream"
