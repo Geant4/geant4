@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: HepPolyhedron.cc,v 1.3 2000-04-04 13:35:30 evc Exp $
+// $Id: HepPolyhedron.cc,v 1.4 2000-04-18 10:03:29 evc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,24 +41,24 @@
  * Function: Print contents of G4 polyhedron                           *
  *                                                                     *
  ***********************************************************************/
-std::ostream & operator<<(std::ostream & ostr, const G4Facet & facet) {
+HepStd::ostream & operator<<(HepStd::ostream & ostr, const G4Facet & facet) {
   for (int k=0; k<4; k++) {
     ostr << " " << facet.edge[k].v << "/" << facet.edge[k].f;
   }
   return ostr;
 }
 
-std::ostream & operator<<(std::ostream & ostr, const HepPolyhedron & ph) {
-  ostr << std::endl;
-  ostr << "Nverteces=" << ph.nvert << ", Nfacets=" << ph.nface << std::endl;
+HepStd::ostream & operator<<(HepStd::ostream & ostr, const HepPolyhedron & ph) {
+  ostr << HepStd::endl;
+  ostr << "Nverteces=" << ph.nvert << ", Nfacets=" << ph.nface << HepStd::endl;
   int i;
   for (i=1; i<=ph.nvert; i++) {
      ostr << "xyz(" << i << ")="
 	  << ph.pV[i].x() << ' ' << ph.pV[i].y() << ' ' << ph.pV[i].z()
-	  << std::endl;
+	  << HepStd::endl;
   }
   for (i=1; i<=ph.nface; i++) {
-    ostr << "face(" << i << ")=" << ph.pF[i] << std::endl;
+    ostr << "face(" << i << ")=" << ph.pF[i] << HepStd::endl;
   }
   return ostr;
 }
@@ -127,10 +127,10 @@ HepPolyhedron::FindNeighbour(int iFace, int iNode, int iOrder) const
     if (iNode == abs(pF[iFace].edge[i].v)) break;
   }
   if (i == 4) {
-    std::cerr
+    HepStd::cerr
       << "HepPolyhedron::FindNeighbour: face " << iFace
       << " has no node " << iNode
-      << std::endl; 
+      << HepStd::endl; 
     return 0;
   }
   if (iOrder < 0) {
@@ -180,10 +180,10 @@ void HepPolyhedron::SetNumberOfRotationSteps(int n)
 {
   const int nMin = 3;
   if (n < nMin) {
-    std::cerr 
+    HepStd::cerr 
       << "HepPolyhedron::SetNumberOfRotationSteps: attempt to set the\n"
       << "number of steps per circle < " << nMin << "; forced to " << nMin
-      << std::endl;
+      << HepStd::endl;
     fNumberOfRotationSteps = nMin;
   }else{
     fNumberOfRotationSteps = n;
@@ -598,11 +598,11 @@ void HepPolyhedron::RotateAroundZ(int nstep, HepDouble phi, HepDouble dphi,
   delete [] kk;
 
   if (k-1 != nface) {
-    std::cerr
+    HepStd::cerr
       << "Polyhedron::RotateAroundZ: number of generated faces ("
       << k-1 << ") is not equal to the number of allocated faces ("
       << nface << ")"
-      << std::endl;
+      << HepStd::endl;
   }
 }
 
@@ -678,13 +678,13 @@ void HepPolyhedron::SetReferences()
         i1 = (pF[iface].edge[iedge].v < 0) ? -1 : 1;
 	i2 = (pF[cur->iface].edge[cur->iedge].v < 0) ? -1 : 1;
         if (i1 != i2) {
-	  std::cerr
+	  HepStd::cerr
 	    << "Polyhedron::SetReferences: different edge visibility "
 	    << iface << "/" << iedge << "/"
 	    << pF[iface].edge[iedge].v << " and "
 	    << cur->iface << "/" << cur->iedge << "/"
 	    << pF[cur->iface].edge[cur->iedge].v
-	    << std::endl;
+	    << HepStd::endl;
 	}
 	continue;
       }
@@ -713,13 +713,13 @@ void HepPolyhedron::SetReferences()
 	  i1 = (pF[iface].edge[iedge].v < 0) ? -1 : 1;
 	  i2 = (pF[cur->iface].edge[cur->iedge].v < 0) ? -1 : 1;
 	    if (i1 != i2) {
-	      std::cerr
+	      HepStd::cerr
 		<< "Polyhedron::SetReferences: different edge visibility "
 		<< iface << "/" << iedge << "/"
 		<< pF[iface].edge[iedge].v << " and "
 		<< cur->iface << "/" << cur->iedge << "/"
 		<< pF[cur->iface].edge[cur->iedge].v
-		<< std::endl;
+		<< HepStd::endl;
 	    }
 	  break;
 	}
@@ -731,9 +731,9 @@ void HepPolyhedron::SetReferences()
 
   for (i=0; i<nvert; i++) {
     if (headList[i] != 0) {
-      std::cerr
+      HepStd::cerr
 	<< "Polyhedron::SetReferences: List " << i << " is not empty"
-	<< std::endl;
+	<< HepStd::endl;
     }
   }
 
@@ -832,9 +832,9 @@ HepPoint3D HepPolyhedron::GetVertex(int index) const
  ***********************************************************************/
 {
   if (index <= 0 || index > nvert) {
-    std::cerr
+    HepStd::cerr
       << "HepPolyhedron::GetVertex: irrelevant index " << index
-      << std::endl;
+      << HepStd::endl;
     return HepPoint3D();
   }
   return pV[index];
@@ -1013,9 +1013,9 @@ void HepPolyhedron::GetFacet(int iFace, int &n, int *iNodes,
  ***********************************************************************/
 {
   if (iFace < 1 || iFace > nface) {
-    std::cerr 
+    HepStd::cerr 
       << "HepPolyhedron::GetFacet: irrelevant index " << iFace
-      << std::endl;
+      << HepStd::endl;
     n = 0;
   }else{
     int i, k;
@@ -1098,9 +1098,9 @@ HepNormal3D HepPolyhedron::GetNormal(int iFace) const
  ***********************************************************************/
 {
   if (iFace < 1 || iFace > nface) {
-    std::cerr 
+    HepStd::cerr 
       << "HepPolyhedron::GetNormal: irrelevant index " << iFace 
-      << std::endl;
+      << HepStd::endl;
     return HepNormal3D();
   }
 
@@ -1123,9 +1123,9 @@ HepNormal3D HepPolyhedron::GetUnitNormal(int iFace) const
  ***********************************************************************/
 {
   if (iFace < 1 || iFace > nface) {
-    std::cerr 
+    HepStd::cerr 
       << "HepPolyhedron::GetUnitNormal: irrelevant index " << iFace
-      << std::endl;
+      << HepStd::endl;
     return HepNormal3D();
   }
 
@@ -1305,15 +1305,15 @@ HepPolyhedronCons::HepPolyhedronCons(HepDouble Rmn1,
   if (dphi > wholeCircle) k += 4; 
 
   if (k != 0) {
-    std::cerr << "HepPolyhedronCone(s)/Tube(s): error in input parameters";
-    if ((k & 1) != 0) std::cerr << " (radiuses)";
-    if ((k & 2) != 0) std::cerr << " (half-length)";
-    if ((k & 4) != 0) std::cerr << " (angles)";
-    std::cerr << std::endl;
-    std::cerr << " Rmn1=" << Rmn1 << " Rmx1=" << Rmx1;
-    std::cerr << " Rmn2=" << Rmn2 << " Rmx2=" << Rmx2;
-    std::cerr << " Dz=" << Dz << " Phi1=" << Phi1 << " Dphi=" << Dphi
-	      << std::endl;
+    HepStd::cerr << "HepPolyhedronCone(s)/Tube(s): error in input parameters";
+    if ((k & 1) != 0) HepStd::cerr << " (radiuses)";
+    if ((k & 2) != 0) HepStd::cerr << " (half-length)";
+    if ((k & 4) != 0) HepStd::cerr << " (angles)";
+    HepStd::cerr << HepStd::endl;
+    HepStd::cerr << " Rmn1=" << Rmn1 << " Rmx1=" << Rmx1;
+    HepStd::cerr << " Rmn2=" << Rmn2 << " Rmx2=" << Rmx2;
+    HepStd::cerr << " Dz=" << Dz << " Phi1=" << Phi1 << " Dphi=" << Dphi
+	      << HepStd::endl;
     return;
   }
   
@@ -1362,33 +1362,33 @@ HepPolyhedronPgon::HepPolyhedronPgon(HepDouble phi,
   //   C H E C K   I N P U T   P A R A M E T E R S
 
   if (dphi <= 0. || dphi > 2*M_PI) {
-    std::cerr
+    HepStd::cerr
       << "HepPolyhedronPgon/Pcon: wrong delta phi = " << dphi
-      << std::endl;
+      << HepStd::endl;
     return;
   }    
     
   if (nz < 2) {
-    std::cerr
+    HepStd::cerr
       << "HepPolyhedronPgon/Pcon: number of z-planes less than two = " << nz
-      << std::endl;
+      << HepStd::endl;
     return;
   }
 
   if (npdv < 0) {
-    std::cerr
+    HepStd::cerr
       << "HepPolyhedronPgon/Pcon: error in number of phi-steps =" << npdv
-      << std::endl;
+      << HepStd::endl;
     return;
   }
 
   int i;
   for (i=0; i<nz; i++) {
     if (rmin[i] < 0. || rmax[i] < 0. || rmin[i] > rmax[i]) {
-      std::cerr
+      HepStd::cerr
 	<< "HepPolyhedronPgon: error in radiuses rmin[" << i << "]="
 	<< rmin[i] << " rmax[" << i << "]=" << rmax[i]
-	<< std::endl;
+	<< HepStd::endl;
       return;
     }
   }
@@ -1446,39 +1446,39 @@ HepPolyhedronSphere::HepPolyhedronSphere(HepDouble rmin, HepDouble rmax,
   //   C H E C K   I N P U T   P A R A M E T E R S
 
   if (dphi <= 0. || dphi > 2*M_PI) {
-    std::cerr
+    HepStd::cerr
       << "HepPolyhedronSphere: wrong delta phi = " << dphi
-      << std::endl;
+      << HepStd::endl;
     return;
   }    
 
   if (the < 0. || the > M_PI) {
-    std::cerr
+    HepStd::cerr
       << "HepPolyhedronSphere: wrong theta = " << the
-      << std::endl;
+      << HepStd::endl;
     return;
   }    
   
   if (dthe <= 0. || dthe > M_PI) {
-    std::cerr
+    HepStd::cerr
       << "HepPolyhedronSphere: wrong delta theta = " << dthe
-      << std::endl;
+      << HepStd::endl;
     return;
   }    
 
   if (the+dthe > M_PI) {
-    std::cerr
+    HepStd::cerr
       << "HepPolyhedronSphere: wrong theta + delta theta = "
       << the << " " << dthe
-      << std::endl;
+      << HepStd::endl;
     return;
   }    
   
   if (rmin < 0. || rmin >= rmax) {
-    std::cerr
+    HepStd::cerr
       << "HepPolyhedronSphere: error in radiuses"
       << " rmin=" << rmin << " rmax=" << rmax
-      << std::endl;
+      << HepStd::endl;
     return;
   }
 
@@ -1542,17 +1542,17 @@ HepPolyhedronTorus::HepPolyhedronTorus(HepDouble rmin,
   //   C H E C K   I N P U T   P A R A M E T E R S
 
   if (dphi <= 0. || dphi > 2*M_PI) {
-    std::cerr
+    HepStd::cerr
       << "HepPolyhedronTorus: wrong delta phi = " << dphi
-      << std::endl;
+      << HepStd::endl;
     return;
   }
 
   if (rmin < 0. || rmin >= rmax || rmax >= rtor) {
-    std::cerr
+    HepStd::cerr
       << "HepPolyhedronTorus: error in radiuses"
       << " rmin=" << rmin << " rmax=" << rmax << " rtorus=" << rtor
-      << std::endl;
+      << HepStd::endl;
     return;
   }
 

@@ -771,7 +771,7 @@ void BooleanProcessor::caseIE(ExtEdge & edge1, ExtEdge & edge2)
  *                                                                     *
  ***********************************************************************/
 {
-  std::cout << "Call caseIE()" << std::endl;
+  HepStd::cout << "Call caseIE()" << HepStd::endl;
 }
 
 void BooleanProcessor::caseEE(ExtEdge & edge1, ExtEdge & edge2)
@@ -784,7 +784,7 @@ void BooleanProcessor::caseEE(ExtEdge & edge1, ExtEdge & edge2)
  *                                                                     *
  ***********************************************************************/
 {
-  std::cout << "Call caseEE()" << std::endl;
+  HepStd::cout << "Call caseEE()" << HepStd::endl;
 }
 
 void BooleanProcessor::testFaceVsFace(int iface1, int iface2)
@@ -931,10 +931,10 @@ void BooleanProcessor::assembleFace(int iface)
 	INSERT_EDGE_TO_THE_LIST(icur);
 	if (edges[icur].i2 == ifirst) { break; } else { continue; }
       }else{
-	std::cerr
+	HepStd::cerr
 	  << "BooleanProcessor::assembleFace(" << iface << ") : "
 	  << "could not find next edge of the contour"
-	  << std::endl;
+	  << HepStd::endl;
 	faces[iface].inew = DEFECTIVE_FACE;
 	return;
       }
@@ -1392,7 +1392,7 @@ void BooleanProcessor::triangulateContour(int ix, int iy, int ihead)
  ***********************************************************************/
 {
 
-//  std::cout << "Next Countour" << std::endl;
+//  HepStd::cout << "Next Countour" << HepStd::endl;
 //  draw_contour(5, 3, ihead);
     
   //   C L O S E   C O N T O U R
@@ -1432,10 +1432,10 @@ void BooleanProcessor::triangulateContour(int ix, int iy, int ihead)
 	break;
       }
     }else if (istart == iedge1) {
-      std::cerr
+      HepStd::cerr
 	<< "BooleanProcessor::triangulateContour : "
 	<< "could not generate a triangle (infinite loop)"
-	<< std::endl;
+	<< HepStd::endl;
       break;
     }
 
@@ -1494,10 +1494,10 @@ void BooleanProcessor::modifyReference(int iface, int i1, int i2, int iref)
     }
     iedge = edges[iedge].inext;
   }
-  std::cerr
+  HepStd::cerr
     << "BooleanProcessor::modifyReference : could not find the edge, "
     << "iface=" << iface << ", i1,i2=" << i1 << "," << i2 << ", iref=" << iref
-    << std::endl;
+    << HepStd::endl;
 }
 
 void BooleanProcessor::triangulateFace(int iface)
@@ -1547,18 +1547,18 @@ void BooleanProcessor::triangulateFace(int iface)
 	  }else if (z < -del*del) {
 	    internal_contours.push_back(icontour);
 	  }else{  
-	    std::cerr
+	    HepStd::cerr
 	      << "BooleanProcessor::triangulateFace : too small contour"
-	      << std::endl;
+	      << HepStd::endl;
 	  }
 	  icontour = edges[iedge].inext;
 	  edges[iedge].inext = 0;
 	  break;
 	}
       }else{
-	std::cerr
+	HepStd::cerr
 	  << "BooleanProcessor::triangulateFace : broken contour"
-	  << std::endl;
+	  << HepStd::endl;
 	icontour = 0;
 	break;
       }
@@ -1574,10 +1574,10 @@ void BooleanProcessor::triangulateFace(int iface)
       if (internal_contours[kint] == 0) break;
     }
     if (kext == external_contours.size()) {
-      std::cerr
+      HepStd::cerr
 	<< "BooleanProcessor::triangulateFace : "
 	<< "could not merge internal contour " << kint 
-	<< std::endl;
+	<< HepStd::endl;
     }      
   }
 
@@ -1595,10 +1595,10 @@ void BooleanProcessor::triangulateFace(int iface)
     iedge = faces[iface].iold;
     while (iedge > 0) {
       if (edges[iedge].iface1 != iface) {
-	std::cerr
+	HepStd::cerr
 	  << "BooleanProcessor::triangulateFace : wrong reference to itself, "
 	  << "iface=" << iface << ", iface1=" << edges[iedge].iface1
-	  << std::endl;
+	  << HepStd::endl;
       }else if (edges[iedge].iface2 > 0) {
 	modifyReference(edges[iedge].iface2,
 			edges[iedge].i1, edges[iedge].i2, iface);
@@ -1664,9 +1664,9 @@ HepPolyhedron BooleanProcessor::createPolyhedron()
     iedge = faces[i].iold;
     while (iedge > 0) {
       if (k > 3) {
-	std::cerr
+	HepStd::cerr
 	  << "BooleanProcessor::createPolyhedron : too many edges"
-	  << std::endl;
+	  << HepStd::endl;
 	break;
       }
       v[k]  = nodes[edges[iedge].i1].s;
@@ -1676,10 +1676,10 @@ HepPolyhedron BooleanProcessor::createPolyhedron()
       k++;
     }
     if (k < 3) {
-      std::cerr
+      HepStd::cerr
 	<< "BooleanProcessor::createPolyhedron : "
 	<< "face has only " << k << " edges"
-	<< std::endl;
+	<< HepStd::endl;
     }
     polyhedron.pF[faces[i].inew] =
       G4Facet(v[0],f[0], v[1],f[1], v[2],f[2], v[3],f[3]);
@@ -1755,9 +1755,9 @@ HepPolyhedron BooleanProcessor::execute(int op,
   for (;;) {
     assemblePolyhedra();
     if (unknown_faces.front() != 0) {
-      std::cerr
+      HepStd::cerr
 	<< "BooleanProcessor::execute : unknown faces !!!"
-	<< std::endl;
+	<< HepStd::endl;
     }
     break;
   }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: HepPolyhedron.h,v 1.3 2000-04-04 13:35:00 evc Exp $
+// $Id: HepPolyhedron.h,v 1.4 2000-04-18 10:03:06 evc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -140,13 +140,21 @@
 #include <CLHEP/Geometry/Plane3D.h>
 #include <CLHEP/Geometry/Transform3D.h>
 
+#ifndef HepStd
+#ifndef HEP_USE_STD
+#define HepStd
+#else
+#define HepStd std
+#endif
+#endif
+
 #ifndef DEFAULT_NUMBER_OF_STEPS
 #define DEFAULT_NUMBER_OF_STEPS 24
 #endif
 
 class G4Facet {
   friend class HepPolyhedron;
-  friend std::ostream& operator<<(std::ostream&, const G4Facet &facet);
+  friend HepStd::ostream& operator<<(HepStd::ostream&, const G4Facet &facet);
 
  private:
   struct G4Edge { int v,f; };
@@ -160,7 +168,7 @@ class G4Facet {
 };
 
 class HepPolyhedron {
-  friend std::ostream& operator<<(std::ostream&, const HepPolyhedron &ph);
+  friend HepStd::ostream& operator<<(HepStd::ostream&, const HepPolyhedron &ph);
 
  private:
   static int fNumberOfRotationSteps;
