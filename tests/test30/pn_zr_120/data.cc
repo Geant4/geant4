@@ -50,7 +50,7 @@
 
 int main(int argc, char** argv)
 {
-  int verbose = 2;
+  int verbose = 1;
 
   // -------------------------------------------------------------------
   // Control on input
@@ -96,11 +96,18 @@ int main(int argc, char** argv)
 
   G4DataVector* energy = new G4DataVector();
   int counter = 0;
-  int nbin = 181;
   int ibin, inum;
   double elim = 30.0*MeV;
   double elim0= 30.0*MeV;
-  double x, an, e1, e2, y1, y2, ct1, ct2;
+  double emax = 120.0*MeV;
+  int nbin = (int)((emax - elim)/MeV);
+  double e1 = 29.25*MeV;
+  for (ibin=0; ibin<nbin; ibin++) {
+    e1 += 1.*MeV;
+    energy->push_back(e1);
+  }
+
+  double x, x1, an, e2, y1, y2, ct1, ct2;
   G4DataVector* angle = new G4DataVector();
   std::vector<G4DataVector*> cs;
 
@@ -135,20 +142,23 @@ int main(int argc, char** argv)
       (*fin) >> word1 >> word2 >> word3;
       (*fin) >> word1 >> word2 >> word3;
       G4DataVector* cross = new G4DataVector();
+      inum = (inum-1)/2;
+
+      if(1 < verbose) {
+        cout << "New set of data N= " << inum << " an= " << an/degree << endl;
+      }
 
       for(int i=0; i<inum; i++) {
         (*fin) >> e1 >> e2 >> x;
+        (*fin) >> e1 >> e2 >> x1;
+        x += x1;
+        x *= 0.5;
         if(x == 0.0) x = 1.e-9;
         if(1 < verbose) {
-          cout << "an= " << an/degree << " e1= " << e1 
-               << " e2= " << e2 << " cross= " << x 
+          cout << "an= " << an/degree << " e1= " << (*energy)[i]
+               << " cross= " << x 
                << endl;
         }  
-        e1 = 0.5*(e1 + e2);      
-
-        if (e1 >= elim && an/degree < 10.) {
-          energy->push_back(e1);
-	}
         cross->push_back(x);
       }
       for(int j=inum; j<nbin; j++) {

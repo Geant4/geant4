@@ -7,7 +7,7 @@
 #verbose
 0
 #events
-10000
+100000
 //--------Proton_processes
 #particle
 proton
@@ -20,6 +20,10 @@ Pb
 160.
 #elim(MeV)
 30.
+#nbinse
+160
+#nbinsd
+160
 #nangle
 13
 #angles
