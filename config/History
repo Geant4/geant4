@@ -1,4 +1,4 @@
-$Id: History,v 1.60 1999-10-26 07:54:56 morita Exp $
+$Id: History,v 1.61 1999-10-26 08:11:47 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -17,14 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26th October 1999  Gabriele Cosmo (config-V00-01-03)
+- Removed AIX-xlC as default platform for G4SYSTEM in architecture.gmk.
+  Configuration is still kept but no longer supported.
+
 26th October 1999  Youhei Morita
 - architecture.gmk: include $(HEP_ODBMS_DIR)/etc/$(OS).mk instead of
   defininig load module separately.  Defined G4ODBMS_LIBS.
 - binmake.gmk: Use G4ODBMS_LIBS.
 
 20th October 1999  Gabriele Cosmo (config-V00-01-02)
-- Removed option -DOS_NO_TYPEDEF_5 from HP-aCC OSpace setup.
-  Not anymore needed.
+- architecture.gmk: removed option -DOS_NO_TYPEDEF_5 from HP-aCC
+  OSpace setup. Not anymore needed.
 
 20th October 1999  John Allison
 - architecture.gmk: removed G4USE_EXPLICIT_TYPES_IN_TEMPLATES (was needed
