@@ -313,7 +313,7 @@ G4VPhysicalVolume* FredDetectorConstruction::Construct()
   }
 
   G4LogicalVolume	  *testLog  = new G4LogicalVolume( testVolume, Vaccuum, "test_log", 0, 0, 0 );
-  G4VPhysicalVolume *test     = new G4PVPlacement( rot, G4ThreeVector(), testLog, 
+  new G4PVPlacement( rot, G4ThreeVector(), testLog, 
 												   "test", hallLog, false, 0 );
 
   //
@@ -322,46 +322,46 @@ G4VPhysicalVolume* FredDetectorConstruction::Construct()
   if (messenger->SelectedVolume() == VOXEL) {
     G4RotationMatrix	*noRot = new G4RotationMatrix();
 
-    G4Box 			*vxBox = new G4Box( "voxel_x", 0.3*mm, 0.6*m, 0.6*m );
+    G4Box 		*vxBox = new G4Box( "voxel_x", 0.3*mm, 0.6*m, 0.6*m );
     G4LogicalVolume   	*vxLog1 = new G4LogicalVolume( vxBox, Vaccuum, "x1", 0, 0, 0 );
-    G4VPhysicalVolume	*vx1 = new G4PVPlacement( noRot, G4ThreeVector( -0.6*m, 0.0*m, 0.0*m ),
+    new G4PVPlacement( noRot, G4ThreeVector( -0.6*m, 0.0*m, 0.0*m ),
 												  vxLog1, "testx1", testLog, false, 0 );
     G4LogicalVolume   	*vxLog2 = new G4LogicalVolume( vxBox, Vaccuum, "x2", 0, 0, 0 );
-    G4VPhysicalVolume	*vx2 = new G4PVPlacement( noRot, G4ThreeVector( -0.2*m, 0.0*m, 0.0*m ),
+    new G4PVPlacement( noRot, G4ThreeVector( -0.2*m, 0.0*m, 0.0*m ),
 												  vxLog2, "testx2", testLog, false, 0 );
     G4LogicalVolume   	*vxLog3 = new G4LogicalVolume( vxBox, Vaccuum, "x3", 0, 0, 0 );
-    G4VPhysicalVolume	*vx3 = new G4PVPlacement( noRot, G4ThreeVector( +0.2*m, 0.0*m, 0.0*m ),
+    new G4PVPlacement( noRot, G4ThreeVector( +0.2*m, 0.0*m, 0.0*m ),
 												  vxLog3, "testx3", testLog, false, 0 );
     G4LogicalVolume   	*vxLog4 = new G4LogicalVolume( vxBox, Vaccuum, "x4", 0, 0, 0 );
-    G4VPhysicalVolume	*vx4 = new G4PVPlacement( noRot, G4ThreeVector( +0.6*m, 0.0*m, 0.0*m ),
+    new G4PVPlacement( noRot, G4ThreeVector( +0.6*m, 0.0*m, 0.0*m ),
 												  vxLog4, "testx4", testLog, false, 0 );
 
-    G4Box 			*vyBox = new G4Box( "voxel_y", 0.8*m, 0.3*mm, 0.6*m );
+    G4Box 		*vyBox = new G4Box( "voxel_y", 0.8*m, 0.3*mm, 0.6*m );
     G4LogicalVolume   	*vyLog1 = new G4LogicalVolume( vyBox, Vaccuum, "y1", 0, 0, 0 );
-    G4VPhysicalVolume	*vy1 = new G4PVPlacement( noRot, G4ThreeVector( 0.0*m, -0.8*m, 0.0*m ),
+    new G4PVPlacement( noRot, G4ThreeVector( 0.0*m, -0.8*m, 0.0*m ),
 												  vyLog1, "testy1", testLog, false, 0 );
     G4LogicalVolume   	*vyLog2 = new G4LogicalVolume( vyBox, Vaccuum, "y2", 0, 0, 0 );
-    G4VPhysicalVolume	*vy2 = new G4PVPlacement( noRot, G4ThreeVector( 0.0*m, -0.7*m, 0.0*m ),
+    new G4PVPlacement( noRot, G4ThreeVector( 0.0*m, -0.7*m, 0.0*m ),
 												  vyLog2, "testy2", testLog, false, 0 );
     G4LogicalVolume   	*vyLog3 = new G4LogicalVolume( vyBox, Vaccuum, "y3", 0, 0, 0 );
-    G4VPhysicalVolume	*vy3 = new G4PVPlacement( noRot, G4ThreeVector( 0.0*m, +0.7*m, 0.0*m ),
+    new G4PVPlacement( noRot, G4ThreeVector( 0.0*m, +0.7*m, 0.0*m ),
 												  vyLog3, "testy3", testLog, false, 0 );
     G4LogicalVolume   	*vyLog4 = new G4LogicalVolume( vyBox, Vaccuum, "y4", 0, 0, 0 );
-    G4VPhysicalVolume	*vy4 = new G4PVPlacement( noRot, G4ThreeVector( 0.0*m, +0.8*m, 0.0*m ),
+    new G4PVPlacement( noRot, G4ThreeVector( 0.0*m, +0.8*m, 0.0*m ),
 												  vyLog4, "testy4", testLog, false, 0 );
 
-    G4Box 			*vzBox = new G4Box( "voxel_z", 0.8*m, 0.8*m, 0.3*mm );
+    G4Box 		*vzBox = new G4Box( "voxel_z", 0.8*m, 0.8*m, 0.3*mm );
     G4LogicalVolume   	*vzLog1 = new G4LogicalVolume( vzBox, Vaccuum, "z1", 0, 0, 0 );
-    G4VPhysicalVolume	*vz1 = new G4PVPlacement( noRot, G4ThreeVector( 0.0*m, 0.0*m, -0.8*m ),
+    new G4PVPlacement( noRot, G4ThreeVector( 0.0*m, 0.0*m, -0.8*m ),
 												  vzLog1, "testz1", testLog, false, 0 );
     G4LogicalVolume   	*vzLog2 = new G4LogicalVolume( vzBox, Vaccuum, "z2", 0, 0, 0 );
-    G4VPhysicalVolume	*vz2 = new G4PVPlacement( noRot, G4ThreeVector( 0.0*m, 0.0*m, -0.7*m ),
+    new G4PVPlacement( noRot, G4ThreeVector( 0.0*m, 0.0*m, -0.7*m ),
 												  vzLog2, "testz2", testLog, false, 0 );
     G4LogicalVolume   	*vzLog3 = new G4LogicalVolume( vzBox, Vaccuum, "z3", 0, 0, 0 );
-    G4VPhysicalVolume	*vz3 = new G4PVPlacement( noRot, G4ThreeVector( 0.0*m, 0.0*m, +0.7*m ),
+    new G4PVPlacement( noRot, G4ThreeVector( 0.0*m, 0.0*m, +0.7*m ),
 												  vzLog3, "testz3", testLog, false, 0 );
     G4LogicalVolume   	*vzLog4 = new G4LogicalVolume( vzBox, Vaccuum, "z4", 0, 0, 0 );
-    G4VPhysicalVolume	*vz4 = new G4PVPlacement( noRot, G4ThreeVector( 0.0*m, 0.0*m, +0.8*m ),
+    new G4PVPlacement( noRot, G4ThreeVector( 0.0*m, 0.0*m, +0.8*m ),
 												  vzLog4, "testz4", testLog, false, 0 );
   }
 

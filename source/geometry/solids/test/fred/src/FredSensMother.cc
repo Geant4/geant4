@@ -82,7 +82,7 @@ void FredSensMother::Initialize( G4HCofThisEvent *HCE )
 // IMHO: the fact that a argument is delivered which I don't need
 // is not good design.
 //
-G4bool FredSensMother::ProcessHits( G4Step *step, G4TouchableHistory *notUsed )
+G4bool FredSensMother::ProcessHits( G4Step *step, G4TouchableHistory * )
 {
 	G4bool imHit = false;
 	

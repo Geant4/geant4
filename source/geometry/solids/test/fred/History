@@ -10,6 +10,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Dec 01, 2003 - G.Cosmo
+----------------------
+- Cleared compilation warnings...
+
 Jan 08, 2001 - G.Cosmo
 ----------------------
 - Updated to compile on geant4 4.0. Removed warning from gcc-2.95.2.

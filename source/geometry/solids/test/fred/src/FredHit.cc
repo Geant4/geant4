@@ -55,6 +55,7 @@ FredHit::FredHit( const G4ThreeVector aPos, G4bool aEnters, const G4Track *aTrac
 // Copy (initialization)
 //
 FredHit::FredHit( const FredHit &right )
+  : G4VHit(right)
 {
 	// Assign position
 	pos = right.pos;

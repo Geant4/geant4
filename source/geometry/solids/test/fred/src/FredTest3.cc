@@ -240,7 +240,8 @@ void FredTest3::RunTest( const G4VSolid *testVolume, std::ostream &logger )
 //
 // Recover previously logged error and setup particle gun appropriately
 //
-G4int FredTest3::DebugError( const G4VSolid *testVolume, std::istream &logger, const G4int errorIndex ) const
+G4int FredTest3::DebugError( const G4VSolid *, std::istream &logger,
+                             const G4int errorIndex ) const
 {
 	G4ThreeVector p, v;
 	

@@ -76,7 +76,7 @@ void FredEventAction::BeginOfEventAction(const G4Event*)
 //
 // Do something interesting at the end of each event
 //
-void FredEventAction::EndOfEventAction(const G4Event* evt)
+void FredEventAction::EndOfEventAction(const G4Event*)
 {
 
 	G4UImanager *UI = G4UImanager::GetUIpointer();

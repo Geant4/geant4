@@ -53,7 +53,7 @@ class FredHit : public G4VHit
 	// Define copy and comparison. Note that hits are never equal.
 	FredHit( const FredHit &right );
 	const FredHit& operator=( const FredHit &right );
-	int operator==(const FredHit &right) const { return 0; }
+	int operator==(const FredHit &) const { return 0; }
 	
 	//
 	// See below. We use G4's special paging allocator

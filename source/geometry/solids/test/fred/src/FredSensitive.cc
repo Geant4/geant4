@@ -79,7 +79,7 @@ void FredSensitive::Initialize( G4HCofThisEvent *HCE )
 // Another misnomer: this member function processes one step in the 
 // sensitive volume.
 //
-G4bool FredSensitive::ProcessHits( G4Step *step, G4TouchableHistory *notUsed )
+G4bool FredSensitive::ProcessHits( G4Step *step, G4TouchableHistory * )
 {
 	G4bool imHit = false;
 	

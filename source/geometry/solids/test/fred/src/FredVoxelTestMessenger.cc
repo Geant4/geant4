@@ -240,7 +240,7 @@ void FredVoxelTestMessenger::SetNewValue( G4UIcommand *command, G4String newValu
 //
 // GetCurrentValue
 //
-G4String FredVoxelTestMessenger::GetCurrentValue( G4UIcommand *command )
+G4String FredVoxelTestMessenger::GetCurrentValue( G4UIcommand * )
 {
 	return "fred";
 }
