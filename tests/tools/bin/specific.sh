@@ -8,6 +8,8 @@
 ####################################################
 #
 # Specfy CLHEP 1.5 as new, run persistance tests 401,402
+# Use /tmp for G4TMP on dxplus01,02,03,04,
+# Use /tmp for G4TMP on all dxplus, retain dev1/dev2/prod identity
 #
 
 REF=undefined
@@ -128,7 +130,7 @@ fi
 
 
 if [ `uname -n | grep hp` ]; then
-  export G4USE_OSPACE=1
+#  export G4USE_OSPACE=1
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=HP-aCC
   export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
@@ -177,11 +179,9 @@ if [ X`uname -n | grep dxplus` != X  -o "$UNAMEN" = "dcosf01" ]; then
   export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
-  if [ "$UNAMEN" = "dxplus01" -o "$UNAMEN" = "dxplus02"  -o "$UNAMEN" = "dxplus03" -o "$UNAMEN" = "dxplus04" ]; then
-    export G4TMP=/tmp/geant4stt
-    if [ ! -d $G4TMP }; then
-      mkdir $G4TMP
-    fi
+  export G4TMP=/tmp/g4stt$REF
+  if [ ! -d $G4TMP }; then
+    mkdir $G4TMP
   fi
   # G4 build flags :
   ######export G4UI_BUILD_XM_SESSION=1
