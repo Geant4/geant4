@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2SteppingVerbose.cc,v 1.2 2003-06-19 14:46:15 gunter Exp $
+// $Id: Em2SteppingVerbose.cc,v 1.3 2004-03-16 15:49:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,7 +82,7 @@ void Em2SteppingVerbose::StepInfo()
       G4cout << std::setw(10) << "OutOfWorld";
     }
 
-    if(fStep->GetPostStepPoint()->GetProcessDefinedStep() != NULL){
+    if(fStep->GetPostStepPoint()->GetProcessDefinedStep() != 0){
       G4cout << "  " 
              << std::setw(10) << fStep->GetPostStepPoint()
 	                           ->GetProcessDefinedStep()->GetProcessName();

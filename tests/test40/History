@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2004-02-05 11:28:20 gcosmo Exp $
+$Id: History,v 1.6 2004-03-16 15:49:57 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16-03-04 G.Cosmo
+- Fixed compilation warnings.
+- Replaced usage of NULL with 0.
+
 05-02-04 G.Cosmo (test40-V06-00-01)
 - Fixed compilation problem on gcc-3.2 in RunAction for usage
   of std stream manipulators.
@@ -30,4 +34,3 @@ track of all tags.
      
 18-12-02 
 - Cloned from testem2
-

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26SteppingVerbose.cc,v 1.4 2003-11-12 10:22:15 vnivanch Exp $
+// $Id: Tst26SteppingVerbose.cc,v 1.5 2004-03-16 15:45:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,7 +55,7 @@ void Tst26SteppingVerbose::StepInfo()
 
     PrintStep(false);
 
-    if(fStep->GetPostStepPoint()->GetProcessDefinedStep() != NULL){
+    if(fStep->GetPostStepPoint()->GetProcessDefinedStep() != 0){
       G4cout << fStep->GetPostStepPoint()->GetProcessDefinedStep()
 	                                ->GetProcessName();
     } else {

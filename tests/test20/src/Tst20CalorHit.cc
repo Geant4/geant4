@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst20CalorHit.cc,v 1.2 2001-07-11 10:10:17 gunter Exp $
+// $Id: Tst20CalorHit.cc,v 1.3 2004-03-16 15:40:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,6 +49,7 @@ Tst20CalorHit::~Tst20CalorHit()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Tst20CalorHit::Tst20CalorHit(const Tst20CalorHit& right)
+  : G4VHit()
 {
   EdepAbs = right.EdepAbs; TrackLengthAbs = right.TrackLengthAbs;
   EdepGap = right.EdepGap; TrackLengthGap = right.TrackLengthGap;
@@ -67,7 +68,7 @@ const Tst20CalorHit& Tst20CalorHit::operator=(const Tst20CalorHit& right)
 
 int Tst20CalorHit::operator==(const Tst20CalorHit& right) const
 {
-  return 0;
+  return (this==&right) ? 1 : 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
