@@ -1,5 +1,5 @@
 #! /bin/sh
-# $Id: update.sh,v 1.11 2000-06-15 16:52:52 stesting Exp $
+# $Id: update.sh,v 1.12 2000-08-01 08:20:19 stesting Exp $
 # For tagset NNN, extract and check  bonsai<NNN>.sdb then run update.sh.
 # Usage: update.sh [-n] < bonsai<NNN>.sdb >& update<NNN>.log
 
@@ -20,6 +20,27 @@ if [ -z "${G4STTDIR}" ] ; then
   echo "G4STTDIR not set. Execute setup file first !"
   exit
 fi
+
+# Assuming standard practice of running in tests/tools/bin
+# ensure the environment variables match the current directory
+# /afs/cern.ch/sw/geant4/stt/dev1/src/geant4
+
+mysrc=`echo $G4INSTALL | cut -f 7 -d'/'`
+mydir=`pwd`
+mysdb=`echo $mydir | cut -f 7 -d'/'`
+echo $mysrc $mysdb
+if [ $mysrc != $mysdb ]
+then
+  echo "Your current directory is in $mysdb :\n $mydir"
+  echo "Your installation directory is in $mysrc :\n $G4INSTALL"
+  echo "On balance, it is more likely you should source setup.sh"
+  echo "   in the correct directory tree"
+  echo "   than you wish to work across the prod/dev1/dev2 structures"
+  echo "\nupdate.sh is stopping\n"
+  exit 24
+fi
+
+
 
 # Make $G4WORKDIR/stt directory :
 dir=$G4WORKDIR/stt
