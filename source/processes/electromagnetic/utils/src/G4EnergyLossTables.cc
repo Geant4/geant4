@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnergyLossTables.cc,v 1.4 1999-03-05 14:23:50 urban Exp $
+// $Id: G4EnergyLossTables.cc,v 1.5 1999-04-09 11:07:00 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,13 +23,6 @@ G4int    G4EnergyLossTables::oldIndex = -1 ;
 
 RWTValHashDictionary<const G4ParticleDefinition*, G4EnergyLossTablesHelper>
 G4EnergyLossTables::dict(G4EnergyLossTables::HashFun);
-
-#if defined(GNU_GCC) && ((__GNUC__ * 10 + __GNUC_MINOR__) < 28)
-template RWTValHashDictionary
-  <G4ParticleDefinition const *, G4EnergyLossTablesHelper>
-  ::RWTValHashDictionary(unsigned int (*)(G4ParticleDefinition
-  const *const &), unsigned int);
-#endif
 
 void G4EnergyLossTables::Register(
   const G4ParticleDefinition* p,
