@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuIonisation.cc,v 1.3 1999-04-13 09:09:41 urban Exp $
+// $Id: G4MuIonisation.cc,v 1.4 1999-07-30 10:23:32 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -90,6 +90,7 @@ void G4MuIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
   DeltaCutInKineticEnergy = theElectron->GetCutsInEnergy() ;
 
   G4double LowEdgeEnergy , ionloss ;
+  G4double deltaloss ;
   G4double RateMass ;
   G4bool isOutRange ;
   static const G4MaterialTable* theMaterialTable=
@@ -144,11 +145,18 @@ void G4MuIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
     {
       LowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;
       tau = LowEdgeEnergy/ParticleMass ;
+      gamma = tau +1. ;
+      bg2 = tau*(tau+2.) ;
+      beta2 = bg2/(gamma*gamma) ;
+      Tmax = 2.*electron_mass_c2*bg2
+             /(1.+2.*gamma*RateMass+RateMass*RateMass) ;
 
       if ( tau < taul )
       //  low energy part , parametrized energy loss formulae
       {
         ionloss = 0. ;
+        deltaloss = 0. ;
+
         for (G4int iel=0; iel<NumberOfElements; iel++)
         {
           const G4Element* element = (*theElementVector)(iel);
@@ -161,15 +169,21 @@ void G4MuIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
             ionloss += theAtomicNumDensityVector[iel]
                        *  element->GetIonisation()->GetClow()/sqrt(tau) ;
         }
+        if ( DeltaCutInKineticEnergyNow < Tmax)
+        {
+          deltaloss = log(Tmax/DeltaCutInKineticEnergyNow)-
+                      beta2*(1.-DeltaCutInKineticEnergyNow/Tmax) ;
+          if(aParticleType.GetPDGSpin() == 0.5)
+            deltaloss += 0.25*(Tmax-DeltaCutInKineticEnergyNow)*
+                              (Tmax-DeltaCutInKineticEnergyNow)/
+                        (LowEdgeEnergy*LowEdgeEnergy+proton_mass_c2*proton_mass_c2) ;
+            deltaloss *= Factor*ElectronDensity/beta2 ;
+        }
+        ionloss -= deltaloss ;
       }
       else
       // high energy part , Bethe-Bloch formula 
       {
-        gamma = tau +1. ;
-        bg2 = tau*(tau+2.) ;
-        beta2 = bg2/(gamma*gamma) ;
-        Tmax = 2.*electron_mass_c2*bg2
-               /(1.+2.*gamma*RateMass+RateMass*RateMass) ;
 
         if ( DeltaCutInKineticEnergyNow < Tmax)
           rcut = DeltaCutInKineticEnergyNow/Tmax ;
