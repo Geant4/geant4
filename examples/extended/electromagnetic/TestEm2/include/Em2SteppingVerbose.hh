@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em2SteppingVerbose.hh,v 1.4 2000-12-06 14:12:16 maire Exp $
+// $Id: Em2SteppingVerbose.hh,v 1.5 2001-02-19 14:06:06 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   This class manages the verbose outputs in G4SteppingManager. 
@@ -14,8 +14,6 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
-class Em2SteppingVerbose;
 
 #ifndef Em2SteppingVerbose_h
 #define Em2SteppingVerbose_h 1
