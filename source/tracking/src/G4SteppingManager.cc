@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.cc,v 1.9 2000-06-01 03:17:42 kurasige Exp $
+// $Id: G4SteppingManager.cc,v 1.10 2000-06-02 09:53:29 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -82,8 +82,8 @@ G4SteppingManager::~G4SteppingManager()
    delete fSelectedAtRestDoItVector;
    delete fSelectedAlongStepDoItVector;
    delete fSelectedPostStepDoItVector;
-   delete fTouchable1;
-   delete fTouchable2;
+   delete (G4VTouchable*)(fTouchable1);
+   delete (G4VTouchable*)(fTouchable2);
    if (fUserSteppingAction) delete fUserSteppingAction;
 #ifdef G4VERBOSE
    if(KillVerbose) delete fVerbose;
