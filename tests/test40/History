@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2004-07-21 08:06:49 japost Exp $
+$Id: History,v 1.11 2004-11-30 12:19:06 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30-11-04 V.Ivanchenko (test40-V06-02-02)
+- consolidation for the release
+
 06-07-04 J.Apostolakis & V.Ivanchenko (test40-V06-02-01)
 RunAction.cc
 - Inactivate enforced automatic saving of RNG in external file at each event 
