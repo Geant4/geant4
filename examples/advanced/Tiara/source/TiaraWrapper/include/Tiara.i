@@ -1,4 +1,4 @@
-# $Id: Tiara.i,v 1.5 2003-06-18 16:40:22 gunter Exp $
+# $Id: Tiara.i,v 1.6 2003-06-20 12:09:08 dressel Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -37,8 +37,6 @@
 %include typemaps.i
 %include std_string.i
 %include std_vector.i
-
-//typedef std G4std; 
 
 %template(hist_vec_dbl) std::vector< double >;
 %template(particle_vec_string) std::vector< std::string >;
