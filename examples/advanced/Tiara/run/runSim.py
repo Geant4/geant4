@@ -1,4 +1,9 @@
 #!/usr/bin/env python2.2
+# $Id: runSim.py,v 1.5 2003-06-16 15:53:28 dressel Exp $
+# -------------------------------------------------------------------
+# GEANT4 tag $Name: not supported by cvs2svn $
+# -------------------------------------------------------------------
+
 # importing python libraries
 import os
 

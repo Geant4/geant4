@@ -1,3 +1,8 @@
+# $Id: envCommon.csh,v 1.3 2003-06-16 15:49:06 dressel Exp $
+# -------------------------------------------------------------------
+# GEANT4 tag $Name: not supported by cvs2svn $
+# -------------------------------------------------------------------
+
 # before sourcing this script make sure you have set the 
 # environment variables according to the description in README
 
