@@ -1,12 +1,12 @@
-dxplus04 dev_stl deb	geant4-00-ref-07a+	all all all all 1
-dxplus03 dev_stl opt	geant4-00-ref-07a+	all all all all 1
-# hpplus04 dev_stl deb	geant4-00-ref-07a+	all all all all 1
-hpplus03 dev_stl opt	geant4-00-ref-07a+	all all all all 1
-rsplus05 dev_stl deb	geant4-00-ref-07a+	all all all all 1
-rsplus03 dev_stl opt	geant4-00-ref-07a+	all all all all 1
-# sgmedia dev_stl deb	geant4-00-ref-07a+	all all all all 1
-# sgmedia dev_stl opt	geant4-00-ref-07a+	all all all all 1
-sungeant dev_stl deb	geant4-00-ref-07a+	all all all all 1
-sungeant dev_stl opt	geant4-00-ref-07a+	all all all all 1
-pcgeant dev_stl deb	geant4-00-ref-07a+	all all all all 1
-pcgeant dev_stl opt	geant4-00-ref-07a+	all all all all 1
+dxplus04 dev_stl deb	geant4-00-ref-07b+	all all all all 1
+dxplus03 dev_stl opt	geant4-00-ref-07b+	all all all all 1
+# hpplus04 dev_stl deb	geant4-00-ref-07b+	all all all all 1
+hpplus03 dev_stl opt	geant4-00-ref-07b+	all all all all 1
+rsplus05 dev_stl deb	geant4-00-ref-07b+	all all all all 1
+rsplus03 dev_stl opt	geant4-00-ref-07b+	all all all all 1
+# sgmedia dev_stl deb	geant4-00-ref-07b+	all all all all 1
+# sgmedia dev_stl opt	geant4-00-ref-07b+	all all all all 1
+sungeant dev_stl deb	geant4-00-ref-07b+	all all all all 1
+# sungeant dev_stl opt	geant4-00-ref-07b+	all all all all 1
+pcgeant dev_stl deb	geant4-00-ref-07b+	all all all all 1
+# pcgeant dev_stl opt	geant4-00-ref-07b+	all all all all 1
