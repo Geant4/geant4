@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationSpectrum.cc,v 1.16 2002-05-31 19:54:07 vnivanch Exp $
+// $Id: G4eIonisationSpectrum.cc,v 1.17 2002-06-01 03:14:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -115,11 +115,11 @@ G4double G4eIonisationSpectrum::Probability(G4int Z,
 
   if(p[3] > 0.5) p[3] = 0.5;
   
-  p[iMax-1] = Function(p[3], p);
-
   G4double g = energy/electron_mass_c2 + 1.;
   p.push_back((2.0*g - 1.0)/(g*g));
-    
+  
+  p[iMax-1] = Function(p[3], p);
+  
   G4double val = IntSpectrum(x1, x2, p);
   G4double x0  = (lowestE + bindingEnergy)/energy;
   G4double nor = IntSpectrum(x0, 0.5, p);
@@ -196,10 +196,11 @@ G4double G4eIonisationSpectrum::AverageEnergy(G4int Z,
   }
 
   if(p[3] > 0.5) p[3] = 0.5;
-  p[iMax-1] = Function(p[3], p);
 
   G4double g = energy/electron_mass_c2 + 1.;
   p.push_back((2.0*g - 1.0)/(g*g));
+
+  p[iMax-1] = Function(p[3], p);
     
   G4double val = AverageValue(x1, x2, p);
   G4double x0  = (lowestE + bindingEnergy)/energy;
@@ -274,10 +275,11 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
   }
 
   if(p[3] > 0.5) p[3] = 0.5;
-  p[iMax-1] = Function(p[3], p);
 
   G4double g = energy/electron_mass_c2 + 1.;
   p.push_back((2.0*g - 1.0)/(g*g));
+
+  p[iMax-1] = Function(p[3], p);
 
   G4double aria1 = 0.0;
   G4double a1 = G4std::max(x1,p[1]);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.46 2002-05-31 18:48:07 vnivanch Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.47 2002-06-01 03:14:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -322,6 +322,11 @@ void G4LowEnergyPhotoElectric::SetCutForLowEnSecElectrons(G4double cut)
 {
   cutForLowEnergySecondaryElectrons = cut;
   deexcitationManager.SetCutForAugerElectrons(cut);
+}
+
+void G4LowEnergyPhotoElectric::ActivateAuger(G4bool val)
+{
+  deexcitationManager.ActivateAugerElectronProduction(val);
 }
 
 

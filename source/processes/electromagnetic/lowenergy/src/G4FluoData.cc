@@ -21,8 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4FluoDataData.cc,v 1.2 
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -34,6 +32,7 @@
 
 #include "G4FluoData.hh"
 #include "G4DataVector.hh"
+#include "G4FluoTransition.hh"
 #include "g4std/fstream"
 #include "g4std/strstream"
 
@@ -100,7 +99,7 @@ size_t G4FluoData::NumberOfTransitions(G4int vacancyIndex) const
   }
  return n;
 }
-G4int G4FluoData::StartShellId(G4int initIndex,G4int vacancyIndex) const
+G4int G4FluoData::StartShellId(G4int initIndex, G4int vacancyIndex) const
 {
  G4int n = -1;
 
@@ -124,7 +123,7 @@ G4int G4FluoData::StartShellId(G4int initIndex,G4int vacancyIndex) const
  return n;
 }
  
-G4double G4FluoData::StartShellEnergy(G4int initIndex,G4int vacancyIndex) const
+G4double G4FluoData::StartShellEnergy(G4int initIndex, G4int vacancyIndex) const
 {
   G4double n = -1;
   
@@ -148,7 +147,7 @@ G4double G4FluoData::StartShellEnergy(G4int initIndex,G4int vacancyIndex) const
   return n;
 }
 
-G4double G4FluoData::StartShellProb(G4int initIndex,G4int vacancyIndex) const
+G4double G4FluoData::StartShellProb(G4int initIndex, G4int vacancyIndex) const
 {
   G4double n = -1;
 
@@ -201,7 +200,7 @@ void G4FluoData::LoadData(G4int Z)
   
   if (! (lsdp->is_open()) )
     {
-      G4String excep("G4FluoData - data file: " + dirFile + " not found");
+      G4String excep = "G4FluoData - data file: " + dirFile + " not found";
       G4Exception(excep);
     }
   
@@ -256,7 +255,7 @@ void G4FluoData::LoadData(G4int Z)
 	if(k%nColumns == 2)
 	  {	 
 	    // 2nd column is transition  probabilities
-	   
+
 	    transProbabilities->push_back(a);
 	    
 	    k++;
@@ -272,10 +271,10 @@ void G4FluoData::LoadData(G4int Z)
 	else if (k%nColumns == 0)
 
 	  {//third column is transition energies
-	   
+
 	    G4double e = a * MeV;
 	    transEnergies->push_back(e);
-	    
+	   
 	    k=1;
 	  }
       }
@@ -308,6 +307,35 @@ void G4FluoData::PrintData()
 	     << G4endl;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -22,8 +22,6 @@
 
 //
 //
-// $Id: G4FluoData.hh,v 1.1 ?????
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -111,7 +109,7 @@ private:
   // G4std::map<G4int,G4DataVector*,G4std::less<G4int> > idMap;
 
   typedef G4std::map<G4int,G4std::vector<G4AugerTransition>,G4std::less<G4int> > trans_Table;
-   trans_Table augerTransitionTable;
+  trans_Table augerTransitionTable;
 
   /*
   G4std::map<G4int,G4std::map<G4Int,G4DataVector*,G4std::less<G4int> >,G4std::less<G4int> > transProbabilityMap;

@@ -21,8 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4AtomicTransitionManager.cc,v 1.2 ????
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
@@ -35,12 +33,20 @@
 
 #include "G4AtomicTransitionManager.hh"
 
-G4AtomicTransitionManager::G4AtomicTransitionManager(G4int minZ, G4int maxZ, G4int limitInfTable,G4int limitSupTable)
-  :zMin(minZ), zMax(maxZ),infTableLimit(limitInfTable),supTableLimit(limitSupTable)
+G4AtomicTransitionManager::G4AtomicTransitionManager(G4int minZ, G4int maxZ, 
+   G4int limitInfTable, G4int limitSupTable)
+  :zMin(minZ), 
+   zMax(maxZ), 
+   infTableLimit(limitInfTable), 
+   supTableLimit(limitSupTable)
 {
   // infTableLimit is initialized to 6 because EADL lacks data for Z<=5
   G4ShellData* shellManager = new G4ShellData;
+
+  // initialization of the data for auger effect
   
+  augerData = new G4AugerData;
+
   shellManager->LoadData("/fluor/binding");
   
   // Fills shellTable with the data from EADL, identities and binding 
@@ -68,7 +74,7 @@ G4AtomicTransitionManager::G4AtomicTransitionManager(G4int minZ, G4int maxZ, G4i
   // energies and transition probabilities
   for (G4int Znum= infTableLimit; Znum<=supTableLimit; Znum++)
     {  G4FluoData* fluoManager = new G4FluoData;
-    G4std::vector<G4AtomicTransition*> vectorOfTransitions;
+    G4std::vector<G4FluoTransition*> vectorOfTransitions;
     fluoManager->LoadData(Znum);
     
     size_t numberOfVacancies = fluoManager-> NumberOfVacancies();
@@ -82,8 +88,8 @@ G4AtomicTransitionManager::G4AtomicTransitionManager(G4int minZ, G4int maxZ, G4i
 	
 	G4int finalShell = fluoManager->VacancyId(vacancyIndex);
 	size_t numberOfTransitions = fluoManager->NumberOfTransitions(vacancyIndex);
-	for (size_t origShellIndex = 0; origShellIndex <= numberOfTransitions;origShellIndex++)
-	    
+	for (size_t origShellIndex = 0; origShellIndex <= numberOfTransitions;
+                    origShellIndex++)
 	  {
 	    
 	    G4int originatingShellId = fluoManager->StartShellId(origShellIndex,vacancyIndex);
@@ -92,11 +98,12 @@ G4AtomicTransitionManager::G4AtomicTransitionManager(G4int minZ, G4int maxZ, G4i
 	    
 	    G4double transitionEnergy = fluoManager->StartShellEnergy(origShellIndex,vacancyIndex);
 	    vectorOfEnergies.push_back(transitionEnergy);
-	    G4double transitionProbability = fluoManager->StartShellProb(origShellIndex,vacancyIndex);
+	    G4double transitionProbability = 
+                     fluoManager->StartShellProb(origShellIndex,vacancyIndex);
 	    vectorOfProbabilities.push_back(transitionProbability);
 	  }
-	  G4AtomicTransition * transition = new G4AtomicTransition (finalShell,vectorOfIds,
-								    vectorOfEnergies,vectorOfProbabilities);
+	  G4FluoTransition * transition = new G4FluoTransition (finalShell,vectorOfIds,
+					      vectorOfEnergies,vectorOfProbabilities);
 	  vectorOfTransitions.push_back(transition); 
       }
     //      transitionTable.insert(G4std::make_pair(Znum, vectorOfTransitions));
@@ -109,52 +116,59 @@ G4AtomicTransitionManager::G4AtomicTransitionManager(G4int minZ, G4int maxZ, G4i
 
 G4AtomicTransitionManager::~G4AtomicTransitionManager()
   
-{ G4std::map<G4int,G4std::vector<G4AtomicShell*>,G4std::less<G4int> >::iterator pos;
+{ 
+  delete augerData;
+
+  G4std::map<G4int,G4std::vector<G4AtomicShell*>,G4std::less<G4int> >::iterator pos;
  
- for (pos = shellTable.begin(); pos != shellTable.end(); ++pos)
-   {
-     G4std::vector< G4AtomicShell*>vec = (*pos).second;
-     G4int vecSize=vec.size();
-     for (G4int i=0; i< vecSize; i++)
-       {
-	 G4AtomicShell* shell = vec[i];
-	 delete shell;
-       }
-   }
+  for (pos = shellTable.begin(); pos != shellTable.end(); pos++){
+   
+    G4std::vector< G4AtomicShell*>vec = (*pos).second;
+   
+    G4int vecSize=vec.size();
+   
+    for (G4int i=0; i< vecSize; i++){
+      G4AtomicShell* shell = vec[i];
+      delete shell;     
+    }
+  }
  
- G4std::map<G4int,G4std::vector<G4AtomicTransition*>,G4std::less<G4int> >::iterator ppos;
+  G4std::map<G4int,G4std::vector<G4FluoTransition*>,G4std::less<G4int> >::iterator ppos;
  
- for (ppos = transitionTable.begin(); ppos != transitionTable.end(); ++ppos)
-   {
-     G4std::vector< G4AtomicTransition*>vec = (*ppos).second;
-     G4int vecSize=vec.size();
-     for (G4int i=0; i< vecSize; i++)
-       {
-	 G4AtomicTransition* transition = vec[i];
-	 delete transition; 
-       }
-   }   
+  for (ppos = transitionTable.begin(); ppos != transitionTable.end(); ppos++){
+   
+    G4std::vector< G4FluoTransition*>vec = (*ppos).second;
+   
+    G4int vecSize=vec.size();
+   
+    for (G4int i=0; i< vecSize; i++){
+	 G4FluoTransition* transition = vec[i];
+	 delete transition;      
+    } 
+  }   
 }
 
 G4AtomicTransitionManager* G4AtomicTransitionManager::instance = 0;
 
-const G4AtomicTransitionManager* G4AtomicTransitionManager::Instance()
+G4AtomicTransitionManager* G4AtomicTransitionManager::Instance()
 {
   if (instance == 0)
     {
       instance = new G4AtomicTransitionManager;
+     
     }
   return instance;
 }
 
 
-const G4AtomicShell* G4AtomicTransitionManager::Shell(G4int Z, size_t shellIndex) const
+const G4AtomicShell* G4AtomicTransitionManager::Shell(
+                     G4int Z, size_t shellIndex) const
 { 
   G4std::map<G4int,G4std::vector<G4AtomicShell*>,G4std::less<G4int> >::const_iterator pos;
   
   pos = shellTable.find(Z);
   
-  if (pos!= shellTable.end()){
+  if (pos!= shellTable.end()) {
     
     G4std::vector<G4AtomicShell*> v = (*pos).second;
     
@@ -174,13 +188,17 @@ const G4AtomicShell* G4AtomicTransitionManager::Shell(G4int Z, size_t shellIndex
   } 
 }
 
-const G4AtomicTransition* G4AtomicTransitionManager:: ReachableShell(G4int Z,size_t shellIndex) const
+// This function gives, upon Z and the Index of the initial shell where te vacancy is, 
+// the radiative transition that can happen (originating shell, energy, probability)
+
+const G4FluoTransition* G4AtomicTransitionManager::ReachableShell(
+                        G4int Z,size_t shellIndex) const
 {
-  G4std::map<G4int,G4std::vector<G4AtomicTransition*>,G4std::less<G4int> >::const_iterator pos;
+  G4std::map<G4int,G4std::vector<G4FluoTransition*>,G4std::less<G4int> >::const_iterator pos;
   pos = transitionTable.find(Z);
   if (pos!= transitionTable.end())
     {
-      G4std::vector<G4AtomicTransition*> v = (*pos).second;      
+      G4std::vector<G4FluoTransition*> v = (*pos).second;      
       if (shellIndex < v.size()) return(v[shellIndex]);
       else {
 	G4Exception("G4AtomicTransitionManager:reachable shell not found");
@@ -192,6 +210,17 @@ const G4AtomicTransition* G4AtomicTransitionManager:: ReachableShell(G4int Z,siz
     return 0;
   } 
 }
+
+const G4AugerTransition* G4AtomicTransitionManager::ReachableAugerShell(
+                         G4int Z, G4int vacancyShellIndex) const
+{
+  
+  G4AugerTransition* augerTransition = 
+                     augerData->GetAugerTransition(Z,vacancyShellIndex);
+  return augerTransition;
+}
+
+
 
 G4int G4AtomicTransitionManager::NumberOfShells (G4int Z) const
 {
@@ -213,15 +242,19 @@ G4std::map<G4int,G4std::vector<G4AtomicShell*>,G4std::less<G4int> >::const_itera
   } 
 }
 
+// This function returns the number of possible radiative transitions 
+// for the atom with atomic number Z, i.e. the number of shell in wich 
+// a vacancy can be filled with a radiative transition 
+
 G4int G4AtomicTransitionManager::NumberOfReachableShells(G4int Z) const
 {
-G4std::map<G4int,G4std::vector<G4AtomicTransition*>,G4std::less<G4int> >::const_iterator pos;
+  G4std::map<G4int,G4std::vector<G4FluoTransition*>,G4std::less<G4int> >::const_iterator pos;
 
   pos = transitionTable.find(Z);
 
   if (pos!= transitionTable.end())
     {
-      G4std::vector<G4AtomicTransition*> v = (*pos).second;
+      G4std::vector<G4FluoTransition*> v = (*pos).second;
       return v.size();
     }
   else
@@ -231,21 +264,30 @@ G4std::map<G4int,G4std::vector<G4AtomicTransition*>,G4std::less<G4int> >::const_
     } 
 }
 
-G4double G4AtomicTransitionManager::TotalRadiativeTransitionProbability(G4int Z, 
-									size_t shellIndex) const
+// This function returns the number of possible NON-radiative transitions 
+// for the atom with atomic number Z, i.e. the number of shell in wich a 
+// vacancy can be filled with a NON-radiative transition 
 
+G4int G4AtomicTransitionManager::NumberOfReachableAugerShells(G4int Z) const
 {
-G4std::map<G4int,G4std::vector<G4AtomicTransition*>,G4std::less<G4int> >::const_iterator pos;
+  G4int n = augerData->NumberOfVacancies(Z);
+  return n;
+}
+
+G4double G4AtomicTransitionManager::TotalRadiativeTransitionProbability(
+         G4int Z, size_t shellIndex) const
+{
+  G4std::map<G4int,G4std::vector<G4FluoTransition*>,G4std::less<G4int> >::const_iterator pos;
 
   pos = transitionTable.find(Z);
 
   if (pos!= transitionTable.end())
     {
-      G4std::vector<G4AtomicTransition*> v = (*pos).second;
+      G4std::vector<G4FluoTransition*> v = (*pos).second;
       
     if (shellIndex < v.size())
       {
-	G4AtomicTransition* transition = v[shellIndex];
+	G4FluoTransition* transition = v[shellIndex];
 	G4DataVector transProb = transition->TransitionProbabilities();
 	G4double totalRadTransProb = 0;
 	
@@ -268,22 +310,21 @@ G4std::map<G4int,G4std::vector<G4AtomicTransition*>,G4std::less<G4int> >::const_
   } 
 }
 
-G4double G4AtomicTransitionManager::TotalNonRadiativeTransitionProbability(G4int Z, size_t shellIndex) const
-
+G4double G4AtomicTransitionManager::TotalNonRadiativeTransitionProbability(
+         G4int Z, size_t shellIndex) const
 {
-
-  G4std::map<G4int,G4std::vector<G4AtomicTransition*>,G4std::less<G4int> >::const_iterator pos;
+  G4std::map<G4int,G4std::vector<G4FluoTransition*>,G4std::less<G4int> >::const_iterator pos;
   
   pos = transitionTable.find(Z);
   
   if (pos!= transitionTable.end()){
     
-    G4std::vector<G4AtomicTransition*> v = (*pos).second;
+    G4std::vector<G4FluoTransition*> v = (*pos).second;
   
     
     if (shellIndex<v.size()){
 
-      G4AtomicTransition* transition=v[shellIndex];
+      G4FluoTransition* transition=v[shellIndex];
       G4DataVector transProb = transition->TransitionProbabilities();
       G4double totalRadTransProb = 0;
       
@@ -306,10 +347,6 @@ G4double G4AtomicTransitionManager::TotalNonRadiativeTransitionProbability(G4int
     return 0;
   } 
 }
-
-
-
-
 
 
 

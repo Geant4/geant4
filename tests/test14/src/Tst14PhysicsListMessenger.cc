@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14PhysicsListMessenger.cc,v 1.6 2001-07-11 10:09:58 gunter Exp $
+// $Id: Tst14PhysicsListMessenger.cc,v 1.7 2002-06-01 03:17:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,6 +36,7 @@
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithABool.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -66,6 +67,12 @@ Tst14PhysicsListMessenger::Tst14PhysicsListMessenger(Tst14PhysicsList * List)
   cutGELowLimCmd->SetDefaultValue(1e-3);
   cutGELowLimCmd->SetDefaultUnit("MeV");
   cutGELowLimCmd->AvailableForStates(Idle);
+
+  augerCmd = new G4UIcmdWithABool("/lowenergy/auger",this);
+  augerCmd->SetGuidance("Set flag Auger electrons production.");
+  augerCmd->SetParameterName("Auger",true);
+  augerCmd->SetDefaultValue(false);
+  augerCmd->AvailableForStates(PreInit,Idle);
 
   cutSecPhotCmd = new G4UIcmdWithADoubleAndUnit("/lowenergy/secphotcut",this);
   cutSecPhotCmd->SetGuidance("Set production threshold for secondary Gamma.");
@@ -109,8 +116,7 @@ Tst14PhysicsListMessenger::~Tst14PhysicsListMessenger()
   delete cutSecPhotCmd;
   delete cutGCmd;
   delete cutECmd;
-
-
+  delete augerCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -128,6 +134,8 @@ void Tst14PhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String newVal
 
   if(command == cutSecPhotCmd)
     { Tst14List->SetLowEnSecPhotCut(cutSecPhotCmd->GetNewDoubleValue(newValue));}
+  if(command == augerCmd)
+    { Tst14List->ActivateAuger(augerCmd->GetNewBoolValue(newValue));}
 
   if(command == cutSecElecCmd)
     { Tst14List->SetLowEnSecElecCut(cutSecElecCmd->GetNewDoubleValue(newValue));}

@@ -190,6 +190,9 @@ public: // With description
   void ActivateFluorescence(G4bool val);
   // Set fluorescence flag on/off
 
+  void ActivateAugerElectronProduction(G4bool val);
+  // Set Auger electron production flag on/off
+
 
 protected:
 

@@ -21,60 +21,60 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14PhysicsListMessenger.hh,v 1.7 2002-06-01 03:17:01 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
+// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
+//
+// History:
+// -----------
+// 16 Sept 2001  EG  Modified according to a design iteration in the 
+//                   LowEnergy category
+//
+// -------------------------------------------------------------------
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+#include "G4FluoTransition.hh"
 
-#ifndef Tst14PhysicsListMessenger_h
-#define Tst14PhysicsListMessenger_h 1
+G4FluoTransition::G4FluoTransition(G4int finalShell,
+				       const G4std::vector<G4int>& ids,
+				       const G4DataVector& energies,
+				       const G4DataVector& prob)
+  :finalShellId(finalShell),
+   originatingShellIds(ids),
+   transitionEnergies(energies),
+   transitionProbabilities(prob)
+{ }
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
+G4FluoTransition::~G4FluoTransition()
+{ }
 
-class Tst14PhysicsList;
-class G4UIdirectory;
-class G4UIcmdWithoutParameter;
-class G4UIcmdWithADouble;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithABool;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class Tst14PhysicsListMessenger: public G4UImessenger
+const G4std::vector<G4int>& G4FluoTransition::OriginatingShellIds() const
 {
-  
-public:
+  return  originatingShellIds;
+}
 
-  Tst14PhysicsListMessenger(Tst14PhysicsList*);
-  ~Tst14PhysicsListMessenger();
-  
-  void SetNewValue(G4UIcommand*, G4String);
-  
-private:
+const G4DataVector& G4FluoTransition::TransitionEnergies() const
+{
+  return transitionEnergies;
+}
 
-  Tst14PhysicsList*          Tst14List;
+const G4DataVector& G4FluoTransition::TransitionProbabilities() const
+{
+  return transitionProbabilities;
+}
 
-  G4UIdirectory* lowEnDir;
-  G4UIcmdWithADoubleAndUnit* cutGLowLimCmd;
-  G4UIcmdWithADoubleAndUnit* cutELowLimCmd;
-  G4UIcmdWithADoubleAndUnit* cutGELowLimCmd;
-  G4UIcmdWithADoubleAndUnit* cutSecPhotCmd;
-  G4UIcmdWithADoubleAndUnit* cutSecElecCmd;
-  G4UIcmdWithADoubleAndUnit* cutGCmd;
-  G4UIcmdWithADoubleAndUnit* cutECmd;
-  G4UIcmdWithABool*          augerCmd;
-};
+const G4int G4FluoTransition::FinalShellId() const
+{ 
+  return finalShellId;
+}
 
-#endif
-
-
-
-
-
-
-
-
+G4int G4FluoTransition::OriginatingShellId(G4int index) const
+{
+  return originatingShellIds[index];
+}
+G4double G4FluoTransition::TransitionEnergy(G4int index) const
+{
+  return  transitionEnergies[index];
+}
+G4double G4FluoTransition::TransitionProbability(G4int index) const
+{
+  return  transitionProbabilities[index];
+}

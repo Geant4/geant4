@@ -67,6 +67,7 @@ public:
   void SetGELowLimit(G4double);
   void SetLowEnSecPhotCut(G4double);
   void SetLowEnSecElecCut(G4double);
+  void ActivateAuger(G4bool);
 
 private:
 

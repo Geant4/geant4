@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14PhysicsList.cc,v 1.14 2002-05-31 22:22:25 vnivanch Exp $
+// $Id: Tst14PhysicsList.cc,v 1.15 2002-06-01 03:17:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 
@@ -237,10 +237,14 @@ void Tst14PhysicsList::SetLowEnSecElecCut(G4double cut){
   LeIoprocess->SetCutForLowEnSecElectrons(cut);
 }
 
-
-
-
-
+void Tst14PhysicsList::ActivateAuger(G4bool val){
+  
+  G4cout << "Auger Electrons production flag " << val
+         << " for processes LowEnergyPhotoElectric & LowEnergyIonisation."
+         << G4endl;
+  LePeprocess->ActivateAuger(val);
+  LeIoprocess->ActivateAuger(val);
+}
 
 
 

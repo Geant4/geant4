@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectric.hh,v 1.24 2002-05-31 18:47:49 vnivanch Exp $
+// $Id: G4LowEnergyPhotoElectric.hh,v 1.25 2002-06-01 03:14:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -74,6 +74,8 @@ public:
   void SetCutForLowEnSecPhotons(G4double);
 
   void SetCutForLowEnSecElectrons(G4double);
+
+  void ActivateAuger(G4bool);
 
   // For testing purpose only
   G4double DumpMeanFreePath(const G4Track& aTrack, 

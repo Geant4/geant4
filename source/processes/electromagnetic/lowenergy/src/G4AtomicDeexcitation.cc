@@ -37,10 +37,14 @@
 #include "G4AtomicDeexcitation.hh"
 #include "Randomize.hh"
 #include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4AtomicTransitionManager.hh"
+#include "G4FluoTransition.hh"
 
 G4AtomicDeexcitation::G4AtomicDeexcitation():
   minGammaEnergy(250.*eV),
-  minElectronEnergy(250.*eV)
+  minElectronEnergy(250.*eV),
+  fAuger(false)
 {}
 
 G4AtomicDeexcitation::~G4AtomicDeexcitation()
@@ -67,7 +71,7 @@ G4std::vector<G4DynamicParticle*>* G4AtomicDeexcitation::GenerateParticles(G4int
 	    {
 	      aParticle = GenerateFluorescence(Z,shellId,provShellId);  
 	    }
-	  else if ( provShellId ==-1)
+	  else if ( provShellId == -1)
 	    {
 	      aParticle = GenerateAuger(Z, shellId);
 	    }
@@ -85,7 +89,7 @@ G4std::vector<G4DynamicParticle*>* G4AtomicDeexcitation::GenerateParticles(G4int
 	    {
 	      aParticle = GenerateFluorescence(Z,newShellId,provShellId);
 	    }
-	  else if ( provShellId ==-1)
+	  else if ( provShellId == -1)
 	    {
 	      aParticle = GenerateAuger(Z, newShellId);
 	    }
@@ -106,12 +110,13 @@ const G4int G4AtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
   if (shellId <=0 ) 
     {G4Exception("G4AtomicDeexcitation: zero or negative shellId");}
   
-  const G4AtomicTransitionManager*  transitionManager = G4AtomicTransitionManager::Instance();
+  const G4AtomicTransitionManager*  transitionManager = 
+        G4AtomicTransitionManager::Instance();
   G4int provShellId = -1;
   G4int shellNum = 0;
   G4int maxNumOfShells = transitionManager->NumberOfReachableShells(Z);  
   
-  const G4AtomicTransition* refShell = transitionManager->ReachableShell(Z,maxNumOfShells-1);
+  const G4FluoTransition* refShell = transitionManager->ReachableShell(Z,maxNumOfShells-1);
 
   // This loop gives shellNum the value of the index of shellId
   // in the vector storing the list of the shells reachable through
@@ -130,7 +135,7 @@ const G4int G4AtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
    
       G4double partialProb = G4UniformRand();      
       G4double partSum = 0;
-      const G4AtomicTransition* aShell = transitionManager->ReachableShell(Z,shellNum);      
+      const G4FluoTransition* aShell = transitionManager->ReachableShell(Z,shellNum);      
       G4int trSize =  (aShell->TransitionProbabilities()).size();
     
       // Loop over the shells wich can provide an electron for a 
@@ -227,7 +232,175 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateFluorescence(G4int Z,
 
 G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
 {
-  return 0;
+  if(!fAuger) return 0;
+
+  const G4AtomicTransitionManager*  transitionManager = 
+        G4AtomicTransitionManager::Instance();
+
+  if (shellId <=0 ) 
+    {G4Exception("G4AtomicDeexcitation: zero or negative shellId");}
+  
+  // G4int provShellId = -1;
+  G4int shellNum = 0;
+  G4int maxNumOfShells = transitionManager->NumberOfReachableAugerShells(Z);  
+  
+  const G4AugerTransition* refAugerTransition = 
+        transitionManager->ReachableAugerShell(Z,maxNumOfShells-1);
+
+  // This loop gives shellNum the value of the index of shellId
+  // in the vector storing the list of the shells reachable through
+  // a NON-radiative transition
+  if ( shellId <= refAugerTransition->FinalShellId())
+    {
+      while (shellId != transitionManager->ReachableAugerShell(Z,shellNum)->FinalShellId())
+        {
+          if(shellNum == maxNumOfShells-1)
+            {
+              break;
+            }
+          shellNum++;
+        }
+
+      // Now we have that shellnum is the shellIndex of the shell named ShellId
+      // But we have now to select two shells: one for the transition, 
+      // and another for the auger emission.
+
+      G4int transitionLoopShellIndex = 0;      
+      G4double partSum = 0;
+      const G4AugerTransition* anAugerTransition = 
+            transitionManager->ReachableAugerShell(Z,shellNum);
+
+      G4int transitionSize = 
+            (anAugerTransition->TransitionOriginatingShellIds())->size();
+      while (transitionLoopShellIndex < transitionSize) {
+
+        G4std::vector<G4int>::const_iterator pos = 
+               anAugerTransition->TransitionOriginatingShellIds()->begin();
+
+        G4int transitionLoopShellId = *(pos+transitionLoopShellIndex);
+        G4int numberOfPossibleAuger = 
+              (anAugerTransition->AugerTransitionProbabilities(transitionLoopShellId))->size();
+        G4int augerIndex = 0;
+        //      G4int partSum2 = 0;
+
+        while (augerIndex < numberOfPossibleAuger) {
+          partSum += anAugerTransition->AugerTransitionProbability(augerIndex, 
+                                                                   transitionLoopShellId);
+          augerIndex++;
+        }
+        transitionLoopShellIndex++;
+      }
+
+
+
+      // Now we have the entire probability of an auger transition for the vacancy 
+      // located in shellNum (index of shellId) 
+      G4double totalVacancyAugerProbability = partSum;
+
+
+      //And now we start to select the right auger transition and emission
+      G4int transitionRandomShellIndex = 0;
+      G4int transitionRandomShellId = 0;
+      G4int augerIndex = 0;
+      partSum = 0; 
+      G4double partialProb = G4UniformRand();
+      // G4int augerOriginatingShellId = 0;
+      
+      while (transitionRandomShellIndex < transitionSize) {
+
+        G4std::vector<G4int>::const_iterator pos = 
+               anAugerTransition->TransitionOriginatingShellIds()->begin();
+
+        transitionRandomShellId = *(pos+transitionRandomShellIndex);
+        
+        //  G4int transitionRandomShellId = *(anAugerTransition->TransitionOriginatingShellIds())[transitionRandomShellIndex];
+        G4int numberOfPossibleAuger = 
+            (anAugerTransition->AugerTransitionProbabilities(transitionRandomShellId))->size();
+        
+
+        while (augerIndex < numberOfPossibleAuger) {
+          partSum += anAugerTransition->AugerTransitionProbability(augerIndex, 
+                                                                   transitionRandomShellId);
+          
+          if (partSum >= (partialProb/totalVacancyAugerProbability) ) {break;}
+          augerIndex++;
+        }
+        if (partSum >= (partialProb/totalVacancyAugerProbability) ) {break;}
+        transitionRandomShellIndex++;
+      }
+      // Now we have the index of the shell from wich comes the auger electron (augerIndex), 
+      // and the id of the shell, from which the transition e- come (transitionRandomShellid)  
+
+      // Isotropic angular distribution for the outcoming e-
+      G4double newcosTh = 1.-2.*G4UniformRand();
+      G4double  newsinTh = sqrt(1.-newcosTh*newcosTh);
+     G4double newPhi = twopi*G4UniformRand();
+  
+     G4double xDir =  newsinTh*sin(newPhi);
+     G4double yDir = newsinTh*cos(newPhi);
+     G4double zDir = newcosTh;
+  
+     G4ThreeVector newElectronDirection(xDir,yDir,zDir);
+
+     /*  
+     G4int shellNum = 0;
+     G4int maxNumOfShells = transitionManager->NumberOfReachableShells(Z);
+  
+
+     // find the index of the shell named shellId
+     while (shellId != transitionManager->
+         ReachableShell(Z,shellNum)->FinalShellId())
+    {
+      if(shellNum == maxNumOfShells-1)
+        {
+          break;
+        }
+      shellNum++;
+    }
+     // number of shell from wich an electron can reach shellId
+     size_t transitionSize = transitionManager->
+     ReachableShell(Z,shellNum)->OriginatingShellIds().size();
+  
+     size_t index = 0;
+  
+     // find the index of the shell named provShellId in the vector
+     // storing the shells from which shellId can be reached 
+     while (provShellId != transitionManager->
+         ReachableShell(Z,shellNum)->OriginatingShellId(index))
+     {
+       if(index ==  transitionSize-1)
+        {
+          break;
+        }
+      index++;
+      }
+     */
+
+     // energy of the auger electron emitted
+     G4double transitionEnergy = 
+              anAugerTransition->AugerTransitionEnergy(augerIndex, transitionRandomShellId);
+  
+     // This is the shell where the new vacancy is: it is the same
+     // shell where the electron came from
+     newShellId = transitionRandomShellId;
+  
+     // Now I have a vacancy more, 
+     // anAugerTransition->AugerOriginatingShellId(augerIndex, transitionRandomShellId)
+     // Were do I put it? (the first wh answers the question in a non-politically 
+     // correct way will be punished. 
+  
+     G4DynamicParticle* newPart = new G4DynamicParticle(G4Electron::Electron(), 
+                                                        newElectronDirection,
+                                                        transitionEnergy);
+     return newPart;
+
+    }
+  else 
+    {
+      //G4Exception("G4AtomicDeexcitation: no auger transition found");
+      return 0;
+    }
+
 }
 
 void G4AtomicDeexcitation::SetCutForSecondaryPhotons(G4double cut)
@@ -235,11 +408,14 @@ void G4AtomicDeexcitation::SetCutForSecondaryPhotons(G4double cut)
   minGammaEnergy = cut;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void G4AtomicDeexcitation::SetCutForAugerElectrons(G4double cut)
 {
   minElectronEnergy = cut;
+}
+
+void G4AtomicDeexcitation::ActivateAugerElectronProduction(G4bool val)
+{
+  fAuger = val;
 }
 
 

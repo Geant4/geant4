@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.82 2002-05-31 18:48:43 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.83 2002-06-01 03:14:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -694,5 +694,10 @@ void G4LowEnergyIonisation::SetCutForLowEnSecElectrons(G4double cut)
   cutForElectrons = cut;
   deexcitationManager.SetCutForAugerElectrons(cut);
   ActivateFluorescence(true);
+}
+
+void G4LowEnergyIonisation::ActivateAuger(G4bool val)
+{
+  deexcitationManager.ActivateAugerElectronProduction(val);
 }
 
