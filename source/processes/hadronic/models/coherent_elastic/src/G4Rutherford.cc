@@ -32,25 +32,33 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
   {
     G4double cth = Apply(aParticle->GetDefinition(), targetNucleus); // cos(th) of the lighter
     G4double th = acos(cth);
+    G4double sth = sin(th);
     G4double phi = 2.*pi*G4UniformRand();
     if(m2>m1)
     {
       // get momentum
       G4double p = projectileMomentum.vect().mag();
 
-      G4double a = m2/m1+1.;
-      G4double b = -2.*p*cth;
-      G4double c =p*p*(1-m2/m1);
+      G4double a = -4.*m1*m1 -4.*p*p*sth*sth;
+      G4double b = -4.*(m2*m2-2.*m1*m1)*p*cth;
+      G4double c = m2*m2*m2*m2 - 4.*m1*m1*m2*m2 -4.*m1*m1*p*p;
+      a=1+m2/m1;
+      b=-2.*p*cth;
+      c=p*p*(1-m2/m1);
       G4double p1=(-b+sqrt(b*b-4.*a*c))/(2.*a);
       // transform to lab.
       G4ThreeVector it(p1*sin(th)*sin(phi), p1*sin(th)*cos(phi), p1*cos(th));
+      G4ThreeVector cache=it;
       G4LorentzVector theMom(it, sqrt(m1*m1+it.mag2()) );
       theMom*=toLabFrame;
       it=theMom.vect();
       G4DynamicParticle * aSec = 
 	  new G4DynamicParticle(aParticle->GetDefinition(), it.unit(), it.mag2()/(2.*m1));
+      G4cout << "Energy conservation check "<< p<<" "<<p1/p<<" "<<m1<<" "<<m1<<" "
+             <<a <<" "<<b<<" "<<c<<" "<<aParticle->GetKineticEnergy()<<" "
+             << p1<<" "<<aSec->GetKineticEnergy();
       theResult.AddSecondary(aSec);
-      G4ThreeVector it1(-it.x(), -it.y(), p-it.z());
+      G4ThreeVector it1(-cache.x(), -cache.y(), p-cache.z());
       G4LorentzVector theMom1(it1, sqrt(m2*m2+it1.mag2()) );
       theMom1*=toLabFrame;
       it1 = theMom1.vect();
@@ -58,6 +66,8 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
           G4ParticleTable::GetParticleTable()->FindIon(z2, a2, 0, z2);
       G4DynamicParticle * bSec = 
 	  new G4DynamicParticle(theSec, it1.unit(), it1.mag2()/(2.*m2));
+      G4cout << " "<<bSec->GetKineticEnergy()<<" "
+             <<it1.mag2()/(2.*m2)<<" "<<(it+it1).mag()<<G4endl;
       theResult.AddSecondary(bSec);
     }
     else
@@ -66,6 +76,7 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
       G4double p = projectileMomentum.vect().mag();
       G4double sth=sin(th);
 
+      G4Exception("Still to be debugged");
       G4double p2=-2.*p*cth;
       p2/=(cth*cth-sth*sth+m1/m2);
       // transform to lab.
