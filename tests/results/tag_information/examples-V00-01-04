@@ -1,0 +1,17 @@
+You will need to do the following in your PhysicsList:
+
+In .hh, change:
+  virtual void ConstructBarions();
+to:
+  virtual void ConstructBaryons();
+
+In .cc, change:
+  ConstructBarions();
+to: 
+  ConstructBaryons();
+and:
+  void ExN02PhysicsList::ConstructBarions()
+to:
+  void ExN02PhysicsList::ConstructBaryons()
+
+That's it!
