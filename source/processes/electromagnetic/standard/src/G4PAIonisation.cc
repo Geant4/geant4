@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIonisation.cc,v 1.7 2000-04-25 14:33:09 maire Exp $
+// $Id: G4PAIonisation.cc,v 1.8 2000-05-02 15:12:45 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -85,12 +85,17 @@ G4PAIonisation::G4PAIonisation( const G4String& materialName,
 
 G4PAIonisation::~G4PAIonisation() 
 {
-     if (theMeanFreePathTable)
-     {
-        theMeanFreePathTable->clearAndDestroy();
-        delete theMeanFreePathTable;
-     }
-
+   if ( theMeanFreePathTable )
+   {
+      theMeanFreePathTable->clearAndDestroy();
+      delete theMeanFreePathTable;
+   }
+   if( fPAItransferBank )    
+   {
+     fPAItransferBank->clearAndDestroy() ;
+     delete fPAItransferBank ;
+   }
+ 
 }
  
 /////////////////////////////////////////////////////////////////////////
