@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManager.hh,v 1.6 2001-07-11 09:59:07 gunter Exp $
+// $Id: G4FieldManager.hh,v 1.7 2001-11-28 18:44:43 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -96,6 +96,10 @@ class G4FieldManager
      inline void     SetDeltaOneStep(G4double valueD1step); 
      inline void     SetDeltaIntersection(G4double valueDintersection); 
 
+     inline G4bool   DoesFieldChangeEnergy();
+     inline void     SetFieldChangesEnergy(G4bool value);
+       //  For electric field this should be true
+       //  For magnetic field this should be false
   private:
 
      G4FieldManager(const G4FieldManager&);
@@ -109,6 +113,7 @@ class G4FieldManager
 
      G4bool          fAllocatedChordFinder; // Did we used "new" to
 					    // create fChordFinder ?
+     G4bool          fFieldChangesEnergy;
 
      //  Values for the required accuracies
      //
