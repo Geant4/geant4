@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.22 2002-04-18 12:26:11 japost Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.23 2002-04-19 17:30:23 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,6 +63,9 @@ G4MagInt_Driver::G4MagInt_Driver( G4double                hminimum,
       RenewStepperAndAdjust( pItsStepper );
       hminimum_val= hminimum;
       fMaxNoSteps = fMaxStepBase / pIntStepper->IntegratorOrder();
+#ifdef G4DEBUG_FIELD
+      fVerboseLevel=2;
+#endif
 }
 
 //  Destructor
@@ -93,9 +96,9 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
 
   G4int  no_warnings=0;
 #ifdef G4DEBUG_FIELD
-  static G4int dbg=0;
-  dbg=1;
-  fVerboseLevel=2;
+  static G4int dbg=1;
+  G4double ySubStepStart[G4FieldTrack::ncompSVEC];
+  G4FieldTrack  yFldTrkStart(y_current);
 #endif
 
   // G4double yscal[ncompSVEC];
@@ -130,18 +133,22 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
 
   do{
      G4ThreeVector StartPos( y[0], y[1], y[2] );   
+#    ifdef G4DEBUG_FIELD
+       for(i=0;i<nvar;i++) ySubStepStart[i] = y[i] ;
+       yFldTrkStart.LoadFromArray(y);
+       yFldTrkStart.SetCurveLength(x);
+#    endif
 
      pIntStepper->RightHandSide( y, dydx );
 
      if( x+h > x2 ) {
-       h = x2 - x ;     // When stepsize overshoots, decrease it!
+        h = x2 - x ;     // When stepsize overshoots, decrease it!
+        if( h < eps * hstep) {
+	    lastStep = true;   //  Ensure that this must be the last step
+                               //   - since otherwise numerical (im)precision
+                               //     could force lots of small last steps
+	}
      }
-     if( h < eps * hstep) {
-       lastStep = true;   //  Ensure that this must be the last step
-                          //   because otherwise numerical (im)precision
-                          //   could otherwise force lots of small last steps.
-     }
-
      static G4int nStpPr=50;   // For debug printing of integrations with many steps
 
      // Perform the Integration
@@ -151,19 +158,24 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
         OneGoodStep(y,dydx,x,h,eps,hdid,hnext) ;
         //--------------------------------------
         lastStepSucceeded= (hdid == h);   
+#         ifdef  G4DEBUG_FIELD
+  	  if(dbg>2) PrintStatus( ySubStepStart, x1, y, x, h,  nstp); // Only
+#         endif
      }else{
         G4FieldTrack yFldTrk( G4ThreeVector(0,0,0), 
 			      G4ThreeVector(0,0,0), 0., 0., 0., 0. );
         G4double dchord_step, dyerr, dyerr_len;  //  Must figure what to do with these
 	yFldTrk.LoadFromArray(y); 
         yFldTrk.SetCurveLength( x );
-//        G4double s_start = yFldTrk.GetCurveLength();
+
         QuickAdvance( yFldTrk, dydx, h, dchord_step, dyerr_len ); 
+        //-----------------------------------------------------
+
 #         ifdef  G4DEBUG_FIELD
-	  if(dbg>1) OneGoodStep(y,dydx,x,h,2*eps,hdid,hnext) ;
-	  if(dbg>1) PrintStatus( ystart, x1, y, x, h, -nstp);  
+ 	   // if(dbg>1) OneGoodStep(y,dydx,x,h,2*eps,hdid,hnext) ;
+	   // if(dbg>1) PrintStatus( ystart, x1, y, x, h, -nstp);  
         yFldTrk.DumpToArray(y);    
-  	  if(dbg>1) PrintStatus( ystart, x1, y, x, h,  nstp);   // Only this
+  	  if(dbg>1) PrintStatus( ySubStepStart, x1, y, x, h,  nstp);   // Only this
 #         endif	
 	dyerr = dyerr_len / h;    // was dyerr_len / hstep;
 	hdid= h;
@@ -173,7 +185,7 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
 	// .. hnext= ComputeNewStepSize_WithinLimits( dyerr/eps, h);
 	lastStepSucceeded= (dyerr<= eps);
      }
-// #ifdef G4DEBUG_FIELD
+
      if(lastStepSucceeded) noFullIntegr++ ; else noSmallIntegr++ ;
      G4ThreeVector EndPos( y[0], y[1], y[2] );
 
@@ -181,7 +193,7 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
      if(nstp>nStpPr) {
        G4cout << "hdid="  << G4std::setw(12) << hdid  << " "
 	      << "hnext=" << G4std::setw(12) << hnext << " " << endl;
-       PrintStatus( ystart, x1, y, x, h, nstp==nStpPr ? -nstp: nstp); 
+       PrintStatus( ystart, x1, y, x, h, (nstp==nStpPr) ? -nstp: nstp); 
      }
 #endif
 
@@ -196,7 +208,7 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
            WarnEndPointTooFar ( endPointDist, hdid, eps, dbg ); 
 	   G4cerr << "  Total steps:  bad" << noBadSteps << " good " << noGoodSteps << endl;
 	   // G4cerr << "Mid:EndPtFar> ";
-	   PrintStatus( ystart, x1, y, x, hstep, no_warnings?nstp:-nstp);  
+	   if(dbg>1) PrintStatus( ystart, x1, y, x, hstep, no_warnings?nstp:-nstp);  
                 // Potentially add as arguments:  <dydx> - as Initial Force
 #endif
 	   no_warnings++;
@@ -218,7 +230,7 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
 	     //  Issue WARNING
 	     WarnSmallStepSize( hnext, hstep, h, x-x1, nstp ); 
 	     // G4cerr << "Mid:SmallStep> ";
-	     PrintStatus( ystart, x1, y, x, hstep, no_warnings?nstp:-nstp);
+	     if(dbg>1) PrintStatus( ystart, x1, y, x, hstep, no_warnings?nstp:-nstp);
 	     no_warnings++;
 	}
 #endif
@@ -252,7 +264,7 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
      succeeded = false;
 #ifdef  G4DEBUG_FIELD
         WarnTooManyStep( x1, x2, x );  //  Issue WARNING
-        PrintStatus( yEnd, x1, y, x, hstep, -nstp);
+        if( dbg>1) PrintStatus( yEnd, x1, y, x, hstep, -nstp);
 #endif
   }
 
@@ -612,9 +624,12 @@ void G4MagInt_Driver::PrintStatus(
     const G4ThreeVector CurrentPosition=    CurrentFT.GetPosition();
     const G4ThreeVector CurrentUnitVelocity=    CurrentFT.GetMomentumDir();
 
+    G4double  DotStartCurrentVeloc= StartUnitVelocity.dot(CurrentUnitVelocity);
+
     G4double step_len= CurrentFT.GetCurveLength() 
                          - StartFT.GetCurveLength();
-      
+    G4double subStepSize = step_len;
+     
     if( (subStepNo <= 0) && (verboseLevel <= 3) )
     {
        subStepNo = - subStepNo;        // To allow printing banner
@@ -627,22 +642,28 @@ void G4MagInt_Driver::PrintStatus(
 	      << G4std::setw( 9) << "X(mm)" << " "
 	      << G4std::setw( 9) << "Y(mm)" << " "  
 	      << G4std::setw( 9) << "Z(mm)" << " "
-	      << G4std::setw( 7) << " N_x " << " "
-	      << G4std::setw( 7) << " N_y " << " "
-	      << G4std::setw( 7) << " N_z " << " "
+	      << G4std::setw( 8) << " N_x " << " "
+	      << G4std::setw( 8) << " N_y " << " "
+	      << G4std::setw( 8) << " N_z " << " "
+	      << G4std::setw( 7) << " N^2-1 " << " "
+	      << G4std::setw(10) << " N(0).N " << " "
 	      << G4std::setw( 7) << "KinEner " << " "
-	      << G4std::setw( 9) << "StepLen" << " "   // Add the Sub-step ??
+	      << G4std::setw(12) << "Track-l" << " "   // Add the Sub-step ??
+	      << G4std::setw(12) << "Step-len" << " " 
+	      << G4std::setw(12) << "Step-len" << " " 
 	      << G4std::setw( 9) << "ReqStep" << " "  
 	      << G4endl;
 
-        PrintStat_Aux( StartFT,  requestStep, 0., 0);
+        PrintStat_Aux( StartFT,  requestStep, 0., 
+		       0,        0.0,         1.0);
         //*************
     }
 
     if( verboseLevel <= 3 )
     {
        G4cout.precision(noPrecision);
-       PrintStat_Aux( CurrentFT, requestStep, step_len, subStepNo);
+       PrintStat_Aux( CurrentFT, requestStep, step_len, 
+		      subStepNo, subStepSize, DotStartCurrentVeloc );
        //*************
     }
 
@@ -666,7 +687,9 @@ void G4MagInt_Driver::PrintStat_Aux(
                   const G4FieldTrack&  aFieldTrack,
                   G4double             requestStep, 
 		  G4double             step_len,
-                  G4int                subStepNo)
+                  G4int                subStepNo,
+		  G4double             subStepSize,
+		  G4double             dotVeloc_StartCurr)
 {
     const G4ThreeVector Position=      aFieldTrack.GetPosition();
     const G4ThreeVector UnitVelocity=  aFieldTrack.GetMomentumDir();
@@ -675,15 +698,36 @@ void G4MagInt_Driver::PrintStat_Aux(
        G4cout << G4std::setw( 5) << subStepNo << " ";
     else
        G4cout << G4std::setw( 5) << "Start" << " ";
-    G4cout << G4std::setw( 7) << aFieldTrack.GetCurveLength();
+    G4double curveLen= aFieldTrack.GetCurveLength();
+    G4cout << G4std::setw( 7) << curveLen;
     G4cout << G4std::setw( 9) << Position.x() << " "
 	   << G4std::setw( 9) << Position.y() << " "
 	   << G4std::setw( 9) << Position.z() << " "
-	   << G4std::setw( 7) << UnitVelocity.x() << " "
-	   << G4std::setw( 7) << UnitVelocity.y() << " "
-	   << G4std::setw( 7) << UnitVelocity.z() << " ";
+	   << G4std::setw( 8) << UnitVelocity.x() << " "
+	   << G4std::setw( 8) << UnitVelocity.y() << " "
+	   << G4std::setw( 8) << UnitVelocity.z() << " ";
+    G4int oldprec= G4cout.precision(3);
+    G4cout << G4std::setw( 7) << UnitVelocity.mag2()-1.0 << " ";
+    G4cout.precision(6);
+    G4cout << G4std::setw(10) << dotVeloc_StartCurr << " ";
+    G4cout.precision(oldprec);
     G4cout << G4std::setw( 7) << aFieldTrack.GetKineticEnergy();
-    G4cout << G4std::setw( 9) << step_len << " "; 
+    G4cout << G4std::setw(12) << step_len << " ";
+
+    static G4double oldCurveLength= 0.0;
+    static G4double oldSubStepLength= 0.0;
+    G4double subStep_len=0.0;
+    if( curveLen > oldCurveLength )
+       subStep_len= curveLen - oldCurveLength;
+    else if (subStepNo == oldSubStepNo)
+       subStep_len= oldSubStepLength;
+    else 
+      subStepLen_NotAvail;
+    oldCurveLength= curveLen;
+    oldSubStepLength= subStep_len;
+
+    G4cout << G4std::setw(12) << subStep_len << " "; 
+    G4cout << G4std::setw(12) << subStepSize << " "; 
     if( requestStep != -1.0 ) 
        G4cout << G4std::setw( 9) << requestStep << " ";
     else
