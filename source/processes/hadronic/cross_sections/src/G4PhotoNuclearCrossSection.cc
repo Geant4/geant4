@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoNuclearCrossSection.cc,v 1.3 2001-10-26 13:12:26 hpw Exp $
+// $Id: G4PhotoNuclearCrossSection.cc,v 1.4 2001-11-09 15:59:49 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -89,12 +89,13 @@ G4double G4PhotoNuclearCrossSection::GetCrossSection(const G4DynamicParticle* aP
   static G4std::vector <G4double> RopWd;   // Width of the Roper Resonance [.1+1.65*ln(A)]
   static G4std::vector <G4double> RopPs;   // Position of the Roper Resonance [6.46+.061*ln(A)]
   G4double sigma=0.;
-  if( aPart->GetDefinition()->GetPDGEncoding() == 22 &&
-	  kinEnergy                                 > ThresholdEnergy(targZ, targN))
+  if( aPart->GetDefinition()->GetPDGEncoding() == 22 )
   {
     G4double A=targN+targZ;
     if(targN!=lastN || targZ!=lastZ)          // Otherwise the set of parameters is ready
 	{
+      lastN    = targN;                       // The last N of calculated nucleus
+      lastZ    = targZ;                       // The last Z of calculated nucleus
       G4int n=colN.size();
       G4bool in=false;
       if(n) for(G4int i=0; i<n; i++) if(colN[i]==targN && colZ[i]==targZ) // Calculated nucleus
@@ -123,8 +124,6 @@ G4double G4PhotoNuclearCrossSection::GetCrossSection(const G4DynamicParticle* aP
 	  }
 	  if(!in)                                 // Fill the new set of parameters for the new nucleus
 	  {
-        lastN    = targN;                     // The last N of calculated nucleus
-        lastZ    = targZ;                     // The last Z of calculated nucleus
         G4double lnA=log(A);
         if(A==1)
         {
@@ -208,6 +207,7 @@ G4double G4PhotoNuclearCrossSection::GetCrossSection(const G4DynamicParticle* aP
 	       lastDelAm/(1.+lastDelWd*delta*delta)/(1.+exp((lastDelTh-lE)/lastDelSl))+      // Delta
 	       lastHighE*(0.0116*exp(lE*0.16)+.4*exp(-lE*0.2))/(1.+exp((7.-lE)/0.2));        // High E
   } // End of "sigma" calculation
+  else return 0.;
   return sigma*millibarn;
 }
 
@@ -217,11 +217,11 @@ G4double G4PhotoNuclearCrossSection::LinearFit(G4double X, G4int N, const G4doub
 {
   G4double Xj=XN[0];
   G4double Xh=XN[N-1];
-  if(X<=Xj) return Xj; //-----+
-  else if(X>=Xh) return Xh;//-|
-  G4double Xp=0.; //          |
-  G4int j=0;   //             |
-  while (X>Xj && j<N)//<------+
+  if(X<=Xj) return YN[0]; //-------+
+  else if(X>=Xh) return YN[N-1];//-|
+  G4double Xp=0.; //               |
+  G4int j=0;   //                  |
+  while (X>Xj && j<N)//<-----------+
   {
     j++;
     Xp=Xj;

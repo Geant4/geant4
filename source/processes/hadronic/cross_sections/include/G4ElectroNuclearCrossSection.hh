@@ -21,16 +21,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.hh,v 1.1 2001-11-06 08:23:57 mkossov Exp $
+// $Id: G4ElectroNuclearCrossSection.hh,v 1.2 2001-11-09 15:59:48 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// GEANT4 physics class: G4PhotoNuclearCrossSection -- header file
+// GEANT4 physics class: G4ElectroNuclearCrossSection -- header file
 // M.V. Kossov, ITEP(Moscow), 24-OCT-01
 //
 
-#ifndef G4PhotoNuclearCrossSection_h
-#define G4PhotoNuclearCrossSection_h 1
+#ifndef G4ElectroNuclearCrossSection_h
+#define G4ElectroNuclearCrossSection_h 1
 
 #include "G4VCrossSectionDataSet.hh"
 /////////#include "G4HadronCrossSections.hh"
@@ -41,17 +41,18 @@
 #include "G4NucleiProperties.hh"
 #include "G4NucleiPropertiesTable.hh"
 #include "g4std/vector"
+#include "Randomize.hh"
 
-class G4PhotoNuclearCrossSection : public G4VCrossSectionDataSet
+class G4ElectroNuclearCrossSection : public G4VCrossSectionDataSet
 {
 public:
 
-  G4PhotoNuclearCrossSection()               // Constructor @@??
+  G4ElectroNuclearCrossSection()               // Constructor @@??
   {
 	 //theHadronCrossSections = G4HadronCrossSections::Instance();
   }
 
-  ~G4PhotoNuclearCrossSection() {}
+  ~G4ElectroNuclearCrossSection() {}
 
   G4bool IsApplicable(const G4DynamicParticle* aParticle, const G4Element* anElement)
   {
@@ -64,202 +65,36 @@ public:
 
   G4double GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement,
 						   G4double temperature=0.);
-  //{
-  //  return theHadronCrossSections->GetInelasticCrossSection(aParticle,
-  //                                                          anElement);
-  //}
+
+  G4double GetEffectivePhotonEnergy();
 
   void BuildPhysicsTable(const G4ParticleDefinition&) {}
 
   void DumpPhysicsTable(const G4ParticleDefinition&) {}
 
 private:
-  G4double GetGDRc1(G4int Z, G4int N);
-  G4double GetGDRp1(G4int Z, G4int N);
-  G4double GetGDRt1(G4int Z, G4int N);
-  G4double GetGDRs1(G4int Z, G4int N);
-  G4double GetGDRc2(G4int Z, G4int N);
-  G4double GetGDRp2(G4int Z, G4int N);
-  G4double GetGDRt2(G4int Z, G4int N);
-  G4double GetGDRs2(G4int Z, G4int N);
-  G4double GetQDAmp(G4int Z, G4int N);
-  G4double GetDelAm(G4int Z, G4int N);
-  G4double GetDelWd(G4int Z, G4int N);
-  G4double GetDelPs(G4int Z, G4int N);
-  G4double GetDelTh(G4int Z, G4int N);
-  G4double GetDelSl(G4int Z, G4int N);
-  G4double GetRopAm(G4int Z, G4int N);
-  G4double GetRopWd(G4int Z, G4int N);
-  G4double GetRopPs(G4int Z, G4int N);
+  G4int    GetFunctions(G4double a, G4double* y, G4double* z);
   G4double LinearFit(G4double X, G4int N, const G4double* XN, const G4double* YN);
   G4double ThresholdEnergy(G4int Z, G4int N);
+  G4double HighEnergyPhi(G4double lE);
+  G4double HighEnergyFun(G4double lE);
+  G4double SolveTheEquation(G4double f);
+  G4double Fun(G4double x);
+  G4double DFun(G4double x);
 
 // Body
-//private:
-
-  //G4HadronCrossSections* theHadronCrossSections;
+private:
+  static G4int     lastF;    // Last used in the cross section TheFirstBin
+  static G4double* lastPhi;  // Pointer to the last array of the Phi function
+  static G4double* lastFun;  // Pointer to the last array of the Fun function
+  static G4int     lastL;    // Last used in the cross section TheLastBin
+  static G4double  lastLE;   // Last used in the cross section TheLogE
+  static G4double  lastSig;  // Last value of the Cross Section
+  static G4double  lastH;    // Last value of the High energy A-dependence
 };
 
-// Calculate the logAmplitude of the 1-st GDR maximum
-inline G4double G4PhotoNuclearCrossSection::GetGDRc1(G4int Z, G4int N)
-{
-  static const G4int nN=13;
-  static G4double X[nN]={0.693,1.386,1.792,1.946,2.197,2.485,2.773,3.296,3.689,4.152,4.777,5.334,
-						 5.472};
-  static G4double Y[nN]={4.2,13.9,13.9,13.6,20.5,28.2,28.7,28.5,29.,28.4,28.15,27.8,25.9};
-
-  return LinearFit(log(Z+N), nN, X, Y);
-}
-
-// Calculate the A-power of the 1-st GDR maximum
-inline G4double G4PhotoNuclearCrossSection::GetGDRp1(G4int Z, G4int N)
-{
-  G4double p=8.;
-  G4int A=Z+N;
-  if(A<12) p=6.;
-  if(A< 8) p=4.;
-  if(A< 4) p=2.;
-  return p;
-}
-
-// Calculate the Threshold of the 1-st GDR maximum
-inline G4double G4PhotoNuclearCrossSection::GetGDRt1(G4int Z, G4int N)
-{
-  static const G4int nN=13;
-  static G4double X[nN]={0.693,1.386,1.792,1.946,2.197,2.485,2.773,3.296,3.689,4.152,4.777,5.334,
-						 5.472};
-  static G4double Y[nN]={1.4,3.13,3.08,2.9,3.09,3.09,3.09,3.02,2.98,2.9,2.745,2.585,2.42};
-
-  return LinearFit(log(Z+N), nN, X, Y);
-}
-
-// Calculate the Slope of the 1-st GDR maximum
-inline G4double G4PhotoNuclearCrossSection::GetGDRs1(G4int Z, G4int N)
-{
-  static const G4int nN=13;
-  static G4double X[nN]={0.693,1.386,1.792,1.946,2.197,2.485,2.773,3.296,3.689,4.152,4.777,5.334,
-						 5.472};
-  static G4double Y[nN]={.12,.12,.12,.12,.06,.03,.03,.06,.05,.065,.06,.059,.061};
-
-  return LinearFit(log(Z+N), nN, X, Y);
-}
-
-// Calculate the logAmplitude of the 2-nd GDR maximum
-inline G4double G4PhotoNuclearCrossSection::GetGDRc2(G4int Z, G4int N)
-{
-  static const G4int nN=13;
-  static G4double X[nN]={0.693,1.386,1.792,1.946,2.197,2.485,2.773,3.296,3.689,4.152,4.777,5.334,
-						 5.472};
-  static G4double Y[nN]={1.85,7.5,6.3,8.2,12.35,15.8,16.1,16.2,16.8,17.1,16.1,15.5,16.6};
-
-  return LinearFit(log(Z+N), nN, X, Y);
-}
-
-// Calculate the A-power of the 2-nd GDR maximum
-inline G4double G4PhotoNuclearCrossSection::GetGDRp2(G4int Z, G4int N)
-{
-  G4double p=4.;
-  G4int A=Z+N;
-  if(A<12) p=3.;
-  if(A< 8) p=2.;
-  if(A< 4) p=1.;
-  return p;
-}
-
-// Calculate the Threshold of the 2-nd GDR maximum
-inline G4double G4PhotoNuclearCrossSection::GetGDRt2(G4int Z, G4int N)
-{
-  static const G4int nN=13;
-  static G4double X[nN]={0.693,1.386,1.792,1.946,2.197,2.485,2.773,3.296,3.689,4.152,4.777,5.334,
-						 5.472};
-  static G4double Y[nN]={1.4,3.22,3.11,3.39,3.48,3.34,3.46,3.35,3.4,3.22,3.09,3.05,2.6};
-
-  return LinearFit(log(Z+N), nN, X, Y);
-}
-
-// Calculate the Slope of the 2-nd GDR maximum
-inline G4double G4PhotoNuclearCrossSection::GetGDRs2(G4int Z, G4int N)
-{
-  static const G4int nN=13;
-  static G4double X[nN]={0.693,1.386,1.792,1.946,2.197,2.485,2.773,3.296,3.689,4.152,4.777,5.334,
-						 5.472};
-  static G4double Y[nN]={.12,.094,.09,.088,.14,.082,.079,.074,.071,.065,.061,.058,.05};
-
-  return LinearFit(log(Z+N), nN, X, Y);
-}
-
-// Calculate the Amplitude of the QuasiDeuteron region [exp/(1+exp)]
-inline G4double G4PhotoNuclearCrossSection::GetQDAmp(G4int Z, G4int N)
-{
-  G4double A=Z+N;
-  G4double lnA=log(A);
-  return exp(-1.7+lnA*0.84)/(1.+exp(7*(2.38-lnA)));
-}
-
-// Calculate the Amplitude of the Delta Resonance [.41*(Z+N)]
-inline G4double G4PhotoNuclearCrossSection::GetDelAm(G4int Z, G4int N)
-{
-  G4double A=Z+N;
-  return .41*A;
-}
-
-// Calculate the Width of the Delta Resonance [11.9-ln(A)*1.24]
-inline G4double G4PhotoNuclearCrossSection::GetDelWd(G4int Z, G4int N)
-{
-  G4double A=Z+N;
-  G4double lnA=log(A);
-  return 11.9-lnA*1.24;
-}
-
-// Calculate the Position of the Delta Resonance [5.84-.09/(1+.003*A*A)]
-inline G4double G4PhotoNuclearCrossSection::GetDelPs(G4int Z, G4int N)
-{
-  G4double A=Z+N;
-  return 5.84-.09/(1+.003*A*A);
-}
-
-// Calculate the Threshold of the Delta Resonance [5.13-.00075*A]
-inline G4double G4PhotoNuclearCrossSection::GetDelTh(G4int Z, G4int N)
-{
-  G4double A=Z+N;
-  return 5.13-0.00075*A;
-}
-
-// Calculate the Threshold of the Delta Resonance [.04->.09]
-inline G4double G4PhotoNuclearCrossSection::GetDelSl(G4int Z, G4int N)
-{
-  G4double A=Z+N;
-  if(A<7) return .04;
-  return .09;
-}
-
-// Calculate the Amplitude of the Roper Resonance [-2.+ln(A)*0.84]
-inline G4double G4PhotoNuclearCrossSection::GetRopAm(G4int Z, G4int N)
-{
-  G4double A=Z+N;
-  G4double lnA=log(A);
-  return exp(-2.+lnA*0.84);
-}
-
-// Calculate the Width of the Roper Resonance [.1+1.65*ln(A)]
-inline G4double G4PhotoNuclearCrossSection::GetRopWd(G4int Z, G4int N)
-{
-  G4double A=Z+N;
-  G4double lnA=log(A);
-  return .1+1.65*lnA;
-}
-
-// Calculate the Position of the Roper Resonance [6.46+.061*ln(A)]
-inline G4double G4PhotoNuclearCrossSection::GetRopPs(G4int Z, G4int N)
-{
-  G4double A=Z+N;
-  G4double lnA=log(A);
-  return 6.46+.061*lnA;
-}
-
-
 // Gives the threshold energy for different nuclei (min of p- and n-threshold)
-inline G4double G4PhotoNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
+inline G4double G4ElectroNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
 {
   // CHIPS - Direct GEANT
   //static const G4double mNeut = G4QPDGCode(2112).GetMass();
@@ -290,6 +125,63 @@ inline G4double G4PhotoNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
   G4double dN= mN+mNeut-mT;
   if(dP<dN)dN=dP;
   return dN;
+}
+
+inline G4double G4ElectroNuclearCrossSection::DFun(G4double x)
+{
+  static const G4double f21=.75;
+  static const G4double f22=.78;
+  static const G4double f23=.9;
+  G4double f2=1.;
+  if     (lastH<.005) f2=f21;
+  else if(lastH<0.01) f2=f22;
+  else if(lastH<0.07) f2=f23;
+  return (lastLE-x)*(0.0116*exp(0.16*x)+f2*exp(-0.26*x));
+}
+
+inline G4double G4ElectroNuclearCrossSection::Fun(G4double x)
+{return (lastLE*HighEnergyPhi(x)-HighEnergyFun(x));}
+
+inline G4double G4ElectroNuclearCrossSection::HighEnergyPhi(G4double lE)
+{
+  static const G4double le=log(2000.);
+  static const G4double c1=0.16;
+  static const G4double f1=.0116/c1;
+  static const G4double e1=exp(c1*le);
+  static const G4double c2=-0.26;
+  static const G4double f21=.75/c2;
+  static const G4double f22=.78/c2;
+  static const G4double f23=.9/c2;
+  static const G4double f24=1./c2;
+  static const G4double e2=exp(c2*le);
+  G4double f2=f24;
+  if     (lastH<.005) f2=f21;
+  else if(lastH<0.01) f2=f22;
+  else if(lastH<0.07) f2=f23;
+  return f1*(exp(c1*lE)-e1)+f2*(exp(c2*lE)-e2);
+}
+
+inline G4double G4ElectroNuclearCrossSection::HighEnergyFun(G4double lE)
+{
+  static const G4double le=log(2000.);
+  static const G4double c1=0.16;
+  static const G4double f1=.0116/c1/c1;
+  static const G4double g1=c1*le;
+  static const G4double e1=(g1-1.)*exp(g1);
+  static const G4double c2=-0.26;
+  static const G4double f21=.75/c2/c2;
+  static const G4double f22=.78/c2/c2;
+  static const G4double f23=.9/c2/c2;
+  static const G4double f24=1./c2/c2;
+  static const G4double g2=c2*le;
+  static const G4double e2=(g2-1.)*exp(g2);
+  G4double f2=f24;
+  if     (lastH<.005) f2=f21;
+  else if(lastH<0.01) f2=f22;
+  else if(lastH<0.07) f2=f23;
+  G4double h1=c1*lE;
+  G4double h2=c2*lE;
+  return f1*((h1-1.)*exp(h1)-e1)+f2*((h2-1.)*exp(h2)-e2);
 }
 
 #endif

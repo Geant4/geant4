@@ -21,207 +21,161 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.cc,v 1.1 2001-11-06 08:23:57 mkossov Exp $
+// $Id: G4ElectroNuclearCrossSection.cc,v 1.2 2001-11-09 15:59:49 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// G4 Physics class: PhotoNuclearCrossSection for gamma+A cross sections
+// G4 Physics class: ElectroNuclearCrossSection for gamma+A cross sections
 // M.V. Kossov, ITEP(Moscow), 10-OCT-01
 // 
+//===============================================================================================
 
-#include "G4PhotoNuclearCrossSection.hh"
+//#define debug
+//#define pdebug
+//#define ppdebug
+//#define tdebug
+//#define sdebug
+
+#include "G4ElectroNuclearCrossSection.hh"
+
+// Initialization of the
+G4int     G4ElectroNuclearCrossSection::lastF=0;   // Last used in the cross section TheFirstBin
+G4double* G4ElectroNuclearCrossSection::lastPhi=0; // Pointer to the last array of the Phi function
+G4double* G4ElectroNuclearCrossSection::lastFun=0; // Pointer to the last array of the Fun function
+G4int     G4ElectroNuclearCrossSection::lastL=0;   // Last used in the cross section TheLastBin
+G4double  G4ElectroNuclearCrossSection::lastLE=0.; // Last used in the cross section TheLogE
+G4double  G4ElectroNuclearCrossSection::lastSig=0.;// Last value of the Cross Section
+G4double  G4ElectroNuclearCrossSection::lastH=0.;  // Last value of the High Energy A-dependence
 
 // The main member function giving the gamma-A cross section (E in GeV, CS in mb)
-G4double G4PhotoNuclearCrossSection::GetCrossSection(const G4DynamicParticle* aPart, const G4Element* anEle, G4double T)
+G4double G4ElectroNuclearCrossSection::GetCrossSection(const G4DynamicParticle* aPart,
+                                                       const G4Element* anEle, G4double T)
 {
-  const G4double kinEnergy = aPart->GetKineticEnergy()/MeV;
-  const G4double lE=log(kinEnergy);
+  static const G4int nL=228; // !!  If you change this, change it in GetFunctions() (*.hh) !!
+  static const G4int mL=nL-1;
+  static const G4double X[nL]={
+ .6931472, .7235778, .7540085, .7844391, .8148697, .8453004, .8757310, .9061617, .9365923, .9670229,
+ .9974536, 1.027884, 1.058315, 1.088746, 1.119176, 1.149607, 1.180037, 1.210468, 1.240899, 1.271329,
+ 1.301760, 1.332191, 1.362621, 1.393052, 1.423483, 1.453913, 1.484344, 1.514774, 1.545205, 1.575636,
+ 1.606066, 1.636497, 1.666928, 1.697358, 1.727789, 1.758220, 1.788650, 1.819081, 1.849512, 1.879942,
+ 1.910373, 1.940803, 1.971234, 2.001665, 2.032095, 2.062526, 2.092957, 2.123387, 2.153818, 2.184249,
+ 2.214679, 2.245110, 2.275540, 2.305971, 2.336402, 2.366832, 2.397263, 2.427694, 2.458124, 2.488555,
+ 2.518986, 2.549416, 2.579847, 2.610278, 2.640708, 2.671139, 2.701569, 2.732000, 2.762431, 2.792861,
+ 2.823292, 2.853723, 2.884153, 2.914584, 2.945015, 2.975445, 3.005876, 3.036306, 3.066737, 3.097168,
+ 3.127598, 3.158029, 3.188460, 3.218890, 3.249321, 3.279752, 3.310182, 3.340613, 3.371044, 3.401474,
+ 3.431905, 3.462335, 3.492766, 3.523197, 3.553627, 3.584058, 3.614489, 3.644919, 3.675350, 3.705781,
+ 3.736211, 3.766642, 3.797072, 3.827503, 3.857934, 3.888364, 3.918795, 3.949226, 3.979656, 4.010087,
+ 4.040518, 4.070948, 4.101379, 4.131810, 4.162240, 4.192671, 4.223101, 4.253532, 4.283963, 4.314393,
+ 4.344824, 4.375255, 4.405685, 4.436116, 4.466547, 4.496977, 4.527408, 4.557838, 4.588269, 4.618700,
+ 4.649130, 4.679561, 4.709992, 4.740422, 4.770853, 4.801284, 4.831714, 4.862145, 4.892575, 4.923006,
+ 4.953437, 4.983867, 5.014298, 5.044729, 5.075159, 5.105590, 5.136021, 5.166451, 5.196882, 5.227313,
+ 5.257743, 5.288174, 5.318604, 5.349035, 5.379466, 5.409896, 5.440327, 5.470758, 5.501188, 5.531619,
+ 5.562050, 5.592480, 5.622911, 5.653341, 5.683772, 5.714203, 5.744633, 5.775064, 5.805495, 5.835925,
+ 5.866356, 5.896787, 5.927217, 5.957648, 5.988079, 6.018509, 6.048940, 6.079370, 6.109801, 6.140232,
+ 6.170662, 6.201093, 6.231524, 6.261954, 6.292385, 6.322816, 6.353246, 6.383677, 6.414107, 6.444538,
+ 6.474969, 6.505399, 6.535830, 6.566261, 6.596691, 6.627122, 6.657553, 6.687983, 6.718414, 6.748845,
+ 6.779275, 6.809706, 6.840136, 6.870567, 6.900998, 6.931428, 6.961859, 6.992290, 7.022720, 7.053151,
+ 7.083582, 7.114012, 7.144443, 7.174873, 7.205304, 7.235735, 7.266165, 7.296596, 7.327027, 7.357457,
+ 7.387888, 7.418319, 7.448749, 7.479180, 7.509611, 7.540041, 7.570472, 7.600902};
+  static const G4double lEMi=exp(X[0]);
+  static const G4double lEMa=X[mL];
+  static const G4double dalop=2./137.036/3.14159265;
+  // Associative memory for acceleration
+  static G4int     lastN;     // The last N of calculated nucleus
+  static G4int     lastZ;     // The last Z of calculated nucleus
+  static G4std::vector <G4int> colN;       // Vector of N for calculated nucleus
+  static G4std::vector <G4int> colZ;       // Vector of Z for calculated nucleus
+  static G4std::vector <G4int> colF;       // Vector of LastZeroPosition in the phi-function
+  static G4std::vector <G4double> colH;    // Vector of high energy coefficient
+  static G4std::vector <G4double*> Phi;    // Vector of pointers to the Phi functions
+  static G4std::vector <G4double*> Fun;    // Vector of pointers to the Fun functions
+  // *** End of Static Definitions (Associative Memory) ***
+  const G4double Energy = aPart->Get4Momentum().t()/MeV;
+  const G4double lE=log(Energy);
   const G4int targetAtomicNumber = static_cast<int>(anEle->GetN()+.499); //@@ Nat mixture
   const G4int targZ = static_cast<int>(anEle->GetZ());
   const G4int targN = targetAtomicNumber-targZ;
-  if (kinEnergy<ThresholdEnergy(targZ, targN))
-  {
-    return 0.;
-  }
-  // Associative memory for acceleration
-  static G4int    lastN;     // The last N of calculated nucleus
-  static G4int    lastZ;     // The last Z of calculated nucleus
-  static G4double lastHighE; // The last High Energy A-dependence
-  static G4double lastGDRc1; // The last logAmplitude of the 1-st GDR maximum
-  static G4double lastGDRp1; // The last A-power of the 1-st GDR maximum
-  static G4double lastGDRt1; // The last Threshold of the 1-st GDR maximum
-  static G4double lastGDRs1; // The last Slope of the 1-st GDR maximum
-  static G4double lastGDRc2; // The last logAmplitude of the 2-nd GDR maximum
-  static G4double lastGDRp2; // The last A-power of the 2-nd GDR maximum
-  static G4double lastGDRt2; // The last Threshold of the 2-nd GDR maximum
-  static G4double lastGDRs2; // The last Slope of the 2-nd GDR maximum
-  static G4double lastQDAmp; // The last Amplitude of the QuasiDeuteron region [exp/(1+exp)]
-  static G4double lastQDWid; // The last Width of the QuasiDeuteron region [.4] or SecRes (H1,H2)
-  static G4double lastQDPos; // The last Position of the QuasiDeuteron region [3.8] or SecRs (H1,H2)
-  static G4double lastDelAm; // The last Amplitude of the Delta Resonance [.41*(Z+N)]
-  static G4double lastDelWd; // The last Width of the Delta Resonance [11.9-ln(A)*1.24]
-  static G4double lastDelPs; // The last Position of the Delta Resonance [5.84-.09/(1+.003*A^2)]
-  static G4double lastDelTh; // The last Threshold of the Delta Resonance [5.13-.00075*A]
-  static G4double lastDelSl; // The last Slope of the Delta Resonance [0.04->0.09]
-  static G4double lastRopAm; // The last Amplitude of the Roper Resonance [-2.+ln(A)*0.84]
-  static G4double lastRopWd; // The last Width of the Roper Resonance [.1+1.65*ln(A)]
-  static G4double lastRopPs; // The last Position of the Roper Resonance [6.46+.061*ln(A)]       
-  static G4std::vector <G4int> colN;       // N of calculated nucleus
-  static G4std::vector <G4int> colZ;       // Z of calculated nucleus
-  static G4std::vector <G4double> HighE;   // High Energy A-dependence
-  static G4std::vector <G4double> GDRc1;   // logAmplitude of the 1-st GDR maximum
-  static G4std::vector <G4double> GDRp1;   // A-power of the 1-st GDR maximum
-  static G4std::vector <G4double> GDRt1;   // Threshold of the 1-st GDR maximum
-  static G4std::vector <G4double> GDRs1;   // Slope of the 1-st GDR maximum
-  static G4std::vector <G4double> GDRc2;   // logAmplitude of the 2-nd GDR maximum
-  static G4std::vector <G4double> GDRp2;   // A-power of the 2-nd GDR maximum
-  static G4std::vector <G4double> GDRt2;   // Threshold of the 2-nd GDR maximum
-  static G4std::vector <G4double> GDRs2;   // Slope of the 2-nd GDR maximum
-  static G4std::vector <G4double> QDAmp;   // Amplitude of the QuasiDeuteron region [exp/(1+exp)]
-  static G4std::vector <G4double> QDWid;   // Width of the QuasiDeuteron region [.4] or R(H1,H2)
-  static G4std::vector <G4double> QDPos;   // Position of the QuasiDeuteron region [3.7] or R(H1,H2)
-  static G4std::vector <G4double> DelAm;   // Amplitude of the Delta Resonance [.41*(Z+N)]
-  static G4std::vector <G4double> DelWd;   // Width of the Delta Resonance [11.9-ln(A)*1.24]
-  static G4std::vector <G4double> DelPs;   // Position of the Delta Resonance [5.84-.09/(1+.003*A2)]
-  static G4std::vector <G4double> DelTh;   // Threshold of the Delta Resonance [5.13-.00075*A]
-  static G4std::vector <G4double> DelSl;   // Slope of the Delta Resonance [0.04->0.09]
-  static G4std::vector <G4double> RopAm;   // Amplitude of the Roper Resonance [-2.+ln(A)*0.84]
-  static G4std::vector <G4double> RopWd;   // Width of the Roper Resonance [.1+1.65*ln(A)]
-  static G4std::vector <G4double> RopPs;   // Position of the Roper Resonance [6.46+.061*ln(A)]
-  G4double sigma=0.;
-  if( aPart->GetDefinition()->GetPDGEncoding() == 22 &&
-	  kinEnergy                                 > ThresholdEnergy(targZ, targN))
+  if (Energy<=ThresholdEnergy(targZ, targN) || Energy<=lEMi) return 0.;
+  G4int PDG=aPart->GetDefinition()->GetPDGEncoding();
+  if(  PDG == 11 || PDG == -11)
   {
     G4double A=targN+targZ;
-    if(targN!=lastN || targZ!=lastZ)          // Otherwise the set of parameters is ready
+    if(targN!=lastN || targZ!=lastZ)       // This nucleus was not the last in use
 	{
+      lastN    = targN;                    // The last N of calculated nucleus
+      lastZ    = targZ;                    // The last Z of calculated nucleus
       G4int n=colN.size();
       G4bool in=false;
       if(n) for(G4int i=0; i<n; i++) if(colN[i]==targN && colZ[i]==targZ) // Calculated nucleus
-	  { // @@ Parameters can be combined in a type (structure) to accelerate the retrieve process
-        in=true;
-        lastHighE=HighE[i];                   // High Energy A-dependence
-        lastGDRc1=GDRc1[i];                   // logAmplitude of the 1-st GDR maximum
-        lastGDRp1=GDRp1[i];                   // A-power of the 1-st GDR maximum
-        lastGDRt1=GDRt1[i];                   // Threshold of the 1-st GDR maximum
-        lastGDRs1=GDRs1[i];                   // Slope of the 1-st GDR maximum
-        lastGDRc2=GDRc2[i];                   // logAmplitude of the 2-nd GDR maximum
-        lastGDRp2=GDRp2[i];                   // A-power of the 2-nd GDR maximum
-        lastGDRt2=GDRt2[i];                   // Threshold of the 2-nd GDR maximum
-        lastGDRs2=GDRs2[i];                   // Slope of the 2-nd GDR maximum
-        lastQDAmp=QDAmp[i];                   // Amplitude of the QuasiDeuteron region
-        lastQDWid=QDWid[i];                   // Width of the QuasiDeuteron region or SecR(H1,H2)
-        lastQDPos=QDPos[i];                   // Position of the QuasiDeuteron region or SecR(H1,H2)
-        lastDelAm=DelAm[i];                   // Amplitude of the Delta Resonance
-        lastDelWd=DelWd[i];                   // Width of the Delta Resonance
-        lastDelPs=DelPs[i];                   // Position of the Delta Resonance
-        lastDelTh=DelTh[i];                   // Threshold of the Delta Resonance
-        lastDelSl=DelSl[i];                   // Slope of the Delta Resonance
-        lastRopAm=RopAm[i];                   // Amplitude of the Roper Resonance
-        lastRopWd=RopWd[i];                   // Width of the Roper Resonance
-        lastRopPs=RopPs[i];                   // Position of the Roper Resonance       
-	  }
-	  if(!in)                                 // Fill the new set of parameters for the new nucleus
 	  {
-        lastN    = targN;                     // The last N of calculated nucleus
-        lastZ    = targZ;                     // The last Z of calculated nucleus
+        in=true;
+        lastF  =colF[i];                   // LastZeroPosition in the phi-function
+        lastH  =colH[i];                   // Last High Energy Coefficient (A-dependent)
+        lastPhi=Phi[i];                    // Pointer to the prepared Phi function
+        lastFun=Fun[i];                    // Pointer to the prepared Fun function
+	  }
+	  if(!in)                              // This nucleus have not been calculated previously
+	  {
         G4double lnA=log(A);
-        if(A==1)
-        {
-          lastHighE=1.;                       // High Energy A-dependence
-          lastDelAm=.55;                      // The last Amplitude of the Delta Resonance (not .41)
-          lastQDAmp=.08;                      // The last Amplitude of the Third Resonance (like H2)
-          lastQDWid=90.;                      // The last Width of the Third Resonance (like H2)
-		  lastQDPos=6.93;                     // The last Position of the Third Resonance (like H2)
-          lastDelWd=18.;                      // The last Width of the Delta Resonance (not 11.9)
-          lastRopAm=.22;                      // The last Amplitude of the Roper Resonance (not .14)
-          lastRopWd=20.;                      // The last Width of the Roper Resonance (close to H2)
-          lastRopPs=6.57;                     // The last Position of the Roper Resonance (like H2)
-		}
-        else
-        {
-          lastHighE=exp(-lnA*(.115-.0048*lnA))*A; // High Energy A-dependence
-          lastGDRc1=GetGDRc1(targZ, targN);   // The last logAmplitude of the 1-st GDR maximum
-          lastGDRp1=GetGDRp1(targZ, targN);   // The last A-power of the 1-st GDR maximum
-          lastGDRt1=GetGDRt1(targZ, targN);   // The last Threshold of the 1-st GDR maximum
-          lastGDRs1=GetGDRs1(targZ, targN);   // The last Slope of the 1-st GDR maximum
-          lastGDRc2=GetGDRc2(targZ, targN);   // The last logAmplitude of the 2-nd GDR maximum
-          lastGDRp2=GetGDRp2(targZ, targN);   // The last A-power of the 2-nd GDR maximum
-          lastGDRt2=GetGDRt2(targZ, targN);   // The last Threshold of the 2-nd GDR maximum
-          lastGDRs2=GetGDRs2(targZ, targN);   // The last Slope of the 2-nd GDR maximum
-          lastDelWd=GetDelWd(targZ, targN);   // The last Width of the Delta Resonance
-          if(A==2)
-		  {
-            lastDelAm=.88;                    // The last Amplitude of the Delta Resonance (not .82)
-            lastQDAmp=.078;                   // The last Amplitude of the Third Resonance
-            lastQDWid=90.;                    // The last Width of the Third Resonance (like H1)
-		    lastQDPos=6.93;                   // The last Position of the Third Resonance (like H1)
-            lastRopAm=.34;                    // The last Amplitude of the Roper Resonance (not .14)
-            lastRopWd=15.;                    // The last Width of the Roper Resonance (close to H1)
-            lastRopPs=6.57;                   // The last Position of the Roper Resonance (like H1)
-		  }
-          else
-          {
-            lastDelAm=GetDelAm(targZ, targN); // The last Amplitude of the Delta Resonance
-            lastQDAmp=GetQDAmp(targZ, targN); // The last Amplitude of the QuasiDeuteron region
-            lastQDWid=.4;                     // The last Width of the QuasiDeuteron region
-	    	lastQDPos=3.7;                    // The last Position of the QuasiDeuteron region
-            lastRopAm=GetRopAm(targZ, targN); // The last Amplitude of the Roper Resonance
-            lastRopWd=GetRopWd(targZ, targN); // The last Width of the Roper Resonance
-            lastRopPs=GetRopPs(targZ, targN); // The last Position of the Roper Resonance       
-		  }
-		}
-        lastDelPs=GetDelPs(targZ, targN);     // The last Position of the Delta Resonance
-        lastDelTh=GetDelTh(targZ, targN);     // The last Threshold of the Delta Resonance
-        lastDelSl=GetDelSl(targZ, targN);     // The last Slope of the Delta Resonance
+        lastPhi = new G4double[228];       // Allocate memory for the new Phi function
+        lastFun = new G4double[228];       // Allocate memory for the new Fun function
+        lastF=GetFunctions(lnA, lastPhi, lastFun); // MinChannelNumber and filling of the functions
+        lastH=dalop*A*exp(-lnA*(.115-.0048*lnA));
+#ifdef pdebug
+        G4cout<<"lastH="<<lastH<<",A="<<A<<",lnA="<<lnA<<G4endl;
+#endif
         colN.push_back(targN);
         colZ.push_back(targZ);
-        HighE.push_back(lastHighE);
-        GDRc1.push_back(lastGDRc1);
-        GDRp1.push_back(lastGDRp1);
-        GDRt1.push_back(lastGDRt1);
-        GDRs1.push_back(lastGDRs1);
-        GDRc2.push_back(lastGDRc2);
-        GDRp2.push_back(lastGDRp2);
-        GDRt2.push_back(lastGDRt2);
-        GDRs2.push_back(lastGDRs2);
-        QDAmp.push_back(lastQDAmp);
-        QDWid.push_back(lastQDWid);
-        QDPos.push_back(lastQDPos);
-        DelAm.push_back(lastDelAm);
-        DelWd.push_back(lastDelWd);
-        DelPs.push_back(lastDelPs);
-        DelTh.push_back(lastDelTh);
-        DelSl.push_back(lastDelSl);
-        RopAm.push_back(lastRopAm);
-        RopWd.push_back(lastRopWd);
-        RopPs.push_back(lastRopPs);
+        colF.push_back(targN);
+        Phi.push_back(lastPhi);
+        Fun.push_back(lastFun);
+        colH.push_back(lastH);
 	  } // End of creation of the new set of parameters
     } // End of parameters udate
-    // ============================== NOW the Magic Formula =================================
-    G4double qdeut=lE-lastQDPos;
-    G4double delta=lE-lastDelPs;
-    G4double roper=lE-lastRopPs;
-    if(A>1) sigma+=exp(lastGDRc1-lE*lastGDRp1)/(1.+exp((lastGDRt1-lE)/lastGDRs1))+       // 1-st GDR
-			       exp(lastGDRc2-lE*lastGDRp2)/(1.+exp((lastGDRt2-lE)/lastGDRs2));       // 2-nd GDR
-	sigma+=lastQDAmp/(1.+lastQDWid*qdeut*qdeut) + lastRopAm/(1.+lastRopWd*roper*roper)+  // QD+Roper
-	       lastDelAm/(1.+lastDelWd*delta*delta)/(1.+exp((lastDelTh-lE)/lastDelSl))+      // Delta
-	       lastHighE*(0.0116*exp(lE*0.16)+.4*exp(-lE*0.2))/(1.+exp((7.-lE)/0.2));        // High E
+    else if(abs(lastLE-lE)<.001) return lastSig*millibarn;  // Don't calculate the same CS twice
+    // ============================== NOW Calculate the Cross Section ==========================
+    lastLE=lE;
+    if(lE<lEMa) // Linear fit is done explicitly to fix the last bin for the randomization
+	{
+      G4double Xj=X[lastF];
+      G4double Xp=0.;                      // It just remembers the Previous bin delimiter
+      lastL=lastF;
+      while (lE>Xj && lastL<nL)            // lE is X in this case
+      {
+        lastL++;
+        Xp=Xj;
+        Xj=X[lastL];
+      }
+      G4double YNj=lE*lastPhi[lastL]-lastFun[lastL];
+      G4double YN1=lE*lastPhi[lastL-1]-lastFun[lastL-1];
+      if(YNj<0.||YN1<0.)G4cerr<<",lE="<<lE<<",P1="<<lastPhi[lastL]<<",F1="<<lastPhi[lastL]
+                              <<",P2="<<lastPhi[lastL-1]<<",F2="<<lastPhi[lastL-1]<<G4endl;
+      lastSig= YNj-(Xj-lE)*(YNj-YN1)/(Xj-Xp);
+      //G4cout<<"S="<<lastSig<<",E="<<lE<<",Xj="<<Xj<<",Yj="<<YNj<<",Y1="<<YN1<<",M="<<lEMa<<G4endl;
+    }
+    else
+	{
+      lastL=mL;
+      lastSig=lE*(lastPhi[mL]+lastH*HighEnergyPhi(lE))-lastFun[mL]-lastH*HighEnergyFun(lE);
+      //G4cout<<"S="<<lastSig<<",lE="<<lE<<",Pm="<<lastPhi[mL]<<",Ph="<<lastH*HighEnergyPhi(lE)
+      //      <<",Fm="<<lastFun[mL]<<",Fh="<<lastH*HighEnergyFun(lE)<<",EM="<<lEMa<<G4endl;
+	}
   } // End of "sigma" calculation
-  return sigma*millibarn;
+  else return 0.;
+  return lastSig*millibarn;
 }
 
-// Correction function for Be,C @@ Move to header
-G4double G4PhotoNuclearCrossSection::LinearFit(G4double X, G4int N, const G4double* XN,
-											   const G4double* YN)
+// Correction function for Be,C @@ Move to header // @@@ !!! NOT used !!!
+G4double G4ElectroNuclearCrossSection::LinearFit(G4double X, G4int N, const G4double* XN,
+                                                 const G4double* YN)
 {
   G4double Xj=XN[0];
   G4double Xh=XN[N-1];
-  if(X<=Xj) return Xj; //-----+
-  else if(X>=Xh) return Xh;//-|
-  G4double Xp=0.; //          |
-  G4int j=0;   //             |
-  while (X>Xj && j<N)//<------+
+  if(X<=Xj) return YN[0]; //-------+ !!! If you correct this, correct upper copy too!!
+  else if(X>=Xh) return YN[N-1];//-|
+  G4double Xp=0.; //               |
+  G4int j=0;   //                  |
+  while (X>Xj && j<N)//<-----------+
   {
     j++;
     Xp=Xj;
@@ -230,4 +184,1461 @@ G4double G4PhotoNuclearCrossSection::LinearFit(G4double X, G4int N, const G4doub
   return YN[j]-(Xj-X)*(YN[j]-YN[j-1])/(Xj-Xp);
 }
 
+// Calculate the functions for the log(A)
+G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double* z)
+{
+  static const G4int nN=14;
+  static const G4int nL=228; // !!  If you change this, change it in GetCrossSection() (*.cc) !!
+  static G4int L[nN]={138, 3, 75, 27, 42, 0, 68, 59, 46, 46, 42, 38, 39, 36};
+  static G4double A[nN]={0.    , 0.6931, 1.3863, 1.7918, 1.9459, 2.1972, 2.4849,
+                         2.7726, 3.2958, 3.6889, 4.1518, 4.7767, 5.3337, 5.4723};
+
+  static G4double Y0[nL]= {0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,// 5
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//10
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//15
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//20
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//25
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//30
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//35
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//40
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//45
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//50
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//55
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//60
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//65
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//70
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//75
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//80
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//85
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//90
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//95
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//00
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//05
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//10
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//15
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//20
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//25
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//30
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//35
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 3.387622e-07,//40
+                           9.964574e-07, 1.742999e-06, 2.661486e-06, 3.926492e-06, 5.874476e-06,//45
+                           9.052119e-06, 1.411437e-05, 2.152053e-05, 3.131927e-05, 4.328920e-05,//50
+                           5.720955e-05, 7.299449e-05, 9.070187e-05, 1.105048e-04, 1.326680e-04,//55
+                           1.575362e-04, 1.855306e-04, 2.171477e-04, 2.529554e-04, 2.935782e-04,//60
+                           3.396608e-04, 3.917976e-04, 4.504126e-04, 5.155876e-04, 5.868588e-04,//65
+                           6.630548e-04, 7.422805e-04, 8.221346e-04, 9.001299e-04, 9.741510e-04,//70
+                           1.042759e-03, 1.105258e-03, 1.161570e-03, 1.212042e-03, 1.257255e-03,//75
+                           1.297888e-03, 1.334629e-03, 1.368134e-03, 1.399003e-03, 1.427786e-03,//80
+                           1.454982e-03, 1.481053e-03, 1.506435e-03, 1.531550e-03, 1.556816e-03,//85
+                           1.582654e-03, 1.609491e-03, 1.637753e-03, 1.667838e-03, 1.700071e-03,//90
+                           1.734625e-03, 1.771427e-03, 1.810077e-03, 1.849835e-03, 1.889727e-03,//95
+                           1.928757e-03, 1.966132e-03, 2.001401e-03, 2.034479e-03, 2.065585e-03,//00
+                           2.095164e-03, 2.123829e-03, 2.152314e-03, 2.181379e-03, 2.211513e-03,//05
+                           2.242371e-03, 2.272629e-03, 2.300986e-03, 2.327082e-03, 2.351270e-03,//10
+                           2.374076e-03, 2.395947e-03, 2.417207e-03, 2.438076e-03, 2.458703e-03,//15
+                           2.479181e-03, 2.499574e-03, 2.519916e-03, 2.540230e-03, 2.560524e-03,//20
+                           2.580801e-03, 2.601057e-03, 2.621288e-03, 2.641488e-03, 2.661647e-03,//25
+                           2.681759e-03, 2.701817e-03, 2.721814e-03};
+																								
+  static G4double Z0[nL]= {0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,// 5
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//10
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//15
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//20
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//25
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//30
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//35
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//40
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//45
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//50
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//55
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//60
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//65
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//70
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//75
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//80
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//85
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//90
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//95
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//00
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//05
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//10
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//15
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//20
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//25
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//30
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//35
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 1.664888e-06,//40
+                           4.912894e-06, 8.622498e-06, 1.321468e-05, 1.957825e-05, 2.943725e-05,//45
+                           4.561655e-05, 7.154481e-05, 1.097018e-04, 1.604814e-04, 2.228750e-04,//50
+                           2.958575e-04, 3.790956e-04, 4.730097e-04, 5.786404e-04, 6.975356e-04,//55
+                           8.316992e-04, 9.835803e-04, 1.156079e-03, 1.352530e-03, 1.576635e-03,//60
+                           1.832262e-03, 2.123058e-03, 2.451770e-03, 2.819251e-03, 3.223270e-03,//65
+                           3.657520e-03, 4.111442e-03, 4.571388e-03, 5.022995e-03, 5.453838e-03,//70
+                           5.855261e-03, 6.222834e-03, 6.555735e-03, 6.855648e-03, 7.125689e-03,//75
+                           7.369610e-03, 7.591288e-03, 7.794455e-03, 7.982587e-03, 8.158877e-03,//80
+                           8.326277e-03, 8.487546e-03, 8.645328e-03, 8.802214e-03, 8.960812e-03,//85
+                           9.123790e-03, 9.293890e-03, 9.473880e-03, 9.666397e-03, 9.873636e-03,//90
+                           1.009685e-02, 1.033571e-02, 1.058774e-02, 1.084819e-02, 1.111074e-02,//95
+                           1.136880e-02, 1.161705e-02, 1.185239e-02, 1.207411e-02, 1.228356e-02,//00
+                           1.248364e-02, 1.267840e-02, 1.287280e-02, 1.307206e-02, 1.327956e-02,//05
+                           1.349298e-02, 1.370317e-02, 1.390101e-02, 1.408387e-02, 1.425410e-02,//10
+                           1.441530e-02, 1.457056e-02, 1.472212e-02, 1.487154e-02, 1.501984e-02,//15
+                           1.516771e-02, 1.531557e-02, 1.546370e-02, 1.561223e-02, 1.576123e-02,//20
+                           1.591072e-02, 1.606068e-02, 1.621107e-02, 1.636184e-02, 1.651292e-02,//25
+                           1.666426e-02, 1.681580e-02, 1.696749e-02};							
+																								
+  static G4double Y1[nL]= {0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 8.909761e-06,// 5
+                           2.776632e-05, 5.067999e-05, 7.851213e-05, 1.122970e-04, 1.532706e-04,//10
+                           2.029008e-04, 2.629174e-04, 3.353372e-04, 4.224803e-04, 5.269686e-04,//15
+                           6.516968e-04, 7.997623e-04, 9.743426e-04, 1.178508e-03, 1.414969e-03,//20
+                           1.685774e-03, 1.991986e-03, 2.333404e-03, 2.708386e-03, 3.113828e-03,//25
+                           3.545343e-03, 3.997589e-03, 4.464710e-03, 4.940787e-03, 5.420231e-03,//30
+                           5.898070e-03, 6.370105e-03, 6.832964e-03, 7.284071e-03, 7.721560e-03,//35
+                           8.144174e-03, 8.551147e-03, 8.942106e-03, 9.316976e-03, 9.675904e-03,//40
+                           1.001920e-02, 1.034728e-02, 1.066064e-02, 1.095982e-02, 1.124540e-02,//45
+                           1.151794e-02, 1.177803e-02, 1.202624e-02, 1.226312e-02, 1.248921e-02,//50
+                           1.270503e-02, 1.291107e-02, 1.310782e-02, 1.329573e-02, 1.347522e-02,//55
+                           1.364671e-02, 1.381060e-02, 1.396725e-02, 1.411701e-02, 1.426023e-02,//60
+                           1.439721e-02, 1.452827e-02, 1.465368e-02, 1.477371e-02, 1.488863e-02,//65
+                           1.499867e-02, 1.510407e-02, 1.520505e-02, 1.530181e-02, 1.539455e-02,//70
+                           1.548347e-02, 1.556872e-02, 1.565050e-02, 1.572895e-02, 1.580422e-02,//75
+                           1.587647e-02, 1.594583e-02, 1.601242e-02, 1.607639e-02, 1.613783e-02,//80
+                           1.619686e-02, 1.625360e-02, 1.630813e-02, 1.636057e-02, 1.641099e-02,//85
+                           1.645949e-02, 1.650615e-02, 1.655105e-02, 1.659426e-02, 1.663586e-02,//90
+                           1.667591e-02, 1.671448e-02, 1.675164e-02, 1.678744e-02, 1.682193e-02,//95
+                           1.685518e-02, 1.688723e-02, 1.691813e-02, 1.694793e-02, 1.697668e-02,//00
+                           1.700442e-02, 1.703118e-02, 1.705701e-02, 1.708195e-02, 1.710602e-02,//05
+                           1.712928e-02, 1.715174e-02, 1.717344e-02, 1.719441e-02, 1.721467e-02,//10
+                           1.723427e-02, 1.725321e-02, 1.727154e-02, 1.728926e-02, 1.730641e-02,//15
+                           1.732301e-02, 1.733908e-02, 1.735464e-02, 1.736971e-02, 1.738431e-02,//20
+                           1.739845e-02, 1.741216e-02, 1.742546e-02, 1.743835e-02, 1.745086e-02,//25
+                           1.746300e-02, 1.747478e-02, 1.748622e-02, 1.749734e-02, 1.750814e-02,//30
+                           1.751864e-02, 1.752886e-02, 1.753880e-02, 1.754847e-02, 1.755790e-02,//35
+                           1.756709e-02, 1.757604e-02, 1.758479e-02, 1.759335e-02, 1.760173e-02,//40
+                           1.761001e-02, 1.761827e-02, 1.762674e-02, 1.763585e-02, 1.764643e-02,//45
+                           1.765981e-02, 1.767753e-02, 1.770061e-02, 1.772907e-02, 1.776227e-02,//50
+                           1.779959e-02, 1.784071e-02, 1.788565e-02, 1.793462e-02, 1.798801e-02,//55
+                           1.804632e-02, 1.811011e-02, 1.817999e-02, 1.825662e-02, 1.834058e-02,//60
+                           1.843240e-02, 1.853238e-02, 1.864052e-02, 1.875640e-02, 1.887903e-02,//65
+                           1.900688e-02, 1.913786e-02, 1.926959e-02, 1.939960e-02, 1.952567e-02,//70
+                           1.964603e-02, 1.975949e-02, 1.986544e-02, 1.996375e-02, 2.005468e-02,//75
+                           2.013874e-02, 2.021659e-02, 2.028897e-02, 2.035664e-02, 2.042037e-02,//80
+                           2.048089e-02, 2.053893e-02, 2.059519e-02, 2.065035e-02, 2.070508e-02,//85
+                           2.076003e-02, 2.081584e-02, 2.087310e-02, 2.093231e-02, 2.099383e-02,//90
+                           2.105779e-02, 2.112402e-02, 2.119197e-02, 2.126079e-02, 2.132938e-02,//95
+                           2.139664e-02, 2.146165e-02, 2.152378e-02, 2.158283e-02, 2.163891e-02,//00
+                           2.169244e-02, 2.174404e-02, 2.179452e-02, 2.184474e-02, 2.189530e-02,//05
+                           2.194601e-02, 2.199568e-02, 2.204317e-02, 2.208821e-02, 2.213122e-02,//10
+                           2.217279e-02, 2.221340e-02, 2.225340e-02, 2.229301e-02, 2.233241e-02,//15
+                           2.237169e-02, 2.241090e-02, 2.245008e-02, 2.248923e-02, 2.252837e-02,//20
+                           2.256746e-02, 2.260651e-02, 2.264550e-02, 2.268440e-02, 2.272320e-02,//25
+                           2.276188e-02, 2.280043e-02, 2.283884e-02};							
+																								
+  static G4double Z1[nL]= {0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 7.186408e-06,// 5
+                           2.284819e-05, 4.257695e-05, 6.738745e-05, 9.853245e-05, 1.375512e-04,//10
+                           1.863237e-04, 2.471291e-04, 3.227041e-04, 4.162949e-04, 5.316930e-04,//15
+                           6.732382e-04, 8.457707e-04, 1.054509e-03, 1.304829e-03, 1.601935e-03,//20
+                           1.950425e-03, 2.353788e-03, 2.813905e-03, 3.330649e-03, 3.901692e-03,//25
+                           4.522571e-03, 5.187023e-03, 5.887528e-03, 6.615936e-03, 7.364072e-03,//30
+                           8.124233e-03, 8.889516e-03, 9.654000e-03, 1.041279e-02, 1.116199e-02,//35
+                           1.189857e-02, 1.262027e-02, 1.332547e-02, 1.401305e-02, 1.468231e-02,//40
+                           1.533287e-02, 1.596458e-02, 1.657748e-02, 1.717176e-02, 1.774770e-02,//45
+                           1.830565e-02, 1.884602e-02, 1.936925e-02, 1.987582e-02, 2.036619e-02,//50
+                           2.084085e-02, 2.130028e-02, 2.174498e-02, 2.217540e-02, 2.259201e-02,//55
+                           2.299528e-02, 2.338565e-02, 2.376354e-02, 2.412939e-02, 2.448359e-02,//60
+                           2.482656e-02, 2.515866e-02, 2.548027e-02, 2.579176e-02, 2.609346e-02,//65
+                           2.638571e-02, 2.666885e-02, 2.694317e-02, 2.720898e-02, 2.746658e-02,//70
+                           2.771624e-02, 2.795824e-02, 2.819283e-02, 2.842028e-02, 2.864081e-02,//75
+                           2.885468e-02, 2.906209e-02, 2.926328e-02, 2.945845e-02, 2.964780e-02,//80
+                           2.983154e-02, 3.000984e-02, 3.018289e-02, 3.035086e-02, 3.051393e-02,//85
+                           3.067226e-02, 3.082599e-02, 3.097529e-02, 3.112030e-02, 3.126116e-02,//90
+                           3.139801e-02, 3.153097e-02, 3.166018e-02, 3.178575e-02, 3.190780e-02,//95
+                           3.202645e-02, 3.214181e-02, 3.225397e-02, 3.236305e-02, 3.246915e-02,//00
+                           3.257234e-02, 3.267274e-02, 3.277043e-02, 3.286549e-02, 3.295801e-02,//05
+                           3.304807e-02, 3.313574e-02, 3.322111e-02, 3.330424e-02, 3.338520e-02,//10
+                           3.346407e-02, 3.354091e-02, 3.361578e-02, 3.368874e-02, 3.375987e-02,//15
+                           3.382921e-02, 3.389682e-02, 3.396276e-02, 3.402709e-02, 3.408985e-02,//20
+                           3.415109e-02, 3.421087e-02, 3.426924e-02, 3.432623e-02, 3.438191e-02,//25
+                           3.443631e-02, 3.448948e-02, 3.454145e-02, 3.459229e-02, 3.464202e-02,//30
+                           3.469068e-02, 3.473833e-02, 3.478499e-02, 3.483072e-02, 3.487554e-02,//35
+                           3.491951e-02, 3.496266e-02, 3.500506e-02, 3.504678e-02, 3.508795e-02,//40
+                           3.512881e-02, 3.516987e-02, 3.521221e-02, 3.525802e-02, 3.531156e-02,//45
+                           3.537967e-02, 3.547042e-02, 3.558935e-02, 3.573682e-02, 3.590986e-02,//50
+                           3.610551e-02, 3.632238e-02, 3.656070e-02, 3.682192e-02, 3.710834e-02,//55
+                           3.742289e-02, 3.776895e-02, 3.815024e-02, 3.857062e-02, 3.903383e-02,//60
+                           3.954313e-02, 4.010076e-02, 4.070721e-02, 4.136056e-02, 4.205574e-02,//65
+                           4.278434e-02, 4.353481e-02, 4.429354e-02, 4.504634e-02, 4.578015e-02,//70
+                           4.648439e-02, 4.715170e-02, 4.777803e-02, 4.836222e-02, 4.890532e-02,//75
+                           4.940993e-02, 4.987964e-02, 5.031854e-02, 5.073096e-02, 5.112126e-02,//80
+                           5.149380e-02, 5.185283e-02, 5.220254e-02, 5.254711e-02, 5.289065e-02,//85
+                           5.323729e-02, 5.359104e-02, 5.395570e-02, 5.433458e-02, 5.473012e-02,//90
+                           5.514329e-02, 5.557310e-02, 5.601621e-02, 5.646704e-02, 5.691848e-02,//95
+                           5.736320e-02, 5.779496e-02, 5.820959e-02, 5.860539e-02, 5.898301e-02,//00
+                           5.934503e-02, 5.969563e-02, 6.004016e-02, 6.038443e-02, 6.073262e-02,//05
+                           6.108330e-02, 6.142836e-02, 6.175966e-02, 6.207528e-02, 6.237803e-02,//10
+                           6.267186e-02, 6.296012e-02, 6.324524e-02, 6.352889e-02, 6.381216e-02,//15
+                           6.409575e-02, 6.438008e-02, 6.466536e-02, 6.495166e-02, 6.523898e-02,//20
+                           6.552724e-02, 6.581633e-02, 6.610612e-02, 6.639648e-02, 6.668726e-02,//25
+                           6.697834e-02, 6.726961e-02, 6.756094e-02};							
+																								
+  static G4double Y2[nL]= {0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,// 5
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//10
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//15
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//20
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//25
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//30
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//35
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//40
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//45
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//50
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//55
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//60
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//65
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//70
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//75
+                           0.000000e+00, 1.904286e-04, 5.076287e-04, 8.544776e-04, 1.230463e-03,//80
+                           1.634103e-03, 2.062791e-03, 2.512694e-03, 2.978748e-03, 3.454859e-03,//85
+                           3.934305e-03, 4.410313e-03, 4.876647e-03, 5.328073e-03, 5.760610e-03,//90
+                           6.171561e-03, 6.559389e-03, 6.923508e-03, 7.264054e-03, 7.581670e-03,//95
+                           7.877334e-03, 8.152223e-03, 8.407610e-03, 8.644800e-03, 8.865083e-03,//00
+                           9.069699e-03, 9.259829e-03, 9.436582e-03, 9.600988e-03, 9.754006e-03,//05
+                           9.896518e-03, 1.002934e-02, 1.015322e-02, 1.026884e-02, 1.037684e-02,//10
+                           1.047780e-02, 1.057225e-02, 1.066068e-02, 1.074354e-02, 1.082124e-02,//15
+                           1.089418e-02, 1.096270e-02, 1.102712e-02, 1.108774e-02, 1.114485e-02,//20
+                           1.119869e-02, 1.124952e-02, 1.129753e-02, 1.134295e-02, 1.138595e-02,//25
+                           1.142673e-02, 1.146543e-02, 1.150221e-02, 1.153723e-02, 1.157060e-02,//30
+                           1.160245e-02, 1.163291e-02, 1.166208e-02, 1.169007e-02, 1.171697e-02,//35
+                           1.174288e-02, 1.176789e-02, 1.179208e-02, 1.181555e-02, 1.183841e-02,//40
+                           1.186083e-02, 1.188304e-02, 1.190555e-02, 1.192928e-02, 1.195596e-02,//45
+                           1.198826e-02, 1.202924e-02, 1.208082e-02, 1.214291e-02, 1.221424e-02,//50
+                           1.229360e-02, 1.238040e-02, 1.247465e-02, 1.257677e-02, 1.268747e-02,//55
+                           1.280767e-02, 1.293838e-02, 1.308072e-02, 1.323579e-02, 1.340464e-02,//60
+                           1.358811e-02, 1.378669e-02, 1.400034e-02, 1.422826e-02, 1.446875e-02,//65
+                           1.471916e-02, 1.497598e-02, 1.523512e-02, 1.549235e-02, 1.574378e-02,//70
+                           1.598618e-02, 1.621729e-02, 1.643577e-02, 1.664115e-02, 1.683364e-02,//75
+                           1.701390e-02, 1.718289e-02, 1.734172e-02, 1.749154e-02, 1.763348e-02,//80
+                           1.776859e-02, 1.789785e-02, 1.802210e-02, 1.814211e-02, 1.825854e-02,//85
+                           1.837192e-02, 1.848273e-02, 1.859133e-02, 1.869802e-02, 1.880303e-02,//90
+                           1.890651e-02, 1.900859e-02, 1.910933e-02, 1.920880e-02, 1.930702e-02,//95
+                           1.940401e-02, 1.949980e-02, 1.959442e-02, 1.968791e-02, 1.978035e-02,//00
+                           1.987180e-02, 1.996238e-02, 2.005218e-02, 2.014134e-02, 2.022997e-02,//05
+                           2.031821e-02, 2.040615e-02, 2.049391e-02, 2.058158e-02, 2.066920e-02,//10
+                           2.075682e-02, 2.084446e-02, 2.093213e-02, 2.101978e-02, 2.110740e-02,//15
+                           2.119493e-02, 2.128232e-02, 2.136950e-02, 2.145642e-02, 2.154301e-02,//20
+                           2.162921e-02, 2.171497e-02, 2.180024e-02, 2.188498e-02, 2.196915e-02,//25
+                           2.205273e-02, 2.213569e-02, 2.221801e-02};							
+																								
+  static G4double Z2[nL]= {0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,// 5
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//10
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//15
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//20
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//25
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//30
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//35
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//40
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//45
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//50
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//55
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//60
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//65
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//70
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//75
+                           0.000000e+00, 5.705302e-04, 1.528895e-03, 2.587386e-03, 3.746227e-03,//80
+                           5.002575e-03, 6.349922e-03, 7.777619e-03, 9.270740e-03, 1.081055e-02,//85
+                           1.237572e-02, 1.394413e-02, 1.549485e-02, 1.700971e-02, 1.847434e-02,//90
+                           1.987838e-02, 2.121521e-02, 2.248139e-02, 2.367596e-02, 2.479976e-02,//95
+                           2.585489e-02, 2.684423e-02, 2.777117e-02, 2.863927e-02, 2.945220e-02,//00
+                           3.021354e-02, 3.092676e-02, 3.159518e-02, 3.222192e-02, 3.280989e-02,//05
+                           3.336184e-02, 3.388029e-02, 3.436761e-02, 3.482597e-02, 3.525739e-02,//10
+                           3.566376e-02, 3.604680e-02, 3.640813e-02, 3.674922e-02, 3.707146e-02,//15
+                           3.737614e-02, 3.766443e-02, 3.793746e-02, 3.819624e-02, 3.844175e-02,//20
+                           3.867487e-02, 3.889645e-02, 3.910725e-02, 3.930803e-02, 3.949946e-02,//25
+                           3.968218e-02, 3.985681e-02, 4.002391e-02, 4.018401e-02, 4.033764e-02,//30
+                           4.048525e-02, 4.062732e-02, 4.076427e-02, 4.089651e-02, 4.102444e-02,//35
+                           4.114844e-02, 4.126887e-02, 4.138612e-02, 4.150060e-02, 4.161281e-02,//40
+                           4.172349e-02, 4.183389e-02, 4.194640e-02, 4.206576e-02, 4.220076e-02,//45
+                           4.236521e-02, 4.257508e-02, 4.284079e-02, 4.316254e-02, 4.353434e-02,//50
+                           4.395041e-02, 4.440813e-02, 4.490798e-02, 4.545269e-02, 4.604658e-02,//55
+                           4.669502e-02, 4.740419e-02, 4.818073e-02, 4.903148e-02, 4.996295e-02,//60
+                           5.098067e-02, 5.208826e-02, 5.328637e-02, 5.457143e-02, 5.593471e-02,//65
+                           5.736182e-02, 5.883325e-02, 6.032585e-02, 6.181531e-02, 6.327875e-02,//70
+                           6.469707e-02, 6.605631e-02, 6.734793e-02, 6.856837e-02, 6.971803e-02,//75
+                           7.080014e-02, 7.181976e-02, 7.278291e-02, 7.369600e-02, 7.456536e-02,//80
+                           7.539703e-02, 7.619655e-02, 7.696895e-02, 7.771862e-02, 7.844942e-02,//85
+                           7.916461e-02, 7.986691e-02, 8.055853e-02, 8.124122e-02, 8.191632e-02,//90
+                           8.258480e-02, 8.324729e-02, 8.390423e-02, 8.455585e-02, 8.520227e-02,//95
+                           8.584356e-02, 8.647982e-02, 8.711118e-02, 8.773789e-02, 8.836031e-02,//00
+                           8.897891e-02, 8.959431e-02, 9.020722e-02, 9.081842e-02, 9.142873e-02,//05
+                           9.203897e-02, 9.264991e-02, 9.326223e-02, 9.387652e-02, 9.449319e-02,//10
+                           9.511255e-02, 9.573471e-02, 9.635967e-02, 9.698727e-02, 9.761726e-02,//15
+                           9.824928e-02, 9.888292e-02, 9.951773e-02, 1.001532e-01, 1.007890e-01,//20
+                           1.014245e-01, 1.020594e-01, 1.026933e-01, 1.033258e-01, 1.039566e-01,//25
+                           1.045855e-01, 1.052122e-01, 1.058367e-01};							
+																								
+  static G4double Y3[nL]= {0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,// 5
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//10
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//15
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//20
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//25
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 1.943104e-06, 4.659390e-06,//30
+                           7.535072e-06, 1.058953e-05, 1.384480e-05, 1.732599e-05, 2.106166e-05,//35
+                           2.508436e-05, 2.943112e-05, 3.414419e-05, 3.927165e-05, 4.486833e-05,//40
+                           5.099672e-05, 5.772806e-05, 6.514357e-05, 7.333588e-05, 8.241062e-05,//45
+                           9.248827e-05, 1.037063e-04, 1.162213e-04, 1.302124e-04, 1.458834e-04,//50
+                           1.634673e-04, 1.832295e-04, 2.054730e-04, 2.305434e-04, 2.588348e-04,//55
+                           2.907961e-04, 3.269391e-04, 3.678463e-04, 4.141800e-04, 4.666925e-04,//60
+                           5.262363e-04, 5.937753e-04, 6.703954e-04, 7.573147e-04, 8.558908e-04,//65
+                           9.676254e-04, 1.094162e-03, 1.237273e-03, 1.398834e-03, 1.580778e-03,//70
+                           1.785025e-03, 2.013377e-03, 2.267380e-03, 2.548150e-03, 2.856163e-03,//75
+                           3.191040e-03, 3.551329e-03, 3.934348e-03, 4.336120e-03, 4.751454e-03,//80
+                           5.174223e-03, 5.597815e-03, 6.015684e-03, 6.421910e-03, 6.811609e-03,//85
+                           7.181155e-03, 7.528199e-03, 7.851537e-03, 8.150906e-03, 8.426751e-03,//90
+                           8.680011e-03, 8.911937e-03, 9.123959e-03, 9.317577e-03, 9.494296e-03,//95
+                           9.655572e-03, 9.802791e-03, 9.937245e-03, 1.006013e-02, 1.017254e-02,//00
+                           1.027549e-02, 1.036986e-02, 1.045650e-02, 1.053614e-02, 1.060946e-02,//05
+                           1.067705e-02, 1.073947e-02, 1.079720e-02, 1.085068e-02, 1.090033e-02,//10
+                           1.094648e-02, 1.098948e-02, 1.102961e-02, 1.106713e-02, 1.110229e-02,//15
+                           1.113530e-02, 1.116637e-02, 1.119566e-02, 1.122334e-02, 1.124956e-02,//20
+                           1.127445e-02, 1.129813e-02, 1.132073e-02, 1.134233e-02, 1.136304e-02,//25
+                           1.138294e-02, 1.140212e-02, 1.142063e-02, 1.143857e-02, 1.145598e-02,//30
+                           1.147294e-02, 1.148949e-02, 1.150568e-02, 1.152157e-02, 1.153721e-02,//35
+                           1.155264e-02, 1.156791e-02, 1.158307e-02, 1.159818e-02, 1.161335e-02,//40
+                           1.162875e-02, 1.164472e-02, 1.166196e-02, 1.168191e-02, 1.170722e-02,//45
+                           1.174202e-02, 1.179089e-02, 1.185657e-02, 1.193869e-02, 1.203517e-02,//50
+                           1.214410e-02, 1.226453e-02, 1.239643e-02, 1.254037e-02, 1.269735e-02,//55
+                           1.286864e-02, 1.305569e-02, 1.326005e-02, 1.348329e-02, 1.372684e-02,//60
+                           1.399187e-02, 1.427906e-02, 1.458831e-02, 1.491852e-02, 1.526731e-02,//65
+                           1.563101e-02, 1.600469e-02, 1.638259e-02, 1.675866e-02, 1.712719e-02,//70
+                           1.748338e-02, 1.782365e-02, 1.814579e-02, 1.844882e-02, 1.873279e-02,//75
+                           1.899847e-02, 1.924716e-02, 1.948040e-02, 1.969987e-02, 1.990723e-02,//80
+                           2.010411e-02, 2.029198e-02, 2.047221e-02, 2.064601e-02, 2.081444e-02,//85
+                           2.097842e-02, 2.113870e-02, 2.129592e-02, 2.145056e-02, 2.160300e-02,//90
+                           2.175350e-02, 2.190221e-02, 2.204921e-02, 2.219453e-02, 2.233812e-02,//95
+                           2.247995e-02, 2.261996e-02, 2.275811e-02, 2.289439e-02, 2.302883e-02,//00
+                           2.316150e-02, 2.329251e-02, 2.342199e-02, 2.355012e-02, 2.367709e-02,//05
+                           2.380310e-02, 2.392834e-02, 2.405299e-02, 2.417721e-02, 2.430111e-02,//10
+                           2.442481e-02, 2.454835e-02, 2.467178e-02, 2.479508e-02, 2.491825e-02,//15
+                           2.504123e-02, 2.516396e-02, 2.528638e-02, 2.540841e-02, 2.552998e-02,//20
+                           2.565102e-02, 2.577146e-02, 2.589124e-02, 2.601030e-02, 2.612860e-02,//25
+                           2.624610e-02, 2.636276e-02, 2.647858e-02};							
+																								
+  static G4double Z3[nL]= {0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,// 5
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//10
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//15
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//20
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//25
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 2.980365e-06, 7.219292e-06,//30
+                           1.179450e-05, 1.674710e-05, 2.212441e-05, 2.798087e-05, 3.437916e-05,//35
+                           4.139150e-05, 4.910108e-05, 5.760378e-05, 6.701017e-05, 7.744770e-05,//40
+                           8.906339e-05, 1.020268e-04, 1.165335e-04, 1.328092e-04, 1.511142e-04,//45
+                           1.717490e-04, 1.950601e-04, 2.214475e-04, 2.513727e-04, 2.853683e-04,//50
+                           3.240484e-04, 3.681219e-04, 4.184062e-04, 4.758439e-04, 5.415220e-04,//55
+                           6.166926e-04, 7.027982e-04, 8.014986e-04, 9.147022e-04, 1.044600e-03,//60
+                           1.193703e-03, 1.364882e-03, 1.561408e-03, 1.786997e-03, 2.045838e-03,//65
+                           2.342632e-03, 2.682593e-03,3.071438e-03, 3.515330e-03, 4.020760e-03, //70
+                           4.594360e-03, 5.242602e-03, 5.971387e-03, 6.785509e-03, 7.687995e-03,//75
+                           8.679373e-03, 9.756937e-03,1.091413e-02, 1.214018e-02, 1.342025e-02, //80
+                           1.473608e-02, 1.606734e-02, 1.739332e-02, 1.869470e-02, 1.995498e-02,//85
+                           2.116132e-02, 2.230476e-02, 2.337993e-02, 2.438450e-02, 2.531853e-02,//90
+                           2.618378e-02, 2.698321e-02, 2.772047e-02, 2.839964e-02, 2.902490e-02,//95
+                           2.960044e-02, 3.013028e-02, 3.061828e-02, 3.106803e-02, 3.148287e-02,//00
+                           3.186590e-02, 3.221993e-02, 3.254757e-02, 3.285117e-02, 3.313288e-02,//05
+                           3.339466e-02, 3.363830e-02, 3.386540e-02, 3.407743e-02, 3.427574e-02,//10
+                           3.446152e-02, 3.463589e-02, 3.479985e-02, 3.495432e-02, 3.510012e-02,//15
+                           3.523803e-02, 3.536874e-02, 3.549287e-02, 3.561103e-02, 3.572375e-02,//20
+                           3.583151e-02, 3.593478e-02, 3.603398e-02, 3.612948e-02, 3.622166e-02,//25
+                           3.631085e-02, 3.639737e-02, 3.648149e-02, 3.656351e-02, 3.664367e-02,//30
+                           3.672223e-02, 3.679942e-02, 3.687545e-02, 3.695054e-02, 3.702491e-02,//35
+                           3.709875e-02, 3.717229e-02, 3.724576e-02, 3.731949e-02, 3.739394e-02,//40
+                           3.746999e-02, 3.754934e-02, 3.763554e-02, 3.773587e-02, 3.786395e-02,//45
+                           3.804112e-02, 3.829144e-02, 3.862980e-02, 3.905535e-02, 3.955823e-02,//50
+                           4.012933e-02, 4.076441e-02, 4.146394e-02, 4.223171e-02, 4.307382e-02,//55
+                           4.399792e-02, 4.501273e-02, 4.612769e-02, 4.735240e-02, 4.869598e-02,//60
+                           5.016614e-02, 5.176791e-02, 5.350217e-02, 5.536396e-02, 5.734118e-02,//65
+                           5.941389e-02, 6.155487e-02, 6.373152e-02, 6.590906e-02, 6.805416e-02,//70
+                           7.013824e-02, 7.213954e-02, 7.404399e-02, 7.584467e-02, 7.754070e-02,//75
+                           7.913564e-02, 8.063610e-02, 8.205047e-02, 8.338800e-02, 8.465810e-02,//80
+                           8.586991e-02, 8.703205e-02, 8.815241e-02, 8.923809e-02, 9.029536e-02,//85
+                           9.132964e-02, 9.234551e-02, 9.334673e-02, 9.433628e-02, 9.531636e-02,//90
+                           9.628852e-02, 9.725367e-02, 9.821222e-02, 9.916416e-02, 1.001092e-01,//95
+                           1.010470e-01, 1.019769e-01, 1.028988e-01, 1.038123e-01, 1.047176e-01,//00
+                           1.056150e-01, 1.065051e-01, 1.073888e-01, 1.082672e-01, 1.091415e-01,//05
+                           1.100130e-01, 1.108830e-01, 1.117527e-01, 1.126231e-01, 1.134951e-01,//10
+                           1.143694e-01, 1.152465e-01, 1.161264e-01, 1.170092e-01, 1.178948e-01,//15
+                           1.187828e-01, 1.196727e-01, 1.205641e-01, 1.214563e-01, 1.223490e-01,//20
+                           1.232413e-01, 1.241330e-01, 1.250233e-01, 1.259120e-01, 1.267986e-01,//25
+                           1.276827e-01, 1.285642e-01, 1.294427e-01};							
+																								
+  static G4double Y4[nL]= {0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,// 5
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//10
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//15
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//20
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//25
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//30
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//35
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//40
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 1.597269e-05, 4.295065e-05,//45
+                           7.320271e-05, 1.071793e-04, 1.453932e-04, 1.884277e-04, 2.369458e-04,//50
+                           2.917007e-04, 3.535466e-04, 4.234509e-04, 5.025069e-04, 5.919469e-04,//55
+                           6.931546e-04, 8.076764e-04, 9.372307e-04, 1.083711e-03, 1.249181e-03,//60
+                           1.435859e-03, 1.646084e-03, 1.882253e-03, 2.146733e-03, 2.441725e-03,//65
+                           2.769084e-03, 3.130090e-03, 3.525180e-03, 3.953666e-03, 4.413479e-03,//70
+                           4.901005e-03, 5.411072e-03, 5.937152e-03, 6.471771e-03, 7.007112e-03,//75
+                           7.535694e-03, 8.051023e-03, 8.548111e-03, 9.023799e-03, 9.476890e-03,//80
+                           9.908116e-03, 1.032000e-02, 1.071664e-02, 1.110341e-02, 1.148658e-02,//85
+                           1.187276e-02, 1.226819e-02, 1.267783e-02, 1.310448e-02, 1.354815e-02,//90
+                           1.400602e-02, 1.447298e-02, 1.494265e-02, 1.540849e-02, 1.586472e-02,//95
+                           1.630674e-02, 1.673129e-02, 1.713635e-02, 1.752089e-02, 1.788464e-02,//00
+                           1.822785e-02, 1.855112e-02, 1.885526e-02, 1.914123e-02, 1.941001e-02,//05
+                           1.966259e-02, 1.989997e-02, 2.012310e-02, 2.033288e-02, 2.053018e-02,//10
+                           2.071580e-02, 2.089051e-02, 2.105500e-02, 2.120996e-02, 2.135600e-02,//15
+                           2.149369e-02, 2.162358e-02, 2.174618e-02, 2.186195e-02, 2.197134e-02,//20
+                           2.207475e-02, 2.217258e-02, 2.226519e-02, 2.235291e-02, 2.243605e-02,//25
+                           2.251493e-02, 2.258981e-02, 2.266097e-02, 2.272866e-02, 2.279311e-02,//30
+                           2.285455e-02, 2.291321e-02, 2.296932e-02, 2.302309e-02, 2.307476e-02,//35
+                           2.312459e-02, 2.317287e-02, 2.321996e-02, 2.326626e-02, 2.331232e-02,//40
+                           2.335883e-02, 2.340666e-02, 2.345691e-02, 2.351089e-02, 2.357012e-02,//45
+                           2.363624e-02, 2.371089e-02, 2.379557e-02, 2.389158e-02, 2.399997e-02,//50
+                           2.412162e-02, 2.425729e-02, 2.440775e-02, 2.457387e-02, 2.475667e-02,//55
+                           2.495738e-02, 2.517736e-02, 2.541812e-02, 2.568123e-02, 2.596815e-02,//60
+                           2.628007e-02, 2.661765e-02, 2.698072e-02, 2.736800e-02, 2.777680e-02,//65
+                           2.820295e-02, 2.864088e-02, 2.908404e-02, 2.952547e-02, 2.995858e-02,//70
+                           3.037771e-02, 3.077861e-02, 3.115853e-02, 3.151619e-02, 3.185150e-02,//75
+                           3.216526e-02, 3.245887e-02, 3.273408e-02, 3.299283e-02, 3.323705e-02,//80
+                           3.346864e-02, 3.368936e-02, 3.390083e-02, 3.410452e-02, 3.430170e-02,//85
+                           3.449349e-02, 3.468084e-02, 3.486453e-02, 3.504518e-02, 3.522325e-02,//90
+                           3.539907e-02, 3.557285e-02, 3.574467e-02, 3.591456e-02, 3.608246e-02,//95
+                           3.624829e-02, 3.641195e-02, 3.657337e-02, 3.673251e-02, 3.688936e-02,//00
+                           3.704399e-02, 3.719649e-02, 3.734703e-02, 3.749581e-02, 3.764305e-02,//05
+                           3.778898e-02, 3.793384e-02, 3.807784e-02, 3.822120e-02, 3.836406e-02,//10
+                           3.850657e-02, 3.864879e-02, 3.879079e-02, 3.893258e-02, 3.907414e-02,//15
+                           3.921544e-02, 3.935641e-02, 3.949699e-02, 3.963710e-02, 3.977666e-02,//20
+                           3.991559e-02, 4.005382e-02, 4.019128e-02, 4.032792e-02, 4.046368e-02,//25
+                           4.059853e-02, 4.073243e-02, 4.086535e-02};							
+																								
+  static G4double Z4[nL]= {0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,// 5
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//10
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//15
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//20
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//25
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//30
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//35
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//40
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 3.181494e-05, 8.623394e-05,//45
+                           1.481781e-04, 2.187827e-04, 2.993554e-04, 3.914020e-04, 4.966540e-04,//50
+                           6.171021e-04, 7.550308e-04, 9.130589e-04, 1.094181e-03, 1.301816e-03,//55
+                           1.539849e-03, 1.812681e-03, 2.125268e-03, 2.483151e-03, 2.892464e-03,//60
+                           3.359920e-03, 3.892734e-03, 4.498489e-03, 5.184906e-03, 5.959484e-03,//65
+                           6.829007e-03, 7.798882e-03, 8.872342e-03, 1.004957e-02, 1.132684e-02,//70
+                           1.269591e-02, 1.414379e-02, 1.565311e-02, 1.720318e-02, 1.877162e-02,//75
+                           2.033632e-02, 2.187745e-02, 2.337915e-02, 2.483066e-02, 2.622701e-02,//80
+                           2.756910e-02, 2.886353e-02, 3.012213e-02, 3.136120e-02, 3.260040e-02,//85
+                           3.386112e-02, 3.516409e-02, 3.652635e-02, 3.795815e-02, 3.946058e-02,//90
+                           4.102501e-02, 4.263468e-02, 4.426797e-02, 4.590214e-02, 4.751644e-02,//95
+                           4.909388e-02, 5.062191e-02, 5.209210e-02, 5.349952e-02, 5.484191e-02,//00
+                           5.611893e-02, 5.733160e-02, 5.848180e-02, 5.957194e-02, 6.060473e-02,//05
+                           6.158299e-02, 6.250959e-02, 6.338734e-02, 6.421898e-02, 6.500713e-02,//10
+                           6.575428e-02, 6.646281e-02, 6.713495e-02, 6.777282e-02, 6.837841e-02,//15
+                           6.895359e-02, 6.950015e-02, 7.001973e-02, 7.051391e-02, 7.098418e-02,//20
+                           7.143191e-02, 7.185844e-02, 7.226501e-02, 7.265279e-02, 7.302290e-02,//25
+                           7.337639e-02, 7.371428e-02, 7.403752e-02, 7.434703e-02, 7.464371e-02,//30
+                           7.492843e-02, 7.520204e-02, 7.546543e-02, 7.571950e-02, 7.596524e-02,//35
+                           7.620373e-02, 7.643629e-02, 7.666448e-02, 7.689032e-02, 7.711639e-02,//40
+                           7.734607e-02, 7.758373e-02, 7.783491e-02, 7.810642e-02, 7.840615e-02,//45
+                           7.874275e-02, 7.912501e-02, 7.956125e-02, 8.005877e-02, 8.062377e-02,//50
+                           8.126155e-02, 8.197695e-02, 8.277493e-02, 8.366102e-02, 8.464169e-02,//55
+                           8.572446e-02, 8.691793e-02, 8.823150e-02, 8.967497e-02, 9.125780e-02,//60
+                           9.298801e-02, 9.487083e-02, 9.690689e-02, 9.909048e-02, 1.014079e-01,//65
+                           1.038365e-01, 1.063456e-01, 1.088981e-01, 1.114542e-01, 1.139751e-01,//70
+                           1.164275e-01, 1.187853e-01, 1.210314e-01, 1.231567e-01, 1.251594e-01,//75
+                           1.270429e-01, 1.288144e-01, 1.304833e-01, 1.320603e-01, 1.335561e-01,//80
+                           1.349816e-01, 1.363469e-01, 1.376615e-01, 1.389338e-01, 1.401715e-01,//85
+                           1.413813e-01, 1.425687e-01, 1.437385e-01, 1.448944e-01, 1.460393e-01,//90
+                           1.471751e-01, 1.483029e-01, 1.494233e-01, 1.505363e-01, 1.516413e-01,//95
+                           1.527377e-01, 1.538248e-01, 1.549019e-01, 1.559686e-01, 1.570248e-01,//00
+                           1.580707e-01, 1.591069e-01, 1.601343e-01, 1.611543e-01, 1.621681e-01,//05
+                           1.631774e-01, 1.641836e-01, 1.651884e-01, 1.661930e-01, 1.671984e-01,//10
+                           1.682057e-01, 1.692153e-01, 1.702277e-01, 1.712428e-01, 1.722607e-01,//15
+                           1.732809e-01, 1.743031e-01, 1.753267e-01, 1.763511e-01, 1.773758e-01,//20
+                           1.784001e-01, 1.794234e-01, 1.804453e-01, 1.814651e-01, 1.824826e-01,//25
+                           1.834973e-01, 1.845089e-01, 1.855172e-01};							
+																								
+  static G4double Y5[nL]= {0.000000e+00, 8.280822e-06, 1.712984e-05, 2.611782e-05, 3.524791e-05,// 5
+                           4.452340e-05, 5.394766e-05, 6.352418e-05, 7.325656e-05, 8.314855e-05,//10
+                           9.320402e-05, 1.034270e-04, 1.138216e-04, 1.243922e-04, 1.351434e-04,//15
+                           1.460797e-04, 1.572062e-04, 1.685280e-04, 1.800503e-04, 1.917789e-04,//20
+                           2.037197e-04, 2.158788e-04, 2.282628e-04, 2.408787e-04, 2.537338e-04,//25
+                           2.668358e-04, 2.801931e-04, 2.938144e-04, 3.077093e-04, 3.218877e-04,//30
+                           3.363605e-04, 3.511395e-04, 3.662372e-04, 3.816673e-04, 3.974447e-04,//35
+                           4.135854e-04, 4.301071e-04, 4.470292e-04, 4.643726e-04, 4.821607e-04,//40
+                           5.004192e-04, 5.191764e-04, 5.384638e-04, 5.583162e-04, 5.787728e-04,//45
+                           5.998769e-04, 6.216775e-04, 6.442292e-04, 6.675940e-04, 6.918419e-04,//50
+                           7.170521e-04, 7.433155e-04, 7.707357e-04, 7.994323e-04, 8.295436e-04,//55
+                           8.612308e-04, 8.946831e-04, 9.301240e-04, 9.678201e-04, 1.008092e-03,//60
+                           1.051329e-03, 1.098008e-03, 1.148722e-03, 1.204210e-03, 1.265408e-03,//65
+                           1.333512e-03, 1.410061e-03, 1.497053e-03, 1.597097e-03, 1.713615e-03,//70
+                           1.851101e-03, 2.015433e-03, 2.214217e-03, 2.457071e-03, 2.755637e-03,//75
+                           3.122924e-03, 3.571361e-03, 4.109100e-03, 4.735108e-03, 5.435649e-03,//80
+                           6.185715e-03, 6.956145e-03, 7.722196e-03, 8.468457e-03, 9.188844e-03,//85
+                           9.883849e-03, 1.055740e-02, 1.121446e-02, 1.185955e-02, 1.249595e-02,//90
+                           1.312542e-02, 1.374811e-02, 1.436285e-02, 1.496738e-02, 1.555879e-02,//95
+                           1.613390e-02, 1.668962e-02, 1.722318e-02, 1.773240e-02, 1.821570e-02,//00
+                           1.867216e-02, 1.910146e-02, 1.950378e-02, 1.987974e-02, 2.023027e-02,//05
+                           2.055653e-02, 2.085981e-02, 2.114150e-02, 2.140302e-02, 2.164578e-02,//10
+                           2.187115e-02, 2.208045e-02, 2.227493e-02, 2.245577e-02, 2.262407e-02,//15
+                           2.278085e-02, 2.292706e-02, 2.306359e-02, 2.319123e-02, 2.331072e-02,//20
+                           2.342275e-02, 2.352795e-02, 2.362689e-02, 2.372008e-02, 2.380802e-02,//25
+                           2.389115e-02, 2.396988e-02, 2.404458e-02, 2.411560e-02, 2.418326e-02,//30
+                           2.424787e-02, 2.430972e-02, 2.436909e-02, 2.442627e-02, 2.448154e-02,//35
+                           2.453522e-02, 2.458767e-02, 2.463933e-02, 2.469072e-02, 2.474252e-02,//40
+                           2.479560e-02, 2.485108e-02, 2.491037e-02, 2.497515e-02, 2.504735e-02,//45
+                           2.512906e-02, 2.522233e-02, 2.532905e-02, 2.545082e-02, 2.558890e-02,//50
+                           2.574433e-02, 2.591801e-02, 2.611084e-02, 2.632385e-02, 2.655828e-02,//55
+                           2.681559e-02, 2.709744e-02, 2.740568e-02, 2.774221e-02, 2.810883e-02,//60
+                           2.850704e-02, 2.893770e-02, 2.940070e-02, 2.989460e-02, 3.041627e-02,//65
+                           3.096079e-02, 3.152145e-02, 3.209027e-02, 3.265862e-02, 3.321811e-02,//70
+                           3.376138e-02, 3.428266e-02, 3.477806e-02, 3.524549e-02, 3.568445e-02,//75
+                           3.609563e-02, 3.648058e-02, 3.684138e-02, 3.718039e-02, 3.750006e-02,//80
+                           3.780280e-02, 3.809090e-02, 3.836652e-02, 3.863160e-02, 3.888787e-02,//85
+                           3.913687e-02, 3.937992e-02, 3.961811e-02, 3.985236e-02, 4.008334e-02,//90
+                           4.031154e-02, 4.053728e-02, 4.076070e-02, 4.098181e-02, 4.120051e-02,//95
+                           4.141666e-02, 4.163007e-02, 4.184056e-02, 4.204800e-02, 4.225234e-02,//00
+                           4.245357e-02, 4.265181e-02, 4.284720e-02, 4.304000e-02, 4.323048e-02,//05
+                           4.341896e-02, 4.360574e-02, 4.379113e-02, 4.397541e-02, 4.415882e-02,//10
+                           4.434153e-02, 4.452370e-02, 4.470541e-02, 4.488669e-02, 4.506757e-02,//15
+                           4.524800e-02, 4.542793e-02, 4.560729e-02, 4.578599e-02, 4.596395e-02,//20
+                           4.614107e-02, 4.631727e-02, 4.649249e-02, 4.666663e-02, 4.683966e-02,//25
+                           4.701151e-02, 4.718216e-02, 4.735156e-02};							
+																								
+  static G4double Z5[nL]= {0.000000e+00, 5.872081e-06, 1.241002e-05, 1.932414e-05, 2.662542e-05,// 5
+                           3.432524e-05, 4.243534e-05, 5.096788e-05, 5.993547e-05, 6.935115e-05,//10
+                           7.922843e-05, 8.958133e-05, 1.004244e-04, 1.117727e-04, 1.236420e-04,//15
+                           1.360486e-04, 1.490095e-04, 1.625423e-04, 1.766656e-04, 1.913986e-04,//20
+                           2.067614e-04, 2.227752e-04, 2.394621e-04, 2.568454e-04, 2.749494e-04,//25
+                           2.937999e-04, 3.134241e-04, 3.338507e-04, 3.551104e-04, 3.772354e-04,//30
+                           4.002603e-04, 4.242219e-04, 4.491598e-04, 4.751163e-04, 5.021371e-04,//35
+                           5.302714e-04, 5.595726e-04, 5.900987e-04, 6.219128e-04, 6.550839e-04,//40
+                           6.896878e-04, 7.258078e-04, 7.635356e-04, 8.029730e-04, 8.442329e-04,//45
+                           8.874414e-04, 9.327391e-04, 9.802840e-04, 1.030254e-03, 1.082851e-03,//50
+                           1.138302e-03, 1.196870e-03, 1.258851e-03, 1.324592e-03, 1.394489e-03,//55
+                           1.469010e-03, 1.548699e-03, 1.634205e-03, 1.726299e-03, 1.825912e-03,//60
+                           1.934175e-03, 2.052480e-03, 2.182552e-03, 2.326559e-03, 2.487251e-03,//65
+                           2.668150e-03, 2.873811e-03, 3.110178e-03, 3.385057e-03, 3.708749e-03,//70
+                           4.094879e-03, 4.561413e-03, 5.131810e-03, 5.836057e-03, 6.710952e-03,//75
+                           7.798394e-03, 9.139736e-03, 1.076452e-02, 1.267501e-02, 1.483420e-02,//80
+                           1.716878e-02, 1.959012e-02, 2.202095e-02, 2.441167e-02, 2.674141e-02,//85
+                           2.901022e-02, 3.122949e-02, 3.341443e-02, 3.557922e-02, 3.773424e-02,//90
+                           3.988491e-02, 4.203140e-02, 4.416915e-02, 4.628980e-02, 4.838243e-02,//95
+                           5.043487e-02, 5.243497e-02, 5.437160e-02, 5.623534e-02, 5.801893e-02,//00
+                           5.971735e-02, 6.132776e-02, 6.284923e-02, 6.428244e-02, 6.562936e-02,//05
+                           6.689292e-02, 6.807674e-02, 6.918487e-02, 7.022161e-02, 7.119136e-02,//10
+                           7.209850e-02, 7.294733e-02, 7.374197e-02, 7.448637e-02, 7.518428e-02,//15
+                           7.583920e-02, 7.645443e-02, 7.703304e-02, 7.757787e-02, 7.809159e-02,//20
+                           7.857663e-02, 7.903528e-02, 7.946963e-02, 7.988163e-02, 8.027307e-02,//25
+                           8.064563e-02, 8.100085e-02, 8.134016e-02, 8.166492e-02, 8.197640e-02,//30
+                           8.227579e-02, 8.256428e-02, 8.284301e-02, 8.311317e-02, 8.337601e-02,//35
+                           8.363293e-02, 8.388557e-02, 8.413593e-02, 8.438657e-02, 8.464080e-02,//40
+                           8.490294e-02, 8.517864e-02, 8.547502e-02, 8.580083e-02, 8.616620e-02,//45
+                           8.658215e-02, 8.705981e-02, 8.760960e-02, 8.824058e-02, 8.896032e-02,//50
+                           8.977521e-02, 9.069104e-02, 9.171375e-02, 9.285000e-02, 9.410760e-02,//55
+                           9.549573e-02, 9.702486e-02, 9.870653e-02, 1.005528e-01, 1.025753e-01,//60
+                           1.047842e-01, 1.071862e-01, 1.097827e-01, 1.125674e-01, 1.155246e-01,//65
+                           1.186278e-01, 1.218401e-01, 1.251165e-01, 1.284074e-01, 1.316639e-01,//70
+                           1.348426e-01, 1.379085e-01, 1.408372e-01, 1.436149e-01, 1.462366e-01,//75
+                           1.487050e-01, 1.510276e-01, 1.532155e-01, 1.552816e-01, 1.572395e-01,//80
+                           1.591030e-01, 1.608851e-01, 1.625984e-01, 1.642542e-01, 1.658629e-01,//85
+                           1.674335e-01, 1.689739e-01, 1.704908e-01, 1.719897e-01, 1.734748e-01,//90
+                           1.749489e-01, 1.764140e-01, 1.778708e-01, 1.793193e-01, 1.807587e-01,//95
+                           1.821878e-01, 1.836053e-01, 1.850099e-01, 1.864004e-01, 1.877763e-01,//00
+                           1.891375e-01, 1.904844e-01, 1.918179e-01, 1.931396e-01, 1.944512e-01,//05
+                           1.957548e-01, 1.970523e-01, 1.983458e-01, 1.996371e-01, 2.009279e-01,//10
+                           2.022194e-01, 2.035126e-01, 2.048080e-01, 2.061059e-01, 2.074065e-01,//15
+                           2.087093e-01, 2.100139e-01, 2.113199e-01, 2.126265e-01, 2.139331e-01,//20
+                           2.152390e-01, 2.165435e-01, 2.178459e-01, 2.191457e-01, 2.204424e-01,//25
+                           2.217356e-01, 2.230249e-01, 2.243099e-01};							
+																								
+  static G4double Y6[nL]= {0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,// 5
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//10
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//15
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//20
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//25
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//30
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//35
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//40
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//45
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//50
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//55
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//60
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//65
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 9.468463e-05,//70
+                           2.284202e-04, 3.741347e-04, 5.384794e-04, 7.343413e-04, 9.875210e-04,//75
+                           1.350289e-03, 1.926261e-03, 2.902337e-03, 4.533512e-03, 6.949177e-03,//80
+                           9.884435e-03, 1.285486e-02, 1.556162e-02, 1.794346e-02, 2.004600e-02,//85
+                           2.193610e-02, 2.367013e-02, 2.528580e-02, 2.680280e-02, 2.822744e-02,//90
+                           2.955848e-02, 3.079255e-02, 3.192765e-02, 3.296466e-02, 3.390735e-02,//95
+                           3.476168e-02, 3.553490e-02, 3.623476e-02, 3.686895e-02, 3.744478e-02,//00
+                           3.796898e-02, 3.844761e-02, 3.888609e-02, 3.928919e-02, 3.966109e-02,//05
+                           4.000548e-02, 4.032555e-02, 4.062409e-02, 4.090356e-02, 4.116607e-02,//10
+                           4.141348e-02, 4.164743e-02, 4.186932e-02, 4.208039e-02, 4.228173e-02,//15
+                           4.247430e-02, 4.265893e-02, 4.283636e-02, 4.300723e-02, 4.317210e-02,//20
+                           4.333149e-02, 4.348584e-02, 4.363554e-02, 4.378095e-02, 4.392237e-02,//25
+                           4.406008e-02, 4.419435e-02, 4.432540e-02, 4.445344e-02, 4.457867e-02,//30
+                           4.470128e-02, 4.482146e-02, 4.493940e-02, 4.505531e-02, 4.516942e-02,//35
+                           4.528203e-02, 4.539348e-02, 4.550424e-02, 4.561493e-02, 4.572638e-02,//40
+                           4.583967e-02, 4.595625e-02, 4.607794e-02, 4.620695e-02, 4.634580e-02,//45
+                           4.649720e-02, 4.666380e-02, 4.684799e-02, 4.705176e-02, 4.727666e-02,//50
+                           4.752393e-02, 4.779463e-02, 4.808984e-02, 4.841082e-02,4.875906e-02, //55
+                           4.913639e-02, 4.954489e-02, 4.998691e-02, 5.046485e-02, 5.098106e-02,//60
+                           5.153753e-02, 5.213551e-02, 5.277513e-02, 5.345495e-02, 5.417146e-02,//65
+                           5.491892e-02, 5.568932e-02, 5.647279e-02, 5.725842e-02, 5.803524e-02,//70
+                           5.879327e-02, 5.952432e-02, 6.022248e-02, 6.088421e-02, 6.150805e-02,//75
+                           6.209430e-02, 6.264454e-02, 6.316116e-02, 6.364709e-02, 6.410547e-02,//80
+                           6.453948e-02, 6.495222e-02, 6.534662e-02, 6.572539e-02, 6.609099e-02,//85
+                           6.644563e-02, 6.679126e-02, 6.712953e-02, 6.746182e-02, 6.778925e-02,//90
+                           6.811261e-02, 6.843247e-02, 6.874911e-02, 6.906260e-02, 6.937284e-02,//95
+                           6.967958e-02, 6.998251e-02, 7.028132e-02, 7.057573e-02, 7.086556e-02,//00
+                           7.115072e-02, 7.143128e-02, 7.170742e-02, 7.197940e-02, 7.224761e-02,//05
+                           7.251247e-02, 7.277440e-02, 7.303385e-02, 7.329123e-02, 7.354688e-02,//10
+                           7.380110e-02, 7.405411e-02, 7.430608e-02, 7.455710e-02, 7.480722e-02,//15
+                           7.505641e-02, 7.530465e-02, 7.555186e-02, 7.579795e-02, 7.604283e-02,//20
+                           7.628640e-02, 7.652856e-02, 7.676923e-02, 7.700834e-02, 7.724580e-02,//25
+                           7.748157e-02, 7.771560e-02, 7.794787e-02};							
+																								
+  static G4double Z6[nL]= {0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,// 5
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//10
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//15
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//20
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//25
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//30
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//35
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//40
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//45
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//50
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//55
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//60
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//65
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 2.633635e-04,//70
+                           6.389279e-04, 1.052576e-03, 1.524130e-03, 2.092109e-03, 2.834068e-03,//75
+                           3.908318e-03, 5.631581e-03, 8.581709e-03, 1.356122e-02, 2.100802e-02,//80
+                           3.014435e-02, 3.947942e-02, 4.806782e-02, 5.569768e-02, 6.249690e-02,//85
+                           6.866674e-02, 7.437999e-02, 7.975245e-02, 8.484302e-02, 8.966697e-02,//90
+                           9.421448e-02, 9.846822e-02, 1.024153e-01, 1.060529e-01, 1.093883e-01,//95
+                           1.124371e-01, 1.152199e-01, 1.177600e-01, 1.200811e-01, 1.222061e-01,//00
+                           1.241565e-01, 1.259520e-01, 1.276101e-01, 1.291468e-01, 1.305758e-01,//05
+                           1.319096e-01, 1.331590e-01, 1.343334e-01, 1.354413e-01, 1.364899e-01,//10
+                           1.374858e-01, 1.384346e-01, 1.393412e-01, 1.402101e-01, 1.410451e-01,//15
+                           1.418495e-01, 1.426264e-01, 1.433784e-01, 1.441077e-01, 1.448165e-01,//20
+                           1.455066e-01, 1.461796e-01, 1.468368e-01, 1.474796e-01, 1.481091e-01,//25
+                           1.487263e-01, 1.493322e-01, 1.499275e-01, 1.505130e-01, 1.510895e-01,//30
+                           1.516576e-01, 1.522182e-01, 1.527719e-01, 1.533196e-01, 1.538623e-01,//35
+                           1.544012e-01, 1.549380e-01, 1.554749e-01, 1.560147e-01, 1.565617e-01,//40
+                           1.571212e-01, 1.577004e-01, 1.583088e-01, 1.589576e-01, 1.596603e-01,//45
+                           1.604310e-01, 1.612841e-01, 1.622330e-01, 1.632889e-01, 1.644612e-01,//50
+                           1.657575e-01, 1.671850e-01, 1.687507e-01, 1.704628e-01, 1.723309e-01,//55
+                           1.743665e-01, 1.765828e-01, 1.789943e-01, 1.816164e-01, 1.844641e-01,//60
+                           1.875508e-01, 1.908860e-01, 1.944730e-01, 1.983060e-01, 2.023677e-01,//65
+                           2.066275e-01, 2.110414e-01, 2.155542e-01, 2.201032e-01, 2.246248e-01,//70
+                           2.290600e-01, 2.333597e-01, 2.374872e-01, 2.414193e-01, 2.451453e-01,//75
+                           2.486647e-01, 2.519846e-01, 2.551174e-01, 2.580788e-01, 2.608864e-01,//80
+                           2.635578e-01, 2.661110e-01, 2.685626e-01, 2.709286e-01, 2.732235e-01,//85
+                           2.754605e-01, 2.776510e-01, 2.798053e-01, 2.819316e-01, 2.840367e-01,//90
+                           2.861255e-01, 2.882014e-01, 2.902661e-01, 2.923198e-01, 2.943616e-01,//95
+                           2.963897e-01, 2.984019e-01, 3.003958e-01, 3.023693e-01, 3.043209e-01,//00
+                           3.062497e-01, 3.081560e-01, 3.100405e-01, 3.119051e-01, 3.137519e-01,//05
+                           3.155837e-01, 3.174033e-01, 3.192135e-01, 3.210170e-01, 3.228163e-01,//10
+                           3.246132e-01, 3.264093e-01, 3.282056e-01, 3.300029e-01, 3.318012e-01,//15
+                           3.336005e-01, 3.354005e-01, 3.372005e-01, 3.389998e-01, 3.407978e-01,//20
+                           3.425936e-01, 3.443863e-01, 3.461754e-01, 3.479600e-01, 3.497397e-01,//25
+                           3.515138e-01, 3.532820e-01, 3.550438e-01};							
+																								
+  static G4double Y7[nL]= {0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,// 5
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//10
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//15
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//20
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//25
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//30
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//35
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//40
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//45
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//50
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//55
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//60
+                           1.212477e-04, 2.856191e-04, 4.531531e-04, 6.239284e-04, 7.980425e-04,//65
+                           9.756255e-04, 1.156869e-03, 1.342081e-03, 1.531806e-03, 1.727068e-03,//70
+                           1.929900e-03, 2.144461e-03, 2.379442e-03, 2.653210e-03, 3.004672e-03,//75
+                           3.515485e-03, 4.350962e-03, 5.812695e-03, 8.313453e-03, 1.205706e-02,//80
+                           1.659414e-02, 2.111135e-02, 2.510242e-02, 2.845608e-02, 3.124326e-02,//85
+                           3.357943e-02, 3.557563e-02, 3.732598e-02, 3.890581e-02, 4.037191e-02,//90
+                           4.176288e-02, 4.310016e-02, 4.439063e-02, 4.563102e-02, 4.681322e-02,//95
+                           4.792892e-02, 4.897246e-02, 4.994180e-02, 5.083816e-02, 5.166517e-02,//00
+                           5.242785e-02, 5.313187e-02, 5.378302e-02, 5.438686e-02, 5.494854e-02,//05
+                           5.547275e-02, 5.596365e-02, 5.642494e-02, 5.685990e-02, 5.727136e-02,//10
+                           5.766183e-02, 5.803349e-02, 5.838824e-02, 5.872776e-02, 5.905349e-02,//15
+                           5.936672e-02, 5.966855e-02, 5.995996e-02, 6.024182e-02, 6.051488e-02,//20
+                           6.077981e-02, 6.103719e-02, 6.128754e-02, 6.153134e-02, 6.176898e-02,//25
+                           6.200085e-02, 6.222728e-02, 6.244858e-02, 6.266503e-02, 6.287689e-02,//30
+                           6.308442e-02, 6.328787e-02, 6.348751e-02, 6.368362e-02, 6.387653e-02,//35
+                           6.406663e-02, 6.425441e-02, 6.444053e-02, 6.462583e-02, 6.481144e-02,//40
+                           6.499889e-02, 6.519014e-02, 6.538766e-02, 6.559442e-02, 6.581382e-02,//45
+                           6.604940e-02, 6.630461e-02, 6.658251e-02, 6.688559e-02, 6.721574e-02,//50
+                           6.757446e-02, 6.796300e-02, 6.838267e-02, 6.883499e-02, 6.932183e-02,//55
+                           6.984545e-02, 7.040851e-02, 7.101395e-02, 7.166489e-02, 7.236439e-02,//60
+                           7.311513e-02, 7.391901e-02, 7.477664e-02, 7.568678e-02, 7.664577e-02,//65
+                           7.764720e-02, 7.868175e-02, 7.973756e-02, 8.080103e-02, 8.185800e-02,//70
+                           8.289501e-02, 8.390051e-02, 8.486559e-02, 8.578429e-02, 8.665351e-02,//75
+                           8.747257e-02, 8.824269e-02, 8.896645e-02, 8.964731e-02, 9.028917e-02,//80
+                           9.089616e-02, 9.147238e-02, 9.202180e-02, 9.254814e-02, 9.305487e-02,//85
+                           9.354514e-02, 9.402176e-02, 9.448721e-02, 9.494360e-02, 9.539267e-02,//90
+                           9.583577e-02, 9.627387e-02, 9.670755e-02, 9.713705e-02, 9.756232e-02,//95
+                           9.798304e-02, 9.839876e-02, 9.880897e-02, 9.921317e-02, 9.961099e-02,//00
+                           1.000022e-01, 1.003867e-01, 1.007647e-01, 1.011366e-01, 1.015027e-01,//05
+                           1.018636e-01, 1.022199e-01, 1.025723e-01, 1.029213e-01, 1.032674e-01,//10
+                           1.036110e-01, 1.039526e-01, 1.042924e-01, 1.046305e-01, 1.049670e-01,//15
+                           1.053020e-01, 1.056355e-01, 1.059674e-01, 1.062975e-01, 1.066259e-01,//20
+                           1.069524e-01, 1.072768e-01, 1.075992e-01, 1.079193e-01, 1.082372e-01,//25
+                           1.085527e-01, 1.088658e-01, 1.091765e-01};							
+																								
+  static G4double Z7[nL]= {0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,// 5
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//10
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//15
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//20
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//25
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//30
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//35
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//40
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//45
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//50
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//55
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//60
+                           3.040348e-04, 7.205927e-04, 1.150264e-03, 1.593445e-03, 2.050588e-03,//65
+                           2.522244e-03, 3.009137e-03, 3.512330e-03, 4.033557e-03, 4.575942e-03,//70
+                           5.145532e-03, 5.754602e-03, 6.428818e-03, 7.222705e-03, 8.252687e-03,//75
+                           9.765368e-03, 1.226512e-02, 1.668322e-02, 2.431743e-02, 3.585795e-02,//80
+                           4.998002e-02, 6.417586e-02, 7.683889e-02, 8.758139e-02, 9.659416e-02,//85
+                           1.042197e-01, 1.107964e-01, 1.166164e-01, 1.219178e-01, 1.268821e-01,//90
+                           1.316345e-01, 1.362441e-01, 1.407317e-01, 1.450828e-01, 1.492658e-01,//95
+                           1.532473e-01, 1.570031e-01, 1.605213e-01, 1.638020e-01, 1.668539e-01,//00
+                           1.696917e-01, 1.723327e-01, 1.747951e-01, 1.770970e-01, 1.792553e-01,//05
+                           1.812855e-01, 1.832017e-01, 1.850164e-01, 1.867407e-01, 1.883843e-01,//10
+                           1.899561e-01, 1.914634e-01, 1.929129e-01, 1.943105e-01, 1.956613e-01,//15
+                           1.969698e-01, 1.982398e-01, 1.994749e-01, 2.006781e-01, 2.018520e-01,//20
+                           2.029990e-01, 2.041211e-01, 2.052203e-01, 2.062981e-01, 2.073559e-01,//25
+                           2.083951e-01, 2.094168e-01, 2.104220e-01, 2.114118e-01, 2.123871e-01,//30
+                           2.133488e-01, 2.142977e-01, 2.152350e-01, 2.161616e-01, 2.170790e-01,//35
+                           2.179889e-01, 2.188933e-01, 2.197954e-01, 2.206992e-01, 2.216101e-01,//40
+                           2.225358e-01, 2.234861e-01, 2.244735e-01, 2.255135e-01, 2.266236e-01,//45
+                           2.278229e-01, 2.291298e-01, 2.305614e-01, 2.321319e-01, 2.338528e-01,//50
+                           2.357334e-01, 2.377823e-01, 2.400080e-01, 2.424207e-01, 2.450323e-01,//55
+                           2.478572e-01, 2.509119e-01, 2.542150e-01, 2.577862e-01, 2.616451e-01,//60
+                           2.658094e-01, 2.702930e-01, 2.751025e-01, 2.802340e-01, 2.856703e-01,//65
+                           2.913775e-01, 2.973050e-01, 3.033863e-01, 3.095441e-01, 3.156963e-01,//70
+                           3.217640e-01, 3.276778e-01, 3.333832e-01, 3.388425e-01, 3.440341e-01,//75
+                           3.489510e-01, 3.535976e-01, 3.579865e-01, 3.621359e-01, 3.660672e-01,//80
+                           3.698034e-01, 3.733678e-01, 3.767831e-01, 3.800709e-01, 3.832517e-01,//85
+                           3.863441e-01, 3.893649e-01, 3.923291e-01, 3.952495e-01, 3.981367e-01,//90
+                           4.009990e-01, 4.038423e-01, 4.066701e-01, 4.094838e-01, 4.122827e-01,//95
+                           4.150645e-01, 4.178258e-01, 4.205630e-01, 4.232725e-01, 4.259512e-01,//00
+                           4.285972e-01, 4.312099e-01, 4.337899e-01, 4.363389e-01, 4.388597e-01,//05
+                           4.413559e-01, 4.438312e-01, 4.462897e-01, 4.487351e-01, 4.511709e-01,//10
+                           4.536000e-01, 4.560248e-01, 4.584470e-01, 4.608677e-01, 4.632875e-01,//15
+                           4.657066e-01, 4.681246e-01, 4.705410e-01, 4.729551e-01, 4.753661e-01,//20
+                           4.777731e-01, 4.801750e-01, 4.825712e-01, 4.849607e-01, 4.873428e-01,//25
+                           4.897171e-01, 4.920829e-01, 4.944398e-01};							
+																								
+  static G4double Y8[nL]= {0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,// 5
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//10
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//15
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//20
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//25
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//30
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//35
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//40
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//45
+                           0.000000e+00, 0.000000e+00, 7.432762e-05, 2.902526e-04, 5.118389e-04,//50
+                           7.396415e-04, 9.743596e-04, 1.216880e-03, 1.468334e-03, 1.730171e-03,//55
+                           2.004254e-03, 2.292984e-03, 2.599468e-03, 2.927722e-03, 3.282957e-03,//60
+                           3.671930e-03, 4.103414e-03, 4.588795e-03, 5.142856e-03, 5.784768e-03,//65
+                           6.539351e-03, 7.438635e-03, 8.523738e-03, 9.846957e-03, 1.147377e-02,//70
+                           1.348397e-02, 1.597036e-02, 1.903187e-02, 2.275677e-02, 2.719171e-02,//75
+                           3.229892e-02, 3.792012e-02, 4.378039e-02, 4.955270e-02, 5.495429e-02,//80
+                           5.981517e-02, 6.408786e-02, 6.781533e-02, 7.108930e-02, 7.401679e-02,//85
+                           7.669821e-02, 7.921375e-02, 8.161612e-02, 8.392922e-02, 8.615340e-02,//90
+                           8.827521e-02, 9.027797e-02, 9.214907e-02, 9.388307e-02, 9.548145e-02,//95
+                           9.695078e-02, 9.830068e-02, 9.954210e-02, 1.006862e-01, 1.017437e-01,//00
+                           1.027245e-01, 1.036375e-01, 1.044905e-01, 1.052905e-01, 1.060435e-01,//05
+                           1.067549e-01, 1.074293e-01, 1.080707e-01, 1.086826e-01, 1.092680e-01,//10
+                           1.098295e-01, 1.103694e-01, 1.108898e-01, 1.113923e-01, 1.118785e-01,//15
+                           1.123496e-01, 1.128070e-01, 1.132515e-01, 1.136841e-01, 1.141055e-01,//20
+                           1.145165e-01, 1.149176e-01, 1.153094e-01, 1.156924e-01, 1.160671e-01,//25
+                           1.164337e-01, 1.167928e-01, 1.171445e-01, 1.174893e-01, 1.178275e-01,//30
+                           1.181593e-01, 1.184851e-01, 1.188052e-01, 1.191201e-01, 1.194303e-01,//35
+                           1.197363e-01, 1.200391e-01, 1.203398e-01, 1.206398e-01, 1.209412e-01,//40
+                           1.212466e-01, 1.215597e-01, 1.218845e-01, 1.222264e-01, 1.225909e-01,//45
+                           1.229837e-01, 1.234103e-01, 1.238753e-01, 1.243821e-01, 1.249334e-01,//50
+                           1.255310e-01, 1.261765e-01, 1.268717e-01, 1.276188e-01, 1.284204e-01,//55
+                           1.292799e-01, 1.302014e-01, 1.311894e-01, 1.322487e-01, 1.333842e-01,//60
+                           1.346004e-01, 1.359009e-01, 1.372877e-01, 1.387604e-01, 1.403153e-01,//65
+                           1.419450e-01, 1.436376e-01, 1.453772e-01, 1.471441e-01, 1.489167e-01,//70
+                           1.506730e-01, 1.523925e-01, 1.540579e-01, 1.556557e-01, 1.571772e-01,//75
+                           1.586177e-01, 1.599762e-01, 1.612546e-01, 1.624568e-01, 1.635882e-01,//80
+                           1.646548e-01, 1.656633e-01, 1.666200e-01, 1.675315e-01, 1.684037e-01,//85
+                           1.692425e-01, 1.700532e-01, 1.708406e-01, 1.716089e-01, 1.723620e-01,//90
+                           1.731029e-01, 1.738341e-01, 1.745574e-01, 1.752739e-01, 1.759840e-01,//95
+                           1.766875e-01, 1.773838e-01, 1.780717e-01, 1.787504e-01, 1.794186e-01,//00
+                           1.800755e-01, 1.807207e-01, 1.813541e-01, 1.819758e-01, 1.825866e-01,//05
+                           1.831871e-01, 1.837785e-01, 1.843618e-01, 1.849380e-01, 1.855080e-01,//10
+                           1.860729e-01, 1.866333e-01, 1.871897e-01, 1.877425e-01, 1.882921e-01,//15
+                           1.888386e-01, 1.893820e-01, 1.899223e-01, 1.904595e-01, 1.909934e-01,//20
+                           1.915240e-01, 1.920511e-01, 1.925745e-01, 1.930942e-01, 1.936101e-01,//25
+                           1.941220e-01, 1.946300e-01, 1.951340e-01};							
+																								
+  static G4double Z8[nL]= {0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,// 5
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//10
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//15
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//20
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//25
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//30
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//35
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//40
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//45
+                           0.000000e+00, 0.000000e+00, 1.574229e-04, 6.192143e-04, 1.099857e-03,//50
+                           1.600917e-03, 2.124332e-03, 2.672529e-03, 3.248573e-03, 3.856373e-03,//55
+                           4.500944e-03, 5.188754e-03, 5.928187e-03, 6.730144e-03, 7.608836e-03,//60
+                           8.582831e-03, 9.676415e-03, 1.092139e-02, 1.235941e-02, 1.404499e-02,//65
+                           1.604943e-02, 1.846563e-02, 2.141415e-02, 2.504999e-02, 2.956954e-02,//70
+                           3.521542e-02, 4.227437e-02, 5.105923e-02, 6.186085e-02, 7.485610e-02,//75
+                           8.997619e-02, 1.067883e-01, 1.244929e-01, 1.421066e-01, 1.587528e-01,//80
+                           1.738803e-01, 1.873071e-01, 1.991340e-01, 2.096217e-01, 2.190888e-01,//85
+                           2.278419e-01, 2.361302e-01, 2.441188e-01, 2.518809e-01, 2.594123e-01,//90
+                           2.666616e-01, 2.735651e-01, 2.800715e-01, 2.861540e-01, 2.918094e-01,//95
+                           2.970529e-01, 3.019113e-01, 3.064170e-01, 3.106045e-01, 3.145071e-01,//00
+                           3.181564e-01, 3.215811e-01, 3.248068e-01, 3.278565e-01, 3.307502e-01,//05
+                           3.335055e-01, 3.361381e-01, 3.386613e-01, 3.410869e-01, 3.434253e-01,//10
+                           3.456855e-01, 3.478753e-01, 3.500014e-01, 3.520700e-01, 3.540862e-01,//15
+                           3.560545e-01, 3.579789e-01, 3.598628e-01, 3.617093e-01, 3.635211e-01,//20
+                           3.653004e-01, 3.670493e-01, 3.687696e-01, 3.704628e-01, 3.721304e-01,//25
+                           3.737737e-01, 3.753937e-01, 3.769916e-01, 3.785684e-01, 3.801250e-01,//30
+                           3.816626e-01, 3.831822e-01, 3.846851e-01, 3.861731e-01, 3.876481e-01,//35
+                           3.891129e-01, 3.905714e-01, 3.920286e-01, 3.934919e-01, 3.949711e-01,//40
+                           3.964795e-01, 3.980348e-01, 3.996589e-01, 4.013783e-01, 4.032226e-01,//45
+                           4.052224e-01, 4.074072e-01, 4.098024e-01, 4.124288e-01, 4.153022e-01,//50
+                           4.184352e-01, 4.218392e-01, 4.255263e-01, 4.295110e-01, 4.338111e-01,//55
+                           4.384482e-01, 4.434476e-01, 4.488377e-01, 4.546492e-01, 4.609133e-01,//60
+                           4.676596e-01, 4.749131e-01, 4.826900e-01, 4.909933e-01, 4.998077e-01,//65
+                           5.090955e-01, 5.187935e-01, 5.288131e-01, 5.390440e-01, 5.493618e-01,//70
+                           5.596382e-01, 5.697516e-01, 5.795969e-01, 5.890918e-01, 5.981792e-01,//75
+                           6.068266e-01, 6.150232e-01, 6.227753e-01, 6.301023e-01, 6.370319e-01,//80
+                           6.435975e-01, 6.498354e-01, 6.557827e-01, 6.614761e-01, 6.669514e-01,//85
+                           6.722422e-01, 6.773802e-01, 6.823944e-01, 6.873108e-01, 6.921524e-01,//90
+                           6.969384e-01, 7.016842e-01, 7.064007e-01, 7.110946e-01, 7.157681e-01,//95
+                           7.204196e-01, 7.250443e-01, 7.296350e-01, 7.341838e-01, 7.386832e-01,//00
+                           7.431269e-01, 7.475107e-01, 7.518332e-01, 7.560955e-01, 7.603009e-01,//05
+                           7.644545e-01, 7.685626e-01, 7.726320e-01, 7.766696e-01, 7.806819e-01,//10
+                           7.846746e-01, 7.886523e-01, 7.926190e-01, 7.965772e-01, 8.005287e-01,//15
+                           8.044745e-01, 8.084147e-01, 8.123491e-01, 8.162770e-01, 8.201973e-01,//20
+                           8.241091e-01, 8.280110e-01, 8.319020e-01, 8.357811e-01, 8.396472e-01,//25
+                           8.434995e-01, 8.473374e-01, 8.511602e-01};							
+																								
+  static G4double Y9[nL]= {0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,// 5
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//10
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//15
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//20
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//25
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//30
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//35
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//40
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//45
+                           0.000000e+00, 0.000000e+00, 4.361706e-05, 3.377672e-04, 6.380457e-04,//50
+                           9.447587e-04, 1.258300e-03, 1.579188e-03, 1.908125e-03, 2.246070e-03,//55
+                           2.594362e-03, 2.954882e-03, 3.330290e-03, 3.724376e-03, 4.142551e-03,//60
+                           4.592567e-03, 5.085543e-03, 5.637447e-03, 6.271224e-03, 7.019830e-03,//65
+                           7.930567e-03, 9.071161e-03, 1.053817e-02, 1.246807e-02, 1.505082e-02,//70
+                           1.854304e-02, 2.327262e-02, 2.961428e-02, 3.790179e-02, 4.824870e-02,//75
+                           6.033047e-02, 7.332160e-02, 8.615485e-02, 9.794242e-02, 1.082158e-01,//80
+                           1.168906e-01, 1.241122e-01, 1.301210e-01, 1.351748e-01, 1.395139e-01,//85
+                           1.433485e-01, 1.468545e-01, 1.501691e-01, 1.533861e-01, 1.565526e-01,//90
+                           1.596721e-01, 1.627172e-01, 1.656474e-01, 1.684252e-01, 1.710256e-01,//95
+                           1.734378e-01, 1.756627e-01, 1.777091e-01, 1.795902e-01, 1.813212e-01,//00
+                           1.829174e-01, 1.843933e-01, 1.857623e-01, 1.870366e-01, 1.882269e-01,//05
+                           1.893426e-01, 1.903922e-01, 1.913828e-01, 1.923208e-01, 1.932119e-01,//10
+                           1.940607e-01, 1.948716e-01, 1.956483e-01, 1.963939e-01, 1.971114e-01,//15
+                           1.978031e-01, 1.984713e-01, 1.991178e-01, 1.997443e-01, 2.003524e-01,//20
+                           2.009433e-01, 2.015181e-01, 2.020779e-01, 2.026235e-01, 2.031559e-01,//25
+                           2.036757e-01, 2.041836e-01, 2.046803e-01, 2.051662e-01, 2.056420e-01,//30
+                           2.061082e-01, 2.065654e-01, 2.070142e-01, 2.074553e-01, 2.078896e-01,//35
+                           2.083181e-01, 2.087423e-01, 2.091639e-01, 2.095855e-01, 2.100105e-01,//40
+                           2.104431e-01, 2.108889e-01, 2.113547e-01, 2.118484e-01, 2.123782e-01,//45
+                           2.129526e-01, 2.135788e-01, 2.142628e-01, 2.150091e-01, 2.158206e-01,//50
+                           2.166994e-01, 2.176476e-01, 2.186672e-01, 2.197612e-01, 2.209332e-01,//55
+                           2.221881e-01, 2.235313e-01, 2.249691e-01, 2.265083e-01, 2.281556e-01,//60
+                           2.299176e-01, 2.317992e-01, 2.338039e-01, 2.359317e-01, 2.381788e-01,//65
+                           2.405362e-01, 2.429892e-01, 2.455174e-01, 2.480951e-01, 2.506931e-01,//70
+                           2.532806e-01, 2.558280e-01, 2.583088e-01, 2.607013e-01, 2.629900e-01,//75
+                           2.651652e-01, 2.672225e-01, 2.691622e-01, 2.709879e-01, 2.727058e-01,//80
+                           2.743238e-01, 2.758506e-01, 2.772954e-01, 2.786672e-01, 2.799752e-01,//85
+                           2.812279e-01, 2.824335e-01, 2.835995e-01, 2.847328e-01, 2.858397e-01,//90
+                           2.869255e-01, 2.879949e-01, 2.890515e-01, 2.900976e-01, 2.911348e-01,//95
+                           2.921635e-01, 2.931830e-01, 2.941921e-01, 2.951890e-01, 2.961718e-01,//00
+                           2.971387e-01, 2.980886e-01, 2.990207e-01, 2.999349e-01, 3.008319e-01,//05
+                           3.017125e-01, 3.025782e-01, 3.034304e-01, 3.042708e-01, 3.051010e-01,//10
+                           3.059222e-01, 3.067356e-01, 3.075422e-01, 3.083428e-01, 3.091378e-01,//15
+                           3.099276e-01, 3.107124e-01, 3.114922e-01, 3.122670e-01, 3.130367e-01,//20
+                           3.138013e-01, 3.145604e-01, 3.153142e-01, 3.160623e-01, 3.168047e-01,//25
+                           3.175413e-01, 3.182720e-01, 3.189968e-01};							
+																								
+  static G4double Z9[nL]= {0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,// 5
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//10
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//15
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//20
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//25
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//30
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//35
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//40
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//45
+                           0.000000e+00, 0.000000e+00, 9.250533e-05, 7.215906e-04, 1.372920e-03,//50
+                           2.047541e-03, 2.746722e-03, 3.472054e-03, 4.225588e-03, 5.010046e-03,//55
+                           5.829125e-03, 6.687933e-03, 7.593639e-03, 8.556408e-03, 9.590766e-03,//60
+                           1.071759e-02, 1.196702e-02, 1.338262e-02, 1.502755e-02, 1.699336e-02,//65
+                           1.941268e-02, 2.247740e-02, 2.646391e-02, 3.176715e-02, 3.894303e-02,//70
+                           4.875214e-02, 6.218063e-02, 8.037898e-02, 1.044127e-01, 1.347321e-01,//75
+                           1.705004e-01, 2.093534e-01, 2.481222e-01, 2.840888e-01, 3.157467e-01,//80
+                           3.427421e-01, 3.654349e-01, 3.844997e-01, 4.006883e-01, 4.147197e-01,//85
+                           4.272371e-01, 4.387886e-01, 4.498106e-01, 4.606062e-01, 4.713285e-01,//90
+                           4.819868e-01, 4.924835e-01, 5.026730e-01, 5.124171e-01, 5.216180e-01,//95
+                           5.302262e-01, 5.382336e-01, 5.456610e-01, 5.525459e-01, 5.589339e-01,//00
+                           5.648729e-01, 5.704092e-01, 5.755865e-01, 5.804442e-01, 5.850179e-01,//05
+                           5.893392e-01, 5.934361e-01, 5.973330e-01, 6.010518e-01, 6.046112e-01,//10
+                           6.080280e-01, 6.113167e-01, 6.144902e-01, 6.175596e-01, 6.205348e-01,//15
+                           6.234244e-01, 6.262359e-01, 6.289761e-01, 6.316506e-01, 6.342647e-01,//20
+                           6.368228e-01, 6.393290e-01, 6.417867e-01, 6.441990e-01, 6.465688e-01,//25
+                           6.488984e-01, 6.511902e-01, 6.534462e-01, 6.556685e-01, 6.578588e-01,//30
+                           6.600192e-01, 6.621517e-01, 6.642587e-01, 6.663430e-01, 6.684082e-01,//35
+                           6.704590e-01, 6.725019e-01, 6.745455e-01, 6.766020e-01, 6.786875e-01,//40
+                           6.808238e-01, 6.830391e-01, 6.853679e-01, 6.878508e-01, 6.905319e-01,//45
+                           6.934556e-01, 6.966624e-01, 7.001862e-01, 7.040533e-01, 7.082830e-01,//50
+                           7.128906e-01, 7.178903e-01, 7.232979e-01, 7.291331e-01, 7.354206e-01,//55
+                           7.421903e-01, 7.494775e-01, 7.573219e-01, 7.657661e-01, 7.748539e-01,//60
+                           7.846272e-01, 7.951221e-01, 8.063639e-01, 8.183611e-01, 8.310991e-01,//65
+                           8.445342e-01, 8.585888e-01, 8.731509e-01, 8.880767e-01, 9.031988e-01,//70
+                           9.183389e-01, 9.333213e-01, 9.479872e-01, 9.622046e-01, 9.758746e-01,//75
+                           9.889325e-01, 1.001345e+00, 1.013107e+00, 1.024234e+00, 1.034756e+00,//80
+                           1.044716e+00, 1.054160e+00, 1.063141e+00, 1.071710e+00, 1.079921e+00,//85
+                           1.087822e+00, 1.095463e+00, 1.102888e+00, 1.110140e+00, 1.117257e+00,//90
+                           1.124271e+00, 1.131212e+00, 1.138101e+00, 1.144954e+00, 1.151780e+00,//95
+                           1.158582e+00, 1.165354e+00, 1.172087e+00, 1.178769e+00, 1.185387e+00,//00
+                           1.191928e+00, 1.198382e+00, 1.204743e+00, 1.211010e+00, 1.217186e+00,//05
+                           1.223277e+00, 1.229290e+00, 1.235237e+00, 1.241126e+00, 1.246968e+00,//10
+                           1.252773e+00, 1.258547e+00, 1.264298e+00, 1.270030e+00, 1.275746e+00,//15
+                           1.281449e+00, 1.287139e+00, 1.292817e+00, 1.298482e+00, 1.304134e+00,//20
+                           1.309770e+00, 1.315391e+00, 1.320993e+00, 1.326577e+00, 1.332141e+00,//25
+                           1.337684e+00, 1.343205e+00, 1.348703e+00};							
+																								
+  static G4double Y10[nL]={0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,// 5
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//10
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//15
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//20
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//25
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//30
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//35
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//40
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 4.043968e-04, 8.450434e-04,//45
+                           1.303132e-03, 1.781260e-03, 2.282642e-03, 2.811262e-03, 3.372075e-03,//50
+                           3.971243e-03, 4.616446e-03, 5.317262e-03, 6.085645e-03, 6.936526e-03,//55
+                           7.888559e-03, 8.965054e-03, 1.019514e-02, 1.161518e-02, 1.327058e-02,//60
+                           1.521785e-02, 1.752718e-02, 2.028530e-02, 2.359847e-02, 2.759513e-02,//65
+                           3.242717e-02, 3.826747e-02, 4.530026e-02, 5.369841e-02, 6.358146e-02,//70
+                           7.495244e-02, 8.762682e-02, 1.011915e-01, 1.150441e-01, 1.285287e-01,//75
+                           1.411080e-01, 1.524816e-01, 1.626024e-01, 1.716205e-01, 1.798037e-01,//80
+                           1.874635e-01, 1.948930e-01, 2.023112e-01, 2.098192e-01, 2.173878e-01,//85
+                           2.248888e-01, 2.321560e-01, 2.390436e-01, 2.454562e-01, 2.513518e-01,//90
+                           2.567291e-01, 2.616131e-01, 2.660418e-01, 2.700587e-01, 2.737073e-01,//95
+                           2.770290e-01, 2.800615e-01, 2.828388e-01, 2.853909e-01, 2.877443e-01,//00
+                           2.899222e-01, 2.919450e-01, 2.938305e-01, 2.955942e-01, 2.972498e-01,//05
+                           2.988091e-01, 3.002826e-01, 3.016793e-01, 3.030072e-01, 3.042734e-01,//10
+                           3.054838e-01, 3.066438e-01, 3.077582e-01, 3.088310e-01, 3.098658e-01,//15
+                           3.108658e-01, 3.118338e-01, 3.127722e-01, 3.136832e-01, 3.145687e-01,//20
+                           3.154304e-01, 3.162697e-01, 3.170880e-01, 3.178866e-01, 3.186663e-01,//25
+                           3.194284e-01, 3.201735e-01, 3.209026e-01, 3.216165e-01, 3.223160e-01,//30
+                           3.230018e-01, 3.236749e-01, 3.243363e-01, 3.249872e-01, 3.256291e-01,//35
+                           3.262639e-01, 3.268944e-01, 3.275240e-01, 3.281575e-01, 3.288012e-01,//40
+                           3.294631e-01, 3.301534e-01, 3.308839e-01, 3.316675e-01, 3.325176e-01,//45
+                           3.334463e-01, 3.344637e-01, 3.355772e-01, 3.367917e-01, 3.381103e-01,//50
+                           3.395352e-01, 3.410688e-01, 3.427141e-01, 3.444755e-01, 3.463587e-01,//55
+                           3.483709e-01, 3.505206e-01, 3.528171e-01, 3.552704e-01, 3.578906e-01,//60
+                           3.606869e-01, 3.636667e-01, 3.668346e-01, 3.701909e-01, 3.737299e-01,//65
+                           3.774392e-01, 3.812979e-01, 3.852771e-01, 3.893404e-01, 3.934456e-01,//70
+                           3.975476e-01, 4.016018e-01, 4.055670e-01, 4.094084e-01, 4.130992e-01,//75
+                           4.166208e-01, 4.199629e-01, 4.231224e-01, 4.261017e-01, 4.289080e-01,//80
+                           4.315512e-01, 4.340433e-01, 4.363976e-01, 4.386277e-01, 4.407473e-01,//85
+                           4.427698e-01, 4.447081e-01, 4.465746e-01, 4.483807e-01, 4.501372e-01,//90
+                           4.518538e-01, 4.535390e-01, 4.552003e-01, 4.568432e-01, 4.584720e-01,//95
+                           4.600887e-01, 4.616939e-01, 4.632863e-01, 4.648634e-01, 4.664219e-01,//00
+                           4.679583e-01, 4.694695e-01, 4.709533e-01, 4.724085e-01, 4.738351e-01,//05
+                           4.752339e-01, 4.766067e-01, 4.779558e-01, 4.792835e-01, 4.805924e-01,//10
+                           4.818848e-01, 4.831628e-01, 4.844281e-01, 4.856820e-01, 4.869256e-01,//15
+                           4.881596e-01, 4.893846e-01, 4.906007e-01, 4.918081e-01, 4.930067e-01,//20
+                           4.941965e-01, 4.953773e-01, 4.965491e-01, 4.977117e-01, 4.988650e-01,//25
+                           5.000089e-01, 5.011433e-01, 5.022682e-01};							
+																								
+  static G4double Z10[nL]={0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,// 5
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//10
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//15
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//20
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//25
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//30
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//35
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//40
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 8.036364e-04, 1.692409e-03,//45
+                           2.630306e-03, 3.623786e-03, 4.680847e-03, 5.811431e-03, 7.027940e-03,//50
+                           8.345894e-03, 9.784755e-03, 1.136898e-02, 1.312934e-02, 1.510463e-02,//55
+                           1.734372e-02, 1.990833e-02, 2.287631e-02, 2.634588e-02, 3.044089e-02,//60
+                           3.531722e-02, 4.117055e-02, 4.824536e-02, 5.684477e-02, 6.733989e-02,//65
+                           8.017571e-02, 9.586759e-02, 1.149774e-01, 1.380525e-01, 1.655079e-01,//70
+                           1.974421e-01, 2.334213e-01, 2.723390e-01, 3.125028e-01, 3.520081e-01,//75
+                           3.892431e-01, 4.232544e-01, 4.538272e-01, 4.813439e-01, 5.065623e-01,//80
+                           5.304016e-01, 5.537510e-01, 5.772908e-01, 6.013441e-01, 6.258219e-01,//85
+                           6.503087e-01, 6.742531e-01, 6.971560e-01, 7.186744e-01, 7.386370e-01,//90
+                           7.570086e-01, 7.738430e-01, 7.892429e-01, 8.033330e-01, 8.162425e-01,//95
+                           8.280963e-01, 8.390106e-01, 8.490907e-01, 8.584311e-01, 8.671160e-01,//00
+                           8.752195e-01, 8.828075e-01, 8.899378e-01,8.966614e-01, 9.030230e-01, //05
+                           9.090623e-01, 9.148139e-01, 9.203085e-01, 9.255729e-01, 9.306307e-01,//10
+                           9.355029e-01, 9.402076e-01, 9.447609e-01, 9.491770e-01, 9.534684e-01,//15
+                           9.576458e-01, 9.617189e-01, 9.656962e-01, 9.695850e-01, 9.733918e-01,//20
+                           9.771225e-01, 9.807819e-01, 9.843748e-01, 9.879049e-01, 9.913759e-01,//25
+                           9.947911e-01, 9.981533e-01, 1.001465e+00, 1.004730e+00, 1.007950e+00,//30
+                           1.011128e+00, 1.014268e+00, 1.017373e+00, 1.020448e+00, 1.023501e+00,//35
+                           1.026539e+00, 1.029576e+00, 1.032627e+00, 1.035717e+00, 1.038876e+00,//40
+                           1.042145e+00, 1.045575e+00, 1.049227e+00, 1.053168e+00, 1.057470e+00,//45
+                           1.062197e+00, 1.067408e+00, 1.073144e+00, 1.079437e+00, 1.086310e+00,//50
+                           1.093781e+00, 1.101867e+00, 1.110593e+00, 1.119988e+00, 1.130091e+00,//55
+                           1.140946e+00, 1.152609e+00, 1.165138e+00, 1.178597e+00, 1.193052e+00,//60
+                           1.208563e+00, 1.225182e+00, 1.242948e+00, 1.261871e+00, 1.281933e+00,//65
+                           1.303072e+00, 1.325181e+00, 1.348101e+00, 1.371628e+00, 1.395524e+00,//70
+                           1.419525e+00, 1.443370e+00, 1.466812e+00, 1.489639e+00, 1.511683e+00,//75
+                           1.532824e+00, 1.552989e+00, 1.572148e+00, 1.590305e+00, 1.607493e+00,//80
+                           1.623763e+00, 1.639179e+00, 1.653813e+00, 1.667744e+00, 1.681049e+00,//85
+                           1.693805e+00, 1.706090e+00, 1.717977e+00, 1.729534e+00, 1.740827e+00,//90
+                           1.751915e+00, 1.762853e+00, 1.773685e+00, 1.784448e+00, 1.795168e+00,//95
+                           1.805857e+00, 1.816520e+00, 1.827145e+00, 1.837717e+00, 1.848211e+00,//00
+                           1.858603e+00, 1.868871e+00, 1.878998e+00, 1.888974e+00, 1.898797e+00,//05
+                           1.908471e+00, 1.918008e+00, 1.927420e+00, 1.936724e+00, 1.945936e+00,//10
+                           1.955071e+00, 1.964143e+00, 1.973164e+00, 1.982141e+00, 1.991083e+00,//15
+                           1.999993e+00, 2.008875e+00, 2.017730e+00, 2.026558e+00, 2.035359e+00,//20
+                           2.044131e+00, 2.052873e+00, 2.061583e+00, 2.070261e+00, 2.078904e+00,//25
+                           2.087511e+00, 2.096082e+00, 2.104615e+00};							
+																								
+  static G4double Y11[nL]={0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,// 5
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//10
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//15
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//20
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//25
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//30
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//35
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 2.294982e-04,//40
+                           9.004214e-04, 1.596711e-03, 2.322644e-03, 3.083713e-03, 3.886991e-03,//45
+                           4.741611e-03, 5.659382e-03, 6.655601e-03, 7.750097e-03, 8.968605e-03,//50
+                           1.034453e-02, 1.192128e-02, 1.375523e-02, 1.591960e-02, 1.850948e-02,//55
+                           2.164817e-02, 2.549531e-02, 3.025682e-02, 3.619690e-02, 4.365119e-02,//60
+                           5.303925e-02, 6.487094e-02, 7.973615e-02, 9.825773e-02, 1.209790e-01,//65
+                           1.481596e-01, 1.795004e-01, 2.139193e-01, 2.495969e-01, 2.844062e-01,//70
+                           3.165270e-01, 3.448627e-01, 3.690832e-01, 3.894161e-01, 4.063913e-01,//75
+                           4.206479e-01, 4.328177e-01, 4.434584e-01, 4.530097e-01, 4.617670e-01,//80
+                           4.698828e-01, 4.774047e-01, 4.843323e-01, 4.906643e-01, 4.964189e-01,//85
+                           5.016352e-01, 5.063648e-01, 5.106640e-01, 5.145877e-01, 5.181865e-01,//90
+                           5.215053e-01, 5.245831e-01, 5.274535e-01, 5.301452e-01, 5.326823e-01,//95
+                           5.350856e-01, 5.373725e-01, 5.395579e-01, 5.416542e-01, 5.436722e-01,//00
+                           5.456210e-01, 5.475082e-01, 5.493402e-01, 5.511227e-01, 5.528604e-01,//05
+                           5.545572e-01, 5.562164e-01, 5.578409e-01, 5.594332e-01, 5.609952e-01,//10
+                           5.625287e-01, 5.640350e-01, 5.655154e-01, 5.669709e-01, 5.684024e-01,//15
+                           5.698105e-01, 5.711959e-01, 5.725591e-01, 5.739006e-01, 5.752207e-01,//20
+                           5.765197e-01, 5.777981e-01, 5.790561e-01, 5.802940e-01, 5.815120e-01,//25
+                           5.827107e-01, 5.838903e-01, 5.850513e-01, 5.861943e-01, 5.873200e-01,//30
+                           5.884295e-01, 5.895241e-01, 5.906057e-01, 5.916770e-01, 5.927414e-01,//35
+                           5.938043e-01, 5.948725e-01, 5.959555e-01, 5.970660e-01, 5.982199e-01,//40
+                           5.994368e-01, 6.007391e-01, 6.021506e-01, 6.036945e-01, 6.053907e-01,//45
+                           6.072547e-01, 6.092966e-01, 6.115219e-01, 6.139333e-01, 6.165327e-01,//50
+                           6.193223e-01, 6.223060e-01, 6.254900e-01, 6.288832e-01, 6.324967e-01,//55
+                           6.363440e-01, 6.404401e-01, 6.448016e-01, 6.494451e-01, 6.543868e-01,//60
+                           6.596409e-01, 6.652182e-01, 6.711241e-01, 6.773565e-01, 6.839040e-01,//65
+                           6.907435e-01, 6.978394e-01, 7.051433e-01, 7.125951e-01, 7.201256e-01,//70
+                           7.276608e-01, 7.351264e-01, 7.424528e-01, 7.495790e-01, 7.564557e-01,//75
+                           7.630466e-01, 7.693284e-01, 7.752899e-01, 7.809298e-01, 7.862553e-01,//80
+                           7.912795e-01, 7.960199e-01, 8.004969e-01, 8.047325e-01, 8.087493e-01,//85
+                           8.125703e-01, 8.162182e-01, 8.197148e-01, 8.230814e-01, 8.263382e-01,//90
+                           8.295044e-01, 8.325978e-01, 8.356343e-01, 8.386281e-01, 8.415908e-01,//95
+                           8.445308e-01, 8.474533e-01, 8.503598e-01, 8.532483e-01, 8.561140e-01,//00
+                           8.589499e-01, 8.617486e-01, 8.645033e-01, 8.672086e-01, 8.698614e-01,//05
+                           8.724612e-01, 8.750091e-01, 8.775082e-01, 8.799623e-01, 8.823759e-01,//10
+                           8.847533e-01, 8.870988e-01, 8.894158e-01, 8.917074e-01, 8.939759e-01,//15
+                           8.962233e-01, 8.984507e-01, 9.006592e-01, 9.028491e-01, 9.050209e-01,//20
+                           9.071747e-01, 9.093104e-01, 9.114281e-01, 9.135278e-01, 9.156092e-01,//25
+                           9.176726e-01, 9.197178e-01, 9.217449e-01};							
+																								
+  static G4double Z11[nL]={0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,// 5
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//10
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//15
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//20
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//25
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//30
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//35
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 4.301985e-04,//40
+                           1.701763e-03, 3.042599e-03, 4.462618e-03, 5.974538e-03, 7.594770e-03,//45
+                           9.344584e-03, 1.125165e-02, 1.335207e-02, 1.569304e-02, 1.833637e-02,//50
+                           2.136312e-02, 2.487967e-02, 2.902571e-02, 3.398470e-02, 3.999750e-02,//55
+                           4.738007e-02, 5.654614e-02, 6.803579e-02, 8.255020e-02, 1.009915e-01,//60
+                           1.245025e-01, 1.544932e-01, 1.926254e-01, 2.407000e-01, 3.003655e-01,//65
+                           3.725664e-01, 4.567683e-01, 5.502827e-01, 6.482972e-01, 7.449805e-01,//70
+                           8.351696e-01, 9.155905e-01, 9.850672e-01, 1.044011e+00, 1.093737e+00,//75
+                           1.135934e+00, 1.172325e+00, 1.204468e+00, 1.233612e+00, 1.260600e+00,//80
+                           1.285858e+00, 1.309496e+00, 1.331478e+00, 1.351762e+00, 1.370372e+00,//85
+                           1.387399e+00, 1.402982e+00, 1.417277e+00, 1.430444e+00, 1.442630e+00,//90
+                           1.453968e+00, 1.464577e+00, 1.474559e+00, 1.484000e+00, 1.492978e+00,//95
+                           1.501554e+00, 1.509785e+00, 1.517717e+00, 1.525390e+00, 1.532837e+00,//00
+                           1.540088e+00, 1.547168e+00, 1.554096e+00, 1.560892e+00, 1.567569e+00,//05
+                           1.574141e+00, 1.580617e+00, 1.587008e+00, 1.593321e+00, 1.599561e+00,//10
+                           1.605733e+00, 1.611842e+00, 1.617892e+00, 1.623883e+00, 1.629820e+00,//15
+                           1.635702e+00, 1.641531e+00, 1.647309e+00, 1.653035e+00, 1.658711e+00,//20
+                           1.664335e+00, 1.669909e+00, 1.675432e+00, 1.680904e+00, 1.686326e+00,//25
+                           1.691698e+00, 1.697021e+00, 1.702295e+00, 1.707522e+00, 1.712704e+00,//30
+                           1.717845e+00, 1.722951e+00, 1.728029e+00, 1.733090e+00, 1.738153e+00,//35
+                           1.743240e+00, 1.748384e+00, 1.753634e+00, 1.759050e+00, 1.764713e+00,//40
+                           1.770723e+00, 1.777194e+00, 1.784251e+00, 1.792016e+00, 1.800599e+00,//45
+                           1.810088e+00, 1.820544e+00, 1.832008e+00, 1.844504e+00, 1.858053e+00,//50
+                           1.872677e+00, 1.888411e+00, 1.905297e+00, 1.923397e+00, 1.942781e+00,//55
+                           1.963536e+00, 1.985759e+00, 2.009554e+00, 2.035029e+00, 2.062290e+00,//60
+                           2.091434e+00, 2.122541e+00, 2.155660e+00, 2.190801e+00, 2.227916e+00,//65
+                           2.266895e+00, 2.307551e+00, 2.349621e+00, 2.392769e+00, 2.436602e+00,//70
+                           2.480691e+00, 2.524601e+00, 2.567914e+00, 2.610260e+00, 2.651333e+00,//75
+                           2.690900e+00, 2.728802e+00, 2.764952e+00, 2.799324e+00, 2.831942e+00,//80
+                           2.862868e+00, 2.892191e+00, 2.920020e+00, 2.946478e+00, 2.971692e+00,//85
+                           2.995793e+00, 3.018913e+00, 3.041180e+00, 3.062723e+00, 3.083662e+00,//90
+                           3.104114e+00, 3.124190e+00, 3.143990e+00, 3.163603e+00, 3.183101e+00,//95
+                           3.202541e+00, 3.221953e+00, 3.241347e+00, 3.260710e+00, 3.280006e+00,//00
+                           3.299188e+00, 3.318204e+00, 3.337004e+00, 3.355549e+00, 3.373816e+00,//05
+                           3.391797e+00, 3.409496e+00, 3.426932e+00, 3.444129e+00, 3.461116e+00,//10
+                           3.477920e+00, 3.494570e+00, 3.511089e+00, 3.527496e+00, 3.543807e+00,//15
+                           3.560034e+00, 3.576185e+00, 3.592265e+00, 3.608278e+00, 3.624224e+00,//20
+                           3.640102e+00, 3.655914e+00, 3.671656e+00, 3.687327e+00, 3.702926e+00,//25
+                           3.718453e+00, 3.733905e+00, 3.749282e+00};							
+																								
+  static G4double Y12[nL]={0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,// 5
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//10
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//15
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//20
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//25
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//30
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//35
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//40
+                           7.108529e-05, 1.564521e-03, 3.226948e-03, 5.105537e-03, 7.262090e-03,//45
+                           9.777604e-03, 1.275826e-02, 1.634324e-02, 2.071498e-02, 2.611241e-02,//50
+                           3.284815e-02, 4.133040e-02, 5.209029e-02, 6.581486e-02, 8.338387e-02,//55
+                           1.059047e-01, 1.347303e-01, 1.714287e-01, 2.176457e-01, 2.747775e-01,//60
+                           3.433864e-01, 4.224423e-01, 5.087840e-01, 5.974091e-01, 6.827831e-01,//65
+                           7.604531e-01, 8.279523e-01, 8.847085e-01, 9.314122e-01, 9.693627e-01,//70
+                           1.000022e+00, 1.024778e+00, 1.044852e+00, 1.061277e+00, 1.074912e+00,//75
+                           1.086458e+00, 1.096479e+00, 1.105393e+00, 1.113480e+00, 1.120896e+00,//80
+                           1.127715e+00, 1.133977e+00, 1.139718e+00, 1.144987e+00, 1.149836e+00,//85
+                           1.154320e+00, 1.158492e+00, 1.162399e+00, 1.166081e+00, 1.169575e+00,//90
+                           1.172908e+00, 1.176107e+00, 1.179190e+00, 1.182176e+00, 1.185077e+00,//95
+                           1.187906e+00, 1.190672e+00, 1.193383e+00, 1.196045e+00, 1.198664e+00,//00
+                           1.201243e+00, 1.203786e+00, 1.206296e+00, 1.208775e+00, 1.211224e+00,//05
+                           1.213645e+00, 1.216039e+00, 1.218406e+00, 1.220747e+00, 1.223062e+00,//10
+                           1.225351e+00, 1.227614e+00, 1.229851e+00, 1.232062e+00, 1.234246e+00,//15
+                           1.236403e+00, 1.238534e+00, 1.240637e+00, 1.242713e+00, 1.244761e+00,//20
+                           1.246782e+00, 1.248775e+00, 1.250740e+00, 1.252677e+00, 1.254586e+00,//25
+                           1.256469e+00, 1.258324e+00, 1.260155e+00, 1.261961e+00, 1.263746e+00,//30
+                           1.265512e+00, 1.267264e+00, 1.269009e+00, 1.270754e+00, 1.272513e+00,//35
+                           1.274303e+00, 1.276145e+00, 1.278067e+00, 1.280102e+00, 1.282288e+00,//40
+                           1.284664e+00, 1.287265e+00, 1.290123e+00, 1.293258e+00, 1.296682e+00,//45
+                           1.300401e+00, 1.304415e+00, 1.308723e+00, 1.313325e+00, 1.318225e+00,//50
+                           1.323429e+00, 1.328948e+00, 1.334798e+00, 1.340998e+00, 1.347569e+00,//55
+                           1.354535e+00, 1.361924e+00, 1.369760e+00, 1.378072e+00, 1.386882e+00,//60
+                           1.396211e+00, 1.406071e+00, 1.416466e+00, 1.427388e+00, 1.438813e+00,//65
+                           1.450702e+00, 1.462993e+00, 1.475611e+00, 1.488460e+00, 1.501434e+00,//70
+                           1.514418e+00, 1.527297e+00, 1.539963e+00, 1.552320e+00, 1.564285e+00,//75
+                           1.575798e+00, 1.586814e+00, 1.597310e+00, 1.607276e+00, 1.616716e+00,//80
+                           1.625645e+00, 1.634087e+00, 1.642070e+00, 1.649626e+00, 1.656790e+00,//85
+                           1.663596e+00, 1.670082e+00, 1.676281e+00, 1.682230e+00, 1.687962e+00,//90
+                           1.693510e+00, 1.698906e+00, 1.704178e+00, 1.709356e+00, 1.714463e+00,//95
+                           1.719519e+00, 1.724542e+00, 1.729540e+00, 1.734517e+00, 1.739470e+00,//00
+                           1.744389e+00, 1.749263e+00, 1.754077e+00, 1.758816e+00, 1.763472e+00,//05
+                           1.768037e+00, 1.772511e+00, 1.776893e+00, 1.781191e+00, 1.785409e+00,//10
+                           1.789556e+00, 1.793638e+00, 1.797662e+00, 1.801635e+00, 1.805561e+00,//15
+                           1.809443e+00, 1.813285e+00, 1.817089e+00, 1.820857e+00, 1.824589e+00,//20
+                           1.828286e+00, 1.831949e+00, 1.835578e+00, 1.839173e+00, 1.842734e+00,//25
+                           1.846262e+00, 1.849757e+00, 1.853220e+00};							
+																								
+  static G4double Z12[nL]={0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,// 5
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//10
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//15
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//20
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//25
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//30
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//35
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//40
+                           1.356912e-04, 3.011807e-03, 6.264023e-03, 9.996358e-03, 1.434666e-02,//45
+                           1.949772e-02, 2.569207e-02, 3.325156e-02, 4.260321e-02, 5.431334e-02,//50
+                           6.913219e-02, 8.805169e-02, 1.123790e-01, 1.438271e-01, 1.846190e-01,//55
+                           2.375934e-01, 3.062751e-01, 3.948310e-01, 5.077608e-01, 6.490958e-01,//60
+                           8.209053e-01, 1.021272e+00, 1.242719e+00, 1.472705e+00, 1.696840e+00,//65
+                           1.903102e+00, 2.084402e+00, 2.238570e+00, 2.366851e+00, 2.472244e+00,//70
+                           2.558320e+00, 2.628578e+00, 2.686160e+00, 2.733774e+00, 2.773713e+00,//75
+                           2.807890e+00, 2.837854e+00, 2.864782e+00, 2.889458e+00, 2.912312e+00,//80
+                           2.933534e+00, 2.953212e+00, 2.971431e+00, 2.988309e+00, 3.003989e+00,//85
+                           3.018627e+00, 3.032373e+00, 3.045364e+00, 3.057722e+00, 3.069551e+00,//90
+                           3.080941e+00, 3.091966e+00, 3.102688e+00, 3.113161e+00, 3.123427e+00,//95
+                           3.133523e+00, 3.143479e+00, 3.153318e+00, 3.163062e+00, 3.172725e+00,//00
+                           3.182322e+00, 3.191863e+00, 3.201355e+00, 3.210805e+00, 3.220217e+00,//05
+                           3.229595e+00, 3.238939e+00, 3.248251e+00, 3.257532e+00, 3.266779e+00,//10
+                           3.275993e+00, 3.285171e+00, 3.294311e+00, 3.303412e+00, 3.312470e+00,//15
+                           3.321482e+00, 3.330448e+00, 3.339362e+00, 3.348224e+00, 3.357030e+00,//20
+                           3.365778e+00, 3.374466e+00, 3.383093e+00, 3.391656e+00, 3.400156e+00,//25
+                           3.408592e+00, 3.416966e+00, 3.425281e+00, 3.433543e+00, 3.441759e+00,//30
+                           3.449943e+00, 3.458115e+00, 3.466304e+00, 3.474552e+00, 3.482918e+00,//35
+                           3.491483e+00, 3.500355e+00, 3.509670e+00, 3.519598e+00, 3.530327e+00,//40
+                           3.542059e+00, 3.554986e+00, 3.569272e+00, 3.585040e+00, 3.602369e+00,//45
+                           3.621300e+00, 3.641855e+00, 3.664046e+00, 3.687893e+00, 3.713431e+00,//50
+                           3.740714e+00, 3.769819e+00, 3.800846e+00, 3.833914e+00, 3.869163e+00,//55
+                           3.906746e+00, 3.946830e+00, 3.989585e+00, 4.035183e+00, 4.083784e+00,//60
+                           4.135529e+00, 4.190522e+00, 4.248816e+00, 4.310397e+00, 4.375165e+00,//65
+                           4.442917e+00, 4.513344e+00, 4.586020e+00, 4.660421e+00, 4.735936e+00,//70
+                           4.811907e+00, 4.887658e+00, 4.962540e+00, 5.035965e+00, 5.107433e+00,//75
+                           5.176545e+00, 5.243014e+00, 5.306660e+00, 5.367395e+00, 5.425214e+00,//80
+                           5.480179e+00, 5.532398e+00, 5.582021e+00, 5.629221e+00, 5.674187e+00,//85
+                           5.717119e+00, 5.758223e+00, 5.797704e+00, 5.835770e+00, 5.872622e+00,//90
+                           5.908461e+00, 5.943478e+00, 5.977860e+00, 6.011778e+00, 6.045388e+00,//95
+                           6.078822e+00, 6.112183e+00, 6.145533e+00, 6.178895e+00, 6.212245e+00,//00
+                           6.245522e+00, 6.278637e+00, 6.311488e+00, 6.343981e+00, 6.376038e+00,//05
+                           6.407613e+00, 6.438686e+00, 6.469265e+00, 6.499378e+00, 6.529066e+00,//10
+                           6.558376e+00, 6.587355e+00, 6.616047e+00, 6.644489e+00, 6.672714e+00,//15
+                           6.700747e+00, 6.728605e+00, 6.756304e+00, 6.783851e+00, 6.811252e+00,//20
+                           6.838511e+00, 6.865628e+00, 6.892603e+00, 6.919437e+00, 6.946128e+00,//25
+                           6.972677e+00, 6.999082e+00, 7.025345e+00};							
+																								
+  static G4double Y13[nL]={0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,// 5
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//10
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//15
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//20
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//25
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//30
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//35
+                           0.000000e+00, 0.000000e+00, 5.382880e-05, 1.140133e-03, 2.246255e-03,//40
+                           3.372735e-03, 4.520110e-03, 5.688912e-03, 6.879668e-03, 8.092904e-03,//45
+                           9.329142e-03, 1.058890e-02, 1.187270e-02, 1.318105e-02, 1.451445e-02,//50
+                           1.587342e-02, 1.725844e-02, 1.867002e-02, 2.010863e-02, 2.157475e-02,//55
+                           2.306884e-02, 2.459136e-02, 2.614273e-02, 2.772339e-02, 2.933374e-02,//60
+                           3.097416e-02, 3.264501e-02, 3.434663e-02, 3.607932e-02, 3.784336e-02,//65
+                           3.963899e-02, 4.146642e-02, 4.332582e-02, 4.521730e-02, 4.714093e-02,//70
+                           4.909674e-02, 5.108471e-02, 5.310473e-02, 5.515666e-02, 5.724029e-02,//75
+                           5.935534e-02, 6.150144e-02, 6.367817e-02, 6.588503e-02, 6.812144e-02,//80
+                           7.038672e-02, 7.268015e-02, 7.500087e-02, 7.734798e-02, 7.972048e-02,//85
+                           8.211727e-02, 8.453721e-02, 8.697902e-02, 8.944138e-02, 9.192288e-02,//90
+                           9.442205e-02, 9.693733e-02, 9.946710e-02, 1.020097e-01, 1.045634e-01,//95
+                           1.071264e-01, 1.096970e-01, 1.122732e-01, 1.148533e-01, 1.174353e-01,//00
+                           1.200173e-01, 1.225976e-01, 1.251741e-01, 1.277451e-01, 1.303088e-01,//05
+                           1.328632e-01, 1.354068e-01, 1.379377e-01, 1.404544e-01, 1.429553e-01,//10
+                           1.454388e-01, 1.479036e-01, 1.503482e-01, 1.527714e-01, 1.551720e-01,//15
+                           1.575488e-01, 1.599009e-01, 1.622273e-01, 1.645273e-01, 1.668001e-01,//20
+                           1.690452e-01, 1.712620e-01, 1.734503e-01, 1.756100e-01, 1.777411e-01,//25
+                           1.798442e-01, 1.819199e-01, 1.839697e-01, 1.859956e-01, 1.880007e-01,//30
+                           1.899896e-01, 1.919689e-01, 1.939479e-01, 1.959394e-01, 1.979610e-01,//35
+                           2.000361e-01, 2.021944e-01, 2.044719e-01, 2.069099e-01, 2.095517e-01,//40
+                           2.124388e-01, 2.156065e-01, 2.190804e-01, 2.228756e-01, 2.269982e-01,//45
+                           2.314485e-01, 2.362242e-01, 2.413240e-01, 2.467494e-01, 2.525060e-01,//50
+                           2.586040e-01, 2.650580e-01, 2.718870e-01, 2.791137e-01, 2.867639e-01,//55
+                           2.948660e-01, 3.034497e-01, 3.125450e-01, 3.221812e-01, 3.323844e-01,//60
+                           3.431756e-01, 3.545682e-01, 3.665650e-01, 3.791548e-01, 3.923098e-01,//65
+                           4.059832e-01, 4.201075e-01, 4.345952e-01, 4.493408e-01, 4.642249e-01,//70
+                           4.791206e-01, 4.939003e-01, 5.084427e-01, 5.226393e-01, 5.363990e-01,//75
+                           5.496512e-01, 5.623458e-01, 5.744530e-01, 5.859607e-01, 5.968719e-01,//80
+                           6.072016e-01, 6.169740e-01, 6.262198e-01, 6.349741e-01, 6.432750e-01,//85
+                           6.511619e-01, 6.586745e-01, 6.658530e-01, 6.727365e-01, 6.793635e-01,//90
+                           6.857714e-01, 6.919964e-01, 6.980727e-01, 7.040325e-01, 7.099047e-01,//95
+                           7.157146e-01, 7.214821e-01, 7.272205e-01, 7.329360e-01, 7.386269e-01,//00
+                           7.442846e-01, 7.498950e-01, 7.554413e-01, 7.609074e-01, 7.662799e-01,//05
+                           7.715499e-01, 7.767139e-01, 7.817731e-01, 7.867319e-01, 7.915976e-01,//10
+                           7.963782e-01, 8.010821e-01, 8.057170e-01, 8.102898e-01, 8.148063e-01,//15
+                           8.192710e-01, 8.236877e-01, 8.280589e-01, 8.323866e-01, 8.366722e-01,//20
+                           8.409166e-01, 8.451206e-01, 8.492844e-01, 8.534086e-01, 8.574934e-01,//25
+                           8.615392e-01, 8.655463e-01, 8.695151e-01};
+																								
+  static G4double Z13[nL]={0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,// 5
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//10
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//15
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//20
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//25
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//30
+                           0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00,//35
+                           0.000000e+00, 0.000000e+00, 9.783703e-05, 2.090489e-03, 4.153155e-03,//40
+                           6.288065e-03, 8.497490e-03, 1.078374e-02, 1.314917e-02, 1.559618e-02,//45
+                           1.812720e-02, 2.074472e-02, 2.345125e-02, 2.624934e-02, 2.914161e-02,//50
+                           3.213067e-02, 3.521920e-02, 3.840989e-02, 4.170546e-02, 4.510866e-02,//55
+                           4.862226e-02, 5.224904e-02, 5.599178e-02, 5.985326e-02, 6.383627e-02,//60
+                           6.794358e-02, 7.217793e-02, 7.654202e-02, 8.103854e-02, 8.567010e-02,//65
+                           9.043924e-02, 9.534845e-02, 1.004001e-01, 1.055965e-01, 1.109397e-01,//70
+                           1.164319e-01, 1.220748e-01, 1.278702e-01, 1.338196e-01, 1.399243e-01,//75
+                           1.461854e-01, 1.526037e-01, 1.591799e-01, 1.659143e-01, 1.728069e-01,//80
+                           1.798574e-01, 1.870652e-01, 1.944295e-01, 2.019490e-01, 2.096219e-01,//85
+                           2.174464e-01, 2.254201e-01, 2.335401e-01, 2.418034e-01, 2.502065e-01,//90
+                           2.587454e-01, 2.674159e-01, 2.762134e-01, 2.851328e-01, 2.941689e-01,//95
+                           3.033160e-01, 3.125681e-01, 3.219191e-01, 3.313625e-01, 3.408915e-01,//00
+                           3.504993e-01, 3.601789e-01, 3.699230e-01, 3.797244e-01, 3.895757e-01,//05
+                           3.994695e-01, 4.093984e-01, 4.193552e-01, 4.293325e-01, 4.393231e-01,//10
+                           4.493200e-01, 4.593164e-01, 4.693054e-01, 4.792806e-01, 4.892357e-01,//15
+                           4.991648e-01, 5.090621e-01, 5.189223e-01, 5.287402e-01, 5.385113e-01,//20
+                           5.482314e-01, 5.578968e-01, 5.675044e-01, 5.770520e-01, 5.865384e-01,//25
+                           5.959637e-01, 6.053297e-01, 6.146410e-01, 6.239055e-01, 6.331361e-01,//30
+                           6.423526e-01, 6.515848e-01, 6.608755e-01, 6.702858e-01, 6.799001e-01,//35
+                           6.898319e-01, 7.002274e-01, 7.112667e-01, 7.231579e-01, 7.361238e-01,//40
+                           7.503819e-01, 7.661218e-01, 7.834889e-01, 8.025778e-01, 8.234389e-01,//45
+                           8.460930e-01, 8.705492e-01, 8.968203e-01, 9.249338e-01, 9.549387e-01,//50
+                           9.869084e-01, 1.020941e+00, 1.057159e+00, 1.095706e+00, 1.136745e+00,//55
+                           1.180454e+00, 1.227023e+00, 1.276644e+00, 1.329509e+00, 1.385796e+00,//60
+                           1.445654e+00, 1.509195e+00, 1.576471e+00, 1.647455e+00, 1.722027e+00,//65
+                           1.799953e+00, 1.880878e+00, 1.964325e+00, 2.049707e+00, 2.136343e+00,//70
+                           2.223500e+00, 2.310427e+00, 2.396401e+00, 2.480762e+00, 2.562946e+00,//75
+                           2.642502e+00, 2.719096e+00, 2.792514e+00, 2.862648e+00, 2.929477e+00,//80
+                           2.993060e+00, 3.053509e+00, 3.110983e+00, 3.165668e+00, 3.217773e+00,//85
+                           3.267519e+00, 3.315133e+00, 3.360848e+00, 3.404894e+00, 3.447501e+00,//90
+                           3.488894e+00, 3.529295e+00, 3.568916e+00, 3.607958e+00, 3.646606e+00,//95
+                           3.685021e+00, 3.723330e+00, 3.761621e+00, 3.799933e+00, 3.838254e+00,//00
+                           3.876522e+00, 3.914642e+00, 3.952495e+00, 3.989967e+00, 4.026960e+00,//05
+                           4.063408e+00, 4.099281e+00, 4.134578e+00, 4.169328e+00, 4.203572e+00,//10
+                           4.237363e+00, 4.270754e+00, 4.303797e+00, 4.336537e+00, 4.369011e+00,//15
+                           4.401248e+00, 4.433273e+00, 4.465101e+00, 4.496745e+00, 4.528211e+00,//20
+                           4.559503e+00, 4.590625e+00, 4.621577e+00, 4.652360e+00, 4.682973e+00,//25
+                           4.713417e+00, 4.743691e+00, 4.773797e+00};
+
+  static G4double* Y[nN]={Y0, Y1, Y2, Y3, Y4, Y5, Y6, Y7, Y8, Y9, Y10, Y11, Y12, Y13};
+  static G4double* Z[nN]={Z0, Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, Z9, Z10, Z11, Z12, Z13};
+
+  for(G4int j=0; j<nN; j++) if(abs(a-A[j])<.0005)
+  {
+    for(G4int k=0; k<nL; k++)
+    {
+	  y[k]=Y[j][k];
+	  z[k]=Z[j][k];
+    }
+    return L[j];
+  }
+  G4int      r=0;
+  if(a>=0)
+  {
+    G4int f=nN-2; // Very high A is default (more than Pb)
+    G4int h=nN-1;
+    if(a<A[f]) for(G4int i=2; i<nN; i++) if(a<A[i])
+	{
+      h=i;
+      f=i-1;
+    }
+    r=L[f];
+    if(r>L[h]) r=L[h];
+    G4double  xi=A[f];
+    G4double  xa=A[h];
+    G4double   b=(a-xi)/(xa-xi);
+    for(G4int m=0; m<nL; m++)
+	{
+      G4double yf=Y[f][m];
+      y[m]=yf+(Y[h][m]-yf)*b;
+      G4double zf=Z[f][m];
+      z[m]=zf+(Z[h][m]-zf)*b;
+	}
+  }
+  return r;
+}
+
+G4double G4ElectroNuclearCrossSection::GetEffectivePhotonEnergy()
+{
+  // !! This should be identical to the begining of the GetCrossSection member-function !!
+  static const G4int nL=228; // !!  If you change this, change it in GetFunctions() (*.hh) !!
+  static const G4double X[nL]={
+ .6931472, .7235778, .7540085, .7844391, .8148697, .8453004, .8757310, .9061617, .9365923, .9670229,
+ .9974536, 1.027884, 1.058315, 1.088746, 1.119176, 1.149607, 1.180037, 1.210468, 1.240899, 1.271329,
+ 1.301760, 1.332191, 1.362621, 1.393052, 1.423483, 1.453913, 1.484344, 1.514774, 1.545205, 1.575636,
+ 1.606066, 1.636497, 1.666928, 1.697358, 1.727789, 1.758220, 1.788650, 1.819081, 1.849512, 1.879942,
+ 1.910373, 1.940803, 1.971234, 2.001665, 2.032095, 2.062526, 2.092957, 2.123387, 2.153818, 2.184249,
+ 2.214679, 2.245110, 2.275540, 2.305971, 2.336402, 2.366832, 2.397263, 2.427694, 2.458124, 2.488555,
+ 2.518986, 2.549416, 2.579847, 2.610278, 2.640708, 2.671139, 2.701569, 2.732000, 2.762431, 2.792861,
+ 2.823292, 2.853723, 2.884153, 2.914584, 2.945015, 2.975445, 3.005876, 3.036306, 3.066737, 3.097168,
+ 3.127598, 3.158029, 3.188460, 3.218890, 3.249321, 3.279752, 3.310182, 3.340613, 3.371044, 3.401474,
+ 3.431905, 3.462335, 3.492766, 3.523197, 3.553627, 3.584058, 3.614489, 3.644919, 3.675350, 3.705781,
+ 3.736211, 3.766642, 3.797072, 3.827503, 3.857934, 3.888364, 3.918795, 3.949226, 3.979656, 4.010087,
+ 4.040518, 4.070948, 4.101379, 4.131810, 4.162240, 4.192671, 4.223101, 4.253532, 4.283963, 4.314393,
+ 4.344824, 4.375255, 4.405685, 4.436116, 4.466547, 4.496977, 4.527408, 4.557838, 4.588269, 4.618700,
+ 4.649130, 4.679561, 4.709992, 4.740422, 4.770853, 4.801284, 4.831714, 4.862145, 4.892575, 4.923006,
+ 4.953437, 4.983867, 5.014298, 5.044729, 5.075159, 5.105590, 5.136021, 5.166451, 5.196882, 5.227313,
+ 5.257743, 5.288174, 5.318604, 5.349035, 5.379466, 5.409896, 5.440327, 5.470758, 5.501188, 5.531619,
+ 5.562050, 5.592480, 5.622911, 5.653341, 5.683772, 5.714203, 5.744633, 5.775064, 5.805495, 5.835925,
+ 5.866356, 5.896787, 5.927217, 5.957648, 5.988079, 6.018509, 6.048940, 6.079370, 6.109801, 6.140232,
+ 6.170662, 6.201093, 6.231524, 6.261954, 6.292385, 6.322816, 6.353246, 6.383677, 6.414107, 6.444538,
+ 6.474969, 6.505399, 6.535830, 6.566261, 6.596691, 6.627122, 6.657553, 6.687983, 6.718414, 6.748845,
+ 6.779275, 6.809706, 6.840136, 6.870567, 6.900998, 6.931428, 6.961859, 6.992290, 7.022720, 7.053151,
+ 7.083582, 7.114012, 7.144443, 7.174873, 7.205304, 7.235735, 7.266165, 7.296596, 7.327027, 7.357457,
+ 7.387888, 7.418319, 7.448749, 7.479180, 7.509611, 7.540041, 7.570472, 7.600902};
+
+  G4double phLE=0.;                     // Prototype of the log(E_gamma)
+  G4double Y[nL];                       // Prepare the array for randomization
+#ifdef debug
+  G4cout<<"G4ElectroNuclearCrossSection::GetEffectivePhotonEnergy: called B="<<lastF<<",End="<<lastL
+        <<",Phi="<<lastPhi[lastL]<<",Fun="<<lastFun[lastL]<<",S="<<lastSig<<",lE="<<lastLE<<G4endl;
+#endif
+  for (G4int i=lastF; i<=lastL; i++) Y[i]=lastLE*lastPhi[i]-lastFun[i];
+  G4double ris=lastSig*G4UniformRand();
+#ifdef debug
+  G4cout<<"G4ElectroNuclearCrossSection::GetEffectivePhotonEnergy:r="<<ris<<",Y="<<Y[lastL]<<G4endl;
+#endif
+  if(ris<Y[lastL])                      // Search in the table
+  {
+	G4int j=lastF;
+    G4double Yj=Y[j];                   // It should be 0.
+    while (ris>Yj && j<lastL)           // Associative search
+	{
+      j++;
+      Yj=Y[j];
+	}
+    G4int j1=j-1;
+    phLE=X[j]-(Yj-ris)*(X[j]-X[j1])/(Yj-Y[j1]);
+#ifdef debug
+	G4cout<<"lE="<<phLE<<",j="<<j<<",f="<<ris<<",X="<<X[j]<<",Y="<<Yj<<G4endl;
+#endif
+  }
+  else                                  // Search with the function
+  {
+    G4double f=(ris-Y[lastL])/lastH;    // The scaling residual value
+#ifdef pdebug
+	G4cout<<"High Energy f="<<f<<",ris="<<ris<<",lastH="<<lastH<<G4endl;
+#endif
+    phLE=SolveTheEquation(f);
+#ifdef pdebug
+	G4cout<<"High Energy lphE="<<phLE<<G4endl;
+#endif
+  }
+  if(phLE>lastLE)G4cerr<<"***G4ElectroNuclearCrossSection::GetEffPhotE:"<<phLE<<">"<<lastLE<<",S="
+   <<lastSig<<",ris="<<ris<<",B="<<lastF<<",E="<<lastL<<",Y="<<Y[lastL]<<",Y="<<Y[lastL]<<G4endl;
+  return exp(phLE);
+}
+
+G4double G4ElectroNuclearCrossSection::SolveTheEquation(G4double f)
+{
+  static const G4double z=log(2000.);
+  static const G4double p=0.0116*exp(0.16*z)+.4*exp(-0.2*z);
+  static const G4int    imax=7;    // Not more than "imax" steps to find the solution
+  static const G4double eps=0.001; // Accuracy which satisfies the search
+  G4double x=z+f/p/(lastLE-z);
+#ifdef pdebug
+  G4cout<<"SolveTheEq: e="<<eps<<",f="<<f<<",z="<<z<<",p="<<p<<",lastLE="<<lastLE<<",x="<<x<<G4endl;
+#endif
+  for(G4int i=0; i<imax; i++)
+  {
+    G4double fx=Fun(x);
+    G4double df=DFun(x);
+    G4double d=(fx-f)/df;
+    x=x-d;
+#ifdef pdebug
+    G4cout<<"SolveTheEq: i="<<i<<",d="<<d<<",x="<<x<<",fx="<<fx<<",df="<<df<<G4endl;
+#endif
+    if(abs(d)<eps) break;
+  }
+  return x;
+}
 
