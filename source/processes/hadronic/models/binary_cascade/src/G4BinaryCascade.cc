@@ -743,6 +743,7 @@ void G4BinaryCascade::BuildTargetList()
 
 	G4KineticTrack * kt = new G4KineticTrack(definition, 0., pos, mom);
 	kt->SetState(G4KineticTrack::inside);
+	kt->SetNucleon(nucleon);
 	theTargetList.push_back(kt);
 	++currentA;
 	if (definition->GetPDGCharge() > .5 ) ++currentZ;

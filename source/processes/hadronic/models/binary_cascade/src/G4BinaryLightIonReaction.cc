@@ -87,6 +87,7 @@
 	G4LorentzVector p4 = aNuc->GetMomentum();	
 	tmpV+=p4;
 	G4KineticTrack * it = new G4KineticTrack(aNuc, aNuc->GetPosition()+pos, nucleonMom );
+        it->SetState(G4KineticTrack::outside);
 	initalState->push_back(it);
       }
       debug.push_back(tmpV);
