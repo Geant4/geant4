@@ -102,20 +102,20 @@ HepRepFactory* G4HepRepSceneHandler::GetHepRepFactory() {
 void G4HepRepSceneHandler::open() {
     if (writer != NULL) return;
 
-    char fname [256];
-    G4std::ostrstream ost(fname, 256);
-    ost << GetScene()->GetName() << "-" << fileNo++ << ".heprep" << G4std::ends;
-
 #ifdef DEBUG
     G4cout << "G4HepRepSceneHandler::open(" << fname << ") " << G4endl;
 #endif
-    if (strcmp(fname, "stdout") == 0) {
+    if (strcmp(GetScene()->GetName(), "stdout") == 0) {
         out = NULL;
         writer = heprepFactory->createHepRepWriter(&G4cout);
-    } else if (strcmp(fname, "stderr") == 0) {
+    } else if (strcmp(GetScene()->GetName(), "stderr") == 0) {
         out = NULL;
         writer = heprepFactory->createHepRepWriter(&G4cerr);
     } else {
+        char fname [256];
+        G4std::ostrstream ost(fname, 256);
+        ost << GetScene()->GetName() << "-" << fileNo++ << ".heprep" << G4std::ends;
+
         out = new G4std::ofstream(fname);
         writer = heprepFactory->createHepRepWriter(out);
     }

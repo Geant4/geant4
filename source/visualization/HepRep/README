@@ -33,6 +33,9 @@ The version of HepRep produced by this driver is HepRep Version 2.
 To set the base part of the filename (filename = basefilename-seqno.heprep):
 /vis/scene/create basefilename
 
+To route the HepRep XML output to stdout (or stderr) use:
+/vis/scene/create stdout
+
 To select the driver
 /vis/open HepRepXML
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2002-11-27 19:13:28 duns Exp $
+$Id: History,v 1.22 2002-12-03 18:01:29 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,8 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 ---------------------------------------------------------------------------
+3rd December 2002 Mark Donszelmann
+- Fixed bug that XML Output can be routed to stdout or stderr.
 
 27th November 2002 Mark Donszelmann
 - Fixed core dump (Solaris) if open HepRepXML and closed it w/o writing anything
