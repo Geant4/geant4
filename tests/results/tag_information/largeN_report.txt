@@ -1,13 +1,13 @@
-          Problems with geant4-03-02-ref-04
+          Problems with geant4-04-00-cand-00
           ===========================================
 
 
 
 
-Report on Errors and Warnings arising from system testing on the geant4-03-02-ref-04 tag.
+Report on Errors and Warnings arising from system testing on the geant4-04-00-cand-01 tag.
 
 The complete set of tests has not been run, with Large_N(umbers of events), for all platforms. 
-It is hoped to extend the coverage and speed up the problem reporting in the September reference tag.
+It is hoped to extend the coverage and speed up the problem reporting in the next reference tag.
  
 --------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
         | SUN-CC  | SUN-CC  |Linux-egcs|Linux-egcs|Linux-g++ |Linux-g++ | HP-aCC   | HP-aCC   | DEC-cxx | DEC-cxx | DEC-cxx | DEC-cxx |
@@ -24,11 +24,11 @@ test09  |(anno)   |Err 3.1  |          |          |          |          | Warn 5
 test10  |(anno)   |         |          |          |          |          |          |          |         |         |         |         |
 --------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
 
-test11  |Err 1.1  |         | Err 1    | Err 1    | Err 1    | Err 1    | Err 1    | Err 1    | Err 1   | Err 1   | Err 1   | Err 1   |
+test11  |Err 1.1  |         | abend    | abend    | abend    | abend    | Err 1    | Err 1    | Err 1   | Err 1   | Err 1   | Err 1   |
 test12  |(anno)   |         |          | Warn 2   | Err 4    | Warn 2   |          | Warn 2   | abend   |         | abend   |         |
-test13  |Warn 2.1 |         |          |          | Err 4    | Warn 2   |          |          | abend   |         | abend   |         |
+test13  |Warn 2.1 |         |          |          | Err 4    | Err  6   | loop     | loop     | abend   |         | abend   |         |
 test14  |anno+2nds|         |          |          |          |          |          |          |         |         |cxx fail |cxx fail |
-test15  |         |         |          |          | Err 4    |          |          |          | Err 1   | Err 1   | Err 1   | Err 1   |
+test15  |         |         | abend    | abend    | abend    | abend    |          |          | Err 1   | Err 1   | Err 1   | Err 1   |
 --------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
 test16  |Warn 3.1 |OK + anno| Warn 3   | Warn 2   | Err 4    | Warn 2   | Warn 3   | Warn 3   | abend   | Warn 3  | abend   |         |
 test17  | OK      |         |          |          |          |          |          |          |         |         |cxx fail |cxx fail |
@@ -36,7 +36,8 @@ test18  |OK (anno)|         |          |          |          |          |       
 test20  |OK (anno)|         |          |          |          |          |          |          |         |         |cxx fail |cxx fail |
 --------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
 test103 |........ |Warn 4.1 | Warn 1   |          |          |          |          | Warn 1   |         |
-test104 |........ |Warn 4.1 |          |          |          |          |          | Warn 4   |         | abend   |
+test104 |........ |Warn 4.1 |          |          |          | Warn 3   |          | Warn 4   | abend   | abend   | abend   | abend
+test502 |         |         | Err  8   | Err  8   | Err  8   | Err  8   |          |          |         |
 test508 |Err  2.1 | Err  2  |          | Err  2   |          | Err  2   |          |          |         |
 --------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
 
@@ -52,6 +53,7 @@ test508 |Err  2.1 | Err  2  |          | Err  2   |          | Err  2   |       
  Err  3  system problem (?)
  Err  4  negative currentInteractionLength
  Err  5  Momentum Change is not unit vector (leading to exception).
+ Err  6  Error in G4HEInelastic::GenerateNBodyEvent
 
 
  It would be really nice to get rid of these warnings, particularly for the Large_N tests.
@@ -172,7 +174,26 @@ SimpleBox is now made of Pb
         Track Weight      :                    1
 
 
- 
+G4 Err 6  Linux-g++.deb.NewGCC   test13
+---------------------------------------
+
+*** Error in G4HEInelastic::GenerateNBodyEvent
+    total mass (1.87784) >= total energy (1.87384)
+*** Error in G4HEInelastic::GenerateNBodyEvent
+    total mass (1.87913) >= total energy (1.8412)
+
+
+G4 Err 7  Linux-egcs.egcs.optim   test12
+----------------------------------------
+
+eliminating target particle
+Command exited with non-zero status 1
+
+
+G4 Err 8  Linux-*   test502
+---------------------------
+
+"SOMETIMES IT CRASHES"
 
 
 G4Warn 1  SUN-CC.optim_ISO test02
