@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellEMDataSet.cc,v 1.2 2001-09-07 18:39:17 vnivanch Exp $
+// $Id: G4ShellEMDataSet.cc,v 1.3 2001-09-09 17:53:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -90,7 +90,7 @@ G4double G4ShellEMDataSet::FindValue(G4double e, G4int id) const
   // Returns the id-th shells value corresponding to e
   G4double value = 0.;
 
-  if(id > 0 && id <nComponents) value = (components[id])->FindValue(e);
+  if(id >= 0 && id <nComponents) value = (components[id])->FindValue(e);
   else {
     G4cout << "G4ShellEMDataSet::FindValue WARNING: component "
            << id << " is absent" << G4endl;

@@ -357,13 +357,10 @@ G4double G4LowEnergyDeltaGen::AverageEnergy(G4int atomicNumber,
   const G4DataVector* p = FindParameters(atomicNumber, shellNumber, 
                                          kineticEnergy);
   G4double t1 = FindEnergyLimit1(atomicNumber, shellNumber);
-  if(atomicNumber == 14) G4cout << "t1= " << t1 << G4endl;
   G4double t2 = FindEnergyLimit2(atomicNumber, shellNumber);
-  if(atomicNumber == 14) G4cout << "t2= " << t2 << G4endl;
     
   G4double z = (G4double) atomicNumber;
   const G4VEMDataSet* data = bindingData->GetComponent(shellNumber);
-  if(atomicNumber == 14) data->PrintData();
   G4double bindingEnergy = data->FindValue(z);
   if(verbose > 1) {
     G4cout << "G4LowEnergyDeltaGen::AverageEnergy: Z= " << atomicNumber
