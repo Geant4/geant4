@@ -24,7 +24,7 @@ opendir(TL,"$TestLogDir") || die "Failed to opendir TestLog  $TestLogDir $!";
 closedir(TL);
 foreach $testlog (@testlogs) {
     next unless ((-M "$TestLogDir/$testlog") < 60 );
-#   print "Test Run Log \"$testlog\"\n";
+    print "Test Run Log \"$testlog\"\n";
     $Machine="Machine";
     $Option="CompilerOpts";
     if ( $testlog =~ m/(\w+)\.\w+\.(.*)\.log/ ) {
@@ -121,6 +121,8 @@ foreach $testlog (@testlogs) {
                 print "Gmake Age $line\n";
             }
         }
+    } else {
+        sleep(1);
     }
     if (defined($syntaxerror)) {
         print "$syntaxerror\n";
