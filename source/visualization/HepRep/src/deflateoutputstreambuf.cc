@@ -160,6 +160,7 @@ int DeflateOutputStreambuf::sync() {
 
 bool DeflateOutputStreambuf::flushOutvec() {
   int deflated_bytes = _outvecsize - _zs.avail_out ;
+  cerr << "********************* " << deflated_bytes << endl;
   int bc = _outbuf->sputn( &( _outvec[ 0 ] ), deflated_bytes ) ;
 
   _zs.next_out = reinterpret_cast< unsigned char * >( &( _outvec[ 0 ] ) ) ;

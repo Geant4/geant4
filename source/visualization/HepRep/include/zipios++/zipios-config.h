@@ -40,6 +40,7 @@
 //#define S_ISSOCK(mode)	0
 
 #ifdef WIN32
+#ifndef GNU_GCC
 #  ifdef _MSC_VER
 // Disable class-browser warning about truncated template-names
 #    pragma warning( disable : 4786 )
@@ -52,6 +53,7 @@
 #   define S_ISBLK(mode)	0
 #   define S_ISSOCK(mode)	0
 #   define S_ISFIFO(mode)	(((mode) & _S_IFIFO) == _S_IFIFO)
+#endif
 #endif
 
 #include <assert.h>
