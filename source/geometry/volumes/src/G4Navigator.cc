@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.29 2002-06-01 01:20:47 japost Exp $
+// $Id: G4Navigator.cc,v 1.30 2002-06-01 01:27:01 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation  Paul Kent July 95/96
@@ -639,12 +639,12 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
      if(fValidExitNormal)
      {
         // Convention: fExitNormal is in the 'grand-mother' coordinate system
-        fMotherExitNormal= fExitNormal;
+        fGrandMotherExitNormal= fExitNormal;
 
         // If no relocation were made, we would need to rotate it back to 
 	//   this (the mother) coordinate system
         // const G4RotationMatrix* motherRotation= motherPhysical->GetRotation();
-	// G4ThreeVector trueMotherExitNormal = fMotherExitNormal;
+	// G4ThreeVector trueMotherExitNormal = fGrandMotherExitNormal;
 	// trueMotherExitNormal *= (*motherRotation);  // Un-rotate gran->mother
 
         // However, relocation will put us either in
@@ -660,12 +660,12 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
        if( mRot ) { 
 	  G4ThreeVector grandMotherExitNormal = localExitNormal;
           grandMotherExitNormal *= (*mRot); 
-          // Now fMotherExitNormal is in the 'grand-mother' coordinate system
-	  fMotherExitNormal = grandMotherExitNormal;
+          // Now fGrandMotherExitNormal is in the 'grand-mother' coordinate system
+	  fGrandMotherExitNormal = grandMotherExitNormal;
        }
      }
 #    ifdef G4DEBUG_NAVIGATION
-       G4cout << " fMotherExitNormal= " << fMotherExitNormal << endl;
+       G4cout << " fGrandMotherExitNormal= " << fGrandMotherExitNormal << endl;
 #    endif
   }
 
@@ -745,7 +745,7 @@ G4ThreeVector  G4Navigator::GetLocalExitNormal(G4bool* valid)
 			 ->GetSolid()->SurfaceNormal(fLastLocatedPointLocal));
      *valid = true;
   }else if( fExitedMother ){
-     ExitNormal=fMotherExitNormal;
+     ExitNormal=fGrandMotherExitNormal;
      *valid = true;
   }else{
      // We are not at a boundary.
