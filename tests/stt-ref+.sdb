@@ -1,4 +1,4 @@
-# $Id: stt-ref+.sdb,v 1.27 1999-05-07 13:35:47 stesting Exp $
+# $Id: stt-ref+.sdb,v 1.28 1999-05-07 13:57:22 stesting Exp $
 # .sdb files are read by checkout.sh and update.sh
 # Lines beginning "# " are ignored (the space after the '#' is important!
 # Blank lines are not allowed!
@@ -27,7 +27,7 @@ geant4/source/intercoms        intercoms-01-00-03
 geant4/source/interfaces       geant4-00-ref-06
 geant4/source/materials        geant4-00-ref-06
 geant4/source/particles        geant4-00-ref-06
-# + modifications to management/src/G4IonTable.cc and management/src/G4DynamicParticle.cc
+geant4/source/particles/management partman-01-00-07
 geant4/source/persistency      geant4-00-ref-06
 geant4/source/processes/GNUmakefile         geant4-00-ref-06
 geant4/source/processes/History             geant4-00-ref-06
