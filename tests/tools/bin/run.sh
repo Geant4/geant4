@@ -88,7 +88,7 @@ if [ $1 = "all" ] ; then
 #
 # NDL
 # default value!
-#export NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL3.1
+#export NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL3.4
   nice $G4STTDIR/bin/run.sh test11
   nice $G4STTDIR/bin/run.sh test12
   nice $G4STTDIR/bin/run.sh test13
@@ -99,7 +99,7 @@ if [ $1 = "all" ] ; then
   NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL0.2;export NeutronHPCrossSections
   nice $G4STTDIR/bin/run.sh test15
 # ...and back again to original! 
-  NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL3.1;export NeutronHPCrossSections
+  NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL3.4;export NeutronHPCrossSections
   nice $G4STTDIR/bin/run.sh test16
   nice $G4STTDIR/bin/run.sh test17
   nice $G4STTDIR/bin/run.sh test18
