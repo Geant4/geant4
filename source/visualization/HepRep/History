@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2002-11-26 08:05:19 duns Exp $
+$Id: History,v 1.18 2002-11-26 19:27:14 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,7 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 ---------------------------------------------------------------------------
-25th Novemeber 2002 Mark Donszelmann
+26th November 2002 Mark Donszelmann
+- Fixed FillStyle, LineStyle, LineWidth, HasFrame and Symbol Names
+
+25th November 2002 Mark Donszelmann
 - Fixed HepRep1 warnings in HepRepFileSceneHandler
 - Fixed HepRep2 radius of markers to be non-zero
 - Fixed HepRep2 attributes some of which had wrong names, especially the markers

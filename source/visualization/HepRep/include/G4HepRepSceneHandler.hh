@@ -46,6 +46,7 @@
 //G4
 #include "G4VGraphicsSystem.hh"
 #include "G4VSceneHandler.hh"
+#include "G4Visible.hh"
 #include "G4Material.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PhysicalVolumeModel.hh"
@@ -118,7 +119,9 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
 
         G4Transform3D transform;
 
-        void SetColour (HEPREP::HepRepAttribute *attribute, const G4Colour&);
+        void SetColour (HEPREP::HepRepAttribute *attribute, const G4Colour& color);
+        void SetLine (HEPREP::HepRepInstance *instance, const G4Visible& visible);
+        void SetMarker (HEPREP::HepRepInstance *instance, const G4VMarker& marker);
         HEPREP::HepRepInstance* CreateInstance(HEPREP::HepRepInstance* p, HEPREP::HepRepType* altType);
         bool IsEventData ();
 

@@ -54,6 +54,7 @@
 #include "G4Text.hh"
 #include "G4NURBS.hh"
 #include "G4VPhysicalVolume.hh"
+#include "G4VisAttributes.hh"
 #include "G4VSolid.hh"
 #include "G4VTrajectory.hh"
 #include "G4VHit.hh"
@@ -221,9 +222,10 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyline& line) {
     HepRepFactory* factory = GetHepRepFactory();
     HepRepInstance* instance = CreateInstance(parent, trackType);
 
-// FIXME where do we get the linewidth?
+    SetLine(instance, line);
 
     instance->addAttValue("DrawAs", G4String("Line"));
+    instance->addAttValue("HasFrame", G4String("True"));
     SetColour(instance, GetColour(line));
     for (size_t i=0; i < line.size(); i++) {
         G4Point3D vertex = transform * line[i];
@@ -243,28 +245,26 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polymarker& line) {
     HepRepInstance* instance = CreateInstance(parent, hitType);
 
     instance->addAttValue("DrawAs", G4String("Point"));
+    instance->addAttValue("HasFrame", G4String("True"));
 
-// FIXME, what are we supposed to draw?
+    SetMarker(instance, line);
     switch (line.GetMarkerType()) {
         case line.dots:
-            instance->addAttValue("MarkName", G4String("filled_circle"));
+            instance->addAttValue("MarkName", G4String("Circle"));
+            instance->addAttValue("Fill", G4String("True"));
             break;
         case line.circles:
-            instance->addAttValue("MarkName", G4String("circle"));
+            instance->addAttValue("MarkName", G4String("Circle"));
             break;
         case line.squares:
-            instance->addAttValue("MarkName", G4String("box"));
+            instance->addAttValue("MarkName", G4String("Box"));
             break;
         case line.line:
         default:
-            instance->addAttValue("MarkName", G4String("plus"));
+            instance->addAttValue("MarkName", G4String("Plus"));
             break;
     }
 
-	MarkerSizeType markerType;
-	G4double size = GetMarkerDiameter( line , markerType );
-    instance->addAttValue("MarkSize", size);
-	instance->addAttValue("MarkType", (markerType == screen) ? G4String("Symbol") : G4String("Real"));
 
     SetColour(instance, GetColour(line));
     for (size_t i=0; i < line.size(); i++) {
@@ -283,12 +283,10 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Circle& circle) {
 
     SetColour (instance, GetColour(circle));
     instance->addAttValue("DrawAs", G4String("Point"));
-    instance->addAttValue("MarkName", G4String("filled_circle"));
+    instance->addAttValue("HasFrame", G4String("True"));
+    instance->addAttValue("MarkName", G4String("Circle"));
 
-	MarkerSizeType markerType;
-	G4double size = GetMarkerRadius( circle , markerType );
-    instance->addAttValue("MarkSize", size);
-	instance->addAttValue("MarkType", (markerType == screen) ? G4String("Symbol") : G4String("Real"));
+    SetMarker(instance, circle);
 
     HepRepPoint* point = factory->createHepRepPoint(instance, center.x(), center.y(), center.z());
     delete point;
@@ -313,16 +311,18 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     G4Normal3D surfaceNormal;
     G4Point3D vertex;
 
-// FIXME where do we get the linewidth?
     HepRepFactory* factory = GetHepRepFactory();
     HepRepInstance* instance = CreateInstance(parent, calHitType);
+
 
     if (polyhedron.GetNoFacets()==0) return;
 
     G4bool notLastFace;
     do {
         HepRepInstance* face = CreateInstance(parent, calHitType);
+        SetLine(face, polyhedron);
         face->addAttValue("DrawAs", G4String("Polygon"));
+        face->addAttValue("HasFrame", G4String("True"));
         SetColour(face, GetColour(polyhedron));
 
         notLastFace = polyhedron.GetNextNormal (surfaceNormal);
@@ -363,12 +363,10 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Square& square) {
 
     SetColour (instance, GetColour(square));
     instance->addAttValue("DrawAs", G4String("Point"));
-    instance->addAttValue("MarkName", G4String("box"));
+    instance->addAttValue("HasFrame", G4String("True"));
+    instance->addAttValue("MarkName", G4String("Box"));
 
-	MarkerSizeType markerType;
-	G4double size = GetMarkerRadius( square , markerType );
-    instance->addAttValue("MarkSize", size);
-	instance->addAttValue("MarkType", (markerType == screen) ? G4String("Symbol") : G4String("Real"));
+    SetMarker(instance, square);
 
     HepRepPoint* point = factory->createHepRepPoint(instance, center.x(), center.y(), center.z());
     delete point;
@@ -538,6 +536,31 @@ void G4HepRepSceneHandler::SetColour (HepRepAttribute *attribute, const G4Colour
     c.push_back(color.GetBlue());
     c.push_back(color.GetAlpha());
     attribute->addAttValue("Color", c);
+}
+
+void G4HepRepSceneHandler::SetLine (HepRepInstance *instance, const G4Visible& visible) {
+    G4VisAttributes atts = visible.GetVisAttributes();
+    instance->addAttValue("LineWidth", atts.GetLineWidth());
+    switch (atts.GetLineStyle()) {
+        case atts.LineStyle::dotted:
+            instance->addAttValue("LineStyle", G4String("Dotted"));
+            break;
+        case atts.LineStyle::dashed:
+            instance->addAttValue("LineStyle", G4String("Dashed"));
+            break;
+        case atts.LineStyle::unbroken:
+        default:
+            instance->addAttValue("LineStyle", G4String("Solid"));
+            break;
+    }
+}
+
+void G4HepRepSceneHandler::SetMarker (HepRepInstance *instance, const G4VMarker& marker) {
+	MarkerSizeType markerType;
+	G4double size = GetMarkerRadius( marker , markerType );
+    instance->addAttValue("MarkSize", size);
+	instance->addAttValue("MarkType", (markerType == screen) ? G4String("Symbol") : G4String("Real"));
+    instance->addAttValue("Fill", (marker.GetFillStyle() == marker.FillStyle::noFill) ? G4String("False") : G4String("True"));
 }
 
 HepRepInstance* G4HepRepSceneHandler::CreateInstance(HepRepInstance* p, HepRepType* altType) {
