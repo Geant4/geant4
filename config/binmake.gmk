@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.41 2000-01-31 09:40:40 gcosmo Exp $
+# $Id: binmake.gmk,v 1.42 2000-02-14 11:24:45 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -124,6 +124,7 @@ ifndef USER_DEFINED_LDLIBS
 ifdef G4EXLIB
   LDLIBS1 := -l$(G4TARGET)
 endif
+LDLIBS1 += $(EXTRALIBS)
 
 # VISLIBS and UILIBS are now handled by the granular library script...
 #
@@ -188,7 +189,6 @@ ifdef G4USE_OSPACE
   LDLIBS4 += $(OSPACELIBS)
 endif
 
-LDLIBS4 += $(EXTRALIBS)
 LDLIBS4 += $(LOADLIBS)
 
 # Finally assemble libraries...
