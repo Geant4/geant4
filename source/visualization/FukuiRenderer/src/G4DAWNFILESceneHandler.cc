@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DAWNFILESceneHandler.cc,v 1.4 2000-04-12 13:08:22 johna Exp $
+// $Id: G4DAWNFILESceneHandler.cc,v 1.5 2000-05-16 15:56:43 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -53,7 +53,14 @@
 //----- constants
 const char  FR_ENV_CULL_INVISIBLE_OBJECTS [] = "G4DAWN_CULL_INVISIBLE_OBJECTS";
 const char  G4PRIM_FILE_HEADER      [] = "g4_";
-const char  DEFAULT_G4PRIM_FILE_NAME[] = "g4.prim";
+const char  DEFAULT_G4PRIM_FILE_NAME[] = "g4_00.prim";
+
+// const int   FR_MAX_FILE_NUM = 1 ;
+// const int   FR_MAX_FILE_NUM = 5 ;
+// const int   FR_MAX_FILE_NUM = 10 ;
+// const int   FR_MAX_FILE_NUM = 15 ;
+// const int   FR_MAX_FILE_NUM = 20 ;
+   const int   FR_MAX_FILE_NUM = 99 ;
 
 
 ///////////////////////////
@@ -75,21 +82,21 @@ COMMAND_BUF_SIZE       (G4FRofstream::SEND_BUFMAX)
 
 	// g4.prim filename and its directory
 	if ( getenv( "G4DAWNFILE_DEST_DIR" ) == NULL ) {
-		strcpy( fG4PrimDestDir , "" );
-		strcpy( fG4PrimFileName, DEFAULT_G4PRIM_FILE_NAME );
+		strcpy( fG4PrimDestDir , "" )                      ;  // output dir
+		strcpy( fG4PrimFileName, DEFAULT_G4PRIM_FILE_NAME );  // filename
 	} else {
-		strcpy( fG4PrimDestDir , getenv( "G4DAWNFILE_DEST_DIR" ) );
-		strcpy( fG4PrimFileName, DEFAULT_G4PRIM_FILE_NAME        );
+		strcpy( fG4PrimDestDir , getenv( "G4DAWNFILE_DEST_DIR" ) ); // output dir
+		strcpy( fG4PrimFileName, DEFAULT_G4PRIM_FILE_NAME        ); // filename 
 	}
 		
 	// maximum number of g4.prim files in the dest directory
-	fMaxFileNum = 1 ; // initialization
+	fMaxFileNum = FR_MAX_FILE_NUM ; // initialization
 	if ( getenv( "G4DAWNFILE_MAX_FILE_NUM" ) != NULL ) {	
 		
 		sscanf( getenv("G4DAWNFILE_MAX_FILE_NUM"), "%d", &fMaxFileNum ) ;
 
 	} else {
-		fMaxFileNum = 1 ;
+		fMaxFileNum = FR_MAX_FILE_NUM ;
 	}
 	if( fMaxFileNum < 1 ) { fMaxFileNum = 1 ; }
 
@@ -110,7 +117,7 @@ G4DAWNFILESceneHandler::~G4DAWNFILESceneHandler ()
 //-----
 void	G4DAWNFILESceneHandler::SetG4PrimFileName() 
 {
-	// g4.prim, g4_1.prim, ..., g4_MAX_FILE_INDEX.prim
+	// g4_00.prim, g4_01.prim, ..., g4_MAX_FILE_INDEX.prim
 	const int MAX_FILE_INDEX = fMaxFileNum - 1 ;
 
 	// dest directory (null if no environmental variables is set)
@@ -122,19 +129,22 @@ void	G4DAWNFILESceneHandler::SetG4PrimFileName()
 	// Automatic updation of file names
 	for( int i = 0 ; i < fMaxFileNum ; i++) { 
 
-		// Message
-		if( fMaxFileNum > 1 && i == MAX_FILE_INDEX ) {
+		// Message in the final execution
+		if( i == MAX_FILE_INDEX ) 
+		{
 		  G4cerr << "==========================================="   << G4endl; 
 		  G4cerr << "WARNING MESSAGE from DAWNFILE driver:      "   << G4endl;
 		  G4cerr << "  This file name is the final one in the   "   << G4endl;
 		  G4cerr << "  automatic updation of the output file name." << G4endl; 
-		  G4cerr << "  You may overwrite an existing file of   "    << G4endl; 
-                  G4cerr << "  the same name.                          "    << G4endl;
+		  G4cerr << "  You may overwrite existing files, i.e.   "   << G4endl; 
+                  G4cerr << "  g4_XX.prim and g4_XX.eps                 "   << G4endl;
 		  G4cerr << "==========================================="   << G4endl; 
 		}
 
-		// re-determine file to G4DAWNFILE_DEST_DIR/g4_i.prim for i>0
-		if( i >  0 ) { 
+		// re-determine file name as G4DAWNFILE_DEST_DIR/g4_XX.prim 
+		if( i >=  0 && i <= 9 ) { 
+			sprintf( fG4PrimFileName, "%s%s%s%d.prim" , fG4PrimDestDir,  G4PRIM_FILE_HEADER, "0", i );
+		} else {
 			sprintf( fG4PrimFileName, "%s%s%d.prim" , fG4PrimDestDir,  G4PRIM_FILE_HEADER, i );
 		}
 
@@ -143,7 +153,7 @@ void	G4DAWNFILESceneHandler::SetG4PrimFileName()
 		fin.open(fG4PrimFileName) ;
 		if(!fin) { 
 			// new file	
-			fin.close();  // error recovery
+			fin.close();  
 			break; 
 		} else { 
 			// already exists (try next) 
@@ -152,11 +162,18 @@ void	G4DAWNFILESceneHandler::SetG4PrimFileName()
 
 	} // for 
 
-	G4cerr << "===========================================" << G4endl; 
-	G4cerr << "Output file: " <<    fG4PrimFileName         << G4endl; 
-	G4cerr << "Muximal number of file in the destination directory: " << fMaxFileNum << G4endl; 
-	G4cerr << "  (Customizable as: setenv G4DAWNFILE_MAX_FILE_NUM number) " << G4endl;
-	G4cerr << "===========================================" << G4endl; 
+	G4cerr << "===========================================    " << G4endl; 
+	G4cerr << "Output file: " <<    fG4PrimFileName             << G4endl; 
+	G4cerr << "Destination directory (current dir if NULL): "       << fG4PrimDestDir    << G4endl; 
+	G4cerr << "Maximal number of files in the destination directory: " << fMaxFileNum << G4endl; 
+	G4cerr << "Note:                                                " << G4endl; 
+	G4cerr << "  * The maximal number is customizable as:           " << G4endl;
+	G4cerr << "       % setenv  G4DAWNFILE_MAX_FILE_NUM  number " << G4endl;        
+	G4cerr << "  * The destination directory is customizable as:" << G4endl;
+	G4cerr << "       % setenv  G4DAWNFILE_DEST_DIR  dir_name/  " << G4endl;        
+	G4cerr << "     ** Do not forget \"/\" at the end of the    " << G4endl;              
+	G4cerr << "        dir_name, e.g. \"./tmp/\".  " << G4endl;              
+	G4cerr << "===========================================      " << G4endl; 
 
 } // G4DAWNFILESceneHandler::SetG4PrimFileName()
 
@@ -174,7 +191,7 @@ void	G4DAWNFILESceneHandler::BeginSavingG4Prim( void )
 	        G4cerr << "*****                   (started) " ;
 	        G4cerr << "(open g4.prim, ##)"  << G4endl;
 #endif
-		SetG4PrimFileName() ; // returned to fG4PrimFileName
+		SetG4PrimFileName() ; // result set to fG4PrimFileName
 		fPrimDest.Open(fG4PrimFileName)   ;
 
 		SendStr( FR_G4_PRIM_HEADER   )    ; 
