@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXViewer.cc,v 1.5 1999-12-15 14:54:09 gunter Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.6 1999-12-15 18:08:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,8 +44,11 @@
 #define USE_DEFAULT_COLORMAP 1
 #define USE_STANDARD_COLORMAP 0
 
-static Bool WaitForNotify (Display*, XEvent* e, char* arg) {
-  return (e->type == MapNotify) && (e->xmap.window == (Window) arg);
+extern "C"
+{
+  static Bool WaitForNotify (Display*, XEvent* e, char* arg) {
+    return (e->type == MapNotify) && (e->xmap.window == (Window) arg);
+  }
 }
 
 void G4OpenGLXViewer::SetView () {
@@ -651,19 +654,22 @@ typedef struct _DepthIndex {
   GLfloat depth;
 } DepthIndex;
 
-static int
-compare(const void *a, const void *b)
+extern "C"
 {
-  DepthIndex *p1 = (DepthIndex *) a;
-  DepthIndex *p2 = (DepthIndex *) b;
-  GLfloat diff = p2->depth - p1->depth;
+  static int
+  compare(const void *a, const void *b)
+  {
+    DepthIndex *p1 = (DepthIndex *) a;
+    DepthIndex *p2 = (DepthIndex *) b;
+    GLfloat diff = p2->depth - p1->depth;
 
-  if (diff > 0.0) {
-    return 1;
-  } else if (diff < 0.0) {
-    return -1;
-  } else {
-    return 0;
+    if (diff > 0.0) {
+      return 1;
+    } else if (diff < 0.0) {
+      return -1;
+    } else {
+      return 0;
+    }
   }
 }
 
