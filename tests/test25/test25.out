@@ -1,8 +1,8 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (25-March-2004)
+ Geant4 version $Name: not supported by cvs2svn $   (25-June-2004)
                       Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303.
+                      Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
@@ -67,8 +67,8 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -77,7 +77,7 @@ msc:  Model variant of multiple scattering for mu+
 MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
@@ -95,7 +95,7 @@ MuPairProd:   tables are built for  mu+
 MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
@@ -148,27 +148,6 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
-
-Region DefaultRegionForTheWorld
- Materials : Copper 
- Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.9e+295 J      e- 9.5e+02 GeV    e+ 7.8e+02 GeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
   User=0.01s Real=0.01s Sys=0s
 
 Region DefaultRegionForTheWorld
@@ -190,7 +169,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.55s Real=0.61s Sys=0.06s
+  User=0s Real=0s Sys=0s
+
+Region DefaultRegionForTheWorld
+ Materials : Copper 
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 9.5e+02 GeV    e+ 7.8e+02 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.78s Real=0.91s Sys=0.04s
 
 Region DefaultRegionForTheWorld
  Materials : Copper 
@@ -211,7 +211,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.82s Real=0.87s Sys=0.02s
+  User=0.44s Real=0.45s Sys=0.01s
 
 Region DefaultRegionForTheWorld
  Materials : Copper 
@@ -232,7 +232,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2.23s Real=2.41s Sys=0.1s
+  User=1.16s Real=1.25s Sys=0.09s
 SimpleBox is now made of Cu
 
 Region DefaultRegionForTheWorld
@@ -254,7 +254,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.04s Real=0.04s Sys=0s
+  User=0.18s Real=0.19s Sys=0.01s
 
 Region DefaultRegionForTheWorld
  Materials : Copper 
@@ -275,7 +275,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.17s Real=0.19s Sys=0.02s
+  User=0.1s Real=0.12s Sys=0.02s
 
 Region DefaultRegionForTheWorld
  Materials : Copper 
@@ -296,7 +296,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.17s Real=0.18s Sys=0.01s
+  User=0.42s Real=0.42s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : Copper 
@@ -317,7 +317,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.8s Real=0.82s Sys=0.02s
+  User=0.74s Real=0.8s Sys=0.05s
 
 Region DefaultRegionForTheWorld
  Materials : Copper 
@@ -338,7 +338,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.75s Real=0.79s Sys=0.04s
+  User=0.9s Real=0.97s Sys=0.07s
 
 Region DefaultRegionForTheWorld
  Materials : Copper 
@@ -359,7 +359,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2.01s Real=2.15s Sys=0.14s
+  User=2.21s Real=2.32s Sys=0.06s
 SimpleBox is now made of U
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=4
@@ -418,8 +418,8 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -428,7 +428,7 @@ msc:  Model variant of multiple scattering for mu+
 MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
@@ -446,7 +446,7 @@ MuPairProd:   tables are built for  mu+
 MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
@@ -530,7 +530,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.69s Real=1.73s Sys=0.04s
+  User=0s Real=0s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : Uranium 
@@ -556,7 +556,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.14s Real=1.2s Sys=0.04s
+  User=3.57s Real=3.66s Sys=0.07s
 
 Region DefaultRegionForTheWorld
  Materials : Uranium 
@@ -582,7 +582,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=4.24s Real=4.31s Sys=0.07s
+  User=1.54s Real=1.55s Sys=0.01s
 
 Region DefaultRegionForTheWorld
  Materials : Uranium 
@@ -608,7 +608,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=8.45s Real=8.64s Sys=0.16s
+  User=6.5s Real=6.67s Sys=0.13s
 SimpleBox is now made of U
 
 Region DefaultRegionForTheWorld
@@ -635,7 +635,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.21s Real=0.22s Sys=0.01s
+  User=0.24s Real=0.24s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : Uranium 
@@ -661,7 +661,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.22s Real=0.23s Sys=0.01s
+  User=0.33s Real=0.33s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : Uranium 
@@ -687,7 +687,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.28s Real=1.31s Sys=0.03s
+  User=1.53s Real=1.53s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : Uranium 
@@ -713,7 +713,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2.15s Real=2.16s Sys=0.01s
+  User=0.26s Real=0.26s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : Uranium 
@@ -739,7 +739,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=5.48s Real=5.59s Sys=0.09s
+  User=3.96s Real=4s Sys=0.04s
 
 Region DefaultRegionForTheWorld
  Materials : Uranium 
@@ -765,7 +765,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=7.57s Real=7.67s Sys=0.1s
+  User=7.31s Real=7.46s Sys=0.15s
 SimpleBox is now made of Si
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=1
@@ -818,8 +818,8 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -828,7 +828,7 @@ msc:  Model variant of multiple scattering for mu+
 MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
@@ -846,44 +846,13 @@ MuPairProd:   tables are built for  mu+
 MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
-
-Region DefaultRegionForTheWorld
- Materials : Silicon 
- Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.8802232e+295 J      e- 949.55059 GeV    e+ 779.78768 GeV
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Uranium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.8802232e+295 J      e- 2.8802232e+295 J      e+ 2.8802232e+295 J  
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.8802232e+295 J      e- 1.0114457 GeV    e+ 962.84668 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0s Real=0s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : Silicon 
@@ -976,7 +945,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.42s Real=0.44s Sys=0.02s
+  User=0.31s Real=0.34s Sys=0.01s
 
 Region DefaultRegionForTheWorld
  Materials : Silicon 
@@ -1007,7 +976,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.97s Real=1s Sys=0.01s
+  User=0.21s Real=0.21s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : Silicon 
@@ -1038,7 +1007,38 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.19s Real=1.24s Sys=0.04s
+  User=0.35s Real=0.38s Sys=0.03s
+
+Region DefaultRegionForTheWorld
+ Materials : Silicon 
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 949.55059 GeV    e+ 779.78768 GeV
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Uranium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 2.8802232e+295 J      e+ 2.8802232e+295 J  
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 1.0114457 GeV    e+ 962.84668 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=1.5s Real=1.53s Sys=0.03s
 SimpleBox is now made of Si
 
 Region DefaultRegionForTheWorld
@@ -1070,7 +1070,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.08s Real=0.08s Sys=0s
+  User=0.35s Real=0.35s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : Silicon 
@@ -1101,7 +1101,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.14s Real=0.14s Sys=0s
+  User=0.11s Real=0.12s Sys=0.01s
 
 Region DefaultRegionForTheWorld
  Materials : Silicon 
@@ -1132,7 +1132,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.29s Real=0.29s Sys=0s
+  User=0.28s Real=0.28s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : Silicon 
@@ -1163,7 +1163,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.22s Real=0.24s Sys=0.02s
+  User=0.62s Real=0.62s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : Silicon 
@@ -1194,7 +1194,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.6s Real=0.6s Sys=0s
+  User=1.31s Real=1.34s Sys=0.03s
 
 Region DefaultRegionForTheWorld
  Materials : Silicon 
@@ -1225,7 +1225,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.14s Real=1.15s Sys=0.01s
+  User=0.95s Real=0.98s Sys=0.03s
 SimpleBox is now made of H
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
@@ -1275,8 +1275,8 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -1285,7 +1285,7 @@ msc:  Model variant of multiple scattering for mu+
 MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
@@ -1303,7 +1303,7 @@ MuPairProd:   tables are built for  mu+
 MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
@@ -1417,7 +1417,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : H 
