@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiOmegacZero.cc,v 1.7 2001-07-11 10:01:39 gunter Exp $
+// $Id: G4AntiOmegacZero.cc,v 1.8 2001-09-19 11:16:49 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -99,21 +99,10 @@ void G4AntiOmegacZero::SetCuts(G4double aCut)
 {
   theCutInMaxInteractionLength = aCut;
 
-  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-  // Create the vector of cuts in energy
-  // corresponding to the stopping range cut
-  if(theKineticEnergyCuts) delete [] theKineticEnergyCuts;
-  theKineticEnergyCuts = new G4double [materialTable->length()];
+ // Set Energy Cut values to lowest  for all materials
+  SetEnergyCutValues(LowestEnergy);
 
-  // Build range vector for every material, convert cut into energy-cut,
-  // fill theKineticEnergyCuts and delete the range vector
-  for (size_t J=0; J<materialTable->length(); J++)
-  {
-    theKineticEnergyCuts[J] = LowestEnergy;
-  }
   theAntiOmegacZeroLengthCut = theCutInMaxInteractionLength;  
   theAntiOmegacZeroKineticEnergyCuts = theKineticEnergyCuts;
-  // Rebuild the physics tables for every process for this particle type
-  
 }
 
