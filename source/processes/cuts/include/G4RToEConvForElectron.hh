@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForGamma.hh,v 1.3 2003-06-16 16:58:18 gunter Exp $
+// $Id: G4RToEConvForElectron.hh,v 1.1 2003-09-19 14:42:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -30,14 +30,14 @@
 //
 //
 // Class Description
-//  This class is a Range to Energy Converter for gamma.
+//  This class is a Range to Energy Converter for electron.
 //
 // ------------------------------------------------------------
 //   First Implementation          5 Oct. 2002  H.Kurahige
 // ------------------------------------------------------------
 
-#ifndef G4RToEConvForGamma_h
-#define G4RToEConvForGamma_h 1
+#ifndef G4RToEConvForElectron_h
+#define G4RToEConvForElectron_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -46,61 +46,29 @@
 #include "G4VRangeToEnergyConverter.hh"
 
 
-class G4RToEConvForGamma : public G4VRangeToEnergyConverter
+class G4RToEConvForElectron : public G4VRangeToEnergyConverter
 {
-  public: // with description
+  public: 
   //  constructor
-  G4RToEConvForGamma();
+  G4RToEConvForElectron();
 
   public:
   //  destructor
-  virtual ~G4RToEConvForGamma();
-
-  public: // with description 
-  // calculate energy cut from given range cut for the material
-  // virtual G4double convert(G4double rangeCut, const G4Material* material); 
+  virtual ~G4RToEConvForElectron();
 
   protected:
-    virtual G4double ComputeLoss( G4double AtomicNumber,
-                                  G4double KineticEnergy
-				  ) const;
-  
-  //-------------- Range Table ------------------------------------------
-    virtual void BuildRangeVector( const G4Material* aMaterial,
-				   G4double       maxEnergy,
-				   G4double       aMass,
-				   G4RangeVector* rangeVector);
+    virtual G4double ComputeLoss(G4double AtomicNumber,
+                                 G4double KineticEnergy
+                                ) const;
 
-    typedef G4LossTable G4CrossSectionTable;
-    void BuildAbsorptionLengthVector( const G4Material* aMaterial,
-				      G4double       maxEnergy,
-				      G4double       aMass,
-				      G4RangeVector* rangeVector);
- 
-    G4double ComputeCrossSection( G4double AtomicNumber,
-				  G4double KineticEnergy
-				  ) const;
+  //-------------- Range Table ------------------------------------------
+    virtual void BuildRangeVector(const G4Material* aMaterial,
+                                  G4double       maxEnergy,
+                                  G4double       aMass,
+                                  G4RangeVector* rangeVector);
 
 
 };
-
-inline 
- G4double G4RToEConvForGamma::ComputeLoss(G4double AtomicNumber,
-					  G4double KineticEnergy) const
-{
-  return ComputeCrossSection(AtomicNumber,KineticEnergy);
-}
-
-inline 
- void G4RToEConvForGamma::BuildRangeVector(
-                                const G4Material* aMaterial,
-                                G4double       maxEnergy,     
-                                G4double       aMass,
-                                G4RangeVector* rangeVector)
-{
-  BuildAbsorptionLengthVector(aMaterial, maxEnergy, aMass, rangeVector);
-}
-
 
 
 #endif

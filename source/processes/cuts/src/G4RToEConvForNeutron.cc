@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForAntiNeutron.cc,v 1.3 2003-06-16 16:58:36 gunter Exp $
+// $Id: G4RToEConvForNeutron.cc,v 1.1 2003-09-19 14:47:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -30,7 +30,7 @@
 //    5 Oct. 2002, H.Kuirashige : Structure created based on object model
 // --------------------------------------------------------------
 
-#include "G4RToEConvForAntiNeutron.hh"
+#include "G4RToEConvForNeutron.hh"
 #include "G4ParticleTable.hh"
 #include "G4Material.hh"
 #include "G4PhysicsLogVector.hh"
@@ -39,20 +39,20 @@
 #include <iomanip>
 #include <strstream>
 
-G4RToEConvForAntiNeutron::G4RToEConvForAntiNeutron() : G4VRangeToEnergyConverter()
+G4RToEConvForNeutron::G4RToEConvForNeutron() : G4VRangeToEnergyConverter()
 {    
-  theParticle =  G4ParticleTable::GetParticleTable()->FindParticle("anti_neutron");
+  theParticle =  G4ParticleTable::GetParticleTable()->FindParticle("neutron");
   if (theParticle ==0) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cout << " G4RToEConvForAntiNeutron::G4RToEConvForAntiNeutron() ";
-      G4cout << " Antineutron is not defined !!" << G4endl;
+      G4cout << " G4RToEConvForNeutron::G4RToEConvForNeutron() ";
+      G4cout << " Neutron is not defined !!" << G4endl;
     }
 #endif
   } 
 }
 
-G4RToEConvForAntiNeutron::~G4RToEConvForAntiNeutron()
+G4RToEConvForNeutron::~G4RToEConvForNeutron()
 { 
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.hh,v 1.4 2003-06-16 16:58:23 gunter Exp $
+// $Id: G4VRangeToEnergyConverter.hh,v 1.1 2003-09-19 14:44:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

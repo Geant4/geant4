@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForGamma.cc,v 1.5 2003-06-16 16:58:39 gunter Exp $
+// $Id: G4RToEConvForGamma.cc,v 1.1 2003-09-19 14:47:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

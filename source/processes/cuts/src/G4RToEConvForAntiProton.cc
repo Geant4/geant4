@@ -21,62 +21,38 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCuts.cc,v 1.7 2003-06-16 16:58:34 gunter Exp $
+// $Id: G4RToEConvForAntiProton.cc,v 1.1 2003-09-19 14:46:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file/  History:
-//    18 Sep. 2002, H.Kuirashige : Structure created based on object model
+//    5 Oct. 2002, H.Kuirashige : Structure created based on object model
 // --------------------------------------------------------------
 
-#include "G4ProductionCuts.hh"
+#include "G4RToEConvForAntiProton.hh"
+#include "G4ParticleTable.hh"
+#include "G4Material.hh"
+#include "G4PhysicsLogVector.hh"
+
+#include "G4ios.hh"
 #include <iomanip>
+#include <strstream>
 
-const G4ParticleDefinition* G4ProductionCuts::gammaDef = 0;
-const G4ParticleDefinition* G4ProductionCuts::electDef = 0;
-const G4ParticleDefinition* G4ProductionCuts::positDef = 0;
-
-G4ProductionCuts::G4ProductionCuts() :
-  isModified(true)
-{
-  for (G4int i=0; i< NumberOfG4CutIndex; i++) {
-    fRangeCuts.push_back(0.0);
-  }
+G4RToEConvForAntiProton::G4RToEConvForAntiProton() : G4VRangeToEnergyConverter()
+{    
+  theParticle =  G4ParticleTable::GetParticleTable()->FindParticle("anti_proton");
+  if (theParticle ==0) {
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()>0) {
+      G4cout << " G4RToEConvForAntiProton::G4RToEConvForAntiProton() ";
+      G4cout << " AntiProton is not defined !!" << G4endl;
+    }
+#endif
+  } 
 }
 
-G4ProductionCuts::G4ProductionCuts(const G4ProductionCuts& right) 
-{
-  *this = right;
-}
-
-G4ProductionCuts::~G4ProductionCuts()
-{
-  fRangeCuts.clear();
-}
-
-G4ProductionCuts & G4ProductionCuts::operator=(const G4ProductionCuts &right)
-{
-  if (&right==this) return *this;
-
-  for (G4int i=0; i< NumberOfG4CutIndex; i++) {
-    fRangeCuts[i] = right.fRangeCuts[i];
-  }
-  isModified = right.isModified;
-
-  return *this;
-}
-
-
-
-G4int G4ProductionCuts::operator==(const G4ProductionCuts &right) const
-{
-  return (this == &right);
-}
-
-
-G4int G4ProductionCuts::operator!=(const G4ProductionCuts &right) const
-{
-  return (this !=  &right);
+G4RToEConvForAntiProton::~G4RToEConvForAntiProton()
+{ 
 }
 

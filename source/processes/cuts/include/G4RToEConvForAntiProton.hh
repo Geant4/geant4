@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForProton.hh,v 1.3 2003-06-16 16:58:21 gunter Exp $
+// $Id: G4RToEConvForAntiProton.hh,v 1.1 2003-09-19 14:42:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -30,14 +30,14 @@
 //
 //
 // Class Description
-//  This class is a Range to Energy Converter for proton.
+//  This class is a Range to Energy Converter for anti proton.
 //
 // ------------------------------------------------------------
 //   First Implementation          5 Oct. 2002  H.Kurahige
 // ------------------------------------------------------------
 
-#ifndef G4RToEConvForProton_h
-#define G4RToEConvForProton_h 1
+#ifndef G4RToEConvForAntiProton_h
+#define G4RToEConvForAntiProton_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -46,16 +46,15 @@
 #include "G4VRangeToEnergyConverter.hh"
 
 
-class G4RToEConvForProton : public G4VRangeToEnergyConverter
+class G4RToEConvForAntiProton : public G4VRangeToEnergyConverter
 {
   public: 
   //  constructor
-  G4RToEConvForProton();
+  G4RToEConvForAntiProton();
 
   public:
   //  destructor
-  virtual ~G4RToEConvForProton();
-
+  virtual ~G4RToEConvForAntiProton();
 
 
 };

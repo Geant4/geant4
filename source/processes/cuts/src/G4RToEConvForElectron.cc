@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForElectron.cc,v 1.4 2003-06-16 16:58:38 gunter Exp $
+// $Id: G4RToEConvForElectron.cc,v 1.1 2003-09-19 14:46:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

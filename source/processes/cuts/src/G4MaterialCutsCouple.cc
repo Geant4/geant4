@@ -21,63 +21,60 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForElectron.hh,v 1.3 2003-06-16 16:58:17 gunter Exp $
+// $Id: G4MaterialCutsCouple.cc,v 1.2 2003-09-19 14:45:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// ------------------------------------------------------------
-//      GEANT 4 class header file
-//
-//
-// Class Description
-//  This class is a Range to Energy Converter for electron.
-//
-// ------------------------------------------------------------
-//   First Implementation          5 Oct. 2002  H.Kurahige
-// ------------------------------------------------------------
+// --------------------------------------------------------------
+//      GEANT 4 class implementation file/  History:
+//    18 Sep. 2002, H.Kuirashige : Structure created based on object model
+// --------------------------------------------------------------
 
-#ifndef G4RToEConvForElectron_h
-#define G4RToEConvForElectron_h 1
+#include "G4MaterialCutsCouple.hh"
+#include <iomanip>
 
-#include "globals.hh"
-#include "G4ios.hh"
-#include <vector>
+#include "G4Material.hh"
+#include "G4ProductionCuts.hh"
 
-#include "G4VRangeToEnergyConverter.hh"
-
-
-class G4RToEConvForElectron : public G4VRangeToEnergyConverter
+G4MaterialCutsCouple::G4MaterialCutsCouple() :
+  isMaterialModified(false),
+  fMaterial(0),
+  fCuts(0),
+  indexNumber(-1),
+  isUsedInGeometry(false)
 {
-  public: 
-  //  constructor
-  G4RToEConvForElectron();
-
-  public:
-  //  destructor
-  virtual ~G4RToEConvForElectron();
-
-  protected:
-    virtual G4double ComputeLoss(G4double AtomicNumber,
-                                 G4double KineticEnergy
-                                ) const;
-
-  //-------------- Range Table ------------------------------------------
-    virtual void BuildRangeVector(const G4Material* aMaterial,
-                                  G4double       maxEnergy,
-                                  G4double       aMass,
-                                  G4RangeVector* rangeVector);
+}
+  
+G4MaterialCutsCouple::G4MaterialCutsCouple(const G4Material* material,
+					   G4ProductionCuts* cut) :
+  isMaterialModified(true),
+  fMaterial(material),
+  fCuts(cut),
+  indexNumber(-1),
+  isUsedInGeometry(false)
+{
+}
 
 
-};
+G4MaterialCutsCouple::G4MaterialCutsCouple(const G4MaterialCutsCouple& right) 
+{
+  *this = right;
+}
 
+G4MaterialCutsCouple::~G4MaterialCutsCouple()
+{
+}
 
-#endif
+G4MaterialCutsCouple & G4MaterialCutsCouple::operator=(const G4MaterialCutsCouple &right)
+{
+  if (&right==this) return *this;
 
+  fMaterial = right.fMaterial;
+  fCuts     = right.fCuts; 
+  isMaterialModified = right.isMaterialModified;
+  indexNumber = right.indexNumber;
+  isUsedInGeometry = right.isUsedInGeometry;
 
-
-
-
-
-
-
+  return *this;
+}
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForNeutron.hh,v 1.3 2003-06-16 16:58:19 gunter Exp $
+// $Id: G4RToEConvForAntiNeutron.hh,v 1.1 2003-09-19 14:42:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -30,14 +30,14 @@
 //
 //
 // Class Description
-//  This class is a Range to Energy Converter for Neutron.
+//  This class is a Range to Energy Converter for anti Neutron.
 //
 // ------------------------------------------------------------
 //   First Implementation          5 Oct. 2002  H.Kurahige
 // ------------------------------------------------------------
 
-#ifndef G4RToEConvForNeutron_h
-#define G4RToEConvForNeutron_h 1
+#ifndef G4RToEConvForAntiNeutron_h
+#define G4RToEConvForAntiNeutron_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -46,15 +46,16 @@
 #include "G4VRangeToEnergyConverter.hh"
 
 
-class G4RToEConvForNeutron : public G4VRangeToEnergyConverter
+class G4RToEConvForAntiNeutron : public G4VRangeToEnergyConverter
 {
   public: 
   //  constructor
-  G4RToEConvForNeutron();
+  G4RToEConvForAntiNeutron();
 
   public:
   //  destructor
-  virtual ~G4RToEConvForNeutron();
+  virtual ~G4RToEConvForAntiNeutron();
+
 
  // calculate energy cut from given range cut for the material
   virtual G4double Convert(G4double rangeCut, const G4Material* material);
@@ -62,7 +63,7 @@ class G4RToEConvForNeutron : public G4VRangeToEnergyConverter
 };
 
 inline
-  G4double G4RToEConvForNeutron::Convert(G4double , const G4Material* )
+  G4double G4RToEConvForAntiNeutron::Convert(G4double , const G4Material* )
 {
   // reutrn lowest energy
   return LowestEnergy;

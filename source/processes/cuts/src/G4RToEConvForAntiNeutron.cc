@@ -21,60 +21,38 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialCutsCouple.cc,v 1.5 2003-06-16 16:58:29 gunter Exp $
+// $Id: G4RToEConvForAntiNeutron.cc,v 1.1 2003-09-19 14:46:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file/  History:
-//    18 Sep. 2002, H.Kuirashige : Structure created based on object model
+//    5 Oct. 2002, H.Kuirashige : Structure created based on object model
 // --------------------------------------------------------------
 
-#include "G4MaterialCutsCouple.hh"
-#include <iomanip>
-
+#include "G4RToEConvForAntiNeutron.hh"
+#include "G4ParticleTable.hh"
 #include "G4Material.hh"
-#include "G4ProductionCuts.hh"
+#include "G4PhysicsLogVector.hh"
 
-G4MaterialCutsCouple::G4MaterialCutsCouple() :
-  isMaterialModified(false),
-  fMaterial(0),
-  fCuts(0),
-  indexNumber(-1),
-  isUsedInGeometry(false)
-{
-}
-  
-G4MaterialCutsCouple::G4MaterialCutsCouple(const G4Material* material,
-					   G4ProductionCuts* cut) :
-  isMaterialModified(true),
-  fMaterial(material),
-  fCuts(cut),
-  indexNumber(-1),
-  isUsedInGeometry(false)
-{
+#include "G4ios.hh"
+#include <iomanip>
+#include <strstream>
+
+G4RToEConvForAntiNeutron::G4RToEConvForAntiNeutron() : G4VRangeToEnergyConverter()
+{    
+  theParticle =  G4ParticleTable::GetParticleTable()->FindParticle("anti_neutron");
+  if (theParticle ==0) {
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()>0) {
+      G4cout << " G4RToEConvForAntiNeutron::G4RToEConvForAntiNeutron() ";
+      G4cout << " Antineutron is not defined !!" << G4endl;
+    }
+#endif
+  } 
 }
 
-
-G4MaterialCutsCouple::G4MaterialCutsCouple(const G4MaterialCutsCouple& right) 
-{
-  *this = right;
-}
-
-G4MaterialCutsCouple::~G4MaterialCutsCouple()
-{
-}
-
-G4MaterialCutsCouple & G4MaterialCutsCouple::operator=(const G4MaterialCutsCouple &right)
-{
-  if (&right==this) return *this;
-
-  fMaterial = right.fMaterial;
-  fCuts     = right.fCuts; 
-  isMaterialModified = right.isMaterialModified;
-  indexNumber = right.indexNumber;
-  isUsedInGeometry = right.isUsedInGeometry;
-
-  return *this;
+G4RToEConvForAntiNeutron::~G4RToEConvForAntiNeutron()
+{ 
 }
 

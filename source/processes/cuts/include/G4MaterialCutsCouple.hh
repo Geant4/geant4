@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialCutsCouple.hh,v 1.4 2003-04-10 02:51:18 asaim Exp $
+// $Id: G4MaterialCutsCouple.hh,v 1.2 2003-09-19 14:40:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

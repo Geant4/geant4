@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForProton.cc,v 1.3 2003-06-16 16:58:42 gunter Exp $
+// $Id: G4RToEConvForProton.cc,v 1.1 2003-09-19 14:47:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForAntiNeutron.hh,v 1.3 2003-06-16 16:58:14 gunter Exp $
+// $Id: G4RToEConvForPositron.hh,v 1.1 2003-09-19 14:43:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -30,14 +30,14 @@
 //
 //
 // Class Description
-//  This class is a Range to Energy Converter for anti Neutron.
+//  This class is a Range to Energy Converter for positron.
 //
 // ------------------------------------------------------------
 //   First Implementation          5 Oct. 2002  H.Kurahige
 // ------------------------------------------------------------
 
-#ifndef G4RToEConvForAntiNeutron_h
-#define G4RToEConvForAntiNeutron_h 1
+#ifndef G4RToEConvForPositron_h
+#define G4RToEConvForPositron_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -46,28 +46,31 @@
 #include "G4VRangeToEnergyConverter.hh"
 
 
-class G4RToEConvForAntiNeutron : public G4VRangeToEnergyConverter
+class G4RToEConvForPositron : public G4VRangeToEnergyConverter
 {
-  public: 
+  public:
   //  constructor
-  G4RToEConvForAntiNeutron();
+  G4RToEConvForPositron();
 
   public:
   //  destructor
-  virtual ~G4RToEConvForAntiNeutron();
+  virtual ~G4RToEConvForPositron();
 
+  protected:
+    virtual G4double ComputeLoss(G4double AtomicNumber,
+                                 G4double KineticEnergy
+                                ) const;
 
- // calculate energy cut from given range cut for the material
-  virtual G4double Convert(G4double rangeCut, const G4Material* material);
+  //-------------- Range Table ------------------------------------------
+    virtual void BuildRangeVector(const G4Material* aMaterial,
+                                  G4double       maxEnergy,
+                                  G4double       aMass,
+                                  G4RangeVector* rangeVector);
+
 
 };
 
-inline
-  G4double G4RToEConvForAntiNeutron::Convert(G4double , const G4Material* )
-{
-  // reutrn lowest energy
-  return LowestEnergy;
-}
+
 #endif
 
 
