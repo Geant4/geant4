@@ -29,28 +29,38 @@
 //
 // History:
 // -----------
-// ?????      Created
+//  
+//  16 Sept 2001 Modofied according to a design iteration in the 
+//              LowEnergy category
 //
+// -------------------------------------------------------------------
+
+// Class description:
+// Low Energy Electromagnetic Physics, a data container
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
 // -------------------------------------------------------------------
 
 
 #ifndef G4AtomicShell_h 
 #define G4AtomicShell_h 1
-
-#include "G4DataVector.hh"
 #include "globals.hh"
-#include "g4std/vector"
 
 class G4AtomicShell {
 
 public:
 
+  // The data and the methods of this class are relative to
+  // a given shell
  
   G4AtomicShell(G4int,G4double);
  
   ~G4AtomicShell();
 
+  // Returns the binding energy of the shell
   G4double BindingEnergy() const; 
+
+  // Returns the id of the shell
   G4int ShellId() const;
 
 private:

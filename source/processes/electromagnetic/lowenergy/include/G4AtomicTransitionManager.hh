@@ -29,8 +29,17 @@
 //
 // History:
 // -----------
-// ?????      Created
+//  
+//  16 Sept 2001 Modofied according to a design iteration in the 
+//              LowEnergy category
 //
+// -------------------------------------------------------------------
+
+// Class description:
+// Low Energy Electromagnetic Physics, fills and manages G4Shell 
+// and G4Transition objects
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
 // -------------------------------------------------------------------
 
 #ifndef G4AtomicTransitionManager_h
@@ -40,43 +49,44 @@
 #include "G4FluoData.hh"
 #include "G4AtomicTransition.hh"
 #include "G4AtomicShell.hh"
-#include "globals.hh"
-#include "g4std/algorithm"
 #include "g4std/map"
 #include "g4std/vector"
+#include "globals.hh"
 
-//this class is a SINGLETON
+// This class is a singleton
 class G4AtomicTransitionManager {
 
 public: 
 
-  static G4AtomicTransitionManager* Instance();
   // The only way to get an instance of this class is to call the 
   // function Instance() 
-
+  static G4AtomicTransitionManager* Instance();
+ 
+  // Z is the atomic number of the element, shellIndex is the 
+  // index (in EADL) of the shell
   const G4AtomicShell* Shell(G4int Z, size_t shellIndex);
-  //Z is the atomic number of the element, shellIdentifier is the 
-  //index (in EADL) of the shell 
-
+   
+  // Z is the atomic number of the element, shellIndex is the 
+  // index (in EADL) of the final shell for the transition
   const G4AtomicTransition* ReachableShell(G4int Z, size_t shellIndex);
-  //Z is the atomic number of the element, shellIdentifier is the 
-  //index (in EADL) of the final shell for the transition 
-
+ 
+  // This function returns the number of shells of the element
+  // whose atomic number is Z
   G4int NumberOfShells(G4int Z);
-  //this function returns the number of shells of the element
-  //whose atomic number is Z
-
+ 
+  // This function returns the number of those shells of the element
+  // whose atomic number is Z which are reachable through a radiative
+  // transition
   G4int NumberOfReachableShells(G4int Z);
 
+  // Gives the sum of the probabilities of radiative transition towards the
+  // shell whose index is shellIndex
   G4double TotalRadiativeTransitionProbability(G4int Z, size_t shellIndex);
-  //gives the sum of the probabilities of radiative transition towards the
-  //shell whose index is shellId
- 
+  
+  // Gives the sum of the probabilities of non radiative transition from the
+  // shell whose index is shellIndex
   G4double TotalNonRadiativeTransitionProbability(G4int Z, size_t shellIndex);
-  //gives the sum of the probabilities of non radiative transition from the
-  //shell whose index is shellId 
-
-
+   
 protected:
 
   G4AtomicTransitionManager(G4int minZ = 1, G4int maxZ = 99, 
@@ -87,18 +97,24 @@ private:
  
   static G4AtomicTransitionManager* instance;
   
+  // the first element of the map is the atomic number Z.
+  // the second element is a vector of G4AtomicShell*.
   G4std::map<G4int,G4std::vector<G4AtomicShell*>,std::less<G4int> > shellTable;
-  // the first element of the map is the atomic number z.
-  //the second element is a vector of shells.
-
+  
+  // the first element of the map is the atomic number Z.
+  // the second element is a vector of G4AtomicTransition*.
   G4std::map<G4int,G4std::vector<G4AtomicTransition*>,std::less<G4int> > transitionTable;
   
+  // Minimum and maximum Z in EADL table containing identities and binding
+  // energies of shells
   G4int zMin;
   G4int zMax;
+  
+  // Minimum and maximum Z in EADL table containing identities, transition 
+  // energies and transition probabilities of shells
   G4int infTableLimit;
   G4int supTableLimit;
-  //EADL contains the data for radiative transition only for atoms with Z>5.
-  //tableLimit is initialized to 5 in the constructor of this class
+ 
  
 };
 

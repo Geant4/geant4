@@ -19,6 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+
 //
 //
 // $Id: G4FluoData.hh,v 1.1 ?????
@@ -28,7 +29,7 @@
 //
 // History:
 // -----------
-//  ?????
+//  16 Sept 2001 First committed to cvs
 //
 // -------------------------------------------------------------------
 
@@ -36,6 +37,9 @@
 // Low Energy Electromagnetic Physics
 // Fluorescence data set: shell identifiers, transition probabilities, 
 // transition energies
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
+// -------------------------------------------------------------------
 
 #ifndef G4FLUODATA_HH
 #define G4FLUODATA_HH 1
@@ -55,16 +59,27 @@ public:
 
   ~G4FluoData();
 
+  // The method returns the number of shells in wich a 
+  // vacancy can be filled by a radiative transition
   size_t NumberOfVacancies() const;
 
+  // Given the index of the vacancy returns its identity
   G4int VacancyId(G4int vacancyIndex) const;
-
+  
+  // Given the index of a vacancy returns the number of
+  //shells starting from wich an electrons can fill the vacancy
   size_t NumberOfTransitions(G4int vacancyIndex) const;
 
+  // Given the indexes of the starting and final shells for the 
+  // transition, returns the identity of the starting one
   const G4int StartShellId(G4int initIndex,G4int vacancyIndex);
 
+  // Given the indexes of the starting and final shells for the 
+  // transition, returns the transition energy
   const G4double StartShellEnergy(G4int initIndex,G4int vacancyIndex);
 
+  // Given the indexes of the starting and final shells for the 
+  // transition, returns the probability of this transition
   const G4double StartShellProb(G4int initIndex,G4int vacancyIndex);
 
   void LoadData(const G4int& Z);

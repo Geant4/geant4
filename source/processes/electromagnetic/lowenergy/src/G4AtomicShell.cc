@@ -29,7 +29,8 @@
 //
 // History:
 // -----------
-// ?????      Created
+//  16 Sept 2001 Modofied according to a design iteration in the 
+//              LowEnergy category
 //
 // -------------------------------------------------------------------
 
