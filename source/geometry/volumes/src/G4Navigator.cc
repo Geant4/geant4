@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.24 2002-01-10 16:04:38 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.25 2002-01-21 22:04:35 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation  Paul Kent July 95/96
@@ -738,11 +738,11 @@ G4double G4Navigator::ComputeSafety(const G4ThreeVector &pGlobalpoint,
     }
 #endif
 
-  // Pseudo-relocate to this point (updates voxel information only).
-  LocateGlobalPointWithinVolume( pGlobalpoint );
-
   if( ! (fEnteredDaughter || fExitedMother ) )
     {
+        // Pseudo-relocate to this point (updates voxel information only).
+        LocateGlobalPointWithinVolume( pGlobalpoint );
+
         G4VPhysicalVolume  *motherPhysical=fHistory.GetTopVolume();
         G4LogicalVolume *motherLogical=motherPhysical->GetLogicalVolume();
 
@@ -911,21 +911,17 @@ void G4Navigator::LocateGlobalPointWithinVolume(const  G4ThreeVector& pGlobalpoi
      //      by the 'equivalent' call to LocateGlobalPointAndSetup
      //   - who's values have been invalidated by the 'move'.
      //fWasLimitedByGeometry= false;
-     //fBlockedPhysicalVolume=0; 
-     //fBlockedReplicaNo= -1;
+     fBlockedPhysicalVolume=0; 
+     fBlockedReplicaNo= -1;
 
-     //fEntering=false;
-     //fEnteredDaughter=false;  // Boundary not encountered, did not enter
-     //fExiting=false;
-     //fExitedMother=false;     // Boundary not encountered, did not exit
-#if 0
-   else
-     {
-       // There is no state stored in G4ReplicaNavigation
+     fEntering=false;
+     fEnteredDaughter=false;  // Boundary not encountered, did not enter
+     fExiting=false;
+     fExitedMother=false;     // Boundary not encountered, did not exit
+
+     // else
        // freplicaNav.VoxelLocate( pVoxelHeader, localPoint );                
-     }
-#endif
-
+       // ** NOT ** required: There is no state stored in G4ReplicaNavigation
 
 #ifdef OLD_LOCATE
    //  An alternative implementation using LocateGlobalPointAndSetup.
