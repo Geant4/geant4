@@ -1,4 +1,4 @@
-$Id: History,v 1.52 2002-03-26 18:16:32 maire Exp $
+$Id: History,v 1.53 2002-03-28 14:21:24 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+27 mar 02: V.Ivanchenko (stand-V04-00-06)
+- G4hIonisation: Bug fix in scaling of lambda table
 
 26 mar 02: mma (stand-V04-00-05)
 - G4eIonisation: change access to cuts in BuildLossTables (V.Ivanchenko)
