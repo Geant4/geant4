@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.26 1999-06-24 10:53:08 johna Exp $
+# $Id: binmake.gmk,v 1.27 1999-06-25 17:03:27 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -154,11 +154,11 @@ else
 #   that it is not expanded until the directory G4TMPDIR is created.
   LDLIBS2 = $(shell \
         G4TMP=$(G4TMP); export G4TMP; \
-	if [ \( -f $(G4LIBDIR)/liblist \
-	  -a -f $(G4LIBDIR)/libname.map \) ]; then \
-	$(G4LIBDIR)/liblist \
+	if [ \( -f $(G4LIB)/$(G4SYSTEM)/liblist \
+	  -a -f $(G4LIB)/$(G4SYSTEM)/libname.map \) ]; then \
+	$(G4LIB)/$(G4SYSTEM)/liblist \
 	  -d $(G4TMPDIR) \
-	  < $(G4LIBDIR)/libname.map; fi)
+	  < $(G4LIB)/$(G4SYSTEM)/libname.map; fi)
 # Extra libraries to resolve remaining circular dependencies...
 #  LDLIBS2 += 
 endif
@@ -228,8 +228,8 @@ ifndef USER_DEFINED_LDLIBS
 	@echo "         and go back and make global libraries, i.e,"
 	@echo '           cd $$G4INSTALL/source'
 	@echo "           gmake global"
-	@if [ ! \( -f $(G4LIBDIR)/liblist \
-	  -a -f $(G4LIBDIR)/libname.map \) ]; then \
+	@if [ ! \( -f $(G4LIB)/$(G4SYSTEM)/liblist \
+	  -a -f $(G4LIB)/$(G4SYSTEM)/libname.map \) ]; then \
 	  echo "ERROR: No liblist program or library map file."; \
 	  echo "       These are needed for building with granular"; \
 	  echo "       libraries."; \

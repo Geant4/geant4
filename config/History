@@ -1,4 +1,4 @@
-$Id: History,v 1.43 1999-06-24 10:53:06 johna Exp $
+$Id: History,v 1.44 1999-06-25 17:03:26 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25th June 1999  Gabriele Cosmo
+- Use $G4LIB/$G4SYSTEM instead of $G4LIBDIR in binmake.gmk for invoking
+  liblist and search for libname.map (granular libraries setup).
 
 24th June 1999  John Allison
 - Use liblist and libname.map in $G4LIBDIR.
