@@ -1,4 +1,4 @@
-?RCS: $Id: Options.U,v 1.5 2003-02-20 17:01:09 sadilov Exp $
+?RCS: $Id: Options.U,v 1.6 2004-12-02 22:09:49 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,6 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.5  2003/02/20 17:01:09  sadilov
+?RCS: Last version.
+?RCS:
 ?RCS: Revision 1.4  2002/12/13 13:40:38  sadilov
 ?RCS: Add -libs -cppflags -cxxflags -incflags
 ?RCS:
@@ -164,6 +167,7 @@ while test $# -gt 0; do
 	-d) shift; fastread=yes;;
 	-e) shift; alldone=cont;;
 	-install) shift; install=yes;;
+	-build) shift; g4build=yes;;
 	-ldlibs) shift; g4ldlibs=yes;;
 	-ldflags) shift; g4ldflags=yes;;
 	-cppflags) shift; g4cppflags=yes;;
@@ -223,11 +227,12 @@ done
 case "$error" in
 true)
 	cat >&2 <<EOM
-Usage: $me [-dehrsEKOSV] [-install] [-libs] [-f config.sh] [-D symbol] [-D symbol=value]
+Usage: $me [-dehrsEKOSV] [-install] [-build] [-libs] [-f config.sh] [-D symbol] [-D symbol=value]
                  [-U symbol] [-U symbol=]
   -d : use defaults for all answers.
   -e : go on without questioning past the production of config.sh.
-  -install : start configuration AND installation of Geant4 libraries. 
+  -install : start installation of Geant4 libraries. 
+  -build : start configuration AND build of Geant4 libraries. 
   -ldlibs : retrieve the list of libraries to link
   -ldflags : retrieve the list of directories where libraries are placed
   -cxxflags : retrieve the list of cxxflags
