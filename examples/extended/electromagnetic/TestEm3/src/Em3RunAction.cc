@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3RunAction.cc,v 1.16 2002-06-05 12:13:04 maire Exp $
+// $Id: Em3RunAction.cc,v 1.17 2002-06-05 16:42:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -134,13 +134,13 @@ void Em3RunAction::bookHisto()
 #ifndef G4NOHIST
   // book histograms
   const G4String title  = "Edep/Ebeam in absorber ";
-  const G4String id[10] = {"0","1","2","3","4","5","6","7","8","9"};
+  const G4String id[] = {"0","1","2","3","4","5","6","7","8","9","10"};
   G4int nbins=100; G4double vmin=0., vmax=1.;
   G4int NbOfAbsor = Detector->GetNbOfAbsor();
   for (G4int k=0; k<NbOfAbsor; ++k)
      {
       if (histo[k]==0)
-        { histo[k] = hf->create1D(id[k],title+id[k],nbins,vmin,vmax);
+        { histo[k] = hf->create1D(id[k+1],title+id[k],nbins,vmin,vmax);
           G4cout << "bookHisto: " << k << " " << histo[k] << G4endl;
 	}  
      }   
@@ -149,16 +149,14 @@ void Em3RunAction::bookHisto()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em3RunAction::SetHisto(G4int idh,G4int nbins,G4double vmin,G4double vmax)
+void Em3RunAction::SetHisto(G4int k,G4int nbins,G4double vmin,G4double vmax)
 {
 #ifndef G4NOHIST
   // (re)book histograms
-  char str[25]; char id[1];
-  strcpy(str,"Edep/Ebeam in absorber ");
-  str[23] = (char)((int)('0') + idh); id[0] = str[23];  
-///  if (histo[idh] != NULL) delete histo[idh];
-  histo[idh] = hf->create1D(id,str,nbins,vmin,vmax);
-  G4cout << "SetHisto: " << idh << " " << histo[idh] << G4endl;  
+  const G4String title  = "Edep/Ebeam in absorber ";
+  const G4String id[] = {"0","1","2","3","4","5","6","7","8","9","10"};  
+  histo[k] = hf->create1D(id[k+1],title+id[k],nbins,vmin,vmax);
+  G4cout << "SetHisto: " << k << " " << histo[k] << G4endl;  
 #endif   
 }
 
