@@ -44,7 +44,7 @@
 #include "DicomPatientParameterisation.hh"
 #include "DicomConfiguration.hh"
 #include "DicomPrimaryGeneratorAction.hh"
-
+#include "G4ios.hh"
 #include <fstream>
 #include <string.h>
 #include <stdio.h>
@@ -117,13 +117,13 @@ void DicomPatientConstructor::readContour()
   readingContours = fopen("Plan.roi","r");
   if ( (G4int *)readingContours == 0 )
     {
-      printf("### No contours file ('Plan.roi')\n");
+      G4std::printf("### No contours file ('Plan.roi')\n");
       flag_contours=0;
     }
   else if ( (G4int *)readingContours != 0 )
     {
       flag_contours=1;
-      printf("### There is a contour file ('Plan.roi')\n");
+      G4std::printf("### There is a contour file ('Plan.roi')\n");
       while( fgets(ROIplanLine,2000,readingContours) )
         {
 	  if ( ROIplanLine[0] == '/' && ROIplanLine[1] == '/' )
@@ -196,8 +196,8 @@ void DicomPatientConstructor::readContour()
                         }
 		      else if ( x == 2000 )
                         {
-			  printf("### ERROR, No definition found !\n");
-			  printf("%s\n",Word_1);
+			  G4std::printf("### ERROR, No definition found !\n");
+			  G4std::printf("%s\n",Word_1);
                         }
                     }
                 }
