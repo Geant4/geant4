@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWithADoubleAndUnit.cc,v 1.5 2003-06-16 16:55:40 gunter Exp $
+// $Id: G4UIcmdWithADoubleAndUnit.cc,v 1.6 2004-05-16 18:42:30 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -42,14 +42,7 @@ G4UIcmdWithADoubleAndUnit::G4UIcmdWithADoubleAndUnit
 
 G4double G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(const char* paramString)
 {
-  G4double vl;
-  char unts[30];
-  
-  std::istrstream is((char*)paramString);
-  is >> vl >> unts;
-  G4String unt = unts;
-  
-  return (vl*ValueOf(unt));
+  return ConvertToDimensionedDouble(paramString);
 }
 
 G4double G4UIcmdWithADoubleAndUnit::GetNewDoubleRawValue(const char* paramString)
@@ -73,19 +66,6 @@ G4double G4UIcmdWithADoubleAndUnit::GetNewUnitValue(const char* paramString)
   G4String unt = unts;
   
   return ValueOf(unt);
-}
-
-G4String G4UIcmdWithADoubleAndUnit::ConvertToString
-(G4double dblValue,const char * unitName)
-{
-  G4String unt = unitName;
-  G4double uv = ValueOf(unitName);
-  
-  char st[50];
-  std::ostrstream os(st,50);
-  os << dblValue/uv << " " << unitName << '\0';
-  G4String vl = st;
-  return vl;
 }
 
 void G4UIcmdWithADoubleAndUnit::SetParameterName

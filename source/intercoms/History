@@ -1,4 +1,4 @@
-$Id: History,v 1.54 2003-06-07 16:41:03 gcosmo Exp $
+$Id: History,v 1.55 2004-05-16 18:42:26 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 16, 2004, M.Asai (intercoms-V06-01-00)
+- Introducing static methods in G4UIcommand class for conversion between
+  a string and a value. Some implementation of derived classes are modified
+  accordingly. 
 
 Jun 07, 2003, G.Cosmo (intercoms-V05-01-02)
 - G4UItokenNum.hh: corrected implementation of operator=().

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWithADoubleAndUnit.hh,v 1.5 2002-04-26 22:03:35 asaim Exp $
+// $Id: G4UIcmdWithADoubleAndUnit.hh,v 1.6 2004-05-16 18:42:30 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -43,21 +43,16 @@ class G4UIcmdWithADoubleAndUnit : public G4UIcommand
     (const char * theCommandPath,G4UImessenger * theMessenger);
     //  Constructor. The command string with full path directory
     // and the pointer to the messenger must be given.    
-    G4double GetNewDoubleValue(const char* paramString);
+    static G4double GetNewDoubleValue(const char* paramString);
     //  Convert string which represents a double value and a unit to
     // double. Value is converted to the Geant4 internal unit.
-    G4double GetNewDoubleRawValue(const char* paramString);
+    static G4double GetNewDoubleRawValue(const char* paramString);
     //  Convert string which represents a double value and a unit to
     // double. Value is NOT converted to the Geant4 internal unit
     // but just as the given string.
-    G4double GetNewUnitValue(const char* paramString);
+    static G4double GetNewUnitValue(const char* paramString);
     //  Convert the unit string to the value of the unit. "paramString"
     // must contain a double value AND a unit string.
-    G4String ConvertToString(G4double dblValue,const char * unitName);
-    //  Convert a double value and the unit to a string which represents a
-    // double value and the unit. This method must be used by the messenger
-    // for its GetCurrentValues() method. Value of the double will be
-    // devided by the value of the unit.
     void SetParameterName(const char * theName,G4bool omittable,
                           G4bool currentAsDefault=false);
     //  Set the parameter name for double parameterxs. Name is used by

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWith3VectorAndUnit.hh,v 1.5 2002-04-26 22:03:35 asaim Exp $
+// $Id: G4UIcmdWith3VectorAndUnit.hh,v 1.6 2004-05-16 18:42:29 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -44,21 +44,16 @@ class G4UIcmdWith3VectorAndUnit : public G4UIcommand
     (const char * theCommandPath,G4UImessenger * theMessenger);
     //  Constructor. The command string with full path directory
     // and the pointer to the messenger must be given.
-    G4ThreeVector GetNew3VectorValue(const char* paramString);
+    static G4ThreeVector GetNew3VectorValue(const char* paramString);
     //  Convert string which represents three double values and a unit to
     // G4ThreeVector. Values are converted to the Geant4 internal unit.
-    G4ThreeVector GetNew3VectorRawValue(const char* paramString);
+    static G4ThreeVector GetNew3VectorRawValue(const char* paramString);
     //  Convert string which represents three double values and a unit to
     // G4ThreeVector. Values are NOT converted to the Geant4 internal unit
     // but just as the given string.
-    G4double GetNewUnitValue(const char* paramString);
+    static G4double GetNewUnitValue(const char* paramString);
     //  Convert the unit string to the value of the unit. "paramString"
     // must contain three double values AND a unit string.
-    G4String ConvertToString(G4ThreeVector vec,const char * unitName);
-    //  Convert G4ThreeVector and the unit to a string which represents three
-    // double values and the unit. This method must be used by the messenger
-    // for its GetCurrentValues() method. Values of the three vector will be
-    // devided by the value of the unit.
     void SetParameterName(const char * theNameX,const char * theNameY,
       const char * theNameZ,G4bool omittable,G4bool currentAsDefault=false);
     //  Set the parameter names for three parameters. Names are used by

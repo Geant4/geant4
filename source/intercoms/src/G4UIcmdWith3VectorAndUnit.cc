@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWith3VectorAndUnit.cc,v 1.5 2003-06-16 16:55:37 gunter Exp $
+// $Id: G4UIcmdWith3VectorAndUnit.cc,v 1.6 2004-05-16 18:42:30 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -46,15 +46,7 @@ G4UIcmdWith3VectorAndUnit::G4UIcmdWith3VectorAndUnit
 
 G4ThreeVector G4UIcmdWith3VectorAndUnit::GetNew3VectorValue(const char* paramString)
 {
-  G4double vx;
-  G4double vy;
-  G4double vz;
-  char unts[30];
-  std::istrstream is((char*)paramString);
-  is >> vx >> vy >> vz >> unts;
-  G4String unt = unts;
-  G4double uv = ValueOf(unt);
-  return G4ThreeVector(vx*uv,vy*uv,vz*uv);
+  return ConvertToDimensioned3Vector(paramString);
 }
 
 G4ThreeVector G4UIcmdWith3VectorAndUnit::GetNew3VectorRawValue(const char* paramString)
@@ -78,20 +70,6 @@ G4double G4UIcmdWith3VectorAndUnit::GetNewUnitValue(const char* paramString)
   is >> vx >> vy >> vz >> unts;
   G4String unt = unts;
   return ValueOf(unt);
-}
-
-G4String G4UIcmdWith3VectorAndUnit::ConvertToString
-(G4ThreeVector vec,const char * unitName)
-{
-  G4String unt = unitName;
-  G4double uv = ValueOf(unitName);
-  
-  char st[100];
-  std::ostrstream os(st,100);
-  os << vec.x()/uv << " " << vec.y()/uv << " " << vec.z()/uv
-     << " " << unitName << '\0';
-  G4String vl = st;
-  return vl;
 }
 
 void G4UIcmdWith3VectorAndUnit::SetParameterName
