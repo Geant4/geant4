@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXViewer.cc,v 1.6 2001-07-14 21:47:54 johna Exp $
+// $Id: G4OpenGLStoredXViewer.cc,v 1.7 2001-08-14 18:03:20 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,15 +81,16 @@ void G4OpenGLStoredXViewer::Initialise () {
 
 void G4OpenGLStoredXViewer::DrawView () {
 
+  //Make sure current viewer is attached and clean...
+  glXMakeCurrent (dpy, win, cx);
+  glViewport (0, 0, WinSize_x, WinSize_y);
+
   if (white_background == true) {
     glClearColor (1., 1., 1., 1.);
   } else {
     glClearColor (0., 0., 0., 1.);
   }
 
-  //Make sure current viewer is attached and clean...
-  glXMakeCurrent (dpy, win, cx);
-  glViewport (0, 0, WinSize_x, WinSize_y);
   ClearView ();
 
   G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();

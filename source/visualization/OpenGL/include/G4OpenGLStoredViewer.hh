@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.hh,v 1.7 2001-07-11 10:08:50 gunter Exp $
+// $Id: G4OpenGLStoredViewer.hh,v 1.8 2001-08-14 18:03:15 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,8 +52,10 @@ public:
   
 protected:
   void KernelVisitDecision ();
+  G4bool CompareForKernelVisit(G4ViewParameters&);
   void DrawDisplayLists ();
-  G4OpenGLStoredSceneHandler&            fSceneHandler; // Graphics Scene for this view.
+  G4OpenGLStoredSceneHandler& fG4OpenGLStoredSceneHandler;
+  G4ViewParameters fLastVP;  // Memory for making kernel visit decisions.
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.cc,v 1.6 2001-07-11 10:08:55 gunter Exp $
+// $Id: G4OpenGLStoredViewer.cc,v 1.7 2001-08-14 18:03:19 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,22 +42,36 @@
 #include <assert.h>
 #include <unistd.h>
 
-class G4OpenGLStoredSceneHandler;
+#include "G4OpenGLStoredSceneHandler.hh"
 
-G4OpenGLStoredViewer::G4OpenGLStoredViewer (G4OpenGLStoredSceneHandler& scene):
-G4VViewer (scene, -1),  
-G4OpenGLViewer (scene), 
-fSceneHandler (scene)
-{}
+G4OpenGLStoredViewer::G4OpenGLStoredViewer
+(G4OpenGLStoredSceneHandler& sceneHandler):
+G4VViewer (sceneHandler, -1),  
+G4OpenGLViewer (sceneHandler), 
+fG4OpenGLStoredSceneHandler (sceneHandler)
+{
+  fLastVP = fDefaultVP; // Not sure if this gets executed before or
+  // after G4VViewer::G4VViewer!!  Doesn't matter much.
+}
 
 G4OpenGLStoredViewer::~G4OpenGLStoredViewer () {}
 
 void G4OpenGLStoredViewer::KernelVisitDecision () {
   
-  // Trigger a display List refresh if necessary.  This is a checklist
-  // of relevant view parameters.
+  // If there's a significant difference with the last view parameters
+  // of either the scene handler or this viewer, trigger a rebuild.
 
-  static G4ViewParameters lastVP;  // Initialised to default.
+  if (!fG4OpenGLStoredSceneHandler.fTopPODL ||
+      CompareForKernelVisit(fG4OpenGLStoredSceneHandler.fLastVP)  ||
+      CompareForKernelVisit(fLastVP)) {
+    NeedKernelVisit ();
+  }      
+  fLastVP = fVP;
+  fG4OpenGLStoredSceneHandler.fLastVP = fVP;
+}
+
+G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
+
   G4bool need = false;
 
   if (
@@ -86,23 +100,22 @@ void G4OpenGLStoredViewer::KernelVisitDecision () {
   if (!need && lastVP.IsExplode () &&
       (lastVP.GetExplodeFactor () != fVP.GetExplodeFactor ()))
     need = true;
-      
-  if (need) {
-    lastVP = fVP;
-    NeedKernelVisit ();
-  }
+
+  return need;
 }
 
 void G4OpenGLStoredViewer::DrawDisplayLists () {
   
-  if (fSceneHandler.fTopPODL) glCallList (fSceneHandler.fTopPODL);
+  if (fG4OpenGLStoredSceneHandler.fTopPODL)
+    glCallList (fG4OpenGLStoredSceneHandler.fTopPODL);
   
-  G4int nTODLs = fSceneHandler.fTODLList.size ();
+  G4int nTODLs = fG4OpenGLStoredSceneHandler.fTODLList.size ();
   for (int i = 0; i < nTODLs; i++) {
     glPushMatrix();
-    G4OpenGLTransform3D oglt (fSceneHandler.fTODLTransformList [i]);
+    G4OpenGLTransform3D oglt
+      (fG4OpenGLStoredSceneHandler.fTODLTransformList [i]);
     glMultMatrixd (oglt.GetGLMatrix ());
-    glCallList (fSceneHandler.fTODLList[i]);
+    glCallList (fG4OpenGLStoredSceneHandler.fTODLList[i]);
     glPopMatrix();
   }
 }

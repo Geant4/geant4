@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.5 2001-08-09 20:17:00 johna Exp $
+// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.6 2001-08-14 18:03:16 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -120,8 +120,8 @@ void G4OpenGLImmediateSceneHandler::ClearTransientStore () {
 
   // For immediate mode, clear screen and re-draw detector.
   if (fpViewer) {
-    fpViewer -> ClearView ();
     fpViewer -> SetView ();
+    fpViewer -> ClearView ();
     fpViewer -> DrawView ();
   }
 }

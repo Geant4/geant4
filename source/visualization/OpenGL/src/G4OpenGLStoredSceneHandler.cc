@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.12 2001-08-09 20:17:02 johna Exp $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.13 2001-08-14 18:03:17 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -115,29 +115,36 @@ void G4OpenGLStoredSceneHandler::BeginModeling () {
   if (fpViewer -> GetViewParameters ().GetDrawingStyle() == G4ViewParameters::hlr) {
     initialize_hlr = true;
   }
+  ClearStore();  // ...and all that goes with it.
 }
 
 void G4OpenGLStoredSceneHandler::EndModeling () {
   // Make a List which calls the other lists.
-
-//  if (!(fTopPODL = glGenLists (1))) {
-//    G4Exception ("Unable to allocate display List for fTopPODL in G4OpenGLStoredSceneHandler");
-//  }
-
-  glNewList (fTopPODL, GL_COMPILE); {
-    for (size_t i = 0; i < fPODLList.size (); i++) {
-      glPushMatrix();
-      G4OpenGLTransform3D oglt (fPODLTransformList [i]);
-      glMultMatrixd (oglt.GetGLMatrix ());
-      glCallList (fPODLList[i]);
-      glPopMatrix();
-    }
+  fTopPODL = glGenLists (1);
+  if (!fTopPODL) {
+    G4cout <<
+      "ERROR: G4OpenGLStoredSceneHandler::EndModeling: Failure to allocate"
+      "  display List for fTopPODL - suggest trying OpenGL Immediated mode."
+	   << G4endl;
   }
-  glEndList ();
+  else {
 
-  if (fpViewer -> GetViewParameters ().GetDrawingStyle() == G4ViewParameters::hlr) {
-    initialize_hlr = false;
-    //    glDisable (GL_POLYGON_OFFSET_FILL);
+    glNewList (fTopPODL, GL_COMPILE); {
+      for (size_t i = 0; i < fPODLList.size (); i++) {
+	glPushMatrix();
+	G4OpenGLTransform3D oglt (fPODLTransformList [i]);
+	glMultMatrixd (oglt.GetGLMatrix ());
+	glCallList (fPODLList[i]);
+	glPopMatrix();
+      }
+    }
+    glEndList ();
+
+    if (fpViewer -> GetViewParameters ().GetDrawingStyle() == G4ViewParameters::hlr) {
+      initialize_hlr = false;
+      //    glDisable (GL_POLYGON_OFFSET_FILL);
+    }
+
   }
 
   G4VSceneHandler::EndModeling ();
@@ -161,12 +168,21 @@ void G4OpenGLStoredSceneHandler::ClearStore () {
   if (fTopPODL) glDeleteLists (fTopPODL, 1);
   fTopPODL = 0;
 
-  fMemoryForDisplayLists = glIsList (fTopPODL = glGenLists (1));
-
   // Clear other lists, dictionary, etc.
   fPODLList.clear ();
   fPODLTransformList.clear ();
   fSolidMap.clear ();
+
+  // ...and clear transient store...
+  for (i = 0; i < fTODLList.size (); i++) {
+    if (fTODLList [i]) {
+      glDeleteLists (fTODLList [i], 1);
+    } else {
+      G4cerr << "Warning : NULL display List in fTODLList." << G4endl;
+    }
+  }
+  fTODLList.clear ();
+  fTODLTransformList.clear ();
 }
 
 void G4OpenGLStoredSceneHandler::ClearTransientStore () {
@@ -190,8 +206,8 @@ void G4OpenGLStoredSceneHandler::ClearTransientStore () {
 
   // Make sure screen corresponds to graphical database...
   if (fpViewer) {
-    fpViewer -> ClearView ();
     fpViewer -> SetView ();
+    fpViewer -> ClearView ();
     fpViewer -> DrawView ();
   }
 }
