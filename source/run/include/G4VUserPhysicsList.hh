@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.hh,v 1.13 2001-10-10 02:26:29 kurasige Exp $
+// $Id: G4VUserPhysicsList.hh,v 1.14 2001-10-16 08:35:50 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -253,10 +253,7 @@ class G4VUserPhysicsList
     // check stored material is consistent with the current detector setup. 
     virtual G4bool  CheckMaterialInfo(const G4String& directory, 
 				      G4bool          ascii = false);
-    // check stored cut value is consistent with the current detector setup. 
-    virtual G4bool  CheckCutValues(const G4String& directory, 
-				   G4bool          ascii = false);
-  /////////////////////////////////////////////////////////////////
+   /////////////////////////////////////////////////////////////////
   protected: 
     // adds new ProcessManager to all particles in the Particle Table
     //   this routine is used in Construct()

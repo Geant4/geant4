@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.23 2001-10-10 02:26:29 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.24 2001-10-16 08:35:51 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -514,7 +514,7 @@ void G4VUserPhysicsList::SetCutValueForOthers(G4double cutValue)
 
     if (!particle->IsShortLived()) {
       // check if the cut value has already been set
-      if ((particle->GetLengthCuts()<0.0) ||(particle->GetEnergyCuts()==0)) {
+      if ((particle->GetLengthCuts()==0) ||(particle->GetEnergyCuts()==0)){
 	// set cut value
 	SetParticleCuts( cutValue ,particle );
 	// build physics table 
@@ -731,25 +731,34 @@ void G4VUserPhysicsList::DumpCutValues( G4ParticleDefinition* particle) const
     // name field
     G4cout << " --- " << particle->GetParticleName() << " ------ " << G4endl;
 
-    // cut value in range field
-    G4cout << "   - Cut in range = " << G4BestUnit(particle->GetLengthCuts(),"Length") << G4endl;
+    // cut value in range
+    G4double* theRangeCuts = particle->GetLengthCuts();
 
     // material and energy cut value for the material 
     G4double*  theKineticEnergyCuts = particle->GetEnergyCuts();
     
-    if (theKineticEnergyCuts != 0) {
+    if (theRangeCuts != 0) {
       const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
       size_t numberOfMaterials = G4Material::GetNumberOfMaterials();
-      G4cout << "   - Material ---------------- Energy Cut ---" << G4endl;
+      G4cout << "   - Material --- Cut in range ------------- Energy Cut ---" << G4endl;
       for (size_t idx=0; idx<numberOfMaterials; idx++){
 	G4cout << "     " << G4std::setw(19) << (*materialTable)[idx]->GetName(); 
-	G4cout << " : "   << G4std::setw(10) << G4BestUnit(theKineticEnergyCuts[idx],"Energy");
+	G4cout <<" : ";
+	G4cout << G4std::setw(12)<< G4BestUnit(theRangeCuts[idx],"Length");
+	if (theKineticEnergyCuts ==0) {
+	  G4cout << " : --------------------------------";
+	} else {
+	  G4cout << " : ";
+	  G4cout << G4std::setw(10)<< G4BestUnit(theKineticEnergyCuts[idx],"Energy");
+	}	
 	G4cout << G4endl;
       }
-
+      if (theKineticEnergyCuts ==0) {
+	G4cout << "   - Cuts in energy are not calculated yet --" << G4endl;
+	G4cout << " Enter /run/initialize command to calculate cuts " << G4endl;
+      }
     } else {
-      G4cout << "   - Cuts in energy are not calculated yet --" << G4endl;
-      G4cout << " Enter /run/initialize command to calculate cuts " << G4endl;
+      G4cout << "   - Cuts in range are not set yet --" << G4endl;
     }
 
   }
@@ -786,24 +795,31 @@ void G4VUserPhysicsList::DumpCutValuesTable() const
   }
   G4cout << G4endl;
 
+  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
+  size_t numberOfMaterials = G4Material::GetNumberOfMaterials();
   // line 4
   G4cout << "Cut in range       ";
-  for (idx=0; idx <size_display; idx++) {
-    if (particle[idx] == 0) {
-      G4cout << "            ";
-    } else {
-      G4cout << " " << G4std::setw(11) << G4BestUnit(particle[idx]->GetLengthCuts(),"Length");
+  for (size_t I=0; I<numberOfMaterials; I++) {
+    G4cout << " " << G4std::setw(18) << ((*materialTable)[I])->GetName();
+    for (idx=0; idx <size_display; idx++) {
+      if (particle[idx] == 0) {
+        G4cout << "            ";
+      } else {
+        if (particle[idx]->GetLengthCuts() == 0) {
+          G4cout << " ---------- ";
+        } else {
+          G4cout << " " << G4std::setw(11) << G4BestUnit((particle[idx]->GetLengthCuts())[I],"Length");
+        }
+      }
     }
+    G4cout << G4endl;
   }
-  G4cout << G4endl;
 
   // line 5
   G4cout << "Cut in energy";
   G4cout << G4endl;
 
- // line 6 ..
-  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-  size_t numberOfMaterials = G4Material::GetNumberOfMaterials();
+  // line 6 ..
   for (size_t J=0; J<numberOfMaterials; J++) {
     G4cout << " " << G4std::setw(18) << ((*materialTable)[J])->GetName();
     for (idx=0; idx <size_display; idx++) {
@@ -1016,23 +1032,51 @@ G4bool G4VUserPhysicsList::StoreCutValues(const G4String& directory,
     // Only following particles are concerned
     G4int idx = isParticleForStoreCuts(particle);
     if (idx >=0 ){
-      // particle name and cut in length
+      // particle name 
       if (ascii) {
 	/////////////// ASCII mode  /////////////////
 	fOut.setf(G4std::ios::scientific);
 	fOut << G4std::setw(FixedStringLengthForStore) << particle->GetParticleName();
-	fOut << G4std::setw(20) << particle->GetLengthCuts()/mm  << G4endl;
 	fOut.unsetf(G4std::ios::scientific);
       } else {
 	/////////////// Binary mode  /////////////////
 	G4String name =  particle->GetParticleName();
-	G4double cutLength = particle->GetLengthCuts()/mm;
 	for (i=0; i<FixedStringLengthForStore; ++i) temp[i] = '\0'; 
 	for (i=0; i<name.length() && i<FixedStringLengthForStore-1; ++i) temp[i]=name[i];
 	fOut.write(temp, FixedStringLengthForStore);
-	fOut.write((char*)(&cutLength), sizeof (G4double));
       }
 
+      // range cut  for each material
+      G4double* rangeArray =  particle->GetLengthCuts();
+      if (rangeArray ==0) {
+#ifdef G4VERBOSE
+        if (verboseLevel>0){
+          G4cout << "G4VUserPhysicsList::StoreCutValues        " ;
+          G4cout << ":  Range Cut Values have not be set for";
+          G4cout << particle->GetParticleName() << G4endl;
+        }
+#endif
+        return false;
+      }
+      if (ascii) {
+        /////////////// ASCII mode  /////////////////
+        fOut.setf(G4std::ios::scientific);
+        G4int ii =0;
+        for(G4int jdx=0; jdx<numberOfMaterial; ++jdx, ++ii) {
+          if (ii==4) {
+            fOut << G4endl;
+            ii =0;
+          }
+          fOut << G4std::setw(20) << rangeArray[jdx];
+        }
+        fOut << G4endl;
+        fOut.unsetf(G4std::ios::scientific);
+      } else {
+        /////////////// Binary mode  /////////////////
+        fOut.write( (char*)(rangeArray), numberOfMaterial*(sizeof (G4double)) );
+      }
+
+      // cut energy for each material
       G4double*  cutArray =  particle->GetEnergyCuts(); 
       if (cutArray ==0) {
 #ifdef G4VERBOSE  
@@ -1044,8 +1088,6 @@ G4bool G4VUserPhysicsList::StoreCutValues(const G4String& directory,
 #endif
 	return false;
       }
-
-      // cut energy for each material
       if (ascii) {
 	/////////////// ASCII mode  /////////////////
 	fOut.setf(G4std::ios::scientific);
@@ -1120,10 +1162,7 @@ G4bool  G4VUserPhysicsList::CheckForRetrievePhysicsTable(const G4String& directo
   numberOfMaterial = G4Material::GetNumberOfMaterials();
 
   if (!fIsCheckedForRetrievePhysicsTable) {
-    if (CheckMaterialInfo(directory, ascii)) {
-      if (CheckCutValues(directory,ascii)) 
-	fIsCheckedForRetrievePhysicsTable = true;
-    }
+    fIsCheckedForRetrievePhysicsTable = CheckMaterialInfo(directory, ascii);
   }
   return fIsCheckedForRetrievePhysicsTable;
 }
@@ -1244,152 +1283,6 @@ G4bool G4VUserPhysicsList::CheckMaterialInfo(const G4String& directory,
   return true;
 }
 
-///////////////////////////////////////////////////////////////
-G4bool G4VUserPhysicsList::CheckCutValues(const G4String& directory, 
-					  G4bool          ascii)
-{
-  const G4String fileName = directory + "/" + "cut_value.dat";
-  const G4String key = "CUT_VALUE";
-  G4std::ifstream fIn;  
-
-  // open input file //
-#ifdef G4USE_STD_NAMESPACE
-  if (!ascii ) 
-    fIn.open(fileName,G4std::ios::in|G4std::ios::binary);
-  else
-#endif 
-    fIn.open(fileName,G4std::ios::in);
-
-  // check if the file has been opened successfully 
-  if (!fIn) {
-#ifdef G4VERBOSE  
-    G4cerr << "G4VUserPhysicsList::CheckCutValues  ";
-    G4cerr << " Can not open file " << fileName << G4endl;
-#endif
-    return false;
-  }
-
-  char temp[FixedStringLengthForStore];
-
-  // key word
-  G4String keyword;    
-  if (ascii) {
-    fIn >> keyword;
-  } else {
-    fIn.read(temp, FixedStringLengthForStore);
-    keyword = (const char*)(temp);
-  }
-  if (key!=keyword) {
-#ifdef G4VERBOSE  
-    if (verboseLevel>0){
-      G4cout << "G4VUserPhysicsList::CheckCutValues ";
-      G4cout << " Can not find key word " << keyword << G4endl;
-    }
-#endif
-  }
-
-  // default cut value
-  G4double defaultCut;
-  if (ascii) {
-    fIn >> keyword >> defaultCut;
-  } else {
-    fIn.read(temp, FixedStringLengthForStore);
-    keyword = (const char*)(temp);
-    fIn.read( (char*)(&defaultCut), sizeof (G4double));
-  }
-  if (fIn.fail()) {
-#ifdef G4VERBOSE  
-    if (verboseLevel>0){
-      G4cout << "G4VUserPhysicsList::CheckCutValues  ";
-      G4cout << " Bad data format " << G4endl;
-    }
-#endif   
-    fIn.close();
-    return false;
-  } 
-
-  // check default value
-  G4double ratio =   abs(defaultCut / (defaultCutValue/mm) );
-  if ((keyword != "Default")|| (ratio<0.999) ||(ratio>1.001) ){
-#ifdef G4VERBOSE  
-    if (verboseLevel>0){
-      G4cout << "G4VUserPhysicsList::CheckCutValues " ;
-      G4cout << " Inconsistent default cut values " << G4endl;;
-    }
-#endif   
-    fIn.close();
-    return false;
-  }
-
-  // loop over all particles 
-  while(!fIn.eof()){
-    // read in particle name and cut in length
-    char name[FixedStringLengthForStore];
-    G4double cutLength;
-    if (ascii) {
-      fIn >> name >> cutLength; 
-    } else {
-     fIn.read(name, FixedStringLengthForStore);
-     fIn.read((char*)(&cutLength), sizeof (G4double));
-    }
-    if (fIn.eof()) break;
-    if (fIn.fail()) {
-#ifdef G4VERBOSE  
-      if (verboseLevel>0){
-	G4cout << "G4VUserPhysicsList::CheckCutValues  ";
-	G4cout << " Bad data format " << G4endl;
-      }
-#endif
-      fIn.close();
-      return false;
-    }
-
-    // Search particle
-    G4ParticleDefinition* particle = theParticleTable->FindParticle(name);
-    if (particle==0) {
-#ifdef G4VERBOSE  
-      if (verboseLevel>0){
-	G4cout << "G4VUserPhysicsList::CheckCutValues  ";
-	G4cout << " Particle " << name <<" is not found "<< G4endl;
-      } 
-      fIn.close();
-      return false;
-#endif     
-    } 
-
-    // chech cut value in length
-    ratio = abs(cutLength/ (particle->GetLengthCuts()/mm) );
-    if ((ratio<0.999) ||(ratio>1.001) ){
-#ifdef G4VERBOSE  
-      if (verboseLevel>0){
-	G4cout << "G4VUserPhysicsList::CheckCutValues ";
-	G4cout << " Inconsistent cut values for " << name << G4endl;;
-      }
-#endif   
-      fIn.close();
-      return false;
-    }  
-
-    G4double* cutArray = new G4double[numberOfMaterial];
-    // read in energy cut for all materials 
-    if (ascii) {
-      /////////////// ASCII mode  /////////////////
-      for(G4int idx=0; idx<numberOfMaterial; ++idx) {
-	G4double value;
-	fIn >> value;
-	cutArray[idx] = value;
-      }
-    } else {
-      /////////////// Binary mode  /////////////////
-      fIn.read( (char*)(cutArray), numberOfMaterial*(sizeof (G4double)) );
-    }
- 
-  }
-
-  fIn.close();
-  return true;
-}
-  
 
 ///////////////////////////////////////////////////////////////
 G4bool  G4VUserPhysicsList::RetrieveCutValues(const G4String&  directory,
@@ -1486,17 +1379,13 @@ G4bool  G4VUserPhysicsList::RetrieveCutValues(const G4String&  directory,
 
   // loop over all particles 
   while(!fIn.eof()){
-    // read in particle name and cut in length
+    // read in particle name
     char name[FixedStringLengthForStore];
-    G4double cutLength;
     if (ascii) {
-      fIn >> name >> cutLength; 
+      fIn >> name ;
     } else {
      fIn.read(name, FixedStringLengthForStore);
-     fIn.read((char*)(&cutLength), sizeof (G4double));
     }
-    cutLength *= mm;
-
     if (fIn.eof()) break;
     if (fIn.fail()) {
 #ifdef G4VERBOSE  
@@ -1512,7 +1401,7 @@ G4bool  G4VUserPhysicsList::RetrieveCutValues(const G4String&  directory,
 #ifdef G4VERBOSE  
     if (verboseLevel>2){
       G4cout.setf(G4std::ios::scientific);
-      G4cout << name << G4std::setw(20) << cutLength << G4endl;
+      G4cout << name << G4endl;
       G4cout.unsetf(G4std::ios::scientific);
     }
 #endif
@@ -1530,9 +1419,22 @@ G4bool  G4VUserPhysicsList::RetrieveCutValues(const G4String&  directory,
 #endif     
     } 
 
-    G4double* cutArray = new G4double[numberOfMaterial];
+    // read in range cut for all materials
+    G4double* rangeArray = new G4double[numberOfMaterial];
+    if (ascii) {
+      /////////////// ASCII mode  /////////////////
+      for(G4int jdx=0; jdx<numberOfMaterial; ++jdx) {
+        G4double value;
+        fIn >> value;
+        rangeArray[jdx] = value;
+      }
+    } else {
+      /////////////// Binary mode  /////////////////
+      fIn.read( (char*)(rangeArray), numberOfMaterial*(sizeof (G4double)) );
+    }
 
     // read in energy cut for all materials 
+    G4double* cutArray = new G4double[numberOfMaterial];
     if (ascii) {
       /////////////// ASCII mode  /////////////////
       for(G4int idx=0; idx<numberOfMaterial; ++idx) {
@@ -1547,7 +1449,7 @@ G4bool  G4VUserPhysicsList::RetrieveCutValues(const G4String&  directory,
  
   
     // restore cut values
-    particle->RestoreCuts( cutLength , cutArray) ; 
+    particle->RestoreCuts( rangeArray , cutArray) ; 
 #ifdef G4VERBOSE    
     if (verboseLevel >2)DumpCutValues(particle); 
 #endif
