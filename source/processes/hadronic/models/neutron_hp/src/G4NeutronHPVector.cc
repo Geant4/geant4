@@ -53,6 +53,7 @@
     Verbose=0;
     theIntegral=NULL;
     totalIntegral=-1;
+    isFreed = 0;
   }
   
   G4NeutronHPVector::~G4NeutronHPVector()
@@ -65,6 +66,7 @@
 //    if(Verbose==1)G4cout <<"Vector: delete theData"<<endl;
     if(theIntegral!=NULL) delete [] theIntegral;
 //    if(Verbose==1)G4cout <<"Vector: delete theIntegral"<<endl;
+    isFreed = 1;
   }
   
   G4NeutronHPVector & G4NeutronHPVector::  

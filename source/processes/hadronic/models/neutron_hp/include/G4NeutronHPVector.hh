@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPVector.hh,v 1.6 1999-08-27 07:42:57 hpw Exp $
+// $Id: G4NeutronHPVector.hh,v 1.7 1999-11-19 18:47:39 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPVector_h
@@ -425,6 +425,8 @@ class G4NeutronHPVector
   
   G4NeutronHPInterpolator theInt;
   G4int Verbose;
+  // debug only
+  G4int isFreed;
 };
 
 #endif
