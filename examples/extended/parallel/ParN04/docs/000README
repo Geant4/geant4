@@ -1,4 +1,4 @@
-$Id: 000README,v 1.2 2002-03-09 08:26:15 cooperma Exp $
+$Id: 000README,v 1.3 2002-03-09 09:48:03 cooperma Exp $
 -------------------------------------------------------------------
 
    ParGeant4:  Geant4/TOP-C, a parallelization of Geant4
@@ -21,8 +21,8 @@ This parallelization was done using a precompiled library for Geant4 4.0
 See the beginning of GNUmakefile for reasonable `make' targets to run it.
 To run it:
 0.  a. Follow the standard Geant4 installation procedure.
-    b. Try it out:
-        cd $G4INSTALL/examples/extended/parallel/ParN04
+    b. Verify that the Geant4 sequential examples work for you:
+        cd $G4INSTALL/examples/novice/exampleN04
         make
         $G4WORKDIR/bin/$G4SYSTEM/ParN04 ParN04.in
     c. Download and install TOP-C.
@@ -59,7 +59,7 @@ modify.  For example, all TOP-C additions are in conditionals:
   make parclean; make run
   in order to re-compile and rerun without TOP-C.
 Define REMOTE_SHELL differently if you don't use `ssh' for a remote shell.
-  (For example, `rsh' is the default.)
+  (If undefined, ParGNUmakefile defines it to be `ssh')
 Define MACROFILE diferently to use a different set of input commands.
 Define MEM_MODEL=--seq
   to run with TOP-C, but using a single (sequential) process, suitable
