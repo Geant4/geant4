@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the GEANT4 collaboration.
+// the RD44 GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Hype.cc,v 1.4 1999-12-15 14:50:07 gunter Exp $
+// $Id: G4Hype.cc,v 1.5 2000-03-30 20:02:35 davidw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Hype: this class implements in G4 the volume equivalent 
@@ -16,6 +16,7 @@
 //      Ernesto Lamanna (Ernesto.Lamanna@roma1.infn.it) &
 //      Francesco Safai Tehrani (Francesco.SafaiTehrani@roma1.infn.it)
 //      Rome, INFN & University of Rome "La Sapienza",  9 June 1998.
+//  Updated Feb 2000 D.C. Williams
 //
 // $ Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
 //
@@ -30,6 +31,8 @@
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
+#include "G4SolidExtentList.hh"
+#include "G4ClippablePolygon.hh"
 
 #include "G4VPVParameterisation.hh"
 
@@ -42,8 +45,6 @@
 #include "G4NURBScylinder.hh"
 #include "G4NURBStubesector.hh"
 #include "G4VisExtent.hh"
-
-#define  SURFACE_PRECISION  (0.5*kCarTolerance)
 
 // Constructor - check parameters, and fills protected data members
 G4Hype::G4Hype(const G4String& pName,
@@ -70,27 +71,22 @@ G4Hype::G4Hype(const G4String& pName,
 	outerRadius=newOuterRadius;
       }
       else { // swapping radii  (:-)
-	innerRadius=newOuterRadius;
-	outerRadius=newInnerRadius;
+//	innerRadius=newOuterRadius;
+//	outerRadius=newInnerRadius;
+//      DCW: swapping is fine, but what about the stereo angles???
+        G4Exception( "Error in G4Hype::G4Hype outer > inner radius" );
       }
     else
 	{
 	    G4Exception("Error in G4Hype::G4Hype - invalid radii");
 	}
-    
-    innerStereo=newInnerStereo;
-    outerStereo=newOuterStereo;
+	
 
-    // init of precalculated quantities
-    tanInnerStereo2=tan(innerStereo)*tan(innerStereo); 
-    tanOuterStereo2=tan(outerStereo)*tan(outerStereo);
     innerRadius2=innerRadius*innerRadius;
     outerRadius2=outerRadius*outerRadius;
-    endInnerRadius2=HypeInnerRadius2(halfLenZ);
-    endOuterRadius2=HypeOuterRadius2(halfLenZ);
-    endInnerRadius=sqrt(endInnerRadius2);
-    endOuterRadius=sqrt(endOuterRadius2);
-     
+    
+    SetInnerStereo( newInnerStereo );
+    SetOuterStereo( newOuterStereo );
 }
 
 // Destructor
@@ -106,1543 +102,877 @@ G4Hype::~G4Hype()
     p->ComputeDimensions(*this,n,pRep);
 }
 
-// Calculate extent under transform and specified limit
-G4bool G4Hype::CalculateExtent(const EAxis pAxis,
-			      const G4VoxelLimits& pVoxelLimit,
-			      const G4AffineTransform& pTransform,
-			      G4double& pMin, G4double& pMax) const
+
+//
+// CalculateExtent
+//
+G4bool G4Hype::CalculateExtent( const EAxis axis,
+				const G4VoxelLimits &voxelLimit,
+				const G4AffineTransform &transform,
+				G4double &min, G4double &max ) const
 {
-
-
-  //G4cout << "Calculate extent !"<< G4endl;
-  //G4cout << "Surface data: " << outerRadius << G4endl;
-
-  if (!pTransform.IsRotated())
-	{
-	  // Special case handling for unrotated solid tubes
-	  // Compute x/y/z mins and maxs fro bounding box respecting limits,
-	  // with early returns if outside limits. Then switch() on pAxis,
-	  // and compute exact x and y limit for x/y case
-	    
-	  G4double xoffset,xMin,xMax;
-	  G4double yoffset,yMin,yMax;
-	  G4double zoffset,zMin,zMax;
-
-	  G4double diff1,diff2,maxDiff,newMin,newMax;
-	  G4double xoff1,xoff2,yoff1,yoff2;
-
-	  xoffset=pTransform.NetTranslation().x();
-	  xMin=xoffset-endOuterRadius;
-	  xMax=xoffset+endOuterRadius;
-	  //G4cout << "xMin, xMax : " << xMin << " " << xMax << G4endl;
-	  if (pVoxelLimit.IsXLimited())
-	    {
-	      if (xMin>pVoxelLimit.GetMaxXExtent()+kCarTolerance ||
-		  xMax<pVoxelLimit.GetMinXExtent()-kCarTolerance)
-		{
-		  return false;
-		}
-	      else
-		{
-		  if (xMin<pVoxelLimit.GetMinXExtent())
-		    {
-		      xMin=pVoxelLimit.GetMinXExtent();
-		      //G4cout << xMin << G4endl;
-		    }
-		  if (xMax>pVoxelLimit.GetMaxXExtent())
-		    {
-		      xMax=pVoxelLimit.GetMaxXExtent();
-		      //G4cout << xMax << G4endl;
-		    }
-		}
-	    }
-	  
-	  yoffset=pTransform.NetTranslation().y();
-	  yMin=yoffset-endOuterRadius;
-	  yMax=yoffset+endOuterRadius;
-	  if (pVoxelLimit.IsYLimited())
-	    {
-	      if (yMin>pVoxelLimit.GetMaxYExtent()+kCarTolerance
-		  ||yMax<pVoxelLimit.GetMinYExtent()-kCarTolerance)
-		{
-		  return false;
-		}
-	      else
-		{
-		  if (yMin<pVoxelLimit.GetMinYExtent())
-		    {
-		      yMin=pVoxelLimit.GetMinYExtent();
-		    }
-		  if (yMax>pVoxelLimit.GetMaxYExtent())
-		    {
-		      yMax=pVoxelLimit.GetMaxYExtent();
-		    }
-		}
-	    }
-	  
-	  
-	  zoffset=pTransform.NetTranslation().z();
-	  zMin=zoffset-halfLenZ;
-	  zMax=zoffset+halfLenZ;
-	  if (pVoxelLimit.IsZLimited())
-	    {
-	      if (zMin>pVoxelLimit.GetMaxZExtent()+kCarTolerance
-		  ||zMax<pVoxelLimit.GetMinZExtent()-kCarTolerance)
-		{
-		  return false;
-		}
-	      else
-		{
-		  if (zMin<pVoxelLimit.GetMinZExtent())
-		    {
-		      zMin=pVoxelLimit.GetMinZExtent();
-		    }
-		  if (zMax>pVoxelLimit.GetMaxZExtent())
-		    {
-		      zMax=pVoxelLimit.GetMaxZExtent();
-		    }
-		}
-	    }
-
-// Known to cut cylinder
-	  switch (pAxis)
-		{
-		case kXAxis:
-		  //G4cout << "kXAxis" << G4endl;
-		  yoff1=yoffset-yMin;
-		  yoff2=yMax-yoffset;
-		  if (yoff1>=0&&yoff2>=0)
-		    {
-		      // Y limits cross max/min x => no change
-		      pMin=xMin;
-		      pMax=xMax;
-		    }
-		  else
-		    {
-		      // Y limits don't cross max/min x => compute max delta x, hence new mins/maxs
-		      diff1=sqrt(abs(endOuterRadius2-yoff1*yoff1));
-		      diff2=sqrt(abs(endOuterRadius2-yoff2*yoff2));
-		      maxDiff=(diff1>diff2) ? diff1:diff2;
-		      newMin=xoffset-maxDiff;
-		      newMax=xoffset+maxDiff;
-		      pMin=(newMin<xMin) ? xMin : newMin;
-		      pMax=(newMax>xMax) ? xMax : newMax;
-		    }
-		  
-		  break;
-		case kYAxis:
-		  //G4cout << "kYAxis" << G4endl;
-		  xoff1=xoffset-xMin;
-		  xoff2=xMax-xoffset;
-		  if (xoff1>=0&&xoff2>=0)
-		   {
-		      // X limits cross max/min y => no change
-		     //G4cout << "assegnazione diretta, xoff1,2 > 0" << yMin << " " << yMax << G4endl;
-		     pMin=yMin;
-		     pMax=yMax;
-		   }
-		  else
-		    {
-		      // X limits don't cross max/min y => compute max delta y, hence new mins/maxs
-		      diff1=sqrt(abs(endOuterRadius2-xoff1*xoff1));
-		      diff2=sqrt(abs(endOuterRadius2-xoff2*xoff2));
-		      //G4cout << diff1 << " " << diff2 << G4endl;
-		      maxDiff=(diff1>diff2) ? diff1:diff2;
-		      //G4cout << "maxDiff " << maxDiff << G4endl;
-		      newMin=yoffset-maxDiff;
-		      newMax=yoffset+maxDiff;
-		      //G4cout << "assegnazione indiretta" << yMin << " " << yMax << G4endl;
-		      //G4cout << "newMin, newMax : " << newMin << " " << newMax << G4endl;
-		      
-		      pMin=(newMin<yMin) ? yMin : newMin;
-		      pMax=(newMax>yMax) ? yMax : newMax;
-		    }
-		  break;
-		case kZAxis:
-		  //G4cout << "kZAxis" << G4endl;
-		  pMin=zMin;
-		  pMax=zMax;
-		  break;
-		}
-	  
-	  pMin-=kCarTolerance;
-	  pMax+=kCarTolerance;
-
-	  //G4cout << xoffset << " " << yoffset << " " << zoffset << G4endl;
-	  //G4cout << "pMin, pMax: " << pMin << "," << pMax << G4endl << G4endl;
-	  return true;
-	  
+	G4SolidExtentList	extentList( axis, voxelLimit );
+	
+	//
+	// Choose phi size of our segment(s) based on constants as
+	// defined in meshdefs.hh
+	//
+	G4int numPhi = kMaxMeshSections;
+	G4double sigPhi = 2*M_PI/numPhi;
+	G4double rFudge = 1.0/cos(0.5*sigPhi);
+	
+	//
+	// We work around in phi building polygons along the way.
+	// As a reasonable compromise between accuracy and
+	// complexity (=cpu time), the following facets are chosen:
+	//
+	//   1. If outerRadius/endOuterRadius > 0.95, approximate
+	//      the outer surface as a cylinder, and use one
+	//      rectangular polygon (0-1) to build its mesh.
+	//
+	//      Otherwise, use two trapazoidal polygons that 
+	//      meet at z = 0 (0-4-1)
+	//
+	//   2. If there is no inner surface, then use one
+	//      polygon for each entire endcap.  (0) and (1)
+	//
+	//      Otherwise, use a trapazoidal polygon for each
+	//      phi segment of each endcap.    (0-2) and (1-3)
+	//
+	//   3. For the inner surface, if innerRadius/endInnerRadius > 0.95,
+	//      approximate the inner surface as a cylinder of
+	//      radius innerRadius and use one rectangular polygon
+	//      to build each phi segment of its mesh.   (2-3)
+	//
+	//      Otherwise, use one rectangular polygon centered
+	//      at z = 0 (5-6) and two connecting trapazoidal polygons
+	//      for each phi segment (2-5) and (3-6).
+	//
+	
+	G4bool splitOuter = (outerRadius/endOuterRadius < 0.95);
+	G4bool splitInner;
+	if (InnerSurfaceExists()) {
+		splitInner = (innerRadius/endInnerRadius < 0.95);
 	}
-  else
-    {
-      G4int i,noEntries,noBetweenSections4;
-      G4bool existsAfterClip=false;
-      
-      // Calculate rotated vertex coordinates
-      G4ThreeVectorList *vertices;
-      
-      vertices=CreateRotatedVertices(pTransform);
-      
-      pMin=+kInfinity;
-      pMax=-kInfinity;
-      
-      noEntries=vertices->entries();
-      noBetweenSections4=noEntries-4;
-      
-      for (i=0;i<noEntries;i+=4)
-	{
-	  ClipCrossSection(vertices,i,pVoxelLimit,pAxis,pMin,pMax);
+	
+	//
+	// Vertex assignments (v and w arrays)
+	// [0] and [1] are mandatory
+	// the rest are optional
+	//
+	//     +                     -
+	//      [0]------[4]------[1]      <--- outer radius
+	//       |                 |       
+	//       |                 |       
+	//      [2]---[5]---[6]---[3]      <--- inner radius
+	//
+
+
+	G4ClippablePolygon endPoly1, endPoly2;
+	
+	G4double phi = 0, 
+		 cosPhi = cos(phi),
+		 sinPhi = sin(phi);
+	G4ThreeVector v0( rFudge*endOuterRadius*cosPhi, rFudge*endOuterRadius*sinPhi, +halfLenZ ),
+		      v1( rFudge*endOuterRadius*cosPhi, rFudge*endOuterRadius*sinPhi, -halfLenZ ),
+		      v2, v3, v4, v5, v6,
+		      w0, w1, w2, w3, w4, w5, w6;
+	transform.ApplyPointTransform( v0 );
+	transform.ApplyPointTransform( v1 );
+	
+	G4double zInnerSplit;
+	if (InnerSurfaceExists()) {
+		if (splitInner) {
+			v2 = transform.TransformPoint( 
+				G4ThreeVector( endInnerRadius*cosPhi, endInnerRadius*sinPhi, +halfLenZ ) );
+			v3 = transform.TransformPoint( 
+				G4ThreeVector( endInnerRadius*cosPhi, endInnerRadius*sinPhi, -halfLenZ ) );
+
+			//
+			// Find intersection of line normal to inner
+			// surface at z = halfLenZ and line r=innerRadius
+			//
+			G4double rn = halfLenZ*tanInnerStereo2;
+			G4double zn = endInnerRadius;
+
+			zInnerSplit = halfLenZ + (innerRadius - endInnerRadius)*zn/rn;
+
+			//
+			// Build associated vertices
+			//			
+			v5 = transform.TransformPoint( 
+				G4ThreeVector( innerRadius*cosPhi, innerRadius*sinPhi, +zInnerSplit ) );
+			v6 = transform.TransformPoint( 
+				G4ThreeVector( innerRadius*cosPhi, innerRadius*sinPhi, -zInnerSplit ) );
+		}
+		else {
+			v2 = transform.TransformPoint( 
+				G4ThreeVector( innerRadius*cosPhi, innerRadius*sinPhi, +halfLenZ ) );
+			v3 = transform.TransformPoint( 
+				G4ThreeVector( innerRadius*cosPhi, innerRadius*sinPhi, -halfLenZ ) );
+		}
 	}
-      
-      for (i=0;i<noBetweenSections4;i+=4)
-	{
-	  ClipBetweenSections(vertices,i,pVoxelLimit,pAxis,pMin,pMax);
+	
+	if (splitOuter) {
+		v4 = transform.TransformPoint( 
+			G4ThreeVector( rFudge*outerRadius*cosPhi, rFudge*outerRadius*sinPhi, 0 ) );
 	}
-      
-      if (pMin!=kInfinity||pMax!=-kInfinity)
-	{
-	  existsAfterClip=true;
-	  
-	  // Add 2*tolerance to avoid precision troubles
-	  pMin-=kCarTolerance;
-	  pMax+=kCarTolerance;
-	  
+	
+	//
+	// Loop over phi segments
+	//
+	do {
+		phi += sigPhi;
+		if (numPhi == 1) phi = 0;	// Try to avoid roundoff
+	        cosPhi = cos(phi), 
+		sinPhi = sin(phi);
+		
+		G4double r(rFudge*endOuterRadius);
+		w0 = G4ThreeVector( r*cosPhi, r*sinPhi, +halfLenZ );
+		w1 = G4ThreeVector( r*cosPhi, r*sinPhi, -halfLenZ );
+		transform.ApplyPointTransform( w0 );
+		transform.ApplyPointTransform( w1 );
+	
+		//
+		// Outer hyperbolic surface
+		//
+		if (splitOuter) {
+		        r = rFudge*outerRadius;
+			w4 = G4ThreeVector( r*cosPhi, r*sinPhi, 0 );
+			transform.ApplyPointTransform( w4 );
+			
+			AddPolyToExtent( v0, v4, w4, w0, voxelLimit, axis, extentList );
+			AddPolyToExtent( v4, v1, w1, w4, voxelLimit, axis, extentList );
+		}
+		else {
+			AddPolyToExtent( v0, v1, w1, w0, voxelLimit, axis, extentList );
+		}
+	
+		if (InnerSurfaceExists()) {
+			
+			//
+			// Inner hyperbolic surface
+			//
+			if (splitInner) {
+				w2 = G4ThreeVector( endInnerRadius*cosPhi, endInnerRadius*sinPhi, +halfLenZ );
+				w3 = G4ThreeVector( endInnerRadius*cosPhi, endInnerRadius*sinPhi, -halfLenZ );
+				transform.ApplyPointTransform( w2 );
+				transform.ApplyPointTransform( w3 );
+
+				w5 = G4ThreeVector( innerRadius*cosPhi, innerRadius*sinPhi, +zInnerSplit );
+				w6 = G4ThreeVector( innerRadius*cosPhi, innerRadius*sinPhi, -zInnerSplit );
+				transform.ApplyPointTransform( w5 );
+				transform.ApplyPointTransform( w6 );
+				AddPolyToExtent( v3, v6, w6, w3, voxelLimit, axis, extentList );
+				AddPolyToExtent( v6, v5, w5, w6, voxelLimit, axis, extentList );
+				AddPolyToExtent( v5, v2, w2, w5, voxelLimit, axis, extentList );
+			}
+			else {
+				w2 = G4ThreeVector( innerRadius*cosPhi, innerRadius*sinPhi, +halfLenZ );
+				w3 = G4ThreeVector( innerRadius*cosPhi, innerRadius*sinPhi, -halfLenZ );
+				transform.ApplyPointTransform( w2 );
+				transform.ApplyPointTransform( w3 );
+
+				AddPolyToExtent( v3, v2, w2, w3, voxelLimit, axis, extentList );
+			}
+
+			//
+			// Endplate segments
+			//
+			AddPolyToExtent( v1, v3, w3, w1, voxelLimit, axis, extentList );
+			AddPolyToExtent( v2, v0, w0, w2, voxelLimit, axis, extentList );
+		}
+		else {
+			//
+			// Continue building endplate polygons
+			//
+			endPoly1.AddVertexInOrder( v0 );
+			endPoly2.AddVertexInOrder( v1 );
+		}
+
+		//
+		// Next phi segments
+		//		
+		v0 = w0;
+		v1 = w1;
+		if (InnerSurfaceExists()) {
+			v2 = w2;
+			v3 = w3;
+			if (splitInner) {
+				v5 = w5;
+				v6 = w6;
+			}
+		}
+		if (splitOuter) v4 = w4;
+		
+	} while( --numPhi > 0 );
+	
+	
+	//
+	// Don't forget about the endplate polygons, if
+	// we use them
+	//
+	if (!InnerSurfaceExists()) {
+		if (endPoly1.PartialClip( voxelLimit, axis )) {
+			static const G4ThreeVector normal(0,0,+1);
+			endPoly1.SetNormal( transform.TransformAxis(normal) );
+			extentList.AddSurface( endPoly1 );
+		}
+
+		if (endPoly2.PartialClip( voxelLimit, axis )) {
+			static const G4ThreeVector normal(0,0,-1);
+			endPoly2.SetNormal( transform.TransformAxis(normal) );
+			extentList.AddSurface( endPoly2 );
+		}
 	}
-      else
-	{
-	  // Check for case where completely enveloping clipping volume
-	  // If point inside then we are confident that the solid completely
-	  // envelopes the clipping volume. Hence set min/max extents according
-	  // to clipping volume extents along the specified axis.
-	  G4ThreeVector clipCentre(
-				   (pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
-				   (pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
-				   (pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5);
-	  
-	  if (Inside(pTransform.Inverse().TransformPoint(clipCentre))!=kOutside)
-	    {
-	      existsAfterClip=true;
-	      pMin=pVoxelLimit.GetMinExtent(pAxis);
-	      pMax=pVoxelLimit.GetMaxExtent(pAxis);
-	    }
-	}
-      delete vertices;
-      return existsAfterClip;
-    }
+	
+	//
+	// Return min/max value
+	//
+	return extentList.GetExtent( min, max );
 }
 
+
+//
+// AddPolyToExtent (static)
+//
+// Utility function for CalculateExtent
+//
+void G4Hype::AddPolyToExtent( const G4ThreeVector &v0,
+  			      const G4ThreeVector &v1,
+			      const G4ThreeVector &w1,
+			      const G4ThreeVector &w0,
+			      const G4VoxelLimits &voxelLimit,
+			      const EAxis axis,
+			      G4SolidExtentList &extentList ) 
+{
+	G4ClippablePolygon phiPoly;
+
+	phiPoly.AddVertexInOrder( v0 );
+	phiPoly.AddVertexInOrder( v1 );
+	phiPoly.AddVertexInOrder( w1 );
+	phiPoly.AddVertexInOrder( w0 );
+
+	if (phiPoly.PartialClip( voxelLimit, axis )) {
+		phiPoly.SetNormal( (v1-v0).cross(w0-v0).unit() );
+		extentList.AddSurface( phiPoly );
+	}
+}
+
+
+//
 // Decides whether point is inside,outside or on the surface
+//
 EInside G4Hype::Inside(const G4ThreeVector& p) const
 {
-  // Get third component of point "in study"
-  double xZ=abs(p.z());
-  //G4cout << "Inside::This point is : " << p << G4endl;
-  //G4cout << "Surface data : " << outerRadius << G4endl;
-
-  // if point's Z component is greater than halfLenZ it is SURELY outside.
-  if (xZ<=(1+SURFACE_PRECISION)*halfLenZ)
-	{
-	  // for performance reasons I work on squared quantities
-	  double xR2=p.x()*p.x()+p.y()*p.y();
-
-	  // outer radius value at xZ
-	  double oRad2=HypeOuterRadius2(xZ);
-	  // inner radius value at xZ
-	  double iRad2=HypeInnerRadius2(xZ);
-
-	  // two cases:
-	  // 1. w/o inner surface 
-	  // 2. w/  inner surface
-
-	  //G4cout << "iRad, xR, oRad : " << sqrt(iRad2) << "  " << sqrt(xR2) << " " << sqrt(oRad2) << G4endl;
-
-	  if ((innerRadius==0.) && (innerStereo==0.))
-	    {
-	      // Case 1. w/o inner surface
-	      if (xR2<oRad2)
-		{ // on endcaps ?
-		  if (abs(xZ/halfLenZ-1)<SURFACE_PRECISION) 
-		    {
-		      //G4cout << "kSurf, no Inner, endcaps" << G4endl;
-		      return kSurface; // yes. On endcap!
-		    }
-		  else 
-		    {
-		      //G4cout << "kInside, no Inner, endcaps" << G4endl;		      
-		      return kInside;  // no. It's inside!
-		    }
-		}
-	      // is it on the hyperbolical surfaces ?
-	      else
-		if (abs(sqrt(xR2/oRad2)-1) < SURFACE_PRECISION)
-		  {
-		    //G4cout << "kSurf, no Inner, hype surface" << G4endl;
-		    return kSurface;  // yes...it's on the surface!
-		  }
-		else 
-		  {
-		    //G4cout << "kOut, no Inner, hype surface" << G4endl;
-		    return kOutside;  // no...outside the hype.
-		  }
-	    }
-	  else
-	    {
-	      // Case 2. W/ inner surface
-	      
-	      // is it between the hyperbolical surfaces ? 
-	      if (xR2>=iRad2 && xR2<=oRad2) 
-		{
-		  // on endcaps ??
-		  if (abs(xZ/halfLenZ-1)<SURFACE_PRECISION) 
-		    {
-		      //G4cout << "kSurf, Inner, endcaps" << G4endl;
-		      return kSurface; // yes. On endcap!
-		    }
-		  else 
-		    {
-		      //G4cout << "kInside, inner, endcaps" << G4endl;
-		      return kInside;  // no. It's inside!
-		    }
-		}
-	      // is it on the hyperbolical surfaces ?
-	      else
-		if (abs(sqrt(xR2/oRad2)-1) < SURFACE_PRECISION
-		    || 
-		    abs(sqrt(xR2/iRad2)-1) < SURFACE_PRECISION) 
-		  {
-		    //G4cout << "kSurf, inner, hype surface" << G4endl;
-		    return kSurface;  // yes...it's on the surface!
-		  }
-		else 
-		  {
-		    //G4cout << "kOutside, Inner, hype surface" << G4endl;
-		    return kOutside;  // no...outside the hype.
-		  }
-	    }
+	static const G4double halfTol = 0.5*kCarTolerance;
+	
+	//
+	// Check z extents: are we outside?
+	//
+	const G4double absZ(fabs(p.z()));
+	if (absZ > halfLenZ + halfTol) return kOutside;
+	
+	//
+	// Check outer radius
+	//
+	const G4double oRad2(HypeOuterRadius2(absZ));
+	const G4double xR2( p.x()*p.x()+p.y()*p.y() );
+	
+	if (xR2 > oRad2 + kCarTolerance*endOuterRadius) return kOutside;
+	
+	if (xR2 > oRad2 - kCarTolerance*endOuterRadius) return kSurface;
+	
+	if (InnerSurfaceExists()) {
+		//
+		// Check inner radius
+		//
+		const G4double iRad2(HypeInnerRadius2(absZ));
+		
+		if (xR2 < iRad2 - kCarTolerance*endInnerRadius) return kOutside;
+		
+		if (xR2 < iRad2 + kCarTolerance*endInnerRadius) return kSurface;
 	}
-  //G4cout << "qui ci devo arrivare sse abs(z)>halfLenZ!!!! " << G4endl;
-  return kOutside;
+	
+	//
+	// We are inside in radius, now check endplate surface
+	//
+	if (absZ > halfLenZ - halfTol) return kSurface;
+	
+	return kInside;
 }
 
+
+
+//
 // return the normal unit vector to the Hyperbolical Surface at a point 
 // p on (or nearly on) the surface
+//
 G4ThreeVector G4Hype::SurfaceNormal( const G4ThreeVector& p) const
 {
-  G4ThreeVector norm(0.,0.,0.);
-  double pZ=p.z();
-  double zRadius2=p.x()*p.x()+p.y()*p.y();
-  double param=0;
-
-  //G4cout << "Surface Normal " << p << G4endl;
-  //G4cout << "Surface data : " << outerRadius << G4endl;
-
-
-  // check if the point is on the endcaps
-  // within SURFACE_PRECISION
-  if (abs((pZ/halfLenZ)-1)<SURFACE_PRECISION)
-    {
-      if (abs(sqrt(zRadius2/endInnerRadius2)-1)<SURFACE_PRECISION 
-	  && abs(sqrt(zRadius2/endOuterRadius2)-1)<SURFACE_PRECISION)
-	{
-	  // this way the versor has the right direction to exit the surface
-	  norm=G4ThreeVector(0.,0.,(abs(p.z())/p.z()));
+	//
+	// Which of the three or four surfaces are we closest to?
+	//
+	const G4double absZ(fabs(p.z()));
+	const G4double distZ(absZ - halfLenZ);
+	const G4double dist2Z(distZ*distZ);
+	
+	const G4double xR2( p.x()*p.x()+p.y()*p.y() );
+	const G4double dist2Outer( fabs(xR2 - HypeOuterRadius2(absZ)) );
+	
+	if (InnerSurfaceExists()) {
+		//
+		// Has inner surface: is this closest?
+		//
+		const G4double dist2Inner( fabs(xR2 - HypeInnerRadius2(absZ)) );
+		if (dist2Inner < dist2Z && dist2Inner < dist2Outer)
+			return G4ThreeVector( -p.x(), -p.y(), p.z()*tanInnerStereo2 ).unit();
 	}
-    }
-  else
-    {
-      // normal to hyperbolical surfaces
-      // first I have to choose which surface to use
-      // I use SURFACE_PRECISION * halfLenZ as a scale factor for precision 
 
-      // Inner Surface ?
-      if (abs(sqrt(zRadius2/HypeInnerRadius2(pZ))-1) < SURFACE_PRECISION) 
-	{
-	  norm= G4ThreeVector(p.x(),p.y(),-p.z()*tanInnerStereo2);
-	}
-      
-      // Outer Surface ?
-      if (abs(sqrt(zRadius2/HypeOuterRadius2(p.z()))-1) < SURFACE_PRECISION) 
-	{
-	  norm= G4ThreeVector(p.x(),p.y(),-p.z()*tanOuterStereo2);
-	}
-    }
-  // return unit vector parallel to the calculated one
-  return norm.unit();
+	//
+	// Do the "endcaps" win?
+	//
+	if (dist2Z < dist2Outer) 
+		return G4ThreeVector( 0.0, 0.0, p.z() < 0 ? -1.0 : 1.0 );
+		
+		
+	//
+	// Outer surface wins
+	//
+	return G4ThreeVector( p.x(), p.y(), -p.z()*tanOuterStereo2 ).unit();
 }
 
 
+//
 // Calculate distance to shape from outside, along normalised vector
 // - return kInfinity if no intersection, or intersection distance <= tolerance
-
+//
+// Calculating the intersection of a line with the surfaces
+// is fairly straight forward. The difficult problem is dealing
+// with the intersections of the surfaces in a consistent manner, 
+// and this accounts for the complicated logic.
+//
 G4double G4Hype::DistanceToIn(const G4ThreeVector& p,
 			      const G4ThreeVector& v    ) const
 {
-    G4double snxt=kInfinity;			// snxt = default return value
-    EInside Pp=Inside(p);
-    double zero_tolerance=1e-6;
-
-    //G4cout << "DistToIn(pt,dir)" << p << " " << v << G4endl;
-    //G4cout << "Surface data : " << outerRadius << G4endl;
-
-    if (Pp==kSurface || Pp==kInside)
-      {
-	return 0.; 
-      }
-    // if the point is inside the Distance to enter the surface is zero
-    else
-      {
-
-	// Returns distance or kInfinity if there exists or not  an intersection!
-	// Set intersection point to an arbitrarily far point
-
-        // Calculate the distance from a point (p)
-        // to enter or exit the Hype along a certain direction (v)
-        G4ThreeVector direction=v;
-        G4ThreeVector workPoint=p;
-
-	// init various distance parameters
-	double distanceLeft =kInfinity;
-	double distanceRight=kInfinity;
-	double distanceInner=kInfinity;
-	double distanceOuter=kInfinity;
-
-        // make direction a versor
-	direction=direction.unit();
-
-        // line parameters - u vector
-        double ux=direction.x();
-        double uy=direction.y();
-        double uz=direction.z();
-
-        // point parameters - v point
-        double vx=workPoint.x();
-        double vy=workPoint.y();
-        double vz=workPoint.z();
-
-	// ==============================================================================//
-	// Calculate intersection point with endcaps
-
-	// uz must be, within tolerance, NOT zero
-	if (abs(uz)>=zero_tolerance) 
-	  {
-	    // *left* (see docs) intersection z=-halfLenZ
-	    double tLeft=(-halfLenZ-vz)/uz;
-	    if (tLeft>0 || abs(tLeft)<zero_tolerance) 
-	      {
-		double xIL=ux*tLeft+vx;
-		double yIL=uy*tLeft+vy;
-		double radiusL=sqrt(xIL*xIL+yIL*yIL);
-		// is it a real intersection ? (within tolerance)
-		// is the radius compatible with endcaps radii ? 
-		if ((radiusL>=(1-SURFACE_PRECISION)*endInnerRadius)
-		    && radiusL<=(1+SURFACE_PRECISION)*endOuterRadius) 
-		  {
-		    distanceLeft=abs(tLeft);
-		  }	    
-	      }
-
-	    // *right* (see docs) intersection z=halfLenZ
-	    double tRight=(halfLenZ-vz)/uz;
-	    if (tRight>0 || abs(tRight)<zero_tolerance)
-	      {
-		double xIR=ux*tRight+vx;
-		double yIR=uy*tRight+vy;
-		double radiusR=sqrt(xIR*xIR+yIR*yIR);
-		// is it a real intersection ? 
-		// is the radius compatible with endcaps radii ?   
-		if (radiusR>=(1-SURFACE_PRECISION)*endInnerRadius
-		    && radiusR<=(1+SURFACE_PRECISION)*endOuterRadius) 
-		  {
-		    distanceRight=abs(tRight);
-		  }
-	      }
-	  }
-	else
-	  {
-	    if (abs(abs(vz/halfLenZ)-1)<SURFACE_PRECISION) // ON endcaps
-	      {
-		double xR=sqrt(vx*vx+vy*vy);
-		if (xR<=(1+SURFACE_PRECISION)*innerRadius) // inside
-		  {
-		    if (vz<0) // left EndCap
-		      { 
-			distanceLeft=abs(xR-innerRadius);
-		      }
-		    else  // right EndCap
-		      {
-			distanceRight=abs(xR-innerRadius);
-		      }
-		  }
-
-		if (xR>=(1-SURFACE_PRECISION)*outerRadius) // outside
-		  {
-		    if (vz<0) // left EndCap
-		      { 
-			distanceLeft=abs(xR-outerRadius);
-		      }
-		    else // right EndCap
-		      {
-			distanceRight=abs(xR-outerRadius);
-		      }
-		  }
-	      }
-	  }      
-
-	// ==============================================================================//
-
-	// Calculate intersections with hyperbolical surfaces
-
-	// Inner first! ====================================
-        // equation parameters
-
-	double dist1=kInfinity;
-	double dist2=kInfinity;
-	double param1, param2;
-
-	if (innerRadius!=0. || innerStereo!=0.) // is there an inner surface ???
-	  {
-	    // yes...inner & outer are both present!
-	    // degenerations are automagically cured (i.e. hyperbolical -> cylindrical)
-	    param1=tanInnerStereo2;
-	    param2=innerRadius2;
-
-	    double paramA=(ux*ux+uy*uy)-param1*uz*uz;
-	    double paramB=(ux*vx+uy*vy)-param1*uz*vz;
-	    double paramC=(vx*vx+vy*vy)-param1*vz*vz-param2;
- 
-	    // intersection equation discriminant
-	    double delta=paramB*paramB-paramA*paramC;		  
-
-	    if (delta>0. || abs(delta)<zero_tolerance)
-	      { // solution exists!!
-		delta=abs(delta); 
-		double solution1=(-paramB+sqrt(delta))/paramA;
-		double solution2=(-paramB-sqrt(delta))/paramA;
-		
-		if (solution1>0. || abs(solution1)<zero_tolerance) 
-		  {
-		    dist1=abs(solution1);
-		  }
-
-		if (solution2>0. || abs(solution2)<zero_tolerance)
-		  {
-		    dist2=abs(solution2);
-		  }
-		
-		// check if they fall in the correct length range
-
-		// if BOTH intersection are real (geometric cut)
-		if ((abs(dist1*uz+vz)<=(1+SURFACE_PRECISION)*halfLenZ)
-		    && (abs(dist2*uz+vz)<=(1+SURFACE_PRECISION)*halfLenZ)) 
-		  {
-		    distanceInner=((dist1 < dist2) ? dist1 : dist2);
-		  }
-		else
-		  {
-		    if (abs(dist1*uz+vz)<=(1+SURFACE_PRECISION)*halfLenZ)
-		      {
-			distanceInner=dist1;
-		      }
-		    if (abs(dist2*uz+vz)<=(1+SURFACE_PRECISION)*halfLenZ)
-		      {
-			distanceInner=dist2;
-		      }		     
-		  }
-	      }
-	  }
-
-      	// Inner Done! ==================	
-
-	// and now Outer! ===============================================
-	dist1=kInfinity;
-	dist2=kInfinity;
-
-	// look for degenerations (i.e. hyperbolical -> cylindrical)
-	param1=tanOuterStereo2;
-	param2=outerRadius2;
-
-	// equation parameters
-	double paramA=(ux*ux+uy*uy)-param1*uz*uz;
-	double paramB=(ux*vx+uy*vy)-param1*uz*vz;
-	double paramC=(vx*vx+vy*vy)-param1*vz*vz-param2;
-
-        // intersection equation discriminant
-        double delta=paramB*paramB-paramA*paramC;
+	static const G4double halfTol = 0.5*kCarTolerance;
 	
-        if (delta > 0 || abs(delta)<zero_tolerance)
-	  { // solution exists!!
-	    delta=abs(delta);
-	    double solution1=(-paramB+sqrt(delta))/paramA;
-	    double solution2=(-paramB-sqrt(delta))/paramA;
-	    
-	    if (solution1>0 || abs(solution1)<zero_tolerance) 
-	      {
-		dist1=abs(solution1);
-	      }
-	    
-	    if (solution2>0 || abs(solution2)<zero_tolerance)
-	      {
-		dist2=abs(solution2);
-	      }
-	    
-	    // check if they fall in the correct length range		    
-	    // if BOTH intersection are real (geometric cut)
-	    if ((abs(dist1*uz+vz)<=(1+SURFACE_PRECISION)*halfLenZ)
-		&& (abs(dist2*uz+vz)<=(1+SURFACE_PRECISION)*halfLenZ))
-	      {
-		    distanceOuter=((dist1 < dist2) ? dist1 : dist2);
-	      }
-	    else
-	      {
-		if (abs(dist1*uz+vz)<=(1+SURFACE_PRECISION)*halfLenZ)
-		  distanceOuter=dist1;
-		if (abs(dist2*uz+vz)<=(1+SURFACE_PRECISION)*halfLenZ)
-		  distanceOuter=dist2;
-	      }		  
-	  }
-	// Outer Done! ===============================================
+	//
+	// Quick test. Beware! This assumes v is a unit vector!
+	//
+	if (fabs(p.x()*v.y() - p.y()*v.x()) > endOuterRadius+kCarTolerance) return kInfinity;
+	
+	//
+	// Take advantage of z symmetry, and reflect throught the
+	// z=0 plane so that pz is always positive
+	//
+	G4double pz(p.z()), vz(v.z());
+	if (pz < 0) {
+		pz = -pz;
+		vz = -vz;
+	}
 
-	// and now choose che correct snxt value
-	if (snxt > distanceInner)
-	  {
-	    snxt=distanceInner;
-	  }
-	if (snxt > distanceOuter) 
-	  {
-	    snxt=distanceOuter;
-	  }
-	if (snxt > distanceRight) 
-	  {
-	    snxt=distanceRight;
-	  }
-	if (snxt > distanceLeft ) 
-	  {
-	    snxt=distanceLeft;
-	  }
-      }
-    // Done!
-    //G4cout << "DistToIn(pt,dir) = " << snxt << G4endl;
-    return snxt;
+	//
+	// We must be very careful if we don't want to
+	// create subtle leaks at the edges where the
+	// hyperbolic surfaces connect to the endplate.
+	// The only reliable way to do so is to make sure
+	// that the decision as to when a track passes
+	// over the edge of one surface is exactly the
+	// same decision as to when a track passes into the
+	// other surface. By "exact", we don't mean algebraicly
+	// exact, but we mean the same machine instructions
+	// should be used.
+	//
+	G4bool couldMissOuter(true),
+	       couldMissInner(true),
+	       cantMissInnerCylinder(false);
+	
+	//
+	// Check endplate intersection
+	//
+	G4double sigz = pz-halfLenZ;
+	
+	if (sigz > -halfTol) {		// equivalent to: if (pz > halfLenZ - halfTol)
+		//
+		// We start in front of the endplate (within roundoff)
+		// Correct direction to intersect endplate?
+		//
+		if (vz >= 0) {
+			//
+			// Nope. As long as we are far enough away, we
+			// can't intersect anything
+			//
+			if (sigz > 0) return kInfinity;
+			
+			//
+			// Otherwise, we may still hit a hyperbolic surface
+			// if the point is on the hyperbolic surface (within tolerance)
+			//
+			G4double pr2 = p.x()*p.x() + p.y()*p.y();
+			if (pr2 > endOuterRadius2 + kCarTolerance*endOuterRadius) return kInfinity;
+			
+			if (InnerSurfaceExists()) {
+				if (pr2 < endInnerRadius2 - kCarTolerance*endInnerRadius) return kInfinity;
+			        if (pr2 < endOuterRadius2 - kCarTolerance*endOuterRadius &&
+				    pr2 > endInnerRadius2 + kCarTolerance*endInnerRadius    ) return kInfinity;
+			}
+			else {
+				if (pr2 < endOuterRadius2 - kCarTolerance*endOuterRadius) return kInfinity;
+			}
+		}
+		else {
+			//
+			// Where do we intersect at z = halfLenZ?
+			//
+			G4double s = -sigz/vz;
+			G4double xi = p.x() + s*v.x(),
+			         yi = p.y() + s*v.y();
+				 
+			//
+			// Is this on the endplate? If so, return s, unless
+			// we are on the tolerant surface, in which case return 0
+			//
+			G4double pr2 = xi*xi + yi*yi;
+			if (pr2 <= endOuterRadius2) {
+				if (InnerSurfaceExists()) {
+					if (pr2 >= endInnerRadius2) return (sigz < halfTol) ? 0 : s;
+					//
+					// This test is sufficient to ensure that the
+					// trajectory cannot miss the inner hyperbolic surface
+					// for z > 0, if the normal is correct.
+					//
+					G4double dot1 = (xi*v.x() + yi*v.y())*endInnerRadius/sqrt(pr2);
+					couldMissInner = (dot1 - halfLenZ*tanInnerStereo2*vz <= 0);
+					
+					if (pr2 > endInnerRadius2*(1 - 2*DBL_EPSILON) ) {
+						//
+						// There is a potential leak if the inner
+						// surface is a cylinder
+						//
+						if (innerStereo < DBL_MIN && 
+						    (fabs(v.x()) > DBL_MIN || fabs(v.y()) > DBL_MIN))
+							cantMissInnerCylinder = true;
+					}
+				}
+				else {
+					return (sigz < halfTol) ? 0 : s;
+				}
+			}
+			else {
+				G4double dotR( xi*v.x() + yi*v.y() );
+				if (dotR >= 0) {
+					//
+					// Otherwise, if we are traveling outwards, we know
+					// we must miss the hyperbolic surfaces also, so
+					// we need not bother checking
+					//
+					return kInfinity;
+				}
+				else {
+					//
+					// This test is sufficient to ensure that the
+					// trajectory cannot miss the outer hyperbolic surface
+					// for z > 0, if the normal is correct.
+					//
+					G4double dot1 = dotR*endOuterRadius/sqrt(pr2);
+					couldMissOuter = (dot1 - halfLenZ*tanOuterStereo2*vz>= 0);
+				}
+			}
+		}
+	}
+		
+	//
+	// Check intersection with outer hyperbolic surface, save
+	// distance to valid intersection into "best".
+	//		
+	G4double best = kInfinity;
+	
+	G4double s[2];
+	G4int n = IntersectHype( p, v, outerRadius2, tanOuterStereo2, s );
+	
+	if (n > 0) {
+		//
+		// Potential intersection: is p on this surface?
+		//
+		if (pz < halfLenZ+halfTol) {
+			G4double dr2 = p.x()*p.x() + p.y()*p.y() - HypeOuterRadius2(pz);
+			if (fabs(dr2) < kCarTolerance*endOuterRadius) {
+				//
+				// Sure, but make sure we're traveling inwards at
+				// this point
+				//
+				if (p.x()*v.x() + p.y()*v.y() - pz*tanOuterStereo2*vz < 0) return 0;
+			}
+		}
+		
+		//
+		// We are now certain that p is not on the tolerant surface.
+		// Accept only position distance s
+		//
+		G4int i;
+		for( i=0; i<n; i++ ) {
+			if (s[i] >= 0) {
+				//
+				// Check to make sure this intersection point is
+				// on the surface, but only do so if we haven't
+				// checked the endplate intersection already
+				//
+				G4double zi = pz + s[i]*vz;
+				
+				if (zi < -halfLenZ) continue;
+				if (zi > +halfLenZ && couldMissOuter) continue;
+				
+				//
+				// Check normal
+				//
+				G4double xi = p.x() + s[i]*v.x(),
+					 yi = p.y() + s[i]*v.y();
+					 
+				if (xi*v.x() + yi*v.y() - zi*tanOuterStereo2*vz > 0) continue;
+
+				best = s[i];
+				break;
+			}
+		}
+	}
+	
+	if (!InnerSurfaceExists()) return best;		
+	
+	//
+	// Check intersection with inner hyperbolic surface
+	//
+	n = IntersectHype( p, v, innerRadius2, tanInnerStereo2, s );	
+	if (n == 0) {
+		if (cantMissInnerCylinder) return (sigz < halfTol) ? 0 : -sigz/vz;
+				
+		return best;
+	}
+	
+	//
+	// P on this surface?
+	//
+	if (pz < halfLenZ+halfTol) {
+		G4double dr2 = p.x()*p.x() + p.y()*p.y() - HypeInnerRadius2(pz);
+		if (fabs(dr2) < kCarTolerance*endInnerRadius) {
+			//
+			// Sure, but make sure we're traveling outwards at
+			// this point
+			//
+			if (p.x()*v.x() + p.y()*v.y() - pz*tanInnerStereo2*vz > 0) return 0;
+		}
+	}
+	
+	//
+	// No, so only positive s is valid. Search for a valid intersection
+	// that is closer than the outer intersection (if it exists)
+	//
+	G4int i;
+	for( i=0; i<n; i++ ) {
+		if (s[i] > best) break;
+		if (s[i] >= 0) {
+			//
+			// Check to make sure this intersection point is
+			// on the surface, but only do so if we haven't
+			// checked the endplate intersection already
+			//
+			G4double zi = pz + s[i]*vz;
+
+			if (zi < -halfLenZ) continue;
+			if (zi > +halfLenZ && couldMissInner) continue;
+				
+
+			//
+			// Check normal
+			//
+			G4double xi = p.x() + s[i]*v.x(),
+				 yi = p.y() + s[i]*v.y();
+
+			if (xi*v.x() + yi*v.y() - zi*tanOuterStereo2*vz < 0) continue;
+
+			best = s[i];
+			break;
+		}
+	}
+		
+	//
+	// Done
+	//
+	return best;
 }
  
 
+//
 // Calculate distance to shape from outside, along perpendicular direction 
-// (if one exists)
-
+// (if one exists). May be an underestimate.
+//
+// There are five (r,z) regions:
+//    1. a point that is beyond the endcap but within the
+//       endcap radii
+//    2. a point with r > outer endcap radius and with
+//       a z position that is beyond the cone formed by the
+//       normal of the outer hyperbolic surface at the 
+//       edge at which it meets the endcap. 
+//    3. a point that is outside the outer surface and not in (1 or 2)
+//    4. a point that is inside the inner surface and not in (5)
+//    5. a point with radius < inner endcap radius and
+//       with a z position beyond the cone formed by the
+//       normal of the inner hyperbolic surface at the
+//       edge at which it meets the endcap.
+// (regions 4 and 5 only exist if there is an inner surface)
+//
 G4double G4Hype::DistanceToIn(const G4ThreeVector& p) const
 {
-  double zero_tolerance=1e-6;
-  // I use the cylindrical simmetry of the system to optimize calculation
-  double pZ=abs(p.z());
-  double pR2=p.x()*p.x()+p.y()*p.y();
-  double pR=sqrt(pR2);
-  double ApointR=pR;
-  double ApointZ=pZ;
-  double BpointR=0.;
-  double BpointZ=pZ;
-  
-  //G4cout << "DistToIn(pt)" << p << G4endl;
-  //G4cout << "Surface data : " << outerRadius << G4endl;
-
-  EInside Pp=Inside(p);
-  if (Pp==kSurface || Pp==kInside) 
-    {
-      //G4cout << "Point on surface or inside, returning 0" << G4endl;
-      return 0.;
-    }
-
-  // is point in zone 1 ?  
-  if (pZ>=(1-SURFACE_PRECISION)*halfLenZ && 
-      pR2<=(1+SURFACE_PRECISION)*(1+SURFACE_PRECISION)*endOuterRadius2 && 
-      pR2>=(1-SURFACE_PRECISION)*(1-SURFACE_PRECISION)*endInnerRadius2)
-    { 
-      //G4cout << "zone1 - returning : " <<  abs(pZ)-halfLenZ << G4endl;
-      return abs(pZ)-halfLenZ; 
-    }
-
-  // special degenerated case: point with z=0
-  if (pZ<zero_tolerance) 
-    { 
-      if (pR<=(1+SURFACE_PRECISION)*innerRadius) 
-	{
-	  //G4cout << "z=0, inner nearer,  returning: " << (innerRadius-pR) << G4endl;
-	  return abs(innerRadius-pR);
+	static const G4double halfTol(0.5*kCarTolerance);
+	
+	G4double absZ(fabs(p.z()));
+	
+	//
+	// Check region
+	//
+	G4double r2 = p.x()*p.x() + p.y()*p.y();
+	G4double r = sqrt(r2);
+	
+	G4double sigz = absZ - halfLenZ;
+	
+	if (r < endOuterRadius) {
+		if (sigz > -halfTol) {
+			if (InnerSurfaceExists()) {
+				if (r > endInnerRadius) 
+					return sigz < halfTol ? 0 : sigz;	// Region 1
+				
+				G4double dr = endInnerRadius - r;
+				if (sigz > dr*tanInnerStereo2) {
+					//
+					// In region 5
+					//
+					G4double answer = sqrt( dr*dr + sigz*sigz );
+					return answer < halfTol ? 0 : answer;
+				}
+			}
+			else {
+				//
+				// In region 1 (no inner surface)
+				//
+				return sigz < halfTol ? 0 : sigz;
+			}
+		}
 	}
-      else
-	{
-	  //G4cout << "z=0, outer nearer, returning: " << pR2-outerRadius << G4endl;
-	  return abs(pR-outerRadius);
+	else {
+		G4double dr = r - endOuterRadius;
+		if (sigz > -dr*tanOuterStereo2) {
+			//
+			// In region 2
+			//
+			G4double answer = sqrt( dr*dr + sigz*sigz );
+			return answer < halfTol ? 0 : answer;
+		}
 	}
-    }
-
-  // check for degenerations (hyperbolical -> cylindrical)
-  if (outerStereo==0.)
-    {
-      // cylindrical
-      if (pR>=(1-SURFACE_PRECISION)*outerRadius &&
-	  pZ<=(1+SURFACE_PRECISION)*halfLenZ)
-	{
-	  //G4cout << "zone2 - Cyl - returning : " <<  pR-outerRadius << G4endl;
-	  return abs(pR-outerRadius);
+	
+	if (InnerSurfaceExists()) {
+		if (r2 < HypeInnerRadius2(absZ)+kCarTolerance*endInnerRadius) {
+	 		//
+			// In region 4
+			//
+			G4double answer = ApproxDistInside( r, absZ, innerRadius, tanInnerStereo2 );
+			return answer < halfTol ? 0 : answer;
+		}
 	}
-    }
-  else // hyperbolical!
-    {
-      // some parameters I need for zone 2 and 3
-      // zone2: normal has to be calculated in (halfLenZ, endOuterRadius)
-      // zone3: normal has to be calculater in (halfLenZ, endInnerRadius)
-
-      // Parameters for Zone2
-      // since I use just normR/normZ and normZ/normR I simplify the 2 factor
-      // maxNormR=extremeR;
-      // maxNormZ=-tanThetaStereo*tanThetaStereo*halfLenZ;
-  
-      // calculate parameters:
-      // paramNorm=maxNormR/maxNormZ
-      double paramNormZ2=endOuterRadius/(-tanOuterStereo2*halfLenZ);
-
-      // maxRz2 identify the zone on the theta plane where 
-      // I have to use the iterative method to calculate the distance
-      // this is an "hyperbolical" triangle with vertex:
-      // 1 -> (0,outerRadius)
-      // 2 -> (0,maxR);
-      // 3 -> (halfLenZ,0);
-      // Ok - Verified on 20.02.98 
-      
-      // maxZ_Z2=-(1/paramNorm)*extremeR+halfLenZ;
-      // maxRz2=-paramNormZ2*halfLenZ+endOuterRadius;
-      
-      // is point in zone 2 ?
-    
-      if (pR>=(1-SURFACE_PRECISION)*sqrt(HypeOuterRadius2(pZ)) // above the outer hype profile
-	  && ApointR<=(paramNormZ2*(ApointZ-halfLenZ)+endOuterRadius)
-	  // but under the normal in the extreme point
-	  && ApointZ<=(1+SURFACE_PRECISION)*halfLenZ)
-	{
-	  //Prepare the parameter for the iteration
-	  double mydist=0.;       // distance between C and A
-	  double backupdist=kInfinity;  // old distance...
-	  // needed to check if I'm moving in the right direction
-	  double tanThetaStereoSquared=tanOuterStereo2;
-	  double param2=1+2*tanThetaStereoSquared;
-	  
-	  do {
-	    // move along the curve
-	    // at the first Step distance=0., so there's no problem
-	    // then mydist is a value *with* Sign
-	    BpointZ=BpointZ+mydist;
-	    
-	    // calculate the normal to the Hype in
-	    // B=(BpointZ, BpointR)
-	    // (this is the intersection point between the Hype and the 
-	    // line normal to the Hype axis passing in A)
-	    BpointR=sqrt(HypeOuterRadius2(BpointZ));
-	    
-	    // //G4cout << "BpointZ : " << BpointZ << "  BpointR: " << BpointR << G4endl; 
-	    
-	    // the components of the normal vector in B are
-	    // / normR = 2*BpointR
-	    // \ normZ =-2*tanThetaStereoSquared*BpointZ
-	    // but, since I'm interested only in the normZ/normR value,
-	    // I can simplify the 2 factor
-	    // with a bit of calculation (see docs) I get:
-	    
-	    mydist=BpointZ*(param2-tanThetaStereoSquared*ApointR/BpointR)-ApointZ;
-	    
-	    // if mydist grows during the iteration, it means I'm 
-	    // moving in the wrong direction. So I have to 
-	    // 1. revert back to the place where I started from
-	    //    i.e. stepping back for the  backupdist
-	    // 2. move of backupdist in the opposite direction
-	    // so mydist is the double of backupdist with opposite Sign
-	    // //G4cout << " mydist : " << mydist << G4endl;
-	    
-	    if (abs(mydist)<abs(backupdist)) { backupdist=mydist; }
-	    else { mydist=-2*backupdist; }
-	    
-	  } while (abs(mydist)>zero_tolerance);
-	  
-	  // Now I have the correct point BpointZ, BpointR stored...
-	  //G4cout << "zone2 - hyp - returning : " << 
-	  //sqrt((ApointZ-BpointZ)*(ApointZ-BpointZ)+
-	  // (ApointR-BpointR)*(ApointR-BpointR)) << G4endl;
-
-	  return sqrt((ApointZ-BpointZ)*(ApointZ-BpointZ)+
-		      (ApointR-BpointR)*(ApointR-BpointR));
-	}
-    }
-
-  if (innerStereo==0.)
-    {
-      // cylindrical
-      if (pR<=(1+SURFACE_PRECISION)*innerRadius &&
-	  pZ<=(1+SURFACE_PRECISION)*halfLenZ)
-	{
-	  //G4cout << "zone3 - Cyl - returning : " << innerRadius-pR << G4endl;
-	  return abs(innerRadius-pR);
-	}
-    }
-  else // hyperbolical!  
-    {
-      // Parameters for Zone 3
-      // it innerRadius=0 and innerStereo=0 then NO zone 3
-      if (innerRadius!=0.)
-	{
-	  // calculate parameters:
-	  // paramNorm=maxNormR/maxNormZ
-	  double coParamNormZ3=(-tanInnerStereo2*halfLenZ)/endInnerRadius;
-	  
-	  // maxRz2 identify the zone on the theta plane where 
-	  // I have to use the iterative method to calculate the distance
-	  // this is an "hyperbolical" triangle with vertex:
-	  // 1 -> (0,innerRadius)
-	  // 2 -> (maxZ,0);
-	  // 3 -> (halfLenZ,endInnerRadius);
-	  
-	  double maxZz3=-(coParamNormZ3)*endInnerRadius+halfLenZ;
-	  // maxRz3=-paramNormZ3*halfLenZ+endInnerRadius;
-	  
-	  // is point in zone 3 ?
-	  
-	  if (pR<=(1+SURFACE_PRECISION)*sqrt(HypeInnerRadius2(pZ)) // under the inner hype profile
-	      && ApointZ<=(1+SURFACE_PRECISION)*((coParamNormZ3*(ApointR-endOuterRadius)+ halfLenZ)))
-	    {
-	      //Prepare the parameter for the iteration
-	      double mydist=0.;       // distance between C and A
-	      double backupdist=kInfinity;  // old distance...
-	      // needed to check if I'm moving in the right direction
-	      double tanThetaStereoSquared=tanInnerStereo2;
-	      double param2=1+2*tanThetaStereoSquared;
-	      
-	      do {
-		// move along the curve
-		// at the first Step distance=0., so there's no problem
-		// then mydist is a value *with* Sign
-		BpointZ=BpointZ+mydist;
-		
-		// calculate the normal to the Hype in
-		// B=(BpointZ, BpointR)
-		// (this is the intersection point between the Hype and the 
-		// line normal to the Hype axis passing in A)
-		BpointR=sqrt(HypeInnerRadius2(BpointZ));
-		
-		// //G4cout << "BpointZ : " << BpointZ << "  BpointR: " << BpointR << G4endl; 
-		
-		// the components of the normal vector in B are
-		// / normR = 2*BpointR
-		// \ normZ =-2*tanThetaStereoSquared*BpointZ
-		// but, since I'm interested only in the normZ/normR value,
-		// I can simplify the 2 factor
-		// with a bit of calculation (see docs) I get:
-		
-		mydist=BpointZ*(param2-tanThetaStereoSquared*ApointR/BpointR)-ApointZ;
-		
-		// if mydist grows during the iteration, it means I'm 
-		// moving in the wrong direction. So I have to 
-		// 1. revert back to the place where I started from
-		//    i.e. stepping back for the  backupdist
-		// 2. move of backupdist in the opposite direction
-		// so mydist is the double of backupdist with opposite Sign
-		// //G4cout << " mydist : " << mydist << G4endl;
-		
-		if (abs(mydist)<abs(backupdist)) { backupdist=mydist; }
-		else { mydist=-2*backupdist; }
-		
-	      } while (abs(mydist) > zero_tolerance);
-	      
-	      // Now I have the correct point BpointZ, BpointR stored...
-	      //G4cout << " zone3 - hyp - returning: " <<
-	      //sqrt((ApointZ-BpointZ)*(ApointZ-BpointZ)+
-	      //     (ApointR-BpointR)*(ApointR-BpointR)) << G4endl;
-	      return sqrt((ApointZ-BpointZ)*(ApointZ-BpointZ)+
-			  (ApointR-BpointR)*(ApointR-BpointR));
-	    }
-	}
-    }
-  // zone 4a or 4b 
-  if (pR<=(1+SURFACE_PRECISION)*endInnerRadius) 
-    { // 4b
-      //G4cout << " zone 4b - returning: " <<
-      // sqrt((ApointR-endInnerRadius)*(ApointR-endInnerRadius)+
-      //      (ApointZ-halfLenZ)*(ApointZ-halfLenZ)) << G4endl;
-
-      return sqrt( 
-		  (ApointR-endInnerRadius)*(ApointR-endInnerRadius)+
-		  (ApointZ-halfLenZ)*(ApointZ-halfLenZ));
-    }
-  else
-    { // 4a
-      //G4cout << " zone 4a - returning: " <<
-      //sqrt((ApointR-endOuterRadius)*(ApointR-endOuterRadius)+
-      //     (ApointZ-halfLenZ)*(ApointZ-halfLenZ)) << G4endl;
-
-      return sqrt( 
-		  (ApointR-endOuterRadius)*(ApointR-endOuterRadius)+
-		  (ApointZ-halfLenZ)*(ApointZ-halfLenZ));
-    }
+	
+	//
+	// We are left by elimination with region 3
+	//
+	G4double answer = ApproxDistOutside( r, absZ, outerRadius, tanOuterStereo );
+	return answer < halfTol ? 0 : answer;
 }
 
-////////////////////////////////////////////////////////////////////////
+
 //
 // Calculate distance to surface of shape from `inside', allowing for tolerance
-
-G4double G4Hype::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
-			       const G4bool calcNorm, G4bool *validNorm,G4ThreeVector *n) const
+//
+// The situation here is much simplier than DistanceToIn(p,v). For
+// example, there is no need to even check whether an intersection
+// point is inside the boundary of a surface, as long as all surfaces 
+// are checked and the smallest distance is used.
+//
+G4double G4Hype::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
+				const G4bool calcNorm,
+				G4bool *validNorm, G4ThreeVector *norm ) const
 {
-    G4double snxt=kInfinity;			// snxt = default return value
-    ESide side = kUndefined ;
-    double xi,yi,zi;  // service parameters
-    double zero_tolerance=1E-6;
+	static const G4double halfTol = 0.5*kCarTolerance;
+	
+	
+	static const G4ThreeVector normEnd1(0.0,0.0,+1.0);
+	static const G4ThreeVector normEnd2(0.0,0.0,-1.0);
+	
+	//
+	// Keep track of closest surface
+	//
+	G4double sBest;				// distance to
+	const G4ThreeVector *nBest;		// normal vector
+	G4bool vBest;				// whether "valid"
 
-    if (calcNorm) *validNorm=true;  // All normals are valid
-    *n=G4ThreeVector(0.,0.,0.);
-    //G4cout << "DistanceToOut(pt,dir): " << p << " " << v << G4endl;
-    //G4cout << "Surface Data " << outerRadius << G4endl;
+	//
+	// Check endplate, taking advantage of symmetry.
+	// Note that the endcap is the only surface which
+	// has a "valid" normal, i.e. is a surface of which
+	// the entire solid is behind.
+	//
+	G4double pz(p.z()), vz(v.z());
+	if (vz < 0) {
+		pz = -pz;
+		vz = -vz;
+		nBest = &normEnd2;
+	}
+	else
+		nBest = &normEnd1;
 
-    EInside Pp=Inside(p);
-    if (Pp==kOutside)
-      {
-	snxt=0.;
-      }
-    else
-      {
-	// Returns distance or kInfinity if there exists or not  an intersection!
+	//
+	// Possible intercept. Are we on the surface?
+	//
+	if (pz > halfLenZ-halfTol) {
+		if (calcNorm) { *norm = *nBest; *validNorm = true; }
+		return 0;
+	}
 
-	// Calculate the distance from a point (p)
-        // to exit the Hype along a certain direction (v)
-        G4ThreeVector direction=v;
-        G4ThreeVector workPoint=p;
+	//
+	// Nope. Get distance.
+	//
+	sBest = (halfLenZ - pz)/vz;
+	vBest = true;
+	
+	//
+	// Check outer surface
+	//
+	G4double r2 = p.x()*p.x() + p.y()*p.y();
+	
+	G4double s[2];
+	G4int n = IntersectHype( p, v, outerRadius2, tanOuterStereo2, s );
+	
+	G4ThreeVector norm1, norm2;
 
-	// init various distance parameters
-	double distanceLeft= kInfinity;
-	double distanceRight=kInfinity;
-	double distanceInner=kInfinity;
-	double distanceOuter=kInfinity;
-
-        // make direction a versor
-	direction=direction.unit();
-	//G4cout << "direzione : " << direction << G4endl;
-	//G4cout << "workPoint : " << workPoint << G4endl;
-
-        // line parameters - u vector
-        double ux=direction.x();
-        double uy=direction.y();
-        double uz=direction.z();
-
-        // point parameters - v point
-        double vx=workPoint.x();
-        double vy=workPoint.y();
-        double vz=workPoint.z();
-
-	// ==============================================================================//
-	// Calculate intersection point with endcaps
-	// First I have to check that uz is not within tolerance with zero!
-
-	if (abs(uz)>=zero_tolerance) 
-	  {
-	    // *left* (see docs) intersection z=-halfLenZ
-	    double tLeft=(-halfLenZ-vz)/uz;
-	    //   //G4cout << tLeft << G4endl;
-	    if (tLeft>0 || abs(tLeft)<zero_tolerance) 
-	      {
-		double xIL=ux*tLeft+vx;
-		double yIL=uy*tLeft+vy;
-		double radiusL=sqrt(xIL*xIL+yIL*yIL);
+	if (n > 0) {
+		//
+		// We hit somewhere. Are we on the surface?
+		//	
+		G4double dr2 = r2 - HypeOuterRadius2(pz);
+		if (fabs(dr2) < endOuterRadius*kCarTolerance) {
+			G4ThreeVector normHere( p.x(), p.y(), -p.z()*tanOuterStereo2 );
+			//
+			// Sure. But are we going the right way?
+			//
+			if (normHere.dot(v) > 0) {
+				if (calcNorm) { *norm = normHere.unit(); *validNorm = false; }
+				return 0;
+			}
+		}
 		
-		// is it a real intersection ? 
-		if (radiusL>=(1-SURFACE_PRECISION)*endInnerRadius &&
-		    radiusL<=(1+SURFACE_PRECISION)*endOuterRadius)
-		  {
-		    distanceLeft=tLeft;
-		  }
-	      }
+		//
+		// Nope. Check closest positive intercept.
+		//
+		G4int i;
+		for( i=0; i<n; i++ ) {
+			if (s[i] > sBest) break;
+			if (s[i] > 0) {
+				//
+				// Make sure normal is correct (that this
+				// solution is an outgoing solution)
+				//
+				G4ThreeVector pi(p+s[i]*v);
+				norm1 = G4ThreeVector( pi.x(), pi.y(), -pi.z()*tanOuterStereo2 );
+				if (norm1.dot(v) > 0) {
+					sBest = s[i];
+					nBest = &norm1;
+					vBest = false;
+					break;
+				}
+			}
+		}
+	}
 	
-	    // *right* (see docs) intersection z=halfLenZ
-	    double tRight=(halfLenZ-vz)/uz;
-	    // //G4cout << tRight << G4endl;
-	    if (tRight>0 || abs(tRight)<zero_tolerance)
-	      {
-		double xIR=ux*tRight+vx;
-		double yIR=uy*tRight+vy;
-		double radiusR=sqrt(xIR*xIR+yIR*yIR);
-
-		// is it a real intersection ? 
-		if (radiusR>=(1-SURFACE_PRECISION)*endInnerRadius && 
-		    radiusR<=(1+SURFACE_PRECISION)*endOuterRadius) 
-		  {
-		    distanceRight=abs(tRight);
-		  }
-	      }
-	    	    
-	    //G4cout << "tLeft, tRight : " << tLeft << "  " << tRight << G4endl;
-	  }
-	  
-	// ==============================================================================//
-
-	// Calculate intersections with hyperbolical surfaces
-
-	double param1,param2;
-
-	// Inner first! ====================================
-	if (innerRadius!=0. || innerStereo !=0.)
-	  {
-	    param1=tanInnerStereo2;
-	    param2=innerRadius2;
-	    
-	    double paramA=(ux*ux+uy*uy)-param1*uz*uz;
-	    double paramB=(ux*vx+uy*vy)-param1*uz*vz;
-	    double paramC=(vx*vx+vy*vy)-param1*vz*vz-param2;
-	    
-	    // intersection equation discriminant
-	    double delta=paramB*paramB-paramA*paramC;
-
-	    if (delta>0 || abs(delta)<zero_tolerance)
-	      { 
-		// solution exists!!
-		delta=abs(delta);
-		double solution1=(-paramB+sqrt(delta))/paramA;
-		double solution2=(-paramB-sqrt(delta))/paramA;
-		double dist1=kInfinity;
-		double dist2=kInfinity;
-		//G4cout << "Sol 1,2 " << solution1 << "  " << solution2 << G4endl;
-
-		if (solution1>0 || abs(solution1)<zero_tolerance)
-		  dist1=abs(solution1);
-
-		if (solution2>0 || abs(solution2)<zero_tolerance)
-		  dist2=abs(solution2);
-
-		//if (abs(solution1)<=zero_tolerance)
-		//  dist1=0.
-
-
-		// check if they fall in the correct length range
-		if ((abs(dist1*uz+vz)<=(1+SURFACE_PRECISION)*halfLenZ) && 
-		    (abs(dist2*uz+vz)<=(1+SURFACE_PRECISION)*halfLenZ)) 
-		  {
-		    distanceInner=((dist1 < dist2) ? dist1 : dist2);
-		  }
-		else
-		  {
-		    if (abs(dist1*uz+vz)<=(1+SURFACE_PRECISION)*halfLenZ)
-		      distanceInner=dist1;
-		    if (abs(dist2*uz+vz)<=(1+SURFACE_PRECISION)*halfLenZ)
-		      distanceInner=dist2;
-		  }
-	      }
-	  }
-      	// Inner Done! ==================	
-
-	// and now Outer! ===============================================
-
-	// equation parameters
-	double dist1=kInfinity;
-	double dist2=kInfinity;
-
-	// look for degenerations (i.e. hyperbolical -> cylindrical)
-	param1=tanOuterStereo2;
-	param2=outerRadius2;
+	if (InnerSurfaceExists()) {
+		//
+		// Check inner surface
+		//
+		n = IntersectHype( p, v, innerRadius2, tanInnerStereo2, s );
+		if (n > 0) {
+			//
+			// On surface?
+			//
+			G4double dr2 = r2 - HypeInnerRadius2(pz);
+			if (fabs(dr2) < endInnerRadius*kCarTolerance) {
+				G4ThreeVector normHere( -p.x(), -p.y(), p.z()*tanInnerStereo2 );
+				if (normHere.dot(v) > 0) {
+					if (calcNorm) {*norm = normHere.unit(); *validNorm = false;}
+					return 0;
+				}
+			}
+			
+			//
+			// Check closest positive
+			//
+			G4int i;
+			for( i=0; i<n; i++ ) {
+				if (s[i] > sBest) break;
+				if (s[i] > 0) {
+					G4ThreeVector pi(p+s[i]*v);
+					norm2 = G4ThreeVector( -pi.x(), -pi.y(), pi.z()*tanInnerStereo2 );
+					if (norm2.dot(v) > 0) {
+						sBest = s[i];
+						nBest = &norm2;
+						vBest = false;
+						break;
+					}
+				}
+			}
+		}
+	}
 	
-	double paramA=(ux*ux+uy*uy)-param1*uz*uz;
-	double paramB=(ux*vx+uy*vy)-param1*uz*vz;
-	double paramC=(vx*vx+vy*vy)-param1*vz*vz-param2;
-
-	// intersection equation discriminant
-        double delta=paramB*paramB-paramA*paramC;
-	//G4cout << "delta : " << delta << G4endl;
-	//G4cout << "A, B, C : " << paramA << "  " << paramB << "   " << paramC << G4endl;
-
-        if (delta > 0 || abs(delta)<zero_tolerance) 
-        { 
-	  // solution exists!!
-	  delta=abs(delta);
-	  double solution1=(-paramB+sqrt(delta))/paramA;
-	  double solution2=(-paramB-sqrt(delta))/paramA;
-
-	  //G4cout << "Solution 1, 2  : " << solution1*1E+14 << "   " << solution2*1E+14 << G4endl;
-	  
-	  if (solution1>0 || abs(solution1)<zero_tolerance) 
-	    {
-	      dist1=abs(solution1);
-	    }
-
-	  if (solution2>0 || abs(solution2)<zero_tolerance)
-	    {
-	      dist2=abs(solution2);
-	    }
-
-	  // check if they fall in the correct length range
-	  if ((abs(dist1*uz+vz)<=(1+SURFACE_PRECISION)*halfLenZ) &&
-	      (abs(dist2*uz+vz)<=(1+SURFACE_PRECISION)*halfLenZ)) 
-	    {
-	      distanceOuter=((dist1 < dist2) ? dist1 : dist2);
-	    }
-	  else
-	    {
-	      if (abs(dist1*uz+vz)<=(1+SURFACE_PRECISION)*halfLenZ)
-		distanceOuter=dist1;
-	      if (abs(dist2*uz+vz)<=(1+SURFACE_PRECISION)*halfLenZ)
-		distanceOuter=dist2;
-	    }
-        }
-	// Outer Done! ===============================================
-
-	// and now choose che correct snxt value
-	
-	if (snxt > distanceInner) 
-	  { 
-	    snxt=distanceInner;
-	    side=innerFace;
-	  }
-	if (snxt > distanceOuter) 
-	  {
-	    snxt=distanceOuter;
-	    side=outerFace;
-	  }
-
-	if (abs(distanceInner)<zero_tolerance && distanceOuter>0 && distanceOuter<kInfinity)
-	  {
-	    snxt=distanceOuter;
-	    side=outerFace;
-	  }
-
-	if (abs(distanceOuter)<zero_tolerance && distanceInner>0 && distanceInner<kInfinity)
-	  {
-	    snxt=distanceInner;
-	    side=innerFace;
-	  }
-
-	if (snxt > distanceRight) 
-	  {
-	    snxt=distanceRight;
-	    side=rightCap;
-	  }
-	if (snxt > distanceLeft)
-	  {
-	    snxt=distanceLeft;
-	    side=leftCap;
-	  }
-
+	//
 	// Done!
-	//G4cout << "distanze left, right, inner, outer :" << distanceLeft << "   " 
-	//     << distanceRight << "   " << distanceInner << "    " << distanceOuter << G4endl;
+	//
+	if (calcNorm) {
+		*validNorm = vBest;
+		
+		if (nBest == &norm1 || nBest == &norm2) 
+			*norm = nBest->unit();
+		else
+			*norm = *nBest;
+	}
 	
-	// normal calculation, where required.
-	// normal to EXIT the volume...
-	if (calcNorm)
-	  {
-	    switch(side)
-	      {
-	      case outerFace:
-		xi=vx+snxt*ux;
-		yi=vy+snxt*uy;
-		zi=vz+snxt*uz;
-		*n=G4ThreeVector(xi,yi,-zi*tanOuterStereo2).unit();
-		//G4cout << "outerFace : " << *n << G4endl;
-		break;
-	  
-	      case innerFace:
-		xi=vx+snxt*ux;
-		yi=vy+snxt*uy;
-		zi=vx+snxt*uz;
-		*n=-G4ThreeVector(xi,yi,-zi*tanInnerStereo2).unit();
-		//G4cout << "innerFace: " << *n << G4endl;
-		break;
-		
-	      case leftCap:
-		*n=G4ThreeVector(0,0,-1);
-		//G4cout << "leftCap: " << *n << G4endl;
-		break;
-		
-	      case rightCap:
-		*n=G4ThreeVector(0,0,1);
-		//G4cout << "rightCap: " << *n << G4endl;
-		break;
-		
-	      default: *validNorm=false;
-	      }
-	  }
-      }
-    snxt+=zero_tolerance*halfLenZ; 
-    //G4cout << "valore restituito: " << snxt << G4endl;
-    //G4cout << "*n = " << *n << G4endl;
-    return snxt;
+	return sBest;
 }
 
+
+
+//
 // Calculate distance (<=actual) to closest surface of shape from inside
+//
+// May be an underestimate
+//
 G4double G4Hype::DistanceToOut(const G4ThreeVector& p) const
 {
-
-  // I use the cylindrical simmetry of the system to optimize calculation
-  double zero_tolerance=1e-6;
-  double pZ=abs(p.z());
-  double pR2=p.x()*p.x()+p.y()*p.y();
-  double pR=sqrt(pR2);
-
-  //G4cout << "pZ : " << pZ << " param: " << pZ/halfLenZ << " SP: "
-  //      << SURFACE_PRECISION <<G4endl;
-
-  // distance parameters
-  double distEndCap=kInfinity;
-  double distSurfac=kInfinity;
-
-  //G4cout << "DistToOut(pt)" << p << G4endl;
-  //G4cout << "Surface data: " << outerRadius << G4endl;
-
-  EInside Pp=Inside(p);
-  if (Pp==kOutside)
-    {
-      //G4cout << "Point outside, returning 0." << G4endl;
-      return 0;
-    }
-      
-  if (Pp==kSurface) 
-    {
-      //G4cout << "Point on surface, returning Step" << G4endl;
-      return halfLenZ*SURFACE_PRECISION;
-    }
-
-  // point is surely inside from now on!
-  // calculate distEndCap <------------------
-  if (pR<=(1+SURFACE_PRECISION)*endOuterRadius && 
-      pR>=(1-SURFACE_PRECISION)*endInnerRadius)
-    { 
-      distEndCap=abs(halfLenZ-pZ);
-    }
-  else
-    { 
-      distEndCap=sqrt((halfLenZ-pZ)*(halfLenZ-pZ)+
-		      (pR-endInnerRadius)*(pR-endInnerRadius));
-    }
-  
-  // special case: point with z=0
-  if (pZ<zero_tolerance)
-    { 
-      double a1=kInfinity;
-      if (innerRadius!=0) 
-	{
-	  a1= abs(pR-innerRadius);
-	}
-
-      double a2=abs(outerRadius-pR);
-      distSurfac= (a1<a2?a1:a2);
-      //G4cout << "a1: " << a1 << "  a2: " << a2 << "  distEndCap: " << 
-      //	distEndCap << G4endl; 
-      //G4cout << "Point with z=0, returning: " <<(distSurfac<distEndCap?distSurfac:distEndCap) << G4endl;
-      return (distSurfac<distEndCap?distSurfac:distEndCap); // Done
-    }
-  
-  // case w/o inner surface
-  if (innerRadius==0. && innerStereo==0.) 
-    {
-      // no inner surface 
-      if (outerStereo==0.)
-	{
-	  // cylindrical
-	  if (pR<=(1+SURFACE_PRECISION)*outerRadius &&
-	      pZ<=(1+SURFACE_PRECISION)*halfLenZ)
-	    {
-	      distSurfac=abs(outerRadius-pR);
-	      //G4cout << "Cyl, no inner surf, returning: " << 
-	      //(distSurfac<distEndCap?distSurfac:distEndCap) << G4endl;
-	      return (distSurfac<distEndCap?distSurfac:distEndCap);
-	    }
-	}
-      else // hyperbolical!  
-	{
-	  // only outer surface!! No need to check the nearer surface to the point
-	  // since I use just normR/normZ and normZ/normR I simplify the 2 factor
-	  // maxNormR=extremeR;
-	  // maxNormZ=-tanThetaStereo*tanThetaStereo*halfLenZ;
-	  
-	  double ApointR=pR;
-	  double ApointZ=pZ;
-	  double BpointR=0.;
-	  double BpointZ=pZ;
-	  //Prepare the parameter for the iteration
-	  double mydist=0.;             // distance between C and A
-	  double backupdist=kInfinity;  // old distance...
-	  
-	  // needed to check if I'm moving in the right direction
-	  double tanThetaStereoSquared=tanOuterStereo2;
-	  double param2=1+2*tanThetaStereoSquared;
-	  
-	  do {
-	    // move along the curve
-	    // at the first Step distance=0., so there's no problem
-	    // then distance is a value *with* Sign
-	    BpointZ=BpointZ+mydist;
-	    
-	    // calculate the normal to the Hype in
-	    // B=(BpointZ, BpointR)
-	    // (this is the intersection point between the Hype and the 
-	    // line normal to the Hype axis passing in A)
-	    BpointR=sqrt(HypeOuterRadius2(BpointZ));
-	    
-	    // //G4cout << "BpointZ : " << BpointZ << "  BpointR: " << BpointR << G4endl; 
-	    
-	    // the components of the normal vector in B are
-	    // / normR = 2*BpointR
-	    // \ normZ =-2*tanThetaStereoSquared*BpointZ
-	    // but, since I'm interested only in the normZ/normR value,
-	    // I can simplify the 2 factor
-	    // with a bit of calculation (see docs) I get:
-	    
-	    mydist=BpointZ*(param2-tanThetaStereoSquared*ApointR/BpointR)-ApointZ;
-	    
-	    // if mydist grows during the iteration, it means I'm 
-	    // moving in the wrong direction. So I have to 
-	    // 1. revert back to the place where I started from
-	    //    i.e. stepping back for the  backupdist
-	    // 2. move of backupdist in the opposite direction
-	    // so mydist is the double of backupdist with opposite Sign
-	    // //G4cout << " mydist : " << mydist << G4endl;
-	    
-	    if (abs(mydist)<abs(backupdist)) { backupdist=mydist; }
-	    else { mydist=-2*backupdist; }
-	    
-	  } while (abs(mydist)>zero_tolerance);
-	  
-	  // Now I have the correct point BpointZ, BpointR stored...
-	  //distSurfac=sqrt((ApointZ-BpointZ)*(ApointZ-BpointZ)+
-	  //                (ApointR-BpointR)*(ApointR-BpointR));
-	  //G4cout << "Hyperb, no inner surface, returning : " << 
-	  //  (distSurfac<distEndCap?distSurfac:distEndCap) << G4endl;
-	  return (distSurfac<distEndCap?distSurfac:distEndCap);
-	}
-    }
-  // case w/ inner surface
-  else // if(innerRadius==0 && innerStereo==0)
-    {
-      if (abs(pR-sqrt(HypeOuterRadius2(pZ))) < abs(pR-sqrt(HypeInnerRadius2(pZ))))
-	{
-	  // outer surface is nearer...calculate on that one
-	  if (outerStereo==0.)
-	    {
-	      // cylindrical
-	      if (pR<=(1+SURFACE_PRECISION)*outerRadius &&
-		  pZ<=(1+SURFACE_PRECISION)*halfLenZ)
-		{
-		  distSurfac=abs(outerRadius-pR);
-		  //G4cout << "Cyl, with inner surface, outer is nearer,  returning : " << 
-		  //  (distSurfac<distEndCap?distSurfac:distEndCap) << G4endl;
-		  return (distSurfac<distEndCap?distSurfac:distEndCap);
-		}
-	    }
-	  else // hyperbolical!  
-	    {
-	      // since I use just normR/normZ and normZ/normR I simplify the 2 factor
-	      // maxNormR=extremeR;
-	      // maxNormZ=-tanThetaStereo*tanThetaStereo*halfLenZ;
-	      
-	      double ApointR=pR;
-	      double ApointZ=pZ;
-	      double BpointR=0.;
-	      double BpointZ=pZ;
-	      //Prepare the parameter for the iteration
-	      double mydist=0.;       // distance between C and A
-	      double backupdist=kInfinity;  // old distance...
-	      
-	      // needed to check if I'm moving in the right direction
-	      double tanThetaStereoSquared=tanOuterStereo2;
-	      double param2=1+2*tanThetaStereoSquared;
-	      
-	      do {
-		// move along the curve
-		// at the first Step distance=0., so there's no problem
-		// then distance is a value *with* Sign
-		BpointZ=BpointZ+mydist;
-		
-		// calculate the normal to the Hype in
-		// B=(BpointZ, BpointR)
-		// (this is the intersection point between the Hype and the 
-		// line normal to the Hype axis passing in A)
-		BpointR=sqrt(HypeOuterRadius2(BpointZ));
-		
-		// //G4cout << "BpointZ : " << BpointZ << "  BpointR: " << BpointR << G4endl; 
-		
-		// the components of the normal vector in B are
-		// / normR = 2*BpointR
-		// \ normZ =-2*tanThetaStereoSquared*BpointZ
-		// but, since I'm interested only in the normZ/normR value,
-		// I can simplify the 2 factor
-		// with a bit of calculation (see docs) I get:
-	    
-		mydist=BpointZ*(param2-tanThetaStereoSquared*ApointR/BpointR)-ApointZ;
-	    
-		// if mydist grows during the iteration, it means I'm 
-		// moving in the wrong direction. So I have to 
-		// 1. revert back to the place where I started from
-		//    i.e. stepping back for the  backupdist
-		// 2. move of backupdist in the opposite direction
-		// so mydist is the double of backupdist with opposite Sign
-		// //G4cout << " mydist : " << mydist << G4endl;
-		
-		if (abs(mydist)<abs(backupdist)) { backupdist=mydist; }
-		else { mydist=-2*backupdist; }
+	//
+	// Try each surface and remember the closest
+	//
+	G4double absZ(fabs(p.z()));
+	G4double r(p.perp());
 	
-	      } while (abs(mydist)>zero_tolerance);
-	      
-	      // Now I have the correct point BpointZ, BpointR stored...
-	      distSurfac=sqrt((ApointZ-BpointZ)*(ApointZ-BpointZ)+
-			      (ApointR-BpointR)*(ApointR-BpointR));
-	      //G4cout << "Hyp, with inner surface, outer is nearer,  returning : " << 
-	      //(distSurfac<distEndCap?distSurfac:distEndCap) << G4endl;
-
-	      return (distSurfac<distEndCap?distSurfac:distEndCap);
-	    }
+	G4double sBest = halfLenZ - absZ;
+	
+	G4double tryOuter = ApproxDistInside( r, absZ, outerRadius, tanOuterStereo2 );
+	if (tryOuter < sBest) sBest = tryOuter;
+	
+	if (InnerSurfaceExists()) {
+		G4double tryInner = ApproxDistOutside( r, absZ, innerRadius, tanInnerStereo );
+		if (tryInner < sBest) sBest = tryInner;
 	}
-      else //((sqrt(pR2)-sqrt(HypeOuterRadius2(pZ))) < (sqrt(pR2)-sqrt(HypeInnerRadius2(pZ))))
-	{
-	  // working on inner surface
-	  if (innerStereo==0.)
-	    {
-	      // cylindrical
-	      if (pR>=(1-SURFACE_PRECISION)*innerRadius &&
-		  pZ<=(1+SURFACE_PRECISION)*halfLenZ)
-		{
-		  distSurfac=abs(pR-innerRadius);
-		  //G4cout << "Cyl, with inner surface, inner is nearer,  returning : " << 
-		  //  (distSurfac<distEndCap?distSurfac:distEndCap) << G4endl;
-
-		  return (distSurfac<distEndCap?distSurfac:distEndCap);
-		}
-	    }
-	  else // hyperbolical!  
-	    {
-	      // inner surface is nearer, but there are blank zones
-	      // i.e. zones where it is not possible to calculate distance along normal
-	      
-	      double ApointR=pR;
-	      double ApointZ=pZ;
-	      double BpointR=0.;
-	      double BpointZ=pZ;
-	      
-	      // calculate parameters:
-	      double paramNorm=endInnerRadius/(-tanInnerStereo2*halfLenZ);
-	      if (ApointR<=(1+SURFACE_PRECISION)*(paramNorm*(ApointZ-halfLenZ)+endInnerRadius))
-		{
-		  // //G4cout << "HERE!" << G4endl;
-		  // not in a blank zone!!!
-		  //Prepare the parameter for the iteration
-		  double mydist=0.;       // distance between C and A     
-		  double backupdist=kInfinity;  // old distance...
-		  
-		  // needed to check if I'm moving in the right direction
-		  double tanThetaStereoSquared=tanInnerStereo2;
-		  double param2=1+2*tanThetaStereoSquared;
-		  
-		  do {
-		    // move along the curve
-		    // at the first Step distance=0., so there's no problem
-		    // then distance is a value *with* Sign
-		    BpointZ=BpointZ+mydist;
-		    
-		    // calculate the normal to the Hype in
-		    // B=(BpointZ, BpointR)
-		    // (this is the intersection point between the Hype and the 
-		    // line normal to the Hype axis passing in A)
-		    BpointR=sqrt(HypeInnerRadius2(BpointZ));
-		    
-		    // //G4cout << "BpointZ : " << BpointZ << "  BpointR: " << BpointR << G4endl; 
-		    
-		    // the components of the normal vector in B are
-		    // / normR = 2*BpointR
-		    // \ normZ =-2*tanThetaStereoSquared*BpointZ
-		    // but, since I'm interested only in the normZ/normR value,
-		    // I can simplify the 2 factor
-		    // with a bit of calculation (see docs) I get:
-		    
-		    mydist=BpointZ*(param2-tanThetaStereoSquared*ApointR/BpointR)-ApointZ;
-		    
-		    // if mydist grows during the iteration, it means I'm 
-		    // moving in the wrong direction. So I have to 
-		    // 1. revert back to the place where I started from
-		    //    i.e. stepping back for the  backupdist
-		    // 2. move of backupdist in the opposite direction
-		    // so mydist is the double of backupdist with opposite Sign
-		    // //G4cout << " mydist : " << mydist << G4endl;
-		    
-		    if (abs(mydist)<abs(backupdist)) { backupdist=mydist; }
-		    else { mydist=-2*backupdist; }
-		    
-		  } while (abs(mydist)<zero_tolerance);
-		  
-		  // Now I have the correct point BpointZ, BpointR stored...
-		  distSurfac=sqrt((ApointZ-BpointZ)*(ApointZ-BpointZ)+
-				  (ApointR-BpointR)*(ApointR-BpointR));
-		  //G4cout << "Hyp, with inner surface, inner is nearer,  returning : " << 
-		  //  (distSurfac<distEndCap?distSurfac:distEndCap) << G4endl;
-
-		  return (distSurfac<distEndCap?distSurfac:distEndCap);
-		}
-	      else // in a blank zone!!!
-		{ 
-		  double dist1=sqrt((halfLenZ-pZ)*(halfLenZ-pZ)+
-				    (pR-endInnerRadius)*(pR-endInnerRadius));
-		  double dist2=sqrt((halfLenZ-pZ)*(halfLenZ-pZ)+
-				    (pR-endOuterRadius)*(pR-endOuterRadius));
-		  distSurfac=(dist1<dist2?dist1:dist2);
-		  //G4cout << "Blank zone,  returning : " << 
-		  //  (distSurfac<distEndCap?distSurfac:distEndCap) << G4endl;
-
-		  return (distSurfac<distEndCap?distSurfac:distEndCap); // Done
-		}
-	    } // outer hyperbolical
-	}
-    }
-  return 0.;
+	
+	return sBest < 0.5*kCarTolerance ? 0 : sBest;
 }
 
-// Create a List containing the transformed vertices
 
-G4ThreeVectorList* G4Hype::CreateRotatedVertices(const G4AffineTransform& pTransform) const
-{
-  G4ThreeVectorList *vertices;
-  G4ThreeVector vertex0,vertex1,vertex2,vertex3;
-  G4double meshAngle,meshRMax,crossAngle,cosCrossAngle,sinCrossAngle,sAngle;
-  G4double rMaxX,rMaxY,rMinX,rMinY;
-  G4int crossSection,noCrossSections;
 
-  // Compute # of cross-sections necessary to mesh tube
-  // not too few, not too many
-  noCrossSections=(G4int)((kMinMeshSections+kMaxMeshSections)/2)+1;
-  meshAngle=M_PI*2.0/(noCrossSections-1);
-  meshRMax=endOuterRadius/cos(meshAngle*0.5);
-
-  sAngle=-meshAngle*0.5;
- 
-  vertices=new G4ThreeVectorList(noCrossSections*4);
-  if (vertices)
-    {
-      for (crossSection=0;crossSection<noCrossSections;crossSection++)
-	{
-	  // Compute coordinates of cross section at section crossSection
-	  crossAngle=sAngle+crossSection*meshAngle;
-	  cosCrossAngle=cos(crossAngle);
-	  sinCrossAngle=sin(crossAngle);
-	  
-	  rMaxX=meshRMax*cosCrossAngle;
-	  rMaxY=meshRMax*sinCrossAngle;
-	  rMinX=endInnerRadius*cosCrossAngle;
-	  rMinY=endInnerRadius*sinCrossAngle;
-	  vertex0=G4ThreeVector(rMinX,rMinY,-halfLenZ);
-	  vertex1=G4ThreeVector(rMaxX,rMaxY,-halfLenZ);
-	  vertex2=G4ThreeVector(rMaxX,rMaxY,+halfLenZ);
-	  vertex3=G4ThreeVector(rMinX,rMinY,+halfLenZ);
-
-	  vertices->insert(pTransform.TransformPoint(vertex0));
-	  vertices->insert(pTransform.TransformPoint(vertex1));
-	  vertices->insert(pTransform.TransformPoint(vertex2));
-	  vertices->insert(pTransform.TransformPoint(vertex3));
-	}
-    }
-  else
-    {
-      G4Exception("G4Hype::CreateRotatedVertices Out of memory - Cannot alloc vertices");
-    }
-  return vertices;
-}
 
 void G4Hype::DescribeYourselfTo (G4VGraphicsScene& scene) const 
 {
@@ -1666,4 +996,187 @@ G4Polyhedron* G4Hype::CreatePolyhedron () const
 G4NURBS* G4Hype::CreateNURBS () const 
 {
   return new G4NURBStube(endInnerRadius, endOuterRadius, halfLenZ); // Tube for now!!!
+}
+
+
+
+//
+// IntersectHype (static)
+//
+// Decide if and where a line intersects with a hyperbolic
+// surface (of infinite extent)
+//
+// Arguments:
+//     p       - (in) Point on trajectory
+//     v       - (in) Vector along trajectory
+//     r2      - (in) Square of radius at z = 0
+//     tan2phi - (in) tan(phi)**2
+//     s       - (out) Up to two points of intersection, where the
+//                     intersection point is p + s*v, and if there are
+//                     two intersections, s[0] < s[1]. May be negative.
+// Returns:
+//     The number of intersections. If 0, the trajectory misses. 
+//
+//
+// Equation of a line:
+//
+//       x = x0 + s*tx      y = y0 + s*ty      z = z0 + s*tz
+//
+// Equation of a hyperbolic surface:
+//
+//       x**2 + y**2 = r**2 + (z*tanPhi)**2
+//
+// Solution is quadratic:
+//
+//	a*s**2 + b*s + c = 0
+//
+// where:
+//
+//	a = tx**2 + ty**2 - (tz*tanPhi)**2
+//
+//	b = 2*( x0*tx + y0*ty - z0*tz*tanPhi**2 )
+//
+//	c = x0**2 + y0**2 - r**2 - (z0*tanPhi)**2
+//
+// 
+G4int G4Hype::IntersectHype( const G4ThreeVector &p, const G4ThreeVector &v, 
+                             const G4double r2, const G4double tan2Phi, G4double s[2] )
+{
+	G4double x0 = p.x(), y0 = p.y(), z0 = p.z();
+	G4double tx = v.x(), ty = v.y(), tz = v.z();
+
+	G4double a = tx*tx + ty*ty - tz*tz*tan2Phi;
+	G4double b = 2*( x0*tx + y0*ty - z0*tz*tan2Phi );
+	G4double c = x0*x0 + y0*y0 - r2 - z0*z0*tan2Phi;
+	
+	if (fabs(a) < DBL_MIN) {
+		//
+		// The trajectory is parallel to the asympotic limit of
+		// the surface: single solution
+		//
+		if (fabs(b) < DBL_MIN) return 0;	// Unless we travel through exact center
+		
+		s[0] = c/b;
+		return 1;
+	}
+		
+	
+	G4double radical = b*b - 4*a*c;
+	
+	if (radical < -DBL_MIN) return 0;		// No solution
+	
+	if (radical < DBL_MIN) {
+		//
+		// Grazes surface
+		//
+		s[0] = -b/a/2.0;
+		return 1;
+	}
+	
+	radical = sqrt(radical);
+	
+	G4double q = -0.5*( b + (b < 0 ? -radical : +radical) );
+	G4double sa = q/a;
+	G4double sb = c/q;		
+	if (sa < sb) { s[0] = sa; s[1] = sb; } else { s[0] = sb; s[1] = sa; }
+	return 2;
+}
+	
+	
+//
+// ApproxDistOutside (static)
+//
+// Find the approximate distance of a point outside
+// (greater radius) of a hyperbolic surface. The distance
+// must be an underestimate. It will also be nice (although
+// not necesary) that the estimate is always finite no
+// matter how close the point is.
+//
+// Our hyperbola approaches the asymptotic limit at z = +/- infinity
+// to the lines r = z*tanPhi. We call these lines the 
+// asymptotic limit line.
+//
+// We need the distance of the 2d point p(r,z) to the
+// hyperbola r**2 = r0**2 + (z*tanPhi)**2. Find two
+// points that bracket the true normal and use the 
+// distance to the line that connects these two points.
+// The first such point is z=p.z. The second point is
+// the z position on the asymptotic limit line that
+// contains the normal on the line through the point p.
+//
+G4double G4Hype::ApproxDistOutside( const G4double pr, const G4double pz,
+				    const G4double r0, const G4double tanPhi )
+{
+	if (tanPhi < DBL_MIN) return pr-r0;
+
+	G4double tan2Phi = tanPhi*tanPhi;
+
+	//
+	// First point
+	//
+	G4double z1 = pz;
+	G4double r1 = sqrt( r0*r0 + z1*z1*tan2Phi );
+	
+	//
+	// Second point
+	//
+	G4double z2 = (pr*tanPhi + pz)/(1 + tan2Phi);
+	G4double r2 = sqrt( r0*r0 + z2*z2*tan2Phi );
+	
+	//
+	// Line between them
+	//
+	G4double dr = r2-r1;
+	G4double dz = z2-z1;
+	
+	G4double len = sqrt(dr*dr + dz*dz);
+	if (len < DBL_MIN) {
+		//
+		// The two points are the same?? I guess we
+		// must have really bracketed the normal
+		//
+		dr = pr-r1;
+		dz = pz-z1;
+		return sqrt( dr*dr + dz*dz );
+	}
+	
+	//
+	// Distance
+	//
+	return fabs((pr-r1)*dz - (pz-z1)*dr)/len;
+}
+
+//
+// ApproxDistInside (static)
+//
+// Find the approximate distance of a point inside
+// of a hyperbolic surface. The distance
+// must be an underestimate. It will also be nice (although
+// not necesary) that the estimate is always finite no
+// matter how close the point is.
+//
+// This estimate uses the distance to a line tangent to
+// the hyperbolic function. The point of tangent is chosen
+// by the z position point
+//
+// Assumes pr and pz are positive
+//
+G4double G4Hype::ApproxDistInside( const G4double pr, const G4double pz,
+		        	   const G4double r0, const G4double tan2Phi )
+{
+	if (tan2Phi < DBL_MIN) return r0 - pr;
+
+	//
+	// Corresponding position and normal on hyperbolic
+	//
+	G4double rh = sqrt( r0*r0 + pz*pz*tan2Phi );
+	
+	G4double dr = -rh;
+	G4double dz = pz*tan2Phi;
+	G4double len = sqrt(dr*dr + dz*dz);
+	
+	//
+	// Answer
+	//
+	return fabs((pr-rh)*dr)/len;
 }
