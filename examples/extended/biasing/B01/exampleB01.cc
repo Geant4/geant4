@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB01.cc,v 1.17 2003-06-16 16:47:08 gunter Exp $
+// $Id: exampleB01.cc,v 1.18 2003-07-31 08:28:16 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,7 +64,7 @@
 #include "G4ScoreTable.hh"
 
 
-int main(int argc, char **argv)
+int main(int, char **)
 {  
   std::ostream *myout = &G4cout;
   G4int numberOfEvent = 100;

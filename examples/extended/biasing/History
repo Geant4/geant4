@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2003-06-30 16:42:21 dressel Exp $
+$Id: History,v 1.26 2003-07-31 08:29:50 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jul 31th, 2003  M. Dressel - exbiasing-V05-02-01
+- removed some unused arguments in fucntion calls
 
 Jun 30th, 2003  M. Dressel - exbiasing-V05-02-00
 - simplified building of B03 and removed files created by swig,

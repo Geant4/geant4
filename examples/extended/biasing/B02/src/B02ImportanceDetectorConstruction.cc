@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: B02ImportanceDetectorConstruction.cc,v 1.5 2003-06-16 16:47:18 gunter Exp $
+// $Id: B02ImportanceDetectorConstruction.cc,v 1.6 2003-07-31 08:28:16 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -49,8 +49,7 @@ void B02ImportanceDetectorConstruction::Construct()
 {  
 
   G4String name("none");
-  G4double A(0), density(universe_mean_density), temperature(0), pressure(0);
-  G4int z(0);
+  G4double density(universe_mean_density), temperature(0), pressure(0);
 
   name = "Galactic";
   density     = universe_mean_density;            //from PhysicalConstants.h

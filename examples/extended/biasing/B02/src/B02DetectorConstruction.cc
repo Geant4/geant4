@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: B02DetectorConstruction.cc,v 1.8 2003-06-16 16:47:17 gunter Exp $
+// $Id: B02DetectorConstruction.cc,v 1.9 2003-07-31 08:28:16 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -189,15 +189,15 @@ G4VPhysicalVolume* B02DetectorConstruction::Construct()
   pos_x = 0*cm;
   pos_y = 0*cm;
   pos_z = 0;
-  G4VPhysicalVolume *pvol = 
-    new G4PVPlacement(0, 
-		      G4ThreeVector(pos_x, pos_y, pos_z),
-		      aShield_log, 
-		      name, 
-		      worldCylinder_log, 
-		      false, 
-		      0);
 
+  new G4PVPlacement(0, 
+		    G4ThreeVector(pos_x, pos_y, pos_z),
+		    aShield_log, 
+		    name, 
+		    worldCylinder_log, 
+		    false, 
+		    0);
+  
   return pWorldVolume;
 }
 
