@@ -1,0 +1,6285 @@
+
+(object Petal
+    version    	44
+    _written   	"Rational Rose 7.1.9701"
+    charSet    	0)
+
+(object Design "Logical View"
+    is_unit    	TRUE
+    is_loaded  	TRUE
+    quid       	"3DF8BF85013E"
+    defaults   	(object defaults
+	rightMargin 	0.250000
+	leftMargin 	0.250000
+	topMargin  	0.250000
+	bottomMargin 	0.500000
+	pageOverlap 	0.250000
+	clipIconLabels 	TRUE
+	autoResize 	TRUE
+	snapToGrid 	TRUE
+	gridX      	16
+	gridY      	16
+	defaultFont 	(object Font
+	    size       	14
+	    face       	"helvetica"
+	    bold       	FALSE
+	    italics    	FALSE
+	    underline  	FALSE
+	    strike     	FALSE
+	    color      	0
+	    default_color 	TRUE)
+	showMessageNum 	1
+	showClassOfObject 	TRUE
+	notation   	"Unified")
+    root_usecase_package 	(object Class_Category "Use Case View"
+	quid       	"3DE4921C0124"
+	exportControl 	"Public"
+	global     	TRUE
+	logical_models 	(list unit_reference_list)
+	logical_presentations 	(list unit_reference_list
+	    (object UseCaseDiagram "Main"
+		quid       	"3DE4923F0276"
+		title      	"Main"
+		zoom       	100
+		max_height 	28350
+		max_width  	21600
+		origin_x   	0
+		origin_y   	0
+		items      	(list diagram_item_list))))
+    root_category 	(object Class_Category "Logical View"
+	quid       	"3DE4921C0123"
+	exportControl 	"Public"
+	global     	TRUE
+	subsystem  	"Component View"
+	quidu      	"3DE4921C0125"
+	logical_models 	(list unit_reference_list
+	    (object Association "$UNNAMED$0"
+		quid       	"3DECE02603E1"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$1"
+			quid       	"3DECE02800A1"
+			supplier   	"Logical View::lAr_calorimeter::FCALCryostatVolumes"
+			quidu      	"3DE49A360181"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$2"
+			quid       	"3DECE02800A8"
+			supplier   	"Logical View::lAr_calorimeter::FCALCalorHit"
+			quidu      	"3DE49A36015B")))
+	    (object Association "$UNNAMED$3"
+		quid       	"3DECE02F0195"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$4"
+			quid       	"3DECE031016A"
+			supplier   	"Logical View::lAr_calorimeter::FCALCryostatVolumes"
+			quidu      	"3DE49A360181"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$5"
+			quid       	"3DECE0310173"
+			supplier   	"Logical View::lAr_calorimeter::FCALCalorHit"
+			quidu      	"3DE49A36015B")))
+	    (object Association "$UNNAMED$6"
+		quid       	"3DECE03D0079"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$7"
+			quid       	"3DECE03D0383"
+			supplier   	"Logical View::lAr_calorimeter::FCALEMModuleSD"
+			quidu      	"3DE49A3601A5"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$8"
+			quid       	"3DECE03D038C"
+			supplier   	"Logical View::lAr_calorimeter::FCALPrimaryGeneratorAction"
+			quidu      	"3DE49A360202")))
+	    (object Association "$UNNAMED$9"
+		quid       	"3DECE05A02A4"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$10"
+			quid       	"3DECE05C0289"
+			supplier   	"Logical View::lAr_calorimeter::FCALCalorHit"
+			quidu      	"3DE49A36015B"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$11"
+			quid       	"3DECE05C0291"
+			supplier   	"Logical View::lAr_calorimeter::FCALCryostatVolumes"
+			quidu      	"3DE49A360181")))
+	    (object Association "$UNNAMED$12"
+		quid       	"3DECE07F02DF"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$13"
+			quid       	"3DECE080021F"
+			supplier   	"Logical View::lAr_calorimeter::FCALTestbeamSetupSD"
+			quidu      	"3DE49A36028C"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$14"
+			quid       	"3DECE0800227"
+			supplier   	"Logical View::lAr_calorimeter::FCALTestbeamSetup"
+			quidu      	"3DE49A360278")))
+	    (object Association "$UNNAMED$15"
+		quid       	"3DECE09700C8"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$16"
+			quid       	"3DECE099011D"
+			supplier   	"Logical View::lAr_calorimeter::FCALTestbeamSetup"
+			quidu      	"3DE49A360278"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$17"
+			quid       	"3DECE0990125"
+			supplier   	"Logical View::lAr_calorimeter::FCALTestbeamSetupSD"
+			quidu      	"3DE49A36028C")))
+	    (object Association "$UNNAMED$18"
+		quid       	"3DECE0B80334"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$19"
+			quid       	"3DECE0BC02C0"
+			supplier   	"Logical View::lAr_calorimeter::FCALHadModuleSD"
+			quidu      	"3DE49A3601CB"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$20"
+			quid       	"3DECE0BC02C9"
+			supplier   	"Logical View::lAr_calorimeter::FCALCalorHit"
+			quidu      	"3DE49A36015B")))
+	    (object Association "$UNNAMED$21"
+		quid       	"3DECE0E101DB"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$22"
+			quid       	"3DECE0E30036"
+			supplier   	"Logical View::lAr_calorimeter::FCALEMModuleSD"
+			quidu      	"3DE49A3601A5"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$23"
+			quid       	"3DECE0E3003F"
+			supplier   	"Logical View::lAr_calorimeter::FCALCalorHit"
+			quidu      	"3DE49A36015B")))
+	    (object Association "$UNNAMED$24"
+		quid       	"3DECE3A30397"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$25"
+			quid       	"3DECE3A402EE"
+			supplier   	"Logical View::lAr_calorimeter::FCALEMModule"
+			quidu      	"3DE49A360195"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$26"
+			quid       	"3DECE3A402F6"
+			supplier   	"Logical View::lAr_calorimeter::FCALAnalysisManager"
+			quidu      	"3DE49A350324"
+			is_navigable 	TRUE
+			is_aggregate 	TRUE)))
+	    (object Association "$UNNAMED$27"
+		quid       	"3DED0C820351"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$28"
+			quid       	"3DED0C840104"
+			supplier   	"Logical View::lAr_calorimeter::FCALHadModule"
+			quidu      	"3DE49A3601BB"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$29"
+			quid       	"3DED0C84010F"
+			supplier   	"Logical View::lAr_calorimeter::FCALCryostatVolumes"
+			quidu      	"3DE49A360181"
+			is_navigable 	TRUE
+			is_aggregate 	TRUE)))
+	    (object Association "$UNNAMED$30"
+		quid       	"3DED0CB200E4"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$31"
+			quid       	"3DED0CB303BA"
+			supplier   	"Logical View::lAr_calorimeter::FCALEMModule"
+			quidu      	"3DE49A360195"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$32"
+			quid       	"3DED0CB303C5"
+			supplier   	"Logical View::lAr_calorimeter::FCALCryostatVolumes"
+			quidu      	"3DE49A360181"
+			is_navigable 	TRUE
+			is_aggregate 	TRUE)))
+	    (object Association "$UNNAMED$33"
+		quid       	"3DED0D330348"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$34"
+			quid       	"3DED0D34021A"
+			supplier   	"Logical View::lAr_calorimeter::FCALHadModuleSD"
+			quidu      	"3DE49A3601CB"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$35"
+			quid       	"3DED0D340227"
+			supplier   	"Logical View::lAr_calorimeter::FCALHadModule"
+			quidu      	"3DE49A3601BB"
+			is_navigable 	TRUE
+			is_aggregate 	TRUE)))
+	    (object Association "$UNNAMED$36"
+		quid       	"3DED0D4E0237"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$37"
+			quid       	"3DED0D50008B"
+			supplier   	"Logical View::lAr_calorimeter::FCALHadModuleSD"
+			quidu      	"3DE49A3601CB"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$38"
+			quid       	"3DED0D500099"
+			supplier   	"Logical View::lAr_calorimeter::FCALHadModule"
+			quidu      	"3DE49A3601BB"
+			is_navigable 	TRUE
+			is_aggregate 	TRUE)))
+	    (object Association "$UNNAMED$39"
+		quid       	"3DED0D6500E2"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$40"
+			quid       	"3DED0D66011C"
+			supplier   	"Logical View::lAr_calorimeter::FCALHadModule"
+			quidu      	"3DE49A3601BB"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$41"
+			quid       	"3DED0D660128"
+			supplier   	"Logical View::lAr_calorimeter::FCALCryostatVolumes"
+			quidu      	"3DE49A360181"
+			is_navigable 	TRUE
+			is_aggregate 	TRUE)))
+	    (object Association "$UNNAMED$42"
+		quid       	"3DED0D770156"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$43"
+			quid       	"3DED0D790371"
+			supplier   	"Logical View::lAr_calorimeter::FCALEMModule"
+			quidu      	"3DE49A360195"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$44"
+			quid       	"3DED0D79037C"
+			supplier   	"Logical View::lAr_calorimeter::FCALCryostatVolumes"
+			quidu      	"3DE49A360181"
+			is_navigable 	TRUE
+			is_aggregate 	TRUE)))
+	    (object Association "$UNNAMED$45"
+		quid       	"3DED0E2403CD"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$46"
+			quid       	"3DED0E25031C"
+			supplier   	"Logical View::lAr_calorimeter::FCALSteppingAction"
+			quidu      	"3DE49A360224"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$47"
+			quid       	"3DED0E250324"
+			supplier   	"Logical View::lAr_calorimeter::FCALTBEventAction"
+			quidu      	"3DE49A360245"
+			is_navigable 	TRUE
+			is_aggregate 	TRUE)))
+	    (object Association "$UNNAMED$48"
+		quid       	"3DED0E55022D"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$49"
+			quid       	"3DED0E56006A"
+			supplier   	"Logical View::lAr_calorimeter::FCALTBEventAction"
+			quidu      	"3DE49A360245"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$50"
+			quid       	"3DED0E560073"
+			supplier   	"Logical View::lAr_calorimeter::FCALTBEventActionMessenger"
+			quidu      	"3DE49A360255"
+			is_navigable 	TRUE
+			is_aggregate 	TRUE)))
+	    (object Association "$UNNAMED$51"
+		quid       	"3DED0E77028E"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$52"
+			quid       	"3DED0E780135"
+			supplier   	"Logical View::lAr_calorimeter::FCALTestbeamSetup"
+			quidu      	"3DE49A360278"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$53"
+			quid       	"3DED0E78013E"
+			supplier   	"Logical View::lAr_calorimeter::FCALTestbeamSetupSD"
+			quidu      	"3DE49A36028C"
+			is_navigable 	TRUE
+			is_aggregate 	TRUE)))
+	    (object Association "$UNNAMED$54"
+		quid       	"3DEDE342037F"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$55"
+			quid       	"3DEDE34302D2"
+			supplier   	"Logical View::lAr_calorimeter::FCALEMModule"
+			quidu      	"3DE49A360195"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$56"
+			quid       	"3DEDE34302E3"
+			supplier   	"Logical View::lAr_calorimeter::FCALEMModuleSD"
+			quidu      	"3DE49A3601A5"
+			is_navigable 	TRUE
+			is_aggregate 	TRUE)))
+	    (object Association "$UNNAMED$57"
+		quid       	"3DEE1B71019B"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$58"
+			quid       	"3DEE1B7203AC"
+			supplier   	"Logical View::lAr_calorimeter::FCALTBEventAction"
+			quidu      	"3DE49A360245"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$59"
+			quid       	"3DEE1B7203D8"
+			supplier   	"Logical View::lAr_calorimeter::FCALAnalysisManager"
+			quidu      	"3DE49A350324")))
+	    (object Association "$UNNAMED$60"
+		quid       	"3DEE1B9002D5"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$61"
+			quid       	"3DEE1B9102D6"
+			supplier   	"Logical View::lAr_calorimeter::FCALTBEventAction"
+			quidu      	"3DE49A360245"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$62"
+			quid       	"3DEE1B9102E0"
+			supplier   	"Logical View::lAr_calorimeter::FCALAnalysisManager"
+			quidu      	"3DE49A350324"
+			is_navigable 	TRUE
+			is_aggregate 	TRUE)))
+	    (object Association "$UNNAMED$63"
+		quid       	"3DEE1BB101B4"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$64"
+			quid       	"3DEE1BB201E5"
+			supplier   	"Logical View::lAr_calorimeter::FCALCalorHitsCollection"
+			quidu      	"3DE49A360167"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$65"
+			quid       	"3DEE1BB201EB"
+			supplier   	"Logical View::lAr_calorimeter::FCALCalorHit"
+			quidu      	"3DE49A36015B")))
+	    (object Association "$UNNAMED$66"
+		quid       	"3DEE1BB800C9"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$67"
+			quid       	"3DEE1BB903DA"
+			supplier   	"Logical View::lAr_calorimeter::FCALCalorHitsCollection"
+			quidu      	"3DE49A360167"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$68"
+			quid       	"3DEE1BB903E1"
+			supplier   	"Logical View::lAr_calorimeter::FCALCalorHit"
+			quidu      	"3DE49A36015B"
+			is_navigable 	TRUE
+			is_aggregate 	TRUE)))
+	    (object Association "$UNNAMED$69"
+		quid       	"3DEE229000C8"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$70"
+			quid       	"3DEE22910196"
+			supplier   	"Logical View::lAr_calorimeter::FCALTestbeamSetup"
+			quidu      	"3DE49A360278"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$71"
+			quid       	"3DEE229101A1"
+			supplier   	"Logical View::lAr_calorimeter::FCALCryostatVolumes"
+			quidu      	"3DE49A360181")))
+	    (object Association "$UNNAMED$72"
+		quid       	"3DEE22A100F1"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$73"
+			quid       	"3DEE22A203CF"
+			supplier   	"Logical View::lAr_calorimeter::FCALTestbeamSetup"
+			quidu      	"3DE49A360278"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$74"
+			quid       	"3DEE22A203DC"
+			supplier   	"Logical View::lAr_calorimeter::FCALCryostatVolumes"
+			quidu      	"3DE49A360181"
+			is_navigable 	TRUE
+			is_aggregate 	TRUE)))
+	    (object Association "$UNNAMED$75"
+		quid       	"3DEE22C0037B"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$76"
+			quid       	"3DEE22C101FC"
+			supplier   	"Logical View::lAr_calorimeter::FCALEMModule"
+			quidu      	"3DE49A360195"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$77"
+			quid       	"3DEE22C10208"
+			supplier   	"Logical View::lAr_calorimeter::FCALCryostatVolumes"
+			quidu      	"3DE49A360181")))
+	    (object Association "$UNNAMED$78"
+		quid       	"3DEE22C701A1"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$79"
+			quid       	"3DEE22C80039"
+			supplier   	"Logical View::lAr_calorimeter::FCALEMModule"
+			quidu      	"3DE49A360195"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$80"
+			quid       	"3DEE22C80047"
+			supplier   	"Logical View::lAr_calorimeter::FCALCryostatVolumes"
+			quidu      	"3DE49A360181"
+			is_navigable 	TRUE
+			is_aggregate 	TRUE)))
+	    (object Association "$UNNAMED$81"
+		quid       	"3DEE22D203C2"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$82"
+			quid       	"3DEE22D302A1"
+			supplier   	"Logical View::lAr_calorimeter::FCALHadModule"
+			quidu      	"3DE49A3601BB"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$83"
+			quid       	"3DEE22D302AE"
+			supplier   	"Logical View::lAr_calorimeter::FCALCryostatVolumes"
+			quidu      	"3DE49A360181")))
+	    (object Association "$UNNAMED$84"
+		quid       	"3DEE22D801F7"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$85"
+			quid       	"3DEE22D9011B"
+			supplier   	"Logical View::lAr_calorimeter::FCALHadModule"
+			quidu      	"3DE49A3601BB"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$86"
+			quid       	"3DEE22D9012A"
+			supplier   	"Logical View::lAr_calorimeter::FCALCryostatVolumes"
+			quidu      	"3DE49A360181"
+			is_navigable 	TRUE
+			is_aggregate 	TRUE)))
+	    (object Association "$UNNAMED$87"
+		quid       	"3DEE22EC01D2"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$88"
+			quid       	"3DEE22ED020E"
+			supplier   	"Logical View::lAr_calorimeter::FCALEMModuleSD"
+			quidu      	"3DE49A3601A5"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$89"
+			quid       	"3DEE22ED021C"
+			supplier   	"Logical View::lAr_calorimeter::FCALEMModule"
+			quidu      	"3DE49A360195")))
+	    (object Association "$UNNAMED$90"
+		quid       	"3DEE22F4034D"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$91"
+			quid       	"3DEE22F5036A"
+			supplier   	"Logical View::lAr_calorimeter::FCALEMModuleSD"
+			quidu      	"3DE49A3601A5"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$92"
+			quid       	"3DEE22F50379"
+			supplier   	"Logical View::lAr_calorimeter::FCALEMModule"
+			quidu      	"3DE49A360195"
+			is_navigable 	TRUE
+			is_aggregate 	TRUE)))
+	    (object Association "$UNNAMED$93"
+		quid       	"3DEE23010171"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$94"
+			quid       	"3DEE23020066"
+			supplier   	"Logical View::lAr_calorimeter::FCALHadModuleSD"
+			quidu      	"3DE49A3601CB"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$95"
+			quid       	"3DEE23020074"
+			supplier   	"Logical View::lAr_calorimeter::FCALHadModule"
+			quidu      	"3DE49A3601BB")))
+	    (object Association "$UNNAMED$96"
+		quid       	"3DEE2308037A"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$97"
+			quid       	"3DEE230903AF"
+			supplier   	"Logical View::lAr_calorimeter::FCALHadModuleSD"
+			quidu      	"3DE49A3601CB"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$98"
+			quid       	"3DEE230903BD"
+			supplier   	"Logical View::lAr_calorimeter::FCALHadModule"
+			quidu      	"3DE49A3601BB"
+			is_navigable 	TRUE
+			is_aggregate 	TRUE)))
+	    (object Association "$UNNAMED$99"
+		quid       	"3DEE2313037F"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$100"
+			quid       	"3DEE23150237"
+			supplier   	"Logical View::lAr_calorimeter::FCALTestbeamSetupSD"
+			quidu      	"3DE49A36028C"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$101"
+			quid       	"3DEE23150247"
+			supplier   	"Logical View::lAr_calorimeter::FCALTestbeamSetup"
+			quidu      	"3DE49A360278")))
+	    (object Association "$UNNAMED$102"
+		quid       	"3DEE231D0213"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$103"
+			quid       	"3DEE231E0210"
+			supplier   	"Logical View::lAr_calorimeter::FCALTestbeamSetupSD"
+			quidu      	"3DE49A36028C"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$104"
+			quid       	"3DEE231E0221"
+			supplier   	"Logical View::lAr_calorimeter::FCALTestbeamSetup"
+			quidu      	"3DE49A360278"
+			is_navigable 	TRUE
+			is_aggregate 	TRUE)))
+	    (object Association "$UNNAMED$105"
+		quid       	"3DEE2DBD03D1"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$106"
+			quid       	"3DEE2DBF0201"
+			supplier   	"Logical View::lAr_calorimeter::FCALSteppingAction"
+			quidu      	"3DE49A360224"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$107"
+			quid       	"3DEE2DBF020C"
+			supplier   	"Logical View::lAr_calorimeter::FCALTBEventAction"
+			quidu      	"3DE49A360245")))
+	    (object Association "$UNNAMED$108"
+		quid       	"3DEE2DC700BC"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$109"
+			quid       	"3DEE2DC80064"
+			supplier   	"Logical View::lAr_calorimeter::FCALSteppingAction"
+			quidu      	"3DE49A360224"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$110"
+			quid       	"3DEE2DC80070"
+			supplier   	"Logical View::lAr_calorimeter::FCALTBEventAction"
+			quidu      	"3DE49A360245"
+			is_navigable 	TRUE
+			is_aggregate 	TRUE)))
+	    (object Association "$UNNAMED$111"
+		quid       	"3DEE2DD901AB"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$112"
+			quid       	"3DEE2DDA0318"
+			supplier   	"Logical View::lAr_calorimeter::FCALTBEventActionMessenger"
+			quidu      	"3DE49A360255"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$113"
+			quid       	"3DEE2DDA0325"
+			supplier   	"Logical View::lAr_calorimeter::FCALTBEventAction"
+			quidu      	"3DE49A360245")))
+	    (object Association "$UNNAMED$114"
+		quid       	"3DEE2DE002F0"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$115"
+			quid       	"3DEE2DE10356"
+			supplier   	"Logical View::lAr_calorimeter::FCALTBEventActionMessenger"
+			quidu      	"3DE49A360255"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$116"
+			quid       	"3DEE2DE10363"
+			supplier   	"Logical View::lAr_calorimeter::FCALTBEventAction"
+			quidu      	"3DE49A360245"
+			is_navigable 	TRUE
+			is_aggregate 	TRUE)))
+	    (object Association "$UNNAMED$117"
+		quid       	"3DEE2DEC0294"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$118"
+			quid       	"3DEE2DEF0064"
+			supplier   	"Logical View::lAr_calorimeter::FCALTBEventAction"
+			quidu      	"3DE49A360245"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$119"
+			quid       	"3DEE2DEF0076"
+			supplier   	"Logical View::lAr_calorimeter::FCALSteppingAction"
+			quidu      	"3DE49A360224")))
+	    (object Association "$UNNAMED$120"
+		quid       	"3DEE2DF50153"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$121"
+			quid       	"3DEE2DF6003A"
+			supplier   	"Logical View::lAr_calorimeter::FCALTBEventAction"
+			quidu      	"3DE49A360245"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$122"
+			quid       	"3DEE2DF6004D"
+			supplier   	"Logical View::lAr_calorimeter::FCALSteppingAction"
+			quidu      	"3DE49A360224"
+			is_navigable 	TRUE
+			is_aggregate 	TRUE)))
+	    (object Association "$UNNAMED$123"
+		quid       	"3DEE2FD90235"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$124"
+			quid       	"3DEE2FDA0249"
+			supplier   	"Logical View::lAr_calorimeter::FCALSteppingAction"
+			quidu      	"3DE49A360224"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$125"
+			quid       	"3DEE2FDA0258"
+			supplier   	"Logical View::lAr_calorimeter::FCALTBEventAction"
+			quidu      	"3DE49A360245")))
+	    (object Association "$UNNAMED$126"
+		quid       	"3DEE2FE202D8"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$127"
+			quid       	"3DEE2FE30287"
+			supplier   	"Logical View::lAr_calorimeter::FCALSteppingAction"
+			quidu      	"3DE49A360224"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$128"
+			quid       	"3DEE2FE30296"
+			supplier   	"Logical View::lAr_calorimeter::FCALTBEventAction"
+			quidu      	"3DE49A360245"
+			is_navigable 	TRUE
+			is_aggregate 	TRUE)))
+	    (object Association "$UNNAMED$129"
+		quid       	"3DEF229E0014"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$130"
+			quid       	"3DEF229F0331"
+			supplier   	"Logical View::lAr_calorimeter::FCALHadModule"
+			quidu      	"3DE49A3601BB"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$131"
+			quid       	"3DEF229F0341"
+			supplier   	"Logical View::lAr_calorimeter::FCALHadModuleSD"
+			quidu      	"3DE49A3601CB")))
+	    (object Association "$UNNAMED$132"
+		quid       	"3DEF22B00114"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$133"
+			quid       	"3DEF22B10320"
+			supplier   	"Logical View::lAr_calorimeter::FCALHadModule"
+			quidu      	"3DE49A3601BB"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$134"
+			quid       	"3DEF22B10331"
+			supplier   	"Logical View::lAr_calorimeter::FCALHadModuleSD"
+			quidu      	"3DE49A3601CB"
+			is_navigable 	TRUE
+			is_aggregate 	TRUE)))
+	    (object Association "$UNNAMED$135"
+		quid       	"3DEF22CE0171"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$136"
+			quid       	"3DEF22D000DE"
+			supplier   	"Logical View::lAr_calorimeter::FCALHadModule"
+			quidu      	"3DE49A3601BB"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$137"
+			quid       	"3DEF22D000F1"
+			supplier   	"Logical View::lAr_calorimeter::FCALHadModuleSD"
+			quidu      	"3DE49A3601CB"
+			is_navigable 	TRUE
+			is_aggregate 	TRUE)))
+	    (object Association "$UNNAMED$138"
+		quid       	"3DEF22D70115"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$139"
+			quid       	"3DEF22D802B6"
+			supplier   	"Logical View::lAr_calorimeter::FCALHadModuleSD"
+			quidu      	"3DE49A3601CB"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$140"
+			quid       	"3DEF22D802C8"
+			supplier   	"Logical View::lAr_calorimeter::FCALHadModule"
+			quidu      	"3DE49A3601BB"
+			is_navigable 	TRUE
+			is_aggregate 	TRUE)))
+	    (object Association "$UNNAMED$141"
+		quid       	"3DEF22E701D5"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$142"
+			quid       	"3DEF22E90145"
+			supplier   	"Logical View::lAr_calorimeter::FCALEMModuleSD"
+			quidu      	"3DE49A3601A5"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$143"
+			quid       	"3DEF22E90153"
+			supplier   	"Logical View::lAr_calorimeter::FCALEMModule"
+			quidu      	"3DE49A360195"
+			is_navigable 	TRUE
+			is_aggregate 	TRUE)))
+	    (object Association "$UNNAMED$144"
+		quid       	"3DEF22EF0220"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$145"
+			quid       	"3DEF22F00371"
+			supplier   	"Logical View::lAr_calorimeter::FCALEMModule"
+			quidu      	"3DE49A360195"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$146"
+			quid       	"3DEF22F00382"
+			supplier   	"Logical View::lAr_calorimeter::FCALEMModuleSD"
+			quidu      	"3DE49A3601A5"
+			is_navigable 	TRUE
+			is_aggregate 	TRUE)))
+	    (object Association "$UNNAMED$147"
+		quid       	"3DEF22FC01DE"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$148"
+			quid       	"3DEF22FD0200"
+			supplier   	"Logical View::lAr_calorimeter::FCALRunAction"
+			quidu      	"3DE49A360211"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$149"
+			quid       	"3DEF22FD020B"
+			supplier   	"Logical View::lAr_calorimeter::FCALPrimaryGeneratorAction"
+			quidu      	"3DE49A360202"
+			is_aggregate 	TRUE)))
+	    (object Association "$UNNAMED$150"
+		quid       	"3DEF2313025E"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$151"
+			quid       	"3DEF231400D8"
+			supplier   	"Logical View::lAr_calorimeter::FCALAnalysisManager"
+			quidu      	"3DE49A350324"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$152"
+			quid       	"3DEF231400EC"
+			supplier   	"Logical View::lAr_calorimeter::FCALTBEventAction"
+			quidu      	"3DE49A360245"
+			is_aggregate 	TRUE)))
+	    (object Association "$UNNAMED$153"
+		quid       	"3DEF2320036B"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$154"
+			quid       	"3DEF2321031F"
+			supplier   	"Logical View::lAr_calorimeter::FCALTestbeamSetup"
+			quidu      	"3DE49A360278"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$155"
+			quid       	"3DEF23210330"
+			supplier   	"Logical View::lAr_calorimeter::FCALTestbeamSetupSD"
+			quidu      	"3DE49A36028C"
+			is_navigable 	TRUE
+			is_aggregate 	TRUE)))
+	    (object Association "$UNNAMED$156"
+		quid       	"3DF8BFA900B1"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$157"
+			quid       	"3DF8BFAA0013"
+			supplier   	"Logical View::lAr_calorimeter::FCALRunAction"
+			quidu      	"3DE49A360211"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$158"
+			quid       	"3DF8BFAA001D"
+			supplier   	"Logical View::lAr_calorimeter::FCALTBEventAction"
+			quidu      	"3DE49A360245"
+			is_aggregate 	TRUE)))
+	    (object Class_Category "lAr_calorimeter"
+		quid       	"3DE49A3501D3"
+		exportControl 	"Public"
+		logical_models 	(list unit_reference_list
+		    (object Class "FCALAnalysisManager"
+			attributes 	(list Attribute_Set
+			    (object Attribute
+				tool       	"Cplusplus"
+				name       	"HeaderSourceFile"
+				value      	"FCALAnalysisManager.hh"))
+			quid       	"3DE49A350324"
+			documentation 	
+|This class contains the definition and filling of histograms and ntuples with AIDA v.3.0.
+|
+			
+			stereotype 	"singleton"
+			superclasses 	(list inheritance_relationship_list
+			    (object Inheritance_Relationship
+				quid       	"3DEE1B4E00DF"
+				supplier   	"Logical View::lAr_calorimeter::FCALTBEventAction"
+				quidu      	"3DE49A360245"))
+			operations 	(list Operations
+			    (object Operation "~FCALAnalysisManager"
+				quid       	"3DE49A3700C4"
+				stereotype 	"virtual"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "book"
+				quid       	"3DE49A370109"
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "finish"
+				quid       	"3DE49A37010B"
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "NumOutOfWorld"
+				quid       	"3DE49A37010E"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A370110"
+					type       	"G4double")
+				    (object Parameter "G4int"
+					quid       	"3DE49A370137"
+					type       	"G4int"))
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "Secondaries"
+				quid       	"3DE49A370141"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A370143"
+					type       	"G4double")
+				    (object Parameter "G4int"
+					quid       	"3DE49A37014E"
+					type       	"G4int"))
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "Edep"
+				quid       	"3DE49A370157"
+				parameters 	(list Parameters
+				    (object Parameter "G4double"
+					quid       	"3DE49A37015A"
+					type       	"G4double"))
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "getInstance"
+				quid       	"3DE49A370166"
+				stereotype 	"static"
+				result     	"FCALAnalysisManager*"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "FCALAnalysisManager"
+				quid       	"3DE49A37016A"
+				concurrency 	"Sequential"
+				opExportControl 	"Private"
+				uid        	0))
+			module     	"Component View::FML"
+			quidu      	"3DE495920399"
+			language   	"ANSI C++")
+		    (object Class "FCALCalorHit"
+			attributes 	(list Attribute_Set
+			    (object Attribute
+				tool       	"Cplusplus"
+				name       	"HeaderSourceFile"
+				value      	"FCALCalorHit.hh"))
+			quid       	"3DE49A36015B"
+			documentation 	"Hit class derived from G4VHit. "
+			used_nodes 	(list uses_relationship_list
+			    (object Uses_Relationship
+				quid       	"3DECE19B038C"
+				supplier   	"Logical View::lAr_calorimeter::FCALTestbeamSetupSD"
+				quidu      	"3DE49A36028C")
+			    (object Uses_Relationship
+				quid       	"3DECE1A703C6"
+				supplier   	"Logical View::lAr_calorimeter::FCALEMModuleSD"
+				quidu      	"3DE49A3601A5")
+			    (object Uses_Relationship
+				quid       	"3DECE1B60034"
+				supplier   	"Logical View::lAr_calorimeter::FCALHadModuleSD"
+				quidu      	"3DE49A3601CB"))
+			operations 	(list Operations
+			    (object Operation "FCALCalorHit"
+				quid       	"3DE49A37018D"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "~FCALCalorHit"
+				quid       	"3DE49A370190"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "FCALCalorHit"
+				quid       	"3DE49A370192"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A370194"
+					type       	"const FCALCalorHit&"))
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "operator="
+				quid       	"3DE49A370197"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A370199"
+					type       	"const FCALCalorHit&"))
+				result     	"const FCALCalorHit&"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "operator=="
+				quid       	"3DE49A37019B"
+				stereotype 	"const"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A37019F"
+					type       	"const FCALCalorHit&"))
+				result     	"int"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "operator new"
+				attributes 	(list Attribute_Set
+				    (object Attribute
+					tool       	"Cplusplus"
+					name       	"Inline"
+					value      	TRUE))
+				quid       	"3DE49A3701A1"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A3701A4"
+					type       	"size_t"))
+				result     	"void*"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "operator delete"
+				attributes 	(list Attribute_Set
+				    (object Attribute
+					tool       	"Cplusplus"
+					name       	"Inline"
+					value      	TRUE))
+				quid       	"3DE49A3701A6"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A3701A9"
+					type       	"void*"))
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "Draw"
+				quid       	"3DE49A3701AB"
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "Print"
+				quid       	"3DE49A3701AE"
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "AddAbs"
+				attributes 	(list Attribute_Set
+				    (object Attribute
+					tool       	"Cplusplus"
+					name       	"Inline"
+					value      	TRUE))
+				quid       	"3DE49A3701B0"
+				parameters 	(list Parameters
+				    (object Parameter "de"
+					quid       	"3DE49A3701B3"
+					type       	"G4double")
+				    (object Parameter "dl"
+					quid       	"3DE49A3701B4"
+					type       	"G4double"))
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "AddGap"
+				attributes 	(list Attribute_Set
+				    (object Attribute
+					tool       	"Cplusplus"
+					name       	"Inline"
+					value      	TRUE))
+				quid       	"3DE49A3701B6"
+				parameters 	(list Parameters
+				    (object Parameter "de"
+					quid       	"3DE49A3701B9"
+					type       	"G4double")
+				    (object Parameter "dl"
+					quid       	"3DE49A3701BA"
+					type       	"G4double"))
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "GetEdepAbs"
+				attributes 	(list Attribute_Set
+				    (object Attribute
+					tool       	"Cplusplus"
+					name       	"Inline"
+					value      	TRUE))
+				quid       	"3DE49A3701BC"
+				result     	"G4double"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "GetTrakAbs"
+				attributes 	(list Attribute_Set
+				    (object Attribute
+					tool       	"Cplusplus"
+					name       	"Inline"
+					value      	TRUE))
+				quid       	"3DE49A3701BF"
+				result     	"G4double"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "GetEdepGap"
+				attributes 	(list Attribute_Set
+				    (object Attribute
+					tool       	"Cplusplus"
+					name       	"Inline"
+					value      	TRUE))
+				quid       	"3DE49A3701C2"
+				result     	"G4double"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "GetTrakGap"
+				attributes 	(list Attribute_Set
+				    (object Attribute
+					tool       	"Cplusplus"
+					name       	"Inline"
+					value      	TRUE))
+				quid       	"3DE49A3701C5"
+				result     	"G4double"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0))
+			module     	"Component View::FML"
+			quidu      	"3DE495920399"
+			language   	"ANSI C++")
+		    (object Class "FCALCalorHitsCollection"
+			attributes 	(list Attribute_Set
+			    (object Attribute
+				tool       	"Cplusplus"
+				name       	"HeaderSourceFile"
+				value      	"FCALCalorHit.hh")
+			    (object Attribute
+				tool       	"Cplusplus"
+				name       	"ImplementationType"
+				value      	"G4THitsCollection<FCALCalorHit>"))
+			quid       	"3DE49A360167"
+			stereotype 	"typedef"
+			module     	"Component View::FML"
+			quidu      	"3DE495920399"
+			language   	"ANSI C++")
+		    (object Class "FCALCryostatVolumes"
+			attributes 	(list Attribute_Set
+			    (object Attribute
+				tool       	"Cplusplus"
+				name       	"HeaderSourceFile"
+				value      	"FCALCryostatVolumes.hh"))
+			quid       	"3DE49A360181"
+			documentation 	"This class defines the volumes of the Cryostat."
+			superclasses 	(list inheritance_relationship_list
+			    (object Inheritance_Relationship
+				quid       	"3DEDE3030039"
+				supplier   	"Logical View::lAr_calorimeter::FCALMaterialConsultant"
+				quidu      	"3DE49A3601E0"))
+			used_nodes 	(list uses_relationship_list
+			    (object Uses_Relationship
+				quid       	"3DED0D96010F"
+				supplier   	"Logical View::lAr_calorimeter::FCALHadModule"
+				quidu      	"3DE49A3601BB")
+			    (object Uses_Relationship
+				quid       	"3DEDE311005E"
+				supplier   	"Logical View::lAr_calorimeter::FCALMaterialConsultant"
+				quidu      	"3DE49A3601E0"))
+			operations 	(list Operations
+			    (object Operation "FCALCryostatVolumes"
+				quid       	"3DE49A370294"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "~FCALCryostatVolumes"
+				quid       	"3DE49A370297"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "Construct"
+				quid       	"3DE49A370299"
+				result     	"G4LogicalVolume *"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0))
+			module     	"Component View::FML"
+			quidu      	"3DE495920399"
+			language   	"ANSI C++")
+		    (object Class "FCALEMModule"
+			attributes 	(list Attribute_Set
+			    (object Attribute
+				tool       	"Cplusplus"
+				name       	"HeaderSourceFile"
+				value      	"FCALEMModule.hh"))
+			quid       	"3DE49A360195"
+			documentation 	"This class defines the geometry of the EMModule 0."
+			used_nodes 	(list uses_relationship_list
+			    (object Uses_Relationship
+				quid       	"3DEDE35300D0"
+				supplier   	"Logical View::lAr_calorimeter::FCALTestbeamSetupSD"
+				quidu      	"3DE49A36028C")
+			    (object Uses_Relationship
+				quid       	"3DEE2D690107"
+				supplier   	"Logical View::lAr_calorimeter::FCALMaterialConsultant"
+				quidu      	"3DE49A3601E0"))
+			operations 	(list Operations
+			    (object Operation "FCALEMModule"
+				quid       	"3DE49A37031C"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "~FCALEMModule"
+				quid       	"3DE49A37031E"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "Construct"
+				quid       	"3DE49A370320"
+				result     	"G4LogicalVolume *"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "InitializeGeometry"
+				quid       	"3DE49A370323"
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "GetF1TileID"
+				quid       	"3DE49A370326"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A370328"
+					type       	"G4int"))
+				result     	"G4int"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "GetF1LArGapPosX"
+				quid       	"3DE49A370332"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A370335"
+					type       	"G4int"))
+				result     	"G4double"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0))
+			module     	"Component View::FML"
+			quidu      	"3DE495920399"
+			language   	"ANSI C++")
+		    (object Class "FCALEMModuleSD"
+			attributes 	(list Attribute_Set
+			    (object Attribute
+				tool       	"Cplusplus"
+				name       	"HeaderSourceFile"
+				value      	"FCALEMModuleSD.hh"))
+			quid       	"3DE49A3601A5"
+			documentation 	"Sensitive detector class of EMModule. See FCALHadModuleSD class for details.  "
+			operations 	(list Operations
+			    (object Operation "~FCALEMModuleSD"
+				quid       	"3DE49A370395"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "Initialize"
+				quid       	"3DE49A370398"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A37039A"
+					type       	"G4HCofThisEvent*"))
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "ProcessHits"
+				quid       	"3DE49A3703AB"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A3703AD"
+					type       	"G4Step*")
+				    (object Parameter ""
+					quid       	"3DE49A3703BD"
+					type       	"G4TouchableHistory*"))
+				result     	"G4bool"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "EndOfEvent"
+				quid       	"3DE49A3703CB"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A3703CD"
+					type       	"G4HCofThisEvent*"))
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "clear"
+				quid       	"3DE49A3703DD"
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "DrawAll"
+				quid       	"3DE49A3703E0"
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "PrintAll"
+				quid       	"3DE49A3703E3"
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0))
+			module     	"Component View::FML"
+			quidu      	"3DE495920399"
+			language   	"ANSI C++")
+		    (object Class "FCALHadModule"
+			attributes 	(list Attribute_Set
+			    (object Attribute
+				tool       	"Cplusplus"
+				name       	"HeaderSourceFile"
+				value      	"FCALHadModule.hh"))
+			quid       	"3DE49A3601BB"
+			documentation 	"This class defines the geometry of the FCAL HadModule 0."
+			used_nodes 	(list uses_relationship_list
+			    (object Uses_Relationship
+				quid       	"3DEDE32C02AA"
+				supplier   	"Logical View::lAr_calorimeter::FCALMaterialConsultant"
+				quidu      	"3DE49A3601E0"))
+			operations 	(list Operations
+			    (object Operation "FCALHadModule"
+				quid       	"3DE49A3800A1"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "~FCALHadModule"
+				quid       	"3DE49A3800A5"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "Construct"
+				quid       	"3DE49A3800A8"
+				result     	"G4LogicalVolume *"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "InitializeGeometry"
+				quid       	"3DE49A3800AA"
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "GetF2TileID"
+				quid       	"3DE49A3800AD"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A3800B0"
+					type       	"G4int"))
+				result     	"G4int"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0))
+			module     	"Component View::FML"
+			quidu      	"3DE495920399"
+			language   	"ANSI C++")
+		    (object Class "FCALHadModuleSD"
+			attributes 	(list Attribute_Set
+			    (object Attribute
+				tool       	"Cplusplus"
+				name       	"HeaderSourceFile"
+				value      	"FCALHadModuleSD.hh"))
+			quid       	"3DE49A3601CB"
+			documentation 	"Sensitive detector class of HadModule to produce hits. In the constructor, names of hits collections which are madr by the sensitive detector must be set to a collectionName string vector."
+			used_nodes 	(list uses_relationship_list
+			    (object Uses_Relationship
+				quid       	"3DEDE386009B"
+				supplier   	"Logical View::lAr_calorimeter::FCALTestbeamSetup"
+				quidu      	"3DE49A360278")
+			    (object Uses_Relationship
+				quid       	"3DEE2D740257"
+				supplier   	"Logical View::lAr_calorimeter::FCALMaterialConsultant"
+				quidu      	"3DE49A3601E0"))
+			operations 	(list Operations
+			    (object Operation "~FCALHadModuleSD"
+				quid       	"3DE49A380119"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "Initialize"
+				quid       	"3DE49A38011C"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A38011E"
+					type       	"G4HCofThisEvent*"))
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "ProcessHits"
+				quid       	"3DE49A38012F"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A380132"
+					type       	"G4Step*")
+				    (object Parameter ""
+					quid       	"3DE49A380142"
+					type       	"G4TouchableHistory*"))
+				result     	"G4bool"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "EndOfEvent"
+				quid       	"3DE49A380151"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A380154"
+					type       	"G4HCofThisEvent*"))
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "clear"
+				quid       	"3DE49A380165"
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "DrawAll"
+				quid       	"3DE49A380168"
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "PrintAll"
+				quid       	"3DE49A38016A"
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0))
+			module     	"Component View::FML"
+			quidu      	"3DE495920399"
+			language   	"ANSI C++")
+		    (object Class "FCALMaterialConsultant"
+			attributes 	(list Attribute_Set
+			    (object Attribute
+				tool       	"Cplusplus"
+				name       	"HeaderSourceFile"
+				value      	"FCALMaterialConsultant.hh"))
+			quid       	"3DE49A3601E0"
+			documentation 	"Header file for the Material Expert for the ATLAS FCAL."
+			stereotype 	"singleton"
+			operations 	(list Operations
+			    (object Operation "FCALMaterialConsultant"
+				quid       	"3DE49A38029F"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "~FCALMaterialConsultant"
+				attributes 	(list Attribute_Set
+				    (object Attribute
+					tool       	"Cplusplus"
+					name       	"Inline"
+					value      	TRUE))
+				quid       	"3DE49A3802A2"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "construct"
+				quid       	"3DE49A3802A5"
+				stereotype 	"static"
+				result     	"FCALMaterialConsultant *"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "Material"
+				quid       	"3DE49A3802A9"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A3802AB"
+					type       	"G4String"))
+				result     	"G4Material *"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0))
+			module     	"Component View::FML"
+			quidu      	"3DE495920399"
+			language   	"ANSI C++")
+		    (object Class "FCALPhysicsList"
+			attributes 	(list Attribute_Set
+			    (object Attribute
+				tool       	"Cplusplus"
+				name       	"HeaderSourceFile"
+				value      	"FCALPhysicsList.hh"))
+			quid       	"3DE49A3601F3"
+			documentation 	
+|Class to construct particles and processes. It contains the following methods:
+|
+|o ConstructParticle(); --> It contructs particles.
+|
+|o ConstructPhysics(); --> It constructs processes and                                                                                                            registers them to particles.
+|
+|o SetCuts(); ---------> It sets cut values in range to
+|                                      all particles.
+|
+			
+			operations 	(list Operations
+			    (object Operation "FCALPhysicsList"
+				quid       	"3DE49A3802D2"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "~FCALPhysicsList"
+				quid       	"3DE49A3802D6"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "ConstructParticle"
+				quid       	"3DE49A3802D9"
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Protected"
+				uid        	0)
+			    (object Operation "ConstructProcess"
+				quid       	"3DE49A3802DC"
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Protected"
+				uid        	0)
+			    (object Operation "SetCuts"
+				quid       	"3DE49A3802DE"
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Protected"
+				uid        	0)
+			    (object Operation "SetCutForGamma"
+				quid       	"3DE49A3802E1"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A3802E3"
+					type       	"G4double"))
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "SetCutForElectron"
+				quid       	"3DE49A3802E6"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A3802E8"
+					type       	"G4double"))
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "SetCutForProton"
+				quid       	"3DE49A3802EA"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A3802ED"
+					type       	"G4double"))
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "GetCutForGamma"
+				quid       	"3DE49A3802EF"
+				stereotype 	"const"
+				result     	"G4double"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "GetCutForElectron"
+				quid       	"3DE49A3802F3"
+				stereotype 	"const"
+				result     	"G4double"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "GetCutForProton"
+				quid       	"3DE49A3802F7"
+				stereotype 	"const"
+				result     	"G4double"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "ConstructBosons"
+				quid       	"3DE49A3802FB"
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Protected"
+				uid        	0)
+			    (object Operation "ConstructLeptons"
+				quid       	"3DE49A3802FE"
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Protected"
+				uid        	0)
+			    (object Operation "ConstructMesons"
+				quid       	"3DE49A380301"
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Protected"
+				uid        	0)
+			    (object Operation "ConstructBaryons"
+				quid       	"3DE49A380304"
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Protected"
+				uid        	0)
+			    (object Operation "ConstructGeneral"
+				quid       	"3DE49A380307"
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Protected"
+				uid        	0)
+			    (object Operation "ConstructEM"
+				quid       	"3DE49A380309"
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Protected"
+				uid        	0))
+			module     	"Component View::FML"
+			quidu      	"3DE495920399"
+			language   	"ANSI C++")
+		    (object Class "FCALPrimaryGeneratorAction"
+			attributes 	(list Attribute_Set
+			    (object Attribute
+				tool       	"Cplusplus"
+				name       	"HeaderSourceFile"
+				value      	"FCALPrimaryGeneratorAction.hh"))
+			quid       	"3DE49A360202"
+			documentation 	"Class derived from G4VUserPrimaryGeneratorAction. This class has only one method; GeneratePrimaries(), which is invoked from G4RunManager at the beginning of the event loop. "
+			used_nodes 	(list uses_relationship_list
+			    (object Uses_Relationship
+				quid       	"3DED0E0B0179"
+				supplier   	"Logical View::lAr_calorimeter::FCALTestbeamSetupSD"
+				quidu      	"3DE49A36028C")
+			    (object Uses_Relationship
+				quid       	"3DEDE3A101F3"
+				supplier   	"Logical View::lAr_calorimeter::FCALTestbeamSetup"
+				quidu      	"3DE49A360278"))
+			operations 	(list Operations
+			    (object Operation "FCALPrimaryGeneratorAction"
+				quid       	"3DE49A380332"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "~FCALPrimaryGeneratorAction"
+				quid       	"3DE49A380334"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "GeneratePrimaries"
+				quid       	"3DE49A380337"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A380339"
+					type       	"G4Event*"))
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0))
+			module     	"Component View::FML"
+			quidu      	"3DE495920399"
+			language   	"ANSI C++")
+		    (object Class "FCALRunAction"
+			attributes 	(list Attribute_Set
+			    (object Attribute
+				tool       	"Cplusplus"
+				name       	"HeaderSourceFile"
+				value      	"FCALRunAction.hh"))
+			quid       	"3DE49A360211"
+			documentation 	"Class which defines the action at the beginning and at the end of the run by two methods; BeginOfRunAction and EndOfRunAction. "
+			operations 	(list Operations
+			    (object Operation "FCALRunAction"
+				quid       	"3DE49A38034B"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "~FCALRunAction"
+				quid       	"3DE49A38034D"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "BeginOfRunAction"
+				quid       	"3DE49A380350"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A380352"
+					type       	"const G4Run*"))
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "EndOfRunAction"
+				quid       	"3DE49A380355"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A380357"
+					type       	"const G4Run*"))
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0))
+			module     	"Component View::FML"
+			quidu      	"3DE495920399"
+			language   	"ANSI C++")
+		    (object Class "FCALSteppingAction"
+			attributes 	(list Attribute_Set
+			    (object Attribute
+				tool       	"Cplusplus"
+				name       	"HeaderSourceFile"
+				value      	"FCALSteppingAction.hh"))
+			quid       	"3DE49A360224"
+			documentation 	"This class represents actions taken at each end of stepping."
+			operations 	(list Operations
+			    (object Operation "FCALSteppingAction"
+				quid       	"3DE49A3803A1"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "~FCALSteppingAction"
+				quid       	"3DE49A3803A3"
+				stereotype 	"virtual"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "UserSteppingAction"
+				quid       	"3DE49A3803A7"
+				stereotype 	"virtual"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A3803AB"
+					type       	"const G4Step*"))
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "initialize"
+				quid       	"3DE49A3803AD"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A3803B0"
+					type       	"G4int"))
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "GetOutOfWorldTracks"
+				quid       	"3DE49A3803B3"
+				parameters 	(list Parameters
+				    (object Parameter "G4int"
+					quid       	"3DE49A3803B6"
+					type       	"G4int"))
+				result     	"G4double"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "GetSecondaries"
+				quid       	"3DE49A3803B8"
+				parameters 	(list Parameters
+				    (object Parameter "G4int"
+					quid       	"3DE49A3803BB"
+					type       	"G4int"))
+				result     	"G4double"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "GetEdepFCAL"
+				quid       	"3DE49A3803BD"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A3803BF"
+					type       	"G4String"))
+				result     	"G4double"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0))
+			module     	"Component View::FML"
+			quidu      	"3DE495920399"
+			language   	"ANSI C++")
+		    (object Class "FCALSteppingVerbose"
+			attributes 	(list Attribute_Set
+			    (object Attribute
+				tool       	"Cplusplus"
+				name       	"HeaderSourceFile"
+				value      	"FCALSteppingVerbose.hh"))
+			quid       	"3DE49A360233"
+			documentation 	
+|Class inherited from G4VSteppingVerbose to manage
+| the verbose outputs in G4SteppingManager.
+|
+			
+			operations 	(list Operations
+			    (object Operation "FCALSteppingVerbose"
+				quid       	"3DE49A3803D0"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "~FCALSteppingVerbose"
+				quid       	"3DE49A3803D3"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "StepInfo"
+				quid       	"3DE49A3803D5"
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "TrackingStarted"
+				quid       	"3DE49A3803D8"
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0))
+			module     	"Component View::FML"
+			quidu      	"3DE495920399"
+			language   	"ANSI C++")
+		    (object Class "FCALTBEventAction"
+			attributes 	(list Attribute_Set
+			    (object Attribute
+				tool       	"Cplusplus"
+				name       	"HeaderSourceFile"
+				value      	"FCALTBEventAction.hh"))
+			quid       	"3DE49A360245"
+			documentation 	"This class is invoked at the beginning and at the end of one event processing using two fundamental methods; BeginOfEventAction and EndOfEventAction."
+			superclasses 	(list inheritance_relationship_list
+			    (object Inheritance_Relationship
+				quid       	"3DEE2DB8032A"
+				supplier   	"Logical View::lAr_calorimeter::FCALSteppingAction"
+				quidu      	"3DE49A360224"))
+			used_nodes 	(list uses_relationship_list
+			    (object Uses_Relationship
+				quid       	"3DED0E3D0349"
+				supplier   	"Logical View::lAr_calorimeter::FCALAnalysisManager"
+				quidu      	"3DE49A350324"))
+			operations 	(list Operations
+			    (object Operation "FCALTBEventAction"
+				quid       	"3DE49A390036"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A390039"
+					type       	"FCALSteppingAction*"))
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "~FCALTBEventAction"
+				quid       	"3DE49A390040"
+				stereotype 	"virtual"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "BeginOfEventAction"
+				quid       	"3DE49A390045"
+				stereotype 	"virtual"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A390049"
+					type       	"const G4Event*"))
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "EndOfEventAction"
+				quid       	"3DE49A390050"
+				stereotype 	"virtual"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A390054"
+					type       	"const G4Event*"))
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "SetDrawFlag"
+				attributes 	(list Attribute_Set
+				    (object Attribute
+					tool       	"Cplusplus"
+					name       	"Inline"
+					value      	TRUE))
+				quid       	"3DE49A39005C"
+				parameters 	(list Parameters
+				    (object Parameter "val"
+					quid       	"3DE49A39005F"
+					type       	"G4String"))
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "SetPrintModulo"
+				attributes 	(list Attribute_Set
+				    (object Attribute
+					tool       	"Cplusplus"
+					name       	"Inline"
+					value      	TRUE))
+				quid       	"3DE49A390067"
+				parameters 	(list Parameters
+				    (object Parameter "val"
+					quid       	"3DE49A39006A"
+					type       	"G4int"))
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0))
+			module     	"Component View::FML"
+			quidu      	"3DE495920399"
+			language   	"ANSI C++")
+		    (object Class "FCALTBEventActionMessenger"
+			attributes 	(list Attribute_Set
+			    (object Attribute
+				tool       	"Cplusplus"
+				name       	"HeaderSourceFile"
+				value      	"FCALTBEventActionMessenger.hh"))
+			quid       	"3DE49A360255"
+			operations 	(list Operations
+			    (object Operation "FCALTBEventActionMessenger"
+				quid       	"3DE49A3900A2"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A3900A4"
+					type       	"FCALTBEventAction*"))
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "~FCALTBEventActionMessenger"
+				quid       	"3DE49A3900AC"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "SetNewValue"
+				quid       	"3DE49A3900AF"
+				parameters 	(list Parameters
+				    (object Parameter "G4String"
+					quid       	"3DE49A3900B2"
+					type       	"G4UIcommand*"))
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0))
+			module     	"Component View::FML"
+			quidu      	"3DE495920399"
+			language   	"ANSI C++")
+		    (object Class "FCALTestbeamSetup"
+			attributes 	(list Attribute_Set
+			    (object Attribute
+				tool       	"Cplusplus"
+				name       	"HeaderSourceFile"
+				value      	"FCALTestbeamSetup.hh"))
+			quid       	"3DE49A360278"
+			documentation 	"This class defines the volumes in the TestBeam front."
+			used_nodes 	(list uses_relationship_list
+			    (object Uses_Relationship
+				quid       	"3DEDE3C600C0"
+				supplier   	"Logical View::lAr_calorimeter::FCALCryostatVolumes"
+				quidu      	"3DE49A360181")
+			    (object Uses_Relationship
+				quid       	"3DEDE3D50289"
+				supplier   	"Logical View::lAr_calorimeter::FCALMaterialConsultant"
+				quidu      	"3DE49A3601E0"))
+			operations 	(list Operations
+			    (object Operation "FCALTestbeamSetup"
+				quid       	"3DE49A390282"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "~FCALTestbeamSetup"
+				quid       	"3DE49A390284"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "Construct"
+				quid       	"3DE49A390287"
+				result     	"G4VPhysicalVolume*"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0))
+			module     	"Component View::FML"
+			quidu      	"3DE495920399"
+			language   	"ANSI C++")
+		    (object Class "FCALTestbeamSetupSD"
+			attributes 	(list Attribute_Set
+			    (object Attribute
+				tool       	"Cplusplus"
+				name       	"HeaderSourceFile"
+				value      	"FCALTestbeamSetupSD.hh"))
+			quid       	"3DE49A36028C"
+			documentation 	"Sensitive detector class of FCALTestbeamSetup. See FCALHadModuleSD class for details."
+			operations 	(list Operations
+			    (object Operation "~FCALTestbeamSetupSD"
+				quid       	"3DE49A390354"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "Initialize"
+				quid       	"3DE49A390357"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A39035A"
+					type       	"G4HCofThisEvent*"))
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "ProcessHits"
+				quid       	"3DE49A390367"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A390369"
+					type       	"G4Step*")
+				    (object Parameter ""
+					quid       	"3DE49A390378"
+					type       	"G4TouchableHistory*"))
+				result     	"G4bool"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "EndOfEvent"
+				quid       	"3DE49A390384"
+				parameters 	(list Parameters
+				    (object Parameter ""
+					quid       	"3DE49A390387"
+					type       	"G4HCofThisEvent*"))
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "clear"
+				quid       	"3DE49A390394"
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "DrawAll"
+				quid       	"3DE49A390397"
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "PrintAll"
+				quid       	"3DE49A39039A"
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0))
+			module     	"Component View::FML"
+			quidu      	"3DE495920399"
+			language   	"ANSI C++")
+		    (object Class "FCALVisManager"
+			attributes 	(list Attribute_Set
+			    (object Attribute
+				tool       	"Cplusplus"
+				name       	"HeaderSourceFile"
+				value      	"FCALVisManager.hh"))
+			quid       	"3DE49A36029A"
+			documentation 	"Visualization class"
+			operations 	(list Operations
+			    (object Operation "FCALVisManager"
+				quid       	"3DE49A3903AA"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "RegisterGraphicsSystems"
+				quid       	"3DE49A3903AD"
+				result     	"void"
+				concurrency 	"Sequential"
+				opExportControl 	"Private"
+				uid        	0))
+			module     	"Component View::FML"
+			quidu      	"3DE495920399"
+			language   	"ANSI C++")
+		    (object Association "$UNNAMED$159"
+			quid       	"3DE49A3603E1"
+			roles      	(list role_list
+			    (object Role "$UNNAMED$160"
+				quid       	"3DE49A37001C"
+				supplier   	"Logical View::lAr_calorimeter::FCALAnalysisManager"
+				quidu      	"3DE49A350324")
+			    (object Role "$UNNAMED$161"
+				quid       	"3DE49A37003E"
+				supplier   	"Logical View::lAr_calorimeter::FCALAnalysisManager"
+				quidu      	"3DE49A350324"
+				exportControl 	"Private"
+				is_navigable 	TRUE)))
+		    (object Association "$UNNAMED$162"
+			quid       	"3DE49A370261"
+			roles      	(list role_list
+			    (object Role "$UNNAMED$163"
+				quid       	"3DE49A370262"
+				supplier   	"Logical View::lAr_calorimeter::FCALEMModule"
+				quidu      	"3DE49A360195"
+				is_navigable 	TRUE)
+			    (object Role "$UNNAMED$164"
+				quid       	"3DE49A370269"
+				supplier   	"Logical View::lAr_calorimeter::FCALCryostatVolumes"
+				quidu      	"3DE49A360181")))
+		    (object Association "$UNNAMED$165"
+			quid       	"3DE49A37027B"
+			roles      	(list role_list
+			    (object Role "$UNNAMED$166"
+				quid       	"3DE49A37027C"
+				supplier   	"Logical View::lAr_calorimeter::FCALHadModule"
+				quidu      	"3DE49A3601BB"
+				is_navigable 	TRUE)
+			    (object Role "$UNNAMED$167"
+				quid       	"3DE49A370282"
+				supplier   	"Logical View::lAr_calorimeter::FCALCryostatVolumes"
+				quidu      	"3DE49A360181")))
+		    (object Association "$UNNAMED$168"
+			quid       	"3DE49A370301"
+			roles      	(list role_list
+			    (object Role "$UNNAMED$169"
+				quid       	"3DE49A370302"
+				supplier   	"Logical View::lAr_calorimeter::FCALEMModuleSD"
+				quidu      	"3DE49A3601A5"
+				is_navigable 	TRUE)
+			    (object Role "$UNNAMED$170"
+				quid       	"3DE49A370309"
+				supplier   	"Logical View::lAr_calorimeter::FCALEMModule"
+				quidu      	"3DE49A360195")))
+		    (object Association "$UNNAMED$171"
+			quid       	"3DE49A370356"
+			roles      	(list role_list
+			    (object Role "$UNNAMED$172"
+				quid       	"3DE49A370357"
+				supplier   	"Logical View::lAr_calorimeter::FCALEMModuleSD"
+				quidu      	"3DE49A3601A5"
+				is_aggregate 	TRUE)
+			    (object Role "$UNNAMED$173"
+				quid       	"3DE49A37035D"
+				supplier   	"Logical View::lAr_calorimeter::FCALEMModuleSD"
+				quidu      	"3DE49A3601A5"
+				is_navigable 	TRUE)))
+		    (object Association "$UNNAMED$174"
+			quid       	"3DE49A370379"
+			roles      	(list role_list
+			    (object Role "$UNNAMED$175"
+				quid       	"3DE49A37037A"
+				supplier   	"Logical View::lAr_calorimeter::FCALEMModule"
+				quidu      	"3DE49A360195"
+				is_navigable 	TRUE)
+			    (object Role "$UNNAMED$176"
+				quid       	"3DE49A370380"
+				supplier   	"Logical View::lAr_calorimeter::FCALEMModuleSD"
+				quidu      	"3DE49A3601A5")))
+		    (object Association "$UNNAMED$177"
+			quid       	"3DE49A380087"
+			roles      	(list role_list
+			    (object Role "$UNNAMED$178"
+				quid       	"3DE49A380088"
+				supplier   	"Logical View::lAr_calorimeter::FCALHadModuleSD"
+				quidu      	"3DE49A3601CB"
+				is_navigable 	TRUE)
+			    (object Role "$UNNAMED$179"
+				quid       	"3DE49A38008E"
+				supplier   	"Logical View::lAr_calorimeter::FCALHadModule"
+				quidu      	"3DE49A3601BB")))
+		    (object Association "$UNNAMED$180"
+			quid       	"3DE49A3800D2"
+			roles      	(list role_list
+			    (object Role "$UNNAMED$181"
+				quid       	"3DE49A3800D3"
+				supplier   	"Logical View::lAr_calorimeter::FCALHadModuleSD"
+				quidu      	"3DE49A3601CB"
+				is_aggregate 	TRUE)
+			    (object Role "$UNNAMED$182"
+				quid       	"3DE49A3800DA"
+				supplier   	"Logical View::lAr_calorimeter::FCALHadModuleSD"
+				quidu      	"3DE49A3601CB"
+				is_navigable 	TRUE)))
+		    (object Association "$UNNAMED$183"
+			quid       	"3DE49A3800F8"
+			roles      	(list role_list
+			    (object Role "$UNNAMED$184"
+				quid       	"3DE49A3800F9"
+				supplier   	"Logical View::lAr_calorimeter::FCALHadModule"
+				quidu      	"3DE49A3601BB"
+				is_navigable 	TRUE)
+			    (object Role "$UNNAMED$185"
+				quid       	"3DE49A380100"
+				supplier   	"Logical View::lAr_calorimeter::FCALHadModuleSD"
+				quidu      	"3DE49A3601CB")))
+		    (object Association "$UNNAMED$186"
+			quid       	"3DE49A38027F"
+			roles      	(list role_list
+			    (object Role "$UNNAMED$187"
+				quid       	"3DE49A380280"
+				supplier   	"Logical View::lAr_calorimeter::FCALMaterialConsultant"
+				quidu      	"3DE49A3601E0")
+			    (object Role "$UNNAMED$188"
+				quid       	"3DE49A380286"
+				supplier   	"Logical View::lAr_calorimeter::FCALMaterialConsultant"
+				quidu      	"3DE49A3601E0"
+				is_navigable 	TRUE)))
+		    (object Association "$UNNAMED$189"
+			quid       	"3DE49A39001E"
+			roles      	(list role_list
+			    (object Role "$UNNAMED$190"
+				quid       	"3DE49A39001F"
+				supplier   	"Logical View::lAr_calorimeter::FCALSteppingAction"
+				quidu      	"3DE49A360224"
+				is_navigable 	TRUE)
+			    (object Role "$UNNAMED$191"
+				quid       	"3DE49A390025"
+				supplier   	"Logical View::lAr_calorimeter::FCALTBEventAction"
+				quidu      	"3DE49A360245")))
+		    (object Association "$UNNAMED$192"
+			quid       	"3DE49A390088"
+			roles      	(list role_list
+			    (object Role "$UNNAMED$193"
+				quid       	"3DE49A390089"
+				supplier   	"Logical View::lAr_calorimeter::FCALTBEventAction"
+				quidu      	"3DE49A360245"
+				is_navigable 	TRUE)
+			    (object Role "$UNNAMED$194"
+				quid       	"3DE49A390090"
+				supplier   	"Logical View::lAr_calorimeter::FCALTBEventActionMessenger"
+				quidu      	"3DE49A360255")))
+		    (object Association "$UNNAMED$195"
+			quid       	"3DE49A39026A"
+			roles      	(list role_list
+			    (object Role "$UNNAMED$196"
+				quid       	"3DE49A39026B"
+				supplier   	"Logical View::lAr_calorimeter::FCALTestbeamSetupSD"
+				quidu      	"3DE49A36028C"
+				keys       	(list class_attribute_list
+				    (object ClassAttribute "name"
+					quid       	"3DECDF6E0357"))
+				is_navigable 	TRUE)
+			    (object Role "$UNNAMED$197"
+				quid       	"3DE49A390271"
+				supplier   	"Logical View::lAr_calorimeter::FCALTestbeamSetup"
+				quidu      	"3DE49A360278"
+				is_navigable 	TRUE)))
+		    (object Association "$UNNAMED$198"
+			quid       	"3DE49A3902BD"
+			roles      	(list role_list
+			    (object Role "$UNNAMED$199"
+				quid       	"3DE49A3902BE"
+				supplier   	"Logical View::lAr_calorimeter::FCALTestbeamSetupSD"
+				quidu      	"3DE49A36028C"
+				is_aggregate 	TRUE)
+			    (object Role "$UNNAMED$200"
+				quid       	"3DE49A3902C5"
+				supplier   	"Logical View::lAr_calorimeter::FCALTestbeamSetupSD"
+				quidu      	"3DE49A36028C"
+				is_navigable 	TRUE))))
+		logical_presentations 	(list unit_reference_list)))
+	logical_presentations 	(list unit_reference_list
+	    (object ClassDiagram "Main"
+		quid       	"3DE4924000E2"
+		title      	"Main"
+		zoom       	100
+		max_height 	28350
+		max_width  	21600
+		origin_x   	0
+		origin_y   	0
+		items      	(list diagram_item_list
+		    (object ClassView "Class" "Logical View::lAr_calorimeter::FCALMaterialConsultant" @1
+			ShowCompartmentStereotypes 	TRUE
+			IncludeAttribute 	TRUE
+			location   	(880, 1168)
+			font       	(object Font
+			    size       	10
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			label      	(object ItemLabel
+			    Parent_View 	@1
+			    location   	(650, 1140)
+			    fill_color 	13434879
+			    nlines     	1
+			    max_width  	460
+			    justify    	0
+			    label      	"FCALMaterialConsultant")
+			stereotype 	(object ItemLabel
+			    Parent_View 	@1
+			    location   	(650, 1093)
+			    fill_color 	13434879
+			    anchor     	10
+			    nlines     	1
+			    max_width  	460
+			    justify    	0
+			    label      	"<<singleton>>")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	13434879
+			quidu      	"3DE49A3601E0"
+			width      	478
+			height     	172
+			autoResize 	TRUE)
+		    (object ClassView "Class" "Logical View::lAr_calorimeter::FCALPhysicsList" @2
+			ShowCompartmentStereotypes 	TRUE
+			IncludeAttribute 	TRUE
+			location   	(1664, 1504)
+			font       	(object Font
+			    size       	10
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			label      	(object ItemLabel
+			    Parent_View 	@2
+			    location   	(1496, 1455)
+			    fill_color 	13434879
+			    nlines     	1
+			    max_width  	336
+			    justify    	0
+			    label      	"FCALPhysicsList")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	13434879
+			quidu      	"3DE49A3601F3"
+			width      	354
+			height     	120
+			autoResize 	TRUE)
+		    (object ClassView "Class" "Logical View::lAr_calorimeter::FCALSteppingVerbose" @3
+			ShowCompartmentStereotypes 	TRUE
+			IncludeAttribute 	TRUE
+			location   	(784, 192)
+			font       	(object Font
+			    size       	10
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			label      	(object ItemLabel
+			    Parent_View 	@3
+			    location   	(569, 143)
+			    fill_color 	13434879
+			    nlines     	1
+			    max_width  	430
+			    justify    	0
+			    label      	"FCALSteppingVerbose")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	13434879
+			quidu      	"3DE49A360233"
+			width      	448
+			height     	120
+			autoResize 	TRUE)
+		    (object ClassView "Class" "Logical View::lAr_calorimeter::FCALVisManager" @4
+			ShowCompartmentStereotypes 	TRUE
+			IncludeAttribute 	TRUE
+			location   	(1440, 480)
+			font       	(object Font
+			    size       	10
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			label      	(object ItemLabel
+			    Parent_View 	@4
+			    location   	(1263, 431)
+			    fill_color 	13434879
+			    nlines     	1
+			    max_width  	354
+			    justify    	0
+			    label      	"FCALVisManager")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	13434879
+			quidu      	"3DE49A36029A"
+			width      	372
+			height     	120
+			autoResize 	TRUE)
+		    (object ClassView "Class" "Logical View::lAr_calorimeter::FCALCalorHitsCollection" @5
+			ShowCompartmentStereotypes 	TRUE
+			IncludeOperation 	TRUE
+			location   	(304, 544)
+			font       	(object Font
+			    size       	10
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			label      	(object ItemLabel
+			    Parent_View 	@5
+			    location   	(176, 492)
+			    fill_color 	13434879
+			    nlines     	2
+			    max_width  	256
+			    justify    	0
+			    label      	"FCALCalorHitsCollection")
+			stereotype 	(object ItemLabel
+			    Parent_View 	@5
+			    location   	(176, 445)
+			    fill_color 	13434879
+			    anchor     	10
+			    nlines     	1
+			    max_width  	256
+			    justify    	0
+			    label      	"<<typedef>>")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	13434879
+			quidu      	"3DE49A360167"
+			width      	274
+			height     	220
+			autoResize 	TRUE)
+		    (object ClassView "Class" "Logical View::lAr_calorimeter::FCALCalorHit" @6
+			location   	(304, 192)
+			font       	(object Font
+			    size       	10
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			label      	(object ItemLabel
+			    Parent_View 	@6
+			    location   	(162, 143)
+			    fill_color 	13434879
+			    nlines     	1
+			    max_width  	284
+			    justify    	0
+			    label      	"FCALCalorHit")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	13434879
+			quidu      	"3DE49A36015B"
+			width      	302
+			height     	120
+			autoResize 	TRUE)
+		    (object AssociationViewNew "$UNNAMED$63" @7
+			location   	(304, 342)
+			font       	(object Font
+			    size       	14
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"3DEE1BB101B4"
+			roleview_list 	(list RoleViews
+			    (object RoleView "$UNNAMED$64" @8
+				Parent_View 	@7
+				location   	(-720, -762)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEE1BB201E5"
+				client     	@7
+				supplier   	@5
+				line_style 	0)
+			    (object RoleView "$UNNAMED$65" @9
+				Parent_View 	@7
+				location   	(-720, -762)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEE1BB201EB"
+				client     	@7
+				supplier   	@6
+				line_style 	0)))
+		    (object AssociationViewNew "$UNNAMED$66" @10
+			location   	(304, 342)
+			font       	(object Font
+			    size       	14
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"3DEE1BB800C9"
+			roleview_list 	(list RoleViews
+			    (object RoleView "$UNNAMED$67" @11
+				Parent_View 	@10
+				location   	(-720, -762)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEE1BB903DA"
+				client     	@10
+				supplier   	@5
+				line_style 	0)
+			    (object RoleView "$UNNAMED$68" @12
+				Parent_View 	@10
+				location   	(-720, -762)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEE1BB903E1"
+				client     	@10
+				supplier   	@6
+				line_style 	0)))
+		    (object ClassView "Class" "Logical View::lAr_calorimeter::FCALHadModuleSD" @13
+			ShowCompartmentStereotypes 	TRUE
+			IncludeAttribute 	TRUE
+			location   	(256, 784)
+			font       	(object Font
+			    size       	10
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			label      	(object ItemLabel
+			    Parent_View 	@13
+			    location   	(61, 735)
+			    fill_color 	13434879
+			    nlines     	1
+			    max_width  	390
+			    justify    	0
+			    label      	"FCALHadModuleSD")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	13434879
+			quidu      	"3DE49A3601CB"
+			width      	408
+			height     	120
+			autoResize 	TRUE)
+		    (object ClassView "Class" "Logical View::lAr_calorimeter::FCALHadModule" @14
+			ShowCompartmentStereotypes 	TRUE
+			IncludeAttribute 	TRUE
+			location   	(256, 1168)
+			font       	(object Font
+			    size       	10
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			label      	(object ItemLabel
+			    Parent_View 	@14
+			    location   	(88, 1119)
+			    fill_color 	13434879
+			    nlines     	1
+			    max_width  	336
+			    justify    	0
+			    label      	"FCALHadModule")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	13434879
+			quidu      	"3DE49A3601BB"
+			width      	354
+			height     	120
+			autoResize 	TRUE)
+		    (object UsesView "" @15
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"3DEDE32C02AA"
+			client     	@14
+			supplier   	@1
+			line_style 	0)
+		    (object AssociationViewNew "$UNNAMED$135" @16
+			location   	(256, 975)
+			font       	(object Font
+			    size       	14
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"3DEF22CE0171"
+			roleview_list 	(list RoleViews
+			    (object RoleView "$UNNAMED$136" @17
+				Parent_View 	@16
+				location   	(0, 191)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEF22D000DE"
+				client     	@16
+				supplier   	@14
+				line_style 	0)
+			    (object RoleView "$UNNAMED$137" @18
+				Parent_View 	@16
+				location   	(0, 191)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEF22D000F1"
+				client     	@16
+				supplier   	@13
+				line_style 	0)))
+		    (object AssociationViewNew "$UNNAMED$138" @19
+			location   	(256, 975)
+			font       	(object Font
+			    size       	14
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"3DEF22D70115"
+			roleview_list 	(list RoleViews
+			    (object RoleView "$UNNAMED$139" @20
+				Parent_View 	@19
+				location   	(0, -193)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEF22D802B6"
+				client     	@19
+				supplier   	@13
+				line_style 	0)
+			    (object RoleView "$UNNAMED$140" @21
+				Parent_View 	@19
+				location   	(0, -193)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEF22D802C8"
+				client     	@19
+				supplier   	@14
+				line_style 	0)))
+		    (object ClassView "Class" "Logical View::lAr_calorimeter::FCALCryostatVolumes" @22
+			ShowCompartmentStereotypes 	TRUE
+			location   	(880, 1584)
+			font       	(object Font
+			    size       	10
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			label      	(object ItemLabel
+			    Parent_View 	@22
+			    location   	(666, 1535)
+			    fill_color 	13434879
+			    nlines     	1
+			    max_width  	428
+			    justify    	0
+			    label      	"FCALCryostatVolumes")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	13434879
+			quidu      	"3DE49A360181"
+			width      	446
+			height     	120
+			autoResize 	TRUE)
+		    (object UsesView "" @23
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"3DEDE311005E"
+			client     	@22
+			supplier   	@1
+			line_style 	0)
+		    (object AssociationViewNew "$UNNAMED$81" @24
+			location   	(567, 1375)
+			font       	(object Font
+			    size       	14
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"3DEE22D203C2"
+			roleview_list 	(list RoleViews
+			    (object RoleView "$UNNAMED$82" @25
+				Parent_View 	@24
+				location   	(-521, -945)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEE22D302A1"
+				client     	@24
+				supplier   	@14
+				line_style 	0)
+			    (object RoleView "$UNNAMED$83" @26
+				Parent_View 	@24
+				location   	(-521, -945)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEE22D302AE"
+				client     	@24
+				supplier   	@22
+				line_style 	0)))
+		    (object AssociationViewNew "$UNNAMED$84" @27
+			location   	(567, 1375)
+			font       	(object Font
+			    size       	14
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"3DEE22D801F7"
+			roleview_list 	(list RoleViews
+			    (object RoleView "$UNNAMED$85" @28
+				Parent_View 	@27
+				location   	(-521, -945)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEE22D9011B"
+				client     	@27
+				supplier   	@14
+				line_style 	0)
+			    (object RoleView "$UNNAMED$86" @29
+				Parent_View 	@27
+				location   	(-521, -945)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEE22D9012A"
+				client     	@27
+				supplier   	@22
+				line_style 	0)))
+		    (object ClassView "Class" "Logical View::lAr_calorimeter::FCALEMModule" @30
+			ShowCompartmentStereotypes 	TRUE
+			location   	(1712, 1152)
+			font       	(object Font
+			    size       	10
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			label      	(object ItemLabel
+			    Parent_View 	@30
+			    location   	(1548, 1103)
+			    fill_color 	13434879
+			    nlines     	1
+			    max_width  	328
+			    justify    	0
+			    label      	"FCALEMModule")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	13434879
+			quidu      	"3DE49A360195"
+			width      	346
+			height     	120
+			autoResize 	TRUE)
+		    (object AssociationViewNew "$UNNAMED$75" @31
+			location   	(1294, 1367)
+			font       	(object Font
+			    size       	14
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"3DEE22C0037B"
+			roleview_list 	(list RoleViews
+			    (object RoleView "$UNNAMED$76" @32
+				Parent_View 	@31
+				location   	(206, -953)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEE22C101FC"
+				client     	@31
+				supplier   	@30
+				line_style 	0)
+			    (object RoleView "$UNNAMED$77" @33
+				Parent_View 	@31
+				location   	(206, -953)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEE22C10208"
+				client     	@31
+				supplier   	@22
+				line_style 	0)))
+		    (object AssociationViewNew "$UNNAMED$78" @34
+			location   	(1294, 1367)
+			font       	(object Font
+			    size       	14
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"3DEE22C701A1"
+			roleview_list 	(list RoleViews
+			    (object RoleView "$UNNAMED$79" @35
+				Parent_View 	@34
+				location   	(206, -953)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEE22C80039"
+				client     	@34
+				supplier   	@30
+				line_style 	0)
+			    (object RoleView "$UNNAMED$80" @36
+				Parent_View 	@34
+				location   	(206, -953)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEE22C80047"
+				client     	@34
+				supplier   	@22
+				line_style 	0)))
+		    (object UsesView "" @37
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"3DEE2D690107"
+			client     	@30
+			supplier   	@1
+			line_style 	0)
+		    (object ClassView "Class" "Logical View::lAr_calorimeter::FCALEMModuleSD" @38
+			ShowCompartmentStereotypes 	TRUE
+			IncludeAttribute 	TRUE
+			location   	(1712, 768)
+			font       	(object Font
+			    size       	10
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			label      	(object ItemLabel
+			    Parent_View 	@38
+			    location   	(1522, 719)
+			    fill_color 	13434879
+			    nlines     	1
+			    max_width  	380
+			    justify    	0
+			    label      	"FCALEMModuleSD")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	13434879
+			quidu      	"3DE49A3601A5"
+			width      	398
+			height     	120
+			autoResize 	TRUE)
+		    (object AssociationViewNew "$UNNAMED$87" @39
+			location   	(1712, 959)
+			font       	(object Font
+			    size       	14
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"3DEE22EC01D2"
+			roleview_list 	(list RoleViews
+			    (object RoleView "$UNNAMED$88" @40
+				Parent_View 	@39
+				location   	(48, -1537)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEE22ED020E"
+				client     	@39
+				supplier   	@38
+				line_style 	0)
+			    (object RoleView "$UNNAMED$89" @41
+				Parent_View 	@39
+				location   	(48, -1537)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEE22ED021C"
+				client     	@39
+				supplier   	@30
+				line_style 	0)))
+		    (object AssociationViewNew "$UNNAMED$90" @42
+			location   	(1712, 959)
+			font       	(object Font
+			    size       	14
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"3DEE22F4034D"
+			roleview_list 	(list RoleViews
+			    (object RoleView "$UNNAMED$91" @43
+				Parent_View 	@42
+				location   	(48, -1537)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEE22F5036A"
+				client     	@42
+				supplier   	@38
+				line_style 	0)
+			    (object RoleView "$UNNAMED$92" @44
+				Parent_View 	@42
+				location   	(48, -1537)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEE22F50379"
+				client     	@42
+				supplier   	@30
+				line_style 	0)))
+		    (object AssociationViewNew "$UNNAMED$141" @45
+			location   	(1712, 959)
+			font       	(object Font
+			    size       	14
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"3DEF22E701D5"
+			roleview_list 	(list RoleViews
+			    (object RoleView "$UNNAMED$142" @46
+				Parent_View 	@45
+				location   	(0, -193)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEF22E90145"
+				client     	@45
+				supplier   	@38
+				line_style 	0)
+			    (object RoleView "$UNNAMED$143" @47
+				Parent_View 	@45
+				location   	(0, -193)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEF22E90153"
+				client     	@45
+				supplier   	@30
+				line_style 	0)))
+		    (object AssociationViewNew "$UNNAMED$144" @48
+			location   	(1712, 959)
+			font       	(object Font
+			    size       	14
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"3DEF22EF0220"
+			roleview_list 	(list RoleViews
+			    (object RoleView "$UNNAMED$145" @49
+				Parent_View 	@48
+				location   	(0, 191)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEF22F00371"
+				client     	@48
+				supplier   	@30
+				line_style 	0)
+			    (object RoleView "$UNNAMED$146" @50
+				Parent_View 	@48
+				location   	(0, 191)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEF22F00382"
+				client     	@48
+				supplier   	@38
+				line_style 	0)))
+		    (object ClassView "Class" "Logical View::lAr_calorimeter::FCALPrimaryGeneratorAction" @51
+			ShowCompartmentStereotypes 	TRUE
+			IncludeAttribute 	TRUE
+			location   	(1440, 192)
+			font       	(object Font
+			    size       	10
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			label      	(object ItemLabel
+			    Parent_View 	@51
+			    location   	(1162, 143)
+			    fill_color 	13434879
+			    nlines     	1
+			    max_width  	556
+			    justify    	0
+			    label      	"FCALPrimaryGeneratorAction")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	13434879
+			quidu      	"3DE49A360202"
+			width      	574
+			height     	120
+			autoResize 	TRUE)
+		    (object ClassView "Class" "Logical View::lAr_calorimeter::FCALTBEventActionMessenger" @52
+			ShowCompartmentStereotypes 	TRUE
+			IncludeAttribute 	TRUE
+			location   	(928, 2176)
+			font       	(object Font
+			    size       	10
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			label      	(object ItemLabel
+			    Parent_View 	@52
+			    location   	(630, 2127)
+			    fill_color 	13434879
+			    nlines     	1
+			    max_width  	596
+			    justify    	0
+			    label      	"FCALTBEventActionMessenger")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	13434879
+			quidu      	"3DE49A360255"
+			width      	614
+			height     	120
+			autoResize 	TRUE)
+		    (object ClassView "Class" "Logical View::lAr_calorimeter::FCALSteppingAction" @53
+			ShowCompartmentStereotypes 	TRUE
+			IncludeAttribute 	TRUE
+			location   	(1584, 1824)
+			font       	(object Font
+			    size       	10
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			label      	(object ItemLabel
+			    Parent_View 	@53
+			    location   	(1385, 1775)
+			    fill_color 	13434879
+			    nlines     	1
+			    max_width  	398
+			    justify    	0
+			    label      	"FCALSteppingAction")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	13434879
+			quidu      	"3DE49A360224"
+			width      	416
+			height     	120
+			autoResize 	TRUE)
+		    (object ClassView "Class" "Logical View::lAr_calorimeter::FCALTestbeamSetup" @54
+			ShowCompartmentStereotypes 	TRUE
+			IncludeAttribute 	TRUE
+			ShowOperationSignature 	TRUE
+			location   	(880, 896)
+			font       	(object Font
+			    size       	10
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			label      	(object ItemLabel
+			    Parent_View 	@54
+			    location   	(682, 847)
+			    fill_color 	13434879
+			    nlines     	1
+			    max_width  	396
+			    justify    	0
+			    label      	"FCALTestbeamSetup")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	13434879
+			quidu      	"3DE49A360278"
+			width      	414
+			height     	120
+			autoResize 	TRUE)
+		    (object UsesView "" @55
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"3DEDE3D50289"
+			client     	@54
+			supplier   	@1
+			line_style 	0)
+		    (object ClassView "Class" "Logical View::lAr_calorimeter::FCALTestbeamSetupSD" @56
+			ShowCompartmentStereotypes 	TRUE
+			IncludeAttribute 	TRUE
+			location   	(880, 576)
+			font       	(object Font
+			    size       	10
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			label      	(object ItemLabel
+			    Parent_View 	@56
+			    location   	(655, 527)
+			    fill_color 	13434879
+			    nlines     	1
+			    max_width  	450
+			    justify    	0
+			    label      	"FCALTestbeamSetupSD")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	13434879
+			quidu      	"3DE49A36028C"
+			width      	468
+			height     	120
+			autoResize 	TRUE)
+		    (object AssociationViewNew "$UNNAMED$99" @57
+			location   	(880, 735)
+			font       	(object Font
+			    size       	14
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"3DEE2313037F"
+			roleview_list 	(list RoleViews
+			    (object RoleView "$UNNAMED$100" @58
+				Parent_View 	@57
+				location   	(576, -1425)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEE23150237"
+				client     	@57
+				supplier   	@56
+				line_style 	0)
+			    (object RoleView "$UNNAMED$101" @59
+				Parent_View 	@57
+				location   	(576, -1425)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEE23150247"
+				client     	@57
+				supplier   	@54
+				line_style 	0)))
+		    (object AssociationViewNew "$UNNAMED$102" @60
+			location   	(880, 735)
+			font       	(object Font
+			    size       	14
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"3DEE231D0213"
+			roleview_list 	(list RoleViews
+			    (object RoleView "$UNNAMED$103" @61
+				Parent_View 	@60
+				location   	(576, -1425)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEE231E0210"
+				client     	@60
+				supplier   	@56
+				line_style 	0)
+			    (object RoleView "$UNNAMED$104" @62
+				Parent_View 	@60
+				location   	(576, -1425)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEE231E0221"
+				client     	@60
+				supplier   	@54
+				line_style 	0)))
+		    (object AssociationViewNew "$UNNAMED$153" @63
+			location   	(880, 735)
+			font       	(object Font
+			    size       	14
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"3DEF2320036B"
+			roleview_list 	(list RoleViews
+			    (object RoleView "$UNNAMED$154" @64
+				Parent_View 	@63
+				location   	(0, 159)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEF2321031F"
+				client     	@63
+				supplier   	@54
+				line_style 	0)
+			    (object RoleView "$UNNAMED$155" @65
+				Parent_View 	@63
+				location   	(0, 159)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEF23210330"
+				client     	@63
+				supplier   	@56
+				line_style 	0)))
+		    (object ClassView "Class" "Logical View::lAr_calorimeter::FCALTBEventAction" @66
+			ShowCompartmentStereotypes 	TRUE
+			IncludeAttribute 	TRUE
+			location   	(928, 1824)
+			font       	(object Font
+			    size       	10
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			label      	(object ItemLabel
+			    Parent_View 	@66
+			    location   	(733, 1775)
+			    fill_color 	13434879
+			    nlines     	1
+			    max_width  	390
+			    justify    	0
+			    label      	"FCALTBEventAction")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	13434879
+			quidu      	"3DE49A360245"
+			width      	408
+			height     	120
+			autoResize 	TRUE)
+		    (object AssociationViewNew "$UNNAMED$111" @67
+			location   	(928, 1999)
+			font       	(object Font
+			    size       	14
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"3DEE2DD901AB"
+			roleview_list 	(list RoleViews
+			    (object RoleView "$UNNAMED$112" @68
+				Parent_View 	@67
+				location   	(544, 639)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEE2DDA0318"
+				client     	@67
+				supplier   	@52
+				line_style 	0)
+			    (object RoleView "$UNNAMED$113" @69
+				Parent_View 	@67
+				location   	(544, 639)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEE2DDA0325"
+				client     	@67
+				supplier   	@66
+				line_style 	0)))
+		    (object AssociationViewNew "$UNNAMED$114" @70
+			location   	(928, 1999)
+			font       	(object Font
+			    size       	14
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"3DEE2DE002F0"
+			roleview_list 	(list RoleViews
+			    (object RoleView "$UNNAMED$115" @71
+				Parent_View 	@70
+				location   	(544, 639)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEE2DE10356"
+				client     	@70
+				supplier   	@52
+				line_style 	0)
+			    (object RoleView "$UNNAMED$116" @72
+				Parent_View 	@70
+				location   	(544, 639)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEE2DE10363"
+				client     	@70
+				supplier   	@66
+				line_style 	0)))
+		    (object AssociationViewNew "$UNNAMED$123" @73
+			location   	(1253, 1824)
+			font       	(object Font
+			    size       	14
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"3DEE2FD90235"
+			roleview_list 	(list RoleViews
+			    (object RoleView "$UNNAMED$124" @74
+				Parent_View 	@73
+				location   	(325, 0)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEE2FDA0249"
+				client     	@73
+				supplier   	@53
+				line_style 	0)
+			    (object RoleView "$UNNAMED$125" @75
+				Parent_View 	@73
+				location   	(325, 0)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEE2FDA0258"
+				client     	@73
+				supplier   	@66
+				line_style 	0)))
+		    (object AssociationViewNew "$UNNAMED$126" @76
+			location   	(1253, 1824)
+			font       	(object Font
+			    size       	14
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"3DEE2FE202D8"
+			roleview_list 	(list RoleViews
+			    (object RoleView "$UNNAMED$127" @77
+				Parent_View 	@76
+				location   	(325, 0)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEE2FE30287"
+				client     	@76
+				supplier   	@53
+				line_style 	0)
+			    (object RoleView "$UNNAMED$128" @78
+				Parent_View 	@76
+				location   	(325, 0)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DEE2FE30296"
+				client     	@76
+				supplier   	@66
+				line_style 	0)))
+		    (object ClassView "Class" "Logical View::lAr_calorimeter::FCALRunAction" @79
+			ShowCompartmentStereotypes 	TRUE
+			IncludeAttribute 	TRUE
+			location   	(320, 1824)
+			font       	(object Font
+			    size       	10
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			label      	(object ItemLabel
+			    Parent_View 	@79
+			    location   	(160, 1775)
+			    fill_color 	13434879
+			    nlines     	1
+			    max_width  	320
+			    justify    	0
+			    label      	"FCALRunAction")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	13434879
+			quidu      	"3DE49A360211"
+			width      	338
+			height     	120
+			autoResize 	TRUE)
+		    (object AssociationViewNew "$UNNAMED$156" @80
+			location   	(606, 1824)
+			font       	(object Font
+			    size       	14
+			    face       	"helvetica"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"3DF8BFA900B1"
+			roleview_list 	(list RoleViews
+			    (object RoleView "$UNNAMED$157" @81
+				Parent_View 	@80
+				location   	(-322, 0)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DF8BFAA0013"
+				client     	@80
+				supplier   	@79
+				line_style 	0)
+			    (object RoleView "$UNNAMED$158" @82
+				Parent_View 	@80
+				location   	(-322, 0)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"3DF8BFAA001D"
+				client     	@80
+				supplier   	@66
+				line_style 	0)))))))
+    root_subsystem 	(object SubSystem "Component View"
+	quid       	"3DE4921C0125"
+	physical_models 	(list unit_reference_list
+	    (object module "FML" "NotAModuleType" "NotAModulePart"
+		attributes 	(list Attribute_Set
+		    (object Attribute
+			tool       	"Cplusplus"
+			name       	"RevEngRootDirectory"
+			value      	"/afs/cern.ch/user/p/pmendez/geant4/examples/advanced/lAr_calorimeter/include")
+		    (object Attribute
+			tool       	"Cplusplus"
+			name       	"RootPackage"
+			value      	"lAr_calorimeter")
+		    (object Attribute
+			tool       	"Cplusplus"
+			name       	"FilesEncoding"
+			value      	(value Text 
+|v1:XFCALAnalysisManager.cpp,0
+|WFCALAnalysisManager.hh,3dde60f3
+|QFCALCalorHit.cpp,0
+|PFCALCalorHit.hh,3dde60f3
+|XFCALCryostatVolumes.cpp,0
+|WFCALCryostatVolumes.hh,3dde60f3
+|QFCALEMModule.cpp,0
+|PFCALEMModule.hh,3dde60f3
+|SFCALEMModuleSD.cpp,0
+|RFCALEMModuleSD.hh,3dde60f3
+|RFCALHadModule.cpp,0
+|QFCALHadModule.hh,3dde60f3
+|TFCALHadModuleSD.cpp,0
+|SFCALHadModuleSD.hh,3dde60f3
+|aFCALMaterialConsultant.cpp,0
+|ZFCALMaterialConsultant.hh,3dde60f3
+|TFCALPhysicsList.cpp,0
+|SFCALPhysicsList.hh,3dde60f3
+|eFCALPrimaryGeneratorAction.cpp,0
+|dFCALPrimaryGeneratorAction.hh,3dde60f3
+|RFCALRunAction.cpp,0
+|QFCALRunAction.hh,3dde60f3
+|WFCALSteppingAction.cpp,0
+|VFCALSteppingAction.hh,3dde60f3
+|XFCALSteppingVerbose.cpp,0
+|WFCALSteppingVerbose.hh,3dde60f3
+|VFCALTBEventAction.cpp,0
+|UFCALTBEventAction.hh,3dde60f3
+|eFCALTBEventActionMessenger.cpp,0
+|dFCALTBEventActionMessenger.hh,3dde60f4
+|VFCALTestbeamSetup.cpp,0
+|UFCALTestbeamSetup.hh,3dde60f3
+|XFCALTestbeamSetupSD.cpp,0
+|WFCALTestbeamSetupSD.hh,3dde60f3
+|SFCALVisManager.cpp,0
+|RFCALVisManager.hh,3dde60f3
+|
+			))
+		    (object Attribute
+			tool       	"Cplusplus"
+			name       	"StyleSheetEncoding"
+			value      	";ut:0;tw:8;iw:4;pw:80;;pi:-2;nb:2;cb:2;fb:2;pl:0;is:1;mo:1;dr:1;mr:1;bf:0;")
+		    (object Attribute
+			tool       	"Cplusplus"
+			name       	"CodeItemsEncoding"
+			value      	(value Text 
+|v3:FCALAnalysisManager,t,C,,A,953,d10
+|FCALCalorHit,t,E,,A,2d0,660
+|FCALCalorHit::operator delete,f,E,,Gvoid*,,856,8c9
+|FCALCalorHit::operator new,f,E,,Hsize_t,,77d,804
+|FCALCalorHitsCollection,t,E,,A,6b2,6f2
+|FCALCryostatVolumes,t,G,,A,30e,7ea
+|FCALEMModule,t,I,,A,2e2,64f
+|FCALEMModuleSD,t,K,,A,344,5b1
+|FCALHadModule,t,M,,A,301,6fd
+|FCALHadModuleSD,t,O,,A,332,5a4
+|FCALMaterialConsultant,t,Q,,A,33c,657
+|FCALPhysicsList,t,S,,A,321,6e7
+|FCALPrimaryGeneratorAction,t,U,,A,32c,52d
+|FCALRunAction,t,W,,A,2c6,387
+|FCALSteppingAction,t,Y,,A,2e8,5da
+|FCALSteppingVerbose,t,a,,A,309,3ce
+|FCALTBEventAction,t,c,,A,31f,603
+|FCALTBEventActionMessenger,t,e,,A,20e,362
+|FCALTestbeamSetup,t,g,,A,384,cfe
+|FCALTestbeamSetupSD,t,i,,A,329,60f
+|FCALVisManager,t,k,,A,55e,5da
+|
+			)))
+		quid       	"3DE495920399"
+		stereotype 	""
+		language   	"ANSI C++"))
+	physical_presentations 	(list unit_reference_list
+	    (object Module_Diagram "Main"
+		quid       	"3DE4923F0275"
+		title      	"Main"
+		zoom       	100
+		max_height 	28350
+		max_width  	21600
+		origin_x   	0
+		origin_y   	0
+		items      	(list diagram_item_list))))
+    process_structure 	(object Processes
+	quid       	"3DE4921C0126"
+	ProcsNDevs 	(list
+	    (object Process_Diagram "Deployment View"
+		quid       	"3DE4921C013E"
+		title      	"Deployment View"
+		zoom       	100
+		max_height 	28350
+		max_width  	21600
+		origin_x   	0
+		origin_y   	0
+		items      	(list diagram_item_list))))
+    properties 	(object Properties
+	attributes 	(list Attribute_Set
+	    (object Attribute
+		tool       	"Cplusplus"
+		name       	"propertyId"
+		value      	"809135966")
+	    (object Attribute
+		tool       	"Cplusplus"
+		name       	"default__Role"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Cplusplus"
+			name       	"Synchronize"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Cplusplus"
+			name       	"CodeName"
+			value      	"")
+		    (object Attribute
+			tool       	"Cplusplus"
+			name       	"Const"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Cplusplus"
+			name       	"InitialValue"
+			value      	"")))
+	    (object Attribute
+		tool       	"Cplusplus"
+		name       	"default__Inherit"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Cplusplus"
+			name       	"Synchronize"
+			value      	TRUE)))
+	    (object Attribute
+		tool       	"Cplusplus"
+		name       	"default__Module-Spec"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Cplusplus"
+			name       	"Synchronize"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Cplusplus"
+			name       	"Copyright"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"Cplusplus"
+			name       	"RootPackage"
+			value      	"C++ Reverse Engineered")
+		    (object Attribute
+			tool       	"Cplusplus"
+			name       	"InitialHeaderIncludes"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"Cplusplus"
+			name       	"InitialBodyIncludes"
+			value      	(value Text ""))))
+	    (object Attribute
+		tool       	"Cplusplus"
+		name       	"default__Param"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Cplusplus"
+			name       	"CodeName"
+			value      	"")))
+	    (object Attribute
+		tool       	"Cplusplus"
+		name       	"default__Attribute"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Cplusplus"
+			name       	"Synchronize"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Cplusplus"
+			name       	"CodeName"
+			value      	"")))
+	    (object Attribute
+		tool       	"Cplusplus"
+		name       	"default__Operation"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Cplusplus"
+			name       	"Synchronize"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Cplusplus"
+			name       	"CodeName"
+			value      	"")
+		    (object Attribute
+			tool       	"Cplusplus"
+			name       	"InitialCodeBody"
+			value      	"")
+		    (object Attribute
+			tool       	"Cplusplus"
+			name       	"Inline"
+			value      	FALSE)))
+	    (object Attribute
+		tool       	"Cplusplus"
+		name       	"default__Class"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Cplusplus"
+			name       	"Synchronize"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Cplusplus"
+			name       	"CodeName"
+			value      	"")
+		    (object Attribute
+			tool       	"Cplusplus"
+			name       	"ImplementationType"
+			value      	"")
+		    (object Attribute
+			tool       	"Cplusplus"
+			name       	"HeaderSourceFile"
+			value      	"")
+		    (object Attribute
+			tool       	"Cplusplus"
+			name       	"BodySourceFile"
+			value      	"")))
+	    (object Attribute
+		tool       	"Cplusplus"
+		name       	"default__Category"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Cplusplus"
+			name       	"CodeName"
+			value      	"")
+		    (object Attribute
+			tool       	"Cplusplus"
+			name       	"IsNamespace"
+			value      	FALSE)))
+	    (object Attribute
+		tool       	"Cplusplus"
+		name       	"HiddenTool"
+		value      	FALSE)
+	    (object Attribute
+		tool       	"ANSI C++ Event Watcher"
+		name       	"HiddenTool"
+		value      	FALSE)
+	    (object Attribute
+		tool       	"ANSIConvert"
+		name       	"HiddenTool"
+		value      	FALSE)
+	    (object Attribute
+		tool       	"Ada83"
+		name       	"propertyId"
+		value      	"838326200")
+	    (object Attribute
+		tool       	"Ada83"
+		name       	"default__Project"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"SpecFileExtension"
+			value      	"1.ada")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"SpecFileBackupExtension"
+			value      	"1.ad~")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"SpecFileTemporaryExtension"
+			value      	"1.ad#")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"BodyFileExtension"
+			value      	"2.ada")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"BodyFileBackupExtension"
+			value      	"2.ad~")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"BodyFileTemporaryExtension"
+			value      	"2.ad#")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"CreateMissingDirectories"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"GenerateBodies"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"GenerateAccessorOperations"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"GenerateStandardOperations"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"ImplicitParameter"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"CommentWidth"
+			value      	60)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"StopOnError"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"ErrorLimit"
+			value      	30)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"UseFileName"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"Directory"
+			value      	"$ROSEADA83_SOURCE")))
+	    (object Attribute
+		tool       	"Ada83"
+		name       	"default__Class"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"CodeName"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"ClassName"
+			value      	"Object")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"ClassAccess"
+			value      	("ImplementationSet" 43))
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"ImplementationType"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"IsSubtype"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"PolymorphicUnit"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"HandleName"
+			value      	"Handle")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"HandleAccess"
+			value      	("ImplementationSet" 45))
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"Discriminant"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"Variant"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"EnumerationLiteralPrefix"
+			value      	"A_")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"RecordFieldPrefix"
+			value      	"The_")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"GenerateAccessorOperations"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"GenerateStandardOperations"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"ImplicitParameter"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"ClassParameterName"
+			value      	"This")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"DefaultConstructorKind"
+			value      	("ConstructorKindSet" 199))
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"DefaultConstructorName"
+			value      	"Create")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"InlineDefaultConstructor"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"CopyConstructorKind"
+			value      	("ConstructorKindSet" 199))
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"CopyConstructorName"
+			value      	"Copy")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"InlineCopyConstructor"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"DestructorName"
+			value      	"Free")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"InlineDestructor"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"ClassEqualityOperation"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"HandleEqualityOperation"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"InlineEquality"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"IsTask"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"Representation"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"ImplementationSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Ada83"
+				name       	"Public"
+				value      	45)
+			    (object Attribute
+				tool       	"Ada83"
+				name       	"Private"
+				value      	43)
+			    (object Attribute
+				tool       	"Ada83"
+				name       	"LimitedPrivate"
+				value      	200)
+			    (object Attribute
+				tool       	"Ada83"
+				name       	"DoNotCreate"
+				value      	201)))
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"ConstructorKindSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Ada83"
+				name       	"Procedure"
+				value      	202)
+			    (object Attribute
+				tool       	"Ada83"
+				name       	"Function"
+				value      	199)
+			    (object Attribute
+				tool       	"Ada83"
+				name       	"DoNotCreate"
+				value      	201)))))
+	    (object Attribute
+		tool       	"Ada83"
+		name       	"default__Module-Spec"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"Generate"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"CopyrightNotice"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"FileName"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"ReturnType"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"GenericFormalParameters"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"AdditionalWiths"
+			value      	(value Text ""))))
+	    (object Attribute
+		tool       	"Ada83"
+		name       	"default__Module-Body"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"Generate"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"CopyrightNotice"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"FileName"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"ReturnType"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"AdditionalWiths"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"IsSubunit"
+			value      	FALSE)))
+	    (object Attribute
+		tool       	"Ada83"
+		name       	"default__Operation"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"CodeName"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"SubprogramImplementation"
+			value      	("SubprogramImplementationSet" 2))
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"ClassParameterMode"
+			value      	("ParameterModeSet" 203))
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"Inline"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"EntryCode"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"ExitCode"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"Representation"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"SubprogramImplementationSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Ada83"
+				name       	"Body"
+				value      	2)
+			    (object Attribute
+				tool       	"Ada83"
+				name       	"Separate"
+				value      	223)
+			    (object Attribute
+				tool       	"Ada83"
+				name       	"Spec"
+				value      	224)))
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"ParameterModeSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Ada83"
+				name       	"In"
+				value      	204)
+			    (object Attribute
+				tool       	"Ada83"
+				name       	"Out"
+				value      	205)
+			    (object Attribute
+				tool       	"Ada83"
+				name       	"InOut"
+				value      	203)
+			    (object Attribute
+				tool       	"Ada83"
+				name       	"FunctionReturn"
+				value      	206)
+			    (object Attribute
+				tool       	"Ada83"
+				name       	"DoNotCreate"
+				value      	201)))))
+	    (object Attribute
+		tool       	"Ada83"
+		name       	"default__Has"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"CodeName"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"NameIfUnlabeled"
+			value      	"The_${supplier}")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"DataMemberName"
+			value      	"${relationship}")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"GetName"
+			value      	"Get_${relationship}")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"InlineGet"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"SetName"
+			value      	"Set_${relationship}")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"InlineSet"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"IsConstant"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"InitialValue"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"Variant"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"ContainerGeneric"
+			value      	"List")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"ContainerType"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"ContainerDeclarations"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"SelectorName"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"SelectorType"
+			value      	"")))
+	    (object Attribute
+		tool       	"Ada83"
+		name       	"default__Attribute"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"CodeName"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"DataMemberName"
+			value      	"${attribute}")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"GetName"
+			value      	"Get_${attribute}")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"InlineGet"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"SetName"
+			value      	"Set_${attribute}")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"InlineSet"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"IsConstant"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"InitialValue"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"Variant"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"Representation"
+			value      	(value Text ""))))
+	    (object Attribute
+		tool       	"Ada83"
+		name       	"default__Association"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"NameIfUnlabeled"
+			value      	"The_${targetClass}")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"GetName"
+			value      	"Get_${association}")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"InlineGet"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"SetName"
+			value      	"Set_${association}")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"InlineSet"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"GenerateAssociate"
+			value      	("ProcedureKindSet" 202))
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"AssociateName"
+			value      	"Associate")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"InlineAssociate"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"GenerateDissociate"
+			value      	("ProcedureKindSet" 202))
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"DissociateName"
+			value      	"Dissociate")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"InlineDissociate"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"ProcedureKindSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Ada83"
+				name       	"Procedure"
+				value      	202)
+			    (object Attribute
+				tool       	"Ada83"
+				name       	"DoNotCreate"
+				value      	201)))
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"FunctionKindSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Ada83"
+				name       	"Function"
+				value      	199)
+			    (object Attribute
+				tool       	"Ada83"
+				name       	"DoNotCreate"
+				value      	201)))))
+	    (object Attribute
+		tool       	"Ada83"
+		name       	"default__Role"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"CodeName"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"NameIfUnlabeled"
+			value      	"The_${targetClass}")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"DataMemberName"
+			value      	"${target}")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"GetName"
+			value      	"Get_${target}")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"InlineGet"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"SetName"
+			value      	"Set_${target}")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"InlineSet"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"IsConstant"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"InitialValue"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"ContainerGeneric"
+			value      	"List")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"ContainerType"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"ContainerDeclarations"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"SelectorName"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"SelectorType"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"ProcedureKindSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Ada83"
+				name       	"Procedure"
+				value      	202)
+			    (object Attribute
+				tool       	"Ada83"
+				name       	"DoNotCreate"
+				value      	201)))))
+	    (object Attribute
+		tool       	"Ada83"
+		name       	"default__Subsystem"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Ada83"
+			name       	"Directory"
+			value      	"AUTO GENERATE")))
+	    (object Attribute
+		tool       	"Ada83"
+		name       	"HiddenTool"
+		value      	FALSE)
+	    (object Attribute
+		tool       	"Ada95"
+		name       	"propertyId"
+		value      	"838326200")
+	    (object Attribute
+		tool       	"Ada95"
+		name       	"default__Project"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"SpecFileExtension"
+			value      	"1.ada")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"SpecFileBackupExtension"
+			value      	"1.ad~")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"SpecFileTemporaryExtension"
+			value      	"1.ad#")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"BodyFileExtension"
+			value      	"2.ada")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"BodyFileBackupExtension"
+			value      	"2.ad~")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"BodyFileTemporaryExtension"
+			value      	"2.ad#")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"CreateMissingDirectories"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"UseColonNotation"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GenerateBodies"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GenerateAccessorOperations"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GenerateStandardOperations"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"ImplicitParameter"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"CommentWidth"
+			value      	60)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"StopOnError"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"ErrorLimit"
+			value      	30)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"UseFileName"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"Directory"
+			value      	"$ROSEADA95_SOURCE")))
+	    (object Attribute
+		tool       	"Ada95"
+		name       	"default__Class"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"CodeName"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"TypeName"
+			value      	"Object")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"TypeVisibility"
+			value      	("TypeVisibilitySet" 43))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"TypeImplementation"
+			value      	("TypeImplementationSet" 208))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"TypeControl"
+			value      	("TypeControlSet" 225))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"TypeControlName"
+			value      	"Controlled_${type}")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"TypeDefinition"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"RecordImplementation"
+			value      	("RecordImplementationSet" 209))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"RecordKindPackageName"
+			value      	"${class}_Record_Kinds")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"IsLimited"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"IsSubtype"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GenerateAccessType"
+			value      	("GenerateAccessTypeSet" 230))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"AccessTypeName"
+			value      	"Handle")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"AccessTypeVisibility"
+			value      	("TypeVisibilitySet" 45))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"AccessTypeDefinition"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"AccessClassWide"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"MaybeAliased"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"ParameterizedImplementation"
+			value      	("ParameterizedImplementationSet" 11))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"ParentClassName"
+			value      	"Superclass")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"EnumerationLiteralPrefix"
+			value      	"A_")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"RecordFieldPrefix"
+			value      	"The_")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"ArrayOfTypeName"
+			value      	"Array_Of_${type}")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"AccessArrayOfTypeName"
+			value      	"Access_Array_Of_${type}")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"ArrayOfAccessTypeName"
+			value      	"Array_Of_${access_type}")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"AccessArrayOfAccessTypeName"
+			value      	"Access_Array_Of_${access_type}")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"ArrayIndexDefinition"
+			value      	"Positive range <>")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GenerateAccessorOperations"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GenerateStandardOperations"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"ImplicitParameter"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"ImplicitParameterName"
+			value      	"This")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GenerateDefaultConstructor"
+			value      	("SubprogramKindSet" 199))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"DefaultConstructorName"
+			value      	"Create")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"InlineDefaultConstructor"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GenerateCopyConstructor"
+			value      	("SubprogramKindSet" 199))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"CopyConstructorName"
+			value      	"Copy")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"InlineCopyConstructor"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GenerateDestructor"
+			value      	("ProcedureKindSet" 202))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"DestructorName"
+			value      	"Free")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"InlineDestructor"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GenerateTypeEquality"
+			value      	("FunctionKindSet" 201))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"TypeEqualityName"
+			value      	"${quote}=${quote}")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"InlineEquality"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"Representation"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"TypeImplementationSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Tagged"
+				value      	208)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Record"
+				value      	210)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Mixin"
+				value      	211)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Protected"
+				value      	44)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Task"
+				value      	212)))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"RecordImplementationSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"SingleType"
+				value      	209)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"MultipleTypes"
+				value      	213)))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"ParameterizedImplementationSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Generic"
+				value      	11)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Unconstrained"
+				value      	214)))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"TypeVisibilitySet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Public"
+				value      	45)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Private"
+				value      	43)))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"SubprogramKindSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Procedure"
+				value      	202)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Function"
+				value      	199)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"DoNotCreate"
+				value      	201)))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"ProcedureKindSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Procedure"
+				value      	202)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"DoNotCreate"
+				value      	201)))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"FunctionKindSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Function"
+				value      	199)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"DoNotCreate"
+				value      	201)))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"TypeControlSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"None"
+				value      	225)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"InitializationOnly"
+				value      	226)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"AssignmentFinalizationOnly"
+				value      	227)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"All"
+				value      	228)))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GenerateAccessTypeSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Always"
+				value      	229)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Auto"
+				value      	230)))))
+	    (object Attribute
+		tool       	"Ada95"
+		name       	"default__Module-Spec"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"Generate"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"CopyrightNotice"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"FileName"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"ReturnType"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GenericFormalParameters"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"AdditionalWiths"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"IsPrivate"
+			value      	FALSE)))
+	    (object Attribute
+		tool       	"Ada95"
+		name       	"default__Module-Body"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"Generate"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"CopyrightNotice"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"FileName"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"ReturnType"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"AdditionalWiths"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"IsSubunit"
+			value      	FALSE)))
+	    (object Attribute
+		tool       	"Ada95"
+		name       	"default__Operation"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"CodeName"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"SubprogramImplementation"
+			value      	("SubprogramImplementationSet" 2))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"Renames"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GenerateOverriding"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"ImplicitParameterMode"
+			value      	("ParameterModeSet" 203))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"ImplicitParameterClassWide"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GenerateAccessOperation"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"Inline"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"EntryCode"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"ExitCode"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"EntryBarrierCondition"
+			value      	"True")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"Representation"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"SubprogramImplementationSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Abstract"
+				value      	221)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Body"
+				value      	2)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Renaming"
+				value      	222)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Separate"
+				value      	223)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Spec"
+				value      	224)))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"ParameterModeSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"In"
+				value      	204)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Out"
+				value      	205)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"InOut"
+				value      	203)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Access"
+				value      	220)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"DoNotCreate"
+				value      	201)))))
+	    (object Attribute
+		tool       	"Ada95"
+		name       	"default__Has"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"CodeName"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"NameIfUnlabeled"
+			value      	"The_${supplier}")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"RecordFieldImplementation"
+			value      	("RecordFieldImplementationSet" 216))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"RecordFieldName"
+			value      	"${relationship}")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GenerateGet"
+			value      	("FunctionKindSet" 199))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GenerateAccessGet"
+			value      	("FunctionKindSet" 201))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GetName"
+			value      	"Get_${relationship}")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"InlineGet"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GenerateSet"
+			value      	("ProcedureKindSet" 202))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GenerateAccessSet"
+			value      	("ProcedureKindSet" 201))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"SetName"
+			value      	"Set_${relationship}")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"InlineSet"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"IsAliased"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"IsConstant"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"InitialValue"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"ContainerImplementation"
+			value      	("ContainerImplementationSet" 217))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"ContainerGeneric"
+			value      	"List")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"ContainerType"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"ContainerDeclarations"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"SelectorName"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"SelectorType"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"RecordFieldImplementationSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Component"
+				value      	216)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Discriminant"
+				value      	218)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"AccessDiscriminant"
+				value      	219)))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"ContainerImplementationSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Array"
+				value      	217)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Generic"
+				value      	11)))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"ProcedureKindSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Procedure"
+				value      	202)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"DoNotCreate"
+				value      	201)))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"FunctionKindSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Function"
+				value      	199)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"DoNotCreate"
+				value      	201)))))
+	    (object Attribute
+		tool       	"Ada95"
+		name       	"default__Attribute"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"CodeName"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"RecordFieldImplementation"
+			value      	("RecordFieldImplementationSet" 216))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"RecordFieldName"
+			value      	"${attribute}")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GenerateGet"
+			value      	("FunctionKindSet" 199))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GenerateAccessGet"
+			value      	("FunctionKindSet" 201))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GetName"
+			value      	"Get_${attribute}")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"InlineGet"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GenerateSet"
+			value      	("ProcedureKindSet" 202))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GenerateAccessSet"
+			value      	("ProcedureKindSet" 201))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"SetName"
+			value      	"Set_${attribute}")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"InlineSet"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"IsAliased"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"IsConstant"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"InitialValue"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"Representation"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"RecordFieldImplementationSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Component"
+				value      	216)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Discriminant"
+				value      	218)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"AccessDiscriminant"
+				value      	219)))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"ProcedureKindSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Procedure"
+				value      	202)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"DoNotCreate"
+				value      	201)))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"FunctionKindSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Function"
+				value      	199)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"DoNotCreate"
+				value      	201)))))
+	    (object Attribute
+		tool       	"Ada95"
+		name       	"default__Association"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"NameIfUnlabeled"
+			value      	"The_${targetClass}")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GenerateGet"
+			value      	("FunctionKindSet" 199))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GetName"
+			value      	"Get_${association}")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"InlineGet"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GenerateSet"
+			value      	("ProcedureKindSet" 202))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"SetName"
+			value      	"Set_${association}")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"InlineSet"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GenerateAssociate"
+			value      	("ProcedureKindSet" 202))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"AssociateName"
+			value      	"Associate")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"InlineAssociate"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GenerateDissociate"
+			value      	("ProcedureKindSet" 202))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"DissociateName"
+			value      	"Dissociate")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"InlineDissociate"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"ProcedureKindSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Procedure"
+				value      	202)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"DoNotCreate"
+				value      	201)))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"FunctionKindSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Function"
+				value      	199)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"DoNotCreate"
+				value      	201)))))
+	    (object Attribute
+		tool       	"Ada95"
+		name       	"default__Role"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"CodeName"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"NameIfUnlabeled"
+			value      	"The_${targetClass}")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"RecordFieldImplementation"
+			value      	("RecordFieldImplementationSet" 216))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"RecordFieldName"
+			value      	"${target}")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GenerateGet"
+			value      	("FunctionKindSet" 199))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GenerateAccessGet"
+			value      	("FunctionKindSet" 201))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GetName"
+			value      	"Get_${target}")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"InlineGet"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GenerateSet"
+			value      	("ProcedureKindSet" 202))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"GenerateAccessSet"
+			value      	("ProcedureKindSet" 201))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"SetName"
+			value      	"Set_${target}")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"InlineSet"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"IsAliased"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"IsConstant"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"InitialValue"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"ContainerImplementation"
+			value      	("ContainerImplementationSet" 217))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"ContainerGeneric"
+			value      	"List")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"ContainerType"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"ContainerDeclarations"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"SelectorName"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"SelectorType"
+			value      	"")
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"ProcedureKindSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Procedure"
+				value      	202)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"DoNotCreate"
+				value      	201)))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"RecordFieldImplementationSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Component"
+				value      	216)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Discriminant"
+				value      	218)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"AccessDiscriminant"
+				value      	219)))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"ContainerImplementationSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Array"
+				value      	217)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Generic"
+				value      	11)))
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"FunctionKindSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"Function"
+				value      	199)
+			    (object Attribute
+				tool       	"Ada95"
+				name       	"DoNotCreate"
+				value      	201)))))
+	    (object Attribute
+		tool       	"Ada95"
+		name       	"default__Subsystem"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Ada95"
+			name       	"Directory"
+			value      	"AUTO GENERATE")))
+	    (object Attribute
+		tool       	"Ada95"
+		name       	"HiddenTool"
+		value      	FALSE)
+	    (object Attribute
+		tool       	"CORBA"
+		name       	"propertyId"
+		value      	"809135966")
+	    (object Attribute
+		tool       	"CORBA"
+		name       	"default__Project"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"CORBA"
+			name       	"CreateMissingDirectories"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"CORBA"
+			name       	"Editor"
+			value      	("EditorType" 100))
+		    (object Attribute
+			tool       	"CORBA"
+			name       	"IncludePath"
+			value      	"")
+		    (object Attribute
+			tool       	"CORBA"
+			name       	"StopOnError"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"CORBA"
+			name       	"EditorType"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"CORBA"
+				name       	"BuiltIn"
+				value      	100)
+			    (object Attribute
+				tool       	"CORBA"
+				name       	"WindowsShell"
+				value      	101)))))
+	    (object Attribute
+		tool       	"CORBA"
+		name       	"default__Class"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"CORBA"
+			name       	"ArrayDimensions"
+			value      	"")
+		    (object Attribute
+			tool       	"CORBA"
+			name       	"ConstValue"
+			value      	"")
+		    (object Attribute
+			tool       	"CORBA"
+			name       	"ImplementationType"
+			value      	"")))
+	    (object Attribute
+		tool       	"CORBA"
+		name       	"default__Module-Spec"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"CORBA"
+			name       	"AdditionalIncludes"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"CORBA"
+			name       	"CmIdentification"
+			value      	(value Text "  %X% %Q% %Z% %W%"))
+		    (object Attribute
+			tool       	"CORBA"
+			name       	"CopyrightNotice"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"CORBA"
+			name       	"InclusionProtectionSymbol"
+			value      	"AUTO GENERATE")))
+	    (object Attribute
+		tool       	"CORBA"
+		name       	"default__Module-Body"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"CORBA"
+			name       	"AdditionalIncludes"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"CORBA"
+			name       	"CmIdentification"
+			value      	(value Text "  %X% %Q% %Z% %W%"))
+		    (object Attribute
+			tool       	"CORBA"
+			name       	"CopyrightNotice"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"CORBA"
+			name       	"InclusionProtectionSymbol"
+			value      	"AUTO GENERATE")))
+	    (object Attribute
+		tool       	"CORBA"
+		name       	"default__Operation"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"CORBA"
+			name       	"Context"
+			value      	"")
+		    (object Attribute
+			tool       	"CORBA"
+			name       	"OperationIsOneWay"
+			value      	FALSE)))
+	    (object Attribute
+		tool       	"CORBA"
+		name       	"default__Attribute"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"CORBA"
+			name       	"ArrayDimensions"
+			value      	"")
+		    (object Attribute
+			tool       	"CORBA"
+			name       	"CaseSpecifier"
+			value      	"")
+		    (object Attribute
+			tool       	"CORBA"
+			name       	"IsReadOnly"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"CORBA"
+			name       	"Order"
+			value      	"")))
+	    (object Attribute
+		tool       	"CORBA"
+		name       	"default__Role"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"CORBA"
+			name       	"ArrayDimensions"
+			value      	"")
+		    (object Attribute
+			tool       	"CORBA"
+			name       	"CaseSpecifier"
+			value      	"")
+		    (object Attribute
+			tool       	"CORBA"
+			name       	"GenerateForwardReference"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"CORBA"
+			name       	"IsReadOnly"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"CORBA"
+			name       	"Order"
+			value      	"")
+		    (object Attribute
+			tool       	"CORBA"
+			name       	"BoundedRoleType"
+			value      	("AssocTypeSet" 47))
+		    (object Attribute
+			tool       	"CORBA"
+			name       	"AssocTypeSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"CORBA"
+				name       	"Array"
+				value      	24)
+			    (object Attribute
+				tool       	"CORBA"
+				name       	"Sequence"
+				value      	47)))))
+	    (object Attribute
+		tool       	"CORBA"
+		name       	"default__Uses"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"CORBA"
+			name       	"GenerateForwardReference"
+			value      	FALSE)))
+	    (object Attribute
+		tool       	"CORBA"
+		name       	"HiddenTool"
+		value      	FALSE)
+	    (object Attribute
+		tool       	"DDL"
+		name       	"propertyId"
+		value      	"809135966")
+	    (object Attribute
+		tool       	"DDL"
+		name       	"default__Project"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"DDL"
+			name       	"Directory"
+			value      	"AUTO GENERATE")
+		    (object Attribute
+			tool       	"DDL"
+			name       	"DataBase"
+			value      	("DataBaseSet" 800))
+		    (object Attribute
+			tool       	"DDL"
+			name       	"DataBaseSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"DDL"
+				name       	"ANSI"
+				value      	800)
+			    (object Attribute
+				tool       	"DDL"
+				name       	"Oracle"
+				value      	801)
+			    (object Attribute
+				tool       	"DDL"
+				name       	"SQLServer"
+				value      	802)
+			    (object Attribute
+				tool       	"DDL"
+				name       	"Sybase"
+				value      	803)
+			    (object Attribute
+				tool       	"DDL"
+				name       	"Watcom"
+				value      	804)))
+		    (object Attribute
+			tool       	"DDL"
+			name       	"PrimaryKeyColumnName"
+			value      	"Id")
+		    (object Attribute
+			tool       	"DDL"
+			name       	"PrimaryKeyColumnType"
+			value      	"NUMBER(5)")
+		    (object Attribute
+			tool       	"DDL"
+			name       	"ViewName"
+			value      	"V_")
+		    (object Attribute
+			tool       	"DDL"
+			name       	"TableName"
+			value      	"T_")
+		    (object Attribute
+			tool       	"DDL"
+			name       	"InheritSuffix"
+			value      	"_V")
+		    (object Attribute
+			tool       	"DDL"
+			name       	"DropClause"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"DDL"
+			name       	"BaseViews"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"DDL"
+			name       	"DDLScriptFilename"
+			value      	"DDL1.SQL")))
+	    (object Attribute
+		tool       	"DDL"
+		name       	"default__Attribute"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"DDL"
+			name       	"ColumnType"
+			value      	"VARCHAR")
+		    (object Attribute
+			tool       	"DDL"
+			name       	"Length"
+			value      	"")
+		    (object Attribute
+			tool       	"DDL"
+			name       	"NullsOK"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"DDL"
+			name       	"PrimaryKey"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"DDL"
+			name       	"Unique"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"DDL"
+			name       	"CompositeUnique"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"DDL"
+			name       	"CheckConstraint"
+			value      	"")))
+	    (object Attribute
+		tool       	"DDL"
+		name       	"HiddenTool"
+		value      	FALSE)
+	    (object Attribute
+		tool       	"Java"
+		name       	"propertyId"
+		value      	"809135966")
+	    (object Attribute
+		tool       	"Java"
+		name       	"default__Project"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Java"
+			name       	"RootDir"
+			value      	"")
+		    (object Attribute
+			tool       	"Java"
+			name       	"CreateMissingDirectories"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"StopOnError"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"UsePrefixes"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"AutoSync"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"ShowCodegenDlg"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"JavadocDefaultAuthor"
+			value      	"")
+		    (object Attribute
+			tool       	"Java"
+			name       	"JavadocDefaultVersion"
+			value      	"")
+		    (object Attribute
+			tool       	"Java"
+			name       	"JavadocDefaultSince"
+			value      	"")
+		    (object Attribute
+			tool       	"Java"
+			name       	"JavadocNumAsterisks"
+			value      	0)
+		    (object Attribute
+			tool       	"Java"
+			name       	"MaxNumChars"
+			value      	80)
+		    (object Attribute
+			tool       	"Java"
+			name       	"Editor"
+			value      	("EditorType" 100))
+		    (object Attribute
+			tool       	"Java"
+			name       	"VM"
+			value      	("VMType" 200))
+		    (object Attribute
+			tool       	"Java"
+			name       	"ClassPath"
+			value      	"")
+		    (object Attribute
+			tool       	"Java"
+			name       	"EditorType"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Java"
+				name       	"BuiltIn"
+				value      	100)
+			    (object Attribute
+				tool       	"Java"
+				name       	"WindowsShell"
+				value      	101)))
+		    (object Attribute
+			tool       	"Java"
+			name       	"VMType"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Java"
+				name       	"Sun"
+				value      	200)
+			    (object Attribute
+				tool       	"Java"
+				name       	"Microsoft"
+				value      	201)
+			    (object Attribute
+				tool       	"Java"
+				name       	"IBM"
+				value      	202)))
+		    (object Attribute
+			tool       	"Java"
+			name       	"InstanceVariablePrefix"
+			value      	"m_")
+		    (object Attribute
+			tool       	"Java"
+			name       	"ClassVariablePrefix"
+			value      	"s_")
+		    (object Attribute
+			tool       	"Java"
+			name       	"DefaultAttributeDataType"
+			value      	"int")
+		    (object Attribute
+			tool       	"Java"
+			name       	"DefaultOperationReturnType"
+			value      	"void")
+		    (object Attribute
+			tool       	"Java"
+			name       	"NoClassCustomDlg"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"GlobalImports"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"Java"
+			name       	"OpenBraceClassStyle"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"OpenBraceMethodStyle"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"UseTabs"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"UseSpaces"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"SpacingItems"
+			value      	3)
+		    (object Attribute
+			tool       	"Java"
+			name       	"RoseDefaultCommentStyle"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"AsteriskCommentStyle"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"JavaCommentStyle"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"JavadocAuthor"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"JavadocSince"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"JavadocVersion"
+			value      	FALSE)))
+	    (object Attribute
+		tool       	"Java"
+		name       	"default__Class"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Java"
+			name       	"Final"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"Static"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"GenerateDefaultConstructor"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"ConstructorIs"
+			value      	("Ctor_Set" 62))
+		    (object Attribute
+			tool       	"Java"
+			name       	"Ctor_Set"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Java"
+				name       	"public"
+				value      	62)
+			    (object Attribute
+				tool       	"Java"
+				name       	"protected"
+				value      	63)
+			    (object Attribute
+				tool       	"Java"
+				name       	"private"
+				value      	64)
+			    (object Attribute
+				tool       	"Java"
+				name       	"package"
+				value      	65)))
+		    (object Attribute
+			tool       	"Java"
+			name       	"GenerateFinalizer"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"GenerateStaticInitializer"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"GenerateInstanceInitializer"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"GenerateCode"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"DisableAutoSync"
+			value      	FALSE)))
+	    (object Attribute
+		tool       	"Java"
+		name       	"Default_Servlet__Class"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Java"
+			name       	"ServletName"
+			value      	"")
+		    (object Attribute
+			tool       	"Java"
+			name       	"ServletContextRef"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"IsSingleThread"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"ServletInitParameter"
+			value      	"")
+		    (object Attribute
+			tool       	"Java"
+			name       	"ServletInitParameterNames"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"ServletIsSecure"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"ServletRequestDispatcher"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"ServletRequestDispatcherPath"
+			value      	"")
+		    (object Attribute
+			tool       	"Java"
+			name       	"DispatcherInclude"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"DispatcherForward"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"ServletSecurityRoles"
+			value      	"")
+		    (object Attribute
+			tool       	"Java"
+			name       	"ServletgetInfo"
+			value      	"")))
+	    (object Attribute
+		tool       	"Java"
+		name       	"Http_Servlet__Class"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Java"
+			name       	"ServletRequestAttribute"
+			value      	"")
+		    (object Attribute
+			tool       	"Java"
+			name       	"ServletRequestAttributesNames"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"MethodForRequestAttributes"
+			value      	"")
+		    (object Attribute
+			tool       	"Java"
+			name       	"ServletRequestParameter"
+			value      	"")
+		    (object Attribute
+			tool       	"Java"
+			name       	"ServletRequestParameterNames"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"MethodForRequestParameters"
+			value      	"")
+		    (object Attribute
+			tool       	"Java"
+			name       	"ServletHeader"
+			value      	"")
+		    (object Attribute
+			tool       	"Java"
+			name       	"ServletHeaderNames"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"MethodForHeaders"
+			value      	"")
+		    (object Attribute
+			tool       	"Java"
+			name       	"ServletIntHeader"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"ServletDateHeader"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"ServletCookie"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"MethodForCookie"
+			value      	"")
+		    (object Attribute
+			tool       	"Java"
+			name       	"ServletContentType"
+			value      	"")
+		    (object Attribute
+			tool       	"Java"
+			name       	"GenerateHTML"
+			value      	FALSE)))
+	    (object Attribute
+		tool       	"Java"
+		name       	"Default_EJB__Class"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Java"
+			name       	"Generate_XML_DD"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"EJBCmpField"
+			value      	"")
+		    (object Attribute
+			tool       	"Java"
+			name       	"EJBEnvironmentProperties"
+			value      	"")
+		    (object Attribute
+			tool       	"Java"
+			name       	"EJBCnxFactory"
+			value      	"")
+		    (object Attribute
+			tool       	"Java"
+			name       	"EJBReferences"
+			value      	"")
+		    (object Attribute
+			tool       	"Java"
+			name       	"EJBSecurityRoles"
+			value      	"")
+		    (object Attribute
+			tool       	"Java"
+			name       	"EJBNameInJAR"
+			value      	"")
+		    (object Attribute
+			tool       	"Java"
+			name       	"EJBSessionType"
+			value      	("EJBSessionType_Set" 200))
+		    (object Attribute
+			tool       	"Java"
+			name       	"EJBSessionType_Set"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Java"
+				name       	""
+				value      	200)
+			    (object Attribute
+				tool       	"Java"
+				name       	"Stateless"
+				value      	201)
+			    (object Attribute
+				tool       	"Java"
+				name       	"Stateful"
+				value      	202)))
+		    (object Attribute
+			tool       	"Java"
+			name       	"EJBTransactionType"
+			value      	("EJBTransactionType_Set" 211))
+		    (object Attribute
+			tool       	"Java"
+			name       	"EJBTransactionType_Set"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Java"
+				name       	"Container"
+				value      	211)
+			    (object Attribute
+				tool       	"Java"
+				name       	"Bean"
+				value      	212)))
+		    (object Attribute
+			tool       	"Java"
+			name       	"EJBPersistenceType"
+			value      	("EJBPersistenceType_Set" 220))
+		    (object Attribute
+			tool       	"Java"
+			name       	"EJBPersistenceType_Set"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Java"
+				name       	""
+				value      	220)
+			    (object Attribute
+				tool       	"Java"
+				name       	"Bean"
+				value      	221)
+			    (object Attribute
+				tool       	"Java"
+				name       	"Container"
+				value      	222)))
+		    (object Attribute
+			tool       	"Java"
+			name       	"EJBReentrant"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"BMP_Extend_CMP"
+			value      	FALSE)))
+	    (object Attribute
+		tool       	"Java"
+		name       	"default__Module-Spec"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Java"
+			name       	"CmIdentification"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"Java"
+			name       	"CopyrightNotice"
+			value      	(value Text ""))))
+	    (object Attribute
+		tool       	"Java"
+		name       	"default__Module-Body"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Java"
+			name       	"CmIdentification"
+			value      	(value Text ""))
+		    (object Attribute
+			tool       	"Java"
+			name       	"CopyrightNotice"
+			value      	(value Text ""))))
+	    (object Attribute
+		tool       	"Java"
+		name       	"default__Operation"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Java"
+			name       	"Abstract"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"Static"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"Final"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"Native"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"Synchronized"
+			value      	FALSE)))
+	    (object Attribute
+		tool       	"Java"
+		name       	"default__Attribute"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Java"
+			name       	"Final"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"Transient"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"Volatile"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"PropertyType"
+			value      	("BeanProperty_Set" 71))
+		    (object Attribute
+			tool       	"Java"
+			name       	"BeanProperty_Set"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Java"
+				name       	"Not A Property"
+				value      	71)
+			    (object Attribute
+				tool       	"Java"
+				name       	"Simple"
+				value      	72)
+			    (object Attribute
+				tool       	"Java"
+				name       	"Bound"
+				value      	73)
+			    (object Attribute
+				tool       	"Java"
+				name       	"Constrained"
+				value      	74)))
+		    (object Attribute
+			tool       	"Java"
+			name       	"IndividualChangeMgt"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"Read/Write"
+			value      	("Read/Write_Set" 81))
+		    (object Attribute
+			tool       	"Java"
+			name       	"Read/Write_Set"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Java"
+				name       	"Read & Write"
+				value      	81)
+			    (object Attribute
+				tool       	"Java"
+				name       	"Read Only"
+				value      	82)
+			    (object Attribute
+				tool       	"Java"
+				name       	"Write Only"
+				value      	83)))
+		    (object Attribute
+			tool       	"Java"
+			name       	"GenerateFullyQualifiedTypes"
+			value      	FALSE)))
+	    (object Attribute
+		tool       	"Java"
+		name       	"default__Role"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"Java"
+			name       	"ContainerClass"
+			value      	"")
+		    (object Attribute
+			tool       	"Java"
+			name       	"InitialValue"
+			value      	"")
+		    (object Attribute
+			tool       	"Java"
+			name       	"Final"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"Transient"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"Volatile"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"PropertyType"
+			value      	("BeanProperty_Set" 71))
+		    (object Attribute
+			tool       	"Java"
+			name       	"BeanProperty_Set"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Java"
+				name       	"Not A Property"
+				value      	71)
+			    (object Attribute
+				tool       	"Java"
+				name       	"Simple"
+				value      	72)
+			    (object Attribute
+				tool       	"Java"
+				name       	"Bound"
+				value      	73)
+			    (object Attribute
+				tool       	"Java"
+				name       	"Constrained"
+				value      	74)))
+		    (object Attribute
+			tool       	"Java"
+			name       	"IndividualChangeMgt"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"Read/Write"
+			value      	("Read/Write_Set" 81))
+		    (object Attribute
+			tool       	"Java"
+			name       	"Read/Write_Set"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"Java"
+				name       	"Read & Write"
+				value      	81)
+			    (object Attribute
+				tool       	"Java"
+				name       	"Read Only"
+				value      	82)
+			    (object Attribute
+				tool       	"Java"
+				name       	"Write Only"
+				value      	83)))
+		    (object Attribute
+			tool       	"Java"
+			name       	"GenerateFullyQualifiedTypes"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"Java"
+			name       	"IsNavigable"
+			value      	TRUE)))
+	    (object Attribute
+		tool       	"Java"
+		name       	"HiddenTool"
+		value      	FALSE)
+	    (object Attribute
+		tool       	"R2Editor"
+		name       	"HiddenTool"
+		value      	FALSE)
+	    (object Attribute
+		tool       	"Rose Model Integrator"
+		name       	"HiddenTool"
+		value      	FALSE)
+	    (object Attribute
+		tool       	"Rose Web Publisher"
+		name       	"HiddenTool"
+		value      	FALSE)
+	    (object Attribute
+		tool       	"XML_DTD"
+		name       	"propertyId"
+		value      	"809135966")
+	    (object Attribute
+		tool       	"XML_DTD"
+		name       	"default__Project"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"XML_DTD"
+			name       	"CreateMissingDirectories"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"XML_DTD"
+			name       	"Editor"
+			value      	("EditorType" 100))
+		    (object Attribute
+			tool       	"XML_DTD"
+			name       	"StopOnError"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"XML_DTD"
+			name       	"EditorType"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"XML_DTD"
+				name       	"BuiltIn"
+				value      	100)
+			    (object Attribute
+				tool       	"XML_DTD"
+				name       	"WindowsShell"
+				value      	101)))))
+	    (object Attribute
+		tool       	"XML_DTD"
+		name       	"default__Class"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"XML_DTD"
+			name       	"Entity_SystemID"
+			value      	"")
+		    (object Attribute
+			tool       	"XML_DTD"
+			name       	"Entity_PublicID"
+			value      	"")
+		    (object Attribute
+			tool       	"XML_DTD"
+			name       	"NotationValue"
+			value      	"")
+		    (object Attribute
+			tool       	"XML_DTD"
+			name       	"InternalValue"
+			value      	"")
+		    (object Attribute
+			tool       	"XML_DTD"
+			name       	"ParameterEntity"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"XML_DTD"
+			name       	"ExternalEntity"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"XML_DTD"
+			name       	"Notation_SystemID"
+			value      	"")
+		    (object Attribute
+			tool       	"XML_DTD"
+			name       	"Notation_PublicID"
+			value      	"")))
+	    (object Attribute
+		tool       	"XML_DTD"
+		name       	"default__Attribute"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"XML_DTD"
+			name       	"DefaultDeclType"
+			value      	"")))
+	    (object Attribute
+		tool       	"XML_DTD"
+		name       	"default__Module-Spec"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"XML_DTD"
+			name       	"Assign All"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"XML_DTD"
+			name       	"ComponentPath"
+			value      	"")))
+	    (object Attribute
+		tool       	"XML_DTD"
+		name       	"HiddenTool"
+		value      	FALSE))
+	quid       	"3DE4921C0127"))
