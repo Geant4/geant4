@@ -131,35 +131,45 @@
         result.SetA(myA);
         result.SetZ(myZ);
       }
-      if (abs(myZ-Z)>theMaxOffSet||myZ==0||myA==0)
-        if(inc>0)
-        {
-          inc*= -1;
-          myZ = Z;
-          myA = A;
-        }else{
-          G4cout <<"G4NeutronHPNames: Sorry, this material does not come near to any data."<<G4endl;
-          G4cout <<"G4NeutronHPNames: Please make sure NeutronHPCrossSections points to the" << G4endl;
-          G4cout <<"                  directory, the neutron scattering data are located in." << G4endl;
-          G4cout << "G4NeutronHPNames: The material was: A="<<A<<", Z="<<Z<<G4endl;
-          G4Exception("In case the data sets are at present not available in the neutron data library, please contact Hans-Peter.Wellisch@cern.ch");
-          delete theName;
-          theFileName = "";
-          return result;
-        }
-      if (abs(myA-A)>theMaxOffSet)
+      do
       {
-        first = true;
-        myA = A;
-        myZ+=inc;
-      }else{
-        myA+=inc;
+        if (abs(myZ-Z)>theMaxOffSet||myZ==0||myA==0)
+          if(inc>0)
+          {
+            inc*= -1;
+            myZ = Z;
+            myA = A;
+          }else{
+            G4cout <<"G4NeutronHPNames: Sorry, this material does not come near to any data."<<G4endl;
+            G4cout <<"G4NeutronHPNames: Please make sure NeutronHPCrossSections points to the" << G4endl;
+            G4cout <<"                  directory, the neutron scattering data are located in." << G4endl;
+            G4cout << "G4NeutronHPNames: The material was: A="<<A<<", Z="<<Z<<G4endl;
+            G4Exception("In case the data sets are at present not available in the neutron data library, please contact Hans-Peter.Wellisch@cern.ch");
+            delete theName;
+            theFileName = "";
+            return result;
+          }
+        if (abs(myA-A)>theMaxOffSet)
+        {
+          first = true;
+          myA = A;
+          myZ+=inc;
+        }else{
+          myA+=inc;
+        }
       }
+      while(myZ==0 || myA==0);
     }
     while(!(*check));
 //    G4cout << "Names::GetName: last theName proposal = "<< *theName <<" "<<A<<" "<<Z<<G4endl;
 //    G4cout << "File-name: "<<*theName<<G4endl;
-    if(getenv("NeutronHPNamesLogging")) G4cout << "Names::GetName: last theName proposal = "<< *theName <<" "<<A<<" "<<Z<<G4endl;
+    if(getenv("NeutronHPNamesLogging")) 
+    {
+      G4cout << "Names::GetName: last theName proposal = "<< G4endl;
+      G4cout << *theName <<" "<<A<<" "<<Z<<" "<<result.GetName()<<G4endl;
+    }
     delete theName;
+    check->close();
+    delete check;
     return result;
   }
