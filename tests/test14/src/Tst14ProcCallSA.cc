@@ -91,8 +91,8 @@ void Tst14ProcCallSA::execute(const G4Step* aStep){
      if(energy>0. && stepL>1e-20) {
         
         G4double weight = 1./stepL;
-        start[sIndex]->accumulate(log10(energy) , 1 ) ;
-        hist[index]->accumulate(log10(energy) , weight ) ;   
+        start[sIndex]->accumulate(std::log10(energy) , 1 ) ;
+        hist[index]->accumulate(std::log10(energy) , weight ) ;   
      }	 
 #endif     
 }

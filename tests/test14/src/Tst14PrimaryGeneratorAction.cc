@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14PrimaryGeneratorAction.cc,v 1.6 2001-07-11 10:09:58 gunter Exp $
+// $Id: Tst14PrimaryGeneratorAction.cc,v 1.7 2004-12-02 15:39:24 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -108,10 +108,10 @@ void Tst14PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   }
   G4double r0,phi0 ;
   if (rndmFlag == "on")
-     {r0 = (Tst14Detector->GetAbsorberRadius())*sqrt(G4UniformRand());
+     {r0 = (Tst14Detector->GetAbsorberRadius())*std::sqrt(G4UniformRand());
       phi0 = twopi*G4UniformRand();
-      x0 = r0*cos(phi0);
-      y0 = r0*sin(phi0);
+      x0 = r0*std::cos(phi0);
+      y0 = r0*std::sin(phi0);
      } 
   particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
   particleGun->GeneratePrimaryVertex(anEvent);
