@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.37 1999-11-18 15:02:27 hpw Exp $
+# $Id: binmake.gmk,v 1.38 1999-11-29 18:33:52 johna Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -163,8 +163,10 @@ else
 	$(G4LIB)/$(G4SYSTEM)/liblist \
 	  -d $(G4TMPDIR) \
 	  < $(G4LIB)/$(G4SYSTEM)/libname.map; fi)
+# Warning: do not add to LDLIBS2 with += becuase this causes it to be
+# expanded too soon.  Hence extra libraries must have a different name...
 # Extra libraries to resolve remaining circular dependencies...
-#  LDLIBS2 += 
+#  LDLIBS2EXTRA = 
 endif
 
 # LDLIBS3 contains the first set of low level libraries...
@@ -197,7 +199,8 @@ LDLIBS4 += $(LOADLIBS)
 ifdef USER_DEFINED_LDLIBS
   LDLIBS_PREFINAL := $(LDLIBS)
 else
-  LDLIBS_PREFINAL = $(LDLIBS1) $(LDLIBS2) $(LDLIBS3)
+# Again, do not use := or +=.  See note on LDLIBS2 above.
+  LDLIBS_PREFINAL = $(LDLIBS1) $(LDLIBS2) $(LDLIBS2EXTRA) $(LDLIBS3)
 endif
 LDLIBS_PREFINAL += $(LDLIBS4)
 

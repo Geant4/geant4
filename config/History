@@ -1,4 +1,4 @@
-$Id: History,v 1.82 1999-11-25 15:57:30 gcosmo Exp $
+$Id: History,v 1.83 1999-11-29 18:33:49 johna Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29th November 1999  John Allison
+- Introduced LDLIBS2EXTRA so that granular libraries are not
+  expanded too soon.
 
 25th November 1999  Gabriele Cosmo (config-V00-01-14)
 - architecture.gmk: redefined OSPACEDIR as OSPACE_BASE_DIR to conform to
