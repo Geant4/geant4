@@ -1,4 +1,4 @@
-$Id: History,v 1.126 2001-06-04 09:37:51 johna Exp $
+$Id: History,v 1.127 2001-06-04 15:02:08 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -27,6 +27,8 @@ History file for visualization category
 4th June 2001  John Allison
 - G4ASCIITree: Added logical volume name and solid name and type under
   verbosity control.
+- G4ASCIITree: Forced culling off so that all volumes are seen, even if
+  "invisible".
 
 29th May 2001  John Allison
 - Small clean up in test directory.

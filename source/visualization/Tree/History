@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2001-04-10 15:08:01 johna Exp $
+$Id: History,v 1.2 2001-06-04 15:02:10 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,29 @@ committal in the CVS repository !
 
 History file for visualization/Tree sub-category
 ------------------------------------------------
+
+4th June 2001  John Allison
+- G4ASCIITree: Added logical volume name and solid name and type under
+  verbosity control.
+- Forced culling off so that all volumes are seen, even if "invisible".
+
+25th May 2001  John Allison
+- Bug fix in G4ASCIITree.cc: initialise fVerbosity(0).
+
+24th May 2001  John Allison  (vis-V03-01-03)
+- Added missing files G4ASCIITreeMessenger.hh/cc.
+- Bug fix in G4ASCIITreeMessenger.cc: currentAsDefault = true.
+
+22nd May 2001  John Allison
+- Refined ASCIITree.
+
+10th April 2001  John Allison (vis-V03-01-00)
+- Added first version of ASCIITree to dump geometry hierarchy to
+  standard output as ASCII stream.
+  This requires two new environment variables:
+    G4VIS_BUILD_ASCIITREE_DRIVER
+    G4VIS_USE_ASCIITREE
+  and config-V03-01-00.
 
 5th April 2001  John Allison (vis-V03-01-00)
 - First version of G4VTree and G4ASCIITree.
