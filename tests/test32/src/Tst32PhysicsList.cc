@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst32PhysicsList.cc,v 1.1 2002-06-13 12:16:36 jwellisc Exp $
+// $Id: Tst32PhysicsList.cc,v 1.2 2002-06-17 14:34:57 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $ 
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -314,6 +314,7 @@ void Tst32PhysicsList::ConstructMarsProc()
       G4HadronInelasticProcess * theParticleIEProc = 
 	new G4NeutronInelasticProcess();
       G4Mars5GeV * theParticleIE = new G4Mars5GeV();
+      theParticleIE->SetMinEnergy(0.*MeV);
       theParticleIEProc->RegisterMe( theParticleIE );
       pmanager->AddDiscreteProcess( theParticleIEProc );
 
@@ -323,6 +324,7 @@ void Tst32PhysicsList::ConstructMarsProc()
       G4HadronInelasticProcess * theParticleIEProc = 
 	new G4ProtonInelasticProcess();
       G4Mars5GeV * theParticleIE = new G4Mars5GeV();
+      theParticleIE->SetMinEnergy(0.*MeV);
       theParticleIEProc->RegisterMe( theParticleIE );
       pmanager->AddDiscreteProcess( theParticleIEProc );
 
@@ -332,6 +334,7 @@ void Tst32PhysicsList::ConstructMarsProc()
       G4HadronInelasticProcess * theParticleIEProc = 
 	new G4AntiProtonInelasticProcess();
       G4Mars5GeV * theParticleIE = new G4Mars5GeV();
+      theParticleIE->SetMinEnergy(0.*MeV);
       theParticleIEProc->RegisterMe( theParticleIE );
       pmanager->AddDiscreteProcess( theParticleIEProc );
 
@@ -342,6 +345,7 @@ void Tst32PhysicsList::ConstructMarsProc()
       G4HadronInelasticProcess * theParticleIEProc = 
 	new G4PionMinusInelasticProcess();
       G4Mars5GeV * theParticleIE = new G4Mars5GeV();
+      theParticleIE->SetMinEnergy(0.*MeV);
       theParticleIEProc->RegisterMe( theParticleIE );
       pmanager->AddDiscreteProcess( theParticleIEProc );
 
@@ -351,6 +355,7 @@ void Tst32PhysicsList::ConstructMarsProc()
       G4HadronInelasticProcess * theParticleIEProc = 
 	new G4PionPlusInelasticProcess();
       G4Mars5GeV * theParticleIE = new G4Mars5GeV();
+      theParticleIE->SetMinEnergy(0.*MeV);
       theParticleIEProc->RegisterMe( theParticleIE );
       pmanager->AddDiscreteProcess( theParticleIEProc );
 
@@ -360,6 +365,7 @@ void Tst32PhysicsList::ConstructMarsProc()
       G4HadronInelasticProcess * theParticleIEProc = 
 	new G4KaonMinusInelasticProcess();
       G4Mars5GeV * theParticleIE = new G4Mars5GeV();
+      theParticleIE->SetMinEnergy(0.*MeV);
       theParticleIEProc->RegisterMe( theParticleIE );
       pmanager->AddDiscreteProcess( theParticleIEProc );
 
@@ -369,6 +375,7 @@ void Tst32PhysicsList::ConstructMarsProc()
       G4HadronInelasticProcess * theParticleIEProc = 
 	new G4KaonPlusInelasticProcess();
       G4Mars5GeV * theParticleIE = new G4Mars5GeV();
+      theParticleIE->SetMinEnergy(0.*MeV);
       theParticleIEProc->RegisterMe( theParticleIE );
       pmanager->AddDiscreteProcess( theParticleIEProc );
 
