@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.33 2004-07-14 15:38:52 johna Exp $
+// $Id: G4VisManager.hh,v 1.34 2005-01-26 17:06:40 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -201,11 +201,9 @@ public: // With description
   // physical volume.  The objectTransformation defaults to
   // G4Transform3D::Identity by inheritance from G4VVisManager.
 
-  void Draw (const G4VHit&,
-	     const G4Transform3D& objectTransformation);
+  void Draw (const G4VHit&);
 
-  void Draw (const G4VTrajectory&, G4int i_mode,
-	     const G4Transform3D& objectTransformation);
+  void Draw (const G4VTrajectory&, G4int i_mode);
   // i_mode is a parameter that can be used to control the drawing of
   // the trajectory.  See, e.g., G4VTrajectory::DrawTrajectory.
   // i_mode defaults to 0 by inheritance from G4VVisManager.

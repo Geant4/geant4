@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.22 2004-08-03 15:55:33 johna Exp $
+// $Id: G4VSceneHandler.hh,v 1.23 2005-01-26 17:06:38 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,6 +38,8 @@
 
 #include "globals.hh"
 
+#include <stack>
+
 #include "G4VGraphicsScene.hh"
 #include "G4ViewerList.hh"
 #include "G4ViewParameters.hh"
@@ -51,6 +53,7 @@ class G4VModel;
 class G4VGraphicsSystem;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
+class G4Material;
 
 class G4VSceneHandler: public G4VGraphicsScene {
 
@@ -269,11 +272,14 @@ protected:
 
   G4bool fReadyForTransients;           // I.e., not processing scene.
   G4VModel*              fpModel;       // Current model.
-  const G4Transform3D*   fpObjectTransformation;  // Accum'd obj. transfn.
+  const G4Transform3D*   fpObjectTransformation;  // Current
+					// accumulated object transformation.
+  G4int                  fNestingDepth; // For Begin/EndPrimitives.
   const G4VisAttributes* fpVisAttribs;  // Working vis attributes.
   G4int                  fCurrentDepth; // Current depth of geom. hierarchy.
   G4VPhysicalVolume*     fpCurrentPV;   // Current physical volume.
   G4LogicalVolume*       fpCurrentLV;   // Current logical volume.
+  G4Material*       fpCurrentMaterial;  // Current material.
 
 private:
 
