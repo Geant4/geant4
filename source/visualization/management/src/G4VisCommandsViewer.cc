@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.31 2001-08-05 19:02:25 johna Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.32 2001-08-14 18:32:06 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -127,6 +127,7 @@ void G4VisCommandViewerClear::SetNewValue (G4UIcommand* command,
   }
 
   viewer->ClearView();
+  viewer->FinishView();
   if (verbosity >= G4VisManager::confirmations) {
     G4cout << "Viewer \"" << clearName << "\" cleared." << G4endl;
   }
@@ -298,12 +299,20 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command,
 
   // Create viewer.
   fpVisManager -> CreateViewer (newName);
-  if (fpVisManager -> GetCurrentViewer () -> GetName () == newName) {
+  G4VViewer* newViewer = fpVisManager -> GetCurrentViewer ();
+  if (newViewer -> GetName () == newName) {
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "New viewer \"" << newName << "\" created." << G4endl;
     }
     UpdateCandidateLists ();
   }
+  else {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << "ERROR: New viewer doesn\'t match!!!  Curious!!" << G4endl;
+    }
+  }
+  // Refresh if appropriate...
+  SetViewParameters(newViewer, newViewer->GetViewParameters());
 }
 
 ////////////// /vis/viewer/dolly and dollyTo ////////////////////////////
@@ -772,8 +781,8 @@ void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand* command,
     G4cout << "Refreshing viewer \"" << viewer -> GetName () << "\"..."
 	   << G4endl;
   }
-  viewer -> ClearView ();
   viewer -> SetView ();
+  viewer -> ClearView ();
   viewer -> DrawView ();
   if (verbosity >= G4VisManager::confirmations) {
     G4cout << "Viewer \"" << viewer -> GetName () << "\"" << " refreshed."
@@ -945,29 +954,26 @@ void G4VisCommandViewerSelect::SetNewValue (G4UIcommand* command,
   G4String& selectName = newValue;
   G4VViewer* viewer = fpVisManager -> GetViewer (selectName);
 
-  if (viewer) {
-    if (viewer == fpVisManager -> GetCurrentViewer ()) {
-      if (verbosity >= G4VisManager::warnings) {
-	G4cout << "WARNING: Viewer \"" << viewer -> GetName () << "\""
-	       << " already selected." << G4endl;
-      }
-    }
-    else {
-      if (verbosity >= G4VisManager::confirmations) {
-	G4cout << "Viewer \"" << viewer -> GetName () << "\""
-	       << " being selected." << G4endl;
-      }
-      fpVisManager -> SetCurrentViewer (viewer);
-    }
-  }
-  else {
+  if (!viewer) {
     if (verbosity >= G4VisManager::errors) {
       G4cout << "ERROR: Viewer \"" << selectName << "\"";
       G4cout << " not found - \"/vis/viewer/list\""
 	"\n  to see possibilities."
 	     << G4endl;
     }
+    return;
   }
+
+  if (viewer == fpVisManager -> GetCurrentViewer ()) {
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "WARNING: Viewer \"" << viewer -> GetName () << "\""
+	     << " already selected." << G4endl;
+    }
+    return;
+  }
+
+  fpVisManager -> SetCurrentViewer (viewer);  // Prints confirmation.
+
 }
 
 ////////////// /vis/viewer/update ///////////////////////////////////////

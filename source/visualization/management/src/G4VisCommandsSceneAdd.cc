@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.25 2001-08-11 21:38:13 johna Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.26 2001-08-14 18:32:45 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -124,7 +124,6 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand* command,
   G4VModel* model = new G4AxesModel(x0, y0, z0, length);
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
-  UpdateVisManagerScene (currentSceneName);
   if (successful) {
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Axes have been added to scene \"" << currentSceneName << "\"."
@@ -132,6 +131,7 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand* command,
     }
   }
   else G4VisCommandsSceneAddUnsuccessful(verbosity);
+  UpdateVisManagerScene (currentSceneName);
 }
 
 
@@ -194,7 +194,6 @@ void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
     if(CurrentFlavoredWorld)
       successful = pScene -> AddRunDurationModel
 	(new G4FlavoredParallelWorldModel (CurrentFlavoredWorld), warn);
-    UpdateVisManagerScene ();
     if (successful) {
       if (verbosity >= G4VisManager::confirmations) {
 	G4cout << "Ghosts have been added to scene \""
@@ -223,7 +222,6 @@ void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
   if(worldForThis) {
     G4bool successful = pScene -> AddRunDurationModel
       (new G4FlavoredParallelWorldModel (worldForThis), warn);
-    UpdateVisManagerScene (currentSceneName);
     if (successful) {
       if (verbosity >= G4VisManager::confirmations) {
 	G4cout << "Ghosts have been added to scene \""
@@ -238,6 +236,7 @@ void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
       G4VisCommandsSceneAddUnsuccessful(verbosity);
     }
   }
+  UpdateVisManagerScene (currentSceneName);
 }
 
 
@@ -357,7 +356,6 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand* command,
   G4VModel* model = new G4LogicalVolumeModel (pLV, requestedDepthOfDescent);
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
-  UpdateVisManagerScene (currentSceneName);
   if (successful) {
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Logical volume \"" << pLV -> GetName ()
@@ -368,6 +366,7 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand* command,
     }
   }
   else G4VisCommandsSceneAddUnsuccessful(verbosity);
+  UpdateVisManagerScene (currentSceneName);
 }
 
 
@@ -599,7 +598,6 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand* command,
 
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
-  UpdateVisManagerScene (currentSceneName);
   if (successful) {
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Scale of " << annotation
@@ -608,6 +606,7 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand* command,
     }
   }
   else G4VisCommandsSceneAddUnsuccessful(verbosity);
+  UpdateVisManagerScene (currentSceneName);
 }
 
 
@@ -685,7 +684,6 @@ void G4VisCommandSceneAddText::SetNewValue (G4UIcommand* command,
   G4VModel* model = new G4TextModel(g4text);
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
-  UpdateVisManagerScene (currentSceneName);
   if (successful) {
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Text \"" << text
@@ -694,6 +692,7 @@ void G4VisCommandSceneAddText::SetNewValue (G4UIcommand* command,
     }
   }
   else G4VisCommandsSceneAddUnsuccessful(verbosity);
+  UpdateVisManagerScene (currentSceneName);
 }
 
 
@@ -861,7 +860,6 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand* command,
 
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
-  UpdateVisManagerScene (currentSceneName);
   if (successful) {
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "First occurrence of \""
@@ -884,4 +882,5 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand* command,
     }
   }
   else G4VisCommandsSceneAddUnsuccessful(verbosity);
+  UpdateVisManagerScene (currentSceneName);
 }
