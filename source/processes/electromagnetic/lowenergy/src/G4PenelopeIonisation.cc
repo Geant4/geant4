@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisation.cc,v 1.6 2003-11-18 17:29:43 pia Exp $
+// $Id: G4PenelopeIonisation.cc,v 1.7 2003-11-18 17:52:57 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -356,7 +356,7 @@ G4VParticleChange* G4PenelopeIonisation::PostStepDoIt(const G4Track& track,
   
   std::vector<G4DynamicParticle*>* photonVector=0;
   G4DynamicParticle* aPhoton;
-  G4AtomicDeexcitation deexcitationManager;
+  //  G4AtomicDeexciation deexcitationManager;
 
   if (Z>5 && (ionEnergy > cutg || ionEnergy > cute))
     {
