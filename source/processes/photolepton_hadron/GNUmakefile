@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999-01-07 16:14:07 gunter Exp $
+# $Id: GNUmakefile,v 1.2 1999-12-05 18:30:56 gcosmo Exp $
 # ---------------------------------------------------------------------
 # GNUmakefile for photolepton_hadron library.  Gabriele Cosmo, 18/9/96.
 # ---------------------------------------------------------------------
@@ -11,7 +11,6 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-CPPFLAGS += -g
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPGeometry/include \
