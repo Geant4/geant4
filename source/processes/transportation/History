@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2002-04-10 13:14:16 dressel Exp $
+$Id: History,v 1.28 2002-04-10 13:37:33 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-April 10th, 2002  M.Dressel - transport-V04-00-03
----------------------------
-- Added comments.
+April 10, 2002  M.Dressel - transport-V04-00-04
+-------------------------
+- Added comments to headers of transportation classes and managers for
+  importance biasing, to fullfill Software Reference Manual.
 
 Apr 9, 2002 G.Cosmo
 -------------------
