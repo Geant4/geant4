@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonisParamElm.cc,v 1.4 2000-11-27 08:32:12 vnivanch Exp $
+// $Id: G4IonisParamElm.cc,v 1.5 2000-11-27 08:36:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -52,7 +52,7 @@ G4IonisParamElm::G4IonisParamElm(G4double Z)
      9.6,  9.7,  9.7,  9.8,  9.8,  9.8,  9.8,  9.9,  9.9,  9.9 };
 
      G4int iz = (G4int)Z - 1 ;
-     if(0  < iz) iz = 0;
+     if(0  > iz) iz = 0;
      if(98 < iz) iz = 98 ;
      fMeanExcitationEnergy = 
        fZ * (exc[iz] + (fZ - (G4double)(iz))*(exc[iz+1] - exc[iz])) * eV ;
