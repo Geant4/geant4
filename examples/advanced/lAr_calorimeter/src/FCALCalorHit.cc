@@ -23,7 +23,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALCalorHit.cc,v 1.2 2002-12-12 19:16:33 gunter Exp $
+// $Id: FCALCalorHit.cc,v 1.3 2003-12-02 14:39:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,6 +51,7 @@ FCALCalorHit::~FCALCalorHit()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 FCALCalorHit::FCALCalorHit(const FCALCalorHit& right)
+  : G4VHit(right)
 {
   EdepAbs = right.EdepAbs; TrackLengthAbs = right.TrackLengthAbs;
   EdepGap = right.EdepGap; TrackLengthGap = right.TrackLengthGap;
@@ -69,7 +70,7 @@ const FCALCalorHit& FCALCalorHit::operator=(const FCALCalorHit& right)
 
 int FCALCalorHit::operator==(const FCALCalorHit& right) const
 {
-  return 0;
+  return (this==&right) ? 1 : 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -23,7 +23,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALSteppingVerbose.cc,v 1.3 2003-06-16 16:46:34 gunter Exp $
+// $Id: FCALSteppingVerbose.cc,v 1.4 2003-12-02 14:39:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -118,7 +118,7 @@ void FCALSteppingVerbose::StepInfo()
 	       << " ---------------"
 	       << G4endl;
 
-	for(G4int lp1=(*fSecondary).size()-tN2ndariesTot; 
+	for(size_t lp1=(*fSecondary).size()-tN2ndariesTot; 
                         lp1<(*fSecondary).size(); lp1++){
 	  G4cout << "    : "
 		 << std::setw(6)

@@ -23,7 +23,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALHadModuleSD.cc,v 1.3 2002-12-12 19:16:33 gunter Exp $
+// $Id: FCALHadModuleSD.cc,v 1.4 2003-12-02 14:39:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,7 +64,7 @@ FCALHadModuleSD::~FCALHadModuleSD()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void FCALHadModuleSD::Initialize(G4HCofThisEvent*HCE)
+void FCALHadModuleSD::Initialize(G4HCofThisEvent*)
 {
   if(InitF2 == 0) {
     HadModule->InitializeGeometry();
@@ -75,7 +75,7 @@ void FCALHadModuleSD::Initialize(G4HCofThisEvent*HCE)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool FCALHadModuleSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
+G4bool FCALHadModuleSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
   
   G4double edep = aStep->GetTotalEnergyDeposit();
@@ -97,13 +97,14 @@ G4bool FCALHadModuleSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void FCALHadModuleSD::EndOfEvent(G4HCofThisEvent* HCE)
+void FCALHadModuleSD::EndOfEvent(G4HCofThisEvent*)
 {
   G4int NF2Tile = 0;
   G4int AddTileP[300];
   G4double EvisTileP[300];
+  G4int i=0;
 
-  for (G4int i=0; i<2330; i++){
+  for (i=0; i<2330; i++){
     if(EvisF2Tile[i] > 0.) {
       NF2Tile++;
       AddTileP[NF2Tile] = i;

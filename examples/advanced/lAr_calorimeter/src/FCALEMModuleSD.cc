@@ -23,7 +23,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALEMModuleSD.cc,v 1.5 2002-12-17 15:53:30 pmendez Exp $
+// $Id: FCALEMModuleSD.cc,v 1.6 2003-12-02 14:39:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,7 +66,7 @@ FCALEMModuleSD::~FCALEMModuleSD()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void FCALEMModuleSD::Initialize(G4HCofThisEvent*HCE)
+void FCALEMModuleSD::Initialize(G4HCofThisEvent*)
 {
   if (Init_state==0) 
     {
@@ -79,7 +79,7 @@ void FCALEMModuleSD::Initialize(G4HCofThisEvent*HCE)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool FCALEMModuleSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
+G4bool FCALEMModuleSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
   
   G4double edep = aStep->GetTotalEnergyDeposit();
@@ -101,18 +101,19 @@ G4bool FCALEMModuleSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void FCALEMModuleSD::EndOfEvent(G4HCofThisEvent* HCE)
+void FCALEMModuleSD::EndOfEvent(G4HCofThisEvent*)
 {
   G4int NF1Tile = 0;
   G4int AddTileP[300];
   G4double EvisTileP[300];
-
-  for (G4int i=1; i <= 1130; i++){
+  G4int i=0;
+  for (i=1; i <= 1130; i++){
     if(EvisF1Tile[i] > 0.) {
       NF1Tile++;
       AddTileP[NF1Tile] = i;
       EvisTileP[NF1Tile] = EvisF1Tile[i];
-    };};
+    }
+  }
 
   G4cout << "Number of F1 Tiles with Positive energy : " << NF1Tile <<  G4endl;
 
@@ -125,7 +126,7 @@ void FCALEMModuleSD::EndOfEvent(G4HCofThisEvent* HCE)
     Init_state++;
   } else {
     iostemp = ios::out|ios::app; // ios::app;  
-  };
+  }
   
   ofstream EmDatafile(FileName, iostemp);
   // EmDatafile.precision(5);

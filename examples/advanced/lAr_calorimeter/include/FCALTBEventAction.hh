@@ -23,15 +23,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALTBEventAction.hh,v 1.7 2003-02-14 15:54:43 pmendez Exp $
+// $Id: FCALTBEventAction.hh,v 1.8 2003-12-02 14:39:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-#ifdef G4ANALYSIS_USE
 
 #ifndef FCALTBEventAction_h
 #define FCALTBEventAction_h 1
@@ -71,7 +69,5 @@ class FCALTBEventAction : public G4UserEventAction
   private:
   G4double NTracksOutOfWorld, NSecondaries, Init1, Init2, Init3;
   };
-
-#endif
 
 #endif    
