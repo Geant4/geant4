@@ -1,0 +1,22 @@
+vis-01-00-05  7th February 1999  John Allison
+- management: - Added /vis/scene/notifyHandlers.
+              - Added virtual functions AddThis (const G4Polycone and
+                G4Polyhedra to G4VSceneHandler
+              - Moved some code from G4VisManager to G4Scene::AddWorldIfEmpty.
+              - Various refinements and bug fixes.
+- modeling: Augmented G4PhysicalVolumeSearchScene and G4BoundingSphereScene
+            See modeling/History.
+- OpenGL: - Corrected edgeCount check for triangles in
+            G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron&).
+          - Added (long unsigned int) cast in G4OpenGLXmRotationCallbacks.cc.
+          - Added SetView and ShowView to G4OpenGLXViewer:
+              // To force change of context...
+              void G4OpenGLXViewer::SetView () {
+                glXMakeCurrent (dpy, win, cx);
+                G4OpenGLViewer::SetView ();  
+              }
+              // Hopefully to get better flushing in DEC OpenGL...
+              void G4OpenGLXViewer::ShowView () {
+                glXWaitGL ();
+                glFlush ();
+              }
