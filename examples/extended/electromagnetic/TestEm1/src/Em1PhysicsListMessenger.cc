@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em1PhysicsListMessenger.cc,v 1.5 2001-10-31 15:36:45 maire Exp $
+// $Id: Em1PhysicsListMessenger.cc,v 1.6 2002-03-08 13:43:30 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,36 +40,29 @@
 Em1PhysicsListMessenger::Em1PhysicsListMessenger(Em1PhysicsList* EvAct)
 :physList(EvAct)
 { 
-  cutGCmd = new G4UIcmdWithADoubleAndUnit("/calor/cutG",this);
-  cutGCmd->SetGuidance("Set cut values by RANGE for Gamma.");
-  cutGCmd->SetParameterName("range",false);
-  cutGCmd->SetRange("range>0.");
+  cutGCmd = new G4UIcmdWithADoubleAndUnit("/run/particle/setGCut",this);
+  cutGCmd->SetGuidance("Set gamma cut.");
+  cutGCmd->SetParameterName("Gcut",false);
+  cutGCmd->SetRange("Gcut>0.");
   cutGCmd->SetUnitCategory("Length");
   cutGCmd->AvailableForStates(PreInit,Idle);
   
-  cutECmd = new G4UIcmdWithADoubleAndUnit("/calor/cutE",this);
-  cutECmd->SetGuidance("Set cut values by RANGE for e- e+.");
-  cutECmd->SetParameterName("range",false);
-  cutECmd->SetRange("range>0.");
+  cutECmd = new G4UIcmdWithADoubleAndUnit("/run/particle/setECut",this);
+  cutECmd->SetGuidance("Set electron cut");
+  cutECmd->SetParameterName("Ecut",false);
+  cutECmd->SetRange("Ecut>0.");
   cutECmd->SetUnitCategory("Length");   
   cutECmd->AvailableForStates(PreInit,Idle);
   
-  cutPCmd = new G4UIcmdWithADoubleAndUnit("/calor/cutP",this);
-  cutPCmd->SetGuidance("Set cut values by RANGE for proton and others.");
-  cutPCmd->SetParameterName("range",false);
-  cutPCmd->SetRange("range>0.");
+  cutPCmd = new G4UIcmdWithADoubleAndUnit("/run/particle/setPCut",this);
+  cutPCmd->SetGuidance("Set proton cut.");
+  cutPCmd->SetParameterName("Pcut",false);
+  cutPCmd->SetRange("Pcut>0.");
   cutPCmd->SetUnitCategory("Length");      
   cutPCmd->AvailableForStates(PreInit,Idle);
      
-  eCmd = new G4UIcmdWithADoubleAndUnit("/calor/cutEnergy",this);
-  eCmd->SetGuidance("Set cut values by ENERGY for charged particles.");
-  eCmd->SetParameterName("energy",false); 
-  eCmd->SetRange("energy>0.");
-  eCmd->SetUnitCategory("Energy");
-  eCmd->AvailableForStates(Idle);
-  
-  rCmd = new G4UIcmdWithADoubleAndUnit("/calor/range",this);
-  rCmd->SetGuidance("Display the RANGE of Electron for the current material.");
+  rCmd = new G4UIcmdWithADoubleAndUnit("/run/particle/getRange",this);
+  rCmd->SetGuidance("get the electron cut for the current material.");
   rCmd->SetParameterName("energy",false);
   rCmd->SetRange("energy>0.");
   rCmd->SetUnitCategory("Energy");  
@@ -84,7 +77,6 @@ Em1PhysicsListMessenger::~Em1PhysicsListMessenger()
   delete cutECmd;
   delete cutPCmd;
   delete rCmd;
-  delete eCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -95,11 +87,9 @@ void Em1PhysicsListMessenger::SetNewValue(G4UIcommand* command,
   if(command == cutGCmd)
     {physList->SetGammaCut(cutGCmd->GetNewDoubleValue(newValue));}
   if(command == cutECmd)
-    {physList->SetElectronCut(eCmd->GetNewDoubleValue(newValue));}
+    {physList->SetElectronCut(cutECmd->GetNewDoubleValue(newValue));}
   if(command == cutPCmd)
-    {physList->SetProtonCut(eCmd->GetNewDoubleValue(newValue));}        
-  if(command == eCmd)
-    {physList->SetCutsByEnergy(cutECmd->GetNewDoubleValue(newValue));}
+    {physList->SetProtonCut(cutPCmd->GetNewDoubleValue(newValue));}        
   if(command == rCmd)
     {physList->GetRange(rCmd->GetNewDoubleValue(newValue));}
    

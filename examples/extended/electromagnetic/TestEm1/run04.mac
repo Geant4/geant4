@@ -1,4 +1,4 @@
-# $Id: run04.mac,v 1.4 2001-10-31 15:36:44 maire Exp $
+# $Id: run04.mac,v 1.5 2002-03-08 13:43:28 maire Exp $
 #
 # Macro file for "TestEm1.cc"
 # (can be run in batch, without graphic)
@@ -7,8 +7,8 @@
 #
 /control/verbose 2
 #
-/calor/cutG  95 cm
-/calor/cutE  100. micrometer
+/run/particle/setGCut  95 cm
+/run/particle/setECut  100 micrometer
 #
 /run/initialize
 #
