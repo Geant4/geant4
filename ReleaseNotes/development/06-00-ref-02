@@ -85,7 +85,7 @@ processes/hadronic                               ghad-V06-00-04
 - management:
   o Fix for suspended particles. Solves a problem seen in neutron_hp
     elastic scattering.
-- chiral_inv_phase_space/body:
+- chiral_inv_phase_space/body (ghad-chips-body-V06-00-02):
   o Major improvement of the CHIPS nuclear fragmentation model: in
     addition to Lambdas, now Sigmas, Xi, and Omega hyperons are added to
     the fragmentation algorithm (together with N+Sigma and NN+Sigma nuclear
@@ -144,7 +144,7 @@ visualization/management                         visman-V06-00-00
 - Fixed compilation problems on Intel-icc compiler. Added missing
   forward declaration of G4VisStateDependent to G4VisManager.
 
-visualization/OpenGL                             
+visualization/OpenGL                             opengl-V06-00-00
 --------------------
 - Fixed wrong order of statements in G4OpenGLXViewer desctructor.
   Fixes bug report #581.
