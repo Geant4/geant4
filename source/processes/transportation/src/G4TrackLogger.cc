@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackLogger.cc,v 1.1 2002-07-10 15:51:04 dressel Exp $
+// $Id: G4TrackLogger.cc,v 1.2 2002-07-18 14:57:31 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -52,11 +52,14 @@ G4bool G4TrackLogger::FirstEnterance(G4int trid){
   G4int n = fTrackIDsSet.count(trid);
   if (n==1) {
     first=false;
+  }
+  else  if(n==0) {
     fTrackIDsSet.insert(trid);
   }
   else if (n>1) {
     G4cout << "Error G4TrackLogger::FirstEnterance: " 
 	   << "more than one elm in set!" << G4endl;
+    
   }
   return first;
 };
