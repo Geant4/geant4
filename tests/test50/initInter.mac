@@ -5,8 +5,8 @@
 # Sets some default verbose
 #
 #
-#/control/verbose 2
-#/run/verbose 2
+/control/verbose 1
+/run/verbose 1
 # create empty scene
 #
 /vis/scene/create

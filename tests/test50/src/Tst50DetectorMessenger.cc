@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorMessenger.cc,v 1.3 2003-01-07 15:29:39 guatelli Exp $
+// $Id: Tst50DetectorMessenger.cc,v 1.4 2003-01-08 15:37:14 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,8 +73,15 @@ Tst50DetectorMessenger::Tst50DetectorMessenger(
   YThickCmd->SetRange("Size>=0.");
   YThickCmd->SetUnitCategory("Length");
   YThickCmd->AvailableForStates(Idle);
-
-  UpdateCmd = new G4UIcmdWithoutParameter("/target/update",this);
+ 
+ SetStepCmd = new G4UIcmdWithADoubleAndUnit("/target/setMaxStep",this);
+ SetStepCmd->SetGuidance("Set the particle Max Step in the target ");
+ SetStepCmd->SetParameterName("Size",false);
+ SetStepCmd->SetRange("Size>=0.");
+ SetStepCmd->SetUnitCategory("Length");
+ SetStepCmd->AvailableForStates(Idle);
+  
+UpdateCmd = new G4UIcmdWithoutParameter("/target/update",this);
   UpdateCmd->SetGuidance("Update calorimeter geometry.");
   UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
@@ -92,7 +99,7 @@ Tst50DetectorMessenger::~Tst50DetectorMessenger()
  delete YThickCmd; 
  delete XThickCmd; 
   delete UpdateCmd;
-
+  delete  SetStepCmd;
     delete Tst50detDir;
 }
 
@@ -114,7 +121,11 @@ void Tst50DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   
  if( command == YThickCmd )
    { Tst50Detector->SetTargetY(YThickCmd->GetNewDoubleValue(newValue));}
-  
+ 
+
+ if( command ==SetStepCmd)
+   {Tst50Detector-> SetMaxStepInTarget(SetStepCmd->GetNewDoubleValue(newValue));}
+
  if( command == UpdateCmd )
    { Tst50Detector->UpdateGeometry(); }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.hh,v 1.4 2003-01-07 15:29:39 guatelli Exp $
+// $Id: Tst50SteppingAction.hh,v 1.5 2003-01-08 15:37:13 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,7 +59,7 @@ private:
   Tst50DetectorConstruction* detector;     
   G4double initial_energy;
   G4double range;
-  
+  G4double  KinE_stepBeginning;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

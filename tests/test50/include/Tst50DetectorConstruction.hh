@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.hh,v 1.3 2003-01-07 15:29:39 guatelli Exp $
+// $Id: Tst50DetectorConstruction.hh,v 1.4 2003-01-08 15:37:13 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,7 @@ class G4VPhysicalVolume;
 class G4Material;
 class  Tst50TrackerSD;
 class Tst50DetectorMessenger;
-
+class G4UserLimits;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -63,7 +63,12 @@ class Tst50DetectorConstruction : public G4VUserDetectorConstruction
      G4VPhysicalVolume* Construct();
 
      void UpdateGeometry();
-     
+     void      UseUserLimits(G4bool value); 
+     void  SetMaxStepInTarget(G4double value); 
+
+ G4bool           fUseUserLimits;
+ G4UserLimits*    theUserLimitsForTarget; 
+ G4double         theMaxStepInTarget;
   public:
   
      void PrintParameters(); 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.cc,v 1.6 2003-01-07 15:29:40 guatelli Exp $
+// $Id: Tst50SteppingAction.cc,v 1.7 2003-01-08 15:37:14 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,6 +66,8 @@ G4int evno = eventaction->GetEventno() ;//mi dice a che evento siamo
 //prendo l'energia iniziale delle particelle primarie
   initial_energy= p_Primary->GetInitialEnergy();
  
+ 
+
   //IDnow identifica univocamente la particella//
 IDnow = evno+10000*(Step->GetTrack()->GetTrackID())+
           100000000*(Step->GetTrack()->GetParentID()); 
@@ -90,9 +92,15 @@ IDnow = evno+10000*(Step->GetTrack()->GetTrackID())+
     G4double YMoD;
     G4double ZMoD;
 
-    G4double ThMD;
-    G4double PhMD;
-    G4double XYRd;
+    G4double XIMD;
+    G4double YIMD;
+    G4double ZIMD;
+
+
+    G4double MMoD;
+    G4double MIMD;
+
+    G4double Theta;
 
     //CurV = Step->GetTrack()->GetVolume()->GetName();
     //NexV = Step->GetTrack()->GetNextVolume()->GetName();
@@ -112,20 +120,24 @@ IDnow = evno+10000*(Step->GetTrack()->GetTrackID())+
     YMoD = Step->GetTrack()->GetMomentumDirection().y();
     ZMoD = Step->GetTrack()->GetMomentumDirection().z();
 
-    if( XMoD != 0){
-        ThMD = atan(YMoD/XMoD);
-    } else {
-        ThMD = YMoD/fabs(YMoD)*3.1428; 
-    }
+// albe 8/1/2003 rifaccio distribuzione di theta
 
-    XYRd = sqrt(pow(XMoD,2.0)+pow(YMoD,2.0));
+    // XIMD = p_primary->GetInitialMomentumDirection().x();
+    //YIMD = p_primary->GetInitialMomentumDirection().y();
+    //ZIMD = p_primary->GetInitialMomentumDirection().z();
 
-    if (XYRd != 0) {
-        PhMD = atan(ZMoD/XYRd);
-    } else {
-        PhMD = ZMoD/fabs(ZMoD)*3.1428;
+    /*	
+    MMoD=sqrt(pow(XMoD,2.0)+pow(YMoD,2.0)+pow(ZMoD,2.0));
+    MIMD=sqrt(pow(XIMD,2.0)+pow(YIMD,2.0)+pow(ZIMD,2.0));
+
+    if (MMoD == 0) {
+	Theta = 0;
+    } else if (MIMD == 0) {
+	Theta = 0;
+    } else {   
+	Theta = acos((XMoD*XIMD+YMoD*YIMD+ZMoD*ZIMD)/(MMoD*MIMD))
     }
-  
+    */
     //susanna, istogrammo i processi delle particelle primarie// 
 
    G4String particle_name= p_Primary->GetParticle(); 
@@ -185,18 +197,46 @@ if (process=="LowEnConversion")
 
  runaction->Trans_number();
 	}}}}}}
- else {if(particle_name=="e-"){
-  
-   //new particle    
+ else {
+
+if(particle_name=="e-"){
+
+    //new particle    
 if(IDnow != IDold){ 
 
-   //range
-range=0.;
-IDold=IDnow ;  
-if(0 ==Step->GetTrack()->GetParentID() ) 
-  {
+ IDold=IDnow ; 
+
+
+
+if(0 ==Step->GetTrack()->GetParentID() )  
+{ 
+ G4double  XPos_pre=Step->GetPreStepPoint()->GetPosition().x();
+ G4double YPos_pre=Step->GetPreStepPoint()->GetPosition().y();
+ G4double ZPos_pre=Step->GetPreStepPoint()->GetPosition().z();
+
+
+ if (0== XPos_pre && 0== YPos_pre && 0== ZPos_pre)
+
+    { 
+      G4double energyLost=abs(Step->GetDeltaEnergy());
+      G4double stepLength= Step->GetTrack()-> GetStepLength();
   
- 
+      G4cout<<"lunghezza dello step in cm:"<<stepLength/cm<<G4endl;
+   
+if(stepLength!=0) 
+{
+G4double TotalStoppingPower=(energyLost/stepLength);
+ G4cout<<"TotalStoppingPower in MeV/cm:"<<TotalStoppingPower/(MeV/cm)<<G4endl;}}
+}}
+
+range=0.;
+
+if(0 ==Step->GetTrack()->GetParentID() )  
+{ 
+
+
+   
+
  if(0.0 == KinE) 
                    {  
 		   
@@ -210,36 +250,29 @@ if(0 ==Step->GetTrack()->GetParentID() )
 		     
  
  
-		  
 		   }
+ //Radiation yield
+ G4String process=Step->GetPostStepPoint()->GetProcessDefinedStep()
+	   ->GetProcessName();
+
+
+if (process=="LowEnBrem") 
+  { G4cout <<Step->GetDeltaEnergy()/MeV<<G4endl;
+ G4double energyLostforBremm=abs(Step->GetDeltaEnergy());
+ eventaction->RadiationYield( energyLostforBremm);
 
   }
-}
- }
- }
-}
-       
-    /*
-    G4cout << "UserSteppingAction:"
-//	   << " CurV " << CurV
-//	   << " NexV " << NexV
-      //   << " PTyp " << PTyp  
-	   << " KinE " << KinE
-//         << " EDep " << EDep 
-      //<< " XPox " << XPos 
-      //	   << " YPos " << YPos 
-      //	   << " ZPos " << ZPos 	   
-	   << " XMoD " << XMoD 
-	   << " YMoD " << YMoD 
-	   << " ZMoD " << ZMoD 
-           << " ThMD " << ThMD
-           << " PhMD " << PhMD
-	   << G4endl;
-    */
-   
+
+}}}}
 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+
+
+
+
+
+
 
 
 

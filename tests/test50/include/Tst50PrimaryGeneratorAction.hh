@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50PrimaryGeneratorAction.hh,v 1.4 2003-01-07 15:29:39 guatelli Exp $
+// $Id: Tst50PrimaryGeneratorAction.hh,v 1.5 2003-01-08 15:37:13 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,6 +33,7 @@
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4ios.hh"
 #include "globals.hh"
+#include "G4ThreeVector.hh"
 
 class Tst50PrimaryGeneratorMessenger;
 class G4ParticleGun;
@@ -49,6 +50,8 @@ class Tst50PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
  public:
   G4double GetInitialEnergy();
   G4String GetParticle();
+// added by albe for theta distribution 8/12/2003
+  // G4ThreeVector GetInitialMomentumDirection();
   
  public:
     void GeneratePrimaries(G4Event*);

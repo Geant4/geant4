@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.cc,v 1.5 2003-01-07 15:29:39 guatelli Exp $
+// $Id: Tst50DetectorConstruction.cc,v 1.6 2003-01-08 15:37:14 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,7 +45,7 @@
 
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
-
+#include "G4UserLimits.hh"
 #include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,7 +61,14 @@ Tst50DetectorConstruction::Tst50DetectorConstruction()
   targetX=20. *cm;
   targetY=20. *cm;
   // create commands for interactive definition of the calorimeter  
-  detectorMessenger = new Tst50DetectorMessenger(this);
+
+
+ 
+theUserLimitsForTarget = NULL; 
+ fUseUserLimits = false;//non fa nulla se c'e false ,devo mettere true 
+ theMaxStepInTarget = 0.01*micrometer;
+
+ detectorMessenger = new Tst50DetectorMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -198,7 +205,7 @@ pressure    = 2.e-2*bar;
 temperature = STP_Temperature;         //from PhysicalConstants.h
 
 
-  TargetMaterial = Pb;
+  TargetMaterial =lAr;
 
 
   defaultMaterial  = Vacuum;
@@ -209,14 +216,11 @@ temperature = STP_Temperature;         //from PhysicalConstants.h
 G4VPhysicalVolume* Tst50DetectorConstruction::ConstructWorld()
 {
   // complete the Calor parameters definition 
-  
-  WorldSizeX= 20.*m;
-    WorldSizeYZ=20.*m;
   //     
   // World
   //
   solidWorld = new G4Box("World",				//its name
-                   WorldSizeX/2,WorldSizeYZ/2,WorldSizeYZ/2);	//its size
+                   targetX*5,targetY*5,TargetThickness*5);	//its size
                          
   logicWorld = new G4LogicalVolume(solidWorld,		//its solid
                                    defaultMaterial,	//its material
@@ -241,7 +245,23 @@ G4VPhysicalVolume* Tst50DetectorConstruction::ConstructWorld()
       			                  TargetMaterial, //its material
       			                  "Target");      //its name
       			                  
-      physiTarget = new G4PVPlacement(0,		   //no rotation
+  // create UserLimits
+  if (theUserLimitsForTarget != NULL) delete theUserLimitsForTarget;
+  theUserLimitsForTarget = new G4UserLimits(//DBL_MAX,  //step max
+					      //DBL_MAX,  // track max
+					      theMaxStepInTarget);
+					     
+					
+ 
+
+ // attach UserLimits   
+  if (fUseUserLimits) {
+    logicTarget->SetUserLimits(theUserLimitsForTarget);
+  }
+
+
+
+    physiTarget = new G4PVPlacement(0,		   //no rotation
       		    G4ThreeVector(0.,0.,0.),  //its position
                                         "Target",        //its name
                                         logicTarget,     //its logical volume
@@ -285,7 +305,7 @@ void Tst50DetectorConstruction::PrintParameters()
 {
   G4cout << " Target zdimension is: "
         
-         << TargetThickness/mm <<G4endl; 
+         << TargetThickness/mm<<" mm" <<G4endl; 
 
   G4cout<<" Target xdimension is: "<<targetX/mm<<" mm"<<G4endl;
  G4cout<<" Target ydimension is: "<<targetY/mm<<" mm"<<G4endl;
@@ -332,3 +352,20 @@ void Tst50DetectorConstruction::UpdateGeometry()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void  Tst50DetectorConstruction::SetMaxStepInTarget(G4double value)
+{ 
+  theMaxStepInTarget = value; 
+  if (theUserLimitsForTarget != NULL) 
+  {
+    theUserLimitsForTarget->SetMaxAllowedStep(value);
+  }
+}
+
+void  Tst50DetectorConstruction::UseUserLimits(G4bool isUse) 
+{
+  fUseUserLimits = isUse;
+  if ( fUseUserLimits && (theUserLimitsForTarget!= NULL)) 
+  {logicTarget->SetUserLimits(theUserLimitsForTarget);
+  }    
+} 

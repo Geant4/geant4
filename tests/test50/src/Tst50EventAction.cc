@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50EventAction.cc,v 1.4 2002-12-16 17:36:39 guatelli Exp $
+// $Id: Tst50EventAction.cc,v 1.5 2003-01-08 15:37:14 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -31,7 +31,7 @@
 #ifdef G4ANALYSIS_USE
 #include "Tst50AnalysisManager.hh"
 #endif
-
+#include "Tst50PrimaryGeneratorAction.hh"
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4TrajectoryContainer.hh"
@@ -47,19 +47,26 @@
 #include "G4UnitsTable.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-Tst50EventAction::Tst50EventAction():
- hit_CollID(-1)
-{}
+Tst50EventAction::Tst50EventAction(Tst50PrimaryGeneratorAction* Primary):
+  hit_CollID(-1),p_Primary(Primary)
+{
+ 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 Tst50EventAction::~Tst50EventAction()
-{}
+{
+ 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 void Tst50EventAction::BeginOfEventAction(const G4Event*)
 {
+  G4cout<<"evento:"<<GetEventno()<<G4endl;
+  energy=0;
+
 if (hit_CollID==-1)
 {
       G4SDManager * SDman = G4SDManager::GetSDMpointer();
@@ -72,7 +79,7 @@ if (hit_CollID==-1)
  
 void Tst50EventAction::EndOfEventAction(const G4Event* evt)
 {
-
+ G4double initialEnergy=p_Primary->GetInitialEnergy();
   
   // extracted from hits, compute the total energy deposit 
 
@@ -98,6 +105,10 @@ void Tst50EventAction::EndOfEventAction(const G4Event* evt)
 #endif
 	}
     }
+G4cout<<"energia iniziale in MeV:"<<initialEnergy/MeV<<G4endl;
+G4cout<<"energia in MeV:"<<energy/MeV<<G4endl;
+  G4double radiation=(energy/initialEnergy);
+  G4cout<<"Radiation yield:"<< radiation<<G4endl;
   // get number of stored trajectories
   //
   G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
@@ -127,3 +138,10 @@ G4int Tst50EventAction::GetEventno()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double Tst50EventAction::RadiationYield(G4double energyLost)
+{
+  energy += energyLost;
+}
+
+

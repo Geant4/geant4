@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorMessenger.hh,v 1.2 2003-01-07 15:29:39 guatelli Exp $
+// $Id: Tst50DetectorMessenger.hh,v 1.3 2003-01-08 15:37:13 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,7 +59,8 @@ class Tst50DetectorMessenger: public G4UImessenger
     G4UIcmdWithAString*        AbsMaterCmd;
     G4UIcmdWithADoubleAndUnit* AbsThickCmd; 
   G4UIcmdWithADoubleAndUnit*   XThickCmd;
-   G4UIcmdWithADoubleAndUnit*   YThickCmd;
+   G4UIcmdWithADoubleAndUnit*   YThickCmd; 
+  G4UIcmdWithADoubleAndUnit*   SetStepCmd;
        G4UIcmdWithoutParameter*   UpdateCmd;
 };
 

@@ -22,7 +22,7 @@
 // ********************************************************************
 //
 //
-// $Id: test50.cc,v 1.5 2003-01-07 15:29:38 guatelli Exp $
+// $Id: test50.cc,v 1.6 2003-01-08 15:37:13 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,7 +76,7 @@ HepRandom::setTheEngine(new RanecuEngine);
   Tst50RunAction* p_run=new Tst50RunAction(); 
   runManager->SetUserAction(p_run);  
 
-  Tst50EventAction *pEventAction=new Tst50EventAction();
+  Tst50EventAction *pEventAction=new Tst50EventAction(p_Primary);
  
    runManager->SetUserAction(pEventAction );
      
@@ -103,14 +103,14 @@ HepRandom::setTheEngine(new RanecuEngine);
       session = new G4UIterminal();
 #endif    
 
-    UI->ApplyCommand("/control/execute initInter.mac");    
+    UI->ApplyCommand("/control/execute elettroni.mac");    
     session->SessionStart();
     delete session;
   }
   else
   // Batch mode
   { 
-    G4String command = "/control/execute ";
+    G4String command = "/control/execute elettroni.mac";
     G4String fileName = argv[1];
     UI->ApplyCommand(command+fileName);
   }

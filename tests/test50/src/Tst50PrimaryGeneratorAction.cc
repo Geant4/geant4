@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50PrimaryGeneratorAction.cc,v 1.5 2003-01-07 15:29:40 guatelli Exp $
+// $Id: Tst50PrimaryGeneratorAction.cc,v 1.6 2003-01-08 15:37:14 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,6 +36,7 @@
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
 #include "Randomize.hh"
+#include "G4ThreeVector.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Tst50PrimaryGeneratorAction::Tst50PrimaryGeneratorAction():
@@ -107,12 +108,21 @@ G4double a,b,c;
   
 
 }
+
 G4double Tst50PrimaryGeneratorAction::GetInitialEnergy()
 {
   G4double energy= particleGun->GetParticleEnergy(); 
   return energy;
- 
 }
+/*
+//added by albe for theta distribution 8/1/2003
+G4ThreeVector Tst50PrimaryGeneratorAction::GetInitialMomentumDirection()
+{
+   G4ThreeVector MomentumDirection = particleGun->GetParticleMomentumDirection(); 
+  return MomentumDirection;
+}
+*/
+
 G4String Tst50PrimaryGeneratorAction::GetParticle()
 {
   G4String name= particleGun->GetParticleDefinition()->GetParticleName();
