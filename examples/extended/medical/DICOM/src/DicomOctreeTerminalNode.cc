@@ -1,8 +1,8 @@
 #include "DicomOctreeNode.hh"
 #include "DicomOctreeTerminalNode.hh"
 
-
 DicomOctreeNode* DicomOctreeTerminalNode::mNull = 0;
+
 DicomOctreeTerminalNode::DicomOctreeTerminalNode( DicomOctreeNode* pParent) : DicomOctreeNode( pParent )
 {
 

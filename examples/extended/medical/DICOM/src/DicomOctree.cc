@@ -23,8 +23,8 @@ DicomOctreeNode* DicomOctree::CreateNode( G4double nodeX, G4double nodeY, G4doub
   G4double currentX = 0;
   G4double currentY = 0;
   G4double currentZ = 0;
-  
-  for ( G4int i = 0; i < 8; i++ ) // Make children
+  indexChild = 8;   
+  for ( G4int i = 0; i < indexChild; i++ ) // Make children
     {
       G4double childLevelResolution = (1 << (i+1) );
       G4double childSize = mSize / childLevelResolution;

@@ -1,6 +1,7 @@
 
 #include "DicomOctreeNode.hh"
 #include "DicomOctreeMiddleNode.hh"
+#include "DicomOctree.hh"
 
 DicomOctreeMiddleNode::DicomOctreeMiddleNode()
 {

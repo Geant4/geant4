@@ -1,6 +1,7 @@
 #ifndef DicomOctreeMiddleNode_h
 #define DicomOctreeMiddleNode_h
 #include "globals.hh"
+class DicomOctree;
 
 class DicomOctreeMiddleNode : public DicomOctreeNode
 {
@@ -18,5 +19,6 @@ public:
 
 private:
   DicomOctreeNode*  mChildren[8];
+  DicomOctree* octree;
 };
 #endif
