@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2000-04-04 14:25:32 pia Exp $
+$Id: History,v 1.6 2000-04-18 15:23:38 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+18.04.2000 - MGP, tag emlowen-V01-01-07
+             same as emlowen-V01-01-05 
+             (disregarding modifications in emlowen-V01-01-06),
+             with modification to G4LowEnergyBremsstrahlung.cc to correct
+             error introduced by V.L. 
+
+18.04.2000 - MGP, tag emlowen-V01-01-06
+             includes Veronique's modifications to 
+		G4LowEnergyIonisation.hh
+		G4LowEnergyIonisation.icc
+		G4LowEnergyIonisation.icc
+		G4eLowEnergyLoss.cc
+		G4G4LowEnergyPhotoElectric.cc
+             for integration of cross sections, float/G4double conversions
+             and corrections of fluorescence transition probabilities 
+	     to take into account non-radiative transitions
+             (no Auger electron simulated yet)
+
 
 04.04.2000 - MGP, tag emlowen-V01-01-05
              removed dependency on standard category (G4eEnergyLoss)
