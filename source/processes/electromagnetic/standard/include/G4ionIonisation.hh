@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.hh,v 1.25 2004-07-23 09:38:09 vnivanch Exp $
+// $Id: G4ionIonisation.hh,v 1.26 2004-07-26 15:15:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -60,6 +60,7 @@
 #define G4ionIonisation_h 1
 
 #include "G4VEnergyLossProcess.hh"
+#include "G4ionEffectiveCharge.hh"
 
 class G4Material;
 class G4VEmFluctuationModel;
@@ -96,12 +97,6 @@ public:
   void PrintInfoDefinition();
   // Print out of the class parameters
 
-  G4double EffectiveChargeSquare(const G4Track& track);
-
-  G4double EffectiveCharge(const G4ParticleDefinition* p,
-                           const G4Material* material,
-			         G4double kineticEnergy);
-
 protected:
 
   const G4ParticleDefinition* DefineBaseParticle(const G4ParticleDefinition* p);
@@ -119,6 +114,8 @@ private:
   // hide assignment operator
   G4ionIonisation & operator=(const G4ionIonisation &right);
   G4ionIonisation(const G4ionIonisation&);
+
+  G4ionEffectiveCharge        effCharge;
 
   // cash
   const G4Material*           theMaterial;
@@ -171,8 +168,13 @@ inline G4double G4ionIonisation::GetMeanFreePath(const G4Track& track,
                                                        G4double, 
                                                        G4ForceCondition* cond)
 {
-  G4double mRatio    = proton_mass_c2/track.GetDynamicParticle()->GetMass();
-  G4double q_2       = EffectiveChargeSquare(track);
+
+  currentParticle = track.GetDefinition();
+  theMaterial     = track.GetMaterial();
+  G4double q_2    = effCharge.EffectiveChargeSquareRatio(currentParticle,theMaterial,
+                                                         track.GetKineticEnergy());
+  G4double mRatio = proton_mass_c2/track.GetDynamicParticle()->GetMass();
+
   SetMassRatio(mRatio);
   SetReduceFactor(1.0/(q_2*mRatio));
   SetChargeSquare(q_2);
@@ -200,7 +202,7 @@ inline std::vector<G4Track*>*  G4ionIonisation::SecondariesAlongStep(
     }
   }
   G4double e = step.GetTrack()->GetKineticEnergy() - eloss;
-  fParticleChange.SetProposedCharge(EffectiveCharge(currentParticle,theMaterial,e));
+  fParticleChange.SetProposedCharge(effCharge.EffectiveCharge(currentParticle,theMaterial,e));
   return newp;
 }
 
@@ -221,24 +223,11 @@ inline void G4ionIonisation::SecondariesPostStep(
     fParticleChange.AddSecondary(delta);
     G4ThreeVector finalP = dp->GetMomentum();
     kinEnergy -= delta->GetKineticEnergy();
-    fParticleChange.SetProposedCharge(EffectiveCharge(currentParticle,theMaterial,kinEnergy));
+    fParticleChange.SetProposedCharge(effCharge.EffectiveCharge(currentParticle,theMaterial,kinEnergy));
     finalP -= delta->GetMomentum();
     finalP = finalP.unit();
     fParticleChange.SetProposedMomentumDirection(finalP);
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4ionIonisation::EffectiveChargeSquare(const G4Track& track)
-{
-  currentParticle    = track.GetDefinition();
-  theMaterial        = track.GetMaterial();
-  G4double kinEnergy = track.GetKineticEnergy();
-  G4double charge    = EffectiveCharge(currentParticle,theMaterial,kinEnergy)
-                     *chargeCorrection/eplus;
-
-  return charge*charge;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
