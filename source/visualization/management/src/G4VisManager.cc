@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.42 2001-11-15 14:51:55 johna Exp $
+// $Id: G4VisManager.cc,v 1.43 2001-12-03 11:46:38 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1077,7 +1077,7 @@ G4VViewer* G4VisManager::GetViewer (const G4String& viewerName) const {
   G4String viewerShortName = ViewerShortName (viewerName);
   size_t nHandlers = fAvailableSceneHandlers.size ();
   size_t iHandler, iViewer;
-  G4VViewer* viewer(0);
+  G4VViewer* viewer = 0;
   G4bool found = false;
   for (iHandler = 0; iHandler < nHandlers; iHandler++) {
     G4VSceneHandler* sceneHandler = fAvailableSceneHandlers [iHandler];
