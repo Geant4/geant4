@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.2 2003-08-27 17:18:16 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.3 2003-09-15 17:10:35 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -42,7 +42,6 @@
 #include "G4Positron.hh"
 
 #include "G4UnitsTable.hh"
-#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -198,7 +197,7 @@ void PhysicsList::SetCutForPositron(G4double cut)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4EnergyLossTables.hh"
+#include "G4LossTableManager.hh"
 
 G4double PhysicsList::GetRange(G4double val)
 {
