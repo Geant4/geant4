@@ -94,7 +94,7 @@ G4double G4ShellVacancy::AverageNOfIonisations(const G4Material* material,
 					             G4double eLoss) const
 
 {
-  G4int indexOfElementInMaterial= -1;
+  //  G4int indexOfElementInMaterial= -1;
   
   G4double averageEnergy = energy - eLoss/2.;
   

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.24 2002-03-28 11:49:11 vnivanch Exp $
+// $Id: G4eLowEnergyLoss.cc,v 1.25 2002-04-19 17:21:20 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // -----------------------------------------------------------
@@ -448,11 +448,11 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   aParticleChange.SetEnergyChange(finalT);  
   
   // Deexcitation of ionised atoms
-  G4std::vector<G4DynamicParticle*>* deexcitationProducts;
-  if(theFluo) deexcitationProducts = DeexciteAtom(aMaterial,E,edep);
+  G4std::vector<G4DynamicParticle*>* deexcitationProducts = 0;
+  if (theFluo) deexcitationProducts = DeexciteAtom(aMaterial,E,edep);
 
-
-  size_t nSecondaries = deexcitationProducts->size();
+  size_t nSecondaries = 0;    
+  if (deexcitationProducts != 0) nSecondaries = deexcitationProducts->size();
   aParticleChange.SetNumberOfSecondaries(nSecondaries);
   
   if (nSecondaries > 0) {

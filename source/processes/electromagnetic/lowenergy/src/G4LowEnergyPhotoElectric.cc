@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.43 2002-04-18 13:41:31 vnivanch Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.44 2002-04-19 17:21:20 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -247,16 +247,16 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
   G4int nSecondaries  = nElectrons + nPhotons;
   aParticleChange.SetNumberOfSecondaries(nSecondaries);
 
-  for (size_t l = 0; l<nElectrons; l++ )
+  for (G4int l = 0; l<nElectrons; l++ )
     {
       aPhoton = electronVector[l];
       if(aPhoton) {
         aParticleChange.AddSecondary(aPhoton);
       }
     }
-  for (l = 0; l < nTotPhotons; l++) 
+  for ( size_t ll = 0; ll < nTotPhotons; ll++) 
     {
-      aPhoton = (*photonVector)[l];
+      aPhoton = (*photonVector)[ll];
       if(aPhoton) {
         aParticleChange.AddSecondary(aPhoton);
       } 
@@ -295,7 +295,7 @@ G4double G4LowEnergyPhotoElectric::GetMeanFreePath(const G4Track& track,
   const G4DynamicParticle* photon = track.GetDynamicParticle();
   G4double energy = photon->GetKineticEnergy();
   G4Material* material = track.GetMaterial();
-  size_t materialIndex = material->GetIndex();
+  //  size_t materialIndex = material->GetIndex();
 
   G4double meanFreePath = DBL_MAX;
 
