@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuIonisation.cc,v 1.14 2001-07-11 10:03:25 gunter Exp $
+// $Id: G4MuIonisation.cc,v 1.15 2001-08-10 15:49:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,7 +40,8 @@
 // 26/10/98: new stuff from R.Kokoulin + cleanup , L.Urban
 // 10/02/00  modifications , new e.m. structure, L.Urban
 // 23/03/01: R.Kokoulin's correction is commented out, L.Urban
-// 29.05.01 V.Ivanchenko minor changes to provide ANSI -wall compilation 
+// 29.05.01  V.Ivanchenko minor changes to provide ANSI -wall compilation
+// 10-08-01  new methods Store/Retrieve PhysicsTable (mma) 
 // --------------------------------------------------------------
  
 
@@ -311,7 +312,7 @@ void G4MuIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
         for (G4int iel=0; iel<NumberOfElements; iel++ )
         {
           sigma +=  theAtomicNumDensityVector[iel]*
-                      ComputeMicroscopicCrossSection(aParticleType,
+                      ComputeCrossSectionPerAtom(aParticleType,
                           LowEdgeEnergy,
                           (*theElementVector)(iel)->GetZ() ) ;
         }
@@ -327,7 +328,7 @@ void G4MuIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
 }
 
 
-G4double G4MuIonisation::ComputeMicroscopicCrossSection(
+G4double G4MuIonisation::ComputeCrossSectionPerAtom(
                                  const G4ParticleDefinition& aParticleType,
                                  G4double KineticEnergy,
                                  G4double AtomicNumber)
@@ -361,7 +362,7 @@ G4double G4MuIonisation::ComputeMicroscopicCrossSection(
         G4double y = ymin+hhy*xgi[i];
         G4double ep = 1./y ;
         TotalCrossSection += ep*ep*wgi[i]*hhy*
-                             ComputeDMicroscopicCrossSection(
+                             ComputeDifCrossSectionPerAtom(
                              aParticleType,KineticEnergy,
                              AtomicNumber,ep) ;
       }
@@ -370,11 +371,11 @@ G4double G4MuIonisation::ComputeMicroscopicCrossSection(
   return TotalCrossSection ;
 }
  
-G4double G4MuIonisation::ComputeDMicroscopicCrossSection(
+G4double G4MuIonisation::ComputeDifCrossSectionPerAtom(
                                  const G4ParticleDefinition& ParticleType,
                                  G4double KineticEnergy, G4double AtomicNumber,
                                  G4double KnockonEnergy)
- // Calculates the differential (D) microscopic cross section
+ // Calculates the differential cross section per atom
  //   using the cross section formula of R.P. Kokoulin (10/98)
 {
   const G4double masspar=0.5*ParticleMass*ParticleMass/electron_mass_c2 ;
@@ -382,21 +383,92 @@ G4double G4MuIonisation::ComputeDMicroscopicCrossSection(
   G4double TotalEnergy = KineticEnergy + ParticleMass ;
   G4double KnockonMaxEnergy = TotalEnergy/(1.+masspar/TotalEnergy) ;
 
-  G4double DCrossSection = 0. ;
+  G4double DifCrossSection = 0. ;
 
-  if(KnockonEnergy >=  KnockonMaxEnergy)  return DCrossSection ;
+  if(KnockonEnergy >=  KnockonMaxEnergy)  return DifCrossSection ;
 
   G4double v = KnockonEnergy/TotalEnergy ;
-  DCrossSection = twopi_mc2_rcl2*AtomicNumber*
+  DifCrossSection = twopi_mc2_rcl2*AtomicNumber*
                  (1.-KnockonEnergy/KnockonMaxEnergy+0.5*v*v)/
                  (KnockonEnergy*KnockonEnergy) ;
   G4double a1 = log(1.+2.*KnockonEnergy/electron_mass_c2) ;
   G4double a3 = log(4.*TotalEnergy*(TotalEnergy-KnockonEnergy)/
                     (ParticleMass*ParticleMass)) ;
-   DCrossSection *= (1.+alphaprime*a1*(a3-a1)) ; 
+   DifCrossSection *= (1.+alphaprime*a1*(a3-a1)) ; 
 
-  return DCrossSection ;
+  return DifCrossSection ;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4MuIonisation::StorePhysicsTable(G4ParticleDefinition* particle,
+				              const G4String& directory, 
+				              G4bool          ascii)
+{
+  G4String filename;
+  
+  // store stopping power table
+  filename = GetPhysicsTableFileName(particle,directory,"StoppingPower",ascii);
+  if ( !theLossTable->StorePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theLossTable->StorePhysicsTable in " << filename
+           << G4endl;
+    return false;
+  }
+  // store mean free path table
+  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
+  if ( !theMeanFreePathTable->StorePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theMeanFreePathTable->StorePhysicsTable in " << filename
+           << G4endl;
+    return false;
+  }
+  
+  G4cout << GetProcessName() << ": Success in storing the PhysicsTables in "  
+         << directory << G4endl;
+  return true;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4MuIonisation::RetrievePhysicsTable(G4ParticleDefinition* particle,
+					         const G4String& directory, 
+				                 G4bool          ascii)
+{
+  // delete theLossTable and theMeanFreePathTable
+  if (theLossTable != 0) {
+    theLossTable->clearAndDestroy();
+    delete theLossTable; 
+  }   
+  if (theMeanFreePathTable != 0) {
+    theMeanFreePathTable->clearAndDestroy();
+    delete theMeanFreePathTable;
+  }
+
+  G4String filename;
+  
+  // retreive stopping power table
+  filename = GetPhysicsTableFileName(particle,directory,"StoppingPower",ascii);
+  theLossTable = new G4PhysicsTable(G4Material::GetNumberOfMaterials());
+  if ( !theLossTable->RetrievePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theLossTable0->RetrievePhysicsTable in " << filename
+           << G4endl;  
+    return false;
+  }
+  
+  // retreive mean free path table
+  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
+  theMeanFreePathTable = new G4PhysicsTable(G4Material::GetNumberOfMaterials());
+  if ( !theMeanFreePathTable->RetrievePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theMeanFreePathTable->RetrievePhysicsTable in " << filename
+           << G4endl;  
+    return false;
+  }
+  
+  G4cout << GetProcessName() << ": Success in retrieving the PhysicsTables from "
+         << directory << G4endl;
+  return true;
+}
+ 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
  
 G4VParticleChange* G4MuIonisation::PostStepDoIt(
                                               const G4Track& trackData,   

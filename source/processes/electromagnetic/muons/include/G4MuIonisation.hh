@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuIonisation.hh,v 1.9 2001-07-11 10:03:25 gunter Exp $
+// $Id: G4MuIonisation.hh,v 1.10 2001-08-10 15:49:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // ------------------------------------------------------------
@@ -37,7 +37,8 @@
 // It calculates the ionisation for muons.      
 // ************************************************************
 // 
-// 10/02/00  modifications , new e.m. structure, L.Urban
+// 10-02-00 modifications , new e.m. structure, L.Urban
+// 03-08-01 new methods Store/Retrieve PhysicsTable (mma)
 // ------------------------------------------------------------
  
 #ifndef G4MuIonisation_h
@@ -59,7 +60,7 @@ class G4MuIonisation : public G4VMuEnergyLoss
 {
   public:
  
-     G4MuIonisation(const G4String& processName = "MuIoni"); 
+     G4MuIonisation(const G4String& processName = "MuIonis"); 
 
      ~G4MuIonisation();
 
@@ -70,7 +71,17 @@ class G4MuIonisation : public G4VMuEnergyLoss
      void BuildLossTable(const G4ParticleDefinition& aParticleType);
 
      void BuildLambdaTable(const G4ParticleDefinition& aParticleType);
-
+      
+     G4bool StorePhysicsTable(G4ParticleDefinition* ,
+		              const G4String& directory, G4bool);
+      // store eLoss and MeanFreePath tables into an external file
+      // specified by 'directory' (must exist before invokation)
+      
+     G4bool RetrievePhysicsTable(G4ParticleDefinition* ,   
+			         const G4String& directory, G4bool);
+      // retrieve eLoss and MeanFreePath tables from an external file
+      // specified by 'directory'
+      
      void PrintInfoDefinition();
 
      G4double GetMeanFreePath(const G4Track& track,
@@ -82,12 +93,12 @@ class G4MuIonisation : public G4VMuEnergyLoss
 
   protected:
 
-     virtual G4double ComputeMicroscopicCrossSection(
+     virtual G4double ComputeCrossSectionPerAtom(
                             const G4ParticleDefinition& aParticleType,
                             G4double KineticEnergy,
                             G4double AtomicNumber);
 
-     G4double ComputeDMicroscopicCrossSection(
+     G4double ComputeDifCrossSectionPerAtom(
                                  const G4ParticleDefinition& ParticleType,
                                  G4double KineticEnergy, G4double AtomicNumber,
                                  G4double KnockonEnergy);

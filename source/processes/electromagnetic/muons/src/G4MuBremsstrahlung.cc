@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuBremsstrahlung.cc,v 1.16 2001-07-11 10:03:25 gunter Exp $
+// $Id: G4MuBremsstrahlung.cc,v 1.17 2001-08-10 15:49:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    
@@ -36,7 +36,8 @@
 // 08-04-98: remove 'tracking cut' of muon in oIt, MMa
 // 26/10/98: new cross section of R.Kokoulin,cleanup , L.Urban
 // 10/02/00  modifications , new e.m. structure, L.Urban
-// 29/05/01 V.Ivanchenko minor changes to provide ANSI -wall compilation 
+// 29/05/01 V.Ivanchenko minor changes to provide ANSI -wall compilation
+// 09-08-01 : new methods Store/Retrieve PhysicsTable (mma)  
 // --------------------------------------------------------------
 
 #include "G4MuBremsstrahlung.hh"
@@ -473,6 +474,76 @@ void G4MuBremsstrahlung::MakeSamplingTables(
    }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4MuBremsstrahlung::StorePhysicsTable(G4ParticleDefinition* particle,
+				              const G4String& directory, 
+				              G4bool          ascii)
+{
+  G4String filename;
+  
+  // store stopping power table
+  filename = GetPhysicsTableFileName(particle,directory,"StoppingPower",ascii);
+  if ( !theLossTable->StorePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theLossTable->StorePhysicsTable in " << filename
+           << G4endl;
+    return false;
+  }
+  // store mean free path table
+  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
+  if ( !theMeanFreePathTable->StorePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theMeanFreePathTable->StorePhysicsTable in " << filename
+           << G4endl;
+    return false;
+  }
+  
+  G4cout << GetProcessName() << ": Success in storing the PhysicsTables in "  
+         << directory << G4endl;
+  return true;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4MuBremsstrahlung::RetrievePhysicsTable(G4ParticleDefinition* particle,
+					         const G4String& directory, 
+				                 G4bool          ascii)
+{
+  // delete theLossTable and theMeanFreePathTable
+  if (theLossTable != 0) {
+    theLossTable->clearAndDestroy();
+    delete theLossTable; 
+  }   
+  if (theMeanFreePathTable != 0) {
+    theMeanFreePathTable->clearAndDestroy();
+    delete theMeanFreePathTable;
+  }
+
+  G4String filename;
+  
+  // retreive stopping power table
+  filename = GetPhysicsTableFileName(particle,directory,"StoppingPower",ascii);
+  theLossTable = new G4PhysicsTable(G4Material::GetNumberOfMaterials());
+  if ( !theLossTable->RetrievePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theLossTable0->RetrievePhysicsTable in " << filename
+           << G4endl;  
+    return false;
+  }
+  
+  // retreive mean free path table
+  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
+  theMeanFreePathTable = new G4PhysicsTable(G4Material::GetNumberOfMaterials());
+  if ( !theMeanFreePathTable->RetrievePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theMeanFreePathTable->RetrievePhysicsTable in " << filename
+           << G4endl;  
+    return false;
+  }
+  
+  G4cout << GetProcessName() << ": Success in retrieving the PhysicsTables from "
+         << directory << G4endl;
+  return true;
+}
+ 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
 G4VParticleChange* G4MuBremsstrahlung::PostStepDoIt(const G4Track& trackData,

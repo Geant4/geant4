@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuBremsstrahlung.hh,v 1.9 2001-07-11 10:03:25 gunter Exp $
+// $Id: G4MuBremsstrahlung.hh,v 1.10 2001-08-10 15:49:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -33,6 +33,7 @@
 //                by Laszlo Urban, September 1997
 // ************************************************************
 // 10/02/00  modifications , new e.m. structure, L.Urban
+// 10-08-01: new methods Store/Retrieve PhysicsTable (mma) 
 //
 
 #ifndef G4MuBremsstrahlung_h
@@ -64,7 +65,7 @@ class G4MuBremsstrahlung : public G4VMuEnergyLoss
      void BuildLossTable(const G4ParticleDefinition& ParticleType);
 
      void BuildLambdaTable(const G4ParticleDefinition& ParticleType);
-
+     
      void PrintInfoDefinition() ;
 
      G4double GetMeanFreePath(const G4Track& track,
@@ -80,6 +81,16 @@ class G4MuBremsstrahlung : public G4VMuEnergyLoss
                                             G4double AtomicNumber,
                                             G4double AtomicMass,  
                                             G4double GammaEnergy);
+					    
+     G4bool StorePhysicsTable(G4ParticleDefinition* ,
+  		              const G4String& directory, G4bool);
+      // store eLoss and MeanFreePath tables into an external file
+      // specified by 'directory' (must exist before invokation)
+      
+     G4bool RetrievePhysicsTable(G4ParticleDefinition* ,   
+			         const G4String& directory, G4bool);
+      // retrieve eLoss and MeanFreePath tables from an external file
+      // specified by 'directory'					    
 
   protected:
 
