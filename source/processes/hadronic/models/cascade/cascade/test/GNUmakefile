@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 1999-11-11 15:55:23 miheikki Exp $
+# $Id: GNUmakefile,v 1.3 1999-11-15 12:00:52 miheikki Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -66,15 +66,57 @@ INCFLAGS += \
             -I$(G4BASE)/particles/hadrons/ions/include \
             -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/processes/general/include \
-            -I$(G4BASE)/processes/hadronic/stopping/include \
-            -I$(G4BASE)/processes/hadronic/util/include \
-            -I$(G4BASE)/processes/hadronic/models/generator/de_excitation/include \
-            -I$(G4BASE)/processes/hadronic/models/generator/util/include \
-            -I$(G4BASE)/processes/hadronic/management/include \
-            -I$(G4BASE)/processes/hadronic/models/cascade/cascade/include \
-            -I$(G4BASE)/processes/hadronic/models/generator/management/include
+
+# Spesific for cascade test
+INCFLAGS += \
+	-I$(G4BASE)/processes/hadronic/management/include \
+	-I$(G4BASE)/processes/hadronic/stopping/include \
+	-I$(G4BASE)/processes/hadronic/util/include \
+	-I$(G4BASE)/processes/hadronic/processes/include \
+	-I$(G4BASE)/processes/hadronic/cross_sections/include \
+	-I$(G4BASE)/processes/hadronic/models/neutron_hp/include \
+	-I$(G4BASE)/processes/hadronic/models/low_energy/include \
+	-I$(G4BASE)/processes/hadronic/models/high_energy/include \
+	-I$(G4BASE)/processes/hadronic/models/generator/management/include \
+	-I$(G4BASE)/processes/hadronic/models/generator/de_excitation/include \
+	-I$(G4BASE)/processes/hadronic/models/generator/diffractive_string/include \
+	-I$(G4BASE)/processes/hadronic/models/generator/high_energy/include \
+	-I$(G4BASE)/processes/hadronic/models/generator/kinetic_model/include \
+	-I$(G4BASE)/processes/hadronic/models/generator/pre_equilibrium/include \
+	-I$(G4BASE)/processes/hadronic/models/generator/string_common/include \
+	-I$(G4BASE)/processes/hadronic/models/generator/string_fragmentation/include \
+	-I$(G4BASE)/processes/hadronic/models/generator/util/include \
+	-I$(G4BASE)/processes/hadronic/models/cascade/cascade/include \
+	-I$(G4BASE)/processes/hadronic/models/cascade/evaporation/include \
+
 LDLIBS   := \
-            -lG4hadronic_cascade_bertini \
+            -lG4track \
+            -lG4partman \
+            -lG4intercoms \
+            -lG4materials \
+            -lG4global
+
+# Spesific for cascade test
+LDLIBS   := \
+	-lG4hadronic_mgt \
+	-lG4hadronic_stop \
+	-lG4hadronic_util \
+	-lG4hadronic_proc \
+	-lG4hadronic_xsect \
+	-lG4hadronic_neu \
+	-lG4hadronic_LE \
+	-lG4hadronic_HE \
+	-lG4hadronic_man_gen \
+	-lG4hadronic_deex \
+	-lG4hadronic_diffstring \
+	-lG4hadronic_HE_gen \
+	-lG4hadronic_kinetic \
+	-lG4hadronic_preequ \
+	-lG4hadronic_string_common \
+	-lG4hadronic_stringfrag \
+	-lG4hadronic_util_gen \
+	-lG4hadronic_cascade_bertini \
+	-lG4hadronic_cascade_evaporation \
 
 include $(G4INSTALL)/config/binmake.gmk
 

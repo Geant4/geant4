@@ -11,15 +11,25 @@ WORKSET VERSION 1
   (currentDirectory ".")
   (files 
     { 
+      "cascade/test/G4Test.cc"
+      "cascade/src/G4Cascade.cc"
+      "evaporation/src/G4DeExitation.cc"
     })
 ]
 
 %%Build
 
 [BuildData
-  (currentDirectory ".")
+  (currentDirectory "cascade/test")
   (targets 
     { 
+      [BuildTarget
+        (makefile "GNUmakefile")
+        (target "<Default>")
+        (options "")
+        (command "gmake")
+        (buildDirectory "cascade/test")
+      ]
       [BuildTarget
         (makefile "GNUmakefile")
         (target "<Default>")
@@ -47,6 +57,9 @@ WORKSET VERSION 1
   (mode "PatternSearch")
   (directories 
     { 
+      "/tmp/miheikki/geant4/source/processes/hadronic/models/cascade"
+      "/tmp/miheikki/geant4/source/processes/hadronic/models/cascade/cascade"
+      "/tmp/miheikki/geant4/source/processes/hadronic/models/cascade/cascade/include"
     })
 ]
 

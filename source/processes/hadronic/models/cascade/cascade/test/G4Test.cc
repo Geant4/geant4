@@ -1,10 +1,14 @@
-// Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
-#include "G4Cascade.hh"
-/*
+// 
+#include "globals.hh"
+
 #include "G4ios.hh"
 #include <fstream.h>
 #include <iomanip.h>
- 
+#include <iostream.h>
+#include <assert.h>
+
+#include "G4Cascade.hh" 
+/*
 #include "G4Material.hh"
  
 #include "G4GRSVolume.hh"
@@ -22,7 +26,7 @@
 
 #include "G4Step.hh"
 
-#include "g4templates.hh"
+
 #include "G4NeutronHPChannel.hh"
 
 */
@@ -56,8 +60,9 @@
  int main()
   {
     cout << "Testing HETC cascade" << endl;
+    cout << " Testing G4Cascade" << endl;
 
-    //G4Cascade myCascade;
+      G4Cascade myCascade =  G4Cascade();
 
     /*
     G4cout.setf( ios::scientific, ios::floatfield );
