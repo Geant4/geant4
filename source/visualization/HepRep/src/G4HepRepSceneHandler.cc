@@ -263,12 +263,15 @@ bool G4HepRepSceneHandler::closeHepRep() {
     cout << "G4HepRepSceneHandler::CloseHepRep() start" << endl;
 #endif
 
-    // add geometry to the heprep
-    GetCurrentViewer()->DrawView();
+    // add geometry to the heprep if there is an event (separate geometries are written
+    // using DrawView() called from /vis/viewer/flush)
+    if (_eventInstanceTree != NULL) {
+        GetCurrentViewer()->DrawView();
 
-    // couple geometry to event if both exist
-    if ((_eventInstanceTree != NULL) && (_geometryInstanceTree != NULL)) {
-        getEventInstanceTree()->addInstanceTree(getGeometryInstanceTree());
+        // couple geometry to event if geometry was written
+        if ((_geometryInstanceTree != NULL)) {
+            getEventInstanceTree()->addInstanceTree(getGeometryInstanceTree());
+        }
     }
     
     // force inclusion of all subtypes of event
