@@ -1,4 +1,4 @@
-$Id: History,v 1.46 2001-11-29 07:40:42 yhajime Exp $
+$Id: History,v 1.47 2001-11-30 08:39:07 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-29 November 2001 Hajime Yoshida (interface-V03-02-02)
+29 November 2001 Hajime Yoshida (interfaces-V03-02-03)
 - Fix G4UIGAG.cc for alias command (following G4UIterminal's modif)
 
 26 November 2002 Makoto Asai (interfaces-V03-02-02)
