@@ -16,12 +16,12 @@ esac
 case "$0" in
 */*) cd `expr X$0 : 'X\(.*\)/'` ;;
 esac
-#echo "Extracting install.sh (with variable substitutions)"
+#echo "Extracting env.csh (with variable substitutions)"
 : This section of the file will have variable substitutions done on it.
 : Move anything that needs config subs from !NO!SUBS! section to !GROK!THIS!.
 : Protect any dollar signs and backticks that you do not want interpreted
 : by putting a backslash in front.  You may delete these comments.
-$spitshell >install.sh <<!GROK!THIS!
+$spitshell >env.csh <<!GROK!THIS!
 ######################################
 #
 # g4system.U
@@ -293,17 +293,16 @@ setenv G4VIS_USE_OPACS 1
 echo "On this machine the G4VIS_USE_OPACS=\$G4VIS_USE_OPACS"
 endif
 
-#?
-if ( X$g4vis_use_opengl == Xy ) then
-setenv G4VIS_USE_OPENGL 1
-else
-setenv G4VIS_USE_OPENGL ""
+#+
+if ( X$g4vis_use_openglx == Xy ) then
+setenv G4VIS_USE_OPENGLX 1
+echo "On this machine the G4VIS_USE_OPENGLX=\$G4VIS_USE_OPENGLX"
 endif
 
 #+
-if ( X$g4vis_use_OPENGLX == Xy ) then
-setenv G4VIS_USE_OPENGLX 1
-echo "On this machine the G4VIS_USE_OPENGLX=\$G4VIS_USE_OPENGLX"
+if ( X$g4vis_use_openglxm == Xy ) then
+setenv G4VIS_USE_OPENGLXM 1
+echo "On this machine the G4VIS_USE_OPENGLXM=\$G4VIS_USE_OPENGLXM"
 endif
 
 #+
@@ -512,7 +511,7 @@ echo "On this machine the G4VIS_USE_OPENGLX=\$G4VIS_USE_OPENGLX"
 !GROK!THIS!
 
 : In the following dollars and backticks do not need the extra backslash.
-$spitshell >>install.sh <<'!NO!SUBS!'
+$spitshell >>env.csh <<'!NO!SUBS!'
 !NO!SUBS!
-chmod 755 install.sh
-$eunicefix install.sh
+chmod 755 env.csh
+$eunicefix env.csh
