@@ -1,4 +1,4 @@
-$Id: History,v 1.2 1999-01-29 16:21:13 stesting Exp $
+$Id: History,v 1.3 1999-02-18 15:53:51 johna Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18th February 1999  John Allison
+- Added G4USE_STL flag.
+
+1st January 1999  Gunter Folger
+- Add FCLIBS for SUN.
+
 January 29th 1999 - John Allison (config-01-00-01)
 - Changed rd44 to sw/geant4.
 
