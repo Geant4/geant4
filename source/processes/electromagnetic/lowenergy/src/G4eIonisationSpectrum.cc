@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationSpectrum.cc,v 1.19 2002-06-03 17:52:12 pia Exp $
+// $Id: G4eIonisationSpectrum.cc,v 1.20 2002-07-19 17:32:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -41,6 +41,7 @@
 // 29.11.2001 VI            New parametrisation 
 // 19.04.2002 VI            Add protection in case of energy below binding  
 // 30.05.2002 VI            Update to 24-parameters data
+// 11.07.2002 VI            Fix in integration over spectrum
 //
 // -------------------------------------------------------------------
 //
@@ -94,13 +95,15 @@ G4double G4eIonisationSpectrum::Probability(G4int Z,
   G4double x1 = G4std::min(0.5,(t0 + bindingEnergy)/energy);
   G4double x2 = G4std::min(0.5,(tm + bindingEnergy)/energy);
 
-  if(verbose > 1) {
+  if(verbose > 1 || (Z==4 && e>= 1.0 && e<= 0.0)) {
     G4cout << "G4eIonisationSpectrum::Probability: Z= " << Z
            << "; shell= " << shell
            << "; E(keV)= " << e/keV
+           << "; Eb(keV)= " << bindingEnergy/keV
            << "; x1= " << x1 
            << "; x2= " << x2 
            << G4endl;
+     
   }
 
   G4DataVector p;
@@ -119,12 +122,15 @@ G4double G4eIonisationSpectrum::Probability(G4int Z,
   p.push_back((2.0*g - 1.0)/(g*g));
   
   p[iMax-1] = Function(p[3], p);
+
+  if(e >= 1. && e <= 0. && Z == 4) p.push_back(0.0);
+
   
   G4double val = IntSpectrum(x1, x2, p);
   G4double x0  = (lowestE + bindingEnergy)/energy;
   G4double nor = IntSpectrum(x0, 0.5, p);
   
-  if(verbose > 1) {
+  if(verbose > 1 || (Z==4 && e>= 1.0 && e<= 0.0)) {
     G4cout << "tcut= " << tMin 
            << "; tMax= " << tMax 
            << "; x0= " << x0 
@@ -137,13 +143,13 @@ G4double G4eIonisationSpectrum::Probability(G4int Z,
            << "; b= " << p[2] 
            << "; c= " << p[3] 
            << G4endl;
+    if(shell == 1) G4cout << "============" << G4endl; 
   }
 
   p.clear();
 
   if(nor > 0.0) val /= nor;
   else          val  = 0.0;
-  //  if(val < 0.0) val  = 0.0;
 
   return val; 
 }
@@ -226,7 +232,6 @@ G4double G4eIonisationSpectrum::AverageEnergy(G4int Z,
 
   if(nor > 0.0) val /= nor;
   else          val  = 0.0;
-  //  if(val < 0.0) val  = 0.0;
 
   return val; 
 }
@@ -298,14 +303,14 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
   if(aria <= aria1) { 
 
     amaj = p[4];
-    for (size_t j=5; j<24; j++) {
+    for (G4int j=5; j<iMax; j++) {
       if(p[j] > amaj) amaj = p[j];
     }
 
     a1 = 1./a1;
     a2 = 1./a2;
 
-    size_t i;
+    G4int i;
     do {
 
       x = 1./(a2 + G4UniformRand()*(a1 - a2));
@@ -313,17 +318,17 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
       z2 = p[3];
       dx = (p[2] - p[1]) / 3.0;
       dx1= exp(log(p[3]/p[2]) / 16.0);
-      for (i=5; i<23; i++) {
+      for (i=4; i<iMax-1; i++) {
 
-        if (i <= 8) {
+        if (i < 7) {
           z2 = z1 + dx;
-        } else if(22 == i) {
+        } else if(iMax-2 == i) {
           z2 = p[3];
           break;
         } else {
           z2 = z1*dx1;
         }
-        if(x <= z2) break;
+        if(x >= z1 && x <= z2) break;
         z1 = z2;
       }
       fun = p[i] + (x - z1) * (p[i+1] - p[i])/(z2 - z1);
@@ -398,7 +403,7 @@ G4double G4eIonisationSpectrum::IntSpectrum(G4double xMin,
   G4double sum = 0.0;
   if(xMin >= xMax) return sum;
 
-  G4double x1, x2, xs1, xs2, y1, y2, ys1, ys2;
+  G4double x1, x2, xs1, xs2, y1, y2, ys1, ys2, q;
 
   // Integral over interpolation aria
   if(xMin < p[3]) {
@@ -411,39 +416,45 @@ G4double G4eIonisationSpectrum::IntSpectrum(G4double xMin,
 
     for (size_t i=0; i<19; i++) {
 
-      if (i <= 3) {
+      q = 0.0;
+      if (i < 3) {
         x2 = x1 + dx;
+      } else if(18 == i) {
+        x2 = p[3];
       } else {
         x2 = x1*dx1;
       }
 
       y2 = p[5 + i];
 
-      if (xMin >= x2 || xMax <= x1) {
-        continue;
-      } else {
+      if (xMax <= x1) {
+        break;
+      } else if (xMin < x2) {
 
         xs1 = x1;
         xs2 = x2;
         ys1 = y1;
         ys2 = y2;
 
-        if (xMin > x1) {
-          xs1 = xMin;
-          ys1 += (xs1 - x1)*(y2 - y1)/(x2 - x1);
-	} 
-        if (xMax < x2) {
-          xs2 = xMax;
-          ys2 += (xs2 - x2)*(y1 - y2)/(x1 - x2);
-	} 
-        if (xs2 > xs1) {
-          sum += (ys1*xs2 - ys2*xs1)/(xs1*xs2) 
+        if (x2 > x1) {
+          if (xMin > x1) {
+            xs1 = xMin;
+            ys1 += (xs1 - x1)*(y2 - y1)/(x2 - x1);
+	  } 
+          if (xMax < x2) {
+            xs2 = xMax;
+            ys2 += (xs2 - x2)*(y1 - y2)/(x1 - x2);
+	  } 
+          if (xs2 > xs1) {
+            q = (ys1*xs2 - ys2*xs1)/(xs1*xs2) 
               +  log(xs2/xs1)*(ys2 - ys1)/(xs2 - xs1);
+            sum += q;
+            if(p.size() == 26) G4cout << "i= " << i << "  q= " << q << " sum= " << sum << G4endl;
+	  }
 	}  
       }
       x1 = x2;
       y1 = y2;
-
     }
   }
 
@@ -455,14 +466,15 @@ G4double G4eIonisationSpectrum::IntSpectrum(G4double xMin,
 
   xs1 = 1./x1;
   xs2 = 1./x2;
-  sum += (xs1 - xs2)*(1.0 - p[0]) 
+  q = (xs1 - xs2)*(1.0 - p[0]) 
        - p[iMax]*log(x2/x1) 
        + (1. - p[iMax])*(x2 - x1)
        + 1./(1. - x2) - 1./(1. - x1) 
        + p[iMax]*log((1. - x2)/(1. - x1))
        + 0.25*p[0]*(xs1*xs1 - xs2*xs2);
+  sum += q;
+  if(p.size() == 26) G4cout << "param...  q= " << q <<  " sum= " << sum << G4endl;
 
-  //  if(sum < 0.0) sum = 0.0;
   return sum;
 } 
 
@@ -487,34 +499,38 @@ G4double G4eIonisationSpectrum::AverageValue(G4double xMin,
 
     for (size_t i=0; i<19; i++) {
 
-      if (i <= 3) {
+      if (i < 3) {
         x2 = x1 + dx;
+      } else if(18 == i) {
+        x2 = p[3];
       } else {
         x2 = x1*dx1;
       }
 
       y2 = p[5 + i];
 
-      if (xMin >= x2 || xMax <= x1) {
-        continue;
-      } else {
+      if (xMax <= x1) {
+        break;
+      } else if (xMin < x2) {
 
         xs1 = x1;
         xs2 = x2;
         ys1 = y1;
         ys2 = y2;
 
-        if (xMin > x1) {
-          xs1 = xMin;
-          ys1 += (xs1 - x1)*(y2 - y1)/(x2 - x1);
-	} 
-        if (xMax < x2) {
-          xs2 = xMax;
-          ys2 += (xs2 - x2)*(y1 - y2)/(x1 - x2);
-	} 
-        if (xs2 > xs1) {
-          sum += log(xs2/xs1)*(ys1*xs2 - ys2*xs1)/(xs2 - xs1) 
-              +  ys2 - ys1;
+        if (x2 > x1) {
+          if (xMin > x1) {
+            xs1 = xMin;
+            ys1 += (xs1 - x1)*(y2 - y1)/(x2 - x1);
+	  } 
+          if (xMax < x2) {
+            xs2 = xMax;
+            ys2 += (xs2 - x2)*(y1 - y2)/(x1 - x2);
+	  } 
+          if (xs2 > xs1) {
+            sum += log(xs2/xs1)*(ys1*xs2 - ys2*xs1)/(xs2 - xs1) 
+                +  ys2 - ys1;
+	  }
 	}  
       }
       x1 = x2;
@@ -538,7 +554,6 @@ G4double G4eIonisationSpectrum::AverageValue(G4double xMin,
         + (1. + p[iMax])*log((1. - x2)/(1. - x1))
         + 0.5*p[0]*(xs1 - xs2);
 
-  //  if(sum < 0.0) sum = 0.0;
   return sum;
 } 
 

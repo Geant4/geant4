@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.85 2002-06-03 00:07:17 pia Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.86 2002-07-19 17:32:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -89,6 +89,7 @@
 // 31.05.02 V.Ivanchenko    Add path of Fluo + Auger cuts to 
 //                          AtomicDeexcitation
 // 03.06.02 MGP             Restore fStopAndKill
+// 19.06.02 VI              Additional printout
 //
 // --------------------------------------------------------------
 
@@ -208,6 +209,7 @@ void G4LowEnergyIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParti
   if(verboseLevel > 0) {
     G4cout << "The MeanFreePath table is built"
            << G4endl;
+    if(verboseLevel > 1) theMeanFreePath->PrintData();
       }
 
   // Build common DEDX table for all ionisation processes
@@ -305,7 +307,7 @@ void G4LowEnergyIonisation::BuildLossTable(
                                                              lowEdgeEnergy, n);
           G4double cs= crossSectionHandler->FindValue(Z, lowEdgeEnergy, n);
           ionloss   += e * cs * pro * theAtomicNumDensityVector[iel];
-          if(verboseLevel > 1) {
+          if(verboseLevel > 1 || (Z == 14 && lowEdgeEnergy>1. && lowEdgeEnergy<0.)) {
             G4cout << "Z= " << Z
                    << " shell= " << n
                    << " E(keV)= " << lowEdgeEnergy/keV
@@ -313,12 +315,19 @@ void G4LowEnergyIonisation::BuildLossTable(
                    << " pro= " << pro
                    << " cs= " << cs
 	           << " loss= " << ionloss
+	           << " rho= " << theAtomicNumDensityVector[iel]
                    << G4endl;
           }
         }
         G4double esp = energySpectrum->Excitation(Z, lowEdgeEnergy);
         ionloss   += esp * theAtomicNumDensityVector[iel];
       }	
+      if(verboseLevel > 1 || (m == 0 && lowEdgeEnergy>=1. && lowEdgeEnergy<=0.)) {
+            G4cout << "Sum: " 
+                   << " E(keV)= " << lowEdgeEnergy/keV
+	           << " loss(MeV/mm)= " << ionloss*mm/MeV
+                   << G4endl;
+      }
       aVector->PutValue(i,ionloss);
     }
     theLossTable->insert(aVector);

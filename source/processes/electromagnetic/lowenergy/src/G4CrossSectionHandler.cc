@@ -21,14 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionHandler.cc,v 1.13 2002-05-28 09:20:18 pia Exp $
+// $Id: G4CrossSectionHandler.cc,v 1.14 2002-07-19 17:32:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
 // History:
 // -----------
-// 1 Aug 2001   MGP        Created
+// 1  Aug 2001   MGP        Created
+// 19 Jul 2002   VI         Create composite data set for material
 //
 // -------------------------------------------------------------------
 
@@ -57,7 +58,7 @@ G4CrossSectionHandler::~G4CrossSectionHandler()
 
 G4std::vector<G4VEMDataSet*>* 
 G4CrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector& energyVector,
-						      const G4DataVector* energyCuts)
+						      const G4DataVector*)
 {
   G4DataVector* energies;
   G4DataVector* data;
@@ -68,22 +69,42 @@ G4CrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector& energy
   G4int nMaterials = G4Material::GetNumberOfMaterials();
   
   size_t nOfBins = energyVector.size();
+  const G4VDataSetAlgorithm* interpolationAlgo = CreateInterpolation();
 
   for (G4int m=0; m<nMaterials; m++)
     {
       const G4Material* material= (*materialTable)[m];
-      energies = new G4DataVector;
-      data = new G4DataVector;
-      const G4VDataSetAlgorithm* interpolationAlgo = CreateInterpolation();
-      for (size_t bin=0; bin<nOfBins; bin++)
-	{
-	  G4double e = energyVector[bin];
-	  energies->push_back(e);
-	  G4double materialCrossSection = ValueForMaterial(material,e);
-	  data->push_back(materialCrossSection);
-	}
-      G4VEMDataSet* dataSet = new G4EMDataSet(m,energies,data,interpolationAlgo,1.,1.); 
-      matCrossSections->push_back(dataSet);
+      G4int nElements = material->GetNumberOfElements();
+      const G4ElementVector* elementVector = material->GetElementVector();
+      const G4double* nAtomsPerVolume = material->GetAtomicNumDensityVector();
+
+      G4VDataSetAlgorithm* algo = interpolationAlgo->Clone();
+
+      G4VEMDataSet* setForMat = new G4CompositeEMDataSet(algo,1.,1.);
+
+      for (G4int i=0; i<nElements; i++) {
+ 
+        G4int Z = (G4int) (*elementVector)[i]->GetZ();
+        G4double density = nAtomsPerVolume[i];
+
+        energies = new G4DataVector;
+        data = new G4DataVector;
+
+
+        for (size_t bin=0; bin<nOfBins; bin++)
+	  {
+	    G4double e = energyVector[bin];
+	    energies->push_back(e);
+	    G4double cross = density*FindValue(Z,e);
+	    data->push_back(cross);
+	  }
+
+        G4VDataSetAlgorithm* algo1 = interpolationAlgo->Clone();
+        G4VEMDataSet* elSet = new G4EMDataSet(i,energies,data,algo1,1.,1.);
+        setForMat->AddComponent(elSet);
+      }
+
+      matCrossSections->push_back(setForMat);
     }
   return matCrossSections;
 }
