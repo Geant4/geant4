@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.hh,v 1.9 2004-09-15 09:53:18 grichine Exp $
+// $Id: G4BooleanSolid.hh,v 1.10 2004-09-22 09:27:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -54,25 +54,25 @@ class G4BooleanSolid : public G4VSolid
  
     G4BooleanSolid( const G4String& pName,
                           G4VSolid* pSolidA ,
-                          G4VSolid* pSolidB   ) ;
+                          G4VSolid* pSolidB   );
 
     G4BooleanSolid( const G4String& pName,
                           G4VSolid* pSolidA ,
                           G4VSolid* pSolidB,
                           G4RotationMatrix* rotMatrix,
-                    const G4ThreeVector& transVector    ) ;
+                    const G4ThreeVector& transVector    );
 
     G4BooleanSolid( const G4String& pName,
                           G4VSolid* pSolidA ,
                           G4VSolid* pSolidB , 
-                    const G4Transform3D& transform   ) ;
+                    const G4Transform3D& transform   );
 
-    virtual ~G4BooleanSolid() ;
+    virtual ~G4BooleanSolid();
 
     virtual const G4VSolid* GetConstituentSolid(G4int no) const;
     virtual       G4VSolid* GetConstituentSolid(G4int no);
       // If Solid is made up from a Boolean operation of two solids,
-      //    return the corresponding solid (for no=0 and 1)
+      // return the corresponding solid (for no=0 and 1).
       // If the solid is not a "Boolean", return 0.
 
     virtual G4GeometryType  GetEntityType() const;
@@ -80,16 +80,15 @@ class G4BooleanSolid : public G4VSolid
 
     std::ostream& StreamInfo(std::ostream& os) const;
 
-  G4int GetCubVolStatistics() const {return fCubVolStatistics;};
-  G4double GetCubVolEpsilon() const {return fCubVolEpsilon;};
-
-  void SetCubVolStatistics(G4int st) {fCubVolStatistics=st;};
-  void SetCubVolEpsilon(G4double ep) {fCubVolEpsilon=ep;};
+    inline G4int GetCubVolStatistics() const;
+    inline G4double GetCubVolEpsilon() const;
+    inline void SetCubVolStatistics(G4int st);
+    inline void SetCubVolEpsilon(G4double ep);
 
   protected:
   
-    G4VSolid* fPtrSolidA ;
-    G4VSolid* fPtrSolidB ;
+    G4VSolid* fPtrSolidA;
+    G4VSolid* fPtrSolidB;
 
   private:
 
@@ -99,24 +98,15 @@ class G4BooleanSolid : public G4VSolid
 
   private:
 
-  G4int    fCubVolStatistics;
-  G4double fCubVolEpsilon;
-  G4double fCubicVolume;
+    G4int    fCubVolStatistics;
+    G4double fCubVolEpsilon;
+    G4double fCubicVolume;
 
-  G4bool  createdDisplacedSolid;
+    G4bool  createdDisplacedSolid;
       // If & only if this object created it, it must delete it
 
 } ;
 
-
-///////////////////////////////////////////////////
-
-inline
-G4double G4BooleanSolid::GetCubicVolume()
-{
-  if(fCubicVolume != 0.) ;
-  else   fCubicVolume = EstimateCubicVolume(fCubVolStatistics,fCubVolEpsilon); 
-  return fCubicVolume;
-}
+#include "G4BooleanSolid.icc"
 
 #endif
