@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IVContinuousDiscreteProcess.hh,v 1.2 1999-04-13 09:44:49 kurasige Exp $
+// $Id: G4IVContinuousDiscreteProcess.hh,v 1.3 1999-04-17 06:24:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -109,7 +109,7 @@ class G4IVContinuousDiscreteProcess : public G4VProcess
    protected:
       G4PhysicsTable* theNlambdaTable ; 
       G4PhysicsTable* theInverseNlambdaTable ; 
-      G4double BIGSTEP ;
+      const G4double BIGSTEP ;
 };
 // -----------------------------------------
 //  inlined function members implementation

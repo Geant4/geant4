@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IVContinuousDiscreteProcess.cc,v 1.2 1999-04-17 06:14:59 kurasige Exp $
+// $Id: G4IVContinuousDiscreteProcess.cc,v 1.3 1999-04-17 06:25:00 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -22,13 +22,13 @@
 
 #include "G4IVContinuousDiscreteProcess.hh"
 G4IVContinuousDiscreteProcess::G4IVContinuousDiscreteProcess()
-                   :G4VProcess("No Name Discrete Process") 
+                   :G4VProcess("No Name Discrete Process"), BIGSTEP(1.e10)
 {
   G4Exception("G4IVContinuousDiscreteProcess:: default constructor is called");
 }
 
 G4IVContinuousDiscreteProcess::G4IVContinuousDiscreteProcess(const G4String& aName , G4ProcessType aType)
-                  : G4VProcess(aName, aType)
+                  : G4VProcess(aName, aType),BIGSTEP(1.e10)
 {
 }
 
@@ -37,7 +37,7 @@ G4IVContinuousDiscreteProcess::~G4IVContinuousDiscreteProcess()
 }
 
 G4IVContinuousDiscreteProcess::G4IVContinuousDiscreteProcess(G4IVContinuousDiscreteProcess& right)
-                  : G4VProcess(right)
+                  : G4VProcess(right),BIGSTEP(1.e10)
 {
 }
 
