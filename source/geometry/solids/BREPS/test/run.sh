@@ -1,18 +1,34 @@
 #!/usr/local/bin/bash
+#
+# A simple script to run all the tests in this directory and check
+#  their results against the expected (previous) results
+#
+# $ Id: $
+# $ Name : $
+#
+# Created:  12 May 99 J. Apostolakis: starting from P.Kent's test.sh
+#                                     changed output to STDout only        
+# Modified: 21 May 99 J. Apostolakis: check the results
+
 echo "Running on `hostname`, which is a `uname -a` machine" 
+host=`hostname`
 k=$TESTTARGET
-# if ( ! -f $G4SYSTEM ) ln -fs ../../../../bin/$G4SYSTEM .
+# if ( ! -f bin ) ln -fs ../../../../bin . 
 for i in CurveTest.cc G4*.cc
 do
-  j=`basename $i .cc`
-  TESTTARGET=$j
+  target=`basename $i .cc`
+  TESTTARGET=$target
   export TESTTARGET
+  echo  "Compiling $target ... "
   gmake
-  echo Test output for $TESTTARGET... 
-  #$G4SYSTEM/$TESTTARGET 
-  #../../../../bin/$G4SYSTEM/$TESTTARGET 
-  ./bin/$G4SYSTEM/$TESTTARGET 
+  echo  "Executing $target ... "
+  ./bin/$G4SYSTEM/$target > $target.newout-$host
+  echo  "Difference from expected output: "
+  diff $target.out $target.newout-$host
+  echo  " "
 done
+
+exit
 
 # Now test STEPtest
 export TESTTARGET=STEPTest
