@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03DetectorConstruction.cc,v 1.13 2002-12-18 15:17:56 maire Exp $
+// $Id: ExN03DetectorConstruction.cc,v 1.14 2003-02-10 18:39:49 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -318,11 +318,11 @@ G4VPhysicalVolume* ExN03DetectorConstruction::ConstructCalorimeter()
                           
       logicAbsorber = new G4LogicalVolume(solidAbsorber,    //its solid
       			                  AbsorberMaterial, //its material
-      			                  "Absorber");      //its name
+      			                  AbsorberMaterial->GetName()); //name
       			                  
       physiAbsorber = new G4PVPlacement(0,		   //no rotation
       		    G4ThreeVector(-GapThickness/2,0.,0.),  //its position
-                                        "Absorber",        //its name
+                                        AbsorberMaterial->GetName(), //its name
                                         logicAbsorber,     //its logical volume
                                         physiLayer,        //its mother
                                         false,             //no boulean operat
@@ -341,11 +341,11 @@ G4VPhysicalVolume* ExN03DetectorConstruction::ConstructCalorimeter()
     			   
       logicGap = new G4LogicalVolume(solidGap,
       				     GapMaterial,
-      				     "Gap");
+      				     GapMaterial->GetName());
       				     
       physiGap = new G4PVPlacement(0,                      //no rotation
                G4ThreeVector(AbsorberThickness/2,0.,0.),   //its position
-                                   "Gap",                  //its name
+                                   GapMaterial->GetName(), //its name
                                    logicGap,               //its logical volume
                                    physiLayer,             //its mother
                                    false,                  //no boulean operat

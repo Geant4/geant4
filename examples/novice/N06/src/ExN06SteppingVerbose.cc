@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06SteppingVerbose.cc,v 1.1 2003-01-23 15:34:32 maire Exp $
+// $Id: ExN06SteppingVerbose.cc,v 1.2 2003-02-10 18:44:40 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,7 +73,8 @@ void ExN06SteppingVerbose::StepInfo()
     << G4std::setw(6) << G4BestUnit(fTrack->GetKineticEnergy(),"Energy")
     << G4std::setw(6) << G4BestUnit(fStep->GetTotalEnergyDeposit(),"Energy")
     << G4std::setw(6) << G4BestUnit(fStep->GetStepLength(),"Length")
-    << G4std::setw(6) << G4BestUnit(fTrack->GetTrackLength(),"Length");
+    << G4std::setw(6) << G4BestUnit(fTrack->GetTrackLength(),"Length")
+    << "  ";
 
     // if( fStepStatus != fWorldBoundary){ 
     if( fTrack->GetNextVolume() != 0 ) { 
@@ -162,7 +163,8 @@ G4int prec = G4cout.precision(3);
     << G4std::setw( 6) << G4BestUnit(fTrack->GetKineticEnergy(),"Energy")
     << G4std::setw( 6) << G4BestUnit(fStep->GetTotalEnergyDeposit(),"Energy")
     << G4std::setw( 6) << G4BestUnit(fStep->GetStepLength(),"Length")
-    << G4std::setw( 6) << G4BestUnit(fTrack->GetTrackLength(),"Length");
+    << G4std::setw( 6) << G4BestUnit(fTrack->GetTrackLength(),"Length")
+    << "  ";
 
     if(fTrack->GetNextVolume()){
       G4cout << G4std::setw(10) << fTrack->GetVolume()->GetName();
