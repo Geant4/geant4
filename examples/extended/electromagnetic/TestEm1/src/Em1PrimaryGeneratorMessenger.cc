@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em1PrimaryGeneratorMessenger.cc,v 1.2 2002-12-05 00:24:23 asaim Exp $
+// $Id: Em1PrimaryGeneratorMessenger.cc,v 1.3 2002-12-11 14:19:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,14 +41,14 @@ Em1PrimaryGeneratorMessenger::Em1PrimaryGeneratorMessenger(
                                              Em1PrimaryGeneratorAction* Em1Gun)
 :Em1Action(Em1Gun)
 { 
-  DefaultCmd = new G4UIcmdWithAnInteger("/gun/setDefault",this);
+  DefaultCmd = new G4UIcmdWithAnInteger("/testem/gun/setDefault",this);
   DefaultCmd->SetGuidance("set/reset kinematic defined in PrimaryGenerator");
   DefaultCmd->SetGuidance("0=boxCenter, else=frontFace");
   DefaultCmd->SetParameterName("position",true);
   DefaultCmd->SetDefaultValue(0);
   DefaultCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  RndmCmd = new G4UIcmdWithADouble("/gun/rndm",this);
+  RndmCmd = new G4UIcmdWithADouble("/testem/gun/rndm",this);
   RndmCmd->SetGuidance("random lateral extension on the beam");
   RndmCmd->SetGuidance("in fraction of 0.5*sizeYZ");
   RndmCmd->SetParameterName("rBeam",false);

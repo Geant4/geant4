@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em1RunAction.hh,v 1.9 2002-05-31 17:10:35 maire Exp $
+// $Id: Em1RunAction.hh,v 1.10 2002-12-11 14:19:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,8 +41,10 @@
 class G4Run;
 
 #ifndef G4NOHIST
+namespace AIDA {
  class ITree;
  class IHistogram1D;
+} 
 #endif
 
 class Em1RunAction : public G4UserRunAction
@@ -62,7 +64,7 @@ class Em1RunAction : public G4UserRunAction
     void CountProcesses(G4String);
 
 #ifndef G4NOHIST   
-    IHistogram1D* GetHisto(G4int id) {return histo[id];}
+    AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}
 #endif
            
   private:  
@@ -75,8 +77,8 @@ class Em1RunAction : public G4UserRunAction
     ProcessesCount*   ProcCounter;   
 
 #ifndef G4NOHIST       
-    ITree*        tree;
-    IHistogram1D* histo[3];
+    AIDA::ITree*        tree;
+    AIDA::IHistogram1D* histo[3];
 #endif                     
 };
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em1RunAction.cc,v 1.17 2002-12-05 16:08:10 gcosmo Exp $
+// $Id: Em1RunAction.cc,v 1.18 2002-12-11 14:19:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,15 +43,7 @@
 #include "Randomize.hh"
 
 #ifndef G4NOHIST
- #include "AIDA/IAnalysisFactory.h"
- #include "AIDA/ITreeFactory.h"
- #include "AIDA/ITree.h"
- #include "AIDA/IHistogramFactory.h"
- #include "AIDA/IHistogram1D.h"
- #include "AIDA/IAxis.h"
- #include "AIDA/IAnnotation.h"
- #include "AIDA/ITupleFactory.h"
- #include "AIDA/ITuple.h"
+ #include "AIDA/AIDA.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,24 +65,26 @@ void Em1RunAction::bookHisto()
 {
 #ifndef G4NOHIST
  // Creating the analysis factory
- IAnalysisFactory* af = AIDA_createAnalysisFactory();
+ AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
  
  // Creating the tree factory
- ITreeFactory* tf = af->createTreeFactory();
+ AIDA::ITreeFactory* tf = af->createTreeFactory();
  
  // Creating a tree mapped to an hbook file.
- tree = tf->create("testem1.paw", false, false, "hbook");
+ G4bool readOnly  = false;
+ G4bool createNew = true;
+ tree = tf->create("testem1.paw", "hbook", readOnly, createNew);
 
  // Creating a histogram factory, whose histograms will be handled by the tree
- IHistogramFactory* hf = af->createHistogramFactory(*tree);
+ AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
 
 
  // booking histograms
- histo[0] = hf->create1D("1","track length (mm) of a charged particle",
+ histo[0] = hf->createHistogram1D("1","track length (mm) of a charged particle",
                          100,0.,50*cm);
- histo[1] = hf->create1D("2","Nb of steps per track (charged particle)",
+ histo[1] = hf->createHistogram1D("2","Nb of steps per track (charged particle)",
                          100,0.,100.);
- histo[2] = hf->create1D("3","step length (mm) charged particle",
+ histo[2] = hf->createHistogram1D("3","step length (mm) charged particle",
                          100,0.,10*mm);
 		       
  delete hf;
