@@ -24,7 +24,7 @@
 
 /**
  * @author Mark Donszelmann
- * @version $Id: G4HepRepSceneHandler.cc,v 1.7 2002-11-13 19:05:25 duns Exp $
+ * @version $Id: G4HepRepSceneHandler.cc,v 1.8 2002-11-14 05:08:09 duns Exp $
  */
 
 #include "g4std/vector"
@@ -65,6 +65,7 @@
 
 
 using namespace HEPREP;
+using namespace std;
 
 G4int G4HepRepSceneHandler::sceneCount = 0;
 G4int G4HepRepSceneHandler::sceneIdCount = 0;
@@ -80,19 +81,19 @@ G4HepRepSceneHandler::G4HepRepSceneHandler (G4VGraphicsSystem& system, const G4S
            << system << " "
            << GetScene()->GetName() << G4endl;
 #endif
-    factory = new XMLHepRepStreamerFactory();
+    heprepFactory = new XMLHepRepStreamerFactory();
     writer = NULL;
 }
 
 G4HepRepSceneHandler::~G4HepRepSceneHandler () {
     close();
-    delete factory;
-    factory = NULL;
+    delete heprepFactory;
+    heprepFactory = NULL;
 }
 
 HepRepFactory* G4HepRepSceneHandler::GetHepRepFactory() {
     if (writer == NULL) open();
-    return factory;
+    return heprepFactory;
 }
 
 void G4HepRepSceneHandler::open() {
@@ -107,27 +108,27 @@ void G4HepRepSceneHandler::open() {
 #endif
     if (strcmp(fname, "stdout") == 0) {
         out = NULL;
-        writer = factory->createHepRepWriter(&cout);
+        writer = heprepFactory->createHepRepWriter(&G4cout);
     } else if (strcmp(fname, "stderr") == 0) {
         out = NULL;
-        writer = factory->createHepRepWriter(&cerr);
+        writer = heprepFactory->createHepRepWriter(&G4cerr);
     } else {
         out = new ofstream(fname);
-        writer = factory->createHepRepWriter(out);
+        writer = heprepFactory->createHepRepWriter(out);
     }
 
-	heprep = factory->createHepRep();
+	heprep = heprepFactory->createHepRep();
 	heprep->addLayer("Geometry");
 	heprep->addLayer("Event");
 	heprep->addLayer("CalHit");
 	heprep->addLayer("Track");
 	heprep->addLayer("Hit");
 
-    HepRepTreeID* treeID = factory->createHepRepTreeID("G4Types", "1.0");
-    HepRepTypeTree* typeTree = factory->createHepRepTypeTree(treeID);
+    HepRepTreeID* treeID = heprepFactory->createHepRepTreeID("G4Types", "1.0");
+    HepRepTypeTree* typeTree = heprepFactory->createHepRepTypeTree(treeID);
     heprep->addTypeTree(typeTree);
 
-    geometryType = factory->createHepRepType(NULL, "Detector Geometry");
+    geometryType = heprepFactory->createHepRepType(NULL, "Detector Geometry");
     geometryType->addAttDef("LVol", "Logical Volume", "Physics","");
     geometryType->addAttDef("Solid", "Solid Name", "Physics","");
     geometryType->addAttDef("EType", "Entity Type", "Physics","");
@@ -137,23 +138,23 @@ void G4HepRepSceneHandler::open() {
     geometryType->addAttDef("Radlen", "Material Radiation Length", "Physics","");
     typeTree->addType(geometryType);
 
-    eventType = factory->createHepRepType(NULL, "Event");
-    eventType->addAttValue("Layer", "Event");
+    eventType = heprepFactory->createHepRepType(NULL, "Event");
+    eventType->addAttValue("Layer", (char*)"Event");
     typeTree->addType(eventType);
 
-    trackType = factory->createHepRepType(eventType, "Track");
-    trackType->addAttValue("Layer", "Track");
+    trackType = heprepFactory->createHepRepType(eventType, "Track");
+    trackType->addAttValue("Layer", (char*)"Track");
 
-    calHitType = factory->createHepRepType(eventType, "Calorimeter Hit");
-    calHitType->addAttValue("Layer", "CalHit");
+    calHitType = heprepFactory->createHepRepType(eventType, "Calorimeter Hit");
+    calHitType->addAttValue("Layer", (char*)"CalHit");
 
-    hitType = factory->createHepRepType(eventType, "Hit");
-    hitType->addAttValue("Layer", "Hit");
+    hitType = heprepFactory->createHepRepType(eventType, "Hit");
+    hitType->addAttValue("Layer", (char*)"Hit");
 
-    HepRepInstanceTree* instanceTree = factory->createHepRepInstanceTree("G4Data", "1.0", typeTree);
+    HepRepInstanceTree* instanceTree = heprepFactory->createHepRepInstanceTree("G4Data", "1.0", typeTree);
     heprep->addInstanceTree(instanceTree);
 
-    parent = factory->createHepRepInstance(instanceTree, eventType);
+    parent = heprepFactory->createHepRepInstance(instanceTree, eventType);
     instanceTree->addInstance(parent);
 
     delete treeID;
