@@ -41,47 +41,47 @@ int main() {
 
   G4AtomicDeexcitation* deexcitation = new G4AtomicDeexcitation;
 
-  deexcitation->ActivateAugerElectronProduction(1);
+  deexcitation->ActivateAugerElectronProduction(true);
 
-  for(G4int i = 0; i<numberOfRun;i++)
-    {G4cout<<"begin of run "<<i<<G4endl;
-      G4std::vector<G4DynamicParticle*>* vectorOfParticles;
-      
-      vectorOfParticles = deexcitation-> GenerateParticles(Z,vacancyId);
-      
-      G4cout<<  vectorOfParticles->size()<<" particles in the vector "<<G4endl;
-  
-  for (G4int k=0; k< vectorOfParticles->size();k++)
-    {
-      G4DynamicParticle* newParticle = (*vectorOfParticles)[k];
-      if ( newParticle->GetDefinition()->GetParticleName() == "e-" )
-	{
-	  G4cout <<" An auger has been generated"<<G4endl;
-	G4cout<<" vectorOfParticles ["<<k<<"]:"<<G4endl;
-	G4cout<<"Non zero particle. Index: "<<k<<G4endl;
-
-      G4DynamicParticle* newElectron = (*vectorOfParticles)[k];
-
-      
-      G4ThreeVector augerDirection =newElectron ->GetMomentum();
-
-      G4double  augerEnergy =newElectron ->GetKineticEnergy();
-      G4cout<< "The Auger electron has a kinetic energy = "<<augerEnergy
-          <<" MeV " <<G4endl;
+  for(G4int i = 0; i<numberOfRun;i++){ 
+    G4cout<<"begin of run "<<i<<G4endl;
+    G4std::vector<G4DynamicParticle*>* vectorOfParticles;
+    
+    vectorOfParticles = deexcitation-> GenerateParticles(Z,vacancyId);
+    
+    G4cout<<  vectorOfParticles->size()<<" particles in the vector "<<G4endl;
+    
+    for (G4int k=0; k< vectorOfParticles->size();k++)
+      {
+	G4DynamicParticle* newParticle = (*vectorOfParticles)[k];
+	if ( newParticle->GetDefinition()->GetParticleName() == "e-" )
+	  {
+	    G4cout <<" An auger has been generated"<<G4endl;
+	    G4cout<<" vectorOfParticles ["<<k<<"]:"<<G4endl;
+	    G4cout<<"Non zero particle. Index: "<<k<<G4endl;
+	    
+	    G4DynamicParticle* newElectron = (*vectorOfParticles)[k];
+	    
+	    
+	    G4ThreeVector augerDirection =newElectron ->GetMomentum();
+	    
+	    G4double  augerEnergy =newElectron ->GetKineticEnergy();
+	    G4cout<< "The Auger electron has a kinetic energy = "<<augerEnergy
+		  <<" MeV " <<G4endl;
+	  }
+	else{
+	  G4cout<<" vectorOfParticles ["<<k<<"]:"<<G4endl;
+	  G4cout<<"Non zero particle. Index: "<<k<<G4endl;
+	  
+	  G4ThreeVector photonDirection = newParticle ->GetMomentum();
+	  
+	  G4double  photonEnergy =newParticle ->GetKineticEnergy();
+	  G4cout<< "The photon has a kinetic energy = "<<photonEnergy
+		<<" MeV " <<G4endl;
 	}
-      else{
-	G4cout<<" vectorOfParticles ["<<k<<"]:"<<G4endl;
-	G4cout<<"Non zero particle. Index: "<<k<<G4endl;
-      
-	G4ThreeVector photonDirection = newParticle ->GetMomentum();
-      
-      G4double  photonEnergy =newParticle ->GetKineticEnergy();
-      G4cout<< "The photon has a kinetic energy = "<<photonEnergy
-          <<" MeV " <<G4endl;
       }
-    }
-  delete vectorOfParticles;
-    }
+    delete vectorOfParticles;
+  }
   
   delete deexcitation;
   G4cout<<"END OF THE MAIN PROGRAM"<<G4endl;
