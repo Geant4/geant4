@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.26 2002-04-29 13:39:03 maire Exp $
+// $Id: G4PhotoElectricEffect.cc,v 1.27 2002-05-02 11:37:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,7 +53,7 @@
 // 10-01-02, moved few function from icc to cc
 // 17-04-02, Keep only Sandia crossSections. Remove BuildPhysicsTables.
 //           Simplify public interface (mma)
-// 29-04-02, Generate theta angle of the photoelectron from Sauter-Gravila
+// 29-04-02, Generate theta angle of the photoelectron from Sauter-Gavrila
 //           distribution (mma) 
 //    
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -216,21 +216,21 @@ G4double G4PhotoElectricEffect::ElecThetaDistribution(G4double kineEnergy)
 {
  // Compute Theta distribution of the emitted electron, with respect to the
  // incident Gamma.
- // The Sauter-Gravila distribution for the K-shell is used.
+ // The Sauter-Gavrila distribution for the K-shell is used.
  //
  G4double gamma = 1. + kineEnergy/electron_mass_c2;
- G4double beta = sqrt(gamma*gamma-1.)/gamma;
- G4double factor = 0.5*gamma*(gamma-1.)*(gamma-2);
+ G4double beta  = sqrt(gamma*gamma-1.)/gamma;
+ G4double b     = 0.5*gamma*(gamma-1.)*(gamma-2);
     
- G4double rndm,costeta,term,greject,grejmax;
- if (gamma < 2.) grejmax = gamma*gamma*(1.+factor-beta*factor);
- else            grejmax = gamma*gamma*(1.+factor+beta*factor);
+ G4double rndm,costeta,term,greject,grejsup;
+ if (gamma < 2.) grejsup = gamma*gamma*(1.+b-beta*b);
+ else            grejsup = gamma*gamma*(1.+b+beta*b);
   
  do { rndm = 1.-2*G4UniformRand();
       costeta = (rndm+beta)/(rndm*beta+1.);
       term = 1.-beta*costeta;
-      greject = (1.+factor*term)*(1.-costeta*costeta)/(term*term);
- } while(greject < G4UniformRand()*grejmax);
+      greject = (1.-costeta*costeta)*(1.+b*term)/(term*term);
+ } while(greject < G4UniformRand()*grejsup);
        
  return costeta;      
      

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoElectricEffect.hh,v 1.14 2002-04-29 13:39:03 maire Exp $
+// $Id: G4PhotoElectricEffect.hh,v 1.15 2002-05-02 11:37:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,7 +44,7 @@
 // 10-01-02, moved few function from icc to cc
 // 17-04-02, Keep only Sandia crossSections. Remove BuildPhysicsTables.
 //           Simplify public interface (mma)
-// 29-04-02, Generate theta angle of the photoelectron from Sauter-Gravila
+// 29-04-02, Generate theta angle of the photoelectron from Sauter-Gavrila
 //           distribution (mma)       
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
