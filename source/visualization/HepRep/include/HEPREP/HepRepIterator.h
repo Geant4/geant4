@@ -64,5 +64,5 @@ public:
      */
     virtual HepRepAttValue * getAttValue(std::string key) = 0;
 }; // class
-}; // namespace HEPREP
+} // namespace HEPREP
 #endif /* ifndef HEPREP_HEPREPITERATOR_H */

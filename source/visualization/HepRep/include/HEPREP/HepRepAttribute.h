@@ -40,7 +40,7 @@ public:
 
     /**
      * Adds a char* attValue as a String.
-     * This call is mapped to addAttValue(std::string, std::string, int); and necessary
+     * This call should be mapped to addAttValue(std::string, std::string, int); and necessary
      * because C++ converts char* into bool and would thus call addAttValue(std::string, bool, int)
      * for a call such as addAttValue("drawAs", "Cylinder", 0);
      *
@@ -49,10 +49,7 @@ public:
      * @param showLabel show this as label
      * @return false if an IOException was created.
      */
-    bool addAttValue(std::string key, char* value, int showLabel = HepRepConstants::SHOW_NONE) {
-        return addAttValue(key, std::string(value), showLabel);
-    }
-
+    virtual bool addAttValue(std::string key, char* value, int showLabel = HepRepConstants::SHOW_NONE) = 0;
     /**
      * Adds an attValue.
      *
@@ -148,5 +145,5 @@ public:
      */
     virtual HepRepAttValue * getAttValueFromNode(std::string lowerCaseName) = 0;
 }; // class
-}; // namespace HEPREP
+} // namespace HEPREP
 #endif /* ifndef HEPREP_HEPREPATTRIBUTE_H */

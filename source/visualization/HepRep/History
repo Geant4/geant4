@@ -1,4 +1,4 @@
-$Id: History,v 1.29 2003-05-30 12:50:30 johna Exp $
+$Id: History,v 1.30 2003-07-11 06:01:34 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,14 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 ---------------------------------------------------------------------------
+
+11th July 2003 Mark Donszelmann
+- Removed the HepRepStreamer and replaced it by a fully functional HepRep implementation
+  in C++. Added compression using ZLIB and ZIPIOS++. Moved private header files to
+  subdirectories of include so that they do not get copied by the "gmake includes"
+  command.
+  The current HepRep files are invalid, but we first need to get rid of some memory
+  leaks, using Linux, so we check this in.
 
 30th May 2003  John Allison
 - Eliminated pedantic warnings at head (johna-030530) and on

@@ -1,4 +1,6 @@
 
+#include <iostream>
+
 #include "DefaultHepRepAction.h"
 
 using namespace std;
@@ -20,6 +22,6 @@ string DefaultHepRepAction::getExpression() {
 }
 
 HepRepAction* DefaultHepRepAction::copy() {
-    return NULL;
+    return new DefaultHepRepAction(name, expression);
 }
 

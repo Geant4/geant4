@@ -59,5 +59,5 @@ public:
      */
     virtual HepRepTreeID * copy() = 0;
 }; // class
-}; // namespace HEPREP
+} // namespace HEPREP
 #endif /* ifndef HEPREP_HEPREPTREEID_H */

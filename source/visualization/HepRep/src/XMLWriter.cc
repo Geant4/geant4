@@ -10,7 +10,7 @@ XMLWriter::XMLWriter(ostream* out, string indentString, string defaultNameSpace)
     writer = new IndentPrintWriter(out);
     writer->setIndentString(indentString);
     closed = false;
-    dtdName = NULL;
+    dtdName = "";
 }
 
 XMLWriter::~XMLWriter() {
@@ -42,18 +42,18 @@ void XMLWriter::openDoc(string version, string encoding, bool standalone) {
 }
 
 void XMLWriter::referToDTD(string name, string pid, string ref) {
-    if (dtdName != NULL) {
+    if (dtdName != "") {
         cerr << "XMLWriter::ReferToDTD cannot be called twice" << endl;
     }
-    dtdName = &name;
+    dtdName = name;
     *writer << "<!DOCTYPE " << name.c_str() << " PUBLIC \"" << pid.c_str() << "\" \"" << ref.c_str() << "\">" << endl;
 }
 
 void XMLWriter::referToDTD(string name, string system) {
-    if (dtdName != NULL) {
+    if (dtdName != "") {
         cerr << "XMLWriter::ReferToDTD cannot be called twice";
     }
-    dtdName = &name;
+    dtdName = name;
     *writer << "<!DOCTYPE " << name.c_str() << " SYSTEM \"" << system.c_str() << "\">" << endl;
 }
 
@@ -104,8 +104,8 @@ void XMLWriter::openTag(string ns, string name) {
 
 void XMLWriter::openTag(string name) {
     checkNameValid(name);
-    if (openTags.empty() && dtdName != NULL && dtdName->compare(name)) {
-        cerr << "XMLWriter::openTag(), First tag: '" << name.c_str() << "' not equal to DTD id: '" << dtdName->c_str() << "'" << endl;
+    if (openTags.empty() && dtdName.compare("") && dtdName.compare(name)) {
+        cerr << "XMLWriter::openTag(), First tag: '" << name << "' not equal to DTD id: '" << dtdName << "'" << endl;
     }
     *writer << "<" << name.c_str();
     printAttributes(name.length());

@@ -29,8 +29,8 @@
 
 #include "globals.hh"
 #include <vector>
-#include <strstream>
 #include <iostream>
+#include <sstream>
 #include <iomanip>
 #include <fstream>
 
@@ -59,8 +59,8 @@
 #include "G4AttDef.hh"
 #include "G4AttValue.hh"
 
-// Streamer
-#include "XMLHepRepStreamerFactory.h"
+// JHepRep
+#include "XMLHepRepFactory.h"
 
 // This
 #include "G4HepRep.hh"
@@ -68,74 +68,77 @@
 
 
 using namespace HEPREP;
+using namespace std;
 
 G4int G4HepRepSceneHandler::sceneCount = 0;
-G4int G4HepRepSceneHandler::sceneIdCount = 0;
 
 G4HepRepSceneHandler::G4HepRepSceneHandler (G4VGraphicsSystem& system, const G4String& name)
-        : G4VSceneHandler (system, sceneIdCount++, name),
+        : G4VSceneHandler (system, sceneCount++, name),
+          eventNumber   (1),
           currentDepth  (0),
           currentPV     (0),
           currentLV     (0) {
 
-    G4cout << "G4HepRepSceneHandler::G4HepRepSceneHandler: "
-           << system << " "
-           << GetScene()->GetName() << G4endl;
+#ifdef DEBUG
+    cout << "G4HepRepSceneHandler::G4HepRepSceneHandler: " << system << endl;
+//           << GetScene()->GetName() << endl;
+#endif
 
-    factory = new XMLHepRepStreamerFactory();
+    factory = new XMLHepRepFactory();
     writer = NULL;
 
-    geomTypeHepRepFactory = new XMLHepRepStreamerFactory(true);
-    geomInstanceHepRepFactory = new XMLHepRepStreamerFactory(true);
-    geomTypeWriter = NULL;
-    geomInstanceWriter = NULL;
-
-    eventTypeHepRepFactory = new XMLHepRepStreamerFactory(true);
-    eventInstanceHepRepFactory = new XMLHepRepStreamerFactory(true);
-    eventTypeWriter = NULL;
-    eventInstanceWriter = NULL;
-
-    fileNo = 0;
+    Open(GetScene() == NULL ? "G4HepRepOutput.zip" : GetScene()->GetName());
+    OpenHepRep();
 }
 
 
 G4HepRepSceneHandler::~G4HepRepSceneHandler () {
-    close();
+#ifdef DEBUG
+    cout << "G4HepRepSceneHandler::~G4HepRepSceneHandler() " << endl;
+#endif
+    Close();
 
     delete factory;
     factory = NULL;
 
-    delete geomTypeHepRepFactory;
-    geomTypeHepRepFactory = NULL;
-    delete geomInstanceHepRepFactory;
-    geomInstanceHepRepFactory = NULL;
-
-    delete eventTypeHepRepFactory;
-    eventTypeHepRepFactory = NULL;
-    delete eventInstanceHepRepFactory;
-    eventInstanceHepRepFactory = NULL;
+    dynamic_cast<G4HepRep*>(GetGraphicsSystem())->RemoveSceneHandler();
 }
 
-void G4HepRepSceneHandler::open() {
+void G4HepRepSceneHandler::Open(G4String name) {
     if (writer != NULL) return;
 
-    if (strcmp(GetScene()->GetName(), "stdout") == 0) {
-        G4cout << "G4HepRepSceneHandler::open() stdout" << G4endl;
-        writer = dynamic_cast<XMLHepRepStreamer*>(factory->createHepRepWriter(&G4cout));
+    if (strcmp(name, "stdout") == 0) {
+#ifdef DEBUG
+        cout << "G4HepRepSceneHandler::Open() stdout" << endl;
+#endif
+        writer = factory->createHepRepWriter(&cout, false, false);
         out  = NULL;
-    } else if (strcmp(GetScene()->GetName(), "stderr") == 0) {
-        G4cout << "G4HepRepSceneHandler::open() stderr" << G4endl;
-        writer = dynamic_cast<XMLHepRepStreamer*>(factory->createHepRepWriter(&G4cerr));
+    } else if (strcmp(name, "stderr") == 0) {
+#ifdef DEBUG
+        cout << "G4HepRepSceneHandler::Open() stderr" << endl;
+#endif
+        writer = factory->createHepRepWriter(&cerr, false, false);
         out = NULL;
     } else {
-        G4cout << "G4HepRepSceneHandler::open() " << GetScene()->GetName() << "-" << fileNo << G4endl;
-        char fileName [256];
-        std::ostrstream ost(fileName, 256);
-        ost << GetScene()->GetName()<< "-" << fileNo << ".heprep" << std::ends;
-        out = new std::ofstream(fileName);
-        writer = dynamic_cast<XMLHepRepStreamer*>(factory->createHepRepWriter(out));
+#ifdef DEBUG
+        cout << "G4HepRepSceneHandler::Open() " << name << endl;
+#endif
+        out = new ofstream(name.c_str(), std::ios::out | std::ios::binary );
+        bool zip = name.substr(name.size()-4, 4) == G4String(".zip");
+        bool gz = name.substr(name.size()-3, 3) == G4String(".gz");
+        writer = factory->createHepRepWriter(out, zip, zip || gz);
     }
-    fileNo++;
+}
+
+
+void G4HepRepSceneHandler::OpenHepRep() {
+#ifdef DEBUG
+    cout << "G4HepRepSceneHandler::OpenHepRep() " << endl;
+#endif
+
+    if (heprep != NULL) return;
+//    cout << "GeomTypeWriter " << geomTypeWriter << endl;
+//    cout << "GeomInstanceWriter " << geomInstanceWriter << endl;
 
     // Create the HepRep that holds the Trees.
     heprep = factory->createHepRep();
@@ -149,39 +152,15 @@ void G4HepRepSceneHandler::open() {
     heprep->addLayer("TrajectoryPoint");
     heprep->addLayer("Hit");
 
-    writer->write(heprep->getLayerOrder());
-}
-
-
-void G4HepRepSceneHandler::openGeomHepRep() {
-//    G4cout << "GeomTypeWriter " << geomTypeWriter << G4endl;
-//    G4cout << "GeomInstanceWriter " << geomInstanceWriter << G4endl;
-
-    open();
-    std::ostrstream geomTypeOst(geomTypeFname, 256);
-    geomTypeOst << GetScene()->GetName()<< "-GeomType-" << fileNo-1 << ".tree" << std::ends;
-    geomTypeOut = new std::ofstream(geomTypeFname);
-    geomTypeWriter = geomTypeHepRepFactory->createHepRepWriter(geomTypeOut);
-
-    // geometry instance writer
-    std::ostrstream geomInstanceOst(geomInstanceFname, 256);
-    geomInstanceOst << GetScene()->GetName() << "-GeomInstances-" << fileNo-1 << ".tree" << std::ends;
-    geomInstanceOut = new std::ofstream(geomInstanceFname);
-    geomInstanceWriter = geomInstanceHepRepFactory->createHepRepWriter(geomInstanceOut);
-
-    // Create the HepRep that holds the Geometry Tree.
-    geomTypeHeprep = geomTypeHepRepFactory->createHepRep();
-
     // Create the Geometry TypeTree.
-    HepRepTreeID* geomTreeID = geomTypeHepRepFactory->createHepRepTreeID("G4GeometryTypes", "1.0");
-    HepRepTypeTree* geomTypeTree = geomTypeHepRepFactory->createHepRepTypeTree(geomTreeID);
-    delete geomTreeID;
-    geomTypeHeprep->addTypeTree(geomTypeTree);
+    HepRepTreeID* geometryTreeID = factory->createHepRepTreeID("G4GeometryTypes", "1.0");
+    HepRepTypeTree* geometryTypeTree = factory->createHepRepTypeTree(geometryTreeID);
+    heprep->addTypeTree(geometryTypeTree);
 
     // Create the top level Geometry Type.
-    HepRepType* detectorType = geomTypeHepRepFactory->createHepRepType(NULL, "Detector");
-//    G4cout << "Created HepRepType for Detector" << G4endl;
-    geomTypeFullNameMap[G4String("Detector")] = detectorType;
+    detectorType = factory->createHepRepType(NULL, "Detector");
+//    cout << "Created HepRepType for Detector" << endl;
+//    geomTypeFullNameMap[G4String("Detector")] = detectorType;
     detectorType->addAttValue("Layer", G4String("Detector"));
 
     // Add attdefs used by all detector types.
@@ -193,170 +172,82 @@ void G4HepRepSceneHandler::openGeomHepRep() {
     detectorType->addAttDef("State", "Material State", "Physics","");
     detectorType->addAttDef("Radlen", "Material Radiation Length", "Physics","");
 
-    geomTypeTree->addType(detectorType);
+    geometryTypeTree->addType(detectorType);
 
-    geomParentTypeFullNameS.push(G4String("Detector"));
-
-    // Create the HepRep that holds the Geometry InstanceTree.
-    geomInstanceHeprep = geomInstanceHepRepFactory->createHepRep();
+//    geomParentTypeFullNameS.push(G4String("Detector"));
 
     // Create the Goemetry InstanceTree.
-    geomInstanceTree = geomInstanceHepRepFactory->
-      createHepRepInstanceTree("G4GeometryData", "1.0", geomTypeTree);
-    geomInstanceHeprep->addInstanceTree(geomInstanceTree);
+    geometryInstanceTree = factory->createHepRepInstanceTree("G4GeometryData", "1.0", geometryTypeTree);
+    heprep->addInstanceTree(geometryInstanceTree);
 
     // Create the top level Geometry Instance.
-    HepRepInstance* detectorInstance =
-        geomInstanceHepRepFactory->createHepRepInstance(geomInstanceTree, detectorType);
-    geomInstanceTree->addInstance(detectorInstance);
-    geomParentInstanceS.push(detectorInstance);
+    HepRepInstance* detectorInstance = factory->createHepRepInstance(geometryInstanceTree, detectorType);
+    geometryInstanceTree->addInstance(detectorInstance);
+//    geomParentInstanceS.push(detectorInstance);
 
-    //delete detectorType;
-    delete geomTypeTree;
-
-    geomParentDepth = -1;
-}
-
-
-void G4HepRepSceneHandler::openEventHepRep() {
-//    G4cout << "EventTypeWriter " << eventTypeWriter << G4endl;
-//    G4cout << "EventInstanceWriter " << eventInstanceWriter << G4endl;
-
-    open();
-    if (eventTypeWriter != NULL || eventInstanceWriter != NULL) return;
-
-    std::ostrstream eventTypeOst(eventTypeFname, 256);
-    eventTypeOst << GetScene()->GetName() << "-EventTypes-" << fileNo-1 << ".tree" << std::ends;
-    eventTypeOut = new std::ofstream(eventTypeFname);
-    eventTypeWriter = eventTypeHepRepFactory->createHepRepWriter(eventTypeOut);
-
-    std::ostrstream eventInstanceOst(eventInstanceFname, 256);
-    eventInstanceOst << GetScene()->GetName() << "-EventInstances-" << fileNo-1 << ".tree" << std::ends;
-    eventInstanceOut = new std::ofstream(eventInstanceFname);
-    eventInstanceWriter = eventInstanceHepRepFactory->createHepRepWriter(eventInstanceOut);
-
-    // Create the HepRep that holds the Event TypeTree.
-    eventTypeHeprep = eventTypeHepRepFactory->createHepRep();
+//    geomParentDepth = -1;
 
     // Create the Event TypeTree.
-    HepRepTreeID* eventTreeID = eventTypeHepRepFactory->createHepRepTreeID("G4EventTypes", "1.0");
-    HepRepTypeTree* eventTypeTree = eventTypeHepRepFactory->createHepRepTypeTree(eventTreeID);
-    delete eventTreeID;
-    eventTypeHeprep->addTypeTree(eventTypeTree);
+    HepRepTreeID* eventTreeID = factory->createHepRepTreeID("G4EventTypes", "1.0");
+    HepRepTypeTree* eventTypeTree = factory->createHepRepTypeTree(eventTreeID);
+    heprep->addTypeTree(eventTypeTree);
 
     // Create the top level Event Type.
-    HepRepType* eventType = eventTypeHepRepFactory->createHepRepType(NULL, "Event");
-//    G4cout << "Created HepRepType for Event" << G4endl;
-    eventTypeFullNameMap[G4String("Event")] = eventType;
+    eventType = factory->createHepRepType(NULL, "Event");
+//    cout << "Created HepRepType for Event" << endl;
+//    eventTypeFullNameMap[G4String("Event")] = eventType;
     eventType->addAttValue("Layer", G4String("Event"));
 
     eventTypeTree->addType(eventType);
 
-    eventParentTypeFullNameS.push(G4String("Event"));
-
-    // Create the HepRep that holds the Event InstanceTree.
-    eventInstanceHeprep = eventInstanceHepRepFactory->createHepRep();
+//    eventParentTypeFullNameS.push(G4String("Event"));
 
     // Create the Event InstanceTree.
-    eventInstanceTree = eventInstanceHepRepFactory->
-        createHepRepInstanceTree("G4EventData", "1.0", eventTypeTree);
-    eventInstanceHeprep->addInstanceTree(eventInstanceTree);
+    eventInstanceTree = factory->createHepRepInstanceTree("G4EventData", "1.0", eventTypeTree);
+    heprep->addInstanceTree(eventInstanceTree);
 
     // Create the top level Event Instance.
-    HepRepInstance* eventInstance =
-        eventInstanceHepRepFactory->createHepRepInstance(eventInstanceTree, eventType);
+    HepRepInstance* eventInstance = factory->createHepRepInstance(eventInstanceTree, eventType);
     eventInstanceTree->addInstance(eventInstance);
-    eventParentInstanceS.push(eventInstance);
+//    eventParentInstanceS.push(eventInstance);
 
-    //delete eventType;
-    delete eventTypeTree;
+//    eventParentDepth = -1;
 
-    eventParentDepth = -1;
 }
 
+/**
+ * Returns true if the HepRep was (already) closed, false if the HepRep is still open
+ */
+bool G4HepRepSceneHandler::CloseHepRep() {
 
-void G4HepRepSceneHandler::close() {
+#ifdef DEBUG
+    cout << "G4HepRepSceneHandler::CloseHepRep() " << endl;
+#endif
+
+    if (heprep == NULL) return true;
+
+    // FIXME add provision for not writing empty heprep
+    // FIXME add geometry to each event
+    char eventName[255];
+    sprintf(eventName, "event%010d.heprep", eventNumber);
+    writer->write(heprep, eventName);
+    eventNumber++;
+
+    delete heprep;
+    heprep = NULL;
+
+    return true;
+}
+
+void G4HepRepSceneHandler::Close() {
+
+#ifdef DEBUG
+    cout << "G4HepRepSceneHandler::Close() " << endl;
+#endif
 
     if (writer == NULL) return;
 
-    G4cout << "G4HepRepSceneHandler::close() " << G4endl;
-
-    if (geomTypeWriter != NULL) {
-        geomTypeWriter->close();
-        delete geomTypeWriter;
-        geomTypeWriter = NULL;
-
-        delete geomTypeOut;
-        geomTypeOut = NULL;
-
-        geomInstanceWriter->close();
-        delete geomInstanceWriter;
-        geomInstanceWriter = NULL;
-
-        delete geomInstanceOut;
-        geomInstanceOut = NULL;
-
-        delete geomTypeHeprep;
-        geomTypeHeprep = NULL;
-
-        delete geomInstanceHeprep;
-        geomInstanceHeprep = NULL;
-
-        delete geomInstanceTree;
-        geomInstanceTree = NULL;
-
-        while (!geomParentTypeFullNameS.empty())
-	        geomParentTypeFullNameS.pop();
-
-        while (!geomParentInstanceS.empty())
-	        geomParentInstanceS.pop();
-
-        geomTypeFullNameMap.clear();
-    }
-
-    if (eventTypeWriter != NULL) {
-        eventTypeWriter->close();
-        delete eventTypeWriter;
-        eventTypeWriter = NULL;
-
-        eventInstanceWriter->close();
-        delete eventInstanceWriter;
-        eventInstanceWriter = NULL;
-
-        delete eventTypeOut;
-        eventTypeOut = NULL;
-
-        delete eventInstanceOut;
-        eventInstanceOut = NULL;
-
-        delete eventTypeHeprep;
-        eventTypeHeprep = NULL;
-
-        delete eventInstanceHeprep;
-        eventInstanceHeprep = NULL;
-
-        delete eventInstanceTree;
-        eventInstanceTree = NULL;
-
-        while (!eventParentTypeFullNameS.empty())
-	        eventParentTypeFullNameS.pop();
-
-        while (!eventParentInstanceS.empty())
-	        eventParentInstanceS.pop();
-
-        eventTypeFullNameMap.clear();
-    }
-
-    // merge files
-    mergeAndDelete(geomTypeFname);
-    mergeAndDelete(eventTypeFname);
-    mergeAndDelete(geomInstanceFname);
-    mergeAndDelete(eventInstanceFname);
-
-    geomTypeFname[0] = 0;
-    geomInstanceFname[0] = 0;
-    eventTypeFname[0] = 0;
-    eventInstanceFname[0] = 0;
+    CloseHepRep();
 
     writer->close();
     delete writer;
@@ -364,54 +255,36 @@ void G4HepRepSceneHandler::close() {
 
     delete out;
     out = NULL;
-
-    delete heprep;
-    heprep = NULL;
-}
-
-void G4HepRepSceneHandler::mergeAndDelete(char* fname) {
-    if (fname[0] == 0) return;
-
-    G4cout << "Merging: " << fname << G4endl;
-
-    std::ifstream ifile( fname, std::ios::in );
-    if ( ifile.fail() ) {
-        G4cerr << "Failed to open: " << fname << ", will not be merged." << G4endl;
-        return;
-    }
-
-    G4String line;
-    while(!std::getline(ifile, line).eof()) {
-        writer->printPlain(line);
-        writer->printPlain("\n");
-    }
-    ifile.close();
-
-    // delete file
-    if (remove(fname) != 0) {
-        G4cerr << "Failed to delete: " << fname << G4endl;
-    }
 }
 
 void G4HepRepSceneHandler::EstablishSpecials(G4PhysicalVolumeModel& model) {
+#ifdef DEBUG
+    cout << "G4HepRepSceneHandler::EstablishSpecials(G4PhysicalVolumeModel&) " << endl;
+#endif
     model.DefinePointersToWorkingSpace(&currentDepth, &currentPV, &currentLV);
 }
 
 
 void G4HepRepSceneHandler::BeginModeling() {
+#ifdef DEBUG
+    cout << "G4HepRepSceneHandler::BeginModeling() " << endl;
+#endif
     G4VSceneHandler::BeginModeling();
 }
 
 
 void G4HepRepSceneHandler::EndModeling() {
+#ifdef DEBUG
+    cout << "G4HepRepSceneHandler::EndModeling() " << endl;
+#endif
     G4VSceneHandler::EndModeling();
 }
 
 
 void G4HepRepSceneHandler::AddPrimitive (const G4Polyline& line) {
 
-#ifdef DEBUG
-    G4cout << "G4HepRepSceneHandler::AddPrimitive(G4Polyline&) " << line.size() << G4endl;
+#ifdef PDEBUG
+    cout << "G4HepRepSceneHandler::AddPrimitive(G4Polyline&) " << line.size() << endl;
 #endif
 
     HepRepInstance* instance = CreateEventInstance(G4String("Trajectory"), 0);
@@ -422,18 +295,15 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyline& line) {
 
     for (size_t i=0; i < line.size(); i++) {
         G4Point3D vertex = transform * line[i];
-        HepRepPoint* point =
-	        eventInstanceHepRepFactory->createHepRepPoint(instance, vertex.x(), vertex.y(), vertex.z());
-        delete point;
+        HepRepPoint* point = factory->createHepRepPoint(instance, vertex.x(), vertex.y(), vertex.z());
     }
-    delete instance;
 }
 
 
 void G4HepRepSceneHandler::AddPrimitive (const G4Polymarker& line) {
 
-#ifdef DEBUG
-    G4cout << "G4HepRepSceneHandler::AddPrimitive(G4Polymarker&) " << line.size() << G4endl;
+#ifdef PDEBUG
+    cout << "G4HepRepSceneHandler::AddPrimitive(G4Polymarker&) " << line.size() << endl;
 #endif
 
     HepRepInstance* instance = CreateEventInstance(G4String("Hit"), 0);
@@ -461,15 +331,15 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polymarker& line) {
 
     for (size_t i=0; i < line.size(); i++) {
         G4Point3D vertex = transform * line[i];
-        HepRepPoint* point =
-	  eventInstanceHepRepFactory->createHepRepPoint(instance, vertex.x(), vertex.y(), vertex.z());
-        delete point;
+        HepRepPoint* point = factory->createHepRepPoint(instance, vertex.x(), vertex.y(), vertex.z());
     }
-    delete instance;
 }
 
 
 void G4HepRepSceneHandler::AddPrimitive (const G4Circle& circle) {
+#ifdef PDEBUG
+    cout << "G4HepRepSceneHandler::AddPrimitive(G4Circle&) " << endl;
+#endif
 
     HepRepInstance* instance = CreateEventInstance(G4String("Hit"), 0);
 
@@ -479,46 +349,37 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Circle& circle) {
 
     SetMarker(instance, circle);
 
-    HepRepPoint* point =
-        eventInstanceHepRepFactory->createHepRepPoint(instance, center.x(), center.y(), center.z());
-    delete point;
-    delete instance;
-
-#ifdef DEBUG
-    G4cout << "G4HepRepSceneHandler::AddPrimitive(G4Circle&) : center : "
-        << " x : " << center.x()
-        << " y : " << center.y()
-        << " z : " << center.z()
-        << " ,radius : " << size << G4endl;
-#endif
+    HepRepPoint* point = factory->createHepRepPoint(instance, center.x(), center.y(), center.z());
 }
 
 
 void G4HepRepSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 
-#ifdef DEBUG
-    G4cout << "G4HepRepSceneHandler::AddPrimitive(G4Polyhedron&) " << G4endl;
+#ifdef PDEBUG
+    cout << "G4HepRepSceneHandler::AddPrimitive(G4Polyhedron&) " << endl;
 #endif
     G4Normal3D surfaceNormal;
     G4Point3D vertex;
 
     if (polyhedron.GetNoFacets()==0) return;
 
-//    G4cout << "Will use ParentDepth of " << geomParentDepth << G4endl;
+//    cout << "Will use ParentDepth of " << geomParentDepth << endl;
 
     HepRepInstance* instance;
-    if (IsEventData())
+    if (IsEventData()) {
         instance = CreateEventInstance(G4String("CalHit"), 0);
-    else
-        instance = CreateGeomInstance(currentLV->GetName(), currentDepth);
+    } else {
+        instance = CreateGeometryInstance(currentLV->GetName(), currentDepth);
+    }
 
     G4bool notLastFace;
     do {
         HepRepInstance* face;
-        if (IsEventData())
+        if (IsEventData()) {
 	        face = CreateEventInstance(G4String("Face"), 1);
-        else
-	        face = CreateGeomInstance(G4String("Face"), currentDepth+1);
+        } else {
+	        face = CreateGeometryInstance(G4String("Face"), currentDepth+1);
+        }
 
         SetLine(face, polyhedron);
         SetColour(face, GetColour(polyhedron));
@@ -532,31 +393,27 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 	        notLastEdge = polyhedron.GetNextVertex (vertex, edgeFlag);
             vertex = transform * vertex;
 	        HepRepPoint* point;
-	        if (IsEventData())
-	            point = eventInstanceHepRepFactory->createHepRepPoint(face, vertex.x(), vertex.y(), vertex.z());
-	        else
-	            point = geomInstanceHepRepFactory->createHepRepPoint(face, vertex.x(), vertex.y(), vertex.z());
-	        delete point;
+	        if (IsEventData()) {
+	            point = factory->createHepRepPoint(face, vertex.x(), vertex.y(), vertex.z());
+	        } else {
+	            point = factory->createHepRepPoint(face, vertex.x(), vertex.y(), vertex.z());
+	        }
         } while (notLastEdge);
-
-        delete face;
-
     } while (notLastFace);
-    delete instance;
 }
 
 
 void G4HepRepSceneHandler::AddPrimitive (const G4Text&) {
-#ifdef DEBUG
-    G4cout << "G4HepRepSceneHandler::AddPrimitive(G4Text&) " << G4endl;
+#ifdef PDEBUG
+    cout << "G4HepRepSceneHandler::AddPrimitive(G4Text&) " << endl;
 #endif
-    G4cout << "G4HepRepSceneHandler::AddPrimitive G4Text : not yet implemented. " << G4endl;
+    cout << "G4HepRepSceneHandler::AddPrimitive G4Text : not yet implemented. " << endl;
 }
 
 
 void G4HepRepSceneHandler::AddPrimitive (const G4Square& square) {
-#ifdef DEBUG
-    G4cout << "G4HepRepSceneHandler::AddPrimitive(G4Square&) " << G4endl;
+#ifdef PDEBUG
+    cout << "G4HepRepSceneHandler::AddPrimitive(G4Square&) " << endl;
 #endif
 
     HepRepInstance* instance = CreateEventInstance(G4String("Hit"), 0);
@@ -569,118 +426,27 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Square& square) {
 
     instance->addAttValue("MarkName", G4String("Box"));
 
-    HepRepPoint* point =
-        eventInstanceHepRepFactory->createHepRepPoint(instance, center.x(), center.y(), center.z());
-    delete point;
-    delete instance;
+    HepRepPoint* point = factory->createHepRepPoint(instance, center.x(), center.y(), center.z());
 }
 
 
 //Method for handling G4NURBS objects for drawing solids.
 //Knots and Ctrl Pnts MUST be arrays of GLfloats.
 void G4HepRepSceneHandler::AddPrimitive (const G4NURBS&) {
-#ifdef DEBUG
-    G4cout << "G4HepRepSceneHandler::AddPrimitive(G4NURBS&) " << G4endl;
+#ifdef PDEBUG
+    cout << "G4HepRepSceneHandler::AddPrimitive(G4NURBS&) " << endl;
 #endif
-    G4cout << "G4HepRepSceneHandler::AddPrimitive G4NURBS : not yet implemented. " << G4endl;
-}
-
-
-void G4HepRepSceneHandler::AddThis (const G4Box& box) {
-#ifdef DEBUG
-    G4cout << "G4HepRepSceneHandler::AddThis(G4Box&) " << G4endl;
-#endif
-    G4VSceneHandler::AddThis (box);
-}
-
-
-void G4HepRepSceneHandler::AddThis (const G4Cons& cons) {
-#ifdef DEBUG
-  G4cout << "G4HepRepSceneHandler::AddThis(G4Cons&) " << G4endl;
-#endif
-  G4VSceneHandler::AddThis (cons);
-}
-
-
-void G4HepRepSceneHandler::AddThis (const G4Tubs& tubs) {
-#ifdef DEBUG
-    G4cout << "G4HepRepSceneHandler::AddThis(G4Tubs&) " << G4endl;
-#endif
-    G4VSceneHandler::AddThis (tubs);
-}
-
-
-void G4HepRepSceneHandler::AddThis (const G4Trd& trd) {
-#ifdef DEBUG
-    G4cout << "G4HepRepSceneHandler::AddThis(G4Trd&) " << G4endl;
-#endif
-    G4VSceneHandler::AddThis (trd);
-}
-
-
-void G4HepRepSceneHandler::AddThis (const G4Trap& trap) {
-#ifdef DEBUG
-    G4cout << "G4HepRepSceneHandler::AddThis(G4Trap&) " << G4endl;
-#endif
-    G4VSceneHandler::AddThis (trap);
-}
-
-
-void G4HepRepSceneHandler::AddThis (const G4Sphere& sphere) {
-#ifdef DEBUG
-    G4cout << "G4HepRepSceneHandler::AddThis(G4Sphere&) " << G4endl;
-#endif
-    G4VSceneHandler::AddThis (sphere);
-}
-
-
-void G4HepRepSceneHandler::AddThis (const G4Para& para) {
-#ifdef DEBUG
-    G4cout << "G4HepRepSceneHandler::AddThis(G4Para&) " << G4endl;
-#endif
-    G4VSceneHandler::AddThis (para);
-}
-
-
-void G4HepRepSceneHandler::AddThis (const G4Torus& torus) {
-#ifdef DEBUG
-    G4cout << "G4HepRepSceneHandler::AddThis(G4Torus&) " << G4endl;
-#endif
-    G4VSceneHandler::AddThis (torus);
-}
-
-
-void G4HepRepSceneHandler::AddThis (const G4Polycone& polycone) {
-#ifdef DEBUG
-    G4cout << "G4HepRepSceneHandler::AddThis(G4Polycone&) " << G4endl;
-#endif
-    G4VSceneHandler::AddThis (polycone);
-}
-
-
-void G4HepRepSceneHandler::AddThis (const G4Polyhedra& polyhedra) {
-#ifdef DEBUG
-    G4cout << "G4HepRepSceneHandler::AddThis(G4Polyhedra&) " << G4endl;
-#endif
-    G4VSceneHandler::AddThis (polyhedra);
-}
-
-
-void G4HepRepSceneHandler::AddThis (const G4VSolid& solid) {
-#ifdef DEBUG
-    G4cout << "G4HepRepSceneHandler::AddThis(G4VSolid&) " << G4endl;
-#endif
-    G4VSceneHandler::AddThis (solid);
+    cout << "G4HepRepSceneHandler::AddPrimitive G4NURBS : not yet implemented. " << endl;
 }
 
 
 void G4HepRepSceneHandler::AddThis (const G4VTrajectory& traj) {
-#ifdef DEBUG
-    G4cout << "G4HepRepSceneHandler::AddThis(G4VTrajectory&) " << G4endl;
+#ifdef PDEBUG
+    cout << "G4HepRepSceneHandler::AddThis(G4VTrajectory&) " << endl;
 #endif
 
-    std::vector<G4AttValue>* trajAttValues = traj.CreateAttValues();
-    const std::map<G4String,G4AttDef>* trajAttDefs = traj.GetAttDefs();
+    vector<G4AttValue>* trajAttValues = traj.CreateAttValues();
+    const map<G4String,G4AttDef>* trajAttDefs = traj.GetAttDefs();
 
     HepRepInstance* trajInstance = CreateEventInstance(G4String("Trajectory"), 0, trajAttDefs, trajAttValues);
 
@@ -700,36 +466,23 @@ void G4HepRepSceneHandler::AddThis (const G4VTrajectory& traj) {
     for (i = 0; i < traj.GetPointEntries(); i++) {
         G4VTrajectoryPoint* aTrajectoryPoint = traj.GetPoint(i);
         G4Point3D vertex = aTrajectoryPoint->GetPosition();
-        HepRepPoint* point =
-            eventInstanceHepRepFactory->createHepRepPoint(trajInstance, vertex.x(), vertex.y(), vertex.z());
-        delete point;
+        HepRepPoint* point = factory->createHepRepPoint(trajInstance, vertex.x(), vertex.y(), vertex.z());
     }
 
     for (i = 0; i < traj.GetPointEntries(); i++) {
         G4VTrajectoryPoint* aTrajectoryPoint = traj.GetPoint(i);
 
-        std::vector<G4AttValue>* pointAttValues = aTrajectoryPoint->CreateAttValues();
-        const std::map<G4String,G4AttDef>* pointAttDefs = aTrajectoryPoint->GetAttDefs();
+        vector<G4AttValue>* pointAttValues = aTrajectoryPoint->CreateAttValues();
+        const map<G4String,G4AttDef>* pointAttDefs = aTrajectoryPoint->GetAttDefs();
 
         HepRepInstance* pointInstance = CreateEventInstance(G4String("Point"), 1, pointAttDefs, pointAttValues);
 
         // Specify the position of the trajectory point.
         G4Point3D vertex = aTrajectoryPoint->GetPosition();
-        HepRepPoint* point =
-            eventInstanceHepRepFactory->createHepRepPoint(pointInstance, vertex.x(), vertex.y(), vertex.z());
-        delete point;
-        delete pointInstance;
+        HepRepPoint* point = factory->createHepRepPoint(pointInstance, vertex.x(), vertex.y(), vertex.z());
     }
-    delete trajInstance;
 }
 
-
-void G4HepRepSceneHandler::AddThis (const G4VHit& hit) {
-#ifdef DEBUG
-    G4cout << "G4HepRepSceneHandler::AddThis(G4VHit&) " << G4endl;
-#endif
-    G4VSceneHandler::AddThis (hit);
-}
 
 
 void
@@ -740,15 +493,14 @@ G4HepRepSceneHandler::PreAddThis (const G4Transform3D& objectTransformation,
 
     transform = objectTransformation;
 #ifdef DEBUG
-    G4cout << "G4HepRepSceneHandler::PreAddThis : " << objectTransformation << G4endl;
-    G4cout << "G4HepRepSceneHandler::PreAddThis : " << visAttribs << G4endl;
+    cout << "G4HepRepSceneHandler::PreAddThis(G4Transform3D&, G4VisAttributes&)" << endl;
 #endif
 }
 
 
 void G4HepRepSceneHandler::PostAddThis () {
 #ifdef DEBUG
-    G4cout << "G4HepRepSceneHandler::PostAddThis" << G4endl;
+    cout << "G4HepRepSceneHandler::PostAddThis()" << endl;
 #endif
     G4VSceneHandler::PostAddThis();
 }
@@ -756,7 +508,7 @@ void G4HepRepSceneHandler::PostAddThis () {
 
 void G4HepRepSceneHandler::BeginPrimitives (const G4Transform3D& objectTransformation) {
 #ifdef DEBUG
-    G4cout << "G4HepRepSceneHandler::BeginPrimitives: " << G4endl;
+    cout << "G4HepRepSceneHandler::BeginPrimitives(G4Transform3D&)" << endl;
 #endif
 
     G4VSceneHandler::BeginPrimitives (objectTransformation);
@@ -766,7 +518,7 @@ void G4HepRepSceneHandler::BeginPrimitives (const G4Transform3D& objectTransform
 
 void G4HepRepSceneHandler::EndPrimitives () {
 #ifdef DEBUG
-    G4cout << "G4HepRepSceneHandler::EndPrimitives" << G4endl;
+    cout << "G4HepRepSceneHandler::EndPrimitives" << endl;
 #endif
     G4VSceneHandler::EndPrimitives ();
 }
@@ -775,10 +527,10 @@ void G4HepRepSceneHandler::EndPrimitives () {
 void G4HepRepSceneHandler::SetColour (HepRepAttribute *attribute,
 				      const G4Colour& color,
 				      const G4String& key) {
-#ifdef DEBUG
-    G4cout << "G4HepRepSceneHandler::SetColour : red : " << color.GetRed ()   <<
+#ifdef VDEBUG
+    cout << "G4HepRepSceneHandler::SetColour : red : " << color.GetRed ()   <<
                                   " green : " << color.GetGreen () <<
-                                  " blue : " << color.GetBlue ()   << G4endl;
+                                  " blue : " << color.GetBlue ()   << endl;
 #endif
 
     attribute->addAttValue(key, color.GetRed(), color.GetGreen(), color.GetBlue(),color.GetAlpha());
@@ -807,8 +559,7 @@ void G4HepRepSceneHandler::SetMarker (HepRepInstance *instance, const G4VMarker&
     G4double size = GetMarkerRadius( marker , markerType );
     instance->addAttValue("MarkSize", size);
 
-    if (markerType == screen)
-	    instance->addAttValue("MarkType", G4String("Symbol"));
+    if (markerType == screen) instance->addAttValue("MarkType", G4String("Symbol"));
     if (marker.GetFillStyle() == G4VMarker::noFill) {
         instance->addAttValue("Fill", false);
     } else {
@@ -817,59 +568,56 @@ void G4HepRepSceneHandler::SetMarker (HepRepInstance *instance, const G4VMarker&
 }
 
 
-HepRepInstance* G4HepRepSceneHandler::CreateGeomInstance(G4String typeName, G4int depth) {
+HepRepInstance* G4HepRepSceneHandler::CreateGeometryInstance(G4String typeName, G4int depth) {
 
-    if (geomInstanceWriter == NULL)
-        openGeomHepRep();
+//    cout << "typeName " << typeName << endl;
+//    cout << "depth " << depth << endl;
 
-//    G4cout << "typeName " << typeName << G4endl;
-//    G4cout << "depth " << depth << G4endl;
-//    G4cout << "parent Depth " << geomParentDepth << G4endl;
+    return factory->createHepRepInstance(geometryInstanceTree, detectorType);
+/*
 
     // Pop stacks to get current parent onto the top
-    while (depth <= geomParentDepth-- ) {
-//        G4cout << "Popping old parent of fullTypeName "
-//               << geomParentTypeFullNameS.top() << G4endl;
-        geomParentTypeFullNameS.pop();
-        geomParentInstanceS.pop();
-    }
+//    while (depth <= geomParentDepth-- ) {
+//        cout << "Popping old parent of fullTypeName "
+//               << geomParentTypeFullNameS.top() << endl;
+//        geomParentTypeFullNameS.pop();
+//        geomParentInstanceS.pop();
+//    }
 
     // Create the full type name.
-    G4String typeFullName = geomParentTypeFullNameS.top() + "/" + typeName;
-//    G4cout << "Constructed typeFullName as " << typeFullName << G4endl;
+    G4String typePath = geomParentTypeFullNameS.top() + "/" + typeName;
+//    cout << "Constructed typeFullName as " << typeFullName << endl;
 
     // See if typeFullName is already in map
-    HepRepType* type = geomTypeFullNameMap[typeFullName];
+    HepRepType* type = geometryTypeByPath[typePath];
 
     // Add a type if this one is not yet in the map
     if (type==NULL) {
-//        G4cout << "Type needs to be added to the map" << G4endl;
-//        G4cout << "parentTypeFullNameS.size() = " << geomParentTypeFullNameS.size() << G4endl;
-//        G4cout << "parentTypeFullNameS.top() = " << geomParentTypeFullNameS.top() << G4endl;
-        HepRepType* geomParentType = geomTypeFullNameMap[geomParentTypeFullNameS.top()];
-//        G4cout << "parentType was found to be " << geomParentType << G4endl;
-//        G4cout << "parentType name = " << geomParentType->getName() << G4endl;
-//        G4cout << "typeFactory = " << geomTypeHepRepFactory << G4endl;
-//        G4cout << "Creating HepRepType for " << typeName << G4endl;
-        type = geomTypeHepRepFactory->createHepRepType(geomParentType, typeFullName);
-//        G4cout << "Created new type " << type << G4endl;
-        geomTypeFullNameMap[typeFullName] = type;
-//        G4cout << "Entered new type into map " << G4endl;
+//        cout << "Type needs to be added to the map" << endl;
+//        cout << "parentTypeFullNameS.size() = " << geomParentTypeFullNameS.size() << endl;
+//        cout << "parentTypeFullNameS.top() = " << geomParentTypeFullNameS.top() << endl;
+        HepRepType* geometryParentType = geometryTypeByDepth[depth];
+//        cout << "parentType was found to be " << geomParentType << endl;
+//        cout << "parentType name = " << geomParentType->getName() << endl;
+//        cout << "typeFactory = " << geomTypeHepRepFactory << endl;
+//        cout << "Creating HepRepType for " << typeName << endl;
+        type = factory->createHepRepType(geometryParentType, typePath);
+//        cout << "Created new type " << type << endl;
+        geometryTypeByPath[typePath] = type;
+//        cout << "Entered new type into map " << endl;
 
         // Don't need to specify any attribute definitions, since all Detector types inherit
         // the same set of definitions from the top level detector type.
 
         // Add type-specific attributes
-        if (typeName == G4String("Face"))
-        	type->addAttValue("DrawAs", G4String("Polygon"));
+        if (typeName == G4String("Face")) type->addAttValue("DrawAs", G4String("Polygon"));
     }
 
     // add the instance
-//    G4cout << "Adding instance of type " << type->getName() <<
-//              " and geomParentInstance "  << geomParentInstanceS.top() << G4endl;
-    HepRepInstance* instance =
-      geomInstanceHepRepFactory->createHepRepInstance(geomParentInstanceS.top(), type);
-//    G4cout << "Added instance " << instance << G4endl;
+//    cout << "Adding instance of type " << type->getName() <<
+//              " and geomParentInstance "  << geomParentInstanceS.top() << endl;
+    HepRepInstance* instance = factory->createHepRepInstance(geomParentInstanceS.top(), type);
+//    cout << "Added instance " << instance << endl;
 
     // add the latest info to the stacks
     geomParentDepth = depth;
@@ -885,69 +633,68 @@ HepRepInstance* G4HepRepSceneHandler::CreateGeomInstance(G4String typeName, G4in
     instance->addAttValue("Radlen",   currentLV->GetMaterial()->GetRadlen());
 
     switch (currentLV->GetMaterial()->GetState()) {
-    case kStateSolid:
-        instance->addAttValue("State", G4String("Solid"));
-        break;
-    case kStateLiquid:
-        instance->addAttValue("State", G4String("Liquid"));
-        break;
-    case kStateGas:
-        instance->addAttValue("State", G4String("Gas"));
-        break;
-    case kStateUndefined:
-    default:
-        instance->addAttValue("State", G4String("Undefined"));
-        break;
+        case kStateSolid:
+            instance->addAttValue("State", G4String("Solid"));
+            break;
+        case kStateLiquid:
+            instance->addAttValue("State", G4String("Liquid"));
+            break;
+        case kStateGas:
+            instance->addAttValue("State", G4String("Gas"));
+            break;
+        case kStateUndefined:
+        default:
+            instance->addAttValue("State", G4String("Undefined"));
+            break;
     }
     return instance;
+*/
 }
 
 
 HepRepInstance* G4HepRepSceneHandler::CreateEventInstance(G4String typeName, G4int depth,
-                                                          const std::map<G4String,G4AttDef>* attDefs,
-                                                          std::vector<G4AttValue>* attValues) {
+                                                          const map<G4String,G4AttDef>* attDefs,
+                                                          vector<G4AttValue>* attValues) {
 
-    if (eventInstanceWriter == NULL)
-        openEventHepRep();
+//    cout << "typeName " << typeName << endl;
+//    cout << "depth " << depth << endl;
 
-//    G4cout << "typeName " << typeName << G4endl;
-//    G4cout << "depth " << depth << G4endl;
-//    G4cout << "parent Depth " << eventParentDepth << G4endl;
-
+    return factory->createHepRepInstance(eventInstanceTree, eventType);
+/*
     // Pop stacks to get current parent onto the top
     while (depth <= eventParentDepth-- ) {
-//        G4cout << "Popping old parent of fullTypeName "
-//               << eventParentTypeFullNameS.top() << G4endl;
+//        cout << "Popping old parent of fullTypeName "
+//               << eventParentTypeFullNameS.top() << endl;
         eventParentTypeFullNameS.pop();
         eventParentInstanceS.pop();
     }
 
     // Create the full type name.
     G4String typeFullName = eventParentTypeFullNameS.top() + "/" + typeName;
-//    G4cout << "Constructed typeFullName as " << typeFullName << G4endl;
+//    cout << "Constructed typeFullName as " << typeFullName << endl;
 
     // See if typeFullName is already in map
     HepRepType* type = eventTypeFullNameMap[typeFullName];
 
     // Add a type if this one is not yet in the map
     if (type==NULL) {
-//        G4cout << "Type needs to be added to the map" << G4endl;
-//        G4cout << "parentTypeFullNameS.size() = " << eventParentTypeFullNameS.size() << G4endl;
-//        G4cout << "parentTypeFullNameS.top() = " << eventParentTypeFullNameS.top() << G4endl;
+//        cout << "Type needs to be added to the map" << endl;
+//        cout << "parentTypeFullNameS.size() = " << eventParentTypeFullNameS.size() << endl;
+//        cout << "parentTypeFullNameS.top() = " << eventParentTypeFullNameS.top() << endl;
         HepRepType* eventParentType = eventTypeFullNameMap[eventParentTypeFullNameS.top()];
-//        G4cout << "parentType was found to be " << eventParentType << G4endl;
-//        G4cout << "parentType name = " << eventParentType->getName() << G4endl;
-//        G4cout << "typeFactory = " << eventTypeHepRepFactory << G4endl;
-//        G4cout << "Creating HepRepType for " << typeName << G4endl;
-        type = eventTypeHepRepFactory->createHepRepType(eventParentType, typeFullName);
-//        G4cout << "Created new type " << type << G4endl;
+//        cout << "parentType was found to be " << eventParentType << endl;
+//        cout << "parentType name = " << eventParentType->getName() << endl;
+//        cout << "typeFactory = " << eventTypeHepRepFactory << endl;
+//        cout << "Creating HepRepType for " << typeName << endl;
+        type = factory->createHepRepType(eventParentType, typeFullName);
+//        cout << "Created new type " << type << endl;
         eventTypeFullNameMap[typeFullName] = type;
-//        G4cout << "Entered new type into map " << G4endl;
+//        cout << "Entered new type into map " << endl;
 
         // Specify additional attribute definitions.  Assumes that all attributes for
         //  the given type can be found from the first instance of this type.
-        std::vector<G4AttValue>::iterator iAttVal;
-        std::map<G4String,G4AttDef>::const_iterator iAttDef;
+        vector<G4AttValue>::iterator iAttVal;
+        map<G4String,G4AttDef>::const_iterator iAttDef;
         if (attValues && attDefs) {
 	        for (iAttVal = attValues->begin(); iAttVal != attValues->end(); ++iAttVal) {
 	            iAttDef = attDefs->find(iAttVal->GetName());
@@ -994,11 +741,10 @@ HepRepInstance* G4HepRepSceneHandler::CreateEventInstance(G4String typeName, G4i
     }
 
     // add the instance
-//    G4cout << "Adding instance of type " << type->getName() <<
-//              " and eventParentInstance "  << eventParentInstanceS.top() << G4endl;
-    HepRepInstance* instance =
-        eventInstanceHepRepFactory->createHepRepInstance(eventParentInstanceS.top(), type);
-//    G4cout << "Added instance " << instance << G4endl;
+//    cout << "Adding instance of type " << type->getName() <<
+//              " and eventParentInstance "  << eventParentInstanceS.top() << endl;
+    HepRepInstance* instance = factory->createHepRepInstance(eventParentInstanceS.top(), type);
+//    cout << "Added instance " << instance << endl;
 
     // add the latest info to the stacks
     eventParentDepth = depth;
@@ -1006,13 +752,13 @@ HepRepInstance* G4HepRepSceneHandler::CreateEventInstance(G4String typeName, G4i
     eventParentInstanceS.push(instance);
 
     // Copy the instance's G4AttValues to HepRepAttValues.
-    std::vector<G4AttValue>::iterator iAttVal;
+    vector<G4AttValue>::iterator iAttVal;
     if (attValues && attDefs) {
         for (iAttVal = attValues->begin(); iAttVal != attValues->end(); ++iAttVal) {
-	        std::map<G4String,G4AttDef>::const_iterator iAttDef =
+	        map<G4String,G4AttDef>::const_iterator iAttDef =
 	        attDefs->find(iAttVal->GetName());
 	        if (iAttDef == attDefs->end()) {
-//	            G4cout << "G4HepRepFileSceneHandler::AddThis(traj):"
+//	            cout << "G4HepRepFileSceneHandler::AddThis(traj):"
 //                          "\n  WARNING: no matching definition for attribute \""
 //                       << iAttVal->GetName() << "\", value: "
 //                       << iAttVal->GetValue();
@@ -1026,6 +772,7 @@ HepRepInstance* G4HepRepSceneHandler::CreateEventInstance(G4String typeName, G4i
     }
 
     return instance;
+*/
 }
 
 bool G4HepRepSceneHandler::IsEventData () {

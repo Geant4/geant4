@@ -118,6 +118,13 @@ public:
     virtual bool addInstanceTree(HepRepInstanceTree * instanceTree) = 0;
 
     /**
+     * Overlays an instancetree to this heprep, overriding attributes and adding children.
+     *
+     * @param instanceTree to be overlaid.
+     */
+    virtual void overlayInstanceTree(HepRepInstanceTree * instanceTree) = 0;
+
+    /**
      * Remove an instanectree from this heprep.
      *
      * @param instanceTree to be removed.
@@ -201,5 +208,5 @@ public:
      */
     virtual HepRep * copy(HepRepSelectFilter * filter = NULL) = 0;
 }; // class
-}; // namespace HEPREP
+} // namespace HEPREP
 #endif /* ifndef HEPREP_HEPREP_H */

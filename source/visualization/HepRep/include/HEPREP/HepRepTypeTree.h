@@ -58,5 +58,5 @@ public:
 // To be disabled in g++ 3.0
     virtual HepRepTreeID * copy() = 0;
 }; // class
-}; // namespace HEPREP
+} // namespace HEPREP
 #endif /* ifndef HEPREP_HEPREPTYPETREE_H */

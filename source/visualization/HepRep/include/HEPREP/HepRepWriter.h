@@ -49,9 +49,10 @@ public:
      * Writes a HepRep.
      *
      * @param heprep to be written.
+     * @param name for the heprep to be written (for tagged access), may be ommited.
      * @return false in case of a stream problem.
      */
-    virtual bool write(HepRep * heprep) = 0;
+    virtual bool write(HepRep * heprep, std::string name) = 0;
 
     /**
      * Writes the layerOrder.
@@ -149,5 +150,5 @@ public:
      */
     virtual bool write(HepRepAttDef * attDef) = 0;
 }; // class
-}; // namespace HEPREP
+} // namespace HEPREP
 #endif /* ifndef HEPREP_HEPREPWRITER_H */

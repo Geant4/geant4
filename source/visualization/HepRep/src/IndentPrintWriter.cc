@@ -10,16 +10,20 @@ IndentPrintWriter::IndentPrintWriter(ostream* out, int level)
 
     indentString = "  ";
     indented = false;
+    closed = false;
 }
 
 IndentPrintWriter::~IndentPrintWriter() {
 }
 
 void IndentPrintWriter::close() {
-    out->flush();
-    ofstream* fout = dynamic_cast<ofstream *>(out);
-    if (fout != NULL) {
-        fout->close();
+    if (!closed) {
+        out->flush();
+        ofstream* fout = dynamic_cast<ofstream *>(out);
+        if (fout != NULL) {
+            fout->close();
+        }
+        closed = true;
     }
 }
 

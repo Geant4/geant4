@@ -1,0 +1,21 @@
+Mark Donszelmann - 07/07/2003
+=============================
+Files renamed from .cpp to .cc
+=====================================================
+
+Main author:              Thomas Sondergaard (thomass@deltadata.dk)
+FreeBSD port maintainer:  Ying-Chieh Liao    (ijliao@csie.nctu.edu.tw)
+
+The files zipios++/directory.h and zipios++/directory.cpp originate
+from the dir_it library written by Dietmar Kuehl (it's available for
+download at http://www.boost.org)
+
+zipios++.spec contributed by Rui Miguel Silva Seabra
+
+libtool/shared library patch contributed by Arkadiusz Miskiewicz (arekm)
+
+Russel Winder (r.winder@180sw.com) did the work of amending the code to
+so as to work with GCC 3.2.1.
+
+Ross Burton (r.burton@180sw.com) transformed zipios++.spec into
+zipios++.spec.in and made it more RedHat tradition conformant.

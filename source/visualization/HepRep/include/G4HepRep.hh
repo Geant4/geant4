@@ -36,8 +36,13 @@ class G4HepRep: public G4VGraphicsSystem {
         G4HepRep ();
         virtual ~G4HepRep ();
         G4VSceneHandler* CreateSceneHandler (const G4String& name = "");
-        G4VViewer* CreateViewer  (G4VSceneHandler&, const G4String& name = "");
+        void RemoveSceneHandler();
+        G4VViewer* CreateViewer (G4VSceneHandler&, const G4String& name = "");
+        void RemoveViewer();
 
+    private:
+        G4VSceneHandler* sceneHandler;
+        G4VViewer* viewer;
 };
 
 #endif

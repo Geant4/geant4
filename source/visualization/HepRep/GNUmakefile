@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2002-11-20 16:37:26 duns Exp $
+# $Id: GNUmakefile,v 1.5 2003-07-11 06:01:34 duns Exp $
 
 name := G4visHepRep
 
@@ -9,6 +9,16 @@ endif
 include $(G4INSTALL)/config/architecture.gmk
 include $(G4INSTALL)/config/G4VIS_BUILD.gmk
 include $(G4INSTALL)/config/interactivity.gmk
+
+CPPFLAGS += -DDEBUG -DZ_PREFIX
+CPPFLAGS += -I$(G4BASE)/visualization/HepRep/include/ref
+CPPFLAGS += -I$(G4BASE)/visualization/HepRep/include/zipios++
+CPPFLAGS += -I$(G4BASE)/visualization/HepRep/include/zlib
+
+ifeq ($(G4SYSTEM),Linux-g++)
+# Add extra directory for sstream 2.95.2 (is available in 2.95.3)
+CPPFLAGS += -I$(G4BASE)/visualization/HepRep/include/g++iostream
+endif
 
 CPPFLAGS += -I$(G4BASE)/digits+hits/hits/include
 CPPFLAGS += -I$(G4BASE)/tracking/include

@@ -45,7 +45,6 @@
 #include "G4LogicalVolume.hh"
 #include "G4PhysicalVolumeModel.hh"
 
-#include "XMLHepRepStreamer.h"
 
 //class G4HepRep;
 
@@ -55,22 +54,21 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         G4HepRepSceneHandler (G4VGraphicsSystem& system, const G4String& name = "");
         virtual ~G4HepRepSceneHandler ();
 
-        void AddThis (const G4Box&);
-        void AddThis (const G4Cons&);
-        void AddThis (const G4Tubs&);
-        void AddThis (const G4Trd&);
-        void AddThis (const G4Trap&);
-        void AddThis (const G4Sphere&);
-        void AddThis (const G4Para&);
-        void AddThis (const G4Torus&);
-        void AddThis (const G4Polycone&);
-        void AddThis (const G4Polyhedra&);
-        void AddThis (const G4VSolid&);
+        void AddThis (const G4Box& box)                 { G4VSceneHandler::AddThis (box); }
+        void AddThis (const G4Cons& cons)               { G4VSceneHandler::AddThis (cons); }
+        void AddThis (const G4Tubs& tubs)               { G4VSceneHandler::AddThis (tubs); }
+        void AddThis (const G4Trd& trd)                 { G4VSceneHandler::AddThis (trd); }
+        void AddThis (const G4Trap& trap)               { G4VSceneHandler::AddThis (trap); }
+        void AddThis (const G4Sphere& sphere)           { G4VSceneHandler::AddThis (sphere); }
+        void AddThis (const G4Para& para)               { G4VSceneHandler::AddThis (para); }
+        void AddThis (const G4Torus& torus)             { G4VSceneHandler::AddThis (torus); }
+        void AddThis (const G4Polycone& polycone)       { G4VSceneHandler::AddThis (polycone); }
+        void AddThis (const G4Polyhedra& polyhedra)     { G4VSceneHandler::AddThis (polyhedra); }
+        void AddThis (const G4VSolid& solid)            { G4VSceneHandler::AddThis(solid); }
         void AddThis (const G4VTrajectory&);
-        void AddThis (const G4VHit&);
+        void AddThis (const G4VHit& hit)                { G4VSceneHandler::AddThis(hit); }
 
-        void PreAddThis (const G4Transform3D& objectTransformation,
-			             const G4VisAttributes& visAttribs);
+        void PreAddThis (const G4Transform3D& objectTransformation, const G4VisAttributes& visAttribs);
         void PostAddThis ();
 
         void EstablishSpecials(G4PhysicalVolumeModel&);
@@ -83,22 +81,22 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         void AddPrimitive (const G4NURBS&);
 
         void AddPrimitive (const G4Polymarker&);
-        void AddPrimitive (const G4Scale& scale) {
-            G4VSceneHandler::AddPrimitive(scale);
-        }
+        void AddPrimitive (const G4Scale& scale)            { G4VSceneHandler::AddPrimitive(scale); }
 
         void BeginPrimitives (const G4Transform3D& objectTransformation);
         void EndPrimitives ();
         void BeginModeling ();
         void EndModeling ();
 
-        static G4int GetSceneCount () { return sceneCount; }
+        static G4int GetSceneCount ()                       { return sceneCount; }
 
-        void close();
+        void OpenHepRep();
+        bool CloseHepRep();
+
     private:
-        static G4int sceneCount;      // No. of extanct scenes.
-        static G4int sceneIdCount;    // static counter for scenes.
-        G4int fileNo;                   //  file sequence number
+        static G4int sceneCount;
+        G4int eventNumber;
+
         G4int currentDepth;
         G4VPhysicalVolume* currentPV;
         G4LogicalVolume* currentLV;
@@ -107,62 +105,45 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
 
         G4Transform3D transform;
 
-        G4int geomParentDepth;
-        std::map<G4String, HEPREP::HepRepType *> geomTypeFullNameMap;
-        std::stack<G4String> geomParentTypeFullNameS;
-        std::stack<HEPREP::HepRepInstance *> geomParentInstanceS;
+//        G4int geomParentDepth;
+//        std::map<G4String, HEPREP::HepRepType *> geometryTypeByPath;
+//        std::vector<HEPREP::HepRepType *> geometryTypeByDepth;
+//        std::stack<HEPREP::HepRepInstance *> geomParentInstanceS;
 
-        G4int eventParentDepth;
-        std::map<G4String, HEPREP::HepRepType *> eventTypeFullNameMap;
-        std::stack<G4String> eventParentTypeFullNameS;
-        std::stack<HEPREP::HepRepInstance *> eventParentInstanceS;
+//        G4int eventParentDepth;
+//        std::map<G4String, HEPREP::HepRepType *> eventTypeFullNameMap;
+//        std::stack<G4String> eventParentTypeFullNameS;
+//        std::stack<HEPREP::HepRepInstance *> eventParentInstanceS;
 
         std::ostream* out;
         HEPREP::HepRepFactory* factory;
-        XMLHepRepStreamer* writer;
+        HEPREP::HepRepWriter* writer;
         HEPREP::HepRep* heprep;
 
-        std::ostream* geomTypeOut;
-        std::ostream* geomInstanceOut;
-        HEPREP::HepRepFactory* geomTypeHepRepFactory;
-        HEPREP::HepRepFactory* geomInstanceHepRepFactory;
-        HEPREP::HepRepWriter* geomTypeWriter;
-        HEPREP::HepRepWriter* geomInstanceWriter;
-        HEPREP::HepRep* geomTypeHeprep;
-        HEPREP::HepRep* geomInstanceHeprep;
-        HEPREP::HepRepInstanceTree* geomInstanceTree;
-
-        std::ostream* eventTypeOut;
-        std::ostream* eventInstanceOut;
-        HEPREP::HepRepFactory* eventTypeHepRepFactory;
-        HEPREP::HepRepFactory* eventInstanceHepRepFactory;
-        HEPREP::HepRepWriter* eventTypeWriter;
-        HEPREP::HepRepWriter* eventInstanceWriter;
-        HEPREP::HepRep* eventTypeHeprep;
-        HEPREP::HepRep* eventInstanceHeprep;
+        HEPREP::HepRepType* detectorType;
+        HEPREP::HepRepInstanceTree* geometryInstanceTree;
+        HEPREP::HepRepType* eventType;
         HEPREP::HepRepInstanceTree* eventInstanceTree;
 
-        char geomTypeFname [256];
-        char geomInstanceFname [256];
-        char eventTypeFname [256];
-        char eventInstanceFname [256];
+//        char geomTypeFname [256];
+//        char geomInstanceFname [256];
+//        char eventTypeFname [256];
+//        char eventInstanceFname [256];
 
         void SetColour (HEPREP::HepRepAttribute *attribute, const G4Colour& color,
 			            const G4String& key = G4String("Color"));
         void SetLine (HEPREP::HepRepInstance *instance, const G4Visible& visible);
         void SetMarker (HEPREP::HepRepInstance *instance, const G4VMarker& marker);
 
-        HEPREP::HepRepInstance* CreateGeomInstance(G4String typeName, G4int depth);
+        HEPREP::HepRepInstance* CreateGeometryInstance(G4String typeName, G4int depth);
         HEPREP::HepRepInstance* CreateEventInstance(G4String typeName, G4int depth,
 					    const std::map<G4String,G4AttDef>* attDefs = NULL,
 					    std::vector<G4AttValue>* attValues = NULL);
 
         bool IsEventData ();
 
-        void open();
-        void openGeomHepRep();
-        void openEventHepRep();
-        void mergeAndDelete(char* fname);
+        void Open(G4String name);
+        void Close();
 };
 
 #endif

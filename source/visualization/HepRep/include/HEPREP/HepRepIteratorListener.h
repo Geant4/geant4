@@ -90,5 +90,5 @@ public:
      */
     virtual void removeAttribute(std::string key) = 0;
 }; // class
-}; // namespace HEPREP
+} // namespace HEPREP
 #endif /* ifndef HEPREP_HEPREPITERATORLISTENER_H */

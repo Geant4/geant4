@@ -32,6 +32,13 @@ public:
     virtual ~HepRepInstanceTree() { /* nop */; }
 
     /**
+     * Overlays the instance tree on the current tree.
+     *
+     * The list of instances of the instanceTree has to be the same as the current tree.
+     */
+    virtual void overlay(HepRepInstanceTree * instanceTree) = 0;
+
+    /**
      * Adds an instance to this instancetree.
      *
      * @param instance to be added.
@@ -64,9 +71,9 @@ public:
     /**
      * Returns a collection of associated instance trees.
      *
-     * @return collection of HepRepInstanceTrees.
+     * @return collection of HepRepTreeIDs.
      */
-    virtual std::vector<HepRepInstanceTree *>  * getInstanceTrees() = 0;
+    virtual std::vector<HepRepTreeID *>  * getInstanceTrees() = 0;
 
     /**
      * Returns the associated typetree.
@@ -86,5 +93,5 @@ public:
 
     virtual HepRepTreeID * copy() = 0;
 }; // class
-}; // namespace HEPREP
+} // namespace HEPREP
 #endif /* ifndef HEPREP_HEPREPINSTANCETREE_H */

@@ -33,6 +33,15 @@ public:
     virtual ~HepRepInstance() { /* nop */; }
 
     /**
+     * Overlays the instance on the current instance.
+     *
+     * Attributes of the instance override or are added to the current instance.
+     * Sub-instances of the instance are added only if the current instance has no sub-instances.
+     * Points of the instance are added only if the current instance has no points.
+     */
+    virtual void overlay(HepRepInstance * instance) = 0;
+
+    /**
      * Adds an sub-instance to this instance.
      *
      * @param instance sub-instance.
@@ -96,5 +105,5 @@ public:
      */
     virtual HepRepInstance * copy(HepRep * heprep, HepRepInstanceTree * parent, HepRepSelectFilter * filter = NULL) = 0;
 }; // class
-}; // namespace HEPREP
+} // namespace HEPREP
 #endif /* ifndef HEPREP_HEPREPINSTANCE_H */

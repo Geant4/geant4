@@ -23,6 +23,9 @@
 //
 
 /**
+ * We allow only one HepRep Scene handler and one attached Viewer.
+ * The sceneHandler associates with the output file
+ *
  * @author Mark Donszelmann
  */
 
@@ -35,6 +38,7 @@
 #include "G4HepRep.hh"
 
 using namespace HEPREP;
+using namespace std;
 
 G4HepRep::G4HepRep ()
         : G4VGraphicsSystem ("G4HepRep",
@@ -47,20 +51,30 @@ G4HepRep::~G4HepRep () {
 }
 
 G4VSceneHandler* G4HepRep::CreateSceneHandler (const G4String& name) {
-    G4HepRepSceneHandler* scene = new G4HepRepSceneHandler (*this, name);
-    return scene;
+    if (sceneHandler != NULL) {
+        cout << "G4HepRep::CreateSceneHandler: Cannot create more than one SceneHandler" << endl;
+        return NULL;
+    }
+    sceneHandler = new G4HepRepSceneHandler (*this, name);
+    return sceneHandler;
+}
+
+void G4HepRep::RemoveSceneHandler() {
+    // actual deletion is done in VisManager
+    sceneHandler = NULL;
 }
 
 G4VViewer* G4HepRep::CreateViewer (G4VSceneHandler& scene, const G4String& name) {
-    G4VViewer* view  = new G4HepRepViewer ((G4HepRepSceneHandler&)scene, name);
-    if (view) {
-        if (view->GetViewId() < 0) {
-            G4cout << "G4HepRep::CreateViewer: ERROR flagged by negative view ID." << G4endl;
-            delete view;
-            view = NULL;
-        }
-    } else {
-        G4cout << "G4HepRep::CreateViewer: null pointer on new G4HepRepViewer." << G4endl;
+    if (viewer != NULL) {
+        cout << "G4HepRep::CreateViewer: Cannot create more than one Viewer" << endl;
+        return NULL;
     }
-    return view;
+    viewer  = new G4HepRepViewer ((G4HepRepSceneHandler&)scene, name);
+    return viewer;
 }
+
+void G4HepRep::RemoveViewer() {
+    // actual deletion is done in VisManager
+    viewer = NULL;
+}
+

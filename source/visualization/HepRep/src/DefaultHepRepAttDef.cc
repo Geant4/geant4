@@ -1,6 +1,8 @@
 
+#include <iostream>
 #include <cstring>
 #include <cctype>
+#include <algorithm>
 
 #include "DefaultHepRepAttDef.h"
 
@@ -15,7 +17,7 @@ DefaultHepRepAttDef::~DefaultHepRepAttDef() {
 }
 
 HepRepAttDef* DefaultHepRepAttDef::copy() {
-    return NULL;
+    return new DefaultHepRepAttDef(name, desc, category, extra);
 }
 
 string DefaultHepRepAttDef::getName() {
@@ -23,14 +25,9 @@ string DefaultHepRepAttDef::getName() {
 }
 
 string DefaultHepRepAttDef::getLowerCaseName() {
-    char* tmp = new char[strlen(name.c_str())];
-    strcpy(tmp, name.c_str());
-    int i = -1;
-    do {
-        i++;
-        tmp[i] = tolower(tmp[i]);
-    } while (tmp[i] != 0);
-    return tmp;
+    string s = name;
+    transform(s.begin(), s.end(), s.begin(), (int(*)(int)) tolower);
+    return s;
 }
 
 string DefaultHepRepAttDef::getDescription() {

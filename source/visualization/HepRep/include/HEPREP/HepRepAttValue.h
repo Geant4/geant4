@@ -123,5 +123,5 @@ public:
      */
     virtual HepRepAttValue * copy() = 0;
 }; // class
-}; // namespace HEPREP
+} // namespace HEPREP
 #endif /* ifndef HEPREP_HEPREPATTVALUE_H */

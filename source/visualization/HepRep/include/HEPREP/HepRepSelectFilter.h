@@ -32,5 +32,5 @@ public:
      */
     virtual bool select(HepRepInstance * instance) = 0;
 }; // class
-}; // namespace HEPREP
+} // namespace HEPREP
 #endif /* ifndef HEPREP_HEPREPSELECTFILTER_H */

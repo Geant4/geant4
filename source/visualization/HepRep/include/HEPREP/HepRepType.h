@@ -81,5 +81,5 @@ public:
      */
     virtual HepRepType * copy(HepRep * heprep, HepRepType * parent) = 0;
 }; // class
-}; // namespace HEPREP
+} // namespace HEPREP
 #endif /* ifndef HEPREP_HEPREPTYPE_H */

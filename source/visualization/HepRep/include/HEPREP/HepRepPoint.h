@@ -164,5 +164,5 @@ public:
      */
     virtual HepRepPoint * copy(HepRepInstance * parent) = 0;
 }; // class
-}; // namespace HEPREP
+} // namespace HEPREP
 #endif /* ifndef HEPREP_HEPREPPOINT_H */

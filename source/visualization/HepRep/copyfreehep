@@ -1,11 +1,15 @@
 export HEPREP=$FREEHEP/hep/graphics/heprep
-cp $FREEHEP/org/freehep/jni/FreeHepTypes.h include
-cp $HEPREP/geant4/include/*.hh include
-cp $HEPREP/streamer-c++/include/*.h include
-cp $HEPREP/include/HEPREP/*.h include/HEPREP
-cp $HEPREP/geant4/*.cc src
-cp $HEPREP/streamer-c++/*.cc src
-rm src/HepRepStreamerExample.cc
-rm src/HepRepStreamerTest.cc
-rm src/HepRepStreamerTreeOnly.cc
-
+cp $FREEHEP/org/freehep/jni/FreeHepTypes.h          include/ref
+cp $FREEHEP/org/freehep/zip/g++iostream/*           include/g++iostream
+cp $FREEHEP/org/freehep/zip/zipios++/*.h            include/zipios++
+cp $FREEHEP/org/freehep/zip/*.h                     include/zipios++
+cp $FREEHEP/org/freehep/zip/*.cpp                   src/*.cc
+cp $HEPREP/geant4/include/*.hh                      include
+cp $HEPREP/c++/include/*.h                          include/ref
+cp $HEPREP/include/HEPREP/*.h                       include/HEPREP
+cp $HEPREP/geant4/*.cc                              src
+cp $HEPREP/c++/*.cc                                 src
+rm src/MultiWriteTest.cc
+rm src/HepRepTest.cc
+rm src/HepRepExample.cc
+rm src/test_zipoutputstream.cc

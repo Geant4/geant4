@@ -30,6 +30,6 @@ string DefaultHepRepTreeID::getVersion() {
 }
 
 HepRepTreeID* DefaultHepRepTreeID::copy() {
-    return NULL;
+    return new DefaultHepRepTreeID(name, version, qualifier);
 }
 

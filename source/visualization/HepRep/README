@@ -5,7 +5,7 @@ The HepRep graphics format is further described at
 http://heprep.freehep.org
 
 
-Two different drivers area available for either HepRep1 or HepRep2.
+Two different drivers are available for either HepRep1 or HepRep2.
 
 
 Driver: HepRepFile
@@ -30,31 +30,35 @@ Driver: HepRepXML
 -----------------
 The version of HepRep produced by this driver is HepRep Version 2.
 
-To set the base part of the filename (filename = basefilename-seqno.heprep):
-/vis/scene/create basefilename
+It uses ZLIB and ZIPIOS (included in the HepRep driver) to
+compress the files if necessary. ZLIB and ZIPIOS are included in the
+zlib and zipios++ include directories and further licensed and described there.
 
-To route the HepRep XML output to stdout (or stderr) use:
+HepRep XML files can contain multiple HepRep events/geometries.
+If the file contains more than one HepRep it is not strictly XML anymore.
+Files can be written in .zip or .xml/.heprep format. The former is the
+default for file output, the latter is the default for stdout and stderr.
+
+(Optional) To set the filename, where the extension may be anything (zip will compress), use:
+/vis/scene/create filename
+
+(Optional) To route the HepRep XML output to stdout (or stderr), by default uncompressed, use:
 /vis/scene/create stdout
 
-To select the driver
+To select the driver, where the file if not create by scene is set to G4HepRepOuput.zip, use:
 /vis/open HepRepXML
 
-Any call to draw part of an event will open the file and start writing.
-
-Each file, apart from stdin/stderr, is closed by:
-/vis/viewer/flush
-(WARNING: files will not contain geometry if not flushed. G4 exit will only
-close file)
-
-Multiple events can be written by:
+(Optional) Multiple events can be written to one HepRep by specifying:
 /vis/scene/endOfSceneAction accumulate
 
+(Optional) To close the file, remove the SceneHandler, use:
+/vis/sceneHandler/remove scene-handler-0
+
 View the file using the WIRED Event Display, available from:
-http://www.slac.stanford.edu/BFROOT/www/Computing/Graphics/Wired/
-
-or in future
-
 http://wired.freehep.org
 
-9 Dec 2002
+Limitations:
+Only one SceneHandler can be existent at a time, connected to a single Viewer.
+
+11 July 2003
 Mark Donszelmann

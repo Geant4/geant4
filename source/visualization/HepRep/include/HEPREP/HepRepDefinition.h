@@ -72,5 +72,5 @@ public:
      */
     virtual HepRepAttDef * getAttDefFromNode(std::string lowerCaseName) = 0;
 }; // class
-}; // namespace HEPREP
+} // namespace HEPREP
 #endif /* ifndef HEPREP_HEPREPDEFINITION_H */

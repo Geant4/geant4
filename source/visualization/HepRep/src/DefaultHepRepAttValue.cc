@@ -4,6 +4,7 @@
 #include <cctype>
 #include <cstdio>
 #include <iostream>
+#include <algorithm>
 
 #include "HEPREP/HepRepConstants.h"
 
@@ -59,7 +60,15 @@ void DefaultHepRepAttValue::init() {
 }
 
 HepRepAttValue* DefaultHepRepAttValue::copy() {
-    return NULL;
+    switch(type) {
+        case HepRepConstants::TYPE_COLOR: new DefaultHepRepAttValue(name, colorValue, showLabelValue);
+        case HepRepConstants::TYPE_STRING: new DefaultHepRepAttValue(name, stringValue, showLabelValue);
+        case HepRepConstants::TYPE_LONG: new DefaultHepRepAttValue(name, longValue, showLabelValue);
+        case HepRepConstants::TYPE_INT: new DefaultHepRepAttValue(name, (int)longValue, showLabelValue);
+        case HepRepConstants::TYPE_DOUBLE: new DefaultHepRepAttValue(name, doubleValue, showLabelValue);
+        case HepRepConstants::TYPE_BOOLEAN: new DefaultHepRepAttValue(name, booleanValue, showLabelValue);
+        default: return new DefaultHepRepAttValue(name, "Unknown type stored in HepRepAttDef", showLabelValue);
+    }
 }
 
 string DefaultHepRepAttValue::getName() {
@@ -67,14 +76,9 @@ string DefaultHepRepAttValue::getName() {
 }
 
 string DefaultHepRepAttValue::getLowerCaseName() {
-    char *tmp = new char[strlen(name.c_str())];
-    strcpy(tmp, name.c_str());
-    int i = -1;
-    do {
-        i++;
-        tmp[i] = tolower(tmp[i]);
-    } while (tmp[i] != 0);
-    return tmp;
+    string s = name;
+    transform(s.begin(), s.end(), s.begin(), (int(*)(int)) tolower);
+    return s;
 }
 
 int DefaultHepRepAttValue::getType() {
