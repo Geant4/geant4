@@ -91,18 +91,8 @@
 // New Histogramming (from AIDA and Anaphe):
 #include <memory> // for the auto_ptr(T>
 
-#include "AIDA/IAnalysisFactory.h"
 
-#include "AIDA/ITreeFactory.h"
-#include "AIDA/ITree.h"
-
-#include "AIDA/IHistogramFactory.h"
-#include "AIDA/IHistogram1D.h"
-#include "AIDA/IHistogram2D.h"
-//#include "AIDA/IHistogram3D.h"
-
-#include "AIDA/ITupleFactory.h"
-#include "AIDA/ITuple.h"
+#include "AIDA/AIDA.h"
 
 #include "hTest/include/G4IonC12.hh"
 #include "hTest/include/G4IonAr40.hh"
@@ -136,7 +126,7 @@ int main(int argc,char** argv)
   G4Material* material = 0; 
   G4String name[3] = {"Ionisation", "Bremsstrahlung",
                       "Ionisation+Bremsstrahlung"};
-  G4bool setBarkasOff = true;
+  G4bool setBarkasOff = false;
   G4bool setNuclearOff= true;
 
   G4cout.setf( ios::scientific, ios::floatfield );
@@ -161,7 +151,7 @@ int main(int argc,char** argv)
   // -------------------------------------------------------------------
   //--------- Materials definition ---------
  
-  G4Material* ma[16];
+  G4Material* ma[15];
   ma[0] = new G4Material("Be",    4.,  9.01*g/mole, 1.848*g/cm3);
   ma[1] = new G4Material("Graphite",6., 12.00*g/mole, 2.265*g/cm3 );
   ma[1]->SetChemicalFormula("Graphite");
@@ -201,9 +191,7 @@ int main(int argc,char** argv)
 
   ma[14] = new G4Material("H2", 1., 1.00794*g/mole, 1.*g/cm3);
   ma[14]->SetChemicalFormula("H_2");
-
-  ma[15] = new G4Material("Au", 79., 196.97*g/mole, 19.32*g/cm3);
-    
+  
   static const G4MaterialTable* theMaterialTable = 
                G4Material::GetMaterialTable();
 
@@ -395,48 +383,45 @@ int main(int argc,char** argv)
     G4double bin = (emax10 - emin10) / (G4double)nbin;
 
     // Creating the analysis factory
-    G4std::auto_ptr< IAnalysisFactory > af( AIDA_createAnalysisFactory() );
+    G4std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
 
     // Creating the tree factory
-    G4std::auto_ptr< ITreeFactory > tf( af->createTreeFactory() );
+    G4std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
 
     // Creating a tree mapped to a new hbook file.
-    G4std::auto_ptr< ITree > tree( tf->create( hFile,false,false,"hbook" ) );
+    G4std::auto_ptr< AIDA::ITree > tree( tf->create( hFile,"hbook",false,false ) );
     G4std::cout << "Tree store : " << tree->storeName() << G4std::endl;
  
     // Creating a tuple factory, whose tuples will be handled by the tree
-    G4std::auto_ptr< ITupleFactory > tpf( af->createTupleFactory( *tree ) );
+    G4std::auto_ptr< AIDA::ITupleFactory > tpf( af->createTupleFactory( *tree ) );
 
-    IHistogram1D* hist[5];
-    //    ITuple* ntuple1 = 0;
+    AIDA::IHistogram1D* hist[4];
+    AIDA::ITuple* ntuple1 = 0;
 
     if(usepaw) {
 
       // ---- primary ntuple ------
       // If using Anaphe HBOOK implementation, there is a limitation on the length of the
       // variable names in a ntuple
-      //      ntuple1 = tpf->create( "100", "tuple", "float ekin, dedx" );
+      ntuple1 = tpf->create( "100", "tuple", "float ekin, dedx" );
 
 
       // Creating a histogram factory, whose histograms will be handled by the tree
-      G4std::auto_ptr< IHistogramFactory > hf( af->createHistogramFactory( *tree ) );
+      G4std::auto_ptr< AIDA::IHistogramFactory > hf( af->createHistogramFactory( *tree ) );
 
       // Creating an 1-dimensional histogram in the root directory of the tree
 
-      hist[0] = hf->create1D("11","Stopping power (MeV*cm**2/g)", 
+      hist[0] = hf->createHistogram1D("11","Stopping power (MeV*cm**2/g)", 
                                      nbin,emin10,emax10);
-      hist[1] = hf->create1D("12","Stopping power (MeV/mm)", 
+      hist[1] = hf->createHistogram1D("12","Stopping power (MeV/mm)", 
                                      nbin,emin10,emax10);
-      hist[2] = hf->create1D("13","Step limit (mm)", 
+      hist[2] = hf->createHistogram1D("13","Step limit (mm)", 
                                      nbin,emin10,emax10);
-      hist[3] = hf->create1D("14","Number of secondaries", 
+      hist[3] = hf->createHistogram1D("14","Number of secondaries", 
                                      nbin,emin10,emax10);
-      hist[4] = hf->create1D("17","Range (mm)", 
-                                     nbin,emin10,emax10);
-
 
       /*
-      IHistogram2D* hi2 = hf->create2D("10", 
+      AIDA::IHistogram2D* hi2 = hf->create2D("10", 
        "log10(Stopping power (MeV*cm**2/g)) versus log10Ekin(MeV)",nbin,emin10,emax10,
        100,0.,3.);
       */
@@ -464,7 +449,6 @@ int main(int argc,char** argv)
       if(!fluct) eionle->SetEnlossFluc(false);
       ebrle = new G4LowEnergyBremsstrahlung();
       if(!fluct) ebrle->SetEnlossFluc(false);
-      ebrle->SetVerboseLevel(verbose);
       elecManager->AddProcess(eionle);
       elecManager->AddProcess(ebrle);
       eionle->BuildPhysicsTable(*electron);
@@ -484,10 +468,6 @@ int main(int argc,char** argv)
         if(!setNuclearOff) hionle->SetNuclearStoppingOn();
         if(setBarkasOff)   hionle->SetBarkasOff();
         if(!setBarkasOff)  hionle->SetBarkasOn();
-	hionle->SetElectronicStoppingPowerModel(proton,"ICRU_R49p");
-        //hionle->SetElectronicStoppingPowerModel(proton,"Ziegler77p");
-        //hionle->SetElectronicStoppingPowerModel(proton,"Ziegler1985p");
-	//hionle->SetHighEnergyForProtonParametrisation(2.0*MeV);
         hionle->SetVerboseLevel(verbose);
         hionle->BuildPhysicsTable(*proton);
         success = true;
@@ -504,7 +484,7 @@ int main(int argc,char** argv)
         if(!setBarkasOff)  hionle->SetBarkasOn();
         hionle->SetVerboseLevel(verbose);
         hionle->BuildPhysicsTable(*antiproton);
-        success = true; 
+        success = true;
 
       } else if (nPart == 5 || nPart == 6) {
         protManager = new G4ProcessManager(proton);
@@ -626,8 +606,6 @@ int main(int argc,char** argv)
     G4ParticleMomentum gDir(initX,initY,initZ);
     G4double gEnergy = emax;
     G4DynamicParticle dParticle(part,gDir,gEnergy);
-    dParticle.SetMass(part->GetPDGMass());
-    dParticle.SetCharge(part->GetPDGCharge());
 
     // Track 
     G4ThreeVector aPosition(0.,0.,0.);
@@ -663,11 +641,10 @@ int main(int argc,char** argv)
 
     G4Timer* timer = new G4Timer();
     timer->Start();
-    G4double le = emin10 - bin;
 
-    for (G4int iter=0; iter<=nbin; iter++) {
+    for (G4int iter=0; iter<nbin; iter++) {
 
-      le  += bin;
+      G4double le = emin10 + ((G4double)iter + 0.5)*bin;
       G4double  e = pow(10.0,le) * MeV;
       gTrack->SetStep(step); 
       gTrack->SetKineticEnergy(e);
@@ -748,10 +725,8 @@ int main(int argc,char** argv)
             aChange = ionst->AlongStepDoIt(*gTrack,*step);
 	  }
         }
-        G4double dedx0 = G4EnergyLossTables::GetPreciseDEDX(part,e,material);
-        G4double r = G4EnergyLossTables::GetPreciseRangeFromEnergy(part, e, material);
 
-	//       G4double delx = theStep;
+        G4double delx = theStep;
         G4double de = aChange->GetLocalEnergyDeposit();
         G4int n = aChange->GetNumberOfSecondaries();
 
@@ -768,18 +743,15 @@ int main(int argc,char** argv)
 	    }
 	  }
         }
-	//        G4double st = de/(delx*(material->GetDensity()));
-        G4double st = dedx0/(material->GetDensity());
+        G4double st = de/(delx*(material->GetDensity()));
         st *= gram/(cm*cm*MeV); 
-	//        G4double s = de*mm/(delx*MeV); 
-        G4double s = dedx0*mm/MeV; 
-        r  *= (material->GetDensity())*cm*cm/gram;
+        G4double s = de*mm/(delx*MeV); 
 
         if(verbose) {
-          G4cout  << iter 
-	          << ".  E = " << e/MeV << " MeV; StepLimit= "
-	          << x/mm << " mm; dE/dx= " 
-                  << s << " MeV/mm; dE/dx= "
+          G4cout  <<  "Iteration = "  <<  iter 
+	          << "  E = " << e/MeV << " MeV; StepLimit= "
+	          << x/mm << " mm; de= " 
+                  << de/eV << " eV; dE/dx= "
                   << st << " MeV*cm^2/g" <<  G4endl;
         }
 
@@ -791,23 +763,19 @@ int main(int argc,char** argv)
           if(verbose>1) {
             G4cout << " de(MeV) = " << de/MeV 
                    << G4endl;
-	    /*
             G4cout << " n1= " << ntuple1->findColumn("ekin") 
                    << " n2= " << ntuple1->findColumn("dedx") 
                    << G4endl;
-	    */
 	  }
-	  /*
           ntuple1->fill( ntuple1->findColumn("ekin"), (float)le);
           ntuple1->fill( ntuple1->findColumn("dedx"), st10);
           ntuple1->addRow();
           // G4cout << "ntuple is filled " << G4endl; 
-	  */
+
           hist[0]->fill(le,st*xstatf);
           hist[1]->fill(le,s*xstatf);
           hist[2]->fill(le,x*xstatf/mm);
           hist[3]->fill(le,xstatf*(G4double)n);
-          hist[4]->fill(le,r*xstatf);
 	}
       }
     }

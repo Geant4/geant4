@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.13 2002-11-28 13:17:18 pfeiffer Exp $
+# $Id: GNUmakefile,v 1.14 2002-12-18 14:19:37 vnivanch Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -7,27 +7,28 @@
 ifndef G4TARGET
   G4TARGET := $(TESTTARGET)
 endif
-# G4EXLIB := true
 
 ifndef G4INSTALL
   G4INSTALL = ../../../../..
 endif
 
-G4EXEC_BUILD = true
+.PHONY: all
+all: bin
+
+#G4EXEC_BUILD = true
+
+ifdef G4ANALYSIS_USE
+  CPPFLAGS += -DG4ANALYSIS_USE
+endif
+
 
 include $(G4INSTALL)/config/architecture.gmk
-#
-# ---- Not clear why I need this here... MGP, 18 June 2002
-#      VI - will not run without in AIDA 4.0.4
-OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
-LOADLIBS += $(OGLLIBS)
-# ----
-#
-# NEW: this requires the env-var LHCXX_REL_DIR to be set up correctly,
-# see the first lines in G4ComptonTest.cc
-#
-CPPFLAGS += `aida-config --include`
-LDFLAGS  += `aida-config --lib`
+
+ifdef G4ANALYSIS_USE
+  CPPFLAGS += `aida-config --include`
+  LDFLAGS  += `aida-config --lib`
+endif
+
 
 include $(G4INSTALL)/config/binmake.gmk
 
