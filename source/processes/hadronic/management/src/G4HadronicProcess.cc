@@ -224,7 +224,7 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
       {
         currentZ = G4double( ((*theElementVector)[i])->GetZ());
         G4int localZ = G4lrint(currentZ);
-        if(!isotopeWiseCrossSections)
+        if(noIsotopeWiseCrossSections)
         {
           currentN = ((*theElementVector)[i])->GetN();
         }
@@ -252,7 +252,7 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
     }
     currentZ = G4double((*theElementVector)[numberOfElements-1]->GetZ());
     G4int localZ = G4lrint(currentZ);
-    if(!isotopeWiseCrossSections)
+    if(noIsotopeWiseCrossSections)
     {
       currentN = (*theElementVector)[numberOfElements-1]->GetN();
     }
