@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorStepper.icc,v 1.5 2001-07-11 09:59:09 gunter Exp $
+// $Id: G4MagIntegratorStepper.icc,v 1.6 2002-05-07 16:11:59 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -41,6 +41,12 @@ inline
 void G4MagIntegratorStepper::SetNumberOfVariables(G4int newNo)
 {
   fNumberOfVariables = newNo;
+}
+
+inline
+void G4MagIntegratorStepper::RightHandSide( const  double y[], double dydx[] )   
+{
+  fEquation_Rhs-> RightHandSide(y, dydx);
 }
 
 inline

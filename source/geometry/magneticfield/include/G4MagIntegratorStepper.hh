@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorStepper.hh,v 1.7 2001-07-11 09:59:09 gunter Exp $
+// $Id: G4MagIntegratorStepper.hh,v 1.8 2002-05-07 16:11:59 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -66,7 +66,7 @@ class G4MagIntegratorStepper
      inline void NormaliseTangentVector( G4double vec[6] );
        // Simple utility function to (re)normalise 'unit velocity' vector.
 
-     virtual void RightHandSide( const double y[], double dydx[] );   
+     inline void RightHandSide( const double y[], double dydx[] );   
        // Utility method to supply the standard Evaluation of the
        // Right Hand side of the associated equation.
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorStepper.cc,v 1.6 2001-07-11 09:59:12 gunter Exp $
+// $Id: G4MagIntegratorStepper.cc,v 1.7 2002-05-07 16:11:59 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4MagIntegratorStepper.hh"
@@ -40,7 +40,3 @@ G4MagIntegratorStepper::~G4MagIntegratorStepper()
 {
 }
 
-void G4MagIntegratorStepper::RightHandSide( const  double y[], double dydx[] )   
-{
-  fEquation_Rhs-> RightHandSide(y, dydx);
-}
