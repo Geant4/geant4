@@ -56,7 +56,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
   // Make conversion between native Geant4 and Bertini cascade classes.
   // NOTE: Geant4 units are MeV = 1 and GeV = 1000. Cascade code by default use GeV = 1.
 
-  enum particleType { nuclei = 0, proton = 1, neutron = 2, pionPlus = 3, pionMinus = 5, pionZero = 7, foton = 10 };
+  enum particleType { nuclei = 0, proton = 1, neutron = 2, pionPlus = 3, pionMinus = 5, pionZero = 7, photon = 10 };
 
   G4int bulletType = 0;
 
@@ -66,7 +66,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
   if(aTrack.GetDefinition() ==  G4PionPlus::PionPlus()  ) bulletType = pionPlus;
   if(aTrack.GetDefinition() == G4PionMinus::PionMinus() ) bulletType = pionMinus;
   if(aTrack.GetDefinition() ==  G4PionZero::PionZero()  ) bulletType = pionZero;
-  if(aTrack.GetDefinition() ==     G4Gamma::Gamma()     ) bulletType = foton;
+  if(aTrack.GetDefinition() ==     G4Gamma::Gamma()     ) bulletType = photon;
 
   // Code momentum and energy.
   G4std::vector<G4double> momentumBullet(4);
@@ -123,11 +123,11 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
     G4InuclCollider*             collider = new G4InuclCollider(colep, inc, noneq, eqil, fiss, bigb);
 
 
-
     if ( theNucleusA < 1.5 ) 
     {
+     // Get momentum from H model
      G4NucleiModel* model = new G4NucleiModel(new G4InuclNuclei(targetMomentum, 1, 1));
-      targetH = new G4InuclElementaryParticle((model->generateNucleon(1, 1)).getMomentum(), 1); // get momentum from H model
+      targetH = new G4InuclElementaryParticle((model->generateNucleon(1, 1)).getMomentum(), 1); 
       do
       {
 	 output = collider->collide(bullet, targetH); 
@@ -199,10 +199,10 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 	G4cerr << "pionZero "<< counter<<G4endl;
 	break;
 
-      case foton: 
+      case photon: 
 	cascadeParticle = 
 	  new G4DynamicParticle(G4Gamma::Gamma(), aMom, ekin);
-	G4cerr << "foton "<< counter<<G4endl;
+	G4cerr << "photon "<< counter<<G4endl;
 	break;
 
       default: cout << " ERROR: G4CascadeInterface::Propagate undefined particle type";
