@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StepMax.cc,v 1.2 2003-06-03 09:33:21 vnivanch Exp $
+// $Id: StepMax.cc,v 1.3 2003-06-05 12:25:14 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,7 +66,7 @@ G4double StepMax::PostStepGetPhysicalInteractionLength(
 
   if((MaxChargedStep > 0.) &&
      (aTrack.GetVolume() != NULL) &&
-     (aTrack.GetVolume()->GetName() == "Absorber"))
+     (aTrack.GetVolume()->GetName() != "World"))
      ProposedStep = MaxChargedStep;
 
   return ProposedStep;

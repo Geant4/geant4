@@ -77,9 +77,7 @@ PhysicsList::~PhysicsList()
   delete pMessenger;
   delete generalPhysicsList;
   delete emPhysicsList;
-  for(size_t i=0; i<hadronPhys.size(); i++) {
-    delete hadronPhys[i];
-  }
+  for(size_t i=0; i<hadronPhys.size(); i++) delete hadronPhys[i];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -96,9 +94,7 @@ void PhysicsList::ConstructProcess()
   AddTransportation();
   generalPhysicsList->ConstructProcess();
   emPhysicsList->ConstructProcess();
-  for(size_t i=0; i<hadronPhys.size(); i++) {
-    hadronPhys[i]->ConstructProcess();
-  }
+  for(size_t i=0; i<hadronPhys.size(); i++) hadronPhys[i]->ConstructProcess();
   AddStepMax();
 }
 

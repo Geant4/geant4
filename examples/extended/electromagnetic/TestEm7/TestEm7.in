@@ -1,21 +1,21 @@
-# $Id: TestEm7.in,v 1.3 2003-06-03 09:33:44 vnivanch Exp $
+# $Id: TestEm7.in,v 1.4 2003-06-05 12:25:10 maire Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
 #
 #
 /control/verbose 2
-/run/verbose 1
-#
+/run/verbose 2
 #
 #  select EM PhysicsList
 #
-#/testem/phys/addPhysics  model
-/testem/phys/addPhysics  standard
+/testem/phys/addPhysics  model
+###/testem/phys/addPhysics  standard
+#
+#  select Hadronic PhysicsList
 #
 /testem/phys/addPhysics  binary
 #
-#/testem/phys/setCuts 5.0 mm
 /testem/det/setMat Water
 /testem/det/setSizeX  20 cm
 /testem/det/setSizeYZ 20 cm
@@ -33,7 +33,7 @@
 /gun/energy 160 MeV
 /testem/gun/rndm 2 mm
 #
-/run/verbose 2
 /testem/event/printModulo 1000
+/testem/stepMax 1 mm
 #
 /run/beamOn 10000

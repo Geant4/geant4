@@ -1,4 +1,4 @@
-# $Id: ionC12.mac,v 1.1 2003-04-22 16:25:03 maire Exp $
+# $Id: ionC12.mac,v 1.2 2003-06-05 12:25:11 maire Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -6,6 +6,8 @@
 #
 /control/verbose 2
 /run/verbose 2
+#
+/testem/phys/addPhysics  elastic
 #
 /run/initialize
 #
