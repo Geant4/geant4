@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UserTrackingAction.hh,v 1.3 1999-04-15 08:47:10 asaim Exp $
+// $Id: G4UserTrackingAction.hh,v 1.4 1999-10-14 05:39:47 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

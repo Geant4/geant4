@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.hh,v 1.5 1999-09-21 16:08:50 maire Exp $
+// $Id: G4SteppingManager.hh,v 1.6 1999-10-14 05:39:43 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,16 @@ class G4VSensitiveDetector;
 //#include "G4DynamicParticleVector.hh" // Include from 'piim'
 //#include "G4Hit.hh"                   // Include from 'Hit/dig'
 
-#include "G4Track.hh"                    // Include from 'tracking'
-#include "G4TrackVector.hh"              // Include from 'tracking'
-#include "G4TrackStatus.hh"              // Include from 'tracking'
-#include "G4StepStatus.hh"               // Include from 'tracking'
-#include "G4UserSteppingAction.hh"       // Include from 'tracking'
-#include "G4Step.hh"                     // Include from 'tracking'
-#include "G4StepPoint.hh"                // Include from 'tracking'
-#include "G4VSteppingVerbose.hh"         // Include from 'tracking'
-#include "G4SteppingVerboseWithUnits.hh" // Include from 'tracking'
-#include "G4VTouchable.hh"               // Include from 'geometry'
-#include "G4TouchableHistory.hh"         // Include from 'geometry'
+#include "G4Track.hh"                 // Include from 'tracking'
+#include "G4TrackVector.hh"           // Include from 'tracking'
+#include "G4TrackStatus.hh"           // Include from 'tracking'
+#include "G4StepStatus.hh"            // Include from 'tracking'
+#include "G4UserSteppingAction.hh"    // Include from 'tracking'
+#include "G4Step.hh"                  // Include from 'tracking'
+#include "G4StepPoint.hh"             // Include from 'tracking'
+#include "G4VSteppingVerbose.hh"       // Include from 'tracking'
+#include "G4VTouchable.hh"            // Include from 'geometry'
+#include "G4TouchableHistory.hh"      // Include from 'geometry'
 
 //  must be changed in elegant way
 static const G4int SIZEofSelectedDoIt=100;
@@ -164,8 +163,8 @@ class G4SteppingManager
    G4double GetphysIntLength();
    G4ForceCondition GetfCondition();
    G4GPILSelection  GetfGPILSelection();
-
-
+  //
+   G4bool KillVerbose;
 //---------   
    private:
 //---------   

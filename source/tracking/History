@@ -1,4 +1,4 @@
-$Id: History,v 1.6 1999-07-05 10:56:21 maire Exp $
+$Id: History,v 1.7 1999-10-14 05:38:17 tsasaki Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,10 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
-Jul  5, 99 M.Maire (Head)
- - Make G4SteppingVerbose as derivable class
- - introduce G4SteppingVerboseWithUnits derived from G4SteppingVerbose
- - introduce a command: /tracking/verboseWithUnits          
+Oct 13, 99 T.Sasaki updated G4SteppingVerbose and G4VSteppingVerbose 
 Jun 29, 99 G.Folger have the ctor always assign a SteppingVerbose to fVerbose
 Apr 15, 99 M.Asai (tracking-01-00-03)
 - Make arguments in user action classes take const pointers.

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TrackingManager.cc,v 1.3 1999-04-15 08:47:22 asaim Exp $
+// $Id: G4TrackingManager.cc,v 1.4 1999-10-14 05:39:51 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

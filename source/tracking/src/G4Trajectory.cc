@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trajectory.cc,v 1.4 1999-05-25 21:04:36 stesting Exp $
+// $Id: G4Trajectory.cc,v 1.5 1999-10-14 05:39:52 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
