@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: T07VisManager.cc,v 1.5 2001-07-11 10:09:44 gunter Exp $
+// $Id: T07VisManager.cc,v 1.6 2001-10-25 12:13:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,7 +36,7 @@
 
 // Supported drivers...
 
-/#ifdef G4VIS_USE_ASCIITREE
+#ifdef G4VIS_USE_ASCIITREE
 #include "G4ASCIITree.hh"
 #endif
 
@@ -90,7 +90,7 @@
 #include "G4VRML2File.hh"
 #endif
 
-/....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 T07VisManager::T07VisManager () {}
 
