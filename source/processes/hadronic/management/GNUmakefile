@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2004-03-15 09:41:55 gcosmo Exp $
+# $Id: GNUmakefile,v 1.5 2004-03-22 10:39:57 hpw Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic management library.  G.Folger 10-Dec-97
 # ----------------------------------------------------------------
@@ -38,7 +38,7 @@ ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
 
 $(G4TMPDIR)/G4HadronicInteractionWrapper.o: src/G4HadronicInteractionWrapper.cc
 	@$(ECHO) Compiling G4HadronicInteractionWrapper.cc ...
-	@$(CXX) $(CXXFLAGS_WITH_ZM) $(CPPFLAGS) -c $(OUT_OBJ)$@ \
+	@$(CXX) $(CXXFLAGS_WITH_ZM) $(CPPFLAGS) -Od -Zi -Fd$(G4LIBDIR)/lib$(name) $(OUT_OBJ)$@ \
 	  src/G4HadronicInteractionWrapper.cc
 
 else 
@@ -48,6 +48,6 @@ else
 
 $(G4TMPDIR)/G4HadronicInteractionWrapper.o: src/G4HadronicInteractionWrapper.cc
 	@$(ECHO) Compiling G4HadronicInteractionWrapper.cc ...
-	@$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c -o $@ \
+	@$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -g -c -o $@ \
 	  src/G4HadronicInteractionWrapper.cc
 endif
