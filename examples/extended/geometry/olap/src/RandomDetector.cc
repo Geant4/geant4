@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RandomDetector.cc,v 1.1 2002-06-04 07:40:23 gcosmo Exp $
+// $Id: RandomDetector.cc,v 1.2 2003-02-19 07:59:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,7 +34,6 @@
 //
 #include "globals.hh"
 #include "Randomize.hh"
-#include "SystemOfUnits.h"
 #include "G4PVPlacement.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Box.hh"
