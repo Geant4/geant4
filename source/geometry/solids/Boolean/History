@@ -1,5 +1,5 @@
 
-$Id: History,v 1.31 2002-04-16 12:30:24 gcosmo Exp $
+$Id: History,v 1.32 2002-05-13 06:56:49 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ May 11  2002  Vladimir Grichine    geom-bool-V04-00-05
+  - G4ReflectedSolid.cc: bounding-box like algorithm for CalculateExtent().
 
  Apr 16  2002  Vladimir Grichine    geom-bool-V04-00-04
   - G4ReflectedSolid.cc: enhanced algorithm for CalculateExtent(), now
