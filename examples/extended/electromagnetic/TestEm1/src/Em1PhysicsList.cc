@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em1PhysicsList.cc,v 1.7 2003-02-20 10:41:10 vnivanch Exp $
+// $Id: Em1PhysicsList.cc,v 1.8 2003-03-06 17:52:58 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,7 +57,6 @@ Em1PhysicsList::Em1PhysicsList(Em1DetectorConstruction* p)
   currentDefaultCut = defaultCutValue = 1.*mm;
   cutForGamma       = defaultCutValue;
   cutForElectron    = defaultCutValue;
-  cutForProton      = defaultCutValue;
   
   pMes = new Em1PhysicsListMessenger(this);
   
@@ -247,7 +246,6 @@ void Em1PhysicsList::SetCuts()
     {
      if(cutForGamma    == currentDefaultCut) cutForGamma    = defaultCutValue;
      if(cutForElectron == currentDefaultCut) cutForElectron = defaultCutValue;
-     if(cutForProton   == currentDefaultCut) cutForProton   = defaultCutValue;
      currentDefaultCut = defaultCutValue;
     }
 
@@ -279,14 +277,6 @@ void Em1PhysicsList::SetElectronCut(G4double val)
 {
   ResetCuts();
   cutForElectron = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void Em1PhysicsList::SetProtonCut(G4double val)
-{
-  ResetCuts();
-  cutForProton = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

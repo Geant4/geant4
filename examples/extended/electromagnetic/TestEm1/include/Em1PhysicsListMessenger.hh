@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em1PhysicsListMessenger.hh,v 1.5 2002-03-08 13:43:29 maire Exp $
+// $Id: Em1PhysicsListMessenger.hh,v 1.6 2003-03-06 17:52:58 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,7 +52,6 @@ class Em1PhysicsListMessenger: public G4UImessenger
     Em1PhysicsList* physList;
     G4UIcmdWithADoubleAndUnit* cutGCmd;
     G4UIcmdWithADoubleAndUnit* cutECmd;
-    G4UIcmdWithADoubleAndUnit* cutPCmd;
     G4UIcmdWithADoubleAndUnit* rCmd;
 };
 

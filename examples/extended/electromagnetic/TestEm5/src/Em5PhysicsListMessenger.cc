@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5PhysicsListMessenger.cc,v 1.9 2002-12-16 16:30:08 maire Exp $
+// $Id: Em5PhysicsListMessenger.cc,v 1.10 2003-03-06 17:55:09 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,13 +53,6 @@ Em5PhysicsListMessenger::Em5PhysicsListMessenger(Em5PhysicsList * List)
   cutECmd->SetUnitCategory("Length");  
   cutECmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  cutPCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setPCut",this);
-  cutPCmd->SetGuidance("Set proton cut.");
-  cutPCmd->SetParameterName("Pcut",false);
-  cutPCmd->SetRange("Pcut>0.");
-  cutPCmd->SetUnitCategory("Length");    
-  cutPCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
   rCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/getRange",this);
   rCmd->SetGuidance("get the electron cut for the current material.");
   rCmd->SetParameterName("energy",false);
@@ -80,7 +73,6 @@ Em5PhysicsListMessenger::~Em5PhysicsListMessenger()
 {
   delete cutGCmd;
   delete cutECmd;
-  delete cutPCmd;
   delete rCmd;
   delete MaxStepCmd;
 }
@@ -94,8 +86,6 @@ void Em5PhysicsListMessenger::SetNewValue(G4UIcommand* command,
     { Em5List->SetGammaCut(cutGCmd->GetNewDoubleValue(newValue));}
   if(command == cutECmd)
     { Em5List->SetElectronCut(cutECmd->GetNewDoubleValue(newValue));}
-  if(command == cutPCmd)
-    { Em5List->SetProtonCut(cutPCmd->GetNewDoubleValue(newValue));}
   if(command == rCmd)
     { Em5List->GetRange(rCmd->GetNewDoubleValue(newValue));}
   if(command == MaxStepCmd)

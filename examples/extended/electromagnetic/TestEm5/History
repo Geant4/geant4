@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2003-02-20 10:52:15 vnivanch Exp $
+$Id: History,v 1.24 2003-03-06 17:55:08 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-20-02-03 V.Ivant (testem5-V05-01-02)
+06-03-03 mma (testem5-V05-00-03)
+- PhysicsList::SetCuts : suppress cutForProton
+
+20-02-03 V.Ivant (testem5-V05-00-02)
 -migration to cut per region
 
 12-02-03 mma (testem5-V05-00-01)
