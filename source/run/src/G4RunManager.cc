@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunManager.cc,v 1.7 1999-07-25 05:05:20 asaim Exp $
+// $Id: G4RunManager.cc,v 1.8 1999-07-25 15:37:25 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -264,7 +264,7 @@ G4Event* G4RunManager::GenerateEvent(G4int i_event)
 
   G4Event* anEvent = new G4Event(i_event);
 
-  if(storeRandomNumberStatus==2 || storeRandomNumberStatus==-2) StoreRandomNumberStatus();
+  if(storeRandomNumberStatus==2 || storeRandomNumberStatus==-2) StoreRandomNumberStatus(anEvent->GetEventID());
 
   userPrimaryGeneratorAction->GeneratePrimaries(anEvent);
   return anEvent;
@@ -393,7 +393,7 @@ void G4RunManager::DefineWorldVolume(G4VPhysicalVolume* worldVol)
   geometryNeedsToBeClosed = true;
 }
 
-void G4RunManager::StoreRandomNumberStatus()
+void G4RunManager::StoreRandomNumberStatus(G4int eventID)
 {
   G4String fileN = "RandEngine";
   if(storeRandomNumberStatus>0 && currentRun != NULL)
@@ -404,11 +404,11 @@ void G4RunManager::StoreRandomNumberStatus()
     fileN += "R";
     fileN += st;
   }
-  if(storeRandomNumberStatus==2 && currentEvent != NULL)
+  if(storeRandomNumberStatus==2 && eventID>=0)
   {
     char st[20];
     ostrstream os(st,20);
-    os << currentEvent->GetEventID() << '\0';
+    os << eventID << '\0';
     fileN += "E";
     fileN += st;
   }

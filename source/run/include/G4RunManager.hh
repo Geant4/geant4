@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunManager.hh,v 1.4 1999-07-25 05:05:18 asaim Exp $
+// $Id: G4RunManager.hh,v 1.5 1999-07-25 15:37:23 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -136,7 +136,7 @@ class G4RunManager
     G4int storeRandomNumberStatus;
 
   public:
-    virtual void StoreRandomNumberStatus();
+    virtual void StoreRandomNumberStatus(G4int eventID=-1);
     virtual void RestoreRandomNumberStatus(G4String fileN);
 
   public:
