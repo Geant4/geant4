@@ -34,7 +34,9 @@
 //
 // Modifications: 
 //
-// 28-12-02 add method Dispersion (VI)
+// 28-12-02 add method Dispersion (V.Ivanchenko)
+// 07-02-03 change signature (V.Ivanchenko)
+//
 //
 // Class Description: 
 //
@@ -62,11 +64,11 @@ public:
 
   virtual ~G4VEmFluctuationModel() {};
 
-  virtual void SampleFluctuations(const G4Material*, 
+  virtual G4double SampleFluctuations(const G4Material*, 
                                   const G4DynamicParticle*,
 				        G4double& tmax, 
                                         G4double& length, 
-                                        G4double meanLoss) = 0;
+                                        G4double& meanLoss) = 0;
 
   virtual G4double Dispersion(const G4Material*, 
                               const G4DynamicParticle*,

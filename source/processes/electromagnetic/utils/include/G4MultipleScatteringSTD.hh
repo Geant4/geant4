@@ -128,7 +128,7 @@ class G4MultipleScatteringSTD : public G4VContinuousDiscreteProcess
 
 
    G4double GetTransportMeanFreePath(
-                          G4double KineticEnergy,G4Material* material);
+                          G4double KineticEnergy,const G4Material* material);
      // Just a utility method to get the values of the transport
      //  mean free path . (It is not used inside the class.)
 

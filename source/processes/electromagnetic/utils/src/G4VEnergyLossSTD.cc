@@ -662,6 +662,7 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
              << G4endl;
     }
     */
+    
     if(eloss <= 0.0) eloss = preStepKinEnergy*sqrt(length/fRange);
 
   }
@@ -693,19 +694,27 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
     delete newp;
   }
 
+  /*
+  if(-1 < verboseLevel) {
+    G4cout << "eloss(MeV)= " << eloss/MeV
+           << " preStepKinEnergy= " << preStepKinEnergy
+           << " lossFlag= " << lossFluctuationFlag
+           << G4endl;
+  }
+  */
 
   // Sample fluctuations
 
-  if (lossFluctuationFlag && eloss + minKinEnergy > preStepKinEnergy) {
-
-      emFluctModel->SampleFluctuations(currentMaterial, dynParticle,
+  if (lossFluctuationFlag && eloss + minKinEnergy < preStepKinEnergy) {
+    
+    eloss =  emFluctModel->SampleFluctuations(currentMaterial, dynParticle,
                                        tmax, length, eloss);
       if(eloss < 0.0) eloss = 0.0;
   }
   preStepKinEnergy -= eloss;
 
-  /*
-  if(1 < verboseLevel) {
+  /*  
+  if(-1 < verboseLevel) {
     G4cout << "eloss(MeV)= " << eloss/MeV
            << " currentChargeSquare= " << chargeSquare
            << G4endl;

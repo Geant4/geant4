@@ -34,8 +34,9 @@
 //
 // Modifications: 
 //
-// 09-12-02 remove warnings (VI)
-// 28-12-02 add method Dispersion (VI)
+// 09-12-02 remove warnings (V.Ivanchenko)
+// 28-12-02 add method Dispersion (V.Ivanchenko)
+// 07-02-03 change signature (V.Ivanchenko)
 //
 // Class Description: 
 //
@@ -59,11 +60,11 @@ public:
 
   ~G4UniversalFluctuation();
 
-  void SampleFluctuations(const G4Material*, 
+  G4double SampleFluctuations(const G4Material*, 
                           const G4DynamicParticle*,
  				G4double&, 
                                 G4double&, 
-                                G4double); 
+                                G4double&); 
 
   G4double Dispersion(    const G4Material*, 
                           const G4DynamicParticle*,

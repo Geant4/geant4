@@ -1,4 +1,4 @@
-$Id: History,v 1.71 2003-02-06 15:45:31 urban Exp $
+$Id: History,v 1.72 2003-02-07 14:10:22 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07 feb 03: V.Ivant 
+- fix problem in fluctuations for STD
 
 06 feb 03: L.Urban 
 - important modifications in MSC (both in old design and model

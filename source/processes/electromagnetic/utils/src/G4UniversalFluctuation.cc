@@ -33,7 +33,8 @@
 //
 // Modifications: 
 //
-// 28-12-02 add method Dispersion (VI)
+// 28-12-02 add method Dispersion (V.Ivanchenko)
+// 07-02-03 change signature (V.Ivanchenko)
 //
 // Class Description: 
 //
@@ -84,18 +85,18 @@ void G4UniversalFluctuation::Initialise(const G4ParticleDefinition* part)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4UniversalFluctuation::SampleFluctuations(const G4Material* material, 
+G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material, 
                                                 const G4DynamicParticle* dp,
 				                      G4double& tmax,
 					              G4double& length,
-                                                      G4double meanLoss)
+                                                      G4double& meanLoss)
 {
 //  calculate actual loss from the mean loss
 //  The model used to get the fluctuation is essentially the same 
 // as in Glandz in Geant3.
 
   // shortcut for very very small loss 
-  if(meanLoss < minLoss) return;
+  if(meanLoss < minLoss) return meanLoss;
 
   if(dp->GetDefinition() != particle) {
     particleMass   = dp->GetMass();
@@ -123,8 +124,7 @@ void G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
      loss = G4RandGauss::shoot(meanLoss,siga);
     } while (loss < 0. || loss > 2.*meanLoss);
 
-    meanLoss = loss;
-    return;
+    return loss;
   }
 
   // Non Gaussian fluctuation 
@@ -291,7 +291,7 @@ void G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
      }
     } 
 
-  meanLoss = loss;
+  return loss;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScatteringSTD.icc,v 1.1 2002-10-11 16:41:12 vnivanch Exp $
+// $Id: G4MultipleScatteringSTD.icc,v 1.2 2003-02-07 14:10:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------ G4MultipleScattering physics process ---------------------------
@@ -82,7 +82,7 @@ inline G4double G4MultipleScatteringSTD::GetMeanFreePath(
 
 inline 
 G4double G4MultipleScatteringSTD::GetTransportMeanFreePath(G4double KineticEnergy,
-                                                        G4Material* material)
+                                                     const G4Material* material)
 {
   G4bool isOut;
   
