@@ -201,7 +201,7 @@
 * *** Defines USER perticular materials
 *
       CALL GSMIXT( 1,'Air'      , AAir , ZAir , 1.29E-3, 2,WAir)
-      CALL GSMIXT( 2,'Water'    , AH2O , ZH2O , 1.0    , 2,WH2O)
+      CALL GSMIXT( 2,'Water'    , AH2O , ZH2O , 1.0    ,-2,WH2O)
       CALL GSMATE( 3,'Ar Liquid', 40.00, 18.  , 1.39   ,14.0 ,84.0,0,0)      
       CALL GSMATE( 4,'Aluminium', 26.98, 13.  , 2.7    , 8.9 ,37.2,0,0)      
       CALL GSMATE( 5,'Iron'     , 55.85, 26.  , 7.87   , 1.76,17.1,0,0)
