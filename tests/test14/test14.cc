@@ -5,8 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test14.cc,v 1.5 1999-12-15 14:54:49 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: test14.cc,v 1.6 2000-01-20 10:24:01 lefebure Exp $
 //
 
 #include "Tst14DetectorConstruction.hh"
@@ -43,7 +42,7 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(runaction);
 
   //runManager->SetUserAction(new Tst14SteppingAction);
-  runManager->SetUserAction(new Tst14TrackingAction);
+  //runManager->SetUserAction(new Tst14TrackingAction);
 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
