@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3EventAction.cc,v 1.5 2000-12-07 12:38:25 maire Exp $
+// $Id: Em3EventAction.cc,v 1.6 2001-02-20 13:28:43 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,9 +56,19 @@ Em3EventAction::~Em3EventAction()
 void Em3EventAction::BeginOfEventAction(const G4Event* evt)
 {   
  G4int evtNb = evt->GetEventID();
+ 
+ //survey printing
  if (evtNb%printModulo == 0) 
     G4cout << "\n---> Begin Of Event: " << evtNb << G4endl;
     
+ //save rndm status
+ if (Em3Run->GetRndmFreq() == 2)
+   { 
+    HepRandom::saveEngineStatus("beginOfEvent.rndm");   
+    if (evtNb%printModulo == 0) HepRandom::showEngineStatus();
+   }         
+
+ // initialize Hits collection    
  if (calorimeterCollID==-1)
   {
     G4SDManager * SDman = G4SDManager::GetSDMpointer();
@@ -106,19 +116,7 @@ void Em3EventAction::EndOfEventAction(const G4Event* evt)
           else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
                                   trj->DrawTrajectory(50); 
         }
-  } 
-  
-  //save rndm status
-  if (Em3Run->GetRndmFreq() == 2)
-    { 
-     HepRandom::saveEngineStatus("endOfEvent.rndm");   
-     G4int evtNb = evt->GetEventID();
-     if (evtNb%printModulo == 0)
-       { 
-        G4cout << "\n---> End of Event: " << evtNb << G4endl;
-        HepRandom::showEngineStatus();
-       }
-    }     
+    }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
