@@ -1,4 +1,4 @@
-$Id: History,v 1.35 2004-07-16 14:26:06 johna Exp $
+$Id: History,v 1.36 2004-07-16 14:30:11 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,13 +20,13 @@ committal in the CVS repository !
 History file for visualization/OpenGL
 -------------------------------------
 
-16h July 2004  John Alllison  (opengl-V06-02-04)
+16th July 2004  John Alllison  (opengl-V06-02-04)
 - Refinements to hidden line, hidden surface removal.
 
-14h July 2004  John Alllison  (opengl-V06-02-03)
+14th July 2004  John Alllison  (opengl-V06-02-03)
 - Removed superfluous #include "G4VisManager.hh" from G4OpenGLXmViewer.cc.
 
-13h July 2004  John Alllison  (opengl-V06-02-02)
+13th July 2004  John Alllison  (opengl-V06-02-02)
 - Hidden line *and* hidden surface removal now works.
 
 9th July 2004  John Alllison  (opengl-V06-02-01)
