@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Quasmon.cc,v 1.31 2001-10-30 08:32:39 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.32 2001-10-31 13:23:11 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -387,6 +387,26 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
     start=false;
     G4bool   quexf=false;                          // Flag of successful quark exchange
     G4double qM2  = q4Mom.m2();                    // Current squared mass of Quasmon
+    if(qM2<0.&&qM2>-.000001)                     // Correction for the slightly space like LV
+	{
+      qM2=0.;
+      G4double p=q4Mom.rho();
+      if(p<.000001)
+	  {
+#ifdef debug
+        G4cout<<"G4Q::HQ:NothingToDo After correction: Q4M="<<q4Mom<<", E="<<theEnvironment<<G4endl;
+#endif
+        if(addPhoton)
+	    {
+	      G4cerr<<"***G4Quasmon::HQ: Q4M="<<q4Mom<<",status="<<status<<", phE="<<addPhoton<<G4endl;
+          G4Exception("G4Quasmon::HadronizeQuasmon: Overhead photon for the Zero Quasmon");
+	    }
+        KillQuasmon();                             // This Quasmon is done
+        qEnv=theEnvironment;                       // Update QEnvironment
+        return theQHadrons;
+      }
+      else q4Mom.setE(p);
+    }
     G4double quasM= sqrt(qM2);                     // Current mass of Quasmon
     G4double qurF=quasM/(q4Mom.e()-q4Mom.rho());   // Factor for k Lor.Trans. to LS
     G4ThreeVector qltb = q4Mom.boostVector();      // Boost vector for backward Lor.Trans. in LS
@@ -699,8 +719,8 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
 		}
 	    cost=addPhoton/momPhoton;                    // =1 for the real photon
         // Takes into account that the mass of the quark-parton is small but not zero
-        //G4double hms=12.5;                            // m_q^2/2 (12.5 means m_q=5 MeV)
-        //G4double hms=2.;                            // m_q^2/2 (2. means m_q=2 MeV)
+        //G4double hms=12.5;                           // m_q^2/2 (12.5 means m_q=5 MeV)
+        //G4double hms=2.;                             // m_q^2/2 (2. means m_q=2 MeV)
         G4double hms=50.;                            // m_q^2/2 (50. means m_q=10 MeV)
         G4double x=kMom*kMom/hms;
         G4double dc=(pow(x,G4UniformRand())-1.)/x;   // smearing of the "delta-function" for m=0
@@ -711,11 +731,12 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
 	  }
       else
 	  {
-        //gaF=false;                                   // GammaFirstAct flag is only for the gamma-q
+        //gaF=false;                                 // GammaFirstAct flag is only for the gamma-q
 	    gintFlag=false;
         // ==== Probabiliti proportional to k (without 1/k factor of hadronization)
         if(!miM2) miM2=(minK+minK)*q4Mom.m();        // Make minimum mass for randomization
-        kMom = GetQPartonMomentum(maxK,miM2);        // Calculate value of primary qParton
+        if(qM2<.00000001) kMom=0.;
+        else kMom = GetQPartonMomentum(maxK,miM2);   // Calculate value of primary qParton
         // ==== Direct calculation of the quark spectrum
         //G4double kpow=static_cast<double>(nOfQ-2);
         //G4double kst=0.;
@@ -2895,7 +2916,7 @@ G4double G4Quasmon::GetQPartonMomentum(G4double kMax, G4double mC2)
   if (kMin<0 || kMax<0 || kMax>kLim || qMass<=0. || nOfQ<2)
   {
     G4cerr<<"***G4Q::GetQPMom: kMax="<<kMax<<", kMin="<<kMin<<", kLim="<<kLim<<", MQ="<<qMass
-          <<", n="<<nOfQ<<G4endl;
+          <<", n="<<nOfQ<<",Q4M="<<q4Mom<<G4endl;
 	G4Exception("G4Quasmon::GetQPartonMomentum: Can not generate quark-parton");   
   }
 #ifdef pdebug
