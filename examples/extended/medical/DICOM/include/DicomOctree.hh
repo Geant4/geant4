@@ -29,12 +29,12 @@ public:
   OctreeNode* operator()( G4double nodeX, G4double nodeY, 
                           G4double nodeZ, G4int level );
     
-  OctreeNode* Root(); 
+  OctreeNode* Root(){return mRoot;} 
   G4double Size() {return mSize;}
   G4int CountMemory( G4int rMiddle, G4int rTerminal );
   
-  G4int NoLevels();
-  G4int Resolution();
+  G4int NoLevels(){return mNoLevels;}
+  G4int Resolution(){return ( 1 << mNoLevels );}
   
 private:
 

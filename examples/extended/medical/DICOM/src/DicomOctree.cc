@@ -17,38 +17,38 @@ Octree::~Octree()
 
 OctreeNode* Octree::CreateNode( G4double nodeX, G4double nodeY, G4double nodeZ, G4int level )
 {
-    OctreeNode* current = mRoot;
-    float curr_x = 0;
-    float curr_y = 0;
-    float curr_z = 0;
-    // Make children
-    for ( G4int i = 0; i < 8; i++ )
+  OctreeNode* current = mRoot;
+  G4double currentX = 0;
+  G4double currentY = 0;
+  G4double currentZ = 0;
+  
+  for ( G4int i = 0; i < 8; i++ ) // Make children
     {
-        float child_level_resolution = (1 << (i+1) );
-        float child_size = mSize / child_level_resolution;
+      G4double childLevelResolution = (1 << (i+1) );
+      G4double childSize = mSize / childLevelResolution;
 
-        G4int dir_x = G4int( nodeX >= curr_x + child_size );
-        G4int dir_y = G4int( nodeY >= curr_y + child_size );
-        G4int dir_z = G4int( nodeZ >= curr_z + child_size );
-        G4int direction = dir_x + ( dir_y << 1 ) + ( dir_z << 2 );
+      G4int dirX = G4int( nodeX >= currentX + childSize );
+      G4int dirY = G4int( nodeY >= currentY + childSize );
+      G4int dirZ = G4int( nodeZ >= currentZ + childSize );
+      G4int direction = dirX + ( dirY << 1 ) + ( dirZ << 2 );
 
-        if ( (*current)[direction] == 0 ) // NULL
+      if ( (*current)[direction] == 0 ) 
         {
-            if ( i < level - 1 )
+	  if ( i < level - 1 )
             {
-                (*current)[direction] = new MiddleNode( current );
+	      (*current)[direction] = new MiddleNode( current );
             } else
-            {
+	      {
                 (*current)[direction] = new TerminalNode( current );
-            }
+	      }
         }
 
-        current = (*current)[direction];
-        curr_x += dir_x*child_size;
-        curr_y += dir_y*child_size;
-        curr_z += dir_z*child_size;
+      current = (*current)[direction];
+      currentX += dirX*childSize;
+      currentY += dirY*childSize;
+      currentZ += dirZ*childSize;
     }
-    return current;
+  return current;
 }
 
 OctreeNode* Octree::operator()( G4double nodeX, 
@@ -57,76 +57,55 @@ OctreeNode* Octree::operator()( G4double nodeX,
                                 G4int level )
 {
     OctreeNode* current = mRoot;
-    float curr_x = 0;
-    float curr_y = 0;
-    float curr_z = 0;
+    G4double currentX = 0;
+    G4double currentY = 0;
+    G4double currentZ = 0;
     // Make children
     for ( G4int i = 0; i < level; i++ )
     {
-        float child_level_resolution = ( 1 << (i+1) );
-        float child_size = mSize / child_level_resolution;
+        G4double childLevelResolution = ( 1 << (i+1) );
+        G4double childSize = mSize / childLevelResolution;
 
-        G4int dir_x = G4int( nodeX >= curr_x + child_size );
-        G4int dir_y = G4int( nodeY >= curr_y + child_size );
-        G4int dir_z = G4int( nodeZ >= curr_z + child_size );
-        G4int direction = dir_x + ( dir_y << 1 ) + ( dir_z << 2 );
+        G4int dirX = G4int( nodeX >= currentX + childSize );
+        G4int dirY = G4int( nodeY >= currentY + childSize );
+        G4int dirZ = G4int( nodeZ >= currentZ + childSize );
+        G4int direction = dirX + ( dirY << 1 ) + ( dirZ << 2 );
 
-        if ( (*current)[direction] == 0/*NULL*/ ) return 0/*NULL*/;
+        if ( (*current)[direction] == 0 ) return 0;
 
         current = (*current)[direction];
-        curr_x += dir_x*child_size;
-        curr_y += dir_y*child_size;
-        curr_z += dir_z*child_size;
+        currentX += dirX*childSize;
+        currentY += dirY*childSize;
+        currentZ += dirZ*childSize;
     }
     return current;
 }
 
-
-
-OctreeNode* Octree::Root()
-{
-    return mRoot;
-}
-
-G4int Octree::NoLevels()
-{
-    return mNoLevels;
-}
-
-G4int Octree::Resolution()
-{
-    return ( 1 << mNoLevels );
-}
-
 void Octree::DeleteTree()
 {
-    delete mRoot;
-    mRoot = NULL;
+  delete mRoot;
+  mRoot = NULL;
 }
 
-void Octree::CountRecursive( OctreeNode* pNode, G4int rMiddle, G4int rTerminal )
+void Octree::CountRecursive( OctreeNode* pNode, 
+                             G4int rMiddle, 
+                             G4int rTerminal )
 {
-    if ( pNode->Type() == MIDDLE_NODE )
+  if ( pNode->Type() == MIDDLE_NODE )rMiddle++;
+  else rTerminal++;
+      
+  for ( G4int i = 0; i < 8; i++ )
     {
-        rMiddle++;
-    } else
-    {
-        rTerminal++;
-    }
-    for ( unsigned int i = 0; i < 8; i++ )
-    {
-        if ( (*pNode)[i] != NULL )
-        {
-            CountRecursive( (*pNode)[i], rMiddle, rTerminal );
-        }
+      if ( (*pNode)[i] != NULL )
+	CountRecursive( (*pNode)[i], rMiddle, rTerminal );       
     }
 }
-//---------------------------------------------------------------------------
+
 G4int Octree::CountMemory( G4int rMiddle, G4int rTerminal )
 {
-    CountRecursive( mRoot, rMiddle, rTerminal );
-    G4int total = rMiddle*sizeof(MiddleNode) + rTerminal*sizeof(TerminalNode);
-    return total;
+  CountRecursive( mRoot, rMiddle, rTerminal );
+  G4int total = rMiddle*sizeof(MiddleNode) + rTerminal*sizeof(TerminalNode);
+  return total;
 }
 //---------------------------------------------------------------------------
 
