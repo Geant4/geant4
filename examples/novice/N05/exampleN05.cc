@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: exampleN05.cc,v 1.3 1999-11-11 15:41:25 gunter Exp $
+// $Id: exampleN05.cc,v 1.4 1999-11-29 15:40:46 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -129,10 +129,10 @@ int main(int argc, char** argv) {
     UImanager->ApplyCommand(command+fileName);
   }
 
-  delete runManager;
 #ifdef G4VIS_USE
   delete visManager;
 #endif
+  delete runManager;
   return EXIT_SUCCESS;
 }
 
