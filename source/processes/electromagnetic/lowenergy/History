@@ -1,4 +1,4 @@
-$Id: History,v 1.175 2003-03-28 11:16:43 gcosmo Exp $
+$Id: History,v 1.176 2003-04-12 16:42:36 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12.04-2003   VI migration to cut per region for fluo AlongStep
+             G4ShellVacancy, G4hLowEnergyIonisation, G4LowEnergyIonisation
 
 28.03-2003   G.Cosmo, tag emlowen-V05-00-12
              Fixed compilation errors on SUN-CC for files:
