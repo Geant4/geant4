@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CellScoreComposer.cc,v 1.1 2003-10-03 10:10:41 gcosmo Exp $
+// $Id: G4CellScoreComposer.cc,v 1.2 2004-07-01 09:19:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -95,7 +95,7 @@ GetStandardCellScoreValues() const {
 
 void G4CellScoreComposer::SetImportnace(G4double importance){
   fSCScoreValues.fImportance = importance;
-};
+}
 
 std::ostream& operator<<(std::ostream &out, 
                            const G4CellScoreComposer &ps) {
