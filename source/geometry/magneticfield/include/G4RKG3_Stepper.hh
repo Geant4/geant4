@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RKG3_Stepper.hh,v 1.6 2001-03-23 18:50:33 japost Exp $
+// $Id: G4RKG3_Stepper.hh,v 1.7 2001-05-23 18:34:05 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -30,7 +30,7 @@ class G4RKG3_Stepper : public G4MagIntegratorStepper
   public:  // with description
 
     G4RKG3_Stepper(G4Mag_EqRhs *EqRhs)
-      : G4MagIntegratorStepper(EqRhs,6){;}
+      : G4MagIntegratorStepper(EqRhs,6){ G4Exception(" G4RKG3_Stepper:  is not available in the current version.");}
       // Integrate over 6 variables only:  position & velocity.
 
     ~G4RKG3_Stepper(){;}
