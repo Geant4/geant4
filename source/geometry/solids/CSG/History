@@ -1,4 +1,4 @@
-$Id: History,v 1.31 2000-11-20 17:57:57 gcosmo Exp $
+$Id: History,v 1.32 2000-11-20 18:08:50 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,7 @@ Nov 20,   00   G. Cosmo                  geom-solids-csg-V02-00-11
   o fixed declaration of variables used before being initialised.
   o fixed order of initialisation of member data in constructors.
   o fixed usage of unsigned-int (size_t) for array indeces.
+- NB: based on tag geom-solids-csg-V02-00-09.
 
 Nov 16,   00   V. Grichine               geom-solids-csg-V02-00-10
 - G4Box.cc: introduced fixes to algorithm for computation of rotated vertices
