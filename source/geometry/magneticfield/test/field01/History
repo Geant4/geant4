@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2004-07-16 12:56:21 johna Exp $
+$Id: History,v 1.5 2004-12-02 11:39:04 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,18 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ 2nd Dec  2004  John Apostolakis (field-test-field01-V06-02-02)
+- TEST is DELETED.
+  * Directory contents have been copied to examples/extended/field01
+    which is now better maintained.  This is now just duplication, 
+    and hard to maintain.
+  * Source and include files deleted.
+  * Only Run files remain, to aid in testing
+    ----------------------------------------
+
+ 2nd Dec  2004  John Apostolakis (field-test-field01-V06-02-01)
+- Last version of test in this directory
+ 
 15th July 2004  John Allison  (field-test-field01-V06-02-00)
 - Changed long-deprecated command /vis/viewer/viewpointThetaPhi ->
   /vis/viewer/set/viewpointThetaPhi.
