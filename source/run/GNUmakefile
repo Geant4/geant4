@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2001-10-22 17:03:42 gcosmo Exp $
+# $Id: GNUmakefile,v 1.5 2001-10-24 15:25:18 gcosmo Exp $
 # ----------------------------------------------------------
 # GNUmakefile for run library.  Gabriele Cosmo, 3/4/1997.
 # ----------------------------------------------------------
@@ -23,7 +23,6 @@ CPPFLAGS += \
             -I$(G4BASE)/processes/transportation/include \
             -I$(G4BASE)/processes/decay/include \
             -I$(G4BASE)/geometry/management/include \
-            -I$(G4BASE)/geometry/verification/include \
             -I$(G4BASE)/geometry/volumes/include \
             -I$(G4BASE)/geometry/magneticfield/include \
             -I$(G4BASE)/track/include \
