@@ -52,7 +52,11 @@
 #include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
 
-// Sample Parameterisation
+#include "G4Material.hh"
+
+G4Material *Air, *Pb, *Xenon;
+
+// Sample Parameterisation with varied materials 
 class MoveRot_andMaterial : public G4VPVParameterisation
 {
  public:
@@ -105,11 +109,46 @@ private:
 G4double    angle1= 15.0*M_PI/180.;
 MoveRot_andMaterial myParam(angle1);
 
-
 // Build simple geometry:
 // 4 small cubes (G4Boxes) are positioned inside a larger cuboid
 G4VPhysicalVolume* BuildGeometry()
 {
+
+//--------- Material definition ---------
+
+  G4double a, iz, z, density;
+  G4String name, symbol;
+  G4double temperature, pressure;
+  G4int nel;
+
+  //Air
+    a = 14.01*g/mole;
+    G4Element* elN = new G4Element(name="Nitrogen", symbol="N", iz=7., a);
+    a = 16.00*g/mole;
+    G4Element* elO = new G4Element(name="Oxigen", symbol="O", iz=8., a);
+    density = 1.29*mg/cm3;
+    // G4Material* 
+    Air = new G4Material(name="Air", density, nel=2);
+    Air->AddElement(elN, .7);
+    Air->AddElement(elO, .3);
+
+  //Pb
+    a = 207.19*g/mole;
+    density = 11.35*g/cm3;
+    Pb = new G4Material(name="Pb", z=82., a, density);
+    
+  //Xenon gas
+    density     = 5.458*mg/cm3;    
+    pressure    = 1*atmosphere;
+    temperature = 293.15*kelvin;
+    // G4Material* 
+    Xenon = new G4Material(name="XenonGas", z=54., a=131.29*g/mole,
+                        density, kStateGas,temperature,pressure);
+
+  // Print all the materials defined.
+  //
+    G4cout << G4endl << "The materials defined are : " << G4endl << G4endl;
+    G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
     // The world volume
     //
