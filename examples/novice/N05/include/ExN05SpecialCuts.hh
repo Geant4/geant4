@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05SpecialCuts.hh,v 1.6 2002-01-09 17:24:18 ranjard Exp $
+// $Id: ExN05SpecialCuts.hh,v 1.7 2003-08-27 16:15:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,13 +83,14 @@ class ExN05SpecialCuts : public G4VProcess
      //  no operation in  AlongStepDoIt
      virtual G4VParticleChange* AlongStepDoIt(
 			     const G4Track& ,
-			     const G4Step& 
+			     const G4Step&
 			    ) {return 0;};
 
   private:
-  
-  // hide assignment operator as private 
-     ExN05SpecialCuts& operator=(const ExN05SpecialCuts& right){return *this;};
+
+  // hide assignment operator as private
+     ExN05SpecialCuts(ExN05SpecialCuts&);
+     ExN05SpecialCuts& operator=(const ExN05SpecialCuts& right);
 
 };
 
