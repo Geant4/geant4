@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScatteringx.cc,v 1.12 2001-09-10 13:21:42 urban Exp $
+// $Id: G4MultipleScatteringx.cc,v 1.13 2001-09-11 11:36:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// --------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // 16/05/01 value of cparm changed , L.Urban
 // 18/05/01 V.Ivanchenko Clean up against Linux ANSI compilation
 // 07/08/01 new methods Store/Retrieve PhysicsTable (mma) 
@@ -32,18 +32,21 @@
 //          Store,Retrieve methods commented out temporarily, L.Urban
 // 27-08-01 in BuildPhysicsTable:aParticleType.GetParticleName()=="mu+" (mma)
 // 28-08-01 GetContinuousStepLimit and AlongStepDoIt moved from .icc file (mma)
-// 03/09-01  value of data member factlim changed, L.Urban
-// 10/09/01  small change in GetContinuousStepLimit, L.Urban
-// --------------------------------------------------------------
+// 03-09-01 value of data member factlim changed, L.Urban
+// 10-09-01 small change in GetContinuousStepLimit, L.Urban
+// 11-09-01 G4MultipleScatteringx put as default G4MultipleScattering
+//          store/retrieve physics table reactivated (mma)
+// -----------------------------------------------------------------------------
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4MultipleScatteringx.hh"
 #include "G4Navigator.hh"
 #include "G4TransportationManager.hh"
+#include "Randomize.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4MultipleScatteringx::G4MultipleScatteringx(const G4String& processName)
      : G4VContinuousDiscreteProcess(processName),
@@ -53,8 +56,6 @@ G4MultipleScatteringx::G4MultipleScatteringx(const G4String& processName)
        LowestKineticEnergy(0.1*keV),
        HighestKineticEnergy(100.*TeV),
        TotBin(100),
-       theElectron(G4Electron::Electron()),
-       thePositron(G4Positron::Positron()),
        lastMaterial(0),
        lastKineticEnergy(0.),
        materialIndex(0),
@@ -74,7 +75,7 @@ G4MultipleScatteringx::G4MultipleScatteringx(const G4String& processName)
        FactPar(0.40)
   { }
   
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4MultipleScatteringx::~G4MultipleScatteringx()
 {
@@ -85,7 +86,7 @@ G4MultipleScatteringx::~G4MultipleScatteringx()
     }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MultipleScatteringx::BuildPhysicsTable(
                               const G4ParticleDefinition& aParticleType)
@@ -121,7 +122,7 @@ void G4MultipleScatteringx::BuildPhysicsTable(
       const G4Material* material = (*theMaterialTable)(J);
       const G4ElementVector* theElementVector = material->GetElementVector();
       const G4double* NbOfAtomsPerVolume =
-                                     material->GetVecNbOfAtomsPerVolume();       
+                                     material->GetVecNbOfAtomsPerVolume();
       const G4int NumberOfElements = material->GetNumberOfElements();
       density = material->GetDensity();
  
@@ -154,7 +155,7 @@ void G4MultipleScatteringx::BuildPhysicsTable(
        (aParticleType.GetParticleName() == "proton")  ) PrintInfoDefinition();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4MultipleScatteringx::ComputeTransportCrossSection(
                    const G4ParticleDefinition& aParticleType,
@@ -399,7 +400,7 @@ G4double G4MultipleScatteringx::GetContinuousStepLimit(
   G4double KineticEnergy,tau,z0,kz;
   G4bool isOut;
 
-  // this process is not a candidate for selection by default !!!!!!!!
+  // this process is not a candidate for selection by default
   valueGPILSelectionMSC = NotCandidateForSelection;
 
   tPathLength = currentMinimumStep;
@@ -425,10 +426,10 @@ G4double G4MultipleScatteringx::GetContinuousStepLimit(
   if (boundary)  
   {
     // step limitation at boundary ?
-    if(track.GetCurrentStepNumber() > 1)
+    if (track.GetCurrentStepNumber() > 1)
     {
-      if((track.GetStep()->GetPreStepPoint()->GetSafety() < fTransportMeanFreePath)
-              && (tPathLength > fTransportMeanFreePath))
+     if((track.GetStep()->GetPreStepPoint()->GetSafety()<fTransportMeanFreePath)
+         && (tPathLength > fTransportMeanFreePath))
       {
         tPathLength = factlim*fTransportMeanFreePath ;
         valueGPILSelectionMSC = CandidateForSelection;
@@ -491,7 +492,7 @@ G4VParticleChange* G4MultipleScatteringx::AlongStepDoIt(
   G4double geomPathLength = track.GetStepLength();  
   G4double truePathLength;
   
-  if (fTransportMeanFreePath > biglambda) truePathLength = geomPathLength;                                             
+  if (fTransportMeanFreePath > biglambda) truePathLength = geomPathLength;
   else if(geomPathLength == zLast)        truePathLength = tLast;
   else 
   { 
@@ -519,17 +520,17 @@ G4VParticleChange* G4MultipleScatteringx::AlongStepDoIt(
   
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VParticleChange* G4MultipleScatteringx::PostStepDoIt(
                                                const G4Track& trackData,
                                                const G4Step& stepData)
 {
-  static G4double kappa = 2.5, kappapl1 = kappa+1., kappami1 = kappa-1. ;
+  const G4double kappa = 2.5, kappapl1 = kappa+1., kappami1 = kappa-1. ;
  
   G4bool isOut;
 
-  fParticleChange.Initialize(trackData) ;
+  fParticleChange.Initialize(trackData);
 
   G4double truestep = stepData.GetStepLength();
 
@@ -634,56 +635,57 @@ G4VParticleChange* G4MultipleScatteringx::PostStepDoIt(
   return &fParticleChange;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
- // G4bool G4MultipleScatteringx::StorePhysicsTable(G4ParticleDefinition* particle,
-	//			              const G4String& directory, 
-	//			              G4bool          ascii)
-// {
- // G4String filename;
+ G4bool G4MultipleScatteringx::StorePhysicsTable(G4ParticleDefinition* particle,
+				              const G4String& directory, 
+				              G4bool          ascii)
+{
+  G4String filename;
   // store mean free path table
- // filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
- // if (!theTransportMeanFreePathTable->StorePhysicsTable(filename, ascii) ){
- //     G4cout << " FAIL theMeanFreePathTable->StorePhysicsTable in " << filename
- //          << G4endl;
- //   return false;
- // }
+  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
+  if (!theTransportMeanFreePathTable->StorePhysicsTable(filename, ascii) ){
+      G4cout << " FAIL theMeanFreePathTable->StorePhysicsTable in " << filename
+           << G4endl;
+    return false;
+  }
   
- // G4cout << GetProcessName() << ": Success in storing the PhysicsTables in "  
- //        << directory << G4endl;
- // return true;
-// }
+  G4cout << GetProcessName() << ": Success to store the PhysicsTables in "  
+         << directory << G4endl;
+  return true;
+}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// G4bool G4MultipleScatteringx::RetrievePhysicsTable(G4ParticleDefinition* particle,
-//					         const G4String& directory, 
-//				                 G4bool          ascii)
-// {
+G4bool G4MultipleScatteringx::RetrievePhysicsTable(
+                                                 G4ParticleDefinition* particle,
+					         const G4String& directory, 
+				                 G4bool          ascii)
+{
   // delete theTransportMeanFreePathTable
- // if (theTransportMeanFreePathTable != 0) {
- //   theTransportMeanFreePathTable->clearAndDestroy();
- //   delete theTransportMeanFreePathTable;
- // }
+  if (theTransportMeanFreePathTable != 0) {
+    theTransportMeanFreePathTable->clearAndDestroy();
+    delete theTransportMeanFreePathTable;
+  }
 
- // G4String filename;
+  G4String filename;
 
   // retreive mean free path table
- // filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
- // theTransportMeanFreePathTable = 
- //                      new G4PhysicsTable(G4Material::GetNumberOfMaterials());
- // if (!theTransportMeanFreePathTable->RetrievePhysicsTable(filename, ascii) ){
- //   G4cout << " FAIL theMeanFreePathTable->RetrievePhysicsTable in " << filename
- //          << G4endl;  
- //   return false;
- // }
+  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
+  theTransportMeanFreePathTable = 
+                       new G4PhysicsTable(G4Material::GetNumberOfMaterials());
+  if (!theTransportMeanFreePathTable->RetrievePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theMeanFreePathTable->RetrievePhysicsTable in " << filename
+           << G4endl;  
+    return false;
+  }
   
- // G4cout << GetProcessName() << ": Success in retrieving the PhysicsTables from "
- //        << directory << G4endl;
- // return true;
-// }
+  G4cout << GetProcessName() << ": Success to retrieve the PhysicsTables from "
+         << directory << G4endl;
+  return true;
+}
  
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
 void G4MultipleScatteringx::PrintInfoDefinition()
 {
@@ -692,10 +694,10 @@ void G4MultipleScatteringx::PrintInfoDefinition()
         comments += "          displacement of the particle , too.";
 
   G4cout << G4endl << GetProcessName() << ":  " << comments
-         << "\n        PhysicsTables from " << G4BestUnit(LowestKineticEnergy,
-                                                  "Energy")
+         << "\n        PhysicsTables from " 
+	           << G4BestUnit(LowestKineticEnergy ,"Energy")
          << " to " << G4BestUnit(HighestKineticEnergy,"Energy")
          << " in " << TotBin << " bins. \n";
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

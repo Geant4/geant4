@@ -21,17 +21,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScatteringx.hh,v 1.6 2001-08-28 14:05:04 maire Exp $
+// $Id: G4MultipleScatteringx.hh,v 1.7 2001-09-11 11:36:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-//    --------- G4MultipleScatteringx physics process --------
+//------------- G4MultipleScatteringx physics process --------------------------
 //               by Laszlo Urban, March 2001   
 //
-// 07-08-01, new methods Store/Retrieve PhysicsTable 
-// 23-08-01, new angle and z distribution,energy dependence reduced,
-//           Store,Retrieve methods commented out temporarily, L.Urban
+// 07-08-01 new methods Store/Retrieve PhysicsTable 
+// 23-08-01 new angle and z distribution,energy dependence reduced,
+//          Store,Retrieve methods commented out temporarily, L.Urban
+// 06-09-01 G4MultipleScatteringx put as default: G4MultipleScattering
+//          Store,Retrieve methods reactived (mma)
 //            
-// --------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 // class description
 // class description - end
@@ -41,22 +43,11 @@
 
 #ifndef G4MultipleScatteringx_h
 #define G4MultipleScatteringx_h 1
-
-#include "G4ios.hh"
-#include "globals.hh"
-#include "Randomize.hh"
+#include "G4VContinuousDiscreteProcess.hh"
 #include "G4EnergyLossTables.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
-#include "G4MuonPlus.hh"
-#include "G4PionPlus.hh"
-#include "G4Proton.hh"
-#include "G4PhysicsLogVector.hh"
 #include "G4GPILSelection.hh"
-#include "G4VContinuousDiscreteProcess.hh"
-#include "G4Step.hh"
-#include "G4Track.hh"
-#include "G4Material.hh"
 #include "G4ParticleChangeForMSC.hh"
 #include "G4UnitsTable.hh"
 
@@ -77,13 +68,13 @@ class G4MultipleScatteringx : public G4VContinuousDiscreteProcess
 
    void PrintInfoDefinition();
    
- //  G4bool StorePhysicsTable(G4ParticleDefinition* ,
- //			    const G4String& directory, G4bool);
+   G4bool StorePhysicsTable(G4ParticleDefinition* ,
+ 			    const G4String& directory, G4bool);
        // store TransportMeanFreePath tables into an external file
        // specified by 'directory' (must exist before invokation)
 
- //  G4bool RetrievePhysicsTable(G4ParticleDefinition* ,
- //		               const G4String& directory, G4bool);
+   G4bool RetrievePhysicsTable(G4ParticleDefinition* ,
+ 		               const G4String& directory, G4bool);
        // retrieve TransportMeanFreePath tables from an external file
        // specified by 'directory' 
        
@@ -145,7 +136,7 @@ class G4MultipleScatteringx : public G4VContinuousDiscreteProcess
    G4MultipleScatteringx & operator = (const G4MultipleScatteringx &right);
    G4MultipleScatteringx ( const G4MultipleScatteringx &);
 
- private:        // data members ...............................................
+ private:        // data members
 
    G4PhysicsTable* theTransportMeanFreePathTable;
 
@@ -156,9 +147,6 @@ class G4MultipleScatteringx : public G4VContinuousDiscreteProcess
    G4double LowestKineticEnergy;
    G4double HighestKineticEnergy;
    G4int    TotBin;
-
-   const G4Electron* theElectron;
-   const G4Positron* thePositron;
 
    G4Material* lastMaterial;
    G4double    lastKineticEnergy;

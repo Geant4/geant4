@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScatteringx.icc,v 1.10 2001-08-28 14:05:04 maire Exp $
+// $Id: G4MultipleScatteringx.icc,v 1.11 2001-09-11 11:36:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//    ------- G4MultipleScatteringx physics process ------
+//------------ G4MultipleScatteringx physics process ---------------------------
 //              by Laszlo Urban, March 2001
 //
 // Modified:
@@ -34,8 +34,9 @@
 //          Store,Retrieve methods commented out temporarily, L.Urban
 // 27-08-01 bugfix in AlongStepDoIt, L.Urban
 // 28-08-01 GetContinuousStepLimit and AlongStepDoIt moved to .cc file (mma)
+// 06-09-01 G4MultipleScatteringx put as default: G4MultipleScattering (mma)
 //
-//---------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

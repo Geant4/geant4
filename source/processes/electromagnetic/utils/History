@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2001-09-05 16:39:46 maire Exp $
+$Id: History,v 1.26 2001-09-11 11:36:07 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+ 11 sep 01: L.Urban (utils-V03-02-01)
+- last tag with G4MultipleScatteringx file. 
+    
  03 sep 01: L.Urban (utils-V03-02-00)
 - value of data member factlim has been changed.
      
