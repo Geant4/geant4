@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test201DetectorMessenger.cc,v 1.1 1999-01-08 16:35:59 gunter Exp $
+// $Id: test201DetectorMessenger.cc,v 1.2 1999-05-06 13:28:38 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -122,6 +122,7 @@ void test201DetectorMessenger::SetNewValue
 	  "\nType continue to Construct ATLAS..."
 	     << endl;
 	G4StateManager::GetStateManager () -> Pause ();
+	G4cout << "Now build ATLAS geometry..." << endl;
 	pGeom = atlas -> buildATLAS ();
 	G4cout << "ATLAS geometrical definition Done." << endl;
 	break;

@@ -64,6 +64,7 @@ $(bin)\test201.exe : $(bin)\test201.obj \
 $(libtest201_target) 
 	$(CXXLD) $(CXXLDFLAGS) $(CCLDO)$(bin)\test201.exe $(bin)\test201.obj \
 $(libtest201) \
+$(libG4ATLAS) \
 $(libG4visualization) \
 $(libG4run) \
 $(libG4interfaces) \

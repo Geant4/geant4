@@ -37,7 +37,7 @@ begin OModule
   extension = cc
   type      = application
 !  libs      = libtest201 libG4run libG4interfaces libG4tracking libG4track libG4processes libG4particles libG4event libG4materials libG4digits_hits libG4geometry libG4graphics_reps libG4intercoms libG4global librwtool libCLHEP libm libWin
-  libs      = libtest201 libG4visualization libG4run libG4interfaces libG4tracking libG4track libG4processes libG4particles libG4event libG4materials libG4digits_hits libG4geometry libG4graphics_reps libG4intercoms libG4global libInventor libGLU libGL librwtool libCLHEP libm libWin
+  libs      = libtest201 libG4ATLAS libG4visualization libG4run libG4interfaces libG4tracking libG4track libG4processes libG4particles libG4event libG4materials libG4digits_hits libG4geometry libG4graphics_reps libG4intercoms libG4global libInventor libGLU libGL librwtool libCLHEP libm libWin
 end
 !----------------------------
 !----------------------------

@@ -29,7 +29,8 @@ libInventor="$(OIVLIBS)"\
 ATLAS_CPPFLAGS="/I $(G4ATLAS)\include /DATLAS"\
 libG4ATLAS="$(G4WORKDIR)\lib\$$(CONFIG)\libG4ATLAS.lib"\
 libG4visualization="$(G4WORKDIR)\lib\$$(CONFIG)\libG4visualization.lib"\
-libWin="/subsystem:windows gdi32.lib user32.lib"
+libWin="gdi32.lib user32.lib"
+#libWin="/subsystem:windows gdi32.lib user32.lib"
 
 !include $(G4INSTALL)\tests\tools\NT\Config.nmk
 

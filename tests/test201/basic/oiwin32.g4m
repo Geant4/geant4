@@ -1,0 +1,11 @@
+#/run/verbose 1
+#/event/verbose 1
+#/vis~/set/verbose 1
+#/control/verbose 1
+/vis/sceneHandler/create OIWIN32 oiwin32
+/vis/viewer/create oiwin32 viewer_1
+/vis/scene/create scene_1
+/vis/sceneHandler/attach scene_1
+#/vis/scene/notifyHandlers
+
+

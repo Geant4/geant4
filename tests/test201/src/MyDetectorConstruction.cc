@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyDetectorConstruction.cc,v 1.1 1999-01-08 16:35:57 gunter Exp $
+// $Id: MyDetectorConstruction.cc,v 1.2 1999-05-06 13:25:17 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -121,8 +121,10 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   {
     G4RotationMatrix rm;
     rm.rotateZ(i*rotAngle);
+    char s[64];
+    sprintf(s,"calo_phys_%d",i);
     new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(0.*cm,i*calPos,0.*cm)),
-                      "calo_phys",calorimeter_log,experimantalHall_phys,
+                      s,calorimeter_log,experimantalHall_phys,
                       false,i);
   }
 

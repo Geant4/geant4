@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MySteppingAction.cc,v 1.1 1999-01-08 16:35:58 gunter Exp $
+// $Id: MySteppingAction.cc,v 1.2 1999-05-06 13:27:42 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,6 +40,7 @@ void MySteppingAction::UserSteppingAction() {
 #endif
 
   // User Action Example - begin snippet.
+  /*debug
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   static int coutCount = 0;
   if (coutCount < 10) {
@@ -66,6 +67,7 @@ void MySteppingAction::UserSteppingAction() {
     }
     pVVisManager -> Draw (pl);
   }
+  */
   // User Action Example - end snippet.
 }
 
