@@ -109,7 +109,7 @@ const G4ParticleDefinition* G4MuPairProductionSTD::DefineBaseParticle(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4MuPairProductionSTD::PrintInfoDefinition() const
+void G4MuPairProductionSTD::PrintInfoDefinition() 
 {
   G4VEnergyLossSTD::PrintInfoDefinition();
 

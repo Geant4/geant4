@@ -89,14 +89,14 @@ G4MuIonisationSTD::~G4MuIonisationSTD()
 void G4MuIonisationSTD::InitialiseProcess()
 {
   SetSecondaryParticle(G4Electron::Electron());
+  SetIntegral(true);
 
   SetDEDXBinning(120);
   SetLambdaBinning(120);
   SetMinKinEnergy(0.1*keV);
   SetMaxKinEnergy(100.0*TeV);
 
-  if(IsIntegral()) flucModel = new G4BohrFluctuations();
-  else             flucModel = new G4UniversalFluctuation();
+  flucModel = new G4BohrFluctuations();
 
   G4VEmModel* em = new G4BraggModel();
   em->SetLowEnergyLimit(0.1*keV);
