@@ -1,5 +1,33 @@
-//  XrayTelPrimaryGeneratorAction.hh
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// **********************************************************************
+// *                                                                    *
+// *                    GEANT 4 xray_telescope advanced example         *
+// *                                                                    *
+// * MODULE:            XrayTelPrimaryGeneratorAction.hh                *
+// * -------                                                            *
+// *                                                                    *
+// * Version:           0.4                                             *
+// * Date:              06/11/00                                        *
+// * Author:            R Nartallo                                      *
+// * Organisation:      ESA/ESTEC, Noordwijk, THe Netherlands           *
+// *                                                                    *
+// **********************************************************************
 // 
+// CHANGE HISTORY
+// --------------
+//
+// 06.11.2000 R.Nartallo
+// - First implementation of X-ray Telescope advanced example.
+// - Based on Chandra and XMM models
+//
+//
+// **********************************************************************
 
 #ifndef XrayTelPrimaryGeneratorAction_h
 #define XrayTelPrimaryGeneratorAction_h 1
@@ -41,21 +69,11 @@ private:
   G4double Rmax;
   G4double Tmax;
 
-  G4ThreeVector GetRandomShellPosition (G4double Rmin, G4double Rmax);   
-  // returns a random position vector in a spherical shell defined by Rmin, Rmax
-  G4ThreeVector GetRandomRingPosition (G4double Rmin, G4double Rmax);   
-  // returns a random position vector in a ring defined by Rmin, Rmax
-  G4ThreeVector GetRandomDirection();
-  G4ThreeVector GetRandomDirection(G4double Tmax);
+  G4ThreeVector GetRandomRingPosition (G4double minRad, G4double maxRad);   
+  // returns a random position vector in a ring defined by minRad, maxRad
+  G4ThreeVector GetRandomDirection(G4double maxT);
   // returns a random direction vector in the space
-  G4double GetRandomEnergy(G4int ParticleCode);
-  // returns the particle energy ( ParticleCode == 1 electrons, ParticleCode == 2 protons )
-  // according to the fluxes data spectra
-  G4ThreeVector Get2DRandomDirection();
-  G4ThreeVector GetRandomPositionOnaCircle ( G4double R );
   HepJamesRandom* engine;
-  RandGeneral* ElectronRandomEnergy;
-  RandGeneral* ProtonRandomEnergy;
 };
 
 #endif

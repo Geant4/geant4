@@ -1,24 +1,51 @@
-//  XrayTelRunAction.cc
-
-#include "XrayTelRunAction.hh"
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// **********************************************************************
+// *                                                                    *
+// *                    GEANT 4 xray_telescope advanced example         *
+// *                                                                    *
+// * MODULE:            XrayTelRunAction.cc                             *
+// * -------                                                            *
+// *                                                                    *
+// * Version:           0.4                                             *
+// * Date:              06/11/00                                        *
+// * Author:            R Nartallo                                      *
+// * Organisation:      ESA/ESTEC, Noordwijk, THe Netherlands           *
+// *                                                                    *
+// **********************************************************************
+// 
+// CHANGE HISTORY
+// --------------
+//
+// 06.11.2000 R.Nartallo
+// - First implementation of xray_telescope Physics list
+// - Based on Chandra and XMM models
+// 
+//
+// **********************************************************************
 
 #include "G4Run.hh"
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
 
-#include <fstream.h>
-
+#include "g4std/fstream"
 #include "g4std/vector"
 
-extern G4bool drawEvent;
-extern G4std::vector<G4String> EnteringParticles;
-extern G4std::vector<G4double> EnteringEnergy;
-extern G4std::vector<G4ThreeVector> EnteringDirection;
+#include "XrayTelRunAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XrayTelRunAction::XrayTelRunAction()
+XrayTelRunAction::XrayTelRunAction(G4std::vector<G4double*> *enEnergy,
+				   G4std::vector<G4ThreeVector*> *enDirect,
+				   G4bool* dEvent)
+  :EnteringEnergy(enEnergy),
+   EnteringDirection(enDirect),drawEvent(dEvent)
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -32,49 +59,73 @@ void XrayTelRunAction::BeginOfRunAction(const G4Run* aRun)
 {
   G4int RunN = aRun->GetRunID();
   if ( RunN % 1000 == 0 ) 
-    G4cout << "### Run : " << RunN << endl;
+    G4cout << "### Run : " << RunN << G4endl;
 
   if (G4VVisManager::GetConcreteInstance()) {
-      G4UImanager* UI = G4UImanager::GetUIpointer(); 
-      UI->ApplyCommand("/vis/clear/view");
-      UI->ApplyCommand("/vis/draw/current");
+    G4UImanager* UI = G4UImanager::GetUIpointer(); 
+    UI->ApplyCommand("/vis/clear/view");
+    UI->ApplyCommand("/vis/draw/current");
   } 
-  
-  EnteringParticles.clear();
-  EnteringEnergy.clear();
-  EnteringDirection.clear();
-}
 
+  EnteringEnergy->clear();
+  EnteringDirection->clear();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void XrayTelRunAction::EndOfRunAction(const G4Run* )
 {
   if (G4VVisManager::GetConcreteInstance())
-     G4UImanager::GetUIpointer()->ApplyCommand("/vis/show/view");
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/show/view");
 
-  ofstream outscat("detector.hist", ios::app);
+  G4std::ofstream outscat("detector.hist", ios::app);
 
-  cout << "End of Run summary" << endl << endl;
+  G4cout << "End of Run summary" << G4endl << G4endl;
 
   G4double TotEnteringEnergy = 0.0;
-  for (int i=0;i<EnteringParticles.size();i++)
-	TotEnteringEnergy +=  EnteringEnergy[i];
-  cout << "Total Entering Detector : " << EnteringParticles.size()  << endl;
-  cout << "Total Entering Detector Energy : " << TotEnteringEnergy  << endl;
 
-  for (i=0;i<EnteringParticles.size();i++) {
+  for (G4int i=0;i< EnteringEnergy->size();i++)
+    TotEnteringEnergy += *(*EnteringEnergy)[i];
+  G4cout << "Total Entering Detector : " << EnteringEnergy->size()  << G4endl;
+  G4cout << "Total Entering Detector Energy : " << TotEnteringEnergy  << G4endl;
+
+  for (i=0;i<EnteringEnergy->size();i++) {
     outscat << "  "
-	    << EnteringEnergy[i]
+	    << *(*EnteringEnergy)[i]
             << "  "
-            << EnteringDirection[i].x()
+            << (*EnteringDirection)[i]->x()
 	    << "  "
-            << EnteringDirection[i].y()
+            << (*EnteringDirection)[i]->y()
 	    << "  "
-            << EnteringDirection[i].z()
-	    << endl;
+            << (*EnteringDirection)[i]->z()
+	    << G4endl;
   }
   outscat.close();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

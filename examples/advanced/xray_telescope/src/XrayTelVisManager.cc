@@ -1,5 +1,33 @@
-//  XrayTelVisManager.cc
-
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// **********************************************************************
+// *                                                                    *
+// *                    GEANT 4 xray_telescope advanced example         *
+// *                                                                    *
+// * MODULE:            XrayTelVisManager.cc                            *
+// * -------                                                            *
+// *                                                                    *
+// * Version:           0.4                                             *
+// * Date:              06/11/00                                        *
+// * Author:            R Nartallo                                      *
+// * Organisation:      ESA/ESTEC, Noordwijk, THe Netherlands           *
+// *                                                                    *
+// **********************************************************************
+// 
+// CHANGE HISTORY
+// --------------
+//
+// 06.11.2000 R.Nartallo
+// - First implementation of xray_telescope Physics list
+// - Based on Chandra and XMM models
+// 
+//
+// **********************************************************************
 
 #ifdef G4VIS_USE
 
@@ -118,7 +146,7 @@ void XrayTelVisManager::RegisterGraphicsSystems () {
   if (fVerbose > 0) {
     G4cout <<
       "\nYou have successfully chosen to use the following graphics systems."
-	 << endl;
+	   << G4endl;
     PrintAvailableGraphicsSystems ();
   }
 }
@@ -126,3 +154,4 @@ void XrayTelVisManager::RegisterGraphicsSystems () {
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+

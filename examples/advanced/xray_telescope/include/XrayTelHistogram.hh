@@ -1,11 +1,38 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// **********************************************************************
+// *                                                                    *
+// *                    GEANT 4 xray_telescope advanced example         *
+// *                                                                    *
+// * MODULE:            XrayTelHistogram.hh                             *     
+// * -------                                                            *
+// *                                                                    *
+// * Version:                                                           *
+// * Date:                                                              *
+// * Author:            A Pfeiffer                                      *
+// * Organisation:      CERN/IT, Geneva                                 *
+// *                                                                    *
+// **********************************************************************
+// 
+// CHANGE HISTORY
+// --------------
+//
+//
+// **********************************************************************
 
-#include <vector>
+#include "g4std/vector"
 
 #include "interfaces/IPlotter.h"
-
 #include "interfaces/IHistogram.h"
 #include "interfaces/IHistogram1D.h"
 #include "interfaces/IHistogram2D.h"
+
+class G4SteppingManager;
 
 class IHistoFactory;
 class IVectorFactory;
@@ -26,6 +53,12 @@ public:
   IPlotter * getPlotter() { return pl; }
 
 public:
+  // callback functions from various places, distinguished by argument passed
+  // see visitor pattern
+  void analyze(const G4SteppingManager *);
+  // ... what else ?
+
+public:
   // to have access to the histograms 
   vector<IHistogram1D *> * getH1DList() { return &h1dList; }
   vector<IHistogram2D *> * getH2DList() { return &h2dList; }
@@ -37,5 +70,7 @@ private:
 
   vector<IHistogram1D *> h1dList;
   vector<IHistogram2D *> h2dList;
+
+  IVector * vCache;
 
 };

@@ -1,16 +1,45 @@
-//  XrayTelEventActionMessenger.cc
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// **********************************************************************
+// *                                                                    *
+// *                    GEANT 4 xray_telescope advanced example         *
+// *                                                                    *
+// * MODULE:            XrayTelEventActionMessenger.cc                  *     
+// * -------                                                            *
+// *                                                                    *
+// * Version:           0.4                                             *
+// * Date:              06/11/00                                        *
+// * Author:            R Nartallo                                      *
+// * Organisation:      ESA/ESTEC, Noordwijk, THe Netherlands           *
+// *                                                                    *
+// **********************************************************************
 // 
+// CHANGE HISTORY
+// --------------
+//
+// 06.11.2000 R.Nartallo
+// - First implementation of xray_telescope event action messenger
+// - Based on Chandra and XMM models 
+//
+//
+// **********************************************************************
 
-#include "XrayTelEventActionMessenger.hh"
+#include "G4UIcmdWithAString.hh"
+
+#include "globals.hh"
 
 #include "XrayTelEventAction.hh"
-#include "G4UIcmdWithAString.hh"
-#include "globals.hh"
+#include "XrayTelEventActionMessenger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayTelEventActionMessenger::XrayTelEventActionMessenger(XrayTelEventAction* EvAct)
-:eventAction(EvAct)
+  :eventAction(EvAct)
 { 
   DrawCmd = new G4UIcmdWithAString("/event/drawTracks",this);
   DrawCmd->SetGuidance("Draw the tracks in the event");
@@ -39,3 +68,4 @@ void XrayTelEventActionMessenger::SetNewValue(G4UIcommand * command,G4String new
 
 
 		
+
