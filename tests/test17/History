@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2001-02-15 11:26:34 stesting Exp $
+$Id: History,v 1.11 2001-02-22 12:29:11 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22nd Feb 2001 Steve O'Neale  remove Test17DetectorSD.cc from tag
 
 15th Feb 2001 Steve O'Neale  update reference outputs
 
