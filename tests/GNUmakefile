@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.22 2000-05-22 14:05:17 stesting Exp $
+# $Id: GNUmakefile,v 1.23 2000-06-05 14:45:53 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -14,7 +14,7 @@ EXAMPLES = 01 02 03 04 05 06
 
 # Symbolic links to extended electromagnetic examples using test501, etc...
 ELECTROMAGNETIC += 1 2 3 4 5 ## Awaiting description.
-ELECTROMAGNETIC += 6 ## Low energy electromagnetic processes.
+# ELECTROMAGNETIC += 6 ## Low energy electromagnetic processes (moved to lowenergy).
 # ELECTROMAGNETIC += 8 ## Transistion radiation and PAI (photoabsorption
                        ## ionisation) model.
 
