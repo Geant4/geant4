@@ -1,4 +1,4 @@
-$Id: History,v 1.121 2000-12-01 08:37:43 gunter Exp $
+$Id: History,v 1.122 2000-12-01 11:35:58 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -17,15 +17,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-1st December 2000 Gunter Folger
+1st December 2000  Gabriele Cosmo (config-V02-00-08)
+- Added G4UI_USE_TCSH and related settings to G4UI_USE.gmk (M.Maire).
+- Merged SUN-CC6.gmk to SUN-CC5.gmk and removed SUN-CC6.gmk.
+
+1st December 2000  Gunter Folger (config-V02-00-07)
 - Change -M to -M -MG in common.gmk, binmake.gmk. This will output a "correct"
   dependency file even when missing  header files are missing. Correct in the
   sense that liblist will work, and that the missing header is supposed to be
   (made) in the source directory.
 
-17th November 2000 Gunter Folger
+17th November 2000  Gunter Folger (config-V02-00-06)
 - Link with CLHEP using -L/-l instead of absolute filename; this allows 
   to link with shared lib of Anaphe, or static lib of Geant4.
+- Added shared-lib settings to sys configurations.
 
 14th November 2000  Gabriele Cosmo (config-V02-00-05)
 - Added reference to new "parameterisations" top category.
