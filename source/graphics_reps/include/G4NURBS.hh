@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NURBS.hh,v 1.1 1999-01-07 16:09:10 gunter Exp $
+// $Id: G4NURBS.hh,v 1.2 1999-05-12 16:10:45 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Olivier Crumeyrolle  12 September 1996
@@ -241,10 +241,7 @@ public:
 protected:
 		
   // little structure containing data for each direction
-  class	t_Dir;
-  friend class t_Dir;
-  class	t_Dir {
-  public: 
+  struct t_Dir {
     t_order      order;
     t_inddCtrlPt nbrCtrlPts;
     t_indKnot    nbrKnots;

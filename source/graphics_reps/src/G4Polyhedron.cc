@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polyhedron.cc,v 1.1 1999-01-07 16:09:18 gunter Exp $
+// $Id: G4Polyhedron.cc,v 1.2 1999-05-12 16:11:04 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -91,6 +91,7 @@ G4Polyhedron & G4Polyhedron::operator=(const G4Polyhedron &from)
  ***********************************************************************/
 {
   if (this == &from) return *this;
+  G4VVisPrim::operator=(from);
   delete [] pV;
   delete [] pF;
   if (from.nvert > 0  && from.nface > 0) {

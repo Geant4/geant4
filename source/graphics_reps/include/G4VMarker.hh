@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VMarker.hh,v 1.1 1999-01-07 16:09:13 gunter Exp $
+// $Id: G4VMarker.hh,v 1.2 1999-05-12 16:10:54 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,9 +34,9 @@
 // Also in G4ViewParameters is a "global marker scale" which is a
 // factor by which all marker sizes are multiplied before drawing.
 //
-// Thus the graphics system driver scene code might look like:
+// Thus the graphics system driver scene handler code might look like:
 //
-// void G4XXXGraphicsScene::AddPrimitive (const G4Circle& circle) {
+// void G4XXXGraphicsSceneHandler::AddPrimitive (const G4Circle& circle) {
 //   G4bool hidden = !(fpView -> GetViewParameters().IsMarkerNotHidden());
 //   const G4Colour&     colour = GetColour (circle);  // Base class GetColour.
 //   G4VMarker::FillStyle style = circle.GetFillStyle();
@@ -78,8 +78,15 @@ public:
   // Constructors...
   G4VMarker ();
   G4VMarker (const G4VMarker& marker);
-  G4VMarker& operator = (const G4VMarker& right);
   G4VMarker (const G4Point3D& pos);
+
+  //////////////////////////////////////////////////////
+  // Destructor...
+  virtual ~G4VMarker ();
+
+  //////////////////////////////////////////////////////
+  // Assignment...
+  virtual G4VMarker& operator = (const G4VMarker& right);
 
   /////////////////////////////////////////////////////
   // Get functions...
@@ -104,8 +111,8 @@ public:
   void SetFillStyle      (FillStyle);
 
   // Access functions to the string for user custimizable information
-  virtual   const G4String&  GetInfo() const { return fInfo ;}
-  virtual   void             SetInfo( const G4String& info ){ fInfo = info ;}
+  virtual   const G4String&  GetInfo() const;
+  virtual   void             SetInfo( const G4String& info );
 
 private:
   G4Point3D fPosition;

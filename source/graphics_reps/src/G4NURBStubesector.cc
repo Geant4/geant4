@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NURBStubesector.cc,v 1.1 1999-01-07 16:09:17 gunter Exp $
+// $Id: G4NURBStubesector.cc,v 1.2 1999-05-12 16:11:02 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -197,7 +197,7 @@ const char*	G4NURBStubesector::Whoami() const
 
 		G4NURBStubesector::~G4NURBStubesector()
 		{
-		if (mpwhoami) { delete mpwhoami; mpwhoami = NULL; };
+		if (mpwhoami) { delete [] mpwhoami; mpwhoami = NULL; };
 		}
 
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NURBSbox.hh,v 1.1 1999-01-07 16:09:10 gunter Exp $
+// $Id: G4NURBSbox.hh,v 1.2 1999-05-12 16:10:46 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,12 +23,8 @@
 class	G4NURBSbox : public G4NURBS
 	{
 	public:	G4NURBSbox(G4double DX, G4double DY, G4double DZ);
-virtual	const char*	Whoami() const;
+	  const char*	Whoami() const;
 	};
 
 #endif
 // end of __C_G4NURBSbox__
-
-
-
-

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VMarker.cc,v 1.1 1999-01-07 16:09:18 gunter Exp $
+// $Id: G4VMarker.cc,v 1.2 1999-05-12 16:11:05 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -13,6 +13,19 @@
 #include "G4VMarker.hh"
 
 #include "G4VisAttributes.hh"
+
+G4VMarker::~G4VMarker () {}
+
+G4VMarker& G4VMarker::operator = (const G4VMarker& right) {
+  if (&right == this) return *this;
+  G4VVisPrim::operator = (right);
+  fPosition   = right.fPosition;
+  fWorldSize  = right.fWorldSize;  
+  fScreenSize = right.fScreenSize;
+  fFillStyle  = right.fFillStyle;
+  fInfo       = right.fInfo;
+  return *this;
+}
 
 ostream& operator << (ostream& os, const G4VMarker& marker) {
   os << "G4VMarker: position: " << marker.fPosition
@@ -38,11 +51,17 @@ ostream& operator << (ostream& os, const G4VMarker& marker) {
 
 G4bool operator != (const G4VMarker& m1, const G4VMarker& m2) {
   if (
-      (m1.fWorldSize != m2.fWorldSize) ||
-      (m1.fScreenSize != m2.fScreenSize) ||
-      (m1.fFillStyle != m2.fFillStyle) ||
+      !((G4VVisPrim) m1 == (G4VVisPrim) m2)  ||
+      (m1.fWorldSize != m2.fWorldSize)       ||
+      (m1.fScreenSize != m2.fScreenSize)     ||
+      (m1.fFillStyle != m2.fFillStyle)       ||
       !(m1.fPosition == m2.fPosition)
       )
     return true;
   return false;
 }
+
+const G4String& G4VMarker::GetInfo() const { return fInfo ;}
+
+void G4VMarker::SetInfo( const G4String& info ){ fInfo = info ;}
+

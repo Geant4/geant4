@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Visible.hh,v 1.1 1999-01-07 16:09:15 gunter Exp $
+// $Id: G4Visible.hh,v 1.2 1999-05-12 16:10:58 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,6 +18,8 @@
 #ifndef G4VISIBLE_HH
 #define G4VISIBLE_HH
 
+#include "globals.hh"
+
 class G4VisAttributes;
 class ostream;
 
@@ -29,8 +31,12 @@ public:
 
   G4Visible ();
   G4Visible (const G4Visible& visible);
-  G4Visible& operator = (const G4Visible& right);
   G4Visible (const G4VisAttributes* pVA);
+
+  virtual ~G4Visible ();
+
+  virtual G4Visible& operator = (const G4Visible& right);
+  virtual G4bool operator == (const G4Visible& right) const;
 
   const G4VisAttributes* GetVisAttributes () const;
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Point3DList.cc,v 1.1 1999-01-07 16:09:17 gunter Exp $
+// $Id: G4Point3DList.cc,v 1.2 1999-05-12 16:11:03 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -14,6 +14,8 @@
 #include "G4Point3DList.hh"
 
 #include "G4ios.hh"
+
+G4Point3DList::~G4Point3DList () {}
 
 ostream& operator << (ostream& os, const G4Point3DList& points)
 {

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NURBShexahedron.hh,v 1.1 1999-01-07 16:09:11 gunter Exp $
+// $Id: G4NURBShexahedron.hh,v 1.2 1999-05-12 16:10:49 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hexa hedron builder prototype
@@ -38,7 +38,7 @@ class	G4NURBShexahedron : public G4NURBS
 	// in anticlockwise sens, then the same for front side)
 
 	public:	G4NURBShexahedron(const G4ThreeVector Corners [8]);
-virtual	const char*	Whoami() const;
+	  const char*	Whoami() const;
 	};
 
 #endif

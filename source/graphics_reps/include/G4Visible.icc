@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Visible.icc,v 1.1 1999-01-07 16:09:15 gunter Exp $
+// $Id: G4Visible.icc,v 1.2 1999-05-12 16:11:00 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,11 +16,6 @@ inline G4Visible::G4Visible (): fpVisAttributes (0) {}
 inline G4Visible::G4Visible (const G4Visible& visible):
   fpVisAttributes (visible.fpVisAttributes)
 {}
-
-inline G4Visible& G4Visible::operator = (const G4Visible& right) {
-  fpVisAttributes = right.fpVisAttributes;
-  return *this;
-}
 
 inline G4Visible::G4Visible (const G4VisAttributes* pVA):
   fpVisAttributes (pVA)

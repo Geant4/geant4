@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Point3DList.hh,v 1.1 1999-01-07 16:09:11 gunter Exp $
+// $Id: G4Point3DList.hh,v 1.2 1999-05-12 16:10:51 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,10 +26,7 @@ friend ostream& operator << (ostream& os, const G4Point3DList& points);
 public:
 
   virtual ~G4Point3DList();
-  //  Destructor.
 
 };
-
-#include "G4Point3DList.icc"
 
 #endif

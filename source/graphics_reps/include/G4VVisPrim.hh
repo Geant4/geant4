@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VVisPrim.hh,v 1.1 1999-01-07 16:09:14 gunter Exp $
+// $Id: G4VVisPrim.hh,v 1.2 1999-05-12 16:10:56 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,7 +16,6 @@
 #ifndef G4VVISPRIM_HH
 #define G4VVISPRIM_HH
 
-#include "globals.hh"
 #include "G4Visible.hh"
 
 class ostream;
@@ -30,10 +29,12 @@ public:
 
   G4VVisPrim ();
   G4VVisPrim (const G4VVisPrim& prim);
-  G4VVisPrim& operator = (const G4VVisPrim& right);
   G4VVisPrim (const G4VisAttributes* pVA);
 
-  virtual G4bool operator == (const G4VVisPrim& prim) const;
+  virtual ~G4VVisPrim ();
+
+  virtual G4VVisPrim& operator = (const G4VVisPrim& right);
+  virtual G4bool operator == (const G4VVisPrim& right) const;
 
 };
 
