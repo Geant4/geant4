@@ -63,7 +63,7 @@
       G4double impactMax = fancyNucleus->GetOuterRadius()+projectile->GetOuterRadius();
       G4double aX=(2.*G4UniformRand()-1.)*impactMax;
       G4double aY=(2.*G4UniformRand()-1.)*impactMax;
-      G4ThreeVector pos(aX, aY, -2.*impactMax);
+      G4ThreeVector pos(aX, aY, -2.*impactMax-5.*fermi);
       debug.push_back("Impact parameter");
       debug.push_back(aX);
       debug.push_back(aY);
@@ -83,11 +83,14 @@
       nucleonMom.setZ(nucleonMom.vect().mag());
       nucleonMom.setX(0);
       nucleonMom.setY(0);
+      nucleonMom.setZ(0);
       while( (aNuc=projectile->GetNextNucleon()) )
       {
 	G4LorentzVector p4 = aNuc->GetMomentum();	
 	tmpV+=p4;
-	G4KineticTrack * it = new G4KineticTrack(aNuc, aNuc->GetPosition()+pos, nucleonMom );
+	G4ThreeVector stuff(aNuc->GetPosition());
+	stuff += pos;
+	G4KineticTrack * it = new G4KineticTrack(aNuc, stuff, nucleonMom );
         it->SetState(G4KineticTrack::outside);
 	initalState->push_back(it);
       }

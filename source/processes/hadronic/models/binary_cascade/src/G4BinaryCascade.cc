@@ -255,10 +255,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
   for(iter = secondaries->begin(); iter != secondaries->end(); ++iter)
   {
     theSecondaryList.push_back(*iter);
-    G4ThreeVector pos = (*iter)->GetPosition();
-    G4LorentzVector mom = (*iter)->Get4Momentum();
-    theProjectileList.push_back(new G4KineticTrack((*iter)->GetDefinition(), 0.,
-						   pos, mom));
+    theProjectileList.push_back(new G4KineticTrack(*(*iter)));
   }
   secondaries->clear(); // Don't leave "G4KineticTrack *"s in two vectors
 
@@ -1427,12 +1424,12 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
 
   for_each( theSecondaryList.begin(),theSecondaryList.end(),
            SelectFromKTV(kt_outside,G4KineticTrack::outside));
-//  PrintKTVector(kt_outside, G4std::string("DoTimeStep - found outside"));	  
+  PrintKTVector(kt_outside, G4std::string("DoTimeStep - found outside"));	  
   G4KineticTrackVector * kt_inside = new G4KineticTrackVector;
 
   for_each( theSecondaryList.begin(),theSecondaryList.end(),
            SelectFromKTV(kt_inside, G4KineticTrack::inside));
-//  PrintKTVector(kt_inside, G4std::string("DoTimeStep - found inside"));	  
+  PrintKTVector(kt_inside, G4std::string("DoTimeStep - found inside"));	  
   for ( iter =theSecondaryList.begin(); iter != theSecondaryList.end(); ++iter)
   {
      if ( (*iter)->GetPosition().mag() < nucleusSize )
@@ -1473,7 +1470,7 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
   G4KineticTrackVector * kt_gone_in = new G4KineticTrackVector;
   for_each( kt_outside->begin(),kt_outside->end(),
            SelectFromKTV(kt_gone_in,G4KineticTrack::inside));
-//  PrintKTVector(kt_gone_in, G4std::string("DoTimeStep - gone in"));	  
+  PrintKTVector(kt_gone_in, G4std::string("DoTimeStep - gone in"));	  
 
    //PrintKTVector(&theSecondaryList,G4std::string("aft trsprt....."));
   for ( iter =kt_gone_in->begin(); iter != kt_gone_in->end(); ++iter)
@@ -1491,7 +1488,7 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
   G4KineticTrackVector * kt_gone_out = new G4KineticTrackVector;
   for_each( kt_inside->begin(),kt_inside->end(),
            SelectFromKTV(kt_gone_out, G4KineticTrack::gone_out));
-//  PrintKTVector(kt_gone_out, G4std::string("DoTimeStep - gone out"));	  
+  PrintKTVector(kt_gone_out, G4std::string("DoTimeStep - gone out"));	  
   for ( iter =kt_gone_out->begin(); iter != kt_gone_out->end(); ++iter)
   {
 	if (  ((*iter)->GetPosition().mag() < nucleusSize ) ) G4cout << " DoTimeStep Error: gone out is in " << *iter << G4endl;
