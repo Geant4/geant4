@@ -16,10 +16,11 @@
 name := G4persistency
 G4ODBMS := true
 
-SUBDIRS = global digits+hits/hits events run \
+SUBDIRS = digits+hits/hits events run geometry/global \
           geometry/management geometry/solids/CSG geometry/solids/Boolean \
           management
-SUBLIBS = G4pglobal G4phits G4pevents G4prun G4pgeomn G4pcsg G4pgeomBoolean \
+SUBLIBS = G4phits G4pevents G4prun G4pgeomGlobal \
+          G4pgeomn G4pcsg G4pgeomBoolean \
           G4pmanagement
 
 ifndef G4INSTALL
@@ -43,7 +44,7 @@ ifndef G4SCHEMA_FDID
 	@echo G4SCHEMA_FDID is not defined.  Stop.
 	exit 1
 endif
-	@for dir in $(SUBDIRS); do (cd $$dir; G4ODBMS_NODDL=1; export G4ODBMS_NODDL; $(MAKE) clean); done
+	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) clean); done
 	@rm -f $(G4TMPSCHEMA_BOOT_DIR)/G4TMPSCHEMA
 	@rm -f $(G4TMPSCHEMA_BOOT_DIR)/G4TMPSCHEMA.FDDB
 	@rm -f $(G4TMPSCHEMA_BOOT_DIR)/*.G4TMPSCHEMA.DB
