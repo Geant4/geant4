@@ -1,4 +1,4 @@
-$Id: History,v 1.10 1999-05-19 21:46:52 gcosmo Exp $
+$Id: History,v 1.11 1999-05-19 21:49:59 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,6 +20,8 @@ committal in the CVS repository !
 May 19th G.Cosmo (global-01-00-02)
 - templates.hh: added definition of DBL_EPSILON and FLT_EPSILON.
   Added 'F' to single precision literal constants.
+- Updates to STLInterface wrappers from the STL task-force. Added
+  AIX-xlC STL wrappers.
 
 May 17th J.Allison
 - Added #undef os_times in G4Timer.hh to avoid clash with ObjectSpace when
