@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDecayChan.hh,v 1.13 2003-09-15 17:11:01 mkossov Exp $
+// $Id: G4QDecayChan.hh,v 1.14 2003-10-08 14:48:21 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QDecayChan ----------------
@@ -32,7 +32,7 @@
 #ifndef G4QDecayChan_h
 #define G4QDecayChan_h 1
 
-#include "g4std/iostream"
+#include <iostream>
 #include "globals.hh"
 #include "G4QPDGCodeVector.hh"
 
@@ -74,7 +74,7 @@ private:
 };
 
 // Not member operators
-G4std::ostream&   operator<<(G4std::ostream& lhs, G4QDecayChan& rhs);
+std::ostream&   operator<<(std::ostream& lhs, G4QDecayChan& rhs);
 //----------------------------------------------------------------------------------------
 
 inline G4int G4QDecayChan::operator==(const G4QDecayChan& rhs) const {return this==&rhs;}

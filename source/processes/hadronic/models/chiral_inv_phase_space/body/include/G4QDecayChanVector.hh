@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDecayChanVector.hh,v 1.12 2003-09-15 17:11:01 mkossov Exp $
+// $Id: G4QDecayChanVector.hh,v 1.13 2003-10-08 14:48:21 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCandidateVector ----------------
@@ -33,9 +33,9 @@
 #define G4QDecayChanVector_h 1
 
 #include "G4QDecayChan.hh"
-#include "g4std/vector"
+#include <vector>
 
-typedef G4std::vector<G4QDecayChan *> G4QDecayChanVector;
+typedef std::vector<G4QDecayChan *> G4QDecayChanVector;
 struct DeleteQDecayChan{void operator()(G4QDecayChan *aQ){delete aQ;}};
 
 #endif

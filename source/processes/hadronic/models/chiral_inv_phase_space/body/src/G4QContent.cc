@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QContent.cc,v 1.24 2003-09-15 17:11:04 mkossov Exp $
+// $Id: G4QContent.cc,v 1.25 2003-10-08 14:48:23 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QContent ----------------
@@ -90,7 +90,7 @@ const G4QContent& G4QContent::operator=(const G4QContent &right)
 }
 
 // Standard output for QC {d,u,s,ad,au,as}
-G4std::ostream& operator<<(G4std::ostream& lhs, G4QContent& rhs)
+std::ostream& operator<<(std::ostream& lhs, G4QContent& rhs)
 {//      =========================================
   lhs << "{" << rhs.GetD() << "," << rhs.GetU() << "," << rhs.GetS() << ","
       << rhs.GetAD() << "," << rhs.GetAU() << "," << rhs.GetAS() << "}";
@@ -98,7 +98,7 @@ G4std::ostream& operator<<(G4std::ostream& lhs, G4QContent& rhs)
 }
 
 // Standard output for const QC {d,u,s,ad,au,as}
-G4std::ostream& operator<<(G4std::ostream& lhs, const G4QContent& rhs)
+std::ostream& operator<<(std::ostream& lhs, const G4QContent& rhs)
 {//      ===============================================
   lhs << "{" << rhs.GetD() << "," << rhs.GetU() << "," << rhs.GetS() << ","
       << rhs.GetAD() << "," << rhs.GetAU() << "," << rhs.GetAS() << "}";

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QChipolino.hh,v 1.13 2003-09-15 17:11:01 mkossov Exp $
+// $Id: G4QChipolino.hh,v 1.14 2003-10-08 14:48:21 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QChipolino ----------------
@@ -74,8 +74,8 @@ private:
   G4double              minM;                 // Minimal Mass of Chipolino
 };
 
-G4std::ostream& operator<<(G4std::ostream& lhs, G4QChipolino& rhs);
-//G4std::ostream& operator<<(G4std::ostream& lhs, const G4QChipolino& rhs);
+std::ostream& operator<<(std::ostream& lhs, G4QChipolino& rhs);
+//std::ostream& operator<<(std::ostream& lhs, const G4QChipolino& rhs);
 inline G4int G4QChipolino::operator==(const G4QChipolino& right) const {return this==&right;}
 inline G4int G4QChipolino::operator!=(const G4QChipolino& right) const {return this!=&right;}
  

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCandidate.cc,v 1.22 2003-09-15 17:11:03 mkossov Exp $
+// $Id: G4QCandidate.cc,v 1.23 2003-10-08 14:48:23 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCandidate ----------------
@@ -32,7 +32,7 @@
 //#define debug
 
 #include "G4QCandidate.hh"
-#include "g4std/algorithm"
+#include <algorithm>
 
 G4QCandidate::G4QCandidate() : relativeProbability(0.),integralProbability(0.)
 {
@@ -103,7 +103,7 @@ G4QCandidate::~G4QCandidate()
 #ifdef debug
   G4cout<<"~G4QCandidate: before thePClusters nC="<<thePClusters.entries()<<G4endl;
 #endif
-  G4std::for_each(thePClusters.begin(), thePClusters.end(), DeleteQParentCluster());
+  std::for_each(thePClusters.begin(), thePClusters.end(), DeleteQParentCluster());
 #ifdef debug
   G4cout<<"~G4QCandidate: === DONE ==="<<G4endl;
 #endif

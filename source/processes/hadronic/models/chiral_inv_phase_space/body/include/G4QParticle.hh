@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParticle.hh,v 1.14 2003-09-15 17:11:02 mkossov Exp $
+// $Id: G4QParticle.hh,v 1.15 2003-10-08 14:48:22 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QParticle ----------------
@@ -32,7 +32,7 @@
 #ifndef G4QParticle_h
 #define G4QParticle_h 1
 
-#include "g4std/iostream"
+#include <iostream>
 #include "globals.hh"
 #include "G4QDecayChanVector.hh"
 
@@ -84,7 +84,7 @@ private:
 };
 
 // Not member operators
-G4std::ostream&   operator<<(G4std::ostream& lhs, G4QParticle& rhs);
+std::ostream&   operator<<(std::ostream& lhs, G4QParticle& rhs);
 // Not member functions
 //----------------------------------------------------------------------------------------
 

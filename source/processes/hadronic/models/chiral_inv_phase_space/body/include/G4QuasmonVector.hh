@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasmonVector.hh,v 1.13 2003-09-15 17:11:03 mkossov Exp $
+// $Id: G4QuasmonVector.hh,v 1.14 2003-10-08 14:48:22 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QuasmonVector ----------------
@@ -33,9 +33,9 @@
 #define G4QuasmonVector_h 1
 
 #include "G4Quasmon.hh"
-#include "g4std/vector"
+#include <vector>
 
-typedef G4std::vector<G4Quasmon *> G4QuasmonVector;
+typedef std::vector<G4Quasmon *> G4QuasmonVector;
 struct DeleteQuasmon{ void operator()(G4Quasmon *aN){delete aN;} };
 
 #endif

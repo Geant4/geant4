@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadronVector.hh,v 1.14 2003-09-15 17:11:02 mkossov Exp $
+// $Id: G4QHadronVector.hh,v 1.15 2003-10-08 14:48:21 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCandidateVector ----------------
@@ -33,9 +33,9 @@
 #define G4QHadronVector_h 1
 
 #include "G4QHadron.hh"
-#include "g4std/vector"
+#include <vector>
 
-typedef G4std::vector<G4QHadron *> G4QHadronVector;
+typedef std::vector<G4QHadron *> G4QHadronVector;
 struct DeleteQHadron { void operator()(G4QHadron * aQ){delete aQ;}};
 
 #endif

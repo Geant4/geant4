@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.hh,v 1.24 2003-09-15 17:11:03 mkossov Exp $
+// $Id: G4Quasmon.hh,v 1.25 2003-10-08 14:48:22 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -137,7 +137,7 @@ inline G4QContent      G4Quasmon::GetQC()        const {return valQ;}
 inline G4QPDGCode      G4Quasmon::GetQPDG()      const {return G4QPDGCode(valQ);}
 inline G4int           G4Quasmon::GetStatus()    const {return status;}
 inline void            G4Quasmon::ClearOutput()        
-      {G4std::for_each(theQHadrons.begin(), theQHadrons.end(), DeleteQHadron());
+      {std::for_each(theQHadrons.begin(), theQHadrons.end(), DeleteQHadron());
        theQHadrons.clear();
       }
 inline void            G4Quasmon::KillEnvironment()
@@ -170,7 +170,7 @@ inline void G4Quasmon::ClearQuasmon()
   valQ  = zeroQC;
   q4Mom = nothing;
   status= 0;
-  G4std::for_each(theQCandidates.begin(), theQCandidates.end(), DeleteQCandidate());
+  std::for_each(theQCandidates.begin(), theQCandidates.end(), DeleteQCandidate());
   theQCandidates.clear();
 
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCandidateVector.hh,v 1.15 2003-09-15 17:11:01 mkossov Exp $
+// $Id: G4QCandidateVector.hh,v 1.16 2003-10-08 14:48:21 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCandidateVector ----------------
@@ -33,9 +33,9 @@
 #define G4QCandidateVector_h 1
 
 #include "G4QCandidate.hh"
-#include "g4std/vector"
+#include <vector>
 
-typedef G4std::vector<G4QCandidate *> G4QCandidateVector;
+typedef std::vector<G4QCandidate *> G4QCandidateVector;
 struct DeleteQCandidate{ void operator()(G4QCandidate * aQ){delete aQ;}};
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QChipolino.cc,v 1.18 2003-09-15 17:11:04 mkossov Exp $
+// $Id: G4QChipolino.cc,v 1.19 2003-10-08 14:48:23 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QChipolino ----------------
@@ -499,7 +499,7 @@ const G4QChipolino& G4QChipolino::operator=(const G4QChipolino &right)
 G4QChipolino::~G4QChipolino() {}
 
 // Standard output for G4QChipolino
-G4std::ostream& operator<<(G4std::ostream& lhs, G4QChipolino& rhs)
+std::ostream& operator<<(std::ostream& lhs, G4QChipolino& rhs)
 {//      ===========================================
   lhs<<"{1="<<rhs.GetQPDG1()<<",2="<<rhs.GetQPDG2()<< "}";
   return lhs;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.31 2003-09-15 17:11:07 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.32 2003-10-08 14:48:24 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -208,14 +208,14 @@ const G4QNucleus& G4QNucleus::operator=(const G4QNucleus& right)
 }
 
 // Standard output for QNucleus {Z - a#of protons, N - a#of neutrons, S - a#of lambdas}
-G4std::ostream& operator<<(G4std::ostream& lhs, G4QNucleus& rhs)
+std::ostream& operator<<(std::ostream& lhs, G4QNucleus& rhs)
 {//      =========================================
   lhs<<"{Z="<<rhs.GetZ()<<",N="<<rhs.GetN()<<",S="<<rhs.GetS()<< ",M="<<rhs.GetGSMass()<<"}";
   return lhs;
 }
 
 // Standard output for const QNucleus {Z - a#of protons, N - a#of neutrons, S - a#of lambdas}
-G4std::ostream& operator<<(G4std::ostream& lhs, const G4QNucleus& rhs)
+std::ostream& operator<<(std::ostream& lhs, const G4QNucleus& rhs)
 {//      ===============================================
   lhs<<"{Z="<<rhs.GetZ()<<",N="<<rhs.GetN()<<",S="<<rhs.GetS()<< "}";
   return lhs;

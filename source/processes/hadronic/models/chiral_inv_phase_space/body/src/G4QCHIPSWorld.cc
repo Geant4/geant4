@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCHIPSWorld.cc,v 1.22 2003-09-15 17:11:03 mkossov Exp $
+// $Id: G4QCHIPSWorld.cc,v 1.23 2003-10-08 14:48:23 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCHIPSWorld ----------------
@@ -59,7 +59,7 @@ const G4QCHIPSWorld& G4QCHIPSWorld::operator=(const G4QCHIPSWorld &right)
 }
 
 // Standard output for CHIPS World
-G4std::ostream& operator<<(G4std::ostream& lhs, G4QCHIPSWorld& rhs)
+std::ostream& operator<<(std::ostream& lhs, G4QCHIPSWorld& rhs)
 //       ============================================
 {
   // @@ Later make a list of activated particles and clusters
@@ -109,7 +109,7 @@ G4QParticleVector* G4QCHIPSWorld::InitCHIPSWorld(G4int nOfParts)
   }
   else if (nOfParts<0)                          // Cleaning up the CHIPS Word (a possibility)
   {
-    G4std::for_each(theWorld.begin(), theWorld.end(), DeleteQParticle());
+    std::for_each(theWorld.begin(), theWorld.end(), DeleteQParticle());
     theWorld.clear();
     init=0;
   }

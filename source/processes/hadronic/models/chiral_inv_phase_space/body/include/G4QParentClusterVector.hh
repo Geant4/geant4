@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParentClusterVector.hh,v 1.12 2003-09-15 17:11:02 mkossov Exp $
+// $Id: G4QParentClusterVector.hh,v 1.13 2003-10-08 14:48:22 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCandidateVector ----------------
@@ -33,9 +33,9 @@
 #define G4QParentClusterVector_h 1
 
 #include "G4QParentCluster.hh"
-#include "g4std/vector"
+#include <vector>
 
-typedef G4std::vector<G4QParentCluster *> G4QParentClusterVector;
+typedef std::vector<G4QParentCluster *> G4QParentClusterVector;
 struct DeleteQParentCluster{ void operator()(G4QParentCluster *aN){delete aN;} };
 
 #endif

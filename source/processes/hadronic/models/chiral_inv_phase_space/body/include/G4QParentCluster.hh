@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParentCluster.hh,v 1.14 2003-09-15 17:11:02 mkossov Exp $
+// $Id: G4QParentCluster.hh,v 1.15 2003-10-08 14:48:22 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QParentCluster ----------------
@@ -32,7 +32,7 @@
 #ifndef G4QParentCluster_h
 #define G4QParentCluster_h 1
 
-#include "g4std/iostream"
+#include <iostream>
 #include "globals.hh"
 #include "G4QContent.hh"
 
@@ -97,8 +97,8 @@ private:
 };
 
 // Not member operators
-G4std::ostream&   operator<<(G4std::ostream& lhs, G4QParentCluster& rhs);
-G4std::ostream&   operator<<(G4std::ostream& lhs, const G4QParentCluster& rhs);
+std::ostream&   operator<<(std::ostream& lhs, G4QParentCluster& rhs);
+std::ostream&   operator<<(std::ostream& lhs, const G4QParentCluster& rhs);
 
 inline G4int G4QParentCluster::operator==(const G4QParentCluster& rhs) const {return this==&rhs;}
 inline G4int G4QParentCluster::operator!=(const G4QParentCluster& rhs) const {return this!=&rhs;}
