@@ -361,7 +361,8 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
   G4ThreeVector boost   = pP.findBoostToCM();
   G4Fragment *fragmentP = GetAbradedNucleons (Dabr, AP, ZP, rP); 
   G4int nSecP           = theParticleChange.GetNumberOfSecondaries();
-  for (G4int i=0; i<nSecP; i++)
+  G4int i               = 0;
+  for (i=0; i<nSecP; i++)
   {
     TotalEPost += theParticleChange.GetSecondary(i)->
       GetParticle()->GetTotalEnergy();
@@ -409,7 +410,7 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
 //
   G4Fragment *fragmentT = GetAbradedNucleons (Dabr, AT, ZT, rT); 
   G4int nSec = theParticleChange.GetNumberOfSecondaries();
-  for (G4int i=nSecP; i<nSec; i++)
+  for (i=nSecP; i<nSec; i++)
   {
     TotalEPost += theParticleChange.GetSecondary(i)->
       GetParticle()->GetTotalEnergy();
@@ -459,7 +460,7 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
 // Now boost the secondaries from the projectile.
 //
   G4ThreeVector pBalance = pP.vect();
-  for (G4int i=0; i<nSecP; i++)
+  for (i=0; i<nSecP; i++)
   {
     G4DynamicParticle *dynamicP = theParticleChange.GetSecondary(i)->
       GetParticle();
@@ -502,7 +503,7 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
     G4cout <<"Secondary nucleons from projectile:" <<G4endl;
     G4cout <<"-----------------------------------" <<G4endl;
     G4cout.precision(7);
-    for (G4int i=0; i<nSecP; i++)
+    for (i=0; i<nSecP; i++)
     {
       G4cout <<"Particle # " <<i <<G4endl;
       theParticleChange.GetSecondary(i)->GetParticle()->DumpInfo();
@@ -523,7 +524,7 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
     G4cout <<"Secondary nucleons from target:" <<G4endl;
     G4cout <<"-------------------------------" <<G4endl;
     G4cout.precision(7);
-    for (G4int i=nSecP; i<nSec; i++)
+    for (i=nSecP; i<nSec; i++)
     {
       G4cout <<"Particle # " <<i <<G4endl;
       theParticleChange.GetSecondary(i)->GetParticle()->DumpInfo();
