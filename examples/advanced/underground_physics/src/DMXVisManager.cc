@@ -58,11 +58,6 @@
 #include "G4FukuiRenderer.hh"
 #endif
 
-#ifdef G4VIS_USE_OPACS
-#include "G4Wo.hh"
-#include "G4Xo.hh"
-#endif
-
 #ifdef G4VIS_USE_OPENGLX
 #include "G4OpenGLImmediateX.hh"
 #include "G4OpenGLStoredX.hh"
@@ -113,11 +108,6 @@ void DMXVisManager::RegisterGraphicsSystems () {
 
 #ifdef G4VIS_USE_DAWN
   RegisterGraphicsSystem (new G4FukuiRenderer);
-#endif
-
-#ifdef G4VIS_USE_OPACS
-  RegisterGraphicsSystem (new G4Wo);
-  RegisterGraphicsSystem (new G4Xo);
 #endif
 
 #ifdef G4VIS_USE_OPENGLX
