@@ -8,5 +8,5 @@ ve/copy it(1,1:27) xxx
 ve/copy it(2,1:27) errxxx
 ve/copy it(3,1:27) yyy
 ve/copy it(4,1:27) erryyy
-/GRAPHICS/HPLOT/ERRORS xxx yyy errxxx erryyy 27 20 0.2
+/GRAPHICS/HPLOT/ERRORS xxx yyy errxxx erryyy 27 20 0.1
 

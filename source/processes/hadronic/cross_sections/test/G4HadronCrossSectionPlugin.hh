@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4HadronCrossSectionPlugin.hh,v 1.3 2001-07-11 10:03:48 gunter Exp $
+// $Id: G4HadronCrossSectionPlugin.hh,v 1.4 2001-08-01 17:03:20 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -59,7 +59,7 @@ public:
 
    G4double
    GetCrossSection(const G4DynamicParticle* aParticle,
-                   const G4Element* anElement)
+                   const G4Element* anElement, G4double aTemp)
    {
       return 999.*millibarn;
    }

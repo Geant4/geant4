@@ -15,7 +15,7 @@ ve/copy v(1,1:001) x
 ve/copy v(2,1:001) q
 ve/copy v(3,1:001) y
 ve/copy v(4,1:001) e
- null   0.220000   0.220000    3.24000E-05    7.56000E-02
+ null   0.0000   0.440000    3.24000E-05    7.56000E-02
 exec ../analyse ../../logs/liste.p_c.he4.90degree.p_c
 /GRAPHICS/HPLOT/ERRORS x y q e 001 24 0.2
  atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'

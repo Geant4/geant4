@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: CHIPS_StringModel_Analysis.cc,v 1.6 2001-07-31 09:43:55 hpw Exp $
+// $Id: CHIPS_StringModel_Analysis.cc,v 1.7 2001-08-01 17:04:01 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -102,7 +102,126 @@
 #include "G4Step.hh"
 #include "G4StepPoint.hh"
 
-//#include "../../../../generator/kinetic_model/src/G4GeneratorPrecompoundInterface.cc"
+class PiToKPoint
+{
+ public:
+    
+   PiToKPoint(double low, double high)
+   {
+     thePip = thePim = theKp = theKm = 0;
+     highPl = high;
+     lowPl = low;
+   }
+   
+   bool push_back(const G4DynamicParticle * aPart)
+   {
+     double pl = aPart->GetMomentum().z();
+     if( !(pl<=highPl && pl>lowPl) ) return false;
+     
+     const G4ParticleDefinition * currentDef = aPart->GetDefinition();
+     if( currentDef == G4PionPlus::PionPlusDefinition() )
+     {
+       thePip++;
+     }
+     else if( currentDef == G4PionMinus::PionMinusDefinition() )
+     {
+       thePim++;
+     }
+     else if( currentDef == G4KaonPlus::KaonPlusDefinition() )
+     {
+       theKp++;
+     }
+     else if( currentDef == G4KaonMinus::KaonMinusDefinition() )
+     {
+       theKm++;
+     }
+     else 
+     {
+       return false;
+     }
+     return true;
+   }
+   
+   void dump()
+   {
+     cerr << endl
+          << "Ktopi dump "
+          <<(highPl+lowPl)/2.<<" "
+	  <<thePip <<" "
+	  <<thePim <<" "
+	  <<theKp <<" "
+	  <<theKm <<" "
+	  <<double(theKp)/double(max(1, thePip))<<" "
+	  <<double(theKm)/double(max(1, thePim))<<endl;
+   }
+      
+ private:   
+   double highPl;
+   double lowPl;
+   int thePip;
+   int thePim;
+   int theKp;
+   int theKm;
+   
+};
+
+class KtoPi
+{
+ public:  
+   KtoPi(double highCosTh)
+   {
+     theHighCosTh = highCosTh;
+     
+     PiToKPoint* p1 = new PiToKPoint(6.8*GeV, 7.2*GeV);
+     PiToKPoint* p2 = new PiToKPoint(9.8*GeV, 10.2*GeV);
+     PiToKPoint* p3 = new PiToKPoint(14.8*GeV, 15.2*GeV);
+     PiToKPoint* p4 = new PiToKPoint(19.6*GeV, 20.4*GeV);
+     PiToKPoint* p5 = new PiToKPoint(29.4*GeV, 30.6*GeV);
+     PiToKPoint* p6 = new PiToKPoint(39.2*GeV, 40.8*GeV);
+     PiToKPoint* p7 = new PiToKPoint(64.*GeV, 66.*GeV);
+     PiToKPoint* p8 = new PiToKPoint(132.*GeV, 138.*GeV);
+     
+     theData.push_back(p1);
+     theData.push_back(p2);
+     theData.push_back(p3);
+     theData.push_back(p4);
+     theData.push_back(p5);
+     theData.push_back(p6);
+     theData.push_back(p7);
+     theData.push_back(p8);
+   }
+   
+   void push_back(const G4DynamicParticle * aPart)
+   {
+     int i;
+     double pl = aPart->GetMomentum().z();
+     double pp = aPart->GetMomentum().mag();
+     if(pl<6.*GeV) return;
+     if(pl/pp<theHighCosTh) return;
+     
+     for(i=0; i<theData.size(); i++)
+     {
+       theData[i]->push_back(aPart);
+     }
+   }
+   
+   void dump()
+   {
+     int i;
+     for(i=0; i<theData.size(); i++)
+     {
+       theData[i]->dump();
+     }   
+   }
+   
+ private:
+   KtoPi(){}
+   KtoPi(const KtoPi &){}
+ 
+ private:
+   vector<PiToKPoint *> theData;
+   double theHighCosTh;
+};
 
  int main()
   {
@@ -671,9 +790,9 @@
     G4cin >> incomingEnergy;
     incomingEnergy *= GeV/MeV;
 
-//    theTheoModel->SetTransport(theCascade);
-     G4StringChipsParticleLevelInterface * theChipsCascade = new G4StringChipsParticleLevelInterface();
-     theTheoModel->SetTransport(theChipsCascade);
+    theTheoModel->SetTransport(theCascade);
+//     G4StringChipsParticleLevelInterface * theChipsCascade = new G4StringChipsParticleLevelInterface();
+//     theTheoModel->SetTransport(theChipsCascade);
 //    G4StringChipsInterface * theChips = new G4StringChipsInterface();
 //    theTheoModel->SetTransport(theChips);
 //    G4StringInfoDump * theDummyCascade = new G4StringInfoDump;
@@ -731,6 +850,8 @@
     G4String it;
     it = file+fileName;
     ANAParticleInfo theInformation(weight, it);
+    KtoPi theKtoPi(.9);
+    // some extra stuff for pi/K ratios @@@
  
     G4int k, i;
     for( k = kl; k <= kr; k++ )
@@ -785,7 +906,8 @@
           {
             second = aFinalState->GetSecondary(isec);
             aSec = second->GetDynamicParticle();
-            G4cout << "SECONDARIES info";
+            theKtoPi.push_back(aSec);
+	    G4cout << "SECONDARIES info";
             G4cout << aSec->GetDefinition()->GetPDGCharge()<<" ";
 	    if(aSec->GetDefinition()->GetPDGEncoding())
               G4cout << aSec->GetDefinition()->GetPDGEncoding()<<" ";
@@ -818,6 +940,7 @@
 	  {
 	    theInformation.Analyse();
 	    theInformation.Plot(fileName, l);
+	    theKtoPi.dump();
 	  }
 	} // end of event loop
       } // end of i loop

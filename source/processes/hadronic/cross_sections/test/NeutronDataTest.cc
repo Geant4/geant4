@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -24,19 +24,22 @@
 #include "G4NeutronInelasticCrossSection.hh"
 #include "G4Proton.hh"
 #include "G4ProtonInelasticCrossSection.hh"
+#include "G4HadronCrossSections.hh"
 
 
 main()
 {
    G4NeutronInelasticCrossSection aNDataSet;
    G4ProtonInelasticCrossSection aPDataSet;
+   G4HadronCrossSections aGeneralDataSet;
 //   G4Element* theElement = new G4Element("copper", "Cu", 29, 63.54*g/mole);
-   G4Element* theElement = new G4Element("copper", "Al", 13, 27.0*g/mole);
+//   G4Element* theElement = new G4Element("copper", "Al", 13, 27.0*g/mole);
+   G4Element* theElement = new G4Element("be    ", "Be",  4,  9.0*g/mole);
    G4ParticleDefinition* theParticleDefinition = G4Neutron::NeutronDefinition();
 
-   G4double ekin = 0.1*MeV;
+   G4double ekin = 410*GeV;
    G4DynamicParticle* theDynamicParticle;
-   while(ekin < 20*GeV)
+   while(ekin < 500*GeV)
    {
      ekin *= 1.1;
      theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
@@ -45,9 +48,11 @@ main()
      {
        cout << ekin/MeV 
             << " " 
-            << aNDataSet.GetCrossSection(theDynamicParticle, theElement)/millibarn
+            << aNDataSet.GetCrossSection(theDynamicParticle, theElement, 273*kelvin)/millibarn
             << " " 
-            << aPDataSet.GetCrossSection(theDynamicParticle, theElement)/millibarn
+            << aPDataSet.GetCrossSection(theDynamicParticle, theElement, 273*kelvin)/millibarn
+            << " " 
+            << aGeneralDataSet.GetInelasticCrossSection(theDynamicParticle, theElement)/millibarn
             << G4endl;
      }
      delete theDynamicParticle;

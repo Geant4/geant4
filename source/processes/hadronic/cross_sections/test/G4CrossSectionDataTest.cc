@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionDataTest.cc,v 1.3 2001-07-11 10:03:47 gunter Exp $
+// $Id: G4CrossSectionDataTest.cc,v 1.4 2001-08-01 17:03:19 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -75,8 +75,8 @@ int main()
    G4Material* theMaterial;
    switch (choice) {
     case 1:
-      theElement = new G4Element("copper", "Cu", 29, 63.54*g/mole);
-      theMaterial = new G4Material("copper", 29., 63.54*g/mole, 8.96*g/cm3, 
+      theElement = new G4Element("Be    ", "Be", 4, 63.54*g/mole);
+      theMaterial = new G4Material("copper", 4., 63.54*g/mole, 8.96*g/cm3, 
                                    kStateSolid);
       break;
     case 2:
@@ -132,7 +132,7 @@ int main()
    //   theParticleDefinition->DumpTable();
 
    G4double ekin;
-   G4cout << "Kinetic energy in GeV: ";
+   G4cout << "Kinetic energy in GeV: "<<G4endl;
    G4cin >> ekin;
 
 // Make a dynamic particle too
@@ -204,7 +204,7 @@ int main()
    //   sig = theCrossSectionDataStore.GetCrossSection(theDynamicParticle,
    //                                                  theElement);
    sig = theCrossSectionDataStore.GetCrossSection(theDynamicParticle,
-                                                  theElement);
+                                                  theElement, 273*kelvin);
    G4cout << theProcess->GetProcessName() << " cross section for " << 
            theParticleDefinition->GetParticleName() <<
            " on " << theElement->GetName() << G4endl;
