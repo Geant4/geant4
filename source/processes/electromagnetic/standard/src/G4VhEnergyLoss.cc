@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.cc,v 1.18 2001-07-11 10:03:31 gunter Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.19 2001-09-10 14:04:34 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -42,6 +42,7 @@
 // 23/01/01 : bug fixed in AlongStepDoIt , L.Urban
 // 27/03/01 : commented out the printing of subcutoff energies
 // 28/05/01 : V.Ivanchenko minor changes to provide ANSI -wall compilation 
+// 10/09/01 : bugfix in subcutoff delta generation, L.Urban
 // --------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -101,11 +102,8 @@ G4double G4VhEnergyLoss::UpperBoundEloss = 100.*TeV;
 G4int G4VhEnergyLoss::NbinEloss = 100 ;
 G4double G4VhEnergyLoss::RTable,G4VhEnergyLoss::LOGRTable;
 
-G4double G4VhEnergyLoss::c0N       = 9.0e-21*MeV*MeV*mm*mm ;
-G4double G4VhEnergyLoss::c1N       = 25.0e-21*keV*mm*mm    ;
-G4double G4VhEnergyLoss::c2N       = 13.25e-21*keV*mm*mm   ;
-G4double G4VhEnergyLoss::c3N       = 0.500e-21*mm*mm       ;
-G4int    G4VhEnergyLoss::Ndeltamax = 100                   ;
+G4double G4VhEnergyLoss::cN       = 0.077*MeV*cm2/g   ;
+G4int    G4VhEnergyLoss::Ndeltamax = 100              ;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
@@ -593,8 +591,15 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
                              T0=MinDeltaEnergyNow ;
 
         // compute nb of delta rays to be generated
-        G4int N=int(fragment*(c0N/(E*T0)+c1N/T0-(c2N+c3N*T0)/Tc)* 
-                (aMaterial->GetTotNbOfElectPerVolume())+0.5) ;
+        // approximate value based on Bethe-Bloch and
+        //   assuming an 1/E**2 delta spectrum
+
+        G4double deldedx=cN*aMaterial->GetDensity()*
+                         ((E+mass)*(E+mass)*log(Tc/T0)/(E*(E+mass))-
+                          0.5*(Tc-T0)/Tmax) ;
+        G4double delToverTc=1.-T0/Tc ;
+        G4double N = G4int(deldedx*fragment*delToverTc/(T0*log(Tc/T0))+0.5) ;
+        if(N > Ndeltamax) N = Ndeltamax ;
 
         G4double Px,Py,Pz ;
         G4ThreeVector ParticleDirection ;
@@ -686,6 +691,10 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
                deltaTrack->SetParentID(trackData.GetTrackID()) ;
 
                aParticleChange.AddSecondary(deltaTrack) ;
+ //  G4cout << " hEnLoss: subcutoff delta with T=" << T << " has been generated." << G4endl ;
+ //  G4cout << "  pre/postsafety: " << setw(12) << presafety << setw(12) << postsafety
+ //         << "  rcut=" << rcut << G4endl ; 
+ //  G4cout << "  x,y,z:" << setw(12) << xd << setw(12) << yd << setw(12) << zd << G4endl ;
 
                }
 

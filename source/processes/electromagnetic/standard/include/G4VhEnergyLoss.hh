@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.hh,v 1.8 2001-07-11 10:03:29 gunter Exp $
+// $Id: G4VhEnergyLoss.hh,v 1.9 2001-09-10 14:04:33 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -51,6 +51,7 @@
 // 22/10/98 cleanup , L.Urban
 // 02/02/99 several bugs fixed, L.Urban
 // 10/02/00  modifications , new e.m. structure, L.Urban
+// 10/09/01  bugfix in subcutoff delta generation, L.Urban
 //
 
 #ifndef G4VhEnergyLoss_h
@@ -233,7 +234,7 @@ class G4VhEnergyLoss : public G4VEnergyLoss
     static G4PhysicsTable* thepbarRangeCoeffBTable;
     static G4PhysicsTable* thepbarRangeCoeffCTable;
 
-    static G4double c0N,c1N,c2N,c3N ;    // coeffs to compute nb of deltas
+    static G4double cN ;                // coeff to compute nb of deltas
     static G4int Ndeltamax ;             // upper limit for nb of subcutoff
                                          // delta rays in one step
 
