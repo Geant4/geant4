@@ -43,6 +43,7 @@
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 #include "G4HadronicException.hh"
+#include "G4HadTmpUtil.hh"
 
 
 class G4ParticleDefinition;
@@ -292,7 +293,7 @@ inline G4double G4Fragment::GetGroundStateMass(void) const
 {
 	if (theA == 0) return 0.0; // photon
 	else return G4ParticleTable::GetParticleTable()->
-		    GetIonTable()->GetIonMass(static_cast<G4int>(theZ),static_cast<G4int>(theA));
+		    GetIonTable()->GetIonMass(G4lrint(theZ),G4lrint(theA));
 }
 	
 inline G4double G4Fragment::GetBindingEnergy(void) const

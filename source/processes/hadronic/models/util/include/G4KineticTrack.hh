@@ -44,6 +44,8 @@
 #include "G4ParticleDefinition.hh"
 #include "G4VDecayChannel.hh"
 
+#include "G4Allocator.hh"
+
 class G4KineticTrackVector;
 
 
@@ -73,7 +75,10 @@ class G4KineticTrack : public G4VKineticNucleon
       G4int operator==(const G4KineticTrack& right) const;
 
       G4int operator!=(const G4KineticTrack& right) const;
-
+/*
+      inline void *operator new(size_t);
+      inline void operator delete(void *aTrack);
+*/
       G4ParticleDefinition* GetDefinition() const;
       void SetDefinition(G4ParticleDefinition* aDefinition);
 
@@ -182,9 +187,23 @@ public:
 
 };
 
+extern G4Allocator<G4KineticTrack> theKTAllocator;
 
 
 // Class G4KineticTrack 
+/*
+inline void * G4KineticTrack::operator new(size_t)
+{
+  void * aT;
+  aT = (void *) theKTAllocator.MallocSingle();
+  return aT;
+}
+
+inline void G4KineticTrack::operator delete(void * aT)
+{
+  theKTAllocator.FreeSingle((G4KineticTrack *) aT);
+}
+*/
 
 inline G4ParticleDefinition* G4KineticTrack::GetDefinition() const
 {
