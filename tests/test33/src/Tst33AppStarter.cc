@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33AppStarter.cc,v 1.2 2002-10-29 16:37:10 dressel Exp $
+// $Id: Tst33AppStarter.cc,v 1.3 2002-10-30 10:11:47 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -102,7 +102,7 @@ void Tst33AppStarter::CreateMassGeometry() {
 
 void Tst33AppStarter::CreateParallelGeometry() {
   if (fMassGeometry) {
-    G4std::G4Exception("Tst33AppStarter::CreateParallelGeometry: a eometry already exists!");
+    G4std::G4cout << "Tst33AppStarter::CreateParallelGeometry: a eometry already exists!" << G4endl;
   } 
   else {
     fMassGeometry = new Tst33ConcreteShield;
@@ -245,9 +245,13 @@ void Tst33AppStarter::ClearSampling() {
   }
   else {
     fSampler->ClearSampling();
-    DeleteScorers();
-    delete fIStore;
-    fIStore = 0;
+    if (fScorer) {
+      DeleteScorers();
+    }
+    if (fIStore) {
+      delete fIStore;
+      fIStore = 0;
+    }
     fEventAction->Clear();
     fWeightroulette = false;
     fConfigured = false;
