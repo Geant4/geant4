@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.13 2001-08-17 22:58:25 johna Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.14 2001-08-24 18:37:09 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -116,17 +116,25 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
 }
 
 void G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) {
+
+  static G4int callCount (0);
+  ++callCount;
+
   MarkerSizeType sizeType;
   G4double size = GetMarkerSize (text, sizeType);
   G4ThreeVector position (*fpObjectTransformation * text.GetPosition ());
-  G4cout
-    << "G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) not implemented yet."
-    << "\n  Called with text \"" << text.GetText ()
-    << "\" at " << position
-    << ", size " << size
-    << ", offsets " << text.GetXOffset () << ", " << text.GetYOffset ()
-    << ", type " << G4int(sizeType)
-    << G4endl;
+  if (callCount <= 10 || callCount%100 == 0) {
+    G4cout <<
+      "G4OpenGLSceneHandler::AddPrimitive (const G4Text&) call count "
+	   << callCount <<
+      "\n  Not implemented yet.  Called with text \""
+	   << text.GetText ()
+	   << "\"\n  at " << position
+	   << ", size " << size
+	   << ", offsets " << text.GetXOffset () << ", " << text.GetYOffset ()
+	   << ", type " << G4int(sizeType)
+	   << G4endl;
+  }
 }
 
 void G4OpenGLSceneHandler::AddPrimitive (const G4Circle& circle) {
