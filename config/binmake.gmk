@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.6 1999-02-19 17:11:00 stesting Exp $
+# $Id: binmake.gmk,v 1.7 1999-04-09 04:51:35 fbehner Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -236,7 +236,7 @@ else
 	  -o $(G4BINDIR)/$(G4TARGET) $(objects) $(LDFLAGS) \
 	  $(LDLIBS1) \
 	  `$(G4BINDIR)/liblist \
-	  $(G4TMPDIR)/exe/*.d $(G4TMPDIR)/*.d \
+	  -d $(G4TMPDIR) \
 	  <$(G4WORKDIR)/tmp/$(G4SYSTEM)/libname.map` \
 	  $(LDLIBS3) $(LDLIBS4)
   else
@@ -245,7 +245,7 @@ else
 	  -o $(G4BINDIR)/$(G4TARGET) $(objects) $(LDFLAGS) \
 	  $(LDLIBS1) \
 	  `$(G4BINDIR)/liblist \
-	  $(G4TMPDIR)/exe/*.d $(G4TMPDIR)/*.d \
+	  -d $(G4TMPDIR) \
 	  <$(G4WORKDIR)/tmp/$(G4SYSTEM)/libname.map` \
 	  $(LDLIBS3) $(LDLIBS4)
   endif
