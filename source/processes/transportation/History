@@ -1,4 +1,4 @@
-$Id: History,v 1.89 2003-11-26 14:52:05 gcosmo Exp $
+$Id: History,v 1.90 2004-01-23 02:47:50 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- Add G4UserStepLimit to handle MaxAllowedStep in G4UserLimits (H.K.)
+- Fixed a bug in G4UserSpecialCuts related charged geantino
 
 Nov. 26th, G.Cosmo transport-V05-02-07
 ------------------
