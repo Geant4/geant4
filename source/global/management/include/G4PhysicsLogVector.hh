@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsLogVector.hh,v 1.4 2001-01-09 11:26:58 gcosmo Exp $
+// $Id: G4PhysicsLogVector.hh,v 1.5 2001-03-09 03:39:26 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,16 +41,22 @@
 class G4PhysicsLogVector : public G4PhysicsVector  
 {
   public:
-
     // Constructors
     G4PhysicsLogVector();
     G4PhysicsLogVector(size_t theNbin);
+
+
+  public:  // with description
+
+    // Constructors
     G4PhysicsLogVector(G4double theEmin, G4double theEmax, size_t theNbin);
          // Because of logarithmic scale, note that 'theEmin' has to be 
          // greater than zero. No protection exists against this error.
 
     // Destructor
     ~G4PhysicsLogVector();
+
+    virtual G4bool Retrieve(G4std::ifstream& fIn, G4bool ascii);
 
   protected:
 

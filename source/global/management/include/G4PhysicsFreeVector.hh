@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsFreeVector.hh,v 1.5 2001-01-09 11:26:57 gcosmo Exp $
+// $Id: G4PhysicsFreeVector.hh,v 1.6 2001-03-09 03:39:25 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,7 +43,7 @@
 
 class G4PhysicsFreeVector : public G4PhysicsVector  
 {
-  public:
+  public:// with description
 
     // Constructors
     G4PhysicsFreeVector();

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LPhysicsFreeVector.cc,v 1.6 2001-02-02 16:23:36 gcosmo Exp $
+// $Id: G4LPhysicsFreeVector.cc,v 1.7 2001-03-09 03:39:30 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,6 +26,8 @@
 
 G4LPhysicsFreeVector::G4LPhysicsFreeVector()
 {
+   type = T_G4LPhysicsFreeVector;
+
    edgeMin = 0.0;
    edgeMax = 0.0;
    numberOfBin = 0;
@@ -35,6 +37,8 @@ G4LPhysicsFreeVector::G4LPhysicsFreeVector()
 G4LPhysicsFreeVector::G4LPhysicsFreeVector(size_t nbin, G4double binmin,
                                            G4double binmax)
 {
+   type = T_G4LPhysicsFreeVector;
+
    edgeMin = binmin;
    edgeMax = binmax;
    numberOfBin = nbin;

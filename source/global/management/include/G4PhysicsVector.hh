@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsVector.hh,v 1.7 2001-02-02 16:23:36 gcosmo Exp $
+// $Id: G4PhysicsVector.hh,v 1.8 2001-03-09 03:39:26 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,6 +30,8 @@
 //    21 Sep. 1996, K.Amako : Added [] and () operators
 //    11 Nov. 2000, H.Kurashige : use STL vector for dataVector and binVector
 //    18 Jan. 2001, H.Kurashige : removed ptrNextTable
+//    9  Mar. 2001, H.Kurashige : add PhysicsVector type 
+//    9  Mar. 2001, H.Kurashige : add Store/Retrieve methods
 //
 //---------------------------------------------------------------
 
@@ -38,14 +40,24 @@
 
 #include "g4std/vector"
 #include "globals.hh"
+#include "G4ios.hh"
+#include "g4std/iostream"
+#include "g4std/fstream"
+
+#include  "G4PhysicsVectorType.hh"
 
 class G4PhysicsVector 
 {
-  public:  // with description
-
+  public:  
     G4PhysicsVector();
+    // constructor  
+    // This class is an abstract class with pure virtual method of
+    // virtual size_t FindBinLocation(G4double theEnergy) const
+    // So, default constructor is not supposed to be invoked explicitly
+
+  public:  // with description
     virtual ~G4PhysicsVector();
-         // Constructor and destructor
+         // destructor
 
     inline G4double GetValue(G4double theEnergy, G4bool& isOutRange);
          // Get the cross-section/energy-loss value corresponding to the
@@ -87,12 +99,23 @@ class G4PhysicsVector
     inline void PutComment(const G4String& theComment);
          // Put a comment to the G4PhysicsVector. This may help to check
          // whether your are accessing to the one you want. 
-    inline G4String GetComment() const;
+    inline const G4String& GetComment() const;
          // Retrieve the comment of the G4PhysicsVector.
+
+    inline G4PhysicsVectorType GetType() const;
+         // Get PhysicsVector Type
+ 
+  public:  // with description
+    virtual G4bool Store(G4std::ofstream& fOut, G4bool ascii=false);
+    virtual G4bool Retrieve(G4std::ifstream& fIn, G4bool ascii=false);
+    
+    friend G4std::ostream& operator<<(G4std::ostream&, const G4PhysicsVector&);
 
   protected:
 
     typedef G4std::vector<G4double> G4PVDataVector;
+
+    G4PhysicsVectorType type;   // The type of  PhysicsVector (enumerator)
 
     G4double edgeMin;           // Lower edge value of the lowest bin
     G4double edgeMax;           // Lower edge value of the highest bin
@@ -107,20 +130,26 @@ class G4PhysicsVector
 
     inline G4double LinearInterpolation(G4double theEnergy, size_t theLocBin);
          // Linear interpolation function
+
     virtual size_t FindBinLocation(G4double theEnergy) const=0;
          // Find the bin# in which theEnergy belongs - pure virtual function
 
-  private:
+  protected:
 
     G4PhysicsVector(const G4PhysicsVector&);
     G4PhysicsVector& operator=(const G4PhysicsVector&);
          // Private copy constructor and assignment operator.
 
   private:
-
     G4String comment;
 };
 
 #include "G4PhysicsVector.icc"
 
 #endif
+
+
+
+
+
+

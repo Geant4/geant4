@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsOrderedFreeVector.cc,v 1.6 2001-02-02 16:23:37 gcosmo Exp $
+// $Id: G4PhysicsOrderedFreeVector.cc,v 1.7 2001-03-09 03:39:31 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -42,7 +42,8 @@ G4PhysicsOrderedFreeVector::G4PhysicsOrderedFreeVector(G4double *Energies,
 						       G4double *Values,
 						       size_t VectorLength)
 {
-	
+        type = T_G4PhysicsOrderedFreeVector;
+
         lastBin = INT_MAX;
 
 	lastEnergy = -DBL_MAX;
@@ -61,6 +62,8 @@ G4PhysicsOrderedFreeVector::G4PhysicsOrderedFreeVector(G4double *Energies,
 
 G4PhysicsOrderedFreeVector::G4PhysicsOrderedFreeVector()
 {
+        type = T_G4PhysicsOrderedFreeVector;
+
         lastBin = INT_MAX;
         lastEnergy = -DBL_MAX;
         lastValue = DBL_MAX;

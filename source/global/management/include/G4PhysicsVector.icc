@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsVector.icc,v 1.4 2001-02-02 16:23:36 gcosmo Exp $
+// $Id: G4PhysicsVector.icc,v 1.5 2001-03-09 03:39:26 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -142,7 +142,15 @@ inline
 }
 
 inline 
- G4String G4PhysicsVector::GetComment() const
+ const G4String& G4PhysicsVector::GetComment() const
 {
   return comment;
 }
+
+inline 
+ G4PhysicsVectorType G4PhysicsVector::GetType() const
+{
+  return type;
+}
+
+ 

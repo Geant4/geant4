@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsLinearVector.hh,v 1.4 2001-01-09 11:26:58 gcosmo Exp $
+// $Id: G4PhysicsLinearVector.hh,v 1.5 2001-03-09 03:39:25 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,14 +40,18 @@
 class G4PhysicsLinearVector : public G4PhysicsVector  
 {
   public:
-
     // Constructors
     G4PhysicsLinearVector();
     G4PhysicsLinearVector(size_t theNbin);
+
+  public: // with description
+    // Constructor
     G4PhysicsLinearVector(G4double theEmin, G4double theEmax, size_t theNbin);
 
     // Destructor
     ~G4PhysicsLinearVector();
+
+    virtual G4bool Retrieve(G4std::ifstream& fIn, G4bool ascii);
 
   protected:
 

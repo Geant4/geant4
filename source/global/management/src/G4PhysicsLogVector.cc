@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsLogVector.cc,v 1.6 2001-02-02 16:23:37 gcosmo Exp $
+// $Id: G4PhysicsLogVector.cc,v 1.7 2001-03-09 03:39:31 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,6 +20,7 @@
 //    01 Jul. 1996, K.Amako : Hidden bin from the user introduced
 //    26 Sep. 1996, K.Amako : Constructor with only 'bin size' added
 //    11 Nov. 2000, H.Kurashige : use STL vector for dataVector and binVector
+//    9  Mar. 2001, H.Kurashige : add PhysicsVector type and Retrieve
 //
 // --------------------------------------------------------------
 
@@ -28,11 +29,14 @@
 
 G4PhysicsLogVector::G4PhysicsLogVector()
   : dBin(0.), baseBin(0.)
-{}
+{ 
+  type = T_G4PhysicsLogVector;
+}
 
 
 G4PhysicsLogVector::G4PhysicsLogVector(size_t theNbin)
 {
+  type = T_G4PhysicsLogVector;
 
   // Add extra one bin (hidden to user) to handle correctly when 
   // Energy=theEmax in getValue. 
@@ -60,6 +64,7 @@ G4PhysicsLogVector::G4PhysicsLogVector(size_t theNbin)
 G4PhysicsLogVector::G4PhysicsLogVector(G4double theEmin, 
                                        G4double theEmax, size_t theNbin)
 {
+  type = T_G4PhysicsLogVector;
 
   // Add extra one bin (hidden to user) to handle correctly when 
   // Energy=theEmax in getValue. 
@@ -87,3 +92,15 @@ G4PhysicsLogVector::G4PhysicsLogVector(G4double theEmin,
 
 
 G4PhysicsLogVector::~G4PhysicsLogVector(){}
+
+G4bool G4PhysicsLogVector::Retrieve(G4std::ifstream& fIn, G4bool ascii)
+{
+  G4bool success = G4PhysicsVector::Retrieve(fIn, ascii);
+  if (success){
+    G4double theEmin = binVector[0];
+    dBin = log10(binVector[1]/theEmin);
+    baseBin = log10(theEmin)/dBin;
+  }
+  return success;
+}
+

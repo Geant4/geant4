@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsFreeVector.cc,v 1.6 2001-02-02 16:23:36 gcosmo Exp $
+// $Id: G4PhysicsFreeVector.cc,v 1.7 2001-03-09 03:39:30 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,11 +32,13 @@ G4PhysicsFreeVector::G4PhysicsFreeVector()
   edgeMin = 0.0;
   edgeMax = 0.0;
   numberOfBin = 0;
+  type = T_G4PhysicsFreeVector;
 }
 
 
 G4PhysicsFreeVector::G4PhysicsFreeVector(size_t theNbin)
 {
+  type = T_G4PhysicsFreeVector;
   numberOfBin = theNbin;
 
   // Add extra one bin (hidden to user) to handle correctly when 
@@ -62,6 +64,7 @@ G4PhysicsFreeVector::G4PhysicsFreeVector(size_t theNbin)
 G4PhysicsFreeVector::G4PhysicsFreeVector(const G4DataVector& theBinVector, 
                                          const G4DataVector& theDataVector)
 {
+  type = T_G4PhysicsFreeVector;
   numberOfBin = theBinVector.size();
 
   // Add extra one bin (hidden to user) to handle correctly when 
