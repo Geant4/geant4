@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DecayTable.hh,v 1.1 1999-01-07 16:10:27 gunter Exp $
+// $Id: G4DecayTable.hh,v 1.2 1999-04-13 07:58:23 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,6 +39,8 @@ class G4DecayTable
     ~G4DecayTable();
 
  private:
+  // hide copy constructor and assignment operator by declaring "private"
+  //  (Implementation does not make sense )
     G4DecayTable(const G4DecayTable &){};
     G4DecayTable & operator=(const G4DecayTable &){return *this;};
 
@@ -77,7 +79,7 @@ inline
 inline     
  G4VDecayChannel* G4DecayTable::GetDecayChannel(G4int index) const
 {
-  G4VDecayChannel* selectedChannel = NULL;
+  G4VDecayChannel* selectedChannel = 0;
   if ( (index>=0) && (index<channels->entries()) ){
     selectedChannel = (*channels)(index);
   }

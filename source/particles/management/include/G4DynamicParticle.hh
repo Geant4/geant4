@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DynamicParticle.hh,v 1.2 1999-02-06 10:10:07 kurasige Exp $
+// $Id: G4DynamicParticle.hh,v 1.3 1999-04-13 07:58:25 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -137,7 +137,7 @@ class G4DynamicParticle
      void SetKineticEnergy(G4double aEnergy);
       //  Sets the kinetic energy of a particle
 
-     G4DecayProducts *GetPreAssignedDecayProducts() const;
+     G4DecayProducts *GetPreAssignedDecayProducts();
      void SetPreAssignedDecayProducts(G4DecayProducts *aDecayProducts);
 
   private:
@@ -295,7 +295,7 @@ inline void G4DynamicParticle::SetProperTime(G4double atime)
   theProperTime = atime;
 }
 
-inline G4DecayProducts* G4DynamicParticle::GetPreAssignedDecayProducts() const
+inline G4DecayProducts* G4DynamicParticle::GetPreAssignedDecayProducts()
 { 
   return thePreAssignedDecayProducts;
 }

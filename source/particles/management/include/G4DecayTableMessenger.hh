@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DecayTableMessenger.hh,v 1.1 1999-01-07 16:10:27 gunter Exp $
+// $Id: G4DecayTableMessenger.hh,v 1.2 1999-04-13 07:58:24 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -49,11 +49,11 @@ class G4UIcmdWithADouble;
 class G4DecayTableMessenger: public G4UImessenger
 {
   public:
-    G4DecayTableMessenger(G4ParticleTable* pTable = NULL);
-    ~G4DecayTableMessenger();
+    G4DecayTableMessenger(G4ParticleTable* pTable = 0);
+    virtual ~G4DecayTableMessenger();
 
-    void SetNewValue(G4UIcommand * command,G4String newValues);
-    G4String GetCurrentValue(G4UIcommand * command);
+    virtual void SetNewValue(G4UIcommand * command,G4String newValues);
+    virtual G4String GetCurrentValue(G4UIcommand * command);
 
   private:
     G4DecayTableMessenger(const G4DecayTableMessenger&){};

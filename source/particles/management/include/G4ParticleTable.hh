@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleTable.hh,v 1.1 1999-01-07 16:10:30 gunter Exp $
+// $Id: G4ParticleTable.hh,v 1.2 1999-04-13 07:58:33 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,7 +22,7 @@
 //      modified FindIon                 02 Aug., 98 H.Kurashige
 //      added dictionary for encoding    24 Sep., 98 H.Kurashige
 //      added RemoveAllParticles()        8 Nov., 98 H.Kurashige
-
+//      fixed  some improper codings     08 Apr., 99 H.Kurashige
 
 #ifndef G4ParticleTable_h
 #define G4ParticleTable_h 1
@@ -69,8 +69,8 @@ class G4ParticleTable
    //   At the first time of calling this function, the G4ParticleTable object
    //   is instantiated 
 
-   G4bool   contains(const G4ParticleDefinition *particle) const;
-   G4bool   contains(const G4String &particle_name) const;
+   G4bool   contains(const G4ParticleDefinition *particle);
+   G4bool   contains(const G4String &particle_name);
    // returns TRUE if the ParticleTable contains 
 
    G4int    entries() const;
@@ -80,18 +80,18 @@ class G4ParticleTable
    // returns a pointer to i-th particles in the ParticleTable
    //    0<= index < entries()
 
-   G4String GetParticleName(G4int index);
+   const G4String& GetParticleName(G4int index);
    // returns name of i-th particles in the ParticleTable
 
-   G4ParticleDefinition* FindParticle(G4int  PDGEncoding )  const;
-   G4ParticleDefinition* FindParticle(const G4String &particle_name)  const;
-   G4ParticleDefinition* FindParticle(const G4ParticleDefinition *particle) const;
-   // returns a pointer to the particle (NULL if not contained)
+   G4ParticleDefinition* FindParticle(G4int  PDGEncoding );
+   G4ParticleDefinition* FindParticle(const G4String &particle_name);
+   G4ParticleDefinition* FindParticle(const G4ParticleDefinition *particle);
+   // returns a pointer to the particle (0 if not contained)
 
-   G4ParticleDefinition* FindAntiParticle(G4int  PDGEncoding )  const;
-   G4ParticleDefinition* FindAntiParticle(const G4String &particle_name) const;
-   G4ParticleDefinition* FindAntiParticle(const G4ParticleDefinition *particle) const;
-   // returns a pointer to its anti-particle (NULL if not contained)
+   G4ParticleDefinition* FindAntiParticle(G4int  PDGEncoding );
+   G4ParticleDefinition* FindAntiParticle(const G4String &particle_name);
+   G4ParticleDefinition* FindAntiParticle(const G4ParticleDefinition *particle);
+   // returns a pointer to its anti-particle (0 if not contained)
 
    G4ParticleDefinition* FindIon( G4int atomicNumber, 
 				  G4int atomicMass, 
@@ -107,33 +107,39 @@ class G4ParticleTable
    // insert the particle into ParticleTable 
    // return value is same as particle if successfully inserted
    //              or pointer to another G4ParticleDefinition object which has same name of particle
-   //              or NULL if fail to insert by another reason
+   //              or 0 if fail to insert by another reason
 
    G4ParticleDefinition* Remove(G4ParticleDefinition *particle);
    // Remove Particle
 
-   void DumpTable(const G4String &particle_name = "ALL") const;
+   void DumpTable(const G4String &particle_name = "ALL");
    // dump information of particles specified by name 
 
  public:
-   G4String GetKey(const G4ParticleDefinition *particle) const;
-   G4PTblDictionary* GetDictionary() const;
-   G4PTblDicIterator* GetIterator() const; 
-   G4PTblEncodingDictionary* GetEncodingDictionary() const;
+   const G4String& GetKey(const G4ParticleDefinition *particle) const;
 
-   G4IonTable* GetIonTable() const;
+   G4PTblDictionary* GetDictionary();
+   G4PTblDicIterator* GetIterator();
+
+   const G4PTblEncodingDictionary* GetEncodingDictionary();
+   // return the pointer to EncodingDictionary
+
+   const G4IonTable* GetIonTable();
    // return the pointer to G4IonTable object
 
-   G4ShortLivedTable* GetShortLivedTable() const;
+   const G4ShortLivedTable* GetShortLivedTable();
    // return the pointer to G4ShortLivedTable object
  
  public:
-   G4UImessenger* CreateMessenger();
-   void           DeleteMessenger();
-
+   G4UImessenger*       CreateMessenger();
+   void                 DeleteMessenger();
+  // create/delete messenger for the particle table 
+ 
  protected:
    static unsigned HashFun(const G4String& particle_name);
    static unsigned EncodingHashFun(const G4int& aEndcoding);
+  // hash functions  
+
  private:
    G4int verboseLevel;
    // controle flag for output message
@@ -158,95 +164,114 @@ class G4ParticleTable
    G4ShortLivedTable*     fShortLivedTable;
 };
 
-inline G4ShortLivedTable*  G4ParticleTable::GetShortLivedTable() const 
+inline 
+ const G4ShortLivedTable*  G4ParticleTable::GetShortLivedTable()
 {
   return fShortLivedTable;
 }
 
-inline G4IonTable*  G4ParticleTable::GetIonTable() const 
+inline 
+ const G4IonTable*  G4ParticleTable::GetIonTable()
 {
   return fIonTable;
 }
 
-inline  void G4ParticleTable::SetVerboseLevel(G4int value )
+inline  
+ void G4ParticleTable::SetVerboseLevel(G4int value )
 { 
   verboseLevel = value; 
 }
-inline G4int G4ParticleTable::GetVerboseLevel() const 
+
+inline 
+ G4int G4ParticleTable::GetVerboseLevel() const 
 { 
   return verboseLevel; 
 }
 
-inline G4ParticleTable::G4PTblDictionary* G4ParticleTable::GetDictionary() const
+inline 
+ G4ParticleTable::G4PTblDictionary* G4ParticleTable::GetDictionary()
 {
   return fDictionary;
 }
 
-inline G4ParticleTable::G4PTblDicIterator* G4ParticleTable::GetIterator() const
+inline 
+ G4ParticleTable::G4PTblDicIterator* G4ParticleTable::GetIterator()
 {
   return fIterator;
 }
 
-inline G4ParticleTable::G4PTblEncodingDictionary* G4ParticleTable::GetEncodingDictionary() const
+inline 
+ const G4ParticleTable::G4PTblEncodingDictionary* G4ParticleTable::GetEncodingDictionary()
 {
   return fEncodingDictionary;
 }
 
-inline G4String G4ParticleTable::GetKey(const G4ParticleDefinition *particle) const
+inline 
+ const G4String& G4ParticleTable::GetKey(const G4ParticleDefinition *particle) const
 {
   return particle->GetParticleName();
 }
 
-inline G4ParticleDefinition* G4ParticleTable::FindParticle(const G4String &particle_name) const
+inline 
+ G4ParticleDefinition* G4ParticleTable::FindParticle(const G4String &particle_name)
 {
-  return GetDictionary() -> findValue(&particle_name);
+  return fDictionary -> findValue(&particle_name);
 }
 
-inline G4ParticleDefinition* G4ParticleTable::FindParticle(const G4ParticleDefinition *particle) const
+inline 
+ G4ParticleDefinition* G4ParticleTable::FindParticle(const G4ParticleDefinition *particle)
 {
   G4String key = GetKey(particle);
-  return GetDictionary() -> findValue( &key );
+  return fDictionary -> findValue( &key );
 }
 
-inline G4ParticleDefinition* G4ParticleTable::FindAntiParticle(G4int aPDGEncoding) const
+inline 
+ G4ParticleDefinition* G4ParticleTable::FindAntiParticle(G4int aPDGEncoding)
 {
   return FindParticle( FindParticle(aPDGEncoding)->GetAntiPDGEncoding() );
 }
 
-inline G4ParticleDefinition* G4ParticleTable::FindAntiParticle(const G4String &particle_name) const
+inline 
+ G4ParticleDefinition* G4ParticleTable::FindAntiParticle(const G4String& particle_name) 
 {
   G4int pcode = FindParticle(particle_name) -> GetAntiPDGEncoding();
   return FindParticle(pcode);
 }
 
-inline G4ParticleDefinition* G4ParticleTable::FindAntiParticle(const G4ParticleDefinition *particle) const
+inline 
+ G4ParticleDefinition* G4ParticleTable::FindAntiParticle(const G4ParticleDefinition *particle)
 {
   G4int pcode = particle -> GetAntiPDGEncoding();
   return FindParticle(pcode);
 }
 
-inline G4bool  G4ParticleTable::contains(const G4String &particle_name) const
+inline 
+ G4bool  G4ParticleTable::contains(const G4String& particle_name)
 {
-   return GetDictionary() -> contains(&particle_name);
+   return fDictionary -> contains(&particle_name);
 }
 
-inline G4bool  G4ParticleTable::contains(const G4ParticleDefinition *particle) const
+inline G4bool  G4ParticleTable::contains(const G4ParticleDefinition *particle)
 {
  G4String key = GetKey(particle);
- return GetDictionary() -> contains(&key);
+ return fDictionary -> contains(&key);
 }
 
-inline G4String G4ParticleTable::GetParticleName(G4int index)
+inline 
+ const G4String& G4ParticleTable::GetParticleName(G4int index)
 {
+  static G4String noName = "";
   G4ParticleDefinition* aParticle =GetParticle(index);
-  G4String name = "";
-  if (aParticle != NULL) name = aParticle->GetParticleName();
-  return name;
+  if (aParticle != 0) {
+    return aParticle->GetParticleName();
+  } else {
+    return noName;
+  }
 }
 
 inline G4int G4ParticleTable::entries() const
 {
-  return GetDictionary() -> entries();
+  return fDictionary -> entries();
 }
 
 
@@ -255,10 +280,13 @@ inline unsigned G4ParticleTable::HashFun(const G4String& particle_name)
   return particle_name.hash(); 
 }
 
-inline unsigned G4ParticleTable::EncodingHashFun(const G4int& aEncoding)
+inline 
+ unsigned G4ParticleTable::EncodingHashFun(const G4int& aEncoding)
 {
-  if (aEncoding >0 ) return aEncoding*2;
-  else return abs(aEncoding)*2+1;
+  G4int temp = aEncoding;
+  if (aEncoding <0) temp *= -1;
+  G4int value = ( temp & 0x0FFF)*( temp & 0x0FFF)/2;
+  return value; 
 }
 #endif
 

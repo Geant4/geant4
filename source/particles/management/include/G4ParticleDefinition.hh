@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleDefinition.hh,v 1.1 1999-01-07 16:10:29 gunter Exp $
+// $Id: G4ParticleDefinition.hh,v 1.2 1999-04-13 07:58:30 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -27,6 +27,7 @@
 // change SetProcessManager as public H.Kurashige 06 June 1998
 // added  GetEnergyThreshold  H.Kurashige 08 June 1998
 // added  ShortLived flag and ApplyCuts flag  H.Kurashige 27  June 1998
+// fixed  some improper codings   H.Kurashige 08 Apr. 1999
 // ------------------------------------------------------------
 
 #ifndef G4ParticleDefinition_h
@@ -93,8 +94,7 @@ class G4ParticleDefinition
       void DumpTable() const;
       //  Prints information of data members.
 
-      G4ParticleTable *GetParticleTable() const
-      { return theParticleTable; }
+      G4ParticleTable* GetParticleTable();
       // get pointer to the particle table
       
   public:
@@ -102,13 +102,12 @@ class G4ParticleDefinition
       // to invoke corresponding methods for each particle type.
       // Actual implementation can be seen in the class 
       // G4ParticleWithCuts  
-      virtual void          ResetCuts(){}
-      virtual void          SetCuts(G4double ){}
-      virtual void          ReCalcCuts(){}
-      virtual G4double      GetLengthCuts() const {return -1.0;}
-      virtual G4double*     GetEnergyCuts() const {return NULL;}
-      virtual G4double      GetEnergyThreshold(const G4Material* ) const 
-      {      return -1.0 * eV;   }
+      virtual void          ResetCuts();
+      virtual void          SetCuts(G4double );
+      virtual void          ReCalcCuts();
+      virtual G4double      	GetLengthCuts() const;
+      virtual G4double*	        GetEnergyCuts() const;
+      virtual G4double      	GetEnergyThreshold(const G4Material* ) const;
  
       // applyCuts flag
       G4bool                GetApplyCutsFlag() const;
@@ -118,7 +117,7 @@ class G4ParticleDefinition
   // By these following Getxxxx methods, you can get values 
   // for members which can not be changed
   //  
-      G4String GetParticleName() const { return theParticleName; }
+      const G4String& GetParticleName() const { return theParticleName; }
 
       G4double GetPDGMass() const { return thePDGMass; }
       G4double GetPDGWidth() const { return thePDGWidth; } 
@@ -157,13 +156,16 @@ class G4ParticleDefinition
       G4double GetPDGLifeTime() const { return thePDGLifeTime; }
       void     SetPDGLifeTime(G4double aLifeTime) { thePDGLifeTime = aLifeTime; }
    public:
-      G4DecayTable* GetDecayTable() const { return theDecayTable; }
-      void    SetDecayTable(G4DecayTable* aDecayTable) 
-	{ theDecayTable=aDecayTable; }
+      G4DecayTable* GetDecayTable();
+      void          SetDecayTable(G4DecayTable* aDecayTable); 
+      // Set/Get Decay Table
+      //   !! Decay Table can be modified !!  
 
   public:
       G4ProcessManager* GetProcessManager() const; 
       void SetProcessManager(G4ProcessManager* aProcessManager); 
+      // Set/Get Process Manager
+      //   !! Process Manager can be modified !!  
 
   private:
   //  Values following can not be changed
@@ -286,6 +288,24 @@ class G4ParticleDefinition
 };
 
 inline 
+G4ParticleTable* G4ParticleDefinition::GetParticleTable()
+{ 
+  return theParticleTable; 
+}
+
+inline
+G4DecayTable* G4ParticleDefinition::GetDecayTable()
+{ 
+  return theDecayTable; 
+}
+
+inline
+void          G4ParticleDefinition::SetDecayTable(G4DecayTable* aDecayTable) 
+{ 
+  theDecayTable = aDecayTable; 
+}
+
+inline 
 void G4ParticleDefinition::SetApplyCutsFlag(G4bool flag)
 {
   fApplyCutsFlag = flag;
@@ -296,8 +316,6 @@ G4bool G4ParticleDefinition::GetApplyCutsFlag() const
 {
   return fApplyCutsFlag;
 }
-
-
 
 inline 
 void G4ParticleDefinition::SetVerboseLevel(G4int value)
@@ -310,6 +328,7 @@ G4int G4ParticleDefinition::GetVerboseLevel() const
 {
    return verboseLevel;
 }
+
 inline
 G4ProcessManager* G4ParticleDefinition::GetProcessManager() const
 {
@@ -349,6 +368,22 @@ G4int G4ParticleDefinition::GetAntiQuarkContent(G4int flavor) const
     return 0;
   }  
 }
+
+inline void             G4ParticleDefinition::ResetCuts(){}
+
+inline void             G4ParticleDefinition::SetCuts(G4double ){}
+
+inline void             G4ParticleDefinition::ReCalcCuts(){}
+
+inline G4double         G4ParticleDefinition::GetLengthCuts() const {return -1.0;}
+
+inline G4double*	G4ParticleDefinition::GetEnergyCuts() const {return 0;}
+
+inline G4double      	G4ParticleDefinition::GetEnergyThreshold(const G4Material* ) const     
+{      
+  return -1.0 * eV;   
+}
+ 
 
 
 #endif

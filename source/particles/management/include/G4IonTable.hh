@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.hh,v 1.2 1999-03-15 08:14:35 kurasige Exp $
+// $Id: G4IonTable.hh,v 1.3 1999-04-13 07:58:27 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,8 +19,6 @@
 // ------------------------------------------------------------
 //      modified GetIon                 02 Aug., 98 H.Kurashige
 //      added Remove()                  06 Nov.,98 H.Kurashige
-//      add GetNucleusMass              15 Mar. 99  H.Kurashige
-//                                     
 
 #ifndef G4IonTable_h
 #define G4IonTable_h 1
@@ -53,10 +51,6 @@ class G4IonTable
    G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int J, G4int Q);
    // get a pointer to the ion with A,Z,J,Q 
    // The ion will be created if not exist yet
-   //   Z: Atomic Number
-   //   A: Atomic Mass
-   //   J: Total Angular momentum
-   //   Q: Total charge  
    
    G4bool                IsIon(G4ParticleDefinition*) const;
    // return true if the particle is ion
@@ -66,12 +60,7 @@ class G4IonTable
 
    G4String             GetIonName(G4int Z, G4int A, G4int J, G4int Q) const;
    // get ion name
-
-   G4double             GetNucleusMass(G4int Z, G4int A) const;
    G4double             GetIonMass(G4int Z, G4int A) const;
-   // These two methods returns Nucleus (i.e. full ionized atom) mass 
-   // ,where Z is Atomic Number (number of protons) and
-   //  A is Atomic Number (number of nucleons)
 
    G4int                 Entries() const;
    G4bool                Contains(const G4ParticleDefinition *particle) const;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleWithCuts.hh,v 1.1 1999-01-07 16:10:31 gunter Exp $
+// $Id: G4ParticleWithCuts.hh,v 1.2 1999-04-13 07:58:34 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -103,12 +103,12 @@ class G4ParticleWithCuts : public G4ParticleDefinition
    virtual void          SetCuts(G4double aCut);
    // Set cut values in energy derived from the cut range of aCut
 
-   virtual G4double      GetLengthCuts() const {return theCutInMaxInteractionLength;};
-   virtual G4double*     GetEnergyCuts() const {return theKineticEnergyCuts;};
+   virtual G4double        	GetLengthCuts() const;
+   virtual G4double* 	        GetEnergyCuts() const;
   
-   virtual G4double      GetEnergyThreshold(const G4Material* aMaterial) const;
+   virtual G4double      	GetEnergyThreshold(const G4Material* aMaterial) const;
+   static  void          	SetEnergyRange(G4double, G4double);
 
-   static  void          SetEnergyRange(G4double, G4double);
    protected:
     virtual   void  CalcEnergyCuts(G4double aCut);
 
@@ -167,10 +167,20 @@ class G4ParticleWithCuts : public G4ParticleDefinition
                           );
 };
 
+inline G4double	G4ParticleWithCuts::GetLengthCuts() const 
+{
+	return theCutInMaxInteractionLength;
+}
+
+inline G4double* 	G4ParticleWithCuts::GetEnergyCuts() const 
+{
+	return theKineticEnergyCuts;
+}
+  
 inline void G4ParticleWithCuts::ResetCuts()
 {
    if(theKineticEnergyCuts) delete [] theKineticEnergyCuts;
-   theKineticEnergyCuts = NULL;
+   theKineticEnergyCuts = 0;
 }
 
 inline void G4ParticleWithCuts::ReCalcCuts()

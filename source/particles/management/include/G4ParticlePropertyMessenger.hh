@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticlePropertyMessenger.hh,v 1.1 1999-01-07 16:10:30 gunter Exp $
+// $Id: G4ParticlePropertyMessenger.hh,v 1.2 1999-04-13 07:58:32 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -28,6 +28,7 @@
 //    13 June 1997, H. Kurashige   : The 1st version created.
 //    13 Nov. 1997, H. Kurashige   : fix bugs
 //    08 Jan. 1998, H. Kurashige   : new UIcommand
+//    08 Apr. 1999, H. Kurashige   : fix some improper codings
 //
 //---------------------------------------------------------------
 
@@ -50,11 +51,11 @@ class G4UIcmdWithAnInteger;
 class G4ParticlePropertyMessenger: public G4UImessenger
 {
   public:
-    G4ParticlePropertyMessenger(G4ParticleTable* pTable = NULL);
-    ~G4ParticlePropertyMessenger();
+    G4ParticlePropertyMessenger(G4ParticleTable* pTable = 0);
+    virtual ~G4ParticlePropertyMessenger();
 
-    void SetNewValue(G4UIcommand * command,G4String newValues);
-    G4String GetCurrentValue(G4UIcommand * command);
+    virtual void SetNewValue(G4UIcommand * command,G4String newValues);
+    virtual G4String GetCurrentValue(G4UIcommand * command);
 
   private:
     G4ParticlePropertyMessenger(const G4ParticlePropertyMessenger&){};
