@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SandiaTable.hh,v 1.7 2001-02-16 17:09:54 maire Exp $
+// $Id: G4SandiaTable.hh,v 1.8 2001-04-03 12:32:54 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -17,6 +17,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 //
+// 03.04.01 fnulcof[4] added; returned if energy < emin
 // 30.01.01 major bug in the computation of AoverAvo and in the units (/g!)
 //          in GetSandiaCofPerAtom(). mma
 // 18.11.98 simplified public interface; new methods for materials.  mma
@@ -74,6 +75,8 @@ private:
                  G4Material*     fMaterial;
                  G4int           fMatNbOfIntervals;
                  G4OrderedTable* fMatSandiaMatrix;
+		 
+		 G4double        fnulcof[4];
 		   
 
 /////////////////////////////////////////////////////////////////////
