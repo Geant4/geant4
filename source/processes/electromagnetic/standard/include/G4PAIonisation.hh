@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIonisation.hh,v 1.6 2000-07-13 08:34:03 grichine Exp $
+// $Id: G4PAIonisation.hh,v 1.7 2000-09-22 14:44:07 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,7 +26,7 @@
 //
 // corrected by V. Grichine on 24/11/97
 // 12.07.00 V.Grichine GetFreePath and GetdEdx were added
-//
+// 22.09.00 V.Grichine and K.Assamagan new function GetEnergyTransfer(G4d,G4i)
 
  
 #ifndef G4PAIonisation_h
@@ -114,6 +114,7 @@ class G4PAIonisation : public G4VPAIenergyLoss
                               G4Material *aMaterial) ;
 
     G4double GetRandomEnergyTransfer( G4double scaledTkin ) ;
+    G4double GetEnergyTransfer( G4int iPlace, G4double position, G4int iTransfer  ) ;
 
   //    static                                   
 

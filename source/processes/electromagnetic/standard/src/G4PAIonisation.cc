@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIonisation.cc,v 1.12 2000-08-11 10:26:46 maire Exp $
+// $Id: G4PAIonisation.cc,v 1.13 2000-09-22 14:46:38 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -446,6 +446,7 @@ G4PAIonisation::PostStepDoIt( const G4Track& trackData,
     aParticleChange.SetLocalEnergyDeposit (energyTransfer) ;
       
     return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
+    //  return &aParticleChange ;
 }
 
 
@@ -586,7 +587,8 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
       {
         if(position >= (*(*fPAItransferBank)(iPlace))(iTransfer)) break ;
       }
-      loss += (*fPAItransferBank)(iPlace)->GetLowEdgeEnergy(iTransfer) ;
+      //  loss += (*fPAItransferBank)(iPlace)->GetLowEdgeEnergy(iTransfer) ;
+      loss += GetEnergyTransfer(iPlace,position,iTransfer);
       numOfCollisions-- ;
     }
   }
@@ -607,7 +609,8 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
         {
           if(position >= (*(*fPAItransferBank)(iPlace+1))(iTransfer)) break ;
         }
-        loss += (*fPAItransferBank)(iPlace+1)->GetLowEdgeEnergy(iTransfer) ;
+	//  loss += (*fPAItransferBank)(iPlace+1)->GetLowEdgeEnergy(iTransfer) ;
+        loss += GetEnergyTransfer(iPlace+1,position,iTransfer);
         numOfCollisions-- ;
       }
     } 
@@ -646,7 +649,8 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
 	      break ;
 	  }
         }
-        loss += (*fPAItransferBank)(iPlace)->GetLowEdgeEnergy(iTransfer) ; 
+	// loss += (*fPAItransferBank)(iPlace)->GetLowEdgeEnergy(iTransfer) ; 
+        loss += GetEnergyTransfer(iPlace,position,iTransfer);
         numOfCollisions-- ;    
       }
     }
@@ -685,7 +689,8 @@ G4PAIonisation::GetRandomEnergyTransfer( G4double scaledTkin )
       {
         if(position >= (*(*fPAItransferBank)(iPlace))(iTransfer)) break ;
       }
-      transfer = (*fPAItransferBank)(iPlace)->GetLowEdgeEnergy(iTransfer) ;
+      //  transfer = (*fPAItransferBank)(iPlace)->GetLowEdgeEnergy(iTransfer) ;
+      transfer = GetEnergyTransfer(iPlace,position,iTransfer);
   }
   else
   {
@@ -697,7 +702,8 @@ G4PAIonisation::GetRandomEnergyTransfer( G4double scaledTkin )
       {
         if(position >= (*(*fPAItransferBank)(iPlace+1))(iTransfer)) break ;
       }
-      transfer = (*fPAItransferBank)(iPlace+1)->GetLowEdgeEnergy(iTransfer) ;
+      // transfer = (*fPAItransferBank)(iPlace+1)->GetLowEdgeEnergy(iTransfer) ;
+      transfer = GetEnergyTransfer(iPlace+1,position,iTransfer);
     } 
     else // general case: Tkin between two vectors of the material
     {
@@ -718,7 +724,8 @@ G4PAIonisation::GetRandomEnergyTransfer( G4double scaledTkin )
           ( (*(*fPAItransferBank)(iPlace))(iTransfer)*W1 + 
             (*(*fPAItransferBank)(iPlace+1))(iTransfer)*W2) ) break ;
       }
-      transfer = (*fPAItransferBank)(iPlace)->GetLowEdgeEnergy(iTransfer) ; 
+      //  transfer = (*fPAItransferBank)(iPlace)->GetLowEdgeEnergy(iTransfer) ; 
+      transfer = GetEnergyTransfer(iPlace,position,iTransfer);
     }
   } 
   //  G4cout<<"PAI transfer = "<<transfer/keV<<" keV"<<endl ; 
@@ -726,6 +733,52 @@ G4PAIonisation::GetRandomEnergyTransfer( G4double scaledTkin )
   return transfer ;
 }
 
+///////////////////////////////////////////////////////////////////////
+//
+// Returns random PAI energy transfer according to passed scaled kinetic
+// energy of particle
+
+G4double  
+G4PAIonisation::GetEnergyTransfer( G4int iPlace, G4double position, G4int iTransfer )
+{ 
+  G4double x1, x2, y1, y2, result ;
+
+  if(iTransfer == 0)
+  {
+    result = (*fPAItransferBank)(iPlace)->GetLowEdgeEnergy(iTransfer) ;
+  }  
+  else
+  {
+    y1 = (*(*fPAItransferBank)(iPlace))(iTransfer-1) ;
+    y2 = (*(*fPAItransferBank)(iPlace))(iTransfer) ;
+
+    x1 = (*fPAItransferBank)(iPlace)->GetLowEdgeEnergy(iTransfer-1) ;
+    x2 = (*fPAItransferBank)(iPlace)->GetLowEdgeEnergy(iTransfer) ;
+
+    if ( x1 == x2 )    result = x2 ;
+    else
+    {
+      if ( y1 == y2  ) result = x1 + (x2 - x1)*G4UniformRand() ;
+      else
+      {
+        result = x1 + (position - y1)*(x2 - x1)/(y2 - y1) ;
+      }
+    }
+  }
+  return result ;
+}
+
 //
 //
 /////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
