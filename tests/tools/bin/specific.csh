@@ -136,6 +136,7 @@ if ( `uname -n | grep sun` != "" ) then
     setenv PATH `echo $PATH | sed s/SUNWspro/SUNWspro50/`
     # Persistency...
     unsetenv G4USE_HEPODBMS
+    setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/$G4SYSTEM/pro
   endif
   setenv G4WORKDIR  /afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   setenv G4LIB $G4WORKDIR/lib

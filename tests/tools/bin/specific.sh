@@ -108,7 +108,7 @@ if [ `uname -n | grep sungeant` ]; then
     export PATH=`echo $PATH | sed s/SUNWspro/SUNWspro50/`
     # No Persistency...
     unset G4USE_HEPODBMS
-#   export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC5/pro # iso does not exist
+    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC5/pro 
   fi
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
