@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmRotationCallbacks.cc,v 1.7 2000-05-13 10:48:03 johna Exp $
+// $Id: G4OpenGLXmRotationCallbacks.cc,v 1.8 2001-01-25 12:09:57 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,13 +62,12 @@ void G4OpenGLXmViewer::rotate_in_theta (XtPointer clientData,
   delta_theta *= deg;
   // Rotates by fixed azimuthal angle delta_theta.
 
-  G4Vector3D vp = pView->fVP.GetViewpointDirection ().unit ();
-  G4Vector3D up = pView->fVP.GetUpVector ().unit ();
-  G4Vector3D& zprime = up;
+  const G4Vector3D& vp = pView->fVP.GetViewpointDirection ().unit ();
+  const G4Vector3D& up = pView->fVP.GetUpVector ().unit ();
+  const G4Vector3D& zprime = up;
   G4double cosalpha = up.dot (vp);
   G4double sinalpha = sqrt (1. - pow (cosalpha, 2));
-  G4Vector3D viewPoint = pView->fVP.GetViewpointDirection ().unit ();
-  G4Vector3D yprime = (zprime.cross (viewPoint)).unit ();
+  G4Vector3D yprime = (zprime.cross (vp)).unit ();
   G4Vector3D xprime = yprime.cross (zprime);
   // Projection of vp on plane perpendicular to up...
   G4Vector3D a1 = sinalpha * xprime;
@@ -78,7 +77,7 @@ void G4OpenGLXmViewer::rotate_in_theta (XtPointer clientData,
   // Required Increment vector...
   G4Vector3D delta = a2 - a1;
   // So new viewpoint is...
-  viewPoint += delta;
+  G4Vector3D viewPoint = vp + delta;
 
   pView->fVP.SetViewAndLights (viewPoint);  
 
@@ -132,16 +131,21 @@ void G4OpenGLXmViewer::rotate_in_phi (XtPointer clientData,
 
   delta_alpha *= deg;
 
-  G4Vector3D vp = pView->fVP.GetViewpointDirection ().unit ();
-  G4Vector3D up = pView->fVP.GetUpVector ().unit ();
+  const G4Vector3D& vp = pView->fVP.GetViewpointDirection ().unit ();
+  const G4Vector3D& up = pView->fVP.GetUpVector ().unit ();
 
-  G4Vector3D xprime = vp;
+  const G4Vector3D& xprime = vp;
   G4Vector3D yprime = (up.cross(xprime)).unit();
   G4Vector3D zprime = (xprime.cross(yprime)).unit();
 
   G4Vector3D new_vp = cos(delta_alpha) * xprime + sin(delta_alpha) * zprime;
 
   pView->fVP.SetViewAndLights (new_vp.unit());
+
+  if (pView->fVP.GetLightsMoveWithCamera()) {
+    G4Vector3D new_up = (new_vp.cross(yprime)).unit();
+    pView->fVP.SetUpVector(new_up);
+  }
 
   pView->SetView ();
   pView->ClearView ();
@@ -228,8 +232,8 @@ void G4OpenGLXmViewer::wobble_timer_callback (XtPointer clientData,
 					    XtIntervalId*) 
 {
   G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*)clientData;
-  G4Vector3D up = pView->fVP.GetUpVector();
-  G4Vector3D vp = pView->fVP.GetViewpointDirection();
+  const G4Vector3D& up = pView->fVP.GetUpVector();
+  const G4Vector3D& vp = pView->fVP.GetViewpointDirection();
   G4Vector3D third_axis = up.cross(pView->original_vp);
   G4double pi_div_by_ten = M_PI / 10.0;
   G4Vector3D d_up = 0.1 * (sin ((G4double)pView->frameNo * pi_div_by_ten * 2.)) * up;
