@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSection.hh,v 1.5 2001-07-11 10:03:28 gunter Exp $
+// $Id: G4PAIxSection.hh,v 1.6 2002-02-08 16:48:45 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,6 +42,8 @@
 // 2nd version 30.11.97, V. Grichine
 // 27.10.99, V.Grichine: Bug fixed in constructors, 3rd constructor and 
 //                       GetStepEnergyLoss(step) were added, fDelta = 0.005
+// 10.02.02, V.Grichine: New functions and arrays/gets for Cerenkov and 
+//                       plasmon collisions dN/dx
 
 #ifndef G4PAIXSECTION_HH
 #define G4PAIXSECTION_HH
@@ -92,7 +94,6 @@ public:
 	  	  
 	  // Physical methods
           
-	  void     IntegralPAIxSection() ;
 
           G4double RutherfordIntegral( G4int intervalNumber,
 	                               G4double limitLow,
@@ -106,12 +107,30 @@ public:
           G4double DifPAIxSection( G4int intervalNumber,
 	                           G4double betaGammaSq    ) ;
 
+          G4double PAIdNdxCerenkov( G4int intervalNumber,
+	                           G4double betaGammaSq    ) ;
+
+          G4double PAIdNdxPlasmon( G4int intervalNumber,
+	                           G4double betaGammaSq    ) ;
+
+	  void     IntegralPAIxSection() ;
+	  void     IntegralCerenkov() ;
+	  void     IntegralPlasmon() ;
+
           G4double SumOverInterval(G4int intervalNumber) ;
+          G4double SumOverInterCerenkov(G4int intervalNumber) ;
+          G4double SumOverInterPlasmon(G4int intervalNumber) ;
 
           G4double SumOverBorder( G4int intervalNumber,
 	                          G4double energy          ) ;
+          G4double SumOverBordCerenkov( G4int intervalNumber,
+	                                G4double energy          ) ;
+          G4double SumOverBordPlasmon( G4int intervalNumber,
+	                               G4double energy          ) ;
 
           G4double GetStepEnergyLoss( G4double step ) ;
+          G4double GetStepCerenkovLoss( G4double step ) ;
+          G4double GetStepPlasmonLoss( G4double step ) ;
 	 
 	  // Inline access functions
 
@@ -122,8 +141,14 @@ public:
           G4int GetIntervalNumber() const { return fIntervalNumber ; }
 
           G4double GetEnergyInterval(G4int i){ return fEnergyInterval[i] ; } 
+
+          G4double GetDifPAIxSection(G4int i){ return fDifPAIxSection[i] ; } 
+          G4double GetPAIdNdxCrenkov(G4int i){ return fdNdxCerenkov[i] ; } 
+          G4double GetPAIdNdxPlasmon(G4int i){ return fdNdxPlasmon[i] ; } 
 	  
 	  G4double GetMeanEnergyLoss() const {return fIntegralPAIxSection[0] ; }
+	  G4double GetMeanCerenkovLoss() const {return fIntegralCerenkov[0] ; }
+	  G4double GetMeanPlasmonLoss() const {return fIntegralPlasmon[0] ; }
 
 	  G4double GetNormalizationCof() const { return fNormalizationCof ; }
           
@@ -134,6 +159,8 @@ public:
 	  inline G4double GetSplineEnergy(G4int i) const ;
 	  
 	  inline G4double GetIntegralPAIxSection(G4int i) const ;
+	  inline G4double GetIntegralCerenkov(G4int i) const ;
+	  inline G4double GetIntegralPlasmon(G4int i) const ;
 
 protected :
 
@@ -181,8 +208,12 @@ G4double fRePartDielectricConst[500] ;   // Real part of dielectric const
 G4double fImPartDielectricConst[500] ;   // Imaginary part of dielectric const
 G4double          fIntegralTerm[500] ;   // Integral term in PAI cross section
 G4double        fDifPAIxSection[500] ;   // Differential PAI cross section
-G4double   fIntegralPAIxSection[500] ;   // Integral PAI cross section  ?
+G4double          fdNdxCerenkov[500] ;   // dNdx of Cerenkov collisions
+G4double          fdNdxPlasmon[500] ;   // dNdx of Plasmon collisions
 
+G4double   fIntegralPAIxSection[500] ;   // Integral PAI cross section  ?
+G4double   fIntegralCerenkov[500] ;   // Integral Cerenkov N>omega  ?
+G4double   fIntegralPlasmon[500] ;   // Integral Plasmon N>omega  ?
 
 G4double fPAItable[500][112] ; // Output array
 
@@ -218,6 +249,24 @@ inline G4double G4PAIxSection::GetIntegralPAIxSection(G4int i) const
     G4Exception("Invalid argument in G4PAIxSection::GetIntegralPAIxSection");
    }
    return fIntegralPAIxSection[i] ;
+}
+
+inline G4double G4PAIxSection::GetIntegralCerenkov(G4int i) const 
+{
+   if(i < 1 || i > fSplineNumber)
+   {
+    G4Exception("Invalid argument in G4PAIxSection::GetIntegralCerenkov");
+   }
+   return fIntegralCerenkov[i] ;
+}
+
+inline G4double G4PAIxSection::GetIntegralPlasmon(G4int i) const 
+{
+   if(i < 1 || i > fSplineNumber)
+   {
+    G4Exception("Invalid argument in G4PAIxSection::GetIntegralPlasmon");
+   }
+   return fIntegralPlasmon[i] ;
 }
 
 #endif   

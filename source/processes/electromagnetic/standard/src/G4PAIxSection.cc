@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSection.cc,v 1.8 2001-10-17 14:01:11 gcosmo Exp $
+// $Id: G4PAIxSection.cc,v 1.9 2002-02-08 16:48:46 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -298,8 +298,12 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
       for(i = 1 ; i <= fSplineNumber ; i++)
       {
          fDifPAIxSection[i] = DifPAIxSection(i,betaGammaSq);
+         fdNdxCerenkov[i]   = PAIdNdxCerenkov(i,betaGammaSq);
+         fdNdxPlasmon[i]    = PAIdNdxPlasmon(i,betaGammaSq);
       }
       IntegralPAIxSection() ;
+      IntegralCerenkov() ;
+      IntegralPlasmon() ;
       
       delete[] fEnergyInterval ;
       delete[] fA1 ;
@@ -428,8 +432,12 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
       for(i = 1 ; i <= fSplineNumber ; i++)
       {
          fDifPAIxSection[i] = DifPAIxSection(i,betaGammaSq);
+         fdNdxCerenkov[i]   = PAIdNdxCerenkov(i,betaGammaSq);
+         fdNdxPlasmon[i]    = PAIdNdxPlasmon(i,betaGammaSq);
       }
       IntegralPAIxSection() ;
+      IntegralCerenkov() ;
+      IntegralPlasmon() ;
       
       //   delete[] fEnergyInterval ;
       delete[] fA1 ;
@@ -470,7 +478,10 @@ void G4PAIxSection::InitPAI()
    
    NormShift(betaGammaSq) ;             
    SplainPAI(betaGammaSq) ;
+
    IntegralPAIxSection() ;
+   IntegralCerenkov() ;
+   IntegralPlasmon() ;
 
    for(i = 0 ; i<=fSplineNumber ; i++)
    {
@@ -484,17 +495,19 @@ void G4PAIxSection::InitPAI()
    
    for(G4int j = 1 ; j < 112 ; j++)       // for other gammas
    {
-      if(j == fRefGammaNumber)
-      {
-	 continue ;
-      }
+      if( j == fRefGammaNumber ) continue ;
+      
       betaGammaSq = fLorentzFactor[j]*fLorentzFactor[j] - 1 ;
       
       for(i = 1 ; i <= fSplineNumber ; i++)
       {
          fDifPAIxSection[i] = DifPAIxSection(i,betaGammaSq);
+         fdNdxCerenkov[i]   = PAIdNdxCerenkov(i,betaGammaSq);
+         fdNdxPlasmon[i]    = PAIdNdxPlasmon(i,betaGammaSq);
       }
       IntegralPAIxSection() ;
+      IntegralCerenkov() ;
+      IntegralPlasmon() ;
       
       for(i = 0 ; i <= fSplineNumber ; i++)
       {
@@ -511,46 +524,43 @@ void G4PAIxSection::InitPAI()
 
 void G4PAIxSection::NormShift(G4double betaGammaSq)
 {
-   G4int i,j;
-   for(i=1;i<=fIntervalNumber-1;i++)
-   {
-      for(j=1;j<=2;j++)
-      {
-         fSplineNumber = (i-1)*2 + j ;
+  G4int i, j ;
 
-         if(j==1)
-	 {
-	    fSplineEnergy[fSplineNumber]=fEnergyInterval[i]*(1+fDelta);
-	 }
-         else 
-	 {
-	    fSplineEnergy[fSplineNumber]=fEnergyInterval[i+1]*(1-fDelta);
-	 }
-      }
-   }
-   fIntegralTerm[1]=RutherfordIntegral(1,fEnergyInterval[1],fSplineEnergy[1]);
-   j=1;
-   for(i=2;i<=fSplineNumber;i++)
-   {
-      if(fSplineEnergy[i]<fEnergyInterval[j+1])
-      {
+  for( i = 1 ; i <= fIntervalNumber-1 ; i++ )
+  {
+    for(j=1;j<=2;j++)
+    {
+      fSplineNumber = (i-1)*2 + j ;
+
+      if( j == 1 ) fSplineEnergy[fSplineNumber] = fEnergyInterval[i]*(1+fDelta);
+      else         fSplineEnergy[fSplineNumber] = fEnergyInterval[i+1]*(1-fDelta); 
+    }
+  }
+  fIntegralTerm[1]=RutherfordIntegral(1,fEnergyInterval[1],fSplineEnergy[1]);
+
+  j = 1 ;
+
+  for(i=2;i<=fSplineNumber;i++)
+  {
+    if(fSplineEnergy[i]<fEnergyInterval[j+1])
+    {
          fIntegralTerm[i] = fIntegralTerm[i-1] + 
 	                    RutherfordIntegral(j,fSplineEnergy[i-1],
                                                  fSplineEnergy[i]   ) ;
-      }
-      else
-      {
-         G4double x = RutherfordIntegral(j,fSplineEnergy[i-1],
+    }
+    else
+    {
+       G4double x = RutherfordIntegral(j,fSplineEnergy[i-1],
                                            fEnergyInterval[j+1]   ) ;
          j++;
          fIntegralTerm[i] = fIntegralTerm[i-1] + x + 
 	                    RutherfordIntegral(j,fEnergyInterval[j],
                                                  fSplineEnergy[i]    ) ;
-      }
+    }
       // G4cout<<i<<"\t"<<fSplineEnergy[i]<<"\t"<<fIntegralTerm[i]<<"\n"<<G4endl;
-   } 
-   fNormalizationCof = 2*pi*pi*hbarc*hbarc*fine_structure_const/electron_mass_c2 ;
-   fNormalizationCof *= fElectronDensity/fIntegralTerm[fSplineNumber] ;
+  } 
+  fNormalizationCof = 2*pi*pi*hbarc*hbarc*fine_structure_const/electron_mass_c2 ;
+  fNormalizationCof *= fElectronDensity/fIntegralTerm[fSplineNumber] ;
 
    // G4cout<<"fNormalizationCof = "<<fNormalizationCof<<G4endl ;
 
@@ -567,7 +577,10 @@ void G4PAIxSection::NormShift(G4double betaGammaSq)
          fRePartDielectricConst[i] = fNormalizationCof*
 	                             RePartDielectricConst(fSplineEnergy[i]);
          fIntegralTerm[i] *= fNormalizationCof;
+
          fDifPAIxSection[i] = DifPAIxSection(i,betaGammaSq);
+         fdNdxCerenkov[i]   = PAIdNdxCerenkov(i,betaGammaSq);
+         fdNdxPlasmon[i]    = PAIdNdxPlasmon(i,betaGammaSq);
       }
    }
 
@@ -597,13 +610,16 @@ void
 		       // average of 'i' and 'i+1' energy points to 'i+1' place
       fSplineNumber++;
 
-      for(G4int j=fSplineNumber;j>=i+2;j--)
+      for(G4int j = fSplineNumber; j >= i+2 ; j-- )
       {
-         fSplineEnergy[j] = fSplineEnergy[j-1];
+         fSplineEnergy[j]          = fSplineEnergy[j-1];
          fImPartDielectricConst[j] = fImPartDielectricConst[j-1];
 	 fRePartDielectricConst[j] = fRePartDielectricConst[j-1];
-	 fIntegralTerm[j] = fIntegralTerm[j-1];
+	 fIntegralTerm[j]          = fIntegralTerm[j-1];
+
 	 fDifPAIxSection[j] = fDifPAIxSection[j-1];
+         fdNdxCerenkov[j]   = fdNdxCerenkov[j-1];
+         fdNdxPlasmon[j]    = fdNdxPlasmon[j-1];
       }
       G4double x1  = fSplineEnergy[i];
       G4double x2  = fSplineEnergy[i+1];
@@ -630,7 +646,10 @@ void
       fIntegralTerm[i+1] = fIntegralTerm[i] + fNormalizationCof*
 	                   RutherfordIntegral(k,fSplineEnergy[i],
                                                 fSplineEnergy[i+1]);
+
       fDifPAIxSection[i+1] = DifPAIxSection(i+1,betaGammaSq);
+      fdNdxCerenkov[i+1]   = PAIdNdxCerenkov(i+1,betaGammaSq);
+      fdNdxPlasmon[i+1]    = PAIdNdxPlasmon(i+1,betaGammaSq);
 
 		  // Condition for next division of this segment or to pass
 		  // to higher energies
@@ -651,32 +670,6 @@ void
 
 }  // end of SplainPAI 
 
-////////////////////////////////////////////////////////////////////////
-//
-// Calculation of the PAI integral cross-section
-// fIntegralPAIxSection[1] = specific primary ionisation, 1/cm
-// and fIntegralPAIxSection[0] = mean energy loss per cm  in keV/cm
-
-void G4PAIxSection::IntegralPAIxSection()
-{
-   fIntegralPAIxSection[fSplineNumber] = 0 ;
-   fIntegralPAIxSection[0] = 0 ;
-   G4int k = fIntervalNumber -1 ;
-   for(G4int i=fSplineNumber-1;i>=1;i--)
-   {
-      if(fSplineEnergy[i] >= fEnergyInterval[k])
-      {
-        fIntegralPAIxSection[i] = fIntegralPAIxSection[i+1] + SumOverInterval(i) ;
-      }
-      else
-      {
-        fIntegralPAIxSection[i] = fIntegralPAIxSection[i+1] + 
-	                           SumOverBorder(i+1,fEnergyInterval[k]) ;
-	k-- ;
-      }
-   }
-
-}   // end of IntegralPAIxSection 
 
 ////////////////////////////////////////////////////////////////////
 //
@@ -722,7 +715,7 @@ G4double G4PAIxSection::ImPartDielectricConst( G4int    k ,
 
 //////////////////////////////////////////////////////////////////////////////
 //
-// Real part of dielectric constant minus unit
+// Real part of dielectric constant minus unit: epsilon_1 - 1
 // (G4double enb - energy point)
 //
 
@@ -836,6 +829,187 @@ G4double G4PAIxSection::DifPAIxSection( G4int              i ,
 
 } // end of DifPAIxSection 
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Calculation od dN/dx of collisions with creation of Cerenkov pseudo-photons
+
+G4double G4PAIxSection::PAIdNdxCerenkov( G4int    i ,
+                                         G4double betaGammaSq  )
+{        
+   G4double cof, logarithm, x3, x5, argument, modul2, dNdxC ; 
+   G4double be2, be4, betaBohr2,betaBohr4,cofBetaBohr ;
+
+   cof         = 1.0 ;
+   cofBetaBohr = 4.0 ;
+   betaBohr2   = fine_structure_const*fine_structure_const ;
+   betaBohr4   = betaBohr2*betaBohr2*cofBetaBohr ;
+
+   be2 = betaGammaSq/(1 + betaGammaSq) ;
+   be4 = be2*be2 ;
+
+   if( betaGammaSq < 0.01 ) logarithm = log(1.0+betaGammaSq) ; // 0.0 ;
+   else
+   {
+     logarithm  = -log( (1/betaGammaSq - fRePartDielectricConst[i])*
+	                (1/betaGammaSq - fRePartDielectricConst[i]) + 
+	                fImPartDielectricConst[i]*fImPartDielectricConst[i] )*0.5 ;
+     logarithm += log(1+1.0/betaGammaSq) ;
+   }
+
+   if( fImPartDielectricConst[i] == 0.0 || betaGammaSq < 0.01 )
+   {
+     argument = 0.0 ;
+   }
+   else
+   {
+     x3 = -fRePartDielectricConst[i] + 1.0/betaGammaSq ;
+     x5 = -1.0 - fRePartDielectricConst[i] +
+          be2*((1.0 +fRePartDielectricConst[i])*(1.0 + fRePartDielectricConst[i]) +
+	  fImPartDielectricConst[i]*fImPartDielectricConst[i]) ;
+     if( x3 == 0.0 ) argument = 0.5*pi;
+     else            argument = atan2(fImPartDielectricConst[i],x3) ;
+     argument *= x5  ;
+   }   
+   dNdxC = ( logarithm*fImPartDielectricConst[i] + argument )/hbarc ;
+  
+   if(dNdxC < 1.0e-8) dNdxC = 1.0e-8 ;
+
+   dNdxC *= fine_structure_const/be2/pi ;
+
+   dNdxC *= (1-exp(-be4/betaBohr4)) ;
+
+   if(fDensity >= 0.1)
+   { 
+      modul2 = (1.0 + fRePartDielectricConst[i])*(1.0 + fRePartDielectricConst[i]) + 
+                    fImPartDielectricConst[i]*fImPartDielectricConst[i] ;
+      dNdxC /= modul2 ;
+   }
+   return dNdxC ;
+
+} // end of PAIdNdxCerenkov 
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Calculation od dN/dx of collisions with creation of longitudinal EM
+// excitations (plasmons, delta-electrons)
+
+G4double G4PAIxSection::PAIdNdxPlasmon( G4int    i ,
+                                        G4double betaGammaSq  )
+{        
+   G4double cof, resonance, modul2, dNdxP ;
+   G4double be2, be4, betaBohr2, betaBohr4, cofBetaBohr ;
+
+   cof = 1 ;
+   cofBetaBohr = 4.0 ;
+   betaBohr2   = fine_structure_const*fine_structure_const ;
+   betaBohr4   = betaBohr2*betaBohr2*cofBetaBohr ;
+
+   be2 = betaGammaSq/(1 + betaGammaSq) ;
+   be4 = be2*be2 ;
+ 
+   resonance = log(2*electron_mass_c2*be2/fSplineEnergy[i]) ;  
+   resonance *= fImPartDielectricConst[i]/hbarc ;
+
+
+   dNdxP = ( resonance + cof*fIntegralTerm[i]/fSplineEnergy[i]/fSplineEnergy[i] ) ;
+
+   if( dNdxP < 1.0e-8 ) dNdxP = 1.0e-8 ;
+
+   dNdxP *= fine_structure_const/be2/pi ;
+   dNdxP *= (1-exp(-be4/betaBohr4)) ;
+
+   if( fDensity >= 0.1 )
+   { 
+     modul2 = (1 + fRePartDielectricConst[i])*(1 + fRePartDielectricConst[i]) + 
+        fImPartDielectricConst[i]*fImPartDielectricConst[i] ;
+     dNdxP /= modul2 ;
+   }
+   return dNdxP ;
+
+} // end of PAIdNdxPlasmon 
+
+////////////////////////////////////////////////////////////////////////
+//
+// Calculation of the PAI integral cross-section
+// fIntegralPAIxSection[1] = specific primary ionisation, 1/cm
+// and fIntegralPAIxSection[0] = mean energy loss per cm  in keV/cm
+
+void G4PAIxSection::IntegralPAIxSection()
+{
+   fIntegralPAIxSection[fSplineNumber] = 0 ;
+   fIntegralPAIxSection[0] = 0 ;
+   G4int k = fIntervalNumber -1 ;
+   for(G4int i=fSplineNumber-1;i>=1;i--)
+   {
+      if(fSplineEnergy[i] >= fEnergyInterval[k])
+      {
+        fIntegralPAIxSection[i] = fIntegralPAIxSection[i+1] + SumOverInterval(i) ;
+      }
+      else
+      {
+        fIntegralPAIxSection[i] = fIntegralPAIxSection[i+1] + 
+	                           SumOverBorder(i+1,fEnergyInterval[k]) ;
+	k-- ;
+      }
+   }
+
+}   // end of IntegralPAIxSection 
+
+////////////////////////////////////////////////////////////////////////
+//
+// Calculation of the PAI Cerenkov integral cross-section
+// fIntegralCrenkov[1] = specific Crenkov ionisation, 1/cm
+// and fIntegralCerenkov[0] = mean Cerenkov loss per cm  in keV/cm
+
+void G4PAIxSection::IntegralCerenkov()
+{
+   fIntegralCerenkov[fSplineNumber] = 0 ;
+   fIntegralCerenkov[0] = 0 ;
+
+   G4int k = fIntervalNumber -1 ;
+   for(G4int i=fSplineNumber-1;i>=1;i--)
+   {
+      if(fSplineEnergy[i] >= fEnergyInterval[k])
+      {
+        fIntegralCerenkov[i] = fIntegralCerenkov[i+1] + SumOverInterCerenkov(i) ;
+      }
+      else
+      {
+        fIntegralCerenkov[i] = fIntegralCerenkov[i+1] + 
+	                           SumOverBordCerenkov(i+1,fEnergyInterval[k]) ;
+	k-- ;
+      }
+   }
+
+}   // end of IntegralCerenkov 
+
+////////////////////////////////////////////////////////////////////////
+//
+// Calculation of the PAI Plasmon integral cross-section
+// fIntegralPlasmon[1] = splasmon primary ionisation, 1/cm
+// and fIntegralPlasmon[0] = mean plasmon loss per cm  in keV/cm
+
+void G4PAIxSection::IntegralPlasmon()
+{
+   fIntegralPlasmon[fSplineNumber] = 0 ;
+   fIntegralPlasmon[0] = 0 ;
+   G4int k = fIntervalNumber -1 ;
+   for(G4int i=fSplineNumber-1;i>=1;i--)
+   {
+      if(fSplineEnergy[i] >= fEnergyInterval[k])
+      {
+        fIntegralPlasmon[i] = fIntegralPlasmon[i+1] + SumOverInterPlasmon(i) ;
+      }
+      else
+      {
+        fIntegralPlasmon[i] = fIntegralPlasmon[i+1] + 
+	                           SumOverBordPlasmon(i+1,fEnergyInterval[k]) ;
+	k-- ;
+      }
+   }
+
+}   // end of IntegralPlasmon
+
 //////////////////////////////////////////////////////////////////////
 //
 // Calculation the PAI integral cross-section inside
@@ -875,6 +1049,68 @@ G4double G4PAIxSection::SumOverInterval( G4int i )
    return result ;
 
 } //  end of SumOverInterval
+
+//////////////////////////////////////////////////////////////////////
+//
+// Calculation the PAI Cerenkov integral cross-section inside
+// of interval of continuous values of photo-ionisation Cerenkov
+// cross-section. Parameter  'i' is the number of interval.
+
+G4double G4PAIxSection::SumOverInterCerenkov( G4int i )
+{         
+   G4double x0,x1,y0,yy1,a,b,result ;
+
+   x0  = fSplineEnergy[i] ;
+   x1  = fSplineEnergy[i+1] ;
+   y0  = fdNdxCerenkov[i] ;
+   yy1 = fdNdxCerenkov[i+1];
+
+   a = log10(yy1/y0)/log10(x1/x0) ;
+   b = log10(y0) - a*log10(x0) ;
+   b = pow(10.0,b) ;
+
+   a += 1.0 ;
+   if(a == 0) result = b*log(x1/x0) ;
+   else       result = b*(pow(x1,a) - pow(x0,a))/a ;   
+   a += 1.0 ;
+
+   if( a == 0 ) fIntegralCerenkov[0] += b*log(x1/x0) ;
+   else         fIntegralCerenkov[0] += b*(pow(x1,a) - pow(x0,a))/a ;
+   
+   return result ;
+
+} //  end of SumOverInterCerenkov
+
+//////////////////////////////////////////////////////////////////////
+//
+// Calculation the PAI Plasmon integral cross-section inside
+// of interval of continuous values of photo-ionisation Plasmon
+// cross-section. Parameter  'i' is the number of interval.
+
+G4double G4PAIxSection::SumOverInterPlasmon( G4int i )
+{         
+   G4double x0,x1,y0,yy1,a,b,result ;
+
+   x0  = fSplineEnergy[i] ;
+   x1  = fSplineEnergy[i+1] ;
+   y0  = fdNdxPlasmon[i] ;
+   yy1 = fdNdxPlasmon[i+1];
+
+   a = log10(yy1/y0)/log10(x1/x0) ;
+   b = log10(y0) - a*log10(x0) ;
+   b = pow(10.0,b) ;
+
+   a += 1.0 ;
+   if(a == 0) result = b*log(x1/x0) ;
+   else       result = b*(pow(x1,a) - pow(x0,a))/a ;   
+   a += 1.0 ;
+
+   if( a == 0 ) fIntegralPlasmon[0] += b*log(x1/x0) ;
+   else         fIntegralPlasmon[0] += b*(pow(x1,a) - pow(x0,a))/a ;
+   
+   return result ;
+
+} //  end of SumOverInterPlasmon
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -944,6 +1180,104 @@ G4double G4PAIxSection::SumOverBorder( G4int      i ,
 
 } 
 
+///////////////////////////////////////////////////////////////////////////////
+//
+// Integration of Cerenkov cross-section for the case of
+// passing across border between intervals
+
+G4double G4PAIxSection::SumOverBordCerenkov( G4int      i , 
+                                             G4double en0    )
+{               
+   G4double x0,x1,y0,yy1,a,b,e0,result ;
+
+   e0 = en0 ;
+   x0 = fSplineEnergy[i] ;
+   x1 = fSplineEnergy[i+1] ;
+   y0 = fdNdxCerenkov[i] ;
+   yy1 = fdNdxCerenkov[i+1] ;
+   
+   a = log10(yy1/y0)/log10(x1/x0) ;
+   b = log10(y0) - a*log10(x0) ;
+   b = pow(10,b) ;
+   
+   a += 1.0 ;
+   if( a == 0 ) result = b*log(x0/e0) ;
+   else         result = b*(pow(x0,a) - pow(e0,a))/a ;   
+   a += 1.0 ;
+
+   if( a == 0 ) fIntegralCerenkov[0] += b*log(x0/e0) ;
+   else         fIntegralCerenkov[0] += b*(pow(x0,a) - pow(e0,a))/a ;
+   
+   x0 = fSplineEnergy[i - 1] ;
+   x1 = fSplineEnergy[i - 2] ;
+   y0 = fdNdxCerenkov[i - 1] ;
+   yy1 = fdNdxCerenkov[i - 2] ;
+
+   a = log10(yy1/y0)/log10(x1/x0) ;
+   b = log10(y0) - a*log10(x0) ;
+   b = pow(10,b) ;
+
+   a += 1.0 ;
+   if( a == 0 ) result += b*log(e0/x0) ;
+   else         result += b*(pow(e0,a) - pow(x0,a))/a ;
+   a += 1.0 ;
+
+   if( a == 0 )   fIntegralCerenkov[0] += b*log(e0/x0) ;
+   else           fIntegralCerenkov[0] += b*(pow(e0,a) - pow(x0,a))/a ;
+   
+   return result ;
+
+} 
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Integration of Plasmon cross-section for the case of
+// passing across border between intervals
+
+G4double G4PAIxSection::SumOverBordPlasmon( G4int      i , 
+                                             G4double en0    )
+{               
+   G4double x0,x1,y0,yy1,a,b,e0,result ;
+
+   e0 = en0 ;
+   x0 = fSplineEnergy[i] ;
+   x1 = fSplineEnergy[i+1] ;
+   y0 = fdNdxPlasmon[i] ;
+   yy1 = fdNdxPlasmon[i+1] ;
+   
+   a = log10(yy1/y0)/log10(x1/x0) ;
+   b = log10(y0) - a*log10(x0) ;
+   b = pow(10,b) ;
+   
+   a += 1.0 ;
+   if( a == 0 ) result = b*log(x0/e0) ;
+   else         result = b*(pow(x0,a) - pow(e0,a))/a ;   
+   a += 1.0 ;
+
+   if( a == 0 ) fIntegralPlasmon[0] += b*log(x0/e0) ;
+   else         fIntegralPlasmon[0] += b*(pow(x0,a) - pow(e0,a))/a ;
+   
+   x0 = fSplineEnergy[i - 1] ;
+   x1 = fSplineEnergy[i - 2] ;
+   y0 = fdNdxPlasmon[i - 1] ;
+   yy1 = fdNdxPlasmon[i - 2] ;
+
+   a = log10(yy1/y0)/log10(x1/x0) ;
+   b = log10(y0) - a*log10(x0) ;
+   b = pow(10,b) ;
+
+   a += 1.0 ;
+   if( a == 0 ) result += b*log(e0/x0) ;
+   else         result += b*(pow(e0,a) - pow(x0,a))/a ;
+   a += 1.0 ;
+
+   if( a == 0 )   fIntegralPlasmon[0] += b*log(e0/x0) ;
+   else           fIntegralPlasmon[0] += b*(pow(e0,a) - pow(x0,a))/a ;
+   
+   return result ;
+
+} 
+
 /////////////////////////////////////////////////////////////////////////
 //
 //
@@ -976,6 +1310,78 @@ G4double G4PAIxSection::GetStepEnergyLoss( G4double step )
     numOfCollisions-- ;
   }
   // G4cout<<"PAI energy loss = "<<loss/keV<<" keV"<<G4endl ; 
+
+  return loss ;
+}
+
+/////////////////////////////////////////////////////////////////////////
+//
+//
+
+G4double G4PAIxSection::GetStepCerenkovLoss( G4double step )
+{  
+  G4int iTransfer  ;
+  G4long numOfCollisions ;
+  G4double loss = 0.0 ;
+  G4double meanNumber, position ;
+
+  // G4cout<<" G4PAIxSection::GetStepCreLosnkovs "<<G4endl ;
+
+
+
+  meanNumber = fIntegralCerenkov[1]*step ;
+  numOfCollisions = RandPoisson::shoot(meanNumber) ;
+
+  //   G4cout<<"numOfCollisions = "<<numOfCollisions<<G4endl ;
+
+  while(numOfCollisions)
+  {
+    position = fIntegralCerenkov[1]*G4UniformRand() ;
+
+    for( iTransfer=1 ; iTransfer<=fSplineNumber ; iTransfer++ )
+    {
+        if( position >= fIntegralCerenkov[iTransfer] ) break ;
+    }
+    loss += fSplineEnergy[iTransfer]  ;
+    numOfCollisions-- ;
+  }
+  // G4cout<<"PAI Cerenkov loss = "<<loss/keV<<" keV"<<G4endl ; 
+
+  return loss ;
+}
+
+/////////////////////////////////////////////////////////////////////////
+//
+//
+
+G4double G4PAIxSection::GetStepPlasmonLoss( G4double step )
+{  
+  G4int iTransfer  ;
+  G4long numOfCollisions ;
+  G4double loss = 0.0 ;
+  G4double meanNumber, position ;
+
+  // G4cout<<" G4PAIxSection::GetStepCreLosnkovs "<<G4endl ;
+
+
+
+  meanNumber = fIntegralPlasmon[1]*step ;
+  numOfCollisions = RandPoisson::shoot(meanNumber) ;
+
+  //   G4cout<<"numOfCollisions = "<<numOfCollisions<<G4endl ;
+
+  while(numOfCollisions)
+  {
+    position = fIntegralPlasmon[1]*G4UniformRand() ;
+
+    for( iTransfer=1 ; iTransfer<=fSplineNumber ; iTransfer++ )
+    {
+        if( position >= fIntegralPlasmon[iTransfer] ) break ;
+    }
+    loss += fSplineEnergy[iTransfer]  ;
+    numOfCollisions-- ;
+  }
+  // G4cout<<"PAI Plasmon loss = "<<loss/keV<<" keV"<<G4endl ; 
 
   return loss ;
 }
