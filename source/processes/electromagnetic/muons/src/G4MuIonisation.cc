@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.cc,v 1.40 2004-02-15 17:46:55 vnivanch Exp $
+// $Id: G4MuIonisation.cc,v 1.41 2004-05-27 16:43:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -90,7 +90,7 @@ G4MuIonisation::G4MuIonisation(const G4String& name)
   SetLambdaBinning(120);
   SetMinKinEnergy(0.1*keV);
   SetMaxKinEnergy(100.0*TeV);
-  SetIntegral(false);
+  //SetIntegral(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -125,6 +125,8 @@ void G4MuIonisation::InitialiseProcess()
   em2->SetLowEnergyLimit(1.0*GeV);
   em2->SetHighEnergyLimit(100.0*TeV);
   AddEmModel(3, em2, flucModel);
+
+  SetStepLimits(0.2, 1.0*mm);
 
   ratio = electron_mass_c2/mass;
   isInitialised = true;
