@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryManager.cc,v 1.6 2001-10-26 12:56:02 gcosmo Exp $
+// $Id: G4GeometryManager.cc,v 1.7 2002-02-26 18:26:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GeometryManager
@@ -234,7 +234,8 @@ G4GeometryManager::ReportVoxelStats( G4std::vector<G4SmartVoxelStat> &stats,
            << G4std::setw(13) << (stats[i].GetMemoryUse()+512)/1024
            << "k " << G4std::setiosflags(G4std::ios::left)
            << stats[i].GetVolume()->GetName()
-           << G4std::resetiosflags(G4std::ios::left)
+           << G4std::resetiosflags(G4std::ios::floatfield|G4std::ios::adjustfield)
+           << G4std::setprecision(6)
            << G4endl;
   }
  
@@ -268,7 +269,8 @@ G4GeometryManager::ReportVoxelStats( G4std::vector<G4SmartVoxelStat> &stats,
            << G4std::setw(13) << totTime << "    "
            << G4std::setiosflags(G4std::ios::left)
            << stats[i].GetVolume()->GetName()
-           << G4std::resetiosflags(G4std::ios::left)
+           << G4std::resetiosflags(G4std::ios::floatfield|G4std::ios::adjustfield)
+           << G4std::setprecision(6)
            << G4endl;
   }
 }
