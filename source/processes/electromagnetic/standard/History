@@ -1,4 +1,4 @@
-$Id: History,v 1.76 2003-02-05 10:02:45 vnivanch Exp $
+$Id: History,v 1.77 2003-02-12 08:57:28 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12 feb 03: G.Cosmo (stand-V05-00-04)
+- Replaced call to RandPoisson::shoot() with G4Poisson(), more performant.
+  Affected files: G4PAIonisation.cc, G4PAIxSection.cc.
+
 05 feb 03: V.Ivant (stand-V05-00-03)
 - Fix on warnings at SUN for STD classes
 - Add Initialise method to STD classes to calculate PartialSumSigma
