@@ -1,4 +1,4 @@
-n //---------------------------------------
+//---------------------------------------
 //        Macro file for test30
 //         examine PostStepDoIt
 //        for hadronic physics
@@ -7,7 +7,7 @@ n //---------------------------------------
 #verbose
 0
 #events
-10000
+1000000
 //--------Proton_processes
 //#particle
 #ion
