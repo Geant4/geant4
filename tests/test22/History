@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2003-06-02 12:38:04 gcosmo Exp $
+$Id: History,v 1.3 2003-06-03 12:49:04 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,13 +15,18 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 3, 2003  G.Cosmo (test22-V05-01-01)
+- Reduced statistics in input script.
+- Cleared compilation warnings...
+- Made largeN macro corresponding to standard macro with more statistics...
+
 May 31, 2003  G.Cosmo (test22-V05-01-00)
 - Made test more effective for scaling of the gamma-nuclear cross-sections.
   Modified physics-list and input script. Will require update of the
   reference output. (H.P.Wellisch)
 - Added description to README.
 
-Nov 22, 2001  H.P.Wellisch
+November 22, 2001  H.P.Wellisch
 - Created the test to test gamma and electron nuclear reactions using
   chiral invariant phase space decay for final state production.
 
