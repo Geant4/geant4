@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: NTSTPhysicsList.cc,v 1.1 2003-11-07 21:30:29 japost Exp $
+// $Id: NTSTPhysicsList.cc,v 1.2 2003-11-07 22:10:35 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,19 +31,19 @@
 
 NTSTPhysicsList::NTSTPhysicsList()
   : G4VUserPhysicsList(),
+    useBgsTran(false),                       // use G4Transportation by default
+    MinimumEnergyCut(1*MeV),                 // ParticleWithCuts min E cut 
+    MaximumEnergyCut(100*TeV),               // ParticleWithCuts max E cut 
+    Cut(2.*mm),                              // Range cut
+    LooperCut(0*MeV),                        // Kill loopers below this energy
+    theLooperDeath(0),                       // pointer to looperdeath process
     thePhotoElectricEffect(NULL),theComptonScattering(NULL),
     theGammaConversion(NULL),
     theeminusMultipleScattering(NULL),theeminusIonisation(NULL),
     theeminusBremsstrahlung(NULL),
     theeplusMultipleScattering(NULL),theeplusIonisation(NULL),
     theeplusBremsstrahlung(NULL),
-    theeplusAnnihilation(NULL),
-    useBgsTran(true),                        // use BgsG4Extension by default
-    MinimumEnergyCut(1*MeV),                 // ParticleWithCuts min E cut 
-    MaximumEnergyCut(100*TeV),               // ParticleWithCuts max E cut 
-    Cut(2.*mm),                              // Range cut
-    theLooperDeath(0),                       // pointer to looperdeath process
-    LooperCut(0*MeV)                         // Kill loopers below this energy
+    theeplusAnnihilation(NULL)
 {
   SetVerboseLevel(2);
   physicsListMessenger = new NTSTPhysicsListMessenger(this);
@@ -416,7 +416,12 @@ NTSTPhysicsList::ConstructHad()
 void 
 NTSTPhysicsList::SetMinimumEnergyCut(const G4double e) { 
   MinimumEnergyCut = e; 
-  G4ParticleWithCuts::SetEnergyRange(MinimumEnergyCut, MaximumEnergyCut);
+  // -- G4cerr << " SetMinimumEnergyCut  is not currently implemented." << G4endl;
+  // -- G4Exception("SetMinimumEnergyCut missing"); 
+  // G4ParticleWithCuts::SetEnergyRange(MinimumEnergyCut, MaximumEnergyCut);
+  G4cerr << " SetMinimumEnergyCut  is newly re-implemented." << G4endl;
+  G4ProductionCutsTable::GetProductionCutsTable()
+       ->SetEnergyRange(MinimumEnergyCut, MaximumEnergyCut);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -424,7 +429,14 @@ NTSTPhysicsList::SetMinimumEnergyCut(const G4double e) {
 void 
 NTSTPhysicsList::SetMaximumEnergyCut(const G4double e) { 
   MaximumEnergyCut = e; 
-  G4ParticleWithCuts::SetEnergyRange(MinimumEnergyCut, MaximumEnergyCut);
+  // -- G4cerr << " SetMaximumEnergyCut  is not currently implemented." << G4endl;
+  // -- G4Exception("SetMaximumEnergyCut missing"); 
+  // G4ParticleWithCuts::SetEnergyRange(MinimumEnergyCut, MaximumEnergyCut);
+
+  G4cerr << " SetMaximumEnergyCut  is newly re-implemented." << G4endl;
+  G4ProductionCutsTable::GetProductionCutsTable()
+       ->SetEnergyRange(MinimumEnergyCut, MaximumEnergyCut);
+   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
