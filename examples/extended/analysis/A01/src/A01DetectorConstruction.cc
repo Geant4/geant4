@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01DetectorConstruction.cc,v 1.6 2003-08-15 00:25:21 duns Exp $
+// $Id: A01DetectorConstruction.cc,v 1.7 2003-10-14 18:15:26 perl Exp $
 // --------------------------------------------------------------
 //
 
@@ -307,7 +307,6 @@ G4VPhysicalVolume* A01DetectorConstruction::Construct()
   worldLogical->SetVisAttributes(worldVisAtt);
 
   magneticVisAtt = new G4VisAttributes(G4Colour(0.9,0.9,0.9));   // LightGray
-  magneticVisAtt->SetForceWireframe(true);
   magneticLogical->SetVisAttributes(magneticVisAtt);
 
   armVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
@@ -316,12 +315,10 @@ G4VPhysicalVolume* A01DetectorConstruction::Construct()
   secondArmLogical->SetVisAttributes(armVisAtt);
 
   hodoscopeVisAtt = new G4VisAttributes(G4Colour(0.8888,0.0,0.0));
-  hodoscopeVisAtt->SetForceWireframe(true);
   hodoscope1Logical->SetVisAttributes(hodoscopeVisAtt);
   hodoscope2Logical->SetVisAttributes(hodoscopeVisAtt);
 
   chamberVisAtt = new G4VisAttributes(G4Colour(0.0,1.0,0.0));
-  chamberVisAtt->SetForceWireframe(true);
   chamber1Logical->SetVisAttributes(chamberVisAtt);
   chamber2Logical->SetVisAttributes(chamberVisAtt);
 
@@ -335,11 +332,9 @@ G4VPhysicalVolume* A01DetectorConstruction::Construct()
   EMcalorimeterLogical->SetVisAttributes(EMcalorimeterVisAtt);
 
   cellVisAtt = new G4VisAttributes(G4Colour(0.9,0.9,0.0));
-  cellVisAtt->SetForceWireframe(true);
   cellLogical->SetVisAttributes(cellVisAtt);
 
   HadCalorimeterVisAtt = new G4VisAttributes(G4Colour(0.0, 0.0, 0.9));
-  HadCalorimeterVisAtt->SetForceWireframe(true);
   HadCalorimeterLogical->SetVisAttributes(HadCalorimeterVisAtt);
   HadCalorimeterCellVisAtt = new G4VisAttributes(G4Colour(0.0, 0.0, 0.9));
   HadCalorimeterCellVisAtt->SetVisibility(false);
