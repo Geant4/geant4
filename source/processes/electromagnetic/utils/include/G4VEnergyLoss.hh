@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEnergyLoss.hh,v 1.13 2001-11-08 08:09:57 urban Exp $
+// $Id: G4VEnergyLoss.hh,v 1.14 2002-09-02 15:46:55 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -203,7 +203,7 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
 
     static void SetSubSec(G4bool value);
     // switch on/off the generation of the subcutoff secondaries
-    // ( default = subcutoff secondary generation )
+    // ( default = no subcutoff secondary generation )
 
     static void SetMinDeltaCutInRange(G4double value);
     // sets minimal cut value for the subcutoff secondaries
