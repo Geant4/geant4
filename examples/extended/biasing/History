@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2002-03-28 14:41:15 gcosmo Exp $
+$Id: History,v 1.2 2002-04-08 08:59:13 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 8th, 2002  M.Dressel - exbiasing-V04-00-02
+- Resolved compilation problems on HP-aCC.
+
+April 4th, 2002  M.Dressel - exbiasing-V04-00-01
+- Resolved compilation problems on SUN-CC and Linux-egcs.
 
 March 28th, 2002  M.Dressel - exbiasing-V04-00-00
 - First implementation of importance biasing and scoring user examples.
