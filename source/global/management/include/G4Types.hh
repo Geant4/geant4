@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Types.hh,v 1.1 1999-05-24 18:23:09 gcosmo Exp $
+// $Id: G4Types.hh,v 1.2 1999-10-22 14:39:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -18,9 +18,18 @@
 
 #include <CLHEP/config/CLHEP.h>
 
+// Define G4std namespace for standard std.
+// Needed to allow both ISO/not-ISO ANSI compliant code installations
+//
+#ifndef G4USE_STD_NAMESPACE
+  #define G4std
+#else
+  #define G4std std
+#endif
+
 // Typedefs to decouple from library classes
 // Typedefs for numeric types
-// [NOTE: Will in future need to be made more sophisticated]
+//
 typedef HepDouble G4double;
 typedef HepFloat G4float;
 typedef HepInt G4int;
