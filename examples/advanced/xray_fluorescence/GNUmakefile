@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2001-11-28 16:06:32 elena Exp $
+# $Id: GNUmakefile,v 1.5 2001-12-06 19:48:19 pfeiffer Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -12,22 +12,33 @@ ifndef G4INSTALL
 endif
 
 .PHONY: all
-all: lib bin
+all: tmpana lib bin 
 
 include $(G4INSTALL)/config/architecture.gmk
 
+# include the configuration for the Analysis
+include $(G4INSTALL)/config/analysis.gmk
 
-CPPFLAGS += -I$(LHCXX_REL_DIR)/include
-LDFLAGS += -L$(LHCXX_REL_DIR)/lib
-#LOADLIBS += -L$(LHCXX_REL_DIR)/lib
-# general stuff:
-LOADLIBS += -lHepUtilities -lAIDA_Annotation
-# add for Histograms:
-LOADLIBS += -lAIDA_HBook 
-# add for Ntuples:
-LOADLIBS += -lAIDA_Ntuple -lNtupleTag -lNtupleTag_HBook 
-# ... and finally system stuff and to deal with the "Fortran legacy":
-LOADLIBS += -lCHBook -ldl -lg2c 
+
+# Check whether to use AIDA (default) or not.
+# Copy the XrayFluoAnalysisManager files according to which version
+# is selected. For this the target tmpana has been created.
+# This part of the makefile will be obsolete soon (see also below).
+
+ifdef G4ANALYSIS_AIDA_CONFIG_CFLAGS
+# AIDA (version 2.2 for now) selected
+tmpana:
+	cp include/XrayFluoAnalysisManager.hh-AIDA include/XrayFluoAnalysisManager.hh
+	cp src/XrayFluoAnalysisManager.cc-AIDA src/XrayFluoAnalysisManager.cc
+else
+# Anaphe selected (will be obsolete as soon as Anaphe is AIDA 2.2 compliant)
+include anaphe.gmk
+tmpana:
+	cp include/XrayFluoAnalysisManager.hh-Anaphe include/XrayFluoAnalysisManager.hh
+	cp src/XrayFluoAnalysisManager.cc-Anaphe src/XrayFluoAnalysisManager.cc
+endif
+
+# End check for AIDA.
 
 
 include $(G4INSTALL)/config/binmake.gmk
