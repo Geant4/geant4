@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm8.cc,v 1.2 2001-07-11 09:57:53 gunter Exp $
+// $Id: TestEm8.cc,v 1.3 2003-10-27 15:25:59 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,7 +44,9 @@
 #endif
 
 #include "Em8DetectorConstruction.hh"
+#include "PhysicsList.hh"
 #include "Em8PhysicsList.hh"
+#include "Em8PhysicsListModel.hh"
 #include "Em8PrimaryGeneratorAction.hh"
 #include "Em8RunAction.hh"
 #include "Em8EventAction.hh"
@@ -71,7 +73,9 @@ int main(int argc,char** argv)
   Em8DetectorConstruction* detector;
   detector = new Em8DetectorConstruction;
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new Em8PhysicsList(detector));
+  runManager->SetUserInitialization(new PhysicsList);
+  //  runManager->SetUserInitialization(new Em8PhysicsList(detector));
+  // runManager->SetUserInitialization(new Em8PhysicsListModel(detector));
   
 #ifdef G4VIS_USE
 
@@ -99,9 +103,9 @@ int main(int argc,char** argv)
                                                             runAction);
   runManager->SetUserAction(steppingAction);
   
-  //Initialize G4 kernel, physics tables ...
+  //Initialize G4 kernel, physics tables may be here ???...
 
-  runManager->Initialize();
+  //  runManager->Initialize();
     
   // get the pointer to the User Interface manager 
 

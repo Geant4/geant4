@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em8PhysicsList.cc,v 1.10 2003-08-28 09:29:37 vnivanch Exp $
+// $Id: Em8PhysicsList.cc,v 1.11 2003-10-27 15:26:00 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -68,7 +68,8 @@ Em8PhysicsList::Em8PhysicsList(Em8DetectorConstruction* p)
 
   cutForGamma = defaultCutValue ;
   cutForElectron = defaultCutValue ;
-  cutForElectron = 10*mm;
+  //  cutForProton = defaultCutValue ;
+
 
   SetVerboseLevel(1);
   physicsListMessenger = new Em8PhysicsListMessenger(this);
@@ -214,21 +215,19 @@ void Em8PhysicsList::ConstructEM()
       // Construct processes for electron
 
       // theeminusMultipleScattering = new G4MultipleScattering();
-      //   theeminusIonisation = new G4eIonisation();
-      theeminusBremsstrahlung = new G4eBremsstrahlung52();
 
-     //   fPAIonisation = new G4PAIonisation("Xenon") ;
-     // fForwardXrayTR = new G4ForwardXrayTR("Air","Polypropelene","XrayTR") ;
+             theeminusIonisation    = new G4eIonisation52();
+      theeminusBremsstrahlung = new G4eBremsstrahlung52();
 
       theeminusStepCut = new Em8StepCut();
 
       //  pmanager->AddProcess(theeminusMultipleScattering,-1,1,1);
 
-      //   pmanager->AddProcess(theeminusIonisation,-1,2,2);
+        pmanager->AddProcess(theeminusIonisation,-1,2,2);
 
-       pmanager->AddProcess(new G4IonisationByLogicalVolume(particleName,
-                                     pDet->GetLogicalAbsorber(),
-                                    "IonisationByLogVol"),-1,2,-2);
+	//  pmanager->AddProcess(new G4IonisationByLogicalVolume(particleName,
+	//                   pDet->GetLogicalAbsorber(),
+	//                 "IonisationByLogVol"),-1,2,-2);
 
        pmanager->AddProcess(theeminusBremsstrahlung,-1,-1,3);
 
