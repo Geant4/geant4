@@ -1,5 +1,5 @@
 
-$Id: History,v 1.17 2001-01-08 16:52:50 gcosmo Exp $
+$Id: History,v 1.18 2001-01-23 08:31:03 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ Jan 23  2001  Gabriele Cosmo       geom-solid-bool-V03-00-01
+ 
+  - Fixed wrong labels for G4Exception calls in G4UnionSolid.cc and
+    G4SubtractionSolid.cc to identify the correct class.
+    Fixes bug report #200.
 
  Jan 08  2001  Vladimir Grichine    geom-solid-bool-V03-00-00
 
