@@ -30,7 +30,19 @@
 #include "globals.hh"
 #include <vector>
 #include <iostream>
+#if __GNUC__ < 3
+#if __GNUC_MINOR__ < 96
+#if __GNUC_PATCHLEVEL__ < 4
+#define G4HEPREP_SSTREAM 1
+#endif
+#endif
+#endif
+
+#ifdef G4HEPREP_SSTREAM
+#include "../include/g++iostream/sstream"
+#else
 #include <sstream>
+#endif
 #include <iomanip>
 #include <fstream>
 
