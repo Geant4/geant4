@@ -60,7 +60,7 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
 			    clusteringCoefficient);
   G4Quasmon::SetParameters(temperature,
                            halfTheStrangenessOfSee,
-			   etaToEtaPrime);
+			   etaToEtaPrime, 1.);
 //  G4cout << "Input info "<< projectilePDGCode << " " 
 //         << targetPDGCode <<" "
 //	 << 1./MeV*proj4Mom<<" "
