@@ -37,10 +37,10 @@
 // Source axis is oriented along Z axis. 
 // Voxel data on the X-Z plan
 //e is output to 
-// "Brachy2.hbk".
+// "Brachy3.hbk".
 
 
-// $Id: Brachy.cc,v 1.10 2002-06-10 16:09:04 guatelli Exp $
+// $Id: Brachy.cc,v 1.11 2002-06-18 22:20:37 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -59,7 +59,7 @@
 #include "BrachyDetectorConstruction.hh"
 #include "BrachyPhysicsList.hh"
 #include "BrachyPrimaryGeneratorAction.hh"
-#include "BrachyWaterBoxSD.hh"
+#include "BrachyPhantomSD.hh"
 
 #include "G4SDManager.hh"
 
@@ -77,7 +77,7 @@
 int main(int argc ,char ** argv)
 
 { 
-// semi diversi li ha usati per l'errore
+  // semi diversi li ha usati per l'errore
   
 
   //HepRandom::setTheSeed(16520);
@@ -86,25 +86,25 @@ int main(int argc ,char ** argv)
  
   
   // Construct the default run manager
- G4RunManager* pRunManager = new G4RunManager;
+  G4RunManager* pRunManager = new G4RunManager;
 
 
- // Set mandatory initialization classes
- G4String SDName = "WaterBox";
+  // Set mandatory initialization classes
+  G4String SDName = "Phantom";
  
- BrachyDetectorConstruction *pDetectorConstruction=new BrachyDetectorConstruction(SDName);
- pRunManager->SetUserInitialization(pDetectorConstruction) ;
+  BrachyDetectorConstruction *pDetectorConstruction=new BrachyDetectorConstruction(SDName);
+  pRunManager->SetUserInitialization(pDetectorConstruction) ;
  
- pRunManager->SetUserInitialization(new BrachyPhysicsList);
+  pRunManager->SetUserInitialization(new BrachyPhysicsList);
 
   
 #ifdef G4VIS_USE
   // visualization manager
- G4VisManager* visManager = new BrachyVisManager;
- visManager->Initialize();
+  G4VisManager* visManager = new BrachyVisManager;
+  visManager->Initialize();
 #endif
 
-G4UIsession* session=0;
+  G4UIsession* session=0;
   
    
   if (argc==1)   // Define UI session for interactive mode.
@@ -123,12 +123,12 @@ G4UIsession* session=0;
  
 
 
- BrachyEventAction *pEventAction=new BrachyEventAction(SDName);
+  BrachyEventAction *pEventAction=new BrachyEventAction(SDName);
  
   pRunManager->SetUserAction(pEventAction );
   pRunManager->SetUserAction(new BrachyPrimaryGeneratorAction);
  
-  BrachyRunAction *pRunAction=new BrachyRunAction(SDName);
+  BrachyRunAction *pRunAction=new BrachyRunAction();
   pRunManager->SetUserAction(pRunAction);
  
  
@@ -142,7 +142,7 @@ G4UIsession* session=0;
   UI->ApplyCommand("/event/verbose 0");
   UI->ApplyCommand("/tracking/verbose 0");
 
-   if (session)   // Define UI session for interactive mode.
+  if (session)   // Define UI session for interactive mode.
     {
       // G4UIterminal is a (dumb) terminal.
       UI->ApplyCommand("/control/execute initInter.mac");    
@@ -160,12 +160,12 @@ G4UIsession* session=0;
       UI->ApplyCommand(command+fileName);
     }  
   
-   //int numberOfEvent = 10000;
-   //pRunManager->BeamOn(numberOfEvent);
+  //int numberOfEvent = 10000;
+  //pRunManager->BeamOn(numberOfEvent);
   				
  	   
 	 
-// Job termination
+  // Job termination
 
 
   
@@ -175,9 +175,9 @@ G4UIsession* session=0;
   
    
 
- delete pRunManager;
+  delete pRunManager;
 
- return 0;
+  return 0;
 }
 
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyDetectorMessenger.hh,v 1.1 2002-06-13 15:02:46 guatelli Exp $
+// $Id: BrachyDetectorMessenger.hh,v 1.2 2002-06-18 22:24:22 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,19 +46,19 @@ class G4UIcmdWithoutParameter;
 
 class BrachyDetectorMessenger: public G4UImessenger
 {
-  public:
-    BrachyDetectorMessenger(BrachyDetectorConstruction* );
-   ~BrachyDetectorMessenger();
+public:
+  BrachyDetectorMessenger(BrachyDetectorConstruction* );
+  ~BrachyDetectorMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
     
-  private:
-    BrachyDetectorConstruction* Detector;
+private:
+  BrachyDetectorConstruction* Detector;
     
-    G4UIdirectory*             detDir;
-    G4UIcmdWithAString*        AbsMaterCmd;
+  G4UIdirectory*             detDir;
+  G4UIcmdWithAString*        AbsMaterCmd;
     
-    G4UIcmdWithoutParameter*   UpdateCmd;
+  G4UIcmdWithoutParameter*   UpdateCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -20,40 +20,32 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//    ********************************
-//    *                              *  
-//    *     BrachyWaterBoxSD.hh      *
-//    *                              *
-//    ********************************
+//    ************************************
+//    *                                  *
+//    *    BrachyWaterBoxROGeometry.hh   *
+//    *                                  *
+//    ************************************
 
-#ifndef BrachyWaterBoxSD_h
-#define BrachyWaterBoxSD_h 1
 
-#include "G4VSensitiveDetector.hh"
-#include "BrachyWaterBoxHit.hh"
+#ifndef BrachyPhantomROGeometry_h
+#define BrachyPhantomROGeometry_h 
 
-class G4Step;
-class G4HCofThisEvent;
-class G4TouchableHistory;
+#include "G4VReadOutGeometry.hh"
 
-class BrachyWaterBoxSD : public G4VSensitiveDetector
+class BrachyPhantomROGeometry : public G4VReadOutGeometry
 {
- public:
-      BrachyWaterBoxSD(G4String name, G4int NumVoxelX, G4int NumVoxelZ);
-      ~BrachyWaterBoxSD();
+public:
+  BrachyPhantomROGeometry(G4String aString,G4double DetDimX,G4double DetDimZ,G4int NumVoxelX,G4int NumVoxelZ);
+  ~BrachyPhantomROGeometry();
 
-      void Initialize(G4HCofThisEvent*HCE);
-      G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
-      void EndOfEvent(G4HCofThisEvent*HCE);
-      void clear();
-      void DrawAll();
-      void PrintAll();
- private:
-      BrachyWaterBoxHitsCollection *m_pWaterBoxHitsCollection;
-	
-      const G4int m_NumVoxelX;
-      const G4int m_NumVoxelZ;
-      G4int *m_pVoxelID;
+private:
+  const G4double m_DetDimX;
+  const G4double m_DetDimZ;
+  const G4int m_NumVoxelX;
+  const G4int m_NumVoxelZ;
+
+private:
+  G4VPhysicalVolume* Build();
 };
-#endif
 
+#endif

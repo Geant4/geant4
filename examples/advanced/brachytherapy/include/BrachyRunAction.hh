@@ -9,16 +9,16 @@ class G4Run;
 class BrachyAnalysisManager;
 class BrachyRunAction : public G4UserRunAction
 {
-  public:
-    BrachyRunAction(G4String& );
-   ~BrachyRunAction();
+public:
+  BrachyRunAction( );
+  ~BrachyRunAction();
 
-  public:
-    void BeginOfRunAction(const G4Run*);
-    void EndOfRunAction(const G4Run* );
-  private:
+public:
+  void BeginOfRunAction(const G4Run*);
+  void EndOfRunAction(const G4Run* );
+private:
  
-   G4String      SDname;
+  G4String      SDname;
   
  
 };

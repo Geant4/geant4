@@ -17,7 +17,7 @@ class BrachyAnalysisManager
 {
 public:
   
-   ~BrachyAnalysisManager();
+  ~BrachyAnalysisManager();
 
   void book();
   
@@ -34,10 +34,10 @@ private:
   G4double xx,zz;
   G4float  en; 
   G4double  x,z;
- static BrachyAnalysisManager* instance;
+  static BrachyAnalysisManager* instance;
 
 private:
-   BrachyAnalysisManager();
+  BrachyAnalysisManager();
 
 private:
 
