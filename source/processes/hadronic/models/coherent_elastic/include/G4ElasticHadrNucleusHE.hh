@@ -133,7 +133,7 @@
 //     ++++++++++++++++++++++++++++++++++++++++++++++++++
          std::vector<ElasticData> SetOfElasticData;
 
-         G4IonTable                * MyIonTable;
+         G4IonTable                  MyIonTable;
          G4DiffElasticHadrNucleus    aDiffElHadNcls;
 //         G4HadFinalState  FinState; 
 

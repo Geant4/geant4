@@ -117,7 +117,7 @@
   G4Exception(" This nucleus is very light for this model !!!");
          }
 
-  if(Nucleus>208)
+  if(Nucleus>238)
          {
   G4Exception(" This nucleus is very heavy for this model !!!");
          }

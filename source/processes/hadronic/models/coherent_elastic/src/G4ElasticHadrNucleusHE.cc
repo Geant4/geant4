@@ -37,12 +37,10 @@
   G4Exception(" This nucleus is very light for this model !!!");
          }
 
-  if(iNnucl>208)
+  if(iNnucl>238)
          {
   G4Exception(" This nucleus is very heavy for this model !!!");
          }
-
-                MyIonTable  = new G4IonTable();
  
           Factorials1[0] = 1;
           for( ii = 1; ii<110; ii++)
@@ -159,7 +157,7 @@
   G4Exception(" This nucleus is very light for this model !!!");
      }
 
-  if(iNnucl>208)
+  if(iNnucl>238)
     {
   G4Exception(" This nucleus is very heavy for this model !!!");
      }
@@ -170,6 +168,7 @@
    {
         sPath =  getenv("G4ELASTICDATA");
         sPath =  sPath+"/Elastic/";
+	G4cout << "@@@@ Path found "<<std::endl;
    }
   else  sPath =       "./Elastic/";
 
@@ -181,8 +180,6 @@
   G4cout <<" Reading file for: Hadron - "<<sNameHdr
          <<".  Nucleus - "<<iNnucl<<G4endl;
   G4cout <<" The Name of File is "<<sNameFile.str()<<G4endl;
-
-        MyIonTable     = new G4IonTable();
 
         GetNucleusParameters(aNucleus);
 
@@ -217,14 +214,20 @@
    {
            dPower = pow(10.0,ik);
 
-     for(kk=0; kk<iPoE; kk++)  TestFile >> ElD.TableE[kk+ik*iPoE];
-
+     for(kk=0; kk<iPoE; kk++)  
+     {
+       if(kk+ik*iPoE >= ONE*AreaNumb) G4Exception("Fucked up !!!!!");
+       TestFile >> ElD.TableE[kk+ik*iPoE];
+     }
       for(ii=0; ii<ONQ2; ii++)
       {
 
         ElD.TableQ2[ii] = iQ2[ii];
         for(kk=0; kk<iPoE; kk++) 
+	{
              TestFile >> ElD.TableCrossSec[kk*ONQ2+ii+ik*ONQ2XE];
+             if(kk*ONQ2+ii+ik*ONQ2XE>=ONQ2XE*AreaNumb) G4Exception("REALLY Fucked up !!!!!");
+	}
 // G4cout<<" iQ2 "<<iQ2[ii];
       }       //  ii
 // G4cout<<G4endl;
@@ -359,8 +362,6 @@
  {
        G4int    nN, nZ;
 
-       G4IonTable        * MyIonTable = new  G4IonTable();
-
     iContr = 133;
 
     if(iContr==137)
@@ -383,12 +384,12 @@
   G4cout<<" In Apply: HadMass HadName "<<hadrMass
         <<"  "<<hadrName<<G4endl;
 
-    G4ParticleDefinition * hadrDef = new G4ParticleDefinition(
-              hadrName, hadrMass,0,0,0,0,0,0,0,0," a ",0,0,0,0,0,0,0);
+// hpw    G4ParticleDefinition * hadrDef = new G4ParticleDefinition(
+// hpw              hadrName, hadrMass,0,0,0,0,0,0,0,0," a ",0,0,0,0,0,0,0);
 
         G4ThreeVector  hadrMomentum = aHadron.Get4Momentum().vect();
 
-        aParticle->SetDefinition(hadrDef);
+        aParticle->SetDefinition(const_cast<G4ParticleDefinition *>(aHadron.GetDefinition() ) );
         aParticle->SetMomentum(hadrMomentum);
 
         G4double   inLabMom  = aHadron.GetTotalMomentum(); // MeV
@@ -403,7 +404,7 @@
    G4ParticleDefinition * secNuclDef;
    G4DynamicParticle    * secNuclDyn = new G4DynamicParticle();
 
-   secNuclDef  =   MyIonTable->GetIon(nZ,  nN);
+   secNuclDef  =   MyIonTable.GetIon(nZ,  nN);
    secNuclDyn->SetDefinition(secNuclDef);
 //  -------------------------------------------
         size_t SizeData = SetOfElasticData.size();
@@ -440,7 +441,7 @@
 
         else
         {
-	  G4int TestFile = ReadOfData(hadrDef, &aNucleus);
+	  G4int TestFile = ReadOfData(const_cast<G4ParticleDefinition *>(aHadron.GetDefinition()), &aNucleus);
           if(TestFile < 0)
 	  {
 //  G4cout<<" File for elastic scattering of hadron "
