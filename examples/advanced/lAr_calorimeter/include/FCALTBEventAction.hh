@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALTBEventAction.hh,v 1.3 2002-10-02 19:40:09 ahoward Exp $
+// $Id: FCALTBEventAction.hh,v 1.4 2002-10-03 11:34:57 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -21,6 +21,7 @@
 #include "globals.hh"
 #include "G4ThreeVector.hh"
 
+class FCALAnalysisManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
