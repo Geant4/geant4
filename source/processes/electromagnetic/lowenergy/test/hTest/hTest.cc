@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: hTest.cc,v 1.2 2000-08-10 20:22:02 vnivanch Exp $
+// $Id: hTest.cc,v 1.3 2000-10-21 17:44:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,6 +31,7 @@
 
 #include "hTestDetectorConstruction.hh"
 #include "hTestPhysicsList.hh"
+#include "Tst11PhysicsList.hh"
 #include "hTestPrimaryGeneratorAction.hh"
 #include "hTestRunAction.hh"
 #include "hTestEventAction.hh"
@@ -52,7 +53,8 @@ int main(int argc,char** argv) {
   hTestDetectorConstruction* detector;
   detector = new hTestDetectorConstruction;
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new hTestPhysicsList(detector));
+  //  runManager->SetUserInitialization(new hTestPhysicsList(detector));
+  runManager->SetUserInitialization(new Tst11PhysicsList());
   /*  
 #ifdef G4VIS_USE
   G4cout << "VisManager will be inicialized" << G4endl;

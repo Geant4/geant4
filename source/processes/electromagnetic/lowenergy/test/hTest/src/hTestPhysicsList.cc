@@ -39,13 +39,13 @@ hTestPhysicsList::hTestPhysicsList(hTestDetectorConstruction* p)
 {
   pDet = p;
 
-  defaultCutValue = 0.001*cm;
-  cutForGamma     = 0.1*cm;
+  defaultCutValue = 0.1*cm;
+  cutForGamma     = 1.0*cm;
   cutForElectron  = defaultCutValue;
   cutForProton    = defaultCutValue;
   
   //  MaxChargedStep = DBL_MAX; 
-  MaxChargedStep = 0.001*cm; 
+  MaxChargedStep = 0.1*cm; 
   
   SetVerboseLevel(2);
   physicsListMessenger = new hTestPhysicsListMessenger(this);
