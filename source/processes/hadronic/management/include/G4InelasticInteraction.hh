@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InelasticInteraction.hh,v 1.4 2001-08-01 17:03:24 hpw Exp $
+// $Id: G4InelasticInteraction.hh,v 1.5 2001-08-08 15:06:52 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Inelastic Interaction 
@@ -71,6 +71,8 @@
                      G4FastVector<G4ReactionProduct,128> &vec,
                      G4int &vecLen );
     
+    void Rotate(G4FastVector<G4ReactionProduct,128> &vec, G4int &vecLen);
+
     void GetNormalizationConstant( const G4double availableEnergy,
                                    G4double &n,
                                    G4double &anpn );
@@ -92,6 +94,10 @@
                       G4ReactionProduct &currentParticle,
                       G4ReactionProduct &targetParticle,
                       G4bool &incidentHasChanged );
+   private:
+   
+      G4double cache;
+ 
  };
  
 #endif
