@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.7 1999-12-15 14:54:32 gunter Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.8 2000-01-11 17:19:07 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -306,7 +306,7 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   if (thisToBeDrawn) {
     const G4VisAttributes* pVisAttribs = pLV -> GetVisAttributes ();
     if (!pVisAttribs) pVisAttribs = fpMP -> GetDefaultVisAttributes ();
-    DescribeSolids (theNewAT, pSol, pVisAttribs, sceneHandler);
+    DescribeSolid (theNewAT, pSol, pVisAttribs, sceneHandler);
   }
 
   // First check if mother covers...
@@ -333,32 +333,36 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   }
 }
 
-void G4PhysicalVolumeModel::DescribeSolids
+void G4PhysicalVolumeModel::DescribeSolid
 (const G4Transform3D& theAT,
  G4VSolid* pSol,
  const G4VisAttributes* pVisAttribs,
  G4VGraphicsScene& sceneHandler) {
   // Look for "constituents".  Could be a Boolean solid.
-  G4VSolid* pBoolSolA = pSol -> GetConstituentSolid (0);
-  if (pBoolSolA) {
-    // Boolean solid - display components...
-    DescribeSolids (theAT, pBoolSolA, pVisAttribs, sceneHandler);
-    G4VSolid* pBoolSolB = pSol -> GetConstituentSolid (1);
-    if (!pBoolSolB) {
+  G4VSolid* pSol0 = pSol -> GetConstituentSolid (0);
+  if (pSol0) {
+    // Composite solid - describe components...
+    DescribeSolid (theAT, pSol0, pVisAttribs, sceneHandler);
+    G4VSolid* pSol1 = pSol -> GetConstituentSolid (1);
+    if (!pSol1) {
       G4Exception
-	("G4PhysicalVolumeModel::DescribeSolids:"
+	("G4PhysicalVolumeModel::DescribeSolid:"
 	 " 2nd component solid is missing.");
     }
-    G4Transform3D theBT (theAT);
-    G4DisplacedSolid* pDisSol = pBoolSolB -> GetDisplacedSolidPtr ();
-    if (pDisSol) {
-      theBT = theBT * G4Transform3D (pDisSol -> GetObjectRotation ().inverse (),
-				     pDisSol -> GetObjectTranslation ());
-    }
-    DescribeSolids (theBT, pBoolSolB, pVisAttribs, sceneHandler);
+    DescribeSolid (theAT, pSol1, pVisAttribs, sceneHandler);
   }
-  else { // Non-boolean solid.
-    sceneHandler.PreAddThis (theAT, *pVisAttribs);
+  else { // Non-composite solid.
+    G4DisplacedSolid* pDisSol = pSol -> GetDisplacedSolidPtr ();
+    if (pDisSol) {
+      sceneHandler.PreAddThis
+	(theAT *
+	 G4Transform3D (pDisSol -> GetObjectRotation ().inverse (),
+			pDisSol -> GetObjectTranslation ()),
+	 *pVisAttribs);
+    }
+    else {
+      sceneHandler.PreAddThis (theAT, *pVisAttribs);
+    }
     pSol -> DescribeYourselfTo (sceneHandler);
     sceneHandler.PostAddThis ();
   }
