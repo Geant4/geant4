@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F03DetectorConstruction.cc,v 1.8 2003-06-25 17:19:02 gcosmo Exp $
+// $Id: F03DetectorConstruction.cc,v 1.9 2003-11-25 14:51:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,6 +45,7 @@
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
 
+#include "G4GeometryManager.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
@@ -249,6 +250,7 @@ G4VPhysicalVolume* F03DetectorConstruction::ConstructCalorimeter()
 
   if (physiWorld)
   {
+    G4GeometryManager::GetInstance()->OpenGeometry();
     G4PhysicalVolumeStore::GetInstance()->Clean();
     G4LogicalVolumeStore::GetInstance()->Clean();
     G4SolidStore::GetInstance()->Clean();
