@@ -55,7 +55,7 @@ persistency                             persistency-V05-00-00
 - Corrected inclusion of headers for constant and units from CLHEP
   in G4MCTSimParticle and G4MCTSimVertex.
 
-processes/electromagnetic/lowenergy     emlowen-V05-00-08
+processes/electromagnetic/lowenergy     emlowen-V05-00-09
 -----------------------------------
 - First implementation of Penelope processes for photons.
   Minor design iteration on Bremsstrahlung, to accomodate variable
