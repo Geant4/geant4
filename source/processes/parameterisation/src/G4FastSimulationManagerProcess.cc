@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastSimulationManagerProcess.cc,v 1.4 1999-12-15 14:53:46 gunter Exp $
+// $Id: G4FastSimulationManagerProcess.cc,v 1.5 2001-04-03 15:24:14 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -367,9 +367,21 @@ G4double G4FastSimulationManagerProcess::AlongStepGetPhysicalInteractionLength(
 						 track.GetDynamicParticle()->
 						 GetMass());
 
+	      G4double restMass= track.GetDynamicParticle()->GetMass(); 
+	      G4ThreeVector spin  = track.GetPolarization() ;
+	      G4FieldTrack  aFieldTrack =
+		G4FieldTrack( track.GetPosition(), 
+			      track.GetMomentumDirection(),
+			      0.0, 
+			      track.GetKineticEnergy(),
+			      restMass,
+			      track.GetVelocity(),
+			      track.GetLocalTime(),    // tof lab ?
+			      track.GetProperTime(),   // tof proper
+			      &spin                   ) ;
+
 	      fGhostStepLength = fGhostFieldPropagator->ComputeStep( 
-						        track.GetPosition(), 
-						        track.GetMomentumDirection(),
+						        aFieldTrack, 
 						        currentMinimumStep,
 						        fGhostSafety);
 	      }
