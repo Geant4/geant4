@@ -29,7 +29,7 @@
 // 22 Apr 2004  First committed to cvs
 //
 // -------------------------------------------------------------------
-// $Id: G4hShellCrossSectionDoubleExpData.cc,v 1.1 2004-09-29 08:34:37 saliceti Exp $
+// $Id: G4hShellCrossSectionDoubleExpData.cc,v 1.2 2004-11-26 08:51:05 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4hShellCrossSectionDoubleExpData.hh"
@@ -649,12 +649,12 @@ std::vector<std::vector<G4double>*> G4hShellCrossSectionDoubleExpData::GetParam(
 
   std::vector<std::vector<G4double>*> energyPar1Par2;
 
-//   if (energyPar1Par2.size() != 0) {
-//     for (size_t i=1; i==energyPar1Par2.size(); i++)
-//       {
-// 	energyPar1Par2.erase(energyPar1Par2.begin());
-//       }
-//   }
+  //   if (energyPar1Par2.size() != 0) {
+  //     for (size_t i=1; i==energyPar1Par2.size(); i++)
+  //       {
+  // 	energyPar1Par2.erase(energyPar1Par2.begin());
+  //       }
+  //   }
 
   energyPar1Par2.push_back(parameterMapEnergy[Z]);
   energyPar1Par2.push_back(parameterMapPar1[Z]);

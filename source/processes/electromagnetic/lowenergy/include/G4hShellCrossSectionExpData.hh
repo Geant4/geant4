@@ -29,11 +29,11 @@
 // -------------------------------------------------------------------
 // Class description:
 // Low Energy Electromagnetic Physics
-// Fluorescence data set: shell identifiers, transition probabilities, 
-// transition energies
+// Parameterisation of cross sections for proton ionisation, K shell
+// 1st iteration
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
 // -------------------------------------------------------------------
-// $Id: G4hShellCrossSectionExpData.hh,v 1.1 2004-04-27 09:45:48 saliceti Exp $
+// $Id: G4hShellCrossSectionExpData.hh,v 1.2 2004-11-26 08:50:47 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4hShellCrossSectionExpData_HH

@@ -34,9 +34,13 @@
 // 31/05/2004 Simona Saliceti 1st implementation
 // -------------------------------------------------------------------
 // Class Description: 
-// Empiric Model for shell cross sections in proton ionisation
+// Empiric Model for K shell cross sections in proton ionisation
+// 2nd iteration, refined model at low energy
+// Based on Fitted empirical Reference Cross Sections for K-Shell Ionization 
+// by Protons by H.Paul and J.Sacher, At. Data Nucl. Data Tables 42 (1989) 105
+// 
 // -------------------------------------------------------------------
-// $Id: G4hShellCrossSectionDoubleExp.hh,v 1.1 2004-09-29 08:34:35 saliceti Exp $
+// $Id: G4hShellCrossSectionDoubleExp.hh,v 1.2 2004-11-26 08:50:47 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4HSHELLCROSSSECTIONDOUBLEEXP_HH

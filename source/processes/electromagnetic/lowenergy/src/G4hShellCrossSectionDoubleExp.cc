@@ -37,7 +37,7 @@
 // Class Description: 
 // Empiric Model for shell cross sections in proton ionisation
 // -------------------------------------------------------------------
-// $Id: G4hShellCrossSectionDoubleExp.cc,v 1.2 2004-11-24 00:07:18 duns Exp $
+// $Id: G4hShellCrossSectionDoubleExp.cc,v 1.3 2004-11-26 08:51:05 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"
@@ -81,7 +81,7 @@ std::vector<G4double> G4hShellCrossSectionDoubleExp::GetCrossSection(G4int Z,
 
 //This function calculated the cross section with the Empiric model
 G4double G4hShellCrossSectionDoubleExp::GetCrossSectionDoubleExp(G4int Z, 
-						     G4double incidentEnergy) const
+								 G4double incidentEnergy) const
 {
   // Vector that stores the calculated cross-sections for each shell:
   G4double  crossSectionsInBarn = 0.0;
@@ -113,19 +113,19 @@ G4double G4hShellCrossSectionDoubleExp::GetCrossSectionDoubleExp(G4int Z,
   G4double energy = *l;
   energy = energy/MeV;
 
- if(incidentEnergyInMeV <= energy)
+  if(incidentEnergyInMeV <= energy)
     {
       if(Z<26)
 	{
-	 crossSectionsInBarn = (std::pow(incidentEnergyInMeV,(a1)))*exp((b1)-((c1)*(incidentEnergyInMeV))); 	 
+	  crossSectionsInBarn = (std::pow(incidentEnergyInMeV,(a1)))*exp((b1)-((c1)*(incidentEnergyInMeV))); 	 
 	}          
       else if(Z>=26)
 	{
 	  crossSectionsInBarn = a1*(std::pow(b1,(1./incidentEnergyInMeV)))*(std::pow(incidentEnergyInMeV,c1));
 	}  
     }   
- else if(incidentEnergyInMeV > energy)
-   {
+  else if(incidentEnergyInMeV > energy)
+    {
       if(Z<26 || (Z>=36 && Z<=65))
 	{
 	  crossSectionsInBarn = (a2)*(std::pow((b2),(1./incidentEnergyInMeV)))*(std::pow(incidentEnergyInMeV,(c2)));
@@ -140,26 +140,26 @@ G4double G4hShellCrossSectionDoubleExp::GetCrossSectionDoubleExp(G4int Z,
  	}
     }
 
-//   if(Z<26 && incidentEnergyInMeV <= energy)
-//     {
-// 	 crossSectionsInBarn = (std::pow(incidentEnergyInMeV,(a1)))*exp((b1)-((c1)*incidentEnergyInMeV)); 	 
-//     }          
-//   else if(Z>=26 && incidentEnergyInMeV <= energy)
-//     {
-//       crossSectionsInBarn = a1*(std::pow(b1,(1./incidentEnergyInMeV)))*(std::pow(incidentEnergyInMeV,c1));
-//     }     
-//   else if((Z<26 || (36<=Z && Z<=65)) && incidentEnergyInMeV > energy)
-//     {
-//       crossSectionsInBarn = (a2)*(std::pow((b2),(1./incidentEnergyInMeV)))*(std::pow(incidentEnergyInMeV,(c2)));
-//     }
-//   else if(Z>=26 && Z<=35 && incidentEnergyInMeV > energy)
-//     {
-//       crossSectionsInBarn = a2+b2*(log(incidentEnergyInMeV))+c2*(std::pow(log(incidentEnergyInMeV),2))+d2*(std::pow(log(incidentEnergyInMeV),3));
-//     } 
-//   else if(Z>=67 && Z<=92 && incidentEnergyInMeV > energy)
-//     {
-//       crossSectionsInBarn = a2+b2*(log(incidentEnergyInMeV))+c2*(std::pow(log(incidentEnergyInMeV),2))+d2*(std::pow(log(incidentEnergyInMeV),3))+e2*(std::pow(log(incidentEnergyInMeV),4));
-//     }
+  //   if(Z<26 && incidentEnergyInMeV <= energy)
+  //     {
+  // 	 crossSectionsInBarn = (std::pow(incidentEnergyInMeV,(a1)))*exp((b1)-((c1)*incidentEnergyInMeV)); 	 
+  //     }          
+  //   else if(Z>=26 && incidentEnergyInMeV <= energy)
+  //     {
+  //       crossSectionsInBarn = a1*(std::pow(b1,(1./incidentEnergyInMeV)))*(std::pow(incidentEnergyInMeV,c1));
+  //     }     
+  //   else if((Z<26 || (36<=Z && Z<=65)) && incidentEnergyInMeV > energy)
+  //     {
+  //       crossSectionsInBarn = (a2)*(std::pow((b2),(1./incidentEnergyInMeV)))*(std::pow(incidentEnergyInMeV,(c2)));
+  //     }
+  //   else if(Z>=26 && Z<=35 && incidentEnergyInMeV > energy)
+  //     {
+  //       crossSectionsInBarn = a2+b2*(log(incidentEnergyInMeV))+c2*(std::pow(log(incidentEnergyInMeV),2))+d2*(std::pow(log(incidentEnergyInMeV),3));
+  //     } 
+  //   else if(Z>=67 && Z<=92 && incidentEnergyInMeV > energy)
+  //     {
+  //       crossSectionsInBarn = a2+b2*(log(incidentEnergyInMeV))+c2*(std::pow(log(incidentEnergyInMeV),2))+d2*(std::pow(log(incidentEnergyInMeV),3))+e2*(std::pow(log(incidentEnergyInMeV),4));
+  //     }
 
   crossSections = crossSectionsInBarn*barn;
   return crossSections;
@@ -172,12 +172,12 @@ void G4hShellCrossSectionDoubleExp::SetTotalCS(G4double value)
 }
 
 //A new implementation of Probability to calculate the cross section probability for k shell only
- std::vector<G4double> G4hShellCrossSectionDoubleExp::Probabilities(
-							      G4int Z, 
-							      G4double incidentEnergy, 
-							      G4double hMass, 
-							      G4double deltaEnergy
-							      ) const
+std::vector<G4double> G4hShellCrossSectionDoubleExp::Probabilities(
+								   G4int Z, 
+								   G4double incidentEnergy, 
+								   G4double hMass, 
+								   G4double deltaEnergy
+								   ) const
 {  
   hMass = 0.0;
   deltaEnergy = 0.0;
