@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.icc,v 1.5 2001-07-11 09:59:19 gunter Exp $
+// $Id: G4VSolid.icc,v 1.6 2002-10-28 11:25:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,3 +33,21 @@ G4bool G4VSolid::operator==( const G4VSolid& s) const
 {
   return (this==&s) ? true : false;
 }
+
+inline
+void G4VSolid::DumpInfo () const
+{
+  StreamInfo(G4cout);
+}
+
+inline
+G4String G4VSolid::GetName() const
+{
+    return fshapeName;
+}	
+
+inline
+void G4VSolid::SetName(const G4String& name)
+{
+    fshapeName=name;
+}	

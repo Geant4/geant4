@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.hh,v 1.10 2002-04-16 08:21:07 grichine Exp $
+// $Id: G4VSolid.hh,v 1.11 2002-10-28 11:25:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -92,14 +92,16 @@ class G4VSolid
     virtual ~G4VSolid();
       // Default destructor.
 
-    inline G4bool operator==( const G4VSolid& s) const;
+    inline G4bool operator==( const G4VSolid& s ) const;
       // Return true only if addresses are the same.
 
-    G4String GetName() const;
-      // Returns the current shape's name.
-    void SetName(const G4String& name);
-      // Sets the current shape's name.
+    friend G4std::ostream& operator<< ( G4std::ostream& os, const G4VSolid& e );
+      // Streaming operator, using DumpInfo().
 
+    inline G4String GetName() const;
+      // Returns the current shape's name.
+    inline void SetName(const G4String& name);
+      // Sets the current shape's name.
 
     virtual G4bool CalculateExtent(const EAxis pAxis,
 				   const G4VoxelLimits& pVoxelLimit,
@@ -165,6 +167,11 @@ class G4VSolid
     virtual G4GeometryType  GetEntityType() const = 0;
       // Provide identification of the class of an object.
       // (required for persistency and STEP interface)
+
+    virtual G4std::ostream& StreamInfo(G4std::ostream& os) const = 0;
+      // Dumps contents of the solid to a stream.
+    inline void DumpInfo() const;
+      // Dumps contents of the solid to the standard output.
 
     // Visualization functions
 

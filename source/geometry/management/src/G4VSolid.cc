@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.cc,v 1.13 2002-05-11 14:16:10 grichine Exp $
+// $Id: G4VSolid.cc,v 1.14 2002-10-28 11:25:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VSolid
@@ -67,21 +67,13 @@ G4VSolid::~G4VSolid()
     G4SolidStore::GetInstance()->DeRegister(this);
 }
 
-////////////////////////////////////////////////////////////////////////
-//	
-// Returns name by value
-
-G4String G4VSolid::GetName() const
+//////////////////////////////////////////////////////////////////////////
+//
+// Streaming operator dumping solid contents
+G4std::ostream& operator<< ( G4std::ostream& os, const G4VSolid& e )
 {
-    return fshapeName;
-}	
-
-/////////////////////////////////////////////////////////////////////////
-
-void G4VSolid::SetName(const G4String& name)
-{
-    fshapeName=name;
-}	
+    return e.StreamInfo(os);
+}
 
 //////////////////////////////////////////////////////////////////////////
 //
