@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 1999-07-20 15:30:45 stesting Exp $
+# $Id: GNUmakefile,v 1.4 1999-12-08 16:30:46 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 27/06/98.
 # --------------------------------------------------------------
@@ -16,7 +16,12 @@ EXTRALIBS+=$(LIB_PATH)$(G4INSTALL)/tests/tools/lib/$(G4SYSTEM) -lG4TestTool
 EXTRA_LINK_DEPENDENCIES := \
   $(G4INSTALL)/tests/tools/lib/$(G4SYSTEM)/libG4TestTool.a
 
-.PHONY: all
+.PHONY: all tools
+
+tools:
+	cd ../tools/lib; $(MAKE)
+	$(MAKE) all
+
 all: lib bin
 
 include $(G4INSTALL)/config/binmake.gmk
