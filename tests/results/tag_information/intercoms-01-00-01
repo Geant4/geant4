@@ -1,0 +1,31 @@
+Those two tags are made in order to decouple the visu from the
+parameterisation.
+
+The intercoms-01-00-01 tag contains the new files:
+
+        o include/G4VGlobalFastSimulationManager.hh
+        o include/G4VFlavoredParallelWorld.hh
+        o src/G4VGlobalFastSimulationManager.cc
+
+which defines pure abstract classes used as interfaces by the visu.
+
+The param-01-00-02 tag implements the:
+
+        o G4GlobalFastSimulationManager
+        o G4FlavoredParallelWorld
+
+concrete classes, inheriting from the intercoms related classes.
+
+vis-01-00-08 requires those two tags to work.
+
+In order to test param-01-00-02 and intercoms-01-00-01 locally I
+changed and tested the following visualisation files for vis-01-00-08:
+
+management/src/G4VisCommandsSceneAdd.cc
+management/src/G4VisManMessDraw.cc
+modeling/include/G4FlavoredParallelWorldModel.hh
+modeling/src/G4FlavoredParallelWorldModel.cc
+
+ Both  visualisation/management and visualisation/modeling compile even
+without the -I../process/parameterisation/include option in the
+GNUMakefile. So it believe I achieved to decouple it.
