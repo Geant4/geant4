@@ -27,7 +27,6 @@
 //    ************************************
 
 #include "ThyroidROGeometry.hh"
-#include "BrachyDummySD.hh"
 
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"

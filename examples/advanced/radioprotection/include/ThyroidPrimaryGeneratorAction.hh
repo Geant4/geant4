@@ -47,7 +47,9 @@ class ThyroidPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
  private:
       G4ParticleGun* m_pParticleGun;
-	G4RadioactiveDecay *m_pRadioactiveDecay;
+	
+        G4RadioactiveDecay *m_pRadioactiveDecay;
+        G4double Energy;
 };
 
 #endif

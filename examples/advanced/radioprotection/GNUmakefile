@@ -1,12 +1,11 @@
 # --------------------------------------------------------------
-# $Id: GNUmakefile,v 1.1 2002-06-12 14:03:22 francy Exp $
+# $Id: GNUmakefile,v 1.2 2002-06-13 09:25:36 francy Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
-name := Thyroid
 
-G4TARGET := $(name)
+G4TARGET := thyroid
 G4EXLIB := true
 
 ifndef G4INSTALL
@@ -15,8 +14,15 @@ endif
 
 .PHONY: all
 all: lib bin
+
 include $(G4INSTALL)/config/architecture.gmk
 include $(G4INSTALL)/config/binmake.gmk
+
+# From lowenergy/test/GNUmakefile
+CPPFLAGS += `aida-config --useHBook --include`
+LDFLAGS  += `aida-config --useHBook --lib`
+LOADLIBS  += `aida-config --useHBook --lib`
+
 
 
 

@@ -40,7 +40,7 @@
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
-//#include"ThyroidAnalysisManager.hh"
+#include"ThyroidAnalysisManager.hh"
 //....
 
 ThyroidEventAction::ThyroidEventAction() 
@@ -102,7 +102,7 @@ void ThyroidEventAction::EndOfEventAction(const G4Event* evt)
        
 	for (G4int h=0; h<HitCount; h++)
 	  {
-
+ ThyroidAnalysisManager* analysis = ThyroidAnalysisManager::getInstance();	
 	  G4int NumVoxelX=200;
           G4int NumVoxelY=600;
           G4int NumVoxelZ=1200;
@@ -119,8 +119,8 @@ void ThyroidEventAction::EndOfEventAction(const G4Event* evt)
           G4double y=(-NumVoxelY+1+2*w)*VoxelWidth_Y/2; 
           G4double z=(-NumVoxelZ+1+2*k)*VoxelWidth_Z/2;
 
-          if(EDep!=0)	
-{ G4cout<<i<<" "<<w<<""<<k<<" "<<x<<" "<<y<<" "<<z<<" "<<  EDep<<"Energia dello step" << G4endl;}
+          if(EDep!=0)	{analysis->analyse(x,y,z,EDep);
+ G4cout<<i<<" "<<w<<""<<k<<" "<<x<<" "<<y<<" "<<z<<" "<<  EDep<<"Energia dello step" << G4endl;}
 }
 } 
 

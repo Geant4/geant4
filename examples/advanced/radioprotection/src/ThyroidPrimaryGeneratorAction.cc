@@ -27,7 +27,7 @@
 //    ********************************************
 
 #include "ThyroidPrimaryGeneratorAction.hh"
-
+#include "ThyroidAnalysisManager.hh"
 #include "G4ParticleTable.hh"
 #include "Randomize.hh"  
 #include "G4Event.hh"
@@ -44,12 +44,11 @@ ThyroidPrimaryGeneratorAction::ThyroidPrimaryGeneratorAction()
 {
  // Generate a gamma particle with energy = I-131 mean energy
  G4int NumParticles = 10;
- G4double Energy = 0.364*MeV;
+
  // G4double Energy=2*MeV;
 
  m_pParticleGun = new G4ParticleGun(NumParticles);
- if(m_pParticleGun) 
-	m_pParticleGun->SetParticleEnergy(Energy);
+ 
 }
 
 //....
@@ -64,6 +63,7 @@ ThyroidPrimaryGeneratorAction::~ThyroidPrimaryGeneratorAction()
 
 void ThyroidPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
+ ThyroidAnalysisManager* analysis = ThyroidAnalysisManager::getInstance();
  G4ParticleTable* pParticleTable = G4ParticleTable::GetParticleTable();
  G4String ParticleName = "gamma";
  G4ParticleDefinition* pParticle = pParticleTable->FindParticle(ParticleName);
@@ -96,7 +96,9 @@ void ThyroidPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
  a /= n;
  b /= n;
  c /= n;
-
+  Energy = 0.364*MeV;
+ m_pParticleGun->SetParticleEnergy(Energy);
+ analysis->Spectrum(Energy);
  G4ThreeVector direction(a,b,c);
  m_pParticleGun->SetParticleMomentumDirection(direction);
 

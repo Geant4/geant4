@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: thyroid.cc,v 1.1 2002-06-12 14:03:22 francy Exp $
+// $Id: thyroid.cc,v 1.2 2002-06-13 09:25:36 francy Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -48,6 +48,7 @@
 #include "ThyroidDetectorConstruction.hh"
 #include "ThyroidPhysicsList.hh"
 #include "ThyroidPrimaryGeneratorAction.hh"
+#include "ThyroidRunAction.hh"
 #include "ThyroidSD.hh"
 //#include "ThyroidSteppingVerbose.hh"
 
@@ -96,7 +97,9 @@ pRunManager->SetUserInitialization(new ThyroidPhysicsList);
  // Set mandatory user action class
  pRunManager->SetUserAction(new ThyroidPrimaryGeneratorAction);
  pRunManager->SetUserAction(new ThyroidEventAction);
-
+ ThyroidRunAction *pRunAction=new ThyroidRunAction();
+  pRunManager->SetUserAction(pRunAction);
+ 
 
 G4UIsession* session=0;
   

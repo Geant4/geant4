@@ -1,0 +1,82 @@
+#setup necessario per la compilazione con la visualizzazione e l'analisi dati
+
+
+
+setenv G4LEDATA /afs/cern.ch/sw/geant4/dev/data/G4EMLOW1.1
+setenv G4INSTALL /users/francy/geant4
+
+
+
+# ---- Linux setup ----
+#
+if ( `uname` == Linux ) then
+  setenv G4SYSTEM Linux-g++
+  setenv G4LIB /users/francy/work/lib/
+  setenv G4WORKDIR /users/francy/work
+# ---- set up VRMLview
+setenv G4VIS_BUILD_VRMLFILE_DRIVER  1
+setenv G4VIS_USE_VRML               1
+setenv G4VIS_USE_VRMLFILE           1
+setenv G4VRMLFILE_MAX_FILE_NUM     100
+setenv G4VRMLFILE_VIEWER        vrmlview    #if installed
+setenv G4VIS_USE_VRML               1
+setenv G4VIS_USE_VRMLFILE           1
+setenv PATH ${PATH}:"/afs/cern.ch/sw/contrib/VRML/bin/Linux"
+# ---- set up OpenGL or Mesa 
+setenv G4VIS_BUILD_OPENGLX_DRIVER   1
+setenv G4VIS_USE_OPENGLX            1
+setenv OGLHOME /afs/cern.ch/sw/geant4/dev/Mesa/Linux-g++
+# ---- set up DAWN
+setenv G4VIS_BUILD_DAWN_DRIVER      1
+setenv G4VIS_BUILD_DAWNFILE_DRIVER  1  
+setenv G4VIS_USE_DAWN               1
+setenv G4VIS_USE_DAWNFILE           1
+setenv PATH ${PATH}:"/afs/cern.ch/sw/geant4/dev/DAWN/Linux-g++"
+# ---- Analysis
+setenv G4ANALYSIS_BUILD  1
+setenv PATH "${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/4.0.0/bin"
+source /afs/cern.ch/sw/lhcxx/share/LHCXX/4.0.0/install/sharedstart.csh
+# ---- add to the LD_LIBRARY_PATH 
+setenv LD_LIBRARY_PATH $OGLHOME/lib
+#
+# ---- end of Linux set-up ----
+else
+# 
+# ---- SUN setup ----
+  if ( `uname` == SunOS ) then
+  setenv G4SYSTEM SUN-CC
+  setenv G4LIB /users/francy/work/lib
+  setenv G4WORKDIR /users/francy/work
+  endif
+endif
+#
+
+# for Anaphe
+#analisi
+source /afs/cern.ch/sw/lhcxx/share/LHCXX/4.0.2/install/sharedstart.csh
+
+setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --noLicense --include`
+setenv G4ANALYSIS_AIDA_CONFIG_LIBS   `aida-config --noLicense --libs`
+
+#versione vecchia  di Lizard 
+#fare solo questo
+
+#source /afs/cern.ch/sw/lhcxx/share/LHCXX/3.6.3-sec/install/sharedstart.csh
+
+# setup to use gcc 2.95.2 from /iusr/local/gcc-alt-2.95.2
+# GF
+
+set gccvers = `g++ -v |& awk 'NR==2 { print $3 }'`
+if ( $gccvers == "2.95.2" ) then
+   echo "default compiler seems to be gcc 2.95.2 already"
+else
+   echo "need to use alternative gcc"
+   setenv PATH "/usr/local/gcc-alt-2.95.2/bin:${PATH}"
+   setenv MANPATH "/usr/local/gcc-alt-2.95.2/man:${MANPATH}"
+   echo $LD_LIBRARY_PATH | grep -q -e 'gcc-alt-2.95.2/lib' \
+      || setenv LD_LIBRARY_PATH "/usr/local/gcc-alt-2.95.2/lib:${LD_LIBRARY_PATH}"
+endif
+echo "Please check that compiler is version 2.95.2:"
+echo ""
+
+gcc -v |& tail -1
