@@ -85,27 +85,11 @@ int main(int argc, char** argv)
   G4bool end = true;
 
   G4DataVector* energy = new G4DataVector();
-  int nbin = 30;
+  int nbin = 0;
   int ibin, inum;
   int counter = 0;
-  double bin0 = 1.0*MeV;
-  double bin = 10.0*MeV;
-  double elim= 20.0*MeV;
   double elim0= 2.0*MeV;
-  double x, an, e1, e2, e0, y1, y2, ct1, ct2, xs, de;
-
-  x = -bin0;
-
-  for(int i=0; i<=nbin; i++) {
-    if(x < elim) {
-      x += bin0;
-      if(x > elim) x = elim;
-    } else {
-      x += bin;
-    }
-    energy->push_back(x);
-  }
-
+  double x, an, e1, e2, y1, y2, ct1, ct2, xs;
   G4DataVector* angle = new G4DataVector();
   std::vector<G4DataVector*> cs;
 
@@ -160,11 +144,11 @@ int main(int argc, char** argv)
           }
           cs.push_back(cross);
           if(0 < verbose) {
-            (*fout_c) << "#####..Result.of.parcing..####### "
+            (*fout_c) << "#####..Result.of.parcing..####### n= " << nbin 
                       << " Angle(degree)= " << (*angle)[angle->size()-1]/degree
                       << G4endl;
-            for(i=0; i<nbin; i++) {
-               (*fout_c) << "e(MeV)= " << 0.5*((*energy)[i] + (*energy)[i+1]) 
+            for(int i=0; i<nbin; i++) {
+               (*fout_c) << "e(MeV)= " << (*energy)[i]  
                          << " cross(mb/MeV/sr)= " << (*cross)[i] << endl;
 	    }
           }  
@@ -174,24 +158,16 @@ int main(int argc, char** argv)
         if(xs == 0.0) {
           angle->push_back(an);
           cross = new G4DataVector();
-          cross->push_back(0.0);
-          ibin= 0;
-          inum= 0;
+          ibin = 0;
 
-        } else if(end ) {
+        } else if(end) {
 
-          for(int j=ibin; j<nbin; j++) {
-            e0 = (*energy)[j];
-            de = bin;
-            if (e0 < elim) de = bin0;
-            if (e1 >= e0 && e1 <= e0 + de) break;
-            if(inum) (*cross)[j] /= (double)inum;
-            inum = 0;
-            cross->push_back(0.0);
-          }
-          (*cross)[j] += x;
-          inum++;
-          ibin = j;
+          ibin++;
+          cross->push_back(x);
+          if(an < 10.*degree) {
+            energy->push_back(e1);
+            nbin++;
+	  }
         }      
 
       } while (enddata);
@@ -207,23 +183,18 @@ int main(int argc, char** argv)
         (*fout_b) << "#####..Result.of.integration..#####.. Elim(MeV)= " 
                   << elim0/MeV
                   << G4endl;
-        for(i=0; i<nbin; i++) {
+        for(int i=0; i<nbin; i++) {
         
           x = 0.0;
           for(int j=0; j<na-1; j++) {
             f1  = cs[j];  
             y1  = (*f1)[i];  
-            if(y1 == 0.0) y1 = (*f1)[i-1];
-            if(y1 == 0.0) y1 = (*f1)[i-2];
             ct1 = cos((*angle)[j]);
+            ct2 = cos((*angle)[j+1]);
             if(j == 0) {
               f2  = cs[j+1]; 
               y2  = (*f2)[i]; 
-              ct2 = cos((*angle)[j+1]);
-	      //              y1 += (y2 - y1)*(1.0 - ct1)/(ct2 - ct1);
-              y1  = y2;
               ct1 = 1.0;
-              if(y1 < 0.0) y1 = 0.0;
 	    } else if (j == na-2) {
               f2  = cs[j-1]; 
               y2  = (*f2)[i]; 
@@ -234,15 +205,11 @@ int main(int argc, char** argv)
             } else {
               f2  = cs[j+1]; 
               y2  = (*f2)[i]; 
-              ct2 = cos((*angle)[j+1]);
 	    }
-	 //         cout << "f1= " << f1 << " f2= " << f2 << endl;
-	 //         cout << "y1= " << y1 << " y2= " << y2 << endl;
-	 //         cout << "ct1= " << ct1 << " ct2= " << ct2 << endl;
             x  += 0.5*(y1 + y2)*(ct1 - ct2);  
           }        
           x *= twopi;
-          (*fout_a) << "e(MeV)= " << 0.5*((*energy)[i] + (*energy)[i+1]) 
+          (*fout_a) << "e(MeV)= " << (*energy)[i] 
                     << " cross(mb/MeV)= " << x << endl;
         }
 
@@ -250,12 +217,10 @@ int main(int argc, char** argv)
           f1  = cs[j];  
           an  = cos((*angle)[j]);
           x   = 0.0;
-          for(i=0; i<nbin; i++) {
+          for(i=0; i<nbin-1; i++) {
             y1  = (*f1)[i];
             e1  = (*energy)[i];
             e2  = (*energy)[i+1];
-            if(y1 == 0.0) y1 = (*f1)[i-1];
-            if(y1 == 0.0) y1 = (*f1)[i-2];
             if(e2 < elim0) {
               y1 = 0.0;
             } else if (e1 < elim0) {

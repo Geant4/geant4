@@ -32,7 +32,7 @@ set NDVY 010205
  
  
  ve/create X1(4) R  0.991445 0.866025 0.5  -0.866025
-ve/create Y1(4) R 153.635 108.798 44.49 19.81
+ve/create Y1(4) R 161.825 105.744 51.44 17.9
 gr/h/symb X1 Y1 4 25 0.2
 
  exe ../prf n_a eps
