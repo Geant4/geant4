@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuonPlus.cc,v 1.3 1999-12-15 14:51:09 gunter Exp $
+// $Id: G4MuonPlus.cc,v 1.4 2000-02-27 06:23:41 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,6 +49,7 @@ G4MuonPlus::G4MuonPlus(
               iConjugation,iIsospin,iIsospin3,gParity,pType,
               lepton,baryon,encoding,stable,lifetime,decaytable )
 {
+  SetParticleSubType("mu");
   SetPDGStable(false);
 
   //create Decay Table 
