@@ -26,7 +26,6 @@ ifeq ($(G4SYSTEM),DEC-cxx)
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
 #   OGLLIBS   := -lMesaGLU -lMesaGL
   endif
-  CPPFLAGS += -I$(G4BASE)/global/management/include/g4std/wrappers/$(G4SYSTEM)
   G4USE_STD_NAMESPACE := yes
   CXXFLAGS += -std strict_ansi
   CPPFLAGS += -DG4USE_STD_NAMESPACE
