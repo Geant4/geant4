@@ -90,7 +90,7 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
            Aluminium         125.06
          liquidArgon         78.362
               Copper         238.25
-                Lead         229.54
+                Lead         229.55
                Water         81.507
         Scintillator         82.859
               quartz         115.29
@@ -118,7 +118,7 @@ annihil:  Total cross section from Heilter formula (annihilation into 2 photons)
            Aluminium         125.06
          liquidArgon         78.362
               Copper         238.25
-                Lead         229.54
+                Lead         229.55
                Water         81.507
         Scintillator         82.859
               quartz         115.29
@@ -157,22 +157,22 @@ MuPairProd:  theoretical cross sections
           Good description up to 1000 PeV.
     PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 ============= The cut Energy ==============================
-                            gamma              e-             mu-          proton         neutron    
-Cut in range                  1 mm            1 mm            1 mm            1 mm            1 mm 
+                            gamma              e-    
+Cut in range                  1 mm            1 mm 
 Cut in energy
-          Aluminium        6.89 keV         597 keV        5.02 MeV        13.1 MeV         990 eV 
-        liquidArgon        6.18 keV         343 keV        3.24 MeV        8.32 MeV         990 eV 
-             Copper        24.6 keV         1.4 MeV        8.95 MeV          23 MeV         990 eV 
-               Lead         101 keV        1.38 MeV        8.52 MeV        20.9 MeV         990 eV 
-              Water         2.9 keV         347 keV        3.39 MeV        8.95 MeV         990 eV 
-       Scintillator        2.37 keV         356 keV        3.43 MeV        9.06 MeV         990 eV 
-             quartz        5.52 keV         534 keV        4.66 MeV        12.2 MeV         990 eV 
-                Air         990 eV          990 eV         48.4 keV        83.2 keV         990 eV 
-            Aerogel        1.71 keV         119 keV        1.28 MeV        3.18 MeV         990 eV 
-        CarbonicGas         990 eV         36.5 keV         393 keV         853 keV         990 eV 
-         WaterSteam         990 eV          990 eV         11.9 keV        14.9 keV         990 eV 
-           Galactic         990 eV          990 eV          990 eV          990 eV          990 eV 
-               Beam         990 eV          990 eV          990 eV          990 eV          990 eV 
+          Aluminium        6.89 keV         597 keV
+        liquidArgon        6.18 keV         343 keV
+             Copper        24.6 keV         1.4 MeV
+               Lead         101 keV        1.38 MeV
+              Water         2.9 keV         347 keV
+       Scintillator        2.37 keV         356 keV
+             quartz        5.52 keV         534 keV
+                Air         990 eV          990 eV 
+            Aerogel        1.71 keV         119 keV
+        CarbonicGas         990 eV         36.5 keV
+         WaterSteam         990 eV          990 eV 
+           Galactic         990 eV          990 eV 
+               Beam         990 eV          990 eV 
 ===================================================
 # e+ 300MeV 
 ### Run 0 start.
@@ -184,10 +184,10 @@ Cut in energy
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy:  283.74 MeV       total track length:  17.305 cm 
-        Gap: total energy:  8.7024 MeV       total track length:  4.3137 cm 
+   Absorber: total energy:  273.44 MeV       total track length:  16.757 cm 
+        Gap: total energy:  17.368 MeV       total track length:  9.3656 cm 
 
-     10 hits are stored in ExN03CalorHitsCollection.
+     8 hits are stored in ExN03CalorHitsCollection.
 #
 # list the existing physics processes
      Transportation,              hIoni,                msc,              eIoni
@@ -202,11 +202,11 @@ Cut in energy
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1070040020, 1579813191
+ Current couple of seeds = 1102932771, 1917444181
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy:  275.36 MeV       total track length:  15.251 cm 
-        Gap: total energy:  19.635 MeV       total track length:  9.6753 cm 
+   Absorber: total energy:  271.92 MeV       total track length:  15.041 cm 
+        Gap: total energy:  19.422 MeV       total track length:  9.2045 cm 
 
      10 hits are stored in ExN03CalorHitsCollection.
 #
@@ -231,10 +231,10 @@ Cut in energy
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1781348142, 2095441265
+ Current couple of seeds = 1963963117, 1351553931
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy:  385.88 MeV       total track length:  88.482 cm 
-        Gap: total energy:  73.394 MeV       total track length:  2.0259 m  
+   Absorber: total energy:  337.86 MeV       total track length:  77.616 cm 
+        Gap: total energy:  64.609 MeV       total track length:   1.801 m  
 
-     30 hits are stored in ExN03CalorHitsCollection.
+     21 hits are stored in ExN03CalorHitsCollection.
