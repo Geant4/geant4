@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVReplica.cc,v 1.6 2002-10-14 16:16:39 gcosmo Exp $
+// $Id: G4PVReplica.cc,v 1.7 2002-10-16 12:51:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,7 +49,7 @@ G4PVReplica::G4PVReplica( const G4String& pName,
            << G4endl;
     G4Exception("G4PVReplica::G4PVReplica() - Not a valid geometry setup !");
   }
-  if (pMother->GetLogicalVolume()->GetNoDaughters() != 0)
+  if (pMother->GetLogicalVolume()->GetNoDaughters() != 1)
   {
     G4cout << "ERROR - A replica or parameterised volume must be" << G4endl
            << "        the only daughter of a given mother volume !"
@@ -74,7 +74,7 @@ G4PVReplica::G4PVReplica( const G4String& pName,
     G4cout << "ERROR - NULL pointer specified as mother volume." << G4endl;
     G4Exception("G4PVReplica::G4PVReplica() - Not a valid geometry setup !");
   }
-  if (pMotherLogical->GetNoDaughters() != 0)
+  if (pMotherLogical->GetNoDaughters() != 1)
   {
     G4cout << "ERROR - A replica or parameterised volume must be" << G4endl
            << "        the only daughter of a given mother volume !"
