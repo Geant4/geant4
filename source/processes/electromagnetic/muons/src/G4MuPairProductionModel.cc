@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4MuPairProductionModel.cc,v 1.10 2003-06-06 17:42:33 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -39,6 +41,7 @@
 // 24-01-03 Fix for compounds (V.Ivanchenko)
 // 27-01-03 Make models region aware (V.Ivanchenko)
 // 13-02-03 Add model (V.Ivanchenko)
+// 06-06-03 Fix in cross section calculation for high energy (V.Ivanchenko)
 
 //
 // Class Description:
@@ -152,7 +155,7 @@ void G4MuPairProductionModel::Initialise(const G4ParticleDefinition*,
   for (size_t ii=0; ii<partialSumSigma.size(); ii++){
     G4DataVector* a=partialSumSigma[ii];
     if ( a )  delete a;    
-  } 
+  }
   partialSumSigma.clear();
   for (size_t i=0; i<numOfCouples; i++) {
     const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
@@ -277,8 +280,6 @@ G4double G4MuPairProductionModel::ComputeMicroscopicCrossSection(
   G4double hhh = (bbb-aaa)/float(kkk);
   G4double x = aaa;
 
-  //  G4cout << "###Cross tkin= " << tkin << " cut= " << cut << " kkk= " << kkk << G4endl;
-
   for(G4int l=0; l<kkk; l++)
   {
 
@@ -288,12 +289,15 @@ G4double G4MuPairProductionModel::ComputeMicroscopicCrossSection(
 
       cross += ep*wgi[i]*ComputeDMicroscopicCrossSection(tkin, Z, ep);
     }
-    aaa += hhh;
+    x += hhh;
   }
 
   cross *=hhh;
   if(cross < 0.0) cross = 0.0;
-
+  /*
+  G4cout << "###Cross tkin= " << tkin << " cut= " << cut << " kkk= " << kkk
+         << " cross= " << cross << G4endl;
+*/
   return cross;
 }
 
@@ -499,6 +503,7 @@ G4double G4MuPairProductionModel::CrossSection(const G4Material* material,
     }
     cross += theAtomNumDensityVector[i] * cr;
   }
+//G4cout << "e= " << kineticEnergy << " sigma= " << cross << G4endl;
 
   return cross;
 }
