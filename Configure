@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.47 2003-12-12 14:56:57 stesting Exp $
+# $Id: Configure,v 1.48 2003-12-12 15:02:51 stesting Exp $
 #
-# Generated on Thu Dec 11 10:37:07 CET 2003 [metaconfig 3.0 PL70]
+# Generated on Fri Dec 12 15:49:38 CET 2003 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2575,13 +2575,13 @@ esac
 
 case "$g4ledata" in
 '')
-	g4ledata=$g4install/../G4EMLOW2.3
+	g4ledata=$g4data/G4EMLOW2.3
 	;;
 esac
 
 case "$g4neutronhpcrosssections" in
 '')
-	g4neutronhpcrosssections=$g4install/../G4NDL3.7
+	g4neutronhpcrosssections=$g4data/G4NDL3.7
 	;;
 esac
 
@@ -2594,8 +2594,6 @@ Please, specify directories where the Geant4 data is installed:
 1) G4LEVELGAMMADATA:		$g4levelgammadata
 
 2) G4RADIOACTIVEDATA:		$g4radioactivedata
-
-Data which is not part of the default Geant4 distribution:
 
 3) G4LEDATA:			$g4ledata
 
@@ -3163,47 +3161,49 @@ gans=$ans
 	esac
 done
 
-if [ X$g4lib_build_static = Xy ] ; then
+## Comment out in waiting G4LIB_USE_STATIC and G4LIB_USE_SHARED.
 #
-# Ask about g4lib_use_static - default "n". 
+#if [ X$g4lib_build_static = Xy ] ; then
+##
+## Ask about g4lib_use_static - default "n". 
+##
+#echo ""
 #
-echo ""
-
-while test 1 = 1  ; do
-
-g4message=`cat << EOM
-
-You selected to build 'shared' (.so) and 'static' (.a) libraries. 
-Do you want to use 'static' (.a) libraries?
-EOM`
-
-dflt=$g4lib_use_static
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		break
-		;;
-	y*|Y*) 
-#		g4lib_build_shared=1
-#		g4lib_build_static=1
-#		g4lib_use_shared=1
-		g4lib_use_static=y
-		break
-		;;
-#	[eE]) 
+#while test 1 = 1  ; do
+#
+#g4message=`cat << EOM
+#
+#You selected to build 'shared' (.so) and 'static' (.a) libraries. 
+#Do you want to use 'static' (.a) libraries?
+#EOM`
+#
+#dflt=$g4lib_use_static
+#rp=$g4message
+#. ./myread
+#gans=$ans
+#
+#	case $gans in
+#	
+#	n*|N*) 
 #		break
 #		;;
-#	*) 
-#		echo " "
+#	y*|Y*) 
+##		g4lib_build_shared=1
+##		g4lib_build_static=1
+##		g4lib_use_shared=1
+#		g4lib_use_static=y
 #		break
 #		;;
-	esac
-done
-fi
+##	[eE]) 
+##		break
+##		;;
+##	*) 
+##		echo " "
+##		break
+##		;;
+#	esac
+#done
+#fi
 
 fi
 
