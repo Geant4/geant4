@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.22 2003-09-22 10:45:37 johna Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.23 2003-11-12 13:05:10 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,6 +81,8 @@ void G4PhysicalVolumeModel::CalculateExtent () {
   }
   else {
     G4BoundingSphereScene bsScene(this);
+    const G4int tempRequestedDepth = fRequestedDepth;
+    fRequestedDepth = -1;  // Always search to all depths to define extent.
     const G4ModelingParameters* tempMP = fpMP;
     G4ModelingParameters mParams
       (0,      // No default vis attributes.
@@ -98,6 +100,7 @@ void G4PhysicalVolumeModel::CalculateExtent () {
     DescribeYourselfTo (bsScene);
     fExtent = bsScene.GetBoundingSphereExtent ();
     fpMP = tempMP;
+    fRequestedDepth = tempRequestedDepth;
   }
 }
 
