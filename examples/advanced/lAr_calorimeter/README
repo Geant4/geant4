@@ -18,7 +18,7 @@ from the beam direction.
 The liquid Argon calorimeter consists of three modules with the same
 nominal outer dimensions: an electromagnetic module (made
 of copper) followed by two hadronic ones (made of tungsten alloy). 
-the corresponding paremeters of these modules are defined inside the
+The corresponding parameters of these modules are defined inside the
 FCALEMModuleParameters.input and FCALHadModuleParameters.input files.
 The package contains as well a FCALTestbemSetup class whose geometry is given by 
 FCALTestbeamSetupParameters.input. See these files for details concerning to
@@ -75,7 +75,7 @@ radius, lenght and angles of the different components.
  ----------------- 
 
  - compile and link to generate an executable
-      % cd geant4/examples/advanced/lAr_calorimeter/lArcal 
+      % cd geant4/examples/advanced/lAr_calorimeter
       % gmake
  		
  - execute the program  in 'batch' mode from macro files
@@ -104,7 +104,7 @@ radius, lenght and angles of the different components.
  The example generates 3 ntuples too which contains the same information 
  than the histograms. 
 
- See their definitions in FCALRunAction.cc
+ See their definitions in FCALAnalysisManager.cc
 
  Note that histograms are disabled via the flag G4ANALYSIS_USE in GNUmakefile.
 
@@ -112,7 +112,7 @@ radius, lenght and angles of the different components.
  7. Using the Anaphe implementation of the AIDA 3.0 histograms:
  ---------------------------------------------------------------
 
- In order to use the new Anaphe implementation of the AIDA 3.0 interfaces, 
+ In order to use the new Anaphe implementation of the AIDA interfaces, 
  prepare some environment variables by source-ing one of the following 
  startup scripts.
 
@@ -120,18 +120,12 @@ radius, lenght and angles of the different components.
                                                        ----------
 
  o Set up the environment variable: G4ANALYSIS_USE    1
- o setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat72/gcc-2.95.2/5.0.2/bin
-                                                         |
-                                                         |
-                                             (Hier your system must be specified;
-                                              if it is redhat61 or redhat73... this
-                                              link has to be changed to the 
-                                              corresponding system.)
+ o setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat73/gcc-2.95.2/5.0.5/bin
 
-  o source /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.2/install/sharedstart.csh or .sh
-  o ln -s /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.2/scripts/* ~/bin/. 
-    (This has to be made only one)
+  o source /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/install/sharedstart.csh or .ch
+  o ln -s /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/scripts/* ~/bin/. 
+    (This has to be made only once)
      
- After this, you will have access to the 'aida-config' command which
+ After this, you will have access to the last 'aida-config' command which
  is used in the GNUmakefile.
 
