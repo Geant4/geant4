@@ -1,4 +1,4 @@
-$Id: History,v 1.6 1999-05-11 21:49:50 gcosmo Exp $
+$Id: History,v 1.7 1999-05-14 16:20:54 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 14th G.Cosmo (global-01-00-01)
+- Still updates to STLInterface from the STL task-force (internal tag considered
+  is STLInterface-04). Introduced wrapper files differentiated for each architecture.
 
 May 11th G.Cosmo
 - Updates and fixes to STLInterface headers. Input mainly from DEC and HP.
