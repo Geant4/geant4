@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMuEnergyLoss.hh,v 1.4 2001-09-10 13:48:29 urban Exp $
+// $Id: G4VMuEnergyLoss.hh,v 1.5 2001-09-28 15:44:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 //      GEANT 4 class header file 
@@ -41,10 +41,11 @@
 // This class creates static muplus/muminus dE/dx and range tables ,
 // which tables can be used by other processes.
 // ************************************************************
-// some corrections by L.Urban on 27/05/98 , (but other corrections come soon!) 
-// cleanup L.Urban on 23/10/98
-// corrections due to new e.m. structure L.Urban 10/02/00
-// loss+ mechanism has been implemented (subcutoff delta rays), L.Urban 10/09/01
+// 27-05-98 some corrections by L.Urban 
+// 23-10-98 cleanup L.Urban 
+// 10-02-00 corrections due to new e.m. structure L.Urban 
+// 10-09-01 loss+ mechanism has been implemented (subcutoff delta rays), L.Urban
+// 28-09-01 suppression of theMuonPlus ..etc..data members (mma)
 // ------------------------------------------------------------
  
 #ifndef G4VMuEnergyLoss_h
@@ -114,8 +115,6 @@ class G4VMuEnergyLoss : public G4VEnergyLoss
     G4double GetConstraints(const G4DynamicParticle *aParticle,
                             G4Material *aMaterial);
                                        
-  // =====================================================================
-  public:
 
   protected:
 
@@ -123,11 +122,6 @@ class G4VMuEnergyLoss : public G4VEnergyLoss
    
     G4double lastgammaCutInRange ;
     G4double lastelectronCutInRange ;
-
-    const G4Electron* theElectron;
-    const G4Positron* thePositron;
-    const G4MuonPlus* theMuonPlus;
-    const G4MuonMinus* theMuonMinus;
 
   private:
 

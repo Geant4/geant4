@@ -21,47 +21,45 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuBremsstrahlung.cc,v 1.18 2001-09-17 17:05:40 maire Exp $
+// $Id: G4MuBremsstrahlung.cc,v 1.19 2001-09-28 15:44:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    
-// --------------------------------------------------------------
-//      GEANT 4 class implementation file 
-//
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
-//      -------- G4MuBremsstrahlung physics process ---------
+//--------------- G4MuBremsstrahlung physics process ------------------
 //                by Laszlo Urban, September 1997
 //
-// 08-04-98: remove 'tracking cut' of muon in oIt, MMa
-// 26/10/98: new cross section of R.Kokoulin,cleanup , L.Urban
-// 10/02/00  modifications , new e.m. structure, L.Urban
-// 29/05/01  V.Ivanchenko minor changes to provide ANSI -wall compilation
-// 09-08-01: new methods Store/Retrieve PhysicsTable (mma)
-// 17-09-01: migration of Materials to pure STL (mma)   
-// --------------------------------------------------------------
+// 08-04-98 remove 'tracking cut' of muon in oIt, MMa
+// 26/10/98 new cross section of R.Kokoulin,cleanup , L.Urban
+// 10/02/00 modifications , new e.m. structure, L.Urban
+// 29/05/01 V.Ivanchenko minor changes to provide ANSI -wall compilation
+// 09-08-01 new methods Store/Retrieve PhysicsTable (mma)
+// 17-09-01 migration of Materials to pure STL (mma)
+// 26-09-01 completion of store/retrieve PhysicsTable (mma)
+// 28-09-01 suppression of theMuonPlus ..etc..data members (mma)   
+//------------------------------------------------------------------------------
 
 #include "G4MuBremsstrahlung.hh"
 #include "G4UnitsTable.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-// static members ........
-G4int G4MuBremsstrahlung::nzdat =  5 ;
+// static members 
+//
+G4int    G4MuBremsstrahlung::nzdat =  5 ;
 G4double G4MuBremsstrahlung::zdat[]={1.,4.,13.,29.,92.};
 G4double G4MuBremsstrahlung::adat[]={1.01,9.01,26.98,63.55,238.03};
-G4int G4MuBremsstrahlung::ntdat = 8 ;
+G4int    G4MuBremsstrahlung::ntdat = 8 ;
 G4double G4MuBremsstrahlung::tdat[]={1.e3,1.e4,1.e5,1.e6,1.e7,1.e8,1.e9,1.e10};
-G4int G4MuBremsstrahlung::NBIN = 1000;    // 100 ;
-//G4double G4MuBremsstrahlung::ya[1001]={0.};
-//G4double G4MuBremsstrahlung::proba[5][8][1001]={0.};
+G4int    G4MuBremsstrahlung::NBIN = 1000;    // 100 ;
 G4double G4MuBremsstrahlung::ya[1001];
 G4double G4MuBremsstrahlung::proba[5][8][1001];
-G4double G4MuBremsstrahlung::CutFixed=0.98*keV ;
+G4double G4MuBremsstrahlung::CutFixed=0.98*keV;
 
+G4double G4MuBremsstrahlung::LowerBoundLambda = 1.*keV;
+G4double G4MuBremsstrahlung::UpperBoundLambda = 1000000.*TeV;
+G4int	 G4MuBremsstrahlung::NbinLambda = 150;
 
-G4double G4MuBremsstrahlung::LowerBoundLambda = 1.*keV ;
-G4double G4MuBremsstrahlung::UpperBoundLambda = 1000000.*TeV ;
-G4int	 G4MuBremsstrahlung::NbinLambda = 150 ;
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // constructor
  
@@ -69,6 +67,8 @@ G4MuBremsstrahlung::G4MuBremsstrahlung(const G4String& processName)
   : G4VMuEnergyLoss(processName),  
     theMeanFreePathTable(NULL)
 {  }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4MuBremsstrahlung::~G4MuBremsstrahlung()
 {
@@ -81,6 +81,8 @@ G4MuBremsstrahlung::~G4MuBremsstrahlung()
       PartialSumSigma.clearAndDestroy();
    }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 void G4MuBremsstrahlung::BuildPhysicsTable(
                                  const G4ParticleDefinition& aParticleType)
@@ -92,14 +94,14 @@ void G4MuBremsstrahlung::BuildPhysicsTable(
 
   BuildLossTable(aParticleType) ;
  
-  if(&aParticleType==theMuonMinus)
+  if(&aParticleType==G4MuonMinus::MuonMinus())
   {
-    RecorderOfmuminusProcess[CounterOfmuminusProcess] = (*this).theLossTable ;
+    RecorderOfmuminusProcess[CounterOfmuminusProcess] = (*this).theLossTable;
     CounterOfmuminusProcess++;
   }
   else
   {
-    RecorderOfmuplusProcess[CounterOfmuplusProcess] = (*this).theLossTable ;
+    RecorderOfmuplusProcess[CounterOfmuplusProcess] = (*this).theLossTable;
     CounterOfmuplusProcess++;
   }
 
@@ -110,12 +112,12 @@ void G4MuBremsstrahlung::BuildPhysicsTable(
   if(gammaCutInRange != lastgammaCutInRange)
     BuildLambdaTable(aParticleType) ;
   
-  G4VMuEnergyLoss::BuildDEDXTable(aParticleType) ;
+  G4VMuEnergyLoss::BuildDEDXTable(aParticleType);
 
-  if(&aParticleType == theMuonPlus)
-    PrintInfoDefinition() ;
+  if(&aParticleType == G4MuonPlus::MuonPlus()) PrintInfoDefinition();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MuBremsstrahlung::BuildLossTable(
                               const G4ParticleDefinition& aParticleType)
@@ -175,6 +177,8 @@ void G4MuBremsstrahlung::BuildLossTable(
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4double G4MuBremsstrahlung::ComputeBremLoss(
                               const G4ParticleDefinition* aParticleType,
                               G4double AtomicNumber,G4double AtomicMass,
@@ -216,6 +220,8 @@ G4double G4MuBremsstrahlung::ComputeBremLoss(
   return loss ;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4MuBremsstrahlung::BuildLambdaTable(
                                   const G4ParticleDefinition& ParticleType)
 {
@@ -256,11 +262,14 @@ void G4MuBremsstrahlung::BuildLambdaTable(
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4MuBremsstrahlung::ComputePartialSumSigma(
                                     const G4ParticleDefinition* ParticleType,
-                                           G4double KineticEnergy,
-                                     const G4Material* aMaterial)
-// Build the table of cross section per element.The table is built for MATERIALS.
+                                          G4double KineticEnergy,
+                                    const G4Material* aMaterial)
+// Build the table of cross section per element.
+// The table is built for MATERIALS.
 // This table is used by DoIt to select randomly an element in the material. 
 {
    G4int Imate = aMaterial->GetIndex();
@@ -284,6 +293,8 @@ void G4MuBremsstrahlung::ComputePartialSumSigma(
         PartialSumSigma[Imate]->push_back(SIGMA);
    }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4MuBremsstrahlung::ComputeMicroscopicCrossSection(
                                      const G4ParticleDefinition* ParticleType,
@@ -329,6 +340,8 @@ G4double G4MuBremsstrahlung::ComputeMicroscopicCrossSection(
 
   return CrossSection;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4double G4MuBremsstrahlung::GetDMicroscopicCrossSection(
                                      const G4ParticleDefinition* ParticleType,
@@ -339,8 +352,10 @@ G4double G4MuBremsstrahlung::GetDMicroscopicCrossSection(
 // get differential cross section
 {
    return ComputeDMicroscopicCrossSection(ParticleType,KineticEnergy,
-                                          AtomicNumber,AtomicMass,GammaEnergy) ;
+                                          AtomicNumber,AtomicMass,GammaEnergy);
 } 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4MuBremsstrahlung::ComputeDMicroscopicCrossSection(
                                      const G4ParticleDefinition* ParticleType,
@@ -405,6 +420,8 @@ G4double G4MuBremsstrahlung::ComputeDMicroscopicCrossSection(
   return dxsection ;
 }
 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MuBremsstrahlung::MakeSamplingTables(
                    const G4ParticleDefinition* ParticleType)
@@ -475,76 +492,7 @@ void G4MuBremsstrahlung::MakeSamplingTables(
    }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4bool G4MuBremsstrahlung::StorePhysicsTable(G4ParticleDefinition* particle,
-				              const G4String& directory, 
-				              G4bool          ascii)
-{
-  G4String filename;
-  
-  // store stopping power table
-  filename = GetPhysicsTableFileName(particle,directory,"StoppingPower",ascii);
-  if ( !theLossTable->StorePhysicsTable(filename, ascii) ){
-    G4cout << " FAIL theLossTable->StorePhysicsTable in " << filename
-           << G4endl;
-    return false;
-  }
-  // store mean free path table
-  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
-  if ( !theMeanFreePathTable->StorePhysicsTable(filename, ascii) ){
-    G4cout << " FAIL theMeanFreePathTable->StorePhysicsTable in " << filename
-           << G4endl;
-    return false;
-  }
-  
-  G4cout << GetProcessName() << ": Success in storing the PhysicsTables in "  
-         << directory << G4endl;
-  return true;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4bool G4MuBremsstrahlung::RetrievePhysicsTable(G4ParticleDefinition* particle,
-					         const G4String& directory, 
-				                 G4bool          ascii)
-{
-  // delete theLossTable and theMeanFreePathTable
-  if (theLossTable != 0) {
-    theLossTable->clearAndDestroy();
-    delete theLossTable; 
-  }   
-  if (theMeanFreePathTable != 0) {
-    theMeanFreePathTable->clearAndDestroy();
-    delete theMeanFreePathTable;
-  }
-
-  G4String filename;
-  
-  // retreive stopping power table
-  filename = GetPhysicsTableFileName(particle,directory,"StoppingPower",ascii);
-  theLossTable = new G4PhysicsTable(G4Material::GetNumberOfMaterials());
-  if ( !theLossTable->RetrievePhysicsTable(filename, ascii) ){
-    G4cout << " FAIL theLossTable0->RetrievePhysicsTable in " << filename
-           << G4endl;  
-    return false;
-  }
-  
-  // retreive mean free path table
-  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
-  theMeanFreePathTable = new G4PhysicsTable(G4Material::GetNumberOfMaterials());
-  if ( !theMeanFreePathTable->RetrievePhysicsTable(filename, ascii) ){
-    G4cout << " FAIL theMeanFreePathTable->RetrievePhysicsTable in " << filename
-           << G4endl;  
-    return false;
-  }
-  
-  G4cout << GetProcessName() << ": Success in retrieving the PhysicsTables from "
-         << directory << G4endl;
-  return true;
-}
- 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
 G4VParticleChange* G4MuBremsstrahlung::PostStepDoIt(const G4Track& trackData,
@@ -682,6 +630,8 @@ G4VParticleChange* G4MuBremsstrahlung::PostStepDoIt(const G4Track& trackData,
   return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4Element* G4MuBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) const
 {
   // select randomly 1 element within the material
@@ -690,7 +640,8 @@ G4Element* G4MuBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) const
   const G4int NumberOfElements = aMaterial->GetNumberOfElements();
   const G4ElementVector* theElementVector = aMaterial->GetElementVector();
 
-  G4double rval = G4UniformRand()*((*PartialSumSigma[Index])[NumberOfElements-1]);
+  G4double rval = G4UniformRand()
+                 *((*PartialSumSigma[Index])[NumberOfElements-1]);
   for ( G4int i=0; i < NumberOfElements; i++ )
     if (rval <= (*PartialSumSigma[Index])[i]) return ((*theElementVector)[i]);
   G4cout << " WARNING !!! - The Material " << aMaterial->GetName()
@@ -698,6 +649,118 @@ G4Element* G4MuBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) const
   return NULL;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4bool G4MuBremsstrahlung::StorePhysicsTable(G4ParticleDefinition* particle,
+				              const G4String& directory, 
+				              G4bool          ascii)
+{
+  G4String filename;
+  
+  // store stopping power table
+  filename = GetPhysicsTableFileName(particle,directory,"StoppingPower",ascii);
+  if ( !theLossTable->StorePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theLossTable->StorePhysicsTable in " << filename
+           << G4endl;
+    return false;
+  }
+  // store mean free path table
+  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
+  if ( !theMeanFreePathTable->StorePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theMeanFreePathTable->StorePhysicsTable in " << filename
+           << G4endl;
+    return false;
+  }
+
+  // store PartialSumSigma table (G4OrderedTable)
+  filename = GetPhysicsTableFileName(particle,directory,"PartSumSigma",ascii);
+  if ( !PartialSumSigma.Store(filename, ascii) ){
+    G4cout << " FAIL PartialSumSigma.store in " << filename
+           << G4endl;
+    return false;
+  }
+    
+  G4cout << GetProcessName() << " for " << particle->GetParticleName()
+         << ": Success to store the PhysicsTables in "  
+         << directory << G4endl;
+	 
+  return true;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4bool G4MuBremsstrahlung::RetrievePhysicsTable(G4ParticleDefinition* particle,
+					         const G4String& directory, 
+				                 G4bool          ascii)
+{
+  // delete theLossTable and theMeanFreePathTable
+  if (theLossTable != 0) {
+    theLossTable->clearAndDestroy();
+    delete theLossTable; 
+  }   
+  if (theMeanFreePathTable != 0) {
+    theMeanFreePathTable->clearAndDestroy();
+    delete theMeanFreePathTable;
+  }
+  if (&PartialSumSigma != 0) PartialSumSigma.clear();
+    
+  // get bining from EnergyLoss
+  LowestKineticEnergy  = GetLowerBoundEloss();
+  HighestKineticEnergy = GetUpperBoundEloss();
+  TotBin               = GetNbinEloss();
+
+  G4String filename;
+  
+  // retreive stopping power table
+  filename = GetPhysicsTableFileName(particle,directory,"StoppingPower",ascii);
+  theLossTable = new G4PhysicsTable(G4Material::GetNumberOfMaterials());
+  if ( !theLossTable->RetrievePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theLossTable->RetrievePhysicsTable in " << filename
+           << G4endl;  
+    return false;
+  }
+  
+  // retreive mean free path table
+  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
+  theMeanFreePathTable = new G4PhysicsTable(G4Material::GetNumberOfMaterials());
+  if ( !theMeanFreePathTable->RetrievePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theMeanFreePathTable->RetrievePhysicsTable in " << filename
+           << G4endl;  
+    return false;
+  }
+  
+  // retrieve PartialSumSigma table (G4OrderedTable)
+  filename = GetPhysicsTableFileName(particle,directory,"PartSumSigma",ascii);
+  if ( !PartialSumSigma.Retrieve(filename, ascii) ){
+    G4cout << " FAIL PartialSumSigma.retrieve in " << filename
+           << G4endl;
+    return false; 
+  }
+      
+  G4cout << GetProcessName() << " for " << particle->GetParticleName()
+         << ": Success to retrieve the PhysicsTables from "
+         << directory << G4endl;
+	 
+  if (particle->GetPDGCharge() < 0.)
+    {
+      RecorderOfmuminusProcess[CounterOfmuminusProcess] = (*this).theLossTable;
+      CounterOfmuminusProcess++;
+    }
+  else
+    {
+      RecorderOfmuplusProcess[CounterOfmuplusProcess] = (*this).theLossTable;
+      CounterOfmuplusProcess++;
+    }
+
+  MakeSamplingTables(particle);
+ 
+  G4VMuEnergyLoss::BuildDEDXTable(*particle);
+
+  return true;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
 void G4MuBremsstrahlung::PrintInfoDefinition()
 {
   G4String comments = "theoretical cross section \n ";
@@ -709,4 +772,6 @@ void G4MuBremsstrahlung::PrintInfoDefinition()
          << " to " << G4BestUnit(UpperBoundLambda,"Energy")
          << " in " << NbinLambda << " bins. \n";
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

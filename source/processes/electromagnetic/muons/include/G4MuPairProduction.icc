@@ -21,26 +21,23 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuPairProduction.icc,v 1.6 2001-09-17 17:05:40 maire Exp $
+// $Id: G4MuPairProduction.icc,v 1.7 2001-09-28 15:44:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// ---------------------------------------------------------------
-//      GEANT 4 class inlined methods file 
-//
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
-//      -------- G4MuPairProduction physics process ---------
+//--------------- G4MuPairProduction physics process ------------------
 //                by Laszlo Urban, May 1998  
-// ***************************************************************
+//------------------------------------------------------------------------------
 //
 // Modified:
 //
 // 17-09-01 migration of Materials to pure STL (mma) 
-// 29.05.01 V.Ivanchenko minor changes to provide ANSI -wall compilation 
+// 29.05.01 V.Ivanchenko minor changes to provide ANSI -wall compilation
+// 28-09-01 suppression of theMuonPlus ..etc..data members (mma) 
 //
-// ---------------------------------------------------------------
-//
+//------------------------------------------------------------------------------
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
 inline G4double G4MuPairProduction::GetMeanFreePath(const G4Track& trackData,
                                                     G4double previousStepSize,
                                                     G4ForceCondition* condition)
@@ -67,12 +64,14 @@ inline G4double G4MuPairProduction::GetMeanFreePath(const G4Track& trackData,
    return MeanFreePath; 
 } 
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
 inline G4double G4MuPairProduction::ComputeMeanFreePath(
                                      const G4ParticleDefinition* ParticleType,
                                      G4double KineticEnergy,
                                      const G4Material* aMaterial)
 {
-  const G4ElementVector* theElementVector = aMaterial->GetElementVector() ;
+  const G4ElementVector* theElementVector = aMaterial->GetElementVector();
   const G4double* theAtomNumDensityVector = 
                                       aMaterial->GetAtomicNumDensityVector();
   G4double ElectronEnergyCut =
@@ -80,7 +79,7 @@ inline G4double G4MuPairProduction::ComputeMeanFreePath(
   G4double PositronEnergyCut =
                        (G4Positron::GetCutsInEnergy())[aMaterial->GetIndex()];  
 
-  G4double SIGMA = 0 ;
+  G4double SIGMA = 0;
   for ( size_t i=0 ; i < aMaterial->GetNumberOfElements() ; i++ )
       {             
             SIGMA += theAtomNumDensityVector[i] * 
@@ -89,13 +88,16 @@ inline G4double G4MuPairProduction::ComputeMeanFreePath(
                                          ElectronEnergyCut,PositronEnergyCut );
       }       
 
-  return SIGMA<=0.0 ? DBL_MAX : 1./SIGMA ;
+  return SIGMA > 0. ? 1./SIGMA : DBL_MAX;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4bool G4MuPairProduction::IsApplicable(
                             const G4ParticleDefinition& particle)
 {
-   return(   (&particle == (const G4ParticleDefinition *)theMuonMinus)
-           ||(&particle == (const G4ParticleDefinition *)theMuonPlus)
-         ) ;
+   return ((&particle == G4MuonPlus::MuonPlus()  ) ||
+           (&particle == G4MuonMinus::MuonMinus()) );
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

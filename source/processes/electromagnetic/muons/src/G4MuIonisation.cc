@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuIonisation.cc,v 1.17 2001-09-17 17:05:40 maire Exp $
+// $Id: G4MuIonisation.cc,v 1.18 2001-09-28 15:44:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------- G4MuIonisation physics process -----------
@@ -35,7 +35,8 @@
 // 29-05-01 V.Ivanchenko minor changes to provide ANSI -wall compilation
 // 10-08-01 new methods Store/Retrieve PhysicsTable (mma) 
 // 28-08-01 new function ComputeRestrictedMeandEdx() + 'cleanup' (mma)
-// 17-09-01 migration of Materials to pure STL (mma)  
+// 17-09-01 migration of Materials to pure STL (mma)
+// 26-09-01 completion of RetrievePhysicsTable (mma)  
 //
 // --------------------------------------------------------------
 
@@ -511,7 +512,7 @@ G4VParticleChange* G4MuIonisation::PostStepDoIt(const G4Track& trackData,
 return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool G4MuIonisation::StorePhysicsTable(G4ParticleDefinition* particle,
 				              const G4String& directory, 
@@ -534,12 +535,14 @@ G4bool G4MuIonisation::StorePhysicsTable(G4ParticleDefinition* particle,
     return false;
   }
   
-  G4cout << GetProcessName() << ": Success in storing the PhysicsTables in "  
+  G4cout << GetProcessName() << " for " << particle->GetParticleName()
+         << ": Success to store the PhysicsTables in "  
          << directory << G4endl;
+	 
   return true;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool G4MuIonisation::RetrievePhysicsTable(G4ParticleDefinition* particle,
 					         const G4String& directory, 
@@ -554,7 +557,12 @@ G4bool G4MuIonisation::RetrievePhysicsTable(G4ParticleDefinition* particle,
     theMeanFreePathTable->clearAndDestroy();
     delete theMeanFreePathTable;
   }
-
+  
+  // get bining from EnergyLoss
+  LowestKineticEnergy  = GetLowerBoundEloss();
+  HighestKineticEnergy = GetUpperBoundEloss();
+  TotBin               = GetNbinEloss();
+  
   G4String filename;
   
   // retreive stopping power table
@@ -575,18 +583,34 @@ G4bool G4MuIonisation::RetrievePhysicsTable(G4ParticleDefinition* particle,
     return false;
   }
   
-  G4cout << GetProcessName() << ": Success in retrieving the PhysicsTables from "
+  G4cout << GetProcessName() << " for " << particle->GetParticleName()
+         << ": Success to retrieve the PhysicsTables from "
          << directory << G4endl;
+	 
+  if (particle->GetPDGCharge() > 0.)
+    {
+      RecorderOfmuplusProcess[CounterOfmuplusProcess]   = (*this).theLossTable;
+      CounterOfmuplusProcess++;
+    }
+  else
+    {
+      RecorderOfmuminusProcess[CounterOfmuminusProcess] = (*this).theLossTable;
+      CounterOfmuminusProcess++;
+    }
+ 
+
+  G4VMuEnergyLoss::BuildDEDXTable(*particle);
+  	 
   return true;
 }
  
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MuIonisation::PrintInfoDefinition()
 {
-  G4String comments = "  Knock-on electron cross sections . ";
-           comments += "\n         Good description above the mean excitation energy.\n";
-           comments += "         delta ray energy sampled from  differential Xsection.";
+  G4String comments = "  Knock-on electron cross sections . "
+            "\n         Good description above the mean excitation energy.\n"
+            "         delta ray energy sampled from  differential Xsection.";
 
   G4cout << G4endl << GetProcessName() << ":  " << comments
          << "\n        PhysicsTables from " << G4BestUnit(LowerBoundLambda,
@@ -595,4 +619,4 @@ void G4MuIonisation::PrintInfoDefinition()
          << " in " << TotBin << " bins. \n";
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

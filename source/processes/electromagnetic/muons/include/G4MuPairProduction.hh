@@ -21,24 +21,21 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuPairProduction.hh,v 1.10 2001-08-10 15:49:02 maire Exp $
+// $Id: G4MuPairProduction.hh,v 1.11 2001-09-28 15:44:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-//
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
-//      -------- G4MuPairProduction physics process ---------
+//--------------- G4MuPairProduction physics process ------------------
 //                by Laszlo Urban, May 1998      
-// ************************************************************
+//------------------------------------------------------------------------------
 // 10/02/00  modifications , new e.m. structure, L.Urban
 // 10-08-01: new methods Store/Retrieve PhysicsTable (mma) 
-//
+//------------------------------------------------------------------------------
 
 #ifndef G4MuPairproduction_h
 #define G4MuPairproduction_h 1
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
 #include "G4ios.hh" 
 #include "globals.hh"
 #include "Randomize.hh" 
@@ -48,7 +45,9 @@
 #include "G4OrderedTable.hh" 
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"
- 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+  
 class G4MuPairProduction : public G4VMuEnergyLoss
  
 { 
@@ -70,10 +69,10 @@ class G4MuPairProduction : public G4VMuEnergyLoss
 
      G4double GetMeanFreePath( const G4Track& track,
                                G4double previousStepSize,
-                               G4ForceCondition* condition ) ;
+                               G4ForceCondition* condition );
  
      G4VParticleChange *PostStepDoIt(const G4Track& track,
-                                     const G4Step& Step  ) ;                 
+                                     const G4Step& Step  );                 
 
      G4double GetDMicroscopicCrossSection(
                                       const G4ParticleDefinition* ParticleType,
@@ -136,15 +135,15 @@ class G4MuPairProduction : public G4VMuEnergyLoss
 
   private:
 
-     G4PhysicsTable* theMeanFreePathTable ;              
+     G4PhysicsTable* theMeanFreePathTable;              
 
      G4OrderedTable PartialSumSigma;     
 
-     static G4double LowerBoundLambda ; // bining for lambda table
-     static G4double UpperBoundLambda ;
-     static G4int    NbinLambda ;
-     G4double LowestKineticEnergy,HighestKineticEnergy ;
-     G4int    TotBin ;
+     static G4double LowerBoundLambda; // bining for lambda table
+     static G4double UpperBoundLambda;
+     static G4int    NbinLambda;
+     G4double LowestKineticEnergy,HighestKineticEnergy;
+     G4int    TotBin;
 
      const G4double* ElectronCutInKineticEnergy;
      const G4double* PositronCutInKineticEnergy;
@@ -152,11 +151,11 @@ class G4MuPairProduction : public G4VMuEnergyLoss
      G4double ElectronCutInKineticEnergyNow;
      G4double PositronCutInKineticEnergyNow;
 
-     // tables for sampling ..............
-     static G4int nzdat,ntdat,NBIN ;
-     static G4double zdat[5],tdat[8] ;
-     static G4double ya[1001],proba[5][8][1001] ;
-     static G4double MinPairEnergy ;
+     // tables for sampling 
+     static G4int nzdat,ntdat,NBIN;
+     static G4double zdat[5],tdat[8];
+     static G4double ya[1001],proba[5][8][1001];
+     static G4double MinPairEnergy;
 
   public:
 
@@ -169,6 +168,8 @@ class G4MuPairProduction : public G4VMuEnergyLoss
 
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
 #include "G4MuPairProduction.icc"
   
 #endif

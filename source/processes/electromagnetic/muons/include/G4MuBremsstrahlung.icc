@@ -21,26 +21,23 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuBremsstrahlung.icc,v 1.6 2001-09-17 17:05:40 maire Exp $
+// $Id: G4MuBremsstrahlung.icc,v 1.7 2001-09-28 15:44:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// ---------------------------------------------------------------
-//      GEANT 4 class inlined methods file 
-//
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
-//      -------- G4MuBremsstrahlung physics process ---------
+//--------------- G4MuBremsstrahlung physics process ------------------
 //                by Laszlo Urban, September 1997
-// ***************************************************************
+//------------------------------------------------------------------------------
 //
 // Modified:
 //
 // 17-09-01 migration of Materials to pure STL (mma) 
-// 29.05.01 V.Ivanchenko minor changes to provide ANSI -wall compilation 
+// 29.05.01 V.Ivanchenko minor changes to provide ANSI -wall compilation
+// 28-09-01 suppression of theMuonPlus ..etc..data members (mma) 
 //
-// ---------------------------------------------------------------
-//
+//------------------------------------------------------------------------------
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
 inline G4double G4MuBremsstrahlung::GetMeanFreePath(const G4Track& trackData,
                                                     G4double previousStepSize,
                                                     G4ForceCondition* condition)
@@ -67,7 +64,8 @@ inline G4double G4MuBremsstrahlung::GetMeanFreePath(const G4Track& trackData,
    return MeanFreePath; 
 } 
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
 inline G4double G4MuBremsstrahlung::ComputeMeanFreePath(
                                      const G4ParticleDefinition* ParticleType,
                                            G4double KineticEnergy,
@@ -76,7 +74,7 @@ inline G4double G4MuBremsstrahlung::ComputeMeanFreePath(
   const G4ElementVector* theElementVector = aMaterial->GetElementVector() ;
   const G4double* theAtomNumDensityVector = 
                                      aMaterial->GetAtomicNumDensityVector();
-  G4double GammaEnergyCut = (G4Gamma::GetCutsInEnergy())[aMaterial->GetIndex()];   
+  G4double GammaEnergyCut = (G4Gamma::GetCutsInEnergy())[aMaterial->GetIndex()];
   G4double SIGMA = 0 ;
   for ( size_t i=0 ; i < aMaterial->GetNumberOfElements() ; i++ )
       {             
@@ -88,14 +86,17 @@ inline G4double G4MuBremsstrahlung::ComputeMeanFreePath(
                                                      GammaEnergyCut );
       }       
 
-  return SIGMA<=0.0 ? DBL_MAX : 1./SIGMA ;
+  return SIGMA > 0. ? 1./SIGMA : DBL_MAX;
 }
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
 inline G4bool G4MuBremsstrahlung::IsApplicable(
                             const G4ParticleDefinition& particle)
 {
-   return(   (&particle == (const G4ParticleDefinition *)theMuonMinus)
-           ||(&particle == (const G4ParticleDefinition *)theMuonPlus)
-         ) ;
+   return ((&particle == G4MuonPlus::MuonPlus()  ) ||
+           (&particle == G4MuonMinus::MuonMinus()) );
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 

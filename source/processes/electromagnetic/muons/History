@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2001-09-20 10:38:43 maire Exp $
+$Id: History,v 1.21 2001-09-28 15:44:20 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28 sep 01: mma (muons-V03-02-06)
+- suppression of theMuonPlus ..etc..data members : all classes
+- completion of store/retrieve PhysicsTables
      
 20 sep 01: L.Urban (muons-V03-02-05)
 - in MuPairProduction::ComputeMicroscopicCrossSection, remove:

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMuEnergyLoss.cc,v 1.14 2001-09-17 17:05:41 maire Exp $
+// $Id: G4VMuEnergyLoss.cc,v 1.15 2001-09-28 15:44:21 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -41,8 +41,9 @@
 // signature in GetLossWithFluct changed L.Urban 30/10/00
 // 29/05/01 V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // 10/09/01 L.Urban : loss+ mechanism (subcutoff delta rays) implemented
-// 12/09/01  min.delta cut is set as rcut/100 + some optimisation, L.Urban
-// 17-09-01, migration of Materials to pure STL (mma) 
+// 12/09/01 min.delta cut is set as rcut/100 + some optimisation, L.Urban
+// 17-09-01 migration of Materials to pure STL (mma)
+// 28-09-01 suppression of theMuonPlus ..etc..data members (mma) 
 // --------------------------------------------------------------
  
 
@@ -100,10 +101,6 @@ G4VMuEnergyLoss::G4VMuEnergyLoss(const G4String& processName)
      theLossTable(0),
      lastgammaCutInRange(0.),
      lastelectronCutInRange(0.),
-     theElectron ( G4Electron::Electron() ),
-     thePositron ( G4Positron::Positron() ),
-     theMuonPlus ( G4MuonPlus::MuonPlus() ),
-     theMuonMinus ( G4MuonMinus::MuonMinus() ),
      theRangeCoeffATable(0),
      theRangeCoeffBTable(0),
      theRangeCoeffCTable(0)
@@ -496,9 +493,9 @@ G4VParticleChange* G4VMuEnergyLoss::AlongStepDoIt(
     else
     {
        if (charge<0.) finalT = G4EnergyLossTables::GetPreciseEnergyFromRange(
-                               theMuonMinus,fRangeNow-Step,aMaterial);
+                             G4MuonMinus::MuonMinus(),fRangeNow-Step,aMaterial);
        else           finalT = G4EnergyLossTables::GetPreciseEnergyFromRange(
-                               theMuonPlus,fRangeNow-Step,aMaterial);
+                             G4MuonPlus::MuonPlus(),fRangeNow-Step,aMaterial);
      }
   }
 
