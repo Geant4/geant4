@@ -1,4 +1,4 @@
-# $Id: swig.gmk,v 1.3 2003-06-17 07:33:35 dressel Exp $
+# $Id: swig.gmk,v 1.4 2003-06-18 11:37:53 dressel Exp $
 # --------------------------------------------------------------
 # swig.gmk   Michael Dressel
 # --------------------------------------------------------------
@@ -38,6 +38,7 @@ $(SWIGSO): $(objectfilesWrapper) $(SWIG_OBJ_DEP)
 
 src/%_wrap.cc: include/%.i
 	$(SWIG) -python -c++ -shadow -no_default $(SWIGFLAGS) \
+	${SWIG_INCDIRS} \
 	-o $@ $<
 	@mv src/$(moduleName).py ./
 

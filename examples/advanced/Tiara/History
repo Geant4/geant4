@@ -1,4 +1,4 @@
-# $Id: History,v 1.4 2003-06-17 16:25:27 dressel Exp $
+# $Id: History,v 1.5 2003-06-18 11:37:53 dressel Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -20,7 +20,7 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 Jun  17th, 2003 M.Dressel - Tiara-V05-01-02
-- changes for rh72 with gcc-2.95.2 and rh73 with gcc-3.2
+- changes for rh73 with gcc-2.95.2 and rh73 with gcc-3.2
 
 June 16th, 2003 M.Dressel - Tiara-V05-01-01
 - building with gmake supported, cvs meta info  added

@@ -1,4 +1,4 @@
-# $Id: README,v 1.8 2003-06-17 15:24:42 mdressel Exp $
+# $Id: README,v 1.9 2003-06-18 11:37:53 dressel Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -87,13 +87,14 @@ in the three cases:
          simular to this 
          "ld -shared -o libpython2.2.so --whole-archive libpython2.2.a /usr/lib/libc.so"
 
-   Set "PYTHONVERSION" (2.2 or higher)
-   Set "PYTHON_INCLUDE_DIR" (e.g. to  /usr/include/python${PYTHONVERSION})
-   Set "PYTHON_LIB_DIR" (e.g. to /usr/lib/python${PYTHONVERSION}/config)
+   Set the following environment variables:
+   "PYTHONVERSION" (2.2 or higher)
+   "PYTHON_BASE_DIR" (e.g. to  /usr/)
 
-   Set "SWIG"  (e.g. to /users/dressel/local/bin/swig)
+   "SWIG_VERSION" (e.g. 1.3 or higher)
+   "SWIG_BASE_DIR" (e.g. /users/dressel/local)
 
-   Set "CLHEP_BASE_DIR" (e.g. to  /users/dressel/CLHEP)
+   "CLHEP_BASE_DIR" (e.g. to  /users/dressel/CLHEP)
 
    Finally source the script envCommon.csh
 

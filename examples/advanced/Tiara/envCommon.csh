@@ -1,4 +1,4 @@
-# $Id: envCommon.csh,v 1.4 2003-06-17 15:24:42 mdressel Exp $
+# $Id: envCommon.csh,v 1.5 2003-06-18 11:37:53 dressel Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -7,7 +7,8 @@
 # environment variables according to the description in README
 
 
-# in case Anaphe is used via afs.
+# setting in case Anaphe is used
+
 if (${?ANAPHE_SCRIPTS} == 1 && ${?ANAPHETOP} == 1 && ${?AIDA_DIR} == 1 ) then
 
 if ( -f $ANAPHE_SCRIPTS/setupAnaphe.csh ) then 
@@ -28,22 +29,77 @@ setenv PYTHON_INCLUDE_DIR ${ANAPHESPECDIR}/PublicDomainPackages/2.0.0/include/py
 setenv PYTHON_LIB_DIR ${ANAPHESPECDIR}/PublicDomainPackages/2.0.0/lib/python${PYTHONVERSION}/config
 
 # set the swig command
-setenv SWIG ${ANAPHESPECDIR}/PublicDomainPackages/2.0.0/bin/swig-1.3.15
+setenv SWIG_VERSION 1.3.15
+setenv SWIG_BASE_DIR ${ANAPHESPECDIR}/PublicDomainPackages/2.0.0
+setenv SWIG_INCDIRS "-I${SWIG_BASE_DIR}/lib/swig-${SWIG_VERSION} -I${SWIG_BASE_DIR}/lib/swig-${SWIG_VERSION}/python"
+setenv SWIG ${SWIG_BASE_DIR}/bin/swig-${SWIG_VERSION}
 
 # CLHEP access
 setenv CLHEP_BASE_DIR ${ANAPHETOP}/specific/${PLATF}/CLHEP/1.8.0.0/
 
-else
+
+setenv PATH ${ANAPHETOP}/share/LHCXX/${ANAPHE_VERSION}/scripts:${PATH}
+
+
+
+
+
+
+
+
+
+
+else   # not using Anaphe
+
+
+
 
 echo "envCommon.csh: INFO: Anaphe is not used since ANAPHE_SCRIPTS or ANAPHETOP or AIDA_DIR is not set"
 
+if (   ${?PYTHONVERSION} == 1 && \
+       ${?PYTHON_BASE_DIR} == 1 && \
+       ${?SWIG_BASE_DIR} == 1 && \
+       ${?SWIG_VERSION} == 1 && \
+       ${?CLHEP_BASE_DIR} == 1) then  # settings without Anaphe
+
+setenv PYTHON_LIB_DIR ${PYTHON_BASE_DIR}/lib/python${PYTHONVERSION}/config
+setenv PYTHON_INCLUDE_DIR ${PYTHON_BASE_DIR}/include/python${PYTHONVERSION}
+
+if ( ! -d $PYTHON_LIB_DIR ) then
+echo envCommon.csh: ERROR: no pyhton lib/config directory: $PYTHON_LIB_DIR
 endif
 
-if (   ${?PYTHONVERSION} == 1 && \
-       ${?PYTHON_INCLUDE_DIR} == 1 && \
-       ${?PYTHON_LIB_DIR} == 1 && \
-       ${?SWIG} == 1 && \
-       ${?CLHEP_BASE_DIR} == 1) then
+if ( ! -d $PYTHON_INCLUDE_DIR ) then
+echo envCommon.csh: ERROR: no pyhton include directory: $PYTHON_INCLUDE_DIR
+endif
+
+
+setenv SWIG_INCDIRS "-I${SWIG_BASE_DIR}/lib/swig-${SWIG_VERSION} -I${SWIG_BASE_DIR}/lib/swig-${SWIG_VERSION}/python"
+if ( -x  ${SWIG_BASE_DIR}/bin/swig-${SWIG_VERSION} ) then
+setenv SWIG ${SWIG_BASE_DIR}/bin/swig-${SWIG_VERSION}
+else if ( -x ${SWIG_BASE_DIR}/bin/swig ) then
+setenv SWIG ${SWIG_BASE_DIR}/bin/swig
+else 
+echo envCommon.csh: ERROR: could not find swig executable
+endif
+
+else    # environment not completed in case no Anaphe is used
+
+echo "envCommon.csh: ERROR: PYTHONVERSION or PYTHON_BASE_DIR or SWIG_BASE_DIR or SWIG_VERSION or CLHEP_BASE_DIR  not set!"
+
+endif
+
+endif    # settings for not using Anaphe
+
+
+
+
+
+
+
+
+# common setings 
+
 
 if (${?LD_LIBRARY_PATH} == 0) then
 setenv LD_LIBRARY_PATH
@@ -68,12 +124,4 @@ setenv PYTHONPATH ${PYTHONPATH}:${TIARA_BASE}/source/TiaraWrapper
 setenv PYTHONPATH ${PYTHONPATH}:${TIARA_BASE}/source/G4KernelWrapper
 setenv PYTHONPATH ${PYTHONPATH}:${TIARA_BASE}/source/CLHEPWrapper
 
-if (${?ANAPHETOP} == 1) then 
-setenv PATH ${ANAPHETOP}/share/LHCXX/${ANAPHE_VERSION}/scripts:${PATH}
-endif
 
-else 
-
-echo "envCommon.csh: ERROR: PYTHONVERSION or PYTHON_INCLUDE_DIR or PYTHON_LIB_DIR or SWIG or CLHEP_BASE_DIR  not set!"
-
-endif
