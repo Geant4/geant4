@@ -62,7 +62,12 @@ private:
   G4int numberOfReplicas;
   G4int numberOfRadiusBins;  // Number of bins in the transverse profile
   G4int numberOfEvents;
-  G4double radiusBin;        // Size of the bin in the transverse profile  
+  G4double radiusBin;        // Size of the first bin in the transverse profile.
+                             // The other bins have a bin size that is 
+                             // as follows: second bin has a size that is twice
+                             // the first bin size; the third one has a size
+                             // that is three times the first bin size, and so on.
+
   std::vector< G4double > longitudinalProfile;
   std::vector< G4double > transverseProfile; 
 

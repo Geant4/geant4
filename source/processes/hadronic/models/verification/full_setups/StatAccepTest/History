@@ -1,6 +1,16 @@
                  History file
                  ------------
 
+10-Nov-2004 - A.Ribon (statAccepTest-V06-02-04)
+- Added biasing for the neutrons, and also two different
+  level of biasing for gammas, electrons, and positrons.
+  The binning of the later shape has been changed: now
+  they are increasing as the radius grows, in such a way
+  to keep enough statistics in spite of the rapid decrease
+  of the shower with the radius. The default is 10 variable 
+  bins, with the first one of size equal to 0.1 lambda.
+
+
 9-Nov-2004 - A.Ribon (statAccepTest-V06-02-03)
 - Added biasing in electromagnetic physics (i.e. for
   gammas, electrons, and positrons). Also a cut on
@@ -9,12 +19,14 @@
   number of layers is now 20 (each with half lambda
   of absorber), and radially 10, with 1/4 lambda size.
 
+
 8-Nov-2004 - A.Ribon (statAccepTest-V06-02-02)
 - Migration to PI_1_2_4 (so the temporary bug fix in 
   PI_1_2_3 has been removed).
   More automatization has been introduced: now it 
   builds the executable, and it is possible to run
   separately the simulation and the statistical tests.
+
 
 3-Nov-2004 - A.Ribon (statAccepTest-V06-02-01)
 - Fully automatized.

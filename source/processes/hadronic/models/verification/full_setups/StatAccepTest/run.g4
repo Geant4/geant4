@@ -30,8 +30,12 @@
 #          - Is the unit with which to express the radius bin
 #            size in lambdas (interaction lengths) of the absorber,
 #            or in [mm]?	
-#          - Size of the bin for the radius (transverse distance 
-#            from the beam axis).
+#          - Size of the first bin for the radius (transverse 
+#            distance from the beam axis): the other ones will
+#            have increasing widths (e.g. the second bin has
+#            a width equal to two times the first bin size,
+#            the third one has a width equal to three times
+#            the first bin size, etc.).
 #          - Number of bins for the radius.
 #     III) Update Geometry : always necessary, leave it On!
 #
@@ -126,7 +130,7 @@
 /mydet/activeLayerNumber 20
 /mydet/activeLayerSize 4.0
 /mydet/isRadiusUnitInLambda 1
-/mydet/radiusBinSize 0.25
+/mydet/radiusBinSize 0.1
 /mydet/radiusBinNumber 10
 #
 #=== III) UPDATE GEOMETRY : leave it always ON ! ===

@@ -1,4 +1,4 @@
- A.R. Created 20-Aug-2004 ; Last change 5-Nov-2004.
+ A.R. Created 20-Aug-2004 ; Last change 10-Nov-2004.
  
  This directory contains a configurable calorimeter setup to be used
  as statistical acceptance suite of Geant4, that is to validate a
@@ -29,8 +29,10 @@
  the number of layers indicate essentially the number of sampling
  we can have for the longitudinal shower profile.
  Finally, the number of bins for the lateral shower profile should
- also be specified, either in unit of lambda (of the absorber)
- or in [mm].   
+ also be specified, and the width (radius) of the first bin in unit
+ of lambda (of the absorber) or in [mm]. The bins have incresing
+ size as the radius grows, in such a way to keep enough statistics
+ in spite of the rapid decrease of the shower with the radius.   
  Notice that, due to HBOOK limitations, there should be not
  more than 100 layers for the longitudinal shower profile, 
  and not more than 30 layers for the lateral shower profile.

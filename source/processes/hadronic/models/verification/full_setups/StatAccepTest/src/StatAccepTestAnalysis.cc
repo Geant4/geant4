@@ -261,18 +261,25 @@ fillShowerProfile( G4int replica, G4double radius, G4double edep ) {
 
   longitudinalProfile[ replica ] += edep;
 
-  // The last bin of the transverse profile, i.e. bin = numberOfRadiusBins-1,
-  // includes all the hits with radius >= radiusBin*numberOfRadiusBins-2 .
+  // The last bin of the transverse profile includes all the hits with 
+  // remaining radius. 
+  // The bins are not constants: the specified radius refers to the first
+  // (narrow) bin, then the second one has a width which is double the first
+  // one, then the third has a width which is three time the first time,
+  // and so on. The reason for this is to keep a reasonable statistics
+  // in each bin, given the fast decrease as the radius increases.
   int iBinRadius = 0;
-  while ( radius > radiusBin*(iBinRadius+1)  &&  iBinRadius < numberOfRadiusBins-1 ) {
+  double currentRadius = radiusBin;
+  while ( radius > currentRadius  &&  iBinRadius < numberOfRadiusBins-1 ) {
     iBinRadius++;
+    currentRadius += iBinRadius*radiusBin;
   }
 
   transverseProfile[ iBinRadius ] += edep;
 
-  // G4cout << " StatAccepTestAnalysis::fillShowerProfile : DEBUG Info " << G4endl
-  //        << " \t replica = " << replica  << "   radius = " << radius / mm 
-  //        << " mm   iBinRadius = " << iBinRadius << "   edep = " << edep 
-  //        << G4endl;  //***DEBUG***
+  //G4cout << " StatAccepTestAnalysis::fillShowerProfile : DEBUG Info " << G4endl
+  //       << " \t replica = " << replica  << "   radius = " << radius / mm 
+  //       << " mm   iBinRadius = " << iBinRadius << "   edep = " << edep 
+  //       << G4endl;  //***DEBUG***
 
 }
