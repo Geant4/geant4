@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Torus.cc,v 1.18 2000-11-20 17:58:00 gcosmo Exp $
+// $Id: G4Torus.cc,v 1.19 2000-11-30 15:42:06 medernac Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,6 +38,8 @@
 #include "G4NURBStube.hh"
 #include "G4NURBScylinder.hh"
 #include "G4NURBStubesector.hh"
+#include "g4std/iomanip"
+#include "g4std/strstream"
 
 // #define DEBUGTORUS 1
 
@@ -2194,7 +2196,7 @@ G4NURBS* G4Torus::CreateNURBS () const
 #define TORUSPRECISION 1.0  // or whatever you want for precision
                             // (it is TorusEquation related)
 #define NBPOINT 6
-#define ITERATION 8 // 20 But 8 is really enough for Newton with a good guess
+#define ITERATION 12 // 20 But 8 is really enough for Newton with a good guess
 #define NOINTERSECTION kInfinity
 
 
@@ -3098,6 +3100,7 @@ G4int G4Torus::SafeNewton(G4double x, G4double y, G4double z,
 	  }
 	}
     if (IntervalIsVoid != 1) {
+
       (*Lmax) = NewMax;
       (*Lmin) = NewMin;
     }
@@ -3139,11 +3142,25 @@ G4double G4Torus::Newton (G4double guess,
   {
     G4int NewtonIsSafe ;
     G4int k;
-      
+    /*
+      Here we stop to compute after ITERATION loop
+    */
     for (k=0;
         ((k<ITERATION) &&
         ((NewtonIsSafe = SafeNewton(x,y,z,dx,dy,dz,Rmax,Rmin,&Lmin,&Lmax))==0));
 	k++);
+    
+
+    /* But in fact it is safer to compute while this is safe 
+    while ((NewtonIsSafe = SafeNewton(x,y,z,dx,dy,dz,Rmax,Rmin,&Lmin,&Lmax)) == 0) ;
+
+    Problem: the mathematical algorithm is the one with the while loop
+    but because of precision issue we could have TorusEquation(point) never equal to zero..
+    But we see that all initial points are on the bounding volume. So there is a superior limit
+    to the number of iteration in the while loop to reach the point with the given precision.
+    
+    */
+    
     guess = Lmin;
   }
   
