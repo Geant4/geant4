@@ -1,7 +1,7 @@
 <html>
 <head>
 <title>System Testing report on large-N tests</title>
-<!-- Changed by: Serguei SADILOV,  3-Dec-2001 -->
+<!-- Changed by: Serguei SADILOV,  4-Dec-2001 -->
 </head>
 
 <body>
@@ -16,15 +16,15 @@ Report on Errors and Warnings arising from system testing on the
 NOTE: the complete set of tests has not been run, with Large_N(umbers of events),
       for all platforms. 
 <pre>
-              OK        OK        OK         13          OK        |          Testing!   OK         11+15    check     OK         OK
-              ^         ^         ^          ^           ^         ^          ^          ^           ^       later      ^          ^
+              +         +         +          +           testing   +          +          +           +       testing    +          +
+              ^         ^         ^          ^           ^         ^          ^          ^           ^       ^          ^          ^
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
            | SUN-CC  | SUN-CC  |Linux-egcs|Linux-egcs|Linux-g++ |Linux-g++ | HP-aCC   | HP-aCC   | DEC-cxx | DEC-cxx | DEC-cxx | DEC-cxx |
            |optim_ISO|debug_ISO|egcs.optim|egcs.debug|opt.NEWGCC|deb.NEWGCC| optim    | debug    |optim_ISO|debug_ISO|optim_NON|debug_NON|
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
 test01     |         |         |          |          |          |          |          |          |         |         |         |         |
 test02     |         |         |          |          |          |          |          |          |         |         |         |         |
-test02.h   |         |         |          |          |          |          |          |          |  abend  |         | abend   |         |
+test02.h   |         |         |          |          |          |          |          |          |  abend  | W3      | abend   |         |
 test05     |         |         |          |          |          |          |          |          |         |         |         |         |
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
 test06     |         |         |          |          |          |          |          |          |         |         |         |         |
@@ -32,21 +32,21 @@ test07     |         |         |          |          |          |          |    
 test09     |         |         |          |          |          |          |          |          |         |         |         |         |
 test10     |         |         |          |          |          |          |          |          |         |         |         |         |
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
-test11     |         |         |          |          |          |          |          |          | testing | testing | abend   |         |
-test12     |         |         |          |          |          |          |          |          | abend   |         | abend   |         |
-test13     |         | W3   E6 |          |          |          |          |          |          | abend   | E6      | abend   |         |
+test11     |         |         |          |          |          |          |          |          | abend   | testing | abend   |         |
+test12     |         |         |          |          |          |          |          |          | abend   |         | abend   | W7 W3   |
+test13     | E6      |         |          |          |          | E6       |          |          | abend   | E6      | abend   |         |
 test14     |         |         |          |          |          |          |          |          |         |         |         |         |
-test15     | link    |         |          |          |          |          |          |          | testing | testing | abend   |         |
+test15     | link    |         |          |          |          |          |          |          | abend   | testing | abend   |         |
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
 test16     |         |         |          |          |          |          |          |          | abend   |         | abend   |         |
 test17     |         |         |          |          |          |          |          |          |         |         |         |         |
 test18     |         |         |          |          |          |          |          |          |         |         |         |         |
 test20     |         |         |          |          |          |          |          |          |         |         |         |         |
-test21     | testing | testing | testing  | testing  | testing  | testing  |          |          | testing |         | testing |         |
+test21     |         |         |          | W4 W5    | testing  |          |          | testing  | abend   | abend   | abend   | abend   |
 test22     |         |         |          |          |          |          |          |          |         |         |         |         |
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
 test103    |........ |         |          |          |          |          |          |          |         |         |         |         |
-test104    |........ |         |          | W3       |          |          |          |          | abend   | abend   | abend   | abend   |
+test104    |........ |         |          |          |          |          |          |          | abend   | abend   | abend   | abend   |
 test104.Em | Perf    | Perf    | Perf     | Perf     |          |          |          |          |         |         |         |         |
 test502    |         |         | Err  8   | Err  8   | Err  8   | Err  8   |          |          |         |         |         |         |
 test508    |         |         |          |          |          |          |          |          |         |         |         |         |
@@ -70,25 +70,17 @@ test508    |         |         |          |          |          |          |    
  Warn 3  G4CameronTruranHilfShellCorrections: out of table
 ===============================================================================================
 
-G4Err  2  SUN-CC.optim_ISO test508
-----------------------------------
+G4Err  2
+--------
 
  end of Run TotNbofEvents = 10000
     mean charged track length   in absorber=74.7733 +- 0.326843  mm
 
             mean energy deposit in absorber=NaN +- 0  MeV
 
-G4 Err 6  Linux-g++.deb.NewGCC   test13
----------------------------------------
 
-*** Error in G4HEInelastic::GenerateNBodyEvent
-    total mass (1.87784) >= total energy (1.87384)
-*** Error in G4HEInelastic::GenerateNBodyEvent
-    total mass (1.87913) >= total energy (1.8412)
-
-
-G4 Err 8  Linux-*   test502
----------------------------
+G4 Err 8
+--------
 
 It crashes in unpredictable way in printing stat:
 
@@ -105,9 +97,33 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
 
 
-G4Warn 3  SUN-CC.optim_ISO test16
----------------------------------
+G4Warn 3 
+--------
 G4CameronTruranHilfShellCorrections: out of table for Z = 1
+
+
+G4Warn 4 
+--------
+boostVector computed for a non-timelike LorentzVector
+at line 185 in file LorentzVector.cc
+
+
+G4Warn 5 
+--------
+***G4Quasmon::HadronizeQ: (2) rPDG=22, dm=0
+
+
+G4 Warn 6
+---------
+*** Error in G4HEInelastic::GenerateNBodyEvent
+    total mass (1.87784) >= total energy (1.87384)
+*** Error in G4HEInelastic::GenerateNBodyEvent
+    total mass (1.87913) >= total energy (1.8412)
+
+
+G4 Warn 7
+---------
+Warning: eliminating target particle
 
 
 Perf
