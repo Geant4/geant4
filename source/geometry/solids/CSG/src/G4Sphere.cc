@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.23 2003-10-28 16:50:25 gcosmo Exp $
+// $Id: G4Sphere.cc,v 1.24 2003-10-28 17:11:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -2544,8 +2544,8 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p ) const
      G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
-     G4cout << "G4Sphere::DistanceToOut(p) - point p is outside ?!" << G4endl ;
-     G4cerr << "G4Sphere::DistanceToOut(p) - point p is outside ?!" << G4endl ;
+     G4Exception("G4Sphere::DistanceToOut(p)",
+                 "Notification", JustWarning, "Point p is outside !?" );
   }
 #endif
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.19 2003-10-28 16:50:26 gcosmo Exp $
+// $Id: G4Trap.cc,v 1.20 2003-10-28 17:11:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Trap
@@ -1535,8 +1535,8 @@ G4double G4Trap::DistanceToOut( const G4ThreeVector& p ) const
      G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
-     G4cout << "G4Trap::DistanceToOut(p) - point p is outside ?!" << G4endl ;
-     G4cerr << "G4Trap::DistanceToOut(p) - point p is outside ?!" << G4endl ;
+     G4Exception("G4Trap::DistanceToOut(p)",
+                 "Notification", JustWarning, "Point p is outside !?" );
   }
 #endif
 

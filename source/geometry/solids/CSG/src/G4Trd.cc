@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc,v 1.15 2003-10-28 16:50:27 gcosmo Exp $
+// $Id: G4Trd.cc,v 1.16 2003-10-28 17:11:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1152,8 +1152,8 @@ G4double G4Trd::DistanceToOut( const G4ThreeVector& p ) const
      G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
-     G4cout << "G4Trd::DistanceToOut(p) - point p is outside ?!" << G4endl ;
-     G4cerr << "G4Trd::DistanceToOut(p) - point p is outside ?!" << G4endl ;
+     G4Exception("G4Trd::DistanceToOut(p)",
+                 "Notification", JustWarning, "Point p is outside !?" );
   }
 #endif
 
