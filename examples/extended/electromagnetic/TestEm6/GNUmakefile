@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2002-05-23 13:30:10 maire Exp $
+# $Id: GNUmakefile,v 1.7 2002-06-05 14:20:59 maire Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -20,8 +20,9 @@ G4NOHIST := true
 ifdef G4NOHIST
   CPPFLAGS += -DG4NOHIST
 else
-  LDFLAGS  += -L$(CERN)/pro/lib
-  LOADLIBS += -lpacklib $(FCLIBS)
+  # for the aida-config command see the README file
+  CPPFLAGS += `aida-config --useHBook --include`
+  LDFLAGS  += `aida-config --useHBook --lib`
 endif
 
 include $(G4INSTALL)/config/binmake.gmk

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: SteppingAction.cc,v 1.1 2002-05-23 13:30:44 maire Exp $
+// $Id: SteppingAction.cc,v 1.2 2002-06-05 14:21:00 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,7 +36,7 @@
 #include "G4ParticleTypes.hh"
 
 #ifndef G4NOHIST
- #include "CLHEP/Hist/HBookFile.h"
+ #include "AIDA/IHistogram1D.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,16 +82,16 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  static const G4double muonMass=G4MuonPlus::MuonPlus()->GetPDGMass();
   
  G4double GammaPlus=EGamma*xPlus/muonMass;
- runAction->GetHisto(0)->accumulate(1./(1.+pow(thetaPlus*GammaPlus,2)));
- runAction->GetHisto(1)->accumulate(log10(thetaPlus*GammaPlus));
+ runAction->GetHisto(0)->fill(1./(1.+pow(thetaPlus*GammaPlus,2)));
+ runAction->GetHisto(1)->fill(log10(thetaPlus*GammaPlus));
 
  G4double GammaMinus=EGamma*xMinus/muonMass;
- runAction->GetHisto(2)->accumulate(log10(thetaMinus*GammaMinus));
- runAction->GetHisto(3)->accumulate(log10(fabs(thetaPlus *GammaPlus
+ runAction->GetHisto(2)->fill(log10(thetaMinus*GammaMinus));
+ runAction->GetHisto(3)->fill(log10(fabs(thetaPlus *GammaPlus
                                               -thetaMinus*GammaMinus)));
  
- runAction->GetHisto(4)->accumulate(xPlus);
- runAction->GetHisto(5)->accumulate(xMinus); 
+ runAction->GetHisto(4)->fill(xPlus);
+ runAction->GetHisto(5)->fill(xMinus); 
  #endif
 }
 

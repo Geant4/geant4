@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.1 2002-05-23 13:30:44 maire Exp $
+// $Id: RunAction.cc,v 1.2 2002-06-05 14:21:00 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,17 +40,21 @@
 #include "Randomize.hh"
 
 #ifndef G4NOHIST
- #include "CLHEP/Hist/HBookFile.h"
+ #include "AIDA/IAnalysisFactory.h"
+ #include "AIDA/ITreeFactory.h"
+ #include "AIDA/ITree.h"
+ #include "AIDA/IHistogramFactory.h"
+ #include "AIDA/IHistogram1D.h"
+ #include "AIDA/IAxis.h"
+ #include "AIDA/IAnnotation.h"
+ #include "AIDA/ITupleFactory.h"
+ #include "AIDA/ITuple.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction()
-{
-#ifndef G4NOHIST
-  hbookManager = 0;
-#endif 
-}
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -64,16 +68,29 @@ RunAction::~RunAction()
 void RunAction::bookHisto()
 {
 #ifndef G4NOHIST
-  hbookManager = new HBookFile("testem6.paw", 68);
+ // Creating the analysis factory
+ IAnalysisFactory* af = AIDA_createAnalysisFactory();
+ 
+ // Creating the tree factory
+ ITreeFactory* tf = af->createTreeFactory();
+ 
+ // Creating a tree mapped to an hbook file.
+ tree = tf->create("testem6.paw", false, false, "hbook");
 
-  // booking histograms
-  histo[0] = hbookManager->histogram("1/(1+(theta+[g]+)**2)",100, 0 ,1.);
-  histo[1] = hbookManager->histogram("log10(theta+ [g]+)",   100,-3.,1.);
-  histo[2] = hbookManager->histogram("log10(theta- [g]-)",   100,-3.,1.);
-  histo[3] = hbookManager->histogram("log10(theta+ [g]+ -theta- [g]-)",
-                                                             100,-3.,1.);
-  histo[4] = hbookManager->histogram("xPlus" ,100,0.,1.);
-  histo[5] = hbookManager->histogram("xMinus",100,0.,1.);   
+ // Creating a histogram factory, whose histograms will be handled by the tree
+ IHistogramFactory* hf = af->createHistogramFactory(*tree);
+
+ // Creating histograms
+ histo[0] = hf->create1D("1","1/(1+(theta+[g]+)**2)",100, 0 ,1.);
+ histo[1] = hf->create1D("2","log10(theta+ [g]+)",   100,-3.,1.);
+ histo[2] = hf->create1D("3","log10(theta- [g]-)",   100,-3.,1.);
+ histo[3] = hf->create1D("4","log10(theta+ [g]+ -theta- [g]-)",100,-3.,1.);
+ histo[4] = hf->create1D("5","xPlus" ,100,0.,1.);
+ histo[5] = hf->create1D("6","xMinus",100,0.,1.);
+  
+ delete hf;
+ delete tf;
+ delete af;     
 #endif   
 }
 
@@ -82,10 +99,10 @@ void RunAction::bookHisto()
 void RunAction::cleanHisto()
 {
 #ifndef G4NOHIST
-  // writing histogram file
-  hbookManager->write();
-  delete [] histo;
-  delete hbookManager;
+  tree->commit();       // Writing the histograms to the file
+  tree->close();        // and closing the tree (and the file)
+  
+  delete tree;
 #endif   
 }
 

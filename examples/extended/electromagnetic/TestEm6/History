@@ -1,0 +1,22 @@
+$Id: History,v 1.6 2002-06-05 14:20:59 maire Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    TestEm6 History file
+                    --------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+     
+05-06-02 mma (testem6-V04-00-01)
+-old histograming package clhep/hist replaced by AIDA 2.2/anaphe
+
+23-05-02 mma (testem6-V04-00-00)
+-creation

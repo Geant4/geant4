@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.hh,v 1.1 2002-05-23 13:30:33 maire Exp $
+// $Id: RunAction.hh,v 1.2 2002-06-05 14:21:00 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,8 +40,8 @@
 class G4Run;
 
 #ifndef G4NOHIST
- class HepTupleManager;
- class HepHistogram;
+ class ITree;
+ class IHistogram1D;
 #endif
 
 class RunAction : public G4UserRunAction
@@ -56,7 +56,7 @@ class RunAction : public G4UserRunAction
     
 
 #ifndef G4NOHIST   
-    HepHistogram* GetHisto(G4int id) {return histo[id];}
+    IHistogram1D* GetHisto(G4int id) {return histo[id];}
 #endif
            
   private:  
@@ -65,8 +65,8 @@ class RunAction : public G4UserRunAction
 
 #ifndef G4NOHIST 
   private:      
-    HepTupleManager* hbookManager;
-    HepHistogram* histo[5];
+    ITree* tree;
+    IHistogram1D* histo[5];
 #endif                     
 };
 
