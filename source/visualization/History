@@ -1,4 +1,4 @@
-$Id: History,v 1.250 2004-07-14 10:42:40 johna Exp $
+$Id: History,v 1.251 2004-07-14 14:44:26 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+14th July 2004  John Allison
+- Tidied guidance for /vis/viewer/set.
 
 14th July 2004  John Allison  (vis-V06-02-00)
 - opengl-V06-02-02 and vistest-V06-02-01:

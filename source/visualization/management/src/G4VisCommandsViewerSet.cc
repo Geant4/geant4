@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.22 2004-07-01 15:59:09 johna Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.23 2004-07-14 14:43:25 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -57,8 +57,6 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandAutoRefresh->SetGuidance
     ("/vis/viewer/set/autoRefresh [true|false]");
   fpCommandAutoRefresh->SetGuidance
-    ("DEPRECATED COMMAND.  Will be removed from next major release.");
-  fpCommandAutoRefresh->SetGuidance
     ("View is automatically refreshed after a change of view parameters.");
   fpCommandAutoRefresh->SetParameterName("auto-refresh",omitable = true);
   fpCommandAutoRefresh->SetDefaultValue(false);
@@ -68,9 +66,20 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
     ("/vis/viewer/set/culling global|coveredDaughters|invisible|density"
      " [true|false] [density] [unit]");
   fpCommandCulling->SetGuidance
-    ("If density option is true, provide threshold density and unit");
-  fpCommandCulling->SetGuidance
-    ("Unit is g/cm3, mg/cm3 or kg/m3");
+    (
+     "  default: none true 0.01 g/cm3"
+     "\n  global: enables other culling options/disables culling."
+     "\n  coveredDaughters: does not send volumes that would not be seen on the"
+     "\n    screen because covered by ancester volumes in surface drawing mode,"
+     "\n    and then only if the volumes are visible and opaque, and then only if"
+     "\n    no sections or cutways are in operation.  Intended solely to improve"
+     "\n    the speed of rendering visible volumes."
+     "\n  invisible: culls objects with invisible attribute."
+     "\n  density: culls volumes with density lower than threshold.  Useful for"
+     "\n    eliminating \"container volumes\" with no physical correspondence whose"
+     "\n    material is usually air.  If this is selected, provide threshold"
+     "\n    density and unit (g/cm3, mg/cm3 or kg/m3)."
+     );
   parameter = new G4UIparameter("culling-option",'s',omitable = false);
   parameter->SetParameterCandidates
     ("global coveredDaughters invisible density");
@@ -87,6 +96,8 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
 
   fpCommandEdge = new G4UIcmdWithABool("/vis/viewer/set/edge",this);
   fpCommandEdge->SetGuidance("/vis/viewer/set/edge [true|false]");
+  fpCommandEdge->SetGuidance
+    ("Edges become visible/invisible in surface mode.");
   fpCommandEdge->SetParameterName("edge",omitable = true);
   fpCommandEdge->SetDefaultValue(true);
 
@@ -105,6 +116,8 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandHiddenEdge =
     new G4UIcmdWithABool("/vis/viewer/set/hiddenEdge",this);
   fpCommandHiddenEdge->SetGuidance("/vis/viewer/set/hiddenEdge [true|false]");
+  fpCommandHiddenEdge->SetGuidance
+    ("Edges become hidden/seen in wireframe or surface mode.");
   fpCommandHiddenEdge->SetParameterName("hidden-edge",omitable = true);
   fpCommandHiddenEdge->SetDefaultValue(true);
 
@@ -112,6 +125,8 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
     new G4UIcmdWithABool("/vis/viewer/set/hiddenMarker",this);
   fpCommandHiddenMarker->SetGuidance
     ("/vis/viewer/set/hiddenMarker [true|false]");
+  fpCommandHiddenMarker->SetGuidance
+    ("Markers are hidden by/seen though closer objects.");
   fpCommandHiddenMarker->SetParameterName("hidden-marker",omitable = true);
   fpCommandHiddenMarker->SetDefaultValue(true);
 
@@ -122,13 +137,13 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandLightsMove->SetGuidance
     ("Note: parameter will be parsed for \"cam\" or \"obj\".");
   fpCommandLightsMove->SetParameterName("lightsMove",omitable = false);
-  // fpCommandLightsMove->SetCandidates("move-with-camera move-with-object");
-  // Own parsing.
 
   fpCommandLightsThetaPhi = new G4UIcommand
     ("/vis/viewer/set/lightsThetaPhi", this);
   fpCommandLightsThetaPhi -> SetGuidance
     ("/vis/viewer/set/lightsThetaPhi  [<theta>] [<phi>] [deg|rad]");
+  fpCommandLightsThetaPhi -> SetGuidance
+    ("default: 60 45 deg - becomes \"current as default\"");
   fpCommandLightsThetaPhi -> SetGuidance
     ("Set direction from target to lights.");
   parameter = new G4UIparameter("theta", 'd', omitable = true);
@@ -146,8 +161,10 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandLightsVector -> SetGuidance
     ("/vis/viewer/set/lightsVector  [<x>] [<y>] [<z>]");
   fpCommandLightsVector -> SetGuidance
+    ("default: 1 1 1 - becomes \"current as default\"");
+   fpCommandLightsVector -> SetGuidance
     ("Set direction from target to lights.");
-  parameter = new G4UIparameter("x", 'd', omitable = true);
+ parameter = new G4UIparameter("x", 'd', omitable = true);
   parameter -> SetCurrentAsDefault (true);
   fpCommandLightsVector -> SetParameter (parameter);
   parameter = new G4UIparameter("y", 'd', omitable = true);
@@ -162,7 +179,9 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandLineSegments->SetGuidance
     ("/vis/viewer/set/lineSegmentsPerCircle  [<number-of-sides-per-circle>]");
   fpCommandLineSegments->SetGuidance
-    ("  Number of sides per circle in polygon/polyhedron graphical"
+    ("default: 24");
+  fpCommandLineSegments->SetGuidance
+    ("Number of sides per circle in polygon/polyhedron graphical"
      "\nrepresentation of objects with curved lines/surfaces.");
   fpCommandLineSegments->SetParameterName("line-segments",omitable = true);
   fpCommandLineSegments->SetDefaultValue(24);
@@ -171,8 +190,6 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandProjection->SetGuidance
     ("/vis/viewer/set/projection"
      " o[rthogonal]|p[erspective] [<field-half-angle>] [deg|rad]");
-  fpCommandProjection->SetGuidance
-    ("Note: 1st parameter will be parsed for first character \"o\" or \"p\".");
   fpCommandProjection->SetGuidance("Default: orthogonal 30 deg");
   parameter = new G4UIparameter("projection",'s',omitable = true);
   parameter->SetDefaultValue("orthogonal");
@@ -185,12 +202,15 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandProjection->SetParameter(parameter);
 
   fpCommandSectionPlane = new G4UIcommand 
-    ("/vis/viewer/set/sectionPlane",this);
+    ("/vis/viewer/set/sectionPlane on|off [x] [y] [z] [units] [nx] [ny] [nz]",this);
+  fpCommandSectionPlane -> SetGuidance
+    ("Default: none 0 0 0 cm 1 0 0");
   fpCommandSectionPlane -> SetGuidance
     (
      "Set plane for drawing section (DCUT).  Specify plane by"
      "\nx y z units nx ny nz, e.g., for a y-z plane at x = 1 cm:"
      "\n/vis/viewer/set/sectionPlane on 1 0 0 cm 1 0 0"
+     "\nTo turn off: /vis/viewer/set/sectionPlane off"
      );
   parameter  =  new G4UIparameter("Selector",'c',true);
   parameter  -> SetDefaultValue  ("?");
@@ -225,16 +245,15 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandSectionPlane->SetParameter(parameter);
 
   fpCommandStyle = new G4UIcmdWithAString ("/vis/viewer/set/style",this);
-  fpCommandStyle->SetGuidance ("/vis/viewer/set/style wireframe|surface");
-  fpCommandStyle->SetGuidance
-    ("Note: parameter will be parsed for first character \"w\" or \"s\".");
+  fpCommandStyle->SetGuidance ("/vis/viewer/set/style w[ireframe]|s[urface]");
   fpCommandStyle->SetParameterName ("style",omitable = false);
-  // fpCommandStyle->SetCandidates("wireframe surface");  // Own parsing.
 
   fpCommandUpThetaPhi = new G4UIcommand
     ("/vis/viewer/set/upThetaPhi", this);
   fpCommandUpThetaPhi -> SetGuidance
     ("/vis/viewer/set/upThetaPhi  [<theta>] [<phi>] [deg|rad]");
+  fpCommandUpVector -> SetGuidance
+    ("Default: 90 90 deg - becomes \"current as default\"");
   fpCommandUpThetaPhi -> SetGuidance
     ("Set up vector.  Viewer will attempt always to show"
      " this direction upwards.");
@@ -253,6 +272,8 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandUpVector -> SetGuidance
     ("/vis/viewer/set/upVector  [<x>] [<y>] [<z>]");
   fpCommandUpVector -> SetGuidance
+    ("Default: 0 1 0 - becomes \"current as default\"");
+  fpCommandUpVector -> SetGuidance
     ("Set up vector.  Viewer will attempt always to show"
      " this direction upwards.");
   parameter = new G4UIparameter("x", 'd', omitable = true);
@@ -269,6 +290,8 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
     ("/vis/viewer/set/viewpointThetaPhi", this);
   fpCommandViewpointThetaPhi -> SetGuidance
     ("/vis/viewer/set/viewpointThetaPhi  [<theta>] [<phi>] [deg|rad]");
+  fpCommandUpVector -> SetGuidance
+    ("Default: 0 0 deg - becomes \"current as default\"");
   fpCommandViewpointThetaPhi -> SetGuidance
     ("Set direction from target to camera.  Also changes lightpoint direction"
      "\nif lights are set to move with camera.");
@@ -286,6 +309,8 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
     ("/vis/viewer/set/viewpointVector", this);
   fpCommandViewpointVector -> SetGuidance
     ("/vis/viewer/set/viewpointVector  [<x>] [<y>] [<z>]");
+  fpCommandUpVector -> SetGuidance
+    ("Default: 0 0 1 - becomes \"current as default\"");
   fpCommandViewpointVector -> SetGuidance
     ("Set direction from target to camera.  Also changes lightpoint direction"
      "\nif lights are set to move with camera.");
