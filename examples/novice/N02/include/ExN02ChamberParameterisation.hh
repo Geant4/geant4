@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02ChamberParameterisation.hh,v 1.8 2003-10-30 10:03:45 gcosmo Exp $
+// $Id: ExN02ChamberParameterisation.hh,v 1.9 2003-11-10 14:29:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,6 +51,8 @@ class G4Torus;
 class G4Para;
 class G4Hype;
 class G4Tubs;
+class G4Polycone;
+class G4Polyhedra;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -85,7 +87,8 @@ class ExN02ChamberParameterisation : public G4VPVParameterisation
     void ComputeDimensions (G4Para&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Hype&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Tubs&,const G4int,const G4VPhysicalVolume*) const {}
-
+    void ComputeDimensions (G4Polycone&,const G4int,const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Polyhedra&,const G4int,const G4VPhysicalVolume*) const {}
   private:
 
     G4int    fNoChambers;   
