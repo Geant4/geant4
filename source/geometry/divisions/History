@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2003-11-04 17:12:24 gcosmo Exp $
+$Id: History,v 1.9 2003-11-19 11:51:58 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 19th, 2003          G.Cosmo  (geomdiv-V05-02-07)
+- Moved verbose output between G4DIVDEBUG compilation flag.
+- Added graphical unit test to be used as base for user's example.
+- General cleanup.
+
+Nov 18th, 2003          P.Arce  (geomdiv-V05-02-06)
+- Added divisions in X and Y for G4Para.
+- Added divisions in Z for G4Polycone and G4Polyhedra.
+- Fixed handling of offsets and added more checks.
 
 Nov 4th, 2003           G.Cosmo  (geomdiv-V05-02-05)
 - Fixes in the logic of resetting parameters in ComputeDimension() for
