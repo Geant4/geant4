@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2004-06-14 09:27:33 gcosmo Exp $
+$Id: History,v 1.8 2004-07-20 23:44:44 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+21th July 2004  Guy Barrand
+- G4OpenInventorXtViewer : add include X11/Shell.h to have
+  XtNgeometry that may not come throught the includes of some
+  Inventor implementation.
 
 08th April 2004  Guy Barrand (openinventor-V06-01-00)
 - Bring in the repository the necessary HEPVis code. In fact few of HEPVis

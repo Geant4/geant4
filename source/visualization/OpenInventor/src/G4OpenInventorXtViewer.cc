@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.cc,v 1.1 2004-04-08 09:41:11 gbarrand Exp $
+// $Id: G4OpenInventorXtViewer.cc,v 1.2 2004-07-20 23:42:17 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -41,6 +41,7 @@
 #include <Inventor/Xt/SoXt.h>
 #include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
 #include <X11/StringDefs.h>
+#include <X11/Shell.h>
 
 #include "G4OpenInventor.hh"
 #include "G4OpenInventorSceneHandler.hh"
