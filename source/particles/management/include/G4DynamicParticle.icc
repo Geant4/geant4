@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DynamicParticle.icc,v 1.1 1999-08-18 09:15:10 kurasige Exp $
+// $Id: G4DynamicParticle.icc,v 1.2 1999-11-07 09:07:19 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,7 +77,7 @@ inline void    G4DynamicParticle::RemoveElectron(G4int orbit, G4int number)
 {
   if ( theElectronOccupancy != 0) { 
     G4int n = theElectronOccupancy->RemoveElectron(orbit, number );
-    theDynamicalCharge -+ eplus * n;
+    theDynamicalCharge += eplus * n;
     theDynamicalMass -= GetElectronMass() * n;
   }
 }
