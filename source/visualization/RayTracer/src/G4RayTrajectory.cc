@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RayTrajectory.cc,v 1.4 2000-03-09 15:36:38 asaim Exp $
+// $Id: G4RayTrajectory.cc,v 1.5 2001-02-10 02:37:44 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -31,23 +31,26 @@ G4Allocator<G4RayTrajectory> G4RayTrajectoryAllocator;
 
 G4RayTrajectory :: G4RayTrajectory()
 {
-  positionRecord = new G4RWTPtrOrderedVector<G4RayTrajectoryPoint>;
+  positionRecord = new G4std::vector<G4RayTrajectoryPoint*>;
 }
 
 G4RayTrajectory :: G4RayTrajectory(G4RayTrajectory & right)
 {
-  positionRecord = new G4RWTPtrOrderedVector<G4RayTrajectoryPoint>;
-  for(int i=0;i<right.positionRecord->entries();i++)
+  positionRecord = new G4std::vector<G4RayTrajectoryPoint*>;
+  for(int i=0;i<right.positionRecord->size();i++)
   {
     G4RayTrajectoryPoint* rightPoint = (G4RayTrajectoryPoint*)
 				((*(right.positionRecord))[i]);
-    positionRecord->insert(new G4RayTrajectoryPoint(*rightPoint));
+    positionRecord->push_back(new G4RayTrajectoryPoint(*rightPoint));
   }
 }
 
 G4RayTrajectory :: ~G4RayTrajectory()
 {
-  positionRecord->clearAndDestroy();
+  //positionRecord->clearAndDestroy();
+  for(int i=0;i<positionRecord->size();i++)
+  { delete (*positionRecord)[i]; }
+  positionRecord->clear();
   delete positionRecord;
 }
 
@@ -90,7 +93,7 @@ void G4RayTrajectory::AppendStep(const G4Step* aStep)
   }
   trajectoryPoint->SetPostStepAtt(postVisAtt);
 
-  positionRecord->append(trajectoryPoint);
+  positionRecord->push_back(trajectoryPoint);
 }
 
 void G4RayTrajectory::ShowTrajectory() const
@@ -103,6 +106,7 @@ void G4RayTrajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)
   G4RayTrajectory* seco = (G4RayTrajectory*)secondTrajectory;
   G4int ent = seco->GetPointEntries();
   for(G4int i=0;i<ent;i++)
-  { positionRecord->append(seco->positionRecord->removeAt(0)); }
+  { positionRecord->push_back(seco->GetPoint(i)); }
+  seco->positionRecord->clear();
 }
 
