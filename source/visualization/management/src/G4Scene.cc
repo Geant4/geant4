@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.cc,v 1.9 2001-08-05 19:02:18 johna Exp $
+// $Id: G4Scene.cc,v 1.10 2001-08-11 21:39:59 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,8 +36,9 @@
 #include "G4TransportationManager.hh"
 
 G4Scene::G4Scene (const G4String& name):
-  fName (name)
-{} // Note all data members have default initial values.
+  fName (name),
+  fRefreshAtEndOfEvent(true)
+{} // Note all other data members have default initial values.
 
 G4Scene::~G4Scene () {}
 
@@ -141,25 +142,30 @@ void G4Scene::Clear () {
   }
 }
 
-G4std::ostream& operator << (G4std::ostream& os, const G4Scene& d) {
+G4std::ostream& operator << (G4std::ostream& os, const G4Scene& s) {
 
   size_t i;
 
   os << "Scene data:";
 
   os << "\n  Run-duration model list:";
-  for (i = 0; i < d.fRunDurationModelList.size (); i++) {
-    os << "\n  " << *(d.fRunDurationModelList[i]);
+  for (i = 0; i < s.fRunDurationModelList.size (); i++) {
+    os << "\n  " << *(s.fRunDurationModelList[i]);
   }
 
   os << "\n  End-of-event model list:";
-  for (i = 0; i < d.fEndOfEventModelList.size (); i++) {
-    os << "\n  " << *(d.fEndOfEventModelList[i]);
+  for (i = 0; i < s.fEndOfEventModelList.size (); i++) {
+    os << "\n  " << *(s.fEndOfEventModelList[i]);
   }
 
-  os << "\n  Extent or bounding box: " << d.fExtent;
+  os << "\n  Extent or bounding box: " << s.fExtent;
 
-  os << "\n  Standard target point:  " << d.fStandardTargetPoint;
+  os << "\n  Standard target point:  " << s.fStandardTargetPoint;
+
+  os << "\n  End of event action set to \"";
+  if (s.fRefreshAtEndOfEvent) os << "refresh";
+  else os << "accumulate";
+  os << "\"";
 
   return os;
 }
@@ -167,9 +173,10 @@ G4std::ostream& operator << (G4std::ostream& os, const G4Scene& d) {
 G4bool G4Scene::operator != (const G4Scene& s) const {
   if (
       (fRunDurationModelList.size () !=
-       s.fRunDurationModelList.size ())              ||
+       s.fRunDurationModelList.size ())                 ||
       (fExtent               != s.fExtent)              ||
-      !(fStandardTargetPoint == s.fStandardTargetPoint)
+      !(fStandardTargetPoint == s.fStandardTargetPoint) ||
+      fRefreshAtEndOfEvent != s.fRefreshAtEndOfEvent
       ) return true;
 
   for (size_t i = 0; i < fRunDurationModelList.size (); i++) {

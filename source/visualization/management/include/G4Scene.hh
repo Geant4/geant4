@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.hh,v 1.10 2001-08-05 19:02:15 johna Exp $
+// $Id: G4Scene.hh,v 1.11 2001-08-11 21:39:53 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -82,6 +82,11 @@ public: // With description
   const G4Point3D& GetStandardTargetPoint () const;
   // Usually centre of extent.  See G4ViewParameters for definition.
 
+  G4bool GetRefreshAtEndOfEvent () const;
+  // If true, the visualization manager will request viewer to refresh
+  // "transient" objects, such as hits, at end of event.  Otherwise
+  // they will be accumulated.
+
   //////////////////////////////////////////////
   // Add, Set, Clear functions...
 
@@ -113,12 +118,18 @@ public: // With description
   void Clear ();
   // Clears and destroys models in all lists.
 
+  void SetRefreshAtEndOfEvent(G4bool);
+  // If set true, the visualization manager will request viewer to
+  // refresh "transient" objects, such as hits, at end of event.
+  // Otherwise they will be accumulated.
+
 private:
   G4String fName;
   G4std::vector<G4VModel*> fRunDurationModelList;
   G4std::vector<G4VModel*> fEndOfEventModelList;
   G4VisExtent fExtent;
   G4Point3D   fStandardTargetPoint;
+  G4bool      fRefreshAtEndOfEvent;
 };
 
 #include "G4Scene.icc"

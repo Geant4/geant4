@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.35 2001-07-30 23:34:31 johna Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.36 2001-08-11 21:40:04 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,24 +83,24 @@ Scenes are graphics-system-independent.
 
 The G4VisManager has a list of scenes.
 
-/vis/scene/add/axes
-  Adds to current scene.
+Unless otherwise stated, commands affect the current scene only.
+
+/vis/scene/add/axes [<x0>] [<y0>] [<z0>] [<length>] [<unit>]
+  default:             0      0      0       1         m
+  Draws axes at (x0, y0, z0) of given length.
 
 NI /vis/scene/add/ghost [<particle>] [<physical-volume-name>]
 NI                      [<copy-no>] [<depth>]
 
 /vis/scene/add/ghosts [<particle>]
   default:                 all
-  Adds to current scene.
 
 /vis/scene/add/hits [<sensitive-volume-name>]
   default:              (argument not impl'd yet.)
   Causes hits, if any, to be drawn at the end of processiing an event.
-  Adds to current scene.
 
 /vis/scene/add/logicalVolume <logical-volume-name> [<depth>] 
   default:                                             1
-  Adds logical volume to current scene.
 
 /vis/scene/add/scale [<length> <length-unit>] [x|y|z] [<red>] [<green>] [<blue>] [auto|manual] [<xmid> <ymid> <zmid> <unit>]
   default:                1          m           x       1         1        1        auto          0      0      0     m
@@ -108,15 +108,12 @@ NI                      [<copy-no>] [<depth>]
   for further description.
 
 /vis/scene/add/text
-  Adds to current scene.
 
 /vis/scene/add/trajectories [<sensitive-volume-name>]
   default:                      (argument not impl'd yet.)
   Causes trajectories, if any, to be drawn at the end of processiing an event.
-  Adds to current scene.
 
-NI /vis/scene/add/transientObjects
-  Adds in current scene.
+NI /vis/scene/add/transientObjects ???????????? (JA 9/Aug/01)
 
 /vis/scene/add/volume [<physical-volume-name>] [<copy-no>] [<depth>]
   default:                     world                -1         -1
@@ -129,7 +126,15 @@ NI /vis/scene/add/transientObjects
   default       auto-generated name
   This scene becomes current.
 
-NI /vis/scene/edit
+NI /vis/scene/edit  (Just make a new one? JA 9/Aug/01)
+
+/vis/scene/endOfEventAction [accumulate|refresh]
+  default:                        refresh
+  The scene handler for this scene will, when a viewer of this scene is
+  current, be requested to accumulate "transient" objects, such as hits,
+  event by event or to erase them (refresh the screen) before drawing the
+  transient objects of the next event.  Any "run-persistent" objects, such
+  as dectector geometry components, are unaffected and remain in the viewer.
 
 /vis/scene/list [<scene-name>] [<verbosity>]
   default:           all             0
@@ -147,13 +152,12 @@ NI /vis/scene/edit
   This scene becomes current.
 
 NI /vis/scene/set/hitOption accumulate|byEvent
-  Affects current scene.
+  default:                   byEvent
+  (Implemented as see /vis/scene/accumulate true|false.))
 
 NI /vis/scene/set/modelingStyle [<modeling-style>]
-  Affects current scene.
 
 NI /vis/scene/set/notifyOption immediate|delayed
-  Affects current scene.
 
 
 Scene Handlers
@@ -208,8 +212,9 @@ Most viewer commands respond to the viewer "short name", which is the
 name up to the first space character, if any.  Thus, a viewer name can
 contain spaces but must be unique up to the first space.
 
+Unless otherwise stated, commands affect the current viewer only.
+
 /vis/viewer/clear
-  Affects current viewer.
 
 NI /vis/viewer/clone
   Creates a clone.  Clone becomes current viewer.
@@ -222,18 +227,15 @@ NI /vis/viewer/clone
 /vis/viewer/dolly [<increment>] [<unit>]
   default:        current-value    m
   Moves the camera incrementally in by this distance.
-  Affects current viewer.
 
 /vis/viewer/dollyTo [<distance>] [<unit>]
   default:         current-value    m
   Moves the camera in this distance relative to standard target point.
-  Affects current viewer.
 
 /vis/viewer/lightsThetaPhi [<theta>] [<phi>] [deg|rad]
   default: current as default.
 /vis/viewer/lightsVector [<x>] [<y>] [<z>]
   default: current as default.
-  Affects current viewer.
 
 /vis/viewer/list   [<viewer-name>]    [<verbosity>]
   default:             all                  0
@@ -242,13 +244,11 @@ NI /vis/viewer/clone
 /vis/viewer/pan [<right-increment>] [<up-increment>] [<unit>]
   default:                 0           0
   Moves the camera incrementally right and up by these amounts.
-  Affects current viewer.
 
 /vis/viewer/panTo [<right>] [<up>] [<unit>]
   default:                0     0
   Moves the camera to this position right and up relative to standard target
     point.
-  Affects current viewer.
 
 /vis/viewer/select <viewer-name>
   default:          no default
@@ -258,7 +258,8 @@ NI /vis/viewer/clone
   default:       current viewer name
   Re-traverses graphical data, which is enough in some cases to refresh the
   view.  In some cases post-processing is required to complete the view -
-  see /vis/viewer/update.  This viewer becomes current.
+  see /vis/viewer/update.
+  This viewer becomes current.
 
 /vis/viewer/remove <viewer-name>
   default:          no default
@@ -275,71 +276,56 @@ NI /vis/viewer/clone
   default: current as default.
   Set direction from target to camera.  Also changes lightpoint direction if
   lights are set to move with camera.
-  Affects current viewer.
 
 /vis/viewer/zoom [<factor>]
   default:            1
   Multiplies magnification by this factor.
-  Affects current viewer.
 
 /vis/viewer/zoomTo [<factor>]
   default:             1
   Magnifies by this factor relative to standard view.
-  Affects current viewer.
 
 /vis/viewer/set/all <from-viewer-name>
   Copies view parameters from from-viewer to current viewer.
-  Affects current viewer.
 
 /vis/viewer/set/autoRefresh [true|false]
   default:                    false
   View is automatically refreshed after a change of view parameters.
-  Affects current viewer.
 
 /vis/viewer/set/culling
   g[lobal]|c[overedDaughters]|i[nvisible]|d[ensity] [true|false]
   [density] [unit]
   default: none true 0.01 g/cm3
-  Affects current viewer.
 
 NI /vis/viewer/set/cutawayPlane ...
   Set plane(s) for cutaway views.
-  Affects current viewer.
 
 /vis/viewer/set/edge [true|false]
   default:              true
-  Affects current viewer.
 
 /vis/viewer/set/hiddenEdge  [true|false]
   default:                       true
-  Affects current viewer.
 
 /vis/viewer/set/hiddenMarker  [true|false]
   default:                       true
-  Affects current viewer.
 
 /vis/viewer/set/lightsMove with-camera|with-object
-  Affects current viewer.
 
 /vis/viewer/set/lineSegmentsPerCircle        [<number-of-sides-per-circle>]
   default:                                         24
   Number of sides per circle in polygon/polyhedron graphical representation
     of objects with curved lines/surfaces.
-  Affects current viewer.
 
 /vis/viewer/set/projection
   o[rthogonal]|p[erspective] [<field-half-angle>] [deg|rad]
   default: none                       30             deg
-  Affects current viewer.
 
 /vis/viewer/set/sectionPlane ...
   Set plane for drawing section (DCUT).  Specify plane by x y z units nx ny nz,
   e.g., for a y-z plane at x = 1 cm:
   /vis/viewer/set/section_plane on 1 0 0 cm 1 0 0
-  Affects current viewer.
 
 /vis/viewer/set/style w[ireframe]|s[urface]
-  Affects current viewer.
 
 NI /vis/viewer/notifyOption immediate|delayed ?Issue of "update" after "set"?
 
@@ -356,15 +342,17 @@ Attributes (nothing implemented yet)
 The G4VisManager also keeps a list of visualization attributes which can
 be created and changed and attributed to visualizable objects.
 
+Unless otherwise stated, commands affect the visualization attributes of
+the current viewer only.
+
 NI /vis/attributes/create [<vis-attributes-name>]
   default:                 auto-generated name
-  These attributes become current.
+  These attributes are passed to the current viewer???????????
 
 NI /vis/attributes/set/colour [<vis-attributes-name>] [<r>]  [<g>] [<b>] [<o>]
 NI /vis/attributes/set/color  [<vis-attributes-name>] [<r>]  [<g>] [<b>] [<o>]
   default:                   current attributes name   1      1     1     1
   Sets colour (red, green, blue, opacity).
-  Affects current vis attributes.
 
 NI /vis/scene/set/attributes <logical-volume-name>
   Associates current vis attributes with logical volume.  (Do we need to
@@ -380,8 +368,16 @@ General Commands
 /vis/disable
   Enables/disables visualization system.
 
-/vis/verbose [<verbosity-integer>]
-  default:               0
+/vis/verbose [<verbosity>]
+  default:     warnings
+  Simple graded message scheme - give first letter or a digit:
+    0) quiet,         // Nothing is printed.
+    1) startup,       // Startup and endup messages are printed...
+    2) errors,        // ...and errors...
+    3) warnings,      // ...and warnings...
+    4) confirmations, // ...and confirming messages...
+    5) parameters,    // ...and parameters of scenes and views...
+    6) all            // ...and everything available.
 
 
 Compound Commands
@@ -413,6 +409,7 @@ default: 0 0 0 0 cm 1 0 cm
 
 /vis/open [<graphics-system-name>] [<[pixels>]
 default:          error                600
+  /vis/scene/create
   /vis/sceneHandler/create $1
   /vis/viewer/create ! ! $2
 
@@ -442,6 +439,7 @@ default:          error                600
   directory -> SetGuidance ("Operations on Geant4 scenes.");
   fDirectoryList.push_back (directory);
   fMessengerList.push_back (new G4VisCommandSceneCreate);
+  fMessengerList.push_back (new G4VisCommandSceneEndOfEventAction);
   fMessengerList.push_back (new G4VisCommandSceneList);
   fMessengerList.push_back (new G4VisCommandSceneNotifyHandlers);
   fMessengerList.push_back (new G4VisCommandSceneRemove);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.24 2001-08-09 20:13:42 johna Exp $
+// $Id: G4VisManager.hh,v 1.25 2001-08-11 21:39:57 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -289,6 +289,7 @@ public: // With description
 
   static Verbosity GetVerbosityValue(const G4String&);
   static Verbosity GetVerbosityValue(G4int);
+  static G4String VerbosityGuidanceString;
 
 protected:
 

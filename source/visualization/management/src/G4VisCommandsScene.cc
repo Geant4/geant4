@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.22 2001-08-09 20:09:29 johna Exp $
+// $Id: G4VisCommandsScene.cc,v 1.23 2001-08-11 21:40:00 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -210,6 +210,71 @@ void G4VisCommandSceneEdit::SetNewValue (G4UIcommand* command,
   }
 
   UpdateVisManagerScene (sceneName);
+}
+
+////////////// /vis/scene/endOfEventAction ////////////////////////////
+
+G4VisCommandSceneEndOfEventAction::G4VisCommandSceneEndOfEventAction () {
+  G4bool omitable;
+  fpCommand = new G4UIcmdWithAString ("/vis/scene/endOfEventAction", this);
+  fpCommand -> SetGuidance
+    ("/vis/scene/endOfEventAction [accumulate|refresh]");
+  fpCommand -> SetGuidance
+    ("Requests viewer to refresh hits, tracks, etc., at end of event."
+     "\n  Or they are accumulated.  Detector remains or is redrawn.");
+  fpCommand -> SetParameterName ("action",
+				 omitable = true);
+  fpCommand -> SetCandidates ("accumulate refresh");
+  fpCommand -> SetDefaultValue ("refresh");
+}
+
+G4VisCommandSceneEndOfEventAction::~G4VisCommandSceneEndOfEventAction () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneEndOfEventAction::GetCurrentValue
+(G4UIcommand* command) {
+  return "";
+}
+
+void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand* command,
+						     G4String newValue) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4String action;
+  G4std::istrstream is ((char*)newValue.data());
+  is >> action;
+
+  G4Scene* pScene = fpVisManager->GetCurrentScene();
+  if (!pScene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  if (action == "accumulate") {
+    pScene->SetRefreshAtEndOfEvent(false);
+  }
+  else if (action == "refresh") {
+    pScene->SetRefreshAtEndOfEvent(true);
+  }
+  else {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<
+	"ERROR: unrecognised parameter \"" << action << "\"."
+             << G4endl;
+    }
+    return;
+  }
+
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout << "End of event action set to \"";
+    if (pScene->GetRefreshAtEndOfEvent()) G4cout << "refresh";
+    else G4cout << "accumulate";
+    G4cout << "\"" << G4endl;
+  }
 }
 
 ////////////// /vis/scene/list ///////////////////////////////////////

@@ -117,6 +117,7 @@ help /vis/sceneHandler/create
 #
 # Send geantino through...
 /vis/scene/create
+/vis/scene/endOfEventAction accumulate
 /vis/scene/add/volume
 /vis/scene/include/trajectories
 #/vis/sceneHandler/create OGLSX

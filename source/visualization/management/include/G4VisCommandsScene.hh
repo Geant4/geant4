@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.hh,v 1.10 2001-07-11 10:09:15 gunter Exp $
+// $Id: G4VisCommandsScene.hh,v 1.11 2001-08-11 21:39:55 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -71,6 +71,19 @@ public:
 private:
   G4VisCommandSceneEdit (const G4VisCommandSceneEdit&);
   G4VisCommandSceneEdit& operator = (const G4VisCommandSceneEdit&);
+  G4UIcmdWithAString* fpCommand;
+};
+
+class G4VisCommandSceneEndOfEventAction: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneEndOfEventAction ();
+  virtual ~G4VisCommandSceneEndOfEventAction ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneEndOfEventAction (const G4VisCommandSceneEndOfEventAction&);
+  G4VisCommandSceneEndOfEventAction& operator =
+  (const G4VisCommandSceneEndOfEventAction&);
   G4UIcmdWithAString* fpCommand;
 };
 

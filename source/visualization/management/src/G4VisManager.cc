@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.34 2001-08-09 20:11:44 johna Exp $
+// $Id: G4VisManager.cc,v 1.35 2001-08-11 21:40:02 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -912,7 +912,12 @@ void G4VisManager::EndOfEvent () {
       pModel -> SetModelingParameters (0);
     }
     delete pMP;
-    fpSceneHandler->SetMarkForClearingTransientStore(true);
+    if (fpScene->GetRefreshAtEndOfEvent()) {
+      fpSceneHandler->SetMarkForClearingTransientStore(true);
+    }
+    else {
+      fpSceneHandler->SetMarkForClearingTransientStore(false);
+    }
   }
 }
 
@@ -945,6 +950,18 @@ G4VViewer* G4VisManager::GetViewer (const G4String& viewerName) const {
   else return 0;
 }
 
+G4String G4VisManager::VerbosityGuidanceString
+("/vis/verbose [<verbosity>]"
+ "\n  default:    warnings"
+ "\nSimple graded message scheme - digit or string (1st character defines):"
+ "\n  0) quiet,         // Nothing is printed."
+ "\n  1) startup,       // Startup and endup messages are printed..."
+ "\n  2) errors,        // ...and errors..."
+ "\n  3) warnings,      // ...and warnings..."
+ "\n  4) confirmations, // ...and confirming messages..."
+ "\n  5) parameters,    // ...and parameters of scenes and views..."
+ "\n  6) all            // ...and everything available."
+ );
 
 G4VisManager::Verbosity
 G4VisManager::GetVerbosityValue(const G4String& verbosityString) {
@@ -964,10 +981,10 @@ G4VisManager::GetVerbosityValue(const G4String& verbosityString) {
     is >> intVerbosity;
     if (!is) {
       G4cout << "ERROR: G4VisManager::GetVerbosityValue: invalid verbosity \""
-	     << verbosityString << "\",\n  Possibilities are:"
-	"\n  quiet|startup|errors|warnings|confirmations|parameters|all (first"
-	"\n  letter or correspond digit will do).  Returning \"warnings\" == "
-	     << warnings << G4endl;
+	     << verbosityString << "\"\n"
+	     << VerbosityGuidanceString
+	     << "\n  Returning \"warnings\" == " << warnings
+	     << G4endl;
       verbosity = warnings;
     }
     else {
