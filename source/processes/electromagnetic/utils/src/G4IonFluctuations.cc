@@ -110,8 +110,6 @@ G4double G4IonFluctuations::SampleFluctuations(const G4Material* material,
 
   if(gauss) {
     // Increase fluctuations for big fractional energy loss
-    G4double lossmax = G4std::min(kineticEnergy, loss + loss);
-    G4double lossmin = G4std::max(0., loss + loss - lossmax);
 
     if ( meanLoss > minFraction*kineticEnergy ) {
       G4double gam = (kineticEnergy - meanLoss)/particleMass + 1.0;
@@ -122,14 +120,11 @@ G4double G4IonFluctuations::SampleFluctuations(const G4Material* material,
       siga *= 0.25*(1.0 + x)*(x3 + (1.0/b2 - 0.5)/(1.0/beta2 - 0.5) );
     }
     siga = sqrt(siga);
-    if ( (lossmax-lossmin)*minNumberInteractionsBohr < siga) {
-      loss = lossmin + (lossmax-lossmin)*G4UniformRand();
 
-    } else {
-      do {
-        loss = G4RandGauss::shoot(meanLoss,siga);
-      } while (lossmin > loss || loss > lossmax);
-    }
+    G4double lossmax = meanLoss+meanLoss;
+    do {
+      loss = G4RandGauss::shoot(meanLoss,siga);
+    } while (0.0 > loss || loss > lossmax);
 
   // Poisson fluctuations
   } else {

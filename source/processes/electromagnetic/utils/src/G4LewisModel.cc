@@ -35,6 +35,10 @@
 // Modifications:
 //
 // 27-03-03 Move model part from G4MultipleScattering (V.Ivanchenko)
+// 23-05-03 important change in angle distribution for muons/hadrons
+//          the central part now is similar to the Highland parametrization +
+//          minor correction in angle sampling algorithm (for all particles)
+//          (L.Urban)
 //
 
 // Class Description:
@@ -114,7 +118,9 @@ void G4LewisModel::Initialise(const G4ParticleDefinition* p,
     c0 = 1.40 ;
   }
   sigmafactor = twopi*classic_electr_radius*classic_electr_radius;
-
+  particle = p;
+  mass = particle->GetPDGMass();
+  charge = particle->GetPDGCharge()/eplus;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -151,7 +157,7 @@ G4double G4LewisModel::CrossSection(const G4Material* material,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4LewisModel::ComputeTransportCrossSection(
-                             const G4ParticleDefinition* particle,
+                             const G4ParticleDefinition* part,
                                    G4double KineticEnergy,
                                    G4double AtomicNumber,
                                    G4double AtomicWeight)
@@ -266,50 +272,52 @@ G4double G4LewisModel::ComputeTransportCrossSection(
             3.752,2.724,2.116,1.817,1.692,1.554,1.499,1.474,
             1.456,1.412,1.364,1.328,1.307,1.282,1.2026     }};
 
-   G4double sigma;
+  G4double sigma;
+  if (theParticle != particle ) {
+    particle = theParticle;
+    mass = particle->GetPDGMass();
+    charge = particle->GetPDGCharge()/eplus;
+  }
 
-   G4double Z23 = 2.*log(AtomicNumber)/3.; Z23 = exp(Z23);
-
-   G4double ParticleMass = particle->GetPDGMass();
+  G4double Z23 = 2.*log(AtomicNumber)/3.; Z23 = exp(Z23);
 
   // correction if particle .ne. e-/e+
   // compute equivalent kinetic energy
   // lambda depends on p*beta ....
 
-   if((particle->GetParticleName() != "e-") &&
-      (particle->GetParticleName() != "e+") )
-   {
-     G4double TAU = KineticEnergy/ParticleMass ;
-     G4double c = ParticleMass*TAU*(TAU+2.)/(electron_mass_c2*(TAU+1.)) ;
+  if((particle->GetParticleName() != "e-") &&
+     (particle->GetParticleName() != "e+") )
+  {
+     G4double TAU = KineticEnergy/mass ;
+     G4double c = mass*TAU*(TAU+2.)/(electron_mass_c2*(TAU+1.)) ;
      G4double w = c-2. ;
      G4double tau = 0.5*(w+sqrt(w*w+4.*c)) ;
-     KineticEnergy = electron_mass_c2*tau ;
-   }
+     eKineticEnergy = electron_mass_c2*tau ;
+  }
 
-   G4double Charge = particle->GetPDGCharge();
-   G4double ChargeSquare = Charge*Charge/(eplus*eplus);
+  G4double ChargeSquare = charge*charge;
 
-   G4double TotalEnergy = KineticEnergy + electron_mass_c2 ;
-   G4double beta2 = KineticEnergy*(TotalEnergy+electron_mass_c2)
-                                 /(TotalEnergy*TotalEnergy);
-   G4double bg2   = KineticEnergy*(TotalEnergy+electron_mass_c2)
+  G4double eTotalEnergy = eKineticEnergy + electron_mass_c2 ;
+  G4double beta2 = eKineticEnergy*(eTotalEnergy+electron_mass_c2)
+                                 /(eTotalEnergy*eTotalEnergy);
+  G4double bg2   = eKineticEnergy*(eTotalEnergy+electron_mass_c2)
                                  /(electron_mass_c2*electron_mass_c2);
 
-   G4double eps = epsfactor*bg2/Z23;
+  G4double eps = epsfactor*bg2/Z23;
 
-   if     (eps<epsmin)  sigma = 2.*eps*eps;
-   else if(eps<epsmax)  sigma = log(1.+2.*eps)-2.*eps/(1.+2.*eps);
-   else                 sigma = log(2.*eps)-1.+1./eps;
+  if     (eps<epsmin)  sigma = 2.*eps*eps;
+  else if(eps<epsmax)  sigma = log(1.+2.*eps)-2.*eps/(1.+2.*eps);
+  else                 sigma = log(2.*eps)-1.+1./eps;
 
-   sigma *= ChargeSquare*AtomicNumber*AtomicNumber/(beta2*bg2);
+  sigma *= ChargeSquare*AtomicNumber*AtomicNumber/(beta2*bg2);
 
   // nuclear size effect correction for high energy
   // ( a simple approximation at present)
   G4double corrnuclsize,a,w1,w2,w;
 
-  G4double x0 = 1. - NuclCorrPar*ParticleMass/(KineticEnergy*
+  G4double x0 = 1. - NuclCorrPar*mass/(KineticEnergy*
                exp(log(AtomicWeight/(g/mole))/3.));
-  if ( x0 < -1. || KineticEnergy  <= 10.*MeV)
+  if ( x0 < -1. || eKineticEnergy  <= 10.*MeV)
       {
         x0 = -1.;
 	corrnuclsize = 1.;
@@ -323,7 +331,7 @@ G4double G4LewisModel::ComputeTransportCrossSection(
         if (w < epsmin)   w2=-log(w)-1.+2.*w-1.5*w*w;
         else              w2 = log((a-x0)/(a-1.))-(1.-x0)/(a-x0);
         corrnuclsize = w1/w2;
-        corrnuclsize = exp(-FactPar*ParticleMass/KineticEnergy)*
+        corrnuclsize = exp(-FactPar*mass/KineticEnergy)*
                       (corrnuclsize-1.)+1.;
       }
 
@@ -340,9 +348,9 @@ G4double G4LewisModel::ComputeTransportCrossSection(
 
   // get bin number in T (beta2)
   G4int iT = 22;
-  while ((iT>=0)&&(Tdat[iT]>=KineticEnergy)) iT -= 1;
-  if(iT==22)                                 iT = 21;
-  if(iT==-1)                                 iT = 0 ;
+  while ((iT>=0)&&(Tdat[iT]>=eKineticEnergy)) iT -= 1;
+  if(iT==22)                                  iT = 21;
+  if(iT==-1)                                  iT = 0 ;
 
   //  calculate betasquare values
   G4double T = Tdat[iT],   E = T + electron_mass_c2;
@@ -352,7 +360,7 @@ G4double G4LewisModel::ComputeTransportCrossSection(
   G4double ratb2 = (beta2-b2small)/(b2big-b2small);
 
   G4double c1,c2,cc1,cc2,corr;
-  if (Charge < 0.)
+  if (charge < 0.)
     {
        c1 = celectron[iZ][iT];
        c2 = celectron[iZ+1][iT];
@@ -366,7 +374,7 @@ G4double G4LewisModel::ComputeTransportCrossSection(
        sigma /= corr;
     }
 
-  if (Charge > 0.)
+  if (charge > 0.)
     {
        c1 = cpositron[iZ][iT];
        c2 = cpositron[iZ+1][iT];
@@ -394,7 +402,7 @@ G4double G4LewisModel::ComputeTransportCrossSection(
 G4double G4LewisModel::GeomPathLength(
                           G4PhysicsTable* theLambdaTable,
                     const G4MaterialCutsCouple* couple,
-		    const G4ParticleDefinition* particle,
+		    const G4ParticleDefinition* theParticle,
 		          G4double& T0,
 			  G4double lambda,
 			  G4double range,
@@ -402,6 +410,14 @@ G4double G4LewisModel::GeomPathLength(
 {
   //  do the true -> geom transformation
   const G4double ztmin = 1./3., ztmax = 0.98 ;
+  if (theParticle != particle ) {
+    particle = theParticle;
+    mass = particle->GetPDGMass();
+    charge = particle->GetPDGCharge()/eplus;
+  }
+  currentKinEnergy = T0;
+  const G4Material* material = couple->Getmaterial();
+  currentRadLength = material->GetRadlength();
 
   lambda0 = lambda;
   lambda1 = -1.;
@@ -427,7 +443,7 @@ G4double G4LewisModel::GeomPathLength(
       G4bool b;
       lambda1 = ((*theLambdaTable)[couple->GetIndex()])->GetValue(T1,b);
     } else {
-      lambda1 = CrossSection(couple->GetMaterial(),particle,T1,0.0,1.0);
+      lambda1 = CrossSection(material,particle,T1,0.0,1.0);
     }
     if (T0 > particle->GetPDGMass()) alam = lambda0*tPathLength/(lambda0-lambda1) ;
     G4double blam = 1.+alam/lambda0 ;
@@ -472,7 +488,6 @@ G4double G4LewisModel::TrueStepLength(G4double geomStepLength)
   G4double trueLength = geomStepLength;
   if (geomStepLength > lambda0*tausmall) {
     G4double blam = 1.+alam/lambda0;
-//    G4cout << "alam= " << alam << " blam= " << blam << " lambda1= " << lambda1 << G4endl;
     if (lambda1 < 0.) {
       trueLength = -lambda0*log(1.-geomStepLength/lambda0) ;
 
@@ -495,7 +510,6 @@ G4double G4LewisModel::TrueStepLength(G4double geomStepLength)
 
       } else {
         G4double clam = 1.+alam/lambdam;
-//    G4cout << "clam= " << clam << " zm= " << zm << " cthm= " << cthm << G4endl;
         if(clam*(geomStepLength-zm)/(alam*cthm) < 1.)
           trueLength = 0.5*tPathLength + alam*(1.-
                 exp(log(1.-clam*(geomStepLength-zm)/(alam*cthm)))/clam) ;
@@ -503,7 +517,6 @@ G4double G4LewisModel::TrueStepLength(G4double geomStepLength)
           trueLength = tPathLength;
       }
     }
-//    G4cout << "tLenth= " << trueLength << " tpl= " << tPathLength << G4endl;
     if(trueLength > tPathLength) trueLength = tPathLength;
     if(trueLength < geomStepLength) trueLength = geomStepLength;
   }
@@ -521,7 +534,6 @@ G4double G4LewisModel::SampleCosineTheta(G4double trueStepLength)
     cth = exp(-currentTau) ;
   else
   {       
-//  G4cout << "tau= " << currentTau << " lambda1= " << lambda1 << " lambdam= " << lambdam << G4endl;
     if (currentTau > taubig) cth = -1.+2.*G4UniformRand();
     else if (currentTau >= tausmall)
     {
@@ -538,6 +550,11 @@ G4double G4LewisModel::SampleCosineTheta(G4double trueStepLength)
       {
         const G4double amax = 25. ;
         const G4double tau0 = 0.02  ;
+        const G4double c_highland = 13.6*MeV, corr_highland=0.038 ;
+
+        const G4double x1fac1 = exp(-xsi) ;
+        const G4double x1fac2 = (1.-(1.+xsi)*x1fac1)/(1.-x1fac1) ;
+        const G4double x1fac3 = 1.3      ; // x1fac3 >= 1.  !!!!!!!!!
 
         G4double a;
 
@@ -586,13 +603,6 @@ G4double G4LewisModel::SampleCosineTheta(G4double trueStepLength)
           qprob = 1. ;
           prob = (xmeanth-xmean2)/(xmean1-xmean2) ;
         }
-/*
-        G4cout << "tau= " << currentTau << " prob= " << prob << " qprob= " << qprob << G4endl;
-        G4cout << "ea= " << ea << " eaa= " << eaa << " a= " << a
-               << " b= " << b << " b1= " << b1 << " bx= " << bx
-	       << " ebx= " << ebx << " eb1= " << eb1 << " c= " << c
-	       << G4endl;
-*/
         // sampling of costheta
         if (G4UniformRand() < qprob)
         {
