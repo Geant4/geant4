@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnitsTable.hh,v 1.8 2000-01-18 17:42:13 maire Exp $
+// $Id: G4UnitsTable.hh,v 1.9 2000-01-19 11:16:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -135,7 +135,7 @@ class G4BestUnit
 public:  // with description
 
     G4BestUnit(G4double      internalValue, G4String category);
-    G4BestUnit(G4ThreeVector internalValue, G4String category);    
+    G4BestUnit(const G4ThreeVector& internalValue, G4String category);    
     // These constructors convert a physical quantity from its internalValue
     // into the most appropriate unit of the same category.
     // In practice it builds an object VU = (newValue, newUnit)
