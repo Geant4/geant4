@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.101 2004-06-08 08:43:32 gcosmo Exp $
+# $Id: binmake.gmk,v 1.102 2004-06-11 14:07:47 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -20,6 +20,9 @@ include $(G4INSTALL)/config/G4VIS_USE.gmk
 include $(G4INSTALL)/config/interactivity.gmk
 include $(G4INSTALL)/config/analysis.gmk
 
+# Verify the existance of the global static libraries first.
+# if not verify the existance of global shared libraries (Unix only).
+#
 ifndef G4LIB_USE_GRANULAR
     GLOBALLIBS := $(shell test -f $(G4LIB)/$(G4SYSTEM)/libG4global.a && echo yes)
   ifndef GLOBALLIBS
@@ -28,10 +31,15 @@ ifndef G4LIB_USE_GRANULAR
   endif
 endif
 
+# Verify the existance of granular shared libraries (Unix) or global DLLs (Windows)
+#
 ifndef SHAREDLIBS
   SHAREDLIBS := $(shell test -f $(G4LIB)/$(G4SYSTEM)/libG4globman.$(SHEXT) && echo yes)
 endif
-  
+ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+  SHAREDLIBS := $(shell test -f $(G4LIB)/$(G4SYSTEM)/G4global.$(SHEXT) && echo yes)
+endif  
+
 ifndef INCFLAGS
  ifeq ($(G4INCLUDE_EXEC),1)
   INCFLAGS := -I$(G4INCLUDE)
@@ -163,23 +171,32 @@ endif
 #
 ifndef USER_DEFINED_LDLIBS
 
-# LDLIBS1 contains the very high level libraries...
+# TARGETLIB is the library generated for the final user application...
 #
 ifdef G4EXLIB
-  LDLIBS1 := -l$(G4TARGET)
+  ifeq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+  # Unix
+    TARGETLIB := -l$(G4TARGET)
+  else
+  # Windows
+    TARGETLIB := lib$(G4TARGET).a   
+  endif
 endif
-LDLIBS1 += $(EXTRALIBS)
 
-# VISLIBS and UILIBS are now handled by the granular library script...
+# LDLIBS1 contains the very high level libraries...
+#
+LDLIBS1 := $(EXTRALIBS)
+
+# VISLIBS (and UILIBS?) is handled by the granular library script...
 #
 ifdef GLOBALLIBS
-  LDLIBS1 += $(VISLIBS) -lG4interfaces -lG4persistency
+  LDLIBS2 := $(VISLIBS) -lG4interfaces -lG4persistency
 
   ifdef G4USE_G3TOG4
-    LDLIBS1 += -lG3toG4
+    LDLIBS2 += -lG3toG4
   endif
 
-  LDLIBS2 := -lG4readout \
+  LDLIBS2 += -lG4readout \
              -lG4run \
              -lG4event \
              -lG4tracking \
@@ -245,13 +262,17 @@ ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
   WIN32TMP := $(patsubst -L%,$(LIB_PATH)%,$(LDFLAGS))
   LDFLAGS  = $(patsubst /,$(PATH_DEL),$(WIN32TMP))
   WIN32TMP2 := $(patsubst -L%,$(LIB_PATH)%,$(LDLIBS_PREFINAL))
-  LDLIBS = $(patsubst -l%,lib%.a,$(WIN32TMP2))
+  ifdef SHAREDLIBS
+	LDLIBS = $(TARGETLIB) $(patsubst -l%,lib%.lib,$(WIN32TMP2))
+  else
+  	LDLIBS = $(TARGETLIB) $(patsubst -l%,lib%.a,$(WIN32TMP2))
+  endif
 else
-  LDLIBS = $(LDLIBS_PREFINAL)
+  LDLIBS = $(TARGETLIB) $(LDLIBS_PREFINAL)
 endif
 
 ifdef transform-RPath
-#invoke system specific transformation of 
+# Invoke system specific transformation of 
 include $(G4INSTALL)/config/sys/$(G4SYSTEM)-runpath.gmk
 endif
 	
