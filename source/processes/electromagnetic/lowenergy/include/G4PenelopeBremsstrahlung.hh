@@ -22,7 +22,7 @@
 //
 // 
 // -------------------------------------------------------------------
-// $Id: G4PenelopeBremsstrahlung.hh,v 1.2 2003-03-19 10:27:44 pandola Exp $
+// $Id: G4PenelopeBremsstrahlung.hh,v 1.3 2003-05-23 10:27:27 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: L.Pandola
@@ -31,6 +31,7 @@
 // -----------
 // 03 Feb 2003  L. Pandola       1st implementation
 // 18 Mar 2003  L. Pandola       positrons added
+// 23 May 2003  L. Pandola       ebins added as private member
 // Class description:
 // Penelope electromagnetic process, electron and positron Bremsstrahlung
 // --------------------------------------------------------------
@@ -105,6 +106,7 @@ private:
   // Lower limit for generation of gamma in this model
   G4DataVector cutForSecondaryPhotons;
   G4double cutForPhotons;
+  G4DataVector ebins;
 };
 
 
