@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.cc,v 1.16 2004-11-11 16:03:15 johna Exp $
+// $Id: G4ASCIITreeSceneHandler.cc,v 1.17 2005-01-26 16:48:08 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -96,15 +96,20 @@ void G4ASCIITreeSceneHandler::WriteHeader (std::ostream& os)
     "\n#  >=  0: prints physical volume name."
     "\n#  >=  1: prints logical volume name."
     "\n#  >=  2: prints solid name and type."
-    "\n#  >=  3: prints volume and density of solid."
-    "\n#  >=  4: calculates and prints mass(es) of volume(s) in scene."
+    "\n#  >=  3: prints volume and density."
+    "\n#  >=  4: prints mass of each top physical volume in scene to depth specified."
+    "\n#  >=  5: prints mass of branch at each volume (can be time consuming)."
     "\n#  Note: by default, culling is switched off so all volumes are seen.";
   if (detail >=4) {
     os <<
-      "\n#  Note: the mass is calculated for each physical volume in the scene,"
-      "\n#  taking into account daughters up to the depth specified.  Culling "
-      "\n#  is ignored.  If you want the mass of a particular subtree:"
-      "\n#    /vis/drawVolume <name-of-physical-volume-at-top-of-subtree>"
+      "\n#  Note: the mass calculation takes into account daughters, normally"
+      "\n#  to unlimited depth, which can be time consuuming.  If you want the"
+      "\n#  mass of a particular subtree to a particular depth:"
+      "\n#    /vis/open ATree"
+      "\n#    /vis/ASCIITree/verbose 14"
+      "\n#    /vis/scene/create"
+      "\n#    /vis/scene/add/volume <subtree-physical-volume> ! <depth>"
+      "\n#    /vis/sceneHandler/attach"
       "\n#    /vis/viewer/flush";
   }
 
@@ -113,6 +118,7 @@ void G4ASCIITreeSceneHandler::WriteHeader (std::ostream& os)
   if (detail >= 1) os << " / LV";
   if (detail >= 2) os << " / Solid(type)";
   if (detail >= 3) os << ", volume, density";
+  if (detail >= 5) os << ", mass of branch";
   os << "\n#  where PV = Physical Volume";
   if (detail <2) os << " and"; else os << ",";
   os << " n = copy number";
@@ -147,12 +153,12 @@ void G4ASCIITreeSceneHandler::EndModeling () {
 	       << pvModel->GetTopPhysicalVolume()->GetCopyNo()
 	       << ", is "
 	       << G4BestUnit (volume, "Volume")
-	       << "\nMass of tree to ";
+	       << "\nMass of tree";
 	G4int requestedDepth = pvModel->GetRequestedDepth();
-	if (requestedDepth == G4PhysicalVolumeModel::UNLIMITED) {
-	  G4cout << "unlimited depth";
-	} else {
-	  G4cout << "depth " << requestedDepth;
+	if (requestedDepth != G4PhysicalVolumeModel::UNLIMITED) {
+	  G4cout << ", ignoring daughters at depth "
+		 << requestedDepth
+		 << " and below,";
 	}
 	G4cout << " is " << G4BestUnit (mass, "Mass")
 	       << G4endl;
@@ -251,22 +257,17 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
   }
 
   if (detail >= 3) {
-    G4Polyhedron* pPolyhedron = solid.GetPolyhedron();
-    if (pPolyhedron) {
-      G4Material* pMaterial;
-      G4VPVParameterisation* pP = fpCurrentPV->GetParameterisation();
-      if (pP) {
-        pMaterial = pP -> ComputeMaterial (fPVPCount++, fpCurrentPV);
-      } else {
-	pMaterial = fpCurrentLV->GetMaterial();
-      }
-      *fpOutFile << ", "
-		 << G4BestUnit(pPolyhedron->GetVolume(),"Volume")
-		 << ", "
-		 << G4BestUnit(pMaterial->GetDensity(), "Volumic Mass");
-    } else {
-      *fpOutFile << " (volume not available)";
-    }
+    *fpOutFile << ", "
+	       << G4BestUnit(((G4VSolid&)solid).GetCubicVolume(),"Volume")
+	       << ", "
+	       << G4BestUnit(fpCurrentMaterial->GetDensity(), "Volumic Mass");
+  }
+
+  if (detail >= 5) {
+    *fpOutFile << ", "
+	       << G4BestUnit
+      (fpCurrentLV->GetMass(fpCurrentPV->IsParameterised(),  // Force if so.
+			    fpCurrentMaterial),"Mass");
   }
 
   if (fLVSet.find(fpCurrentLV) == fLVSet.end()) {
