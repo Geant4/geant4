@@ -8,7 +8,10 @@ G4NeutronIsotopeProduction()
   for(G4int i=0; i< numberOfElements; i++)
   {
     theData[i] = new G4NeutronElementIsoCrossSections;
-    theData[i]->Init((*(G4Element::GetElementTable()))(i));
+    if((*(G4Element::GetElementTable()))(i)->GetZ()>12) // @@@@@@ workarround to ne fixed in G4NeutronHPNames.
+    {
+      theData[i]->Init((*(G4Element::GetElementTable()))(i));
+    }
   }
 }
 
