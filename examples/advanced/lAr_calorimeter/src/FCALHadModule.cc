@@ -60,7 +60,7 @@ void FCALHadModule::InitializeGeometry() {
 #include "FCALHadModuleParameters.icc"
 
   ifstream File
-   ("/usr0/mazini/fcal/geom_data/FCal2Electrodes.dat");
+   ("geom_data/FCal2Electrodes.dat");
    
    if(!File)  G4cerr << "Failed to open file FCal2Electrode data file" << endl;
    File.seekg(0);

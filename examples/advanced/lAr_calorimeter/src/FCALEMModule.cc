@@ -57,7 +57,7 @@ FCALEMModule::~FCALEMModule(){
 void FCALEMModule::InitializeGeometry() {
 #include "FCALEMModuleParameters.icc"  
   ifstream File
-    ("/usr0/mazini/fcal/geom_data/FCal1Electrodes.dat");
+    ("geom_data/FCal1Electrodes.dat");
   
   if(!File)  G4cerr << "Failed to open file FCal1Electrodes data file  " << endl;
   File.seekg(0);

@@ -4,7 +4,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03PrimaryGeneratorAction.cc,v 1.2 2002-10-01 13:51:18 pmendez Exp $
+// $Id: ExN03PrimaryGeneratorAction.cc,v 1.3 2002-10-02 12:01:29 araujo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,7 +50,7 @@ ExN03PrimaryGeneratorAction::ExN03PrimaryGeneratorAction()
 
   // Read Kinematics from file
   G4int InEvent = 0;
-  G4String file_name = "/home/loch/atlas/fcal.testbeam/simulations/data/gen/electrons/080/tracks_run1503.dat-v1000";
+  G4String file_name = "data-tracks/tracks-80GeV.dat";
   ifstream Traks_file(file_name);
   if(!Traks_file) G4cerr << "WARNING:  Failed to open file " << file_name << endl;
   Traks_file.seekg(0);

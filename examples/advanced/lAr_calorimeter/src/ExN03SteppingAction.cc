@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03SteppingAction.cc,v 1.2 2002-10-01 13:53:21 pmendez Exp $
+// $Id: ExN03SteppingAction.cc,v 1.3 2002-10-02 12:01:29 araujo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -82,7 +82,7 @@ void ExN03SteppingAction::UserSteppingAction(const G4Step* astep)
   G4int TrackID = aTrack->GetTrackID();
   G4int ParentID = aTrack->GetParentID();
   // Get Associated particle
-  G4DynamicParticle * aDynamicParticle = aTrack->GetDynamicParticle();
+  const G4DynamicParticle * aDynamicParticle = aTrack->GetDynamicParticle();
   G4ParticleDefinition * aParticle = aTrack->GetDefinition();
   G4String ParticleName = aParticle->GetParticleName();
   

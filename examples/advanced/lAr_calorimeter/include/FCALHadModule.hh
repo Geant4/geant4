@@ -59,7 +59,7 @@ private:
   G4double F2TroffABLenght, F2TroffStartPhi,  F2TroffDphi; 
   G4double F2TroffRotZ, F2TroffABPosZ; 
 
-  G4double F2LArGapRmin, F2LArGapRmax, F2LArGapLength;
+  G4double F2LArGapRmin, F2LArGapRmax, F2LArGapLenght;
   G4double F2LArGapStartPhi, F2LArGapDphi;
   G4double F2RodRmin, F2RodRmax, F2RodLenght, F2RodStartPhi, F2RodDphi;
 

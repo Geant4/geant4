@@ -5,7 +5,12 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALPhysicsList.hh,v 1.2 2002-10-01 16:54:16 ahoward Exp $
+// $Id: FCALPhysicsList.hh,v 1.3 2002-10-02 12:02:07 araujo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+=======
+// $Id: FCALPhysicsList.hh,v 1.3 2002-10-02 12:02:07 araujo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,8 +66,45 @@ class FCALPhysicsList: public G4VUserPhysicsList
     G4double cutForProton;
     G4double currentDefaultCut;
 };
+=======
+  public:
+    FCALPhysicsList();
+   ~FCALPhysicsList();
+
+  protected:
+    // Construct particle and physics
+    void ConstructParticle();
+    void ConstructProcess();
+ 
+    void SetCuts();
+
+  public:
+    // Set/Get cut values 
+    void      SetCutForGamma(G4double);
+    void      SetCutForElectron(G4double);
+    void      SetCutForProton(G4double);           
+    G4double  GetCutForGamma() const;
+    G4double  GetCutForElectron() const;
+    G4double  GetCutForProton() const;
+    
+  protected:
+    // these methods Construct particles 
+    void ConstructBosons();
+    void ConstructLeptons();
+    void ConstructMesons();
+    void ConstructBaryons();
+
+  protected:
+  // these methods Construct physics processes and register them
+    void ConstructGeneral();
+    void ConstructEM();
+
+  private:
+    G4double cutForGamma;
+    G4double cutForElectron; 
+    G4double cutForProton;
+    G4double currentDefaultCut;
+};
 
 #endif
-
-
 
