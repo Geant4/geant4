@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagHelicalStepper.cc,v 1.9 2002-01-07 13:20:23 japost Exp $
+// $Id: G4MagHelicalStepper.cc,v 1.10 2002-01-17 08:09:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4MagHelicalStepper.hh"
@@ -73,7 +73,7 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
 
   // fCof = fUnitConstant*particleCharge/MomentumXc;
   G4double particleCharge = fPtrMagEqOfMot->FCof() / (eplus*c_light); 
-  G4double fCoefficient = (fUnitConstant / momentumVal) * particleCharge;
+  G4double fCoefficient = (fUnitConstant / velocityVal) * particleCharge;
 
   // for too small magnetic fields there is no curvature
   // (include momentum here) FIXME
