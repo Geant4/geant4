@@ -21,25 +21,31 @@ G4UppTrackChange* G4UppActionCollision::perform(const G4UppTrackVector& allTrack
     G4cout << collPart[j]->GetDefinition()->GetParticleName() << " ";
   }
   G4cout << ")" << G4endl;
-  if (collPart[1]->GetDefinition()->GetParticleName()=="pi-")
-    cout <<"hallo!";
-
+  // if (collPart[1]->GetDefinition()->GetParticleName()=="pi-") 
+  
   G4int arraySize = collPart.size();
+  assert(arraySize==2);
+
+  G4KineticTrackVectorSTL* newPart = scattererPtr->Scatter(*collPart[0],*collPart[1]);
+  if (newPart==NULL) {
+    G4cout << "(debug) no collision" << G4endl;
+    return NULL;
+  }
+
   for (G4int i=0; i<arraySize; i++) {
     collPart[i]->clearLastInteractionPartners();
     collPart[i]->setChanged(true);
-    for (G4int j=0; j<arraySize; j++) 
+    for (G4int j=0; j<arraySize; j++) {
       collPart[i]->addLastInteractionPartner(collPart[j]);
+    }
   }
-  G4KineticTrack* testpart=collPart[0];
-  collPart[0]->GetDefinition()->GetParticleName();
-  testpart->GetDefinition()->GetParticleName();
-  G4KineticTrackVectorSTL* newPart = scattererPtr->Scatter(*collPart[0],*collPart[1]);
-  if (newPart==NULL) cout << "NULL!" << endl;
+  // G4KineticTrack* testpart=collPart[0];
+  // collPart[0]->GetDefinition()->GetParticleName();
+  // testpart->GetDefinition()->GetParticleName();
 
   G4UppTrackChange* theChange = new G4UppTrackChange;
   theChange->oldParticles = collPart;
-
+  assert(newPart->size()>0);
   for (G4int k=0; k<newPart->size(); k++) {
     G4UppTrack* TrackPtr = new G4UppTrack(*(*newPart)[k]);
     TrackPtr->setLocalTime(allTracks.getGlobalTime());

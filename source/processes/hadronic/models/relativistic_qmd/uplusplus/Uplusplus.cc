@@ -5,7 +5,7 @@
 #include "G4UppModel.hh"
 #include "G4UppSimpleFieldtransport.hh"
 #include "G4VUppAnalyzer.hh"
-#include "G4Proton.hh"
+#include "G4Lambda.hh"
 //#include "G4PionZero.hh"
 //#include "G4MuonPlus.hh"
 #include <iostream>
@@ -13,6 +13,7 @@
 #include "G4VShortLivedParticle.hh"
 #include "G4ShortLivedConstructor.hh"
 #include "G4LeptonConstructor.hh"
+#include "G4BaryonConstructor.hh"
 #include "G4MesonConstructor.hh"
 #include "G4ParticleTable.hh"
 #include "G4ShortLivedTable.hh"
@@ -28,6 +29,8 @@ G4int main()
   // G4ShortLivedConstructor ShortLived;
   // G4ShortLivedTable ShortLivedTab;
   // ShortLived.ConstructParticle();
+  G4BaryonConstructor Baryons;
+  Baryons.ConstructParticle();
   G4LeptonConstructor Leptons;
   Leptons.ConstructParticle();
   G4MesonConstructor Mesons;
@@ -39,7 +42,7 @@ G4int main()
   //G4ParticleDefinition* aPi0 = G4PionZero::PionZero();
   //G4ParticleDefinition* aMuonPlus = G4MuonPlus::MuonPlus();
   cout << endl;
-  cout << "U++ Version 0.0.3" << endl;
+  cout << "U++ Version 0.0.4" << endl;
   cout << "-----------------" << endl;
   cout << endl;
 
@@ -88,11 +91,11 @@ G4int main()
   cout << "initialize model ... " << endl;
   myQMD.initialize(Projectile,Target);
 
-  myQMD.addAnalyzer(myAnalyzer, 10.0*fermi/c_light);
+  myQMD.addAnalyzer(myAnalyzer, 0.0*fermi/c_light);
   // myQMD.addAnalyzer(myAnalyzer,  5.0*fermi/c_light);
   // myQMD.addAnalyzer(myAnalyzer, 10.0*fermi/c_light);
-  myQMD.addAnalyzer(myAnalyzer, 15.0*fermi/c_light);
-  myQMD.addAnalyzer(myAnalyzer, 20.0*fermi/c_light);
+  myQMD.addAnalyzer(myAnalyzer, 5.0*fermi/c_light);
+  myQMD.addAnalyzer(myAnalyzer, 10.0*fermi/c_light);
 
   cout << "starting propagation ... " << endl;
   myQMD.propagate(aFieldtransport);
@@ -103,3 +106,8 @@ G4int main()
 
   return 0;
 }
+
+
+
+
+

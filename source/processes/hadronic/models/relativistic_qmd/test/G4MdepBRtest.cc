@@ -1,4 +1,4 @@
-// $Id: G4MdepBRtest.cc,v 1.1 2000-03-23 16:45:50 hweber Exp $
+// $Id: G4MdepBRtest.cc,v 1.2 2001-03-08 23:39:35 hweber Exp $
 // -------------------------------------------------------------------
 // This code implementation is the intellectual property of
 // the RD44 GEANT4 collaboration.
@@ -90,6 +90,8 @@
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
+#include "G4SampleResonance.hh"
+
 int main()
 {
   // MGP ---- HBOOK initialization
@@ -166,14 +168,14 @@ int main()
   */
 
   G4int DEBUG;
-  cout << "Insert DEBUG value (0|1)" << endl;
+  G4cerr << "Insert DEBUG value (0|1)" << endl;
   cin >> DEBUG;
 
   // Select track 1
   
-  G4cout << "---- Select KineticTrack 1 ----" << endl;
+  G4cerr << "---- Select KineticTrack 1 ----" << endl;
   G4int id1 = 0;
-  G4cout << "1 N1535_0      2 N1440_0    3 N1535_1  4 N1710_0" << endl;
+  G4cerr << "1 N1535_0      2 N1440_0    3 N1535_1  4 N1710_0" << endl;
   cin >> id1;
 
   G4ParticleDefinition* definition1;
@@ -204,18 +206,18 @@ int main()
   G4double px1 = 0. * GeV;
   G4double py1 = 0. * GeV;
   G4double pz1 = 0. * GeV; 
-  cout << " Enter Pz (Px=Py=0.)" << endl;
+  G4cerr << " Enter Pz (Px=Py=0.)" << endl;
   cin >> pz1;
   G4ThreeVector p1(px1,py1,pz1);
 
-  G4double startMass = definition1->GetPDGMass()-definition1->GetPDGWidth()*6;
-  G4double endMass = definition1->GetPDGMass()+definition1->GetPDGWidth()*6;
+  G4double startMass = definition1->GetPDGMass()-definition1->GetPDGWidth()*4;
+  G4double endMass = definition1->GetPDGMass()+definition1->GetPDGWidth()*4;
   G4String name1 = definition1->GetParticleName();
-  const G4int nSteps=100;
+  const G4int nSteps=500;
   G4double stepMass = (endMass-startMass)/double(nSteps);
   typedef vector<double> graph;
   G4int nChannels = definition1->GetDecayTable()->entries();
-  cout << "nChannels: " << nChannels << endl;
+  G4cerr << "nChannels: " << nChannels << endl;
   vector<graph> plot(nChannels);
   if (DEBUG) cout << "Particle Type: " << name1 << endl;
   cout << "! title \"Mass Dependent Decay Width (" << definition1->GetParticleName() << ")\"" << endl;
@@ -243,16 +245,15 @@ int main()
       G4KineticTrack* mytrack = new G4KineticTrack(definition1,time1,pos1,p41);
       G4double* awidth = mytrack->GetActualWidth();
 
-      //      cout << "ActualMass: " << endl;
-
       cout << mass1 << " ";
       G4double TotWidth=0.0;
       for (G4int i=0; i<nChannels; i++) {
+	//	cout << TotWidth << " + " << awidth[i] << " = ";
 	TotWidth+=awidth[i];
 	//	cout << TotWidth << endl;
       }
       for (i=0; i<nChannels; i++) {
-	cout << awidth[i]/TotWidth << " ";
+	cout << ( (TotWidth) ? awidth[i]/TotWidth : 0.0) << " ";
       }
       //            cout << endl;
       G4double BreitWigner = 0.7*mytrack->BrWig(definition1->GetPDGWidth(),mass1,definition1->GetPDGMass()) / mytrack->BrWig(definition1->GetPDGWidth(),definition1->GetPDGMass(),definition1->GetPDGMass());

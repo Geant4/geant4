@@ -60,7 +60,9 @@ G4int G4UppModel::propagate(const G4VUppFieldtransport& aTransport)
       // now perform the action
       if (aTrackChangePtr = actualActionPtr->perform(allTracks)) {
 	// cout << "(info) Updating AllTracks" << endl;
-	G4UppTrackChange undoBackupChange = allTracks.update(*aTrackChangePtr);
+	if (aTrackChangePtr!=NULL) {
+	  G4UppTrackChange undoBackupChange = allTracks.update(*aTrackChangePtr);
+	}
 	//if (allTracks.isPauliBlocked(aTrackChangePtr->newParticles))
 	// allTracks.update(undoBackupChange);
       }
