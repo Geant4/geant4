@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimDetectorConstruction.hh,v 1.4 2004-05-19 09:29:33 guatelli Exp $
+// $Id: RemSimDetectorConstruction.hh,v 1.5 2004-05-21 08:12:22 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -50,10 +50,13 @@ public:
 
   void ConstructVolume();
   void AddShielding(G4String);
+  void AddAstronaut();
   void ChangeShieldingMaterial(G4String);
   void ChangeShieldingThickness(G4double);
+
 private:
   RemSimDecorator* retrieveDecorator();
+  RemSimDecorator* retrieveDecorator1();
 
   G4LogicalVolume* experimentalHall_log;
   G4VPhysicalVolume* experimentalHall_phys;
@@ -62,8 +65,10 @@ private:
   RemSimVGeometryComponent* pVehicle;
   RemSimMaterial*  pMaterial;
   RemSimDetectorMessenger* messenger; 
-  RemSimDecorator* decorator; 
+  RemSimDecorator* decorator;
+  RemSimDecorator* decorator1; 
   G4String decoratorValue;
+  G4String astronautValue;
 };
 #endif
 

@@ -32,6 +32,7 @@ RemSimShieldingDecorator::~RemSimShieldingDecorator()
 }
 void RemSimShieldingDecorator::ConstructComponent(G4VPhysicalVolume* motherVolume)
 {
+  pMaterial -> DefineMaterials();
   RemSimDecorator::ConstructComponent(motherVolume);
   ConstructShielding(motherVolume);
 }
@@ -53,7 +54,8 @@ void RemSimShieldingDecorator::DestroyComponent()
 void RemSimShieldingDecorator::ConstructShielding(G4VPhysicalVolume* motherVolume)
 {
   // Geometry definition
- 
+  pMaterial -> DefineMaterials();
+
   G4Material* water = pMaterial -> GetMaterial("Water");
   
   shielding = new G4Box("shielding",shieldingX/2.,shieldingY/2.,shieldingZ/2.);
@@ -65,7 +67,6 @@ void RemSimShieldingDecorator::ConstructShielding(G4VPhysicalVolume* motherVolum
              G4ThreeVector(0.,0.,translation + shieldingZ/2.),
             "shieldingPhys", shieldingLog, motherVolume,false,0); 
 
-  G4cout<< " Thickness cm:"<<shieldingZ/cm<<G4endl;
   //Visualisation attributes
   G4Colour  red      (1.0,0.0,0.0);
   shieldingVisAtt = new G4VisAttributes(red);
@@ -100,7 +101,7 @@ void RemSimShieldingDecorator::PrintDetectorParameters()
   G4cout << "-----------------------------------------------------------------------"
          << G4endl
          << "the shielding is a box whose thickness is: " << G4endl
-         << shieldingZ/cm
+         << ((shielding -> GetZHalfLength())*2.)/cm
          << " cm along the Z axis"
          << G4endl
          << "material of the shielding: "

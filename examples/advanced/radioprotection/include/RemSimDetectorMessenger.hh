@@ -27,7 +27,7 @@
 //    *                                       *
 //    *****************************************
 //
-// $Id: RemSimDetectorMessenger.hh,v 1.4 2004-05-19 09:29:33 guatelli Exp $
+// $Id: RemSimDetectorMessenger.hh,v 1.5 2004-05-21 08:12:22 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,6 +54,7 @@ private:
   G4UIdirectory*               vehicleDir; // control the geometry configuration
   G4UIcmdWithAString*          vehicleCmd; //change set-up configuration 
   G4UIcmdWithAString*          shieldingCmd;//add a shielding layer
+  G4UIcmdWithAString*          astronautCmd; //add the astronaut
 
   G4UIdirectory*               shieldingDir;//control the shielding parameters 
   G4UIcmdWithAString*          materialCmd; //change the material of 

@@ -31,7 +31,7 @@
 //    *********************************
 //
 //
-// $Id: RemSimDetectorMessenger.cc,v 1.4 2004-05-19 09:29:34 guatelli Exp $
+// $Id: RemSimDetectorMessenger.cc,v 1.5 2004-05-21 08:12:23 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,6 +59,12 @@ RemSimDetectorMessenger::RemSimDetectorMessenger( RemSimDetectorConstruction* De
   shieldingCmd -> SetCandidates("On Off");
   shieldingCmd -> AvailableForStates(G4State_PreInit,G4State_Idle); 
 
+  astronautCmd =  new G4UIcmdWithAString("/configuration/AddAstronaut",this); 
+  astronautCmd -> SetGuidance("Add Astronaut."); 
+  astronautCmd -> SetParameterName("choice",true);
+  astronautCmd -> SetCandidates("On Off");
+  astronautCmd -> AvailableForStates(G4State_PreInit,G4State_Idle); 
+
   // Fix the parameters of the shielding: material and thickness
   shieldingDir = new G4UIdirectory("/shielding/");
   shieldingDir -> SetGuidance("shielding control.");
@@ -81,6 +87,7 @@ RemSimDetectorMessenger::~RemSimDetectorMessenger()
   delete thicknessCmd;
   delete materialCmd;
   delete shieldingDir;
+  delete astronautCmd; 
   delete shieldingCmd; 
   delete vehicleCmd;
   delete vehicleDir; 
@@ -91,6 +98,11 @@ void RemSimDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue
   if(command == shieldingCmd)
     detector -> AddShielding(newValue); 
 
+  if(command == astronautCmd)
+    {
+    if (newValue == "On")
+    detector -> AddAstronaut(); 
+    }
   if(command == materialCmd)
     {
       detector -> ChangeShieldingMaterial(newValue);
