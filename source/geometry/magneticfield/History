@@ -1,4 +1,4 @@
-$Id: History,v 1.58 2002-05-07 17:10:40 japost Exp $
+$Id: History,v 1.59 2002-06-01 02:45:04 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+May  31st, 2002   J. Apostolakis - field-V04-00-03
+--------------------------------
+ - G4MagHelicalStepper.icc
+    o Fix to LinearStep (correcting previous fix/cosmetic)
+ - G4ChordFinder.cc
+    o Corrective behaviour for very small or large changes of 'new step'
+       [observed in complex 3-d fields (purging magnet),  or
+                    approximate equations of motion ]
+ - G4MagIntegratorDriver
+    o More information in debug printing (tangent cosine, norm)
 
 
 May   7th, 2002   J. Apostolakis - field-V04-00-02
