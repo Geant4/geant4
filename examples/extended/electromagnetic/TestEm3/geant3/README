@@ -1,5 +1,5 @@
 
- testem3.cra is the geant3 equivalent of TestEm3
+ testem3/src is the geant3 equivalent of TestEm3
  
  % cd geant3
  % gmakeB           to make an executable  (Batch version) 
@@ -16,7 +16,7 @@
  run01.dat      (runNN.dat is the equivalent of the G4 runNN.mac)
  
  
- testem3 produce an Ntuple which is saved as testem3.ntupl if ISWIT(2)=1
+ testem3 produce an Ntuple which is saved as testem3.paw if ISWIT(2)=1
  
  Content of this Ntuple:
   
