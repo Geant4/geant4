@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsListMessenger.cc,v 1.4 2003-01-27 09:46:20 hbu Exp $
+// $Id: PhysicsListMessenger.cc,v 1.5 2003-10-10 10:42:39 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,7 +33,6 @@
 
 #include "PhysicsList.hh"
 #include "G4UIcmdWithADouble.hh"
-#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

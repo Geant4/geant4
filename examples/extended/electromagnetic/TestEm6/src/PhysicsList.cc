@@ -21,9 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.4 2003-02-20 11:24:14 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.5 2003-10-10 10:42:39 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,11 +32,9 @@
 #include "PhysicsListMessenger.hh"
 
 #include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
-#include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
