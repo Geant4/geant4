@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: VisActionWithAttDefs.cc,v 1.3 2005-03-28 10:33:27 allison Exp $
+// $Id: VisActionWithAttDefs.cc,v 1.4 2005-03-28 19:15:33 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "VisActionWithAttDefs.hh"
@@ -42,23 +42,32 @@ VisActionWithAttDefs::VisActionWithAttDefs ()
   fpBox = new G4Box("boxAtts",1*m,2*m,3*m);
 
   fpAttDefs = new std::map<G4String,G4AttDef>;
-  (*fpAttDefs)["name"] = G4AttDef("name","Name of box","","","G4String");
-  (*fpAttDefs)["dimX"] = G4AttDef("dimX","Half x-side","","","G4BestUnit");
-  (*fpAttDefs)["dimY"] = G4AttDef("dimY","Half y-side","","","km");
-  (*fpAttDefs)["dimZ"] = G4AttDef("dimZ","Half z-side","","RubBish","G4BestUni");
+  (*fpAttDefs)["name"] =
+    G4AttDef("name","Name of box","Bookkeeping","","G4String");
+  (*fpAttDefs)["dimX"] =
+    G4AttDef("dimX","Half x-side","Physics","G4BestUnit","G4double");
+  (*fpAttDefs)["dimY"] =
+    G4AttDef("dimY","Half y-side","Physics","km","G4double");
+  (*fpAttDefs)["dimZ"] =
+    G4AttDef("dimZ","Half z-side","Fizziks","RubBish","G4BestUnit");
+  (*fpAttDefs)["diag"] =
+    G4AttDef("diag","Diagonal","Physics","mmm","G4double");
   (*fpAttDefs)["dims"] =
-    G4AttDef("dims","Half sides","","G4ThreeVector","G4BestUnit");
+    G4AttDef("dims","Half sides","Physics","G4BestUnit","G4ThreeVector");
 
   fpAttValues = new std::vector<G4AttValue>;
   fpAttValues->push_back(G4AttValue("name","Cyan box with attributes",""));
+  G4double x = fpBox->GetXHalfLength();
+  G4double y = fpBox->GetYHalfLength();
+  G4double z = fpBox->GetZHalfLength();
   fpAttValues->push_back
-    (G4AttValue("dimX",G4BestUnit(fpBox->GetXHalfLength(),"Length"),""));
+    (G4AttValue("dimX",G4BestUnit(x,"Length"),""));
   fpAttValues->push_back
-    (G4AttValue("dimY",
-		G4UIcommand::ConvertToString(fpBox->GetYHalfLength()/km),
-		""));
+    (G4AttValue("dimY",G4UIcommand::ConvertToString(y/km),""));
   fpAttValues->push_back
-    (G4AttValue("dimZ",G4BestUnit(fpBox->GetZHalfLength(),"Length"),""));
+    (G4AttValue("dimZ",G4BestUnit(z,"Length"),""));
+  fpAttValues->push_back
+    (G4AttValue("diag",G4BestUnit(sqrt(x*x+y*y+z*z),"Length"),""));
   fpAttValues->push_back
     (G4AttValue
      ("dims",
@@ -77,15 +86,16 @@ VisActionWithAttDefs::VisActionWithAttDefs ()
   G4cout << "\nVisActionWithAttDefs: constructor: att values:\n"
 	 << G4AttCheck(fpAttValues,fpAttDefs) << G4endl;
 
-  G4AttCheck standard = G4AttCheck(fpAttValues,fpAttDefs).Standard();
-  // Creates new AttValues and AttDefs on the heap...
+  std::vector<G4AttValue>* pStandardAttValues = new std::vector<G4AttValue>;
+  std::map<G4String,G4AttDef>* pStandardAttDefs =
+    new std::map<G4String,G4AttDef>;
+  G4AttCheck(fpAttValues,fpAttDefs).Standard
+    (pStandardAttValues,pStandardAttDefs);
   G4cout << "\nVisActionWithAttDefs: constructor: standardised versions:\n"
-	 << G4AttCheck(standard.GetAttValues(),
-		       standard.GetAttDefs())
+	 << G4AttCheck(pStandardAttValues,pStandardAttDefs)
 	 << G4endl;
-  // ...so don't forget to delete them...
-  delete standard.GetAttValues();
-  delete standard.GetAttDefs();
+  delete pStandardAttDefs;
+  delete pStandardAttValues;
 
   fpVisAtts = new G4VisAttributes(G4Colour(1,0,1));
   fpVisAtts->SetAttDefs(fpAttDefs);
