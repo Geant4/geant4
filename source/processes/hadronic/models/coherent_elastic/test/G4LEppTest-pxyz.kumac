@@ -1,0 +1,11 @@
+Histo/File 0 /local/geant4/paw/g4lepptest.hbook 0 -X
+Exec /local/geant4/paw/G4LEppTest.style
+Cdir //LUN1
+zone 2 3
+histo/plot '1'
+histo/plot '4'
+histo/plot '2'
+histo/plot '5'
+histo/plot '3'
+histo/plot '6'
+picture/print pxyz.ps

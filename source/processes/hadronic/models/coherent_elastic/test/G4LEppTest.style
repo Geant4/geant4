@@ -1,0 +1,71 @@
+Igset * ; Set * ; Option * ; Option ZFL1
+Set FILE 1
+Option FILE 
+Set DATE 2
+Option DATE 
+Set FIT 101
+Option NFIT 
+Set STAT 0111111
+Option STAT 
+Zone 1 1
+Angle 30.000000 30.000000
+Set NDVX 10510.00
+Set NDVY 10510.00
+Set NDVZ 10510.00
+Option NGRI
+Option LINX 
+Option LINY 
+Option LINZ 
+Option NTIC 
+Set YMGU  2.00
+Set GSIZ  0.28
+Set YGTI  1.50
+Set XMGR  2.00
+Set XWIN  2.00
+Set XMGL  2.00
+Set SMGU  0.00
+Set SMGR  0.00
+Set XLAB  1.40
+Set YWIN  2.00
+Set YSIZ 20.00
+Set XSIZ 20.00
+Set YTIC  0.30
+Set XVAL  0.40
+Set VSIZ  0.28
+Set YMGL  2.00
+Set XTIC  0.30
+Set TSIZ  0.28
+Set YHTI  1.20
+Set YLAB  0.80
+Set ASIZ  0.28
+Set BARO  0.25
+Set BARW  0.50
+Set CSIZ  0.28
+Set HMAX  0.90
+Set ERRX  0.50
+Set YVAL  0.20
+Set HCOL 0
+Set BCOL 1
+Set PCOL 1
+Set FCOL 1
+Set XCOL 1
+Set YCOL 1
+Set HTYP 0
+Set BTYP 0
+Set PTYP 0
+Set FTYP 0
+Igset MSCF 1
+Igset MTYP 1
+Igset LTYP 1
+Set DMOD 1
+Set CFON 2
+Set TFON 2
+Set LFON 2
+Set VFON 2
+Set GFON 2
+Set BWID 1
+Set HWID 1
+Set FWID 1
+Set PWID 1
+Set XWID 1
+Set YWID 1
