@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: GammaRayTelPayloadSD.cc,v 1.2 2000-11-15 20:27:41 flongo Exp $
+// $Id: GammaRayTelPayloadSD.cc,v 1.3 2000-11-20 16:48:51 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -72,51 +72,56 @@ G4bool GammaRayTelPayloadSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhis
 
   G4TouchableHistory* theTouchable
     = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
+ 
+  G4VPhysicalVolume* phys_tile = theTouchable->GetVolume();  
+  G4VPhysicalVolume* plane = phys_tile->GetMother();  
   
   G4int PlaneNumber = 0;
-  G4VPhysicalVolume* plane = theTouchable->GetVolume(); 
   PlaneNumber=plane->GetCopyNo();
   G4String PlaneName = plane->GetName();
 
-  //  G4cout << " Plane Number = " << PlaneNumber << PlaneName << G4endl;
+  G4cout << " Plane Number = " << PlaneNumber << PlaneName << G4endl;
   
 
   // The RO History is used to obtain the real strip
   // of the hit
   // some problems with the RO tree
 
-  /*  G4int StripNumber = 0;
-      G4VPhysicalVolume* strip = 0;
-      strip = ROhist->GetVolume();
-      
-      G4String StripName = strip->GetName();
-      StripNumber= strip->GetCopyNo();  
-  
-      //G4cout << StripName << " " << StripNumber << G4endl;
-      
-      
-      ROhist->MoveUpHistory();
-      G4VPhysicalVolume* tile = ROhist->GetVolume(); 
-      G4int TileNumber = tile->GetCopyNo();  
-      G4String TileName = tile->GetName();   
-      //G4cout << " Tile Number = " << TileNumber << TileName << G4endl;
-  
-      G4int NTile = (TileNumber%TileTotal);  
-      G4int j=0;
-      
-      for (j=0;j<TileTotal;j++)
-      { 
-      if(NTile==j) StripNumber += StripTotal*NTile;
-      }  
-      
-      ROhist->MoveUpHistory();
 
-  */
+  G4int StripNumber = 0;
+  G4VPhysicalVolume* strip = 0;
+  strip = ROhist->GetVolume();
+  G4String StripName = strip->GetName();
+  StripNumber= strip->GetCopyNo();  
+  G4cout << StripName << " " << StripNumber << G4endl;       
+       
+  //G4ThreeVector pos_obj = strip->GetObjectTranslation();
+  //G4ThreeVector pos_particle = aStep->GetPreStepPoint()->GetPosition();
+  //G4cout << StripName << " " << pos_obj << " " << pos_particle << G4endl;
+
+  
+  ROhist->MoveUpHistory();
+  G4VPhysicalVolume* tile = ROhist->GetVolume(); 
+  G4int TileNumber = tile->GetCopyNo();  
+  G4String TileName = tile->GetName();   
+  G4cout << " Tile Number = " << TileNumber << TileName << G4endl;
+  
+  G4int NTile = (TileNumber%TileTotal);  
+  G4int j=0;
+      
+  for (j=0;j<TileTotal;j++)
+    { 
+      if(NTile==j) StripNumber += StripTotal*NTile;
+    }  
+      
+  ROhist->MoveUpHistory();
+
+  
 
   G4VPhysicalVolume* ROPlane = ROhist->GetVolume(); 
   G4int ROPlaneNumber = ROPlane->GetCopyNo();
   G4String ROPlaneName = ROPlane->GetName();   
-  //G4cout << " Number ROPlane = " << ROPlaneNumber << ROPlaneName << G4endl;
+  G4cout << " Number ROPlane = " << ROPlaneNumber << ROPlaneName << G4endl;
   
 
   // The hit is on an X silicon plane
@@ -127,7 +132,7 @@ G4bool GammaRayTelPayloadSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhis
       PayloadHit->AddSil(edep);
       PayloadHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
       PayloadHit->SetNSilPlane(PlaneNumber);
-      // PayloadHit->SetNStrip(StripNumber);
+      PayloadHit->SetNStrip(StripNumber);
       PayloadCollection->insert(PayloadHit);
     }
   
@@ -139,7 +144,7 @@ G4bool GammaRayTelPayloadSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhis
       PayloadHit->AddSil(edep);
       PayloadHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
       PayloadHit->SetNSilPlane(PlaneNumber);
-      //PayloadHit->SetNStrip(StripNumber);
+      PayloadHit->SetNStrip(StripNumber);
       PayloadCollection->insert(PayloadHit);
     }
   

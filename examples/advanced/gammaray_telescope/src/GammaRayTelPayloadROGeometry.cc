@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: GammaRayTelPayloadROGeometry.cc,v 1.1 2000-11-15 20:27:41 flongo Exp $
+// $Id: GammaRayTelPayloadROGeometry.cc,v 1.2 2000-11-20 16:49:02 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -125,12 +125,17 @@ G4VPhysicalVolume* GammaRayTelPayloadROGeometry::Build()
   G4double TKRLayerDistance =  GammaRayTelDetector->GetTKRLayerDistance();
   G4double TKRViewsDistance =  GammaRayTelDetector->GetTKRViewsDistance();  
   
-  G4VSolid*  solidTKRDetectorRO = new G4Box
-    ("TKRDetectorRO",TKRSizeXY/2,TKRSizeXY/2,TKRSiliconThickness/2); 
+  G4VSolid*  solidTKRDetectorYRO = new G4Box
+    ("TKRDetectorYRO",TKRSizeXY/2,TKRSizeXY/2,TKRSiliconThickness/2); 
   
-  G4LogicalVolume* logicTKRDetectorRO =
-    new G4LogicalVolume(solidTKRDetectorRO,dummyMat, "TKRDetectorRO",0,0,0);
+  G4LogicalVolume* logicTKRDetectorYRO =
+    new G4LogicalVolume(solidTKRDetectorYRO,dummyMat, "TKRDetectorYRO",0,0,0);
+
+  G4VSolid*  solidTKRDetectorXRO = new G4Box
+    ("TKRDetectorXRO",TKRSizeXY/2,TKRSizeXY/2,TKRSiliconThickness/2); 
   
+  G4LogicalVolume* logicTKRDetectorXRO =
+    new G4LogicalVolume(solidTKRDetectorXRO,dummyMat, "TKRDetectorXRO",0,0,0);
   G4int i=0;
   G4VPhysicalVolume* physiTKRDetectorXRO = 0;
   G4VPhysicalVolume* physiTKRDetectorYRO = 0;
@@ -144,7 +149,7 @@ G4VPhysicalVolume* GammaRayTelPayloadROGeometry::Build()
 					  +TKRSiliconThickness/2 
 					  +(i)*TKRLayerDistance),
 			  "TKRDetectorYRO",		
-			  logicTKRDetectorRO,
+			  logicTKRDetectorYRO,
 			  ROphysiTKR,
 			  false,	
 			  i);	
@@ -157,7 +162,7 @@ G4VPhysicalVolume* GammaRayTelPayloadROGeometry::Build()
 					  TKRSiliconThickness+
 					  (i)*TKRLayerDistance),
 			  "TKRDetectorXRO",		
-			  logicTKRDetectorRO,
+			  logicTKRDetectorXRO,
 			  ROphysiTKR,
 			  false,	
 			  i);	
@@ -167,17 +172,21 @@ G4VPhysicalVolume* GammaRayTelPayloadROGeometry::Build()
   // Silicon Tiles 
   // some problems with the RO tree
 
-  /*
-
   G4double TKRActiveTileXY =  GammaRayTelDetector->GetTKRActiveTileXY();
   G4double TKRActiveTileZ  =  GammaRayTelDetector->GetTKRActiveTileZ();  
 
-  G4VSolid * solidTKRActiveTileRO = new
-    G4Box("Active Tile", TKRActiveTileXY/2,TKRActiveTileXY/2,TKRActiveTileZ/2);
+  G4VSolid * solidTKRActiveTileXRO = new
+    G4Box("Active Tile X", TKRActiveTileXY/2,TKRActiveTileXY/2,TKRActiveTileZ/2);
+
+  G4VSolid * solidTKRActiveTileYRO = new
+    G4Box("Active Tile Y", TKRActiveTileXY/2,TKRActiveTileXY/2,TKRActiveTileZ/2);
   
   
-  G4LogicalVolume* logicTKRActiveTileRO = 
-    new G4LogicalVolume(solidTKRActiveTileRO, dummyMat,"Active Tile",0,0,0);
+  G4LogicalVolume* logicTKRActiveTileXRO = 
+    new G4LogicalVolume(solidTKRActiveTileXRO, dummyMat,"Active Tile",0,0,0);
+
+  G4LogicalVolume* logicTKRActiveTileYRO = 
+    new G4LogicalVolume(solidTKRActiveTileYRO, dummyMat,"Active Tile",0,0,0);
     
   G4int j=0;
   G4int k=0;
@@ -209,7 +218,7 @@ G4VPhysicalVolume* GammaRayTelPayloadROGeometry::Build()
 	    new G4PVPlacement(0,
 			      G4ThreeVector(x,y,z),
 			      "Active Tile X",		
-			      logicTKRActiveTileRO,
+			      logicTKRActiveTileXRO,
 			      physiTKRDetectorXRO,
 			      false,	
 			      k);	
@@ -224,7 +233,7 @@ G4VPhysicalVolume* GammaRayTelPayloadROGeometry::Build()
 	    new G4PVPlacement(0,
 			      G4ThreeVector(x,y,z),
 			      "Active Tile Y",		
-			      logicTKRActiveTileRO,
+			      logicTKRActiveTileYRO,
 			      physiTKRDetectorYRO,
 			      false,	
 			      k);
@@ -232,7 +241,7 @@ G4VPhysicalVolume* GammaRayTelPayloadROGeometry::Build()
 	}
     }
   
-
+  
   // Silicon Strips 
   // some problems with the RO tree
   
@@ -296,7 +305,7 @@ G4VPhysicalVolume* GammaRayTelPayloadROGeometry::Build()
 
 
     }
-  */
+  
 
 
   //Flags the strip as sensitive .The pointer here serves
@@ -306,10 +315,12 @@ G4VPhysicalVolume* GammaRayTelPayloadROGeometry::Build()
   
   GammaRayTelDummySD * dummySensi = new GammaRayTelDummySD;
   
-  //  logicTKRStripX->SetSensitiveDetector(dummySensi);
-  //logicTKRStripY->SetSensitiveDetector(dummySensi);
+  logicTKRStripX->SetSensitiveDetector(dummySensi);
+  logicTKRStripY->SetSensitiveDetector(dummySensi);
   
-  logicTKRDetectorRO->SetSensitiveDetector(dummySensi);
+  //logicTKRActiveTileXRO->SetSensitiveDetector(dummySensi);
+  //logicTKRActiveTileYRO->SetSensitiveDetector(dummySensi);
+    //logicTKRDetectorRO->SetSensitiveDetector(dummySensi);
   
   return ROWorldPhys;
 }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: GammaRayTelDetectorConstruction.hh,v 1.2 2000-11-15 20:27:38 flongo Exp $
+// $Id: GammaRayTelDetectorConstruction.hh,v 1.3 2000-11-20 16:49:44 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -199,10 +199,12 @@ private:
   G4LogicalVolume*   logicACL2;    
   G4VPhysicalVolume* physiACL2;    
 
-  G4Box*             solidTKRDetector;  // Tracker PLANE 
-  G4LogicalVolume*   logicTKRDetector;
-    
+  G4Box*             solidTKRDetectorX;  // Tracker PLANE X
+  G4LogicalVolume*   logicTKRDetectorX;
   G4VPhysicalVolume* physiTKRDetectorX;    
+
+  G4Box*             solidTKRDetectorY;  // Tracker PLANE Y
+  G4LogicalVolume*   logicTKRDetectorY;
   G4VPhysicalVolume* physiTKRDetectorY;    
 
   G4Box*             solidCALDetector;  // Calorimeter PLANE 
