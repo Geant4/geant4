@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FluoDataData.cc,v 1.2 ????
+// $Id: G4FluoDataData.cc,v 1.2 
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
@@ -255,8 +255,8 @@ void G4FluoData::LoadData(G4int Z)
 	if(k%nColumns == 2)
 	  {	 
 	    // 2nd column is transition  probabilities
-	    G4double e = a * MeV;
-	    transProbabilities->push_back(e);
+	   
+	    transProbabilities->push_back(a);
 	    
 	    k++;
 	  }
@@ -272,7 +272,8 @@ void G4FluoData::LoadData(G4int Z)
 
 	  {//third column is transition energies
 	   
-	    transEnergies->push_back(a);
+	    G4double e = a * MeV;
+	    transEnergies->push_back(e);
 	    
 	    k=1;
 	  }
