@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2000-12-07 13:32:34 maire Exp $
+$Id: History,v 1.6 2001-01-09 12:36:37 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,13 +14,16 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
-07-12-00  mma (testem5-V02-00-03 & testem-noHist)
-          remove hbook histograms: GNUmakefile,runAction
+
+09-01-01 mma modified Em5PhysicsList and Em5StepCut in order to make the
+         command /step/setMaxStep working
+	      
+07-12-00 mma (testem5-V02-00-03 & testem-noHist)
+         remove hbook histograms: GNUmakefile,runAction
 				   
-06-12-00  mma (testem5-V02-00-02 & testem-withHist)
-          update of init.mac for new vis commands.
-	  G4UItcsh in the main()
+06-12-00 mma (testem5-V02-00-02 & testem-withHist)
+         update of init.mac for new vis commands.
+	 G4UItcsh in the main()
 	  
 25th November 2000 Steve O'Neale (tagset210)
 - update test outputs for min.delta energy cut and cut table

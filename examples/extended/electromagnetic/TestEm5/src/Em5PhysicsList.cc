@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em5PhysicsList.cc,v 1.6 2000-05-24 16:13:21 maire Exp $
+// $Id: Em5PhysicsList.cc,v 1.7 2001-01-09 12:36:38 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -41,8 +41,6 @@ Em5PhysicsList::Em5PhysicsList(Em5DetectorConstruction* p)
   cutForGamma       = defaultCutValue;
   cutForElectron    = defaultCutValue;
   cutForProton      = defaultCutValue;
-  
-  MaxChargedStep = DBL_MAX; 
   
   SetVerboseLevel(1);
   physicsListMessenger = new Em5PhysicsListMessenger(this);
@@ -145,8 +143,6 @@ void Em5PhysicsList::ConstructProcess()
 
 #include "G4hIonisation.hh"
 
-#include "Em5StepCut.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Em5PhysicsList::ConstructEM()
@@ -169,20 +165,12 @@ void Em5PhysicsList::ConstructEM()
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);       
 
-      Em5StepCut* theeminusStepCut = new Em5StepCut();
-      theeminusStepCut->SetMaxStep(MaxChargedStep);  
-      pmanager->AddProcess(theeminusStepCut,         -1,-1,4);
-
     } else if (particleName == "e+") {
       //positron      
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
-                  
-      Em5StepCut* theeplusStepCut = new Em5StepCut();
-      theeplusStepCut->SetMaxStep(MaxChargedStep) ;          
-      pmanager->AddProcess(theeplusStepCut,          -1,-1,5);
   
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
@@ -190,8 +178,8 @@ void Em5PhysicsList::ConstructEM()
      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
      pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
      pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-1,3);
-     pmanager->AddProcess(new G4MuPairProduction,  -1,-1,4);       	       
-
+     pmanager->AddProcess(new G4MuPairProduction,  -1,-1,4);
+      
     } else if (
                 particleName == "proton"  
                || particleName == "antiproton"  
@@ -203,10 +191,6 @@ void Em5PhysicsList::ConstructEM()
     {
       pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
       pmanager->AddProcess(new G4hIonisation,       -1,2,2);
-      
-      Em5StepCut* thehadronStepCut = new Em5StepCut();
-      thehadronStepCut->SetMaxStep(MaxChargedStep);          		       
-      pmanager->AddProcess( thehadronStepCut,       -1,-1,3);
     }
   }
 }
@@ -214,21 +198,28 @@ void Em5PhysicsList::ConstructEM()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4Decay.hh"
+#include "Em5StepCut.hh"
 
 void Em5PhysicsList::ConstructGeneral()
 {
-  // Add Decay Process
    G4Decay* theDecayProcess = new G4Decay();
+   pStepCut = new Em5StepCut();   
+   
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
+    
+    //add decay process
     if (theDecayProcess->IsApplicable(*particle)) { 
       pmanager ->AddProcess(theDecayProcess);
       // set ordering for PostStepDoIt and AtRestDoIt
       pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
       pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
     }
+    
+    //user StepCut  
+      pmanager ->AddDiscreteProcess(pStepCut);
   }
 }
 
@@ -364,9 +355,8 @@ void Em5PhysicsList::GetRange(G4double val)
 
 void Em5PhysicsList::SetMaxStep(G4double step)
 {
-  MaxChargedStep = step ;
-  G4cout << " MaxChargedStep=" << MaxChargedStep << G4endl;
-  G4cout << G4endl;
+  pStepCut->SetMaxStep(step);
+  G4cout << " MaxChargedStep=" << step/mm << " mm" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em5PhysicsList.hh,v 1.2 1999-12-15 14:49:08 gunter Exp $
+// $Id: Em5PhysicsList.hh,v 1.3 2001-01-09 12:36:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -20,6 +20,7 @@
 
 class Em5DetectorConstruction;
 class Em5PhysicsListMessenger;
+class Em5StepCut;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -64,11 +65,10 @@ class Em5PhysicsList: public G4VUserPhysicsList
     G4double cutForElectron;
     G4double cutForProton;
     G4double currentDefaultCut;
-    
-    G4double MaxChargedStep;    
 
     Em5DetectorConstruction* pDet;
     Em5PhysicsListMessenger* physicsListMessenger;
+    Em5StepCut* pStepCut;
 };
 
 #endif
