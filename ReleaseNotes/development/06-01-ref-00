@@ -107,7 +107,7 @@ processes/hadronic                               ghad-V06-00-06
     signal handler.
   o Fixed cases of double deletion of memory in cases when
     isotope-production models are used.
-  o Run-time checking fo NaN values of energies of secondaries.
+  o Run-time checking for NaN values of energies of secondaries.
   o Fix for suspended particles (only neutron_hp code has these).
   o Rudimentary verification of consistancy of hadronic physics.
 - models/binary_cascade (ghad-bin-V06-00-03)
@@ -172,7 +172,7 @@ visualization                                    vis-V06-00-01
   o Renamed the HepRep schema locator to:
     http://java.freehep.org/schemas/heprep/2.0
 - management:
-  o Added checks and minor improvment of behaviour at end of event and run:
+  o Added checks and minor improvement of behaviour at end of event and run:
     + G4VisManager::EndOfRun(): added check on MarkForClearingTransientStore.
     + G4VisCommandsScene: For "/vis/scene/endOf[Event|Run]Action refresh",
       SetMarkForClearingTransientStore(true).
