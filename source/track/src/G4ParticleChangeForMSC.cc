@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChangeForMSC.cc,v 1.1 1999-01-07 16:14:26 gunter Exp $
+// $Id: G4ParticleChangeForMSC.cc,v 1.2 1999-02-06 10:44:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,7 +62,7 @@ G4ParticleChangeForMSC & G4ParticleChangeForMSC::operator=(
    }
    if (this != &right)
    {
-      theMomentumChange = right.theMomentumChange;
+      theMomentumDirectionChange = right.theMomentumDirectionChange;
       thePositionChange = right.thePositionChange;
       theTrueStepLength = right.theTrueStepLength;
    }
@@ -80,7 +80,7 @@ void G4ParticleChangeForMSC::Initialize(const G4Track& track)
 
   // set Energy/Momentum etc. equal to those of the parent particle
   const G4DynamicParticle*  pParticle = track.GetDynamicParticle();
-  theMomentumChange        = pParticle->GetMomentumDirection();
+  theMomentumDirectionChange        = pParticle->GetMomentumDirection();
 
   // set Position equal to those of the parent track
   thePositionChange      = track.GetPosition();
@@ -112,7 +112,7 @@ G4Step* G4ParticleChangeForMSC::UpdateStepForPostStep(G4Step* pStep)
   G4Track*     aTrack  = pStep->GetTrack();
  
   // update  momentum direction
-  pPostStepPoint->SetMomentumDirection(theMomentumChange);
+  pPostStepPoint->SetMomentumDirection(theMomentumDirectionChange);
 
   // update position 
   pPostStepPoint->SetPosition( thePositionChange  );
@@ -147,14 +147,14 @@ void G4ParticleChangeForMSC::DumpInfo() const
   G4cout << "        Position - z (mm)   : " 
        << setw(20) << thePositionChange.z()/mm
        << endl;
-  G4cout << "        Momentum Direct - x : " 
-       << setw(20) << theMomentumChange.x()
+  G4cout << "     Momentum Direction - x : " 
+       << setw(20) << theMomentumDirectionChange.x()
        << endl;
-  G4cout << "        Momentum Direct - y : " 
-       << setw(20) << theMomentumChange.y()
+  G4cout << "     Momentum Direction - y : " 
+       << setw(20) << theMomentumDirectionChange.y()
        << endl;
-  G4cout << "        Momentum Direct - z : " 
-       << setw(20) << theMomentumChange.z()
+  G4cout << "     Momentum Direction - z : " 
+       << setw(20) << theMomentumDirectionChange.z()
        << endl;
 }
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChange.cc,v 1.1 1999-01-07 16:14:26 gunter Exp $
+// $Id: G4ParticleChange.cc,v 1.2 1999-02-06 10:44:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,7 +74,7 @@ G4ParticleChange::G4ParticleChange(const G4ParticleChange &right): G4VParticleCh
    if (verboseLevel>1) {
     G4cerr << "G4ParticleChange::  copy constructor is called " << endl;
    }
-   theMomentumChange = right.theMomentumChange;
+   theMomentumDirectionChange = right.theMomentumDirectionChange;
    thePolarizationChange = right.thePolarizationChange;
    thePositionChange = right.thePositionChange;
    theTimeChange = right.theTimeChange;
@@ -94,7 +94,7 @@ G4ParticleChange & G4ParticleChange::operator=(const G4ParticleChange &right)
       theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
       theNumberOfSecondaries = right.theNumberOfSecondaries;
       theStatusChange = right.theStatusChange;
-      theMomentumChange = right.theMomentumChange;
+      theMomentumDirectionChange = right.theMomentumDirectionChange;
       thePolarizationChange = right.thePolarizationChange;
       thePositionChange = right.thePositionChange;
       theTimeChange = right.theTimeChange;
@@ -190,7 +190,7 @@ void G4ParticleChange::Initialize(const G4Track& track)
   // set Energy/Momentum etc. equal to those of the parent particle
   const G4DynamicParticle*  pParticle = track.GetDynamicParticle();
   theEnergyChange          = pParticle->GetKineticEnergy();
-  theMomentumChange        = pParticle->GetMomentumDirection();
+  theMomentumDirectionChange        = pParticle->GetMomentumDirection();
   thePolarizationChange    = pParticle->GetPolarization();
   theProperTimeChange      = pParticle->GetProperTime();
 
@@ -214,7 +214,7 @@ G4Step* G4ParticleChange::UpdateStepForAlongStep(G4Step* pStep)
   // So, the differences (delta) between these two states have to be
   // calculated and be accumulated in PostStepPoint. 
   
-  // Take note that the return type of GetMomentumChange is a
+  // Take note that the return type of GetMomentumDirectionChange is a
   // pointer to G4ParticleMometum. Also it is a normalized 
   // momentum vector.
 
@@ -231,7 +231,7 @@ G4Step* G4ParticleChange::UpdateStepForAlongStep(G4Step* pStep)
   if (energy > 0.0) {
     // calculate new momentum
     G4ThreeVector pMomentum =  pPostStepPoint->GetMomentum() 
-                + ( CalcMomentum(theEnergyChange, theMomentumChange, mass)
+                + ( CalcMomentum(theEnergyChange, theMomentumDirectionChange, mass)
 	            - pPreStepPoint->GetMomentum());
     G4double      tMomentum = pMomentum.mag();
     G4ThreeVector direction( pMomentum.x()/tMomentum,
@@ -282,7 +282,7 @@ G4Step* G4ParticleChange::UpdateStepForPostStep(G4Step* pStep)
   G4double     mass = aTrack->GetDynamicParticle()->GetMass();
  
   // update kinetic energy and momentum direction
-  pPostStepPoint->SetMomentumDirection(theMomentumChange);
+  pPostStepPoint->SetMomentumDirection(theMomentumDirectionChange);
   pPostStepPoint->SetKineticEnergy( theEnergyChange );
 
    // update polarization
@@ -315,7 +315,7 @@ G4Step* G4ParticleChange::UpdateStepForAtRest(G4Step* pStep)
   G4double     mass = aTrack->GetDynamicParticle()->GetMass();
  
   // update kinetic energy and momentum direction
-  pPostStepPoint->SetMomentumDirection(theMomentumChange);
+  pPostStepPoint->SetMomentumDirection(theMomentumDirectionChange);
   pPostStepPoint->SetKineticEnergy( theEnergyChange );
 
   // update polarization
@@ -363,13 +363,13 @@ void G4ParticleChange::DumpInfo() const
        << setw(20) << theProperTimeChange/ns
        << endl;
   G4cout << "        Momentum Direct - x : " 
-       << setw(20) << theMomentumChange.x()
+       << setw(20) << theMomentumDirectionChange.x()
        << endl;
   G4cout << "        Momentum Direct - y : " 
-       << setw(20) << theMomentumChange.y()
+       << setw(20) << theMomentumDirectionChange.y()
        << endl;
   G4cout << "        Momentum Direct - z : " 
-       << setw(20) << theMomentumChange.z()
+       << setw(20) << theMomentumDirectionChange.z()
        << endl;
   G4cout << "        Kinetic Energy (MeV): " 
        << setw(20) << theEnergyChange/MeV
@@ -400,9 +400,9 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
 //    itsOK = false;
 //  }
   if ( (theEnergyChange >0.) && 
-        ( abs(theMomentumChange.mag2()-1.0) > perMillion ) ){
+        ( abs(theMomentumDirectionChange.mag2()-1.0) > perMillion ) ){
     G4cout << " !!! the Momentum Change is not unit vector !!!!"
-         << " :  " << theMomentumChange.mag()
+         << " :  " << theMomentumDirectionChange.mag()
          << endl;
     itsOK = false;
   }

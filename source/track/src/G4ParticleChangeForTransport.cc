@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChangeForTransport.cc,v 1.1 1999-01-07 16:14:26 gunter Exp $
+// $Id: G4ParticleChangeForTransport.cc,v 1.2 1999-02-06 10:44:58 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,7 +64,7 @@ G4ParticleChangeForTransport & G4ParticleChangeForTransport::operator=(const G4P
       theNumberOfSecondaries = right.theNumberOfSecondaries;
       theStatusChange = right.theStatusChange;
       theTouchableChange = right.theTouchableChange;
-      theMomentumChange = right.theMomentumChange;
+      theMomentumDirectionChange = right.theMomentumDirectionChange;
       thePolarizationChange = right.thePolarizationChange;
       thePositionChange = right.thePositionChange;
       theTimeChange = right.theTimeChange;
@@ -105,13 +105,13 @@ G4Step* G4ParticleChangeForTransport::UpdateStepForAlongStep(G4Step* pStep)
   // calculated and be accumulated in PostStepPoint. 
   
   // Take note that the return type of GetMomentumChange is a
-  // pointer to G4ParticleMomentum. Also it is a normalized 
+  // pointer to G4ThreeVector. Also it is a normalized 
   // momentum vector.
 
   G4StepPoint* pPreStepPoint  = pStep->GetPreStepPoint(); 
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
   G4Track*     aTrack  = pStep->GetTrack();
-  G4double     mass = mass = aTrack->GetDynamicParticle()->GetMass();
+  G4double     mass = aTrack->GetDynamicParticle()->GetMass();
  
   // uodate kinetic energy
   //  now assume that no energy change in transportation
@@ -127,7 +127,7 @@ G4Step* G4ParticleChangeForTransport::UpdateStepForAlongStep(G4Step* pStep)
 
     // calculate new momentum
     G4ThreeVector pMomentum =  pPostStepPoint->GetMomentum() 
-                     + ( CalcMomentum(theEnergyChange, theMomentumChange, mass)
+                     + ( CalcMomentum(theEnergyChange, theMomentumDirectionChange, mass)
 	                  - pPreStepPoint->GetMomentum());
     G4double      tMomentum_inv = 1.0 / pMomentum.mag();
     pPostStepPoint->SetMomentumDirection(pMomentum*tMomentum_inv);
