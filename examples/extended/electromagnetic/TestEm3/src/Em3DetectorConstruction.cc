@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3DetectorConstruction.cc,v 1.11 2003-03-17 17:30:53 vnivanch Exp $
+// $Id: Em3DetectorConstruction.cc,v 1.12 2003-03-28 15:16:15 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -320,8 +320,8 @@ G4VPhysicalVolume* Em3DetectorConstruction::ConstructCalorimeter()
 
   physiWorld = new G4PVPlacement(0,			//no rotation
   				 G4ThreeVector(),	//at (0,0,0)
+                                 logicWorld,		//its logical volume				 
                                  "World",		//its name
-                                 logicWorld,		//its logical volume
                                  0,			//its mother  volume
                                  false,			//no boolean operation
                                  0);			//copy number
@@ -342,9 +342,9 @@ G4VPhysicalVolume* Em3DetectorConstruction::ConstructCalorimeter()
 
   physiCalor = new G4PVPlacement(0,			//no rotation
                                  G4ThreeVector(),	//at (0,0,0)
+                                 logicCalor,		//its logical volume				 
                                  "Calorimeter",		//its name
-                                 logicCalor,		//its logical volume
-                                 physiWorld,		//its mother  volume
+                                 logicWorld,		//its mother  volume
                                  false,			//no boolean operation
                                  0);			//copy number
 
@@ -364,16 +364,16 @@ G4VPhysicalVolume* Em3DetectorConstruction::ConstructCalorimeter()
   if (NbOfLayers > 1)
     physiLayer = new G4PVReplica("Layer",		//its name
       				 logicLayer,		//its logical volume
-      				 physiCalor,		//its mother
+      				 logicCalor,		//its mother
                                  kXAxis,		//axis of replication
                                  NbOfLayers,		//number of replica
                                  LayerThickness);	//witdth of replica
   else
     physiLayer = new G4PVPlacement(0,			//no rotation
                                    G4ThreeVector(),	//at (0,0,0)
+                                   logicLayer,		//its logical volume				   
                                    "Layer",		//its name
-                                   logicLayer,		//its logical volume
-                                   physiCalor,		//its mother  volume
+                                   logicCalor,		//its mother  volume
                                    false,		//no boolean operation
                                    0);			//copy number
 
@@ -402,9 +402,9 @@ G4VPhysicalVolume* Em3DetectorConstruction::ConstructCalorimeter()
       xfront += AbsorThickness[k];
       physiAbsor[k] = new G4PVPlacement(0,		   //no rotation
       		    	G4ThreeVector(xcenter,0.,0.),      //its position
+                        logicAbsor[k],     		   //its logical volume			
                     	AbsorMaterial[k]->GetName(),	   //its name
-                        logicAbsor[k],     		   //its logical volume
-                        physiLayer,        		   //its mother
+                        logicLayer,        		   //its mother
                         false,             		   //no boulean operat
                         k);               		   //copy number
 
