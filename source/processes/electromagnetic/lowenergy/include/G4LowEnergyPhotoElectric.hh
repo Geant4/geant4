@@ -21,123 +21,91 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectric.hh,v 1.20 2001-09-10 18:05:16 pia Exp $
+// $Id: G4LowEnergyPhotoElectric.hh,v 1.21 2001-09-21 08:24:02 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class header file
-//      CERN Geneva Switzerland
+// Author: A. Forti
+//         Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
-//      ------------ G4LowEnergyPhotoElectric physics process ------
-//                   by A.Forti  1999/03/02
+// History:
+// -----------
+// 02 Mar 1999   A. Forti   1st implementation
+// 12 Aug 2001   MGP        Major revision according to a design iteration
 //
+// -------------------------------------------------------------------
+
 // Class description:
 // Low Energy Electromagnetic process, Photoelectric effect
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
 
-// ************************************************************
+// -------------------------------------------------------------------
 
-#ifndef G4LowEnergyPhotoElectric_h
-#define G4LowEnergyPhotoElectric_h 1
+#ifndef G4LOWENERGYPHOTOELECTRIC_HH
+#define G4LOWENERGYPHOTOELECTRIC_HH 1
 
-// Base Class Headers
+#include "globals.hh"
 #include "G4VDiscreteProcess.hh"
+#include "G4ShellData.hh"
 
-// Contained Variables Headers
-#include "G4LowEnergyUtilities.hh"
-#include "G4Gamma.hh"
+class G4Track;
+class G4Step;
+class G4ParticleDefinition;
+class G4VParticleChange;
+class G4VEMDataSet;
+class G4CrossSectionHandler;
+class G4VDataSetAlgorithm;
 
-//    ..
-
-typedef G4FirstLevel oneShellTable;
-typedef G4SecondLevel oneAtomTable;
-typedef G4ThirdLevel allAtomTable;
-
-//    ..
-
-class G4LowEnergyPhotoElectric : public G4VDiscreteProcess
-
-{
+class G4LowEnergyPhotoElectric : public G4VDiscreteProcess {
   
 public:
   
   G4LowEnergyPhotoElectric(const G4String& processName ="LowEnPhotoElec");
   
- ~G4LowEnergyPhotoElectric();
+  ~G4LowEnergyPhotoElectric();
 
   G4bool IsApplicable(const G4ParticleDefinition&);
   
+  void BuildPhysicsTable(const G4ParticleDefinition& photon);
+ 
+  G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep);
+
   void SetCutForLowEnSecPhotons(G4double);
 
-  //  void SetCutForLowEnSecElectrons(G4double);
+  // For testing purpose only
+  G4double DumpMeanFreePath(const G4Track& aTrack, 
+			    G4double previousStepSize, 
+			    G4ForceCondition* condition) 
+  { return GetMeanFreePath(aTrack, previousStepSize, condition); }
 
-  void BuildPhysicsTable(const G4ParticleDefinition& PhotonType);
-  
+protected:  
+
   G4double GetMeanFreePath(const G4Track& aTrack, 
 			   G4double previousStepSize, 
 			   G4ForceCondition* condition);
 
-  G4double GetCrossSection(G4DynamicParticle* aDynamicGamma,
-			    G4Element* anElement);
-
-  inline G4double GetTransitionShell(G4int k){return(thePrimShVec[k]);};
-
-  G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep);
-  
-protected:  
-
-  virtual G4double ComputeCrossSection(const G4double AtomicNumber,
-				       const G4double IncEnergy);  
-  void BuildCrossSectionTable();
-  void BuildShellCrossSectionTable();
-  void BuildBindingEnergyTable();
-  void BuildFluorTransitionTable();
-  void BuildMeanFreePathTable();
-  void BuildZVec();
-
 private:
 
-  G4int SelectRandomShell(const G4int AtomIndex, const G4double IncEnergy);
-  
-  G4Element* SelectRandomAtom(const G4DynamicParticle* aDynamicPhoton, 
-			      G4Material* aMaterial);
-
-  G4bool SelectRandomTransition(G4int, G4double*, const oneAtomTable*);
-
-private:
-  
-  // hide assignment operator as private 
-  G4LowEnergyPhotoElectric& operator=(const G4LowEnergyPhotoElectric &right);
+ // Hide copy constructor and assignment operator as private 
+  G4LowEnergyPhotoElectric& operator=(const G4LowEnergyPhotoElectric& right);
   G4LowEnergyPhotoElectric(const G4LowEnergyPhotoElectric& );
-     
-private:
 
-  G4double lowestEnergyLimit;      
-  G4double highestEnergyLimit;     
+  G4double lowEnergyLimit;  // low energy limit  applied to the process
+  G4double highEnergyLimit; // high energy limit applied to the process
 
-  G4int NumbBinTable;              
+  G4VDataSetAlgorithm* scatterInterpolation;
 
-  G4double CutForLowEnergySecondaryPhotons;
+  G4VEMDataSet* meanFreePathTable;
 
-  G4SecondLevel* theCrossSectionTable;    
-  G4PhysicsTable* theMeanFreePathTable;
+  G4CrossSectionHandler* crossSectionHandler;
+  G4CrossSectionHandler* shellCrossSectionHandler;
 
-  allAtomTable* allAtomShellCrossSec;
-  allAtomTable* theFluorTransitionTable;
-  G4SecondLevel* theBindingEnergyTable;   
-  G4DataVector* ZNumVec;
-  G4DataVector* ZNumVecFluor;
+  const G4double intrinsicLowEnergyLimit; // intrinsic validity range
+  const G4double intrinsicHighEnergyLimit;
 
-  G4DataVector thePrimShVec;
-  G4LowEnergyUtilities util;
+  G4double cutForLowEnergySecondaryPhotons;
 
-  G4double MeanFreePath;           
+  G4ShellData shellData;
 };
-
-//    ..
-
-#include "G4LowEnergyPhotoElectric.icc"
 
 #endif
 
