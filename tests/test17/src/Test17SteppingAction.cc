@@ -81,14 +81,14 @@ void Test17SteppingAction::UserSteppingAction(const G4Step* aStep)
   // new particle
   if(IDnow != IDold) {
     IDold=IDnow ;
-    if(IDnow == 10001) {
+    if(IDnow == 10000) {
       runaction->FillEn(Tsec);
       runaction->FillDef(aStep->GetTrack()->
                          GetDynamicParticle()->GetDefinition());
     }
 
     // primary
-    prim = false;
+    prim  = false;
     if(0 == aStep->GetTrack()->GetParentID() ) {
       runaction->SaveToTuple("TKIN",Tsec/MeV);      
       runaction->SaveToTuple("MASS",(aStep->GetTrack()->
@@ -109,28 +109,31 @@ void Test17SteppingAction::UserSteppingAction(const G4Step* aStep)
             eventaction->AddCharged() ;
             runaction->FillTsec(Tsec) ;
 
-      } else {
-            eventaction->AddNeutral() ;
+      } else if ((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
+		  GetParticleName()) == "gamma") {
+            eventaction->AddNeutral();
       }
     }
   }
 
     // Primary 
   if( prim ) {
-    eventaction->CountStepsCharged(aStep->GetStepLength()) ;
+    eventaction->CountStepsCharged(aStep->GetStepLength());
 
     // Stopping or end of track (only once per event)
     if(0.0 == Tkin || 0.0 > xend || xend >= 100.0*mm) {
 
+      G4cout << "evn= " << evno << " xend= " << xend << G4endl;
       if(0.5*(eventaction->TrackLength()) > xend) {
         eventaction->SetRef();
+        G4cout << "!!! length= " << eventaction->TrackLength() << G4endl;
 
       } else {
         runaction->CountEvent() ;
         runaction->AddnStepsCharged(xend) ;
       }
-      yend= aStep->GetPostStepPoint()->GetPosition().y()/mm ;
-      zend= aStep->GetPostStepPoint()->GetPosition().z()/mm ;
+      yend= aStep->GetPostStepPoint()->GetPosition().y()/mm;
+      zend= aStep->GetPostStepPoint()->GetPosition().z()/mm;
       runaction->SaveToTuple("XEND",xend,1000.0);      
       runaction->SaveToTuple("YEND",yend,1000.0);      
       runaction->SaveToTuple("ZEND",zend,1000.0);      

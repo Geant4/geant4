@@ -79,11 +79,11 @@ void Test17EventAction::BeginOfEventAction(const G4Event* evt)
   totEAbs =0.;
   totLAbs =0.;
   /*
-  if(994 == evt->GetEventID()) {
-    (G4UImanager::GetUIpointer())->ApplyCommand("/tracking/verbose 5");
-    (G4UImanager::GetUIpointer())->ApplyCommand("/stepping/verbose 5");
+  if(8 == evt->GetEventID()) {
+    (G4UImanager::GetUIpointer())->ApplyCommand("/tracking/verbose 2");
+    (G4UImanager::GetUIpointer())->ApplyCommand("/stepping/verbose 2");
   }
-  if(995 == evt->GetEventID()) {
+  if(9 == evt->GetEventID()) {
     (G4UImanager::GetUIpointer())->ApplyCommand("/tracking/verbose 0");
     (G4UImanager::GetUIpointer())->ApplyCommand("/stepping/verbose 0");
   }
@@ -105,7 +105,8 @@ void Test17EventAction::EndOfEventAction(const G4Event* evt)
     }
     runaction->CountParticles(Nch,Nne);
     runaction->AddEP(NE,NP);
-    runaction->AddTrRef(Transmitted,Reflected) ;
+    //    runaction->AddTrRef(Transmitted,Reflected) ;
+    runaction->AddTrRef(((G4double)nstepCharged),((G4double)nstepNeutral)) ;
     runaction->AddEdeps(totEAbs);
 
     nstep=nstepCharged+nstepNeutral;

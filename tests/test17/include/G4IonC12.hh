@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonC12.hh,v 1.2 2001-07-11 10:10:04 gunter Exp $
+// $Id: G4IonC12.hh,v 1.3 2001-10-24 17:29:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,6 +83,10 @@ public: // Without description
    static G4double* GetCutsInEnergy() {return theIonC12KineticEnergyCuts;};
 
    void SetCuts(G4double aCut); 
+
+   virtual void RestoreCuts(G4double cutInLength,
+                            const G4double* cutInEnergy );
+
 };
 
 inline void G4IonC12::SetCuts(G4double aCut)
@@ -92,5 +96,15 @@ inline void G4IonC12::SetCuts(G4double aCut)
   theIonC12KineticEnergyCuts = theKineticEnergyCuts;
   
 }
+
+inline void G4IonC12::RestoreCuts(G4double cutInLength,
+                            const G4double* cutInEnergy )
+{
+  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
+  theIonC12LengthCut = theCutInMaxInteractionLength;  
+  theIonC12KineticEnergyCuts = theKineticEnergyCuts;
+  
+}
+
 
 #endif

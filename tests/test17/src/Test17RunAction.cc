@@ -30,11 +30,10 @@
 
 #include "G4Run.hh"
 #include "G4UImanager.hh"
-#include "G4ios.hh"
-#include "g4std/iomanip"
-#include "G4PionMinus.hh"
-#include "G4EnergyLossTables.hh"
-#include "Test17PrimaryGeneratorAction.hh"
+//#include "G4ios.hh"
+//#include "g4std/iomanip"
+//#include "G4EnergyLossTables.hh"
+//#include "Test17PrimaryGeneratorAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -342,11 +341,9 @@ void Test17RunAction::EndOfRunAction(const G4Run* aRun)
     G4cout << G4endl ;
   }
 
-  G4cout << "(number) transmission coeff=" << Transmitted <<
-            "  reflection coeff=" << Reflected << G4endl;
+  G4cout << "Average Number electrons per event = " << Transmitted << G4endl;
+  G4cout << "Average Number protons per event   = " << Reflected << G4endl;
   G4cout << G4endl; 
-
- G4cout.precision(prec);
       
 }
 

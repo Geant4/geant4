@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonC12.cc,v 1.4 2001-07-11 10:10:08 gunter Exp $
+// $Id: G4IonC12.cc,v 1.5 2001-10-24 17:29:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,7 +81,7 @@ G4IonC12 G4IonC12::theIonC12(
 		    0,              +1,             0,          
 		    0,               0,             0,             
 	    "static_nucleus",        0,            +12,           0,
-		 true,            -1.0,          NULL
+		 true,            -1.0,             0
 );
 
 G4IonC12* G4IonC12::IonC12Definition(){return &theIonC12;}
