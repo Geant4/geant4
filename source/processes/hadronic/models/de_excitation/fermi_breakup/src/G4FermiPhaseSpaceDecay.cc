@@ -62,7 +62,10 @@ G4FermiPhaseSpaceDecay::KopylovNBodyDecay(const G4double M, const std::vector<G4
 
       PFragMagCM = PtwoBody(Mass,m[k],RestMass);
       if (PFragMagCM < 0) 
-        G4Exception("G4FermiPhaseSpaceDecay::KopylovNBodyDecay: Error sampling fragments momenta!!");
+        {
+          throw G4HadronicException(__FILE__, __LINE__, "G4FermiPhaseSpaceDecay::KopylovNBodyDecay: Error sampling fragments momenta!!");
+        }
+      
 
       // Create a unit vector with a random direction isotropically distributed
       G4ParticleMomentum RandVector(IsotropicVector(PFragMagCM));
