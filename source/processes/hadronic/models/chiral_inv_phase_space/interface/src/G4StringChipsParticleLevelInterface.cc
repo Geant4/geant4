@@ -279,8 +279,9 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     }
   }
   // construct the quasmon
-  for (size_t i=0; i<theFinalMomenta.size(); i++) delete theFinalMomenta[i];
-  for (size_t i=0; i<theMomenta.size();      i++) delete theMomenta[i];
+  size_t i;
+  for (i=0; i<theFinalMomenta.size(); i++) delete theFinalMomenta[i];
+  for (i=0; i<theMomenta.size();      i++) delete theMomenta[i];
   theFinalMomenta.clear();
   theMomenta.clear();
 
