@@ -47,7 +47,7 @@ x=0  y=0  z=-30 is outside  distance to in=9e+99  closest distance to in=10
 x=0  y=0  z=-25 is outside  distance to in=9e+99  closest distance to in=5
 x=0  y=0  z=-20 is outside  distance to in=30  closest distance to in=0
 x=0  y=0  z=-15 is outside  distance to in=30  closest distance to in=5
-x=0  y=0  z=-10 is outside  distance to in=30  closest distance to in=0
+x=0  y=0  z=-10 is on the surface
 x=0  y=0  z=-5 is inside  distance to out=55  closest distance to out=5
 x=0  y=0  z=0 is inside  distance to out=40  closest distance to out=10
 x=0  y=0  z=5 is inside  distance to out=40  closest distance to out=15
@@ -106,3 +106,242 @@ Dir is (0, 0, 1)
   y=80  distance to in=70
   y=85  distance to in=9e+99
   y=90  distance to in=9e+99
+
+CMS case of BREPPolyconeTOBSolid
+--------------------------------
+estimation to in  =0
+estimation to out =0
+direction x=-0.32132  y=0.1116  z=0.940372
+position x=904.058  y=-761.448  z=-382.294 is on the surface
+
+	Test of In & Out BREPPolyconeTOBSolid
+	--------------------------------------
+	Distance to in=0	Closest distance to in=0
+	Distance to out=1693.26	Closest distance to out=0
+
+		Surface normal
+		--------------
+		position x=904.058 y=-761.448 z=-382.294
+		is normX=0.764855 normY=-0.644203 normZ=0
+
+surface of BREPPolyconeTOBSolid
+--------------------------------
+estimation to in  =0
+estimation to out =0
+direction x=-0.32132  y=0.1116  z=0.940372
+position x=541  y=0  z=1210 is on the surface
+
+	Test of In & Out BREPPolyconeTOBSolid
+	--------------------------------------
+	Distance to in=9e+99	Closest distance to in=0
+	Distance to out=0	Closest distance to out=0
+
+		Surface normal
+		--------------
+		position x=541 y=0 z=1210
+		is normX=0 normY=0 normZ=1
+
+edge of BREPPolyconeTOBSolid
+--------------------------------
+estimation to in  =0
+estimation to out =0
+direction x=-0.32132  y=0.1116  z=0.940372
+position x=540  y=540  z=-1210 is on the surface
+
+	Test of In & Out BREPPolyconeTOBSolid
+	--------------------------------------
+	Distance to in=0	Closest distance to in=0
+	Distance to out=2573.45	Closest distance to out=0
+
+		Surface normal
+		--------------
+		position x=540 y=540 z=-1210
+		is normX=-0 normY=-0 normZ=-1
+
+inside of BREPPolyconeTOBSolid
+--------------------------------
+estimation to in  =0
+estimation to out =0
+direction x=-0.32132  y=0.1116  z=0.940372
+position x=540  y=540  z=-1209 is inside  distance to out=2572.39  closest distance to out=1
+
+inside of s1
+--------------------------------
+estimation to in  =0
+estimation to out =0
+direction x=0  y=0  z=1
+position x=150  y=0  z=0 is inside  distance to out=100  closest distance to out=50
+
+outside of s1
+--------------------------------
+estimation to in  =0
+estimation to out =0
+direction x=1  y=0  z=0
+position x=0  y=0  z=0 is outside  distance to in=25  closest distance to in=25
+
+edge of s1
+--------------------------------
+estimation to in  =0
+estimation to out =400
+direction x=0  y=0  z=1
+position x=50  y=0  z=-200 is on the surface
+
+	Test of In & Out s1
+	--------------------------------------
+	Distance to in=0	Closest distance to in=0
+	Distance to out=100	Closest distance to out=0
+
+		Surface normal
+		--------------
+		position x=50 y=0 z=-200
+		is normX=-1 normY=-0 normZ=-0
+
+outer surface of s1
+--------------------------------
+estimation to in  =0
+estimation to out =100
+direction x=-1  y=0  z=0
+position x=200  y=0  z=0 is on the surface
+
+	Test of In & Out s1
+	--------------------------------------
+	Distance to in=0	Closest distance to in=0
+	Distance to out=175	Closest distance to out=0
+
+		Surface normal
+		--------------
+		position x=200 y=0 z=0
+		is normX=1 normY=0 normZ=0
+
+inner surface of s1
+--------------------------------
+estimation to in  =0
+estimation to out =175
+direction x=0  y=1  z=0
+position x=0  y=25  z=0 is on the surface
+
+	Test of In & Out s1
+	--------------------------------------
+	Distance to in=0	Closest distance to in=0
+	Distance to out=175	Closest distance to out=0
+
+		Surface normal
+		--------------
+		position x=0 y=25 z=0
+		is normX=-0 normY=-1 normZ=-0
+
+left outer planar surface of s1
+--------------------------------
+estimation to in  =0
+estimation to out =200
+direction x=0  y=0  z=1
+position x=150  y=0  z=-100 is on the surface
+
+	Test of In & Out s1
+	--------------------------------------
+	Distance to in=0	Closest distance to in=0
+	Distance to out=200	Closest distance to out=0
+
+		Surface normal
+		--------------
+		position x=150 y=0 z=-100
+		is normX=-0 normY=-0 normZ=-1
+
+left outer planar surface inv of s1
+--------------------------------
+estimation to in  =9e+99
+estimation to out =0
+direction x=0  y=0  z=-1
+position x=150  y=0  z=-100 is on the surface
+
+	Test of In & Out s1
+	--------------------------------------
+	Distance to in=9e+99	Closest distance to in=0
+	Distance to out=0	Closest distance to out=0
+
+		Surface normal
+		--------------
+		position x=150 y=0 z=-100
+		is normX=-0 normY=-0 normZ=-1
+
+fictious left planar surface of s1
+--------------------------------
+estimation to in  =9e+99
+estimation to out =25
+direction x=0  y=0  z=1
+position x=0  y=0  z=-100 is outside  distance to in=9e+99  closest distance to in=0
+
+fictious left planar surface inv of s1
+--------------------------------
+estimation to in  =9e+99
+estimation to out =25
+direction x=0  y=0  z=-1
+position x=0  y=0  z=-100 is outside  distance to in=9e+99  closest distance to in=0
+
+left inner planar surface of s1
+--------------------------------
+estimation to in  =0
+estimation to out =200
+direction x=0  y=0  z=1
+position x=30  y=0  z=-100 is on the surface
+
+	Test of In & Out s1
+	--------------------------------------
+	Distance to in=0	Closest distance to in=0
+	Distance to out=200	Closest distance to out=0
+
+		Surface normal
+		--------------
+		position x=30 y=0 z=-100
+		is normX=-0 normY=-0 normZ=-1
+
+left inner planar surface inv of s1
+--------------------------------
+estimation to in  =9e+99
+estimation to out =0
+direction x=0  y=0  z=-1
+position x=30  y=0  z=-100 is on the surface
+
+	Test of In & Out s1
+	--------------------------------------
+	Distance to in=9e+99	Closest distance to in=0
+	Distance to out=0	Closest distance to out=0
+
+		Surface normal
+		--------------
+		position x=30 y=0 z=-100
+		is normX=-0 normY=-0 normZ=-1
+
+right planar surface of s1
+--------------------------------
+estimation to in  =0
+estimation to out =200
+direction x=0  y=0  z=-1
+position x=150  y=0  z=100 is on the surface
+
+	Test of In & Out s1
+	--------------------------------------
+	Distance to in=0	Closest distance to in=0
+	Distance to out=200	Closest distance to out=0
+
+		Surface normal
+		--------------
+		position x=150 y=0 z=100
+		is normX=0 normY=0 normZ=1
+
+right planar surface inv of s1
+--------------------------------
+estimation to in  =0
+estimation to out =0
+direction x=0  y=0  z=1
+position x=150  y=0  z=100 is on the surface
+
+	Test of In & Out s1
+	--------------------------------------
+	Distance to in=9e+99	Closest distance to in=0
+	Distance to out=0	Closest distance to out=0
+
+		Surface normal
+		--------------
+		position x=150 y=0 z=100
+		is normX=0 normY=0 normZ=1
