@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuEnergyLoss.hh,v 1.2 1999-03-15 12:53:06 urban Exp $
+// $Id: G4MuEnergyLoss.hh,v 1.3 1999-07-30 10:18:00 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -152,6 +152,18 @@ class G4MuEnergyLoss : public G4VContinuousDiscreteProcess
     // particle mass
     G4double ParticleMass;
 
+    // LowestKineticEnergy = lower limit of particle kinetic energy
+    // HighestKineticEnergy = upper limit of particle kinetic energy 
+    // TotBin = number of bins 
+    //  ---------in the energy loss/range tables-------------------
+    G4double LowestKineticEnergy;
+    G4double HighestKineticEnergy;
+    G4int TotBin;// number of bins in table, calculated in BuildPhysicsTable
+                 //  from LowestKineticEnergy,HighestKineticEnergy and  
+                 //  dToverTini
+    G4double RTable,LOGRTable; // LOGRTable=log(HighestKineticEnergy
+                               //          /LowestKineticEnergy)/TotBin
+                               //   RTable = exp(LOGRTable)
   private:
 
     G4PhysicsTable* theDEDXTable;
@@ -181,19 +193,6 @@ class G4MuEnergyLoss : public G4VContinuousDiscreteProcess
     G4int EnergyBinNumber ;
     G4double RangeCoeffA,RangeCoeffB,RangeCoeffC ;
 
-    // LowestKineticEnergy = lower limit of particle kinetic energy
-    // HighestKineticEnergy = upper limit of particle kinetic energy 
-    // TotBin = number of bins 
-    //  ---------in the energy loss/range tables-------------------
-    G4double LowestKineticEnergy;
-    G4double HighestKineticEnergy;
-    G4int TotBin;// number of bins in table, calculated in BuildPhysicsTable
-                 //  from LowestKineticEnergy,HighestKineticEnergy and  
-                 //  dToverTini
-    G4double RTable,LOGRTable; // LOGRTable=log(HighestKineticEnergy
-                               //          /LowestKineticEnergy)/TotBin
-                               //   RTable = exp(LOGRTable)
-   
 
     // variables for the integration routines
     G4double taulow,tauhigh,ltaulow,ltauhigh;
