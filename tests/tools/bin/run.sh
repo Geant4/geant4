@@ -156,6 +156,8 @@ else
         rm -f $dir/$1.exerciser$dot_G4LARGE_N.in
         $G4WORKDIR/bin/$G4SYSTEM/$shortname.hadronic.exerciser $G4LARGE_N \
         > $dir/$1.exerciser$dot_G4LARGE_N.in
+#       echo "quick fix for dxplus02 coredump"
+#       ulimit -c 200000
         rm -f $dir/$1$dot_G4LARGE_N.out
         rm -f $dir/$1$dot_G4LARGE_N.err
         time $G4WORKDIR/bin/$G4SYSTEM/$shortname \
