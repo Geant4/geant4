@@ -22,7 +22,7 @@
 //
 // --------------------------------------------------------------------
 ///
-// $Id: G4PenelopeGammaConversion.cc,v 1.4 2003-03-13 17:03:34 pandola Exp $
+// $Id: G4PenelopeGammaConversion.cc,v 1.5 2003-03-25 15:16:38 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,6 +35,7 @@
 // 12 Feb 2003   MG Pia     Migration to "cuts per region"
 // 10 Mar 2003 V.Ivanchenko Remove CutPerMaterial warning
 // 13 Mar 2003 L.Pandola    Code "cleaned"  
+// 25 Mar 2003 L.Pandola    Changed the name of the database file to read
 // --------------------------------------------------------------
 
 #include "G4PenelopeGammaConversion.hh"
@@ -350,7 +351,7 @@ G4double G4PenelopeGammaConversion::GetScreeningRadius(G4double Z)
       G4Exception(excep);
     }
   G4String pathString(path);
-  G4String pathFile = pathString + "/penelope/PEN_gpp.dat";
+  G4String pathFile = pathString + "/penelope/pp-pen.dat";
   G4std::ifstream file(pathFile);
   G4std::filebuf* lsdp = file.rdbuf();
   
