@@ -273,7 +273,9 @@ if ( `uname -n` == asc ) then
   source /lal/OPACS/v3/setup.csh
   set prompt=${G4INSTALL}-${G4SYSTEM}'> '
   # Else :
+  setenv LD_LIBRARY_PATH "$OIVHOME/lib:$HEPVISHOME/OSF1-cxx-TGS:${OGLHOME}/lib"
   setenv PATH "${PATH}:/lal/DAWN/3.72b/OSF1-cxx"
+  setenv XENVIRONMENT   g4Xt.xrm
   setenv CPPVERBOSE 1
   set prompt='g4-asc> ' 
   # To be able to link :
