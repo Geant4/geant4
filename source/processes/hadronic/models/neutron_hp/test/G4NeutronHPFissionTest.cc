@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFissionTest.cc,v 1.5 2003-06-19 14:42:15 gunter Exp $
+// $Id: G4NeutronHPFissionTest.cc,v 1.6 2003-06-27 10:20:41 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -29,7 +29,6 @@
 #include <fstream>
 #include <iomanip>
  
-#include "../src/G4NeutronHPIsoData.cc"
 #include "G4Material.hh"
  
 #include "G4GRSVolume.hh"
@@ -46,8 +45,9 @@
 #include "G4PVPlacement.hh"
 
 #include "G4Step.hh"
+#include "G4TouchableHandle.hh"
+#include "G4StepPoint.hh"
 
-#include "g4templates.hh"
 #include "G4NeutronHPChannel.hh"
 #include "G4NeutronHPElasticFS.hh"
 #include "G4NeutronHPFissionFS.hh"
@@ -235,14 +235,15 @@
     G4Box* theFrame = new G4Box ("Frame",10*m, 10*m, 10*m);
     
     G4LogicalVolume* LogicalFrame = new G4LogicalVolume(theFrame,
-                                                        (*theMaterialTable)(imat),
+                                                        (*theMaterialTable)[imat],
                                                         "LFrame", 0, 0, 0);
     
     G4PVPlacement* PhysicalFrame = new G4PVPlacement(0,G4ThreeVector(),
                                                      "PFrame",LogicalFrame,0,false,0);
     G4RotationMatrix theNull;
     G4ThreeVector theCenter(0,0,0);
-    G4GRSVolume * theTouchable = new G4GRSVolume(PhysicalFrame, &theNull, theCenter);
+    G4GRSVolume * theTouchableV = new G4GRSVolume(PhysicalFrame, &theNull, theCenter);
+    G4TouchableHandle * theTouchable = new G4TouchableHandle(theTouchableV);
     // ----------- now get all particles of interest ---------
    G4int numberOfParticles = 1;
    G4ParticleDefinition* theParticles[1];
@@ -287,6 +288,8 @@
    // --------- Test the GetMeanFreePath
    
    G4Step aStep;
+   G4StepPoint aStepPoint;
+   aStep.SetPreStepPoint(&aStepPoint);
    G4double meanFreePath;
    G4double incomingEnergy;
    G4int k, i, l, hpw = 0;   
@@ -320,8 +323,13 @@ int j = 0;
            G4DynamicParticle* aParticle =
              new G4DynamicParticle( theParticles[i], theDirection, incomingEnergy );
            G4Track* aTrack = new G4Track( aParticle, aTime, aPosition );
-           aTrack->SetTouchable(theTouchable);
+           aTrack->SetTouchableHandle(*theTouchable);
            aStep.SetTrack( aTrack );
+           aStepPoint.SetTouchableHandle(*theTouchable);
+	   aStepPoint.SetMaterial(theMaterials[k]);
+           aStep.SetPreStepPoint(&aStepPoint);
+	   aStep.SetPostStepPoint(&aStepPoint);
+	   aTrack->SetStep(&aStep);
            ++hpw;
            if(hpw==1000*(hpw/1000))
            G4cerr << "FINAL EVENTCOUNTER=" << hpw
@@ -339,7 +347,7 @@ int j = 0;
 	   (G4ParticleChange*) (theProcesses[i]->PostStepDoIt( *aTrack, aStep ));
            G4cout << "NUMBER OF SECONDARIES="<<aFinalState->GetNumberOfSecondaries();
            G4double theFSEnergy = aFinalState->GetEnergyChange();
-           G4ThreeVector * theFSMomentum= aFinalState->GetMomentumChange();
+           G4ThreeVector * theFSMomentum= const_cast<G4ThreeVector *>(aFinalState->GetMomentumChange());
            G4cout << "FINAL STATE = "<<theFSEnergy<<" ";
            G4cout <<*theFSMomentum<<G4endl;
            G4Track * second;
@@ -347,11 +355,17 @@ int j = 0;
            G4int isec;
            for(isec=0;isec<aFinalState->GetNumberOfSecondaries();isec++)
            {
-             G4cout << "SECONDARIES info";
              second = aFinalState->GetSecondary(isec);
-             aSec = second->GetDynamicParticle();
-             G4cout << aSec->GetTotalEnergy();
-             G4cout << aSec->GetMomentum();
+             aSec = const_cast<G4DynamicParticle *>(second->GetDynamicParticle());
+             G4cout << aSec->GetTotalEnergy()<<" ";
+             G4cout << aSec->GetMomentum().x()<<" ";
+             G4cout << aSec->GetMomentum().y()<<" ";
+             G4cout << aSec->GetMomentum().z()<<" ";
+             G4cout << aSec->GetDefinition()->GetPDGEncoding()<<" ";
+             G4cout << isec <<" ";
+	     G4cout << (1-isec)*aFinalState->GetNumberOfSecondaries()<<" ";
+	     G4cout << aSec->GetDefinition()->GetParticleName()<<" ";
+             G4cout << " SECONDARIES info";
              if(isec==0) 
              {
                G4cout << aFinalState->GetNumberOfSecondaries();

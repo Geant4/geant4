@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPInterpolator.hh,v 1.13 2003-06-03 14:17:45 jwellisc Exp $
+// $Id: G4NeutronHPInterpolator.hh,v 1.14 2003-06-27 10:20:40 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPInterpolator_h
@@ -134,7 +134,10 @@ inline G4double G4NeutronHPInterpolator::
 LinearLogarithmic(G4double x, G4double x1, G4double x2, G4double y1, G4double y2) const
 {
   G4double result;
-  result = LinearLinear(log(x), log(x1), log(x2), y1, y2);
+  if(x==0) result = y1+y2/2.;
+  else if(x1==0) result = y1;
+  else if(x2==0) result = y2;
+  else result = LinearLinear(log(x), log(x1), log(x2), y1, y2);
   return result;
 }
   
@@ -142,8 +145,12 @@ inline G4double G4NeutronHPInterpolator::
 LogarithmicLinear(G4double x, G4double x1, G4double x2, G4double y1, G4double y2) const
 {
   G4double result;
-  result = LinearLinear(x, x1, x2, log(y1), log(y2));
-  result = exp(result);
+  if(y1==0||y2==0) result = 0;
+  else 
+  {
+    result = LinearLinear(x, x1, x2, log(y1), log(y2));
+    result = exp(result);
+  }
   return result;
 }
   
@@ -151,8 +158,15 @@ inline G4double G4NeutronHPInterpolator::
 LogarithmicLogarithmic(G4double x, G4double x1, G4double x2, G4double y1, G4double y2) const
 {
   G4double result;
-  result = LinearLinear(log(x), log(x1), log(x2), log(y1), log(y2));
-  result = exp(result);
+  if(x==0) result = y1+y2/2.;
+  else if(x1==0) result = y1;
+  else if(x2==0) result = y2;
+  if(y1==0||y2==0) result = 0;
+  else 
+  {
+    result = LinearLinear(log(x), log(x1), log(x2), log(y1), log(y2));
+    result = exp(result);
+  }
   return result;
 }
 
