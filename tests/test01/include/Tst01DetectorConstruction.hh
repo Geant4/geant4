@@ -50,9 +50,19 @@ class Tst01DetectorConstruction : public G4VUserDetectorConstruction
      G4VPhysicalVolume* honeycombDetector ;
      G4VPhysicalVolume* fWorldPhysVol ;
 
-     G4VSolid* fTestCSG ;
+     G4VSolid*          fTestCSG ;
      G4LogicalVolume*   fTestLog ;
      G4VPhysicalVolume* fTestVol ;
+
+  // Daughter CSGs /logic/physics volumes
+
+     G4VSolid*          fTestD1CSG ;
+     G4LogicalVolume*   fTestD1Log ;
+     G4VPhysicalVolume* fTestD1Vol ;
+
+     G4VSolid*          fTestD2CSG ;
+     G4LogicalVolume*   fTestD2Log ;
+     G4VPhysicalVolume* fTestD2Vol ;
 
      G4Material* Air ;
      G4Material* Al ;

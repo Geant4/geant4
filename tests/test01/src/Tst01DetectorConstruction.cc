@@ -15,12 +15,18 @@
 #include "G4Torus.hh"
 
 #include "G4BooleanSolid.hh"
+#include "G4DisplacedSolid.hh"
 #include "G4IntersectionSolid.hh"
 #include "G4UnionSolid.hh"
 #include "G4SubtractionSolid.hh"
 
-#include "G4LogicalVolume.hh"
 #include "G4ThreeVector.hh"
+#include "G4RotationMatrix.hh"
+#include "G4AffineTransform.hh"
+#include "G4Transform3D.hh"
+#include "G4VoxelLimits.hh"
+
+#include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
@@ -103,11 +109,10 @@ void Tst01DetectorConstruction::SwitchDetector()
 
 void Tst01DetectorConstruction::SelectDetector(G4String val)
 {
-  if(val=="Honeycomb") 
-  { detectorChoice = 1; }
-  else
-  { detectorChoice = 0; }
-  G4cout << "Now Detector is " << val << G4endl;
+  if(val == "Honeycomb")  detectorChoice = 1 ; 
+  else                    detectorChoice = 0 ;
+
+  G4cout << "Now Detector is " << val << G4endl ;
 }
 /////////////////////////////////////////////////////////////////////
 //
@@ -115,7 +120,7 @@ void Tst01DetectorConstruction::SelectDetector(G4String val)
 
 void Tst01DetectorConstruction::SelectCSG(G4String name)
 {
-  if(      name == "Tubs"   ) fChoiceCSG = 1 ; 
+  if     ( name == "Tubs"   ) fChoiceCSG = 1 ; 
   else if( name == "Cons"   ) fChoiceCSG = 2 ;
   else if( name == "Sphere" ) fChoiceCSG = 3 ;
   else                        fChoiceCSG = 0 ; // default or error in name
@@ -136,7 +141,7 @@ void Tst01DetectorConstruction::SwitchCSG()
   // G4VPhysicalVolume* worldPhysVol =    G4TransportationManager::
   // GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume();
 
-  if( fTestCSG ) fTestCSG =NULL ;
+  if( fTestCSG ) fTestCSG = NULL ;
   
   switch(fChoiceCSG)
   { 
@@ -193,13 +198,30 @@ void Tst01DetectorConstruction::SelectBoolean(G4String name)
 void Tst01DetectorConstruction::SwitchBoolean()
 {
   SelectMaterialPointer();
-  if((!simpleBoxDetector)&&(!honeycombDetector)) ConstructDetectors();
+  if( (!simpleBoxDetector) && (!honeycombDetector) ) ConstructDetectors();
 
   // G4VPhysicalVolume* worldPhysVol =    G4TransportationManager::
   // GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume();
 
+  G4RotationMatrix identity, xRot ;
+    
+// NOTE: xRot = rotation such that x axis->y axis & y axis->-x axis
+
+  xRot.rotateZ(-M_PI*0.5) ;
+
+  G4Transform3D transform(xRot,G4ThreeVector()) ;
+  
+
+
   G4Box* pb1 = new G4Box("b1",50*cm,50*cm,50*cm) ;
   G4Box* pb2 = new G4Box("b2",10*cm,10*cm,60*cm) ;
+  G4Box* pb3 = new G4Box("b3",40*cm,40*cm,40*cm) ;
+  G4Box* pb4 = new G4Box("b4",50*cm,50*cm, 5*cm) ;
+
+  G4DisplacedSolid* disPb4 = new G4DisplacedSolid("disPb4",pb4,&identity,
+                                                   G4ThreeVector(0,0,60*cm)) ;
+
+  G4Tubs* tubs1 = new G4Tubs("tubs1",80*cm,90*cm,50*cm,0,2*pi) ;
 
   G4VSolid* testBool ;
   
@@ -207,7 +229,9 @@ void Tst01DetectorConstruction::SwitchBoolean()
   { 
     case 1 :
     {
-      testBool = new G4UnionSolid("b1UnionB2", pb1, pb2) ;
+      // testBool = new G4UnionSolid("b1UnionB2", pb1, pb2) ;
+      // testBool = new G4UnionSolid("b1UnionT1", pb1, tubs1) ;
+      testBool = new G4UnionSolid("b1UnionDisPb4", pb1, disPb4) ;
       break ;
     }
     case 2 :
@@ -220,11 +244,28 @@ void Tst01DetectorConstruction::SwitchBoolean()
       testBool = new G4IntersectionSolid("b1IntersectB2", pb1, pb2) ;
     }
   }
+
+
+
   G4LogicalVolume*   testBoolLog = new G4LogicalVolume(testBool,selectedMaterial,
                                                 "testBoolLog",0,0,0) ;
 
   G4VPhysicalVolume* testBoolVol = new G4PVPlacement(0,G4ThreeVector(),
-                             "testBoolVol",testBoolLog,fWorldPhysVol,false,0);  
+                             "testBoolVol",testBoolLog,fWorldPhysVol,false,0);
+
+  // daughters
+  
+  G4LogicalVolume*   testD1Log = new G4LogicalVolume(pb3,selectedMaterial,
+                                                "testD1Log",0,0,0) ;
+
+  G4VPhysicalVolume* testD1Vol = new G4PVPlacement(0,G4ThreeVector(),
+                             "testD1Vol",testD1Log,testBoolVol,false,0);  
+
+  G4LogicalVolume*   testD2Log = new G4LogicalVolume(disPb4,selectedMaterial,
+                                                "testD2Log",0,0,0) ;
+
+  G4VPhysicalVolume* testD2Vol = new G4PVPlacement(0,G4ThreeVector(0,0,0),
+                             "testD2Vol",testD2Log,testBoolVol,false,0);  
 }
 
 //////////////////////////////////////////////////////////////////////
