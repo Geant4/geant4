@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.hh,v 1.10 2001-11-06 13:01:31 johna Exp $
+// $Id: G4VisCommandsViewerSet.hh,v 1.11 2002-11-27 12:33:29 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -37,6 +37,7 @@ class G4UIcommand;
 class G4UIcmdWithAString;
 class G4UIcmdWithABool;
 class G4UIcmdWithAnInteger;
+class G4UIcmdWithADouble;
 
 class G4VisCommandsViewerSet: public G4VVisCommandViewer {
 public:
@@ -51,6 +52,7 @@ private:
   G4UIcmdWithABool*     fpCommandAutoRefresh;
   G4UIcommand*          fpCommandCulling;
   G4UIcmdWithABool*     fpCommandEdge;
+  G4UIcmdWithADouble*   fpCommandGlobalMarkerScale;
   G4UIcmdWithABool*     fpCommandHiddenEdge;
   G4UIcmdWithABool*     fpCommandHiddenMarker;
   G4UIcmdWithAnInteger* fpCommandLineSegments;

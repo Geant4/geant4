@@ -315,6 +315,9 @@ NI /vis/viewer/set/cutawayPlane ...
 /vis/viewer/set/edge [true|false]
   default:              true
 
+/vis/viewer/set/globalMarkerScale [<scale-factor>]
+  default:                              1
+
 /vis/viewer/set/hiddenEdge  [true|false]
   default:                       true
 

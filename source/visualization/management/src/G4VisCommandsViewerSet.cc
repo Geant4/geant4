@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.19 2002-05-01 09:55:28 johna Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.20 2002-11-27 12:33:28 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -32,6 +32,7 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAnInteger.hh"
+#include "G4UIcmdWithADouble.hh"
 #include "G4UnitsTable.hh"
 #include "G4VisManager.hh"
 
@@ -88,6 +89,18 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandEdge->SetGuidance("/vis/viewer/set/edge [true|false]");
   fpCommandEdge->SetParameterName("edge",omitable = true);
   fpCommandEdge->SetDefaultValue(true);
+
+  fpCommandGlobalMarkerScale = new G4UIcmdWithADouble
+    ("/vis/viewer/set/globalMarkerScale", this);
+  fpCommandGlobalMarkerScale -> SetGuidance
+    ("/vis/viewer/set/globalMarkerScale [<scale-factor>]");
+  fpCommandGlobalMarkerScale -> SetGuidance
+    ("default: 1");
+  fpCommandGlobalMarkerScale -> SetGuidance
+    ("Multiplies marker sizes by this factor.");
+  fpCommandGlobalMarkerScale -> SetParameterName("scale-factorr",
+						 omitable=true);
+  fpCommandGlobalMarkerScale->SetDefaultValue(1.);
 
   fpCommandHiddenEdge =
     new G4UIcmdWithABool("/vis/viewer/set/hiddenEdge",this);
@@ -292,6 +305,7 @@ G4VisCommandsViewerSet::~G4VisCommandsViewerSet() {
   delete fpCommandAutoRefresh;
   delete fpCommandCulling;
   delete fpCommandEdge;
+  delete fpCommandGlobalMarkerScale;
   delete fpCommandHiddenEdge;
   delete fpCommandHiddenMarker;
   delete fpCommandLineSegments;
@@ -501,6 +515,16 @@ void G4VisCommandsViewerSet::SetNewValue
       G4cout << "Drawing style of viewer \"" << currentViewer->GetName()
 	     << "\" set to " << vp.GetDrawingStyle()
 	     << G4endl;
+    }
+  }
+
+  else if (command == fpCommandGlobalMarkerScale) {
+    G4double globalMarkerScale
+      = fpCommandGlobalMarkerScale->GetNewDoubleValue(newValue);
+    vp.SetGlobalMarkerScale(globalMarkerScale);
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Global Marker Scale changed to "
+	     << vp.GetGlobalMarkerScale() << G4endl;
     }
   }
 
