@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.46 2001-05-23 10:56:35 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.47 2001-05-25 17:08:31 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -82,8 +82,8 @@ G4LowEnergyIonisation::G4LowEnergyIonisation(const G4String& processName)
      CutForLowEnergySecondaryElectrons(0.),
      MeanFreePath(0.)
 { 
-    LowestKineticEnergy  = GetLowerBoundEloss();
-    HighestKineticEnergy = GetUpperBoundEloss();
+    lowestKineticEnergy  = GetLowerBoundEloss();
+    highestKineticEnergy = GetUpperBoundEloss();
     TotBin = GetNbinEloss();
 }
 
@@ -211,8 +211,8 @@ void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticle
   for (G4int J=0; J<numOfMaterials; J++){
     
       // create physics vector and fill it
-      G4PhysicsLogVector* aVector = new G4PhysicsLogVector(LowestKineticEnergy,
-			  HighestKineticEnergy,TotBin);
+      G4PhysicsLogVector* aVector = new G4PhysicsLogVector(lowestKineticEnergy,
+			  highestKineticEnergy,TotBin);
       // get material parameters needed for the energy loss calculation
       const G4Material* material= (*theMaterialTable)[J];
 
@@ -406,7 +406,7 @@ void G4LowEnergyIonisation::BuildLambdaTable(const G4ParticleDefinition& aPartic
      //create physics vector then fill it ....
 
      G4PhysicsLogVector* aVector = new G4PhysicsLogVector(
-               LowestKineticEnergy, HighestKineticEnergy, TotBin);
+               lowestKineticEnergy, highestKineticEnergy, TotBin);
 
      // compute the (macroscopic) cross section first
  
@@ -1335,14 +1335,14 @@ G4Element* G4LowEnergyIonisation::SelectRandomAtom(
 
     G4double DeltaThreshold = DeltaCutInKineticEnergy[i] ;
     G4double crossSection;
-    if (KineticEnergy <  LowestKineticEnergy)
+    if (KineticEnergy <  lowestKineticEnergy)
 
       crossSection = 0. ;
 
     else {
 
-      if (KineticEnergy > HighestKineticEnergy) 
-                          KineticEnergy = 0.99*HighestKineticEnergy;
+      if (KineticEnergy > highestKineticEnergy) 
+                          KineticEnergy = 0.99*highestKineticEnergy;
 
       G4int AtomIndex = (G4int) (*theElementVector)(i)->GetZ();
       crossSection = ComputeCrossSectionWithCut(AtomIndex, KineticEnergy,

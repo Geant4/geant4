@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.hh,v 1.14 2001-05-25 16:03:28 pia Exp $
+// $Id: G4LowEnergyBremsstrahlung.hh,v 1.15 2001-05-25 17:08:29 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,7 +44,7 @@ public:
   
   G4bool IsApplicable(const G4ParticleDefinition&);
 
-  void SetCutForLowEnSecPhotons(G4double);
+  void SetcutForLowEnSecPhotons(G4double);
   
   void PrintInfoDefinition();
   
@@ -73,7 +73,7 @@ private:
   void BuildZVec();
   void BuildLambdaTable(const G4ParticleDefinition& aParticleType);
 
-  void ComputePartialSumSigma(const G4double KineticEnergy, 
+  void ComputepartialSumSigma(const G4double KineticEnergy, 
 			      const G4Material* aMaterial,
 			      const G4double threshold);
   
@@ -105,14 +105,14 @@ private:
 
   G4LowEnergyUtilities util;
   // partial sum of total crosssection
-  G4OrderedTable PartialSumSigma;
+  G4OrderedTable partialSumSigma;
   
   G4double lowestKineticEnergy;      
-  G4double HighestKineticEnergy;     
+  G4double highestKineticEnergy;     
   
   G4double lowEnergyCut;    // lower limit of the energy sampling formula
-  G4int    TotBin;                   // number of bins in the tables 
-  G4double CutForLowEnergySecondaryPhotons;
+  G4int    totBin;                   // number of bins in the tables 
+  G4double cutForLowEnergySecondaryPhotons;
 
 };
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.icc,v 1.14 2001-05-23 10:56:35 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.icc,v 1.15 2001-05-25 17:08:30 pia Exp $
 //
 // 
 // ---------------------------------------------------------------
@@ -53,10 +53,10 @@ inline G4double G4LowEnergyIonisation::GetMeanFreePath(
  
    G4bool isOutRange = false;
 
-   if( KineticEnergy < LowestKineticEnergy ) MeanFreePath = DBL_MAX;
+   if( KineticEnergy < lowestKineticEnergy ) MeanFreePath = DBL_MAX;
    else {
-     if(KineticEnergy > HighestKineticEnergy) 
-        KineticEnergy = HighestKineticEnergy;
+     if(KineticEnergy > highestKineticEnergy) 
+        KineticEnergy = highestKineticEnergy;
 
      MeanFreePath = ((*theMeanFreePathTable)(aMaterial->GetIndex()))->
                     GetValue( KineticEnergy, isOutRange);

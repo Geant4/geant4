@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyGammaConversion.cc,v 1.18 2001-05-07 23:32:09 pia Exp $
+// $Id: G4LowEnergyGammaConversion.cc,v 1.19 2001-05-25 17:08:30 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,7 +19,7 @@
 //                   by A.Forti 1999/03/02
 //
 // 14.03.2000 Veronique Lefebure;
-// Change initialisation of LowestEnergyLimit from 1.22 to 1.022.
+// Change initialisation of lowestEnergyLimit from 1.22 to 1.022.
 // Note that the hard coded value 1.022 should be used instead of
 // 2*electron_mass_c2 in order to agree with the value of the data bank EPDL97
 // 24.04.01 V.Ivanchenko remove RogueWave 
@@ -43,14 +43,14 @@ G4LowEnergyGammaConversion::G4LowEnergyGammaConversion(const G4String& processNa
     theMeanFreePathTable(0),
     ZNumVec(0),
     //Use lowest limit of EPDL97 which is larger than 2*electron_mass_c2 = 1.02199812 MeV
-    LowestEnergyLimit (1.022000*MeV),
-    HighestEnergyLimit(100*GeV),
+    lowestEnergyLimit (1.022000*MeV),
+    highestEnergyLimit(100*GeV),
     NumbBinTable(200)
 {
    if (verboseLevel>0) {
      G4cout << GetProcessName() << " is created "<< G4endl;
-     G4cout << "LowestEnergy: " << LowestEnergyLimit/keV << "keV ";
-     G4cout << "HighestEnergy: " << HighestEnergyLimit/GeV << "GeV " << G4endl;
+     G4cout << "lowestEnergy: " << lowestEnergyLimit/keV << "keV ";
+     G4cout << "highestEnergy: " << highestEnergyLimit/GeV << "GeV " << G4endl;
    }
 }
  
@@ -338,7 +338,7 @@ void G4LowEnergyGammaConversion::BuildMeanFreePathTable(){
   for ( G4int J = 0 ; J < NumbOfMaterials; J++ ) { // For each material 
   
     //create physics vector then fill it ....
-    ptrVector = new  G4PhysicsLogVector(LowestEnergyLimit, HighestEnergyLimit, NumbBinTable);
+    ptrVector = new  G4PhysicsLogVector(lowestEnergyLimit, highestEnergyLimit, NumbBinTable);
     
     material = (*theMaterialTable)(J);
     const G4ElementVector* theElementVector = material->GetElementVector();
@@ -391,10 +391,10 @@ G4Element* G4LowEnergyGammaConversion::SelectRandomAtom(const G4DynamicParticle*
   for ( G4int i=0 ; i < NumberOfElements ; i++ ){ 
 
     G4double crossSection;
-    if (GammaEnergy <  LowestEnergyLimit)
+    if (GammaEnergy <  lowestEnergyLimit)
       crossSection = 0. ;
     else {
-      if (GammaEnergy > HighestEnergyLimit) GammaEnergy = 0.99*HighestEnergyLimit ;
+      if (GammaEnergy > highestEnergyLimit) GammaEnergy = 0.99*highestEnergyLimit ;
 
       G4int AtomIndex = (G4int) (*theElementVector)(i)->GetZ();
       const G4FirstLevel* oneAtomCS

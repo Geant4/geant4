@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyCompton.cc,v 1.24 2001-05-24 18:18:35 pia Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.25 2001-05-25 17:08:30 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,14 +41,14 @@ G4LowEnergyCompton::G4LowEnergyCompton(const G4String& processName)
     theScatteringFunctionTable(0),
     theMeanFreePathTable(0),
     ZNumVec(0),
-    LowestEnergyLimit (250*eV),              // initialization
-    HighestEnergyLimit(100*GeV),
-    NumbBinTable(200)
+    lowestEnergyLimit (250*eV),              // initialization
+    highestEnergyLimit(100*GeV),
+    numbBinTable(200)
 {
    if (verboseLevel>0) {
      G4cout << GetProcessName() << " is created "<< G4endl;
-     G4cout << "LowestEnergy: " << LowestEnergyLimit/keV << "keV ";
-     G4cout << "HighestEnergy: " << HighestEnergyLimit/TeV << "TeV " << G4endl;
+     G4cout << "lowestEnergy: " << lowestEnergyLimit/keV << "keV ";
+     G4cout << "highestEnergy: " << highestEnergyLimit/TeV << "TeV " << G4endl;
    }
 }
  
@@ -192,7 +192,7 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const
   // Dynamic particle quantities  
   const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
   G4double GammaEnergy0 = aDynamicGamma->GetKineticEnergy();
-  if(GammaEnergy0 <= LowestEnergyLimit){
+  if(GammaEnergy0 <= lowestEnergyLimit){
     
     aParticleChange.SetStatusChange(fStopAndKill);
     aParticleChange.SetEnergyChange(0.);
@@ -325,13 +325,13 @@ void G4LowEnergyCompton::BuildMeanFreePathTable(){
   for ( G4int J = 0 ; J < NumbOfMaterials; J++ ) { // For each material 
   
     //create physics vector then fill it ....
-    ptrVector = new  G4PhysicsLogVector(LowestEnergyLimit, HighestEnergyLimit, NumbBinTable);
+    ptrVector = new  G4PhysicsLogVector(lowestEnergyLimit, highestEnergyLimit, numbBinTable);
     
     material = (*theMaterialTable)(J);
     const G4ElementVector* theElementVector = material->GetElementVector();
     const G4double* theAtomNumDensityVector = material->GetAtomicNumDensityVector();   
     
-    for ( G4int i = 0 ; i < NumbBinTable ; i++ ){ 
+    for ( G4int i = 0 ; i < numbBinTable ; i++ ){ 
       //For each energy
       
       LowEdgeEnergy = ptrVector->GetLowEdgeEnergy(i);
@@ -376,15 +376,15 @@ G4Element* G4LowEnergyCompton::SelectRandomAtom(const G4DynamicParticle* aDynami
   G4double PartialSumSigma = 0.;
 
   G4double rval = 0;
-  rval = G4UniformRand()/MeanFreePath;
+  rval = G4UniformRand()/meanFreePath;
 
   for ( G4int i=0 ; i < NumberOfElements ; i++ ){ 
 
     G4double crossSection;
-    if (GammaEnergy <  LowestEnergyLimit)
+    if (GammaEnergy <  lowestEnergyLimit)
       crossSection = 0. ;
     else {
-      if (GammaEnergy > HighestEnergyLimit) GammaEnergy = 0.99*HighestEnergyLimit ;
+      if (GammaEnergy > highestEnergyLimit) GammaEnergy = 0.99*highestEnergyLimit ;
       
       G4int AtomIndex = (G4int) (*theElementVector)(i)->GetZ();
       const G4FirstLevel* oneAtomCS

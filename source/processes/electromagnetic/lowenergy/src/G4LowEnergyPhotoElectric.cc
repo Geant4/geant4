@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.29 2001-05-07 23:32:09 pia Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.30 2001-05-25 17:08:31 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,8 +53,8 @@ typedef G4std::vector<G4DynamicParticle*> G4ParticleVector;
  
 G4LowEnergyPhotoElectric::G4LowEnergyPhotoElectric(const G4String& processName)
   : G4VDiscreteProcess(processName),             // initialization
-  LowestEnergyLimit (250*eV),
-  HighestEnergyLimit(100*GeV),
+  lowestEnergyLimit (250*eV),
+  highestEnergyLimit(100*GeV),
   NumbBinTable(200),
   CutForLowEnergySecondaryPhotons(0.),
   theCrossSectionTable(0),
@@ -68,8 +68,8 @@ G4LowEnergyPhotoElectric::G4LowEnergyPhotoElectric(const G4String& processName)
 {
    if (verboseLevel>0) {
      G4cout << GetProcessName() << " is created "<< G4endl;
-     G4cout << "LowestEnergy: " << LowestEnergyLimit/keV << "keV ";
-     G4cout << "HighestEnergy: " << HighestEnergyLimit/MeV << "MeV " << G4endl;
+     G4cout << "lowestEnergy: " << lowestEnergyLimit/keV << "keV ";
+     G4cout << "highestEnergy: " << highestEnergyLimit/MeV << "MeV " << G4endl;
    }
 }
 
@@ -333,9 +333,9 @@ void G4LowEnergyPhotoElectric::BuildMeanFreePathTable(){
     //create physics vector then fill it ....
     // WARNING: Lower limit of total cross sections in the data is the binding energy 
     // of the relative subshell. MeanFreePath table require a common lowest limit.
-    // This LowestEnergyLimit is at the moment fixed at 250 ev.
+    // This lowestEnergyLimit is at the moment fixed at 250 ev.
  
-    ptrVector = new  G4PhysicsLogVector(LowestEnergyLimit, HighestEnergyLimit, NumbBinTable);
+    ptrVector = new  G4PhysicsLogVector(lowestEnergyLimit, highestEnergyLimit, NumbBinTable);
     
     material = (*theMaterialTable)(J);
     const G4ElementVector* theElementVector = material->GetElementVector();
@@ -384,7 +384,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
 
   const G4DynamicParticle* aDynamicPhoton = aTrack.GetDynamicParticle();
   const G4double PhotonEnergy = aDynamicPhoton->GetKineticEnergy();
-  if(PhotonEnergy <= LowestEnergyLimit){
+  if(PhotonEnergy <= lowestEnergyLimit){
     
     aParticleChange.SetStatusChange(fStopAndKill);
     aParticleChange.SetEnergyChange(0.);
@@ -623,13 +623,13 @@ G4LowEnergyPhotoElectric::SelectRandomAtom(const G4DynamicParticle* aDynamicPhot
   for ( G4int i=0 ; i < NumberOfElements ; i++ ){ 
 
     G4double crossSection;
-    if (GammaEnergy <  LowestEnergyLimit)
+    if (GammaEnergy <  lowestEnergyLimit)
 
       crossSection = 0. ;
 
     else {
 
-      if (GammaEnergy > HighestEnergyLimit) GammaEnergy = 0.99*HighestEnergyLimit ;
+      if (GammaEnergy > highestEnergyLimit) GammaEnergy = 0.99*highestEnergyLimit ;
 
       G4int AtomIndex = (G4int) (*theElementVector)(i)->GetZ();
       const G4FirstLevel* oneAtomCS

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.hh,v 1.19 2001-05-18 17:44:12 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.hh,v 1.20 2001-05-25 17:08:30 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -142,8 +142,8 @@ private:
   G4double CutForLowEnergySecondaryElectrons;
   G4double MeanFreePath;
 
-  G4double LowestKineticEnergy;
-  G4double HighestKineticEnergy;
+  G4double lowestKineticEnergy;
+  G4double highestKineticEnergy;
   G4int TotBin;
 
   G4LowEnergyUtilities util;

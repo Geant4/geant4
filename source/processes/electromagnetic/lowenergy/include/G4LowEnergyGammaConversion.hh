@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyGammaConversion.hh,v 1.8 2001-05-07 23:32:07 pia Exp $
+// $Id: G4LowEnergyGammaConversion.hh,v 1.9 2001-05-25 17:08:29 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,8 +78,8 @@ private:
 
   G4DataVector* ZNumVec;
 
-  G4double LowestEnergyLimit; 
-  G4double HighestEnergyLimit;
+  G4double lowestEnergyLimit; 
+  G4double highestEnergyLimit;
   G4int NumbBinTable; 
 
   G4double MeanFreePath; // actual Mean Free Path (current medium)

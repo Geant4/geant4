@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VeLowEnergyLoss.cc,v 1.10 2001-05-23 10:56:35 vnivanch Exp $
+// $Id: G4VeLowEnergyLoss.cc,v 1.11 2001-05-25 17:08:31 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,7 +85,7 @@ G4VeLowEnergyLoss::G4VeLowEnergyLoss(G4VeLowEnergyLoss& right)
 
 G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeTable(
         G4PhysicsTable* theDEDXTable,G4PhysicsTable* theRangeTable,            
-        G4double LowestKineticEnergy,G4double HighestKineticEnergy,G4int TotBin)
+        G4double lowestKineticEnergy,G4double highestKineticEnergy,G4int TotBin)
 // Build range table from the energy loss table
 {
    const G4MaterialTable* theMaterialTable=
@@ -102,9 +102,9 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeTable(
    for (G4int J=0;  J<numOfMaterials; J++)
    {
      G4PhysicsLogVector* aVector;
-     aVector = new G4PhysicsLogVector(LowestKineticEnergy,
-                              HighestKineticEnergy,TotBin);
-     BuildRangeVector(theDEDXTable,LowestKineticEnergy,HighestKineticEnergy,
+     aVector = new G4PhysicsLogVector(lowestKineticEnergy,
+                              highestKineticEnergy,TotBin);
+     BuildRangeVector(theDEDXTable,lowestKineticEnergy,highestKineticEnergy,
                       TotBin,J,aVector);
      theRangeTable->insert(aVector);
    }
@@ -114,7 +114,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeTable(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VeLowEnergyLoss::BuildRangeVector(G4PhysicsTable* theDEDXTable,
-                                         G4double LowestKineticEnergy,
+                                         G4double lowestKineticEnergy,
                                          G4double,
                                          G4int TotBin,
                                          G4int materialIndex,
@@ -124,7 +124,7 @@ void G4VeLowEnergyLoss::BuildRangeVector(G4PhysicsTable* theDEDXTable,
 {
   G4bool isOut;
   G4PhysicsVector* physicsVector= (*theDEDXTable)[materialIndex];
-  G4double energy1 = LowestKineticEnergy;
+  G4double energy1 = lowestKineticEnergy;
   G4double dedx    = physicsVector->GetValue(energy1,isOut);
   G4double range   = 0.5*energy1/dedx;
   rangeVector->PutValue(0,range);
@@ -218,8 +218,8 @@ G4double G4VeLowEnergyLoss::RangeIntLog(G4PhysicsVector* physicsVector,
 
 G4PhysicsTable* G4VeLowEnergyLoss::BuildLabTimeTable(G4PhysicsTable* theDEDXTable,
                                      G4PhysicsTable* theLabTimeTable,
-                                     G4double LowestKineticEnergy,
-                                     G4double HighestKineticEnergy,G4int TotBin)
+                                     G4double lowestKineticEnergy,
+                                     G4double highestKineticEnergy,G4int TotBin)
                             
 {
   const G4MaterialTable* theMaterialTable=
@@ -236,11 +236,11 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildLabTimeTable(G4PhysicsTable* theDEDXTabl
   {
     G4PhysicsLogVector* aVector;
 
-    aVector = new G4PhysicsLogVector(LowestKineticEnergy,
-                            HighestKineticEnergy,TotBin);
+    aVector = new G4PhysicsLogVector(lowestKineticEnergy,
+                            highestKineticEnergy,TotBin);
 
     BuildLabTimeVector(theDEDXTable,
-              LowestKineticEnergy,HighestKineticEnergy,TotBin,J,aVector);
+              lowestKineticEnergy,highestKineticEnergy,TotBin,J,aVector);
     theLabTimeTable->insert(aVector);
 
 
@@ -252,8 +252,8 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildLabTimeTable(G4PhysicsTable* theDEDXTabl
 
 G4PhysicsTable* G4VeLowEnergyLoss::BuildProperTimeTable(G4PhysicsTable* theDEDXTable,
                                      G4PhysicsTable* theProperTimeTable,
-                                     G4double LowestKineticEnergy,
-                                     G4double HighestKineticEnergy,G4int TotBin)
+                                     G4double lowestKineticEnergy,
+                                     G4double highestKineticEnergy,G4int TotBin)
                             
 {
   const G4MaterialTable* theMaterialTable=
@@ -270,11 +270,11 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildProperTimeTable(G4PhysicsTable* theDEDXT
   {
     G4PhysicsLogVector* aVector;
 
-    aVector = new G4PhysicsLogVector(LowestKineticEnergy,
-                            HighestKineticEnergy,TotBin);
+    aVector = new G4PhysicsLogVector(lowestKineticEnergy,
+                            highestKineticEnergy,TotBin);
 
     BuildProperTimeVector(theDEDXTable,
-              LowestKineticEnergy,HighestKineticEnergy,TotBin,J,aVector);
+              lowestKineticEnergy,highestKineticEnergy,TotBin,J,aVector);
     theProperTimeTable->insert(aVector);
 
 
@@ -285,8 +285,8 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildProperTimeTable(G4PhysicsTable* theDEDXT
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VeLowEnergyLoss::BuildLabTimeVector(G4PhysicsTable* theDEDXTable,
-                                    G4double LowestKineticEnergy,
-                                    G4double HighestKineticEnergy,G4int TotBin,
+                                    G4double lowestKineticEnergy,
+                                    G4double highestKineticEnergy,G4int TotBin,
                                     G4int materialIndex, G4PhysicsLogVector* timeVector)
 //  create lab time vector for a material
 {
@@ -305,7 +305,7 @@ void G4VeLowEnergyLoss::BuildLabTimeVector(G4PhysicsTable* theDEDXTable,
   taulim=tlim/ParticleMass ;
   clim=sqrt(ParticleMass*tlim/2.)/(c_light*losslim*ppar) ;
   ltaulim = log(taulim);
-  ltaumax = log(HighestKineticEnergy/ParticleMass) ;
+  ltaumax = log(highestKineticEnergy/ParticleMass) ;
 
   G4int i=-1;
   G4double oldValue = 0. ;
@@ -347,8 +347,8 @@ void G4VeLowEnergyLoss::BuildLabTimeVector(G4PhysicsTable* theDEDXTable,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VeLowEnergyLoss::BuildProperTimeVector(G4PhysicsTable* theDEDXTable,
-                                    G4double LowestKineticEnergy,
-                                    G4double HighestKineticEnergy,G4int TotBin,
+                                    G4double lowestKineticEnergy,
+                                    G4double highestKineticEnergy,G4int TotBin,
                                     G4int materialIndex, G4PhysicsLogVector* timeVector)
 //  create proper time vector for a material
 {
@@ -366,7 +366,7 @@ void G4VeLowEnergyLoss::BuildProperTimeVector(G4PhysicsTable* theDEDXTable,
   taulim=tlim/ParticleMass ;
   clim=sqrt(ParticleMass*tlim/2.)/(c_light*losslim*ppar) ;
   ltaulim = log(taulim);
-  ltaumax = log(HighestKineticEnergy/ParticleMass) ;
+  ltaumax = log(highestKineticEnergy/ParticleMass) ;
 
   G4int i=-1;
   G4double oldValue = 0. ;
@@ -478,8 +478,8 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildInverseRangeTable(G4PhysicsTable* theRan
                                    G4PhysicsTable* theRangeCoeffBTable,
                                    G4PhysicsTable* theRangeCoeffCTable,
                                    G4PhysicsTable* theInverseRangeTable,
-                                   G4double LowestKineticEnergy,
-                                   G4double HighestKineticEnergy,G4int TotBin)
+                                   G4double lowestKineticEnergy,
+                                   G4double highestKineticEnergy,G4int TotBin)
 // Build inverse table of the range table
 {
   G4double SmallestRange,BiggestRange ;
@@ -497,9 +497,9 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildInverseRangeTable(G4PhysicsTable* theRan
   for (G4int J=0;  J<numOfMaterials; J++)
   {
     SmallestRange = (*theRangeTable)(J)->
-                       GetValue(LowestKineticEnergy,isOut) ;
+                       GetValue(lowestKineticEnergy,isOut) ;
     BiggestRange = (*theRangeTable)(J)->
-                       GetValue(HighestKineticEnergy,isOut) ;
+                       GetValue(highestKineticEnergy,isOut) ;
     G4PhysicsLogVector* aVector;
     aVector = new G4PhysicsLogVector(SmallestRange,
                             BiggestRange,TotBin);
@@ -508,7 +508,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildInverseRangeTable(G4PhysicsTable* theRan
                       theRangeCoeffATable,
                       theRangeCoeffBTable,
                       theRangeCoeffCTable,
-         LowestKineticEnergy,HighestKineticEnergy,TotBin,J, aVector);
+         lowestKineticEnergy,highestKineticEnergy,TotBin,J, aVector);
 
     theInverseRangeTable->insert(aVector);
   }
@@ -521,14 +521,14 @@ void G4VeLowEnergyLoss::InvertRangeVector(G4PhysicsTable* theRangeTable,
                               G4PhysicsTable* theRangeCoeffATable,
                               G4PhysicsTable* theRangeCoeffBTable,
                               G4PhysicsTable* theRangeCoeffCTable,
-                              G4double LowestKineticEnergy,
-                              G4double HighestKineticEnergy,G4int TotBin,
+                              G4double lowestKineticEnergy,
+                              G4double highestKineticEnergy,G4int TotBin,
                               G4int  materialIndex,G4PhysicsLogVector* aVector)
 //  invert range vector for a material
 {
   G4double LowEdgeRange,A,B,C,discr,KineticEnergy ;
-  G4double RTable = exp(log(HighestKineticEnergy/LowestKineticEnergy)/TotBin) ;
-  G4double Tbin = LowestKineticEnergy/RTable ;
+  G4double RTable = exp(log(highestKineticEnergy/lowestKineticEnergy)/TotBin) ;
+  G4double Tbin = lowestKineticEnergy/RTable ;
   G4double rangebin = 0.0 ;
   G4int binnumber = -1 ;
   G4bool isOut ;
@@ -549,9 +549,9 @@ void G4VeLowEnergyLoss::InvertRangeVector(G4PhysicsTable* theRangeTable,
     }
 
     if(binnumber == 0)
-      KineticEnergy = LowestKineticEnergy ;
+      KineticEnergy = lowestKineticEnergy ;
     else if(binnumber == TotBin-1)
-      KineticEnergy = HighestKineticEnergy ;
+      KineticEnergy = highestKineticEnergy ;
     else
     {
       A = (*(*theRangeCoeffATable)(materialIndex))(binnumber-1) ;
@@ -575,8 +575,8 @@ void G4VeLowEnergyLoss::InvertRangeVector(G4PhysicsTable* theRangeTable,
 
 G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffATable(G4PhysicsTable* theRangeTable,
                                       G4PhysicsTable* theRangeCoeffATable,
-                                      G4double LowestKineticEnergy,
-                             G4double HighestKineticEnergy,G4int TotBin)
+                                      G4double lowestKineticEnergy,
+                             G4double highestKineticEnergy,G4int TotBin)
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "A"
 {
@@ -589,7 +589,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffATable(G4PhysicsTable* theRang
     delete theRangeCoeffATable; }
   theRangeCoeffATable = new G4PhysicsTable(numOfMaterials);
 
-  G4double RTable = exp(log(HighestKineticEnergy/LowestKineticEnergy)/TotBin) ;
+  G4double RTable = exp(log(highestKineticEnergy/lowestKineticEnergy)/TotBin) ;
   G4double R2 = RTable*RTable ;
   G4double R1 = RTable+1.;
   G4double w = R1*(RTable-1.)*(RTable-1.);
@@ -603,7 +603,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffATable(G4PhysicsTable* theRang
     G4int binmax=TotBin ;
     G4PhysicsLinearVector* aVector =
                            new G4PhysicsLinearVector(0.,binmax, TotBin);
-    Ti = LowestKineticEnergy ;
+    Ti = lowestKineticEnergy ;
     G4PhysicsVector* rangeVector= (*theRangeTable)[J];
 
     for ( G4int i=0; i<TotBin; i++)
@@ -638,8 +638,8 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffATable(G4PhysicsTable* theRang
   
 G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffBTable(G4PhysicsTable* theRangeTable,
                                       G4PhysicsTable* theRangeCoeffBTable,
-                                      G4double LowestKineticEnergy,
-                             G4double HighestKineticEnergy,G4int TotBin)
+                                      G4double lowestKineticEnergy,
+                             G4double highestKineticEnergy,G4int TotBin)
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "B"
 {
@@ -652,7 +652,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffBTable(G4PhysicsTable* theRang
     delete theRangeCoeffBTable; }
   theRangeCoeffBTable = new G4PhysicsTable(numOfMaterials);
 
-  G4double RTable = exp(log(HighestKineticEnergy/LowestKineticEnergy)/TotBin) ;
+  G4double RTable = exp(log(highestKineticEnergy/lowestKineticEnergy)/TotBin) ;
   G4double R2 = RTable*RTable ;
   G4double R1 = RTable+1.;
   G4double w = R1*(RTable-1.)*(RTable-1.);
@@ -666,7 +666,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffBTable(G4PhysicsTable* theRang
     G4int binmax=TotBin ;
     G4PhysicsLinearVector* aVector =
                         new G4PhysicsLinearVector(0.,binmax, TotBin);
-    Ti = LowestKineticEnergy ;
+    Ti = lowestKineticEnergy ;
     G4PhysicsVector* rangeVector= (*theRangeTable)[J];
   
     for ( G4int i=0; i<TotBin; i++)
@@ -700,8 +700,8 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffBTable(G4PhysicsTable* theRang
 
 G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffCTable(G4PhysicsTable* theRangeTable,
                                       G4PhysicsTable* theRangeCoeffCTable,
-                                      G4double LowestKineticEnergy,
-                             G4double HighestKineticEnergy,G4int TotBin)
+                                      G4double lowestKineticEnergy,
+                             G4double highestKineticEnergy,G4int TotBin)
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "C"
 {
@@ -714,7 +714,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffCTable(G4PhysicsTable* theRang
     delete theRangeCoeffCTable; }
   theRangeCoeffCTable = new G4PhysicsTable(numOfMaterials);
 
-  G4double RTable = exp(log(HighestKineticEnergy/LowestKineticEnergy)/TotBin) ;
+  G4double RTable = exp(log(highestKineticEnergy/lowestKineticEnergy)/TotBin) ;
   G4double R2 = RTable*RTable ;
   G4double R1 = RTable+1.;
   G4double w = R1*(RTable-1.)*(RTable-1.);
@@ -728,7 +728,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffCTable(G4PhysicsTable* theRang
     G4int binmax=TotBin ;
     G4PhysicsLinearVector* aVector =
                       new G4PhysicsLinearVector(0.,binmax, TotBin);
-    Ti = LowestKineticEnergy ;
+    Ti = lowestKineticEnergy ;
     G4PhysicsVector* rangeVector= (*theRangeTable)[J];
   
     for ( G4int i=0; i<TotBin; i++)

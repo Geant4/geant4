@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyCompton.hh,v 1.10 2001-05-24 18:18:35 pia Exp $
+// $Id: G4LowEnergyCompton.hh,v 1.11 2001-05-25 17:08:29 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,13 +74,13 @@ private:
   G4PhysicsTable* theMeanFreePathTable;
   G4DataVector* ZNumVec;
 
-  G4double LowestEnergyLimit; // low  energy limit of the crosssection data 
-  G4double HighestEnergyLimit; // high energy limit of the crosssection data
-  G4int NumbBinTable; // number of bins in the data  tables
+  G4double lowestEnergyLimit; // low  energy limit of the crosssection data 
+  G4double highestEnergyLimit; // high energy limit of the crosssection data
+  G4int numbBinTable; // number of bins in the data  tables
 
   G4LowEnergyUtilities util;
 
-  G4double MeanFreePath; // actual Mean Free Path (current medium)
+  G4double meanFreePath; // actual Mean Free Path (current medium)
 };
 
 #include "G4LowEnergyCompton.icc"

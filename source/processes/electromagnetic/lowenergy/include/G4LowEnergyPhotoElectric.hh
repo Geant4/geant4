@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.hh,v 1.16 2001-05-07 23:32:08 pia Exp $
+// $Id: G4LowEnergyPhotoElectric.hh,v 1.17 2001-05-25 17:08:30 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -99,8 +99,8 @@ private:
      
 private:
 
-  G4double LowestEnergyLimit;      
-  G4double HighestEnergyLimit;     
+  G4double lowestEnergyLimit;      
+  G4double highestEnergyLimit;     
 
   G4int NumbBinTable;              
 
