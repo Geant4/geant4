@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.8 2004-06-18 12:47:02 gcosmo Exp $
+// $Id: G4Navigator.hh,v 1.9 2004-11-19 14:21:21 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -82,7 +82,9 @@
 // discretion.
 
 // History:
-// - Created. Paul Kent, July 95/96
+// - Created. Paul Kent,         July 95/96
+// - Maintained  J. Apostolakis, Oct 1996/2004
+// - Maintained  G. Cosmo,       Oct 2000/2004
 // ********************************************************************
 
 #ifndef G4NAVIGATOR_HH
@@ -200,12 +202,14 @@ class G4Navigator
     // LocateGlobalPointAndSetup(). Then use the volume found and its
     // navigation history to update the touchable.
 
+  // #ifDEF OBSOLETE_LOCATE_NO_DIRECTION
   inline void LocateGlobalPointAndUpdateTouchable(
                 const G4ThreeVector&       position,
                       G4VTouchable*        touchableToUpdate,
                 const G4bool               RelativeSearch = true);
     // Old version (missing direction).
     // Not recommended replace with newer version above.
+  // #endif
 
   inline void SetGeometricallyLimitedStep();
     // Inform the navigator that the previous Step calculated
@@ -268,6 +272,12 @@ class G4Navigator
     // Reset stack and minimum or navigator state machine necessary for reset
     // as needed by LocalGlobalPointAndSetup.
     // [Does not perform clears, resizes, or reset fLastLocatedPointLocal]
+
+  inline G4int SeverityOfZeroStepping( G4int *noZeroSteps ) const; 
+    // Report on severity of error and number of zero steps,
+    //   - in case Navigator is stuck and is returning zero steps.
+    //  Values: 1 (small problem),  5 ('pushing'), 
+    //          9 (ready to abandon), 10 (abandoned)
 
  protected:  // with description
 
