@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewer.cc,v 1.22 2001-02-05 02:34:25 johna Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.23 2001-02-06 23:36:56 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -37,6 +37,8 @@ void G4VVisCommandViewer::SetViewParameters
   else {
     G4cout << "Issue /vis/viewer/refresh to see effect." << G4endl;
   }
+  // For now...
+  fpVisManager->SetCurrentViewParameters() = viewParams;
 }
 
 void G4VVisCommandViewer::UpdateCandidateLists () {
@@ -102,7 +104,11 @@ void G4VisCommandViewerClear::SetNewValue (G4UIcommand* command,
     return;
   }
 
-  viewer->ClearView();   
+  viewer->ClearView();
+  if (fpVisManager->GetVerboseLevel() > 0) {
+    G4cout << "Viewer \"" << clearName << "\" cleared." << G4endl;
+  }
+
 }
 
 ////////////// /vis/viewer/create ///////////////////////////////////////

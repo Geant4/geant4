@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VVisCommand.cc,v 1.7 2001-02-04 01:37:33 johna Exp $
+// $Id: G4VVisCommand.cc,v 1.8 2001-02-06 23:36:55 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Base class for visualization commands - John Allison  9th August 1998
@@ -26,11 +26,8 @@ G4std::vector <G4UIcommand*> G4VVisCommand::sceneHandlerNameCommands;
 
 G4std::vector <G4UIcommand*> G4VVisCommand::viewerNameCommands;
 
-G4double G4VVisCommand::ValueOf(G4String unitName)
-{
-   G4double value = 0.;
-   value = G4UnitDefinition::GetValueOf(unitName);
-   return value;              
+G4double G4VVisCommand::ValueOf(G4String unitName) {
+   return G4UnitDefinition::GetValueOf(unitName);
 }
 
 G4String G4VVisCommand::ConvertToString(G4bool blValue)
@@ -71,7 +68,16 @@ G4bool G4VVisCommand::GetNewBoolValue(const G4String& paramString)
   return vl;
 }
 
-G4double G4VVisCommand::GetNewDoubleValue(G4String paramString)
+G4int G4VVisCommand::GetNewIntValue(const G4String& paramString)
+{
+  G4int vl;
+  const char* t = paramString;
+  G4std::istrstream is((char*)t);
+  is >> vl;
+  return vl;
+}
+
+G4double G4VVisCommand::GetNewDoubleValue(const G4String& paramString)
 {
   G4double vl;
   char unts[30];
@@ -84,7 +90,7 @@ G4double G4VVisCommand::GetNewDoubleValue(G4String paramString)
   return (vl*ValueOf(unt));
 }
 
-G4ThreeVector G4VVisCommand::GetNew3VectorValue(G4String paramString)
+G4ThreeVector G4VVisCommand::GetNew3VectorValue(const G4String& paramString)
 {
   G4double vx;
   G4double vy;
@@ -95,7 +101,7 @@ G4ThreeVector G4VVisCommand::GetNew3VectorValue(G4String paramString)
   return G4ThreeVector(vx,vy,vz);
 }
 
-void G4VVisCommand::GetNewDoublePairValue(G4String paramString,
+void G4VVisCommand::GetNewDoublePairValue(const G4String& paramString,
 					  G4double& xval,
 					  G4double& yval)
 {

@@ -1,4 +1,4 @@
-$Id: History,v 1.105 2001-02-05 02:35:34 johna Exp $
+$Id: History,v 1.106 2001-02-06 23:36:40 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,18 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+4th February 2001  John Allison  (vis-V03-00-05)
+- Reverted to /vis/viewer commands updating vis manager's view parameters.
+  Otherwise this can have a big effect on users if old commands are still
+  being used.  Let's schedule this change for the next version of Geant4.
+- Added the following new commands:
+  /vis/enable [true|false]
+  /vis/disable
+  /vis/verbose [<verbosity-integer>]
+  /vis/viewer/set/lineSegmentsPerCircle  [<number-of-sides-per-circle>]
+  /vis/viewer/set/sectionPlane ...
+  Only /vis/scene/add/text and /vis/scene/add/axes to go!!!
 
 4th February 2001  John Allison  (vis-V03-00-04)
 - /vis/viewer commands no longer update vis manager's view parameters.

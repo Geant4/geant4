@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.cc,v 1.19 2001-02-05 02:34:41 johna Exp $
+// $Id: G4VisManager.cc,v 1.20 2001-02-06 23:37:01 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -155,6 +155,26 @@ void G4VisManager::Initialise () {
 
 // void G4VisManager::RegisterMessengers () - see separate file,
 // G4VisManagerRegisterMessengers.cc.
+
+void G4VisManager::Enable() {
+  if (IsValidView ()) {
+    G4cout << "G4VisManager::Enable: visualization enabled." << G4endl;
+  }
+  else {
+    G4cout <<
+      "G4VisManager::Enable: visualization remains disabled for above reasons."
+      "\n  Rectifying with valid vis commands will automatically enable."
+	   << G4endl;
+  }
+}
+
+void G4VisManager::Disable() {
+  fpConcreteInstance = 0;
+  G4cout <<
+    "G4VisManager::Disable: visualization disabled."
+    "\n  Note that it will become enabled after some valid vis commands."
+	 << G4endl;
+}
 
 const G4GraphicsSystemList& G4VisManager::GetAvailableGraphicsSystems () {
   G4int nSystems = fAvailableGraphicsSystems.entries ();

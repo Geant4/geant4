@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VVisCommand.hh,v 1.8 2001-02-04 20:26:19 johna Exp $
+// $Id: G4VVisCommand.hh,v 1.9 2001-02-06 23:36:51 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Base class for visualization commands - John Allison  9th August 1998
@@ -34,9 +34,10 @@ public:
 				  const char * unitName);
   static G4String ConvertToString(const G4ThreeVector& vec);
   static G4bool        GetNewBoolValue(const G4String& paramString);
-  static G4double      GetNewDoubleValue(G4String paramString);
-  static G4ThreeVector GetNew3VectorValue(G4String paramString);
-  static void          GetNewDoublePairValue(G4String paramString,
+  static G4int         GetNewIntValue(const G4String& paramString);
+  static G4double      GetNewDoubleValue(const G4String& paramString);
+  static G4ThreeVector GetNew3VectorValue(const G4String& paramString);
+  static void          GetNewDoublePairValue(const G4String& paramString,
 					     G4double& xval,
 					     G4double& yval);
 protected:

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessSet.cc,v 1.9 2001-02-05 02:34:39 johna Exp $
+// $Id: G4VisManMessSet.cc,v 1.10 2001-02-06 23:36:59 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -399,6 +399,8 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 
   ///////////////////////////////////////////  /vis~/set/section_plane  ////
   if (commandPath == "/vis~/set/section_plane") {
+    G4VisManager::PrintCommandDeprecation
+      ("Use \"/vis/viewer/set/section_plane\".");
     G4String choice, unit;
     G4double x, y, z, nx, ny, nz;
     const char* t = newValues;
@@ -451,6 +453,8 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 
   ///////////////////////////////////////////  /vis~/set/sides  ////
   if (commandPath == "/vis~/set/sides") {
+    G4VisManager::PrintCommandDeprecation
+      ("Use \"/vis/viewer/set/lineSegmentsPerCircle\".");
     G4int nSides;
     const char* t = newValues;
     G4std::istrstream is ((char*)t); is >> nSides;
@@ -622,6 +626,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 
   ///////////////////////////////////////////  /vis~/set/verbose  //////
   if (commandPath == "/vis~/set/verbose") {
+    G4VisManager::PrintCommandDeprecation("Use \"/vis/verbose\".");
     G4int vLevel;
     const char* t = newValues;
     G4std::istrstream is ((char*)t); is >> vLevel;

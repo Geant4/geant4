@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.6 2001-02-05 02:34:27 johna Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.7 2001-02-06 23:36:58 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -15,6 +15,7 @@
 #include "G4UIcommand.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithAnInteger.hh"
 #include "G4UnitsTable.hh"
 #include "G4VisManager.hh"
 
@@ -30,7 +31,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet () {
   viewerNameCommands.push_back (fpCommandAll);
 
   fpCommandAutoRefresh = new G4UIcmdWithABool
-    ("/vis/viewer/set/autorefresh", this);
+    ("/vis/viewer/set/autorefresh",this);
   fpCommandAutoRefresh->SetGuidance
     ("/vis/viewer/set/autorefresh [true|false]");
   fpCommandAutoRefresh->SetGuidance
@@ -84,9 +85,19 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet () {
     ("/vis/viewer/set/lightsMove with-camera|with-object");
   fpCommandLightsMove->SetGuidance
     ("Note: parameter will be parsed for \"cam\" or \"obj\".");
-  fpCommandLightsMove->SetParameterName ("lightsMove",omitable = false);
+  fpCommandLightsMove->SetParameterName("lightsMove",omitable = false);
   // fpCommandLightsMove->SetCandidates("move-with-camera move-with-object");
   // Own parsing.
+
+  fpCommandLineSegments = new G4UIcmdWithAnInteger
+    ("/vis/viewer/set/lineSegmentsPerCircle",this);
+  fpCommandLineSegments->SetGuidance
+    ("/vis/viewer/set/lineSegmentsPerCircle  [<number-of-sides-per-circle>]");
+  fpCommandLineSegments->SetGuidance
+    ("  Number of sides per circle in polygon/polyhedron graphical"
+     "\nrepresentation of objects with curved lines/surfaces.");
+  fpCommandLineSegments->SetParameterName("line-segments",omitable = true);
+  fpCommandLineSegments->SetDefaultValue(24);
 
   fpCommandProjection = new G4UIcommand("/vis/viewer/set/projection",this);
   fpCommandProjection->SetGuidance
@@ -105,6 +116,46 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet () {
   parameter->SetDefaultValue("deg");
   fpCommandProjection->SetParameter(parameter);
 
+  fpCommandSectionPlane = new G4UIcommand 
+    ("/vis/viewer/set/section_plane",this);
+  fpCommandSectionPlane -> SetGuidance
+    (
+     "Set plane for drawing section (DCUT).  Specify plane by"
+     "\nx y z units nx ny nz, e.g., for a y-z plane at x = 1 cm:"
+     "\n/vis~/set/section_plane on 1 0 0 cm 1 0 0"
+     );
+  parameter  =  new G4UIparameter("Selector",'c',true);
+  parameter  -> SetDefaultValue  ("?");
+  fpCommandSectionPlane->SetParameter(parameter);
+  parameter  =  new G4UIparameter("x",'d',omitable = true);
+  parameter  -> SetDefaultValue  (0);
+  parameter  -> SetGuidance      ("Coordinate of point on the plane.");
+  fpCommandSectionPlane->SetParameter(parameter);
+  parameter  =  new G4UIparameter("y",'d',omitable = true);
+  parameter  -> SetDefaultValue  (0);
+  parameter  -> SetGuidance      ("Coordinate of point on the plane.");
+  fpCommandSectionPlane->SetParameter(parameter);
+  parameter  =  new G4UIparameter("z",'d',omitable = true);
+  parameter  -> SetDefaultValue  (0);
+  parameter  -> SetGuidance      ("Coordinate of point on the plane.");
+  fpCommandSectionPlane->SetParameter(parameter);
+  parameter  =  new G4UIparameter("unit",'s',omitable = true);
+  parameter  -> SetDefaultValue  ("cm");
+  parameter  -> SetGuidance      ("Unit of point on the plane.");
+  fpCommandSectionPlane->SetParameter(parameter);
+  parameter  =  new G4UIparameter("nx",'d',omitable = true);
+  parameter  -> SetDefaultValue  (1);
+  parameter  -> SetGuidance      ("Component of plane normal.");
+  fpCommandSectionPlane->SetParameter(parameter);
+  parameter  =  new G4UIparameter("ny",'d',omitable = true);
+  parameter  -> SetDefaultValue  (0);
+  parameter  -> SetGuidance      ("Component of plane normal.");
+  fpCommandSectionPlane->SetParameter(parameter);
+  parameter  =  new G4UIparameter("nz",'d',omitable = true);
+  parameter  -> SetDefaultValue  (0);
+  parameter  -> SetGuidance      ("Component of plane normal.");
+  fpCommandSectionPlane->SetParameter(parameter);
+
   fpCommandStyle = new G4UIcmdWithAString ("/vis/viewer/set/style",this);
   fpCommandStyle->SetGuidance ("/vis/viewer/set/style wireframe|surface");
   fpCommandStyle->SetGuidance
@@ -120,8 +171,10 @@ G4VisCommandsViewerSet::~G4VisCommandsViewerSet() {
   delete fpCommandEdge;
   delete fpCommandHiddenEdge;
   delete fpCommandHiddenMarker;
+  delete fpCommandLineSegments;
   delete fpCommandLightsMove;
   delete fpCommandProjection;
+  delete fpCommandSectionPlane;
   delete fpCommandStyle;
 }
 
@@ -130,7 +183,7 @@ G4String G4VisCommandsViewerSet::GetCurrentValue(G4UIcommand* command) {
 }
 
 void G4VisCommandsViewerSet::SetNewValue
-(G4UIcommand* command, G4String newValue) {
+(G4UIcommand* command,G4String newValue) {
 
   G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
   if (!currentViewer) {
@@ -326,6 +379,14 @@ void G4VisCommandsViewerSet::SetNewValue
     G4cout << G4endl;
   }
 
+  else if (command == fpCommandLineSegments) {
+    G4int nSides = GetNewIntValue(newValue);
+    G4cout <<
+      "Number of line segements per circle in polygon approximation is "
+	   << nSides << G4endl;
+    vp.SetNoOfSides(nSides);
+  }
+
   else if (command == fpCommandProjection) {
     G4double fieldHalfAngle;
     if (newValue[0] == 'o') {  // "orthogonal"
@@ -358,6 +419,50 @@ void G4VisCommandsViewerSet::SetNewValue
       G4cout << "perspective\n  with half angle " << fieldHalfAngle / deg
 	     << " degrees.";
     }
+    G4cout << G4endl;
+  }
+
+  else if (command == fpCommandSectionPlane) {
+    G4String choice, unit;
+    G4double x, y, z, nx, ny, nz;
+    const char* t = newValue;
+    G4std::istrstream is ((char*)t);
+    is >> choice >> x >> y >> z >> unit >> nx >> ny >> nz;
+
+    G4int iSelector = -1;
+    if (choice.compareTo("off",G4String::ignoreCase) == 0) iSelector = 0;
+    if (choice.compareTo("on",G4String::ignoreCase) == 0) iSelector = 1;
+    if (iSelector < 0) {
+      G4cout << "Choice not recognised (on/off)." << G4endl;
+      G4cout << "Section drawing is currently: ";
+      if (vp.IsSection ()) G4cout << "on";
+      else                    G4cout << "off";
+      G4cout << ".\nSection plane is currently: "
+           << vp.GetSectionPlane ();
+      G4cout << G4endl;
+      return;
+    }
+
+    G4double F;
+    switch (iSelector) {
+    case 0:
+      vp.UnsetSectionPlane();
+      break;
+    case 1:
+      F = ValueOf(unit);
+      x *= F; y *= F; z *= F;
+      vp.SetSectionPlane(G4Plane3D(G4Normal3D(nx,ny,nz),
+				   G4Point3D(x,y,z)));
+      vp.SetViewpointDirection(G4Normal3D(nx,ny,nz));
+      break;
+    default: G4cout << "Choice not recognised (on/off).\n"; break;
+    }
+
+    G4cout << "Section drawing is now: ";
+    if (vp.IsSection ()) G4cout << "on";
+    else                    G4cout << "off";
+    G4cout << ".\nSection plane is now: "
+           << vp.GetSectionPlane ();
     G4cout << G4endl;
   }
 
@@ -407,5 +512,5 @@ void G4VisCommandsViewerSet::SetNewValue
     return;
   }
 
-  SetViewParameters(currentViewer, vp);
+  SetViewParameters(currentViewer,vp);
 }

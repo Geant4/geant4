@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.hh,v 1.15 2001-02-05 02:34:07 johna Exp $
+// $Id: G4VisManager.hh,v 1.16 2001-02-06 23:36:53 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -262,6 +262,10 @@ public: // With description
 
   /////////////////////////////////////////////////////////////////////
   // Access functions.
+
+  void Enable();
+  void Disable();
+  // Global enable/disable functions.
 
   G4VGraphicsSystem*           GetCurrentGraphicsSystem    () const;
   G4Scene*                     GetCurrentScene             () const;

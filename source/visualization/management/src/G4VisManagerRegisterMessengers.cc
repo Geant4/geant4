@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.25 2001-02-05 02:34:43 johna Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.26 2001-02-06 23:37:03 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -13,6 +13,7 @@
 
 #include "G4VisManager.hh"
 #include "G4VVisCommand.hh"
+#include "G4VisCommands.hh"
 #include "G4VisCommandsCompound.hh"
 #include "G4VisCommandsScene.hh"
 #include "G4VisCommandsSceneAdd.hh"
@@ -47,7 +48,7 @@ void G4VisManager::RegisterMessengers () {
 
 (Extract for working note.)
 
-# means "not implemented yet".
+NI means "not implemented yet".
 
 
 Introduction
@@ -97,7 +98,7 @@ The G4VisManager has a list of scenes.
   default:      current scene name
   This scene becomes current.
 
-# /vis/scene/edit
+NI /vis/scene/edit
 
 /vis/scene/remove <scene-name>
   Current scene can change or become invalid.
@@ -106,8 +107,8 @@ The G4VisManager has a list of scenes.
   default:                 all
   Adds to current scene.
 
-# /vis/scene/add/ghost [<particle>] [<physical-volume-name>]
-#                      [<copy-no>] [<depth>]
+NI /vis/scene/add/ghost [<particle>] [<physical-volume-name>]
+NI                      [<copy-no>] [<depth>]
 
 /vis/scene/add/logicalVolume <logical-volume-name> [<depth>] 
   default:                                             1
@@ -127,26 +128,26 @@ The G4VisManager has a list of scenes.
   Causes trajectories, if any, to be drawn at the end of processiing an event.
   Adds to current scene.
 
-# /vis/scene/add/transientObjects
+NI /vis/scene/add/transientObjects
   Adds in current scene.
 
-# /vis/scene/set/hitOption accumulate|byEvent
+NI /vis/scene/set/hitOption accumulate|byEvent
   Affects current scene.
 
-# /vis/scene/set/notifyOption immediate|delayed
+NI /vis/scene/set/notifyOption immediate|delayed
   Affects current scene.
 
-# /vis/scene/set/modelingStyle [<modeling-style>]
+NI /vis/scene/set/modelingStyle [<modeling-style>]
   Affects current scene.
 
 /vis/scene/notifyHandlers
   Refreshes all viewers of current scene.
   Does not issue "update" (see /vis/viewer/update).
 
-# /vis/scene/add/axes
+NI /vis/scene/add/axes
   Adds to current scene.
 
-# /vis/scene/add/text
+NI /vis/scene/add/text
   Adds to current scene.
 
 
@@ -182,11 +183,11 @@ The G4VisManager has a list of scene handlers.
 /vis/sceneHandler/remove <scene-handler-name>
   Current scene handler can change or become invalid.
 
-# /vis/sceneHandler/processScene
+NI /vis/sceneHandler/processScene
   Refreshes all viewers of current scene handler.
   Does not issue "update" (see /vis/viewer/update).
 
-# /vis/sceneHandler/notifyEndOfProcessing
+NI /vis/sceneHandler/notifyEndOfProcessing
   Issues "update" for each viewer of current scene handler.
 
 
@@ -205,7 +206,7 @@ contain spaces but must be unique up to the first space.
 /vis/viewer/clear
   Affects current viewer.
 
-# /vis/viewer/clone
+NI /vis/viewer/clone
   Creates a clone.  Clone becomes current viewer.
 
 /vis/viewer/create [<scene-handler>]           [<viewer-name>]     [<pixels>]
@@ -283,7 +284,7 @@ contain spaces but must be unique up to the first space.
 
 (Now follow some viewer/set commands.  A possible syntax is:
 
-# /vis/viewer/set <parameter-name> <parameter-value> [<parameter-value>]...
+NI /vis/viewer/set <parameter-name> <parameter-value> [<parameter-value>]...
 
 but this would mean re-inventing parameter parsing which is already
 contained in many G4UIcommand subclasses.  To re-use this code we have
@@ -304,7 +305,7 @@ to know the type of the parameter, so we need separate commands.)
   default: none true 0.01 g/cm3
   Affects current viewer.
 
-# /vis/viewer/set/cutawayPlane ...
+NI /vis/viewer/set/cutawayPlane ...
   Set plane(s) for cutaway views.
   Affects current viewer.
 
@@ -323,7 +324,7 @@ to know the type of the parameter, so we need separate commands.)
 /vis/viewer/set/lightsMove with-camera|with-object
   Affects current viewer.
 
-# /vis/viewer/set/lineSegmentsPerCircle        [<number-of-sides-per-circle>]
+/vis/viewer/set/lineSegmentsPerCircle        [<number-of-sides-per-circle>]
   default:                                         24
   Number of sides per circle in polygon/polyhedron graphical representation
     of objects with curved lines/surfaces.
@@ -334,19 +335,19 @@ to know the type of the parameter, so we need separate commands.)
   default: none                       30             deg
   Affects current viewer.
 
-#special# /vis/viewer/set/orbit (parameters)
+#specialNI /vis/viewer/set/orbit (parameters)
   Orbits the scene about the up-vector, lights fixed to the scene.  Draws N
     frames, the camera rotated Delta-beta about the up-vector each frame.
   Affects current viewer.
 
-# /vis/viewer/set/sectionPlane ...
+/vis/viewer/set/sectionPlane ...
   Set plane for drawing section (DCUT).  Specify plane by x y z units nx ny nz,
   e.g., for a y-z plane at x = 1 cm:
   /vis/viewer/set/section_plane on 1 0 0 cm 1 0 0
   Affects current viewer.
 
-#special# /vis/viewer/set/spin (parameters)
-#or#      /vis/viewer/advanced?
+#specialNI /vis/viewer/set/spin (parameters)
+#orNI      /vis/viewer/advanced?
   Spins the scene about the up-vector, lights fixed to the camera.  Draws N
   frames, the scene rotated Delta-beta about the up-vector each frame.
   Affects current viewer.
@@ -354,9 +355,9 @@ to know the type of the parameter, so we need separate commands.)
 /vis/viewer/set/style w[ireframe]|s[urface]
   Affects current viewer.
 
-# /vis/viewer/notifyOption immediate|delayed ?Issue of "update" after "set"?
+NI /vis/viewer/notifyOption immediate|delayed ?Issue of "update" after "set"?
 
-# /vis/viewer/notifyHandler ??
+NI /vis/viewer/notifyHandler ??
 
 /vis/viewer/update [<viewer-name>]
   default:     current viewer name
@@ -369,17 +370,17 @@ Attributes (nothing implemented yet)
 The G4VisManager also keeps a list of visualization attributes which can
 be created and changed and attributed to visualizable objects.
 
-# /vis/attributes/create [<vis-attributes-name>]
+NI /vis/attributes/create [<vis-attributes-name>]
   default:                 auto-generated name
   These attributes become current.
 
-# /vis/attributes/set/colour [<vis-attributes-name>] [<r>]  [<g>] [<b>] [<o>]
-# /vis/attributes/set/color  [<vis-attributes-name>] [<r>]  [<g>] [<b>] [<o>]
+NI /vis/attributes/set/colour [<vis-attributes-name>] [<r>]  [<g>] [<b>] [<o>]
+NI /vis/attributes/set/color  [<vis-attributes-name>] [<r>]  [<g>] [<b>] [<o>]
   default:                   current attributes name   1      1     1     1
   Sets colour (red, green, blue, opacity).
   Affects current vis attributes.
 
-# /vis/scene/set/attributes <logical-volume-name>
+NI /vis/scene/set/attributes <logical-volume-name>
   Associates current vis attributes with logical volume.  (Do we need to
     provide possibility of resetting to original attributes?)
   (Move to scene when implemented.)
@@ -388,13 +389,13 @@ be created and changed and attributed to visualizable objects.
 General Commands
 ================
 
-# /vis/verbose [<verbosity-integer>]
-  default:               0
-
-# /vis/activate [true|false]
+/vis/enable [true|false]
   default:       true
-  Activates/deactivates visualization system.
-  (Should this apply to user code only or all vis commands?)
+/vis/disable
+  Enables/disables visualization system.
+
+/vis/verbose [<verbosity-integer>]
+  default:               0
 
 
 Compound Commands
@@ -405,7 +406,7 @@ default:          error                600
   /vis/sceneHandler/create $1
   /vis/viewer/create ! ! $2
 
-# /vis/draw <physical-volume-name> but this clashes with old /vis~/draw/, so...
+NI /vis/draw <physical-volume-name> clashes with old /vis~/draw/, so...
 /vis/drawVolume [<physical-volume-name>]
 default:             world
   /vis/scene/create
@@ -440,6 +441,8 @@ default: 0 0 0 0 cm 1 0 cm
   G4UIcommand* command;
   command = new G4UIdirectory ("/vis/");
   command -> SetGuidance ("Visualization commands.");
+  fMessengerList.append (new G4VisCommandEnable);
+  fMessengerList.append (new G4VisCommandVerbose);
 
   command = new G4UIdirectory ("/vis/scene/");
   command -> SetGuidance ("Operations on Geant4 scenes.");
