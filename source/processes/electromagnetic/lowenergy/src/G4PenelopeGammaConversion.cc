@@ -22,7 +22,7 @@
 //
 // --------------------------------------------------------------------
 ///
-// $Id: G4PenelopeGammaConversion.cc,v 1.3 2003-03-10 12:18:34 vnivanch Exp $
+// $Id: G4PenelopeGammaConversion.cc,v 1.4 2003-03-13 17:03:34 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,9 +31,10 @@
 // Author: L.Pandola
 // History:
 // --------
-// 02/12/2002 L.Pandola 1st implementation
+// 02 Dec 2002 L.Pandola    1st implementation
 // 12 Feb 2003   MG Pia     Migration to "cuts per region"
-// 10 Mar 2003 V.Ivanchenko   Remome CutPerMaterial warning
+// 10 Mar 2003 V.Ivanchenko Remove CutPerMaterial warning
+// 13 Mar 2003 L.Pandola    Code "cleaned"  
 // --------------------------------------------------------------
 
 #include "G4PenelopeGammaConversion.hh"
@@ -116,8 +117,7 @@ G4VParticleChange* G4PenelopeGammaConversion::PostStepDoIt(const G4Track& aTrack
   aParticleChange.Initialize(aTrack);
 
   const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
-  //  G4Material* material = aTrack.GetMaterial();
-
+ 
   const G4DynamicParticle* incidentPhoton = aTrack.GetDynamicParticle();
   G4double photonEnergy = incidentPhoton->GetKineticEnergy();
   G4ParticleMomentum photonDirection = incidentPhoton->GetMomentumDirection();
@@ -149,12 +149,10 @@ G4VParticleChange* G4PenelopeGammaConversion::PostStepDoIt(const G4Track& aTrack
       G4double Z=ionisation->GetZ(); 
       G4double ZAlpha = Z*fine_structure_const;
       G4double ScreenRadius = GetScreeningRadius(Z);
-      //G4cout << "Atomic number" << (G4int) Z << G4endl;
-      //G4cout << "Screening radius" << ScreenRadius << G4endl;
-      G4double funct1,g0;
-      G4double g1min,g2min;
+      G4double funct1=0,g0=0;
+      G4double g1min=0,g2min=0;
       funct1 = 4.0*log(ScreenRadius);
-      g0 = funct1-4*CoulombCorrection(ZAlpha)+LowEnergyCorrection(ZAlpha,eki); //eq. (2.92)
+      g0 = funct1-4*CoulombCorrection(ZAlpha)+LowEnergyCorrection(ZAlpha,eki); 
       G4double bmin = 2*eki*ScreenRadius;
       g1min=g0+ScreenFunction(bmin,1);
       g2min=g0+ScreenFunction(bmin,2);
@@ -187,8 +185,8 @@ G4VParticleChange* G4PenelopeGammaConversion::PostStepDoIt(const G4Track& aTrack
 	  {
 	    eps = eki+2.0*xr*G4UniformRand();
 	    b = (eki*ScreenRadius)/(2*eps*(1.0-eps));
-	    g1 = g0+ScreenFunction(b,2); //e' quella che in Penelope e' chiamata g2
-	    if (g1 < 0) g1=0; //usando gli stessi nomi l'espressione di uscita dal loop e' unica
+	    g1 = g0+ScreenFunction(b,2); 
+	    if (g1 < 0) g1=0; 
 	    rand3 = G4UniformRand()*g2min;
 	  }	   
       } while (rand3>g1);
@@ -205,7 +203,7 @@ G4VParticleChange* G4PenelopeGammaConversion::PostStepDoIt(const G4Track& aTrack
   //electron kinematics
   G4double costheta_el,costheta_po;
   G4double phi_el,phi_po;
-  G4double electronKineEnergy = G4std::max(0.,electronTotEnergy - electron_mass_c2) ; //EE di Penelope
+  G4double electronKineEnergy = G4std::max(0.,electronTotEnergy - electron_mass_c2) ; 
   costheta_el = G4UniformRand()*2.0-1.0;
   G4double kk = sqrt(electronKineEnergy*(electronKineEnergy+2*electron_mass_c2));
   costheta_el = (costheta_el*electronTotEnergy+kk)/(electronTotEnergy+costheta_el*kk);
@@ -215,7 +213,7 @@ G4VParticleChange* G4PenelopeGammaConversion::PostStepDoIt(const G4Track& aTrack
   G4double dirZ_el = costheta_el;
 
   //positron kinematics
-  G4double positronKineEnergy = G4std::max(0.,positronTotEnergy - electron_mass_c2) ; //EP di Penelope
+  G4double positronKineEnergy = G4std::max(0.,positronTotEnergy - electron_mass_c2) ; 
   costheta_po = G4UniformRand()*2.0-1.0;
   kk = sqrt(positronKineEnergy*(positronKineEnergy+2*electron_mass_c2));
   costheta_po = (costheta_po*positronTotEnergy+kk)/(positronTotEnergy+costheta_po*kk);
@@ -251,7 +249,7 @@ G4VParticleChange* G4PenelopeGammaConversion::PostStepDoIt(const G4Track& aTrack
       localEnergyDeposit += electronKineEnergy ; 
     }
 
-  // Is the local energy deposit correct, if the positron is always created?
+ 
   if (! (rangeTest->Escape(G4Positron::Positron(),couple,positronKineEnergy,safety)))
     {
       localEnergyDeposit += positronKineEnergy ;
@@ -326,8 +324,7 @@ G4double G4PenelopeGammaConversion::ScreenFunction(G4double b,G4int icase)
       
 G4double G4PenelopeGammaConversion::CoulombCorrection(G4double a)
 {
-  //a=Z*alpha
-  G4double fc;
+  G4double fc=0;
   G4double b[7] = {0.202059,-0.03693,0.00835,-0.00201,0.00049,-0.00012,0.00003};
   fc = ((1.0/(1.0+a*a))+b[0]+b[1]*pow(a,2)+b[2]*pow(a,4)+b[3]*pow(a,6)+b[4]*pow(a,8)+b[5]*pow(a,10)+b[6]*pow(a,12));
   fc=pow(a,2)*fc;
@@ -336,8 +333,7 @@ G4double G4PenelopeGammaConversion::CoulombCorrection(G4double a)
 
 G4double G4PenelopeGammaConversion::LowEnergyCorrection(G4double a,G4double eki)
 {
-  //a=Z*alpha
-  G4double f0,t;
+  G4double f0=0,t=0;
   G4double b[12] = {-1.744,-12.10,11.18,8.523,73.26,-41.41,-13.52,-121.1,94.41,8.946,62.05,-63.41};
   t=sqrt(2.0*eki);
   f0=(b[0]+b[1]*a+b[2]*a*a)*t+(b[3]+b[4]*a+b[5]*a*a)*pow(t,2)+(b[6]+b[7]*a+b[8]*a*a)*pow(t,3)+
@@ -345,7 +341,7 @@ G4double G4PenelopeGammaConversion::LowEnergyCorrection(G4double a,G4double eki)
   return f0;
 }
 
-G4double G4PenelopeGammaConversion::GetScreeningRadius(G4double Z) //ho bisogno di accedere ad un file di dati!!!
+G4double G4PenelopeGammaConversion::GetScreeningRadius(G4double Z) 
 {
   char* path = getenv("G4LEDATA");
   if (!path)
@@ -372,7 +368,6 @@ G4double G4PenelopeGammaConversion::GetScreeningRadius(G4double Z) //ho bisogno 
 	return a1;
       }
   } 
-  //se arriva qui ha qualche problema!  
   G4String excep = "G4PenelopeGammaConversion - Screening Radius for not found in the data file";
   G4Exception(excep);
   return 0;
