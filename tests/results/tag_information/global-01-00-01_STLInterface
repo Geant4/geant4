@@ -1,0 +1,12 @@
+ "global-01-00-01" includes many updates to the STLInterface
+ (internal tag STLInterface-04), NB - development is still going on
+ here, do not consider it a "stable" module yet.
+---------------------
+May 14th G.Cosmo (global-01-00-01)
+- Still updates to STLInterface from the STL task-force (internal tag
+  considered is STLInterface-04). Introduced wrapper files
+  differentiated for each architecture.
+ 
+May 11th G.Cosmo
+- Updates and fixes to STLInterface headers.
+  Input mainly from DEC and HP.

@@ -1,0 +1,5 @@
+- Added G4Poisson.hh to HEPRandom/include.
+  It includes the implementation of the global function
+  "G4long G4Poisson(G4double)" which reproduces the GPOISS algorithm
+  adopted in Geant3. Uses the CLHEP standard engines as basic random
+  generators.

@@ -1,0 +1,42 @@
+13th May 1999  Gabriele Cosmo (config-01-00-05)
+- architecture.gmk: G4USE_OSPACE setup is now independent from
+  G4USE_STL which is now devoted for generic STL setup. Added
+  -DOS_NO_TYPEDEF_5 option to HP-aCC for ObjectSpace.
+ 
+12th May 1999  Gabriele Cosmo
+- architecture.gmk: modified path to STL wrapper files directory to
+  point to $RWINC/wrappers/$G4SYSTEM. Wrappers are now differenciated
+  according to the architecture type.
+ 
+11th May 1999  Gabriele Cosmo
+- architecture.gmk: merged Isidro's OSPACE setup for HP-aCC.
+  Reorganised OSPACE options by introducing OSPACEINC variable.
+ 
+10th May 1999  Guy Barrand
+- interactivity.gmk ; put OpenGL things after OPACS things to have 
+  correct link order.
+ 
+10th May 1999  John Allison
+- Added -I$(OSPACEDIR)/ospace/stl for Sun.
+ 
+7th May 1999  John Allison
+- Added GREP := grep except for SUN.
+- Introduced STLInterface/wrappers directory. Testing on
+  OSF+ObjectSpace (G.Cosmo).
+ 
+6th May 1999  Gabriele Cosmo
+- Introduced G4USE_OSPACE for ObjectSpace STL.
+  Modified architecture.gmk and binmake.gmk.
+ 
+6th May 1999  John Allison
+- Removed extra library for circular dependencies.  Now all solved!
+ 
+5th May 1999  Gabriele Cosmo
+- Fixed typo in architecture.gmk and defined OSPACEDIR to point to
+  the G4 dev area where links to the ObjectSpace installations at
+  CERN have been created for all platforms. "pro" version points to
+  ObjectSpace 2.1.
+ 
+5th May 1999  John Allison
+- Eliminated all references to RW in the case of G4USE_STL.
+- Added OSPACE variables.

@@ -1,0 +1,4 @@
+  cvs update -d -A run/src/G4RunManager.cc
+  cvs update -d -A geometry/volumes/include/G4NavigationLevel.hh
+  cvs update -d -A geometry/volumes/include/G4NavigationLevel.icc
+  cvs update -d -A geometry/volumes/src/G4Navigator.cc

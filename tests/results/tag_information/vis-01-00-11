@@ -1,0 +1,69 @@
+     Hello vis and testers
+
+  I have been able to reconstruct Geant4 and test201 
+ on the LAL machines :
+         Linux-g++
+         DEC-cxx
+         HP-aCC
+         SunOS-CC
+         NT-4.0-VC-6.0 (without Cygnus)
+  It is based on 
+     ref-06
+     RW
+     CLHEP-1.4
+     granular libs
+
+  Through test201 I focus mainly on testing interfaces
+ and visualization.
+
+  test201 have been reconstructed and tested with
+     G4UIXm (on UNIX)
+   + G4UIWin32 (on NT)
+   + HEPVis (recent 5.1 should be ok)
+   + SoFree (with a not yet release version) (UNIX and NT)
+   + TGS Inventor2.5 on DEC
+   + TGS Inventor2.5 on NT
+
+  The test :
+   - initialize a simple geometry
+   - draw it with the new vis command system.
+   - loop over events by drawing the trajectories
+     (mainly an em shower).
+ 
+  It permits me to find various problems in interfaces
+ and visualization categories. Things for interfaces are committed
+ and I am going to commit vis things now. In vis, mainly
+ corrections are for the Inventor driver. Some touches
+ vis/management : add a "ClearTransientStore' in G4VScenehandler,
+ some protection over null pointers, have trajectory drawn
+ as polyline by default (if not, it overflows Inventor scene graph),
+ etc...
+  I have already noticed other problems, like increase of the
+ memory used when looping over events (trajectory badly deleted ?),
+ etc...
+
+  The size of the binaries are interesting :
+    21 457 664 Linux-g++/test201
+    17 412 328 HP-aCC/test201
+    11 024 496 SunOS-CC/test201
+    48 832 512 DEC-cxx/test201
+  The 50 Mbytes of DEC are interesting...
+
+  I plan now to have test201 running here for other ui, vis drivers
+ and environments (and try perhaps to have a 100Mbytes binary on DEC !).
+
+    Cheers   
+
+      Guy
+
+PS : All this is exhausting ; it tooks me quite two weeks 
+     to have test201 on all these platforms ; too long...
+PSPS : As I have said, because I want to concentrate on the 
+       visualization, I don't plan to jump in the STL things.
+-------------------------------------------------------------
+Guy Barrand                   e-mail: barrand@lal.in2p3.fr
+LAL                           Tel: +33 (1) 64 46 84 17
+Universite de Paris-Sud       Fax: +33 (1) 69 07 94 04
+B.P 34
+91898 ORSAY CEDEX France
+-------------------------------------------------------------
