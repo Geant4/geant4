@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em8RunAction.cc,v 1.4 2000-06-27 13:29:52 gcosmo Exp $
+// $Id: Em8RunAction.cc,v 1.5 2000-06-28 09:55:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -21,7 +21,9 @@
 #include "g4std/iomanip"
 
 #include "Randomize.hh"
-#include "CLHEP/Hist/HBookFile.h"
+#ifndef G4NOHIST
+  #include "CLHEP/Hist/HBookFile.h"
+#endif
 #include <assert.h>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -29,11 +31,14 @@
 Em8RunAction::Em8RunAction()
   :histName("histfile"),nbinStep(0),nbinEn(0),nbinTt(0),nbinTb(0),
    nbinTsec(0),nbinTh(0),nbinThback(0),nbinR(0),nbinGamma(0),
-   nbinvertexz(0),histo1(0),histo2(0),histo3(0),histo4(0),histo5(0),
-   histo6(0),histo7(0),histo8(0),histo9(0),histo10(0)
+   nbinvertexz(0)
 {
   runMessenger = new Em8RunMessenger(this);
   saveRndm = 1;  
+#ifndef G4NOHIST
+  histo1=0; histo2=0; histo3=0; histo4=0; histo5=0;
+  histo6=0; histo7=0; histo8=0; histo9=0; histo10=0;
+#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -41,6 +46,7 @@ Em8RunAction::Em8RunAction()
 Em8RunAction::~Em8RunAction()
 {
   delete runMessenger;
+#ifndef G4NOHIST
   if(histo1) delete histo1 ;
   if(histo2) delete histo2 ;
   if(histo3) delete histo3 ;
@@ -52,13 +58,14 @@ Em8RunAction::~Em8RunAction()
   if(histo9) delete histo9 ;
   if(histo10) delete histo10 ;
   delete hbookManager;
-
+#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 void Em8RunAction::bookHisto()
 {
+#ifndef G4NOHIST
   // init hbook
 
   hbookManager = new HBookFile(histName, 68);
@@ -127,6 +134,7 @@ void Em8RunAction::bookHisto()
                                 ,nbinGamma,log10(ElowGamma),log10(EhighGamma))  ;
     assert (histo10 != 0);
   }
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -727,8 +735,10 @@ void Em8RunAction::EndOfRunAction(const G4Run* aRun)
   }
   // Write histogram file
 
+#ifndef G4NOHIST
   hbookManager->write();
-   
+#endif
+
   // save Rndm status
 
   if (saveRndm == 1)
@@ -789,10 +799,11 @@ void Em8RunAction::AddTrRef(G4double tr,G4double ref)
 
 void Em8RunAction::FillNbOfSteps(G4double ns)
 {
+#ifndef G4NOHIST
   const G4double eps = 1.e-10 ;
   G4double n,bin ;
   G4int ibin;
- 
+
   if(histo1)
   {
     entryStep += 1. ;
@@ -810,12 +821,14 @@ void Em8RunAction::FillNbOfSteps(G4double ns)
     }
    histo1->accumulate(ns) ;
   }
+#endif
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
 void Em8RunAction::FillEn(G4double En)
 {
+#ifndef G4NOHIST
   G4double bin ;
   G4int ibin;
 
@@ -833,12 +846,14 @@ void Em8RunAction::FillEn(G4double En)
     }
     histo2->accumulate(En/keV) ; // was /MeV
   }
+#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////
 
 void Em8RunAction::FillTt(G4double En)
 {
+#ifndef G4NOHIST
   G4double bin ;
   G4int ibin;
 
@@ -860,12 +875,14 @@ void Em8RunAction::FillTt(G4double En)
     }
   histo5->accumulate(En/MeV) ;
   }
+#endif
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
 void Em8RunAction::FillTb(G4double En)
 {
+#ifndef G4NOHIST
   G4double bin ;
   G4int ibin;
   
@@ -887,12 +904,14 @@ void Em8RunAction::FillTb(G4double En)
     }
   histo7->accumulate(En/MeV) ;
   }
+#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 void Em8RunAction::FillTsec(G4double En)
 {
+#ifndef G4NOHIST
   G4double bin ;
   G4int ibin;
 
@@ -912,12 +931,14 @@ void Em8RunAction::FillTsec(G4double En)
     }
   histo8->accumulate(En/MeV) ;
   }
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
 void Em8RunAction::FillGammaSpectrum(G4double En)
 {
+#ifndef G4NOHIST
   G4double bin ;
   G4int ibin;
 
@@ -937,12 +958,14 @@ void Em8RunAction::FillGammaSpectrum(G4double En)
     }
   histo10->accumulate(log10(En/MeV)) ;
   }
+#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 void Em8RunAction::FillTh(G4double Th)
 {
+#ifndef G4NOHIST
   static const G4double cn=pi/(64800.*dTh) ;
   static const G4double cs=pi/
         (64800.*(cos(Thlow)-cos(Thlow+dTh)));      
@@ -978,12 +1001,14 @@ void Em8RunAction::FillTh(G4double Th)
 
   histo3->accumulate(Th/deg, wg) ;
   }
+#endif
 }
 
 //////////////////////////////////////////////////////////////////////////
 
 void Em8RunAction::FillThBack(G4double Th)
 {
+#ifndef G4NOHIST
   static const G4double cn=pi/(64800.*dThback) ;
   static const G4double cs=pi/
         (64800.*(cos(Thlowback)-cos(Thlowback+dThback)));      
@@ -1016,13 +1041,14 @@ void Em8RunAction::FillThBack(G4double Th)
     }
   histo6->accumulate(Th/deg, wg) ;
   }
-
+#endif
 }
 
 //////////////////////////////////////////////////////////////////////////
 
 void Em8RunAction::FillR(G4double R )
 {
+#ifndef G4NOHIST
   G4double bin ;
   G4int ibin;
 
@@ -1044,12 +1070,14 @@ void Em8RunAction::FillR(G4double R )
     }
   histo4->accumulate(R/mm) ;
   }
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
 void Em8RunAction::Fillvertexz(G4double z )
 {
+#ifndef G4NOHIST
   G4double bin ;
   G4int ibin;
   
@@ -1069,6 +1097,7 @@ void Em8RunAction::Fillvertexz(G4double z )
     }
   histo9->accumulate(z/mm) ;
   }
+#endif
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1085,6 +1114,7 @@ void Em8RunAction::SetnbinStep(G4int nbin)
   if(nbinStep>0)
   G4cout << " Nb of bins in #step plot = " << nbinStep << G4endl ;
 }
+
 void Em8RunAction::SetSteplow(G4double low)
 {
   Steplow = low ;
@@ -1106,11 +1136,13 @@ void Em8RunAction::SetnbinEn(G4int nbin)
 
   if(nbinEn > 0) G4cout << " Nb of bins in Edep plot = " << nbinEn << G4endl ;
 }
+
 void Em8RunAction::SetEnlow(G4double Elow)
 {
   Enlow = Elow ;
   if(nbinEn>0) G4cout << " Elow  in the  Edep plot = " << Enlow << G4endl ;
 }
+
 void Em8RunAction::SetEnhigh(G4double Ehigh)
 {
   Enhigh = Ehigh ;
@@ -1126,12 +1158,14 @@ void Em8RunAction::SetnbinGamma(G4int nbin)
   if(nbinGamma>0)
   G4cout << " Nb of bins in gamma spectrum plot = " << nbinGamma << G4endl ;
 }
+
 void Em8RunAction::SetElowGamma(G4double Elow)
 {
   ElowGamma = Elow ;
   if(nbinGamma>0)
   G4cout << " Elow  in the gamma spectrum plot = " << ElowGamma << G4endl ;
 }
+
 void Em8RunAction::SetEhighGamma(G4double Ehigh)
 {
   EhighGamma = Ehigh ;
@@ -1145,30 +1179,35 @@ void Em8RunAction::SetnbinTt(G4int nbin)
   if(nbinTt>0)
   G4cout << " Nb of bins in Etransmisssion plot = " << nbinTt << G4endl ;
 }
+
 void Em8RunAction::SetTtlow(G4double Elow)
 {
   Ttlow = Elow ;
   if(nbinTt>0)
   G4cout << " Elow  in the  Etransmission plot = " << Ttlow << G4endl ;
 }
+
 void Em8RunAction::SetTthigh(G4double Ehigh)
 {
   Tthigh = Ehigh ;
   if(nbinTt>0)
   G4cout << " Ehigh in the  Etransmission plot = " << Tthigh << G4endl ;
 }
+
 void Em8RunAction::SetnbinTb(G4int nbin)
 {
   nbinTb = nbin ;
   if(nbinTb>0)
   G4cout << " Nb of bins in Ebackscattered plot = " << nbinTb << G4endl ;
 }
+
 void Em8RunAction::SetTblow(G4double Elow)
 {
   Tblow = Elow ;
   if(nbinTb>0)
   G4cout << " Elow  in the  Ebackscattered plot = " << Tblow << G4endl ;
 }
+
 void Em8RunAction::SetTbhigh(G4double Ehigh)
 {
   Tbhigh = Ehigh ;
@@ -1182,12 +1221,14 @@ void Em8RunAction::SetnbinTsec(G4int nbin)
   if(nbinTsec>0)
   G4cout << " Nb of bins in Tsecondary  plot = " << nbinTsec << G4endl ;
 }
+
 void Em8RunAction::SetTseclow(G4double Elow)
 {
   Tseclow = Elow ;
   if(nbinTsec>0)
   G4cout << " Elow  in the  Tsecondary plot = " << Tseclow << G4endl ;
 }
+
 void Em8RunAction::SetTsechigh(G4double Ehigh)
 {
   Tsechigh = Ehigh ;
@@ -1201,12 +1242,14 @@ void Em8RunAction::SetnbinR(G4int nbin)
   if(nbinR>0)
   G4cout << " Nb of bins in R plot = " << nbinR << G4endl ;
 }
+
 void Em8RunAction::SetRlow(G4double rlow)
 {
   Rlow = rlow ;
   if(nbinR>0)
   G4cout << " Rlow  in the  R plot = " << Rlow << G4endl ;
 }
+
 void Em8RunAction::SetRhigh(G4double rhigh)
 {
   Rhigh = rhigh ;
@@ -1220,12 +1263,14 @@ void Em8RunAction::Setnbinzvertex(G4int nbin)
   if(nbinvertexz>0)
   G4cout << " Nb of bins in Z plot = " << nbinvertexz << G4endl ;
 }
+
 void Em8RunAction::Setzlow(G4double z)
 {
   zlow = z ;
   if(nbinvertexz>0)
   G4cout << " zlow  in the  Z plot = " << zlow << G4endl ;
 }
+
 void Em8RunAction::Setzhigh(G4double z)
 {
   zhigh = z ;
@@ -1239,12 +1284,14 @@ void Em8RunAction::SetnbinTh(G4int nbin)
   if(nbinTh>0)
   G4cout << " Nb of bins in Theta plot = " << nbinTh << G4endl ;
 }
+
 void Em8RunAction::SetThlow(G4double Tlow)
 {
   Thlow = Tlow ;
   if(nbinTh>0)
   G4cout << " Tlow  in the  Theta plot = " << Thlow << G4endl ;
 }
+
 void Em8RunAction::SetThhigh(G4double Thigh)
 {
   Thhigh = Thigh ;
@@ -1258,18 +1305,21 @@ void Em8RunAction::SetnbinThBack(G4int nbin)
   if(nbinThback>0)
   G4cout << " Nb of bins in Theta plot = " << nbinThback << G4endl ;
 }
+
 void Em8RunAction::SetThlowBack(G4double Tlow)
 {
   Thlowback = Tlow ;
   if(nbinThback>0)
   G4cout << " Tlow  in the  Theta plot = " << Thlowback << G4endl ;
 }
+
 void Em8RunAction::SetThhighBack(G4double Thigh)
 {
   Thhighback = Thigh ;
   if(nbinThback>0)
   G4cout << " Thigh in the Theta plot = " << Thhighback << G4endl ;
 }
+
 void Em8RunAction::CountParticles(G4double nch,G4double nne)
 {
   SumCharged += nch ;
@@ -1277,6 +1327,7 @@ void Em8RunAction::CountParticles(G4double nch,G4double nne)
   Sum2Charged += nch*nch ;
   Sum2Neutral += nne*nne ;
 }
+
 void Em8RunAction::AddEP(G4double nele,G4double npos) 
 {
   Selectron += nele;
@@ -1286,7 +1337,3 @@ void Em8RunAction::AddEP(G4double nele,G4double npos)
 //
 //
 ////////////////////////////////////////////////////////////////////////
-
-
-
-
