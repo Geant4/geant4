@@ -3,6 +3,7 @@
 
 #include "G4BinaryCascade.hh"
 #include "G4PreCompoundModel.hh"
+#include "G4ParticleChange.hh"
 
 class G4BinaryLightIonReaction : public G4HadronicInteraction 
 {
@@ -12,6 +13,7 @@ class G4BinaryLightIonReaction : public G4HadronicInteraction
   private:
     G4BinaryCascade theModel;
     G4PreCompoundModel theProjectileFragmentation;
+    G4ParticleChange theResult;
 };
 
 #endif

@@ -111,10 +111,35 @@ ApplyYourself(const G4Track &aTrack, G4Nucleus & targetNucleus )
       }
     }
     // Rotate to lab
+  G4LorentzRotation toZ;
+  toZ.rotateZ(-1*mom.phi());
+  toZ.rotateY(-1*mom.theta());
+  G4LorentzRotation toLab(toZ.inverse());
+  
     // ...
-    // Fill the particle change
+    // Fill the particle change, while rotating. set z->-z in case we swapped.
     // ... 
-  return 0;
+  
+  theParticleChange.Clear();
+  theParticleChange.Initialize(aTrack);
+  theParticleChange.SetStatusChange(fStopAndKill);
+  theParticleChange.SetNumberOfSecondaries(result->size());
+  for(G4int i=0; i<result->size(); i++)
+  {
+    G4DynamicParticle * aNew = 
+      new G4DynamicParticle((*result)[i]->GetDefinition(),
+                            (*result)[i]->GetTotalEnergy(),
+			    (*result)[i]->GetMomentum() );
+    G4LorentzVector tmp = aNew->Get4Momentum();
+    tmp *= toLab;
+    if(swapped)
+    {
+      tmp.setZ(-tmp.getZ());
+    }    
+    aNew->Set4Momentum(tmp);
+    theParticleChange.AddSecondary(aNew);
+  }
+  return &theResult;
 }
 
 
