@@ -38,10 +38,10 @@
 //    of cones describing the lens grooves.
 //    An  UltraFresnelLensParameterisation object is created in the UltraFresnelLens class
 //
+#include <cmath>
 #include "UltraFresnelLensParameterisation.hh"
 #include "UltraFresnelLens.hh"
 
-#include <math.h>
 #include "G4VPhysicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4Cons.hh"

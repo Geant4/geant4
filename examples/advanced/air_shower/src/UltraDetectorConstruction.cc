@@ -41,6 +41,7 @@
 //    The main part of the UVscope definition is the Fresnel lens construction based
 //    on the UltraFresnelLens class.
 //
+#include <cmath>
 #include "UltraDetectorConstruction.hh"
 #include "UltraPMTSD.hh"
 #include "UltraFresnelLens.hh"
@@ -245,7 +246,7 @@ void UltraDetectorConstruction::ConstructTableMaterials()
 
 // Air refractive index at 20 oC and 1 atm (from PDG) 
   for(G4int j=0 ; j<NUMENTRIES ; j++){
-    RINDEX_AIR[j] = RINDEX_AIR[j] + 2.73*pow(10.0,-4) ; 
+    RINDEX_AIR[j] = RINDEX_AIR[j] + 2.73*std::pow(10.0,-4) ; 
     }
 
   G4MaterialPropertiesTable *MPT_Air = new G4MaterialPropertiesTable();
@@ -478,8 +479,8 @@ G4VPhysicalVolume *physicalUVscopeBack =
 
 G4double      LensDiameter        = 457*mm ; // Size of the optical active area of the lens.
 G4int      LensNumOfGrooves    = 13 ;
-//G4double      LensNumOfGrooves    = 129 ;
-//G4double      LensNumOfGrooves    = 1287 ;
+//G4int      LensNumOfGrooves    = 129 ;
+//G4int      LensNumOfGrooves    = 1287 ;
 
 G4double      LensBorderThickness = 2.8*mm ;     // Thickness of the border area. 
 G4double      LensFocalLength     = 441.973*mm ; // This parameter depends on the lens geometry, etc !!

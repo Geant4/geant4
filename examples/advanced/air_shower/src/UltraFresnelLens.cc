@@ -38,6 +38,7 @@
 //    This class makes use of the UltraFresnelLensParameterisation class.
 //    The lens profile is define through the GetSagita method.   
 //
+#include <cmath>
 #include "UltraFresnelLens.hh"
 #include "UltraFresnelLensParameterisation.hh"
 
@@ -132,15 +133,15 @@ G4double UltraFresnelLens::GetSagita(G4double radius)
   G4double TotAspher = 0.0*mm ;
 
   for(G4int k=1;k<9;k++){
-    TotAspher += Aspher[k-1]*pow(radius,2*k) ;
+    TotAspher += Aspher[k-1]*std::pow(radius,2*k) ;
   }
 
-  G4double ArgSqrt = 1.0-(1.0+Conic)*pow(Curvature,2)*pow(radius,2) ; 
+  G4double ArgSqrt = 1.0-(1.0+Conic)*std::pow(Curvature,2)*std::pow(radius,2) ; 
 
   if (ArgSqrt < 0.0){
      G4Exception("UltraFresnelLensParameterisation::Sagita: Square Root of <0 !");
   }
-  G4double Sagita_value = Curvature*pow(radius,2)/(1.0+sqrt(ArgSqrt)) + TotAspher;
+  G4double Sagita_value = Curvature*std::pow(radius,2)/(1.0+std::sqrt(ArgSqrt)) + TotAspher;
 
   return Sagita_value ;
 

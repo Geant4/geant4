@@ -36,7 +36,6 @@
 //    Ultra EventAction class. The UltraAnalysisManager class is used for histogram
 //    filling if the G4ANALYSIS_USE environment variable is set.
 //
-#include <math.h>
 #include "UltraEventAction.hh"
 #include "UltraRunAction.hh"
 #include "UltraPrimaryGeneratorAction.hh"
