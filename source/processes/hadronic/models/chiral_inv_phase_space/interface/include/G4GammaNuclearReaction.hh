@@ -20,6 +20,15 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//
+// $Id: G4GammaNuclearReaction.hh,v 1.7 2002-05-22 11:43:15 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+// GEANT4 physics class: G4GammaNuclearReaction -- header file
+// Created: M.V. Kossov, CERN/ITEP(Moscow), 10-OCT-01
+// The last update: M.V. Kossov, CERN/ITEP (Moscow) 21-May-02
+//
 #ifndef G4GammaNuclearReaction_h
 #define G4GammaNuclearReaction_h
 
