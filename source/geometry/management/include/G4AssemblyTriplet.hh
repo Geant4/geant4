@@ -1,5 +1,5 @@
-#ifndef ASSEMBLYTRIPLET_H
-#define ASSEMBLYTRIPLET_H 1
+#ifndef G4_ASSEMBLYTRIPLET_H
+#define G4_ASSEMBLYTRIPLET_H 
 
 #include "G4LogicalVolume.hh"
 #include "G4ThreeVector.hh"
@@ -76,5 +76,5 @@ private:
 
 #include "G4AssemblyTriplet.icc"
 
-#endif //ASSEMBLYTRIPLET_H
+#endif // G4_ASSEMBLYTRIPLET_H
 
