@@ -21,12 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConcreteNNToDeltaDeltastar.cc,v 1.2 2003-11-19 15:35:30 hpw Exp $ //
+// $Id: G4ConcreteNNToDeltaDeltastar.cc,v 1.3 2003-11-20 10:08:56 jwellisc Exp $ //
 
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ConcreteNNToDeltaDeltastar.hh"
 #include "G4DeltaDeltastarBuilder.hh"
+#include <typeinfo>
 
 G4XDeltaDeltastarTable G4ConcreteNNToDeltaDeltastar::theSigmaTable;
 
@@ -42,12 +43,12 @@ G4ConcreteNNToDeltaDeltastar::G4ConcreteNNToDeltaDeltastar(const G4ParticleDefin
   chargeBalance -= bSecondary->GetPDGCharge();
   if(abs(chargeBalance) >.1)
   {
+    G4cout << "Charge conservation problem in G4ConcreteNNToDeltaDeltastar"<<G4endl;
     G4cout << "Initial charges in "<<typeid(*this).name()<<G4endl;
     G4cout << aPrimary->GetPDGCharge()<<" "<<aPrimary->GetParticleName()
            << bPrimary->GetPDGCharge()<<" "<<bPrimary->GetParticleName()
 	   << aSecondary->GetPDGCharge()<<" "<<aSecondary->GetParticleName()
 	   << bSecondary->GetPDGCharge()<<" "<<bSecondary->GetParticleName()<<G4endl;
-    exit(0);
   }
 }
 
