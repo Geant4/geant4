@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.31 2001-09-27 15:19:22 gcosmo Exp $
+// $Id: G4RunManager.cc,v 1.32 2001-10-05 23:31:55 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -220,7 +220,7 @@ void G4RunManager::RunInitialization()
 
   runAborted = false;
 
-  if(storeRandomNumberStatus==1 || storeRandomNumberStatus==-1) StoreRandomNumberStatus();
+  if(storeRandomNumberStatus==1 || storeRandomNumberStatus==-1 || storeRandomNumberStatus==-3) StoreRandomNumberStatus();
   
   if(verboseLevel>0) G4cout << "Start Run processing." << G4endl;
 }
@@ -283,7 +283,7 @@ G4Event* G4RunManager::GenerateEvent(G4int i_event)
 
   G4Event* anEvent = new G4Event(i_event);
 
-  if(storeRandomNumberStatus==2 || storeRandomNumberStatus==-2) StoreRandomNumberStatus(anEvent->GetEventID());
+  if(storeRandomNumberStatus==2 || storeRandomNumberStatus==-2 || storeRandomNumberStatus==-3) StoreRandomNumberStatus(anEvent->GetEventID());
 
   userPrimaryGeneratorAction->GeneratePrimaries(anEvent);
   return anEvent;
@@ -434,6 +434,13 @@ void G4RunManager::StoreRandomNumberStatus(G4int eventID)
     os << eventID << '\0';
     fileN += "E";
     fileN += st;
+  }
+  if(storeRandomNumberStatus==-3)
+  {
+    if(eventID>=0)
+    { fileN += "Run"; }
+    else
+    { fileN += "Event"; }
   }
   fileN += ".stat";
   HepRandom::saveEngineStatus(fileN);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.cc,v 1.8 2001-07-11 10:08:33 gunter Exp $
+// $Id: G4RunMessenger.cc,v 1.9 2001-10-05 23:31:55 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -128,10 +128,13 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   storeRandCmd->SetGuidance("           -1 - begining of each run (file overwritten)");
   storeRandCmd->SetGuidance("            2 - begining of each event before generating primaries");
   storeRandCmd->SetGuidance("           -2 - begining of each event before generating primaries (file overwritten)");
+  storeRandCmd->SetGuidance("           -3 - begining of both each run and each event before generating primaries (file overwritten)");
   storeRandCmd->SetGuidance("Stored status can be restored by ");
   storeRandCmd->SetGuidance("  /run/restoreRandomNumberStatus command.");
   storeRandCmd->SetGuidance("In case Frequency is negative, a output file (file name RandEngine.stat)");
   storeRandCmd->SetGuidance("  is overwitten every time.");
+  storeRandCmd->SetGuidance("In case Frequency is -3, output files (file name RandEngineRun.stat and RanEngineEvent.stat)");
+  storeRandCmd->SetGuidance("  are overwitten every time.");
   storeRandCmd->SetGuidance("In case Frequency is 1, file names are RandEngineRxxx.stat,");
   storeRandCmd->SetGuidance("  where xxx is the run number.");
   storeRandCmd->SetGuidance("In case Frequency is 2, file names are RandEngineRxxxEyyy.stat,");
@@ -139,7 +142,7 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   storeRandCmd->AvailableForStates(PreInit,Idle);
   storeRandCmd->SetParameterName("frequency",true);
   storeRandCmd->SetDefaultValue(1);
-  storeRandCmd->SetRange("frequency >=-2 && frequency <=2");
+  storeRandCmd->SetRange("frequency >=-3 && frequency <=2");
 
   restoreRandCmd = new G4UIcmdWithAString("/run/restoreRandomNumberStatus",this);
   restoreRandCmd->SetGuidance("Restore the status of the random number engine from a file.");
