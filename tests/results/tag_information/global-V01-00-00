@@ -1,0 +1,5 @@
+- Syncronized changes with HEAD (mainly CVS headers).
+- Fixed truncation problem in G4Poisson.hh.
+- Removed tphdict_test.cc and tvhdict_test.cc in STLInterface/test.
+- Added wrapper for HP-aCC for missing <fstream> standard header.
+- Removed G4USE_STL from globals.hh and G4Timer[.hh.cc].
