@@ -140,7 +140,7 @@ G4double RemSimInterplanetarySpaceConfiguration:: GetInitialEnergy()
  G4double primaryParticleEnergy = particleGun -> GetParticleEnergy();
  return primaryParticleEnergy;
 }
-void  RemSimInterplanetarySpaceConfiguration:: GetMoon(G4bool value) 
+void RemSimInterplanetarySpaceConfiguration::SetMoon(G4bool value)
 {
   moon = value;
 }

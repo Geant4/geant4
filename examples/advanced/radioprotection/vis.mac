@@ -30,13 +30,13 @@
 /run/initialize
 /vis/viewer/set/viewpointThetaPhi 90 180 deg
 /gun/particle proton
-/gun/generator Interplanetary
-#/run/data gcrZ=1.txt
-/configuration/choose moon
+/gun/generator Basic
+/gun/energy 100. MeV 
 /configuration/choose vehicle
 /configuration/AddShielding On
 /configuration/AddSPE On
-/run/beamOn 100
+
+
 
 
 
