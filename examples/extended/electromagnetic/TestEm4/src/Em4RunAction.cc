@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em4RunAction.cc,v 1.13 2002-06-03 13:39:11 maire Exp $
+// $Id: Em4RunAction.cc,v 1.14 2002-06-05 17:31:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,7 +67,6 @@ Em4RunAction::~Em4RunAction()
   tree->close();        // and closing the tree (and the file)
   
   delete tree;
-///  delete [] histo;  
 #endif  
   
 }
@@ -90,7 +89,7 @@ void Em4RunAction::bookHisto()
  IHistogramFactory* hf = af->createHistogramFactory(*tree);
  
  // Creating the histogram
- histo[0]=hf->create1D("eDep","total energy deposit in C6F6 (MeV)",100,0.,10.);
+ histo[0]=hf->create1D("1","total energy deposit in C6F6 (MeV)",100,0.,10.);
  
  delete hf;
  delete tf;
