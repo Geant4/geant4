@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 1999-12-06 11:23:57 gcosmo Exp $
+# $Id: GNUmakefile,v 1.6 2002-02-20 18:06:22 gcosmo Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic management library.  G.Folger 10-Dec-97
 # ----------------------------------------------------------------
@@ -30,18 +30,16 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
 
 include $(G4INSTALL)/config/common.gmk
 
-# Compiling G4NucleiPropertiesTable.cc and G4ReactionDynamics.cc
+# Compiling G4ReactionDynamics.cc
 # non-optimised on all platforms is recommended.
 
 ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
 
   CXXFLAGS_WITH_ZM = $(filter-out -Zm%,$(CXXFLAGS)) -Zm500
 
-$(G4TMPDIR)/G4NucleiPropertiesTable.o: src/G4NucleiPropertiesTable.cc
-	$(CXX) $(CXXFLAGS_WITH_ZM) $(CPPFLAGS) -c $(OUT_OBJ)$@ \
-	  src/G4NucleiPropertiesTable.cc
 $(G4TMPDIR)/G4ReactionDynamics.o: src/G4ReactionDynamics.cc
-	$(CXX) $(CXXFLAGS_WITH_ZM) $(CPPFLAGS) -c $(OUT_OBJ)$@ \
+	@$(ECHO) Compiling G4ReactionDynamics.cc ...
+	@$(CXX) $(CXXFLAGS_WITH_ZM) $(CPPFLAGS) -c $(OUT_OBJ)$@ \
 	  src/G4ReactionDynamics.cc
 
 else
@@ -49,11 +47,9 @@ else
   CXXFLAGS_WITHOUT_O := $(filter-out -O% , $(CXXFLAGS))
   CXXFLAGS_WITHOUT_O := $(filter-out +O% , $(CXXFLAGS_WITHOUT_O))
 
-$(G4TMPDIR)/G4NucleiPropertiesTable.o: src/G4NucleiPropertiesTable.cc
-	$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c -o $@ \
-	  src/G4NucleiPropertiesTable.cc
 $(G4TMPDIR)/G4ReactionDynamics.o: src/G4ReactionDynamics.cc
-	$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c -o $@ \
+	@$(ECHO) Compiling G4ReactionDynamics.cc ...
+	@$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c -o $@ \
 	  src/G4ReactionDynamics.cc
 
 endif
