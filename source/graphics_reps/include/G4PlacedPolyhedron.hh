@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PlacedPolyhedron.hh,v 1.3 1999-10-05 07:50:16 johna Exp $
+// $Id: G4PlacedPolyhedron.hh,v 1.4 1999-10-05 08:07:35 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4PLACEDPOLYHEDRON_HH
@@ -24,8 +24,7 @@ public:
 
   // Uses default copy constructor, destructor and assignment.
 
-  G4bool G4PlacedPolyhedron::operator ==
-  (const G4PlacedPolyhedron& right) const {
+  G4bool operator == (const G4PlacedPolyhedron& right) const {
     return this == &right;
   }
 
