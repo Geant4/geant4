@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyCompton.hh,v 1.1 1999-03-02 17:16:26 aforti Exp $
+// $Id: G4LowEnergyCompton.hh,v 1.2 1999-06-04 12:55:03 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,7 +67,6 @@ public:
 
   G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep);
   
-
 protected:
 
   void BuildScatteringFunctionTable();
@@ -79,11 +78,12 @@ private:
   G4Element* SelectRandomAtom(const G4DynamicParticle*, G4Material*);
 
 
-  G4double DataLogInterpolation(G4double Argument, 
-				G4double AtomicNumber, 
-				G4PhysicsTable* Table);
+  G4double DataLogInterpolation(const G4double Argument, 
+				const G4double AtomicNumber, 
+				const G4PhysicsTable* Table);
 
-  G4int FindBinLocation(G4double BinValue, G4PhysicsVector* theVec);
+  G4int FindBinLocation(const G4double BinValue, 
+			const G4PhysicsVector* theVec);
   
   G4PhysicsTable* theCrossSectionTable;
   G4PhysicsTable* theScatteringFunctionTable;
