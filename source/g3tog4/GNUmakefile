@@ -14,14 +14,12 @@
 ###
 ###############################################################################
 
-G4TARGET = rztog4
+G4TARGET := rztog4
 
-name = G3toG4
-
-curdir = $(shell /bin/pwd)
+name := G3toG4
 
 ifndef G4INSTALL
-  G4INSTALL = ../..
+  G4INSTALL := ../..
 endif
 
 include $(G4INSTALL)/config/architecture.gmk
@@ -46,8 +44,8 @@ CPPFLAGS  += \
              -I$(G4BASE)/track/include \
              -I$(G4BASE)/tracking/include \
              -I$(G4BASE)/digits+hits/detector/include \
-             -I$(G4BASE)/digits+hits/hits/include \
-             -Itest
+             -I$(G4BASE)/digits+hits/hits/include
+
 ###	kludge for AIX
 
 ifeq ($(FC),xlf)
@@ -71,13 +69,13 @@ vpath %.hh  $(patsubst -I%,%,$(filter -I%,$(CPPFLAGS)))
 vpath %.inc $(patsubst -I%,%,$(filter -I%,$(CPPFLAGS)))
 
 G4LIBDIR := $(G4LIB)/$(G4SYSTEM)
-G4TMPDIR := $(G4TMP)/$(G4SYSTEM)/$(name)
+G4TMPDIR := $(G4TMP)/$(G4SYSTEM)
 G4BINDIR := $(G4BIN)/$(G4SYSTEM)
 
 Fbinsources = src/$(G4TARGET).F
-Fbinobjects = $(patsubst src/%.F,$(G4TMPDIR)/%.o,$(Fbinsources))
+Fbinobjects = $(patsubst src/%.F,$(G4TMPDIR)/$(name)/%.o,$(Fbinsources))
 Flibsources = $(filter-out $(Fbinsources),$(wildcard src/*.F))
-Flibobjects = $(patsubst src/%.F,$(G4TMPDIR)/%.o,$(Flibsources))
+Flibobjects = $(patsubst src/%.F,$(G4TMPDIR)/$(name)/%.o,$(Flibsources))
 Fdependencies = $(patsubst %.o,%.d,$(Fbinobjects) $(Flibobjects))
 
 ###############################################################################
@@ -102,31 +100,24 @@ cernlibs := $(shell cernlib -v $(cernlibv) geant321 packlib)
 
 first: lib
 
-global: lib
+global: lib bin
 
-all: lib bin examples
-	@echo $@ stage done in $(curdir)
-
-examples: cltog4 clGeometry
-	@echo $@ stage done in $(curdir)
-
-cltog4:
-	cd test; $(MAKE) "G4TARGET=cltog4"
-
-clGeometry:
-	cd test; $(MAKE) "G4TARGET=clGeometry"
+all: lib
 
 lib: libc libF
-	@echo $@ stage done in $(curdir)
 
+ifneq ($(G4MAKESHLIB),)
+libc : $(G4LIBDIR)/lib$(name).$(SHEXT)
+else
 libc : $(G4LIBDIR)/lib$(name).a
-	@echo $@ stage done in $(curdir)
+endif
+	@echo $@ stage done
 
 libF : $(G4LIBDIR)/lib$(name)F.a
-	@echo $@ stage done in $(curdir)
+	@echo $@ stage done
 
 bin: $(G4BINDIR)/$(G4TARGET)
-	@echo $@ stage done in $(curdir)
+	@echo $@ stage done
 
 ### Make Fortran library.
 
@@ -153,14 +144,14 @@ $(G4BINDIR)/$(G4TARGET) : $(Fbinobjects) $(G4LIBDIR)/lib$(name)F.a
 ###-------------------- locally defined pattern rules ------------------------
 
 ### Make the .o files from src/*.F
-$(G4TMPDIR)/%.o : src/%.F
-	$(FC) $(FCFLAGS) -o $(G4TMPDIR)/$(*F).o -c src/$(*F).F
+$(G4TMPDIR)/$(name)/%.o : src/%.F
+	$(FC) $(FCFLAGS) -o $(G4TMPDIR)/$(name)/$(*F).o -c src/$(*F).F
 	@file=$(dotf_prepend)$(*F).f;\
-	if [ -f $$file ]; then echo Moving $$file to $(G4TMPDIR)/$$file; \
-	mv $$file $(G4TMPDIR)/$$file; fi	
+	if [ -f $$file ]; then echo Moving $$file to $(G4TMPDIR)/$(name)/$$file; \
+	mv $$file $(G4TMPDIR)/$(name)/$$file; fi	
 
 ### Move the .f files
-$(G4TMPDIR)/%.f : %.f
+$(G4TMPDIR)/$(name)/%.f : %.f
 	@echo Moving $< to $@
 	@mv $< $@
 
@@ -170,9 +161,9 @@ $(G4TMPDIR)/%.f : %.f
 ### g++ -MM is good at this, except it forgets the subdirectory (hence
 ###  the echo $(@D)/).
 
-$(G4TMPDIR)/%.d: src/%.F
+$(G4TMPDIR)/$(name)/%.d: src/%.F
 	@if [ ! -d $(G4TMP)/$(G4SYSTEM) ] ; then mkdir $(G4TMP)/$(G4SYSTEM) ;fi
-	@if [ ! -d $(G4TMPDIR) ] ; then mkdir $(G4TMPDIR) ;fi
+	@if [ ! -d $(G4TMPDIR)/$(name) ] ; then mkdir $(G4TMPDIR)/$(name) ;fi
 	@if test -f $@ ; then rm -f $@; fi
 	@echo $(G4LIBDIR)/lib$(name)F.a\($*.o\) $@ " : " $? "\\" > $@
 	@if test -f $< ; then awk '$$1=="#include" { print $$2 " \\" }' $< | tr -d \"\>\< >> $@ ; echo >> $@ ; fi
@@ -190,9 +181,6 @@ cleanf:
 	@$(RM) $(Fbinobjects)
 	@$(RM) $(Fdependencies)
 	@$(RM) $(G4BINDIR)/$(G4TARGET)
-
-cleantest:
-	cd test; $(MAKE) clean
 
 include $(G4INSTALL)/config/common.gmk
 
