@@ -1,4 +1,4 @@
-# $Id: globlib.gmk,v 1.8 1999-11-17 11:04:53 morita Exp $
+# $Id: globlib.gmk,v 1.9 1999-11-30 09:34:06 morita Exp $
 # --------------------------------------------------------------
 # Script for compound libraries.  Gabriele Cosmo, 25/6/98.
 # --------------------------------------------------------------
@@ -19,14 +19,13 @@ ifndef G4ODBMS
 else
 	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) headers); done
 	@for dir in $(SUBDIRS); do (cd $$dir; G4ODBMS_DEPEND=1;  \
-	               export G4ODBMS_DEPEND; $(MAKE) d_files); done
-	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE)); done
-	@echo Copying tmp schema header from $(G4TMPSCHEMA_INCLUDE) to $(G4SCHEMA_INCLUDE)
+	               export G4ODBMS_DEPEND; $(MAKE)); done
+	@echo Copying tmp schema header from G4TMPDIR to $(G4SCHEMA_INCLUDE)
 	@rm -f $(G4SCHEMA_INCLUDE)/*.hh
-	@cp -f $(G4TMPSCHEMA_INCLUDE)/*.hh $(G4SCHEMA_INCLUDE)
+	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) install_schema); done
+	@echo Copying tmp schema to $(G4SCHEMA_DIR) for FDID $(G4SCHEMA_FDID)
 	@rm -f $(G4SCHEMA_DIR)/G4SCHEMA
 	@rm -f $(G4SCHEMA_DIR)/G4SCHEMA.FDDB
-	@echo Copying tmp schema to $(G4SCHEMA_DIR) for FDID $(G4SCHEMA_FDID)
 	@$(HEP_ODBMS_DIR)/etc/getdb $(G4TMPSCHEMA_BOOT) \
 	  $(G4SCHEMA_DIR)/G4SCHEMA $(G4SCHEMA_FDID)
 endif
@@ -92,6 +91,9 @@ $(G4SCHEMA_DIR)/G4SCHEMA.FDDB: $(G4TMPSCHEMA_DIR)/G4SCHEMA.FDDB
 	@echo Copying schema file to $(G4SCHEMA_DIR) for FDID $(G4SCHEMA_FDID)
 	@$(HEP_ODBMS_DIR)/etc/getdb $(G4TMPSCHEMA_BOOT) \
 	  $(G4SCHEMA_DIR)/G4SCHEMA $(G4SCHEMA_FDID)
+
+install_schema:
+	@cp -f $(G4TMPDIR)/*.hh $(G4SCHEMA_INCLUDE)/
 endif
 
 objs:
