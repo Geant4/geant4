@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidPCone.cc,v 1.1 1999-01-07 16:07:38 gunter Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.2 1999-01-14 16:12:26 broglia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4BREPSolidPCone.hh"
@@ -363,19 +363,22 @@ EInside G4BREPSolidPCone::Inside(register const G4ThreeVector& Pt) const
      (dist1 > kCarTolerance && dist2 >kCarTolerance)    )
     return kOutside;
 
-  G4Vector3D v(1,0,0);
+  // Set the surfaces to active again
+  Reset();
+
+  G4Vector3D v(1, 0, 0.01);
   G4double Dist;
   G4double halfTolerance = kCarTolerance*0.5;
   G4Vector3D Pttmp(Pt);
   G4Vector3D Vtmp(v);
   G4Ray r(Pttmp, Vtmp);
-  TestSurfaceBBoxes(r);
+  //TestSurfaceBBoxes(r);
   G4int hits=0;
 
   for(G4int a=0; a < nb_of_surfaces; a++)
   {
     if(SurfaceVec[a]->Active())
-      if(SurfaceVec[a]->Intersect(r))
+      if( (SurfaceVec[a]->Intersect(r)) & 1 )
       {
 	if(SurfaceVec[a]->Distance() < kCarTolerance)
 	  return kSurface;
@@ -383,11 +386,6 @@ EInside G4BREPSolidPCone::Inside(register const G4ThreeVector& Pt) const
 	hits++;
       }
   }
-
-  // Set the surfaces to active again
-  for(G4int b=0; b < nb_of_surfaces; b++)
-    SurfaceVec[b]->Reset();
-
 
   if(hits&1)
     return kInside;
@@ -472,6 +470,9 @@ G4double G4BREPSolidPCone::DistanceToIn(const G4ThreeVector& Pt) const
   G4double halfTolerance = kCarTolerance*0.5;  
   G4int a;
 
+  // Set the surfaces to active again
+  Reset();
+  
   for(a=0; a< nb_of_surfaces;a++)
     dists[a] = fabs(SurfaceVec[a]->HowNear(Pt));
   
@@ -481,10 +482,6 @@ G4double G4BREPSolidPCone::DistanceToIn(const G4ThreeVector& Pt) const
     if(Dist>dists[a]) Dist = dists[a];
   
   delete[] dists;
-
-  // Set the surfaces to active again
-  for(G4int b=0; b < nb_of_surfaces; b++)
-    SurfaceVec[b]->Reset();
  
   return Dist;
 }
@@ -493,14 +490,17 @@ G4double G4BREPSolidPCone::DistanceToIn(const G4ThreeVector& Pt) const
 G4double G4BREPSolidPCone::DistanceToIn(register const G4ThreeVector& Pt, 
 					register const G4ThreeVector& V) const
 {
-  int a;
+  G4int a;
+  
+  // Set the surfaces to active again
   Reset();
+  
   G4double halfTolerance = kCarTolerance*0.5;    
   G4Vector3D Pttmp(Pt);
   G4Vector3D Vtmp(V);   
-  //  G4double kInfinity = ;
+  
   G4Ray r(Pttmp, Vtmp);
-  TestSurfaceBBoxes(r);
+  //TestSurfaceBBoxes(r);
   ShortestDistance = kInfinity;
   
   for(a=0; a< nb_of_surfaces;a++)
@@ -522,10 +522,6 @@ G4double G4BREPSolidPCone::DistanceToIn(register const G4ThreeVector& Pt,
       }
   }
 
-  // Set the surfaces to active again
-  for(G4int b=0; b < nb_of_surfaces; b++)
-    SurfaceVec[b]->Reset();
-
   if(ShortestDistance != kInfinity)
     return sqrt(ShortestDistance);
   
@@ -539,6 +535,9 @@ G4double G4BREPSolidPCone::DistanceToOut(register const G4ThreeVector& Pt,
 					 G4bool *validNorm, 
 					 G4ThreeVector *n            ) const
 {
+  // Set the surfaces to active again
+  Reset();
+
   const G4double halfTolerance = kCarTolerance*0.5;    
   G4Vector3D Ptv = Pt;
   G4double wb = 0.0;
@@ -557,15 +556,13 @@ G4double G4BREPSolidPCone::DistanceToOut(register const G4ThreeVector& Pt,
   
   if(validNorm)
     *validNorm=false;
-  
-  Reset();  
 
   G4Vector3D Pttmp(Pt);
   G4Vector3D Vtmp(V);   
   
   // G4double kInfinity = 10e20;
   G4Ray r(Pttmp, Vtmp);
-  TestSurfaceBBoxes(r);
+  //TestSurfaceBBoxes(r);
   ShortestDistance = kInfinity;
   
   for(a=0; a< nb_of_surfaces;a++)
@@ -574,10 +571,6 @@ G4double G4BREPSolidPCone::DistanceToOut(register const G4ThreeVector& Pt,
 	if(ShortestDistance > SurfaceVec[a]->Distance()&&
 	   SurfaceVec[a]->Distance()> halfTolerance) 	
 	  ShortestDistance = SurfaceVec[a]->Distance();
-  
-  // Set the surfaces to active again
-  for(G4int b=0; b < nb_of_surfaces; b++)
-    SurfaceVec[b]->Reset();
 
   if(ShortestDistance != kInfinity)
     return sqrt(ShortestDistance);
@@ -588,7 +581,10 @@ G4double G4BREPSolidPCone::DistanceToOut(register const G4ThreeVector& Pt,
 
 G4double G4BREPSolidPCone::DistanceToOut(const G4ThreeVector& Pt) const
 {
-  int a;
+  G4int a;
+  
+  // Set the surfaces to active again
+  Reset();
 
   G4double *dists = new G4double[nb_of_surfaces];
   G4double halfTolerance = kCarTolerance*0.5;    
@@ -601,13 +597,9 @@ G4double G4BREPSolidPCone::DistanceToOut(const G4ThreeVector& Pt) const
   for(a=0; a< nb_of_surfaces;a++)
      if( Dist>dists[a] ) Dist = dists[a];
 
-  // Set the surfaces to active again
-  for(G4int b=0; b < nb_of_surfaces; b++)
-    SurfaceVec[b]->Reset();
-
-
   // If we are on a surface, the return value Dist must be zero!
-  delete[] dists;	
+  delete[] dists;
+	
   return Dist;
 }
 
