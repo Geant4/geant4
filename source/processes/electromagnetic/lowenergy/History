@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2000-06-20 21:37:33 pia Exp $
+$Id: History,v 1.20 2000-06-22 02:35:25 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22.06.2000 - MGP, tag emlowen-V01-01-21
+	     MGP: Bug fix in G4VeLowEnergyLoss (calculation of fluctuations);
+	     correction to prevent log of negative argument
+             Fixes problems with test14 in system testing on HP 
+	     To be better verified 
+
+22.06.2000 - MGP, tag emlowen-V01-01-20
+	     Minor improvements in test/G4BremsstrahlungTest and
+	     and test/G4eIonisationTest
+	     Cosmetics (found $ tag $ in many header files, where does it
+             come from?)
 
 20.06.2000 - MGP, tag emlowen-V01-01-19
 	     Fixed printout in test/G4eIonisationTest
