@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50EventAction.cc,v 1.18 2003-07-03 13:43:10 guatelli Exp $
+// $Id: Tst50EventAction.cc,v 1.19 2003-07-30 12:23:31 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -68,6 +68,7 @@ if (collisionID==-1)
  
 void Tst50EventAction::EndOfEventAction(const G4Event* evt)
 {
+  /*
  G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
   
   Tst50TrackerHitsCollection* hitCollection = 0;
@@ -86,7 +87,7 @@ void Tst50EventAction::EndOfEventAction(const G4Event* evt)
 
   Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
   analysis -> FillEnergyDeposit(totalEnergy/MeV);
-
+  */
   G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
   G4int n_trajectories = 0;
   if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();

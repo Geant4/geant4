@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.cc,v 1.38 2003-07-29 09:45:38 guatelli Exp $
+// $Id: Tst50SteppingAction.cc,v 1.39 2003-07-30 12:23:31 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -95,7 +95,6 @@ void Tst50SteppingAction::UserSteppingAction(const G4Step* aStep)
 		{
                  runAction -> BackscatteredParticleNumber();
                  runAction -> BackscatteredEnergy(ParticleKineticEnergy);
-                 G4cout<<" backscattered energy "<<ParticleKineticEnergy<<G4endl;
                  } 
 	      if ((primaryParticleEnergy == ParticleKineticEnergy) 
 		  &&( particleZMomentumDirection == 1.))

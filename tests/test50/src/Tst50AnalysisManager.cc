@@ -26,7 +26,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: Tst50AnalysisManager.cc,v 1.25 2003-07-28 15:05:52 guatelli Exp $
+// $Id: Tst50AnalysisManager.cc,v 1.26 2003-07-30 12:23:31 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
@@ -189,7 +189,7 @@ void Tst50AnalysisManager::ParticleTransmission(G4int PointNumber,
 void Tst50AnalysisManager::TransmittedEnergy(G4int PointNumber, G4double primaryParticleEnergy,G4double energy)
 {
   particleTransmissionEnergyDataPoint-> addPoint();
-  AIDA::IDataPoint* point = particleTransmissionDataPoint -> point(PointNumber);
+  AIDA::IDataPoint* point = particleTransmissionEnergyDataPoint -> point(PointNumber);
   AIDA::IMeasurement* coordinateX = point -> coordinate( 0 );
   coordinateX -> setValue(primaryParticleEnergy );
   AIDA::IMeasurement* coordinateY = point -> coordinate( 1 );

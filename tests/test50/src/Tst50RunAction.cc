@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst50RunAction.cc,v 1.23 2003-07-28 15:05:52 guatelli Exp $
+// $Id: Tst50RunAction.cc,v 1.24 2003-07-30 12:23:31 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -57,10 +57,7 @@ Tst50RunAction::~Tst50RunAction()
 void Tst50RunAction::BeginOfRunAction(const G4Run* aRun)
 {  
   runID = aRun->GetRunID();
-  
-  //Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
-  //analysis->bookHistograms();
-  
+    
   if (G4VVisManager::GetConcreteInstance())
     {
       G4UImanager* UI = G4UImanager::GetUIpointer();
@@ -126,7 +123,12 @@ void Tst50RunAction::EndOfRunAction(const G4Run* aRun)
 	G4double particleBackscatteredFractionError= (sqrt(particleBackscattered))/numberEvents;
 	Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
 	analysis -> ParticleTransmission(runID,primaryParticleEnergy/MeV,particleTransmittedFraction,particleBackscatteredFraction,particleTransmittedFractionError,particleBackscatteredFractionError);
-        analysis -> TransmittedEnergy(runID,primaryParticleEnergy/MeV,backscatteredEnergy/MeV);
+
+// Test: fraction of backscattered energy in respect to total initial
+// energy of the beamOn
+	G4int numberOfEvents = aRun -> GetNumberOfEvent();
+        G4double energyFraction = backscatteredEnergy/( numberOfEvents *primaryParticleEnergy);
+        analysis -> TransmittedEnergy(runID,primaryParticleEnergy/MeV, energyFraction);
 	}
     }
 }
