@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonFe56.hh,v 1.5 2000-04-07 14:33:41 vnivanch Exp $
+// $Id: G4IonFe56.hh,v 1.6 2000-04-07 14:44:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
