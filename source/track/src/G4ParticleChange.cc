@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChange.cc,v 1.25 2004-03-31 01:21:54 kurasige Exp $
+// $Id: G4ParticleChange.cc,v 1.26 2004-05-08 15:28:13 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -421,7 +421,7 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
   G4double  accuracy;
 
   // No check in case of "fStopAndKill" 
-  if (GetStatusChange() ==   fStopAndKill )  {
+  if (GetTrackStatus() ==   fStopAndKill )  {
     return G4VParticleChange::CheckIt(aTrack);
   }
 

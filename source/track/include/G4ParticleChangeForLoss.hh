@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.hh,v 1.5 2004-01-20 15:29:41 vnivanch Exp $
+// $Id: G4ParticleChangeForLoss.hh,v 1.6 2004-05-08 15:28:11 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -78,12 +78,24 @@ public:
   void SetProposedCharge(G4double theCharge);
   //   Get/Set theCharge
 
+  G4double GetCharge() const;
+  void ProposeCharge(G4double finalCharge);
+  //   Get/Propose the final dynamical Charge in G4DynamicParticle
+
   G4double GetProposedKineticEnergy() const;
   void SetProposedKineticEnergy(G4double kinEnergy);
   // Get/Set the final kinetic energy of the current particle.
 
+  G4double GetEnergy() const;
+  void ProposeEnergy(G4double finalEnergy);
+  // Get/Propose the final kinetic energy of the current particle.
+
   const G4ThreeVector& GetProposedMomentumDirection() const;
   void SetProposedMomentumDirection(const G4ThreeVector& dir);
+  const G4ThreeVector& GetMomentumDirection() const;
+  void ProposeMomentumDirection(G4double Px, G4double Py, G4double Pz);
+  void ProposeMomentumDirection(const G4ThreeVector& Pfinal);
+  // Get/Propose the MomentumDirection vector: it is the final momentum direction.
 
   virtual void DumpInfo() const;
 
@@ -112,7 +124,17 @@ inline G4double G4ParticleChangeForLoss::GetProposedKineticEnergy() const
   return kinEnergy;
 }
 
+inline G4double G4ParticleChangeForLoss::GetEnergy() const
+{
+  return kinEnergy;
+}
+
 inline void G4ParticleChangeForLoss::SetProposedKineticEnergy(G4double energy)
+{
+  kinEnergy = energy;
+}
+
+inline void G4ParticleChangeForLoss::ProposeEnergy(G4double energy)
 {
   kinEnergy = energy;
 }
@@ -122,7 +144,17 @@ inline G4double G4ParticleChangeForLoss::GetProposedCharge() const
   return currentCharge;
 }
 
+inline G4double G4ParticleChangeForLoss::GetCharge() const
+{
+  return currentCharge;
+}
+
 inline void G4ParticleChangeForLoss::SetProposedCharge(G4double theCharge)
+{
+  currentCharge = theCharge;
+}
+
+inline void G4ParticleChangeForLoss::ProposeCharge(G4double theCharge)
 {
   currentCharge = theCharge;
 }
@@ -134,7 +166,13 @@ inline
 }
 
 inline
- void G4ParticleChangeForLoss::SetProposedMomentumDirection(const G4ThreeVector& dir)
+ const G4ThreeVector& G4ParticleChangeForLoss::GetMomentumDirection() const
+{
+  return proposedMomentumDirection;
+}
+
+inline
+ void G4ParticleChangeForLoss::ProposeMomentumDirection(const G4ThreeVector& dir)
 {
   proposedMomentumDirection = dir;
 }
