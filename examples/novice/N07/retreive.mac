@@ -7,7 +7,7 @@
 /run/particle/retrievePhysicsTable physTable
 
 ### dump couples
-/tracking/verbose 1
+#/tracking/verbose 1
 # /run/particle/verbose 1
 /run/beamOn 1
 /run/dumpRegion
