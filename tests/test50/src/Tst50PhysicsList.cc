@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50PhysicsList.cc,v 1.9 2003-03-03 11:31:10 guatelli Exp $
+// $Id: Tst50PhysicsList.cc,v 1.10 2003-03-04 12:53:32 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -180,11 +180,12 @@ void Tst50PhysicsList::ConstructProcess()
 #include "G4LowEnergyCompton.hh"  
 #include "G4LowEnergyGammaConversion.hh" 
 //gamma penelope
+/*
 #include "G4PenelopeCompton.hh"
 #include "G4PenelopeGammaConversion.hh"
 #include "G4PenelopePhotoElectric.hh"
 #include "G4PenelopeRayleigh.hh"
-
+*/
 // e-
 #include "G4LowEnergyIonisation.hh" 
 #include "G4LowEnergyBremsstrahlung.hh" 
@@ -213,12 +214,13 @@ void Tst50PhysicsList::ConstructEM()
       G4cout<<"Low Energy processes for gamma ray"<<G4endl;}
       else if (Penelope== true)
 	{
+	  /*
 
           pmanager->AddDiscreteProcess(new G4PenelopePhotoElectric);
 	  pmanager->AddDiscreteProcess(new G4PenelopeCompton);
 	  pmanager->AddDiscreteProcess(new G4PenelopeGammaConversion);
 	  pmanager->AddDiscreteProcess(new G4PenelopeRayleigh);
-	    
+	  */
  G4cout<<" Penelope  processes for gamma ray"<<G4endl;
 	}
 else{

@@ -22,7 +22,7 @@
 // ********************************************************************
 //
 //
-// $Id: test50.cc,v 1.16 2003-03-03 11:31:08 guatelli Exp $
+// $Id: test50.cc,v 1.17 2003-03-04 12:53:30 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,6 +30,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 #include <iostream.h>
 #include <iomanip.h>
+#include <fstream.h>
 #include "globals.hh"
 #include "G4ios.hh"
 #include "g4std/fstream"
@@ -73,7 +74,7 @@ HepRandom::setTheEngine(new RanecuEngine);
 
 if (argc==1){G4cout <<"Input file is not specified!"<<G4endl;}
  ifstream* fin=new ifstream();
- string fname=argv[1];
+ G4String fname=argv[1];
  fin->open(fname.c_str());
  if (!fin->is_open())
 {G4cout<<"InputFile<"<<fname<<">doesn't exist!Exit"<<G4endl;

@@ -1,7 +1,7 @@
 /control/verbose 1
 /run/verbose 0
 /event/verbose 0
-/tracking/verbose 0
+/tracking/verbose 1
 # create empty scene
 #
 /vis/scene/create
@@ -16,11 +16,12 @@
 /vis/viewer/update
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
-#/target/setTargetThick 5. mm
-/target/setTargetMat  Silicon
+/target/setTargetThick 10. mm
+/target/setTargetMat  Aluminium
 /target/update
-#/le/cutE 0.1 micrometer
+/target/setMaxStep 0.01 cm 
+/le/cutE 0.0001 mm
 /gun/particle e-
-/gun/energy 1. MeV
-/run/beamOn 1000
-
+/gun/energy 11. keV
+/run/beamOn 1
+/vis/viewer/update

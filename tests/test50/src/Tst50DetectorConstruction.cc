@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.cc,v 1.16 2003-02-10 15:49:07 guatelli Exp $
+// $Id: Tst50DetectorConstruction.cc,v 1.17 2003-03-04 12:53:32 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -608,11 +608,11 @@ G4VPhysicalVolume* Tst50DetectorConstruction::ConstructWorld()
   if (pTargetSD ==0)
     {
   G4String targetSD_name = "target";
-  pTargetSD = new Tst50TrackerSD( targetSD_name  );}
+  pTargetSD = new Tst50TrackerSD( targetSD_name  );
   // qui il problema
    SDman->AddNewDetector( pTargetSD );
   logicTarget->SetSensitiveDetector( pTargetSD );
-    
+    }
 
  
   // Visualization attributes
