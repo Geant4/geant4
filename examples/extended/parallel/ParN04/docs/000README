@@ -1,4 +1,4 @@
-$Id: 000README,v 1.1 2002-03-05 15:22:07 gcosmo Exp $
+$Id: 000README,v 1.2 2002-03-09 08:26:15 cooperma Exp $
 -------------------------------------------------------------------
 
    ParGeant4:  Geant4/TOP-C, a parallelization of Geant4
@@ -14,7 +14,8 @@ For the latest information on ParGeant4, see:
 Note that a version now exists that runs Geant4 over the Grid.
 Please write to gene@ccs.neu.edu for further information.
 To port other applications to a parallel version, read the
-files PAR_INSTALL and PAR_README.
+  files ../../info/PAR_INSTALL and ../../info/PAR_README.
+
 
 This parallelization was done using a precompiled library for Geant4 4.0
 See the beginning of GNUmakefile for reasonable `make' targets to run it.
@@ -70,6 +71,7 @@ Try:  pushd $G4WORKDIR/bin/$G4SYSTEM/; ./ParN04 --TOPC-help
 
 You can also try other targets:  make run-debug
   This will run it under gdb, so you can single step to see what happens.
+make parclean - Start over with clean set of files.
 
 ============================================================================
 New or modified files:
