@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEAntiProtonInelastic.cc,v 1.6 2001-10-05 16:11:31 hpw Exp $
+// $Id: G4LEAntiProtonInelastic.cc,v 1.7 2002-06-17 11:34:49 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: AntiProton Inelastic Process
@@ -531,6 +531,7 @@
       currentParticle.SetMass( 0.0 );
       targetParticle.SetMass( 0.0 );
     }
+    while(np+nm+nz<3) nz++;
     SetUpPions( np, nm, nz, vec, vecLen );
     return;
   }
