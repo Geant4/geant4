@@ -1,4 +1,4 @@
-$Id: History,v 1.48 1999-11-29 15:20:29 johna Exp $
+$Id: History,v 1.49 1999-11-29 15:23:24 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -27,6 +27,7 @@ History file for visualization category
 vis-V00-01-11  29th November 1999  John Allison
 - Introduced helper class G4VisStateDependent to decouple G4VisManager from
   G4StateManager, G4RunManager, etc.
+- Archived old directoris inside test subdirectory.
 
 vis-V00-01-10  25th November 1999  John Allison
 - Adapted relevant header files of modeling and management for
