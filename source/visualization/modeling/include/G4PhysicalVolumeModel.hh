@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.19 2005-03-04 16:25:58 allison Exp $
+// $Id: G4PhysicalVolumeModel.hh,v 1.20 2005-03-09 16:23:21 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,6 +49,7 @@ class G4LogicalVolume;
 class G4VSolid;
 class G4Material;
 class G4VisAttributes;
+class G4Polyhedron;
 
 class G4PhysicalVolumeModel: public G4VModel {
 
@@ -97,22 +98,16 @@ public: // With description
 
   G4int GetRequestedDepth () const {return fRequestedDepth;}
 
-  const G4VSolid* GetClippingVolume () const {return fpClippingSolid;}
-
-  const G4Transform3D& GetClippingTransform () const {
-    return fClippingTransform;
+  const G4Polyhedron* GetClippingVolume () const {
+    return fpClippingPolyhedron;
   }
 
   void SetRequestedDepth (G4int requestedDepth) {
     fRequestedDepth = requestedDepth;
   }
 
-  void SetClippingSolid (const G4VSolid* pClippingSolid) {
-    fpClippingSolid = pClippingSolid;
-  }
-
-  void SetClippingTransform (const G4Transform3D clippingTransform) {
-    fClippingTransform = clippingTransform;
+  void SetClippingPolyhedron (const G4Polyhedron* pClippingPolyhedron) {
+    fpClippingPolyhedron = pClippingPolyhedron;
   }
 
   G4bool Validate (G4bool warn);
@@ -168,8 +163,7 @@ protected:
   G4LogicalVolume*   fpCurrentLV;    // Current logical volume.
   G4Material*    fpCurrentMaterial;  // Current material.
   G4bool             fCurtailDescent;// Can be set to curtail descent.
-  const G4VSolid*    fpClippingSolid;
-  G4Transform3D      fClippingTransform;
+  const G4Polyhedron*fpClippingPolyhedron;
 
   ////////////////////////////////////////////////////////////
   // Pointers to working space in scene, if required.

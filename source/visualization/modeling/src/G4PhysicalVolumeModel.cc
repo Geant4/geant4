@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.28 2005-03-04 16:25:58 allison Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.29 2005-03-09 16:23:21 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,7 +62,7 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
   fpCurrentPV     (0),
   fpCurrentLV     (0),
   fCurtailDescent (false),
-  fpClippingSolid (0),
+  fpClippingPolyhedron (0),
   fpCurrentDepth  (0),
   fppCurrentPV    (0),
   fppCurrentLV    (0),
@@ -393,16 +393,37 @@ void G4PhysicalVolumeModel::DescribeSolid
  G4VSolid* pSol,
  const G4VisAttributes* pVisAttribs,
  G4VGraphicsScene& sceneHandler) {
+
   sceneHandler.PreAddSolid (theAT, *pVisAttribs);
-  if (fpClippingSolid) {  // Clip and force polyhedral representation...
-    G4Polyhedron clipper(*fpClippingSolid->GetPolyhedron());
-    clipper.Transform(theAT.inverse() * fClippingTransform);
-    G4Polyhedron clipped(pSol->GetPolyhedron()->subtract(clipper));
-    clipped.SetVisAttributes(pVisAttribs);
-    G4VVisManager::GetConcreteInstance()->Draw(clipped,theAT);
-  } else {               // Standard treatment...
-    pSol -> DescribeYourselfTo (sceneHandler);
-  }
+  if (fpClippingPolyhedron)  // Clip and force polyhedral representation...
+    {
+      G4Polyhedron clipper(*fpClippingPolyhedron);  // Local copy.
+      clipper.Transform(theAT.inverse());
+
+      G4Polyhedron* pClippee = pSol->GetPolyhedron();
+      if (pClippee)  // Solid can provide.
+	{
+	  G4Polyhedron clipped(pClippee->subtract(clipper));
+	  if(clipped.IsErrorBooleanProcess())
+	    {
+	      G4cout <<
+ "WARNING: G4PhysicalVolumeModel::DescribeSolid: polyhedron for solid\n  \""
+		     << pSol->GetName() <<
+ "\" skipped due to error during Boolean processing."
+		     << G4endl;
+	    }
+	  else
+	    {
+	      clipped.SetVisAttributes(pVisAttribs);
+	      G4VVisManager::GetConcreteInstance()->Draw(clipped,theAT);
+	    }
+	}
+    }
+  else  // Standard treatment...
+    {
+      pSol -> DescribeYourselfTo (sceneHandler);
+      
+    }
   sceneHandler.PostAddSolid ();
 }
 
