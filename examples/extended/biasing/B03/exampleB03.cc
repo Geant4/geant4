@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB03.cc,v 1.5 2002-04-19 10:54:27 gcosmo Exp $
+// $Id: exampleB03.cc,v 1.6 2002-05-31 11:46:23 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,7 +43,7 @@
 #include "B03PrimaryGeneratorAction.hh"
 
 // Files specific for biasing
-#include "G4MassImportanceManager.hh"
+#include "G4MassImportanceSampler.hh"
 
 int main(int argc, char **argv)
 {  
@@ -67,8 +67,8 @@ int main(int argc, char **argv)
 
   // the IStore is filled during detector construction
   G4VIStore &aIstore = *detector->GetIStore();
-  // create the importance manager for biasing in the tracking world
-  G4MassImportanceManager mim(aIstore, "neutron");
+  // create the importance sampler for biasing in the tracking world
+  G4MassImportanceSampler mim(aIstore, "neutron");
   mim.Initialize();
 
   G4UImanager* UI;

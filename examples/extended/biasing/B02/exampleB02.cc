@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB02.cc,v 1.8 2002-04-19 12:01:46 gcosmo Exp $
+// $Id: exampleB02.cc,v 1.9 2002-05-31 11:46:23 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,7 +49,7 @@
 // Files specific for scoring 
 #include "B02Scorer.hh"
 #include "G4Sigma.hh"
-#include "G4ParallelScoreManager.hh"
+#include "G4ParallelScoreSampler.hh"
 
 // helper function for print out
 G4std::string FillString(const G4std::string &name, char c, G4int n, G4bool back = true);
@@ -77,9 +77,9 @@ int main(int argc, char **argv)
   // create the detector for scoring
   B02ScoringDetectorConstruction scoringdetector;
   
-  // create scorer and manager to score neutrons in the "scoring" detector
+  // create scorer and sampler to score neutrons in the "scoring" detector
   B02Scorer pScorer;
-  G4ParallelScoreManager pmgr(*(scoringdetector.Construct()), 
+  G4ParallelScoreSampler pmgr(*(scoringdetector.Construct()), 
 			      "neutron", pScorer);
   pmgr.Initialize();
 

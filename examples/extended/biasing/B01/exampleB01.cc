@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB01.cc,v 1.9 2002-04-19 12:01:45 gcosmo Exp $
+// $Id: exampleB01.cc,v 1.10 2002-05-31 11:46:23 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,7 +47,7 @@
 // Files specific for scoring 
 #include "B01Scorer.hh"
 #include "G4Sigma.hh"
-#include "G4MassScoreManager.hh"
+#include "G4MassScoreSampler.hh"
 
 // helper function for print out
 G4std::string FillString(const G4std::string &name, char c, G4int n, G4bool back = true);
@@ -72,9 +72,9 @@ int main(int argc, char **argv)
   runManager->SetUserAction(new B01PrimaryGeneratorAction);
   runManager->Initialize();
 
-  // create scorer and manager to score neutrons in the detector
+  // create scorer and sampler to score neutrons in the detector
   B01Scorer mScorer;
-  G4MassScoreManager msm(mScorer, "neutron"); // to be don after 
+  G4MassScoreSampler msm(mScorer, "neutron"); // to be don after 
   msm.Initialize();                           // runManager->Initialize()
 
   runManager->BeamOn(numberOfEvent);
