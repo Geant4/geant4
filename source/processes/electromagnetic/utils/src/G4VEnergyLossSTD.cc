@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossSTD.cc,v 1.55 2003-10-28 10:19:11 vnivanch Exp $
+// $Id: G4VEnergyLossSTD.cc,v 1.56 2003-11-03 19:37:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -63,6 +63,7 @@
 // 23-05-03 Remove tracking cuts (V.Ivanchenko)
 // 03-06-03 Fix initialisation problem for STD ionisation (V.Ivanchenko)
 // 21-07-03 Add UpdateEmModel method (V.Ivanchenko)
+// 03-11-03 Fix initialisation problem in RetrievePhysicsTable (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -194,7 +195,6 @@ void G4VEnergyLossSTD::Clear()
   theSubLambdaTable = 0;
   theDEDXAtMaxEnergy = 0;
   theRangeAtMaxEnergy = 0;
-  modelManager->Clear();
   tablesAreBuilt = false;
 }
 
@@ -202,13 +202,12 @@ void G4VEnergyLossSTD::Clear()
 
 void G4VEnergyLossSTD::Initialise()
 {
-
-  Clear();
-
   if(0 < verboseLevel) {
     G4cout << "G4VEnergyLossSTD::Initialise() for "
            << GetProcessName() << G4endl;
   }
+
+  Clear();
 
   G4double initialCharge = particle->GetPDGCharge();
   G4double initialMass  = particle->GetPDGMass();
@@ -586,7 +585,7 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
   G4double eloss  = 0.0;
   G4bool b;
 
-  /*
+  /*  
   if(-1 < verboseLevel) {
     const G4ParticleDefinition* d = track.GetDefinition();
     G4cout << "AlongStepDoIt for "
@@ -626,7 +625,7 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
                GetValue(preStepScaledEnergy, b))*length*chargeSqRatio;
     }
 
-    /*
+    /*  
     if(-1 < verboseLevel) {
       G4cout << "fRange(mm)= " << fRange/mm
              << " xPost(mm)= " << x/mm
@@ -1097,7 +1096,6 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
            << part->GetParticleName() << " and process "
 	   << GetProcessName() << G4endl;
   }
-  G4bool res = true;
 
   const G4String particleName = part->GetParticleName();
   if( !particle ) particle = part;
@@ -1108,11 +1106,14 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
      part->GetParticleSubType() == "generic")
   {
     (G4LossTableManager::Instance())->RegisterIon(part, this);
-    return res;
+    return true;
   }
 
-  if( baseParticle ) return true;
   Initialise();
+
+  // Recalculation is needed because cuts were changed or recalculation is forced
+  G4LossTableManager* lManager = G4LossTableManager::Instance();
+  if ( !lManager->IsRecalcNeeded(particle) || baseParticle ) return true;
 
   G4bool yes = true;
   if ( !baseParticle ) {
@@ -1134,7 +1135,7 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
       }
     } else {
       table->clearAndDestroy();
-      if (-1 < verboseLevel) {
+      if (0 < verboseLevel) {
         G4cout << "DEDX table for " << particleName << " in file <"
                << filename << "> is not exist"
                << G4endl;
@@ -1153,7 +1154,7 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
       }
     } else {
       table->clearAndDestroy();
-      if (-1 < verboseLevel) {
+      if (0 < verboseLevel) {
         G4cout << "Range table for " << particleName << " in file <"
                << filename << "> is not exist"
                << G4endl;
@@ -1172,7 +1173,7 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
       }
     } else {
       table->clearAndDestroy();
-      if (-1 < verboseLevel) {
+      if (0 < verboseLevel) {
         G4cout << "InverseRange table for " << particleName << " in file <"
                << filename << "> is not exist"
              << G4endl;
@@ -1191,7 +1192,7 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
       }
     } else {
       table->clearAndDestroy();
-      if (-1 < verboseLevel) {
+      if (0 < verboseLevel) {
         G4cout << "Lambda table for " << particleName << " in file <"
                << filename << "> is not exist"
                << G4endl;
@@ -1203,7 +1204,7 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
     yes = table->RetrievePhysicsTable(filename,ascii);
     if ( yes ) {
       SetSubLambdaTable(table);
-      if (0 < verboseLevel) {
+      if (-1 < verboseLevel) {
         G4cout << "SubLambda table for " << particleName << " is retrieved from <"
                << filename << ">"
                << G4endl;
@@ -1223,7 +1224,7 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
 
 
   if(!baseParticle) PrintInfoDefinition();
-  return res;
+  return true;
 }
 
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.13 2003-10-27 17:24:42 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.14 2003-11-03 19:37:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -39,6 +39,7 @@
 // 13.04.03 Change printout (V.Ivanchenko)
 // 04-06-03 Fix compilation warnings (V.Ivanchenko)
 // 16-07-03 Use G4VMscModel interface (V.Ivanchenko)
+// 03-11-03 Fix initialisation problem in RetrievePhysicsTable (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -112,23 +113,15 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
            << G4endl;
   }
 
-  G4bool cutsWasModified = false;
+  InitialiseProcess(part);
+
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
 
-  for (size_t j=0; j<numOfCouples; j++){
-    if (theCoupleTable->GetMaterialCutsCouple(j)->IsRecalcNeeded()) {
-      cutsWasModified = true;
-      break;
-    }
-  }
-  if( !cutsWasModified ) return;
-  InitialiseProcess(part);
-
   if(latDisplasment) navigator = G4TransportationManager::GetTransportationManager()
 			       ->GetNavigatorForTracking();
-  modelManager->Clear();
+
   const G4DataVector* theCuts = modelManager->Initialise(&part, 0, 10.0, verboseLevel);
 
   if (buildLambdaTable) {
@@ -309,8 +302,15 @@ G4bool G4VMultipleScattering::RetrievePhysicsTable(G4ParticleDefinition* part,
            << part->GetParticleName() << " and process "
 	   << GetProcessName() << G4endl;
   }
-  G4bool res = true;
-  if(!buildLambdaTable) return res;
+
+  InitialiseProcess(*part);
+  if(latDisplasment) navigator = G4TransportationManager::GetTransportationManager()
+			       ->GetNavigatorForTracking();
+
+  const G4DataVector* theCuts = modelManager->Initialise(part, 0, 10.0, verboseLevel);
+  if(5 < verboseLevel) G4cout << theCuts << G4endl;
+
+  if(!buildLambdaTable) return true;
 
   G4String num = part->GetParticleName();
   const G4ProductionCutsTable* theCoupleTable=
@@ -319,7 +319,7 @@ G4bool G4VMultipleScattering::RetrievePhysicsTable(G4ParticleDefinition* part,
 
   G4String filename = GetPhysicsTableFileName(part,directory,"Lambda",ascii);
   theLambdaTable = new G4PhysicsTable(numOfCouples);
-  res = theLambdaTable->RetrievePhysicsTable(filename,ascii);
+  G4bool res = theLambdaTable->RetrievePhysicsTable(filename,ascii);
   if ( res ) {
     if (-1 < verboseLevel) {
         G4cout << "Lambda table for " << num << " is retrieved from <"
@@ -329,7 +329,7 @@ G4bool G4VMultipleScattering::RetrievePhysicsTable(G4ParticleDefinition* part,
   } else {
     theLambdaTable->clearAndDestroy();
     theLambdaTable = 0;
-    if (-1 < verboseLevel) {
+    if (0 < verboseLevel) {
         G4cout << "Lambda table for " << num << " in file <"
                << filename << "> is not exist"
                << G4endl;

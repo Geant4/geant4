@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.19 2003-10-27 17:24:42 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.20 2003-11-03 19:37:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -47,6 +47,7 @@
 // 16-07-03 Replace G4Material by G4MaterialCutCouple in dE/dx and CrossSection
 //          calculation (V.Ivanchenko)
 // 21-07-03 Add UpdateEmModel method (V.Ivanchenko)
+// 03-11-03 Substitute STL vector for G4RegionModels (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -101,6 +102,8 @@ G4EmModelManager::G4EmModelManager():
   nEmModels(0),
   nRegions(0),
   nCouples(0),
+  idxOfRegionModels(0),
+  setOfRegionModels(0),
   minSubRange(0.1),
   particle(0),
   verboseLevel(0)
@@ -155,8 +158,15 @@ void G4EmModelManager::Clear()
   theCuts.clear();
   theSubCuts.clear();
   upperEkin.clear();
-  idxOfRegionModels.clear();
-  setOfRegionModels.clear();
+  if(idxOfRegionModels) delete [] idxOfRegionModels;
+  if(setOfRegionModels && nRegions) {
+    for(G4int i=0; i<nRegions; i++) {
+      delete (setOfRegionModels[i]);
+    }
+    delete [] setOfRegionModels;
+  }
+  idxOfRegionModels = 0;
+  setOfRegionModels = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -216,6 +226,11 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 						       G4double theMinSubRange,
                                                        G4int val)
 {
+  if(0 < verboseLevel) {
+    G4cout << "G4EmModelManager::Initialise() for "
+           << p->GetParticleName()
+           << G4endl;
+  }
   // Are models defined?
   if(!nEmModels) {
     G4Exception("G4EmModelManager::Initialise without any model defined");
@@ -225,11 +240,6 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
   minSubRange = theMinSubRange;
   verboseLevel = val;
 
-  if(0 < verboseLevel) {
-    G4cout << "G4EmModelManager::Initialise() for "
-           << p->GetParticleName()
-           << G4endl;
-  }
   Clear();
 
   G4RegionStore* regionStore = G4RegionStore::GetInstance();
@@ -256,11 +266,11 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
     }
   }
 
-  setOfRegionModels.clear();
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
-  idxOfRegionModels.resize(numOfCouples);
+  idxOfRegionModels = new G4int[numOfCouples];
+  setOfRegionModels = new G4RegionModels*[nRegions];
   upperEkin.resize(nEmModels);
 
   // Order models for regions
@@ -307,12 +317,14 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
     }
     eLow[0] = 0.0;
 
-    if(1 < verboseLevel) {
+    if(0 < verboseLevel) {
       G4cout << "New G4RegionModels set with " << n << " models for region <"
-	     << region->GetName() << ">  " << G4endl;
+	     << region->GetName() << ">  Elow(MeV)= "; 
+      for(G4int ii=0; ii<n; ii++) {G4cout << eLow[ii]/MeV << " ";}
+      G4cout << G4endl;
     }
     G4RegionModels* rm = new G4RegionModels(n, modelAtRegion, eLow);
-    setOfRegionModels.push_back(rm);
+    setOfRegionModels[reg] = rm;
   }
 
   // Access to materials and build cuts
@@ -326,9 +338,13 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
     do {reg--;} while (reg>0 && pcuts != (set[reg]->GetProductionCuts()));
     idxOfRegionModels[i] = reg;
 
-    if(1 < verboseLevel) {
+    if(0 < verboseLevel) {
       G4cout << "G4EmModelManager::Initialise() for "
-             << material->GetName() << G4endl;
+             << material->GetName()
+             << " indexOfCouple= " << i
+             << " indexOfRegion= " << reg  
+             << " indexOfRegion= " << reg  
+             << G4endl;
     }
 
     G4double cut = 0.0;
@@ -368,7 +384,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 
 
   if(0 < verboseLevel) {
-    G4cout << "G4EmModelManager is initialised "
+    G4cout << "G4EmModelManager is initialised; nRegions=  " << nRegions
            << G4endl;
   }
 

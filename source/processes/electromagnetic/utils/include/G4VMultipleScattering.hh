@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.12 2003-07-23 17:23:07 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.13 2003-11-03 19:37:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
