@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.icc,v 1.2 1999-02-17 17:35:59 japost Exp $
+// $Id: G4PropagatorInField.icc,v 1.3 1999-07-23 11:47:48 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,7 +31,10 @@ G4PropagatorInField( G4Navigator    *theNavigator,
     fNavigator(theNavigator),
     fDetectorFieldMgr(detectorFieldMgr), 
     fmax_loop_count(1000),
-    End_PointAndTangent(G4ThreeVector(0.,0.,0.),G4ThreeVector(0.,0.,0.),0.0,0.0)
+    End_PointAndTangent(G4ThreeVector(0.,0.,0.),
+			G4ThreeVector(0.,0.,0.),0.0,0.0),
+    fDelta_One_Step_Value(fDefault_Delta_One_Step_Value),
+    fDelta_Intersection_Val(fDefault_Delta_Intersection_Val)
 {
    // this->fChordFinder = new G4ChordFinder( (G4MagneticField*)0, 1e-6 );
 }
@@ -91,8 +94,15 @@ inline void     G4PropagatorInField::SetMaxLoopCount(G4int new_max)
 
 // inline void     G4PropagatorInField::SetChordFinder(G4ChordFinder* newCF)
 
-inline G4double G4PropagatorInField::DeltaOneStep() 
-{ return delta_one_step_val; }
 
-inline G4double G4PropagatorInField::DeltaIntersection()
-{ return delta_intersection_val; } 
+inline G4double G4PropagatorInField::GetDeltaIntersection()
+{ return fDelta_Intersection_Val; } 
+inline G4double G4PropagatorInField::     GetDeltaOneStep()    
+{ return fDelta_One_Step_Value;  }                                    
+
+// void  SetDeltaIntersection(G4double);   
+inline void G4PropagatorInField::SetAccuraciesWithDeltaOneStep(G4double valDeltaOneStep)
+{ 
+  fDelta_One_Step_Value= valDeltaOneStep;  
+  fDelta_Intersection_Val = 0.4 * fDelta_One_Step_Value;
+}
