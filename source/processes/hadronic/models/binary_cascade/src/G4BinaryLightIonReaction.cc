@@ -56,261 +56,305 @@
     debug.dump();
 
     G4ReactionProductVector * result = NULL;
-    G4V3DNucleus * fancyNucleus = NULL;
-    G4V3DNucleus * projectile = NULL;
-    G4double m1(0) ,m2(0);    
+    G4ReactionProductVector * cascaders= new G4ReactionProductVector;
     G4double m_nucl(0);      // to check energy balance 
-    G4LorentzVector it;
-    
-    G4FermiMomentum theFermi;
-    while(!result)
-    {
-      projectile = new G4Fancy3DNucleus;
-      projectile->Init(a1, z1);
-      m1=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(
-			projectile->GetCharge(),projectile->GetMassNumber());
-      it=toBreit * G4LorentzVector(m1,G4ThreeVector(0,0,0));
-      fancyNucleus = new G4Fancy3DNucleus;  
-      fancyNucleus->Init(a2, z2);
-      m2=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(
-      			fancyNucleus->GetCharge(),fancyNucleus->GetMassNumber());
-      m_nucl = ( swapped ) ? m1 : m2;
-//G4cout << " mass table, nucleus, delta : " << m2 <<" "<< fancyNucleus->GetMass()
-//       <<" "<<m2-fancyNucleus->GetMass() << G4endl;
-      G4double impactMax = fancyNucleus->GetOuterRadius()+projectile->GetOuterRadius();
-      G4double aX=(2.*G4UniformRand()-1.)*impactMax;
-      G4double aY=(2.*G4UniformRand()-1.)*impactMax;
-      G4ThreeVector pos(aX, aY, -2.*impactMax-5.*fermi);
-      debug.push_back("Impact parameter");
-      debug.push_back(aX);
-      debug.push_back(aY);
-      debug.push_back(-2.*impactMax);
-      debug.dump();
 
-      G4KineticTrackVector * initalState = new G4KineticTrackVector;
-      projectile->StartLoop();
+
+    G4cout << "Entering the decision point "
+           << (mom.t()-mom.mag())/a1 << " "
+	   << a1<<" "<< z1<<" "
+	   << a2<<" "<< z1<<" "<<mom.t()-mom.mag()<<G4endl;
+    if( (mom.mag())/a1 < 50*MeV )
+    {
+      G4cout << "Using pre-compound only, E= "<<mom.t()-mom.mag()<<G4endl;
+      m_nucl = mom.mag();
+      G4Fragment aPreFrag;
+      aPreFrag.SetA(a1+a2);
+      aPreFrag.SetZ(z1+z2);
+      aPreFrag.SetNumberOfParticles(G4lrint(a1));
+      aPreFrag.SetNumberOfCharged(G4lrint(z1));
+      aPreFrag.SetNumberOfHoles(0);
+      G4ThreeVector plop(0.,0., mom.vect().mag());
+      G4LorentzVector aL(mom.t()+m2, plop);
+      aPreFrag.SetMomentum(aL);
+      G4ParticleDefinition * preFragDef;
+      preFragDef = G4ParticleTable::GetParticleTable()
+                      ->FindIon(G4lrint(z1+z2),G4lrint(a1+a2),0,G4lrint(z1+z2));  
+      aPreFrag.SetParticleDefinition(preFragDef);
+
+      cascaders = theProjectileFragmentation.DeExcite(aPreFrag);
+      G4double tSum = 0;
+      for(size_t count = 0; count<cascaders->size(); count++)
+      {
+	cascaders->operator[](count)->SetNewlyAdded(true);
+	tSum += cascaders->operator[](count)->GetKineticEnergy();
+      }
+       G4cout << "Exiting pre-compound only, E= "<<tSum<<G4endl;
+   }
+    else
+    {
+ 
+
+      G4V3DNucleus * fancyNucleus = NULL;
+      G4V3DNucleus * projectile = NULL;
+      G4double m1(0) ,m2(0);    
+      G4LorentzVector it;
+
+      G4FermiMomentum theFermi;
+      while(!result)
+      {
+	projectile = new G4Fancy3DNucleus;
+	projectile->Init(a1, z1);
+	m1=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(
+			  projectile->GetCharge(),projectile->GetMassNumber());
+	it=toBreit * G4LorentzVector(m1,G4ThreeVector(0,0,0));
+	fancyNucleus = new G4Fancy3DNucleus;  
+	fancyNucleus->Init(a2, z2);
+	m2=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(
+      			  fancyNucleus->GetCharge(),fancyNucleus->GetMassNumber());
+	m_nucl = ( swapped ) ? m1 : m2;
+  //G4cout << " mass table, nucleus, delta : " << m2 <<" "<< fancyNucleus->GetMass()
+  //       <<" "<<m2-fancyNucleus->GetMass() << G4endl;
+	G4double impactMax = fancyNucleus->GetOuterRadius()+projectile->GetOuterRadius();
+	G4double aX=(2.*G4UniformRand()-1.)*impactMax;
+	G4double aY=(2.*G4UniformRand()-1.)*impactMax;
+	G4ThreeVector pos(aX, aY, -2.*impactMax-5.*fermi);
+	debug.push_back("Impact parameter");
+	debug.push_back(aX);
+	debug.push_back(aY);
+	debug.push_back(-2.*impactMax);
+	debug.dump();
+
+	G4KineticTrackVector * initalState = new G4KineticTrackVector;
+	projectile->StartLoop();
+	G4Nucleon * aNuc;
+	G4LorentzVector tmpV(0,0,0,0);
+	G4LorentzVector nucleonMom(1./a1*mom);
+	nucleonMom.setZ(nucleonMom.vect().mag());
+	nucleonMom.setX(0);
+	nucleonMom.setY(0);
+	debug.push_back(" projectile nucleon momentum");
+	debug.push_back(nucleonMom);
+	debug.dump();
+	theFermi.Init(a1,z1);
+	while( (aNuc=projectile->GetNextNucleon()) )
+	{
+	  G4LorentzVector p4 = aNuc->GetMomentum();	
+	  tmpV+=p4;
+	  G4ThreeVector nucleonPosition(aNuc->GetPosition());
+          G4double density=(projectile->GetNuclearDensity())->GetDensity(nucleonPosition);
+	  nucleonPosition += pos;
+	  G4KineticTrack * it = new G4KineticTrack(aNuc, nucleonPosition, nucleonMom );
+          it->SetState(G4KineticTrack::outside);
+	  G4double pfermi= theFermi.GetFermiMomentum(density);
+	  G4double mass = aNuc->GetDefinition()->GetPDGMass();
+	  G4double Efermi= sqrt( sqr(mass) + sqr(pfermi)) - mass;
+          it->SetProjectilePotential(-Efermi);
+	  initalState->push_back(it);
+	}
+	debug.push_back(tmpV);
+	debug.dump();
+
+	result=theModel.Propagate(initalState, fancyNucleus);
+	debug.push_back("################# Result size");
+	debug.push_back(result->size());
+	debug.dump();
+	std::for_each(initalState->begin(), initalState->end(), Delete<G4KineticTrack>());
+	delete initalState;
+
+	if(result->size()==0) 
+	{
+          delete result; result=0;
+          delete fancyNucleus;
+          delete projectile;
+	} 
+	else
+	{
+          break;
+	}     
+      }
+      debug.push_back("################# Through the loop ? "); debug.dump();
+
+      //inverse transformation in case we swapped.
+      projectile->StartLoop();  
+      G4int resA(0), resZ(0); 
       G4Nucleon * aNuc;
-      G4LorentzVector tmpV(0,0,0,0);
-      G4LorentzVector nucleonMom(1./a1*mom);
-      nucleonMom.setZ(nucleonMom.vect().mag());
-      nucleonMom.setX(0);
-      nucleonMom.setY(0);
-      debug.push_back(" projectile nucleon momentum");
-      debug.push_back(nucleonMom);
-      debug.dump();
-      theFermi.Init(a1,z1);
+      G4ReactionProductVector * spectators= new G4ReactionProductVector;
+     debug.push_back("getting at the hits"); debug.dump();
+      // the projectile excitation energy estimate...
+      G4double theStatisticalExEnergy = 0;
       while( (aNuc=projectile->GetNextNucleon()) )
       {
-	G4LorentzVector p4 = aNuc->GetMomentum();	
-	tmpV+=p4;
-	G4ThreeVector nucleonPosition(aNuc->GetPosition());
-        G4double density=(projectile->GetNuclearDensity())->GetDensity(nucleonPosition);
-	nucleonPosition += pos;
-	G4KineticTrack * it = new G4KineticTrack(aNuc, nucleonPosition, nucleonMom );
-        it->SetState(G4KineticTrack::outside);
-	G4double pfermi= theFermi.GetFermiMomentum(density);
-	G4double mass = aNuc->GetDefinition()->GetPDGMass();
-	G4double Efermi= sqrt( sqr(mass) + sqr(pfermi)) - mass;
-        it->SetProjectilePotential(-Efermi);
-	initalState->push_back(it);
+  //      G4cout << " Nucleon : " << aNuc->AreYouHit() <<" "<<aNuc->GetMomentum()<<G4endl;
+	debug.push_back("getting the hits"); debug.dump();
+	if(!aNuc->AreYouHit())
+	{
+          resA++;
+	  resZ+=G4lrint(aNuc->GetDefinition()->GetPDGCharge());
+	}
+	else
+	{
+          debug.push_back(" ##### a hit ##### "); debug.dump();
+	  G4ThreeVector aPosition(aNuc->GetPosition());
+          G4double localDensity = projectile->GetNuclearDensity()->GetDensity(aPosition);
+	  G4double localPfermi = theFermi.GetFermiMomentum(localDensity);
+	  G4double nucMass = aNuc->GetDefinition()->GetPDGMass();
+	  G4double localFermiEnergy = sqrt(nucMass*nucMass + localPfermi*localPfermi) - nucMass;
+	  G4double deltaE = localFermiEnergy - (aNuc->GetMomentum().t()-aNuc->GetMomentum().mag());
+	  theStatisticalExEnergy += deltaE;
+	}
+	debug.push_back("collected a hit"); debug.dump();
       }
-      debug.push_back(tmpV);
+      delete fancyNucleus;
+      delete projectile;
+      debug.push_back("have the hits"); 
+      debug.push_back(resA);
+      debug.push_back(resZ);
+      debug.dump();
+      // Calculate excitation energy
+      G4LorentzVector iState = mom;
+      iState.setT(iState.getT()+m2);
+
+      G4LorentzVector fState(0,0,0,0);
+      G4LorentzVector pspectators(0,0,0,0);
+      unsigned int i(0);
+      for(i=0; i<result->size(); i++)
+      {
+	if( (*result)[i]->GetNewlyAdded() ) 
+	{
+          fState += G4LorentzVector( (*result)[i]->GetMomentum(), (*result)[i]->GetTotalEnergy() );
+	  cascaders->push_back((*result)[i]);
+  //        G4cout <<" secondary ... ";
+	}
+	else {
+  //        G4cout <<" spectator ... ";
+          pspectators += G4LorentzVector( (*result)[i]->GetMomentum(), (*result)[i]->GetTotalEnergy() );
+	  spectators->push_back((*result)[i]);
+	}
+
+  // 	G4cout << (*result)[i]<< " "
+  // 	      << (*result)[i]->GetDefinition()->GetParticleName() << " " 
+  // 	      << (*result)[i]->GetMomentum()<< " " 
+  // 	      << (*result)[i]->GetTotalEnergy() << G4endl;
+      }
+      delete result;
+      G4LorentzVector momentum(iState-fState);
+      debug.push_back("the momentum balance");
+      debug.push_back(iState);
+      debug.push_back(fState);
+      debug.push_back(momentum-pspectators);
+      debug.push_back(momentum);
       debug.dump();
 
-      result=theModel.Propagate(initalState, fancyNucleus);
-      debug.push_back("################# Result size");
-      debug.push_back(result->size());
+
+
+
+      // call precompound model
+      G4ReactionProductVector * proFrag = NULL;
+      G4LorentzVector pFragment;
+      G4cout << " == pre boost 1 "<< momentum.e()<< " "<< momentum.mag()<<G4endl;
+      G4LorentzRotation boost_fragments;
+      G4cout << " == post boost 1 "<< momentum.e()<< " "<< momentum.mag()<<G4endl;
+  //    G4LorentzRotation boost_spectator_mom(-momentum.boostVector());
+  //     G4cout << "- momentum " << boost_spectator_mom * momentum << G4endl; 
+      if(resZ>0 && resA>1) 
+      {
+	//  Make the fragment
+	G4Fragment aProRes;
+	aProRes.SetA(resA);
+	aProRes.SetZ(resZ);
+	aProRes.SetNumberOfParticles(0);
+	aProRes.SetNumberOfCharged(0);
+	aProRes.SetNumberOfHoles(G4lrint(a1)-resA);
+	G4double mFragment=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(resZ,resA);
+	G4LorentzVector pFragment(0,0,0,mFragment+std::max(0.,theStatisticalExEnergy) );
+	aProRes.SetMomentum(pFragment);
+	G4ParticleDefinition * resDef;
+	resDef = G4ParticleTable::GetParticleTable()->FindIon(resZ,resA,0,resZ);  
+	aProRes.SetParticleDefinition(resDef);
+	proFrag = theHandler.BreakItUp(aProRes);
+        G4LorentzRotation boost_fragments_here(momentum.boostVector());
+	boost_fragments = boost_fragments_here;
+
+  //       G4cout << " Fragment a,z, Mass Fragment, mass spect-mom, exitationE " 
+  //              << resA <<" "<< resZ <<" "<< mFragment <<" "
+  //              << momentum.mag() <<" "<< momentum.mag() - mFragment 
+  // 	     << " "<<theStatisticalExEnergy << G4endl;
+      }
+      else if(resA!=0)
+      {
+  //       proFrag=new G4ReactionProductVector;
+  //       G4ReactionProduct * it(0);
+  //       while ( resA > 0 ) 
+  //       {
+  // 	 if(1==resZ) 
+  // 	 {
+  //             it = new G4ReactionProduct(G4Proton::ProtonDefinition());
+  // 	    resZ--;resA--;
+  // 	 } else
+  // 	 {
+  // 	    it = new G4ReactionProduct(G4Neutron::NeutronDefinition());
+  // 	    resA--;
+  // 	 }
+  // // @@GF  fix.... momentum is wrong if more than one neutron @@
+  //          G4cout << "LIBIC: single "<<it->GetDefinition()->GetParticleName()
+  // 	        << ", momentum " <<  momentum << " mass " << momentum.mag()
+  // 		<< G4endl;
+  // 	 it->SetTotalEnergy(momentum.t());
+  // 	 it->SetMomentum(momentum.vect());
+  // 	 it->SetNewlyAdded(true);
+  // //	 proFrag->push_back(it);
+  //       }
+           G4ReactionProductVector::iterator ispectator;
+	   for (ispectator=spectators->begin();ispectator!=spectators->end();ispectator++)
+	   {
+	       (*ispectator)->SetNewlyAdded(true);
+  // 	     G4cout << "from spectator "  
+  //  	      << (*ispectator)->GetDefinition()->GetParticleName() << " " 
+  //  	      << (*ispectator)->GetMomentum()<< " " 
+  //  	      << (*ispectator)->GetTotalEnergy() << G4endl;
+	   }
+      }
+      if (spectators) delete spectators;
+
+      // collect the evaporation part
+      debug.push_back("the nucleon count balance");
+      debug.push_back(resA);
+      debug.push_back(resZ);
+      if(proFrag) debug.push_back(proFrag->size());
       debug.dump();
-      std::for_each(initalState->begin(), initalState->end(), Delete<G4KineticTrack>());
-      delete initalState;
-      
-      if(result->size()==0) 
+      G4ReactionProductVector::iterator ii;
+      G4LorentzVector pFragments(0);
+      if(proFrag) for(ii=proFrag->begin(); ii!=proFrag->end(); ii++)
       {
-        delete result; result=0;
-        delete fancyNucleus;
-        delete projectile;
-      } 
-      else
-      {
-        break;
-      }     
-    }
-    debug.push_back("################# Through the loop ? "); debug.dump();
-    
-    //inverse transformation in case we swapped.
-    projectile->StartLoop();  
-    G4int resA(0), resZ(0); 
-    G4Nucleon * aNuc;
-    G4ReactionProductVector * spectators= new G4ReactionProductVector;
-    G4ReactionProductVector * cascaders= new G4ReactionProductVector;
-   debug.push_back("getting at the hits"); debug.dump();
-    // the projectile excitation energy estimate...
-    G4double theStatisticalExEnergy = 0;
-    while( (aNuc=projectile->GetNextNucleon()) )
-    {
-//      G4cout << " Nucleon : " << aNuc->AreYouHit() <<" "<<aNuc->GetMomentum()<<G4endl;
-      debug.push_back("getting the hits"); debug.dump();
-      if(!aNuc->AreYouHit())
-      {
-        resA++;
-	resZ+=G4lrint(aNuc->GetDefinition()->GetPDGCharge());
+	(*ii)->SetNewlyAdded(true);
+	G4LorentzVector tmp((*ii)->GetMomentum(),(*ii)->GetTotalEnergy());
+	tmp *= boost_fragments;
+	(*ii)->SetMomentum(tmp.vect());
+	(*ii)->SetTotalEnergy(tmp.e());
+  //      result->push_back(*ii);
+	pFragments += tmp;
       }
-      else
+
+  //    G4cout << "Fragmented p, momentum, delta " << pFragments <<" "<<momentum
+  //            <<" "<< pFragments-momentum << G4endl;
+      debug.push_back("################# done with evaporation"); debug.dump();
+
+  //  correct p/E of Cascade secondaries
+      G4LorentzVector pCas=iState - pFragments;
+  //    G4cout <<" Going to correct from " << fState << " to " << pCas << G4endl;
+      if ( ! EnergyAndMomentumCorrector(cascaders, pCas) )
       {
-        debug.push_back(" ##### a hit ##### "); debug.dump();
-	G4ThreeVector aPosition(aNuc->GetPosition());
-        G4double localDensity = projectile->GetNuclearDensity()->GetDensity(aPosition);
-	G4double localPfermi = theFermi.GetFermiMomentum(localDensity);
-	G4double nucMass = aNuc->GetDefinition()->GetPDGMass();
-	G4double localFermiEnergy = sqrt(nucMass*nucMass + localPfermi*localPfermi) - nucMass;
-	G4double deltaE = localFermiEnergy - (aNuc->GetMomentum().t()-aNuc->GetMomentum().mag());
-	theStatisticalExEnergy += deltaE;
+	 if(getenv("debug_G4BinaryLightIonReactionResults"))      
+           G4cout << "G4BinaryLightIonReaction E/P corrections failed" << G4endl;
       }
-      debug.push_back("collected a hit"); debug.dump();
-    }
-    delete fancyNucleus;
-    delete projectile;
-    debug.push_back("have the hits"); 
-    debug.push_back(resA);
-    debug.push_back(resZ);
-    debug.dump();
-    // Calculate excitation energy
-    G4LorentzVector iState = mom;
-    iState.setT(iState.getT()+m2);
 
-    G4LorentzVector fState(0,0,0,0);
-    G4LorentzVector pspectators(0,0,0,0);
-    unsigned int i(0);
-    for(i=0; i<result->size(); i++)
-    {
-      if( (*result)[i]->GetNewlyAdded() ) 
+  //  Add deexcitation secondaries 
+      if(proFrag) for(ii=proFrag->begin(); ii!=proFrag->end(); ii++)
       {
-        fState += G4LorentzVector( (*result)[i]->GetMomentum(), (*result)[i]->GetTotalEnergy() );
-	cascaders->push_back((*result)[i]);
-//        G4cout <<" secondary ... ";
+	cascaders->push_back(*ii);
       }
-      else {
-//        G4cout <<" spectator ... ";
-        pspectators += G4LorentzVector( (*result)[i]->GetMomentum(), (*result)[i]->GetTotalEnergy() );
-	spectators->push_back((*result)[i]);
-      }
-	
-// 	G4cout << (*result)[i]<< " "
-// 	      << (*result)[i]->GetDefinition()->GetParticleName() << " " 
-// 	      << (*result)[i]->GetMomentum()<< " " 
-// 	      << (*result)[i]->GetTotalEnergy() << G4endl;
-    }
-    G4LorentzVector momentum(iState-fState);
-    debug.push_back("the momentum balance");
-    debug.push_back(iState);
-    debug.push_back(fState);
-    debug.push_back(momentum-pspectators);
-    debug.push_back(momentum);
-    debug.dump();
 
-    
-
-    
-    // call precompound model
-    G4ReactionProductVector * proFrag = NULL;
-    G4LorentzVector pFragment;
-    G4LorentzRotation boost_fragments(momentum.boostVector());
-//    G4LorentzRotation boost_spectator_mom(-momentum.boostVector());
-//     G4cout << "- momentum " << boost_spectator_mom * momentum << G4endl; 
-    if(resZ>0 && resA>1) 
-    {
-      //  Make the fragment
-      G4Fragment aProRes;
-      aProRes.SetA(resA);
-      aProRes.SetZ(resZ);
-      aProRes.SetNumberOfParticles(0);
-      aProRes.SetNumberOfCharged(0);
-      aProRes.SetNumberOfHoles(G4lrint(a1)-resA);
-      G4double mFragment=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(resZ,resA);
-      G4LorentzVector pFragment(0,0,0,mFragment+std::max(0.,theStatisticalExEnergy) );
-      aProRes.SetMomentum(pFragment);
-      G4ParticleDefinition * resDef;
-      resDef = G4ParticleTable::GetParticleTable()->FindIon(resZ,resA,0,resZ);  
-      aProRes.SetParticleDefinition(resDef);
-      proFrag = theHandler.BreakItUp(aProRes);
-      
-//       G4cout << " Fragment a,z, Mass Fragment, mass spect-mom, exitationE " 
-//              << resA <<" "<< resZ <<" "<< mFragment <<" "
-//              << momentum.mag() <<" "<< momentum.mag() - mFragment 
-// 	     << " "<<theStatisticalExEnergy << G4endl;
-    }
-    else if(resA!=0)
-    {
-//       proFrag=new G4ReactionProductVector;
-//       G4ReactionProduct * it(0);
-//       while ( resA > 0 ) 
-//       {
-// 	 if(1==resZ) 
-// 	 {
-//             it = new G4ReactionProduct(G4Proton::ProtonDefinition());
-// 	    resZ--;resA--;
-// 	 } else
-// 	 {
-// 	    it = new G4ReactionProduct(G4Neutron::NeutronDefinition());
-// 	    resA--;
-// 	 }
-// // @@GF  fix.... momentum is wrong if more than one neutron @@
-//          G4cout << "LIBIC: single "<<it->GetDefinition()->GetParticleName()
-// 	        << ", momentum " <<  momentum << " mass " << momentum.mag()
-// 		<< G4endl;
-// 	 it->SetTotalEnergy(momentum.t());
-// 	 it->SetMomentum(momentum.vect());
-// 	 it->SetNewlyAdded(true);
-// //	 proFrag->push_back(it);
-//       }
-         G4ReactionProductVector::iterator ispectator;
-	 for (ispectator=spectators->begin();ispectator!=spectators->end();ispectator++)
-	 {
-	     (*ispectator)->SetNewlyAdded(true);
-// 	     G4cout << "from spectator "  
-//  	      << (*ispectator)->GetDefinition()->GetParticleName() << " " 
-//  	      << (*ispectator)->GetMomentum()<< " " 
-//  	      << (*ispectator)->GetTotalEnergy() << G4endl;
-	 }
-    }
-    if (spectators) delete spectators;
-    
-    // collect the evaporation part
-    debug.push_back("the nucleon count balance");
-    debug.push_back(resA);
-    debug.push_back(resZ);
-    if(proFrag) debug.push_back(proFrag->size());
-    debug.dump();
-    G4ReactionProductVector::iterator ii;
-    G4LorentzVector pFragments(0);
-    if(proFrag) for(ii=proFrag->begin(); ii!=proFrag->end(); ii++)
-    {
-      (*ii)->SetNewlyAdded(true);
-      G4LorentzVector tmp((*ii)->GetMomentum(),(*ii)->GetTotalEnergy());
-      tmp *= boost_fragments;
-      (*ii)->SetMomentum(tmp.vect());
-      (*ii)->SetTotalEnergy(tmp.e());
-//      result->push_back(*ii);
-      pFragments += tmp;
-    }
-
-//    G4cout << "Fragmented p, momentum, delta " << pFragments <<" "<<momentum
-//            <<" "<< pFragments-momentum << G4endl;
-    debug.push_back("################# done with evaporation"); debug.dump();
-
-//  correct p/E of Cascade secondaries
-    G4LorentzVector pCas=iState - pFragments;
-//    G4cout <<" Going to correct from " << fState << " to " << pCas << G4endl;
-    if ( ! EnergyAndMomentumCorrector(cascaders, pCas) )
-    {
-       if(getenv("debug_G4BinaryLightIonReactionResults"))      
-         G4cout << "G4BinaryLightIonReaction E/P corrections failed" << G4endl;
-    }
-
-//  Add deexcitation secondaries 
-    if(proFrag) for(ii=proFrag->begin(); ii!=proFrag->end(); ii++)
-    {
-      cascaders->push_back(*ii);
     }
     
     // Rotate to lab
@@ -324,6 +368,7 @@
     theResult.Clear();
     theResult.SetStatusChange(stopAndKill);
     G4double Etot(0);
+    size_t i=0;
     for(i=0; i<cascaders->size(); i++)
     {
       if((*cascaders)[i]->GetNewlyAdded())
@@ -347,6 +392,8 @@
 // 	      << G4endl;
       }
     }
+    if(cascaders) delete cascaders;
+    
     G4ping debug1("debug_G4BinaryLightIonReactionResults");
     debug1.push_back("Result analysis, secondaries");
     debug1.push_back(theResult.GetNumberOfSecondaries());
@@ -387,7 +434,9 @@ G4bool G4BinaryLightIonReaction::EnergyAndMomentumCorrector(
     SumMass = sqrt(SumMass);
 
      // Compute c.m.s. hadron velocity and boost KTV to hadron c.m.s.
+      G4cout << " == pre boost 2 "<< SumMom.e()<< " "<< SumMom.mag()<<G4endl;
     G4ThreeVector Beta = -SumMom.boostVector();
+      G4cout << " == pre boost 2 "<< SumMom.e()<< " "<< SumMom.mag()<<G4endl;
 //    Output->Boost(Beta);
       for(i = 0; i < Output->size(); i++)
       {
