@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em1EventAction.cc,v 1.5 2001-10-26 12:51:25 maire Exp $
+// $Id: Em1EventAction.cc,v 1.6 2001-11-29 11:28:07 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,7 +31,6 @@
 
 #include "Em1EventAction.hh"
 
-#include "Em1RunAction.hh"
 #include "Em1EventActionMessenger.hh"
 
 #include "G4Event.hh"
@@ -41,12 +40,11 @@
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
-#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em1EventAction::Em1EventAction(Em1RunAction* run)
-:Em1Run(run),drawFlag("all"),printModulo(10000),eventMessenger(NULL)
+Em1EventAction::Em1EventAction()
+:drawFlag("none"),printModulo(10000),eventMessenger(0)
 {
   eventMessenger = new Em1EventActionMessenger(this);
 }
@@ -67,13 +65,6 @@ void Em1EventAction::BeginOfEventAction(const G4Event* evt)
  //printing survey
  if (evtNb%printModulo == 0) 
     G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
-  
- //save rndm status
- if (Em1Run->GetRndmFreq() == 2)
-   { 
-    HepRandom::saveEngineStatus("beginOfEvent.rndm");   
-    if (evtNb%printModulo == 0) HepRandom::showEngineStatus();
-   }
  
  //additional initializations            
  TotalEnergyDeposit = 0.;

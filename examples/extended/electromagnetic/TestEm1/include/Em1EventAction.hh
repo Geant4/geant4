@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em1EventAction.hh,v 1.4 2001-10-26 12:51:23 maire Exp $
+// $Id: Em1EventAction.hh,v 1.5 2001-11-29 11:28:07 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,7 +35,6 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-class Em1RunAction;
 class Em1EventActionMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,7 +42,7 @@ class Em1EventActionMessenger;
 class Em1EventAction : public G4UserEventAction
 {
   public:
-    Em1EventAction(Em1RunAction*);
+    Em1EventAction();
    ~Em1EventAction();
 
   public:
@@ -57,7 +56,6 @@ class Em1EventAction : public G4UserEventAction
             
     
   private:
-    Em1RunAction*             Em1Run;
     G4double                  TotalEnergyDeposit;   
     G4String                  drawFlag;
     G4int                     printModulo;                    

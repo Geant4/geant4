@@ -22,7 +22,7 @@
 //
 
 //
-// $Id: Em1DetectorConstruction.cc,v 1.6 2001-10-26 12:51:25 maire Exp $
+// $Id: Em1DetectorConstruction.cc,v 1.7 2001-11-29 11:28:07 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,9 +52,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em1DetectorConstruction::Em1DetectorConstruction()
-:pBox     (NULL), lBox (NULL),
- aMaterial(NULL), 
- magField (NULL)
+:pBox     (0), lBox (0),
+ aMaterial(0), 
+ magField (0)
 {
   // create commands for interactive definition of the detector  
   detectorMessenger = new Em1DetectorMessenger(this);
@@ -164,7 +164,7 @@ G4VPhysicalVolume* Em1DetectorConstruction::ConstructVolumes()
   			   G4ThreeVector(),		//at (0,0,0)
                            "Container",			//its name
                            lBox,			//its logical volume
-                           NULL,			//its mother  volume
+                           0,			//its mother  volume
                            false,			//no boolean operation
                            0);				//copy number
                            
@@ -229,7 +229,7 @@ void Em1DetectorConstruction::SetMagField(G4double fieldValue)
     }
    else
     {
-      magField = NULL;
+      magField = 0;
       fieldMgr->SetDetectorField(magField);
     }
 }

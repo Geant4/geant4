@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm1.cc,v 1.6 2001-10-26 12:51:21 maire Exp $
+// $Id: TestEm1.cc,v 1.7 2001-11-29 11:28:06 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,7 +82,7 @@ int main(int argc,char** argv) {
   Em1EventAction* EvtAct;
   
   runManager->SetUserAction(RunAct = new Em1RunAction); 
-  runManager->SetUserAction(EvtAct = new Em1EventAction(RunAct));
+  runManager->SetUserAction(EvtAct = new Em1EventAction);
   runManager->SetUserAction(new Em1TrackingAction(RunAct));
   runManager->SetUserAction(new Em1SteppingAction(RunAct,EvtAct));
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em1RunAction.hh,v 1.7 2001-10-26 12:51:24 maire Exp $
+// $Id: Em1RunAction.hh,v 1.8 2001-11-29 11:28:07 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4Run;
-class Em1RunActionMessenger;
 
 #ifndef G4NOHIST
  class HepTupleManager;
@@ -61,11 +60,7 @@ class Em1RunAction : public G4UserRunAction
     void CountSteps0(G4int ns) { NbOfSteps0 += ns;}
     void CountSteps1(G4int ns) { NbOfSteps1 += ns;}
     void CountProcesses(G4String);
-    
-  public:
-    void  SetRndmFreq(G4int val) {saveRndm = val;}
-    G4int GetRndmFreq()          {return saveRndm;}
-        
+
 #ifndef G4NOHIST   
     HepHistogram* GetHisto(G4int id) {return histo[id];}
 #endif
@@ -78,10 +73,7 @@ class Em1RunAction : public G4UserRunAction
     G4int NbOfTraks0, NbOfTraks1;
     G4int NbOfSteps0, NbOfSteps1;
     ProcessesCount*   ProcCounter;   
-    G4int saveRndm;
-    
-    Em1RunActionMessenger* runMessenger;    
-    
+
 #ifndef G4NOHIST       
     HepTupleManager* hbookManager;
     HepHistogram* histo[3];
