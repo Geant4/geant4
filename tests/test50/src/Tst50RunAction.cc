@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst50RunAction.cc,v 1.24 2003-07-30 12:23:31 guatelli Exp $
+// $Id: Tst50RunAction.cc,v 1.25 2004-11-24 16:46:05 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -32,7 +32,7 @@
 // -------------------------------------------------------------------
  
 #include "G4ios.hh"
-#include <math.h>
+#include <cmath>
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -107,7 +107,7 @@ void Tst50RunAction::EndOfRunAction(const G4Run* aRun)
     {
       G4double gammaTransmittedFraction = (gammaTransmitted/numberEvents);
       G4double gammaTransmittedFractionError = 1/(gammaTransmitted*(targetThickness*absorberMaterialDensity)); 
-      G4double gammaAttenuationCoefficient = -(log(gammaTransmittedFraction))/(targetThickness*absorberMaterialDensity);
+      G4double gammaAttenuationCoefficient = -(std::log(gammaTransmittedFraction))/(targetThickness*absorberMaterialDensity);
       Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
       analysis -> AttenuationGammaCoeffiecient(runID,primaryParticleEnergy/MeV,gammaAttenuationCoefficient/(cm2/g),gammaTransmittedFractionError/(cm2/g));
     }
@@ -118,9 +118,9 @@ void Tst50RunAction::EndOfRunAction(const G4Run* aRun)
        {
          
 	G4double particleTransmittedFraction = (particleTransmitted/numberEvents) ;
-	G4double particleTransmittedFractionError = (sqrt(particleTransmitted))/numberEvents;
+	G4double particleTransmittedFractionError = (std::sqrt(particleTransmitted))/numberEvents;
 	G4double particleBackscatteredFraction = (particleBackscattered/numberEvents);
-	G4double particleBackscatteredFractionError= (sqrt(particleBackscattered))/numberEvents;
+	G4double particleBackscatteredFractionError= (std::sqrt(particleBackscattered))/numberEvents;
 	Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
 	analysis -> ParticleTransmission(runID,primaryParticleEnergy/MeV,particleTransmittedFraction,particleBackscatteredFraction,particleTransmittedFractionError,particleBackscatteredFractionError);
 
