@@ -72,7 +72,14 @@ void hTestEventAction::BeginOfEventAction(const G4Event* evt)
     verbose = 2;
     (hTestHisto::GetPointer())->SetVerbose(2);    
     (G4UImanager::GetUIpointer())->ApplyCommand("/tracking/verbose 2");
-    (G4UImanager::GetUIpointer())->ApplyCommand("/stepping/verbose 2");
+    /*
+    const G4ProcessManager* pm = G4Gamma::Gamma()->GetProcessManager();
+    const G4ProcessVector* pv = pm->GetProcessList();
+    G4int np = pm->GetProcessListLength();
+    for(G4int i=0; i<np; i++) {
+     ((*pv)[i])->SetVerboseLevel(2);
+    }
+    */
   }
     
   // Switch off verbose mode
@@ -80,7 +87,6 @@ void hTestEventAction::BeginOfEventAction(const G4Event* evt)
     verbose = 0;
     (hTestHisto::GetPointer())->SetVerbose(0);    
     (G4UImanager::GetUIpointer())->ApplyCommand("/tracking/verbose 0");
-    (G4UImanager::GetUIpointer())->ApplyCommand("/stepping/verbose 0");
   }
 
   // Initialize user actions
