@@ -25,12 +25,12 @@ endif
 
 if ( $?G4USE_STL ) then
   setenv DEBOPT ${DEBOPT}_STL
-  if ( `uname -n | grep sun` != "" ) then
-    setenv G4USE_OSPACE 1
-  endif
 endif
 
 if ( `uname -n | grep rsplus` != "" ) then
+  if ( $?G4USE_STL ) then
+    setenv G4USE_OSPACE 1
+  endif
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
   setenv G4SYSTEM AIX-xlC
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
@@ -55,6 +55,9 @@ if ( `uname -n | grep rsplus` != "" ) then
 endif
 
 if ( `uname -n | grep dxplus` != "" ) then
+  if ( $?G4USE_STL ) then
+    setenv G4USE_OSPACE 1
+  endif
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
   setenv G4SYSTEM DEC-cxx
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
@@ -104,6 +107,9 @@ if ( `uname -n | grep pcgeant` != "" ) then
 endif
 
 if ( `uname -n | grep sgmedia` != "" ) then
+  if ( $?G4USE_STL ) then
+    setenv G4USE_OSPACE 1
+  endif
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
   setenv G4SYSTEM SGI-CC
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
@@ -124,6 +130,9 @@ if ( `uname -n | grep sgmedia` != "" ) then
 endif
 
 if ( `uname -n | grep sun` != "" ) then
+  if ( $?G4USE_STL ) then
+    setenv G4USE_OSPACE 1
+  endif
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
   setenv G4SYSTEM SUN-CC
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
@@ -145,6 +154,9 @@ if ( `uname -n | grep sun` != "" ) then
 endif
 
 if ( `uname -n | grep hp` != "" ) then
+  if ( $?G4USE_STL ) then
+    setenv G4USE_OSPACE 1
+  endif
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
   setenv G4SYSTEM HP-aCC
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
@@ -165,6 +177,9 @@ if ( `uname -n | grep hp` != "" ) then
 endif
 
 if ( `uname -n` == aleph ) then
+  if ( $?G4USE_STL ) then
+    setenv G4USE_OSPACE 1
+  endif
 setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/rd44/cvs
 setenv G4INSTALL /geant4/dev/geant4
 setenv G4LIB     /geant4/dev/lib
@@ -212,6 +227,9 @@ endif
 #---------------------------------------------------
 if ( `uname -n` == asc ) then
 # In CLHEP-default.h : //#define HEP_USE_STD 1
+  if ( $?G4USE_STL ) then
+    setenv G4USE_OSPACE 1
+  endif
 setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/rd44/cvs
 setenv G4INSTALL /geant4/dev/geant4
 setenv G4LIB     /geant4/dev/lib
@@ -309,6 +327,9 @@ endif
 # tvsldict.h. Solved by editing directly the file !
 #---------------------------------------------------
 if ( `uname -n` == "papou1" ) then
+  if ( $?G4USE_STL ) then
+    setenv G4USE_OSPACE 1
+  endif
 setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/rd44/cvs
 setenv G4INSTALL /geant4/dev/geant4
 setenv G4LIB     /geant4/dev/lib
