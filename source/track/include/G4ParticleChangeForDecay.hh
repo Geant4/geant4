@@ -21,8 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForDecay.hh,v 1.6 2004-05-08 15:28:11 kurasige Exp $
+// $Id: G4ParticleChangeForDecay.hh,v 1.7 2004-09-21 21:32:19 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+
 //
 // 
 // ------------------------------------------------------------
@@ -90,6 +91,11 @@ class G4ParticleChangeForDecay: public G4VParticleChange
     G4double GetGlobalTime(G4double timeDelay) const;
     //  Convert the time delay to the global time.
 
+    const G4ThreeVector* GetPolarization() const;
+    void  ProposePolarization(G4double Px, G4double Py, G4double Pz);
+    void  ProposePolarization(const G4ThreeVector& finalPoralization);
+    // Get/Propose the final Polarization vector.
+
   public:
    // Following methods will be removed in release 7.0
    // Using ProposeXXXX methods is recommended to setting
@@ -103,6 +109,9 @@ class G4ParticleChangeForDecay: public G4VParticleChange
   protected:
     G4double theTimeChange;
     //  The change of global time of a given particle.
+
+    G4ThreeVector thePolarizationChange;
+    //  The changed (final) polarization of a given track
  
  public:
     // for Debug 
@@ -141,6 +150,28 @@ inline
   theTimeChange = t;
 }
 
+inline
+ const G4ThreeVector* G4ParticleChangeForDecay::GetPolarization() const
+{
+  return &thePolarizationChange;
+}
+
+inline
+ void G4ParticleChangeForDecay::ProposePolarization(const G4ThreeVector& finalPoralization)
+{
+  thePolarizationChange = finalPoralization;
+}
+
+inline
+ void G4ParticleChangeForDecay::ProposePolarization(
+                                                G4double Px,
+                                                G4double Py,
+                                                G4double Pz     )
+{
+  thePolarizationChange.setX(Px);
+  thePolarizationChange.setY(Py);
+  thePolarizationChange.setZ(Pz);
+}
 
 #endif
 
