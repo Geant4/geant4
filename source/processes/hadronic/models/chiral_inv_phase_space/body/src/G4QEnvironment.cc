@@ -23,7 +23,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.68 2003-11-24 10:15:12 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.69 2003-11-25 10:03:38 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -945,7 +945,8 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
 #endif
             G4int nOfOUT = theQHadrons.size();   // Total #of QHadrons at this point      ^
             G4double  dM = totQM-gsM;            // Excitation of the Quasmon             ^
-            while(nOfOUT)                        // LOOP over all existing QHadrons       ^
+            G4bool corrf = true;                 // False when corrected & needs to quit  ^
+            while(nOfOUT && corrf)               // LOOP over all existing QHadrons       ^
 			{                                    //                                       ^
               G4QHadron*     theLast = theQHadrons[nOfOUT-1];     //  Remember            ^
               G4LorentzVector last4M = theLast->Get4Momentum();   //  all                 ^
@@ -984,7 +985,7 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
                 if(!ast) nlq--;                  // Reduce nlq if Quasmon decayed       ^ ^
                 G4int nHadrons=curout->size();   // A#of outputQHadrons in theDecayedQ  ^ ^
 #ifdef pdebug
-                G4cout<<"G4QEnv::HadrQ:VacuumRecoverQ#"<<iq<<",nH="<<nHadrons<<G4endl;//^ ^
+                G4cout<<"G4QEnv::HadrQE:VacuumRecoverQ#"<<iq<<",n="<<nHadrons<<G4endl;//^ ^
 #endif
                 if(nHadrons>0)                   // => "QHadrons from Quasmon to Output"^ ^
 				{                                //                                     ^ ^
@@ -995,12 +996,15 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
                     G4cout<<"G4QEnv::HadrQE:Recovered, H#"<<ih<<", QPDG="<<curH->GetQPDG()
                           <<",4M="<<curH->Get4Momentum()<<G4endl;    //                 ^ ^
 #endif
+                    totQC-=curH->GetQC();        // totQC recalculation                 ^ ^
+					tot4M-=curH->Get4Momentum(); // tot4M recalculation                 ^ ^
                     theQHadrons.push_back(curH); // Fill hadron-copy (delete equivalent)^ ^
                     delete curout->operator[](ih); //>-*Necessary to delete instances*>-^ ^
                   } // End of LOOP over Hadrons of the Quasmon                          ^ ^
                   curout->clear();               //                                     ^ ^
                   delete curout;                 //>*Necessary to delete VectPointers*>=^ ^
-                  break;                         // @@ ??                               ^ ^
+                  corrf = false;                 // Corrected: go out of the while loop ^ ^
+                  //break;                       // @@ ??                               ^ ^
 	            } // End of check for existing output Hadrons in the Quasmon            ^ ^
                 else                             //                                     ^ ^
 				{                                //                                     ^ ^
@@ -1033,7 +1037,7 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
               }
               G4cout<<"G4QE::HQ:||||Vacuum|||4-MomCHECK|||||| d4M="<<totCur4M<<G4endl; // ^
 #endif
-		    }                                    //                                       ^
+		    }                                    // End of the WHILE LOOP                 ^
 		    //if(!nOfOUT&&nQuasmons==1)          // TRY TO EVAPORATE THE TOTAL SYSTEM     ^
 		    if((!nOfOUT&&nQuasmons==1)||theEnvironment.GetPDGCode()==NUCPDG)//EvaporTotal ^
 			{                                    //                                       ^
@@ -1318,7 +1322,9 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
                           <<", 4M="<<ph4M<<", ct="<<phCost<<G4endl; //                           ^ ^
 #endif
                     theQHadrons.push_back(curH); // Fill hadron-copy (delete equivalent)         ^ ^
-				  }
+                    totQC-=curH->GetQC();        //                                              ^ ^
+                    tot4M-=curH->Get4Momentum(); //                                              ^ ^
+				  }                              //                                              ^ ^
 				}                                //                                              ^ ^
                 pQ->ClearOutput();               // Hadrons are filled, Clear Frag-output <-<-<--^ ^
                 count3=0;                        // Reset counter of empty hadronizations          ^
@@ -1364,7 +1370,7 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
      		      G4cout<<"G4QEnv::HQE:Status after kill (#"<<jq<<")="<<pQ->GetStatus()<<", nH="// ^
                         <<theQHadrons.size()<<G4endl;                                           // ^
 #endif
-                  tot4M=tot4M-cq4M;              // Update the TotalResidNucleus for hadronisation ^
+                  tot4M-=cq4M;                   // Update the TotalResidNucleus for hadronisation ^
                   totQC-=qQC;
                   eCount--;                      // Reduce the number of the living Quasmons       ^
                 }
@@ -1525,7 +1531,7 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
                       G4QHadron* resQ = new G4QHadron(PDGQ,cq4M); // GS hadron for the CurQuasmon  ^
                       theQHadrons.push_back(resQ);  // @@ Check Dibarions @@ (delete equivalent)   ^
                       pQ->KillQuasmon();         // Make done the current Quasmon                  ^
-                      tot4M=tot4M-cq4M;          // Update the TotalResidNucleus for hadronisation ^
+                      tot4M-=cq4M;               // Update the TotalResidNucleus for hadronisation ^
                       totQC-=qQC;
                       eCount--;                  // Reduce the number of the living Quasmons       ^
 					}
@@ -1547,8 +1553,8 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
 #endif
                       G4QHadronVector* decHV=pQ->DecayQuasmon();// Decay theQuasmon & fill decHV=* ^
                       CopyAndDeleteHadronVector(decHV);// Copy output to theQHadrons of G4Env      ^
-                      tot4M=tot4M-pQ->Get4Momentum();
-                      totQC-=pQ->GetQC();
+                      tot4M-=pQ->Get4Momentum(); // tot4M recalculation                            ^
+                      totQC-=pQ->GetQC();        // totQC recalculation                            ^
                       pQ->KillQuasmon();         // Make done the current Quasmon                  ^
                       eCount--;                  // Reduce the number of the living Quasmons       ^
 					}
@@ -5830,7 +5836,7 @@ void G4QEnvironment::DecayMultyBaryon(G4QHadron* qH)
     G4LorentzVector f4Mom=q4M/totBN; // @@ Too simple solution (split in two parts!)
 #ifdef pdebug
     // Worning for the future development
-    G4cerr<<"*G4QE::DecMulBar:Split MulBar inEqualParts M="<<totBN<<"*"<<f4Mom.m()<<G4endl;
+    G4cout<<"**G4QE::DecMulBar:Split MulBar inEqualParts M="<<totBN<<"*"<<f4Mom.m()<<G4endl;
     G4cout<<"G4QEnv::DecMBar:*DONE* fPDG="<<fPDG<<",f="<<f4Mom<<G4endl;
 #endif
     delete qH;
