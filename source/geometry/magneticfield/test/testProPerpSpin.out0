@@ -1,0 +1,249 @@
+ Using the following values for  Min Eps = 1e-08 and  Max Eps = 1e-08
+ Test with no voxels
+
+
+Test PropagateMagField: ***********************
+ Starting New Particle with Position (0,0,0)
+ and UnitVelocity (0,0.6,0.8)
+ Momentum in MeV/c is 50
+ Initial spin is set to = (0,0.8,-0.6)
+ Initial dot product of spin and momentum = 0
+ dot product of spin and momentum = -8.10613e-09
+Step#     X(mm)     Y(mm)     Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z    StepLen   PhsStep    Safety         NextVolume 
+    0         0         0         0  0.0896   0.593     0.8    0.12   0.791    -0.6       2.5       2.5        50        World 
+ dot product of spin and momentum = -7.3e-08
+    1     0.112      1.49         2   0.261    0.54     0.8   0.348    0.72    -0.6         5         5      47.5        World 
+ dot product of spin and momentum = -3.97e-07
+    2     0.995      4.35         6    0.52   0.299     0.8   0.694   0.398    -0.6        10        10      42.5        World 
+ dot product of spin and momentum = -1.82e-06
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= -1.82e-06  Spin magnitude= 1 (-1=3.89e-11)  UnitMom mag= 1 (-1=-5.05e-17) 
+    3      5.02      8.68        14   0.467  -0.376     0.8   0.622  -0.503    -0.6        20        20      32.8        World 
+ dot product of spin and momentum = -7.79e-06
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= -7.79e-06  Spin magnitude= 1 (-1=8.05e-11)  UnitMom mag= 1 (-1=-2.63e-17) 
+    4      16.3       7.8        30  -0.599 -0.0393     0.8  -0.799 -0.0481    -0.6        40        40        15        World 
+ dot product of spin and momentum = -3.22e-05
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= -3.22e-05  Spin magnitude= 1 (-1=1.63e-10)  UnitMom mag= 1 (-1=5.05e-17) 
+    5      10.7     -9.99        62 -0.0112    -0.6     0.8 -0.0238    -0.8    -0.6        80        80      26.5        World 
+ dot product of spin and momentum = -0.000131
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= -0.000131  Spin magnitude= 1 (-1=3.29e-10)  UnitMom mag= 1 (-1=-1.7e-17) 
+    6        20    -0.187       126   0.112    0.59     0.8   0.166   0.783    -0.6       160       160      5.16        World 
+ dot product of spin and momentum = -0.000527
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= -0.000527  Spin magnitude= 1 (-1=6.6e-10)  UnitMom mag= 1 (-1=-9.65e-18) 
+    7     0.175      1.86       254     0.3   0.519     0.8   0.431   0.674    -0.6       320       320      49.8        World 
+ dot product of spin and momentum = -0.00212
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= -0.00212  Spin magnitude= 1 (-1=1.32e-09)  UnitMom mag= 1 (-1=5.18e-17) 
+    8      1.34      5.01       510   0.559   0.218     0.8   0.768   0.223    -0.6       640       640      44.8        World 
+ dot product of spin and momentum = -0.00846
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= -0.00846  Spin magnitude= 1 (-1=2.62e-09)  UnitMom mag= 1 (-1=-1.48e-17) 
+    9      6.37      9.32  1.02e+03   0.336  -0.497     0.8   0.323  -0.732  -0.601  1.28e+03  1.28e+03       187        World 
+ dot product of spin and momentum = -0.0328
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= -0.0328  Spin magnitude= 1 (-1=5.11e-09)  UnitMom mag= 1 (-1=-5.03e-17) 
+   10      18.3       5.6  2.05e+03   0.598 -0.0477     0.8   0.724  -0.335  -0.603   2.5e+03  2.56e+03  1.13e+03        World 
+ dot product of spin and momentum = -0.0498
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= -0.0498  Spin magnitude= 1 (-1=6.27e-09)  UnitMom mag= 1 (-1=-2.17e-17) 
+   11      10.8      9.98  4.05e+03  -0.467  -0.377     0.8  -0.774  -0.191  -0.604  1.19e+03  5.12e+03       954        World 
+ dot product of spin and momentum = -0.096
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= -0.096  Spin magnitude= 1 (-1=8.65e-09)  UnitMom mag= 1 (-1=3.7e-17) 
+   12      16.3     -7.78     5e+03 0.00359    -0.6     0.8  -0.453  -0.652  -0.607   2.5e+03  1.02e+04         0 Big Target 2 
+ dot product of spin and momentum = -0.155
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= -0.155  Spin magnitude= 1 (-1=1.09e-08)  UnitMom mag= 1 (-1=-1.56e-17) 
+   13        20    0.0598     7e+03   0.471  -0.372     0.8  0.0898  -0.786  -0.612   2.5e+03  2.05e+04  1.52e+03 Big Target 2 
+
+Test PropagateMagField: ***********************
+ Starting New Particle with Position (0.2,0.3,0.4)
+ and UnitVelocity (0.0733,0.587,0.807)
+ Momentum in MeV/c is 150
+ Initial spin is set to = (0,0.809,-0.588)
+ Initial dot product of spin and momentum = 3.26e-17
+ dot product of spin and momentum = 6e-06
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= 6e-06  Spin magnitude= 1 (-1=4.31e-14)  UnitMom mag= 1 (-1=2.66e-17) 
+Step#     X(mm)     Y(mm)     Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z    StepLen   PhsStep    Safety         NextVolume 
+    0       0.2       0.3       0.4   0.103   0.582   0.807  0.0404   0.808  -0.588       2.5       2.5      49.8        World 
+ dot product of spin and momentum = 1.8e-05
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= 1.8e-05  Spin magnitude= 1 (-1=1.34e-13)  UnitMom mag= 1 (-1=-3.49e-17) 
+    1      0.42      1.76      2.42    0.16   0.569   0.807   0.121     0.8  -0.588         5         5      47.3        World 
+ dot product of spin and momentum = 4.19e-05
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= 4.19e-05  Spin magnitude= 1 (-1=3.12e-13)  UnitMom mag= 1 (-1=1.85e-17) 
+    2      1.08      4.64      6.45    0.27   0.526   0.807   0.277    0.76  -0.588        10        10      42.3        World 
+ dot product of spin and momentum = 8.97e-05
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= 8.97e-05  Spin magnitude= 1 (-1=6.71e-13)  UnitMom mag= 1 (-1=-1.67e-17) 
+    3      3.23      10.1      14.5   0.453   0.379   0.807   0.551   0.592  -0.588        20        20      32.3        World 
+ dot product of spin and momentum = 0.000185
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= 0.000185  Spin magnitude= 1 (-1=1.39e-12)  UnitMom mag= 1 (-1=2.27e-17) 
+    4      10.6      19.3      30.6   0.588 -0.0605   0.807   0.809  0.0162  -0.588        40        40      12.6        World 
+ dot product of spin and momentum = 0.000372
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= 0.000372  Spin magnitude= 1 (-1=2.82e-12)  UnitMom mag= 1 (-1=1.66e-17) 
+    5      32.6      26.1      62.9  -0.077  -0.586   0.807 -0.00802  -0.809  -0.588        80        80      5.86        World 
+ dot product of spin and momentum = 0.000739
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= 0.000739  Spin magnitude= 1 (-1=5.64e-12)  UnitMom mag= 1 (-1=-3.79e-17) 
+    6      58.9     -7.22       127    0.11   0.581   0.807  0.0565   0.807  -0.588       160       160      17.8        World 
+ dot product of spin and momentum = 0.00144
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= 0.00144  Spin magnitude= 1 (-1=1.13e-11)  UnitMom mag= 1 (-1=5.13e-17) 
+    7     0.486      2.12       256   0.174   0.565   0.807   0.153   0.795  -0.588       320       320      42.5        World 
+ dot product of spin and momentum = 0.0027
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= 0.0027  Spin magnitude= 1 (-1=2.22e-11)  UnitMom mag= 1 (-1=1.12e-17) 
+    8      1.29      5.35       515   0.296   0.512   0.807   0.337   0.736  -0.587       640       640      37.5        World 
+ dot product of spin and momentum = 0.00467
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= 0.00467  Spin magnitude= 1 (-1=4.3e-11)  UnitMom mag= 1 (-1=5.72e-17) 
+    9      3.94      11.4  1.03e+03   0.489   0.332   0.807   0.639   0.498  -0.587  1.28e+03  1.28e+03      24.3        World 
+ dot product of spin and momentum = 0.00638
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= 0.00638  Spin magnitude= 1 (-1=7.93e-11)  UnitMom mag= 1 (-1=4.41e-17) 
+   10      12.9      21.1  2.06e+03    0.37   0.461   0.807   0.503   0.636  -0.586   2.5e+03  2.56e+03       505        World 
+ dot product of spin and momentum = 0.00622
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= 0.00622  Spin magnitude= 1 (-1=9.4e-11)  UnitMom mag= 1 (-1=1.08e-19) 
+   11      6.46      15.1  4.08e+03  -0.589 -0.0477   0.807  -0.809 -0.0487  -0.586  1.14e+03  5.12e+03       505        World 
+ dot product of spin and momentum = 0.00381
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= 0.00381  Spin magnitude= 1 (-1=1.22e-10)  UnitMom mag= 1 (-1=-9.38e-18) 
+   12      31.9     -32.9     5e+03  -0.549  -0.219   0.807  -0.774  -0.239  -0.587   2.5e+03  1.02e+04         0 Big Target 2 
+ dot product of spin and momentum = -0.00142
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= -0.00142  Spin magnitude= 1 (-1=1.44e-10)  UnitMom mag= 1 (-1=-1.3e-17) 
+   13      40.5     -30.8  7.02e+03  -0.461   -0.37   0.807  -0.693  -0.415  -0.589   2.5e+03  2.05e+04       857 Big Target 2 
+ Test with full voxels
+
+
+Test PropagateMagField: ***********************
+ Starting New Particle with Position (0,0,0)
+ and UnitVelocity (0,0.6,0.8)
+ Momentum in MeV/c is 50
+ Initial spin is set to = (0,0.8,-0.6)
+ Initial dot product of spin and momentum = 0
+ dot product of spin and momentum = -8.11e-09
+Step#     X(mm)     Y(mm)     Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z    StepLen   PhsStep    Safety         NextVolume 
+    0         0         0         0  0.0896   0.593     0.8    0.12   0.791    -0.6       2.5       2.5         0        World 
+ dot product of spin and momentum = -7.3e-08
+    1     0.112      1.49         2   0.261    0.54     0.8   0.348    0.72    -0.6         5         5     0.112        World 
+ dot product of spin and momentum = -3.97e-07
+    2     0.995      4.35         6    0.52   0.299     0.8   0.694   0.398    -0.6        10        10     0.995        World 
+ dot product of spin and momentum = -1.82e-06
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= -1.82e-06  Spin magnitude= 1 (-1=3.89e-11)  UnitMom mag= 1 (-1=-5.05e-17) 
+    3      5.02      8.68        14   0.467  -0.376     0.8   0.622  -0.503    -0.6        20        20      5.02        World 
+ dot product of spin and momentum = -7.79e-06
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= -7.79e-06  Spin magnitude= 1 (-1=8.05e-11)  UnitMom mag= 1 (-1=-2.63e-17) 
+    4      16.3       7.8        30  -0.599 -0.0393     0.8  -0.799 -0.0481    -0.6        40        40       7.8        World 
+ dot product of spin and momentum = -3.22e-05
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= -3.22e-05  Spin magnitude= 1 (-1=1.63e-10)  UnitMom mag= 1 (-1=5.05e-17) 
+    5      10.7     -9.99        62 -0.0112    -0.6     0.8 -0.0238    -0.8    -0.6        80        80      7.28        World 
+ dot product of spin and momentum = -0.000131
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= -0.000131  Spin magnitude= 1 (-1=3.29e-10)  UnitMom mag= 1 (-1=-1.7e-17) 
+    6        20    -0.187       126   0.112    0.59     0.8   0.166   0.783    -0.6       160       160     0.187        World 
+ dot product of spin and momentum = -0.000527
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= -0.000527  Spin magnitude= 1 (-1=6.6e-10)  UnitMom mag= 1 (-1=-9.65e-18) 
+    7     0.175      1.86       254     0.3   0.519     0.8   0.431   0.674    -0.6       320       320     0.175        World 
+ dot product of spin and momentum = -0.00212
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= -0.00212  Spin magnitude= 1 (-1=1.32e-09)  UnitMom mag= 1 (-1=5.18e-17) 
+    8      1.34      5.01       510   0.559   0.218     0.8   0.768   0.223    -0.6       640       640      1.34        World 
+ dot product of spin and momentum = -0.00846
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= -0.00846  Spin magnitude= 1 (-1=2.62e-09)  UnitMom mag= 1 (-1=-1.48e-17) 
+    9      6.37      9.32  1.02e+03   0.336  -0.497     0.8   0.323  -0.732  -0.601  1.28e+03  1.28e+03      2.54        World 
+ dot product of spin and momentum = -0.0328
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= -0.0328  Spin magnitude= 1 (-1=5.11e-09)  UnitMom mag= 1 (-1=-5.03e-17) 
+   10      18.3       5.6  2.05e+03   0.598 -0.0477     0.8   0.724  -0.335  -0.603   2.5e+03  2.56e+03       179        World 
+ dot product of spin and momentum = -0.0498
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= -0.0498  Spin magnitude= 1 (-1=6.27e-09)  UnitMom mag= 1 (-1=-2.17e-17) 
+   11      10.8      9.98  4.05e+03  -0.467  -0.377     0.8  -0.774  -0.191  -0.604  1.19e+03  5.12e+03       406        World 
+ dot product of spin and momentum = -0.096
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= -0.096  Spin magnitude= 1 (-1=8.65e-09)  UnitMom mag= 1 (-1=3.7e-17) 
+   12      16.3     -7.78     5e+03 0.00359    -0.6     0.8  -0.453  -0.652  -0.607   2.5e+03  1.02e+04         0 Big Target 2 
+ dot product of spin and momentum = -0.155
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= -0.155  Spin magnitude= 1 (-1=1.09e-08)  UnitMom mag= 1 (-1=-1.56e-17) 
+   13        20    0.0598     7e+03   0.471  -0.372     0.8  0.0898  -0.786  -0.612   2.5e+03  2.05e+04  1.52e+03 Big Target 2 
+
+Test PropagateMagField: ***********************
+ Starting New Particle with Position (0.2,0.3,0.4)
+ and UnitVelocity (0.0733,0.587,0.807)
+ Momentum in MeV/c is 150
+ Initial spin is set to = (0,0.809,-0.588)
+ Initial dot product of spin and momentum = 3.26e-17
+ dot product of spin and momentum = 6e-06
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= 6e-06  Spin magnitude= 1 (-1=4.31e-14)  UnitMom mag= 1 (-1=2.66e-17) 
+Step#     X(mm)     Y(mm)     Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z    StepLen   PhsStep    Safety         NextVolume 
+    0       0.2       0.3       0.4   0.103   0.582   0.807  0.0404   0.808  -0.588       2.5       2.5       0.2        World 
+ dot product of spin and momentum = 1.8e-05
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= 1.8e-05  Spin magnitude= 1 (-1=1.34e-13)  UnitMom mag= 1 (-1=-3.49e-17) 
+    1      0.42      1.76      2.42    0.16   0.569   0.807   0.121     0.8  -0.588         5         5      0.42        World 
+ dot product of spin and momentum = 4.19e-05
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= 4.19e-05  Spin magnitude= 1 (-1=3.12e-13)  UnitMom mag= 1 (-1=1.85e-17) 
+    2      1.08      4.64      6.45    0.27   0.526   0.807   0.277    0.76  -0.588        10        10      1.08        World 
+ dot product of spin and momentum = 8.97e-05
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= 8.97e-05  Spin magnitude= 1 (-1=6.71e-13)  UnitMom mag= 1 (-1=-1.67e-17) 
+    3      3.23      10.1      14.5   0.453   0.379   0.807   0.551   0.592  -0.588        20        20      3.23        World 
+ dot product of spin and momentum = 0.000185
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= 0.000185  Spin magnitude= 1 (-1=1.39e-12)  UnitMom mag= 1 (-1=2.27e-17) 
+    4      10.6      19.3      30.6   0.588 -0.0605   0.807   0.809  0.0162  -0.588        40        40      6.96        World 
+ dot product of spin and momentum = 0.000372
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= 0.000372  Spin magnitude= 1 (-1=2.82e-12)  UnitMom mag= 1 (-1=1.66e-17) 
+    5      32.6      26.1      62.9  -0.077  -0.586   0.807 -0.00802  -0.809  -0.588        80        80      18.8        World 
+ dot product of spin and momentum = 0.000739
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= 0.000739  Spin magnitude= 1 (-1=5.64e-12)  UnitMom mag= 1 (-1=-3.79e-17) 
+    6      58.9     -7.22       127    0.11   0.581   0.807  0.0565   0.807  -0.588       160       160      3.26        World 
+ dot product of spin and momentum = 0.00144
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= 0.00144  Spin magnitude= 1 (-1=1.13e-11)  UnitMom mag= 1 (-1=5.13e-17) 
+    7     0.486      2.12       256   0.174   0.565   0.807   0.153   0.795  -0.588       320       320     0.486        World 
+ dot product of spin and momentum = 0.0027
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= 0.0027  Spin magnitude= 1 (-1=2.22e-11)  UnitMom mag= 1 (-1=1.12e-17) 
+    8      1.29      5.35       515   0.296   0.512   0.807   0.337   0.736  -0.587       640       640      1.29        World 
+ dot product of spin and momentum = 0.00467
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= 0.00467  Spin magnitude= 1 (-1=4.3e-11)  UnitMom mag= 1 (-1=5.72e-17) 
+    9      3.94      11.4  1.03e+03   0.489   0.332   0.807   0.639   0.498  -0.587  1.28e+03  1.28e+03      3.94        World 
+ dot product of spin and momentum = 0.00638
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= 0.00638  Spin magnitude= 1 (-1=7.93e-11)  UnitMom mag= 1 (-1=4.41e-17) 
+   10      12.9      21.1  2.06e+03    0.37   0.461   0.807   0.503   0.636  -0.586   2.5e+03  2.56e+03      37.5        World 
+ dot product of spin and momentum = 0.00622
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= 0.00622  Spin magnitude= 1 (-1=9.4e-11)  UnitMom mag= 1 (-1=1.08e-19) 
+   11      6.46      15.1  4.08e+03  -0.589 -0.0477   0.807  -0.809 -0.0487  -0.586  1.14e+03  5.12e+03       207        World 
+ dot product of spin and momentum = 0.00381
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= 0.00381  Spin magnitude= 1 (-1=1.22e-10)  UnitMom mag= 1 (-1=-9.38e-18) 
+   12      31.9     -32.9     5e+03  -0.549  -0.219   0.807  -0.774  -0.239  -0.587   2.5e+03  1.02e+04         0 Big Target 2 
+ dot product of spin and momentum = -0.00142
+ $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-06
+ Spin dot UnitMomentum= -0.00142  Spin magnitude= 1 (-1=1.44e-10)  UnitMom mag= 1 (-1=-1.3e-17) 
+   13      40.5     -30.8  7.02e+03  -0.461   -0.37   0.807  -0.693  -0.415  -0.589   2.5e+03  2.05e+04       857 Big Target 2 
