@@ -88,7 +88,7 @@ visualization/Tree           stanaka@cs.ritsumei.ac.jp       Satoshi Tanaka
 visualization/VRML           stanaka@cs.ritsumei.ac.jp       Satoshi Tanaka
 visualization/XXX            John.Allison@man.ac.uk          John Allison
 environments                 John.Allison@man.ac.uk          John Allison
-environments/Momo            yoshidah@naruto-u.ac.jp         Hajime Yoshida
+environments/MOMO            yoshidah@naruto-u.ac.jp         Hajime Yoshida
 examples                     asai@slac.stanford.edu          Makoto Asai
 examples/novice/N01          asai@slac.stanford.edu          Makoto Asai
 examples/novice/N02          John.Apostolakis@cern.ch        John Apostolakis
@@ -115,8 +115,11 @@ examples/advanced            asai@slac.stanford.edu          Makoto Asai
 examples/extended/analysis   duns@slac.stanford.edu          Mark Donszelmann
 examples/extended/biasing    Giuseppe.Daquino@cern.ch        Giuseppe Daquino
 examples/extended/electromagnetic:
-  TestEm1,2,3,4,5,6,7        Michel.Maire@lapp.in2p3.fr      Michel Maire
+  TestEm1,2,5,6,7,9          Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
+  TestEm3,4                  Michel.Maire@lapp.in2p3.fr      Michel Maire
   TestEm8,10                 Vladimir.Grichine@cern.ch       Vladimir Grichine
+  MuonProcesses              Michel.Maire@lapp.in2p3.fr      Michel Maire
+  PhotonProcesses            Michel.Maire@lapp.in2p3.fr      Michel Maire
 examples/extended/eventgenerator:
   HepMCEx01,02               Koichi.Murakami@kek.jp          Koichi Murakami
 examples/extended/field      John.Apostolakis@cern.ch        John Apostolakis
@@ -126,7 +129,10 @@ examples/extended/geometry   Gabriele.Cosmo@cern.ch          Gabriele Cosmo
   olap                       Martin.Liendl@cern.ch           Martin Liendl
 examples/extended/medical    MariaGrazia.Pia@ge.infn.it	     Maria Grazia Pia
   DICOM                      Susanna.Guatelli@ge.infn.it     Susanna Guatelli
-examples/extended/parallel   gene@ccs.neu.edu                Gene Cooperman
+examples/extended/optical    gum@triumf.ca                   Peter Gumplinger
+examples/extended/parallel:
+  ParN02, ParN04             gene@ccs.neu.edu                Gene Cooperman
+  ExDiane                    Susanna.Guatelli@ge.infn.it     Susanna Guatelli
 examples/extended/persistency  Youhei.Morita@cern.ch         Youhei Morita
 tests                        Serguei.Sadilov@cern.ch         Serguei Sadilov
       test01                 Gabriele.Cosmo@cern.ch          Gabriele Cosmo
