@@ -1,3 +1,11 @@
+DAWN-V01-01-04
+- Target =  standard target in scene 
+          + relative target in view
+  (G4DAWNFILEView.cc, G4FukuiRendererView.cc)
+- Automatic filename incrementation is made default.
+  g4_00.prim, g4_01.prim, ... , g4_99.prim
+  g4_00.eps , g4_01.eps , ... , g4_99.eps
+
 DAWN-V01-01-03  Satoshi TANAKA  May 11, 2000
 - In G4DAWNFILEViewer.cc, 
   <       strcpy( fPSViewer, "ghostview" );
