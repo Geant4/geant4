@@ -1,0 +1,151 @@
+            Problems and Fixes with geant4-02-00-ref-02
+            ===========================================
+
+geant4-02-00-ref-02 is geant4-02-00-ref-01  plus:
+
+./config		config-V02-00-02
+./examples		examples-V02-00-03
+./source/g3tog4		g3tog4-V02-00-03
+./source/geometry/solids/CSG		geom-solids-csg-V02-00-00b
+./source/global		global-V02-00-02
+./source/interfaces		interfaces-V02-00-01
+./source/materials		materials-V02-00-00
+./source/processes/electromagnetic/lowenergy		emlowen-V02-00-02r
+./source/processes/electromagnetic/muons		muons-V02-00-01
+./source/processes/electromagnetic/standard		stand-V02-00-01
+./source/processes/electromagnetic/utils		utils-V02-00-01
+./source/processes/electromagnetic/xrays		xrays-V02-00-01
+./source/processes/hadronic/models/generator/de_excitation		de_excitation-V02-00-00r
+./source/processes/hadronic/models/high_energy		high_energy-V02-00-01
+./source/processes/hadronic/models/low_energy		low_energy-V02-00-00r
+./source/processes/hadronic/util		had_util-V02-00-00r
+./source/processes/optical		op-V02-00-00r
+./source/processes/parameterisation		param-V02-00-00r
+./source/processes/photolepton_hadron		photolepton_hadron-V02-00-00r
+./source/visualization		vis-V02-00-00
+./tests		tests-V02-00-03
+
+
+Problems Fixed
+--------------
+
+The introduction of reproducible results from a change in the use of
+random numbers has decreased the differences between results from
+different platforms.
+
+  DEC: optim:     ISO: T02.hadron: crash not seen, but Large_N crashed so
+                                   we still have a problem.
+
+ Large_N problem no longer seen in geant4-02-00-ref-02
+
+  DEC: debug:    ISO: T13: *** Error in G4HEInelastic::GenerateNBodyEvent
+                           total mass (1.87784) >= total energy (1.81268)
+                     
+
+New Problems and Features
+-------------------------
+
+The introduction of the g3tog4 tests gives rise to an indefinite loop of
+prompting for input (which typically terminates after some hours when the
+entire storage space for the output logs is exhausted). 
+It was therefore, essential to avoid running g3tog4 tests on such platforms.
+
+Having provided a mechanism, it seemed pointless to keep running test11 and
+test15 on DEC "iso compliant" which fail (re-reading) files and for which 
+the authors have no immediate intention of circumventing the compiler
+problems.
+
+disabled tests
+--------------
+
+disable.test11.DEC-cxx.debug_ISO    disable.test11.DEC-cxx.optim_ISO  
+disable.test15.DEC-cxx.debug_ISO    disable.test15.DEC-cxx.optim_ISO  
+problem reading neutron data.
+
+disable.test601.DEC-cxx.debug_ISO   disable.test601.DEC-cxx.optim_ISO 
+disable.test602.DEC-cxx.debug_ISO   disable.test602.DEC-cxx.optim_ISO
+prompts indefinitely.
+
+
+Problems remaining
+------------------
+
+G4Exceptions, not terminating program, are reported from
+
+  G4CameronTruranHilfShellCorrections
+    out of table for Z = 1
+
+  G4ExcitationHandler
+    Warning: Photonevaporation data not exact.
+    Warning: Found gamma with energy = 1.44773e-13MeV 
+
+  G4VParticleChange::SetNumberOfSecondaries() 
+    Warning theListOfSecondaries is not empty
+
+on many platforms.
+
+
+  DEC: debug: NON-ISO:    T13:      G4ExcitationHandler exception.
+  DEC: debug: ISO:        T13:      G4ExcitationHandler exception.
+  SUN: debug: NON-ISO:    T13:      G4ExcitationHandler exception.
+  SUN: optim: NON-ISO:    T13:      G4ExcitationHandler exception.
+
+  DEC: debug: NON-ISO:    T15:      G4ExcitationHandler exception.
+  SUN: debug: NON-ISO:    T15:      G4ExcitationHandler exception.
+  SUN: optim: NON-ISO:    T15:      G4ExcitationHandler exception.
+  HP: debug:              T15:      G4ExcitationHandler exception.
+  HP: optim:              T15:      G4ExcitationHandler exception.
+
+  DEC: debug: NON-ISO:    T16:      G4CameronTruranHilfShellCorrections exception.
+  DEC: debug: ISO:        T16:      G4CameronTruranHilfShellCorrections exception.
+  DEC: debug: NON-ISO:   T104:      G4CameronTruranHilfShellCorrections exception.
+  DEC: debug: ISO:       T104:      G4CameronTruranHilfShellCorrections exception.
+  HP:  debug:            T104:      G4CameronTruranHilfShellCorrections exception.
+  HP:  optim:            T104:      G4CameronTruranHilfShellCorrections exception.
+
+
+
+Large N Problems
+----------------
+
+  HP:  debug:         T02.hadron:   G4ExcitationHandler exception.
+  DEC: debug:    ISO: T12:          G4ExcitationHandler exception.
+  DEC: debug: NONISO: T12:          G4ExcitationHandler exception.
+  DEC: optim:    ISO: T12:          G4ExcitationHandler exception.
+  DEC: optim: NONISO: T12:          G4ExcitationHandler exception.
+  HP:  debug:         T12:          G4ExcitationHandler exception.
+  HP:  optim:         T12:          G4ExcitationHandler exception.
+  SUN: debug: NONISO: T12:          G4ExcitationHandler exception.
+  SUN: optim: NONISO: T12:          G4ExcitationHandler exception.
+  DEC: debug:    ISO: T13:          G4ExcitationHandler exception.
+  DEC: debug: NONISO: T13:          G4ExcitationHandler exception.
+  SUN: debug: NONISO: T13:          G4ExcitationHandler exception.
+  SUN: optim: NONISO: T13:          G4ExcitationHandler exception.
+  DEC: debug: NONISO: T15:          G4ExcitationHandler exception.
+  HP:  debug:         T15:          G4ExcitationHandler exception.
+  HP:  optim:         T15:          G4ExcitationHandler exception.
+  SUN: debug: NONISO: T15:          G4ExcitationHandler exception.
+  SUN: optim: NONISO: T15:          G4ExcitationHandler exception.
+  DEC: debug:    ISO: T16:          G4ExcitationHandler exception.
+  DEC: debug: NONISO: T16:          G4ExcitationHandler exception.
+  SUN: debug: NONISO: T16:          G4ExcitationHandler exception.
+  SUN: optim: NONISO: T16:          G4ExcitationHandler exception.
+
+  DEC: optim:    ISO: T02.hadron: crash with 100 GeV K- in Al
+
+
+  DEC:   optim:NONISO:  T02.hadron:  G4ExcitationHandler exception.
+
+  SUN: debug: NONISO:   T09:         G4VParticleChange exception.
+  SUN: optim: NONISO:   T09:         G4VParticleChange exception.
+
+  HP:    optim:         T13:         Crash with 400 GeV proton in Al.
+  DEC:   optim:   ISO:  T13:         Crash during 1Tev proton in Al.
+
+  DEC: optim: NON-ISO:    T16:      G4CameronTruranHilfShellCorrections exception.
+  DEC: optim: ISO:        T16:      G4CameronTruranHilfShellCorrections exception.
+
+  SUN: debug: NONISO: T09: G4VParticleChange::SetNumberOfSecondaries() Warning
+                           theListOfSecondaries is not empty -
+                           but it runs to completion.
+  SUN: optim: NONISO: T09: As debug.
