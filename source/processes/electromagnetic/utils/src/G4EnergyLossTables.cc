@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossTables.cc,v 1.23 2003-04-07 17:13:35 vnivanch Exp $
+// $Id: G4EnergyLossTables.cc,v 1.24 2003-04-11 14:27:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,16 +35,19 @@
 // 26.10.01 all static functions moved from .icc files (mma)
 // 15.01.03 Add interfaces required for "cut per region" (V.Ivanchenko)
 // 12.03.03 Add warnings to obsolete interfaces (V.Ivanchenko)
+// 10.04.03 Add call to G4LossTableManager is particle is not registered (V.Ivanchenko)
 // -------------------------------------------------------------------
 
 #include "G4EnergyLossTables.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4RegionStore.hh"
+#include "G4LossTableManager.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4EnergyLossTablesHelper G4EnergyLossTables::t  ;
+G4EnergyLossTablesHelper G4EnergyLossTables::null_loss ;
 const G4ParticleDefinition* G4EnergyLossTables::lastParticle = 0;
 G4double G4EnergyLossTables::QQPositron = eplus*eplus ;
 G4double G4EnergyLossTables::Chargesquare ;
@@ -54,6 +57,7 @@ G4double G4EnergyLossTables::rmax = 0. ;
 G4double G4EnergyLossTables::Thigh = 0. ;
 G4int    G4EnergyLossTables::let_counter = 0;
 G4int    G4EnergyLossTables::let_max_num_warnings = 2;
+G4bool   G4EnergyLossTables::first_loss = true;
 
 G4EnergyLossTables::helper_map G4EnergyLossTables::dict;
 
@@ -107,6 +111,10 @@ void G4EnergyLossTables::Register(
   lastParticle = p ;
   Chargesquare = (p->GetPDGCharge())*(p->GetPDGCharge())/
                   QQPositron ;
+  if (first_loss ) {
+    null_loss = G4EnergyLossTablesHelper(0, 0, 0, 0, 0, 0.0, 0.0, 0.0, 0);
+    first_loss = false;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -165,10 +173,11 @@ G4EnergyLossTablesHelper G4EnergyLossTables::GetTables(
   const G4ParticleDefinition* p)
 {
   helper_map::iterator it;
-  if((it=dict.find(p))==dict.end()) {
-    G4cout << "Table is not found out for " << p->GetParticleName() << G4endl;
-    G4Exception("G4EnergyLossTables::GetTables: table not found!");
-    exit(1);
+  if ((it=dict.find(p))==dict.end()) {
+//    G4cout << "Table is not found out for " << p->GetParticleName() << G4endl;
+//    G4Exception("G4EnergyLossTables::GetTables: table not found!");
+//    exit(1);
+    return null_loss;
   }
   return (*it).second;
 }
@@ -690,6 +699,8 @@ G4double G4EnergyLossTables::GetDEDX(
     oldIndex = -1 ;
   }
   const G4PhysicsTable*  dEdxTable= t.theDEDXTable;
+  if ( !dEdxTable )
+    return G4LossTableManager::Instance()->GetDEDX(aParticle,KineticEnergy,couple);
 
   G4int materialIndex = couple->GetIndex();
   G4double scaledKineticEnergy = KineticEnergy*t.theMassRatio;
@@ -734,6 +745,9 @@ G4double G4EnergyLossTables::GetRange(
     oldIndex = -1 ;
   }
   const G4PhysicsTable* rangeTable= t.theRangeTable;
+  if ( !rangeTable )
+    return G4LossTableManager::Instance()->GetRange(aParticle,KineticEnergy,couple);
+
   const G4PhysicsTable*  dEdxTable= t.theDEDXTable;
 
   G4int materialIndex = couple->GetIndex();
@@ -783,6 +797,8 @@ G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
     oldIndex = -1 ;
   }
   const G4PhysicsTable*  dEdxTable= t.theDEDXTable;
+  if ( !dEdxTable )
+    return G4LossTableManager::Instance()->GetEnergy(aParticle,range,couple);
   const G4PhysicsTable*  inverseRangeTable= t.theInverseRangeTable;
 
   G4double scaledrange,scaledKineticEnergy ;
@@ -845,6 +861,8 @@ G4double G4EnergyLossTables::GetPreciseDEDX(
     oldIndex = -1 ;
   }
   const G4PhysicsTable*  dEdxTable= t.theDEDXTable;
+  if ( !dEdxTable )
+    return G4LossTableManager::Instance()->GetDEDX(aParticle,KineticEnergy,couple);
 
   G4int materialIndex = couple->GetIndex();
   G4double scaledKineticEnergy = KineticEnergy*t.theMassRatio;
@@ -890,6 +908,8 @@ G4double G4EnergyLossTables::GetPreciseRangeFromEnergy(
   }
   const G4PhysicsTable* rangeTable= t.theRangeTable;
   const G4PhysicsTable*  dEdxTable= t.theDEDXTable;
+  if ( !dEdxTable )
+    return G4LossTableManager::Instance()->GetDEDX(aParticle,KineticEnergy,couple);
 
   G4int materialIndex = couple->GetIndex();
 

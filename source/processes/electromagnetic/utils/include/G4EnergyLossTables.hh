@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossTables.hh,v 1.14 2003-03-12 17:58:32 vnivanch Exp $
+// $Id: G4EnergyLossTables.hh,v 1.15 2003-04-11 14:27:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id:
@@ -206,6 +206,7 @@ private:
   static G4EnergyLossTablesHelper GetTables(const G4ParticleDefinition* p);
 
   static G4EnergyLossTablesHelper t ;
+  static G4EnergyLossTablesHelper null_loss ;
   static const G4ParticleDefinition* lastParticle ;
   static G4double QQPositron ;
   static G4double Chargesquare ;
@@ -213,6 +214,7 @@ private:
   static G4double rmin,rmax,Thigh ;
   static G4int  let_counter;
   static G4int  let_max_num_warnings;
+  static G4bool first_loss;
 
 };
 
