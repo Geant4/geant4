@@ -183,20 +183,6 @@ export G4UI_USE_WIN32
 echo "On this machine the G4UI_USE_WIN32=\$G4UI_USE_WIN32"
 fi 
 
-#+
-if [ X$g4ui_build_wo_session = Xy ] ; then
-G4UI_BUILD_WO_SESSION=1
-export G4UI_BUILD_WO_SESSION
-echo "On this machine the G4UI_BUILD_WO_SESSION=\$G4UI_BUILD_WO_SESSION"
-fi 
-
-#+
-if [ X$g4ui_use_wo = Xy ] ; then
-G4UI_USE_WO=1
-export G4UI_USE_WO
-echo "On this machine the G4UI_USE_WO=\$G4UI_USE_WO"
-fi 
-
 #
 # g4vis
 #
