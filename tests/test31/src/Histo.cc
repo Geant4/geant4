@@ -103,7 +103,7 @@ void Histo::clear()
     m_ntup[j] = 0;
   }
   for(G4int k=0; k<m_Clouds; k++) {
-    m_cloud[j] = 0;
+    m_cloud[k] = 0;
   }
   if(m_tree) delete m_tree;
   m_tree = 0;

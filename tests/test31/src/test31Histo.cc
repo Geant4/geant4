@@ -166,6 +166,7 @@ void test31Histo::EndOfHisto()
   G4cout << std::setprecision(4) << "Average number of pi+pi-       " << xpi << G4endl;
   G4cout<<"===================================================================="<<G4endl;
 
+  TableControl();
   if(0 < nHisto) {
 
     // normalise histograms
@@ -175,7 +176,7 @@ void test31Histo::EndOfHisto()
     histo->save();
   }
 
-  if(nHisto == 0) TableControl();
+  //if(nHisto == 0) TableControl();
   //  CrossSections();
 }
 
@@ -489,7 +490,7 @@ void test31Histo::TableControl()
     G4cout << "             Stopping Powers" << G4endl;
     G4cout << "====================================================================" << G4endl;
 
-    G4String nm[5] = {"G4_Be", "G4_Al", "G4_Fe", "G4_Ag", "G4_Au"};
+    G4String nm[7] = {"G4_Be", "G4_Al", "G4_Si", "G4_Ge", "G4_Fe", "G4_Ag", "G4_Au"};
     const G4String partc[2] = {"proton", "alpha"};
     const G4String proc[2] = {"hIoni", "ionIoni"};
     
@@ -500,7 +501,7 @@ void test31Histo::TableControl()
     
       const G4ParticleDefinition* part = cal.FindParticle(partc[ii]);
 
-      for(G4int i=0; i<5; i++) {
+      for(G4int i=0; i<7; i++) {
 	mat = mman->FindOrBuildMaterial(nm[i]);
         G4cout << "  Particle  " << partc[ii] << " in  Material  " << mat->GetName() << G4endl;
 	G4double fact = gram/(MeV*cm2*mat->GetDensity());
@@ -514,13 +515,16 @@ void test31Histo::TableControl()
         }
         G4int i1 = histo->addCloud1D(fname);
         for(G4int j=0; j<8; j++) {fin->getline( line, 200);}
+        G4int i2 =0;
         do {
+          i2++;
           (*fin) >> e >> se >> sn >> st;
           e *= MeV;
           mce = fact*(cal.ComputeDEDX(e,part,proc[ii],mat));
           mcn = fact*emc->NuclearDEDX(part,mat,e,false);
           mct = mce + mcn;
           G4double diff = 100.*(mct/st - 1.0);
+	  /*
           G4cout << e/MeV 
                  << " NIST:  dedx= " << se
                  << " nuc= " << sn
@@ -530,10 +534,14 @@ void test31Histo::TableControl()
                  << " tot= " << mct
                  << " diff= " << diff << " %"
                  << G4endl;
-          histo->fill(i1,e,diff);
+	  */
+          if(ii==0 && i==0) G4cout << " " << e;
+	  else              G4cout << " " << -diff;
+          //histo->fill(i1,e,diff);
               
         } while ( std::fabs(e - 1000.) > MeV);
-        G4cout << "====================================================================" << G4endl;
+	  G4cout << G4endl;
+	  G4cout << "========= n= " << i2 << " ===========================================================" << G4endl;
         fin->close();
       }
     }
