@@ -188,7 +188,7 @@ void DMXParticleSource::GeneratePointSource()
 void DMXParticleSource::GeneratePointsInVolume()
 {
   G4ThreeVector RandPos;
-  G4double x, y, z;
+  G4double x=0., y=0., z=0.;
   
   if(SourcePosType != "Volume" && verbosityLevel >= 1)
     G4cout << "Error SourcePosType not Volume" << G4endl;
