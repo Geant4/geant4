@@ -79,7 +79,8 @@ int main(int argc, char **argv)
   
   G4cout<<"\n\n==================================================";
   G4Point3D  pt(0, -100, 24);
-  for (G4int y = -100; y<=100; y+=10)
+  G4int y;
+  for (y = -100; y<=100; y+=10)
   {
     pt.setY(y);
     in = MyPCone->Inside(pt);
@@ -99,11 +100,12 @@ int main(int argc, char **argv)
   G4Point3D  start( 0, 0, -30);
   G4Vector3D dir(1./sqrt(2.), 1./sqrt(2.), 0);
   G4double   d;
+  G4int z;
   
   G4cout<<"\nPdep is (0, 0, z)";
   G4cout<<"\nDir is (1, 1, 0)\n";
 
-  for(G4double z=-30; z<=50; z+=5)
+  for(z=-30; z<=50; z+=5)
   {
     start.setZ(z);
 
