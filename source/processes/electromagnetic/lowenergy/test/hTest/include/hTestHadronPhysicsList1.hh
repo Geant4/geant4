@@ -23,7 +23,7 @@
 //----------------------------------------------------------------------------
 //
 
-#include "hTestVHadronPhysicsList.h"
+#include "hTestVHadronPhysicsList.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -16,12 +16,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-// HARP includes
-#include "Simulation/hTestTrackingAction.h"
-#include "HarpEvent/MonteCarlo/McParticle.h"
-#include "HarpEvent/MonteCarlo/McVertex.h"
-
-// G4 includes
+#include "hTestTrackingAction.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Track.hh"
@@ -59,7 +54,6 @@ void hTestTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
     theRun->SaveToTuple("TKIN", kinE/MeV);      
 
     G4ParticleDefinition* particle = aTrack->GetDefinition();
-    G4DynamicParticle* dynParticle = aTrack->GetDynamicParticle();
 
     G4double mass = 0.0;
     if(particle) {
@@ -69,6 +63,7 @@ void hTestTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
     }
 
     G4ThreeVector pos = aTrack->GetPosition();
+    G4ThreeVector dir = aTrack->GetMomentumDirection();
     theRun->SaveToTuple("X0",(pos.x())/mm);
     theRun->SaveToTuple("Y0",(pos.y())/mm);
     theRun->SaveToTuple("Z0",(pos.z())/mm);

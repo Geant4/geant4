@@ -19,6 +19,8 @@
 
 #include "G4VUserPhysicsList.hh"
 #include "hTestDetectorConstruction.hh"
+#include "hTestVEMPhysicsList.hh"
+#include "hTestVHadronPhysicsList.hh"
 #include "globals.hh"
 
 class hTestPhysicsListMessenger;
@@ -37,6 +39,7 @@ public: // Without description
     void SetProtonCut(G4double);
     void SetElectronCutByEnergy(G4double);
     void SetLowEnergyLimit(G4double);
+    void SetHighEnergyLimit(G4double);
     void SetMaxStep(G4double);
     void SetVerbose(G4int val) {verbose = val;};    
     void SetEMPhysicsList(const G4String&);  
@@ -73,6 +76,7 @@ private:
     G4double cutForProton;
     G4double maxChargedStep;    
     G4double lowEnergyLimit;
+    G4double highEnergyLimit;
 
     G4String emPhysics;
     G4String hadronPhysics;

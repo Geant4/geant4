@@ -45,20 +45,23 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void hTestLowEPhysicsList::hTestLowEPhysicsList():
-  verbose(0),
-  maxChargedStep(DBL_MAX),
-  nuclStop(true),
-  barkas(true),
-  table("")
-{}
+hTestLowEPhysicsList::hTestLowEPhysicsList()
+{
+  verbose = 0;
+  maxChargedStep = DBL_MAX;
+  nuclStop = true;
+  barkas = true;
+  table = G4String("");
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void hTestLowEPhysicsList::ConstructProcess()
 {
   hTestStepCut* theStepCut = new hTestStepCut();
-  theStepCut->SetMaxStep(maxChargedStep);          
+  theStepCut->SetMaxStep(maxChargedStep);
+  G4ParticleDefinition* proton = G4Proton::ProtonDefinition();     
+  G4ParticleDefinition* antiproton = G4AntiProton::AntiProtonDefinition();     
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
@@ -121,8 +124,13 @@ void hTestLowEPhysicsList::ConstructProcess()
          table == G4String("Ziegler1977H") ||
          table == G4String("ICRU_R49p") ||
          table == G4String("ICRU_R49He") ||
-         table == G4String("ICRU_R49PowersHe") )
-         hIon->SetStoppingPowerTableName(table);
+         table == G4String("ICRU_R49PowersHe") ) {
+
+	if(particle->GetPDGCharge() > 0.0) 
+          hIon->SetElectronicStoppingPowerModel(proton,table);
+        else
+          hIon->SetElectronicStoppingPowerModel(antiproton,table);
+      }
 
       pmanager->AddProcess(hIon,-1,2,2);		       
       pmanager->AddProcess( theStepCut,  -1,-1,3);
@@ -154,7 +162,7 @@ void hTestLowEPhysicsList::ConstructProcess()
          table == G4String("ICRU_R49p") ||
          table == G4String("ICRU_R49He") ||
          table == G4String("ICRU_R49PowersHe") )
-         iIon->SetStoppingPowerTableName(table);
+         iIon->SetElectronicStoppingPowerModel(proton,table);
 
       pmanager->AddProcess(iIon,-1,2,2);
       pmanager->AddProcess(theStepCut, -1,-1,3);

@@ -66,19 +66,18 @@ public: // Without description
 
     void SethistName(G4String name) {histName = name;};
     void bookHisto();
-    HepTuple* GetNtuple() const {return ntup;};
+    inline HepTuple* GetNtuple() const {return ntup;};
     void SaveToTuple(G4String, G4double);
     void SaveToTuple(G4String, G4double, G4double);
     void SaveEvent();
     void AddEnergy(G4double, G4double);
-    void SetVerbose(G4int val) {verbose = val;};
-    G4int GetVerbose() const {return verbose;};
-    void SetHistoNumber(G4int val) {nHisto = val;};
+    inline void SetVerbose(G4int val) {verbose = val;};
+    inline G4int GetVerbose() const {return verbose;};
+    inline void SetHistoNumber(G4int val) {nHisto = val;};
 
   private:
 
     hTestDetectorConstruction* theDet;
-    hTestRunMessenger* runMessenger;
 
     G4String histName ;
     G4std::vector<HepHistogram*> histo;

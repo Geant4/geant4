@@ -69,7 +69,14 @@ hTestPhysicsListMessenger::hTestPhysicsListMessenger(hTestPhysicsList* list)
   lowLimCmd->SetUnitCategory("Energy");   
   lowLimCmd->AvailableForStates(Idle);
 
-  setMaxStepCmd = new G4UIcmdWithADoubleAndUnit("/step/setMaxChargedStep",this);
+  highLimCmd = new G4UIcmdWithADoubleAndUnit("/hTest/setHighEnergyLimit",this);
+  highLimCmd->SetGuidance("Set cut values by ENERGY for charged particles.");
+  highLimCmd->SetParameterName("setHighEnergyLimit",false);
+  highLimCmd->SetRange("setHighEnergyLimit>0.");
+  highLimCmd->SetUnitCategory("Energy");   
+  highLimCmd->AvailableForStates(Idle);
+
+  setMaxStepCmd = new G4UIcmdWithADoubleAndUnit("/hTest/setMaxChargedStep",this);
   setMaxStepCmd->SetGuidance("Set max charged particle step length");
   setMaxStepCmd->SetParameterName("mxStep",false);
   setMaxStepCmd->SetRange("mxStep>0.");
@@ -96,6 +103,7 @@ hTestPhysicsListMessenger::~hTestPhysicsListMessenger()
   delete cutPCmd;
   delete eCmd;
   delete lowLimCmd;
+  delete highLimCmd;
   delete setMaxStepCmd;
   delete EMPhysicsCmd;
   delete HadPhysicsCmd;
@@ -114,7 +122,9 @@ void hTestPhysicsListMessenger::SetNewValue(G4UIcommand* com, G4String newValue)
   if(com == eCmd)
     { hTestList->SetElectronCutByEnergy(eCmd->GetNewDoubleValue(newValue));}
   if(com == lowLimCmd)
-    { hTestList->GetLowEnergyLimit(rCmd->GetNewDoubleValue(newValue));}
+    { hTestList->SetLowEnergyLimit(lowLimCmd->GetNewDoubleValue(newValue));}
+  if(com == lowLimCmd)
+    { hTestList->SetHighEnergyLimit(highLimCmd->GetNewDoubleValue(newValue));}
   if(com == setMaxStepCmd)
     { hTestList->SetMaxStep(setMaxStepCmd->GetNewDoubleValue(newValue));}
   if(com == EMPhysicsCmd)

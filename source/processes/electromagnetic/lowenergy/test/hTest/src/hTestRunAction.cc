@@ -24,7 +24,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "hTestRunAction.hh"
-#include "hTestRunMessenger.hh"
 
 #include "G4Run.hh"
 #include "G4UImanager.hh"
@@ -47,8 +46,6 @@ hTestRunAction::hTestRunAction(hTestDetectorConstruction* det):
   nHisto(1),
   verbose(0)
 {
-  runMessenger = new hTestRunMessenger(this);
-
   // Water test
   // nbinEn = 600;
   // Enlow  = 0.0;
@@ -64,7 +61,6 @@ hTestRunAction::hTestRunAction(hTestDetectorConstruction* det):
 
 hTestRunAction::~hTestRunAction()
 {
-  delete runMessenger;
   delete hbookManager;
   histo.clear(); 
   G4cout << "runMessenger and histograms are deleted" << G4endl;
@@ -91,9 +87,10 @@ void hTestRunAction::BeginOfRunAction(const G4Run* aRun)
 
   bookHisto();
 
-  G4cout << "hTestRunAction: Histograms are booked" << G4endl;
-      
-  G4cout << "hTestRunAction: Run is started!!!" << G4endl;
+  if(verbose > 0) {
+    G4cout << "hTestRunAction: Histograms are booked and run has been started" 
+           << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -147,10 +144,10 @@ void hTestRunAction::bookHisto()
 
   // book histograms
 
-  histo.resize(nHisto)
+  histo.resize(nHisto);
 
-  G4int nbin = theDet->GetAbsorberNumber();
-  G4int zmax = (theDet->GetAbsorberThickness()) * nbin / mm;
+  G4int nbin = theDet->GetNumberOfAbsorbers();
+  G4double zmax = (theDet->GetAbsorberThickness()) * G4double(nbin) / mm;
 
   if(0 < nHisto) {
     histo[0] = hbookManager->histogram("Energy deposit (MeV) in absorber (mm)"

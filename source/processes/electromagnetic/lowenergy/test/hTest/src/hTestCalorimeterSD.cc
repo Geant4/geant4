@@ -33,11 +33,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-hTestCalorimeterSD::hTestCalorimeterSD(G4String name)
- :G4VSensitiveDetector(name)
-{
-  theEvent = (G4RunManager::G4RunManager())->GetUserEventAction();
-}
+hTestCalorimeterSD::hTestCalorimeterSD(G4String name, 
+                                       hTestDetectorConstruction* det)
+ :G4VSensitiveDetector(name),
+  theDet(det)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -48,6 +48,7 @@ hTestCalorimeterSD::~hTestCalorimeterSD()
 
 void hTestCalorimeterSD::Initialize(G4HCofThisEvent*HCE)
 {
+  if(!theEvent) theDet->GetEventAction();
   verbose = theEvent->GetVerbose();
 }
 
@@ -58,7 +59,7 @@ G4bool hTestCalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* h)
   G4double edep = aStep->GetTotalEnergyDeposit();
 
   if(0.0 < edep) {
-    G4int j = aStep->GetTrack()->GetPhysicsVolume()->GetCopyNo();
+    G4int j = aStep->GetTrack()->GetVolume()->GetCopyNo();
     theEvent->AddEnergy(edep, j);
     if(1 < verbose) {
       G4cout << "hTestCalorimeterSD: energy = " << edep/MeV

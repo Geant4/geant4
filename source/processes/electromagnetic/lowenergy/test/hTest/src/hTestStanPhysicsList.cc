@@ -44,10 +44,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void hTestStanPhysicsList::hTestStanPhysicsList():
-  verbose(0),
-  maxChargedStep(DBL_MAX)
-{}
+hTestStanPhysicsList::hTestStanPhysicsList()
+{
+  verbose = 0;
+  maxChargedStep = DBL_MAX;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

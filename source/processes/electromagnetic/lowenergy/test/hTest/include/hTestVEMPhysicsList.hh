@@ -1,5 +1,5 @@
-#ifndef HsVEMPhysicsList_h
-#define HsVEMPhysicsList_h 1
+#ifndef hTestVEMPhysicsList_h
+#define hTestVEMPhysicsList_h 1
 
 //---------------------------------------------------------------------------
 // This code implementation is the intellectual property of
@@ -11,7 +11,7 @@
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   HsVEMPhysicsList
+// ClassName:   hTestVEMPhysicsList
 //  
 // Description: Virtual class to build Hadron Physics List for Geant4
 //
@@ -32,11 +32,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class HsVEMPhysicsList:  public G4VUserPhysicsList
+class hTestVEMPhysicsList:  public G4VUserPhysicsList
 {
 public:
-  HsVEMPhysicsList() {};
-  ~HsVEMPhysicsList() {};
+  hTestVEMPhysicsList() {};
+  ~hTestVEMPhysicsList() {};
 
 public:
   void ConstructEM() {ConstructProcess();};
@@ -52,8 +52,8 @@ public:
 private:
 
   // hide assignment operator 
-  HsVEMPhysicsList & operator=(const HsVEMPhysicsList &right);
-  HsVEMPhysicsList(const HsVEMPhysicsList&);
+  hTestVEMPhysicsList & operator=(const hTestVEMPhysicsList &right);
+  hTestVEMPhysicsList(const hTestVEMPhysicsList&);
 
 protected:
 

@@ -56,7 +56,8 @@ protected:
 private:
   
   // hide assignment operator as private 
-  hTestStepCut& operator=(const hTestStepCut &right);
+  hTestStepCut(const hTestStepCut &right);
+  const hTestStepCut& operator=(const hTestStepCut &right);
 
   G4double maxChargedStep;
 };
@@ -82,7 +83,7 @@ inline G4double hTestStepCut::PostStepGetPhysicalInteractionLength(
   *condition = NotForced;
    G4double step = DBL_MAX;
 
-   if((MaxChargedStep > 0.) &&
+   if((maxChargedStep > 0.) &&
       (aTrack.GetVolume() != 0) &&
       (aTrack.GetVolume()->GetName() == "Absorber") &&
       (aTrack.GetDynamicParticle()->GetDefinition()->GetPDGCharge() != 0.))

@@ -10,7 +10,7 @@
 //
 // ClassName:   hTestHadronPhysicsList
 //  
-// Description: Implementation file for Standard HARP HadronPhysicsList 
+// Description: Implementation file for Standard HadronPhysicsList 
 //
 // Authors:     V.Ivanchenko 29/03/01
 //
@@ -164,16 +164,14 @@ void hTestHadronPhysicsList::ConstructProcess()
          theInelasticProcess->RegisterMe(theHEInelasticModel);
 	 
          pmanager->AddDiscreteProcess(theInelasticProcess);
-	 /*
+       
 #ifdef TRIUMF_STOP_PIMINUS
          pmanager->AddRestProcess(new G4PionMinusAbsorptionAtRest, ordDefault);
 #else
-         G4String prcNam;
-         pmanager->AddRestProcess(
-           new G4PiMinusAbsorptionAtRest(
-                prcNam="PiMinusAbsorptionAtRest"), ordDefault);
+         pmanager->AddRestProcess(new G4PiMinusAbsorptionAtRest(
+                   G4String("PiMinusAbsorptionAtRest")), ordDefault);
 #endif
-*/
+
       }
       else if (particleName == "kaon+") {
          pmanager->AddDiscreteProcess(theElasticProcess);
@@ -313,3 +311,6 @@ void hTestHadronPhysicsList::ConstructProcess()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+

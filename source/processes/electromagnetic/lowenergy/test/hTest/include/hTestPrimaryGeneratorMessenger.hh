@@ -1,5 +1,5 @@
-#ifndef hTestPrimaryGeneratorAction_h
-#define hTestPrimaryGeneratorAction_h 1
+#ifndef hTestPrimaryGeneratorMessenger_h
+#define hTestPrimaryGeneratorMessenger_h 1
 
 //---------------------------------------------------------------------------
 //
@@ -15,11 +15,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-
-// HARP includes
-#include "Simulation/HsManager.h"
-
-// G4 includes
 #include "globals.hh"
 #include "G4UImessenger.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
@@ -27,21 +22,20 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class HsPrimaryGeneratorOld;
+class hTestPrimaryGeneratorAction;
 
-class hTestPrimaryGeneratorAction: public G4UImessenger
+class hTestPrimaryGeneratorMessenger: public G4UImessenger
 {
   public:
   
-    hTestPrimaryGeneratorAction(HsPrimaryGeneratorOld* gen);
-   ~hTestPrimaryGeneratorAction();
+    hTestPrimaryGeneratorMessenger(hTestPrimaryGeneratorAction* gen);
+   ~hTestPrimaryGeneratorMessenger();
     
     void SetNewValue(G4UIcommand* command, G4String newValue);
 
   private:
   
-    HsPrimaryGeneratorOld*  theGeneratorOld;
-    HsManager* theMCmanager;
+    hTestPrimaryGeneratorAction*  theGen;
 
     G4UIcmdWithADoubleAndUnit* beamXCmd;
     G4UIcmdWithADoubleAndUnit* beamYCmd;

@@ -40,7 +40,9 @@ hTestEventAction::hTestEventAction(hTestRunAction* run,
   verbose(0),
   nEvt(0),
   drawFlag("all")
-{}
+{
+  theDet->SetEventAction(this);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -55,18 +57,18 @@ void hTestEventAction::BeginOfEventAction(const G4Event* evt)
 {  
   verbose = theRun->GetVerbose();
   nEvt++;
-
-  //theRun->InitializeTuples();
-
-  numAbs = theDet->GetAbsorberNumber();
-  energy.resize(numAbs);
-  for(G4int i=0; i<numAbs; i++) { energy[i] = 0.0; }
-
-  if(verboselevel > 0) {
+  if(verbose > 0) {
     G4cout << "hTestEventAction: Event #" 
            << evt->GetEventID() << " started; nEvt = " 
            << nEvt << G4endl;
   }
+
+  //theRun->InitializeTuples();
+
+  numAbs = theDet->GetNumberOfAbsorbers();
+  energy.resize(numAbs);
+  for(G4int i=0; i<numAbs; i++) { energy[i] = 0.0; }
+
   backEnergy = 0.0;
   leakEnergy = 0.0;
 }
@@ -138,7 +140,7 @@ void hTestEventAction::EndOfEventAction(const G4Event* evt)
   }  
 #endif
 
-  if(verboselevel > 0) {
+  if(verbose > 0) {
     G4cout << "hTestEventAction: Event #" 
            << evt->GetEventID() << " ended" << G4endl;
   }

@@ -27,17 +27,17 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4VUserDetectorConstruction.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4LogicalVolume.hh"
+#include "G4Box.hh"
+#include "G4Material.hh"
+#include "G4UniformMagField.hh"
 #include "globals.hh"
-#include "G4UnitsTable.hh"
 #include "G4ios.hh"
 
-class G4Box;
-class G4LogicalVolume;
-class G4VPhysicalVolume;
-class G4Material;
-class G4UniformMagField;
-class hTestDetectorMessenger;
 class hTestCalorimeterSD;
+class hTestEventAction;
+class hTestDetectorMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -50,38 +50,36 @@ class hTestDetectorConstruction : public G4VUserDetectorConstruction
 
   public:
      
-    inline void SetAbsorberMaterial (G4String);     
-    inline void SetNumberOfAbsorbers(G4int);     
-    inline void SetAbsorberThickness(G4double);     
-    inline void SetAbsorberSizeXY   (G4double);          
-      
-    inline void SetWorldMaterial(G4String);
-    inline void SetWorldSizeZ   (G4double);
+    void SetAbsorberMaterial (const G4String&);     
+    void SetNumberOfAbsorbers(G4int);     
+    void SetAbsorberThickness(G4double);     
+    void SetAbsorberSizeXY   (G4double);            
+    void SetWorldMaterial(const G4String&);
+    void SetWorldSizeZ   (G4double);
+    void SetMagField(G4double,G4int);
 
-    inline void SetMagField(G4double,G4int);
-    inline void SetVerbose(G4int val) {verbose = val;};
+    inline void SetVerbose(G4int val) {myVerbose = val;};
     inline void SetHistoName(G4String name) {histoName = name;};
     inline void SetNumberOfEvents(G4int val) {nEvents = val;};
+    inline void SetEventAction(hTestEventAction* p) {theEvent = p;};
      
     G4VPhysicalVolume* Construct();
-
     void UpdateGeometry();
-     
     void PrintGeomParameters(); 
                     
-    inline G4Material* GetAbsorberMaterial()  {return AbsorberMaterial;};
-    inline G4double    GetAbsorberThickness() {return AbsorberThickness;};      
-    inline G4double    GetAbsorberSizeXY()    {return SizeXY;};
-          
-    inline G4Material* GetWorldMaterial()     {return WorldMaterial;};
-    inline G4double    GetWorldSizeZ()        {return WorldSizeZ;}; 
-    inline G4double    GetWorldSizeXY()       {return SizeXY;};
-     
-    inline const G4VPhysicalVolume* GetPhysWorld() {return physWorld;};           
-    inline const G4LogicalVolume*   GetAbsorber()  {return logicAbs;};
-
+    inline G4int       GetNumberOfAbsorbers() const {return NumberOfAbsorbers;};
+    inline G4Material* GetAbsorberMaterial()  const {return AbsorberMaterial;};
+    inline G4double  GetAbsorberThickness()   const {return AbsorberThickness;};
+    inline G4double    GetAbsorberSizeXY()    const {return SizeXY;};
+    inline G4Material* GetWorldMaterial()     const {return WorldMaterial;};
+    inline G4double    GetWorldSizeZ()        const {return WorldSizeZ;}; 
+    inline G4double    GetWorldSizeXY()       const {return SizeXY;};
+    inline const G4VPhysicalVolume* GetPhysWorld() const {return physWorld;};
+    inline const G4LogicalVolume*   GetAbsorber()  const {return logicAbs;};
     inline G4String GetHistoName() const {return histoName;};
     inline G4int GetNumberOfEvents() const {return nEvents;};
+    inline hTestEventAction* GetEventAction() const {return theEvent;};
+    inline G4int       GetVerbose() const {return myVerbose;};
                  
   private:
 
@@ -116,10 +114,11 @@ class hTestDetectorConstruction : public G4VUserDetectorConstruction
      
      G4UniformMagField* magField;      //pointer to the magnetic field
      
-     hTestDetectorMessenger* detectorMessenger;  //pointer to the Messenger
-     hTestCalorimeterSD* calorimeterSD;  //pointer to the sensitive detector
+     hTestDetectorMessenger* detectorMessenger;  
+     hTestCalorimeterSD* calorimeterSD;  
+     hTestEventAction* theEvent;
 
-     G4int verbose;      
+     G4int myVerbose;      
      G4String histoName;
      G4int nEvents;
 };

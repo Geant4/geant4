@@ -112,6 +112,11 @@ hTestDetectorMessenger::hTestDetectorMessenger(hTestDetectorConstruction* h):
   NumOfEvt->SetGuidance("Set number of event to be simulated");
   NumOfEvt->SetParameterName("Nevt",false);
   NumOfEvt->AvailableForStates(Idle);
+
+  verbCmd = new G4UIcmdWithAnInteger("/hTest/verbose",this);
+  verbCmd->SetGuidance("Set number of event to be simulated");
+  verbCmd->SetParameterName("Nevt",false);
+  verbCmd->AvailableForStates(Idle);
   
 }
 
@@ -131,6 +136,7 @@ hTestDetectorMessenger::~hTestDetectorMessenger()
   delete ZMagFieldCmd;
   delete HistoCmd;
   delete NumOfEvt;
+  delete verbCmd;
   delete hTestdetDir;
 }
 
@@ -138,6 +144,8 @@ hTestDetectorMessenger::~hTestDetectorMessenger()
 
 void hTestDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
+  G4cout << "hTestDetectorMessenger: " << newValue << G4endl;
+
   if( command == NumOfAbsCmd )
    { hDet->SetNumberOfAbsorbers(NumOfAbsCmd->GetNewIntValue(newValue));}
 
@@ -174,6 +182,8 @@ void hTestDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if( command == NumOfEvt )
    { hDet->SetNumberOfEvents(NumOfAbsCmd->GetNewIntValue(newValue));}
 
+  if( command == verbCmd )
+   { hDet->SetVerbose(verbCmd->GetNewIntValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -53,6 +53,7 @@ class hTestPhysicsListMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* cutPCmd;
     G4UIcmdWithADoubleAndUnit* eCmd;
     G4UIcmdWithADoubleAndUnit* lowLimCmd;
+    G4UIcmdWithADoubleAndUnit* highLimCmd;
     G4UIcmdWithADoubleAndUnit* setMaxStepCmd;     
     G4UIcmdWithAString*        EMPhysicsCmd;
     G4UIcmdWithAString*        HadPhysicsCmd;

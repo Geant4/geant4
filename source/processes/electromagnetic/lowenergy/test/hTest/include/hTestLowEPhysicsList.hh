@@ -27,7 +27,7 @@
 
 #include "hTestVEMPhysicsList.hh"
 
-class hTestLowEPhysicsList:  public hTestVEMPhysicsList
+class hTestLowEPhysicsList : public hTestVEMPhysicsList
 {
 public:
   hTestLowEPhysicsList();

@@ -23,8 +23,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-hTestPrimaryGeneratorAction::hTestPrimaryGeneratorAction(hTestEventAction* evt)
- :theEvent(evt)
+hTestPrimaryGeneratorAction::hTestPrimaryGeneratorAction(
+			     hTestDetectorConstruction* det):
+  theDet(det)
 {
   InitializeMe();
 }
@@ -33,7 +34,7 @@ hTestPrimaryGeneratorAction::hTestPrimaryGeneratorAction(hTestEventAction* evt)
 
 void hTestPrimaryGeneratorAction::InitializeMe()
 {
-  verbose = theEvent->GetVerbose();
+  verbose = theDet->GetVerbose();
   theMessenger = new hTestPrimaryGeneratorMessenger(this);
   particleGun = new G4ParticleGun();
   counter = 0;
@@ -63,7 +64,7 @@ hTestPrimaryGeneratorAction::~hTestPrimaryGeneratorAction()
 void hTestPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   counter++ ;
-  verbose = theEvent->GetVerbose();
+  verbose = theDet->GetVerbose();
 
   // Simulation of beam position
   G4double x = x0;

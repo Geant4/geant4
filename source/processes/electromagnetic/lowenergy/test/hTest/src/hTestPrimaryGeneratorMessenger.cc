@@ -109,11 +109,8 @@ void hTestPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
     {theGen->SetBeamX(beamXCmd->GetNewDoubleValue(newValue));}
   if(command == beamYCmd)
     {theGen->SetBeamY(beamYCmd->GetNewDoubleValue(newValue));}
-  if(command == beamZCmd) {
-     G4double z = beamZCmd->GetNewDoubleValue(newValue);
-     theGen->SetBeamZ(z);
-     theMCmanager->SetBeamTime(z/c_light);
-    }
+  if(command == beamZCmd) 
+    {theGen->SetBeamZ(beamZCmd->GetNewDoubleValue(newValue));}
   if(command == sigmaXCmd)
     {theGen->SetBeamSigmaX(sigmaXCmd->GetNewDoubleValue(newValue));}
   if(command == sigmaYCmd)
@@ -123,13 +120,10 @@ void hTestPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
   if(command == sigmaECmd)
     {theGen->SetBeamSigmaE(sigmaECmd->GetNewDoubleValue(newValue));}
   if(command == maxThetaCmd)
-    {theGen->SetBeamMinCosTheta(
-                   cos(maxThetaCmd->GetNewDoubleValue(newValue)));}
-
-  if(1 < theGen->GetVerbose()) {
-    G4cout << "hTestPrimaryGeneratorMessenger: O'K " << G4endl;
+    {theGen->SetBeamMinCosTheta(cos(maxThetaCmd->GetNewDoubleValue(newValue)));}
+  if(1 < theGen->GetVerbose())
+    {G4cout << "hTestPrimaryGeneratorMessenger: O'K " << G4endl;}
   }
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

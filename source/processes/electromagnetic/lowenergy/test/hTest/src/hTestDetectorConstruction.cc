@@ -23,7 +23,7 @@
 
 #include "hTestDetectorConstruction.hh"
 #include "hTestDetectorMessenger.hh"
-
+#include "hTestEventAction.hh"
 #include "hTestCalorimeterSD.hh"
 
 #include "G4Material.hh"
@@ -39,6 +39,7 @@
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 
+#include "globals.hh"
 #include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -54,7 +55,8 @@ hTestDetectorConstruction::hTestDetectorConstruction():
   physAbs(0),
   magField(0),
   calorimeterSD(0),
-  verbose(0),
+  theEvent(0),
+  myVerbose(0),
   nEvents(1)
 {
   // Default parameter values of the calorimeter
@@ -63,6 +65,7 @@ hTestDetectorConstruction::hTestDetectorConstruction():
   SizeXY            = 100.0*mm;
   NumberOfAbsorbers = 300;
   WorldSizeZ        = 0.0;
+  histoName         = G4String("histo.paw");
 
   // Water test
   // Mylar test
@@ -99,8 +102,10 @@ G4VPhysicalVolume* hTestDetectorConstruction::Construct()
 
 void hTestDetectorConstruction::DefineMaterials()
 { 
-  //This function illustrates the possible ways to define materials
- 
+  if(myVerbose > 0) {
+    G4cout << "hTestDetectorConstruction: DefineMaterials starts" << G4endl;  
+  } 
+
   G4String name, symbol;             //a=mass of a mole;
   G4double a, z, density;            //z=mean number of protons;  
   G4int iz, n;                       //iz=number of protons  in an isotope; 
@@ -209,7 +214,6 @@ void hTestDetectorConstruction::DefineMaterials()
   CsI->AddElement(Cs,1);
   CsI->AddElement(I,1);
 
-
 //
 // define a material from elements.   case 2: mixture by fractional mass
 //
@@ -242,6 +246,10 @@ void hTestDetectorConstruction::DefineMaterials()
   
 G4VPhysicalVolume* hTestDetectorConstruction::ConstructGeometry()
 {
+  if(myVerbose > 0) {
+    G4cout << "hTestDetectorConstruction: ConstructGeometry starts" << G4endl;
+  } 
+
   ComputeGeomParameters();
 
   //     
@@ -290,7 +298,7 @@ G4VPhysicalVolume* hTestDetectorConstruction::ConstructGeometry()
   logicAbs->SetVisAttributes(VisAtt);
 #endif
 
-  if(verbose > 0) PrintGeomParameters();  
+  if(myVerbose > 0) PrintGeomParameters();  
 
   //
   //always return the physical World
@@ -303,45 +311,49 @@ G4VPhysicalVolume* hTestDetectorConstruction::ConstructGeometry()
 
 void hTestDetectorConstruction::PrintGeomParameters()
 {
-  G4cout << "\n The  WORLD   is made of " 
-         << G4BestUnit(WorldSizeZ,"Length") 
+  G4cout << "The  WORLD   is made of " 
          << " of " << WorldMaterial->GetName();
   G4cout << ". The transverse size (XY) of the world is " 
-         << G4BestUnit(SizeXY,"Length") << G4endl;
-  G4cout << " The ABSORBER is made of " << NumberOfAbsorbers << " items of "
-         << G4BestUnit(AbsorberThickness,"Length") 
-         << " of " << AbsorberMaterial->GetName();
+         << SizeXY/mm << " mm" << G4endl;
+  G4cout << "The ABSORBER is made of " << NumberOfAbsorbers << " items of "
+         << AbsorberThickness/mm  
+         << " mm of " << AbsorberMaterial->GetName();
   G4cout << ". The transverse size (YZ) is " 
-         << G4BestUnit(SizeXY,"Length") << G4endl;
-  G4cout << G4endl;
+         << SizeXY/mm << " mm" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void hTestDetectorConstruction::SetAbsorberMaterial(G4String mat)
+void hTestDetectorConstruction::SetAbsorberMaterial(const G4String& mat)
 {
   // search the material by its name
   G4Material* pttoMaterial = G4Material::GetMaterial(mat);     
 
   if (pttoMaterial) {     
     AbsorberMaterial = pttoMaterial;
-    logicAbs->SetMaterial(pttoMaterial); 
+
+    if(logicAbs) {
+      logicAbs->SetMaterial(pttoMaterial); 
+      MaterialIsChanged();
+    }
   }                  
-  MaterialIsChanged();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void hTestDetectorConstruction::SetWorldMaterial(G4String mat)
+void hTestDetectorConstruction::SetWorldMaterial(const G4String& mat)
 {
   // search the material by its name
+  G4cout << "seach for world mat" << G4endl;  
   G4Material* pttoMaterial = G4Material::GetMaterial(mat);     
 
   if (pttoMaterial) {
     WorldMaterial = pttoMaterial;
-    logicWorld->SetMaterial(pttoMaterial); 
+    if(logicWorld) {
+      logicWorld->SetMaterial(pttoMaterial); 
+      MaterialIsChanged();
+    }
   }
-  MaterialIsChanged();
 }
     
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -428,21 +440,21 @@ void hTestDetectorConstruction::ComputeGeomParameters()
   
 void hTestDetectorConstruction::UpdateGeometry()
 {
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructGeometry());
+  (G4RunManager::GetRunManager())->DefineWorldVolume(ConstructGeometry());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void hTestDetectorConstruction::GeometryIsChanged()
 {
-  G4RunManager::GetRunManager()->GeometryHasBeenModified();
+  (G4RunManager::GetRunManager())->GeometryHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void hTestDetectorConstruction::MaterialIsChanged()
 {
-  G4RunManager::GetRunManager()->CutOffHasBeenModified();
+  (G4RunManager::GetRunManager())->CutOffHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -17,7 +17,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "hTestEventAction.hh"
+#include "hTestDetectorConstruction.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
@@ -34,7 +34,7 @@ class hTestPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
   // The constructor defines a ParticleGun object, which allows 
   // shooting a beam of particles through the experimental set-up.
-    hTestPrimaryGeneratorAction(hTestEventAction*);
+    hTestPrimaryGeneratorAction(hTestDetectorConstruction*);
 
   //The destructor. It deletes the ParticleGun.
     ~hTestPrimaryGeneratorAction();
@@ -46,24 +46,25 @@ class hTestPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     void GeneratePrimaries(G4Event* anEvent);
 
   //Get/Set methods
-    void SetBeamX(G4double val) {x0 = val;};
-    void SetBeamY(G4double val) {y0 = val;};
-    void SetBeamZ(G4double val) {z0 = val;};
-    void SetBeamSigmaX(G4double val) {sigmaX = val;};
-    void SetBeamSigmaY(G4double val) {sigmaY = val;};
-    void SetBeamSigmaZ(G4double val) {sigmaY = val;};
-    void SetBeamSigmaE(G4double val) {sigmaE = val;};
-    void SetBeamMinCosTheta(G4double val) {minCosTheta = val;};
-    void SetVerbose(G4int val) {verbose = val;};
-    G4ThreeVector GetBeamPosition() const {return position;}; 
-    G4ThreeVector GetBeamDirection() const {return direction;};
-    G4ThreeVector GetBeamEnergy() const {return energy;};
+    inline void SetBeamX(G4double val) {x0 = val;};
+    inline void SetBeamY(G4double val) {y0 = val;};
+    inline void SetBeamZ(G4double val) {z0 = val;};
+    inline void SetBeamSigmaX(G4double val) {sigmaX = val;};
+    inline void SetBeamSigmaY(G4double val) {sigmaY = val;};
+    inline void SetBeamSigmaZ(G4double val) {sigmaY = val;};
+    inline void SetBeamSigmaE(G4double val) {sigmaE = val;};
+    inline void SetBeamMinCosTheta(G4double val) {minCosTheta = val;};
+    inline void SetVerbose(G4int val) {verbose = val;};
+    inline G4ThreeVector GetBeamPosition() const {return position;}; 
+    inline G4ThreeVector GetBeamDirection() const {return direction;};
+    inline G4ThreeVector GetBeamEnergy() const {return energy;};
+    inline G4int GetVerbose() const {return verbose;};
 
   private:
 
     void InitializeMe();
 
-    hTestEventAction* theEvent;
+    hTestDetectorConstruction* theDet;
     G4ParticleGun* particleGun;
     hTestPrimaryGeneratorMessenger* theMessenger;
 

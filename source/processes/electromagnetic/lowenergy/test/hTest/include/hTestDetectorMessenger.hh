@@ -64,7 +64,7 @@ public: // Without description
     G4UIcmdWithADoubleAndUnit* ZMagFieldCmd;
     G4UIcmdWithAString*        HistoCmd;
     G4UIcmdWithAnInteger*      NumOfEvt;
-
+    G4UIcmdWithAnInteger*      verbCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
