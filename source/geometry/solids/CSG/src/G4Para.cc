@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc,v 1.21 2004-10-10 10:44:26 johna Exp $
+// $Id: G4Para.cc,v 1.22 2004-10-13 13:14:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Para
@@ -79,7 +79,7 @@ void G4Para::SetAllParameters( G4double pDx, G4double pDy, G4double pDz,
     G4Exception("G4Para::SetAllParameters()", "InvalidSetup",
                 FatalException, "Invalid Length Parameters.");
   }
-  fCubicVolume= 0.;
+  fCubicVolume = 0.;
   fpPolyhedron = 0;
 }
 

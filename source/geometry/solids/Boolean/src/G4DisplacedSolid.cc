@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.cc,v 1.20 2004-10-10 10:50:52 johna Exp $
+// $Id: G4DisplacedSolid.cc,v 1.21 2004-10-13 13:19:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for G4DisplacedSolid class for boolean 
@@ -396,8 +396,8 @@ G4DisplacedSolid::CreateNURBS () const
 G4Polyhedron* G4DisplacedSolid::GetPolyhedron () const
 {
   if (!fpPolyhedron)
-    {
-      fpPolyhedron = CreatePolyhedron ();
-    }
+  {
+    fpPolyhedron = CreatePolyhedron();
+  }
   return fpPolyhedron;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.cc,v 1.29 2004-10-10 10:56:33 johna Exp $
+// $Id: G4BREPSolid.cc,v 1.30 2004-10-13 13:21:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -53,7 +53,7 @@ G4BREPSolid::G4BREPSolid(const G4String& name)
    intersectionDistance(kInfinity), active(1), startInside(0),
    nb_of_surfaces(0), SurfaceVec(0), solidname(name),
    fCubVolStatistics(1000000), fCubVolEpsilon(0.001), fCubicVolume(0.),
-   fpPolyhedron (0)
+   fpPolyhedron(0)
 {
 }
 
@@ -64,8 +64,8 @@ G4BREPSolid::G4BREPSolid( const G4String&   name        ,
    Box(0), Convex(0), AxisBox(0), PlaneSolid(0), place(0), bbox(0),
    intersectionDistance(kInfinity), active(1), startInside(0),
    nb_of_surfaces(numberOfSrfs), SurfaceVec(srfVec),
-   fCubVolStatistics(1000000),fCubVolEpsilon(0.001),fCubicVolume(0.),
-   fpPolyhedron (0)
+   fCubVolStatistics(1000000), fCubVolEpsilon(0.001), fCubicVolume(0.),
+   fpPolyhedron(0)
 {
   Initialize();
 }
@@ -1447,8 +1447,8 @@ std::ostream& G4BREPSolid::StreamInfo(std::ostream& os) const
 G4Polyhedron* G4BREPSolid::GetPolyhedron () const
 {
   if (!fpPolyhedron)
-    {
-      fpPolyhedron = CreatePolyhedron ();
-    }
+  {
+    fpPolyhedron = CreatePolyhedron();
+  }
   return fpPolyhedron;
 }
