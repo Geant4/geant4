@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.9 2001-04-27 14:18:20 gcosmo Exp $
+// $Id: G4SmartVoxelHeader.cc,v 1.10 2001-05-23 07:00:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1143,7 +1143,7 @@ G4bool G4SmartVoxelHeader::AllSlicesEqual() const
 // Output for debugging
 G4std::ostream& operator << (G4std::ostream&s, const G4SmartVoxelHeader& h)
 {
-    s << "Axis = " << h.faxis << G4endl;
+    s << "Axis = " << G4int(h.faxis) << G4endl;
     G4SmartVoxelProxy *collectNode=0,*collectHead=0;
     G4int collectNodeNo=0;
     G4int collectHeadNo=0;
