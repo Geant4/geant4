@@ -126,7 +126,7 @@
 /gun/particle gamma
 #------------------
 /process/inactivate LowEnRayleigh
-/process/inactivate LowEnCompton
+/process/inactivate polarLowEnCompton
 /process/inactivate LowEnPhotoElec
 /process/inactivate eIoni
 /process/inactivate LowEnergyIoni
