@@ -21,37 +21,58 @@
 // ********************************************************************
 //
 //
-// $Id: TrackingAction.hh,v 1.2 2004-05-24 07:03:22 vnivanch Exp $
+// $Id: EmAcceptance.cc,v 1.1 2004-05-24 07:01:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 
-#ifndef TrackingAction_h
-#define TrackingAction_h 1
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4UserTrackingAction.hh"
-
-class RunAction;
+#include "EmAcceptance.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class TrackingAction : public G4UserTrackingAction {
-
-public:
-  TrackingAction(RunAction*);
-  ~TrackingAction() {};
-
-  void PostUserTrackingAction(const G4Track*);
-
-private:
-
-  // hide assignment operator
-  TrackingAction & operator=(const TrackingAction &right);
-  TrackingAction(const TrackingAction&);
-
-  RunAction* Run;
-};
+EmAcceptance::EmAcceptance()
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+EmAcceptance::~EmAcceptance()
+{}
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void EmAcceptance::BeginOfAcceptance(const G4String& title, G4int stat)
+{
+  G4cout << G4endl;
+  G4cout << "<<<<<ACCEPTANCE>>>>> " << stat << " events for " << title << G4endl;
+  isAccepted = true;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void EmAcceptance::EndOfAcceptance()
+{
+  G4String resume = "IS ACCEPTED";
+  if(!isAccepted) resume = "IS NOT ACCEPTED";
+  G4cout << "<<<<<END>>>>>   " << resume << G4endl;
+  G4cout << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void EmAcceptance::EmAcceptanceGauss(const G4String& title, G4int stat,
+                                           G4double avr, G4double avr0,
+                                           G4double rms, G4double limit)
+{
+  G4double x = sqrt((G4double)stat);
+  G4double dde = avr - avr0;
+  G4double de = dde*x/rms;
+
+  G4cout << title << ": " << avr << "  del"<< title << "= " << dde << " nrms= " << de << G4endl;
+  if(de > limit) isAccepted = false;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

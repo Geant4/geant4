@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.7 2004-05-21 18:21:49 vnivanch Exp $
+// $Id: RunAction.cc,v 1.8 2004-05-24 07:01:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// 08.03.01 Hisaya: Adapted MyVector for STL   
+// 08.03.01 Hisaya: Adapted MyVector for STL
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,6 +39,7 @@
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
+#include "EmAcceptance.hh"
 
 #include <iomanip>
 
@@ -408,22 +409,15 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   // Acceptance
   G4double ltrue = Det->GetLimitEdep();
   if(ltrue < DBL_MAX) {
-    G4double x = sqrt((G4double)NbOfEvents);
+    EmAcceptance acc;
+    acc.BeginOfAcceptance("Total Energy in Absorber",NbOfEvents);
     G4double etrue = Det->GetAverageEdep();
     G4double rtrue = Det->GetRMSEdep();
-    G4double dde = (MeanELongitCumul[nLbin-1]/100. - etrue);
-    G4double ddr = ( rmsELongitCumul[nLbin-1]/100. - rtrue);
-    G4double de = dde*x/rtrue;
-    G4double dr = ddr*x/rtrue;
-    G4String resume = "IS ACCEPTED";
-    if(abs(de) > ltrue || abs(dr) > 1.5*ltrue) resume = "IS NOT ACCEPTED";
-
-    G4cout << G4endl;
-    G4cout << "<<<<<ACCEPTANCE>>>>> 2 values " << NbOfEvents << " events" << G4endl;
-    G4cout << "Edep= " << etrue << "  delEdep= " << dde << " nEdep= " << de << G4endl;
-    G4cout << "RMSe= " << rtrue << "  delRms=  " << ddr << " nRms=  " << dr << G4endl;
-    G4cout << "<<<<<END>>>>>   " << resume << G4endl;
-    G4cout << G4endl;
+    G4double e = MeanELongitCumul[nLbin-1]/100.;
+    G4double r = rmsELongitCumul[nLbin-1]/100.;
+    acc.EmAcceptanceGauss("Edep",NbOfEvents,e,etrue,rtrue,ltrue);
+    acc.EmAcceptanceGauss("Erms",NbOfEvents,r,rtrue,rtrue,2.0*ltrue);
+    acc.EndOfAcceptance();
   }
 }
 

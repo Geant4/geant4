@@ -21,35 +21,40 @@
 // ********************************************************************
 //
 //
-// $Id: TrackingAction.hh,v 1.2 2004-05-24 07:03:22 vnivanch Exp $
+// $Id: EmAcceptance.hh,v 1.1 2004-05-24 07:03:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 
-#ifndef TrackingAction_h
-#define TrackingAction_h 1
+#ifndef EmAcceptance_h
+#define EmAcceptance_h 1
 
-#include "G4UserTrackingAction.hh"
-
-class RunAction;
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class TrackingAction : public G4UserTrackingAction {
+class EmAcceptance
+{
 
 public:
-  TrackingAction(RunAction*);
-  ~TrackingAction() {};
+  EmAcceptance();
+  ~EmAcceptance();
 
-  void PostUserTrackingAction(const G4Track*);
+  void BeginOfAcceptance(const G4String& title, G4int stat);
+  void EndOfAcceptance();
+
+  void EmAcceptanceGauss(const G4String& title, G4int stat, 
+                               G4double avr, G4double avr0, 
+		               G4double rms, G4double limit);
 
 private:
 
   // hide assignment operator
-  TrackingAction & operator=(const TrackingAction &right);
-  TrackingAction(const TrackingAction&);
+  EmAcceptance & operator=(const EmAcceptance &right);
+  EmAcceptance(const EmAcceptance&);
 
-  RunAction* Run;
+  G4bool isAccepted;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
