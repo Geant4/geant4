@@ -20,6 +20,10 @@ else
   DEBOPT=optim
 fi
 
+if [ $G4USE_STL ]; then
+  DEBOPT=${DEBOPT}_STL
+fi
+
 UNAMEN=`uname -n `
 ANS=`uname -n | grep rsplus`
 if [ X`uname -n | grep rsplus` != X  -o "$UNAMEN" = "shift51" ]; then

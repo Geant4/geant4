@@ -23,6 +23,10 @@ else
   setenv DEBOPT optim
 endif
 
+if ( $?G4USE_STL ) then
+  setenv DEBOPT ${DEBOPT}_STL
+endif
+
 if ( `uname -n | grep rsplus` != "" ) then
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
   setenv G4SYSTEM AIX-xlC
