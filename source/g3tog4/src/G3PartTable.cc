@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3PartTable.cc,v 1.3 1999-05-18 18:41:53 lockman Exp $
+// $Id: G3PartTable.cc,v 1.4 1999-05-28 21:09:02 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -20,7 +20,7 @@ G3PartTable::G3PartTable(){
 G3PartTable::~G3PartTable(){
   _PTD->clearAndDestroy();
   delete _PTD;
-  G4cout << "Destructing Particle Table Hash Dictionary" << endl;
+  G4cout << "Deleted G3PartTable..." << endl;
 };
 
 G4ParticleDefinition*

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3MatTable.cc,v 1.5 1999-05-28 20:54:05 lockman Exp $
+// $Id: G3MatTable.cc,v 1.6 1999-05-28 21:08:55 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -19,9 +19,8 @@ G3MatTable::G3MatTable(){
 };
 
 G3MatTable::~G3MatTable(){
-  G4cout << "Clearing G3MatTable list." << endl;
   _Mat->clear();
-  G4cout << "Deleting G3MatTable list." << endl;
+  G4cout << "Deleted G3MatTable..." << endl;
   delete _Mat;
 };
 

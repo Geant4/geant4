@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3VolTable.cc,v 1.10 1999-05-28 02:19:33 lockman Exp $
+// $Id: G3VolTable.cc,v 1.11 1999-05-28 21:09:10 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -22,7 +22,7 @@ G3VolTable::G3VolTable()
 G3VolTable::~G3VolTable(){
   _VTD->clearAndDestroy();
   delete _VTD;
-  G4cout << "Destructing VolTable Hash Dictionary" << endl;
+  G4cout << "Deleted VolTable Hash Dictionary..." << endl;
 };
 
 VolTableEntry*
