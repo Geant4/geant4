@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VeLowEnergyLoss.cc,v 1.4 2000-08-03 08:23:36 gcosmo Exp $
+// $Id: G4VeLowEnergyLoss.cc,v 1.5 2000-09-20 16:49:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,6 +16,11 @@
 //	GEANT4 Collaboration
 //	History: first implementation, based on object model of
 //	2nd December 1995, G.Cosmo
+// --------------------------------------------------------------
+//
+// Modifications:
+// 20/09/00 update fluctuations V.Ivanchenko
+//
 // --------------------------------------------------------------
 
 #include "G4VeLowEnergyLoss.hh"
@@ -843,7 +848,8 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffCTable(G4PhysicsTable* theRang
 
 G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
                                                G4Material* aMaterial,
-                                             G4double    MeanLoss)
+                                               G4double MeanLoss,
+                                               G4double step)
 //  calculate actual loss from the mean loss
 //  The model used to get the fluctuation is essentially the same as in Glandz in Geant3.
 {
@@ -852,6 +858,7 @@ G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
    static const G4double sumaLim = -log(probLim) ;
    static const G4double alim=10.;
    static const G4double kappa = 10. ;
+   static const G4double factor = twopi_mc2_rcl2 ;
 
 
   // check if the material has changed ( cache mechanism)
@@ -902,10 +909,11 @@ G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   // Gaussian fluctuation ?
   if(MeanLoss >= kappa*Tm)
   {
-    siga = sqrt(MeanLoss*Tm*(1.-0.5*beta2)) ;
+    G4double electronDensity = aMaterial->GetElectronDensity() ;
+    siga = sqrt(Tm*(0.5-0.25*beta2)*step*
+                factor*electronDensity/beta2) ;
     loss = G4RandGauss::shoot(MeanLoss,siga) ;
     if(loss < 0.) loss = 0. ;
-    // G4cout << "MGP Gaussian: Tm = " << Tm << ", siga = " << siga << ", loss = " << loss << G4endl;
     return loss ;
   }
 
@@ -959,7 +967,7 @@ G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
 	  if (Tm <= 0.) 
 	    { 
 	      loss = MeanLoss;
-	      p3 = 0.;
+	      p3 = 0;
 	      // G4cout << "MGP correction loss = MeanLoss " << loss/keV << G4endl;
 	    }
 	  else

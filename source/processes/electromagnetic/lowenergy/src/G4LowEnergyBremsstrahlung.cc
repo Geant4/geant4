@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.26 2000-07-11 18:46:47 pia Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.27 2000-09-20 16:49:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,6 +31,7 @@
 // Modified PostStepDoIt to insert sampling with with EEDL data A. Forti
 // Added SelectRandomAtom A. Forti
 // Added map of the elements A. Forti
+// 20/09/00 update printout V.Ivanchenko
 // --------------------------------------------------------------
 
 #include "G4LowEnergyBremsstrahlung.hh"
@@ -675,6 +676,8 @@ void G4LowEnergyBremsstrahlung::PrintInfoDefinition()
            comments += "Implementation of the continuous dE/dx part.";  
            comments += "\n At present it can be used for electrons ";
            comments += " in the energy range [250eV,100GeV]";
+           comments += 
+  "\n the process must work with G4LowEnergyIonisation";
                      
 	   G4cout << G4endl << GetProcessName() << ":  " << comments<<G4endl;
 

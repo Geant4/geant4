@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.hh,v 1.14 2000-04-07 13:43:13 lefebure Exp $
+// $Id: G4LowEnergyIonisation.hh,v 1.15 2000-09-20 16:46:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -14,13 +14,14 @@
 //
 //      For information related to this code contact:
 //      CERN, IT Division, ASD group
-//      ---------- G4LowEnergyIonisation physics process -----------
+//      --- G4LowEnergyIonisation physics process for electrons
 //                by Alessandra Forti July 1999
 // ************************************************************
 //
 //   07.04.2000 Veronique Lefebure + Laszlo Urban
 // - First implemention of continuous energy loss
 // 14/07/99: corrections , L.Urban
+// 20/09/00 update fluctuations V.Ivanchenko
 // ------------------------------------------------------------
  
 #ifndef G4LowEnergyIonisation_h

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VeLowEnergyLoss.hh,v 1.1 2000-04-04 13:47:35 lefebure Exp $
+// $Id: G4VeLowEnergyLoss.hh,v 1.2 2000-09-20 16:46:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 3.4.2000 Veronique Lefebure:
@@ -32,6 +32,11 @@
 //
 //  -----------------------------------------------------------
 //  created  on 28 January 2000  by L. Urban               
+//  -----------------------------------------------------------
+//
+//  Modifications:
+// 20/09/00 update fluctuations V.Ivanchenko
+//
 //  -----------------------------------------------------------
 
 #ifndef G4VeLowEnergyLoss_h
@@ -80,7 +85,8 @@ class G4VeLowEnergyLoss : public G4VContinuousDiscreteProcess
 
     G4double GetLossWithFluct(const G4DynamicParticle* aParticle,
                               G4Material* aMaterial,
-                              G4double	 threshold);
+                              G4double	MeanLoss,
+                              G4double  step);
 
 
    private:

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.6 2000-07-11 18:46:48 pia Exp $
+// $Id: G4eLowEnergyLoss.cc,v 1.7 2000-09-20 16:49:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // -----------------------------------------------------------
@@ -33,6 +33,8 @@
 // 20-01-99: important correction in AlongStepDoIt , L.Urban
 // 10/02/00  modifications , new e.m. structure, L.Urban
 // 11/04/00: Bug fix in dE/dx fluctuation simulation, Veronique Lefebure
+// 19-09-00  change of fluctuation sampling V.Ivanchenko
+// 20/09/00 update fluctuations V.Ivanchenko
 // --------------------------------------------------------------
  
 #include "G4eLowEnergyLoss.hh"
@@ -359,16 +361,10 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
 
   MeanLoss = E-finalT ;  
   
-  // G4cout << "MGP AlongStepDoIt finalT before fluct = " << finalT/keV  << " keV" << G4endl;
-
-   G4double fluc = GetLossWithFluct(aParticle,aMaterial,MeanLoss);
-
-   // G4cout << "LowerBoundEloss = " << LowerBoundEloss/keV = << "   Fluc = " << fluc/keV << G4endl;
-
   //now the loss with fluctuation
   if ((EnlossFlucFlag) && (finalT > 0.) && (finalT < E)&&(E > LowerBoundEloss))
   {
-    finalT = E-GetLossWithFluct(aParticle,aMaterial,MeanLoss);
+    finalT = E-GetLossWithFluct(aParticle,aMaterial,MeanLoss,Step);
     if (finalT < 0.) finalT = 0.;
   }
 
