@@ -26,7 +26,7 @@
 
 #include "G4FermiSplitter.hh"
 #include "G4FermiIntegerPartition.hh"
-
+#include "G4HadronicException.hh"
 #include <strstream>
 
 

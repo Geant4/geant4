@@ -26,7 +26,7 @@
 // by V. Lara (Nov 1998)
 
 #include "G4FermiBreakUp.hh"
-
+#include "G4HadronicException.hh"
 
 G4FermiBreakUp::G4FermiBreakUp()
 {

@@ -26,7 +26,7 @@
 
 #include "G4FermiConfigurationList.hh"
 #include "G4FermiSplitter.hh"
-
+#include "G4HadronicException.hh"
 
 G4FermiFragmentsPool G4FermiConfigurationList::theFragmentsPool;
 

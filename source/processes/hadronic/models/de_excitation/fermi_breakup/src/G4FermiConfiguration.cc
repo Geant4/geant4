@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FermiConfiguration.cc,v 1.2 2003-11-03 09:43:54 lara Exp $
+// $Id: G4FermiConfiguration.cc,v 1.3 2003-11-04 11:04:03 lara Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -32,6 +32,7 @@
 
 #include "G4FermiConfiguration.hh"
 #include "G4FermiPhaseSpaceDecay.hh"
+#include "G4HadronicException.hh"
 #include <set>
 
 // Kappa = V/V_0 it is used in calculation of Coulomb energy
@@ -94,12 +95,13 @@ G4double G4FermiConfiguration::DecayProbability(const G4int A, const G4double To
       KineticEnergy -= m + (*i)->GetExcitationEnergy();
     }
 
-  G4double MassFactor = ProdMass/SumMass;
-  MassFactor *= sqrt(MassFactor);
-  
   // Check that there is enough energy to produce K fragments
+  if (KineticEnergy <= 0.0) return 0.0;
   if ((KineticEnergy -= this->CoulombBarrier()) <= 0.0) return 0.0;
-  
+
+
+  G4double MassFactor = ProdMass/SumMass;
+  MassFactor *= sqrt(MassFactor);  
   
   // Number of fragments
   G4int K = Configuration.size();

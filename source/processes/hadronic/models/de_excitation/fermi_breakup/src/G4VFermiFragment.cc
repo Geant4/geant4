@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4VFermiFragment.cc,v 1.2 2003-11-03 17:53:02 hpw Exp $
+// $Id: G4VFermiFragment.cc,v 1.3 2003-11-04 11:04:34 lara Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
 
 #include "G4VFermiFragment.hh"
-
+#include "G4HadronicException.hh"
 
 G4VFermiFragment::G4VFermiFragment(const G4VFermiFragment &)
 {
