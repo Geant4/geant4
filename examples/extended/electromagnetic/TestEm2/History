@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2002-12-05 16:50:24 gcosmo Exp $
+$Id: History,v 1.23 2002-12-06 16:52:01 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06-12-02 G.Cosmo (testem2-V04-01-02)
+- Migration to new G4ApplicationState.
+- Added HepRep driver to visManager.
 
 05-12-02 G.Cosmo (testem2-V04-01-01)
 - Fixes to runAction for porting on gcc-3.2.
