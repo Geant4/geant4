@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.cc,v 1.40 2003-11-17 14:43:42 guatelli Exp $
+// $Id: Tst50SteppingAction.cc,v 1.41 2004-11-24 17:05:07 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -34,7 +34,7 @@
 //
 // -------------------------------------------------------------------
 #include "G4ios.hh"
-#include <math.h> // standard c math library
+#include <cmath> 
 #include "G4SteppingManager.hh"
 #include "G4Step.hh"
 #include "G4Track.hh"
@@ -126,7 +126,7 @@ void Tst50SteppingAction::UserSteppingAction(const G4Step* aStep)
                       0 == initialStepYPosition &&
                       0 == initialStepZPosition)
 		    { 
-		      G4double energyLost = abs(aStep->GetDeltaEnergy());
+		      G4double energyLost = std::abs(aStep->GetDeltaEnergy());
 		      G4double stepLength = aStep->GetTrack()-> GetStepLength();
 		      if (stepLength != 0) 
 			{
@@ -152,7 +152,7 @@ void Tst50SteppingAction::UserSteppingAction(const G4Step* aStep)
                  
                   // calculation of CSDA range 
                   // reference http://physics.nist.gov/PhysRefData/Star/Text/contents.html
-		  G4double range = (sqrt(xend*xend + yend*yend + zend*zend)); 
+		  G4double range = (std::sqrt(xend*xend + yend*yend + zend*zend)); 
                   G4double nistRange = range*(detector->GetDensity());
 		  analysis -> CSDARange(runID,
                                         primaryParticleEnergy/MeV,

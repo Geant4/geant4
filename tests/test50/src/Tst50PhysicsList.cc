@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst50PhysicsList.cc,v 1.21 2004-07-20 15:11:12 guatelli Exp $
+// $Id: Tst50PhysicsList.cc,v 1.22 2004-11-24 17:05:07 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Unknown (contact: Maria.Grazia.Pia@cern.ch)
@@ -36,6 +36,7 @@
 #include "Tst50Particles.hh"
 #include "Tst50AlphaICRU49.hh"
 #include "Tst50AlphaStandard.hh"
+#include "Tst50AlphaZiegler.hh"
 #include "Tst50PhotonStandard.hh"
 #include "Tst50PhotonEPDL.hh"
 #include "Tst50PhotonPenelope.hh"
@@ -50,7 +51,7 @@
 #include "Tst50PositronStandardBack.hh"
 #include "Tst50PositronPenelope.hh"
 #include "Tst50ProtonStandard.hh"
-#include "Tst50ProtonEEDL.hh"
+#include "Tst50ProtonICRU49.hh"
 #include "Tst50ProtonEEDLziegler.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Gamma.hh"
@@ -271,6 +272,7 @@ void Tst50PhysicsList::AddPhysicsList(const G4String& name)
 	  positronIsRegistered = true;
 	}
     }
+
  //Alpha particle  
 if (name == "alpha-ICRU49") 
     {
@@ -302,8 +304,24 @@ if (name == "alpha-standard")
 	}
     }
 
-//Proton
- if (name == "proton-eedl") 
+if (name == "alpha-ziegler77") 
+    {
+      if (alphaIsRegistered) 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- alpha e.m. List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  RegisterPhysics( new Tst50AlphaZiegler(name) );
+	  alphaIsRegistered = true;
+	}
+    }
+
+// Proton
+
+ if (name == "proton-ICRU49") 
     {
       if (protonIsRegistered) 
 	{
@@ -313,7 +331,7 @@ if (name == "alpha-standard")
       else 
 	{
 	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
-	  RegisterPhysics( new Tst50ProtonEEDL(name) );
+	  RegisterPhysics( new Tst50ProtonICRU49(name) );
 	  protonIsRegistered = true;
 	}
     }

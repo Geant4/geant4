@@ -25,7 +25,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4MultipleScattering.hh"
 #include "G4Alpha.hh"
-#include "G4hIonisation.hh"
+#include "G4ionIonisation.hh"
 
 Tst50AlphaStandard::Tst50AlphaStandard(const G4String& name): G4VPhysicsConstructor(name)
 { }
@@ -46,10 +46,10 @@ theParticleIterator->reset();
      
       if (particleName == "alpha")
 	{
-	  G4hIonisation* ionisation = new G4hIonisation();
-          G4VProcess*  multipleScattering= new G4MultipleScattering(); 
+	  G4ionIonisation* ionisation = new G4ionIonisation();
+          //G4VProcess*  multipleScattering= new G4MultipleScattering();  
 	  manager->AddProcess(ionisation,-1,2,2);
-          manager->AddProcess(multipleScattering,-1,1,1);  	
+          //manager->AddProcess(multipleScattering,-1,1,1);  	
 	}	
     }
 }

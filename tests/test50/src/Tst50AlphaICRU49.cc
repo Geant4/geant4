@@ -1,3 +1,4 @@
+
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -50,10 +51,9 @@ theParticleIterator->reset();
 	  G4hLowEnergyIonisation* ionisation = new G4hLowEnergyIonisation();
           // G4VProcess*  multipleScattering= new G4MultipleScattering(); 
 	  ionisation -> SetEnlossFluc(false); 
-
           ionisation -> SetNuclearStoppingOn() ;
-          ionisation -> SetElectronicStoppingPowerModel(particle, "ICRU_49He");
-          ionisation -> SetNuclearStoppingPowerModel("ICRU_49");
+          ionisation -> SetElectronicStoppingPowerModel(particle, "ICRU_R49He");
+          ionisation -> SetNuclearStoppingPowerModel("ICRU_R49");
 	  manager->AddProcess(ionisation,-1,2,2);
           //  manager->AddProcess(multipleScattering,-1,1,1);  	
 	}	
