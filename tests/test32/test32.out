@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (3-October-2003)
+                                (12-December-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 SimpleBox is now made of Pb
@@ -122,20 +122,20 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ### Run 0 start.
 number of event = 1000
- User=69.75s Real=72.05s Sys=2.28s
+ User=68.62s Real=72.14s Sys=2.73s
 #
 /gun/particle proton
 /run/beamOn 1000
 ### Run 1 start.
 number of event = 1000
- User=36.93s Real=39.07s Sys=2.14s
+ User=36.4s Real=38.8s Sys=2.02s
 /gun/particle pi-
 /run/beamOn 1000
 ### Run 2 start.
 number of event = 1000
- User=60.34s Real=62.57s Sys=2.22s
+ User=59.34s Real=62.23s Sys=2.27s
 /gun/particle pi+
 /run/beamOn 1000
 ### Run 3 start.
 number of event = 1000
- User=41.42s Real=43.78s Sys=2.35s
+ User=40.94s Real=43.46s Sys=1.97s

@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (3-October-2003)
+                                (12-December-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 G4ClassicalRK4 (default) is called
@@ -3329,7 +3329,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.06s Real=4.35s Sys=0.57s
+  User=1.15s Real=1.63s Sys=0.47s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (3-October-2003)
+                                (12-December-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
@@ -235,7 +235,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=80.34s Real=83.83s Sys=3.49s
+  User=79.47s Real=83.14s Sys=3.67s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================

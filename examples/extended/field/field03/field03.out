@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (3-October-2003)
+                                (12-December-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 
@@ -193,7 +193,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.02s Sys=0.01s
+  User=0.02s Real=0.03s Sys=0.01s
 
 ========= Table of registered couples ==============================
 
@@ -215,7 +215,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.77s Real=0.77s Sys=0s
+  User=0.82s Real=0.82s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

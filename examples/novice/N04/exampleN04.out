@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (3-October-2003)
+                                (12-December-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 
@@ -178,7 +178,7 @@ Stage 1->2 : 0 isolated muon found.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=7s Real=7.74s Sys=0.17s
+  User=7.01s Real=7.37s Sys=0.2s
 G4 kernel has come to Quit state.
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (3-October-2003)
+                                (12-December-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
@@ -243,7 +243,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.55s Real=7.41s Sys=1.85s
+  User=5.55s Real=7.22s Sys=1.67s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV
@@ -286,7 +286,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.69s Real=7.47s Sys=1.76s
+  User=5.43s Real=7.27s Sys=1.84s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV
@@ -326,7 +326,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=9.18s Real=11.42s Sys=2.24s
+  User=8.77s Real=11.14s Sys=2.36s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for IonC12 with Ekin = 6 MeV
@@ -368,7 +368,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=37.64s Real=38.09s Sys=0.15s
+  User=37.73s Real=37.84s Sys=0.11s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV
@@ -412,7 +412,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=38.48s Real=38.66s Sys=0.16s
+  User=38.63s Real=38.82s Sys=0.19s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV
