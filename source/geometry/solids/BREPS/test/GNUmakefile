@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 1999-06-07 17:44:28 japost Exp $
+# $Id: GNUmakefile,v 1.3 1999-10-28 09:14:01 japost Exp $
 # ------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ------------------------------------------------------
@@ -22,6 +22,7 @@ INCFLAGS := \
             -I$(G4BASE)/geometry/volumes/include \
             -I$(G4BASE)/geometry/solids/CSG/include \
 	    -I$(G4BASE)/geometry/solids/STEP/include \
+	    -I$(G4BASE)/geometry/solids/Boolean/include \
 	    -I$(G4BASE)/geometry/solids/STEPinterface/include \
 	    -I$(G4BASE)/geometry/solids/BREPS/include \
 	    -I$(G4BASE)/materials/include \
@@ -34,6 +35,7 @@ INCFLAGS := \
 LDLIBS   := \
 	    -lG4stepinterface \
 	    -lG4brep \
+	    -lG4geomBoolean \
 	    -lG4step \
 	    -lG4csg \
 	    -lG4geometrymng \
