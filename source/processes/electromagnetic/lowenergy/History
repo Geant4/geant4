@@ -1,4 +1,4 @@
-$Id: History,v 1.48 2000-11-05 15:02:45 pia Exp $
+$Id: History,v 1.49 2000-11-05 15:36:52 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05.11.2000 - MGP, tag emlowen-V02-00-16
+             Remove the temporary const cast introduced with emlowen-V02-00-08
+             Co-works with Michel's electromagnetic/utils utils-V02-00-03 tag
+             
 05.11.2000 - MGP, tag emlowen-V02-00-15
              Includes bug fixes and other modifications by V. Ivanchenko
              listed below
