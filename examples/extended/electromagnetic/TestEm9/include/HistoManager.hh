@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.5 2004-04-02 15:13:45 vnivanch Exp $
+// $Id: HistoManager.hh,v 1.6 2004-05-27 13:43:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef HistoManager_h
@@ -108,6 +108,9 @@ public: // Without description
   void SetThresholdZ(G4double val) {thPosZ = val;};
   void AddStep() {n_step++;};
 
+  // Acceptance parameters
+  void SetEdepAndRMS(G4int, G4ThreeVector);
+  void SetBeamEnergy(G4double val) {beamEnergy = val;};
 
 private:
 
@@ -139,11 +142,21 @@ private:
   G4bool nTuple;
 
   G4double Eabs1, Eabs2, Eabs3, Eabs4;
-  G4double E[25];
+  G4double     E[25];
   G4DataVector Evertex;
   G4DataVector Nvertex;
 
+  G4DataVector edeptrue;
+  G4DataVector rmstrue;
+  G4DataVector limittrue;
+  G4DataVector edep;
+  G4DataVector erms;
+  G4int   nmax;
+
   Histo*  histo;
+  
+
+
 };
 
 #endif

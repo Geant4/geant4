@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.hh,v 1.2 2003-10-31 12:08:50 vnivanch Exp $
+// $Id: DetectorConstruction.hh,v 1.3 2004-05-27 13:43:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -52,6 +52,7 @@ class G4Tubs;
 class G4LogicalVolume;
 class G4UniformMagField;
 class DetectorMessenger;
+class G4Region;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -106,6 +107,9 @@ private:
   G4LogicalVolume* logicA2;
   G4LogicalVolume* logicA3;
   G4LogicalVolume* logicA4;
+  
+  G4Region*   vertexRegion;
+  G4Region*   muonRegion;
 
   DetectorMessenger* detectorMessenger;  //pointer to the Messenger
 

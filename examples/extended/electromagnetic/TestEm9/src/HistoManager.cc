@@ -36,6 +36,7 @@
 #include "HistoManager.hh"
 #include "G4UnitsTable.hh"
 #include "Histo.hh"
+#include "EmAcceptance.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -58,6 +59,7 @@ HistoManager::HistoManager()
   verbose = 1;
   nEvt1   = -1;
   nEvt2   = -1;
+  nmax    = 3;
   histo   = new Histo();
   bookHisto();
 }
@@ -82,6 +84,14 @@ void HistoManager::bookHisto()
   nBinsED= 100;
   nTuple = false;
   nHisto = 10;
+
+  for(G4int i=0; i<nmax; i++) {
+    edep.push_back(0.0);
+    erms.push_back(0.0);
+    edeptrue.push_back(1.0);
+    rmstrue.push_back(1.0);
+    limittrue.push_back(DBL_MAX);
+  }
 
   histo->add1D("10",
     "Energy deposit (MeV) in central crystal",nBinsED,0.0,beamEnergy,MeV);
@@ -141,21 +151,34 @@ void HistoManager::EndOfRun()
 {
 
   G4cout << "HistoManager: End of run actions are started" << G4endl;
+  G4String nam[3] = {"1x1", "3x3", "5x5"};
 
   // average
 
   G4cout<<"========================================================"<<G4endl;
   G4double x = (G4double)n_evt;
   if(n_evt > 0) x = 1.0/x;
+  G4int j;
+  for(j=0; j<nmax; j++) {
+    edep[j] *= x/beamEnergy;
+    G4double y = erms[j]*x/(beamEnergy*beamEnergy) - edep[j]*edep[j];
+    if(y < 0.0) y = 0.0;
+    erms[j] = sqrt(y);
+  }
   G4double xe = x*(G4double)n_elec;
   G4double xg = x*(G4double)n_gam;
   G4double xp = x*(G4double)n_posit;
   G4double xs = x*(G4double)n_step;
-  G4cout                    << "Number of events                     " << n_evt <<G4endl;
-  G4cout << std::setprecision(4) << "Average number of e-                 " << xe << G4endl;
-  G4cout << std::setprecision(4) << "Average number of gamma              " << xg << G4endl;
-  G4cout << std::setprecision(4) << "Average number of e+                 " << xp << G4endl;
-  G4cout << std::setprecision(4) << "Average number of steps              " << xs << G4endl;
+
+  G4cout                         << "Number of events             " << n_evt <<G4endl;
+  G4cout << std::setprecision(4) << "Average number of e-         " << xe << G4endl;
+  G4cout << std::setprecision(4) << "Average number of gamma      " << xg << G4endl;
+  G4cout << std::setprecision(4) << "Average number of e+         " << xp << G4endl;
+  G4cout << std::setprecision(4) << "Average number of steps      " << xs << G4endl;
+  for(j=0; j<3; j++) {
+    G4cout << std::setprecision(4) << "Edep " << nam[j] << " =                   " << edep[j]
+           << " +- " << erms[j]*sqrt(x) << G4endl;
+  }
   G4cout<<"========================================================"<<G4endl;
   G4cout<<G4endl;
 
@@ -165,6 +188,25 @@ void HistoManager::EndOfRun()
   }
 
   histo->save();
+
+  // Acceptance
+  EmAcceptance acc;
+  G4bool isStarted = false;
+  for (j=0; j<nmax; j++) {
+
+    G4double ltrue = limittrue[j];
+    if (ltrue < DBL_MAX) {
+      if (!isStarted) {
+        acc.BeginOfAcceptance("Crystal Calorimeter",n_evt);
+        isStarted = true;
+      }
+      G4double etrue = edeptrue[j];
+      G4double rtrue = rmstrue[j];
+      acc.EmAcceptanceGauss("Edep"+nam[j],n_evt,edep[j],etrue,rtrue,ltrue);
+      acc.EmAcceptanceGauss("Erms"+nam[j],n_evt,erms[j],rtrue,rtrue,2.0*ltrue);
+    }
+  }
+  if(isStarted) acc.EndOfAcceptance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -203,6 +245,13 @@ void HistoManager::EndOfEvent()
   histo->fill(8,Eabs4,1.0);
   float nn = (double)(Nvertex.size());
   histo->fill(9,nn,1.0);
+
+  edep[0] += E[12];
+  erms[0] += E[12]*E[12];
+  edep[1] += e9;
+  erms[1] += e9*e9;
+  edep[2] += e25;
+  erms[2] += e25*e25;
 
   if(nTuple) histo->addRow();
 
@@ -272,9 +321,9 @@ void HistoManager::ScoreNewTrack(const G4Track* aTrack)
 void HistoManager::AddEnergy(G4double edep, G4int volIndex, G4int copyNo)
 {
   if(1 < verbose) {
-    G4cout << "HistoManager::AddEnergy: e(keV)= " << edep/keV 
+    G4cout << "HistoManager::AddEnergy: e(keV)= " << edep/keV
            << "; volIdx= " << volIndex
-           << "; copyNo= " << copyNo 
+           << "; copyNo= " << copyNo
            << G4endl;
   }
   if(0 == volIndex) {
@@ -322,6 +371,17 @@ void HistoManager::AddPhoton(const G4DynamicParticle* ph)
   G4double e = ph->GetKineticEnergy()/MeV;
   if(e > 0.0) n_gam++;
   histo->fill(4,e,1.0);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void HistoManager::SetEdepAndRMS(G4int i, G4ThreeVector val)
+{
+  if(i<nmax && i>=0) {
+    if(val[0] > 0.0) edeptrue[i] = val[0];
+    if(val[1] > 0.0) rmstrue[i] = val[1];
+    if(val[2] > 0.0) limittrue[i] = val[2];
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
