@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpticalPhoton.hh,v 1.3 1999-12-15 14:50:52 gunter Exp $
+// $Id: G4OpticalPhoton.hh,v 1.4 2001-03-12 05:49:03 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,9 +66,21 @@ class G4OpticalPhoton: public G4VBoson
    static G4double* GetCutsInEnergy() {return theOpticalPhotonKineticEnergyCuts;}
 
    virtual void SetCuts(G4double aCut); 
+   virtual void RestoreCuts(G4double cutInLength,
+			    const G4double* cutInEnergy );
 };
+
+inline void G4OpticalPhoton::RestoreCuts(G4double cutInLength,
+			    const G4double* cutInEnergy )
+{
+  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
+  theOpticalPhotonLengthCut = theCutInMaxInteractionLength;  
+  theOpticalPhotonKineticEnergyCuts = theKineticEnergyCuts;
+}
 
 inline G4OpticalPhoton* G4OpticalPhoton::OpticalPhoton()
 { return &theOpticalPhoton; }
+
+
 #endif
 
