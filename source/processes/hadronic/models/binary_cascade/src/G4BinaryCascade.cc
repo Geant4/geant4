@@ -53,6 +53,8 @@
 
 #include <algorithm>
 #include "G4ShortLivedConstructor.hh"
+#include <typeinfo>
+
 // #define debug_1_BinaryCascade 1
 // #define debug_G4BinaryCascade 1
 //
@@ -810,7 +812,7 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
   G4KineticTrackVector * products=0;
   products = collision->GetFinalState();
   initialBaryon += collision->GetTargetBaryonNumber();
-  initialCharge+=collision->GetTargetCharge(); 
+  initialCharge+=G4lrint(collision->GetTargetCharge()); 
   
   if(!products || products->size()==0 || !CheckPauliPrinciple(products))
   {
@@ -853,7 +855,18 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
         G4cout << "G4BinaryCascade: Error in Balancing: " << G4endl;
         G4cout << "initial/final baryon number, initial/final Charge "
             << initialBaryon <<" "<< finalBaryon <<" "
-	    << initialCharge <<" "<< finalCharge <<G4endl;
+	    << initialCharge <<" "<< finalCharge <<" "
+	    << " in Collision type: "<< typeid(*collision->GetGenerator()).name()
+	    << ", with number of products: "<< products->size() <<G4endl;
+       G4cout << G4endl<<"Initial condition are these:"<<G4endl;
+       G4cout << "proj: "<<collision->GetPrimary()->GetDefinition()->GetParticleName()<<G4endl;
+       for(size_t it=0; it<collision->GetTargetCollection().size(); it++)
+       {
+         G4cout << "targ: "
+	      <<collision->GetTargetCollection()[it]->GetDefinition()->GetParticleName()<<G4endl;
+       }
+       PrintKTVector(&collision->GetTargetCollection(),std::string(" Target particles"));
+       G4cout << G4endl<<G4endl;
      }
 //#endif
 
