@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.34 2004-11-24 14:59:39 gbarrand Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.35 2004-11-25 15:35:36 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -568,8 +568,8 @@ void G4OpenInventorSceneHandler::PreAddThis
     break;
   }	
 
-  //G4bool isAuxEdgeVisible = GetAuxEdgeVisible (pVA);
-  //fReducedWireFrame = !isAuxEdgeVisible;
+  G4bool isAuxEdgeVisible = GetAuxEdgeVisible (pVisAttribs);
+  fReducedWireFrame = !isAuxEdgeVisible;
 
   //printf("debug : PreAddThis : %g %g %g : %d\n",
     //red,green,blue,pVisAttribs->IsVisible());

@@ -591,11 +591,12 @@ void G4OpenInventorViewer::SetWireFrame() {
 
 
 void G4OpenInventorViewer::SetReducedWireFrame(bool aValue) {
+  G4ViewParameters vp = GetViewParameters();
+
   // Set the wire frame kind :
-  fG4OpenInventorSceneHandler.fReducedWireFrame = aValue;
+  vp.SetAuxEdgeVisible(!aValue);
 
   // Set wire frame :
-  G4ViewParameters vp = GetViewParameters();
   G4ViewParameters::DrawingStyle existingStyle = vp.GetDrawingStyle();
   switch (existingStyle) {
   case G4ViewParameters::wireframe:
