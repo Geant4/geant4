@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyDetectorConstruction.cc,v 1.7 2000-01-17 10:30:17 johna Exp $
+// $Id: MyDetectorConstruction.cc,v 1.8 2000-02-21 15:59:51 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,7 +26,8 @@
 #include "G4Box.hh"
 #include "G4Tubs.hh"
 #include "G4Sphere.hh"
-#include "G4UnionSolid.hh"
+#include "G4Trap.hh"
+#include "G4IntersectionSolid.hh"
 #include "G4DisplacedSolid.hh"
 #include "G4LogicalVolume.hh"
 #include "G4RotationMatrix.hh"
@@ -163,16 +164,16 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   G4RotationMatrix* rm2 = new G4RotationMatrix;
   rm2->rotateZ(60*deg);
 
-  G4UnionSolid* cyl1Ubox1 =
-    new G4UnionSolid("cylinder1-union-box1", cylinder1, box1,
-		     rm1,G4ThreeVector(30.*cm,0.,0.));
-  G4UnionSolid* cyl1Ubox1Ubox2 =
-    new G4UnionSolid("cylinder1-union-box1-union-box2", cyl1Ubox1, box2,
+  G4IntersectionSolid* cyl1Ubox1 =
+    new G4IntersectionSolid("cylinder1-intersection-box1", cylinder1, box1,
+		     rm1,G4ThreeVector(30.*cm,30.*cm,0.));
+  G4IntersectionSolid* cyl1Ubox1Ubox2 =
+    new G4IntersectionSolid("cylinder1-intersection-box1-intersection-box2", cyl1Ubox1, box2,
 		     rm2,G4ThreeVector(0.,40*cm,0.));
-  G4LogicalVolume * union_log
-    = new G4LogicalVolume(cyl1Ubox1Ubox2,Ar,"union_L",0,0,0);
+  G4LogicalVolume * intersection_log
+    = new G4LogicalVolume(cyl1Ubox1Ubox2,Ar,"intersection_L",0,0,0);
   new G4PVPlacement(0,G4ThreeVector(200.*cm,-50*cm,0.*cm),
-                    "union_phys",union_log,experimentalHall_phys,
+                    "intersection_phys",intersection_log,experimentalHall_phys,
                     false,0);
 
   //----------- Tubes, replicas(!?) and daughter boxes
@@ -287,6 +288,56 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   G4PVPlacement* PD_physical
     = new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(200.*cm,200.*cm,0)),
                         "PD_physical", PD_log_crystal,
+                        experimentalHall_phys,false,0);
+
+  //-------------------------------------------- Trapezoid
+
+  G4Trap* trap1_solid = new G4Trap
+    ("trap1_solid",
+     50.*cm,  //      pDz     Half-length along the z-axis
+     0.,      //      pTheta  Polar angle of the line joining the centres of the faces
+              //              at -/+pDz
+     0.,      //      pPhi    Azimuthal angle of the line joing the centre of the face at
+              //              -pDz to the centre of the face at +pDz
+     40.*cm,  //      pDy1     Half-length along y of the face at -pDz
+     30.*cm,  //      pDx1    Half-length along x of the side at y=-pDy1 of the face at -pDz
+     30.*cm,  //      pDx2    Half-length along x of the side at y=+pDy1 of the face at -pDz
+     20.*deg, //      pAlp1   Angle with respect to the y axis from the centre of the side
+              //              at y=-pDy1 to the centre at y=+pDy1 of the face at -pDz
+     40.*cm,  //      pDy2     Half-length along y of the face at +pDz
+     30.*cm,  //      pDx3    Half-length along x of the side at y=-pDy2 of the face at +pDz
+     30.*cm,  //      pDx4    Half-length along x of the side at y=+pDy2 of the face at +pDz
+     20.*deg  //      pAlp2   Angle with respect to the y axis from the centre of the side
+              //              at y=-pDy2 to the centre at y=+pDy2 of the face at +pDz
+     );
+  G4LogicalVolume* trap1_log = new G4LogicalVolume (trap1_solid,Ar,"trap1_log");
+  G4PVPlacement* trap1_phys
+    = new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(-200.*cm,200.*cm,-200.*cm)),
+                        "trap1_phys", trap1_log,
+                        experimentalHall_phys,false,0);
+
+  G4Trap* trap2_solid = new G4Trap
+    ("trap2_solid",
+     50.*cm,  //      pDz     Half-length along the z-axis
+     20.*deg, //      pTheta  Polar angle of the line joining the centres of the faces
+              //              at -/+pDz
+     90.*deg, //      pPhi    Azimuthal angle of the line joing the centre of the face at
+              //              -pDz to the centre of the face at +pDz
+     40.*cm,  //      pDy1     Half-length along y of the face at -pDz
+     30.*cm,  //      pDx1    Half-length along x of the side at y=-pDy1 of the face at -pDz
+     30.*cm,  //      pDx2    Half-length along x of the side at y=+pDy1 of the face at -pDz
+     0.,      //      pAlp1   Angle with respect to the y axis from the centre of the side
+              //              at y=-pDy1 to the centre at y=+pDy1 of the face at -pDz
+     40.*cm,  //      pDy2     Half-length along y of the face at +pDz
+     30.*cm,  //      pDx3    Half-length along x of the side at y=-pDy2 of the face at +pDz
+     30.*cm,  //      pDx4    Half-length along x of the side at y=+pDy2 of the face at +pDz
+     0.       //      pAlp2   Angle with respect to the y axis from the centre of the side
+              //              at y=-pDy2 to the centre at y=+pDy2 of the face at +pDz
+     );
+  G4LogicalVolume* trap2_log = new G4LogicalVolume (trap2_solid,Ar,"trap2_log");
+  G4PVPlacement* trap2_phys
+    = new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(-200.*cm,400.*cm,-200.*cm)),
+                        "trap2_phys", trap2_log,
                         experimentalHall_phys,false,0);
 
   //-------------------------------------------- visualization attributes

@@ -54,12 +54,31 @@ help /vis/sceneHandler/create
 #
 # Create a viewer.
 /vis/viewer/create
-/vis/camera/viewpoint 35 35
 #
-/vis/scene/notifyHandlers
+/vis/viewer/refresh
 /vis/draw/axes     0 0 0 500
 /vis/draw/text     0 0 0 mm 50 -120 -200   exampleN03
 /vis/viewer/show
+#
+# Create another viewer.
+/vis/viewer/create
+#
+/vis/camera/viewpoint 35 35
+/vis/set/drawing_style 2
+/vis/camera/projection_style 1 30
+#
+/vis/viewer/refresh
+/vis/draw/axes     0 0 0 500
+/vis/draw/text     0 0 0 mm 50 -120 -200   exampleN03
+/vis/viewer/show
+#
+#/vis/sceneHandler/create RayTracer
+#/vis/viewer/create
+#/vis/viewer/refresh
+#/vis/viewer/show
+#
+/vis/set/drawing_style 0
+/vis/camera/projection_style 0
 #
 # Start a run to initialise/optimise geometry.
 /run/beamOn
@@ -84,6 +103,145 @@ help /vis/sceneHandler/create
 /run/beamOn 1
 /vis/viewer/show
 #
+# G4Trap1
+/vis/camera/reset
+#/vis/viewer/panTo -200 200 cm
+/vis/camera/pan -2750 750
+/vis/camera/zoom 5
+/vis/viewer/refresh
+/gun/direction -1 0 0
+/gun/position -20 120 -200 cm
+/run/beamOn
+/gun/position -20 130 -200 cm
+/run/beamOn
+/gun/position -20 140 -200 cm
+/run/beamOn
+/gun/position -20 150 -200 cm
+/run/beamOn
+/gun/position -20 160 -200 cm
+/run/beamOn
+/gun/position -20 170 -200 cm
+/run/beamOn
+/gun/position -20 180 -200 cm
+/run/beamOn
+/gun/position -20 190 -200 cm
+/run/beamOn
+/gun/position -20 200 -200 cm
+/run/beamOn
+/gun/position -20 210 -200 cm
+/run/beamOn
+/gun/position -20 220 -200 cm
+/run/beamOn
+/gun/position -20 230 -200 cm
+/run/beamOn
+/gun/position -20 240 -200 cm
+/run/beamOn
+/gun/position -20 250 -200 cm
+/run/beamOn
+/gun/position -20 260 -200 cm
+/run/beamOn
+/gun/position -20 270 -200 cm
+/run/beamOn
+/gun/position -20 280 -200 cm
+/run/beamOn
+# z = -20 cm
+/gun/position -20 120 -220 cm
+/run/beamOn
+/gun/position -20 130 -220 cm
+/run/beamOn
+/gun/position -20 140 -220 cm
+/run/beamOn
+/gun/position -20 150 -220 cm
+/run/beamOn
+/gun/position -20 160 -220 cm
+/run/beamOn
+/gun/position -20 170 -220 cm
+/run/beamOn
+/gun/position -20 180 -220 cm
+/run/beamOn
+/gun/position -20 190 -220 cm
+/run/beamOn
+/gun/position -20 200 -220 cm
+/run/beamOn
+/gun/position -20 210 -220 cm
+/run/beamOn
+/gun/position -20 220 -220 cm
+/run/beamOn
+/gun/position -20 230 -220 cm
+/run/beamOn
+/gun/position -20 240 -220 cm
+/run/beamOn
+/gun/position -20 250 -220 cm
+/run/beamOn
+/gun/position -20 260 -220 cm
+/run/beamOn
+/gun/position -20 270 -220 cm
+/run/beamOn
+/gun/position -20 280 -220 cm
+/run/beamOn
+# z = +20 cm
+/gun/position -20 120 -180 cm
+/run/beamOn
+/gun/position -20 130 -180 cm
+/run/beamOn
+/gun/position -20 140 -180 cm
+/run/beamOn
+/gun/position -20 150 -180 cm
+/run/beamOn
+/gun/position -20 160 -180 cm
+/run/beamOn
+/gun/position -20 170 -180 cm
+/run/beamOn
+/gun/position -20 180 -180 cm
+/run/beamOn
+/gun/position -20 190 -180 cm
+/run/beamOn
+/gun/position -20 200 -180 cm
+/run/beamOn
+/gun/position -20 210 -180 cm
+/run/beamOn
+/gun/position -20 220 -180 cm
+/run/beamOn
+/gun/position -20 230 -180 cm
+/run/beamOn
+/gun/position -20 240 -180 cm
+/run/beamOn
+/gun/position -20 250 -180 cm
+/run/beamOn
+/gun/position -20 260 -180 cm
+/run/beamOn
+/gun/position -20 270 -180 cm
+/run/beamOn
+/gun/position -20 280 -180 cm
+/run/beamOn
+/vis/viewer/show
+#
+# G4Trap2
+/vis/camera/reset
+#/vis/viewer/panTo -200 400 cm
+/vis/camera/pan -2750 2750
+/vis/camera/viewpoint 90 180
+#/vis/viewer/panTo -200 0 cm
+/vis/camera/pan -2000 0
+/vis/camera/zoom 5
+/vis/viewer/refresh
+/gun/direction 0 0 -1
+/gun/position -200 400 -20 cm
+/run/beamOn
+/gun/position -200 380 -20 cm
+/run/beamOn
+/gun/position -200 420 -20 cm
+/run/beamOn
+/gun/position -200 360 -20 cm
+/run/beamOn
+/gun/position -200 440 -20 cm
+/run/beamOn
+/gun/position -200 340 -20 cm
+/run/beamOn
+/gun/position -200 460 -20 cm
+/run/beamOn
+/vis/viewer/show
+#
 # Displaced solid.
 /vis/camera/reset
 #/vis/viewer/panTo 200 -200 cm
@@ -101,8 +259,16 @@ help /vis/sceneHandler/create
 /vis/camera/pan 1250 -1750
 /vis/camera/zoom 5
 /vis/viewer/refresh
-/gun/position 100 -40 0 cm
 /gun/direction 1 0 0
+/gun/position 100 -40 0 cm
+/run/beamOn
+/gun/position 100 -30 0 cm
+/run/beamOn
+/gun/position 100 -20 0 cm
+/run/beamOn
+/gun/position 100 -10 0 cm
+/run/beamOn
+/gun/position 100 0 0 cm
 /run/beamOn
 /vis/viewer/show
 #
@@ -152,4 +318,3 @@ help /vis/sceneHandler/create
 /gun/position 205 0 150 cm
 /run/beamOn
 /vis/viewer/show
-
