@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.12 2003-12-10 18:34:19 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.13 2003-12-10 19:17:24 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -297,7 +297,8 @@ G4PropagatorInField::ComputeStep(
                    NewSafety,     do_loop_count,  pPhysVol );
     }
 #endif
-    if( (fVerboseLevel > 0) && (do_loop_count > fMax_loop_count-10 )) {
+#ifdef G4VERBOSE
+    if( (fVerboseLevel > 1) && (do_loop_count > fMax_loop_count-10 )) {
       if( do_loop_count == fMax_loop_count-9 ){
 	G4cout << "G4PropagatorInField::ComputeStep "
 	       << " Difficult track - taking many sub steps." << G4endl;
@@ -305,6 +306,7 @@ G4PropagatorInField::ComputeStep(
       printStatus( SubStepStartState, CurrentState, CurrentProposedStepLength, 
 		   NewSafety, do_loop_count, pPhysVol );
     }
+#endif
 
     do_loop_count++;
 
@@ -387,14 +389,14 @@ G4PropagatorInField::ComputeStep(
             << " Zero progress for "  << fNoZeroStep << " attempted steps." 
             << G4endl;
 #ifdef G4VERBOSE
-     if ( fVerboseLevel > 0 )
+     if ( fVerboseLevel > 2 )
        G4cout << " Particle that is stuck will be killed." << G4endl;
 #endif
      fNoZeroStep = 0; 
   }
 
 #ifdef G4VERBOSE
-  if ( fVerboseLevel > 1 ){
+  if ( fVerboseLevel > 3 ){
      G4cout << "G4PropagatorInField returns " << TruePathLength << G4endl;
   }
 #endif
@@ -527,7 +529,7 @@ G4PropagatorInField::LocateIntersectionPoint(
 	final_section= false; 
 
 #ifdef G4VERBOSE
-	if( fVerboseLevel > 2 ){
+	if( fVerboseLevel > 3 ){
 	  G4cout << "G4PiF::LI> Investigating intermediate point"
 		 << " at s=" << ApproxIntersecPointV.GetCurveLength()
 		 << " on way to full s=" << CurveEndPointVelocity.GetCurveLength()
@@ -582,19 +584,23 @@ G4PropagatorInField::LocateIntersectionPoint(
 	     final_section= true;
  	     if( recalculatedEndPoint ) {
 	        // Since we have moved the endpoint, what must we do about this ???
-	        G4cout << "G4PiF::LI> Restoring full end point"
-		       << "  Yet previous endpoint was recalculated "
-		       << "  Reseting recalculatedEndPoint to false " << G4endl;
 	        //  Two scenarios:
 	        //   - we leave it as it was, since the move is likely small (CHOSEN)
 	        recalculatedEndPoint= false;
 		//   - we recalculate the final endpoint again (leaving it true)
 
 	        // If we did nothing, the midpoint would be used as an endpoint
+#ifdef G4VERBOSE
+	        if( fVerboseLevel > 0 ){
+		  G4cout << "G4PiF::LI> Restoring full end point"
+			 << "  Yet previous endpoint was recalculated "
+			 << "  Reseting recalculatedEndPoint to false " << G4endl;
+		}
+#endif
 	     }
 
 #ifdef G4VERBOSE
-	     if( fVerboseLevel > 2 ){
+	     if( fVerboseLevel > 1 ){
 	       G4cout << "G4PiF::LI> Restoring full end point"
 		      << " at s=" << CurrentA_PointVelocity.GetCurveLength()
 		      << " on way to full s=" << CurveEndPointVelocity.GetCurveLength()
@@ -647,7 +653,7 @@ G4PropagatorInField::LocateIntersectionPoint(
        // tests ChordAF_Vector.mag() <= maximum_lateral_displacement 
 
 #ifdef G4VERBOSE
-     if( Verbose() > 1 )
+     if( fVerboseLevel > 3 )
         printStatus( CurrentA_PointVelocity,  CurrentB_PointVelocity,
                      -1.0, NewSafety,  substep_no, 0);
 #endif
@@ -879,7 +885,7 @@ ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,
   static G4int noInaccuracyWarnings = 0; 
   G4int maxNoWarnings = 10;
   if (  (noInaccuracyWarnings < maxNoWarnings ) 
-       || (Verbose() > 1) )
+       || (fVerboseLevel > 2) )
     {
       G4cerr << "G4PropagatorInField::LocateIntersectionPoint():"
              << G4endl
