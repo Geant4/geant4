@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3MedTable.cc,v 1.10 1999-12-05 17:50:09 gcosmo Exp $
+// $Id: G3MedTable.cc,v 1.11 2001-05-30 08:13:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, 27 Sep 99
@@ -25,7 +25,7 @@ G3MedTable::~G3MedTable()
 
 G3MedTableEntry* G3MedTable::get(G4int id) const
 {
-  for (G4int i=0; i< fMedVector->entries(); i++) {
+  for (size_t i=0; i< fMedVector->entries(); i++) {
     G3MedTableEntry* mte = (*fMedVector)[i];
     if (id == mte->GetID()) return mte;
   }

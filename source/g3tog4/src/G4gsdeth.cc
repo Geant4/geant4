@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsdeth.cc,v 1.4 1999-12-05 17:50:12 gcosmo Exp $
+// $Id: G4gsdeth.cc,v 1.5 2001-05-30 08:13:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G3toG4.hh"
@@ -35,9 +35,9 @@ void G4gsdeth(G4String chset, G4String chdet, G4int nh, G4String chnamh[],
               G4int nbitsh[], G4double orig[], G4double fact[])
 {
     // Get pointer to sensitive detector chset
-    G4VSensitiveDetector* sdet = G3Det.GetSD(chset, chdet);
+    // G4VSensitiveDetector* sdet = G3Det.GetSD(chset, chdet);
     // Add hits to sensitive detector
-    for (G4int i=0; i<nh; i++) {
+    // for (G4int i=0; i<nh; i++) {
       // $$$        sdet->AddHit(chnamh[i],nbitsh[i],orig[i],fact[i]);
-    }
+    // }
 }

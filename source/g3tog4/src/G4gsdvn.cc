@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsdvn.cc,v 1.5 1999-12-05 17:50:13 gcosmo Exp $
+// $Id: G4gsdvn.cc,v 1.6 2001-05-30 08:13:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, V.Berejnoi, 29 Oct 99
@@ -35,7 +35,7 @@ void G4CreateCloneVTEWithDivision(G4String vname, G3VolTableEntry* mvte,
         G3DivType divType, G4int nofDivisions, G4int iaxis, G4int nmed, 
 	G4double c0, G4double step)
 {	
-  G3VolTableEntry* vte;
+  G3VolTableEntry* vte=0;
 
   // loop over all mothers
   for (G4int i=0; i<mvte->GetNoClones(); i++) {

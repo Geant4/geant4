@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3NegVolPars.cc,v 1.7 2000-11-24 09:50:12 gcosmo Exp $ 
+// $Id: G3NegVolPars.cc,v 1.8 2001-05-30 08:13:35 gcosmo Exp $ 
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I. Hrivnacova, 13.10.99 
@@ -187,7 +187,6 @@ G4bool G3NegVolPars(G4double pars[], G4int *nparpt,
   // mother
   G4String shapem = mvte->GetShape();
   G4double* Rparm = mvte->GetRpar();
-  G4int nparm = mvte->GetNpar();    
 
   if (strcmp(routine,"GSPOS") == 0 || strcmp(routine,"GSVOLU") == 0) {
     NegPresent = G3CalcParamsFn(Rpar,npar,Rparm,shape,shapem);

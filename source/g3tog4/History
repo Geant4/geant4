@@ -1,7 +1,10 @@
-$Id: History,v 1.43 2001-05-15 13:19:26 gcosmo Exp $
+$Id: History,v 1.44 2001-05-30 08:13:34 gcosmo Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V03-01-01 30-May-2001 G.Cosmo
+- Cleared pedantic warnings detected on Linux-g++ with ISO/ANSI setup.
 
 g3tog4-V03-01-00 15-May-2001 G.Cosmo
 - G3toG4BuildTree[.hh.cc]: fix for a case of the placement a volume

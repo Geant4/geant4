@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3MatTable.cc,v 1.12 1999-12-05 17:50:09 gcosmo Exp $
+// $Id: G3MatTable.cc,v 1.13 2001-05-30 08:13:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, 27 Sep 99
@@ -25,7 +25,7 @@ G3MatTable::~G3MatTable()
 
 G4Material* G3MatTable::get(G4int id) const
 {
-  for (G4int i=0; i< fMatVector->entries(); i++) {
+  for (size_t i=0; i< fMatVector->entries(); i++) {
     G3MatTableEntry* mte = (*fMatVector)[i];
     if (id == mte->GetID()) return mte->GetMaterial();
   }

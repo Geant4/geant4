@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3RotTable.cc,v 1.12 2000-07-24 11:32:14 gcosmo Exp $
+// $Id: G3RotTable.cc,v 1.13 2001-05-30 08:13:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, 27 Sep 99
@@ -26,7 +26,7 @@ G3RotTable::~G3RotTable()
 
 G4RotationMatrix* G3RotTable::Get(G4int id) const
 {
-  for (G4int i=0; i<fRotVector->entries(); i++) {
+  for (size_t i=0; i<fRotVector->entries(); i++) {
     G3RotTableEntry* rte = (*fRotVector)[i];
     if (id == rte->GetID()) return rte->GetMatrix();
   }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3Division.cc,v 1.9 2001-03-14 13:27:23 gcosmo Exp $
+// $Id: G3Division.cc,v 1.10 2001-05-30 08:13:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, V.Berejnoi 13.10.99
@@ -290,7 +290,6 @@ void G3Division::SetRangeAndAxis()
     }
     else if ( shape == "PGON" ) {
         G4int i;
-        G4int npdv = int(Rpar[2]);
         G4int nz = int(Rpar[3]);
 
         G4double pPhi1 = Rpar[0]*deg;

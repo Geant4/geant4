@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsmate.cc,v 1.6 1999-12-15 14:49:43 gunter Exp $
+// $Id: G4gsmate.cc,v 1.7 2001-05-30 08:13:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, 27 Sep 99
@@ -30,7 +30,7 @@ void PG4gsmate(G4String tokens[])
   G4double z = Rpar[1];
   G4double dens = Rpar[2];
   G4double radl = Rpar[3];
-  G4double absl = Rpar[4];
+  // G4double absl = Rpar[4];
   G4double *ubuf = &Rpar[5];
 
   G4gsmate(imate, name, a, z, dens, radl, nwbf, ubuf);
@@ -92,7 +92,7 @@ void G4gsmate(G4int imate, G4String name, G4double ain, G4double zin,
   G4double a = ain*g/mole;
   G4double dens = densin*g/cm3;
 
-  G4Material* material;
+  G4Material* material=0;
   
   G4String sname = name.strip(G4String::both);
   if (sname == "AIR") {
