@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSolid.cc,v 1.1 1999-01-07 16:07:22 gunter Exp $
+// $Id: G4VSolid.cc,v 1.2 1999-11-09 18:41:48 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VSolid
@@ -306,3 +306,15 @@ void G4VSolid::ClipPolygonToSimpleLimits(G4ThreeVectorList& pPolygon,
 	}
 
 }
+
+ const G4VSolid* G4VSolid::GetConstituentSolid(G4int no) const
+{ return 0; } 
+
+       G4VSolid* G4VSolid::GetConstituentSolid(G4int no)
+{ return 0; } 
+
+ const G4DisplacedSolid* G4VSolid::GetDisplacedSolidPtr() const
+{ return 0; } 
+
+       G4DisplacedSolid* G4VSolid::GetDisplacedSolidPtr() 
+{ return 0; } 

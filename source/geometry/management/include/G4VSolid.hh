@@ -5,10 +5,12 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSolid.hh,v 1.1 1999-01-07 16:07:18 gunter Exp $
+// $Id: G4VSolid.hh,v 1.2 1999-11-09 18:41:44 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
+//  Class Description 
+//
 // class G4VSolid
 //
 // Abstract base class solids, physical shapes that can be tracked through.
@@ -113,6 +115,9 @@
 //      Creates a G4Polyhedron/G4NURBS/...  (It is the caller's reponsibility
 //        to delete it.)  A null pointer means "not created".
 //
+//   Class Description - end:
+// -----------------------------------------------------------------------------
+
 // Protected functions:
 //
 // void CalculateClippedPolygonExtent(G4ThreeVectorList& pPolygon,
@@ -193,21 +198,17 @@
 // G4bool operator==(const G4VSolid& s) const
 //   Return true only if addresses are the same
 //
+
 // Member Data:
 //
 // G4String fshapeName
 //   Name for this solid.
 //
 // History:
-// 17.06.98 J.Apostolakis  Added pure virtual function GetEntityType()
-// 24.10.96 J.Allison Added const G4VisAttributes* fpVisAttributes; and
-//                    associated access functions.
-// 26.07.96 P.Kent    Added ComputeDimensions for replication mechanism.
-// 22.07.96 J.Allison Renamed CreatePolyhedon, G4VGraphicsScene.
-// 27.03.96 J.Allison Changed names to:  DescribeYourselfTo and
-//                    SendWireframeTo (G4VGraphicsModel&).
-// 10.07.95 P.Kent Added == operator 
-// 30.06.95 P.Kent Initial version, no scoping or visualisation functions
+// 17.06.98 J.Apostolakis Added pure virtual function GetEntityType()
+// 26.07.96 P.Kent        Added ComputeDimensions for replication mechanism.
+// 27.03.96 J.Allison     Methods for visualisation 
+// 30.06.95 P.Kent        Initial version, no scoping or visualisation functions
 
 #ifndef G4VSOLID_HH
 #define G4VSOLID_HH
@@ -225,6 +226,7 @@ class G4VGraphicsScene;
 class G4Polyhedron;
 class G4NURBS;
 class G4VisExtent;
+class G4DisplacedSolid;
 
 #include "G4ThreeVector.hh"
 #include <rw/tvordvec.h>
@@ -232,7 +234,7 @@ typedef RWTValOrderedVector<G4ThreeVector> G4ThreeVectorList;
 typedef G4String   G4GeometryType;
 
 class G4VSolid {
-public:
+public: // With description 
     G4VSolid(const G4String& name);
     virtual ~G4VSolid();
 
@@ -275,6 +277,17 @@ public:
     virtual G4VisExtent   GetExtent        () const = 0;
     virtual G4Polyhedron* CreatePolyhedron () const;
     virtual G4NURBS*      CreateNURBS      () const;
+
+    // If Solid is made up from a Boolean operation of two solids,
+    //   return the "no" solid. 
+    // If the solid is not a "Boolean", return 0
+    virtual const G4VSolid* GetConstituentSolid(G4int no) const;
+    virtual       G4VSolid* GetConstituentSolid(G4int no);
+
+    // If the Solid is a "G4DisplacedSolid", return a self pointer
+    //  else return 0
+    virtual const G4DisplacedSolid* GetDisplacedSolidPtr() const; 
+    virtual       G4DisplacedSolid* GetDisplacedSolidPtr(); 
 
 protected:
 
