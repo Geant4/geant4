@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALVisManager.cc,v 1.1 2002-10-02 19:45:57 ahoward Exp $
+// $Id: FCALVisManager.cc,v 1.2 2002-11-15 12:47:05 pmendez Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,10 +18,25 @@
 
 #include "FCALVisManager.hh"
 
+
+#include "G4ASCIITree.hh"
+#include "G4DAWNFILE.hh"
+#include "G4GAGTree.hh"
+#include "G4HepRepFile.hh"
+#include "G4RayTracer.hh"
+#include "G4VRML1File.hh"
+#include "G4VRML2File.hh"
+
+
 // Supported drivers...
 
 #ifdef G4VIS_USE_DAWN
 #include "G4FukuiRenderer.hh"
+#endif
+
+#ifdef G4VIS_USE_OPACS
+#include "G4Wo.hh"
+#include "G4Xo.hh"
 #endif
 
 #ifdef G4VIS_USE_DAWNFILE
@@ -78,13 +93,24 @@ FCALVisManager::FCALVisManager () {}
 
 void FCALVisManager::RegisterGraphicsSystems () {
 
+
+  RegisterGraphicsSystem (new G4ASCIITree);
+  RegisterGraphicsSystem (new G4DAWNFILE);
+  RegisterGraphicsSystem (new G4GAGTree);
+  RegisterGraphicsSystem (new G4HepRepFile);
+  RegisterGraphicsSystem (new G4RayTracer);
+  RegisterGraphicsSystem (new G4VRML1File);
+  RegisterGraphicsSystem (new G4VRML2File);
+
+
+
 #ifdef G4VIS_USE_DAWN
   RegisterGraphicsSystem (new G4FukuiRenderer);
 #endif
 
 #ifdef G4VIS_USE_DAWNFILE
-  RegisterGraphicsSystem (new G4DAWNFILE);
-#endif
+    RegisterGraphicsSystem (new G4DAWNFILE);
+  #endif
 
 #ifdef G4VIS_USE_OPACS
   RegisterGraphicsSystem (new G4Wo);
