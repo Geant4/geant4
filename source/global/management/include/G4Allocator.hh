@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Allocator.hh,v 1.15 2004-05-26 14:43:41 gcosmo Exp $
+// $Id: G4Allocator.hh,v 1.16 2004-11-29 17:53:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,6 +42,8 @@
 
 #ifndef G4Allocator_h
 #define G4Allocator_h 1
+
+#include <cstddef>
 
 #include "G4AllocatorPool.hh"
 
