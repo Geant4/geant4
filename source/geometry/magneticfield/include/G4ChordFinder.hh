@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.hh,v 1.13 2003-11-08 01:12:42 japost Exp $
+// $Id: G4ChordFinder.hh,v 1.14 2003-11-08 02:10:20 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -91,7 +91,12 @@ class G4ChordFinder
       inline G4int GetNoTrials();        // Total number of trials
       inline G4int GetNoMaxTrials();     // Maximum # of trials for one call
         // Get statistics about number of calls & trials in FindNextChord
-  
+
+      void   PrintStatistics();  // virtual ? 
+        // A report with the above -- and possibly other stats
+      inline G4int SetVerbose( G4int newvalue=1); 
+       // Set verbosity and return old value
+
    protected:   // .........................................................
 
       inline G4bool AcceptableMissDist(G4double dChordStep) const;
@@ -117,6 +122,17 @@ class G4ChordFinder
                                G4double dChordStep, 
                                G4double nextStepTrial );
         //   Printing for monitoring ...
+ 
+      inline   G4double GetFirstFraction();         // Originally 0.999
+      inline   G4double GetFractionLast();          // Originally 1.000
+      inline   G4double GetFractionNextEstimate();  // Originally 0.980
+      inline   G4double GetMultipleRadius();        // No original value
+       //  Parameters for adapting performance ... use with great care
+
+   protected:    
+      void     SetFractions_Last_Next( G4double fractLast= 0.90, 
+				       G4double fractNext= 0.95 ); 
+      //  Parameters for  performance ... change with great care
 
    private:  // ............................................................
 
@@ -138,10 +154,14 @@ class G4ChordFinder
       G4EquationOfMotion* fEquation; 
       G4MagIntegratorStepper* fDriversStepper; 
 
+      //  Parameters 
+      G4double  fFirstFraction, fFractionLast, fFractionNextEstimate;
+      G4double  fMultipleRadius; 
+
       // For Statistics
       // -- G4int   fNoTrials, fNoCalls;
       G4int   fTotalNoTrials_FNC,  fNoCalls_FNC, fmaxTrials_FNC; // fnoTimesMaxTrFNC; 
-
+      G4int   fStatsVerbose;  // if > 0, print Statistics in destructor
 };
 
 // Inline function implementation:
