@@ -1,4 +1,4 @@
-$Id: History,v 1.206 2002-11-15 10:02:36 allison Exp $
+$Id: History,v 1.207 2002-11-21 13:15:25 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,13 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+21st November 2002  Gabriele Cosmo  (vis-V04-01-07)
+- Corrections to HepRep module to allow porting on egcs compiler
+  (M.Donszelmann).
+- Patched access to static data in G4VisCommandsSceneAdd.cc, G4VisManager.cc
+  and G4FlavoredParallelWorldModel.cc to allow porting on Windows DLLs.
+  It requires co-working with tags "greps-V04-01-04" and "intercoms-V04-01-02".
 
 15th November 2002  Mark Donszelmann  (vis-V04-01-06)
 - HepRep2 driver implemented.
