@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em8DetectorConstruction.cc,v 1.16 2004-12-03 10:21:04 vnivanch Exp $
+// $Id: Em8DetectorConstruction.cc,v 1.17 2004-12-03 10:51:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -82,7 +82,7 @@ fCalorimeterSD(NULL),fRegGasDet(NULL)
   // G4double delta = 0.0001*mm;
 
   // fAbsorberThickness = 85.*mm;
-  fAbsorberThickness = 1.0*mm;
+  fAbsorberThickness = 23.0*mm;
 
   fAbsorberRadius    = 10.*cm;
   fAbsorberZ         = 0.*cm ;

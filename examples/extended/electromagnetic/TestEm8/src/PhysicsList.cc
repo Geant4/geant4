@@ -22,7 +22,7 @@
 //
 //
 
-// $Id: PhysicsList.cc,v 1.5 2004-12-03 10:21:04 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.6 2004-12-03 10:51:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -137,7 +137,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new PhysListEmModelPai(name);
   }
-  else if (name == "paiPhoton") 
+  else if (name == "pai_photon") 
   {
     emName = name;
     delete emPhysicsList;
