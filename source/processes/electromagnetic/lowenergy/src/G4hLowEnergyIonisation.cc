@@ -71,6 +71,7 @@
 // 07 Dec   2001 V.Ivanchenko Add SetFluorescence method
 // 15 Feb   2002 V.Ivanchenko Fix problem of Generic Ions
 // 25 Mar   2002 V.Ivanchenko Fix problem of fluorescence below threshold  
+// 28 Mar   2002 V.Ivanchenko Set fluorescence off by default
 // -----------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -117,7 +118,7 @@ G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
     paramStepLimit (0.005),
     shellVacancy(0),
     shellCS(0),
-    theFluo(true)
+    theFluo(false)
 { 
   InitializeMe();
 }
@@ -1967,6 +1968,7 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
 void G4hLowEnergyIonisation::SetCutForSecondaryPhotons(G4double cut)
 {
   minGammaEnergy = cut;
+  theFluo = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1974,6 +1976,14 @@ void G4hLowEnergyIonisation::SetCutForSecondaryPhotons(G4double cut)
 void G4hLowEnergyIonisation::SetCutForAugerElectrons(G4double cut)
 {
   minElectronEnergy = cut;
+  theFluo = true;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4hLowEnergyIonisation::ActivateFluorescence(G4bool val)
+{
+  theFluo = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
