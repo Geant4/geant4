@@ -267,12 +267,12 @@ void G4MuMinusCaptureCascade::DoBoundMuonMinusDecay(G4double Z, G4double massA,
   N1.boost(moment);
 
 
-  AddNewParticle(G4AntiNeutrinoE::AntiNeutrinoE(),G4ThreeVector(N1),0.0,nCascade,Cascade);
+  AddNewParticle(G4AntiNeutrinoE::AntiNeutrinoE(),G4ThreeVector(N1.vect()),0.0,nCascade,Cascade);
 
   G4LorentzVector N2 = G4LorentzVector(-p1,ecm);
   N2.boost(moment);
 
-  AddNewParticle(G4NeutrinoMu::NeutrinoMu(),G4ThreeVector(N2),0.0,nCascade,Cascade);
+  AddNewParticle(G4NeutrinoMu::NeutrinoMu(),G4ThreeVector(N2.vect()),0.0,nCascade,Cascade);
 
   return;
 }
