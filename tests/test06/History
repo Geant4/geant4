@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2001-10-16 14:24:25 maire Exp $
+$Id: History,v 1.5 2001-10-16 14:58:27 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,17 +15,18 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-16.10.01 mma
-- remove all 'Integral' processes
+Oct 16, 2001 M.Maire  (test06-V03-02-00)
+- Removed all 'Integral' processes.
+- Synchronised files to HEAD.
 
-June 17, 2000  John Allison  (test06-V01-01-00)
+Jun 17, 2000  John Allison  (test06-V01-01-00)
 - Updated test06.out for geant4-01-01-ref-06.
 
-17 Apr., 1999 H.Kurashige 
+Apr 17, 1999 H.Kurashige 
 - Modify SetCuts() and ConstructParticle() in Tst06PhysicsList
 - Modify BeginOfRunAction() and EndOfRunAction() in Tst06RunAction
 - Modify UserSteppingAction() in Tst06SteppingAction
 
-June 27, 98 G. Cosmo
+Jun 27, 1998 G. Cosmo
 - Created.
 
