@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+5th October 2000  Peter Gumplinger (op-V02-00-02)
+- G4OpAbsorption.cc: Comment out warning - No Absorption length specified.
+
 3rd August 2000  Gabriele Cosmo (op-V02-00-00r)
 - G4OpBoundaryProcess.cc: changed RandGauss to G4RandGauss to fix problem
   of events' reproducibility.
