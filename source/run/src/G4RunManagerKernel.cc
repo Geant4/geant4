@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.8 2003-11-04 10:38:59 kurasige Exp $
+// $Id: G4RunManagerKernel.cc,v 1.9 2003-12-09 09:13:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -79,7 +79,7 @@ G4RunManagerKernel::G4RunManagerKernel()
 
   // version banner
   versionString
-    = " Geant4 version $Name: not supported by cvs2svn $\n                                (3-October-2003)";
+    = " Geant4 version $Name: not supported by cvs2svn $\n                                (12-December-2003)";
   G4cout
     << "**********************************************" << G4endl
     << versionString << G4endl
