@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuIonisation.cc,v 1.11 2000-05-23 09:58:47 urban Exp $
+// $Id: G4MuIonisation.cc,v 1.12 2001-03-23 07:27:29 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,6 +25,7 @@
 // 08-04-98: remove 'tracking cut' of the ionizing particle, MMa
 // 26/10/98: new stuff from R.Kokoulin + cleanup , L.Urban
 // 10/02/00  modifications , new e.m. structure, L.Urban
+// 23/03/01: R.Kokoulin's correction is commented out, L.Urban
 // --------------------------------------------------------------
  
 
@@ -228,12 +229,12 @@ void G4MuIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
         ionloss -= delta + sh ;
         ionloss /= beta2 ;
          
-        // correction of R. Kokoulin  
-        G4double E = LowEdgeEnergy+ParticleMass ;
-        G4double epmax = RateMass*E*E/(RateMass*E+ParticleMass) ;
-        G4double apar = log(2.*epmax/electron_mass_c2) ;
-        ionloss += fine_structure_const*(log(2.*E/ParticleMass)-apar/3.)*
-                                        apar*apar/twopi ; 
+      // correction of R. Kokoulin  // has been taken out *************** 
+      //  G4double E = LowEdgeEnergy+ParticleMass ;
+      //  G4double epmax = RateMass*E*E/(RateMass*E+ParticleMass) ;
+      //  G4double apar = log(2.*epmax/electron_mass_c2) ;
+      //  ionloss += fine_structure_const*(log(2.*E/ParticleMass)-apar/3.)*
+      //                                  apar*apar/twopi ; 
 
         ionloss *= Factor*ElectronDensity ;
       }
