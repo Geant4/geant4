@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuIonisation.cc,v 1.1 1999-01-07 16:11:08 gunter Exp $
+// $Id: G4MuIonisation.cc,v 1.2 1999-03-09 13:21:48 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,6 +30,8 @@
 #include "G4MuIonisation.hh"
 #include "G4UnitsTable.hh"
 
+#include "G4ios.hh"
+
 // constructor and destructor
  
 G4MuIonisation::G4MuIonisation(const G4String& processName)
@@ -37,11 +39,7 @@ G4MuIonisation::G4MuIonisation(const G4String& processName)
      LowestKineticEnergy(1.00*keV),
      HighestKineticEnergy(1000000.*TeV),
      theMeanFreePathTable(NULL),
-     lastCutInRange(0.),
-     TotBin(100),
-     theElectron ( G4Electron::Electron() ),
-     theMuonPlus ( G4MuonPlus::MuonPlus() ),
-     theMuonMinus ( G4MuonMinus::MuonMinus() )
+     TotBin(100)
 {  }
 
 G4MuIonisation::~G4MuIonisation() 
@@ -63,12 +61,9 @@ void G4MuIonisation::SetPhysicsTableBining(G4double lowE, G4double highE,
 void G4MuIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 //  just call BuildLossTable+BuildLambdaTable
 {
+  BuildLossTable(aParticleType) ;
   G4double Charge = aParticleType.GetPDGCharge();     
 
-  CutInRange = aParticleType.GetLengthCuts(); 
-
-  BuildLossTable(aParticleType) ;
- 
   if(Charge>0.)
   {
     RecorderOfmuplusProcess[CounterOfmuplusProcess] = (*this).theLossTable ;
@@ -80,11 +75,9 @@ void G4MuIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType
     CounterOfmuminusProcess++;
   }
  
-  if(CutInRange != lastCutInRange)
-  {
-    lastCutInRange = CutInRange ;
+  G4double electronCutInRange = G4Electron::Electron()->GetCuts();  
+  if(electronCutInRange != lastelectronCutInRange)
     BuildLambdaTable(aParticleType) ;
-  }
  
    G4MuEnergyLoss::BuildDEDXTable(aParticleType) ;
 
@@ -94,14 +87,7 @@ void G4MuIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType
 
 void G4MuIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
 {
-  G4double Charge = aParticleType.GetPDGCharge() ;
-
-  if(Charge>0.)
-    ParticleCutInKineticEnergy = theMuonPlus->GetCutsInEnergy() ;
-  else
-    ParticleCutInKineticEnergy = theMuonMinus->GetCutsInEnergy() ;
-
-    DeltaCutInKineticEnergy = theElectron->GetCutsInEnergy() ;
+  DeltaCutInKineticEnergy = theElectron->GetCutsInEnergy() ;
 
   G4double LowEdgeEnergy , ionloss ;
   G4double RateMass ;
@@ -151,11 +137,9 @@ void G4MuIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
                    material->GetAtomicNumDensityVector() ;
     const G4int NumberOfElements=
                    material->GetNumberOfElements() ;
- 
     DeltaCutInKineticEnergyNow = DeltaCutInKineticEnergy[J] ;
 
     G4double tau,tau0,Tmax,gamma,bg2,beta2,rcut,delta,x,sh ;
-
     for (G4int i = 0 ; i < TotBin ; i++)
     {
       LowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;
@@ -248,7 +232,7 @@ void G4MuIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
 void G4MuIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
 {
   // Build mean free path tables for the delta ray production process
-  G4double LowEdgeEnergy , Value ,sigma ;
+  G4double LowEdgeEnergy,Tmax , Value ,sigma ;
   G4bool isOutRange ;
   const G4MaterialTable* theMaterialTable=G4Material::GetMaterialTable();
 
@@ -263,7 +247,6 @@ void G4MuIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
 
   // get electron and particle cuts in kinetic energy
   DeltaCutInKineticEnergy = theElectron->GetCutsInEnergy() ;
-  ParticleCutInKineticEnergy = aParticleType.GetEnergyCuts() ;
 
   for (G4int J=0 ; J < numOfMaterials; J++)
   { 
@@ -282,13 +265,23 @@ void G4MuIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
     {
       LowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;
       sigma = 0. ;
-           
-      for (G4int iel=0; iel<NumberOfElements; iel++ )
+
+      // check threshold here !
+      G4double Tmax = 2.*electron_mass_c2*LowEdgeEnergy*
+                     (LowEdgeEnergy+2.*ParticleMass)/
+                     (ParticleMass*ParticleMass+2.*electron_mass_c2*
+                     (LowEdgeEnergy+ParticleMass)+
+                       electron_mass_c2*electron_mass_c2) ;
+
+      if(Tmax > DeltaCutInKineticEnergyNow)
       {
-        sigma +=  theAtomicNumDensityVector[iel]*
+        for (G4int iel=0; iel<NumberOfElements; iel++ )
+        {
+          sigma +=  theAtomicNumDensityVector[iel]*
                       ComputeMicroscopicCrossSection(aParticleType,
                           LowEdgeEnergy,
                           (*theElementVector)(iel)->GetZ() ) ;
+        }
       }
 
       Value = sigma<=0 ? DBL_MAX : 1./sigma ;     
@@ -341,7 +334,6 @@ G4double G4MuIonisation::ComputeMicroscopicCrossSection(
       }
     }
   }
- 
   return TotalCrossSection ;
 }
  
@@ -430,10 +422,12 @@ G4VParticleChange* G4MuIonisation::PostStepDoIt(
              (a0+log((2.*TotalEnergy-twoep)/ParticleMass)-
               log(1.+twoep/electron_mass_c2)))
               /grejc ;
+       
       } while( G4UniformRand()>grej );
    }
   
    DeltaKineticEnergy = x * MaxKineticEnergyTransfer ;
+
    if(DeltaKineticEnergy <= 0.)
      return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
 

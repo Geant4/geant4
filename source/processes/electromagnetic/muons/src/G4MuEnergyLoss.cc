@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuEnergyLoss.cc,v 1.1 1999-01-07 16:11:07 gunter Exp $
+// $Id: G4MuEnergyLoss.cc,v 1.2 1999-03-09 13:21:45 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -42,7 +42,7 @@
 //  The NbOfProcesses data member can be changed using the (public static)
 //  functions Get/Set/Plus/MinusNbOfProcesses (see G4MuEnergyLoss.hh)
 
-G4int G4MuEnergyLoss::NbOfProcesses = 3 ;
+G4int G4MuEnergyLoss::NbOfProcesses = 3 ; // !!!!!!!!!!!!!!!
 
 G4PhysicsTable** G4MuEnergyLoss::RecorderOfmuplusProcess  =
                                            new G4PhysicsTable*[10] ;
@@ -75,9 +75,6 @@ G4PhysicsTable* G4MuEnergyLoss::themuminusRangeCoeffATable = NULL ;
 G4PhysicsTable* G4MuEnergyLoss::themuminusRangeCoeffBTable = NULL ;
 G4PhysicsTable* G4MuEnergyLoss::themuminusRangeCoeffCTable = NULL ;
 
-G4double G4MuEnergyLoss::CutInmupluslossTable = 0. ;
-G4double G4MuEnergyLoss::CutInmuminuslossTable = 0. ;
-
 // constructor and destructor
  
 G4MuEnergyLoss::G4MuEnergyLoss(const G4String& processName)
@@ -94,7 +91,8 @@ G4MuEnergyLoss::G4MuEnergyLoss(const G4String& processName)
      theRangeCoeffBTable(NULL),
      theRangeCoeffCTable(NULL),
      lastMaterial(NULL),
-     lastCutInRange(0.),
+     lastgammaCutInRange(0.),
+     lastelectronCutInRange(0.),
      theElectron ( G4Electron::Electron() ),
      thePositron ( G4Positron::Positron() ),
      theMuonPlus ( G4MuonPlus::MuonPlus() ),
@@ -114,56 +112,39 @@ G4MuEnergyLoss::~G4MuEnergyLoss()
                          const G4ParticleDefinition& aParticleType)
 {
   //  calculate data members TotBin,LOGRTable,RTable first
-  G4double lrate ;
-  G4int nbin ;
-  G4double binning = 2.*dRoverRange ;
-  lrate = log(HighestKineticEnergy/LowestKineticEnergy) ;
-  nbin = G4int((lrate/log(1.+binning) + lrate/log(1.+2.*binning))/2.);
-  nbin = (nbin+25)/50 ; 
-  TotBin = 50*nbin ;
-  if(TotBin<50)
-    TotBin = 50 ;
-  if(TotBin>500)
-    TotBin = 500 ;
+  G4double binning = dRoverRange;
+  G4double lrate = log(HighestKineticEnergy/LowestKineticEnergy);
+  G4int    nbin =  G4int(lrate/log(1.+binning) + 0.5 );
+  nbin = (nbin+25)/50;
+  TotBin =50*nbin ;
+  if (TotBin<50) TotBin = 50;
+  if (TotBin>500) TotBin = 500;
   LOGRTable=lrate/TotBin;
   RTable   =exp(LOGRTable);
 
   G4bool MakeTable ;
   ParticleMass = aParticleType.GetPDGMass() ; 
   G4double Charge = aParticleType.GetPDGCharge() ;
-  CutInRange = aParticleType.GetLengthCuts();
+  G4double gammaCutInRange = G4Gamma::Gamma()->GetCuts(); 
+  G4double electronCutInRange = G4Electron::Electron()->GetCuts(); 
 
-  // Create tables only if there is a new cut value !*************************
-  if( Charge > 0.)
+  MakeTable = false ;
+  // Create tables only if there are new cut values 
+  if((gammaCutInRange == lastgammaCutInRange) &&
+     (electronCutInRange == lastelectronCutInRange))
   {
-   if(CounterOfmuplusProcess==NbOfProcesses)
-   {
-    if(CutInRange != CutInmupluslossTable)
-      MakeTable = true ;
-      CutInmupluslossTable = CutInRange ;
-   }
-   else
-   {
-      MakeTable = false ;
-   }
+     ;
   }
   else
   {
-   if(CounterOfmuminusProcess==NbOfProcesses)
-   {
-    if(CutInRange != CutInmuminuslossTable)
-      MakeTable = true ;
-      CutInmuminuslossTable = CutInRange ;
-   }
-   else
-   {
-      MakeTable = false ;
-   }
+    if((Charge > 0.)&&(CounterOfmuplusProcess==NbOfProcesses))
+       MakeTable = true ;
+    if((Charge < 0.)&&(CounterOfmuminusProcess==NbOfProcesses))
+       MakeTable = true ;
   }
-  
+      
   if( MakeTable )
   {
-
    // Build energy loss table as a sum of the energy loss due to the
    //           different processes.                                           
     const G4MaterialTable* theMaterialTable=
@@ -203,66 +184,53 @@ G4MuEnergyLoss::~G4MuEnergyLoss()
 
     if(CounterOfProcess == NbOfProcesses)
     {
-
       //  loop for materials
       G4double LowEdgeEnergy , Value ;
       G4bool isOutRange ;
       G4int J;
-
       G4PhysicsTable* pointer ;
 
       for (J=0; J<numOfMaterials; J++)
       {
         // create physics vector and fill it
-
         G4PhysicsLogVector* aVector = new G4PhysicsLogVector(
                     LowestKineticEnergy, HighestKineticEnergy, TotBin);   
-
         // loop for the kinetic energy
         for (G4int i=0; i<TotBin; i++)
         {
           LowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;      
-
           Value = 0. ;
-    
           for (G4int process=0; process < NbOfProcesses; process++)
           {
             pointer= RecorderOfProcess[process];
             Value += (*pointer)[J]->
                                GetValue(LowEdgeEnergy,isOutRange) ;
-
           }
-
           aVector->PutValue(i,Value) ; 
-
         }
-
         theDEDXTable->insert(aVector) ;
-     }
+      }
  
-    //  reset counter to zero ..................
-    if( Charge >0.)    
-       CounterOfmuplusProcess=0 ;
-    else
-       CounterOfmuminusProcess=0 ;
+      //  reset counter to zero ..................
+      if( Charge >0.)    
+        CounterOfmuplusProcess=0 ;
+      else
+        CounterOfmuminusProcess=0 ;
 
-    // Build range table
-    BuildRangeTable( aParticleType);  
+      // Build range table
+      BuildRangeTable( aParticleType);  
 
-    // Build lab/proper time tables
-    BuildTimeTables( aParticleType) ;
+      // Build lab/proper time tables
+      BuildTimeTables( aParticleType) ;
 
-    // Build coeff tables for the energy loss calculation
-    BuildRangeCoeffATable( aParticleType);
-    BuildRangeCoeffBTable( aParticleType);
-    BuildRangeCoeffCTable( aParticleType);
+      // Build coeff tables for the energy loss calculation
+      BuildRangeCoeffATable( aParticleType);
+      BuildRangeCoeffBTable( aParticleType);
+      BuildRangeCoeffCTable( aParticleType);
 
-    // invert the range table
-    BuildInverseRangeTable(aParticleType);
-
+      // invert the range table
+      BuildInverseRangeTable(aParticleType);
     }
-
-  }
     // make the energy loss and the range table available
     const G4double lowestKineticEnergy(1.00*keV);
     const G4double highestKineticEnergy(1000000.*TeV);
@@ -273,6 +241,10 @@ G4MuEnergyLoss::~G4MuEnergyLoss()
       (Charge > 0)? theLabTimemuplusTable: theLabTimemuminusTable,
       (Charge > 0)? theProperTimemuplusTable: theProperTimemuminusTable,
       lowestKineticEnergy, highestKineticEnergy, 1.,TotBin);
+
+    lastgammaCutInRange = gammaCutInRange ;
+    lastelectronCutInRange = electronCutInRange ;
+  }
 }
       
   void G4MuEnergyLoss::BuildRangeTable(
@@ -1171,51 +1143,43 @@ G4VParticleChange* G4MuEnergyLoss::AlongStepDoIt(
  
   // do not track further if kin.energy < 1. eV
    const G4double MinKineticEnergy = 1.*eV;
+   const G4double linLossLimit = 0.02 ;
   
   G4double MeanLoss, finalT;
  
-  if (E < MinKineticEnergy)   { finalT = 0.; MeanLoss = E;}
- 
-  else if (EnergyBinNumber <= 0)  
-     {
-       if (Step >= fRangeNow) { finalT = 0.; MeanLoss = E;}
-       else
-         {
-           finalT = E*(1.-Step/fRangeNow)*(1.-Step/fRangeNow);
-           if (finalT < MinKineticEnergy) finalT = 0.;
-           MeanLoss = E - finalT;
-         }
-     }
+  if (E < MinKineticEnergy)    finalT = 0.; 
+  else if ( E<= LowestKineticEnergy)
+  {
+    if (Step >= fRangeNow)  finalT = 0.;
+    else finalT = E - Step*fdEdx ;
+  }
+   
+  else if (E>=HighestKineticEnergy) finalT = E - Step*fdEdx;
 
-  else if (EnergyBinNumber >= (TotBin-1))
-     {
-       // simple solution for the moment: loss = Step*dE/dx (dE/dx const)
-       MeanLoss = Step*fdEdx;
-       if (MeanLoss > E) MeanLoss = E;
-       finalT = E - MeanLoss;
-       if (finalT < MinKineticEnergy) { finalT = 0.; MeanLoss = E;}
-     }
-
-  else if (Step >= fRangeNow) { finalT = 0.; MeanLoss = E;}
+  else if (Step >= fRangeNow)  finalT = 0.;
  
   else
-     {
+  {
+    if(Step/fRangeNow < linLossLimit) finalT = E-Step*fdEdx ;
+    else
+    {
        if (charge<0.) finalT = G4EnergyLossTables::GetPreciseEnergyFromRange(
                                theMuonMinus,fRangeNow-Step,aMaterial);
        else           finalT = G4EnergyLossTables::GetPreciseEnergyFromRange(
                                theMuonPlus,fRangeNow-Step,aMaterial);
-       if (finalT < MinKineticEnergy) finalT = 0.;
-       MeanLoss = E-finalT;
-
-       if (MeanLoss < 0.) { MeanLoss = 0.; finalT = E;}
-
-       //now the loss with fluctuation
-       if ((EnlossFlucFlag) && (MeanLoss > 0.) && (MeanLoss < E))
-         {
-           finalT = E-GetLossWithFluct(aParticle,aMaterial,MeanLoss);
-           if (finalT < 0.) finalT = E-MeanLoss;
-         }
      }
+  }
+
+  if(finalT < MinKineticEnergy) finalT = 0. ;
+
+  MeanLoss = E-finalT ; 
+
+  //now the loss with fluctuation
+  if ((EnlossFlucFlag) && (finalT > 0.) && (finalT < E))
+  {
+    finalT = E-GetLossWithFluct(aParticle,aMaterial,MeanLoss);
+    if (finalT < 0.) finalT = E-MeanLoss;
+  }
 
   // kill the particle if the kinetic energy <= 0
   if (finalT <= 0. )
