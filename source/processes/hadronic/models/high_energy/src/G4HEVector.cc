@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HEVector.cc,v 1.6 2001-05-03 08:59:22 hpw Exp $
+// $Id: G4HEVector.cc,v 1.7 2001-06-26 12:59:15 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -38,6 +38,7 @@ G4HEVector::G4HEVector(const G4DynamicParticle * aParticle)
      baryon           = aParticle->GetDefinition()->GetBaryonNumber();
      particleName     = getParticleName(code, baryon);
      particleType     = aParticle->GetDefinition()->GetParticleType();
+     strangeness       = aParticle->GetDefinition()->GetQuarkContent(2);
   }
   
 G4double G4HEVector::Amax(G4double a, G4double b)
