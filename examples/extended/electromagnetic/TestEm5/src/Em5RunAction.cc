@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em5RunAction.cc,v 1.1 1999-10-12 12:23:36 maire Exp $
+// $Id: Em5RunAction.cc,v 1.2 1999-11-12 17:00:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -147,8 +147,7 @@ void Em5RunAction::BeginOfRunAction(const G4Run* aRun)
 
   if(pVVisManager)
   {
-    UI->ApplyCommand("/vis/clear/view");
-    UI->ApplyCommand("/vis/draw/current");
+    UI->ApplyCommand("/vis/scene/notifyHandlers");
   }
       
   EnergySumAbs = 0. ;
@@ -710,7 +709,7 @@ void Em5RunAction::EndOfRunAction(const G4Run* aRun)
  G4cout.precision(prec);
   
   if (G4VVisManager::GetConcreteInstance())
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/show/view");
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
     
    // Write histogram file
    hbookManager->write();

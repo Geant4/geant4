@@ -25,7 +25,7 @@
 #include "G4ParticleTable.hh"
 #include "G4Material.hh"
 #include "G4EnergyLossTables.hh"
-#include "G4Timer.hh"
+////#include "G4Timer.hh"
 #include "G4ios.hh"
 #include <iomanip.h>                
 
@@ -299,8 +299,8 @@ void Em6PhysicsList::ConstructGeneral()
 
 void Em6PhysicsList::SetCuts()
 {
-  G4Timer theTimer ;
-  theTimer.Start() ;
+  ////G4Timer theTimer ;
+  ////theTimer.Start() ;
   if (verboseLevel >0){
     G4cout << "Em6PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << endl;
@@ -325,10 +325,10 @@ void Em6PhysicsList::SetCuts()
               
   if (verboseLevel>0) DumpCutValuesTable();
 
-  theTimer.Stop();
-  G4cout.precision(6);
-  G4cout << endl ;
-  G4cout << "total time(SetCuts)=" << theTimer.GetUserElapsed() << " s " <<endl;
+  ////theTimer.Stop();
+  ////G4cout.precision(6);
+  ////G4cout << endl ;
+  ////G4cout << "total time(SetCuts)=" << theTimer.GetUserElapsed() << " s " <<endl;
 
 }
 

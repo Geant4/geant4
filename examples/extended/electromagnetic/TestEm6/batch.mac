@@ -36,8 +36,8 @@
 #/gun/energy 6.56 MeV
 /gun/energy 10.0 MeV
 #
-#/run/beamOn 10
-/run/beamOn 10000
+/run/beamOn 10
+#/run/beamOn 10000
 #
 #
 

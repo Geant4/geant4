@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em5DetectorConstruction.cc,v 1.1 1999-10-12 12:23:35 maire Exp $
+// $Id: Em5DetectorConstruction.cc,v 1.2 1999-11-12 17:00:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -128,6 +128,10 @@ G4Material* Au = new G4Material(name="Gold"   , z=79., a, density);
 density = 11.35*g/cm3;
 a = 207.19*g/mole;
 G4Material* Pb = new G4Material(name="Lead"     , z=82., a, density);
+
+density = 5.858*mg/cm3;
+a = 131.29*g/mole;
+G4Material* Xe = new G4Material(name="XenonGas" , z=54., a, density);
 
 //
 // define a material from elements.   case 1: chemical molecule

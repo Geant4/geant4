@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em5PhysicsList.cc,v 1.1 1999-10-12 12:24:39 maire Exp $
+// $Id: Em5PhysicsList.cc,v 1.2 1999-11-12 17:00:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -23,7 +23,7 @@
 #include "G4ParticleTable.hh"
 #include "G4Material.hh"
 #include "G4EnergyLossTables.hh"
-#include "G4Timer.hh"
+////#include "G4Timer.hh"
 #include "G4ios.hh"
 #include <iomanip.h>                
 
@@ -233,8 +233,8 @@ void Em5PhysicsList::ConstructGeneral()
 
 void Em5PhysicsList::SetCuts()
 {
-  G4Timer theTimer ;
-  theTimer.Start() ;
+  ////G4Timer theTimer ;
+  ////theTimer.Start() ;
   
   // reactualise cutValues
   if (currentDefaultCut != defaultCutValue)
@@ -268,10 +268,10 @@ void Em5PhysicsList::SetCuts()
               
   if (verboseLevel>0) DumpCutValuesTable();
 
-  theTimer.Stop();
-  G4cout.precision(6);
-  G4cout << endl ;
-  G4cout << "total time(SetCuts)=" << theTimer.GetUserElapsed() << " s " <<endl;
+  ////theTimer.Stop();
+  ////G4cout.precision(6);
+  ////G4cout << endl ;
+  ////G4cout << "total time(SetCuts)=" << theTimer.GetUserElapsed() << " s " <<endl;
 
 }
 
