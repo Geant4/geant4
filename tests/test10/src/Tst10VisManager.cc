@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst10VisManager.cc,v 1.3 1999-12-15 14:54:43 gunter Exp $
+// $Id: Tst10VisManager.cc,v 1.4 2001-05-24 11:19:41 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,6 +16,10 @@
 #include "Tst10VisManager.hh"
 
 // Supported drivers...
+
+#ifdef G4VIS_USE_ASCIITREE
+#include "G4ASCIITree.hh"
+#endif
 
 #ifdef G4VIS_USE_DAWN
 #include "G4FukuiRenderer.hh"
@@ -53,6 +57,10 @@
 #include "G4OpenInventorWin32.hh"
 #endif
 
+#ifdef G4VIS_USE_RAYTRACER
+#include "G4RayTracer.hh"
+#endif
+
 #ifdef G4VIS_USE_VRML
 #include "G4VRML1.hh"
 #include "G4VRML2.hh"
@@ -68,6 +76,10 @@ Tst10VisManager::Tst10VisManager () {}
 
 
 void Tst10VisManager::RegisterGraphicsSystems () {
+
+#ifdef G4VIS_USE_ASCIITREE
+  RegisterGraphicsSystem (new G4ASCIITree);
+#endif
 
 #ifdef G4VIS_USE_DAWN
   RegisterGraphicsSystem (new G4FukuiRenderer);
@@ -103,6 +115,10 @@ void Tst10VisManager::RegisterGraphicsSystems () {
 
 #ifdef G4VIS_USE_OIWIN32
   RegisterGraphicsSystem (new G4OpenInventorWin32);
+#endif
+
+#ifdef G4VIS_USE_RAYTRACER
+  RegisterGraphicsSystem (new G4RayTracer);
 #endif
 
 #ifdef G4VIS_USE_VRML

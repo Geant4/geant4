@@ -35,6 +35,10 @@
 
 // Supported drivers...
 
+#ifdef G4VIS_USE_ASCIITREE
+#include "G4ASCIITree.hh"
+#endif
+
 #ifdef G4VIS_USE_DAWN
 #include "G4FukuiRenderer.hh"
 #endif
@@ -71,8 +75,8 @@
 #include "G4OpenInventorWin32.hh"
 #endif
 
-#ifdef G4VIS_USE_RAYX
-#include "G4RayX.hh"
+#ifdef G4VIS_USE_RAYTRACER
+#include "G4RayTracer.hh"
 #endif
 
 #ifdef G4VIS_USE_VRML
@@ -92,6 +96,10 @@ XrayTelVisManager::XrayTelVisManager () {}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void XrayTelVisManager::RegisterGraphicsSystems () {
+
+#ifdef G4VIS_USE_ASCIITREE
+  RegisterGraphicsSystem (new G4ASCIITree);
+#endif
 
 #ifdef G4VIS_USE_DAWN
   RegisterGraphicsSystem (new G4FukuiRenderer);
@@ -129,8 +137,8 @@ void XrayTelVisManager::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4OpenInventorWin32);
 #endif
 
-#ifdef G4VIS_USE_RAYX
-  RegisterGraphicsSystem (new G4RayX);
+#ifdef G4VIS_USE_RAYTRACER
+  RegisterGraphicsSystem (new G4RayTracer);
 #endif
 
 #ifdef G4VIS_USE_VRML

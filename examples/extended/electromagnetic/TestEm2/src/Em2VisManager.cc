@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em2VisManager.cc,v 1.2 1999-12-15 14:49:01 gunter Exp $
+// $Id: Em2VisManager.cc,v 1.3 2001-05-24 11:20:03 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,6 +19,10 @@
 #include "Em2VisManager.hh"
 
 // Supported drivers...
+
+#ifdef G4VIS_USE_ASCIITREE
+#include "G4ASCIITree.hh"
+#endif
 
 #ifdef G4VIS_USE_DAWN
 #include "G4FukuiRenderer.hh"
@@ -56,8 +60,8 @@
 #include "G4OpenInventorWin32.hh"
 #endif
 
-#ifdef G4VIS_USE_RAYX
-#include "G4RayX.hh"
+#ifdef G4VIS_USE_RAYTRACER
+#include "G4RayTracer.hh"
 #endif
 
 #ifdef G4VIS_USE_VRML
@@ -77,6 +81,10 @@ Em2VisManager::Em2VisManager () {}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Em2VisManager::RegisterGraphicsSystems () {
+
+#ifdef G4VIS_USE_ASCIITREE
+  RegisterGraphicsSystem (new G4ASCIITree);
+#endif
 
 #ifdef G4VIS_USE_DAWN
   RegisterGraphicsSystem (new G4FukuiRenderer);
@@ -114,8 +122,8 @@ void Em2VisManager::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4OpenInventorWin32);
 #endif
 
-#ifdef G4VIS_USE_RAYX
-  RegisterGraphicsSystem (new G4RayX);
+#ifdef G4VIS_USE_RAYTRACER
+  RegisterGraphicsSystem (new G4RayTracer);
 #endif
 
 #ifdef G4VIS_USE_VRML

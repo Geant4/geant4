@@ -6,7 +6,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: GammaRayTelVisManager.cc,v 1.2 2000-11-15 20:27:42 flongo Exp $
+// $Id: GammaRayTelVisManager.cc,v 1.3 2001-05-24 11:19:53 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -25,6 +25,10 @@
 #include "GammaRayTelVisManager.hh"
 
 // Supported drivers...
+
+#ifdef G4VIS_USE_ASCIITREE
+#include "G4ASCIITree.hh"
+#endif
 
 #ifdef G4VIS_USE_DAWN
 #include "G4FukuiRenderer.hh"
@@ -62,6 +66,10 @@
 #include "G4OpenInventorWin32.hh"
 #endif
 
+#ifdef G4VIS_USE_RAYTRACER
+#include "G4RayTracer.hh"
+#endif
+
 #ifdef G4VIS_USE_VRML
 #include "G4VRML1.hh"
 #include "G4VRML2.hh"
@@ -79,6 +87,10 @@ GammaRayTelVisManager::GammaRayTelVisManager () {}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void GammaRayTelVisManager::RegisterGraphicsSystems () {
+
+#ifdef G4VIS_USE_ASCIITREE
+  RegisterGraphicsSystem (new G4ASCIITree);
+#endif
 
 #ifdef G4VIS_USE_DAWN
   RegisterGraphicsSystem (new G4FukuiRenderer);
@@ -114,6 +126,10 @@ void GammaRayTelVisManager::RegisterGraphicsSystems () {
 
 #ifdef G4VIS_USE_OIWIN32
   RegisterGraphicsSystem (new G4OpenInventorWin32);
+#endif
+
+#ifdef G4VIS_USE_RAYTRACER
+  RegisterGraphicsSystem (new G4RayTracer);
 #endif
 
 #ifdef G4VIS_USE_VRML

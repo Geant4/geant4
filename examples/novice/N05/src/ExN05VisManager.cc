@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05VisManager.cc,v 1.1 2000-06-29 07:42:05 gcosmo Exp $
+// $Id: ExN05VisManager.cc,v 1.2 2001-05-24 11:20:19 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -17,6 +17,10 @@
 #include "ExN05VisManager.hh"
 
 // Supported drivers...
+
+#ifdef G4VIS_USE_ASCIITREE
+  RegisterGraphicsSystem (new G4ASCIITree);
+#endif
 
 #ifdef G4VIS_USE_DAWN
 #include "G4FukuiRenderer.hh"
@@ -54,6 +58,10 @@
 #include "G4OpenInventorWin32.hh"
 #endif
 
+#ifdef G4VIS_USE_RAYTRACER
+#include "G4RayTracer.hh"
+#endif
+
 #ifdef G4VIS_USE_VRML
 #include "G4VRML1.hh"
 #include "G4VRML2.hh"
@@ -64,10 +72,6 @@
 #include "G4VRML2File.hh"
 #endif
 
-#ifdef G4VIS_USE_RAYTRACER
-#include "G4RayTracer.hh"
-#endif
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 ExN05VisManager::ExN05VisManager () {}
@@ -75,6 +79,10 @@ ExN05VisManager::ExN05VisManager () {}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void ExN05VisManager::RegisterGraphicsSystems () {
+
+#ifdef G4VIS_USE_ASCIITREE
+  RegisterGraphicsSystem (new G4ASCIITree);
+#endif
 
 #ifdef G4VIS_USE_DAWN
   RegisterGraphicsSystem (new G4FukuiRenderer);
@@ -112,6 +120,10 @@ void ExN05VisManager::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4OpenInventorWin32);
 #endif
 
+#ifdef G4VIS_USE_RAYTRACER
+  RegisterGraphicsSystem (new G4RayTracer);
+#endif
+
 #ifdef G4VIS_USE_VRML
   RegisterGraphicsSystem (new G4VRML1);
   RegisterGraphicsSystem (new G4VRML2);
@@ -120,10 +132,6 @@ void ExN05VisManager::RegisterGraphicsSystems () {
 #ifdef G4VIS_USE_VRMLFILE
   RegisterGraphicsSystem (new G4VRML1File);
   RegisterGraphicsSystem (new G4VRML2File);
-#endif
-
-#ifdef G4VIS_USE_RAYTRACER
-  RegisterGraphicsSystem (new G4RayTracer);
 #endif
 
   if (fVerbose > 0) {
