@@ -1,4 +1,4 @@
-/* $Id: liblist.c,v 1.2 1999-03-02 15:22:59 fbehner Exp $ */
+/* $Id: liblist.c,v 1.3 1999-03-02 16:02:08 fbehner Exp $ */
 /*
 Given libname.map file and a list of .d dependency files liblist produces:
   a) with no options, a library list ordered according to the libname.map,
@@ -20,6 +20,7 @@ Frank Behner, John Allison  13th February 1999.
 #include <dirent.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <errno.h>
 
 #define BUFSIZE 1000000
 #define TRIGSIZE 1000
@@ -33,10 +34,10 @@ char** parsedir(char *directory,int *argc)
   DIR *actualdir;
   FILE *actualfile;
   struct dirent *entry; 
-  char buffer[256];
+  char *buffer=0;
   struct stat status;
-  char **targv,**ptr,**phelp;
-  int len,targc;
+  char **targv=0,**ptr,**phelp;
+  int len,targc,s;
 
   /*Open the actual directory*/
   actualdir=opendir(directory);
@@ -44,14 +45,24 @@ char** parsedir(char *directory,int *argc)
   /*Loop over all entries */
   for(entry=readdir(actualdir);entry!=NULL;entry=readdir(actualdir))
     {
+      /* Throw away . and .. */
+      if(strcmp(entry->d_name,".")==0 ||
+	 strcmp(entry->d_name,"..")==0) continue;
       /* Obtain the status information of that entry */
-      if(stat(entry->d_name,&status)==0)
+      if(buffer) free(buffer);
+      buffer=(char*) malloc((strlen(directory)+
+			     strlen(entry->d_name)+2)*sizeof(char));
+      strcpy(buffer,directory);
+      strcat(buffer,"/");
+      strcat(buffer,entry->d_name);
+      s=stat(buffer,&status);
+      if(s==0)
 	{
 	  if(S_ISDIR(status.st_mode))
 	    {
 	      /* a directory, so we are going recursive*/
 	      targc=0;
-	      ptr=parsedir(entry->d_name,&targc);
+	      ptr=parsedir(buffer,&targc);
 	      if(targc)
 		{
 		  phelp=targv;
@@ -72,14 +83,17 @@ char** parsedir(char *directory,int *argc)
 		  phelp=targv;
 		  targv=(char**) malloc((*argc+1)*sizeof(char*));
 		  memcpy(targv,phelp,*argc*sizeof(char*));
-		  targv[*argc]=strdup(entry->d_name);
+		  targv[*argc]=strdup(buffer);
 		  (*argc)++;
 		  free(phelp);
 		}
 	    }
 	}
+      else
+	perror("No status");
     }
 
+  if(buffer) free(buffer);
   closedir(actualdir);
 
   return targv;
