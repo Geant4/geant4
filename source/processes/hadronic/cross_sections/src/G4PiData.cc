@@ -19,6 +19,15 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+// $Id: G4PiData.cc,v 1.5 2002-12-13 09:12:23 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// --------------------------------------------------------------------
+// by J.P Wellisch, Sun Sep 15 2002.
+
+#include "G4PiData.hh"
+
 G4PiData::    
 G4PiData(const G4double * aT, const G4double * aIn, const G4double * anE, G4int nP)
 {
