@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEnergyLoss.hh,v 1.15 2003-01-17 18:55:55 vnivanch Exp $
+// $Id: G4VEnergyLoss.hh,v 1.16 2003-01-22 14:04:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -59,6 +59,7 @@
 #include "G4VContinuousDiscreteProcess.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsLinearVector.hh"
+#include "G4MaterialCutsCouple.hh"
 
 class G4EnergyLossMessenger;
 
@@ -94,7 +95,7 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
     // code for the energy loss fluctuation
 
     G4double GetLossWithFluct(const G4DynamicParticle* aParticle,
-                              const G4Material* aMaterial,
+                              const G4MaterialCutsCouple* couple,
                               G4double ChargeSquare,
                               G4double	 MeanLoss,
                               G4double step);

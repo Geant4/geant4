@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.cc,v 1.36 2003-01-17 18:55:43 vnivanch Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.37 2003-01-22 14:03:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -695,7 +695,7 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
  if ((EnlossFlucFlag) && (finalT > 0.) && (finalT < E)&&(E > LowerBoundEloss))
   {
    finalT = E -
-        EnergyLossFluctuation(aParticle,aMaterial,ChargeSquare,MeanLoss,Step);
+        EnergyLossFluctuation(aParticle,couple,ChargeSquare,MeanLoss,Step);
    if (finalT < 0.) finalT = 0.;
   }
 
@@ -718,12 +718,12 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
 
 G4double G4VhEnergyLoss::EnergyLossFluctuation(
                                          const G4DynamicParticle* aParticle,
-                                         const G4Material* aMaterial,
+                                         const G4MaterialCutsCouple* couple,
                                                G4double ChargeSquare,
                                                G4double MeanLoss,
                                                G4double Step)
 {
-  return GetLossWithFluct(aParticle,aMaterial,ChargeSquare,MeanLoss,Step);
+  return GetLossWithFluct(aParticle,couple,ChargeSquare,MeanLoss,Step);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.hh,v 1.16 2003-01-17 18:55:42 vnivanch Exp $
+// $Id: G4VhEnergyLoss.hh,v 1.17 2003-01-22 14:03:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------- G4VhEnergyLoss physics process --------------------------------
@@ -103,7 +103,7 @@ class G4VhEnergyLoss : public G4VEnergyLoss
                             const G4MaterialCutsCouple *couple);
 
     G4double EnergyLossFluctuation(const G4DynamicParticle *aParticle,
-                                   const G4Material *aMaterial,
+                                   const G4MaterialCutsCouple *couple,
                                          G4double ChargeSquare,
                                          G4double MeanLoss,
                                          G4double Step);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMuEnergyLoss.cc,v 1.24 2003-01-20 18:16:26 vnivanch Exp $
+// $Id: G4VMuEnergyLoss.cc,v 1.25 2003-01-22 14:03:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -364,7 +364,7 @@ void G4VMuEnergyLoss::BuildDEDXTable(
                                 theCoupleTable->GetMaterialCutsCouple(mat));
 
         if(MinDeltaEnergy[mat]<Tlowerlimit) MinDeltaEnergy[mat] = Tlowerlimit ;
-       
+
         G4double ecut = (*(theCoupleTable->GetEnergyCutsVector(1)))[mat];
         if(MinDeltaEnergy[mat]>ecut) MinDeltaEnergy[mat] = ecut;
 
@@ -729,7 +729,7 @@ G4VParticleChange* G4VMuEnergyLoss::AlongStepDoIt(
   if ((EnlossFlucFlag) && (finalT > 0.) && (finalT < E)&&(E > LowerBoundEloss))
 
   {
-    finalT = E-GetLossWithFluct(aParticle,aMaterial,1.,MeanLoss,Step);
+    finalT = E-GetLossWithFluct(aParticle,couple,1.,MeanLoss,Step);
     if (finalT < 0.) finalT = 0. ;
   }
 

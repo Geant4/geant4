@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScatteringSTD.cc,v 1.7 2003-01-20 18:16:58 vnivanch Exp $
+// $Id: G4MultipleScatteringSTD.cc,v 1.8 2003-01-22 14:04:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -84,7 +84,7 @@ G4MultipleScatteringSTD::G4MultipleScatteringSTD(const G4String& processName)
        facrange(0.199),tlimit(1.e10*mm),tlimitmin(1.e-7*mm),
        cf(1.001),
        stepno(0),stepnolastmsc(-1000000),nsmallstep(5),
-       laststep(0.), 
+       laststep(0.),
        valueGPILSelectionMSC(NotCandidateForSelection),
        pcz(0.17),zmean(0.),
        range(1.0),T1(1.0),lambda1(-1.),cth1(1.),z1(1.e10),dtrl(0.15),
@@ -93,7 +93,7 @@ G4MultipleScatteringSTD::G4MultipleScatteringSTD(const G4String& processName)
        FactPar(0.40),
        facxsi(1.)
 { }
-  
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4MultipleScatteringSTD::~G4MultipleScatteringSTD()
@@ -112,7 +112,7 @@ void G4MultipleScatteringSTD::BuildPhysicsTable(
 {
   // set values of some data members
     if((aParticleType.GetParticleName() == "e-") ||
-       (aParticleType.GetParticleName() == "e+"))  
+       (aParticleType.GetParticleName() == "e+"))
     {
        // parameters for e+/e-
        alfa1 = 1.45 ;
@@ -129,7 +129,7 @@ void G4MultipleScatteringSTD::BuildPhysicsTable(
        alfa3 = 0.42 ;
        xsi = facxsi*2.70 ;
        c0 = 1.40 ;
-    }   
+    }
 
   // tables are built for MATERIALS
     const G4double sigmafactor = twopi*classic_electr_radius*
@@ -165,7 +165,7 @@ void G4MultipleScatteringSTD::BuildPhysicsTable(
                                      material->GetVecNbOfAtomsPerVolume();
       const G4int NumberOfElements = material->GetNumberOfElements();
       density = material->GetDensity();
- 
+
       // loop for kinetic energy values
       for (G4int i=0; i<TotBin; i++)
       {
@@ -368,7 +368,7 @@ G4double G4MultipleScatteringSTD::ComputeTransportCrossSection(
         corrnuclsize = exp(-FactPar*ParticleMass/KineticEnergy)*
                       (corrnuclsize-1.)+1.;
       }
- 
+
   // interpolate in AtomicNumber and beta2
   // get bin number in Z
   G4int iZ = 14;
@@ -453,7 +453,6 @@ G4double G4MultipleScatteringSTD::GetContinuousStepLimit(
   tPathLength = currentMinimumStep;
 
   const G4MaterialCutsCouple* couple = track.GetMaterialCutsCouple();
-  coupleIndex = couple->GetIndex();
   const G4Material* aMaterial = track.GetMaterial();
   materialIndex = aMaterial->GetIndex();
 

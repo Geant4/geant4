@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeEnergyLoss.cc,v 1.26 2003-01-17 18:55:43 vnivanch Exp $
+// $Id: G4VeEnergyLoss.cc,v 1.27 2003-01-22 14:03:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -116,7 +116,7 @@ G4VeEnergyLoss::~G4VeEnergyLoss()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-void  G4VeEnergyLoss::SetNbOfProcesses(G4int nb) 
+void  G4VeEnergyLoss::SetNbOfProcesses(G4int nb)
       {NbOfProcesses=nb;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -697,7 +697,7 @@ G4VParticleChange* G4VeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   //now the loss with fluctuation
   if ((EnlossFlucFlag) && (finalT > 0.) && (finalT < E)&&(E > LowerBoundEloss))
   {
-    finalT = E-GetLossWithFluct(aParticle,aMaterial,1.,MeanLoss,Step);
+    finalT = E-GetLossWithFluct(aParticle,couple,1.,MeanLoss,Step);
     if (finalT < 0.) finalT = 0. ;
   }
 

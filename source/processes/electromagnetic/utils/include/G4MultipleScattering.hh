@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.12 2003-01-17 18:55:54 vnivanch Exp $
+// $Id: G4MultipleScattering.hh,v 1.13 2003-01-22 14:04:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------- G4MultipleScattering physics process --------------------------
@@ -196,7 +196,6 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
    G4int    TotBin;
 
    G4int       materialIndex;
-   G4int       coupleIndex;
 
    G4double tLast;
    G4double zLast;

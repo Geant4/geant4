@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEnergyLoss.cc,v 1.36 2003-01-17 18:55:55 vnivanch Exp $
+// $Id: G4VEnergyLoss.cc,v 1.37 2003-01-22 14:04:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -900,27 +900,27 @@ G4PhysicsTable* G4VEnergyLoss::BuildRangeCoeffCTable(G4PhysicsTable* theRangeTab
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
-                                         const G4Material* aMaterial,
+                                         const G4MaterialCutsCouple* couple,
                                                G4double ChargeSquare,
                                                G4double    MeanLoss,
                                                G4double step )
 //  calculate actual loss from the mean loss
 //  The model used to get the fluctuation is essentially the same as in Glandz in Geant3.
 {
-   const G4double minLoss = 1.*eV ;
-   const G4double probLim = 0.01 ;
-   const G4double sumaLim = -log(probLim) ;
-   const G4double alim=10.;
-   const G4double kappa = 10. ;
-   const G4double factor = twopi_mc2_rcl2 ;
-
+  const G4double minLoss = 1.*eV ;
+  const G4double probLim = 0.01 ;
+  const G4double sumaLim = -log(probLim) ;
+  const G4double alim=10.;
+  const G4double kappa = 10. ;
+  const G4double factor = twopi_mc2_rcl2 ;
+  const G4Material* aMaterial = couple->GetMaterial();
 
   // check if the material has changed ( cache mechanism)
 
   if (aMaterial != lastMaterial)
     {
       lastMaterial = aMaterial;
-      imat         = aMaterial->GetIndex(); 
+      imat         = couple->GetIndex();
       f1Fluct      = aMaterial->GetIonisation()->GetF1fluct();
       f2Fluct      = aMaterial->GetIonisation()->GetF2fluct();
       e1Fluct      = aMaterial->GetIonisation()->GetEnergy1fluct();
@@ -947,7 +947,8 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   G4double Tkin   = aParticle->GetKineticEnergy();
   ParticleMass = aParticle->GetMass() ;
 
-  threshold =((G4Electron::Electron())->GetEnergyCuts())[imat];
+  threshold = (*((G4ProductionCutsTable::GetProductionCutsTable())
+                ->GetEnergyCutsVector(1)))[imat];
   G4double rmass = electron_mass_c2/ParticleMass;
   G4double tau   = Tkin/ParticleMass, tau1 = tau+1., tau2 = tau*(tau+2.);
   G4double Tm    = 2.*electron_mass_c2*tau2/(1.+2.*tau1*rmass+rmass*rmass);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering.cc,v 1.31 2003-01-17 18:55:55 vnivanch Exp $
+// $Id: G4MultipleScattering.cc,v 1.32 2003-01-22 14:04:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -452,7 +452,6 @@ G4double G4MultipleScattering::GetContinuousStepLimit(
   const G4Material* aMaterial = track.GetMaterial();
   materialIndex = aMaterial->GetIndex();
   const G4MaterialCutsCouple* couple = track.GetMaterialCutsCouple();
-  coupleIndex = couple->GetIndex();
 
   const G4DynamicParticle* aParticle = track.GetDynamicParticle();
   KineticEnergy = aParticle->GetKineticEnergy();
