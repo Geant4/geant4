@@ -87,8 +87,8 @@ G4OpenInventorViewer::G4OpenInventorViewer(
   fSoCamera->focalDistance.setValue(10);
   fSoSelection->addChild(fSoCamera);
 
-  fSoCameraSensor = new SoNodeSensor(CameraSensorCB,this);
-  fSoCameraSensor->attach(fSoCamera);
+  //fSoCameraSensor = new SoNodeSensor(CameraSensorCB,this);
+  //fSoCameraSensor->attach(fSoCamera);
 
   fSoSelection->addChild(fG4OpenInventorSceneHandler.fRoot);
 
@@ -99,8 +99,8 @@ G4OpenInventorViewer::G4OpenInventorViewer(
 }
 
 G4OpenInventorViewer::~G4OpenInventorViewer () {
-  fSoCameraSensor->detach();
-  delete fSoCameraSensor;
+  //fSoCameraSensor->detach();
+  //delete fSoCameraSensor;
   fSoSelection->unref();
 }
 
@@ -223,10 +223,10 @@ void G4OpenInventorViewer::ShowView () {
   fInteractorManager -> SecondaryLoop ();
 }
 
+/*
 void G4OpenInventorViewer::CameraSensorCB(void* aThis,SoSensor*) { 
   G4OpenInventorViewer* This = (G4OpenInventorViewer*)aThis;
 
-/*
   SbVec3f direction;
   This->fSoCamera->orientation.getValue().multVec(SbVec3f(0,0,-1),direction);
   This->fVP.SetViewpointDirection
@@ -236,8 +236,8 @@ void G4OpenInventorViewer::CameraSensorCB(void* aThis,SoSensor*) {
   SbVec3f target = pos + direction * This->fSoCamera->focalDistance.getValue();
 
   This->fVP.SetCurrentTargetPoint(G4Point3D(target[0],target[1],target[2]));
-*/
 }
+*/
 
 void G4OpenInventorViewer::SelectionCB(
  void* aThis
