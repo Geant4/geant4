@@ -5,16 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: PhysicalConstants.h,v 1.3 1999-11-17 18:43:28 maire Exp $
+// $Id: PhysicalConstants.h,v 1.4 1999-11-19 09:19:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ----------------------------------------------------------------------
 //
-// class description
+// Class description:
 //
 // HEP coherent Physical Constants
 //
-// This file has been provided by Geant4 (simulation toolkit for HEP).
+// This file has been provided to CLHEP by Geant4 (simulation toolkit for HEP).
 //
 // The basic units are :
 //  		millimeter  

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnitsTable.hh,v 1.5 1999-11-17 18:43:28 maire Exp $
+// $Id: G4UnitsTable.hh,v 1.6 1999-11-19 09:19:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,7 +17,7 @@
 // 17-05-98: first version, M.Maire
 // 13-10-98: Units and symbols printed in fxed length
 
-// class description
+// Class description:
 //
 // This class maintains a table of Units.
 // A Unit has a name, a symbol, a value and belong to a category (i.e. its
@@ -96,7 +96,7 @@ typedef G4RWTPtrOrderedVector<G4UnitDefinition> G4UnitsContainer;
 
 class G4UnitsCategory
 {
-public:  //without description
+public:  // without description
 
     G4UnitsCategory(G4String name);
    ~G4UnitsCategory();
@@ -108,7 +108,7 @@ private:
     G4UnitsCategory(G4UnitsCategory&);
     G4UnitsCategory& operator=(const G4UnitsCategory&);
    
-public:  //without description
+public:  // without description
 
     G4String          GetName()      {return Name;};
     G4UnitsContainer& GetUnitsList() {return UnitsList;};
@@ -130,26 +130,26 @@ private:
 
 class G4BestUnit
 {
-public:  //with description
+public:  // with description
 
     G4BestUnit(G4double internalValue, G4String category);
-    //This constructor converts a physical quantity from its internalValue
-    //into the most appropriate unit of the same category.
-    //In practice it builds an object VU = (newValue, newUnit)
+    // This constructor converts a physical quantity from its internalValue
+    // into the most appropriate unit of the same category.
+    // In practice it builds an object VU = (newValue, newUnit)
     
    ~G4BestUnit();
    
-public:  //without description
+public:  // without description
 
     G4double  GetValue()           {return Value;};
     G4String  GetCategory()        {return Category;};
     size_t    GetIndexOfCategory() {return IndexOfCategory;};
     
-public:  //with description 
+public:  // with description 
    
     friend
     ostream&  operator<<(ostream&,G4BestUnit VU);
-    //default format to print the objet VU above
+    // Default format to print the objet VU above.
 
 private:
 
