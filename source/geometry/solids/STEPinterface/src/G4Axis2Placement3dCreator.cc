@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Axis2Placement3dCreator.cc,v 1.5 2001-07-11 10:00:08 gunter Exp $
+// $Id: G4Axis2Placement3dCreator.cc,v 1.6 2001-09-21 16:11:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -70,7 +70,7 @@ void G4Axis2Placement3dCreator::CreateG4Geometry(STEPentity& Ent)
   // Get axis
   Attr = Ent.NextAttribute();
   TmpEnt = *Attr->ptr.c;
-  tmp =G4GeometryTable::CreateObject(*TmpEnt);
+  tmp = G4GeometryTable::CreateObject(*TmpEnt);
   if (tmp)
     axis = *(G4Vector3D*)tmp;
   else
@@ -81,7 +81,13 @@ void G4Axis2Placement3dCreator::CreateG4Geometry(STEPentity& Ent)
   // Get direction
   Attr = Ent.NextAttribute();
   TmpEnt = *Attr->ptr.c;
-  tmp =G4GeometryTable::CreateObject(*TmpEnt);
+  if (Attr->is_null())  // No direction specified!  Set it to (0,0,0) and warn.
+  {
+    tmp = 0;
+    dir = G4Vector3D(0.,0.,0.);
+  }
+  else
+    tmp = G4GeometryTable::CreateObject(*TmpEnt);
   if (tmp)
     dir = *(G4Vector3D*)tmp;  
   else
