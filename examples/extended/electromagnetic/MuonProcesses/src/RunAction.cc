@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.6 2004-11-25 15:21:45 stesting Exp $
+// $Id: RunAction.cc,v 1.7 2004-12-03 09:38:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -217,11 +217,11 @@ G4double RunAction::ComputeTheory(G4String process, G4int NbOfMu)
   // 
   G4double lgeps, etransf, sigmaE, dsigma, NbProcess;
   G4double sigmaTot = 0.;
-  const G4double ln10 = log(10.);
+  const G4double ln10 = std::log(10.);
     
   for (G4int ibin=0; ibin<nbOfBins; ibin++) {
     lgeps = binMin + (ibin+0.5)*binWidth;
-    etransf = ekin*pow(10.,lgeps);
+    etransf = ekin*std::pow(10.,lgeps);
     sigmaE = crossSections.CR_Macroscopic(process,material,ekin,etransf);
     dsigma = sigmaE*etransf*binWidth*ln10;
     if (etransf > cut) sigmaTot += dsigma;    

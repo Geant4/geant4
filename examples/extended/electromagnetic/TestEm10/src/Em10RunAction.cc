@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10RunAction.cc,v 1.5 2004-12-03 09:12:42 vnivanch Exp $
+// $Id: Em10RunAction.cc,v 1.6 2004-12-03 09:33:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -295,7 +295,7 @@ void Em10RunAction::BeginOfRunAction(const G4Run* aRun)
 
 /////////////////////////////////////////////////////////////////////////////
 
-void Em10RunAction::EndOfRunAction(const G4Run* aRun)
+void Em10RunAction::EndOfRunAction(const G4Run*)
 {
   G4double sAbs,sigAbs,sigstep,sigcharged,signeutral;
 
@@ -787,7 +787,7 @@ void Em10RunAction::AddTrRef(G4double tr,G4double ref)
 
 /////////////////////////////////////////////////////////////////////////////
 
-void Em10RunAction::FillNbOfSteps(G4double ns)
+void Em10RunAction::FillNbOfSteps(G4double)// ns)
 {
   /*
   const G4double eps = 1.e-10 ;
@@ -816,7 +816,7 @@ void Em10RunAction::FillNbOfSteps(G4double ns)
 
 //////////////////////////////////////////////////////////////////////////////
 
-void Em10RunAction::FillEn(G4double En)
+void Em10RunAction::FillEn(G4double) // En)
 {
   /*
   G4double bin ;
@@ -841,7 +841,7 @@ void Em10RunAction::FillEn(G4double En)
 
 ////////////////////////////////////////////////////////////////////////////
 
-void Em10RunAction::FillTt(G4double En)
+void Em10RunAction::FillTt(G4double) // En)
 {
   /*
   G4double bin ;
@@ -870,7 +870,7 @@ void Em10RunAction::FillTt(G4double En)
 
 //////////////////////////////////////////////////////////////////////////////
 
-void Em10RunAction::FillTb(G4double En)
+void Em10RunAction::FillTb(G4double) // En)
 {
   /*
   G4double bin ;
@@ -899,7 +899,7 @@ void Em10RunAction::FillTb(G4double En)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void Em10RunAction::FillTsec(G4double En)
+void Em10RunAction::FillTsec(G4double) // En)
 {
   /*
   G4double bin ;
@@ -926,7 +926,7 @@ void Em10RunAction::FillTsec(G4double En)
 
 /////////////////////////////////////////////////////////////////////////////
 
-void Em10RunAction::FillGammaSpectrum(G4double En)
+void Em10RunAction::FillGammaSpectrum(G4double) // En)
 {
   /*
   G4double bin ;
@@ -953,7 +953,7 @@ void Em10RunAction::FillGammaSpectrum(G4double En)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void Em10RunAction::FillTh(G4double Th)
+void Em10RunAction::FillTh(G4double) // Th)
 {
   /*
   static const G4double cn=pi/(64800.*dTh) ;
@@ -996,7 +996,7 @@ void Em10RunAction::FillTh(G4double Th)
 
 //////////////////////////////////////////////////////////////////////////
 
-void Em10RunAction::FillThBack(G4double Th)
+void Em10RunAction::FillThBack(G4double) // Th)
 {
   /*
   static const G4double cn=pi/(64800.*dThback) ;
@@ -1036,7 +1036,7 @@ void Em10RunAction::FillThBack(G4double Th)
 
 //////////////////////////////////////////////////////////////////////////
 
-void Em10RunAction::FillR(G4double R )
+void Em10RunAction::FillR(G4double) // R )
 {
   /*
   G4double bin ;
@@ -1065,7 +1065,7 @@ void Em10RunAction::FillR(G4double R )
 
 /////////////////////////////////////////////////////////////////////////////
 
-void Em10RunAction::Fillvertexz(G4double z )
+void Em10RunAction::Fillvertexz(G4double) // z )
 {
   /*
   G4double bin ;

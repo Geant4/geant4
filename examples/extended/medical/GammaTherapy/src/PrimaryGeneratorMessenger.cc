@@ -164,7 +164,7 @@ void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
     if(theHisto->GetMaxEnergy() == 0.0) theHisto->SetMaxEnergy(e);
   }
   if(command == maxThetaCmd)
-    {theGen->SetBeamMinCosTheta(cos(maxThetaCmd->GetNewDoubleValue(newValue)));}
+    {theGen->SetBeamMinCosTheta(std::cos(maxThetaCmd->GetNewDoubleValue(newValue)));}
   if(command == sThetaCmd)
     {theGen->SetSigmaTheta(sThetaCmd->GetNewDoubleValue(newValue));}
   if(command == randCmd)

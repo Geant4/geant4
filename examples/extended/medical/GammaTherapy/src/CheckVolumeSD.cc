@@ -74,7 +74,7 @@ G4bool CheckVolumeSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     G4ThreeVector p = track->GetPosition();
     G4double x = p.x();
     G4double y = p.y();
-    G4double r = sqrt(x*x + y*y);
+    G4double r = std::sqrt(x*x + y*y);
     theHisto->AddGamma(e,r);
   }
   if(1 < theHisto->GetVerbose()) {

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.3 2004-09-07 17:02:19 vnivanch Exp $
+// $Id: SteppingAction.cc,v 1.4 2004-12-03 09:38:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,7 +63,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4double E2 = endPoint->GetKineticEnergy();
   G4double etrans = E1 - E2;
   G4double lgepsE = 0.;
-  if (etrans > 0.) lgepsE = log10(etrans/E1);
+  if (etrans > 0.) lgepsE = std::log10(etrans/E1);
 
   G4int id = 0;
   if (procName == "muIoni")     id = 1; 

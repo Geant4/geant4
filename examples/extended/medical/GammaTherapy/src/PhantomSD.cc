@@ -82,15 +82,15 @@ G4bool PhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   G4double x1 = p1.x();
   G4double y1 = p1.y();
   G4double z1 = p1.z() - shiftZ;
-  G4double r1 = sqrt(x1*x1 + y1*y1);
+  G4double r1 = std::sqrt(x1*x1 + y1*y1);
   G4double x2 = p2.x();
   G4double y2 = p2.y();
   G4double z2 = p2.z() - shiftZ;
-  G4double r2 = sqrt(x2*x2 + y2*y2);
+  G4double r2 = std::sqrt(x2*x2 + y2*y2);
   G4double x0 = 0.5*(x1 + x2);
   G4double y0 = 0.5*(y1 + y2);
   G4double z0 = 0.5*(z1 + z2);
-  G4double r0 = sqrt(x0*x0 + y0*y0);
+  G4double r0 = std::sqrt(x0*x0 + y0*y0);
 
   theHisto->AddStep(edep,r1,z1,r2,z2,r0,z0);
 

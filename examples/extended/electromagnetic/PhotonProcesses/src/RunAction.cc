@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.4 2004-09-29 10:38:05 maire Exp $
+// $Id: RunAction.cc,v 1.5 2004-12-03 09:36:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -124,7 +124,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //
   G4double MeanFreePath = sumTrack /totalCount;     
   G4double MeanTrack2   = sumTrack2/totalCount;     
-  G4double rms = sqrt(abs(MeanTrack2 - MeanFreePath*MeanFreePath));
+  G4double rms = std::sqrt(std::fabs(MeanTrack2 - MeanFreePath*MeanFreePath));
   G4double AttenuationCoef = 1./MeanFreePath;     
   G4double massicMFP = MeanFreePath*density;
   G4double massicAC  = 1./massicMFP;

@@ -114,16 +114,16 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // Beam particles are uniformly distributed over phi, cosTheta
   if(1.0 > minCosTheta) {
     uz = minCosTheta + (1.0 - minCosTheta)*G4UniformRand() ;
-    ux = sqrt(1.0 - uz*uz) ;
+    ux = std::sqrt(1.0 - uz*uz) ;
   } else if (sigmaTheta > 0.0) {
     ux = G4RandGauss::shoot(0.0,sigmaTheta);
-    uz = sqrt(1.0 - ux*ux);
+    uz = std::sqrt(1.0 - ux*ux);
   }
 
   G4double phi = twopi*G4UniformRand() ;
   uy = ux ;
-  ux *= cos(phi) ;
-  uy *= sin(phi) ;
+  ux *= std::cos(phi) ;
+  uy *= std::sin(phi) ;
   direction = G4ThreeVector(ux,uy,uz) ;
 
   direction = direction.unit();
