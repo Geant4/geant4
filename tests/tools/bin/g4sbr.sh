@@ -99,7 +99,7 @@ exit
 fi
 echo CREATE stt.${THISTAG} and RESET stt symbolic link.
 mkdir stt.${THISTAG}
-rm -f stt
+rm -rf stt
 ln -s stt.${THISTAG} stt
 echo 'REMOVE bin/* lib/* tmp/*'
 rm -r bin/* lib/* tmp/*

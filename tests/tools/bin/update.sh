@@ -1,5 +1,5 @@
 #! /bin/sh
-# $Id: update.sh,v 1.4 1999-07-28 10:37:21 stesting Exp $
+# $Id: update.sh,v 1.5 1999-07-28 16:13:53 stesting Exp $
 # Edit stt-prod.sdb or stt-dev.sdb and execute.
 # Usage: update.sh [-n] [-d]
 
@@ -22,8 +22,9 @@ dir=$G4WORKDIR/stt
 if [ -d $dir ] ; then
  echo "" > /dev/null
 else 
- mkdir $dir
- echo "$dir created."
+ echo "$dir does not exist."
+ echo "This is now an error.  Create a directory or a symbolic link"
+ echo "  to a directory by hand or in a calling script."
 fi
 #
 # Make $G4WORKDIR/stt/$G4SYSTEM directory :
