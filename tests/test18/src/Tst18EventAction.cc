@@ -1,9 +1,7 @@
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
-// MODULE:		SSAEventAction.cc
+// MODULE:		Tst18EventAction.cc
 //
-// Version:		0.b.4
-// Date:		16/08/99
 // Author:		F Lei
 // Organisation:	DERA UK
 // Customer:		ESA/ESTEC, NOORDWIJK
@@ -13,16 +11,6 @@
 //
 // CHANGE HISTORY
 // --------------
-//
-// 16 August 1999, F Lei, DERA UK
-// Adapted from a verson by Bill Lockman, SLAC, to whom all credits go:
-//
-// $Id: Tst18EventAction.cc,v 1.1 2000-05-23 06:30:19 stesting Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//#include <rw/tvordvec.h>
 #include "G4ios.hh"
 #include "Tst18EventActionMessenger.hh"
 #include "Tst18EventAction.hh"

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test18.cc,v 1.1 2000-05-23 06:30:16 stesting Exp $
+// $Id: test18.cc,v 1.2 2000-06-06 11:36:05 flei Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,7 +22,7 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-// #include "G4UIGAG.hh"
+#include "G4UIGAG.hh"
 #include "G4UIterminal.hh"
 #include "G4UIXm.hh" 
 
@@ -35,7 +35,7 @@
 #include "Randomize.hh"
 
 #include "g4std/vector"
-G4String filename;
+//G4String filename;
 G4bool drawEvent;
 G4std::vector<G4String> Particles;
 G4std::vector<G4double> Energies;
@@ -49,8 +49,8 @@ G4std::vector<G4double> Times;
 int main(int argc,char** argv)
 {
 
-  G4cout << " The results file name = "<<G4endl ;
-  G4cin >> filename;
+  //  G4cout << " The results file name = "<<G4endl ;
+  //G4cin >> filename;
 
   // Construct the default run manager
   G4RunManager* runManager = new G4RunManager;

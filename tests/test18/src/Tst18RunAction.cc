@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst18RunAction.cc,v 1.1 2000-05-23 06:30:19 stesting Exp $
+// $Id: Tst18RunAction.cc,v 1.2 2000-06-06 11:36:19 flei Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -13,6 +13,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+#include "Tst18RunActionMessenger.hh"
 #include "Tst18RunAction.hh"
 
 #include "G4Run.hh"
@@ -27,7 +28,7 @@
 
 //using namespace std;
 
-extern G4String filename;
+//extern G4String filename;
 
 extern G4std::vector<G4String> Particles;
 extern G4std::vector<G4double> Energies;
@@ -37,13 +38,17 @@ extern G4std::vector<G4double> Times;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Tst18RunAction::Tst18RunAction()
+  : fileName("rdmex2.log")
 {
+  runMessenger = new Tst18RunActionMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Tst18RunAction::~Tst18RunAction()
-{}
+{
+  delete runMessenger;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -74,7 +79,7 @@ void Tst18RunAction::EndOfRunAction(const G4Run* )
   
   if (G4VVisManager::GetConcreteInstance())
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/show/view");
-  ofstream outscat(filename, ios::app);
+  ofstream outscat(fileName, ios::app);
 
   for (G4int i=0; i<Particles.size();i++) {
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst18VisManager.cc,v 1.1 2000-05-23 06:30:19 stesting Exp $
+// $Id: Tst18VisManager.cc,v 1.2 2000-06-06 11:36:19 flei Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

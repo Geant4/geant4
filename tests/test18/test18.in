@@ -1,4 +1,3 @@
-tav01.log
 ################################################################################
 #                                                                              #
 # ESA-CERN GEANT4 RADIOACTIVE DECAY MODULE                                     #
@@ -20,56 +19,64 @@ tav01.log
 # NOTE THAT THE FIRST RECORD IN THIS MACROFILE IS THE OUTPUT LOG-FILE NAME.
 # NOW SET VERBOSE LEVELS FOR RUN, EVENT, TRACKING AND THE RDM PROCESS.
 #
+/run/filename test18.out
 /run/verbose 0
 /event/verbose 0
 /tracking/verbose 0
-grdm/verbose 0
+/grdm/verbose 0
 #
 #
 # FIRST ION IS NA-24 (GND-STATE) BY BETA-DECAY.  THE RANGE OF NUCLEI DOES NOT
 # NEED TO BE RESTRICTED SINCE MG-24 IS THE ONLY PRODUCT AND IS STABLE.
 # 
-grdm/ion 24 11 0
-run/beamOn
+/grdm/ion 24 11 0
+/run/beamOn
 #
 #
 # NE-24 BETA- DECAY.
 #
-grdm/nucleusLimits 24 24 10 10
-grdm/ion 24 10 0
-run/beamOn
+/grdm/nucleusLimits 24 24 10 10
+/grdm/ion 24 10 0
+/run/beamOn
 #
 #
 # F-9 BETA- DECAY.
 #
-grdm/nucleusLimits 24 24 9 9
-grdm/ion 24 9 0
-run/beamOn 
+/grdm/nucleusLimits 24 24 9 9
+/grdm/ion 24 9 0
+/run/beamOn 
 #
 #
 # AL-24 (GND-STATE) BETA+ DECAY.
 #
-grdm/nucleusLimits 24 24 13 13
-grdm/ion 24 13 0
-run/beamOn 
+/grdm/nucleusLimits 24 24 13 13
+/grdm/ion 24 13 0
+/run/beamOn 
 #
 #
 # NA-24 (472 KEV METASTABLE STATE) BETA+ DECAY AND IT.
 #
-grdm/nucleusLimits 24 24 11 11
-grdm/ion 24 11 472
-run/beamOn
+/grdm/nucleusLimits 24 24 11 11
+/grdm/ion 24 11 472
+/run/beamOn
 #
 #
 # CR-46 BETA+ DECAY.
 #
-grdm/nucleusLimits 46 46 24 24
-grdm/ion 46 24 0
-run/beamOn
+/grdm/nucleusLimits 46 46 24 24
+/grdm/ion 46 24 0
+/run/beamOn
 #
 #
 # PO-215 ALPHA DECAY.
 #
-grdm/nucleusLimits 215 215 84 84
-grdm/ion 215 84 0
-run/beamOn
+/grdm/nucleusLimits 215 215 84 84
+/grdm/ion 215 84 0
+/run/beamOn
+
+
+
+
+
+
+
