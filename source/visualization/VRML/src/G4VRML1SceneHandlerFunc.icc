@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML1SceneHandlerFunc.icc,v 1.2 1999-01-11 00:48:08 allison Exp $
+// $Id: G4VRML1SceneHandlerFunc.icc,v 1.3 1999-11-04 02:38:48 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML1SceneHandlerFunc.icc
@@ -24,32 +24,36 @@
 void G4VRML1SCENE::AddThis(const G4Trd& trd)
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddThis trd\n";
+	G4cerr << "***** AddThis trd" << endl ;
 #endif
+	VRMLBeginModeling () ;
 	ADDTHIS_WITH_NAME(trd)
 }
 
 void G4VRML1SCENE::AddThis(const G4Trap& trap)
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddThis trap\n";
+	G4cerr << "***** AddThis trap" << endl ;
 #endif
+	VRMLBeginModeling () ;
 	ADDTHIS_WITH_NAME(trap)
 }
 
 void G4VRML1SCENE::AddThis(const G4Para& para)
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddThis para\n";
+	G4cerr << "***** AddThis para" << endl ;
 #endif
+	VRMLBeginModeling () ;
 	ADDTHIS_WITH_NAME(para)
 }
 
 void G4VRML1SCENE::AddThis(const G4Torus& torus )
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddThis torus\n";
+	G4cerr << "***** AddThis torus" << endl ;
 #endif
+	VRMLBeginModeling () ;
 	ADDTHIS_WITH_NAME(torus)
 }
 
@@ -57,16 +61,19 @@ void G4VRML1SCENE::AddThis(const G4Torus& torus )
 void G4VRML1SCENE::AddThis(const G4VSolid& vsolid)
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddThis vsolid\n";
+	G4cerr << "***** AddThis vsolid" << endl ;
 #endif
+	VRMLBeginModeling () ;
 	ADDTHIS_WITH_NAME(vsolid)
 }
 
 void G4VRML1SCENE::AddThis(const G4Tubs& tubs)
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddThis tubs\n";
+	G4cerr << "***** AddThis tubs" << endl ;
 #endif
+	VRMLBeginModeling () ;
+
 	// set current name
 	fCurrentDEF = "tubs_" + tubs.GetName();
 
@@ -88,7 +95,7 @@ void G4VRML1SCENE::AddThis(const G4Tubs& tubs)
 		fDest << "\t" << "}" << endl; // DEF Separator
 		fDest << "}" << endl; // Separator
 	} else {
-		// call AddPrimitives(Polyhedron)
+		// call AddPrimitive(Polyhedron)
 		RequestPrimitives(tubs); 
 	}
 
@@ -100,8 +107,10 @@ void G4VRML1SCENE::AddThis(const G4Tubs& tubs)
 void G4VRML1SCENE::AddThis(const G4Cons& cons)
 {
 #if defined DEBUG_SCENE_FUNC
-    G4cerr << "***** AddThis cons\n";
+    G4cerr << "***** AddThis cons" << endl ;
 #endif
+	VRMLBeginModeling () ;
+
 	// set current name
 	fCurrentDEF = "cons_" + cons.GetName();
 
@@ -126,7 +135,7 @@ void G4VRML1SCENE::AddThis(const G4Cons& cons)
 		fDest << "\t" << "}" << endl; // DEF Separator
 		fDest << "}" << endl; // Separator
 	} else {
-		// call AddPrimitives(Polyhedron)
+		// call AddPrimitive(Polyhedron)
 		RequestPrimitives(cons); 
 	}
 
@@ -137,8 +146,10 @@ void G4VRML1SCENE::AddThis(const G4Cons& cons)
 void G4VRML1SCENE::AddThis(const G4Box& box)
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddThis box\n";
+	G4cerr << "***** AddThis box" << endl ;
 #endif
+	VRMLBeginModeling () ;
+
 	// set current name
 	fCurrentDEF = "box_" + box.GetName();
 
@@ -163,8 +174,10 @@ void G4VRML1SCENE::AddThis(const G4Box& box)
 void G4VRML1SCENE::AddThis(const G4Sphere& sphere)
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddThis sphere\n";
+	G4cerr << "***** AddThis sphere" << endl ;
 #endif
+	VRMLBeginModeling () ;
+
 	// set current name
 	fCurrentDEF = "sphere_" + sphere.GetName();
 
@@ -186,7 +199,7 @@ void G4VRML1SCENE::AddThis(const G4Sphere& sphere)
 		fDest << "\t" << "}" << endl; // DEF Separator
 		fDest << "}" << endl; // Separator
 	} else {
-			// call AddPrimitives(Polyhedron)
+			// call AddPrimitive(Polyhedron)
 			RequestPrimitives( sphere ); 
 	}
 
@@ -197,8 +210,9 @@ void G4VRML1SCENE::AddThis(const G4Sphere& sphere)
 void G4VRML1SCENE::AddPrimitive(const G4Polyline& polyline)
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddPrimitive polyline\n";
+	G4cerr << "***** AddPrimitive polyline" << endl ;
 #endif 
+	VRMLBeginModeling () ;	
 
 	fDest << "Separator {" << endl;
 
@@ -237,6 +251,7 @@ void G4VRML1SCENE::AddPrimitive(const G4Polyhedron& polyhedron)
 #if defined DEBUG_SCENE_FUNC
 	G4cerr << "***** AddPrimitive(G4Polyhedron)" << endl;
 #endif
+	VRMLBeginModeling () ;
 
 	fDest << "Separator {" << endl;
 
@@ -294,35 +309,39 @@ void G4VRML1SCENE::AddPrimitive(const G4Polyhedron& polyhedron)
 	fDest << "\t" << "}" << endl; // (DEF) Separator
 	fDest << "}" << endl; // Separator
 
-#if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** end of AddPrimitive(G4Polyhedron)\n";
-#endif
 }
+
 
 void G4VRML1SCENE::AddPrimitive(const G4NURBS& nurb)
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddPrimitive nurbs\n";
+	G4cerr << "***** AddPrimitive nurbs" << endl ;
 #endif 
-	G4cerr << "G4VRML1File::AddPrimitive(G4NURBS&): not implemented. \n";
+	G4cerr << "G4VRML1File::AddPrimitive(G4NURBS&): not implemented. " << endl ;
+	VRMLBeginModeling () ;
+
 }
 
 void G4VRML1SCENE::AddPrimitive( const G4Text& text ) 
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddPrim mark text\n";
+	G4cerr << "***** AddPrimitive text" << endl ;
 #endif
 	G4cerr <<
           "***** void G4VRML1SCENE::AddPrimitive( const G4Text& text )"
           " not implemented yet."
              << endl;
+
+	VRMLBeginModeling () ;
 }
 
 void G4VRML1SCENE::AddPrimitive( const G4Circle& circle ) 
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddPrim mark circle\n";
+	G4cerr << "***** AddPrimitive circle" << endl ;
 #endif
+
+	VRMLBeginModeling () ;
 
 	// begin sending a mark
 	fDest << "Separator {" << endl;
@@ -345,23 +364,26 @@ void G4VRML1SCENE::AddPrimitive( const G4Circle& circle )
 	fDest << "}" << endl; // Separator
 }
 
-void G4VRML1SCENE::AddPrimitive(const G4Square& Square) // mark Square
+
+void G4VRML1SCENE::AddPrimitive(const G4Square& square)
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddPrim mark Square\n";
+	G4cerr << "***** AddPrimitive square" << endl ;
 #endif
+
+	VRMLBeginModeling () ;
 
 	// begin sending a mark
 	fDest << "Separator {" << endl;
 
 	// send color 
-	SendMarkerColor    ( Square );
+	SendMarkerColor    ( square );
 
 	// position 
-	SendMarkerWorldPosition ( Square );
+	SendMarkerWorldPosition ( square );
 
 	// Calc size 
-	G4double size = GetMarkerHalfSize ( Square );
+	G4double size = GetMarkerHalfSize ( square );
 	size *= 2.;
 
 	// send shape with size 
@@ -378,23 +400,22 @@ void G4VRML1SCENE::AddPrimitive(const G4Square& Square) // mark Square
 void G4VRML1SCENE::ClearStore()
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** ClearStore()\n";
+	G4cerr << "***** ClearStore(): No effects" << endl ;
 #endif 
 }
 
 void G4VRML1SCENE::BeginModeling()
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** BeginModeling\n";
+	G4cerr << "***** BeginModeling " << endl ;
 #endif
 	G4VSceneHandler::BeginModeling();
-	beginSending();
 }
 
 void G4VRML1SCENE::EndModeling()
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** EndModeling \n";
+	G4cerr << "***** EndModeling " << endl ;
 #endif
 	G4VSceneHandler::EndModeling();
 }
@@ -404,15 +425,15 @@ void G4VRML1SCENE::BeginPrimitives(const G4Transform3D& objectTransformation)
   G4VSceneHandler::BeginPrimitives (objectTransformation);
   fpObjectTransformation = &objectTransformation;
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** BeginPrimitives \n";
+	G4cerr << "***** BeginPrimitives " << endl ;
 #endif
-	beginSending();
+	VRMLBeginModeling();
 }
 
 void G4VRML1SCENE::EndPrimitives()
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** EndPrimitives \n";
+	G4cerr << "***** EndPrimitives " << endl ;
 #endif
   G4VSceneHandler::EndPrimitives();
 }
@@ -514,18 +535,25 @@ void G4VRML1SCENE::SendSphereNode(G4double R)
 	fDest << "\t\t" << "}" << endl;
 }
 
-void G4VRML1SCENE::beginSending()
+void G4VRML1SCENE::VRMLBeginModeling()
 {
 	if (!IS_CONNECTED ) {
+#if defined DEBUG_SCENE_FUNC
+	G4cerr << "***** VRMLBeginModeling() (started)" << endl ;
+#endif
 		this->connectPort();
 		fDest << "#VRML V1.0 ascii" << endl;
-		fDest << "# Generated by VRML driver of GEANT4\n" << endl;
+		fDest << "# Generated by VRML 1.0 driver of GEANT4\n" << endl;
 	}
 }
 
-void G4VRML1SCENE::endSending()
+void G4VRML1SCENE::VRMLEndModeling()
 {
 	if ( IS_CONNECTED ) {
+#if defined DEBUG_SCENE_FUNC
+	G4cerr << "***** VRMLEndModeling() (started)" << endl ;
+#endif
+
 		fDest << "#End of file." << endl;
 		this->closePort();
 	}

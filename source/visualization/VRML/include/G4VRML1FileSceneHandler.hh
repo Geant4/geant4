@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML1FileSceneHandler.hh,v 1.3 1999-10-01 02:45:18 stanaka Exp $
+// $Id: G4VRML1FileSceneHandler.hh,v 1.4 1999-11-04 02:38:35 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML1FileSceneHandler.hh
@@ -16,7 +16,6 @@
 #ifndef G4VRML1FILE_SCENE_HANDLER_HH
 #define G4VRML1FILE_SCENE_HANDLER_HH
 
-//#include <rw/tvhdict.h>
 #include <fstream.h>
 
 #include "globals.hh"
@@ -61,8 +60,8 @@ public:
 	void BeginModeling();
 	void EndModeling();
 
-	void beginSending();
-	void endSending();
+	void VRMLBeginModeling();
+	void VRMLEndModeling();
 
 	static G4int GetSceneCount() { return fSceneCount; }
 

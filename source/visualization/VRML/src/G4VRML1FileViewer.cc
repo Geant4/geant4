@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML1FileViewer.cc,v 1.2 1999-01-11 00:48:07 allison Exp $
+// $Id: G4VRML1FileViewer.cc,v 1.3 1999-11-04 02:38:48 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRMLView.cc
@@ -35,8 +35,7 @@ G4VRML1FileViewer::~G4VRML1FileViewer()
 void G4VRML1FileViewer::SetView()
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4VRML1FileViewer::SetView()" << endl;
-	G4cerr << "G4VRML1FileViewer::SetView(); not imlemented. " << endl;
+  G4cerr << "***** G4VRML1FileViewer::SetView(): No effects" << endl;
 #endif
 }
 
@@ -45,6 +44,9 @@ void G4VRML1FileViewer::DrawView()
 #if defined DEBUG_FR_VIEW
 	G4cerr << "***** G4VRML1FileViewer::DrawView()" << endl;
 #endif
+
+	fSceneHandler.VRMLBeginModeling();
+
 	// Here is a minimal DrawView() function.
 	NeedKernelVisit();
 	ProcessView();
@@ -54,23 +56,22 @@ void G4VRML1FileViewer::DrawView()
 void G4VRML1FileViewer::ClearView(void)
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4VRML1File1View::ClearView()" << endl;
-	G4cerr << "G4VRML1FileViewer::ClearView(); not implemented. " << endl;
+  G4cerr << "***** G4VRML1File1View::ClearView(): No effects" << endl;
 #endif
 }
 
 void G4VRML1FileViewer::ShowView(void)
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4VRML1FileViewer::ShowView()" << endl;
+  G4cerr << "***** G4VRML1FileViewer::ShowView()" << endl;
 #endif
-	fSceneHandler.endSending();
+	fSceneHandler.VRMLEndModeling();
 }
 
 void G4VRML1FileViewer::FinishView(void)
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4VRML1FileViewer::FinishView()" << endl;
+  G4cerr << "***** G4VRML1FileViewer::FinishView(): No effects" << endl;
 #endif
 }
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML2FileSceneHandler.hh,v 1.2 1999-05-10 15:39:13 johna Exp $
+// $Id: G4VRML2FileSceneHandler.hh,v 1.3 1999-11-04 02:38:36 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2FileSceneHandler.hh
@@ -62,9 +62,8 @@ public:
 
 	static G4int GetSceneCount() { return fSceneCount; }
 
-	// IO
-	void beginSending();
-	void endSending();
+	void VRMLBeginModeling();
+	void VRMLEndModeling();
 
 	void connectPort();
 	void closePort();
