@@ -1,5 +1,5 @@
 
-$Id: History,v 1.4 1999-11-24 20:17:20 japost Exp $
+$Id: History,v 1.5 2000-01-19 19:24:25 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ Gen 19   2000	Gabriele Cosmo		geom-solid-bool-V01-00-00
+
+  - Syncronized file versions with HEAD (essentially CVS headers changes)
+  - Fixed cases of G4std::min which were not migrated on the HEAD in files:
+    G4UnionSolid.cc and G4IntersectionSolid.cc
+
  Nov 24   1999 				geom-solid-bool-V00-01-05
 
   - Small fix in src/G4DisplacedSolid.cc to the return type 

@@ -343,8 +343,8 @@ G4IntersectionSolid::DistanceToOut( const G4ThreeVector& p,
   G4double distB = fPtrSolidB->DistanceToOut(p,v,calcNorm,validNorm,n) ;
   G4double dist = G4std::min(distA,distB) ; 
   return dist ; 
-  //  return min(fPtrSolidA->DistanceToOut(p,v,calcNorm,validNorm,n),
-  //	     fPtrSolidB->DistanceToOut(p,v,calcNorm,validNorm,n) ) ; 
+  //  return G4std::min(fPtrSolidA->DistanceToOut(p,v,calcNorm,validNorm,n),
+  //	                fPtrSolidB->DistanceToOut(p,v,calcNorm,validNorm,n) ) ; 
 }
 
 //////////////////////////////////////////////////////////////
@@ -360,8 +360,8 @@ G4IntersectionSolid::DistanceToOut( const G4ThreeVector& p ) const
   }
 
 
-  return min(fPtrSolidA->DistanceToOut(p),
-             fPtrSolidB->DistanceToOut(p) ) ; 
+  return G4std::min(fPtrSolidA->DistanceToOut(p),
+                    fPtrSolidB->DistanceToOut(p) ) ; 
 
 }
 

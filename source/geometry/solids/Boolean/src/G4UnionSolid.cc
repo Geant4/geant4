@@ -169,8 +169,8 @@ G4UnionSolid::DistanceToIn( const G4ThreeVector& p,
   {
     G4Exception("Invalid call in G4IntersectionSolid::DistanceToIn(p,v),  point p is inside") ;
   }
-  return min(fPtrSolidA->DistanceToIn(p,v),
-             fPtrSolidB->DistanceToIn(p,v) ) ;
+  return G4std::min(fPtrSolidA->DistanceToIn(p,v),
+                    fPtrSolidB->DistanceToIn(p,v) ) ;
 }
 
 ////////////////////////////////////////////////////////
@@ -188,7 +188,7 @@ G4UnionSolid::DistanceToIn( const G4ThreeVector& p) const
   G4double distA = fPtrSolidA->DistanceToIn(p) ;
   G4double distB = fPtrSolidB->DistanceToIn(p) ;
 
-  return min(distA,distB) ;
+  return G4std::min(distA,distB) ;
 }
 
 //////////////////////////////////////////////////////////
