@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.13 2004-10-25 12:50:59 maire Exp $
+// $Id: SteppingAction.cc,v 1.14 2004-11-23 14:05:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,8 +65,11 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   //locate the absorber
   //
   G4int absorNum  = volume->GetCopyNo();
-  G4int layerNum  = prePoint->GetTouchable()->GetReplicaNumber(1);  
-  
+  G4int layerNum  = prePoint->GetTouchable()->GetReplicaNumber(1);
+    
+  ////G4int absorNum  = prePoint->GetTouchable()->GetCopyNumber( );
+  ////G4int layerNum  = prePoint->GetTouchable()->GetCopyNumber(1);
+   
   // collect energy deposit
   G4double edep = aStep->GetTotalEnergyDeposit();
   

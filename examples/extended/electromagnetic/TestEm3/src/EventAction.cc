@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.11 2004-10-22 15:53:45 maire Exp $
+// $Id: EventAction.cc,v 1.12 2004-11-23 14:05:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -77,7 +77,7 @@ void EventAction::EndOfEventAction(const G4Event* evt)
 {
   for (G4int k=1; k<=detector->GetNbOfAbsor(); k++) {
      runAct->fillPerEvent(k,energyDeposit[k],trackLengthCh[k]);		       
-     histoManager->FillHisto(k, energyDeposit[k]);
+     if (energyDeposit[k] > 0.) histoManager->FillHisto(k, energyDeposit[k]);
   }
 
   if (G4VVisManager::GetConcreteInstance())

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.12 2004-10-20 14:32:35 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.13 2004-11-23 14:05:30 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,7 +35,6 @@
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
 #include "G4UniformMagField.hh"
-#include "G4UserLimits.hh"
 
 #include "G4GeometryManager.hh"
 #include "G4PhysicalVolumeStore.hh"
@@ -67,9 +66,6 @@ DetectorConstruction::DetectorConstruction()
   SetAbsorMaterial(1,"Lead");
   SetAbsorMaterial(2,"liquidArgon");
 
-  // create UserLimits
-  userLimits = new G4UserLimits();
-
   // create commands for interactive definition of the calorimeter
   detectorMessenger = new DetectorMessenger(this);
 }
@@ -78,7 +74,6 @@ DetectorConstruction::DetectorConstruction()
 
 DetectorConstruction::~DetectorConstruction()
 {
-  delete userLimits;
   delete detectorMessenger;
 }
 
@@ -354,8 +349,6 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
       			                  AbsorMaterial[k], //its material
       			                  AbsorMaterial[k]->GetName());
 
-      logicAbsor[k]->SetUserLimits(userLimits);
-
       G4double xcenter = xfront+0.5*AbsorThickness[k];
       xfront += AbsorThickness[k];
       physiAbsor[k] = new G4PVPlacement(0,		   //no rotation
@@ -505,21 +498,6 @@ void DetectorConstruction::SetMagField(G4double fieldValue)
     fieldMgr->SetDetectorField(magField);
   }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void DetectorConstruction::SetMaxStepSize(G4double val)
-{
-  // set the maximum allowed step size
-  //
-  if (val <= DBL_MIN)
-    { G4cout << "\n --->warning from SetMaxStepSize: maxStep "
-             << val  << " out of range. Command refused" << G4endl;
-      return;
-    }
-  userLimits->SetMaxAllowedStep(val);
-}
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

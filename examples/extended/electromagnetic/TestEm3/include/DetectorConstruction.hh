@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh,v 1.10 2004-10-20 14:32:31 maire Exp $
+// $Id: DetectorConstruction.hh,v 1.11 2004-11-23 14:05:26 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,7 +37,6 @@ class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
 class G4UniformMagField;
-class G4UserLimits;
 class DetectorMessenger;
 
      const G4int MaxAbsor = 10;			// 0 + 9  
@@ -62,7 +61,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      void SetNbOfLayers    (G4int);   
 
      void SetMagField   (G4double);
-     void SetMaxStepSize(G4double);
      
      G4VPhysicalVolume* Construct();
 
@@ -121,7 +119,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      G4VPhysicalVolume* physiAbsor[MaxAbsor];
 
      G4UniformMagField* magField;
-     G4UserLimits*      userLimits;
 
      DetectorMessenger* detectorMessenger;
 

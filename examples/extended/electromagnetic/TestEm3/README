@@ -1,4 +1,4 @@
-$Id: README,v 1.21 2004-10-25 12:50:55 maire Exp $
+$Id: README,v 1.22 2004-11-23 14:05:24 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -81,7 +81,7 @@ $Id: README,v 1.21 2004-10-25 12:50:55 maire Exp $
   The particle's type and the physic processes which will be available
   in this example are set in PhysicsList class.
  	
-  In addition a build-in interactive command (/process/inactivate proname)
+  In addition a build-in interactive command (/process/inactivate processName)
   allows to activate/inactivate the processes one by one.
   Then one can well visualize the processes one by one, especially 
   in the bubble chamber setup with a transverse magnetic field.
@@ -89,9 +89,9 @@ $Id: README,v 1.21 2004-10-25 12:50:55 maire Exp $
   As a homework try to visualize a gamma conversion alone, 
   or the effect of the multiple scattering.
 	
-  Notice that one can control the maximum step size at tracking time, via 
-  G4UserLimit class and the command /tracking/stepMax  
-  (see DetectorConstruction and DetectorMessenger classes)
+  Notice that one can control the maximum step size in each absorber, via the
+  StepMax process and the command /testem/stepMax/absorber  
+  (see StepMax and PhysicsList classes)
  	
  6- HOW TO START ?
  

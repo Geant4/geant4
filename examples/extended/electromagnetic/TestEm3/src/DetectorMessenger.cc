@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.cc,v 1.6 2004-10-20 14:32:36 maire Exp $
+// $Id: DetectorMessenger.cc,v 1.7 2004-11-23 14:05:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -106,13 +106,6 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
   UpdateCmd->AvailableForStates(G4State_Idle);
-      
-  MaxStepCmd = new G4UIcmdWithADoubleAndUnit("/testem/tracking/stepMax",this);
-  MaxStepCmd->SetGuidance("Set max allowed step size");
-  MaxStepCmd->SetParameterName("Size",false);
-  MaxStepCmd->SetRange("Size>0.");
-  MaxStepCmd->SetUnitCategory("Length");
-  MaxStepCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -125,7 +118,6 @@ DetectorMessenger::~DetectorMessenger()
   delete AbsorCmd;
   delete MagFieldCmd;
   delete UpdateCmd;
-  delete MaxStepCmd;
   delete detDir;  
   delete testemDir;
 }
@@ -161,9 +153,6 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
            
   if( command == UpdateCmd )
    { Detector->UpdateGeometry();}
-   
-  if( command == MaxStepCmd )
-   { Detector->SetMaxStepSize(MaxStepCmd->GetNewDoubleValue(newValue));}   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
