@@ -1,4 +1,4 @@
-$Id: History,v 1.118 2001-10-26 16:59:11 pia Exp $
+$Id: History,v 1.119 2001-10-28 12:00:49 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28.10.2001 - MGP, tag emlowen-V03-02-37
+             Fixed compilation warnings on Linux and HP
+             Improved code style
 
 26.10.2001 - MGP, tag emlowen-V03-02-36
              Bug and memory leak fixes in the new electron classes
