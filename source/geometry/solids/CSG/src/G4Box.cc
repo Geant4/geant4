@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Box.cc,v 1.5 2000-05-05 14:17:26 grichine Exp $
+// $Id: G4Box.cc,v 1.6 2000-06-09 14:37:30 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -15,6 +15,10 @@
 //  24.06.98 - V. Grichine: insideEdge in DistanceToIn(p,v)
 //  20.09.98 - V.Grichine: new algorithm of DistanceToIn(p,v)
 //  07.05.00 - V.Grichine: d= DistanceToIn(p,v), if d<e/2, d=0
+//  09.06.00 - V.Grichine: safety in DistanceToIn(p) against Inside(p)=kOutside
+//             and information before exception in DistanceToOut(p,v,...)
+
+
 
 #include "G4Box.hh"
 
@@ -36,14 +40,16 @@
 G4Box::G4Box(const G4String& pName, G4double pX,
 	  G4double pY, G4double pZ) : G4CSGSolid(pName)
 {
-    if (pX>0&&pY>0&&pZ>0)
-	{
-	    fDx=pX; fDy=pY; fDz=pZ;
-	}
-    else
-	{
-		G4Exception("Error in G4Box::Box - negative parameters");
-	}	
+  if ( pX > 0 && pY > 0 && pZ > 0 )
+  {
+    fDx = pX ;
+    fDy = pY ; 
+    fDz = pZ ;
+  }
+  else
+  {
+    G4Exception("Error in G4Box::Box - negative parameters");
+  }	
 
 }
 
@@ -52,7 +58,9 @@ G4Box::G4Box(const G4String& pName, G4double pX,
 // Destructor
 
 G4Box::~G4Box()
-{}
+{
+  ;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -63,7 +71,7 @@ void G4Box::ComputeDimensions(G4VPVParameterisation* p,
                               const G4int n,
                               const G4VPhysicalVolume* pRep)
 {
-    p->ComputeDimensions(*this,n,pRep);
+  p->ComputeDimensions(*this,n,pRep);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -75,154 +83,142 @@ G4bool G4Box::CalculateExtent(const EAxis pAxis,
 			      const G4AffineTransform& pTransform,
 			      G4double& pMin, G4double& pMax) const
 {
-    if (!pTransform.IsRotated())
-	{
+  if (!pTransform.IsRotated())
+  {
 // Special case handling for unrotated boxes
 // Compute x/y/z mins and maxs respecting limits, with early returns
 // if outside limits. Then switch() on pAxis
-	    G4double xoffset,xMin,xMax;
-	    G4double yoffset,yMin,yMax;
-	    G4double zoffset,zMin,zMax;
 
-	    xoffset=pTransform.NetTranslation().x();
-	    xMin=xoffset-fDx;
-	    xMax=xoffset+fDx;
-	    if (pVoxelLimit.IsXLimited())
-		{
-		    if (xMin>pVoxelLimit.GetMaxXExtent()+kCarTolerance
-			||xMax<pVoxelLimit.GetMinXExtent()-kCarTolerance)
-			{
-			    return false;
-			}
-		    else
-			{
-			    if (xMin<pVoxelLimit.GetMinXExtent())
-				{
-				    xMin=pVoxelLimit.GetMinXExtent();
-				}
-			    if (xMax>pVoxelLimit.GetMaxXExtent())
-				{
-				    xMax=pVoxelLimit.GetMaxXExtent();
-				}
-			}
-		}
+    G4double xoffset,xMin,xMax;
+    G4double yoffset,yMin,yMax;
+    G4double zoffset,zMin,zMax;
 
+    xoffset = pTransform.NetTranslation().x() ;
+    xMin    = xoffset - fDx ;
+    xMax    = xoffset + fDx ;
 
-	    yoffset=pTransform.NetTranslation().y();
-	    yMin=yoffset-fDy;
-	    yMax=yoffset+fDy;
-	    if (pVoxelLimit.IsYLimited())
-		{
-		    if (yMin>pVoxelLimit.GetMaxYExtent()+kCarTolerance
-			||yMax<pVoxelLimit.GetMinYExtent()-kCarTolerance)
-			{
-			    return false;
-			}
-		    else
-			{
-			    if (yMin<pVoxelLimit.GetMinYExtent())
-				{
-				    yMin=pVoxelLimit.GetMinYExtent();
-				}
-			    if (yMax>pVoxelLimit.GetMaxYExtent())
-				{
-				    yMax=pVoxelLimit.GetMaxYExtent();
-				}
-			}
-		}
-
-
-	    zoffset=pTransform.NetTranslation().z();
-	    zMin=zoffset-fDz;
-	    zMax=zoffset+fDz;
-	    if (pVoxelLimit.IsZLimited())
-		{
-		    if (zMin>pVoxelLimit.GetMaxZExtent()+kCarTolerance
-			||zMax<pVoxelLimit.GetMinZExtent()-kCarTolerance)
-			{
-			    return false;
-			}
-		    else
-			{
-			    if (zMin<pVoxelLimit.GetMinZExtent())
-				{
-				    zMin=pVoxelLimit.GetMinZExtent();
-				}
-			    if (zMax>pVoxelLimit.GetMaxZExtent())
-				{
-				    zMax=pVoxelLimit.GetMaxZExtent();
-				}
-			}
-		}
-
-
-	    switch (pAxis)
-		{
-		case kXAxis:
-		    pMin=xMin;
-		    pMax=xMax;
-		    break;
-		case kYAxis:
-		    pMin=yMin;
-		    pMax=yMax;
-		    break;
-		case kZAxis:
-		    pMin=zMin;
-		    pMax=zMax;
-		    break;
-		}
-
-	    pMin-=kCarTolerance;
-	    pMax+=kCarTolerance;
-
-	    return true;
-	}
-    else
+    if (pVoxelLimit.IsXLimited())
+    {
+      if ( xMin > pVoxelLimit.GetMaxXExtent()+kCarTolerance || 
+           xMax < pVoxelLimit.GetMinXExtent()-kCarTolerance    ) return false ;
+      else
+      {
+        if (xMin < pVoxelLimit.GetMinXExtent())
 	{
-// General rotated case - create and clip mesh to boundaries
+	  xMin = pVoxelLimit.GetMinXExtent() ;
+	}
+	if (xMax > pVoxelLimit.GetMaxXExtent())
+	{
+	  xMax = pVoxelLimit.GetMaxXExtent() ;
+	}
+      }
+    }
+    yoffset = pTransform.NetTranslation().y() ;
+    yMin    = yoffset - fDy ;
+    yMax    = yoffset + fDy ;
 
-	    G4bool existsAfterClip=false;
-	    G4ThreeVectorList *vertices;
+    if (pVoxelLimit.IsYLimited())
+    {
+      if ( yMin > pVoxelLimit.GetMaxYExtent()+kCarTolerance ||
+	   yMax < pVoxelLimit.GetMinYExtent()-kCarTolerance   ) return false ;
+      else
+      {
+        if (yMin < pVoxelLimit.GetMinYExtent())
+	{
+	  yMin = pVoxelLimit.GetMinYExtent() ;
+	}
+	if (yMax > pVoxelLimit.GetMaxYExtent())
+	{
+	  yMax = pVoxelLimit.GetMaxYExtent() ;
+	}
+      }
+    }
+    zoffset = pTransform.NetTranslation().z() ;
+    zMin    = zoffset - fDz ;
+    zMax    = zoffset + fDz ;
 
-	    pMin=+kInfinity;
-	    pMax=-kInfinity;
+    if (pVoxelLimit.IsZLimited())
+    {
+      if ( zMin > pVoxelLimit.GetMaxZExtent()+kCarTolerance ||
+	   zMax < pVoxelLimit.GetMinZExtent()-kCarTolerance   ) return false ;
+      else
+      {
+	if (zMin < pVoxelLimit.GetMinZExtent())
+	{
+	  zMin = pVoxelLimit.GetMinZExtent() ;
+	}
+	if (zMax > pVoxelLimit.GetMaxZExtent())
+	{
+	  zMax = pVoxelLimit.GetMaxZExtent() ;
+	}
+      }
+    }
+    switch (pAxis)
+    {
+      case kXAxis:
+	pMin = xMin ;
+	pMax = xMax ;
+	break ;
+      case kYAxis:
+	pMin=yMin;
+	pMax=yMax;
+	break;
+      case kZAxis:
+	pMin=zMin;
+	pMax=zMax;
+	break;
+    }
+    pMin -= kCarTolerance ;
+    pMax += kCarTolerance ;
+
+    return true;
+  }
+  else  // General rotated case - create and clip mesh to boundaries
+  {
+    G4bool existsAfterClip = false ;
+    G4ThreeVectorList* vertices ;
+
+    pMin = +kInfinity ;
+    pMax = -kInfinity ;
+
 // Calculate rotated vertex coordinates
 
-	    vertices=CreateRotatedVertices(pTransform);
-	    ClipCrossSection(vertices,0,pVoxelLimit,pAxis,pMin,pMax);
-	    ClipCrossSection(vertices,4,pVoxelLimit,pAxis,pMin,pMax);
-	    ClipBetweenSections(vertices,0,pVoxelLimit,pAxis,pMin,pMax);
+    vertices = CreateRotatedVertices(pTransform) ;
+    ClipCrossSection(vertices,0,pVoxelLimit,pAxis,pMin,pMax) ;
+    ClipCrossSection(vertices,4,pVoxelLimit,pAxis,pMin,pMax) ;
+    ClipBetweenSections(vertices,0,pVoxelLimit,pAxis,pMin,pMax) ;
 	    
-	    if (pMin!=kInfinity||pMax!=-kInfinity)
-		{
-		    existsAfterClip=true;
+    if ( pMin != kInfinity || pMax != -kInfinity )
+    {
+      existsAfterClip = true ;
 		    
 // Add 2*tolerance to avoid precision troubles
-		    pMin-=kCarTolerance;
-		    pMax+=kCarTolerance;
-		    
-		}
-	    else
-		{
+
+      pMin -= kCarTolerance ;
+      pMax += kCarTolerance ;		    
+    }
+    else
+    {
 // Check for case where completely enveloping clipping volume
 // If point inside then we are confident that the solid completely
 // envelopes the clipping volume. Hence set min/max extents according
 // to clipping volume extents along the specified axis.
-		    G4ThreeVector clipCentre(
-			(pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
-			(pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
-			(pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5);
+
+      G4ThreeVector clipCentre(
+	     ( pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
+	     ( pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
+	     ( pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5);
 		    
-		    if (Inside(pTransform.Inverse().TransformPoint(clipCentre))!=kOutside)
-			{
-			    existsAfterClip=true;
-			    pMin=pVoxelLimit.GetMinExtent(pAxis);
-			    pMax=pVoxelLimit.GetMaxExtent(pAxis);
-			}
-		}
-	    delete vertices;
-	    return existsAfterClip;
-	}
+      if (Inside(pTransform.Inverse().TransformPoint(clipCentre))!=kOutside)
+      {
+        existsAfterClip = true ;
+        pMin            = pVoxelLimit.GetMinExtent(pAxis) ;
+        pMax            = pVoxelLimit.GetMaxExtent(pAxis) ;
+      }
+    }
+    delete vertices;
+    return existsAfterClip;
+  }
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -231,41 +227,28 @@ G4bool G4Box::CalculateExtent(const EAxis pAxis,
 
 EInside G4Box::Inside(const G4ThreeVector& p) const
 {
-    EInside in=kOutside;
+  EInside in = kOutside ;
 
-    if (fabs(p.x())<=fDx-kCarTolerance*0.5)
-	{
-	    if (fabs(p.y())<=fDy-kCarTolerance*0.5)
-		{
-		    if (fabs(p.z())<=fDz-kCarTolerance*0.5)
-			{
-			    in=kInside;
-			}
-		    else if (fabs(p.z())<=fDz+kCarTolerance*0.5)
-			{
-			    in=kSurface;
-			}
-		}
-	    else if (fabs(p.y())<=fDy+kCarTolerance*0.5)
-		{
-		    if (fabs(p.z())<=fDz+kCarTolerance*0.5)
-			{
-			    in=kSurface;
-			}
-		}
-	}
-    else if (fabs(p.x())<=fDx+kCarTolerance*0.5)
-	{
-	    if (fabs(p.y())<=fDy+kCarTolerance*0.5)
-		{
-		    if (fabs(p.z())<=fDz+kCarTolerance*0.5)
-			{
-			    in=kSurface;
-			}
-		}
-	}
-
-    return in;
+  if ( fabs(p.x()) <= fDx - kCarTolerance*0.5 )
+  {
+    if (fabs(p.y()) <= fDy - kCarTolerance*0.5 )
+    {
+      if      (fabs(p.z()) <= fDz - kCarTolerance*0.5 ) in = kInside ;
+      else if (fabs(p.z()) <= fDz + kCarTolerance*0.5 ) in = kSurface ;
+    }
+    else if (fabs(p.y()) <= fDy + kCarTolerance*0.5 )
+    {
+      if (fabs(p.z()) <= fDz + kCarTolerance*0.5 ) in = kSurface ;
+    }
+  }
+  else if (fabs(p.x()) <= fDx + kCarTolerance*0.5 )
+  {
+    if (fabs(p.y()) <= fDy + kCarTolerance*0.5 )
+    {
+      if (fabs(p.z()) <= fDz + kCarTolerance*0.5) in = kSurface ;
+    }
+  }
+  return in ;
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -276,45 +259,43 @@ EInside G4Box::Inside(const G4ThreeVector& p) const
 
 G4ThreeVector G4Box::SurfaceNormal( const G4ThreeVector& p) const
 {
-    G4double distx,disty,distz;
-    G4ThreeVector norm;
+  G4double distx, disty, distz ;
+  G4ThreeVector norm ;
+
 // Calculate distances as if in 1st octant
-    distx=fabs(fabs(p.x())-fDx);
-    disty=fabs(fabs(p.y())-fDy);
-    distz=fabs(fabs(p.z())-fDz);
 
-    if (distx<=disty)
-	{
-	    if (distx<=distz)
-		{
-// Closest to X
-		    if (p.x()<0) norm=G4ThreeVector(-1.0,0,0);
-		    else         norm=G4ThreeVector(1.0,0,0);
-		}
-	    else
-		{
-// Closest to Z
-		    if (p.z()<0) norm=G4ThreeVector(0,0,-1.0);
-		    else         norm=G4ThreeVector(0,0,1.0);
-		}
-	}
-    else
-	{
-	    if (disty<=distz)
-		{
-// Closest to Y
-		    if (p.y()<0) norm=G4ThreeVector(0,-1.0,0);
-		    else         norm=G4ThreeVector(0,1.0,0);
-		}
-	    else
-		{
-// Closest to Z
-		    if (p.z()<0) norm=G4ThreeVector(0,0,-1.0);
-		    else         norm=G4ThreeVector(0,0,1.0);
-		}
-	}
+  distx = fabs(fabs(p.x()) - fDx) ;
+  disty = fabs(fabs(p.y()) - fDy) ;
+  distz = fabs(fabs(p.z()) - fDz) ;
 
-    return norm;
+  if ( distx <= disty )
+  {
+    if ( distx <= distz )     // Closest to X
+    {
+      if ( p.x() < 0 ) norm = G4ThreeVector(-1.0,0,0) ;
+      else             norm = G4ThreeVector( 1.0,0,0) ;
+    }
+    else                      // Closest to Z
+    {
+      if ( p.z() < 0 ) norm = G4ThreeVector(0,0,-1.0) ;
+      else             norm = G4ThreeVector(0,0, 1.0) ;
+    }
+  }
+  else
+  {
+    if ( disty <= distz )      // Closest to Y
+    {
+
+      if ( p.y() < 0 ) norm = G4ThreeVector(0,-1.0,0) ;
+      else             norm = G4ThreeVector(0, 1.0,0) ;
+    }
+    else                       // Closest to Z
+    {
+      if ( p.z() < 0 ) norm = G4ThreeVector(0,0,-1.0) ;
+      else             norm = G4ThreeVector(0,0, 1.0) ;
+    }
+  }
+  return norm;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -454,15 +435,17 @@ G4double G4Box::DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) cons
 
 G4double G4Box::DistanceToIn(const G4ThreeVector& p) const
 {
-    G4double safex,safey,safez,safe=0.0;
-    safex=fabs(p.x())-fDx;
-    safey=fabs(p.y())-fDy;
-    safez=fabs(p.z())-fDz;
+  G4double safex, safey, safez, safe = 0.0 ;
 
-    if (safex>safe) safe=safex;
-    if (safey>safe) safe=safey;
-    if (safez>safe) safe=safez;
-    return safe;
+  safex = fabs(p.x()) - fDx ;
+  safey = fabs(p.y()) - fDy ;
+  safez = fabs(p.z()) - fDz ;
+
+  if (safex > safe) safe = safex ;
+  if (safey > safe) safe = safey ;
+  if (safez > safe) safe = safez ;
+
+  return safe ;
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -482,24 +465,19 @@ G4double G4Box::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
 
   if (calcNorm) *validNorm = true ; // All normals are valid
 
-  // X planes  
-
-  if (v.x() > 0)
+  if (v.x() > 0)   // X planes  
   {
-     pdist = fDx-p.x() ;
+     pdist = fDx - p.x() ;
 
      if (pdist > kCarTolerance*0.5)
      {
-	snxt=pdist/v.x();
-	side=kPX;
+	snxt = pdist/v.x() ;
+	side = kPX ;
      }
      else
      {
-	if (calcNorm)
-	{
-	   *n=G4ThreeVector(1,0,0);
-	}
-	return snxt=0;
+	if (calcNorm) *n    = G4ThreeVector(1,0,0) ;
+	return         snxt = 0 ;
      }
   }
   else if (v.x() < 0) 
@@ -508,26 +486,18 @@ G4double G4Box::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
 
      if (pdist > kCarTolerance*0.5)
      {
-	snxt=-pdist/v.x();
-	side=kMX;
+	snxt = -pdist/v.x() ;
+	side = kMX ;
      }
      else
      {
-	if (calcNorm)
-	{
-	   *n=G4ThreeVector(-1,0,0);
-	}
-	return snxt=0;
+	if (calcNorm) *n   = G4ThreeVector(-1,0,0) ;
+	return        snxt = 0 ;
      }
   }
-  else
-  {
-    snxt=kInfinity;
-  }
+  else snxt = kInfinity ;
 
-  // Y planes  
-
-  if (v.y()>0)
+  if ( v.y() > 0 )   // Y planes  
   {
      pdist=fDy-p.y();
 
@@ -543,18 +513,15 @@ G4double G4Box::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
      }
      else
      {
-        if (calcNorm)
-        {
-	   *n=G4ThreeVector(0,1,0);
-        }
-        return snxt=0;
+        if (calcNorm) *n    = G4ThreeVector(0,1,0) ;
+        return         snxt = 0 ;
      }
   }
-  else if (v.y()<0) 
+  else if ( v.y() < 0 ) 
   {
-     pdist=fDy+p.y();
+     pdist = fDy + p.y() ;
 
-     if (pdist>kCarTolerance*0.5)
+     if (pdist > kCarTolerance*0.5)
      {
 	stmp=-pdist/v.y();
 
@@ -566,25 +533,19 @@ G4double G4Box::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
      }
      else
      {
-	if (calcNorm)
-	{
-	   *n=G4ThreeVector(0,-1,0);
-	}
-	return snxt=0;
+	if (calcNorm) *n    = G4ThreeVector(0,-1,0) ;
+	return         snxt = 0 ;
      }
   }
-
-  // Z planes  
-
-  if (v.z()>0)
+  if (v.z()>0)        // Z planes 
   {
      pdist=fDz-p.z();
 
-     if (pdist>kCarTolerance*0.5)
+     if (pdist > kCarTolerance*0.5)
      {
 	stmp=pdist/v.z();
 
-	if (stmp<snxt)
+	if (stmp < snxt)
 	{
 	   snxt=stmp;
 	   side=kPZ;
@@ -592,22 +553,19 @@ G4double G4Box::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
      }
      else
      {
-	if (calcNorm)
-	{
-	   *n=G4ThreeVector(0,0,1);
-	}
-	return snxt=0;
+	if (calcNorm) *n    = G4ThreeVector(0,0,1) ;
+	return         snxt = 0 ;
      }
   }
   else if (v.z()<0) 
   {
-     pdist=fDz+p.z();
+     pdist = fDz + p.z() ;
 
-     if (pdist>kCarTolerance*0.5)
+     if (pdist > kCarTolerance*0.5)
      {
 	stmp=-pdist/v.z();
 
-	if (stmp<snxt)
+	if (stmp < snxt)
 	{
 	   snxt=stmp;
 	   side=kMZ;
@@ -615,38 +573,51 @@ G4double G4Box::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
      }
      else
      {
-	if (calcNorm)
-	{
-	   *n=G4ThreeVector(0,0,-1);
-	}
-	return snxt=0;
+	if (calcNorm) *n    = G4ThreeVector(0,0,-1) ;
+	return         snxt = 0 ;
      }
   }
   if (calcNorm)
   {	    
     switch (side)
     {
-		case kPX:
+      case kPX:
 		    *n=G4ThreeVector(1,0,0);
 		    break;
-		case kMX:
+      case kMX:
 		    *n=G4ThreeVector(-1,0,0);
 		    break;
-		case kPY:
+      case kPY:
 		    *n=G4ThreeVector(0,1,0);
 		    break;
-		case kMY:
+      case kMY:
 		    *n=G4ThreeVector(0,-1,0);
 		    break;
-		case kPZ:
+      case kPZ:
 		    *n=G4ThreeVector(0,0,1);
 		    break;
-		case kMZ:
+      case kMZ:
 		    *n=G4ThreeVector(0,0,-1);
 		    break;
-		default:
-		    G4Exception("Invalid enum in G4Box::CalcNormal");
-		    break;
+      default:
+        G4cout.precision(16);
+        G4cout << G4endl;
+        G4cout << "Box parameters:" << G4endl << G4endl;
+        G4cout << "fDx = "   << fDx/mm << " mm" << G4endl;
+        G4cout << "fDy = "   << fDy/mm << " mm" << G4endl;
+        G4cout << "fDz = "   << fDz/mm << " mm" << G4endl;
+        G4cout << "Position:"  << G4endl << G4endl;
+        G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl;
+        G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
+        G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl;
+        G4cout << "Direction:" << G4endl << G4endl;
+        G4cout << "v.x() = "   << v.x() << G4endl;
+        G4cout << "v.y() = "   << v.y() << G4endl;
+        G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
+        G4cout << "Proposed distance :" << G4endl << G4endl;
+        G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
+	G4Exception("Invalid enum in G4Box::DistanceToOut(p,v,...)");
+	break;
     }
   }
   return snxt;
@@ -659,26 +630,34 @@ G4double G4Box::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
 
 G4double G4Box::DistanceToOut(const G4ThreeVector& p) const
 {
-    G4double safx1,safx2,safy1,safy2,safz1,safz2,safe;
-	
-    safx1=fDx-p.x();
-    safx2=fDx+p.x();
-    safy1=fDy-p.y();
-    safy2=fDy+p.y();
-    safz1=fDz-p.z();
-    safz2=fDz+p.z();	
+  G4double safx1,safx2,safy1,safy2,safz1,safz2,safe;
+
+  if( Inside(p) == kOutside )
+  {
+     G4cout << "Position:"  << G4endl << G4endl;
+     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl;
+     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
+     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl;
+    G4Exception("Invalid call in G4Box::DistanceToOut(p),  point p is outside") ;
+  }
+  safx1 = fDx - p.x() ;
+  safx2 = fDx + p.x() ;
+  safy1 = fDy - p.y() ;
+  safy2 = fDy + p.y() ;
+  safz1 = fDz - p.z() ;
+  safz2 = fDz + p.z() ;	
 	
 // shortest Dist to any boundary now MIN(safx1,safx2,safy1..)
 
-    if (safx2<safx1) safe=safx2;
-    else             safe=safx1;
-    if (safy1<safe) safe=safy1;
-    if (safy2<safe) safe=safy2;
-    if (safz1<safe) safe=safz1;
-    if (safz2<safe) safe=safz2;
+  if (safx2 < safx1) safe = safx2 ;
+  else               safe = safx1 ;
+  if (safy1 < safe)  safe = safy1 ;
+    if (safy2 < safe)  safe = safy2 ;
+    if (safz1 < safe)  safe = safz1 ;
+    if (safz2 < safe)  safe = safz2 ;
 
-    if (safe<0) safe=0;
-    return safe;	
+    if (safe < 0) safe = 0 ;
+    return safe ;	
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -693,33 +672,33 @@ G4double G4Box::DistanceToOut(const G4ThreeVector& p) const
 G4ThreeVectorList*
 G4Box::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 {
-    G4ThreeVectorList *vertices;
-    vertices=new G4ThreeVectorList(8);
-    if (vertices)
-	{
-	    G4ThreeVector vertex0(-fDx,-fDy,-fDz);
-	    G4ThreeVector vertex1(fDx,-fDy,-fDz);
-	    G4ThreeVector vertex2(fDx,fDy,-fDz);
-	    G4ThreeVector vertex3(-fDx,fDy,-fDz);
-	    G4ThreeVector vertex4(-fDx,-fDy,fDz);
-	    G4ThreeVector vertex5(fDx,-fDy,fDz);
-	    G4ThreeVector vertex6(fDx,fDy,fDz);
-	    G4ThreeVector vertex7(-fDx,fDy,fDz);
+  G4ThreeVectorList* vertices = new G4ThreeVectorList(8) ;
 
-	    vertices->insert(pTransform.TransformPoint(vertex0));
-	    vertices->insert(pTransform.TransformPoint(vertex1));
-	    vertices->insert(pTransform.TransformPoint(vertex2));
-	    vertices->insert(pTransform.TransformPoint(vertex3));
-	    vertices->insert(pTransform.TransformPoint(vertex4));
-	    vertices->insert(pTransform.TransformPoint(vertex5));
-	    vertices->insert(pTransform.TransformPoint(vertex6));
-	    vertices->insert(pTransform.TransformPoint(vertex7));
-	}
-    else
-	{
-	    G4Exception("G4Box::CreateRotatedVertices Out of memory - Cannot alloc vertices");
-	}
-    return vertices;
+  if (vertices)
+  {
+    G4ThreeVector vertex0(-fDx,-fDy,-fDz) ;
+    G4ThreeVector vertex1(fDx,-fDy,-fDz) ;
+    G4ThreeVector vertex2(fDx,fDy,-fDz) ;
+    G4ThreeVector vertex3(-fDx,fDy,-fDz) ;
+    G4ThreeVector vertex4(-fDx,-fDy,fDz) ;
+    G4ThreeVector vertex5(fDx,-fDy,fDz) ;
+    G4ThreeVector vertex6(fDx,fDy,fDz) ;
+    G4ThreeVector vertex7(-fDx,fDy,fDz) ;
+
+    vertices->insert(pTransform.TransformPoint(vertex0));
+    vertices->insert(pTransform.TransformPoint(vertex1));
+    vertices->insert(pTransform.TransformPoint(vertex2));
+    vertices->insert(pTransform.TransformPoint(vertex3));
+    vertices->insert(pTransform.TransformPoint(vertex4));
+    vertices->insert(pTransform.TransformPoint(vertex5));
+    vertices->insert(pTransform.TransformPoint(vertex6));
+    vertices->insert(pTransform.TransformPoint(vertex7));
+  }
+  else
+  {
+G4Exception("G4Box::CreateRotatedVertices Out of memory - Cannot alloc vertices");
+  }
+  return vertices;
 }
 
 //////////////////////////////////////////////////////////////////////////
