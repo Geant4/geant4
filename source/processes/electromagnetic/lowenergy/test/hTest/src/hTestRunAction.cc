@@ -26,7 +26,7 @@
 
 #include "G4EnergyLossTables.hh"
 #include "G4hLowEnergyIonisation.hh"
-#include "G4ionLowEnergyIonisation.hh"
+//#include "G4ionLowEnergyIonisation.hh"
 #include "hTestPrimaryGeneratorAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1480,17 +1480,17 @@ void hTestRunAction::FillLowEnergyTest( )
     G4double cac = 2.0 ;
     theProton = G4Alpha::Alpha() ;
 
-    G4ionLowEnergyIonisation* ionLEIon = new G4ionLowEnergyIonisation() ;
-    ionLEIon->SetIonDefinition(theProton) ;
+    G4hLowEnergyIonisation* ionLEIon = new G4ionLowEnergyIonisation() ;
+    //  ionLEIon->SetIonDefinition(theProton) ;
 
-    G4ionLowEnergyIonisation* ionLEIonC = new G4ionLowEnergyIonisation() ;
+    G4hLowEnergyIonisation* ionLEIonC = new G4ionLowEnergyIonisation() ;
     G4ParticleDefinition* theC12 = G4IonC12::IonC12() ;
-    ionLEIonC->SetIonDefinition(theC12) ;
+    //ionLEIonC->SetIonDefinition(theC12) ;
     G4double chc = 6.0 ;
 
-    G4ionLowEnergyIonisation* ionLEIonAr = new G4ionLowEnergyIonisation() ;
+    G4hLowEnergyIonisation* ionLEIonAr = new G4ionLowEnergyIonisation() ;
     G4ParticleDefinition* theAr40 = G4IonAr40::IonAr40() ;
-    ionLEIonAr->SetIonDefinition(theAr40) ;
+    //ionLEIonAr->SetIonDefinition(theAr40) ;
     G4double cha = 18.0 ;
 
 

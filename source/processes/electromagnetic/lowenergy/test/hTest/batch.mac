@@ -28,7 +28,7 @@
 /calor/cutG 100.0 micrometer
 /calor/cutE 100.0 micrometer
 #  hist file name
-/plots/sethistName test.plot 
+/plots/sethistName prot.paw 
 /run/initialize
 #/run/particle/dumpCutValues
 #/event/drawTracks none
@@ -40,17 +40,17 @@
 /gun/energy 10.0 MeV
 #
 /run/beamOn 1
-#/plots/sethistName antip.plot 
-#/run/initialize
-#/gun/particle antiproton
-#/gun/energy 10.0 MeV
-#/run/beamOn 100
+/plots/sethistName antip.paw
+/run/initialize
+/gun/particle antiproton
+/gun/energy 10.0 MeV
+/run/beamOn 1
 #
-#/plots/sethistName ionc12.plot 
-#/run/initialize
-#/gun/particle IonC12
-#/gun/energy 100.0 MeV
-#/run/beamOn 100
+/plots/sethistName ionc12.plot 
+/run/initialize
+/gun/particle IonC12
+/gun/energy 100.0 MeV
+/run/beamOn 1
 
 
 

@@ -19,6 +19,7 @@
 //                 Introduced sizes of L0, L1, L2 arrays
 // 23/05/2000 MGP  Made compliant to design
 //  
+// 02/08/2000 V.Ivanchenko Clean up according new design
 //
 // ************************************************************
 // It is the Quantal Harmonic Oscillator Model for energy loss
@@ -38,7 +39,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4QAOLowEnergyLoss::G4QAOLowEnergyLoss()
+G4QAOLowEnergyLoss::G4QAOLowEnergyLoss(const G4String& name)
+  : G4VLowEnergyModel(name)
 {
   numberOfMaterials = 6;
   sizeL0 = 67;
@@ -49,13 +51,46 @@ G4QAOLowEnergyLoss::G4QAOLowEnergyLoss()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4QAOLowEnergyLoss::~G4QAOLowEnergyLoss()
-{ 
+{;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4QAOLowEnergyLoss::HighEnergyLimit(
+                             const G4ParticleDefinition* aParticle,
+                             const G4Material* material) const
+{
+  return 2.0*MeV ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool G4QAOLowEnergyLoss::IsInCharge(G4double energy, 
-			    const G4ParticleDefinition* particleDefinition,
+G4double G4QAOLowEnergyLoss::LowEnergyLimit(
+                             const G4ParticleDefinition* aParticle,
+                             const G4Material* material) const
+{
+  return 50.0*keV ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4QAOLowEnergyLoss::HighEnergyLimit(
+                             const G4ParticleDefinition* aParticle) const
+{
+  return 2.0*MeV ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4QAOLowEnergyLoss::LowEnergyLimit(
+                             const G4ParticleDefinition* aParticle) const
+{
+  return 50.0*keV ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4QAOLowEnergyLoss::IsInCharge(
+			    const G4DynamicParticle* particle,
 			    const G4Material* material) const
 {
   G4bool isInCharge = false;
@@ -70,11 +105,32 @@ G4bool G4QAOLowEnergyLoss::IsInCharge(G4double energy,
 	break;}
     }
   
-  if (particleDefinition == G4AntiProton::AntiProtonDefinition()
-      &&
-      hasMaterial)
-      //&& energy >= LowEnergyLimit() && energy <= HighEnergyLimit() )
-    isInCharge = true;
+  if ((particle->GetDefinition()) == (G4AntiProton::AntiProtonDefinition())
+               && hasMaterial) isInCharge = true;
+  
+  return isInCharge;
+      
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4QAOLowEnergyLoss::IsInCharge(
+			    const G4ParticleDefinition* aParticle,
+			    const G4Material* material) const
+{
+  G4bool isInCharge = false;
+
+  G4bool hasMaterial = false;
+
+  for (G4int m = 0; m < numberOfMaterials; m++)
+    {
+      G4String matName = material->GetName();
+      if (matName == materialAvailable[m]){ 
+	hasMaterial = true;
+	break;}
+    }
+  
+  if (aParticle == (G4AntiProton::AntiProtonDefinition())
+                && hasMaterial) isInCharge = true;
   
   return isInCharge;
       
@@ -82,13 +138,39 @@ G4bool G4QAOLowEnergyLoss::IsInCharge(G4double energy,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4QAOLowEnergyLoss::EnergyLoss(const G4DynamicParticle* particle,
-					const G4Material* material) const
+G4double G4QAOLowEnergyLoss::TheValue(const G4DynamicParticle* particle,
+	       	                      const G4Material* material) 
+{
+  G4int zParticle = G4int(particle->GetCharge());
+
+  G4double energy = particle->GetKineticEnergy() ;
+  G4double eloss  = EnergyLoss(material,energy,zParticle) ;
+
+  return eloss ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4QAOLowEnergyLoss::TheValue(const G4ParticleDefinition* aParticle,
+       		                      const G4Material* material,
+                                            G4double kineticEnergy) 
+{
+  G4int zParticle = G4int (aParticle->GetPDGCharge());
+
+  G4double eloss  = EnergyLoss(material,kineticEnergy,zParticle) ;
+
+  return eloss ;
+}
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4QAOLowEnergyLoss::EnergyLoss(const G4Material* material,
+                                              G4double kineticEnergy,
+                                              G4int zParticle) const 
 {
   G4int nbOfShell = GetNumberOfShell(material);
   G4double ionisationEnergy = material->GetIonisation()->GetMeanExcitationEnergy();
-  G4double kineticEnergy = particle->GetKineticEnergy();
-  G4int zParticle = (G4int) particle->GetCharge();
   G4double dedx=0;
   G4double v=0;
   v= c_light * sqrt( 2 * kineticEnergy / proton_mass_c2 );
@@ -389,10 +471,3 @@ const G4double G4QAOLowEnergyLoss::L2[14][2] =
   40.00,  -1.13902
 };
 
-
-
-G4double G4QAOLowEnergyLoss::HighEnergyLimit() const
-{
-  G4double eMax = 2. * MeV;
-  return eMax;
-}

@@ -28,45 +28,60 @@
 #ifndef G4QAOLowEnergyLoss_hh
 #define G4QAOLowEnergyLoss_hh 1
 
-#include "G4VhEnergyLossModel.hh"
+#include "G4VLowEnergyModel.hh"
 #include "globals.hh"
 
-class G4DynamicParticle;
-class G4Material;
-class G4ParticleDefinition;
-
-class G4QAOLowEnergyLoss : public G4VhEnergyLossModel
+class G4QAOLowEnergyLoss : public G4VLowEnergyModel
 {
 public: 
   
-  G4QAOLowEnergyLoss(); 
+  G4QAOLowEnergyLoss(const G4String& name); 
   
   ~G4QAOLowEnergyLoss();
-  
-  virtual G4double LowEnergyLimit() const {return 50*keV;};
-  // returns the lower limit for model validity
-  
-  virtual G4double HighEnergyLimit() const;
+    
+  G4double HighEnergyLimit(const G4ParticleDefinition* aParticle,
+                           const G4Material* material) const;
   // returns the higher limit for model validity
+
+  G4double LowEnergyLimit(const G4ParticleDefinition* aParticle,
+                          const G4Material* material) const;
+  // returns the lower limit for model validity
  
-  virtual G4bool IsInCharge(G4double energy, 
-			    const G4ParticleDefinition* particleDefinition,
-			    const G4Material* material) const;
+  G4double HighEnergyLimit(const G4ParticleDefinition* aParticle) const;
+  // returns the higher limit for model validity
+
+  G4double LowEnergyLimit(const G4ParticleDefinition* aParticle) const;
+  // returns the lower limit for model validity
+ 
+  G4bool IsInCharge(const G4DynamicParticle* particle,
+		    const G4Material* material) const;
+  // returns true if the model is applicable at that energy for
+  // that particle for that material
+
+  G4bool IsInCharge(const G4ParticleDefinition* aParticle,
+		    const G4Material* material) const;
   // returns true if the model is applicable at that energy for
   // that particle for that material
   
-  virtual G4double EnergyLoss(const G4DynamicParticle* particle,
-			      const G4Material* material) const;
+  G4double TheValue(const G4DynamicParticle* particle,
+		           const G4Material* material);
   // returns the energy loss via the quantal harmonic oscillator model 
   
+  G4double TheValue(const G4ParticleDefinition* aParticle,
+       		          const G4Material* material,
+                                G4double kineticEnergy);
+  // returns the energy loss via the quantal harmonic oscillator model 
+
 private:
   
-  // hide assignment operator 
-  G4QAOLowEnergyLoss & operator=( G4QAOLowEnergyLoss &right);
-  G4QAOLowEnergyLoss( G4QAOLowEnergyLoss&);
-  
+  G4double EnergyLoss(const G4Material* material,
+                            G4double kineticEnergy,
+                            G4int zParticle) const;
+  // returns the energy loss via the quantal harmonic oscillator model 
+   
   // get number of shell, energy and oscillator strenghts for material
   G4int GetNumberOfShell(const G4Material* material) const;
+
   G4double GetShellEnergy(const G4Material* material,G4int nbOfTheShell) const; 
   G4double GetShellStrength(const G4Material* material,G4int nbOfTheShell) const;
   

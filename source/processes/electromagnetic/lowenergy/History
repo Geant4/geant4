@@ -1,4 +1,4 @@
-$Id: History,v 1.26 2000-07-29 13:17:24 pia Exp $
+$Id: History,v 1.27 2000-08-02 16:27:22 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02.08.2000 - MGP, tag emlowen-V02-
+             V.Ivanchenko: Energy losses of hadrons and ions are redesigned,
+             a lot of new classes are created
 
 29.07.2000 - MGP, tag emlowen-V02-00-02
              Added theta to ntuples in G4BremsstrahlungTest

@@ -165,7 +165,7 @@ void hTestPhysicsList::ConstructProcess()
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
 #include "G4hLowEnergyIonisation.hh"
-#include "G4ionLowEnergyIonisation.hh"
+//#include "G4ionLowEnergyIonisation.hh"
 
 #include "hTestStepCut.hh"
 
@@ -231,19 +231,17 @@ void hTestPhysicsList::ConstructEM()
       // Standard ionisation
       //       G4hIonisation* hIon = new G4hIonisation() ;
 
-      // Standard ionisation with low energy extantion
-      // G4ionLowEnergyIonisation* hIon = new G4ionLowEnergyIonisation() ;
       G4hLowEnergyIonisation* hIon = new G4hLowEnergyIonisation() ;
       //hIon->SetNuclearStoppingOff() ;
-      hIon->SetNuclearStoppingOn() ;
+      //      hIon->SetNuclearStoppingOn() ;
 
        //hIon->SetStoppingPowerTableName("Ziegler1977He") ;
        //hIon->SetStoppingPowerTableName("Ziegler1977H") ;
-         hIon->SetStoppingPowerTableName("ICRU_R49p") ;
+      //  hIon->SetStoppingPowerTableName("ICRU_R49p") ;
        //hIon->SetStoppingPowerTableName("ICRU_R49He") ;
        //hIon->SetStoppingPowerTableName("ICRU_R49PowersHe") ;
 
-      hIon->SetAntiProtonStoppingOn(); 
+      //hIon->SetAntiProtonStoppingOn(); 
 
       pmanager->AddProcess(hIon,-1,2,2);
       
@@ -266,15 +264,15 @@ void hTestPhysicsList::ConstructEM()
       // G4ionIonisation* iIon = new G4ionIonisation() ;
 
       // Standard ionisation with low energy extantion
-      //  G4hLowEnergyIonisation* iIon = new G4hLowEnergyIonisation() ;
-      G4ionLowEnergyIonisation* iIon = new G4ionLowEnergyIonisation() ;
+        G4hLowEnergyIonisation* iIon = new G4hLowEnergyIonisation() ;
+      // G4ionLowEnergyIonisation* iIon = new G4ionLowEnergyIonisation() ;
       //      iIon->SetNuclearStoppingOff() ;
-        iIon->SetNuclearStoppingOn() ;
-      iIon->SetIonDefinition(particle) ;
+	//  iIon->SetNuclearStoppingOn() ;
+	//iIon->SetIonDefinition(particle) ;
 
       //iIon->SetStoppingPowerTableName("Ziegler1977He") ;
       //iIon->SetStoppingPowerTableName("Ziegler1977H") ;
-      iIon->SetStoppingPowerTableName("ICRU_R49p") ;
+	// iIon->SetStoppingPowerTableName("ICRU_R49p") ;
       //iIon->SetStoppingPowerTableName("ICRU_R49He") ;
       //iIon->SetStoppingPowerTableName("ICRU_R49PowersHe") ;
 

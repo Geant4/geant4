@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hLowEnergyLoss.hh,v 1.2 2000-03-31 15:17:20 vnivanch Exp $
+// $Id: G4hLowEnergyLoss.hh,v 1.3 2000-08-02 16:23:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -72,21 +72,21 @@ class G4hLowEnergyLoss : public G4VContinuousDiscreteProcess
     G4bool IsApplicable(const G4ParticleDefinition&);
 
     G4double GetContinuousStepLimit(
-                                    const G4Track& track,
+                              const G4Track& track,
                                     G4double previousStepSize,
                                     G4double currentMinimumStep,
-                                    G4double& currentSafety) ; 
+                                    G4double& currentSafety); 
 
-    G4VParticleChange* AlongStepDoIt(const G4Track& track ,const G4Step& Step) ;
+    G4VParticleChange* AlongStepDoIt(const G4Track& track, const G4Step& Step);
 
     virtual G4double GetMeanFreePath(
-                                      const G4Track& track,
+                                const G4Track& track,
                                       G4double previousStepSize,
-                                      G4ForceCondition* condition
+                                enum  G4ForceCondition* condition
                                                          ) = 0 ;
 
     virtual G4VParticleChange* PostStepDoIt(const G4Track& track,
-                                               const G4Step& Step) = 0 ;
+                                            const G4Step& Step) = 0 ;
 
 
   protected:
@@ -261,7 +261,6 @@ class G4hLowEnergyLoss : public G4VContinuousDiscreteProcess
 
     static G4PhysicsTable** RecorderOfProcess;
     static G4int CounterOfProcess;
-
 
     static G4PhysicsTable* thepRangeCoeffATable;
     static G4PhysicsTable* thepRangeCoeffBTable;
