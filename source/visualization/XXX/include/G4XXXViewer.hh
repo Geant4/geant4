@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXViewer.hh,v 1.4 2001-11-16 10:49:15 johna Exp $
+// $Id: G4XXXViewer.hh,v 1.5 2001-11-19 15:09:23 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,7 +31,7 @@
 #ifndef G4XXXVIEWER_HH
 #define G4XXXVIEWER_HH
 
-#define G4XXXDEBUG  // Comment this out to suppress printing.
+#define G4XXXDEBUG  // Comment this out to suppress debug code.
 
 #include "G4VViewer.hh"
 
