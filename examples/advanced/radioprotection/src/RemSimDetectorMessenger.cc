@@ -31,7 +31,7 @@
 //    *********************************
 //
 //
-// $Id: RemSimDetectorMessenger.cc,v 1.7 2004-05-21 13:49:23 guatelli Exp $
+// $Id: RemSimDetectorMessenger.cc,v 1.8 2004-05-21 14:42:44 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,6 +65,13 @@ RemSimDetectorMessenger::RemSimDetectorMessenger( RemSimDetectorConstruction* De
   SPECmd -> SetCandidates("On Off");
   SPECmd -> AvailableForStates(G4State_PreInit,G4State_Idle); 
 
+  roofCmd =  new G4UIcmdWithAString("/configuration/AddRoof",this); 
+  roofCmd -> SetGuidance("Add the Roof to the moon habitat."); 
+  roofCmd -> SetParameterName("choice",true);
+  roofCmd -> SetCandidates("On Off");
+  roofCmd -> AvailableForStates(G4State_Idle); 
+
+
   // Fix the parameters of the shielding: material and thickness
   shieldingDir = new G4UIdirectory("/shielding/");
   shieldingDir -> SetGuidance("shielding control.");
@@ -80,13 +87,25 @@ RemSimDetectorMessenger::RemSimDetectorMessenger( RemSimDetectorConstruction* De
   thicknessCmd -> SetRange("Size>=0.");
   thicknessCmd -> SetUnitCategory("Length");
   thicknessCmd -> AvailableForStates(G4State_Idle); 
+
+  roofDir = new G4UIdirectory("/roof/");
+  roofDir -> SetGuidance("Roof control.");
+  thicknessRoofCmd =  new G4UIcmdWithADoubleAndUnit("/roof/thickness",this);
+  thicknessRoofCmd -> SetGuidance("Set the thickness of the Roof."); 
+  thicknessRoofCmd -> SetParameterName("Size",true);
+  thicknessRoofCmd -> SetRange("Size>=0.");
+  thicknessRoofCmd -> SetUnitCategory("Length");
+  thicknessRoofCmd -> AvailableForStates(G4State_Idle); 
 }
 
 RemSimDetectorMessenger::~RemSimDetectorMessenger()
 {
+  delete thicknessRoofCmd;
+  delete roofDir;
   delete thicknessCmd;
   delete materialCmd;
   delete shieldingDir;
+  delete roofCmd;
   delete SPECmd; 
   delete shieldingCmd; 
   delete vehicleCmd;
@@ -104,14 +123,18 @@ void RemSimDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue
   if(command == SPECmd)
     detector -> AddShelterSPE(newValue); 
 
+  if(command == roofCmd)
+    detector -> AddHabitatRoof(newValue); 
+
   if(command == materialCmd)
     detector -> ChangeShieldingMaterial(newValue);
 
- 
   if(command == thicknessCmd)
-    {
       detector -> ChangeShieldingThickness
                   (thicknessCmd -> GetNewDoubleValue(newValue));
-    }
+    
+  if(command == thicknessRoofCmd)
+      detector -> ChangeRoofThickness
+                  (thicknessRoofCmd -> GetNewDoubleValue(newValue));
 }
 

@@ -27,7 +27,7 @@
 //    *                                       *
 //    *****************************************
 //
-// $Id: RemSimDetectorMessenger.hh,v 1.6 2004-05-21 13:49:22 guatelli Exp $
+// $Id: RemSimDetectorMessenger.hh,v 1.7 2004-05-21 14:42:44 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,13 +55,16 @@ private:
   G4UIcmdWithAString*          vehicleCmd; //change set-up configuration 
   G4UIcmdWithAString*          shieldingCmd;//add the shielding layer
   G4UIcmdWithAString*          SPECmd; //add the SPE shelter
-
+  G4UIcmdWithAString*          roofCmd; // add the roof to the moon habitat
   G4UIdirectory*               shieldingDir;//control the shielding parameters 
   G4UIcmdWithAString*          materialCmd; //change the material of 
                                             //the shielding
   G4UIcmdWithADoubleAndUnit*   thicknessCmd; //change the thickness of the
                                              // shielding
 
+ G4UIdirectory*  roofDir; // control the roof height
+ G4UIcmdWithADoubleAndUnit*   thicknessRoofCmd;//change the thickness of the
+                                             // roof
 };
 #endif
 

@@ -53,21 +53,6 @@ void RemSimMoonHabitat::ConstructComponent(G4VPhysicalVolume* motherVolume)
                                   G4ThreeVector(0.,0.,translation),
                                   "shelter",shelterLog, 
                                   moonPhys,false,0);
-
-//     G4double roofThick = 3.*m;
-//      G4Trd* roof = new G4Trd("roof",2.25*m,7.*m,5.*m, 8.*m,roofThick/2.);
-
-//      G4LogicalVolume* roofLog = new G4LogicalVolume(roof,
-//                                                     moon,
-//                                                     "roof",
-//                                                      0,0,0);
-
-//     G4VPhysicalVolume* roofPhys = new G4PVPlacement(0,
-//                                     G4ThreeVector(0.,0.,thick/2.- roofThick/2.),
-//                                     "roof",roofLog, 
-//                                     spacePhys,false,0);
-
-
   
     G4Colour  red      (1.0,0.0,0.0);
     G4Colour  blue   (0.,0.,1.);

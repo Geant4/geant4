@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimMoonSurfaceConfiguration.cc,v 1.2 2004-05-17 10:34:57 guatelli Exp $
+// $Id: RemSimMoonSurfaceConfiguration.cc,v 1.3 2004-05-21 14:42:44 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "CLHEP/Random/RandGeneral.h"
@@ -94,7 +94,7 @@ void RemSimMoonSurfaceConfiguration::GeneratePrimaries(G4Event* anEvent)
   G4double x0 = 0.*m;
   G4double z0 = -radius*sin(angle);
  
-  if ( z0 < -2.75*m)
+  if ( z0 < 0. *m)
     {
    particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
     }

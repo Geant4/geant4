@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimDetectorConstruction.hh,v 1.7 2004-05-21 13:49:22 guatelli Exp $
+// $Id: RemSimDetectorConstruction.hh,v 1.8 2004-05-21 14:42:44 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -51,13 +51,16 @@ public:
   void ConstructVolume();
   void AddShielding(G4String);
   void AddShelterSPE(G4String);
+  void AddHabitatRoof(G4String);
   void ChangeShieldingMaterial(G4String);
   void ChangeShieldingThickness(G4double);
+  void ChangeRoofThickness(G4double);
   void ChooseConfiguration(G4String);
 
 private:
   RemSimDecorator* retrieveDecorator(); 
   RemSimDecorator* retrieveDecoratorSPE();
+  RemSimDecorator* retrieveDecoratorRoof(); 
   RemSimDecorator* retrieveDecorator1();
 
   G4LogicalVolume* experimentalHall_log;
@@ -70,7 +73,8 @@ private:
   RemSimDetectorMessenger* messenger; 
   RemSimDecorator* decorator;
   RemSimDecorator* decoratorSPE;
-  RemSimDecorator* decorator1; 
+  RemSimDecorator* decorator1;
+  RemSimDecorator* decoratorRoof; 
   G4String decoratorValue;
   G4String astronautValue;
   G4bool moon;
