@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst10DetectorConstruction.cc,v 1.6 2003-05-15 08:24:16 gcosmo Exp $
+// $Id: Tst10DetectorConstruction.cc,v 1.7 2004-01-15 09:03:23 grichine Exp $
 // ------------------------------------------------------------
 //  GEANT 4 class header file 
 //
@@ -37,6 +37,7 @@
 #include "G4Element.hh"
 #include "G4ElementTable.hh"
 #include "G4Box.hh"
+#include "G4Orb.hh"
 #include "G4Tubs.hh"
 #include "G4Sphere.hh"
 #include "G4Cons.hh"
@@ -82,13 +83,18 @@ Tst10DetectorConstruction::SelectDetector( const G4String& val )
   if (val == "Sphere")
    aVolume = new G4Sphere ( "aSphere", 8.0*cm, 10.0*cm, 
                              0.0*deg, 360.0*deg,0.0*deg, 130.0*deg);
+  else if (val == "Orb")
+   aVolume = new G4Orb ( "aOrb", 10.0*cm );
   else if (val == "Box")          
     aVolume = new G4Box ( "aBox", 10*cm, 10*cm, 10*cm );
   else if (val == "Cone")        
     aVolume = new G4Cons ( "aCone", 2*cm, 6*cm, 8*cm, 14*cm,
-                           10*cm, 10*deg, 300*deg );  
+                           10*cm, 10*deg, 300*deg ); 
+  //  10*cm, 10*deg, 300*deg ); 
+			   //  0., pi); 
   else if (val == "Tube")
-    aVolume = new G4Tubs ( "aTube", 5*cm, 10*cm, 7*cm, 70*deg, 100*deg);
+    //  aVolume = new G4Tubs ( "aTube", 5*cm, 10*cm, 7*cm, 70*deg, 100*deg);
+    aVolume = new G4Tubs ( "aTube", 5*cm, 10*cm, 7*cm, 10*deg, 300*deg);
   else if (val == "Hype")
     aVolume = new G4Hype ("aHype", 10*cm, 20*cm, 0*deg, 360*deg, 10*cm );
   else if (val == "Torus")
@@ -243,3 +249,5 @@ G4VPhysicalVolume* Tst10DetectorConstruction::Construct()
   
   return SelectDetector ("Sphere");
 }
+
+
