@@ -347,13 +347,12 @@ endif
 #---------------------------------------------------
 if ( `uname -n` == "lx1" ) then
   setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
-  setenv G4INSTALL /geant4/geant4.5.2.ref04
+  setenv G4INSTALL /geant4/geant4.6.0
   setenv G4WORKDIR $G4INSTALL/rh72_gcc332
   setenv G4STTDIR  $G4WORKDIR/stt
   setenv G4LIB     $G4WORKDIR/lib
   setenv G4SYSTEM  Linux-g++
-  setenv G4DEBUG   1
-  setenv G4MAKESHLIB                 $G4INSTALL/config/makeshlib.sh
+  #setenv G4DEBUG   1
   # G4 build flags :
   #setenv G4UI_BUILD_XM_SESSION       1
   #setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
@@ -373,19 +372,18 @@ if ( `uname -n` == "lx1" ) then
   #setenv G4VIS_USE_VRML              1
   #setenv G4VIS_USE_VRMLFILE          1
   # Specific :
-  setenv CLHEP_BASE_DIR /lal/CLHEP/1.8.0.0/rh72_gcc332
+  setenv CLHEP_BASE_DIR /lal/CLHEP/1.8.1.0/rh72_gcc332
   #setenv OGLHOME        /lal/Mesa/3.1/Linux
   #setenv OIVHOME        /lal/SoFree/v2r9
   #setenv HEPVISHOME     /lal/HEPVis/v5r1-05-LAL
   #setenv OIVFLAGS       "-I$OIVHOME/include -I$HEPVISHOME/include"
   #setenv OIVLIBS        "-L$HEPVISHOME/Linux-gxx-SF -lHEPVis -L$OIVHOME/Linux-gxx -lSoFree"
-  #setenv SOFREEUSER     $OIVHOME/user/
   # Else :
   #setenv XENVIRONMENT   $G4INSTALL/tests/test201/test201.xrm
   #setenv XENVIRONMENT   g4.xrm
   #setenv PATH "${PATH}:/lal/DAWN/3.72b/Linux-egcs"
   #setenv CPPVERBOSE 1
-  set prompt='g4-lx1-rh72_gcc332> ' 
+  set prompt='g4-6.0-rh72_gcc332> ' 
 endif
 
 if ( `uname -n` == "papou1" ) then
