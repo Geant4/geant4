@@ -64,7 +64,7 @@ G4VParticleChange* G4DecayWithSpin::DecayIt(const G4Track& aTrack, const G4Step&
     G4double cost = 1. - 2.*G4UniformRand();
     G4double sint = std::sqrt((1.-cost)*(1.+cost));
 
-    G4double phi = 2*M_PI*G4UniformRand();
+    G4double phi = twopi*G4UniformRand();
     G4double sinp = std::sin(phi);
     G4double cosp = std::cos(phi);
 
