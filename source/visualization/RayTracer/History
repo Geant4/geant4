@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2000-05-02 10:07:08 johna Exp $
+$Id: History,v 1.8 2001-05-18 10:00:22 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+18th May 2001 John Allison (raytracer-V03-01-00)
+- Removed unnecessary virtual inheritance of G4VViewer in G4RayTracerViewer.
 
 2nd May 2000  John Allison
 - G4RayTracer: set out-of-world ray to black.

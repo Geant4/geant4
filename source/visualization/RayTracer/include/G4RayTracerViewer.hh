@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RayTracerViewer.hh,v 1.2 2000-02-28 15:19:49 johna Exp $
+// $Id: G4RayTracerViewer.hh,v 1.3 2001-05-18 09:59:34 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // John Allison  17th March 2000
@@ -15,7 +15,7 @@
 
 #include "G4VViewer.hh"
 
-class G4RayTracerViewer: virtual public G4VViewer {
+class G4RayTracerViewer: public G4VViewer {
 public:
   G4RayTracerViewer(G4VSceneHandler&,const G4String& name);
   virtual ~G4RayTracerViewer();
