@@ -252,12 +252,12 @@
       {
         if( vec[i]->GetSide() == 1 )
         {
+          forwardParticlesLeft = 1;  
           if( ++is == iskip )
           {
             forwardEnergy += vec[i]->GetMass()/GeV;
             for( G4int j=i; j<(vecLen-1); j++ )*vec[j] = *vec[j+1];    // shift up
             --forwardCount;
-            forwardParticlesLeft = 1;  
             G4ReactionProduct *temp = vec[vecLen-1];
             delete temp;
             if( --vecLen == 0 )return false;  // all the secondaries have been eliminated
@@ -291,6 +291,7 @@
       {
         if( vec[i]->GetSide() < 0 )
         {
+          backwardParticlesLeft = 1;
           if( ++is == iskip )        // eliminate the i'th particle
           {
             if( vec[i]->GetSide() == -2 )
@@ -302,7 +303,6 @@
             backwardEnergy += vec[i]->GetTotalEnergy()/GeV;
             for( G4int j=i; j<(vecLen-1); ++j )*vec[j] = *vec[j+1];   // shift up
             --backwardCount;
-            backwardParticlesLeft = 1;
             G4ReactionProduct *temp = vec[vecLen-1];
             delete temp;
             if( --vecLen == 0 )return false;  // all the secondaries have been eliminated
