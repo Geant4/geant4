@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.cc,v 1.2 2002-12-16 11:15:46 gcosmo Exp $
+// $Id: G4VRangeToEnergyConverter.cc,v 1.3 2003-01-07 23:52:24 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -112,7 +112,7 @@ G4double G4VRangeToEnergyConverter::Convert(G4double rangeCut,
   
   // Build range vector for every material, convert cut into energy-cut,
   // fill theKineticEnergyCuts and delete the range vector
-  //???????????? G4double tune = 0.025*mm*g/cm3 ,lowen = 30.*keV ; 
+  G4double tune = 0.025*mm*g/cm3 ,lowen = 30.*keV ; 
 
   G4int idx = material->GetIndex(); 
   G4double density = material->GetDensity() ;
@@ -120,6 +120,10 @@ G4double G4VRangeToEnergyConverter::Convert(G4double rangeCut,
     G4RangeVector* rangeVector = new G4RangeVector(LowestEnergy, HighestEnergy, TotBin);
     BuildRangeVector(material, HighestEnergy, Mass, rangeVector);
     theKineticEnergyCuts = ConvertCutToKineticEnergy(rangeVector, rangeCut, idx);
+
+    if( ((theParticle->GetParticleName()=="e-")||(theParticle->GetParticleName()=="e+"))
+           && (theKineticEnergyCuts < lowen) ) 
+    { theKineticEnergyCuts /= (1.+tune/(rangeCut*density)); }
     if(theKineticEnergyCuts < LowestEnergy) {
       theKineticEnergyCuts = LowestEnergy ;
     }
@@ -164,12 +168,12 @@ G4double G4VRangeToEnergyConverter::RangeLinSimpson(
                                      const G4ElementVector* elementVector,
                                      const G4double* atomicNumDensityVector,
                                      G4double aMass,   
-                                     G4double taulow, G4double tauhigh)
+                                     G4double taulow, G4double tauhigh, G4int nbin)
 {
   // Simpson numerical integration, linear binning
-  G4double dtau = (tauhigh-taulow)/TotBin;
+  G4double dtau = (tauhigh-taulow)/nbin;
   G4double Value=0.;
-  for (size_t i=0; i<=size_t(TotBin); i++){
+  for (size_t i=0; i<=size_t(nbin); i++){
     G4double taui=taulow+dtau*i;
     G4double ti=aMass*taui;
     G4double lossi=0.;
@@ -183,7 +187,7 @@ G4double G4VRangeToEnergyConverter::RangeLinSimpson(
     if ( i==0 ) {
       Value += 0.5/lossi;
     } else {
-      if ( i<size_t(TotBin) ) Value += 1./lossi;
+      if ( i<size_t(nbin) ) Value += 1./lossi;
       else            Value += 0.5/lossi;
     }
   }
@@ -200,13 +204,15 @@ G4double G4VRangeToEnergyConverter::RangeLogSimpson(
                                      const G4ElementVector* elementVector,
                                      const G4double* atomicNumDensityVector,
                                      G4double aMass,   
-                                     G4double ltaulow, G4double ltauhigh)
+                                     G4double ltaulow, G4double ltauhigh,
+                                     G4int nbin)
 {
   // Simpson numerical integration, logarithmic binning
+  if(nbin<0) nbin = TotBin;
   G4double ltt = ltauhigh-ltaulow;
-  G4double dltau = ltt/TotBin;
+  G4double dltau = ltt/nbin;
   G4double Value = 0.;
-  for (size_t i=0; i<=size_t(TotBin); i++){
+  for (size_t i=0; i<=size_t(nbin); i++){
     G4double ui = ltaulow+dltau*i;
     G4double taui = exp(ui);
     G4double ti = aMass*taui;
@@ -221,7 +227,7 @@ G4double G4VRangeToEnergyConverter::RangeLogSimpson(
     if ( i==0 ) {
       Value +=  0.5*taui/lossi;
     } else {
-      if ( i<size_t(TotBin) ) Value += taui/lossi;
+      if ( i<size_t(nbin) ) Value += taui/lossi;
       else Value +=  0.5*taui/lossi;
     }
   }
@@ -372,18 +378,18 @@ void G4VRangeToEnergyConverter::BuildRangeVector(
         if ( nbin<1 ) nbin = 1;
         Value += RangeLinSimpson(elementVector,atomicNumDensityVector, 
                                  aMass,
-                                 tau1, tau);
+                                 tau1, tau, nbin);
       } else {
         Value += RangeLinSimpson(elementVector,atomicNumDensityVector,
                                    aMass,
-				   tau1, taulim);
+				   tau1, taulim, maxnbint);
         G4double ltaulow  = log(taulim);
         G4double ltauhigh = log(tau);
         G4int nbin = (G4int)(maxnbint*(ltauhigh-ltaulow)/(ltaumax-ltaulow));
         if ( nbin<1 ) nbin = 1;
         Value += RangeLogSimpson(elementVector,atomicNumDensityVector,
 				 aMass,
-				 ltaulow, ltauhigh);
+				 ltaulow, ltauhigh, nbin);
       }
     }
     rangeVector->PutValue(i,Value); 
@@ -435,7 +441,10 @@ G4double G4VRangeToEnergyConverter::ConvertCutToKineticEnergy(
   // convert range to energy
   G4double T1 = LowestEnergy;
   G4double r1 = rangeVector->GetValue(T1,isOut);
-  if ( theCutInLength <= r1 ) return T1;
+  if ( theCutInLength <= r1 )
+  {
+    return T1;
+  }
 
   G4double T2 = Tmax ;
   G4double T3 = sqrt(T1*T2);
@@ -449,6 +458,7 @@ G4double G4VRangeToEnergyConverter::ConvertCutToKineticEnergy(
     T3 = sqrt(T1*T2);
     r3 = rangeVector->GetValue(T3,isOut);
   }
+
   return T3;
 }
 

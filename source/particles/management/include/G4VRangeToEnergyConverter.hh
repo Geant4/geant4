@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.hh,v 1.2 2002-12-16 11:15:43 gcosmo Exp $
+// $Id: G4VRangeToEnergyConverter.hh,v 1.3 2003-01-07 23:52:24 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -130,14 +130,16 @@ class G4VRangeToEnergyConverter
                             const G4ElementVector* elementVector,
                             const G4double* atomicNumDensityVector,
 			    G4double aMass,
-                            G4double taulow, G4double tauhigh
+                            G4double taulow, G4double tauhigh,
+                            G4int nbin
                           ); 
 
     G4double RangeLogSimpson(
                             const G4ElementVector* elementVector,
                             const G4double* atomicNumDensityVector,
                             G4double aMass,
-                            G4double ltaulow, G4double ltauhigh
+                            G4double ltaulow, G4double ltauhigh,
+                            G4int nbin
                           );
 
   public: // with description  
