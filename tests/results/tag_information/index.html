@@ -1,7 +1,7 @@
 <html>
 <head>
 <title>System Testing report on large-N tests</title>
-<!-- Changed by: Serguei SADILOV, 17-Dec-2001 -->
+<!-- Changed by: Serguei SADILOV,  4-Mar-2002 -->
 </head>
 
 <body>
@@ -11,7 +11,7 @@
 </div>
 
 Report on Errors and Warnings arising from system testing on the
-<b><blink>geant4-04-00-ref-00</blink></b> development tag.
+<b><blink>geant4-04-00-ref-02</blink></b> development tag.
 <p>
 NOTE: the complete set of tests has not been run, with Large_N(umbers of events),
       for all platforms. 
@@ -24,7 +24,7 @@ NOTE: the complete set of tests has not been run, with Large_N(umbers of events)
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
 test01     |         |         |          |          |          |          |          |          |         |         |         |         |
 test02     |         |         |          |          |          |          |          |          |         |         |         |         |
-test02.h   |         |         |          |          |          |          |          |          |  abend  | W3      | abend   |         |
+test02.h   |         |         |          |          |          | WL7      |          |          |  abend  |         | abend   |         |
 test05     |         |         |          |          |          |          |          |          |         |         |         |         |
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
 test06     |         |         |          |          |          |          |          |          |         |         |         |         |
@@ -32,38 +32,90 @@ test07     |         |         |          |          |          |          |    
 test09     |         |         |          |          |          |          |          |          |         |         |         |         |
 test10     |         |         |          |          |          |          |          |          |         |         |         |         |
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
-test11     |         |         |          |          |          |          |          |          | abend   | testing | abend   |         |
-test12     |         |         |          | W7       |          |          |          | W3       | abend   |         | abend   | W7 W3   |
-test13     |         |         |          |          |          |          |          |          | abend   | W6      | abend   |         |
+test11     |         |         |          |          |          |          |          |          | abend   |         | abend   |         |
+test12     |         | WL7     |          | W7       | WL7      | WL7      |          |          | abend   |         | abend   | W7      |
+test13     | WL6     | WL6     | WL6      | WL6      | WL6      | WL6      | WL7      |          | abend   | W6      | abend   |         |
 test14     |         |         |          |          |          |          |          |          |         |         |         |         |
-test15     | Err 10  |         |          |          |          |          |          |          | abend   | testing | abend   |         |
+test15     |         |         |          |          |          |          |          |          | abend   |         | abend   |         |
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
-test16     |         |         |          |          |          |          | W3       | W3       | abend   |         | abend   |         |
+test16     |         |         |          |          |          |          |          |          | abend   |         | abend   |         |
 test17     |         |         |          |          |          |          |          |          |         |         |         |         |
 test18     |         |         |          |          |          |          |          |          |         |         |         |         |
 test20     |         |         |          |          |          |          |          |          |         |         |         |         |
-test21     |         |         |          |          |          |          | abend(?) |          | abend   | abend   | abend   | abend   |
-test22     |         |         |          |          |          |          |          |          |         |         |         |         |
+test21     | WL4     | EL2     | WL7      | WL7      | WL7      |WL7 WL6WL5| EL1      |          | abend   | abend   | abend   | abend   |
+test22     |         |         | WL1      | WL1      | WL1      |          | WL1      |          |         |         |         |         |
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
 test103    |         |         |          |          |          |          |          |          |         |         |         |         |
-test104    |         |         |          |          |          |          |          |          | abend(?)| abend   | abend(?)| abend   |
+test104    |         |         |          |          |          |          |          |          | abend   | abend   | abend   | abend   |
 test104.Em |         |         |          |          |          |          |          |          |         |         |         |         |
 test502    |         |         |          |          |          |          |          |          |         |         |         |         |
 test508    |         |         |          |          |          |          |          |          |         |         |         |         |
+test5010   | W2      | W2      | W2       | W2       | W2       | W2       | W2       | W2       | W2      | W2      | W2      | W2      |
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
 
  abend  - crash without clue
  testing - under testing now
  ? - last time was!
+ WL - warning in large_N test
+ EL - error in large_N test
 
  It would be really nice to get rid of these warnings, particularly for the Large_N tests.
 
- Warn 3  G4CameronTruranHilfShellCorrections: out of table
-===============================================================================================
 
-G4Warn 3 
+WL1
 --------
-G4CameronTruranHilfShellCorrections: out of table for Z = 1
+G4HadronInelasticProcess: called for final state, while cross-section was zero
+                          Returning empty particle change....
+                          current MeanFreePath is 1.79769e+308
+
+
+W2
+--------
+--warning from G4Material-- The state conditions of the gas: C3H8 are not consist
+ent.
+ density  = 2.005 mg/cm3         pressure = 1 atmosphere         temperature = 27
+3.15 kelvin
+ rho*(T/P) would be of the order of: 28.9264 (mg/cm3)*(kelvin/atmosphere). The en
+ergy loss calculation maybe be affected 
+--warning from G4Material-- The state conditions of the gas: isoC4H10 are not con
+sistent.
+ density  = 2.67 mg/cm3  pressure = 1 atmosphere         temperature = 273.15 kel
+vin
+ rho*(T/P) would be of the order of: 29.7177 (mg/cm3)*(kelvin/atmosphere). The en
+ergy loss calculation maybe be affected 
+
+WL4
+--------
+boostVector computed for a non-timelike LorentzVector 
+at line 185 in file LorentzVector.cc
+
+WL5
+------
+***G4Q::DecayOutH: n=662894, ch#2,PDG=2214--
+
+WL6
+--------
+*** Error in G4HEInelastic::GenerateNBodyEvent
+    total mass (4.69395) >= total energy (4.51751)
+
+
+WL7
+--------
+Warning: eliminating target particle
+
+
+EL1
+--------
+***G4QHaron:(P) PDG=0, use other constructor
+
+
+EL2
+--------
+***G4Quasmon::HadronizeQuasmon:(NK) QM=1423.75,d=-9.4959
+***G4Quasmon::HadronizeQuasmon: Can't decay Q in N and K
+
+*** G4Exception: Aborting execution ***
+
 
 G4 Warn 6
 ---------
@@ -77,18 +129,6 @@ G4 Warn 7
 ---------
 Warning: eliminating target particle
 
-
-Err 10
---------------------
-Linking test15 ...
-Undefined                       first referenced
- symbol                             in file
-hbarc                               /afs/cern.ch/sw/geant4/stt/dev1/SUN-CC/optim_ISO/lib/SUN-CC/l
-ibG4hadronic_iso.a(R4nhcZo-V6bx13mJ9ifH.o)
-fermi                               /afs/cern.ch/sw/geant4/stt/dev1/SUN-CC/optim_ISO/lib/SUN-CC/l
-ibG4hadronic_iso.a(R4nhcZo-V6bx13mJ9ifH.o)
-ld: fatal: Symbol referencing errors. No output written to /afs/cern.ch/sw/geant4/stt/dev1/SUN-CC
-/optim_ISO/bin/SUN-CC/test15
 
 
 </pre>
