@@ -1,0 +1,9 @@
+June     29th, 1999   J. Apostolakis - field-01-00-06
+
+  I re-instated a check on whether the input distance along the curve
+between the two input curve points is truly greater than their linear
+distance.  ( in G4ChordFinder::ApproxCurvePointV )
+
+The condition that prints out a warning message has been altered to
+take into account the case of a very small final interval. 
+( in G4MagInt_Driver::AccurateAdvance )
