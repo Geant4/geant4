@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst18PhysicsList.cc,v 1.8 2001-07-11 10:10:13 gunter Exp $
+// $Id: Tst18PhysicsList.cc,v 1.9 2004-11-17 14:45:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -109,6 +109,7 @@ void Tst18PhysicsList::ConstructProcess()
 #include "G4MuPairProduction.hh"
 
 #include "G4hIonisation.hh"
+#include "G4ionIonisation.hh"
 
 void Tst18PhysicsList::ConstructEM()
 {
@@ -127,79 +128,30 @@ void Tst18PhysicsList::ConstructEM()
 
     } else if (particleName == "e-") {
     //electron
-      // Construct processes for electron
-      G4VProcess* theeminusMultipleScattering = new G4MultipleScattering();
-      G4VProcess* theeminusIonisation = new G4eIonisation();
-      G4VProcess* theeminusBremsstrahlung = new G4eBremsstrahlung();
-      // add processes
-      pmanager->AddProcess(theeminusMultipleScattering);
-      pmanager->AddProcess(theeminusIonisation);
-      pmanager->AddProcess(theeminusBremsstrahlung);      
-      // set ordering for AlongStepDoIt
-      pmanager->SetProcessOrdering(theeminusMultipleScattering, idxAlongStep,  1);
-      pmanager->SetProcessOrdering(theeminusIonisation, idxAlongStep,  2);
-      // set ordering for PostStepDoIt
-      pmanager->SetProcessOrdering(theeminusMultipleScattering, idxPostStep, 1);
-      pmanager->SetProcessOrdering(theeminusIonisation, idxPostStep, 2);
-      pmanager->SetProcessOrdering(theeminusBremsstrahlung, idxPostStep, 3);
+      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+      pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
+      pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
 
     } else if (particleName == "e+") {
     //positron
-      // Construct processes for positron
-      G4VProcess* theeplusMultipleScattering = new G4MultipleScattering();
-      G4VProcess* theeplusIonisation = new G4eIonisation();
-      G4VProcess* theeplusBremsstrahlung = new G4eBremsstrahlung();
-      G4VProcess* theeplusAnnihilation = new G4eplusAnnihilation();
-      // add processes
-      pmanager->AddProcess(theeplusMultipleScattering);
-      pmanager->AddProcess(theeplusIonisation);
-      pmanager->AddProcess(theeplusBremsstrahlung);
-      pmanager->AddProcess(theeplusAnnihilation);
-      // set ordering for AtRestDoIt
-      pmanager->SetProcessOrderingToFirst(theeplusAnnihilation, idxAtRest);
-      // set ordering for AlongStepDoIt
-      pmanager->SetProcessOrdering(theeplusMultipleScattering, idxAlongStep,  1);
-      pmanager->SetProcessOrdering(theeplusIonisation, idxAlongStep,  2);
-      // set ordering for PostStepDoIt
-      pmanager->SetProcessOrdering(theeplusMultipleScattering, idxPostStep, 1);
-      pmanager->SetProcessOrdering(theeplusIonisation, idxPostStep, 2);
-      pmanager->SetProcessOrdering(theeplusBremsstrahlung, idxPostStep, 3);
-      pmanager->SetProcessOrdering(theeplusAnnihilation, idxPostStep, 4);
+      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+      pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
+      pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
+      pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
   
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
     //muon  
-     // Construct processes for muon+
-     G4VProcess* aMultipleScattering = new G4MultipleScattering();
-     G4VProcess* aBremsstrahlung = new G4MuBremsstrahlung();
-     G4VProcess* aPairProduction = new G4MuPairProduction();
-     G4VProcess* anIonisation = new G4MuIonisation();
-      // add processes
-     pmanager->AddProcess(anIonisation);
-     pmanager->AddProcess(aMultipleScattering);
-     pmanager->AddProcess(aBremsstrahlung);
-     pmanager->AddProcess(aPairProduction);
-     // set ordering for AlongStepDoIt
-     pmanager->SetProcessOrdering(aMultipleScattering, idxAlongStep,  1);
-     pmanager->SetProcessOrdering(anIonisation, idxAlongStep,  2);
-     // set ordering for PostStepDoIt
-     pmanager->SetProcessOrdering(aMultipleScattering, idxPostStep, 1);
-     pmanager->SetProcessOrdering(anIonisation, idxPostStep, 2);
-     pmanager->SetProcessOrdering(aBremsstrahlung, idxPostStep, 3);
-     pmanager->SetProcessOrdering(aPairProduction, idxPostStep, 4);
+      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
+      pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-1,3);
+      pmanager->AddProcess(new G4MuPairProduction,  -1,-1,4);
      
-     /*    } else if( particleName == "GenericIon" ) {
-     G4VProcess* aionIonization = new G4hIonisation;
-     G4VProcess* aMultipleScattering = new G4MultipleScattering();
-     pmanager->AddProcess(aionIonization);
-     pmanager->AddProcess(aMultipleScattering);
-     // set ordering for AlongStepDoIt
-     pmanager->SetProcessOrdering(aMultipleScattering, idxAlongStep,  1);
-     pmanager->SetProcessOrdering(aionIonization, idxAlongStep,  2);
-     // set ordering for PostStepDoIt
-     pmanager->SetProcessOrdering(aMultipleScattering, idxPostStep, 1);
-     pmanager->SetProcessOrdering(aionIonization, idxPostStep, 2); 
-  */
+   } else if( particleName == "GenericIon" ) {
+      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+      pmanager->AddProcess(new G4ionIonisation,      -1, 2,2);
+
+ 
    } else if ((!particle->IsShortLived()) &&
 	      (particle->GetPDGCharge() != 0.0) && 
 	      (particle->GetParticleName() != "chargedgeantino")) {
@@ -207,33 +159,12 @@ void Tst18PhysicsList::ConstructEM()
 
       pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
       G4hIonisation*    hIon;
-#if 0 
-      if ( 0 ) { 
-	G4hEnergyLoss* hIonLowE;
-
-	// hIon=  new G4hLowEnergyIonisation() ;
-	// Definition of nuclear stopping
-        if( 1 ) { 
-	  hIonLowE->SetNuclearStoppingOff() ;
-	  // Definition of the proton's table  
-	  hIonLowE->SetStoppingPowerTableName("ICRU_R49p") ;
-
-        } else { // to use Ziegler: 
-	  hIonLowE->SetNuclearStoppingOn() ;
-	  // Definition of the proton's table  
-	  hIonLowE->SetStoppingPowerTableName("Ziegler1977H") ;
-	}
-        hIon= hIonLowE;
-      }else{
-	hIon= new G4hIonisation();
-      }
-#endif
       hIon= new G4hIonisation();
       pmanager->AddProcess(hIon,  -1,2,2);      
 
       G4double demax = 0.05;  // try to lose at most 5% of the energy in 
                               //    a single step (in limit of large energies)
-      G4double stmin = 0.01 * m;  // length of the final step 
+      G4double stmin = 0.01 * mm;  // length of the final step 
       hIon->SetStepFunction( demax, stmin );
     }
   }
