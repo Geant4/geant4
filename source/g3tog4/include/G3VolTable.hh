@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3VolTable.hh,v 1.1 1999-01-07 16:06:44 gunter Exp $
+// $Id: G3VolTable.hh,v 1.2 1999-05-06 04:21:15 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -28,9 +28,6 @@ struct VolTableEntry {
     G4VSolid* solid;
     G4LogicalVolume* lvpt;
     G4VPhysicalVolume* pvpt;
-    G4double rangehi[3];   // ranges 
-    G4double rangelo[3];   // ranges 
-    EAxis *axiscode;       // axis codes
     G4int tmed;
     G4String shape;
     G4double* par;
@@ -48,8 +45,6 @@ private:
     VolTableEntry* curEntry;
     G4int ScanTmed;
     G4int nEntry;
-    EAxis Rect[3];
-    EAxis Polar[3];
     static G4VPhysicalVolume* mothPV; // mother of all mothers
     static G4LogicalVolume* mothLV; // mother of all mothers logical volume
     RWTPtrOrderedVector<G4VPhysicalVolume>* pVolsPtr;
@@ -66,16 +61,13 @@ public:
     void FindPV(G4int* npv, G4String* vname);
         // MatchPV: look up PV only
     void MatchPV(G4int* npv, G4String* vname);
-    void GetLVPars(G4String* vname, G4int iaxis, G4double* rangehi, 
-                   G4double* rangelo, EAxis*,
+    void GetLVPars(G4String* vname, 
                    G4String* shape, G4int* nmed, G4double* par[],
                    G4int* npar, G4VSolid* solid);
     void GetLVInfo(G4String* vname, G4String* shape, G4int* nmed);
     void AddConstituentLVol(G4String* vname, G4LogicalVolume* lvol);
     void PutLV(G4String* vname, G4LogicalVolume* lvpt, G4int tmed,
-               G4double rnghi[], G4double rnglo[],
-               EAxis axis, G4String shape,
-               G4double par[], G4int npar, G4VSolid* solid);
+	       G4String shape, G4double par[], G4int npar, G4VSolid* solid);
          // For case where nothing is known about the volume; it doesn't
          // come from g3tog4 (eg. externally specified global mother)
     void PutLV(G4String* vname, G4LogicalVolume* lvpt);

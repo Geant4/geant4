@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BuildGeom.cc,v 1.3 1999-05-02 05:08:27 lockman Exp $
+// $Id: G4BuildGeom.cc,v 1.4 1999-05-06 04:24:09 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -22,12 +22,14 @@
 // code from geant 3 geometry and builds the g4 geometry
 // It returns a pointer to the logical volume of the mother of all worlds.
 
-#include <iostream.h>
 #include <iomanip.h>
 #include <fstream.h>
 #include "G4ios.hh"
 #include "G4GeometryManager.hh"
 #include "G3toG4.hh"
+#include "G3MatTable.hh"
+#include "G3MedTable.hh"
+#include "G3RotTable.hh"
 #include "G3VolTable.hh"
 #include "G4LogicalVolume.hh"
 #include "G4LogicalVolumeStore.hh"
@@ -40,8 +42,8 @@ void checkVol(G4LogicalVolume*, G4int);
 void checkVol();
 
 
-G4LogicalVolume* G4BuildGeom(G4String& inFile)
-{
+G4LogicalVolume* G4BuildGeom(G4String& inFile){
+
   // Read the call List and interpret to Generate Geant4 geometry
 
   G4cout << "Reading the call List file " << inFile << "..." << endl;
@@ -66,7 +68,7 @@ G4LogicalVolume* G4BuildGeom(G4String& inFile)
   G4int debug=0;
         
   if (debug){
-    cout << "scan through G4LogicalVolumeStore:" << endl;
+    G4cout << "scan through G4LogicalVolumeStore:" << endl;
     checkVol();
   }
   return lG3toG4;
@@ -93,7 +95,7 @@ void checkVol(G4LogicalVolume* _lvol, G4int level)
   for (int idau=0; idau<ndau; idau++){
     _pdvol = _lvol-> GetDaughter(idau);
     _ldvol = _pdvol -> GetLogicalVolume();
-    cout << "G4VPhysical volume " << setw(5) << _pdvol -> GetName() 
+    G4cout << "G4VPhysical volume " << setw(5) << _pdvol -> GetName() 
 	 << " (G4LogicalVolume " << setw(5) << _ldvol->GetName() << ")" 
 	 << endl;
     checkVol(_ldvol, level);

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gspos.cc,v 1.1 1999-01-07 16:06:51 gunter Exp $
+// $Id: G4gspos.cc,v 1.2 1999-05-06 04:26:14 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4LogicalVolume.hh"
@@ -43,7 +43,7 @@ void G4gspos(G4String vname, G4int num, G4String vmoth, G4double x,
     G4LogicalVolume *lvol = G3Vol.GetLVx(vname);
   
         // get the rotation matrix pointer from the G3 IROT index
-    G4RotationMatrix *rotm;
+    G3toG4RotationMatrix *rotm;
     if (irot>0) {
         rotm = G3Rot.get(irot);
     } else {
@@ -65,7 +65,8 @@ void G4gspos(G4String vname, G4int num, G4String vmoth, G4double x,
   
         // get the logical volume pointer of the mother from the name
     G4LogicalVolume *mothLV = G3Vol.GetLVx(vmoth);
-    G4PVPlacement* pvol = new G4PVPlacement(rotm, *offset, lvol, vname,
+    G4PVPlacement* pvol = new G4PVPlacement((G4RotationMatrix*)rotm, 
+					    *offset, lvol, vname,
                                             mothLV, isMany, num);
 
         // add it to the List

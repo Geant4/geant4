@@ -1,8 +1,14 @@
-$Id: History,v 1.5 1999-05-04 21:16:20 lockman Exp $
+$Id: History,v 1.6 1999-05-06 04:17:36 lockman Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
 g3tog4-01-00-02 24-Apr-1999 Lockman
+- temporarily comment out G4gsdv* code
+- G4gstmed: now just store a link between tracking medium number and assoicated
+  G4Material pointer
+- replaced rw/gdlist with RWTPtrHashDictionary
+- replaced iostream.h with G4ios.hh everywhere
+- added G3EleTable to manage elements in G3toG4
 - tog4.F, g3routines.F: generate gsmixt instructions in call list
 - clGeometry.cc: cleaned up and added some default commands
 - added G3toG4EventAction and EventActionMessenger classes to draw tracks

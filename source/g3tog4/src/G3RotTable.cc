@@ -5,57 +5,47 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3RotTable.cc,v 1.1 1999-01-07 16:06:47 gunter Exp $
+// $Id: G3RotTable.cc,v 1.2 1999-05-06 04:23:24 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+#include "G4strstreambuf.hh"
+#include "G4ios.hh"
 #include "globals.hh"
-#include "G4RotationMatrix.hh"
+#include "G3toG4RotationMatrix.hh"
 #include "G3RotTable.hh"
 
-RWBoolean RotTableMatch(const RotTableEntry *RotTentry, const void *pt)
-{
-    G4int rotid;
-    rotid = *((G4int*) pt);
-    if (RotTentry->rotid == rotid)
-        {
-            return TRUE;
-        } else {
-            return FALSE;
-        }
+G3RotTable::G3RotTable(){
+  _Rot = new 
+    RWTPtrHashDictionary<RWCString,G3toG4RotationMatrix>(RWCString::hash);
 }
 
-G3RotTable::G3RotTable()
-{
-    RotTable = &RotT;
+G3RotTable::~G3RotTable(){
+  G4cout << "Destructing G3RotTable." << endl;
+  _Rot->clearAndDestroy();
 }
 
-G3RotTable::~G3RotTable()
-{
-    while (! RotTable->isEmpty()) {
-        RotTableEntry *RotTentry = RotTable->last();
-        RotTable->removeReference(RotTentry);
-        delete RotTentry;
-    }
-    delete RotTable;
+G3toG4RotationMatrix*
+G3RotTable::get(G4int RotID){
+  // create a string from the RotID, retrieve pointer from hash dictionary
+  G4String Hash(MakeRotID(RotID));
+  G3toG4RotationMatrix* R = _Rot->findValue(&Hash);
+  if (R == 0) {
+    G4cerr << "Arrggh! No rotation matrix found with key " << Hash << endl;
+  }
+  return R;
+};
+
+void 
+G3RotTable::put(G4int RotID, G3toG4RotationMatrix *RotPT){
+  // create a string from the RotID, store in hash dictionary
+  G4String* Hash = new G4String(MakeRotID(RotID));
+  _Rot->insertKeyAndValue(Hash, RotPT);
 }
 
-G4RotationMatrix *G3RotTable::get(G4int rotid)
-{
-    const void *pt;
-    if ( rotid == 0 ) return NULL;
-    pt = &rotid;
-    RotTableEntry *RotTentry = RotTable->find(RotTableMatch, pt);
-    if (RotTentry == NULL) {
-        return NULL;
-    } else {
-        return RotTentry->rotpt;
-    }
-}
-
-void G3RotTable::put(G4int *rotid, G4RotationMatrix *rotpt)
-{
-    RotTableEntry *RotTentry = new RotTableEntry;
-    RotTentry->rotid = *rotid;
-    RotTentry->rotpt = rotpt;
-    RotTable->append(RotTentry);
+char*
+G3RotTable::MakeRotID(G4int RotID){
+  char buf[20];
+  ostrstream ostr(buf, sizeof buf);
+  ostr << "Rot" << RotID << ends;
+  return buf;
 }

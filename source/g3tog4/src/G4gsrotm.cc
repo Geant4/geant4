@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsrotm.cc,v 1.1 1999-01-07 16:06:51 gunter Exp $
+// $Id: G4gsrotm.cc,v 1.2 1999-05-06 04:26:39 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4ThreeVector.hh"
@@ -69,7 +69,7 @@ void G4gsrotm(G4int irot, G4double theta1, G4double phi1,
     
         // add it to the List
 
-    G3Rot.put(&irot, rotp);
+    G3Rot.put(irot, rotp);
 }
 
 

@@ -5,9 +5,10 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsdvt2.cc,v 1.1 1999-01-07 16:06:50 gunter Exp $
+// $Id: G4gsdvt2.cc,v 1.2 1999-05-06 04:25:37 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+#include "G4ios.hh"
 #include "globals.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
@@ -36,8 +37,8 @@ void PG4gsdvt2(RWCString tokens[])
 }
 
 void G4gsdvt2(G4String vname, G4String vmoth, G4double Step, G4int iaxis,
-              G4double c0, G4int numed, G4int ndvmx)
-{
+              G4double c0, G4int numed, G4int ndvmx){
+  /*
   // get the physical volume pointer of the mother from the name
   G4int npv=0;
   G4VPhysicalVolume* mothPV;
@@ -90,4 +91,7 @@ void G4gsdvt2(G4String vname, G4String vmoth, G4double Step, G4int iaxis,
       G3Vol.PutPV1(&vname, pvol);
     }
   }
+  */
+  G4cerr << "G4gsdvt2 currently not supported." << endl;
 }
+

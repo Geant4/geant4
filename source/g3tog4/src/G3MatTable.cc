@@ -5,54 +5,45 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3MatTable.cc,v 1.1 1999-01-07 16:06:45 gunter Exp $
+// $Id: G3MatTable.cc,v 1.2 1999-05-06 04:22:38 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+
+#include "G4ios.hh"
+#include "G4strstreambuf.hh"
+#include "globals.hh"
 #include "G3MatTable.hh"
 
-RWBoolean MatTableMatch(const MatTableEntry* MatTentry, const void* pt)
-{
-    G4int matid;
-    matid = *((G4int*) pt);
-    if (MatTentry->matid == matid)
-        {
-            return TRUE;
-        } else {
-            return FALSE;
-        }
-}
+G3MatTable::G3MatTable(){
+  _Mat = new 
+    RWTPtrHashDictionary<RWCString,G4Material>(RWCString::hash);
+};
 
-G3MatTable::G3MatTable()
-{
-    MatTable = &MatT;
-}
+G3MatTable::~G3MatTable(){
+  G4cout << "Destructing G3MatTable." << endl;
+  _Mat->clearAndDestroy();
+  delete _Mat;
+};
 
-G3MatTable::~G3MatTable()
-{
-    while (! MatTable->isEmpty()) {
-        MatTableEntry* MatTentry = MatTable->last();
-        MatTable->removeReference(MatTentry);
-        delete MatTentry;
-    }
-    delete MatTable;
-}
+G4Material*
+G3MatTable::get(G4int MatID){
+  // create a string from the MatID, retrieve pointer from hash dictionary
+  G4String Hash(MakeMatID(MatID));
+  G4Material* R = _Mat->findValue(&Hash);
+  if (R == 0) G4cerr << "Arrggh! No G4Material found with key " << Hash << endl;
+  return R;
+};
 
-G4Material* G3MatTable::get(G4int matid)
-{
-    const void* pt;
-    pt = &matid;
-    MatTableEntry* MatTentry = MatTable->find(MatTableMatch, pt);
-    if (MatTentry == NULL) {
-        return NULL;
-    } else {
-        return MatTentry->matpt;
-    }
-}
+void G3MatTable::put(G4int MatID, G4Material* MatPT){
+  // create a string from the MatID, store in hash dictionary
+  G4String* Hash = new G4String(MakeMatID(MatID)); 
+  _Mat->insertKeyAndValue(Hash, MatPT);
+};
 
-void G3MatTable::put(G4int* matid, G4Material* matpt)
-{
-    MatTableEntry* MatTentry = new MatTableEntry;
-    MatTentry->matid = *matid;
-    MatTentry->matpt = matpt;
-    MatTable->append(MatTentry);
+char*
+G3MatTable::MakeMatID(G4int MatID){
+  char buf[20];
+  ostrstream ostr(buf, sizeof buf);
+  ostr << "Mat" << MatID << ends;
+  return buf;
 }

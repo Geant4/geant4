@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3DetTable.cc,v 1.1 1999-01-07 16:06:45 gunter Exp $
+// $Id: G3DetTable.cc,v 1.2 1999-05-06 04:22:06 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -13,8 +13,8 @@
 
 class G4VSensitiveDetector;
 
-RWBoolean DetTableMatch(const DetTableEntry *DetTentry, const void *pt)
-{
+RWBoolean 
+DetTableMatch(const DetTableEntry *DetTentry, const void *pt){
     G4String *name;
     name = (G4String*) pt;
     if (DetTentry->name == *name)
@@ -25,13 +25,11 @@ RWBoolean DetTableMatch(const DetTableEntry *DetTentry, const void *pt)
         }
 }
 
-G3DetTable::G3DetTable()
-{
+G3DetTable::G3DetTable(){
     DetTable = &DetT;
 }
 
-G3DetTable::~G3DetTable()
-{
+G3DetTable::~G3DetTable(){
     while (! DetTable->isEmpty()) {
         DetTableEntry *DetTentry = DetTable->last();
         DetTable->removeReference(DetTentry);
@@ -40,8 +38,8 @@ G3DetTable::~G3DetTable()
     delete DetTable;
 }
 
-G4VSensitiveDetector *G3DetTable::get(G4String detname)
-{
+G4VSensitiveDetector*
+G3DetTable::get(G4String detname){
     const void *pt;
     pt = &detname;
     DetTableEntry *DetTentry = DetTable->find(DetTableMatch, pt);
@@ -52,8 +50,8 @@ G4VSensitiveDetector *G3DetTable::get(G4String detname)
     }
 }
 
-G4int G3DetTable::GetID(G4String detname)
-{
+G4int 
+G3DetTable::GetID(G4String detname){
     const void *pt;
     pt = &detname;
     DetTableEntry *DetTentry = DetTable->find(DetTableMatch, pt);
@@ -64,8 +62,8 @@ G4int G3DetTable::GetID(G4String detname)
     }
 }
 
-void G3DetTable::put(G4String name, G4int detid, G4VSensitiveDetector *detpt)
-{
+void 
+G3DetTable::put(G4String name, G4int detid, G4VSensitiveDetector *detpt){
     DetTableEntry *DetTentry = new DetTableEntry;
     DetTentry->name = name;
     DetTentry->detid = detid;

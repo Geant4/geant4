@@ -5,9 +5,10 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsdvn.cc,v 1.1 1999-01-07 16:06:49 gunter Exp $
+// $Id: G4gsdvn.cc,v 1.2 1999-05-06 04:24:42 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+#include "G4ios.hh"
 #include "globals.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVReplica.hh"
@@ -33,6 +34,7 @@ void PG4gsdvn(RWCString tokens[])
 
 void G4gsdvn(G4String vname, G4String vmoth, G4int ndiv, G4int iaxis)
 {
+  /*
   // get the physical volume pointer of the mother from the name
   G4VPhysicalVolume* mothPV;
   G4int npv=0;
@@ -45,8 +47,8 @@ void G4gsdvn(G4String vname, G4String vmoth, G4int ndiv, G4int iaxis)
     mothPV = G3Vol.GetPV(ipv);
     
     // extract the needed parameters from the mother's logical volume
-    G4double rangehi;
-    G4double rangelo;
+    G4double rangehi=0;
+    G4double rangelo=0;
     EAxis axiscode;
     G4String shape;
     G4int nmed;
@@ -54,8 +56,7 @@ void G4gsdvn(G4String vname, G4String vmoth, G4int ndiv, G4int iaxis)
     G4int npar;
     G4int zeronpar=0;
     G4VSolid *solid = NULL;
-    G3Vol.GetLVPars(&vmoth, iaxis, &rangehi, &rangelo, &axiscode, &shape,
-                    &nmed, &Rpar, &npar, solid);
+    G3Vol.GetLVPars(&vmoth, &shape, &nmed, &Rpar, &npar, solid);
     // nullify parameter values
     for (G4int i=0; i<npar; i++) Rpar[i] = 0.;
     // Generate the logical volume for the subvolumes
@@ -71,14 +72,16 @@ void G4gsdvn(G4String vname, G4String vmoth, G4int ndiv, G4int iaxis)
     
     if ( ! negpars ) {
       // Generate replicas
-      G4PVReplica *pvol = new G4PVReplica(
-                          vname, lvol, mothPV, axiscode, ndiv, width, offset);
+      G4PVReplica *pvol = new 
+	G4PVReplica(vname, lvol, mothPV, axiscode, ndiv, width, offset);
       G3Vol.PutPV1(&vname, pvol);
     } else {
       G4VPVParameterisation *dvnParam = new G3CalcParams(ndiv, width, offset);
-      G4PVParameterised *pvol = new G4PVParameterised(
-                                vname, lvol, mothPV, axiscode, ndiv, dvnParam);
+      G4PVParameterised *pvol = new 
+	G4PVParameterised(vname, lvol, mothPV, axiscode, ndiv, dvnParam);
       G3Vol.PutPV1(&vname, pvol);
     }
   }
+  */
+  G4cerr << "G4gsdvn currently not supported." << endl;
 }

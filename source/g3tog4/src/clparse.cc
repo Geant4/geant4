@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: clparse.cc,v 1.1 1999-01-07 16:06:52 gunter Exp $
+// $Id: clparse.cc,v 1.2 1999-05-06 04:27:49 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -31,6 +31,7 @@
 #include <rw/rwfile.h>
 
 #include "G3toG4.hh"
+#include "G3EleTable.hh"
 #include "G3VolTable.hh"
 #include "G3MatTable.hh"
 #include "G3MedTable.hh"
@@ -46,30 +47,13 @@ extern "C" {
 
 extern ofstream ofile;
 
-// The first volume defined on the call List file is assumed to be
-// the mother. 
-// If GlobalMotherVolume is non-null, it is used as the mother rather
-// than the volume specified on the call List file.
-// If GlobalMotherVolume is null, the volume in the call List file is
-// used normally.
-//
-// This is used by BaBar's Bogus, which uses G3toG4 as one way to
-// Build subsystems. Bogus must have a way to override the global
-// mother. The G3toG4 defined geometry is installed immediately below
-// the global mother.
-
-// G4LogicalVolume* GlobalMotherVolume = 0;
-
-// Save the second volume pointer. In Bogus usage, it is the
-// containing mother for the subdetector.
-// G4LogicalVolume* SubsystemMotherVolume = 0;
-
-G3VolTable G3Vol;   // volume G3 name <-> G4 pointer tables
-G3MatTable G3Mat;  // material G3 ID <-> G4 pointer table
-G3MedTable G3Med;  // trk media G3 ID <-> G4 pointer table
-G3RotTable G3Rot;  // rotation ID <-> G4 transform object table
+G3VolTable G3Vol; // volume G3 name <-> G4 pointer tables
+G3MatTable G3Mat; // material G3 ID <-> G4 pointer table
+G3MedTable G3Med; // trk media G3 ID <-> G4 pointer table
+G3RotTable G3Rot; // rotation ID <-> G4 transform object table
 G3PartTable G3Part; // particle ID <-> ParticleDefinition pointer
-G3DetTable G3Det;  // sensitive detector name <-> pointer
+G3DetTable G3Det; // sensitive detector name <-> pointer
+G3EleTable G3Ele; // element names table
 
 G4int narray;
 

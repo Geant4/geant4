@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsposp.cc,v 1.1 1999-01-07 16:06:51 gunter Exp $
+// $Id: G4gsposp.cc,v 1.2 1999-05-06 04:26:26 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4LogicalVolume.hh"
@@ -47,7 +47,7 @@ void G4gsposp(G4String vname, G4int num, G4String vmoth, G4double x,
     G4bool _debug=false;
     
         // get the rotation matrix pointer from the G3 IROT index
-    G4RotationMatrix* rotm = G3Rot.get(irot);
+    G3toG4RotationMatrix* rotm = G3Rot.get(irot);
   
         // translation offset
     G4ThreeVector* offset = new G4ThreeVector(x, y, z);
@@ -77,9 +77,9 @@ void G4gsposp(G4String vname, G4int num, G4String vmoth, G4double x,
         // add the logical volume to the constituent List
     G3Vol.AddConstituentLVol(&vname, lvol);
     
-    G4VPhysicalVolume* pvol = new G4PVPlacement(rotm, *offset, lvol, vname,
+    G4VPhysicalVolume* pvol = new G4PVPlacement((G4RotationMatrix*)rotm, 
+						*offset, lvol, vname,
                                                 mothLV, isMany, num);
-
         // add it to the List
     G3Vol.PutPV(&vname, pvol);
     delete offset;

@@ -5,9 +5,10 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsdetv.cc,v 1.1 1999-01-07 16:06:49 gunter Exp $
+// $Id: G4gsdetv.cc,v 1.2 1999-05-06 04:24:33 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+#include "G4ios.hh"
 #include "G3toG4.hh"
 #include "G3DetTable.hh"
 #include "G3VolTable.hh"
