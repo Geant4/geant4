@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingVerbose.cc,v 1.9 2001-11-07 10:57:54 radoone Exp $
+// $Id: G4SteppingVerbose.cc,v 1.10 2001-12-06 10:04:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -382,7 +382,7 @@ void G4SteppingVerbose::DPSLAlongStep()
       G4cout << "NotCandidateForSelection)" << G4endl;
     }
     else{
-      G4cout << "???)" << G4endl;
+      G4cout << "?!?)" << G4endl;
     }
   }
 }
