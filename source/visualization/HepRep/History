@@ -1,4 +1,4 @@
-.$Id: History,v 1.63 2004-02-12 21:38:46 duns Exp $
+.$Id: History,v 1.64 2004-02-19 05:39:20 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+18 February 2004 Mark Donszelmann
+- Removed appendzip.cc file, since it is strictly not necessary.
+
 12 Febryary 2004 Mark Donszelmann
 - GEANT-42: Renamed the HepRep schema locator to 
   http://java.freehep.org/schemas/heprep/2.0

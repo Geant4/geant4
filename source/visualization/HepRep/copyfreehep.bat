@@ -6,6 +6,7 @@ REM copy "%FREEHEP%\org\freehep\zip\*.cpp"              "src\*.cc"
 copy "%HEPREP%\c++\include\*.h"                     "include\ref"
 copy "%HEPREP%\include\HEPREP\*.h"                  "include\HEPREP"
 copy "%HEPREP%\c++\*.cc"                            "src"
+REM del src\appendzip.cc
 del src\MultiWriteTest.cc
 del src\HepRepTest.cc
 del src\HepRepExample.cc

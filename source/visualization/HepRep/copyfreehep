@@ -3,7 +3,7 @@ cp $FREEHEP/org/freehep/jni/FreeHepTypes.h          include/ref
 #cp $FREEHEP/org/freehep/zip/zipios++/*.h            include/zipios++
 #cp $FREEHEP/org/freehep/zip/*.h                     include/zipios++
 #cp $FREEHEP/org/freehep/zip/*.cpp                   src
-#mv src/appendzip.cpp			            src/appendzip.cc
+#rm src/appendzip.cpp
 #mv src/basicentry.cpp			            src/basicentry.cc
 #mv src/collcoll.cpp			            src/collcoll.cc
 #mv src/deflateoutputstreambuf.cpp		    src/deflateoutputstreambuf.cc
