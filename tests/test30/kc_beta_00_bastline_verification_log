@@ -1,19 +1,23 @@
 Gunter: Try kinetic model/G4ExcitationHandler combination (replacing pre-compound)
 
-HP: Find Correct pion potential.
-Gunter: Code Correct pion potential.
-
-HP: check that Weisskopf-Ewing model is ok (gives neutrons) for pn_be_256
-
 Gunter: Viele print-outs - warning particle may be looping
 
 Gunter: Check -- gehen short-lived in den end-zustand?
 
-SampleResonanceMass: mass range negative (minMass>maxMass)
+Gunter:
+ppi_d_585
+ G4HadronKineticModel::CorrectFinalPandE() : error!
+ Boost Vector supplied to set HepLorentzRotation represents speed >= c.
+ at line 33 in file LorentzRotation.cc
+ Segmentation fault
+
+Gunter:
+ppi_h_585
+G4MagIntegratorDriver::OneGoodStep: Stepsize underflow in Stepper
+  Step's start x=0 and end x= 0 are equal !!
+  Due to step-size= 0 . Note that input step was 1
 
 Gunter: G4HadronKineticModel-Warning: negative excitation energy -16.682 (in pion production)
-
-HP - reproduce G4NucleiPropertiesTable::GetIndex : Nucleon number smaller than Z!
 
 Hisaya: Comment out
 G4VDecayChannel::FillDaughters     Energy/Momentum conserevation breaks
@@ -44,6 +48,20 @@ HP:
 4-th secondary  neutron   Ekin(MeV)= 4.083272e+00   p(MeV)= (-1.361760e-02,8.769081e+01,7.094648e-03)   m(MeV)= 9.395656e+02   Etot(MeV)= 9.436489e+02   pt(MeV)= 8.769081e+01
 1-th secondary  neutron   Ekin(MeV)= 1.526455e+01   p(MeV)= (-2.224871e-03,1.488845e+02,-8.216155e+01)   m(MeV)= 9.395656e+02   Etot(MeV)= 9.548302e+02   pt(MeV)= 1.488845e+02
 
+Hans-Peter:
+pn_pb_800 - re-run ????
+
+Hans-Peter:
+pn_zr_050 - seems ok, but needs more stats to say anything.
+
+HP: Find Correct pion potential.
+Gunter: Code Correct pion potential.
+
+HP: check that Weisskopf-Ewing model is ok (gives neutrons) for pn_be_256
+
+HP - reproduce G4NucleiPropertiesTable::GetIndex : Nucleon number smaller than Z!
+
+For Later: SampleResonanceMass: mass range negative (minMass>maxMass)
 
 For Later:
 Fix this:
@@ -64,31 +82,6 @@ while trying to de-excite
 Fragment: A = 11, Z = 8, U = 1.063e+02 MeV
           P = (-3.876e+02,1.401e+02,1.395e+02) MeV   E = 1.043e+04 MeV
           #Particles = 4, #Holes = 5, #Charged = 3
-
-
-
-Hans-Peter:
-pn_pb_800 - re-run ????
-
-Hans-Peter:
-pn_zr_050 - seems ok, but needs more stats to say anything.
-
-
-Gunter:
-ppi_d_585
- G4HadronKineticModel::CorrectFinalPandE() : error!
- Boost Vector supplied to set HepLorentzRotation represents speed >= c.
- at line 33 in file LorentzRotation.cc
- Segmentation fault
-
-Gunter:
-ppi_h_585
-G4MagIntegratorDriver::OneGoodStep: Stepsize underflow in Stepper
-  Step's start x=0 and end x= 0 are equal !!
-  Due to step-size= 0 . Note that input step was 1
-
-
-
 
 
 
