@@ -85,7 +85,7 @@ private:
   G4double CryostatPosX, CryostatPosY, CryostatPosZ;
 
 
-  FCALTestbeamSetupSD* FcalTBSetupSD;  // Senstive detector
+  FCALTestbeamSetupSD* FCALTBSetupSD;  // Senstive detector
 
   /* 
   G4double TailPosX;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALTBEventAction.hh,v 1.1 2002-10-02 19:37:01 ahoward Exp $
+// $Id: FCALTBEventAction.hh,v 1.2 2002-10-02 19:38:35 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -13,8 +13,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#ifndef FcalTBEventAction_h
-#define FcalTBEventAction_h 1
+#ifndef FCALTBEventAction_h
+#define FCALTBEventAction_h 1
 
 #include "G4UserEventAction.hh"
 #include "ExN03SteppingAction.hh"
@@ -24,11 +24,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class FcalTBEventAction : public G4UserEventAction
+class FCALTBEventAction : public G4UserEventAction
 {
   public:
-    FcalTBEventAction(ExN03SteppingAction* );
-    virtual ~FcalTBEventAction();
+    FCALTBEventAction(ExN03SteppingAction* );
+    virtual ~FCALTBEventAction();
 
   public:
     virtual void   BeginOfEventAction(const G4Event*);
