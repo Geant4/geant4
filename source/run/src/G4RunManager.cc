@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.65 2003-03-11 05:33:40 asaim Exp $
+// $Id: G4RunManager.cc,v 1.66 2003-03-11 06:53:07 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -426,7 +426,10 @@ void G4RunManager::InitializeCutOff()
 
 void G4RunManager::BuildPhysicsTables()
 {
-  UpdateRegionAndCouple();
+  UpdateRegion();
+
+  // Let G4ProductionCutsTable create new couples
+  G4ProductionCutsTable::GetProductionCutsTable()->UpdateCoupleTable();
 
   if(G4ProductionCutsTable::GetProductionCutsTable()->IsModified())
   {
@@ -435,12 +438,10 @@ void G4RunManager::BuildPhysicsTables()
   }
 }
 
-void G4RunManager::UpdateRegionAndCouple()
+void G4RunManager::UpdateRegion()
 {
   // Let G4RegionStore scan materials
   G4RegionStore::GetInstance()->UpdateMaterialList();
-  // Let G4ProductionCutsTable update couples
-  G4ProductionCutsTable::GetProductionCutsTable()->UpdateCoupleTable();
 }
   
 void G4RunManager::AbortRun(G4bool softAbort)

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.cc,v 1.15 2003-03-11 05:33:40 asaim Exp $
+// $Id: G4RunMessenger.cc,v 1.16 2003-03-11 06:53:07 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -93,6 +93,8 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
 
   dumpCoupleCmd = new G4UIcmdWithoutParameter("/run/dumpCouples",this);
   dumpCoupleCmd->SetGuidance("Dump material-cuts-couple information.");
+  dumpCoupleCmd->SetGuidance("Note that material-cuts-couple information is updated");
+  dumpCoupleCmd->SetGuidance("after BeamOn has started.");
   dumpCoupleCmd->AvailableForStates(G4State_Idle);
 
   optCmd = new G4UIcmdWithABool("/run/optimizeGeometry",this);
@@ -246,7 +248,7 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   { runManager->SetVerboseLevel(verboseCmd->GetNewIntValue(newValue)); }
   else if( command==dumpRegCmd )
   { 
-    runManager->UpdateRegionAndCouple();
+    runManager->UpdateRegion();
     if(newValue=="**ALL**")
     { runManager->DumpRegion(); }
     else
@@ -254,7 +256,6 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   }
   else if( command==dumpCoupleCmd)
   {
-    runManager->UpdateRegionAndCouple();
     G4ProductionCutsTable::GetProductionCutsTable()->DumpCouples();
   }
   else if( command==optCmd )
