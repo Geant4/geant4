@@ -4,9 +4,9 @@
 #include <algorithm>
 
 
-G4VParticleChange *G4BinaryLightIonReaction::
-ApplyYourself(const G4Track &aTrack, G4Nucleus & targetNucleus )
-{    
+  G4VParticleChange *G4BinaryLightIonReaction::
+  ApplyYourself(const G4Track &aTrack, G4Nucleus & targetNucleus )
+  {    
     G4double a1=aTrack.GetDefinition()->GetBaryonNumber();
     G4double z1=aTrack.GetDefinition()->GetPDGCharge();
     G4double m1=aTrack.GetDefinition()->GetPDGMass();
@@ -111,36 +111,33 @@ ApplyYourself(const G4Track &aTrack, G4Nucleus & targetNucleus )
       }
     }
     // Rotate to lab
-  G4LorentzRotation toZ;
-  toZ.rotateZ(-1*mom.phi());
-  toZ.rotateY(-1*mom.theta());
-  G4LorentzRotation toLab(toZ.inverse());
+    G4LorentzRotation toZ;
+    toZ.rotateZ(-1*mom.phi());
+    toZ.rotateY(-1*mom.theta());
+    G4LorentzRotation toLab(toZ.inverse());
   
-    // ...
-    // Fill the particle change, while rotating. set z->-z in case we swapped.
-    // ... 
-  
-  theParticleChange.Clear();
-  theParticleChange.Initialize(aTrack);
-  theParticleChange.SetStatusChange(fStopAndKill);
-  theParticleChange.SetNumberOfSecondaries(result->size());
-  for(G4int i=0; i<result->size(); i++)
-  {
-    G4DynamicParticle * aNew = 
+    // Fill the particle change, while rotating. set z->-z in case we swapped.  
+    theParticleChange.Clear();
+    theParticleChange.Initialize(aTrack);
+    theParticleChange.SetStatusChange(fStopAndKill);
+    theParticleChange.SetNumberOfSecondaries(result->size());
+    for(G4int i=0; i<result->size(); i++)
+    {
+      G4DynamicParticle * aNew = 
       new G4DynamicParticle((*result)[i]->GetDefinition(),
                             (*result)[i]->GetTotalEnergy(),
 			    (*result)[i]->GetMomentum() );
-    G4LorentzVector tmp = aNew->Get4Momentum();
-    tmp *= toLab;
-    if(swapped)
-    {
-      tmp.setZ(-tmp.getZ());
-    }    
-    aNew->Set4Momentum(tmp);
-    theParticleChange.AddSecondary(aNew);
+      G4LorentzVector tmp = aNew->Get4Momentum();
+      tmp *= toLab;
+      if(swapped)
+      {
+        tmp.setZ(-tmp.getZ());
+      }    
+      aNew->Set4Momentum(tmp);
+      theParticleChange.AddSecondary(aNew);
+    }
+    return &theResult;
   }
-  return &theResult;
-}
 
 
 
