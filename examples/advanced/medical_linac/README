@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2004-05-21 07:52:16 mpiergen Exp $
+$Id: README,v 1.2 2004-05-21 11:52:32 mpiergen Exp $
 -------------------------------------------------------------------
 
 
@@ -44,7 +44,7 @@ of the phantom (SSD) is 100 cm.
 ------------------------------------------------------------------------
 ----> 2.Setting up the environment variables
 
-compiler = gcc-3.2
+compiler = gcc-3.2.3
 
 setenv G4SYSTEM Linux-g++
 
@@ -58,26 +58,13 @@ setenv CLHEP_BASE_DIR         points to the installation directory of CHLEP;
  
 setenv G4LEDATA               points to the low energy electromagnetic libraries - G4EMLOW2.3 
 
+setup for analysis: AIDA 3.2.1, PI 1.2.1                                
 
-#------- SETUP.py ------------------------                                                                        
-setenv G4ANALYSIS_USE  1
+Users can download the analysis tools from:  
                                                                         
-source /afs/cern.ch/sw/lcg/app/spi/tools/latest/setup/lcgspi.csh
-setenv PI_VERSION 1_2_1                                                 
-setenv SCRAM_ARCH rh73_gcc32
-echo "setting up PI version " ${PI_VERSION}                             
-setenv CURDIR `pwd`
-cd /afs/cern.ch/sw/lcg/app/releases/PI/PI_${PI_VERSION}                 
-
-eval `scram runtime -csh`                                               
-cd ${CURDIR}
-    
-#-----------------------------------------                                                       
-The users not provided of afs service can download the analysis tools   
-from the web.
-Please take a look to the web page                                      
-        http://www.cern.ch/PI 
-for more info          
+http://aida.freehep.org/
+http://www.cern.ch/PI 
+         
 #------------------------------------------                                                   
 
  - Setup for Visualization 
@@ -139,8 +126,8 @@ specifically provided from GEANT4 to treat low energy processes.
 The default cut in range value is 0.1 mm, a bigger cut is associated to the first collimator.
 
 ------------------------------------------------------------------------
-----> 5. Simulation output  
-                         
+----> 5. Simulation output    
+                                          
  The analysis part of Medical_Linac is based on the AIDA interfaces and their
  implementation in Anaphe
  The actual analysis produces some histograms; the histograms are saved at 
@@ -172,7 +159,7 @@ The default cut in range value is 0.1 mm, a bigger cut is associated to the firs
     (Y and Z Thickness = 5. mm) at a depth in the phantom of 200 mm,  
     from which the user can calculate the flatness 
                                                                         
-Units:   the energy deposit is in MeV;
+ Units:   the energy deposit is in MeV;
          x, y, z in mm for histograms   
 
  To fill histograms from (4) to (8) I suggest you to select NumberOfEvents>500000
@@ -180,8 +167,8 @@ Units:   the energy deposit is in MeV;
  Please note that in a multiple run session, the last run always override the 
  hbook file.
 
- To use analisys remember to set G4ANALYSIS_USE.  
- 
+ To use analisys remember to set G4ANALYSIS_USE. 
+
 ------------------------------------------------------------------------
 ----> 6. Future plans
 In next future I will put in this example the multi leaf collimator
