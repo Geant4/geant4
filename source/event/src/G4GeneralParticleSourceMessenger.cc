@@ -785,7 +785,7 @@ void G4GeneralParticleSourceMessenger::SetNewValue(G4UIcommand *command, G4Strin
     }
 }
 
-G4String G4GeneralParticleSourceMessenger::GetCurrentValue(G4UIcommand * command)
+G4String G4GeneralParticleSourceMessenger::GetCurrentValue(G4UIcommand *)
 {
   G4String cv;
   
