@@ -590,7 +590,7 @@ void SBTrun::TestOutsidePoint( const G4VSolid *testVolume, G4int *nError,
 // TestInsidePoint
 //
 void SBTrun::TestInsidePoint( const G4VSolid *testVolume, G4int *nError,
-				 const SBTrunPointList *outside, const G4ThreeVector point, ostream &logger )
+			      const SBTrunPointList *outside, const G4ThreeVector point, ostream &logger )
 {
 	G4int i, n = outside->NumPoints();
 	
@@ -599,6 +599,16 @@ void SBTrun::TestInsidePoint( const G4VSolid *testVolume, G4int *nError,
 		ReportError( nError, point, 0, "TI: DistanceToOut(p) <= 0", logger );
 		return;
 	}
+	
+	G4VisExtent visExtent(testVolume->GetExtent());
+	if (point.x() < visExtent.GetXmin() ||
+	    point.x() > visExtent.GetXmax() || 
+	    point.y() < visExtent.GetYmin() || 
+	    point.y() > visExtent.GetYmax() || 
+	    point.z() < visExtent.GetZmin() || 
+	    point.z() > visExtent.GetZmax() ) {
+	    	ReportError( nError, point, 0, "TI: Point is outside G4VisExtent", logger );
+	} 
 	
 	for( i=0; i < n; i++ ) {
 		G4ThreeVector vr = (*outside)[i] - point;
