@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.hh,v 1.3 2001-09-10 18:05:17 pia Exp $
+// $Id: G4eLowEnergyLoss.hh,v 1.4 2001-10-18 09:47:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -110,7 +110,7 @@ class G4eLowEnergyLoss : public G4VeLowEnergyLoss
     // ( ionisation and bremsstrahlung) .
 
     virtual G4VParticleChange* PostStepDoIt(const G4Track& track,
-                                            const G4Step& Step) = 0;
+                                            const G4Step& step) = 0;
     // Virtual function to be overridden in the derived classes
     // ( ionisation and bremsstrahlung) .
                                             
@@ -125,6 +125,10 @@ class G4eLowEnergyLoss : public G4VeLowEnergyLoss
     G4eLowEnergyLoss & operator=(const G4eLowEnergyLoss &right);
 
   protected:
+
+
+    virtual G4std::vector<G4Track*>* SecondariesAlongStep(const G4Step& step,
+                                     G4double edep) {return 0;};
 
     G4PhysicsTable* theLossTable;
      

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4LowEnergyIonisationVI.hh,v 1.1 2001-10-11 12:24:49 pia Exp $
+// $Id: G4LowEnergyIonisationVI.hh,v 1.2 2001-10-18 09:47:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -55,6 +55,7 @@ class G4VDataSetAlgorithm;
 class G4ParticleChange;
 class G4VEnergySpectrum;
 class G4VCrossSectionHandler;
+class G4ShellVacancy;
 
 class G4LowEnergyIonisationVI : public G4eLowEnergyLoss
 { 
@@ -77,12 +78,14 @@ public:
 
   void SetCutForLowEnSecElectrons(G4double cut);
     
-
 protected:
  
   G4double GetMeanFreePath(const G4Track& track,
 			   G4double previousStepSize,
 			   G4ForceCondition* condition );
+
+  G4std::vector<G4Track*>* SecondariesAlongStep(const G4Step& step,
+                                                      G4double edep);
 
 private:
 
@@ -101,6 +104,8 @@ private:
   G4double cutForPhotons;
   G4double cutForElectrons;
   G4AtomicDeexcitation deexcitationManager;
+  G4ShellVacancy* shellVacancy;
+  G4VDataSetAlgorithm* interp;
 
 };
 

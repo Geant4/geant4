@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.12 2001-09-23 23:08:58 pia Exp $
+// $Id: G4eLowEnergyLoss.cc,v 1.13 2001-10-18 09:49:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // -----------------------------------------------------------
@@ -333,11 +333,8 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   // get particle and material pointers from trackData 
   const G4DynamicParticle* aParticle = trackData.GetDynamicParticle();
   G4double E      = aParticle->GetKineticEnergy() ;
-
-  //  G4cout << "MGP -- Along eInit " << E/keV << " keV " << G4endl;
   
   G4Material* aMaterial = trackData.GetMaterial();
-  //  G4int index = aMaterial->GetIndex();
   
   G4double Step = stepData.GetStepLength();
 
@@ -389,13 +386,24 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
     else             fParticleChange.SetStatusChange(fStopButAlive); 
   } 
 
-  // MGP debug 
-  // G4cout << "MGP AlongStepDoIt finalT = " << finalT/keV  << " keV" << G4endl;
-
+  G4double edep = E - finalT;
 
   fParticleChange.SetEnergyChange(finalT);
-  fParticleChange.SetLocalEnergyDeposit(E-finalT);
+  fParticleChange.SetLocalEnergyDeposit(edep);
 
+  G4std::vector<G4Track*>* vt = SecondariesAlongStep(stepData, edep);
+
+  if(vt) {
+
+    size_t nSecondaries = vt->size();
+    G4cout << "nSecondaries= " << nSecondaries << G4endl;
+    fParticleChange.SetNumberOfSecondaries(nSecondaries);
+    for(size_t i=0; i<nSecondaries; i++) {
+      fParticleChange.AddSecondary((*vt)[i]);
+    }
+    delete vt;   
+  }
+  
   return &fParticleChange;
 }
 
