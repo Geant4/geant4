@@ -33,17 +33,14 @@
 // Creation date: 29 September 2001
 //
 // Modifications: 
-//
+// 10 Oct 2001  MGP  Revision to improve code quality and consistency with design
 //
 // -------------------------------------------------------------------
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4BremsstrahlungElectronSpectrum.hh"
 #include "G4BremsstrahlungParameters.hh"
 #include "Randomize.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4BremsstrahlungElectronSpectrum::G4BremsstrahlungElectronSpectrum():
   G4VEnergySpectrum(),
@@ -52,14 +49,12 @@ G4BremsstrahlungElectronSpectrum::G4BremsstrahlungElectronSpectrum():
   theBRparam = new G4BremsstrahlungParameters();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4BremsstrahlungElectronSpectrum::~G4BremsstrahlungElectronSpectrum() 
 {
   delete theBRparam;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4BremsstrahlungElectronSpectrum::Probability(G4int Z, 
                                                        G4double tmin, 
@@ -85,7 +80,6 @@ G4double G4BremsstrahlungElectronSpectrum::Probability(G4int Z,
   return x; 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4BremsstrahlungElectronSpectrum::AverageEnergy(G4int Z,
                                                          G4double tmin, 
@@ -111,7 +105,6 @@ G4double G4BremsstrahlungElectronSpectrum::AverageEnergy(G4int Z,
   return x; 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4BremsstrahlungElectronSpectrum::SampleEnergy(G4int Z,
                                                         G4double tmin, 
@@ -143,8 +136,6 @@ G4double G4BremsstrahlungElectronSpectrum::SampleEnergy(G4int Z,
 
   return tgam; 
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
 
