@@ -1,0 +1,118 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4LowEnergyBremsstrahlung.icc,v 1.1 1999-01-08 14:16:11 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// ---------------------------------------------------------------
+//      GEANT 4 class inlined methods file
+//
+//      For information related to this code contact:
+//      CERN, IT Division, ASD group
+//      History: first implementation, based on object model of
+//      2nd December 1995, G.Cosmo
+//      ------------ G4LowEnergyBremsstrahlung physics process ---------
+//                     by Michel Maire, 27 July 1996
+// ***************************************************************
+// 13-12-96 : Sign corrected in the ScreenFunctions, L.Urban
+// 20/03/97 : new energy loss+ionisation+brems scheme, L.Urban
+// ***************************************************************
+
+
+inline G4double G4LowEnergyBremsstrahlung::GetMeanFreePath(
+                                                    const G4Track& trackData,
+                                                    G4double previousStepSize,
+                                                    G4ForceCondition* condition)
+ 
+// gives the MeanFreePath in GEANT4 internal units
+
+{
+   const G4DynamicParticle* aDynamicParticle;
+   G4Material* aMaterial;
+   G4double MeanFreePath;
+   G4bool isOutRange ;
+ 
+   *condition = NotForced ;
+
+   aDynamicParticle = trackData.GetDynamicParticle();
+   aMaterial = trackData.GetMaterial();
+
+   G4double KineticEnergy = aDynamicParticle->GetKineticEnergy();
+
+   if (KineticEnergy <  LowestKineticEnergy)
+     MeanFreePath = BIGSTEP ;
+   else {
+     if (KineticEnergy > HighestKineticEnergy) KineticEnergy = 0.99*HighestKineticEnergy ;
+     MeanFreePath = (*theMeanFreePathTable)(aMaterial->GetIndex())->
+                    GetValue( KineticEnergy, isOutRange );
+   }
+
+   return MeanFreePath; 
+} 
+
+
+inline G4double G4LowEnergyBremsstrahlung::ScreenFunction1(G4double ScreenVariable)
+
+// compute the value of the screening function 3*PHI1 - PHI2
+
+{
+   G4double screenVal;
+
+   if (ScreenVariable > 1.)
+     screenVal = 42.24 - 8.368*log(ScreenVariable+0.952);
+   else
+     screenVal = 42.392 - ScreenVariable* (7.796 - 1.961*ScreenVariable);
+
+   return screenVal;
+} 
+
+inline G4double G4LowEnergyBremsstrahlung::ScreenFunction2(G4double ScreenVariable)
+
+// compute the value of the screening function 1.5*PHI1 - 0.5*PHI2
+
+{
+   G4double screenVal;
+
+   if (ScreenVariable > 1.)
+     screenVal = 42.24 - 8.368*log(ScreenVariable+0.952);
+   else
+     screenVal = 41.734 - ScreenVariable* (6.484 - 1.250*ScreenVariable);
+
+   return screenVal;
+} 
+
+inline G4double G4LowEnergyBremsstrahlung::ComputeMeanFreePath(
+                                     const G4ParticleDefinition* ParticleType,
+                                           G4double KineticEnergy,
+                                           const G4Material* aMaterial)
+{
+  const G4ElementVector* theElementVector = aMaterial->GetElementVector() ;
+  const G4double* theAtomNumDensityVector = aMaterial->GetAtomicNumDensityVector();
+  G4double GammaEnergyCut = (G4Gamma::GetCutsInEnergy())[aMaterial->GetIndex()];   
+  G4double SIGMA = 0 ;
+
+  for ( G4int i=0 ; i < aMaterial->GetNumberOfElements() ; i++ )
+      {             
+            SIGMA += theAtomNumDensityVector[i] * 
+                     ComputeMicroscopicCrossSection( ParticleType, KineticEnergy,
+                                                     (*theElementVector)(i)->GetZ(), 
+                                                     GammaEnergyCut );
+      }       
+
+  return SIGMA<=0.0 ? BIGSTEP : 1./SIGMA ;
+}
+
+
+inline G4bool G4LowEnergyBremsstrahlung::IsApplicable(
+                            const G4ParticleDefinition& particle)
+{
+   return(   (&particle == (const G4ParticleDefinition *)theElectron)
+           ||(&particle == (const G4ParticleDefinition *)thePositron)
+         ) ;
+}
+         
