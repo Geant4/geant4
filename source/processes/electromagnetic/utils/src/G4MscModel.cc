@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.cc,v 1.20 2004-08-17 12:40:52 urban Exp $
+// $Id: G4MscModel.cc,v 1.21 2004-09-21 11:53:48 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -64,6 +64,7 @@
 //          Highland formula for the width of the central part,
 //          changes in the numerical values of some other parameters)
 //          ---> approximately step independent distribution (L.Urban)
+// 21-09-04 change in the tail of the angular distribution (L.Urban)
 
 // Class Description:
 //
@@ -612,7 +613,7 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength, G4double Kinetic
           xmean1 = 1.-x1fac2/a ;
 
           const G4double fctail = factail*1.0 ;
-          c = 2.+fctail*xx0 ;
+          c = 2.+fctail*tau ;
           if(c == 2.) c=2.000001 ;
 
           b = 1.+(c-xsi)/a ;
