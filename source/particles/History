@@ -1,4 +1,4 @@
-$Id: History,v 1.70 2002-05-30 02:20:18 kurasige Exp $
+$Id: History,v 1.71 2002-10-01 04:38:00 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- May 30, 2002     (particles-V04-01-00)
+- Fixed PDG codes for k0_star(1430), a0(1450) and f0(1370) (shortlived-04-01-00)
+- 
+
 - May 30, 2002     (particles-V04-00-03)
 - Fixed a bug in  G4NeutronBetaDecayChannel
 - Fixed warnings in G4NucleiProperties
