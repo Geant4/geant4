@@ -77,17 +77,33 @@
 #include "G4GRSVolume.hh"
 
 #include "G4UnitsTable.hh"
-#include "CLHEP/Hist/TupleManager.h"
-#include "CLHEP/Hist/HBookFile.h"
-#include "CLHEP/Hist/Histogram.h"
-#include "CLHEP/Hist/Tuple.h"
+//#include "CLHEP/Hist/TupleManager.h"
+//#include "CLHEP/Hist/HBookFile.h"
+//#include "CLHEP/Hist/Histogram.h"
+//#include "CLHEP/Hist/Tuple.h"
+
+// New Histogramming (from AIDA and Anaphe):
+#include <memory> // for the auto_ptr(T>
+
+#include "AIDA/IAnalysisFactory.h"
+
+#include "AIDA/ITreeFactory.h"
+#include "AIDA/ITree.h"
+
+#include "AIDA/IHistogramFactory.h"
+#include "AIDA/IHistogram1D.h"
+#include "AIDA/IHistogram2D.h"
+//#include "AIDA/IHistogram3D.h"
+
+#include "AIDA/ITupleFactory.h"
+#include "AIDA/ITuple.h"
 
 
 #include "G4Timer.hh"
 
 int main(int argc, char** argv)
 {
-  HepTupleManager* hbookManager = 0;
+  //  HepTupleManager* hbookManager = 0;
 
   // -------------------------------------------------------------------
   // Setup
@@ -287,66 +303,83 @@ int main(int argc, char** argv)
 
 
     // -------------------------------------------------------------------
-    // ---- HBOOK initialization
+
+    // Creating the analysis factory
+    G4std::auto_ptr< IAnalysisFactory > af( AIDA_createAnalysisFactory() );
+
+    // Creating the tree factory
+    G4std::auto_ptr< ITreeFactory > tf( af->createTreeFactory() );
+
+    // Creating a tree mapped to a new hbook file.
+    G4std::auto_ptr< ITree > tree( tf->create( hFile, false, true, "hbook" ) );
+    G4std::cout << "Tree store : " << tree->storeName() << G4std::endl;
+ 
+    // Creating a tuple factory, whose tuples will be handled by the tree
+    //   G4std::auto_ptr< ITupleFactory > tpf( af->createTupleFactory( *tree ) );
+
     const G4int nhisto = 40; 
-    HepHistogram* h[nhisto];
+    IHistogram1D* h[nhisto];
+    //ITuple* ntuple1 = 0;
+
     G4double mass = part->GetPDGMass();
     G4double pmax = sqrt(energy*(energy + 2.0*mass));
 		
     if(usepaw) {
-      hbookManager = new HBookFile(hFile, 58);
-      assert (hbookManager != 0);
+
+      // Creating a histogram factory, whose histograms will be handled by the tree
+      G4std::auto_ptr< IHistogramFactory > hf( af->createHistogramFactory( *tree ) );
+
+      // Creating an 1-dimensional histogram in the root directory of the tree
   
       // ---- Book a histogram and ntuples
-      G4cout << "Hbook file name: <" 
-             << ((HBookFile*) hbookManager)->filename() << ">" << G4endl;
+      G4cout << "Hbook file name: <" << hFile << ">" << G4endl;
 
-      h[0]=hbookManager->histogram("Number of Secondaries",50,-0.5,49.5);
-      h[1]=hbookManager->histogram("Type of secondary",10,-0.5,9.5);
-      h[2]=hbookManager->histogram("Phi(degrees) of Secondaries",90,-180.0,180.0);
-      h[3]=hbookManager->histogram("Pz (MeV) for protons",100,-pmax,pmax);
-      h[4]=hbookManager->histogram("Pz (MeV) for pi-",100,-pmax,pmax);
-      h[5]=hbookManager->histogram("Pz (MeV) for pi+",100,-pmax,pmax);
-      h[6]=hbookManager->histogram("Pz (MeV) for neutrons",100,-pmax,pmax);
-      h[7]=hbookManager->histogram("Pt (MeV) for protons",100,0.,pmax);
-      h[8]=hbookManager->histogram("Pt (MeV) for pi-",100,0.,pmax);
-      h[9]=hbookManager->histogram("Pt (MeV) for pi+",100,0.,pmax);
-      h[10]=hbookManager->histogram("Pt (MeV) for neutrons",100,0.,pmax);
-      h[11]=hbookManager->histogram("E (MeV) for protons",100,0.,energy);
-      h[12]=hbookManager->histogram("E (MeV) for pi-",100,0.,energy);
-      h[13]=hbookManager->histogram("E (MeV) for pi+",100,0.,energy);
-      h[14]=hbookManager->histogram("E (MeV) for neutrons",100,0.,energy);
-      h[15]=hbookManager->histogram("delta E (MeV)",20,-1.,1.);
-      h[16]=hbookManager->histogram("delta Pz (GeV)",20,-1.,1.);
-      h[17]=hbookManager->histogram("delta Pt (GeV)",20,-1.,1.);
+      h[0]=hf->create1D("1","Number of Secondaries",50,-0.5,49.5);
+      h[1]=hf->create1D("2","Type of secondary",10,-0.5,9.5);
+      h[2]=hf->create1D("3","Phi(degrees) of Secondaries",90,-180.0,180.0);
+      h[3]=hf->create1D("4","Pz (MeV) for protons",100,-pmax,pmax);
+      h[4]=hf->create1D("5","Pz (MeV) for pi-",100,-pmax,pmax);
+      h[5]=hf->create1D("6","Pz (MeV) for pi+",100,-pmax,pmax);
+      h[6]=hf->create1D("7","Pz (MeV) for neutrons",100,-pmax,pmax);
+      h[7]=hf->create1D("8","Pt (MeV) for protons",100,0.,pmax);
+      h[8]=hf->create1D("9","Pt (MeV) for pi-",100,0.,pmax);
+      h[9]=hf->create1D("10","Pt (MeV) for pi+",100,0.,pmax);
+      h[10]=hf->create1D("11","Pt (MeV) for neutrons",100,0.,pmax);
+      h[11]=hf->create1D("12","E (MeV) for protons",100,0.,energy);
+      h[12]=hf->create1D("13","E (MeV) for pi-",100,0.,energy);
+      h[13]=hf->create1D("14","E (MeV) for pi+",100,0.,energy);
+      h[14]=hf->create1D("15","E (MeV) for neutrons",100,0.,energy);
+      h[15]=hf->create1D("16","delta E (MeV)",20,-1.,1.);
+      h[16]=hf->create1D("17","delta Pz (GeV)",20,-1.,1.);
+      h[17]=hf->create1D("18","delta Pt (GeV)",20,-1.,1.);
       
-      h[18]=hbookManager->histogram("E (MeV) for pi0",100,0.,energy);
-      h[19]=hbookManager->histogram("Pz (MeV) for pi0",100,-pmax,pmax);
-      h[20]=hbookManager->histogram("Pt (MeV) for pi0",100,0.,pmax);
+      h[18]=hf->create1D("19","E (MeV) for pi0",100,0.,energy);
+      h[19]=hf->create1D("20","Pz (MeV) for pi0",100,-pmax,pmax);
+      h[20]=hf->create1D("21","Pt (MeV) for pi0",100,0.,pmax);
       
-      h[21]=hbookManager->histogram("E(MeV) protons",nbinse,0.,emax);
-      h[22]=hbookManager->histogram("E(MeV) neutrons",nbinse,0.,emax);
+      h[21]=hf->create1D("22","E(MeV) protons",nbinse,0.,emax);
+      h[22]=hf->create1D("23","E(MeV) neutrons",nbinse,0.,emax);
 
-      h[23]=hbookManager->histogram("Phi(degrees) of neutrons",90,-180.0,180.0);
+      h[23]=hf->create1D("24","Phi(degrees) of neutrons",90,-180.0,180.0);
 
-      h[24]=hbookManager->histogram("cos(theta) protons",nbinsa,-1.,1.);
-      h[25]=hbookManager->histogram("cos(theta) neutrons",nbinsa,-1.,1.);
+      h[24]=hf->create1D("25","cos(theta) protons",nbinsa,-1.,1.);
+      h[25]=hf->create1D("26","cos(theta) neutrons",nbinsa,-1.,1.);
 
-      h[26]=hbookManager->histogram("Baryon charge",maxn,-0.5,(G4double)maxn + 0.5);
+      h[26]=hf->create1D("27","Baryon charge",maxn,-0.5,(G4double)maxn + 0.5);
 
-      h[27]=hbookManager->histogram("ds/dE at theta = 0",nbinsd,0.,emax);
-      h[28]=hbookManager->histogram("ds/dE at theta = 1",nbinsd,0.,emax);
-      h[29]=hbookManager->histogram("ds/dE at theta = 2",nbinsd,0.,emax);
-      h[30]=hbookManager->histogram("ds/dE at theta = 3",nbinsd,0.,emax);
-      h[31]=hbookManager->histogram("ds/dE at theta = 4",nbinsd,0.,emax);
-      h[32]=hbookManager->histogram("ds/dE at theta = 5",nbinsd,0.,emax);
-      h[33]=hbookManager->histogram("ds/dE at theta = 6",nbinsd,0.,emax);
-      h[34]=hbookManager->histogram("ds/dE at theta = 7",nbinsd,0.,emax);
-      h[35]=hbookManager->histogram("ds/dE at theta = 8",nbinsd,0.,emax);
-      h[36]=hbookManager->histogram("ds/dE at theta = 9",nbinsd,0.,emax);
-      h[37]=hbookManager->histogram("ds/dE at theta = 10",nbinsd,0.,emax);
-      h[38]=hbookManager->histogram("ds/dE at theta = 11",nbinsd,0.,emax);
-      h[39]=hbookManager->histogram("ds/dE at theta = 12",nbinsd,0.,emax);
+      h[27]=hf->create1D("28","ds/dE at theta = 0",nbinsd,0.,emax);
+      h[28]=hf->create1D("29","ds/dE at theta = 1",nbinsd,0.,emax);
+      h[29]=hf->create1D("30","ds/dE at theta = 2",nbinsd,0.,emax);
+      h[30]=hf->create1D("31","ds/dE at theta = 3",nbinsd,0.,emax);
+      h[31]=hf->create1D("32","ds/dE at theta = 4",nbinsd,0.,emax);
+      h[32]=hf->create1D("33","ds/dE at theta = 5",nbinsd,0.,emax);
+      h[33]=hf->create1D("34","ds/dE at theta = 6",nbinsd,0.,emax);
+      h[34]=hf->create1D("35","ds/dE at theta = 7",nbinsd,0.,emax);
+      h[35]=hf->create1D("36","ds/dE at theta = 8",nbinsd,0.,emax);
+      h[36]=hf->create1D("37","ds/dE at theta = 9",nbinsd,0.,emax);
+      h[37]=hf->create1D("38","ds/dE at theta = 10",nbinsd,0.,emax);
+      h[38]=hf->create1D("39","ds/dE at theta = 11",nbinsd,0.,emax);
+      h[39]=hf->create1D("40","ds/dE at theta = 12",nbinsd,0.,emax);
       	
       G4cout << "Histograms is initialised nbins=" << nbins
              << G4endl;
@@ -429,7 +462,6 @@ int main(int argc, char** argv)
       }
       gTrack->SetStep(step); 
       gTrack->SetKineticEnergy(energy); 
-      //G4double x = 0.0;
 
       labv = G4LorentzVector(0.0, 0.0, pmax, energy + mass + amass);
       aChange = proc->PostStepDoIt(*gTrack,*step);
@@ -481,8 +513,8 @@ int main(int argc, char** argv)
         sint  = sin(dtet*(0.5 + (G4double)itet));
 				
 	if(usepaw && e > 0.0 && pt > 0.0) {
-          h[2]->accumulate(mom.phi()/degree,1.0);
-          if(pd == neutron) h[23]->accumulate(mom.phi()/degree,1.0);
+          h[2]->fill(mom.phi()/degree,1.0);
+          if(pd == neutron) h[23]->fill(mom.phi()/degree,1.0);
 	}				
 	de += e;
         if(verbose>0 || abs(mom.phi()/degree - 90.) < 0.01) {
@@ -500,64 +532,62 @@ int main(int argc, char** argv)
 
 	if(usepaw) {
 
-          if(pd) h[26]->accumulate((G4double)pd->GetBaryonNumber(), 1.0);
+          if(pd) h[26]->fill((G4double)pd->GetBaryonNumber(), 1.0);
 
           if(pd == proton) { 
 						
-            h[1]->accumulate(1.0, 1.0);						
-            h[3]->accumulate(pz/MeV, 1.0); 
-            h[7]->accumulate(pt/MeV, 1.0);
-            h[11]->accumulate(e/MeV, 1.0);
-            h[11]->accumulate(e/MeV, 1.0);
-	    //    h[18]->accumulate(e/MeV, 1.0);
-	    h[21]->accumulate(e/MeV, factor);
-	    h[24]->accumulate(cos(theta), factora/sint);
+            h[1]->fill(1.0, 1.0);						
+            h[3]->fill(pz/MeV, 1.0); 
+            h[7]->fill(pt/MeV, 1.0);
+            h[11]->fill(e/MeV, 1.0);
+            h[11]->fill(e/MeV, 1.0);
+	    h[21]->fill(e/MeV, factor);
+	    h[24]->fill(cos(theta), factora/sint);
 		
           } else if(pd == pin) {
     
-	    h[1]->accumulate(4.0, 1.0);
-            h[4]->accumulate(pz/MeV, 1.0); 
-            h[8]->accumulate(pt/MeV, 1.0);
-            h[12]->accumulate(e/MeV, 1.0);
+	    h[1]->fill(4.0, 1.0);
+            h[4]->fill(pz/MeV, 1.0); 
+            h[8]->fill(pt/MeV, 1.0);
+            h[12]->fill(e/MeV, 1.0);
 						
           } else if(pd == pip) {
     
-	    h[1]->accumulate(3.0, 1.0);		
-            h[5]->accumulate(pz/MeV, 1.0); 
-            h[9]->accumulate(pt/MeV, 1.0);
-            h[13]->accumulate(e/MeV, 1.0);
+	    h[1]->fill(3.0, 1.0);		
+            h[5]->fill(pz/MeV, 1.0); 
+            h[9]->fill(pt/MeV, 1.0);
+            h[13]->fill(e/MeV, 1.0);
 
 	  } else if(pd == pi0) {
     
-	    h[1]->accumulate(5.0, 1.0);	
-	    h[18]->accumulate(e/MeV, 1.0);		
-	    h[19]->accumulate(pz/MeV, 1.0); 
-	    h[20]->accumulate(pt/MeV, 1.0);
+	    h[1]->fill(5.0, 1.0);	
+	    h[18]->fill(e/MeV, 1.0);		
+	    h[19]->fill(pz/MeV, 1.0); 
+	    h[20]->fill(pt/MeV, 1.0);
 
 	  } else if(pd == neutron) {
     
-	    h[1]->accumulate(2.0, 1.0);	  
-            h[6]->accumulate(pz/MeV, 1.0); 
-            h[10]->accumulate(pt/MeV, 1.0);
-            h[14]->accumulate(e/MeV, 1.0);
-            //h[22]->accumulate(e/MeV, 1.0);
-	    h[22]->accumulate(e/MeV, factor);
-	    if(e >= elim) h[25]->accumulate(cos(theta), factora/sint);
+	    h[1]->fill(2.0, 1.0);	  
+            h[6]->fill(pz/MeV, 1.0); 
+            h[10]->fill(pt/MeV, 1.0);
+            h[14]->fill(e/MeV, 1.0);
+	    h[22]->fill(e/MeV, factor);
+	    if(e >= elim) h[25]->fill(cos(theta), factora/sint);
             theta /= degree;
 	    G4int kk=0;
             for(kk=0; kk<13; kk++) {
               if(theta <= bng[kk+1]) break;
 	    }
-            h[27+kk]->accumulate(e/MeV, cng[kk]); 
+            h[27+kk]->fill(e/MeV, cng[kk]); 
 
 	  } else if(pd == deu) {
-	    h[1]->accumulate(6.0, 1.0);	
+	    h[1]->fill(6.0, 1.0);	
 	  } else if(pd == tri) {
-	    h[1]->accumulate(7.0, 1.0);	
+	    h[1]->fill(7.0, 1.0);	
 	  } else if(pd == alp) {
-	    h[1]->accumulate(8.0, 1.0);							
+	    h[1]->fill(8.0, 1.0);							
 	  } else {
-	    h[1]->accumulate(9.0, 1.0);	
+	    h[1]->fill(9.0, 1.0);	
 	  }
 	}
         if(i<n) delete aChange->GetSecondary(i);
@@ -575,10 +605,10 @@ int main(int argc, char** argv)
       pt = sqrt(px*px +py*py);
 
       if(usepaw) {
-        h[0]->accumulate((float)nn,1.0);
-	h[15]->accumulate(labv.e()/MeV, 1.0);
-	h[16]->accumulate(pz/GeV, 1.0);
-	h[17]->accumulate(pt/GeV, 1.0);
+        h[0]->fill((float)nn,1.0);
+	h[15]->fill(labv.e()/MeV, 1.0);
+	h[16]->fill(pz/GeV, 1.0);
+	h[17]->fill(pt/GeV, 1.0);
       }	
       //      delete aChange;
       aChange->Clear();
@@ -589,15 +619,14 @@ int main(int argc, char** argv)
     G4cout << "  "  << *timer << G4endl;
     delete timer;
 
+    // Committing the transaction with the tree
     if(usepaw) {
-      hbookManager->write();
-      G4cout << "# hbook is writed" << G4endl;
-      for(G4int i=0; i<nhisto; i++) {
-        if(h[i]) delete h[i];
-      }
-      delete hbookManager;    
-      G4cout << "# hbook is deleted" << G4endl;
+      G4std::cout << "Committing..." << G4std::endl;
+      tree->commit();
+      G4std::cout << "Closing the tree..." << G4std::endl;
+      tree->close();
     }
+
     G4cout << "###### End of run # " << run << "     ######" << G4endl;
 
   } while(end);

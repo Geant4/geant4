@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2002-03-18 17:32:48 vnivanch Exp $
+# $Id: GNUmakefile,v 1.2 2002-07-04 10:28:32 vnivanch Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -18,12 +18,13 @@ all: lib bin
 
 include $(G4INSTALL)/config/architecture.gmk
 
-ifdef G4NOHIST
-  CPPFLAGS += -DG4NOHIST
-else
-  LDFLAGS  += -L/cern/pro/lib
-  LOADLIBS += -lpacklib $(FCLIBS)
-endif
+
+#
+# NEW: this requires the env-var LHCXX_REL_DIR to be set up correctly,
+# see the first lines in G4ComptonTest.cc
+#
+CPPFLAGS += `aida-config --useHBook --include`
+LDFLAGS  += `aida-config --useHBook --lib`
 
 
 include $(G4INSTALL)/config/binmake.gmk

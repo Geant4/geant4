@@ -1,3 +1,5 @@
+source setup_aida.csh
+
 gmake
 rm $TARGET/res.out
 echo "Start of run"

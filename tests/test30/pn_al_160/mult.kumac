@@ -11,23 +11,23 @@ set NDVY 010205
  zone 2 2
  
  hi/file 1 par.paw
- hi/pl 1
+ hi/pl 1 hist
 * itx 30 40000 'protons 160.3 MeV on Al'
  itx 20 15000 'LEPAR'
  close 1
  
  hi/file 1 prec.paw
- hi/pl 1
+ hi/pl 1 hist
  itx 20 15000 'PREC'
  close 1
  
  hi/file 1 chips.paw
- hi/pl 1
+ hi/pl 1 hist
  itx 20 5000 'CHIPS'
  close 1
  
  hi/file 1 kin.paw
- hi/pl 1
+ hi/pl 1 hist
  itx 20 10000 'KIN'
  close 1
  

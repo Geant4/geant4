@@ -16,7 +16,7 @@ set NDVY 010205
  
  hi/file 1 prec.paw
  set dmod 3
- hi/pl 32 s
+ hi/pl 32 shist
  line 100 0.6 110 0.6
  itx 115 3.5 'PREC'
  close 1
@@ -24,7 +24,7 @@ set NDVY 010205
  
  hi/file 1 kin.paw
  set dmod 1
- hi/pl 32 s
+ hi/pl 32 shist
  line 100 0.2 110 0.2
  itx 115 1.5 'KIN'
  close 1
@@ -40,7 +40,7 @@ gr/h/symb X Y 27 21 0.2
  
  hi/file 1 par.paw
  set dmod 4
- hi/pl 32 s
+ hi/pl 32 shist
 * itx 20 200 'proton 160.3 MeV on Al secondary neutrons at theta=45 degree'
  line 100 0.8 110 0.8
  itx 115 6.0 'LEPAR'
@@ -48,7 +48,7 @@ gr/h/symb X Y 27 21 0.2
  
  hi/file 1 chips.paw
  set dmod 1
- hi/pl 32 s
+ hi/pl 32 shist
  line 100 0.4 110 0.4
  itx 115 2.2 'CHIPS'
  close 1

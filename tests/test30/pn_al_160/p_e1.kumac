@@ -13,23 +13,23 @@ set NDVY 010205
  opt logx 
  
  hi/file 1 par.paw
- hi/pl 12
+ hi/pl 12 hist
 * itx 1 200000 'protons 160.3 MeV on Al'
  itx 0.5 5000 'LEPAR'
  close 1
  
  hi/file 1 prec.paw
- hi/pl 12
+ hi/pl 12 hist
  itx 0.5 5000 'PREC'
  close 1
  
  hi/file 1 chips.paw
- hi/pl 12
+ hi/pl 12 hist
  itx 0.5 2000 'CHIPS'
  close 1
  
  hi/file 1 kin.paw
- hi/pl 12
+ hi/pl 12 hist
  itx 0.5 1000 'KIN'
  close 1
  
