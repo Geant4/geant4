@@ -1,0 +1,65 @@
+opt zfl
+opt nfit
+opt sta
+opt nbox
+opt ngri
+set VSIZ 0.2
+set XVAL 0.25
+set lwid 6
+set htyp -3
+set gsiz 0.4
+set ygti 0.5
+set yhti 0.5
+set ymgl 1.0
+set ywin 1.0
+zone 2 3
+
+
+close 1
+ hi/file 1 ber.paw
+title 'Bertini G4 6.1  theta = (15 - 300)mrad, p = (0.2-13.0)GeV'
+
+  hi/copy 10 20
+ hist/opera/add 10 20 30 0.00001 0.
+ hi/pl 30 histo
+
+  hi/copy 11 21
+ hist/opera/add 11 21 31 0.00001 0.
+ hi/pl 31 histo
+
+  hi/copy 12 22
+ hist/opera/add 12 22 32 0.00001 0.
+ hi/pl 32 histo
+
+  hi/copy 13 23
+ hist/opera/add 13 23 33 0.00001 0.
+ hi/pl 33 histo
+
+*  hi/copy 14 24
+* hist/opera/add 14 24 34 0.00001 0.
+* hi/pl 34 histo
+
+*  hi/copy 15 25
+* hist/opera/add 15 25 35 0.00001 0.
+* hi/pl 35 histo
+
+  hi/copy 16 26
+ hist/opera/add 16 26 36 0.00001 0.
+ hi/pl 36 histo
+
+  hi/copy 17 27
+ hist/opera/add 17 27 37 0.00001 0.
+ hi/pl 37 histo
+
+ * hi/copy 18 28
+ *hist/opera/add 18 28 38 0.00001 0.
+ *hi/pl 38 histo
+
+ * hi/copy 19 29
+ *hist/opera/add 19 29 39 0.00001 0.
+ *hi/pl 39 histo
+
+close 1
+
+
+exe prf ber61 ps
