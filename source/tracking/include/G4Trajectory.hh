@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trajectory.hh,v 1.18 2003-06-16 17:13:11 gunter Exp $
+// $Id: G4Trajectory.hh,v 1.19 2004-06-07 14:03:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -129,7 +129,7 @@ public: // with description
 
 };
 
-extern G4Allocator<G4Trajectory> aTrajectoryAllocator;
+G4extern G4Allocator<G4Trajectory> aTrajectoryAllocator;
 
 inline void* G4Trajectory::operator new(size_t)
 {

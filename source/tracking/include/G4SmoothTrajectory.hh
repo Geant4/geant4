@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectory.hh,v 1.5 2003-06-16 17:13:07 gunter Exp $
+// $Id: G4SmoothTrajectory.hh,v 1.6 2004-06-07 14:03:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -124,7 +124,7 @@ public: // with description
 
 };
 
-extern G4Allocator<G4SmoothTrajectory> aSmoothTrajectoryAllocator;
+G4extern G4Allocator<G4SmoothTrajectory> aSmoothTrajectoryAllocator;
 
 inline void* G4SmoothTrajectory::operator new(size_t)
 {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTrajectoryPoint.hh,v 1.5 2002-10-16 11:42:48 johna Exp $
+// $Id: G4RayTrajectoryPoint.hh,v 1.6 2004-06-07 14:05:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -77,7 +77,7 @@ class G4RayTrajectoryPoint :public G4VTrajectoryPoint
     // Dummy function (not used) to satisfy base class pure virtual function.
 };
 
-extern G4Allocator<G4RayTrajectoryPoint> G4RayTrajectoryPointAllocator;
+G4extern G4Allocator<G4RayTrajectoryPoint> G4RayTrajectoryPointAllocator;
 
 inline void* G4RayTrajectoryPoint::operator new(size_t)
 {
