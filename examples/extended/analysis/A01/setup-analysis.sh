@@ -5,14 +5,14 @@
 #
 # Change this to point to your Java installation
 #
-#export JDK_HOME="/usr/java/jdk1.4.1"
+#export JDK_HOME="/usr/java/jdk1.4.2"
 #
 #
 # No User Configuration below.
 #
 if test ! "${JDK_HOME:+x}"
 then
-    export JDK_HOME=/usr/java/jdk1.4.1
+    export JDK_HOME=/usr/java/jdk1.4.2
 fi
 if ! test -e $JDK_HOME/bin/java
 then
@@ -63,8 +63,7 @@ Darwin*)
     break
 esac
 
-export CLASSPATH="$JLIBPATH/JASAIDA.jar"
-CLASSPATH="$CLASSPATH:$JLIBPATH/aida.jar"
+export CLASSPATH="$JLIBPATH/aida.jar"
 CLASSPATH="$CLASSPATH:$JLIBPATH/aida-dev.jar"
 CLASSPATH="$CLASSPATH:$JLIBPATH/freehep-hep.jar"
 CLASSPATH="$CLASSPATH:$JLIBPATH/freehep-base.jar"

@@ -5,13 +5,13 @@
 #
 # Change this to point to your Java installation
 #
-#setenv JDK_HOME "/usr/java/jdk1.4.1"
+#setenv JDK_HOME "/usr/java/jdk1.4.2"
 #
 #
 # No User Configuration below.
 #
 if (! $?JDK_HOME) then
-   setenv JDK_HOME /usr/java/jdk1.4.1
+   setenv JDK_HOME /usr/java/jdk1.4.2
 endif
 if (! -e $JDK_HOME/bin/java) then
    echo "You need to install Java and/or modify script to set JDK_HOME correctly"
@@ -56,8 +56,7 @@ switch ($G4SYSTEM)
         breaksw
 endsw
 
-setenv CLASSPATH "$JLIBPATH/JASAIDA.jar"
-setenv CLASSPATH "${CLASSPATH}:$JLIBPATH/aida.jar"
+setenv CLASSPATH "$JLIBPATH/aida.jar"
 setenv CLASSPATH "${CLASSPATH}:$JLIBPATH/aida-dev.jar"
 setenv CLASSPATH "${CLASSPATH}:$JLIBPATH/freehep-hep.jar"
 setenv CLASSPATH "${CLASSPATH}:$JLIBPATH/freehep-base.jar"

@@ -5,14 +5,14 @@
 #
 # Change this to point to your Java installation
 #
-#export JDK_HOME="/cygdrive/c/java/j2sdk1.4.1"
+#export JDK_HOME="/cygdrive/c/java/j2sdk1.4.2"
 #
 #
 # No User Configuration below.
 #
 if test ! "${JDK_HOME:+x}"
 then
-   export JDK_HOME="/cygdrive/c/java/j2sdk1.4.1"
+   export JDK_HOME="/cygdrive/c/java/j2sdk1.4.2"
 fi
 if ! test -e $JDK_HOME/bin/java
 then
@@ -32,7 +32,7 @@ fi
 export JLIBPATH=$GEANT4_HOME/extlib/java
 if ! test -e $JLIBPATH/aida.jar
 then
-   echo "The AIDA.jar files seem to be missing, make sure JAIDA-Geant4 patch has been applied"
+   echo "The aida.jar files seem to be missing, make sure JAIDA-Geant4 patch has been applied"
 	echo "and that GEANT4_HOME is set correctly"
    return
 fi
@@ -42,10 +42,9 @@ cp $JDK_HOME/lib/jvm.lib $GEANT4_HOME/extlib/$G4SYSTEM
 export G4ANALYSIS_AIDA_CONFIG_LIBS="'-libpath:'$GEANT4_HOME/extlib/$G4SYSTEM AIDAJNI.lib FHJNI.lib jvm.lib"
 
 export JVM_ARGS="-Dhep.aida.IAnalysisFactory=hep.aida.ref.AnalysisFactory"
-export PATH=$PATH:$JDK_HOME/jre/bin/client
+export PATH=$PATH:../../../../extlib/$G4SYSTEM:$JDK_HOME/jre/bin/client
 
-export CLASSPATH="$JLIBPATH/JASAIDA.jar"
-CLASSPATH="$CLASSPATH;$JLIBPATH/aida.jar"
+export CLASSPATH="$JLIBPATH/aida.jar"
 CLASSPATH="$CLASSPATH;$JLIBPATH/aida-dev.jar"
 CLASSPATH="$CLASSPATH;$JLIBPATH/freehep-hep.jar"
 CLASSPATH="$CLASSPATH;$JLIBPATH/freehep-base.jar"
