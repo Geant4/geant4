@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05VisManager.cc,v 1.3 2001-07-11 09:58:36 gunter Exp $
+// $Id: ExN05VisManager.cc,v 1.4 2001-10-24 21:25:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -35,7 +35,7 @@
 // Supported drivers...
 
 #ifdef G4VIS_USE_ASCIITREE
-  RegisterGraphicsSystem (new G4ASCIITree);
+#include "G4ASCIITree.hh"
 #endif
 
 #ifdef G4VIS_USE_DAWN
