@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungSTD.hh,v 1.8 2003-06-16 17:01:39 gunter Exp $
+// $Id: G4MuBremsstrahlungSTD.hh,v 1.9 2003-08-06 15:22:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------

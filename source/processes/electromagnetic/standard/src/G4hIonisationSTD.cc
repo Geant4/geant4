@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4hIonisationSTD.cc,v 1.11 2003-07-21 12:52:24 vnivanch Exp $
+// $Id: G4hIonisationSTD.cc,v 1.12 2003-08-06 15:22:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -63,6 +63,7 @@
 // 13-02-03 SubCutoff regime is assigned to a region (V.Ivanchenko)
 // 23-05-03 Define default integral + BohrFluctuations (V.Ivanchenko)
 // 03-06-03 Fix initialisation problem for STD ionisation (V.Ivanchenko)
+// 04-08-03 Set integral=false to be default (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -93,6 +94,7 @@ G4hIonisationSTD::G4hIonisationSTD(const G4String& name)
   SetMinKinEnergy(0.1*keV);
   SetMaxKinEnergy(100.0*TeV);
   SetVerboseLevel(0);
+  SetIntegral(false);
   mass = 0.0;
   ratio = 0.0;
 }
@@ -112,8 +114,13 @@ void G4hIonisationSTD::InitialiseProcess()
   em->SetLowEnergyLimit(0.1*keV);
   em->SetHighEnergyLimit(2.0*MeV);
 
-  if(IsIntegral()) flucModel = new G4BohrFluctuations();
-  else             flucModel = new G4UniversalFluctuation();
+  if(IsIntegral()) {
+    flucModel = new G4BohrFluctuations();
+    SetStepLimits(1.0, 1.0*mm);
+  } else {
+    flucModel = new G4UniversalFluctuation();
+    SetStepLimits(0.2, 1.0*mm);
+  }
 
   AddEmModel(1, em, flucModel);
   G4VEmModel* em1 = new G4BetheBlochModel();
@@ -144,7 +151,8 @@ void G4hIonisationSTD::PrintInfoDefinition()
   G4VEnergyLossSTD::PrintInfoDefinition();
 
   G4cout << "      Bether-Bloch model for Escaled > 2 MeV, "
-         << "parametrisation of Bragg peak below."
+         << "parametrisation of Bragg peak below, "
+         << "Integral mode " << IsIntegral()
          << G4endl;
 }
 

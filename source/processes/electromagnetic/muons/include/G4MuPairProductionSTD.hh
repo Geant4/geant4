@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionSTD.hh,v 1.9 2003-06-16 17:01:44 gunter Exp $
+// $Id: G4MuPairProductionSTD.hh,v 1.10 2003-08-06 15:22:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -91,7 +91,7 @@ public:
                              const G4DynamicParticle*,
                                    G4double&,
                                    G4double&);
-
+  
   void SetSubCutoff(G4bool val);
 
   void PrintInfoDefinition();

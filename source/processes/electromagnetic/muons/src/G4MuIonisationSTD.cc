@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuIonisationSTD.cc,v 1.14 2003-06-06 15:00:01 vnivanch Exp $
+// $Id: G4MuIonisationSTD.cc,v 1.15 2003-08-06 15:22:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -56,6 +56,7 @@
 // 23-05-03 Define default integral + BohrFluctuations (V.Ivanchenko)
 // 03-06-03 Add SetIntegral method to choose fluctuation model (V.Ivanchenko)
 // 03-06-03 Fix initialisation problem for STD ionisation (V.Ivanchenko)
+// 04-08-03 Set integral=false to be default (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -86,6 +87,7 @@ G4MuIonisationSTD::G4MuIonisationSTD(const G4String& name)
   SetLambdaBinning(120);
   SetMinKinEnergy(0.1*keV);
   SetMaxKinEnergy(100.0*TeV);
+  SetIntegral(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -99,8 +101,14 @@ void G4MuIonisationSTD::InitialiseProcess()
 {
   SetSecondaryParticle(G4Electron::Electron());
 
-  if(IsIntegral()) flucModel = new G4BohrFluctuations();
-  else             flucModel = new G4UniversalFluctuation();
+  if(IsIntegral()) {
+    flucModel = new G4BohrFluctuations();
+    SetStepLimits(1.0, 1.0*mm);
+
+  } else {
+    flucModel = new G4UniversalFluctuation();
+    SetStepLimits(0.2, 1.0*mm);
+  }
 
   G4VEmModel* em = new G4BraggModel();
   em->SetLowEnergyLimit(0.1*keV);

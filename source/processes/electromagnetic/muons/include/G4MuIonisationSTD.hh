@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuIonisationSTD.hh,v 1.14 2003-06-16 17:01:41 gunter Exp $
+// $Id: G4MuIonisationSTD.hh,v 1.15 2003-08-06 15:22:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationSTD.cc,v 1.10 2003-07-21 12:52:23 vnivanch Exp $
+// $Id: G4eIonisationSTD.cc,v 1.11 2003-08-06 15:22:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -94,14 +94,21 @@ void G4eIonisationSTD::InitialiseProcess()
 {
   SetSecondaryParticle(theElectron);
 
-  if(IsIntegral()) flucModel = new G4BohrFluctuations();
-  else             flucModel = new G4UniversalFluctuation();
+  if(IsIntegral()) {
+    flucModel = new G4BohrFluctuations();
+    SetStepLimits(1.0, 1.0*mm);
+
+  } else {
+    flucModel = new G4UniversalFluctuation();
+    SetStepLimits(0.2, 1.0*mm);
+  }
 
   G4VEmModel* em = new G4MollerBhabhaModel();
   em->SetLowEnergyLimit(0.1*keV);
   em->SetHighEnergyLimit(100.0*TeV);
   AddEmModel(1, em, flucModel);
   isInitialised = true;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
