@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.11 2004-09-27 14:42:27 maire Exp $
+// $Id: RunAction.cc,v 1.12 2004-12-02 16:33:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -171,7 +171,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //
   projRange /= NbofEvents; projRange2 /= NbofEvents;
   G4double rms = projRange2 - projRange*projRange;        
-  if (rms>0.) rms = sqrt(rms); else rms = 0.;
+  if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
 
   G4cout.precision(5);       
   G4cout << "\n projected Range= "<< G4BestUnit(projRange,"Length")

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.7 2004-12-02 16:22:02 vnivanch Exp $
+// $Id: SteppingAction.cc,v 1.8 2004-12-02 16:28:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,7 +40,9 @@
 
 SteppingAction::SteppingAction(RunAction* RuAct)
 :runAction(RuAct)
-{ }
+{ 
+ muonMass = G4MuonPlus::MuonPlus()->GetPDGMass();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -56,6 +58,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  G4String processName = process->GetProcessName();
  if (processName != "GammaToMuPair") return;
  
+#ifdef G4ANALYSIS_USE
  G4StepPoint* PrePoint = aStep->GetPreStepPoint();  
  G4double      EGamma  = PrePoint->GetTotalEnergy();
  G4ThreeVector PGamma  = PrePoint->GetMomentum();
@@ -72,14 +75,12 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
      Pminus = (*secondary)[lp]->GetMomentum();      	   
    }
  }
+    	   
  G4double xPlus = Eplus/EGamma, xMinus = Eminus/EGamma;
  G4double thetaPlus = PGamma.angle(Pplus), thetaMinus = PGamma.angle(Pminus);
- 
- static const G4double muonMass=G4MuonPlus::MuonPlus()->GetPDGMass();
  G4double GammaPlus=EGamma*xPlus/muonMass;
  G4double GammaMinus=EGamma*xMinus/muonMass;
-   	   
-#ifdef G4ANALYSIS_USE
+
  runAction->GetHisto(0)->fill(1./(1.+std::pow(thetaPlus*GammaPlus,2)));
  runAction->GetHisto(1)->fill(std::log10(thetaPlus*GammaPlus));
 
