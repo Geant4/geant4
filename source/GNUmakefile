@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 1999-04-13 10:24:33 johna Exp $
+# $Id: GNUmakefile,v 1.3 1999-04-15 07:47:37 johna Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake glob" makes global libraries for each subdomain.
@@ -90,6 +90,7 @@ clean_libs:
 ifdef CFRONT
 	@rm -rf $(G4TREP)
 endif
+	@rm -rf $(G4TMP)/$(G4SYSTEM)/libname.map
 
 clean:
 	@echo Removing current $(G4SYSTEM) installation ...
