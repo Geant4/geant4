@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4PenelopeIonisation.hh,v 1.2 2003-06-19 14:39:02 gunter Exp $
+// $Id: G4PenelopeIonisation.hh,v 1.3 2003-07-01 14:01:35 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: L. Pandola
@@ -29,6 +29,7 @@
 // History:
 // -----------
 // 20 Mar 2003  L. Pandola        1st implementation
+// 30 Jun 2003  L. Pandola        methods for positrons added
 // -------------------------------------------------------------------
 //
 // Class description:
@@ -51,7 +52,6 @@ class G4VDataSetAlgorithm;
 class G4ParticleChange;
 class G4VEnergySpectrum;
 class G4VCrossSectionHandler;
-class G4ShellVacancy;
 class G4VEMDataSet;
 class G4RangeTest;
 
@@ -90,12 +90,6 @@ protected:
 			   G4double previousStepSize,
 			   G4ForceCondition* condition );
 
-protected:
-
-  virtual std::vector<G4DynamicParticle*>* DeexciteAtom(const G4MaterialCutsCouple* couple,
-							  G4double incidentEnergy,
-							  G4double eLoss);
-
 private:
 
   // Hide copy constructor and assignment operator as private 
@@ -103,12 +97,16 @@ private:
   G4PenelopeIonisation& operator = (const G4PenelopeIonisation& right);
   
   void BuildLossTable(const G4ParticleDefinition& ParticleType);
-  void CalculateDiscrete(G4double,G4double,G4int,G4double);
+  void CalculateDiscreteForElectrons(G4double,G4double,G4int,G4double);
+  void CalculateDiscreteForPositrons(G4double,G4double,G4int,G4double);
   void ReadData();
   G4double CalculateDeltaFermi(G4double,G4int,G4double);
-  G4double CalculateContinuous(G4double,G4double,G4int,G4double);
-  G4double CalculateStoppingPower(G4double,G4double,G4double,G4double);
-
+  G4double CalculateContinuous(G4double,G4double,G4int,G4double,
+			       const G4ParticleDefinition&);
+  G4double CalculateStoppingPowerForElectrons(G4double,
+					      G4double,G4double,G4double);
+  G4double CalculateStoppingPowerForPositrons(G4double,
+					      G4double,G4double,G4double);
   G4VCrossSectionHandler* crossSectionHandler;
   G4VEMDataSet* theMeanFreePath;
   G4VEnergySpectrum* energySpectrum;
@@ -118,8 +116,7 @@ private:
   G4double cutForPhotons;
   G4double cutForElectrons;
   G4AtomicDeexcitation deexcitationManager;
-  G4ShellVacancy* shellVacancy;
-
+ 
   //Parameters of hard interactions
   G4double kineticEnergy1;
   G4double cosThetaPrimary;
