@@ -1,0 +1,322 @@
+
+                       geant4-07-00-ref-00
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o New module 'gflash' for fast shower parameterisation.
+  o Implemented migration to <cmath> for standard mathematical functions.
+  o Completed migration to new G4VParticleChange interfaces.
+  o Restructured modules for standard electromagnetic.
+    Created new 'highenergy' module.
+  o New structure for physics-lists and updates to EM lists.
+  o New version of MOMO integrating GAG and Gain.
+  o General revision of the OpenInventor visualization driver.
+  o New advanced example 'air_shower'; new extended examples for
+    general-particle-source, radioactive-decay, run/event managment.
+    New example for GDML, showing import/export abilities with GDML-2.0.0.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config                                           config-V06-02-03
+------
+- Darwin-g++.gmk: fixes on setup for dynamic libraries.
+- binmake.gmk:
+  added modules to INCLUDE path - electromagnetic/highenergy,
+  parameterisations/trd_clusters and parameterisations/gflash.
+
+event                                            event-V06-02-04
+-----
+- Implemented migration to <cmath>.
+
+geometry                                         geometry-V06-02-02
+--------
+- Implemented migration to <cmath> for standard mathematical functions.
+
+geometry/solids/specific                         geom-specific-V06-02-07
+------------------------
+- Extensions to twisted box/trap shapes to consider all 4 solutions
+  for determining correct intersections.
+
+global                                           global-V06-02-05
+------
+- Migrated code to use 'std' namespace for mathematical functions
+  included from <cmath>. Removed explicit inclusion of CLHEP.h and
+  therefore also implicit inclusions of system headers <math.h>,
+  <stdlib.h> and <limits.h>.
+- Removed implicit inclusion of CLHEP's template function abs(), use
+  now standard function std::abs() instead.
+- Added inclusion of <cstddef> to G4Allocator.hh to make the header
+  self-consistent.
+
+graphics_reps                                    greps-V06-02-04
+-------------
+- Implemented migration to <cmath>.
+- HepPolyhedron, BooleanProcessor: replaced occurences of 'HepStd' with 'std'.
+
+interfaces                                       interfaces-V06-02-00
+----------
+- Implemented migration to <cmath>.
+- G4UIXm: define default resources in case XENVIRONMENT is not set.
+
+materials                                        materials-V06-02-02
+---------
+- Implemented migration to <cmath>.
+
+parameterisations                                gpara-V06-02-02
+-----------------
+- New 'gflash' submodule, contribution of CMS and ATLAS.
+- Moved original TRD classes to 'trd_models' submodule.
+- Implemented migration to <cmath>.
+
+particles                                        particles-V06-02-05
+---------
+- Implemented migration to <cmath>.
+- management (partman-V06-02-02)
+  o Removed unnecessary run-time warning messages.
+
+processes/cuts                                   procuts-V06-02-03
+--------------
+- Implemented migration to <cmath>.
+
+processes/decay                                  decay-V06-02-05
+---------------
+- Implemented migration to <cmath>.
+
+processes/electromagnetic/highenergy             highenergy-V06-02-01
+------------------------------------
+- New module. Imported classes from 'muons', 'standard' and 'utils'
+  for high-energy models.
+
+processes/electromagnetic/lowenergy              emlowen-V06-02-15
+-----------------------------------
+- Implemented migration to <cmath>.
+- Completed migration to G4VParticleChange new interface.
+- Cleaned up code in G4hShellCrossSection* classes.
+  Corrected uninitialized variables.
+- Fixes for uninitialized variables in Auger classes.
+- Bug fix in G4AtomicDeexcitation.
+
+processes/electromagnetic/muons                  muons-V06-02-07
+-------------------------------
+- Implemented migration to <cmath>.
+- Cleanup of GNUmakefile.
+
+processes/electromagnetic/standard               stand-V06-02-14
+----------------------------------
+- Implemented migration to <cmath>.
+- Implemented migration to new algorithm for Store/Retrieve tables.
+- Restructure of subdirectory:
+  o Moved classes to new 'high_energy' module.
+  o Imported classes implementing real models from 'utils' module.
+  o Remove obsolete G4PAIonisation classes.
+  o Cleanup of GNUmakefile.
+- Add energy threshold for gamma of G4eBremsstrahlung, which will be used
+  to kill e- and start new track in case of hard photon emission.
+- Modified fluctuation model for G4PAIPhotonModel.
+
+processes/electromagnetic/utils                  utils-V06-02-22
+-------------------------------
+- Implemented migration to <cmath>.
+- Minor but critical fix in BuildPhysicsTables for muons
+- Fix of BuildDEDXtables for e-, e+, mu+, mu-
+- Fixed control on verboseLevel for energy loss and multiple-scattering.
+- Fix in BuildPhysicsTable() for case of sharing processes between particles.
+- Restructure of subdirectory:
+  o Moved classes to new 'high_energy' module.
+  o Exported classes implementing real models to 'standard' module.
+  o Cleanup of GNUmakefile.
+
+processes/electromagnetic/xrays                  xrays-V06-02-05
+-------------------------------
+- Implemented migration to <cmath>.
+
+processes/hadronic                               ghad-V06-02-12
+------------------
+- Implemented migration to <cmath>.
+- models/binary_cascade (ghad-bin-V06-02-01)
+  o Cleared debug run-time output.
+- models/chiral_inv_phase_space/body (ghad-chips-body-V06-02-04a)
+  o Fixed unnecessary debug messages affecting unit-test test23.
+
+processes/management                             procman-V06-02-03
+--------------------
+- Implemented migration to <cmath>.
+
+processes/optical                                op-V06-02-06
+-----------------
+- Implemented migration to <cmath>.
+
+processes/parameterisarion                       param-V06-02-01
+--------------------------
+- Implemented migration to <cmath>.
+- Implemented migration to new G4VParticleChange interfaces.
+
+processes/transportation                         transport-V06-02-05
+------------------------
+- Implemented migration to <cmath>.
+
+run                                              run-V06-02-08
+---
+- Fix wrong behaviour of G4RunManager when the user modifies the
+  geometry without replacing the world.
+- Add PreparePhysicsTable() for nucleus process initialization.
+- Moved ConstructParticle() and ConstructProcess() methods to 'public'.
+- Modified BuildPhysicsTable() for new scheme of Store/RetrievePhysicsTable().
+- Changed date in G4RunManagerKernel for release 7.0.
+
+track                                            track-V06-02-04
+-----
+- Removed obsolete interface methods from G4VParticleChange.
+- Fixed problem in the destructor of G4VUserTrackInformation.
+
+tracking                                         tracking-V06-02-09
+--------
+- Implemented migration to <cmath>.
+- Fix in G4SteppingManager::InvokePSDIP() for completing migration
+  to new G4VParticleChange interface.
+
+visualization                                    vis-V06-02-09
+-------------
+- Implemented migration to <cmath>.
+- HepRep (vis-HepRep-V06-02-02):
+  o Upgraded to latest version C++ HepRep driver from FreeHEP.
+  o Fixed GEANT-51, upgrade zlib to version 1.2.2 (for AMD64 compatibility).
+- OpenGL (opengl-V06-02-07):
+  o Removed redundant fLastVP from G4OpenGLStoredSceneHandler.
+  o G4OpenGLWin32Viewer::ShowView: correction in usage of glFlush to
+    allow proper visualization of trajectories.
+- OpenInventor (openinventor-V06-02-02):
+  o General code review of the driver.
+  o Porting on Windows.
+  o Corrected handling of transparent mode.
+  o Forced culling off by default and solid mode. User will see
+    all of the requested geometry volume tree; can use pointer button
+    and CTRL-left-click to uncover (SHIFT-left-click to re-cover);
+    can use the hand button and right-click to get wireframe.
+
+environments                                     envs-V06-02-00
+------------
+- New version of MOMO integrating GAG and Gain.
+- Added new example and removed obsolete files.
+
+g3tog4                                           g3tog4-V06-02-00
+------
+- Implemented migration to <cmath>.
+
+physics_lists                                    phys-lists-V06-02-00
+-------------
+- Imported hadronic lists and electromagnetic lists from top-level.
+- electromagnetic:
+  o Instantiate processes only once for muons.
+  o Use ionIonisation for GenericIon, alpha, He3.
+- hadronic:
+  o Added to build missing LHEP_BERT_HP & LHEP_BIC_HP lists.
+  o Implemented migration to new G4VParticleChange interface.
+  o Removed debug printout in G4HadronQEDBuilder.
+
+examples                                         examples-V06-02-06
+--------
+- Updated reference outputs.
+- Implemented migration to <cmath>.
+- advanced
+  o air_shower (air_shower-V06-02-02)
+    + New example for the simulation of an UV detection system (UVscope).
+  o brachytherapy (brachy-V06-02-01)
+    + Improved analysis management and corrected initial seed setting.
+  o composite_calorimeter (ccal-V06-02-02)
+    + Use new phys-lists structure.
+  o cosmicray_charging (cosmicray_charging-V06-02-03)
+    + Removed call by pointer of hadronics classes.
+    + Added MuNuclear interaction.
+    + Updated input macros for obsolete gps commands.
+  o gammaray_telescope (gammaraytel-V06-02-01)
+    + Code review.
+  o hadrontherapy (hadrontherapy-V06-02-01)
+    + Correction to analysis classes.
+  o lAr_calorimeter (lAr_calorimeter-V06-02-02)
+    + Use new phys-lists structure.
+  o medical_linac (medical_linac-V06-02-00)
+    + Added MedLinacTrackingAction, MedLinacMLCDecorator
+      and MedLinacMLCMessenger.
+  o purging_magnet (purtag-V06-02-01)
+    + Cleared compilation warnings.
+  o radioprotection (radioprotection-V06-02-00)
+    + Added binary cascade approach.
+    + Added histograms and option to define the format of the output
+      file hbook or xml.
+  o Rich (Rich-V06-02-02)
+    + Implemented migration to new G4VParticleChange interface.
+  o Tiara (Tiara-V06-02-02)
+    + Corrected link to the centralized hadronic physics lists and using
+      new physics-lists structure.
+    + Eliminated all the old links to the tiara-dedicated shared libraries
+      for the Packaging and the physics lists SWIG wraps based on the
+      templated physics list classes.
+  o underground_physics (DMX-V06-02-02)
+    + Implemented migration to new G4VParticleChange interface.
+  o xray_fluorescence (XrayFluo-V06-02-01)
+    - General update, can now be used in batch mode without histograms.
+- extended
+  o analysis/A01 (exampleA01-V06-02-03)
+    + Removed dependency from user hadronics lists.
+  o electromagnetic/TestEm1 (testem1-V06-02-07)
+    + PhysListEmStandard: put threshold for G4BremsstrahlungCMS at 10 GeV.
+  o electromagnetic/TestEm2 (testem1-V06-02-05)
+    + Fix in the logic of PhysicsList::AddPhysicsList().
+    + Fixed bug in change of cuts between runs.
+  o electromagnetic/TestEm3 (testem1-V06-02-06)
+    + New 'StepMax' processes and messenger.
+    + Updated macros tbhec and lhcb.
+  o eventgenerator/exgps (exgps-V06-02-01)
+    + New example demonstrating the usage of G4GeneralParticleSource for
+      generating primary incident particle according to user defined
+      distributions.
+  o field (fieldex-V06-02-00)
+    + Removed dependency on old PAI and XTR models in PhysicsList
+      of field01/02/03 examples.
+  o gdml (exgdml-V06-02-00)
+    + Archived old example and setup. New example based on GDML-2.0.0
+      demonstrating the abilities of import/export of GDML descriptions.
+  o medical/DICOM (DICOM-V06-02-02)
+    + Updated README.
+  o medical/GammaTherapy (gtherapy-V06-02-07)
+    + Implemented migration to new G4VParticleChange interfaces.
+    + Bug fix in step-max and StepFunction.
+  o parallel (exparallel-V06-02-00)
+    + New version of marshaling/unmarshaling code for ParN02 and ParN04,
+      generated from annotations using Marshalgen.
+  o radioactivedecay/exrdm (exrdm-V06-02-02)
+    + Use new phys-lists structure.
+  o runAndEvent/RE01 (exampleRE01-V06-02-02)
+    + New example showing how to connect the information between
+      primary particles and hits and utilize user-information classes.
+- novice
+  o N04 (exampleN04-V06-02-03)
+    + Use standard hadronic physics-lists with QGSP.
+  o N05 (exampleN05-V06-02-02)
+    + Implemented migration to new G4VParticleChange interfaces.
+
+tests                                            tests-V06-02-07
+-----
+- Updated reference outputs.
+- Implemented migration to <cmath>.
+- test10 (test10-V06-02-00)
+  o Added G4TwistedBox and G4TwistedTrap as test cases also in the
+    default input macros.
+- test32 (test32-V06-02-01)
+  o Fix for migration to new G4VParticleChange interface in
+    Tst32EminCut::PostStepDoIt().
+- test34 (test34-V06-02-00)
+  o New test for 'gflash' fast shower parameterisation.
+- test40 (test40-V06-02-02)
+  o Fixed initialisation of radial profile
+  o Removed VisManager.
+  o New values for (<E>, sigma, interval) for use with SPEC.
+  o RunAction: inactivated automatic saving of RNG in external file at
+    each event and run. Can still be activated using /random command.
+  o General cleanup.
+- test50 (test50-V06-02-02)
+  o Added SP and CSDA range of alpha.
