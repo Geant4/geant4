@@ -115,7 +115,7 @@ int main(int argc, char** argv)
   G4int     nbinspi  = 20;
   G4int     nangl    = 0;
   G4int     nanglpi  = 0;
-  G4String hFile     = "";
+  G4String hFile     = "hbook.paw";
   G4double theStep   = 0.01*micrometer;
   G4double range     = 1.0*micrometer;
   G4double  emax     = 160.*MeV;
@@ -733,9 +733,10 @@ int main(int argc, char** argv)
         theta = mom.theta();
         G4double thetad = theta/degree;
 
-//	if(usepaw && e > 0.0 && pt > 0.0) {
-        h[2]->fill(mom.phi()/degree,1.0);
-        if(pd == neutron) h[23]->fill(mom.phi()/degree,1.0);
+	if(usepaw) {
+          h[2]->fill(mom.phi()/degree,1.0);
+          if(pd == neutron) h[23]->fill(mom.phi()/degree,1.0);
+	}
 
 	if( e == 0.0 || pt == 0.0) {
           G4cout << "Warning! in event # " << iter 
@@ -844,7 +845,7 @@ int main(int argc, char** argv)
 	    h[1]->fill(9.0, 1.0);
 	  }
 	}
-	//       delete sec;       	 
+	//	delete sec;       	 
         delete aChange->GetSecondary(i);
       }
 
