@@ -20,8 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: PhotonProcesses.cc,v 1.4 2004-06-30 16:13:50 maire Exp $
+// $Id: PhotonProcesses.cc,v 1.5 2004-09-29 10:37:47 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -20,8 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: SteppingVerbose.hh,v 1.1 2004-04-28 11:11:55 maire Exp $
+// $Id: SteppingVerbose.hh,v 1.2 2004-09-29 10:37:57 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   This class manages the verbose outputs in G4SteppingManager. 

@@ -20,10 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: RunAction.cc,v 1.3 2004-06-30 11:13:59 maire Exp $
+// $Id: RunAction.cc,v 1.4 2004-09-29 10:38:05 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

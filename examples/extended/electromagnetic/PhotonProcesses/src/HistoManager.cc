@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.3 2004-06-30 11:13:59 maire Exp $
+// $Id: HistoManager.cc,v 1.4 2004-09-29 10:38:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -31,6 +31,7 @@
 #include "G4UnitsTable.hh"
 
 #ifdef G4ANALYSIS_USE
+#include <memory>       //for auto_ptr
 #include "AIDA/AIDA.h"
 #endif
 
@@ -39,7 +40,12 @@
 HistoManager::HistoManager()
 :tree(0),hf(0),factoryOn(false)
 {
-  fileName = "photonprocesses.paw";
+#ifdef G4ANALYSIS_USE
+  // Creating the analysis factory
+  af = AIDA_createAnalysisFactory();
+#endif
+ 
+  fileName = "photonprocesses.aida";
   fileType = "hbook";
   // histograms
   for (G4int k=0; k<MaxHisto; k++) {
@@ -57,6 +63,10 @@ HistoManager::HistoManager()
 HistoManager::~HistoManager()
 {
   delete histoMessenger;
+  
+#ifdef G4ANALYSIS_USE  
+  delete af;
+#endif   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,16 +74,13 @@ HistoManager::~HistoManager()
 void HistoManager::book()
 {
 #ifdef G4ANALYSIS_USE
-  // Creating the analysis factory
-  AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
-
   // Creating the tree factory
-  AIDA::ITreeFactory* tf = af->createTreeFactory();
+  std::auto_ptr<AIDA::ITreeFactory> tf(af->createTreeFactory());  
 
   // Creating a tree mapped to an hbook file.
   G4bool readOnly  = false;
   G4bool createNew = true;
-  tree = tf->create(fileName, fileType, readOnly, createNew);
+  tree = tf->create(fileName, fileType, readOnly, createNew, "uncompress");
 
   // Creating a histogram factory, whose histograms will be handled by the tree
   hf = af->createHistogramFactory(*tree);
@@ -88,9 +95,6 @@ void HistoManager::book()
   }
   if(factoryOn) 
       G4cout << "\n----> Histogram Tree is opened " << G4endl;
-
-  delete tf;
-  delete af;
 #endif
 }
 
