@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialsTest.cc,v 1.7 2002-05-06 15:37:56 maire Exp $
+// $Id: G4MaterialsTest.cc,v 1.8 2005-04-01 12:41:11 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,8 +76,8 @@ G4Element* elFe = new G4Element(name="Iron"    ,symbol="Fe", z=26., a);
 // define an Element from isotopes, by relative abundance 
 //
 
-G4Isotope* U5 = new G4Isotope(name="U235", iz=92, n=235, a=235.01*g/mole);
-G4Isotope* U8 = new G4Isotope(name="U238", iz=92, n=238, a=238.03*g/mole);
+G4Isotope* U5 = new G4Isotope(name="U235", iz=92, n=235);
+G4Isotope* U8 = new G4Isotope(name="U238", iz=92, n=238);
 
 G4Element* elU=new G4Element(name="enriched Uranium",symbol="U",ncomponents=2);
 elU->AddIsotope(U5, abundance= 90.*perCent);
