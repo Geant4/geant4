@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILEViewer.cc,v 1.11 2001-07-11 10:08:45 gunter Exp $
+// $Id: G4DAWNFILEViewer.cc,v 1.12 2001-07-18 22:32:13 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -347,7 +347,7 @@ void G4DAWNFILEViewer::SendViewParameters ()
         }
 
 	gui_out << GetPSViewer() << G4endl; // PS viewer
-	gui_out << 0 << G4endl            ; // Do not add showpage 
+	gui_out << 1 << G4endl            ; // Do not add showpage 
 	gui_out << 0 << G4endl            ; // Non-append mode
 
 	gui_out.close();
