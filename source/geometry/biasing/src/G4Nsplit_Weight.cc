@@ -19,6 +19,19 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+//
+// $Id: G4Nsplit_Weight.cc,v 1.8 2002-12-13 11:54:19 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4Nsplit_Weight.cc
+//
+// ----------------------------------------------------------------------
+#include "G4Nsplit_Weight.hh"
+
 G4std::ostream& operator<<(G4std::ostream &out, 
 			   const G4Nsplit_Weight &nw)
 {

@@ -19,6 +19,16 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+// $Id: G4BREPIOtest.cc,v 1.3 2002-12-13 11:56:40 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------------------------------------------------------
+// GEANT 4 source file
+// ----------------------------------------------------------------------
+#include "G4BREPSolid.hh"
+#include "G4BREPSolidBox.hh"
+#include "G4BREPSolidCone.hh"
 #include "G4BREPSolidCylinder.hh"
 #include "G4BREPSolidOpenPCone.hh"
 #include "G4BREPSolidPCone.hh"
