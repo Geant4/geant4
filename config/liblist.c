@@ -1,4 +1,4 @@
-/* $Id: liblist.c,v 1.14 2002-05-03 12:59:08 gcosmo Exp $ */
+/* $Id: liblist.c,v 1.15 2002-07-08 14:31:56 johna Exp $ */
 
 /*
 Given a "libname.map" file on standard input and a list or directory
@@ -103,7 +103,13 @@ char** parsedir(char *directory,int *argc)
 	    }
 	}
       else
-	perror("  No status");
+	{
+	  fprintf
+	    (stderr,
+	     "  No status - perhaps file %s does not exist.\n",
+	     directory);
+	  exit(1);
+	}
     }
 
   if(buffer) free(buffer);
@@ -172,8 +178,10 @@ int main (int argc, char** argv) {
 	}
       else
 	{
-	  fprintf(stderr,"  ERROR: If you specify a directory don't also specify files\n");
-	  exit(-1);
+	  fprintf
+	    (stderr,
+	     "  ERROR: If you specify a directory don't also specify files\n");
+	  exit(1);
 	}
     }
 
@@ -256,7 +264,9 @@ int main (int argc, char** argv) {
 	}
       if(!ptr)
 	{
-	  fprintf(stderr,"  ERROR: \"source/<unique-sub-path>/GNUmakefile\" expected.\n");
+	  fprintf
+	    (stderr,
+	     "  ERROR: \"source/<unique-sub-path>/GNUmakefile\" expected.\n");
 	  exit(1);
 	}
     }
