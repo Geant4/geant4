@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.18 2001-12-04 16:41:44 radoone Exp $
+// $Id: G4Navigator.cc,v 1.19 2001-12-05 08:27:17 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation  Paul Kent July 95/96
@@ -57,7 +57,7 @@ G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector& globalPoint,
   G4bool notKnownContained=true,noResult;
   G4VPhysicalVolume *targetPhysical;
   G4LogicalVolume *targetLogical;
-  G4VSolid *targetSolid;
+  G4VSolid *targetSolid=0;
   G4ThreeVector localPoint, globalDirection=*pGlobalDirection;
   EInside insideCode;
 
