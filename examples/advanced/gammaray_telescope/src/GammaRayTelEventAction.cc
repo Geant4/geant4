@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelEventAction.cc,v 1.7 2001-10-23 13:28:36 gcosmo Exp $
+// $Id: GammaRayTelEventAction.cc,v 1.8 2001-10-24 13:12:10 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -30,6 +30,8 @@
 //
 //      ------------ GammaRayTelEventAction  ------
 //           by  R.Giannitrapani, F.Longo & G.Santin (13 nov 2000)
+//
+// - inclusion of Digits by F.Longo & R.Giannitrapani (24 oct 2001)
 //
 // ************************************************************
 
@@ -55,8 +57,13 @@
 #include "G4UnitsTable.hh"
 #include "Randomize.hh"
 
+#include "GammaRayTelDigi.hh"
+#include "GammaRayTelDigitizer.hh"
+#include "G4DigiManager.hh"
+
 // This file is a global variable in which we store energy deposition per hit
 // and other relevant information
+
 extern G4std::ofstream outFile;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -65,13 +72,19 @@ extern G4std::ofstream outFile;
 GammaRayTelEventAction::GammaRayTelEventAction(GammaRayTelAnalysisManager* aMgr)
   :drawFlag("all"),trackerCollID(-1),  calorimeterCollID(-1),                
   anticoincidenceCollID(-1), analysisManager(aMgr)
-{
+{ 
+  G4DigiManager * fDM = G4DigiManager::GetDMpointer();
+  GammaRayTelDigitizer * myDM = new GammaRayTelDigitizer( "TrackerDigitizer" );
+  fDM->AddNewModule(myDM);
 }
 #else
 GammaRayTelEventAction::GammaRayTelEventAction()
   :drawFlag("all"), trackerCollID(-1),calorimeterCollID(-1),                
   anticoincidenceCollID(-1)
-{
+{ 
+  G4DigiManager * fDM = G4DigiManager::GetDMpointer();
+  GammaRayTelDigitizer * myDM = new GammaRayTelDigitizer( "TrackerDigitizer" );
+  fDM->AddNewModule(myDM);
 }
 #endif
 
@@ -88,8 +101,8 @@ void GammaRayTelEventAction::BeginOfEventAction(const G4Event* evt)
 
   G4int evtNb = evt->GetEventID();
   G4cout << "Event: " << evtNb << G4endl;
-
   G4SDManager * SDman = G4SDManager::GetSDMpointer();  
+
   if (trackerCollID==-1)
     {
       trackerCollID = SDman->GetCollectionID("TrackerCollection");
@@ -123,6 +136,8 @@ void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
   GammaRayTelAnticoincidenceHitsCollection* AHC = 0;
 
 
+  G4DigiManager * fDM = G4DigiManager::GetDMpointer();
+
   if (HCE)
     {
       THC = (GammaRayTelTrackerHitsCollection*)(HCE->GetHC(trackerCollID));
@@ -149,15 +164,15 @@ void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
 	  NStrip = (*THC)[i]->GetNStrip();
 	  NPlane = (*THC)[i]->GetNSilPlane();
 	  IsX = (*THC)[i]->GetPlaneType();
-	  
+
 	  outFile << G4std::setw(7) << event_id << " " << 
 	    ESil/keV << " " << NStrip << 
 	    " " << NPlane << " " << IsX << " " <<
 	    (*THC)[i]->GetPos().x()/mm <<" "<<
 	    (*THC)[i]->GetPos().y()/mm <<" "<<
 	    (*THC)[i]->GetPos().z()/mm <<" "<<
-	    G4endl;
-	  
+	    G4endl;	  
+
 #ifdef G4ANALYSIS_USE
 	  // Here we fill the histograms of the Analysis manager
 	  if(IsX)
@@ -175,6 +190,7 @@ void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
 	    else 
 	      analysisManager->InsertPositionYZ(NStrip, NPlane);  	      
 #endif
+	
 	}
 
       // Here we call the analysis manager function for visualization
@@ -183,7 +199,35 @@ void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
 #endif
     }
   
+  GammaRayTelDigitizer * myDM = 
+    (GammaRayTelDigitizer*)fDM->FindDigitizerModule( "TrackerDigitizer" );
+  myDM->Digitize();
   
+  G4int myHitsCollID = fDM->GetHitsCollectionID("TrackerCollection" );
+  G4int myDigiCollID = fDM->GetDigiCollectionID("DigitsCollection");
+
+  // G4cout << "Collezione dei digi " << myDigiCollID << G4endl;
+  // G4cout << "Collezione dei hits " << myHitsCollID << G4endl;
+  
+  GammaRayTelDigitsCollection * DC = (GammaRayTelDigitsCollection*)fDM->GetDigiCollection( myDigiCollID );
+  
+  if(DC)
+    {
+      G4cout << "Total Digits " << DC->entries() << G4endl;
+      G4int n_digi =  DC->entries();
+      G4int NStrip, NPlane, IsX;
+      for (G4int i=0;i<n_digi;i++)
+	{
+	  // Here we put the digi data in a an ASCII file for 
+	  // later analysis
+ 	  NStrip = (*DC)[i]->GetStripNumber();
+	  NPlane = (*DC)[i]->GetPlaneNumber();
+	  IsX = (*DC)[i]->GetPlaneType();
+	  
+	  outFile << G4std::setw(7) << event_id << " " << NStrip << 
+	    " " << NPlane << " " << IsX << " " << G4endl;	
+	}
+    }
   
   if(G4VVisManager::GetConcreteInstance())
     {

@@ -21,65 +21,50 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelEventAction.hh,v 1.6 2001-10-24 13:11:43 flongo Exp $
+// $Id: GammaRayTelDigitizer.hh,v 1.1 2001-10-24 13:12:00 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland
 //
 //
-//      ------------ GammaRayTelEventAction  ------
-//           by R.Giannitrapani, F. Longo & G.Santin (13 nov 2000)
+//      ------------ GammaRayTelDigitizer ------
 //
-//- inclusion of Digits by F.Longo & R.Giannitrapani (24 oct 2001)
+//           by F.Longo, R.Giannitrapani & G.Santin (24 oct 2001)
+//
 // ************************************************************
 
+#ifndef GammaRayTelDigitizer_h
+#define GammaRayTelDigitizer_h 1
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-#ifndef GammaRayTelEventAction_h
-#define GammaRayTelEventAction_h 1
-
-#include "G4UserEventAction.hh"
+#include "G4VDigitizerModule.hh"
+#include "GammaRayTelDigi.hh"
 #include "globals.hh"
-
-#ifdef G4ANALYSIS_USE
-#include "GammaRayTelAnalysisManager.hh"
-#endif
+//#include "g4std/vector"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class GammaRayTelEventAction : public G4UserEventAction
+class GammaRayTelDigitizer : public G4VDigitizerModule
 {
 public:
+  
+  GammaRayTelDigitizer(G4String name);
+  ~GammaRayTelDigitizer();
 
-#ifdef G4ANALYSIS_USE
-  GammaRayTelEventAction(GammaRayTelAnalysisManager* analysisMgr);
-#else
-  GammaRayTelEventAction();
-#endif
-  virtual ~GammaRayTelEventAction();
-  
-public:
-  virtual void   BeginOfEventAction(const G4Event*);
-  virtual void   EndOfEventAction(const G4Event*);
-  
-  void SetDrawFlag   (G4String val)  {drawFlag = val;};
+  void Digitize();
   
 private:
-  G4int       trackerCollID;                
-  G4int       calorimeterCollID;                
-  G4int       anticoincidenceCollID;                
-  G4String    drawFlag;
-#ifdef G4ANALYSIS_USE
-  GammaRayTelAnalysisManager* analysisManager;
-#endif
+
+  GammaRayTelDigitsCollection*  DigitsCollection;
+  G4double Energy_Threshold;
+  
 };
 
 #endif
 
-    
+
+
+
 
 
 

@@ -1,4 +1,4 @@
-//
+////
 // ********************************************************************
 // * DISCLAIMER                                                       *
 // *                                                                  *
@@ -21,65 +21,81 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelEventAction.hh,v 1.6 2001-10-24 13:11:43 flongo Exp $
+// $Id: GammaRayTelDigi.cc,v 1.1 2001-10-24 13:12:16 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
-//      GEANT 4 class header file
+//      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
 //
 //
-//      ------------ GammaRayTelEventAction  ------
-//           by R.Giannitrapani, F. Longo & G.Santin (13 nov 2000)
+//      ------------ GammaRayTelDigi  ------
+//           by F.Longo, R.Giannitrapani & G.Santin (21 oct 2001)
 //
-//- inclusion of Digits by F.Longo & R.Giannitrapani (24 oct 2001)
 // ************************************************************
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+#include "GammaRayTelDigi.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-#ifndef GammaRayTelEventAction_h
-#define GammaRayTelEventAction_h 1
-
-#include "G4UserEventAction.hh"
-#include "globals.hh"
-
-#ifdef G4ANALYSIS_USE
-#include "GammaRayTelAnalysisManager.hh"
-#endif
+G4Allocator<GammaRayTelDigi> GammaRayTelDigiAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class GammaRayTelEventAction : public G4UserEventAction
+GammaRayTelDigi::GammaRayTelDigi()
 {
-public:
+  PlaneType = 0; 
+  PlaneNumber = 0;
+  StripNumber=0;
+}
 
-#ifdef G4ANALYSIS_USE
-  GammaRayTelEventAction(GammaRayTelAnalysisManager* analysisMgr);
-#else
-  GammaRayTelEventAction();
-#endif
-  virtual ~GammaRayTelEventAction();
-  
-public:
-  virtual void   BeginOfEventAction(const G4Event*);
-  virtual void   EndOfEventAction(const G4Event*);
-  
-  void SetDrawFlag   (G4String val)  {drawFlag = val;};
-  
-private:
-  G4int       trackerCollID;                
-  G4int       calorimeterCollID;                
-  G4int       anticoincidenceCollID;                
-  G4String    drawFlag;
-#ifdef G4ANALYSIS_USE
-  GammaRayTelAnalysisManager* analysisManager;
-#endif
-};
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#endif
+GammaRayTelDigi::~GammaRayTelDigi()
+{;}
 
-    
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+GammaRayTelDigi::GammaRayTelDigi(const GammaRayTelDigi& right)
+{
+  PlaneType = right.PlaneType; 
+  PlaneNumber = right.PlaneNumber;
+  StripNumber = right.StripNumber;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+const GammaRayTelDigi& GammaRayTelDigi::operator=(const GammaRayTelDigi& right)
+{
+  PlaneType = right.PlaneType; 
+  PlaneNumber = right.PlaneNumber;
+  StripNumber = right.StripNumber;
+  return *this;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+int GammaRayTelDigi::operator==(const GammaRayTelDigi& right) const
+{
+  return 0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void GammaRayTelDigi::Draw()
+{;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void GammaRayTelDigi::Print()
+{;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+
+
+
+
+
 
 
 
