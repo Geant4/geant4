@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FRClientServer.cc,v 1.3 1999-12-15 14:54:01 gunter Exp $
+// $Id: G4FRClientServer.cc,v 1.4 2001-06-19 10:29:46 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA, Wed Jul  3 14:14:29 JST 1996
@@ -18,8 +18,6 @@
 #ifdef G4VIS_BUILD_DAWN_DRIVER
 //=================//
 
-#include "G4FRSocketConfig.hh"
-#include "G4FRSocketMacro.hh"
 #include "G4FRClientServer.hh"
 
 // #define DEBUG_CLIENT_SERVER
@@ -33,7 +31,7 @@ const  int	DEFAULT_PORT_NUMBER		= 40701            ;
 const  int	MAX_BINDING_TRIAL		= 10               ;
 const  int	BINDING_TRIAL_INTERVAL		= 5                ;
 const  int	MAX_CONNECT_TRIAL		= 10               ;
-
+const  char     FR_DEFAULT_HOST_NAME[]          = "localhost"      ;      
 
 	//----- G4FRClientServer::G4FRClientServer ()
 G4FRClientServer::G4FRClientServer ( char terminator , char end_line ) :  
@@ -227,27 +225,11 @@ int G4FRClientServer::ConnectINET()
 #if defined DEBUG_CLIENT_SERVER
 			Err("G4FRClientServer::ConnectINET(), gethostbyname");
 #endif
-				//----- get server name
-			if( GET_HOSTNAME( server_hostname, sizeof( server_hostname ) ) < 0 )
-			{ Err("G4FRClientServer::ConnectNET(), GET_HOSTNAME");}
-
-				//----- get IP address of server from its name
-			if( !(server_host_p = gethostbyname( server_hostname ) ) )
-			{ Err("G4FRClientServer::ConnectINET(), gethostbyname");}
+			server_host_p = gethostbyname( FR_DEFAULT_HOST_NAME ) ;
 		}
 
 	} else {
-			//----- If FR_ENV_SERVER_HOST_NAME is not set, 
-			//...... server host is set to the same as the
-			//...... client host.
-
-			//----- get server name
-		if( GET_HOSTNAME( server_hostname, sizeof( server_hostname ) ) < 0 )
-		{ Err("G4FRClientServer::ConnectNET(), GET_HOSTNAME");}
-
-			//----- get IP address of server from its name
-		if( !(server_host_p = gethostbyname( server_hostname ) ) )
-		{ Err("G4FRClientServer::ConnectINET(), gethostbyname");}
+			server_host_p = gethostbyname( FR_DEFAULT_HOST_NAME ) ;
 	}
 
 

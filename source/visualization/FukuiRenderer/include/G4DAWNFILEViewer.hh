@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DAWNFILEViewer.hh,v 1.5 1999-12-15 14:54:00 gunter Exp $
+// $Id: G4DAWNFILEViewer.hh,v 1.6 2001-06-19 10:29:36 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FRClientServer.hh,v 1.4 2000-02-29 09:54:38 johna Exp $
+// $Id: G4FRClientServer.hh,v 1.5 2001-06-19 10:29:36 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA, Wed Jul  3 14:13:52 JST 1996

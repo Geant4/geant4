@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FukuiRendererSceneHandler.hh,v 1.5 1999-12-16 17:24:49 johna Exp $
+// $Id: G4FukuiRendererSceneHandler.hh,v 1.6 2001-06-19 10:29:37 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
