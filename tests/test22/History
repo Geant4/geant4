@@ -1,0 +1,22 @@
+$Id: History,v 1.1 2001-11-15 15:10:10 hpw Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Test 22 History file
+                    --------------------
+This file should be used by the test developer to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Nov 22, 2001  H.P. Wellisch
+- created the test to test gamma and electron nuclear reactions using
+  chiral invariant phase space decay for final state production.
+
+March 07 2001 H.Kurashige (test22-V03-00-03)
