@@ -1,0 +1,12 @@
+In order to compile this test with analysis you must:
+1) setenv G4ANALYSIS_USE 1
+2) cd include; mkdir Interfaces ; cd Interfaces
+ln -s $LHCXX_REL_DIR/include/Interfaces/*.h .
+ln -s . Interfaces
+cd ..
+3)mkdir NtupleTag
+cd  NtupleTag
+ln -s $LHCXX_REL_DIR/include/NtupleTag/*.* .
+ln -s . NtupleTag
+cd ..
+gmake
