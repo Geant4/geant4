@@ -178,6 +178,7 @@ private:
   G4bool subCutoffFlag;
   G4bool rndmStepFlag;
   G4bool integral;
+  G4bool integralActive;
   G4bool all_tables_are_stored;
   G4bool buildPreciseRange;
 

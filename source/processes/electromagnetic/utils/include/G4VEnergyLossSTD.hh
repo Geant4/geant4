@@ -114,7 +114,8 @@ public:
   void BuildPhysicsTable(const G4ParticleDefinition&);
   // Build physics table during initialisation
 
-  virtual void PrintInfoDefinition() const;
+  virtual void PrintInfoDefinition();
+ 
   // Print out of the class parameters
 
   G4PhysicsTable* BuildDEDXTable();
@@ -206,8 +207,6 @@ public:
 
   G4double GetRange(G4double& kineticEnergy, const G4MaterialCutsCouple* couple);
 
-  //  G4double GetPreciseRange(G4double& kineticEnergy, const G4MaterialCutsCouple* couple);
-
   G4double GetKineticEnergy(G4double& range, const G4MaterialCutsCouple* couple);
 
   G4double GetLambda(G4double kineticEnergy, const G4MaterialCutsCouple* couple);
@@ -225,13 +224,16 @@ public:
 
   void SetLossFluctuations(G4bool val) {lossFluctuationFlag = val;};
 
-  void SetIntegral(G4bool val) {integral = val;};
+  virtual void SetIntegral(G4bool val);
+  //  G4bool IsIntegral() const {return integral;};
 
   void SetRandomStep(G4bool val) {rndmStepFlag = val;};
 
   void SetMinSubRange(G4double val) {minSubRange = val;};
 
   void SetStepLimits(G4double v1, G4double v2);
+
+  void SetRangeCoeff(G4double val);
 
   G4bool TablesAreBuilt() const {return  tablesAreBuilt;};
 
@@ -365,6 +367,7 @@ private:
   G4double minSubRange;
   G4double dRoverRange;
   G4double finalRange;
+  G4double rangeCoeff;
 
   G4bool lossFluctuationFlag;
   G4bool rndmStepFlag;
@@ -480,7 +483,7 @@ inline G4double G4VEnergyLossSTD::GetMeanFreePath(const G4Track& track,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEnergyLossSTD::GetContinuousStepLimit(const G4Track&,
-                                               G4double, G4double, G4double&)
+                                               G4double, G4double currentMinimumStep, G4double& currentSafety)
 {
   G4double x = DBL_MAX;
 
@@ -489,9 +492,11 @@ inline G4double G4VEnergyLossSTD::GetContinuousStepLimit(const G4Track&,
     fRange = ((*theRangeTable)[currentMaterialIndex])->
             GetValue(preStepScaledEnergy, b)*reduceFactor;
     x = fRange;
-    if( !integral ) {
-      G4double r = G4std::min(finalRange, currentCouple->GetProductionCuts()
+    G4double r = G4std::min(finalRange, currentCouple->GetProductionCuts()
                  ->GetProductionCut(idxG4ElectronCut));
+    if( integral ) {
+      if(x < currentMinimumStep && x > r) x *= rangeCoeff;
+    } else {
       if (fRange > r) {
 
         x = dRoverRange*fRange + r*(1.0 - dRoverRange)*(2.0 - r/fRange);

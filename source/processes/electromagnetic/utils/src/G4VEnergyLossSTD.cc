@@ -58,6 +58,7 @@
 // 06-05-03 Set defalt finalRange = 1 mm (V.Ivanchenko)
 // 12-05-03 Update range calculations + lowKinEnergy (V.Ivanchenko)
 // 13-05-03 Add calculation of precise range (V.Ivanchenko)
+// 23-05-03 Remove tracking cuts (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -123,6 +124,7 @@ G4VEnergyLossSTD::G4VEnergyLossSTD(const G4String& name, G4ProcessType type):
   lowKinEnergy(minKinEnergy*faclow),
   linLossLimit(0.05),
   minSubRange(0.1),
+  rangeCoeff(1.0),
   lossFluctuationFlag(true),
   rndmStepFlag(false),
   hasRestProcess(true),
@@ -662,7 +664,7 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
 */
 
   // Sample fluctuations
-  if (lossFluctuationFlag && eloss + minKinEnergy < preStepKinEnergy) {
+  if (lossFluctuationFlag && eloss < preStepKinEnergy && eloss > 0.0) {
 
     eloss = modelManager->SampleFluctuations(currentMaterial, dynParticle,
                                        tmax, length, eloss, preStepScaledEnergy,
@@ -715,7 +717,7 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
 
   preStepKinEnergy -= eloss;
 
-  if (preStepKinEnergy < minKinEnergy) {
+  if (preStepKinEnergy <= 0.0) {
 
     eloss += preStepKinEnergy;
     preStepKinEnergy = 0.0;
@@ -767,8 +769,8 @@ G4VParticleChange* G4VEnergyLossSTD::PostStepDoIt(const G4Track& track,
   if (tcut < tmax)
     SecondariesPostStep(currentModel,currentCouple,dynParticle,tcut,finalT);
 
-  if (finalT < minKinEnergy) {
-    aParticleChange.SetLocalEnergyDeposit(finalT);
+  if (finalT <= 0.0) {
+    //    aParticleChange.SetLocalEnergyDeposit(finalT);
     aParticleChange.SetEnergyChange(0.0);
 
     if (hasRestProcess) aParticleChange.SetStatusChange(fStopButAlive);
@@ -784,7 +786,7 @@ G4VParticleChange* G4VEnergyLossSTD::PostStepDoIt(const G4Track& track,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossSTD::PrintInfoDefinition() const
+void G4VEnergyLossSTD::PrintInfoDefinition()
 {
   G4cout << G4endl << GetProcessName() << ":  " << G4endl
          << "      dE/dx and range tables from "
@@ -1194,4 +1196,50 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+/*
 
+G4double G4VEnergyLossSTD::GetContinuousStepLimit(const G4Track&,
+                                               G4double, G4double currentMinimumStep, G4double& currentSafety)
+{
+  G4double x = DBL_MAX;
+
+  if (theRangeTable) {
+    G4bool b;
+    fRange = ((*theRangeTable)[currentMaterialIndex])->
+            GetValue(preStepScaledEnergy, b)*reduceFactor;
+    x = fRange;
+    G4double r = G4std::min(finalRange, currentCouple->GetProductionCuts()
+                 ->GetProductionCut(idxG4ElectronCut));
+    if( integral ) {
+      if(x < currentMinimumStep && x > r) x *= 0.8;
+    } else {
+      if (fRange > r) {
+
+        x = dRoverRange*fRange + r*(1.0 - dRoverRange)*(2.0 - r/fRange);
+        if(rndmStepFlag) x = r + (x-r)*G4UniformRand();
+        if(x > fRange) x = fRange;
+      }
+    }
+  }
+
+  return x;
+}
+*/
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossSTD::SetRangeCoeff(G4double val)
+{
+  if (val > 0.0) {
+    if (val < 1.0) rangeCoeff = val;
+    else           rangeCoeff = 1.0;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossSTD::SetIntegral(G4bool val) 
+{
+  integral = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

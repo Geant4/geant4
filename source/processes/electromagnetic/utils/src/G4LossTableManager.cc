@@ -110,6 +110,7 @@ G4LossTableManager::G4LossTableManager()
   theElectron  = G4Electron::Electron();
   tableBuilder = new G4LossTableBuilder();
   integral = true;
+  integralActive = false;
   buildPreciseRange = false;
   verbose = 0;
 }
@@ -150,6 +151,7 @@ void G4LossTableManager::Register(G4VEnergyLossSTD* p)
   inv_range_vector.push_back(0);
   tables_are_built.push_back(false);
   all_tables_are_built = false;
+  if(integralActive) p->SetIntegral(integral);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -557,6 +559,7 @@ void G4LossTableManager::SetSubCutoff(G4bool val)
 void G4LossTableManager::SetIntegral(G4bool val) 
 {
   integral = val;
+  integralActive = true;
   for(G4int i=0; i<n_loss; i++) {
     loss_vector[i]->SetIntegral(val);
   }

@@ -57,6 +57,7 @@
   
 G4UniversalFluctuation::G4UniversalFluctuation(const G4String& nam)
  :G4VEmFluctuationModel(nam),
+  particle(0),
   minNumberInteractionsBohr(10.0),
   theBohrBeta2(50.0*keV/proton_mass_c2),
   minLoss(0.000001*eV),
