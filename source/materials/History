@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2001-07-17 15:54:35 verderi Exp $
+$Id: History,v 1.24 2001-08-31 16:13:02 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+31.08.01 P.Gumplinger - materials-V03-02-01
+         Fix printing of property name and check for NULL property vector 
+         pointer in G4MaterialPropertiesTable:DumpTable; and correct warning
+         message in RemoveEntry method.
+         Improve printing in G4MaterialPropertyVector::DumpVector.
 
 17.07.01 M. Verderi - materials-V03-02-00
 	 Complete migration to STL. Tag proposed for testing.
