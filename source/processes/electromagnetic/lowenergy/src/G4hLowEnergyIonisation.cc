@@ -26,6 +26,7 @@
 // yet)  
 // 31 August 1999 V.Ivanchenko update and cleen up 
 // 30 Sept.  1999 V.Ivanchenko minor upgrade 
+// 19 Jan.   2000 V.Ivanchenko minor changing in Barkas corrections
 // --------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -114,7 +115,7 @@ void G4hLowEnergyIonisation::SetStoppingPowerTableName(const G4String& dedxTable
     
   } else {
   G4cout << "G4hLowEnergyIonisation Warning: There is no table with the name ="
-         << dedxTable; 
+         << dedxTable << G4endl; 
   }  
 }
 
@@ -137,7 +138,6 @@ void G4hLowEnergyIonisation::SetNuclearStoppingOff()
 void G4hLowEnergyIonisation::SetAntiProtonStoppingOn()
 {
   pbarStop = true ;
-  LowestKineticEnergy = 500.*keV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -756,7 +756,7 @@ G4double G4hLowEnergyIonisation::GetParametrisedLoss(const G4Material* material,
   
     // Correction term for the Barkas effect applied if pbarStop = true
     
-    G4double BarkasTerm=0;
+    G4double BarkasTerm=0.0 ;
     
     if(PartCharge == -1 && pbarStop) BarkasTerm = ComputeBarkasTerm( material, KinEnergy, PartMass);
     
@@ -765,7 +765,7 @@ G4double G4hLowEnergyIonisation::GetParametrisedLoss(const G4Material* material,
     
     ionloss += BarkasTerm;   
    
-  if ( ionloss <= 0.) ionloss = 0. ;
+  if ( ionloss <= 0.0) ionloss = 0.0 ;
   
   return ionloss;
 }
@@ -797,11 +797,17 @@ G4double G4hLowEnergyIonisation::ComputeBarkasTerm(const G4Material* material,
 				        8,    0.006, 9,    0.0032, 
 	              10,   0.0025};
 
+  // Internal variable for Kinetic Energy 
+  // in order to keep Barkas correction to be constant below 500 keV 
+
+  G4double KineticEnergy = KinEnergy;
+  if( 500*keV > KineticEnergy ) KineticEnergy = 500*keV;
+
   // Information on particle and material
   
-  G4double BarkasTerm=0;
-  G4double AMaterial=0;
-  G4double ZMaterial=0;
+  G4double BarkasTerm=0.0;
+  G4double AMaterial=0.0;
+  G4double ZMaterial=0.0;
   G4double RoMaterial = material->GetDensity()/6.2415063631e18;
   const G4ElementVector* theElementVector = material->GetElementVector();
   G4int i=0;
@@ -810,14 +816,14 @@ G4double G4hLowEnergyIonisation::ComputeBarkasTerm(const G4Material* material,
     AMaterial = (*theElementVector)(i)->GetA()*mole/g;
     ZMaterial = (*theElementVector)(i)->GetZ();
     
-    G4double Beta = sqrt( (2*KinEnergy) / PartMass );
-    G4double X = ( (137*Beta) * (137*Beta) ) / ZMaterial;
+    G4double Beta = sqrt( (2.0*KineticEnergy) / PartMass );
+    G4double X = ( (137.0*Beta) * (137.0*Beta) ) / ZMaterial;
   
     // Variables to compute L_1
     G4double Eta0Chi = 0.8;
     G4double EtaChi = Eta0Chi * ( 1 + 6.02*pow( ZMaterial,-1.19 ) );
-    G4double W = ( EtaChi * pow( ZMaterial,1./6 ) ) / sqrt(X); 
-    G4double FunctionOfW = 0;
+    G4double W = ( EtaChi * pow( ZMaterial,1.0/6.0 ) ) / sqrt(X); 
+    G4double FunctionOfW = 0.0;
     for(int IndexOfFTable=0;IndexOfFTable<47;IndexOfFTable++){
      if(W<FTable[IndexOfFTable][0]){
      		FunctionOfW =( FTable[IndexOfFTable][1] + FTable[IndexOfFTable-1][1] ) /2;
@@ -2297,7 +2303,6 @@ void G4hLowEnergyIonisation::PrintInfoDefinition()
   comments += "\n         Good description above the mean excitation energy.\n";
   comments += "         delta ray energy sampled from  differential Xsection.";
   
-  if(pbarStop){
   G4cout << G4endl << GetProcessName() << ":  " << comments
          << "\n        PhysicsTables from " << LowestKineticEnergy / eV << " eV " 
          << " to " << HighestKineticEnergy / TeV << " TeV "
@@ -2305,18 +2310,11 @@ void G4hLowEnergyIonisation::PrintInfoDefinition()
          << "\n        Low energy losses approximation is taken from  " << DEDXtable
          << "\n        from " << ParamLowEnergy / keV << " keV "
          << " to " << ParamHighEnergy / MeV << " MeV " << "." << G4endl ;
-  } else {
-  G4cout << G4endl << GetProcessName() << ":  " << comments
-         << "\n        PhysicsTables from " << LowestKineticEnergy / eV << " eV " 
-         << " to " << HighestKineticEnergy / TeV << " TeV "
-         << " in " << TotBin << " bins."
-         << "\n        Low energy losses approximation is taken from  " << DEDXtable
-         << "\n        from " << ParamLowEnergy / keV << " keV "
-         << " to " << ParamHighEnergy / MeV << " MeV " << "." << G4endl
-  	 << "\n Energy loss for antiproton now available only from 100 keV.";
+  if(pbarStop){
+    G4cout << "        Parametrization of Barkas Effect is switched on." << G4endl ;
   }
   if(nStopping) {
-    G4cout << "        Simulation of nuclear stopping is switched on.  \n" << G4endl ; 
+    G4cout << "        Simulation of nuclear stopping is switched on." << G4endl ; 
   }
 }
 
