@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.hh,v 1.8 1999-12-15 14:53:57 gunter Exp $
+// $Id: G4SteppingManager.hh,v 1.9 1999-12-16 13:29:54 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -498,7 +498,7 @@ class G4SteppingManager
   }
 
   inline G4double G4SteppingManager::CalculateSafety(){
-    return max( endpointSafety -
+    return G4std::max( endpointSafety -
 		(endpointSafOrigin - fPostStepPoint->GetPosition()).mag(),
 	        0.);
   }
