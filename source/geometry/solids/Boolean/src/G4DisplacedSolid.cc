@@ -110,13 +110,13 @@ G4ThreeVector  G4DisplacedSolid::GetFrameTranslation() const
 ///////////////////////////////////////////////////////////////
 G4RotationMatrix G4DisplacedSolid::GetObjectRotation() const
 {
-   G4RotationMatrix InvRotation= fPtrTransform->NetRotation();
-   return InvRotation;
+   G4RotationMatrix Rotation= fDirectTransform->NetRotation();
+   return Rotation;
 }
 
 G4ThreeVector  G4DisplacedSolid::GetObjectTranslation() const
 {
-   return fPtrTransform->NetTranslation();
+   return fDirectTransform->NetTranslation();
 }
 ///////////////////////////////////////////////////////////////
 //
