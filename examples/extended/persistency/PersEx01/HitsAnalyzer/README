@@ -1,0 +1,14 @@
+
+                        Geant4 ROOT Hit Analyzer
+                        ========================
+
+This directory contains an example of ROOT Hit analysis and histogramming.
+Type the following commands for quick setup and running.
+
+   make
+   ./run
+   setenv DISPLAY <your_display>:0.0
+   $ROOTSYS/bin/root draw.C
+
+See the README file in PersEx01 for more detail.
+

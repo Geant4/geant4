@@ -1,0 +1,321 @@
+
+                          PersEx01: ROOT I/O example
+                          ==========================
+
+This example demonstrates how to store calorimeter hits using ROOT I/O.
+Example sensitive detector and hits (Pers01CalorimeterSD and Pers01CalorHit)
+are taken from the novice example N03.
+
+*** Making libraries ***
+
+First you need to make Geant4 ROOT I/O libraries.
+
+You may need to set up ROOT environment variables.
+
+  setenv ROOTSYS /usr/local/root/v3.03.06/root
+  setenv PATH $ROOTSYS/bin:$PATH
+
+In Addition, you may also need to set up LD_LIBRARY_PATH, depending on
+the ROOT version.
+
+  setenv LD_LIBRARY_PATH $ROOTSYS/lib:$LD_LIBRARY_PATH
+
+Note: ROOT 3.03.08 is known to cause problems with Geant4 ROOT I/O.
+
+Then you make libG4ROOTIO.so by typing 
+
+  cd G4INSTALL/examples/extented/persistency/rootio
+  make
+
+The library module will be built into $G4PEX_LIB.
+ (G4INSTALL/examples/extented/persistency/rootio/lib/$G4SYSTEM)
+
+
+*** Making executable module G4PersEx01 ***
+
+  cd G4INSTALL/examples/extented/persistency/PersEx01
+  make
+
+By doing this, you create libG4PersEx01.so in $G4PEX_LIB, and
+the executable module G4PersEx01 in $G4PEX_BIN.
+ (G4INSTALL/examples/extented/persistency/rootio/bin/$G4SYSTEM)
+
+By running "run" script provided in this directory, hits information
+will be stored into a file G4run0001.root.
+
+  ./run
+
+
+*** Reading the ROOT file ***
+
+You can read the hit ROOT file G4run0001.root with HitsAnalyzer.
+
+  cd HitsAnalyzer
+  make
+  ./run
+
+
+*** Some Documentation ***
+
+In G4run0001.root, there is a ROOT tree called "Geant4".
+Hits information is stored as a branch under this tree,
+and the calorimeter hits in the above example are stored
+into the branch "CalCollection".
+
+Now take a look of a macro file "run.mac", which gives the
+necessary commands to enable Geant4 ROOT I/O.
+
+-------------------------------------------------------
+/persistency/verbose 1
+/persistency/select ROOT
+/persistency/store/using/hitIO  CalorSD     CalCollection
+#                              <IOmanager> <collectionName>
+/persistency/set/writeFile/Hits  G4run0001.root
+/persistency/printall
+-------------------------------------------------------
+
+On line#2, ROOT I/O package is selected.
+On line#3, you must provide the same sensitive detector name
+as you named to Pers01CarorimeterSD in the file
+Pers01DetectorConstruction.cc.
+On line#4, file name for the hits output is specified.
+
+
+*** Root I/O Adopter classes ***
+
+In the subdirectory rootio, there is a file called Pers01CalorHit.rootio
+which is used to generate a set of ROOT I/O adopter classes.
+Following files are generated automatically with this file by using
+a perl script "g4rootio.pl".
+
+  Pers01CalorHitRoot.hh    Pers01CalorHitRoot.cc
+  Pers01CalorHitsRoot.hh   Pers01CalorHitsRoot.cc
+  Pers01CalorHitRootIO.hh  Pers01CalorHitRootIO.cc
+
+The contents of Pers01CalorHit.rootio may look like this:
+
+-------------------------------------------------------
+#
+# File: Pers01CalorHit.rootio
+#
+#  Author: <youhei.morita@kek.jp>
+#
+#  Usage:
+#    Use g4rootio.pl to generate ROOT I/O adapter classes:
+#      % g4rootio.pl Pers01CalorHit.rootio
+#    This will generate the following files:
+#      Pers01CalorHitRoot.hh/cc, Pers01CalorHitsRoot.hh/cc, 
+#      Pers01CalorHitRootIs.hh/cc
+#
+set class_name Pers01CalorHit
+set collection_class Pers01CalorHitsCollection
+set collection_base_class G4VHitsCollection
+set array_io_base G4VPHitsCollectionIO
+set catalog G4HCIOentryT
+set sdet_name CalorSD
+set add_header
+  @class_name@.hh
+..
+set member
+  @float@ EdepAbs;
+  @float@ EdepGap;     
+  @float@ TrackLengthAbs;
+  @float@ TrackLengthGap;     
+..
+
+set constructor
+  @class_root@(@class_name@* hit)
+  {
+    EdepAbs = hit->GetEdepAbs();
+    EdepGap = hit->GetEdepGap();
+    TrackLengthAbs = hit->GetTrakAbs();
+    TrackLengthGap = hit->GetTrakGap();
+  }
+..
+
+set method
+  @class_name@* @make_transient@()
+  {
+    @class_name@* hit = new @class_name@();
+    hit->AddAbs(EdepAbs, TrackLengthAbs);
+    hit->AddGap(EdepGap, TrackLengthGap);
+    return hit;
+  }
+..
+-------------------------------------------------------
+
+
+*** About g4rootio.pl ***
+
+In Geant4, various types of hits information from each subdetector
+must be recorded into the file.  For the developer of each
+subdetector, the type of information for each hit is important
+and the I/O mechanism can be similar to each other.  g4rootio.pl
+enables an automatic generation of ROOT I/O adopter classes from
+a simple definition file *.rootio.
+
+
+*** Limitations of g4rootio.pl ***
+
+g4rootio.pl generates a large collection of a simple hit class
+by using an array class (TClonesArray) as a container.
+
+For the moment, g4rootio.pl limits itself to store only a simple
+data types, such as @int@, @uint@, @float@, @char@, or a fixed
+length array of these types, or a simple concrete class containing
+only those simple types.
+
+g4rootio.pl is not capable of storing data members with pointers
+or variable length array such as char* or std::string.  For the
+charaters, you may need to use fixed length array such as char[20].
+
+
+*** How to write Pers01CalorHit.rootio ***
+
+To store and retrieve a collection of transient class Pers01CalorHit,
+you create a file Pers01CalorHit.rootio.
+
+In *.rootio, you may use macro such as @class_name@.  See the later
+section of this document about detail description of the macros.
+
+Normally you may need to edit the name of the following classes.
+
+set class_name Pers01CalorHit                    # name of the original transient class
+set collection_class Pers01CalorHitsCollection   # name of the original hit collection transient class
+
+Following examples are universal for standard Geant4 hits.
+You may need to change them to digits if you are dealing with digits class.
+
+set collection_base_class G4VHitsCollection      # base class of the transient hits collection
+set array_io_base VPHitsCollectionIO             # base class of the Hits I/O manager
+set catalog HCIOentryT                           # name of the Hit I/O catalog
+
+In the next section you declare the data members which you want to
+store and retrieve.  In this example, four simple Float_t variables
+EdepAbs, EdepGap, TrackLengthAbs, TrackLengthGap are declared.
+
+This command takes several input lines, so you need to terminate 
+with a line ".." by itself.
+
+set member
+  @float@ EdepAbs;
+  @float@ EdepGap;     
+  @float@ TrackLengthAbs;
+  @float@ TrackLengthGap;     
+..
+
+Next you need to design a constructor for the ROOT I/O persistent
+class Pers01CalorHitRoot.  A macro @class_root@ will be replaced
+with "Pers01CalorHitROot", and @class_name@ will become "Pers01CalorHit".
+
+In the constructor, copy the values of the transient class into the
+data members of @class_root@.
+
+This command takes several input lines, so you need to terminate 
+with a line ".." by itself.
+
+set constructor
+  @class_root@(@class_name@* hit)
+  {
+    EdepAbs = hit->GetEdepAbs();
+    EdepGap = hit->GetEdepGap();
+    TrackLengthAbs = hit->GetTrakAbs();
+    TrackLengthGap = hit->GetTrakGap();
+  }
+..
+
+The method "@make_transient@ is called duing a retrieve of events.
+In this method you specify how to reproduce the instance of the
+transient class @class_name@, by using the stored data member
+values of @class_root@.
+
+This command takes several input lines, so you need to terminate 
+with a line ".." by itself.
+
+set method
+  @class_name@* @make_transient@()
+  {
+    @class_name@* hit = new @class_name@();
+    hit->AddAbs(EdepAbs, TrackLengthAbs);
+    hit->AddGap(EdepGap, TrackLengthGap);
+    return hit;
+  }
+..
+
+
+*** List of available macros ***
+@class_name@             name of the original transient class
+@class_root@             name of the correspondent root class
+@class_array@            name of the collection of the root class
+@class_io@               name of the I/O manager class
+@collection_class@       name of the collection of the transient class
+@collection_base_class@  name of the base class of the transient collection
+@catalog@                catalog of the I/O manager class
+@entry_object@           -internal use-
+@entry_name@             -internal use-
+                          (used in /persistency/store/using/hitIO<IOmanager>)
+@make_transient@         -internal use- (MakeTransientObject)
+
+
+*** Data type macros ***
+@int@             Int_t
+@uint@            UInt_t
+@float@           Float_t
+@char@            char
+
+
+*** Use of the generic hits collection class ***
+
+In the above example, hits collection is made of a template class
+G4THitsCollection<T>.
+
+  typedef G4THitsCollection<Pers01CalorHit> Pers01CalorHitsCollection;
+
+In this case, *.rootio may remain as above.
+
+However, in some circumstances it would be required to use
+a base hits collection class other than G4THitsCollecton.
+g4rootio.pl provides a way to work with this situation.
+
+You may add addtional directives to the *.rootio file.
+
+  set collection_class_header yes
+
+This command tells the hits collection header file is separated
+from the transient hit class.
+
+  set collection_class_method_entries Size()
+  set collection_class_method_add     Insert(hit)
+  set collection_class_method_get     GetHit(i)
+
+You may specify the method names for the entries of the transient
+hit class, adding a hit to the collection, or referencing the i-th
+hit entry in the collection. (In this example, the variable name
+"hit" is a place holder, and will be ignored in the actual
+implementation.)
+
+  set collection_class_signature @collection_class@(f_detName, f_colName, 0)
+
+This command gives a non-standard signature of the collection class
+constructor.  Note that f_detName and f_colName are required and
+cannot be omitted.  For other variables, it can take only explicit
+numbers such as 0, or 1.
+
+Example: Suppose MDTHitsCollection just has the following type of constructor.
+
+  MDTHitsCollection(G4String detName, G4String colName, MDTSensitiveDetector* sd);
+
+Then the retrieved MDTHitsCollection has 0 as the 3rd argument.
+It is users responsibility to fill this variable properly.
+
+
+*** Generation of the ROOT I/O Adopter classes ***
+
+ROOT I/O adopter classes can be generated automatically with the
+GNUmakefiles provided in the $G4PEX_DIR/config directory.
+"make clean" will cleans up your directory.
+
+If you want to generate these file manually, type:
+
+% $G4PEX_DIR/config/fadsrootio.pl rootio/Pers01CalorHit.rootio
+

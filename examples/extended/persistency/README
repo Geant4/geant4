@@ -1,0 +1,11 @@
+
+                        Geant4 Persistency Examples
+                        ===========================
+
+This directory contains a several set of persistency examples.
+
+   PersEx01   ROOT I/O example for storing and retrieving calorimeter hits
+   rootio     Geant4 ROOT I/O library module
+
+See the README file in PersEx01 for more detail.
+

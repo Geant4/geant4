@@ -2186,6 +2186,9 @@ sub fads_create_io_source_file{
   print(OUT "  // reset the persistent array\n");
   print(OUT "  f_hc->Clear();\n");
   print(OUT "\n");
+  print(OUT "  // return the array pointer\n");
+  print(OUT "  hc = (${collection_base_class}*&) ahc;\n");
+  print(OUT "\n");
   print(OUT "  // Check the number of stored entries\n");
   print(OUT "  return true;\n");
   print(OUT "}\n");
