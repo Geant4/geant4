@@ -57,7 +57,7 @@ hTestHisto* hTestHisto::GetPointer()
 
 hTestHisto::hTestHisto() 
 {
-  verbose = 0;
+  verbose = 1;
   histName = G4String("histo.hbook");
   hbookManager = 0;
   ntup = 0;

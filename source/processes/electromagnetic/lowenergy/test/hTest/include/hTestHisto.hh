@@ -73,7 +73,7 @@ public:
 
 public: // Without description
 
-    void SetHistoName(const G4String& name) {histName = name;};
+  void SetHistoName(const G4String& name) {histName = name;};
     void bookHisto();
     inline HepTuple* GetNtuple() const {return ntup;};
     void SaveToTuple(const G4String&, G4double);

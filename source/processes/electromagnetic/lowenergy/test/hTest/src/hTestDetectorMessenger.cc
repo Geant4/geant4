@@ -266,7 +266,7 @@ void hTestDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
    { hDet->SetNumAbsorbersSaved(intCmd->GetNewIntValue(newValue));}
 
   if( command == nhistCmd )
-   { hDet->SetHistoNumber(nhistCmd->GetNewIntValue(newValue));}
+   { (hTestHisto::GetPointer())->SetHistoNumber(nhistCmd->GetNewIntValue(newValue));}
 
   if( command == nDebugSCmd )
    { hDet->SetFirstEventToDebug(nDebugSCmd->GetNewIntValue(newValue));}

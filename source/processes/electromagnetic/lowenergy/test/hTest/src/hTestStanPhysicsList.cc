@@ -87,7 +87,7 @@ void hTestStanPhysicsList::ConstructProcess()
       pmanager->AddDiscreteProcess(new G4GammaConversion);    
       
     } else if (particleName == "e-") {
-      //      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
       G4eIonisation* eion = new G4eIonisation();
       eion->SetSubSec(false);
       pmanager->AddProcess(eion,   -1, 2,2);
@@ -97,7 +97,7 @@ void hTestStanPhysicsList::ConstructProcess()
 
     } else if (particleName == "e+") {
 
-      //      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
       G4eIonisation* pion = new G4eIonisation();
       pion->SetSubSec(false);
       pmanager->AddProcess(pion,        -1, 2,2);
@@ -125,7 +125,7 @@ void hTestStanPhysicsList::ConstructProcess()
                || particleName == "kaon-"  
               )
     {
-      //      pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
+      pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
       if(0 < verbose) {
         G4cout << "Hadronic processes for " << particleName << G4endl; 
       }
@@ -144,7 +144,7 @@ void hTestStanPhysicsList::ConstructProcess()
                || particleType == "nucleus") 
               
     {
-      //      pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
+      pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
 
       if(0 < verbose) {
         G4cout << "Ionic processes for " << particleName << G4endl; 

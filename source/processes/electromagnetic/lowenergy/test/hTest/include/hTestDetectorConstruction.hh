@@ -78,8 +78,6 @@ class hTestDetectorConstruction : public G4VUserDetectorConstruction
     inline G4double    GetWorldSizeZ() const {return WorldSizeZ;}; 
     void SetGap(G4double val);
     inline G4double    GetGap() const {return gap;}; 
-    inline void SetHistoName(G4String name) {histoName = name;};
-    inline G4String GetHistoName() const {return histoName;};
     inline void SetNumberOfEvents(G4int val) {nEvents = val;};
     inline G4int GetNumberOfEvents() const {return nEvents;};
     inline void SetEventAction(hTestEventAction* p) {theEvent = p;};
@@ -88,8 +86,6 @@ class hTestDetectorConstruction : public G4VUserDetectorConstruction
     inline G4int GetVerbose() const {return myVerbose;};
     inline void SetNumAbsorbersSaved(G4int val) {nAbsSaved = val;};
     inline G4int GetNumAbsorbersSaved() const {return nAbsSaved;};
-    inline void SetHistoNumber(G4int val) {nHisto = val;};
-    inline G4int GetHistoNumber() const {return nHisto;};
     inline void SetFirstEventToDebug(G4int val) {nFirstEvtToDebug = val;};
     inline G4int GetFirstEventToDebug() const {return nFirstEvtToDebug;};
     inline void SetLastEventToDebug(G4int val) {nLastEvtToDebug = val;};
@@ -148,11 +144,9 @@ class hTestDetectorConstruction : public G4VUserDetectorConstruction
      hTestEventAction* theEvent;
 
      G4int myVerbose;      
-     G4String histoName;
      G4int nEvents;
      G4bool detIsConstructed;
      G4int nAbsSaved;
-     G4int nHisto;
      G4int nFirstEvtToDebug;
      G4int nLastEvtToDebug;
      G4double maxDelta;

@@ -75,7 +75,6 @@ hTestDetectorConstruction::hTestDetectorConstruction():
   nEvents(0),
   detIsConstructed(false),
   nAbsSaved(0),
-  nHisto(1),
   nFirstEvtToDebug(-1),
   nLastEvtToDebug(-1)
 {
@@ -88,7 +87,6 @@ hTestDetectorConstruction::hTestDetectorConstruction():
   NumberOfAbsorbers = 300;
   nameMatWorld      = G4String("Air");
   WorldSizeZ        = 400.0*mm;
-  histoName         = G4String("histo.paw");
   maxDelta          = 10.0*MeV;
 
   ComputeGeomParameters();
@@ -442,8 +440,6 @@ void hTestDetectorConstruction::ComputeGeomParameters()
   (hTestHisto::GetPointer())->SetNumberOfAbsorbers(NumberOfAbsorbers);
   (hTestHisto::GetPointer())->SetAbsorberThickness(AbsorberThickness);
   (hTestHisto::GetPointer())->SetNumAbsorbersSaved(nAbsSaved);
-  (hTestHisto::GetPointer())->SetHistoName(histoName);
-  (hTestHisto::GetPointer())->SetHistoNumber(nHisto);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
