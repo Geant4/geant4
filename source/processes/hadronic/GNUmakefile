@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2000-05-26 07:17:24 stesting Exp $
+# $Id: GNUmakefile,v 1.5 2000-06-09 15:24:11 hpw Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic processes library.  G.Folger 10-Dec-97.
 # ----------------------------------------------------------------
@@ -14,6 +14,7 @@ SUBDIRS += models/low_energy
 SUBDIRS += models/high_energy 
 SUBDIRS += models/neutron_hp
 SUBDIRS += models/isotope_production
+SUBDIRS += models/radiative_decay
 SUBDIRS += models/generator/de_excitation
 SUBDIRS += models/generator/diffractive_string
 SUBDIRS += models/generator/high_energy
@@ -21,11 +22,9 @@ SUBDIRS += models/generator/kinetic_model
 SUBDIRS += models/generator/management
 SUBDIRS += models/generator/pre_equilibrium
 SUBDIRS += models/generator/quark_gluon_string
-SUBDIRS += models/generator/radiative_decay
 SUBDIRS += models/generator/string_common
 SUBDIRS += models/generator/string_fragmentation
 SUBDIRS += models/generator/util
-SUBDIRS += models/radiative_decay
 
 SUBLIBS =  G4hadronic_mgt G4hadronic_util G4hadronic_proc
 SUBLIBS += G4hadronic_xsect G4hadronic_stop  
