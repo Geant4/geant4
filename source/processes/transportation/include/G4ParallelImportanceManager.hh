@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceManager.hh,v 1.6 2002-05-29 10:07:03 dressel Exp $
+// $Id: G4ParallelImportanceManager.hh,v 1.7 2002-05-30 11:14:38 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -40,6 +40,7 @@
 #define G4ParallelImportanceManager_hh G4ParallelImportanceManager_hh 
 
 #include "globals.hh"
+#include "G4VImportanceScoreConstructor.hh"
 
 class G4ParallelManager;
 class G4VIStore;
@@ -47,19 +48,15 @@ class G4VImportanceAlgorithm;
 class G4VImportanceSampler;
 class G4ParallelImportanceProcess;
 
-class G4ParallelImportanceManager
+class G4ParallelImportanceManager : public G4VImportanceScoreConstructor
 {
 
 public:  // with description
 
   G4ParallelImportanceManager(G4VIStore &is, 
-			      const G4String &particlename);
-    // use the G4ImportanceAlgorithm 
-    // create G4ParallelManager and G4ImportanceSampler
-
-  G4ParallelImportanceManager(G4VIStore &is, 
 			      const G4String &particlename,
-			      G4VImportanceAlgorithm &ialg);
+			      const G4VImportanceAlgorithm *ialg = 0);
+    // if *ialg = 0: use the G4ImportanceAlgorithm 
     // use a customised  importance algorithm derived from
     // G4VImportanceAlgorithm  
     // create G4ParallelManager andG4ImportanceSampler
@@ -67,13 +64,8 @@ public:  // with description
 public: // used internally by importance sampling 
 
   G4ParallelImportanceManager(G4VIStore &is, 
-			      G4ParallelManager &pmanager);
-    // use the G4ImportanceAlgorithm
-    // create G4ParallelManager and  G4ImportanceSampler
-
-  G4ParallelImportanceManager(G4VIStore &is, 
-			      G4VImportanceAlgorithm &ialg,
-			      G4ParallelManager &pmanager);
+			      G4ParallelManager &pmanager,
+			      const G4VImportanceAlgorithm *ialg = 0);
     // create G4ParallelManager and G4ImportanceSampler
   
   ~G4ParallelImportanceManager();
@@ -99,9 +91,10 @@ private:
 private:
 
   G4ParallelManager &fParallelManager;
-  bool fCreatedPM;
-  G4VImportanceAlgorithm &fIalgorithm;
+  G4bool fCreatedPM;
+
   G4bool fDeleteAlg;
+  const G4VImportanceAlgorithm *fIalgorithm;
 
   G4VImportanceSampler *fSampler;
   G4ParallelImportanceProcess *fParallelImportanceProcess;

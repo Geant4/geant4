@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceManager.cc,v 1.4 2002-05-24 08:17:19 dressel Exp $
+// $Id: G4MassImportanceManager.cc,v 1.5 2002-05-30 11:14:39 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -40,24 +40,14 @@
 G4MassImportanceManager::
 G4MassImportanceManager(G4VIStore &aIstore,
 			const G4String &particlename,
-			const G4VImportanceAlgorithm &algorithm)
+			const G4VImportanceAlgorithm *algorithm)
  : fIStore(aIstore),
    fParticleName(particlename),
-   fAlgorithm(algorithm),
-   fCreatedAlgorithm(false),
-   fMassImportanceProcess(0)
+   fMassImportanceProcess(0),
+   fCreatedAlgorithm( ( ! algorithm) ),
+   fAlgorithm(( (fCreatedAlgorithm) ? 
+		new G4ImportanceAlgorithm : algorithm))
 {}
-
-G4MassImportanceManager::
-G4MassImportanceManager(G4VIStore &aIstore,
-			const G4String &particlename)
- : fIStore(aIstore),
-   fParticleName(particlename),
-   fAlgorithm(*(new G4ImportanceAlgorithm)),
-   fCreatedAlgorithm(true),
-   fMassImportanceProcess(0)
-{}
-
 
 G4MassImportanceManager::~G4MassImportanceManager()
 {
@@ -74,7 +64,7 @@ G4MassImportanceProcess *G4MassImportanceManager::CreateMassImportanceProcess()
 {
   if (!fMassImportanceProcess) {
     fMassImportanceProcess =
-      new G4MassImportanceProcess(fAlgorithm, fIStore);
+      new G4MassImportanceProcess(*fAlgorithm, fIStore);
   }
   return fMassImportanceProcess;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceScoreManager.hh,v 1.4 2002-04-10 13:14:17 dressel Exp $
+// $Id: G4ParallelImportanceScoreManager.hh,v 1.5 2002-05-30 11:14:38 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -40,6 +40,7 @@
 #define G4ParallelImportanceScoreManager_hh G4ParallelImportanceScoreManager_hh
 
 #include "globals.hh"
+#include "G4VImportanceScoreConstructor.hh"
 
 class G4VIStore;
 class G4VPScorer;
@@ -48,21 +49,18 @@ class G4PScoreProcess;
 class G4ParallelManager;
 class G4ParallelImportanceManager;
 
-class G4ParallelImportanceScoreManager
+class G4ParallelImportanceScoreManager : 
+  public G4VImportanceScoreConstructor
 {
 
 public:  // with description
 
-  G4ParallelImportanceScoreManager(G4VIStore &iw, 
-				   G4VPScorer &ascorer,
-				   const G4String &particlename);
-    // use G4ImportanceAlgorithm, construct and initalise
-    // used objects
  
   G4ParallelImportanceScoreManager(G4VIStore &iw, 
 				   G4VPScorer &ascorer,
 				   const G4String &particlename,
-				   G4VImportanceAlgorithm &ialg);
+				   const G4VImportanceAlgorithm *ialg = 0);
+    // if *ialg = 0: use G4ImportanceAlgorithm,
     // use a customised  importance algorithm derived from
     // G4VImportanceAlgorithm
   

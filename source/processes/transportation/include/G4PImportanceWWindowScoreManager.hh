@@ -11,6 +11,7 @@
 #define G4PImportanceWWindowScoreManager_hh G4PImportanceWWindowScoreManager_hh
 
 #include "globals.hh"
+#include "G4VImportanceScoreConstructor.hh"
 
 class G4VIStore;
 class G4VPScorer;
@@ -21,7 +22,8 @@ class G4ParallelImportanceManager;
 class G4VProcess;
 class G4VWeightWindowAlgorithm;
 
-class G4PImportanceWWindowScoreManager
+class G4PImportanceWWindowScoreManager : 
+  public G4VImportanceScoreConstructor
 {
 
 public:  // with description
@@ -29,15 +31,9 @@ public:  // with description
   G4PImportanceWWindowScoreManager(G4VIStore &iw, 
 				   G4VPScorer &ascorer,
 				   const G4String &particlename,
-				   G4VWeightWindowAlgorithm &wwalg);
-    // use G4ImportanceAlgorithm, construct and initalise
-    // used objects
- 
-  G4PImportanceWWindowScoreManager(G4VIStore &iw, 
-				   G4VPScorer &ascorer,
-				   const G4String &particlename,
 				   G4VWeightWindowAlgorithm &wwalg,
-				   G4VImportanceAlgorithm &ialg);
+				   const G4VImportanceAlgorithm *ialg = 0);
+    // if *ialg = 0: use G4ImportanceAlgorithm
     // use a customised  importance algorithm derived from
     // G4VImportanceAlgorithm
   

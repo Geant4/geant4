@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceManager.hh,v 1.3 2002-04-10 13:14:16 dressel Exp $
+// $Id: G4MassImportanceManager.hh,v 1.4 2002-05-30 11:14:38 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -40,25 +40,23 @@
 #define G4MassImportanceManager_hh G4MassImportanceManager_hh
 
 #include "globals.hh"
+#include "G4VImportanceScoreConstructor.hh"
 
 class G4VIStore;
 class G4MassImportanceProcess;
 class G4VImportanceAlgorithm;
 class G4VProcess;
 
-class G4MassImportanceManager
+class G4MassImportanceManager : public G4VImportanceScoreConstructor
 {
 
 public:  // with description
 
   G4MassImportanceManager(G4VIStore &aIstore,
-			  const G4String &particlename);
-    // use the G4ImportanceAlgorithm
-
-  G4MassImportanceManager(G4VIStore &aIstore,
 			  const G4String &particlename,
-			  const G4VImportanceAlgorithm &algorithm);
-    // use a customised  importance algorithm derived from
+			  const G4VImportanceAlgorithm *algorithm = 0);
+    // if *algorithm = 0: use the G4ImportanceAlgorithm 
+    // else: use a customised  importance algorithm derived from
     // G4VImportanceAlgorithm
 
   ~G4MassImportanceManager();
@@ -83,9 +81,9 @@ private:
 
   G4VIStore &fIStore;
   G4String fParticleName;
-  const G4VImportanceAlgorithm &fAlgorithm;
-  bool fCreatedAlgorithm;
   G4MassImportanceProcess *fMassImportanceProcess;
+  G4bool fCreatedAlgorithm;
+  const G4VImportanceAlgorithm *fAlgorithm;
 };
 
 #endif

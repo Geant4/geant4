@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceScoreManager.cc,v 1.4 2002-04-09 17:40:15 gcosmo Exp $
+// $Id: G4MassImportanceScoreManager.cc,v 1.5 2002-05-30 11:14:39 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -39,16 +39,8 @@
 G4MassImportanceScoreManager::
 G4MassImportanceScoreManager(G4VIStore &aIstore,
 			     G4VPScorer &ascorer,
-			     const G4String &particlename)
- : fMassImportanceManager(new G4MassImportanceManager(aIstore, particlename)),
-   fMassScoreManager(new G4MassScoreManager(ascorer, particlename))
-{}
-  
-G4MassImportanceScoreManager::
-G4MassImportanceScoreManager(G4VIStore &aIstore,
-			     G4VPScorer &ascorer,
 			     const G4String &particlename,
-			     const G4VImportanceAlgorithm &algorithm)
+			     const G4VImportanceAlgorithm *algorithm)
  : fMassImportanceManager(new G4MassImportanceManager(aIstore, 
                                                       particlename,
                                                       algorithm)),

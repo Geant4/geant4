@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelScoreManager.hh,v 1.4 2002-04-10 13:14:17 dressel Exp $
+// $Id: G4ParallelScoreManager.hh,v 1.5 2002-05-30 11:14:38 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -40,13 +40,14 @@
 #define G4ParallelScoreManager_hh G4ParallelScoreManager_hh
 
 #include "globals.hh"
+#include "G4VImportanceScoreConstructor.hh"
 
 class G4VPhysicalVolume;
 class G4ParallelManager;
 class G4VPScorer;
 class G4PScoreProcess;
 
-class G4ParallelScoreManager
+class G4ParallelScoreManager : public G4VImportanceScoreConstructor
 {
 
 public:  // with description

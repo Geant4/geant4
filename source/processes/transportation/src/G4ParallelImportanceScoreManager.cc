@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceScoreManager.cc,v 1.4 2002-05-24 08:17:19 dressel Exp $
+// $Id: G4ParallelImportanceScoreManager.cc,v 1.5 2002-05-30 11:14:39 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -43,23 +43,13 @@
 G4ParallelImportanceScoreManager::
 G4ParallelImportanceScoreManager(G4VIStore &is, 
 				 G4VPScorer &ascorer,
-				 const G4String &particlename)
- : fParallelManager(*(new G4ParallelManager(is.GetWorldVolume(), particlename))),
-   fParallelImportanceManager(*(new G4ParallelImportanceManager(is, fParallelManager))),
-   fPScorer(ascorer),
-   fPScoreProcess(0)
-{}
-
-G4ParallelImportanceScoreManager::
-G4ParallelImportanceScoreManager(G4VIStore &is, 
-				 G4VPScorer &ascorer,
 				 const G4String &particlename,
-				 G4VImportanceAlgorithm &ialg)
+				 const G4VImportanceAlgorithm *ialg)
  : fParallelManager(*(new G4ParallelManager(is.GetWorldVolume(), particlename))),
    fParallelImportanceManager(*(new 
 			       G4ParallelImportanceManager(is,
-							   ialg,
-							   fParallelManager))),
+							   fParallelManager,
+							   ialg))),
    fPScorer(ascorer),
    fPScoreProcess(0)
 {}

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceManager.cc,v 1.4 2002-05-24 08:17:19 dressel Exp $
+// $Id: G4ParallelImportanceManager.cc,v 1.5 2002-05-30 11:14:39 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -42,42 +42,14 @@
 
 G4ParallelImportanceManager::
 G4ParallelImportanceManager(G4VIStore &is,
-			    const G4String &particlename)
- : fParallelManager(*(new G4ParallelManager(is.GetWorldVolume(), particlename))),
-   fCreatedPM(true),
-   fIalgorithm(*(new G4ImportanceAlgorithm())),
-   fDeleteAlg(true),
-   fSampler(new G4ImportanceSampler(fIalgorithm,
-                                    fParallelManager.
-                                    GetParallelWorld().GetParallelStepper(),
-                                    is)),
-   fParallelImportanceProcess(0)
-{}
-
-G4ParallelImportanceManager::
-G4ParallelImportanceManager(G4VIStore &is, 
-			    G4ParallelManager &pmanager)
- : fParallelManager(pmanager),
-   fCreatedPM(false),
-   fIalgorithm(*(new G4ImportanceAlgorithm())),
-   fDeleteAlg(true),
-   fSampler(new G4ImportanceSampler(fIalgorithm, 
-                                    fParallelManager.
-                                    GetParallelWorld().GetParallelStepper(),  
-                                    is)),
-   fParallelImportanceProcess(0)
-{}
-
-
-G4ParallelImportanceManager::
-G4ParallelImportanceManager(G4VIStore &is,
 			    const G4String &particlename,
-			    G4VImportanceAlgorithm &ialg)
+			    const G4VImportanceAlgorithm *ialg)
  : fParallelManager(*(new G4ParallelManager(is.GetWorldVolume(), particlename))),
    fCreatedPM(true),
-   fIalgorithm(ialg),
-   fDeleteAlg(false),
-   fSampler(new G4ImportanceSampler(fIalgorithm, 
+   fDeleteAlg( ( ! ialg) ),
+   fIalgorithm(( (fDeleteAlg) ? 
+		 new G4ImportanceAlgorithm : ialg)),
+   fSampler(new G4ImportanceSampler(*fIalgorithm, 
                                     fParallelManager.
                                     GetParallelWorld().GetParallelStepper(),  
                                     is)),
@@ -86,13 +58,14 @@ G4ParallelImportanceManager(G4VIStore &is,
 
 G4ParallelImportanceManager::
 G4ParallelImportanceManager(G4VIStore &is, 
-			    G4VImportanceAlgorithm &ialg,
-			    G4ParallelManager &pmanager)
+			    G4ParallelManager &pmanager,
+			    const G4VImportanceAlgorithm *ialg)
  : fParallelManager(pmanager),
    fCreatedPM(false),
-   fIalgorithm(ialg),
-   fDeleteAlg(false),
-   fSampler(new G4ImportanceSampler(fIalgorithm, 
+   fDeleteAlg( ( ! ialg) ),
+   fIalgorithm(( (fDeleteAlg) ? 
+		 new G4ImportanceAlgorithm : ialg)),
+   fSampler(new G4ImportanceSampler(*fIalgorithm, 
                                     fParallelManager.
                                     GetParallelWorld().GetParallelStepper(),  
                                     is)),

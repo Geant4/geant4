@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassScoreManager.hh,v 1.3 2002-04-10 13:14:16 dressel Exp $
+// $Id: G4MassScoreManager.hh,v 1.4 2002-05-30 11:14:38 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -38,12 +38,13 @@
 #define G4MassScoreManager_hh G4MassScoreManager_hh
 
 #include "globals.hh"
+#include "G4VImportanceScoreConstructor.hh"
 
 class G4VProcess;
 class G4VPScorer;
 class G4MScoreProcess;
 
-class G4MassScoreManager
+class G4MassScoreManager : public G4VImportanceScoreConstructor
 {
 
 public:  // with description

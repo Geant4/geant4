@@ -20,27 +20,13 @@ G4PImportanceWWindowScoreManager::
 G4PImportanceWWindowScoreManager(G4VIStore &is, 
 				 G4VPScorer &ascorer,
 				 const G4String &particlename,
-				 G4VWeightWindowAlgorithm &wwalg)
- : fParallelManager(*(new G4ParallelManager(is.GetWorldVolume(), particlename))),
-   fParallelImportanceManager(*(new G4ParallelImportanceManager(is, fParallelManager))),
-   fPScorer(ascorer),
-   fIstore(is),
-   fPScoreProcess(0),
-   fPWeightWindowProcess(0),
-   fWWAlgorithm(wwalg)
-{}
-
-G4PImportanceWWindowScoreManager::
-G4PImportanceWWindowScoreManager(G4VIStore &is, 
-				 G4VPScorer &ascorer,
-				 const G4String &particlename,
 				 G4VWeightWindowAlgorithm &wwalg,
-				 G4VImportanceAlgorithm &ialg)
+				 const G4VImportanceAlgorithm *ialg)
  : fParallelManager(*(new G4ParallelManager(is.GetWorldVolume(), particlename))),
    fParallelImportanceManager(*(new 
 			       G4ParallelImportanceManager(is,
-							   ialg,
-							   fParallelManager))),
+							   fParallelManager,
+							   ialg))),
    fPScorer(ascorer),
    fIstore(is),
    fPScoreProcess(0),
