@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeStore.cc,v 1.13 2003-11-02 14:01:23 gcosmo Exp $
+// $Id: G4PhysicalVolumeStore.cc,v 1.14 2004-09-02 07:49:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PhysicalVolumeStore
@@ -36,12 +36,14 @@
 #include "G4PhysicalVolumeStore.hh"
 #include "G4GeometryManager.hh"
 #include "G4LogicalVolume.hh"
+#include "G4VStoreNotifier.hh"
 
 // ***************************************************************************
 // Static class variables
 // ***************************************************************************
 //
 G4PhysicalVolumeStore* G4PhysicalVolumeStore::fgInstance = 0;
+G4VStoreNotifier* G4PhysicalVolumeStore::fgNotifier = 0;
 G4bool G4PhysicalVolumeStore::locked = false;
 
 // ***************************************************************************
@@ -118,12 +120,22 @@ void G4PhysicalVolumeStore::Clean(G4bool notifyLV)
 }
 
 // ***************************************************************************
+// Associate user notifier to the store
+// ***************************************************************************
+//
+void G4PhysicalVolumeStore::SetNotifier(G4VStoreNotifier* pNotifier)
+{
+  fgNotifier = pNotifier;
+}
+
+// ***************************************************************************
 // Add Volume to container
 // ***************************************************************************
 //
 void G4PhysicalVolumeStore::Register(G4VPhysicalVolume* pVolume)
 {
-    GetInstance()->push_back(pVolume);
+  GetInstance()->push_back(pVolume);
+  if (fgNotifier) fgNotifier->NotifyRegistration();
 }
 
 // ***************************************************************************
@@ -135,6 +147,7 @@ void G4PhysicalVolumeStore::DeRegister(G4VPhysicalVolume* pVolume)
 {
   if (!locked)    // Do not de-register if locked !
   {
+    if (fgNotifier) fgNotifier->NotifyDeRegistration();
     G4LogicalVolume* motherLogical = pVolume->GetMotherLogical();
     if (motherLogical) motherLogical->RemoveDaughter(pVolume);
     for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)

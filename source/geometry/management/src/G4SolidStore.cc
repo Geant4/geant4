@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SolidStore.cc,v 1.11 2003-11-02 14:01:23 gcosmo Exp $
+// $Id: G4SolidStore.cc,v 1.12 2004-09-02 07:49:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4SolidStore
@@ -35,12 +35,14 @@
 #include "globals.hh"
 #include "G4SolidStore.hh"
 #include "G4GeometryManager.hh"
+#include "G4VStoreNotifier.hh"
 
 // ***************************************************************************
 // Static class variables
 // ***************************************************************************
 //
 G4SolidStore* G4SolidStore::fgInstance = 0;
+G4VStoreNotifier* G4SolidStore::fgNotifier = 0;
 G4bool G4SolidStore::locked = false;
 
 // ***************************************************************************
@@ -110,12 +112,22 @@ void G4SolidStore::Clean()
 }
 
 // ***************************************************************************
+// Associate user notifier to the store
+// ***************************************************************************
+//
+void G4SolidStore::SetNotifier(G4VStoreNotifier* pNotifier)
+{
+  fgNotifier = pNotifier;
+}
+
+// ***************************************************************************
 // Add Solid to container
 // ***************************************************************************
 //
 void G4SolidStore::Register(G4VSolid* pSolid)
 {
   GetInstance()->push_back(pSolid);
+  if (fgNotifier) fgNotifier->NotifyRegistration();
 }
 
 // ***************************************************************************
@@ -126,6 +138,7 @@ void G4SolidStore::DeRegister(G4VSolid* pSolid)
 {
   if (!locked)    // Do not de-register if locked !
   {
+    if (fgNotifier) fgNotifier->NotifyDeRegistration();
     for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
     {
       if (**i==*pSolid)
