@@ -374,26 +374,6 @@ echo "On this machine the G4USE_G3TOG4=\$G4USE_G3TOG4"
 fi
 fi 
 
-#
-# Use STEP module
-#
-#+
-if [ X$g4wlib_build_step = Xy ] ; then
-G4LIB_BUILD_STEP=1
-export G4LIB_BUILD_STEP
-if [ X\$g4non_display = X ] ; then
-echo "On this machine the G4LIB_BUILD_STEP=\$G4LIB_BUILD_STEP"
-fi
-fi 
-
-if [ X$g4w_use_step = Xy ] ; then
-G4USE_STEP=1
-export G4USE_STEP
-if [ X\$g4non_display = X ] ; then
-echo "On this machine the G4USE_STEP=\$G4USE_STEP"
-fi
-fi 
-
 #+
 #
 # g4shared
@@ -411,22 +391,6 @@ G4LIB_BUILD_STATIC=1
 export G4LIB_BUILD_STATIC
 if [ X\$g4non_display = X ] ; then
 echo "On this machine the G4LIB_BUILD_STATIC=\$G4LIB_BUILD_STATIC"
-fi
-fi 
-
-if [ X$g4lib_use_shared = Xy ] ; then
-G4LIB_USE_SHARED=1
-export G4LIB_USE_SHARED
-if [ X\$g4non_display = X ] ; then
-echo "On this machine the G4LIB_USE_SHARED=\$G4LIB_USE_SHARED"
-fi
-fi 
-
-if [ X$g4lib_use_static = Xy ] ; then
-G4LIB_USE_STATIC=1
-export G4LIB_USE_STATIC
-if [ X\$g4non_display = X ] ; then
-echo "On this machine the G4LIB_USE_STATIC=\$G4LIB_USE_STATIC"
 fi
 fi 
 

@@ -263,20 +263,6 @@ setenv G4USE_G3TOG4 1
 echo "On this machine the G4USE_G3TOG4=\$G4USE_G3TOG4"
 endif 
 
-#
-# Use STEP module
-#
-#+
-if ( X$g4wlib_build_step == Xy )  then
-setenv G4LIB_BUILD_STEP 1
-echo "On this machine the G4LIB_BUILD_STEP=\$G4LIB_BUILD_STEP"
-endif 
-
-if ( X$g4w_use_step == Xy )  then
-setenv G4USE_STEP 1
-echo "On this machine the G4USE_STEP=\$G4USE_STEP"
-endif 
-
 #+
 #
 # g4shared
@@ -289,16 +275,6 @@ endif
 if ( X$g4lib_build_static == Xy ) then
 setenv G4LIB_BUILD_STATIC 1
 echo "On this machine the G4LIB_BUILD_STATIC=\$G4LIB_BUILD_STATIC"
-endif
-
-if ( X$g4lib_use_shared == Xy ) then
-setenv G4LIB_USE_SHARED 1
-echo "On this machine the G4LIB_USE_SHARED=\$G4LIB_USE_SHARED"
-endif
-
-if ( X$g4lib_use_static == Xy ) then
-setenv G4LIB_USE_STATIC 1
-echo "On this machine the G4LIB_USE_STATIC=\$G4LIB_USE_STATIC"
 endif
 
 #+

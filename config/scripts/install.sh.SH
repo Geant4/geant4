@@ -307,22 +307,6 @@ export G4USE_G3TOG4
 echo "On this machine the G4USE_G3TOG4=\$G4USE_G3TOG4"
 fi 
 
-#
-# Use STEP module
-#
-#+
-if [ X$g4wlib_build_step = Xy ] ; then
-G4LIB_BUILD_STEP=1
-export G4LIB_BUILD_STEP
-echo "On this machine the G4LIB_BUILD_STEP=\$G4LIB_BUILD_STEP"
-fi 
-
-if [ X$g4w_use_step = Xy ] ; then
-G4USE_STEP=1
-export G4USE_STEP
-echo "On this machine the G4USE_STEP=\$G4USE_STEP"
-fi 
-
 #+
 #
 # g4shared
@@ -337,18 +321,6 @@ if [ X$g4lib_build_static = Xy ] ; then
 G4LIB_BUILD_STATIC=1
 export G4LIB_BUILD_STATIC
 echo "On this machine the G4LIB_BUILD_STATIC=\$G4LIB_BUILD_STATIC"
-fi 
-
-if [ X$g4lib_use_shared = Xy ] ; then
-G4LIB_USE_SHARED=1
-export G4LIB_USE_SHARED
-echo "On this machine the G4LIB_USE_SHARED=\$G4LIB_USE_SHARED"
-fi 
-
-if [ X$g4lib_use_static = Xy ] ; then
-G4LIB_USE_STATIC=1
-export G4LIB_USE_STATIC
-echo "On this machine the G4LIB_USE_STATIC=\$G4LIB_USE_STATIC"
 fi 
 
 #+
@@ -401,9 +373,10 @@ fi
 
 # Check for errors in log file
 export err=\$[ \`grep Error $g4conf/g4make.log | wc -w\` ]
+export int=\$[ \`grep Stop\. $g4conf/g4make.log | wc -w\` ]
 # echo err=\$err
 
-if [ X\$err = X0 ] ; then
+if [ X\$err = X0 -a X\$int = X0 ] ; then
 echo ""
 echo "####################################################"
 echo "# Your Geant4 installation seems to be successful! #"
@@ -414,7 +387,8 @@ echo ""
 else
 echo ""
 echo "############################################################"
-echo "# It looks like you had errors during Geant4 installation! #"
+echo "# It looks like you had errors during Geant4 installation  #"
+echo "# (or interrupted installation)!				 #"
 echo "# Please check log file:				      	 #"
 echo "# $g4conf/g4make.log					 #"
 echo "############################################################"
