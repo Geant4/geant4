@@ -35,7 +35,7 @@ G4AtomicTransitionManager::G4AtomicTransitionManager( )
   :ZVector(0),
    tableLimit(0)
 {
-  G4int tableLimit = 5;
+  tableLimit = 5;
 
   G4SecondLevel* theBindingEnergyTable=BuildBindingEnergiesTable();
   
@@ -198,7 +198,9 @@ G4ThirdLevel* G4AtomicTransitionManager::BuildTransitionTable()
       theTransitionTable->push_back(oneAtomTransProb);
     }
     else{
-      ZVector.erase(remove( ZVector.begin(), ZVector.end(),atomInd),ZVector.end()) ;
+      // MGP following line commented out to remove compilation error
+      // To be fixed
+      //      ZVector.erase(remove( ZVector.begin(), ZVector.end(),atomInd),ZVector.end()) ;
      
        tableInd=tableInd-1;
     } 
