@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTable.cc,v 1.8 2001-07-11 10:08:20 gunter Exp $
+// $Id: G4ProcessTable.cc,v 1.9 2002-11-28 00:32:25 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,14 +77,14 @@ G4ProcessTable::~G4ProcessTable()
   }
 
   if ( fProcTblVector != 0) {
-    // G4ProcTableVector::iterator idx;
+    G4ProcTableVector::iterator idx;
     
     // destruction of processes has moved to G4VUserPhysicsList
-    // for (idx=fProcTblVector->begin(); idx!=fProcTblVector->end(); ++idx) {
+    for (idx=fProcTblVector->begin(); idx!=fProcTblVector->end(); ++idx) {
       // delete all processes
       // delete (*idx)->GetProcess();
-      // delete (*idx);
-    //}  
+      delete (*idx);
+    }  
     fProcTblVector ->clear();
     delete fProcTblVector;
   }
