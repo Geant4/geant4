@@ -39,17 +39,17 @@
 #ifndef G4RandGeneralTmp_h
 #define G4RandGeneralTmp_h 1
 
-#include "CLHEP/Random/Random.h"
+#include <CLHEP/Random/Random.h>
 
 class G4RandGeneralTmp : public HepRandom {
 
 public:
 
-  G4RandGeneralTmp ( HepDouble* aProbFunc, HepInt theProbSize );
+  G4RandGeneralTmp ( G4double* aProbFunc, G4int theProbSize );
   G4RandGeneralTmp ( HepRandomEngine& anEngine,
-                HepDouble* aProbFunc, HepInt theProbSize );
+                G4double* aProbFunc, G4int theProbSize );
   G4RandGeneralTmp ( HepRandomEngine* anEngine, 
-                HepDouble* aProbFunc, HepInt theProbSize );
+                G4double* aProbFunc, G4int theProbSize );
   // These constructors should be used to instantiate a G4RandGeneralTmp
   // distribution object defining a local engine for it.
   // The static generator will be skeeped using the non-static methods
@@ -70,26 +70,26 @@ public:
   // N.B.: The methods are NOT static since they use nonstatic members
   // theIntegralPdf & nBins
 
-  inline HepDouble shoot();
+  inline G4double shoot();
 
-  inline void shootArray ( const HepInt size, HepDouble* vect);
+  inline void shootArray ( const G4int size, G4double* vect);
 
   //  Methods to shoot random values using a given engine
   //  by-passing the static generator.
 
-  HepDouble shoot( HepRandomEngine* anEngine );
+  G4double shoot( HepRandomEngine* anEngine );
 
-  void shootArray ( HepRandomEngine* anEngine, const HepInt size,
-                    HepDouble* vect );
+  void shootArray ( HepRandomEngine* anEngine, const G4int size,
+                    G4double* vect );
 			    
   //  Methods using the localEngine to shoot random values, by-passing
   //  the static generator.
 
-  HepDouble fire();
+  G4double fire();
 
-  void fireArray ( const HepInt size, HepDouble* vect);
+  void fireArray ( const G4int size, G4double* vect);
 
-  HepDouble operator()();
+  G4double operator()();
 
 private:
 
@@ -97,9 +97,9 @@ private:
   G4RandGeneralTmp(const G4RandGeneralTmp&) : HepRandom() {;}
 
   HepRandomEngine* localEngine;
-  HepBoolean deleteEngine;
-  HepDouble* theIntegralPdf;
-  HepInt nBins;
+  G4bool deleteEngine;
+  G4double* theIntegralPdf;
+  G4int nBins;
 
 };
 

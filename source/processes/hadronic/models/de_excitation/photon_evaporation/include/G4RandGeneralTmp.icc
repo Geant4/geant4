@@ -30,12 +30,12 @@
 // Gabriele Cosmo - Created: 20th August 1998
 // =======================================================================
 
-inline HepDouble G4RandGeneralTmp::shoot()
+inline G4double G4RandGeneralTmp::shoot()
 {
   return fire();
 }
 
-inline void G4RandGeneralTmp::shootArray( const HepInt size, HepDouble* vect )
+inline void G4RandGeneralTmp::shootArray( const G4int size, G4double* vect )
 {
   fireArray(size, vect);
 }

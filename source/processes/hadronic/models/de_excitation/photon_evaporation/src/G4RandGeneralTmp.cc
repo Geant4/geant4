@@ -44,12 +44,12 @@
 // Constructors
 //////////////////
 
-G4RandGeneralTmp::G4RandGeneralTmp(HepDouble* aProbFunc, HepInt theProbSize )
+G4RandGeneralTmp::G4RandGeneralTmp(G4double* aProbFunc, G4int theProbSize )
 : deleteEngine(false), nBins(theProbSize)
 {
   localEngine = HepRandom::getTheEngine();
-  register HepInt ptn;
-  theIntegralPdf = new HepDouble[theProbSize];
+  register G4int ptn;
+  theIntegralPdf = new G4double[theProbSize];
   theIntegralPdf[0] = 0;
   for ( ptn = 1; ptn<theProbSize; ++ptn ) 
   {
@@ -62,11 +62,11 @@ G4RandGeneralTmp::G4RandGeneralTmp(HepDouble* aProbFunc, HepInt theProbSize )
 }
 
 G4RandGeneralTmp::G4RandGeneralTmp(HepRandomEngine& anEngine,
-                         HepDouble* aProbFunc, HepInt theProbSize )
+                         G4double* aProbFunc, G4int theProbSize )
 : localEngine(&anEngine), deleteEngine(false), nBins(theProbSize)
 {
-  register HepInt ptn;
-  theIntegralPdf = new HepDouble[theProbSize];
+  register G4int ptn;
+  theIntegralPdf = new G4double[theProbSize];
   theIntegralPdf[0] = 0;
   for ( ptn = 1; ptn<theProbSize; ++ptn ) 
   {
@@ -79,11 +79,11 @@ G4RandGeneralTmp::G4RandGeneralTmp(HepRandomEngine& anEngine,
 }
 
 G4RandGeneralTmp::G4RandGeneralTmp(HepRandomEngine* anEngine,
-                         HepDouble* aProbFunc, HepInt theProbSize )
+                         G4double* aProbFunc, G4int theProbSize )
 : localEngine(anEngine), deleteEngine(true), nBins(theProbSize)
 {
-  register HepInt ptn;
-  theIntegralPdf = new HepDouble[nBins];
+  register G4int ptn;
+  theIntegralPdf = new G4double[nBins];
   theIntegralPdf[0] = 0.;
   for ( ptn = 1; ptn<nBins; ++ptn ) {
     theIntegralPdf[ptn] = 0;
@@ -104,14 +104,14 @@ G4RandGeneralTmp::~G4RandGeneralTmp() {
   delete [] theIntegralPdf;
 }
 
-HepDouble G4RandGeneralTmp::operator()() {
+G4double G4RandGeneralTmp::operator()() {
   return fire();
 }
 
-HepDouble G4RandGeneralTmp::shoot( HepRandomEngine* anEngine )
+G4double G4RandGeneralTmp::shoot( HepRandomEngine* anEngine )
 {
-  HepDouble rand;
-  HepInt nabove, nbelow = 0, middle;
+  G4double rand;
+  G4int nabove, nbelow = 0, middle;
   
   nabove = nBins+1;  
   rand = anEngine->flat();
@@ -123,22 +123,22 @@ HepDouble G4RandGeneralTmp::shoot( HepRandomEngine* anEngine )
     else nbelow = middle;
   }
   
-  return ((HepDouble)nbelow - 1) / nBins;
+  return ((G4double)nbelow - 1) / nBins;
 }
 
 void G4RandGeneralTmp::shootArray( HepRandomEngine* anEngine,
-                              const HepInt size, HepDouble* vect )
+                              const G4int size, G4double* vect )
 {
-   register HepInt i;
+   register G4int i;
 
    for (i=0; i<size; ++i)
      vect[i] = shoot(anEngine);
 }
 
-HepDouble G4RandGeneralTmp::fire()
+G4double G4RandGeneralTmp::fire()
 {
-  HepDouble rand;
-  HepInt nabove, nbelow = 0, middle;
+  G4double rand;
+  G4int nabove, nbelow = 0, middle;
   
   nabove = nBins+1;  
   rand = localEngine->flat();
@@ -150,13 +150,13 @@ HepDouble G4RandGeneralTmp::fire()
     else nbelow = middle;
   }
   
-  return ((HepDouble)nbelow - 1) / nBins;
+  return ((G4double)nbelow - 1) / nBins;
 
 }
 
-void G4RandGeneralTmp::fireArray( const HepInt size, HepDouble* vect )
+void G4RandGeneralTmp::fireArray( const G4int size, G4double* vect )
 {
-   register HepInt i;
+   register G4int i;
 
    for (i=0; i<size; ++i)
      vect[i] = fire();
