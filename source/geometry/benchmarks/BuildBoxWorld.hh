@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BuildBoxWorld.hh,v 1.4 2001-07-11 09:59:04 gunter Exp $
+// $Id: BuildBoxWorld.hh,v 1.5 2002-01-09 16:17:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef BUILDBOXWORLD_HH
@@ -35,10 +35,6 @@
 
 G4VPhysicalVolume* BuildBoxWorld()
 {
-    G4double z = 13.;
-    G4double a = 26.98*g/mole;
-    G4double density = 2.7*g/cm3;
-
     G4Box *myWorldBox= new G4Box ("WBox",10000*mm,10000*mm,10000*mm);
     G4Box *myTargetBox = new G4Box ("TBox",100*mm,200*mm,400*mm);
     //G4Cons *myTargetBox = new G4Cons ("TBox",100*mm,200*mm,400*mm,600*mm,200*mm,0,2*M_PI);
@@ -51,10 +47,11 @@ G4VPhysicalVolume* BuildBoxWorld()
 						 "WPhys",
 						 myWorldLog,
 						 0,false,0);
-    G4PVPlacement *myTargetPhys=new G4PVPlacement(0,G4ThreeVector(10*mm,10*mm,10*mm),
-						  "TPhys",
-						  myTargetLog,
-						  myWorldPhys,false,0);
+    // G4PVPlacement *myTargetPhys=
+    new G4PVPlacement(0,G4ThreeVector(10*mm,10*mm,10*mm),
+		      "TPhys",
+		      myTargetLog,
+		      myWorldPhys,false,0);
     
     return myWorldPhys;
 }

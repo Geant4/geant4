@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Shoot.hh,v 1.5 2001-07-11 09:59:04 gunter Exp $
+// $Id: Shoot.hh,v 1.6 2002-01-09 16:17:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef SHOOT_HH
@@ -38,14 +38,14 @@ void Shoot(const G4int numShoot,
 	   const G4ThreeVector& pSource,
 	   const G4ThreeVector& pVec)
 {
-  const G4double physStep=kInfinity;
+  G4double physStep=kInfinity;
   G4int i;
   G4double safety;
   G4double Step;
   G4Navigator myNav;
   G4Timer timer;
   G4ThreeVector partLoc;
-  G4VPhysicalVolume *located;
+  G4VPhysicalVolume *located=0;
 
   myNav.SetWorldVolume(pTopNode);
 
@@ -56,8 +56,7 @@ void Shoot(const G4int numShoot,
       //      G4cout << "#Loop  " << i << G4endl ;
       
       partLoc=pSource;
-      //located=myNav.LocateGlobalPointAndSetup(partLoc,false);
-      located=myNav.LocateGlobalPointAndSetup(partLoc);
+      located=myNav.LocateGlobalPointAndSetup(partLoc,0,false,true);
       while (located)
 	{
 	  /*
@@ -65,6 +64,7 @@ void Shoot(const G4int numShoot,
 	  G4cout << "Safety = " << safety << G4endl ;
 	  */
 	  Step=myNav.ComputeStep(partLoc,pVec,physStep,safety);
+
 	  partLoc+=Step*pVec;
 	  myNav.SetGeometricallyLimitedStep();
 	  located=myNav.LocateGlobalPointAndSetup(partLoc);
@@ -103,12 +103,16 @@ void MagneticShoot(const G4int numShoot,
   /** Setting up the Magnetic field **/
 
   G4UniformMagField magField (0.,0.,fieldValue);
-
   G4Navigator *myNav = G4TransportationManager::
-    GetTransportationManager()-> GetNavigatorForTracking();
+                       GetTransportationManager()-> GetNavigatorForTracking();
   myNav->SetWorldVolume(pTopNode);
 
-
+  G4double momentum = 0.05*proton_mass_c2;
+  G4double kineticEnergy = momentum*momentum /
+       (sqrt(momentum*momentum+proton_mass_c2*proton_mass_c2)+proton_mass_c2);
+  G4double velocity = momentum / (proton_mass_c2+kineticEnergy);
+  G4double labTof= 10.*ns;
+  G4double properTof= 0.1*ns;
   
   /* Field Properties */
 
@@ -130,31 +134,22 @@ void MagneticShoot(const G4int numShoot,
     pStepper = new G4RKG3_Stepper( fEquation );
   */
 
-  G4FieldManager* pFieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-
-  
+  G4FieldManager* pFieldMgr = G4TransportationManager::
+                  GetTransportationManager()->GetFieldManager();
   pFieldMgr->SetDetectorField( &magField );
 
-  //  G4ChordFinder* pChordFinder = new G4ChordFinder( &magField);
   G4ChordFinder* pChordFinder = new G4ChordFinder( &magField,DeltaChord,pStepper);
-
   pFieldMgr->SetChordFinder( pChordFinder );
 
-  G4Timer timer;
-  timer.Start();
-
-  /*    
-	G4PropagatorInField *pMagFieldPropagator = new G4PropagatorInField(myNav,pFieldMgr);
-  */
   G4PropagatorInField *pMagFieldPropagator= G4TransportationManager::
     GetTransportationManager()-> GetPropagatorInField ();
 
-  pChordFinder->SetChargeMomentumMass(  +1.,                    // charge in e+ units
-					0.05 * proton_mass_c2,    // Momentum in Mev/c ?
-					proton_mass_c2 );
-  
+  pChordFinder->SetChargeMomentumMass(1.,               // charge in e+ units
+				      momentum,         // Momentum in Mev/c ?
+				      proton_mass_c2 );
+  G4Timer timer;
+  timer.Start();
 
-  
   for (G4int i=numShoot;i>0;i--)
     {
       G4VPhysicalVolume *located;
@@ -164,21 +159,20 @@ void MagneticShoot(const G4int numShoot,
 	G4cout << "#Loop  " << i << G4endl ;
 	G4cout << "Loc = " << partLoc << " Vec = " << Vec << G4endl << G4endl ;
       */
-      pFieldMgr->GetChordFinder()
-	->SetChargeMomentumMass(// charge in e+ units
-				+1,                  
-				// Momentum in Mev/c 
-				(0.5+i*0.1) * proton_mass_c2, 
-				// Mass
-				proton_mass_c2);
+      momentum = (0.5+i*0.1) * proton_mass_c2;
+      kineticEnergy = momentum*momentum /
+       (sqrt(momentum*momentum+proton_mass_c2*proton_mass_c2)+proton_mass_c2);
+      velocity = momentum / (proton_mass_c2+kineticEnergy);
 
-      
+      pFieldMgr->GetChordFinder()
+	       ->SetChargeMomentumMass(1,               // charge in e+ units
+				       momentum,        // Momentum in Mev/c 
+				       proton_mass_c2); // Mass
       
       located=myNav->LocateGlobalPointAndSetup(partLoc);
-      
       while (located)
 	{
-	  const G4double physStep= kInfinity; // 2.5*mm ;
+	  G4double physStep= kInfinity; // 2.5*mm ;
 	  G4double safety = 1.0*m;
 	  G4double Step = 0.0*m;
 	  /*
@@ -186,7 +180,9 @@ void MagneticShoot(const G4int numShoot,
 	  G4cout << "Safety = " << safety << G4endl ;
 	  */
 	  
-	  Step=pMagFieldPropagator->ComputeStep(partLoc,Vec,physStep,safety);
+	  G4FieldTrack initTrack(partLoc,pVec,0.,kineticEnergy,
+	                         proton_mass_c2,velocity,labTof,properTof,0);
+	  Step=pMagFieldPropagator->ComputeStep(initTrack,physStep,safety);
 
 	  myNav->SetGeometricallyLimitedStep();
 	  
@@ -230,15 +226,4 @@ void ShootVerbose(G4VPhysicalVolume *pTopNode,
 }
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
 

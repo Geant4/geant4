@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: calorimeter.cc,v 1.3 2001-07-11 09:59:04 gunter Exp $
+// $Id: calorimeter.cc,v 1.4 2002-01-09 16:17:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // calorimeter
@@ -53,11 +53,8 @@ int main()
     G4VPhysicalVolume *myTopNode;
     G4Timer timer;
 
-    G4cout << "  Calorimeter Performance Test - P.Kent 21.08.95" << G4endl
-	 << "Using calorimeter from CERN School of Computing '95" << G4endl;
-#ifndef NDEBUG
-    G4cout << "WARNING: *** ASSERTs are compiled IN ***" << G4endl;
-#endif
+    G4cout << "***  Calorimeter Performance Test - P.Kent 21.08.95  ***" << G4endl
+	   << ">>>  Using calorimeter from CERN School of Computing 1995" << G4endl << G4endl;
 
     myTopNode=BuildCalorimeter();	// Build the geometry
     timer.Start();
@@ -66,22 +63,23 @@ int main()
 
     if (optimise)
 	{
-	    G4cout << "Optimisation ON";
+	    G4cout << "Optimisation ON" << G4endl;
 	}
     else
 	{
-	    G4cout << "Optimisation OFF";
+	    G4cout << "Optimisation OFF" << G4endl;
 	}
-    G4cout << " Geometry close took " << timer << G4endl;
+    G4cout << "Closing geometry took: " << timer << G4endl;
 
 #ifdef G4GEOMETRY_VERBOSE
     G4cout << G4endl << "Voxels for:" 
-	 << G4LogicalVolumeStore::GetInstance()->at(1)->GetName() << G4endl
-	<< *G4LogicalVolumeStore::GetInstance()->at(1)->GetVoxelHeader()
-	<< G4endl;
+	   << (*G4LogicalVolumeStore::GetInstance())[1]->GetName() << G4endl
+	   << *(*G4LogicalVolumeStore::GetInstance())[1]->GetVoxelHeader()
+	   << G4endl;
 #endif
-    G4SmartVoxelHeader* top=G4LogicalVolumeStore::GetInstance()
-	                   ->at(1)->GetVoxelHeader();
+
+    G4SmartVoxelHeader* top=(*G4LogicalVolumeStore::GetInstance())[1]
+	                    ->GetVoxelHeader();
     if (top)
 	{
 	    G4cout << "1st level voxels along ";
@@ -96,7 +94,8 @@ int main()
 		case kZAxis:
 		    G4cout << "Z" << G4endl;
 		    break;
-		    
+		default:
+		    break;    
 		}
 	}
 

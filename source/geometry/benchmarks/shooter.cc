@@ -21,13 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: shooter.cc,v 1.4 2001-07-11 09:59:04 gunter Exp $
+// $Id: shooter.cc,v 1.5 2002-01-09 16:17:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// shooter - perform test shots through simple box world.
+// shooter - perform test shots.
 //
-// World consisting of single box positioned inside large box world
-// For comparison against F77 case. No voxels involved
 
 /*
   gmake CXXFLAGS="-g -pg -a -lc_p " CPPVERBOSE=1 for the library
@@ -105,18 +103,21 @@ G4VPhysicalVolume* BuildReplicaCal(G4Material* Air)
 					    ecalLog,
 					    0,false,0);
   // Position end caps, wrapper and calorimeter bloc within ecal
-  G4PVPlacement *leakPhys=new G4PVPlacement(0,G4ThreeVector(0,0,-zc),
-					    "leakPhys",
-					    leakLog,
-					    ecalPhys,false,0);
-  G4PVPlacement *leakPhys2=new G4PVPlacement(0,G4ThreeVector(0,0,zc),
-					    "leakPhys",
-					    leakLog,
-					    ecalPhys,false,1);
-  G4PVPlacement *latrPhys=new G4PVPlacement(0,G4ThreeVector(),
-					    "latrPhys",
-					    latrLog,
-					    ecalPhys,false,0);
+  // G4PVPlacement *leakPhys=
+  new G4PVPlacement(0,G4ThreeVector(0,0,-zc),
+		    "leakPhys",
+		    leakLog,
+		    ecalPhys,false,0);
+  // G4PVPlacement *leakPhys2=
+  new G4PVPlacement(0,G4ThreeVector(0,0,zc),
+		    "leakPhys",
+		    leakLog,
+		    ecalPhys,false,1);
+  // G4PVPlacement *latrPhys=
+  new G4PVPlacement(0,G4ThreeVector(),
+		    "latrPhys",
+		    latrLog,
+		    ecalPhys,false,0);
   G4PVPlacement *blocPhys=new G4PVPlacement(0,G4ThreeVector(),
 					    "blocPhys",
 					    blocLog,
@@ -126,9 +127,10 @@ G4VPhysicalVolume* BuildReplicaCal(G4Material* Air)
   G4PVReplica *blocPhysR=new G4PVReplica("blocRepR",
 					 blocRLog,blocPhys,
 					 kRho,nr,r1/nr,0);
-  G4PVReplica *blocPhysRZ=new G4PVReplica("blocRepRZ",
-					  blocRZLog,blocPhysR,
-					  kZAxis,nl,2*z1/nl);
+  // G4PVReplica *blocPhysRZ=
+  new G4PVReplica("blocRepRZ",
+		  blocRZLog,blocPhysR,
+		  kZAxis,nl,2*z1/nl);
 
   return ecalPhys;
 }
@@ -137,35 +139,24 @@ G4VPhysicalVolume* BuildReplicaCal(G4Material* Air)
 /*
    to change accuracy :
 	fieldMgr->GetChordFinder()->SetDeltaChord( G4double newValue);
- */
-/**
-   Speed tests and benchmarking
-   
-   Options:
-   - Number of events
-   - Geometry type ("box": simple box,"caloloop": calorimeter with a creation loop,
-   "calorep": calorimeter done by replication)
-   - Magnetic Field  [value of the field, accuracy] (default OFF)
-**/
+*/
+
 int main(int argc,char *argv[])
 {
   G4ThreeVector origin(0,0,0),pMX(-500,0,0);
   G4ThreeVector vx(1,0,0);
   G4ThreeVector vy(0,1,0);
-  G4VPhysicalVolume *myTopNode;
+  G4VPhysicalVolume *myTopNode=0;
 
-  G4double Field ;
-  G4double DeltaChord ;
+  G4double Field = 0.*tesla;
 
   enum GeomType { BOX, CALOLOOP, CALOREP} GeomType;
-  G4int NOMAGFIELD ;
-
-  int i;
+  G4int i;
+  G4bool useField = false;
 
   /* Default Value */
   
   GeomType = BOX ;
-  NOMAGFIELD = 1 ;
   numShoot = 1000000 ;
   
   /* Command line parsing */
@@ -194,44 +185,52 @@ int main(int argc,char *argv[])
       G4cout << " Mag Field = " << Field << G4endl ;
       
       Field = Field * tesla ;
-      
-      NOMAGFIELD = 0;
+      useField = true;
     }
   }
   
   
-  G4cout << "Magnetic Navigation Performace tester -- E.Medernach 30/10/00" << G4endl;
-#ifndef NDEBUG
-  G4cout << "WARNING: *** ASSERTs are compiled IN ***" << G4endl << G4endl ;
-#endif
+  G4cout << "***  Navigation Performance Tester - E.Medernach 30.10.00  ***" << G4endl
+	 << ">>>  Based on original benchmark test by P.Kent" << G4endl << G4endl;
+
+  G4cout << "Options (as arguments):" << G4endl
+         << "-event <number_of_events>" << G4endl
+         << "      number of events for the test. Default is 1000000" << G4endl
+         << "-geom <geometry_type>" << G4endl
+         << "      where <geometry_type> can be:" << G4endl
+         << "      box      - simple box (default)" << G4endl
+         << "      caloloop - calorimeter made by a loop of placements" << G4endl
+         << "      calorep  - calorimeter made of replicas" << G4endl
+         << "-magn <magnetic_field_value>" << G4endl
+         << "      activates magnetic field (value in tesla units). Default is OFF" << G4endl << G4endl;
 
   // Build the geometry
-  
+
+  G4cout << "Geometry type:";  
   switch (GeomType) {
 
   case BOX:
-    G4cout << " Box only " << G4endl ;
+    G4cout << " Box only." << G4endl ;
     myTopNode=BuildBoxWorld();
     break;
 
   case CALOLOOP:
-    G4cout << " Calorimeter with loop " << G4endl ;
+    G4cout << " Calorimeter made of placements." << G4endl ;
     myTopNode=BuildCalorimeter();
     break;
 
   case CALOREP:
-    G4cout << "  Calorimeter with replica " << G4endl ;
-    myTopNode=BuildReplicaCal(NULL);
+    G4cout << "  Calorimeter made of replicas." << G4endl ;
+    myTopNode=BuildReplicaCal(0);
     break;
     
   }
   
-   
   G4GeometryManager::GetInstance()->CloseGeometry(true);
 
-  if (NOMAGFIELD) {
-
-    G4cout << "No Magnetic Field test" << G4endl ;
+  if (!useField)
+  {
+    G4cout << "--> Magnetic Field is disabled !" << G4endl ;
     
     G4cout << G4endl << "Shooting from " << origin << " along " << vx << G4endl;
     ShootVerbose(myTopNode,origin,vx);
@@ -244,34 +243,28 @@ int main(int argc,char *argv[])
     G4cout << G4endl << "Shooting from " << pMX << " along " << vx << G4endl;
     ShootVerbose(myTopNode,pMX,vx);
     Shoot(numShoot,myTopNode,pMX,vx);
-
-  } else {
-
+  }
+  else
+  {
     //    Field = 0.1 * tesla ;
-    DeltaChord = 1.0e-2 * mm ;
+    G4double DeltaChord = 1.0e-2 * mm ;
     
-    
-    G4cout << "Magnetic Field test with " << Field/tesla << " Tesla" << G4endl ;
+    G4cout << "--> Magnetic Field test with " << Field/tesla << " Tesla" << G4endl ;
 
     G4cout << G4endl << "Shooting from " << origin << " along " << vx << G4endl;
-    //    ShootVerbose(myTopNode,origin,vx);
+    ShootVerbose(myTopNode,origin,vx);
     MagneticShoot(numShoot,myTopNode,origin,vx,Field,DeltaChord);
 
     G4cout << G4endl << "Shooting from " << origin << " along " << vy << G4endl;
-    //    ShootVerbose(myTopNode,origin,vy);
+    ShootVerbose(myTopNode,origin,vy);
     MagneticShoot(numShoot,myTopNode,origin,vy,Field,DeltaChord);
 
     G4cout << G4endl << "Shooting from " << pMX << " along " << vx << G4endl;
-    //    ShootVerbose(myTopNode,pMX,vx);
+    ShootVerbose(myTopNode,pMX,vx);
     MagneticShoot(numShoot,myTopNode,pMX,vx,Field,DeltaChord);
-
   }
-    
-    
-    
+
   G4GeometryManager::GetInstance()->OpenGeometry();
   return EXIT_SUCCESS;
 }
-
-
 

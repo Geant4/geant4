@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BuildCalorimeter.hh,v 1.4 2001-07-11 09:59:04 gunter Exp $
+// $Id: BuildCalorimeter.hh,v 1.5 2002-01-09 16:17:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef BUILDCALORIMETER_HH
@@ -36,13 +36,10 @@ G4VPhysicalVolume* BuildCalorimeter()
 {
     G4double offset=22.5,xTlate,yTlate;
     G4int i,j,copyNo;
-    G4double z = 13.;
-    G4double a = 26.98*g/mole;
-    G4double density = 2.7*g/cm3;
 
-    G4Box *myWorldBox= new G4Box ("WBox",10000*mm,10000*mm,10000*mm);
-    G4Box *myCalBox = new G4Box ("CBox",1500*mm,1500*mm,1000*mm);
-    G4Tubs *myTargetTube = new G4Tubs ("TTube",0,22.5*mm,1000*mm,0,360);
+    G4Box *myWorldBox= new G4Box ("WBox",10000.*mm,10000.*mm,10000.*mm);
+    G4Box *myCalBox = new G4Box ("CBox",1500.*mm,1500.*mm,1000.*mm);
+    G4Tubs *myTargetTube = new G4Tubs ("TTube",0.,22.5*mm,1000.*mm,0.,360.*deg);
 
     G4LogicalVolume *myWorldLog=new G4LogicalVolume(myWorldBox,0,
 						   "WLog",0,0,0);
@@ -71,12 +68,13 @@ G4VPhysicalVolume* BuildCalorimeter()
 	  {
 	    copyNo++;
 	    xTlate=-1000.0-20.0+i*45.0-offset;
-	    G4PVPlacement *myTargetPhys=new G4PVPlacement(0,G4ThreeVector(xTlate*mm,yTlate*mm,0),
-							  tName1,
-							  myTargetLog,
-							  myCalPhys,
-							  false,
-							  copyNo);
+	    // G4PVPlacement *myTargetPhys=
+	    new G4PVPlacement(0,G4ThreeVector(xTlate*mm,yTlate*mm,0),
+					      tName1,
+					      myTargetLog,
+					      myCalPhys,
+					      false,
+					      copyNo);
 	  }
       }
     
@@ -90,18 +88,17 @@ G4VPhysicalVolume* BuildCalorimeter()
 	  {
 	    copyNo++;
 	    xTlate=-1000.0-20.0+i*45.0;
-	    G4PVPlacement *myTargetPhys=new G4PVPlacement(0,G4ThreeVector(xTlate*mm,yTlate*mm,0),
-							  tName2,
-							  myTargetLog,
-							  myCalPhys,
-							  false,
-							  copyNo);
+	    // G4PVPlacement *myTargetPhys=
+            new G4PVPlacement(0,G4ThreeVector(xTlate*mm,yTlate*mm,0),
+					      tName2,
+					      myTargetLog,
+					      myCalPhys,
+					      false,
+					      copyNo);
 	  }
       }
 
     return myWorldPhys;
 }
 #endif
-
-
 

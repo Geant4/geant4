@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: replicaCal.cc,v 1.3 2001-07-11 09:59:04 gunter Exp $
+// $Id: replicaCal.cc,v 1.4 2002-01-09 16:17:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -86,18 +86,21 @@ G4VPhysicalVolume* BuildReplicaCal(G4Material* Air)
 					    ecalLog,
 					    0,false,0);
   // Position end caps, wrapper and calorimeter bloc within ecal
-  G4PVPlacement *leakPhys=new G4PVPlacement(0,G4ThreeVector(0,0,-zc),
-					    "leakPhys",
-					    leakLog,
-					    ecalPhys,false,0);
-  G4PVPlacement *leakPhys2=new G4PVPlacement(0,G4ThreeVector(0,0,zc),
-					    "leakPhys",
-					    leakLog,
-					    ecalPhys,false,1);
-  G4PVPlacement *latrPhys=new G4PVPlacement(0,G4ThreeVector(),
-					    "latrPhys",
-					    latrLog,
-					    ecalPhys,false,0);
+  // G4PVPlacement *leakPhys=
+  new G4PVPlacement(0,G4ThreeVector(0,0,-zc),
+		    "leakPhys",
+		    leakLog,
+		    ecalPhys,false,0);
+  // G4PVPlacement *leakPhys2=
+  new G4PVPlacement(0,G4ThreeVector(0,0,zc),
+		    "leakPhys",
+		    leakLog,
+		    ecalPhys,false,1);
+  // G4PVPlacement *latrPhys=
+  new G4PVPlacement(0,G4ThreeVector(),
+		    "latrPhys",
+		    latrLog,
+		    ecalPhys,false,0);
   G4PVPlacement *blocPhys=new G4PVPlacement(0,G4ThreeVector(),
 					    "blocPhys",
 					    blocLog,
@@ -107,9 +110,10 @@ G4VPhysicalVolume* BuildReplicaCal(G4Material* Air)
   G4PVReplica *blocPhysR=new G4PVReplica("blocRepR",
 					 blocRLog,blocPhys,
 					 kRho,nr,r1/nr,0);
-  G4PVReplica *blocPhysRZ=new G4PVReplica("blocRepRZ",
-					  blocRZLog,blocPhysR,
-					  kZAxis,nl,2*z1/nl);
+  // G4PVReplica *blocPhysRZ=
+  new G4PVReplica("blocRepRZ",
+		  blocRZLog,blocPhysR,
+		  kZAxis,nl,2*z1/nl);
 
   return ecalPhys;
 }
@@ -122,25 +126,22 @@ int main()
   G4VPhysicalVolume *myTopNode;
   G4Timer timer;
 
-  G4cout << "  Replication Performance Test - P.Kent 26.09.96" << G4endl;
-#ifndef NDEBUG
-  G4cout << "WARNING: *** ASSERTs are compiled IN ***" << G4endl;
-#endif
+  G4cout << "***  Replication Performance Test - P.Kent 26.09.96  ***" << G4endl << G4endl;
 
-  myTopNode=BuildReplicaCal(NULL);	// Build the geometry
+  myTopNode=BuildReplicaCal(0);	// Build the geometry
   timer.Start();
   G4GeometryManager::GetInstance()->CloseGeometry(optimise);
   timer.Stop();
 
   if (optimise)
     {
-      G4cout << "Optimisation ON";
+      G4cout << "Optimisation ON" << G4endl;
     }
   else
     {
-      G4cout << "Optimisation OFF";
+      G4cout << "Optimisation OFF" << G4endl;
     }
-  G4cout << " Geometry close took " << timer << G4endl;
+  G4cout << "Closing geometry took: " << timer << G4endl;
   
   G4cout << G4endl << "Shooting from " << pos << " along " << dir << G4endl;
   ShootVerbose(myTopNode,pos,dir);
