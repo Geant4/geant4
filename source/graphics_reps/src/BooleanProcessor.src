@@ -791,9 +791,9 @@ void BooleanProcessor::caseIE(ExtEdge &, ExtEdge &)
  ***********************************************************************/
 {
   processor_error = 1;
-  HepStd::cout
+  std::cout
     << "BooleanProcessor::caseIE : unimplemented case"
-    << HepStd::endl;
+    << std::endl;
 }
 
 void BooleanProcessor::caseEE(ExtEdge &, ExtEdge &)
@@ -807,9 +807,9 @@ void BooleanProcessor::caseEE(ExtEdge &, ExtEdge &)
  ***********************************************************************/
 {
   processor_error = 1;
-  HepStd::cout
+  std::cout
     << "BooleanProcessor::caseEE : unimplemented case"
-    << HepStd::endl;
+    << std::endl;
 }
 
 void BooleanProcessor::testFaceVsFace(int iface1, int iface2)
@@ -959,10 +959,10 @@ void BooleanProcessor::assembleFace(int what, int iface)
 	if (edges[icur].i2 == ifirst) { break; } else { continue; }
       }else{
 	processor_error = 1;
-	HepStd::cerr
+	std::cerr
 	  << "BooleanProcessor::assembleFace(" << iface << ") : "
 	  << "could not find next edge of the contour"
-	  << HepStd::endl;
+	  << std::endl;
 	faces[iface].inew = DEFECTIVE_FACE;
 	return;
       }
@@ -1199,7 +1199,7 @@ BooleanProcessor::findABC(double x1, double y1, double x2, double y2,
   double w;
   a  = y1 - y2;
   b  = x2 - x1;
-  w  = abs(a)+abs(b);
+  w  = std::abs(a)+std::abs(b);
   a /= w;
   b /= w;
   c  = -(a*x2 + b*y2);
@@ -1455,7 +1455,7 @@ void BooleanProcessor::triangulateContour(int ix, int iy, int ihead)
  ***********************************************************************/
 {
    
-  //HepStd::cout << "Next Countour" << HepStd::endl;
+  //std::cout << "Next Countour" << std::endl;
   //int draw_flag = 0;
   //if (draw_flag) draw_contour(5, 3, ihead);
     
@@ -1496,10 +1496,10 @@ void BooleanProcessor::triangulateContour(int ix, int iy, int ihead)
       }
     }else if (istart == iedge1) {
       processor_error = 1;
-      HepStd::cerr
+      std::cerr
 	<< "BooleanProcessor::triangulateContour : "
 	<< "could not generate a triangle (infinite loop)"
-	<< HepStd::endl;
+	<< std::endl;
       break;
     }
 
@@ -1558,10 +1558,10 @@ void BooleanProcessor::modifyReference(int iface, int i1, int i2, int iref)
     iedge = edges[iedge].inext;
   }
   processor_error = 1;
-  HepStd::cerr
+  std::cerr
     << "BooleanProcessor::modifyReference : could not find the edge, "
     << "iface=" << iface << ", i1,i2=" << i1 << "," << i2 << ", iref=" << iref
-    << HepStd::endl;
+    << std::endl;
 }
 
 void BooleanProcessor::triangulateFace(int iface)
@@ -1580,8 +1580,8 @@ void BooleanProcessor::triangulateFace(int iface)
 
   HepNormal3D normal = faces[iface].plane.normal();
   int ix, iy, iz = 0;
-  if (abs(normal[1]) > abs(normal[iz])) iz = 1;
-  if (abs(normal[2]) > abs(normal[iz])) iz = 2;
+  if (std::abs(normal[1]) > std::abs(normal[iz])) iz = 1;
+  if (std::abs(normal[2]) > std::abs(normal[iz])) iz = 2;
   if (normal[iz] > 0) {
     ix = (iz+1)%3; iy = (ix+1)%3;
   }else{
@@ -1613,9 +1613,9 @@ void BooleanProcessor::triangulateFace(int iface)
 	    internal_contours.push_back(icontour);
 	  }else{  
 	    processor_error = 1;
-	    HepStd::cerr
+	    std::cerr
 	      << "BooleanProcessor::triangulateFace : too small contour"
-	      << HepStd::endl;
+	      << std::endl;
 	  }
 	  icontour = edges[iedge].inext;
 	  edges[iedge].inext = 0;
@@ -1623,9 +1623,9 @@ void BooleanProcessor::triangulateFace(int iface)
 	}
       }else{
 	processor_error = 1;
-	HepStd::cerr
+	std::cerr
 	  << "BooleanProcessor::triangulateFace : broken contour"
-	  << HepStd::endl;
+	  << std::endl;
 	icontour = 0;
 	break;
       }
@@ -1642,10 +1642,10 @@ void BooleanProcessor::triangulateFace(int iface)
     }
     if (kext == external_contours.size()) {
       processor_error = 1;
-      HepStd::cerr
+      std::cerr
 	<< "BooleanProcessor::triangulateFace : "
 	<< "could not merge internal contour " << kint 
-	<< HepStd::endl;
+	<< std::endl;
     }      
   }
 
@@ -1664,10 +1664,10 @@ void BooleanProcessor::triangulateFace(int iface)
     while (iedge > 0) {
       if (edges[iedge].iface1 != ifa) {
 	processor_error = 1;
-	HepStd::cerr
+	std::cerr
 	  << "BooleanProcessor::triangulateFace : wrong reference to itself, "
 	  << "iface=" << ifa << ", iface1=" << edges[iedge].iface1
-	  << HepStd::endl;
+	  << std::endl;
       }else if (edges[iedge].iface2 > 0) {
 	modifyReference(edges[iedge].iface2,
 			edges[iedge].i1, edges[iedge].i2, ifa);
@@ -1733,9 +1733,9 @@ HepPolyhedron BooleanProcessor::createPolyhedron()
     iedge = faces[i].iold;
     while (iedge > 0) {
       if (k > 3) {
-	HepStd::cerr
+	std::cerr
 	  << "BooleanProcessor::createPolyhedron : too many edges"
-	  << HepStd::endl;
+	  << std::endl;
 	break;
       }
       v[k]  = nodes[edges[iedge].i1].s;
@@ -1745,10 +1745,10 @@ HepPolyhedron BooleanProcessor::createPolyhedron()
       k++;
     }
     if (k < 3) {
-      HepStd::cerr
+      std::cerr
 	<< "BooleanProcessor::createPolyhedron : "
 	<< "face has only " << k << " edges"
-	<< HepStd::endl;
+	<< std::endl;
     }
     polyhedron.pF[faces[i].inew] =
       G4Facet(v[0],f[0], v[1],f[1], v[2],f[2], v[3],f[3]);
@@ -1794,9 +1794,9 @@ HepPolyhedron BooleanProcessor::execute(int op,
   ifaces2 = faces.size(); takePolyhedron(b,0,0,0);
 
   if (processor_error) {             // corrapted polyhedron
-    HepStd::cerr
+    std::cerr
       << "BooleanProcessor: corrapted input polyhedron"
-      << HepStd::endl;
+      << std::endl;
     return HepPolyhedron();
   }
   if (ifaces1 == ifaces2) {          // a is empty
@@ -1804,14 +1804,14 @@ HepPolyhedron BooleanProcessor::execute(int op,
     case OP_UNION:
       return b;
     case OP_INTERSECTION:
-      HepStd::cerr 
+      std::cerr 
 	<< "BooleanProcessor: intersection with empty polyhedron"
-	<< HepStd::endl;
+	<< std::endl;
       return HepPolyhedron();
     case OP_SUBTRACTION:
-      HepStd::cerr
+      std::cerr
 	<< "BooleanProcessor: subtraction from empty polyhedron"
-	<< HepStd::endl;
+	<< std::endl;
       return HepPolyhedron();
     }
   }
@@ -1820,9 +1820,9 @@ HepPolyhedron BooleanProcessor::execute(int op,
     case OP_UNION:
       return a;
     case OP_INTERSECTION:
-      HepStd::cerr
+      std::cerr
 	<< "BooleanProcessor: intersection with empty polyhedron"
-	<< HepStd::endl;
+	<< std::endl;
       return HepPolyhedron();
     case OP_SUBTRACTION:
       return a;
@@ -1872,7 +1872,7 @@ HepPolyhedron BooleanProcessor::execute(int op,
   }
 
 #define PROCESSOR_ERROR \
-HepStd::cerr << "BooleanProcessor: boolean operation failed" << HepStd::endl;\
+std::cerr << "BooleanProcessor: boolean operation failed" << std::endl;\
 return a;
 
   //   F I N D   N E W   E D G E S
@@ -1904,9 +1904,9 @@ return a;
     assemblePolyhedra();
     if (unknown_faces.front() != 0) {
       processor_error = 1;
-      HepStd::cerr
+      std::cerr
 	<< "BooleanProcessor::execute : unknown faces !!!"
-	<< HepStd::endl;
+	<< std::endl;
     }
     break;
   }
@@ -2127,7 +2127,7 @@ BooleanProcessor::print_face(int iface) {
 void
 BooleanProcessor::print_edge(int iedge) {
   cout << "==== Edge N " << iedge << endl;
-  int i = abs(iedge);
+  int i = std::abs(iedge);
   int i1 = edges[i].i1;
   int i2 = edges[i].i2;
   cout << "node[" << i1 << "] = " 
