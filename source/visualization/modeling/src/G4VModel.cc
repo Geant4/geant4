@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VModel.cc,v 1.2 1999-01-11 00:48:54 allison Exp $
+// $Id: G4VModel.cc,v 1.3 1999-10-04 15:39:19 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,6 +24,8 @@ G4VModel::G4VModel (const G4Transform3D& modelTransformation,
   fGlobalTag = "Default Global Tag";
   fGlobalDescription = "Default Global Description";
 }
+
+G4VModel::~G4VModel () {}
 
 ostream& operator << (ostream& os, const G4VModel& m) {
   os << m.fGlobalDescription;

@@ -5,16 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VModel.icc,v 1.2 1999-01-11 00:48:50 allison Exp $
+// $Id: G4VModel.icc,v 1.3 1999-10-04 15:39:17 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  31st December 1997.
 // Base class for models.
 
-inline G4VModel::~G4VModel () {}
-
-inline G4bool G4VModel::operator == (const G4VModel& model) const{
+inline G4bool G4VModel::operator == (const G4VModel& model) const {
   return this == &model;
 }
 
