@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagHelicalStepper.cc,v 1.10 2002-01-17 08:09:52 gcosmo Exp $
+// $Id: G4MagHelicalStepper.cc,v 1.11 2002-01-17 08:12:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4MagHelicalStepper.hh"
@@ -140,9 +140,9 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
       yHelix[1]   = yIn[1] + positionMove.y(); 
       yHelix[2]   = yIn[2] + positionMove.z(); 
 				
-      yHelix[3] = momentumVal * endTangent.x();
-      yHelix[4] = momentumVal * endTangent.y();
-      yHelix[5] = momentumVal * endTangent.z();
+      yHelix[3] = velocityVal * endTangent.x();
+      yHelix[4] = velocityVal * endTangent.y();
+      yHelix[5] = velocityVal * endTangent.z();
 
       // Store and/or calculate parameters for chord distance.
     }
