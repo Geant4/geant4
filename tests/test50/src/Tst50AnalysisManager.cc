@@ -29,7 +29,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: Tst50AnalysisManager.cc,v 1.6 2003-01-28 08:57:49 guatelli Exp $
+// $Id: Tst50AnalysisManager.cc,v 1.7 2003-01-29 14:29:51 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifdef  G4ANALYSIS_USE
@@ -128,7 +128,11 @@ h4=histFact->createHistogram1D("40","angle of backscattered particles",80.*2, 80
  std::string options = "";
  if (tupFact) ntuple = tupFact->create("1","1",columnNames, options);
  // check for non-zero ...
- if (ntuple) G4cout<<"The Ntuple is non-zero"<<G4endl;
+
+ std::string columnNames2 = "double energy; double angle"; 
+ if (tupFact) ntuple2 = tupFact->create("2","2",columnNames2, options);
+ // check for non-zero ...
+ if (ntuple && ntuple2) G4cout<<"The Ntuple is non-zero"<<G4endl;
 
  
 }
@@ -160,14 +164,25 @@ void Tst50AnalysisManager::angleT(G4double angle)
 
   h5->fill(angle);
 }
-
-
-
+void Tst50AnalysisManager::fill_dataBrem(G4double energy,G4double angle)
+{
+  if (ntuple2 == 0) {
+    cout << "AAAAAAAGH" << endl;
+    return;
+  }
+  if (ntuple2)
+    {
+  G4int ien2 = ntuple2->findColumn("energy" );
+  G4int iangle2 = ntuple2->findColumn("angle" );
+ 
+  ntuple2->fill(ien2,energy);
+  ntuple2->fill(iangle2,angle);
+    }
+ ntuple2->addRow();
+}
 void Tst50AnalysisManager::fill_data(G4double initial_en, G4double en, G4double angle)
 {
-
-  //ntuple = dynamic_cast<ITuple *> ( theTree->find("1") );
-
+ 
   if (ntuple == 0) {
     cout << "AAAAAAAGH" << endl;
     return;

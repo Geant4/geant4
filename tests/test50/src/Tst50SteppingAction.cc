@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.cc,v 1.15 2003-01-28 08:57:50 guatelli Exp $
+// $Id: Tst50SteppingAction.cc,v 1.16 2003-01-29 14:29:51 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -80,7 +80,7 @@ IDnow = run_ID+1000*evno+10000*(Step->GetTrack()->GetTrackID())+
  //G4String CurV;
   //G4String NexV;
 
-    G4String PTyp;
+    G4String name;
 
     G4double KinE;
 
@@ -105,8 +105,8 @@ IDnow = run_ID+1000*evno+10000*(Step->GetTrack()->GetTrackID())+
     G4double MIMD;
 
  
-
-    PTyp = Step->GetTrack()->GetDefinition()->GetParticleType();    
+    // prendo la particella corrente;
+    name = Step->GetTrack()->GetDefinition()->GetParticleName();    
   
     //prendo l'energia cinetica della particella  	
     KinE = Step->GetTrack()->GetKineticEnergy();
@@ -172,22 +172,31 @@ if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target"){
     analysis ->fill_data(initial,energy,angle);
 #endif
     }}}}}
-   
-/*
-    //susanna, istogrammo i processi delle particelle primarie// 
 
-   G4String particle_name= p_Primary->GetParticle(); 
- if(0 ==Step->GetTrack()->GetParentID() ) 
+
+  if(0 != Step->GetTrack()->GetParentID() )
    {
+ if(particle_name=="e-")
+   {   
+    if(name=="gamma")
+  {
 if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target"){
    
-    if(Step->GetTrack()->GetNextVolume()->GetName() == "World" ) {
-
-   //volume in cui si esce e' il target 
-    if(XMoD==0 && YMoD==0 && ZMoD==1){
-   
-
+    if(Step->GetTrack()->GetNextVolume()->GetName() == "World" )
+      {
+	
+	G4double kin=KinE/MeV;
+    MMoD=sqrt(pow(XMoD,2.0)+pow(YMoD,2.0)+pow(ZMoD,2.0));
+    MIMD=sqrt(pow(XIMD,2.0)+pow(YIMD,2.0)+pow(ZIMD,2.0));
+     G4double angle=(acos((XMoD*XIMD+YMoD*YIMD+ZMoD*ZIMD)/(MMoD*MIMD))/deg);   
+    
+#ifdef G4ANALYSIS_USE
+     analysis->fill_dataBrem(kin,angle);
+#endif
+      }}}
    }
+   }
+/*
    
 
 if(particle_name=="gamma")
