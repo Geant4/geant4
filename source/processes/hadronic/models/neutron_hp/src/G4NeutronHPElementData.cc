@@ -58,10 +58,10 @@
         UpdateData(A, Z, count++, frac);
       }
     }
-    theElasticData.ThinOut(precision);
-    theInelasticData.ThinOut(precision);
-    theCaptureData.ThinOut(precision);
-    theFissionData.ThinOut(precision);
+    theElasticData->ThinOut(precision);
+    theInelasticData->ThinOut(precision);
+    theCaptureData->ThinOut(precision);
+    theFissionData->ThinOut(precision);
   }
   
   void G4NeutronHPElementData::UpdateData(G4int A, G4int Z, G4int index, G4double abundance)
