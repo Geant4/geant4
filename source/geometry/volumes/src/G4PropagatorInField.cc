@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.47 2003-06-16 16:54:57 gunter Exp $
+// $Id: G4PropagatorInField.cc,v 1.48 2003-06-21 00:36:49 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -57,10 +57,11 @@ G4PropagatorInField::G4PropagatorInField( G4Navigator    *theNavigator,
     fVerboseLevel(0),
     fEpsilonMinDefault(5.0e-7),
     fEpsilonMaxDefault(0.05),
-    fmax_loop_count(10000),
+    fMax_loop_count(1000),
     fNoZeroStep(0), 
-  fCharge(0.0), fInitialMomentumModulus(0.0), fMass(0.0),
-  fpTrajectoryFilter( 0 )
+    fCharge(0.0), fInitialMomentumModulus(0.0), fMass(0.0),
+    fSetFieldMgr(false),
+    fpTrajectoryFilter( 0 )
 {
   fEpsilonMin = fEpsilonMinDefault;
   fEpsilonMax = fEpsilonMaxDefault;
@@ -112,16 +113,14 @@ G4PropagatorInField::ComputeStep(
   G4double      NewSafety;
   fParticleIsLooping = false;
 
-  // Set the field manager if the volume has one, else use the global one
+  // If not yet done, 
+  //   Set the field manager to the local  one if the volume has one, 
+  //                      or to the global one if not
   //
-  fCurrentFieldMgr = fDetectorFieldMgr;
-  if( pPhysVol)
-  {
-    G4FieldManager *newFieldMgr = 0;
-    newFieldMgr= pPhysVol->GetLogicalVolume()->GetFieldManager(); 
-    if ( newFieldMgr ) 
-      fCurrentFieldMgr = newFieldMgr;
-  }
+  if( !fSetFieldMgr ) FindAndSetFieldManager( pPhysVol ); 
+  // For the next call, the field manager must again be set
+  fSetFieldMgr= false;
+
   GetChordFinder()->SetChargeMomentumMass(fCharge, fInitialMomentumModulus, fMass);  
 
   G4FieldTrack  CurrentState(pFieldTrack);
@@ -143,9 +142,13 @@ G4PropagatorInField::ComputeStep(
                                            fLargestAcceptableStep ); 
   }
   epsilon = GetDeltaOneStep() / CurrentProposedStepLength;
+  // G4double raw_epsilon= epsilon;
   if( epsilon < fEpsilonMin ) epsilon = fEpsilonMin;
   if( epsilon > fEpsilonMax ) epsilon = fEpsilonMax;
   SetEpsilonStep( epsilon );
+
+  // G4cout << "G4PiF: Epsilon of current step - raw= " << raw_epsilon
+  //        << " final= " << epsilon << G4endl;
 
   //  Shorten the proposed step in case of earlier problems (zero steps)
   // 
@@ -295,9 +298,9 @@ G4PropagatorInField::ComputeStep(
 
   } while( (!intersects )
         && (StepTaken + kCarTolerance < CurrentProposedStepLength)  
-        && ( do_loop_count < GetMaxLoopCount() ) );
+        && ( do_loop_count < fMax_loop_count ) );
 
-  if( do_loop_count >= GetMaxLoopCount() )
+  if( do_loop_count >= fMax_loop_count  )
   {
     G4cout << "G4PropagateInField: Warning: Particle is looping - " 
            << " tracking in field will be stopped. " << G4endl;
@@ -342,11 +345,14 @@ G4PropagatorInField::ComputeStep(
 #endif
 
 #ifdef G4DEBUG_FIELD
-  if( fNoZeroStep )
-  {
-    G4cout << " PiF: Step returning= " << StepTaken << G4endl;
-    G4cout << " ------------------------------------------------------- "
-           << G4endl;
+  // static G4std::vector<G4int>  ZeroStepNumberHist(fAbandonThreshold+1);
+  if( fNoZeroStep ){
+     // ZeroStepNumberHist[fNoZeroStep]++; 
+     if( fNoZeroStep > fActionThreshold_NoZeroSteps ){
+        G4cout << " PiF: Step returning=" << StepTaken << G4endl;
+	G4cout << " ------------------------------------------------------- "
+	       << G4endl;
+     }
   }
 #endif
 
@@ -548,6 +554,7 @@ G4PropagatorInField::LocateIntersectionPoint(
           G4FieldTrack newEndPoint=
 	          ReEstimateEndpoint( CurrentA_PointVelocity,
 				      CurrentB_PointVelocity,
+				      linDistSq,    // to avoid recalculation
 				      curveDist );
  	  CurrentB_PointVelocity = newEndPoint;
        }
@@ -770,6 +777,7 @@ G4PropagatorInField::IntersectChord( G4ThreeVector  StartPointA,
 G4FieldTrack G4PropagatorInField::
 ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,  
 		    const G4FieldTrack &EstimatedEndStateB,	
+		    double              linearDistSq,
 		    double              curveDist
 		  )
 {
@@ -790,10 +798,10 @@ ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,
 	     <<   " an adjustment in the step's endpoint."  << G4endl
 	     << "   Two mid-points are further apart than their"
 	     <<   " curve length difference"                << G4endl 
-	     << "   Dist = "       << sqrt(linDistSq)
+	     << "   Dist = "       << sqrt(linearDistSq)
 	     << " curve length = " << curveDist             << G4endl; 
       G4cerr << " Correction applied is " 
-	     << (newEndpoint-EstimatedEndStateB).mag()
+	     << (newEndPoint.GetPosition()-EstimatedEndStateB.GetPosition()).mag()
 	     << G4endl;
     }
 #endif
@@ -831,4 +839,25 @@ void G4PropagatorInField::ClearPropagatorState()
 {
   G4Exception("G4PropagatorInField::ClearPropagatorState is not yet implemented");
 
+}
+
+G4FieldManager* 
+G4PropagatorInField::FindAndSetFieldManager( G4VPhysicalVolume* pCurrentPhysicalVolume)
+{
+  G4FieldManager* currentFieldMgr;
+
+  currentFieldMgr = fDetectorFieldMgr;
+  if( pCurrentPhysicalVolume)
+  {
+     G4FieldManager *newFieldMgr = 0;
+     newFieldMgr= pCurrentPhysicalVolume->GetLogicalVolume()->GetFieldManager();
+     if ( newFieldMgr ) 
+        currentFieldMgr = newFieldMgr;
+  }
+  fCurrentFieldMgr= currentFieldMgr;
+
+  // Flag that field manager has been set.
+  fSetFieldMgr= true;
+
+  return currentFieldMgr;
 }
