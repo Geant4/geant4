@@ -20,7 +20,7 @@
 // ***************************************************************
 // corrected by L.Urban on 24/09/97
 // 06.01.00 V.Grichine, modifications in GetConstraints and GetMenaFreePath
-//
+// 11.07.00 V.Grichine, modifications in GetMeanFreePath
 //
 
 
@@ -80,25 +80,65 @@ G4PAIonisation::GetContinuousStepLimit( const G4Track& track ,
 //
 //
 
-inline G4double G4PAIonisation::GetMeanFreePath(
-                                               const G4Track& trackData,
-                                               G4double previousStepSize,
-                                               G4ForceCondition* condition) 
+inline G4double G4PAIonisation::
+GetMeanFreePath( const G4Track&          trackData,
+                       G4double          previousStepSize,
+                       G4ForceCondition* condition         ) 
 {
-//   G4cout<<"G4PAIonisation::GetMeanFreePath is called"<<G4endl ;
- 
-   *condition = NotForced ;
-   
-   G4Material* aMaterial = trackData.GetMaterial() ;
+// G4cout<<"G4PAIonisation::GetMeanFreePath is called"<<G4endl ;
 
-   if( aMaterial->GetIndex() != fMatIndex ) 
-   {
-     return DBL_MAX;
-   }
-   else 
-   {
-     return DBL_MAX ; // 1*mm ;
-   }
+  G4int iTkin, iPlace ;
+  G4double charge, charge2, massRatio, kinE, scaledE, meanFreePath ;
+  G4double E1, E2, W, W1, W2, primaryIon ; 
+
+ *condition = NotForced ;
+
+  G4Material* aMaterial = trackData.GetMaterial() ;
+
+  if( aMaterial->GetIndex() != fMatIndex )  meanFreePath = DBL_MAX ;
+  else 
+  {
+    const G4DynamicParticle* aParticle = trackData.GetDynamicParticle() ;
+    kinE = aParticle->GetKineticEnergy() ;
+    charge = aParticle->GetDefinition()->GetPDGCharge() ;
+    charge2 = charge*charge ;
+    massRatio = proton_mass_c2/aParticle->GetDefinition()->GetPDGMass() ;
+    scaledE = kinE*massRatio ;
+
+    for(iTkin=0;iTkin<G4PAIonisation::GetBinNumber();iTkin++)
+    {
+      if(scaledE < fProtonEnergyVector->GetLowEdgeEnergy(iTkin)) // <= ?
+      {
+        break ;
+      } 
+    }
+    iPlace = iTkin - 1 ; 
+
+    if(iTkin == G4PAIonisation::GetBinNumber()) // Fermi plato, try from left
+    {
+      meanFreePath = 1.0/(*(*fPAItransferBank)(iPlace))(0)/charge2 ;
+    }
+    else
+    {
+      if(iTkin == 0) // Tkin is too small, trying from right only
+      {
+        meanFreePath = 1.0/(*(*fPAItransferBank)(iPlace+1))(0)/charge2 ;
+      }
+      else
+      {
+        E1 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin - 1) ; 
+        E2 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin)     ;
+        W  = 1.0/(E2 - E1) ;
+        W1 = (E2 - scaledE)*W ;
+        W2 = (scaledE - E1)*W ;
+        primaryIon = (*(*fPAItransferBank)(iPlace  ))(0)*W1 + 
+                     (*(*fPAItransferBank)(iPlace+1))(0)*W2    ;
+        meanFreePath = 1.0/primaryIon/charge2 ;
+      }
+    }
+    // meanFreePath = DBL_MAX ;
+  }
+  return meanFreePath ;
 }
 
 //////////////////////////////////////////////////////////////////////
