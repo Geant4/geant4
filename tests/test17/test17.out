@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (12-December-2003)
+                                (11-February-2004)
              Copyright : Geant4 Collaboration
 **********************************************
 G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
@@ -82,6 +82,8 @@ Ionic processes for deuteron
 phot:  Total cross sections from Sandia parametrisation. 
 Hadronic processes for kaon+
 Hadronic processes for kaon-
+MuonMinusCaptureAtRest is created 
+MuonMinusCaptureAtRest is created 
 Hadronic processes for pi+
 Hadronic processes for pi-
 Hadronic processes for proton
@@ -241,7 +243,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.63s Real=7.26s Sys=1.57s
+  User=5.46s Real=7.67s Sys=1.87s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV
@@ -284,7 +286,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.35s Real=7.24s Sys=1.83s
+  User=5.67s Real=7.27s Sys=1.6s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV
@@ -324,7 +326,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=8.68s Real=11.15s Sys=2.35s
+  User=8.86s Real=11.4s Sys=2.31s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for IonC12 with Ekin = 6 MeV
@@ -366,7 +368,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=38.13s Real=39.01s Sys=0.27s
+  User=37.71s Real=38.26s Sys=0.19s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV
@@ -410,7 +412,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=38.95s Real=39.71s Sys=0.23s
+  User=38.7s Real=39.94s Sys=0.2s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV

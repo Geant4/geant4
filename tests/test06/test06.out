@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (12-December-2003)
+                                (11-February-2004)
              Copyright : Geant4 Collaboration
 **********************************************
 SimpleBox is now made of Pb
@@ -129,7 +129,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=25s Real=26s Sys=0.58s
+  User=26s Real=29s Sys=0.66s
 #
 # electron 500 MeV in Air
 #
@@ -244,7 +244,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.9s Real=0.91s Sys=0.01s
+  User=0.93s Real=0.99s Sys=0.02s
 #
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

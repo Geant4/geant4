@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (12-December-2003)
+                                (11-February-2004)
              Copyright : Geant4 Collaboration
 **********************************************
 SimpleBox is now made of U
@@ -122,48 +122,6 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
-
-Region DefaultRegionForTheWorld
- Materials : Copper 
- Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.9e+295 J      e- 9.5e+02 GeV    e+ 7.8e+02 GeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0s Real=0s Sys=0s
-
-Region DefaultRegionForTheWorld
- Materials : Copper 
- Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.9e+295 J      e- 9.5e+02 GeV    e+ 7.8e+02 GeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
   User=0.01s Real=0.01s Sys=0s
 
 Region DefaultRegionForTheWorld
@@ -185,7 +143,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.03s Sys=0.01s
+  User=0s Real=0s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : Copper 
@@ -206,7 +164,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.9s Real=2s Sys=0.06s
+  User=0.01s Real=0.02s Sys=0.01s
 
 Region DefaultRegionForTheWorld
  Materials : Copper 
@@ -227,7 +185,49 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2.5s Real=2.6s Sys=0.03s
+  User=0.02s Real=0.03s Sys=0s
+
+Region DefaultRegionForTheWorld
+ Materials : Copper 
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 9.5e+02 GeV    e+ 7.8e+02 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=1.7s Real=1.8s Sys=0.05s
+
+Region DefaultRegionForTheWorld
+ Materials : Copper 
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 9.5e+02 GeV    e+ 7.8e+02 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=2.2s Real=2.4s Sys=0.08s
 SimpleBox is now made of Cu
 
 Region DefaultRegionForTheWorld
@@ -249,7 +249,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.21s Real=0.22s Sys=0.01s
+  User=0.17s Real=0.17s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : Copper 
@@ -270,7 +270,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.39s Real=0.39s Sys=0s
+  User=0.43s Real=0.45s Sys=0.01s
 
 Region DefaultRegionForTheWorld
  Materials : Copper 
@@ -291,7 +291,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.56s Real=0.57s Sys=0.01s
+  User=1.3s Real=1.3s Sys=0.01s
 
 Region DefaultRegionForTheWorld
  Materials : Copper 
@@ -312,7 +312,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2.7s Real=2.7s Sys=0.03s
+  User=1.4s Real=1.5s Sys=0.03s
 
 Region DefaultRegionForTheWorld
  Materials : Copper 
@@ -333,7 +333,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.8s Real=1.8s Sys=0.05s
+  User=0.99s Real=1s Sys=0.02s
 
 Region DefaultRegionForTheWorld
  Materials : Copper 
@@ -354,7 +354,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=4s Real=4.1s Sys=0.05s
+  User=5.8s Real=6s Sys=0.11s
 SimpleBox is now made of U
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1e+03 (mm)]   is too big   for material  idx=3
@@ -471,7 +471,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.44s Real=0.45s Sys=0.01s
 
 Region DefaultRegionForTheWorld
  Materials : Uranium 
@@ -523,7 +523,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=3s Real=3s Sys=0.02s
+  User=0s Real=0s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : Uranium 
@@ -549,7 +549,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=4.5s Real=4.5s Sys=0.02s
 
 Region DefaultRegionForTheWorld
  Materials : Uranium 
@@ -575,7 +575,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=11s Real=12s Sys=0.08s
+  User=5.5s Real=5.5s Sys=0.02s
 
 Region DefaultRegionForTheWorld
  Materials : Uranium 
@@ -601,7 +601,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=13s Real=13s Sys=0.05s
+  User=15s Real=15s Sys=0.05s
 SimpleBox is now made of U
 
 Region DefaultRegionForTheWorld
@@ -628,7 +628,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.67s Real=0.68s Sys=0.01s
+  User=0.53s Real=0.53s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : Uranium 
@@ -654,7 +654,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=3.3s Real=3.3s Sys=0s
+  User=0.32s Real=0.32s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : Uranium 
@@ -680,7 +680,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=8.3s Real=8.3s Sys=0.04s
+  User=9.2s Real=9.2s Sys=0.03s
 
 Region DefaultRegionForTheWorld
  Materials : Uranium 
@@ -706,7 +706,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=10s Real=10s Sys=0.08s
+  User=5.7s Real=5.7s Sys=0.03s
 
 Region DefaultRegionForTheWorld
  Materials : Uranium 
@@ -732,7 +732,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=17s Real=18s Sys=0.16s
+  User=11s Real=11s Sys=0.07s
 
 Region DefaultRegionForTheWorld
  Materials : Uranium 
@@ -758,7 +758,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=25s Real=25s Sys=0.18s
+  User=0.52s Real=0.52s Sys=0s
 SimpleBox is now made of Si
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1e+03 (mm)]   is too big   for material  idx=1
@@ -874,7 +874,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.13s Real=0.13s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : Silicon 
@@ -905,69 +905,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
-
-Region DefaultRegionForTheWorld
- Materials : Silicon 
- Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.9e+295 J      e- 9.5e+02 GeV    e+ 7.8e+02 GeV
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Uranium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.9e+295 J      e- 1 GeV    e+ 9.6e+02 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.87s Real=1s Sys=0.02s
-
-Region DefaultRegionForTheWorld
- Materials : Silicon 
- Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.9e+295 J      e- 9.5e+02 GeV    e+ 7.8e+02 GeV
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Uranium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.9e+295 J      e- 1 GeV    e+ 9.6e+02 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.52s Real=0.52s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : Silicon 
@@ -1029,7 +967,69 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2.8s Real=2.8s Sys=0.03s
+  User=1.8s Real=1.8s Sys=0.03s
+
+Region DefaultRegionForTheWorld
+ Materials : Silicon 
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 9.5e+02 GeV    e+ 7.8e+02 GeV
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Uranium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 1 GeV    e+ 9.6e+02 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=1.2s Real=1.2s Sys=0s
+
+Region DefaultRegionForTheWorld
+ Materials : Silicon 
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 9.5e+02 GeV    e+ 7.8e+02 GeV
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Uranium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 1 GeV    e+ 9.6e+02 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=2.3s Real=2.3s Sys=0s
 SimpleBox is now made of Si
 
 Region DefaultRegionForTheWorld
@@ -1061,7 +1061,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.29s Real=0.29s Sys=0s
+  User=0.21s Real=0.21s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : Silicon 
@@ -1092,7 +1092,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.94s Real=0.95s Sys=0.01s
+  User=0.17s Real=0.17s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : Silicon 
@@ -1123,7 +1123,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.74s Real=0.74s Sys=0s
+  User=1.6s Real=1.6s Sys=0.03s
 
 Region DefaultRegionForTheWorld
  Materials : Silicon 
@@ -1154,7 +1154,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.64s Real=0.66s Sys=0.02s
+  User=1.5s Real=1.5s Sys=0.01s
 
 Region DefaultRegionForTheWorld
  Materials : Silicon 
@@ -1185,7 +1185,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.5s Real=1.5s Sys=0s
+  User=1.7s Real=1.7s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : Silicon 
@@ -1216,7 +1216,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2.1s Real=2.1s Sys=0.01s
+  User=2.7s Real=2.7s Sys=0s
 SimpleBox is now made of H
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
@@ -1731,7 +1731,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

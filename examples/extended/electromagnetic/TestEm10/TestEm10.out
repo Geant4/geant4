@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (12-December-2003)
+                                (11-February-2004)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -225,7 +225,7 @@ Regular X-ray TR  radiator EM process is called
 48	fGamma = 8.085e+04	sumE = 21.04
 49	fGamma = 9.283e+04	sumE = 21.05
 
-total time for build X-ray TR energy loss tables = 206.39 s
+total time for build X-ray TR energy loss tables = 208.24 s
 
 phot:  Total cross sections from Sandia parametrisation. 
 Em10PhysicsList::SetCuts:CutLength : 1 mm 
@@ -245,7 +245,7 @@ PAI mat index = 28
 PAI matcuts name  = Ar7CH4
 PAI matcuts index = 3
 
-PAI DeltaCutInKineticEnergyNow = 0.0136 keV
+PAI DeltaCutInKineticEnergyNow = 0.99 keV
 
 e-:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
@@ -263,7 +263,7 @@ PAI mat index = 28
 PAI matcuts name  = Ar7CH4
 PAI matcuts index = 3
 
-PAI DeltaCutInKineticEnergyNow = 0.0136 keV
+PAI DeltaCutInKineticEnergyNow = 0.99 keV
 
 proton:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
@@ -276,28 +276,28 @@ PAI mat index = 28
 PAI matcuts name  = Ar7CH4
 PAI matcuts index = 3
 
-PAI DeltaCutInKineticEnergyNow = 0.0136 keV
+PAI DeltaCutInKineticEnergyNow = 0.99 keV
 PAI mat name  = Ar7CH4
 PAI mat index = 28
 
 PAI matcuts name  = Ar7CH4
 PAI matcuts index = 3
 
-PAI DeltaCutInKineticEnergyNow = 0.0136 keV
+PAI DeltaCutInKineticEnergyNow = 0.99 keV
 PAI mat name  = Ar7CH4
 PAI mat index = 28
 
 PAI matcuts name  = Ar7CH4
 PAI matcuts index = 3
 
-PAI DeltaCutInKineticEnergyNow = 0.0136 keV
+PAI DeltaCutInKineticEnergyNow = 0.99 keV
 PAI mat name  = Ar7CH4
 PAI mat index = 28
 
 PAI matcuts name  = Ar7CH4
 PAI matcuts index = 3
 
-PAI DeltaCutInKineticEnergyNow = 0.0136 keV
+PAI DeltaCutInKineticEnergyNow = 0.99 keV
 
 ========= Table of registered couples ==============================
 
@@ -343,28 +343,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=12.99s Real=13.2s Sys=0.21s
+  User=214.89s Real=215.17s Sys=0.26s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=60.027 +- 2.06452  mm  
+    mean charged track length   in absorber=68.4534 +- 2.63717  mm  
 
-            mean energy deposit in absorber=0.00452746 +- 0.000135297  MeV 
+            mean energy deposit in absorber=0.0113531 +- 0.000241854  MeV 
 
- mean number of steps in absorber (charged) =2.294 +- 0.0396177      
- mean number of steps in absorber (neutral) =3.547 +- 0.0591083      
+ mean number of steps in absorber (charged) =2.37 +- 0.0413896      
+ mean number of steps in absorber (neutral) =3.77 +- 0.0602752      
 
-   mean number of charged secondaries = 1.076 +- 0.0313085
+   mean number of charged secondaries = 1.227 +- 0.0355735
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =1.076  and e+s =0
+   mean number of e-s =1.227  and e+s =0
 
-(number) transmission coeff=0.364  reflection coeff=0.323
+(number) transmission coeff=0.407  reflection coeff=0.387
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 463266466, 142086553
+ Current couple of seeds = 1230122199, 1902390584
 ----------------------------------------
 
 ========= Table of registered couples ==============================

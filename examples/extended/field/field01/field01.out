@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (12-December-2003)
+                                (11-February-2004)
              Copyright : Geant4 Collaboration
 **********************************************
 
@@ -180,7 +180,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0.02s Sys=0.01s
 
 ========= Table of registered couples ==============================
 
@@ -240,7 +240,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 
 ========= Table of registered couples ==============================
 
@@ -270,7 +270,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 
 ========= Table of registered couples ==============================
 
