@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionHandler.hh,v 1.5 2001-09-10 18:05:16 pia Exp $
+// $Id: G4CrossSectionHandler.hh,v 1.6 2001-10-05 18:25:19 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -46,71 +46,33 @@
 #include "G4DataVector.hh"
 #include "g4std/map"
 #include "g4std/vector"
+#include "G4VCrossSectionHandler.hh"
 
 class G4VDataSetAlgorithm;
 class G4VEMDataSet;
 class G4Material;
 class G4Element;
 
-class G4CrossSectionHandler {
+class G4CrossSectionHandler : public G4VCrossSectionHandler {
  
 public:
 
-  G4CrossSectionHandler(const G4VDataSetAlgorithm* interpolation,
-			G4double minE = 250*eV, G4double maxE = 100*GeV, 
-			G4int nBins = 200,
-			G4double unitE = MeV, G4double unitData = barn,
-			G4int minZ = 1, G4int maxZ = 99);
+  G4CrossSectionHandler();
 
   ~G4CrossSectionHandler();
 	
-  G4double FindValue(G4int Z, G4double e) const;
-
-  G4double ValueForMaterial(const G4Material* material, G4double e) const;
-
-  G4int SelectRandomAtom(const G4Material* material, G4double e) const;
-
-  const G4Element* SelectRandomElement(const G4Material* material, G4double e) const;
-
-  G4int SelectRandomShell(G4int Z, G4double e) const;
-
-  G4VEMDataSet* BuildMeanFreePathForMaterials(G4double energyThreshold = 0.);
- 
-  void LoadData(const G4String& dataFile);
-
-  void LoadShellData(const G4String& dataFile);
-
-  void PrintData() const;
-  
-  void Clear();
    
+protected: 
+   
+  virtual G4std::vector<G4VEMDataSet*>* BuildCrossSectionsForMaterials(const G4DataVector& energyVector, 
+								       const G4DataVector* energyCuts = 0);
+ 
 private:
  
   // Hide copy constructor and assignment operator
+  G4CrossSectionHandler(const G4CrossSectionHandler&);
+  G4CrossSectionHandler & operator=(const G4CrossSectionHandler &right);
 
-  void BuildCrossSectionsForMaterials(const G4DataVector& energyVector);
-
-  void BuildCrossSectionsWithCut(G4double energyCut, const G4DataVector& energyVector);
-
-  void ActiveElements();
-
-  const G4VDataSetAlgorithm* interpolation;
-  
-  G4double eMin;
-  G4double eMax;
-  G4int nBins;
-
-  G4double unit1;
-  G4double unit2;
-
-  G4int zMin;
-  G4int zMax; 
-
-  G4DataVector activeZ;
-
-  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> > dataMap;
-  
-  G4std::vector<G4VEMDataSet*> crossSections;
 };
  
 #endif

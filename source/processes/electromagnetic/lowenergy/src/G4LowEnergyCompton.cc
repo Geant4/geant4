@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyCompton.cc,v 1.30 2001-09-10 18:07:35 pia Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.31 2001-10-05 18:24:19 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -70,9 +70,7 @@ G4LowEnergyCompton::G4LowEnergyCompton(const G4String& processName)
       G4Exception("G4LowEnergyCompton::G4LowEnergyCompton - energy limit outside intrinsic process validity range");
     }
 
-  // The following pointer is owned by G4DataHandler
-  G4VDataSetAlgorithm* crossSectionInterpolation = new G4LogLogInterpolation;
-  crossSectionHandler = new G4CrossSectionHandler(crossSectionInterpolation);
+  crossSectionHandler = new G4CrossSectionHandler();
 
   // The following pointer is owned by the process
   scatterInterpolation = new G4LogLogInterpolation;

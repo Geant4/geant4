@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCrossSectionHandler.cc,v 1.3 2001-09-26 20:15:33 pia Exp $
+// $Id: G4VCrossSectionHandler.cc,v 1.4 2001-10-05 18:24:18 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -34,6 +34,7 @@
 
 #include "G4VCrossSectionHandler.hh"
 #include "G4VDataSetAlgorithm.hh"
+#include "G4LogLogInterpolation.hh"
 #include "G4VEMDataSet.hh"
 #include "G4EMDataSet.hh"
 #include "G4CompositeEMDataSet.hh"
@@ -47,7 +48,18 @@
 #include "g4std/fstream"
 #include "g4std/strstream"
 
-G4VCrossSectionHandler::G4VCrossSectionHandler(const G4VDataSetAlgorithm* algorithm,
+
+G4VCrossSectionHandler::G4VCrossSectionHandler()
+{
+  crossSections = 0;
+  interpolation = 0;
+  interpolation = CreateInterpolation();
+  Initialise(interpolation);
+  ActiveElements();
+}
+
+
+G4VCrossSectionHandler::G4VCrossSectionHandler(G4VDataSetAlgorithm* algorithm,
 					       G4double minE, 
 					       G4double maxE, 
 					       G4int bins,
@@ -58,6 +70,7 @@ G4VCrossSectionHandler::G4VCrossSectionHandler(const G4VDataSetAlgorithm* algori
   : interpolation(algorithm), eMin(minE), eMax(maxE), nBins(bins),
     unit1(unitE), unit2(unitData), zMin(minZ), zMax(maxZ)
 {
+  crossSections = 0;
   ActiveElements();
 }
 
@@ -81,6 +94,33 @@ G4VCrossSectionHandler::~G4VCrossSectionHandler()
       delete (*crossSections)[i];
     }
 }
+
+void G4VCrossSectionHandler::Initialise(G4VDataSetAlgorithm* algorithm,
+					G4double minE, G4double maxE, 
+					G4int numberOfBins,
+					G4double unitE, G4double unitData,
+					G4int minZ, G4int maxZ)
+{
+  if (algorithm != 0) 
+    {
+      delete interpolation;
+      interpolation = algorithm;
+    }
+  else
+    {
+      interpolation = CreateInterpolation();
+    }
+
+  eMin = minE;
+  eMax = maxE;
+  nBins = numberOfBins;
+  unit1 = unitE;
+  unit2 = unitData;
+  zMin = minZ;
+  zMax = maxZ;
+}
+
+
 
 void G4VCrossSectionHandler::PrintData() const
 {
@@ -269,19 +309,6 @@ void G4VCrossSectionHandler::Clear()
       dataMap.clear();
     }
 
-  // Reset the list of cross sections
-  G4std::vector<G4VEMDataSet*>::iterator mat;
-  if (! crossSections->empty())
-    {
-      for (mat = crossSections->begin(); mat!= crossSections->end(); mat++)
-	{
-	  G4VEMDataSet* set = *mat;
-	  delete set;
-          set = 0;
-	}
-      crossSections->clear();
-    }
-
   activeZ.clear();
   ActiveElements();
 }
@@ -343,6 +370,27 @@ G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(const G4Data
       energyVector.push_back(pow(10., log10(eMin)+i*dBin));
     }
 
+  // Factory method to build cross sections in derived classes, 
+  // related to the type of physics process 
+
+  if (crossSections != 0)
+    {  // Reset the list of cross sections
+      G4std::vector<G4VEMDataSet*>::iterator mat;
+      if (! crossSections->empty())
+	{
+	  for (mat = crossSections->begin(); mat!= crossSections->end(); mat++)
+	    {
+	      G4VEMDataSet* set = *mat;
+	      delete set;
+	      set = 0;
+	    }
+	  delete crossSections;
+	  crossSections = 0;
+	}
+    }
+
+  crossSections = BuildCrossSectionsForMaterials(energyVector);
+
 
   //if (energyThreshold > 0.0)
   //{
@@ -398,6 +446,8 @@ G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(const G4Data
 
   return materialSet;
 }
+
+
 
 G4int G4VCrossSectionHandler::SelectRandomAtom(const G4Material* material, G4double e) const
 {
@@ -541,4 +591,10 @@ void G4VCrossSectionHandler::ActiveElements()
 	    }
 	}
     }
+}
+
+G4VDataSetAlgorithm* G4VCrossSectionHandler::CreateInterpolation()
+{
+  G4VDataSetAlgorithm* algorithm = new G4LogLogInterpolation;
+  return algorithm;
 }

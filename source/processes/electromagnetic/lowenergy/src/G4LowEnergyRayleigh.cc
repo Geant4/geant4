@@ -22,7 +22,7 @@
 //
 // --------------------------------------------------------------------
 //
-// $Id: G4LowEnergyRayleigh.cc,v 1.24 2001-08-28 16:05:20 pia Exp $
+// $Id: G4LowEnergyRayleigh.cc,v 1.25 2001-10-05 18:24:20 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -73,9 +73,7 @@ G4LowEnergyRayleigh::G4LowEnergyRayleigh(const G4String& processName)
       G4Exception("G4LowEnergyRayleigh::G4LowEnergyRayleigh - energy limit outside intrinsic process validity range");
     }
   
-  // The following pointer is owned by G4DataHandler
-  G4VDataSetAlgorithm* crossSectionInterpolation = new G4LogLogInterpolation;
-  crossSectionHandler = new G4CrossSectionHandler(crossSectionInterpolation);
+  crossSectionHandler = new G4CrossSectionHandler();
 
   // The following pointer is owned by the process
   ffInterpolation = new G4LogLogInterpolation;

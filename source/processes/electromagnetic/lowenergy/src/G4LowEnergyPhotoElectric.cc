@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.37 2001-10-04 17:49:59 pia Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.38 2001-10-05 18:24:19 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -83,12 +83,10 @@ G4LowEnergyPhotoElectric::G4LowEnergyPhotoElectric(const G4String& processName)
       G4Exception("G4LowEnergyPhotoElectric::G4LowEnergyPhotoElectric - energy limit outside intrinsic process validity range");
     }
 
-  // The falgorithm pointers are owned by G4CrossSectionHandler
-  G4VDataSetAlgorithm* crossSectionInterpolation = new G4LogLogInterpolation;
-  crossSectionHandler = new G4CrossSectionHandler(crossSectionInterpolation);
 
-  G4VDataSetAlgorithm* shellInterpolation = new G4LogLogInterpolation;
-  shellCrossSectionHandler = new G4CrossSectionHandler(shellInterpolation);
+  crossSectionHandler = new G4CrossSectionHandler();
+
+  shellCrossSectionHandler = new G4CrossSectionHandler();
 
   meanFreePathTable = 0;
 

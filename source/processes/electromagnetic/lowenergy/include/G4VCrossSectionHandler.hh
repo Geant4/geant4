@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCrossSectionHandler.hh,v 1.4 2001-10-04 14:03:56 pia Exp $
+// $Id: G4VCrossSectionHandler.hh,v 1.5 2001-10-05 18:25:19 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -57,7 +57,9 @@ class G4VCrossSectionHandler {
  
 public:
 
-  G4VCrossSectionHandler(const G4VDataSetAlgorithm* interpolation,
+  G4VCrossSectionHandler();
+
+  G4VCrossSectionHandler(G4VDataSetAlgorithm* interpolation,
 			 G4double minE = 250*eV, G4double maxE = 100*GeV, 
 			 G4int nBins = 200,
 			 G4double unitE = MeV, G4double unitData = barn,
@@ -65,6 +67,12 @@ public:
 
   virtual ~G4VCrossSectionHandler();
 	
+  void Initialise(G4VDataSetAlgorithm* interpolation = 0,
+		  G4double minE = 250*eV, G4double maxE = 100*GeV, 
+		  G4int numberOfBins = 200,
+		  G4double unitE = MeV, G4double unitData = barn,
+		  G4int minZ = 1, G4int maxZ = 99);
+
   G4int SelectRandomAtom(const G4Material* material, G4double e) const;
 
   const G4Element* SelectRandomElement(const G4Material* material, 
@@ -84,24 +92,30 @@ public:
 
   void Clear();
 
+
 protected: 
    
   G4double ValueForMaterial(const G4Material* material, G4double e) const;
 
   void ActiveElements();
 
-  virtual G4std::vector<G4VEMDataSet*>* 
-  BuildCrossSectionsForMaterials(const G4DataVector& energyVector, 
-				 const G4DataVector* energyCuts = 0) = 0;
+  // Factory method
+  virtual G4std::vector<G4VEMDataSet*>* BuildCrossSectionsForMaterials(const G4DataVector& energyVector, 
+								       const G4DataVector* energyCuts = 0) = 0;
+
+  // Factory method
+  virtual G4VDataSetAlgorithm* CreateInterpolation(); 
+
+  const G4VDataSetAlgorithm* GetInterpolation() const { return interpolation; }
+
 
 private:
 
   // Hide copy constructor and assignment operator
-
   G4VCrossSectionHandler(const G4VCrossSectionHandler&);
   G4VCrossSectionHandler & operator=(const G4VCrossSectionHandler &right);
 
-  const G4VDataSetAlgorithm* interpolation;
+  G4VDataSetAlgorithm* interpolation;
   
   G4double eMin;
   G4double eMax;

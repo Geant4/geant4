@@ -22,7 +22,7 @@
 //
 // --------------------------------------------------------------------
 ///
-// $Id: G4LowEnergyGammaConversion.cc,v 1.22 2001-08-28 16:05:20 pia Exp $
+// $Id: G4LowEnergyGammaConversion.cc,v 1.23 2001-10-05 18:24:19 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -82,9 +82,9 @@ G4LowEnergyGammaConversion::G4LowEnergyGammaConversion(const G4String& processNa
     }
 
   // The following pointer is owned by G4DataHandler
-  G4VDataSetAlgorithm* crossSectionInterpolation = new G4LogLogInterpolation;
-  crossSectionHandler = new G4CrossSectionHandler(crossSectionInterpolation,1.0220*MeV,100.*GeV,400);
-
+  
+  crossSectionHandler = new G4CrossSectionHandler();
+  crossSectionHandler->Initialise(0,1.0220*MeV,100.*GeV,400);
   meanFreePathTable = 0;
 
    if (verboseLevel > 0) 
