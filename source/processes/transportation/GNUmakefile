@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2002-03-25 17:15:31 gcosmo Exp $
+# $Id: GNUmakefile,v 1.3 2002-04-24 07:13:26 gcosmo Exp $
 # ------------------------------------------------------------
 # GNUmakefile for transportation library.  G.Folger 10-Dec-97.
 # ------------------------------------------------------------
@@ -23,5 +23,9 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/electromagnetic/utils/include \
 	    -I$(G4BASE)/particles/management/include \
 	    -I$(G4BASE)/materials/include
+
+ifdef G4DEBUG_TRANSPORT
+  CPPFLAGS += -DG4DEBUG_TRANSPORT
+endif
 
 include $(G4INSTALL)/config/common.gmk
