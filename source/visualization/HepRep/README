@@ -36,11 +36,11 @@ zlib and zipios++ include directories and further licensed and described there.
 
 HepRep XML files can contain multiple HepRep events/geometries.
 If the file contains more than one HepRep it is not strictly XML anymore.
-Files can be written in .zip or .xml/.heprep format. The former is the
+Files can be written in .heprep.zip or .heprep format. The former is the
 default for file output, the latter is the default for stdout and stderr.
 
-(Optional) To set the filename, where the extension may be anything (zip will compress), use:
-/vis/scene/create filename
+(Optional) To set the filename, where the extension should be .heprep.zip or .heprep (zip will compress), use:
+/vis/scene/create filename.heprep.zip
 
 (Optional) To route the HepRep XML output to stdout (or stderr), by default uncompressed, use:
 /vis/scene/create stdout
@@ -48,8 +48,11 @@ default for file output, the latter is the default for stdout and stderr.
 To select the driver, where the file if not create by scene is set to G4HepRepOuput.zip, use:
 /vis/open HepRepXML
 
-(Optional) Multiple events can be written to one HepRep by specifying:
-/vis/scene/endOfSceneAction accumulate
+To write an event, use:
+/run/beamOn 1
+
+To write the geometry, use:
+/vis/viewer/flush
 
 (Optional) To close the file, remove the SceneHandler, use:
 /vis/sceneHandler/remove scene-handler-0
@@ -58,7 +61,7 @@ View the file using the WIRED Event Display, available from:
 http://wired.freehep.org
 
 Limitations:
-Only one SceneHandler can be existent at a time, connected to a single Viewer.
+Only one SceneHandler can exist at any time, connected to a single Viewer.
 
-11 July 2003
-Mark Donszelmann
+9 October 2003
+Mark.Donszelmann@slac.stanford.edu

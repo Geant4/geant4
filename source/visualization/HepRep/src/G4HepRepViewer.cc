@@ -44,7 +44,7 @@ using namespace std;
 G4HepRepViewer::G4HepRepViewer (G4VSceneHandler& sceneHandler, const G4String& name)
         : G4VViewer (sceneHandler, sceneHandler.IncrementViewCount(), name) {
 
-#ifdef DEBUG
+#ifdef SDEBUG
     cout << "G4HepRepViewer::G4HepRepViewer " << name << endl;
 #endif
 
@@ -56,7 +56,7 @@ G4HepRepViewer::G4HepRepViewer (G4VSceneHandler& sceneHandler, const G4String& n
 
 
 G4HepRepViewer::~G4HepRepViewer () {
-#ifdef DEBUG
+#ifdef SDEBUG
     cout << "G4HepRepViewer::~G4HepRepViewer" << endl;
 #endif
     dynamic_cast<G4HepRep*>(GetSceneHandler()->GetGraphicsSystem())->RemoveViewer();
@@ -64,7 +64,7 @@ G4HepRepViewer::~G4HepRepViewer () {
 
 
 void G4HepRepViewer::ClearView () {
-#ifdef DEBUG
+#ifdef SDEBUG
     cout << "G4HepRepViewer::ClearView" << endl;
 #endif
 }
@@ -87,13 +87,13 @@ void G4HepRepViewer::SetView () {
     /vis/viewer/update calls ShowView
 */
 void G4HepRepViewer::DrawView () {
-#ifdef DEBUG
+#ifdef SDEBUG
     cout << "G4HepRepViewer::DrawView" << endl;
 #endif
 }
 
 void G4HepRepViewer::ShowView () {
-#ifdef DEBUG
+#ifdef SDEBUG
     cout << "G4HepRepViewer::ShowView" << endl;
 #endif
     G4VViewer::ShowView();
@@ -105,7 +105,7 @@ void G4HepRepViewer::ShowView () {
 }
 
 void G4HepRepViewer::FinishView () {
-#ifdef DEBUG
+#ifdef SDEBUG
     cout << "G4HepRepViewer::FinishView" << endl;
 #endif
     G4VViewer::FinishView();
