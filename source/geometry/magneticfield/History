@@ -1,4 +1,4 @@
-$Id: History,v 1.46 2001-11-28 18:43:14 japost Exp $
+$Id: History,v 1.47 2001-11-28 18:45:52 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-
+Nov 28st, 2001  J. Apostolakis - field-V03-02-07
+------------------------------
+G4FieldManager
+- Added fFieldChangesEnergy data member and get/set methods
+ ( required to allow transportation to know how to calculate end-time,
+   enabling the integration of time only for electric fields. )
 
 Nov 28st, 2001  J. Apostolakis - field-V03-02-06
 ------------------------------
