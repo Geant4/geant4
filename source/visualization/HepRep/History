@@ -1,4 +1,4 @@
-.$Id: History,v 1.65 2004-03-02 05:29:02 duns Exp $
+.$Id: History,v 1.66 2004-03-04 08:12:01 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,7 +19,7 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
-1 March 2004 Mark Donszelmann
+1 March 2004 Mark Donszelmann (vis-HepRep-V06-00-05)
 - Fixed compilation warnings for the Linux-icc (8.0) compiler.
 
 18 February 2004 Mark Donszelmann
