@@ -33,30 +33,30 @@ template <class group, class functor>
 class G4ForEach
 {
   private:
-  template <class T1> static void Apply(T1* aT1)
+  template <class T1> static void ActOn(T1* aT1)
   {
     typename group::first aL;
     functor aF;
     aF(&aL, aT1);
   }
   public:
-  template <class T1> static void exec(T1* aT1=0)
+  template <class T1> static void Apply(T1* aT1=0)
   {
-    Apply(aT1);
-    G4ForEach<typename group::rest, functor>::exec(aT1);
+    ActOn(aT1);
+    G4ForEach<typename group::rest, functor>::Apply(aT1);
   }
-  static void exec()
+  static void Apply()
   {
-    Apply<int>(0);
-    G4ForEach<typename group::rest, functor>::exec();
+    ActOn<int>(0);
+    G4ForEach<typename group::rest, functor>::Apply();
   }
 };
 
 template <class functor>
 struct G4ForEach<G4Terminator, functor>
 {
-  template <class T1> static void exec(T1* aT1){};
-  static void exec(){};
+  template <class T1> static void Apply(T1* ){};
+  static void Apply(){};
 };
 
 #endif
