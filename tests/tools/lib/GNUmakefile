@@ -1,3 +1,6 @@
+ifndef G4INSTALL
+  G4INSTALL = ../../..
+endif
 include $(G4INSTALL)/config/architecture.gmk
 
 CPPFLAGS+=-I../include
@@ -9,7 +12,7 @@ dependencies := $(patsubst ../src/%.cc,$(G4SYSTEM)/%.d,$(SRCS))
 ############### RULES ##########################################
 $(G4SYSTEM)/libG4TestTool.a: $(G4SYSTEM)/obj.last
 	@echo Creating/replacing object files in $(G4SYSTEM)/libG4TestTool.a
-	@$(AR) $@ $(G4SYSTEM)/*.o
+	@$(AR) $(OUT_LIB)$@ $(G4SYSTEM)/*.o
 
 # Touch the versioning file
 $(G4SYSTEM)/obj.last: $(OBJS)
@@ -17,7 +20,7 @@ $(G4SYSTEM)/obj.last: $(OBJS)
 
 $(G4SYSTEM)/%.o: ../src/%.cc
 	@echo Compiling $*.cc ...
-	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $(G4SYSTEM)/$*.o
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< $(OUT_OBJ)$(G4SYSTEM)/$*.o
 
 $(G4SYSTEM)/%.d: ../src/%.cc
 	@if [ ! -d $(G4SYSTEM) ] ; then mkdir $(G4SYSTEM) ;fi
