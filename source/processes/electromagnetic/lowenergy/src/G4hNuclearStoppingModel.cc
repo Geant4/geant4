@@ -84,7 +84,10 @@ void G4hNuclearStoppingModel::InitializeMe()
  << " for nuclear stopping, <ICRU_R49> is applied " 
  << G4endl; 
     nStopingPowerTable = new G4hICRU49Nuclear();
-  }  
+  }
+
+  // Default is nuclear stopping fluctuations On
+  nStopingPowerTable->SetNuclearStoppingFluctuationsOn();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

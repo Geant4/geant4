@@ -20,6 +20,7 @@
 // ************************************************************
 // 28 July 1999 V.Ivanchenko cleen up
 // 09 Aug  2000 V.Ivanchenko add GetContinuousStepLimit
+// 23 Oct  2000 V.Ivanchenko add control on particle mass
 // ---------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -72,7 +73,8 @@ inline G4double G4hLowEnergyIonisation::GetContinuousStepLimit(
 inline G4bool G4hLowEnergyIonisation::IsApplicable(
                                 const G4ParticleDefinition& particle) 
 {
-   return(particle.GetPDGCharge() != 0.);
+   return(particle.GetPDGCharge() != 0.0 
+       && particle.GetPDGMass() > proton_mass_c2*0.1);
 }
          
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

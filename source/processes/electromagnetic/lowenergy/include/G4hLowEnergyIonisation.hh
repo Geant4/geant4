@@ -20,19 +20,27 @@
 // Class Description:
 // G4hLowEnergyIonisation class is the extention of the ionisation 
 // process for the slow charged hadrons and ions. The physics model is
-// described in CERN-OPEN-99-121. User have a possibility to define
-// a parametrisation table via its name. 
+// described in CERN-OPEN-99-121 and CERN-OPEN-99-300. User have a 
+// possibility to define a parametrisation tables for electronic
+// stopping powers and nuclear stopping powers via its name.
+// The list of available tables:
+// Electronic stopping powers: "ICRU_49p" (default), "ICRU_49He",
+//                             "Ziegler1977p", "Ziegler1985p",
+//                             "Ziegler1977He" 
+// Nuclear stopping powers:    "ICRU_49" (default), "Ziegler1977",
+//                             "Ziegler1985"
 // Class Description - End
 //
 // ************************************************************
-// 23 May 2000    MG Pia  Clean up for QAO model 
-// 28 July 1999 V.Ivanchenko cleen up
+// 28 July   1999 V.Ivanchenko cleen up
 // 17 August 1999 G.Mancinelli implemented ICRU parametrization (protons)  
 // 20 August 1999 G.Mancinelli implemented ICRU parametrization (alpha)  
 // 31 August 1999 V.Ivanchenko update and cleen up 
+// 23 May    2000    MG Pia  Clean up for QAO model 
 // 25 July   2000 V.Ivanchenko New design iteration
 // 09 August 2000 V.Ivanchenko Add GetContinuousStepLimit
 // 17 August 2000 V.Ivanchenko Add IonFluctuationModel
+// 23 Oct    2000 V.Ivanchenko Renew comments
 // ------------------------------------------------------------
  
 #ifndef G4hLowEnergyIonisation_h
@@ -55,47 +63,67 @@
 
 class G4hLowEnergyIonisation : public G4hLowEnergyLoss
 {
-public: // Without description
+public: // With description
   
   G4hLowEnergyIonisation(const G4String& processName = "hLowEIoni"); 
+  // The ionisation process for hadrons/ions to be include in the
+  // UserPhysicsList
 
   ~G4hLowEnergyIonisation();
+  // Destructor
   
   G4bool IsApplicable(const G4ParticleDefinition&);
+  // True for all charged hadrons/ions
     
   void BuildPhysicsTable(const G4ParticleDefinition& aParticleType) ;
+  // Build physics table during inicialisation
 
   G4double GetMeanFreePath(const G4Track& track,
 			         G4double previousStepSize,
 			    enum G4ForceCondition* condition );
+  // Return MeanFreePath until delta-electron production
   
   void PrintInfoDefinition() const;
+  // Print out of the class parameters
 
   void SetHighEnergyForProtonParametrisation(G4double energy) 
                              {protonHighEnergy = energy;} ;
+  // Definition of the boundary proton energy. For higher energies
+  // Bethe-Bloch formula is used, for lower energies parametrisation
+  // of the energy losses is performed. 
 
   void SetLowEnergyForProtonParametrisation(G4double energy) 
                              {protonLowEnergy = energy;} ;
+  // Definition of the boundary proton energy. For lower energies
+  // Free Electron Gas model is used for the energy losses
 
   void SetHighEnergyForAntiProtonParametrisation(G4double energy) 
                              {antiProtonHighEnergy = energy;} ;
+  // Definition of the boundary antiproton energy. For higher energies
+  // Bethe-Bloch formula is used, for lower energies parametrisation
+  // of the energy losses is performed. Default is 2 MeV.
 
   void SetLowEnergyForAntiProtonParametrisation(G4double energy) 
                               {antiProtonLowEnergy = energy;} ;
+  // Definition of the boundary antiproton energy. For lower energies
+  // Free Electron Gas model is used for the energy losses. Default
+  // is 1 keV.
 
   G4double GetContinuousStepLimit(const G4Track& track,
                                         G4double previousStepSize,
                                         G4double currentMinimumStep,
                                         G4double& currentSafety); 
+  // Calculation of the step limit due to ionisation losses
 
-public: // With description
   void SetElectronicStoppingPowerModel(const G4ParticleDefinition* aParticle,
                                        const G4String& dedxTable);
-  // This method defines the ionisation parametrisation method via its name 
+  // This method defines the electron ionisation parametrisation method 
+  // via the name of the table. Default is "ICRU_49p".
 
   void SetNuclearStoppingPowerModel(const G4String& dedxTable)
                  {theNuclearTable = dedxTable; SetNuclearStoppingOn();};
-  // This method defines the ionisation parametrisation method via its name 
+  // This method defines the nuclear ionisation parametrisation method 
+  // via the name of the table. Default is "ICRU_49".
 
   void SetNuclearStoppingOn() {nStopping = true;};
   // This method switch on calculation of the nuclear stopping power.
@@ -104,10 +132,10 @@ public: // With description
   // This method switch off calculation of the nuclear stopping power.
   
   void SetBarkasOn() {theBarkas = true;};
-  // This method switch on calculation of the Barkas Effect for antiproton
+  // This method switch on calculation of the Barkas and Bloch effects 
   
   void SetBarkasOff() {theBarkas = false;};
-  // This method switch on calculation of the Barkas Effect for antiproton
+  // This method switch off calculation of the Barkas and Bloch effects
                                        
   G4VParticleChange* AlongStepDoIt(const G4Track& trackData , 
                                    const G4Step& stepData ) ;
@@ -120,7 +148,7 @@ public: // With description
   G4double ComputeDEDX(const G4ParticleDefinition* aParticle,
                        const G4Material* material,
                              G4double kineticEnergy);
-  // This method returns total energy loss for a static particle.
+  // This method returns electronic dE/dx for protons or antiproton.
 
 protected:
 
