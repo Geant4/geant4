@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc,v 1.3 2002-01-18 17:26:21 grichine Exp $
+// $Id: G4VXTRenergyLoss.cc,v 1.4 2002-01-21 14:52:20 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -127,6 +127,9 @@ G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume *anEnvelope,
 G4VXTRenergyLoss::~G4VXTRenergyLoss()
 {
    G4int i ;
+
+   if(fEnvelope) delete fEnvelope;
+
    for(i=0;i<fGasIntervalNumber;i++)
    {
      delete[] fGasPhotoAbsCof[i] ;
@@ -281,14 +284,25 @@ G4VParticleChange* G4VXTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
   G4int iTkin, iPlace,   numOfTR, iTR ;
   G4double energyTR, meanNumOfTR, theta, phi, dirX, dirY, dirZ, rand ;
   G4double W, W1, W2, E1, E2 ;
+
+  aParticleChange.Initialize(aTrack);
+
+  if(verboseLevel)
+  {
     G4cout<<"Start of G4VXTRenergyLoss::AlongStepDoIt "<<G4endl ;
+    G4cout<<"name of current material =  "
+          <<aTrack.GetVolume()->GetLogicalVolume()->GetMaterial()->GetName()<<G4endl ;
+  }
+// if(aStep.GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume() != fEnvelope) 
 
   if( aTrack.GetVolume()->GetLogicalVolume() != fEnvelope ) 
   {
-    G4cout<<"Go out from G4VXTRenergyLoss::AlongStepDoIt: wrong volume "<<G4endl ;
+    if(verboseLevel)
+    {
+      G4cout<<"Go out from G4VXTRenergyLoss::AlongStepDoIt: wrong volume "<<G4endl;
+    }
     return G4VContinuousProcess::AlongStepDoIt(aTrack, aStep);
   }
-  aParticleChange.Initialize(aTrack);
   G4StepPoint* pPreStepPoint  = aStep.GetPreStepPoint();
   G4StepPoint* pPostStepPoint = aStep.GetPostStepPoint();
 	
@@ -312,7 +326,9 @@ G4VParticleChange* G4VXTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
 
   G4ThreeVector      startPos  = pPreStepPoint->GetPosition();
   G4double           startTime = pPreStepPoint->GetGlobalTime();
+
   G4ParticleMomentum direction = aParticle->GetMomentumDirection();
+
   G4double           distance  = aStep.GetStepLength() ;
 
 
@@ -324,7 +340,10 @@ G4VParticleChange* G4VXTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
 
   if(iTkin == 0) // Tkin is too small, neglect of TR photon generation
   {
-    G4cout<<"Go out from G4VXTRenergyLoss::AlongStepDoIt: iTkin=0 "<<G4endl ;
+    if(verboseLevel)
+    {
+      G4cout<<"Go out from G4VXTRenergyLoss::AlongStepDoIt:iTkin = "<<iTkin<<G4endl;
+    }
     return G4VContinuousProcess::AlongStepDoIt(aTrack, aStep);
   } 
   else          // general case: Tkin between two vectors of the material
@@ -359,19 +378,25 @@ G4VParticleChange* G4VXTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
     if( numOfTR == 0 ) // no change, return 
     {
       aParticleChange.SetNumberOfSecondaries(0);
-    G4cout<<"Go out from G4VXTRenergyLoss::AlongStepDoIt: numOfTR=0 "<<G4endl ;
+      if(verboseLevel)
+      {
+      G4cout<<"Go out from G4VXTRenergyLoss::AlongStepDoIt: numOfTR = "
+            <<numOfTR<<G4endl ;
+      }
       return G4VContinuousProcess::AlongStepDoIt(aTrack, aStep); 
     }
     else
     {
-      G4cout<<"Number of X-ray TR photons = "<<numOfTR<<endl ;
-
+      if(verboseLevel)
+      {
+        G4cout<<"Number of X-ray TR photons = "<<numOfTR<<endl ;
+      }
       aParticleChange.SetNumberOfSecondaries(numOfTR);
 
       G4double sumEnergyTR = 0.0 ;
 
-        for(iTR=0;iTR<numOfTR;iTR++)
-        {
+      for(iTR=0;iTR<numOfTR;iTR++)
+      {
 
       //    energyPos = ((*(*fEnergyDistrTable)(iPlace))(0)*W1+
       //          (*(*fEnergyDistrTable)(iPlace + 1))(0)*W2)*G4UniformRand() ;
@@ -385,13 +410,15 @@ G4VParticleChange* G4VXTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
 
       energyTR = GetXTRrandomEnergy(TkinScaled,iTkin) ;
 
-	   G4cout<<"energyTR = "<<energyTR/keV<<"keV"<<endl ;
+      if(verboseLevel)
+      {
+        G4cout<<"energyTR = "<<energyTR/keV<<"keV"<<endl ;
+      }
+      sumEnergyTR += energyTR ;
 
-        sumEnergyTR += energyTR ;
+      theta = abs(G4RandGauss::shoot(0.0,pi/gamma)) ;
 
-        theta = abs(G4RandGauss::shoot(0.0,pi/gamma)) ;
-
-        if( theta >= 0.1 ) theta = 0.1 ;
+      if( theta >= 0.1 ) theta = 0.1 ;
 
 	// G4cout<<" : theta = "<<theta<<endl ;
 
