@@ -1,4 +1,4 @@
-$Id: History,v 1.209 2004-11-18 10:00:41 pia Exp $
+$Id: History,v 1.210 2004-11-18 10:28:31 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-17.11.2004   MGP, tag emlowen-V06-02-04
+18.11.2004   MGP, tag emlowen-V06-02-05
+             Improved Paul&Sacher PIXE model added; it becomes the default one
+
+18.11.2004   MGP, tag emlowen-V06-02-04
              First Paul&Sacher PIXE model becomes the default one
 
 17.11.2004   MGP, tag emlowen-V06-02-03
