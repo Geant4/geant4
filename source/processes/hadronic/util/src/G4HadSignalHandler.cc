@@ -1,3 +1,5 @@
+#ifndef G4HadSignalHandler_off
+
 #include "G4HadSignalHandler.hh"
 
 
@@ -45,3 +47,5 @@ void G4HadSignalHandler_local::HandleIt(int i)
   signal (SIGSEGV, G4HadSignalHandler_local::G4HadSignalHandler_initial);
   raise(i);
 }
+
+#endif

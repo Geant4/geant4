@@ -49,7 +49,9 @@
 #include "G4HadReentrentException.hh"
 #include "G4HadronicInteractionWrapper.hh"
 
-#include "G4HadSignalHandler.hh"
+#ifndef G4HadSignalHandler_off
+  #include "G4HadSignalHandler.hh"
+#endif
 
 //@@ add model name info, once typeinfo available #include <typeinfo.h>
 

@@ -1,6 +1,8 @@
 #ifndef G4HadSignalHandler_hh
 #define G4HadSignalHandler_hh
 
+#ifndef G4HadSignalHandler_off
+
 #include <iostream>
 #include <signal.h>
 #include <vector>
@@ -27,5 +29,7 @@ class G4HadSignalHandler
 };
 
  
+
+#endif
 
 #endif
