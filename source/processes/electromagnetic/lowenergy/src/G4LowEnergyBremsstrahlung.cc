@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.12 1999-07-05 14:27:33 aforti Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.13 1999-07-06 14:35:47 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -656,6 +656,17 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
   G4double charge = aDynamicParticle->GetDefinition()->GetPDGCharge();   
   
   G4double ElectKinEn = aDynamicParticle->GetKineticEnergy();
+
+  if(ElectKinEn <= LowestKineticEnergy){
+    
+    aParticleChange.SetStatusChange(fStopAndKill);
+    aParticleChange.SetEnergyChange(0.);
+    aParticleChange.SetLocalEnergyDeposit(ElectKinEn);
+    
+    return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
+
+  }
+
   G4ParticleMomentum ElectDirection = aDynamicParticle->GetMomentumDirection();
   
   // Gamma production cut in this material
@@ -682,7 +693,7 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
   
   //
   //  sample the energy rate of the emitted gamma for electron kinetic energy
-  //  sampling formula: spet(T) = A(T)*E+B(T)
+  //  sampling formula: spet(T) = A(T)/E+B(T)
   //
   
   G4double p1 = 0, p2 = 0;
