@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.cc,v 1.16 2001-05-15 14:51:48 grichine Exp $
+// $Id: G4PropagatorInField.cc,v 1.17 2001-05-23 19:09:09 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,7 +31,8 @@
 //   correct order initialisation of static (class) data members
 //const G4double G4PropagatorInField::fDefault_Delta_Intersection_Val= 0.1 * mm;
 //const G4double G4PropagatorInField::fDefault_Delta_One_Step_Value = 0.25 * mm;
-// const G4double  G4PropagatorInField::fEpsilonMin = 1.0e-10 ;  
+
+const G4double  G4PropagatorInField::fEpsilonMin = 1.0e-10 ;  
 
 // -------------------------------------------------------------------------
 #if OLD_SIGNATURE_IS_INVALID
