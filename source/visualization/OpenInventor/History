@@ -1,4 +1,8 @@
-$Id: History,v 1.29 2004-11-14 14:42:26 gbarrand Exp $
+<<<<<<< History
+$Id: History,v 1.30 2004-11-14 18:20:20 johna Exp $
+=======
+$Id: History,v 1.30 2004-11-14 18:20:20 johna Exp $
+>>>>>>> 1.26.2.1
 -------------------------------------------------------------------
 
      =========================================================
@@ -26,6 +30,18 @@ History file for visualization/OpenInventor
 - G4OpenInventorViewer : base class for Inventor viewers.
 - Menuitem "Etc/Triangles" : to count rendered triangles.
 - Menuitem "File/IV" : to write the scene in an inventor file.
+
+14th November 2004  John Allison  (openinventor-V06-02-01)
+- Tag on branch openinventor-V06-02-01-branch.
+- Consolidating the changes below, plus:
+  - forcing culling off by default;
+  - forcing solid mode;
+  so that the user:
+  - sees all of the requested geometry volume tree;
+  - can use pointer button and CTRL-left-click to uncover (SHIFT-left-click
+    to re-cover);
+  - can use the hand button and right-click to get wireframe.
+- Removed G4OpenInventorSceneHandler::EndModeling (empty function).
 
 12th November 2004  Guy Barrand
 - G4OpenInventor.cc : initClass of Geant4_SoPolyhedron.
