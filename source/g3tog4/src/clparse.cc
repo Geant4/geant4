@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: clparse.cc,v 1.8 1999-12-05 17:50:15 gcosmo Exp $
+// $Id: clparse.cc,v 1.9 1999-12-09 00:05:02 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I.Hrivnacova
@@ -95,7 +95,6 @@ void G3CLRead(G4String & fname, char *select = NULL){
   G4int count = 0;
   G4int ntokens = 0;
   ifstream istr(fname);
-  G4bool _debug=false;
     
   while (line.readLine(istr) && ! istr.eof()){
       count++;

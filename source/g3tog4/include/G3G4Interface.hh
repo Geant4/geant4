@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3G4Interface.hh,v 1.5 1999-12-05 17:50:01 gcosmo Exp $
+// $Id: G3G4Interface.hh,v 1.6 1999-12-09 00:04:58 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

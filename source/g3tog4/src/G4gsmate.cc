@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsmate.cc,v 1.4 1999-12-05 17:50:13 gcosmo Exp $
+// $Id: G4gsmate.cc,v 1.5 1999-12-09 00:05:02 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, 27 Sep 99
@@ -18,8 +18,6 @@
 #include "G4Material.hh"
 #include "G4Isotope.hh"
 #include "G4UnitsTable.hh"
-
-//extern int debugOn;
 
 void PG4gsmate(G4String tokens[])
 {

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3toG4BuildTree.cc,v 1.8 1999-12-05 17:50:11 gcosmo Exp $
+// $Id: G3toG4BuildTree.cc,v 1.9 1999-12-09 00:04:59 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I. Hrivnacova, 2.8.99 
@@ -19,6 +19,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "globals.hh"
+#include "G3toG4Debug.hh"
 
 void G3toG4BuildTree(G3VolTableEntry* curVTE, G3VolTableEntry* motherVTE)
 {
@@ -60,7 +61,7 @@ void G3toG4BuildTree(G3VolTableEntry* curVTE, G3VolTableEntry* motherVTE)
     else {  	    
        mothLV = 0;
     }  
- 
+    
     // positions in motherVTE
     for (G4int i=0; i<curVTE->NPCopies(); i++){
 
@@ -76,29 +77,35 @@ void G3toG4BuildTree(G3VolTableEntry* curVTE, G3VolTableEntry* motherVTE)
         // (in G3 numbering starts from 1 but in G4 from 0)
         G4int copyNo = theG3Pos->GetCopy() - 1;
       
-        // position it
-        new G4PVPlacement(theMatrix,          // rotation matrix
-                      *(theG3Pos->GetPos()),  // its position
-                      curLog,                 // its LogicalVolume 
-                      curVTE->GetName(),      // PV name
-                      mothLV,                 // Mother LV
-                      0,                      // only
-                      copyNo);                // copy
-		      
+        // position it if not top-level volume
+	if (mothLV != 0) {
+	  new G4PVPlacement(theMatrix,          // rotation matrix
+			    *(theG3Pos->GetPos()),  // its position
+			    curLog,                 // its LogicalVolume 
+			    curVTE->GetName(),      // PV name
+			    mothLV,                 // Mother LV
+			    0,                      // only
+			    copyNo);                // copy
+	
         // verbose
-	// G4cout << "PV: " << i << "th copy of " << curVTE->GetName()
-        //       << "  in " << motherVTE->GetName() << "  copyNo: " 
-        //       << copyNo << "  irot: " << irot << "  pos: " 
-        //       << *(theG3Pos->GetPos()) << endl;
+	  
+	  if (G3toG4Debug != 0) 
+	    G4cout << "PV: " << i << "th copy of " << curVTE->GetName()
+		   << "  in " << motherVTE->GetName() << "  copyNo: " 
+		   << copyNo << "  irot: " << irot << "  pos: " 
+		   << *(theG3Pos->GetPos()) << endl;
+	}
       }
     }
 
     // divisions     
     if (curVTE->GetDivision()) {
-       curVTE->GetDivision()->CreatePVReplica();
-       // verbose
-       // G4cout << "PVReplica: " << curVTE->GetName() 
-       //        << " in "  << motherVTE->GetName() << endl;
+      curVTE->GetDivision()->CreatePVReplica();
+      // verbose
+      if (G3toG4Debug != 0) {
+	G4cout << "CreatePVReplica: " << curVTE->GetName() 
+	       << " in "  << motherVTE->GetName() << endl;
+      }
     }
   }
   else {

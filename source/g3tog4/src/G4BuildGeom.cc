@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BuildGeom.cc,v 1.9 1999-12-05 17:50:11 gcosmo Exp $
+// $Id: G4BuildGeom.cc,v 1.10 1999-12-09 00:05:00 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I. Hrivnacova, 13.10.99 
@@ -14,6 +14,7 @@
 #include "g4std/fstream"
 #include "globals.hh"
 #include "G3toG4.hh"
+#include "G3toG4Debug.hh"
 #include "G3MatTable.hh"
 #include "G3MedTable.hh"
 #include "G3RotTable.hh"
@@ -52,6 +53,7 @@ G4LogicalVolume* G4BuildGeom(G4String& inFile){
   G3Det.PrintAll();
 
   G3Vol.PrintAll();
+
   G4cout << "Call List file read completed. Build geometry" << endl;
 
   // Build the geometry
@@ -80,9 +82,7 @@ G4LogicalVolume* G4BuildGeom(G4String& inFile){
         
         // check the geometry here
 
-  G4int debug=0;
-        
-  if (debug){
+  if (G3toG4Debug != 0){
     G4cout << "scan through G4LogicalVolumeStore:" << endl;
     checkVol();
   }
@@ -117,6 +117,12 @@ void checkVol(G4LogicalVolume* _lvol, G4int level)
   }
   return;
 }
+
+
+
+
+
+
 
 
 

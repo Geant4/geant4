@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3Division.cc,v 1.2 1999-12-05 17:50:08 gcosmo Exp $
+// $Id: G3Division.cc,v 1.3 1999-12-09 00:04:59 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, V.Berejnoi 13.10.99
@@ -14,7 +14,8 @@
 #include "G3VolTableEntry.hh"
 #include "G3toG4MakeSolid.hh"
 #include "G3Pos.hh"
-
+//#include "G3toG4.hh"
+#include "G3toG4Debug.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
@@ -109,7 +110,13 @@ G4VPhysicalVolume* G3Division::CreatePVReplica()
   
   G4PVReplica* pvol 
     = new G4PVReplica(name, lv, mlv, fAxis, fNofDivisions, fWidth, fOffset);
-
+  if (G3toG4Debug != 0) {
+    G4cout << "Create G4PVReplica name " << name << " logical volume name " 
+	   << lv->GetName() << " mother logical volme name "
+	   << mlv->GetName() << " axis " << fAxis << " ndivisions " 
+	   << fNofDivisions << " width " << fWidth << " Offset "
+	   << fOffset << endl;
+  }
   return pvol;
 }
 
@@ -361,8 +368,10 @@ void G3Division::SetRangeAndAxis()
     }  
 
     // verbose
-    //G4cout << "SetRangeAndAxis: " 
-    //       << fLowRange << " " << fHighRange << " " << fAxis << endl;
+    if (G3toG4Debug != 0) {
+      G4cout << "Shape " << shape << " SetRangeAndAxis: " 
+	     << fLowRange << " " << fHighRange << " " << fAxis << endl;
+    }
 }
 
 G3VolTableEntry* G3Division::CreateEnvelope(G4String shape, G4double hi, 
