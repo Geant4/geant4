@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.cc,v 1.14 2001-06-06 08:36:51 gcosmo Exp $
+// $Id: G4SteppingManager.cc,v 1.15 2001-07-10 03:11:24 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -272,6 +272,7 @@ void G4SteppingManager::SetInitialStep(G4Track* valueTrack)
      fTrack->SetVertexPosition( fTrack->GetPosition() );
      fTrack->SetVertexMomentumDirection( fTrack->GetMomentumDirection() );
      fTrack->SetVertexKineticEnergy( fTrack->GetKineticEnergy() );
+     fpPostStepPoint->SetVelocity(fpTrack->GetVelocity());
    }
 // Initial set up for attributes of 'G4SteppingManager'
    fCurrentVolume = pTouchableFree->GetVolume();
