@@ -17,7 +17,10 @@ esac
 g4message=`cat << EOM
 
   G4USE_HEPODBMS
-Persistency.
+In Geant4, object persistency is provided as an optional category, so
+that the users could be able to run Geant4 with or without a commercial 
+ODBMS package. How to store and retrieve Geant4 events, hits and geometry 
+objects is explained in documentation. 
 EOM`
 
 dflt=$g4use_hepodbms
