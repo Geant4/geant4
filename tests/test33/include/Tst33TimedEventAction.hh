@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33TimedEventAction.hh,v 1.4 2003-06-16 17:15:56 gunter Exp $
+// $Id: Tst33TimedEventAction.hh,v 1.5 2003-11-18 17:22:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,13 +40,14 @@
 #ifndef Tst33TimedEventAction_h
 #define Tst33TimedEventAction_h 1
 
-#include "Tst33VEventAction.hh"
-#include "globals.hh"
+#include "G4Types.hh"
+#include "G4Timer.hh"
 #include <fstream>
+
+#include "Tst33VEventAction.hh"
 #include "Tst33Sigma.hh"
 
 class G4CellScorer;
-
 
 class Tst33TimedEventAction : public Tst33VEventAction
 {
@@ -55,8 +56,8 @@ public:
   virtual ~Tst33TimedEventAction();
   
 public:
-  virtual void   BeginOfEventAction(const G4Event*);
-  virtual void   EndOfEventAction(const G4Event*);
+  virtual void BeginOfEventAction(const G4Event*);
+  virtual void EndOfEventAction(const G4Event*);
   virtual void SpecialCellScorer(const G4CellScorer *scorer);
   virtual void Clear();
 
@@ -64,11 +65,13 @@ private:
   Tst33TimedEventAction(const Tst33TimedEventAction &);
   Tst33TimedEventAction &operator=(const Tst33TimedEventAction &);
   void CalculateFOM();
+
+private:
+  G4Timer fTimer;
   const G4CellScorer *fCScorer;
-  G4int fEvStartTime;
-  G4int fProcessTime;
+  G4double fProcessTime;
   std::ofstream fOut;
-  G4int fMaxRunTime;
+  G4double fMaxRunTime;
   Tst33Sigma fSig;
   G4double fOld_lwe;
 };

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33TimedEventAction.cc,v 1.8 2003-09-16 13:01:11 dressel Exp $
+// $Id: Tst33TimedEventAction.cc,v 1.9 2003-11-18 17:22:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,15 +42,10 @@
 #include "G4CellScorer.hh"
 #include "G4RunManager.hh"
 
-#include <sys/times.h>
-#include <time.h>
-
-
 Tst33TimedEventAction::Tst33TimedEventAction(G4int time)
   :
   fCScorer(0),
-  fEvStartTime(0),
-  fProcessTime(0),
+  fProcessTime(0.),
   fMaxRunTime(time),
   fOld_lwe(0)
 {
@@ -74,20 +69,15 @@ void Tst33TimedEventAction::SpecialCellScorer(const G4CellScorer *scorer){
 
 void Tst33TimedEventAction::BeginOfEventAction(const G4Event*)
 {
-  struct tms time;
-  times(&time);
-  fEvStartTime = time.tms_utime;
+  fTimer.Start();
 }
 
 
 void Tst33TimedEventAction::EndOfEventAction(const G4Event*)
 {
+  fTimer.Stop();
 
-  struct tms time;
-  times(&time);
-
-
-  fProcessTime += time.tms_utime - fEvStartTime;
+  fProcessTime += fTimer.GetUserElapsed()*100;
   if (fCScorer) {
     G4CellScoreValues v=fCScorer->GetCellScoreValues();
     G4double lwe(v.fSumSLWE);
@@ -105,10 +95,9 @@ void Tst33TimedEventAction::EndOfEventAction(const G4Event*)
 	   << G4endl;
     CalculateFOM();
     fSig.Init();
-    fProcessTime = 0;
+    fProcessTime = 0.;
     fOld_lwe = 0;
   }  
-  
 }
 
 void Tst33TimedEventAction::CalculateFOM(){
@@ -119,7 +108,7 @@ void Tst33TimedEventAction::CalculateFOM(){
   G4double sigma(fSig.GetSigma());
 
   if (sigma>0. && mean > 0.) {
-    R = sigma/(mean*std::sqrt(static_cast<double>(entries)));
+    R = sigma/(mean*std::sqrt(static_cast<G4double>(entries)));
     fom = 1./(R*R);
   }
   G4cout << "Tst33TimedEventAction::CalculateFOM(): FOM: " 
