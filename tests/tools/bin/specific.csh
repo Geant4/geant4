@@ -343,48 +343,49 @@ if ( `uname -n` == asc ) then
   # To be able to link :
   limit datasize 500000
 endif
+
 #---------------------------------------------------
-if ( `uname -n` == "lx1.lal.in2p3.fr" ) then
+if ( `uname -n` == "lx1" ) then
   setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
-  setenv G4INSTALL /geant4/geant4-01-01
-  setenv G4WORKDIR $G4INSTALL
+  setenv G4INSTALL /geant4/geant4.5.2.ref04
+  setenv G4WORKDIR $G4INSTALL/rh72_gcc332
   setenv G4STTDIR  $G4WORKDIR/stt
   setenv G4LIB     $G4WORKDIR/lib
   setenv G4SYSTEM  Linux-g++
   setenv G4DEBUG   1
-  #setenv G4MAKESHLIB                 $G4INSTALL/config/makeshlib.sh
+  setenv G4MAKESHLIB                 $G4INSTALL/config/makeshlib.sh
   # G4 build flags :
-  setenv G4UI_BUILD_XM_SESSION       1
-  setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
-  setenv G4VIS_BUILD_OPENGLX_DRIVER  1
-  setenv G4VIS_BUILD_OIX_DRIVER      1
-  setenv G4VIS_BUILD_DAWN_DRIVER     1
-  setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
-  setenv G4VIS_BUILD_VRML_DRIVER     1
-  setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
+  #setenv G4UI_BUILD_XM_SESSION       1
+  #setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
+  #setenv G4VIS_BUILD_OPENGLX_DRIVER  1
+  #setenv G4VIS_BUILD_OIX_DRIVER      1
+  #setenv G4VIS_BUILD_DAWN_DRIVER     1
+  #setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
+  #setenv G4VIS_BUILD_VRML_DRIVER     1
+  #setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
   # G4 use flags :
-  setenv G4UI_USE_XM                 1
-  setenv G4VIS_USE_OPENGLXM          1
-  setenv G4VIS_USE_OPENGLX           1
-  setenv G4VIS_USE_OIX               1
-  setenv G4VIS_USE_DAWN              1
-  setenv G4VIS_USE_DAWNFILE          1
-  setenv G4VIS_USE_VRML              1
-  setenv G4VIS_USE_VRMLFILE          1
+  #setenv G4UI_USE_XM                 1
+  #setenv G4VIS_USE_OPENGLXM          1
+  #setenv G4VIS_USE_OPENGLX           1
+  #setenv G4VIS_USE_OIX               1
+  #setenv G4VIS_USE_DAWN              1
+  #setenv G4VIS_USE_DAWNFILE          1
+  #setenv G4VIS_USE_VRML              1
+  #setenv G4VIS_USE_VRMLFILE          1
   # Specific :
-  setenv CLHEP_BASE_DIR /lal/CLHEP/1.4/Linux-gxx
-  setenv OGLHOME        /lal/Mesa/3.1/Linux
-  setenv OIVHOME        /lal/SoFree/v2r9
-  setenv HEPVISHOME     /lal/HEPVis/v5r1-05-LAL
-  setenv OIVFLAGS       "-I$OIVHOME/include -I$HEPVISHOME/include"
-  setenv OIVLIBS        "-L$HEPVISHOME/Linux-gxx-SF -lHEPVis -L$OIVHOME/Linux-gxx -lSoFree"
-  setenv SOFREEUSER     $OIVHOME/user/
+  setenv CLHEP_BASE_DIR /lal/CLHEP/1.8.0.0/rh72_gcc332
+  #setenv OGLHOME        /lal/Mesa/3.1/Linux
+  #setenv OIVHOME        /lal/SoFree/v2r9
+  #setenv HEPVISHOME     /lal/HEPVis/v5r1-05-LAL
+  #setenv OIVFLAGS       "-I$OIVHOME/include -I$HEPVISHOME/include"
+  #setenv OIVLIBS        "-L$HEPVISHOME/Linux-gxx-SF -lHEPVis -L$OIVHOME/Linux-gxx -lSoFree"
+  #setenv SOFREEUSER     $OIVHOME/user/
   # Else :
   #setenv XENVIRONMENT   $G4INSTALL/tests/test201/test201.xrm
-  setenv XENVIRONMENT   g4.xrm
-  setenv PATH "${PATH}:/lal/DAWN/3.72b/Linux-egcs"
-  setenv CPPVERBOSE 1
-  set prompt='g4-lx1> ' 
+  #setenv XENVIRONMENT   g4.xrm
+  #setenv PATH "${PATH}:/lal/DAWN/3.72b/Linux-egcs"
+  #setenv CPPVERBOSE 1
+  set prompt='g4-lx1-rh72_gcc332> ' 
 endif
 
 if ( `uname -n` == "papou1" ) then
