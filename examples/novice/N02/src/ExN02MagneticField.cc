@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02MagneticField.cc,v 1.2 1999-12-15 14:49:21 gunter Exp $
+// $Id: ExN02MagneticField.cc,v 1.3 2000-11-09 16:22:04 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -19,12 +19,14 @@
 ExN02MagneticField::ExN02MagneticField()
   : G4UniformMagField(G4ThreeVector())
 {
+  GetGlobalFieldManager()->SetDetectorField(this);
   GetGlobalFieldManager()->CreateChordFinder(this);
 }
 
 ExN02MagneticField::ExN02MagneticField(G4ThreeVector fieldVector)
   : G4UniformMagField(fieldVector)
-{    
+{
+  GetGlobalFieldManager()->SetDetectorField(this);    
   GetGlobalFieldManager()->CreateChordFinder(this);
 }
 
