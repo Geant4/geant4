@@ -21,20 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManager.icc,v 1.8 2003-11-05 10:52:59 japost Exp $
+// $Id: G4FieldManager.icc,v 1.9 2003-11-08 03:39:39 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4FieldManager inline implementation 
 //
 // -------------------------------------------------------------------
-
-inline
-G4bool G4FieldManager::SetDetectorField(G4Field *detectorField)
-{
-   fDetectorField= detectorField;
-   return 0;
-}
 
 inline
 const G4Field* G4FieldManager::GetDetectorField() const
