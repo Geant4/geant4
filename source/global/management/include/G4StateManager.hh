@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StateManager.hh,v 1.5 2001-07-18 17:59:22 asaim Exp $
+// $Id: G4StateManager.hh,v 1.6 2002-04-16 18:19:13 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -82,6 +82,11 @@ public: // with description
     // Set Geant4 to a new state.
     // In case the request is irregal, false will be returned
     // and the state of Geant4 will not be changed.
+  G4bool SetNewState(G4ApplicationState requestedState, const char* msg);
+    // Set Geant4 to a new state.
+    // In case the request is irregal, false will be returned
+    // and the state of Geant4 will not be changed.
+    // "msg" is information associating to this state change
   G4bool RegisterDependent(G4VStateDependent* aDependent,G4bool bottom=false);
     // Register a concrete class of G4VStateDependent.
     // Registered concrete classes will be notified via
@@ -121,10 +126,12 @@ private:
   G4std::vector<G4VStateDependent*> theDependentsList;
   G4VStateDependent* theBottomDependent;
   G4int suppressAbortion;
+  const char* msgptr;
 
 public:
   inline void SetSuppressAbortion(G4int i) { suppressAbortion = i; }
   inline G4int GetSuppressAbortion() const { return suppressAbortion; }
+  inline const char* GetMessage() const { return msgptr; }
 
 };
 

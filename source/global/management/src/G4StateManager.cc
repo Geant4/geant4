@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StateManager.cc,v 1.5 2001-07-18 17:59:23 asaim Exp $
+// $Id: G4StateManager.cc,v 1.6 2002-04-16 18:19:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,8 @@ G4StateManager::G4StateManager()
  : theCurrentState(PreInit),
    thePreviousState(PreInit),
    theBottomDependent(0),
-   suppressAbortion(0)
+   suppressAbortion(0),
+   msgptr(0)
 {
 }
 
@@ -159,11 +160,16 @@ G4StateManager::GetPreviousState() const
 
 G4bool
 G4StateManager::SetNewState(G4ApplicationState requestedState)
+{ return SetNewState(requestedState,0); }
+
+G4bool
+G4StateManager::SetNewState(G4ApplicationState requestedState, const char* msg)
 {
    if(requestedState==Abort && suppressAbortion>0) {
      if(suppressAbortion==2) return false;
      if(theCurrentState==EventProc) return false;
    }
+   msgptr = msg;
    size_t i=0;
    G4bool ack = true;
    G4ApplicationState savedState = thePreviousState;
@@ -184,6 +190,7 @@ G4StateManager::SetNewState(G4ApplicationState requestedState)
      theCurrentState = thePreviousState;
      thePreviousState = savedState;
    }
+   msgptr = 0;
    return ack;
 }
 
