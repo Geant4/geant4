@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FConicalSurface.hh,v 1.1 1999-01-07 16:07:31 gunter Exp $
+// $Id: G4FConicalSurface.hh,v 1.2 1999-01-27 16:11:57 broglia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef __FCONIC_H
@@ -56,7 +56,8 @@ public:
     // Add by L. Broglia
     tan_angle = (large_radius-small_radius)/length;
   }
-			     
+	
+  // constructor utilized into G4BREPSolidPCone
   G4FConicalSurface( const G4Point3D& o, const G4Vector3D& a,
 		     G4double l, G4double sr, G4double lr );
 
@@ -81,18 +82,6 @@ public:
 
   // Add by L. Broglia
   virtual G4double HowNear( const G4Vector3D& x ) const;
-  
-  inline void Comp( G4Vector3D& v, G4Point3D& min , G4Point3D& max)
-  {
-    if(v.x() > max.x() ) max.setX(v.x());
-    if(v.y() > max.y() ) max.setY(v.y());
-    if(v.z() > max.z() ) max.setZ(v.z());
-
-    if(v.x() < min.x()) min.setX(v.x());
-    if(v.y() < min.y()) min.setY(v.y());
-    if(v.z() < min.z()) min.setZ(v.z()); 
-  }
-
   
   virtual int WithinBoundary( const G4Vector3D& x ) const;
   virtual G4double Scale() const;
