@@ -23,9 +23,13 @@
 // ====================================================================
 //
 //   G4HepMCInterface.cc
-//   $Id: G4HepMCInterface.cc,v 1.1 2002-11-18 22:43:13 asaim Exp $
+//   $Id: G4HepMCInterface.cc,v 1.2 2002-12-03 14:44:33 gcosmo Exp $
 //
 // ====================================================================
+
+#ifndef WIN32         // Temporarly disabled on Windows, until CLHEP
+                      // will support the HepMC module
+
 #include "G4HepMCInterface.hh"
 
 #include "globals.hh"
@@ -138,3 +142,4 @@ void G4HepMCInterface::GeneratePrimaryVertex(G4Event* anEvent)
   HepMC2G4(hepmcEvent, anEvent);
 }
 
+#endif

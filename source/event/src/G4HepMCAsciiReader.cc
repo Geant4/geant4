@@ -23,9 +23,13 @@
 // ====================================================================
 //
 //   G4HepMCAsciiReader.cc
-//   $Id: G4HepMCAsciiReader.cc,v 1.1 2002-11-18 22:43:13 asaim Exp $
+//   $Id: G4HepMCAsciiReader.cc,v 1.2 2002-12-03 14:44:32 gcosmo Exp $
 //
 // ====================================================================
+
+#ifndef WIN32         // Temporarly disabled on Windows, until CLHEP
+                      // will support the HepMC module
+
 #include "G4HepMCAsciiReader.hh"
 #include "G4HepMCAsciiReaderMessenger.hh"
 
@@ -69,3 +73,4 @@ HepMC::GenEvent* G4HepMCAsciiReader::GenerateHepMCEvent()
   return evt;
 }
 
+#endif

@@ -23,9 +23,13 @@
 // ====================================================================
 //
 //   G4HepMCAsciiReaderMessenger.cc
-//   $Id: G4HepMCAsciiReaderMessenger.cc,v 1.1 2002-11-18 22:43:13 asaim Exp $
+//   $Id: G4HepMCAsciiReaderMessenger.cc,v 1.2 2002-12-03 14:44:32 gcosmo Exp $
 //
 // ====================================================================
+
+#ifndef WIN32         // Temporarly disabled on Windows, until CLHEP
+                      // will support the HepMC module
+
 #include "G4HepMCAsciiReaderMessenger.hh"
 #include "G4HepMCAsciiReader.hh"
 
@@ -95,3 +99,4 @@ G4String G4HepMCAsciiReaderMessenger::GetCurrentValue(G4UIcommand* command)
   return cv;
 }
 
+#endif
