@@ -7,6 +7,6 @@ rsplus04 prod_stl opt	geant4-00-cand-10+	all all all all 1
 # sgmedia prod_stl deb	geant4-00-cand-10+	all all all all 1
 # sgmedia prod_stl opt	geant4-00-cand-10+	all all all all 1
 sungeant prod_stl deb	geant4-00-cand-10+	all all all all 1
-sungeant prod_stl opt	geant4-00-cand-10+	all all all all 1
+# sungeant prod_stl opt	geant4-00-cand-10+	all all all all 1
 pcgeant prod_stl deb	geant4-00-cand-10+	all all all all 1
-pcgeant prod_stl opt	geant4-00-cand-10+	all all all all 1
+# pcgeant prod_stl opt	geant4-00-cand-10+	all all all all 1
