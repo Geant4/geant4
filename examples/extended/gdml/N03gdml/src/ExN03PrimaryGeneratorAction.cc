@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PrimaryGeneratorAction.cc,v 1.1.1.1 2002-05-31 00:34:44 radoone Exp $
+// $Id: ExN03PrimaryGeneratorAction.cc,v 1.2 2002-06-03 09:59:37 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,8 +61,9 @@ ExN03PrimaryGeneratorAction::ExN03PrimaryGeneratorAction(
   particleGun->SetParticleDefinition(particle);
   particleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
   particleGun->SetParticleEnergy(50.*MeV);
-  G4double position = -0.5*(ExN03Detector->GetWorldSizeX());
-  particleGun->SetParticlePosition(G4ThreeVector(position,0.*cm,0.*cm));
+  // We can't call it here as the WorldSizeX is not yet read from GDML input
+  //G4double position = -0.5*(ExN03Detector->GetWorldSizeX());
+  //particleGun->SetParticlePosition(G4ThreeVector(position,0.*cm,0.*cm));
 
 }
 
