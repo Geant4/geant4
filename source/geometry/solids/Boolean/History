@@ -1,5 +1,5 @@
 
-$Id: History,v 1.50 2005-03-10 11:36:07 gcosmo Exp $
+$Id: History,v 1.51 2005-04-04 09:45:14 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ Mar 23, 2005  J.Allison                  geom-bool-V07-00-02
+  - Added test for Number-Of-Rotation-Steps in GetPolyhedron()
+    for G4DisplacedSolid and G4BooleanSolid. Requires tag "greps-V07-00-02".
 
  Mar 10, 2005  V.Grichine                 geom-bool-V07-00-01
   - Modified Inside(p) G4SubtractionSolid and G4UnionSolid, to fix
