@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst12PhysicsList.cc,v 1.9 2001-07-11 10:09:53 gunter Exp $
+// $Id: Tst12PhysicsList.cc,v 1.10 2002-11-27 10:59:57 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -298,7 +298,7 @@ void Tst12PhysicsList::ConstructHad()
         theHandler->SetFermiModel(theFermiBreakUp);
         theHandler->SetMultiFragmentation(theMF);
         theHandler->SetMaxAandZForFermiBreakUp(12, 6);
-        theHandler->SetMinEForMultiFrag(3*MeV);
+        theHandler->SetMinEForMultiFrag(3*GeV);
 	
     // Pre equilibrium stage 
     G4PreCompoundModel * thePreEquilib = new G4PreCompoundModel(theHandler);
