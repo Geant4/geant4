@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_SpinEqRhs.hh,v 1.9 2003-10-31 14:35:52 gcosmo Exp $
+// $Id: G4Mag_SpinEqRhs.hh,v 1.10 2004-10-20 23:28:00 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -62,6 +62,10 @@ class G4Mag_SpinEqRhs : public G4Mag_EqRhs
                                     G4double dydx[] ) const;
        // Given the value of the magnetic field B, this function 
        // calculates the value of the derivative dydx.
+
+     inline void SetAnomaly(G4double a) { anomaly = a; }
+     inline G4double GetAnomaly() const { return anomaly; }
+       // set/get magnetic anomaly
 
    private:
 

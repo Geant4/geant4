@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_SpinEqRhs.cc,v 1.9 2003-10-31 14:35:55 gcosmo Exp $
+// $Id: G4Mag_SpinEqRhs.cc,v 1.10 2004-10-20 23:28:16 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // This is the standard right-hand side for equation of motion.
@@ -39,7 +39,10 @@
 #include "G4ThreeVector.hh"
 
 G4Mag_SpinEqRhs::G4Mag_SpinEqRhs( G4MagneticField* MagField )
-  : G4Mag_EqRhs( MagField ) {}
+  : G4Mag_EqRhs( MagField ) 
+{
+   anomaly = 1.165923e-3;
+}
 
 G4Mag_SpinEqRhs::~G4Mag_SpinEqRhs() {}
 
@@ -52,7 +55,7 @@ G4Mag_SpinEqRhs::SetChargeMomentumMass(G4double particleCharge, // in e+ units
    G4Mag_EqRhs::SetChargeMomentumMass(particleCharge, MomentumXc, mass);
 
    omegac = 0.105658387*GeV/mass * 2.837374841e-3*(rad/cm/kilogauss);
-   anomaly = 1.165923e-3;
+
    ParticleCharge = particleCharge;
 
    E = sqrt(sqr(MomentumXc)+sqr(mass));
