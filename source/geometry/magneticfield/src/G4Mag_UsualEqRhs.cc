@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_UsualEqRhs.cc,v 1.9 2003-10-31 14:35:55 gcosmo Exp $
+// $Id: G4Mag_UsualEqRhs.cc,v 1.10 2003-11-05 17:31:31 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,7 +45,7 @@ G4Mag_UsualEqRhs::EvaluateRhsGivenB( const G4double y[],
 			             const G4double B[3],
 				           G4double dydx[] ) const
 {
-   G4double momentum_mag_square = sqr(y[3]) + sqr(y[4]) + sqr(y[5]);
+   G4double momentum_mag_square = y[3]*y[3] + y[4]*y[4] + y[5]*y[5];
    G4double inv_momentum_magnitude = 1.0 / sqrt( momentum_mag_square );
 
    G4double cof = FCof()*inv_momentum_magnitude;
