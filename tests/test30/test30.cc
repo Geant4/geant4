@@ -158,7 +158,7 @@ int main(int argc, char** argv)
     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //120 
     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //130 
     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //140 
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //150 
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //150
     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //160
     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //170 
     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //180 
@@ -722,14 +722,14 @@ int main(int argc, char** argv)
 
         theta = mom.theta();
         G4double thetad = theta/degree;
-				
+
 	if(usepaw && e > 0.0 && pt > 0.0) {
           h[2]->fill(mom.phi()/degree,1.0);
           if(pd == neutron) h[23]->fill(mom.phi()/degree,1.0);
-	}				
+	}
 	de += e;
         if(verbose>0 || abs(mom.phi()/degree - 90.) < 0.01) {
-          G4cout << i << "-th secondary  " 
+          G4cout << i << "-th secondary  "
 		 << pd->GetParticleName() << "   Ekin(MeV)= "
                  << e/MeV
 		 << "   p(MeV)= " << mom/MeV
@@ -738,8 +738,8 @@ int main(int argc, char** argv)
 		 << "   pt(MeV)= " << pt/MeV
                  << G4endl;
         }
-				
- 
+
+
 
 	if(usepaw) {
 
@@ -750,12 +750,11 @@ int main(int argc, char** argv)
             if(abs(Z0 - Z) < 0.1 || Z0 == 0.0) h[26]->fill(N, factorb);
 	  }
 
-          if(pd == proton) { 
-						
-            h[1]->fill(1.0, 1.0);						
-            h[3]->fill(pz/MeV, 1.0); 
+          if(pd == proton) {
+
+            h[1]->fill(1.0, 1.0);
+            h[3]->fill(pz/MeV, 1.0);
             h[7]->fill(pt/MeV, 1.0);
-            h[11]->fill(e/MeV, 1.0);
             h[11]->fill(e/MeV, 1.0);
 	    h[21]->fill(e/MeV, factor);
 	    h[24]->fill(cos(theta), factora);

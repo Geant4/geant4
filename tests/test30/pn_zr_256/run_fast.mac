@@ -34,5 +34,11 @@ kinetic
 #paw
 kin.paw
 #run
+//--------
+#generator
+bertini
+#paw
+ber.paw
+#run
 //--------Exit
 #exit

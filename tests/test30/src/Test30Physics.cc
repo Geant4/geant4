@@ -83,6 +83,7 @@
 #include "G4PreCompoundModel.hh"
 #include "G4ExcitationHandler.hh"
 #include "G4BinaryCascade.hh"
+#include "G4CascadeInterface.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -158,7 +159,7 @@ void Test30Physics::Initialise()
 G4VProcess* Test30Physics::GetProcess(const G4String& gen_name, 
 		                      const G4String& part_name,
 		                            G4Material* mat)
-{ 
+{
   G4cout <<  "Test30Physics entry" << G4endl;
   if(theProcess) delete theProcess;
   theProcess = 0;
@@ -174,7 +175,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
 	
   theProcess = new Test30HadronProduction();	
   G4cout <<  "Process is created; gen= " << gen_name << G4endl;
-	 	
+
   // Physics list for the given run
   Test30VSecondaryGenerator* sg = 0;
    
@@ -202,17 +203,20 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     //G4cout <<  "Generator is set" << G4endl;
     man->AddDiscreteProcess(theProcess);
 
-    
+
   } else if(gen_name == "preCompound") {
     sg = new Test30VSecondaryGenerator(new G4PreCompoundModel(new G4ExcitationHandler()),mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
-		
+
   } else if(gen_name == "kinetic") {
     G4BinaryCascade* hkm = new G4BinaryCascade();
-    G4ExcitationHandler* excite = new G4ExcitationHandler();
-    G4VPreCompoundModel* precompound = new G4PreCompoundModel(excite);
-    hkm->SetDeExcitation(precompound);
+    sg = new Test30VSecondaryGenerator(hkm, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+
+  } else if(gen_name == "bertini") {
+    G4CascadeInterface* hkm = new G4CascadeInterface();
     sg = new Test30VSecondaryGenerator(hkm, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
