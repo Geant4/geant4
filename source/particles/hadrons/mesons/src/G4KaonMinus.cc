@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonMinus.cc,v 1.7 2001-10-16 08:16:12 kurasige Exp $
+// $Id: G4KaonMinus.cc,v 1.8 2002-02-12 01:07:21 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,12 +69,12 @@ G4KaonMinus::G4KaonMinus(
   G4VDecayChannel** mode = new G4VDecayChannel*[6];
   // kaon- -> mu- + anti_nu_mu
   mode[0] = new G4PhaseSpaceDecayChannel("kaon-",0.635,2,"mu-","anti_nu_mu");
-  // kaon- -> pi+ + pi0
-  mode[1] = new G4PhaseSpaceDecayChannel("kaon-",0.212,2,"pi+","pi0");
-  // kaon- -> pi+ + pi+ + pi-
-  mode[2] = new G4PhaseSpaceDecayChannel("kaon-",0.056,3,"pi+","pi+","pi-");
-  // kaon- -> pi+ + pi0 + pi0
-  mode[3] = new G4PhaseSpaceDecayChannel("kaon-",0.017,3,"pi+","pi0","pi0");
+  // kaon- -> pi- + pi0
+  mode[1] = new G4PhaseSpaceDecayChannel("kaon-",0.212,2,"pi-","pi0");
+  // kaon- -> pi- + pi+ + pi-
+  mode[2] = new G4PhaseSpaceDecayChannel("kaon-",0.056,3,"pi-","pi+","pi-");
+  // kaon- -> pi- + pi0 + pi0
+  mode[3] = new G4PhaseSpaceDecayChannel("kaon-",0.017,3,"pi-","pi0","pi0");
   // kaon- -> pi0 + e- + anti_nu_e (Ke3) 
   mode[4] = new G4KL3DecayChannel("kaon-",0.048,"pi0","e-","anti_nu_e");
   // kaon- -> pi0 + mu- + anti_nu_mu (Kmu3) 
