@@ -1,4 +1,4 @@
-$Id: History,v 1.37 2000-01-06 14:27:42 gcosmo Exp $
+$Id: History,v 1.38 2000-01-19 11:13:46 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+January 19, 2000 G.Cosmo (global-V01-00-01)
+- G4UnitsTable[.hh.cc]: added constructor to G4BestUnit for 3vectors (M.Maire).
+- globals.hh: added check on definition of CLHEP_MAX_MIN_DEFINED.
 
 January 3, 2000 G.Cosmo (global-V01-00-00)
 - Syncronized changes with HEAD (mainly CVS headers).
