@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyCompton.cc,v 1.11 1999-07-05 14:27:33 aforti Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.12 1999-07-06 15:03:02 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -193,6 +193,17 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const
   // Dynamic particle quantities  
   const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
   G4double GammaEnergy0 = aDynamicGamma->GetKineticEnergy();
+  if(GammaEnergy0 <= LowestEnergyLimit){
+    
+    aParticleChange.SetStatusChange(fStopAndKill);
+    aParticleChange.SetEnergyChange(0.);
+    aParticleChange.SetLocalEnergyDeposit(GammaEnergy0);
+    
+    return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
+
+  }
+
+
   G4double E0_m = GammaEnergy0 / electron_mass_c2 ;
   G4ParticleMomentum GammaDirection0 = aDynamicGamma->GetMomentumDirection();
 

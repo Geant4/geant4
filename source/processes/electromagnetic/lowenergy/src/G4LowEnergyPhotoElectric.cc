@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.15 1999-06-28 15:46:02 aforti Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.16 1999-07-06 15:03:03 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -347,6 +347,15 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
 
   const G4DynamicParticle* aDynamicPhoton = aTrack.GetDynamicParticle();
   const G4double PhotonEnergy = aDynamicPhoton->GetKineticEnergy();
+  if(PhotonEnergy <= LowestEnergyLimit){
+    
+    aParticleChange.SetStatusChange(fStopAndKill);
+    aParticleChange.SetEnergyChange(0.);
+    aParticleChange.SetLocalEnergyDeposit(PhotonEnergy);
+    
+    return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
+  }
+
   const G4ParticleMomentum PhotonDirection = aDynamicPhoton->GetMomentumDirection();
    
   // select randomly one element constituing the material.
