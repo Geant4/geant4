@@ -40,8 +40,8 @@ kin.paw
 #run
 //#kBound
 //0.1
-//#paw
-//kin01.paw
+#paw
+kin.paw
 //#run
 //--------Exit
 #exit

@@ -34,8 +34,8 @@ Zr
 #generator
 LEparametrisation
 //binary
-//#paw
-//kin.paw
+#paw
+kin.paw
 #run
 //--------Exit
 #exit
