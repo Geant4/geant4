@@ -67,8 +67,8 @@ G4PAIonisation::fProtonEnergyVector = new G4PhysicsLogVector(LowestKineticEnergy
 G4PAIonisation::G4PAIonisation( G4LogicalVolume* lVolume,
                                 const G4String& pName)
    : G4VPAIenergyLoss(pName),
-     theElectron ( G4Electron::Electron() ),
-     fLogicalVolume(NULL), fMaterial(NULL), fMaterialCutsCouple(NULL)
+     fLogicalVolume(NULL), fMaterial(NULL), fMaterialCutsCouple(NULL),
+     theElectron ( G4Electron::Electron() )
 {
   fLogicalVolume      = lVolume;
   //  fMatIndex           = lVolume->GetMaterialCutsCouple()->GetIndex();
@@ -218,7 +218,7 @@ void
 G4PAIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 
 {
-  G4double Charge = aParticleType.GetPDGCharge();
+  //  G4double Charge = aParticleType.GetPDGCharge();
   fMatCutsIndex           = fLogicalVolume->GetMaterialCutsCouple()->GetIndex();
   fMatIndex           = fLogicalVolume->GetMaterial()->GetIndex();
   // fMaterial           = lVolume->GetMaterial();
