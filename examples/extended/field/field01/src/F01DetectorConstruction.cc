@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01DetectorConstruction.cc,v 1.6 2001-10-15 17:20:36 gcosmo Exp $
+// $Id: F01DetectorConstruction.cc,v 1.7 2001-10-25 08:10:20 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -394,36 +394,6 @@ void F01DetectorConstruction::SetAbsorberZpos(G4double val)
   ComputeCalorParameters();
 }  
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//
-
-void F01DetectorConstruction::SetMagField(G4double fieldValue)
-{
-  // apply a global uniform magnetic field along X axis
-
-  /* *********************************************************
-
-  G4FieldManager* fieldMgr 
-   = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-    
-  if(magField) delete magField;		// delete the existing magn field
-  
-  if(fieldValue!=0.)			// create a new one if non nul
-  { 
-    magField = new G4UniformMagField(G4ThreeVector(fieldValue,0.,0.));        
-    fieldMgr->SetDetectorField(magField);
-    fieldMgr->CreateChordFinder(magField);
-  } 
-  else 
-  {
-    magField = 0;
-    fieldMgr->SetDetectorField(magField);
-  }
-
-  *************************************************************** */
-
-}
 
 ///////////////////////////////////////////////////////////////////////////////
 //

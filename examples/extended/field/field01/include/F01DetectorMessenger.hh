@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01DetectorMessenger.hh,v 1.2 2001-07-11 09:57:58 gunter Exp $
+// $Id: F01DetectorMessenger.hh,v 1.3 2001-10-25 08:10:20 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,7 +67,6 @@ class F01DetectorMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* WorldZCmd;
     G4UIcmdWithADoubleAndUnit* WorldRCmd;
 
-    G4UIcmdWithADoubleAndUnit* MagFieldCmd;
     G4UIcmdWithoutParameter*   UpdateCmd;
 
 };

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01DetectorMessenger.cc,v 1.2 2001-07-11 09:58:00 gunter Exp $
+// $Id: F01DetectorMessenger.cc,v 1.3 2001-10-25 08:10:20 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,13 +97,6 @@ F01DetectorMessenger::F01DetectorMessenger(F01DetectorConstruction * F01Det)
   UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
   UpdateCmd->AvailableForStates(Idle);
-      
-  MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/calor/setField",this);  
-  MagFieldCmd->SetGuidance("Define magnetic field.");
-  MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
-  MagFieldCmd->SetParameterName("Bz",false,false);
-  MagFieldCmd->SetDefaultUnit("tesla");
-  MagFieldCmd->AvailableForStates(Idle);  
 
 }
 
@@ -119,7 +112,6 @@ F01DetectorMessenger::~F01DetectorMessenger()
   delete WorldZCmd;
   delete WorldRCmd;
   delete UpdateCmd;
-  delete MagFieldCmd;
   delete F01detDir;
 }
 
@@ -150,9 +142,6 @@ void F01DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
    
   if( command == UpdateCmd )
    { F01Detector->UpdateGeometry(); }
-
-  if( command == MagFieldCmd )
-   { F01Detector->SetMagField(MagFieldCmd->GetNewDoubleValue(newValue));}
 
 }
 

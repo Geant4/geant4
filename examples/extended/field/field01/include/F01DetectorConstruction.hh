@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01DetectorConstruction.hh,v 1.4 2001-10-15 17:20:35 gcosmo Exp $
+// $Id: F01DetectorConstruction.hh,v 1.5 2001-10-25 08:10:20 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,8 +62,6 @@ class F01DetectorConstruction : public G4VUserDetectorConstruction
      void SetWorldMaterial(G4String);
      void SetWorldSizeZ(G4double);
      void SetWorldSizeR(G4double);
-
-     void SetMagField(G4double);
      
      G4VPhysicalVolume* Construct();
 

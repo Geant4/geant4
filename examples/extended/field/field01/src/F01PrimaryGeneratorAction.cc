@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01PrimaryGeneratorAction.cc,v 1.4 2001-10-15 17:20:38 gcosmo Exp $
+// $Id: F01PrimaryGeneratorAction.cc,v 1.5 2001-10-25 08:11:23 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -151,3 +151,14 @@ void F01PrimaryGeneratorAction::Setyvertex(G4double y)
   G4cout << " Y coordinate of the primary vertex = " << yvertex/mm <<
             " mm." << G4endl;
 }
+
+
+
+
+
+
+
+
+
+
+
