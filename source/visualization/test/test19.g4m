@@ -52,14 +52,14 @@ help /vis/sceneHandler/create
 #
 # Add world volume.
 /vis/scene/add/volume
+/vis/scene/add/axes 0 0 0 2 m
+/vis/scene/add/text 0 0 0 mm 50 -120 -200   exampleN03
 #
 # Create a viewer.
 /vis/viewer/create
 #
 /vis/viewer/set/lineSegmentsPerCircle 100
 /vis/viewer/refresh
-/vis/draw/axes     0 0 0 500
-/vis/draw/text     0 0 0 mm 50 -120 -200   exampleN03
 /vis/viewer/update
 #
 # Create another viewer.
@@ -70,11 +70,8 @@ help /vis/sceneHandler/create
 /vis/viewer/set/projection perspective 30
 #
 /vis/viewer/refresh
-/vis/draw/axes     0 0 0 500
-/vis/draw/text     0 0 0 mm 50 -120 -200   exampleN03
 /vis/viewer/update
 #
-/vis/set/drawing_style 0
 /vis/viewer/set/style wireframe
 #
 # Start a run to initialise/optimise geometry.
