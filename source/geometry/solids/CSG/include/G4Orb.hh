@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Orb.hh,v 1.4 2003-11-05 10:56:58 gcosmo Exp $
+// $Id: G4Orb.hh,v 1.5 2004-09-10 09:38:15 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -59,6 +59,7 @@ class G4Orb : public G4CSGSolid
     // Modifiers
 
     inline void SetRadius   (G4double newRmax) {fRmax=newRmax;};
+    inline G4double GetCubicVolume();
 
     // Methods for solid
 
@@ -114,5 +115,17 @@ class G4Orb : public G4CSGSolid
     G4double fRmax;
     G4double fRmaxTolerance;
 };
+
+
+///////////////////////////////////////////////////
+
+inline
+G4double G4Orb::GetCubicVolume()
+{
+  if(fCubicVolume != 0.) ;
+  else   fCubicVolume = 4*pi*fRmax*fRmax*fRmax/3.; 
+  return fCubicVolume;
+}
+
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 
-// $Id: testG4Orb.cc,v 1.2 2004-06-30 13:33:25 grichine Exp $
+// $Id: testG4Orb.cc,v 1.3 2004-09-10 09:38:29 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Orb Test File
@@ -89,7 +89,7 @@ const G4String OutputInside(const EInside a)
 
 int main(void)
 {
-    G4double Dist;
+    G4double Dist, vol, volCheck;
     G4ThreeVector pzero(0,0,0),px(30,0,0),py(0,30,0),pz(0,0,30);
     G4ThreeVector Pmx(-30,0,0),pmy(0,-30,0),pmz(0,0,-30);
     G4ThreeVector pbigx(100,0,0),pbigy(0,100,0),pbigz(0,0,100);
@@ -154,9 +154,11 @@ int main(void)
     assert(s1.GetName()=="Solid G4Orb");
 
 
-    // Some user application cases
+    // check cubic volume cases
 
-
+    vol = s1.GetCubicVolume();
+    volCheck = 4*pi*50*50*50/3;
+    assert(ApproxEqual(vol,volCheck));
     
 // Check G4Orb::Inside
 
