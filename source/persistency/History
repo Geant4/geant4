@@ -15,6 +15,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05 February, 03   G.Cosmo (persistency-V05-00-00)
+- Corrected inclusion of headers for constant and units from CLHEP.
+
 04 December, 02   Y.Morita (persistency-V04-01-02)
 - G4PersistencyManager.cc: protect for default persistency manager
 - G4PersistencyCenter.cc: bug fixes, disable HepMC/MCTruth printout
