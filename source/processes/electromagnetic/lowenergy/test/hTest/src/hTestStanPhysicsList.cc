@@ -54,7 +54,7 @@ hTestStanPhysicsList::hTestStanPhysicsList()
 
 void hTestStanPhysicsList::ConstructProcess()
 {
-  G4cout << "Standard Electromagnetic PhysicsList is initilized" << G4endl;
+  G4cout << "Standard EM PhysicsList will be constructed" << G4endl;
   hTestStepCut* theStepCut = new hTestStepCut();
   theStepCut->SetMaxStep(maxChargedStep);          
 
@@ -63,6 +63,8 @@ void hTestStanPhysicsList::ConstructProcess()
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
+    G4String particleType = particle->GetParticleType();
+    G4double charge = particle->GetPDGCharge();
      
     if (particleName == "gamma") {
 
@@ -121,6 +123,7 @@ void hTestStanPhysicsList::ConstructProcess()
                || particleName == "IonAr40"  
                || particleName == "IonFe56"  
                || particleName == "GenericIon"  
+               || (particleType == "nucleus" && charge != 0) 
               )
     {
       pmanager->AddProcess(new G4MultipleScattering,-1,1,1);

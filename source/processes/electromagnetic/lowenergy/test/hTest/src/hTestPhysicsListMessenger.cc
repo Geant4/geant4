@@ -28,6 +28,7 @@
 #include "hTestPhysicsList.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithAnInteger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -93,6 +94,11 @@ hTestPhysicsListMessenger::hTestPhysicsListMessenger(hTestPhysicsList* list)
   HadPhysicsCmd->SetParameterName("HadronList",false);
   HadPhysicsCmd->AvailableForStates(PreInit,Idle);
 
+  verbCmd = new G4UIcmdWithAnInteger("/hTest/physics/verbose",this);
+  verbCmd->SetGuidance("Set verbose for hTest");
+  verbCmd->SetParameterName("verb",false);
+  verbCmd->AvailableForStates(PreInit,Idle);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -108,6 +114,7 @@ hTestPhysicsListMessenger::~hTestPhysicsListMessenger()
   delete setMaxStepCmd;
   delete EMPhysicsCmd;
   delete HadPhysicsCmd;
+  delete verbCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -136,6 +143,8 @@ void hTestPhysicsListMessenger::SetNewValue(G4UIcommand* com, G4String newValue)
     { hTestList->SetEMPhysicsList(newValue);}
   if(com == HadPhysicsCmd)
     { hTestList->SetHadronPhysicsList(newValue);}
+  if( com == verbCmd )
+   { hTestList->SetVerbose(verbCmd->GetNewIntValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

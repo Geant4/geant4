@@ -32,6 +32,7 @@
 class hTestPhysicsList;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -57,6 +58,7 @@ class hTestPhysicsListMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* setMaxStepCmd;     
     G4UIcmdWithAString*        EMPhysicsCmd;
     G4UIcmdWithAString*        HadPhysicsCmd;
+    G4UIcmdWithAnInteger*      verbCmd;
 
 };
 

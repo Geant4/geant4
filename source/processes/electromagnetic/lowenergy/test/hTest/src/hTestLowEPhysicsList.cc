@@ -71,6 +71,8 @@ void hTestLowEPhysicsList::ConstructProcess()
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
+    G4String particleType = particle->GetParticleType();
+    G4double charge = particle->GetPDGCharge();
 
     if(0 < verbose) G4cout << "LowE EM processes for " << particleName << G4endl; 
      
@@ -150,6 +152,7 @@ void hTestLowEPhysicsList::ConstructProcess()
                || particleName == "IonFe56"  
                || particleName == "He3"  
                || particleName == "GenericIon"  
+               || (particleType == "nucleus" && charge != 0) 
               )
     {
       if(0 < verbose) G4cout << "LowE " << particleName << G4endl; 
