@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorMessenger.cc,v 1.3 2001-08-01 17:11:40 hpw Exp $
+// $Id: DetectorMessenger.cc,v 1.4 2002-12-06 18:11:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -48,7 +48,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * myDC)
   selMatCmd->SetParameterName("choice",true);
   selMatCmd->SetDefaultValue("Pb");
   selMatCmd->SetCandidates("Air Al Pb U");
-  selMatCmd->AvailableForStates(PreInit,Idle);
+  selMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   myDetector->SelectMaterial(defParam="Pb");
 }
