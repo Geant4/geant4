@@ -1,4 +1,4 @@
-$Id: History,v 1.62 1999-10-27 14:16:40 stesting Exp $
+$Id: History,v 1.63 1999-10-28 06:49:27 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -17,7 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-26th October 1999  John Allison.
+28th October 1999  Gabriele Cosmo (config-V00-01-04)
+- architecture.gmk: removed G4STREAM and G4STREAM_STREAMBUF_IMPLEMENTATION
+  flags, now no longer needed. Streambuf implementation is the default for
+  every platform. (by H.Yoshida)
+
+26th October 1999  John Allison
 - Augmented liblist to look for dependencies on auto-generated
   headers in $G4TMP.
 
