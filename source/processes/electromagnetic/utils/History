@@ -1,4 +1,4 @@
-$Id: History,v 1.68 2003-01-06 16:54:30 vnivanch Exp $
+$Id: History,v 1.69 2003-01-24 16:13:22 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24 jan 03: V.Ivant (utils-V05-00-01)
+- Migration to "cut per region" 
 
 06 jan 03: V.Ivant (utils-V05-00-00)
 - Update interfaces to STD classes in order to be ready to migrade 

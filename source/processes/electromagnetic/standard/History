@@ -1,4 +1,4 @@
-$Id: History,v 1.73 2003-01-15 12:10:27 maire Exp $
+$Id: History,v 1.74 2003-01-24 16:11:29 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24 jan 03: V.Ivant (stand-V05-00-02)
+- Migration to "cut per region" 
      
 15 jan 03: mma 
 - PhotoElectricEffect::ElecThetaDistribution : if gamma>5 --> costeta=1
