@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScatteringSTD.cc,v 1.21 2003-05-26 14:15:06 vnivanch Exp $
+// $Id: G4MultipleScatteringSTD.cc,v 1.22 2003-06-02 08:47:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -66,7 +66,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4MultipleScatteringSTD.hh"
-#include "G4LewisModel.hh"
+#include "G4MscModel.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -110,7 +110,7 @@ void G4MultipleScatteringSTD::InitialiseProcess(const G4ParticleDefinition& part
     SetLateralDisplasmentFlag(true);
     SetBuildLambdaTable(true);
   }
-  G4VEmModel* em = new G4LewisModel(dtrl,NuclCorrPar,FactPar,facxsi,samplez);
+  G4VEmModel* em = new G4MscModel(dtrl,NuclCorrPar,FactPar,facxsi,samplez);
   em->SetLowEnergyLimit(0.1*keV);
   em->SetHighEnergyLimit(100.0*TeV);
   AddEmModel(1, em);

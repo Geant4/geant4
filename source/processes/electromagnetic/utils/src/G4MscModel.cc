@@ -26,7 +26,7 @@
 // GEANT4 Class file
 //
 //
-// File name:   G4LewisModel
+// File name:   G4MscModel
 //
 // Author:      Laszlo Urban
 //
@@ -39,14 +39,15 @@
 //          the central part now is similar to the Highland parametrization +
 //          minor correction in angle sampling algorithm (for all particles)
 //          (L.Urban)
-// 30-05-03 misprint in SampleCosineTheta corrected(L.Urban)          
-//          
+// 30-05-03 misprint in SampleCosineTheta corrected(L.Urban)
+// 27-03-03 Rename (V.Ivanchenko)
+//
 //
 
 // Class Description:
 //
-// Implementation of Lewis model of multiple scattering
-// H.W.Lewis Phys Rev 78 (1950) 526
+// Implementation of the model of multiple scattering based on
+// H.W.Lewis Phys Rev 78 (1950) 526 and others
 
 // -------------------------------------------------------------------
 //
@@ -55,7 +56,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4LewisModel.hh"
+#include "G4MscModel.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
 #include "G4LossTableManager.hh"
@@ -63,7 +64,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4LewisModel::G4LewisModel(G4double& m_dtrl, G4double& m_NuclCorrPar, 
+G4MscModel::G4MscModel(G4double& m_dtrl, G4double& m_NuclCorrPar, 
                            G4double& m_FactPar, G4double& m_facxsi, 
 			   G4bool& m_samplez, const G4String& nam)
   : G4VEmModel(nam),
@@ -82,20 +83,20 @@ G4LewisModel::G4LewisModel(G4double& m_dtrl, G4double& m_NuclCorrPar,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4LewisModel::~G4LewisModel()
+G4MscModel::~G4MscModel()
 {}
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool G4LewisModel::IsInCharge(const G4ParticleDefinition* p)
+G4bool G4MscModel::IsInCharge(const G4ParticleDefinition* p)
 {
   return (p->GetPDGCharge() != 0.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4LewisModel::Initialise(const G4ParticleDefinition* p,
+void G4MscModel::Initialise(const G4ParticleDefinition* p,
                               const G4DataVector&)
 {
   // set values of some data members
@@ -127,7 +128,7 @@ void G4LewisModel::Initialise(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4LewisModel::CrossSection(const G4Material* material,
+G4double G4MscModel::CrossSection(const G4Material* material,
                                     const G4ParticleDefinition* p,
                                           G4double kineticEnergy,
                                           G4double,
@@ -158,7 +159,7 @@ G4double G4LewisModel::CrossSection(const G4Material* material,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4LewisModel::ComputeTransportCrossSection(
+G4double G4MscModel::ComputeTransportCrossSection(
                              const G4ParticleDefinition* part,
                                    G4double KineticEnergy,
                                    G4double AtomicNumber,
@@ -403,7 +404,7 @@ G4double G4LewisModel::ComputeTransportCrossSection(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4LewisModel::GeomPathLength(
+G4double G4MscModel::GeomPathLength(
                           G4PhysicsTable* theLambdaTable,
                     const G4MaterialCutsCouple* couple,
 		    const G4ParticleDefinition* theParticle,
@@ -476,7 +477,7 @@ G4double G4LewisModel::GeomPathLength(
         u = exp(log(G4UniformRand())/cz1) ;
         grej  = exp(cz*log(u))*(1.-u) ;
         if (grej > grej0)
-            G4cout << "G4LewisModel: Warning! majorant "
+            G4cout << "G4MscModel: Warning! majorant "
                    << grej0 << " < " << grej << G4endl;
       } while (grej < grej0*G4UniformRand()) ;
    zPathLength = tPathLength*u ;
@@ -487,7 +488,7 @@ G4double G4LewisModel::GeomPathLength(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4LewisModel::TrueStepLength(G4double geomStepLength)
+G4double G4MscModel::TrueStepLength(G4double geomStepLength)
 {
   G4double trueLength = geomStepLength;
   if (geomStepLength > lambda0*tausmall) {
@@ -530,7 +531,7 @@ G4double G4LewisModel::TrueStepLength(G4double geomStepLength)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4LewisModel::SampleCosineTheta(G4double trueStepLength)
+G4double G4MscModel::SampleCosineTheta(G4double trueStepLength)
 {
   G4double cth = 1.;
   currentTau = trueStepLength/lambda0;
@@ -538,7 +539,7 @@ G4double G4LewisModel::SampleCosineTheta(G4double trueStepLength)
   if(trueStepLength < stepmin)
     cth = exp(-currentTau) ;
   else
-  {       
+  {
     if (currentTau > taubig) cth = -1.+2.*G4UniformRand();
     else if (currentTau >= tausmall)
     {
@@ -690,7 +691,7 @@ G4double G4LewisModel::SampleCosineTheta(G4double trueStepLength)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4LewisModel::SampleDisplacement()
+G4double G4MscModel::SampleDisplacement()
 {
   const G4double kappa = 2.5;
   const G4double kappapl1 = kappa+1.;

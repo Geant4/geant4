@@ -26,7 +26,7 @@
 // GEANT4 Class header file
 //
 //
-// File name:     G4LewisModel
+// File name:     G4MscModel
 //
 // Author:        Laszlo Urban
 //
@@ -35,30 +35,31 @@
 // Modifications:
 //
 // 27-03-03 Move model part from G4MultipleScattering (V.Ivanchenko)
+// 27-03-03 Rename (V.Ivanchenko)
 //
 //
 // Class Description:
 //
-// Implementation of Lewis model of multiple scattering
-// H.W.Lewis Phys Rev 78 (1950) 526
+// Implementation of the model of multiple scattering based on
+// H.W.Lewis Phys Rev 78 (1950) 526 and others
 
 // -------------------------------------------------------------------
 //
 
-#ifndef G4LewisModel_h
-#define G4LewisModel_h 1
+#ifndef G4MscModel_h
+#define G4MscModel_h 1
 
 #include "G4VEmModel.hh"
 
-class G4LewisModel : public G4VEmModel
+class G4MscModel : public G4VEmModel
 {
 
 public:
 
-  G4LewisModel(G4double&, G4double&, G4double&, G4double&, G4bool&,
-               const G4String& nam = "Lewis");
+  G4MscModel(G4double&, G4double&, G4double&, G4double&, G4bool&,
+               const G4String& nam = "MscUni");
 
-  ~G4LewisModel();
+  ~G4MscModel();
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
@@ -128,8 +129,8 @@ private:
                                    G4double AtomicWeight);
 
   // hide assignment operator
-  G4LewisModel & operator=(const  G4LewisModel &right);
-  G4LewisModel(const  G4LewisModel&);
+  G4MscModel & operator=(const  G4MscModel &right);
+  G4MscModel(const  G4MscModel&);
 
   const G4ParticleDefinition* particle;
   G4double mass;
