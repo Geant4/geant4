@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.31 2003-06-16 17:00:36 gunter Exp $
+// $Id: G4eLowEnergyLoss.cc,v 1.32 2004-06-01 14:03:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // -----------------------------------------------------------
@@ -58,6 +58,7 @@
 // 03/06/02  MGP - Restore fStopAndKill
 // 28/10/02  VI Optimal binning for dE/dx
 // 21/01/03  VI cut per region
+// 01/06/04  VI check if stopped particle has AtRest processes
 //
 // --------------------------------------------------------------
 
@@ -451,7 +452,8 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   if (finalT <= 0. )
   {
     finalT = 0.;
-    aParticleChange.SetStatusChange(fStopAndKill);
+    if(Charge > 0.0) aParticleChange.SetStatusChange(fStopButAlive);
+    else             aParticleChange.SetStatusChange(fStopAndKill);
   }
 
   G4double edep = E - finalT;
