@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3Division.hh,v 1.5 2001-07-11 09:58:57 gunter Exp $
+// $Id: G3Division.hh,v 1.6 2001-11-08 16:07:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------
@@ -43,6 +43,7 @@
 
 #include "globals.hh"
 #include "geomdefs.hh"
+#include "G4ReflectionFactory.hh"
 
 class G3VolTableEntry;
 class G4VPhysicalVolume;
@@ -63,7 +64,7 @@ class G3Division
     
     // methods
     void UpdateVTE();
-    G4VPhysicalVolume* CreatePVReplica();   
+    G4PhysicalVolumesPair CreatePVReplica();   
     
   private:
 

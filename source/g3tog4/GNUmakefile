@@ -8,10 +8,6 @@
 ###  make this package non-generic enough to require its
 ###  own makefile.
 ###
-###  History: now in README file.
-###  !!!!! Please add -- or at least copy -- history updates  !!!!!
-###  !!!!! to the g3tog4/README file   - TW                   !!!!!
-###
 ###############################################################################
 
 G4TARGET := rztog4
@@ -33,6 +29,7 @@ CPPFLAGS  += \
              -I$(G4BASE)/geometry/management/include \
              -I$(G4BASE)/geometry/solids/CSG/include \
              -I$(G4BASE)/geometry/solids/specific/include \
+             -I$(G4BASE)/geometry/solids/Boolean/include \
              -I$(G4BASE)/geometry/solids/BREPS/include \
              -I$(G4BASE)/geometry/solids/STEP/include \
              -I$(G4BASE)/graphics_reps/include \
@@ -87,12 +84,7 @@ endif
 ### versions. You can use cernlib -v option to specify the cernlib version 
 ###############################################################################
 
-ifdef SLAC
-   cernlibv = 95a
-else
-   cernlibv = pro
-endif
-
+cernlibv = pro
 cernlibs := $(shell cernlib -v $(cernlibv) geant321 packlib)
 
 ### .PHONY targets are executed regardless of time-stamp of any file of same 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3VolTableEntry.cc,v 1.9 2001-07-16 15:38:21 gcosmo Exp $
+// $Id: G3VolTableEntry.cc,v 1.10 2001-11-08 16:08:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I.Hrivnacova, 13.10.99
@@ -29,15 +29,18 @@
 #include "globals.hh"
 #include "G3VolTableEntry.hh"
 #include "G3VolTable.hh"
+#include "G3RotTable.hh"
 #include "G4LogicalVolume.hh"
+#include "G4SubtractionSolid.hh"
 #include "G3Pos.hh"
 #include "G3toG4.hh"
 
 G3VolTableEntry::G3VolTableEntry(G4String& vname, G4String& shape, 
-			     G4double* rpar, G4int npar, G4int nmed, 
-			     G4VSolid* solid, G4bool hasNegPars)
+			         G4double* rpar, G4int npar, G4int nmed, 
+			         G4VSolid* solid, G4bool hasNegPars)
   : fVname(vname), fShape(shape), fRpar(0), fNpar(npar), fNmed(nmed), 
-    fSolid(solid), fLV(0), fHasNegPars(hasNegPars), fDivision(0)		  		     
+    fSolid(solid), fLV(0), fHasNegPars(hasNegPars), fHasMANY(false),
+    fDivision(0)		  		     
 {
   if (npar>0 && rpar!=0) {
     fRpar = new G4double[npar];
@@ -58,8 +61,14 @@ G3VolTableEntry::operator == ( const G3VolTableEntry& lv) const {
 
 void 
 G3VolTableEntry::AddG3Pos(G3Pos* aG3Pos){
+
+  // insert this position to the vector
   G3Vol.CountG3Pos();
   fG3Pos.push_back(aG3Pos);
+
+  // pass MANY info 
+  G4String vonly = aG3Pos->GetOnly();
+  if (vonly == "MANY") SetHasMANY(true);
 }
 
 void 
@@ -81,6 +90,11 @@ G3VolTableEntry::AddClone(G3VolTableEntry* itsClone){
   if (FindClone(itsClone->GetName()) == 0) {
     fClones.push_back(itsClone);
   }  
+}
+
+void 
+G3VolTableEntry::AddOverlap(G3VolTableEntry* overlap){
+    fOverlaps.push_back(overlap);
 }
 
 void 
@@ -117,7 +131,7 @@ G3VolTableEntry::ReplaceMother(G3VolTableEntry* vteOld,
 
 G3VolTableEntry*
 G3VolTableEntry::FindDaughter(const G4String& Dname){
-  for (int idau=0; idau<GetNoDaughters(); idau++){
+  for (G4int idau=0; idau<GetNoDaughters(); idau++){
     if (GetDaughter(idau)->GetName() == Dname) return GetDaughter(idau);
   }
   return 0;
@@ -150,6 +164,7 @@ void G3VolTableEntry::PrintSolidInfo() {
   for (G4int i=0; i<fNpar; i++) G4cout << fRpar[i] << " ";
   G4cout << G4endl;
   G4cout << "HasNegPars: " << fHasNegPars << G4endl;
+  G4cout << "HasMANY: " << fHasMANY << G4endl;
   G4cout << "================================= " << G4endl;
 }
 
@@ -185,15 +200,19 @@ void G3VolTableEntry::SetHasNegPars(G4bool hasNegPars) {
   fHasNegPars = hasNegPars;
 }
 
+void G3VolTableEntry::SetHasMANY(G4bool hasMANY) {
+  fHasMANY = hasMANY;
+}
+
 void G3VolTableEntry::ClearG3PosCopy(G4int copy) {
   if (fG3Pos.size()>0 && copy>=0 && copy<G4int(fG3Pos.size())) {
     G3Pos* tmp=0;
-    G4std::vector<G3Pos*>::iterator it=fG3Pos.begin();
-    for(G4int j=0;j<copy;j++) it++;
-    if(it!=fG3Pos.end()) {
-        tmp = fG3Pos[copy];
-        fG3Pos.erase(it);
-    }
+     G4std::vector<G3Pos*>::iterator it=fG3Pos.begin();
+     for(G4int j=0;j<copy;j++) it++;
+     if(it!=fG3Pos.end()) {
+         tmp = fG3Pos[copy];
+         fG3Pos.erase(it);
+     }
   }
 }
 
@@ -245,6 +264,11 @@ G3VolTableEntry::HasNegPars(){
   return fHasNegPars;
 }
 
+G4bool 
+G3VolTableEntry::HasMANY(){
+  return fHasMANY;
+}
+
 G4VSolid*
 G3VolTableEntry::GetSolid() {
   return fSolid;
@@ -268,6 +292,11 @@ G3VolTableEntry::GetNoMothers() {
 G4int
 G3VolTableEntry::GetNoClones() {
   return fClones.size();
+}
+
+G4int
+G3VolTableEntry::GetNoOverlaps() {
+  return fOverlaps.size();
 }
 
 G3VolTableEntry* 
@@ -315,4 +344,9 @@ G3VolTableEntry::GetMasterClone(){
     master = this;
 
   return master;
+}
+
+G4std::vector<G3VolTableEntry*>*
+G3VolTableEntry::GetOverlaps(){
+  return &fOverlaps;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3Division.cc,v 1.12 2001-07-16 15:38:19 gcosmo Exp $
+// $Id: G3Division.cc,v 1.13 2001-11-08 16:07:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, V.Berejnoi 13.10.99
@@ -35,7 +35,6 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
-
 
 G3VolTableEntry* G4CreateVTE(G4String vname, G4String shape, G4int nmed,
                                G4double Rpar[], G4int npar);
@@ -118,7 +117,7 @@ void G3Division::UpdateVTE()
   }  
 }
 
-G4VPhysicalVolume* G3Division::CreatePVReplica()
+G4PhysicalVolumesPair G3Division::CreatePVReplica()
 {
   G4String name = fVTE->GetName();
   G4LogicalVolume* lv =  fVTE->GetLV();
@@ -137,15 +136,22 @@ G4VPhysicalVolume* G3Division::CreatePVReplica()
        if (position.y()!=0.) 
          position.setX(position.y()*((G4Para*)lv->GetSolid())->GetTanAlpha());
 
-       new G4PVPlacement(0, position, lv, name, mlv, 0, i);
+       G4ReflectionFactory::Instance()
+	 ->Place(G4Translate3D(position), name, lv, mlv, 0, i);
+
+       //new G4PVPlacement(0, position, lv, name, mlv, 0, i);
     }
     
     // no G4PVReplica was created - return 0
-    return 0;   
+    return G4PhysicalVolumesPair(0,0);   
   }     
   
-  G4PVReplica* pvol 
-    = new G4PVReplica(name, lv, mlv, fAxis, fNofDivisions, fWidth, fOffset);
+  G4PhysicalVolumesPair pvol
+    = G4ReflectionFactory::Instance()
+        ->Replicate(name, lv, mlv, fAxis, fNofDivisions, fWidth, fOffset);
+  
+  //G4PVReplica* pvol 
+  //  = new G4PVReplica(name, lv, mlv, fAxis, fNofDivisions, fWidth, fOffset);
 
   #ifdef G3G4DEBUG
     G4cout << "Create G4PVReplica name " << name << " logical volume name " 

@@ -1,7 +1,13 @@
-$Id: History,v 1.46 2001-10-11 12:36:01 gcosmo Exp $
+$Id: History,v 1.47 2001-11-08 16:07:57 gcosmo Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V03-02-02 08-Nov-2001 G.Cosmo
+- Implemented reflection of CSG solids through G4ReflectionFactory class
+  and G4ReflectedSolid (I.Hrivnacova).
+- Added limited support for MANY volumes through adoption of boolean
+  solids(I.Hrivnacova). New files: G3toG4MANY[.hh.cc], G4gsbool.cc.
 
 g3tog4-V03-02-01 11-Oct-2001 G.Cosmo
 - clparse.cc: removed inclusion of RW wrapper, moved now to G4Tokenizer.hh.
