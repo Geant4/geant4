@@ -33,7 +33,6 @@
 #include "G4VHitsCollection.hh"
 #include "G4TrajectoryContainer.hh"
 #include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
@@ -57,11 +56,6 @@ void ExN04EventAction::BeginOfEventAction(const G4Event*)
     trackerCollID = SDman->GetCollectionID(colNam="trackerCollection");
     calorimeterCollID = SDman->GetCollectionID(colNam="calCollection");
     muonCollID = SDman->GetCollectionID(colNam="muonCollection");
-  }
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if(pVVisManager)
-  {
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/draw/current");
   }
 }
 
@@ -104,15 +98,6 @@ void ExN04EventAction::EndOfEventAction(const G4Event* evt)
     int n_hit = MHC->entries();
     G4cout << "     " << n_hit
          << " hits are stored in ExN04MuonHitsCollection." << G4endl;
-  }
-
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if(pVVisManager)
-  {
-    if(THC) THC->DrawAllHits();
-    if(CHC) CHC->DrawAllHits();
-    if(MHC) MHC->DrawAllHits();
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/show/view");
   }
 }
 
