@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLWin32Viewer.cc,v 1.8 2003-06-23 13:06:34 gbarrand Exp $
+// $Id: G4OpenGLWin32Viewer.cc,v 1.9 2003-06-25 09:01:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,7 +32,6 @@
 
 #ifdef G4VIS_BUILD_OPENGLWIN32_DRIVER
 
-// this :
 #include "G4OpenGLWin32Viewer.hh"
 
 #include "G4ios.hh"

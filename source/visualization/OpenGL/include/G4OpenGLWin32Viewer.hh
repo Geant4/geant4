@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLWin32Viewer.hh,v 1.10 2003-06-23 13:03:48 gbarrand Exp $
+// $Id: G4OpenGLWin32Viewer.hh,v 1.11 2003-06-25 09:01:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,8 +34,6 @@
 #define G4OPENGLWIN32VIEWER_HH
 
 #include "globals.hh"
-
-#include "G4OpenGL.hh"
 
 #include "G4VViewer.hh"
 #include "G4OpenGLSceneHandler.hh"
