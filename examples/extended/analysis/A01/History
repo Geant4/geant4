@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2004-12-03 15:30:34 gcosmo Exp $
+$Id: History,v 1.28 2004-12-13 16:02:49 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -10,6 +10,9 @@ $Id: History,v 1.27 2004-12-03 15:30:34 gcosmo Exp $
      ----------------------------------------------------------
 
 ---------------------------------------------------------------------------  
+
+13th December 2004 Gabriele Cosmo (exampleA01-V06-02-03)
+- Modified hadlists.gmk to new phys-lists structure.
 
 3rd December 2004 Gabriele Cosmo (exampleA01-V06-02-02)
 - Implemented migration to <cmath>.
