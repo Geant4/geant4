@@ -86,6 +86,13 @@ G4OpBoundaryProcess::G4OpBoundaryProcess(const G4String& processName)
 	theStatus = Undefined;
 	theModel = glisur;
 	theFinish = polished;
+        theReflectivity = 1.;
+        theEfficiency   = 0.;
+                                                                                
+        prob_sl = 0.;
+        prob_ss = 0.;
+        prob_bs = 0.;
+
 }
 
 // G4OpBoundaryProcess::G4OpBoundaryProcess(const G4OpBoundaryProcess &right)
