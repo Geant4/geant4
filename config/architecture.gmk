@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.60 1999-12-15 18:06:19 gracia Exp $
+# $Id: architecture.gmk,v 1.61 2000-01-31 11:30:04 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -153,10 +153,17 @@ endif
 #
 ########################### end setup for G4ODBMS #############################
 
-# If G4DEBUG not specified, the default compilation is optimised ...
+# If G4DEBUG or G4NO_OPTIMISE are not specified,
+# the default compilation is optimised ...
 #
-ifndef G4DEBUG
-  G4OPTIMISE := 1
+ifdef G4DEBUG
+  CPPFLAGS += -DG4DEBUG
+  G4DEBUG := 1
+else
+  ifndef G4NO_OPTIMISE
+    CPPFLAGS += -DG4OPTIMISE
+    G4OPTIMISE := 1
+  endif
 endif
 
 # CLHEP path, etc.
@@ -362,9 +369,11 @@ ifeq ($(G4SYSTEM),SUN-CC)
   ifdef G4OPTIMISE
     CXXFLAGS  := -O
   else
-    CXXFLAGS  := -g
-    FCFLAGS := -g
-    CCFLAGS := -g
+    ifdef G4DEBUG
+      CXXFLAGS  := -g
+      FCFLAGS := -g
+      CCFLAGS := -g
+    endif
   endif
 #  CXXFLAGS += -fnonstd
   CFRONT_G4TEMPLATE_REPOSITORY  := true
@@ -407,9 +416,11 @@ ifeq ($(G4SYSTEM),SUN-CC5)
   ifdef G4OPTIMISE
     CXXFLAGS  := -O
   else
-    CXXFLAGS  := -g
-    FCFLAGS := -g
-    CCFLAGS := -g
+    ifdef G4DEBUG
+      CXXFLAGS  := -g
+      FCFLAGS := -g
+      CCFLAGS := -g
+    endif
   endif
 #  CXXFLAGS += -fnonstd
   G4_HAVE_BOOL := yes
@@ -461,9 +472,11 @@ ifeq ($(G4SYSTEM),HP-aCC)
   ifdef G4OPTIMISE
     CXXFLAGS  := +O2 +Onolimit
   else
-    CXXFLAGS := -g
-    FCFLAGS  := -g
-    CCFLAGS  := -g
+    ifdef G4DEBUG
+      CXXFLAGS := -g
+      FCFLAGS  := -g
+      CCFLAGS  := -g
+    endif
   endif
   CXXFLAGS += +DAportable
   CPPFLAGS += -I/usr
@@ -509,9 +522,11 @@ ifeq ($(G4SYSTEM),SGI-CC)
   ifdef G4OPTIMISE
     CXXFLAGS  := -O -OPT:Olimit=5000
   else
-    CXXFLAGS  := -g 
-    FCFLAGS   := -g
-    CCFLAGS   := -g
+    ifdef G4DEBUG
+      CXXFLAGS  := -g 
+      FCFLAGS   := -g
+      CCFLAGS   := -g
+    endif
   endif
   G4_HAVE_BOOL := yes
   CXXFLAGS  += -ptused
@@ -543,9 +558,11 @@ ifeq ($(G4SYSTEM),AIX-xlC)
   ifdef G4OPTIMISE
     CXXFLAGS  := -O3 -qtwolink -+
   else
-    CXXFLAGS  := -g -qdbxextra -qcheck=all -qfullpath -qtwolink -+
-    FCFLAGS := -g
-    CCFLAGS := -g
+    ifdef G4DEBUG
+      CXXFLAGS  := -g -qdbxextra -qcheck=all -qfullpath -qtwolink -+
+      FCFLAGS := -g
+      CCFLAGS := -g
+    endif
   endif
   FC := xlf
   FCFLAGS += -qextname
@@ -578,9 +595,11 @@ ifeq ($(G4SYSTEM),DEC-cxx)
   ifdef G4OPTIMISE
     CXXFLAGS	:= -O
   else
-    CXXFLAGS	:= -gall
-    FCFLAGS	:= -g
-    CCFLAGS     := -g
+    ifdef G4DEBUG
+      CXXFLAGS	:= -gall
+      FCFLAGS	:= -g
+      CCFLAGS   := -g
+    endif
   endif
   G4_HAVE_BOOL  := yes
   CXXFLAGS	+= -ieee -timplicit_local
@@ -621,9 +640,11 @@ ifeq ($(G4SYSTEM),Linux-g++)
     FCFLAGS   := -O
     CCFLAGS   := -O
   else
-    CXXFLAGS  += -g
-    FCFLAGS   := -g
-    CCFLAGS   := -g
+    ifdef G4DEBUG
+      CXXFLAGS  += -g
+      FCFLAGS   := -g
+      CCFLAGS   := -g
+    endif
   endif
   ifdef G4MAKESHLIB
     CXXFLAGS  += -fPIC
@@ -664,7 +685,9 @@ ifeq ($(G4SYSTEM),WIN32-VC)
   ifdef G4OPTIMISE
     CXXFLAGS  += -Ox
   else
-    CXXFLAGS  += -Od -Zi -Fd$(G4LIBDIR)/lib$(name)
+    ifdef G4DEBUG
+      CXXFLAGS  += -Od -Zi -Fd$(G4LIBDIR)/lib$(name)
+    endif
   endif
   CXXFLAGS += -MD -GX -Zm200 -nologo -DWIN32 -D_CONSOLE 
   CXXFLAGS += -D_WIN32 -DOS
