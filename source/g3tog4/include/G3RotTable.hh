@@ -8,7 +8,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3RotTable.hh,v 1.3 1999-05-06 17:46:39 lockman Exp $
+// $Id: G3RotTable.hh,v 1.4 1999-05-12 17:37:52 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -17,8 +17,7 @@
 // Maintains a linked List of G3 material index/G4 material pointer pairs.
 
 #include <rw/tpordvec.h>
-
-class G3toG4RotationMatrix;
+#include "G3toG4RotationMatrix.hh"
 
 class G3RotTable {
 private:

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gspos.cc,v 1.3 1999-05-12 08:10:07 lockman Exp $
+// $Id: G4gspos.cc,v 1.4 1999-05-12 17:37:54 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4LogicalVolume.hh"
@@ -63,7 +63,7 @@ void G4gspos(G4String vname, G4int num, G4String vmoth, G4double x,
   
   // get the logical volume pointer of the mother from the name
   G4LogicalVolume *mothLV = G3Vol.GetLV(vmoth);
-  G4PVPlacement* pvol = new G4PVPlacement((G4RotationMatrix*)rotm, 
+  G4PVPlacement* pvol = new G4PVPlacement((G4RotationMatrix*) rotm,
 					  *offset, lvol, vname,
 					  mothLV, isMany, num);
   
@@ -71,4 +71,16 @@ void G4gspos(G4String vname, G4int num, G4String vmoth, G4double x,
   //    G3Vol.PutPV(&vname, pvol);
   delete offset;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
