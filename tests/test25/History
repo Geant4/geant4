@@ -12,6 +12,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19th March 2004  Gabriele Cosmo (test25-V06-00-00)
+- Fixed definition of materials and values in messenger.
+- Made test25.in be the default input script.
+
 16th March 2004  Gabriele Cosmo
 - Fixed compilation warnings.
 - Replaced usage of NULL with 0.
