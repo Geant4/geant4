@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.hh,v 1.12 2001-08-03 05:59:03 kurasige Exp $
+// $Id: G4VUserPhysicsList.hh,v 1.13 2001-10-10 02:26:29 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -308,6 +308,12 @@ class G4VUserPhysicsList
   private:
    enum { FixedStringLengthForStore = 32 }; 
 
+  ////////////////////////////////////////////////////////////////////
+  protected:
+   enum { NumberOfParticlesForStoreCuts = 9};
+   static const G4String particleForStoreCuts[NumberOfParticlesForStoreCuts];
+   G4bool isBuildPhysicsTable[NumberOfParticlesForStoreCuts];
+   G4int  isParticleForStoreCuts(const G4ParticleDefinition*) const;
 };
 
 

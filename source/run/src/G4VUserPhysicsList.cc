@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.22 2001-09-20 02:34:23 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.23 2001-10-10 02:26:29 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -525,8 +525,12 @@ void G4VUserPhysicsList::SetCutValueForOthers(G4double cutValue)
 	  G4cout << "Set cuts for " << particle->GetParticleName() << G4endl;
 #endif
       }
+      // special treatment for particles for store cuts
+      G4int idx = isParticleForStoreCuts(particle);
+      if (idx >=0) {
+	if (!isBuildPhysicsTable[idx])BuildPhysicsTable(particle);
+      }
     }
-
   }
 }
 
@@ -609,6 +613,8 @@ void G4VUserPhysicsList::SetParticleCuts( G4double cut, G4ParticleDefinition* pa
 ///////////////////////////////////////////////////////////////
 void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
 {
+  G4int idx = isParticleForStoreCuts(particle);
+  if (idx >=0) isBuildPhysicsTable[idx] = true;
   if (fRetrievePhysicsTable) {
 #ifdef G4VERBOSE  
     if (verboseLevel>2){
@@ -1008,17 +1014,8 @@ G4bool G4VUserPhysicsList::StoreCutValues(const G4String& directory,
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     // Only following particles are concerned
-    if ( (particle->GetParticleName() == "gamma" ) ||
-	 (particle->GetParticleName() == "e-"    ) ||
-	 (particle->GetParticleName() == "e+"    ) ||
-	 (particle->GetParticleName() == "mu-"   ) ||
-	 (particle->GetParticleName() == "mu+"   ) ||
-	 (particle->GetParticleName() == "proton" ) ||
-	 (particle->GetParticleName() == "anti_proton" ) ||
-	 (particle->GetParticleName() == "neutron" ) ||
-	 (particle->GetParticleName() == "anti_neutron" ) ){
-      
-      
+    G4int idx = isParticleForStoreCuts(particle);
+    if (idx >=0 ){
       // particle name and cut in length
       if (ascii) {
 	/////////////// ASCII mode  /////////////////
@@ -1554,6 +1551,8 @@ G4bool  G4VUserPhysicsList::RetrieveCutValues(const G4String&  directory,
 #ifdef G4VERBOSE    
     if (verboseLevel >2)DumpCutValues(particle); 
 #endif
+    G4int idx = isParticleForStoreCuts(particle);
+    if (idx >=0) isBuildPhysicsTable[idx] = false;
    }
   
 #ifdef G4VERBOSE    
@@ -1568,9 +1567,28 @@ G4bool  G4VUserPhysicsList::RetrieveCutValues(const G4String&  directory,
   return true;
 }
 
+G4int G4VUserPhysicsList::isParticleForStoreCuts(const G4ParticleDefinition* particle) const
+{
+  G4int idx;
+  for ( idx =0; idx < NumberOfParticlesForStoreCuts; ++idx) {
+    if (particle->GetParticleName()==particleForStoreCuts[idx]) return idx;
+  }
+  return -1;
+}
 
-
-
+const G4String 
+  G4VUserPhysicsList::particleForStoreCuts[NumberOfParticlesForStoreCuts] =
+{
+  "gamma",
+  "e-",
+  "e+",
+  "mu-",
+  "mu+",
+  "proton",
+  "anti_proton",
+  "neutron",
+  "anti_neutron"
+};
 
 
 
