@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.4 2003-01-14 22:26:50 asaim Exp $
+// $Id: G4ProductionCutsTable.cc,v 1.5 2003-01-22 17:55:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -396,6 +396,7 @@ void G4ProductionCutsTable::DumpCouples() const
             G4cout << "    " << (*rItr)->GetName() << G4endl;
             break;
           }
+          mItr++;
         }
       }
     }
