@@ -37,12 +37,12 @@ public:
 private:     
      };
      
-inline int G4QGSMParameters::operator==(const G4QGSMParameters &right) const
+inline int G4QGSMParameters::operator==(const G4QGSMParameters &) const
     {
     return 1;
     }
 
-inline int G4QGSMParameters::operator!=(const G4QGSMParameters &right) const
+inline int G4QGSMParameters::operator!=(const G4QGSMParameters &) const
     {
     return  0;
     }
