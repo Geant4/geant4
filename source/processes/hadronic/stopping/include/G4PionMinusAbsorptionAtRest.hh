@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PionMinusAbsorptionAtRest.hh,v 1.2 1999-12-15 14:53:36 gunter Exp $
+// $Id: G4PionMinusAbsorptionAtRest.hh,v 1.3 2000-12-14 08:53:15 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -25,6 +25,11 @@
 #ifndef G4PionMinusAbsorptionAtRest_h
 #define G4PionMinusAbsorptionAtRest_h 1
  
+// Class Description
+// Process for pion- absorption at rest; 
+// to be used in your physics list in case you need this physics.
+// Class Description - End
+
 #include "globals.hh"
 #include "Randomize.hh" 
 #include "G4VRestProcess.hh"

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4KaonMinusAbsorption.hh,v 1.2 1999-12-15 14:53:35 gunter Exp $
+// $Id: G4KaonMinusAbsorption.hh,v 1.3 2000-12-14 08:53:15 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -31,6 +31,11 @@
 #include "G4VParticleChange.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4GHEKinematicsVector.hh"
+// Class Description
+// Alternative process for absorption of K- at rest; 
+// to be used in your physics list in case you need this physics.
+// Class Description - End
+
 
 class G4KaonMinusAbsorption : public G4VRestProcess
  
