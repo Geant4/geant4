@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999-01-07 16:11:37 gunter Exp $
+# $Id: GNUmakefile,v 1.2 1999-11-06 17:29:36 hpw Exp $
 # --------------------------------------------------------------
 # GNUmakefile for hadronic models library. G.Folger 10-Dec-97
 # --------------------------------------------------------------
@@ -8,6 +8,7 @@ name := G4hadronic_models
 SUBDIRS  = low_energy 
 SUBDIRS += high_energy 
 SUBDIRS += neutron_hp
+SUBDIRS += isotope_production
 SUBDIRS += generator/de_excitation
 SUBDIRS += generator/diffractive_string
 SUBDIRS += generator/high_energy
@@ -19,7 +20,7 @@ SUBDIRS += generator/string_common
 SUBDIRS += generator/string_fragmentation
 SUBDIRS += generator/util
 
-SUBLIBS  = G4hadronic_HE G4hadronic_LE G4hadronic_neu
+SUBLIBS  = G4hadronic_HE G4hadronic_LE G4hadronic_neu G4hadronic_iso
 SUBLIBS += G4hadronic_deex G4hadronic_diffstring G4hadronic_HE_gen G4hadronic_kinetic
 SUBLIBS += G4hadronic_man_gen G4hadronic_preequ G4hadronic_qgstring G4hadronic_string_common
 SUBLIBS += G4hadronic_stringfrag G4hadronic_util_gen
