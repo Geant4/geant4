@@ -21,13 +21,19 @@
 #
 #  hist file name
 #
+#/plots/sethistName g4.p11
+#
 /plots/sethistName g4.p11
 #
-#  PLOT: energy deposit distribution in absorber
+#  PLOT: kinetic energy distribution in absorber
 #
-/plots/setnbinEn 95
-/plots/setEnlow 0.0 MeV
-/plots/setEnhigh 0.1  MeV  
+#/plots/setnbinEn 95
+#/plots/setEnlow 0.0 MeV
+#/plots/setEnhigh 0.1  MeV 
+# 
+/plots/setnbinTt 100
+/plots/setTtlow 99.9996 MeV
+/plots/setTthigh 100.0002  MeV  
 #
 #/calor/cutG 3.0 mm    
 #
@@ -36,18 +42,18 @@
 /run/initialize
 /run/particle/dumpCutValues
 #
-/gun/particle e-
+/gun/particle proton
 #
 #/gun/particle chargedgeantino
 # 
 #/gun/energy 200.00 GeV
 #
-/gun/energy 4000.0 MeV
+/gun/energy 1.0 MeV
 #
-/tracking/verbose 1
+#/tracking/verbose 1
 #
-/event/printModulo 1
-/run/beamOn 10
+/event/printModulo 10
+/run/beamOn 100
 #
 #
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02EventAction.cc,v 1.2 2001-11-13 17:22:39 grichine Exp $
+// $Id: F02EventAction.cc,v 1.3 2001-11-19 16:40:27 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -100,36 +100,41 @@ void F02EventAction::EndOfEventAction(const G4Event* evt)
 {
   G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
   F02CalorHitsCollection* CHC = NULL;
-  if (HCE)
-      CHC = (F02CalorHitsCollection*)(HCE->GetHC(calorimeterCollID));
+  
+  if (HCE) CHC = (F02CalorHitsCollection*)(HCE->GetHC(calorimeterCollID));
 
   if (CHC)
-   {
+  {
     int n_hit = CHC->entries();
    // if(verboselevel==2)
    // G4cout << "     " << n_hit
    //      << " hits are stored in F02CalorHitsCollection." << G4endl;
 
     G4double totEAbs=0, totLAbs=0;
-    for (int i=0;i<n_hit;i++)
-      { totEAbs += (*CHC)[i]->GetEdepAbs(); 
-        totLAbs += (*CHC)[i]->GetTrakAbs();
-      }
-  if(verboselevel==2)
-    G4cout
-       << "   Absorber: total energy: " << G4std::setw(7) << 
-                             G4BestUnit(totEAbs,"Energy")
-       << "       total track length: " << G4std::setw(7) <<
-                             G4BestUnit(totLAbs,"Length")
-       << G4endl;           
 
-   // count event, add deposits to the sum ...
+    for (int i=0;i<n_hit;i++)
+    { 
+      totEAbs += (*CHC)[i]->GetEdepAbs(); 
+      totLAbs += (*CHC)[i]->GetTrakAbs();
+    }
+    if(verboselevel==2)
+    {
+      G4cout << "   Absorber: total energy: " << G4std::setw(7) 
+             << G4BestUnit(totEAbs,"Energy")
+             << "       total track length: " << G4std::setw(7) 
+             << G4BestUnit(totLAbs,"Length")  << G4endl;           
+    }
+    // count event, add deposits to the sum ...
+
     runaction->CountEvent() ;
     runaction->AddTrackLength(totLAbs) ;
     runaction->AddnStepsCharged(nstepCharged) ;
     runaction->AddnStepsNeutral(nstepNeutral) ;
+
     if(verboselevel==2)
+    {
       G4cout << " Ncharged=" << Nch << "  ,   Nneutral=" << Nne << G4endl;
+    }
     runaction->CountParticles(Nch,Nne);
     runaction->AddEP(NE,NP);
     runaction->AddTrRef(Transmitted,Reflected) ;
@@ -144,32 +149,42 @@ void F02EventAction::EndOfEventAction(const G4Event* evt)
 
   if(pVVisManager)
   {
-   G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
-   G4int n_trajectories = 0;
-   if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();  
-   for(G4int i=0; i<n_trajectories; i++) 
-      { G4Trajectory* trj = (G4Trajectory *)((*(evt->GetTrajectoryContainer()))[i]);
-        if (drawFlag == "all") trj->DrawTrajectory(50);
-        else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-                               trj->DrawTrajectory(50); 
-      }
-  }  
+    G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
+    G4int n_trajectories = 0;
 
+    if (trajectoryContainer) n_trajectories = trajectoryContainer->entries(); 
+ 
+    for(G4int i=0; i<n_trajectories; i++) 
+    { 
+      G4Trajectory* trj = (G4Trajectory *)((*(evt->GetTrajectoryContainer()))[i]);
+
+      if (drawFlag == "all") 
+      {
+        trj->DrawTrajectory(50);
+      }
+      else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
+      {
+        trj->DrawTrajectory(50); 
+      }
+    }
+  }  
   if(verboselevel>0)
+  {  
     G4cout << "<<< Event  " << evt->GetEventID() << " ended." << G4endl;
-  
+  }
   
   //save rndm status
   if (runaction->GetRndmFreq() == 2)
+  { 
+    HepRandom::saveEngineStatus("endOfEvent.rndm");   
+    G4int evtNb = evt->GetEventID();
+
+    if (evtNb%printModulo == 0)
     { 
-     HepRandom::saveEngineStatus("endOfEvent.rndm");   
-     G4int evtNb = evt->GetEventID();
-     if (evtNb%printModulo == 0)
-       { 
         G4cout << "\n---> End of Event: " << evtNb << G4endl;
         HepRandom::showEngineStatus();
-       }
-    }     
+    }
+  }     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

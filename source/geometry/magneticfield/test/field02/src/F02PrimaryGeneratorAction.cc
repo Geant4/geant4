@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02PrimaryGeneratorAction.cc,v 1.1 2001-10-11 07:17:44 grichine Exp $
+// $Id: F02PrimaryGeneratorAction.cc,v 1.2 2001-11-19 16:40:27 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,8 +68,8 @@ F02PrimaryGeneratorAction::F02PrimaryGeneratorAction(
   
   thePrimaryParticleName = particle->GetParticleName() ;
 
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  particleGun->SetParticleEnergy(100.*GeV);
+  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.0,0.0,1.0));
+  particleGun->SetParticleEnergy(0.01*GeV);
 
   zvertex = 0.0 ; //  -0.5*(F02Detector->GetAbsorberThickness());
   particleGun->SetParticlePosition(G4ThreeVector(xvertex,yvertex,zvertex));

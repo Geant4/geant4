@@ -43,7 +43,7 @@
 /gun/energy 1.0 MeV
 #
 /event/printModulo 1
-/run/beamOn 1
+/run/beamOn 10
 #
 #
 

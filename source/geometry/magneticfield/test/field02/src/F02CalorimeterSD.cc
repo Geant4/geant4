@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02CalorimeterSD.cc,v 1.1 2001-10-11 07:17:43 grichine Exp $
+// $Id: F02CalorimeterSD.cc,v 1.2 2001-11-19 16:40:26 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,7 @@
   
 #include "G4ios.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+/////////////////////////////////////////////////////////////////////////////////
 
 F02CalorimeterSD::F02CalorimeterSD(G4String name,
                                    F02DetectorConstruction* det)
@@ -52,25 +52,28 @@ F02CalorimeterSD::F02CalorimeterSD(G4String name,
   HitID = new G4int[500];
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//////////////////////////////////////////////////////////////////////////////////
 
 F02CalorimeterSD::~F02CalorimeterSD()
 {
   delete [] HitID;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+/////////////////////////////////////////////////////////////////////////////
 
 void F02CalorimeterSD::Initialize(G4HCofThisEvent*HCE)
 {
-  CalCollection = new F02CalorHitsCollection
-                      (SensitiveDetectorName,collectionName[0]); 
-  for (G4int j=0;j<1; j++) {HitID[j] = -1;};
+  CalCollection = new F02CalorHitsCollection( SensitiveDetectorName,
+                                              collectionName[0]      ); 
+  for (G4int j=0;j<1; j++) 
+  {
+    HitID[j] = -1;
+  }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+////////////////////////////////////////////////////////////////////////////////
 
-G4bool F02CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
+G4bool F02CalorimeterSD::ProcessHits( G4Step* aStep, G4TouchableHistory* ROhist)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
   
@@ -84,26 +87,38 @@ G4bool F02CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
   G4TouchableHistory* theTouchable
     = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
     
-  G4VPhysicalVolume* physVol = theTouchable->GetVolume(); 
+  G4VPhysicalVolume* physVol = theTouchable->GetVolume();
+ 
   //theTouchable->MoveUpHistory();
+
   G4int F02Number = 0 ;
 
   if (HitID[F02Number]==-1)
-    { 
-      F02CalorHit* calHit = new F02CalorHit();
-      if (physVol == Detector->GetAbsorber()) calHit->AddAbs(edep,stepl);
-      HitID[F02Number] = CalCollection->insert(calHit) - 1;
-      if (verboseLevel>0)
-        G4cout << " New Calorimeter Hit on F02: " << F02Number << G4endl;
+  { 
+    F02CalorHit* calHit = new F02CalorHit();
+
+    if (physVol == Detector->GetAbsorber()) 
+    {
+      calHit->AddAbs(edep,stepl);
     }
+    HitID[F02Number] = CalCollection->insert(calHit) - 1;
+
+    if (verboseLevel>0)
+    {  
+      G4cout << " New Calorimeter Hit on F02: " << F02Number << G4endl;
+    }
+  }
   else
-    { 
-      if (physVol == Detector->GetAbsorber())
-         (*CalCollection)[HitID[F02Number]]->AddAbs(edep,stepl);
-      if (verboseLevel>0)
-        G4cout << " Energy added to F02: " << F02Number << G4endl; 
+  { 
+    if (physVol == Detector->GetAbsorber())
+    {   
+      (*CalCollection)[HitID[F02Number]]->AddAbs(edep,stepl);
     }
-    
+    if (verboseLevel>0)
+    {    
+      G4cout << " Energy added to F02: " << F02Number << G4endl;
+    } 
+  }    
   return true;
 }
 

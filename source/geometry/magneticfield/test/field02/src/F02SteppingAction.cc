@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02SteppingAction.cc,v 1.1 2001-10-11 07:17:45 grichine Exp $
+// $Id: F02SteppingAction.cc,v 1.2 2001-11-19 16:40:27 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,7 +44,7 @@
 #include "g4std/iomanip"
 #include "G4UImanager.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//////////////////////////////////////////////////////////////////////////
 
 F02SteppingAction::F02SteppingAction(F02DetectorConstruction* DET,
                                      F02EventAction* EA,
@@ -55,14 +55,14 @@ F02SteppingAction::F02SteppingAction(F02DetectorConstruction* DET,
   steppingMessenger = new F02SteppingMessenger(this);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//////////////////////////////////////////////////////////////////////////
 
 F02SteppingAction::~F02SteppingAction()
 {
   delete steppingMessenger ;
  }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+/////////////////////////////////////////////////////////////////////////////////
 
 void F02SteppingAction::UserSteppingAction(const G4Step* aStep)
 { 
@@ -151,17 +151,17 @@ void F02SteppingAction::UserSteppingAction(const G4Step* aStep)
         (aStep->GetTrack()->GetNextVolume()->GetName()=="World") &&
         (aStep->GetPostStepPoint()->GetProcessDefinedStep()
               ->GetProcessName() == "Transportation") &&
-        (aStep->GetTrack()->GetMomentumDirection().x()>0.)
+        (aStep->GetTrack()->GetMomentumDirection().z()>0.)
                                                         )
      {
        eventaction->SetTr();
-       Theta = acos(aStep->GetTrack()->GetMomentumDirection().x()) ;
+       Theta = acos(aStep->GetTrack()->GetMomentumDirection().z()) ;
        runaction->FillTh(Theta) ;
        Ttrans = aStep->GetTrack()->GetKineticEnergy() ;
        runaction->FillTt(Ttrans) ;
        yend= aStep->GetTrack()->GetPosition().y() ;
-       zend= aStep->GetTrack()->GetPosition().z() ;
-       rend = sqrt(yend*yend+zend*zend) ;
+       xend= aStep->GetTrack()->GetPosition().x() ;
+       rend = sqrt(yend*yend+xend*xend) ;
        runaction->FillR(rend);
      }
        
@@ -205,4 +205,9 @@ void F02SteppingAction::UserSteppingAction(const G4Step* aStep)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+
+
+
 

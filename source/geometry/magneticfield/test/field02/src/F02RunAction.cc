@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02RunAction.cc,v 1.1 2001-10-11 07:17:44 grichine Exp $
+// $Id: F02RunAction.cc,v 1.2 2001-11-19 16:40:27 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -495,30 +495,34 @@ void F02RunAction::EndOfRunAction(const G4Run* aRun)
       G4cout << G4endl ;
     }     
   }
-  if(nbinTt>0)
+  if( nbinTt > 0 )
   {
-     G4double E , dnorm, norm ,sig;
-   G4cout << " transmitted energy distribution " << G4endl ;
-   G4cout << "#entries=" << entryTt << "    #underflows=" << underTt <<
+    G4double E , dnorm, norm ,sig;
+    G4cout << " transmitted energy distribution " << G4endl ;
+    G4cout << "#entries=" << entryTt << "    #underflows=" << underTt <<
              "    #overflows=" << overTt << G4endl ;
-   if( entryTt>0.)
+   if( entryTt > 0.0 )
    {
      Ttmean /= entryTt;
-     sig=Tt2mean/entryTt-Ttmean*Ttmean ;
-     if(sig<=0.)
-       sig=0.;
-     else
-       sig=sqrt(sig/entryTt) ;
+     sig     = Tt2mean/entryTt - Ttmean*Ttmean ;
+
+     if( sig <= 0.0 )  sig = 0.0 ;
+     else              sig = sqrt(sig/entryTt) ;
+
      G4cout << " mean energy of transmitted particles=" << Ttmean/keV << 
                " +- " << sig/keV << "  keV." << G4endl;
-     E = Ttlow - dTt ;
+
+     E    = Ttlow - dTt ;
      norm = TotNbofEvents*dTt ;
+
      G4cout << " bin nb      Elow      entries     normalized " << G4endl ;
+
      for(G4int itt=0; itt<nbinTt; itt++)
      {
-      E += dTt ;
-      dnorm = distTt[itt]/norm;
-      G4cout << G4std::setw(5) << itt << G4std::setw(10) << E << 
+       E    += dTt ;
+       dnorm = distTt[itt]/norm;
+
+       G4cout << G4std::setw(5) << itt << G4std::setw(10) << E << 
                 G4std::setw(12) << distTt[itt] <<
                 G4std::setw(12) << dnorm << G4endl ;
      }

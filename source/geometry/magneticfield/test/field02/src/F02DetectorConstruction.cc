@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02DetectorConstruction.cc,v 1.1 2001-10-11 07:17:43 grichine Exp $
+// $Id: F02DetectorConstruction.cc,v 1.2 2001-11-19 16:40:27 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,13 +62,13 @@ F02DetectorConstruction::F02DetectorConstruction()
   G4double inch = 2.54*cm ;
   G4double  mil = inch/1000.0 ;
 
-  WorldSizeZ = 80.*cm;
-  WorldSizeR = 20.*cm;
+  WorldSizeZ = 200.*cm;
+  WorldSizeR = 1000.*cm;
 
-  AbsorberThickness = 40.0*mm;
+  AbsorberThickness = 0.1*mm;
 
-  AbsorberRadius   = 10.*cm;
-  zAbsorber = 36.*cm ;
+  AbsorberRadius   = WorldSizeR - 0.1*cm;
+  zAbsorber = 0.5*WorldSizeZ + 0.5*AbsorberThickness - 1.0*cm ;
 
   fWindowThick = 51.0*micrometer ;
   fElectrodeThick = 10.0*micrometer ;
@@ -310,6 +310,7 @@ H2O->AddElement(elO, natoms=1);
 
 
   density = 1.2928*mg/cm3 ;       // STP
+  density *= 10e-8 ;
   G4Material* Air = new G4Material(name="Air"  , density, ncomponents=3);
   Air->AddMaterial( Nitrogen, fractionmass = 0.7557 ) ;
   Air->AddMaterial( Oxygen,   fractionmass = 0.2315 ) ;
@@ -408,8 +409,8 @@ H2O->AddElement(elO, natoms=1);
   fWindowMat = Mylar ;
   fElectrodeMat = Al ;
 
-  AbsorberMaterial = Kr20CO2 ;   // XeCO2CF4  ; 
-  fGapMat          = Kr20CO2 ;
+  AbsorberMaterial = Air ;  // Kr20CO2 ;   // XeCO2CF4  ; 
+  fGapMat          = Air ;  //  Kr20CO2 ;
 
   WorldMaterial    = Air ;
 }
@@ -552,19 +553,14 @@ void F02DetectorConstruction::PrintCalorParameters()
 
 void F02DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
 {
-  // get the pointer to the material table
-  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-
-  // search the material by its name   
-  G4Material* pttoMaterial;
-  for (G4int J=0 ; J<theMaterialTable->length() ; J++)
-   { pttoMaterial = (*theMaterialTable)(J);     
-     if(pttoMaterial->GetName() == materialChoice)
-        {AbsorberMaterial = pttoMaterial;
-         logicAbsorber->SetMaterial(pttoMaterial); 
-        // PrintCalorParameters();
-        }             
-   }
+  // search the material by its name
+  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
+  if (pttoMaterial)
+  {
+    AbsorberMaterial = pttoMaterial;
+    logicAbsorber->SetMaterial(pttoMaterial); 
+    PrintCalorParameters();
+  }   
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -573,19 +569,14 @@ void F02DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
 
 void F02DetectorConstruction::SetWorldMaterial(G4String materialChoice)
 {
-  // get the pointer to the material table
-  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-
-  // search the material by its name   
-  G4Material* pttoMaterial;
-  for (G4int J=0 ; J<theMaterialTable->length() ; J++)
-   { pttoMaterial = (*theMaterialTable)(J);     
-     if(pttoMaterial->GetName() == materialChoice)
-        {WorldMaterial = pttoMaterial;
-         logicWorld->SetMaterial(pttoMaterial); 
-       //  PrintCalorParameters();
-        }             
-   }
+ // search the material by its name
+  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
+  if (pttoMaterial)
+  {
+    WorldMaterial = pttoMaterial;
+    logicWorld->SetMaterial(pttoMaterial); 
+    PrintCalorParameters();     
+  }
 }
 
 ///////////////////////////////////////////////////////////////////////////
