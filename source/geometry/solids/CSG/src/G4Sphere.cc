@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.27 2003-11-03 18:17:32 gcosmo Exp $
+// $Id: G4Sphere.cc,v 1.28 2004-01-24 15:22:43 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -2454,7 +2454,8 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
         G4cout << "Proposed distance :" << G4endl << G4endl;
         G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
         G4Exception("G4Sphere::DistanceToOut(p,v,...)",
-                    "LogicError", FatalException,
+		    // "LogicError", FatalException,
+                "Notification", JustWarning,
                     "Undefined side for valid surface normal to solid.");
         break;
     }
