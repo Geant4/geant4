@@ -162,11 +162,12 @@ if ( `uname -n | grep hpplus` != "" ) then
 endif
 
 if ( `uname -n` == aleph ) then
-setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
-setenv G4INSTALL                   /geant4/stt/$REF/src/geant4
-setenv G4SYSTEM                    HP-aCC
-setenv G4WORKDIR                   /geant4/stt/$REF/$G4SYSTEM/$DEBOPT
-setenv G4DEBUG                     1
+setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/rd44/cvs
+setenv G4INSTALL /geant4/dev/geant4
+setenv G4LIB     /geant4/dev/lib
+setenv G4WORKDIR /geant4/dev
+setenv G4SYSTEM  HP-aCC
+setenv G4DEBUG   1
 #setenv G4MAKESHLIB                 $G4INSTALL/config/makeshlib.sh
 # G4 build flags :
 setenv G4UI_BUILD_XM_SESSION       1
@@ -185,27 +186,31 @@ setenv G4VIS_USE_OPENGLX           1
 setenv G4VIS_USE_RAYX              1
 setenv G4VIS_USE_OIX               1
 # Specific :
-setenv CLHEP_BASE_DIR /geant4/HP-UX
-setenv OGLHOME        /geant4/HP-UX
-setenv OIVFLAGS       "-I/geant4/HP-UX/include/SoFree"
-setenv OIVLIBS        "-L/geant4/HP-UX/lib -lhepvisXt -lhepvis -lSoFreeXt -lSoFree"
-setenv SOFREEUSER     /projects/SoFree/user/
+setenv CLHEP_BASE_DIR /lal/CLHEP/1.3/HP-UX-aCC
+setenv OGLHOME        /lal/Mesa/3.0/HP-UX
+setenv OIVHOME        /lal/SoFree/v2r1
+setenv OIVFLAGS       "-I$OIVHOME/include -I/lal/HEPVis/v5r0/include"
+setenv OIVLIBS        "-L/lal/HEPVis/v5r0/HP-UX-aCC-SF -lHEPVisXt -lHEPVis -L$OIVHOME/HP-UX-aCC -lSoFreeXt -lSoFree"
+setenv SOFREEUSER     $OIVHOME/user/
 # OPACS :
-#setenv G4UI_BUILD_WO_SESSION       1
-#setenv G4VIS_BUILD_OPACS_DRIVER    1
-#setenv G4UI_USE_WO                 1
-#setenv G4VIS_USE_OPACS             1
-#setenv OCONFIG HP-UX-aCC
-#source /projects/OPACS/setup.csh
+setenv G4UI_BUILD_WO_SESSION       1
+setenv G4VIS_BUILD_OPACS_DRIVER    1
+setenv G4UI_USE_WO                 1
+setenv G4VIS_USE_OPACS             1
+setenv OCONFIG HP-UX-aCC
+source /lal/OPACS/v3/setup.csh
+# Else :
+setenv CPPVERBOSE 1
 endif
 #---------------------------------------------------
 if ( `uname -n` == asc ) then
-setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
-setenv G4INSTALL                   /geant4/stt/$REF/src/geant4
-setenv G4SYSTEM                    OSF1
-setenv G4WORKDIR                   /geant4/stt/$REF/$G4SYSTEM/$DEBOPT
-setenv G4DEBUG                     1
-#setenv G4MAKESHLIB                 $G4INSTALL/config/makeshlib.sh
+setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/rd44/cvs
+setenv G4INSTALL /geant4/dev/geant4
+setenv G4LIB     /geant4/dev/lib
+setenv G4WORKDIR /geant4/dev
+setenv G4SYSTEM DEC-cxx
+setenv G4DEBUG 1
+#setenv G4MAKESHLIB $G4INSTALL/config/makeshlib.sh
 # G4 build flags :
 setenv G4UI_BUILD_XM_SESSION       1
 setenv G4UI_BUILD_XAW_SESSION      1
@@ -225,19 +230,116 @@ setenv G4VIS_USE_OPENGLX           1
 setenv G4VIS_USE_RAYX              1
 setenv G4VIS_USE_OIX               1
 # Specific :
-setenv RWBASE         /geant4/OSF1
-setenv CLHEP_BASE_DIR /geant4/OSF1
-setenv OGLHOME        /geant4/OSF1
-setenv OIVHOME        /geant4/OpenInventor2.4.1
-setenv OIVFLAGS       "-I$OIVHOME/include -I/geant4/OSF1/include"
-setenv OIVLIBS        "-L/geant4/OSF1/lib -lhepvisXt -lhepvis  -L$OIVHOME/lib -lInventorXt -lInventor -limage"
+setenv RWBASE         /lal/rogue/6.1/OSF1-cxx
+setenv CLHEP_BASE_DIR /lal/CLHEP/1.3/OSF1-cxx
+setenv OGLHOME        /lal/Mesa/3.0/OSF1
+setenv OIVHOME        /lal/OpenInventor/2.5
+setenv OIVFLAGS       "-I$OIVHOME/include -I/lal/HEPVis/v5r0/include"
+setenv OIVLIBS        "-L/lal/HEPVis/v5r0/OSF1-TGS -lHEPVisXt -lHEPVis  -L$OIVHOME/lib -lInventorXt -lInventor -limage"
 setenv XENVIRONMENT   $OIVHOME/app-defaults/Inventor
 # OPACS :
-#setenv G4UI_BUILD_WO_SESSION       1
-#setenv G4VIS_BUILD_OPACS_DRIVER    1
-#setenv G4UI_USE_WO                 1
-#setenv G4VIS_USE_OPACS             1
-#source /projects/OPACS/setup.csh
+setenv G4UI_BUILD_WO_SESSION       1
+setenv G4VIS_BUILD_OPACS_DRIVER    1
+setenv G4UI_USE_WO                 1
+setenv G4VIS_USE_OPACS             1
+source /lal/OPACS/v3/setup.csh
+set prompt=${G4INSTALL}-${G4SYSTEM}'> '
+# Else :
+setenv CPPVERBOSE 1
 endif
+#---------------------------------------------------
+if ( `uname -n` == "lx1.lal.in2p3.fr" ) then
+setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/rd44/cvs
+setenv G4INSTALL /geant4/dev/geant4
+setenv G4LIB     /geant4/dev/lib
+setenv G4WORKDIR /geant4/dev
+setenv G4SYSTEM  Linux-g++
+setenv G4DEBUG   1
+#setenv G4MAKESHLIB                 $G4INSTALL/config/makeshlib.sh
+# G4 build flags :
+setenv G4UI_BUILD_XM_SESSION       1
+setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
+setenv G4VIS_BUILD_OPENGLX_DRIVER  1
+setenv G4VIS_BUILD_RAYX_DRIVER     1
+setenv G4VIS_BUILD_OIX_DRIVER      1
+setenv G4VIS_BUILD_DAWN_DRIVER     1
+setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
+setenv G4VIS_BUILD_VRML_DRIVER     1
+setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
+# G4 use flags :
+setenv G4UI_USE_XM                 1
+setenv G4VIS_USE_OPENGLXM          1
+setenv G4VIS_USE_OPENGLX           1
+setenv G4VIS_USE_RAYX              1
+setenv G4VIS_USE_OIX               1
+# Specific :
+setenv RWBASE         /lal/rogue/6.1/Linux-gxx
+setenv CLHEP_BASE_DIR /lal/CLHEP/1.3/Linux-gxx
+setenv OGLHOME        /lal/Mesa/3.0/Linux
+setenv OIVHOME        /lal/SoFree/v2r1
+setenv OIVFLAGS       "-I$OIVHOME/include -I/lal/HEPVis/v5r0/include"
+setenv OIVLIBS        "-L/lal/HEPVis/v5r0/Linux-gxx -lHEPVisXt -lHEPVis -L$OIVHOME/Linux-gxx -lSoFreeXt -lSoFree"
+setenv SOFREEUSER     $OIVHOME/user/
+# OPACS :
+setenv G4UI_BUILD_WO_SESSION       1
+setenv G4VIS_BUILD_OPACS_DRIVER    1
+setenv G4UI_USE_WO                 1
+setenv G4VIS_USE_OPACS             1
+setenv OCONFIG HP-UX-aCC
+source /lal/OPACS/v3/setup.csh
+setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$OIVHOME/Linux-gxx:/lal/HEPVis/v5r0/Linux-gxx"
+# Else :
+setenv CPPVERBOSE 1
+endif
+# Comments :
+# --------
+#  Problems with advance method in rogue/6.1/rw/tpsldict.h, 
+# tvsldict.h. Solved by editing directly the file !
+#---------------------------------------------------
+if ( `uname -n` == "papou1" ) then
+setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/rd44/cvs
+setenv G4INSTALL /geant4/dev/geant4
+setenv G4LIB     /geant4/dev/lib
+setenv G4WORKDIR /geant4/dev
+setenv G4SYSTEM  SUN-CC
+setenv G4DEBUG   1
+#setenv G4MAKESHLIB                 $G4INSTALL/config/makeshlib.sh
+# G4 build flags :
+setenv G4UI_BUILD_XM_SESSION       1
+setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
+setenv G4VIS_BUILD_OPENGLX_DRIVER  1
+setenv G4VIS_BUILD_RAYX_DRIVER     1
+setenv G4VIS_BUILD_OIX_DRIVER      1
+setenv G4VIS_BUILD_DAWN_DRIVER     1
+setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
+setenv G4VIS_BUILD_VRML_DRIVER     1
+setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
+# G4 use flags :
+setenv G4UI_USE_XM                 1
+setenv G4VIS_USE_OPENGLXM          1
+setenv G4VIS_USE_OPENGLX           1
+setenv G4VIS_USE_RAYX              1
+setenv G4VIS_USE_OIX               1
+# Specific :
+setenv RWBASE         /lal/rogue/6.1/SunOS-CC
+setenv CLHEP_BASE_DIR /lal/CLHEP/1.3/SunOS-CC
+setenv OGLHOME        /lal/Mesa/3.0/SunOS
+setenv OIVHOME        /lal/SoFree/v2r3
+setenv OIVFLAGS       "-I$OIVHOME/include -I/lal/HEPVis/v5r0-06-LAL/include"
+setenv OIVLIBS        "-L/lal/HEPVis/v5r0-06-LAL/SunOS-CC-SF -lHEPVis -L$OIVHOME/SunOS-CC -lSoFree"
+setenv SOFREEUSER     $OIVHOME/user/
+# OPACS :
+setenv G4UI_BUILD_WO_SESSION       1
+setenv G4VIS_BUILD_OPACS_DRIVER    1
+setenv G4UI_USE_WO                 1
+setenv G4VIS_USE_OPACS             1
+setenv OCONFIG HP-UX-aCC
+source /lal/OPACS/v3/setup.csh
+setenv LD_LIBRARY_PATH "$OIVHOME/Linux-gxx:/lal/HEPVis/v5r0/Linux-gxx"
+# Else :
+setenv CPPVERBOSE 1
+endif
+# Comments :
+# --------
 ####################################################
 ####################################################
