@@ -86,15 +86,18 @@ G4PAIModel::~G4PAIModel()
   if ( fLambdaVector)     delete fLambdaVector;
   if ( fdNdxCutVector)    delete fdNdxCutVector;
   if( fPAItransferBank )
-      {
+  {
         fPAItransferBank->clearAndDestroy();
         delete fPAItransferBank ;
-      }
-  for(G4int i=0;i<fSandiaIntervalNumber;i++)
-      {
+  }
+  if(fSandiaPhotoAbsCof)
+  {
+    for(G4int i=0;i<fSandiaIntervalNumber;i++)
+    {
         delete[] fSandiaPhotoAbsCof[i];
-      }
-  delete[] fSandiaPhotoAbsCof;
+    }
+    delete[] fSandiaPhotoAbsCof;
+  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -208,9 +211,11 @@ void G4PAIModel::ComputeSandiaPhotoAbsCof()
                                               GetNumberOfElements();
   G4int* thisMaterialZ = new G4int[numberOfElements] ;
 
-  for(i=0;i<numberOfElements;i++)  thisMaterialZ[i] = 
+  for(i=0;i<numberOfElements;i++)  
+  {
+    thisMaterialZ[i] = 
     (G4int)(*theMaterialTable)[fMatIndex]->GetElement(i)->GetZ() ;
-   
+  }  
   fSandiaIntervalNumber = thisMaterialSandiaTable.SandiaIntervals
                            (thisMaterialZ,numberOfElements) ;
 
@@ -234,7 +239,7 @@ void G4PAIModel::ComputeSandiaPhotoAbsCof()
                  (*theMaterialTable)[fMatIndex]->GetDensity() ;
     }
   }
-  delete[] thisMaterialZ ;
+  // delete[] thisMaterialZ ;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -352,11 +357,12 @@ G4PAIModel::BuildLambdaVector(const G4MaterialCutsCouple* matCutsCouple)
 
   size_t numOfCouples = theCoupleTable->GetTableSize();
   size_t jMatCC;
+
   for (jMatCC = 0 ; jMatCC < numOfCouples ; jMatCC++ )
   {
     if( matCutsCouple == theCoupleTable->GetMaterialCutsCouple(jMatCC) ) break;
   }
-
+  if( jMatCC == numOfCouples && jMatCC > 0 ) jMatCC--;
 
   const std::vector<G4double>*  deltaCutInKineticEnergy = theCoupleTable->
                                 GetEnergyCutsVector(idxG4ElectronCut);
@@ -489,6 +495,8 @@ G4double G4PAIModel::ComputeDEDX(const G4MaterialCutsCouple* matCC,
   {
     if( matCC == fMaterialCutsCoupleVector[jMat] ) break;
   }
+  if(jMat == fMaterialCutsCoupleVector.size() && jMat > 0) jMat--;
+
   fPAIdEdxTable = fPAIdEdxBank[jMat];
   fdEdxVector = fdEdxTable[jMat];
   for(iTkin = 0 ; iTkin < fTotBin ; iTkin++)
@@ -522,6 +530,8 @@ G4double G4PAIModel::CrossSection( const G4MaterialCutsCouple* matCC,
   {
     if( matCC == fMaterialCutsCoupleVector[jMat] ) break;
   }
+  if(jMat == fMaterialCutsCoupleVector.size() && jMat > 0) jMat--;
+
   fPAItransferBank = fPAIxscBank[jMat];
 
   for(iTkin = 0 ; iTkin < fTotBin ; iTkin++)
@@ -530,6 +540,7 @@ G4double G4PAIModel::CrossSection( const G4MaterialCutsCouple* matCC,
   }
   iPlace = iTkin - 1;
   if(iPlace < 0) iPlace = 0;
+
   cross1 = GetdNdxCut(iPlace,tmax) ;  
   cross2 = GetdNdxCut(iPlace,cutEnergy) ;  
   cross  = (cross2-cross1)*charge2;
@@ -553,6 +564,8 @@ G4PAIModel::SampleSecondary( const G4MaterialCutsCouple* matCC,
   {
     if( matCC == fMaterialCutsCoupleVector[jMat] ) break;
   }
+  if(jMat == fMaterialCutsCoupleVector.size() && jMat > 0) jMat--;
+
   fPAItransferBank = fPAIxscBank[jMat];
   fdNdxCutVector     = fdNdxCutTable[jMat];
 
@@ -735,6 +748,8 @@ G4double G4PAIModel::SampleFluctuations( const G4Material* material,
   {
     if( material == fMaterialCutsCoupleVector[jMat]->GetMaterial() ) break;
   }
+  if(jMat == fMaterialCutsCoupleVector.size() && jMat > 0) jMat--;
+
   fPAItransferBank = fPAIxscBank[jMat];
   fdNdxCutVector   = fdNdxCutTable[jMat];
 
