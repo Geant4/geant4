@@ -1,4 +1,4 @@
-$Id: History,v 1.11 2003-11-25 18:07:38 japost Exp $
+$Id: History,v 1.12 2003-12-01 16:31:07 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,9 +14,17 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Dec  1st, 2003 John Apostolakis (fieldex01-V05-02-01)
+-----------------------------------------------------
+- F01FieldSetup corrections
+   o deleting forgotten inheritance from G4MagneticField
+   o fixing SetFieldValue method
+- F01SteppingVerbose: New output format.
+- field01.in: different energies, 1 track each in place of 100 events of 1 energy.
+    --> updated output file, using output from run on pcgeant2 / gcc 3.2
 
-Nov 25th, 2003 Gabriele Cosmo
------------------------------
+Nov 25th, 2003 John Apostolakis (fieldex01-V05-02-00)
+-----------------------------------------------------
 - Renamed F01ElectroMagneticField into F01FieldSetup (as it is a creator, 
    not a field). 
 - FieldSetup is now called in Detector Construction, not main.
