@@ -48,6 +48,8 @@
 // 15-08-02 new angle distribution, L.Urban
 // 26-09-02 angle distribution + boundary algorithm modified, L.Urban
 // 15-10-02 temporary fix for proton scattering
+// 30-10-02 modified angle distribution,mods in boundary algorithm,
+//          changes in data members, L.Urban
 //
 // -----------------------------------------------------------------------------
 //
@@ -66,7 +68,7 @@ G4MultipleScatteringSTD::G4MultipleScatteringSTD(const G4String& processName)
      : G4VContinuousDiscreteProcess(processName),
        theTransportMeanFreePathTable(0),
        fTransportMeanFreePath (1.e12),kappa(2.5),
-       taubig(8.0),tausmall(1.e-15),taulim(1.e-5),
+       taubig(8.0),tausmall(1.e-14),taulim(1.e-5),
        LowestKineticEnergy(0.1*keV),
        HighestKineticEnergy(100.*TeV),
        TotBin(100),
@@ -81,13 +83,10 @@ G4MultipleScatteringSTD::G4MultipleScatteringSTD(const G4String& processName)
        valueGPILSelectionMSC(NotCandidateForSelection),
        pcz(0.17),zmean(0.),
        range(1.0),T1(1.0),lambda1(-1.),cth1(1.),z1(1.e10),dtrl(0.15),
-       tuning (1.00),
-       cparm (0.0),
        fLatDisplFlag(true),
        NuclCorrPar (0.0615),
        FactPar(0.40),
-       alfa0(2.4212),alfa1(0.8267),xsi0(1.20),
-       beta0(0.35),beta1(1.75)
+       facxsi(1.)
 { }
   
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -106,6 +105,27 @@ G4MultipleScatteringSTD::~G4MultipleScatteringSTD()
 void G4MultipleScatteringSTD::BuildPhysicsTable(
                               const G4ParticleDefinition& aParticleType)
 {
+  // set values of some data members
+    if((aParticleType.GetParticleName() == "e-") ||
+       (aParticleType.GetParticleName() == "e+"))  
+    {
+       // parameters for e+/e-
+       alfa1 = 1.45 ;
+       alfa2 = 0.60 ;
+       alfa3 = 1.80 ;
+       xsi = facxsi*2.22 ;
+       c0 = 2.30 ;
+    }
+    else
+    {
+       // parameters for heavy particles
+       alfa1 = 1.10 ;
+       alfa2 = 0.14 ;
+       alfa3 = 0.42 ;
+       xsi = facxsi*2.70 ;
+       c0 = 1.40 ;
+    }   
+
   // tables are built for MATERIALS
     const G4double sigmafactor = twopi*classic_electr_radius*
                                        classic_electr_radius;
@@ -293,24 +313,36 @@ G4double G4MultipleScatteringSTD::ComputeTransportCrossSection(
 
    G4double ParticleMass = aParticleType.GetPDGMass();
 
-   G4double rat2 = ParticleMass/electron_mass_c2; rat2 = rat2*rat2;
+  // correction if particle .ne. e-/e+            
+  // compute equivalent kinetic energy 
+  // lambda depends on p*beta ....
+   G4double Mass = ParticleMass ;
+   if((aParticleType.GetParticleName() != "e-") &&    
+      (aParticleType.GetParticleName() != "e+") )     
+   {
+     G4double Ecm = KineticEnergy*(KineticEnergy+2.*ParticleMass)/
+          (KineticEnergy+ParticleMass) ;   
+     KineticEnergy = 0.5*(Ecm - 2.*electron_mass_c2+
+                     sqrt(Ecm*Ecm + 2.*electron_mass_c2*electron_mass_c2)) ; 
+     Mass = electron_mass_c2 ;
+   }
 
    G4double Charge = aParticleType.GetPDGCharge();
    G4double ChargeSquare = Charge*Charge/(eplus*eplus);
 
-   G4double TotalEnergy = KineticEnergy + ParticleMass ;
-   G4double beta2 = KineticEnergy*(TotalEnergy+ParticleMass)
+   G4double TotalEnergy = KineticEnergy + Mass ;
+   G4double beta2 = KineticEnergy*(TotalEnergy+Mass)
                                  /(TotalEnergy*TotalEnergy);
-   G4double bg2   = KineticEnergy*(TotalEnergy+ParticleMass)
-                                 /(ParticleMass*ParticleMass);
+   G4double bg2   = KineticEnergy*(TotalEnergy+Mass)
+                                 /(Mass*Mass);
 
-   G4double eps = rat2*epsfactor*bg2/Z23;
+   G4double eps = epsfactor*bg2/Z23;
 
    if     (eps<epsmin)  sigma = 2.*eps*eps;
    else if(eps<epsmax)  sigma = log(1.+2.*eps)-2.*eps/(1.+2.*eps);
    else                 sigma = log(2.*eps)-1.+1./eps;
 
-   sigma *= ChargeSquare*AtomicNumber*AtomicNumber/(rat2*beta2*bg2);
+   sigma *= ChargeSquare*AtomicNumber*AtomicNumber/(beta2*bg2);
 
   // nuclear size effect correction for high energy
   // ( a simple approximation at present)
@@ -331,10 +363,6 @@ G4double G4MultipleScatteringSTD::ComputeTransportCrossSection(
         corrnuclsize = exp(-FactPar*proton_mass_c2/KineticEnergy)*
                       (corrnuclsize-1.)+1.;
       }
-
-  // correct this value using the corrections computed for e+/e-
-  KineticEnergy *= electron_mass_c2/ParticleMass;
-
  
   // interpolate in AtomicNumber and beta2
   // get bin number in Z
@@ -359,14 +387,6 @@ G4double G4MultipleScatteringSTD::ComputeTransportCrossSection(
   T = Tdat[iT+1]; E = T + electron_mass_c2;
   G4double b2big = T*(E+electron_mass_c2)/(E*E);
   G4double ratb2 = (beta2-b2small)/(b2big-b2small);
-  G4double beta2lim = Tlim*(Tlim+2.*electron_mass_c2)/
-                      ((Tlim+electron_mass_c2)*(Tlim+electron_mass_c2));
- 
-  G4double corrfactor ;  
-  if(T < Tlim)
-    corrfactor = tuning*(1.+cparm*beta2lim)/(1.+cparm*beta2);
-  else
-    corrfactor = tuning ;
   
   G4double c1,c2,cc1,cc2,corr;
   if (Charge < 0.)
@@ -397,7 +417,6 @@ G4double G4MultipleScatteringSTD::ComputeTransportCrossSection(
        sigma /= corr;
     }
 
-     sigma *= corrfactor;
 
   //  nucl. size correction for particles other than e+/e- only at present !!!!
   if((aParticleType.GetParticleName() != "e-") &&
@@ -457,7 +476,12 @@ G4double G4MultipleScatteringSTD::GetContinuousStepLimit(
       if(track.GetStep()->GetPreStepPoint()->GetStepStatus() == fGeomBoundary)
       {
         stepnolastmsc = stepno ;
-        tlimit = facrange*range ;
+        //  if : diff.treatment for small/not small Z
+        if(range > fTransportMeanFreePath)
+          tlimit = facrange*range ;
+        else
+          tlimit = facrange*fTransportMeanFreePath ;
+
         if(tlimit < tlimitmin) tlimit = tlimitmin ;
         laststep = tlimit ;
         if(tPathLength > tlimit)
@@ -604,24 +628,30 @@ G4VParticleChange* G4MultipleScatteringSTD::PostStepDoIt(
       else
       {
        const G4double amax=25. ;
-       const G4double tau0 = 5.e-4 ;
-       const G4double c0 = 1.10 , c1 = (c0-1.)/tau0 ;
+       const G4double tau0 = 0.02  ;
+       const G4double b = 1. ;
 
-       G4double a,b,x0,c,xmean1,xmean2,
+       G4double a,x0,c,xmean1,xmean2,
                  xmeanth,prob,qprob ;
-       G4double ea,eaa,b1,bx,eb1,ebx,cnorm1,cnorm2,f1x0,f2x0 ;
+       G4double ea,eaa,b1,bx,eb1,ebx,cnorm1,cnorm2,f1x0,f2x0,w ;
 
-       a = (alfa0-alfa1*sqrt(tau))/tau ;
-       x0 = exp(-xsi0*tau) ;
-       b = 1.-tau*(beta0-beta1*tau) ;
+       w = log(tau/tau0) ;
+       if(tau < tau0)
+         a = (alfa1-alfa2*w)/tau ;
+       else
+         a = (alfa1+alfa3*w)/tau ;
+
+       x0 = 1.-xsi/a ; 
+       if(x0 < 0.) x0 = 0. ;
 
        // from continuity of the 1st derivatives
        c =  a*(b-x0) ;
-       // mod for small tau
-       if(tau < tau0)
-         c *= c0/(1.+c1*tau) ;
+       if(a*tau < c0)
+        c = c0*(b-x0)/tau ;
 
+       if(c == 1.) c=1.000001 ;
        if(c == 2.) c=2.000001 ;
+       if(c == 3.) c=3.000001 ;
 
        if(a*(1.-x0) < amax)
          ea = exp(-a*(1.-x0)) ;
@@ -649,6 +679,7 @@ G4VParticleChange* G4MultipleScatteringSTD::PostStepDoIt(
        // from xmean = xmeanth
        qprob = (f1x0+f2x0)*xmeanth/(f2x0*xmean1+f1x0*xmean2) ;
 
+       // protection against qprob > 1
        // *******************************************
        if(qprob > 1.)
        {

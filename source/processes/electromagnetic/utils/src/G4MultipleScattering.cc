@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering.cc,v 1.27 2002-10-30 11:30:48 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.28 2002-10-30 12:48:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -51,6 +51,7 @@
 // 15-10-02 temporary fix for proton scattering
 // 30-10-02 modified angle distribution,mods in boundary algorithm,
 //          changes in data members, L.Urban
+// 30-10-02 rename variable cm - Ecm, V.Ivanchenko
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -313,15 +314,14 @@ G4double G4MultipleScattering::ComputeTransportCrossSection(
   // correction if particle .ne. e-/e+            
   // compute equivalent kinetic energy 
   // lambda depends on p*beta ....
-   G4double cm,Mass ;
-   Mass = ParticleMass ;
+   G4double Mass = ParticleMass ;
    if((aParticleType.GetParticleName() != "e-") &&    
       (aParticleType.GetParticleName() != "e+") )     
    {
-     cm = KineticEnergy*(KineticEnergy+2.*ParticleMass)/
+     G4double Ecm = KineticEnergy*(KineticEnergy+2.*ParticleMass)/
           (KineticEnergy+ParticleMass) ;   
-     KineticEnergy = 0.5*(cm - 2.*electron_mass_c2+
-                     sqrt(cm*cm + 2.*electron_mass_c2*electron_mass_c2)) ; 
+     KineticEnergy = 0.5*(Ecm - 2.*electron_mass_c2+
+                     sqrt(Ecm*Ecm + 2.*electron_mass_c2*electron_mass_c2)) ; 
      Mass = electron_mass_c2 ;
    }
 

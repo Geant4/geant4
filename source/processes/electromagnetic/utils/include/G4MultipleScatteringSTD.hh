@@ -37,6 +37,7 @@
 // 22-04-02 boundary algorithm modified -> important improvement in timing !!!!
 //          (L.Urban)
 // 24-05-02 changes in data members, L.Urban
+// 30-10-02 changes in data members, L.Urban 
 //            
 //------------------------------------------------------------------------------
 
@@ -148,24 +149,15 @@ class G4MultipleScatteringSTD : public G4VContinuousDiscreteProcess
      // to reduce the energy/step dependence
 
    void SetBoundary(G4bool value)      {boundary = value;};
-   void SetFacrange(G4double val)      {facrange=val;
-                                        nsmallstep = G4int(log((cf+facrange-1.)/
+   void Setfacxsi(G4double value)      {facxsi = value;
+                                    G4cout << " facxsi=" << facxsi << G4endl;};
+   void SetFacrange(G4double val)  {facrange=val;
+                                    nsmallstep = G4int(log((cf+facrange-1.)/
                                                  facrange)/log(cf))+1 ;
-                                        G4cout << " f= " << facrange 
-                                               << " n= " << nsmallstep << G4endl ;};
+                                    G4cout << " fr=" << facrange 
+                                           << "  nsmall=" << nsmallstep << G4endl ;};
       // Steplimit after boundary crossing = facrange*range
       // estimated nb of steps at boundary nsmallstep = 1/facrange
-      // parameters needed near to boundary
-
-   void SetTuning(G4double value)               {tuning = value;};
-   void SetCparm (G4double value)               {cparm  = value;};
-   void SetTlim  (G4double value)               {Tlim   = value;};
-   void Setalfa0(G4double value)                    {alfa0 = value;};
-   void Setalfa1(G4double value)                    {alfa1 = value;};
-   void Setxsi0(G4double value)                    {xsi0 = value;};
-   void Setbeta0(G4double value)                    {beta0 = value;};
-   void Setbeta1(G4double value)                    {beta1 = value;};
-     // tuning of the transport mean free path
 
    void SetLateralDisplacementFlag(G4bool flag) {fLatDisplFlag = flag;};
      // lateral displacement to be/not to be computed
@@ -220,9 +212,6 @@ class G4MultipleScatteringSTD : public G4VContinuousDiscreteProcess
    G4double range,T1,lambda1,cth1,z1,t1,dtrl; // used to reduce the energy
                                               // (or step length) dependence
 
-   G4double tuning;                            //  param. for lambda tuning
-   G4double cparm;                             //          "
-   G4double Tlim ;                             //          "
 
    // with/without lateral displacement
    G4bool fLatDisplFlag;
@@ -233,7 +222,9 @@ class G4MultipleScatteringSTD : public G4VContinuousDiscreteProcess
 
    G4ParticleChangeForMSC fParticleChange; 
 
-   G4double alfa0,alfa1,xsi0,beta0,beta1 ;    // angle distr. params
+   G4double alfa1,alfa2,alfa3,xsi,c0,facxsi ;    // angle distr. parameters
+                                                 // facxsi : some tuning 
+                                                 // possibility in the tail 
 
 };
 
