@@ -238,7 +238,7 @@ G4double G4Clebsch::Wigner3J(G4double j1, G4double j2, G4double j3,
     if (sigma1 < 0. || sigma1 > logEntries)
       G4Exception("G4Clebsch::Wigner3J - Outside logVector boundaries, sigma");
 
-    G4double ls = logVector[static_cast<G4int>(sigma1)+.00001];
+    G4double ls = logVector[static_cast<G4int>(sigma1+.00001)];
     G4double hlp1 = (l2 + l3 + l4 +l7 -ls -l1 -l5 -l9 -l6 -l8) / 2.;
     G4int expon = static_cast<G4int>(r6 + r8+.00001);
     G4double sgn = pow(-1., expon);

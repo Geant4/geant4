@@ -79,9 +79,9 @@ GetFinalState(G4KineticTrack * projectile,
   G4LorentzVector theT2 = targets[1]->Get4Momentum();
   G4LorentzVector incoming = thePro + theT1 + theT2;
   G4double energyBalance = incoming.t();
-  G4int chargeBalance = projectile->GetDefinition()->GetPDGCharge()
+  G4int chargeBalance = lrint(projectile->GetDefinition()->GetPDGCharge()
                        + targets[0]->GetDefinition()->GetPDGCharge()
-                       + targets[1]->GetDefinition()->GetPDGCharge();
+                       + targets[1]->GetDefinition()->GetPDGCharge());
 		       
   G4int baryonBalance = projectile->GetDefinition()->GetBaryonNumber()
                        + targets[0]->GetDefinition()->GetBaryonNumber()
@@ -188,7 +188,7 @@ GetFinalState(G4KineticTrack * projectile,
   for(size_t hpw=0; hpw<result->size(); hpw++)
   {
     energyBalance-=result->operator[](hpw)->Get4Momentum().t();
-    chargeBalance-=result->operator[](hpw)->GetDefinition()->GetPDGCharge();
+    chargeBalance-=lrint(result->operator[](hpw)->GetDefinition()->GetPDGCharge());
     baryonBalance-=result->operator[](hpw)->GetDefinition()->GetBaryonNumber();
   }
   if(getenv("AbsorptionEnergyBalanceCheck"))
@@ -270,7 +270,7 @@ GetTimeToAbsorption(const G4KineticTrack& trk1, const G4KineticTrack& trk2)
 }
 
 G4double G4MesonAbsorption::
-AbsorptionCrossSection(const G4KineticTrack & trk1, const G4KineticTrack & trk2)
+AbsorptionCrossSection(const G4KineticTrack & , const G4KineticTrack & )
 {
   return theCross*millibarn;
 }
