@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.31 1999-05-27 20:03:28 gcosmo Exp $
+# $Id: architecture.gmk,v 1.32 1999-06-04 07:01:00 stesting Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -355,6 +355,7 @@ GREP := grep
 # -------- AIX ----------
 #
 ifeq ($(G4SYSTEM),AIX-xlC)
+  AR        := /usr/ccs/bin/ar41 r
   CXX       := xlC
   ifdef G4OPTIMISE
     CXXFLAGS  := -O3 -qtwolink -+
