@@ -10,6 +10,7 @@
 
 #include "precoreaction.h"
 
+#include <unistd.h>
 
 double ToDouble(const std::string& s)
 {
@@ -27,26 +28,62 @@ int ToInt(const std::string& s)
   return result;
 }
 
+int ToInt(const char * t)
+{
+  std::istringstream tonum(t);
+  int result;
+  tonum >> result;
+  return result;
+}
+
+void usage(const std::string& progname)
+{
+  std::cout << "Usage: " << progname << " filename>\n" 
+            << "       " << progname << " <input filename> <output filename>\n"
+            << "       Options:    -h        prints this help\n"
+            << "                   -l num    conver only the first num events"
+            << std::endl;
+  return;
+}
+
 
 int main(int argc, char **argv)
 {
-
   TROOT rconversion("rconversion","G4PreCompoundTest to root data conversion");
 
-  if (argc == 1 || argc > 3) {
-    std::cout << "Usage: " << argv[0] << " <input filename>\n" 
-	      << "       " << argv[0] << " <input filename> <output filename>"
-	      << std::endl;
-    return 1;
-  }
+  std::string progname(argv[0]);
+  int limit_event = -1;
+  bool hflag = false;
+  int st;
   
+  while ((st = getopt(argc,argv,"hl:")) != -1)
+    {
+      switch(st)
+        {
+        case 'l':
+          limit_event = ToInt(optarg);
+          break;
+        case 'h':
+          hflag = true;
+          break;
+        default:
+          break;
+        }
+    }
+  
+  if (hflag)
+    {
+      usage(progname);
+      return 0;
+    }
+
   std::string filename,basename;
   std::string fname_root;
   std::string fname_ascii;
-  
-  if (argc == 2) 
+
+  if (argc-optind == 1)
     {
-      filename = argv[1];
+      filename = argv[optind];
       fname_ascii = filename;
       // Is the path included in the filename?
       std::string::size_type idx = filename.rfind('/');
@@ -88,11 +125,17 @@ int main(int argc, char **argv)
 	    }
 	}
     } 
-  else if (argc == 3) 
+  else if (argc-optind == 2) 
     {
-      fname_ascii = argv[1];
-      fname_root = argv[2];
+      fname_ascii = argv[optind];
+      fname_root = argv[optind+1];
     }
+  else 
+    {
+      usage(progname);
+      return 1;
+    }
+  
 
   // Create root file
   TFile * file = new TFile(fname_root.c_str(),"RECREATE",
@@ -350,6 +393,7 @@ int main(int argc, char **argv)
 	  reaction->Clear(); 
 	  is.ignore(1000000,'\n');
 	}
+      if (limit_event > 0 && REACTN == limit_event) break;
     }
   
   std::cout
