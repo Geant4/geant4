@@ -12,14 +12,10 @@
 #
 set class_name Pers01CalorHit
 set collection_class Pers01CalorHitsCollection
-set collection_class_header no
-set collection_class_method_entries  entries()
-set collection_class_method_add      insert(hit)
-set collection_class_method_get      [i]
 set collection_base_class G4VHitsCollection
 set array_io_base G4VPHitsCollectionIO
 set catalog G4HCIOentryT
-set sdet_name Pers01CalorHit
+set sdet_name CalorSD
 set add_header
   @class_name@.hh
 ..
