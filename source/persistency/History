@@ -15,6 +15,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 29, 99  Y.Morita (persistency-00-04-01)
+- removed overlapping definition of HepRefVArray for G4PVPhysicalVolume
+  in G4PGeometryObjectMap.cc
+- Fixed a typo in G4PersistentGeomMan.cc
+
 November 15, 98  Y.Morita (persistency-00-03-03)
 - Fix bug in G4PVPhysicalVolume.cc
 
