@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcsh.cc,v 1.3 2000-06-23 08:46:49 stesting Exp $
+// $Id: G4UIcsh.cc,v 1.4 2000-07-22 10:52:29 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -26,10 +26,10 @@ G4UIcsh::~G4UIcsh()
 
 
 //////////////////////////////////
-G4String G4UIcsh::GetCommandLine()
+G4String G4UIcsh::GetCommandLine(const char* msg)
 //////////////////////////////////
 {
-  MakePrompt();
+  MakePrompt(msg);
   G4cout << promptString << G4std::flush;
 
   G4String newCommand;

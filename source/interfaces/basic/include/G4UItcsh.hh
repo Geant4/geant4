@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UItcsh.hh,v 1.1 2000-03-26 23:03:47 asaim Exp $
+// $Id: G4UItcsh.hh,v 1.2 2000-07-22 10:52:28 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -51,7 +51,7 @@
 
 class G4UItcsh : public G4VUIshell {
 protected:
-  virtual void MakePrompt();
+  virtual void MakePrompt(const char* msg=0);
 
   G4int cursorPosition;    // cursor position 
   G4String commandLine;    // command line string;
@@ -104,7 +104,7 @@ public:
   ~G4UItcsh();
   
   void SetLsColor(TermColorIndex dirColor, TermColorIndex cmdColor);
-  virtual G4String GetCommandLine();
+  virtual G4String GetCommandLine(const char* msg=0);
 };
 
 inline G4bool G4UItcsh::IsCursorLast() const

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UItcsh.cc,v 1.3 2000-06-23 08:46:49 stesting Exp $
+// $Id: G4UItcsh.cc,v 1.4 2000-07-22 10:52:29 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -57,7 +57,7 @@ G4UItcsh::~G4UItcsh()
 }
   
 ///////////////////////////
-void G4UItcsh::MakePrompt()
+void G4UItcsh::MakePrompt(const char* msg)
 ///////////////////////////
 {
   if(promptSetting.length()<=1) {
@@ -72,10 +72,16 @@ void G4UItcsh::MakePrompt()
       switch (promptSetting[i+1]) {
       case 's':  // current application status
 	{
-	G4StateManager* statM= G4StateManager::GetStateManager();
-	G4String stateStr= statM-> GetStateString(statM->GetCurrentState());
-	promptString.append(stateStr);
-	i++;
+          G4String stateStr;
+          if(msg)
+          { stateStr = msg; }
+          else
+          {
+	    G4StateManager* statM= G4StateManager::GetStateManager();
+	    stateStr= statM-> GetStateString(statM->GetCurrentState());
+          }
+	  promptString.append(stateStr);
+	  i++;
 	}
         break;
       case '/':  // current working directory
@@ -567,12 +573,12 @@ G4String G4UItcsh::ReadLine()
 }
 
 ///////////////////////////////////
-G4String G4UItcsh::GetCommandLine()
+G4String G4UItcsh::GetCommandLine(const char* msg)
 ///////////////////////////////////
 {
   SetTermToInputMode();
 
-  MakePrompt(); // update
+  MakePrompt(msg); // update
   relativeHistoryIndex= 0;
 
   G4cout << promptString << G4std::flush;

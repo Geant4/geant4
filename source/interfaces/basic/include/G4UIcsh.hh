@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcsh.hh,v 1.1 2000-03-26 23:03:46 asaim Exp $
+// $Id: G4UIcsh.hh,v 1.2 2000-07-22 10:52:28 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -26,7 +26,7 @@ public:
   G4UIcsh(const G4String& prompt="%s> ");
   ~G4UIcsh();
   
-  virtual G4String GetCommandLine();
+  virtual G4String GetCommandLine(const char* msg=0);
 
 };
 

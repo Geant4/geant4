@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VUIshell.hh,v 1.1 2000-03-26 23:03:48 asaim Exp $
+// $Id: G4VUIshell.hh,v 1.2 2000-07-22 10:52:28 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -41,7 +41,7 @@ class G4VUIshell {
 protected:
   G4String promptString;
   G4String promptSetting; // including %-directive
-  virtual void MakePrompt();  // make prompt string
+  virtual void MakePrompt(const char* msg=0);  // make prompt string
   G4int nColumn;  // column size of terminal (default=80)
 
   // color code support (effective if your terminal supports color code.)
@@ -74,7 +74,7 @@ public:
   //  "candidate" is specified with full path.
 
   // get command string from a command line
-  virtual G4String GetCommandLine()= 0;
+  virtual G4String GetCommandLine(const char* msg=0)= 0;
 };
 
 

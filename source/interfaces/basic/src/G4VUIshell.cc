@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VUIshell.cc,v 1.2 2000-06-14 03:19:00 asaim Exp $
+// $Id: G4VUIshell.cc,v 1.3 2000-07-22 10:52:29 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -40,7 +40,7 @@ G4VUIshell::~G4VUIshell()
 }
 
 /////////////////////////////
-void G4VUIshell::MakePrompt() 
+void G4VUIshell::MakePrompt(const char* msg) 
 /////////////////////////////
 {
   if(promptSetting.length()<=1) {
@@ -55,10 +55,16 @@ void G4VUIshell::MakePrompt()
       switch (promptSetting[i+1]) {
       case 's':  // current application status
 	{
-	G4StateManager* statM= G4StateManager::GetStateManager();
-	G4String stateStr= statM-> GetStateString(statM->GetCurrentState());
-	promptString.append(stateStr);
-	i++;
+           G4String stateStr;
+           if(msg)
+           { stateStr = msg; }
+           else
+           {
+	     G4StateManager* statM= G4StateManager::GetStateManager();
+	     stateStr= statM-> GetStateString(statM->GetCurrentState());
+           }
+	   promptString.append(stateStr);
+	   i++;
 	}
         break;
       case '/':  // current working directory
