@@ -1,4 +1,4 @@
-// $Id: Tst10PrimaryGeneratorAction.cc,v 1.1 1999-01-08 16:35:34 gunter Exp $
+// $Id: Tst10PrimaryGeneratorAction.cc,v 1.2 1999-03-27 17:31:00 stesting Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -91,9 +91,12 @@ G4ThreeVector Tst10PrimaryGeneratorAction::GetRandomDirection() {
 
 G4ThreeVector Tst10PrimaryGeneratorAction::GetRandomPosition() {
 
-  G4ThreeVector retval ( (G4UniformRand()*2-1)*m, 
-	                       (G4UniformRand()*2-1)*m,
-												 (G4UniformRand()*2-1)*m );
+  G4double x = (G4UniformRand()*2-1)*m;
+  G4double y = (G4UniformRand()*2-1)*m;
+  G4double z = (G4UniformRand()*2-1)*m;
+
+  G4ThreeVector retval (x, y, z);
+
   return retval;
 }
 

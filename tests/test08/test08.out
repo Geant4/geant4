@@ -76,221 +76,221 @@ Idle> /run/beamOn 10
 >>> Event 3
     133 trajectories stored in this event.
 >>> Event 4
-    148 trajectories stored in this event.
+    143 trajectories stored in this event.
 >>> Event 5
-    85 trajectories stored in this event.
+    91 trajectories stored in this event.
 >>> Event 6
-    126 trajectories stored in this event.
+    119 trajectories stored in this event.
 >>> Event 7
-    324 trajectories stored in this event.
+    96 trajectories stored in this event.
 >>> Event 8
-    113 trajectories stored in this event.
+    86 trajectories stored in this event.
 >>> Event 9
-    424 trajectories stored in this event.
+    242 trajectories stored in this event.
 Idle> #
 Idle> #/tracking/verbose 0
 Idle> /run/beamOn 100
 ### Run 2 start.
 /tracking/storeTrajectory 1
 >>> Event 0
-    127 trajectories stored in this event.
+    220 trajectories stored in this event.
 >>> Event 1
-    93 trajectories stored in this event.
+    83 trajectories stored in this event.
 >>> Event 2
-    134 trajectories stored in this event.
+    522 trajectories stored in this event.
 >>> Event 3
-    313 trajectories stored in this event.
+    105 trajectories stored in this event.
 >>> Event 4
-    101 trajectories stored in this event.
+    71 trajectories stored in this event.
 >>> Event 5
-    287 trajectories stored in this event.
+    108 trajectories stored in this event.
 >>> Event 6
-    81 trajectories stored in this event.
+    74 trajectories stored in this event.
 >>> Event 7
-    429 trajectories stored in this event.
->>> Event 8
-    152 trajectories stored in this event.
->>> Event 9
-    127 trajectories stored in this event.
->>> Event 10
-    303 trajectories stored in this event.
->>> Event 11
-    205 trajectories stored in this event.
->>> Event 12
-    126 trajectories stored in this event.
->>> Event 13
-    140 trajectories stored in this event.
->>> Event 14
-    89 trajectories stored in this event.
->>> Event 15
-    78 trajectories stored in this event.
->>> Event 16
-    87 trajectories stored in this event.
->>> Event 17
-    165 trajectories stored in this event.
->>> Event 18
-    101 trajectories stored in this event.
->>> Event 19
-    95 trajectories stored in this event.
->>> Event 20
-    110 trajectories stored in this event.
->>> Event 21
-    76 trajectories stored in this event.
->>> Event 22
-    103 trajectories stored in this event.
->>> Event 23
-    203 trajectories stored in this event.
->>> Event 24
-    92 trajectories stored in this event.
->>> Event 25
-    91 trajectories stored in this event.
->>> Event 26
-    126 trajectories stored in this event.
->>> Event 27
-    82 trajectories stored in this event.
->>> Event 28
-    106 trajectories stored in this event.
->>> Event 29
-    600 trajectories stored in this event.
->>> Event 30
-    87 trajectories stored in this event.
->>> Event 31
-    95 trajectories stored in this event.
->>> Event 32
-    106 trajectories stored in this event.
->>> Event 33
-    218 trajectories stored in this event.
->>> Event 34
-    282 trajectories stored in this event.
->>> Event 35
-    114 trajectories stored in this event.
->>> Event 36
-    206 trajectories stored in this event.
->>> Event 37
-    136 trajectories stored in this event.
->>> Event 38
-    198 trajectories stored in this event.
->>> Event 39
-    95 trajectories stored in this event.
->>> Event 40
-    230 trajectories stored in this event.
->>> Event 41
     88 trajectories stored in this event.
+>>> Event 8
+    87 trajectories stored in this event.
+>>> Event 9
+    83 trajectories stored in this event.
+>>> Event 10
+    93 trajectories stored in this event.
+>>> Event 11
+    298 trajectories stored in this event.
+>>> Event 12
+    108 trajectories stored in this event.
+>>> Event 13
+    103 trajectories stored in this event.
+>>> Event 14
+    183 trajectories stored in this event.
+>>> Event 15
+    156 trajectories stored in this event.
+>>> Event 16
+    108 trajectories stored in this event.
+>>> Event 17
+    98 trajectories stored in this event.
+>>> Event 18
+    121 trajectories stored in this event.
+>>> Event 19
+    87 trajectories stored in this event.
+>>> Event 20
+    82 trajectories stored in this event.
+>>> Event 21
+    78 trajectories stored in this event.
+>>> Event 22
+    93 trajectories stored in this event.
+>>> Event 23
+    85 trajectories stored in this event.
+>>> Event 24
+    182 trajectories stored in this event.
+>>> Event 25
+    473 trajectories stored in this event.
+>>> Event 26
+    139 trajectories stored in this event.
+>>> Event 27
+    84 trajectories stored in this event.
+>>> Event 28
+    431 trajectories stored in this event.
+>>> Event 29
+    95 trajectories stored in this event.
+>>> Event 30
+    97 trajectories stored in this event.
+>>> Event 31
+    90 trajectories stored in this event.
+>>> Event 32
+    101 trajectories stored in this event.
+>>> Event 33
+    104 trajectories stored in this event.
+>>> Event 34
+    103 trajectories stored in this event.
+>>> Event 35
+    102 trajectories stored in this event.
+>>> Event 36
+    111 trajectories stored in this event.
+>>> Event 37
+    100 trajectories stored in this event.
+>>> Event 38
+    112 trajectories stored in this event.
+>>> Event 39
+    103 trajectories stored in this event.
+>>> Event 40
+    84 trajectories stored in this event.
+>>> Event 41
+    104 trajectories stored in this event.
 >>> Event 42
     108 trajectories stored in this event.
 >>> Event 43
-    245 trajectories stored in this event.
->>> Event 44
-    306 trajectories stored in this event.
->>> Event 45
-    101 trajectories stored in this event.
->>> Event 46
-    91 trajectories stored in this event.
->>> Event 47
-    79 trajectories stored in this event.
->>> Event 48
-    96 trajectories stored in this event.
->>> Event 49
-    217 trajectories stored in this event.
->>> Event 50
-    313 trajectories stored in this event.
->>> Event 51
-    97 trajectories stored in this event.
->>> Event 52
-    91 trajectories stored in this event.
->>> Event 53
-    222 trajectories stored in this event.
->>> Event 54
-    112 trajectories stored in this event.
->>> Event 55
-    165 trajectories stored in this event.
->>> Event 56
-    110 trajectories stored in this event.
->>> Event 57
-    93 trajectories stored in this event.
->>> Event 58
-    100 trajectories stored in this event.
->>> Event 59
-    136 trajectories stored in this event.
->>> Event 60
-    114 trajectories stored in this event.
->>> Event 61
-    89 trajectories stored in this event.
->>> Event 62
-    223 trajectories stored in this event.
->>> Event 63
-    161 trajectories stored in this event.
->>> Event 64
-    85 trajectories stored in this event.
->>> Event 65
-    109 trajectories stored in this event.
->>> Event 66
-    107 trajectories stored in this event.
->>> Event 67
-    170 trajectories stored in this event.
->>> Event 68
-    95 trajectories stored in this event.
->>> Event 69
-    63 trajectories stored in this event.
->>> Event 70
-    188 trajectories stored in this event.
->>> Event 71
-    89 trajectories stored in this event.
->>> Event 72
-    498 trajectories stored in this event.
->>> Event 73
-    122 trajectories stored in this event.
->>> Event 74
-    194 trajectories stored in this event.
->>> Event 75
-    104 trajectories stored in this event.
->>> Event 76
-    250 trajectories stored in this event.
->>> Event 77
-    135 trajectories stored in this event.
->>> Event 78
     119 trajectories stored in this event.
+>>> Event 44
+    354 trajectories stored in this event.
+>>> Event 45
+    337 trajectories stored in this event.
+>>> Event 46
+    236 trajectories stored in this event.
+>>> Event 47
+    138 trajectories stored in this event.
+>>> Event 48
+    143 trajectories stored in this event.
+>>> Event 49
+    116 trajectories stored in this event.
+>>> Event 50
+    129 trajectories stored in this event.
+>>> Event 51
+    96 trajectories stored in this event.
+>>> Event 52
+    75 trajectories stored in this event.
+>>> Event 53
+    62 trajectories stored in this event.
+>>> Event 54
+    243 trajectories stored in this event.
+>>> Event 55
+    112 trajectories stored in this event.
+>>> Event 56
+    130 trajectories stored in this event.
+>>> Event 57
+    260 trajectories stored in this event.
+>>> Event 58
+    92 trajectories stored in this event.
+>>> Event 59
+    107 trajectories stored in this event.
+>>> Event 60
+    79 trajectories stored in this event.
+>>> Event 61
+    293 trajectories stored in this event.
+>>> Event 62
+    249 trajectories stored in this event.
+>>> Event 63
+    98 trajectories stored in this event.
+>>> Event 64
+    112 trajectories stored in this event.
+>>> Event 65
+    68 trajectories stored in this event.
+>>> Event 66
+    94 trajectories stored in this event.
+>>> Event 67
+    182 trajectories stored in this event.
+>>> Event 68
+    148 trajectories stored in this event.
+>>> Event 69
+    101 trajectories stored in this event.
+>>> Event 70
+    99 trajectories stored in this event.
+>>> Event 71
+    88 trajectories stored in this event.
+>>> Event 72
+    82 trajectories stored in this event.
+>>> Event 73
+    102 trajectories stored in this event.
+>>> Event 74
+    99 trajectories stored in this event.
+>>> Event 75
+    206 trajectories stored in this event.
+>>> Event 76
+    89 trajectories stored in this event.
+>>> Event 77
+    113 trajectories stored in this event.
+>>> Event 78
+    127 trajectories stored in this event.
 >>> Event 79
-    105 trajectories stored in this event.
+    82 trajectories stored in this event.
 >>> Event 80
-    162 trajectories stored in this event.
+    88 trajectories stored in this event.
 >>> Event 81
-    80 trajectories stored in this event.
+    261 trajectories stored in this event.
 >>> Event 82
-    78 trajectories stored in this event.
+    60 trajectories stored in this event.
 >>> Event 83
     117 trajectories stored in this event.
 >>> Event 84
-    135 trajectories stored in this event.
+    212 trajectories stored in this event.
 >>> Event 85
-    103 trajectories stored in this event.
+    175 trajectories stored in this event.
 >>> Event 86
-    88 trajectories stored in this event.
+    76 trajectories stored in this event.
 >>> Event 87
-    74 trajectories stored in this event.
+    220 trajectories stored in this event.
 >>> Event 88
-    99 trajectories stored in this event.
+    110 trajectories stored in this event.
 >>> Event 89
-    97 trajectories stored in this event.
->>> Event 90
-    170 trajectories stored in this event.
->>> Event 91
-    89 trajectories stored in this event.
->>> Event 92
-    158 trajectories stored in this event.
->>> Event 93
-    301 trajectories stored in this event.
->>> Event 94
-    81 trajectories stored in this event.
->>> Event 95
-    89 trajectories stored in this event.
->>> Event 96
-    87 trajectories stored in this event.
->>> Event 97
-    104 trajectories stored in this event.
->>> Event 98
     88 trajectories stored in this event.
+>>> Event 90
+    119 trajectories stored in this event.
+>>> Event 91
+    385 trajectories stored in this event.
+>>> Event 92
+    115 trajectories stored in this event.
+>>> Event 93
+    133 trajectories stored in this event.
+>>> Event 94
+    260 trajectories stored in this event.
+>>> Event 95
+    142 trajectories stored in this event.
+>>> Event 96
+    196 trajectories stored in this event.
+>>> Event 97
+    196 trajectories stored in this event.
+>>> Event 98
+    106 trajectories stored in this event.
 >>> Event 99
-    151 trajectories stored in this event.
+    241 trajectories stored in this event.
 Idle> # /run/beamOn 1000
 Idle> 

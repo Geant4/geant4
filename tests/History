@@ -1,4 +1,4 @@
-$Id: History,v 1.4 1999-02-06 13:15:44 stesting Exp $
+$Id: History,v 1.5 1999-03-27 17:33:15 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 27th 1999  John Allison
+- Updated test05.out and test08.out.
+- Forced order of x,y,z in Tst10PrimaryGeneratorAction.cc.
 
 February 6th 1999  John Allison
 - Commented out troublesome printing:

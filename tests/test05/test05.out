@@ -22,44 +22,6 @@ Finished reading file.
 
 
 ### The InstMgr says there are 873 instantiated objects
-
-
- Creating the Context_Dependent_Shape_Representation
-loop 1 of 7
-Warning : GetSTEPentity modified by L. Broglia
-Warning ! G4GeometricRepresentationContextCreator called ...
-G4 object of type Geometric_Representation_Context not necessary
- Context_Dependent_Shape_Representation find in index 598
-loop 2 of 7
-Warning : GetSTEPentity modified by L. Broglia
-Warning ! G4GeometricRepresentationContextCreator called ...
-G4 object of type Geometric_Representation_Context not necessary
- Context_Dependent_Shape_Representation find in index 779
-loop 3 of 7
-Warning : GetSTEPentity modified by L. Broglia
-Warning ! G4GeometricRepresentationContextCreator called ...
-G4 object of type Geometric_Representation_Context not necessary
- Context_Dependent_Shape_Representation find in index 788
-loop 4 of 7
-Warning : GetSTEPentity modified by L. Broglia
-Warning ! G4GeometricRepresentationContextCreator called ...
-G4 object of type Geometric_Representation_Context not necessary
- Context_Dependent_Shape_Representation find in index 797
-loop 5 of 7
-Warning : GetSTEPentity modified by L. Broglia
-Warning ! G4GeometricRepresentationContextCreator called ...
-G4 object of type Geometric_Representation_Context not necessary
- Context_Dependent_Shape_Representation find in index 806
-loop 6 of 7
-Warning : GetSTEPentity modified by L. Broglia
-Warning ! G4GeometricRepresentationContextCreator called ...
-G4 object of type Geometric_Representation_Context not necessary
- Context_Dependent_Shape_Representation find in index 815
-loop 7 of 7
-Warning : GetSTEPentity modified by L. Broglia
-Warning ! G4GeometricRepresentationContextCreator called ...
-G4 object of type Geometric_Representation_Context not necessary
- Context_Dependent_Shape_Representation find in index 824
 Tst05PhysicsList::SetCuts:CutLength : 1 (mm)
 
 conv:  Total cross sections from a parametrisation(L.Urban). Good description from 1.5 MeV to 100 GeV for all Z. 
