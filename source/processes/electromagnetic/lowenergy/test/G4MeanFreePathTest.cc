@@ -179,11 +179,11 @@ int main(int argc,char** argv)
  
   static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
-  G4int nMaterials = theMaterialTable->length();
+  G4int nOfMaterials = G4Material::GetNumberOfMaterials();
   G4cout << "Available materials are: " << G4endl;
   G4int mat;
   for (mat = 0; mat < nMaterials; mat++) {
-    G4cout << mat << ") " << (*theMaterialTable)(mat)->GetName() << G4endl;
+    G4cout << mat << ") " << (*theMaterialTable)[mat]->GetName() << G4endl;
   }
 
   G4cout << "Available processes are: " << G4endl;
@@ -343,7 +343,7 @@ int main(int argc,char** argv)
     }
 
     for (mat = 0; mat < nMaterials; mat++) {
-      material = (*theMaterialTable)(mat);
+      material = (*theMaterialTable)[mat];
       if(nameMat == material->GetName()) break;
     }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComplexTest.cc,v 1.7 2001-10-08 16:36:07 vnivanch Exp $
+// $Id: G4ComplexTest.cc,v 1.8 2001-10-09 10:07:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -186,12 +186,12 @@ int main(int argc,char** argv)
 
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
-  G4int nMaterials = theMaterialTable->length();
+  G4int nOfMaterials = G4Material::GetNumberOfMaterials();
 
   G4cout << "Available materials are: " << G4endl;
   G4int mat;
   for (mat = 0; mat < nMaterials; mat++) {
-    G4cout << mat << ") " << (*theMaterialTable)(mat)->GetName() << G4endl;
+    G4cout << mat << ") " << (*theMaterialTable)[mat]->GetName() << G4endl;
   }
 
   G4cout << "Available processes are: " << G4endl;
@@ -341,7 +341,7 @@ int main(int argc,char** argv)
     }
 
     for (mat = 0; mat < nMaterials; mat++) {
-      material = (*theMaterialTable)(mat);
+      material = (*theMaterialTable)[mat];
       if(nameMat == material->GetName()) break;
     }
 
