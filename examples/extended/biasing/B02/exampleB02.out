@@ -18,7 +18,7 @@ compt:  Total cross sections from a parametrisation. Good description from 10 Ke
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
@@ -37,7 +37,7 @@ annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
@@ -47,7 +47,7 @@ hIoni:    Knock-on electron cross sections .
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 MuIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
@@ -139,143 +139,143 @@ DoIt Vector:
 output pScorer, scoring detector, neutron
 Volume name = score_worldCylinder_phys, Replica number = -1
 HistorysEntering
-entries                             : 327
-Sum(w)                              : 327
-Sum(w*x)                            : 327
-Sum(w*x*x)                          : 327
+entries                             : 331
+Sum(w)                              : 331
+Sum(w*x)                            : 331
+Sum(w*x*x)                          : 331
 mean=Sum(w*x) / Sum(w)              : 1
 sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 327
-Sum(x^2)                            : 327
+Sum(x)                              : 331
+Sum(x^2)                            : 331
 EnergyEnteringHistory
-entries                             : 327
-Sum(w)                              : 327
-Sum(w*x)                            : 2758.31
-Sum(w*x*x)                          : 24999.1
-mean=Sum(w*x) / Sum(w)              : 8.43521
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 2.30157
-Sum(x)                              : 2758.31
-Sum(x^2)                            : 24999.1
+entries                             : 331
+Sum(w)                              : 331
+Sum(w*x)                            : 2868.82
+Sum(w*x*x)                          : 26144.9
+mean=Sum(w*x) / Sum(w)              : 8.66714
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.96678
+Sum(x)                              : 2868.82
+Sum(x^2)                            : 26144.9
 Volume name = scorecell: M1, Replica number = 0
 HistorysEntering
-entries                             : 1816
-Sum(w)                              : 1816
-Sum(w*x)                            : 1816
-Sum(w*x*x)                          : 1816
+entries                             : 1794
+Sum(w)                              : 1794
+Sum(w*x)                            : 1794
+Sum(w*x*x)                          : 1794
 mean=Sum(w*x) / Sum(w)              : 1
 sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 1816
-Sum(x^2)                            : 1816
+Sum(x)                              : 1794
+Sum(x^2)                            : 1794
 EnergyEnteringHistory
-entries                             : 1816
-Sum(w)                              : 1816
-Sum(w*x)                            : 17580.9
-Sum(w*x*x)                          : 172729
-mean=Sum(w*x) / Sum(w)              : 9.68112
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.1794
-Sum(x)                              : 17580.9
-Sum(x^2)                            : 172729
+entries                             : 1794
+Sum(w)                              : 1794
+Sum(w*x)                            : 17426.6
+Sum(w*x*x)                          : 171284
+mean=Sum(w*x) / Sum(w)              : 9.71383
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.05729
+Sum(x)                              : 17426.6
+Sum(x^2)                            : 171284
 Collisions
-entries                             : 1383
-Sum(w)                              : 1383
-Sum(w*x)                            : 1383
-Sum(w*x*x)                          : 1383
+entries                             : 1263
+Sum(w)                              : 1263
+Sum(w*x)                            : 1263
+Sum(w*x*x)                          : 1263
 mean=Sum(w*x) / Sum(w)              : 1
 sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 1383
-Sum(x^2)                            : 1383
+Sum(x)                              : 1263
+Sum(x^2)                            : 1263
 Volume name = scorecell: D1, Replica number = 0
 HistorysEntering
-entries                             : 879
-Sum(w)                              : 879
-Sum(w*x)                            : 879
-Sum(w*x*x)                          : 879
+entries                             : 858
+Sum(w)                              : 858
+Sum(w*x)                            : 858
+Sum(w*x*x)                          : 858
 mean=Sum(w*x) / Sum(w)              : 1
 sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 879
-Sum(x^2)                            : 879
+Sum(x)                              : 858
+Sum(x^2)                            : 858
 EnergyEnteringHistory
-entries                             : 879
-Sum(w)                              : 879
-Sum(w*x)                            : 8411.06
-Sum(w*x*x)                          : 82210
-mean=Sum(w*x) / Sum(w)              : 9.5689
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.40104
-Sum(x)                              : 8411.06
-Sum(x^2)                            : 82210
+entries                             : 858
+Sum(w)                              : 858
+Sum(w*x)                            : 8292.88
+Sum(w*x*x)                          : 81250.1
+mean=Sum(w*x) / Sum(w)              : 9.66536
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.13047
+Sum(x)                              : 8292.88
+Sum(x^2)                            : 81250.1
 Collisions
-entries                             : 479
-Sum(w)                              : 479
-Sum(w*x)                            : 479
-Sum(w*x*x)                          : 479
+entries                             : 512
+Sum(w)                              : 512
+Sum(w*x)                            : 512
+Sum(w*x*x)                          : 512
 mean=Sum(w*x) / Sum(w)              : 1
 sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 479
-Sum(x^2)                            : 479
+Sum(x)                              : 512
+Sum(x^2)                            : 512
 Volume name = scorecell: M2, Replica number = 0
 HistorysEntering
-entries                             : 821
-Sum(w)                              : 821
-Sum(w*x)                            : 821
-Sum(w*x*x)                          : 821
+entries                             : 845
+Sum(w)                              : 845
+Sum(w*x)                            : 845
+Sum(w*x*x)                          : 845
 mean=Sum(w*x) / Sum(w)              : 1
 sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 821
-Sum(x^2)                            : 821
+Sum(x)                              : 845
+Sum(x^2)                            : 845
 EnergyEnteringHistory
-entries                             : 821
-Sum(w)                              : 821
-Sum(w*x)                            : 7751.12
-Sum(w*x*x)                          : 75044.5
-mean=Sum(w*x) / Sum(w)              : 9.44107
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.50749
-Sum(x)                              : 7751.12
-Sum(x^2)                            : 75044.5
+entries                             : 845
+Sum(w)                              : 845
+Sum(w*x)                            : 7918.1
+Sum(w*x*x)                          : 76692.5
+mean=Sum(w*x) / Sum(w)              : 9.37053
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.71858
+Sum(x)                              : 7918.1
+Sum(x^2)                            : 76692.5
 Collisions
-entries                             : 692
-Sum(w)                              : 692
-Sum(w*x)                            : 692
-Sum(w*x*x)                          : 692
+entries                             : 696
+Sum(w)                              : 696
+Sum(w*x)                            : 696
+Sum(w*x*x)                          : 696
 mean=Sum(w*x) / Sum(w)              : 1
 sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 692
-Sum(x^2)                            : 692
+Sum(x)                              : 696
+Sum(x^2)                            : 696
 Volume name = scorecell: D2, Replica number = 0
 HistorysEntering
-entries                             : 387
-Sum(w)                              : 387
-Sum(w*x)                            : 387
-Sum(w*x*x)                          : 387
+entries                             : 392
+Sum(w)                              : 392
+Sum(w*x)                            : 392
+Sum(w*x*x)                          : 392
 mean=Sum(w*x) / Sum(w)              : 1
 sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 387
-Sum(x^2)                            : 387
+Sum(x)                              : 392
+Sum(x^2)                            : 392
 EnergyEnteringHistory
-entries                             : 387
-Sum(w)                              : 387
-Sum(w*x)                            : 3646.1
-Sum(w*x*x)                          : 35124
-mean=Sum(w*x) / Sum(w)              : 9.42146
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.41271
-Sum(x)                              : 3646.1
-Sum(x^2)                            : 35124
+entries                             : 392
+Sum(w)                              : 392
+Sum(w*x)                            : 3630.15
+Sum(w*x*x)                          : 34992.4
+mean=Sum(w*x) / Sum(w)              : 9.26058
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.87297
+Sum(x)                              : 3630.15
+Sum(x^2)                            : 34992.4
 Collisions
-entries                             : 232
-Sum(w)                              : 232
-Sum(w*x)                            : 232
-Sum(w*x*x)                          : 232
+entries                             : 233
+Sum(w)                              : 233
+Sum(w*x)                            : 233
+Sum(w*x*x)                          : 233
 mean=Sum(w*x) / Sum(w)              : 1
 sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 232
-Sum(x^2)                            : 232
+Sum(x)                              : 233
+Sum(x^2)                            : 233
 
 ----------------------------------------------
 Volume name               |  AV E/Track | sigma       |  Coll_Ent.Tr|
-score_worldCylinder_phys. |     8.43521 |     2.30157 |           0 |
-scorecell: M1............ |     9.68112 |      1.1794 |    0.761564 |
-scorecell: D1............ |      9.5689 |     1.40104 |    0.544937 |
-scorecell: M2............ |     9.44107 |     1.50749 |    0.842875 |
-scorecell: D2............ |     9.42146 |     1.41271 |    0.599483 |
+score_worldCylinder_phys. |     8.66714 |     1.96678 |           0 |
+scorecell: M1............ |     9.71383 |     1.05729 |    0.704013 |
+scorecell: D1............ |     9.66536 |     1.13047 |    0.596737 |
+scorecell: M2............ |     9.37053 |     1.71858 |    0.823669 |
+scorecell: D2............ |     9.26058 |     1.87297 |    0.594388 |
 +++ G4ProcessPlacer::G4ProcessPlacer: for: neutron
   ProcessName: PScoreProcess, will be removed!
 The initial Vectors: 
@@ -314,3 +314,6 @@ DoIt Vector:
    LFission
    LCapture
    Decay
+WARNING - Attempt to delete the physical volume store while geometry closed !
+WARNING - Attempt to delete the logical volume store while geometry closed !
+WARNING - Attempt to delete the solid store while geometry closed !

@@ -1,9 +1,11 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (31-Jan-2002)
+                                (28-Feb-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 SimpleBox is now made of Pb
+
+phot:  Total cross sections from Sandia parametrisation. 
 MuonMinusCaptureAtRest is created 
 #
 #/tracking/verbose 1 
@@ -16,7 +18,6 @@ SimpleBox is now made of Al
 /run/particle/retrievePhysicsTable physData 
 #
 /run/initialize
-phot for gamma: Success to retrieve the PhysicsTables from physData
 compt for gamma: Success to retrieve the PhysicsTables from physData
 conv for gamma: Success to retrieve the PhysicsTables from physData
 eBrem for e-: Success to retrieve the PhysicsTables from physData
@@ -103,8 +104,8 @@ Cut in energy
 /gun/energy 50 MeV
 /run/beamOn 1 
 >>> Event 0
-     Total energy deposition in 0-th BOX: 0.0498914 (GeV)
-     Total energy deposition in 1-th BOX: 0.0501086 (GeV)
+     Total energy deposition in 0-th BOX: 0.0497068 (GeV)
+     Total energy deposition in 1-th BOX: 0.0502932 (GeV)
 #
 # gamma 500 MeV in Al
 #
@@ -112,8 +113,8 @@ Cut in energy
 /gun/energy 500 MeV
 /run/beamOn 1
 >>> Event 0
-     Total energy deposition in 0-th BOX: 0.5 (GeV)
-     Total energy deposition in 1-th BOX: 0.5 (GeV)
+     Total energy deposition in 0-th BOX: 0.500096 (GeV)
+     Total energy deposition in 1-th BOX: 0.499904 (GeV)
 #
 # for tests of basic e.m. processes
 #
@@ -130,13 +131,9 @@ SimpleBox is now made of Pb
 /gun/energy 500 MeV
 /run/beamOn 1
 
-phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
-        Sandia crossSection below 50 KeV
-       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
-
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
@@ -193,8 +190,8 @@ msc:   Tables of transport mean free paths.
           displacement of the particle , too.
         PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 >>> Event 0
-     Total energy deposition in 0-th BOX: 0.5 (GeV)
-     Total energy deposition in 1-th BOX: 0.5 (GeV)
+     Total energy deposition in 0-th BOX: 0.501526 (GeV)
+     Total energy deposition in 1-th BOX: 0.498474 (GeV)
 #
 # muon 100 GeV in Pb
 #
@@ -202,8 +199,8 @@ msc:   Tables of transport mean free paths.
 /gun/energy 100 GeV
 /run/beamOn 1
 >>> Event 0
-     Total energy deposition in 0-th BOX: 16.4676 (GeV)
-     Total energy deposition in 1-th BOX: 15.0236 (GeV)
+     Total energy deposition in 0-th BOX: 14.0625 (GeV)
+     Total energy deposition in 1-th BOX: 8.47643 (GeV)
 #
 /run/particle/dumpCutValues
 ============= The cut Energy ==============================

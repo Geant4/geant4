@@ -171,20 +171,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=25.11s Real=46.56s Sys=2.87s
+  User=23.26s Real=43.58s Sys=2.91s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 1.11 radl:   14.83%       7.37%             0-> 1.11 radl:   14.83%     7.37% 
-    1.11-> 2.22 radl:   25.38%      11.21%             0-> 2.22 radl:   40.21%    15.05% 
-    2.22-> 3.33 radl:   20.54%       9.89%             0-> 3.33 radl:   60.74%    17.34% 
-    3.33-> 4.44 radl:   13.80%       8.67%             0-> 4.44 radl:   74.55%    15.30% 
-    4.44-> 5.55 radl:    8.74%       6.67%             0-> 5.55 radl:   83.29%    13.42% 
-    5.55-> 6.66 radl:    5.41%       5.49%             0-> 6.66 radl:   88.70%    10.59% 
-    6.66-> 7.77 radl:    2.95%       4.76%             0-> 7.77 radl:   91.65%     7.64% 
-    7.77-> 8.88 radl:    1.76%       4.00%             0-> 8.88 radl:   93.41%     5.78% 
-    8.88-> 9.99 radl:    0.69%       2.01%             0-> 9.99 radl:   94.10%     5.05% 
+    0.00-> 1.11 radl:   15.10%       6.92%             0-> 1.11 radl:   15.10%     6.92% 
+    1.11-> 2.22 radl:   24.22%      10.76%             0-> 2.22 radl:   39.32%    14.56% 
+    2.22-> 3.33 radl:   21.55%       9.89%             0-> 3.33 radl:   60.87%    17.09% 
+    3.33-> 4.44 radl:   14.26%       7.99%             0-> 4.44 radl:   75.13%    16.32% 
+    4.44-> 5.55 radl:    8.32%       6.26%             0-> 5.55 radl:   83.44%    14.90% 
+    5.55-> 6.66 radl:    4.76%       5.25%             0-> 6.66 radl:   88.20%    12.18% 
+    6.66-> 7.77 radl:    2.84%       4.64%             0-> 7.77 radl:   91.04%    10.05% 
+    7.77-> 8.88 radl:    1.83%       3.78%             0-> 8.88 radl:   92.88%     8.76% 
+    8.88-> 9.99 radl:    1.10%       3.13%             0-> 9.99 radl:   93.98%     7.39% 
 
 
 
@@ -192,21 +192,21 @@ Run Summary
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 0.11 radl:   64.41%      10.96%             0-> 0.11 radl:   64.41%    10.96% 
-    0.11-> 0.22 radl:   17.45%       7.25%             0-> 0.22 radl:   81.85%     7.81% 
-    0.22-> 0.33 radl:    5.88%       3.99%             0-> 0.33 radl:   87.73%     6.13% 
-    0.33-> 0.44 radl:    3.19%       2.11%             0-> 0.44 radl:   90.91%     5.64% 
-    0.44-> 0.56 radl:    1.96%       1.67%             0-> 0.56 radl:   92.87%     5.24% 
-    0.56-> 0.67 radl:    1.22%       1.19%             0-> 0.67 radl:   94.10%     5.05% 
+    0.00-> 0.11 radl:   65.45%      11.91%             0-> 0.11 radl:   65.45%    11.91% 
+    0.11-> 0.22 radl:   16.29%       6.69%             0-> 0.22 radl:   81.74%     9.13% 
+    0.22-> 0.33 radl:    6.28%       4.06%             0-> 0.33 radl:   88.03%     8.05% 
+    0.33-> 0.44 radl:    3.18%       2.44%             0-> 0.44 radl:   91.21%     7.60% 
+    0.44-> 0.56 radl:    1.83%       1.93%             0-> 0.56 radl:   93.04%     7.46% 
+    0.56-> 0.67 radl:    0.94%       0.97%             0-> 0.67 radl:   93.98%     7.39% 
 
                               SUMMARY
-                         energy deposit :   94.10 % E0 +-    5.05 % E0
-                         charged traklen:   13.69 radl +-    0.74 radl
-                         neutral traklen:  199.40 radl +-   19.83 radl
+                         energy deposit :   93.98 % E0 +-    7.39 % E0
+                         charged traklen:   13.66 radl +-    1.08 radl
+                         neutral traklen:  201.00 radl +-   22.88 radl
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1297128713, 1365018591
+ Current couple of seeds = 1983783255, 1611071241
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

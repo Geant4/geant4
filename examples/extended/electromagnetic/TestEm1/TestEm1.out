@@ -22,7 +22,7 @@ Current available graphics systems are:
 # 
 /run/initialize
 
-***** Table : Nb of materials = 10 *****
+***** Table : Nb of materials = 11 *****
 
  Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
    --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
@@ -50,11 +50,14 @@ Current available graphics systems are:
  Material:     Iron     density:  7.870 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm 
    --->  Element:     Iron      Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
+ Material: Tungsten     density: 19.300 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.504 mm 
+   --->  Element: Tungsten      Z = 74.0   N = 183.8   A = 183.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
  Material:     Lead     density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm 
    --->  Element:     Lead      Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material:  Uranium     density: 18.950 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.861 mm 
-   --->  Element:  Uranium      Z = 82.0   N = 238.0   A = 238.03 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material:  Uranium     density: 18.950 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.166 mm 
+   --->  Element:  Uranium      Z = 92.0   N = 238.0   A = 238.03 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
 
 
@@ -128,6 +131,7 @@ Cut in range
             Silicon         2.2 mm         6.05 mum
           Germanium         2.2 mm         6.05 mum
                Iron         2.2 mm         6.05 mum
+           Tungsten         2.2 mm         6.05 mum
                Lead         2.2 mm         6.05 mum
             Uranium         2.2 mm         6.05 mum
 Cut in energy
@@ -139,8 +143,9 @@ Cut in energy
             Silicon          10 keV        8.45 keV
           Germanium        31.6 keV        32.7 keV
                Iron        31.1 keV        43.3 keV
+           Tungsten         139 keV        59.7 keV
                Lead         124 keV        42.8 keV
-            Uranium         143 keV        53.4 keV
+            Uranium         188 keV        56.1 keV
 ===================================================
 #
 /process/eLoss/StepFunction 0.183 170 micrometer
@@ -167,18 +172,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=12s Real=27s Sys=2.7s
+  User=12s Real=23s Sys=2.8s
 
- nb tracks/event   neutral:    26.7900   charged:   687.1000
- nb  steps/event   neutral:   141.5300   charged:  1321.3700
+ nb tracks/event   neutral:    27.5700   charged:   695.0200
+ nb  steps/event   neutral:   148.5400   charged:  1331.6000
 
  nb of process calls per event: 
           eIoni       eBrem        phot       compt        conv     annihil
-      1295.7300     24.4000     25.5500    114.7400      1.2400      1.2400
+      1305.3700     24.8300     26.1700    120.9700      1.4000      1.4000
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1685078950, 499665807
+ Current couple of seeds = 2126832091, 1419935556
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

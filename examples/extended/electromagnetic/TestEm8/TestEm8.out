@@ -133,7 +133,7 @@ Irregular X-ray TR model is called
 48	fGamma = 8.085e+04	sumE = 8.377
 49	fGamma = 9.283e+04	sumE = 8.504
 
-total time for build X-ray TR tables = 7.56 s
+total time for build X-ray TR tables = 6.5 s
 
 phot:  Total cross sections from Sandia parametrisation. 
 Em8PhysicsList::SetCuts:CutLength : 1 mm 
@@ -161,7 +161,7 @@ hIoni:    Knock-on electron cross sections .
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-total time(SetCuts)=6.08 s 
+total time(SetCuts)=5.76 s 
 #
 #control/saveHistory
 #
@@ -247,42 +247,42 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-       0.00         0.00         0.71            0k World
-       0.00         0.00         0.71           11k Radiator
+       0.00         0.00         0.54            0k World
+       0.00         0.00         0.54           11k Radiator
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      96.00         11k         1      305        376     42711.10    Radiator
-       4.00          0k         3        7         20     42711.10    World
+      96.00         11k         1      305        376     42709.36    Radiator
+       4.00          0k         3        7         20     42709.36    World
 Start Run processing.
 
 ---> Begin of Event: 0
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=93.45s Real=136.82s Sys=1.45s
+  User=126.19s Real=133.52s Sys=2.13s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=73.9704 +- 1.0547  mm  
+    mean charged track length   in absorber=155.499 +- 3.90364  mm  
 
-            mean energy deposit in absorber=-NaN +- 0  MeV 
+            mean energy deposit in absorber=0.101305 +- 0.00101646  MeV 
 
- mean number of steps in absorber (charged) =431.829 +- 1.74206      
- mean number of steps in absorber (neutral) =5.065 +- 0.0690997      
+ mean number of steps in absorber (charged) =430.761 +- 1.31017      
+ mean number of steps in absorber (neutral) =5.127 +- 0.072006      
 
-   mean number of charged secondaries = 1.418 +- 0.0382789
+   mean number of charged secondaries = 1.481 +- 0.0379426
 
-   mean number of neutral secondaries = 0.026 +- 0.0050323
+   mean number of neutral secondaries = 0.033 +- 0.00564898
 
-   mean number of e-s =1.418  and e+s =0
+   mean number of e-s =1.481  and e+s =0
 
-(number) transmission coeff=0.76  reflection coeff=0
+(number) transmission coeff=0.682  reflection coeff=0.048
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1832013494, 1332108052
+ Current couple of seeds = 1389024498, 296616067
 ----------------------------------------
 #
 #

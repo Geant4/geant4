@@ -242,19 +242,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=48.94s Real=93.65s Sys=8.93s
+  User=43.96s Real=73.89s Sys=8.8s
 
 -------------------------------------------------------------
                                    total energy dep            total tracklen 
  
- Absorber0 (        Lead) : 808.83 MeV +- 17.07 MeV       56.82 cm  +-  1.28 cm 
- Absorber1 ( liquidArgon) : 179.33 MeV +- 13.98 MeV       89.53 cm  +-  7.28 cm 
+ Absorber0 (        Lead) : 812.93 MeV +- 14.83 MeV       57.12 cm  +-  1.15 cm 
+ Absorber1 ( liquidArgon) : 176.46 MeV +- 13.64 MeV       88.10 cm  +-  7.16 cm 
 
 -------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 121385458, 837627139
+ Current couple of seeds = 1367155280, 999623368
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

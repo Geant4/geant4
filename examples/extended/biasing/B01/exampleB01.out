@@ -18,7 +18,7 @@ compt:  Total cross sections from a parametrisation. Good description from 10 Ke
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
@@ -37,7 +37,7 @@ annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
@@ -47,7 +47,7 @@ hIoni:    Knock-on electron cross sections .
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 MuIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
@@ -100,79 +100,79 @@ DoIt Vector:
 output mScorer, mass geometry, neutron
 Volume name = worldCylinder_phys, Replica number = -1
 HistorysEntering
-entries                             : 327
-Sum(w)                              : 327
-Sum(w*x)                            : 327
-Sum(w*x*x)                          : 327
+entries                             : 331
+Sum(w)                              : 331
+Sum(w*x)                            : 331
+Sum(w*x*x)                          : 331
 mean=Sum(w*x) / Sum(w)              : 1
 sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 327
-Sum(x^2)                            : 327
+Sum(x)                              : 331
+Sum(x^2)                            : 331
 EnergyEnteringHistory
-entries                             : 327
-Sum(w)                              : 327
-Sum(w*x)                            : 2758.31
-Sum(w*x*x)                          : 24999.1
-mean=Sum(w*x) / Sum(w)              : 8.43521
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 2.30157
-Sum(x)                              : 2758.31
-Sum(x^2)                            : 24999.1
+entries                             : 331
+Sum(w)                              : 331
+Sum(w*x)                            : 2868.82
+Sum(w*x*x)                          : 26144.9
+mean=Sum(w*x) / Sum(w)              : 8.66714
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.96678
+Sum(x)                              : 2868.82
+Sum(x^2)                            : 26144.9
 Volume name = cell: 02, shield, Replica number = 0
 HistorysEntering
-entries                             : 1080
-Sum(w)                              : 1080
-Sum(w*x)                            : 1080
-Sum(w*x*x)                          : 1080
+entries                             : 1066
+Sum(w)                              : 1066
+Sum(w*x)                            : 1066
+Sum(w*x*x)                          : 1066
 mean=Sum(w*x) / Sum(w)              : 1
 sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 1080
-Sum(x^2)                            : 1080
+Sum(x)                              : 1066
+Sum(x^2)                            : 1066
 EnergyEnteringHistory
-entries                             : 1080
-Sum(w)                              : 1080
-Sum(w*x)                            : 10552
-Sum(w*x*x)                          : 104339
-mean=Sum(w*x) / Sum(w)              : 9.77041
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.07195
-Sum(x)                              : 10552
-Sum(x^2)                            : 104339
+entries                             : 1066
+Sum(w)                              : 1066
+Sum(w*x)                            : 10503.1
+Sum(w*x*x)                          : 104013
+mean=Sum(w*x) / Sum(w)              : 9.85277
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0.704593
+Sum(x)                              : 10503.1
+Sum(x^2)                            : 104013
 Collisions
-entries                             : 1321
-Sum(w)                              : 1321
-Sum(w*x)                            : 1321
-Sum(w*x*x)                          : 1321
+entries                             : 1274
+Sum(w)                              : 1274
+Sum(w*x)                            : 1274
+Sum(w*x*x)                          : 1274
 mean=Sum(w*x) / Sum(w)              : 1
 sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 1321
-Sum(x^2)                            : 1321
+Sum(x)                              : 1274
+Sum(x^2)                            : 1274
 Volume name = cell: 03, shield, Replica number = 0
 HistorysEntering
-entries                             : 686
-Sum(w)                              : 686
-Sum(w*x)                            : 686
-Sum(w*x*x)                          : 686
+entries                             : 665
+Sum(w)                              : 665
+Sum(w*x)                            : 665
+Sum(w*x*x)                          : 665
 mean=Sum(w*x) / Sum(w)              : 1
 sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 686
-Sum(x^2)                            : 686
+Sum(x)                              : 665
+Sum(x^2)                            : 665
 EnergyEnteringHistory
-entries                             : 686
-Sum(w)                              : 686
-Sum(w*x)                            : 6577.61
-Sum(w*x*x)                          : 64241.1
-mean=Sum(w*x) / Sum(w)              : 9.58835
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.30743
-Sum(x)                              : 6577.61
-Sum(x^2)                            : 64241.1
+entries                             : 665
+Sum(w)                              : 665
+Sum(w*x)                            : 6401.76
+Sum(w*x*x)                          : 62732.9
+mean=Sum(w*x) / Sum(w)              : 9.62671
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.28905
+Sum(x)                              : 6401.76
+Sum(x^2)                            : 62732.9
 Collisions
-entries                             : 951
-Sum(w)                              : 951
-Sum(w*x)                            : 951
-Sum(w*x*x)                          : 951
+entries                             : 908
+Sum(w)                              : 908
+Sum(w*x)                            : 908
+Sum(w*x*x)                          : 908
 mean=Sum(w*x) / Sum(w)              : 1
 sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 951
-Sum(x^2)                            : 951
+Sum(x)                              : 908
+Sum(x^2)                            : 908
 Volume name = cell: 04, shield, Replica number = 0
 HistorysEntering
 entries                             : 376
@@ -186,28 +186,28 @@ Sum(x^2)                            : 376
 EnergyEnteringHistory
 entries                             : 376
 Sum(w)                              : 376
-Sum(w*x)                            : 3596.31
-Sum(w*x*x)                          : 34979
-mean=Sum(w*x) / Sum(w)              : 9.56464
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.24371
-Sum(x)                              : 3596.31
-Sum(x^2)                            : 34979
+Sum(w*x)                            : 3528.31
+Sum(w*x*x)                          : 34285
+mean=Sum(w*x) / Sum(w)              : 9.3838
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.76852
+Sum(x)                              : 3528.31
+Sum(x^2)                            : 34285
 Collisions
-entries                             : 514
-Sum(w)                              : 514
-Sum(w*x)                            : 514
-Sum(w*x*x)                          : 514
+entries                             : 522
+Sum(w)                              : 522
+Sum(w*x)                            : 522
+Sum(w*x*x)                          : 522
 mean=Sum(w*x) / Sum(w)              : 1
 sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 514
-Sum(x^2)                            : 514
+Sum(x)                              : 522
+Sum(x^2)                            : 522
 
 ----------------------------------------------
 Volume name               |  AV E/Track | sigma       |  Coll_Ent.Tr|
-worldCylinder_phys....... |     8.43521 |     2.30157 |           0 |
-cell: 02, shield......... |     9.77041 |     1.07195 |     1.22315 |
-cell: 03, shield......... |     9.58835 |     1.30743 |      1.3863 |
-cell: 04, shield......... |     9.56464 |     1.24371 |     1.36702 |
+worldCylinder_phys....... |     8.66714 |     1.96678 |           0 |
+cell: 02, shield......... |     9.85277 |    0.704593 |     1.19512 |
+cell: 03, shield......... |     9.62671 |     1.28905 |     1.36541 |
+cell: 04, shield......... |      9.3838 |     1.76852 |      1.3883 |
 +++ G4ProcessPlacer::G4ProcessPlacer: for: neutron
   ProcessName: MScoreProcess, will be removed!
 The initial Vectors: 
@@ -242,3 +242,6 @@ DoIt Vector:
    LFission
    LCapture
    Decay
+WARNING - Attempt to delete the physical volume store while geometry closed !
+WARNING - Attempt to delete the logical volume store while geometry closed !
+WARNING - Attempt to delete the solid store while geometry closed !

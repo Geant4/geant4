@@ -263,99 +263,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=65s Real=1.7e+03s Sys=1.6e+02s
+  User=58s Real=1.1e+03s Sys=1.2e+02s
  ================== run summary =====================
  end of Run TotNbofEvents = 100000
-    mean charged track length   in absorber=0.0209448 +- 1.48371e-05  mm  
+    mean charged track length   in absorber=0.0209457 +- 1.48628e-05  mm  
 
-            mean energy deposit in absorber=0.00667718 +- 2.03905e-05  MeV 
+            mean energy deposit in absorber=0.006678 +- 2.04253e-05  MeV 
 
- mean number of steps in absorber (charged) =0.05869 +- 0.00123897      
+ mean number of steps in absorber (charged) =0.05875 +- 0.00124032      
  mean number of steps in absorber (neutral) =3e-05 +- 1.73202e-05      
 
-   mean number of charged secondaries = 0.03787 +- 0.000638403
+   mean number of charged secondaries = 0.03788 +- 0.000638476
 
-   mean number of neutral secondaries = 3e-05 +- 1.73202e-05
+   mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =0.03787  and e+s =0
+   mean number of e-s =0.03788  and e+s =0
 
 (number) transmission coeff=1  reflection coeff=0
-
- energy deposit distribution 
-#entries=100000    #underflows=0    #overflows=5789
- bin nb      Elow      entries     normalized 
-    0         0           0           0
-    1    0.0002           0           0
-    2    0.0004           0           0
-    3    0.0006           0           0
-    4    0.0008           1        0.05
-    5     0.001           2         0.1
-    6    0.0012           1        0.05
-    7    0.0014          15        0.75
-    8    0.0016          32         1.6
-    9    0.0018          96         4.8
-   10     0.002         211       10.55
-   11    0.0022         432        21.6
-   12    0.0024         789       39.45
-   13    0.0026        1249       62.45
-   14    0.0028        1862        93.1
-   15     0.003        2679      133.95
-   16    0.0032        3341      167.05
-   17    0.0034        3989      199.45
-   18    0.0036        4487      224.35
-   19    0.0038        4807      240.35
-   20     0.004        4904       245.2
-   21    0.0042        4849      242.45
-   22    0.0044        4787      239.35
-   23    0.0046        4469      223.45
-   24    0.0048        4194       209.7
-   25     0.005        3666       183.3
-   26    0.0052        3493      174.65
-   27    0.0054        3138       156.9
-   28    0.0056        2851      142.55
-   29    0.0058        2668       133.4
-   30     0.006        2418       120.9
-   31    0.0062        2215      110.75
-   32    0.0064        2066       103.3
-   33    0.0066        2029      101.45
-   34    0.0068        1877       93.85
-   35     0.007        1634        81.7
-   36    0.0072        1551       77.55
-   37    0.0074        1471       73.55
-   38    0.0076        1381       69.05
-   39    0.0078        1256        62.8
-   40     0.008        1241       62.05
-   41    0.0082        1046        52.3
-   42    0.0084        1000          50
-   43    0.0086         934        46.7
-   44    0.0088         845       42.25
-   45     0.009         803       40.15
-   46    0.0092         711       35.55
-   47    0.0094         617       30.85
-   48    0.0096         583       29.15
-   49    0.0098         572        28.6
-   50      0.01         503       25.15
-   51    0.0102         482        24.1
-   52    0.0104         418        20.9
-   53    0.0106         396        19.8
-   54    0.0108         378        18.9
-   55     0.011         367       18.35
-   56    0.0112         361       18.05
-   57    0.0114         323       16.15
-   58    0.0116         283       14.15
-   59    0.0118         275       13.75
-   60     0.012         256        12.8
-   61    0.0122         230        11.5
-   62    0.0124         238        11.9
-   63    0.0126         217       10.85
-   64    0.0128         222        11.1
-
- Emp =           0.004   width=         0.0028  MeV 
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1921872655, 667762889
+ Current couple of seeds = 2114771135, 1541635325
 ----------------------------------------
 #
 Graphics systems deleted.

@@ -17,7 +17,7 @@ Current available graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
 
-***** Table : Nb of materials = 28 *****
+***** Table : Nb of materials = 32 *****
 
  Material: Aluminium     density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
    --->  Element: Aluminium      Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
@@ -49,7 +49,7 @@ Current available graphics systems are:
    --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  45.47 %  Abundance  45.45 %
    --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   6.11 %  Abundance  36.36 %
 
- Material: Polypropelene     density: 910.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  28.167 cm 
+ Material:      CH2     density: 910.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  28.167 cm 
    --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  25.16 %  Abundance  66.67 %
    --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  74.84 %  Abundance  33.33 %
 
@@ -130,22 +130,101 @@ Current available graphics systems are:
    --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:   1.79 %  Abundance  13.38 %
    --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   1.21 %  Abundance  53.51 %
 
+ Material:   Ar7CH4     density:  1.709 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 115.488 m  
+   --->  Element:    Argon Ar   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass:  97.10 %  Abundance  62.75 %
+   --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:   1.73 %  Abundance   7.45 %
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   1.17 %  Abundance  29.80 %
+
+ Material:   Kr7CH4     density:  3.491 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  32.856 m  
+   --->  Element:       Kr      Z = 36.0   N =  83.8   A =  83.80 g/mole  fractionMass:  98.60 %  Abundance  62.82 %
+   --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:   0.84 %  Abundance   7.44 %
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   0.56 %  Abundance  29.75 %
+
+ Material:  XeArCH4     density:  3.655 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  26.879 m  
+   --->  Element:    Xenon      Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  76.14 %  Abundance  33.82 %
+   --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:   0.68 %  Abundance   6.60 %
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   0.46 %  Abundance  26.42 %
+   --->  Element:    Argon Ar   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass:  22.72 %  Abundance  33.17 %
+
+ Material: radiatorMat     density: 24.058 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  11.575 m  
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  47.08 %  Abundance  18.25 %
+   --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  43.07 %  Abundance  44.43 %
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   5.79 %  Abundance  35.54 %
+   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:   3.99 %  Abundance   1.77 %
+   --->  Element:    Argon Ar   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass:   0.07 %  Abundance   0.01 %
 
 
- The  WORLD   is made of 800mm of He, the transverse size (R) of the world is 200 mm. 
- The ABSORBER is made of 30mm of Xe10CH4, the transverse size (R) is 100 mm. 
+
+ The  WORLD   is made of 2000mm of Air, the transverse size (R) of the world is 200 mm. 
+ The ABSORBER is made of 15mm of Ar7CH4, the transverse size (R) is 100 mm. 
  Z position of the (middle of the) absorber 360  mm.
 
-zRad = 75.4 mm
-radThick = 60.96 mm
-fFoilNumber = 300
-fRadiatorMat = Li
-WorldMaterial = He
-zModule = 50.04 mm
-50.04 mm	50.206 mm	50.372 mm	50.538 mm	50.704 mm	50.87 mm	51.036 mm	51.202 mm	51.368 mm	51.534 mm	51.7 mm	51.866 mm	52.032 mm	52.198 mm	52.364 mm	52.53 mm	52.696 mm	52.862 mm	53.028 mm	53.194 mm	53.36 mm	53.526 mm	53.692 mm	53.858 mm	54.024 mm	54.19 mm	54.356 mm	54.522 mm	54.688 mm	54.854 mm	55.02 mm	55.186 mm	55.352 mm	55.518 mm	55.684 mm	55.85 mm	56.016 mm	56.182 mm	56.348 mm	56.514 mm	56.68 mm	56.846 mm	57.012 mm	57.178 mm	57.344 mm	57.51 mm	57.676 mm	57.842 mm	58.008 mm	58.174 mm	58.34 mm	58.506 mm	58.672 mm	58.838 mm	59.004 mm	59.17 mm	59.336 mm	59.502 mm	59.668 mm	59.834 mm	60 mm	60.166 mm	60.332 mm	60.498 mm	60.664 mm	60.83 mm	60.996 mm	61.162 mm	61.328 mm	61.494 mm	61.66 mm	61.826 mm	61.992 mm	62.158 mm	62.324 mm	62.49 mm	62.656 mm	62.822 mm	62.988 mm	63.154 mm	63.32 mm	63.486 mm	63.652 mm	63.818 mm	63.984 mm	64.15 mm	64.316 mm	64.482 mm	64.648 mm	64.814 mm	64.98 mm	65.146 mm	65.312 mm	65.478 mm	65.644 mm	65.81 mm	65.976 mm	66.142 mm	66.308 mm	66.474 mm	66.64 mm	66.806 mm	66.972 mm	67.138 mm	67.304 mm	67.47 mm	67.636 mm	67.802 mm	67.968 mm	68.134 mm	68.3 mm	68.466 mm	68.632 mm	68.798 mm	68.964 mm	69.13 mm	69.296 mm	69.462 mm	69.628 mm	69.794 mm	69.96 mm	70.126 mm	70.292 mm	70.458 mm	70.624 mm	70.79 mm	70.956 mm	71.122 mm	71.288 mm	71.454 mm	71.62 mm	71.786 mm	71.952 mm	72.118 mm	72.284 mm	72.45 mm	72.616 mm	72.782 mm	72.948 mm	73.114 mm	73.28 mm	73.446 mm	73.612 mm	73.778 mm	73.944 mm	74.11 mm	74.276 mm	74.442 mm	74.608 mm	74.774 mm	74.94 mm	75.106 mm	75.272 mm	75.438 mm	75.604 mm	75.77 mm	75.936 mm	76.102 mm	76.268 mm	76.434 mm	76.6 mm	76.766 mm	76.932 mm	77.098 mm	77.264 mm	77.43 mm	77.596 mm	77.762 mm	77.928 mm	78.094 mm	78.26 mm	78.426 mm	78.592 mm	78.758 mm	78.924 mm	79.09 mm	79.256 mm	79.422 mm	79.588 mm	79.754 mm	79.92 mm	80.086 mm	80.252 mm	80.418 mm	80.584 mm	80.75 mm	80.916 mm	81.082 mm	81.248 mm	81.414 mm	81.58 mm	81.746 mm	81.912 mm	82.078 mm	82.244 mm	82.41 mm	82.576 mm	82.742 mm	82.908 mm	83.074 mm	83.24 mm	83.406 mm	83.572 mm	83.738 mm	83.904 mm	84.07 mm	84.236 mm	84.402 mm	84.568 mm	84.734 mm	84.9 mm	85.066 mm	85.232 mm	85.398 mm	85.564 mm	85.73 mm	85.896 mm	86.062 mm	86.228 mm	86.394 mm	86.56 mm	86.726 mm	86.892 mm	87.058 mm	87.224 mm	87.39 mm	87.556 mm	87.722 mm	87.888 mm	88.054 mm	88.22 mm	88.386 mm	88.552 mm	88.718 mm	88.884 mm	89.05 mm	89.216 mm	89.382 mm	89.548 mm	89.714 mm	89.88 mm	90.046 mm	90.212 mm	90.378 mm	90.544 mm	90.71 mm	90.876 mm	91.042 mm	91.208 mm	91.374 mm	91.54 mm	91.706 mm	91.872 mm	92.038 mm	92.204 mm	92.37 mm	92.536 mm	92.702 mm	92.868 mm	93.034 mm	93.2 mm	93.366 mm	93.532 mm	93.698 mm	93.864 mm	94.03 mm	94.196 mm	94.362 mm	94.528 mm	94.694 mm	94.86 mm	95.026 mm	95.192 mm	95.358 mm	95.524 mm	95.69 mm	95.856 mm	96.022 mm	96.188 mm	96.354 mm	96.52 mm	96.686 mm	96.852 mm	97.018 mm	97.184 mm	97.35 mm	97.516 mm	97.682 mm	97.848 mm	98.014 mm	98.18 mm	98.346 mm	98.512 mm	98.678 mm	98.844 mm	99.01 mm	99.176 mm	99.342 mm	99.508 mm	99.674 mm	
-Em10DetectorConstruction::ParametrisationModel() is called
-fModelNumber = 0
-Warning: No parametrisation model was defined?
+zRad = 138.359 mm
+radThick = 76.718 mm
+fFoilNumber = 100
+fRadiatorMat = radiatorMat
+WorldMaterial = Air
+zModule = 100 mm
+zAbsorber = 200.309 mm
+the number of TR radiator plates = 100
+total radiator thickness = 7.747 cm
+plate material = Mylar
+gas material = Air
+plate plasma energy = 29.55 eV
+gas plasma energy = 0.731967 eV
+Regular X-ray TR  radiator EM process is called
+0	fGamma = 107.6	sumE = 0.1933
+1	fGamma = 123.4	sumE = 0.2553
+2	fGamma = 141.5	sumE = 0.3303
+3	fGamma = 162.3	sumE = 0.4171
+4	fGamma = 186.2	sumE = 0.5041
+5	fGamma = 213.7	sumE = 0.5873
+6	fGamma = 245.2	sumE = 0.6919
+7	fGamma = 281.3	sumE = 0.8242
+8	fGamma = 322.9	sumE = 0.914
+9	fGamma = 370.5	sumE = 1.058
+10	fGamma = 425.3	sumE = 1.179
+11	fGamma = 488.2	sumE = 1.277
+12	fGamma = 560.3	sumE = 1.423
+13	fGamma = 643.2	sumE = 1.53
+14	fGamma = 738.3	sumE = 1.64
+15	fGamma = 847.6	sumE = 1.77
+16	fGamma = 973	sumE = 1.943
+17	fGamma = 1117	sumE = 2.024
+18	fGamma = 1282	sumE = 2.251
+19	fGamma = 1472	sumE = 2.413
+20	fGamma = 1690	sumE = 2.628
+21	fGamma = 1940	sumE = 2.842
+22	fGamma = 2228	sumE = 2.938
+23	fGamma = 2558	sumE = 3.031
+24	fGamma = 2936	sumE = 3.432
+25	fGamma = 3371	sumE = 3.327
+26	fGamma = 3871	sumE = 3.48
+27	fGamma = 4444	sumE = 3.561
+28	fGamma = 5102	sumE = 3.472
+29	fGamma = 5858	sumE = 3.698
+30	fGamma = 6726	sumE = 3.649
+31	fGamma = 7722	sumE = 3.826
+32	fGamma = 8866	sumE = 3.921
+33	fGamma = 1.018e+04	sumE = 4.137
+34	fGamma = 1.169e+04	sumE = 4.02
+35	fGamma = 1.342e+04	sumE = 4.187
+36	fGamma = 1.541e+04	sumE = 4.157
+37	fGamma = 1.769e+04	sumE = 4.105
+38	fGamma = 2.031e+04	sumE = 4.082
+39	fGamma = 2.332e+04	sumE = 4.096
+40	fGamma = 2.677e+04	sumE = 4.138
+41	fGamma = 3.074e+04	sumE = 4.222
+42	fGamma = 3.529e+04	sumE = 4.274
+43	fGamma = 4.052e+04	sumE = 4.305
+44	fGamma = 4.652e+04	sumE = 4.324
+45	fGamma = 5.342e+04	sumE = 4.336
+46	fGamma = 6.133e+04	sumE = 4.341
+47	fGamma = 7.042e+04	sumE = 4.343
+48	fGamma = 8.085e+04	sumE = 4.344
+49	fGamma = 9.283e+04	sumE = 4.343
+
+total time for build X-ray TR energy loss tables = 74.72 s
 
 phot:  Total cross sections from Sandia parametrisation. 
 Em10PhysicsList::SetCuts:CutLength : 1 mm 
@@ -173,7 +252,7 @@ hIoni:    Knock-on electron cross sections .
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-total time(SetCuts)=14.67 s 
+total time(SetCuts)=16.33 s 
 ============= The cut Energy ==============================
                             gamma              e-    
 Cut in range       
@@ -185,7 +264,7 @@ Cut in range
                  Be           1 mm            1 mm 
               Mylar           1 mm            1 mm 
              Kapton           1 mm            1 mm 
-      Polypropelene           1 mm            1 mm 
+                CH2           1 mm            1 mm 
                  He           1 mm            1 mm 
                  Ne           1 mm            1 mm 
               Argon           1 mm            1 mm 
@@ -205,6 +284,10 @@ Cut in range
             Xe10CH4           1 mm            1 mm 
              Xe5CH4           1 mm            1 mm 
             Xe20CH4           1 mm            1 mm 
+             Ar7CH4           1 mm            1 mm 
+             Kr7CH4           1 mm            1 mm 
+            XeArCH4           1 mm            1 mm 
+        radiatorMat           1 mm            1 mm 
 Cut in energy
           Aluminium        6.89 keV         597 keV
             TRT_CH2        2.78 keV         515 keV
@@ -214,7 +297,7 @@ Cut in energy
                  Be        1.99 keV         466 keV
               Mylar        3.48 keV         541 keV
              Kapton        3.48 keV         541 keV
-      Polypropelene        2.75 keV         502 keV
+                CH2        2.75 keV         502 keV
                  He         990 eV          990 eV 
                  Ne         990 eV          990 eV 
               Argon         990 eV          990 eV 
@@ -234,67 +317,11 @@ Cut in energy
             Xe10CH4         990 eV         1.74 keV
              Xe5CH4         990 eV         1.83 keV
             Xe20CH4         990 eV         1.54 keV
+             Ar7CH4         990 eV          990 eV 
+             Kr7CH4         990 eV          996 eV 
+            XeArCH4         990 eV         1.04 keV
+        radiatorMat         990 eV         43.9 keV
 ===================================================
-Em10DetectorConstruction::ParametrisationModel() is called
-fModelNumber = 1
-the number of TR radiator plates = 300
-plate material = Li
-gas material = He
-plate plasma energy = 13.8447 eV
-gas plasma energy = 0.271761 eV
-Foam X-ray TR radiator model is called
-0	fGamma = 107.6	sumE = 0.004254
-1	fGamma = 123.4	sumE = 0.006653
-2	fGamma = 141.5	sumE = 0.01023
-3	fGamma = 162.3	sumE = 0.01548
-4	fGamma = 186.2	sumE = 0.02297
-5	fGamma = 213.7	sumE = 0.0336
-6	fGamma = 245.2	sumE = 0.04841
-7	fGamma = 281.3	sumE = 0.06867
-8	fGamma = 322.9	sumE = 0.09587
-9	fGamma = 370.5	sumE = 0.1317
-10	fGamma = 425.3	sumE = 0.1778
-11	fGamma = 488.2	sumE = 0.2359
-12	fGamma = 560.3	sumE = 0.3073
-13	fGamma = 643.2	sumE = 0.393
-14	fGamma = 738.3	sumE = 0.4929
-15	fGamma = 847.6	sumE = 0.6058
-16	fGamma = 973	sumE = 0.7292
-17	fGamma = 1117	sumE = 0.859
-18	fGamma = 1282	sumE = 0.9897
-19	fGamma = 1472	sumE = 1.115
-20	fGamma = 1690	sumE = 1.227
-21	fGamma = 1940	sumE = 1.319
-22	fGamma = 2228	sumE = 1.386
-23	fGamma = 2558	sumE = 1.422
-24	fGamma = 2936	sumE = 1.424
-25	fGamma = 3371	sumE = 1.393
-26	fGamma = 3871	sumE = 1.329
-27	fGamma = 4444	sumE = 1.237
-28	fGamma = 5102	sumE = 1.15
-29	fGamma = 5858	sumE = 1.208
-30	fGamma = 6726	sumE = 1.257
-31	fGamma = 7722	sumE = 1.298
-32	fGamma = 8866	sumE = 1.333
-33	fGamma = 1.018e+04	sumE = 1.362
-34	fGamma = 1.169e+04	sumE = 1.385
-35	fGamma = 1.342e+04	sumE = 1.405
-36	fGamma = 1.541e+04	sumE = 1.421
-37	fGamma = 1.769e+04	sumE = 1.434
-38	fGamma = 2.031e+04	sumE = 1.445
-39	fGamma = 2.332e+04	sumE = 1.454
-40	fGamma = 2.677e+04	sumE = 1.461
-41	fGamma = 3.074e+04	sumE = 1.468
-42	fGamma = 3.529e+04	sumE = 1.473
-43	fGamma = 4.052e+04	sumE = 1.477
-44	fGamma = 4.652e+04	sumE = 1.481
-45	fGamma = 5.342e+04	sumE = 1.485
-46	fGamma = 6.133e+04	sumE = 1.488
-47	fGamma = 7.042e+04	sumE = 1.49
-48	fGamma = 8.085e+04	sumE = 1.493
-49	fGamma = 9.283e+04	sumE = 1.495
-
-total time for build X-ray TR tables = 28.7 s
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -305,837 +332,25 @@ total time for build X-ray TR tables = 28.7 s
 ---> Begin of Event: 0
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=51.3923 +- 0.723033  mm  
+    mean charged track length   in absorber=23.6609 +- 0.943952  mm  
 
-            mean energy deposit in absorber=NaN +- 0  MeV 
+            mean energy deposit in absorber=0.00667686 +- 0.000191481  MeV 
 
- mean number of steps in absorber (charged) =1.965 +- 0.0308184      
- mean number of steps in absorber (neutral) =1.414 +- 0.0381917      
+ mean number of steps in absorber (charged) =1.259 +- 0.0171441      
+ mean number of steps in absorber (neutral) =2.086 +- 0.0477766      
 
-   mean number of charged secondaries = 0.965 +- 0.0308184
-
-   mean number of neutral secondaries = 0 +- 0
-
-   mean number of e-s =0.965  and e+s =0
-
-(number) transmission coeff=0.574  reflection coeff=0
-
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 154750560, 554136335
-----------------------------------------
-Em10DetectorConstruction::ParametrisationModel() is called
-fModelNumber = 2
-the number of TR radiator plates = 300
-plate material = Li
-gas material = He
-plate plasma energy = 13.8447 eV
-gas plasma energy = 0.271761 eV
-Foam XTR dE/dx model is called
-0	fGamma = 107.6	sumE = 0.1086
-1	fGamma = 123.4	sumE = 0.158
-2	fGamma = 141.5	sumE = 0.224
-3	fGamma = 162.3	sumE = 0.3095
-4	fGamma = 186.2	sumE = 0.4155
-5	fGamma = 213.7	sumE = 0.546
-6	fGamma = 245.2	sumE = 0.7026
-7	fGamma = 281.3	sumE = 0.8863
-8	fGamma = 322.9	sumE = 1.096
-9	fGamma = 370.5	sumE = 1.331
-10	fGamma = 425.3	sumE = 1.587
-11	fGamma = 488.2	sumE = 1.857
-12	fGamma = 560.3	sumE = 2.133
-13	fGamma = 643.2	sumE = 2.406
-14	fGamma = 738.3	sumE = 2.664
-15	fGamma = 847.6	sumE = 2.895
-16	fGamma = 973	sumE = 3.087
-17	fGamma = 1117	sumE = 3.23
-18	fGamma = 1282	sumE = 3.315
-19	fGamma = 1472	sumE = 3.338
-20	fGamma = 1690	sumE = 3.296
-21	fGamma = 1940	sumE = 3.191
-22	fGamma = 2228	sumE = 3.028
-23	fGamma = 2558	sumE = 2.816
-24	fGamma = 2936	sumE = 2.567
-25	fGamma = 3371	sumE = 2.297
-26	fGamma = 3871	sumE = 2.018
-27	fGamma = 4444	sumE = 1.745
-28	fGamma = 5102	sumE = 1.532
-29	fGamma = 5858	sumE = 1.594
-30	fGamma = 6726	sumE = 1.647
-31	fGamma = 7722	sumE = 1.691
-32	fGamma = 8866	sumE = 1.728
-33	fGamma = 1.018e+04	sumE = 1.759
-34	fGamma = 1.169e+04	sumE = 1.784
-35	fGamma = 1.342e+04	sumE = 1.805
-36	fGamma = 1.541e+04	sumE = 1.822
-37	fGamma = 1.769e+04	sumE = 1.836
-38	fGamma = 2.031e+04	sumE = 1.847
-39	fGamma = 2.332e+04	sumE = 1.856
-40	fGamma = 2.677e+04	sumE = 1.864
-41	fGamma = 3.074e+04	sumE = 1.871
-42	fGamma = 3.529e+04	sumE = 1.876
-43	fGamma = 4.052e+04	sumE = 1.881
-44	fGamma = 4.652e+04	sumE = 1.885
-45	fGamma = 5.342e+04	sumE = 1.889
-46	fGamma = 6.133e+04	sumE = 1.892
-47	fGamma = 7.042e+04	sumE = 1.895
-48	fGamma = 8.085e+04	sumE = 1.897
-49	fGamma = 9.283e+04	sumE = 1.899
-
-total time for build X-ray TR dE/dx tables = 58.07 s
-### Run 1 start.
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 154750560, 554136335
-----------------------------------------
-
----> Begin of Event: 0
- ================== run summary =====================
- end of Run TotNbofEvents = 10
-    mean charged track length   in absorber=55.8428 +- 5.52322  mm  
-
-            mean energy deposit in absorber=0.0468046 +- 0.00769904  MeV 
-
- mean number of steps in absorber (charged) =2.2 +- 0.236643      
- mean number of steps in absorber (neutral) =1.4 +- 0.404969      
-
-   mean number of charged secondaries = 1.1 +- 0.262679
+   mean number of charged secondaries = 0.241 +- 0.0155216
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =1.1  and e+s =0
+   mean number of e-s =0.241  and e+s =0
 
-(number) transmission coeff=0.8  reflection coeff=0
-
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 2120844477, 1957916095
-----------------------------------------
-Em10DetectorConstruction::ParametrisationModel() is called
-fModelNumber = 3
-the number of TR radiator plates = 300
-plate material = Li
-gas material = He
-plate plasma energy = 13.8447 eV
-gas plasma energy = 0.271761 eV
-Gammma distributed X-ray TR radiator model is called
-fAlphaPlate = 160 ; fAlphaGas = 160
-0	fGamma = 107.6	sumE = 0.004089
-1	fGamma = 123.4	sumE = 0.006404
-2	fGamma = 141.5	sumE = 0.009919
-3	fGamma = 162.3	sumE = 0.01502
-4	fGamma = 186.2	sumE = 0.02226
-5	fGamma = 213.7	sumE = 0.03343
-6	fGamma = 245.2	sumE = 0.04775
-7	fGamma = 281.3	sumE = 0.06558
-8	fGamma = 322.9	sumE = 0.09347
-9	fGamma = 370.5	sumE = 0.1394
-10	fGamma = 425.3	sumE = 0.1904
-11	fGamma = 488.2	sumE = 0.2455
-12	fGamma = 560.3	sumE = 0.3134
-13	fGamma = 643.2	sumE = 0.3836
-14	fGamma = 738.3	sumE = 0.4518
-15	fGamma = 847.6	sumE = 0.5229
-16	fGamma = 973	sumE = 0.7238
-17	fGamma = 1117	sumE = 1.225
-18	fGamma = 1282	sumE = 1.713
-19	fGamma = 1472	sumE = 2.101
-20	fGamma = 1690	sumE = 2.378
-21	fGamma = 1940	sumE = 2.628
-22	fGamma = 2228	sumE = 2.736
-23	fGamma = 2558	sumE = 2.798
-24	fGamma = 2936	sumE = 2.385
-25	fGamma = 3371	sumE = 2.242
-26	fGamma = 3871	sumE = 3.371
-27	fGamma = 4444	sumE = 2.766
-28	fGamma = 5102	sumE = 1.331
-29	fGamma = 5858	sumE = 1.311
-30	fGamma = 6726	sumE = 1.298
-31	fGamma = 7722	sumE = 1.289
-32	fGamma = 8866	sumE = 1.282
-33	fGamma = 1.018e+04	sumE = 1.278
-34	fGamma = 1.169e+04	sumE = 1.275
-35	fGamma = 1.342e+04	sumE = 1.274
-36	fGamma = 1.541e+04	sumE = 1.274
-37	fGamma = 1.769e+04	sumE = 1.274
-38	fGamma = 2.031e+04	sumE = 1.275
-39	fGamma = 2.332e+04	sumE = 1.276
-40	fGamma = 2.677e+04	sumE = 1.278
-41	fGamma = 3.074e+04	sumE = 1.28
-42	fGamma = 3.529e+04	sumE = 1.282
-43	fGamma = 4.052e+04	sumE = 1.284
-44	fGamma = 4.652e+04	sumE = 1.285
-45	fGamma = 5.342e+04	sumE = 1.287
-46	fGamma = 6.133e+04	sumE = 1.289
-47	fGamma = 7.042e+04	sumE = 1.291
-48	fGamma = 8.085e+04	sumE = 1.293
-49	fGamma = 9.283e+04	sumE = 1.294
-
-total time for build X-ray TR tables = 49.36 s
-### Run 2 start.
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 2120844477, 1957916095
-----------------------------------------
-
----> Begin of Event: 0
- ================== run summary =====================
- end of Run TotNbofEvents = 10
-    mean charged track length   in absorber=50.2377 +- 5.08644  mm  
-
-            mean energy deposit in absorber=0.0307339 +- 0.00234288  MeV 
-
- mean number of steps in absorber (charged) =1.9 +- 0.221359      
- mean number of steps in absorber (neutral) =1.5 +- 0.254951      
-
-   mean number of charged secondaries = 0.9 +- 0.221359
-
-   mean number of neutral secondaries = 0 +- 0
-
-   mean number of e-s =0.9  and e+s =0
-
-(number) transmission coeff=0.7  reflection coeff=0
+(number) transmission coeff=0.191  reflection coeff=0.008
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1962200145, 538932138
-----------------------------------------
-Em10DetectorConstruction::ParametrisationModel() is called
-fModelNumber = 4
-the number of TR radiator plates = 300
-plate material = Li
-gas material = He
-plate plasma energy = 13.8447 eV
-gas plasma energy = 0.271761 eV
-Gammma distributed X-ray TR radiator model is called
-fAlphaPlate = 160 ; fAlphaGas = 160
-0	fGamma = 107.6	sumE = 0.1089
-1	fGamma = 123.4	sumE = 0.158
-2	fGamma = 141.5	sumE = 0.2245
-3	fGamma = 162.3	sumE = 0.3112
-4	fGamma = 186.2	sumE = 0.4152
-5	fGamma = 213.7	sumE = 0.5535
-6	fGamma = 245.2	sumE = 0.7168
-7	fGamma = 281.3	sumE = 0.8888
-8	fGamma = 322.9	sumE = 1.081
-9	fGamma = 370.5	sumE = 1.349
-10	fGamma = 425.3	sumE = 1.649
-11	fGamma = 488.2	sumE = 1.992
-12	fGamma = 560.3	sumE = 2.431
-13	fGamma = 643.2	sumE = 2.862
-14	fGamma = 738.3	sumE = 3.207
-15	fGamma = 847.6	sumE = 3.475
-16	fGamma = 973	sumE = 3.784
-17	fGamma = 1117	sumE = 4.407
-18	fGamma = 1282	sumE = 4.976
-19	fGamma = 1472	sumE = 5.448
-20	fGamma = 1690	sumE = 5.494
-21	fGamma = 1940	sumE = 5.421
-22	fGamma = 2228	sumE = 5.358
-23	fGamma = 2558	sumE = 4.689
-24	fGamma = 2936	sumE = 4.244
-25	fGamma = 3371	sumE = 4.003
-26	fGamma = 3871	sumE = 3.865
-27	fGamma = 4444	sumE = 3.706
-28	fGamma = 5102	sumE = 1.794
-29	fGamma = 5858	sumE = 1.771
-30	fGamma = 6726	sumE = 1.755
-31	fGamma = 7722	sumE = 1.744
-32	fGamma = 8866	sumE = 1.737
-33	fGamma = 1.018e+04	sumE = 1.732
-34	fGamma = 1.169e+04	sumE = 1.729
-35	fGamma = 1.342e+04	sumE = 1.728
-36	fGamma = 1.541e+04	sumE = 1.727
-37	fGamma = 1.769e+04	sumE = 1.728
-38	fGamma = 2.031e+04	sumE = 1.728
-39	fGamma = 2.332e+04	sumE = 1.73
-40	fGamma = 2.677e+04	sumE = 1.731
-41	fGamma = 3.074e+04	sumE = 1.733
-42	fGamma = 3.529e+04	sumE = 1.735
-43	fGamma = 4.052e+04	sumE = 1.737
-44	fGamma = 4.652e+04	sumE = 1.739
-45	fGamma = 5.342e+04	sumE = 1.741
-46	fGamma = 6.133e+04	sumE = 1.743
-47	fGamma = 7.042e+04	sumE = 1.744
-48	fGamma = 8.085e+04	sumE = 1.746
-49	fGamma = 9.283e+04	sumE = 1.748
-
-total time for build X-ray TR dE/dx tables = 84.31 s
-### Run 3 start.
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 1962200145, 538932138
-----------------------------------------
-
----> Begin of Event: 0
- ================== run summary =====================
- end of Run TotNbofEvents = 10
-    mean charged track length   in absorber=45.5555 +- 7.46711  mm  
-
-            mean energy deposit in absorber=0.0386814 +- 0.00830669  MeV 
-
- mean number of steps in absorber (charged) =1.7 +- 0.3755      
- mean number of steps in absorber (neutral) =0.8 +- 0.394968      
-
-   mean number of charged secondaries = 0.7 +- 0.3755
-
-   mean number of neutral secondaries = 0 +- 0
-
-   mean number of e-s =0.7  and e+s =0
-
-(number) transmission coeff=0.4  reflection coeff=0
-
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 900860836, 903605833
-----------------------------------------
-Em10DetectorConstruction::ParametrisationModel() is called
-fModelNumber = 5
-the number of TR radiator plates = 300
-plate material = Li
-gas material = He
-plate plasma energy = 13.8447 eV
-gas plasma energy = 0.271761 eV
-Irregular X-ray TR model is called
-0	fGamma = 107.6	sumE = 0.004258
-1	fGamma = 123.4	sumE = 0.006661
-2	fGamma = 141.5	sumE = 0.01025
-3	fGamma = 162.3	sumE = 0.01552
-4	fGamma = 186.2	sumE = 0.02305
-5	fGamma = 213.7	sumE = 0.03376
-6	fGamma = 245.2	sumE = 0.04873
-7	fGamma = 281.3	sumE = 0.0693
-8	fGamma = 322.9	sumE = 0.09709
-9	fGamma = 370.5	sumE = 0.1339
-10	fGamma = 425.3	sumE = 0.182
-11	fGamma = 488.2	sumE = 0.2435
-12	fGamma = 560.3	sumE = 0.3207
-13	fGamma = 643.2	sumE = 0.4161
-14	fGamma = 738.3	sumE = 0.5318
-15	fGamma = 847.6	sumE = 0.6697
-16	fGamma = 973	sumE = 0.8314
-17	fGamma = 1117	sumE = 1.018
-18	fGamma = 1282	sumE = 1.229
-19	fGamma = 1472	sumE = 1.466
-20	fGamma = 1690	sumE = 1.727
-21	fGamma = 1940	sumE = 2.011
-22	fGamma = 2228	sumE = 2.316
-23	fGamma = 2558	sumE = 2.64
-24	fGamma = 2936	sumE = 2.98
-25	fGamma = 3371	sumE = 3.332
-26	fGamma = 3871	sumE = 3.695
-27	fGamma = 4444	sumE = 4.064
-28	fGamma = 5102	sumE = 4.478
-29	fGamma = 5858	sumE = 5.169
-30	fGamma = 6726	sumE = 5.901
-31	fGamma = 7722	sumE = 6.671
-32	fGamma = 8866	sumE = 7.473
-33	fGamma = 1.018e+04	sumE = 8.302
-34	fGamma = 1.169e+04	sumE = 9.152
-35	fGamma = 1.342e+04	sumE = 10.02
-36	fGamma = 1.541e+04	sumE = 10.89
-37	fGamma = 1.769e+04	sumE = 11.76
-38	fGamma = 2.031e+04	sumE = 12.63
-39	fGamma = 2.332e+04	sumE = 13.49
-40	fGamma = 2.677e+04	sumE = 14.33
-41	fGamma = 3.074e+04	sumE = 15.14
-42	fGamma = 3.529e+04	sumE = 15.93
-43	fGamma = 4.052e+04	sumE = 16.69
-44	fGamma = 4.652e+04	sumE = 17.41
-45	fGamma = 5.342e+04	sumE = 18.1
-46	fGamma = 6.133e+04	sumE = 18.74
-47	fGamma = 7.042e+04	sumE = 19.34
-48	fGamma = 8.085e+04	sumE = 19.9
-49	fGamma = 9.283e+04	sumE = 20.41
-
-total time for build X-ray TR tables = 5.91 s
-### Run 4 start.
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 900860836, 903605833
-----------------------------------------
-
----> Begin of Event: 0
- ================== run summary =====================
- end of Run TotNbofEvents = 10
-    mean charged track length   in absorber=167.799 +- 20.152  mm  
-
-            mean energy deposit in absorber=0.0880605 +- 0.0126384  MeV 
-
- mean number of steps in absorber (charged) =6.9 +- 0.83006      
- mean number of steps in absorber (neutral) =10.4 +- 0.750999      
-
-   mean number of charged secondaries = 5.9 +- 0.83006
-
-   mean number of neutral secondaries = 0 +- 0
-
-   mean number of e-s =5.9  and e+s =0
-
-(number) transmission coeff=1  reflection coeff=0
-
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 901788978, 1310521124
-----------------------------------------
-Em10DetectorConstruction::ParametrisationModel() is called
-fModelNumber = 6
-the number of TR radiator plates = 300
-plate material = Li
-gas material = He
-plate plasma energy = 13.8447 eV
-gas plasma energy = 0.271761 eV
-Irregular X-ray TR dE/dx model is called
-0	fGamma = 107.6	sumE = 0.1088
-1	fGamma = 123.4	sumE = 0.1582
-2	fGamma = 141.5	sumE = 0.2245
-3	fGamma = 162.3	sumE = 0.3105
-4	fGamma = 186.2	sumE = 0.4174
-5	fGamma = 213.7	sumE = 0.5494
-6	fGamma = 245.2	sumE = 0.7086
-7	fGamma = 281.3	sumE = 0.8967
-8	fGamma = 322.9	sumE = 1.114
-9	fGamma = 370.5	sumE = 1.361
-10	fGamma = 425.3	sumE = 1.636
-11	fGamma = 488.2	sumE = 1.936
-12	fGamma = 560.3	sumE = 2.26
-13	fGamma = 643.2	sumE = 2.605
-14	fGamma = 738.3	sumE = 2.966
-15	fGamma = 847.6	sumE = 3.34
-16	fGamma = 973	sumE = 3.725
-17	fGamma = 1117	sumE = 4.117
-18	fGamma = 1282	sumE = 4.513
-19	fGamma = 1472	sumE = 4.91
-20	fGamma = 1690	sumE = 5.305
-21	fGamma = 1940	sumE = 5.696
-22	fGamma = 2228	sumE = 6.079
-23	fGamma = 2558	sumE = 6.452
-24	fGamma = 2936	sumE = 6.811
-25	fGamma = 3371	sumE = 7.152
-26	fGamma = 3871	sumE = 7.472
-27	fGamma = 4444	sumE = 7.768
-28	fGamma = 5102	sumE = 8.144
-29	fGamma = 5858	sumE = 9.149
-30	fGamma = 6726	sumE = 10.17
-31	fGamma = 7722	sumE = 11.21
-32	fGamma = 8866	sumE = 12.26
-33	fGamma = 1.018e+04	sumE = 13.31
-34	fGamma = 1.169e+04	sumE = 14.35
-35	fGamma = 1.342e+04	sumE = 15.38
-36	fGamma = 1.541e+04	sumE = 16.4
-37	fGamma = 1.769e+04	sumE = 17.4
-38	fGamma = 2.031e+04	sumE = 18.37
-39	fGamma = 2.332e+04	sumE = 19.31
-40	fGamma = 2.677e+04	sumE = 20.22
-41	fGamma = 3.074e+04	sumE = 21.09
-42	fGamma = 3.529e+04	sumE = 21.93
-43	fGamma = 4.052e+04	sumE = 22.72
-44	fGamma = 4.652e+04	sumE = 23.47
-45	fGamma = 5.342e+04	sumE = 24.18
-46	fGamma = 6.133e+04	sumE = 24.84
-47	fGamma = 7.042e+04	sumE = 25.46
-48	fGamma = 8.085e+04	sumE = 26.03
-49	fGamma = 9.283e+04	sumE = 26.55
-
-total time for build X-ray TR dE/dx tables = 11.68 s
-### Run 5 start.
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 901788978, 1310521124
-----------------------------------------
-
----> Begin of Event: 0
- ================== run summary =====================
- end of Run TotNbofEvents = 10
-    mean charged track length   in absorber=150.23 +- 14.698  mm  
-
-            mean energy deposit in absorber=0.089848 +- 0.0110929  MeV 
-
- mean number of steps in absorber (charged) =6.7 +- 0.664078      
- mean number of steps in absorber (neutral) =10.1 +- 1.30729      
-
-   mean number of charged secondaries = 5.7 +- 0.664078
-
-   mean number of neutral secondaries = 0 +- 0
-
-   mean number of e-s =5.7  and e+s =0
-
-(number) transmission coeff=1  reflection coeff=0
-
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 1142597788, 1328049769
-----------------------------------------
-Em10DetectorConstruction::ParametrisationModel() is called
-fModelNumber = 7
-the number of TR radiator plates = 300
-plate material = Li
-gas material = He
-plate plasma energy = 13.8447 eV
-gas plasma energy = 0.271761 eV
-PlateIrrGas X-ray TR radiator model is called
-0	fGamma = 107.6	sumE = 0.004086
-1	fGamma = 123.4	sumE = 0.006405
-2	fGamma = 141.5	sumE = 0.00993
-3	fGamma = 162.3	sumE = 0.01502
-4	fGamma = 186.2	sumE = 0.02208
-5	fGamma = 213.7	sumE = 0.0339
-6	fGamma = 245.2	sumE = 0.0481
-7	fGamma = 281.3	sumE = 0.06463
-8	fGamma = 322.9	sumE = 0.09286
-9	fGamma = 370.5	sumE = 0.1389
-10	fGamma = 425.3	sumE = 0.1959
-11	fGamma = 488.2	sumE = 0.2531
-12	fGamma = 560.3	sumE = 0.306
-13	fGamma = 643.2	sumE = 0.365
-14	fGamma = 738.3	sumE = 0.4427
-15	fGamma = 847.6	sumE = 0.5631
-16	fGamma = 973	sumE = 0.7273
-17	fGamma = 1117	sumE = 0.9532
-18	fGamma = 1282	sumE = 1.258
-19	fGamma = 1472	sumE = 1.602
-20	fGamma = 1690	sumE = 1.962
-21	fGamma = 1940	sumE = 2.373
-22	fGamma = 2228	sumE = 2.865
-23	fGamma = 2558	sumE = 3.425
-24	fGamma = 2936	sumE = 4.001
-25	fGamma = 3371	sumE = 4.542
-26	fGamma = 3871	sumE = 5.012
-27	fGamma = 4444	sumE = 5.397
-28	fGamma = 5102	sumE = 5.758
-29	fGamma = 5858	sumE = 6.464
-30	fGamma = 6726	sumE = 7.176
-31	fGamma = 7722	sumE = 7.888
-32	fGamma = 8866	sumE = 8.596
-33	fGamma = 1.018e+04	sumE = 9.293
-34	fGamma = 1.169e+04	sumE = 9.974
-35	fGamma = 1.342e+04	sumE = 10.63
-36	fGamma = 1.541e+04	sumE = 11.27
-37	fGamma = 1.769e+04	sumE = 11.87
-38	fGamma = 2.031e+04	sumE = 12.44
-39	fGamma = 2.332e+04	sumE = 12.97
-40	fGamma = 2.677e+04	sumE = 13.46
-41	fGamma = 3.074e+04	sumE = 13.9
-42	fGamma = 3.529e+04	sumE = 14.3
-43	fGamma = 4.052e+04	sumE = 14.66
-44	fGamma = 4.652e+04	sumE = 14.97
-45	fGamma = 5.342e+04	sumE = 15.25
-46	fGamma = 6.133e+04	sumE = 15.48
-47	fGamma = 7.042e+04	sumE = 15.68
-48	fGamma = 8.085e+04	sumE = 15.86
-49	fGamma = 9.283e+04	sumE = 16
-
-total time for build X-ray TR tables = 9.44 s
-### Run 6 start.
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 1142597788, 1328049769
-----------------------------------------
-
----> Begin of Event: 0
- ================== run summary =====================
- end of Run TotNbofEvents = 10
-    mean charged track length   in absorber=225.528 +- 16.7376  mm  
-
-            mean energy deposit in absorber=0.0997312 +- 0.00929809  MeV 
-
- mean number of steps in absorber (charged) =9.6 +- 0.750999      
- mean number of steps in absorber (neutral) =10.1 +- 0.713442      
-
-   mean number of charged secondaries = 8.6 +- 0.750999
-
-   mean number of neutral secondaries = 0 +- 0
-
-   mean number of e-s =8.6  and e+s =0
-
-(number) transmission coeff=1  reflection coeff=0
-
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 1555095787, 1314782790
-----------------------------------------
-Em10DetectorConstruction::ParametrisationModel() is called
-fModelNumber = 8
-the number of TR radiator plates = 300
-plate material = Li
-gas material = He
-plate plasma energy = 13.8447 eV
-gas plasma energy = 0.271761 eV
-PlateIrrGas X-ray TR radiator model is called
-0	fGamma = 107.6	sumE = 0.1092
-1	fGamma = 123.4	sumE = 0.1581
-2	fGamma = 141.5	sumE = 0.2232
-3	fGamma = 162.3	sumE = 0.3109
-4	fGamma = 186.2	sumE = 0.4159
-5	fGamma = 213.7	sumE = 0.5576
-6	fGamma = 245.2	sumE = 0.7202
-7	fGamma = 281.3	sumE = 0.8948
-8	fGamma = 322.9	sumE = 1.101
-9	fGamma = 370.5	sumE = 1.353
-10	fGamma = 425.3	sumE = 1.639
-11	fGamma = 488.2	sumE = 1.952
-12	fGamma = 560.3	sumE = 2.222
-13	fGamma = 643.2	sumE = 2.552
-14	fGamma = 738.3	sumE = 2.825
-15	fGamma = 847.6	sumE = 3.185
-16	fGamma = 973	sumE = 3.515
-17	fGamma = 1117	sumE = 3.902
-18	fGamma = 1282	sumE = 4.418
-19	fGamma = 1472	sumE = 4.931
-20	fGamma = 1690	sumE = 5.387
-21	fGamma = 1940	sumE = 5.857
-22	fGamma = 2228	sumE = 6.401
-23	fGamma = 2558	sumE = 7.008
-24	fGamma = 2936	sumE = 7.62
-25	fGamma = 3371	sumE = 8.174
-26	fGamma = 3871	sumE = 8.629
-27	fGamma = 4444	sumE = 8.965
-28	fGamma = 5102	sumE = 9.306
-29	fGamma = 5858	sumE = 10.32
-30	fGamma = 6726	sumE = 11.32
-31	fGamma = 7722	sumE = 12.3
-32	fGamma = 8866	sumE = 13.25
-33	fGamma = 1.018e+04	sumE = 14.17
-34	fGamma = 1.169e+04	sumE = 15.04
-35	fGamma = 1.342e+04	sumE = 15.87
-36	fGamma = 1.541e+04	sumE = 16.66
-37	fGamma = 1.769e+04	sumE = 17.39
-38	fGamma = 2.031e+04	sumE = 18.06
-39	fGamma = 2.332e+04	sumE = 18.69
-40	fGamma = 2.677e+04	sumE = 19.25
-41	fGamma = 3.074e+04	sumE = 19.76
-42	fGamma = 3.529e+04	sumE = 20.21
-43	fGamma = 4.052e+04	sumE = 20.61
-44	fGamma = 4.652e+04	sumE = 20.95
-45	fGamma = 5.342e+04	sumE = 21.25
-46	fGamma = 6.133e+04	sumE = 21.51
-47	fGamma = 7.042e+04	sumE = 21.73
-48	fGamma = 8.085e+04	sumE = 21.91
-49	fGamma = 9.283e+04	sumE = 22.07
-
-total time for build X-ray TR dE/dx tables = 23.71 s
-### Run 7 start.
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 1555095787, 1314782790
-----------------------------------------
-
----> Begin of Event: 0
- ================== run summary =====================
- end of Run TotNbofEvents = 10
-    mean charged track length   in absorber=321.251 +- 23.4201  mm  
-
-            mean energy deposit in absorber=0.126561 +- 0.0125068  MeV 
-
- mean number of steps in absorber (charged) =12.7 +- 0.917061      
- mean number of steps in absorber (neutral) =13.2 +- 0.869483      
-
-   mean number of charged secondaries = 11.5 +- 0.839643
-
-   mean number of neutral secondaries = 0 +- 0
-
-   mean number of e-s =11.5  and e+s =0
-
-(number) transmission coeff=1  reflection coeff=0
-
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 910141549, 1117288653
-----------------------------------------
-Em10DetectorConstruction::ParametrisationModel() is called
-fModelNumber = 9
-the number of TR radiator plates = 300
-plate material = Li
-gas material = He
-plate plasma energy = 13.8447 eV
-gas plasma energy = 0.271761 eV
-Regular X-ray TR radiator model is called
-0	fGamma = 107.6	sumE = 0.004757
-1	fGamma = 123.4	sumE = 0.006213
-2	fGamma = 141.5	sumE = 0.008651
-3	fGamma = 162.3	sumE = 0.01573
-4	fGamma = 186.2	sumE = 0.02543
-5	fGamma = 213.7	sumE = 0.03201
-6	fGamma = 245.2	sumE = 0.05278
-7	fGamma = 281.3	sumE = 0.05867
-8	fGamma = 322.9	sumE = 0.1018
-9	fGamma = 370.5	sumE = 0.1469
-10	fGamma = 425.3	sumE = 0.1786
-11	fGamma = 488.2	sumE = 0.2919
-12	fGamma = 560.3	sumE = 0.3108
-13	fGamma = 643.2	sumE = 0.2985
-14	fGamma = 738.3	sumE = 0.4656
-15	fGamma = 847.6	sumE = 0.5473
-16	fGamma = 973	sumE = 0.911
-17	fGamma = 1117	sumE = 1.469
-18	fGamma = 1282	sumE = 1.626
-19	fGamma = 1472	sumE = 2.145
-20	fGamma = 1690	sumE = 2.212
-21	fGamma = 1940	sumE = 2.643
-22	fGamma = 2228	sumE = 2.875
-23	fGamma = 2558	sumE = 2.505
-24	fGamma = 2936	sumE = 2.271
-25	fGamma = 3371	sumE = 1.625
-26	fGamma = 3871	sumE = 3.543
-27	fGamma = 4444	sumE = 2.547
-28	fGamma = 5102	sumE = 1.326
-29	fGamma = 5858	sumE = 1.079
-30	fGamma = 6726	sumE = 1.166
-31	fGamma = 7722	sumE = 1.652
-32	fGamma = 8866	sumE = 0.8713
-33	fGamma = 1.018e+04	sumE = 1.478
-34	fGamma = 1.169e+04	sumE = 1.245
-35	fGamma = 1.342e+04	sumE = 1.203
-36	fGamma = 1.541e+04	sumE = 1.272
-37	fGamma = 1.769e+04	sumE = 0.8468
-38	fGamma = 2.031e+04	sumE = 0.7525
-39	fGamma = 2.332e+04	sumE = 0.9297
-40	fGamma = 2.677e+04	sumE = 1.099
-41	fGamma = 3.074e+04	sumE = 1.196
-42	fGamma = 3.529e+04	sumE = 1.23
-43	fGamma = 4.052e+04	sumE = 1.232
-44	fGamma = 4.652e+04	sumE = 1.226
-45	fGamma = 5.342e+04	sumE = 1.222
-46	fGamma = 6.133e+04	sumE = 1.223
-47	fGamma = 7.042e+04	sumE = 1.226
-48	fGamma = 8.085e+04	sumE = 1.231
-49	fGamma = 9.283e+04	sumE = 1.235
-
-total time for build X-ray TR tables = 46.62 s
-### Run 8 start.
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 910141549, 1117288653
-----------------------------------------
-
----> Begin of Event: 0
- ================== run summary =====================
- end of Run TotNbofEvents = 10
-    mean charged track length   in absorber=56.074 +- 5.17396  mm  
-
-            mean energy deposit in absorber=0.0471371 +- 0.0092751  MeV 
-
- mean number of steps in absorber (charged) =2.1 +- 0.221359      
- mean number of steps in absorber (neutral) =1.6 +- 0.209762      
-
-   mean number of charged secondaries = 1.1 +- 0.221359
-
-   mean number of neutral secondaries = 0 +- 0
-
-   mean number of e-s =1.1  and e+s =0
-
-(number) transmission coeff=0.7  reflection coeff=0
-
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 1747481159, 1372711820
-----------------------------------------
-Em10DetectorConstruction::ParametrisationModel() is called
-fModelNumber = 10
-the number of TR radiator plates = 300
-plate material = Li
-gas material = He
-plate plasma energy = 13.8447 eV
-gas plasma energy = 0.271761 eV
-Regular X-ray TR dE/dx radiator model is called
-0	fGamma = 107.6	sumE = 0.1102
-1	fGamma = 123.4	sumE = 0.1591
-2	fGamma = 141.5	sumE = 0.2276
-3	fGamma = 162.3	sumE = 0.3018
-4	fGamma = 186.2	sumE = 0.4444
-5	fGamma = 213.7	sumE = 0.5486
-6	fGamma = 245.2	sumE = 0.6789
-7	fGamma = 281.3	sumE = 0.8374
-8	fGamma = 322.9	sumE = 1.005
-9	fGamma = 370.5	sumE = 1.384
-10	fGamma = 425.3	sumE = 1.644
-11	fGamma = 488.2	sumE = 2.001
-12	fGamma = 560.3	sumE = 2.464
-13	fGamma = 643.2	sumE = 2.98
-14	fGamma = 738.3	sumE = 3.457
-15	fGamma = 847.6	sumE = 3.391
-16	fGamma = 973	sumE = 3.782
-17	fGamma = 1117	sumE = 4.33
-18	fGamma = 1282	sumE = 5.624
-19	fGamma = 1472	sumE = 5.355
-20	fGamma = 1690	sumE = 5.291
-21	fGamma = 1940	sumE = 4.926
-22	fGamma = 2228	sumE = 5.24
-23	fGamma = 2558	sumE = 4.833
-24	fGamma = 2936	sumE = 4.372
-25	fGamma = 3371	sumE = 3.614
-26	fGamma = 3871	sumE = 3.926
-27	fGamma = 4444	sumE = 3.907
-28	fGamma = 5102	sumE = 1.839
-29	fGamma = 5858	sumE = 1.708
-30	fGamma = 6726	sumE = 1.732
-31	fGamma = 7722	sumE = 1.743
-32	fGamma = 8866	sumE = 1.779
-33	fGamma = 1.018e+04	sumE = 1.613
-34	fGamma = 1.169e+04	sumE = 1.79
-35	fGamma = 1.342e+04	sumE = 1.682
-36	fGamma = 1.541e+04	sumE = 1.668
-37	fGamma = 1.769e+04	sumE = 1.68
-38	fGamma = 2.031e+04	sumE = 1.724
-39	fGamma = 2.332e+04	sumE = 1.726
-40	fGamma = 2.677e+04	sumE = 1.705
-41	fGamma = 3.074e+04	sumE = 1.672
-42	fGamma = 3.529e+04	sumE = 1.647
-43	fGamma = 4.052e+04	sumE = 1.637
-44	fGamma = 4.652e+04	sumE = 1.632
-45	fGamma = 5.342e+04	sumE = 1.631
-46	fGamma = 6.133e+04	sumE = 1.631
-47	fGamma = 7.042e+04	sumE = 1.632
-48	fGamma = 8.085e+04	sumE = 1.633
-49	fGamma = 9.283e+04	sumE = 1.634
-
-total time for build X-ray TR dE/dx tables = 71.37 s
-### Run 9 start.
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 1747481159, 1372711820
-----------------------------------------
-
----> Begin of Event: 0
- ================== run summary =====================
- end of Run TotNbofEvents = 10
-    mean charged track length   in absorber=37.298 +- 3.54764  mm  
-
-            mean energy deposit in absorber=0.0346144 +- 0.00782009  MeV 
-
- mean number of steps in absorber (charged) =1.3 +- 0.144914      
- mean number of steps in absorber (neutral) =0.8 +- 0.275681      
-
-   mean number of charged secondaries = 0.3 +- 0.144914
-
-   mean number of neutral secondaries = 0 +- 0
-
-   mean number of e-s =0.3  and e+s =0
-
-(number) transmission coeff=0.3  reflection coeff=0
-
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 1862525355, 1883143890
+ Current couple of seeds = 2146225322, 1749835364
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
