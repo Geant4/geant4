@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mars5GeVMechanism.cc,v 1.6 2001-08-16 08:17:58 kurasige Exp $
+// $Id: G4Mars5GeVMechanism.cc,v 1.7 2001-09-19 11:05:29 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -107,12 +107,12 @@ void G4Mars5GeVMechanism::GetTargetNuclei(const G4Material* material)
   G4double totNumAtoms = 0.0; 
   for (G4int iel=0; iel < numberOfElements; iel +=1) {
     totNumAtoms +=  theAtomicNumDensityVector[iel];
-	fZNucl += theAtomicNumDensityVector[iel]*((*theElementVector)(iel)->GetZ());
-	fANucl += theAtomicNumDensityVector[iel]*((*theElementVector)(iel)->GetN());
+	fZNucl += theAtomicNumDensityVector[iel]*((*theElementVector)[iel]->GetZ());
+	fANucl += theAtomicNumDensityVector[iel]*((*theElementVector)[iel]->GetN());
 #ifdef G4VERBOSE
     if (GetVerboseLevel() > 2) {
       G4cout << iel << ": " << theAtomicNumDensityVector[iel];
-      G4cout << "  Z=" << (*theElementVector)(iel)->GetZ() << "  A=" << (*theElementVector)(iel)->GetN();
+      G4cout << "  Z=" << (*theElementVector)[iel]->GetZ() << "  A=" << (*theElementVector)[iel]->GetN();
       G4cout << G4endl; 
    }
 #endif 
