@@ -80,6 +80,30 @@
 //  void DeleteaSource(G4int);
 //     delete the specified particle gun
 //
+//  void SetParticleDefinition ();
+//  G4ParticleDefinition * GetParticleDefinition () 
+//     Get/Set the particle definition of the primary track
+//
+//  void SetParticleCharge(G4double aCharge) 
+//     set the charge state of the primary track
+//
+//  inline void SetParticlePolarization (G4ThreeVector aVal) 
+//  inline G4ThreeVector GetParticlePolarization ()
+//     Set/Get the polarization state of the primary track
+//
+//  inline void SetParticleTime(G4double aTime)  { particle_time = aTime; };
+//  inline G4double GetParticleTime()  { return particle_time; };
+//     Set/Get the Time.
+//
+//  inline void SetNumberOfParticles(G4int i) 
+//  inline G4int GetNumberOfParticles() 
+//     set/get the number of particles to be generated in the primary track
+//
+//  inline G4ThreeVector GetParticlePosition()  
+//  inline G4ThreeVector GetParticleMomentumDirection()  
+//  inline G4double GetParticleEnergy()  
+//     get the position, direction, and energy of the current particle 
+//
 ///////////////////////////////////////////////////////////////////////////////
 //
 #ifndef G4GeneralParticleSource_H
@@ -113,6 +137,32 @@ public:
   void ClearAll();
   void AddaSource (G4double);
   void DeleteaSource(G4int);
+
+  // Set the verbosity level.
+  inline void SetVerbosity(G4int i) {currentSource->SetVerbosity(i);} ;
+
+  // Set the particle species
+  inline void SetParticleDefinition (G4ParticleDefinition * aParticleDefinition) 
+    {currentSource->SetParticleDefinition(aParticleDefinition); } ;
+
+  inline G4ParticleDefinition * GetParticleDefinition () { return currentSource->GetParticleDefinition();} ;
+
+  inline void SetParticleCharge(G4double aCharge) { currentSource->SetParticleCharge(aCharge); } ;
+
+  // Set polarization
+  inline void SetParticlePolarization (G4ThreeVector aVal) {currentSource->SetParticlePolarization(aVal);};
+  inline G4ThreeVector GetParticlePolarization ()  {return currentSource->GetParticlePolarization();};
+
+  // Set Time.
+  inline void SetParticleTime(G4double aTime)  { currentSource->SetParticleTime(aTime); };
+  inline G4double GetParticleTime()  { return currentSource->GetParticleTime(); };
+
+  inline void SetNumberOfParticles(G4int i)  { currentSource->SetNumberOfParticles(i); };
+  //
+  inline G4int GetNumberOfParticles() { return currentSource->GetNumberOfParticles(); };
+  inline G4ThreeVector GetParticlePosition()  { return currentSource->GetParticlePosition();};
+  inline G4ThreeVector GetParticleMomentumDirection()  { return currentSource->GetParticleMomentumDirection();};
+  inline G4double GetParticleEnergy()  {return currentSource->GetParticleEnergy();};
 
 private:
 

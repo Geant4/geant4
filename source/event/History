@@ -1,4 +1,4 @@
-$Id: History,v 1.73 2004-04-05 13:59:20 flei Exp $
+$Id: History,v 1.74 2004-04-26 10:55:53 flei Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Apr, 26, 2004, F. Lei (event-V06-01-02)
+- Restored a few methods to G4GeneralParticleSource.hh to maintain backward 
+  compatibility. 
+
 Apr, 5, 2004, F. Lei (event-V06-01-01)
 - Added "UserWRTSurace = true", "UserAngRef= flase" to constructor of 
   G4SPSAngDistribution.
