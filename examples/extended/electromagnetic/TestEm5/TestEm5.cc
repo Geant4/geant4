@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm5.cc,v 1.11 2004-06-18 09:47:48 vnivanch Exp $
+// $Id: TestEm5.cc,v 1.12 2004-06-30 16:32:57 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -126,13 +126,12 @@ int main(int argc,char** argv) {
     }
     
   // job termination
-#ifdef G4ANALYSIS_USE
-  delete histo;
-#endif    
+
 #ifdef G4VIS_USE
   delete visManager;
 #endif
   
+  delete histo;
   delete runManager;
 
   return 0;
