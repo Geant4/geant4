@@ -1,4 +1,4 @@
-$Id: History,v 1.64 2004-07-02 16:14:29 gcosmo Exp $
+$Id: History,v 1.65 2004-07-21 09:44:23 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jul 16, 2004  V.Grichine                 geom-csg-V06-02-01
+- Fix in G4Sphere::DistanceToOut(p,v,...) on fRmin moving outside.
+  The bug showed 3 events of dIn=dOut=0 for 10^7 statistics in
+  testSurfaceInOut.
+- Added new unit test testSurfaceInOut.cc.
 
 Jul 02, 2004  V.Grichine                 geom-csg-V06-02-00
 - Fixes curing rare conditions of loops at boundaries for G4Orb and G4Sphere:
