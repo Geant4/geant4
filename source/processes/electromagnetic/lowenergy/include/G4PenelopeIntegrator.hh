@@ -56,6 +56,8 @@ class G4PenelopeIntegrator
 		     G4double MaxError);
 
 };
+
+#include "G4PenelopeIntegrator.icc"
  
 #endif
  
