@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.27 2004-08-08 12:09:44 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.28 2004-08-08 20:45:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -309,6 +309,7 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
   currentCouple = 0;
   preStepLambda = 0.0;
   mfpKinEnergy  = DBL_MAX;
+  preStepMFP    = DBL_MAX;
 
   if(0 < verboseLevel) {
     G4cout << "========================================================" << G4endl;
@@ -1128,6 +1129,7 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(G4ParticleDefinition* part,
   currentCouple = 0;
   preStepLambda = 0.0;
   mfpKinEnergy  = DBL_MAX;
+  preStepMFP    = DBL_MAX;
 
   if(0 < verboseLevel) {
     G4cout << "========================================================" << G4endl;

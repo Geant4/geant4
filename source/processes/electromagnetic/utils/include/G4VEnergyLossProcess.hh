@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.28 2004-08-08 12:09:42 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.29 2004-08-08 20:45:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -100,6 +100,7 @@ public:
   virtual ~G4VEnergyLossProcess();
 
   void Initialise();
+  // Initialise for build of tables
 
   G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
 
@@ -307,6 +308,10 @@ protected:
 
 private:
 
+  // Initialise process
+  //void InitialiseProcess(const G4ParticleDefinition*);
+
+  // Clear tables
   void Clear();
 
   void DefineMaterial(const G4MaterialCutsCouple* couple);
@@ -379,6 +384,7 @@ private:
   G4double chargeSqRatio;
 
   G4double preStepLambda;
+  G4double preStepMFP;
   G4double fRange;
   G4double preStepKinEnergy;
   G4double preStepScaledEnergy;
@@ -576,18 +582,18 @@ inline G4double G4VEnergyLossProcess::GetMeanFreePath(const G4Track& track,
                                                             G4ForceCondition* condition)
 {
   *condition = NotForced;
-  G4double mfp = DBL_MAX;
   preStepKinEnergy = track.GetKineticEnergy();
   preStepScaledEnergy = preStepKinEnergy*massRatio;
-  if(aboveCSmax && preStepScaledEnergy < mfpKinEnergy) meanFreePath = false;
+  if(aboveCSmax && preStepScaledEnergy < mfpKinEnergy) ResetNumberOfInteractionLengthLeft();
   DefineMaterial(track.GetMaterialCutsCouple());
   if (meanFreePath) {
     if (integral) ComputeLambdaForScaledEnergy(preStepScaledEnergy);
     else          preStepLambda = GetLambdaForScaledEnergy(preStepScaledEnergy);
-    if(0.0 < preStepLambda) mfp = 1.0/preStepLambda;
+    if(0.0 < preStepLambda) preStepMFP = 1.0/preStepLambda;
+    else                    preStepMFP = DBL_MAX;
   }
-  //G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<<" mfp= "<<mfp<<G4endl;
-  return mfp;
+  //G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<< " eCSmax= " <<mfpKinEnergy<< " mfp= "<<preStepMFP<<G4endl;
+  return preStepMFP;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
