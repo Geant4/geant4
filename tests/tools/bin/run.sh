@@ -112,6 +112,7 @@ else
 # Echo marks
 #
 echo "Starting $1 in $G4WORKDIR `date`"
+
     if [ $1 = test02.hadron -o $1 = test11 -o $1 = test12 -o $1 = test13 ]
     then
       $G4WORKDIR/bin/$G4SYSTEM/$shortname.hadronic.exerciser \
@@ -124,9 +125,21 @@ echo "Starting $1 in $G4WORKDIR `date`"
       < $G4INSTALL/tests/$shortname/$1.in \
       > $dir/$1.out 2> $dir/$1.err
     fi
+
 echo "Finished $1 in $G4WORKDIR `date`"
-    diff -w $1.out $dir/$1.out > $dir/$1.diff 2> $dir/$1.diff_err
-    #cat $dir/$1.diff
+
+    if [ -f $1.evalsh ]
+    then
+      $1.evalsh $1.out $dir/$1.out > $dir/$1.eval 2>&1
+      if [ $? != 0 ]
+      then
+        if [ ! -f $dir/$1.badflag ]; then touch $dir/$1.badflag; fi;
+        echo $1 run failure >> $dir/$1.badflag 2>&1
+      fi
+    else
+      diff -w $1.out $dir/$1.out > $dir/$1.diff 2> $dir/$1.diff_err
+      #cat $dir/$1.diff
+    fi
 
   fi
 
