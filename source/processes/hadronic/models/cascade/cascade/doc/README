@@ -1,9 +1,0 @@
-HETC cascade model documentation
---------------------------------
-
-We list here Rational Rose ULM model files (*.mdl) used in OOA&D of the cascade module.
-
-Documentation in ps format can be achieved with gmake command. To create HTML documentation
-give commanf gmake html.
-
-See also HETC homepage at http://cmsdoc.cern.ch/~miheikki/hetc/
