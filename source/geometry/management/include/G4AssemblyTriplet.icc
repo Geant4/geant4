@@ -29,7 +29,7 @@ inline G4LogicalVolume* G4AssemblyTriplet::GetVolume() const
   return fVolume;
 }
 
-inline void G4AssemblyTriplet::SetVolume(G4LogicalVolume* pVolume)
+inline void G4AssemblyTriplet::SetVolume( G4LogicalVolume* pVolume )
 {
   fVolume = pVolume;
 }
@@ -39,7 +39,7 @@ inline G4ThreeVector G4AssemblyTriplet::GetTranslation() const
   return fTranslation;
 }
 
-inline void G4AssemblyTriplet::SetTranslation(G4ThreeVector& translation)
+inline void G4AssemblyTriplet::SetTranslation( G4ThreeVector& translation )
 {
   fTranslation = translation;
 }
@@ -49,7 +49,7 @@ inline G4RotationMatrix* G4AssemblyTriplet::GetRotation() const
   return fRotation;
 }
 
-inline void G4AssemblyTriplet::SetRotation(G4RotationMatrix* pRotation)
+inline void G4AssemblyTriplet::SetRotation( G4RotationMatrix* pRotation )
 {
   fRotation = pRotation;
 }

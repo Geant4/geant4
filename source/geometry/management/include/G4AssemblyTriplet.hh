@@ -1,5 +1,5 @@
 #ifndef ASSEMBLYTRIPLET_H
-#define ASSEMBLYTRIPLET_H
+#define ASSEMBLYTRIPLET_H 1
 
 #include "G4LogicalVolume.hh"
 #include "G4ThreeVector.hh"
@@ -44,19 +44,19 @@ public:
     G4LogicalVolume* GetVolume() const;
 
     // Update the logical volume reference
-    void SetVolume(G4LogicalVolume* pVolume);
+    void SetVolume( G4LogicalVolume* pVolume );
 
     // Retrieve the logical volume translation
     G4ThreeVector GetTranslation() const;
 
     // Update the logical volume translation
-    void SetTranslation(G4ThreeVector& pVolume);
+    void SetTranslation( G4ThreeVector& pVolume );
 
     // Retrieve the logical volume rotation
     G4RotationMatrix* GetRotation() const;
 
     // Update the logical volume rotation
-    void SetRotation(G4RotationMatrix* pVolume);
+    void SetRotation( G4RotationMatrix* pVolume );
     
     // Assignment
     G4AssemblyTriplet& operator=( const G4AssemblyTriplet& second );
