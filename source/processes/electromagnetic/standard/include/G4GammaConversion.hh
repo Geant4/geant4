@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion.hh,v 1.11 2004-03-10 16:48:45 vnivanch Exp $
+// $Id: G4GammaConversion.hh,v 1.12 2004-08-13 13:14:43 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------------ G4GammaConversion physics process -------------------------
@@ -39,7 +39,10 @@
 // 06-08-01, BuildThePhysicsTable() called from constructor (mma)
 // 19-09-01, come back to previous ProcessName: "conv"
 // 20-09-01, DoIt: fminimalEnergy = 1*eV (mma) 
-// 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)    
+// 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)
+// 13-08-04, suppress .icc file
+//           public ComputeCrossSectionPerAtom() and ComputeMeanFreePath() (mma)
+   
 // -----------------------------------------------------------------------------
 
 // class description
@@ -126,14 +129,12 @@ class G4GammaConversion : public G4VDiscreteProcess
        // returned as a ParticleChange object.			    
        // This function overloads a virtual function of the base class.
        // It is invoked by the ProcessManager of the Particle.
-        
-  protected:
 
-     virtual G4double ComputeCrossSectionPerAtom(G4double GammaEnergy, 
-                                                 G4double AtomicNumber);
+     G4double ComputeCrossSectionPerAtom(G4double GammaEnergy, 
+                                         G4double AtomicNumber);
 
-     virtual G4double ComputeMeanFreePath (G4double GammaEnergy, 
-                                           G4Material* aMaterial);
+     G4double ComputeMeanFreePath (G4double GammaEnergy, 
+                                   G4Material* aMaterial);
 
   private:
 
@@ -166,7 +167,41 @@ class G4GammaConversion : public G4VDiscreteProcess
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4GammaConversion.icc"
+
+inline G4double G4GammaConversion::ScreenFunction1(G4double ScreenVariable)
+
+// compute the value of the screening function 3*PHI1 - PHI2
+
+{
+   G4double screenVal;
+
+   if (ScreenVariable > 1.)
+     screenVal = 42.24 - 8.368*log(ScreenVariable+0.952);
+   else
+     screenVal = 42.392 - ScreenVariable*(7.796 - 1.961*ScreenVariable);
+
+   return screenVal;
+} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4GammaConversion::ScreenFunction2(G4double ScreenVariable)
+
+// compute the value of the screening function 1.5*PHI1 - 0.5*PHI2
+
+{
+   G4double screenVal;
+
+   if (ScreenVariable > 1.)
+     screenVal = 42.24 - 8.368*log(ScreenVariable+0.952);
+   else
+     screenVal = 41.405 - ScreenVariable*(5.828 - 0.8945*ScreenVariable);
+
+   return screenVal;
+} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
   
 #endif
  

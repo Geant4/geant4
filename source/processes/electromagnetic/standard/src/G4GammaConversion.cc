@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion.cc,v 1.19 2004-03-10 16:48:45 vnivanch Exp $
+// $Id: G4GammaConversion.cc,v 1.20 2004-08-13 13:14:58 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------------ G4GammaConversion physics process -------------------------
@@ -89,6 +89,13 @@ G4GammaConversion::~G4GammaConversion()
       theMeanFreePathTable->clearAndDestroy();
       delete theMeanFreePathTable;
    }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4bool G4GammaConversion::IsApplicable( const G4ParticleDefinition& particle)
+{
+   return ( &particle == G4Gamma::Gamma() ); 
 }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -218,6 +225,79 @@ G4double G4GammaConversion::ComputeCrossSectionPerAtom
  if (CrossSection < 0.) CrossSection = 0.;
 
  return CrossSection;
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4GammaConversion::ComputeMeanFreePath(G4double GammaEnergy,
+                                                G4Material* aMaterial)
+
+// computes and returns the photon mean free path in GEANT4 internal units
+
+{
+  const G4ElementVector* theElementVector = aMaterial->GetElementVector();
+  const G4double* NbOfAtomsPerVolume = aMaterial->GetVecNbOfAtomsPerVolume();   
+
+  G4double SIGMA = 0 ;
+
+  for ( size_t i=0 ; i < aMaterial->GetNumberOfElements() ; i++ )
+      {             
+            SIGMA += NbOfAtomsPerVolume[i] * 
+                     ComputeCrossSectionPerAtom(GammaEnergy,
+                                               (*theElementVector)[i]->GetZ());
+      }       
+
+  return SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4GammaConversion::GetCrossSectionPerAtom(
+                                   const G4DynamicParticle* aDynamicGamma,
+                                         G4Element*         anElement)
+ 
+// gives the total cross section per atom in GEANT4 internal units
+
+{
+   G4double crossSection;
+   G4double GammaEnergy = aDynamicGamma->GetKineticEnergy();
+   G4bool isOutRange ;
+
+   if (GammaEnergy <  LowestEnergyLimit)
+     crossSection = 0. ;
+   else {
+     if (GammaEnergy > HighestEnergyLimit) GammaEnergy=0.99*HighestEnergyLimit;
+     crossSection = (*theCrossSectionTable)(anElement->GetIndex())->
+                    GetValue( GammaEnergy, isOutRange );
+   }
+
+   return crossSection; 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
+G4double G4GammaConversion::GetMeanFreePath(const G4Track& aTrack,
+                                                     G4double,
+                                                     G4ForceCondition*)
+
+// returns the photon mean free path in GEANT4 internal units
+// (MeanFreePath is a private member of the class)
+
+{
+   const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
+   G4double GammaEnergy = aDynamicGamma->GetKineticEnergy();
+   G4Material* aMaterial = aTrack.GetMaterial();
+
+   G4bool isOutRange;
+
+   if (GammaEnergy <  LowestEnergyLimit)
+     MeanFreePath = DBL_MAX;
+   else {
+     if (GammaEnergy > HighestEnergyLimit) GammaEnergy=0.99*HighestEnergyLimit;
+     MeanFreePath = (*theMeanFreePathTable)(aMaterial->GetIndex())->
+                    GetValue( GammaEnergy, isOutRange );
+   }
+
+   return MeanFreePath; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
