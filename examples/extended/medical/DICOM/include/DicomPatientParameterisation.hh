@@ -10,7 +10,7 @@ class G4LogicalVolume;
 class G4Box;
 class G4Material;
 class G4VisAttributes;
-
+class DicomConfiguration;
 class DicomPatientParameterisation : public G4VPVParameterisation
 {
 public:
@@ -87,56 +87,40 @@ private:
   G4Material* denseBoneTissue;
   G4Material* trabecularBoneTissue;
 
-  G4double red;
-  G4double green;
-  G4double blue;
-  G4double alpha;
+  G4VisAttributes* attributeAir;
+  G4VisAttributes* attributeLungINhale;
+  G4VisAttributes* attributeLungEXhale;
+  G4VisAttributes* attributeAdipose;
+  G4VisAttributes* attributeBreast;
+  G4VisAttributes* attributePhantom;
+  G4VisAttributes* attributeMuscle;
+  G4VisAttributes* attributeLiver;
+  G4VisAttributes* attributeTrabecularBone;
+  G4VisAttributes* attributeDenseBone;
 
-  G4VisAttributes* Attributes_air;
-  G4VisAttributes* Attributes_LungINhale;
-  G4VisAttributes* Attributes_LungEXhale;
-  G4VisAttributes* Attributes_Adipose;
-  G4VisAttributes* Attributes_Breast;
-  G4VisAttributes* Attributes_Phantom;
-  G4VisAttributes* Attributes_Muscle;
-  G4VisAttributes* Attributes_Liver;
-  G4VisAttributes* Attributes_TrabecularBone;
-  G4VisAttributes* Attributes_DenseBone;
-
-  char Densitybuf[300];
-  FILE* readConfiguration; //lecturepref;
   G4int max;
-  char name[300];
   G4int compression;
-  char maxbuf[300];
-
-  FILE* readData; //lectureDon;
+  
+  FILE* readData; 
   G4int columns,rows;
-  G4double pixel_spacing_X,pixel_spacing_Y;
-  G4double SliceTickness;
-  G4double SliceLocation;
-  char rowsbuf[300],columnsbuf[300];
-  char pixel_spacing_Xbuf[300],pixel_spacing_Ybuf[300];
-  char SliceTicknessbuf[300];
-  char SliceLocationbuf[300];
-  char compressionbuf[300];
-  char fullname[300];
+  G4double pixelSpacingX;
+  G4double pixelSpacingY;
+  G4double sliceThickness;
+  G4double sliceLocation;
+ 
+  //G4double PatientX;
+  //G4double PatientY;
+  //G4double PatientZ;
 
-  G4double PatientX;
-  G4double PatientY;
-  G4double PatientZ;
-
-  G4std::vector<double> Density;
-  G4std::vector<double> PatientPlacementX;
-  G4std::vector<double> PatientPlacementY;
-  G4std::vector<double> PatientPlacementZ;
+  G4std::vector<G4double> Density;
+  G4std::vector<G4double> PatientPlacementX;
+  G4std::vector<G4double> PatientPlacementY;
+  G4std::vector<G4double> PatientPlacementZ;
 
 
   G4LogicalVolume* LogicalVolumeParam;
 
   G4double MiddleLocationValue;
-
-  G4int lenc,lenr;
 };
 #endif
 
