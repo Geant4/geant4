@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyDetectorConstruction.cc,v 1.21 2004-09-22 20:17:34 johna Exp $
+// $Id: MyDetectorConstruction.cc,v 1.22 2004-11-11 16:09:40 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,6 +40,7 @@
 #include "G4Box.hh"
 #include "G4Tubs.hh"
 #include "G4Sphere.hh"
+#include "G4Orb.hh"
 #include "G4Trap.hh"
 #include "G4EllipticalTube.hh"
 #include "G4IntersectionSolid.hh"
@@ -415,6 +416,25 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
 
   new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(200.*cm,200.*cm,0)),
 		    "PD_physical", PD_log_crystal,
+		    experimentalHall_phys,false,0);
+
+  //-------------------------------------------- Sphere
+
+  G4Orb* orb 
+    = new G4Orb("Test orb", 100.*cm);
+
+  G4LogicalVolume* orb_log
+    = new G4LogicalVolume(orb, Ar,"Test orb");
+
+  G4VisAttributes * orb_att
+    = new G4VisAttributes(G4Colour(1.,0.,1.));
+  orb_att->SetForceAuxEdgeVisible(true);
+  orb_log->SetVisAttributes(orb_att);
+
+  G4RotationMatrix orb_rm;
+
+  new G4PVPlacement(G4Transform3D(orb_rm,G4ThreeVector(-200.*cm,200.*cm,0)),
+		    "Test orb", orb_log, 
 		    experimentalHall_phys,false,0);
 
   //-------------------------------------------- Trapezoid
