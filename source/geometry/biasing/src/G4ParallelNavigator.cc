@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelNavigator.cc,v 1.12 2002-10-14 12:36:03 dressel Exp $
+// $Id: G4ParallelNavigator.cc,v 1.13 2002-10-16 14:29:07 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -31,13 +31,11 @@
 //
 // ----------------------------------------------------------------------
 
-#include "g4std/strstream"
-
 #include "G4ParallelNavigator.hh"
 
 #include "G4GeometryCell.hh"
 #include "G4VParallelStepper.hh"
-#include "G4Pstring.hh"
+#include "G4StringConversion.hh"
 
 G4ParallelNavigator::G4ParallelNavigator(G4VPhysicalVolume &aWorldVolume)
   : 
@@ -168,10 +166,12 @@ GetStepLength(const G4String &methodname,
     G4std::G4cout << "GetSL: " << aPosition << ", " << aDirection << G4endl;
   }
   G4double newSafety = 0.;    
-  G4double stepLength = fNavigator.ComputeStep( aPosition, aDirection,
-						kInfinity, newSafety);
+  G4double stepLength = fNavigator.ComputeStep( aPosition, 
+						aDirection,
+						G4std::kInfinity, 
+						newSafety);
   // if stepLength = 0 try shifting
-  if (stepLength<=2*kCarTolerance) {
+  if (stepLength<=2*G4std::kCarTolerance) {
     stepLength  = 
       ComputeStepLengthShifted(methodname,
 			       aPosition, aDirection);
@@ -189,9 +189,9 @@ GetStepLengthUseLocate(const G4String &methodname,
   }
   G4double newSafety = 0;    
   G4double stepLength = fNavigator.ComputeStep( aPosition, aDirection,
-						kInfinity, newSafety);
+						G4std::kInfinity, newSafety);
   // if stepLength = 0 try locate
-  if (stepLength<=2*kCarTolerance) {
+  if (stepLength<=2*G4std::kCarTolerance) {
     Locate(aPosition, aDirection, true, true);    
     stepLength  = GetStepLength(methodname + 
 				"form GetStepLengthUseLocate",
@@ -219,7 +219,7 @@ ComputeStepLengthShifted(const G4String &m,
 			   Shift(aDirection.z()));
   G4double stepLength = 0.;
   G4int trys = 0;
-  while (stepLength<=2*kCarTolerance && trys < fMaxShiftedTrys) {
+  while (stepLength<=2*G4std::kCarTolerance && trys < fMaxShiftedTrys) {
     if (fVerbose>=1) {
       G4std::G4cout << "G4ParallelNavigator::ComputeStepLengthShifted: trys = "
 	     << ++trys << G4endl;
@@ -230,10 +230,13 @@ ComputeStepLengthShifted(const G4String &m,
     G4double newSafety = 0;
     fNavigator.LocateGlobalPointWithinVolume(aPosition);    // to place at the correct position
     stepLength = fNavigator.ComputeStep( aPosition, aDirection,
-					 kInfinity, newSafety);
+					 G4std::kInfinity, newSafety);
   }
-  if (stepLength<=kCarTolerance) {
-    Error("still got stepLength<=kCarTolerance: " + str(shift_pos) + "\n", aPosition, aDirection);
+  if (stepLength<=G4std::kCarTolerance) {
+    G4String m("still got stepLength<=G4std::kCarTolerance: ");
+    m += G4std::str(shift_pos);
+    m += "\n";
+    Error(m, aPosition, aDirection);
   } 
   return stepLength;
 }
@@ -263,10 +266,10 @@ G4double G4ParallelNavigator::Shift(G4double d)
 {
   G4double s=0;
   if (d>0){
-    s = 2 * kCarTolerance;
+    s = 2 * G4std::kCarTolerance;
   }
   else if (d<0) {
-    s = -2 * kCarTolerance;
+    s = -2 * G4std::kCarTolerance;
   }
   return s;
 }

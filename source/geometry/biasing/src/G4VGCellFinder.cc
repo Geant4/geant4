@@ -21,32 +21,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4Pstring.hh,v 1.4 2002-08-29 15:30:50 dressel Exp $
+// $Id: G4VGCellFinder.cc,v 1.1 2002-10-16 14:30:01 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Declaration
+// GEANT 4 class source file
 //
-// Declaration description:
+// G4VGCellFinder.cc
 //
-// This fucntions convert some non character objects into 
-// G4Strings
-
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4Pstring_hh
-#define G4Pstring_hh G4Pstring_hh
 
-#include "globals.hh"
-#include "G4ThreeVector.hh"
+#include "G4VGCellFinder.hh"
 
-G4String str(const int &i);
-  // convert an integer into a G4String 
-
-G4String str(const double &d);
-  // convert a double into a G4String
-
-G4String str(const G4ThreeVector &v);
-  // convert a G4ThreeVector into a G4String
-
-#endif
+G4VGCellFinder::G4VGCellFinder()
+{}
+G4VGCellFinder::~G4VGCellFinder()
+{}

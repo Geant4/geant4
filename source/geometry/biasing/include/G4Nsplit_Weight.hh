@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Nsplit_Weight.hh,v 1.6 2002-08-29 15:30:49 dressel Exp $
+// $Id: G4Nsplit_Weight.hh,v 1.7 2002-10-16 14:29:06 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -41,9 +41,6 @@
 
 struct G4Nsplit_Weight
 {
-  G4Nsplit_Weight(G4int an, G4double aw): fN(an), fW(aw){}
-    // initialise members
-
   G4int fN;
     // number of tracks a mother track should be split into
     // including the mother track
@@ -51,9 +48,6 @@ struct G4Nsplit_Weight
   G4double fW;
     // the weight to be given to the tracks
 };
-
-G4std::ostream& operator<<(G4std::ostream &out, 
-			   const G4Nsplit_Weight &nw);
 
 #endif
 

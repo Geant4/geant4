@@ -21,79 +21,43 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightWindowAlgorithm.cc,v 1.5 2002-10-16 14:29:07 dressel Exp $
+// $Id: G4VGCellFinder.hh,v 1.1 2002-10-16 14:30:00 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// GEANT 4 class source file
+// Class G4VGCellFinder
 //
-// G4WeightWindowAlgorithm.cc
+// Class description:
 //
+// An interface of an GCellFinder. The G4GeometryCell is obtained
+// in the parallel geometry from G4VParallelStepper and in the
+// mass geometry form G4Step. This interface allows to implement
+// the two different ways to get a G4GeometryCell used by a process.
+// 
+
+// Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#include "G4WeightWindowAlgorithm.hh"
-#include "Randomize.hh"
+#ifndef G4VGCellFinder_hh
+#define G4VGCellFinder_hh G4VGCellFinder_hh
 
+#include "globals.hh"
+#include "G4GeometryCell.hh"
 
-G4WeightWindowAlgorithm::G4WeightWindowAlgorithm() :
-  fUpper(1),
-  fLower(1)
-{}
+class G4Step;
 
-G4WeightWindowAlgorithm::~G4WeightWindowAlgorithm()
-{}
+class  G4VGCellFinder
+{
 
+public:  // with description
 
-void G4WeightWindowAlgorithm::SetUpperLimit(G4double Upper){
-  fUpper = Upper;
-}
+  G4VGCellFinder();
+  virtual  ~G4VGCellFinder();
+
+  virtual G4GeometryCell 
+  GetPreGeometryCell(const G4Step &aStep) const=0;
+  virtual G4GeometryCell 
+  GetPostGeometryCell(const G4Step &aStep) const=0;
   
-void G4WeightWindowAlgorithm::SetLowerLimit(G4double Lower){
-  fLower = Lower;
-}
+};
 
-
-G4Nsplit_Weight 
-G4WeightWindowAlgorithm::Calculate(G4double init_w, 
-				   G4double importance) const {
-
-
-  G4Nsplit_Weight nw = {1, init_w};
-  G4double iw =  importance * init_w;
-  if (iw>fUpper) {
-    // f is the factor by which the weight is greater 
-    // than allowed by fUpper
-    // it is almost the number of coppies to be produced
-    G4double f = iw / fUpper;
-    // calculate new weight
-    nw.fW/=f; 
-
-    // calculate the number of coppies
-    nw.fN = static_cast<G4int>(f);
-    // correct the number of coppies in case f is not an integer
-    if (static_cast<G4double>(nw.fN) != f) {
-      // probabillity p for splitting into nw.fN+1 particles
-      G4double p = f - nw.fN;
-      // get a random number out of [0,1)
-      G4double r = G4UniformRand();
-      if (r<p) {
-	nw.fN++;
-      } 
-    }
-
-  }
-  else if (iw < fLower) {
-    // play russian roulett
-    G4double p = iw / fLower; // survival prob.
-    G4double r = G4UniformRand();
-    if (r>=p) {
-      // kill track
-      nw.fN = 0;
-      nw.fW = 0;
-    } 
-    else {
-      nw.fW*=1/p; // to be consistant with the survival prob.
-    }      
-  }
-  return nw;
-}
-
+#endif

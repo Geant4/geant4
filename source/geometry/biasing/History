@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2002-10-14 12:38:35 dressel Exp $
+$Id: History,v 1.23 2002-10-16 14:29:06 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,10 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Oct, 14th 2002 M.Dressel 
+Oct. 16th 2002 M.Dressel internal_6_geombias-V04-01-01
+     - changes recomanded by codewizard
+     - stream, and string conversion from file G4Nsplit_Weight.hh/.cc
+       to G4StringConversion.hh/.cc
+
+Oct. 15th 2002 M.Dressel
+     removing G4Pstring with G4StringConversion
+
+Oct. 14th 2002 M.Dressel 
      cleanup according to codewizzard
 
-Oct, 10th 2002 M.Dressel geombias-V04-01-01-internal-5
+Oct. 10th 2002 M.Dressel geombias-V04-01-01-internal-5
      change in G4(V)ImportanceAlgorithm, G4ImportanceSplitExaminer
      G4ImportanceFinder: give pre and post importance 
      separatly insted only ipre/ipost.
