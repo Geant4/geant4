@@ -1,5 +1,5 @@
 //
-// $Id: G4VNestedParameterisation.cc,v 1.2 2005-02-15 17:34:30 japost Exp $
+// $Id: G4VNestedParameterisation.cc,v 1.3 2005-02-16 18:13:58 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VNestedParamterisation
@@ -20,6 +20,45 @@
 
 #include "G4VNestedParameterisation.hh" 
 
+G4VPhysicalVolume* 
+G4VNestedParameterisation::
+ObtainParts( G4VPhysicalVolume* thisVolPlus,     // Input 
+	     const G4String method, 
+	     const G4VTouchable* pTouchableParent)  const     // Returned
+{
+  G4PhysicalTouchable* pPhysTouchable=0;
+  pPhysTouchable=  dynamic_cast<G4PhysicalTouchable *>(thisVolPlus); 
+  
+  if( ! pPhysTouchable ) 
+    ReportErrorInTouchable( method ); 
+  // ParameterisedNavigator must provide a G4PhysicalTouchable !!
+  
+  G4VPhysicalVolume* pCurrentVol= pPhysTouchable->GetCurrentVolume(); 
+  // const G4VTouchable* 
+  pTouchableParent= pPhysTouchable->GetTouchable();  // Parent Touch
+
+  return pCurrentVol; 
+}
+
+const G4VPhysicalVolume* 
+G4VNestedParameterisation::
+ObtainParts( const G4VPhysicalVolume* thisVolPlus,     // Input 
+	     const G4String method, 
+	     const G4VTouchable* pTouchableParent)  const     // Returned
+{
+  const G4PhysicalTouchable* pPhysTouchable=0;
+  pPhysTouchable=  dynamic_cast<const G4PhysicalTouchable *>(thisVolPlus); 
+  
+  if( ! pPhysTouchable ) 
+    ReportErrorInTouchable( method ); 
+  // ParameterisedNavigator must provide a G4PhysicalTouchable !!
+  
+  const G4VPhysicalVolume* pCurrentVol= pPhysTouchable->GetCurrentVolume(); 
+  // const G4VTouchable* 
+  pTouchableParent= pPhysTouchable->GetTouchable();  // Parent Touch
+
+  return pCurrentVol; 
+}
 
 // Implement standard PVParameterisation methods, 
 //   in terms of the new methods with 'parent' information
@@ -27,46 +66,66 @@
 G4VSolid*  
 G4VNestedParameterisation::ComputeSolid(const G4int no, G4VPhysicalVolume *thisVol)
 {
-  G4PhysicalTouchable* pPhysTouchable;
-  pPhysTouchable=  dynamic_cast<G4PhysicalTouchable*> thisVol; 
+  const G4String method("G4VNestedParameterisation::ComputeSolid(int, pv)");
+  G4PhysicalTouchable* pPhysTouchable=0;
+  
+  pPhysTouchable=  dynamic_cast<G4PhysicalTouchable *>(thisVol); 
   
   if( ! pPhysTouchable ) 
-    G4Exception(" ") ; // FATAL error -- 
+    ReportErrorInTouchable( method ); 
   // ParameterisedNavigator must provide a G4PhysicalTouchable
   
-  // G4VPhysicalVolume* pCurrentVol= thisVol->GetPhysVol; 
-  const G4VTouchable* pTouchableParent; 
-  // currentVol= 
-  this->ComputeSolid( no, thisVol, pTouchableParent); 
+  G4VPhysicalVolume* pCurrentVol= pPhysTouchable->GetCurrentVolume(); 
+  const G4VTouchable* pTouchableParent= pPhysTouchable->GetTouchable();  // Parent Touch
+  return this->ComputeSolid( no, pCurrentVol, pTouchableParent); 
 }
 
 
 void G4VNestedParameterisation::ComputeTransformation(const G4int no,
-                                       G4VPhysicalVolume *currVolPlus )
+                                       G4VPhysicalVolume *currVolPlus ) const
 {
-  const G4String method("G4VNestedParameterisation::Transformation(int, pv)");
+  static G4String methodName(
+		  "G4VNestedParameterisation::ComputeTransformation(int, pv)");
 
-  G4PhysicalTouchable* pPhysTouchable;
-  pPhysTouchable=  dynamic_cast<G4PhysicalTouchable*> currVolPlus; 
-  
-  if( ! pPhysTouchable ) 
-    ReportErrorInTouchable(method); 
-  // ParameterisedNavigator must provide a G4PhysicalTouchable
-  
-  const G4VTouchable* pTouchableParent; 
-  // currentVol= 
-  this->ComputeTransformation( no, currVolPlus, pTouchableParent);   
+  G4VPhysicalVolume* pCurrentVol= 0;  
+  const G4VTouchable* pTouchableParent=0; 
+  pCurrentVol= ObtainParts( currVolPlus, methodName, pTouchableParent); 
+
+  // Call the implementing virtual method
+  this->ComputeTransformation( no, pCurrentVol, pTouchableParent);
 }
 
-G4Material* G4VNestedParameterisation::ComputeMaterial(const G4int, G4VPhysicalVolume *)
+G4Material* G4VNestedParameterisation::ComputeMaterial(const G4int no, 
+						       G4VPhysicalVolume *currVolPlus)
 {
-  const G4String Method("G4VNestedParameterisation::ComputeDimensions()");
+  const G4String methodName("G4VNestedParameterisation::ComputeMaterial(int, physVol)");
+  G4VPhysicalVolume* pCurrentVol= 0;  
+  const G4VTouchable* pTouchableParent=0; 
+  pCurrentVol= ObtainParts( currVolPlus, methodName, pTouchableParent); 
+
+  // Call the implementing virtual method
+  return this->ComputeMaterial( no, pCurrentVol, pTouchableParent);  
 }
 
-void G4VNestedParameterisation::ReportErrorInTouchable(G4String method)
+void G4VNestedParameterisation::ReportErrorInTouchable(const G4String method) const
 {
    G4cerr << "ERROR - Illegal call to G4VNestedParameterisation method: ComputeDimensions, ComputeTransformation or ComputeMaterial()" << G4endl
            << "        Physical volume is not 'dressed' to provide parent touchable. Cross cast failed!" << G4endl;
    G4Exception( method, "NotApplicable",
                 FatalException, "Failed cross cast: Illegal call, missing information.");
 }
+
+void G4VNestedParameterisation::ComputeDimensions(G4Box &box,  
+		       const G4int no,
+		       const G4VPhysicalVolume *currVolPlus) const
+{
+  const G4String methodName( "ComputeDimensions(G4Box, int, pPhysVol)" ); 
+
+  const G4VPhysicalVolume* pCurrentVol= 0;  
+  const G4VTouchable* pTouchableParent=0; 
+  pCurrentVol= ObtainParts( currVolPlus, methodName, pTouchableParent); 
+
+  // Call the implementing virtual method
+  this->ComputeDimensions( box, no, pCurrentVol, pTouchableParent);  
+}
+
