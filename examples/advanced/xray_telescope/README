@@ -1,4 +1,4 @@
-$Id: README,v 1.2 2000-10-06 10:12:27 nartallo Exp $
+$Id: README,v 1.3 2000-11-16 13:46:15 nartallo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,57 +7,86 @@ $Id: README,v 1.2 2000-10-06 10:12:27 nartallo Exp $
 
                             xray_telescope
                             --------------
- xray_telescope is a......
+XrayTel is an advanced Geant4 example based on a realistic simulation of 
+an X-ray Telescope.  It is based on work carried out by a team of Geant4 
+experts to simulate the interaction between X-ray Telescopes XMM-Newton 
+and Chandra with low energy protons present in the orbital radiation 
+background.  The X-ray mirrors are designed to collect x-ray photons at
+grazing-incidence angles and focus them onto detectors at the focal plane.
+However, this mechanism also seems to work for low energy protons which,
+if they reach the detectors in sufficient numbers, can cause damage.
+In this example, the geometry has been simplified by using a single mirror 
+shell and no baffles, but all the dimensions and materials are realistic.
 
-0. Setting up the environment variablesset path = ( $G4INSTALL/bin/$G4SYSTEM $G4WORKDIR/bin/$G4SYSTEM $path )
+The aim of this advanced example is to illustrate the use advanced 
+GUI, visualisation, particle generation and analysis schemes available 
+in Geant4:
 
-setenv G4SYSTEM Linux-g++
-setenv G4INSTALL $G4HOME/geant4
-setenv OGLHOME "/usr/local"
+ - the simulation can be run from GAG or the command prompt
+ - macros are provided to display the geometry and particle tracks with 
+   OpenGL, DAWN Postscript or VRML visualisation
+ - the generation of particles is done via the new General Particle Source
+
+ - histograming facilities are provided with three different systems Lizard
+   OpenScientist and JAS
+
+In order to be able to use any of these packages, prior installation is 
+necessary and a number of environment variables will have to be set.
+
+
+1. Setting up the environment variables for GAG and Visualisation options
+
+#set up GAG 
+setenv G4UI_BUILD_GAG_SESSION       1
+setenv G4UI_USE_GAG                 1
+
+#set up VRMLview
+setenv G4VIS_BUILD_VRMLFILE_DRIVER  1
+setenv G4VIS_USE_VRML               1
+setenv G4VIS_USE_VRMLFILE           1
+setenv G4VRMLFILE_MAX_FILE_NUM     100
+setenv G4VRMLFILE_VIEWER        vrmlview    #if installed
+setenv G4VIS_USE_VRML               1
+setenv G4VIS_USE_VRMLFILE           1
+
+#set up OpenGL or Mesa 
+setenv G4VIS_BUILD_OPENGLX_DRIVER   1
+setenv G4VIS_USE_OPENGLX            1
+setenv OGLHOME /usr/local                   #get correct path
 setenv OGLLIBS "-L$OGLHOME/lib -lMesaGLU -lMesaGL"
 
-set path = ( $G4INSTALL/bin/$G4SYSTEM $G4WORKDIR/bin/$G4SYSTEM $path )
+#set up DAWN
+setenv G4VIS_BUILD_DAWN_DRIVER      1
+setenv G4VIS_BUILD_DAWNFILE_DRIVER  1  
+setenv G4VIS_USE_DAWN               1
+setenv G4VIS_USE_DAWNFILE           1
 
-setenv G4VIS_BUILD_OPENGLX_DRIVER 1
-setenv G4VIS_BUILD_DAWN_DRIVER         1  # DAWN is the Fukui Renderer
-setenv G4VIS_BUILD_DAWNFILE_DRIVER     1  
-setenv G4VIS_BUILD_RAYX_DRIVER         1  # GEANT4 Ray Tracing
-setenv G4VIS_BUILD_VRML_DRIVER         1  # Spawns VRML viewer
-setenv G4VIS_BUILD_VRMLFILE_DRIVER     1  # Writes VRML ascii file
-setenv G4UI_BUILD_GAG_SESSION 1
 
-setenv G4UI_USE_GAG           1
-setenv G4VIS_USE_OPENGLX      1
-setenv G4VIS_USE_DAWN         1
-setenv G4VIS_USE_DAWNFILE     1
-setenv G4VIS_USE_RAYX         1
-setenv G4VIS_USE_VRML         1
-setenv G4VIS_USE_VRMLFILE     1
-
-0.5 Sample run
+2. Sample run
 To execute a sample simulation with visualisation of proton tracks
 reaching teh detector run:
 
 XrayTel longsection.macro
 
 
-1. Detector description
+3. Detector description
 
  The detector is defined in ....DetectorConstruction.cc
 
  The experimental hall, which is the world volume, is made of vaccuum
  and it is a box. ...
  
-2. Physics processes
+4. Physics processes
 
 ...PhysicsList.cc defines ...
 
-3. Event generation
+5. Event generation
 
 
-4. main()
+6. main()
 
 XrayTel.cc has the main() method. In the main() method, three
 mandatory user classes described above are constructed and set to
 the G4RunManager object. Then, the "Initialize()" method of G4RunManager
 is invoked. 
+

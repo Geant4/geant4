@@ -29,48 +29,65 @@
 //
 // **********************************************************************
 
+#include "G4ios.hh"
+#include "G4Event.hh"
 #include "G4EventManager.hh"
+#include "G4HCofThisEvent.hh"
+#include "G4TrajectoryContainer.hh"
+#include "G4Trajectory.hh"
+#include "G4VVisManager.hh"
+#include "G4UImanager.hh"
+#include "G4UnitsTable.hh"
 
 #include "XrayTelEventAction.hh"
 #include "XrayTelEventActionMessenger.hh"
 
-#ifdef G4ANALYSIS_USE
-#include "XrayTelAnalysisManager.hh"
-#endif
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XrayTelEventAction::XrayTelEventAction(XrayTelAnalysisManager* aAnalysisManager)
-:fAnalysisManager(aAnalysisManager)
-,fDrawFlag("all")
-,fEventMessenger(NULL)
+XrayTelEventAction::XrayTelEventAction(G4bool* dEvent)
+  : drawFlag("all"),eventMessenger(NULL), drawEvent(dEvent)
 {
-  fEventMessenger = new XrayTelEventActionMessenger(this);
+  eventMessenger = new XrayTelEventActionMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayTelEventAction::~XrayTelEventAction()
 {
-  delete fEventMessenger;
+  delete eventMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void XrayTelEventAction::BeginOfEventAction(const G4Event*)
+void XrayTelEventAction::BeginOfEventAction(const G4Event* Ev)
 {
-#ifdef G4ANALYSIS_USE
-  if(fAnalysisManager) fAnalysisManager->BeginOfEvent();
-#endif
+  *drawEvent=false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void XrayTelEventAction::EndOfEventAction(const G4Event*)
+void XrayTelEventAction::EndOfEventAction(const G4Event* Ev)
 {
-#ifdef G4ANALYSIS_USE
-  if(fAnalysisManager) fAnalysisManager->EndOfEvent(fpEventManager->GetConstCurrentEvent(),fDrawFlag);
-#endif
+  //  if (drawEvent){
+  if (*drawEvent){
+    const G4Event* evt = fpEventManager->GetConstCurrentEvent();
+
+    G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
+    G4int n_trajectories = 0;
+    if ( trajectoryContainer ){ 
+      n_trajectories = trajectoryContainer->entries(); 
+    }
+    
+    if ( G4VVisManager::GetConcreteInstance() ) {
+      for ( G4int i=0; i<n_trajectories; i++ ) {
+	G4Trajectory* trj = (G4Trajectory*)(*(evt->GetTrajectoryContainer()))[i];
+	if ( drawFlag == "all" ) trj->DrawTrajectory(50);
+	else if ( (drawFlag == "charged")&&(trj->GetCharge() > 0.) )
+	  trj->DrawTrajectory(50); 
+	  trj->ShowTrajectory(); 
+      }
+    }
+  }
 }
 
 

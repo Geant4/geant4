@@ -12,8 +12,8 @@
 // * MODULE:            XrayTelRunAction.cc                             *
 // * -------                                                            *
 // *                                                                    *
-// * Version:           0.5                                             *
-// * Date:              08/11/00                                        *
+// * Version:           0.4                                             *
+// * Date:              06/11/00                                        *
 // * Author:            R Nartallo                                      *
 // * Organisation:      ESA/ESTEC, Noordwijk, THe Netherlands           *
 // *                                                                    *
@@ -22,13 +22,10 @@
 // CHANGE HISTORY
 // --------------
 //
-// 06.11.2000 R. Nartallo
-// - First implementation of RunAction
+// 06.11.2000 R.Nartallo
+// - First implementation of xray_telescope Physics list
 // - Based on Chandra and XMM models
-//
-// 08.11.2000 R. Nartallo
-// - Modified "/vis/****" commands to the G4UIManager in 
-//   BeginOfRunAction and EndOfRunAction
+// 
 //
 // **********************************************************************
 
@@ -37,16 +34,19 @@
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
 
+#include "g4std/fstream"
+#include "g4std/vector"
+
 #include "XrayTelRunAction.hh"
-#ifdef G4ANALYSIS_USE
-#include "XrayTelAnalysisManager.hh"
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XrayTelRunAction::XrayTelRunAction(XrayTelAnalysisManager* aAnalysisManager)
-:fAnalysisManager(aAnalysisManager)
-{}
+XrayTelRunAction::XrayTelRunAction(G4std::vector<G4double*> *enEnergy,
+				   G4std::vector<G4ThreeVector*> *enDirect,
+				   G4bool* dEvent)
+  :EnteringEnergy(enEnergy),
+   EnteringDirection(enDirect),drawEvent(dEvent)
+{;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -63,27 +63,47 @@ void XrayTelRunAction::BeginOfRunAction(const G4Run* aRun)
 
   if (G4VVisManager::GetConcreteInstance()) {
     G4UImanager* UI = G4UImanager::GetUIpointer(); 
-    UI->ApplyCommand("/vis/scene/notifyHandlers");
+    UI->ApplyCommand("/vis/clear/view");
+    UI->ApplyCommand("/vis/draw/current");
   } 
 
-#ifdef G4ANALYSIS_USE
-  if(fAnalysisManager) fAnalysisManager->BeginOfRun();
-#endif
-
+  EnteringEnergy->clear();
+  EnteringDirection->clear();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void XrayTelRunAction::EndOfRunAction(const G4Run* )
 {
-  if (G4VVisManager::GetConcreteInstance()) {
-     G4UImanager::GetUIpointer()->ApplyCommand("/vis/show/view");
+
+  G4int i;
+
+  if (G4VVisManager::GetConcreteInstance())
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/show/view");
+
+  G4std::ofstream outscat("detector.hist", ios::app);
+
+  G4cout << "End of Run summary" << G4endl << G4endl;
+
+  G4double TotEnteringEnergy = 0.0;
+
+  for (i=0;i< EnteringEnergy->size();i++)
+    TotEnteringEnergy += *(*EnteringEnergy)[i];
+  G4cout << "Total Entering Detector : " << EnteringEnergy->size()  << G4endl;
+  G4cout << "Total Entering Detector Energy : " << TotEnteringEnergy  << G4endl;
+
+  for (i=0;i<EnteringEnergy->size();i++) {
+    outscat << "  "
+	    << *(*EnteringEnergy)[i]
+            << "  "
+            << (*EnteringDirection)[i]->x()
+	    << "  "
+            << (*EnteringDirection)[i]->y()
+	    << "  "
+            << (*EnteringDirection)[i]->z()
+	    << G4endl;
   }
-
-#ifdef G4ANALYSIS_USE
-  if(fAnalysisManager) fAnalysisManager->EndOfRun();
-#endif
-
+  outscat.close();
 }
 
 

@@ -33,6 +33,11 @@
 // CHANGE HISTORY
 // --------------
 //
+// 15.11.2000 R. Nartallo
+// - Minor changes proposed by F. Lei to implement the GPS module now 
+//   replacing the standard particle gun 
+// - Remove commented lines related to old histograming code
+//
 // 06.11.2000 R.Nartallo
 // - First implementation of X-ray Telescope advanced example.
 // - Based on Chandra and XMM models
@@ -43,27 +48,18 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-
+#include "G4UIGAG.hh"
+#include "G4UIterminal.hh"
+#include "G4UIXm.hh" 
 #include "XrayTelDetectorConstruction.hh"
 #include "XrayTelPhysicsList.hh"
+#include "XrayTelVisManager.hh"
 #include "XrayTelEventAction.hh"
 #include "XrayTelRunAction.hh"
 #include "XrayTelSteppingAction.hh"
 #include "XrayTelPrimaryGeneratorAction.hh"
-
-//#include "G4UIterminal.hh"
-#ifdef G4UI_USE_GAG
-#include "G4UIGAG.hh"
-#endif
-#ifdef G4UI_USE_XM
-#include "G4UIXm.hh"
-#endif
-#ifdef G4VIS_USE
-#include "XrayTelVisManager.hh"
-#endif                                                                                    
-#ifdef G4ANALYSIS_USE
-#include "XrayTelAnalysisManager.hh"
-#endif
+#include <iostream.h>
+#include "g4std/vector"
 
 int main( int argc, char** argv )
 {
@@ -71,33 +67,25 @@ int main( int argc, char** argv )
   G4RunManager * runManager = new G4RunManager;
 
   // set mandatory initialization classes
-  XrayTelDetectorConstruction* telescope = new XrayTelDetectorConstruction;
-  runManager->SetUserInitialization( telescope );
+  runManager->SetUserInitialization(new XrayTelDetectorConstruction ) ;
   runManager->SetUserInitialization(new XrayTelPhysicsList);
 
+  // setup some of the common variables
+  G4bool drawEvent;
+  G4std::vector<G4double*> EnteringEnergy;
+  G4std::vector<G4ThreeVector*> EnteringDirection;
+
   // set mandatory user action class
-  runManager->SetUserAction(new XrayTelPrimaryGeneratorAction( telescope ));
-
-  // create a manager for the analysis
-  // The analysis system is given through an environment variable :
-#ifdef G4ANALYSIS_USE
-  char* s = getenv("G4ANALYSIS_SYSTEM");
-  XrayTelAnalysisManager* analysisManager = new XrayTelAnalysisManager(s?s:"");
-  runManager->SetUserAction(new XrayTelRunAction(analysisManager));
-  runManager->SetUserAction(new XrayTelEventAction(analysisManager));
-  runManager->SetUserAction(new XrayTelSteppingAction(analysisManager));
-#else
-  runManager->SetUserAction(new XrayTelRunAction());
-  runManager->SetUserAction(new XrayTelEventAction());
-  runManager->SetUserAction(new XrayTelSteppingAction());
-#endif
-
+  runManager->SetUserAction(new XrayTelPrimaryGeneratorAction );
+  runManager->SetUserAction(new XrayTelRunAction(&EnteringEnergy,
+				&EnteringDirection, &drawEvent));
+  runManager->SetUserAction(new XrayTelEventAction(&drawEvent));
+  runManager->SetUserAction(new XrayTelSteppingAction(
+				&EnteringEnergy, &EnteringDirection, &drawEvent));
    
   // visualization manager
-#ifdef G4VIS_USE
   G4VisManager* visManager = new XrayTelVisManager;
   visManager->Initialize();    
-#endif
 
   //Initialize G4 kernel
   runManager->Initialize();
@@ -105,18 +93,12 @@ int main( int argc, char** argv )
   // get the pointer to the User Interface manager 
   G4UImanager *UI = G4UImanager::GetUIpointer();  
   if ( argc==1 ){
-    G4UIsession* session = 0;
-#ifdef G4UI_USE_XM
-    session = new G4UIXm(argc,argv);
-    // Customize the G4UIXm menubar with a macro file :
-    UI->ApplyCommand("/control/execute gui.mac");
-#else
-    //session = new G4UIterminal;
-    session = new G4UIGAG;
-#endif
+    G4UIsession * session = new G4UIGAG;
+    //G4UIsession * session = new G4UIterminal;
     session->SessionStart();
     delete session;
-  } else {
+  }
+  else {
     // Create a pointer to the User Interface manager 
     G4String command = "/control/execute ";
     for (int i=2; i<=argc; i++) {
@@ -126,12 +108,7 @@ int main( int argc, char** argv )
   }                                  
 
   // job termination
-#ifdef G4VIS_USE
   delete visManager;
-#endif
-#ifdef G4ANALYSIS_USE
-  delete analysisManager;
-#endif
   delete runManager;
   return 0;
 }

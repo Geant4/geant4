@@ -23,7 +23,7 @@
 // --------------
 //
 // 06.11.2000 R.Nartallo
-// - First implementation of xray_telescope VisManager
+// - First implementation of xray_telescope Physics list
 // - Based on Chandra and XMM models
 // 
 //

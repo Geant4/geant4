@@ -40,15 +40,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class G4Run;
-class XrayTelAnalysisManager;
 
 class XrayTelRunAction : public G4UserRunAction
 {
 public:
-  XrayTelRunAction(XrayTelAnalysisManager* = 0);
-  //		   G4std::vector<G4double*> *enEnergy,
-  //	   G4std::vector<G4ThreeVector*> *enDirect,
-  //	   G4bool* dEvent);
+  XrayTelRunAction(G4std::vector<G4double*> *enEnergy,
+		   G4std::vector<G4ThreeVector*> *enDirect,
+		   G4bool* dEvent);
   ~XrayTelRunAction();
 
 public:
@@ -56,10 +54,9 @@ public:
   void EndOfRunAction(const G4Run*);
 
 private:
-  XrayTelAnalysisManager* fAnalysisManager;
-  //G4bool* drawEvent;
-  //G4std::vector<G4double*>* EnteringEnergy;
-  //G4std::vector<G4ThreeVector*>* EnteringDirection;
+  G4bool* drawEvent;
+  G4std::vector<G4double*>* EnteringEnergy;
+  G4std::vector<G4ThreeVector*>* EnteringDirection;
 
 };
 

@@ -14,8 +14,8 @@
 # * MACRO:             dawn.mac                                     * #
 # * ------             demostrates the DAWN DRIVER                  * #
 # *                                                                 * #
-# * Version:           0.5                                          * #
-# * Date:              08/11/00                                     * #
+# * Version:           0.6                                          * #
+# * Date:              15/11/00                                     * #
 # * Author:            R Nartallo                                   * #
 # * Organisation:      ESA/ESTEC, Noordwijk, THe Netherlands        * #
 # *                                                                 * #
@@ -57,11 +57,14 @@
 #   CHANGE HISTORY                                                    #
 #   --------------                                                    #
 #                                                                     #
-#   17.10.2000 S. Tanaka                                              #
-#   - First implementation                                            #
+#   15.11.2000 R. Nartallo                                            #
+#   - Replaced standard particle gun by GPS set options               #
 #                                                                     #
 #   08.11.2000 R. Nartallo                                            #
 #   - Modified version                                                #
+#                                                                     #
+#   17.10.2000 S. Tanaka                                              #
+#   - First implementation                                            #
 #                                                                     #
 #######################################################################
 
@@ -100,18 +103,28 @@
 # Set to draw tracks of positively charged particles
 /event/drawTracks charged
 
-# Set the type of random gun "aperture" is default
-# other option is "point"
-/gun/random aperture
-
-# Set the particle type
-/gun/particle proton
-
-# Set particle energy
-/gun/energy 0.5 MeV
+# Set General Particle Source options
+/gps/particle proton
+/gps/type Plane
+/gps/shape Annulus
+/gps/posrot1 0. 0. 1.
+/gps/posrot2 0. 1. 0.
+/gps/radius 35.5 cm
+/gps/radius0 30.5 cm
+/gps/centre 780.1 0. 0. cm
+/gps/angtype cos
+/gps/angrot1 0. 0. 1.
+/gps/angrot2 0. 1. 0.
+/gps/maxtheta 1. deg
+/gps/energytype Mono
+/gps/monoenergy 0.5 MeV
 
 # Set number of particles and start
 /run/beamOn 10000
+
+
+
+
 
 
 

@@ -1,11 +1,20 @@
+/run/verbose 1
 /tracking/storeTrajectory 1
-/gun/particle proton
-/gun/energy 0.5 MeV
-/run/beamOn 10000
-
-
-
-
+/gps/particle proton
+/gps/type Plane
+/gps/shape Annulus
+/gps/posrot1 0. 0. 1.
+/gps/posrot2 0. 1. 0.
+/gps/radius 35.5 cm
+/gps/radius0 30.5 cm
+/gps/centre 780.1 0. 0. cm
+/gps/angtype cos
+/gps/angrot1 0. 0. 1.
+/gps/angrot2 0. 1. 0.
+/gps/maxtheta 1. deg
+/gps/energytype Mono
+/gps/monoenergy 0.5 MeV
+/run/beamOn 100000
 
 
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2000-11-06 18:01:04 nartallo Exp $
+$Id: History,v 1.5 2000-11-16 13:46:10 nartallo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,38 +17,38 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-06.10.2000 - RN, tag xraytel-V02-00-00
-             First submission of XrayTel advanced example.
+16.11.2000 - RN, tag xraytel-V02-00-06 
+             Replace standard gun with General Particle Source
+             Remove all code related to old Histogram implementation
+             Modified all macros to work with GPS
+             Cleaned GNUmakefile
+             Started drafting README file
 
+08.11.2000 - RN, tag xraytel-V02-00-05 
+             Tydied up macros
+             Small bug fixes to compile on Linux, SUN and DEC platforms
 
-17.10.2000 - RN, tag xraytel-V02-00-01
-             Tydied up geometry
-             Add all physics processes to XrayTelPhysicsList.cc
-             Modified *.hh accordingly
-
-17.10.2000 - RN, tag xraytel-V02-00-02
-             Added histogramming capability
-	     Added XrayTelHistogram.hh, XrayTelHistogram.cc
-	     Modified: GNUmakefile
-		       XrayTel.cc
-		       XrayTelSteppingAction.hh
-		       XrayTelSteppingAction.cc
+06.11.2000 - RN, tag xraytel-V02-00-04 
+             Tydied up code added headers
 
 18.10.2000 - RN, tag xraytel-V02-00-03
 	     Modified geometry and PrimaryGenerator to speed up events
 	     Modified SteppingAction.cc to call histoManager analyser
 	     Modified Histogram.cc to do all the histo work
 
-06.11.2000 - RN, tag xraytel-V02-00-04
-             Cleaned up the code in all modules
-             Commented out lines dealing with histograming
-             Added macros for OpenGL, Dawn and VRML visulaisation
+17.10.2000 - RN, tag xraytel-V02-00-02
+             Added histograming capability
+	     Added XrayTelHistogram.hh, XrayTelHistogram.cc
+	     Modified: GNUmakefile
+		       XrayTel.cc
+		       XrayTelSteppingAction.hh
+		       XrayTelSteppingAction.cc
 
+17.10.2000 - RN, tag xraytel-V02-00-01
+             Tydied up geometry
+             Add all physics processes to XrayTelPhysicsList.cc
+             Modified *.hh accordingly
 
-
-
-
-
-
-
+06.10.2000 - RN, tag xraytel-V02-00-00
+             First submission of XrayTel advanced example.
 

@@ -36,27 +36,25 @@
 #include "globals.hh"
 
 class XrayTelEventActionMessenger;
-class XrayTelAnalysisManager;
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class XrayTelEventAction : public G4UserEventAction
 {
 public:
-  XrayTelEventAction(XrayTelAnalysisManager* = 0);
+  XrayTelEventAction(G4bool* dEvent);
   ~XrayTelEventAction();
 
 public:
   void BeginOfEventAction(const G4Event* anEvent);
   void EndOfEventAction(const G4Event* anEvent);
     
-  void SetDrawFlag(G4String val)  {fDrawFlag = val;};
+  void SetDrawFlag(G4String val)  {drawFlag = val;};
     
 private:
-  XrayTelAnalysisManager* fAnalysisManager;
-  G4String fDrawFlag;                         // control the drawing of event
-  XrayTelEventActionMessenger* fEventMessenger;
+  G4bool* drawEvent;
+  G4String drawFlag;                         // control the drawing of event
+  XrayTelEventActionMessenger* eventMessenger;
 };
 
 #endif
