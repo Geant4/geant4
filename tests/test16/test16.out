@@ -1,7 +1,6 @@
 SimpleBox is now made of Pb
 PreInit> #
-PreInit> # Macro file test16.in
-PreInit> # for tests of basic e.m. processes
+PreInit> # Auto-generated test input file for test16 hadronics.
 PreInit> #
 PreInit> PreInit> # /run/verbose 2
 PreInit> /run/initialize
@@ -69,20 +68,130 @@ MuPairProd:  theoretical cross sections
     PhysicsTables from 1 GeV to 1000 PeV in 50 bins. 
 Idle> /gun/direction 1 0 0
 Idle> #
-Idle> # gamma 500 MeV in Al
+Idle> # proton at 1 GeV in Pb
 Idle> #
+Idle> /gun/particle proton
+Idle> /gun/energy 1 GeV
+Idle> /mydet/SelectMaterial Pb
+SimpleBox is now made of Pb
+Idle> /run/beamOn 10
+Idle> # neutron at 1 GeV in Pb
+Idle> #
+Idle> /gun/particle neutron
+Idle> /gun/energy 1 GeV
+Idle> /mydet/SelectMaterial Pb
+SimpleBox is now made of Pb
+Idle> /run/beamOn 10
+Idle> # proton at 10 GeV in Pb
+Idle> #
+Idle> /gun/particle proton
+Idle> /gun/energy 10 GeV
+Idle> /mydet/SelectMaterial Pb
+SimpleBox is now made of Pb
+Idle> /run/beamOn 10
+Idle> # neutron at 10 GeV in Pb
+Idle> #
+Idle> /gun/particle neutron
+Idle> /gun/energy 10 GeV
+Idle> /mydet/SelectMaterial Pb
+SimpleBox is now made of Pb
+Idle> /run/beamOn 10
+Idle> # proton at 20 GeV in Pb
+Idle> #
+Idle> /gun/particle proton
+Idle> /gun/energy 20 GeV
+Idle> /mydet/SelectMaterial Pb
+SimpleBox is now made of Pb
+Idle> /run/beamOn 10
+Idle> # neutron at 20 GeV in Pb
+Idle> #
+Idle> /gun/particle neutron
+Idle> /gun/energy 20 GeV
+Idle> /mydet/SelectMaterial Pb
+SimpleBox is now made of Pb
+Idle> /run/beamOn 10
+Idle> # proton at 1 GeV in Al
+Idle> #
+Idle> /gun/particle proton
+Idle> /gun/energy 1 GeV
 Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
-Idle> /gun/particle gamma
-Idle> /gun/energy 500 MeV
-Idle> /run/beamOn 1
+Idle> /run/beamOn 10
+Idle> # neutron at 1 GeV in Al
 Idle> #
-Idle> # electron 500 MeV in Air
+Idle> /gun/particle neutron
+Idle> /gun/energy 1 GeV
+Idle> /mydet/SelectMaterial Al
+SimpleBox is now made of Al
+Idle> /run/beamOn 10
+Idle> # proton at 10 GeV in Al
 Idle> #
+Idle> /gun/particle proton
+Idle> /gun/energy 10 GeV
+Idle> /mydet/SelectMaterial Al
+SimpleBox is now made of Al
+Idle> /run/beamOn 10
+Idle> # neutron at 10 GeV in Al
+Idle> #
+Idle> /gun/particle neutron
+Idle> /gun/energy 10 GeV
+Idle> /mydet/SelectMaterial Al
+SimpleBox is now made of Al
+Idle> /run/beamOn 10
+Idle> # proton at 20 GeV in Al
+Idle> #
+Idle> /gun/particle proton
+Idle> /gun/energy 20 GeV
+Idle> /mydet/SelectMaterial Al
+SimpleBox is now made of Al
+Idle> /run/beamOn 10
+Idle> # neutron at 20 GeV in Al
+Idle> #
+Idle> /gun/particle neutron
+Idle> /gun/energy 20 GeV
+Idle> /mydet/SelectMaterial Al
+SimpleBox is now made of Al
+Idle> /run/beamOn 10
+Idle> # proton at 1 GeV in Air
+Idle> #
+Idle> /gun/particle proton
+Idle> /gun/energy 1 GeV
 Idle> /mydet/SelectMaterial Air
 SimpleBox is now made of Air
-Idle> /gun/particle e-
-Idle> /gun/energy 500 MeV
-Idle> /run/beamOn 1
+Idle> /run/beamOn 10
+Idle> # neutron at 1 GeV in Air
 Idle> #
+Idle> /gun/particle neutron
+Idle> /gun/energy 1 GeV
+Idle> /mydet/SelectMaterial Air
+SimpleBox is now made of Air
+Idle> /run/beamOn 10
+Idle> # proton at 10 GeV in Air
+Idle> #
+Idle> /gun/particle proton
+Idle> /gun/energy 10 GeV
+Idle> /mydet/SelectMaterial Air
+SimpleBox is now made of Air
+Idle> /run/beamOn 10
+Idle> # neutron at 10 GeV in Air
+Idle> #
+Idle> /gun/particle neutron
+Idle> /gun/energy 10 GeV
+Idle> /mydet/SelectMaterial Air
+SimpleBox is now made of Air
+Idle> /run/beamOn 10
+Idle> # proton at 20 GeV in Air
+Idle> #
+Idle> /gun/particle proton
+Idle> /gun/energy 20 GeV
+Idle> /mydet/SelectMaterial Air
+SimpleBox is now made of Air
+Idle> /run/beamOn 10
+Idle> # neutron at 20 GeV in Air
+Idle> #
+Idle> /gun/particle neutron
+Idle> /gun/energy 20 GeV
+Idle> /mydet/SelectMaterial Air
+SimpleBox is now made of Air
+Idle> /run/beamOn 10
 Idle> 
