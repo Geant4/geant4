@@ -104,7 +104,7 @@ processes/electromagnetic/utils         utils-V05-02-09
 - Added new method DefineForRegion() to G4VEmModel.
 - Fixed minor problems in messenger.
 
-processes/hadronic/models/chiral_inv_phase_space/body ghad-chips-body-V05-02-02
+processes/hadronic/models/chiral_inv_phase_space/body ghad-chips-body-V05-02-03
 -----------------------------------------------------
 - Physics tuning of CHIPS on a number of experimental data sets. 
 - Eta, omega, Sigma0 etc. radiative decays are switched on to avoid transport.
