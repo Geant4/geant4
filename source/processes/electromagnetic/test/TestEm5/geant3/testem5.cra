@@ -436,6 +436,7 @@ C
 C
       parameter ( facdeg=180./3.1415927 )
       DATA IEVOLD/0/
+
 *                                                                               
 *                                                                               
 * *** Debug event and store tracks for drawing
@@ -489,7 +490,9 @@ C
         if(ipart.eq.1) call hfill(10,log10(1000.*gekin),0.,1.)
         if(ipart.eq.ikine) then
           tra=1.
+*
           call hfill(5,1000.*gekin,0.,1.)
+
           if((1-vect(4)).gt.1.e-6) then
             theta=acos(vect(4))
           else
@@ -558,14 +561,10 @@ C
        endif
       endif
          
-      if((r.le.YZABSO).and.(x.ge.X1ABSO).and.(x.le.X2ABSO)) then
-       if((ro.le.YZABSO).and.(xo.ge.X1ABSO).and.(xo.le.X2ABSO)) then
         IF(NUMED.EQ.1) THEN
           anbstep=anbstep+1.
           EDEP = EDEP+DESTEP
         ENDIF
-       endif
-      endif
 C
       ITOLD=IEVENT
       XO=X
@@ -581,6 +580,7 @@ C
 +SEQ,EDEPO
 +SEQ,GCONST
 *                                                                               
+      dimension runerr(2)
 * *** drawing
 *                                                          
 +self,if=-batch.
@@ -604,7 +604,6 @@ C
         SEDEP2=SEDEP2+EDEP**2
       stra=stra+tra
       sref=sref+ref
-*     detector noise,first edep in keV
       eein=1000.*EDEP
       CALL HFILL(2,eein,0.,1.0)
 C
