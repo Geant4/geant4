@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGun.cc,v 1.5 2001-07-13 15:01:53 gcosmo Exp $
+// $Id: G4ParticleGun.cc,v 1.6 2001-11-20 23:21:41 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 

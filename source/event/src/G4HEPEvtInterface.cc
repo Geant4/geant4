@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEPEvtInterface.cc,v 1.6 2001-07-13 15:01:53 gcosmo Exp $
+// $Id: G4HEPEvtInterface.cc,v 1.7 2001-11-20 23:21:41 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,13 +45,25 @@ G4HEPEvtInterface::G4HEPEvtInterface(char* evfile)
   else {
     G4Exception("G4HEPEvtInterface:: cannot open file.");
   }
+  G4ThreeVector zero;
+  particle_position = zero;
+  particle_time = 0.0;
+
 }
 
 G4HEPEvtInterface::G4HEPEvtInterface(G4String evfile)
 {
   const char* fn = evfile.data();
   inputFile.open((char*)fn);
-  fileName = evfile;
+  if (inputFile) {
+    fileName = evfile;
+  }
+  else {
+    G4Exception("G4HEPEvtInterface:: cannot open file.");
+  }
+  G4ThreeVector zero;
+  particle_position = zero;
+  particle_time = 0.0;
 }
 
 G4HEPEvtInterface::~G4HEPEvtInterface()
@@ -119,11 +131,7 @@ void G4HEPEvtInterface::GeneratePrimaryVertex(G4Event* evt)
   }
 
   // create G4PrimaryVertex object
-  G4double x0 = 0.;  // vertex point X
-  G4double y0 = 0.;  // vertex point Y
-  G4double z0 = 0.;  // vertex point Z
-  G4double t0 = 0.;  // vertex time
-  G4PrimaryVertex* vertex = new G4PrimaryVertex(x0,y0,z0,t0);
+  G4PrimaryVertex* vertex = new G4PrimaryVertex(particle_position,particle_time);
 
   // put initial particles to the vertex
   for( size_t ii=0; ii<HPlist.size(); ii++ )

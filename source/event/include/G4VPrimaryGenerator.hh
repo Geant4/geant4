@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPrimaryGenerator.hh,v 1.4 2001-07-11 09:58:50 gunter Exp $
+// $Id: G4VPrimaryGenerator.hh,v 1.5 2001-11-20 23:21:41 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -45,6 +45,21 @@ class G4VPrimaryGenerator
      virtual ~G4VPrimaryGenerator();
 
      virtual void GeneratePrimaryVertex(G4Event* evt) = 0;
+
+  protected:
+     G4ThreeVector         particle_position;
+     G4double              particle_time;
+
+  public:
+     G4ThreeVector GetParticlePosition()
+     { return particle_position; }
+     G4double GetParticleTime()
+     { return particle_time; }
+     void SetParticlePosition(G4ThreeVector aPosition)
+     { particle_position = aPosition; }
+     void SetParticleTime(G4double aTime)
+     { particle_time = aTime; }
+
 };
 
 #endif
