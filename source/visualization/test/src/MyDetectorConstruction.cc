@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyDetectorConstruction.cc,v 1.11 2000-05-02 13:51:19 johna Exp $
+// $Id: MyDetectorConstruction.cc,v 1.12 2000-05-22 07:24:48 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -179,12 +179,12 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
 
   G4IntersectionSolid* cyl1Ibox1 =
     new G4IntersectionSolid("cylinder1-intersection-box1", cylinder1, box1,
-		     rm1,G4ThreeVector(30.*cm,30.*cm,0.));
+		     rm1,G4ThreeVector(30.01*cm,30.01*cm,0.01*cm));
   G4cout << "cylinder1-intersection-box1 extent:\n"
 	 << cyl1Ibox1->GetExtent() << G4endl;
   G4IntersectionSolid* cyl1Ibox1Ibox2 =
     new G4IntersectionSolid("cylinder1-intersection-box1-intersection-box2", cyl1Ibox1, box2,
-		     rm2,G4ThreeVector(0.,40*cm,0.));
+		     rm2,G4ThreeVector(0.01,40.01*cm,0.01*cm));
   G4cout << "cylinder1-intersection-box1-intersection-box2 extent:\n"
 	 << cyl1Ibox1Ibox2->GetExtent() << G4endl;
   G4LogicalVolume * intersection_log
@@ -196,20 +196,12 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
                     "intersection_phys",intersection_log,experimentalHall_phys,
                     true,0);
 
-  G4Tubs* cylinder1s = new G4Tubs("Cylinder #1",20*cm,50*cm,30*cm,0,2*M_PI);
-  G4Box* box1s = new G4Box("Box #1",20*cm,30*cm,40*cm);
-  G4Box* box2s = new G4Box("Box #2",10*cm,20*cm,35*cm);
-  G4RotationMatrix* rm1s = new G4RotationMatrix;
-  rm1s->rotateZ(20*deg);
-  G4RotationMatrix* rm2s = new G4RotationMatrix;
-  rm2s->rotateZ(60*deg);
-
   G4SubtractionSolid* cyl1Sbox1 =
-    new G4SubtractionSolid("cylinder1-subtraction-box1", cylinder1s, box1s,
-		     rm1s,G4ThreeVector(30.*cm,30.*cm,0.));
+    new G4SubtractionSolid("cylinder1-subtraction-box1", cylinder1, box1,
+		     rm1,G4ThreeVector(30.*cm,30.*cm,1.*cm));
   G4SubtractionSolid* cyl1Sbox1Sbox2 =
-    new G4SubtractionSolid("cylinder1-subtraction-box1-subtraction-box2", cyl1Sbox1, box2s,
-		     rm2s,G4ThreeVector(0.,40*cm,0.));
+    new G4SubtractionSolid("cylinder1-subtraction-box1-subtraction-box2", cyl1Sbox1, box2,
+		     rm2,G4ThreeVector(0.,40*cm,2.*cm));
   G4LogicalVolume * subtraction_log
     = new G4LogicalVolume(cyl1Sbox1Sbox2,Ar,"subtraction_L",0,0,0);
   const G4VisAttributes* bool_green =
@@ -219,20 +211,12 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
                     "subtraction_phys",subtraction_log,experimentalHall_phys,
                     true,0);
 
-  G4Tubs* cylinder1u = new G4Tubs("Cylinder #1",20*cm,50*cm,30*cm,0,2*M_PI);
-  G4Box* box1u = new G4Box("Box #1",20*cm,30*cm,40*cm);
-  G4Box* box2u = new G4Box("Box #2",10*cm,20*cm,35*cm);
-  G4RotationMatrix* rm1u = new G4RotationMatrix;
-  rm1u->rotateZ(20*deg);
-  G4RotationMatrix* rm2u = new G4RotationMatrix;
-  rm2u->rotateZ(60*deg);
-
   G4UnionSolid* cyl1Ubox1 =
-    new G4UnionSolid("cylinder1-union-box1", cylinder1u, box1u,
-		     rm1u,G4ThreeVector(30.*cm,30.*cm,0.));
+    new G4UnionSolid("cylinder1-union-box1", cylinder1, box1,
+		     rm1,G4ThreeVector(30.*cm,30.*cm,1.*cm));
   G4UnionSolid* cyl1Ubox1Ubox2 =
-    new G4UnionSolid("cylinder1-union-box1-union-box2", cyl1Ubox1, box2u,
-		     rm2u,G4ThreeVector(0.,40*cm,0.));
+    new G4UnionSolid("cylinder1-union-box1-union-box2", cyl1Ubox1, box2,
+		     rm2,G4ThreeVector(0.,40*cm,2.*cm));
   G4LogicalVolume * union_log
     = new G4LogicalVolume(cyl1Ubox1Ubox2,Ar,"union_L",0,0,0);
   const G4VisAttributes* bool_blue =
