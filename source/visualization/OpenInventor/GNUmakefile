@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999-01-07 16:15:05 gunter Exp $
+# $Id: GNUmakefile,v 1.2 1999-04-15 15:27:58 johna Exp $
 
 name := G4OpenInventor
 
@@ -19,6 +19,7 @@ CPPFLAGS += -I$(G4BASE)/graphics_reps/include
 CPPFLAGS += -I$(G4BASE)/geometry/management/include
 CPPFLAGS += -I$(G4BASE)/geometry/volumes/include
 CPPFLAGS += -I$(G4BASE)/interfaces/common/include
+CPPFLAGS += -I$(G4BASE)/intercoms/include
 CPPFLAGS += -I$(G4BASE)/materials/include
 CPPFLAGS += -I$(G4BASE)/global/HEPRandom/include
 
