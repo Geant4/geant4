@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MedLinacDetectorConstruction.cc,v 1.5 2004-11-24 13:49:42 mpiergen Exp $
+// $Id: MedLinacDetectorConstruction.cc,v 1.6 2004-11-24 16:53:29 mpiergen Exp $
 //
 // Code developed by: M. Piergentili
 //
@@ -36,6 +36,7 @@
 #include "MedLinacHead.hh"
 #include "MedLinacDecorator.hh"
 #include "MedLinacTargetAndFilterDecorator.hh"
+#include "MedLinacMLCDecorator.hh"
 #include "G4CSGSolid.hh"
 #include "G4RotationMatrix.hh"
 #include "G4Transform3D.hh"
@@ -104,6 +105,7 @@ MedLinacDetectorConstruction::MedLinacDetectorConstruction(G4String SDName)
   detectorMessenger = new MedLinacDetectorMessenger(this);
   pHead = new MedLinacHead();
   decorator = new MedLinacTargetAndFilterDecorator(pHead);
+  decorator1 = new MedLinacMLCDecorator(pHead);
 }
 
 MedLinacDetectorConstruction* MedLinacDetectorConstruction::instance = 0;
@@ -123,8 +125,7 @@ MedLinacDetectorConstruction::~MedLinacDetectorConstruction()
   delete detectorMessenger; 
   delete pHead;
   delete decorator;
-  //delete decorator1;
-  //delete decorator2;
+  delete decorator1;
 }
 
 G4VPhysicalVolume* MedLinacDetectorConstruction::Construct()
@@ -435,6 +436,7 @@ void MedLinacDetectorConstruction::ConstructVolume()
 {
   pHead ->ConstructComponent(experimentalHall_phys,vacuumBlock_phys);
   decorator ->ConstructComponent( experimentalHall_phys,vacuumBlock_phys);
+  decorator1 ->ConstructComponent( experimentalHall_phys,vacuumBlock_phys);
 }
 
 void  MedLinacDetectorConstruction::ConstructSensitiveDetector()

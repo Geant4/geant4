@@ -23,6 +23,94 @@
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
 
+
+
+#    Multi Leaf
+/MLC/A/A1position 0. cm
+/MLC/A/A2position 0. cm
+/MLC/A/A3position 0. cm
+/MLC/A/A4position 0. cm
+/MLC/A/A5position 0. cm
+/MLC/A/A6position 0. cm
+/MLC/A/A7position 0. cm
+/MLC/A/A8position 0. cm
+/MLC/A/A9position 0. cm
+/MLC/A/A10position 0. cm
+/MLC/A/A11position 0. cm
+/MLC/A/A12position 0. cm
+/MLC/A/A13position 0. cm
+/MLC/A/A14position 0. cm
+/MLC/A/A15position 0. cm
+/MLC/A/A16position 0. cm
+/MLC/A/A17position 2.4 cm
+/MLC/A/A18position 2.7 cm
+/MLC/A/A19position 3.5 cm
+/MLC/A/A20position 4.0 cm
+/MLC/A/A21position 4.6 cm
+/MLC/A/A22position 5.0 cm
+/MLC/A/A23position 5.8 cm
+/MLC/A/A24position 6.0 cm
+/MLC/A/A25position 5.6 cm
+/MLC/A/A26position 0. cm
+/MLC/A/A27position 0. cm
+/MLC/A/A28position 0. cm
+/MLC/A/A29position 0. cm
+/MLC/A/A30position 0. cm
+/MLC/A/A31position 0. cm
+/MLC/A/A32position 0. cm
+/MLC/A/A33position 0. cm
+/MLC/A/A34position 0. cm
+/MLC/A/A35position 0. cm
+/MLC/A/A36position 0. cm
+/MLC/A/A37position 0. cm
+/MLC/A/A38position 0. cm
+/MLC/A/A39position 0. cm
+/MLC/A/A40position 0. cm
+
+
+/MLC/B/B1position 0. cm
+/MLC/B/B2position 0. cm
+/MLC/B/B3position 0. cm
+/MLC/B/B4position 0. cm
+/MLC/B/B5position 0. cm
+/MLC/B/B6position 0. cm
+/MLC/B/B7position 0. cm
+/MLC/B/B8position 0. cm
+/MLC/B/B9position 0. cm
+/MLC/B/B10position 0. cm
+/MLC/B/B11position 0. cm
+/MLC/B/B12position 0. cm
+/MLC/B/B13position 0. cm
+/MLC/B/B14position 0. cm
+/MLC/B/B15position 0. cm
+/MLC/B/B16position 0. cm
+/MLC/B/B17position 2.3 cm
+/MLC/B/B18position 2.8 cm
+/MLC/B/B19position 3.5 cm
+/MLC/B/B20position 4.4 cm
+/MLC/B/B21position 4.7 cm
+/MLC/B/B22position 5.4 cm
+/MLC/B/B23position 5.7 cm
+/MLC/B/B24position 5.8 cm
+/MLC/B/B25position 5.4 cm
+/MLC/B/B26position 0. cm
+/MLC/B/B27position 0. cm
+/MLC/B/B28position 0. cm
+/MLC/B/B29position 0. cm
+/MLC/B/B30position 0. cm
+/MLC/B/B31position 0. cm
+/MLC/B/B32position 0. cm
+/MLC/B/B33position 0. cm
+/MLC/B/B34position 0. cm
+/MLC/B/B35position 0. cm
+/MLC/B/B36position 0. cm
+/MLC/B/B37position 0. cm
+/MLC/B/B38position 0. cm
+/MLC/B/B39position 0. cm
+/MLC/B/B40position 0. cm
+
+
+
 /Jaws/X1/DistanceFromAxis -15. cm
 /Jaws/X2/DistanceFromAxis 15. cm
 /Jaws/Y1/DistanceFromAxis -15. cm
