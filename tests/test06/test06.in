@@ -4,7 +4,7 @@
 #   (G4PhotoAbsorption).
 #
 /control/verbose 2
-# /run/verbose 2
+/run/verbose 2
 /run/initialize
 /gun/direction 1 0 0
 #
