@@ -1,16 +1,49 @@
-// $Id: G4FlatSurface.hh,v 1.1 2003-11-12 15:43:00 link Exp $
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4FlatSurface.hh,v 1.2 2003-11-14 14:46:16 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// --------------------------------------------------------------------
+// GEANT 4 class header file
+//
+//
+// G4FlatSurface
+//
+// Class description:
+//
+//  Class describing a flat boundary surface for G4VSolid.
+
+// Author: 
+//   01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp)
+//
+// History:
+//   13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
+//                 from original version in Jupiter-2.5.02 application.
+// --------------------------------------------------------------------
 #ifndef __G4FLATSURFACE__
 #define __G4FLATSURFACE__
-//*************************************************************************
-//* --------------------
-//* G4FlatSurface
-//* --------------------
-//* (Description)
-//* 	Class for flat boundary surface for J4Solid.
-//*     
-//* (Update Record)
-//*	2002/08/01  K.Hoshina	Original version.
-//*************************************************************************
 
 #include "G4VSurface.hh"
 
@@ -18,14 +51,14 @@ class G4TwistedTubs;
 
 class G4FlatSurface : public G4VSurface
 {
-public:
+  public:  // with description
 
    G4FlatSurface(const G4String         &name,
                  const G4RotationMatrix &rot,
                  const G4ThreeVector    &tlate,
                  const G4ThreeVector    &n,
-                 const EAxis             axis1 = kRho,
-                 const EAxis             axis2 = kPhi,
+                 const EAxis             axis1 = kRho, // RHO axis !
+                 const EAxis             axis2 = kPhi, // PHI axis !
                        G4double          axis0min = -kInfinity,
                        G4double          axis1min = -kInfinity,
                        G4double          axis0max = kInfinity,
@@ -34,37 +67,33 @@ public:
    G4FlatSurface(const G4String            &name,
                        G4TwistedTubs       *solid,
                        G4int                handedness) ;
-                       
+
    virtual ~G4FlatSurface();
-   
-  virtual G4ThreeVector  GetNormal(const G4ThreeVector & /* xx */ , G4bool isGlobal = FALSE);
-
-   virtual G4int          DistanceToSurface(const G4ThreeVector &gp,
-                                            const G4ThreeVector &gv,
-                                                  G4ThreeVector  gxx[],
-                                                  G4double       distance[],
-                                                  G4int          areacode[],
-                                                  G4bool         isvalid[],
-                                                  EValidate      validate = kValidateWithTol);
+   virtual G4ThreeVector  GetNormal(const G4ThreeVector & /* xx */ ,
+                                          G4bool isGlobal = false);
+   virtual G4int DistanceToSurface(const G4ThreeVector &gp,
+                                   const G4ThreeVector &gv,
+                                         G4ThreeVector  gxx[],
+                                         G4double       distance[],
+                                         G4int          areacode[],
+                                         G4bool         isvalid[],
+                                         EValidate validate = kValidateWithTol);
                                                   
-   virtual G4int          DistanceToSurface(const G4ThreeVector &gp,
-                                                  G4ThreeVector  gxx[],
-                                                  G4double       distance[],
-                                                  G4int          areacode[]);
+   virtual G4int DistanceToSurface(const G4ThreeVector &gp,
+                                         G4ThreeVector  gxx[],
+                                         G4double       distance[],
+                                         G4int          areacode[]);
                                                   
-protected:                                                  
-   virtual G4int          GetAreaCode(const G4ThreeVector &xx, 
-                                      G4bool withTol = TRUE) ;
+  protected:  // with description
 
-private:
+   virtual G4int GetAreaCode(const G4ThreeVector &xx, 
+                                   G4bool withTol = true) ;
 
-   virtual void           SetCorners();
-   virtual void           SetBoundaries();
+  private:
 
-
-private:
+   virtual void SetCorners();
+   virtual void SetBoundaries();
    
 };
 
 #endif
-

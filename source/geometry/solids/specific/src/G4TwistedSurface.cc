@@ -1,20 +1,49 @@
-/*
- *  G4TwistedSurface.cc
- *  
- *
- *  Created by Kotoyo Hoshina on Thu Aug 01 2002.
- *  Copyright (c) 2001 __MyCompanyName__. All rights reserved.
- *
- */
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4TwistedSurface.cc,v 1.2 2003-11-14 14:46:16 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// --------------------------------------------------------------------
+// GEANT 4 class source file
+//
+//
+// G4TwistedSurface.cc
+//
+// Author: 
+//   01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp)
+//
+// History:
+//   13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
+//                 from original version in Jupiter-2.5.02 application.
+// --------------------------------------------------------------------
 
 #include "G4TwistedSurface.hh"
 #include "G4TwistedTubs.hh"
 
-//#define __SOLIDDEBUG__
-//#define __SOLIDDEBUGAREACODE__
-
 //=====================================================================
-//* constructor -------------------------------------------------------
+//* constructors ------------------------------------------------------
 
 G4TwistedSurface::G4TwistedSurface(const G4String         &name,
                                    const G4RotationMatrix &rot,
@@ -27,15 +56,15 @@ G4TwistedSurface::G4TwistedSurface(const G4String         &name,
                                          G4double          axis1min,
                                          G4double          axis0max,
                                          G4double          axis1max)
-                 :G4VSurface(name, rot, tlate, handedness, axis0, axis1, axis0min, 
-                             axis1min, axis0max, axis1max),
-                  fKappa(kappa)
+   : G4VSurface(name, rot, tlate, handedness, axis0, axis1,
+                axis0min, axis1min, axis0max, axis1max),
+     fKappa(kappa)
 {
    if (axis0 == kZAxis && axis1 == kXAxis) {
-       G4cerr << "JTwistedSurface::Constructor: Swap axis0 and axis1. abort. " << G4endl;
-       abort();
+      G4Exception("G4TwistedSurface::G4TwistedSurface()", "InvalidSetup",
+                  FatalException, "Should swap axis0 and axis1!");
    }
-   fIsValidNorm = FALSE;
+   fIsValidNorm = false;
    SetCorners();
    SetBoundaries();
 }
@@ -43,7 +72,7 @@ G4TwistedSurface::G4TwistedSurface(const G4String         &name,
 G4TwistedSurface::G4TwistedSurface(const G4String      &name,
                                          G4TwistedTubs *solid, 
                                          G4int          handedness)
-                 :G4VSurface(name, solid)
+   : G4VSurface(name, solid)
 {  
    fHandedness = handedness;   // +z = +ve, -z = -ve
    fAxis[0]    = kXAxis; // in local coordinate system
@@ -54,9 +83,11 @@ G4TwistedSurface::G4TwistedSurface(const G4String      &name,
    fAxisMax[1] = solid->GetEndZ(1);
 
    fKappa = solid->GetKappa();
-   fRot.rotateZ(fHandedness > 0 ? -0.5*(solid->GetDPhi()) : 0.5*(solid->GetDPhi()));
+   fRot.rotateZ( fHandedness > 0
+                 ? -0.5*(solid->GetDPhi())
+                 :  0.5*(solid->GetDPhi()) );
    fTrans.set(0, 0, 0);
-   fIsValidNorm = FALSE;
+   fIsValidNorm = false;
    
    SetCorners(solid);
    SetBoundaries();
@@ -65,18 +96,20 @@ G4TwistedSurface::G4TwistedSurface(const G4String      &name,
 
 //=====================================================================
 //* destructor --------------------------------------------------------
+
 G4TwistedSurface::~G4TwistedSurface()
 {
 }
 
 //=====================================================================
 //* GetNormal ---------------------------------------------------------
+
 G4ThreeVector G4TwistedSurface::GetNormal(const G4ThreeVector &tmpxx, 
                                                 G4bool isGlobal) 
 {
    // GetNormal returns a normal vector at a surface (or very close
    // to surface) point at tmpxx.
-   // If isGlobal=TRUE, it returns the normal in global coordinate.
+   // If isGlobal=true, it returns the normal in global coordinate.
    //
    G4ThreeVector xx;
    if (isGlobal) {
@@ -105,6 +138,7 @@ G4ThreeVector G4TwistedSurface::GetNormal(const G4ThreeVector &tmpxx,
 
 //=====================================================================
 //* DistanceToSurface -------------------------------------------------
+
 G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
                                           const G4ThreeVector &gv,
                                                 G4ThreeVector  gxx[],
@@ -174,7 +208,7 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
       for (i=0; i<2; i++) {
          distance[i] = kInfinity;
          areacode[i] = kOutside;
-         isvalid[i]  = FALSE;
+         isvalid[i]  = false;
          gxx[i].set(kInfinity, kInfinity, kInfinity);
       }
    }
@@ -183,15 +217,15 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
    G4ThreeVector v = ComputeLocalDirection(gv);
    G4ThreeVector xx[2]; 
 
-#ifdef __SOLIDDEBUG__
-   G4cerr << "      ~~~~~ G4TwistedSurface:DistanceToSurface(p,v):Start"
+#ifdef G4SPECSDEBUG
+   G4cout << "      ~~~~~ G4TwistedSurface::DistanceToSurface(p,v) Start"
           << G4endl;
-   G4cerr << "         Name : " << GetName() << G4endl;
-   G4cerr << "         gp   : " << gp << G4endl;
-   G4cerr << "         gv   : " << gv << G4endl;
-   G4cerr << "         p    : " << p << G4endl;
-   G4cerr << "         v    : " << v << G4endl;
-   G4cerr << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+   G4cout << "         Name : " << GetName() << G4endl;
+   G4cout << "         gp   : " << gp << G4endl;
+   G4cout << "         gv   : " << gv << G4endl;
+   G4cout << "         p    : " << p << G4endl;
+   G4cout << "         v    : " << v << G4endl;
+   G4cout << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
           << G4endl;
 #endif
 
@@ -206,16 +240,16 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
    if ((absvz < DBL_MIN) && (fabs(p.x() * v.y() - p.y() * v.x()) < DBL_MIN)) {
       // no intersection
 
-      isvalid[0] = FALSE;
+      isvalid[0] = false;
       fCurStat.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                                 isvalid[0], 0, validate, &gp, &gv);
-#ifdef __SOLIDDEBUG__
-      G4cerr << "      ~~~~~ G4TwistedSurface:DistanceToSurface(p,v):return"
+#ifdef G4SPECSDEBUG
+      G4cout << "      ~~~~~ G4TwistedSurface::DistanceToSurface(p,v) return"
              << G4endl;
-      G4cerr << "         p is on z-axis and v(transverse) is parallel to "
-             <<           "p(transverse). return 0." << G4endl; 
-      G4cerr << "         NAME     : " << GetName() <<  G4endl;
-      G4cerr << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      G4cout << "         p is on z-axis and v(transverse) is parallel to "
+             <<           "p(transverse)." << G4endl; 
+      G4cout << "         Name     : " << GetName() <<  G4endl;
+      G4cout << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
              << G4endl;
 #endif
       return 0;
@@ -231,14 +265,14 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
    G4double c = fKappa * p.x() * p.z() - p.y();
    G4double D = b * b - 4 * a * c;             // discriminant
 
-#ifdef __SOLIDDEBUG__
-   G4cerr << "      ~~~ G4TwistedSurface::DistanceToSurface: a,b,c,D = "
+#ifdef G4SPECSDEBUG
+   G4cout << "      ~~~ G4TwistedSurface::DistanceToSurface(): a,b,c,D"
           << G4endl;
-   G4cerr << "      //*   NAME    " << GetName() << G4endl;
-   G4cerr << "      //*   p, v    " << p << " , " << v << G4endl;
-   G4cerr << "      //*   a,b,c,D " << a << " " << b << " " 
-                                    << c << " " << D << G4endl;
-   G4cerr << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+   G4cout << "            Name    : " << GetName() << G4endl;
+   G4cout << "            p, v    : " << p << " , " << v << G4endl;
+   G4cout << "            a,b,c,D : " << a << " " << b << " " 
+                                      << c << " " << D << G4endl;
+   G4cout << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
           << G4endl;
 #endif 
 
@@ -254,69 +288,66 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
          if (validate == kValidateWithTol) {
             areacode[0] = GetAreaCode(xx[0]);
             if (!IsOutside(areacode[0])) {
-               if (distance[0] >= 0) isvalid[0] = TRUE;
+               if (distance[0] >= 0) isvalid[0] = true;
             }
          } else if (validate == kValidateWithoutTol) {
-            areacode[0] = GetAreaCode(xx[0], FALSE);
+            areacode[0] = GetAreaCode(xx[0], false);
             if (IsInside(areacode[0])) {
-               if (distance[0] >= 0) isvalid[0] = TRUE;
+               if (distance[0] >= 0) isvalid[0] = true;
             }
          } else { // kDontValidate                       
             // we must omit x(rho,z) = rho(z=0) < 0
             if (xx[0].x() > 0) {
                areacode[0] = kInside;
-               if (distance[0] >= 0) isvalid[0] = TRUE;
+               if (distance[0] >= 0) isvalid[0] = true;
             } else {
                distance[0] = kInfinity;
-               fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-                                              isvalid[0], 0, validate, &gp, &gv);
+               fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0],
+                                              areacode[0], isvalid[0],
+                                              0, validate, &gp, &gv);
 
-#ifdef __SOLIDDEBUG__
-               G4cerr 
-               << "      ~~~~~ G4TwistedSurface:DistanceToSurface(p,v):return" 
+#ifdef G4SPECSDEBUG
+               G4cout 
+               << "      ~~~~~ G4TwistedSurface::DistanceToSurface(p,v) return" 
                << G4endl;
-               G4cerr 
-               << "         xx is out of boundary. return 0. " << G4endl; 
-               G4cerr 
-               << "         NAME      : " << GetName()  << G4endl;
-               G4cerr 
+               G4cout 
+               << "         xx is out of boundary." << G4endl; 
+               G4cout 
+               << "         Name      : " << GetName()  << G4endl;
+               G4cout 
                << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-                      << G4endl;
+               << G4endl;
 #endif
-
                return 0;
-
             } 
          }
                  
          fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                                         isvalid[0], 1, validate, &gp, &gv);
 
-#ifdef __SOLIDDEBUG__
-         G4cerr 
-         << "      ~~~~~ G4TwistedSurface:DistanceToSurface(p,v):return" 
+#ifdef G4SPECSDEBUG
+         G4cout 
+         << "      ~~~~~ G4TwistedSurface::DistanceToSurface(p,v) return" 
                 << G4endl;
-         G4cerr << "         Single solution. " << G4endl;
-         G4cerr << "         NAME        : " << GetName() << G4endl;
-         G4cerr << "         xx[0]       : " << xx[0] << G4endl;
-         G4cerr << "         gxx[0]      : " << gxx[0] << G4endl;
-         G4cerr << "         dist[0]     : " << distance[0] << G4endl;
-         G4cerr << "         areacode[0] : " << hex << areacode[0] 
+         G4cout << "         Single solution. " << G4endl;
+         G4cout << "         Name        : " << GetName() << G4endl;
+         G4cout << "         xx[0]       : " << xx[0] << G4endl;
+         G4cout << "         gxx[0]      : " << gxx[0] << G4endl;
+         G4cout << "         dist[0]     : " << distance[0] << G4endl;
+         G4cout << "         areacode[0] : " << hex << areacode[0] 
                 << G4endl;
-         G4cerr << "         isvalid[0]  : " << dec << isvalid[0] 
+         G4cout << "         isvalid[0]  : " << dec << isvalid[0] 
                 << G4endl;
-         G4cerr 
+         G4cout 
          << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ "
                 << G4endl;
          if (isvalid[0] && GetSolid()->Inside(gxx[0]) != ::kSurface) {
-            G4cerr << "      ~~~~~ G4TwistedSurface:DistanceToSurface(p,v)" << G4endl;
-            G4cerr << "      valid return value is not on surface! abort." << G4endl; 
-            abort();
+           G4Exception("G4TwistedSurface::DistanceToSurface(p,v)",
+                       "InvalidSetup", FatalException,
+                       "Valid return value is not on surface!");
          } 
 #endif
-
          return 1;
-         
       } else {
          // if a=b=0 , v.y=0 and (v.x=0 && p.x=0) or (v.z=0 && p.z=0) .
          //    if v.x=0 && p.x=0, no intersection unless p is on z-axis
@@ -328,23 +359,21 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
          fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                                         isvalid[0], 0, validate, &gp, &gv);
 
-#ifdef __SOLIDDEBUG__
-         G4cerr 
-         << "      ~~~~~ G4TwistedSurface:DistanceToSurface(p,v):return"
+#ifdef G4SPECSDEBUG
+         G4cout 
+         << "      ~~~~~ G4TwistedSurface::DistanceToSurface(p,v) return"
                 << G4endl;
-         G4cerr << "         paralell to the surface or on surface but"
-                <<           " flying away opposit direction. return 0" 
+         G4cout << "         parallel to the surface or on surface but"
+                <<           " flying away in opposit direction." 
                 << G4endl; 
-         G4cerr << "         a, b, c  : " <<  a  << " , " << b << " , " 
+         G4cout << "         a, b, c  : " <<  a  << " , " << b << " , " 
                                           << c << G4endl; 
-         G4cerr << "         NAME     : " << GetName() << G4endl;
-         G4cerr 
+         G4cout << "         Name     : " << GetName() << G4endl;
+         G4cout 
          << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-                << G4endl;
+         << G4endl;
 #endif
-
          return 0;
-
       }
       
    } else if (D > DBL_MIN) {   
@@ -356,7 +385,7 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
       G4double      tmpdist[2] = {kInfinity, kInfinity};
       G4ThreeVector tmpxx[2];
       G4int         tmpareacode[2] = {kOutside, kOutside};
-      G4bool        tmpisvalid[2]  = {FALSE, FALSE};
+      G4bool        tmpisvalid[2]  = {false, false};
       G4int i;
 
       for (i=0; i<2; i++) {
@@ -378,20 +407,20 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
          if (validate == kValidateWithTol) {
             tmpareacode[i] = GetAreaCode(tmpxx[i]);
             if (!IsOutside(tmpareacode[i])) {
-               if (tmpdist[i] >= 0) tmpisvalid[i] = TRUE;
+               if (tmpdist[i] >= 0) tmpisvalid[i] = true;
                continue;
             }
          } else if (validate == kValidateWithoutTol) {
-            tmpareacode[i] = GetAreaCode(tmpxx[i], FALSE);
+            tmpareacode[i] = GetAreaCode(tmpxx[i], false);
             if (IsInside(tmpareacode[i])) {
-               if (tmpdist[i] >= 0) tmpisvalid[i] = TRUE;
+               if (tmpdist[i] >= 0) tmpisvalid[i] = true;
                continue;
             }
          } else { // kDontValidate
             // we must choose x(rho,z) = rho(z=0) > 0
             if (tmpxx[i].x() > 0) {
                tmpareacode[i] = kInside;
-               if (tmpdist[i] >= 0) tmpisvalid[i] = TRUE;
+               if (tmpdist[i] >= 0) tmpisvalid[i] = true;
                continue;
             } else {
                tmpdist[i] = kInfinity;
@@ -429,22 +458,22 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
       fCurStatWithV.SetCurrentStatus(1, gxx[1], distance[1], areacode[1],
                                      isvalid[1], 2, validate, &gp, &gv);
 
-#ifdef __SOLIDDEBUG__
-      G4cerr << "      ~~~~~ G4TwistedSurface:DistanceToSurface(p,v):return"
+#ifdef G4SPECSDEBUG
+      G4cout << "      ~~~~~ G4TwistedSurface::DistanceToSurface(p,v) return"
              << G4endl;
-      G4cerr << "         NAME,        : " << GetName() << " , " << i 
+      G4cout << "         Name,        : " << GetName() << " , " << i 
              << G4endl;
-      G4cerr << "         xx[0,1]      : " << xx[0] << " , " << xx[1] 
+      G4cout << "         xx[0,1]      : " << xx[0] << " , " << xx[1] 
              << G4endl;
-      G4cerr << "         gxx[0,1]     : " << gxx[0] << " , " << gxx[1] 
+      G4cout << "         gxx[0,1]     : " << gxx[0] << " , " << gxx[1] 
              << G4endl;
-      G4cerr << "         dist[0,1]    : " << distance[0] << " , " 
+      G4cout << "         dist[0,1]    : " << distance[0] << " , " 
                                            << distance[1] << G4endl;
-      G4cerr << "         areacode[0,1]: " << hex << areacode[0] << " , " 
+      G4cout << "         areacode[0,1]: " << hex << areacode[0] << " , " 
                                            << areacode[1] << dec << G4endl;
-      G4cerr << "         isvalid[0,1] : " << isvalid[0] << " , " 
+      G4cout << "         isvalid[0,1] : " << isvalid[0] << " , " 
                                            << isvalid[1] << G4endl;
-      G4cerr << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      G4cout << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
              << G4endl;
 #endif
 
@@ -457,11 +486,14 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
             G4ThreeVector xxonsurface(xx[k].x(), fKappa * fabs(xx[k].x()) * xx[k].z() , xx[k].z());
             G4double      deltaY  =  (xx[k] - xxonsurface).mag();
 
-#ifdef __SOLIDDEBUG__
-            G4cerr << "      ~~~~~ G4TwistedSurface:DistanceToSurface(p,v)" << G4endl;
-            G4cerr << "      valid return value is not on surface! abort. k=" << k << G4endl; 
-            G4cerr << " xxonsurface: " << xxonsurface << G4endl; 
-            G4cerr << " deltaY     : " << deltaY << G4endl; 
+#ifdef G4SPECSDEBUG
+            G4cout << "WARNING - G4TwistedSurface::DistanceToSurface(p,v)"
+                   << G4endl;
+            G4cout << "          Valid return value is not on surface!"
+                   << G4endl;
+            G4cout << "          k = " << k << G4endl; 
+            G4cout << "          xxonsurface: " << xxonsurface << G4endl; 
+            G4cout << "          deltaY     : " << deltaY << G4endl; 
 #endif
 
             G4int maxcount = 10;
@@ -470,34 +502,40 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
             G4ThreeVector last = deltaY; 
             for (l=0; l<maxcount; l++) {
                G4ThreeVector surfacenormal = GetNormal(xxonsurface); 
-               distance[k] = DistanceToPlaneWithV(p, v, xxonsurface, surfacenormal, xx[k]);
+               distance[k] = DistanceToPlaneWithV(p, v, xxonsurface,
+                                                  surfacenormal, xx[k]);
                deltaY      = (xx[k] - xxonsurface).mag();
                if (deltaY > lastdeltaY) {
                
                }
                gxx[k]      = ComputeGlobalPoint(xx[k]);
-               G4cerr << " loop count, deltaY, xxonsurface, xx : " << l << " " << deltaY << " " 
+               G4cout << " loop count, deltaY, xxonsurface, xx : "
+                      << l << " " << deltaY << " " 
                       << xxonsurface << " " << xx[k] << G4endl; 
 #if 0
                if (GetSolid()->Inside(gxx[k])) {
 #else
                if (deltaY <= 0.5*kCarTolerance) {
 #endif
-                  G4cerr << " gxx & distance replaced : gxx, distance " << gxx[k] << " " << distance[k] << G4endl; 
+                  G4cout << " gxx & distance replaced : gxx, distance "
+                         << gxx[k] << " " << distance[k] << G4endl; 
                   break;
                }
-               xxonsurface.set(xx[k].x(), fKappa * fabs(xx[k].x()) * xx[k].z() , xx[k].z());
+               xxonsurface.set(xx[k].x(),
+                               fKappa * fabs(xx[k].x()) * xx[k].z(),
+                               xx[k].z());
             }
             if (l == maxcount) {
-               G4cerr << "G4TwistedSurface:DistanceToSurface(p,v): iteration exceeded maxloop count " 
-                      << maxcount << ". abort." << G4endl;
-               abort(); 
+               G4cerr << "ERROR - G4TwistedSurface::DistanceToSurface(p,v)"
+                      << G4endl
+                      << "        maxloop count " << maxcount << G4endl;
+               G4Exception("G4FlatSurface::DistanceToSurface(p,v)",
+                           "InvalidSetup",  FatalException,
+                           "Exceeded maxloop count!");
             }
          } 
-      } 
-
+      }
       return 2;
-      
    } else {
       // if D<0, no solution
       // if D=0, just grazing the surfaces, return kInfinity
@@ -505,27 +543,25 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
       fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                                      isvalid[0], 0, validate, &gp, &gv);
 
-#ifdef __SOLIDDEBUG__
-      G4cerr << "      ~~~~~ G4TwistedSurface:DistanceToSurface(p,v):return"
+#ifdef G4SPECSDEBUG
+      G4cout << "      ~~~~~ G4TwistedSurface::DistanceToSurface(p,v) return"
              << G4endl;
-      G4cerr << "         no solution or just grazing the surface. "
+      G4cout << "         No solution or just grazing the surface. "
              <<           "return 0. " << G4endl; 
-      G4cerr << "         NAME     : " << GetName() << G4endl;
-      G4cerr << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      G4cout << "         Name     : " << GetName() << G4endl;
+      G4cout << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
              << G4endl;
 #endif
-
       return 0;
-
    }
-   G4cerr << "      G4TwistedSurface::DistanceToSurface(p,v) "
-          << "illigal operation!! abort"
-          << G4endl;
-   abort(); 
+   G4Exception("G4TwistedSurface::DistanceToSurface(p,v)",
+	       "InvalidCondition", FatalException, "Illegal operation !");
+   return 1;
 }
 
 //=====================================================================
 //* DistanceToSurface -------------------------------------------------
+
 G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
                                                 G4ThreeVector  gxx[],
                                                 G4double       distance[],
@@ -555,13 +591,13 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
    G4ThreeVector  xx;
    G4int          parity  = (fKappa >= 0 ? 1 : -1);
 
-#ifdef __SOLIDDEBUG__
-   G4cerr << "      ~~~~~ G4TwistedSurface:DistanceToSurface(p):Start"
+#ifdef G4SPECSDEBUG
+   G4cout << "      ~~~~~ G4TwistedSurface::DistanceToSurface(p) Start"
           << G4endl;
-   G4cerr << "         Name : " << GetName() << G4endl;
-   G4cerr << "         gp   : " << gp << G4endl;
-   G4cerr << "         p    : " << p << G4endl;
-   G4cerr << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+   G4cout << "         Name : " << GetName() << G4endl;
+   G4cout << "         gp   : " << gp << G4endl;
+   G4cout << "         p    : " << p << G4endl;
+   G4cout << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
           << G4endl;
 #endif
  
@@ -579,14 +615,15 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
       distfromlast[i] = (gp - lastgxx[i]).mag();
    } 
 
-   if ((gp - lastgxx[0]).mag() < halftol || (gp - lastgxx[1]).mag() < halftol) { 
+   if  ((gp - lastgxx[0]).mag() < halftol
+     || (gp - lastgxx[1]).mag() < halftol) { 
       // last winner, or last poststep point is on the surface.
       xx = p;
       distance[0] = 0;
       gxx[0] = gp;
 
-#ifdef __BOUNDARYCHECK__     
-      areacode[0] = GetAreaCode(xx, FALSE);
+#ifdef G4SPECSDEBUG     
+      areacode[0] = GetAreaCode(xx, false);
       if (IsInside(areacode[0])) {
          distance[0] = 0;
          gxx[0] = gp;
@@ -602,25 +639,23 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
       }
 #endif
 
-      G4bool isvalid = TRUE;
+      G4bool isvalid = true;
       fCurStat.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                              isvalid, 1, kDontValidate, &gp);
-#ifdef __SOLIDDEBUG__
-      G4cerr <<"      ~~~~~ G4TwistedSurface:DistanceToSurface(p):return" 
+#ifdef G4SPECSDEBUG
+      G4cout <<"      ~~~~~ G4TwistedSurface::DistanceToSurface(p) return" 
              << G4endl;
-      G4cerr <<"         I'm a last winner !" << G4endl;
-      G4cerr <<"         Otherwise last poststep point is on my surface."
+      G4cout <<"         I'm a last winner !" << G4endl;
+      G4cout <<"         Otherwise last poststep point is on my surface."
              << G4endl;
-      G4cerr <<"         NAME        : " << GetName() << G4endl;
-      G4cerr <<"         xx          : " << xx << G4endl;
-      G4cerr <<"         gxx[0]      : " << gxx[0] << G4endl;
-      G4cerr <<"         dist[0]     : " << distance[0] << G4endl;
-      G4cerr <<"      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      G4cout <<"         Name        : " << GetName() << G4endl;
+      G4cout <<"         xx          : " << xx << G4endl;
+      G4cout <<"         gxx[0]      : " << gxx[0] << G4endl;
+      G4cout <<"         dist[0]     : " << distance[0] << G4endl;
+      G4cout <<"      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
              << G4endl;
 #endif
-
       return 1;
-
    }
           
    if (p.getRho() == 0) { 
@@ -628,7 +663,7 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
       // We must return here, however, returning distance to x-minimum
       // boundary is better than return 0-distance.
       //
-      G4bool isvalid = TRUE;
+      G4bool isvalid = true;
       if (fAxis[0] == kXAxis && fAxis[1] == kZAxis) {
          distance[0] = DistanceToBoundary(kAxis0 & kAxisMin, xx, p);
          areacode[0] = kInside;
@@ -639,29 +674,27 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
       gxx[0] = ComputeGlobalPoint(xx);
       fCurStat.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                                 isvalid, 0, kDontValidate, &gp);
-#ifdef __SOLIDDEBUG__
-      G4cerr <<"      ~~~~~ G4TwistedSurface:DistanceToSurface(p):return"
+#ifdef G4SPECSDEBUG
+      G4cout <<"      ~~~~~ G4TwistedSurface::DistanceToSurface(p) return"
              << G4endl;
-      G4cerr <<"         p is on z-axis. return x-axis-min or 0 " 
+      G4cout <<"         p is on z-axis. return x-axis-min or 0 " 
              << G4endl;
-      G4cerr <<"         NAME        : " << GetName() << G4endl;
-      G4cerr <<"         dist[0]     : " << distance[0] << G4endl;
-      G4cerr <<"      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      G4cout <<"         Name        : " << GetName() << G4endl;
+      G4cout <<"         dist[0]     : " << distance[0] << G4endl;
+      G4cout <<"      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
              << G4endl;
 #endif
       return 1;
-      
    } 
 
    // 
    // special case end
    //
 
-
    // set corner points of quadrangle try area ...
 
-   G4ThreeVector A;       // foot of normal from p to boundary of kAxis0 & kAxisMin
-   G4ThreeVector C;       // foot of normal from p to boundary of kAxis0 & kAxisMax
+   G4ThreeVector A;  // foot of normal from p to boundary of kAxis0 & kAxisMin
+   G4ThreeVector C;  // foot of normal from p to boundary of kAxis0 & kAxisMax
    G4ThreeVector B;       // point on boundary kAxis0 & kAxisMax at z = A.z()
    G4ThreeVector D;       // point on boundary kAxis0 & kAxisMin at z = C.z()
    G4double      distToA; // distance from p to A
@@ -685,7 +718,6 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
          A = GetBoundaryAtPZ(kAxis0 & kAxisMin, p);
       }
    }
-   
 
    G4ThreeVector  d[2];     // direction vectors of boundary
    G4ThreeVector  x0[2];    // foot of normal from line to p 
@@ -716,8 +748,8 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
          distance[0] = 0;
          gxx[0] = gp;
 
-#ifdef __BOUNDARYCHECK__     
-         areacode[0] = GetAreaCode(xx, FALSE);
+#ifdef G4SPECSDEBUG     
+         areacode[0] = GetAreaCode(xx, false);
          if (IsInside(areacode[0])) {
             distance[0] = 0;
             gxx[0] = gp;
@@ -732,22 +764,21 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
             gxx[0] = ComputeGlobalPoint(xx);
          }
 #endif
-
-         G4bool isvalid = TRUE;
+         G4bool isvalid = true;
          fCurStat.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                                 isvalid, 1, kDontValidate, &gp);
-#ifdef __SOLIDDEBUG__
-         G4cerr <<"      ~~~~~ G4TwistedSurface:DistanceToSurface(p):return"
+#ifdef G4SPECSDEBUG
+         G4cout <<"      ~~~~~ G4TwistedSurface::DistanceToSurface(p) return"
                 << G4endl;
-         G4cerr <<"         I'm a last winner !" << G4endl;
-         G4cerr <<"         Otherwise last poststep point is on my surface."
+         G4cout <<"         I'm a last winner !" << G4endl;
+         G4cout <<"         Otherwise last poststep point is on my surface."
                 << G4endl;
-         G4cerr <<"         NAME        : " << GetName() << G4endl;
-         G4cerr <<"         xx          : " << xx << G4endl;
-         G4cerr <<"         gxx[0]      : " << gxx[0] << G4endl;
-         G4cerr <<"         dist[0]     : " << distance[0] << G4endl;
-         G4cerr <<"      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-             << G4endl;
+         G4cout <<"         Name        : " << GetName() << G4endl;
+         G4cout <<"         xx          : " << xx << G4endl;
+         G4cout <<"         gxx[0]      : " << gxx[0] << G4endl;
+         G4cout <<"         dist[0]     : " << distance[0] << G4endl;
+         G4cout <<"      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+                << G4endl;
 #endif
          return 1;
       } else {
@@ -756,17 +787,17 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
          distance[0] = DistanceToLine(p, A, d[0], xx);
          areacode[0] = kInside;
          gxx[0] = ComputeGlobalPoint(xx);
-         G4bool isvalid = TRUE;
+         G4bool isvalid = true;
          fCurStat.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                                 isvalid, 1, kDontValidate, &gp);
-#ifdef __SOLIDDEBUG__
-         G4cerr <<"      ~~~~~ G4TwistedSurface:DistanceToSurface(p):return"
+#ifdef G4SPECSDEBUG
+         G4cout <<"      ~~~~~ G4TwistedSurface::DistanceToSurface(p) return"
                 << G4endl;
-         G4cerr <<"         NAME        : " << GetName() << G4endl;
-         G4cerr <<"         xx          : " << xx << G4endl;
-         G4cerr <<"         gxx[0]      : " << gxx[0] << G4endl;
-         G4cerr <<"         dist[0]     : " << distance[0] << G4endl;
-         G4cerr <<"      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+         G4cout <<"         Name        : " << GetName() << G4endl;
+         G4cout <<"         xx          : " << xx << G4endl;
+         G4cout <<"         gxx[0]      : " << gxx[0] << G4endl;
+         G4cout <<"         dist[0]     : " << distance[0] << G4endl;
+         G4cout <<"      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
                 << G4endl;
 #endif
          return 1;
@@ -787,7 +818,6 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
    } else {
       // correct diagonal. nothing to do.  
    }
-
 
    // Now, we chose correct diaglnal.
    // First try. divide quadrangle into double triangle by diagonal and 
@@ -810,38 +840,36 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
       areacode[0] = kInside;
       gxx[0] = ComputeGlobalPoint(xx);
       distance[0] = 0;
-      G4bool isvalid = TRUE;
+      G4bool isvalid = true;
       fCurStat.SetCurrentStatus(0, gxx[0], distance[0] , areacode[0],
                                 isvalid, 1, kDontValidate, &gp);
-#ifdef __SOLIDDEBUG__
-      G4cerr <<"      ~~~~~ G4TwistedSurface:DistanceToSurface(p):return"
+#ifdef G4SPECSDEBUG
+      G4cout <<"      ~~~~~ G4TwistedSurface::DistanceToSurface(p) return"
              << G4endl;
-      G4cerr <<"         NAME        : " << GetName() << G4endl;
-      G4cerr <<"         xx          : " << xx << G4endl;
-      G4cerr <<"         gxx[0]      : " << gxx[0] << G4endl;
-      G4cerr <<"         dist[0]     : " << distance[0] << G4endl;
-      G4cerr <<"      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      G4cout <<"         Name        : " << GetName() << G4endl;
+      G4cout <<"         xx          : " << xx << G4endl;
+      G4cout <<"         gxx[0]      : " << gxx[0] << G4endl;
+      G4cout <<"         dist[0]     : " << distance[0] << G4endl;
+      G4cout <<"      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
              << G4endl;
 #endif
-
       return 1;
-
    }
 
-#ifdef __SOLIDDEBUG__
-   G4cerr << "      ~~~ G4TwistedSurface::DistanceToSurface(p):~~~~~~~"
+#ifdef G4SPECSDEBUG
+   G4cout << "      ~~~ G4TwistedSurface::DistanceToSurface(p) ~~~~~~~"
           << G4endl;
-   G4cerr << "      //*   NAME          : " << GetName() << G4endl;
-   G4cerr << "      //*   p             : " << p << G4endl; 
-   G4cerr << "      //*   A, C, parity  : " << A << " , " << C << " , " 
+   G4cout << "            Name          : " << GetName() << G4endl;
+   G4cout << "            p             : " << p << G4endl; 
+   G4cout << "            A, C, parity  : " << A << " , " << C << " , " 
                                             << parity << G4endl;
-   G4cerr << "      //*   nacb, ncad    : " << nacb << " , " << ncad 
+   G4cout << "            nacb, ncad    : " << nacb << " , " << ncad 
           << G4endl;
-   G4cerr << "      //*   xxacb, xxcad  : " << xxacb << " , " << xxcad 
+   G4cout << "            xxacb, xxcad  : " << xxacb << " , " << xxcad 
           << G4endl;
-   G4cerr << "      //*   distToACB, distToCAD  : " << distToACB << " , "
-                                                << distToCAD << G4endl; 
-   G4cerr << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+   G4cout << "            distToACB, distToCAD  : " << distToACB << " , "
+                                                    << distToCAD << G4endl; 
+   G4cout << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
           << G4endl;
 #endif
    
@@ -873,7 +901,7 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
          }
       }
 
-#ifdef __BOUNDARYCHECK__     
+#ifdef G4SPECSDEBUG     
       // boundary check 
       G4ThreeVector xxt(xx.x(), xx.y(), 0.);
       G4double      xxrc     = fabs(xx.x());
@@ -898,25 +926,25 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
    }
    areacode[0] = kInside;
    gxx[0]      = ComputeGlobalPoint(xx);
-   G4bool isvalid = TRUE;
+   G4bool isvalid = true;
    fCurStat.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                              isvalid, 1, kDontValidate, &gp);
-#ifdef __SOLIDDEBUG__
-      G4cerr <<"      ~~~~~ G4TwistedSurface:DistanceToSurface(p):return"
+#ifdef G4SPECSDEBUG
+      G4cout <<"      ~~~~~ G4TwistedSurface::DistanceToSurface(p) return"
              << G4endl;
-      G4cerr <<"         NAME        : " << GetName() << G4endl;
-      G4cerr <<"         xx          : " << xx << G4endl;
-      G4cerr <<"         gxx[0]      : " << gxx[0] << G4endl;
-      G4cerr <<"         dist[0]     : " << distance[0] << G4endl;
-      G4cerr <<"      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      G4cout <<"         Name        : " << GetName() << G4endl;
+      G4cout <<"         xx          : " << xx << G4endl;
+      G4cout <<"         gxx[0]      : " << gxx[0] << G4endl;
+      G4cout <<"         dist[0]     : " << distance[0] << G4endl;
+      G4cout <<"      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
              << G4endl;
 #endif
    return 1;
-   
 }
 
 //=====================================================================
-//* DistanceToPlane -------------------------------------------------
+//* DistanceToPlane ---------------------------------------------------
+
 G4double G4TwistedSurface::DistanceToPlane(const G4ThreeVector &p,
                                            const G4ThreeVector &A,
                                            const G4ThreeVector &B,
@@ -940,9 +968,9 @@ G4double G4TwistedSurface::DistanceToPlane(const G4ThreeVector &p,
 
    // if p is behind of both surfaces, abort.
    if (distToanm * distTocmn > 0 && distToanm < 0) {
-      G4cerr << "      G4TwistedSurface::DistanceToPlane: p is "
-             << "behind the surfaces. abort." << G4endl;
-      abort();
+     G4Exception("G4TwistedSurface::DistanceToPlane()",
+	         "InvalidCondition", FatalException,
+		 "Point p is behind the surfaces.");
    }
 
    // if p is on surface, return 0.
@@ -981,6 +1009,7 @@ G4double G4TwistedSurface::DistanceToPlane(const G4ThreeVector &p,
 
 //=====================================================================
 //* GetAreaCode -------------------------------------------------------
+
 G4int G4TwistedSurface::GetAreaCode(const G4ThreeVector &xx, 
                                           G4bool withTol)
 {
@@ -994,30 +1023,30 @@ G4int G4TwistedSurface::GetAreaCode(const G4ThreeVector &xx,
       G4int xaxis = 0;
       G4int zaxis = 1;
 
-#ifdef __SOLIDDEBUGAREACODE__
-      G4cerr << "         === G4TwistedSurface::GetAreaCode ============"
+#ifdef G4SPECSDEBUG
+      G4cout << "         === G4TwistedSurface::GetAreaCode() =========="
              << G4endl;
-      G4cerr << "         //#    fAxisMin,Max(xaxis)  : " 
+      G4cout << "                fAxisMin,Max(xaxis)  : " 
              << fAxisMin[xaxis] << " , " << fAxisMax[xaxis] << G4endl;
-      G4cerr << "         //#    fAxisMin,Max(zaxis)  : " 
+      G4cout << "                fAxisMin,Max(zaxis)  : " 
              << fAxisMin[zaxis] << " , " << fAxisMax[zaxis] << G4endl;
-      G4cerr << "         =============================================="
+      G4cout << "         =============================================="
              << G4endl;
 #endif
       
       if (withTol) {
 
-         G4bool isoutside   = FALSE;
+         G4bool isoutside   = false;
 
          // test boundary of xaxis
 
          if (xx.x() < fAxisMin[xaxis] + ctol) {
             areacode |= (kAxis0 & (kAxisX | kAxisMin)) | kBoundary; 
-            if (xx.x() <= fAxisMin[xaxis] - ctol) isoutside = TRUE;
+            if (xx.x() <= fAxisMin[xaxis] - ctol) isoutside = true;
 
          } else if (xx.x() > fAxisMax[xaxis] - ctol) {
             areacode |= (kAxis0 & (kAxisX | kAxisMax)) | kBoundary;
-            if (xx.x() >= fAxisMin[xaxis] + ctol)  isoutside = TRUE;
+            if (xx.x() >= fAxisMin[xaxis] + ctol)  isoutside = true;
          }
 
          // test boundary of z-axis
@@ -1027,17 +1056,17 @@ G4int G4TwistedSurface::GetAreaCode(const G4ThreeVector &xx,
 
             if   (areacode & kBoundary) areacode |= kCorner;  // xx is on the corner.
             else                        areacode |= kBoundary;
-            if (xx.z() <= fAxisMin[zaxis] - ctol) isoutside = TRUE;
+            if (xx.z() <= fAxisMin[zaxis] - ctol) isoutside = true;
 
          } else if (xx.z() > fAxisMax[zaxis] - ctol) {
             areacode |= (kAxis1 & (kAxisZ | kAxisMax));
 
             if   (areacode & kBoundary) areacode |= kCorner;  // xx is on the corner.
             else                        areacode |= kBoundary; 
-            if (xx.z() >= fAxisMax[zaxis] + ctol) isoutside = TRUE;
+            if (xx.z() >= fAxisMax[zaxis] + ctol) isoutside = true;
          }
 
-         // if isoutside = TRUE, clear inside bit.             
+         // if isoutside = true, clear inside bit.             
          // if not on boundary, add axis information.             
          
          if (isoutside) {
@@ -1074,20 +1103,18 @@ G4int G4TwistedSurface::GetAreaCode(const G4ThreeVector &xx,
             areacode |= (kAxis0 & kAxisX) | (kAxis1 & kAxisZ);
          }           
       }
-
       return areacode;
-
    } else {
-
-      G4cerr << "          G4FlatSurface::GetAreaCode fAxis[0] = " << fAxis[0]
-             << " fAxis[1] = " << fAxis[1]
-             << " is yet implemented. Write the code yourself." << G4endl;
-      abort();
-   }   
+      G4Exception("G4TwistedSurface::GetAreaCode()",
+	          "NotImplemented", FatalException,
+                  "Feature NOT implemented !");
+   }
+   return areacode;
 }
 
 //=====================================================================
 //* SetCorners(solid) -------------------------------------------------
+
 void G4TwistedSurface::SetCorners(G4TwistedTubs *solid)
 {
    // Set Corner points in local coodinate.   
@@ -1136,24 +1163,28 @@ void G4TwistedSurface::SetCorners(G4TwistedTubs *solid)
       SetCorner(kCorner0Min1Max, x, y, z);
 
    } else {
-      G4cerr << "G4FlatSurface::SetCorners fAxis[0] = " << fAxis[0]
-      << " fAxis[1] = " << fAxis[1]
-      << " is yet implemented. Write the code yourself." << G4endl;
-      abort();
+      G4cerr << "ERROR - G4FlatSurface::SetCorners()" << G4endl
+             << "        fAxis[0] = " << fAxis[0] << G4endl
+             << "        fAxis[1] = " << fAxis[1] << G4endl;
+      G4Exception("G4TwistedSurface::SetCorners()",
+	          "NotImplemented", FatalException,
+                  "Feature NOT implemented !");
    }
 }
 
 //=====================================================================
 //* SetCorners() ------------------------------------------------------
+
 void G4TwistedSurface::SetCorners()
 {
-   G4cerr << "G4FlatSurface::SetCorners" 
-   << " is yet implemented. Write the code yourself." << G4endl;
-   abort();
+   G4Exception("G4TwistedSurface::SetCorners()",
+	       "NotImplemented", FatalException,
+               "Method NOT implemented !");
 }
 
 //=====================================================================
-//* SetBoundaries() ------------------------------------------------------
+//* SetBoundaries() ---------------------------------------------------
+
 void G4TwistedSurface::SetBoundaries()
 {
    // Set direction-unit vector of boundary-lines in local coodinate. 
@@ -1187,10 +1218,12 @@ void G4TwistedSurface::SetBoundaries()
                   GetCorner(kCorner0Min1Max), kAxisX);
                   
    } else {
-      G4cerr << "G4FlatSurface::SetBoundaries fAxis[0] = " << fAxis[0]
-      << " fAxis[1] = " << fAxis[1]
-      << " is yet implemented. Write the code yourself." << G4endl;
-      abort();
+      G4cerr << "ERROR - G4FlatSurface::SetBoundaries()" << G4endl
+             << "        fAxis[0] = " << fAxis[0] << G4endl
+             << "        fAxis[1] = " << fAxis[1] << G4endl;
+      G4Exception("G4TwistedSurface::SetCorners()",
+	          "NotImplemented", FatalException,
+                  "Feature NOT implemented !");
    }
 }
 

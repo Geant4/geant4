@@ -1,19 +1,49 @@
- /*
- *  G4FlatSurface.cc
- *  
- *
- *  Created by Kotoyo Hoshina on Thu Aug 01 2002.
- *
- */
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4FlatSurface.cc,v 1.2 2003-11-14 14:46:16 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// --------------------------------------------------------------------
+// GEANT 4 class source file
+//
+//
+// G4FlatSurface.cc
+//
+// Author: 
+//   01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp)
+//
+// History:
+//   13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
+//                 from original version in Jupiter-2.5.02 application.
+// --------------------------------------------------------------------
 
 #include "G4FlatSurface.hh"
 #include "G4TwistedTubs.hh"
 
-//#define __SOLIDDEBUG__
-//#define __SOLIDDEBUGAREACODE__
-
 //=====================================================================
-//* constructor -------------------------------------------------------
+//* constructors ------------------------------------------------------
 
 G4FlatSurface::G4FlatSurface(const G4String         &name,
                              const G4RotationMatrix &rot,
@@ -25,17 +55,17 @@ G4FlatSurface::G4FlatSurface(const G4String         &name,
                                    G4double          axis1min,
                                    G4double          axis0max,
                                    G4double          axis1max )
-              :G4VSurface(name, rot, tlate, 0, axis0, axis1, axis0min, axis1min,
-                          axis0max, axis1max)
+  : G4VSurface(name, rot, tlate, 0, axis0, axis1,
+               axis0min, axis1min, axis0max, axis1max)
 {   
    if (axis0 == kPhi && axis1 == kRho) {
-      G4cerr << "G4FlatSurface::Constructor: Swap axis0 and axis1. abort. " << G4endl;
-      abort();
+      G4Exception("G4FlatSurface::G4FlatSurface()", "InvalidSetup",
+                  FatalException, "Should swap axis0 and axis1!");
    }
    
    G4ThreeVector normal = rot.inverse()*n;
    fCurrentNormal.normal = normal.unit();   // in local coordinate system
-   fIsValidNorm = TRUE;
+   fIsValidNorm = true;
 
    SetCorners();
    SetBoundaries();
@@ -44,7 +74,7 @@ G4FlatSurface::G4FlatSurface(const G4String         &name,
 G4FlatSurface::G4FlatSurface(const G4String      &name,
                                    G4TwistedTubs *solid,
                                    G4int          handedness) 
-              :G4VSurface(name, solid)
+   : G4VSurface(name, solid)
 {   
    fHandedness = handedness;   // +z = +ve, -z = -ve
    fAxis[0]    = kRho;         // in local coordinate system
@@ -58,7 +88,7 @@ G4FlatSurface::G4FlatSurface(const G4String      &name,
          // Unit vector, in local coordinate system
    fRot.rotateZ(solid->GetEndPhi(i));
    fTrans.set(0, 0, solid->GetEndZ(i));
-   fIsValidNorm = TRUE;
+   fIsValidNorm = true;
 
    SetCorners();
    SetBoundaries();
@@ -66,12 +96,14 @@ G4FlatSurface::G4FlatSurface(const G4String      &name,
 
 //=====================================================================
 //* destructor --------------------------------------------------------
+
 G4FlatSurface::~G4FlatSurface()
 {
 }
 
 //=====================================================================
 //* GetNormal ---------------------------------------------------------
+
 G4ThreeVector G4FlatSurface::GetNormal(const G4ThreeVector & /* xx */ , 
                                              G4bool isGlobal)
 {
@@ -83,7 +115,8 @@ G4ThreeVector G4FlatSurface::GetNormal(const G4ThreeVector & /* xx */ ,
 }
 
 //=====================================================================
-//* DistanceToSurface(p, v) ------------------------------------------
+//* DistanceToSurface(p, v) -------------------------------------------
+
 G4int G4FlatSurface::DistanceToSurface(const G4ThreeVector &gp,
                                        const G4ThreeVector &gv,
                                              G4ThreeVector  gxx[],
@@ -109,7 +142,7 @@ G4int G4FlatSurface::DistanceToSurface(const G4ThreeVector &gp,
       for (i=0; i<2; i++) {
          distance[i] = kInfinity;
          areacode[i] = kOutside;
-         isvalid[i]  = FALSE;
+         isvalid[i]  = false;
          gxx[i].set(kInfinity, kInfinity, kInfinity);
       }
    }
@@ -117,15 +150,15 @@ G4int G4FlatSurface::DistanceToSurface(const G4ThreeVector &gp,
    G4ThreeVector p = ComputeLocalPoint(gp);
    G4ThreeVector v = ComputeLocalDirection(gv);
 
-#ifdef __SOLIDDEBUG__
-   G4cerr << "      ~~~~~ G4FlatSurface:DistanceToSurface(p,v) : Start" 
+#ifdef G4SPECSDEBUG
+   G4cout << "      ~~~~~ G4FlatSurface:DistanceToSurface(p,v) : Start" 
           << G4endl;
-   G4cerr << "         Name : " << GetName() << G4endl;
-   G4cerr << "         gp   : " << gp << G4endl;
-   G4cerr << "         gv   : " << gv << G4endl;
-   G4cerr << "         p    : " << p << G4endl;
-   G4cerr << "         v    : " << v << G4endl;
-   G4cerr << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" 
+   G4cout << "         Name : " << GetName() << G4endl;
+   G4cout << "         gp   : " << gp << G4endl;
+   G4cout << "         gv   : " << gv << G4endl;
+   G4cout << "         p    : " << p << G4endl;
+   G4cout << "         v    : " << v << G4endl;
+   G4cout << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" 
           << G4endl;
 #endif    
  
@@ -142,60 +175,51 @@ G4int G4FlatSurface::DistanceToSurface(const G4ThreeVector &gp,
       if (validate == kValidateWithTol) {
          areacode[0] = GetAreaCode(xx);
          if (!IsOutside(areacode[0])) {
-            isvalid[0] = TRUE;
+            isvalid[0] = true;
          }
       } else if (validate == kValidateWithoutTol) {
-         areacode[0] = GetAreaCode(xx, FALSE);
+         areacode[0] = GetAreaCode(xx, false);
          if (IsInside(areacode[0])) {
-            isvalid[0] = TRUE;
+            isvalid[0] = true;
          }
       } else { // kDontValidate
          areacode[0] = kInside;
-         isvalid[0] = TRUE;
+         isvalid[0] = true;
       }
 
-#ifdef __SOLIDDEBUG__
-      G4cerr << "      ~~~~~ G4FlatSurface:DistanceToSurface(p,v) : return"
-             << G4endl;
-      G4cerr << "         P is on surface. return 0. " << G4endl;
-      G4cerr << "         NAME        : " << GetName() << G4endl;
-      G4cerr << "         xx          : " << xx << G4endl;
-      G4cerr << "         gxx[0]      : " << gxx[0] << G4endl;
-      G4cerr << "         dist[0]     : " << distance[0] << G4endl;
-      G4cerr << "         areacode[0] : " << areacode[0] << G4endl;
-      G4cerr << "         isvalid[0]  : " << isvalid[0]  << G4endl;
-      G4cerr << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" 
-             << G4endl;
+#ifdef G4SPECSDEBUG
+      G4cerr << "ERROR - G4FlatSurface::DistanceToSurface(p,v)" << G4endl;
+      G4cerr << "        Point p is on surface." << G4endl;
+      G4cerr << "        Name        : " << GetName() << G4endl;
+      G4cerr << "        xx          : " << xx << G4endl;
+      G4cerr << "        gxx[0]      : " << gxx[0] << G4endl;
+      G4cerr << "        dist[0]     : " << distance[0] << G4endl;
+      G4cerr << "        areacode[0] : " << areacode[0] << G4endl;
+      G4cerr << "        isvalid[0]  : " << isvalid[0]  << G4endl;
       if (isvalid[0] && GetSolid()->Inside(gxx[0]) != ::kSurface) {
-         G4cerr << " valid return value is not on surface! abort." << G4endl;
-         abort();
+         G4Exception("G4FlatSurface::DistanceToSurface(p,v)", "InvalidSetup",
+	             FatalException, "Valid return value is not on surface!");
       }
 #endif
-
       return 1;
-
    }
    //
    // special case end
    //
-
    
    if (v.z() == 0) { 
 
       fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0], 
                                      isvalid[0], 0, validate, &gp, &gv);
 
-#ifdef __SOLIDDEBUG__
-      G4cerr << "      ~~~~~ G4FlatSurface:DistanceToSurface(p,v) : return"
-             << G4endl;
-      G4cerr << "         v.z = 0. no intersection. return 0. " << G4endl; 
-      G4cerr << "         NAME     : " << GetName() << G4endl;
-      G4cerr << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" 
-             << G4endl;
-#endif   
-
+#ifdef G4SPECSDEBUG
+      G4cerr << "WARNING - G4FlatSurface:DistanceToSurface(p,v)" << G4endl;
+      G4cerr << "          v.z=0. No intersection detected." << G4endl; 
+      G4cerr << "          Name     : " << GetName() << G4endl;
+      G4Exception("G4FlatSurface::DistanceToSurface(p,v)", "ZeroValue",
+	          JustWarning, "No intersection detected!");
+#endif
       return 0;
-
    }
    
    distance[0] = - (p.z() / v.z());
@@ -206,44 +230,40 @@ G4int G4FlatSurface::DistanceToSurface(const G4ThreeVector &gp,
    if (validate == kValidateWithTol) {
       areacode[0] = GetAreaCode(xx);
       if (!IsOutside(areacode[0])) {
-         if (distance[0] >= 0) isvalid[0] = TRUE;
+         if (distance[0] >= 0) isvalid[0] = true;
       }
    } else if (validate == kValidateWithoutTol) {
-      areacode[0] = GetAreaCode(xx, FALSE);
+      areacode[0] = GetAreaCode(xx, false);
       if (IsInside(areacode[0])) {
-         if (distance[0] >= 0) isvalid[0] = TRUE;
+         if (distance[0] >= 0) isvalid[0] = true;
       }
    } else { // kDontValidate
       areacode[0] = kInside;
-         if (distance[0] >= 0) isvalid[0] = TRUE;
+         if (distance[0] >= 0) isvalid[0] = true;
    }
 
    fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                                   isvalid[0], 1, validate, &gp, &gv);
 
-#ifdef __SOLIDDEBUG__
-   G4cerr <<"      ~~~~~ G4FlatSurface:DistanceToSurface(p,v) : return"
-          << G4endl;
-   G4cerr <<"         NAME        : " << GetName() << G4endl;
-   G4cerr <<"         xx          : " << xx << G4endl;
-   G4cerr <<"         gxx[0]      : " << gxx[0] << G4endl;
-   G4cerr <<"         dist[0]     : " << distance[0] << G4endl;
-   G4cerr <<"         areacode[0] : " << areacode[0] << G4endl;
-   G4cerr <<"         isvalid[0]  : " << isvalid[0]  << G4endl;
-   G4cerr <<"      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" 
-          << G4endl;
+#ifdef G4SPECSDEBUG
+   G4cerr << "ERROR - G4FlatSurface::DistanceToSurface(p,v)" << G4endl;
+   G4cerr << "        Name        : " << GetName() << G4endl;
+   G4cerr << "        xx          : " << xx << G4endl;
+   G4cerr << "        gxx[0]      : " << gxx[0] << G4endl;
+   G4cerr << "        dist[0]     : " << distance[0] << G4endl;
+   G4cerr << "        areacode[0] : " << areacode[0] << G4endl;
+   G4cerr << "        isvalid[0]  : " << isvalid[0]  << G4endl;
    if (isvalid[0] && GetSolid()->Inside(gxx[0]) != ::kSurface) {
-      G4cerr << " valid return value is not on surface! abort." << G4endl;
-      abort();
+      G4Exception("G4FlatSurface::DistanceToSurface(p,v)", "InvalidSetup",
+	          FatalException, "Valid return value is not on surface!");
    }
 #endif
-
    return 1;
-
 }
 
 //=====================================================================
 //* DistanceToSurface(p) ----------------------------------------------
+
 G4int G4FlatSurface::DistanceToSurface(const G4ThreeVector &gp,
                                              G4ThreeVector  gxx[],
                                              G4double       distance[],
@@ -286,8 +306,8 @@ G4int G4FlatSurface::DistanceToSurface(const G4ThreeVector &gp,
       xx.set(p.x(), p.y(), 0);  
    }
 
-#ifdef __BOUNDARYCHECK__
-   areacode[0] = GetAreaCode(xx, FALSE);
+#ifdef G4SPECSDEBUG
+   areacode[0] = GetAreaCode(xx, false);
    if (!IsInside(areacode[0])) {
       // xx is out of boundary. 
       // return distance to boundary or corner.
@@ -302,7 +322,7 @@ G4int G4FlatSurface::DistanceToSurface(const G4ThreeVector &gp,
 
    gxx[0] = ComputeGlobalPoint(xx);
    areacode[0] = kInside;
-   G4bool isvalid = TRUE;
+   G4bool isvalid = true;
    fCurStat.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                              isvalid, 1, kDontValidate, &gp);
    return 1;
@@ -311,6 +331,7 @@ G4int G4FlatSurface::DistanceToSurface(const G4ThreeVector &gp,
 
 //=====================================================================
 //* GetAreaCode -------------------------------------------------------
+
 G4int G4FlatSurface::GetAreaCode(const G4ThreeVector &xx, 
                                        G4bool withTol)
 {
@@ -330,19 +351,19 @@ G4int G4FlatSurface::GetAreaCode(const G4ThreeVector &xx,
       
       if (withTol) {
 
-         G4bool isoutside = FALSE;
+         G4bool isoutside = false;
 
          // test boundary of rho-axis
 
          if (xx.getRho() <= fAxisMin[rhoaxis] + rtol) {
 
             areacode |= (kAxis0 & (kAxisRho | kAxisMin)) | kBoundary; // rho-min
-            if (xx.getRho() < fAxisMin[rhoaxis] - rtol) isoutside = TRUE; 
+            if (xx.getRho() < fAxisMin[rhoaxis] - rtol) isoutside = true; 
             
          } else if (xx.getRho() >= fAxisMax[rhoaxis] - rtol) {
 
             areacode |= (kAxis0 & (kAxisRho | kAxisMax)) | kBoundary; // rho-max
-            if (xx.getRho() > fAxisMax[rhoaxis] + rtol) isoutside = TRUE; 
+            if (xx.getRho() > fAxisMax[rhoaxis] + rtol) isoutside = true; 
 
          }         
          
@@ -354,7 +375,7 @@ G4int G4FlatSurface::GetAreaCode(const G4ThreeVector &xx,
             if   (areacode & kBoundary) areacode |= kCorner;  // xx is on the corner.
             else                        areacode |= kBoundary;
 
-            if (AmIOnLeftSide(xx, dphimin) > 0) isoutside = TRUE; 
+            if (AmIOnLeftSide(xx, dphimin) > 0) isoutside = true; 
 
          } else if (AmIOnLeftSide(xx, dphimax) <= 0) {    // xx is on dphimax
 
@@ -362,11 +383,11 @@ G4int G4FlatSurface::GetAreaCode(const G4ThreeVector &xx,
             if   (areacode & kBoundary) areacode |= kCorner;  // xx is on the corner.
             else                        areacode |= kBoundary;
 
-            if (AmIOnLeftSide(xx, dphimax) < 0) isoutside = TRUE; 
+            if (AmIOnLeftSide(xx, dphimax) < 0) isoutside = true; 
 
          }
          
-         // if isoutside = TRUE, clear inside bit.
+         // if isoutside = true, clear inside bit.
          // if not on boundary, add axis information. 
 
          if (isoutside) {
@@ -388,12 +409,12 @@ G4int G4FlatSurface::GetAreaCode(const G4ThreeVector &xx,
          
          // out of boundary of phi-axis
 
-         if (AmIOnLeftSide(xx, dphimin, FALSE) >= 0) {       // xx is leftside or
+         if (AmIOnLeftSide(xx, dphimin, false) >= 0) {       // xx is leftside or
             areacode |= (kAxis1 & (kAxisPhi | kAxisMin)) ;   // boundary of dphimin
-            if   (areacode & kBoundary) areacode |= kCorner;  // xx is on the corner.
+            if   (areacode & kBoundary) areacode |= kCorner; // xx is on the corner.
             else                        areacode |= kBoundary;
 
-         } else if (AmIOnLeftSide(xx, dphimax, FALSE) <= 0) { // xx is rightside or
+         } else if (AmIOnLeftSide(xx, dphimax, false) <= 0) { // xx is rightside or
             areacode |= (kAxis1 & (kAxisPhi | kAxisMax)) ;    // boundary of dphimax
             if   (areacode & kBoundary) areacode |= kCorner;  // xx is on the corner.
             else                        areacode |= kBoundary;
@@ -405,21 +426,22 @@ G4int G4FlatSurface::GetAreaCode(const G4ThreeVector &xx,
          }
 
       }
-
       return areacode;
-
    } else {
 
-      G4cerr << "      G4FlatSurface::GetAreaCode(withTol) fAxis[0] = " << fAxis[0]
-             << " fAxis[1] = " << fAxis[1]
-             << " is yet implemented. Write the code yourself." << G4endl;
-      abort();
+      G4cerr << "ERROR - G4FlatSurface::GetAreaCode()" << G4endl
+             << "        fAxis[0] = " << fAxis[0] << G4endl
+             << "        fAxis[1] = " << fAxis[1] << G4endl;
+      G4Exception("G4FlatSurface::GetAreaCode()", "NotImplemented",
+	          FatalException, "Feature NOT implemented !");
    }
+   return areacode;
 }
                                       
                                            
 //=====================================================================
-//* SetCorners ---------------------------------------------------
+//* SetCorners --------------------------------------------------------
+
 void G4FlatSurface::SetCorners()
 {
    // Set Corner points in local coodinate.
@@ -452,15 +474,17 @@ void G4FlatSurface::SetCorners()
          SetCorner(kCorner0Min1Max, x, y, z);
        
    } else {
-      G4cerr << "      G4FlatSurface::SetCorners fAxis[0] = " << fAxis[0]
-             << " fAxis[1] = " << fAxis[1]
-             << " is yet implemented. Write the code yourself." << G4endl;
-      abort();   
+      G4cerr << "ERROR - G4FlatSurface::SetCorners()" << G4endl
+             << "        fAxis[0] = " << fAxis[0] << G4endl
+             << "        fAxis[1] = " << fAxis[1] << G4endl;
+      G4Exception("G4FlatSurface::SetCorners()", "NotImplemented",
+	          FatalException, "Feature NOT implemented !");
    }
 }
 
 //=====================================================================
-//* SetBoundaries() -------------------------------------------
+//* SetBoundaries() ---------------------------------------------------
+
 void G4FlatSurface::SetBoundaries()
 {
    // Set direction-unit vector of phi-boundary-lines in local coodinate.
@@ -492,26 +516,11 @@ void G4FlatSurface::SetBoundaries()
       direction = direction.unit();
       SetBoundary(kAxis1 & (kAxisRho | kAxisMax), direction,
                   GetCorner(kCorner0Min1Max), kAxisPhi);
-                                       
    } else {
-      G4cerr << "      G4FlatSurface::SetBoundaries fAxis[0] = " << fAxis[0] 
-             << " fAxis[1] = " << fAxis[1]
-             << " is yet implemented. Write the code yourself." << G4endl;
-      abort();
+      G4cerr << "ERROR - G4FlatSurface::SetBoundaries()" << G4endl
+             << "        fAxis[0] = " << fAxis[0] << G4endl
+             << "        fAxis[1] = " << fAxis[1] << G4endl;
+      G4Exception("G4FlatSurface::SetBoundaries()", "NotImplemented",
+	          FatalException, "Feature NOT implemented !");
    }
 }
-
-                                           
-                                           
-                                           
-                                           
-                                           
-                                           
-                                           
-                                           
-                                           
-                                           
-                                           
-                                           
-                                           
-

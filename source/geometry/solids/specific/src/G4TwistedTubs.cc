@@ -1,17 +1,45 @@
-// $Id: G4TwistedTubs.cc,v 1.1 2003-11-12 15:43:01 link Exp $
-//*************************************************************************
-//* --------------------
-//* G4TwistedTubs
-//* --------------------
-//* (Description)
-//* 	Class for describing his/her detector compornents.
-//*     
-//* (Update Record)
-//*	2002/07/26  K.Hoshina	Original version.
-//*************************************************************************
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4TwistedTubs.cc,v 1.2 2003-11-14 14:46:16 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// --------------------------------------------------------------------
+// GEANT 4 class source file
+//
+//
+// G4TwistedSurface.cc
+//
+// Author: 
+//   01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp)
+//
+// History:
+//   13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
+//                 from original version in Jupiter-2.5.02 application.
+// --------------------------------------------------------------------
 
 #include "G4TwistedTubs.hh"
-// #include "J4VComponent.hh"
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -27,23 +55,9 @@
 #include "G4NURBStube.hh"
 #include "G4NURBScylinder.hh"
 #include "G4NURBStubesector.hh"
-// #include "G4Timer.hh"
-
-
-//#define __SOLIDDEBUG__
-
-// ====================================================================
-//--------------------------------
-// constants & static value
-//--------------------------------
 
 //=====================================================================
-//---------------------
-// Class Description
-//---------------------
-
-//=====================================================================
-//* constructor -------------------------------------------------------
+//* constructors ------------------------------------------------------
 
 G4TwistedTubs::G4TwistedTubs(const G4String &pname,
                                    G4double  twistedangle,
@@ -51,13 +65,13 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
                                    G4double  endouterrad,
                                    G4double  halfzlen,
                                    G4double  dphi)
-              :G4VSolid(pname), fDPhi(dphi), 
-               fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0),
-               fFormerTwisted(0), fInnerHype(0), fOuterHype(0)
+   : G4VSolid(pname), fDPhi(dphi), 
+     fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0),
+     fFormerTwisted(0), fInnerHype(0), fOuterHype(0)
 {
    if (endinnerrad < DBL_MIN) {
-      G4cerr << "G4TwistedTubs: invalid endinnerrad" << G4endl;
-      abort();
+      G4Exception("G4TwistedTubs::G4TwistedTubs()", "InvalidSetup",
+                  FatalException, "Invalid end-inner-radius!");
    }
             
    G4double sinhalftwist = sin(0.5 * twistedangle);
@@ -74,22 +88,20 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
    SetFields(twistedangle, innerrad, outerrad, -halfzlen, halfzlen);
    CreateSurfaces();
    
-#ifdef __SOLIDDEBUG__
-
-   G4cerr << "G4TwistedTubs::constracter ===========================" << G4endl;
-   G4cerr << "   EndInnerRad(0,1)   : " << fEndInnerRadius[0]
+#ifdef G4SPECSDEBUG
+   G4cout << "G4TwistedTubs::G4TwistedTubs() =======================" << G4endl;
+   G4cout << "   EndInnerRad(0,1)   : " << fEndInnerRadius[0]
           << " " << fEndInnerRadius[1] << G4endl;
-   G4cerr << "   EndOuterRad(0,1)   : " << fEndOuterRadius[0]
+   G4cout << "   EndOuterRad(0,1)   : " << fEndOuterRadius[0]
           << " " << fEndOuterRadius[1] << G4endl;
-   G4cerr << "   EndZ(0,1)          : " << fEndZ[0] << " " << fEndZ[1] << G4endl;
-   G4cerr << "   Inner/Outer rad    : " << fInnerRadius << " "
+   G4cout << "   EndZ(0,1)          : " << fEndZ[0] << " " << fEndZ[1] << G4endl;
+   G4cout << "   Inner/Outer rad    : " << fInnerRadius << " "
           << fOuterRadius << G4endl;
-   G4cerr << "   Inner/Outer Stereo : " << fInnerStereo << " "
+   G4cout << "   Inner/Outer Stereo : " << fInnerStereo << " "
           << fOuterStereo << G4endl;
-   G4cerr << "   phitwist, deltaphi : " << fPhiTwist << " "
+   G4cout << "   phitwist, deltaphi : " << fPhiTwist << " "
           << fDPhi << G4endl;
-   G4cerr << "======================================================" << G4endl;
-   
+   G4cout << "======================================================" << G4endl;
 #endif
 }
 
@@ -105,10 +117,11 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
                 fFormerTwisted(0), fInnerHype(0), fOuterHype(0)
 {
 
-   if (!nseg) G4cerr << "G4TwistedTubs: invalid nseg" << G4endl;
+   if (!nseg) G4cerr << "ERROR - G4TwistedTubs::G4TwistedTubs()" << G4endl
+                     << "        Invalid nseg. nseg = " << nseg << G4endl;
    if (totphi == DBL_MIN || endinnerrad < DBL_MIN) {
-      G4cerr << "G4TwistedTubs: invalid totphi or endinnerrad" << G4endl;
-      abort();
+      G4Exception("G4TwistedTubs::G4TwistedTubs()", "InvalidSetup",
+                  FatalException, "Invalid total-phi or end-inner-radius!");
    }    
          
    G4double sinhalftwist = sin(0.5 * twistedangle);
@@ -125,7 +138,6 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
    fDPhi = totphi / nseg;
    SetFields(twistedangle, innerrad, outerrad, -halfzlen, halfzlen);
    CreateSurfaces();
-
 }
 
 G4TwistedTubs::G4TwistedTubs(const G4String &pname,
@@ -135,13 +147,13 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
                                    G4double  negativeEndz,
                                    G4double  positiveEndz,
                                    G4double  dphi)
-              :G4VSolid(pname), fDPhi(dphi),
-               fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0),
-               fFormerTwisted(0), fInnerHype(0), fOuterHype(0)
+   : G4VSolid(pname), fDPhi(dphi),
+     fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0),
+     fFormerTwisted(0), fInnerHype(0), fOuterHype(0)
 {
    if (innerrad < DBL_MIN) {
-      G4cerr << "G4TwistedTubs: invalid innerrad" << G4endl;
-      abort();
+      G4Exception("G4TwistedTubs::G4TwistedTubs()", "InvalidSetup",
+                  FatalException, "Invalid end-inner-radius!");
    }
                  
    SetFields(twistedangle, innerrad, outerrad, negativeEndz, positiveEndz);
@@ -160,10 +172,11 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
                 fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0),
                 fFormerTwisted(0), fInnerHype(0), fOuterHype(0)
 {
-   if (!nseg) G4cerr << "G4TwistedTubs: invalid nseg" << G4endl;
+   if (!nseg) G4cerr << "ERROR - G4TwistedTubs::G4TwistedTubs()" << G4endl
+                     << "        Invalid nseg. nseg = " << nseg << G4endl;
    if (totphi == DBL_MIN || innerrad < DBL_MIN) {
-      G4cerr << "G4TwistedTubs: invalid totphi or innerrad" << G4endl;
-      abort();
+      G4Exception("G4TwistedTubs::G4TwistedTubs()", "InvalidSetup",
+                  FatalException, "Invalid total-phi or end-inner-radius!");
    }
             
    fDPhi = totphi / nseg;
@@ -171,20 +184,17 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
    CreateSurfaces();
 }
 
-
 //=====================================================================
 //* destructor --------------------------------------------------------
 
 G4TwistedTubs::~G4TwistedTubs()
 {
-
    if (fLowerEndcap)   delete fLowerEndcap;
    if (fUpperEndcap)   delete fUpperEndcap;
    if (fLatterTwisted) delete fLatterTwisted;
    if (fFormerTwisted) delete fFormerTwisted;
    if (fInnerHype)     delete fInnerHype;
    if (fOuterHype)     delete fOuterHype;
-
 }
 
 //=====================================================================
@@ -194,9 +204,9 @@ void G4TwistedTubs::ComputeDimensions(G4VPVParameterisation* /* p */ ,
 				      const G4int            /* n  */ ,
 				      const G4VPhysicalVolume* /* pRep */ )
 {
-    G4cerr << "G4TwistedTubs::ComputeDimensions: G4TwistedTubs does not "
-    << "support Parameterisation. abort. " << G4endl;
-    abort();
+  G4Exception("G4TwistedTubs::ComputeDimensions()",
+              "NotSupported", FatalException,
+	      "G4TwistedTubs does not support Parameterisation.");
 }
 
 
@@ -270,7 +280,6 @@ G4bool G4TwistedTubs::CalculateExtent( const EAxis              axis,
   //      [2]---[5]---[6]---[3]      <--- inner radius
   //
 
-
   G4ClippablePolygon endPoly1, endPoly2;
   
   G4double phimax   = maxphi + 0.5*fDPhi;
@@ -333,12 +342,11 @@ G4bool G4TwistedTubs::CalculateExtent( const EAxis              axis,
           G4ThreeVector(fInnerRadius * cosPhi, fInnerRadius * sinPhi, 
                         - fZHalfLength));
   }
-    
-  
+
   //
-  // decide verticies of +ve phi boundary
+  // decide vertices of +ve phi boundary
   // 
-  
+
   cosPhi = cos(phimax);
   sinPhi = sin(phimax);
   
@@ -409,6 +417,7 @@ G4bool G4TwistedTubs::CalculateExtent( const EAxis              axis,
 
 //=====================================================================
 //* AddPolyToExtent ---------------------------------------------------
+
 void G4TwistedTubs::AddPolyToExtent( const G4ThreeVector &v0,
                                      const G4ThreeVector &v1,
                                      const G4ThreeVector &w1,
@@ -440,26 +449,30 @@ EInside G4TwistedTubs::Inside(const G4ThreeVector& p) const
 {
 
    static const G4double halftol = 0.5 * kRadTolerance;
-   //   static G4int timerid = -1;
+   // static G4int timerid = -1;
    // G4Timer timer(timerid, "G4TwistedTubs", "Inside");
    // timer.Start();
    
-#ifdef __SOLIDDEBUG__
-   G4cerr << ">>>>> G4TwistedTubs:Inside(p) : Start from >>>>>>>>>>>>>> " << G4endl;
-   G4cerr << "   name : " << GetName() << G4endl;
-   G4cerr << "   gp   : " << p << G4endl;
-   G4cerr << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << G4endl;
+#ifdef G4SPECSDEBUG
+   G4cout << "~~~~~ G4TwistedTubs::Inside(p) - Start ~~~~~~~~~~~~~~~~~~"
+          << G4endl;
+   G4cout << "   name : " << GetName() << G4endl;
+   G4cout << "   gp   : " << p << G4endl;
+   G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+          << G4endl;
 #endif
 
    G4ThreeVector *tmpp;
    EInside       *tmpinside;
    if (fLastInside.p == p) {
-#ifdef __SOLIDDEBUG__
-   G4cerr << ">>>>> G4TwistedTubs:Inside(p) >>>>>>>>>>>>>>>>>>>>>>>>>>> " << G4endl;
-   G4cerr << "   p is same as lastp.  " << G4endl;
-   G4cerr << "   Status(0:kOutside, 1:kSurface, 2:kInside) : " 
+#ifdef G4SPECSDEBUG
+   G4cout << "~~~~~ G4TwistedTubs::Inside(p) ~~~~~~~~~~~~~~~~~~~~~~~~~~"
+          << G4endl;
+   G4cout << "   Point p is the same as 'lastp'.  " << G4endl;
+   G4cout << "   Status(0:kOutside, 1:kSurface, 2:kInside) : " 
                  << fLastInside.inside << G4endl;
-   G4cerr << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << G4endl;
+   G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+          << G4endl;
 #endif
    // timer.Stop();
       return fLastInside.inside;
@@ -469,9 +482,9 @@ EInside G4TwistedTubs::Inside(const G4ThreeVector& p) const
       tmpp->set(p.x(), p.y(), p.z());
    }
    
-#ifdef __SOLIDDEBUG__
-   G4cerr << "G4TwistedTubs:Inside : fLastInside.p is updated : "
-      << fLastInside.p << G4endl;
+#ifdef G4SPECSDEBUG
+   G4cout << "   G4TwistedTubs::Inside() : fLastInside.p is updated : "
+          << fLastInside.p << G4endl;
 #endif
    
    EInside  outerhypearea = ((G4HyperbolicSurface *)fOuterHype)->Inside(p);
@@ -490,13 +503,17 @@ EInside G4TwistedTubs::Inside(const G4ThreeVector& p) const
       }
    }
    
-#ifdef __SOLIDDEBUG__
-   G4cerr <<">>>>> G4TwistedTubs:Inside(p) : >>>>>>>>>>>>>>>>>>>>>>>>>>" << G4endl;
-   G4cerr <<"   SolidName   : " << GetName() << G4endl;
-   G4cerr <<"   area from OuterHyperbolicSurface::Inside(p)   : " << outerhypearea << G4endl;
-   G4cerr <<"   distanceToOut(innersurface)  : " << distanceToOut << G4endl;
-   G4cerr <<"   inside(0:kOutside, 1:kSurface, 2:kInside : " << fLastInside.inside << G4endl;
-   G4cerr <<">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << G4endl;
+#ifdef G4SPECSDEBUG
+   G4cout <<"~~~~~ G4TwistedTubs::Inside(p) : ~~~~~~~~~~~~~~~~~~~~~~~~~"
+          << G4endl;
+   G4cout <<"   SolidName   : " << GetName() << G4endl;
+   G4cout <<"   area from OuterHyperbolicSurface::Inside(p)   : "
+          << outerhypearea << G4endl;
+   G4cout <<"   distanceToOut(innersurface)  : " << distanceToOut << G4endl;
+   G4cout <<"   inside(0:kOutside, 1:kSurface, 2:kInside : "
+          << fLastInside.inside << G4endl;
+   G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+          << G4endl;
 #endif   
 
    // timer.Stop();
@@ -516,24 +533,28 @@ G4ThreeVector G4TwistedTubs::SurfaceNormal(const G4ThreeVector& p) const
    // Which of the three or four surfaces are we closest to?
    //
 
-  //    static G4int timerid = -1;
+  // static G4int timerid = -1;
   // G4Timer timer(timerid, "G4TwistedTubs", "SurfaceNormal");
   // timer.Start();
    
 
-#ifdef __SOLIDDEBUG__
-   G4cerr << ">>>>> G4TwistedTubs:SurfaceNormal(p) : Start from >>>>>>> " << G4endl;
-   G4cerr << "   name : " << GetName() << G4endl;
-   G4cerr << "   gp   : " << p << G4endl;
-   G4cerr << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << G4endl;
+#ifdef G4SPECSDEBUG
+   G4cout << "~~~~~ G4TwistedTubs::SurfaceNormal(p) - Start ~~~~~~~~~~~"
+          << G4endl;
+   G4cout << "   name : " << GetName() << G4endl;
+   G4cout << "   gp   : " << p << G4endl;
+   G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+          << G4endl;
 #endif
 
    if (fLastNormal.p == p) {
-#ifdef __SOLIDDEBUG__
-      G4cerr << ">>>>> G4TwistedTubs:SurfaceNormal(p) >>>>>>>>>>>>>>>>>>>> " << G4endl;
-      G4cerr << "   p is same as lastp.  " << G4endl;
-      G4cerr << "   normal : " << fLastNormal.vec << G4endl;
-      G4cerr << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << G4endl;
+#ifdef G4SPECSDEBUG
+      G4cout << "~~~~~ G4TwistedTubs::SurfaceNormal(p) ~~~~~~~~~~~~~~~~~~~"
+             << G4endl;
+      G4cout << "   p is same as lastp.  " << G4endl;
+      G4cout << "   normal : " << fLastNormal.vec << G4endl;
+      G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+             << G4endl;
 #endif
       // timer.Stop();
       return fLastNormal.vec;
@@ -542,8 +563,7 @@ G4ThreeVector G4TwistedTubs::SurfaceNormal(const G4ThreeVector& p) const
    G4ThreeVector *tmpnormal  = const_cast<G4ThreeVector*>(&(fLastNormal.vec));
    G4VSurface    **tmpsurface = const_cast<G4VSurface**>(fLastNormal.surface);
    tmpp->set(p.x(), p.y(), p.z());
-   
-   
+
    G4double      distance = kInfinity;
 
    G4VSurface *surfaces[6];
@@ -568,31 +588,34 @@ G4ThreeVector G4TwistedTubs::SurfaceNormal(const G4ThreeVector& p) const
    }
 
    tmpsurface[0] = surfaces[besti];
-   *tmpnormal = tmpsurface[0]->GetNormal(bestxx, TRUE);
+   *tmpnormal = tmpsurface[0]->GetNormal(bestxx, true);
    
-#ifdef __SOLIDDEBUG__
+#ifdef G4SPECSDEBUG
    if (besti < 0) {
-      G4cerr <<">>>>> G4TwistedTubs:SurfaceNormal(p) : last winner >>>>>>" << G4endl;
-      G4cerr <<"   No winner!  : " << G4endl;
-      G4cerr <<"   SolidName   : " << GetName() << G4endl;
-      G4cerr <<"   gp          : " << p << G4endl;
-      G4cerr <<"   bestdist    : " << distance << G4endl;
-      G4cerr <<">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << G4endl;
+      G4cerr << "~~~~~ G4TwistedTubs::SurfaceNormal(p) - last winner ~~~~~"
+             << G4endl;
+      G4cerr << "   No winner!  : " << G4endl;
+      G4cerr << "   SolidName   : " << GetName() << G4endl;
+      G4cerr << "   gp          : " << p << G4endl;
+      G4cerr << "   bestdist    : " << distance << G4endl;
+      G4cerr << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+             << G4endl;
    } else {
-      G4cerr <<">>>>> G4TwistedTubs:SurfaceNormal(p) : last winner >>>>>>" << G4endl;
-      G4cerr <<"   SolidName   : " << GetName() << G4endl;
-      G4cerr <<"   SurfaceName : " << surfaces[besti]->GetName() << G4endl;
-      G4cerr <<"   gp          : " << p << G4endl;
-      G4cerr <<"   bestxx      : " << bestxx << G4endl;
-      G4cerr <<"   bestdist    : " << distance << G4endl;
-      G4cerr <<"   normal      : " << *tmpnormal << G4endl;
-      G4cerr <<">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << G4endl;
+      G4cout << "~~~~~ G4TwistedTubs::SurfaceNormal(p) - last winner ~~~~~"
+             << G4endl;
+      G4cout << "   SolidName   : " << GetName() << G4endl;
+      G4cout << "   SurfaceName : " << surfaces[besti]->GetName() << G4endl;
+      G4cout << "   gp          : " << p << G4endl;
+      G4cout << "   bestxx      : " << bestxx << G4endl;
+      G4cout << "   bestdist    : " << distance << G4endl;
+      G4cout << "   normal      : " << *tmpnormal << G4endl;
+      G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+             << G4endl;
    }
 #endif
 
    //   timer.Stop();
    return fLastNormal.vec;
-   
 }
 
 //=====================================================================
@@ -607,23 +630,19 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p,
    // along with the v, allowing for tolerance.
    // The function returns kInfinity if no intersection or
    // just grazing within tolerance.
-   //
-
-   
-   //
-   // opening message
-   //
 
    // static G4int timerid = -1;
    // G4Timer timer(timerid, "G4TwistedTubs", "DistanceToInWithV");
    // timer.Start();
 
-#ifdef __SOLIDDEBUG__
-   G4cerr << ">>>>> G4TwistedTubs:DistanceToIn(p,v) : Start from >>>>>> " << G4endl;
-   G4cerr << "   name : " << GetName() << G4endl; 
-   G4cerr << "   gp   : " << p << G4endl; 
-   G4cerr << "   gv   : " << v << G4endl; 
-   G4cerr << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " << G4endl;
+#ifdef G4SPECSDEBUG
+   G4cout << "~~~~~ G4TwistedTubs::DistanceToIn(p,v) - Start ~~~~~~~~~~"
+          << G4endl;
+   G4cout << "   name : " << GetName() << G4endl; 
+   G4cout << "   gp   : " << p << G4endl; 
+   G4cout << "   gv   : " << v << G4endl; 
+   G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+          << G4endl;
 #endif
 
    //
@@ -634,11 +653,13 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p,
    G4ThreeVector *tmpv;
    G4double      *tmpdist;
    if (fLastDistanceToInWithV.p == p && fLastDistanceToInWithV.vec == v) {
-#ifdef __SOLIDDEBUG__
-      G4cerr << ">>>>> G4TwistedTubs:DistanceToIn(p,v) >>>>>>>>>>>>>>>>>>> " << G4endl;
-      G4cerr << "   p & v is same as last p,v.  " << G4endl;
-      G4cerr << "   distance   : " << fLastDistanceToInWithV.value << G4endl;
-      G4cerr << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << G4endl;
+#ifdef G4SPECSDEBUG
+      G4cout << "~~~~~ G4TwistedTubs::DistanceToIn(p,v) ~~~~~~~~~~~~~~~~~~"
+             << G4endl;
+      G4cout << "   p & v is same as last p,v.  " << G4endl;
+      G4cout << "   distance   : " << fLastDistanceToInWithV.value << G4endl;
+      G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+             << G4endl;
 #endif
       //      timer.Stop();
       return fLastDistanceToIn.value;
@@ -650,7 +671,6 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p,
       tmpv->set(v.x(), v.y(), v.z());
    }
 
-
    //
    // Calculate DistanceToIn(p,v)
    //
@@ -658,21 +678,26 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p,
    EInside currentside = Inside(p);
 
    if (currentside == ::kInside) {
-      G4cerr << "G4TwistedTubs:DistanceToIn(p,v) is called from inside! abort." << G4endl;
-      abort();
+#ifdef G4SPECSDEBUG
+      G4Exception("G4TwistedTubs::DistanceToIn(p,v)", "InvalidCall",
+                  JustWarning, "Point p is inside!");
+#endif
    } else if (currentside == ::kSurface) {
       // particle is just on a boundary.
       // if the particle is entering to the volume, return 0.
       G4ThreeVector normal = SurfaceNormal(p);
       if (normal*v < 0) {
-#ifdef __SOLIDDEBUG__
-         G4cerr <<">>>>> G4TwistedTubs:DistanceToIn(p,v) : last winner >>>>>" << G4endl;
-         G4cerr <<"   p is on surface and particle comes in. return 0. "<< G4endl;
-         G4cerr <<"   SolidName   : " << GetName() << G4endl;
-         G4cerr <<"   gp , gv     : " << p  << " " << v << G4endl;
-         G4cerr <<"   normal      : " << normal << G4endl;
-         G4cerr <<"   normal*gv   : " << normal*v << G4endl;
-         G4cerr <<">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << G4endl;
+#ifdef G4SPECSDEBUG
+         G4cout << "~~~~~ G4TwistedTubs::DistanceToIn(p,v) - last winner ~~~"
+	        << G4endl;
+         G4cout << "   p is on surface and particle comes in. "
+                << G4endl;
+         G4cout << "   SolidName   : " << GetName() << G4endl;
+         G4cout << "   gp , gv     : " << p  << " " << v << G4endl;
+         G4cout << "   normal      : " << normal << G4endl;
+         G4cout << "   normal*gv   : " << normal*v << G4endl;
+         G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+                << G4endl;
 #endif
          *tmpdist = 0;
 	 //         timer.Stop();
@@ -707,28 +732,31 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p,
       }
    }
 
-#ifdef __SOLIDDEBUG__
+#ifdef G4SPECSDEBUG
    if (besti < 0) {
-      G4cerr <<">>>>> G4TwistedTubs:DistanceToIn(p,v) : last winner >>>>>" << G4endl;
-      G4cerr <<"   No winner!  : " << G4endl;
-      G4cerr <<"   SolidName   : " << GetName() << G4endl;
-      G4cerr <<"   gp , gv     : " << p  << " " << v << G4endl;
-      G4cerr <<"   bestdist    : " << distance << G4endl;
-      G4cerr <<">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << G4endl;
+      G4cerr << "~~~~~ G4TwistedTubs::DistanceToIn(p,v) - last winner ~~~~"
+             << G4endl;
+      G4cerr << "   No winner!  : " << G4endl;
+      G4cerr << "   SolidName   : " << GetName() << G4endl;
+      G4cerr << "   gp , gv     : " << p  << " " << v << G4endl;
+      G4cerr << "   bestdist    : " << distance << G4endl;
+      G4cerr << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+             << G4endl;
    } else {
-      G4cerr <<">>>>> G4TwistedTubs:DistanceToIn(p,v) : last winner >>>>>" << G4endl;
-      G4cerr <<"   SolidName   : " << GetName() << G4endl;
-      G4cerr <<"   SurfaceName : " << surfaces[besti]->GetName() << G4endl;
-      G4cerr <<"   gp , gv     : " << p  << " " << v << G4endl;
-      G4cerr <<"   bestxx      : " << bestxx << G4endl;
-      G4cerr <<"   bestdist    : " << distance << G4endl;
-      G4cerr <<">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << G4endl;
+      G4cout << "~~~~~ G4TwistedTubs::DistanceToIn(p,v) - last winner ~~~~"
+             << G4endl;
+      G4cout << "   SolidName   : " << GetName() << G4endl;
+      G4cout << "   SurfaceName : " << surfaces[besti]->GetName() << G4endl;
+      G4cout << "   gp , gv     : " << p  << " " << v << G4endl;
+      G4cout << "   bestxx      : " << bestxx << G4endl;
+      G4cout << "   bestdist    : " << distance << G4endl;
+      G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+             << G4endl;
    }
 
    if (besti >= 0 && Inside(bestxx) != kSurface) {
-      G4cerr << "G4TwistedTubs:DistanceToIn(p,v) last return value is not kSurface!"
-             << " abort. " << G4endl;
-      abort();
+      G4Exception("G4TwistedTubs::DistanceToIn(p,v)", "InvalidCondition",
+                  FatalException, "Last return value is not kSurface!");
    }
 #endif
 
@@ -747,19 +775,17 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p) const
    // allowing for tolerance
    //
    
-   //
-   // opening message
-   //
-   
   //  static G4int timerid = -1;
   //  G4Timer timer(timerid, "G4TwistedTubs", "DistanceToIn");
   //  timer.Start();
    
-#ifdef __SOLIDDEBUG__
-   G4cerr << ">>>>> G4TwistedTubs:DistanceToIn(p) : Start from >>>>>>>> " << G4endl;
-   G4cerr << "   name : " << GetName() << G4endl;
-   G4cerr << "   gp   : " << p << G4endl;
-   G4cerr << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << G4endl;
+#ifdef G4SPECSDEBUG
+   G4cout << "~~~~~ G4TwistedTubs::DistanceToIn(p) - Start from ~~~~~~~"
+          << G4endl;
+   G4cout << "   name : " << GetName() << G4endl;
+   G4cout << "   gp   : " << p << G4endl;
+   G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+          << G4endl;
 #endif
 
    //
@@ -769,11 +795,13 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p) const
    G4ThreeVector *tmpp;
    G4double      *tmpdist;
    if (fLastDistanceToIn.p == p) {
-#ifdef __SOLIDDEBUG__
-      G4cerr << ">>>>> G4TwistedTubs:DistanceToIn(p) >>>>>>>>>>>>>>>>>>>>> " << G4endl;
-      G4cerr << "   p is same as lastp.  " << G4endl;
-      G4cerr << "   distance   : " << fLastDistanceToIn.value << G4endl;
-      G4cerr << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << G4endl;
+#ifdef G4SPECSDEBUG
+      G4cout << "~~~~~ G4TwistedTubs::DistanceToIn(p) ~~~~~~~~~~~~~~~~~~~~"
+             << G4endl;
+      G4cout << "   p is same as lastp.  " << G4endl;
+      G4cout << "   distance   : " << fLastDistanceToIn.value << G4endl;
+      G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+             << G4endl;
 #endif
       // timer.Stop();
       return fLastDistanceToIn.value;
@@ -782,8 +810,7 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p) const
       tmpdist = const_cast<G4double*>(&(fLastDistanceToIn.value));
       tmpp->set(p.x(), p.y(), p.z());
    }
-   
-   
+
    //
    // Calculate DistanceToIn(p) 
    //
@@ -793,18 +820,22 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p) const
    switch (currentside) {
 
       case (::kInside) : {
-         G4cerr << "G4TwistedTubs:DistanceToIn(p) is called from inside! abort." << G4endl;
-         abort();
+#ifdef G4SPECSDEBUG
+         G4Exception("G4TwistedTubs::DistanceToIn(p)", "InvalidCall",
+                     JustWarning, "Point p is inside!");
+#endif
       }
 
       case (::kSurface) : {
          *tmpdist = 0.;
 	 //          timer.Stop();
-#ifdef __SOLIDDEBUG__
-         G4cerr << ">>>>> G4TwistedTubs:DistanceToIn(p) >>>>>>>>>>>>>>>>>> " << G4endl;
-         G4cerr << "   p is on surface. return 0. " << G4endl;
-         G4cerr << "   distance   : " << fLastDistanceToIn.value << G4endl;
-         G4cerr << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << G4endl;
+#ifdef G4SPECSDEBUG
+         G4cout << "~~~~~ G4TwistedTubs::DistanceToIn(p) ~~~~~~~~~~~~~~~~~~~~"
+                << G4endl;
+         G4cout << "   p is on surface. " << G4endl;
+         G4cout << "   distance   : " << fLastDistanceToIn.value << G4endl;
+         G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+                << G4endl;
 #endif
          return fLastDistanceToIn.value;
       }
@@ -835,35 +866,39 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p) const
             }
          }
       
-#ifdef __SOLIDDEBUG__
+#ifdef G4SPECSDEBUG
          if (besti < 0) {
-            G4cerr <<">>>>> G4TwistedTubs:DistanceToIn(p) : last winner >>>>>>>" << G4endl;
-            G4cerr <<"   No winner!  : " << G4endl;
-            G4cerr <<"   SolidName   : " << GetName() << G4endl;
-            G4cerr <<"   gp          : " << p << G4endl;
-            G4cerr <<"   bestdist    : " << distance << G4endl;
-            G4cerr <<">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << G4endl;
+            G4cerr << "~~~~~ G4TwistedTubs::DistanceToIn(p) - last winner ~~~~~~"
+                   << G4endl;
+            G4cerr << "   No winner!  : " << G4endl;
+            G4cerr << "   SolidName   : " << GetName() << G4endl;
+            G4cerr << "   gp          : " << p << G4endl;
+            G4cerr << "   bestdist    : " << distance << G4endl;
+            G4cerr << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+                   << G4endl;
          } else {
-            G4cerr <<">>>>> G4TwistedTubs:DistanceToIn(p) : last winner >>>>>>>" << G4endl;
-            G4cerr <<"   SolidName   : " << GetName() << G4endl;
-            G4cerr <<"   SurfaceName : " << surfaces[besti]->GetName() << G4endl;
-            G4cerr <<"   gp          : " << p << G4endl;
-            G4cerr <<"   bestxx      : " << bestxx << G4endl;
-            G4cerr <<"   bestdist    : " << distance << G4endl;
-            G4cerr <<">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << G4endl;
+            G4cout << "~~~~~ G4TwistedTubs::DistanceToIn(p) - last winner ~~~~~~"
+                   << G4endl;
+            G4cout << "   SolidName   : " << GetName() << G4endl;
+            G4cout << "   SurfaceName : " << surfaces[besti]->GetName() << G4endl;
+            G4cout << "   gp          : " << p << G4endl;
+            G4cout << "   bestxx      : " << bestxx << G4endl;
+            G4cout << "   bestdist    : " << distance << G4endl;
+            G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+                   << G4endl;
          }
 #endif
-
          *tmpdist = distance;
          // timer.Stop();
          return fLastDistanceToIn.value;
       }
 
       default : {
-         G4cerr << "G4TwistedTubs:DistanceToIn(p) invalid option! abort." << G4endl;
-         abort();
+         G4Exception("G4TwistedTubs::DistanceToIn(p)", "InvalidCondition",
+                     FatalException, "Unknown point location!");
       }
    } // switch end
+   return kInfinity;
 }
 
 //=====================================================================
@@ -881,20 +916,18 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p,
    // just grazing within tolerance.
    //
    
-   //
-   // opening message
-   //
-   
   //    static G4int timerid = -1;
   //  G4Timer timer(timerid, "G4TwistedTubs", "DistanceToOutWithV");
   //  timer.Start();
    
-#ifdef __SOLIDDEBUG__
-   G4cerr << ">>>>> G4TwistedTubs:DistanceToOut(p,v) : Start from >>>>> " << G4endl;
-   G4cerr << "   name : " << GetName() << G4endl;
-   G4cerr << "   gp   : " << p << G4endl;
-   G4cerr << "   gv   : " << v << G4endl;
-   G4cerr << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " << G4endl;
+#ifdef G4SPECSDEBUG
+   G4cout << "~~~~~ G4TwistedTubs::DistanceToOut(p,v) - Start ~~~~~~~~~"
+          << G4endl;
+   G4cout << "   name : " << GetName() << G4endl;
+   G4cout << "   gp   : " << p << G4endl;
+   G4cout << "   gv   : " << v << G4endl;
+   G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+          << G4endl;
 #endif
 
    //
@@ -905,11 +938,13 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p,
    G4ThreeVector *tmpv;
    G4double      *tmpdist;
    if (fLastDistanceToOutWithV.p == p && fLastDistanceToOutWithV.vec == v  ) {
-#ifdef __SOLIDDEBUG__
-      G4cerr << ">>>>> G4TwistedTubs:DistanceToOut(p,v) >>>>>>>>>>>>>>>>>> " << G4endl;
-      G4cerr << "   p & v is same as last p,v.  " << G4endl;
-      G4cerr << "   distance   : " << fLastDistanceToOutWithV.value << G4endl;
-      G4cerr << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << G4endl;
+#ifdef G4SPECSDEBUG
+      G4cout << "~~~~~ G4TwistedTubs::DistanceToOut(p,v) ~~~~~~~~~~~~~~~~~"
+             << G4endl;
+      G4cout << "   p & v is same as last p,v.  " << G4endl;
+      G4cout << "   distance   : " << fLastDistanceToOutWithV.value << G4endl;
+      G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+             << G4endl;
 #endif
       // timer.Stop();
       return fLastDistanceToOutWithV.value;
@@ -921,7 +956,6 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p,
       tmpv->set(v.x(), v.y(), v.z());
    }
 
-   
    //
    // Calculate DistanceToOut(p,v)
    //
@@ -929,25 +963,30 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p,
    EInside currentside = Inside(p);
 
    if (currentside == ::kOutside) {
-      G4cerr << "G4TwistedTubs:DistanceToOut(p,v) is called from outside! abort." << G4endl;
-      abort();
+#ifdef G4SPECSDEBUG
+      G4Exception("G4TwistedTubs::DistanceToOut(p,v)", "InvalidCall",
+                  JustWarning, "Point p is outside!");
+#endif
    } else if (currentside == ::kSurface) {
       // particle is just on a boundary.
       // if the particle is exiting from the volume, return 0.
       G4ThreeVector normal = SurfaceNormal(p);
       G4VSurface *blockedsurface = fLastNormal.surface[0];
       if (normal*v > 0) {
-#ifdef __SOLIDDEBUG__
-            G4cerr <<">>>>> G4TwistedTubs:DistanceToOut(p,v) : last winner >>>>>" << G4endl;
-            G4cerr <<"   p is on surface and particle goes out. return 0. "<< G4endl;
-            G4cerr <<"   SolidName   : " << GetName() << G4endl;
-            G4cerr <<"   gp , gv     : " << p  << " " << v << G4endl;
-            G4cerr <<"   normal      : " << normal << G4endl;
-            G4cerr <<"   normal*gv   : " << normal*v << G4endl;
-            G4cerr <<">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << G4endl;
+#ifdef G4SPECSDEBUG
+            G4cout << "~~~~~ G4TwistedTubs::DistanceToOut(p,v) - last winner ~~~"
+                   << G4endl;
+            G4cout << "   p is on surface and particle goes out. "
+                   << G4endl;
+            G4cout << "   SolidName   : " << GetName() << G4endl;
+            G4cout << "   gp , gv     : " << p  << " " << v << G4endl;
+            G4cout << "   normal      : " << normal << G4endl;
+            G4cout << "   normal*gv   : " << normal*v << G4endl;
+            G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+                   << G4endl;
 #endif
             if (calcNorm) {
-               *norm = (blockedsurface->GetNormal(p, TRUE));
+               *norm = (blockedsurface->GetNormal(p, true));
                *validNorm = blockedsurface->IsValidNorm();
             }
             *tmpdist = 0.;
@@ -985,40 +1024,41 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p,
 
    if (calcNorm) {
       if (besti != -1) {
-         *norm = (surfaces[besti]->GetNormal(p, TRUE));
+         *norm = (surfaces[besti]->GetNormal(p, true));
          *validNorm = surfaces[besti]->IsValidNorm();
       }
    }
 
-#ifdef __SOLIDDEBUG__
+#ifdef G4SPECSDEBUG
    if (besti < 0) {
-      G4cerr <<">>>>> G4TwistedTubs:DistanceToOut(p,v) : last winner >>>>" << G4endl;
-      G4cerr <<"   No winner! abort. " << G4endl;
-      G4cerr <<"   SolidName   : " << GetName() << G4endl;
-      G4cerr <<"   gp , gv     : " << p  << " " << v << G4endl;
-      G4cerr <<"   bestdist    : " << distance << G4endl;
-      G4cerr <<">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << G4endl;
-      abort();
+      G4cerr << "~~~~~ G4TwistedTubs::DistanceToOut(p,v) - last winner ~~~"
+             << G4endl;
+      G4cerr << "   No winner!" << G4endl;
+      G4cerr << "   SolidName   : " << GetName() << G4endl;
+      G4cerr << "   gp , gv     : " << p  << " " << v << G4endl;
+      G4cerr << "   bestdist    : " << distance << G4endl;
+      G4cerr << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+             << G4endl;
    } else {
-      G4cerr <<">>>>> G4TwistedTubs:DistanceToOut(p,v) : last winner >>>>" << G4endl;
-      G4cerr <<"   SolidName   : " << GetName() << G4endl;
-      G4cerr <<"   SurfaceName : " << surfaces[besti]->GetName() << G4endl;
-      G4cerr <<"   gp , gv     : " << p  << " " << v << G4endl;
-      G4cerr <<"   bestxx      : " << bestxx << G4endl;
-      G4cerr <<"   bestdist    : " << distance << G4endl;
-      G4cerr <<">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << G4endl;
+      G4cout << "~~~~~ G4TwistedTubs::DistanceToOut(p,v) : last winner ~~~"
+             << G4endl;
+      G4cout << "   SolidName   : " << GetName() << G4endl;
+      G4cout << "   SurfaceName : " << surfaces[besti]->GetName() << G4endl;
+      G4cout << "   gp , gv     : " << p  << " " << v << G4endl;
+      G4cout << "   bestxx      : " << bestxx << G4endl;
+      G4cout << "   bestdist    : " << distance << G4endl;
+      G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+             << G4endl;
    }
    if (besti >= 0 && Inside(bestxx) != kSurface) {
-      G4cerr << "G4TwistedTubs:DistanceToOut(p,v) last return value is not kSurface!"
-             << " abort. " << G4endl;
-             abort();
+      G4Exception("G4TwistedTubs::DistanceToOut(p,v)", "InvalidCondition",
+                  FatalException, "Last return value is not kSurface!");
    }
 #endif
 
    *tmpdist = distance;
    // timer.Stop();
    return fLastDistanceToOutWithV.value;
-       
 }
 
 
@@ -1040,11 +1080,13 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p ) const
   //  G4Timer timer(timerid, "G4TwistedTubs", "DistanceToOut");
   //  timer.Start();
    
-#ifdef __SOLIDDEBUG__
-   G4cerr << ">>>>> G4TwistedTubs:DistanceToOut(p) : Start from >>>>>>> " << G4endl;
-   G4cerr << "   name : " << GetName() << G4endl;
-   G4cerr << "   gp   : " << p << G4endl;
-   G4cerr << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " << G4endl;
+#ifdef G4SPECSDEBUG
+   G4cout << "~~~~~ G4TwistedTubs::DistanceToOut(p) - Start ~~~~~~~~~~~"
+          << G4endl;
+   G4cout << "   name : " << GetName() << G4endl;
+   G4cout << "   gp   : " << p << G4endl;
+   G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+          << G4endl;
 #endif
 
    //
@@ -1054,11 +1096,13 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p ) const
    G4ThreeVector *tmpp;
    G4double      *tmpdist;
    if (fLastDistanceToOut.p == p) {
-#ifdef __SOLIDDEBUG__
-      G4cerr << ">>>>> G4TwistedTubs:DistanceToOut(p) >>>>>>>>>>>>>>>>>> " << G4endl;
-      G4cerr << "   p is same as lastp.  " << G4endl;
-      G4cerr << "   distance   : " << fLastDistanceToOut.value << G4endl;
-      G4cerr << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << G4endl;
+#ifdef G4SPECSDEBUG
+      G4cout << "~~~~~ G4TwistedTubs::DistanceToOut(p) ~~~~~~~~~~~~~~~~~~~"
+             << G4endl;
+      G4cout << "   p is same as lastp.  " << G4endl;
+      G4cout << "   distance   : " << fLastDistanceToOut.value << G4endl;
+      G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+             << G4endl;
 #endif
       return fLastDistanceToOut.value;
    } else {
@@ -1066,7 +1110,6 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p ) const
       tmpdist = const_cast<G4double*>(&(fLastDistanceToOut.value));
       tmpp->set(p.x(), p.y(), p.z());
    }
-   
    
    //
    // Calculate DistanceToOut(p)
@@ -1076,17 +1119,21 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p ) const
 
    switch (currentside) {
       case (::kOutside) : {
-         G4cerr << "G4TwistedTubs:DistanceToOut(p,v) is called from outside! abort." << G4endl;
-         abort();
+#ifdef G4SPECSDEBUG
+        G4Exception("G4TwistedTubs::DistanceToOut(p)", "InvalidCall",
+                    JustWarning, "Point p is outside!");
+#endif
       }
       case (::kSurface) : {
         *tmpdist = 0.;
 	//   timer.Stop();
-#ifdef __SOLIDDEBUG__
-         G4cerr << ">>>>> G4TwistedTubs:DistanceToOut(p) >>>>>>>>>>>>>>>>>> " << G4endl;
-         G4cerr << "   p is on surface. return 0. " << G4endl;
-         G4cerr << "   distance   : " << fLastDistanceToOut.value << G4endl;
-         G4cerr << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << G4endl;
+#ifdef G4SPECSDEBUG
+         G4cout << "~~~~~ G4TwistedTubs::DistanceToOut(p) ~~~~~~~~~~~~~~~~~~~"
+                << G4endl;
+         G4cout << "   Point p is on surface." << G4endl;
+         G4cout << "   distance   : " << fLastDistanceToOut.value << G4endl;
+         G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+                << G4endl;
 #endif
          return fLastDistanceToOut.value;
       }
@@ -1117,36 +1164,39 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p ) const
             }
          }
 
-#ifdef __SOLIDDEBUG__
+#ifdef G4SPECSDEBUG
          if (besti < 0) {
-            G4cerr <<">>>>> G4TwistedTubs:DistanceToOut(p) : last winner >>>>>>" << G4endl;
-            G4cerr <<"   No winner! abort. " << G4endl;
-            G4cerr <<"   SolidName   : " << GetName() << G4endl;
-            G4cerr <<"   gp          : " << p << G4endl;
-            G4cerr <<"   bestdist    : " << distance << G4endl;
-            G4cerr <<">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << G4endl;
-            abort();
+            G4cerr << "~~~~~ G4TwistedTubs::DistanceToOut(p) - last winner ~~~~~"
+                   << G4endl;
+            G4cerr << "   No winner!" << G4endl;
+            G4cerr << "   SolidName   : " << GetName() << G4endl;
+            G4cerr << "   gp          : " << p << G4endl;
+            G4cerr << "   bestdist    : " << distance << G4endl;
+            G4cerr << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+                   << G4endl;
          } else {
-            G4cerr <<">>>>> G4TwistedTubs:DistanceToOut(p) : last winner >>>>>>" << G4endl;
-            G4cerr <<"   SolidName   : " << GetName() << G4endl;
-            G4cerr <<"   SurfaceName : " << surfaces[besti]->GetName() << G4endl;
-            G4cerr <<"   gp          : " << p << G4endl;
-            G4cerr <<"   bestxx      : " << bestxx << G4endl;
-            G4cerr <<"   bestdist    : " << distance << G4endl;
-            G4cerr <<">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << G4endl;
+            G4cout << "~~~~~ G4TwistedTubs::DistanceToOut(p) - last winner ~~~~~"
+                   << G4endl;
+            G4cout << "   SolidName   : " << GetName() << G4endl;
+            G4cout << "   SurfaceName : " << surfaces[besti]->GetName() << G4endl;
+            G4cout << "   gp          : " << p << G4endl;
+            G4cout << "   bestxx      : " << bestxx << G4endl;
+            G4cout << "   bestdist    : " << distance << G4endl;
+            G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+                   << G4endl;
          }
 #endif
-
          *tmpdist = distance;
          // timer.Stop();
          return fLastDistanceToOut.value;
       }
       
       default : {
-         G4cerr << "G4TwistedTubs:DistanceToOut(p) invalid option! abort." << G4endl;
-         abort();
+         G4Exception("G4TwistedTubs::DistanceToOut(p)", "InvalidCondition",
+                     FatalException, "Unknown point location!");
       }
    } // switch end
+   return 0;
 }
 
 //=====================================================================
@@ -1211,6 +1261,7 @@ G4Polyhedron* G4TwistedTubs::CreatePolyhedron () const
 
 //=====================================================================
 //* CreateNUBS --------------------------------------------------------
+
 G4NURBS* G4TwistedTubs::CreateNURBS () const 
 {
    G4double maxEndOuterRad = (fEndOuterRadius[0] > fEndOuterRadius[1] ? 0 : 1);
@@ -1221,6 +1272,7 @@ G4NURBS* G4TwistedTubs::CreateNURBS () const
 
 //=====================================================================
 //* CreateSurfaces ----------------------------------------------------
+
 void G4TwistedTubs::CreateSurfaces() 
 {
    
@@ -1237,7 +1289,7 @@ void G4TwistedTubs::CreateSurfaces()
    fInnerHype     = new G4HyperbolicSurface("InnerHype", this, -1);
    fOuterHype     = new G4HyperbolicSurface("OuterHype", this, 1);
 
-#ifdef __SOLIDDEBUG__
+#ifdef G4SPECSDEBUG
    fLowerEndcap->DebugPrint();
    fUpperEndcap->DebugPrint();
    fLatterTwisted->DebugPrint();
@@ -1247,11 +1299,25 @@ void G4TwistedTubs::CreateSurfaces()
 #endif
 
    // set neighbour surfaces.
-   fLowerEndcap->SetNeighbours(fInnerHype, fLatterTwisted, fOuterHype, fFormerTwisted);
-   fUpperEndcap->SetNeighbours(fInnerHype, fLatterTwisted, fOuterHype, fFormerTwisted);
-   fLatterTwisted->SetNeighbours(fInnerHype, fLowerEndcap, fOuterHype, fUpperEndcap);
-   fFormerTwisted->SetNeighbours(fInnerHype, fLowerEndcap, fOuterHype, fUpperEndcap);
-   fInnerHype->SetNeighbours(fLatterTwisted, fLowerEndcap, fFormerTwisted, fUpperEndcap);
-   fOuterHype->SetNeighbours(fLatterTwisted, fLowerEndcap, fFormerTwisted, fUpperEndcap);
-   
+   fLowerEndcap->SetNeighbours(fInnerHype, fLatterTwisted,
+                               fOuterHype, fFormerTwisted);
+   fUpperEndcap->SetNeighbours(fInnerHype, fLatterTwisted,
+                               fOuterHype, fFormerTwisted);
+   fLatterTwisted->SetNeighbours(fInnerHype, fLowerEndcap,
+                                 fOuterHype, fUpperEndcap);
+   fFormerTwisted->SetNeighbours(fInnerHype, fLowerEndcap,
+                                 fOuterHype, fUpperEndcap);
+   fInnerHype->SetNeighbours(fLatterTwisted, fLowerEndcap,
+                             fFormerTwisted, fUpperEndcap);
+   fOuterHype->SetNeighbours(fLatterTwisted, fLowerEndcap,
+                             fFormerTwisted, fUpperEndcap);
+}
+
+
+//=====================================================================
+//* GetEntityType -----------------------------------------------------
+
+G4GeometryType G4TwistedTubs::GetEntityType() const
+{
+  return G4String("G4TwistedTubs");
 }

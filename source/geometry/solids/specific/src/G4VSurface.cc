@@ -1,15 +1,46 @@
- /*
- *  G4VSurface.cc
- *  
- *
- *  Created by Kotoyo Hoshina on Thu Aug 01 2002.
- *  Copyright (c) 2001 __MyCompanyName__. All rights reserved.
- *
- */
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4VSurface.cc,v 1.2 2003-11-14 14:46:16 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// --------------------------------------------------------------------
+// GEANT 4 class source file
+//
+//
+// G4VSurface.cc
+//
+// Author: 
+//   01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp)
+//
+// History:
+//   13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
+//                 from original version in Jupiter-2.5.02 application.
+// --------------------------------------------------------------------
+
 #include <iomanip.h>
 #include "G4VSurface.hh"
-
-//#define __SOLIDDEBUG__
 
 const G4int  G4VSurface::kOutside        = 0x00000000;
 const G4int  G4VSurface::kInside         = 0x10000000;
@@ -35,10 +66,10 @@ const G4int  G4VSurface::kAxisMask       = 0x0000FCFC;
 const G4int  G4VSurface::kAreaMask       = 0XF0000000;
 
 //=====================================================================
-//* constructor -------------------------------------------------------
+//* constructors ------------------------------------------------------
 
 G4VSurface::G4VSurface(const G4String &name, G4VSolid *solid)
-           :fName(name), fSolid(solid)
+   : fName(name), fSolid(solid)
 {
 
    fAxis[0]    = kUndefined;
@@ -71,7 +102,7 @@ G4VSurface::G4VSurface(const G4String         &name,
                              G4double          axis1min,
                              G4double          axis0max,
                              G4double          axis1max )
-           :fName(name)
+   : fName(name)
 {
    fAxis[0]    = axis0;
    fAxis[1]    = axis1;
@@ -97,23 +128,24 @@ G4VSurface::G4VSurface(const G4String         &name,
 
 //=====================================================================
 //* destructor --------------------------------------------------------
+
 G4VSurface::~G4VSurface()
 {
-
 }
 
 //=====================================================================
 //* AmIOnLeftSide -----------------------------------------------------
+
 G4int G4VSurface::AmIOnLeftSide(const G4ThreeVector &me, 
                                 const G4ThreeVector &vec,
-                                G4bool        withtol) 
+                                      G4bool        withtol) 
 {
    // AmIOnLeftSide returns phi-location of "me"
    // (phi relation between me and vec projected on z=0 plane).
    // If "me" is on -ve-phi-side of "vec", it returns 1.
    // On the other hand, if "me" is on +ve-phi-side of "vec",
    // it returns -1.
-   // (The return value replesents z-coordinate of normal vector
+   // (The return value represents z-coordinate of normal vector
    //  of me.cross(vec).)
    // If me is on boundary of vec, return 0.
 
@@ -159,28 +191,28 @@ G4int G4VSurface::AmIOnLeftSide(const G4ThreeVector &me,
       }
    }
 
-#ifdef __SOLIDDEBUG__
-   G4cerr << "         === G4VSurface::AmIOnLeftSide ================"
+#ifdef G4SPECSDEBUG
+   G4cout << "         === G4VSurface::AmIOnLeftSide() =============="
           << G4endl;
-   G4cerr << "         //# NAME , returncode  : " << fName << " " 
+   G4cout << "             Name , returncode  : " << fName << " " 
                        << fAmIOnLeftSide.amIOnLeftSide <<  G4endl;
-   G4cerr << "         //# me, vec    : " << std::setprecision(14) << me 
+   G4cout << "             me, vec    : " << std::setprecision(14) << me 
                                           << " " << vec  << G4endl;
-   G4cerr << "         //# met, vect  : " << met << " " << vect  << G4endl;
-   G4cerr << "         //# ivec, rvec : " << ivect << " " << rvect << G4endl;
-   G4cerr << "         //# met x vect : " << metcrossvect << G4endl;
-   G4cerr << "         //# met x ivec : " << met.cross(ivect) << G4endl;
-   G4cerr << "         //# met x rvec : " << met.cross(rvect) << G4endl;
-   G4cerr << "         =============================================="
+   G4cout << "             met, vect  : " << met << " " << vect  << G4endl;
+   G4cout << "             ivec, rvec : " << ivect << " " << rvect << G4endl;
+   G4cout << "             met x vect : " << metcrossvect << G4endl;
+   G4cout << "             met x ivec : " << met.cross(ivect) << G4endl;
+   G4cout << "             met x rvec : " << met.cross(rvect) << G4endl;
+   G4cout << "         =============================================="
           << G4endl;
 #endif
 
    return fAmIOnLeftSide.amIOnLeftSide;
-
 }
 
 //=====================================================================
 //* DistanceToBoundary ------------------------------------------------
+
 G4double G4VSurface::DistanceToBoundary(G4int areacode,
                                         G4ThreeVector &xx,
                                         const G4ThreeVector &p) 
@@ -196,14 +228,17 @@ G4double G4VSurface::DistanceToBoundary(G4int areacode,
 
    G4ThreeVector d;    // direction vector of the boundary
    G4ThreeVector x0;   // reference point of the boundary
-   G4double      dist;
+   G4double      dist = kInfinity;
    G4int         boundarytype;
 
    if (IsAxis0(areacode) && IsAxis1(areacode)) {
-      G4cerr << "G4VSurface::DistanceToBoundary: You are in the "
-      << "corner area. This function returns a direction vector of "
-      << "a boundary line. areacode = " << areacode << G4endl;
-      abort();
+      G4cerr << "ERROR - G4VSurface::DistanceToBoundary()" << G4endl
+             << "        Point is in the corner area. This function returns"
+             << G4endl
+	     << "        a direction vector of a boundary line." << G4endl
+	     << "        areacode = " << areacode << G4endl;
+      G4Exception("G4VSurface::DistanceToBoundary()", "InvalidSetup",
+                  FatalException, "Point is in the corner area.");
    } else if (IsAxis0(areacode) || IsAxis1(areacode)) {
       GetBoundaryParameters(areacode, d, x0, boundarytype);
       if (boundarytype == kAxisPhi) {
@@ -216,34 +251,33 @@ G4double G4VSurface::DistanceToBoundary(G4int areacode,
          dist = DistanceToLine(p, x0, d, xx);
       }
    } else {
-      G4cerr << "G4VSurface::DistanceToBoundary: bad areacode of "
-      << "boundary. areacode = " << areacode << G4endl;
-      abort();
+      G4cerr << "ERROR - G4VSurface::DistanceToBoundary()" << G4endl
+             << "        areacode = " << areacode << G4endl;
+      G4Exception("G4VSurface::DistanceToBoundary()", "InvalidSetup",
+                  FatalException, "Bad areacode of boundary.");
    }
-
    return dist;
-   
 }
-
 
 //=====================================================================
 //* DistanceToIn ------------------------------------------------------
+
 G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
                                   const G4ThreeVector &gv,
                                         G4ThreeVector &gxxbest)
 {
-#ifdef __SOLIDDEBUG__
-   G4cerr <<"   ..... G4VSurface:DistanceToIn(p,v) Start ....." << G4endl;
-   G4cerr <<"      Name : " << fName << G4endl;
-   G4cerr <<"      gp   : " << gp << G4endl;
-   G4cerr <<"      gv   : " <<  gv << G4endl;
-   G4cerr <<"   .............................................." << G4endl;
+#ifdef G4SPECSDEBUG
+   G4cout << " ~~~~~ G4VSurface::DistanceToIn(p,v) - Start ~~~~~" << G4endl;
+   G4cout << "      Name : " << fName << G4endl;
+   G4cout << "      gp   : " << gp << G4endl;
+   G4cout << "      gv   : " <<  gv << G4endl;
+   G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << G4endl;
 #endif
    
    G4ThreeVector gxx[2];
    G4double      distance[2]    = {kInfinity, kInfinity};
    G4int         areacode[2]    = {kOutside, kOutside};
-   G4bool        isvalid[2]     = {FALSE, FALSE};
+   G4bool        isvalid[2]     = {false, false};
    G4double      bestdistance   = kInfinity;
    G4int         besti          = -1;  
    G4ThreeVector bestgxx(kInfinity, kInfinity, kInfinity);
@@ -262,13 +296,13 @@ G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
          continue;      
       }
 
-      G4ThreeVector normal = GetNormal(gxx[i], TRUE);
+      G4ThreeVector normal = GetNormal(gxx[i], true);
 
       if ((normal * gv) >= 0) {
 
-#ifdef __SOLIDDEBUG__
-         G4cerr << "   G4VSurface:DistanceToIn(p,v): "
-                << "particle goes outword the surface " << G4endl;
+#ifdef G4SPECSDEBUG
+         G4cout << "   G4VSurface::DistanceToIn(p,v): "
+                << "particle goes outword the surface." << G4endl;
 #endif 
          continue; 
       }
@@ -283,8 +317,8 @@ G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
             bestgxx = gxx[i];
             besti   = i;
 
-#ifdef __SOLIDDEBUG__
-            G4cerr << "   G4VSurface:DistanceToIn(p,v): "
+#ifdef G4SPECSDEBUG
+            G4cout << "   G4VSurface::DistanceToIn(p,v): "
                    << " areacode kInside name, distance = "
                    << fName <<  " "<< bestdistance << G4endl;
 #endif 
@@ -297,7 +331,7 @@ G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
       } else {
 
          G4VSurface *neighbours[2];
-         G4bool      isaccepted[2] = {FALSE, FALSE};
+         G4bool      isaccepted[2] = {false, false};
          G4int       nneighbours   = GetNeighbours(areacode[i], neighbours);
             
          for (G4int j=0; j< nneighbours; j++) {
@@ -306,7 +340,7 @@ G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
             G4ThreeVector tmpgxx[2];
             G4double      tmpdist[2]     = {kInfinity, kInfinity};
             G4int         tmpareacode[2] = {kOutside, kOutside};
-            G4bool        tmpisvalid[2]  = {FALSE, FALSE};
+            G4bool        tmpisvalid[2]  = {false, false};
                   
             G4int tmpnxx = neighbours[j]->DistanceToSurface(
                                           gp, gv, tmpgxx, tmpdist,
@@ -324,15 +358,17 @@ G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
 
                if (IsInside(tmpareacode[k])) {
 
-#ifdef __SOLIDDEBUG__
-                  G4cerr << "   G4VSurface:DistanceToIn(p,v): "
-                         << " intersection "<< tmpgxx[k] 
-                         << " is inside of neighbour surface of " << fName 
-                         << " . return kInfinity." << G4endl;
-                  G4cerr <<"   ..... G4VSurface:DistanceToIn(p,v) : return .." << G4endl;
-                  G4cerr <<"      No intersections " << G4endl; 
-                  G4cerr <<"      NAME : " << fName << G4endl; 
-                  G4cerr <<"   .............................................." << G4endl;
+#ifdef G4SPECSDEBUG
+                  G4cout << "   G4VSurface:DistanceToIn(p,v): "
+                         << " intersection "<< tmpgxx[k] << G4endl
+                         << "   is inside of neighbour surface of " << fName 
+                         << " . returning kInfinity." << G4endl;
+                  G4cout << "~~~~~ G4VSurface::DistanceToIn(p,v) - return ~~~~"
+                         << G4endl;
+                  G4cout << "      No intersections " << G4endl; 
+                  G4cout << "      Name : " << fName << G4endl; 
+                  G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+                         << G4endl;
 #endif 
                   if (tmpisvalid[k])  return kInfinity;
                   continue;
@@ -342,29 +378,31 @@ G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
                // be neighbour surface. return .  
                //
 
-               } else if (IsSameBoundary(this,areacode[i], neighbours[j], tmpareacode[k])) { 
+               } else if (IsSameBoundary(this,areacode[i],
+                                         neighbours[j], tmpareacode[k])) { 
                   // tmpxx[k] is same boundary (or corner) of xx.
                  
-                  neighbournormal = neighbours[j]->GetNormal(tmpgxx[k], TRUE);
-                  if (neighbournormal * gv < 0) isaccepted[1] = TRUE;
+                  neighbournormal = neighbours[j]->GetNormal(tmpgxx[k], true);
+                  if (neighbournormal * gv < 0) isaccepted[1] = true;
                }
             } 
 
-            // if nneighbours = 1, chabge isaccepted[1] before exiting neighboursurface loop.  
+            // if nneighbours = 1, chabge isaccepted[1] before
+            // exiting neighboursurface loop.  
 
-            if (nneighbours == 1) isaccepted[1] = TRUE;
+            if (nneighbours == 1) isaccepted[1] = true;
 
          } // neighboursurface loop end
 
          // now, we can accept xx intersection
 
-         if (isaccepted[0] == TRUE && isaccepted[1] == TRUE) {
+         if (isaccepted[0] == true && isaccepted[1] == true) {
             if (distance[i] < bestdistance) {
                 bestdistance = distance[i];
                 gxxbest = gxx[i];
                 besti   = i;
-#ifdef __SOLIDDEBUG__
-               G4cerr << "   G4VSurface:DistanceToIn(p,v): "
+#ifdef G4SPECSDEBUG
+               G4cout << "   G4VSurface::DistanceToIn(p,v): "
                       << " areacode kBoundary & kBoundary distance = "
                       << fName  << " " << distance[i] << G4endl;
 #endif 
@@ -376,18 +414,18 @@ G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
 
    gxxbest = bestgxx;
 
-#ifdef __SOLIDDEBUG__
+#ifdef G4SPECSDEBUG
    if (besti < 0) {
-      G4cerr <<"   ..... G4VSurface:DistanceToIn(p,v) : return .." << G4endl;
-      G4cerr <<"      No intersections " << G4endl; 
-      G4cerr <<"      NAME : " << fName << G4endl; 
-      G4cerr <<"   .............................................." << G4endl;
+      G4cout << "~~~~~ G4VSurface::DistanceToIn(p,v) - return ~~~~" << G4endl;
+      G4cout << "      No intersections " << G4endl; 
+      G4cout << "      Name : " << fName << G4endl; 
+      G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << G4endl;
    } else {
-      G4cerr <<"   ..... G4VSurface:DistanceToIn(p,v) : return .." << G4endl;
-      G4cerr <<"      NAME, i  : " << fName << " , " << besti << G4endl; 
-      G4cerr <<"      gxx[i]   : " << gxxbest << G4endl; 
-      G4cerr <<"      bestdist : " << bestdistance << G4endl;
-      G4cerr <<"   .............................................." << G4endl;
+      G4cout << "~~~~~ G4VSurface::DistanceToIn(p,v) : return ~~~~" << G4endl;
+      G4cout << "      Name, i  : " << fName << " , " << besti << G4endl; 
+      G4cout << "      gxx[i]   : " << gxxbest << G4endl; 
+      G4cout << "      bestdist : " << bestdistance << G4endl;
+      G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << G4endl;
    } 
 #endif
 
@@ -396,21 +434,22 @@ G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
 
 //=====================================================================
 //* DistanceToOut(p, v) -----------------------------------------------
+
 G4double G4VSurface::DistanceToOut(const G4ThreeVector &gp,
                                    const G4ThreeVector &gv,
                                          G4ThreeVector &gxxbest)
 {
-#ifdef __SOLIDDEBUG__
-   G4cerr <<"   ..... G4VSurface:DistanceToOut(p,v) Start ....." << G4endl;
-   G4cerr <<"      Name : " << fName << G4endl;
-   G4cerr <<"      gp   : " << gp << G4endl;
-   G4cerr <<"      gv   : " <<  gv << G4endl;
-   G4cerr <<"   ..............................................." << G4endl;
+#ifdef G4SPECSDEBUG
+   G4cout << "~~~~~ G4VSurface::DistanceToOut(p,v) - Start ~~~~" << G4endl;
+   G4cout << "      Name : " << fName << G4endl;
+   G4cout << "      gp   : " << gp << G4endl;
+   G4cout << "      gv   : " <<  gv << G4endl;
+   G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << G4endl;
 #endif
 
    G4double      distance[2]    = {kInfinity, kInfinity};
    G4int         areacode[2]    = {kOutside, kOutside};
-   G4bool        isvalid [2]    = {FALSE, FALSE};
+   G4bool        isvalid [2]    = {false, false};
    G4ThreeVector gxx[2];
    G4int         nxx;
    G4double      bestdistance   = kInfinity;
@@ -424,11 +463,11 @@ G4double G4VSurface::DistanceToOut(const G4ThreeVector &gp,
          continue;
       }
 
-      G4ThreeVector normal = GetNormal(gxx[i], TRUE);
+      G4ThreeVector normal = GetNormal(gxx[i], true);
       if (normal * gv <= 0) {
          // particle goes toword inside of solid, return kInfinity
-#ifdef __SOLIDDEBUG__
-          G4cerr << "   G4VSurface:DistanceToOut(p,v): normal*gv < 0, normal " 
+#ifdef G4SPECSDEBUG
+          G4cout << "   G4VSurface::DistanceToOut(p,v): normal*gv < 0, normal " 
                  << fName << " " << normal 
                  << G4endl;
 #endif 
@@ -442,36 +481,36 @@ G4double G4VSurface::DistanceToOut(const G4ThreeVector &gp,
       } 
    }
 
-#ifdef __SOLIDDEBUG__
+#ifdef G4SPECSDEBUG
    if (besti < 0) {
-      G4cerr <<"   ..... G4VSurface:DistanceToOut(p,v) : return ." << G4endl;
-      G4cerr <<"      No intersections   " << G4endl; 
-      G4cerr <<"      NAME     : " << fName << G4endl; 
-      G4cerr <<"      bestdist : " << bestdistance << G4endl;
-      G4cerr <<"   .............................................." << G4endl;
+      G4cout << "~~~~~ G4VSurface::DistanceToOut(p,v) - return ~~~" << G4endl;
+      G4cout << "      No intersections   " << G4endl; 
+      G4cout << "      Name     : " << fName << G4endl; 
+      G4cout << "      bestdist : " << bestdistance << G4endl;
+      G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << G4endl;
    } else {
-      G4cerr <<"   ..... G4VSurface:DistanceToOut(p,v) : return ." << G4endl;
-      G4cerr <<"      NAME, i  : " << fName << " , " << i << G4endl; 
-      G4cerr <<"      gxx[i]   : " << gxxbest << G4endl; 
-      G4cerr <<"      bestdist : " << bestdistance << G4endl;
-      G4cerr <<"   .............................................. " << G4endl;
+      G4cout << "~~~~~ G4VSurface::DistanceToOut(p,v) : return ~~~" << G4endl;
+      G4cout << "      Name, i  : " << fName << " , " << i << G4endl; 
+      G4cout << "      gxx[i]   : " << gxxbest << G4endl; 
+      G4cout << "      bestdist : " << bestdistance << G4endl;
+      G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << G4endl;
    } 
 #endif
 
    return bestdistance;
- 
 }
 
 //=====================================================================
 //* DistanceTo(p) -----------------------------------------------------
+
 G4double G4VSurface::DistanceTo(const G4ThreeVector &gp,
                                       G4ThreeVector &gxxbest)
 {
-#ifdef __SOLIDDEBUG__
-   G4cerr <<"   ..... G4VSurface:DistanceTo(p) Start ....." << G4endl;
-   G4cerr <<"      Name : " << fName << G4endl;
-   G4cerr <<"      gp   : " << gp << G4endl;
-   G4cerr <<"   .........................................." << G4endl;
+#ifdef G4SPECSDEBUG
+   G4cout << "~~~~~ G4VSurface::DistanceTo(p) - Start ~~~~~~~~~" << G4endl;
+   G4cout << "      Name : " << fName << G4endl;
+   G4cout << "      gp   : " << gp << G4endl;
+   G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << G4endl;
 #endif
    G4double distance[2] = {kInfinity, kInfinity};
    G4int    areacode[2] = {kOutside, kOutside};
@@ -481,12 +520,12 @@ G4double G4VSurface::DistanceTo(const G4ThreeVector &gp,
    nxx = DistanceToSurface(gp, gxx, distance, areacode);
    gxxbest = gxx[0];
 
-#ifdef __SOLIDDEBUG__
-   G4cerr <<"   ..... G4VSurface:DistanceTo(p) : return .." << G4endl;
-   G4cerr <<"      NAME     : " << fName << G4endl; 
-   G4cerr <<"      gxx      : " << gxxbest << G4endl; 
-   G4cerr <<"      bestdist : " << distance[0] << G4endl;
-   G4cerr <<"   .........................................." << G4endl;
+#ifdef G4SPECSDEBUG
+   G4cout << "~~~~~ G4VSurface::DistanceTo(p) - return ~~~~~~~~" << G4endl;
+   G4cout << "      Name     : " << fName << G4endl; 
+   G4cout << "      gxx      : " << gxxbest << G4endl; 
+   G4cout << "      bestdist : " << distance[0] << G4endl;
+   G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << G4endl;
 #endif
 
    return distance[0];
@@ -494,6 +533,7 @@ G4double G4VSurface::DistanceTo(const G4ThreeVector &gp,
 
 //=====================================================================
 //* IsSameBoundary ----------------------------------------------------
+
 G4bool G4VSurface::IsSameBoundary(G4VSurface *surface1, G4int areacode1,
                                   G4VSurface *surface2, G4int areacode2 ) const
 {
@@ -503,7 +543,7 @@ G4bool G4VSurface::IsSameBoundary(G4VSurface *surface1, G4int areacode1,
    // checking tool whether two boundaries on different surfaces are same or not.
    //
 
-   G4bool testbitmode = TRUE;
+   G4bool testbitmode = true;
    G4bool iscorner[2] = {IsCorner(areacode1, testbitmode), 
                          IsCorner(areacode2, testbitmode)};
 
@@ -515,9 +555,9 @@ G4bool G4VSurface::IsSameBoundary(G4VSurface *surface1, G4int areacode1,
            surface2->ComputeGlobalPoint(surface2->GetCorner(areacode2));
 
       if ((corner1 - corner2).mag() < kCarTolerance) {
-         return TRUE;
+         return true;
       } else {
-         return FALSE;
+         return false;
       }
     
    } else if ((IsBoundary(areacode1, testbitmode) && (!iscorner[0])) &&
@@ -536,18 +576,19 @@ G4bool G4VSurface::IsSameBoundary(G4VSurface *surface1, G4int areacode1,
 
       if ((x01 - x02).mag() < kCarTolerance &&
           (d1 - d2).mag() < kCarTolerance) {
-        return TRUE;
+        return true;
       } else {
-        return FALSE;
+        return false;
       }
 
    } else {
-      return FALSE;
+      return false;
    }
 }
 
 //=====================================================================
 //* GetBoundaryParameters ---------------------------------------------
+
 void G4VSurface::GetBoundaryParameters(const G4int         &areacode,
                                              G4ThreeVector &d,
                                              G4ThreeVector &x0,
@@ -565,14 +606,17 @@ void G4VSurface::GetBoundaryParameters(const G4int         &areacode,
       }
    }
 
-   G4cerr << "   G4VSurface::GetBoundaryParameters: boundary at areacode "
-      << hex << areacode << dec << " is not be registerd. abort. " << G4endl;
-   abort();
-
+   G4cerr << "ERROR - G4VSurface::GetBoundaryParameters()" << G4endl
+          << "        Boundary at areacode " << hex << areacode << dec
+          << G4endl
+          << "        is not be registered." << G4endl;
+   G4Exception("G4VSurface::GetBoundaryParameters()", "InvalidSetup",
+               FatalException, "Not registered boundary.");
 }
 
 //=====================================================================
 //* GetBoundaryAtPZ ---------------------------------------------------
+
 G4ThreeVector G4VSurface::GetBoundaryAtPZ(G4int areacode,
                                           const G4ThreeVector &p) const
 {
@@ -581,49 +625,57 @@ G4ThreeVector G4VSurface::GetBoundaryAtPZ(G4int areacode,
    // kAxis1 & kAxisMin, kAxis1 & kAxisMax.
 
    if (areacode & kAxis0 && areacode & kAxis1) {
-      G4cerr << "   G4VSurface::GetBoundaryAtPZ: You are in the "
-      << "corner area. This function returns a direction vector of "
-      << "a boundary line. abort. areacode = " << areacode << G4endl;
-      abort();
+     G4cerr << "ERROR - G4VSurface::GetBoundaryAtPZ()" << G4endl
+            << "        Point is in the corner area. This function returns"
+            << G4endl
+            << "        a direction vector of a boundary line." << G4endl
+            << "        areacode = " << areacode << G4endl;
+     G4Exception("G4VSurface::GetBoundaryAtPZ()", "InvalidCondition",
+                 FatalException, "Point is in the corner area.");
    }
 
    G4ThreeVector d;
    G4ThreeVector x0;
    G4int         boundarytype;
-   G4bool        found = FALSE;
+   G4bool        found = false;
    
    for (G4int i=0; i<4; i++) {
       if (fBoundaries[i].GetBoundaryParameters(areacode, d, x0, 
                                                 boundarytype)){
-         found = TRUE;
+         found = true;
          continue;
       }
    }
 
    if (!found) {
-      G4cerr << "   G4VSurface::GetBoundaryAtPZ: boundary at areacode "
-         << areacode << " is not be registerd. abort. " << G4endl;
-      abort();
+     G4cerr << "ERROR - G4VSurface::GetBoundaryAtPZ()" << G4endl
+            << "        Boundary at areacode " << areacode << G4endl
+            << "        is not be registered." << G4endl;
+     G4Exception("G4VSurface::GetBoundaryAtPZ()", "InvalidSetup",
+                 FatalException, "Not registered boundary.");
    }
 
    if (((boundarytype & kAxisPhi) == kAxisPhi) ||
        ((boundarytype & kAxisRho) == kAxisRho)) {
-      G4cerr << "   G4VSurface::GetBoundaryAtPZ: boundary at areacode "
-      << areacode << " is not a z-depended line. abort. " << G4endl;
-      abort();
+     G4cerr << "ERROR - G4VSurface::GetBoundaryAtPZ()" << G4endl
+            << "        Boundary at areacode " << areacode << G4endl
+            << "        is not a z-depended line." << G4endl;
+     G4Exception("G4VSurface::GetBoundaryAtPZ()", "InvalidSetup",
+                 FatalException, "Not a z-depended line boundary.");
    }
-
    return ((p.z() - x0.z()) / d.z()) * d + x0;
 }
 
 //=====================================================================
 //* SetCorner ---------------------------------------------------------
+
 void G4VSurface::SetCorner(G4int areacode, G4double x, G4double y, G4double z)
 {
    if ((areacode & kCorner) != kCorner){
-      G4cerr << "   G4VSurface::GetCorner: area code must represents corner. "
-      << "your areacode = " << areacode << G4endl;
-      abort();
+     G4cerr << "ERROR - G4VSurface::SetCorner()" << G4endl
+            << "        areacode " << areacode << G4endl;
+     G4Exception("G4VSurface::SetCorner()", "InvalidSetup",
+                 FatalException, "Area code must represents corner.");
    }
 
    if ((areacode & kCorner0Min1Min) == kCorner0Min1Min) {
@@ -635,20 +687,17 @@ void G4VSurface::SetCorner(G4int areacode, G4double x, G4double y, G4double z)
    } else if ((areacode & kCorner0Min1Max) == kCorner0Min1Max) {
       fCorners[3].set(x, y, z);
    }
-
 }
 
 //=====================================================================
 //* SetBoundaryAxis ---------------------------------------------------
+
 void G4VSurface::GetBoundaryAxis(G4int areacode, EAxis axis[]) const
 {
-
    if ((areacode & kBoundary) != kBoundary) {
-      G4cerr << "   G4VSurface::GetBoundaryAxis: "
-             << "you are not on boudary. abort." << G4endl;
-      abort();
+     G4Exception("G4VSurface::GetBoundaryAxis()", "InvalidCondition",
+                 FatalException, "Not located on a boundary!");
    }
-
    G4int i;
    for (i=0; i<2; i++) {
 
@@ -673,17 +722,18 @@ void G4VSurface::GetBoundaryAxis(G4int areacode, EAxis axis[]) const
          } else if (axiscode == (whichaxis & kAxisPhi)) {
             axis[i] = kPhi;
          } else {
-            G4cerr << "   G4VSurface::GetBoundaryAxis: areacode " << areacode
-            << " is not be supported. abort. " << G4endl;
-            abort();
+           G4cerr << "ERROR - G4VSurface::GetBoundaryAxis()" << G4endl
+                  << "        areacode " << areacode << G4endl;
+           G4Exception("G4VSurface::GetBoundaryAxis()", "InvalidSetup",
+                       FatalException, "Not supported areacode.");
          }
       }
    }
-
 }
 
 //=====================================================================
 //* SetBoundaryLimit --------------------------------------------------
+
 void G4VSurface::GetBoundaryLimit(G4int areacode, G4double limit[]) const
 {
    if (areacode & kCorner) {
@@ -711,13 +761,16 @@ void G4VSurface::GetBoundaryLimit(G4int areacode, G4double limit[]) const
          limit[0] = fAxisMax[1];
       }
    } else {
-      G4cerr << "   G4VSurface::GetBoundaryLimit: you are not on boudary. "
-      << "your areacode = " << areacode << G4endl;
+     G4cerr << "WARNING - G4VSurface::GetBoundaryAxis()" << G4endl
+            << "          areacode " << areacode << G4endl;
+     G4Exception("G4VSurface::GetBoundaryLimit()", "InvalidCondition",
+                 JustWarning, "Not located on a boundary!");
    }
 }
 
 //=====================================================================
-//* SetBoundary --------------------------------------------------
+//* SetBoundary -------------------------------------------------------
+
 void G4VSurface::SetBoundary(const G4int         &axiscode,
                              const G4ThreeVector &direction,
                              const G4ThreeVector &x0,
@@ -730,33 +783,32 @@ void G4VSurface::SetBoundary(const G4int         &axiscode,
        (code == (kAxis1 & kAxisMax))) {
 
       G4int i;
-      G4bool done = FALSE;
+      G4bool done = false;
       for (i=0; i<4; i++) {
          if (fBoundaries[i].IsEmpty()) {
             fBoundaries[i].SetFields(axiscode, direction,
                                      x0, boundarytype);
-            done = TRUE;
+            done = true;
             break;
          }
       }
 
       if (!done) {
-         G4cerr << "   G4VSurface::SetBoundary: No. of boundary exeeded 4. "
-                << "abort. " << G4endl;
-         abort();
+         G4Exception("G4VSurface::SetBoundary()", "InvalidCondition",
+                      FatalException, "Number of boundary exceeding 4!");
       }
-
    } else {
-
-      G4cerr << "   G4VSurface::SetBoundary: invalid axiscode "
-             << std::hex << axiscode << std::dec
-             << " . abort. " << G4endl;
-      abort();
+      G4cerr << "ERROR - G4VSurface::SetBoundary()" << G4endl
+             << "        invalid axiscode. axiscode = "
+             << std::hex << axiscode << std::dec << G4endl;
+      G4Exception("G4VSurface::SetBoundary()", "InvalidCondition",
+                  FatalException, "Invalid axis-code.");
    }
 }
 
 //=====================================================================
-//* DebugPrint --------------------------------------------------
+//* DebugPrint --------------------------------------------------------
+
 void G4VSurface::DebugPrint()
 {
    G4ThreeVector A = fRot * GetCorner(kCorner0Min1Min) + fTrans;
@@ -764,20 +816,19 @@ void G4VSurface::DebugPrint()
    G4ThreeVector C = fRot * GetCorner(kCorner0Max1Max) + fTrans;
    G4ThreeVector D = fRot * GetCorner(kCorner0Min1Max) + fTrans;
   
-   G4cerr << "/* G4VSurface::DebugPrint:---------------------------------" << G4endl;
-   G4cerr << "/* NAME = " << fName << G4endl;
-   G4cerr << "/* Axis = " << hex << fAxis[0] << " " << hex << fAxis[1] 
+   G4cout << "/* G4VSurface::DebugPrint():-------------------------------"
+          << G4endl;
+   G4cout << "/* Name = " << fName << G4endl;
+   G4cout << "/* Axis = " << hex << fAxis[0] << " " << hex << fAxis[1] 
           << " (0,1,2,3,5 = kXAxis,kYAxis,kZAxis,kRho,kPhi)" << dec << G4endl;
-   G4cerr << "/* BoundaryLimit(in local) fAxis0(min, max) = ("<<fAxisMin[0] 
+   G4cout << "/* BoundaryLimit(in local) fAxis0(min, max) = ("<<fAxisMin[0] 
           << ", " << fAxisMax[0] << ")" << G4endl;
-   G4cerr << "/* BoundaryLimit(in local) fAxis1(min, max) = ("<<fAxisMin[1] 
+   G4cout << "/* BoundaryLimit(in local) fAxis1(min, max) = ("<<fAxisMin[1] 
           << ", " << fAxisMax[1] << ")" << G4endl;
-   G4cerr << "/* Cornar point kCorner0Min1Min = " << A << G4endl;
-   G4cerr << "/* Cornar point kCorner0Max1Min = " << B << G4endl;
-   G4cerr << "/* Cornar point kCorner0Max1Max = " << C << G4endl;
-   G4cerr << "/* Cornar point kCorner0Min1Max = " << D << G4endl;
-   G4cerr << "/*---------------------------------------------------------" << G4endl;
-
+   G4cout << "/* Cornar point kCorner0Min1Min = " << A << G4endl;
+   G4cout << "/* Cornar point kCorner0Max1Min = " << B << G4endl;
+   G4cout << "/* Cornar point kCorner0Max1Max = " << C << G4endl;
+   G4cout << "/* Cornar point kCorner0Min1Max = " << D << G4endl;
+   G4cout << "/*---------------------------------------------------------"
+          << G4endl;
 }
-
-                             

@@ -1,20 +1,49 @@
-/*
- *  G4HyperbolicSurface.cc
- *  
- *
- *  Created by Kotoyo Hoshina on Thu Aug 01 2002.
- *  Copyright (c) 2001 __MyCompanyName__. All rights reserved.
- *
- */
-
-//#define __SOLIDDEBUG__
-//#define __SOLIDDEBUGAREACODE__
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4HyperbolicSurface.cc,v 1.2 2003-11-14 14:46:16 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// --------------------------------------------------------------------
+// GEANT 4 class source file
+//
+//
+// G4HyperbolicSurface.cc
+//
+// Author: 
+//   01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp)
+//
+// History:
+//   13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
+//                 from original version in Jupiter-2.5.02 application.
+// --------------------------------------------------------------------
 
 #include "G4HyperbolicSurface.hh"
 #include "G4TwistedTubs.hh"
 
 //=====================================================================
-//* constructor -------------------------------------------------------
+//* constructors ------------------------------------------------------
 
 G4HyperbolicSurface::G4HyperbolicSurface(const G4String         &name,
                                          const G4RotationMatrix &rot,
@@ -29,20 +58,19 @@ G4HyperbolicSurface::G4HyperbolicSurface(const G4String         &name,
                                                G4double          axis1min,
                                                G4double          axis0max,
                                                G4double          axis1max )
-                    :G4VSurface(name, rot, tlate, handedness, axis0, axis1,
-                                axis0min, axis1min, axis0max, axis1max),
-                     fKappa(kappa), fTanStereo(tanstereo),
-                     fTan2Stereo(tanstereo*tanstereo), fR0(r0), fR02(r0*r0)
+  : G4VSurface(name, rot, tlate, handedness, axis0, axis1,
+               axis0min, axis1min, axis0max, axis1max),
+    fKappa(kappa), fTanStereo(tanstereo),
+    fTan2Stereo(tanstereo*tanstereo), fR0(r0), fR02(r0*r0)
 {
    if (axis0 == kZAxis && axis1 == kPhi) {
-      G4cerr << "G4HyperbolicSurface::Constructor: " 
-             << "Swap axis0 and axis1. abort. " << G4endl;
-      abort();
+      G4Exception("G4HyperbolicSurface::G4HyperbolicSurface()", "InvalidSetup",
+                  FatalException, "Should swap axis0 and axis1!");
    }
    
    fInside.gp.set(kInfinity, kInfinity, kInfinity);
    fInside.inside = ::kOutside;
-   fIsValidNorm = FALSE;
+   fIsValidNorm = false;
    
    SetCorners();
    SetBoundaries();
@@ -52,7 +80,7 @@ G4HyperbolicSurface::G4HyperbolicSurface(const G4String         &name,
 G4HyperbolicSurface::G4HyperbolicSurface(const G4String      &name,
                                                G4TwistedTubs *solid,
                                                G4int          handedness)
-                    :G4VSurface(name, solid)
+   : G4VSurface(name, solid)
 {
 
    fHandedness = handedness;   // +z = +ve, -z = -ve
@@ -75,7 +103,7 @@ G4HyperbolicSurface::G4HyperbolicSurface(const G4String      &name,
    fR02        = fR0 * fR0;
    
    fTrans.set(0, 0, 0);
-   fIsValidNorm = FALSE;
+   fIsValidNorm = false;
 
    fInside.gp.set(kInfinity, kInfinity, kInfinity);
    fInside.inside = ::kOutside;
@@ -86,18 +114,20 @@ G4HyperbolicSurface::G4HyperbolicSurface(const G4String      &name,
 
 //=====================================================================
 //* destructor --------------------------------------------------------
+
 G4HyperbolicSurface::~G4HyperbolicSurface()
 {
 }
 
 //=====================================================================
 //* GetNormal ---------------------------------------------------------
+
 G4ThreeVector G4HyperbolicSurface::GetNormal(const G4ThreeVector &tmpxx, 
                                                    G4bool isGlobal) 
 {
    // GetNormal returns a normal vector at a surface (or very close
    // to surface) point at tmpxx.
-   // If isGlobal=TRUE, it returns the normal in global coordinate.
+   // If isGlobal=true, it returns the normal in global coordinate.
    //
    
    G4ThreeVector xx;
@@ -129,6 +159,7 @@ G4ThreeVector G4HyperbolicSurface::GetNormal(const G4ThreeVector &tmpxx,
 
 //=====================================================================
 //* Inside() ----------------------------------------------------------
+
 EInside G4HyperbolicSurface::Inside(const G4ThreeVector &gp) 
 {
    // Inside returns 
@@ -141,11 +172,11 @@ EInside G4HyperbolicSurface::Inside(const G4ThreeVector &gp)
    
    G4ThreeVector p = ComputeLocalPoint(gp);
    
-#ifdef __SOLIDDEBUG__
-   G4cerr << "      ~~~~~ G4HyperbolicSurface:Inside(gp) start~~~~~~~~~"
+#ifdef G4SPECSDEBUG
+   G4cout << "      ~~~~~ G4HyperbolicSurface::Inside() start~~~~~~~~~"
           << G4endl;
-   G4cerr << "         p : " << p << G4endl;
-   G4cerr << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" 
+   G4cout << "         Local point p : " << p << G4endl;
+   G4cout << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" 
           << G4endl;
 #endif
 
@@ -159,10 +190,9 @@ EInside G4HyperbolicSurface::Inside(const G4ThreeVector &gp)
                             // +ve : inside
 
    if (distanceToOut < -halftol) {
-#ifdef __SOLIDDEBUG__
-      G4cerr << "      G4HyperbolicSurface:Inside(gp) distanceToOut"
-             << " is -ve. kOutside. "
-             << "distanceToOut = " << distanceToOut << G4endl;
+#ifdef G4SPECSDEBUG
+      G4cout << "      distanceToOut is -ve. kOutside. " << G4endl
+             << "      distanceToOut = " << distanceToOut << G4endl;
 #endif
       fInside.inside = ::kOutside;
    } else {
@@ -178,21 +208,22 @@ EInside G4HyperbolicSurface::Inside(const G4ThreeVector &gp)
             fInside.inside = ::kInside;
          }
       } else {
-         G4cerr << "      G4HyperbolicSurface::Inside "
-                << "invalid option! name, areacode, distanceToOut = "
-                << GetName() << " " << hex << areacode << dec << " "
+         G4cout << "WARNING - G4HyperbolicSurface::Inside()" << G4endl
+                << "          Invalid option !" << G4endl
+		<< "          name, areacode, distanceToOut = "
+                << GetName() << ", " << hex << areacode << dec << ", "
                 << distanceToOut << G4endl;
       }
    }
    
-#ifdef __SOLIDDEBUG__
-   G4cerr << "      ~~~~~ G4HyperbolicSurface:Inside return ~~~~~~~~~~~~~~"
-      << G4endl;
-   G4cerr << "         Name : " << GetName() << G4endl;
-   G4cerr << "         distanceToOut : " << distanceToOut << G4endl;
-   G4cerr << "         areacode      : " << std::hex << fInside.inside 
+#ifdef G4SPECSDEBUG
+   G4cout << "      ~~~~~ G4HyperbolicSurface::Inside() return ~~~~~~~~~~~"
+          << G4endl;
+   G4cout << "         Name : " << GetName() << G4endl;
+   G4cout << "         distanceToOut : " << distanceToOut << G4endl;
+   G4cout << "         areacode      : " << std::hex << fInside.inside 
                                          << std::dec << G4endl;
-   G4cerr << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+   G4cout << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
           << G4endl;
 #endif
    
@@ -201,6 +232,7 @@ EInside G4HyperbolicSurface::Inside(const G4ThreeVector &gp)
 
 //=====================================================================
 //* DistanceToSurface -------------------------------------------------
+
 G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
                                              const G4ThreeVector &gv,
                                                    G4ThreeVector  gxx[],
@@ -263,7 +295,7 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
       for (i=0; i<2; i++) {
          distance[i] = kInfinity;
          areacode[i] = kOutside;
-         isvalid[i]  = FALSE;
+         isvalid[i]  = false;
          gxx[i].set(kInfinity, kInfinity, kInfinity);
       }
    }
@@ -272,15 +304,15 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
    G4ThreeVector v = ComputeLocalDirection(gv);
    G4ThreeVector xx[2]; 
 
-#ifdef __SOLIDDEBUG__
-   G4cerr << "      ~~~~~ G4HyperbolicSurface:DistanceToSurface(p,v):Start"
+#ifdef G4SPECSDEBUG
+   G4cout << "      ~~~~~ G4HyperbolicSurface::DistanceToSurface(p,v) Start"
           << G4endl;
-   G4cerr << "         Name : " << GetName() << G4endl;
-   G4cerr << "         gp   : " << gp << G4endl;
-   G4cerr << "         gv   : " << gv << G4endl;
-   G4cerr << "         p    : " << p << G4endl;
-   G4cerr << "         v    : " << v << G4endl;
-   G4cerr << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+   G4cout << "         Name : " << GetName() << G4endl;
+   G4cout << "         gp   : " << gp << G4endl;
+   G4cout << "         gv   : " << gv << G4endl;
+   G4cout << "         p    : " << p << G4endl;
+   G4cout << "         v    : " << v << G4endl;
+   G4cout << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
           << G4endl;
 #endif
    
@@ -310,14 +342,14 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
          distance[0] = kInfinity;
          fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                                         isvalid[0], 0, validate, &gp, &gv);
-#ifdef __SOLIDDEBUG__
-         G4cerr << "      ~~~~~ G4HyperbolicSurface:DistanceToSurface(p,v):"
-                <<              "return" << G4endl;
-         G4cerr << "         vz/vrho is bigger than slope of asymptonic "
-                <<           "line." << G4endl;
-         G4cerr << "         NAME     : " << GetName() << G4endl;
-         G4cerr << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-                <<        "~~~~~" << G4endl;
+#ifdef G4SPECSDEBUG
+         G4cout << "      ~~~~~ G4HyperbolicSurface:DistanceToSurface(p,v) "
+                << "return" << G4endl;
+         G4cout << "         vz/vrho is bigger than slope of asymptonic line."
+	        << G4endl;
+         G4cout << "         Name     : " << GetName() << G4endl;
+         G4cout << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+                << G4endl;
 #endif
          return 0;
       }
@@ -337,61 +369,58 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
       if (validate == kValidateWithTol) {
          areacode[0] = GetAreaCode(xx[0]);
          if (!IsOutside(areacode[0])) {
-            if (distance[0] >= 0) isvalid[0] = TRUE;
+            if (distance[0] >= 0) isvalid[0] = true;
          }
       } else if (validate == kValidateWithoutTol) {
-         areacode[0] = GetAreaCode(xx[0], FALSE);
+         areacode[0] = GetAreaCode(xx[0], false);
          if (IsInside(areacode[0])) {
-            if (distance[0] >= 0) isvalid[0] = TRUE;
+            if (distance[0] >= 0) isvalid[0] = true;
          }
       } else { // kDontValidate                       
          areacode[0] = kInside;
-            if (distance[0] >= 0) isvalid[0] = TRUE;
+            if (distance[0] >= 0) isvalid[0] = true;
       }
                  
       fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                                         isvalid[0], 1, validate, &gp, &gv);
-#ifdef __SOLIDDEBUG__
-      G4cerr << "      ~~~~~ G4HyperbolicSurface:DistanceToSurface(p,v):return"
+#ifdef G4SPECSDEBUG
+      G4cout << "      ~~~~~ G4HyperbolicSurface::DistanceToSurface(p,v) return"
              << G4endl;
-      G4cerr << "         p is on origin. " << G4endl;
-      G4cerr << "         NAME        : " << GetName() << G4endl;
-      G4cerr << "         xx[0]       : " << xx[0] << G4endl;
-      G4cerr << "         gxx[0]      : " << gxx[0] << G4endl;
-      G4cerr << "         dist[0]     : " << distance[0] << G4endl;
-      G4cerr << "         areacode[0] : " << hex << areacode[0] << G4endl;
-      G4cerr << "         isvalid[0]  : " << dec << isvalid[0] << G4endl;
-      G4cerr << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      G4cout << "         Point p is on origin. " << G4endl;
+      G4cout << "         Name        : " << GetName() << G4endl;
+      G4cout << "         xx[0]       : " << xx[0] << G4endl;
+      G4cout << "         gxx[0]      : " << gxx[0] << G4endl;
+      G4cout << "         dist[0]     : " << distance[0] << G4endl;
+      G4cout << "         areacode[0] : " << hex << areacode[0] << G4endl;
+      G4cout << "         isvalid[0]  : " << dec << isvalid[0] << G4endl;
+      G4cout << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
              << G4endl;
       if (isvalid[0] && GetSolid()->Inside(gxx[0]) != ::kSurface) {
-         G4cerr << " valid return value is not on surface! abort." << G4endl;
-         abort();
-      } 
-
+         G4Exception("G4HyperbolicSurface::DistanceToSurface(p,v)",
+	             "InvalidSetup", FatalException,
+                     "Valid return value is not on surface!");
+      }
 #endif
-
       return 1;
-
    }
 
    //
    // special case end.
    // 
-   
 
    G4double a = v.x()*v.x() + v.y()*v.y() - v.z()*v.z()*fTan2Stereo;
    G4double b = 2.0 * ( p.x() * v.x() + p.y() * v.y() - p.z() * v.z() * fTan2Stereo );
    G4double c = p.x()*p.x() + p.y()*p.y() - fR02 - p.z()*p.z()*fTan2Stereo;
    G4double D = b*b - 4*a*c;          //discriminant
    
-#ifdef __SOLIDDEBUG__
-   G4cerr << "      ~~ G4HyperbolicSurface::DistanceToSurface: a,b,c,D ~~~" 
+#ifdef G4SPECSDEBUG
+   G4cout << "      ~~ G4HyperbolicSurface::DistanceToSurface(): a,b,c,D ~" 
           << G4endl;
-   G4cerr << "      //*   NAME      : " << GetName() << G4endl;
-   G4cerr << "      //*   p, v      : " << p << " , " << v << G4endl;
-   G4cerr << "      //*   a,b,c,D   : " << a << " , " << b << " , " 
-                                     << c << " , " << D << G4endl; 
-   G4cerr << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+   G4cout << "            Name      : " << GetName() << G4endl;
+   G4cout << "            p, v      : " << p << " , " << v << G4endl;
+   G4cout << "            a,b,c,D   : " << a << " , " << b << " , " 
+                                        << c << " , " << D << G4endl; 
+   G4cout << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
           << G4endl;
 #endif  
    
@@ -405,35 +434,36 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
          if (validate == kValidateWithTol) {
             areacode[0] = GetAreaCode(xx[0]);
             if (!IsOutside(areacode[0])) {
-               if (distance[0] >= 0) isvalid[0] = TRUE;
+               if (distance[0] >= 0) isvalid[0] = true;
             }
          } else if (validate == kValidateWithoutTol) {
-            areacode[0] = GetAreaCode(xx[0], FALSE);
+            areacode[0] = GetAreaCode(xx[0], false);
             if (IsInside(areacode[0])) {
-               if (distance[0] >= 0) isvalid[0] = TRUE;
+               if (distance[0] >= 0) isvalid[0] = true;
             }
          } else { // kDontValidate                       
             areacode[0] = kInside;
-               if (distance[0] >= 0) isvalid[0] = TRUE;
+               if (distance[0] >= 0) isvalid[0] = true;
          }
                  
          fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                                         isvalid[0], 1, validate, &gp, &gv);
-#ifdef __SOLIDDEBUG__
-         G4cerr << "      ~~~~~ G4HyperbolicSurface:DistanceToSurface(p,v):return~"
-                << G4endl;
-         G4cerr << "         Single solution. " << G4endl;
-         G4cerr << "         NAME        : " << GetName() << G4endl;
-         G4cerr << "         xx[0]       : " << xx[0] << G4endl;
-         G4cerr << "         gxx[0]      : " << gxx[0] << G4endl;
-         G4cerr << "         dist[0]     : " << distance[0] << G4endl;
-         G4cerr << "         areacode[0] : " << hex << areacode[0] << G4endl;
-         G4cerr << "         isvalid[0]  : " << dec << isvalid[0] << G4endl;
-         G4cerr << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+#ifdef G4SPECSDEBUG
+         G4cout << "      ~~~~~ G4HyperbolicSurface::DistanceToSurface(p,v) "
+	        << "return" << G4endl;
+         G4cout << "         Single solution. " << G4endl;
+         G4cout << "         Name        : " << GetName() << G4endl;
+         G4cout << "         xx[0]       : " << xx[0] << G4endl;
+         G4cout << "         gxx[0]      : " << gxx[0] << G4endl;
+         G4cout << "         dist[0]     : " << distance[0] << G4endl;
+         G4cout << "         areacode[0] : " << hex << areacode[0] << G4endl;
+         G4cout << "         isvalid[0]  : " << dec << isvalid[0] << G4endl;
+         G4cout << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
                 << G4endl;
         if (isvalid[0] && GetSolid()->Inside(gxx[0]) != ::kSurface) {
-           G4cerr << " valid return value is not on surface! abort." << G4endl;
-           abort();
+           G4Exception("G4HyperbolicSurface::DistanceToSurface(p,v)",
+	               "InvalidSetup", FatalException,
+                       "Valid return value is not on surface!");
         } 
 #endif
          return 1;
@@ -446,14 +476,14 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
          fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                                         isvalid[0], 0, validate, &gp, &gv);
 
-#ifdef __SOLIDDEBUG__
-         G4cerr << "      ~~~~~ G4HyperbolicSurface:DistanceToSurface(p,v):return~"
-                << G4endl;
-         G4cerr << "         No intersection." << G4endl;
-         G4cerr << "         a, b, c  : " <<  a  << " , " << b << " , " 
+#ifdef G4SPECSDEBUG
+         G4cout << "      ~~~~~ G4HyperbolicSurface::DistanceToSurface(p,v) "
+	        << "return" << G4endl;
+         G4cout << "         No intersection." << G4endl;
+         G4cout << "         a, b, c  : " <<  a  << " , " << b << " , " 
                                           << c << G4endl;
-         G4cerr << "         NAME     : " << GetName() << G4endl;
-         G4cerr << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+         G4cout << "         Name     : " << GetName() << G4endl;
+         G4cout << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
                 << G4endl;
 #endif
          return 0;
@@ -466,7 +496,7 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
       G4double      tmpdist[2] = {kInfinity, kInfinity};
       G4ThreeVector tmpxx[2] ;
       G4int         tmpareacode[2] = {kOutside, kOutside};
-      G4bool        tmpisvalid[2]  = {FALSE, FALSE};
+      G4bool        tmpisvalid[2]  = {false, false};
       G4int i;
 
       for (i=0; i<2; i++) {
@@ -477,18 +507,18 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
          if (validate == kValidateWithTol) {
             tmpareacode[i] = GetAreaCode(tmpxx[i]);
             if (!IsOutside(tmpareacode[i])) {
-               if (tmpdist[i] >= 0) tmpisvalid[i] = TRUE;
+               if (tmpdist[i] >= 0) tmpisvalid[i] = true;
                continue;
             }
          } else if (validate == kValidateWithoutTol) {
-            tmpareacode[i] = GetAreaCode(tmpxx[i], FALSE);
+            tmpareacode[i] = GetAreaCode(tmpxx[i], false);
             if (IsInside(tmpareacode[i])) {
-               if (tmpdist[i] >= 0) tmpisvalid[i] = TRUE;
+               if (tmpdist[i] >= 0) tmpisvalid[i] = true;
                continue;
             }
          } else { // kDontValidate
             tmpareacode[i] = kInside;
-               if (tmpdist[i] >= 0) tmpisvalid[i] = TRUE;
+               if (tmpdist[i] >= 0) tmpisvalid[i] = true;
             continue;
          }
       }      
@@ -521,27 +551,32 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
                                      isvalid[0], 2, validate, &gp, &gv);
       fCurStatWithV.SetCurrentStatus(1, gxx[1], distance[1], areacode[1],
                                      isvalid[1], 2, validate, &gp, &gv);
-#ifdef __SOLIDDEBUG__
-      G4cerr << "      ~~~~~ G4HyperbolicSurface:DistanceToSurface(p,v):return~"
+#ifdef G4SPECSDEBUG
+      G4cout << "      ~~~~~ G4HyperbolicSurface::DistanceToSurface(p,v) return"
              << G4endl;
-      G4cerr << "         NAME,        : " << GetName() << " , " << i << G4endl;
-      G4cerr << "         xx[0,1]      : " << xx[0] << " , " << xx[1] << G4endl;
-      G4cerr << "         gxx[0,1]     : " << gxx[0] << " , " << gxx[1] << G4endl;
-      G4cerr << "         dist[0,1]    : " << distance[0] << " , " << distance[1] << G4endl;
-      G4cerr << "         areacode[0,1]: " << hex << areacode[0] << " , " 
+      G4cout << "         Name,        : " << GetName() << " , " << i << G4endl;
+      G4cout << "         xx[0,1]      : " << xx[0] << " , " << xx[1] << G4endl;
+      G4cout << "         gxx[0,1]     : " << gxx[0] << " , " << gxx[1]
+             << G4endl;
+      G4cout << "         dist[0,1]    : " << distance[0] << " , "
+                                           << distance[1] << G4endl;
+      G4cout << "         areacode[0,1]: " << hex << areacode[0] << " , " 
                                            << areacode[1] << dec << G4endl;
-      G4cerr << "         isvalid[0,1] : " << isvalid[0] << " , " << isvalid[1] 
+      G4cout << "         isvalid[0,1] : " << isvalid[0] << " , " << isvalid[1] 
                                            << G4endl;
-      G4cerr << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      G4cout << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
              << G4endl;
 
       for (G4int k=0; k<2; k++) {
          if (isvalid[k] && GetSolid()->Inside(gxx[k]) != ::kSurface) {
-            G4cerr << " valid return value is not on surface! abort. k="
-                   << k << G4endl;
+            G4cerr << "WARNING - valid return value is not on surface!"
+	           << "          k=" << k << G4endl;
+            G4Exception("G4HyperbolicSurface::DistanceToSurface(p,v)",
+	                "InvalidSetup", JustWarning,
+                        "Valid return value is not on surface!");
             G4ThreeVector pp = gxx[k];
-            return DistanceToSurface(pp, gv, gxx, distance, areacode, isvalid, validate); 
-            //abort();
+            return DistanceToSurface(pp, gv, gxx, distance,
+	                             areacode, isvalid, validate); 
          }
       }
 #endif
@@ -553,28 +588,28 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
 
       fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                                      isvalid[0], 0, validate, &gp, &gv);
-#ifdef __SOLIDDEBUG__
-      G4cerr << "      ~~~~~ G4HyperbolicSurface:DistanceToSurface(p,v):return~"
+#ifdef G4SPECSDEBUG
+      G4cout << "      ~~~~~ G4HyperbolicSurface::DistanceToSurface(p,v) return"
              << G4endl;
-      G4cerr << "         paralell to the surface or on surface but flying"
-             <<          "away opposit direction. return 0. " << G4endl;
-      G4cerr << "         a, b, c  : " <<  a  << " , " << b << " , " 
-                                        << c << G4endl;
-      G4cerr << "         NAME     : " << GetName() << G4endl;
-      G4cerr << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      G4cout << "         Parallel to the surface, or on surface but flying"
+             << " away in opposit direction." << G4endl;
+      G4cout << "         a, b, c  : " <<  a  << " , " << b << " , " 
+                                       << c << G4endl;
+      G4cout << "         Name     : " << GetName() << G4endl;
+      G4cout << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
              << G4endl;
 #endif
       return 0;
    }
-    G4cerr << "      G4HyperbolicSurface::DistanceToSurface(p,v) illigal "
-           << "operation!! abort"
-           << G4endl;
-    abort();          
+   G4Exception("G4HyperbolicSurface::DistanceToSurface(p,v)",
+	       "InvalidCondition", FatalException, "Illegal operation !");
+   return 1;
 }
 
    
 //=====================================================================
 //* DistanceToSurface -------------------------------------------------
+
 G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
                                                    G4ThreeVector  gxx[],
                                                    G4double       distance[],
@@ -582,7 +617,7 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
 {
     // Find the approximate distance of a point of a hyperbolic surface.
     // The distance must be an underestimate. 
-    // It will also be nice (although not necesary) that the estimate is
+    // It will also be nice (although not necessary) that the estimate is
     // always finite no matter how close the point is.
     //
     // We arranged G4Hype::ApproxDistOutside and G4Hype::ApproxDistInside
@@ -612,13 +647,13 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
    G4ThreeVector p = ComputeLocalPoint(gp);
    G4ThreeVector xx;
 
-#ifdef __SOLIDDEBUG__
-   G4cerr << "      ~~~~~ G4HyperbolicSurface:DistanceToSurface(p):Start"
+#ifdef G4SPECSDEBUG
+   G4cout << "      ~~~~~ G4HyperbolicSurface::DistanceToSurface(p) Start"
           << G4endl;
-   G4cerr << "         Name : " << GetName() << G4endl;
-   G4cerr << "         gp   : " << gp << G4endl;
-   G4cerr << "         p    : " << p << G4endl;
-   G4cerr << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+   G4cout << "         Name : " << GetName() << G4endl;
+   G4cout << "         gp   : " << gp << G4endl;
+   G4cout << "         p    : " << p << G4endl;
+   G4cout << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
           << G4endl;
 #endif
 
@@ -639,8 +674,8 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
       gxx[0] = gp;
       distance[0] = 0;      
 
-#ifdef __BOUNDARYCHECK__
-      areacode[0] = GetAreaCode(xx, FALSE);
+#ifdef G4SPECSDEBUG
+      areacode[0] = GetAreaCode(xx, false);
       if (IsInside(areacode[0])) {
          distance[0] = 0;      
          gxx[0] = gp;
@@ -656,21 +691,21 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
       }
 #endif
 
-      G4bool isvalid = TRUE;
+      G4bool isvalid = true;
       fCurStat.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                                 isvalid, 1, kDontValidate, &gp);
                              
-#ifdef __SOLIDDEBUG__
-      G4cerr <<"      ~~~~~ G4HyperbolicSurface:DistanceToSurface(p):return"
+#ifdef G4SPECSDEBUG
+      G4cout <<"      ~~~~~ G4HyperbolicSurface::DistanceToSurface(p) return"
              << G4endl;
-      G4cerr <<"         I'm a last winner ! " << G4endl;
-      G4cerr <<"         Otherwise last poststep point is on my surface. "
+      G4cout <<"         I'm a last winner ! " << G4endl;
+      G4cout <<"         Otherwise last poststep point is on my surface. "
              << G4endl;
-      G4cerr <<"         NAME        : " << GetName() << G4endl;
-      G4cerr <<"         xx          : " << xx << G4endl;
-      G4cerr <<"         gxx[0]      : " << gxx[0] << G4endl;
-      G4cerr <<"         dist[0]     : " << distance[0] << G4endl;
-      G4cerr <<"      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      G4cout <<"         Name        : " << GetName() << G4endl;
+      G4cout <<"         xx          : " << xx << G4endl;
+      G4cout <<"         gxx[0]      : " << gxx[0] << G4endl;
+      G4cout <<"         dist[0]     : " << distance[0] << G4endl;
+      G4cout <<"      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
              << G4endl;
 #endif
 
@@ -687,15 +722,15 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
    
    G4ThreeVector pabsz(p.x(), p.y(), pz);
    
-#ifdef __SOLIDDEBUG__
-   G4cerr << "      ~~~ G4HyperbolicSurface::DistanceToSurface(p):~~~~~~"
+#ifdef G4SPECSDEBUG
+   G4cout << "      ~~~ G4HyperbolicSurface::DistanceToSurface(p) ~~~~~~"
           << G4endl;
-   G4cerr << "      //*   NAME     : " <<  GetName() << G4endl;
-   G4cerr << "      //*   fR02     : " <<  fR02 << G4endl;
-   G4cerr << "      //*   p.rho    : " <<  prho << G4endl;
-   G4cerr << "      //*   pz       : " <<  pz << G4endl;
-   G4cerr << "      //*   r1(z=p.z): " <<  r1 << G4endl;
-   G4cerr << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+   G4cout << "            Name     : " <<  GetName() << G4endl;
+   G4cout << "            fR02     : " <<  fR02 << G4endl;
+   G4cout << "            p.rho    : " <<  prho << G4endl;
+   G4cout << "            pz       : " <<  pz << G4endl;
+   G4cout << "            r1(z=p.z): " <<  r1 << G4endl;
+   G4cout << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
           << G4endl;
 #endif
     
@@ -721,17 +756,17 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
          distance[0] = DistanceToLine(pabsz, xx1, (xx2 - xx1) , xx);
       }
       
-#ifdef __SOLIDDEBUG__
-      G4cerr << "      ~~~ G4HyperbolicSurface::DistanceToSurface(p):~~~~~~" 
+#ifdef G4SPECSDEBUG
+      G4cout << "      ~~~ G4HyperbolicSurface::DistanceToSurface(p) ~~~~~~" 
              << G4endl;
-      G4cerr << "      //*   p is outside of Hyperbolic surface."  << G4endl;
-      G4cerr << "      //*   NAME     : " <<  GetName() << G4endl;
-      G4cerr << "      //*   xx1      : " <<  xx1 << G4endl;
-      G4cerr << "      //*   xx2      : " <<  xx2 << G4endl;
-      G4cerr << "      //*   xx       : " <<  xx  << G4endl;
-      G4cerr << "      //*   Len      : " <<  len << G4endl;
-      G4cerr << "      //*   Distance : " <<  distance[0] << G4endl;
-      G4cerr << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      G4cout << "            p is outside of Hyperbolic surface."  << G4endl;
+      G4cout << "            Name     : " <<  GetName() << G4endl;
+      G4cout << "            xx1      : " <<  xx1 << G4endl;
+      G4cout << "            xx2      : " <<  xx2 << G4endl;
+      G4cout << "            xx       : " <<  xx  << G4endl;
+      G4cout << "            Len      : " <<  len << G4endl;
+      G4cout << "            Distance : " <<  distance[0] << G4endl;
+      G4cout << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
              << G4endl;
 #endif
             
@@ -768,15 +803,15 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
       G4ThreeVector d = xx2 - xx1;
       distance[0] = DistanceToLine(pabsz, xx1, d, xx);
       
-#ifdef __SOLIDDEBUG__
-      G4cerr << "      ~~~ G4HyperbolicSurface::DistanceToSurface(p):~~~~~~" << G4endl;
-      G4cerr << "      //*   p is inside of Hyperbolic surface."  << G4endl;
-      G4cerr << "      //*   NAME     : " <<  GetName() << G4endl;
-      G4cerr << "      //*   xx1      : " <<  xx1 << G4endl;
-      G4cerr << "      //*   xx2      : " <<  xx2 << G4endl;
-      G4cerr << "      //*   xx       : " <<  xx  << G4endl;
-      G4cerr << "      //*   Distance : " <<  distance[0] << G4endl;
-      G4cerr << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+#ifdef G4SPECSDEBUG
+      G4cout << "      ~~~ G4HyperbolicSurface::DistanceToSurface(p) ~~~~~~" << G4endl;
+      G4cout << "            p is inside of Hyperbolic surface."  << G4endl;
+      G4cout << "            Name     : " <<  GetName() << G4endl;
+      G4cout << "            xx1      : " <<  xx1 << G4endl;
+      G4cout << "            xx2      : " <<  xx2 << G4endl;
+      G4cout << "            xx       : " <<  xx  << G4endl;
+      G4cout << "            Distance : " <<  distance[0] << G4endl;
+      G4cout << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
              << G4endl;
 #endif
           
@@ -784,11 +819,11 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
    
       distance[0] = 0;
       xx.set(p.x(), p.y(), pz);
-#ifdef __SOLIDDEBUG__
-      G4cerr << "      ~~~ G4HyperbolicSurface::DistanceToSurface(p):~~~~~~" 
+#ifdef G4SPECSDEBUG
+      G4cout << "      ~~~ G4HyperbolicSurface::DistanceToSurface(p) ~~~~~~" 
              << G4endl;
-      G4cerr << "      //*   p is on of Hyperbolic surface."  << G4endl;
-      G4cerr << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      G4cout << "            Point p is on of Hyperbolic surface."  << G4endl;
+      G4cout << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
              << G4endl;
 #endif
    }
@@ -798,8 +833,8 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
       xx = tmpxx;
    }
 
-#ifdef __BOUNDARYCHECK__
-   areacode[0] = GetAreaCode(xx, FALSE);
+#ifdef G4SPECSDEBUG
+   areacode[0] = GetAreaCode(xx, false);
    if (!IsInside(areacode[0])) {
       // xx is out of boundary or corner.
       // return distance to boundary or corner.
@@ -808,29 +843,28 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
          distance[0] = (xx - p).mag();
       } else {
          distance[0] = DistanceToBoundary(areacode[0], xx, p);
-         G4cerr << "      G4HyperbolicSurface:DistanceToSurface(p) ~~~~~~~~~~~~~~" << G4endl;
-         G4cerr << "         xx is out of boundary." << G4endl;
-         G4cerr << "         areacode : " << std::hex << areacode[0] << std::dec << G4endl;
-         G4cerr << "         xx : " << xx << G4endl;
-         G4cerr << "         p : " << p << G4endl;
-         G4cerr << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << G4endl;
-         
+         G4cout << "      G4HyperbolicSurface:DistanceToSurface(p) ~~~~~~~~~~~~~~" << G4endl;
+         G4cout << "         xx is out of boundary." << G4endl;
+         G4cout << "         areacode : " << std::hex << areacode[0] << std::dec << G4endl;
+         G4cout << "         xx : " << xx << G4endl;
+         G4cout << "         p : " << p << G4endl;
+         G4cout << "      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << G4endl;
       }
    }
 #endif
        
    gxx[0] = ComputeGlobalPoint(xx);
    areacode[0]    = kInside;
-   G4bool isvalid = TRUE;
+   G4bool isvalid = true;
    fCurStat.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                              isvalid, 1, kDontValidate, &gp);
-#ifdef __SOLIDDEBUG__
-   G4cerr <<"      ~~~~~ G4HyperbolicSurface:DistanceToSurface(p):return"
+#ifdef G4SPECSDEBUG
+   G4cout <<"      ~~~~~ G4HyperbolicSurface:DistanceToSurface(p) return"
           << G4endl;
-   G4cerr <<"         NAME        : " << GetName() << G4endl;
-   G4cerr <<"         xx, gxx     : " << xx << " " << gxx[0] << G4endl;
-   G4cerr <<"         dist[0]     : " << distance[0] << G4endl;
-   G4cerr <<"      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+   G4cout <<"         Name        : " << GetName() << G4endl;
+   G4cout <<"         xx, gxx     : " << xx << " " << gxx[0] << G4endl;
+   G4cout <<"         dist[0]     : " << distance[0] << G4endl;
+   G4cout <<"      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
           << G4endl;
 #endif
 
@@ -839,6 +873,7 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
 
 //=====================================================================
 //* GetAreaCode -------------------------------------------------------
+
 G4int G4HyperbolicSurface::GetAreaCode(const G4ThreeVector &xx, 
                                              G4bool         withTol)
 {
@@ -851,7 +886,7 @@ G4int G4HyperbolicSurface::GetAreaCode(const G4ThreeVector &xx,
       
       if (withTol) {
 
-         G4bool isoutside      = FALSE;
+         G4bool isoutside      = false;
          G4int  phiareacode    = GetAreaCodeInPhi(xx);
          G4bool isoutsideinphi = IsOutside(phiareacode);
 
@@ -860,12 +895,12 @@ G4int G4HyperbolicSurface::GetAreaCode(const G4ThreeVector &xx,
          if ((phiareacode & kAxisMin) == kAxisMin) {
 
             areacode |= (kAxis0 & (kAxisPhi | kAxisMin)) | kBoundary;
-            if (isoutsideinphi) isoutside = TRUE;
+            if (isoutsideinphi) isoutside = true;
 
          } else if ((phiareacode & kAxisMax)  == kAxisMax) {
 
             areacode |= (kAxis0 & (kAxisPhi | kAxisMax)) | kBoundary;
-            if (isoutsideinphi) isoutside = TRUE;
+            if (isoutsideinphi) isoutside = true;
 
          }
 
@@ -877,7 +912,7 @@ G4int G4HyperbolicSurface::GetAreaCode(const G4ThreeVector &xx,
             if   (areacode & kBoundary) areacode |= kCorner;  // xx is on the corner.
             else                        areacode |= kBoundary;
 
-            if (xx.z() <= fAxisMin[zaxis] - ctol) isoutside = TRUE;
+            if (xx.z() <= fAxisMin[zaxis] - ctol) isoutside = true;
 
          } else if (xx.z() > fAxisMax[zaxis] - ctol) {
 
@@ -885,10 +920,10 @@ G4int G4HyperbolicSurface::GetAreaCode(const G4ThreeVector &xx,
             if   (areacode & kBoundary) areacode |= kCorner;  // xx is on the corner.
             else                        areacode |= kBoundary;
 
-            if (xx.z() >= fAxisMax[zaxis] + ctol) isoutside = TRUE;
+            if (xx.z() >= fAxisMax[zaxis] + ctol) isoutside = true;
          }
 
-         // if isoutside = TRUE, clear kInside bit.
+         // if isoutside = true, clear kInside bit.
          // if not on boundary, add boundary information. 
 
          if (isoutside) {
@@ -899,20 +934,20 @@ G4int G4HyperbolicSurface::GetAreaCode(const G4ThreeVector &xx,
          }
 
 
-#ifdef __SOLIDDEBUGAREACODE__
-         G4cerr << "         === G4HyperbolicSurface::GetAreaCode ========="
+#ifdef G4SPECSDEBUG
+         G4cout << "         === G4HyperbolicSurface::GetAreaCode() ======="
                 << G4endl;
-         G4cerr << "         //#    NAME     : " << GetName() << G4endl;
-         G4cerr << "         //#    xx       : " << xx << G4endl;
-         G4cerr << "         //#    areacode : " << hex << areacode << G4endl;
-         G4cerr << "         =============================================="
+         G4cout << "                Name     : " << GetName() << G4endl;
+         G4cout << "                xx       : " << xx << G4endl;
+         G4cout << "                areacode : " << hex << areacode << G4endl;
+         G4cout << "         =============================================="
                 << dec << G4endl;
 #endif
          return areacode;
       
       } else {
 
-         G4int phiareacode = GetAreaCodeInPhi(xx, FALSE);
+         G4int phiareacode = GetAreaCodeInPhi(xx, false);
          
          // test boundary of z-axis
 
@@ -947,21 +982,22 @@ G4int G4HyperbolicSurface::GetAreaCode(const G4ThreeVector &xx,
          if ((areacode & kBoundary) != kBoundary) {
             areacode |= (kAxis0 & kAxisPhi) | (kAxis1 & kAxisZ);
          }
-
          return areacode;
-
       }
-
    } else {
-      G4cerr << "         G4HyperbolicSurface::GetAreaCode fAxis[0] = " 
-             << fAxis[0] << " fAxis[1] = " << fAxis[1]
-             << " is yet implemented. Write the code yourself." << G4endl;
-      abort();
+      G4cerr << "ERROR - G4HyperbolicSurface::GetAreaCode()" << G4endl
+             << "        fAxis[0] = " << fAxis[0] << G4endl
+             << "        fAxis[1] = " << fAxis[1] << G4endl;
+      G4Exception("G4HyperbolicSurface::GetAreaCode()",
+	          "NotImplemented", FatalException,
+                  "Feature NOT implemented !");
    }
+   return areacode;
 }
 
 //=====================================================================
 //* GetAreaCodeInPhi --------------------------------------------------
+
 G4int G4HyperbolicSurface::GetAreaCodeInPhi(const G4ThreeVector &xx,
                                                   G4bool withTol)
 {
@@ -971,33 +1007,33 @@ G4int G4HyperbolicSurface::GetAreaCodeInPhi(const G4ThreeVector &xx,
    lowerlimit = GetBoundaryAtPZ(kAxis0 & kAxisMin, xx);
    upperlimit = GetBoundaryAtPZ(kAxis0 & kAxisMax, xx);
 
-#ifdef __SOLIDDEBUGAREACODE__
-   G4cerr << "         === G4HyperbolicSurface::GetAreaCodeInPhi ========="
+#ifdef G4SPECSDEBUG
+   G4cout << "         === G4HyperbolicSurface::GetAreaCodeInPhi() ======="
           << G4endl;
-   G4cerr << "         //#    NAME       : " << GetName() << G4endl;
-   G4cerr << "         //#    xx         : " << xx << G4endl;
-   G4cerr << "         //#    lowerlimit : " << lowerlimit << G4endl;
-   G4cerr << "         //#    upperlimit : " << upperlimit << G4endl; 
-   G4cerr << "         ==================================================="
+   G4cout << "                Name       : " << GetName() << G4endl;
+   G4cout << "                xx         : " << xx << G4endl;
+   G4cout << "                lowerlimit : " << lowerlimit << G4endl;
+   G4cout << "                upperlimit : " << upperlimit << G4endl; 
+   G4cout << "         ==================================================="
           << G4endl;
  
 #endif
 
    G4int  areacode  = kInside;
-   G4bool isoutside = FALSE; 
+   G4bool isoutside = false; 
    
    if (withTol) {
          
       if (AmIOnLeftSide(xx, lowerlimit) >= 0) {        // xx is on lowerlimit
          areacode |= (kAxisMin | kBoundary);
-         if (AmIOnLeftSide(xx, lowerlimit) > 0) isoutside = TRUE; 
+         if (AmIOnLeftSide(xx, lowerlimit) > 0) isoutside = true; 
 
       } else if (AmIOnLeftSide(xx, upperlimit) <= 0) { // xx is on upperlimit
          areacode |= (kAxisMax | kBoundary);
-         if (AmIOnLeftSide(xx, upperlimit) < 0) isoutside = TRUE; 
+         if (AmIOnLeftSide(xx, upperlimit) < 0) isoutside = true; 
       }
 
-      // if isoutside = TRUE, clear inside bit.
+      // if isoutside = true, clear inside bit.
 
       if (isoutside) {
          G4int tmpareacode = areacode & (~kInside);
@@ -1007,9 +1043,9 @@ G4int G4HyperbolicSurface::GetAreaCodeInPhi(const G4ThreeVector &xx,
 
    } else {
    
-      if (AmIOnLeftSide(xx, lowerlimit, FALSE) >= 0) {
+      if (AmIOnLeftSide(xx, lowerlimit, false) >= 0) {
          areacode |= (kAxisMin | kBoundary);
-      } else if (AmIOnLeftSide(xx, upperlimit, FALSE) <= 0) {
+      } else if (AmIOnLeftSide(xx, upperlimit, false) <= 0) {
          areacode |= (kAxisMax | kBoundary);
       }
    }
@@ -1020,6 +1056,7 @@ G4int G4HyperbolicSurface::GetAreaCodeInPhi(const G4ThreeVector &xx,
 
 //=====================================================================
 //* SetCorners(solid) -------------------------------------------------
+
 void G4HyperbolicSurface::SetCorners(G4TwistedTubs *solid)
 {
    // Set Corner points in local coodinate.
@@ -1069,24 +1106,28 @@ void G4HyperbolicSurface::SetCorners(G4TwistedTubs *solid)
       SetCorner(kCorner0Min1Max, x, y, z);
 
    } else {
-      G4cerr << "G4FlatSurface::SetCorners fAxis[0] = " << fAxis[0]
-      << " fAxis[1] = " << fAxis[1]
-      << " is yet implemented. Write the code yourself." << G4endl;
-      abort();
+      G4cerr << "ERROR - G4FlatSurface::SetCorners()" << G4endl
+             << "        fAxis[0] = " << fAxis[0] << G4endl
+             << "        fAxis[1] = " << fAxis[1] << G4endl;
+      G4Exception("G4HyperbolicSurface::SetCorners()",
+	          "NotImplemented", FatalException,
+                  "Feature NOT implemented !");
    }
 }
 
 //=====================================================================
 //* SetCorners() ------------------------------------------------------
+
 void G4HyperbolicSurface::SetCorners()
 {
-   G4cerr << "G4FlatSurface::SetCorners"
-   << " is yet implemented. Write the code yourself." << G4endl;
-   abort();
+   G4Exception("G4HyperbolicSurface::SetCorners()",
+	       "NotImplemented", FatalException,
+               "Method NOT implemented !");
 }
 
 //=====================================================================
 //* SetBoundaries() ---------------------------------------------------
+
 void G4HyperbolicSurface::SetBoundaries()
 {
    // Set direction-unit vector of phi-boundary-lines in local coodinate.
@@ -1120,15 +1161,11 @@ void G4HyperbolicSurface::SetBoundaries()
       SetBoundary(kAxis1 & (kAxisZ | kAxisMax), direction, 
                   GetCorner(kCorner0Min1Max), kAxisPhi);
    } else {
-      G4cerr << "G4HyperbolicSurface::SetBoundaries fAxis[0] = " << fAxis[0]
-      << " fAxis[1] = " << fAxis[1]
-      << " is yet implemented. Write the code yourself." << G4endl;
-      abort();
+      G4cerr << "ERROR - G4HyperbolicSurface::SetBoundaries()" << G4endl
+             << "        fAxis[0] = " << fAxis[0] << G4endl
+             << "        fAxis[1] = " << fAxis[1] << G4endl;
+      G4Exception("G4HyperbolicSurface::SetBoundaries()",
+	          "NotImplemented", FatalException,
+                  "Feature NOT implemented !");
    }
-   
 }
-
-
-
-
-

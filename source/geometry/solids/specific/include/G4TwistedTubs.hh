@@ -1,129 +1,129 @@
-// $Id: G4TwistedTubs.hh,v 1.1 2003-11-12 15:43:00 link Exp $
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4TwistedTubs.hh,v 1.2 2003-11-14 14:46:16 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// --------------------------------------------------------------------
+// GEANT 4 class header file
+//
+//
+// G4TwistedTubs
+//
+// Class description:
+//
+//  G4TwistedTubs is a sort of twisted cylinder.
+//  A twisted cylinder which is placed along with z-axis and is
+//  separated into phi-segments should become a hyperboloid, and
+//  its each segmented piece should be tilted with a stereo angle. 
+//  G4TwistedTubs is a G4VSolid.
+//  It can have inner & outer surfaces as well as G4TwistedTubs, 
+//  but cannot has different stereo angles between the inner surface
+//  and outer surface.
+
+// Author: 
+//   01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp)
+//
+// History:
+//   13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
+//                 from original version in Jupiter-2.5.02 application.
+// --------------------------------------------------------------------
 #ifndef __G4TWISTEDTUBS__
 #define __G4TWISTEDTUBS__
-//*************************************************************************
-//* --------------------
-//* G4TWISTEDTUBS
-//* --------------------
-//* (Description)
-//* G4TwistedTubs is a piece of twisted cylinder.
-//*	A twisted cylinder which is placed along with z-axis and
-//*	is separated into phi-segments should become a hyperboloid,
-//*	and its each segmented piece should be tilted with a stereo angle. 
-//*	G4TwistedTubs inherits G4TwistedTubs.¡¡ 
-//*	It can have inner & outer surfaces as well as G4TwistedTubs, 
-//*	but cannot has different stereo angles between inner 
-//*	surface and outer surface.
-//*	
-//*     
-//* (Update Record)
-//*	2002/04/08  K.Hoshina	Original version.
-//*************************************************************************
 
 #include "G4VSolid.hh"
-// #include "G4EventManager.hh"
 #include "G4FlatSurface.hh"
 #include "G4TwistedSurface.hh"
 #include "G4HyperbolicSurface.hh"
-// #include "J4PVPlacement.hh"
-
-//#define __SOLIDDEBUG__
 
 class G4SolidExtentList;
 class G4ClippablePolygon;
-// class J4VComponent;
-
 
 class G4TwistedTubs : public G4VSolid
 {
- public:
+ public:  // with description
  
-  G4TwistedTubs(const G4String &pname,              // Name of instance
-                      G4double  twistedangle,       // Twisted angle
-                      G4double  endinnerrad,        // Inner radius at endcap 
-                      G4double  endouterrad,        // Outer radius at endcap 
-                      G4double  halfzlen,           // half z length 
-                      G4double  dphi);              // Phi angle of a segment
+  G4TwistedTubs(const G4String &pname,         // Name of instance
+                      G4double  twistedangle,  // Twisted angle
+                      G4double  endinnerrad,   // Inner radius at endcap 
+                      G4double  endouterrad,   // Outer radius at endcap 
+                      G4double  halfzlen,      // half z length 
+                      G4double  dphi);         // Phi angle of a segment
                       
-  G4TwistedTubs(const G4String &pname,              // Name of instance
-                      G4double  twistedangle,       // Stereo angle
-                      G4double  endinnerrad,        // Inner radius at endcap 
-                      G4double  endouterrad,        // Outer radius at endcap 
-                      G4double  halfzlen,           // half z length 
-                      G4int     nseg,               // Number of segments in totalPhi
-                      G4double  totphi);            // Total angle of all segments
+  G4TwistedTubs(const G4String &pname,         // Name of instance
+                      G4double  twistedangle,  // Stereo angle
+                      G4double  endinnerrad,   // Inner radius at endcap 
+                      G4double  endouterrad,   // Outer radius at endcap 
+                      G4double  halfzlen,      // half z length 
+                      G4int     nseg,          // Number of segments in totalPhi
+                      G4double  totphi);       // Total angle of all segments
                       
-  G4TwistedTubs(const G4String &pname,              // Name of instance
-                      G4double  twistedangle,       // Twisted angle
-                      G4double  innerrad,           // Inner radius at z=0 
-                      G4double  outerrad,           // Outer radius at z=0 
-                      G4double  negativeEndz,       // -ve z endplate
-                      G4double  positiveEndz,       // +ve z endplate
-                      G4double  dphi);              // Phi angle of a segment
+  G4TwistedTubs(const G4String &pname,         // Name of instance
+                      G4double  twistedangle,  // Twisted angle
+                      G4double  innerrad,      // Inner radius at z=0 
+                      G4double  outerrad,      // Outer radius at z=0 
+                      G4double  negativeEndz,  // -ve z endplate
+                      G4double  positiveEndz,  // +ve z endplate
+                      G4double  dphi);         // Phi angle of a segment
 
-  G4TwistedTubs(const G4String &pname,              // Name of instance
-                      G4double  twistedangle,       // Stereo angle
-                      G4double  innerrad,           // Inner radius at z=0 
-                      G4double  outerrad,           // Outer radius at z=0 
-                      G4double  negativeEndz,       // -ve z endplate
-                      G4double  positiveEndz,       // +ve z endplate
-                      G4int     nseg,               // Number of segments in totalPhi
-                      G4double  totphi);            // Total angle of all segments
-                      
- // argument miss protection -------------------------------------------------
-  G4TwistedTubs(const G4String &pname ,              // Name of instance
-		G4double   /* twistedangle */ ,       // Twisted angle
-		G4double   /*  endinnerrad */ ,        // Inner radius at endcap 
-		G4double   /* endouterrad  */ ,        // Outer radius at endcap 
-		G4double   /*  halfzlen    */ ,           // half z length 
-		G4int      /* dphi */ )               // Phi angle of a segment??
-                     :G4VSolid(pname)
-  {
-       G4cerr << "G4TwistedTubs: dphi must be type G4double. abort." << G4endl;
-       abort();
-  }
-  G4TwistedTubs(const G4String &pname,              // Name of instance
-                      G4double   /* twistedangle */ ,       // Twisted angle
-                      G4double   /* innerrad */ ,           // Inner radius at z=0 
-                      G4double   /* outerrad */ ,           // Outer radius at z=0 
-                      G4double   /* negativeEndz */ ,       // -ve z endplate
-                      G4double   /* positiveEndz */ ,       // +ve z endplate
-                      G4int      /* dphi */ )               // Phi angle of a segment
-                     :G4VSolid(pname)
-  {
-       G4cerr << "G4TwistedTubs: dphi must be type G4double. abort." << G4endl;
-       abort();
-  }
- // argument miss protection end ------------------------------------------
+  G4TwistedTubs(const G4String &pname,         // Name of instance
+                      G4double  twistedangle,  // Stereo angle
+                      G4double  innerrad,      // Inner radius at z=0 
+                      G4double  outerrad,      // Outer radius at z=0 
+                      G4double  negativeEndz,  // -ve z endplate
+                      G4double  positiveEndz,  // +ve z endplate
+                      G4int     nseg,          // Number of segments in totalPhi
+                      G4double  totphi);       // Total angle of all segments
 
-  virtual         ~G4TwistedTubs();
+  virtual ~G4TwistedTubs();
              
-  void            ComputeDimensions(G4VPVParameterisation   *  /* p  */ ,
-                                    const G4int                /* n  */ ,
-                                    const G4VPhysicalVolume *  /* prep */ );
+  void ComputeDimensions(G4VPVParameterisation   *  /* p  */ ,
+                         const G4int                /* n  */ ,
+                         const G4VPhysicalVolume *  /* prep */ );
  
-  G4bool          CalculateExtent(const EAxis               paxis,
-                                  const G4VoxelLimits      &pvoxellimit,
-                                  const G4AffineTransform  &ptransform,
-                                        G4double           &pmin,
-                                        G4double           &pmax ) const;
+  G4bool CalculateExtent(const EAxis               paxis,
+                         const G4VoxelLimits      &pvoxellimit,
+                         const G4AffineTransform  &ptransform,
+                               G4double           &pmin,
+                               G4double           &pmax ) const;
 
-  G4double        DistanceToIn (const G4ThreeVector &p,
-                                const G4ThreeVector &v ) const;
+  G4double DistanceToIn (const G4ThreeVector &p,
+                         const G4ThreeVector &v ) const;
 
-  G4double        DistanceToIn (const G4ThreeVector &p ) const;
+  G4double DistanceToIn (const G4ThreeVector &p ) const;
    
-  G4double        DistanceToOut(const G4ThreeVector &p, 
-                                const G4ThreeVector &v,
-                                const G4bool         calcnorm=G4bool(false),
-                                      G4bool        *validnorm=0, 
-                                      G4ThreeVector *n=0 ) const;
+  G4double DistanceToOut(const G4ThreeVector &p, 
+                         const G4ThreeVector &v,
+                         const G4bool         calcnorm=G4bool(false),
+                               G4bool        *validnorm=0, 
+                               G4ThreeVector *n=0 ) const;
 
-  G4double        DistanceToOut(const G4ThreeVector &p) const;
+  G4double DistanceToOut(const G4ThreeVector &p) const;
   
-  EInside         Inside       (const G4ThreeVector &p) const;
+  EInside Inside (const G4ThreeVector &p) const;
 
-  G4ThreeVector   SurfaceNormal(const G4ThreeVector &p) const;
+  G4ThreeVector SurfaceNormal(const G4ThreeVector &p) const;
 
   void            DescribeYourselfTo (G4VGraphicsScene &scene) const;
   G4Polyhedron   *CreatePolyhedron   () const;
@@ -131,7 +131,7 @@ class G4TwistedTubs : public G4VSolid
 
   std::ostream &StreamInfo(std::ostream& os) const;
 
-  //* get functions *//
+  // accessors
   
   inline G4double GetDPhi        () const { return fDPhi       ; }
   inline G4double GetPhiTwist    () const { return fPhiTwist   ; }
@@ -147,10 +147,12 @@ class G4TwistedTubs : public G4VSolid
   inline G4double GetTanOuterStereo () const { return fTanOuterStereo  ; }
   inline G4double GetTanOuterStereo2() const { return fTanOuterStereo2 ; }
   
-  inline G4double GetEndZ           (G4int i) const { return fEndZ[i]       ; }
-  inline G4double GetEndPhi         (G4int i) const { return fEndPhi[i]     ; }
-  inline G4double GetEndInnerRadius (G4int i) const { return fEndInnerRadius[i]; }
-  inline G4double GetEndOuterRadius (G4int i) const { return fEndOuterRadius[i]; }
+  inline G4double GetEndZ           (G4int i) const { return fEndZ[i]  ; }
+  inline G4double GetEndPhi         (G4int i) const { return fEndPhi[i]; }
+  inline G4double GetEndInnerRadius (G4int i) const
+                  { return fEndInnerRadius[i]; }
+  inline G4double GetEndOuterRadius (G4int i) const
+                  { return fEndOuterRadius[i]; }
   inline G4double GetEndInnerRadius () const 
                   { return (fEndInnerRadius[0] > fEndInnerRadius[1] ?
                     fEndInnerRadius[0] : fEndInnerRadius[1]); }
@@ -158,16 +160,19 @@ class G4TwistedTubs : public G4VSolid
                   { return (fEndOuterRadius[0] > fEndOuterRadius[1] ?
                     fEndOuterRadius[0] : fEndOuterRadius[1]); }
   
-  G4VisExtent            GetExtent    () const;
-  inline G4GeometryType  GetEntityType() const;
+  G4VisExtent     GetExtent    () const;
+  G4GeometryType  GetEntityType() const;
 
-#ifdef __SOLIDDEBUG__
+ public:  // without description
+
+#ifdef G4SPECSDEBUG
   G4VSurface * GetOuterHype() const { return fOuterHype; }
 #endif
   
  private:
  
-  inline void  SetFields(G4double phitwist, G4double innerrad, G4double outerrad,
+  inline void  SetFields(G4double phitwist, G4double innerrad,
+                         G4double outerrad,
                          G4double negativeEndz, G4double positiveEndz);
                      
   void         CreateSurfaces();
@@ -180,27 +185,23 @@ class G4TwistedTubs : public G4VSolid
                                 const G4VoxelLimits     &voxellimit,
                                 const EAxis              axis,
                                       G4SolidExtentList &extentlist );
-
-
- //* data members *//
- 
  private:
  
-  G4double fPhiTwist;	       // Twist angle from -fZHalfLength to fZHalfLength
-  G4double fInnerRadius;       // Inner-hype radius at z=0
-  G4double fOuterRadius;       // Outer-hype radius at z=0
-  G4double fEndZ[2];           // z at endcaps, [0] = -ve z, [1] = +ve z
-  G4double fDPhi;	             // Phi-width of a segment fDPhi > 0
-  G4double fZHalfLength;       // Half length along z-axis
+  G4double fPhiTwist;       // Twist angle from -fZHalfLength to fZHalfLength
+  G4double fInnerRadius;    // Inner-hype radius at z=0
+  G4double fOuterRadius;    // Outer-hype radius at z=0
+  G4double fEndZ[2];        // z at endcaps, [0] = -ve z, [1] = +ve z
+  G4double fDPhi;           // Phi-width of a segment fDPhi > 0
+  G4double fZHalfLength;    // Half length along z-axis
  
   G4double fInnerStereo;       // Inner-hype stereo angle
   G4double fOuterStereo;       // Outer-hype stereo angle
   G4double fTanInnerStereo;    // tan(innerStereoAngle)
   G4double fTanOuterStereo;    // tan(outerStereoAngle)
-  G4double fKappa;		       // tan(fPhiTwist/2)/fZHalfLen;
-  G4double fEndInnerRadius[2]; // Inner-hype radii of endcaps [0] -ve z, [1] +ve z
-  G4double fEndOuterRadius[2]; // Outer-hype radii of endcaps [0] -ve z, [1] +ve z
-  G4double fEndPhi[2];         // Phi of endcaps, [0] = -ve z, [1] = +ve z
+  G4double fKappa;             // tan(fPhiTwist/2)/fZHalfLen;
+  G4double fEndInnerRadius[2]; // Inner-hype radii endcaps [0] -ve z, [1] +ve z
+  G4double fEndOuterRadius[2]; // Outer-hype radii endcaps [0] -ve z, [1] +ve z
+  G4double fEndPhi[2];         // Phi endcaps, [0] = -ve z, [1] = +ve z
   
   G4double fInnerRadius2;      // fInnerRadius * fInnerRadius
   G4double fOuterRadius2;      // fOuterRadius * fOuterRadius
@@ -215,64 +216,68 @@ class G4TwistedTubs : public G4VSolid
   G4VSurface *fInnerHype;      // Surface of -ve r
   G4VSurface *fOuterHype;      // Surface of +ve r
     
-  class       LastState {                // last Inside result
-                public:
-                   LastState()
-                   {
-                      p.set(kInfinity,kInfinity,kInfinity);
-                      inside = kOutside;
-                   }
-                   virtual ~LastState(){}
-                public:
-                   G4ThreeVector p;
-                   EInside       inside;
-              };
+  class LastState              // last Inside result
+  {
+    public:
+      LastState()
+      {
+        p.set(kInfinity,kInfinity,kInfinity);
+        inside = kOutside;
+      }
+      ~LastState(){}
+    public:
+      G4ThreeVector p;
+        EInside       inside;
+  };
               
-  class       LastVector{                // last SurfaceNormal result
-                public:
-                   LastVector()
-                   {
-                      p.set(kInfinity,kInfinity,kInfinity);
-                      vec.set(kInfinity,kInfinity,kInfinity);
-                      surface = new G4VSurface*[1];
-                   }
-                   virtual ~LastVector()
-                   {
-                      delete [] surface;
-                   }
-                public:
-                   G4ThreeVector   p;
-                   G4ThreeVector   vec;
-                   G4VSurface    **surface;
-              };
+  class LastVector             // last SurfaceNormal result
+  {
+    public:
+      LastVector()
+      {
+        p.set(kInfinity,kInfinity,kInfinity);
+        vec.set(kInfinity,kInfinity,kInfinity);
+        surface = new G4VSurface*[1];
+      }
+      ~LastVector()
+      {
+        delete [] surface;
+      }
+    public:
+      G4ThreeVector   p;
+      G4ThreeVector   vec;
+      G4VSurface    **surface;
+  };
+
+  class LastValue              // last G4double value
+  {
+    public:
+      LastValue()
+      {
+        p.set(kInfinity,kInfinity,kInfinity);
+        value = DBL_MAX;
+      }
+      ~LastValue(){}
+    public:
+      G4ThreeVector p;
+      G4double      value;
+  };
               
-  class       LastValue{                // last G4double value
-                public:
-                   LastValue()
-                   {
-                      p.set(kInfinity,kInfinity,kInfinity);
-                      value = DBL_MAX;
-                   }
-                   virtual ~LastValue(){}
-                public:
-                   G4ThreeVector p;
-                   G4double      value;
-              };
-              
-  class       LastValueWithDoubleVector{ // last G4double value
-                public:
-                   LastValueWithDoubleVector()
-                   {
-                      p.set(kInfinity,kInfinity,kInfinity);
-                      vec.set(kInfinity,kInfinity,kInfinity);
-                      value = DBL_MAX;
-                   }
-                   virtual ~LastValueWithDoubleVector(){}
-                public:
-                   G4ThreeVector p;
-                   G4ThreeVector vec;
-                   G4double      value;
-              };
+  class LastValueWithDoubleVector   // last G4double value
+  {
+    public:
+      LastValueWithDoubleVector()
+      {
+        p.set(kInfinity,kInfinity,kInfinity);
+        vec.set(kInfinity,kInfinity,kInfinity);
+        value = DBL_MAX;
+      }
+      ~LastValueWithDoubleVector(){}
+      public:
+        G4ThreeVector p;
+        G4ThreeVector vec;
+        G4double      value;
+  };
               
   LastState    fLastInside;
   LastVector   fLastNormal;
@@ -280,13 +285,13 @@ class G4TwistedTubs : public G4VSolid
   LastValue    fLastDistanceToOut;
   LastValueWithDoubleVector   fLastDistanceToInWithV;
   LastValueWithDoubleVector   fLastDistanceToOutWithV;
-             
+
  };
- 
 
 //=====================================================================
+
 //---------------------
-// inline function
+// inline functions
 //---------------------
 
 inline
@@ -333,28 +338,20 @@ void G4TwistedTubs::SetFields(G4double phitwist, G4double innerrad,
    fEndPhi[0]      = atan2(fEndZ[0] * tanHalfTwist, fZHalfLength);
    fEndPhi[1]      = atan2(fEndZ[1] * tanHalfTwist, fZHalfLength);
 
-#ifdef __SOLIDDEBUG__
-   G4cerr << "/********* G4TwistedTubs::SetField  Field Parameters ******************* " << G4endl;
-   G4cerr << "/*   fPhiTwist                  : " << fPhiTwist << G4endl;
-   G4cerr << "/*   fEndZ(0, 1)                : " << fEndZ[0] << " , " << fEndZ[1] << G4endl; 
-   G4cerr << "/*   fEndPhi(0, 1)              : " << fEndPhi[0] << " , " << fEndPhi[1] << G4endl; 
-   G4cerr << "/*   fInnerRadius, fOuterRadius : " << fInnerRadius << " , " << fOuterRadius << G4endl; 
-   G4cerr << "/*   fEndInnerRadius(0, 1)      : " << fEndInnerRadius[0] << " , " 
+#ifdef G4SPECSDEBUG
+   G4cout << "/********* G4TwistedTubs::SetFields() Field Parameters ***************** " << G4endl;
+   G4cout << "/*   fPhiTwist                  : " << fPhiTwist << G4endl;
+   G4cout << "/*   fEndZ(0, 1)                : " << fEndZ[0] << " , " << fEndZ[1] << G4endl; 
+   G4cout << "/*   fEndPhi(0, 1)              : " << fEndPhi[0] << " , " << fEndPhi[1] << G4endl; 
+   G4cout << "/*   fInnerRadius, fOuterRadius : " << fInnerRadius << " , " << fOuterRadius << G4endl; 
+   G4cout << "/*   fEndInnerRadius(0, 1)      : " << fEndInnerRadius[0] << " , " 
           << fEndInnerRadius[1] << G4endl; 
-   G4cerr << "/*   fEndOuterRadius(0, 1)      : " << fEndOuterRadius[0] << " , " 
+   G4cout << "/*   fEndOuterRadius(0, 1)      : " << fEndOuterRadius[0] << " , " 
           << fEndOuterRadius[1] << G4endl; 
-   G4cerr << "/*   fInnerStereo, fOuterStereo : " << fInnerStereo << " , " << fOuterStereo << G4endl; 
-   G4cerr << "/*   tanHalfTwist, fKappa       : " << tanHalfTwist << " , " << fKappa << G4endl; 
-   G4cerr << "/*********************************************************************** " << G4endl;
+   G4cout << "/*   fInnerStereo, fOuterStereo : " << fInnerStereo << " , " << fOuterStereo << G4endl; 
+   G4cout << "/*   tanHalfTwist, fKappa       : " << tanHalfTwist << " , " << fKappa << G4endl; 
+   G4cout << "/*********************************************************************** " << G4endl;
 #endif
 }
-
-inline
-G4GeometryType G4TwistedTubs::GetEntityType() const
-  {
-    return G4String("G4TwistedTubs");
-  }
-
-
 
 #endif
