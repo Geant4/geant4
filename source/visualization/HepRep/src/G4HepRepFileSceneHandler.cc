@@ -43,7 +43,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.11 2003-01-24 21:18:48 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.12 2003-02-28 19:21:22 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -392,8 +392,7 @@ void G4HepRepFileSceneHandler::AddThis (const G4VTrajectory& traj) {
   if (strcmp("Trajectory Points",previousName)!=0) {
     hepRepXMLWriter->addAttValue("DrawAs","Point");
     hepRepXMLWriter->addAttValue("Layer",110);
-    // Change to False once related problem is fixed in WIRED.
-    hepRepXMLWriter->addAttValue("Visibility","True");
+    hepRepXMLWriter->addAttValue("Visibility","False");
   }
 
   for (i = 0; i < traj.GetPointEntries(); i++) {

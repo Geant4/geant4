@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2003-01-24 21:18:48 perl Exp $
+$Id: History,v 1.26 2003-02-28 19:21:22 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 ---------------------------------------------------------------------------
+
+28th February 2003  Joseph Perl
+- Modified G4HepRepFileSceneHandler to allow some volumes to be initially invisible.
 
 24th January 2003  Joseph Perl
 - Modified G4HepRepFileSceneHandler:AddThis (const G4VTrajectory& traj)
