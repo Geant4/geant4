@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test40.cc,v 1.3 2004-06-18 11:13:51 vnivanch Exp $
+// $Id: test40.cc,v 1.4 2004-06-30 15:26:25 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -32,10 +32,6 @@
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
 #include "Randomize.hh"
-
-#ifdef G4VIS_USE
-#include "VisManager.hh"
-#endif
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
@@ -67,12 +63,6 @@ int main(int argc,char** argv) {
   PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
   runManager->SetUserAction(primary);
     
-#ifdef G4VIS_USE
-  // visualization manager
-  G4VisManager* visManager = new VisManager;
-  visManager->Initialize();
-#endif
-    
   // set user action classes
   RunAction* RunAct = new RunAction(detector,primary);
   runManager->SetUserAction(RunAct);
@@ -102,9 +92,6 @@ int main(int argc,char** argv) {
     }
 
   // job termination
-#ifdef G4VIS_USE
-  delete visManager;
-#endif
   delete runManager;
 
   return 0;
