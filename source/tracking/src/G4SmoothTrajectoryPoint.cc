@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectoryPoint.cc,v 1.5 2002-11-05 16:15:51 jacek Exp $
+// $Id: G4SmoothTrajectoryPoint.cc,v 1.6 2002-11-08 18:28:30 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -32,6 +32,12 @@
 // ---------------------------------------------------------------
 
 #include "G4SmoothTrajectoryPoint.hh"
+
+#include "G4AttDefStore.hh"
+#include "G4AttDef.hh"
+#include "G4AttValue.hh"
+#include "G4UnitsTable.hh"
+#include "g4std/strstream"
 
 G4Allocator<G4SmoothTrajectoryPoint> aSmoothTrajectoryPointAllocator;
 
@@ -61,7 +67,39 @@ G4SmoothTrajectoryPoint::~G4SmoothTrajectoryPoint()
 
 const G4std::map<G4String,G4AttDef>*
 G4SmoothTrajectoryPoint::GetAttDefs() const
-{ return 0; }  // Empty for now.
+{
+  G4bool isNew;
+  G4std::map<G4String,G4AttDef>* store
+    = G4AttDefStore::GetInstance("G4SmoothTrajectoryPoint",isNew);
+  if (isNew) {
+    G4String Pos("Pos");
+    (*store)[Pos] = G4AttDef(Pos, "Step Position",
+			     "Physics","","G4ThreeVector");
+    G4String Aux("Aux");
+    (*store)[Aux] = G4AttDef(Aux, "Auxiliary Point Position",
+			     "Physics","","G4ThreeVector");
+  }
+  return store;
+}
 
 G4std::vector<G4AttValue>* G4SmoothTrajectoryPoint::CreateAttValues() const
-{ return 0; }  // Empty for now.
+{
+  char c[100];
+  G4std::ostrstream s(c,100);
+
+  G4std::vector<G4AttValue>* values = new G4std::vector<G4AttValue>;
+
+  G4std::vector<G4ThreeVector>::iterator iAux;
+  for (iAux = fAuxiliaryPointVector->begin();
+       iAux != fAuxiliaryPointVector->end(); ++iAux) {
+    s.seekp(G4std::ios::beg);
+    s << G4BestUnit(*iAux,"Length") << G4std::ends;
+    values->push_back(G4AttValue("Aux",c,""));
+  }
+
+  s.seekp(G4std::ios::beg);
+  s << G4BestUnit(fPosition,"Length") << G4std::ends;
+  values->push_back(G4AttValue("Pos",c,""));
+
+  return values;
+}
