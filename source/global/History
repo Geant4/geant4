@@ -1,4 +1,4 @@
-$Id: History,v 1.21 1999-10-20 14:47:32 gcosmo Exp $
+$Id: History,v 1.22 1999-10-22 14:44:17 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 22, 99 G.Cosmo (global-V00-01-03)
+- Added first implementation of wrapper files for ISO-ANSI migration:
+  added new directory management/include/g4std.
+- Added definition of G4std keyword in G4Types.hh.
+ 
 October 20, 99 G.Cosmo (global-V00-01-02)
 - Tagged.
 
