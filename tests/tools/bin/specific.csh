@@ -458,20 +458,22 @@ if ( `whoami` == "gbarrand" ) then
   setenv CPPVERBOSE 1
   #setenv G4MAKESHLIB                 $G4INSTALL/config/makeshlib.sh
   # G4 build flags :
-  setenv G4ANALYSIS_BUILD_OPEN_SCIENTIST 1
-  setenv G4ANALYSIS_BUILD_JAS            1
+  #setenv G4ANALYSIS_BUILD_OPEN_SCIENTIST 1
+  #setenv G4ANALYSIS_BUILD_JAS            1
   setenv G4ANALYSIS_BUILD_LIZARD         1
   # G4 use flags :
   setenv G4UI_USE_XM                   1
   setenv G4UI_USE_XAW                  1
-  setenv G4ANALYSIS_USE_OPEN_SCIENTIST 1
-  setenv G4ANALYSIS_USE_JAS            1
+  #setenv G4ANALYSIS_USE_OPEN_SCIENTIST 1
+  #setenv G4ANALYSIS_USE_JAS            1
   setenv G4ANALYSIS_USE_LIZARD         1
   # AIDA : 
   setenv G4ANALYSIS_AIDA /afs/cern.ch/sw/contrib/AIDA/1.0/AIDA
   # Lab :
   setenv CMTSITE CERN
   source /afs/cern.ch/sw/contrib/Lab/v4r0/cmt/setup.csh
+  # Lizard :
+  setenv LIZARDROOT /afs/cern.ch/project/asddat/lhcxx/3.2.0/Gecko
   # CLHEP :
   setenv CLHEP_BASE_DIR /afs/cern.ch/sw/lhcxx/specific/@sys/CLHEP/1.5.0.0
   #

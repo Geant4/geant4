@@ -34,7 +34,7 @@ ifdef G4ANALYSIS_BUILD_JAS
   LIB_JAS = 1	
 endif
 
-# ------------- OpenScientist -----------------
+# ------------- Lizard -----------------
 ifdef G4ANALYSIS_USE_LIZARD
   CPPFLAGS += -DG4ANALYSIS_USE_LIZARD
   CPPFLAGS += -DG4ANALYSIS_USE
@@ -68,8 +68,6 @@ ifdef INC_ANALYSIS
 # AIDA interfaces :
 ifdef G4ANALYSIS_AIDA
   CPPFLAGS += -I$(G4ANALYSIS_AIDA)
-else
-  CPPFLAGS += -I$(G4BASE)/analysis/management/AIDA
 endif
 endif
 #
@@ -133,7 +131,7 @@ endif
 
 # ------------- Lizard -----------------
 ifdef INC_LIZARD
-  CPPFLAGS += -I$(G4BASE)/analysis/Lizard/include
+  CPPFLAGS += -I$(LIZARDROOT)/include
 endif
 #
 ifdef LIB_LIZARD
