@@ -3,8 +3,7 @@
 #
 # It creates the default geometry (simple absorber cylinder )        
 #
-/control/verbose 2
-#control/saveHistory
+/tracking/verbose 1
 /run/verbose 1
 #
 #
