@@ -1,0 +1,33 @@
+$Id: History 
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+
+                    Example radioprotection
+                    -----------------------  
+
+                         History file
+                         ------------
+
+
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+June 13, 2002  Francesca Castrovillari (update of  no-ufficial tag Rad-fra-02)
+- using the gcc2952 compilator and the G4version 4.00
+  It is able to show visualization and a first form of analysis using the AIDA Library.
+
+June 12, 2002  Francesca Castrovillari (first no-ufficialtag Rad-fra-00)
+- using the gcc2952 compilator and the G4version 4.00
+  It is able to show the visualization
+
+
+- Created.
