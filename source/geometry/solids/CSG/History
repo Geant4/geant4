@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2000-08-16 10:31:03 gcosmo Exp $
+$Id: History,v 1.23 2000-10-05 12:57:55 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 05,   00   V. Grichine               geom-solids-csg-V02-00-03
+- G4Cons.cc:
+  o fix in DistanceToIn(p,v): corrected condition on conical surface to
+    consider a real projection of the conical surface thickness on XY
+    plane (0.5*kCarTolerance*secRMin instead of 0.5*kCarTolerance), when
+    dealing with cons with large opening angle.
+  o Updated unit test testG4Cons2.cc.
 
 Aug 16,   00   V. Grichine		 geom-solids-csg-V02-00-02
 - G4Cons.cc:
