@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLWin32Viewer.hh,v 1.5 2001-07-11 10:08:51 gunter Exp $
+// $Id: G4OpenGLWin32Viewer.hh,v 1.6 2002-10-24 15:28:05 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,7 +49,7 @@ class G4OpenGLWin32Viewer: virtual public G4OpenGLViewer {
 
 public:
   G4OpenGLWin32Viewer (G4OpenGLSceneHandler& scene);
-  ~G4OpenGLWin32Viewer ();
+  virtual ~G4OpenGLWin32Viewer ();
   void FinishView ();
 
 protected:
