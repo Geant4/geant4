@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.26 2004-11-18 14:02:22 gbarrand Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.27 2004-11-18 14:37:25 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -547,12 +547,25 @@ void G4OpenInventorSceneHandler::PreAddThis
   const double green = g4Col.GetGreen ();
   const double blue = g4Col.GetBlue ();
   double transparency = 1 - g4Col.GetAlpha();
+/*
   if(pVisAttribs->IsForceDrawingStyle()
     &&(pVisAttribs->GetForcedDrawingStyle()==G4VisAttributes::solid)) {
     fModelingSolid = true;
   } else {
     fModelingSolid = false;
   }
+*/
+  G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle(pVisAttribs);
+  switch (drawing_style) {
+  case (G4ViewParameters::wireframe):    
+    fModelingSolid = false;
+    break;
+  case (G4ViewParameters::hlr):
+  case (G4ViewParameters::hsr):
+  case (G4ViewParameters::hlhsr):
+    fModelingSolid = true;
+    break;
+  }	
 
   //printf("debug : PreAddThis : %g %g %g : %d\n",
     //red,green,blue,pVisAttribs->IsVisible());
