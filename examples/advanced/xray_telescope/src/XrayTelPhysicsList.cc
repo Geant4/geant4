@@ -47,16 +47,52 @@ void XrayTelPhysicsList::ConstructParticle()
 
 void XrayTelPhysicsList::ConstructBosons()
 {
+  // pseudo-particles
+  G4Geantino::GeantinoDefinition();
+  G4ChargedGeantino::ChargedGeantinoDefinition();
+
+  // gamma
+  G4Gamma::GammaDefinition();
+
+  // optical photon
+  G4OpticalPhoton::OpticalPhotonDefinition();
 }
 void XrayTelPhysicsList::ConstructLeptons()
 {
+  // leptons
+  G4Electron::ElectronDefinition();
+  G4Positron::PositronDefinition();
+  G4MuonPlus::MuonPlusDefinition();
+  G4MuonMinus::MuonMinusDefinition();
+
+  G4NeutrinoE::NeutrinoEDefinition();
+  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
+  G4NeutrinoMu::NeutrinoMuDefinition();
+  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
 }
 void XrayTelPhysicsList::ConstructMesons()
 {
+ //  mesons
+  G4PionPlus::PionPlusDefinition();
+  G4PionMinus::PionMinusDefinition();
+  G4PionZero::PionZeroDefinition();
+  G4Eta::EtaDefinition();
+  G4EtaPrime::EtaPrimeDefinition();
+//  G4RhoZero::RhoZeroDefinition();
+  G4KaonPlus::KaonPlusDefinition();
+  G4KaonMinus::KaonMinusDefinition();
+  G4KaonZero::KaonZeroDefinition();
+  G4AntiKaonZero::AntiKaonZeroDefinition();
+  G4KaonZeroLong::KaonZeroLongDefinition();
+  G4KaonZeroShort::KaonZeroShortDefinition();
 }
 void XrayTelPhysicsList::ConstructBaryons()
 {
+//  barions
   G4Proton::ProtonDefinition();
+  G4AntiProton::AntiProtonDefinition();
+  G4Neutron::NeutronDefinition();
+  G4AntiNeutron::AntiNeutronDefinition();
 }
 void XrayTelPhysicsList::ConstructAllShortLiveds()
 {
@@ -73,35 +109,74 @@ void XrayTelPhysicsList::ConstructProcess()
 }
 // Here are respective header files for chosen processes
 
+#include "G4ComptonScattering.hh"
+#include "G4GammaConversion.hh"
+#include "G4PhotoElectricEffect.hh"
+#include "G4eIonisation.hh"
+#include "G4eBremsstrahlung.hh"
+#include "G4eplusAnnihilation.hh"
+#include "G4MuIonisation.hh"
+#include "G4MuBremsstrahlung.hh"
+#include "G4MuPairProduction.hh"
 #include "G4MultipleScattering.hh"
 #include "G4hLowEnergyIonisation.hh"
 
 void XrayTelPhysicsList::ConstructEM()
 {
   theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
+
+  while( (*theParticleIterator)() )
+  {
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
 
-    if ((!particle->IsShortLived()) &&
-         (particle->GetPDGCharge() != 0.0 )&&
-           (particle->GetParticleName() != "e-") &&
-           (particle->GetParticleName() != "e+") &&
-           (particle->GetParticleName() != "mu-") &&
-           (particle->GetParticleName() != "mu+") &&
-           (particle->GetParticleName() != "chargedgeantino")){
+    if (particleName == "gamma")
+    {
+      //gamma
+      pmanager->AddDiscreteProcess(new G4PhotoElectricEffect());
+      pmanager->AddDiscreteProcess(new G4ComptonScattering());
+      pmanager->AddDiscreteProcess(new G4GammaConversion());
+    }
+    else if (particleName == "e-")
+    {
+      //electron
+      pmanager->AddProcess(new G4MultipleScattering(),-1, 1,1);
+      pmanager->AddProcess(new G4eIonisation(),       -1, 2,2);
+      pmanager->AddProcess(new G4eBremsstrahlung(),   -1,-1,3);
+    }
+    else if (particleName == "e+")
+    {
+      //positron
+      pmanager->AddProcess(new G4MultipleScattering(),-1, 1,1);
+      pmanager->AddProcess(new G4eIonisation(),       -1, 2,2);
+      pmanager->AddProcess(new G4eBremsstrahlung(),   -1,-1,3);
+      pmanager->AddProcess(new G4eplusAnnihilation(),  0,-1,4);
+    }
+    else if( particleName == "mu+" ||
+               particleName == "mu-"    )
+    {
+     //muon
+     pmanager->AddProcess(new G4MultipleScattering(),-1, 1,1);
+//       pmanager->AddProcess(new G4MuIonisation(),      -1, 2,2);
+//       pmanager->AddProcess(new G4MuBremsstrahlung(),  -1,-1,3);
+//       pmanager->AddProcess(new G4MuPairProduction(),  -1,-1,4);
+    }
+    else if ((!particle->IsShortLived()) &&
+	       (particle->GetPDGCharge() != 0.0) &&
+	       (particle->GetParticleName() != "chargedgeantino"))
+    {
+      //all others charged particles except geantino
+      pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
 
-      pmanager->AddProcess(new G4MultipleScattering(), -1, 1, 1);
-
-      G4double demax = 0.05;    // try to lose at most 5% of the energy in
-                                // a single step (in limit of large energies)
-      G4double stmin = 1.e-9*m; // length of the final step: 10 angstrom
-                                // reproduced angular distribution of TRIM
+      G4double demax = 0.05;  // try to lose at most 5% of the energy in
+                              //    a single step (in limit of large energies)
+      G4double stmin = 1.e-9 * m;  // length of the final step: 10 angstrom
+                                   // reproduced angular distribution of TRIM
 
       G4hLowEnergyIonisation* lowEIonisation = new G4hLowEnergyIonisation();
-      pmanager->AddProcess( lowEIonisation, -1,2,2);      
-      lowEIonisation->SetStepFunction( demax, stmin ); 
+      pmanager->AddProcess( lowEIonisation, -1,2,2);
+      lowEIonisation->SetStepFunction( demax, stmin );
     }
   }
 }
@@ -134,9 +209,11 @@ void XrayTelPhysicsList::SetCuts()
   // set cut values for gamma at first and for e- second
   SetCutValue(cutForGamma, "gamma");
   SetCutValue(cutForElectron, "e-");
+  SetCutValue(cutForElectron, "e+");
 
   // set cut values for proton
   SetCutValue(cutForProton, "proton"); 
+  SetCutValue(cutForProton, "anti_proton");
 
   SetCutValueForOthers(defaultCutValue); 
  

@@ -35,53 +35,16 @@ XrayTelDetectorConstruction::~XrayTelDetectorConstruction()
 
 G4VPhysicalVolume* XrayTelDetectorConstruction::Construct( )
 {
- G4int nel;
- G4String symbol;
 
- // Elements
-
- G4Material* Ni = new G4Material("Nickel", 28., 58.6934*g/mole, 8.902*g/cm3);
- G4Material* Au = new G4Material("Gold", 79., 196.96654*g/mole, 19.300*g/cm3);
- G4Material* Al = new G4Material("Aluminium", 13., 26.98*g/mole, 2.700*g/cm3);
- G4Material* Ti = new G4Material("Titanium", 22., 47.867*g/mole, 4.54*g/cm3);
- G4Material* Si = new G4Material("Silicon", 14., 28.090*g/mole, 2.33*g/cm3);
-
- G4Element* C = new G4Element("Carbon", symbol="C", 6., 12.011*g/mole);
- G4Element* H = new G4Element("Hdrogen",symbol="H", 1., 1.00794*g/mole);
-
- // Materials from Combination
-
- G4Material* Cf = new G4Material("Carbon Fibre", 2.0*g/cm3, nel=2);
- Cf->AddElement(C,1);
- Cf->AddElement(H,2);
-
- // Materials from Scratch
-
- G4Material* Vacuum = new G4Material("Vacuum", 
+ // Material: Vacuum
+ G4Material* Vacuum = new G4Material("Vacuum",
                       1.0 , 1.01*g/mole, 1.0E-25*g/cm3,
                       kStateGas, 2.73*kelvin, 3.0E-18*pascal );
 
  // Visualization attributes
-
  G4VisAttributes* VisAttWorld= new G4VisAttributes( G4Colour(204/255.,255/255.,255/255.));
 
- G4VisAttributes* VisAttMirror = new G4VisAttributes(
-                                     G4Colour(0/255., 0/255.,255/255.));
- G4VisAttributes* VisAttAuCoating = new G4VisAttributes( 
-                                     G4Colour(255/255., 255/255., 0/255.));
- G4VisAttributes* VisAttBaffle = new G4VisAttributes( 
-                                     G4Colour(128/255., 128/255., 128/255.));
- G4VisAttributes* VisAttBench = new G4VisAttributes( 
-                                     G4Colour(0/255., 200/255., 0/255.));
- G4VisAttributes* VisDetectorBaffle = new G4VisAttributes( 
-                                     G4Colour(190/255., 255/255., 0/255.) );
- G4VisAttributes* VisDetector = new G4VisAttributes( 
-                                     G4Colour(255/255., 0/255., 0/255.) );
-
- // Logical  Volumes
-
- // Physical world
-
+ // World
  G4Box * solidWorld = new G4Box( "World_S", World_x, World_y, World_z );
  G4LogicalVolume * logicalWorld = new G4LogicalVolume( solidWorld, // solid
                                   Vacuum,                          // material
@@ -90,12 +53,56 @@ G4VPhysicalVolume* XrayTelDetectorConstruction::Construct( )
 
  logicalWorld -> SetVisAttributes(VisAttWorld);
 
- //--- Make Invisible
- logicalWorld -> SetVisAttributes(G4VisAttributes::Invisible);    
+ // Physical volume
+ physicalWorld= new G4PVPlacement( 0,
+                                   G4ThreeVector(),
+                                   "World_P",        // name (2nd constructor)
+                                   logicalWorld,     // logical volume
+                                   NULL,             // mother volume
+                                   false,            // no boolean operation
+                                   0);               // copy number
 
+ // Make Invisible
+ logicalWorld -> SetVisAttributes(G4VisAttributes::Invisible);
 
- //----- construct cones to make  Mirror sections
+ // Construct geometry
+ ConstructTelescope();
+ ConstructFocalPlane();
 
+ return physicalWorld;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+// Construct Telescope
+
+void XrayTelDetectorConstruction::ConstructTelescope()
+{
+ // Construct Mirror
+ // Single shell mirror made of Nickel with thin Gold coating
+ // Mirror made up of two cones approximating the parabolic section and
+ // two cones approximating the hyperbolic section
+ // The centre of the mirror is filled wiith a solid aluminium rod shaped as the
+ // mirrors, so as to leave a constant BaffleGap distance from the mirror surface
+
+ // Build materials
+ G4Material* Ni = new G4Material("Nickel", 28., 58.6934*g/mole, 8.902*g/cm3);
+ G4Material* Au = new G4Material("Gold", 79., 196.96654*g/mole, 19.300*g/cm3);
+ G4Material* Al = new G4Material("Aluminium", 13., 26.98*g/mole, 2.700*g/cm3);
+
+ // Visualization attributes
+ G4VisAttributes* VisAttMirror = new G4VisAttributes(
+                                     G4Colour(0/255., 0/255.,255/255.));
+ G4VisAttributes* VisAttAuCoating = new G4VisAttributes(
+                                     G4Colour(255/255., 255/255., 0/255.));
+ G4VisAttributes* VisAttBaffle = new G4VisAttributes(
+                                     G4Colour(128/255., 128/255., 128/255.));
+
+ // Rotation Matrix
+ G4RotationMatrix *rotateMatrix = new G4RotationMatrix();
+ rotateMatrix -> rotateY(90.*deg);
+
+ // Construct cones to make  Mirror sections
  G4int i;
  G4double MirrorEnd[5] = { 34.9995975*cm, 34.8277209*cm, 34.6549918*cm,
                            34.1347834*cm, 33.6137753*cm };
@@ -147,9 +154,61 @@ G4VPhysicalVolume* XrayTelDetectorConstruction::Construct( )
     BaffleLogicalVolume[i]-> SetVisAttributes(VisAttBaffle);
  }
 
+ // Physical volume
+ G4VPhysicalVolume* MirrorPhysicalVolume[4];
+ G4VPhysicalVolume* MirrorAuCoatingPhysicalVolume[4];
+ G4VPhysicalVolume* BafflePhysicalVolume[4];
+
+ for ( i=0; i<4; i++ ) {
+    MirrorPhysicalVolume[i] = new G4PVPlacement(
+                   rotateMatrix,
+                   G4ThreeVector( MirrorPosition[i], 0.0*cm, 0.0*cm ),
+                   "Mirror_P",
+                   MirrorLogicalVolume[i],
+                   physicalWorld, false, 0 );
+    MirrorAuCoatingPhysicalVolume[i] = new G4PVPlacement(
+                   rotateMatrix,
+                   G4ThreeVector( MirrorPosition[i], 0.0*cm, 0.0*cm ),
+                   "MirrorAuCoating_P",
+                   MirrorAuCoatingLogicalVolume[i],
+                   physicalWorld, false, 0 );
+    BafflePhysicalVolume[i] = new G4PVPlacement(
+                   rotateMatrix,
+                   G4ThreeVector( MirrorPosition[i], 0.0*cm, 0.0*cm ),
+                   "Baffle_P",
+                   BaffleLogicalVolume[i],
+                   physicalWorld, false, 0 );
+ }
+
+ // Make Mirror Invisible
+
+// for ( i=0; i<4; i++ ) {
+//    MirrorLogicalVolume[i] -> SetVisAttributes(G4VisAttributes::Invisible);
+//    MirrorAuCoatingLogicalVolume[i] -> SetVisAttributes(G4VisAttributes::Invisible);
+//    BaffleLogicalVolume[i] -> SetVisAttributes(G4VisAttributes::Invisible);
+// }
+
+
+// Construct Optical Bench
+// Main Telescope carbon fibre tube and two aluminium end caps
+
+ G4int nel;
+ G4String symbol;
+
+ // Elements
+ G4Element* C = new G4Element("Carbon", symbol="C", 6., 12.011*g/mole);
+ G4Element* H = new G4Element("Hydrogen",symbol="H", 1., 1.00794*g/mole);
+
+ // Materials from Combination
+ G4Material* Cf = new G4Material("Carbon Fibre", 2.0*g/cm3, nel=2);
+ Cf->AddElement(C,1);
+ Cf->AddElement(H,2);
+
+ // Visualization attributes
+ G4VisAttributes* VisAttBench = new G4VisAttributes(
+                                     G4Colour(0/255., 200/255., 0/255.));
 
  // Construct Optical bench
-
  G4double BenchThickness = 1.0*cm;
  G4double BenchFrontEndMinRadiusOut = MirrorEnd[4] + 
                                       ( MirrorEnd[3] - MirrorEnd[4] )*7.5/15
@@ -197,100 +256,7 @@ G4VPhysicalVolume* XrayTelDetectorConstruction::Construct( )
                       BenchMainSolid, Cf, "BenchMain_L", 0, 0, 0 );
  BenchMainLogicalVolume -> SetVisAttributes(VisAttBench);
 
- // Construct Detector Baffle
-
- G4double DetectorBaffleLength = 57.2*cm;
- G4double DetectorBaffleOuterRadiusIn = 7.1*cm;
- G4double DetectorBaffleOuterRadiusOut = 7.35*cm;
- G4double DetectorBaffleInnerRadiusIn = 4.55*cm;
- G4double DetectorBaffleInnerRadiusOut = 5.75*cm;
-
- G4Cons* DetectorBaffleSolid;
-
- G4LogicalVolume* DetectorBaffleLogicalVolume;
-
- DetectorBaffleSolid = new G4Cons( "DetectorBaffle_S",              
-                      DetectorBaffleOuterRadiusIn,
-                      DetectorBaffleOuterRadiusOut,
-                      DetectorBaffleInnerRadiusIn,
-                      DetectorBaffleInnerRadiusOut,
-                      DetectorBaffleLength/2, 0*deg, 360.*deg);  
- DetectorBaffleLogicalVolume = new G4LogicalVolume( 
-                      DetectorBaffleSolid, Ti, "DetectorBaffle_L", 0, 0, 0 );
- DetectorBaffleLogicalVolume -> SetVisAttributes( VisDetectorBaffle );
-
- // Construct Detector
-
- G4double DetectorRadius = 32.5*mm;
- G4double DetectorThickness = 50e-6*m;
-
- G4Tubs* DetectorSolid;
-
- G4LogicalVolume* DetectorLogicalVolume;
-
- DetectorSolid = new G4Tubs( "Detector_S",                        
-                      0, DetectorRadius,
-                      DetectorThickness/2, 0*deg, 360.*deg);  
- DetectorLogicalVolume = new G4LogicalVolume( 
-                      DetectorSolid, Si, "Detector_L", 0, 0, 0 );
- DetectorLogicalVolume -> SetVisAttributes( VisDetector );
-
-
- // Physical Volumes - Single Positioned Placement, Repeated Placement, Slicing
-
- // Single Positioned Placement 
-
- // World
-
- G4VPhysicalVolume * physicalWorld= new G4PVPlacement( 0,
-                                    G4ThreeVector(), 
-                                    "World_P",        // name (2nd constructor)
-                                    logicalWorld,     // logical volume
-                                    NULL,             // mother volume
-                                    false,            // no boolean operation
-                                    0);               // copy number 
-
- //  Mirror
-
- G4RotationMatrix *rotateMatrix = new G4RotationMatrix();
- rotateMatrix -> rotateY(90.*deg);
-
- G4VPhysicalVolume* MirrorPhysicalVolume[4];
- G4VPhysicalVolume* MirrorAuCoatingPhysicalVolume[4];
- G4VPhysicalVolume* BafflePhysicalVolume[4];
-
- for ( i=0; i<4; i++ ) {
-    MirrorPhysicalVolume[i] = new G4PVPlacement(
-                   rotateMatrix,
-                   G4ThreeVector( MirrorPosition[i], 0.0*cm, 0.0*cm ),
-                   "Mirror_P",
-                   MirrorLogicalVolume[i],
-                   physicalWorld, false, 0 );
-    MirrorAuCoatingPhysicalVolume[i] = new G4PVPlacement(
-                   rotateMatrix,
-                   G4ThreeVector( MirrorPosition[i], 0.0*cm, 0.0*cm ),
-                   "MirrorAuCoating_P",
-                   MirrorAuCoatingLogicalVolume[i],
-                   physicalWorld, false, 0 );
-    BafflePhysicalVolume[i] = new G4PVPlacement(
-                   rotateMatrix,
-                   G4ThreeVector( MirrorPosition[i], 0.0*cm, 0.0*cm ),
-                   "Baffle_P",
-                   BaffleLogicalVolume[i],
-                   physicalWorld, false, 0 );
- }
-
- //--- Make Mirror Invisible
-
- for ( i=0; i<4; i++ ) {
-//    MirrorLogicalVolume[i] -> SetVisAttributes(G4VisAttributes::Invisible);    
-//    MirrorAuCoatingLogicalVolume[i] -> SetVisAttributes(G4VisAttributes::Invisible);
-//    BaffleLogicalVolume[i] -> SetVisAttributes(G4VisAttributes::Invisible);
- }
-
-
- // Bench
-
+ // Physical volume
  G4VPhysicalVolume* BenchFrontEndPhysicalVolume;
  G4VPhysicalVolume* BenchBackEndPhysicalVolume;
  G4VPhysicalVolume* BenchMainPhysicalVolume;
@@ -323,12 +289,54 @@ G4VPhysicalVolume* XrayTelDetectorConstruction::Construct( )
 // BenchBackEndLogicalVolume -> SetVisAttributes(G4VisAttributes::Invisible);
 // BenchMainLogicalVolume -> SetVisAttributes(G4VisAttributes::Invisible);
 
+ return;
+}
 
- // Detector baffle
+// Construct Focal Plane
+// Conical Titanium baffle and silicon detector
 
+void XrayTelDetectorConstruction::ConstructFocalPlane()
+{
+
+ // Elements
+ G4Material* Ti = new G4Material("Titanium", 22., 47.867*g/mole, 4.54*g/cm3);
+ G4Material* Si = new G4Material("Silicon", 14., 28.090*g/mole, 2.33*g/cm3);
+
+ // Visualization attributes
+ G4VisAttributes* VisDetectorBaffle = new G4VisAttributes(
+                                     G4Colour(190/255., 255/255., 0/255.) );
+ G4VisAttributes* VisDetector = new G4VisAttributes(
+                                     G4Colour(255/255., 0/255., 0/255.) );
+
+ // Rotation Matrix
+ G4RotationMatrix *rotateMatrix = new G4RotationMatrix();
+ rotateMatrix -> rotateY(90.*deg);
+
+ // Construct Detector Baffle
+ G4double DetectorBaffleLength = 57.2*cm;
+ G4double DetectorBaffleOuterRadiusIn = 7.1*cm;
+ G4double DetectorBaffleOuterRadiusOut = 7.35*cm;
+ G4double DetectorBaffleInnerRadiusIn = 4.55*cm;
+ G4double DetectorBaffleInnerRadiusOut = 5.75*cm;
+
+ G4Cons* DetectorBaffleSolid;
+
+ G4LogicalVolume* DetectorBaffleLogicalVolume;
+
+ DetectorBaffleSolid = new G4Cons( "DetectorBaffle_S",              
+                      DetectorBaffleOuterRadiusIn,
+                      DetectorBaffleOuterRadiusOut,
+                      DetectorBaffleInnerRadiusIn,
+                      DetectorBaffleInnerRadiusOut,
+                      DetectorBaffleLength/2, 0*deg, 360.*deg);  
+ DetectorBaffleLogicalVolume = new G4LogicalVolume( 
+                      DetectorBaffleSolid, Ti, "DetectorBaffle_L", 0, 0, 0 );
+ DetectorBaffleLogicalVolume -> SetVisAttributes( VisDetectorBaffle );
+
+ // Physical volume
  G4VPhysicalVolume* DetectorBafflePhysicalVolume;
 
- DetectorBafflePhysicalVolume = new G4PVPlacement( 
+ DetectorBafflePhysicalVolume = new G4PVPlacement(
              rotateMatrix,
              G4ThreeVector( DetectorBaffleLength/2, 0.0*cm, 0.0*cm),
              "DetectorBaffle_P",
@@ -339,8 +347,23 @@ G4VPhysicalVolume* XrayTelDetectorConstruction::Construct( )
 
 // DetectorBaffleLogicalVolume -> SetVisAttributes( G4VisAttributes::Invisible );
 
- // Detector
+ // Construct Detector
 
+ G4double DetectorRadius = 32.5*mm;
+ G4double DetectorThickness = 50e-6*m;
+
+ G4Tubs* DetectorSolid;
+
+ G4LogicalVolume* DetectorLogicalVolume;
+
+ DetectorSolid = new G4Tubs( "Detector_S",                        
+                      0, DetectorRadius,
+                      DetectorThickness/2, 0*deg, 360.*deg);  
+ DetectorLogicalVolume = new G4LogicalVolume( 
+                      DetectorSolid, Si, "Detector_L", 0, 0, 0 );
+ DetectorLogicalVolume -> SetVisAttributes( VisDetector );
+
+ // Physical volume
  G4VPhysicalVolume* DetectorPhysicalVolume;
 
  DetectorPhysicalVolume = new G4PVPlacement( 
@@ -351,11 +374,7 @@ G4VPhysicalVolume* XrayTelDetectorConstruction::Construct( )
              physicalWorld, false, 0 );
 
   //--- Make Invisible
-
 // DetectorLogicalVolume -> SetVisAttributes( G4VisAttributes::Invisible );
 
-
- // return the physical World
-
- return physicalWorld;
+ return;
 }

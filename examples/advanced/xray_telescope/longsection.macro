@@ -6,6 +6,7 @@
 /vis/sceneHandler/create OGLIX
 /vis/viewer/create
 /vis/scene/notifyHandlers
+/vis/camera/viewpoint 25 0
 /tracking/storeTrajectory 1
 /event/drawTracks charged
 /gun/random aperture

@@ -22,6 +22,9 @@ class XrayTelDetectorConstruction : public G4VUserDetectorConstruction
      G4double World_x;
      G4double World_y;
      G4double World_z;
+     void ConstructTelescope();
+     void ConstructFocalPlane();
+     G4VPhysicalVolume* physicalWorld;
 };
 
 #endif
