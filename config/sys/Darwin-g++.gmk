@@ -41,11 +41,11 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   ECHO    := /bin/echo -n
   SHEXT   := dylib
   X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
-  X11LIBS   := -L/usr/X11R6/lib  -lXmu -lXt -lXext -lX11 -lSM -lICE
-#  XMFLAGS   := -I/sw/include             ##### original
-  XMFLAGS   := -I/usr/X11R6/include       ##### my machine
-#  XMLIBS    := -L/sw/lib -lXm -lXpm             ##### original
-  XMLIBS    := -L/usr/X11R6/lib -lXm -lXpm       ##### my machine
+  X11LIBS   := -L/usr/X11R6/lib  -lXmu -lXt -lXext -lX11 -lXi -lSM -lICE
+  XMFLAGS   := -I/sw/include
+#  XMFLAGS   := -I/usr/X11R6/include          ##### some installations.
+  XMLIBS    := -L/sw/lib -lXm -lXpm
+#  XMLIBS    := -L/usr/X11R6/lib -lXm -lXpm   ##### some installations.
   DLDLIBS   := -ldl
   ifndef OGLHOME
     OGLHOME  := /usr/X11R6
