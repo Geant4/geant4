@@ -42,6 +42,8 @@
 
 #include "G4ios.hh"
 
+#include <CLHEP/Units/PhysicalConstants.h>
+
 class G4GHEKinematicsVector
  {
  public:
@@ -577,7 +579,7 @@ class G4GHEKinematicsVector
           G4double cost  = p2.momentum.z()/p2.momentum.mag(); 
           G4double sint  = 0.5 * (  std::sqrt(std::fabs((1.-cost)*(1.+cost))) 
                                   + std::sqrt(pt2)/p2.momentum.mag());
-          (p2.momentum.y() < 0.) ? ph = 1.5*M_PI : ph = 0.5*M_PI;
+          (p2.momentum.y() < 0.) ? ph = 1.5*pi : ph = halfpi;
           if( p2.momentum.x() != 0.0) 
              ph = std::atan2(p2.momentum.y(),p2.momentum.x());             
           px =   cost*std::cos(ph)*p1.momentum.x() - std::sin(ph)*p1.momentum.y()
