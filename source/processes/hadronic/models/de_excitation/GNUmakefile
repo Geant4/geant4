@@ -10,7 +10,7 @@ ifndef G4INSTALL
 endif
 
 
-SUBDIRS  = handler       
+SUBDIRS  = management       
 SUBDIRS += evaporation
 SUBDIRS += gem_evaporation
 SUBDIRS += photon_evaporation
@@ -20,7 +20,7 @@ SUBDIRS += multifragmentation
 SUBDIRS += util
 
 
-SUBLIBS  = G4hadronic_deex_handler
+SUBLIBS  = G4hadronic_deex_management
 SUBLIBS += G4hadronic_deex_evaporation
 SUBLIBS += G4hadronic_deex_gem_evaporation
 SUBLIBS += G4hadronic_deex_photon_evaporation
