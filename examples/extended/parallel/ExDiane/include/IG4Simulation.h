@@ -22,7 +22,7 @@ public:
   virtual G4bool initialize(int argc, char** argv) = 0;
   virtual void executeMacro(std::string macroFileName) = 0;
   virtual std::string getOutputFilename() = 0;
-
+  virtual void finish() = 0;
   virtual ~IG4Simulation() {}
 };
 }

@@ -49,8 +49,10 @@ int main(int argc, char** argv){
     }
   
   simulation -> executeMacro(mn);
-  
+ 
+  simulation -> finish();
+ 
   delete simulation;
-
+  G4cout << "The job ends! " << G4endl;
   return 0;
 }

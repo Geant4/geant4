@@ -65,7 +65,10 @@
 #include "BrachySimulation.hh"
 
 BrachySimulation::BrachySimulation(G4int sd)
-{ seed= sd;}
+{ 
+  pRunManager = 0;
+  seed = sd;
+}
 
 BrachySimulation::~BrachySimulation()
 
@@ -82,7 +85,7 @@ G4bool BrachySimulation::initialize(int ,char** )
  
   G4cout << "G4 initializing" << G4endl;
  
-  G4RunManager* pRunManager = new G4RunManager;
+  pRunManager = new G4RunManager;
 
   G4String sensitiveDetectorName = "Phantom";
 
@@ -134,6 +137,11 @@ void BrachySimulation::executeMacro(std::string macroFileName)
 std::string  BrachySimulation::getOutputFilename()
 {
   return "brachytherapy.xml";
+}
+
+void BrachySimulation::finish()
+{
+  delete pRunManager;
 }
 
 //// This is all the application needs to run in parallel mode through DIANE

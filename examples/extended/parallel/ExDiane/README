@@ -14,7 +14,7 @@ using DIANE (DIstributed ANalysis Environment).
 
 With DIANE the simulation may be run in sequential or parallel mode
 without changing the code of the Geant4 application. Using a dedicated
-cluster or geographically distributed resources (e.g.  GRID) is
+cluster or geographically distributed resources (e.g. GRID) is
 completely transparent for the user.
 
 For more details about DIANE, have a look at http://cern.ch/diane
@@ -42,13 +42,13 @@ to know details about the functionality of the application:
  - download DIANE
     You need to have python 2.2 or greater.
     
-   AUTOMATIC INSTALLATION
+  * AUTOMATIC INSTALLATION OF DIANE
     Execute this command:
     > python2 diane.installation.manager --packages=brachy DIANE-1.0.0 download
     Get the diane.installation.manager script from 
-      http://cern.ch/diane/download.html
+    http://cern.ch/diane/download.html
 
-   MANUAL INSTALLATION
+  * MANUAL INSTALLATION OF DIANE
     Make sure that you have AIDA 3.2.1, PI 1.2.1. Download them from
       http://aida.freehep.org/
       http://www.cern.ch/PI
@@ -58,8 +58,8 @@ to know details about the functionality of the application:
 ------------------------------------------------------------------------
 ----> 3.How to compile the example.
                                        
-setenv G4ANALYSIS_USE 1
-setenv G4DIANE_USE 1
+setenv G4ANALYSIS_USE 1 -> to activate the analysis
+setenv G4DIANE_USE 1    -> to activate the use of DIANE
 > gmake
 ------------------------------------------------------------------------
 ----> 4.How to run the example.                                       
@@ -70,7 +70,7 @@ IodiumSourceMacro.mac
 
 - batch mode running through DIANE:
   diane.startjob --job=iodium.job -w 3@localhost --wms=xterm                                                ^        ^    
-                  input macro        number of machines
+                  input macro        number of workers
 ------------------------------------------------------------------------
 ----> 4. Simulation output                                            
 
