@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.cc,v 1.6 2004-11-09 11:25:37 gbarrand Exp $
+// $Id: G4OpenInventorXtViewer.cc,v 1.7 2004-11-10 10:29:31 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -211,13 +211,14 @@ G4OpenInventorXtViewer::G4OpenInventorXtViewer
     fViewer = new SoXtExaminerViewer(parent,wName.c_str(),TRUE);
   }
 
+  fViewer->setSize(SbVec2s(SIZE,SIZE));
+
   // Have a GL2PS render action :
   const SbViewportRegion& vpRegion = fViewer->getViewportRegion();
   SoGL2PSAction* action = new SoGL2PSAction(vpRegion);
   fViewer->setGLRenderAction(action);
 
   // Else :
-  fViewer->setSize(SbVec2s(SIZE,SIZE));
   fViewer->setSceneGraph(fSelection);
   fViewer->viewAll();
   fViewer->saveHomePosition();
@@ -261,12 +262,13 @@ void G4OpenInventorXtViewer::ShowView () {
 
 void G4OpenInventorXtViewer::WritePostScript(const G4String& aFile) {
   if(!fViewer) return;
-  SoGL2PSAction* action = (SoGL2PSAction*)fViewer->getGLRenderAction();
+  SoGLRenderAction* glAction = fViewer->getGLRenderAction();
+  if(glAction->isOfType(SoGL2PSAction::getClassTypeId())==FALSE) return;
+  SoGL2PSAction* action = (SoGL2PSAction*)glAction;
   action->setFileName(aFile.c_str());
   action->enableFileWriting();
   fViewer->render();
   action->disableFileWriting();
-  fViewer->render();
 }
 
 void G4OpenInventorXtViewer::EscapeButtonCbk(

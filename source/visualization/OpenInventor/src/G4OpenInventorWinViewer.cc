@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.cc,v 1.6 2004-11-09 09:28:18 gbarrand Exp $
+// $Id: G4OpenInventorWinViewer.cc,v 1.7 2004-11-10 10:29:31 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -256,7 +256,9 @@ void G4OpenInventorWinViewer::ShowView () {
 
 void G4OpenInventorWinViewer::WritePostScript(const G4String& aFile) {
   if(!fViewer) return;
-  SoGL2PSAction* action = (SoGL2PSAction*)fViewer->getGLRenderAction();
+  SoGLRenderAction* glAction = fViewer->getGLRenderAction();
+  if(glAction->isOfType(SoGL2PSAction::getClassTypeId())==FALSE) return;
+  SoGL2PSAction* action = (SoGL2PSAction*)glAction;
   action->setFileName(aFile.c_str());
   action->enableFileWriting();
   fViewer->render();
