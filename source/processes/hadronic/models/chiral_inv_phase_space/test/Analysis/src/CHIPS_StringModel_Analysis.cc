@@ -5,12 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: CHIPS_StringModel_Analysis.cc,v 1.2 2000-09-15 08:45:57 hpw Exp $
+// $Id: CHIPS_StringModel_Analysis.cc,v 1.3 2000-09-18 17:56:24 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
-// Viktor Krylov, 6.Dec 1998: some corrections.
     
+#include "Analysis/src/ParticleInfo.h"
+
 #include "G4ios.hh"
 #include "g4std/fstream"
 #include "g4std/iomanip"
@@ -84,6 +85,7 @@
 #include "G4Step.hh"
 #include "G4StepPoint.hh"
 
+//#include "../../../../generator/kinetic_model/src/G4GeneratorPrecompoundInterface.cc"
 
  int main()
   {
@@ -651,7 +653,7 @@
     G4cin >> incomingEnergy;
     incomingEnergy *= GeV/MeV;
 
-    theTheoModel->SetTransport(theCascade);
+//    theTheoModel->SetTransport(theCascade);
     G4StringChipsParticleLevelInterface * theChipsCascade = new G4StringChipsParticleLevelInterface();
     theTheoModel->SetTransport(theChipsCascade);
 //    G4StringInfoDump * theDummyCascade = new G4StringInfoDump;
@@ -670,6 +672,45 @@
     G4Timer timerEvent;
     G4Timer timerTotal;
     timerTotal.Start();
+    
+    // Prepare the analysis
+    G4String file("../logs/liste.");
+    G4String fileName; // p_al
+    G4double weight; // sigme/A
+    if(kl == 17) 
+    {
+      fileName = "p_li6";
+      weight = 128.*millibarn/6.;
+    }
+    if(kl == 8) 
+    {
+      fileName = "p_be";
+      weight = 204.*millibarn/9.;
+    }
+    if(kl == 16) 
+    {
+      fileName = "p_c";
+      weight = 243.*millibarn/12.;
+    }
+    if(kl == 9) 
+    {
+      fileName = "p_al";
+      weight = 455.*millibarn/27.;
+    }
+    if(kl == 0) 
+    {
+      fileName = "p_cu";
+      weight = 823.*millibarn/65.;
+    }
+    if(kl == 18) 
+    {
+      fileName = "p_ta";
+      weight = 1690.*millibarn/181.;
+    }
+    G4cout << "running on"<<fileName<<G4endl;
+    G4String it;
+    it = file+fileName;
+    ANAParticleInfo theInformation(weight, it);
  
     G4int k, i;
     for( k = kl; k <= kr; k++ )
@@ -735,11 +776,29 @@
             G4cout << aSec->GetMomentum();
 	    G4cout << (1-isec)*aFinalState->GetNumberOfSecondaries();
 	    G4cout << G4endl;
-            delete aSec;
+	    // analysis part;
+	    G4int theCHIPSCode = aSec->GetDefinition()->GetPDGEncoding();
+	    if(theCHIPSCode == 0)
+	    {
+	      theCHIPSCode =
+	      aSec->GetDefinition()->GetPDGCharge()*1000+aSec->GetDefinition()->GetBaryonNumber();
+	    }
+	    ANAParticle aPart(theCHIPSCode,
+	                      aSec->GetMomentum().x(),
+			      aSec->GetMomentum().y(),
+			      aSec->GetMomentum().z(),
+			      aSec->GetTotalEnergy());
+            theInformation.ProcessOne(aPart);
+	    delete aSec;
 	    delete second;
           }
           delete aTrack;
 	  aFinalState->Clear();
+	  if(l==1000*(l/1000)) 
+	  {
+	    theInformation.Analyse();
+	    theInformation.Plot(fileName, l);
+	  }
 	} // end of event loop
       } // end of i loop
     timerTotal.Stop();    

@@ -12,6 +12,8 @@ class ANAPlot : public TVANAPlot<DataPointType>
     ANAPlot(G4int aPDG, G4double aMass, G4double aTotalXsec, 
            G4String fn = "", FilterType * aFilter = 0);
   
+    void SetNevents(G4int aNumber) {theStatistics = aNumber;}
+    
     G4bool Insert(G4int aPDG, G4double anEnergy, G4double aXsec)
     {
       if(aPDG==thePDG)
@@ -31,7 +33,7 @@ class ANAPlot : public TVANAPlot<DataPointType>
       G4String it = theOutputFile+theFilter->GetName()+dot+aPreFix;
       G4cout<< it<<G4endl;
       ofstream theOutput(it);
-      G4double aWeight = theTotalXsec/theFilter->RelativeGeometricalAcceptance();
+      G4double aWeight = theTotalXsec/theStatistics/theFilter->RelativeGeometricalAcceptance();
       for(G4int i=0; i<theDataPoints.size(); i++)
       {
 //        theDataPoints[i].DumpInfo(aOStream);
@@ -47,6 +49,7 @@ class ANAPlot : public TVANAPlot<DataPointType>
   private:
     G4int thePDG;
     G4double theTotalXsec;
+    G4int theStatistics;
     FilterType * theFilter;
     
     G4std::vector<DataPointType> theDataPoints;
@@ -58,6 +61,7 @@ ANAPlot<DataPointType, FilterType>::ANAPlot(G4int aPDG, G4double aMass, G4double
                                             G4String fn, FilterType * aFilter) : 
          thePDG(aPDG), theTotalXsec(aTotalXsec), theFilter(aFilter)
 {
+  theStatistics = 10000;
   theOutputFile = fn;
   theDataPoints.push_back(DataPointType(0.05*GeV, 0.05*GeV, aMass));
   theDataPoints.push_back(DataPointType(0.075*GeV, 0.025*GeV, aMass));

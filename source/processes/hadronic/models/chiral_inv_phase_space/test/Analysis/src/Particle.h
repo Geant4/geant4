@@ -7,7 +7,9 @@
 class ANAParticle
 {
   public:
-  
+    ANAParticle(G4int aCode, G4double apx, G4double apy, G4double apz, G4double anenergy)
+    : pdgCode(aCode), px(apx), py(apy), pz(apz), energy(anenergy) {}
+    ANAParticle(){}
     G4bool Init(ifstream & theData);
     
     G4int GetCharge(){return charge;}

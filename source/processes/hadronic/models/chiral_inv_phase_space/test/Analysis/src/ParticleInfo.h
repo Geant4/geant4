@@ -23,7 +23,9 @@ class ANAParticleInfo
   public:
     ANAParticleInfo(G4double xSec, G4String aFileName);
     ~ANAParticleInfo() {} // Needs to clean up memory.
-    void Analyse(G4String aPreFix);
+    void Analyse();
+    void Plot(G4String aPreFix, G4int aStatistics);
+    void ProcessOne(ANAParticle aPart);
     
   private:
     // pdg, info
@@ -203,7 +205,7 @@ ANAParticleInfo::ANAParticleInfo(G4double xSec, G4String aFileName) : theFileNam
 }
 
 inline
-void ANAParticleInfo::Analyse(G4String aPreFix)
+void ANAParticleInfo::Analyse()
 {
   G4int aParticle;
   G4int aPlot;
@@ -216,22 +218,31 @@ void ANAParticleInfo::Analyse(G4String aPreFix)
        G4cout << "taken care of "<<counter<<" particles." << G4endl;
     ANAParticle aPart;
     if(!aPart.Init(theData)) break;
+    ProcessOne(aPart);
+  }
+}
+
+void ANAParticleInfo::Plot(G4String aPreFix, G4int aStatistics)
+{
+  for(int aPlot = 0; aPlot<thePlots.size(); aPlot++)
+  {
+    G4cout << "New plot:"<<G4endl;
+    thePlots[aPlot]->SetNevents(aStatistics);
+    thePlots[aPlot]->DumpInfo(G4cout, aPreFix);
+  }
+}
+
+inline void ANAParticleInfo::ProcessOne(ANAParticle aPart)
+{
     G4int pdg = aPart.GetPDGCode();
     G4double energy = aPart.GetEnergy();
     G4double weight = aPart.GetWeight();
-    for(aPlot = 0; aPlot<thePlots.size(); aPlot++)
+    for(int aPlot = 0; aPlot<thePlots.size(); aPlot++)
     {
       if(thePlots[aPlot]->Filter( &(aPart) ))
       {
         if(thePlots[aPlot]->Insert(pdg, energy, weight)) break;
       }
-    }
-  }
-  for(aPlot = 0; aPlot<thePlots.size(); aPlot++)
-  {
-    G4cout << "New plot:"<<G4endl;
-    thePlots[aPlot]->DumpInfo(G4cout, aPreFix);
-  }
+    }  
 }
-
 #endif

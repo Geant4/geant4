@@ -35,13 +35,14 @@ main()
       crossSection *= millibarn;
       input >> A;
       input >> nevents;
-      G4double weight = crossSection/A/nevents;
+      G4double weight = crossSection/A;
     G4cout << "IT!!!!!"<<crossSection<<" "<<A<<" "<<nevents<<" "<<weight<< G4endl;
       G4String file("../logs/liste.");
       G4String it;
       it = file+fileName;
       ANAParticleInfo theInformation(weight, it);
-      theInformation.Analyse(fileName);
+      theInformation.Analyse();
+      theInformation.Plot(fileName, nevents);
     }
     fileName = "";
   }
