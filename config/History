@@ -1,4 +1,4 @@
-$Id: History,v 1.234 2004-01-30 09:53:39 gbarrand Exp $
+$Id: History,v 1.235 2004-02-09 15:22:48 gunter Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+9th February 2004  Gunter Folger
+- protect OGLFLAGS against containing -I/usr/include; this may cause 
+   wrong includes to be picked up.
+   
 30th January 2004  Guy Barrand
 - WIN32-VC7.gmk: material to build shared libs for Windows (DLLs).
 - config/win32def.c : program to help building DLLs.
