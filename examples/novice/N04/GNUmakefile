@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 2004-12-02 14:28:03 santin Exp $
+# $Id: GNUmakefile,v 1.8 2004-12-13 16:11:53 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -13,15 +13,14 @@ endif
 
 include hadronic_lists.gmk
 
-
 .PHONY: all
 all:  had_list lib bin
 
 had_list:
-	@echo "This example (novice/N04) uses the QGSP 'educated guess physics list'"
-	@echo "(see http://cmsdoc.cern.ch/~hpw/GHAD/HomePage)."
-	@echo "The Hadronic Physics lists should be compiled before compiling this example." 
-	@echo "If you haven't done so yet, please see the README file for detailed compilation instructions"
+	@echo "This example uses the QGSP 'educated guess physics list'"
+	@echo "(see $G4INSTALL/physics_lists/hadronic)."
+	@echo "The hadronic physics lists should be compiled before"
+	@echo "compiling this example."
 
 include $(G4INSTALL)/config/binmake.gmk
 
