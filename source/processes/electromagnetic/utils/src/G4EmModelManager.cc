@@ -539,6 +539,7 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
     }
 
     G4double cross = models[regModels->ModelIndex(k)]->CrossSection(material,particle,e,cut,e)*fac;
+    if(j==0 && cross < perMillion) cross = 0.0;
 
     if(1 < verboseLevel) {
       G4cout << "FillLambdaVector: " << j << ".   e(MeV)= " << e/MeV
@@ -546,7 +547,7 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
                << " fac= " << fac
                << G4endl;
     }
-    if(cross <= 0.0) cross = 0.0;
+    if(cross < 0.0) cross = 0.0;
 
     aVector->PutValue(j, cross);
   }
@@ -639,6 +640,7 @@ void G4EmModelManager::FillSubLambdaVector(G4PhysicsVector* aVector,
     }
 
     G4double cross=models[regModels->ModelIndex(k)]->CrossSection(material,particle,e,subcut,cut)*fac;
+    if(j==0 && cross < perMillion) cross = 0.0;
 
     if(1 < verboseLevel) {
         G4cout << "BuildLambdaTable: e(MeV)= " << e/MeV
@@ -646,7 +648,7 @@ void G4EmModelManager::FillSubLambdaVector(G4PhysicsVector* aVector,
                << " fac= " << fac
                << G4endl;
     }
-    if(cross <= 0.0) cross = 0.0;
+    if(cross < 0.0) cross = 0.0;
 
     aVector->PutValue(j, cross);
   }
