@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.cc,v 1.12 2001-02-08 07:48:39 tsasaki Exp $
+// $Id: G4SteppingManager.cc,v 1.13 2001-05-10 06:38:09 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -267,10 +267,12 @@ void G4SteppingManager::SetInitialStep(G4Track* valueTrack)
    fTrack->SetNextTouchable( pTouchableFree );
 
 // Set vertex information of G4Track at here
-   fTrack->SetVertexPosition( fTrack->GetPosition() );
-   fTrack->SetVertexMomentumDirection( fTrack->GetMomentumDirection() );
-   fTrack->SetVertexKineticEnergy( fTrack->GetKineticEnergy() );
-
+//corrected on 10APR2001/TS
+   if ( fTrack->GetCurrentStepNumber() == 0 ) {
+     fTrack->SetVertexPosition( fTrack->GetPosition() );
+     fTrack->SetVertexMomentumDirection( fTrack->GetMomentumDirection() );
+     fTrack->SetVertexKineticEnergy( fTrack->GetKineticEnergy() );
+   }
 // Initial set up for attributes of 'G4SteppingManager'
    fCurrentVolume = pTouchableFree->GetVolume();
 
