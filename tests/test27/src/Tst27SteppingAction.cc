@@ -77,7 +77,7 @@ void Tst27SteppingAction::UserSteppingAction(const G4Step * theStep)
    G4TrackVector* fSecondary = SM->GetfSecondary();
        G4cout << "   -- List of secondaries generated : "
          << "(x,y,z,kE,t,PID) --" << G4endl;
-       for( G4int lp1=0;lp1<(*fSecondary).size(); lp1++){
+       for( unsigned int lp1=0;lp1<(*fSecondary).size(); lp1++){
          G4cout << "      "
            << std::setw( 9)
              << (*fSecondary)[lp1]->GetPosition().x() / mm << " "
