@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelStepper.cc,v 1.8 2002-11-04 10:43:07 dressel Exp $
+// $Id: G4ParallelStepper.cc,v 1.9 2003-04-02 17:01:09 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -34,8 +34,9 @@
 #include "G4ParallelStepper.hh"
 #include "G4VPhysicalVolume.hh"
 
-G4ParallelStepper::G4ParallelStepper()
- : fPStep(0)
+G4ParallelStepper::G4ParallelStepper() :
+  G4VParallelStepper(),
+  fPStep(0)
 {}
 
 G4ParallelStepper::~G4ParallelStepper()
