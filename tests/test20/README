@@ -1,0 +1,23 @@
+$Id: README,v 1.1 2001-05-24 19:48:21 flongo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            test20
+                       ------------------
+                 
+		Testing Geant4 Low Energy Polarized Processes
+
+
+- adapted by G.Depaola & F.Longo
+  from GammaRayTel advanced example (Longo, Giannitrapani & Santin (200) 
+
+
+- simple geometry of Compton telescopes
+
+- low-energy electromagnetic processes
+
+- testing G4LowEnergyPolarizedCompton class (by G.Depaola & F.Longo)
+

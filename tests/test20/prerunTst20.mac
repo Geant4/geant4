@@ -1,0 +1,21 @@
+# Macro file for the initialization phase of the
+# Test 20
+#
+# Sets some default verbose
+# and initializes the graphic.
+#
+/control/verbose 2
+/control/saveHistory
+/run/verbose 2
+/gun/particle gamma
+/gun/energy 100 keV
+/gun/vertexRadius 25. cm
+/gun/sourceType 2
+/gun/direction 0 0 -1
+/gun/polarization 1 0 0
+/payload/setSiPitch 1. mm
+/payload/update
+/run/beamOn 100
+
+
+
