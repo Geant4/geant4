@@ -1,3 +1,18 @@
+MACRO PlotRZpoint [1]=100 [2]=100 [3]=100
+  r = $sigma(sqrt([1]*[1]+[2]*[2]))
+  vec/create xx(2) r [r] [3]
+  
+  sigma xx=0.001*xx
+  
+  set mtyp 20
+  pmarker 1 xx(2) xx(1)
+RETURN
+MACRO PlotRZC
+|
+| Use paw to plot r/z cross section of polycone test case c
+|
+  exec plotrzd
+RETURN
 MACRO PlotRZD
 |
 | Use paw to plot r/z cross section of polycone test case d
@@ -6,12 +21,121 @@ MACRO PlotRZD
   vec/create zz(18) r -0.5 -0.5 -1.1 -1.1 -0.4 -0.4 -1.0 -1.0 -0.4 -1.0 0.0 0.0 0.2 0.2 1.0 0.0 1.0 -0.5
 
   null -1.2 1.2 -0.2 1.2
-  pline $sigma(NCO(zz)) zz rr
   
+  exec plotrz
+RETURN
+MACRO PlotRZF
+|
+| Use paw to plot r/z cross section of polycone test case f
+|
+  vec/create rr(11) r 0.6 0.6 1.0 1.0 1.1 0.9 0.0 0.0 0.4 0.5 0.6
+  vec/create zz(11) r -1.0 0.0 0.0 0.8 1.0 1.0 0.8 0.0 0.0 -1.0 -1.0
+
+  null -1.2 1.2 -0.2 1.2
+  
+  exec plotrz
+RETURN
+MACRO PlotRZG
+  vec/create rr(17) r 0.7 0.7 0.8 0.9 1.0 1.0 0.5 0.5 0.0 0.4 0.4 0.4 0.5 0.5 0.6 0.6 0.7
+  vec/create zz(17) r -1.0 -0.5 -0.5 -1.0 -1.0 0.7 0.7 1.0 1.0 0.7 0.7 -1.0 -1.0 -0.5 -0.5 -1.0 -1.0
+
+  null -1.2 1.2 -0.2 1.2
+  
+  exec plotrz
+RETURN
+MACRO PlotRZH
+  vec/create rr(17) r 0.7 0.7 0.7 0.4 0.4 0.8 0.8 0.6 0.4 0.4 0.0 0.0 0.0 0.0 0.3 0.3 0.7
+  vec/create zz(17) r -0.2 -0.1 -0.1 0.0 0.1 0.2 0.3 0.4 0.4 0.3 0.2 0.1 0.0 -0.1 -0.1 -0.2 -0.2
+
+  null -0.4 0.5 -0.2 1
+  
+  exec plotrz
+RETURN
+MACRO PlotRZI
+  vec/create rr(10) r 0.0 0.2 0.1 0.0 0.1 0.0 0.0 0.1 0.1 0.0
+  vec/create zz(10) r -1.0 -0.2 1.0 0.8 0.6 0.0 -0.4 0.2 -0.2 -1.0
+
+  null -1.2 1.2 -0.1 0.4
+  
+  exec plotrz
+RETURN
+MACRO PlotRZ
+  pline $sigma(NCO(zz)) zz rr
   do i = 1, $sigma(NCO(zz)-1)
     i0 = [i]-1
     xl = zz([i])+0.025
     yl = rr([i])-0.025
     text [xl] [yl] [i0] 0.25 0 L
   enddo
+RETURN
+MACRO PlotRZI
+|
+| Use paw to plot r/z cross section of polycone test case f
+|
+  vec/create rr(10) r 0.0 0.2 0.1 0.0 0.1 0.0 0.0 0.1 0.1 0.0
+  vec/create zz(10) r -1.0 -0.2 1.0 0.8 0.6 0.0 -0.4 0.2 -0.2 -1.0
+
+  null -1.2 1.2 -0.2 1.2
+  pline $sigma(NCO(zz)) zz rr
+  
+  exec plotrz
+RETURN
+MACRO PlotCEtest
+  sh rm /tmp/polycone.dat
+  message "Copy column values are press <ctrl>d:"
+  sh cat > /tmp/polycone.dat
+
+  vec/del r0,z0,r1,z1,r2
+  vec/read r0,z0,r1,z1,r2 /tmp/polycone.dat
+  
+  vec/del rd,zd,nd
+  nn = $sigma(2*NCO(r0))
+  vec/create rd1([nn])
+  vec/create rd2([nn])
+  vec/create zd1([nn])
+  vec/create zd2([nn])
+  vec/create nd(1) r 0
+  
+  application comis QUIT
+      subroutine fillvec( n )
+      integer n
+C
+      real rd2,zd2,rd1,zd1,nd,r0,z0,r1,z1,r2
+      vector rd2,zd2,rd1,zd1,nd,r0,z0,r1,z1,r2
+C
+      nn = 0
+      DO I = 1, n
+        nn = nn + 1
+	rd1(nn) = r0(i)
+	zd1(nn) = z0(i)
+	rd2(nn) = r1(i)
+	zd2(nn) = z1(i)
+	if (r2(i).ge.0) then
+	  nn = nn + 1
+	  rd1(nn) = r2(i)
+	  zd1(nn) = z0(i)
+	  rd2(nn) = r0(i)
+	  zd2(nn) = z0(i)
+	endif
+      enddo
+C     
+      nd(1) = nn
+      RETURN
+      END
+QUIT
+
+  call fillvec($sigma(nco(r0)))
+
+  sigma rd1 = 0.001*rd1
+  sigma zd1 = 0.001*zd1
+  sigma rd2 = 0.001*rd2
+  sigma zd2 = 0.001*zd2
+  
+  set plci 2
+  
+  do i = 1, nd(1)
+    arrow zd1([i]) zd2([i]) rd1([i]) rd2([i]) 0.2
+  enddo
+  
+  set plci
 RETURN

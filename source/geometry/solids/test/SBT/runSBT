@@ -1,3 +1,4 @@
+#!/bin/csh
 #
 # runSBT
 # 
@@ -19,4 +20,5 @@ endif
 #
 rm -f SBT.$2.log
 $EXECUTABLE < $1/$2.geant4 >& SBT.$2.log
-awk -f $1/counterr.awk $2*.log
+awk -f $1/counterr.awk $2.*.log
+awk -f $1/countvoxelerr.awk $2v.*.log

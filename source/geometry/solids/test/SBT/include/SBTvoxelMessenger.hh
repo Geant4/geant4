@@ -10,8 +10,8 @@
 #include "G4UImessenger.hh"
 #include "SBTvoxel.hh"
 #include "G4RotationMatrix.hh"
-#include "g4std/fstream"
 
+class ifstream;
 class G4VSolid;
 class G4SolidQuery;
 

@@ -11,18 +11,24 @@ test/maxPoints 10000
 /test/errorFileName box.a1.log
 /test/run
 #
-# --- box.a2.log
-# Up the ante ans generate points on a grid
+/voxel/errorFileName boxv.a1.log
+/voxel/run
 #
-/test/gridSizes 0.02 0.02 0.02 m
+# --- box.a2.log
+# Up the ante and generate points on a grid
+#
+/test/gridSizes 0.2 0.2 0.2 m
 /test/errorFileName box.a2.log
 /test/run
 #
 # --- box.b1.log
 # Try an odd case
 #
-/solid/G4Box 0.001 1 2
+/solid/G4Box 0.0001 1 2
 /test/errorFileName box.b1.log
 /test/run
+#
+/voxel/errorFileName boxv.b1.log
+/voxel/run
 #
 exit

@@ -27,13 +27,13 @@ It features:
 Installation
 ------------
 
-The standard make file including with SBT links against the full geant4
+The standard make file included with SBT links against the full geant4
 libraries (much like a geant4 application). 
 
 It should be possible to produce a makefile that only requires a
 subset of libraries, but this makefile is not supplied in the package.
 
-SBT has been tested on SUN-CC and AIX-xlC platforms.
+SBT has been tested on SUN-CC and Linux platforms.
 
 
 General (Interactive) Use
@@ -41,9 +41,11 @@ General (Interactive) Use
 
 The general use of SBT involves the following commands:
     1. Choosing a solid (with a "/solid/" command)
-    2. Specifying test parameters (with a "/test/" command)
-    3. Running the test (with command "/test/run")
-    4. Repeating as desired
+    2. Specifying geometry test parameters (with a "/test/" command)
+    3. Running the geometry test (with command "/test/run")
+    4. Specifying voxel test parameters (with a "/voxel/" command)
+    5. Running the voxel test (with command "/voxel/run")
+    6. Repeating as desired
 
 Example session:
 
@@ -69,8 +71,8 @@ The Unix script "runSBT" is included to do the following:
         reported errors in all log files
 
 
-Method
-------
+Method: geometry
+----------------
 
 SBT creates a set of random points in 3D space, in a Gaussian distribution
 with adjustable mean and width in each dimension. The default is to
@@ -118,6 +120,70 @@ Value (2) defaults to 100 errors in the log file and is set by
 command "/test/maxErrors".
 
 
+Method: voxel
+-------------
+
+To start a voxel test, SBT first generates up to 100000 random
+points until it finds 1000 points inside the solid (using method 
+G4VSolid::Inside).
+
+Afterwards, it starts generating random voxels. It does this by
+throwing a random number for each x,y,z dimension. If this
+number is less than 0.2, this coordinate is given no limits.
+Otherwise, the remaining 0.8 is spread between +/- the range specified
+in command /voxel/widths (default value is 1 meter).
+
+For each random voxel, 20 random offsets are choosen. For these
+20 offsets in addition to no offset, the following rotations are tried:
+
+        1. No rotation
+	2. Random rotation around z
+	3. A further random rotation around x
+	4. A further random rotation around y
+	5. A further random rotation around z
+
+So, each random sized voxel is tested under 21*5 = 105 different
+offsets and rotation.
+
+Each voxel test consists of calling G4VSolid::CalculateExtent for
+each of the three coordinate axes.
+
+For each axis, if CalculateExtent returns false, the following tests
+are performed:
+
+        1. Make sure none of the 1000 points inside the solid
+	   (found earlier) are inside the voxel.
+
+Otherwise, if CalculateExtent returns true, the following tests are
+performed:
+
+        1. Make sure all 1000 of the points inside the solid
+	   (found earlier) are inside the limits returned.
+
+        2. Make sure the min limit is smaller or equal to the max limit.
+
+        3. Make sure the min and max limits are not outside the
+	   original voxel limits (if there were any)
+	   
+	4. Calculate the set of points spread in the following
+	   pattern:
+	   
+	              1----2----3
+		      |    |    |
+		      |    |    |
+		      4----5----6
+		      |    |    |
+		      |    |    |
+		      7----8----9
+
+           along the two axes not being tested to the current
+	   voxel limits along those two axes, or to +/- 10 meters
+	   if the voxel is not limit only an axis. These nine points
+	   are positions at the min and max points in the voxel.
+	   SBT then uses G4VSolid::Inside to check whether the
+	   points are outside or on the surface of the solid.
+	   
+
 Choosing the Target Solid
 ------------------------
 
@@ -162,8 +228,8 @@ Examples:
 /solid/G4Polycone 0 90 4 (1.0,1.2,1.4,1.2) (-1.0,-1.0,1.0,1.0)
 
 
-Log File Format
----------------
+Log File Format: geometry test
+------------------------------
 
 The log file is an ASCII file delimited by newlines. Each line
 that begins with "%" is a comment. Other lines have the format:
@@ -176,6 +242,15 @@ a comment describing the error. In addition SBT adds comments
 concerning the test at the beginning and end of the file.
 
 The meaning of the specific errors are described below.
+
+
+Log File Format: voxel test
+---------------------------
+
+The log file from the voxel test is not made to be machine readable,
+since the types of errors from this test are too varied. Instead,
+for each error the word "ERROR" is displayed, and a description of the
+error follows. The voxel and transform parameters are then displayed.
 
 
 Testing Inside Points
@@ -340,8 +415,8 @@ of the grid always corresponds to the mean value (as set by "/test/target").
 The spacing of the grid is adjusted by command "/test/gridSizes".
 
 
-Debugging
----------
+Debugging: geometry
+-------------------
 
 Once a test is run and a log file created, it is possible to read the
 values from the log file to recreate an error. This is useful in the
@@ -389,6 +464,51 @@ The "/test/draw" command may be useful to isolate the problem.
 
 Clearly, to use the debugger requires that the geant4 libraries linked
 to SBT are compiled with the debug flag on (environment variable G4DEBUG).
+
+
+Debugging: voxel
+----------------
+
+Included in SBT is a package for displaying voxels and the
+results of ::CalculateExtent. The commands for this are under
+the tree /voxel/picture.
+
+     1. /voxel/picture/voxel
+     
+        Takes six double numbers (xmin xmax ymin ymax zmin zmax)
+	to specify the voxel dimensions. If any min > max, that
+	dimension is taken to be unlimited.
+
+     2. /voxel/picture/translate
+     
+        Takes three double numbers to specify the translation in
+	the voxel.
+
+     4. /voxel/picture/rotate
+     
+        Takes four doubles numbers (axisx axisy axisz rotation) to
+	specify the axis and rotation amount to specify the
+	rotation of the voxel.
+
+     5. /voxel/picture/point
+     
+        Takes three numbers for an optional point to be displayed
+	along with the voxel and solid shape.
+
+     6. /voxel/picture/limit
+     
+        Specifies the voxel limits to be drawn inside the
+	voxel.
+
+     7. /voxel/picture/draw
+     
+        Draws the items as specified in the above 1-6 commands.
+	
+     8. /voxel/picture/debug
+     
+        Invokes ::CalculateExtent and ::Inside for the items
+	as specified in the above 1--6 commands. Useful
+	for running the solid code inside a debugger.
 
 
 Problems

@@ -47,7 +47,7 @@ G4UIcmdWithPargs::~G4UIcmdWithPargs() {;}
 G4bool G4UIcmdWithPargs::GetArguments( G4String argumentString )
 {
 	const char *buff = argumentString;
-	G4std::istrstream is( (char *)buff );
+	istrstream is( (char *)buff );
 	
 	G4UIcmdParg **thisArg = args;
 	while( thisArg < args + numArgs ) {

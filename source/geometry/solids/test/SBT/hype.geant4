@@ -1,0 +1,91 @@
+#
+# GEANT4 SBT Script to test G4Hype
+# DCW 21/4/99 
+#
+/test/maxPoints 100000
+/voxel/maxVoxels 1000
+#
+# --- hype.a1.log
+# Start with a nice and easy case
+#
+/solid/G4Hype 0.0 1 0 0 1
+/test/errorFileName hype.a1.log
+/test/run
+/voxel/errorFileName hypev.a1.log
+/voxel/run
+#
+# --- hype.a2.log
+# Up the ante and generate points on a grid
+#
+/test/gridSizes 0.1 0.1 0.1 m
+/test/errorFileName hype.a2.log
+/test/run
+#
+# --- hype.b1.log
+# Add an inner radius
+#
+/test/gridSizes 0 0 0 m
+/solid/G4Hype 0.5 1 0 0 1
+/test/errorFileName hype.b1.log
+/test/run
+/voxel/errorFileName hypev.b1.log
+/voxel/run
+#
+# --- hype.b2.log
+# Up the ante and generate points on a grid
+#
+/test/gridSizes 0.1 0.1 0.1 m
+/test/errorFileName hype.b2.log
+/test/run
+#
+# --- hype.c1.log
+# Add some stereo
+#
+/test/gridSizes 0 0 0 m
+/solid/G4Hype 0.5 1 2 2 1
+/test/errorFileName hype.c1.log
+/test/run
+/voxel/errorFileName hypev.c1.log
+/voxel/run
+#
+# --- hype.c2.log
+# Up the ante and generate points on a grid
+#
+/test/gridSizes 0.1 0.1 0.1 m
+/test/errorFileName hype.c2.log
+/test/run
+#
+# --- hype.d1.log
+# Add some particularly large stereo
+#
+/solid/G4Hype 0.5 1 10 10 1
+/test/errorFileName hype.d1.log
+/test/run
+/voxel/errorFileName hypev.d1.log
+/voxel/run
+#
+# --- hype.d2.log
+# Up the ante and generate points on a grid
+#
+/test/gridSizes 0.1 0.1 0.1 m
+/test/errorFileName hype.d2.log
+/test/run
+#
+#
+# --- hype.e1.log
+# Add some particularly tiny stereo
+#
+/solid/G4Hype 0.5 1 0.001 0.001 1
+/test/errorFileName hype.e1.log
+/test/run
+/voxel/errorFileName hypev.e1.log
+/voxel/run
+#
+# --- hype.e2.log
+# Up the ante and generate points on a grid
+#
+/test/gridSizes 0.1 0.1 0.1 m
+/test/errorFileName hype.e2.log
+/test/run
+
+exit

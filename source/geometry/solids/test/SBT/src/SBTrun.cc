@@ -15,8 +15,8 @@
 #include "G4VisAttributes.hh"
 
 #include <time.h>
-#include "g4std/iomanip"
-#include "g4std/strstream"
+#include <iomanip.h>
+#include <strstream.h>
 
 //
 // Constructor
@@ -109,7 +109,7 @@ G4double SBTrun::GaussianRandom(const G4double cutoff) const {
 //
 // Do your stuff!
 //
-void SBTrun::RunTest( const G4VSolid *testVolume, G4std::ostream &logger )
+void SBTrun::RunTest( const G4VSolid *testVolume, ostream &logger )
 {
 	//
 	// Clear error list
@@ -120,14 +120,19 @@ void SBTrun::RunTest( const G4VSolid *testVolume, G4std::ostream &logger )
 	// Output test parameters
 	//
 	time_t now = time(0);
-	G4String dateTime( ctime(&now) );		// AFAIK, this is standard c++
+//	G4String dateTime( ctime(&now), 24 );		// AFAIK, this is standard c++
+//      it looks like the above is missing from STLInterface
+	char timebuf[25];
+	timebuf[24]=0;
+	strncpy( ctime(&now), timebuf, 24 );
+	G4String dateTime( timebuf );
 	
-	logger << "% SBT logged output " << dateTime << G4endl;
-	logger << "% target =    " << target << G4endl;
-	logger << "% widths =    " << widths << G4endl;
-	logger << "% grids  =    " << grids  << G4endl;
-	logger << "% maxPoints = " << maxPoints << G4endl;
-	logger << "% maxErrors = " << maxErrors << G4endl;
+	logger << "% SBT logged output " << dateTime << endl;
+	logger << "% target =    " << target << endl;
+	logger << "% widths =    " << widths << endl;
+	logger << "% grids  =    " << grids  << endl;
+	logger << "% maxPoints = " << maxPoints << endl;
+	logger << "% maxErrors = " << maxErrors << endl;
 
 	//
 	// Setup lists
@@ -139,7 +144,7 @@ void SBTrun::RunTest( const G4VSolid *testVolume, G4std::ostream &logger )
 	//
 	// Set iostream precision to 14 digits
 	//
-	logger << G4std::setprecision(14);
+	logger << setprecision(14);
 	
 	//
 	// Set clock
@@ -167,7 +172,7 @@ void SBTrun::RunTest( const G4VSolid *testVolume, G4std::ostream &logger )
 		switch( catagory ) {
 			case kOutside:
 			nOut++;
-			TestOutsidePoint( testVolume, &nError, &inside, point, logger );
+			TestOutsidePoint( testVolume, &nError, &inside, &outside, point, logger );
 			outside.AddPoint( point );
 			break;
 			
@@ -199,17 +204,19 @@ void SBTrun::RunTest( const G4VSolid *testVolume, G4std::ostream &logger )
 	}
 
 	now = time(0);
-	G4String dateTime2( ctime(&now) );		
-	logger << dateTime2 << G4endl;
+//	G4String dateTime2( ctime(&now), 24 );		
+	strncpy( ctime(&now), timebuf, 24 );
+	G4String dateTime2( timebuf );
+	logger << dateTime2 << endl;
 
 	logger << "% Statistics: points=" << nPoint << " errors=" << CountErrors()
-	       << " errors reported=" << nError << G4endl;
+	       << " errors reported=" << nError << endl;
 
 	logger << "%             inside=" << nIn << " outside=" << nOut
-               << " surface=" << nSurf << G4endl;
-        logger << "%             cpu time=" << clock()/CLOCKS_PER_SEC << G4endl;
+               << " surface=" << nSurf << endl;
+        logger << "%             cpu time=" << clock()/CLOCKS_PER_SEC << endl;
 	       
-	logger << "%(End of file)" << G4endl;
+	logger << "%(End of file)" << endl;
 }
 
 
@@ -218,7 +225,7 @@ void SBTrun::RunTest( const G4VSolid *testVolume, G4std::ostream &logger )
 //
 // Recover previously logged error and display it
 //
-G4int SBTrun::DrawError( const G4VSolid *testVolume, G4std::istream &logger, 
+G4int SBTrun::DrawError( const G4VSolid *testVolume, istream &logger, 
 			 const G4int errorIndex, SBTVisManager *visManager ) const
 {
 	G4ThreeVector p, v;
@@ -270,7 +277,7 @@ G4int SBTrun::DrawError( const G4VSolid *testVolume, G4std::istream &logger,
 //
 // Recover previously logged error and invoke G4VSolid::Inside
 //
-G4int SBTrun::DebugInside( const G4VSolid *testVolume, G4std::istream &logger, const G4int errorIndex ) const
+G4int SBTrun::DebugInside( const G4VSolid *testVolume, istream &logger, const G4int errorIndex ) const
 {	
 	G4ThreeVector p, v;
 	
@@ -293,7 +300,7 @@ G4int SBTrun::DebugInside( const G4VSolid *testVolume, G4std::istream &logger, c
 //
 // Recover previously logged error and invoke G4VSolid::DistanceToIn(p)
 //
-G4int SBTrun::DebugToInP( const G4VSolid *testVolume, G4std::istream &logger, const G4int errorIndex ) const
+G4int SBTrun::DebugToInP( const G4VSolid *testVolume, istream &logger, const G4int errorIndex ) const
 {	
 	G4ThreeVector p, v;
 	
@@ -316,7 +323,7 @@ G4int SBTrun::DebugToInP( const G4VSolid *testVolume, G4std::istream &logger, co
 //
 // Recover previously logged error and invoke G4VSolid::DistanceToIn(p,v)
 //
-G4int SBTrun::DebugToInPV( const G4VSolid *testVolume, G4std::istream &logger, const G4int errorIndex ) const
+G4int SBTrun::DebugToInPV( const G4VSolid *testVolume, istream &logger, const G4int errorIndex ) const
 {	
 	G4ThreeVector p, v;
 	
@@ -343,7 +350,7 @@ G4int SBTrun::DebugToInPV( const G4VSolid *testVolume, G4std::istream &logger, c
 //
 // Recover previously logged error and invoke G4VSolid::DistanceToOut(p)
 //
-G4int SBTrun::DebugToOutP( const G4VSolid *testVolume, G4std::istream &logger, const G4int errorIndex ) const
+G4int SBTrun::DebugToOutP( const G4VSolid *testVolume, istream &logger, const G4int errorIndex ) const
 {	
 	G4ThreeVector p, v;
 	
@@ -366,7 +373,7 @@ G4int SBTrun::DebugToOutP( const G4VSolid *testVolume, G4std::istream &logger, c
 //
 // Recover previously logged error and invoke G4VSolid::DistanceToOut(p,v)
 //
-G4int SBTrun::DebugToOutPV( const G4VSolid *testVolume, G4std::istream &logger, const G4int errorIndex ) const
+G4int SBTrun::DebugToOutPV( const G4VSolid *testVolume, istream &logger, const G4int errorIndex ) const
 {	
 	G4ThreeVector p, v;
 	
@@ -397,7 +404,8 @@ G4int SBTrun::DebugToOutPV( const G4VSolid *testVolume, G4std::istream &logger, 
 // TestOutsidePoint
 //
 void SBTrun::TestOutsidePoint( const G4VSolid *testVolume, G4int *nError,
-				  const SBTrunPointList *inside, const G4ThreeVector point, G4std::ostream &logger )
+			       const SBTrunPointList *inside, const SBTrunPointList *outside,
+			       const G4ThreeVector point, ostream &logger )
 {
 	G4int i, n = inside->NumPoints();
 	
@@ -450,8 +458,13 @@ void SBTrun::TestOutsidePoint( const G4VSolid *testVolume, G4int *nError,
 		}
 		
 		dist = testVolume->DistanceToIn( p, v );
-		if (dist != 0) {
-			ReportError( nError, p, v, "T02: DistanceToIn(p,v) should be zero", logger );
+		//
+		// Beware! We might expect dist to be precisely zero, but this may not
+		// be true at corners due to roundoff of the calculation of p = point + dist*v.
+		// It should, however, *not* be infinity.
+		//
+		if (dist == kInfinity) {
+			ReportError( nError, p, v, "T02: DistanceToIn(p,v) == kInfinity", logger );
 			continue;
 		}	
 		
@@ -465,6 +478,10 @@ void SBTrun::TestOutsidePoint( const G4VSolid *testVolume, G4int *nError,
 			ReportError( nError, p, v, "T02: DistanceToOut(p,v) == kInfinity", logger );
 			continue;
 		}
+		else if (dist < 0) {
+			ReportError( nError, p, v, "T02: DistanceToOut(p,v) < 0", logger );
+			continue;
+		}
 		
 		if (validNorm) {
 			if (norm.dot(v) < 0) {
@@ -472,6 +489,12 @@ void SBTrun::TestOutsidePoint( const G4VSolid *testVolume, G4int *nError,
 				continue;
 			}
 		}
+		
+		G4ThreeVector norm1 = testVolume->SurfaceNormal( p );
+		if (norm1.dot(v) > 0) {
+			ReportError( nError, p, v, "T02: Ingoing surfaceNormal is incorrect", logger );
+		}
+		
 		
 		G4ThreeVector p2 = p + v*dist;
 		
@@ -485,9 +508,30 @@ void SBTrun::TestOutsidePoint( const G4VSolid *testVolume, G4int *nError,
 			continue;
 		}
 			
-		dist = testVolume->DistanceToIn(p2,v);
+		G4ThreeVector norm2 = testVolume->SurfaceNormal( p2 );
+		if (norm2.dot(v) < 0) {
+			if (testVolume->DistanceToIn(p2,v) != 0)
+				ReportError( nError, p2, v, "T02: Outgoing surfaceNormal is incorrect", logger );
+		}
 		if (validNorm) {
-			if (dist != kInfinity) {
+			if (norm.dot(norm2) < 0.0) {
+				ReportError( nError, p2, v, "T02: SurfaceNormal and DistanceToOut disagree on normal", logger );
+			}
+		}
+		
+		if (validNorm) {
+			dist = testVolume->DistanceToIn(p2,v);
+			if (dist == 0) {
+				//
+				// We may have grazed a corner, which is a problem of design.
+				// Check distance out
+				//
+				if (testVolume->DistanceToOut(p2,v) != 0) {
+					ReportError( nError, p, v, "TO2: DistanceToOut incorrectly returns validNorm==true (line of sight)(c)", logger );
+					continue;
+				}
+			}
+			else if (dist != kInfinity) {
 				ReportError( nError, p, v, "TO2: DistanceToOut incorrectly returns validNorm==true (line of sight)", logger );
 				continue;
 			}
@@ -504,6 +548,40 @@ void SBTrun::TestOutsidePoint( const G4VSolid *testVolume, G4int *nError,
 			}
 		} // if valid normal
 	} // Loop over inside points
+	
+	n = outside->NumPoints();
+	
+	for( i=0; i < n; i++ ) {
+		G4ThreeVector vr = (*outside)[i] - point;
+		if (vr.mag2() < DBL_MIN) continue;
+		
+		G4ThreeVector v = vr.unit();
+		
+		G4double dist = testVolume->DistanceToIn( point, v );
+		if (dist <= 0) {
+			ReportError( nError, point, v, "T03: DistanceToIn(p,v) <= 0", logger );
+			continue;
+		}
+		if (dist == kInfinity) {
+			continue;
+		}
+		if (dist < safeDistance-1E-10) {
+			ReportError( nError, point, v, "T03: DistanceToIn(p,v) < DistanceToIn(p)", logger );
+			continue;
+		}
+		
+		G4ThreeVector p = point + dist*v;
+		
+		EInside insideOrNot = testVolume->Inside( p );
+		if (insideOrNot == kOutside) {
+			ReportError( nError, point, v, "T03: DistanceToIn(p,v) undershoots", logger );
+			continue;
+		}
+		if (insideOrNot == kInside) {
+			ReportError( nError, point, v, "TO3: DistanceToIn(p,v) overshoots", logger );
+			continue;
+		}
+	} // Loop over outside points
 }
 
 
@@ -512,7 +590,7 @@ void SBTrun::TestOutsidePoint( const G4VSolid *testVolume, G4int *nError,
 // TestInsidePoint
 //
 void SBTrun::TestInsidePoint( const G4VSolid *testVolume, G4int *nError,
-				 const SBTrunPointList *outside, const G4ThreeVector point, G4std::ostream &logger )
+				 const SBTrunPointList *outside, const G4ThreeVector point, ostream &logger )
 {
 	G4int i, n = outside->NumPoints();
 	
@@ -561,6 +639,12 @@ void SBTrun::TestInsidePoint( const G4VSolid *testVolume, G4int *nError,
 			ReportError( nError, point, v, "TI: DistanceToOut(p,v) overshoots", logger );
 			continue;
 		}
+
+		G4ThreeVector norm1 = testVolume->SurfaceNormal( p );
+		if (norm1.dot(v) < 0) {
+			if (testVolume->DistanceToIn(p,v) != 0)
+				ReportError( nError, p, v, "TI: SurfaceNormal is incorrect", logger );
+		}
 	}
 }
 
@@ -572,7 +656,7 @@ void SBTrun::TestInsidePoint( const G4VSolid *testVolume, G4int *nError,
 // times already.
 //
 void SBTrun::ReportError( G4int *nError, const G4ThreeVector p, 
-			     const G4ThreeVector v, const G4String comment, G4std::ostream &logger )
+			     const G4ThreeVector v, const G4String comment, ostream &logger )
 {
 	//
 	// Have we encountered this error message before?
@@ -613,10 +697,10 @@ void SBTrun::ReportError( G4int *nError, const G4ThreeVector p,
 	//	
 	logger << "% " << comment;
 	if (errors->nUsed == 5) logger << " (any further such errors suppressed)";
-	logger << G4endl;
+	logger << endl;
 	
 	logger << ++(*nError) << " " << p.x() << " " << p.y() << " " << p.z() 
-			      << " " << v.x() << " " << v.y() << " " << v.z() << G4endl;
+			      << " " << v.x() << " " << v.y() << " " << v.z() << endl;
 }
 
 
@@ -664,10 +748,10 @@ G4int SBTrun::CountErrors() const
 //
 // Get the p and v vectors stored in a test3 log file
 //
-G4int SBTrun::GetLoggedPV( G4std::istream &logger, const G4int errorIndex,
+G4int SBTrun::GetLoggedPV( istream &logger, const G4int errorIndex,
 			      G4ThreeVector &p, G4ThreeVector &v        ) const
 {
-	logger >> G4std::setprecision(14);		// I wonder if this is necessary?
+	logger >> setprecision(14);		// I wonder if this is necessary?
 
 	//
 	// Search for the requested error index, skipping comments along the way
@@ -716,7 +800,7 @@ SBTrunPointList::SBTrunPointList( G4int size )
 
 SBTrunPointList::~SBTrunPointList()
 {
-	delete pointList;
+	delete [] pointList;
 }
 
 void SBTrunPointList::AddPoint( G4ThreeVector newPoint )
@@ -734,7 +818,7 @@ void SBTrunPointList::AddPoint( G4ThreeVector newPoint )
 		// Our list is filled up, so replace a random
 		// entry
 		//
-		G4int	irand = G4UniformRand()*( (G4double)maxPoints );
+		G4int	irand = static_cast<G4int>(G4UniformRand()*( (G4double)maxPoints ));
 		pointList[irand] = newPoint;
 	}
 }

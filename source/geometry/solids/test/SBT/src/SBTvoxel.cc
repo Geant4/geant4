@@ -20,8 +20,8 @@
 #include "G4AffineTransform.hh"
 
 #include <time.h>
-#include "g4std/iomanip"
-#include "g4std/strstream"
+#include <iomanip.h>
+#include <strstream.h>
 
 //
 // Constructor
@@ -67,9 +67,9 @@ void SBTvoxel::Debug( const G4VSolid *testVolume, const EAxis axis,
 	G4double min, max;
 	
 	if (testVolume->CalculateExtent( axis, voxel, transform, min, max ))
-		G4cout << "Solid is intersected with: " << min << " " << max << G4endl;
+		G4cout << "Solid is intersected with: " << min << " " << max << endl;
 	else
-		G4cout << "Voxel misses solid" << G4endl;
+		G4cout << "Voxel misses solid" << endl;
 
 	if (point) testVolume->Inside( *point );
 }
@@ -202,19 +202,24 @@ void SBTvoxel::Draw( const G4VSolid *testVolume,
 //
 // Perform a test on the specified solid
 //
-void SBTvoxel::RunTest( const G4VSolid *testVolume, G4std::ostream &logger )
+void SBTvoxel::RunTest( const G4VSolid *testVolume, ostream &logger )
 {
 	//
 	// Output test parameters
 	//
 	time_t now = time(0);
-	G4String dateTime( ctime(&now) );		// AFAIK, this is standard c++
+//	G4String dateTime( ctime(&now), 24 );		// AFAIK, this is standard c++
+//      it looks like the above is missing from STLInterface
+	char timebuf[25];
+	timebuf[24]=0;
+	strncpy( ctime(&now), timebuf, 24 );
+	G4String dateTime( timebuf );
 	
-	logger << "% SBT voxel logged output " << dateTime << G4endl;
-	logger << "% target =    " << target << G4endl;
-	logger << "% widths =    " << widths << G4endl;
-	logger << "% maxVoxels = " << maxVoxels << G4endl;
-	logger << "% maxErrors = " << maxErrors << G4endl;
+	logger << "% SBT voxel logged output " << dateTime << endl;
+	logger << "% target =    " << target << endl;
+	logger << "% widths =    " << widths << endl;
+	logger << "% maxVoxels = " << maxVoxels << endl;
+	logger << "% maxErrors = " << maxErrors << endl;
 
 	G4int nVoxel = 0,
 	      nError = 0;
@@ -297,12 +302,14 @@ void SBTvoxel::RunTest( const G4VSolid *testVolume, G4std::ostream &logger )
 	}
 	
 	now = time(0);
-	G4String dateTime2( ctime(&now) );		
-	logger << dateTime2 << G4endl;
+//	G4String dateTime2( ctime(&now), 24 );		
+	strncpy( ctime(&now), timebuf, 24 );
+	G4String dateTime2( timebuf );
+	logger << dateTime2 << endl;
 
-	logger << "% Statistics: voxels=" << nVoxel << " errors=" << nError << G4endl;
+	logger << "% Statistics: voxels=" << nVoxel << " errors=" << nError << endl;
 	       
-	logger << "%(End of file)" << G4endl;
+	logger << "%(End of file)" << endl;
 }
 
 
@@ -313,7 +320,7 @@ G4bool SBTvoxel::TestOneVoxel( const G4VSolid *testVolume,
 			       const G4VoxelLimits &voxel,
 			       const G4AffineTransform &transform,
 			       const G4ThreeVector inside[], const G4int numInside,
-			       G4std::ostream &logger ) const
+			       ostream &logger ) const
 {
 	static const EAxis axes[3] = { kXAxis, kYAxis, kZAxis };
 	G4int numError = 0;
@@ -360,9 +367,9 @@ G4bool SBTvoxel::TestOneVoxel( const G4VSolid *testVolume,
 			//
 			if (min > pointMins[i] || max < pointMaxs[i]) {
 				numError++;
-				logger << "ERROR: Voxel limits are incorrect, axis " << i << G4endl;
-				logger << "  reported limits were: " << min << " " << max << G4endl;
-				logger << "  but points were found at: " << pointMins[i] << " " << pointMaxs[i] << G4endl;
+				logger << "ERROR: Voxel limits are incorrect, axis " << i << endl;
+				logger << "  reported limits were: " << min << " " << max << endl;
+				logger << "  but points were found at: " << pointMins[i] << " " << pointMaxs[i] << endl;
 			}
 			
 			//
@@ -370,8 +377,8 @@ G4bool SBTvoxel::TestOneVoxel( const G4VSolid *testVolume,
 			//
 			if (min >= max) {
 				numError++;
-				logger << "ERROR: Voxel limits max <= min, axis " << i << G4endl;
-				logger << "  reported limits were: " << min << " " << max << G4endl;
+				logger << "ERROR: Voxel limits max <= min, axis " << i << endl;
+				logger << "  reported limits were: " << min << " " << max << endl;
 			}
 			
 			//
@@ -383,13 +390,13 @@ G4bool SBTvoxel::TestOneVoxel( const G4VSolid *testVolume,
 			if ( voxel.IsLimited(axes[i]) ) {
 				if (min < voxel.GetMinExtent(axes[i])-1.1*kCarTolerance) {
 					numError++;
-					logger << "ERROR: Voxel min is below pre-existing limit, axis " << i << G4endl;
-					logger << "  reported limits were: " << min << " " << max << G4endl;
+					logger << "ERROR: Voxel min is below pre-existing limit, axis " << i << endl;
+					logger << "  reported limits were: " << min << " " << max << endl;
 				}
 				if (max > voxel.GetMaxExtent(axes[i])+1.1*kCarTolerance) {
 					numError++;
-					logger << "ERROR: Voxel max is above pre-existing limit, axis " << i << G4endl;
-					logger << "  reported limits were: " << min << " " << max << G4endl;
+					logger << "ERROR: Voxel max is above pre-existing limit, axis " << i << endl;
+					logger << "  reported limits were: " << min << " " << max << endl;
 				}
 			}
 					
@@ -407,14 +414,14 @@ G4bool SBTvoxel::TestOneVoxel( const G4VSolid *testVolume,
 					G4ThreeVector tp = inverseTransform.TransformPoint( *testPoint );
 					if (testVolume->Inside( tp ) == kInside) {
 						numError++;
-						logger << "ERROR: Voxel MAX limit is too small, axis " << i << G4endl;
-						logger << "  reported limits were: " << min << " " << max << G4endl;
-						logger << "  test point " << *testPoint << " [" << tp << "] was inside" << G4endl;
+						logger << "ERROR: Voxel MAX limit is too small, axis " << i << endl;
+						logger << "  reported limits were: " << min << " " << max << endl;
+						logger << "  test point " << *testPoint << " [" << tp << "] was inside" << endl;
 						
 						MakeVoxelTestPoints( voxel, axes[i], max+10.0*kCarTolerance, testPoints );
 						tp = inverseTransform.TransformPoint( *testPoint );
 						if (testVolume->Inside( tp ) == kInside)
-							logger << "  and so was a more tolerant test point" << G4endl;
+							logger << "  and so was a more tolerant test point" << endl;
 						break;
 					}
 				} while( ++testPoint < testPoints+9 );
@@ -429,14 +436,14 @@ G4bool SBTvoxel::TestOneVoxel( const G4VSolid *testVolume,
 					G4ThreeVector tp = inverseTransform.TransformPoint( *testPoint );
 					if (testVolume->Inside( tp ) == kInside) {
 						numError++;
-						logger << "ERROR: Voxel MIN limit is too large, axis " << i << G4endl;
-						logger << "  reported limits were: " << min << " " << max << G4endl;
-						logger << "  test point " << *testPoint << " [" << tp << "] was inside" << G4endl;
+						logger << "ERROR: Voxel MIN limit is too large, axis " << i << endl;
+						logger << "  reported limits were: " << min << " " << max << endl;
+						logger << "  test point " << *testPoint << " [" << tp << "] was inside" << endl;
 						
 						MakeVoxelTestPoints( voxel, axes[i], min-10.0*kCarTolerance, testPoints );
 						tp = inverseTransform.TransformPoint( *testPoint );
 						if (testVolume->Inside( tp ) == kInside)
-							logger << "  and so was a more tolerant test point" << G4endl;
+							logger << "  and so was a more tolerant test point" << endl;
 						break;
 					}
 				} while( ++testPoint < testPoints+9 );
@@ -451,8 +458,8 @@ G4bool SBTvoxel::TestOneVoxel( const G4VSolid *testVolume,
 			if (numPointInside) {
 				numError++;
 				logger << "ERROR: Voxel isn't empty, axis " << i 
-				       << ",  number points inside: " << numPointInside << " out of " << numInside << G4endl;
-				logger << "  they have limits of: " << pointMins[i] << " " << pointMaxs[i] << G4endl;
+				       << ",  number points inside: " << numPointInside << " out of " << numInside << endl;
+				logger << "  they have limits of: " << pointMins[i] << " " << pointMaxs[i] << endl;
 			}
 		}
 	}
@@ -470,7 +477,7 @@ G4bool SBTvoxel::TestOneVoxel( const G4VSolid *testVolume,
 //
 // DumpVoxel
 //
-void SBTvoxel::DumpVoxel( const G4VoxelLimits &voxel, G4std::ostream &logger ) const
+void SBTvoxel::DumpVoxel( const G4VoxelLimits &voxel, ostream &logger ) const
 {
 	logger << "VOXEL =";
 	
@@ -487,14 +494,14 @@ void SBTvoxel::DumpVoxel( const G4VoxelLimits &voxel, G4std::ostream &logger ) c
 		logger << ")";
 	} while( ++axis < axes+3 );
 	
-	logger << G4endl;
+	logger << endl;
 }	
 
 
 //
 // DumpTransform
 //
-void SBTvoxel::DumpTransform( const G4AffineTransform &transform, G4std::ostream &logger ) const
+void SBTvoxel::DumpTransform( const G4AffineTransform &transform, ostream &logger ) const
 {
 	G4RotationMatrix rotate = transform.NetRotation();
   
@@ -503,8 +510,8 @@ void SBTvoxel::DumpTransform( const G4AffineTransform &transform, G4std::ostream
 	
 	rotate.getAngleAxis( amount, axis );
   
-	logger << "TRANLATE = " << transform.NetTranslation() << G4endl;
-	logger << "ROTATE = " << axis << " " << amount << G4endl;
+	logger << "TRANLATE = " << transform.NetTranslation() << endl;
+	logger << "ROTATE = " << axis << " " << amount << endl;
 }
 
 	

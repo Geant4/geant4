@@ -17,7 +17,7 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
-#include "g4std/fstream"
+#include "fstream.h"
 
 //
 // Constructor
@@ -54,80 +54,82 @@ SBTMessenger::SBTMessenger( const G4String prefix, const G4SolidQuery *theSolidQ
 	//
 	// Target command
 	//
-	G4String com = prefix+"target";
-	targetCmd = new G4UIcmdWith3VectorAndUnit( com, this );
+	G4String command;
+	
+	command = prefix+"target";
+	targetCmd = new G4UIcmdWith3VectorAndUnit( command, this );
 	targetCmd->SetGuidance( "Center of distribution of random points" );
 	targetCmd->SetParameterName( "X", "Y", "Z", true, true );
 	
 	//
 	// Widths command
 	//
-	com = prefix+"widths";
-	widthsCmd = new G4UIcmdWith3VectorAndUnit( com, this );
+	command = prefix+"widths";
+	widthsCmd = new G4UIcmdWith3VectorAndUnit( command, this );
 	widthsCmd->SetGuidance( "Widths of distribution of random points" );
 	widthsCmd->SetParameterName( "Dx", "Dy", "Dz", true, true );
 	
 	//
 	// Grid Size command
 	//
-	com = prefix+"gridSizes";
-	gridSizesCmd = new G4UIcmdWith3VectorAndUnit( com, this );
+	command = prefix+"gridSizes";
+	gridSizesCmd = new G4UIcmdWith3VectorAndUnit( command, this );
 	gridSizesCmd->SetGuidance( "Grid size, or zero for no grid" );
 	gridSizesCmd->SetParameterName( "Dx", "Dy", "Dz", true, true );
 	
 	//
 	// Max Points command
 	//
-	com = prefix+"maxPoints";
-	maxPointsCmd = new G4UIcmdWithAnInteger( com, this );
+	command = prefix+"maxPoints";
+	maxPointsCmd = new G4UIcmdWithAnInteger( command, this );
 	maxPointsCmd->SetGuidance( "Maximum number of points before test ends" );
 
 	//
 	// Max Errors command
 	//	
-	com = prefix+"maxErrors";
-	maxErrorsCmd = new G4UIcmdWithAnInteger( com, this );
+	command = prefix+"maxErrors";
+	maxErrorsCmd = new G4UIcmdWithAnInteger( command, this );
 	maxErrorsCmd->SetGuidance( "Maximum number of errors before test ends" );
 	
 	//
 	// Error filename command
 	//
-	com = prefix+"errorFileName";
-	errorFileCmd = new G4UIcmdWithAString( com, this );
+	command = prefix+"errorFileName";
+	errorFileCmd = new G4UIcmdWithAString( command, this );
 	errorFileCmd->SetGuidance( "Filename in which to send error listings" );
 	
 	//
 	// Run command
 	//
-	com = prefix+"run";
-	runCmd = new G4UIcmdWithoutParameter( com, this );
+	command = prefix + "run";
+	runCmd = new G4UIcmdWithoutParameter( command, this );
 	runCmd->SetGuidance( "Execute test 3" );
 	
 	//
 	// Debug commands
 	//
-	com = prefix+"draw";
-	drawCmd = new G4UIcmdWithAnInteger( com, this );
+	command = prefix+"draw";
+	drawCmd = new G4UIcmdWithAnInteger( command, this );
 	drawCmd->SetGuidance( "Draw error listed in log file" );
 	
-	com = prefix+"debugInside";
-	debugInsideCmd = new G4UIcmdWithAnInteger( com, this );
+	command = prefix+"debugInside";
+	debugInsideCmd = new G4UIcmdWithAnInteger( command, this );
 	debugInsideCmd->SetGuidance( "Call G4VSolid::Inside for error listed in log file" );
 	
-	com = prefix+"debugToInP";
-	debugToInPCmd = new G4UIcmdWithAnInteger( com, this );
+	command = prefix+"debugToInP";
+	debugToInPCmd = new G4UIcmdWithAnInteger( command, this );
 	debugToInPCmd->SetGuidance( "Call G4VSolid::DistanceToIn(p) for error listed in log file" );
 	
-	com = prefix+"debugToInPV";
-	debugToInPVCmd = new G4UIcmdWithAnInteger( com, this );
+	command = prefix+"debugToInPV";
+	debugToInPVCmd = new G4UIcmdWithAnInteger( command, this );
 	debugToInPVCmd->SetGuidance( "Call G4VSolid::DistanceToIn(p,v) for error listed in log file" );
 	
-	com = prefix+"debugToOutP";
-	debugToOutPCmd = new G4UIcmdWithAnInteger( com, this );
+	command = prefix+"debugToOutP";
+	debugToOutPCmd = new G4UIcmdWithAnInteger( command, this );
 	debugToOutPCmd->SetGuidance( "Call G4VSolid::DistanceToOut(p) for error listed in log file" );
 	
-	com = prefix+"debugToOutPV";
-	debugToOutPVCmd = new G4UIcmdWithAnInteger( com, this );
+	command = prefix+"debugToOutPV";
+	debugToOutPVCmd = new G4UIcmdWithAnInteger( command, this );
 	debugToOutPVCmd->SetGuidance( "Call G4VSolid::DistanceToOut(p,v) for error listed in log file" );
 }
 
@@ -159,15 +161,15 @@ void SBTMessenger::InvokeTest3()
 	//
 	G4VSolid *testSolid = solidQuery->GetSolid();
 	if (testSolid == 0) {
-		G4cerr << "Please initialize geometry before running test 3" << G4endl;
-		G4cerr << "Test 3 ABORTED" << G4endl;
+		G4cerr << "Please initialize geometry before running test 3" << endl;
+		G4cerr << "Test 3 ABORTED" << endl;
 		return;
 	}
 
 	//
 	// Open output file
 	//
-	G4std::ofstream logFile( errorFile );
+	ofstream logFile( errorFile );
 	
 	//
 	// Run the test
@@ -194,16 +196,16 @@ void SBTMessenger::Debug( const G4int errorIndex,  SBTMessenger::Debugger *debug
 	//
 	G4VSolid *testSolid = solidQuery->GetSolid();
 	if (testSolid == 0) {
-		G4cerr << "Please initialize geometry before debugging/drawing" << G4endl;
+		G4cerr << "Please initialize geometry before debugging/drawing" << endl;
 		return;
 	}
 
 	//
 	// Open output file
 	//
-	G4std::ifstream logFile( errorFile );
+	ifstream logFile( errorFile );
 	if (!logFile) {
-		G4cerr << "Cannot open input file " << errorFile << G4endl;
+		G4cerr << "Cannot open input file " << errorFile << endl;
 		return;
 	}
 	
@@ -211,7 +213,7 @@ void SBTMessenger::Debug( const G4int errorIndex,  SBTMessenger::Debugger *debug
 	// Debug
 	//
 	if (debugger->DebugMe( logFile, errorIndex )) {
-		G4cerr << "Error reading index " << errorIndex << " from input file " << errorFile << G4endl;
+		G4cerr << "Error reading index " << errorIndex << " from input file " << errorFile << endl;
 	}
 }
 
@@ -219,7 +221,7 @@ void SBTMessenger::Debug( const G4int errorIndex,  SBTMessenger::Debugger *debug
 //
 // DebugMe (various classes)
 //
-G4int SBTMessenger::DrawError::DebugMe( G4std::ifstream &logFile, const G4int errorIndex )
+G4int SBTMessenger::DrawError::DebugMe( ifstream &logFile, const G4int errorIndex )
 {
 	if (visManager) {
 		//
@@ -231,31 +233,31 @@ G4int SBTMessenger::DrawError::DebugMe( G4std::ifstream &logFile, const G4int er
 	}
 	
 	
-	G4cerr << "Visualization is not available in this executable" << G4endl;
+	G4cerr << "Visualization is not available in this executable" << endl;
 	return 1;
 }
 
-G4int SBTMessenger::DebugInside::DebugMe( G4std::ifstream &logFile, const G4int errorIndex )
+G4int SBTMessenger::DebugInside::DebugMe( ifstream &logFile, const G4int errorIndex )
 {
 	return tester->DebugInside( testSolid, logFile, errorIndex );
 }
 
-G4int SBTMessenger::DebugToInP::DebugMe( G4std::ifstream &logFile, const G4int errorIndex )
+G4int SBTMessenger::DebugToInP::DebugMe( ifstream &logFile, const G4int errorIndex )
 {
 	return tester->DebugToInP( testSolid, logFile, errorIndex );
 }
 
-G4int SBTMessenger::DebugToInPV::DebugMe( G4std::ifstream &logFile, const G4int errorIndex )
+G4int SBTMessenger::DebugToInPV::DebugMe( ifstream &logFile, const G4int errorIndex )
 {
 	return tester->DebugToInPV( testSolid, logFile, errorIndex );
 }
 
-G4int SBTMessenger::DebugToOutP::DebugMe( G4std::ifstream &logFile, const G4int errorIndex )
+G4int SBTMessenger::DebugToOutP::DebugMe( ifstream &logFile, const G4int errorIndex )
 {
 	return tester->DebugToOutP( testSolid, logFile, errorIndex );
 }
 
-G4int SBTMessenger::DebugToOutPV::DebugMe( G4std::ifstream &logFile, const G4int errorIndex )
+G4int SBTMessenger::DebugToOutPV::DebugMe( ifstream &logFile, const G4int errorIndex )
 {
 	return tester->DebugToOutPV( testSolid, logFile, errorIndex );
 }

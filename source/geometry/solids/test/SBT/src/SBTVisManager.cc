@@ -55,12 +55,12 @@
 
 #ifdef G4VIS_USE_VRML
 #include "G4VRML1.hh"
-// #include "G4VRML2.hh"
+#include "G4VRML2.hh"
 #endif
 
 #ifdef G4VIS_USE_VRMLFILE
 #include "G4VRML1File.hh"
-//#include "G4VRML2File.hh"
+#include "G4VRML2File.hh"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -109,18 +109,18 @@ void SBTVisManager::RegisterGraphicsSystems () {
  
 #ifdef G4VIS_USE_VRML
   RegisterGraphicsSystem (new G4VRML1);
-// RegisterGraphicsSystem (new G4VRML2);
+  RegisterGraphicsSystem (new G4VRML2);
 #endif
  
 #ifdef G4VIS_USE_VRMLFILE
   RegisterGraphicsSystem (new G4VRML1File);
-// RegisterGraphicsSystem (new G4VRML2File);
+  RegisterGraphicsSystem (new G4VRML2File);
 #endif
  
   if (fVerbose > 0) {
     G4cout <<
       "\nYou have successfully chosen to use the following graphics systems."
-         << G4endl;
+         << endl;
     PrintAvailableGraphicsSystems ();
   }
 }
@@ -160,7 +160,7 @@ G4int SBTVisManager::BuildFakeWorld() const
 	SBTFakeModel *fakeModel = new SBTFakeModel(model);
 	
 	if (!fpScene) {
-		G4cerr << "Please create a view first" << G4endl;
+		G4cerr << "Please create a view first" << endl;
 		return 1;
 	}
 	

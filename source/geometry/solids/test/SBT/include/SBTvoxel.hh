@@ -9,8 +9,8 @@
 #include "globals.hh"
 #include "G4ThreeVector.hh"
 #include "geomdefs.hh"
-#include "g4std/iostream"
 
+class ostream;
 class G4VSolid;
 class G4VoxelLimits;
 class G4AffineTransform;
@@ -24,7 +24,7 @@ class SBTvoxel {
 	
 	void SetDefaults();
 	
-	void RunTest( const G4VSolid *testVolume, G4std::ostream &logger );
+	void RunTest( const G4VSolid *testVolume, ostream &logger );
 	
 	void Draw( const G4VSolid *testVolume, 
 		   const G4VoxelLimits &voxel, const G4AffineTransform &transform,
@@ -61,7 +61,7 @@ class SBTvoxel {
 			     const G4VoxelLimits &voxel,
 			     const G4AffineTransform &transform,
 			     const G4ThreeVector inside[], const G4int numInside,
-			     G4std::ostream &logger ) const;
+			     ostream &logger ) const;
 
 	void GetInsidePoints( const G4VSolid *testVolume,
 			      G4ThreeVector inside[], G4int *numInside,
@@ -76,9 +76,9 @@ class SBTvoxel {
 
 	G4VoxelLimits *NewRandomVoxel( const G4ThreeVector &theWidths ) const;
 	
-	void DumpVoxel( const G4VoxelLimits &voxel, G4std::ostream &logger ) const;
+	void DumpVoxel( const G4VoxelLimits &voxel, ostream &logger ) const;
 	
-	void DumpTransform( const G4AffineTransform &transform, G4std::ostream &logger ) const;
+	void DumpTransform( const G4AffineTransform &transform, ostream &logger ) const;
 	
 	void MakeVoxelTestPoints( const G4VoxelLimits &voxel,
 				  const EAxis axis, const G4double value,

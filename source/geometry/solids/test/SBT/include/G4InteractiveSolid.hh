@@ -86,9 +86,24 @@ class G4InteractiveSolid : public G4UImessenger, public G4SolidQuery {
 	G4UIcmdWithPargs	*polyconeCmd;
 	void MakeMeAPolycone( G4String values );
 	
+	G4UIcmdParg		*polycone2Args[6];
+	G4UIcmdWithPargs	*polycone2Cmd;
+	void MakeMeAPolycone2( G4String values );
+	
 	G4UIcmdParg		*polyhedraArgs[6];
 	G4UIcmdWithPargs	*polyhedraCmd;
 	void MakeMeAPolyhedra( G4String values );
+	
+	G4UIcmdParg		*polyhedra2Args[7];
+	G4UIcmdWithPargs	*polyhedra2Cmd;
+	void MakeMeAPolyhedra2( G4String values );
+	
+	G4UIcmdParg		*ellipticalTubeArgs[6];
+	G4UIcmdWithPargs	*ellipticalTubeCmd;
+	void MakeMeAnEllipticalTube( G4String values );
+	
+	G4UIcmdWithPargs	*dircTestCmd;
+	void MakeMeDircTest();
 };
 
 

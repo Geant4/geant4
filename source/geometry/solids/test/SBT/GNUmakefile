@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2000-04-07 11:11:06 gcosmo Exp $
+# $Id: GNUmakefile,v 1.2 2000-04-17 19:19:58 davidw Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -6,7 +6,6 @@
 name := SBT
 G4TARGET := $(name)
 G4EXLIB := true
-
 ifndef G4INSTALL
   G4INSTALL = ../../../../../..
 endif

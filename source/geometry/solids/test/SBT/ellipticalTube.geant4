@@ -1,0 +1,54 @@
+#
+# GEANT4 SBT Script to test G4EllipticalTube
+# DCW 19/5/99 
+#
+test/maxPoints 100000
+voxel/maxVoxels 200
+#
+# --- ellipticalTube.a1.log
+# Start with a nice and easy case
+#
+/solid/G4EllipticalTube 1 1 1
+/test/errorFileName ellipticalTube.a1.log
+/test/run
+/voxel/errorFileName ellipticalTubev.a1.log
+/voxel/run
+#
+# --- ellipticalTube.a2.log
+# Up the ante ans generate points on a grid
+#
+/test/gridSizes 0.1 0.1 0.1 m
+/test/errorFileName ellipticalTube.a2.log
+/test/run
+#
+# --- ellipticalTube.b1.log
+# More complicated
+#
+/test/gridSizes 0 0 0 m
+/solid/G4EllipticalTube 1 0.5 2
+/test/errorFileName ellipticalTube.b1.log
+/test/run
+/voxel/errorFileName ellipticalTubev.b1.log
+/voxel/run
+#
+/test/gridSizes 0.1 0.1 0.1 m
+/test/errorFileName ellipticalTube.b2.log
+/test/run
+#
+# --- ellipticalTube.c1.log
+# Odd case
+#
+/test/gridSizes 0 0 0 m
+/test/widths 0.0004 5 5 m
+/solid/G4EllipticalTube 0.0001 1 1
+/test/errorFileName ellipticalTube.c1.log
+/test/run
+/voxel/widths 0.0004 5 5 m
+/voxel/errorFileName ellipticalTubev.c1.log
+/voxel/run
+#
+/test/gridSizes 0.00001 0.1 0.1 m
+/test/errorFileName ellipticalTube.c2.log
+/test/run
+#
+exit

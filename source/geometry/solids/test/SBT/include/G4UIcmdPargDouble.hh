@@ -21,7 +21,7 @@ class G4UIcmdPargDouble : public G4UIcmdParg {
 	
 	inline char GetTypeCode() const { return 'd'; }
 	
-	G4std::istream &FetchValue( G4std::istream &ios );
+	istream &FetchValue( istream &ios );
 	
 	protected:
 	G4double units, value;

@@ -22,6 +22,8 @@
 #include "G4Hype.hh"
 #include "G4Polycone.hh"
 #include "G4Polyhedra.hh"
+#include "G4EllipticalTube.hh"
+#include "G4SubtractionSolid.hh"
 
 //
 // Constructor
@@ -46,8 +48,8 @@ G4InteractiveSolid::G4InteractiveSolid( const G4String &prefix )
 	boxArgs[0] = new G4UIcmdPargDouble( "dx", 1.0, m );
 	boxArgs[1] = new G4UIcmdPargDouble( "dy", 1.0, m );
 	boxArgs[2] = new G4UIcmdPargDouble( "dz", 1.0, m );
-	G4String com = prefix+"G4Box";
-	boxCmd = new G4UIcmdWithPargs( com, this, boxArgs, 3 );
+	G4String boxPath = prefix+"G4Box";
+	boxCmd = new G4UIcmdWithPargs( boxPath, this, boxArgs, 3 );
 	boxCmd->SetGuidance( "Declare a G4Box solid" );
 
 	//
@@ -59,8 +61,8 @@ G4InteractiveSolid::G4InteractiveSolid( const G4String &prefix )
 	paraArgs[3] = new G4UIcmdPargDouble( "alpha", 90, deg );
 	paraArgs[4] = new G4UIcmdPargDouble( "theta", 90, deg );
 	paraArgs[5] = new G4UIcmdPargDouble( "phi", 90, deg );
-	com = prefix+"G4Para";
-	paraCmd = new G4UIcmdWithPargs( com, this, paraArgs, 6 );
+	G4String paraPath = prefix+"G4Para";
+	paraCmd = new G4UIcmdWithPargs( paraPath, this, paraArgs, 6 );
 	paraCmd->SetGuidance( "Declare a G4Para solid" );
 
 	//
@@ -77,8 +79,8 @@ G4InteractiveSolid::G4InteractiveSolid( const G4String &prefix )
 	trapArgs[ 8] = new G4UIcmdPargDouble( "dx3",   1.0, m );
 	trapArgs[ 9] = new G4UIcmdPargDouble( "dx4",   1.0, m );
 	trapArgs[10] = new G4UIcmdPargDouble( "alpha2", 90, deg );
-	com = prefix+"G4Trap";
-	trapCmd = new G4UIcmdWithPargs( com, this, trapArgs, 11 );
+	G4String trapPath = prefix+"G4Trap";
+	trapCmd = new G4UIcmdWithPargs( trapPath, this, trapArgs, 11 );
 	trapCmd->SetGuidance( "Declare a G4Trap solid" );
 
 	//
@@ -89,8 +91,8 @@ G4InteractiveSolid::G4InteractiveSolid( const G4String &prefix )
 	trdArgs[2] = new G4UIcmdPargDouble( "dy1", 1.0, m );
 	trdArgs[3] = new G4UIcmdPargDouble( "dy2", 1.0, m );
 	trdArgs[4] = new G4UIcmdPargDouble( "dz",  1.0, m );
-	com = prefix+"G4Trd";
-	trdCmd = new G4UIcmdWithPargs( com, this, trdArgs, 5 );
+	G4String trdPath = prefix+"G4Trd";
+	trdCmd = new G4UIcmdWithPargs( trdPath, this, trdArgs, 5 );
 	trdCmd->SetGuidance( "Declare a G4Trd solid" );
 
 	//
@@ -102,8 +104,8 @@ G4InteractiveSolid::G4InteractiveSolid( const G4String &prefix )
 	sphereArgs[3] = new G4UIcmdPargDouble( "deltaPhi", 1.0, deg );
 	sphereArgs[4] = new G4UIcmdPargDouble( "startTheta",  1.0, deg );
 	sphereArgs[5] = new G4UIcmdPargDouble( "deltaTheta",  1.0, deg );
-	com = prefix+"G4Sphere";
-	sphereCmd = new G4UIcmdWithPargs( com, this, sphereArgs, 6 );
+	G4String spherePath = prefix+"G4Sphere";
+	sphereCmd = new G4UIcmdWithPargs( spherePath, this, sphereArgs, 6 );
 	sphereCmd->SetGuidance( "Declare a G4Sphere solid" );
 
 	//
@@ -114,8 +116,8 @@ G4InteractiveSolid::G4InteractiveSolid( const G4String &prefix )
 	torusArgs[2] = new G4UIcmdPargDouble( "rtorus", 1.0, m );
 	torusArgs[3] = new G4UIcmdPargDouble( "startPhi",  1.0, deg );
 	torusArgs[4] = new G4UIcmdPargDouble( "deltaPhi",  1.0, deg );
-	com = prefix+"G4Torus";
-	torusCmd = new G4UIcmdWithPargs( com, this, torusArgs, 5 );
+	G4String torusPath = prefix+"G4Torus";
+	torusCmd = new G4UIcmdWithPargs( torusPath, this, torusArgs, 5 );
 	torusCmd->SetGuidance( "Declare a G4Torus solid" );
 
 	//
@@ -126,8 +128,8 @@ G4InteractiveSolid::G4InteractiveSolid( const G4String &prefix )
 	tubsArgs[2] = new G4UIcmdPargDouble( "dz",   1.0, m );
 	tubsArgs[3] = new G4UIcmdPargDouble( "startPhi",  1.0, deg );
 	tubsArgs[4] = new G4UIcmdPargDouble( "deltaPhi",  1.0, deg );
-	com = prefix+"G4Tubs";
-	tubsCmd = new G4UIcmdWithPargs( com, this, tubsArgs, 5 );
+	G4String tubsPath = prefix+"G4Tubs";
+	tubsCmd = new G4UIcmdWithPargs( tubsPath, this, tubsArgs, 5 );
 	tubsCmd->SetGuidance( "Declare a G4Tubs solid" );
 
 	//
@@ -140,8 +142,8 @@ G4InteractiveSolid::G4InteractiveSolid( const G4String &prefix )
 	consArgs[4] = new G4UIcmdPargDouble( "dz",    1.0, m );
 	consArgs[5] = new G4UIcmdPargDouble( "startPhi",  1.0, deg );
 	consArgs[6] = new G4UIcmdPargDouble( "deltaPhi",  1.0, deg );
-	com = prefix+"G4Cons";
-	consCmd = new G4UIcmdWithPargs( com, this, consArgs, 7 );
+	G4String consPath = prefix+"G4Cons";
+	consCmd = new G4UIcmdWithPargs( consPath, this, consArgs, 7 );
 	consCmd->SetGuidance( "Declare a G4Cons solid" );
 
 	//
@@ -149,11 +151,11 @@ G4InteractiveSolid::G4InteractiveSolid( const G4String &prefix )
 	//
 	hypeArgs[0] = new G4UIcmdPargDouble( "innerRadius", 1.0, m );
 	hypeArgs[1] = new G4UIcmdPargDouble( "outerRadius", 1.0, m );
-	hypeArgs[2] = new G4UIcmdPargDouble( "innerStereo", 1.0, m );
-	hypeArgs[3] = new G4UIcmdPargDouble( "outerStereo", 1.0, m );
+	hypeArgs[2] = new G4UIcmdPargDouble( "innerStereo", 1.0, deg );
+	hypeArgs[3] = new G4UIcmdPargDouble( "outerStereo", 1.0, deg );
 	hypeArgs[4] = new G4UIcmdPargDouble( "dz",  1.0, m );
-	com = prefix+"G4Hype";
-	hypeCmd = new G4UIcmdWithPargs( com, this, hypeArgs, 5 );
+	G4String hypePath = prefix+"G4Hype";
+	hypeCmd = new G4UIcmdWithPargs( hypePath, this, hypeArgs, 5 );
 	hypeCmd->SetGuidance( "Declare a G4Hype solid" );
 	
 	//
@@ -164,9 +166,22 @@ G4InteractiveSolid::G4InteractiveSolid( const G4String &prefix )
 	polyconeArgs[2] = new G4UIcmdPargInteger( "numRZ", 1 );
 	polyconeArgs[3] = new G4UIcmdPargListDouble( "r", 100, m );
 	polyconeArgs[4] = new G4UIcmdPargListDouble( "z", 100, m );
-	com = prefix+"G4Polycone";
-	polyconeCmd = new G4UIcmdWithPargs( com, this, polyconeArgs, 5 );
+	G4String polyconePath = prefix+"G4Polycone";
+	polyconeCmd = new G4UIcmdWithPargs( polyconePath, this, polyconeArgs, 5 );
 	polyconeCmd->SetGuidance( "Declare a G4Polycone solid" );
+	
+	//
+	// Declare G4Polycone2
+	//
+	polycone2Args[0] = new G4UIcmdPargDouble( "phiStart", 0, deg );
+	polycone2Args[1] = new G4UIcmdPargDouble( "phiTotal", 0, deg );
+	polycone2Args[2] = new G4UIcmdPargInteger( "numRZ", 1 );
+	polycone2Args[3] = new G4UIcmdPargListDouble( "z", 100, m );
+	polycone2Args[4] = new G4UIcmdPargListDouble( "rin", 100, m );
+	polycone2Args[5] = new G4UIcmdPargListDouble( "rout", 100, m );
+	G4String polycone2Path = prefix+"G4Polycone2";
+	polycone2Cmd = new G4UIcmdWithPargs( polycone2Path, this, polycone2Args, 6 );
+	polycone2Cmd->SetGuidance( "Declare a G4Polycone solid (PCON style)" );
 	
 	//
 	// Declare G4Polyhedra
@@ -177,9 +192,39 @@ G4InteractiveSolid::G4InteractiveSolid( const G4String &prefix )
 	polyhedraArgs[3] = new G4UIcmdPargInteger( "numRZ", 1 );
 	polyhedraArgs[4] = new G4UIcmdPargListDouble( "r", 100, m );
 	polyhedraArgs[5] = new G4UIcmdPargListDouble( "z", 100, m );
-	com = prefix+"G4Polyhedra";
-	polyhedraCmd = new G4UIcmdWithPargs( com, this, polyhedraArgs, 6 );
+	G4String polyhedraPath = prefix+"G4Polyhedra";
+	polyhedraCmd = new G4UIcmdWithPargs( polyhedraPath, this, polyhedraArgs, 6 );
 	polyhedraCmd->SetGuidance( "Declare a G4Polyhedra solid" );
+	
+	//
+	// Declare G4Polyhedra2
+	//
+	polyhedra2Args[0] = new G4UIcmdPargDouble( "phiStart", 0, deg );
+	polyhedra2Args[1] = new G4UIcmdPargDouble( "phiTotal", 0, deg );
+	polyhedra2Args[2] = new G4UIcmdPargInteger( "numSides", 8 );
+	polyhedra2Args[3] = new G4UIcmdPargInteger( "numRZ", 1 );
+	polyhedra2Args[4] = new G4UIcmdPargListDouble( "z", 100, m );
+	polyhedra2Args[5] = new G4UIcmdPargListDouble( "rin", 100, m );
+	polyhedra2Args[6] = new G4UIcmdPargListDouble( "rout", 100, m );
+	G4String polyhedra2Path = prefix+"G4Polyhedra2";
+	polyhedra2Cmd = new G4UIcmdWithPargs( polyhedra2Path, this, polyhedra2Args, 7 );
+	polyhedra2Cmd->SetGuidance( "Declare a G4Polyhedra solid (PGON style)" );
+	
+	//
+	// Declare G4EllipticalTube
+	//
+	ellipticalTubeArgs[0] = new G4UIcmdPargDouble( "dx", 1.0, m );
+	ellipticalTubeArgs[1] = new G4UIcmdPargDouble( "dy", 1.0, m );
+	ellipticalTubeArgs[2] = new G4UIcmdPargDouble( "dz", 1.0, m );
+	G4String ellipticalTubePath = prefix+"G4EllipticalTube";
+	ellipticalTubeCmd = new G4UIcmdWithPargs( ellipticalTubePath, this, ellipticalTubeArgs, 3 );
+	ellipticalTubeCmd->SetGuidance( "Declare a G4EllipticalTube solid" );
+	//
+	// Declare DircTest
+	//
+	G4String dircTestPath = prefix+"DircTest";
+	dircTestCmd = new G4UIcmdWithPargs( dircTestPath, this, 0, 0 );
+	dircTestCmd->SetGuidance( "Declare a DircTest solid" );
 }
 
 
@@ -222,6 +267,9 @@ G4InteractiveSolid::~G4InteractiveSolid()
 
 	delete polyhedraCmd;
 	DeleteArgArray( polyhedraArgs, sizeof(polyhedraArgs)/sizeof(G4UIcmdParg**) );
+
+	delete ellipticalTubeCmd;
+	DeleteArgArray( ellipticalTubeArgs, sizeof(ellipticalTubeArgs)/sizeof(G4UIcmdParg**) );
 }
 
 
@@ -255,7 +303,7 @@ void G4InteractiveSolid::MakeMeABox( G4String values )
 					  	     dzArg->GetValue() );
 	}
 	else
-		G4cerr << "G4Box not created" << G4endl;
+		G4cerr << "G4Box not created" << endl;
 }
 
 
@@ -282,7 +330,7 @@ void G4InteractiveSolid::MakeMeAPara( G4String values )
 					  	       phiArg->GetValue()    );
 	}
 	else
-		G4cerr << "G4Para not created" << G4endl;
+		G4cerr << "G4Para not created" << endl;
 }
 
 
@@ -309,7 +357,7 @@ void G4InteractiveSolid::MakeMeATrap( G4String values )
 						       dArg[10]->GetValue() );
 	}
 	else
-		G4cerr << "G4Trap not created" << G4endl;
+		G4cerr << "G4Trap not created" << endl;
 }
 
 
@@ -334,7 +382,7 @@ void G4InteractiveSolid::MakeMeATrd( G4String values )
 					  	      dzArg->GetValue() );
 	}
 	else
-		G4cerr << "G4Trd not created" << G4endl;
+		G4cerr << "G4Trd not created" << endl;
 }
 
 
@@ -356,7 +404,7 @@ void G4InteractiveSolid::MakeMeASphere( G4String values )
 						           dArg[5]->GetValue() );
 	}
 	else
-		G4cerr << "G4Sphere not created" << G4endl;
+		G4cerr << "G4Sphere not created" << endl;
 }
 
 
@@ -377,7 +425,7 @@ void G4InteractiveSolid::MakeMeATorus( G4String values )
 						         dArg[4]->GetValue() );
 	}
 	else
-		G4cerr << "G4Torus not created" << G4endl;
+		G4cerr << "G4Torus not created" << endl;
 }
 
 
@@ -398,7 +446,7 @@ void G4InteractiveSolid::MakeMeATubs( G4String values )
 						       dArg[4]->GetValue() );
 	}
 	else
-		G4cerr << "G4Tubs not created" << G4endl;
+		G4cerr << "G4Tubs not created" << endl;
 }
 
 
@@ -421,7 +469,7 @@ void G4InteractiveSolid::MakeMeACons( G4String values )
 						       dArg[6]->GetValue() );
 	}
 	else
-		G4cerr << "G4Cons not created" << G4endl;
+		G4cerr << "G4Cons not created" << endl;
 }
 
 
@@ -442,7 +490,7 @@ void G4InteractiveSolid::MakeMeAHype( G4String values )
 						       dArg[4]->GetValue()  );
 	}
 	else
-		G4cerr << "G4Hype not created" << G4endl;
+		G4cerr << "G4Hype not created" << endl;
 }
 
 
@@ -452,8 +500,6 @@ void G4InteractiveSolid::MakeMeAHype( G4String values )
 void G4InteractiveSolid::MakeMeAPolycone( G4String values )
 {
 	if (polyconeCmd->GetArguments( values )) {
-		delete solid;
-		
 		G4UIcmdPargDouble	*phiStartArg = (G4UIcmdPargDouble	*)polyconeArgs[0];
 		G4UIcmdPargDouble	*phiTotalArg = (G4UIcmdPargDouble	*)polyconeArgs[1];
 		G4UIcmdPargInteger	*numRZArg    = (G4UIcmdPargInteger	*)polyconeArgs[2];
@@ -466,11 +512,12 @@ void G4InteractiveSolid::MakeMeAPolycone( G4String values )
 		G4int numRZ = numRZArg->GetValue();
 		if (numRZ != rArg->GetNItem() ||
 		    numRZ != zArg->GetNItem()    ) {
-		    	G4cerr << "numRZ inconsistent among polycone arguments" << G4endl;
-			G4cerr << "G4Polycone not created" << G4endl;
+		    	G4cerr << "numRZ inconsistent among polycone arguments" << endl;
+			G4cerr << "G4Polycone not created" << endl;
 			return;
 		}
 		
+		delete solid;
 		solid = new G4Polycone( "interactivePolycone", 
 					phiStartArg->GetValue(),
 					phiTotalArg->GetValue(),
@@ -479,7 +526,46 @@ void G4InteractiveSolid::MakeMeAPolycone( G4String values )
 					zArg->GetValues() );
 	}
 	else
-		G4cerr << "G4Polycone not created" << G4endl;
+		G4cerr << "G4Polycone not created" << endl;
+}
+
+
+//
+// MakeMeAPolycone2
+//
+void G4InteractiveSolid::MakeMeAPolycone2( G4String values )
+{
+	if (polycone2Cmd->GetArguments( values )) {
+		G4UIcmdPargDouble	*phiStartArg = (G4UIcmdPargDouble	*)polycone2Args[0];
+		G4UIcmdPargDouble	*phiTotalArg = (G4UIcmdPargDouble	*)polycone2Args[1];
+		G4UIcmdPargInteger	*numRZArg    = (G4UIcmdPargInteger	*)polycone2Args[2];
+		G4UIcmdPargListDouble	*zArg        = (G4UIcmdPargListDouble	*)polycone2Args[3];
+		G4UIcmdPargListDouble	*rInArg      = (G4UIcmdPargListDouble	*)polycone2Args[4];
+		G4UIcmdPargListDouble	*rOutArg     = (G4UIcmdPargListDouble	*)polycone2Args[5];
+				  
+		//
+		// Check consistency
+		//
+		G4int numRZ = numRZArg->GetValue();
+		if (numRZ != zArg->GetNItem() ||
+		    numRZ != rInArg->GetNItem() ||
+		    numRZ != rOutArg->GetNItem()    ) {
+		    	G4cerr << "numRZ inconsistent among polycone arguments" << endl;
+			G4cerr << "G4Polycone not created" << endl;
+			return;
+		}
+		
+		delete solid;
+		solid = new G4Polycone( "interactivePolycone", 
+					phiStartArg->GetValue(),
+					phiTotalArg->GetValue(),
+					numRZ,
+					zArg->GetValues(),
+					rInArg->GetValues(),
+					rOutArg->GetValues() );
+	}
+	else
+		G4cerr << "G4Polycone not created" << endl;
 }
 
 
@@ -489,8 +575,6 @@ void G4InteractiveSolid::MakeMeAPolycone( G4String values )
 void G4InteractiveSolid::MakeMeAPolyhedra( G4String values )
 {
 	if (polyhedraCmd->GetArguments( values )) {
-		delete solid;
-		
 		G4UIcmdPargDouble	*phiStartArg = (G4UIcmdPargDouble	*)polyhedraArgs[0];
 		G4UIcmdPargDouble	*phiTotalArg = (G4UIcmdPargDouble	*)polyhedraArgs[1];
 		G4UIcmdPargInteger	*numSidesArg = (G4UIcmdPargInteger	*)polyhedraArgs[2];
@@ -504,11 +588,12 @@ void G4InteractiveSolid::MakeMeAPolyhedra( G4String values )
 		G4int numRZ = numRZArg->GetValue();
 		if (numRZ != rArg->GetNItem() ||
 		    numRZ != zArg->GetNItem()    ) {
-		    	G4cerr << "numRZ inconsistent among polyhedra arguments" << G4endl;
-			G4cerr << "G4Polyhedra not created" << G4endl;
+		    	G4cerr << "numRZ inconsistent among polyhedra arguments" << endl;
+			G4cerr << "G4Polyhedra not created" << endl;
 			return;
 		}
 		
+		delete solid;
 		solid = new G4Polyhedra( "interactivePolyhedra", 
 					phiStartArg->GetValue(),
 					phiTotalArg->GetValue(),
@@ -518,8 +603,96 @@ void G4InteractiveSolid::MakeMeAPolyhedra( G4String values )
 					zArg->GetValues() );
 	}
 	else
-		G4cerr << "G4Polyhedra not created" << G4endl;
+		G4cerr << "G4Polyhedra not created" << endl;
 }
+
+
+//
+// MakeMeAPolyhedra2
+//
+void G4InteractiveSolid::MakeMeAPolyhedra2( G4String values )
+{
+	if (polyhedra2Cmd->GetArguments( values )) {
+		G4UIcmdPargDouble	*phiStartArg = (G4UIcmdPargDouble	*)polyhedra2Args[0];
+		G4UIcmdPargDouble	*phiTotalArg = (G4UIcmdPargDouble	*)polyhedra2Args[1];
+		G4UIcmdPargInteger	*numSidesArg = (G4UIcmdPargInteger	*)polyhedra2Args[2];
+		G4UIcmdPargInteger	*numRZArg    = (G4UIcmdPargInteger	*)polyhedra2Args[3];
+		G4UIcmdPargListDouble	*zArg        = (G4UIcmdPargListDouble	*)polyhedra2Args[4];
+		G4UIcmdPargListDouble	*rinArg      = (G4UIcmdPargListDouble	*)polyhedra2Args[5];
+		G4UIcmdPargListDouble	*routArg     = (G4UIcmdPargListDouble	*)polyhedra2Args[6];
+				  
+		//
+		// Check consistency
+		//
+		G4int numRZ = numRZArg->GetValue();
+		if (numRZ != zArg->GetNItem() ||
+		    numRZ != rinArg->GetNItem()  ||
+		    numRZ != routArg->GetNItem()    ) {
+		    	G4cerr << "numRZ inconsistent among polyhedra arguments" << endl;
+			G4cerr << "G4Polyhedra not created" << endl;
+			return;
+		}
+		
+		delete solid;
+		solid = new G4Polyhedra( "interactivePolyhedra", 
+					phiStartArg->GetValue(),
+					phiTotalArg->GetValue(),
+					numSidesArg->GetValue(),
+					numRZ,
+					zArg->GetValues(),
+					rinArg->GetValues(),
+					routArg->GetValues() );
+	}
+	else
+		G4cerr << "G4Polyhedra not created" << endl;
+}
+
+
+//
+// MakeMeAnEllipticalTube
+//
+void G4InteractiveSolid::MakeMeAnEllipticalTube( G4String values )
+{
+	if (ellipticalTubeCmd->GetArguments( values )) {
+		delete solid;
+		
+		G4UIcmdPargDouble *dxArg = (G4UIcmdPargDouble *)ellipticalTubeArgs[0],
+				  *dyArg = (G4UIcmdPargDouble *)ellipticalTubeArgs[1],
+				  *dzArg = (G4UIcmdPargDouble *)ellipticalTubeArgs[2];
+		
+		solid = new G4EllipticalTube( "interactiveBox", dxArg->GetValue(),
+					   	                dyArg->GetValue(),
+					  	                dzArg->GetValue() );
+	}
+	else
+		G4cerr << "G4EllipticalTube not created" << endl;
+}
+
+
+//
+// MakeMeDircTest
+//
+void G4InteractiveSolid::MakeMeDircTest()
+{
+	delete solid;
+
+	G4Tubs *outside = new G4Tubs( "OuterFrame",	// name (arbitrary) 
+				      1.0*m, 		// inner radius
+				      1.1*m, 		// outer radius
+				      0.01*m, 		// half-thickness in z
+				      -15*deg, 		// start angle
+				      30*deg );		// total angle
+				      
+	G4Box *cutout = new G4Box( "Cutout", 	// name (arbitrary)
+				   0.02*m,	// half-width (x)
+				   0.25*m,	// half-height (y)
+				   0.01001*m );	// half-thickness (z)
+				   
+	G4Transform3D tran = G4Translate3D( 1.03*m, 0.0, 0.0 );
+	
+	solid = new G4SubtractionSolid( "drcExample", outside, cutout, tran );
+}
+
 
 
 //
@@ -551,8 +724,16 @@ void G4InteractiveSolid::SetNewValue( G4UIcommand *command, G4String newValues )
 		MakeMeAHype( newValues );
 	else if (command == polyconeCmd) 
 		MakeMeAPolycone( newValues );
+	else if (command == polycone2Cmd) 
+		MakeMeAPolycone2( newValues );
 	else if (command == polyhedraCmd) 
 		MakeMeAPolyhedra( newValues );
+	else if (command == polyhedra2Cmd) 
+		MakeMeAPolyhedra2( newValues );
+	else if (command == ellipticalTubeCmd) 
+		MakeMeAnEllipticalTube( newValues );
+	else if (command == dircTestCmd) 
+		MakeMeDircTest();
 	else
 		G4Exception( "Unrecognized command" );
 }
@@ -583,8 +764,16 @@ G4String G4InteractiveSolid::GetCurrentValue( G4UIcommand *command )
 		return ConvertArgsToString( 	  hypeArgs, sizeof(	hypeArgs)/sizeof(G4UIcmdParg**) );
 	else if (command == polyconeCmd)
 		return ConvertArgsToString(   polyconeArgs, sizeof( polyconeArgs)/sizeof(G4UIcmdParg**) );
+	else if (command == polycone2Cmd)
+		return ConvertArgsToString(  polycone2Args, sizeof(polycone2Args)/sizeof(G4UIcmdParg**) );
 	else if (command == polyhedraCmd)
 		return ConvertArgsToString(  polyhedraArgs, sizeof(polyhedraArgs)/sizeof(G4UIcmdParg**) );
+	else if (command == polyhedra2Cmd)
+		return ConvertArgsToString(  polyhedra2Args, sizeof(polyhedra2Args)/sizeof(G4UIcmdParg**) );
+	else if (command == ellipticalTubeCmd)
+		return ConvertArgsToString(  ellipticalTubeArgs, sizeof(ellipticalTubeArgs)/sizeof(G4UIcmdParg**) );
+	else if (command == dircTestCmd)
+		return "";
 	
 	G4Exception( "Unrecognized command" );
 	return "foo!";
