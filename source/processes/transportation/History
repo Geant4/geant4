@@ -1,4 +1,4 @@
-$Id: History,v 1.36 2002-05-31 10:17:41 dressel Exp $
+$Id: History,v 1.37 2002-05-31 13:49:46 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May   31, 2002  M.Dressel transport-V04-00-07
+--------------------------------------------------------
+- bug fix in G4PArallelScoreSampler.cc and remove Warning from ParallelTransport
 
 May   31, 2002  M.Dressel transport-V04-00-06
 --------------------------------------------------------
