@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2002-07-11 16:32:43 dressel Exp $
+$Id: History,v 1.18 2002-11-08 17:40:27 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov   8th, 2002 M.Dressel 
+  reduce and change examples. Only B01 B02 B03 will
+  remain but with different content. 
 
 July 11th, 2002 M.Dressel - internal-3-exbiasing-V04-01-01
 - resolved B09 into geometry/biasing and run.
