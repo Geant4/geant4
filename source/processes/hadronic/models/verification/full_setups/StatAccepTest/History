@@ -1,6 +1,10 @@
                  History file
                  ------------
 
+1-Mar-2005 - A.Ribon (statAccepTest-V07-01-00)
+- Update for Geant4 7.0 .
+
+
 6-Dec-2004 - A.Ribon (statAccepTest-V06-02-06)
 - Setup for running on the Grid.
 

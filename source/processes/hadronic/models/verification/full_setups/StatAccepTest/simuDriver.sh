@@ -48,49 +48,51 @@ echo ' EVENTS      =' $EVENTS
 #--- Run the first reference ---
 #
 ( if [ X$SIM_REF1 == XYes ] ; then
-    ###echo " I AM HERE 1 "
+    ###echo " I AM HERE 1 " ;
     export REF=$REF1 ;
     export LABEL=$REF-$PHYSICS-$CALORIMETER-$PARTICLE-$ENERGY-$EVENTS ;
     python2.2 build.py $REF $PHYSICS $CALORIMETER $PARTICLE $ENERGY $EVENTS ;
-    mv run.g4 run.g4-$LABEL
-    mv setup.sh setup.sh-$LABEL
+    mv run.g4 run.g4-$LABEL ;
+    mv setup.sh setup.sh-$LABEL ;
     . setup.sh-$LABEL ;
-    echo '  '; echo ' G4INSTALL = ' $G4INSTALL; echo ' running REF = ' $REF ; echo '  '
-    rm -rf tmp/
-    gmake
-    mv bin/$G4SYSTEM/mainStatAccepTest bin/$G4SYSTEM/mainStatAccepTest-$REF-$PHYSICS
+    echo '  '; echo ' G4INSTALL = ' $G4INSTALL; echo ' running REF = ' $REF ; echo '  ' ;
+    rm -rf tmp/ ;
+    gmake ;
+    mv bin/$G4SYSTEM/mainStatAccepTest bin/$G4SYSTEM/mainStatAccepTest-$REF-$PHYSICS ;
     mainStatAccepTest-$REF-$PHYSICS run.g4-$LABEL > output.log-$LABEL 2>&1 ;
-    mv ntuple.hbook ntuple.hbook-$LABEL
+###    mainStatAccepTest-$REF-$PHYSICS run.g4-$LABEL ;
+    mv ntuple.hbook ntuple.hbook-$LABEL ;
   fi )
 #
 #--- Run the second reference ---
 #
 ( if [ X$SIM_REF2 == XYes ] ; then
-    ###echo " I AM HERE 2 "
+    ###echo " I AM HERE 2 " ;
     export REF=$REF2 ; 
     export LABEL=$REF-$PHYSICS-$CALORIMETER-$PARTICLE-$ENERGY-$EVENTS ;
     python2.2 build.py $REF $PHYSICS $CALORIMETER $PARTICLE $ENERGY $EVENTS ;
-    mv run.g4 run.g4-$LABEL
-    mv setup.sh setup.sh-$LABEL
+    mv run.g4 run.g4-$LABEL ;
+    mv setup.sh setup.sh-$LABEL ;
     . setup.sh-$LABEL ;
-    echo '  '; echo ' G4INSTALL = ' $G4INSTALL; echo ' running REF = ' $REF ; echo '  '
-    rm -rf tmp/
-    gmake
-    mv bin/$G4SYSTEM/mainStatAccepTest bin/$G4SYSTEM/mainStatAccepTest-$REF-$PHYSICS
+    echo '  '; echo ' G4INSTALL = ' $G4INSTALL; echo ' running REF = ' $REF ; echo '  ' ;
+    rm -rf tmp/ ;
+    gmake ;
+    mv bin/$G4SYSTEM/mainStatAccepTest bin/$G4SYSTEM/mainStatAccepTest-$REF-$PHYSICS ;
     mainStatAccepTest-$REF-$PHYSICS run.g4-$LABEL > output.log-$LABEL 2>&1 ;
-    mv ntuple.hbook ntuple.hbook-$LABEL 
+###    mainStatAccepTest-$REF-$PHYSICS run.g4-$LABEL ;
+    mv ntuple.hbook ntuple.hbook-$LABEL ;
   fi )
 #
 #--- Run the statistical tests ---
 #
 ( if [ X$RUN_STAT == XYes ] ; then
-    ###echo " I AM HERE 3 "
-    export LABEL=$PHYSICS-$CALORIMETER-$PARTICLE-$ENERGY-$EVENTS
-    . setup.sh-$REF1-$LABEL
-    cd dirStat/
-    rm pvalue.o pvalue
-    gmake
-    python2.2 driver.py $REF1 $REF2 $LABEL 
+    ###echo " I AM HERE 3 " ;
+    export LABEL=$PHYSICS-$CALORIMETER-$PARTICLE-$ENERGY-$EVENTS ;
+    . setup.sh-$REF1-$LABEL ;
+    cd dirStat/ ;
+    rm pvalue.o pvalue ;
+    gmake ;
+    python2.2 driver.py $REF1 $REF2 $LABEL ; 
   fi )
 #
 echo ' ========== END simuDriver.sh ========== '

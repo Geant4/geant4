@@ -28,11 +28,11 @@ print '========== START mainScript.py =========='
 #               -  the Number of Events:
 #                  e.g. : "5000", "5k", etc.
 #
-REF1        = "6.2.p02"
+REF1        = "7.0"
 SIM_REF1    = "Yes"
-REF2        = "7.0.cand01"
-SIM_REF2    = "No"
-RUN_STAT    = "No"
+REF2        = "7.0bis"
+SIM_REF2    = "Yes"
+RUN_STAT    = "Yes"
 PHYSICS     = "QGSP"
 EVENTS      = "100"
 #***endLOOKHERE***

@@ -52,7 +52,7 @@ print '  ENERGY      = ', ENERGY
 print '  EVENTS      = ', EVENTS
 
 # ---------------- Release ---------------------
-Release = "geant4." + REFERENCE
+Release = "dirGeant4-" + REFERENCE
 print '  Release = ', Release                 
                  
 # ---------------- Physics ---------------------
@@ -178,13 +178,11 @@ g4file.close()
 
 setupFile = open( "setup.sh", "w" )
 
-setupFile.write( "export PATH=$VO_DTEAM_SW_DIR/dirInstallations/dirGCC/bin:$PATH \n" )
-setupFile.write( "export LD_LIBRARY_PATH=$VO_DTEAM_SW_DIR/dirInstallations/dirGCC/lib:$LIBRARY_PATH \n" )
-
 setupFile.write( "export G4SYSTEM=Linux-g++ \n" )
 
 setupFile.write( "export G4_RELEASE=" + Release + " \n" )
-setupFile.write( "export DIR_INSTALLATIONS=$VO_DTEAM_SW_DIR/dirInstallations \n" )
+###setupFile.write( "export DIR_INSTALLATIONS=$VO_DTEAM_SW_DIR/dirInstallations \n" )
+setupFile.write( "export DIR_INSTALLATIONS=$PWD/.. \n" )
 setupFile.write( "export G4INSTALL=$DIR_INSTALLATIONS/$G4_RELEASE \n" )
 setupFile.write( "export G4LIB=$DIR_INSTALLATIONS/$G4_RELEASE/lib \n" )
 
@@ -201,19 +199,21 @@ setupFile.write( "export CLHEP_LIB=CLHEP \n" )
 setupFile.write( "export G4UI_USE_TCSH=1 \n" )
 
 setupFile.write( "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$G4LIB/$G4SYSTEM \n" )
-setupFile.write( "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$G4LIB/.lists_build/$G4SYSTEM \n" )
 setupFile.write( "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$CLHEP_LIB_DIR \n" )
+setupFile.write( "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$G4LIB/plists/$G4SYSTEM \n" )
 
 setupFile.write( "export G4WORKDIR=$PWD \n" )
 setupFile.write( "export PATH=$PATH:$G4WORKDIR/bin/$G4SYSTEM \n" )
 setupFile.write( "export G4ANALYSIS_USE=1 \n" )
 
 setupFile.write( "export PI_DIR=$DIR_INSTALLATIONS/dirPI \n" )
-setupFile.write( "export LD_LIBRARY_PATH=$PI_DIR/lib:${LD_LIBRARY_PATH} \n" )
-setupFile.write( "export SEAL_PLUGINS=$PI_DIR/lib/modules \n" )
+setupFile.write( "export PATH=$PI_DIR/bin:${PATH} \n" )
+setupFile.write( "eval `aida-config --runtime sh` \n" )
 
-###setupFile.write( "export GSL_DIR=$DIR_INSTALLATIONS/dirGSL \n" )
-###setupFile.write( "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GSL_DIR/lib \n" )
+setupFile.write( "export GSL_DIR=$DIR_INSTALLATIONS/dirGSL \n" )
+setupFile.write( "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GSL_DIR/lib \n" )
+
+setupFile.write( "export PATH=$PATH:$DIR_INSTALLATIONS/dirPAW \n" )
 
 setupFile.close()
 
