@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ASCIITreeSceneHandler.cc,v 1.2 2001-05-18 10:03:13 johna Exp $
+// $Id: G4ASCIITreeSceneHandler.cc,v 1.3 2001-05-22 12:16:54 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,46 +29,81 @@ G4ASCIITreeSceneHandler::G4ASCIITreeSceneHandler(G4VGraphicsSystem& system,
 G4ASCIITreeSceneHandler::~G4ASCIITreeSceneHandler () {}
 
 void G4ASCIITreeSceneHandler::BeginModeling () {
-  fReplicaSet.clear();
+  const G4ASCIITree* pSystem = (G4ASCIITree*)GetGraphicsSystem();
+  const G4int verbosity = pSystem->GetVerbosity();
+  G4cout << "\nG4ASCIITreeSceneHandler::BeginModeling:"
+    "\n  set verbosity with \"/vis/ASCIITree/verbose <verbosity>\":"
+    "\n  <= 0: mimimum verbosity:"
+    "\n        - does not print daughters of repeated logical volumes."
+    "\n        - does not repeat replicas."
+    "\n   > 0: prints all physical volumes."
+    "\n  Now printing with verbosity " << verbosity << G4endl;
 }
 
 void G4ASCIITreeSceneHandler::EndModeling () {
+  fLVSet.clear();
   fReplicaSet.clear();
 }
 
 void G4ASCIITreeSceneHandler::Dump (const G4VSolid& solid) {
 
   const G4ASCIITree* pSystem = (G4ASCIITree*)GetGraphicsSystem();
-  const G4int verbosity =pSystem->GetVerbosity();
+  const G4int verbosity = pSystem->GetVerbosity();
 
-  if (verbosity < 1 && fReplicaSet.find(fpCurrentPV) != fReplicaSet.end()) {
-    // Ignore if an already treated replica.  (Assumes model which has
-    // invoked this function is a G4PhysicalVolumeModel - how can we
-    // check this?)
-    ((G4PhysicalVolumeModel*)fpModel)->CurtailDescent();
-    return;
+  if (verbosity <= 0 && fReplicaSet.find(fpCurrentPV) != fReplicaSet.end()) {
+    // Ignore if an already treated replica.  (Assumes that the model
+    // which has invoked this function is a G4PhysicalVolumeModel - we
+    // check this by testing fpCurrentPV.)
+    if (fpCurrentPV) {
+      ((G4PhysicalVolumeModel*)fpModel)->CurtailDescent();
+      return;
+    }
   }
 
+  // Print indented text...
   for (G4int i = 0; i < fCurrentDepth; i++ ) G4cout << "  ";
   G4cout << "\"" << fpCurrentPV->GetName()
 	 << "\", copy no. " << fpCurrentPV->GetCopyNo();
+
   if (fpCurrentPV->IsReplicated()) {
-    fReplicaSet.insert(fpCurrentPV);
-    EAxis axis;
-    G4int nReplicas;
-    G4double width;
-    G4double offset;
-    G4bool consuming;
-    fpCurrentPV->GetReplicationData(axis,nReplicas,width,offset,consuming);
-    G4VPVParameterisation* pP = fpCurrentPV->GetParameterisation();
-    G4cout << " (" << nReplicas;
-    if (pP) {  // Parametrised volume.
-      G4cout << " parametrised volumes)";
-    }
-    else {  // Plain replicated volume.  From geometry_guide.txt...
-      G4cout << " plain replicas)";
+    fReplicaSet.insert(fpCurrentPV);  // Record new replica volume.
+    if (verbosity <= 0) {
+      // Add printing for replicas (when replicas are ignored)...
+      EAxis axis;
+      G4int nReplicas;
+      G4double width;
+      G4double offset;
+      G4bool consuming;
+      fpCurrentPV->GetReplicationData(axis,nReplicas,width,offset,consuming);
+      G4VPVParameterisation* pP = fpCurrentPV->GetParameterisation();
+      G4cout << " (" << nReplicas;
+      if (pP) {
+	G4cout << " parametrised volumes)";
+      }
+      else {
+	G4cout << " replicas)";
+      }
     }
   }
+  else {
+    if (fLVSet.find(fpCurrentLV) != fLVSet.end()) {
+      if (verbosity <= 0) {
+	// Add printing for repeated logical volume...
+	G4cout << " (repeated logical volume)";
+	// Ignore if an already treated logical volume.
+	if (fpCurrentPV) {
+	  ((G4PhysicalVolumeModel*)fpModel)->CurtailDescent();
+	  G4cout << G4endl;
+	  return;
+	}
+      }
+    }
+  }
+
+  if (fLVSet.find(fpCurrentLV) == fLVSet.end()) {
+    fLVSet.insert(fpCurrentLV);  // Record new logical volume.
+  }
+
   G4cout << G4endl;
   return;
 }

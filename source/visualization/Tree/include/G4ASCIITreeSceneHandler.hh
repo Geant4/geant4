@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ASCIITreeSceneHandler.hh,v 1.2 2001-05-18 10:03:12 johna Exp $
+// $Id: G4ASCIITreeSceneHandler.hh,v 1.3 2001-05-22 12:16:54 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,6 +32,8 @@ public:
   void EndModeling();
 protected:
   void Dump(const G4VSolid&);
+  G4std::set<G4LogicalVolume*> fLVSet;
+  typedef G4std::set<G4LogicalVolume*>::iterator LVSetIterator;
   G4std::set<G4VPhysicalVolume*> fReplicaSet;
   typedef G4std::set<G4VPhysicalVolume*>::iterator ReplicaSetIterator;
 };
