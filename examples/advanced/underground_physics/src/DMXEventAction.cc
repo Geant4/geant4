@@ -120,7 +120,8 @@ void DMXEventAction::BeginOfEventAction(const G4Event* evt) {
   if (event_id%printModulo == 0)
     {
       G4cout << "\n---> Begin of event: " << event_id << G4endl;
-      G4cout << " and energy: " << G4BestUnit(energy_pri,"Energy") << G4endl;
+      G4cout << " Primary Energy: " << G4BestUnit(energy_pri,"Energy") 
+	     << G4endl;
       //      HepRandom::showEngineStatus(); 
     }
 
@@ -291,9 +292,10 @@ void DMXEventAction::writeScintHitsToFile(void) {
   G4std::ofstream hitsfile(filename, G4std::ios::app);
   if(!event_id) {
     G4std::ofstream hitsfile(filename);
-    hitsfile <<"Evt     E_Primary Etot    LXe     LXeTime PMT     PmtTime First   Flags" 
+    hitsfile <<"Evt     E_Prim  Etot    LXe     LXeTime PMT     PmtTime First   Flags   Seed1   Seed2" 
 	     << G4endl;
-    hitsfile <<"#       MeV       MeV     hits    ns      hits    ns      hit    Seed1    Seed2" << G4endl
+    hitsfile <<"#       MeV       MeV     hits    ns      hits    ns      hit"
+	     << G4endl
 	     << G4endl;
   }
 
