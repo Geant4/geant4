@@ -1,0 +1,8 @@
+
+18-09-01 Satoshi Tanaka (exN03VisTutor-V03-02-00)
+- Updation for automatic visualization at Hebden Bridge mini-workshop.
+- /vis/viewer/flush and /vis/flushAll are not included yet.
+  (To be included in the next tag.) 
+- /vis/drawTree may still require /vis/scene/notifyHandlers.
+  (John Allison will revise the /vis/drawTree command soon.)
+
