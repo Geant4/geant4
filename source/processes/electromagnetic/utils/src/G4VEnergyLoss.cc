@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VEnergyLoss.cc,v 1.10 2000-05-25 16:50:27 urban Exp $
+// $Id: G4VEnergyLoss.cc,v 1.11 2000-05-26 07:40:09 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,6 +17,7 @@
 //	History: first implementation, based on object model of
 //	2nd December 1995, G.Cosmo
 // --------------------------------------------------------------
+//  bug fixed in fluct., L.Urban 26/05/00
 // ------------------------------------------------------------
 
 #include "G4VEnergyLoss.hh"
@@ -907,6 +908,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
 
   // get particle data
   G4double Tkin   = aParticle->GetKineticEnergy();
+  ParticleMass = aParticle->GetMass() ;
 
   threshold =((*G4Electron::Electron()).GetCutsInEnergy())[imat];
   G4double rmass = electron_mass_c2/ParticleMass;
