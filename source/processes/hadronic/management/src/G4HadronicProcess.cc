@@ -43,6 +43,8 @@
 #include "G4ProcessVector.hh"
 #include "G4ProcessManager.hh"
 
+#include "G4HadLeadBias.hh"
+
 //@@ add model name info, once typeinfo available #include <typeinfo.h>
  
  G4IsoParticleChange * G4HadronicProcess::theIsoResult = NULL;
@@ -63,6 +65,7 @@
    theCrossSectionDataStore = new G4CrossSectionDataStore();
    aScaleFactor = 1;
    xBiasOn = false;
+   if(getenv("SwitchLeadBiasOn")) theBias.push_back(new G4HadLeadBias());
  }
 
  G4HadronicProcess::~G4HadronicProcess()
@@ -169,6 +172,7 @@
     G4double random = G4UniformRand();
     for( i=0; i < numberOfElements; ++i )
     { 
+      if(i!=0) runningSum[i]+=runningSum[i-1];
       if( random<=runningSum[i]/crossSectionTotal )
       {
         currentZ = G4double( ((*theElementVector)[i])->GetZ());
@@ -247,9 +251,13 @@
       }
     }
     
-    for(size_t i=0; i<theBias.size(); i++)
+    G4double e=aTrack.GetKineticEnergy();
+    if(e<5*GeV)
     {
-      result = theBias[i]->Bias(result);
+      for(size_t i=0; i<theBias.size(); i++)
+      {
+        result = theBias[i]->Bias(result);
+      }
     }
     FillTotalResult(result, aTrack);
     return theTotalResult;
