@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2000-02-22 13:40:31 johna Exp $
+$Id: History,v 1.4 2000-02-22 13:53:24 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -25,6 +25,7 @@ History file for visualization category
 ---------------------------------------
 
 22nd February 2000  John Allison (raytracer-V01-00-01a)
+- Added G4std:: in a few places to obtain ISO compliance.
 - Change "char*" to "const char*" in G4OutBitStream::CopyByte(...).
 
 22nd February 2000  Makoto Asai (raytracer-V01-00-01)
