@@ -5,6 +5,7 @@
 #include "G4ReactionProductVector.hh"
 #include <vector>
 #include "G4ping.hh"
+#include "G4Delete.hh"
   
   G4BinaryLightIonReaction::G4BinaryLightIonReaction()
   : theModel(), theHandler(), theProjectileFragmentation(&theHandler) {}
@@ -90,7 +91,7 @@
       debug.dump();
       delete fancyNucleus;
       delete projectile;
-      for_each(initalState->begin(), initalState->end(), DeleteKineticTrack());
+      for_each(initalState->begin(), initalState->end(), Delete<G4KineticTrack>());
       delete initalState;
       
       if(result->size()==0) 

@@ -311,8 +311,8 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 // on the surface the particle loose the barrier energy
 // 	G4double newE = mom.e()-(*theFieldMap)[encoding]->GetBarrier();
 //     GetField = Barrier + FermiPotential
-	G4double newE = kt->Get4Momentum().e()-currentField->GetField(kt->GetPosition());
-//      G4cout << " enter nucleus, E out/in: " << kt->Get4Momentum().e() << " / " << newE <<G4endl;
+	G4double newE = kt->GetTrackingMomentum().e()-currentField->GetField(kt->GetPosition());
+//      G4cout << " enter nucleus, E out/in: " << kt->GetTrackingMomentum().e() << " / " << newE <<G4endl;
 //      G4cout << " the Field "<< currentField->GetField(kt->GetPosition()) << " "<< kt->GetPosition()<<G4endl;
 //      G4cout << " the particle "<<kt->GetDefinition()->GetParticleName()<<G4endl;
 	if(newE <= kt->GetActualMass())  // the particle cannot enter the nucleus
@@ -324,14 +324,14 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 	}
 //
 	G4double newP = sqrt(newE*newE- sqr(kt->GetActualMass()));
-	G4LorentzVector new4Mom(newP*kt->Get4Momentum().vect().unit(), newE);
-	G4ThreeVector transfer(kt->Get4Momentum().vect()-new4Mom.vect());
+	G4LorentzVector new4Mom(newP*kt->GetTrackingMomentum().vect().unit(), newE);
+	G4ThreeVector transfer(kt->GetTrackingMomentum().vect()-new4Mom.vect());
 	G4ThreeVector boost= transfer / sqrt(transfer.mag2() + sqr(theNucleus->GetMass()));
 	new4Mom*=G4LorentzRotation(boost);
 	kt->Set4Momentum(new4Mom);
-//     G4cout <<" Enter Nucleus - E/Field/Sum: " <<kt->Get4Momentum().e() << " / "
+//     G4cout <<" Enter Nucleus - E/Field/Sum: " <<kt->GetTrackingMomentum().e() << " / "
 //    	   << (*theFieldMap)[encoding]->GetField(kt->GetPosition()) << " / "
-//	   << kt->Get4Momentum().e()-currentField->GetField(kt->GetPosition())
+//	   << kt->GetTrackingMomentum().e()-currentField->GetField(kt->GetPosition())
 //	   << G4endl
 //	   << " Barrier / field just inside nucleus (0.9999*kt->GetPosition())"
 //	   << (*theFieldMap)[encoding]->GetBarrier() << " / "
@@ -353,14 +353,14 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 //        G4cerr << "RKPropagation t_leave, curTimeStep " <<t_leave << " " <<currTimeStep<<G4endl;
 #ifdef debug_1_RKPropagation
         G4cout << "RKPropagation Ekin, field, p "
-	<< kt->Get4Momentum().e() - kt->Get4Momentum().mag() << " "
+	<< kt->GetTrackingMomentum().e() - kt->GetTrackingMomentum().mag() << " "
 	<< kt->GetPosition()<<" "
  	<< currentField->GetField(kt->GetPosition())<< G4endl
- 	<< kt->Get4Momentum()
+ 	<< kt->GetTrackingMomentum()
  	<< G4endl;
 #endif
 
-    G4LorentzVector momold=kt->Get4Momentum();
+    G4LorentzVector momold=kt->GetTrackingMomentum();
     G4ThreeVector posold=kt->GetPosition();
 
     if (! FieldTransport(kt, currTimeStep)) {
@@ -368,11 +368,11 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
     }
 #ifdef debug_1_RKPropagation
         G4cout << "RKPropagation Ekin, field, p "
- 	<< kt->Get4Momentum().e() - kt->Get4Momentum().mag() << " "
+ 	<< kt->GetTrackingMomentum().e() - kt->GetTrackingMomentum().mag() << " "
  	<< currentField->GetField(kt->GetPosition())<< G4endl
- 	<< kt->Get4Momentum()
+ 	<< kt->GetTrackingMomentum()
  //	<< G4endl;
-	<< "delta p " << momold-kt->Get4Momentum() << G4endl
+	<< "delta p " << momold-kt->GetTrackingMomentum() << G4endl
 	<< "del pos " << posold-kt->GetPosition()
 	<< G4endl;
 #endif
@@ -388,7 +388,7 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
       G4double t_in, t_out;
       if(GetSphereIntersectionTimes(kt, t_in, t_out))
       {
-        G4double velocity=kt->Get4Momentum().vect().mag()/kt->Get4Momentum().e()*c_light;
+        G4double velocity=kt->GetTrackingMomentum().vect().mag()/kt->GetTrackingMomentum().e()*c_light;
 	G4double t_min=0.1*fermi/velocity;
 	t_out=G4std::max(abs(t_out),t_min); // avoid transport by 0 step not taking it out..
 	if(t_in < 0 && t_out >= 0)   //still inside, transport safely out.
@@ -396,7 +396,7 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 	  G4ThreeVector savePos = kt->GetPosition();
 	  FreeTransport(kt, 1.1*t_out);
 	  // and evaluate the right the energy
-	  G4double newE=kt->Get4Momentum().e();
+	  G4double newE=kt->GetTrackingMomentum().e();
 
 // 	G4cout << " V pos/savePos << "
 // 		<< (*theFieldMap)[encoding]->GetField(kt->GetPosition())<< " / "
@@ -412,22 +412,22 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 	            - currentField->GetField(kt->GetPosition());
 	   }
 
-//       G4cout << " go border nucleus, E in/border: " << kt->Get4Momentum() << " / " << newE <<G4endl;
+//       G4cout << " go border nucleus, E in/border: " << kt->GetTrackingMomentum() << " / " << newE <<G4endl;
 
 	   if(newE < kt->GetActualMass())
 	   {
 //	     G4cout << "RKPropagation-Transport: problem with particle exiting - ignored" << G4endl;
 	     continue; // the particle cannot exit the nucleus
 	   }
-//	   G4cout << "%%%% before update %%%% "<< kt->Get4Momentum()<<G4endl;
+//	   G4cout << "%%%% before update %%%% "<< kt->GetTrackingMomentum()<<G4endl;
 	   G4double newP = sqrt(newE*newE- sqr(kt->GetActualMass()));
-	   G4LorentzVector new4Mom(newP*kt->Get4Momentum().vect().unit(), newE);
-	   G4ThreeVector transfer(kt->Get4Momentum().vect()-new4Mom.vect());
+	   G4LorentzVector new4Mom(newP*kt->GetTrackingMomentum().vect().unit(), newE);
+	   G4ThreeVector transfer(kt->GetTrackingMomentum().vect()-new4Mom.vect());
 	   G4ThreeVector boost= transfer / sqrt(transfer.mag2() + sqr(theNucleus->GetMass()));
 	   new4Mom*=G4LorentzRotation(boost);
 	   kt->Set4Momentum(new4Mom);
 //old	   kt->Update4Momentum(newE);
-//	   G4cout << "%%%% beyond update %%%% "<< kt->Get4Momentum()<<G4endl;
+//	   G4cout << "%%%% beyond update %%%% "<< kt->GetTrackingMomentum()<<G4endl;
 //	   G4cout << "Field values: "<<currentField->GetField(savePos)<<" "
 //	          <<currentField->GetField(kt->GetPosition())<<" "<<kt->GetDefinition()->GetParticleName()<<G4endl;
 	}
@@ -438,15 +438,15 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 
       // add the potential barrier
       // FixMe the Coulomb field is not parallel to mom, this is simple approximation
-      G4double newE = kt->Get4Momentum().e()+currentField->GetField(kt->GetPosition());
-//      G4cout << " leave nucleus, E in/out: " << kt->Get4Momentum() << " / " << newE <<G4endl;
+      G4double newE = kt->GetTrackingMomentum().e()+currentField->GetField(kt->GetPosition());
+//      G4cout << " leave nucleus, E in/out: " << kt->GetTrackingMomentum() << " / " << newE <<G4endl;
       if(newE < kt->GetActualMass())
       {  // the particle cannot exit the nucleus
 	continue;
       }
 	G4double newP = sqrt(newE*newE- sqr(kt->GetActualMass()));
-	G4LorentzVector new4Mom(newP*kt->Get4Momentum().vect().unit(), newE);
-	G4ThreeVector transfer(kt->Get4Momentum().vect()-new4Mom.vect());
+	G4LorentzVector new4Mom(newP*kt->GetTrackingMomentum().vect().unit(), newE);
+	G4ThreeVector transfer(kt->GetTrackingMomentum().vect()-new4Mom.vect());
 	G4ThreeVector boost= transfer / sqrt(transfer.mag2() + sqr(theNucleus->GetMass()));
 	new4Mom*=G4LorentzRotation(boost);
 	kt->Set4Momentum(new4Mom);
@@ -472,7 +472,7 @@ G4bool G4RKPropagation::FieldTransport(G4KineticTrack * kt, const G4double timeS
 //----------------------------------------------------------------------------
 {
     theMomentumTranfer=0;
-//    G4cout <<"Stepper input"<<kt->Get4Momentum()<<G4endl;
+//    G4cout <<"Stepper input"<<kt->GetTrackingMomentum()<<G4endl;
 // create the integrator stepper
     //    G4Mag_EqRhs * equation = mapIter->second;
     G4Mag_EqRhs * equation = (*theEquationMap)[kt->GetDefinition()->GetPDGEncoding()];
@@ -486,18 +486,18 @@ G4bool G4RKPropagation::FieldTransport(G4KineticTrack * kt, const G4double timeS
   // create the G4FieldTrack needed by AccurateAdvance
     G4double curveLength = 0;
     G4FieldTrack track(kt->GetPosition(),
-                       kt->Get4Momentum().vect().unit(), // momentum direction
+                       kt->GetTrackingMomentum().vect().unit(), // momentum direction
                        curveLength, // curvelength
-		       kt->Get4Momentum().e()-kt->GetActualMass(), // kinetic energy
+		       kt->GetTrackingMomentum().e()-kt->GetActualMass(), // kinetic energy
 		       kt->GetActualMass(), // restmass
-		       kt->Get4Momentum().beta()*c_light); // velocity
+		       kt->GetTrackingMomentum().beta()*c_light); // velocity
   // integrate
     G4double eps = 0.01;
 //    G4cout << "currTimeStep = " << currTimeStep << G4endl;
     if(!driver->AccurateAdvance(track, timeStep, eps))
     {  // cannot track this particle
       G4std::cerr << "G4RKPropagation::FieldTransport() warning: integration error."
-         << G4endl << "position " << kt->GetPosition() << " 4mom " <<kt->Get4Momentum()
+         << G4endl << "position " << kt->GetPosition() << " 4mom " <<kt->GetTrackingMomentum()
 	 <<G4endl << " timestep " <<timeStep
 		  << G4endl;
       delete driver;
@@ -512,16 +512,16 @@ G4bool G4RKPropagation::FieldTransport(G4KineticTrack * kt, const G4double timeS
  */
 
 // Correct for momentum ( thus energy) transfered to nucleus, boost particle into moving nuclues frame.
-    G4ThreeVector MomentumTranfer = kt->Get4Momentum().vect() - track.GetMomentum();
+    G4ThreeVector MomentumTranfer = kt->GetTrackingMomentum().vect() - track.GetMomentum();
     G4ThreeVector boost= MomentumTranfer / sqrt (MomentumTranfer.mag2() +sqr(theNucleus->GetMass()));
 
  // update the kt
     kt->SetPosition(track.GetPosition());
     G4LorentzVector mom(track.GetMomentum(),sqrt(track.GetMomentum().mag2() + sqr(kt->GetActualMass())));
     mom *= G4LorentzRotation( boost );
-    theMomentumTranfer += kt->Get4Momentum().vect() - track.GetMomentum();
+    theMomentumTranfer += kt->GetTrackingMomentum().vect() - track.GetMomentum();
     kt->Set4Momentum(mom);
-//    G4cout <<"Stepper output"<<kt<<" "<<kt->Get4Momentum()<<" "<<kt->GetPosition()<<G4endl;
+//    G4cout <<"Stepper output"<<kt<<" "<<kt->GetTrackingMomentum()<<" "<<kt->GetPosition()<<G4endl;
 /*
  *      G4cout <<" E/Field/Sum aft : " <<mom.e() << " / "
  *            << " / " << (*theFieldMap)[encoding]->GetField(pos)<< " / "
@@ -539,7 +539,7 @@ G4bool G4RKPropagation::FreeTransport(G4KineticTrack * kt, const G4double timeSt
 //----------------------------------------------------------------------------
 {
 	G4ThreeVector newpos = kt->GetPosition() +
-		               timeStep*c_light/kt->Get4Momentum().e() * kt->Get4Momentum().vect();
+		               timeStep*c_light/kt->GetTrackingMomentum().e() * kt->GetTrackingMomentum().vect();
 	kt->SetPosition(newpos);
 	return true;
 }
@@ -553,7 +553,7 @@ G4bool G4RKPropagation::WillBeCaptured(const G4KineticTrack * kt)
   G4ParticleDefinition * definition = kt->GetDefinition();
   G4double mass = definition->GetPDGMass();
   G4ThreeVector pos = kt->GetPosition();
-  G4LorentzVector mom = kt->Get4Momentum();
+  G4LorentzVector mom = kt->GetTrackingMomentum();
   G4VNuclearField * field = (*theFieldMap)[definition->GetPDGEncoding()];
   G4ThreeVector newPos(0, 0, radius); // to get the field on the surface
 
@@ -592,7 +592,7 @@ G4bool G4RKPropagation::GetSphereIntersectionTimes(const G4KineticTrack * kt,
 				  G4double & t1, G4double & t2)
 {
   G4double radius = theOuterRadius + 3*fermi; // "safety" of 3 fermi
-  G4ThreeVector speed = kt->Get4Momentum().vect()/kt->Get4Momentum().e(); // bost vector
+  G4ThreeVector speed = kt->GetTrackingMomentum().vect()/kt->GetTrackingMomentum().e(); // bost vector
   G4double scalarProd = kt->GetPosition().dot(speed);
   G4double speedMag = speed.mag();
   G4double sqrtArg = scalarProd*scalarProd -
