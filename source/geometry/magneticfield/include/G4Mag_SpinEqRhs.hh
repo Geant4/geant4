@@ -1,36 +1,49 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4Mag_SpinEqRhs.hh,v 1.3 2000-04-27 09:14:06 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-//  This is the standard right-hand side for equation of motion.
-//        This version of the right-hand side includes
-//        the three components of the particle's spin.
+// class G4Mag_SpinEqRhs
 //
-//            J. Apostolakis, February 8th, 1999
-//            P. Gumplinger,  February 8th, 1999
+// Class description:
 //
+// This is the standard right-hand side for equation of motion.
+// This version of the right-hand side includes the three components
+// of the particle's spin.
+
+// History:
+// - Created: J.Apostolakis, P.Gumplinger - February 8th, 1999.
+
 #ifndef G4MAG_SPIN_EQRHS
 #define G4MAG_SPIN_EQRHS
 
 #include "G4Mag_EqRhs.hh"
 #include "G4MagneticField.hh"
 
-class G4Mag_SpinEqRhs: public G4Mag_EqRhs{
+class G4Mag_SpinEqRhs : public G4Mag_EqRhs{
 
-   public:
+   public:  // with description
 
-     G4Mag_SpinEqRhs( G4MagneticField* MagField ) :
-		       G4Mag_EqRhs( MagField ) {};
-    ~G4Mag_SpinEqRhs() {} ; 
+     G4Mag_SpinEqRhs( G4MagneticField* MagField )
+       : G4Mag_EqRhs( MagField ) {;}
+    ~G4Mag_SpinEqRhs() {;}
+       // Constructor and destructor. No actions.
 
      void SetChargeMomentumMass(const G4double particleCharge, // in e+ units
                                 const G4double MomentumXc,
                                 const G4double mass); 
 
-     //  Given the value of the magnetic field B, this function 
-     //   calculates the value of the derivative dydx.
-     //
      void EvaluateRhsGivenB( const  G4double y[],
 			     const  G4double B[3],
 			     G4double dydx[] ) const;
+       // Given the value of the magnetic field B, this function 
+       // calculates the value of the derivative dydx.
 
    private:
 

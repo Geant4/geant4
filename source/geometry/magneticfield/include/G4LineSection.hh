@@ -5,38 +5,50 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LineSection.hh,v 1.3 2000-02-25 16:57:02 grichine Exp $
+// $Id: G4LineSection.hh,v 1.4 2000-04-27 09:14:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-//  A utility class that calculates the distance of a point from a 
-//   line section.
+// class G4LineSection
 //
+// Class description:
+//
+// A utility class that calculates the distance of a point from a 
+// line section.
+
 // History:
-// ~1996 J. Apostolakis, first version
-// 25.02.00 V. Grichine, cosmetics against /0. and sqrt(<0.)
-//  
+// - Created. J. Apostolakis.
+// - Cosmetics against /0. and sqrt(<0.). V. Grichine, 25.02.00.
+
+#ifndef G4LineSection_hh
+#define G4LineSection_hh
 
 #include "globals.hh" 
 #include "G4ThreeVector.hh"
 
-typedef G4ThreeVector  POINT;
-typedef POINT          Vector;
+class G4LineSection
+{
+  public:  // with description
 
+     G4LineSection( const G4ThreeVector& PntA, const G4ThreeVector& PntB );
 
-class G4LineSection {
-  public:
-     G4LineSection( const POINT& PntA, const POINT& PntB );
+     G4double Dist( G4ThreeVector OtherPnt ) const;
+     G4double InvsqDistAB() const;
 
-     G4double Dist( POINT OtherPnt ) const;
-     G4double InvsqDistAB() const { return inverse_square_distAB; }  
-
-     //
-     static G4double Distline( const POINT& OtherPnt, 
-			       const POINT& LinePntA, 
-			       const POINT& LinePntB );
+     static G4double Distline( const G4ThreeVector& OtherPnt, 
+			       const G4ThreeVector& LinePntA, 
+			       const G4ThreeVector& LinePntB );
   private:
-     POINT    EndpointA;
-     Vector   VecAtoB;
+
+     G4ThreeVector    EndpointA;
+     G4ThreeVector   VecAtoB;
      G4double inverse_square_distAB;
 };
+
+inline
+G4double G4LineSection::InvsqDistAB() const
+{
+  return inverse_square_distAB;
+}
+
+#endif

@@ -5,28 +5,25 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ChordFinder.hh,v 1.2 1999-12-15 14:49:46 gunter Exp $
+// $Id: G4ChordFinder.hh,v 1.3 2000-04-27 09:14:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// ------------------------------------------------------------------------
-//	GEANT 4  include file implementation
+// class G4ChordFinder
 //
-//	For information related to this code contact:
-//	CERN, IT Division (formely CN), ASD group
-// ------------------------------------------------------------------------
+// Class description:
 //
-//  A class that provides RK integration of motion ODE  (as does g4magtr)
-//   and also has a method that returns an Approximate point on the curve 
-//   near to a (chord) point.
-//
-// 25.02.97 John Apostolakis,  design and implementation 
-// 05.03.97 V. Grichine , makeup to G4 'standard'
+// A class that provides RK integration of motion ODE  (as does g4magtr)
+// and also has a method that returns an Approximate point on the curve 
+// near to a (chord) point.
+
+// History:
+// - 25.02.97 John Apostolakis,  design and implementation 
+// - 05.03.97 V. Grichine , makeup to G4 'standard'
 
 #ifndef G4CHORDFINDER_HH
 #define G4CHORDFINDER_HH
 
-                                             // #include "globals.hh"
 #include "G4MagIntegratorDriver.hh"
 #include "G4FieldTrack.hh"
 #include "G4MagneticField.hh"
@@ -35,25 +32,24 @@
 
 class G4ChordFinder
 { 
-   public:                      // Constructors 
+   public:  // with description
 
       G4ChordFinder( G4MagInt_Driver* pIntegrationDriver );
 
-      // A constructor that creates defaults for all "children" classes
-      //
       G4ChordFinder( G4MagneticField* itsMagField,
 		     G4double         stepMinimum = 1.0e-2 * mm, 
 		     G4MagIntegratorStepper* pItsStepper = 0 );  
+        // A constructor that creates defaults for all "children" classes.
                   
       ~G4ChordFinder();
 
-      //      Uses ODE solver's driver to find the endpoint that satisfies 
-      //   the chord criterion: that d_chord < delta_chord
-      //   -> Returns Length of Step taken
 
       G4double    AdvanceChordLimited( G4FieldTrack& yCurrent,
                                     const  G4double     stepInitial,
                                     const  G4double     epsStep  );
+        // Uses ODE solver's driver to find the endpoint that satisfies 
+        // the chord criterion: that d_chord < delta_chord
+        // -> Returns Length of Step taken.
 
       G4FieldTrack ApproxCurvePointV(const  G4FieldTrack&  curveAPointVelocity,
 		  	             const  G4FieldTrack&  curveBPointVelocity,
@@ -63,25 +59,18 @@ class G4ChordFinder
       G4double  GetDeltaChord();
       void      SetDeltaChord( G4double newval);
 
-      // Routine to inform integration driver of charge, speed 
-      //  
       void SetChargeMomentumMass( const G4double pCharge,    // in e+ units
 				  const G4double pMomentum,
 				  const G4double pMass );
+        // Function to inform integration driver of charge, speed.
 
-      // Access and set Driver
-      //
-      void             SetIntegrationDriver( G4MagInt_Driver* IntegrationDriver)
-                                          { fIntgrDriver=IntegrationDriver;}
-      G4MagInt_Driver* GetIntegrationDriver()
-                                          { return fIntgrDriver;}
-      
+      void SetIntegrationDriver(G4MagInt_Driver* IntegrationDriver);
+      G4MagInt_Driver* GetIntegrationDriver();
+        // Access and set Driver.
+
    protected:   // .........................................................
 
-      G4bool AcceptableMissDist(G4double dChordStep) 
-      { 
- 	return (dChordStep <= fDeltaChord) ;
-      }
+      G4bool AcceptableMissDist(G4double dChordStep);
 
       G4double NewStep( const G4double stepTrialOld, 
 		        const G4double dChordStep ) ;  // Current dchord 
@@ -106,30 +95,8 @@ class G4ChordFinder
       G4MagIntegratorStepper* fDriversStepper; 
 };
 
-
-
 // Inline function implementation:
 
-inline
-G4ChordFinder:: G4ChordFinder( G4MagInt_Driver* pIntegrationDriver )
-: fDeltaChord( fDefaultDeltaChord )
-{
-    fIntgrDriver= pIntegrationDriver ;
-    fAllocatedStepper= false ;
-} 
-
-inline void
-G4ChordFinder::SetChargeMomentumMass( const G4double pCharge,  // in e+ units
-				      const G4double pMomentum,
-				      const G4double pMass )
-{
-   fIntgrDriver-> SetChargeMomentumMass(pCharge, pMomentum, pMass);
-}
-
-inline G4double  G4ChordFinder::GetDeltaChord() 
-{   return fDeltaChord; }
-
-inline void      G4ChordFinder::SetDeltaChord( G4double newval)
-{   fDeltaChord=newval; }
+#include "G4ChordFinder.icc"
 
 #endif  // G4CHORDFINDER_HH

@@ -5,24 +5,37 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EquationOfMotion.icc,v 1.2 1999-12-15 14:49:46 gunter Exp $
+// $Id: G4EquationOfMotion.icc,v 1.3 2000-04-27 09:14:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //  Inline implementation 
 //
-inline G4Field* G4EquationOfMotion::GetFieldObj()
-{
-   return itsField;
-}
 
-inline void G4EquationOfMotion::SetFieldObj(G4Field* pField)
-{
-   itsField= pField;
-}
-
-inline G4EquationOfMotion::G4EquationOfMotion(G4Field* pField) 
+inline
+G4EquationOfMotion::G4EquationOfMotion(G4Field* pField) 
   :itsField(pField)
 {}
 
-inline G4EquationOfMotion::~G4EquationOfMotion() {}
+inline
+G4EquationOfMotion::~G4EquationOfMotion()
+{}
+
+inline
+G4Field* G4EquationOfMotion::GetFieldObj()
+{
+  return itsField;
+}
+
+inline
+void G4EquationOfMotion::SetFieldObj(G4Field* pField)
+{
+  itsField= pField;
+}
+
+inline
+void G4EquationOfMotion::GetFieldValue( const  G4double Point[3],
+			                       G4double Field[] ) const
+{
+  itsField-> GetFieldValue( Point, Field );
+}

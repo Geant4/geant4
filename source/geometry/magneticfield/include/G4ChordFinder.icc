@@ -1,0 +1,59 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4ChordFinder.icc,v 1.1 2000-04-27 09:14:04 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// G4ChordFinder inline implementations
+//
+// --------------------------------------------------------------------
+
+inline
+G4ChordFinder::G4ChordFinder(G4MagInt_Driver* pIntegrationDriver)
+  : fDeltaChord( fDefaultDeltaChord )
+{
+  fIntgrDriver= pIntegrationDriver;
+  fAllocatedStepper= false;
+}
+
+inline 
+void G4ChordFinder::SetIntegrationDriver(G4MagInt_Driver* IntegrationDriver)
+{
+  fIntgrDriver=IntegrationDriver;
+}
+
+inline
+G4MagInt_Driver* G4ChordFinder::GetIntegrationDriver()
+{
+  return fIntgrDriver;
+}
+
+inline
+G4bool G4ChordFinder::AcceptableMissDist(G4double dChordStep) 
+{ 
+  return (dChordStep <= fDeltaChord) ;
+}
+
+inline
+void G4ChordFinder::SetChargeMomentumMass(const G4double pCharge, // in e+ units
+				          const G4double pMomentum,
+				          const G4double pMass)
+{
+  fIntgrDriver-> SetChargeMomentumMass(pCharge, pMomentum, pMass);
+}
+
+inline
+G4double G4ChordFinder::GetDeltaChord() 
+{
+  return fDeltaChord;
+}
+
+inline
+void G4ChordFinder::SetDeltaChord(G4double newval)
+{
+  fDeltaChord=newval;
+}

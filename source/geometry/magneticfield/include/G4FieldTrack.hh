@@ -5,30 +5,34 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FieldTrack.hh,v 1.2 1999-12-15 14:49:46 gunter Exp $
+// $Id: G4FieldTrack.hh,v 1.3 2000-04-27 09:14:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//  
-//  Data structure bringing together a magnetic track's state.
-//   (position, momentum direction & modulus, energy, spin, ... )
-//  Uses/abilities:
-//   - does not maintain any relationship between its data (eg energy/momentum)
-//   - for use in Runge-Kutta solver (in passing it the values right now).
 //
-//  First version: Oct 14, 1996  John Apostolakis
-//  Modified:      Oct 24, 1996  JA: Added dist_on_curve, deleted constructor
-//                 Nov  5, 1998  JA: Added energy, momentum, TOF, spin
-//                                   & several constructor, access, set methods
-//                                   
-// 
+// class G4FieldTrack
+//
+// Class description:
+//
+// Data structure bringing together a magnetic track's state.
+// (position, momentum direction & modulus, energy, spin, ... )
+// Uses/abilities:
+//  - does not maintain any relationship between its data (eg energy/momentum).
+//  - for use in Runge-Kutta solver (in passing it the values right now).
+
+// History
+// - First version: Oct 14, 1996  John Apostolakis
+// - Modified:      Oct 24, 1996  JA: Added dist_on_curve, deleted constructor
+//                  Nov  5, 1998  JA: Added energy, momentum, TOF, spin &
+//                                    several constructor, access, set methods
+
 #ifndef G4FieldTrack_HH
 #define G4FieldTrack_HH
 
 #include "G4ThreeVector.hh"
 
-class  G4FieldTrack{
-   public:
-     //  Constructors
+class  G4FieldTrack
+{
+   public:  // with description
 
      G4FieldTrack( const G4ThreeVector& pPosition, 
 		   const G4ThreeVector& pVelocity,   // Or UnitVelocity
@@ -40,57 +44,69 @@ class  G4FieldTrack{
 
      G4FieldTrack( const G4FieldTrack&   pFieldTrack );
 
-     // Destructor 
      ~G4FieldTrack();
+       // Destructor 
 
-     // Equality operator
      G4FieldTrack& operator = ( const G4FieldTrack & rStVec );
+       // Equality operator
 
-     // Old multi-set method
-     inline G4FieldTrack&  SetCurvePnt( 
-				const G4ThreeVector& pPosition, 
-				const G4ThreeVector& pVelocity,
-				const G4double       s_curve );
-
-     //  Access Methods:   ("Const")
-     G4ThreeVector  Position() const;   // Renamed to GetPosition
      G4ThreeVector  GetVelocity() const;   
-     G4double       CurveS()    const;  // distance along curve of point
-     //   Old methods above to be deleted. 
      G4ThreeVector  GetPosition() const; 
      const G4ThreeVector& GetMomentumDir() const;
-     G4double       GetCurveLength() const;  // distance along curve of point
-     // G4double       GetEnergy() const;       //  Wrong Energy  --> FIXME
+     G4double       GetCurveLength() const;
+       // Distance along curve of point.
      G4double       GetMomentumModulus() const;
      G4ThreeVector  GetSpin()   const;
      G4double       GetLabTimeOfFlight() const;
      G4double       GetProperTimeOfFlight() const;
+       // Accessors.
 
-     //  Modifiers
      void SetPosition(G4ThreeVector nPos); 
-     void SetVelocity(G4ThreeVector nMomDir);    // does change mom-dir too
-     void SetMomentumDir(G4ThreeVector nMomDir); // does NOT change velocity
-     void SetCurveLength(G4double nCurve_s); // distance along curve 
-     void SetEnergy(G4double nEnergy);              // does not modify momentum
-     void SetMomentumModulus(G4double nMomentumMod); // does not modify energy
+     void SetVelocity(G4ThreeVector nMomDir);
+       // Does change mom-dir too.
+     void SetMomentumDir(G4ThreeVector nMomDir);
+       // Does NOT change velocity.
+     void SetCurveLength(G4double nCurve_s);
+       // Distance along curve.
+     void SetEnergy(G4double nEnergy);
+       // Does not modify momentum.
+     void SetMomentumModulus(G4double nMomentumMod);
+       // Does not modify energy.
      void SetSpin(G4ThreeVector nSpin);
      void SetLabTimeOfFlight(G4double nTOF); 
      void SetProperTimeOfFlight(G4double nTOF);
-     // older one: 
+       //  Modifiers
+
+   public: // without description
+
+     G4FieldTrack&  SetCurvePnt(const G4ThreeVector& pPosition, 
+				const G4ThreeVector& pVelocity,
+				const G4double       s_curve );
+       // Old multi-set method
+
+     G4ThreeVector  Position() const;
+       // Renamed to GetPosition
+
+     G4double       CurveS()    const;  // distance along curve of point
      void SetCurveS(G4double new_curve_s);
+       // Old methods to be deleted. 
+
+     // G4double       GetEnergy() const;       //  Wrong Energy  --> FIXME
 
      // G4double*      PosVelVec();       // [6]  Needed for RK integrator
-     //  This old method completely broke encapsulation ?  
+       // This old method completely broke encapsulation ?  
   
-     //  Needed and should be used only for RK integration driver
      // static const G4int ncompSVEC=15;
+       // Needed and should be used only for RK integration driver
      enum { ncompSVEC = 16 };
      void DumpToArray(   G4double valArr[ncompSVEC] ) const; 
      void LoadFromArray( const G4double valArr[ncompSVEC] ); 
      
-     friend  G4std::ostream& operator<<( G4std::ostream& os, G4FieldTrack& SixVec);
+     friend  G4std::ostream&
+             operator<<( G4std::ostream& os, G4FieldTrack& SixVec);
 
    private:
+
      G4double  SixVector[6];
      G4double  fDistanceAlongCurve;  // distance along curve of point
      G4double  fEnergy;

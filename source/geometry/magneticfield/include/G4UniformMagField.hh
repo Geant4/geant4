@@ -5,17 +5,21 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UniformMagField.hh,v 1.2 1999-12-15 14:49:47 gunter Exp $
+// $Id: G4UniformMagField.hh,v 1.3 2000-04-27 09:14:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
+// class G4UniformMagField
 //
-//   Class for creation of Uniform Magnetic Field
+// Class description:
 //
-// 30.1.97 V.Grichine
-//  1.8.97 J.Apostolakis, cleanup, new 3-vector constructor, 
-//                        and removal of helix-stepper (to separate file)
-// 5.11.97 G.Cosmo, added copy constructor and assignment operator.
+// Class for creation of Uniform Magnetic Field.
+
+// History:
+// - 30.01.97 V.Grichine, Created.
+// - 01.08.97 J.Apostolakis, cleanup, new 3-vector constructor, 
+//            and removal of helix-stepper (to separate file).
+// - 05.11.97 G.Cosmo, added copy constructor and assignment operator.
 
 #ifndef G4UNIFORMMAGFIELD_HH
 #define G4UNIFORMMAGFIELD_HH
@@ -27,32 +31,31 @@
 
 class G4UniformMagField : public G4MagneticField
 {
-public:
-         //  A field with value equal to FieldVector
-         // 
-         G4UniformMagField(const G4ThreeVector& FieldVector );
+  public:  // with description
+  
+    G4UniformMagField(const G4ThreeVector& FieldVector );
+      // A field with value equal to FieldVector.
 
-         G4UniformMagField(G4double vField,
-	                   G4double vTheta,
-		           G4double vPhi     ) ;
+    G4UniformMagField(G4double vField,
+	              G4double vTheta,
+		      G4double vPhi     ) ;
 		       
-         ~G4UniformMagField() ;
+    ~G4UniformMagField() ;
 
-         // Copy constructor and assignment operator
-         //
-         G4UniformMagField(const G4UniformMagField &p);
-         G4UniformMagField& operator = (const G4UniformMagField &p);
+    G4UniformMagField(const G4UniformMagField &p);
+    G4UniformMagField& operator = (const G4UniformMagField &p);
+      // Copy constructor and assignment operator.
 
-         void GetFieldValue(const G4double yTrack[3] ,
-	                          G4double *MagField ) const ;
+    void GetFieldValue(const G4double yTrack[3] ,
+	                     G4double *MagField ) const ;
 
-         void SetFieldValue( const G4ThreeVector& newFieldValue );
+    void SetFieldValue( const G4ThreeVector& newFieldValue );
 
-         //  Return the field value  
-         G4ThreeVector GetConstantFieldValue() const;
+    G4ThreeVector GetConstantFieldValue() const;
+      //  Return the field value  
 
-private:
+  private:
          G4double fFieldComponents[3] ;
-} ;
+};
 
 #endif
