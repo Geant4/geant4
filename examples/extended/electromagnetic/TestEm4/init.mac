@@ -31,4 +31,5 @@
 /tracking/storeTrajectory 1
 /event/drawTracks charged
 #
-/tracking/verboseWithUnits
+# Flush visualization
+/vis/viewer/update

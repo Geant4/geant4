@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em4RunAction.cc,v 1.1 1999-10-12 11:26:59 maire Exp $
+// $Id: Em4RunAction.cc,v 1.2 1999-11-12 16:42:34 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,8 +77,7 @@ void Em4RunAction::BeginOfRunAction(const G4Run* aRun)
 
   if(pVVisManager)
   {
-    UI->ApplyCommand("/vis/clear/view");
-    UI->ApplyCommand("/vis/draw/current");
+    UI->ApplyCommand("/vis/scene/notifyHandlers");
   } 
 }
 
@@ -87,7 +86,7 @@ void Em4RunAction::BeginOfRunAction(const G4Run* aRun)
 void Em4RunAction::EndOfRunAction(const G4Run* aRun)
 {  
   if (G4VVisManager::GetConcreteInstance())
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/show/view");
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
     
   // Write histogram file 
   if (saveFlag == "on") hbookManager->write();
