@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPInelasticTest.cc,v 1.13 2003-06-19 14:42:17 gunter Exp $
+// $Id: G4NeutronHPInelasticTest.cc,v 1.14 2003-06-30 09:44:33 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -134,26 +134,26 @@
 //      theMaterials[2] =theLi ;
 //      
 //      // Init runs
-      G4Material *theB = new G4Material(name="Boron", density=0.9*g/cm3, nEl=1);
+//      G4Material *theB = new G4Material(name="Boron", density=0.9*g/cm3, nEl=1);
 //      G4Element *elB = new G4Element(name="Boron", symbol="B", iz=5, a=10.811*g/mole);
 //      theB->AddElement( elB, 1);
 
-      G4Element *elB = new G4Element(name="Boron", symbol="B", 1);
-      G4Isotope * isoB10 = new G4Isotope(name="B10", 5, 10, a=10.*g/mole);
-      elB->AddIsotope(isoB10, 1);
-      theB->AddElement( elB, 1);
+//      G4Element *elB = new G4Element(name="Boron", symbol="B", 1);
+//      G4Isotope * isoB10 = new G4Isotope(name="B10", 5, 10, a=10.*g/mole);
+//      elB->AddIsotope(isoB10, 1);
+//      theB->AddElement( elB, 1);
 
-      theMaterials[3] = theB;
+//      theMaterials[3] = theB;
 // 
 //      // probem in: src/G4NeutronHPPhotonDist.cc line 82,
 //      // Init erwartet einen Manager in den daten, der nicht
 //      // existiert: Data/InInelastic/F24/7_14_Nitrogen line 300, 
 // // combined bug in G4LegendreTable and G4PhotonDist fixed
 //      // Init runs
-//      G4Material *theN = new G4Material(name="Nitrogen", density=0.9*g/cm3, nEl=1);
-//      G4Element *elN = new G4Element(name="Nitrogen", symbol="N", iz=7., a=14.007*g/mole);
-//      theN->AddElement( elN, 1 );
-//      theMaterials[4] = theN;
+      G4Material *theN = new G4Material(name="Nitrogen", density=0.9*g/cm3, nEl=1);
+      G4Element *elN = new G4Element(name="Nitrogen", symbol="N", iz=7., a=14.007*g/mole);
+      theN->AddElement( elN, 1 );
+      theMaterials[4] = theN;
 // 
 //      // Init runs
 //      G4Material *theO = new G4Material(name="Oxygen", density=1.1*g/cm3, nEl=1);
@@ -439,7 +439,7 @@ int j = 0;
            aFinalState = (G4ParticleChange*)  (theProcesses[i]->PostStepDoIt( *aTrack, aStep ));
            G4cout << "NUMBER OF SECONDARIES="<<aFinalState->GetNumberOfSecondaries();
            G4double theFSEnergy = aFinalState->GetEnergyChange();
-           G4ThreeVector * theFSMomentum= aFinalState->GetMomentumChange();
+           G4ThreeVector * theFSMomentum= const_cast<G4ThreeVector *>(aFinalState->GetMomentumChange());
            G4cout << "FINAL STATE = "<<theFSEnergy<<" ";
            G4cout <<*theFSMomentum<<G4endl;
            G4Track * second;
@@ -449,11 +449,13 @@ int j = 0;
            for(isec=0;isec<aFinalState->GetNumberOfSecondaries();isec++)
            {
              second = aFinalState->GetSecondary(isec);
-             aSec = second->GetDynamicParticle();
-             G4cout << "SECONDARIES info";
-             G4cout << aSec->GetTotalEnergy();
-             G4cout << aSec->GetMomentum();
-	     G4cout << (1-isec)*aFinalState->GetNumberOfSecondaries();
+             aSec = const_cast<G4DynamicParticle *>(second->GetDynamicParticle() );
+             G4cout << aSec->GetTotalEnergy()<<" ";
+             G4cout << aSec->GetMomentum().x()<<" ";
+             G4cout << aSec->GetMomentum().y()<<" ";
+             G4cout << aSec->GetMomentum().z()<<" ";
+	     G4cout << (1-isec)*aFinalState->GetNumberOfSecondaries()<<" ";
+             G4cout << " SECONDARIES info";
 	     G4cout << G4endl;
              QValue += aSec->GetKineticEnergy();
 	     delete second;
