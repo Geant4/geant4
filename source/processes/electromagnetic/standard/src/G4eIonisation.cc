@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisation.cc,v 1.15 2001-08-13 14:34:28 maire Exp $
+// $Id: G4eIonisation.cc,v 1.16 2001-08-14 10:01:26 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------- G4eIonisation physics process -----------
@@ -42,8 +42,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 #include "G4eIonisation.hh"
-#include "G4EnergyLossTables.hh"
-#include "G4ios.hh"
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -227,7 +225,7 @@ G4double G4eIonisation::ComputeRestrictedMeandEdx (
  ParticleMass = aParticleType.GetPDGMass();      
  
  G4double ElectronDensity = material->GetElectronDensity();
- G4double Eexc   = material->GetIonisation()->GetMeanExcitationEnergy();
+ G4double Eexc = material->GetIonisation()->GetMeanExcitationEnergy();
  Eexc  /= ParticleMass; G4double Eexcm2 = Eexc*Eexc;
 
  // for the lowenergy extrapolation
@@ -303,8 +301,6 @@ G4double G4eIonisation::ComputeCrossSectionPerAtom(
 {
   // calculates the cross section per atom (Geant4 internal units) 
   //(it is called for elements , AtomicNumber = Z )
- 
-  G4double MaxKineticEnergyTransfer, TotalCrossSection(0.);
   
   ParticleMass = aParticleType.GetPDGMass();
   G4double TotalEnergy = KineticEnergy + ParticleMass;
@@ -314,12 +310,14 @@ G4double G4eIonisation::ComputeCrossSectionPerAtom(
   G4double gamma = TotalEnergy/ParticleMass, gamma2 = gamma*gamma;
   G4double x=DeltaThreshold/KineticEnergy, x2 = x*x;
 
+  G4double MaxKineticEnergyTransfer;
   if (&aParticleType==G4Electron::Electron())
-                            MaxKineticEnergyTransfer = 0.5*KineticEnergy;
-  else                      MaxKineticEnergyTransfer =     KineticEnergy;
+                      MaxKineticEnergyTransfer = 0.5*KineticEnergy;
+  else                MaxKineticEnergyTransfer =     KineticEnergy;
 
-  // now you can calculate the total cross section
-
+ // now you can calculate the total cross section
+ //
+ G4double TotalCrossSection = 0.; 
  if (MaxKineticEnergyTransfer > DeltaThreshold)
    {
     if (&aParticleType==G4Electron::Electron())   //Moller (e-e-) scattering

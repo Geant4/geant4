@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisation.hh,v 1.11 2001-08-13 14:34:28 maire Exp $
+// $Id: G4eIonisation.hh,v 1.12 2001-08-14 10:01:25 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------- G4eIonisation physics process -----------
@@ -46,19 +46,8 @@
 #ifndef G4eIonisation_h
 #define G4eIonisation_h 1
  
-#include "G4ios.hh"
-#include "globals.hh"
-#include "Randomize.hh"
 #include "G4VeEnergyLoss.hh"
-#include "globals.hh"
-#include "G4Track.hh"
-#include "G4Step.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-#include "G4Gamma.hh"
-#include "G4PhysicsLogVector.hh"
-#include "G4PhysicsLinearVector.hh"
- 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 class G4eIonisation : public G4VeEnergyLoss 

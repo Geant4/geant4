@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisation.icc,v 1.7 2001-08-09 17:24:23 maire Exp $
+// $Id: G4eIonisation.icc,v 1.8 2001-08-14 10:01:25 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,32 +48,29 @@ inline G4bool G4eIonisation::IsApplicable(const G4ParticleDefinition& particle)
 inline G4double G4eIonisation::GetMeanFreePath(const G4Track& track, G4double,
                                                G4ForceCondition*) 
 {
-   const G4DynamicParticle* aParticle = track.GetDynamicParticle();
-   G4double KineticEnergy = aParticle->GetKineticEnergy();
-   G4Material* aMaterial  = track.GetMaterial();
+ G4double KineticEnergy = track.GetDynamicParticle()->GetKineticEnergy();
+ G4Material* aMaterial  = track.GetMaterial();
    
-   G4double MeanFreePath;
-   G4bool isOutRange ;
-
-   if (KineticEnergy < LowestKineticEnergy) MeanFreePath = DBL_MAX;
-   else {
-         if (KineticEnergy > HighestKineticEnergy) KineticEnergy = HighestKineticEnergy;
+ G4double MeanFreePath;
+ G4bool isOut;
+   
+ if (KineticEnergy > HighestKineticEnergy) KineticEnergy = HighestKineticEnergy;
+ if (KineticEnergy > LowestKineticEnergy)
          MeanFreePath = ((*theMeanFreePathTable)(aMaterial->GetIndex()))->
-                        GetValue( KineticEnergy, isOutRange);
-   }
-   
-   return MeanFreePath;
+                        GetValue(KineticEnergy, isOut);     
+ else    MeanFreePath = DBL_MAX;
+
+ return MeanFreePath;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4eIonisation::GetLambda(G4double KineticEnergy,
-                                         G4Material* material)
+inline 
+G4double G4eIonisation::GetLambda(G4double KineticEnergy, G4Material* material)
 {
   G4bool isOut;
-
   return (*theMeanFreePathTable)[material->GetIndex()]->
-                                                GetValue(KineticEnergy,isOut);
+                                           GetValue(KineticEnergy,isOut);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
