@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2000-10-04 16:40:41 nartallo Exp $
+$Id: README,v 1.2 2000-10-06 10:12:27 nartallo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -34,7 +34,11 @@ setenv G4VIS_USE_RAYX         1
 setenv G4VIS_USE_VRML         1
 setenv G4VIS_USE_VRMLFILE     1
 
+0.5 Sample run
+To execute a sample simulation with visualisation of proton tracks
+reaching teh detector run:
 
+XrayTel longsection.macro
 
 
 1. Detector description
