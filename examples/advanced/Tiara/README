@@ -4,8 +4,14 @@ Simulation of the TIARA experiment using importance sampling
 The example has been tested on CERN RH 7.3 with the
 gcc-3.2 compiler.
 
-Seting the environment
-======================
+Information about the Tiara experiment may be found at:
+http://idsun1.kek.jp/nakao/research/tiara/tiara.htm
+
+Note for system testing: see points 1, 1.3 and 3.2.
+
+
+1) Setting the environment
+==========================
 
 You should have Geant4 compiled with:
 "G4LIB_BUILD_SHARED" set to 1.
@@ -16,36 +22,36 @@ You need to set:
 Three examples are given of how to set environment variables
 in the three cases:
 
-Anaphe via AFS:
----------------
-   You have access to afs adn you want to use Anaphe for the
+1.1) Anaphe via AFS:
+--------------------
+   You have access to afs and you want to use Anaphe for the
    analysis: 
-   Set the follwing environment variables:
+   Set the following environment variables:
    "G4ANALYSIS_USE"
 
    "ANAPHETOP" (e.g. /afs/cern.ch/sw/lhcxx)
    "AIDA_DIR"  (e.g. /afs/cern.ch/sw/contrib/AIDA/3.0/src/cpp)
    "ANAPHE_SCRIPTS" (e.g. /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.4/scripts)
 
-   Finaly source the script env.Common.csh
+   Finally source the script env.Common.csh
 
 
-No afs but a local Anphe and AIDA installation:
-----------------------------------------------
+1.2) No afs but a local Anphe and AIDA installation:
+----------------------------------------------------
    You don't use afs but you have a local installation of Anaphe and AIDA
    (e.g. from http://anaphe.web.cern.ch/anaphe/.
-   Set the follwing environment variables:
+   Set the following environment variables:
    "G4ANALYSIS_USE"
  
    "ANAPHETOP" (e.g. /users/dressel/Anaphe/release)
    "AIDA_DIR"  (e.g. /users/dressel/AIDA/3.0.0/3.0.0/AIDA/3.0/src/cpp)
    "ANAPHE_SCRIPTS" (e.g. ${ANAPHETOP}/share/LHCXX/5.0.5/scripts)
 
-   Finaly source the script env.Common.csh
+   Finally source the script env.Common.csh
 
 
-No afs and no Anaphe and no AIDA (e.g. for system testing):
------------------------------------------------------------
+1.3) No afs and no Anaphe and no AIDA (e.g. for system testing):
+----------------------------------------------------------------
    You don't want to use Anaphe and AIDA and you don't have no afs access.
    Make sure "G4ANALYSIS_USE" is unset (e.g. unsetenv G4ANALYSIS_USE).
 
@@ -57,24 +63,20 @@ No afs and no Anaphe and no AIDA (e.g. for system testing):
 
    Set "CLHEP_BASE_DIR" (e.g. to  /users/dressel/CLHEP)
 
-   Finaly source the script env.Common.csh
+   Finally source the script env.Common.csh
 
 
-Building the example
-====================
+2) Building the example
+=======================
 
-
-
-Quick building:
----------------
-Geant4 is compiled using G4LIB_BUILD_SHARED 1 and the one of the above 
-environment settings have to be set.
+Geant4 has to be compiled using G4LIB_BUILD_SHARED 1 and the one of the 
+above environment settings have to be set.
 
 Type "gmake".
 
 
-In more detail
---------------
+2.1) In more detail
+-------------------
 
 Geant4 should be compiled into granular shared libraries.
 Therefore before compiling Geant4 set "G4LIB_BUILD_SHARED" to "1".
@@ -82,23 +84,23 @@ Therefore before compiling Geant4 set "G4LIB_BUILD_SHARED" to "1".
 External packages used in this example are Anaphe, SWIG and Python.
 The Anaphe package comes with SWIG and Python versions used to build
 Anaphe itself. These SWIG and Python versions should also be used with 
-this example. 
+this example if Anaphe is used. 
 
 
-Cleaning up
------------
-To remove the directories related to this example under 
-$G4WORKDIR/tmp/$G4SYSTEM/ use "gmake tiaraClean".
+2.2) Cleaning up
+----------------
 To remove the files created by swig ( *_wrap.cc, the corresponding 
 .py files) use "gmake swigClean.
+To remove the directories of compiled code related to this example under 
+$G4WORKDIR/tmp/$G4SYSTEM/ use "gmake tiaraClean".
 
 
-Running the example:
-=====================
+3) Running the example:
+=======================
 
 
-Using Anaphe
-------------
+3.1) Using Anaphe
+-----------------
 Change to the sub directory "run" and execute "runSim.py".
 "runSim.py" runs an example configuration which nay be
 changed by the user. The results of the simulation are stored in 
@@ -126,8 +128,8 @@ set the print out period to 10 minutes by setting:
 "timeForOneRun = 10 * myUtils.min".
 
 
-Not using Anaphe (mainly for system testing)
---------------------------------------------
+3.2) Not using Anaphe (mainly for system testing)
+-------------------------------------------------
 Change to the sub directory "run" and execute 
 runSimNoAnalysis.py.
 
@@ -135,15 +137,15 @@ runSimNoAnalysis.py.
 
 
 
-Content of the directory:
-=========================
+4) Content of the directory:
+============================
 
 
 simCommon.csh - a script to setup environment variables
-    in case the above one of the above environmetn settings have been
+    in case the above one of the above environment settings have been
     done beforehand.
 
-buildit.csh - file to be executed to build the example
+GNUmakefile - for building the example
 
 
 data / - directory containing experimental data
@@ -179,7 +181,8 @@ source / - directory containing the source code
 
 run / - directory for running the example
        runSim.py - executable example script
-
+       runSimNoAnalysis.py - executable script for running without 
+                             analysis
 
 
 
