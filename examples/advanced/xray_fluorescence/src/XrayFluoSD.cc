@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: XrayFluoHPGeSD.cc
+// $Id: XrayFluoSD.cc
 // GEANT4 tag $Name: xray_fluo-V04-01-03
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
@@ -30,9 +30,10 @@
 // -----------
 // 28 Nov 2001 Elena Guardincerri     Created
 // 29 Nov 2002 Energy deposition bug fixed (Alfonso.mantero@ge.infn.it)
+// 17 Jul 2003 Name changed to XrayFluoSD
 // -------------------------------------------------------------------
 
-#include "XrayFluoHPGeSD.hh"
+#include "XrayFluoSD.hh"
 #include "XrayFluoSensorHit.hh"
 #include "XrayFluoDetectorConstruction.hh"
 #include "G4VPhysicalVolume.hh"
@@ -45,47 +46,46 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XrayFluoHPGeSD::XrayFluoHPGeSD(G4String name,
+XrayFluoSD::XrayFluoSD(G4String name,
                                    XrayFluoDetectorConstruction* det)
 :G4VSensitiveDetector(name),Detector(det)
 {
   collectionName.insert("HPGeCollection");
   HitHPGeID = new G4int[500];
-  //G4cout << "XrayFluoHPGeSD created" << G4endl;
+  //G4cout << "XrayFluoSD created" << G4endl;
 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XrayFluoHPGeSD::~XrayFluoHPGeSD()
+XrayFluoSD::~XrayFluoSD()
 {
 
   delete [] HitHPGeID;
 
   // delete HPGeCollection;
 
-  G4cout << "XrayFluoHPGeSD deleted" << G4endl;
+  G4cout << "XrayFluoSD deleted" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void XrayFluoHPGeSD::Initialize(G4HCofThisEvent*HCE)
+void XrayFluoSD::Initialize(G4HCofThisEvent*)
  
 //initializes HCE with the hits collection(s) created by this 
   //sensitive detector
 { 
-  if (HCE){
-    
-    HPGeCollection = new XrayFluoSensorHitsCollection
-      (SensitiveDetectorName,collectionName[0]); 
-    for (G4int j=0;j<Detector->GetNbOfPixels();j++)
-      {HitHPGeID [j]= -1;};
-  }
+  HPGeCollection = new XrayFluoSensorHitsCollection
+                      (SensitiveDetectorName,collectionName[0]); 
+ for (G4int j=0;j<Detector->GetNbOfPixels();j++)
+ {HitHPGeID [j]= -1;};
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool XrayFluoHPGeSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
+G4bool XrayFluoSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {	
+
 
 
   G4double edep = aStep->GetTotalEnergyDeposit();
@@ -135,13 +135,12 @@ G4bool XrayFluoHPGeSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
     }
   
   return true;
-
 }
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void XrayFluoHPGeSD::EndOfEvent(G4HCofThisEvent* HCE)
+void XrayFluoSD::EndOfEvent(G4HCofThisEvent* HCE)
 {
   static G4int HCID = -1;
   if(HCID<0)
@@ -151,17 +150,17 @@ void XrayFluoHPGeSD::EndOfEvent(G4HCofThisEvent* HCE)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void XrayFluoHPGeSD::clear()
+void XrayFluoSD::clear()
 {} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void XrayFluoHPGeSD::DrawAll()
+void XrayFluoSD::DrawAll()
 {} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void XrayFluoHPGeSD::PrintAll()
+void XrayFluoSD::PrintAll()
 {} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

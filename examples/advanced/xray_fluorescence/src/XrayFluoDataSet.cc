@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoDAtaSet.cc
-// GEANT4 tag $Name: xray_fluo-V04-01-03
+// GEANT4 tag $Name: xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -79,9 +79,8 @@ XrayFluoDataSet::~XrayFluoDataSet()
 }
 
 
-G4double XrayFluoDataSet::FindValue(G4double e, G4int id) const
+G4double XrayFluoDataSet::FindValue(G4double e, G4int) const
 {
-  id = id;
   G4double value;
   G4double e0 = (*energies)[0];
   // Protections
@@ -139,13 +138,19 @@ void XrayFluoDataSet::LoadData(const G4String& fileName)
   ost << fileName <<".dat";
   
   G4String name(nameChar);
-  
-  char* path = getenv("PWD");
- 
-  G4String pathString(path);
-  G4String dirFile = pathString + "/" + name;
-  std::ifstream file(dirFile);
-  std::filebuf* lsdp = file.rdbuf();
+
+  G4String dirFile = name;
+
+  if (!(getenv("XRAYDATA"))) { 
+    
+    char* path = getenv("PWD");
+    
+    G4String pathString(path);
+    dirFile = pathString + "/" + name;
+  }
+
+  G4std::ifstream file(dirFile);
+  G4std::filebuf* lsdp = file.rdbuf();
   
   if (! (lsdp->is_open()) )
 	{

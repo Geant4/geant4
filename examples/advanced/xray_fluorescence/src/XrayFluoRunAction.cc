@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoRunAction.cc
-// GEANT4 tag $Name: xray_fluo-V04-01-03
+// GEANT4 tag $Name: xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -68,7 +68,6 @@ XrayFluoRunAction::XrayFluoRunAction()
 
   dataGammaSet = normalization.Normalize(minGamma, maxGamma, nBinsGamma,
 				  "FlatSpectrum");
-
   
 
   //G4String fileName = "SILIefficiency";
@@ -76,7 +75,6 @@ XrayFluoRunAction::XrayFluoRunAction()
   //efficiencySet = new XrayFluoDataSet(1,fileName,interpolation4,keV,1);
   //delete interpolation4;  
   G4cout << "XrayFluoRunAction created" << G4endl;  
-
 }
 #else
 XrayFluoRunAction::XrayFluoRunAction()
@@ -92,7 +90,6 @@ XrayFluoRunAction::~XrayFluoRunAction()
 {
 
   //G4std::map<G4int,G4DataVector*,G4std::less<G4int> >::iterator pos;
-
   
   // delete energies;
   // delete data;
@@ -113,7 +110,6 @@ XrayFluoRunAction::~XrayFluoRunAction()
   
 
   G4cout << "XrayFluoRunAction deleted" << G4endl; 
-
 
 }
 
@@ -146,7 +142,7 @@ void XrayFluoRunAction::BeginOfRunAction(const G4Run* aRun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void XrayFluoRunAction::EndOfRunAction(const G4Run* aRun )
+void XrayFluoRunAction::EndOfRunAction(const G4Run*)
 {
 
 
@@ -156,12 +152,10 @@ void XrayFluoRunAction::EndOfRunAction(const G4Run* aRun )
   // Run ended, update the visualization
   if (G4VVisManager::GetConcreteInstance()) {
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-
   }
 
    analysis->finish();
  
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -201,121 +195,6 @@ G4double XrayFluoRunAction::GetDataSum()
     }
   return sum;
 }
-
-// G4double XrayFluoRunAction::GetInfData(G4double energy, G4double random, G4int posIndex)
-// {
-//   G4double value = 0.;
-//   G4int zMin = 1;
-//   G4int zMax = 6; 
-  
-//   G4int Z = posIndex;
-  
-//   if (Z<zMin) {Z=zMin;}
-//   if (Z>zMax) {Z=zMax;}
-  
-//   if (Z >= zMin && Z <= zMax)
-//     {
-//       G4std::map<G4int,G4DataVector*,G4std::less<G4int> >::const_iterator pos;
-//       pos = energyMap.find(Z);
-//       G4std::map<G4int,G4DataVector*,G4std::less<G4int> >::const_iterator posData;
-//       posData = dataMap.find(Z);
-
-
-//       if (pos!= energyMap.end())
-// 	{
-// 	  G4DataVector energySet = *((*pos).second);
-// 	  G4DataVector dataSet = *((*posData).second);
-// 	  G4int nData = energySet.size();
-
-
-// 	  G4double dataSum = 0;
-// 	  G4double partSum = 0;
-// 	  G4int index = 0;
-
-// 	  // if data is not perfectly normalized (it may happen) 
-// 	  // rnadom number is renormalized, in case it is higer 
-// 	  //than the sum of all energies => segmentation fault.
-
-	  
-// 	  for  (G4int i = 0; i<nData; i++){
-// 	    dataSum += dataSet[i];
-// 	  }
-
-// 	  G4double normRandom = random*dataSum;
-
-
-// 	  while (normRandom> partSum)
-// 	    {
-	      
-// 	      partSum += dataSet[index];
-// 	      index++;
-// 	    }
-	 
-	  
-// 	  if (index >= 0 && index < nData)
-// 	    {
-// 	      value = energySet[index];
-	      
-
-// 	    }
-
-	  
-// 	}
-//     }
-//   return value;
-// }
-
-// G4double XrayFluoRunAction::GetSupData(G4double energy, G4double random, G4int posIndex)
-// {
-//   G4double value = 0.;
-//   G4int zMin = 1;
-//   G4int zMax = 6;
-//   G4int Z = (posIndex+1);
-  
-//   if (Z<zMin) {Z=zMin;}
-//   if (Z>zMax) {Z=zMax;}
-//   if (Z >= zMin && Z <= zMax)
-//     {
-//       G4std::map<G4int,G4DataVector*,G4std::less<G4int> >::const_iterator pos;
-//       pos = energyMap.find(Z);
-//       G4std::map<G4int,G4DataVector*,G4std::less<G4int> >::const_iterator posData;
-//       posData = dataMap.find(Z);
-//       if (pos!= energyMap.end())
-// 	{
-// 	  G4DataVector energySet = *((*pos).second);
-// 	  G4DataVector dataSet = *((*posData).second);
-// 	  G4int nData = energySet.size();
-// 	  G4double dataSum = 0;
-// 	  G4double partSum = 0;
-// 	  G4int index = 0;
-
-// 	  // if data is not perfectly normalized (it may happen) 
-// 	  // rnadom number is renormalized, in case it is higer 
-// 	  //than the sum of all energies => segmentation fault.
-
-// 	  for  (G4int i = 0; i<nData; i++){
-// 	    dataSum += dataSet[i];
-// 	  }	  
-
-// 	  G4double normRandom = random*dataSum;
-
-
-// 	  while (normRandom> partSum)
-// 	    {
-// 	      partSum += dataSet[index];
-// 	      index++;
-// 	    }
-	  
-	  
-// 	  if (index >= 0 && index < nData)
-// 	    {
-// 	      value = energySet[index];
-// 	    }
-// 	}
-//     }
-//   return value;
-// }
-
 
 
 void XrayFluoRunAction::ReadData(G4double unitE, G4String fileName)
@@ -381,87 +260,6 @@ void XrayFluoRunAction::ReadData(G4double unitE, G4String fileName)
 }
 
 
-// void XrayFluoRunAction::ReadResponse(const G4String& fileName)
-// {
-//   char nameChar[100] = {""};
-//   G4std::ostrstream ost(nameChar, 100, G4std::ios::out);
-  
-  
-//   ost << fileName<<".dat";
-  
-//   G4String name(nameChar);
-  
-//   char* path = getenv("XRAYDATA");
-  
-//   G4String pathString(path);
-//   G4String dirFile = pathString + "/" + name;
-//   G4std::ifstream file(dirFile);
-//   G4std::filebuf* lsdp = file.rdbuf();
-  
-//   if (! (lsdp->is_open()) )
-//     {
-//       G4String excep = "XrayFluoRunAction - data file: " + dirFile + " not found";
-//       G4Exception(excep);
-// 	}
-//   G4double a = 0;
-//   G4int k = 1;
-//   G4int s = 0;
-  
-//   G4int Z = 1;
-//   G4DataVector* energies = new G4DataVector;
-//   G4DataVector* data = new G4DataVector;
-
-//   do
-//     {
-//       file >> a;
-//       G4int nColumns = 2;
-//       if (a == -1)
-// 	{
-// 	  if (s == 0)
-// 	    {
-// 	      // End of a  data set
-// 	      energyMap[Z] = energies;
-// 	      dataMap[Z] = data;
-// 	      // Start of new shell data set
-// 	      energies = new G4DataVector;
-// 	      data = new G4DataVector;
-// 	      Z++;	    
-// 	    }      
-// 	  s++;
-// 	  if (s == nColumns)
-// 	    {
-// 	      s = 0;
-// 	    }
-// 	}
-//       else if (a == -2)
-// 	{
-// 	  // End of file; delete the empty vectors 
-// 	  //created when encountering the last -1 -1 row
-// 	  delete energies;
-// 	  delete data;
-
-	  
-// 	}
-//       else
-// 	{
-// 	  // 1st column is energy
-// 	  if(k%nColumns != 0)
-// 	    {	
-// 	      G4double e = a * keV;
-// 	      energies->push_back(e);
-// 	      k++;
-// 	    }
-// 	  else if (k%nColumns == 0)
-// 	    {
-// 	      // 2nd column is data
-	      
-// 	      data->push_back(a);
-// 	      k = 1;
-// 	    }
-// 	}
-//     } while (a != -2); // end of file
-//   file.close();    
-// }
 
 
 

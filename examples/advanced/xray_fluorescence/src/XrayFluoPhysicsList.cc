@@ -22,14 +22,13 @@
 //
 //
 // $Id: XrayFluoPhysicsList.cc
-// GEANT4 tag $Name: xray_fluo-V04-01-03
+// GEANT4 tag $Name: xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
 // History:
 // -----------
 // 28 Nov 2001 Elena Guardincerri     Created
-// 29 Nov 2002 Auger Effect Added (Alfonso.mantero@ge.infn.it)
 //
 // -------------------------------------------------------------------
 
@@ -153,6 +152,7 @@ void XrayFluoPhysicsList::ConstructEM()
       pmanager->AddDiscreteProcess(new G4LowEnergyCompton);
      
       LePeprocess = new G4LowEnergyPhotoElectric();
+
       LePeprocess->ActivateAuger(true);
       //LePeprocess->SetCutForLowEnSecPhotons(10000 * keV);
       //LePeprocess->SetCutForLowEnSecElectrons(10000 * keV);
@@ -165,6 +165,7 @@ void XrayFluoPhysicsList::ConstructEM()
       //electron
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
 
+
       
       LeIoprocess = new G4LowEnergyIonisation("IONI");
       LeIoprocess->ActivateAuger(true);
@@ -172,7 +173,6 @@ void XrayFluoPhysicsList::ConstructEM()
       LeIoprocess->SetCutForLowEnSecPhotons(10000*keV);
       LeIoprocess->SetCutForLowEnSecElectrons(10000*keV);
       pmanager->AddProcess(LeIoprocess, -1,  2, 2); 
-      
 
       LeBrprocess = new G4LowEnergyBremsstrahlung();
       pmanager->AddProcess(LeBrprocess, -1, -1, 3);
@@ -309,18 +309,6 @@ void XrayFluoPhysicsList::SetCutsByEnergy(G4double val)
   SetCutValue(cut, "proton");
  
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

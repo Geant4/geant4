@@ -29,7 +29,7 @@
 // History:
 // -----------
 // 28 Nov 2001 Elena Guardincerri     Created
-// 29 Nov 2002 Alfonso Mantero minor modifications (Alfonso.mantero@ge.infn.it 
+// 29 Nov 2002 Alfonso Mantero minor modifications (Alfonso.mantero@ge.infn.it)
 // -------------------------------------------------------------------
 
 #include "XrayFluoSensorHit.hh"
@@ -49,16 +49,14 @@ XrayFluoSensorHit::XrayFluoSensorHit()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XrayFluoSensorHit::XrayFluoSensorHit(const XrayFluoSensorHit& right)
-  :G4VHit(right)
+XrayFluoSensorHit::XrayFluoSensorHit(const XrayFluoSensorHit& right):
+  G4VHit(right)
 {
-
   EdepTot = right.EdepTot ; 
 
   EdepDetect = right.EdepDetect;
 
   //G4cout << "XrayFluoSensorHit created" << G4endl;  
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -81,10 +79,8 @@ const XrayFluoSensorHit& XrayFluoSensorHit::operator=(const XrayFluoSensorHit& r
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-int XrayFluoSensorHit::operator==(const XrayFluoSensorHit& right) const
+int XrayFluoSensorHit::operator==(const XrayFluoSensorHit&) const
 {
-  if(EdepTot == right.EdepTot && EdepDetect == right.EdepDetect)
-    {return 1;}
   return 0;
 }
 

@@ -21,50 +21,33 @@
 // ********************************************************************
 //
 //
-// $Id: XrayFluoSteppingAction.cc
-// GEANT4 tag $Name: xray_fluo-V03-02-00
+// $Id: XrayFluoVdetectorType.cc
+// GEANT4 tag $Name:
 //
-// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
+// Author: Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
 //
 // History:
 // -----------
-// 28 Nov 2001 Elena Guardincerri     Created
+//  19 Jun 2003  Alfonso Mantero Created
 //
 // -------------------------------------------------------------------
 
-#include "XrayFluoSteppingAction.hh"
-#include "XrayFluoDetectorConstruction.hh"
-#include "G4SteppingManager.hh"
-#include "G4TrackVector.hh"
-#include "G4ios.hh"
-#ifdef G4ANALYSIS_USE
-#include "XrayFluoAnalysisManager.hh"
-#endif
+#include "XrayFluoVDetectorType.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-XrayFluoSteppingAction::XrayFluoSteppingAction()
-{
-  G4cout << "XrayFluoSteppingAction created" << G4endl; 
- }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-XrayFluoSteppingAction::~XrayFluoSteppingAction()
-{ 
-  G4cout << "XrayFluoSteppingAction deleted" << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void XrayFluoSteppingAction::UserSteppingAction(const G4Step* aStep)
-{
-#ifdef G4ANALYSIS_USE
-  XrayFluoAnalysisManager* analysis  = XrayFluoAnalysisManager::getInstance();
-  analysis->analyseStepping(aStep);
-#endif
-}	 
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+XrayFluoVDetectorType::XrayFluoVDetectorType()
+{;}
+XrayFluoVDetectorType::~XrayFluoVDetectorType()
+{;}
+// G4String XrayFluoVDetectorType::GetDetectorMaterial()
+// {;}
+// G4double XrayFluoVDetectorType::ResponseFunction(G4double)
+// {;}
+// G4double XrayFluoVDetectorType::GetInfData(G4double,G4double,G4int=0)
+// {;}
+// G4double XrayFluoVDetectorType::GetSupData(G4double,G4double,G4int=0)
+// {;}
+void XrayFluoVDetectorType::LoadResponseData(G4String)
+{;}
+void XrayFluoVDetectorType::LoadEfficiencyData(G4String)
+{;}
 

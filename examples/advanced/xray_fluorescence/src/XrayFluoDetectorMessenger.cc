@@ -22,14 +22,13 @@
 //
 //
 // $Id: XrayFluoDetectorMessenger.cc
-// GEANT4 tag $Name: xray_fluo-V04-01-03  
+// GEANT4 tag $Name: xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
 // History:
 // -----------
 // 28 Nov 2001 Elena Guardincerri     Created
-// 29 Nov 2002 change material command added(Alfonso.mantero@ge.infn.it)
 //
 // -------------------------------------------------------------------
 
@@ -66,7 +65,7 @@ XrayFluoDetectorMessenger::XrayFluoDetectorMessenger(XrayFluoDetectorConstructio
   detectorCmd->SetGuidance("select a diferent detectorType");
   detectorCmd->SetParameterName("choice",true);
   detectorCmd->SetDefaultValue("sili");
-  detectorCmd->SetCandidates("sili");
+  detectorCmd->SetCandidates("sili hpge");
   detectorCmd->AvailableForStates(G4State_Idle);
   
 }

@@ -22,20 +22,20 @@
 //
 //
 // $Id: XrayFluoDetectorConstruction.cc
-// GEANT4 tag $Name: xray_fluo-V04-01-03
+// GEANT4 tag $Name: xray_fluo-V03-02-00
 //
-// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
+// Author: Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
 //
 // History:
 // -----------
 // 28 Nov 2001 Elena Guardincerri     Created
-// 29 Nov 2002 New materials added (Alfonso.mantero@ge.infn.it)
-//
+//    Nov 2002 Alfonso Mantero materials added, Material selection implementation
+// 16 Jul 2003 Alfonso Mantero Detector type selection added + minor fixes
 // -------------------------------------------------------------------
 
 #include "XrayFluoDetectorConstruction.hh"
 #include "XrayFluoDetectorMessenger.hh"
-#include "XrayFluoHPGeSD.hh"
+#include "XrayFluoSD.hh"
 #include "G4Material.hh"
 #include "G4ThreeVector.hh"
 #include "G4Box.hh"
@@ -75,7 +75,6 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
   NbOfPixelRows     =  1;
   NbOfPixelColumns  =  1;
   NbOfPixels        =  NbOfPixelRows*NbOfPixelColumns;
-
   PixelSizeXY       = 5 * cm;
   PixelThickness = 3.5 * mm; //changed should be 3.5 mm
 
@@ -84,7 +83,6 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
 
   ContactSizeXY     = 5*cm;
   SampleThickness = 4 * mm;
-
   SampleSizeXY = 3. * cm;
   Dia1Thickness = 1. *mm;
   Dia3Thickness = 1. *mm;
@@ -126,6 +124,46 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+<<<<<<< XrayFluoDetectorConstruction.cc
+
+XrayFluoDetectorConstruction* XrayFluoDetectorConstruction::instance = 0;
+
+XrayFluoDetectorConstruction* XrayFluoDetectorConstruction::GetInstance()
+{
+  if (instance == 0)
+    {
+      instance = new XrayFluoDetectorConstruction;
+     
+    }
+  return instance;
+}
+
+void XrayFluoDetectorConstruction::SetDetectorType(G4String type)
+{
+
+  if (type=="sili")
+    {
+      detectorType = XrayFluoSiLiDetectorType::GetInstance();
+    }
+   else if (type=="hpge")
+     {
+       detectorType = XrayFluoHPGeDetectorType::GetInstance();
+    }
+  else 
+    {
+      G4String excep = type + "detector type unknown";
+      G4Exception(excep);
+    }
+}
+
+XrayFluoVDetectorType* XrayFluoDetectorConstruction::GetDetectorType()
+{
+  return detectorType;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+=======
 
 XrayFluoDetectorConstruction* XrayFluoDetectorConstruction::instance = 0;
 
@@ -164,6 +202,7 @@ XrayFluoVDetectorType* XrayFluoDetectorConstruction::GetDetectorType()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+>>>>>>> 1.7
 XrayFluoDetectorConstruction::~XrayFluoDetectorConstruction()
 
 { 
@@ -622,9 +661,13 @@ void XrayFluoDetectorConstruction::DefineMaterials()
   
   //default materials of the apparate
   
+<<<<<<< XrayFluoDetectorConstruction.cc
+  sampleMaterial = anorthosite;
+=======
 
   sampleMaterial = anorthosite;
 
+>>>>>>> 1.7
   Dia1Material = Pb;
   Dia3Material = Pb;
   pixelMaterial = Si;
@@ -865,7 +908,7 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
 
   if(!HPGeSD)
     {
-      HPGeSD = new XrayFluoHPGeSD ("HPGeSD",this);
+      HPGeSD = new XrayFluoSD ("HPGeSD",this);
       SDman->AddNewDetector(HPGeSD);
     }
   
@@ -942,6 +985,7 @@ void XrayFluoDetectorConstruction::SetSampleMaterial(G4String newMaterial)
 {
 
 
+<<<<<<< XrayFluoDetectorConstruction.cc
   G4Material* pttoMaterial = G4Material::GetMaterial(newMaterial);     
   if (pttoMaterial){
     G4cout << "Material!!!!" << newMaterial << G4cout;
@@ -951,6 +995,18 @@ void XrayFluoDetectorConstruction::SetSampleMaterial(G4String newMaterial)
   
 }
 
+
+=======
+  G4Material* pttoMaterial = G4Material::GetMaterial(newMaterial);     
+  if (pttoMaterial){
+    G4cout << "Material!!!!" << newMaterial << G4cout;
+    logicSample->SetMaterial(pttoMaterial);
+    PrintApparateParameters();
+  }            
+  
+}
+
+>>>>>>> 1.7
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
