@@ -1,4 +1,4 @@
-.$Id: History,v 1.56 2003-12-11 21:55:54 duns Exp $
+.$Id: History,v 1.57 2004-01-29 00:51:03 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,12 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+28 January 2004 Mark Donszelmann
+- Fixed GEANT-40. For some unclear reason the symbols zcalloc and zcfree
+  of the zlib library were being called as C++ mangled names. 
+  To get rid of the situation of a mix of C++ and C names, we took
+  out the 'extern "C"' declarations from our zlib.h and zutil.h.
+
 11 December 2003 Mark Donszelmann
 - Removed the HepRep2 driver from FreeHEP, so the HepRep2 sources now live
   in this directory. Modified the copyfreehep scripts, and the READMEs.
