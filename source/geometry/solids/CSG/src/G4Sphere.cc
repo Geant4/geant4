@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.11 2001-08-27 08:04:08 grichine Exp $
+// $Id: G4Sphere.cc,v 1.12 2001-12-12 11:04:46 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -1878,15 +1878,20 @@ G4double G4Sphere::DistanceToOut(const G4ThreeVector& p,
 //
 // => s=-pDotV3d+-sqrt(pDotV3d^2-(rad2-R^2))
 //
+  const G4double  fractionTolerance = 1.0e-14;
+  const G4double  flexRadMaxTolerance= max( kRadTolerance, 
+					    fractionTolerance * fRmax);
+  const G4double  Rmax_plus=  fRmax+ flexRadMaxTolerance*0.5;
 
-  G4double  Rmax_plus=  fRmax+kRadTolerance*0.5;
-  G4double  Rmin_minus= (fRmin>0) ? fRmin-kRadTolerance*0.5 : 0 ;
+  const G4double  flexRadMinTolerance= max( kRadTolerance, 
+					    fractionTolerance * fRmin);
+  const G4double  Rmin_minus= (fRmin>0) ? fRmin-flexRadMinTolerance*0.5 : 0 ;
 
   if(rad2 <= Rmax_plus*Rmax_plus && rad2 >= Rmin_minus*Rmin_minus)
   {
     c=rad2-fRmax*fRmax ;
 
-    if (c < kRadTolerance*fRmax) 
+    if (c < flexRadMaxTolerance*fRmax) 
     {
         // Within tolerant Outer radius 
         // 
@@ -1899,7 +1904,7 @@ G4double G4Sphere::DistanceToOut(const G4ThreeVector& p,
 
       d2=pDotV3d*pDotV3d-c ;
 
-      if( (c >- kRadTolerance*fRmax) &&       // on tolerant surface
+      if( (c >- flexRadMaxTolerance*fRmax) &&       // on tolerant surface
 	  ( ( pDotV3d >=0 )  ||  (d2 < 0)) )  // leaving outside from Rmax 
 			                      // not re-entering
       {
@@ -1924,9 +1929,9 @@ G4double G4Sphere::DistanceToOut(const G4ThreeVector& p,
     {
       c=rad2-fRmin*fRmin ;
 
-      if (c >- kRadTolerance*fRmin) // 2.0 * (0.5*kRadTolerance) * fRmin
+      if (c >- flexRadMinTolerance*fRmin) // 2.0 * (0.5*kRadTolerance) * fRmin
       {
-	if( c < kRadTolerance*fRmin && pDotV3d < 0 )  // leaving from Rmin
+	if( c < flexRadMinTolerance*fRmin && pDotV3d < 0 )  // leaving from Rmin
 	{
 	  if(calcNorm)
 	  {
@@ -2091,7 +2096,7 @@ G4double G4Sphere::DistanceToOut(const G4ThreeVector& p,
 	  {
 	    s = -b + d ;    // Second root
 	  }
-	  if (s > kRadTolerance*0.5 )   // && s<sr)
+	  if (s > flexRadMaxTolerance*0.5 )   // && s<sr)
 	  {
 	    stheta = s ;
 	    sidetheta = kSTheta ;
@@ -2117,7 +2122,7 @@ G4double G4Sphere::DistanceToOut(const G4ThreeVector& p,
 	  {
 	    s=-b+d;    // Second root
 	  }
-	  if (s > kRadTolerance*0.5 && s < stheta )
+	  if (s > flexRadMaxTolerance*0.5 && s < stheta )
 	  {
 	    stheta = s ;
 	    sidetheta = kETheta ;
