@@ -1,4 +1,4 @@
-$Id: History,v 1.206 2002-12-02 15:26:58 johna Exp $
+$Id: History,v 1.207 2002-12-04 08:39:26 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -17,9 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-2nd December 2002  John Allison
-- common.gmk binmake.gmk: New dependency file algorithm that avoids
+2nd December 2002  John Allison (config-V04-01-07)
+- common.gmk, binmake.gmk: New dependency file algorithm that avoids
   leaving corrupt .d files when #include'd files cannot be found.
+- Removed obsolete schema targets in common.gmk.
 
 25th November 2002  Gabriele Cosmo (config-V04-01-06)
 - Removed ODBMS setup. Now library for persistency is built as part of the
