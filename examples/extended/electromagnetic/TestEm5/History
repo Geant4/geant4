@@ -1,4 +1,4 @@
-$Id: History,v 1.48 2004-08-02 11:30:04 maire Exp $
+$Id: History,v 1.49 2004-08-02 15:39:39 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,7 @@ track of all tags.
 
 28-07-04 mma (testem5-V06-02-00)
 - print stopping power.
+- example of use of G4EmCalculator.
 - add dedx1.mac and dedx2.mac
      
 21-06-04 mma (testem5-V06-01-04)

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.9 2004-08-02 11:30:06 maire Exp $
+// $Id: RunAction.cc,v 1.10 2004-08-02 15:39:16 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,7 +34,7 @@
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
-#include "G4ParticleGun.hh"
+#include "G4EmCalculator.hh"
 
 #include "Randomize.hh"
 #include <iomanip>
@@ -129,22 +129,31 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     if (rmsMsc > 0.) rmsMsc = sqrt(rmsMsc);
   }
   
-  G4double meandEdx = EnergyDeposit/(detector->GetAbsorberThickness());
-  G4double stopPower = meandEdx/(detector->GetAbsorberMaterial()->GetDensity());  
+  //Stopping Power from input Table.
+  //
+  G4Material* material = detector->GetAbsorberMaterial();
+  G4double length  = detector->GetAbsorberThickness();
+  G4double density = material->GetDensity();
+   
+  G4ParticleDefinition* particle = primary->GetParticleGun()
+                                          ->GetParticleDefinition();
+  G4String partName = particle->GetParticleName();    
+  G4double energy = primary->GetParticleGun()->GetParticleEnergy();
+  
+  G4EmCalculator emCalculator;
+  G4double dEdxTable = emCalculator.GetDEDX(particle,material,energy);
+  G4double stopTable = dEdxTable/density;
+  
+  //Stopping Power from simulation.
+  //    
+  G4double meandEdx  = EnergyDeposit/length;
+  G4double stopPower = meandEdx/density;  
 
   G4cout << "\n ======================== run summary ======================\n";
 
   G4int prec = G4cout.precision(2);
   
-  G4Material* material = detector->GetAbsorberMaterial();
-  G4double length  = detector->GetAbsorberThickness();
-  G4double density = material->GetDensity();
-   
-  G4String particle = primary->GetParticleGun()->GetParticleDefinition()
-                      ->GetParticleName();    
-  G4double energy = primary->GetParticleGun()->GetParticleEnergy();
-  
-  G4cout << "\n The run is of " << TotNbofEvents << " " << particle << " of "
+  G4cout << "\n The run was " << TotNbofEvents << " " << partName << " of "
          << G4BestUnit(energy,"Energy") << " through " 
 	 << G4BestUnit(length,"Length") << " of "
 	 << material->GetName() << " (density: " 
@@ -155,10 +164,14 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
          << G4BestUnit(EnergyDeposit,"Energy") << " +- "
          << G4BestUnit(rmsEdep,      "Energy") << G4endl;
 	 
-  G4cout << " Mean dE/dx = " << meandEdx/(MeV/cm) << " MeV/cm"
+  G4cout << "\n Mean dE/dx = " << meandEdx/(MeV/cm) << " MeV/cm"
          << "\t stopping Power = " << stopPower/(MeV*cm2/g) << " MeV*cm2/g"
 	 << G4endl;
-
+	 	 
+  G4cout << " (fromTable = " << dEdxTable/(MeV/cm) << " MeV/cm)"
+         << "\t (from Table    = " << stopTable/(MeV*cm2/g) << " MeV*cm2/g)"
+	 << G4endl;
+	 
   G4cout << "\n Total track length (charged) in absorber per event = "
          << G4BestUnit(TrakLenCharged,"Length") << " +- "
          << G4BestUnit(rmsTLCh,       "Length") << G4endl;
