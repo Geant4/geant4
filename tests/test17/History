@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2001-12-03 22:04:30 vnivanch Exp $
+$Id: History,v 1.26 2002-02-28 12:33:52 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28 Feb 2002  V.I., test17-V04-00-00
+             Extend test - include GenericIons.
 
 03 Dec 2001  V.I., test17-V03-02-04
              Remove warning about chemical formula. No difference in physics.

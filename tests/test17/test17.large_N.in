@@ -15,8 +15,13 @@
 /gun/particle anti_proton
 /run/beamOn 10000
 
+/step/setMaxStep 0.001 mm
 #scaled energy
 /gun/particle IonC12
 /gun/energy 6000 keV
 /run/beamOn 10000
 #
+#scaled energy
+/gun/particle ion
+/gun/ion 6 12 6
+/run/beamOn 10000

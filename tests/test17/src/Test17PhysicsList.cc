@@ -143,6 +143,7 @@ void Test17PhysicsList::ConstructBarions()
 void Test17PhysicsList::ConstructIons()
 {
 //  Ions
+  G4GenericIon::GenericIonDefinition();
   G4Deuteron::DeuteronDefinition();
   G4Alpha::AlphaDefinition();
   G4IonC12::IonC12Definition();
@@ -188,6 +189,9 @@ void Test17PhysicsList::ConstructProcess()
 void Test17PhysicsList::ConstructEM()
 {
   theParticleIterator->reset();
+  theStepCut = new Test17StepCut();
+  theStepCut->SetMaxStep(MaxChargedStep);
+          		       
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
@@ -205,9 +209,7 @@ void Test17PhysicsList::ConstructEM()
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);       
 
-      Test17StepCut* theeminusStepCut = new Test17StepCut();
-      theeminusStepCut->SetMaxStep(MaxChargedStep);  
-      pmanager->AddProcess(theeminusStepCut,         -1,-1,4);
+      pmanager->AddProcess(theStepCut,         -1,-1,4);
 
     } else if (particleName == "e+") {
       //positron      
@@ -216,9 +218,7 @@ void Test17PhysicsList::ConstructEM()
       pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
                   
-      Test17StepCut* theeplusStepCut = new Test17StepCut();
-      theeplusStepCut->SetMaxStep(MaxChargedStep) ;          
-      pmanager->AddProcess(theeplusStepCut,          -1,-1,5);
+      pmanager->AddProcess(theStepCut,          -1,-1,5);
   
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
@@ -262,15 +262,14 @@ void Test17PhysicsList::ConstructEM()
       pmanager->AddProcess(hIon,-1,2,2);
       hionVector.push_back(hIon);
       
-      Test17StepCut* thehadronStepCut = new Test17StepCut();
-      thehadronStepCut->SetMaxStep(MaxChargedStep);          		       
-      pmanager->AddProcess( thehadronStepCut,       -1,-1,3);
+      pmanager->AddProcess( theStepCut,       -1,-1,3);
    
     } else if (   particleName == "alpha"  
                || particleName == "deuteron"  
                || particleName == "IonC12"  
                || particleName == "IonAr40"  
                || particleName == "IonFe56"  
+               || particleName == "GenericIon"  
               )
     {
       pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
@@ -278,11 +277,12 @@ void Test17PhysicsList::ConstructEM()
       G4cout << "Ionic processes for " << particleName << G4endl; 
 
       // Standard ionisation
-      // G4ionIonisation* iIon = new G4ionIonisation() ;
+      //      G4hIonisation* iIon = new G4hIonisation() ;
 
       // Standard ionisation with low energy extantion
-        G4hLowEnergyIonisation* iIon = new G4hLowEnergyIonisation() ;
-      //      iIon->SetNuclearStoppingOff() ;
+       G4hLowEnergyIonisation* iIon = new G4hLowEnergyIonisation() ;
+       	   iIon->SetVerboseLevel(1);
+	   //   iIon->SetNuclearStoppingOff() ;
 	//  iIon->SetNuclearStoppingOn() ;
 
       //iIon->SetStoppingPowerTableName("Ziegler1977He") ;
@@ -292,11 +292,9 @@ void Test17PhysicsList::ConstructEM()
       //iIon->SetStoppingPowerTableName("ICRU_R49PowersHe") ;
 
       pmanager->AddProcess(iIon,-1,2,2);
-      hionVector.push_back(iIon);
+      //      hionVector.push_back(iIon);
       
-      Test17StepCut* theIonStepCut = new Test17StepCut();
-      theIonStepCut->SetMaxStep(MaxChargedStep);          		       
-      pmanager->AddProcess( theIonStepCut,       -1,-1,3);
+      pmanager->AddProcess( theStepCut,       -1,-1,3);
     }
   }
 }
@@ -452,8 +450,8 @@ void Test17PhysicsList::GetRange(G4double val)
 void Test17PhysicsList::SetMaxStep(G4double step)
 {
   MaxChargedStep = step ;
-  G4cout << " MaxChargedStep=" << MaxChargedStep << G4endl;
-  G4cout << G4endl;
+  theStepCut->SetMaxStep(MaxChargedStep);
+  G4cout << "Test17PhysicsList:MaxChargedStep=" << MaxChargedStep << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

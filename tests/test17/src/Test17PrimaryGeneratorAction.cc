@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Test17PrimaryGeneratorAction.cc,v 1.3 2001-07-20 12:37:07 vnivanch Exp $
+// $Id: Test17PrimaryGeneratorAction.cc,v 1.4 2002-02-28 12:31:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,7 +84,7 @@ void Test17PrimaryGeneratorAction::SetDefaultKinematic()
   particleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
   particleGun->SetParticleEnergy(30.*MeV);
   //  G4double x0 = -0.5*(Test17Detector->GetWorldSizeX());
-  particleGun->SetParticlePosition(G4ThreeVector(0.0*cm, 0.0*cm, 0.0*cm));  
+  particleGun->SetParticlePosition(G4ThreeVector(1.0e-9*cm, 0.0*cm, 0.0*cm)); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

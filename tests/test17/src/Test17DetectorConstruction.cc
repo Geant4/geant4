@@ -141,6 +141,11 @@ a = 39.95*g/mole;
 G4Material* lAr = new G4Material(name="liquidArgon", z=18., a, density);
 G4cout << "Material available: " << lAr->GetName() << G4endl; 
 
+density = 3.02*g/cm3;
+a = 131.29*g/mole;
+G4Material* lXe = new G4Material(name="liquidXenon", z=54., a, density);
+G4cout << "Material available: " << lXe->GetName() << G4endl; 
+
 density = 7.870*g/cm3;
 a = 55.85*g/mole;
 G4Material* Fe = new G4Material(name="Iron"   , z=26., a, density);
@@ -197,7 +202,8 @@ Air->AddElement(elO, fractionmass=0.3);
 G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
   //default materials of the calorimeter
-   AbsorberMaterial = H2O;
+  AbsorberMaterial = H2O;
+  //    AbsorberMaterial = lXe;
 // AbsorberMaterial = Si;
   // AbsorberMaterial = Cu;
 //   AbsorberMaterial = Fe;

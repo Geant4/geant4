@@ -38,6 +38,7 @@
 
 class Test17DetectorConstruction;
 class Test17PhysicsListMessenger;
+class Test17StepCut;
 class G4hLowEnergyIonisation;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -92,6 +93,7 @@ public: // Without description
 
     Test17DetectorConstruction* pDet;
     Test17PhysicsListMessenger* physicsListMessenger;
+    Test17StepCut* theStepCut;
 };
 
 #endif
