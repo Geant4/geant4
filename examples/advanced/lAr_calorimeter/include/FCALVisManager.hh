@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALVisManager.hh,v 1.1 2002-10-02 19:37:01 ahoward Exp $
+// $Id: FCALVisManager.hh,v 1.2 2002-10-02 19:40:09 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,8 +28,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#ifndef ExN03VisManager_h
-#define ExN03VisManager_h 1
+#ifndef FCALVisManager_h
+#define FCALVisManager_h 1
 
 #ifdef G4VIS_USE
 
@@ -37,11 +37,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class ExN03VisManager: public G4VisManager {
+class FCALVisManager: public G4VisManager {
 
 public:
 
-  ExN03VisManager ();
+  FCALVisManager ();
 
 private:
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALSteppingAction.hh,v 1.1 2002-10-02 19:37:01 ahoward Exp $
+// $Id: FCALSteppingAction.hh,v 1.2 2002-10-02 19:40:09 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -13,8 +13,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#ifndef ExN03SteppingAction_h
-#define ExN03SteppingAction_h 1
+#ifndef FCALSteppingAction_h
+#define FCALSteppingAction_h 1
 
 #include "G4UserSteppingAction.hh"
 #include "G4ThreeVector.hh"
@@ -22,11 +22,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class ExN03SteppingAction : public G4UserSteppingAction
+class FCALSteppingAction : public G4UserSteppingAction
 {
   public:
-    ExN03SteppingAction();
-    virtual ~ExN03SteppingAction();
+    FCALSteppingAction();
+    virtual ~FCALSteppingAction();
 
     virtual void UserSteppingAction(const G4Step*);
 

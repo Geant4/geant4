@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALHadModuleSD.hh,v 1.2 2002-10-02 12:02:07 araujo Exp $
+// $Id: FCALHadModuleSD.hh,v 1.3 2002-10-02 19:40:09 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,7 +23,7 @@ class FCALTestbeamSetup;
 class FCALHadModule;
 class G4HCofThisEvent;
 class G4Step;
-#include "ExN03CalorHit.hh"
+#include "FCALCalorHit.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -44,7 +44,7 @@ class FCALHadModuleSD : public G4VSensitiveDetector
 
   private:
   
-  //  ExN03CalorHitsCollection*  CalCollection;      
+  //  FCALCalorHitsCollection*  CalCollection;      
   //      FCALTestbeamSetup* Detector;
   //   G4int*                   HitID;
       FCALHadModule* HadModule;

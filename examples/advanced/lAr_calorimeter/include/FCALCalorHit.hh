@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALCalorHit.hh,v 1.1 2002-10-02 19:37:01 ahoward Exp $
+// $Id: FCALCalorHit.hh,v 1.2 2002-10-02 19:40:09 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -13,8 +13,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#ifndef ExN03CalorHit_h
-#define ExN03CalorHit_h 1
+#ifndef FCALCalorHit_h
+#define FCALCalorHit_h 1
 
 #include "G4VHit.hh"
 #include "G4THitsCollection.hh"
@@ -22,15 +22,15 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class ExN03CalorHit : public G4VHit
+class FCALCalorHit : public G4VHit
 {
   public:
 
-      ExN03CalorHit();
-     ~ExN03CalorHit();
-      ExN03CalorHit(const ExN03CalorHit&);
-      const ExN03CalorHit& operator=(const ExN03CalorHit&);
-      int operator==(const ExN03CalorHit&) const;
+      FCALCalorHit();
+     ~FCALCalorHit();
+      FCALCalorHit(const FCALCalorHit&);
+      const FCALCalorHit& operator=(const FCALCalorHit&);
+      int operator==(const FCALCalorHit&) const;
 
       inline void* operator new(size_t);
       inline void  operator delete(void*);
@@ -57,24 +57,24 @@ class ExN03CalorHit : public G4VHit
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-typedef G4THitsCollection<ExN03CalorHit> ExN03CalorHitsCollection;
+typedef G4THitsCollection<FCALCalorHit> FCALCalorHitsCollection;
 
-extern G4Allocator<ExN03CalorHit> ExN03CalorHitAllocator;
+extern G4Allocator<FCALCalorHit> FCALCalorHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void* ExN03CalorHit::operator new(size_t)
+inline void* FCALCalorHit::operator new(size_t)
 {
   void* aHit;
-  aHit = (void*) ExN03CalorHitAllocator.MallocSingle();
+  aHit = (void*) FCALCalorHitAllocator.MallocSingle();
   return aHit;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void ExN03CalorHit::operator delete(void* aHit)
+inline void FCALCalorHit::operator delete(void* aHit)
 {
-  ExN03CalorHitAllocator.FreeSingle((ExN03CalorHit*) aHit);
+  FCALCalorHitAllocator.FreeSingle((FCALCalorHit*) aHit);
 }
 
 #endif

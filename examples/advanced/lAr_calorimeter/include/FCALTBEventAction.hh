@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALTBEventAction.hh,v 1.2 2002-10-02 19:38:35 ahoward Exp $
+// $Id: FCALTBEventAction.hh,v 1.3 2002-10-02 19:40:09 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,7 +17,7 @@
 #define FCALTBEventAction_h 1
 
 #include "G4UserEventAction.hh"
-#include "ExN03SteppingAction.hh"
+#include "FCALSteppingAction.hh"
 #include "globals.hh"
 #include "G4ThreeVector.hh"
 
@@ -27,7 +27,7 @@
 class FCALTBEventAction : public G4UserEventAction
 {
   public:
-    FCALTBEventAction(ExN03SteppingAction* );
+    FCALTBEventAction(FCALSteppingAction* );
     virtual ~FCALTBEventAction();
 
   public:
@@ -42,7 +42,7 @@ class FCALTBEventAction : public G4UserEventAction
     G4String                    drawFlag;
     G4int                       printModulo;   
      
-    ExN03SteppingAction* StepAction;
+    FCALSteppingAction* StepAction;
 
   private:
   G4int NTracksOutOfWorld, NSecondaries, Init1, Init2, Init3;
