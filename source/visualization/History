@@ -1,4 +1,4 @@
-$Id: History,v 1.224 2003-06-02 10:42:59 johna Exp $
+$Id: History,v 1.225 2003-09-22 10:46:44 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,18 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+22nd September 2003  John Allison  (vis-V05-02-00, greps-V05-02-00)
+- Incorporates raytracer-V05-02-01 (needs greps-V05-02-00) - see
+  RayTracer/History:
+  o Introduced G4VRTScanner.
+  o Added /vis/rayTracer/backgroundColour.
+- Introduced Doxygen documentation for management, OpenGL and test.
+- Improved guidance for /vis/scene/notifyHandlers.
+- OpenGL: Cosmetic change to regularise names.
+
+2nd September 2003  John Allison
+- Fixed pedantic warnings etc. in test suite - see test/History.
 
 2nd June 2003  John Allison  (vis-V05-01-01)
 - Small fix for pedantic warnings in RayTracer.
