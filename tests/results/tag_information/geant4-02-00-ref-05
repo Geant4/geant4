@@ -1,0 +1,10 @@
+                      geant4-02-00-ref-05
+                      ===================
+
+geant4-02-00-ref-05 is geant4-02-00-cand-04 plus:
+
+.		geant4-02-00-cand-04
+./config		config-V02-00-07
+./source/g3tog4		g3tog4-V02-00-05
+./source/geometry/solids/CSG		geom-solids-csg-V02-00-12
+./source/interfaces		interfaces-V02-00-03

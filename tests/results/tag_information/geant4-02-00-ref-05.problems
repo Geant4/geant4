@@ -1,0 +1,83 @@
+          Problems and Fixes with geant4-02-00-ref-05
+          ===========================================
+
+geant4-02-00-ref-05 is geant4-02-00-cand-04 plus:
+
+.		geant4-02-00-cand-04
+./config		config-V02-00-07
+./source/g3tog4		g3tog4-V02-00-05
+./source/geometry/solids/CSG		geom-solids-csg-V02-00-12
+./source/interfaces		interfaces-V02-00-03
+
+
+Problems Fixed
+--------------
+
+A change in config-V02-00-05 to generate dependency files did not recover
+from missing (generic.h) headers files. This prevented the build of the
+persisteancy test executables (401,402 on SUN) and is now corrected. 
+
+New Problems and Features
+-------------------------
+
+------ Below this line, to be updated -----------------
+
+
+disabled tests
+--------------
+
+disable.test11.DEC-cxx.debug_ISO    disable.test11.DEC-cxx.optim_ISO  
+disable.test15.DEC-cxx.debug_ISO    disable.test15.DEC-cxx.optim_ISO  
+problem reading neutron data.
+
+disable.test601.DEC-cxx.debug_ISO   disable.test601.DEC-cxx.optim_ISO 
+disable.test602.DEC-cxx.debug_ISO   disable.test602.DEC-cxx.optim_ISO
+prompts indefinitely.
+
+
+Problems remaining for large N (no of events) tests.
+------------------
+
+G4Exceptions, not neccessarily terminating program, are reported from
+
+  G4CameronTruranHilfShellCorrections
+    out of table for Z = 1
+
+  G4ExcitationHandler
+    Warning: Photonevaporation data not exact.
+    Warning: Found gamma with energy = 1.44773e-13MeV 
+
+on many platforms, including.
+
+
+  DEC: debug: NON-ISO:    T16:      G4ExcitationHandler exception.
+  DEC: optim: ISO:        T12:      G4ExcitationHandler exception.
+  DEC: optim: NON-ISO:    T12:      G4ExcitationHandler exception.
+  SUN: debug: NON-ISO:    T13:      G4ExcitationHandler exception.
+  SUN: optim: NON-ISO:    T13:      G4ExcitationHandler exception.
+  HP: debug:              T12:      G4ExcitationHandler exception.
+  HP: debug:              T16:      G4ExcitationHandler exception.
+  HP: optim:          T02.had:      G4ExcitationHandler exception.
+  HP: optim:              T12:      G4ExcitationHandler exception.
+  HP: optim:              T16:      G4ExcitationHandler exception.
+  SUN: optim: NON-ISO:    T15:      G4ExcitationHandler exception.
+
+  DEC: debug: NON-ISO:    T16:      G4CameronTruranHilfShellCorrections exception.
+  DEC: optim: ISO:        T16:      G4CameronTruranHilfShellCorrections exception.
+  DEC: optim: NON-ISO:    T16:      G4CameronTruranHilfShellCorrections exception.
+  DEC: optim: NON-ISO:    T15:      G4CameronTruranHilfShellCorrections exception.
+  HP:  debug:             T16:      G4CameronTruranHilfShellCorrections exception.
+  HP:  optim:             T16:      G4CameronTruranHilfShellCorrections exception.
+  HP:  debug:         T02.had:      G4CameronTruranHilfShellCorrections exception.
+  HP:  optim:         T02.had:      G4CameronTruranHilfShellCorrections exception.
+  SUN: optim: NON-ISO:    T16:      G4CameronTruranHilfShellCorrections exception.
+
+
+  G4VParticleChange::SetNumberOfSecondaries() 
+    Warning theListOfSecondaries is not empty
+  
+  SUN: optim: NON-ISO:    T09:
+  SUN: debug: NON-ISO:    T09:
+
+
+
