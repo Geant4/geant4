@@ -114,7 +114,7 @@ gPad->GetFrame()->SetFillColor(0);
 ntuple->SetFillStyle(4000);
 ntuple->SetFillColor(0); 
 
-ntuple->SetLineClor(16);
+ntuple->SetLineColor(16);
 ntuple->SetLineStyle(1);
 ntuple->SetLineWidth(1); 
 ntuple->Draw("nucA", "typePart==0");
@@ -126,7 +126,7 @@ ntuple->Draw("nucZ", "typePart==0","same");
 r->Update();
 
 printf(" ::: Writing ps files ...\n");
-r->Print("cascade.ps");
+r->Print("cascade.eps");
 
 printf(" ::: Done.\n");
 }
