@@ -1,4 +1,4 @@
-// $Id: TiaraTally.hh,v 1.2 2003-06-16 17:06:46 dressel Exp $
+// $Id: TiaraTally.hh,v 1.3 2003-06-18 16:40:24 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -10,10 +10,10 @@
 #define TiaraTally_hh TiaraTally_hh
 #include "TiaraMeasure.hh"
 #include <vector>
-#include "g4std/map"
+#include <map>
 
 
-typedef G4std::map<G4double, G4std::pair<G4double, TiaraMeasure > > TiaraTallyData;
+typedef std::map<G4double, std::pair<G4double, TiaraMeasure > > TiaraTallyData;
 
 class TiaraTally{
 public:

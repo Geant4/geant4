@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: tiara.cc,v 1.1.1.1 2003-06-12 13:08:24 dressel Exp $
+// $Id: tiara.cc,v 1.2 2003-06-18 16:40:23 gunter Exp $
 // GEANT4 tag 
 //
 // 
@@ -43,7 +43,7 @@
 int main(int argc, char **argv)
 {  
 
-  G4std::vector<G4double> binEdges;
+  std::vector<G4double> binEdges;
   binEdges.push_back(1.);
   binEdges.push_back(3.);
   binEdges.push_back(7.);

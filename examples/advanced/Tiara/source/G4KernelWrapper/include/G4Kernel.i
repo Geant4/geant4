@@ -1,4 +1,4 @@
-# $Id: G4Kernel.i,v 1.3 2003-06-17 15:24:43 mdressel Exp $
+# $Id: G4Kernel.i,v 1.4 2003-06-18 16:40:20 gunter Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -41,7 +41,7 @@
 #include "G4VIStore.hh"
 #include "G4IStore.hh"
 #include "G4UserSteppingAction.hh"
-#include "g4std/strstream"
+#include <strstream>
 #include "G4Dimensions.hh"
 #include "G4VisManager.hh"
 #include "G4VUserDetectorConstruction.hh"

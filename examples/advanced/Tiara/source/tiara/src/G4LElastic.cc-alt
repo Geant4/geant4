@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LElastic.cc-alt,v 1.1.1.1 2003-06-12 13:08:25 dressel Exp $
+// $Id: G4LElastic.cc-alt,v 1.2 2003-06-18 16:40:26 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Physics model class G4LElastic
@@ -171,7 +171,7 @@ G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
    if (verboseLevel > 1)
       G4cout << "rr=" << rr << G4endl;
    G4double cost = 1. - rr;
-   G4double sint = sqrt(G4std::max(rr*(2. - rr), 0.));
+   G4double sint = sqrt(std::max(rr*(2. - rr), 0.));
    if (!(sint > 0.)) return &theParticleChange;
    if (verboseLevel > 1)
       G4cout << "cos(t)=" << cost << "  sin(t)=" << sint << G4endl;

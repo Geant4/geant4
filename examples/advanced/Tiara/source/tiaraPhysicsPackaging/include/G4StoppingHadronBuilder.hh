@@ -3,7 +3,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/vector"
+#include <vector>
 
 
 // At rest processes

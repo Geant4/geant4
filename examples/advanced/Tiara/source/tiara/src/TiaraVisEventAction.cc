@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TiaraVisEventAction.cc,v 1.2 2003-06-13 16:05:33 dressel Exp $
+// $Id: TiaraVisEventAction.cc,v 1.3 2003-06-18 16:40:32 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -98,7 +98,7 @@ void TiaraVisEventAction::EndOfEventAction(const G4Event* evt)
       trj = dynamic_cast<G4Trajectory*>((*trajectoryContainer)[i]);
       if (trj) {
 	G4bool charged(false);
-	charged = G4std::fabs(trj->GetCharge()) > 0;
+	charged = std::fabs(trj->GetCharge()) > 0;
 	DrawTrajectory(*trj);
       }
       else {

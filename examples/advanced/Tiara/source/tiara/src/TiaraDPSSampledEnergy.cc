@@ -1,4 +1,4 @@
-// $Id: TiaraDPSSampledEnergy.cc,v 1.3 2003-06-16 17:06:48 dressel Exp $
+// $Id: TiaraDPSSampledEnergy.cc,v 1.4 2003-06-18 16:40:28 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -107,9 +107,9 @@ G4double TiaraDPSSampledEnergy::GetEnergy() {
 }
 
 void TiaraDPSSampledEnergy::getBounds(G4int &cL, G4int &cH, G4double v) {
-  G4std::map<int, double>::iterator itH = fEnergy_Flux.upper_bound(v);
+  std::map<int, double>::iterator itH = fEnergy_Flux.upper_bound(v);
   cH = itH->first;
-  G4std::map<int, double>::iterator itL = --itH;
+  std::map<int, double>::iterator itL = --itH;
   cL = itL->first;
 }
 

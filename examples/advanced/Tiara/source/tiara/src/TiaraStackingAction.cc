@@ -1,4 +1,4 @@
-// $Id: TiaraStackingAction.cc,v 1.2 2003-06-16 17:06:48 dressel Exp $
+// $Id: TiaraStackingAction.cc,v 1.3 2003-06-18 16:40:32 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -37,7 +37,7 @@ TiaraStackingAction::ClassifyNewTrack(const G4Track* aTrack) {
   else {
     G4ParticleDefinition* pParticle = aTrack->GetDefinition();
     G4String pName = pParticle->GetParticleName();
-    G4std::map<G4String, G4double>::const_iterator itP = 
+    std::map<G4String, G4double>::const_iterator itP = 
       fParticleCut.find(pName);
     if (itP != fParticleCut.end()) {
       if (kinEnergy < itP->second) {

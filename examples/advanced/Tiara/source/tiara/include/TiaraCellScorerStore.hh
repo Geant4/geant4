@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TiaraCellScorerStore.hh,v 1.1.1.1 2003-06-12 13:08:24 dressel Exp $
+// $Id: TiaraCellScorerStore.hh,v 1.2 2003-06-18 16:40:23 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -42,7 +42,7 @@
 #ifndef TiaraCellScorerStore_hh
 #define TiaraCellScorerStore_hh TiaraCellScorerStore_hh
 
-#include "g4std/map"
+#include <map>
 #include "G4GeometryCell.hh"
 #include "G4GeometryCellComp.hh"
 
@@ -54,9 +54,9 @@ class G4CellScorer;
 class IHistogram1D;
 class TiaraCellScorer;
 
-//typedef G4std::map<G4GeometryCell, G4CellScorer *, G4GeometryCellComp> G4MapGeometryCellCellScorer;
+//typedef std::map<G4GeometryCell, G4CellScorer *, G4GeometryCellComp> G4MapGeometryCellCellScorer;
 
-typedef G4std::map<G4GeometryCell,TiaraCellScorer  *, G4GeometryCellComp> TiaraMapGeometryCellTiaraCellScorer;
+typedef std::map<G4GeometryCell,TiaraCellScorer  *, G4GeometryCellComp> TiaraMapGeometryCellTiaraCellScorer;
 
 class TiaraCellScorerStore : public G4VCellScorerStore {
 public:

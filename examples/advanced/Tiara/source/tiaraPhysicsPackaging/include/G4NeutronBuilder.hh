@@ -9,7 +9,7 @@
 #include "G4NeutronInelasticProcess.hh"
 #include "G4VNeutronBuilder.hh"
 
-#include "g4std/vector"
+#include <vector>
 
 class G4NeutronBuilder
 {
@@ -27,7 +27,7 @@ class G4NeutronBuilder
     G4HadronFissionProcess theNeutronFission;
     G4HadronCaptureProcess  theNeutronCapture;
     
-    G4std::vector<G4VNeutronBuilder *> theModelCollections;
+    std::vector<G4VNeutronBuilder *> theModelCollections;
 
 };
 

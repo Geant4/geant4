@@ -7,7 +7,7 @@
 #include "G4ProtonInelasticProcess.hh"
 #include "G4VPiKBuilder.hh"
 
-#include "g4std/vector"
+#include <vector>
 
 enum G4DataType {no, photon, neutron, radioactive, lowenergy};
 class G4DataQuestionaire

@@ -1,4 +1,4 @@
-// $Id: TiaraMaterials.hh,v 1.2 2003-06-16 17:06:46 dressel Exp $
+// $Id: TiaraMaterials.hh,v 1.3 2003-06-18 16:40:23 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -10,13 +10,13 @@
 #define TiaraMaterials_hh TiaraMaterials_hh
 
 #include "globals.hh"
-#include "g4std/map"
+#include <map>
 
 class G4Material;
 class G4Element;
 
-typedef G4std::map< G4String , G4Element* > TiaraMapSymbolElement;
-typedef G4std::map< G4String, G4Material* > TiaraMapNameMaterial;
+typedef std::map< G4String , G4Element* > TiaraMapSymbolElement;
+typedef std::map< G4String, G4Material* > TiaraMapNameMaterial;
 
 class TiaraMaterials{
 public:

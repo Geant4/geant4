@@ -1,4 +1,4 @@
-// $Id: TiaraSim.hh,v 1.2 2003-06-16 17:06:46 dressel Exp $
+// $Id: TiaraSim.hh,v 1.3 2003-06-18 16:40:24 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -9,7 +9,7 @@
 #ifndef TiaraSim_hh
 #define TiaraSim_hh TiaraSim_hh
 #include "G4UIterminal.hh"
-#include "g4std/map"
+#include <map>
 #include <string>
 #include "G4ProcessPlacer.hh"
 
@@ -50,8 +50,8 @@ private:
   G4VUserPrimaryGeneratorAction *fPrimary;
   G4VUserPhysicsList *fPhysics;
 
-  G4std::vector<TiaraEnergyCutProcess *> fCutProcessVector;
-  G4std::vector<G4ProcessPlacer> fPlacers;
+  std::vector<TiaraEnergyCutProcess *> fCutProcessVector;
+  std::vector<G4ProcessPlacer> fPlacers;
 
   TiaraStackingAction *fStackingAction;
   G4UserEventAction *fUserEventAction;

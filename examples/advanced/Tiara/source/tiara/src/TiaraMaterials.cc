@@ -1,4 +1,4 @@
-// $Id: TiaraMaterials.cc,v 1.2 2003-06-16 17:06:48 dressel Exp $
+// $Id: TiaraMaterials.cc,v 1.3 2003-06-18 16:40:30 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -77,7 +77,7 @@ void TiaraMaterials::FillElementMap(const G4String &name,
 }
 
 G4Material *TiaraMaterials::CreateMCNPConcrete(){
-  typedef G4std::map< G4Element* , G4double > TiaraMapElementFraction;
+  typedef std::map< G4Element* , G4double > TiaraMapElementFraction;
 
   TiaraMapElementFraction concreteFractions; 
   concreteFractions[fMapSymbolElement["H"]] = 0.01;
@@ -105,7 +105,7 @@ G4Material *TiaraMaterials::CreateMCNPConcrete(){
 }
 
 G4Material *TiaraMaterials::CreateConcrete(){
-  typedef G4std::map< G4Element* , G4double > TiaraMapElementFraction;
+  typedef std::map< G4Element* , G4double > TiaraMapElementFraction;
 
   TiaraMapElementFraction concreteFractions; 
   concreteFractions[fMapSymbolElement["H"]] = 0.010853422;

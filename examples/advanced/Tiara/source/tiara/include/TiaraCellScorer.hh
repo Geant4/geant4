@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TiaraCellScorer.hh,v 1.2 2003-06-13 16:05:33 dressel Exp $
+// $Id: TiaraCellScorer.hh,v 1.3 2003-06-18 16:40:23 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -43,7 +43,7 @@
 #include "G4CellScorer.hh"
 #include "G4VCellScorer.hh"
 
-#include "g4std/vector"
+#include <vector>
 
 #ifdef G4ANALYSIS_USE
 #include "AIDA/AIDA.h"
@@ -57,8 +57,8 @@ public:
 #ifdef G4ANALYSIS_USE
   TiaraCellScorer(AIDA::IHistogramFactory *hf,
 		  const G4String &histBaseName,
-		  const G4std::vector<double>  & binEdgesScinti,
-		  const G4std::vector<double>  & binEdgesBonner,
+		  const std::vector<double>  & binEdgesScinti,
+		  const std::vector<double>  & binEdgesBonner,
 		  const TiaraTally &tally);
 #else
   TiaraCellScorer(const G4String &histBaseName,

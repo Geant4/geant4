@@ -1,9 +1,9 @@
-// $Id: TiaraSim.cc,v 1.2 2003-06-16 17:06:48 dressel Exp $
+// $Id: TiaraSim.cc,v 1.3 2003-06-18 16:40:31 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "TiaraSim.hh"
-#include "g4std/iostream"
+#include <iostream>
 
 #include "CLHEP/Random/Random.h"
 

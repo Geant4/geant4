@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TiaraCellScorer.cc-Smeared,v 1.1.1.1 2003-06-12 13:08:25 dressel Exp $
+// $Id: TiaraCellScorer.cc-Smeared,v 1.2 2003-06-18 16:40:28 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -41,9 +41,9 @@
 
 TiaraCellScorer::TiaraCellScorer(AIDA::IHistogramFactory *hf,
 				 const G4String &histBaseName,
-				 const G4std::vector<double> 
+				 const std::vector<double> 
 				 &binEdgesScinti,
-				 const G4std::vector<double> 
+				 const std::vector<double> 
 				 &binEdgesBonner,
 				 const TiaraTally &tally) :
   fBaseName(histBaseName),
@@ -118,7 +118,7 @@ void TiaraCellScorer::FillHisto(const G4Step &aStep){
 
 
   if (fDataStream.is_open()) {
-    fDataStream << G4std::scientific << G4std::setprecision(4)
+    fDataStream << std::scientific << std::setprecision(4)
 		<< e << " " << sl << " " << w << "\n";
   }
   

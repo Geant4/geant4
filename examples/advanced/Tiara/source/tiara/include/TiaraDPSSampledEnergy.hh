@@ -1,4 +1,4 @@
-// $Id: TiaraDPSSampledEnergy.hh,v 1.3 2003-06-16 17:06:45 dressel Exp $
+// $Id: TiaraDPSSampledEnergy.hh,v 1.4 2003-06-18 16:40:23 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -13,7 +13,7 @@
 
 #include "TiaraVSourceEnergyGenerator.hh"
 #include <memory>
-#include "g4std/map"
+#include <map>
 
 namespace AIDA {
   class IDataPointSet;
@@ -42,7 +42,7 @@ private:
   std::auto_ptr<AIDA::ITree> fTree;
   std::auto_ptr<AIDA::IDataPointSet> fSampleDPS;
   G4double fMinEnergyCut;
-  G4std::map<int, double> fEnergy_Flux;
+  std::map<int, double> fEnergy_Flux;
   G4double fMaxProb;
   G4double fMinE;
   G4double fMaxE;

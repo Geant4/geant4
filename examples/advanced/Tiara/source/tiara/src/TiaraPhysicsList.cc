@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: TiaraPhysicsList.cc,v 1.1.1.1 2003-06-12 13:08:25 dressel Exp $
+// $Id: TiaraPhysicsList.cc,v 1.2 2003-06-18 16:40:30 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "globals.hh"
-#include "g4std/iomanip"                
+#include <iomanip>                
 
 #include "TiaraPhysicsList.hh"
 #include "G4ParticleDefinition.hh"

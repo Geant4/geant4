@@ -23,7 +23,7 @@
 //
 #ifndef TiaraStackingAction_h
 #define TiaraStackingAction_h
-#include "g4std/map"
+#include <map>
 #include "globals.hh"
 #include "G4UserStackingAction.hh"
 
@@ -37,7 +37,7 @@ public:
   void AddParticleCut(const G4String &particle, G4double cut);
  
 private:
-  G4std::map<G4String, G4double> fParticleCut;
+  std::map<G4String, G4double> fParticleCut;
   G4double fMinEnergyCut;
 };
 
