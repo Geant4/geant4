@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Sc01DetectorConstruction.cc,v 1.6 2005-01-12 07:59:27 grichine Exp $
+// $Id: Sc01DetectorConstruction.cc,v 1.7 2005-03-18 15:42:43 link Exp $
 // 
 //  GEANT 4 class header file 
 //
@@ -212,6 +212,23 @@ Sc01DetectorConstruction::SelectDetector( const G4String& val )
   {
     aVolume = new G4TwistedTrap("aTwistedTrap",40*deg,5*cm,7*cm,8*cm,15*cm);
   }
+  else if ( val == "TwistedTrap2") 
+  {
+    aVolume = new G4TwistedTrap("aTwistedTrap2",
+				20*deg,    // twist angle
+				80*cm,         // half z length
+				10*deg,      // direction between end planes
+				40*deg,        // defined by polar and azimutal angles.
+				8*cm,        // half y length at -pDz
+				11*cm,        // half x length at -pDz,-pDy
+				16*cm,        // half x length at -pDz,+pDy
+				8*cm,        // half y length at +pDz
+				11*cm,         // half x length at +pDz,-pDy
+				16*cm,        // half x length at +pDz,+pDy
+				-50*deg        // tilt angle at +pDz
+				) ;
+  }
+
   else
   {
     G4Exception("Sc01DetectorConstruction::SelectDetector() - Invalid shape!");

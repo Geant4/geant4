@@ -23,7 +23,11 @@
 #
 #/mydet/SelectDetector b1Sb2
 #
-/mydet/SelectDetector TwistedBox
+#/mydet/SelectDetector TwistedBox
+#
+#/mydet/SelectDetector TwistedTrap
+#
+/mydet/SelectDetector TwistedTrap2
 #
 /event/printModulo 10000000
 /run/beamOn 100000000
