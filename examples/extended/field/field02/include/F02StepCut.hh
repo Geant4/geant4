@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02StepCut.hh,v 1.2 2001-07-11 09:58:03 gunter Exp $
+// $Id: F02StepCut.hh,v 1.3 2001-10-15 17:20:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -95,7 +95,7 @@ inline G4double F02StepCut::PostStepGetPhysicalInteractionLength(
    G4double ProposedStep = DBL_MAX;
 
    if((MaxChargedStep > 0.) &&
-      (aTrack.GetVolume() != NULL) &&
+      (aTrack.GetVolume() != 0) &&
       (aTrack.GetVolume()->GetName() == "Absorber") &&
       (aTrack.GetDynamicParticle()->GetDefinition()->GetPDGCharge() != 0.))
         ProposedStep = MaxChargedStep ;

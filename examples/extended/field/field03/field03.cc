@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: field03.cc,v 1.2 2001-07-11 09:58:04 gunter Exp $
+// $Id: field03.cc,v 1.3 2001-10-15 17:20:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
-//      GEANT 4 - TestF01 
+//      GEANT 4 - Example F03
 //
 // --------------------------------------------------------------
 // Comments
@@ -63,13 +63,15 @@ int main(int argc,char** argv)
 
   G4VSteppingVerbose::SetInstance(new F03SteppingVerbose);
   
-  F03ElectroMagneticField* field = new F03ElectroMagneticField() ;
-    
   // Construct the default run manager
 
   G4RunManager * runManager = new G4RunManager;
 
-  // set mandatory initialization classes
+  // Construct the electromagnetic field
+
+  F03ElectroMagneticField* field = new F03ElectroMagneticField() ;
+    
+  // Set mandatory initialization classes
 
   F03DetectorConstruction* detector;
   detector = new F03DetectorConstruction;
@@ -85,7 +87,7 @@ int main(int argc,char** argv)
 
 #endif 
  
-  // set user action classes
+  // Set user action classes
 
   runManager->SetUserAction(new F03PrimaryGeneratorAction(detector));
 
@@ -102,18 +104,17 @@ int main(int argc,char** argv)
                                                             runAction);
   runManager->SetUserAction(steppingAction);
   
-  //Initialize G4 kernel, physics tables ...
+  // Initialize G4 kernel, physics tables ...
 
   runManager->Initialize();
     
-  // get the pointer to the User Interface manager 
+  // Get the pointer to the User Interface manager 
 
   G4UImanager* UI = G4UImanager::GetUIpointer();  
  
   if (argc==1)   // Define UI terminal for interactive mode  
   { 
      G4UIsession * session = new G4UIterminal;
-     UI->ApplyCommand("/control/execute init.mac");    
      session->SessionStart();
      delete session;
   }
@@ -128,7 +129,8 @@ int main(int argc,char** argv)
 
 #ifdef G4VIS_USE
   delete visManager;
-#endif  
+#endif
+  delete field;
   delete runManager;
 
   return 0;

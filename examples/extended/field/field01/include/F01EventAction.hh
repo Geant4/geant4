@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01EventAction.hh,v 1.2 2001-07-11 09:57:59 gunter Exp $
+// $Id: F01EventAction.hh,v 1.3 2001-10-15 17:20:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,7 +48,8 @@ class F01EventAction : public G4UserEventAction
 
   public:
     void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
+    void EndOfEventAction(const G4Event*);
+
     G4int GetEventno();
     void setEventVerbose(G4int level);
     

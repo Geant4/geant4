@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01ElectroMagneticField.cc,v 1.7 2001-07-11 09:58:00 gunter Exp $
+// $Id: F01ElectroMagneticField.cc,v 1.8 2001-10-15 17:20:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -56,17 +56,12 @@
 //  Constructors:
 
 F01ElectroMagneticField::F01ElectroMagneticField()
-  :  fStepper(NULL),fChordFinder(NULL)
+  : fChordFinder(0), fStepper(0)
 {
   fMagneticField = new G4UniformMagField(
 		       G4ThreeVector(3.3*tesla,
                                      0.0,         // 0.5*tesla,
                                      0.0               ));
-
-  //  G4FieldManager* fieldMgr = G4TransportationManager::GetTransportationManager()
-  //                         ->GetFieldManager();  
-  //  fieldMgr->SetDetectorField(fMagneticField);
-  //  fieldMgr->CreateChordFinder(fMagneticField);
 
   fFieldMessenger = new F01FieldMessenger(this) ;  
  
@@ -81,7 +76,6 @@ F01ElectroMagneticField::F01ElectroMagneticField()
 
   UpdateField();
 
-  //  GetGlobalFieldManager()->CreateChordFinder(this);
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -216,7 +210,7 @@ void F01ElectroMagneticField::SetFieldValue(G4ThreeVector fieldVector)
     // If the new field's value is Zero, then it is best to
     //  insure that it is not used for propagation.
 
-    G4MagneticField* fMagneticField = NULL;
+    G4MagneticField* fMagneticField = 0;
     fieldMgr->SetDetectorField(fMagneticField);
   }
 }
@@ -230,7 +224,3 @@ G4FieldManager*  F01ElectroMagneticField::GetGlobalFieldManager()
   return G4TransportationManager::GetTransportationManager()
 	                        ->GetFieldManager();
 }
-    
-
-
-

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02SteppingVerbose.cc,v 1.3 2001-10-11 14:17:51 grichine Exp $
+// $Id: F02SteppingVerbose.cc,v 1.4 2001-10-15 17:20:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -95,7 +95,7 @@ void F02SteppingVerbose::StepInfo()
       G4cout << G4std::setw(10) << "OutOfWorld";
     }
 
-    if(fStep->GetPostStepPoint()->GetProcessDefinedStep() != NULL){
+    if(fStep->GetPostStepPoint()->GetProcessDefinedStep() != 0){
       G4cout << G4std::setw(10) << fStep->GetPostStepPoint()->GetProcessDefinedStep()
 	->GetProcessName();
     } else {
@@ -115,26 +115,8 @@ void F02SteppingVerbose::StepInfo()
 	       << ",Along=" << G4std::setw(2) << fN2ndariesAlongStepDoIt
 	       << ",Post="  << G4std::setw(2) << fN2ndariesPostStepDoIt
 	       << "), "
-	  //  << "#SpawnTotal=" << G4std::setw(3) << (*fSecondary).entries()
 	       << " ---------------"
 	       << G4endl;
-	/*
-	for(G4int lp1=(*fSecondary).entries()-tN2ndariesTot; 
-                        lp1<(*fSecondary).entries(); lp1++){
-	  G4cout << "    : "
-		 << G4std::setw(6)
-		 << G4BestUnit((*fSecondary)[lp1]->GetPosition().x(),"Length")
-		 << G4std::setw(6)
-		 << G4BestUnit((*fSecondary)[lp1]->GetPosition().y(),"Length")
-		 << G4std::setw(6)
-		 << G4BestUnit((*fSecondary)[lp1]->GetPosition().z(),"Length")
-		 << G4std::setw(6)
-		 << G4BestUnit((*fSecondary)[lp1]->GetKineticEnergy(),"Energy")
-		 << G4std::setw(10)
-		 << (*fSecondary)[lp1]->GetDefinition()->GetParticleName();
-	  G4cout << G4endl;	
-	}
-	*/         
 	G4cout << "    :-----------------------------"
 	       << "----------------------------------"
 	       << "-- EndOf2ndaries Info ---------------"

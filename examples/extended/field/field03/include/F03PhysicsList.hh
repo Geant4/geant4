@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: F03PhysicsList.hh,v 1.2 2001-07-11 09:58:05 gunter Exp $
+// $Id: F03PhysicsList.hh,v 1.3 2001-10-15 17:20:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef F03PhysicsList_h
 #define F03PhysicsList_h 1
 
-#include "G4VUserPhysicsList.hh"
 #include "globals.hh"
+#include "G4VUserPhysicsList.hh"
 
 class G4PhotoElectricEffect;
 class G4ComptonScattering;
@@ -128,6 +128,3 @@ class F03PhysicsList: public G4VUserPhysicsList
 };
 
 #endif
-
-
-

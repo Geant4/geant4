@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F03EventAction.cc,v 1.2 2001-07-11 09:58:06 gunter Exp $
+// $Id: F03EventAction.cc,v 1.3 2001-10-15 17:20:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,8 +35,6 @@
 
 #include "F03CalorHit.hh"
 #include "F03EventActionMessenger.hh"
-
-#include "g4rw/tvordvec.h"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
@@ -54,8 +52,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 F03EventAction::F03EventAction(F03RunAction* F03RA)
-:calorimeterCollID(-1),eventMessenger(NULL),
- verboselevel(0),runaction(F03RA),drawFlag("all"),printModulo(10000)
+ : calorimeterCollID(-1), eventMessenger(0),
+   runaction(F03RA), verboselevel(0),
+   drawFlag("all"), printModulo(10000)
 {
   eventMessenger = new F03EventActionMessenger(this);
 }
@@ -100,19 +99,14 @@ void F03EventAction::BeginOfEventAction(const G4Event* evt)
 void F03EventAction::EndOfEventAction(const G4Event* evt)
 {
   G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
-  F03CalorHitsCollection* CHC = NULL;
-  if (HCE)
-      CHC = (F03CalorHitsCollection*)(HCE->GetHC(calorimeterCollID));
+  F03CalorHitsCollection* CHC = 0;
+  if (HCE)  CHC = (F03CalorHitsCollection*)(HCE->GetHC(calorimeterCollID));
 
   if (CHC)
-   {
-    int n_hit = CHC->entries();
-   // if(verboselevel==2)
-   // G4cout << "     " << n_hit
-   //      << " hits are stored in F03CalorHitsCollection." << G4endl;
-
+  {
+    G4int n_hit = CHC->entries();
     G4double totEAbs=0, totLAbs=0;
-    for (int i=0;i<n_hit;i++)
+    for (G4int i=0;i<n_hit;i++)
       { totEAbs += (*CHC)[i]->GetEdepAbs(); 
         totLAbs += (*CHC)[i]->GetTrakAbs();
       }
@@ -135,10 +129,7 @@ void F03EventAction::EndOfEventAction(const G4Event* evt)
     runaction->AddEP(NE,NP);
     runaction->AddTrRef(Transmitted,Reflected) ;
     runaction->AddEdeps(totEAbs) ;
-    runaction->FillEn(totEAbs) ;
-
     nstep=nstepCharged+nstepNeutral ;
-    runaction->FillNbOfSteps(nstep);
   }
   
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
@@ -245,5 +236,3 @@ void F03EventAction::SetRef()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
-

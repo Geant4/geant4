@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F03FieldMessenger.cc,v 1.2 2001-07-11 09:58:06 gunter Exp $
+// $Id: F03FieldMessenger.cc,v 1.3 2001-10-15 17:20:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,7 +38,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 F03FieldMessenger::F03FieldMessenger(F03ElectroMagneticField* pEMfield)
-  :fEMfield(pEMfield)
+  : fEMfield(pEMfield)
 { 
   F03detDir = new G4UIdirectory("/field/");
   F03detDir->SetGuidance("F03 field tracking control.");
@@ -119,30 +119,3 @@ void F03FieldMessenger::SetNewValue( G4UIcommand* command, G4String newValue)
 //
 //
 /////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

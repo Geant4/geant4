@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F03SteppingAction.cc,v 1.2 2001-07-11 09:58:07 gunter Exp $
+// $Id: F03SteppingAction.cc,v 1.3 2001-10-15 17:20:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,8 +49,8 @@
 F03SteppingAction::F03SteppingAction(F03DetectorConstruction* DET,
                                      F03EventAction* EA,
                                      F03RunAction* RA)
-:detector (DET),eventaction (EA),runaction (RA),steppingMessenger(NULL),
- IDold(-1) ,evnoold(-1)
+  : detector(DET), eventaction(EA), runaction(RA),
+    steppingMessenger(0), IDold(-1)
 {
   steppingMessenger = new F03SteppingMessenger(this);
 }
@@ -60,15 +60,12 @@ F03SteppingAction::F03SteppingAction(F03DetectorConstruction* DET,
 F03SteppingAction::~F03SteppingAction()
 {
   delete steppingMessenger ;
- }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void F03SteppingAction::UserSteppingAction(const G4Step* aStep)
 { 
-
-  G4double Edep,Theta,Thetaback,Ttrans,Tback,Tsec,Egamma,xend,yend,zend,rend ;
-  G4double Tkin ;
   G4int evno = eventaction->GetEventno() ; 
 
   IDnow = evno+10000*(aStep->GetTrack()->GetTrackID())+
@@ -76,19 +73,6 @@ void F03SteppingAction::UserSteppingAction(const G4Step* aStep)
   if(IDnow != IDold)
   {
    IDold=IDnow ;
-   if(
-      (((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-        GetParticleName()) == "e-") &&
-       ((aStep->GetTrack()->GetTrackID() != 1) ||
-       (aStep->GetTrack()->GetParentID() != 0)) )
-       ||
-      (((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-        GetParticleName()) == "e+") &&
-       ((aStep->GetTrack()->GetTrackID() != 1) ||
-       (aStep->GetTrack()->GetParentID() != 0)) )
-     )
-        runaction->Fillvertexz(aStep->GetTrack()->GetVertexPosition().x());
-
    if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Absorber")
    {
     if(((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
@@ -98,9 +82,6 @@ void F03SteppingAction::UserSteppingAction(const G4Step* aStep)
     {
         eventaction->AddCharged() ;
         eventaction->AddE() ;
-        Tsec = aStep->GetTrack()->GetKineticEnergy() ;  // !!!!!!!!!!!!
-        Tsec += aStep->GetTotalEnergyDeposit() ;        // !!!!!!!!!!!!
-        runaction->FillTsec(Tsec) ;
     }
     else
     if(((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
@@ -110,9 +91,6 @@ void F03SteppingAction::UserSteppingAction(const G4Step* aStep)
     {
         eventaction->AddCharged() ;
         eventaction->AddP() ;
-        Tsec = aStep->GetTrack()->GetKineticEnergy() ;  // !!!!!!!!!!!!
-        Tsec += aStep->GetTotalEnergyDeposit() ;        // !!!!!!!!!!!!
-        runaction->FillTsec(Tsec) ;
     }
     else
     if(((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
@@ -155,14 +133,6 @@ void F03SteppingAction::UserSteppingAction(const G4Step* aStep)
                                                         )
      {
        eventaction->SetTr();
-       Theta = acos(aStep->GetTrack()->GetMomentumDirection().x()) ;
-       runaction->FillTh(Theta) ;
-       Ttrans = aStep->GetTrack()->GetKineticEnergy() ;
-       runaction->FillTt(Ttrans) ;
-       yend= aStep->GetTrack()->GetPosition().y() ;
-       xend= aStep->GetTrack()->GetPosition().x() ;
-       rend = sqrt(yend*yend+xend*xend) ;
-       runaction->FillR(rend);
      }
        
   if (
@@ -180,29 +150,7 @@ void F03SteppingAction::UserSteppingAction(const G4Step* aStep)
                                                         )
      {
        eventaction->SetRef();
-       Thetaback = acos(aStep->GetTrack()->GetMomentumDirection().x()) ;
-       Thetaback -= 0.5*pi ;
-       runaction->FillThBack(Thetaback) ;
-       Tback  = aStep->GetTrack()->GetKineticEnergy() ;
-       runaction->FillTb(Tback) ;
      }
- 
-
-  if (
-      ((aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Absorber") &&
-      (aStep->GetTrack()->GetNextVolume()->GetName()=="World") &&
-      (aStep->GetPostStepPoint()->GetProcessDefinedStep()
-               ->GetProcessName() == "Transportation") &&
-      (aStep->GetTrack()->GetMomentumDirection().x()>0.) &&
-      (aStep->GetTrack()->GetDynamicParticle()->GetDefinition()
-       ->GetParticleName() == "gamma"))
-     )
-     {
-       Egamma = aStep->GetTrack()->GetKineticEnergy() ;
-       runaction->FillGammaSpectrum(Egamma) ;
-     }
-      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F03SteppingVerbose.cc,v 1.2 2001-07-11 09:58:08 gunter Exp $
+// $Id: F03SteppingVerbose.cc,v 1.3 2001-10-15 17:20:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -79,14 +79,13 @@ void F03SteppingVerbose::StepInfo()
 	   << G4std::setw(10) << G4BestUnit(fStep->GetStepLength(),"Length")
 	   << G4std::setw(10) << G4BestUnit(fTrack->GetTrackLength(),"Length");
 
-    // if( fStepStatus != fWorldBoundary){ 
     if( fTrack->GetNextVolume() != 0 ) { 
       G4cout << G4std::setw(10) << fTrack->GetVolume()->GetName();
     } else {
       G4cout << G4std::setw(10) << "OutOfWorld";
     }
 
-    if(fStep->GetPostStepPoint()->GetProcessDefinedStep() != NULL){
+    if(fStep->GetPostStepPoint()->GetProcessDefinedStep() != 0){
       G4cout << "  " 
              << G4std::setw(10) << fStep->GetPostStepPoint()->GetProcessDefinedStep()
 	                                ->GetProcessName();
@@ -115,8 +114,8 @@ void F03SteppingVerbose::StepInfo()
 	       << " ---------------"
 	       << G4endl;
 
-	for(G4int lp1=(*fSecondary).size()-tN2ndariesTot; 
-                        lp1<(*fSecondary).size(); lp1++){
+	for(size_t lp1=(*fSecondary).size()-tN2ndariesTot; 
+                   lp1<(*fSecondary).size(); lp1++){
 	  G4cout << "    : "
 		 << G4std::setw(6)
 		 << G4BestUnit((*fSecondary)[lp1]->GetPosition().x(),"Length")

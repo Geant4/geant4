@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02CalorimeterSD.hh,v 1.2 2001-07-11 09:58:01 gunter Exp $
+// $Id: F02CalorimeterSD.hh,v 1.3 2001-10-15 17:20:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,13 +32,13 @@
 #ifndef F02CalorimeterSD_h
 #define F02CalorimeterSD_h 1
 
-#include "G4VSensitiveDetector.hh"
 #include "globals.hh"
+#include "G4VSensitiveDetector.hh"
+#include "F02CalorHit.hh"
 
 class F02DetectorConstruction;
 class G4HCofThisEvent;
 class G4Step;
-#include "F02CalorHit.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

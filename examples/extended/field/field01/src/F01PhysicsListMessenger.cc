@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01PhysicsListMessenger.cc,v 1.2 2001-07-11 09:58:00 gunter Exp $
+// $Id: F01PhysicsListMessenger.cc,v 1.3 2001-10-15 17:20:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 F01PhysicsListMessenger::F01PhysicsListMessenger(F01PhysicsList * List)
-:F01List(List)
+  : F01List(List)
 {
   cutGCmd = new G4UIcmdWithADoubleAndUnit("/calor/cutG",this);
   cutGCmd->SetGuidance("Set cut values by RANGE for Gamma.");

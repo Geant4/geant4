@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02ElectroMagneticField.cc,v 1.3 2001-07-11 09:58:03 gunter Exp $
+// $Id: F02ElectroMagneticField.cc,v 1.4 2001-10-15 17:20:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -59,32 +59,25 @@
 //  Constructors:
 
 F02ElectroMagneticField::F02ElectroMagneticField()
-  :  fStepper(NULL),fChordFinder(NULL),G4UniformElectricField(
-                 G4ThreeVector(0.0,100000.0*kilovolt/cm,0.0))
+  : G4UniformElectricField(G4ThreeVector(0.0,100000.0*kilovolt/cm,0.0)),
+    fChordFinder(0), fStepper(0)
 {
   fEMfield = new G4UniformElectricField(
                  G4ThreeVector(0.0,100000.0*kilovolt/cm,0.0));
-
   fFieldMessenger = new F02FieldMessenger(this) ;  
- 
   fEquation = new G4EqMagElectricField(fEMfield); 
- 
   fMinStep     = 1.0*mm ; // minimal step of 1 mm is default
-
   fStepperType = 4 ;      // ClassicalRK4 is default stepper
 
-  fFieldManager = G4TransportationManager::GetTransportationManager()
-                                         ->GetFieldManager();
-
+  fFieldManager = GetGlobalFieldManager();
   UpdateField();
 
-  //  GetGlobalFieldManager()->CreateChordFinder(this);
 }
 
 /////////////////////////////////////////////////////////////////////////////////
 
-F02ElectroMagneticField::F02ElectroMagneticField(G4ThreeVector pFV):
-G4UniformElectricField(pFV)
+F02ElectroMagneticField::F02ElectroMagneticField(G4ThreeVector pFV)
+  : G4UniformElectricField(pFV)
 {    
   fEMfield = new G4UniformElectricField(pFV);
   GetGlobalFieldManager()->CreateChordFinder(this);
@@ -94,11 +87,9 @@ G4UniformElectricField(pFV)
 
 F02ElectroMagneticField::~F02ElectroMagneticField()
 {
-  // GetGlobalFieldManager()->SetDetectorField(0);
-
-  if(fEMfield) delete fEMfield;
-  if(fChordFinder)   delete fChordFinder;
-  if(fStepper)       delete fStepper;
+  if(fEMfield)     delete fEMfield;
+  if(fChordFinder) delete fChordFinder;
+  if(fStepper)     delete fStepper;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -112,14 +103,9 @@ void F02ElectroMagneticField::UpdateField()
   G4cout<<"The minimal step is equal to "<<fMinStep/mm<<" mm"<<G4endl ;
 
   fFieldManager->SetDetectorField(fEMfield );
-
   if(fChordFinder) delete fChordFinder;
-
   fChordFinder = new G4ChordFinder( fEMfield, fMinStep,fStepper);
-
   fFieldManager->SetChordFinder( fChordFinder );
-
-  return;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -177,7 +163,6 @@ void F02ElectroMagneticField::SetStepper()
       break;
     default: fStepper = 0;
   }
-  return; 
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -216,7 +201,7 @@ void F02ElectroMagneticField::SetFieldValue(G4ThreeVector fieldVector)
     // If the new field's value is Zero, then it is best to
     //  insure that it is not used for propagation.
 
-    G4MagneticField* fEMfield = NULL;
+    G4MagneticField* fEMfield = 0;
     fieldMgr->SetDetectorField(fEMfield);
   }
 }
@@ -228,15 +213,5 @@ void F02ElectroMagneticField::SetFieldValue(G4ThreeVector fieldVector)
 G4FieldManager*  F02ElectroMagneticField::GetGlobalFieldManager()
 {
   return G4TransportationManager::GetTransportationManager()
-	                        ->GetFieldManager();
+	 ->GetFieldManager();
 }
-    
-
-
-
-
-
-
-
-
-

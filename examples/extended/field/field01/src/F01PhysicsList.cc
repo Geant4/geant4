@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01PhysicsList.cc,v 1.2 2001-07-11 09:58:00 gunter Exp $
+// $Id: F01PhysicsList.cc,v 1.3 2001-10-15 17:20:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -51,16 +51,13 @@
 //
 
 F01PhysicsList::F01PhysicsList(F01DetectorConstruction* p)
-:  G4VUserPhysicsList(),
- thePhotoElectricEffect(NULL),theComptonScattering(NULL),
- theGammaConversion(NULL),
- theeminusMultipleScattering(NULL),theeminusIonisation(NULL),
- theeminusBremsstrahlung(NULL),
- theeplusMultipleScattering(NULL),theeplusIonisation(NULL),
- theeplusBremsstrahlung(NULL),
- theeplusAnnihilation(NULL),
- theeminusStepCut(NULL),theeplusStepCut(NULL),
- MaxChargedStep(DBL_MAX)
+:  G4VUserPhysicsList(), MaxChargedStep(DBL_MAX),
+   thePhotoElectricEffect(0), theComptonScattering(0), theGammaConversion(0),
+   theeminusMultipleScattering(0), theeminusIonisation(0),
+   theeminusBremsstrahlung(0),
+   theeplusMultipleScattering(0),theeplusIonisation(0),
+   theeplusBremsstrahlung(0), theeplusAnnihilation(0),
+   theeminusStepCut(0),theeplusStepCut(0)
 {
   pDet = p;
 
@@ -498,4 +495,3 @@ void F01PhysicsList::SetMaxStep(G4double step)
   G4cout << " MaxChargedStep=" << MaxChargedStep << G4endl;
   G4cout << G4endl;
 }
-

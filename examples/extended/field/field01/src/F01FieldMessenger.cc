@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01FieldMessenger.cc,v 1.4 2001-07-11 09:58:00 gunter Exp $
+// $Id: F01FieldMessenger.cc,v 1.5 2001-10-15 17:20:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,8 +75,6 @@ F01FieldMessenger::F01FieldMessenger(F01ElectroMagneticField* pEMfield)
   AbsMaterCmd->SetParameterName("choice",true);
   AbsMaterCmd->SetDefaultValue("Xe");
   AbsMaterCmd->AvailableForStates(Idle);
-
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -119,30 +117,3 @@ void F01FieldMessenger::SetNewValue( G4UIcommand* command, G4String newValue)
 //
 //
 /////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

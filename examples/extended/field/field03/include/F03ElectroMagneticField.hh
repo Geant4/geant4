@@ -21,22 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: F03ElectroMagneticField.hh,v 1.2 2001-07-11 09:58:05 gunter Exp $
+// $Id: F03ElectroMagneticField.hh,v 1.3 2001-10-15 17:20:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-//    A class for control of the Magnetic Field of the detector.
+//  A class for control of the Magnetic Field of the detector.
 //  The field is assumed to be uniform.
 // 
-//  $ Id:  $
-
-// Should this be a:
-//    i) messenger
-//   ii) user class that creates the field       ? 
-//  iii) simply a derived class of Uniform field ?  <== I have chosen this now.
-//   iv) a field manager that creates/updates field    (Prefered?)
-//
-
 
 #ifndef F03ElectroMagneticField_H
 #define F03ElectroMagneticField_H
@@ -50,34 +41,35 @@ class G4Mag_UsualEqRhs;
 class G4MagIntegratorStepper;
 class F03FieldMessenger;
 
-class F03ElectroMagneticField: public G4MagneticField
+class F03ElectroMagneticField : public G4MagneticField
 {
-public:
-  F03ElectroMagneticField(G4ThreeVector) ;  //  The value of the field
-  F03ElectroMagneticField() ;               //  A zero field
 
- ~F03ElectroMagneticField() ;  
+public:
+
+  F03ElectroMagneticField() ;               //  A zero field
+  F03ElectroMagneticField(G4ThreeVector) ;  //  The value of the field
+ ~F03ElectroMagneticField() ;
       
   void  GetFieldValue( const  G4double Point[3],
-			      G4double *Bfield ) const {;} ;
+			      G4double *Bfield ) const {;}
   
-  void SetStepperType( G4int i) { fStepperType = i ; } ;
+  void SetStepperType( G4int i) { fStepperType = i ; }
 
   void SetStepper();
 
-  void SetMinStep(G4double s) { fMinStep = s ; } ;
+  void SetMinStep(G4double s) { fMinStep = s ; }
 
   void UpdateField();
 
   void SetFieldValue(G4ThreeVector fieldVector) ;
   void SetFieldValue(G4double      fieldValue) ;
   G4ThreeVector GetConstantFieldValue();
-  G4FieldManager*  GetLocalFieldManager() { return fLocalFieldManager ;};
+  G4FieldManager*  GetLocalFieldManager() { return fLocalFieldManager ;}
+
 protected:
 
-      // Find the global Field Manager
-
-  G4FieldManager*         GetGlobalFieldManager() ;   // static 
+  G4FieldManager*         GetGlobalFieldManager() ;
+    // Returns the global Field Manager
 
   G4FieldManager*         fFieldManager ;
   G4FieldManager*         fLocalFieldManager ;

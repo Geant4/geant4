@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F03SteppingVerbose.hh,v 1.2 2001-07-11 09:58:05 gunter Exp $
+// $Id: F03SteppingVerbose.hh,v 1.3 2001-10-15 17:20:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -40,8 +40,6 @@
 //
 //---------------------------------------------------------------
 
-class F03SteppingVerbose;
-
 #ifndef F03SteppingVerbose_h
 #define F03SteppingVerbose_h 1
 
@@ -50,10 +48,10 @@ class F03SteppingVerbose;
 class F03SteppingVerbose : public G4SteppingVerbose 
 {
   public:   
-         // Constructor/Destructor
 
     F03SteppingVerbose();
    ~F03SteppingVerbose();
+      // Constructor, Destructor
 
     void StepInfo();
     void TrackingStarted();

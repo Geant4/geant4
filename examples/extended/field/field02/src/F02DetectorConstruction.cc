@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02DetectorConstruction.cc,v 1.2 2001-07-11 09:58:03 gunter Exp $
+// $Id: F02DetectorConstruction.cc,v 1.3 2001-10-15 17:20:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,15 +52,12 @@
 //
 
 F02DetectorConstruction::F02DetectorConstruction()
-:solidWorld(NULL),logicWorld(NULL),physiWorld(NULL),
- solidAbsorber(NULL),logicAbsorber(NULL),physiAbsorber(NULL),
- AbsorberMaterial(NULL),WorldMaterial(NULL),fRadiatorMat(NULL),
- magField(NULL),calorimeterSD(NULL),worldchanged(false),fEmField(NULL)
+ : solidWorld(0), logicWorld(0), physiWorld(0),
+   solidAbsorber(0),logicAbsorber(0), physiAbsorber(0),
+   magField(0), fEmField(0), calorimeterSD(0),
+   AbsorberMaterial(0), worldchanged(false), WorldMaterial(0)
 {
   // default parameter values of the calorimeter
-
-  G4double inch = 2.54*cm ;
-  G4double  mil = inch/1000.0 ;
 
   WorldSizeZ = 80.*cm;
   WorldSizeR = 20.*cm;
@@ -69,23 +66,6 @@ F02DetectorConstruction::F02DetectorConstruction()
 
   AbsorberRadius   = 10.*cm;
   zAbsorber = 36.*cm ;
-
-  fWindowThick = 51.0*micrometer ;
-  fElectrodeThick = 10.0*micrometer ;
-  fGapThick = 1.0*mm ;
-
-  fRadThickness = 25*micrometer ;   // 0.5*mil ;   
-  fGasGap       = 1500*micrometer  ;    // 30*mil ;    
-  fFoilNumber   = 188 ;
-
-  fDetThickness = 40.0*mm ;
-  fDetLength    = 200.0*cm  ;
-  fDetGap       = 1.0*mm ;
-
-  fStartR       = 40*cm  ;
-  fStartZ       = 10.0*mm  ;
-
-  fModuleNumber = 1      ;  
 
   // create commands for interactive definition of the calorimeter  
 
@@ -122,14 +102,11 @@ void F02DetectorConstruction::DefineMaterials()
 { 
  //This function illustrates the possible ways to define materials
  
-G4String name, symbol ;             //a=mass of a mole;
-G4double a, z, density ;            //z=mean number of protons;  
-G4int iz, n, nel ;                       //iz=number of protons  in an isotope; 
-                                   // n=number of nucleons in an isotope;
-
-G4int ncomponents, natoms;
-G4double abundance, fractionmass;
-G4double temperature, pressure;
+  G4String name, symbol ;             // a=mass of a mole;
+  G4double a, z, density ;            // z=mean number of protons;  
+  G4int nel;
+  G4int ncomponents;
+  G4double fractionmass;
 
 //
 // define Elements
@@ -150,119 +127,9 @@ G4double temperature, pressure;
   a = 39.948*g/mole;
   G4Element* elAr = new G4Element(name="Argon", symbol="Ar", z=18., a);
 
-  a = 131.29*g/mole;
-  G4Element* elXe = new G4Element(name="Xenon", symbol="Xe", z=54., a);
-  
-  a = 19.00*g/mole;
-  G4Element* elF  = new G4Element(name="Fluorine", symbol="F", z=9., a);
-
-
 //
 // define simple materials
 //
-
-     /* ******************************************************************
-
-density = 1.848*g/cm3;
-a = 9.01*g/mole;
-G4Material* Be = new G4Material(name="Beryllium", z=4., a, density);
-
-
-density = 1.390*g/cm3;
-a = 39.95*g/mole;
-G4Material* lAr = new G4Material(name="liquidArgon", z=18., a, density);
-
-density = 7.870*g/cm3;
-a = 55.85*g/mole;
-G4Material* Fe = new G4Material(name="Iron"   , z=26., a, density);
-
-density = 8.960*g/cm3;
-a = 63.55*g/mole;
-G4Material* Cu = new G4Material(name="Copper"   , z=29., a, density);
-
-density = 19.32*g/cm3;
-a =196.97*g/mole;
-G4Material* Au = new G4Material(name="Gold"   , z=79., a, density);
-
-density = 11.35*g/cm3;
-a = 207.19*g/mole;
-G4Material* Pb = new G4Material(name="Lead"     , z=82., a, density);
-
-//
-// define a material from elements.   case 1: chemical molecule
-//
-
-density = 1.000*g/cm3;
-G4Material* H2O = new G4Material(name="Water", density, ncomponents=2);
-H2O->AddElement(elH, natoms=2);
-H2O->AddElement(elO, natoms=1);
-
-  // Kapton (polyimide) ??? since = Mylar C5H4O2
-
-  density = 1.39*g/cm3;
-  G4Material* Kapton = new G4Material(name="Kapton", density, nel=3);
-  Kapton->AddElement(elO,2);
-  Kapton->AddElement(elC,5);
-  Kapton->AddElement(elH,4);
-
-  // Silicon as detector material
-
-  density = 2.330*g/cm3;
-  a = 28.09*g/mole;
-  G4Material* Si = new G4Material(name="Silicon", z=14., a, density);
-
-  // Carbon dioxide
-
-  density = 1.977*mg/cm3;
-  G4Material* CO2 = new G4Material(name="CO2", density, nel=2,
-				       kStateGas,273.15*kelvin,1.*atmosphere);
-  CO2->AddElement(elC,1);
-  CO2->AddElement(elO,2);
-
-
-  // TRT_CH2
-      
-  density = 0.935*g/cm3;
-  G4Material* TRT_CH2 = new G4Material(name="TRT_CH2",density, nel=2);
-  TRT_CH2->AddElement(elC,1);
-  TRT_CH2->AddElement(elH,2);
-
-  // Radiator
-
-  density = 0.059*g/cm3;
-  G4Material* Radiator = new G4Material(name="Radiator",density, nel=2);
-  Radiator->AddElement(elC,1);
-  Radiator->AddElement(elH,2);
-
-  // Carbon Fiber
-
-  density = 0.145*g/cm3;
-  G4Material* CarbonFiber = new G4Material(name="CarbonFiber",density, nel=1);
-  CarbonFiber->AddElement(elC,1);
-
-  density = 1.290*mg/cm3;  // old air from elements
-  G4Material* air = new G4Material(name="air"  , density, ncomponents=2);
-  Air->AddElement(elN, fractionmass=0.7);
-  Air->AddElement(elO, fractionmass=0.3);
-
-
-  density = 1.25053*mg/cm3 ;       // STP
-  a = 14.01*g/mole ;       // get atomic weight !!!
-  //  a = 28.016*g/mole;
-  G4Material* N2  = new G4Material(name="Nitrogen", z= 7.,a,density) ;
-
-  density = 1.25053*mg/cm3 ;       // STP
-  G4Material* anotherN2 = new G4Material(name="anotherN2", density,ncomponents=2);
-  anotherN2->AddElement(elN, 1);
-  anotherN2->AddElement(elN, 1);
-
-************************ */
-
-  // Al for electrodes
-
-  density = 2.700*g/cm3;
-  a = 26.98*g/mole;
-  G4Material* Al = new G4Material(name="Aluminium", z=13., a, density);
 
   // Mylar
 
@@ -278,21 +145,11 @@ H2O->AddElement(elO, natoms=1);
   CH2->AddElement(elH,2);
   CH2->AddElement(elC,1);
 
-
-
   // Krypton as detector gas, STP
 
   density = 3.700*mg/cm3 ;
   a = 83.80*g/mole ;
   G4Material* Kr  = new G4Material(name="Kr",z=36., a, density );
-
-  // Metane, STP
-
-  //  density = 0.7174*mg/cm3 ;
-  //  G4Material* metane = new G4Material(name="CH4",density,nel=2) ;
-  //  metane->AddElement(elC,1) ;
-  //  metane->AddElement(elH,4) ;
-
 
   // Dry air (average composition)
 
@@ -315,53 +172,6 @@ H2O->AddElement(elO, natoms=1);
   Air->AddMaterial( Oxygen,   fractionmass = 0.2315 ) ;
   Air->AddMaterial( Argon,    fractionmass = 0.0128 ) ;
 
-  // 93% Ar + 7% CH4, STP
-
-  //  density = 1.709*mg/cm3 ;      
-  //  G4Material* Ar7CH4 = new G4Material(name="Ar7CH4"  , density, 
-  //                                                           ncomponents=2);
-  //  Ar7CH4->AddMaterial( Argon,    fractionmass = 0.971 ) ;
-  //  Ar7CH4->AddMaterial( metane,   fractionmass = 0.029 ) ;
-
-  // 93% Kr + 7% CH4, STP
-
-  //  density = 3.491*mg/cm3 ;      
-  //  G4Material* Kr7CH4 = new G4Material(name="Kr7CH4"  , density, 
-  //                                                   ncomponents=2);
-  //  Kr7CH4->AddMaterial( Kr,       fractionmass = 0.986 ) ;
-  //  Kr7CH4->AddMaterial( metane,   fractionmass = 0.014 ) ;
-
-  /* **************
-
-  G4double TRT_Xe_density = 5.485*mg/cm3;
-  G4Material* TRT_Xe = new G4Material(name="TRT_Xe", TRT_Xe_density, nel=1,
-				      kStateGas,293.15*kelvin,1.*atmosphere);
-  TRT_Xe->AddElement(elXe,1);
-
-  G4double TRT_CO2_density = 1.842*mg/cm3;
-  G4Material* TRT_CO2 = new G4Material(name="TRT_CO2", TRT_CO2_density, nel=2,
-				       kStateGas,293.15*kelvin,1.*atmosphere);
-  TRT_CO2->AddElement(elC,1);
-  TRT_CO2->AddElement(elO,2);
-
-  G4double TRT_CF4_density = 3.9*mg/cm3;
-  G4Material* TRT_CF4 = new G4Material(name="TRT_CF4", TRT_CF4_density, nel=2,
-                                       kStateGas,293.15*kelvin,1.*atmosphere);
-  TRT_CF4->AddElement(elC,1);
-  TRT_CF4->AddElement(elF,4);
-
-  // ATLAS TRT straw tube gas mixture (20 C, 1 atm)
-
-  G4double XeCO2CF4_density = 4.76*mg/cm3;
-  G4Material* XeCO2CF4 = new G4Material(name="XeCO2CF4", XeCO2CF4_density,
-					ncomponents=3,
-					kStateGas,293.15*kelvin,1.*atmosphere);
-  XeCO2CF4->AddMaterial(TRT_Xe,0.807);
-  XeCO2CF4->AddMaterial(TRT_CO2,0.039);
-  XeCO2CF4->AddMaterial(TRT_CF4,0.154);
-
-  *********** */
-
   // Xenon as detector gas, STP
 
   density = 5.858*mg/cm3 ;
@@ -374,14 +184,6 @@ H2O->AddElement(elO, natoms=1);
   G4Material* CarbonDioxide = new G4Material(name="CO2", density, nel=2);
   CarbonDioxide->AddElement(elC,1);
   CarbonDioxide->AddElement(elO,2);
-
-  // 80% Ar + 20% CO2, STP
-
-//  density = 1.8223*mg/cm3 ;      
-//  G4Material* Ar_80CO2_20 = new G4Material(name="ArCO2"  , density, 
-//                                    ncomponents=2);
-//  Ar_80CO2_20->AddMaterial( Argon,           fractionmass = 0.783 ) ;
-//  Ar_80CO2_20->AddMaterial( CarbonDioxide,   fractionmass = 0.217 ) ;
 
   // 80% Xe + 20% CO2, STP
 
@@ -401,15 +203,7 @@ H2O->AddElement(elO, natoms=1);
 
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
-  //default materials of the calorimeter and TR radiator
-
-  fRadiatorMat =  Mylar ; // CH2 ;   // Mylar ; 
-  
-  fWindowMat = Mylar ;
-  fElectrodeMat = Al ;
-
   AbsorberMaterial = Kr20CO2 ;   // XeCO2CF4  ; 
-  fGapMat          = Kr20CO2 ;
 
   WorldMaterial    = Air ;
 }
@@ -420,9 +214,6 @@ H2O->AddElement(elO, natoms=1);
   
 G4VPhysicalVolume* F02DetectorConstruction::ConstructCalorimeter()
 {
-  G4int i, j ; 
-  G4double zModule, zRadiator, rModule, rRadiator ; 
-
   // complete the Calor parameters definition and Print 
 
   ComputeCalorParameters();
@@ -445,52 +236,9 @@ G4VPhysicalVolume* F02DetectorConstruction::ConstructCalorimeter()
   				 G4ThreeVector(),	//at (0,0,0)
                                  "World",		//its name
                                  logicWorld,		//its logical volume
-                                 NULL,			//its mother  volume
+                                 0,			//its mother  volume
                                  false,			//no boolean operation
-                                 0);			//copy number
-
-  /**************************
-
-  G4Tubs* solidElectrode = new G4Tubs("Electrode",0.,AbsorberRadius,
-                                       fElectrodeThick/2.,0.,twopi); 
-                          
-  G4LogicalVolume* logicElectrode = new G4LogicalVolume(solidElectrode,
-                                        fElectrodeMat, "Electrode"); 
-
-  G4double zElectrode = zAbsorber - AbsorberThickness/2. - 
-                        fElectrodeThick/2. - 0.01*mm;    
-      			                  
-  G4VPhysicalVolume*    physiElectrode = new G4PVPlacement(0,		   
-      		                       G4ThreeVector(0.,0.,zElectrode),        
-                                        "Electrode",logicElectrode,
-                                         physiWorld,false,0);    
-  
-
-
-  G4Tubs* solidGap = new G4Tubs("Gap",0.,AbsorberRadius,fGapThick/2.,0.,twopi); 
-                          
-  G4LogicalVolume* logicGap = new G4LogicalVolume(solidGap,fGapMat, "Gap"); 
-
-  G4double zGap = zElectrode - fElectrodeThick/2. - fGapThick/2. - 0.01*mm ;    
-      			                  
-  G4VPhysicalVolume*    physiGap = new G4PVPlacement(0,		   
-      		                       G4ThreeVector(0.,0.,zGap),        
-                                        "Gap",logicGap,physiWorld,false,0); 
-
-  G4Tubs* solidWindow = new G4Tubs("Window",0.,AbsorberRadius,
-                                    fWindowThick/2.,0.,twopi); 
-                          
-  G4LogicalVolume* logicWindow = new G4LogicalVolume(solidWindow,
-                                     fWindowMat, "Window"); 
-
-  G4double zWindow = zGap - fGapThick/2. - fWindowThick/2. - 0.01*mm ;    
-      			                  
-  G4VPhysicalVolume*    physiWindow = new G4PVPlacement(0,		   
-      		                       G4ThreeVector(0.,0.,zWindow),        
-                                        "Window",logicWindow,physiWorld,false,0); 
-
-  ************ */
-                             
+                                 0);			//copy number                             
   // Absorber
 
   if (AbsorberThickness > 0.) 
@@ -557,12 +305,12 @@ void F02DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
 
   // search the material by its name   
   G4Material* pttoMaterial;
-  for (G4int J=0 ; J<theMaterialTable->length() ; J++)
-   { pttoMaterial = (*theMaterialTable)(J);     
+  for (size_t J=0 ; J<theMaterialTable->size() ; J++)
+   { pttoMaterial = (*theMaterialTable)[J];     
      if(pttoMaterial->GetName() == materialChoice)
-        {AbsorberMaterial = pttoMaterial;
-         logicAbsorber->SetMaterial(pttoMaterial); 
-        // PrintCalorParameters();
+        {
+	  AbsorberMaterial = pttoMaterial;
+          logicAbsorber->SetMaterial(pttoMaterial); 
         }             
    }
 }
@@ -578,12 +326,12 @@ void F02DetectorConstruction::SetWorldMaterial(G4String materialChoice)
 
   // search the material by its name   
   G4Material* pttoMaterial;
-  for (G4int J=0 ; J<theMaterialTable->length() ; J++)
-   { pttoMaterial = (*theMaterialTable)(J);     
+  for (size_t J=0 ; J<theMaterialTable->size() ; J++)
+   { pttoMaterial = (*theMaterialTable)[J];     
      if(pttoMaterial->GetName() == materialChoice)
-        {WorldMaterial = pttoMaterial;
-         logicWorld->SetMaterial(pttoMaterial); 
-       //  PrintCalorParameters();
+        {
+	  WorldMaterial = pttoMaterial;
+          logicWorld->SetMaterial(pttoMaterial); 
         }             
    }
 }
@@ -648,7 +396,7 @@ void F02DetectorConstruction::SetAbsorberZpos(G4double val)
 
 void F02DetectorConstruction::SetMagField(G4double fieldValue)
 {
-  //apply a global uniform magnetic field along X axis
+  // apply a global uniform magnetic field along X axis
 
   /* *********************************************************
 
@@ -665,7 +413,7 @@ void F02DetectorConstruction::SetMagField(G4double fieldValue)
   } 
   else 
   {
-    magField = NULL;
+    magField = 0;
     fieldMgr->SetDetectorField(magField);
   }
 
@@ -673,7 +421,7 @@ void F02DetectorConstruction::SetMagField(G4double fieldValue)
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
 //
 //
   
@@ -685,20 +433,3 @@ void F02DetectorConstruction::UpdateGeometry()
 //
 //
 ////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

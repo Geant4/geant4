@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F03DetectorConstruction.hh,v 1.2 2001-07-11 09:58:05 gunter Exp $
+// $Id: F03DetectorConstruction.hh,v 1.3 2001-10-15 17:20:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -91,73 +91,52 @@ class F03DetectorConstruction : public G4VUserDetectorConstruction
                  
   private:
      
-     G4bool             worldchanged;
-     G4Material*        AbsorberMaterial;
-     G4double           AbsorberThickness;
-     G4double           AbsorberRadius;
+     G4Tubs*            solidWorld;    // pointer to the solid World 
+     G4LogicalVolume*   logicWorld;    // pointer to the logical World
+     G4VPhysicalVolume* physiWorld;    // pointer to the physical World
 
-  G4Material*        fWindowMat ;
-  G4double           fWindowThick ;
-
-  G4Material*        fElectrodeMat ;
-  G4double           fElectrodeThick ;
-
-  G4Material*        fGapMat ;
-  G4double           fGapThick ;
-
- 
-     G4double           zAbsorber ;
-     G4double           zstartAbs , zendAbs ;
+     G4Tubs*            solidAbsorber; // pointer to the solid Absorber
+     G4LogicalVolume*   logicAbsorber; // pointer to the logical Absorber
+     G4VPhysicalVolume* physiAbsorber; // pointer to the physical Absorber
      
-     G4Material*        WorldMaterial;
-     G4double           WorldSizeR;
-     G4double           WorldSizeZ;
-            
-     G4Tubs*             solidWorld;    //pointer to the solid World 
-     G4LogicalVolume*   logicWorld;    //pointer to the logical World
-     G4VPhysicalVolume* physiWorld;    //pointer to the physical World
-
+     G4UniformMagField* magField;      // pointer to the magnetic field
+     F03ElectroMagneticField* fEmField;     
+     F03DetectorMessenger* detectorMessenger;  // pointer to the Messenger
+     F03CalorimeterSD* calorimeterSD;  // pointer to the sensitive detector
+      
   // TR radiator volumes and dimensions
           
      G4Tubs*            fSolidRadSlice;   // pointer to the solid  z-slice 
      G4LogicalVolume*   fLogicRadSlice;   // pointer to the logical z-slide
      G4VPhysicalVolume* fPhysicRadSlice;  // pointer to the physical z-slide
 
-     G4Tubs*            fSolidRadRing;    // pointer to the solid  R-slice 
-     G4LogicalVolume*   fLogicRadRing;    // pointer to the logical R-slide
-     G4VPhysicalVolume* fPhysicRadRing;   // pointer to the physical R-slide
-
-
-     G4Tubs*             solidRadiator;
+     G4Tubs*            solidRadiator;
      G4LogicalVolume*   logicRadiator; 
      G4VPhysicalVolume* physiRadiator;
 
+     G4Material*        AbsorberMaterial;
+     G4double           AbsorberThickness;
+     G4double           AbsorberRadius;
+     G4Material*        fRadiatorMat;     // pointer to the TR radiator material
+     G4bool             worldchanged;
 
-     G4Material* fRadiatorMat;        //pointer to the TR radiator material
+     G4double           zAbsorber ;
+     G4double           zstartAbs , zendAbs ;
+     
+     G4Material*        WorldMaterial;
+     G4double           WorldSizeR;
+     G4double           WorldSizeZ;
 
      G4double fRadThickness ;
      G4double fGasGap       ;
 
      G4int fFoilNumber ;
 
-     G4double fDetThickness ;
-     G4double fDetLength    ;
      G4double fDetGap       ;
 
      G4double fStartR       ;
      G4double fStartZ       ;
 
-     G4int fModuleNumber ;   // the number of Rad-Det modules
-
-     G4Tubs*             solidAbsorber; //pointer to the solid Absorber
-     G4LogicalVolume*   logicAbsorber; //pointer to the logical Absorber
-     G4VPhysicalVolume* physiAbsorber; //pointer to the physical Absorber
-     
-     G4UniformMagField* magField;      //pointer to the magnetic field
-     F03ElectroMagneticField* fEmField;     
-     F03DetectorMessenger* detectorMessenger;  //pointer to the Messenger
-     F03CalorimeterSD* calorimeterSD;  //pointer to the sensitive detector
-      
   private:
     
      void DefineMaterials();
@@ -170,11 +149,6 @@ class F03DetectorConstruction : public G4VUserDetectorConstruction
 inline void F03DetectorConstruction::ComputeCalorParameters()
 {
   // Compute derived parameters of the calorimeter
-     if(!worldchanged)
-     {
-       //  WorldSizeR=2.*AbsorberRadius ;
-       //  WorldSizeZ=2.*AbsorberThickness ;
-     }
      
      zstartAbs = zAbsorber-0.5*AbsorberThickness; 
      zendAbs   = zAbsorber+0.5*AbsorberThickness; 
@@ -182,4 +156,3 @@ inline void F03DetectorConstruction::ComputeCalorParameters()
 }
 
 #endif
-

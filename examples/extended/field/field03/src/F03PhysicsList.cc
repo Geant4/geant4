@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F03PhysicsList.cc,v 1.2 2001-07-11 09:58:06 gunter Exp $
+// $Id: F03PhysicsList.cc,v 1.3 2001-10-15 17:20:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -51,16 +51,13 @@
 //
 
 F03PhysicsList::F03PhysicsList(F03DetectorConstruction* p)
-:  G4VUserPhysicsList(),
- thePhotoElectricEffect(NULL),theComptonScattering(NULL),
- theGammaConversion(NULL),
- theeminusMultipleScattering(NULL),theeminusIonisation(NULL),
- theeminusBremsstrahlung(NULL),
- theeplusMultipleScattering(NULL),theeplusIonisation(NULL),
- theeplusBremsstrahlung(NULL),
- theeplusAnnihilation(NULL),
- theeminusStepCut(NULL),theeplusStepCut(NULL),
- MaxChargedStep(DBL_MAX)
+:  G4VUserPhysicsList(), MaxChargedStep(DBL_MAX),
+   thePhotoElectricEffect(0), theComptonScattering(0), theGammaConversion(0),
+   theeminusMultipleScattering(0), theeminusIonisation(0),
+   theeminusBremsstrahlung(0),
+   theeplusMultipleScattering(0), theeplusIonisation(0),
+   theeplusBremsstrahlung(0), theeplusAnnihilation(0),
+   theeminusStepCut(0), theeplusStepCut(0)
 {
   pDet = p;
 
@@ -220,57 +217,27 @@ void F03PhysicsList::ConstructEM()
     {
       // Construct processes for electron 
 
-      // theeminusMultipleScattering = new G4MultipleScattering();
      theeminusIonisation = new G4eIonisation();
      theeminusBremsstrahlung = new G4eBremsstrahlung();
 
-     //   fPAIonisation = new G4PAIonisation("Xenon") ;
-     // fForwardXrayTR = new G4ForwardXrayTR("Air","Polypropelene","XrayTR") ;
+     theeminusStepCut = new F03StepCut();
 
-      theeminusStepCut = new F03StepCut();
-
-      //  pmanager->AddProcess(theeminusMultipleScattering,-1,1,1);
-
-      pmanager->AddProcess(theeminusIonisation,-1,2,2);
-
-      //  pmanager->AddProcess(new G4IonisationByLogicalVolume(particleName,
-      //                pDet->GetLogicalAbsorber(),
-      //              "IonisationByLogVol"),-1,-1,1);
-
-      pmanager->AddProcess(theeminusBremsstrahlung,-1,1,1); 
-
-       //   pmanager->AddProcess(fPAIonisation,-1,2,2);
- 
-       //  pmanager->AddProcess(fForwardXrayTR,-1,-1,2);
-     
-      pmanager->AddProcess(theeminusStepCut,-1,-1,4);
-      theeminusStepCut->SetMaxStep(MaxChargedStep) ;
+     pmanager->AddProcess(theeminusIonisation,-1,2,2);
+     pmanager->AddProcess(theeminusBremsstrahlung,-1,1,1); 
+     pmanager->AddProcess(theeminusStepCut,-1,-1,4);
+     theeminusStepCut->SetMaxStep(MaxChargedStep) ;
 
     } 
     else if (particleName == "e+") 
     {
       // Construct processes for positron 
 
-      //   theeplusMultipleScattering = new G4MultipleScattering();
       theeplusIonisation = new G4eIonisation();
       theeplusBremsstrahlung = new G4eBremsstrahlung();
-      // theeplusAnnihilation = new G4eplusAnnihilation();
-
-      //  fPAIonisation = new G4PAIonisation("Xenon") ;
-      // fForwardXrayTR = new G4ForwardXrayTR("Air","Polypropelene","XrayTR") ;
-
       theeplusStepCut = new F03StepCut();
       
-      //  pmanager->AddProcess(theeplusMultipleScattering,-1,1,1);
       pmanager->AddProcess(theeplusIonisation,-1,2,2);
       pmanager->AddProcess(theeplusBremsstrahlung,-1,-1,3);
-      //  pmanager->AddProcess(theeplusAnnihilation,0,-1,4); 
-     
-      //  pmanager->AddProcess(fPAIonisation,-1,2,2);
-
-
-      // pmanager->AddProcess(fForwardXrayTR,-1,-1,2);
-
       pmanager->AddProcess(theeplusStepCut,-1,-1,5);
       theeplusStepCut->SetMaxStep(MaxChargedStep) ;
   
@@ -278,20 +245,18 @@ void F03PhysicsList::ConstructEM()
     else if( particleName == "mu+" || 
                particleName == "mu-"    ) 
     {
-     // Construct processes for muon+ 
+      // Construct processes for muon+ 
 
       //  F03StepCut* muonStepCut = new F03StepCut();
 
       // G4MuIonisation* themuIonisation = new G4MuIonisation() ;
-     //  pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
-      //  pmanager->AddProcess(themuIonisation,-1,2,2);
-     //  pmanager->AddProcess(new G4MuBremsstrahlung(),-1,-1,3);
-     //  pmanager->AddProcess(new G4MuPairProduction(),-1,-1,4); 
-      
-      //  pmanager->AddProcess(new G4PAIonisation("Xenon"),-1,2,2) ;
-      //  pmanager->AddProcess( muonStepCut,-1,-1,3);
-      //  muonStepCut->SetMaxStep(MaxChargedStep) ;
-
+      // pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
+      // pmanager->AddProcess(themuIonisation,-1,2,2);
+      // pmanager->AddProcess(new G4MuBremsstrahlung(),-1,-1,3);
+      // pmanager->AddProcess(new G4MuPairProduction(),-1,-1,4); 
+      // pmanager->AddProcess(new G4PAIonisation("Xenon"),-1,2,2) ;
+      // pmanager->AddProcess( muonStepCut,-1,-1,3);
+      // muonStepCut->SetMaxStep(MaxChargedStep) ;
     } 
     else if (
                 particleName == "proton"  
@@ -304,24 +269,11 @@ void F03PhysicsList::ConstructEM()
     {
         F03StepCut* thehadronStepCut = new F03StepCut();
 
-      //  G4hIonisation* thehIonisation = new G4hIonisation() ; 
-      //   G4MultipleScattering* thehMultipleScattering =
-      //                  new G4MultipleScattering() ;
-
         pmanager->AddProcess(new G4IonisationByLogicalVolume(particleName,
                                      pDet->GetLogicalAbsorber(),
                                     "IonisationByLogVolHadr"),-1,2,2);
-
-      //  pmanager->AddProcess(thehMultipleScattering,-1,1,1);
-      //  pmanager->AddProcess(thehIonisation,-1,2,2);
-
-      //  pmanager->AddProcess(new G4PAIonisation("Xenon"),-1,2,2) ;
-      // pmanager->AddProcess(new G4PAIonisation("Argon"),-1,2,2) ;
-      
         pmanager->AddProcess( thehadronStepCut,-1,-1,3);
         thehadronStepCut->SetMaxStep(MaxChargedStep) ;
-      // thehadronStepCut->SetMaxStep(10*mm) ;
-     
     }
   }
 }
@@ -333,7 +285,7 @@ void F03PhysicsList::ConstructGeneral()
 {
   // Add Decay Process
 
-   G4Decay* theDecayProcess = new G4Decay();
+  G4Decay* theDecayProcess = new G4Decay();
   theParticleIterator->reset();
 
   while( (*theParticleIterator)() )
@@ -498,4 +450,3 @@ void F03PhysicsList::SetMaxStep(G4double step)
   G4cout << " MaxChargedStep=" << MaxChargedStep << G4endl;
   G4cout << G4endl;
 }
-

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02CalorimeterSD.cc,v 1.2 2001-07-11 09:58:03 gunter Exp $
+// $Id: F02CalorimeterSD.cc,v 1.3 2001-10-15 17:20:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,7 +46,7 @@
 
 F02CalorimeterSD::F02CalorimeterSD(G4String name,
                                    F02DetectorConstruction* det)
-:G4VSensitiveDetector(name),Detector(det)
+  : G4VSensitiveDetector(name), Detector(det)
 {
   collectionName.insert("CalCollection");
   HitID = new G4int[500];
@@ -63,9 +63,12 @@ F02CalorimeterSD::~F02CalorimeterSD()
 
 void F02CalorimeterSD::Initialize(G4HCofThisEvent*HCE)
 {
-  CalCollection = new F02CalorHitsCollection
-                      (SensitiveDetectorName,collectionName[0]); 
-  for (G4int j=0;j<1; j++) {HitID[j] = -1;};
+  CalCollection = new F02CalorHitsCollection(SensitiveDetectorName,
+                                             collectionName[0]); 
+  for (G4int j=0;j<1; j++)
+  {
+    HitID[j] = -1;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -113,7 +116,9 @@ void F02CalorimeterSD::EndOfEvent(G4HCofThisEvent* HCE)
 {
   static G4int HCID = -1;
   if(HCID<0)
-  { HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]); }
+  {
+    HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
+  }
   HCE->AddHitsCollection(HCID,CalCollection);
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01PrimaryGeneratorMessenger.cc,v 1.2 2001-07-11 09:58:00 gunter Exp $
+// $Id: F01PrimaryGeneratorMessenger.cc,v 1.3 2001-10-15 17:20:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,7 +38,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 F01PrimaryGeneratorMessenger::F01PrimaryGeneratorMessenger(F01PrimaryGeneratorAction* F01Gun)
-:F01Action(F01Gun)
+  : F01Action(F01Gun)
 { 
   RndmCmd = new G4UIcmdWithAString("/gun/random",this);
   RndmCmd->SetGuidance("Shoot randomly the incident particle.");

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01PhysicsListMessenger.hh,v 1.2 2001-07-11 09:57:59 gunter Exp $
+// $Id: F01PhysicsListMessenger.hh,v 1.3 2001-10-15 17:20:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,6 +39,7 @@ class F01PhysicsList;
 class G4UIcmdWithoutParameter;
 class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class F01PhysicsListMessenger: public G4UImessenger
@@ -63,4 +64,3 @@ class F01PhysicsListMessenger: public G4UImessenger
 };
 
 #endif
-

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02ElectroMagneticField.hh,v 1.3 2001-07-11 09:58:01 gunter Exp $
+// $Id: F02ElectroMagneticField.hh,v 1.4 2001-10-15 17:20:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -80,7 +80,7 @@ protected:
 
       // Find the global Field Manager
 
-  G4FieldManager*         GetGlobalFieldManager() ;   // static 
+  G4FieldManager*         GetGlobalFieldManager() ;
 
   G4FieldManager*         fFieldManager ;
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F03ElectroMagneticField.cc,v 1.2 2001-07-11 09:58:06 gunter Exp $
+// $Id: F03ElectroMagneticField.cc,v 1.3 2001-10-15 17:20:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -56,21 +56,16 @@
 //  Constructors:
 
 F03ElectroMagneticField::F03ElectroMagneticField()
-  :  fStepper(NULL),fChordFinder(NULL),fLocalChordFinder(NULL)
+  :  fChordFinder(0), fLocalChordFinder(0), fStepper(0)
 {
   fMagneticField = new G4UniformMagField(
 		       G4ThreeVector(3.3*tesla,
-                                     0.0,         // 0.5*tesla,
-                                     0.0               ));
+                                     0.0,              // 0.5*tesla,
+                                     0.0       ));
   fLocalMagneticField = new G4UniformMagField(
 		            G4ThreeVector(3.3*tesla,
                                           0.0,         // 0.5*tesla,
-                                          0.0               ));
-
-  //  G4FieldManager* fieldMgr = G4TransportationManager::GetTransportationManager()
-  //                         ->GetFieldManager();  
-  //  fieldMgr->SetDetectorField(fMagneticField);
-  //  fieldMgr->CreateChordFinder(fMagneticField);
+                                          0.0  ));
 
   fFieldMessenger = new F03FieldMessenger(this) ;  
  
@@ -78,18 +73,11 @@ F03ElectroMagneticField::F03ElectroMagneticField()
   fLocalEquation = new G4Mag_UsualEqRhs(fLocalMagneticField); 
  
   fMinStep     = 1.0*mm ; // minimal step of 1 mm is default
-
   fStepperType = 4 ;      // ClassicalRK4 is default stepper
 
-  fFieldManager = G4TransportationManager::GetTransportationManager()
-                                         ->GetFieldManager();
-
-  fLocalFieldManager = G4TransportationManager::GetTransportationManager()
-                                         ->GetFieldManager();
+  fFieldManager = fLocalFieldManager = GetGlobalFieldManager();
 
   UpdateField();
-
-  //  GetGlobalFieldManager()->CreateChordFinder(this);
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -104,8 +92,6 @@ F03ElectroMagneticField::F03ElectroMagneticField(G4ThreeVector fieldVector)
 
 F03ElectroMagneticField::~F03ElectroMagneticField()
 {
-  // GetGlobalFieldManager()->SetDetectorField(0);
-
   if(fMagneticField) delete fMagneticField;
   if(fChordFinder)   delete fChordFinder;
   if(fStepper)       delete fStepper;
@@ -133,8 +119,6 @@ void F03ElectroMagneticField::UpdateField()
 
   fFieldManager->SetChordFinder( fChordFinder );
   fLocalFieldManager->SetChordFinder( fLocalChordFinder );
-
-  return;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -200,7 +184,6 @@ void F03ElectroMagneticField::SetStepper()
       break;
     default: fStepper = 0;
   }
-  return; 
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -239,7 +222,7 @@ void F03ElectroMagneticField::SetFieldValue(G4ThreeVector fieldVector)
     // If the new field's value is Zero, then it is best to
     //  insure that it is not used for propagation.
 
-    G4MagneticField* fMagneticField = NULL;
+    G4MagneticField* fMagneticField = 0;
     fieldMgr->SetDetectorField(fMagneticField);
   }
 }
@@ -253,7 +236,3 @@ G4FieldManager*  F03ElectroMagneticField::GetGlobalFieldManager()
   return G4TransportationManager::GetTransportationManager()
 	                        ->GetFieldManager();
 }
-    
-
-
-

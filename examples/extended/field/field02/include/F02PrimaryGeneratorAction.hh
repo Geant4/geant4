@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02PrimaryGeneratorAction.hh,v 1.2 2001-07-11 09:58:02 gunter Exp $
+// $Id: F02PrimaryGeneratorAction.hh,v 1.3 2001-10-15 17:20:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,11 +58,11 @@ class F02PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     static G4String GetPrimaryName() ;                
 
   private:
-    G4ParticleGun*                particleGun;	//pointer a to G4 service class
-    F02DetectorConstruction*      F02Detector; //pointer to the geometry
+    G4ParticleGun*                particleGun;	// pointer a to G4 service class
+    F02DetectorConstruction*      F02Detector;  // pointer to the geometry
     
-    F02PrimaryGeneratorMessenger* gunMessenger; //messenger of this class
-    G4String                      rndmFlag;	//flag for a random impact point       
+    F02PrimaryGeneratorMessenger* gunMessenger; // messenger of this class
+    G4String                      rndmFlag;	// flag for a random impact point       
 
     static G4String thePrimaryParticleName ;
     G4double xvertex,yvertex,zvertex;
@@ -71,5 +71,3 @@ class F02PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 };
 
 #endif
-
-

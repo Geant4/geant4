@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F03SteppingAction.hh,v 1.2 2001-07-11 09:58:05 gunter Exp $
+// $Id: F03SteppingAction.hh,v 1.3 2001-10-15 17:20:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,8 +61,6 @@ class F03SteppingAction : public G4UserSteppingAction
     F03SteppingMessenger*    steppingMessenger;
 
     G4int IDnow,IDold;
-    G4int evnoold ;
-
 };
 
 #endif

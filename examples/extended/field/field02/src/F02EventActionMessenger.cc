@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02EventActionMessenger.cc,v 1.2 2001-07-11 09:58:03 gunter Exp $
+// $Id: F02EventActionMessenger.cc,v 1.3 2001-10-15 17:20:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,13 +29,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+#include "globals.hh"
 #include "F02EventActionMessenger.hh"
 
 #include "F02EventAction.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
-#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

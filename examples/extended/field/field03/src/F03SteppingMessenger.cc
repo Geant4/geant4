@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F03SteppingMessenger.cc,v 1.2 2001-07-11 09:58:07 gunter Exp $
+// $Id: F03SteppingMessenger.cc,v 1.3 2001-10-15 17:20:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -37,7 +37,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 F03SteppingMessenger::F03SteppingMessenger(F03SteppingAction* SA)
-:steppingAction (SA)
+  : steppingAction (SA)
 {
   steppingDir = new G4UIdirectory("/stepping/");
   steppingDir->SetGuidance("stepping control");
