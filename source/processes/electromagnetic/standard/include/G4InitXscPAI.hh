@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InitXscPAI.hh,v 1.2 2004-04-15 09:13:14 grichine Exp $
+// $Id: G4InitXscPAI.hh,v 1.3 2004-04-20 11:04:51 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,6 +38,7 @@
 #include "globals.hh"
 #include "Randomize.hh"
 #include "G4OrderedTable.hh"
+#include "G4PhysicsLogVector.hh"
 
 class G4MaterialCutsCouple;
 class G4SandiaTable;
@@ -78,15 +79,15 @@ public:
   G4double DifPAIxSection( G4double omega ) ;
   G4double DifPAIdEdx( G4double omega ) ;
 
-  G4double PAIdNdxCerenkov( G4double omega ) ;
+  G4double PAIdNdxCherenkov( G4double omega ) ;
 
   G4double PAIdNdxPlasmon( G4double omega ) ;
 
-  G4double IntegralPAIxSection(G4double omega, G4double bg2, G4double Tmax) ;
-  G4double IntegralPAIdEdx(G4double omega, G4double bg2, G4double Tmax) ;
+  void     IntegralPAIxSection(G4double bg2, G4double Tmax) ;
+  void     IntegralCherenkov(G4double bg2, G4double Tmax) ;
+  void     IntegralPlasmon(G4double bg2, G4double Tmax) ;
 
-  void     IntegralCerenkov() ;
-  void     IntegralPlasmon() ;
+  G4double IntegralPAIdEdx(G4double omega, G4double bg2, G4double Tmax) ;
 
 
   G4double GetStepEnergyLoss( G4double step ) ;
@@ -103,14 +104,19 @@ public:
   G4double GetMatSandiaMatrix(G4int i, G4int j) const 
           { return (*(*fMatSandiaMatrix)[i])[j]; }
 
+  G4PhysicsLogVector* GetPAIxscVector() const { return fPAIxscVector;}
+  G4PhysicsLogVector* GetPAIphotonVector() const { return fPAIphotonVector;}
+  G4PhysicsLogVector* GetPAIelectronVector() const { return fPAIelectronVector;}
+
 protected :
 
 private :
 
-// Local class constants
+  // Local class constants
  
   static const G4double fDelta ; // energy shift from interval border = 0.001
-
+  static const G4int fPAIbin;
+  static const G4double fSolidDensity; // ~the border between gases and solids
 
   G4int    fIntervalNumber;    //  The number of energy intervals
   G4double fNormalizationCof;   // Normalization cof for PhotoAbsorptionXsection
@@ -121,12 +127,18 @@ private :
   G4double fDensity ;            // Current density
   G4double fElectronDensity ;    // Current electron (number) density
 
-// Arrays of Sandia coefficients
+  // Arrays of Sandia coefficients
 
   G4OrderedTable* fMatSandiaMatrix;
   G4SandiaTable*  fSandia;
 
-} ;    
+  // vectors of integral cross-sections
+  
+  G4PhysicsLogVector* fPAIxscVector;
+  G4PhysicsLogVector* fPAIphotonVector;
+  G4PhysicsLogVector* fPAIelectronVector;
+  
+};    
 
 #endif   
 
