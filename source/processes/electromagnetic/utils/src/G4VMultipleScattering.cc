@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.14 2003-11-03 19:37:59 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.15 2003-11-04 09:28:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -40,6 +40,7 @@
 // 04-06-03 Fix compilation warnings (V.Ivanchenko)
 // 16-07-03 Use G4VMscModel interface (V.Ivanchenko)
 // 03-11-03 Fix initialisation problem in RetrievePhysicsTable (V.Ivanchenko)
+// 04-11-03 Update PrintInfoDefinition (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -106,6 +107,7 @@ G4VMultipleScattering::~G4VMultipleScattering()
 void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
   currentCouple = 0;
+  currentParticle = &part;
   if(0 < verboseLevel) {
     G4cout << "### G4VMultipleScattering::BuildPhysicsTable() for "
            << GetProcessName()
@@ -239,7 +241,9 @@ G4VParticleChange* G4VMultipleScattering::PostStepDoIt(const G4Track& track,
 
 void G4VMultipleScattering::PrintInfoDefinition()
 {
-  G4cout << G4endl << GetProcessName() << ":  Model variant of multiple scattering " << G4endl;
+  G4cout << G4endl << GetProcessName() << ":  Model variant of multiple scattering " 
+         << "for " << currentParticle->GetParticleName()
+         << G4endl;
   if (theLambdaTable) {
     G4cout << "      Lambda tables from "
            << G4BestUnit(MinKinEnergy(),"Energy")
@@ -267,8 +271,8 @@ G4PhysicsVector* G4VMultipleScattering::PhysicsVector(const G4MaterialCutsCouple
 }
 
 G4bool G4VMultipleScattering::StorePhysicsTable(G4ParticleDefinition* part,
-			 	     const G4String& directory,
-				           G4bool ascii)
+   			 	          const G4String& directory,
+				                G4bool ascii)
 {
   G4bool res = true;
   if ( theLambdaTable ) {
@@ -297,6 +301,7 @@ G4bool G4VMultipleScattering::RetrievePhysicsTable(G4ParticleDefinition* part,
 			  	        const G4String& directory,
 			  	              G4bool ascii)
 {
+  currentParticle = part;
   if(0 < verboseLevel) {
     G4cout << "G4VMultipleScattering::RetrievePhysicsTable() for "
            << part->GetParticleName() << " and process "

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.28 2003-10-30 16:20:45 gcosmo Exp $
+// $Id: G4LossTableManager.cc,v 1.29 2003-11-04 09:28:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -48,6 +48,7 @@
 // 05-10-03 Add G4VEmProcesses registration and Verbose command (V.Ivanchenko)
 // 17-10-03 Add SetParameters method (V.Ivanchenko)
 // 23-10-03 Add control on inactive processes (V.Ivanchenko)
+// 04-11-03 Add checks in RetrievePhysicsTable (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -426,18 +427,16 @@ void G4LossTableManager::RetrievePhysicsTables(const G4ParticleDefinition* aPart
            << aParticle->GetParticleName()
            << G4endl;
   }
-  if (first_entry) Initialise();
-  if (all_tables_are_built) return;
+  if(all_tables_are_built) return;
 
   G4bool hasRange = false;
-  for (G4int i=0; i<n_loss; i++) {
+  G4int i;
+  for (i=0; i<n_loss; i++) {
     if ( theLoss == loss_vector[i] ) {
       tables_are_built[i] = true;
       if (theLoss->RangeTable()) {
         if (part_vector[i] == theElectron) {
 	  eIonisation = theLoss;
-	//  currentLoss = theLoss;
-	//  currentParticle = theElectron;
           electron_table_are_built = true;
         }
         loss_map[part_vector[i]] = theLoss;
@@ -448,9 +447,10 @@ void G4LossTableManager::RetrievePhysicsTables(const G4ParticleDefinition* aPart
                  << G4endl;
         }
       }
+      if (electron_table_are_built && theLoss->SecondaryParticle() == theElectron)
+        theLoss->SetSecondaryRangeTable(eIonisation->RangeTable());
+      break;
     }
-    if (electron_table_are_built && theLoss->SecondaryParticle() == theElectron)
-      theLoss->SetSecondaryRangeTable(eIonisation->RangeTable());
   }
 
   if ( hasRange ) {
@@ -458,7 +458,7 @@ void G4LossTableManager::RetrievePhysicsTables(const G4ParticleDefinition* aPart
       if ( base_part_vector[j] == aParticle && !tables_are_built[j] ) {
         G4VEnergyLossSTD* em = loss_vector[j];
         tables_are_built[j] = true;
-        em->Initialise();
+	//        em->Initialise();
         em->SetDEDXTable(theLoss->DEDXTable());
         em->SetRangeTable(theLoss->RangeTable());
         em->SetInverseRangeTable(theLoss->InverseRangeTable());
@@ -498,7 +498,11 @@ void G4LossTableManager::RetrievePhysicsTables(const G4ParticleDefinition* aPart
   if(0 < verbose) {
     G4cout << "G4LossTableManager::RetrievePhysicsTable: end; "
            << "all_tables_are_built= " << all_tables_are_built
+           << " i= " << i << " n_loss= " << n_loss
            << G4endl;
+  }
+  if(all_tables_are_built) {
+      G4cout << "### G4LossTableManager: all dEdx and Range tables are retrieved" << G4endl;
   }
 }
 

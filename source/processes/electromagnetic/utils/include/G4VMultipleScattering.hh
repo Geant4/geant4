@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.13 2003-11-03 19:37:59 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.14 2003-11-04 09:28:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -202,6 +202,7 @@ private:
   G4PhysicsTable*             theLambdaTable;
 
   // cash
+  const G4ParticleDefinition* currentParticle;
   const G4MaterialCutsCouple* currentCouple;
   size_t                      currentMaterialIndex;
 
