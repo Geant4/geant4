@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: standalone.cc,v 1.1 2005-02-19 21:50:20 allison Exp $
+// $Id: standalone.cc,v 1.2 2005-02-20 00:41:42 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"
@@ -40,7 +40,7 @@ int main() {
 
   visManager->SetUserAction
     (new StandaloneVisAction,
-     G4VisExtent(-5*m,5*m,-5*m,5*m,-5*m,5*m));
+     G4VisExtent(-5*m,5*m,-5*m,5*m,-5*m,5*m));  // 2nd argument optional.
 
   G4UImanager* UI = G4UImanager::GetUIpointer ();
   UI->ApplyCommand ("/control/execute standalone.g4m");
