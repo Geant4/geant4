@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.cc,v 1.13 2002-12-04 08:43:33 mkossov Exp $
+// $Id: G4ElectroNuclearCrossSection.cc,v 1.14 2002-12-06 08:57:05 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -2321,17 +2321,11 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy()
   G4double dlg1=lastG+lastG-1.;
   G4double lgoe=lastG/lastE;
   for(G4int i=lastF;i<=lastL;i++) Y[i]=dlg1*lastJ1[i]-lgoe*(lastJ2[i]+lastJ2[i]-lastJ3[i]/lastE);
-  if(lastSig>0.99*Y[lastL]&&lastL<mL)
+  // @@ Tempory IF of H.P.: delete it if the *HP* err message does not show up M.K.@@
+  if(lastSig>0.99*Y[lastL] && lastL<mL && Y[lastL]<1.E-30)
   {
-    if(Y[lastL]<1.E-30)
-    {
-      G4cerr<<"*HP*G4ElNucCS::GetEqPhotE:S="<<lastSig<<">"<<Y[lastL]<<",l="<<lastL<<">"<<mL<<G4endl;
-      return 3.0*MeV; // quick and dirty workaround @@@ HP. (now can be not necessary M.K.)
-    }
-  }
-  else
-  {
-    G4cerr<<"***G4EleNucCrS::GetEquPhotE:S="<<lastSig<<"<"<<Y[lastL]<<",l="<<lastL<<"<"<<mL<<G4endl;
+    G4cerr<<"*HP*G4ElNucCS::GetEqPhotE:S="<<lastSig<<">"<<Y[lastL]<<",l="<<lastL<<">"<<mL<<G4endl;
+    return 3.0*MeV; // quick and dirty workaround @@@ HP. (now can be not necessary M.K.)
   }
   G4double ris=lastSig*G4UniformRand(); // Sig can be > Y[lastL=mL], then it is in the func. region
 #ifdef debug
