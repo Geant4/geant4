@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ForwardXrayTR.hh,v 1.12 2004-07-26 16:06:40 vnivanch Exp $
+// $Id: G4ForwardXrayTR.hh,v 1.13 2004-08-11 14:41:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ForwardXrayTR -- header file
@@ -157,7 +157,7 @@ protected :  // for access from X-ray TR fast simulation models
 
   // private :  ///////////////  Data members   ///////////////////////////
 
-G4Gamma* fPtrGamma ;  // pointer to TR photon
+G4ParticleDefinition* fPtrGamma ;  // pointer to TR photon
 
 const std::vector<G4double>* fGammaCutInKineticEnergy ;
                                      // TR photon cut in energy array
