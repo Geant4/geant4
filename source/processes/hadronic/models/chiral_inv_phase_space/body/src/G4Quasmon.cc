@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.cc,v 1.42 2002-12-09 13:02:28 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.43 2002-12-10 09:55:33 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -2049,12 +2049,16 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
           G4double ddm=quasM-rMass;
           if(fabs(sMM-ddm)<1.5*sWi-.001)
           {
+#ifdef debug
             G4double msm=sMass;
+#endif
             sMass=GetRandomMass(sPDG,ddm);           // Randomize mass of the Reson-Hadron
             if(fabs(sMass)<.001)
             {
+#ifdef debug
               G4cerr<<"***G4Q::HQ: CHANGE to M=0, sPDG="<<sPDG<<",dm="<<ddm<<",M_old="<<msm<<G4endl;
-              sMass=msm;
+#endif
+              sMass=ddm;
             }
 #ifdef debug
             G4cout<<"G4Q::HQ: "<<sPDG<<" mass's changed to "<<sMass<<",d="<<ddm<<",W="<<sWi<<G4endl;
