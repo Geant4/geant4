@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.20 2001-11-21 16:43:16 gcosmo Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.21 2001-12-08 00:00:46 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,11 +30,11 @@
 //   Tracking in space dependent magnetic field
 //
 // History of major changes:
-//  7 Oct 96  V. Grichine       First version
-// 28 Jan 98  W. Wander:        Added ability for low order integrators
-// 30 Jan 98  J. Apostolakis:   Made method parameters into instance variables
+//  8 Nov 01  J. Apostolakis:   Respect minimum step in AccurateAdvance
 // 27 Jul 99  J. Apostolakis:   Ensured that AccurateAdvance does not loop 
 //                                due to very small eps & step size (precision)
+// 28 Jan 98  W. Wander:        Added ability for low order integrators
+//  7 Oct 96  V. Grichine       First version
 #include <math.h>
 #include "G4ios.hh"
 #include "G4MagIntegratorDriver.hh"
@@ -49,7 +49,7 @@ const G4double G4MagInt_Driver::max_stepping_decrease = 0.1;
 
 //  The (default) maximum number of steps is Base divided by the order of Stepper
 //
-const G4int  G4MagInt_Driver::fMaxStepBase = 500;  // Was 5000
+const G4int  G4MagInt_Driver::fMaxStepBase = 250;  // Was 5000
 
 //  Constructor
 //
@@ -151,11 +151,6 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
         //--------------------------------------
         lastStepSucceeded= (hdid == h);   
      }else{
-#if  0
-        OneGoodStep(y,dydx,x,h,2*eps,hdid,hnext) ;
-        //--------------------------------------
-        lastStepSucceeded= (hdid == h);         
-#else
         G4FieldTrack yFldTrk( G4ThreeVector(0,0,0), 
 			      G4ThreeVector(0,0,0), 0., 0., 0., 0. );
         G4double dchord_step, dyerr, dyerr_len;  //  Must figure what to do with these
@@ -174,8 +169,8 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
         x += hdid;
         // Compute suggested new step
 	hnext= ComputeNewStepSize( dyerr/eps, h);
+	// .. hnext= ComputeNewStepSize_WithinLimits( dyerr/eps, h);
 	lastStepSucceeded= (dyerr<= eps);
-#endif
      }
 // #ifdef G4DEBUG_FIELD
      if(lastStepSucceeded) noFullIntegr++ ; else noSmallIntegr++ ;
