@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXViewer.cc,v 1.6 1999-12-15 18:08:30 gcosmo Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.7 2000-02-21 16:02:42 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -367,7 +367,7 @@ void G4OpenGLXViewer::print3DcolorVertex(GLint size, GLint * count, GLfloat * bu
   printf("\n");
 }
 
-void G4OpenGLXViewer::spewWireframeEPS (FILE* file, GLint size, GLfloat* buffer, char* cr) {
+void G4OpenGLXViewer::spewWireframeEPS (FILE* file, GLint size, GLfloat* buffer, const char* cr) {
 
   GLfloat EPS_GOURAUD_THRESHOLD=0.1;
 

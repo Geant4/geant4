@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXViewer.hh,v 1.6 1999-12-15 14:54:05 gunter Exp $
+// $Id: G4OpenGLXViewer.hh,v 1.7 2000-02-21 16:02:54 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,7 +56,7 @@ protected:
   void printBuffer(GLint, GLfloat*);
   GLfloat* spewPrimitiveEPS (FILE*, GLfloat*);
   void spewSortedFeedback (FILE*, GLint, GLfloat*);
-  void spewWireframeEPS (FILE*, GLint, GLfloat*, char*);
+  void spewWireframeEPS (FILE*, GLint, GLfloat*, const char*);
   void print3DcolorVertex(GLint, GLint*, GLfloat*);
   G4float                           pointSize;
 
