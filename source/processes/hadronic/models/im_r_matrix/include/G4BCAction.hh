@@ -8,6 +8,8 @@ class G4BCAction
 {
   public:
   
+  G4BCAction(){}
+  virtual ~G4BCAction(){}
   virtual const std::vector<G4CollisionInitialState *> &
          GetCollisions(G4KineticTrack * aProjectile, 
 	               std::vector<G4KineticTrack *> & someCandidates,

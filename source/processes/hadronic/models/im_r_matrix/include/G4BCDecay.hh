@@ -10,6 +10,8 @@ class G4BCDecay : public G4BCAction
 {
   public:
   
+  G4BCDecay(){}
+  virtual ~G4BCDecay(){}
   virtual const std::vector<G4CollisionInitialState *> &
          GetCollisions(G4KineticTrack * aProjectile, 
 	               std::vector<G4KineticTrack *> & ,
