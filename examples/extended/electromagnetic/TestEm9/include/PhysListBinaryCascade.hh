@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysListBinaryCascade.hh,v 1.4 2003-11-19 20:23:12 vnivanch Exp $
+// $Id: PhysListBinaryCascade.hh,v 1.5 2003-12-05 11:22:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -45,6 +45,8 @@
 #include "globals.hh"
 #include "G4ProtonInelasticProcess.hh"
 #include "G4NeutronInelasticProcess.hh"
+#include "G4ProtonInelasticCrossSection.hh"
+#include "G4NeutronInelasticCrossSection.hh"
 
 class PhysListBinaryCascade : public G4VPhysicsConstructor
 {
@@ -64,8 +66,10 @@ class PhysListBinaryCascade : public G4VPhysicsConstructor
 
   private:
 
-    G4ProtonInelasticProcess      theIPproton;
-    G4NeutronInelasticProcess     theIPneutron;
+    G4ProtonInelasticProcess       theIPproton;
+    G4NeutronInelasticProcess      theIPneutron;
+    G4ProtonInelasticCrossSection  thePXSec;
+    G4NeutronInelasticCrossSection theNXSec;
 
 };
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysListBinaryCascade.cc,v 1.3 2003-11-19 20:23:12 vnivanch Exp $
+// $Id: PhysListBinaryCascade.cc,v 1.4 2003-12-05 11:22:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "PhysListBinaryCascade.hh"
@@ -63,6 +63,7 @@ void PhysListBinaryCascade::ConstructProcess()
   pmanager = particle->GetProcessManager();
   theBC = new G4BinaryCascade();
   theIPproton.RegisterMe(theBC);
+  theIPproton.AddDataSet(&thePXSec);
   pmanager->AddDiscreteProcess(&theIPproton);
 
   // neutron
@@ -70,6 +71,7 @@ void PhysListBinaryCascade::ConstructProcess()
   pmanager = particle->GetProcessManager();
   theBC = new G4BinaryCascade();
   theIPneutron.RegisterMe(theBC);
+  theIPneutron.AddDataSet(&theNXSec);
   pmanager->AddDiscreteProcess(&theIPneutron);
   // fission
   G4HadronFissionProcess* theFissionProcess = new G4HadronFissionProcess;
