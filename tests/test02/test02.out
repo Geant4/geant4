@@ -4,12 +4,12 @@
              Copyright : Geant4 Collaboration
 **********************************************
 SimpleBox is now made of Pb
-PreInit> #
-PreInit> # Macro file test02.in
-PreInit> # for tests of basic e.m. processes
-PreInit> #
-PreInit> PreInit> # /run/verbose 2
-PreInit> /run/initialize
+#
+# Macro file test02.in
+# for tests of basic e.m. processes
+#
+# /run/verbose 2
+/run/initialize
 
 ionIoni:    Knock-on electron cross sections . 
          MeanFreePath is computed at tracking time.
@@ -72,22 +72,22 @@ MuBrems:  theoretical cross section
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 TeV.
     PhysicsTables from 1 GeV to 1000 PeV in 50 bins. 
-Idle> /gun/direction 1 0 0
-Idle> #
-Idle> # gamma 500 MeV in Al
-Idle> #
-Idle> /mydet/SelectMaterial Al
+/gun/direction 1 0 0
+#
+# gamma 500 MeV in Al
+#
+/mydet/SelectMaterial Al
 SimpleBox is now made of Al
-Idle> /gun/particle gamma
-Idle> /gun/energy 500 MeV
-Idle> /run/beamOn 1
-Idle> #
-Idle> # electron 500 MeV in Air
-Idle> #
-Idle> /mydet/SelectMaterial Air
+/gun/particle gamma
+/gun/energy 500 MeV
+/run/beamOn 1
+#
+# electron 500 MeV in Air
+#
+/mydet/SelectMaterial Air
 SimpleBox is now made of Air
-Idle> /gun/particle e-
-Idle> /gun/energy 500 MeV
-Idle> /run/beamOn 1
-Idle> #
-Idle> 
+/gun/particle e-
+/gun/energy 500 MeV
+/run/beamOn 1
+#
+exit

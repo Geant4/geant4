@@ -4,12 +4,12 @@
              Copyright : Geant4 Collaboration
 **********************************************
 Now Detector is rod_place_asm
-PreInit> Now Detector is rod_place_asm
-PreInit> PreInit> #/tracking/verbose 1
-PreInit> #
-PreInit> # Initialize GEANT4
-PreInit> #
-PreInit> /run/initialize
+Now Detector is rod_place_asm
+#/tracking/verbose 1
+#
+# Initialize GEANT4
+#
+/run/initialize
 
 ### Reading exchange file from stepfiles/G4rod_place_asm.stp
 Reading Data from stepfiles/G4rod_place_asm.stp...
@@ -86,13 +86,14 @@ MuBrems:  theoretical cross section
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 TeV.
     PhysicsTables from 1 GeV to 1000 PeV in 50 bins. 
-Idle> #
-Idle> # Run 100 events
-Idle> #
-Idle> /run/beamOn 1
+#
+# Run 100 events
+#
+/run/beamOn 1
 /event/Verbose 1
 /tracking/Verbose 1
-Idle> #
-Idle> # Termination
-Idle> #
-Idle> 
+#
+# Termination
+#
+exit
+

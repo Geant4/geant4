@@ -117,10 +117,10 @@ MuBrems:  theoretical cross section
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 TeV.
     PhysicsTables from 1 GeV to 1e+03 PeV in 50 bins. 
-Idle> Idle> /control/saveHistory
-Idle> # /run/verbose 2
-Idle> #
-Idle> /run/particle/dumpCutValues
+/control/saveHistory
+# /run/verbose 2
+#
+/run/particle/dumpCutValues
 ============= The cut Energy ==============================
                             gamma              e-             mu-          proton         neutron    
 Cut in range                  2 mm            2 mm            2 mm            2 mm            2 mm 
@@ -139,35 +139,35 @@ Cut in energy
            Galactic         990 eV          990 eV          990 eV          990 eV          990 eV 
                Beam         990 eV          990 eV          990 eV          990 eV          990 eV 
 ===================================================
-Idle> #
-Idle> #
-Idle> /gun/particle e+
-Idle> /gun/energy 300 MeV
-Idle> /run/beamOn 500
+#
+#
+/gun/particle e+
+/gun/energy 300 MeV
+/run/beamOn 500
 ### Run 0 start.
-Idle> /calor/setAbsMat Aluminium
+/calor/setAbsMat Aluminium
 
  The calorimeter is made of 10 layers of: [ 10mm of Aluminium + 5mm of liquidArgon ] 
-Idle> /calor/setGapMat Aerogel
+/calor/setGapMat Aerogel
 
  The calorimeter is made of 10 layers of: [ 10mm of Aluminium + 5mm of Aerogel ] 
-Idle> /calor/setAbsThick 2. cm
+/calor/setAbsThick 2. cm
 
  The calorimeter is made of 10 layers of: [ 20mm of Aluminium + 5mm of Aerogel ] 
-Idle> /calor/setGapThick 5. cm
+/calor/setGapThick 5. cm
 
  The calorimeter is made of 10 layers of: [ 20mm of Aluminium + 50mm of Aerogel ] 
-Idle> /calor/setNbOfLayers 30
+/calor/setNbOfLayers 30
 
  The calorimeter is made of 30 layers of: [ 20mm of Aluminium + 50mm of Aerogel ] 
-Idle> /calor/setSizeYZ   1.5 m
+/calor/setSizeYZ   1.5 m
 
  The calorimeter is made of 30 layers of: [ 20mm of Aluminium + 50mm of Aerogel ] 
-Idle> /calor/update
+/calor/update
 
  The calorimeter is made of 30 layers of: [ 20mm of Aluminium + 50mm of Aerogel ] 
-Idle> /gun/particle gamma
-Idle> /gun/energy 500 MeV
-Idle> /run/beamOn 500
+/gun/particle gamma
+/gun/energy 500 MeV
+/run/beamOn 500
 ### Run 1 start.
-Idle> 
+exit

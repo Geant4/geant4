@@ -4,11 +4,11 @@
              Copyright : Geant4 Collaboration
 **********************************************
 SimpleBox is now made of Pb
-PreInit> #
-PreInit> # Auto-generated test input file for test12 hadronics.
-PreInit> #
-PreInit> PreInit> # /run/verbose 2
-PreInit> /run/initialize
+#
+# Auto-generated test input file for test12 hadronics.
+#
+# /run/verbose 2
+/run/initialize
 
 ionIoni:    Knock-on electron cross sections . 
          MeanFreePath is computed at tracking time.
@@ -72,197 +72,196 @@ MuBrems:  theoretical cross section
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 TeV.
     PhysicsTables from 1 GeV to 1000 PeV in 50 bins. 
-Idle> /gun/direction 1 0 0
-Idle> #
-Idle> # proton at 100 GeV in Pb
-Idle> #
-Idle> /gun/particle proton
-Idle> /gun/energy 100 GeV
-Idle> /mydet/SelectMaterial Pb
+/gun/direction 1 0 0
+#
+# proton at 100 GeV in Pb
+#
+/gun/particle proton
+/gun/energy 100 GeV
+/mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
-Idle> /run/beamOn 1
-Idle> #
-Idle> # neutron at 100 GeV in Pb
-Idle> #
-Idle> /gun/particle neutron
-Idle> /gun/energy 100 GeV
-Idle> /mydet/SelectMaterial Pb
+/run/beamOn 1
+#
+# neutron at 100 GeV in Pb
+#
+/gun/particle neutron
+/gun/energy 100 GeV
+/mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
-Idle> /run/beamOn 1
-Idle> #
-Idle> # pi+ at 100 GeV in Pb
-Idle> #
-Idle> /gun/particle pi+
-Idle> /gun/energy 100 GeV
-Idle> /mydet/SelectMaterial Pb
+/run/beamOn 1
+#
+# pi+ at 100 GeV in Pb
+#
+/gun/particle pi+
+/gun/energy 100 GeV
+/mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
-Idle> /run/beamOn 1
-Idle> #
-Idle> # pi- at 100 GeV in Pb
-Idle> #
-Idle> /gun/particle pi-
-Idle> /gun/energy 100 GeV
-Idle> /mydet/SelectMaterial Pb
+/run/beamOn 1
+#
+# pi- at 100 GeV in Pb
+#
+/gun/particle pi-
+/gun/energy 100 GeV
+/mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
-Idle> /run/beamOn 1
-Idle> #
-Idle> # kaon+ at 100 GeV in Pb
-Idle> #
-Idle> /gun/particle kaon+
-Idle> /gun/energy 100 GeV
-Idle> /mydet/SelectMaterial Pb
+/run/beamOn 1
+#
+# kaon+ at 100 GeV in Pb
+#
+/gun/particle kaon+
+/gun/energy 100 GeV
+/mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
-Idle> /run/beamOn 1
-Idle> #
-Idle> # kaon- at 100 GeV in Pb
-Idle> #
-Idle> /gun/particle kaon-
-Idle> /gun/energy 100 GeV
-Idle> /mydet/SelectMaterial Pb
+/run/beamOn 1
+#
+# kaon- at 100 GeV in Pb
+#
+/gun/particle kaon-
+/gun/energy 100 GeV
+/mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
-Idle> /run/beamOn 1
-Idle> #
-Idle> # kaon0S at 100 GeV in Pb
-Idle> #
-Idle> /gun/particle kaon0S
-Idle> /gun/energy 100 GeV
-Idle> /mydet/SelectMaterial Pb
+/run/beamOn 1
+#
+# kaon0S at 100 GeV in Pb
+#
+/gun/particle kaon0S
+/gun/energy 100 GeV
+/mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
-Idle> /run/beamOn 1
-Idle> #
-Idle> # kaon0L at 100 GeV in Pb
-Idle> #
-Idle> /gun/particle kaon0L
-Idle> /gun/energy 100 GeV
-Idle> /mydet/SelectMaterial Pb
+/run/beamOn 1
+#
+# kaon0L at 100 GeV in Pb
+#
+/gun/particle kaon0L
+/gun/energy 100 GeV
+/mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
-Idle> /run/beamOn 1
-Idle> #
-Idle> # proton at 100 GeV in Al
-Idle> #
-Idle> /gun/particle proton
-Idle> /gun/energy 100 GeV
-Idle> /mydet/SelectMaterial Al
+/run/beamOn 1
+#
+# proton at 100 GeV in Al
+#
+/gun/particle proton
+/gun/energy 100 GeV
+/mydet/SelectMaterial Al
 SimpleBox is now made of Al
-Idle> /run/beamOn 1
-Idle> #
-Idle> # neutron at 100 GeV in Al
-Idle> #
-Idle> /gun/particle neutron
-Idle> /gun/energy 100 GeV
-Idle> /mydet/SelectMaterial Al
+/run/beamOn 1
+#
+# neutron at 100 GeV in Al
+#
+/gun/particle neutron
+/gun/energy 100 GeV
+/mydet/SelectMaterial Al
 SimpleBox is now made of Al
-Idle> /run/beamOn 1
-Idle> #
-Idle> # pi+ at 100 GeV in Al
-Idle> #
-Idle> /gun/particle pi+
-Idle> /gun/energy 100 GeV
-Idle> /mydet/SelectMaterial Al
+/run/beamOn 1
+#
+# pi+ at 100 GeV in Al
+#
+/gun/particle pi+
+/gun/energy 100 GeV
+/mydet/SelectMaterial Al
 SimpleBox is now made of Al
-Idle> /run/beamOn 1
-Idle> #
-Idle> # pi- at 100 GeV in Al
-Idle> #
-Idle> /gun/particle pi-
-Idle> /gun/energy 100 GeV
-Idle> /mydet/SelectMaterial Al
+/run/beamOn 1
+#
+# pi- at 100 GeV in Al
+#
+/gun/particle pi-
+/gun/energy 100 GeV
+/mydet/SelectMaterial Al
 SimpleBox is now made of Al
-Idle> /run/beamOn 1
-Idle> #
-Idle> # kaon+ at 100 GeV in Al
-Idle> #
-Idle> /gun/particle kaon+
-Idle> /gun/energy 100 GeV
-Idle> /mydet/SelectMaterial Al
+/run/beamOn 1
+#
+# kaon+ at 100 GeV in Al
+#
+/gun/particle kaon+
+/gun/energy 100 GeV
+/mydet/SelectMaterial Al
 SimpleBox is now made of Al
-Idle> /run/beamOn 1
-Idle> #
-Idle> # kaon- at 100 GeV in Al
-Idle> #
-Idle> /gun/particle kaon-
-Idle> /gun/energy 100 GeV
-Idle> /mydet/SelectMaterial Al
+/run/beamOn 1
+#
+# kaon- at 100 GeV in Al
+#
+/gun/particle kaon-
+/gun/energy 100 GeV
+/mydet/SelectMaterial Al
 SimpleBox is now made of Al
-Idle> /run/beamOn 1
-Idle> #
-Idle> # kaon0S at 100 GeV in Al
-Idle> #
-Idle> /gun/particle kaon0S
-Idle> /gun/energy 100 GeV
-Idle> /mydet/SelectMaterial Al
+/run/beamOn 1
+#
+# kaon0S at 100 GeV in Al
+#
+/gun/particle kaon0S
+/gun/energy 100 GeV
+/mydet/SelectMaterial Al
 SimpleBox is now made of Al
-Idle> /run/beamOn 1
-Idle> #
-Idle> # kaon0L at 100 GeV in Al
-Idle> #
-Idle> /gun/particle kaon0L
-Idle> /gun/energy 100 GeV
-Idle> /mydet/SelectMaterial Al
+/run/beamOn 1
+#
+# kaon0L at 100 GeV in Al
+#
+/gun/particle kaon0L
+/gun/energy 100 GeV
+/mydet/SelectMaterial Al
 SimpleBox is now made of Al
-Idle> /run/beamOn 1
-Idle> #
-Idle> # proton at 100 GeV in Air
-Idle> #
-Idle> /gun/particle proton
-Idle> /gun/energy 100 GeV
-Idle> /mydet/SelectMaterial Air
+/run/beamOn 1
+#
+# proton at 100 GeV in Air
+#
+/gun/particle proton
+/gun/energy 100 GeV
+/mydet/SelectMaterial Air
 SimpleBox is now made of Air
-Idle> /run/beamOn 1
-Idle> #
-Idle> # neutron at 100 GeV in Air
-Idle> #
-Idle> /gun/particle neutron
-Idle> /gun/energy 100 GeV
-Idle> /mydet/SelectMaterial Air
+/run/beamOn 1
+#
+# neutron at 100 GeV in Air
+#
+/gun/particle neutron
+/gun/energy 100 GeV
+/mydet/SelectMaterial Air
 SimpleBox is now made of Air
-Idle> /run/beamOn 1
-Idle> #
-Idle> # pi+ at 100 GeV in Air
-Idle> #
-Idle> /gun/particle pi+
-Idle> /gun/energy 100 GeV
-Idle> /mydet/SelectMaterial Air
+/run/beamOn 1
+#
+# pi+ at 100 GeV in Air
+#
+/gun/particle pi+
+/gun/energy 100 GeV
+/mydet/SelectMaterial Air
 SimpleBox is now made of Air
-Idle> /run/beamOn 1
-Idle> #
-Idle> # pi- at 100 GeV in Air
-Idle> #
-Idle> /gun/particle pi-
-Idle> /gun/energy 100 GeV
-Idle> /mydet/SelectMaterial Air
+/run/beamOn 1
+#
+# pi- at 100 GeV in Air
+#
+/gun/particle pi-
+/gun/energy 100 GeV
+/mydet/SelectMaterial Air
 SimpleBox is now made of Air
-Idle> /run/beamOn 1
-Idle> #
-Idle> # kaon+ at 100 GeV in Air
-Idle> #
-Idle> /gun/particle kaon+
-Idle> /gun/energy 100 GeV
-Idle> /mydet/SelectMaterial Air
+/run/beamOn 1
+#
+# kaon+ at 100 GeV in Air
+#
+/gun/particle kaon+
+/gun/energy 100 GeV
+/mydet/SelectMaterial Air
 SimpleBox is now made of Air
-Idle> /run/beamOn 1
-Idle> #
-Idle> # kaon- at 100 GeV in Air
-Idle> #
-Idle> /gun/particle kaon-
-Idle> /gun/energy 100 GeV
-Idle> /mydet/SelectMaterial Air
+/run/beamOn 1
+#
+# kaon- at 100 GeV in Air
+#
+/gun/particle kaon-
+/gun/energy 100 GeV
+/mydet/SelectMaterial Air
 SimpleBox is now made of Air
-Idle> /run/beamOn 1
-Idle> #
-Idle> # kaon0S at 100 GeV in Air
-Idle> #
-Idle> /gun/particle kaon0S
-Idle> /gun/energy 100 GeV
-Idle> /mydet/SelectMaterial Air
+/run/beamOn 1
+#
+# kaon0S at 100 GeV in Air
+#
+/gun/particle kaon0S
+/gun/energy 100 GeV
+/mydet/SelectMaterial Air
 SimpleBox is now made of Air
-Idle> /run/beamOn 1
-Idle> #
-Idle> # kaon0L at 100 GeV in Air
-Idle> #
-Idle> /gun/particle kaon0L
-Idle> /gun/energy 100 GeV
-Idle> /mydet/SelectMaterial Air
+/run/beamOn 1
+#
+# kaon0L at 100 GeV in Air
+#
+/gun/particle kaon0L
+/gun/energy 100 GeV
+/mydet/SelectMaterial Air
 SimpleBox is now made of Air
-Idle> /run/beamOn 1
-Idle> 
+/run/beamOn 1

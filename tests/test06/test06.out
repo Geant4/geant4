@@ -4,13 +4,13 @@
              Copyright : Geant4 Collaboration
 **********************************************
 SimpleBox is now made of Pb
-PreInit> #
-PreInit> # Macro file test06.in
-PreInit> # for tests of basic e.m. processes in integral approach + new p.e. effect
-PreInit> #   (G4PhotoAbsorption).
-PreInit> #
-PreInit> PreInit> /run/verbose 2
-PreInit> /run/initialize
+#
+# Macro file test06.in
+# for tests of basic e.m. processes in integral approach + new p.e. effect
+#   (G4PhotoAbsorption).
+#
+/run/verbose 2
+/run/initialize
 userDetector->Construct() start.
 physicsList->Construct() start.
 physicsList->setCut() start.
@@ -73,36 +73,37 @@ MuBrems:  theoretical cross section
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 TeV.
     PhysicsTables from 1 GeV to 1000 PeV in 50 bins. 
-Idle> /gun/direction 1 0 0
-Idle> #
-Idle> # gamma 500 MeV in Al
-Idle> #
-Idle> /mydet/SelectMaterial Al
+/gun/direction 1 0 0
+#
+# gamma 500 MeV in Al
+#
+/mydet/SelectMaterial Al
 SimpleBox is now made of Al
-Idle> /gun/particle gamma
-Idle> /gun/energy 500 MeV
-Idle> /run/beamOn 100
+/gun/particle gamma
+/gun/energy 500 MeV
+/run/beamOn 100
 Start closing geometry.
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=37.11s Real=38.49s Sys=1.26s
-Idle> #
-Idle> # electron 500 MeV in Air
-Idle> #
-Idle> /mydet/SelectMaterial Air
+  User=38.34s Real=39.64s Sys=1.17s
+#
+# electron 500 MeV in Air
+#
+/mydet/SelectMaterial Air
 SimpleBox is now made of Air
-Idle> /gun/particle e-
-Idle> /gun/energy 500 MeV
-Idle> /run/beamOn 100
+/gun/particle e-
+/gun/energy 500 MeV
+/run/beamOn 100
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=3.14s Real=3.17s Sys=0.03s
-Idle> #
-Idle> G4 kernel has come to Quit state.
+  User=3.41s Real=3.42s Sys=0.01s
+#
+exit
+G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

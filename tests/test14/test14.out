@@ -4,16 +4,12 @@
              Copyright : Geant4 Collaboration
 **********************************************
 #
-# Macro file for the initialization phase of "test14"
-# (Based on electromagnetic/test/TestEm5.)
+# Macro file test14.in
+# for tests of basic low energy e.m. processes (based on test09) 
 #
-PreInit> #
-PreInit> # Macro file test14.in
-PreInit> # for tests of basic low energy e.m. processes (based on test09) 
-PreInit> #
-PreInit> PreInit> /run/verbose 2
-PreInit> #
-PreInit> /run/initialize
+/run/verbose 2
+#
+/run/initialize
 userDetector->Construct() start.
 
 ***** Table : Nb of materials = 10 *****
@@ -66,26 +62,27 @@ msc:   Tables of transport mean free paths.
 
 LowEnergyIoni:  First version of low energy ionisation code,
  At present it can be used for electrons only  in the energy range [250 eV,100 GeV]
-Idle> Idle> /calor/setAbsMat Aluminium
-Idle> /calor/setAbsThick 10 cm
-Idle> /calor/setAbsRad 12.0 cm
-Idle> /calor/update
+
+/calor/setAbsMat Aluminium
+/calor/setAbsThick 10 cm  
+/calor/setAbsRad 12.0 cm
+/calor/update
 
  The  WORLD   is made of 2e+02mm of Air, the transverse size (R) of the world is 2.4e+02 mm. 
  The ABSORBER is made of 1e+02mm of Aluminium, the transverse size (R) is 1.2e+02 mm. 
  Z position of the (middle of the) absorber 0  mm.
 
-Idle> #
-Idle> /lowenergy/lowlimG 2.5e-4
+#
+/lowenergy/lowlimG 2.5e-4
 Tst14PhysicsList::SetCuts:Gamma cut in energy: 0.00025 (MeV)
-Idle> /lowenergy/lowlimE 2.5e-4
+/lowenergy/lowlimE 2.5e-4
 Tst14PhysicsList::SetCuts:Electron cut in energy: 0.00025 (MeV)
-Idle> /lowenergy/cutG .01 micrometer
-Idle> /lowenergy/cutE .01 micrometer
-Idle> /lowenergy/secphotcut 10 eV
+/lowenergy/cutG .01 micrometer
+/lowenergy/cutE .01 micrometer
+/lowenergy/secphotcut 10 eV
 Low energy secondary photons cut is now set to: 1e-05 (MeV)
 for processes LowEnergyBremsstrahlung, LowEnergyPhotoElectric, LowEnergyIonisation
-Idle> /run/initialize
+/run/initialize
 physicsList->setCut() start.
 
 msc:   Tables of transport mean free paths.
@@ -95,7 +92,7 @@ msc:   Tables of transport mean free paths.
 
 LowEnergyIoni:  First version of low energy ionisation code,
  At present it can be used for electrons only  in the energy range [250 eV,100 GeV]
-Idle> /run/particle/dumpCutValues
+/run/particle/dumpCutValues
 ============= The cut Energy ==============================
                             gamma              e-             mu-          proton         neutron    
 Cut in range                 10 nm           10 nm                       -1 mm             
@@ -113,15 +110,15 @@ Cut in energy
  Cuts in energy have not calculated yet !!
  Enter /run/initialize command to calculate cuts 
 ===================================================
-Idle> #
-Idle> #gun/direction 1 0 0
-Idle> /gun/direction 0 0 1
-Idle> #
-Idle> /gun/particle gamma
-Idle> #
-Idle> /gun/energy 10 keV
-Idle> /tracking/verbose 2
-Idle> /run/beamOn 1
+#
+#gun/direction 1 0 0
+/gun/direction 0 0 1
+#
+/gun/particle gamma
+#
+/gun/energy 10 keV
+/tracking/verbose 2
+/run/beamOn 1
 Start closing geometry.
 Start Run processing.
 
@@ -421,18 +418,18 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.17s Real=0.27s Sys=0.02s
-Idle> /tracking/verbose 0
-Idle> /run/beamOn 1000
+  User=0.16s Real=0.3s Sys=0.02s
+/tracking/verbose 0
+/run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=97s Real=1.1e+02s Sys=7.1s
-Idle> # 
-Idle> /gun/energy 2 keV
-Idle> /tracking/verbose 2
-Idle> /run/beamOn 1
+  User=96s Real=1e+02s Sys=8s
+# 
+/gun/energy 2 keV
+/tracking/verbose 2
+/run/beamOn 1
 Start Run processing.
 
 *********************************************************************************************************
@@ -489,18 +486,18 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.03s Real=0.04s Sys=0.01s
-Idle> /tracking/verbose 0
-Idle> /run/beamOn 1000
+  User=0.03s Real=0.03s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=21s Real=23s Sys=0.99s
-Idle> #
-Idle> /gun/energy 600 eV
-Idle> /tracking/verbose 2
-Idle> /run/beamOn 1
+  User=21s Real=22s Sys=1.2s
+#
+/gun/energy 600 eV
+/tracking/verbose 2
+/run/beamOn 1
 Start Run processing.
 
 *********************************************************************************************************
@@ -565,17 +562,17 @@ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0.01s Real=0.02s Sys=0.01s
-Idle> /tracking/verbose 0
-Idle> /run/beamOn 1000
+/tracking/verbose 0
+/run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=4.2s Real=4.6s Sys=0.29s
-Idle> #
-Idle> /gun/energy 300 eV
-Idle> /tracking/verbose 2
-Idle> /run/beamOn 1
+  User=4.2s Real=4.5s Sys=0.35s
+#
+/gun/energy 300 eV
+/tracking/verbose 2
+/run/beamOn 1
 Start Run processing.
 
 *********************************************************************************************************
@@ -599,20 +596,20 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
-Idle> /tracking/verbose 0
-Idle> /run/beamOn 1000
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.1s Real=2.2s Sys=0s
-Idle> #
-Idle> /gun/particle e-
-Idle> #
-Idle> /gun/energy 10 keV
-Idle> /tracking/verbose 2
-Idle> /run/beamOn 1
+  User=2.1s Real=2.1s Sys=0s
+#
+/gun/particle e-
+#
+/gun/energy 10 keV
+/tracking/verbose 2
+/run/beamOn 1
 Start Run processing.
 
 *********************************************************************************************************
@@ -795,19 +792,19 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.17s Real=0.2s Sys=0.03s
-Idle> /tracking/verbose 0
-Idle> /run/beamOn 1000
+  User=0.19s Real=0.19s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.3e+02s Real=1.5e+02s Sys=8.3s
-Idle> #
-Idle> #/gun/particle e-
-Idle> /gun/energy 2 keV
-Idle> /tracking/verbose 2
-Idle> /run/beamOn 1
+  User=1.3e+02s Real=1.4e+02s Sys=8.1s
+#
+#/gun/particle e-
+/gun/energy 2 keV
+/tracking/verbose 2
+/run/beamOn 1
 Start Run processing.
 
 *********************************************************************************************************
@@ -840,19 +837,19 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.03s Real=0.04s Sys=0.01s
-Idle> /tracking/verbose 0
-Idle> /run/beamOn 1000
+  User=0.04s Real=0.04s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=24s Real=28s Sys=1.5s
-Idle> #
-Idle> #/gun/particle e-
-Idle> /gun/energy 600 eV
-Idle> /tracking/verbose 2
-Idle> /run/beamOn 1
+  User=24s Real=26s Sys=1.4s
+#
+#/gun/particle e-
+/gun/energy 600 eV
+/tracking/verbose 2
+/run/beamOn 1
 Start Run processing.
 
 *********************************************************************************************************
@@ -866,18 +863,18 @@ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
-Idle> /tracking/verbose 0
-Idle> /run/beamOn 1000
+/tracking/verbose 0
+/run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.4s Real=3.8s Sys=0.09s
-Idle> #
-Idle> #/gun/particle e-
-Idle> /gun/energy 300 eV
-Idle> /tracking/verbose 2
-Idle> /run/beamOn 1
+  User=3.4s Real=3.5s Sys=0.09s
+#
+#/gun/particle e-
+/gun/energy 300 eV
+/tracking/verbose 2
+/run/beamOn 1
 Start Run processing.
 
 *********************************************************************************************************
@@ -891,24 +888,24 @@ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
-Idle> /tracking/verbose 0
-Idle> /run/beamOn 1000
+/tracking/verbose 0
+/run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.1s Real=1.2s Sys=0s
-Idle> #
-Idle> /calor/setAbsMat Lead
-Idle> #
-Idle> #
-Idle> /gun/direction 1 0 0
-Idle> #
-Idle> /gun/particle gamma
-Idle> #
-Idle> /gun/energy 10 keV
-Idle> /tracking/verbose 2
-Idle> /run/beamOn 1
+  User=1.1s Real=1.1s Sys=0s
+#
+/calor/setAbsMat Lead      
+#
+#
+/gun/direction 1 0 0
+#
+/gun/particle gamma
+#
+/gun/energy 10 keV
+/tracking/verbose 2
+/run/beamOn 1
 Start Run processing.
 
 *********************************************************************************************************
@@ -922,17 +919,17 @@ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0.01s Real=0.01s Sys=0s
-Idle> /tracking/verbose 0
-Idle> /run/beamOn 1000
+/tracking/verbose 0
+/run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=4s Real=4.5s Sys=0.21s
-Idle> # 
-Idle> /gun/energy 2 keV
-Idle> /tracking/verbose 2
-Idle> /run/beamOn 1
+  User=4s Real=4.2s Sys=0.18s
+# 
+/gun/energy 2 keV
+/tracking/verbose 2
+/run/beamOn 1
 Start Run processing.
 
 *********************************************************************************************************
@@ -1006,18 +1003,18 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.03s Real=0.04s Sys=0.01s
-Idle> /tracking/verbose 0
-Idle> /run/beamOn 1000
+  User=0.02s Real=0.03s Sys=0.01s
+/tracking/verbose 0
+/run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=10s Real=11s Sys=0.44s
-Idle> #
-Idle> /gun/energy 600 eV
-Idle> /tracking/verbose 2
-Idle> /run/beamOn 1
+  User=9.9s Real=10s Sys=0.48s
+#
+/gun/energy 600 eV
+/tracking/verbose 2
+/run/beamOn 1
 Start Run processing.
 
 *********************************************************************************************************
@@ -1070,18 +1067,18 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.02s Real=0.02s Sys=0s
-Idle> /tracking/verbose 0
-Idle> /run/beamOn 1000
+  User=0.01s Real=0.01s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.7s Real=4.1s Sys=0.27s
-Idle> #
-Idle> /gun/energy 300 eV
-Idle> /tracking/verbose 2
-Idle> /run/beamOn 1
+  User=3.8s Real=4s Sys=0.27s
+#
+/gun/energy 300 eV
+/tracking/verbose 2
+/run/beamOn 1
 Start Run processing.
 
 *********************************************************************************************************
@@ -1106,19 +1103,19 @@ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0.01s Real=0.01s Sys=0s
-Idle> /tracking/verbose 0
-Idle> /run/beamOn 1000
+/tracking/verbose 0
+/run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
   User=2.2s Real=2.2s Sys=0s
-Idle> #
-Idle> /gun/particle e-
-Idle> #
-Idle> /gun/energy 10 keV
-Idle> /tracking/verbose 2
-Idle> /run/beamOn 1
+#
+/gun/particle e-
+#
+/gun/energy 10 keV
+/tracking/verbose 2
+/run/beamOn 1
 Start Run processing.
 
 *********************************************************************************************************
@@ -1205,19 +1202,19 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.12s Real=0.17s Sys=0s
-Idle> /tracking/verbose 0
-Idle> /run/beamOn 1000
+  User=0.1s Real=0.1s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=27s Real=33s Sys=1.5s
-Idle> #
-Idle> #/gun/particle e-
-Idle> /gun/energy 2 keV
-Idle> /tracking/verbose 2
-Idle> /run/beamOn 1
+  User=27s Real=29s Sys=1.7s
+#
+#/gun/particle e-
+/gun/energy 2 keV
+/tracking/verbose 2
+/run/beamOn 1
 Start Run processing.
 
 *********************************************************************************************************
@@ -1249,18 +1246,18 @@ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0.03s Real=0.03s Sys=0s
-Idle> /tracking/verbose 0
-Idle> /run/beamOn 1000
+/tracking/verbose 0
+/run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=9.4s Real=11s Sys=0.41s
-Idle> #
-Idle> #/gun/particle e-
-Idle> /gun/energy 600 eV
-Idle> /tracking/verbose 2
-Idle> /run/beamOn 1
+  User=9.2s Real=9.8s Sys=0.58s
+#
+#/gun/particle e-
+/gun/energy 600 eV
+/tracking/verbose 2
+/run/beamOn 1
 Start Run processing.
 
 *********************************************************************************************************
@@ -1274,19 +1271,19 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
-Idle> /tracking/verbose 0
-Idle> /run/beamOn 1000
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.8s Real=3s Sys=0.06s
-Idle> #
-Idle> #/gun/particle e-
-Idle> /gun/energy 300 eV
-Idle> /tracking/verbose 2
-Idle> /run/beamOn 1
+  User=2.7s Real=2.8s Sys=0.08s
+#
+#/gun/particle e-
+/gun/energy 300 eV
+/tracking/verbose 2
+/run/beamOn 1
 Start Run processing.
 
 *********************************************************************************************************
@@ -1300,15 +1297,17 @@ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
-Idle> /tracking/verbose 0
-Idle> /run/beamOn 1000
+/tracking/verbose 0
+/run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
   User=1.1s Real=1.1s Sys=0s
-Idle> #
-Idle> Idle> G4 kernel has come to Quit state.
+#
+
+exit
+G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
