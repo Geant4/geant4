@@ -1,9 +1,11 @@
+
 This program compare the Geant3 and Geant4 dE/dx tables.
 The Geant4 values are read as ffread data cards, as they are printed out
 by TestEm3, according the standard Geant3 binning. 
-See the file iron.dat as an example.
-The Geant3 values are computed in this program.
-The g3-g4 differences are ploted in the file plmat.paw
+One must complete by hand the data cards KINE and MATE; see the file iron.dat 
+as an example.
+The Geant3 values are computed within this program.
+The g4-g3 differences are ploted in the file plmat.paw
 
  % cd geant3/g4mat
  % gmakeB           to make an executable  (Batch version) 
@@ -11,7 +13,7 @@ The g3-g4 differences are ploted in the file plmat.paw
  
  To execute:
   
- % cd geant3
+ % cd geant3/g4mat
  % $G4SYSTEM/g4mat.xb (for batch) or g4mat.xt (for interactive)
  
  The program will ask:
