@@ -7,7 +7,7 @@ PreInit> You select Sphere detector
 Tst10PhysicsList::SetCuts:CutLength : 1 (mm)
 Idle> #/particle/list
 Idle> #/tracking/verbose 1
-Idle> You select Cone detector
+Idle> Idle> You select Cone detector
 Idle>   A 10000 optical photons vertex has been generated at (-690.585,174.228,404.117)
 >>> Start Event 0
 >>> End Event 0
