@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.34 2000-04-10 06:48:22 lefebure Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.35 2000-04-10 10:26:56 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,6 +17,11 @@
 //      ---------- G4LowEnergyIonisation low energy modifications -----------
 //                by Alessandra Forti May 1999  
 // **************************************************************
+//   10.04.2000 VL
+// - Correcting Fluorescence transition probabilities in order to take into account 
+//   non-radiative transitions. No Auger electron simulated yet: energy is locally deposited.
+//   10.04.2000 VL
+// - Correction of incident electron final momentum direction
 //   07.04.2000 VL+LU
 // - First implementation of continuous energy loss
 //   22.03.2000 VL
@@ -1149,7 +1154,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
 	diry = newsinTh*cos(newPhi);
 	dirx = newsinTh*sin(newPhi);
 	G4ThreeVector newPartDirection(dirx, diry, dirz);
-	newPartDirection.rotateUz(ParticleDirection);
+	///newPartDirection.rotateUz(ParticleDirection);
 	
 	if(ThereAreShells != FALSE){
 	  
@@ -1167,6 +1172,10 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
 	}
 	else{
 	  
+	  /////Energy deposition vl
+	  ////=================NEW================vl
+	  
+	  /*
 	  // last shell transition from continuum
 	  G4int k = 0;
 	  while(thePrimaryShell != (*(*theBindEnVec)[0])[k]){
@@ -1188,6 +1197,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
 	  }
 	    
 	  thePrimShVec.insert(thePrimaryShell);
+	  */
 	}
       }
     } //END OF THE CHECK ON ATOMIC NUMBER
@@ -1349,10 +1359,15 @@ G4bool G4LowEnergyIonisation::SelectRandomTransition(G4int thePrimShell,
   // loop on subshell is inside the method.
 
   // when the last subshell is reached CollIsFull becomes FALSE.
-  G4bool ColIsFull = TRUE;
+  G4bool ColIsFull = FALSE;
   G4int ShellNum = 0;
   G4double TotalSum = 0; 
   G4int maxNumOfShells = TransitionTable->entries()-1;
+
+  if(thePrimShell <= 0) {
+     G4cerr<<"*** Unvalid Primary shell: "<<thePrimShell<<G4endl;
+     return FALSE;
+  }   
   if(thePrimShell <= (*(*(*TransitionTable)[maxNumOfShells])[0])[0]){
 
     while(thePrimShell != (*(*(*TransitionTable)[ShellNum])[0])[0]){
@@ -1369,12 +1384,13 @@ G4bool G4LowEnergyIonisation::SelectRandomTransition(G4int thePrimShell,
     // transition probability: it must not be added to TotalSum. 
   
     G4int TransProb = 1;
-    for(TransProb = 1; TransProb < (*(*TransitionTable)[ShellNum])[ProbCol]->length(); TransProb++){ 
-      
-      TotalSum += (*(*(*TransitionTable)[ShellNum])[ProbCol])[TransProb];
-    }
-    
-    G4double PartialProb = G4UniformRand()*TotalSum;
+    // Include non-radiative transitions (vl):
+    ////for(TransProb = 1; TransProb < (*(*TransitionTable)[ShellNum])[ProbCol]->length(); TransProb++){ 
+    ////  TotalSum += (*(*(*TransitionTable)[ShellNum])[ProbCol])[TransProb];
+    ////}
+    ////G4double PartialProb = G4UniformRand()*TotalSum;
+    ////
+    G4double PartialProb = G4UniformRand();
     G4double PartSum = 0;
     
     TransProb = 1; 
@@ -1387,6 +1403,7 @@ G4bool G4LowEnergyIonisation::SelectRandomTransition(G4int thePrimShell,
 	TransParam[0] = (*(*(*TransitionTable)[ShellNum])[SubShellCol])[TransProb];
 	TransParam[1] = (*(*(*TransitionTable)[ShellNum])[ProbCol])[TransProb];
 	TransParam[2] = (*(*(*TransitionTable)[ShellNum])[EnergyCol])[TransProb];
+	ColIsFull = TRUE;
 	break;
       }
       

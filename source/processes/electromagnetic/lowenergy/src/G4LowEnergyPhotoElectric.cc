@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.24 2000-02-18 10:27:53 lefebure Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.25 2000-04-10 10:26:56 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,6 +18,9 @@
 //      ------------ G4LowEnergyPhotoelctric: low energy modifications --------
 //                   by Alessandra Forti, October 1998
 // **************************************************************
+//   10.04.2000 VL
+// - Correcting Fluorescence transition probabilities in order to take into account 
+//   non-radiative transitions. No Auger electron simulated yet: energy is locally deposited.
 // 17.02.2000 Veronique Lefebure
 // - bugs corrected in fluorescence simulation: 
 //   . when final use of binding energy: no photon was ever created
@@ -297,7 +300,7 @@ G4double G4LowEnergyPhotoElectric::ComputeCrossSection(const G4double AtomIndex,
 
     else{
 
-      crossSec = util.DataLogInterpolation(IncEnergy, (*EnergyVector), (*CrossSecVector));
+      crossSec = util.DataLogInterpolation(IncEnergy, (*EnergyVector), (*CrossSecVector))*barn;
 
     }
 
@@ -478,7 +481,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
 	diry = newsinTh*cos(newPhi);
 	dirx = newsinTh*sin(newPhi);
 	G4ThreeVector newPartDirection(dirx, diry, dirz);
-	newPartDirection.rotateUz(PhotonDirection);
+	/////newPartDirection.rotateUz(PhotonDirection);
 	
 	if(ThereAreShells != FALSE){
 	  
@@ -496,6 +499,10 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
 	}
 	else{
 	  	  
+	  /////Energy deposition vl
+	  ////=================NEW================vl
+	  
+	  /*
 	  G4int k = 0;
 	  while(thePrimaryShell != (*(*theBindEnVec)[0])[k]) k++;
 	  
@@ -510,11 +517,12 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
 					     newPartDirection, 
 					     lastTransEnergy) ;
 	    photvec.append(newPart);
-
+           
 	  }
+	  thePrimShVec.insert(thePrimaryShell);
+	  */
 	}
 
-	  thePrimShVec.insert(thePrimaryShell);
       }
     } //END OF THE CHECK ON ATOMIC NUMBER
     
@@ -579,7 +587,7 @@ G4int G4LowEnergyPhotoElectric::SelectRandomShell(const G4int AtomIndex,
 
     else{
 
-      crossSec = util.DataLogInterpolation(IncEnergy, (*EnergyVector), (*CrossSecVector));
+      crossSec = util.DataLogInterpolation(IncEnergy, (*EnergyVector), (*CrossSecVector))*barn;
 
     }
     
@@ -652,11 +660,15 @@ G4bool G4LowEnergyPhotoElectric::SelectRandomTransition(G4int thePrimShell,
   // loop on subshell is inside the method.
 
   // when the last subshell is reached CollIsFull becomes FALSE.
-  G4bool ColIsFull = TRUE;
+  G4bool ColIsFull = FALSE;
   G4int ShellNum = 0;
   G4double TotalSum = 0; 
   G4int maxNumOfShells = TransitionTable->entries()-1;
 
+  if(thePrimShell <= 0) {
+     G4cerr<<"*** Unvalid Primary shell: "<<thePrimShell<<G4endl;
+     return FALSE;
+  }   
   if(thePrimShell <= (*(*(*TransitionTable)[maxNumOfShells])[0])[0]){
 
     while(thePrimShell != (*(*(*TransitionTable)[ShellNum])[0])[0]){
@@ -673,12 +685,19 @@ G4bool G4LowEnergyPhotoElectric::SelectRandomTransition(G4int thePrimShell,
     // transition probability: it must not be added to TotalSum. 
 
       G4int TransProb = 1;
-      for(TransProb = 1; TransProb < (*(*TransitionTable)[ShellNum])[ProbCol]->length(); TransProb++){ 
-	
-	TotalSum += (*(*(*TransitionTable)[ShellNum])[ProbCol])[TransProb];
-      }
       
-      G4double PartialProb = G4UniformRand()*TotalSum;
+     // Include non-radiative transitions (vl):
+     //// for(TransProb = 1; TransProb < (*(*TransitionTable)[ShellNum])[ProbCol]->length(); TransProb++){ 
+     ////	TotalSum += (*(*(*TransitionTable)[ShellNum])[ProbCol])[TransProb];
+     //// }
+     ////G4double PartialProb = G4UniformRand()*TotalSum;
+     ////
+     G4double PartialProb = G4UniformRand();
+    
+    
+    //vl.
+
+
       G4double PartSum = 0;
       
       TransProb = 1; 
@@ -691,6 +710,7 @@ G4bool G4LowEnergyPhotoElectric::SelectRandomTransition(G4int thePrimShell,
 	  TransParam[0] = (*(*(*TransitionTable)[ShellNum])[SubShellCol])[TransProb];
 	  TransParam[1] = (*(*(*TransitionTable)[ShellNum])[ProbCol])[TransProb];
 	  TransParam[2] = (*(*(*TransitionTable)[ShellNum])[EnergyCol])[TransProb];
+ 	  ColIsFull = TRUE;
 	  break;
 	}
 	
