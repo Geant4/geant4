@@ -320,16 +320,20 @@ help /vis/sceneHandler/create
 #
 /vis/sceneHandler/create RayTracer
 /vis/viewer/create
-/vis/viewer/reset
 /vis/viewer/set/viewpointThetaPhi 30 30
 /vis/viewer/refresh
 /vis/viewer/update
 #
-# Bug?  It seems to fail to pick up a new viewer's viewing parameters...
 /vis/rayTracer/column 400
 /vis/rayTracer/row 400
+/vis/rayTracer/backgroundColour 0 0 0
 /vis/viewer/create
-/vis/viewer/reset
 /vis/viewer/set/projection perspective  30
+/vis/viewer/set/viewpointThetaPhi 45 45
+/vis/viewer/refresh
+/vis/viewer/update
+#
+# Odd!!?  JPEG image seems upside down for default view direction...
+/vis/viewer/create
 /vis/viewer/refresh
 /vis/viewer/update
