@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.32 2003-06-05 16:12:27 japost Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.33 2003-06-19 13:57:45 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -430,7 +430,8 @@ G4MagInt_Driver::OneGoodStep(      G4double y[],        // InOut
 
 {
       G4double errpos_sq, errvel_sq, errmax_sq;
-      G4double errmax, h, htemp, xnew ;
+      // G4double errmax;
+      G4double h, htemp, xnew ;
 
       G4double yerr[G4FieldTrack::ncompSVEC], ytemp[G4FieldTrack::ncompSVEC];
 
@@ -462,11 +463,11 @@ G4MagInt_Driver::OneGoodStep(      G4double y[],        // InOut
           errvel_sq *= inv_eps_vel_sq;
 
           errmax_sq = G4std::max( errpos_sq, errvel_sq ); // Square of maximum error
-          errmax = sqrt( errmax_sq );
+          // errmax = sqrt( errmax_sq );
 	  if(errmax_sq <= 1.0 ) break ; // Step succeeded. 
 
 	  // Step failed; compute the size of retrial Step.
-	  htemp = GetSafety()*h*pow(errmax,GetPshrnk()) ;
+	  htemp = GetSafety()*h* pow( errmax_sq, 0.5*GetPshrnk() );
 
 	  if(htemp >= 0.1*h) h = htemp ;  // Truncation error too large,
 	  else h = 0.1*h ;                // reduce stepsize, but no more
@@ -489,7 +490,7 @@ G4MagInt_Driver::OneGoodStep(      G4double y[],        // InOut
 #endif
 
       // Compute size of next Step
-      if(errmax > errcon) hnext = GetSafety()*h*pow(errmax,GetPgrow()) ;
+      if(errmax_sq > errcon*errcon) hnext = GetSafety()*h*pow(errmax_sq,0.5*GetPgrow()) ;
       else hnext = max_stepping_increase*h ;
                      // No more than a factor of 5 increase
 
