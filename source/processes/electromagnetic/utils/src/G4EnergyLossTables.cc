@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossTables.cc,v 1.26 2003-04-17 17:40:42 vnivanch Exp $
+// $Id: G4EnergyLossTables.cc,v 1.27 2003-04-18 17:49:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -755,10 +755,10 @@ G4double G4EnergyLossTables::GetRange(
     oldIndex = -1 ;
   }
   const G4PhysicsTable* rangeTable= t.theRangeTable;
-  if ( !rangeTable )
+  const G4PhysicsTable*  dEdxTable= t.theDEDXTable;
+  if ( !rangeTable || !dEdxTable)
     return G4LossTableManager::Instance()->GetRange(aParticle,KineticEnergy,couple);
 
-  const G4PhysicsTable*  dEdxTable= t.theDEDXTable;
 
   G4int materialIndex = couple->GetIndex();
   G4double scaledKineticEnergy = KineticEnergy*t.theMassRatio;
@@ -807,9 +807,9 @@ G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
     oldIndex = -1 ;
   }
   const G4PhysicsTable*  dEdxTable= t.theDEDXTable;
-  if ( !dEdxTable )
-    return G4LossTableManager::Instance()->GetEnergy(aParticle,range,couple);
   const G4PhysicsTable*  inverseRangeTable= t.theInverseRangeTable;
+  if ( !dEdxTable || !inverseRangeTable)
+    return G4LossTableManager::Instance()->GetEnergy(aParticle,range,couple);
 
   G4double scaledrange,scaledKineticEnergy ;
   G4bool isOut ;
@@ -918,7 +918,7 @@ G4double G4EnergyLossTables::GetPreciseRangeFromEnergy(
   }
   const G4PhysicsTable* rangeTable= t.theRangeTable;
   const G4PhysicsTable*  dEdxTable= t.theDEDXTable;
-  if ( !dEdxTable )
+  if ( !dEdxTable || !rangeTable)
     return G4LossTableManager::Instance()->GetDEDX(aParticle,KineticEnergy,couple);
 
   G4int materialIndex = couple->GetIndex();
