@@ -1,4 +1,4 @@
-$Id: History,v 1.82 2003-10-31 14:36:26 gcosmo Exp $
+$Id: History,v 1.83 2003-11-04 15:08:50 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 4th, 2003  G.Cosmo - field-V05-02-02
+----------------------
+- G4ChordFinder.cc:
+  o Fixed compilation problem occuring when G4DEBUG_FIELD was set.
 
 Oct 31st, 2003  G.Cosmo - field-V05-02-01
 -----------------------
