@@ -1400,12 +1400,12 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
   #endif
 
   G4KineticTrackVector * kt_outside = new G4KineticTrackVector;
-  for_each( theSecondaryList.begin(),theSecondaryList.end(),
+  std::for_each( theSecondaryList.begin(),theSecondaryList.end(),
            SelectFromKTV(kt_outside,G4KineticTrack::outside));
 //  PrintKTVector(kt_outside, std::string("DoTimeStep - found outside"));	  
 
   G4KineticTrackVector * kt_inside = new G4KineticTrackVector;
-  for_each( theSecondaryList.begin(),theSecondaryList.end(),
+  std::for_each( theSecondaryList.begin(),theSecondaryList.end(),
            SelectFromKTV(kt_inside, G4KineticTrack::inside));
 //  PrintKTVector(kt_inside, std::string("DoTimeStep - found inside"));	  
 //-----
@@ -1434,7 +1434,7 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
 // Partclies which went INTO nucleus
 
   G4KineticTrackVector * kt_gone_in = new G4KineticTrackVector;
-  for_each( kt_outside->begin(),kt_outside->end(),
+  std::for_each( kt_outside->begin(),kt_outside->end(),
            SelectFromKTV(kt_gone_in,G4KineticTrack::inside));
 //  PrintKTVector(kt_gone_in, std::string("DoTimeStep - gone in"));	  
 
@@ -1442,7 +1442,7 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
 
 // Partclies which  went OUT OF nucleus
   G4KineticTrackVector * kt_gone_out = new G4KineticTrackVector;
-  for_each( kt_inside->begin(),kt_inside->end(),
+  std::for_each( kt_inside->begin(),kt_inside->end(),
            SelectFromKTV(kt_gone_out, G4KineticTrack::gone_out));
 
 //  PrintKTVector(kt_gone_out, std::string("DoTimeStep - gone out"));	  
@@ -1450,10 +1450,10 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
   CorrectBarionsOnBoundary(kt_gone_in,kt_gone_out); 
 
 // Add track missing nucleus to addFinals
-  for_each( kt_outside->begin(),kt_outside->end(),
+  std::for_each( kt_outside->begin(),kt_outside->end(),
            SelectFromKTV(kt_gone_out,G4KineticTrack::miss_nucleus));
 //  tracks going straight through in a single step....
-  for_each( kt_outside->begin(),kt_outside->end(),
+  std::for_each( kt_outside->begin(),kt_outside->end(),
            SelectFromKTV(kt_gone_out,G4KineticTrack::gone_out));
     
     #ifdef debug_G4BinaryCascade
@@ -1467,7 +1467,7 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
     //G4cout << "Here we are 2"<<G4endl;
 // Partclies which could not leave nucleus,  captured...
   G4KineticTrackVector * kt_captured = new G4KineticTrackVector;
-    for_each( theSecondaryList.begin(),theSecondaryList.end(),
+    std::for_each( theSecondaryList.begin(),theSecondaryList.end(),
            SelectFromKTV(kt_captured, G4KineticTrack::captured));
 
     //G4cout << "Here we are 3"<<G4endl;
@@ -1479,7 +1479,7 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
      if (kt_gone_out->size() )
      {
 	G4KineticTrack * nextPrimary = theCollisionMgr->GetNextCollision()->GetPrimary();
-	iter = find(kt_gone_out->begin(),kt_gone_out->end(),nextPrimary);
+	iter = std::find(kt_gone_out->begin(),kt_gone_out->end(),nextPrimary);
 	if ( iter !=  kt_gone_out->end() )
 	{
 	   success=false;
@@ -1491,7 +1491,7 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
      if ( kt_captured->size() )
      {
 	G4KineticTrack * nextPrimary = theCollisionMgr->GetNextCollision()->GetPrimary();
-	iter = find(kt_captured->begin(),kt_captured->end(),nextPrimary);
+	iter = std::find(kt_captured->begin(),kt_captured->end(),nextPrimary);
 	if ( iter !=  kt_captured->end() )
 	{
 	   success=false;
@@ -1511,7 +1511,7 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
   {
      theCapturedList.insert(theCapturedList.end(),
                             kt_captured->begin(),kt_captured->end());
-     for_each(kt_captured->begin(),kt_captured->end(),
+     std::for_each(kt_captured->begin(),kt_captured->end(),
               std::mem_fun(&G4KineticTrack::Hit));
      UpdateTracksAndCollisions(kt_captured, NULL, NULL);
   }
@@ -1519,7 +1519,7 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
 #ifdef debug_G4BinaryCascade
   delete kt_inside;
   kt_inside = new G4KineticTrackVector;
-  for_each( theSecondaryList.begin(),theSecondaryList.end(),
+  std::for_each( theSecondaryList.begin(),theSecondaryList.end(),
            SelectFromKTV(kt_inside, G4KineticTrack::inside));
    if ( currentZ != (GetTotalCharge(theTargetList) 
                     + GetTotalCharge(theCapturedList)
@@ -2035,7 +2035,7 @@ void G4BinaryCascade::ClearAndDestroy(G4KineticTrackVector * ktv)
 {
   std::vector<G4KineticTrack *>::iterator i;
   for(i = ktv->begin(); i != ktv->end(); ++i)
-    delete *i;
+    delete (*i);
   ktv->clear();
 }
 
@@ -2045,7 +2045,7 @@ void G4BinaryCascade::ClearAndDestroy(G4ReactionProductVector * rpv)
 {
   std::vector<G4ReactionProduct *>::iterator i;
   for(i = rpv->begin(); i != rpv->end(); ++i)
-    delete *i;
+    delete (*i);
   rpv->clear();
 }
 

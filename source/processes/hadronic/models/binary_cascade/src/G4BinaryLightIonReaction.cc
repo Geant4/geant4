@@ -113,7 +113,7 @@
       debug.push_back("################# Result size");
       debug.push_back(result->size());
       debug.dump();
-      for_each(initalState->begin(), initalState->end(), Delete<G4KineticTrack>());
+      std::for_each(initalState->begin(), initalState->end(), Delete<G4KineticTrack>());
       delete initalState;
       
       if(result->size()==0) 
