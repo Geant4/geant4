@@ -2,6 +2,7 @@
 #include "G4LorentzVector.hh"
 #include "G4LorentzRotation.hh"
 #include <algorithm>
+#include "G4ReactionProductVector.hh"
 
 
   G4BinaryLightIonReaction::G4BinaryLightIonReaction()
@@ -79,13 +80,17 @@
         resA++;
 	resZ+=aNuc->GetDefinition()->GetPDGCharge();
       }
-      // Calculate excitation energy
-      // ...
-      G4double anEnergy(0);
       
-      // Calculate net momentum
-      // ...
-      G4ThreeVector p;
+      // Calculate excitation energy
+      G4LorentzVector iState = mom;
+      iState.setT(iState.getT()+m2);
+      
+      G4LorentzVector fState(0,0,0,0);
+      for(G4int i=0; i<result->size(); i++)
+      {
+        fState += G4LorentzVector( (*result)[i]->GetMomentum(), (*result)[i]->GetTotalEnergy() );
+      }
+      G4LorentzVector momentum(iState-fState);
       
       //Make the fragment
       G4Fragment aProRes;
@@ -94,7 +99,6 @@
       aProRes.SetNumberOfParticles(0);
       aProRes.SetNumberOfCharged(0);
       aProRes.SetNumberOfHoles(a2-resA);
-      G4LorentzVector momentum(p, anEnergy);
       aProRes.SetMomentum(momentum);
       
       // call precompound model
@@ -102,10 +106,10 @@
       proFrag = theProjectileFragmentation.DeExcite(aProRes);
       
       // collect the evaporation part
-      G4ReactionProductVector::iterator i;
-      for(i=proFrag->begin(); i!=proFrag->end(); i++)
+      G4ReactionProductVector::iterator ii;
+      for(ii=proFrag->begin(); ii!=proFrag->end(); ii++)
       {
-        result->push_back(*i);
+        result->push_back(*ii);
       }
     }
     // Rotate to lab
