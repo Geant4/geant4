@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2002-05-29 15:32:26 maire Exp $
+# $Id: GNUmakefile,v 1.7 2002-05-29 15:33:59 maire Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -16,7 +16,7 @@ all: lib bin
 
 include $(G4INSTALL)/config/architecture.gmk
 
-###G4NOHIST := true
+G4NOHIST := true
 ifdef G4NOHIST
   CPPFLAGS += -DG4NOHIST
 else
