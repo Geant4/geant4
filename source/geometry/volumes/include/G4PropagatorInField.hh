@@ -21,9 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.28 2002-11-09 00:25:08 jacek Exp $
+// $Id: G4PropagatorInField.hh,v 1.29 2002-11-29 16:07:19 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 // 
 // class G4PropagatorInField 
 //
@@ -31,20 +30,16 @@
 // 
 // This class performs the navigation/propagation of a particle/track 
 // in a magnetic field. The field is in general non-uniform.
-// For the calculation of the path, it relies on the class G4MagTr.
-// To create an object, must have an object that calculates the Curved 
-// paths and also must know the value of the maximum displacement allowed.
+// For the calculation of the path, it relies on the class G4ChordFinder.
 //
-// Methods:
-//        ComputeStep(..)
-//        CalculateStepTimeAndAccuracy(..) 
-//        LocateIntersectionPoint(..)
-
+// Key Method:
+//              ComputeStep(..)
 // History:
 // -------
 // 25.10.96 John Apostolakis,  design and implementation 
 // 25.03.97 John Apostolakis,  adaptation for G4Transportation and cleanup
-// ------------------------------------------------------------------------
+//  8.11.02 John Apostolakis,  changes to enable use of safety in intersecting
+// ---------------------------------------------------------------------------
 
 #ifndef G4PropagatorInField_hh 
 #define G4PropagatorInField_hh  1
@@ -141,6 +136,21 @@ class G4PropagatorInField
                                        G4int noAbandon );
    inline G4int GetThresholdNoZeroSteps( G4int i ); 
 
+ public:  // with description
+  // 
+  void SetTrajectoryFilter(G4VCurvedTrajectoryFilter* filter);
+  // Set the filter that examines & stores 'intermediate' 
+  //  curved trajectory points.  Currently only position is stored.
+
+  G4std::vector<G4ThreeVector>* GimmeTrajectoryVectorAndForgetIt() const;
+  // Access the points which have passed by the filter.
+  // Responsibility for deleting the points lies with the client.
+  // This method MUST BE called exactly ONCE per step. 
+
+  void ClearPropagatorState();
+  // Clear all the State of this class and its current associates
+  //   --> the current field manager & chord finder will also be called
+
  protected:  // with description
 
    G4bool LocateIntersectionPoint( 
@@ -152,6 +162,21 @@ class G4PropagatorInField
      // calculate the intersection point of the true path of the particle 
      // with the surface of the current volume (or of one of its daughters). 
      // (Should use lateral displacement as measure of convergence). 
+
+   G4bool IntersectChord( G4ThreeVector  StartPointA, 
+			    G4ThreeVector  EndPointB,
+			    G4double      &NewSafety,
+			    G4double      &LinearStepLength,
+			    G4ThreeVector &IntersectionPoint);
+     // Intersect the chord from StartPointA to EndPointB
+     //  and return whether an intersection occurred
+
+   G4FieldTrack ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,  
+				    const G4FieldTrack &EstimtdEndStateB,
+				    double              curveDist);
+     // Return new estimate for state after curveDist 
+     //    starting from CurrentStateA,  to replace EstimtdEndStateB,
+     //    (and report displacement -- if field is compiled verbose.)
 
    void PrintStepLengthDiagnostic( G4double      currentProposedStepLength,
                                    G4double      decreaseFactor,
@@ -211,19 +236,11 @@ class G4PropagatorInField
    G4double  fCharge, fInitialMomentumModulus, fMass;
 
   // Introducing smooth curved trajectory display (jacek 30/10/2002)
-public:
-  // 
-  void SetTrajectoryFilter(G4VCurvedTrajectoryFilter* filter);
 
-  // Access the points which have passed through the filter. The
-  // points are stored as ThreeVectors for the initial impelmentation
-  // only (jacek 30/10/2002)
-  // Responsibility for deleting the points lies with
-  // SmoothTrajectoryPoint, which is the points' final
-  // destination. The points pointer is set to NULL, to ensure that
-  // the points are not re-used in subsequent steps, therefore THIS
-  // METHOD MUST BE CALLED EXACTLY ONCE PER STEP. (jacek 08/11/2002)
-  G4std::vector<G4ThreeVector>* GimmeTrajectoryVectorAndForgetIt() const;
+   // Last safety origin & value: for optimisation
+   G4ThreeVector  fPreviousSftOrigin;
+   G4double       fPreviousSafety; 
+
 private:
   // The filter encapsulates the algorithm which selects which
   // intermediate points should be stored in a trajectory. If the
