@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2000-05-22 08:17:21 johna Exp $
+$Id: History,v 1.2 2000-05-22 08:34:58 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,7 +20,7 @@ committal in the CVS repository !
 History file for visualization/OpenGL
 -------------------------------------
 
-22nd May 2000  John Allison
+22nd May 2000  John Allison  (opengl-V01-01-00)
 - Fixed slow response of 2nd window of OpenGLXm.  Worked around Mesa bug
   by sharing static visuals in G4OpenGLXViewer (Guy Barrand):
     static XVisualInfo* vi_single_buffer;
