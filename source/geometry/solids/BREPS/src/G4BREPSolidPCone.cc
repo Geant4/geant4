@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidPCone.cc,v 1.10 1999-05-19 17:00:49 magni Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.11 1999-05-21 10:35:11 magni Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -427,7 +427,7 @@ EInside G4BREPSolidPCone::Inside(register const G4ThreeVector& Pt) const
       // increment the number of intersection by 1 if the 
       // point is not on the surface and if this intersection 
       // was not founded before
-      if(SurfaceVec[a]->HowNear(Pt) < kCarTolerance)
+      if(fabs(SurfaceVec[a]->HowNear(Pt)) < kCarTolerance)
 	return kSurface;
       hits += SurfaceVec[a]->Intersect(r);
     }
@@ -556,7 +556,7 @@ G4double G4BREPSolidPCone::DistanceToIn(register const G4ThreeVector& Pt,
     {
       // test if the ray intersect the surface
       G4Vector3D Norm = SurfaceVec[a]->SurfaceNormal(Pttmp);
-      if( (Norm * Vtmp) < 0 && SurfaceVec[a]->HowNear(Pt) < halfTolerance )
+      if( (Norm * Vtmp) < 0 && fabs(SurfaceVec[a]->HowNear(Pt)) < halfTolerance )
 	return 0;
       if( (SurfaceVec[a]->Intersect(r)) ) {
 
@@ -623,7 +623,7 @@ G4double G4BREPSolidPCone::DistanceToOut(register const G4ThreeVector& Pt,
     if(SurfaceVec[a]->Active())
     {
       G4Vector3D Norm = SurfaceVec[a]->SurfaceNormal(Pttmp);
-      if( (Norm * Vtmp) > 0 && SurfaceVec[a]->HowNear(Pt) < halfTolerance )
+      if( (Norm * Vtmp) > 0 && fabs(SurfaceVec[a]->HowNear(Pt)) < halfTolerance )
 	return 0;
       // test if the ray intersect the surface
       if( (SurfaceVec[a]->Intersect(r)) )
