@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEnergyLoss.cc,v 1.29 2002-02-11 16:00:39 maire Exp $
+// $Id: G4VEnergyLoss.cc,v 1.30 2002-02-14 10:01:56 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -37,6 +37,7 @@
 //  26-10-01 static inline functions moved from .hh file (mma) 
 //  08.11.01 some static methods,data members are not static L.Urban
 //  11.02.02 subSecFlag = false --> No sucutoff generation (mma) 
+//  14.02.02 initial value of data member finalRange has been changed L.Urban
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -56,7 +57,8 @@ G4bool*      G4VEnergyLoss::LowerLimitForced        = 0;
 G4bool	     G4VEnergyLoss::setMinDeltaCutInRange = false;
 
 G4double     G4VEnergyLoss::dRoverRange    = 20*perCent;
-G4double     G4VEnergyLoss::finalRange     = 200*micrometer;
+// G4double     G4VEnergyLoss::finalRange     = 200*micrometer;
+G4double     G4VEnergyLoss::finalRange     = 1000.mm;
 G4double     G4VEnergyLoss::c1lim = dRoverRange;
 G4double     G4VEnergyLoss::c2lim = 2.*(1.-dRoverRange)*finalRange;
 G4double     G4VEnergyLoss::c3lim = -(1.-dRoverRange)*finalRange*finalRange;
