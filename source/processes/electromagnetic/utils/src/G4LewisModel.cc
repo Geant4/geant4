@@ -39,6 +39,8 @@
 //          the central part now is similar to the Highland parametrization +
 //          minor correction in angle sampling algorithm (for all particles)
 //          (L.Urban)
+// 30-05-03 misprint in SampleCosineTheta corrected(L.Urban)          
+//          
 //
 
 // Class Description:
@@ -574,7 +576,7 @@ G4double G4LewisModel::SampleCosineTheta(G4double trueStepLength)
                          (1.+corr_highland*log(xx0))/betacp ;
 
           if (theta0 > tausmall) a = 0.5/(1.-cos(theta0)) ;
-          else                   a = 4.0/(theta0*theta0) ;
+          else                   a = 1.0/(theta0*theta0) ;
 
         } 
         else 

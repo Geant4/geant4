@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering.cc,v 1.41 2003-05-26 10:33:10 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.42 2003-05-30 06:40:25 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -66,6 +66,7 @@
 //          minor correction in angle sampling algorithm (for all particles)
 //          (L.Urban)
 // 24-05-03 bug in nuclear size corr.computation fixed thanks to Vladimir(L.Urban)
+// 30-05-03 misprint in PostStepDoIt corrected(L.Urban)
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -729,7 +730,7 @@ G4VParticleChange* G4MultipleScattering::PostStepDoIt(
          if(theta0 > tausmall)
            a = 0.5/(1.-cos(theta0)) ;
          else
-           a = 4./(theta0*theta0) ;
+           a = 1./(theta0*theta0) ;
        } 
        else
        {
