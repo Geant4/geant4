@@ -32,7 +32,8 @@
 // 
 //      Creation date: 1 Giugno 1999
 //
-//      Modifications: 24.04.01 V.Ivanchenko remove RogueWave
+//      Modifications: 24.04.01 V.Ivanchenko comment RogueWave
+//                     13.07.01 V.Ivanchenko remove RW
 //      
 // -------------------------------------------------------------------
 
@@ -46,9 +47,7 @@
 #define G4THIRDLEVEL_HH
 
 #include "G4SecondLevel.hh"
-//#include "g4rw/tpordvec.h"
 
-//class G4ThirdLevel : public G4RWTPtrOrderedVector< G4SecondLevel >{
 class G4ThirdLevel : public G4std::vector< G4SecondLevel* >
 {
 

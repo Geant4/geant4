@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hTestStoppingPower.cc,v 1.9 2001-07-11 10:02:50 gunter Exp $
+// $Id: G4hTestStoppingPower.cc,v 1.10 2001-07-13 10:24:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // -------------------------------------------------------------------
@@ -92,7 +92,7 @@ main()
 {
   // ---- HBOOK initialization
 
-  hbookManager = new HBookFile("stop85.paw", 58);
+  hbookManager = new HBookFile("stop85nuc.paw", 58);
   assert (hbookManager != 0);
   
   // ---- Book a histogram and ntuples
@@ -247,7 +247,7 @@ main()
     hIon[i]->SetEnlossFluc(false) ;
 
     // hIon[i]->SetBarkasOff();
-        hIon[i]->SetNuclearStoppingOff();
+    //    hIon[i]->SetNuclearStoppingOff();
   //  hIon[i]->SetStoppingPowerTableName("ICRU_R49p"); 
   
     theProcessManager[i]->AddProcess(hIon[i]);
@@ -671,7 +671,7 @@ main()
   hIon[7] = new G4hLowEnergyIonisation();
   hIon[7]->SetElectronicStoppingPowerModel(part[0],"Ziegler1985p"); 
   hIon[7]->SetEnlossFluc(false) ;
-  hIon[7]->SetNuclearStoppingOff();
+  //hIon[7]->SetNuclearStoppingOff();
   //  hIon[7]->SetBarkasOff();
   theProcessManager[7]->AddProcess(hIon[7]);
   hIon[7]->BuildPhysicsTable(*part[0]);
