@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.cc,v 1.14 2001-03-05 10:44:25 grichine Exp $
+// $Id: G4PropagatorInField.cc,v 1.15 2001-03-19 18:45:09 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,6 +33,7 @@
 //const G4double G4PropagatorInField::fDefault_Delta_One_Step_Value = 0.25 * mm;
 
 // -------------------------------------------------------------------------
+#if OLD_SIGNATURE_IS_INVALID
 G4double 
 G4PropagatorInField::
   ComputeStep(const  G4ThreeVector &   StartPointA,
@@ -47,6 +48,7 @@ G4PropagatorInField::
 		   Velocity, 
 		   0.0,          // length of path
 		   0.0,          // energy
+	      // PROBLEM ---> zero energy will create zero momentum !!
                    0.0,          // lab tof
 		   0.0,          // proper tof
 		   0 );
@@ -56,6 +58,7 @@ G4PropagatorInField::
 			    CurrentProposedStepLength, 
 			    currentSafety );
 }
+#endif
 
 // -------------------------------------------------------------------------
 G4double 

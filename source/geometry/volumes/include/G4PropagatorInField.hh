@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.hh,v 1.11 2000-11-01 16:53:58 gcosmo Exp $
+// $Id: G4PropagatorInField.hh,v 1.12 2001-03-19 18:43:04 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,15 +57,15 @@ class G4PropagatorInField
   ~G4PropagatorInField(){};
 
    G4double ComputeStep(G4FieldTrack  &pFieldTrack,
-			G4double pCurrentProposedStepLength,
-			G4double       &pNewSafety, 
+ 			G4double pCurrentProposedStepLength,
+ 			G4double       &pNewSafety, 
 			G4VPhysicalVolume *pPhysVol=0 );
 
-   G4double ComputeStep(const G4ThreeVector &pGlobalPoint,
-		        const G4ThreeVector &pCurveTangent,    // Unit vector
-		              G4double pCurrentProposedStepLength,
-			      G4double       &pNewSafety, 
-                       	      G4VPhysicalVolume *pPhysVol=0 );
+  //  G4double ComputeStep(const G4ThreeVector &pGlobalPoint,
+  // 		        const G4ThreeVector &pCurveTangent,    // Unit vector
+  //		              G4double pCurrentProposedStepLength,
+  // 			      G4double       &pNewSafety, 
+  //                          G4VPhysicalVolume *pPhysVol=0 );
      // Compute the next geometric Step
 
    inline G4ThreeVector  EndPosition() const;       
