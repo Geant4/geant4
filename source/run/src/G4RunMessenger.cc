@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunMessenger.cc,v 1.3 1999-07-25 05:05:20 asaim Exp $
+// $Id: G4RunMessenger.cc,v 1.4 1999-07-25 15:58:47 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -121,7 +121,7 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   storeRandCmd->SetGuidance("  is overwitten every time.");
   storeRandCmd->SetGuidance("In case Frequency is 1, file names are RandEngineRxxx.stat,");
   storeRandCmd->SetGuidance("  where xxx is the run number.");
-  storeRandCmd->SetGuidance("In case Frequency is 1, file names are RandEngineRxxxEyyy.stat,");
+  storeRandCmd->SetGuidance("In case Frequency is 2, file names are RandEngineRxxxEyyy.stat,");
   storeRandCmd->SetGuidance("  where xxx is the run number and yyy is the event number.");
   storeRandCmd->AvailableForStates(PreInit,Idle);
   storeRandCmd->SetParameterName("frequency",true);
