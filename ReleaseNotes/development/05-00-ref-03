@@ -51,7 +51,7 @@ geometry/volumes                        geomvol-V05-00-02
   Removed redundant calculation of localPoint in method
   LocateGlobalPointWithinVolume()
 
-global                                  global-V05-00-02
+global                                  global-V05-00-03
 ------
 - Fixed trivial strict pedantic warnings in copy constructor for
   G4PhysicsTable and G4strstreambuf. Also for unused parameters in
@@ -67,7 +67,7 @@ particles                               particles-V05-00-05
   occasionally resulting in computation of negative interaction length. 
   Fixes problem report #360. 
 
-processes/electromagnetic/lowenergy     emlowen-V05-00-10
+processes/electromagnetic/lowenergy     emlowen-V05-00-11
 -----------------------------------
 - Minor design iteration in view of the Penelope model for Bremsstrahlung
   process to accomodate variable name of file with parameters. 
