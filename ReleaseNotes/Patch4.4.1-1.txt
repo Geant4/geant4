@@ -41,7 +41,6 @@ List of fixes included in this public patch to release 4.1:
       o in GetFieldValue() signature of Point is double[4],
         instead of double[3] 
       o defined G4maximum_number_of_field_components as enum. 
-    - Updated reference outputs and some other updates to unit tests.
   + solids/CSG:
     - G4Cons:
       o Bug fixed in DistanceToIn(p,v) concerning z-crossing at
