@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4QContent.hh,v 1.16 2003-06-16 17:04:03 gunter Exp $
+// $Id: G4QContent.hh,v 1.17 2003-09-09 09:13:36 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QContent ----------------
@@ -32,7 +32,7 @@
 #ifndef G4QContent_h
 #define G4QContent_h 1
 
-#include <iostream>
+#include "g4std/iostream"
 #include "globals.hh"
 #include "Randomize.hh"
 
@@ -149,8 +149,8 @@ private:            //                       C    S
 };
 
 // Not member operators
-std::ostream&   operator<<(std::ostream& lhs, G4QContent& rhs);
-std::ostream&   operator<<(std::ostream& lhs, const G4QContent& rhs);
+G4std::ostream&   operator<<(G4std::ostream& lhs, G4QContent& rhs);
+G4std::ostream&   operator<<(G4std::ostream& lhs, const G4QContent& rhs);
 G4QContent operator+(const G4QContent& lhs, const G4QContent& rhs);
 G4QContent operator-(const G4QContent& lhs, const G4QContent& rhs);
 G4QContent operator*(const G4QContent& lhs, const G4int&      rhs);
@@ -218,6 +218,7 @@ inline G4int G4QContent::GetZNSPDGCode() const
   //else
   //{
     G4int b=(kU+kD-kS-kS)/3;                 // Baryon number-n*{LAMBDA=kS)
+    if(!b && !kS) return GetSPDGCode();      // Not a nucleus
     G4int d=kU-kD;                           // Isotopic shift
     G4int n=(b-d)/2;                         // A#of neutrons
     return 90000000+1000*(1000*kS+n+d)+n;

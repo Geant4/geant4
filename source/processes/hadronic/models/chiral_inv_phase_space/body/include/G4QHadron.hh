@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.hh,v 1.17 2002-12-12 19:14:31 gunter Exp $
+// $Id: G4QHadron.hh,v 1.18 2003-09-09 09:13:36 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -54,7 +54,7 @@ public:
   G4QHadron(G4QParticle* pPart, G4double maxM);     // Constructor for a resonance with RANDOM m
   G4QHadron(const G4QHadron& right);                // Copy constructor by object
   G4QHadron(G4QHadron* right);                      // Copy constructor by pointer
-  virtual ~G4QHadron();                                     // Destructor
+  virtual ~G4QHadron();                             // Destructor
   // Operators
   const G4QHadron& operator=(const G4QHadron& right);
   G4int           operator==(const G4QHadron& right) const;
@@ -86,7 +86,7 @@ public:
   G4bool CorMDecayIn2(G4double corM, G4LorentzVector& fr4Mom);//->This(new mass corM)+fr4Mom(correct)
   G4bool CorEDecayIn2(G4double corE, G4LorentzVector& fr4Mom);//->This(E+=corE,P)+fr4Mom(fE-=corE,fP)
   G4bool RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom, G4LorentzVector& dir,
-                  G4double maxCost, G4double minCost = -1.);
+                  G4double maxCost = 1., G4double minCost = -1.);
   G4bool DecayIn3(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom, G4LorentzVector& t4Mom);
 
 private:

@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4QSelector.cc,v 1.15 2002-12-12 19:14:35 gunter Exp $
+// $Id: G4QSelector.cc,v 1.16 2003-09-09 09:13:42 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QSelector ----------------

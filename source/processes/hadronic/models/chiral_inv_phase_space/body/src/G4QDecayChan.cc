@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4QDecayChan.cc,v 1.16 2003-06-16 17:04:20 gunter Exp $
+// $Id: G4QDecayChan.cc,v 1.17 2003-09-09 09:13:40 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QDecayChan ----------------
@@ -33,7 +33,7 @@
 //#define pdebug
 
 #include "G4QDecayChanVector.hh"
-#include <algorithm>
+#include "g4std/algorithm"
 
 G4QDecayChan::G4QDecayChan(){}
 
@@ -86,7 +86,7 @@ G4QDecayChan::G4QDecayChan(G4QDecayChan* right)
 
 G4QDecayChan::~G4QDecayChan() 
 {
-  std::for_each(aVecOfSecHadrons.begin(), aVecOfSecHadrons.end(), DeleteQPDGCode());
+  G4std::for_each(aVecOfSecHadrons.begin(), aVecOfSecHadrons.end(), DeleteQPDGCode());
 }
 
 // Assignment operator
@@ -106,7 +106,7 @@ const G4QDecayChan& G4QDecayChan::operator=(const G4QDecayChan& right)
 }
 
 // Standard output for QDecayChan
-std::ostream& operator<<(std::ostream& lhs, G4QDecayChan& rhs)
+G4std::ostream& operator<<(G4std::ostream& lhs, G4QDecayChan& rhs)
 //       =========================================
 {
   lhs << "[L=" << rhs.GetDecayChanLimit(); 

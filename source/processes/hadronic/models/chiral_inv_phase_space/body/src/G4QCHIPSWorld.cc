@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4QCHIPSWorld.cc,v 1.20 2003-06-16 17:04:16 gunter Exp $
+// $Id: G4QCHIPSWorld.cc,v 1.21 2003-09-09 09:13:39 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCHIPSWorld ----------------
@@ -59,7 +59,7 @@ const G4QCHIPSWorld& G4QCHIPSWorld::operator=(const G4QCHIPSWorld &right)
 }
 
 // Standard output for CHIPS World
-std::ostream& operator<<(std::ostream& lhs, G4QCHIPSWorld& rhs)
+G4std::ostream& operator<<(G4std::ostream& lhs, G4QCHIPSWorld& rhs)
 //       ============================================
 {
   // @@ Later make a list of activated particles and clusters
@@ -109,7 +109,7 @@ G4QParticleVector* G4QCHIPSWorld::InitCHIPSWorld(G4int nOfParts)
   }
   else if (nOfParts<0)                          // Cleaning up the CHIPS Word (a possibility)
   {
-    std::for_each(theWorld.begin(), theWorld.end(), DeleteQParticle());
+    G4std::for_each(theWorld.begin(), theWorld.end(), DeleteQParticle());
     theWorld.clear();
     init=0;
   }

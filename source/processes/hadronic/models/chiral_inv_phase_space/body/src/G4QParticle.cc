@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4QParticle.cc,v 1.20 2003-06-25 10:19:02 gunter Exp $
+// $Id: G4QParticle.cc,v 1.21 2003-09-09 09:13:41 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QParticle ----------------
@@ -73,7 +73,7 @@ G4QParticle::G4QParticle(G4QParticle* right)
 
 G4QParticle::~G4QParticle() 
 {
-  std::for_each(aDecay.begin(), aDecay.end(), DeleteQDecayChan());
+  G4std::for_each(aDecay.begin(), aDecay.end(), DeleteQDecayChan());
 }
 
 // Assignment operator
@@ -94,7 +94,7 @@ const G4QParticle& G4QParticle::operator=(const G4QParticle &right)
 }
 
 // Standard output for QParticle
-std::ostream& operator<<(std::ostream& lhs, G4QParticle& rhs)
+G4std::ostream& operator<<(G4std::ostream& lhs, G4QParticle& rhs)
 //       =========================================
 {
   G4QPDGCode rhsQPDG = rhs.GetQPDG();

@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4QCandidate.cc,v 1.20 2003-06-16 17:04:17 gunter Exp $
+// $Id: G4QCandidate.cc,v 1.21 2003-09-09 09:13:39 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCandidate ----------------
@@ -32,7 +32,7 @@
 //#define debug
 
 #include "G4QCandidate.hh"
-#include <algorithm>
+#include "g4std/algorithm"
 
 G4QCandidate::G4QCandidate() : relativeProbability(0.),integralProbability(0.)
 {
@@ -103,7 +103,7 @@ G4QCandidate::~G4QCandidate()
 #ifdef debug
   G4cout<<"~G4QCandidate: before thePClusters nC="<<thePClusters.entries()<<G4endl;
 #endif
-  std::for_each(thePClusters.begin(), thePClusters.end(), DeleteQParentCluster());
+  G4std::for_each(thePClusters.begin(), thePClusters.end(), DeleteQParentCluster());
 #ifdef debug
   G4cout<<"~G4QCandidate: === DONE ==="<<G4endl;
 #endif

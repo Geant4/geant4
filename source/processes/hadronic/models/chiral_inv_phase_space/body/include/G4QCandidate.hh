@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4QCandidate.hh,v 1.16 2003-06-16 17:04:00 gunter Exp $
+// $Id: G4QCandidate.hh,v 1.17 2003-09-09 09:13:35 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCandidate ----------------
@@ -34,7 +34,7 @@
 
 #include "G4QHadron.hh"
 #include "G4QParentClusterVector.hh"
-#include <algorithm>
+#include "g4std/algorithm"
 
 class G4QCandidate : public G4QHadron
 {
@@ -112,7 +112,7 @@ inline G4double G4QCandidate::GetSecondIntProb()          const {return secondIn
 
 inline void G4QCandidate::ClearParClustVector()                 
 {
-  std::for_each(thePClusters.begin(), thePClusters.end(), DeleteQParentCluster());
+  G4std::for_each(thePClusters.begin(), thePClusters.end(), DeleteQParentCluster());
   thePClusters.clear();
 }
 

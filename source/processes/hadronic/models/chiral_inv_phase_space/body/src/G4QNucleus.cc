@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.29 2003-06-16 17:04:24 gunter Exp $
+// $Id: G4QNucleus.cc,v 1.30 2003-09-09 09:13:41 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -30,16 +30,17 @@
 // ------------------------------------------------------------------
 
 //#define debug
-///#define pdebug
+//#define pdebug
 //#define ppdebug
 
 #include "G4QNucleus.hh"
 
-G4QNucleus::G4QNucleus() : Z(0),N(0),S(0),maxClust(0) {}
+G4QNucleus::G4QNucleus() : Z(0),N(0),S(0),maxClust(0) {probVect[0]=mediRatio;}
 
 G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s) :
   Z(z),N(n),S(s),maxClust(0)
 {
+  probVect[0]=mediRatio;
 #ifdef debug
   G4cout<<"G4QNucleus::Construction By Z="<<z<<",N="<<n<<",S="<<s<<G4endl;
 #endif
@@ -72,6 +73,7 @@ G4QNucleus::G4QNucleus(G4LorentzVector p, G4int nucPDG):maxClust(0)
 G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s, G4LorentzVector p) :
   Z(z),N(n),S(s),maxClust(0)
 {
+  probVect[0]=mediRatio;
   Set4Momentum(p);
   SetNFragments(0);
   G4int ZNS=Z+N+S;
@@ -86,6 +88,7 @@ G4QNucleus::G4QNucleus(G4QContent nucQC):maxClust(0)
 #ifdef debug
   G4cout<<"G4QNucleus::Construction By QC="<<nucQC<<G4endl;
 #endif
+  probVect[0]=mediRatio;
   G4int u=nucQC.GetU()-nucQC.GetAU();
   G4int d=nucQC.GetD()-nucQC.GetAD();
   S = nucQC.GetS()-nucQC.GetAS();     // a#of LAMBDA's in the nucleus
@@ -119,6 +122,7 @@ G4QNucleus::G4QNucleus(G4QContent nucQC, G4LorentzVector p):maxClust(0)
 #ifdef debug
   G4cout<<"G4QNucleus::(LV)Construction By QC="<<nucQC<<G4endl;
 #endif
+  probVect[0]=mediRatio;
   Set4Momentum(p);
   G4int u=nucQC.GetU()-nucQC.GetAU();
   G4int d=nucQC.GetD()-nucQC.GetAD();
@@ -174,6 +178,7 @@ G4double G4QNucleus::freeNuc=0.1;
 G4double G4QNucleus::freeDib=.05;  
 G4double G4QNucleus::clustProb=4.;
 G4double G4QNucleus::mediRatio=1.;
+
 // Fill the private parameters
 void G4QNucleus::SetParameters(G4double fN, G4double fD, G4double cP, G4double mR)
 {//  =============================================================================
@@ -203,14 +208,14 @@ const G4QNucleus& G4QNucleus::operator=(const G4QNucleus& right)
 }
 
 // Standard output for QNucleus {Z - a#of protons, N - a#of neutrons, S - a#of lambdas}
-std::ostream& operator<<(std::ostream& lhs, G4QNucleus& rhs)
+G4std::ostream& operator<<(G4std::ostream& lhs, G4QNucleus& rhs)
 {//      =========================================
   lhs<<"{Z="<<rhs.GetZ()<<",N="<<rhs.GetN()<<",S="<<rhs.GetS()<< ",M="<<rhs.GetGSMass()<<"}";
   return lhs;
 }
 
 // Standard output for const QNucleus {Z - a#of protons, N - a#of neutrons, S - a#of lambdas}
-std::ostream& operator<<(std::ostream& lhs, const G4QNucleus& rhs)
+G4std::ostream& operator<<(G4std::ostream& lhs, const G4QNucleus& rhs)
 {//      ===============================================
   lhs<<"{Z="<<rhs.GetZ()<<",N="<<rhs.GetN()<<",S="<<rhs.GetS()<< "}";
   return lhs;
@@ -223,6 +228,7 @@ void G4QNucleus::InitByPDG(G4int nucPDG)
 #ifdef debug
   G4cout<<"G4QNucleus::InitByPDG: >Called< PDG="<<nucPDG<<G4endl;
 #endif
+  probVect[0]=mediRatio;                        // init Vacuum/Medium probability
   if(nucPDG>80000000)                           // including 90000000 (OK)
   {
     G4int szn=nucPDG-NUCPDG;
@@ -289,7 +295,6 @@ G4int G4QNucleus::UpdateClusters(G4bool din)
   //static const G4double prQ = 1.0;              // relative probability for a Quasmon
   //static const G4double prQ = 0.;               //@@for pi@@relative probability for Quasmon
   G4double probSInt[254];                         // integrated static probabilities
-  probVect[0]=mediRatio;                          //
   probSInt[0]=0;                                  // integrated static probabilities
   G4int a = Z + N + S;                            // atomic number
 #ifdef pdebug
@@ -870,7 +875,7 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
       if(totMass<=mNP)
 	  {
 #ifdef pdebug
-      cout<<"G4QNucleus::EvaporateBaryon: Photon ### d+g ###, dM="<<totMass-mNP<<endl;
+        G4cout<<"G4QNucleus::EvaporateBaryon: Photon ### d+g ###, dM="<<totMass-mNP<<G4endl;
 #endif
         h1mom=G4LorentzVector(0.,0.,0.,0.);
         h2mom=G4LorentzVector(0.,0.,0.,mDeut);
@@ -1133,7 +1138,7 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
             GSResNA=naQPDG.GetMass();
 #ifdef pdebug
             G4double s=GSResNA+mAlph+mNeut;
-	        G4cout<<"G4QN::EB:naM="<<GSResNA<<",T="<<s-GSMass<<",E="<<totMass-s<<",C="<<ABarr<<endl;
+	        G4cout<<"G4QN::EB:M="<<GSResNA<<",T="<<s-GSMass<<",E="<<totMass-s<<",C="<<ABarr<<G4endl;
 #endif
             if(GSResNA+mNeut+mAlph+ABarr<totMass) naFlag=true;
 		  }
@@ -2575,12 +2580,12 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
   G4int mac=6;                                   // Maximum cluster # for fixed baryon number
   G4int cca=0;                                   // Counter of clusters for the same baryon number
   G4int acm=0;                                   // Threshold ac value
-  G4int mCand=theQCandidates.size();
+  G4int mCand=theQCandidates.size();             // Full set of candidates made in UpdateClusters
   G4double s=0.;                                 // Prototype of summ for constant A (=ac>2)
-  ///////////G4double sZ=0.;                                // Percent of protons
-  ///////////G4double sN=0.;                                // Percent of neutrons
   G4double comb=ae0*(ae0-1)/2;                   // Product up to ac=2
 #ifdef pdebug
+  G4double sZ=0.;                                // Percent of protons
+  G4double sN=0.;                                // Percent of neutrons
   G4cout<<"G4QNucleus::PrepareCand:#C=="<<mCand<<",dZ="<<dZ<<",dN="<<dN<<",Z="<<Z<<",N="<<N<<G4endl;
 #endif
   for (G4int index=0; index<mCand; index++)
@@ -2590,7 +2595,7 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
     G4int cBN   = curCand->GetBaryonNumber();
 	//if(piF&&gaF&&cPDG!=90000001&&cPDG!=90001000) // Both flags, which is in case of pi-first-int
 	//if(piF&&gaF&&cBN!=1&&cBN!=3) // Both flags, which is in case of pi-first-int
-	if(piF&&gaF&&cBN!=1) // Should be both, which is in case of pi-first-int
+	if(piF&&gaF&&cBN!=1) // Should be both, which is in case of pi-first-interaction
     {
       curCand->SetPreProbability(0.);  
       curCand->SetDenseProbability(0.); 
@@ -2615,23 +2620,23 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
           if     (piF&&!gaF) pos*=(zc+ac)/ac;    // For piF 1-st interaction act (#of u-quarks) 
           else if(gaF&&!piF)
           {
-            pos*=(zc+dac)/dac;                   // For gaF 1-st interaction act (sum of Q_q^2)
+            pos*=(zc+dac)/ac;                    // For gaF 1-st interaction act (sum of Q_q^2)
             //pos*=(zc+ac)/ac;                     // For piF 1-st interaction act (#of u-quarks) 
             //pos*=zc/ac;                          // For gaF 1-st interaction act (#of protons)
 #ifdef pdebug
-            if(cPDG==90001000) G4cout<<"G4QNucleus::PrepareCand: proton gaF enhanced"<<G4endl;y
+            if(cPDG==90001000) G4cout<<"G4QNucleus::PrepareCand: proton gaF enhanced"<<G4endl;
 #endif
           }
           G4double dense=1.;
           if(ac==1)dense=probVect[254]/pos;
           if(ac==2)dense=probVect[255]/pos;
-#ifdef debug
+#ifdef pdebug
 	      G4cout<<"G4QNucleus::PrepC: cPDG="<<cPDG<<",norm="<<pos<<",zc="<<zc<<",nc="<<nc
                 <<",sc="<<sc<<",ac="<<ac<<",ze1="<<ze1<<",ne1="<<ne1<<",se1="<<se1<<G4endl;
+            G4double mp=pos;
 #endif
           if     (ac==1)
 	      {
-            //////////G4double mp=pos*ae;
             if     (zc) pos*=ze/ae;
             else if(nc) pos*=ne/ae;
             else if(sc) pos*=se/ae;
@@ -2648,7 +2653,6 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
           }
           else if(ac==2)
 	      {
-            ///////////G4double mp=pos*ae2;
             if(ze<zc||ne<nc||se<sc) pos=0.;
             else
 		    {

@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4QHadronVector.hh,v 1.12 2003-06-16 17:04:06 gunter Exp $
+// $Id: G4QHadronVector.hh,v 1.13 2003-09-09 09:13:36 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCandidateVector ----------------
@@ -33,9 +33,9 @@
 #define G4QHadronVector_h 1
 
 #include "G4QHadron.hh"
-#include <vector>
+#include "g4std/vector"
 
-typedef std::vector<G4QHadron *> G4QHadronVector;
+typedef G4std::vector<G4QHadron *> G4QHadronVector;
 struct DeleteQHadron { void operator()(G4QHadron * aQ){delete aQ;}};
 
 #endif

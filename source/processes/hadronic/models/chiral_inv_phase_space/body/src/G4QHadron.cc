@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.cc,v 1.25 2002-12-12 19:14:34 gunter Exp $
+// $Id: G4QHadron.cc,v 1.26 2003-09-09 09:13:40 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -139,7 +139,7 @@ const G4QHadron& G4QHadron::operator=(const G4QHadron &right)
 
 G4QHadron::~G4QHadron() {}
 
-// Decay of the Hadron in 2 particles (f + s) in respect to the direction of refference particle
+// Decay of the Hadr in 2 particles f&s, f is in respect to the direction of refference particle dir
 G4bool G4QHadron::RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
        G4LorentzVector& dir, G4double maxCost, G4double minCost)
 {//    ===================================================================
@@ -154,8 +154,10 @@ G4bool G4QHadron::RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
   G4ThreeVector ltb = theMomentum.boostVector(); // Boost vector for backward Lorentz Trans.
   G4ThreeVector ltf = -ltb;                      // Boost vector for forward Lorentz Trans.
   G4LorentzVector cdir = dir;              // A copy to make a transformation to CMS
-  if(cdir.e()+.001<cdir.rho())G4cerr<<"*G4QH::RDIn2:*Boost* cd4M="<<cdir<<",e-p="
-                                    <<cdir.e()-cdir.rho()<<G4endl;
+#ifdef debug
+  if(cdir.e()+.001<cdir.rho()) G4cerr<<"*G4QH::RDIn2:*Boost* cd4M="<<cdir<<",e-p="
+                                     <<cdir.e()-cdir.rho()<<G4endl;
+#endif
   cdir.boost(ltf);                         // Direction transpormed to CMS of the Momentum
   G4ThreeVector vdir = cdir.vect();        // 3-Vector of the direction-particle
 #ifdef debug
@@ -174,7 +176,10 @@ G4bool G4QHadron::RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
 #ifdef debug
   G4cout<<"G4QHadron::RelDecayIn2:iM="<<iM<<" => fM="<<fM<<" + sM="<<sM<<",ob="<<vx<<vy<<vz<<G4endl;
 #endif
-  if(maxCost>1.) maxCost=1.;
+  if(maxCost> 1.) maxCost= 1.;
+  if(minCost<-1.) minCost=-1.;
+  if(maxCost<-1.) maxCost=-1.;
+  if(minCost> 1.) minCost= 1.;
   if (abs(iM-fM-sM)<.001)
   {
     G4double fR=fM/iM;
@@ -183,10 +188,9 @@ G4bool G4QHadron::RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
     s4Mom=sR*theMomentum;
     return true;
   }
-  else if (iM+.001<fM+sM || iM==0. || maxCost<-1.)
+  else if (iM+.001<fM+sM || iM==0.)
   {//@@ Later on make a quark content check for the decay
-    G4cerr<<"***G4QHadron::RelDecayIn2:fM="<<fM<<"+sM="<<sM<<">iM="<<iM<<",d="<<iM-fM-sM<<",mC="
-          <<maxCost<<G4endl;
+    G4cerr<<"***G4QHadron::RelDecayIn2:fM="<<fM<<"+sM="<<sM<<">iM="<<iM<<",d="<<iM-fM-sM<<G4endl;
     return false;
   }
   G4double d2 = iM2-fM2-sM2;
@@ -200,7 +204,7 @@ G4bool G4QHadron::RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
   }
   G4double p  = sqrt(p2);
   G4double ct = maxCost;
-  if(maxCost>minCost&&minCost>=-1.)
+  if(maxCost>minCost)
   {
     G4double dcost=maxCost-minCost;
     ct = minCost+dcost*G4UniformRand();

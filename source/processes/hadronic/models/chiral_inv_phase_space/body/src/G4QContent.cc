@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4QContent.cc,v 1.22 2003-06-16 17:04:19 gunter Exp $
+// $Id: G4QContent.cc,v 1.23 2003-09-09 09:13:39 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QContent ----------------
@@ -90,7 +90,7 @@ const G4QContent& G4QContent::operator=(const G4QContent &right)
 }
 
 // Standard output for QC {d,u,s,ad,au,as}
-std::ostream& operator<<(std::ostream& lhs, G4QContent& rhs)
+G4std::ostream& operator<<(G4std::ostream& lhs, G4QContent& rhs)
 {//      =========================================
   lhs << "{" << rhs.GetD() << "," << rhs.GetU() << "," << rhs.GetS() << ","
       << rhs.GetAD() << "," << rhs.GetAU() << "," << rhs.GetAS() << "}";
@@ -98,7 +98,7 @@ std::ostream& operator<<(std::ostream& lhs, G4QContent& rhs)
 }
 
 // Standard output for const QC {d,u,s,ad,au,as}
-std::ostream& operator<<(std::ostream& lhs, const G4QContent& rhs)
+G4std::ostream& operator<<(G4std::ostream& lhs, const G4QContent& rhs)
 {//      ===============================================
   lhs << "{" << rhs.GetD() << "," << rhs.GetU() << "," << rhs.GetS() << ","
       << rhs.GetAD() << "," << rhs.GetAU() << "," << rhs.GetAS() << "}";
@@ -741,7 +741,7 @@ G4QContent G4QContent::IndQ (G4int index)
 G4QContent G4QContent::IndAQ (G4int index)
 {//        ==============================
 #ifdef debug
-  cout << "G4QC::IndAQ is called"<<endl;
+  G4cout << "G4QC::IndAQ is called"<<G4endl;
 #endif
   if(index<nAD) return G4QContent(0,0,0,1,0,0);
   else if(index<nAD+nAU) return G4QContent(0,0,0,0,1,0);

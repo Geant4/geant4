@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4QParticle.hh,v 1.12 2003-06-16 17:04:12 gunter Exp $
+// $Id: G4QParticle.hh,v 1.13 2003-09-09 09:13:36 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QParticle ----------------
@@ -32,7 +32,7 @@
 #ifndef G4QParticle_h
 #define G4QParticle_h 1
 
-#include <iostream>
+#include "g4std/iostream"
 #include "globals.hh"
 #include "G4QDecayChanVector.hh"
 
@@ -84,7 +84,7 @@ private:
 };
 
 // Not member operators
-std::ostream&   operator<<(std::ostream& lhs, G4QParticle& rhs);
+G4std::ostream&   operator<<(G4std::ostream& lhs, G4QParticle& rhs);
 // Not member functions
 //----------------------------------------------------------------------------------------
 

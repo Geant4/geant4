@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4QDecayChanVector.hh,v 1.10 2003-06-16 17:04:05 gunter Exp $
+// $Id: G4QDecayChanVector.hh,v 1.11 2003-09-09 09:13:36 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCandidateVector ----------------
@@ -33,9 +33,9 @@
 #define G4QDecayChanVector_h 1
 
 #include "G4QDecayChan.hh"
-#include <vector>
+#include "g4std/vector"
 
-typedef std::vector<G4QDecayChan *> G4QDecayChanVector;
+typedef G4std::vector<G4QDecayChan *> G4QDecayChanVector;
 struct DeleteQDecayChan{void operator()(G4QDecayChan *aQ){delete aQ;}};
 
 #endif

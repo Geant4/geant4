@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4QParentCluster.cc,v 1.15 2003-06-16 17:04:27 gunter Exp $
+// $Id: G4QParentCluster.cc,v 1.16 2003-09-09 09:13:41 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QParentCluster ----------------
@@ -86,14 +86,14 @@ const G4QParentCluster& G4QParentCluster::operator=(const G4QParentCluster& rhs)
 G4QParentCluster::~G4QParentCluster() {}
 
 // Standard output for G4QParentCluster
-std::ostream& operator<<(std::ostream& lhs, G4QParentCluster& rhs)
+G4std::ostream& operator<<(G4std::ostream& lhs, G4QParentCluster& rhs)
 {//      ===============================================
   lhs << "[ParClPDG=" << rhs.GetPDGCode() << ", probab=" << rhs.GetProbability() << "]";
   return lhs;
 }
 
 // Standard output for const G4QParentCluster
-std::ostream& operator<<(std::ostream& lhs, const G4QParentCluster& rhs)
+G4std::ostream& operator<<(G4std::ostream& lhs, const G4QParentCluster& rhs)
 {//      ===============================================
   lhs << "[ParClPDG=" << rhs.GetPDGCode() << ", probab=" << rhs.GetProbability() << "]";
   return lhs;

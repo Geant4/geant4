@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4QChipolino.hh,v 1.11 2003-06-16 17:04:02 gunter Exp $
+// $Id: G4QChipolino.hh,v 1.12 2003-09-09 09:13:36 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QChipolino ----------------
@@ -74,8 +74,8 @@ private:
   G4double              minM;                 // Minimal Mass of Chipolino
 };
 
-std::ostream& operator<<(std::ostream& lhs, G4QChipolino& rhs);
-//std::ostream& operator<<(std::ostream& lhs, const G4QChipolino& rhs);
+G4std::ostream& operator<<(G4std::ostream& lhs, G4QChipolino& rhs);
+//G4std::ostream& operator<<(G4std::ostream& lhs, const G4QChipolino& rhs);
 inline G4int G4QChipolino::operator==(const G4QChipolino& right) const {return this==&right;}
 inline G4int G4QChipolino::operator!=(const G4QChipolino& right) const {return this!=&right;}
  
