@@ -92,7 +92,6 @@ int main(int argc,char** argv)
   // -------------------------------------------------------------------
   // Setup
 
-  G4int  nEvt        = 100;
   G4int  nPart       =-1;
   G4String  nameMat  = "Si";
   G4int  nProcess    = 3;
@@ -103,10 +102,10 @@ int main(int argc,char** argv)
   G4double emax      = 100.0*MeV;
   G4int nbin         = 1000;
   G4String hFile     = "";
-  G4double theStep   = 1.0*micrometer;
+  G4double theStep   = 0.01*micrometer;
   G4double range     = 1.0*micrometer;
-  G4double cutG      = 1.0*micrometer;
-  G4double cutE      = 1.0*micrometer;
+  G4double cutG      = 10.0*mm;
+  G4double cutE      = 10.0*mm;
   G4Material* material = 0; 
   G4String name[3] = {"Ionisation", "Bremsstrahlung",
                       "Ionisation+Bremsstrahlung"};
@@ -176,7 +175,7 @@ int main(int argc,char** argv)
   }
 
   G4cout << "Available processes are: " << G4endl;
-  for (mat = 0; mat < 6; mat++) {
+  for (mat = 0; mat < 2; mat++) {
     G4cout << mat << ") " << name[mat] << G4endl;
   }
 
@@ -232,10 +231,9 @@ int main(int argc,char** argv)
   G4cout << "#run" << G4endl;
   G4cout << "#exit" << G4endl;
 
-  G4ProcessManager *elecManager, *positManager, *gammaManager, 
+  G4ProcessManager *elecManager, *positManager, 
                    *protManager, *aprotManager;
 
-  G4bool ionis = true;
 
   string line, line1;
   G4bool end = true;
@@ -243,10 +241,7 @@ int main(int argc,char** argv)
     do {
       (*fin) >> line;
       G4cout << "Next line " << line << G4endl;
-      if(line == "#events") {
-        (*fin) >> nEvt;
-        if(nEvt < 1) nEvt = 1;
-      } else if(line == "#particle") {
+      if(line == "#particle") {
         (*fin) >> nPart;
       } else if(line == "#emin(MeV)") {
         (*fin) >> emin;
@@ -307,7 +302,7 @@ int main(int argc,char** argv)
              << " is absent in the list of particles: Exit" << G4endl;
       break;
     }
-    if(nProcess < 0 || nProcess > 5) {
+    if(nProcess < 0 || nProcess > 2) {
       G4cout << "Process #" << nProcess 
              << " is absent in the list of processes: Exit" << G4endl;
       break;
@@ -328,20 +323,20 @@ int main(int argc,char** argv)
     // ---- HBOOK initialization
 
     hbookManager = new HBookFile(hFile, 58);
-    //  assert (hbookManager != 0);
+    assert (hbookManager != 0);
   
     // ---- Book a histogram and ntuples
     G4cout << "Hbook file name: <" 
            << ((HBookFile*) hbookManager)->filename() << ">" << G4endl;
-    emin = log10(emin/MeV);
-    emax = log10(emax/MeV);
-    G4double bin = (emax - emin) / (G4double)nbin;
+    G4double emin10 = log10(emin/MeV);
+    G4double emax10 = log10(emax/MeV);
+    G4double bin = (emax10 - emin10) / (G4double)nbin;
 
     HepHistogram* hist[2];
-    hist[0] = hbookManager->histogram("Stopping power (MeV*cm^2/g)", 
-                                     nbin,log10(emin/MeV),log10(emax/MeV));
+    hist[0] = hbookManager->histogram("Stopping power (MeV*cm**2/g)", 
+                                     nbin,emin10,emax10);
     hist[1] = hbookManager->histogram("Step limit (mm)", 
-                                     nbin,log10(emin/MeV),log10(emax/MeV));
+                                     nbin,emin10,emax10);
     //    assert (hDebug != 0);  
     G4cout<< "Histograms is initialised" << G4endl;
 
@@ -355,24 +350,18 @@ int main(int argc,char** argv)
 
     if(lowE) {
 
+      elecManager = new G4ProcessManager(electron);
+      electron->SetProcessManager(elecManager);
+      eionle = new G4LowEnergyIonisation();
+      eionle->SetEnlossFluc(false);
+      ebrle = new G4LowEnergyBremsstrahlung();
+      ebrle->SetEnlossFluc(false);
+      elecManager->AddProcess(eionle);
+      elecManager->AddProcess(ebrle);
+      eionle->BuildPhysicsTable(*electron);
+      ebrle->BuildPhysicsTable(*electron);
       if(nPart == 1) {
-        elecManager = new G4ProcessManager(electron);
-        electron->SetProcessManager(elecManager);
-        eionle = new G4LowEnergyIonisation();
-        ebrle = new G4LowEnergyBremsstrahlung();
-        if(nProcess == 0) {
-          elecManager->AddProcess(eionle);
-          eionle->BuildPhysicsTable(*electron);
-          success = true;
-        } else if(nProcess == 1) {
-          elecManager->AddProcess(ebrle);
-          ebrle->BuildPhysicsTable(*electron);
-          success = true;
-        } else if(nProcess == 2) {
-          elecManager->AddProcess(eionle);
-          elecManager->AddProcess(ebrle);
-          eionle->BuildPhysicsTable(*electron);
-          ebrle->BuildPhysicsTable(*electron);
+        if(nProcess == 2) {
           success = true;
 	}
 
@@ -380,6 +369,8 @@ int main(int argc,char** argv)
         protManager = new G4ProcessManager(proton);
         proton->SetProcessManager(protManager);
         hionle = new G4hLowEnergyIonisation();
+        hionle->SetEnlossFluc(false);
+        hionle->SetNuclearStoppingOff();
         protManager->AddProcess(hionle);
         hionle->BuildPhysicsTable(*proton);
         success = true;
@@ -388,6 +379,8 @@ int main(int argc,char** argv)
         aprotManager = new G4ProcessManager(antiproton);
         antiproton->SetProcessManager(aprotManager);
         hionle = new G4hLowEnergyIonisation();
+        hionle->SetEnlossFluc(false);
+        hionle->SetNuclearStoppingOff();
         aprotManager->AddProcess(hionle);
         hionle->BuildPhysicsTable(*antiproton);
         success = true;
@@ -395,40 +388,40 @@ int main(int argc,char** argv)
 
     } else {
 
+      elecManager = new G4ProcessManager(electron);
+      electron->SetProcessManager(elecManager);
+      eionst = new G4eIonisation();
+      eionst->SetEnlossFluc(false);
+      elecManager->AddProcess(eionst);
+      ebrst = new G4eBremsstrahlung();
+      ebrst->SetEnlossFluc(false);
+      elecManager->AddProcess(ebrst);
+      eionst->BuildPhysicsTable(*electron);
+      ebrst->BuildPhysicsTable(*electron);
       if(nPart == 1) {
-        elecManager = new G4ProcessManager(electron);
-        electron->SetProcessManager(elecManager);
-        eionst = new G4eIonisation();
-        ebrst = new G4eBremsstrahlung();
-        if(nProcess == 0) {
-          elecManager->AddProcess(eionst);
-          eionst->BuildPhysicsTable(*electron);
-          success = true;
-        } else if(nProcess == 1) {
-          elecManager->AddProcess(ebrst);
-          ebrst->BuildPhysicsTable(*electron);
-          success = true;
-        } else if(nProcess == 2) {
-          elecManager->AddProcess(eionst);
-          elecManager->AddProcess(ebrst);
-          eionst->BuildPhysicsTable(*electron);
-          ebrst->BuildPhysicsTable(*electron);
+        if(nProcess == 2) {
           success = true;
 	}
       } else if(nPart == 2) {
         positManager = new G4ProcessManager(positron);
         positron->SetProcessManager(positManager);
-        eionst = new G4eIonisation();
-        ebrst = new G4eBremsstrahlung();
         if(nProcess == 0) {
+          eionst = new G4eIonisation();
+          eionst->SetEnlossFluc(false);
           positManager->AddProcess(eionst);
           eionst->BuildPhysicsTable(*positron);
           success = true;
         } else if(nProcess == 1) {
+          ebrst = new G4eBremsstrahlung();
+          ebrst->SetEnlossFluc(false);
           positManager->AddProcess(ebrst);
           ebrst->BuildPhysicsTable(*positron);
           success = true;
         } else if(nProcess == 2) {
+          eionst = new G4eIonisation();
+          ebrst = new G4eBremsstrahlung();
+          eionst->SetEnlossFluc(false);
+          ebrst->SetEnlossFluc(false);
           positManager->AddProcess(eionst);
           positManager->AddProcess(ebrst);
           eionst->BuildPhysicsTable(*positron);
@@ -440,6 +433,7 @@ int main(int argc,char** argv)
         protManager = new G4ProcessManager(proton);
         proton->SetProcessManager(protManager);
         hionst = new G4hIonisation();
+        hionst->SetEnlossFluc(false);
         protManager->AddProcess(hionst);
         hionst->BuildPhysicsTable(*proton);
         success = true;
@@ -448,6 +442,7 @@ int main(int argc,char** argv)
         aprotManager = new G4ProcessManager(antiproton);
         antiproton->SetProcessManager(aprotManager);
         hionst = new G4hIonisation();
+        hionst->SetEnlossFluc(false);
         aprotManager->AddProcess(hionst);
         hionst->BuildPhysicsTable(*antiproton);
         success = true;
@@ -489,12 +484,11 @@ int main(int argc,char** argv)
     bPoint->SetPosition(bPosition);
     step->SetPostStepPoint(bPoint);
     step->SetStepLength(theStep);
-    G4ForceCondition a = NotForced;
 
     for (G4int iter=0; iter<nbin; iter++) {
 
-      G4double le = emin + ((G4double)iter + 0.5)*bin;
-      G4double  e = exp(le) * MeV;
+      G4double le = emin10 + ((G4double)iter + 0.5)*bin;
+      G4double  e = pow(10.0,le) * MeV;
       gTrack->SetStep(step); 
       gTrack->SetKineticEnergy(e); 
       G4double x = 0.0;
@@ -517,11 +511,11 @@ int main(int argc,char** argv)
 
         } else if (nPart == 3) {
           x = hionle->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-          aChange = eionle->AlongStepDoIt(*gTrack,*step);
+          aChange = hionle->AlongStepDoIt(*gTrack,*step);
 
         } else if (nPart == 4) {
           x = hionle->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-          aChange = eionle->AlongStepDoIt(*gTrack,*step);
+          aChange = hionle->AlongStepDoIt(*gTrack,*step);
 	}
 
       } else {
@@ -554,19 +548,26 @@ int main(int argc,char** argv)
 
         } else if (nPart == 3) {
           x = hionst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-          aChange = eionst->AlongStepDoIt(*gTrack,*step);
+          aChange = hionst->AlongStepDoIt(*gTrack,*step);
 
         } else if (nPart == 4) {
           x = hionst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-          aChange = eionst->AlongStepDoIt(*gTrack,*step);
+          aChange = hionst->AlongStepDoIt(*gTrack,*step);
         }
       }
 
       G4double de = aChange->GetLocalEnergyDeposit();
       G4int n = aChange->GetNumberOfSecondaries();
+
+      //G4cout << " de(MeV) = " << de/MeV << " n= " << n << G4endl;
+
+
       if(n > 0) {
         for(G4int i=0; i<n; i++) {
           de += (aChange->GetSecondary(i))->GetKineticEnergy();
+          G4cout << "add " 
+                 << ((aChange->GetSecondary(i))->GetKineticEnergy())/eV
+                 << " eV" << G4endl;
 	}
       }
       G4double st = de/(theStep*(material->GetDensity()));

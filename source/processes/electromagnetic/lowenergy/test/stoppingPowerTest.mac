@@ -1,0 +1,45 @@
+//---------------------------------------
+//        Macro file for StoppingPowerTest 
+//         examine AlongStepDoIt 
+//        for electromagnetic physics
+//      Created: 25.05.2001 V.Ivanchenkko
+//--------------------------------------- 
+#domain
+standard
+#verbose
+1
+#emin(MeV)
+0.000001
+#emax(MeV)
+1000.0
+#nbin
+1000
+//--------Electron_processes
+#particle
+1
+//--------Ionisation + Bramsstrahlung
+#process
+2
+#paw
+ionei1st.paw
+#run
+//--------Proton_processes
+#particle
+3
+//--------Ionisation
+#process
+0
+#paw
+ionpi0st.paw
+#run
+//--------AntiProton_processes
+#particle
+4
+//--------Ionisation
+#process
+0
+#paw
+ionai0st.paw
+#run
+//--------Exit
+#exit
