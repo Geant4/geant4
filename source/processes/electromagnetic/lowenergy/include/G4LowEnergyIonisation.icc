@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.icc,v 1.6 1999-07-06 13:21:19 aforti Exp $
+// $Id: G4LowEnergyIonisation.icc,v 1.7 1999-07-20 16:45:19 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -15,14 +15,11 @@
 //      For information related to this code contact:
 //      CERN, IT Division, ASD group
 //      ------------ G4LowEnergyIonisation physics process ------------
-//                  by Laszlo Urban, 20 March 1997
-// ***************************************************************
-// It is the first implementation of the NEW IONISATION PROCESS.               
-// It calculates the ionisation of e+/e-.
+//
+//                  by Alessandra Forti , July 1999
 // ***************************************************************
 //
-// 24-11-97: correction on MeanFreePath for KinEnergy > HighestLimit
-//
+// 14/07/99: corrections by L. Urban
 // ---------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -67,6 +64,7 @@ inline G4double G4LowEnergyIonisation::GetMeanFreePath(
        SIGMA += theAtomicNumDensityVector[iel]*Cs;
      }	
        
+  
      // mean free path = 1./macroscopic cross section
      MeanFreePath = SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX;     
   }
