@@ -71,3 +71,49 @@ or the secondary particle (if any).
 
 o	Parameter=4 
 The required file is read and the retrieved data are dumped on the screen.
+
+                   Some possible values of 'temp' string
+
+temp should be a G4String.
+Instead of xxx.xxx you insert the number you prefer.
+
+1) search on the process
+
+*Zxxx.xxxAxxx.xxxmat
+
+will give you all the files with Z=xxx.xxx, A=xxx.xxx and mat
+
+Example:
+
+temp="*Z6.000A12.000mat"
+
+2) Dump all the G4HDS content
+
+temp="*"
+
+3) No condition on Z
+
+ddZ*A12.000mat
+
+4) No condition on A
+
+ddZ6.000A*mat
+
+5) Condition less then or greater then
+
+ddZ>6A12.000mat
+
+Same condition on A. It works both with < as with >.
+
+6) Mixed conditions
+
+*Z>6A<20mat
+*Z*A>20mat
+ddZ<6A*mat
+*Z*A*mat
+
+And so on
+
+If you call temp="HELPME"
+you should have the help file which is locate in $G4HADATASET
+
