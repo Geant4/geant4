@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01PhysicsList.hh,v 1.1 2001-10-11 07:12:31 grichine Exp $
+// $Id: F01PhysicsList.hh,v 1.2 2004-12-02 11:01:11 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -37,7 +37,6 @@ class G4GammaConversion;
 
 class G4MultipleScattering;
 
-class G4PAIonisation ;
 class G4ForwardXrayTR ;
 class G4eIonisation;
 class G4eBremsstrahlung;
@@ -108,7 +107,6 @@ class F01PhysicsList: public G4VUserPhysicsList
     G4eIonisation*         theeminusIonisation;
     G4eBremsstrahlung*     theeminusBremsstrahlung;
 
-    G4PAIonisation*        fPAIonisation ;
     G4ForwardXrayTR*       fForwardXrayTR ;
     
     G4MultipleScattering*  theeplusMultipleScattering;
