@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidPCone.cc,v 1.11 1999-05-21 10:35:11 magni Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.12 1999-05-24 13:51:56 magni Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -399,7 +399,8 @@ EInside G4BREPSolidPCone::Inside(register const G4ThreeVector& Pt) const
 
   G4double halfTolerance = kCarTolerance*0.5;
 
-  G4Vector3D v(1, 0, 0.01);
+  //  G4Vector3D v(1, 0, 0.01);
+  G4Vector3D v(1, 0, 0);
   G4Vector3D Pttmp(Pt);
   G4Vector3D Vtmp(v);
   G4Ray r(Pttmp, Vtmp);
@@ -415,30 +416,40 @@ EInside G4BREPSolidPCone::Inside(register const G4ThreeVector& Pt) const
   // by the ray. If not, the surface become deactive.
   TestSurfaceBBoxes(r);
   
-  G4int hits=0, samehit=0;
+  G4double dist = kInfinity;
+  G4bool isIntersected = false;
+  G4int WhichSurface = 0;
+
+  // Chech if the point is on the surface, otherwise
+  // find the nearest intersected suface. If there are not intersections the
+  // point is outside
 
   for(G4int a=0; a < nb_of_surfaces; a++)
   {
     if(SurfaceVec[a]->Active())
     {
-      // count the number of intersections.
-      // if this number is odd, the start of the ray is 
-      // inside the volume bounded by the surfaces, so 
-      // increment the number of intersection by 1 if the 
-      // point is not on the surface and if this intersection 
-      // was not founded before
       if(fabs(SurfaceVec[a]->HowNear(Pt)) < kCarTolerance)
 	return kSurface;
-      hits += SurfaceVec[a]->Intersect(r);
+
+      if ( SurfaceVec[a]->Intersect(r) ) {
+	isIntersected = true;
+	if ( fabs(SurfaceVec[a]->Distance()) < dist ) {
+	  dist = SurfaceVec[a]->Distance();
+	  WhichSurface = a;
+	}
+      }
     }
   }
-   
-  // if the number of surfaces intersected is odd,
-  // the point is inside the solid
-  if(hits&1)
-    return kInside;
-  else
-    return kOutside;
+  if ( !isIntersected ) return kOutside; 
+
+  // Find the point of intersection on the surface and the normal
+  // !!!! be carefull the distance is sqrt(dist) !!!!
+
+  G4ThreeVector IntersectionPoint = Pttmp + sqrt(dist)*Vtmp;
+  G4ThreeVector Normal = SurfaceVec[WhichSurface]->SurfaceNormal(IntersectionPoint);
+  if ( Normal*Vtmp > 0 ) return kInside;
+  return kOutside;
+
 }
 
 
