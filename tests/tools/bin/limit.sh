@@ -2,7 +2,7 @@
 ###if [ `uname -n | grep pcgeant` ]; then
 limit coredumpsize 0
 ###else
-###ulimit -c 0
+ulimit -c 0
 ###fi
 
 if [ `uname -n | grep rsplus` ]; then
