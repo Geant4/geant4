@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2001-01-16 17:56:33 maire Exp $
+$Id: History,v 1.7 2001-01-25 16:42:55 urban Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+24 jan 01: L. Urban
+- bug fixed in muon bremstrahlung , in G4MuBremstrahlung.cc 
+   in PostStepDoIt.
+ 
 16 jan 01: mma (muons-V03-00-00)
 - small corrections in MuEnergyLoss.cc L.Urban 11-01-01
      
