@@ -1,5 +1,5 @@
 
-$Id: History,v 1.23 2001-10-18 10:08:01 gcosmo Exp $
+$Id: History,v 1.24 2001-11-08 15:46:31 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ Nov 08  2001  Gabriele Cosmo       geom-solid-bool-V03-02-02
+  - Fix for verbosity in G4ReflectionFactory.cc. Reduced of one level.
 
  Oct 18  2001  Gabriele Cosmo       geom-solid-bool-V03-02-01
   - Introduced first implementation of classes G4ReflectedSolid and
