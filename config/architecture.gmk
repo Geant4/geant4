@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.2 1999-01-29 16:21:15 stesting Exp $
+# $Id: architecture.gmk,v 1.3 1999-02-01 14:05:47 gunter Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -358,6 +358,7 @@ ifeq ($(G4SYSTEM),SUN-CC)
   SHEXT  := so
   AR     := $(CXX) -xar -ptr$(G4TREP) -o
   ECHO   := /bin/echo
+  FCLIBS := -lM77 -lF77 -lsunmath
   X11FLAGS  := -I/usr/openwin/include/X11/extensions -I/usr/openwin/include/X11 -I/usr/openwin/include
   X11LIBS   := -L/usr/openwin/lib -L/usr/dt/lib -L/usr/ucblib -R/usr/openwin/lib -lXmu -lX11 -lXext 
   
