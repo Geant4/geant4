@@ -1,4 +1,4 @@
-$Id: History,v 1.146 2002-06-07 17:05:20 pia Exp $
+$Id: History,v 1.147 2002-06-10 18:32:47 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10.06-2002   MGP, tag emlowen-V04-00-16
+             fStopAndKill moved to fStopAndAlive in G4hLowEnergyIonisation
+             to satisfy UR for activation of further processes for ions
+             (UR by UKDM)
 
 07.06-2002   MGP, tag emlowen-V04-00-15
              Fixes to Rayleigh by Francesco Longo and Gerardo Depaola (PRS 371)
