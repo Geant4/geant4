@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.10 2003-07-11 21:40:51 duns Exp $
+# $Id: GNUmakefile,v 1.11 2003-10-03 14:59:34 gcosmo Exp $
 
 name := G4visHepRep
 
@@ -20,7 +20,7 @@ ifneq ($(G4_NO_STD_IOSTREAM),)
 CPPFLAGS += -I$(G4BASE)/visualization/HepRep/include/g++iostream
 endif
 
-CPPFLAGS += -I$(G4BASE)/digits+hits/hits/include
+CPPFLAGS += -I$(G4BASE)/digits_hits/hits/include
 CPPFLAGS += -I$(G4BASE)/tracking/include
 CPPFLAGS += -I$(G4BASE)/visualization/management/include
 CPPFLAGS += -I$(G4BASE)/visualization/modeling/include
