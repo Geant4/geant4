@@ -183,7 +183,7 @@ G4double G4hICRU49He::StoppingPower(const G4Material* material,
     G4double z = (material->GetTotNbOfElectPerVolume()) / 
                  (material->GetTotNbOfAtomsPerVolume()) ;
 
-    ionloss     = a1*a2 / HeEffChargeSquare(z, kineticEnergy/keV) ; 
+    ionloss     = a1*a2 / HeEffChargeSquare(z, kineticEnergy*rateMass) ; 
 
     if ( ionloss < 0.0) ionloss = 0.0 ;
   }
@@ -321,7 +321,7 @@ G4double G4hICRU49He::ElectronicStoppingPower(G4double z,
   if ( ionloss < 0.0) ionloss = 0.0 ;
 
   // He effective charge
-  ionloss /= HeEffChargeSquare(z, kineticEnergy/keV) ; 
+  ionloss /= HeEffChargeSquare(z, kineticEnergy*rateMass) ; 
   
   return ionloss;
 }

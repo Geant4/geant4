@@ -226,7 +226,7 @@ G4double G4hZiegler1977He::ElectronicStoppingPower(G4double z,
 
   if ( ionloss < 0.0) ionloss = 0.0 ;
 
-  ionloss /= HeEffChargeSquare(z, kineticEnergy/keV); 
+  ionloss /= HeEffChargeSquare(z, kineticEnergy*rateMass); 
   
   return ionloss;
 }
