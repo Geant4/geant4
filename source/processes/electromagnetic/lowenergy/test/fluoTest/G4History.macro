@@ -1,0 +1,23 @@
+/run/verbose 2
+/vis/scene/create
+/vis/open OGLIX
+/vis/sceneHandler/create OGLIX
+/vis/sceneHandler/attach
+/vis/viewer/create ! ! 600
+/vis/drawVolume
+/vis/scene/create
+/vis/scene/add/volume world
+/vis/sceneHandler/attach
+/vis/viewer/refresh
+/vis/viewer/update
+/tracking/storeTrajectory 1
+/gun/particle gamma
+/gun/energy 40 keV
+/run/beamOn 1000
+/vis/scene/notifyHandlers
+/vis/viewer/update
+/run/beamOn 1000
+/vis/scene/notifyHandlers
+/vis/viewer/update
+/run/beamOn 5000
+/vis/scene/notifyHandlers
