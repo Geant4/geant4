@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuBremsstrahlung.icc,v 1.10 2003-05-26 16:21:54 vnivanch Exp $
+// $Id: G4MuBremsstrahlung52.icc,v 1.1 2003-08-08 11:28:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//--------------- G4MuBremsstrahlung physics process ------------------
+//--------------- G4MuBremsstrahlung52 physics process ------------------
 //                by Laszlo Urban, September 1997
 //------------------------------------------------------------------------------
 //
@@ -34,12 +34,13 @@
 // 29.05.01 V.Ivanchenko minor changes to provide ANSI -wall compilation
 // 28-09-01 suppression of theMuonPlus ..etc..data members (mma) 
 // 16-01-03 Migrade to cut per region (V.Ivanchenko)
+// 08-08-03 This class is frozen at the release 5.2 (V.Ivanchenko)
 //
 //------------------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-inline G4double G4MuBremsstrahlung::GetMeanFreePath(const G4Track& trackData,
+inline G4double G4MuBremsstrahlung52::GetMeanFreePath(const G4Track& trackData,
                                                     G4double,
                                                     G4ForceCondition* condition)
 {
@@ -66,7 +67,7 @@ inline G4double G4MuBremsstrahlung::GetMeanFreePath(const G4Track& trackData,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4MuBremsstrahlung::ComputeMeanFreePath(
+inline G4double G4MuBremsstrahlung52::ComputeMeanFreePath(
                                      const G4ParticleDefinition* ParticleType,
                                            G4double KineticEnergy,
                                      const G4MaterialCutsCouple* couple)
@@ -92,7 +93,7 @@ inline G4double G4MuBremsstrahlung::ComputeMeanFreePath(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4bool G4MuBremsstrahlung::IsApplicable(
+inline G4bool G4MuBremsstrahlung52::IsApplicable(
                             const G4ParticleDefinition& particle)
 {
    return ((&particle == G4MuonPlus::MuonPlus()  ) ||
@@ -101,7 +102,7 @@ inline G4bool G4MuBremsstrahlung::IsApplicable(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4MuBremsstrahlung::SecondaryEnergyThreshold(size_t index)
+inline G4double G4MuBremsstrahlung52::SecondaryEnergyThreshold(size_t index)
 {
   return (*secondaryEnergyCuts)[index];
 }

@@ -21,52 +21,45 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.icc,v 1.14 2003-06-18 13:48:57 gunter Exp $
+// $Id: G4eIonisation52.icc,v 1.1 2003-08-08 11:30:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-//------------------ G4hIonisation physics process -----------------------------
-//                   by Laszlo Urban, 30 May 1997
+//
+//----------------- G4eIonisation52 physics process ------------------------------
+//                  by Laszlo Urban, 20 March 1997
 //------------------------------------------------------------------------------
 //
-// 24/09/97: corrected by L.Urban
-// 20/11/97: correction on MeanFreePath for KineticEnergy > HighestLimit
-// 14-08-01: 'cleanup' of GetMeanFreePath (mma)
-// 09-04-02: e+- are not applicable (V.Ivanchenko)
-// 15-01-03: Migrade to cut per region (V.Ivanchenko)
-// 16-06-03: ShortLived are not applicable any more (V.Ivanchenko)
+// 24-11-97 correction on MeanFreePath for KinEnergy > HighestLimit
+// 28-05-01 V.Ivanchenko minor changes to provide ANSI -wall compilation
+// 16-01-03 Migrade to cut per region (V.Ivanchenko)
+// 08-08-03 This class is frozen at the release 5.2 (V.Ivanchenko)
 //
 //------------------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4bool G4hIonisation::IsApplicable(
-                            const G4ParticleDefinition& particle)
+inline G4bool G4eIonisation52::IsApplicable(const G4ParticleDefinition& particle)
 {
-   return(particle.GetPDGCharge() != 0. && 
-          particle.GetPDGMass() > 10.*MeV &&
-         !particle.IsShortLived());
+   return(  (&particle == G4Electron::Electron())
+          ||(&particle == G4Positron::Positron()) );
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4hIonisation::GetMeanFreePath(const G4Track& track, G4double,
+inline G4double G4eIonisation52::GetMeanFreePath(const G4Track& track, G4double,
                                                G4ForceCondition*)
 {
- const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
- G4double kinEnergy = (dynParticle->GetKineticEnergy())*initialMass/(dynParticle->GetMass());
- G4double q = dynParticle->GetCharge()/eplus;
- G4double currentChargeSquare = q*q;
+ G4double KineticEnergy = track.GetDynamicParticle()->GetKineticEnergy();
  const G4MaterialCutsCouple* couple  = track.GetMaterialCutsCouple();
 
  G4double MeanFreePath;
  G4bool isOut;
 
- if(kinEnergy > UpperBoundLambda) kinEnergy = UpperBoundLambda;
- if(kinEnergy > LowerBoundLambda)
-         MeanFreePath = (((*theMeanFreePathTable)(couple->GetIndex()))->
-                        GetValue(kinEnergy, isOut))/currentChargeSquare;
+ if (KineticEnergy > HighestKineticEnergy) KineticEnergy = HighestKineticEnergy;
+ if (KineticEnergy > LowestKineticEnergy)
+         MeanFreePath = ((*theMeanFreePathTable)(couple->GetIndex()))->
+                        GetValue(KineticEnergy, isOut);
  else    MeanFreePath = DBL_MAX;
 
  return MeanFreePath;
@@ -74,10 +67,19 @@ inline G4double G4hIonisation::GetMeanFreePath(const G4Track& track, G4double,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4hIonisation::SecondaryEnergyThreshold(size_t index)
+inline
+G4double G4eIonisation52::GetLambda(G4double KineticEnergy, const G4MaterialCutsCouple* couple)
 {
-  return std::max((*secondaryEnergyCuts)[index],Tmincut);
+  G4bool isOut;
+  return (*theMeanFreePathTable)[couple->GetIndex()]->
+                                           GetValue(KineticEnergy,isOut);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+inline G4double G4eIonisation52::SecondaryEnergyThreshold(size_t index)
+{
+  return (*secondaryEnergyCuts)[index];
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

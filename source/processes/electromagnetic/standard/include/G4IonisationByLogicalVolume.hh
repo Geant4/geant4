@@ -51,15 +51,15 @@
 
 #include "G4VContinuousDiscreteProcess.hh"
 #include "G4PAIonisation.hh"
-#include "G4eIonisation.hh"
-#include "G4MuIonisation.hh"
-#include "G4hIonisation.hh"
+#include "G4eIonisation52.hh"
+#include "G4MuIonisation52.hh"
+#include "G4hIonisation52.hh"
 
 
 class G4IonisationByLogicalVolume : public G4VContinuousDiscreteProcess
 {
 public:
-       
+
   G4IonisationByLogicalVolume( const G4String& particleName,
                                      G4LogicalVolume* volumeForPAImodel,
                                const G4String& processName );
@@ -70,20 +70,20 @@ public:
   // Methods
 
   G4bool IsApplicable(const G4ParticleDefinition&);
-  
+
   //  G4double GetConstraints(const G4DynamicParticle *aParticle,
   //                                G4Material *aMaterial              );
- 
-  G4VParticleChange* PostStepDoIt( const G4Track& track,         
-                                   const G4Step& Step      ) ;                 
+
+  G4VParticleChange* PostStepDoIt( const G4Track& track,
+                                   const G4Step& Step      ) ;
 
   void BuildPhysicsTable(const G4ParticleDefinition& aParticleType);
 
-  G4double 
+  G4double
   GetContinuousStepLimit( const G4Track& track,
                                 G4double previousStepSize,
                                 G4double currentMinimumStep,
-                                G4double& currentSafety      ) ; 
+                                G4double& currentSafety      ) ;
 
   G4double GetMeanFreePath( const G4Track& track,
                                   G4double previousStepSize,
@@ -109,9 +109,9 @@ private:
   G4bool fTriggerPAI ;
 
   G4PAIonisation*  fPAIonisation ;
-  G4eIonisation*   feIonisation ;
-  G4MuIonisation*  fMuIonisation ;
-  G4hIonisation*   fhIonisation ;
+  G4eIonisation52*   feIonisation ;
+  G4MuIonisation52*  fMuIonisation ;
+  G4hIonisation52*   fhIonisation ;
 
 
 } ;

@@ -21,21 +21,22 @@
 // ********************************************************************
 //
 //
-// $Id: G4eBremsstrahlung.icc,v 1.7 2003-01-17 18:55:43 vnivanch Exp $
+// $Id: G4eBremsstrahlung52.icc,v 1.1 2003-08-08 11:30:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//      ------------ G4eBremsstrahlung physics process ---------
+//      ------------ G4eBremsstrahlung52 physics process ---------
 //                     by Michel Maire, 27 July 1996
 // 
 // 13-12-96 : Sign corrected in the ScreenFunctions, L.Urban
 // 20/03/97 : new energy loss+ionisation+brems scheme, L.Urban
 // 28/05/01 : V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // 16-01-03 Migrade to cut per region (V.Ivanchenko)
+// 08-08-03 This class is frozen at the release 5.2 (V.Ivanchenko)
 // ---------------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4bool G4eBremsstrahlung::IsApplicable(
+inline G4bool G4eBremsstrahlung52::IsApplicable(
                             const G4ParticleDefinition& particle)
 {
    return(  (&particle == G4Electron::Electron())
@@ -44,7 +45,7 @@ inline G4bool G4eBremsstrahlung::IsApplicable(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4eBremsstrahlung::GetMeanFreePath(const G4Track& track,
+inline G4double G4eBremsstrahlung52::GetMeanFreePath(const G4Track& track,
                                                          G4double,
                                                          G4ForceCondition*)
  
@@ -70,7 +71,7 @@ inline G4double G4eBremsstrahlung::GetMeanFreePath(const G4Track& track,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4eBremsstrahlung::ScreenFunction1(G4double ScreenVariable)
+inline G4double G4eBremsstrahlung52::ScreenFunction1(G4double ScreenVariable)
 
 // compute the value of the screening function 3*PHI1 - PHI2
 
@@ -87,7 +88,7 @@ inline G4double G4eBremsstrahlung::ScreenFunction1(G4double ScreenVariable)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4eBremsstrahlung::ScreenFunction2(G4double ScreenVariable)
+inline G4double G4eBremsstrahlung52::ScreenFunction2(G4double ScreenVariable)
 
 // compute the value of the screening function 1.5*PHI1 - 0.5*PHI2
 
@@ -104,7 +105,7 @@ inline G4double G4eBremsstrahlung::ScreenFunction2(G4double ScreenVariable)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4eBremsstrahlung::GetLambda(
+inline G4double G4eBremsstrahlung52::GetLambda(
                               G4double KineticEnergy,
                               const G4MaterialCutsCouple* couple)
 {
@@ -115,7 +116,7 @@ inline G4double G4eBremsstrahlung::GetLambda(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4eBremsstrahlung::SecondaryEnergyThreshold(size_t index)
+inline G4double G4eBremsstrahlung52::SecondaryEnergyThreshold(size_t index)
 {
   return (*secondaryEnergyCuts)[index];
 }

@@ -1,4 +1,4 @@
-$Id: History,v 1.107 2003-08-07 18:09:58 vnivanch Exp $
+$Id: History,v 1.108 2003-08-08 11:31:24 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08 August 03: V.Ivant (utils-V05-02-02)
+-Substitute standerd by STD, freezing old standard as 52
 
 07 August 03: V.Ivant (utils-V05-02-01)
 - Update of the ion fluctuation model
