@@ -1,7 +1,17 @@
-$Id: History,v 1.42 2001-03-14 13:27:44 gcosmo Exp $
+$Id: History,v 1.43 2001-05-15 13:19:26 gcosmo Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V03-01-00 15-May-2001 G.Cosmo
+- G3toG4BuildTree[.hh.cc]: fix for a case of the placement a volume
+                           in cloned mothers
+  G3toG4BuildTree() has been split in two methods G3toG4BuildLVTree() and
+  G3toG4BuildPVTree(), the first creating logical volumes only, the second
+  performing placements afterwards. Doing so, all mothers are ready (their
+  logical volumes are created) when a volume is put in more than one mother
+  (courtesy of I.Hrivnacova).
+- GNUmakefile: G4MAKESHLIB replaced with G4LIB_BUILD_SHARED.
 
 g3tog4-V03-00-02 14-Mar-2001 G.Cosmo
 - G3toG4MakeSolid.cc: fixed bug in construction of G4Sphere where theta and
