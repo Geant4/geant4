@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Ions.hh,v 1.3 1999-08-18 09:15:12 kurasige Exp $
+// $Id: G4Ions.hh,v 1.4 1999-10-05 06:45:09 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,15 +64,11 @@ class G4Ions : public G4ParticleWithCuts
    G4int    GetAtomicNumber() const;
    G4int    GetAtomicMass() const;
 
-   G4int    GetExcitationLevel() const ; 
-   void     SetExcitationLevel(G4int value);
-
    G4double GetExcitationEnergy() const ; 
    void     SetExcitationEnergy(G4double value);
   
   private:
    G4double theExcitationEnergy; 
-   G4int    theExcitationLevel; 
 
 };
 
@@ -104,18 +100,6 @@ inline
  void G4Ions::SetExcitationEnergy(G4double value) 
 {
   theExcitationEnergy = value;
-}
-
-inline
- G4int G4Ions::GetExcitationLevel() const 
-{
-  return theExcitationLevel;
-}
-
-inline
- void G4Ions::SetExcitationLevel(G4int value) 
-{
-  theExcitationLevel = value;
 }
 
 inline 

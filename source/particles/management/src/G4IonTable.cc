@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.cc,v 1.14 1999-08-30 08:27:57 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.15 1999-10-05 06:45:17 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,6 +24,7 @@
 //      modify fomula of Ion mass       09 Dec., 98 H.Kurashige 
 //          -----
 //      Modified GetIon methods         17 Aug. 99 H.Kurashige
+//      New design using G4VIsotopeTable          5 Oct. 99 H.Kurashige
 
 
 #include "G4IonTable.hh"
@@ -32,7 +33,11 @@
 #include "G4UImanager.hh"
 #include "G4NucleiProperties.hh"
 
+#include "G4IsotopeProperty.hh"
+#include "G4VIsotopeTable.hh"
+
 #include "G4ios.hh"
+#include <iomanip.h>               
 
 #ifdef WIN32
 #  include <Strstrea.h>
@@ -45,13 +50,17 @@
 G4IonTable::G4IonTable()
 {
   fIonList = new G4IonList();
+  fIsotopeTable = 0;
 }
 
 ////////////////////
 G4IonTable::~G4IonTable()
 {
-  G4int idx;
+  // delete IsotopeTable if exists
+  if (fIsotopeTable != 0) delete fIsotopeTable;
 
+  // delete ion objects
+  G4int idx;
   for (idx=(fIonList->entries()-1); idx >=0 ; idx--) {
     G4ParticleDefinition* particle = (*fIonList)(idx);
 
@@ -74,122 +83,119 @@ G4IonTable::~G4IonTable()
   delete fIonList;
 }
 
+
+////////////////////
+// -- CreateIon method ------
+////////////////////
+G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E, G4int J)
+{
+  G4ParticleDefinition* ion=0;
+  
+  // get ion name
+  G4String name = GetIonName(Z, A, E);
+  if ( name(0) == '?') {
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()>0) {
+      G4cout << "G4IonTable::GetIon() : can not create ions " << endl;
+      G4cout << " Z =" << Z << "  A = " << A <<  endl;
+    }
+#endif
+      return 0;
+  } 
+
+  G4double life = -1.0;
+  G4DecayTable* decayTable =0;
+
+  G4IsotopeProperty*  fProperty = FindIsotope(Z, A, E, J);
+  if (fProperty !=0 ){
+    J =    fProperty->GetiSpin();
+    E =    fProperty->GetEnergy();
+    life = fProperty->GetLifeTime();
+    decayTable = fProperty->GetDecayTable();
+  }
+
+  G4double mass =  GetNucleusMass(Z, A)+ E;
+  G4double charge =  G4double(Z)*eplus;
+  
+  // create an ion
+  //   spin, parity, isospin values are fixed
+  //
+  ion = new G4Ions(   name,            mass,       0.0*MeV,     charge, 
+			 J,              +1,             0,          
+			 0,               0,             0,             
+		 "nucleus",               0,             A,           0,
+		      true,            life,    decayTable);
+
+#ifdef G4VERBOSE
+  if (GetVerboseLevel()>1) {
+    G4cout << "G4IonTable::GetIon() : create ion of " << name << endl;
+  } 
+#endif
+  
+  // Add process manager to the ion
+  AddProcessManager(name);
+  
+  // Set cut value same as "GenericIon"
+  SetCuts(ion);
+    
+  if (fProperty !=0) delete fProperty;
+  return ion;
+}
+
 ////////////////////
 // -- GetIon methods  ------
 ////////////////////
 G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int J, G4int Q)
 {
-  return GetIon(Z, A, J);
+  return GetIon(Z, A);
 }
 
 ////////////////////
-G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int L)
+G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int J)
 {
-  if ( (A<1) || (Z>numberOfElements) || (Z<=0) || (L<0)) {
+  return GetIon( Z, A, 0.0, J);
+}
+
+////////////////////
+G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4double E, G4int J)
+{
+  if ( (A<1) || (Z>numberOfElements) || (Z<=0) || (J<0) || (E<0.0) ) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cout << "G4IonTable::GetIon() : illegal atomic number/mass or excitation level " << endl;
-      G4cout << " Z =" << Z << "  A = " << A <<  "  L = " << L << endl;
+      G4cout << "G4IonTable::GetIon() : illegal atomic number/mass" << endl;
+      G4cout << " Z =" << Z << "  A = " << A <<  "  E = " << E/keV << endl;
     }
 #endif
-    G4Exception("G4IonTable::GetIon : illegal atomic number/mass or excitation level ");
+    G4Exception("G4IonTable::GetIon : illegal atomic number/mass ");
   }
 
   // Search ions with A, Z 
-  G4ParticleDefinition* ion = FindIon(Z,A,L);
+  G4ParticleDefinition* ion = FindIon(Z,A,E,J);
 
+  // create ion
   if (ion == 0) {
-    // create ion
-    G4String name = GetIonName(Z, A, L);
-    if ( name(0) == '?') {
-#ifdef G4VERBOSE
-      if (GetVerboseLevel()>0) {
-	G4cout << "G4IonTable::GetIon() : can not create ions " << endl;
-	G4cout << " Z =" << Z << "  A = " << A <<  endl;
-      }
-#endif
-      return 0;
-    } 
-
-    G4double mass =  GetNucleusMass(Z, A);
-    G4double charge =  G4double(Z)*eplus;
-    G4int J = L; // temporarily spin is set to L/2 (excitaion level)
-
-    // create an ion
-    //   spin, parity, isospin values are fixed
-    //
-    ion = new G4Ions(    name,         mass,       0.0*MeV,     charge, 
-			    J,              +1,             0,          
-			    0,               0,             0,             
-		    "nucleus",       0,             A,           0,
-			 true,            -1.0,          0);
-
-#ifdef G4VERBOSE
-    if (GetVerboseLevel()>1) {
-      G4cout << "G4IonTable::GetIon() : create ion of " << name << endl;
-    } 
-#endif
-
-    // create command string for addProcManager
-    char cmdAdd[60];
-    ostrstream osAdd(cmdAdd,60);
-    osAdd << "/run/particle/addProcManager "<< name << '\0';
-    // set /control/verbose 0
-    G4int tempVerboseLevel = G4UImanager::GetUIpointer()->GetVerboseLevel();
-    G4UImanager::GetUIpointer()->SetVerboseLevel(0);
-    // issue /run/particle/addProcManage
-    G4UImanager::GetUIpointer()->ApplyCommand(cmdAdd);
-    // retreive  /control/verbose 
-    G4UImanager::GetUIpointer()->SetVerboseLevel(tempVerboseLevel);
- 
-    // Set cut value same as "GenericIon"
-    G4ParticleDefinition* genericIon=G4ParticleTable::GetParticleTable()->FindParticle("GenericIon");
-
-    if (genericIon->GetEnergyCuts() != 0) {
-      ion->SetCuts( genericIon->GetLengthCuts());
-#ifdef G4VERBOSE
-      if (GetVerboseLevel()> 1) {
-	G4cout << "G4IonTable::GetIon() : cut value =" << genericIon->GetLengthCuts()/mm << "[mm]" <<endl;
-      } 
-#endif      
-      // Build Physics Tables for the ion
-      // create command string for buildPhysicsTable
-      char cmdBld[60];
-      ostrstream osBld(cmdBld,60);
-      osBld << "/run/particle/buildPhysicsTable "<< name << '\0';
-      // set /control/verbose 0
-      tempVerboseLevel = G4UImanager::GetUIpointer()->GetVerboseLevel();
-      G4UImanager::GetUIpointer()->SetVerboseLevel(0);
-      // issue /run/particle/buildPhysicsTable
-      G4UImanager::GetUIpointer()->ApplyCommand(cmdBld);
-      // retreive  /control/verbose 
-      G4UImanager::GetUIpointer()->SetVerboseLevel(tempVerboseLevel);
-    }
+    ion = CreateIon(Z, A, E, J);
   }
+
   return ion;  
 }
 
 ////////////////////
-G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4double E)
+G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4double E, G4int J)
 {
-   // !!  This method is a dummy now !!
-   // !! Implementation will be later !!
-   return GetIon(Z, A, 0);  
-}
+  const G4double EnergyTorelance = 0.1 * keV;
 
-////////////////////
-G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4int L)
-{
-  if ( (A<1) || (Z>numberOfElements) || (Z<=0) || (L<0)) {
+  if ( (A<1) || (Z>numberOfElements) || (Z<=0) || (J<0) || (E<0.0)) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
       G4cout << "G4IonTable::FindIon() : illegal atomic number/mass or excitation level " << endl;
-      G4cout << " Z =" << Z << "  A = " << A <<  "  L = " << L << endl;
+      G4cout << " Z =" << Z << "  A = " << A <<  "  E = " << E/keV << endl;
     }
 #endif
     return 0;
   }
-  // Search ions with A, Z 
+  // Search ions with A, Z ,E
+  //  !! J is moitted now !!
   G4ParticleDefinition* ion;
   G4bool isFound = false;
 
@@ -203,21 +209,22 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4int L)
     // A = baryon number
     G4int anAtomicMass = 0;
     // excitation level
-    G4int anExcitaionLevel =0;
+    G4double anExcitaionEnergy =0.0;
 
     if ( IsLightIon(ion) ) {
       anAtomicNumber = int(ion->GetPDGCharge()/eplus);
       anAtomicMass = ion->GetBaryonNumber();
-      anExcitaionLevel =0;
+      anExcitaionEnergy = 0.0;
+
     } else  {
       anAtomicNumber   = ((const G4Ions*)(ion))->GetAtomicNumber();
       anAtomicMass    =  ((const G4Ions*)(ion))->GetAtomicMass();
-      anExcitaionLevel = ((const G4Ions*)(ion))->GetExcitationLevel();
+      anExcitaionEnergy = ((const G4Ions*)(ion))->GetExcitationEnergy();
     }
 
     if ( (A == anAtomicMass) && 
          (Z == anAtomicNumber ) && 
-         (L == anExcitaionLevel )            ) {
+	 ( abs(E - anExcitaionEnergy ) < EnergyTorelance ) ) {
       isFound = true;
       break;
     }
@@ -230,17 +237,8 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4int L)
   }
 }
 
-////////////////////
-G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4double E)
-{
-   // !!  This method is a dummy now !!
-   // !! Implementation will be later !!
-   return FindIon(Z, A, 0);  
-}
-
-
 /////////////////
-G4String G4IonTable::GetIonName(G4int Z, G4int A, G4int L) const 
+G4String G4IonTable::GetIonName(G4int Z, G4int A, G4double E) const 
 {
   G4String name;
   if ( (0< Z) && (Z <=numberOfElements) ) {
@@ -250,7 +248,7 @@ G4String G4IonTable::GetIonName(G4int Z, G4int A, G4int L) const
   }
   char val[50];
   ostrstream os(val,50);
-  os << A << '[' << L << ']' << '\0';
+  os << A << '[' << setprecision(1) << E/keV << ']' << '\0';
   name += val;
   return name;
 }
@@ -386,60 +384,6 @@ void G4IonTable::Remove(G4ParticleDefinition* particle)
 }
 
 
-/////////////////
-// -- Utilities  ---
-/////////////////
-G4double  G4IonTable::GetProtonMass() const
-{
-  static G4double protonMass = 0.0;
-
-  // check if proton exits and get the mass
-  if (protonMass<=0.0) {
-    G4ParticleDefinition* proton = 
-          G4ParticleTable::GetParticleTable()->FindParticle("proton");
-    if (proton == 0) {
-      G4Exception("G4IonTable: G4Proton is not defined !!"); 
-    }
-    protonMass = proton->GetPDGMass();
-  }
-
-  return protonMass;
-}
-
-/////////////////
-G4double  G4IonTable::GetNeutronMass() const
-{
-  static G4double neutronMass = 0.0;
-
-  // check if neutron exits and get the mass
-  if (neutronMass<=0.0) {
-    G4ParticleDefinition* neutron = G4ParticleTable::GetParticleTable()->FindParticle("neutron");
-    if (neutron == 0) {
-      G4Exception("G4IonTable: G4Neutron is not defined !!"); 
-    }
-    neutronMass = neutron->GetPDGMass();
-  }
-
-  return neutronMass;
-}
-
-/////////////////
-G4double  G4IonTable::GetElectronMass() const
-{
-  static G4double electronMass = 0.0;
-
-  // check if electron exits and get the mass
-  if (electronMass<=0.0) {
-    G4ParticleDefinition* electron = G4ParticleTable::GetParticleTable()->FindParticle("e-");
-    if (electron == 0) {
-      G4Exception("G4IonTable: G4Electron is not defined !!"); 
-    }
-    electronMass = electron->GetPDGMass();
-  }
-
-  return electronMass;
-}
-
 
 /////////////////
 // -- Dump Information 
@@ -478,24 +422,100 @@ G4int G4IonTable::GetVerboseLevel() const
   return G4ParticleTable::GetParticleTable()->GetVerboseLevel();
 }
 
+/////////////////
+void  G4IonTable::AddProcessManager(const G4String& name)
+{
+  // create command string for addProcManager
+  char cmdAdd[60];
+  ostrstream osAdd(cmdAdd,60);
+  osAdd << "/run/particle/addProcManager "<< name << '\0';
+
+  // set /control/verbose 0
+  G4int tempVerboseLevel = G4UImanager::GetUIpointer()->GetVerboseLevel();
+  G4UImanager::GetUIpointer()->SetVerboseLevel(0);
+
+  // issue /run/particle/addProcManage
+  G4UImanager::GetUIpointer()->ApplyCommand(cmdAdd);
+
+  // retreive  /control/verbose 
+  G4UImanager::GetUIpointer()->SetVerboseLevel(tempVerboseLevel);
+}
+ 
+/////////////////
+void  G4IonTable::SetCuts(G4ParticleDefinition* ion)
+{
+  // Set cut value same as "GenericIon"
+  G4ParticleDefinition* genericIon=G4ParticleTable::GetParticleTable()->FindParticle("GenericIon");
+  
+  if (genericIon->GetEnergyCuts() != 0) {
+    ion->SetCuts( genericIon->GetLengthCuts());
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()> 1) {
+      G4cout << "G4IonTable::GetIon() : cut value =";
+      G4cout << genericIon->GetLengthCuts()/mm << "[mm]" <<endl;
+    } 
+#endif      
+
+    G4String name = ion->GetParticleName();
+
+    // Build Physics Tables for the ion
+    // create command string for buildPhysicsTable
+    char cmdBld[60];
+    ostrstream osBld(cmdBld,60);
+    osBld << "/run/particle/buildPhysicsTable "<< name << '\0';
+ 
+    // set /control/verbose 0
+    G4int tempVerboseLevel = G4UImanager::GetUIpointer()->GetVerboseLevel();
+    G4UImanager::GetUIpointer()->SetVerboseLevel(0);
+
+    // issue /run/particle/buildPhysicsTable
+    G4UImanager::GetUIpointer()->ApplyCommand(cmdBld);
+
+    // retreive  /control/verbose 
+    G4UImanager::GetUIpointer()->SetVerboseLevel(tempVerboseLevel);
+
+  } else {
+    G4Exception("G4IonTable::SetCuts : GenericIon is not defined !!");
+
+  }
+}
+
+////////////////////
+void  G4IonTable::RegisterIsotopeTable(G4VIsotopeTable* table)
+{
+  fIsotopeTable = table;
+}
+
+////////////////////
+G4VIsotopeTable* G4IonTable::GetIsotopeTable() const
+{
+  return fIsotopeTable;
+}
 
 
+////////////////////
+G4IsotopeProperty* G4IonTable::FindIsotope(G4int Z, G4int A, G4double E, G4int J)
+{
+  G4IsotopeProperty* fProperty = new G4IsotopeProperty();   
 
+  // Set Isotope Property
+  fProperty->SetAtomicNumber(Z);
+  fProperty->SetAtomicMass(A);
+  fProperty->SetEnergy(E);
+  fProperty->SetiSpin(J);
+  fProperty->SetLifeTime(-1.0);
+  fProperty->SetDecayTable(0);
 
+  if (fIsotopeTable ==0) return 0;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+  // ask IsotopeTable
+  if (fIsotopeTable->FindIsotope(fProperty)) {
+    return fProperty;
+  } else {
+    delete fProperty;
+    return 0;
+  }
+}
 
 
 

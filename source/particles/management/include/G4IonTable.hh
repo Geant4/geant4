@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.hh,v 1.6 1999-08-18 09:15:12 kurasige Exp $
+// $Id: G4IonTable.hh,v 1.7 1999-10-05 06:44:37 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -21,7 +21,8 @@
 //      added Remove()                  06 Nov.,98 H.Kurashige
 //      add GetNucleusMass              15 Mar. 99  H.Kurashige
 //          -----
-//      Modified GetIon methods         17 Aug. 99 H.Kurashige
+//      Modified GetIon methods                  17 Aug. 99 H.Kurashige
+//      New design using G4VIsotopeTable          5 Oct. 99 H.Kurashige
 
 #ifndef G4IonTable_h
 #define G4IonTable_h 1
@@ -30,9 +31,10 @@
 #include <rw/tpordvec.h>
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
-#include <rw/cstring.h>
 
 class G4ParticleTable;
+class G4VIsotopeTable; 
+class G4IsotopeProperty;
 
 class G4IonTable
 {
@@ -40,9 +42,11 @@ class G4IonTable
  //   In G4IonTable, each G4ParticleDefinition pointer is stored
 
  public:
+   // Use  RWTPtrOrderedVector as list of ions
    typedef RWTPtrOrderedVector<G4ParticleDefinition> G4IonList;
 
  public:
+  // constructor
    G4IonTable();
 
  protected:
@@ -55,39 +59,45 @@ class G4IonTable
 
 
  public: 
-   G4ParticleDefinition* FindIon(G4int Z, G4int A, G4int L);
-   // return pointer of ion if it exists 
-   G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int L);
-   // get a pointer to the ion with A,Z,J 
-   // The ion will be created if not exist yet
-   //   Z: Atomic Number
-   //   A: Atomic Mass
-   //   L: Excitation level (0=stable state)
+   // Register Isotope table
+   void RegisterIsotopeTable(G4VIsotopeTable* table);
+   G4VIsotopeTable* GetIsotopeTable() const;
+   // G4IonTable asks properties of isotopes to this G4VIsotopeTable 
+   // by using FindIsotope(G4IsotopeProperty* property) method.
+   
+   // ---------------------------  
+   // FindIon/GetIon
+   //   FindIon methods return pointer of ion if it exists       
+   //   GetIon methods also return pointer of ion. In GetIon 
+   //   methods the designated ion will be created if it does not exist.
+   //
+   // !! PDGCharge inG4ParticleDefinition of ions is           !!
+   // !! electric charge of nucleus (i.e. fully ionized ions)  !!
+   // -----------------------------
 
-   G4ParticleDefinition* FindIon(G4int Z, G4int A, G4double E);
-   // return pointer of ion if it exists 
-   G4ParticleDefinition* GetIon(G4int Z, G4int A, G4double E);
-   // get a pointer to the ion with A,Z,J 
-   // The ion will be created if not exist yet
+   // Find/Get "ground state" 
+   G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int J=0);
+   // The ion is assumed to be ground state (i.e Excited energy = 0) 
    //   Z: Atomic Number
    //   A: Atomic Mass
+   //   J: Total Angular momentum (in unit of 1/2)
+
+   // Find/Get "excited state" 
+   G4ParticleDefinition* FindIon(G4int Z, G4int A, G4double E, G4int J=0);
+   G4ParticleDefinition* GetIon(G4int Z, G4int A, G4double E, G4int J=0);
+   //   Z: Atomic Number
+   //   A: Atomic Mass
+   //   J: Total Angular momentum (in unit of 1/2)
    //   E: Excitaion energy
-   // !!  This method is a dummy now !!
-   // !! Implementation will be later !!
- 
 
    G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int J, G4int Q);
    // This method is provided for compatibilties 
-   // The last argument of "Q" gives no effect
-   // The third argument of J corresponds the excitaion level
-   
-   // !! PDGCharge inG4ParticleDefinition of ions is           !!
-   // !! electric charge of nucleus (i.e. fully ionized ions)  !!
+   // The third and last arguments gives no effect
 
    static G4bool        IsIon(G4ParticleDefinition*);
    // return true if the particle is ion
 
-   G4String             GetIonName(G4int Z, G4int A, G4int L) const;
+   G4String             GetIonName(G4int Z, G4int A, G4double E) const;
    // get ion name
 
    G4double             GetIonMass(G4int Z, G4int A) const;
@@ -96,34 +106,51 @@ class G4IonTable
    // ,where Z is Atomic Number (number of protons) and
    //  A is Atomic Number (number of nucleons)
 
-
+  
    G4int                 Entries() const;
+   // Return number of ions in the table
+
+   G4ParticleDefinition* GetParticle(G4int index) const;
+   // Return the pointer of index-th ion in the table
+
    G4bool                Contains(const G4ParticleDefinition *particle) const;
+   // Return 'true' if the ion exists
+
    void                  Insert(G4ParticleDefinition* particle);
    void                  Remove(G4ParticleDefinition* particle);
-   G4ParticleDefinition* GetParticle(G4int index) const;
+   // Insert/Remove an ion in the table
 
     void DumpTable(const G4String &particle_name = "ALL") const;
    // dump information of particles specified by name 
 
 
  protected:
-
+   G4ParticleDefinition* CreateIon(G4int Z, G4int A, G4double E, G4int J);
+   // Create Ion 
+   
+   G4IsotopeProperty* FindIsotope(G4int Z, G4int A, G4double E, G4int J);
+   // Ask properties of isotopes to this G4VIsotopeTable 
+   
    G4ParticleDefinition* GetLightIon(G4int Z, G4int A) const;
+   
+   
    G4bool                IsLightIon(G4ParticleDefinition*) const;
    // return true if the particle is pre-defined ion
  
-   // Utilities
-   G4double             GetProtonMass() const;
-   G4double             GetNeutronMass() const;
-   G4double             GetElectronMass() const;
+   void                  AddProcessManager(const G4String& ionName);
+   // Add process manager to ions with name of 'ionName'
 
-   // 
+   void                  SetCuts(G4ParticleDefinition* ion);
+   // Set cut value same as "GenericIon" and build physics tables
+
    G4int                GetVerboseLevel() const;
+   // get Verbose Level defined in G4ParticleTable
 
  private:
    G4IonList*                  fIonList; 
 
+   G4VIsotopeTable*            fIsotopeTable;
+ 
    enum { numberOfElements = 110};
    static const G4String       elementName[numberOfElements];
 

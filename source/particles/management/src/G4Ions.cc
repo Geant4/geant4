@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Ions.cc,v 1.2 1999-08-18 09:15:25 kurasige Exp $
+// $Id: G4Ions.cc,v 1.3 1999-10-05 06:45:18 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,6 @@ G4Ions::G4Ions(
            lepton,baryon,encoding,stable,lifetime,decaytable )
 {
   // initialize excitation energy/level
-   theExcitationLevel = 0;
    theExcitationEnergy = 0.0;
 }
 
