@@ -7,7 +7,7 @@
 #                                                                     #
 #  CONTENTS: A basic macro for demonstrating OPACS/Xo driver          #
 #                                                                     #
-#  USAGE:  % $G4BINDIR/exampleN03  exN03Vis4.mac                      #
+#  USAGE:  % $G4BINDIR/exampleN03  exN03Vis5.mac                      #
 #                                                                     #
 #  REQUIRED PLATFORMS & SOFTWARES: Unix, Motif, X-window, OpenGL,     #
 #                                  OPACS (version 3.0)                #
