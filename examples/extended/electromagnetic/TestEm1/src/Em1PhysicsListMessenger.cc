@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em1PhysicsListMessenger.cc,v 1.4 2001-10-26 12:51:25 maire Exp $
+// $Id: Em1PhysicsListMessenger.cc,v 1.5 2001-10-31 15:36:45 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,21 +45,21 @@ Em1PhysicsListMessenger::Em1PhysicsListMessenger(Em1PhysicsList* EvAct)
   cutGCmd->SetParameterName("range",false);
   cutGCmd->SetRange("range>0.");
   cutGCmd->SetUnitCategory("Length");
-  cutGCmd->AvailableForStates(Idle);
+  cutGCmd->AvailableForStates(PreInit,Idle);
   
   cutECmd = new G4UIcmdWithADoubleAndUnit("/calor/cutE",this);
   cutECmd->SetGuidance("Set cut values by RANGE for e- e+.");
   cutECmd->SetParameterName("range",false);
   cutECmd->SetRange("range>0.");
   cutECmd->SetUnitCategory("Length");   
-  cutECmd->AvailableForStates(Idle);
+  cutECmd->AvailableForStates(PreInit,Idle);
   
   cutPCmd = new G4UIcmdWithADoubleAndUnit("/calor/cutP",this);
   cutPCmd->SetGuidance("Set cut values by RANGE for proton and others.");
   cutPCmd->SetParameterName("range",false);
   cutPCmd->SetRange("range>0.");
   cutPCmd->SetUnitCategory("Length");      
-  cutPCmd->AvailableForStates(Idle);
+  cutPCmd->AvailableForStates(PreInit,Idle);
      
   eCmd = new G4UIcmdWithADoubleAndUnit("/calor/cutEnergy",this);
   eCmd->SetGuidance("Set cut values by ENERGY for charged particles.");

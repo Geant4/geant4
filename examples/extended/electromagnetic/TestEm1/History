@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2001-10-26 12:51:20 maire Exp $
+$Id: History,v 1.14 2001-10-31 15:36:43 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+31-10-01 mma (testem1-V03-02-01)
+- PhysicsListMessenger: commands CutE, CutG, CutP avaiblable in PreInit
+- in all macros: set cuts before run/initialize
+       
 26-10-01 mma (testem1-V03-02-00)
 - mods in TestEm1.cc: the initialisation and vis initialisation are
   not done gy default. --> inserted /run/initialize in all macros.
