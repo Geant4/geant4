@@ -871,12 +871,12 @@ G4double G4hLowEnergyIonisation::GetParametrisedLoss(G4Material* material,
   G4ParticleDefinition* pbarDef = G4AntiProton::AntiProtonDefinition();
   if ( pbarStop && (qaoLoss->IsInCharge(KinEnergy,pbarDef,material) ))
     {
-      G4DynamicParticle dynamicPart();
+      G4DynamicParticle dynamicPart;
       dynamicPart.SetDefinition(pbarDef);
       dynamicPart.SetKineticEnergy(KinEnergy);
       dynamicPart.SetCharge(-1);
 
-      ionloss = qaoloss->EnergyLoss(dynamicPart,material);
+      ionloss = qaoLoss->EnergyLoss(&dynamicPart,material);
       ionloss -= GetDeltaRaysEnergy(material,KinEnergy,DeltaRayCutNow);
     
       return ionloss;
