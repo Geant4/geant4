@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyPrimaryGeneratorAction.hh,v 1.4 2005-01-26 17:15:39 johna Exp $
+// $Id: MyPrimaryGeneratorAction.hh,v 1.5 2005-02-04 16:28:46 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -30,8 +30,13 @@
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 
+// #define GPS // For General Particle Source.
+
+#ifdef GPS
+class G4GeneralParticleSource;
+#else
 class G4ParticleGun;
-//class G4GeneralParticleSource;
+#endif
 class G4Event;
 
 class MyPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
@@ -42,12 +47,18 @@ class MyPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
   public:
     void GeneratePrimaries(G4Event* anEvent);
+#ifdef GPS
+    G4GeneralParticleSource* GetGeneralParticleSource();
+#else
     G4ParticleGun* GetParticleGun();
-  //G4GeneralParticleSource* GetGeneralParticleSource();
+#endif
 
   private:
+#ifdef GPS
+    G4GeneralParticleSource* particleGun;
+#else
     G4ParticleGun* particleGun;
-  //G4GeneralParticleSource* particleGun;
+#endif
 };
 
 #endif

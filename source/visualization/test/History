@@ -1,9 +1,12 @@
-$Id: History,v 1.38 2005-02-04 16:26:38 johna Exp $
+$Id: History,v 1.39 2005-02-04 16:28:53 johna Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
 
 $Log: not supported by cvs2svn $
+Revision 1.38  2005/02/04 16:26:38  johna
+Introduced G4VisExecutive.
+
 Revision 1.37  2005/01/26 17:17:02  johna
 Increased hall size for some new volumes and tested General Particle Source (commented out).
 
