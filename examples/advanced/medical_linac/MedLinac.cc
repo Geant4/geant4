@@ -20,10 +20,12 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: MedLinac.cc,v 1.2 2004-04-02 17:47:34 mpiergen Exp $
 //
 // --------------------------------------------------------------
 //      GEANT 4 -  medical_linac
 //
+// Code developed by: M. Piergentili
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"

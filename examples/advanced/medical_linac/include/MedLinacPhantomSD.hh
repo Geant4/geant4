@@ -20,6 +20,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//// $Id: MedLinacPhantomSD.hh,v 1.2 2004-04-02 17:48:41 mpiergen Exp $
+//
+//
+// Code developed by: M. Piergentili
 //
 #ifndef MedLinacPhantomSD_h
 #define MedLinacPhantomSD_h 1

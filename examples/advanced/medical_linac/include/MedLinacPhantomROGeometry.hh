@@ -20,7 +20,11 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-
+// $Id: MedLinacPhantomROGeometry.hh,v 1.2 2004-04-02 17:48:41 mpiergen Exp $
+//
+//
+// Code developed by: M. Piergentili
+//
 //The phantom is devided in voxels. the dimension of the voxel is 1mm
 //
 #ifndef MedLinacPhantomROGeometry_h

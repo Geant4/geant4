@@ -20,8 +20,11 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 // 
+//// $Id: MedLinacPhysicsList.hh,v 1.2 2004-04-02 17:48:41 mpiergen Exp $
 //
-// MedLinacPhysicsList
+//
+// Code developed by: M. Piergentili
+
 
 
 #ifndef MedLinacPhysicsList_h

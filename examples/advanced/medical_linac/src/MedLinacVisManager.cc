@@ -20,7 +20,11 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: MedLinacVisManager.cc,v 1.2 2004-04-02 17:48:03 mpiergen Exp $
 //
+//
+// Code developed by: M. Piergentili
+
 
 #ifdef G4VIS_USE
 
@@ -67,10 +71,10 @@
 //#include "G4OpenInventorWin32.hh"
 //#endif
 
-//#ifdef G4VIS_USE_VRML
-//#include "G4VRML1.hh"
-//#include "G4VRML2.hh"
-//#endif
+#ifdef G4VIS_USE_VRML
+#include "G4VRML1.hh"
+#include "G4VRML2.hh"
+#endif
 
 //---------------------------------------------------------------
 
@@ -87,8 +91,8 @@ void MedLinacVisManager::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4HepRepFile);
   RegisterGraphicsSystem (new G4HepRep);
   RegisterGraphicsSystem (new G4RayTracer);
-  // RegisterGraphicsSystem (new G4VRML1File);
-  //RegisterGraphicsSystem (new G4VRML2File);
+  RegisterGraphicsSystem (new G4VRML1File);
+  RegisterGraphicsSystem (new G4VRML2File);
 
   // Graphics systems needing external packages or libraries...
 

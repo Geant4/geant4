@@ -20,7 +20,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-
+// $Id: MedLinacRunAction.cc,v 1.2 2004-04-02 17:48:03 mpiergen Exp $
+//
+//
+// Code developed by: M. Piergentili
 
 #include "MedLinacRunAction.hh"
 #include "MedLinacEventAction.hh"

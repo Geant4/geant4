@@ -20,7 +20,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-
+// $Id: MedLinacPrimaryGeneratorAction.hh,v 1.2 2004-04-02 17:48:41 mpiergen Exp $
+//
+//
+// Code developed by: M. Piergentili
 
 #ifndef MedLinacPrimaryGeneratorAction_h
 #define MedLinacPrimaryGeneratorAction_h 1

@@ -21,7 +21,9 @@
 // ********************************************************************
 //
 //
-
+// $Id: MedLinacDetectorMessenger.cc,v 1.2 2004-04-02 17:48:03 mpiergen Exp $
+//
+//  Code developed by: M. Piergentili
 
 #include "MedLinacDetectorMessenger.hh"
 

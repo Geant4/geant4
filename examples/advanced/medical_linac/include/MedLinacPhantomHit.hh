@@ -19,7 +19,11 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
+// $Id: MedLinacPhantomHit.hh,v 1.2 2004-04-02 17:48:41 mpiergen Exp $
+//
+//
+// Code developed by: M. Piergentili
 // It manages the hits and the enrgy deposit in the phantom associated with 
 // each hit ...
 
