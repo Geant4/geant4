@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertiesTable.cc,v 1.10 2001-07-11 10:01:28 gunter Exp $
+// $Id: G4MaterialPropertiesTable.cc,v 1.11 2001-08-31 16:12:33 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -179,7 +179,7 @@ void G4MaterialPropertiesTable::RemoveEntry(const char *key,
 		targetVector->RemoveElement(aPhotonMomentum);
  	}
         else {
-                G4Exception("G4MaterialPropertiesTable::AddEntry ==> "
+                G4Exception("G4MaterialPropertiesTable::RemoveEntry ==> "
 			    "Material Property Vector not found.");
         }
 }
@@ -187,7 +187,12 @@ void G4MaterialPropertiesTable::DumpTable()
 {
   MPTiterator i;
   for (i = MPT.begin(); i != MPT.end(); ++i) {
-		G4cout << *(*i).first << G4endl;
-		(*i).second->DumpVector();
+		G4cout << (*i).first << G4endl;
+                if ( (*i).second != NULL ) {
+		  (*i).second->DumpVector();
+                }
+                else {
+                  G4cout << "NULL Material Property Vector Pointer." << G4endl;
+                }
   }
 }
