@@ -244,22 +244,26 @@ please refer to the related History files provided in most packages):
 <A NAME="emstd-notes">
 <H3><I>Electromagnetic Processes (Standard)</I></H3></A>
 <UL>
-<LI>Bug Fixes in model variant of multiple-scattering and simplifications
-    of calculation of energy dependence on internal parameters.<BR>
-    <TT>G4MscModel</TT>: changes in data members, corrections in
-    GeomPathLength, TrueStepLength, SampleCosineTheta.</LI>
-<LI>Updated calculation of energy from range.</LI>
-<LI><TT>G4LossTableManager</TT>: fixed problem of precise-range table.</LI>
-<LI><TT>G4VEnergyLossProcess</TT>: fixed problem of step limit calculation,
-    [lowestKinEnergy = 1.*eV].</LI>
-<LI>Added new class <TT>G4EmProcessOptions</TT>.
-<LI>Updated parameterizations in G4MuPairProductionModel and minor
-    fix in initialisation.</LI>
-<LI>Updated radiative corrections for <TT>G4MuBetheBlochModel</TT>.</LI>
-<LI>Fixed problem of ionisation in air with low pressure
-    <TT>10<SUP>-4</SUP> Atm</TT>.</LI>
-<LI>Fixes in constructor of discrete processes for setting of process
-    type.</LI>
+<LI>Bug Fixes in model variant of multiple-scattering; simplified calculation
+    of energy dependence of internal parameters.<BR>
+    <TT>G4MscModel</TT>: corrections to path length conversion and theta angle.</LI>
+<LI>Updated parameterizations in G4MuPairProductionModel for energies
+    over ~100 GeV. Precision of differential cross section parameterization is
+    improved from 30% to 5%.</LI>
+<LI>Updated radiative corrections calculation for <TT>G4MuBetheBlochModel</TT>
+    for muon energy above 1 GeV. Accuracy of energy loss of high energy muons
+    updated from 10% to 2%.</LI>
+<LI>Fixed problem of ionisation in air with low pressure less than
+    <TT>10<SUP>-4</SUP> Atm</TT>. Setting <TT>lowestKinEnergy</TT> to <TT>1.*eV</TT>,
+    in <TT>G4VEnergyLossProcess</TT>.</LI>
+<LI>Fixed problem of simulation of fluctuation of energy losses in very
+    small steps.</LI>
+<LI>Activated new optional feature, <I>PreciseRange</I> option, which 
+    provides ranges of particles calculated from total (not-truncated 
+    by cut) energy loss. Relevant for energies less than <TT>1 MeV</TT>
+    and effect sampling calorimeter results.</LI>
+<LI>Added new class <TT>G4EmProcessOptions</TT> to be used in physics lists.
+<LI>Fixes in constructor of discrete processes for setting of process type.</LI>
 </UL>
 
 <A NAME="gen-notes">
@@ -452,7 +456,7 @@ please refer to the related History files provided in most packages):
 <A NAME="hlst-notes">
 <H3><I>Hadronic physics-lists</I></H3></A>
 <UL>
-<LI>Updates to last validation.</LI>
+<LI>Updates to package 4.1 (QGSP_BIC, QGSP_BERT).</LI>
 </UL>
 
 <A NAME="ex-notes">
