@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComplexTest.cc,v 1.11 2001-11-01 18:41:31 vnivanch Exp $
+// $Id: G4ComplexTest.cc,v 1.12 2001-11-02 16:17:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -97,7 +97,7 @@
 #include "CLHEP/Hist/HBookFile.h"
 #include "CLHEP/Hist/Histogram.h"
 #include "CLHEP/Hist/Tuple.h"
-
+#include "G4Timer.hh"
 
 int main(int argc,char** argv)
 {
@@ -533,6 +533,9 @@ int main(int argc,char** argv)
     G4double de = 0.0;
     G4double de2 = 0.0;
 
+    G4Timer* timer = new G4Timer();
+    timer->Start();
+
     for (G4int iter=0; iter<nEvt; iter++) {
 
       gTrack->SetStep(step); 
@@ -689,6 +692,10 @@ int main(int argc,char** argv)
     if(0.0 < y) y = sqrt(y); 
     G4cout << "Average energy deposition(MeV)= " 
            << x/MeV << " +- " << y/MeV << G4endl;
+
+    timer->Stop();
+    G4cout << "  "  << *timer << G4endl;
+    delete timer;
   
     if(usepaw)hbookManager->write();
     G4cout << "# hbook is writed" << G4endl;

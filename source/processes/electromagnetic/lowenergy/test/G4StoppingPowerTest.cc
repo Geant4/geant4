@@ -97,6 +97,7 @@
 #include "hTest/include/G4IonC12.hh"
 #include "hTest/include/G4IonAr40.hh"
 
+#include "G4Timer.hh"
 
 int main(int argc,char** argv)
 {
@@ -587,6 +588,9 @@ int main(int argc,char** argv)
     step->SetPostStepPoint(bPoint);
     step->SetStepLength(theStep);
 
+    G4Timer* timer = new G4Timer();
+    timer->Start();
+
     for (G4int iter=0; iter<nbin; iter++) {
 
       G4double le = emin10 + ((G4double)iter + 0.5)*bin;
@@ -703,6 +707,11 @@ int main(int argc,char** argv)
       hist[2]->accumulate(le,x/mm);
       hist[3]->accumulate(le,(G4double)n);
     }
+
+    timer->Stop();
+    G4cout << "  "  << *timer << G4endl;
+    delete timer;
+
     if(usepaw)hbookManager->write();
     G4cout << "# hbook is writed" << G4endl;
     delete hbookManager;    
