@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05PhysicsList.cc,v 1.1 1999-01-07 16:06:18 gunter Exp $
+// $Id: ExN05PhysicsList.cc,v 1.2 1999-04-16 12:05:03 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -274,29 +274,14 @@ void ExN05PhysicsList::AddParameterisation()
   }
 }
 
-void ExN05PhysicsList::SetCuts(G4double cut)
+void ExN05PhysicsList::SetCuts()
 {
-  if (verboseLevel >0){
+  if (verboseLevel >1){
     G4cout << "ExN05PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << cut/mm << " (mm)" << endl;
   }  
-
-  // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma 
-  SetCutValue(cut, "gamma");
-  SetCutValue(cut, "e-");
-  SetCutValue(cut, "e+");
- 
-  // set cut values for proton and anti_proton before all other hadrons
-  // because some processes for hadrons need cut values for proton/anti_proton 
-  SetCutValue(cut, "proton");
-  SetCutValue(cut, "anti_proton");
-  
-  SetCutValueForOthers(cut);
-
-  if (verboseLevel>1) {
-    DumpCutValuesTable();
-  }
+  //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
+  //   the default cut value for all particle types 
+  SetCutsWithDefault();   
 }
 
 

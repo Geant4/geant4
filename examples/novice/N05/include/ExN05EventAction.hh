@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05EventAction.hh,v 1.1 1999-01-07 16:06:12 gunter Exp $
+// $Id: ExN05EventAction.hh,v 1.2 1999-04-16 12:04:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -21,11 +21,11 @@ class ExN05EventAction : public G4UserEventAction
 {
   public:
     ExN05EventAction();
-    ~ExN05EventAction();
+    virtual ~ExN05EventAction();
 
   public:
-    void BeginOfEventAction();
-    void EndOfEventAction();
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void EndOfEventAction(const G4Event*);
 
   private:
     G4int calorimeterCollID;

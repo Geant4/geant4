@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05RunAction.cc,v 1.1 1999-01-07 16:06:19 gunter Exp $
+// $Id: ExN05RunAction.cc,v 1.2 1999-04-16 12:05:04 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -26,15 +26,15 @@ ExN05RunAction::~ExN05RunAction()
   delete timer;
 }
 
-void ExN05RunAction::BeginOfRunAction(G4Run* aRun)
+void ExN05RunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  aRun->SetRunID(runIDcounter++);
+  ((G4Run*)(aRun))->SetRunID(runIDcounter++);
 
   G4cout << "### Run " << aRun->GetRunID() << " start." << endl;
   //  timer->Start();
 }
 
-void ExN05RunAction::EndOfRunAction(G4Run* aRun)
+void ExN05RunAction::EndOfRunAction(const G4Run* aRun)
 {
   timer->Stop();
   G4cout << "number of event = " << aRun->GetNumberOfEvent() << endl;

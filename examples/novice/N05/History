@@ -1,4 +1,4 @@
-$Id: History,v 1.1 1999-01-07 16:06:09 gunter Exp $
+$Id: History,v 1.2 1999-04-16 12:04:55 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+16th April 1999 H.Kurashige
+- modify ExN05RunAction  ExN05SteppingAction ExN05TrackingAction
+- modify ExN05PhysicsList::SetCuts
+
 11 December 1998 M. Verderi
 - fix made in ExN05CalorimeterSD to allow several instanciations of this class.
   The problem was a static variable (HCID) used in EndOfEventAction which made
