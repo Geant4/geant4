@@ -1,4 +1,4 @@
-// $Id: G4PersistencyCenter.cc,v 1.2 2002-12-04 10:25:50 gcosmo Exp $
+// $Id: G4PersistencyCenter.cc,v 1.3 2002-12-04 10:37:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4PersistencyCenter.cc
@@ -192,20 +192,18 @@ G4bool G4PersistencyCenter::SetWriteFile(G4std::string objName, G4std::string wr
 // Implementation of SetReadFile
 G4bool G4PersistencyCenter::SetReadFile(G4std::string objName, G4std::string readFileName)
 {
-  if ( f_ut.FileExists(readFileName) ) {
-
-
-      f_readFileName[objName] = readFileName;
-
-
-
-
-
-  } else {
+#ifndef WIN32
+  if ( f_ut.FileExists(readFileName) )
+  {
+    f_readFileName[objName] = readFileName;
+  }
+  else
+  {
     G4cerr << "!! File \"" << objName << "\" does not exist."
            << G4endl;
     return false;
   }
+#endif
   return true;
 }
 

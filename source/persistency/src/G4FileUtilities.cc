@@ -1,10 +1,12 @@
-// $Id: G4FileUtilities.cc,v 1.2 2002-12-04 10:25:50 gcosmo Exp $
+// $Id: G4FileUtilities.cc,v 1.3 2002-12-04 10:37:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4FileUtilities.cc
 //
 // History:
 //   01.08.24  Youhei Morita  Initial creation
+
+#ifndef WIN32
 
 #include "G4FileUtilities.hh"
 
@@ -47,5 +49,4 @@ int G4FileUtilities::DeleteFile(const G4std::string file, const G4std::string op
   return Shell( cmd );
 }
 
-// End of G4FileUtilities.cc
-
+#endif

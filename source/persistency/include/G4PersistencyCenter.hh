@@ -1,4 +1,4 @@
-// $Id: G4PersistencyCenter.hh,v 1.2 2002-12-04 10:25:49 gcosmo Exp $
+// $Id: G4PersistencyCenter.hh,v 1.3 2002-12-04 10:37:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4PersistencyCenter.hh
@@ -17,7 +17,10 @@
 #include "G4VHCIOentry.hh"
 #include "G4DCIOcatalog.hh"
 #include "G4VDCIOentry.hh"
-#include "G4FileUtilities.hh"
+
+#ifndef WIN32
+  #include "G4FileUtilities.hh"
+#endif
 
 // Forward Declaration to avoid circular dependencies.
 class G4PersistencyManager;
@@ -146,8 +149,9 @@ class G4PersistencyCenter
       StoreMap                      f_writeFileMode;
       BoolMap                       f_readFileMode;
       G4int                         m_verbose;
+#ifndef WIN32
       G4FileUtilities               f_ut;
-
+#endif
 }; // End of class G4PersistencyCenter
 
 #endif
