@@ -47,6 +47,7 @@
 // 13-02-03 SubCutoffProcessors defined for regions (V.Ivanchenko)
 // 15-02-03 Lambda table can be scaled (V.Ivanchenko)
 // 17-02-03 Fix problem of store/restore tables (V.Ivanchenko)
+// 18-02-03 Add control on CutCouple usage (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -935,9 +936,9 @@ void G4VEnergyLossSTD::SetSubLambdaTable(G4PhysicsTable* p)
 
 G4PhysicsVector* G4VEnergyLossSTD::DEDXPhysicsVector(const G4MaterialCutsCouple* couple)
 {
-  //G4int nbins = 2;
-  G4int nbins =  nDEDXBins;
-  //if( couple->IsUsed() ) nbins = nDEDXBins;
+  G4int nbins = 3;
+  //G4int nbins =  nDEDXBins;
+  if( couple->IsUsed() ) nbins = nDEDXBins;
   //  G4double xmax = maxKinEnergy*exp( log(maxKinEnergy/minKinEnergy) / ((G4double)(nbins-1)) );
   G4PhysicsVector* v = new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nbins);
   return v;
@@ -948,9 +949,9 @@ G4PhysicsVector* G4VEnergyLossSTD::DEDXPhysicsVector(const G4MaterialCutsCouple*
 G4PhysicsVector* G4VEnergyLossSTD::LambdaPhysicsVector(const G4MaterialCutsCouple* couple)
 {
   G4double cut  = (*theCuts)[couple->GetIndex()];
-  //G4int nbins = 2;
-  G4int nbins = nLambdaBins;
-  //if( couple->IsUsed() ) nbins = nLambdaBins;
+  G4int nbins = 3;
+  //G4int nbins = nLambdaBins;
+  if( couple->IsUsed() ) nbins = nLambdaBins;
   G4double tmin = G4std::max(MinPrimaryEnergy(particle, couple->GetMaterial(), cut),
                                minKinEnergy);
   if(tmin >= maxKinEnergy) tmin = 0.5*maxKinEnergy;
