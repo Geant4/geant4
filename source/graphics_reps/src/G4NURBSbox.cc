@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBSbox.cc,v 1.4 2001-07-11 10:01:07 gunter Exp $
+// $Id: G4NURBSbox.cc,v 1.5 2003-04-03 15:31:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,64 +32,53 @@
 
 #include "G4NURBSbox.hh"
 
-	G4NURBSbox::G4NURBSbox(G4double DX, G4double DY, G4double DZ)
-		:
-		G4NURBS	(
-			2, 2,	// linear along U and V
-			4, 5	// line with two 90 degrees folds along U
-				// rectangle along V (3 folds)
-			)
-				// let's it Generate regular knots vector
-				// (note we are calling the second constructor)
-		{
-		t_indCtrlPt i = 0;
+G4NURBSbox::G4NURBSbox(G4double DX, G4double DY, G4double DZ)
+  : G4NURBS  ( 2, 2,  // linear along U and V
+               4, 5 ) // line with two 90 degrees folds along U
+                      // rectangle along V (3 folds)
+{
+  // let's it Generate regular knots vector
+  // (note we are calling the second constructor)
 
+  t_indCtrlPt i = 0;
 
-		CP(mpCtrlPts[i++], DX, DY, DZ, 1 ); 
-		CP(mpCtrlPts[i++], DX, DY, DZ, 1 ); 
-		CP(mpCtrlPts[i++], DX, DY,-DZ, 1 ); 
-		CP(mpCtrlPts[i++], DX, DY,-DZ, 1 ); 
+  CP(mpCtrlPts[i++], DX, DY, DZ, 1 ); 
+  CP(mpCtrlPts[i++], DX, DY, DZ, 1 ); 
+  CP(mpCtrlPts[i++], DX, DY,-DZ, 1 ); 
+  CP(mpCtrlPts[i++], DX, DY,-DZ, 1 ); 
 
-		CP(mpCtrlPts[i++], DX, DY, DZ, 1 ); 
-		CP(mpCtrlPts[i++],-DX, DY, DZ, 1 ); 
-		CP(mpCtrlPts[i++],-DX, DY,-DZ, 1 ); 
-		CP(mpCtrlPts[i++], DX, DY,-DZ, 1 ); 
+  CP(mpCtrlPts[i++], DX, DY, DZ, 1 ); 
+  CP(mpCtrlPts[i++],-DX, DY, DZ, 1 ); 
+  CP(mpCtrlPts[i++],-DX, DY,-DZ, 1 ); 
+  CP(mpCtrlPts[i++], DX, DY,-DZ, 1 ); 
 
-		CP(mpCtrlPts[i++], DX,-DY, DZ, 1 ); 
-		CP(mpCtrlPts[i++],-DX,-DY, DZ, 1 ); 
-		CP(mpCtrlPts[i++],-DX,-DY,-DZ, 1 ); 
-		CP(mpCtrlPts[i++], DX,-DY,-DZ, 1 ); 
+  CP(mpCtrlPts[i++], DX,-DY, DZ, 1 ); 
+  CP(mpCtrlPts[i++],-DX,-DY, DZ, 1 ); 
+  CP(mpCtrlPts[i++],-DX,-DY,-DZ, 1 ); 
+  CP(mpCtrlPts[i++], DX,-DY,-DZ, 1 ); 
 
-		CP(mpCtrlPts[i++], DX,-DY, DZ, 1 ); 
-		CP(mpCtrlPts[i++], DX,-DY, DZ, 1 ); 
-		CP(mpCtrlPts[i++], DX,-DY,-DZ, 1 ); 
-		CP(mpCtrlPts[i++], DX,-DY,-DZ, 1 ); 
+  CP(mpCtrlPts[i++], DX,-DY, DZ, 1 ); 
+  CP(mpCtrlPts[i++], DX,-DY, DZ, 1 ); 
+  CP(mpCtrlPts[i++], DX,-DY,-DZ, 1 ); 
+  CP(mpCtrlPts[i++], DX,-DY,-DZ, 1 ); 
 
-		CP(mpCtrlPts[i++], DX, DY, DZ, 1 ); 
-		CP(mpCtrlPts[i++], DX, DY, DZ, 1 ); 
-		CP(mpCtrlPts[i++], DX, DY,-DZ, 1 ); 
-		CP(mpCtrlPts[i++], DX, DY,-DZ, 1 ); 
+  CP(mpCtrlPts[i++], DX, DY, DZ, 1 ); 
+  CP(mpCtrlPts[i++], DX, DY, DZ, 1 ); 
+  CP(mpCtrlPts[i++], DX, DY,-DZ, 1 ); 
+  CP(mpCtrlPts[i++], DX, DY,-DZ, 1 ); 
+}
 
-		
-
-
-		
-		}
-
-G4Visible & G4NURBSbox::operator = (const G4Visible &right) {
+G4Visible & G4NURBSbox::operator = (const G4Visible &right)
+{
   return G4Visible::operator = (right);
 }
 
-G4VVisPrim & G4NURBSbox::operator = (const G4VVisPrim &right) {
+G4VVisPrim & G4NURBSbox::operator = (const G4VVisPrim &right)
+{
   return G4VVisPrim::operator = (right);
 }
 
-const char*	G4NURBSbox::Whoami() const
-		{
-		return "Box (as a folded piece)";
-		}
-
-
-
-
-
+const char*  G4NURBSbox::Whoami() const
+{
+  return "Box (as a folded piece)";
+}

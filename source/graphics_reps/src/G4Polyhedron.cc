@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedron.cc,v 1.11 2001-07-11 10:01:08 gunter Exp $
+// $Id: G4Polyhedron.cc,v 1.12 2003-04-03 15:31:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4Polyhedron.hh"
@@ -30,7 +30,9 @@ G4Polyhedron::G4Polyhedron () {}
 
 G4Polyhedron::~G4Polyhedron () {}
 
-G4Polyhedron::G4Polyhedron (const G4Polyhedron& from) {
+G4Polyhedron::G4Polyhedron (const G4Polyhedron& from)
+  : HepPolyhedron(from), G4VVisPrim(from)
+{
   *this = from;
 }
 

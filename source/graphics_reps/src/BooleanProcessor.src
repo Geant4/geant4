@@ -780,7 +780,7 @@ void BooleanProcessor::caseII(ExtEdge & edge1, ExtEdge & edge2)
   insertEdge(edge2);
 }
 
-void BooleanProcessor::caseIE(ExtEdge & edge1, ExtEdge & edge2)
+void BooleanProcessor::caseIE(ExtEdge &, ExtEdge &)
 /***********************************************************************
  *                                                                     *
  * Name: BooleanProcessor::caseIE                    Date:    19.01.00 *
@@ -796,7 +796,7 @@ void BooleanProcessor::caseIE(ExtEdge & edge1, ExtEdge & edge2)
     << HepStd::endl;
 }
 
-void BooleanProcessor::caseEE(ExtEdge & edge1, ExtEdge & edge2)
+void BooleanProcessor::caseEE(ExtEdge &, ExtEdge &)
 /***********************************************************************
  *                                                                     *
  * Name: BooleanProcessor::caseEE                    Date:    19.01.00 *
@@ -890,7 +890,7 @@ void BooleanProcessor::invertNewEdges(int iface)
   }
 }
 
-void BooleanProcessor::checkDoubleEdges(int iface)
+void BooleanProcessor::checkDoubleEdges(int)
 /***********************************************************************
  *                                                                     *
  * Name: BooleanProcessor::checkDoubleEdges          Date:    04.02.00 *
