@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trap.hh,v 1.3 2000-04-07 12:55:03 gcosmo Exp $
+// $Id: G4Trap.hh,v 1.4 2000-04-11 16:04:27 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -308,8 +308,6 @@ public:
                         // Visualisation functions
 
     void                DescribeYourselfTo (G4VGraphicsScene& scene) const;
-    
-    G4VisExtent         GetExtent          () const;
     
     G4Polyhedron* CreatePolyhedron   () const;
     

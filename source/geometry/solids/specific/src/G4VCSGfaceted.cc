@@ -4,7 +4,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.cc,v 1.1 2000-04-07 11:03:41 gcosmo Exp $
+// $Id: G4VCSGfaceted.cc,v 1.2 2000-04-11 16:03:40 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,7 +30,6 @@
 #include "G4VGraphicsScene.hh"
 #include "G4NURBS.hh"
 #include "G4NURBSbox.hh"
-#include "G4VisExtent.hh"
 
 //
 // Destructor
@@ -310,50 +309,4 @@ G4double G4VCSGfaceted::DistanceTo( const G4ThreeVector &p, const G4bool outgoin
 void G4VCSGfaceted::DescribeYourselfTo( G4VGraphicsScene& scene ) const
 {
    scene.AddThis( *this );
-}
-
-
-//
-// GetExtent
-//
-G4VisExtent G4VCSGfaceted::GetExtent() const
-{  
-	G4ThreeVector plusX(1,0,0), minusX(-1,0,0),
-		      plusY(0,1,0), minusY(0,-1,0),
-		      plusZ(0,0,1), minusZ(0,0,-0);
-	G4double answer, maxX = -kInfinity, 
-			 minX = -kInfinity, 
-			 maxY = -kInfinity, 
-			 minY = -kInfinity,
-			 maxZ = -kInfinity, 
-			 minZ = -kInfinity;
-	
-	//
-	// Ask everyone about x, y, and z
-	//
-	G4VCSGface **face = faces;
-	do {
-		answer = (*face)->Extent( plusX );
-		if (answer > maxX) maxX = answer;
-
-		answer = (*face)->Extent( minusX );
-		if (answer > minX) minX = answer;
-
-		answer = (*face)->Extent( plusY );
-		if (answer > maxY) maxY = answer;
-
-		answer = (*face)->Extent( minusY );
-		if (answer > minY) minY = answer;
-
-		answer = (*face)->Extent( plusZ );
-		if (answer > maxZ) maxZ = answer;
-
-		answer = (*face)->Extent( minusZ );
-		if (answer > minZ) minZ = answer;
-	} while( ++face < faces + numFace );
-	
-	//
-	// Yes, the signs are correct!
-	//
-	return G4VisExtent( -minX, maxY, -minY, maxY, -minZ, maxZ );
 }

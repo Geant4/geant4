@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Cons.cc,v 1.8 2000-03-14 08:49:48 gcosmo Exp $
+// $Id: G4Cons.cc,v 1.9 2000-04-11 16:04:27 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Cons
@@ -35,7 +35,6 @@
 #include "G4Polyhedron.hh"
 #include "G4NURBS.hh"
 #include "G4NURBSbox.hh"
-#include "G4VisExtent.hh"
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -2288,15 +2287,6 @@ G4Cons::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 void G4Cons::DescribeYourselfTo (G4VGraphicsScene& scene) const
 {
   scene.AddThis (*this);
-}
-
-  // Define the sides of the box into which the G4Cons instance would fit.
-
-G4VisExtent G4Cons::GetExtent() const
-{
-    G4double RMax = (fRmax2 >= fRmax1) ? fRmax2 : fRmax1 ;
-    
-    return G4VisExtent (-RMax, RMax, -RMax, RMax, -fDz, fDz);
 }
 
 G4Polyhedron* G4Cons::CreatePolyhedron () const

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Tubs.cc,v 1.13 2000-03-31 16:23:16 grichine Exp $
+// $Id: G4Tubs.cc,v 1.14 2000-04-11 16:04:30 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,7 +40,6 @@
 #include "G4NURBStube.hh"
 #include "G4NURBScylinder.hh"
 #include "G4NURBStubesector.hh"
-#include "G4VisExtent.hh"
 
 /////////////////////////////////////////////////////////////////////////
 //
@@ -1645,12 +1644,6 @@ G4Exception("G4Tubs::CreateRotatedVertices Out of memory - Cannot alloc vertices
 void G4Tubs::DescribeYourselfTo (G4VGraphicsScene& scene) const 
 {
   scene.AddThis (*this);
-}
-
-G4VisExtent G4Tubs::GetExtent() const 
-{
-  // Define the sides of the box into which the G4Tubs instance would fit.
-  return G4VisExtent (-fRMax, fRMax, -fRMax, fRMax, -fDz, fDz);
 }
 
 G4Polyhedron* G4Tubs::CreatePolyhedron () const 

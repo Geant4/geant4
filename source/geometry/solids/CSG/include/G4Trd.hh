@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trd.hh,v 1.4 2000-04-07 12:55:03 gcosmo Exp $
+// $Id: G4Trd.hh,v 1.5 2000-04-11 16:04:27 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -168,7 +168,6 @@ class G4Trd : public G4CSGSolid
                         // Visualisation functions
 
     void                DescribeYourselfTo (G4VGraphicsScene& scene) const;
-    G4VisExtent         GetExtent          () const;
     G4Polyhedron* CreatePolyhedron   () const;
     G4NURBS*      CreateNURBS        () const;
 

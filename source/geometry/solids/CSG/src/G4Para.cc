@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Para.cc,v 1.4 1999-12-15 14:50:07 gunter Exp $
+// $Id: G4Para.cc,v 1.5 2000-04-11 16:04:28 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Para
@@ -28,7 +28,6 @@
 #include "G4Polyhedron.hh"
 #include "G4NURBS.hh"
 #include "G4NURBSbox.hh"
-#include "G4VisExtent.hh"
 
 // Private enum: Not for external use 
   	
@@ -1036,34 +1035,6 @@ G4ThreeVectorList*
 void G4Para::DescribeYourselfTo (G4VGraphicsScene& scene) const
 {
    scene.AddThis (*this);
-   //  scene.AddThis (*this);
-}
-
-G4VisExtent G4Para::GetExtent() const
-{
-  G4int i ;
-  G4double xMin,xMax,yMin,yMax ; 
-  G4ThreeVector pt[8] ;
-	   pt[0]=G4ThreeVector(-fDz*fTthetaCphi-fDy*fTalpha-fDx,-fDz*fTthetaSphi-fDy,-fDz);
-           pt[1]=G4ThreeVector(-fDz*fTthetaCphi-fDy*fTalpha+fDx,-fDz*fTthetaSphi-fDy,-fDz);
-	   pt[2]=G4ThreeVector(-fDz*fTthetaCphi+fDy*fTalpha-fDx,-fDz*fTthetaSphi+fDy,-fDz);
-	   pt[3]=G4ThreeVector(-fDz*fTthetaCphi+fDy*fTalpha+fDx,-fDz*fTthetaSphi+fDy,-fDz);
-	   pt[4]=G4ThreeVector(+fDz*fTthetaCphi-fDy*fTalpha-fDx,+fDz*fTthetaSphi-fDy,+fDz);
-	   pt[5]=G4ThreeVector(+fDz*fTthetaCphi-fDy*fTalpha+fDx,+fDz*fTthetaSphi-fDy,+fDz);
-	   pt[6]=G4ThreeVector(+fDz*fTthetaCphi+fDy*fTalpha-fDx,+fDz*fTthetaSphi+fDy,+fDz);
-	   pt[7]=G4ThreeVector(+fDz*fTthetaCphi+fDy*fTalpha+fDx,+fDz*fTthetaSphi+fDy,+fDz);
-	   xMax = -fabs(fDz*fTthetaCphi)-fDx-fDx-fDx-fDx ;
-	   xMin = -xMax ;
-	   yMax = -fabs(fDz*fTthetaSphi)-fDy-fDy ;
-           yMin = -yMax ;
-	   for(i=0;i<8;i++)
-	   {
-	      if(pt[i].x() > xMax) xMax = pt[i].x() ;
-	      if(pt[i].x() < xMin) xMin = pt[i].x() ;
-	      if(pt[i].y() > yMax) yMax = pt[i].y() ;
-	      if(pt[i].y() < yMin) yMin = pt[i].y() ;
-	   }	   
-  return G4VisExtent (xMin, xMax, yMin, yMax, -fDz, fDz);
 }
 
 G4Polyhedron* G4Para::CreatePolyhedron () const

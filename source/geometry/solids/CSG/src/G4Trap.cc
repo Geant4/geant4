@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trap.cc,v 1.6 1999-12-15 14:50:07 gunter Exp $
+// $Id: G4Trap.cc,v 1.7 2000-04-11 16:04:30 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Trap
@@ -32,7 +32,6 @@
 #include "G4Polyhedron.hh"
 #include "G4NURBS.hh"
 #include "G4NURBSbox.hh"
-#include "G4VisExtent.hh"
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -1417,34 +1416,6 @@ G4Trap::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 void G4Trap::DescribeYourselfTo (G4VGraphicsScene& scene) const
 {
   scene.AddThis (*this);
-   //  scene.AddThis (*this);
-}
-
-G4VisExtent G4Trap::GetExtent() const
-{
-  G4int i ;
-  G4double xMin,xMax,yMin,yMax ; 
-  G4ThreeVector pt[8] ;
-	   pt[0]=G4ThreeVector(-fDz*fTthetaCphi-fDy1*fTalpha1-fDx1,-fDz*fTthetaSphi-fDy1,-fDz);
-           pt[1]=G4ThreeVector(-fDz*fTthetaCphi-fDy1*fTalpha1+fDx1,-fDz*fTthetaSphi-fDy1,-fDz);
-	   pt[2]=G4ThreeVector(-fDz*fTthetaCphi+fDy1*fTalpha1-fDx2,-fDz*fTthetaSphi+fDy1,-fDz);
-	   pt[3]=G4ThreeVector(-fDz*fTthetaCphi+fDy1*fTalpha1+fDx2,-fDz*fTthetaSphi+fDy1,-fDz);
-	   pt[4]=G4ThreeVector(+fDz*fTthetaCphi-fDy2*fTalpha2-fDx3,+fDz*fTthetaSphi-fDy2,+fDz);
-	   pt[5]=G4ThreeVector(+fDz*fTthetaCphi-fDy2*fTalpha2+fDx3,+fDz*fTthetaSphi-fDy2,+fDz);
-	   pt[6]=G4ThreeVector(+fDz*fTthetaCphi+fDy2*fTalpha2-fDx4,+fDz*fTthetaSphi+fDy2,+fDz);
-	   pt[7]=G4ThreeVector(+fDz*fTthetaCphi+fDy2*fTalpha2+fDx4,+fDz*fTthetaSphi+fDy2,+fDz);
-	   xMax = -fabs(fDz*fTthetaCphi)-fDx1-fDx2-fDx3-fDx4 ;
-	   xMin = -xMax ;
-	   yMax = -fabs(fDz*fTthetaSphi)-fDy1-fDy2 ;
-           yMin = -yMax ;
-	   for(i=0;i<8;i++)
-	   {
-	      if(pt[i].x() > xMax) xMax = pt[i].x() ;
-	      if(pt[i].x() < xMin) xMin = pt[i].x() ;
-	      if(pt[i].y() > yMax) yMax = pt[i].y() ;
-	      if(pt[i].y() < yMin) yMin = pt[i].y() ;
-	   }	   
-  return G4VisExtent (xMin, xMax, yMin, yMax, -fDz, fDz);
 }
 
 G4Polyhedron* G4Trap::CreatePolyhedron () const

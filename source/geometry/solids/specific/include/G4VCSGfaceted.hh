@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.hh,v 1.1 2000-04-07 10:59:38 gcosmo Exp $
+// $Id: G4VCSGfaceted.hh,v 1.2 2000-04-11 16:03:39 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,8 +60,6 @@ class G4VCSGfaceted : public G4CSGSolid
 
 	virtual void DescribeYourselfTo( G4VGraphicsScene& scene ) const;
 
-	virtual G4VisExtent GetExtent() const;
-	
 	protected:
 	G4int	  numFace;
 	G4VCSGface **faces;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EllipticalTube.hh,v 1.2 2000-04-07 11:09:07 gcosmo Exp $
+// $Id: G4EllipticalTube.hh,v 1.3 2000-04-11 16:03:39 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -59,9 +59,6 @@ class G4EllipticalTube : public G4CSGSolid {
 
 	virtual void DescribeYourselfTo( G4VGraphicsScene& scene ) const;
 
-	virtual G4VisExtent GetExtent() const;
-	
-	
 	//
 	// Parameter access
 	//

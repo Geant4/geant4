@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Torus.cc,v 1.6 2000-03-14 08:49:48 gcosmo Exp $
+// $Id: G4Torus.cc,v 1.7 2000-04-11 16:04:29 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,7 +35,6 @@
 #include "G4NURBStube.hh"
 #include "G4NURBScylinder.hh"
 #include "G4NURBStubesector.hh"
-#include "G4VisExtent.hh"
 
 
 ///////////////////////////////////////////////////////////////
@@ -1843,12 +1842,6 @@ G4ThreeVectorList*
 
 void G4Torus::DescribeYourselfTo (G4VGraphicsScene& scene) const {
   scene.AddThis (*this);
-}
-
-G4VisExtent G4Torus::GetExtent() const {
-  // Define the sides of the box into which the G4Torus instance would fit.
-  return G4VisExtent (-fRtor-fRmax, fRtor+fRmax,
-		      -fRtor-fRmax, fRtor+fRmax, -fRmax, fRmax);
 }
 
 G4Polyhedron* G4Torus::CreatePolyhedron () const {

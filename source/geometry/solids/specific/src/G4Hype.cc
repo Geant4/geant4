@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Hype.cc,v 1.1 2000-04-07 11:00:51 gcosmo Exp $
+// $Id: G4Hype.cc,v 1.2 2000-04-11 16:03:40 johna Exp $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -50,7 +50,6 @@
 #include "G4NURBStube.hh"
 #include "G4NURBScylinder.hh"
 #include "G4NURBStubesector.hh"
-#include "G4VisExtent.hh"
 
 // Constructor - check parameters, and fills protected data members
 G4Hype::G4Hype(const G4String& pName,
@@ -983,14 +982,6 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p) const
 void G4Hype::DescribeYourselfTo (G4VGraphicsScene& scene) const 
 {
   scene.AddThis (*this);
-}
-
-G4VisExtent G4Hype::GetExtent() const 
-{
-  // Define the sides of the box into which the G4Hype instance would fit.
-  return G4VisExtent (-endOuterRadius, endOuterRadius,
-		      -endOuterRadius, endOuterRadius,
-		      -halfLenZ, halfLenZ);
 }
 
 G4Polyhedron* G4Hype::CreatePolyhedron () const 

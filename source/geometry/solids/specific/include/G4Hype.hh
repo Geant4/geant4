@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Hype.hh,v 1.1 2000-04-07 10:56:06 gcosmo Exp $
+// $Id: G4Hype.hh,v 1.2 2000-04-11 16:03:39 johna Exp $
 // $Original: G4Hype.hh,v 1.0 1998/06/09 16:57:50 safai Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -152,7 +152,6 @@ public:
   virtual G4GeometryType  GetEntityType() const { return G4String("G4Hype"); }
 
   void                DescribeYourselfTo (G4VGraphicsScene& scene) const;
-  G4VisExtent         GetExtent          () const;
   G4Polyhedron*       CreatePolyhedron   () const;
   G4NURBS*            CreateNURBS        () const;
 

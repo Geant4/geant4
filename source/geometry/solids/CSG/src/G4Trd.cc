@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trd.cc,v 1.4 1999-12-15 14:50:08 gunter Exp $
+// $Id: G4Trd.cc,v 1.5 2000-04-11 16:04:30 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -23,7 +23,6 @@
 #include "G4Polyhedron.hh"
 #include "G4NURBS.hh"
 #include "G4NURBSbox.hh"
-#include "G4VisExtent.hh"
 
 #include <math.h>
 
@@ -1237,13 +1236,6 @@ G4Trd::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 void G4Trd::DescribeYourselfTo (G4VGraphicsScene& scene) const
 {
   scene.AddThis (*this);
-}
-
-G4VisExtent G4Trd::GetExtent() const
-{
-  G4double maxX=(fDx1>fDx2) ? fDx1 : fDx2;
-  G4double maxY=(fDy1>fDy2) ? fDy1 : fDy2;
-  return G4VisExtent (-maxX, maxX, -maxY, maxY, -fDz, fDz);
 }
 
 G4Polyhedron* G4Trd::CreatePolyhedron () const
