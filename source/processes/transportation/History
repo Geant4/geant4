@@ -1,4 +1,4 @@
-$Id: History,v 1.53 2002-10-16 16:29:12 dressel Exp $
+$Id: History,v 1.54 2002-10-16 16:29:58 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Oct  16th, 2002 M.Dressel 
---------------------------
+Oct  16th, 2002 M.Dressel internal_6_transport-V04-01-01
+--------------------------------------------------------
 - changes recomanded by codewizrd
 - added GCellFinder concept
 
