@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc,v 1.12 2005-02-18 01:12:25 asaim Exp $
+// $Id: G4Region.cc,v 1.13 2005-04-02 18:23:44 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -87,6 +87,15 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
   G4Region* currentRegion = 0;
   size_t noDaughters = lv->GetNoDaughters();
   G4Material* volMat = lv->GetMaterial();
+  if(!volMat)
+  {
+    G4String errmsg = "Logical volume <";
+    errmsg += lv->GetName();
+    errmsg += "> does not have a valid material pointer.\n";
+    errmsg += "Logical volume that belongs to the (tracking) world volume must have ";
+    errmsg += "a valid material.\nCheck your geometry construction.";
+    G4Exception("G4Region::ScanVolumeTree","Geom/Region/00",FatalException,errmsg);
+  }
   G4MaterialList::iterator pos;
   if (region)
   {
@@ -119,6 +128,15 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
     for (register size_t rep=0; rep<repNo; rep++)
     {
       volMat = pParam->ComputeMaterial(rep, daughterPVol);
+      if(!volMat)
+      {
+        G4String errmsg = "ComputeMaterial method of parameterisation for the physical volume <";
+        errmsg += daughterPVol->GetName();
+        errmsg += "> does not return a valid material pointer.\n";
+        errmsg += "Volume that belongs to the (tracking) world volume must have ";
+        errmsg += "a valid material.\nCheck your parameterisation.";
+        G4Exception("G4Region::ScanVolumeTree","Geom/Region/01",FatalException,errmsg);
+      }
       pos = std::find(fMaterials.begin(),fMaterials.end(),volMat);
       if (pos == fMaterials.end())
       {
