@@ -2,7 +2,11 @@ all:	# :::
 	grep ":::" GNUmakefile
 
 man:	# ::: Make manual.
-	latex manCascade.tex; latex manCascade.tex; dvips manCascade.dvi -o manCascade.ps; gv manCascade.ps
+	make clean; latex manCascade; bibtex manCascade; latex manCascade; latex manCascade; dvips manCascade.dvi -o manCascade.ps; gv manCascade.ps
 
 pub:	# ::: Make publication.
-	latex pubCascade.tex; latex pubCascade.tex; bibtex pubCascade.tex; latex pubCascade.tex; latex pubCascade.tex; dvips pubCascade.dvi -o pubCascade.ps; gv pubCascade.ps
+	make clean; latex pubCascade; bibtex pubCascade; latex pubCascade; latex pubCascade; dvips pubCascade.dvi -o pubCascade.ps; gv pubCascade.ps
+
+
+clean:	# ::: clean directory
+	rm -f \#*.*\# \#*\# \#* .*~ .#* *.*~ *~ *.o; rm -f core tmp.txt *.blg *.bbl *.toc *.log *.aux *.dvi
