@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2002-06-04 07:40:18 gcosmo Exp $
+$Id: History,v 1.2 2002-06-04 09:24:02 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-June 3rd, 2002  M.Liendl - olapex-V04-00-00
+June 4th, 2002  G.Cosmo - olapex-V04-00-00
+- Some general code cleanup.
+- Added disclaimer of liability.
+- Fixed usage of G4 types (G4int, G4double, G4bool).
+- Fixed usage of namespace (G4std::, G4endl, #include "g4std/...")
+- Fixed warnings and porting on supported platforms.
+
+June 3rd, 2002  M.Liendl
 - First implementation of the CMS tool for debugging overlapping geometries.
 
 June 3rd, 2002  G.Cosmo
