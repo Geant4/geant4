@@ -1,4 +1,4 @@
-$Id: History,v 1.58 2001-10-15 10:16:07 kurasige Exp $
+$Id: History,v 1.59 2001-10-20 01:41:22 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- Oct 20, 2001    H.Kurashige (particles-V03-02-06)
+- TAG FOR CUT FOR MATERIAL -
+------- partman-V03-02-06
+- Fixed bugs in G4ParticleWithCuts::UseProton 
+------- bosons-V03-02-06
+- Fixed bugs in G4Gamma::BuildAbsorptionLengthVector   by Hisaya
+
 - Oct 15, 2001   H.Kurashige (particles-V03-02-04)
+- TAG FOR CUT FOR MATERIAL -
 ------- partman-V03-02-04
 ------- hadrons-V03-02-03
 ------- bosons-V03-02-03
