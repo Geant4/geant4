@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.cc,v 1.20 2004-11-13 17:22:05 gcosmo Exp $
+// $Id: G4LogicalVolume.cc,v 1.21 2004-11-15 14:11:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,6 +40,8 @@
 #include "G4VSolid.hh"
 #include "G4Material.hh"
 #include "G4VPVParameterisation.hh"
+
+#include "G4UnitsTable.hh"
 
 // ********************************************************************
 // Constructor - sets member data and adds to logical Store,
@@ -240,16 +242,16 @@ G4LogicalVolume::FindMotherLogicalVolumeForEnvelope()
 //
 G4int G4LogicalVolume::TotalVolumeEntities() const
 {
-  G4int vols = 0;
+  static G4int vols = 0;
 
+  vols++;
   for (G4PhysicalVolumeList::const_iterator itDau = fDaughters.begin();
        itDau != fDaughters.end(); itDau++)
   {
-    vols++;
     G4VPhysicalVolume* physDaughter = (*itDau);
     for (G4int i=0; i<physDaughter->GetMultiplicity(); i++)
     {
-      vols += physDaughter->GetLogicalVolume()->TotalVolumeEntities();
+      physDaughter->GetLogicalVolume()->TotalVolumeEntities();
     }
   }
   return vols;
@@ -273,9 +275,11 @@ G4int G4LogicalVolume::TotalVolumeEntities() const
 //
 G4double G4LogicalVolume::GetMass(G4bool forced, G4Material* parMaterial)
 {
+  static G4double volMass = fMass;
+
   // Return the cached non-zero value, if not forced
   //
-  if ( (fMass) && (!forced) ) return fMass;
+  if ( (volMass) && (!forced) ) return volMass;
 
   // Global density and computed mass associated to the logical
   // volume without considering its daughters
@@ -298,7 +302,7 @@ G4double G4LogicalVolume::GetMass(G4bool forced, G4Material* parMaterial)
 		"No solid associated to the logical volume !");
   }
   G4double globalDensity = logMaterial->GetDensity();
-  fMass = fSolid->GetCubicVolume() * globalDensity;
+  volMass = fSolid->GetCubicVolume() * globalDensity;
 
   // For each daughter in the tree, subtract the mass occupied
   // and add the real daughter's one computed recursively
@@ -323,6 +327,7 @@ G4double G4LogicalVolume::GetMass(G4bool forced, G4Material* parMaterial)
       if (physParam)
       {
         daughterSolid = physParam->ComputeSolid(i, physDaughter);
+        daughterSolid->ComputeDimensions(physParam, i, physDaughter);
         daughterMaterial = physParam->ComputeMaterial(i, physDaughter);
       }
       else
@@ -335,8 +340,10 @@ G4double G4LogicalVolume::GetMass(G4bool forced, G4Material* parMaterial)
       // Subtract the daughter's portion for the mass and add the real
       // daughter's mass computed recursively
       //
-      fMass = fMass - subMass + logDaughter->GetMass(true, daughterMaterial);
+      volMass = volMass-subMass+logDaughter->GetMass(true, daughterMaterial);
     }
   }
+  fMass = volMass;
+
   return fMass;
 }
