@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2000-04-27 09:14:03 gcosmo Exp $
+$Id: History,v 1.19 2000-05-10 12:39:15 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 10th, 2000  G. Cosmo
+
+- G4MagneticField.hh: minor fix to dummy implementation of assignment
+  operator.
 
 April 27th, 2000   G. Cosmo
 
