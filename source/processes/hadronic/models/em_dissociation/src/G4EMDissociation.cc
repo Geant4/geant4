@@ -186,7 +186,7 @@ G4HadFinalState *G4EMDissociation::ApplyYourself
   G4double b         = pP.beta();
   G4double AT        = theTarget.GetN();
   G4double ZT        = theTarget.GetZ();
-  G4double MT        = theTarget.AtomicMass(AT,ZT) - ZT*electron_mass_c2;
+  G4double MT        = G4NucleiProperties::GetNuclearMass(AT,ZT);
 //
 //
 // Depending upon the verbosity level, output the initial information on the
