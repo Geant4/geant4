@@ -47,8 +47,7 @@
     else
     {
       G4ThreeVector aCMSMomentum = theNeutron.GetMomentum()+theTarget.GetMomentum();
-      G4LorentzVector p4(aCMSMomentum, theTarget.GetTotalEnergy() + theNeutron.GetTotalEnergy()
-                         + theBaseZ*G4Electron::ElectronDefinition()->GetPDGMass());
+      G4LorentzVector p4(aCMSMomentum, theTarget.GetTotalEnergy() + theNeutron.GetTotalEnergy());
       G4Fragment nucleus(theBaseA+1, theBaseZ ,p4);
       G4PhotonEvaporation photonEvaporation;
       G4FragmentVector* products = photonEvaporation.BreakItUp(nucleus);
