@@ -38,12 +38,19 @@
 
 // Supported drivers...
 
+// Not needing external packages or libraries...
+#include "G4ASCIITree.hh"
+#include "G4DAWNFILE.hh"
+#include "G4GAGTree.hh"
+#include "G4HepRepFile.hh"
+#include "G4RayTracer.hh"
+#include "G4VRML1File.hh"
+#include "G4VRML2File.hh"
+
+// Needing external packages or libraries...
+
 #ifdef G4VIS_USE_DAWN
 #include "G4FukuiRenderer.hh"
-#endif
-
-#ifdef G4VIS_USE_DAWNFILE
-#include "G4DAWNFILE.hh"
 #endif
 
 #ifdef G4VIS_USE_OPACS
@@ -79,15 +86,6 @@
 #include "G4VRML2.hh"
 #endif
 
-#ifdef G4VIS_USE_VRMLFILE
-#include "G4VRML1File.hh"
-#include "G4VRML2File.hh"
-#endif
-
-#ifdef G4VIS_USE_RAYTRACER
-#include "G4RayTracer.hh"
-#endif
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayFluoVisManager::XrayFluoVisManager () {}
@@ -96,12 +94,19 @@ XrayFluoVisManager::XrayFluoVisManager () {}
 
 void XrayFluoVisManager::RegisterGraphicsSystems () {
 
+  // Graphics Systems not needing external packages or libraries...
+  RegisterGraphicsSystem (new G4ASCIITree);
+  RegisterGraphicsSystem (new G4DAWNFILE);
+  RegisterGraphicsSystem (new G4GAGTree);
+  RegisterGraphicsSystem (new G4HepRepFile);
+  RegisterGraphicsSystem (new G4RayTracer);
+  RegisterGraphicsSystem (new G4VRML1File);
+  RegisterGraphicsSystem (new G4VRML2File);
+
+  // Graphics systems needing external packages or libraries...
+
 #ifdef G4VIS_USE_DAWN
   RegisterGraphicsSystem (new G4FukuiRenderer);
-#endif
-
-#ifdef G4VIS_USE_DAWNFILE
-  RegisterGraphicsSystem (new G4DAWNFILE);
 #endif
 
 #ifdef G4VIS_USE_OPACS
@@ -135,15 +140,6 @@ void XrayFluoVisManager::RegisterGraphicsSystems () {
 #ifdef G4VIS_USE_VRML
   RegisterGraphicsSystem (new G4VRML1);
   RegisterGraphicsSystem (new G4VRML2);
-#endif
-
-#ifdef G4VIS_USE_VRMLFILE
-  RegisterGraphicsSystem (new G4VRML1File);
-  RegisterGraphicsSystem (new G4VRML2File);
-#endif
-
-#ifdef G4VIS_USE_RAYTRACER
-  RegisterGraphicsSystem (new G4RayTracer);
 #endif
 
   if (fVerbose > 0) {
