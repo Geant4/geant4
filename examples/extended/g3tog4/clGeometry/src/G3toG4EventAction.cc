@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3toG4EventAction.cc,v 1.2 2001-07-11 09:58:10 gunter Exp $
+// $Id: G3toG4EventAction.cc,v 1.3 2001-10-23 13:32:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +29,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "g4rw/tvordvec.h"
 #include "G4ios.hh"
 #include "G3toG4EventAction.hh"
 #include "G3toG4EventActionMessenger.hh"

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelEventAction.cc,v 1.6 2001-07-11 09:56:58 gunter Exp $
+// $Id: GammaRayTelEventAction.cc,v 1.7 2001-10-23 13:28:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -37,8 +37,6 @@
 #include "GammaRayTelTrackerHit.hh"
 #include "GammaRayTelAnticoincidenceHit.hh"
 #include "GammaRayTelCalorimeterHit.hh"
-
-#include "g4rw/tvordvec.h"
 
 #ifdef G4ANALYSIS_USE
 #include "GammaRayTelAnalysisManager.hh"
