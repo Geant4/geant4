@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QContent.cc,v 1.4 2000-09-10 13:58:57 mkossov Exp $
+// $Id: G4QContent.cc,v 1.5 2000-09-14 14:54:09 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -89,6 +89,20 @@ G4QContent operator-(const G4QContent& lhs, const G4QContent& rhs)
 {//        =======================================================
   G4QContent s  = lhs;
   return     s -= rhs;
+}
+
+// Overloading of QC multiplication by Int
+G4QContent operator*(const G4QContent& lhs, const G4int&      rhs)
+{//        =======================================================
+  G4QContent s  = lhs;
+  return     s *= rhs;
+}
+
+// Overloading of Int times QC multiplication
+G4QContent operator*(const G4int&      lhs, const G4QContent& rhs)
+{//        =======================================================
+  G4QContent s  = rhs;
+  return     s *= lhs;
 }
 
 // Destructor - - - - - - - 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QContent.hh,v 1.4 2000-09-10 13:58:55 mkossov Exp $
+// $Id: G4QContent.hh,v 1.5 2000-09-14 14:54:08 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -131,10 +131,16 @@ private:            //                       C    S
   G4int nAS;        // a#of anti-s-quarks (+1/3)(-1)
 };
 
+// Not member operators
 ostream&   operator<<(ostream& lhs, G4QContent& rhs);
 ostream&   operator<<(ostream& lhs, const G4QContent& rhs);
 G4QContent operator+(const G4QContent& lhs, const G4QContent& rhs);
 G4QContent operator-(const G4QContent& lhs, const G4QContent& rhs);
+G4QContent operator*(const G4QContent& lhs, const G4int&      rhs);
+G4QContent operator*(const G4int&      lhs, const G4QContent& rhs);
+//G4int      operator/(const G4QContent& lhs, const G4QContent& rhs); // Combinations
+// Not member functions
+//----------------------------------------------------------------------------------------
 
 inline G4int      G4QContent::operator==(const G4QContent& rhs) const {return this==&rhs;}	
 inline G4int      G4QContent::operator!=(const G4QContent& rhs) const {return this!=&rhs;}

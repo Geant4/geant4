@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Quasmon.cc,v 1.13 2000-09-13 14:24:17 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.14 2000-09-14 14:54:10 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -257,6 +257,9 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
   static const G4QContent neutQC(2,1,0,0,0,0);
   static const G4QContent protQC(1,2,0,0,0,0);
   static const G4QContent lambQC(1,1,1,0,0,0);
+  static const G4QContent PiQC(0,1,0,1,0,0);
+  static const G4QContent K0QC(1,0,0,0,0,1);
+  static const G4QContent KpQC(0,1,0,0,0,1);
   static const G4QContent zeroQC(0,0,0,0,0,0);
   static const G4LorentzVector nothing(0.,0.,0.,0.);
   static const G4double mAlph= G4QPDGCode(2112).GetNuclMass(2,2,0);
@@ -1319,10 +1322,45 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
 	    }
         else if(!sPDG)
 		{
-          sPDG = 22;
-          sMass= 0.;
-          rPDG = iniPDG;
-		  rMass= iniQM;
+          if     (iniS<0&&iniQChg+iniQChg>=iniBarN)  // Try to decay in K+
+		  {
+            sPDG = 321;
+            sMass= mK;
+            G4QNucleus totN(valQ+KpQC);              // Nucleus Residual after Kp sub.
+            rPDG = totN.GetPDG();
+		    rMass= totN.GetMZNS();
+		  }
+          else if(iniS<0)                            // Try to decay in K0
+		  {
+            sPDG = 311;
+            sMass= mK0;
+            G4QNucleus totN(valQ+K0QC);              // Nucleus Residual after K0 sub.
+            rPDG = totN.GetPDG();
+		    rMass= totN.GetMZNS();
+		  }
+          else if(iniQChg>iniBarN-iniS)              // Try to decay in Pi+
+		  {
+            sPDG = 211;
+            sMass= mPi;
+            G4QNucleus totN(valQ-PiQC);              // Nucleus Residual after Pi+ sub.
+            rPDG = totN.GetPDG();
+		    rMass= totN.GetMZNS();
+		  }
+          else if(iniQChg<0)                         // Try to decay in Pi-
+		  {
+            sPDG = -211;
+            sMass= mPi;
+            G4QNucleus totN(valQ+PiQC);              // Nucleus Residual after Pi- sub.
+            rPDG = totN.GetPDG();
+		    rMass= totN.GetMZNS();
+		  }
+		  else
+		  {
+            sPDG = 22;
+            sMass= 0.;
+            rPDG = iniPDG;
+		    rMass= iniQM;
+		  }
           ffin = true;
 		}
 #ifdef pdebug
