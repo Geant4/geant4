@@ -1,4 +1,4 @@
-$Id: History,v 1.47 2002-04-24 13:41:27 maire Exp $
+$Id: History,v 1.48 2002-05-06 11:42:36 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+06 may 02: Laszlo (utils-V04-00-06)
+- G4MultipleScattering.cc :bug fixed in GetContinuousStepLimit
      
 24 apr 02: Laszlo (utils-V04-00-05)
 - G4MultipleScattering.hh,.cc have been committed:
