@@ -1,0 +1,28 @@
+# $Id: run02.mac,v 1.1 1999-05-19 15:49:37 maire Exp $
+#
+# Macro file for "TestEm3.cc" 
+# (can be run in batch, without graphic)
+#
+# Tungsten-Silicium 50 layers; electron 1 GeV
+#
+/control/verbose 2
+#
+/calor/setNbOfLayers 50
+/calor/setAbsMat Tungsten
+/calor/setAbsThick 2 mm
+/calor/setGapMat Silicium
+/calor/setGapThick 0.3 mm
+/calor/update
+/gun/setDefault
+#
+/run/particle/setCut 100 mum
+/run/initialize
+#
+/run/verbose 2
+/event/drawTracks none
+/event/printModulo 100
+#/run/save on
+#
+/gun/particle e-
+/gun/energy 1 GeV
+/run/beamOn 100
