@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4makevol.cc,v 1.5 1999-05-06 04:27:33 lockman Exp $
+// $Id: G4makevol.cc,v 1.6 1999-05-12 08:10:24 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4ios.hh"
@@ -216,10 +216,10 @@ G4LogicalVolume* G4makevol(G4String vname, G4String shape, G4int nmed,
   G4LogicalVolume* lvol=0;
   // Create the logical volume
   if (solid != 0) {
-    lvol = G3Vol.GetLVx(vname);
+    lvol = G3Vol.GetLV(vname);
     if (!lvol){
       lvol = new G4LogicalVolume(solid, material, vname);
-      G3Vol.PutLV(&vname, lvol, nmed, shape, Rpar, npar, solid);
+      //      G3Vol.PutLV(&vname, lvol, nmed, shape, Rpar, npar, solid);
       G3Vol.SetMother(lvol);
     } else {
       G4cerr << "Logical volume " << vname << " already exists" << endl;

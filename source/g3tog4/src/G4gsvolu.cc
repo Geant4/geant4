@@ -5,13 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsvolu.cc,v 1.2 1999-05-06 04:27:23 lockman Exp $
+// $Id: G4gsvolu.cc,v 1.3 1999-05-12 08:10:20 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4ios.hh"
 #include "G3toG4.hh"
 #include "G3VolTable.hh"
 #include "G3MedTable.hh"
+#include "G4VSolid.hh"
 
 G4LogicalVolume* G4makevol(G4String vname, G4String shape, G4int nmed,
                            G4double Rpar[], G4int npar);
@@ -66,7 +67,8 @@ void G4gsvolu(G4String vname, G4String shape, G4int nmed, G4double* Rpar,
     }
     if ( isIndexed ) {
       G4VSolid *solid = 0;
-      G3Vol.PutLV(&vname, lvol, nmed, shape, param, npar, solid);
+      G4cerr << "G4gsvolu: indexed volumes not implemented" << endl;
+      //      G3Vol.PutLV(&vname, lvol, nmed, shape, param, npar, solid);
     } else {
       // Else proceed with volume creation.
       lvol = G4makevol(vname, shape, nmed, param, npar);

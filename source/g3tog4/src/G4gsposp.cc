@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsposp.cc,v 1.2 1999-05-06 04:26:26 lockman Exp $
+// $Id: G4gsposp.cc,v 1.3 1999-05-12 08:10:11 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4LogicalVolume.hh"
@@ -32,9 +32,9 @@ void PG4gsposp(RWCString tokens[])
     G4int num = Ipar[0];
     G4int irot = Ipar[1];
     G4int npar = Ipar[2];
-    G4double x = Rpar[0];
-    G4double y = Rpar[1];
-    G4double z = Rpar[2];
+    G4double x = Rpar[0]*cm;
+    G4double y = Rpar[1]*cm;
+    G4double z = Rpar[2]*cm;
     G4double *pars = &Rpar[3];
   
     G4gsposp(name, num, moth, x, y, z, irot, only, pars, npar);
@@ -42,8 +42,8 @@ void PG4gsposp(RWCString tokens[])
 
 void G4gsposp(G4String vname, G4int num, G4String vmoth, G4double x,
               G4double y, G4double z, G4int irot, G4String vonly,
-              G4double pars[], G4int npar)
-{
+              G4double pars[], G4int npar){
+
     G4bool _debug=false;
     
         // get the rotation matrix pointer from the G3 IROT index
@@ -60,13 +60,16 @@ void G4gsposp(G4String vname, G4int num, G4String vmoth, G4double x,
     G4bool negpars = G3NegVolPars(pars,&npar,vname,vmoth,"GSPOS");
 
         // get the logical volume pointer of the mother from the name
-    G4LogicalVolume *mothLV = G3Vol.GetLVx(vmoth);
+    G4LogicalVolume *mothLV = G3Vol.GetLV(vmoth);
     
         // create a logical volume and add it to the constituent List of the
         // G3 logical volume
     G4String shape;
+
     G4int nmed;
-    G3Vol.GetLVInfo(&vname, &shape, &nmed);
+    G4cerr << "G4gsposp: not implemented" << endl;
+    /*
+    //    G3Vol.GetLVInfo(&vname, &shape, &nmed);
     if (_debug) {
         G4cout << "gsposp: creating lvol " << vname << " shape " << shape << " nmed " <<
             nmed << " moth " << vmoth << " mothLV " << mothLV << " pars ";
@@ -81,6 +84,7 @@ void G4gsposp(G4String vname, G4int num, G4String vmoth, G4double x,
 						*offset, lvol, vname,
                                                 mothLV, isMany, num);
         // add it to the List
-    G3Vol.PutPV(&vname, pvol);
+//    G3Vol.PutPV(&vname, pvol);
+    */
     delete offset;
 }

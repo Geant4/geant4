@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gstpar.cc,v 1.1 1999-01-07 16:06:52 gunter Exp $
+// $Id: G4gstpar.cc,v 1.2 1999-05-12 08:10:15 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G3toG4.hh"
@@ -28,9 +28,12 @@ void G4gstpar(G4int itmed, G4String chpar, G4double parval)
 {
     // set special tracking medium parameter. Apply to all logical
     // volumes making use of the specified tracking medium.
+  G4cerr << "G4gstpar: not implemented." << endl;
+  /*
     G3Vol.MatchTmed(itmed);
     G4LogicalVolume *lvol;
     while (lvol = G3Vol.NextTmed()) {
         // $$$ apply tracking parameter
     }
+  */
 }

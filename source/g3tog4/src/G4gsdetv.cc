@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsdetv.cc,v 1.2 1999-05-06 04:24:33 lockman Exp $
+// $Id: G4gsdetv.cc,v 1.3 1999-05-12 08:10:03 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4ios.hh"
@@ -31,23 +31,24 @@ void PG4gsdetv(RWCString tokens[])
 }
 
 void G4gsdetv(G4String chset, G4String chdet, G4int idtyp, G4int,
-              G4int)
-{
+              G4int){
+  
+  G4cout << "G4gsdetv not currently implemented." << endl;
+  /*
     // get lvol for detector chdet
-    G4LogicalVolume *lvol = G3Vol.GetLVx(chdet);
+    G4LogicalVolume *lvol = G3Vol.GetLV(chdet);
     if (lvol == NULL) {
-      G4cout << "G4gsdetv: Logical volume " << chdet << " not available. Skip." << endl;
-      return;
+    G4cout << "G4gsdetv: Logical volume " << chdet << " not available. Skip." << endl;
+    return;
     }
-    G4cout << "G4gsdetv not currently implemented." << endl;
-    
     // Generate a sensitive detector structure
-        // G4VSensitiveDetector *sdet;
+    // G4VSensitiveDetector *sdet;
     // $$$    G4VSensitiveDetector *sdet = new G4VSensitiveDetector(chset);
     // inform the logical volume of its sensitive detector
-        // lvol->SetSensitiveDetector(sdet);
+    // lvol->SetSensitiveDetector(sdet);
     // $$$ sdet->SetID(idtyp);
     // Add the sensitive detector to the table
-        // G3Det.put(chset,idtyp,sdet);
+    // G3Det.put(chset,idtyp,sdet);
+    */
 }
 

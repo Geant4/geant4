@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3NegVolPars.cc,v 1.2 1999-05-06 04:23:01 lockman Exp $
+// $Id: G3NegVolPars.cc,v 1.3 1999-05-12 08:09:51 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -24,6 +24,7 @@ G4bool G3NegVolPars(G4double pars[], G4int *nparpt,
 		    char routine[]){
   G4bool NegPresent = FALSE;
   // Retrieve the parameters of the volume
+  /*
   G4String shape;
   G4int nmed, npar;
   G4double *Rpar;
@@ -54,6 +55,7 @@ G4bool G3NegVolPars(G4double pars[], G4int *nparpt,
       }
     }
   }
+  */
   return NegPresent;
 }
 

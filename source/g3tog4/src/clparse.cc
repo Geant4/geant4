@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: clparse.cc,v 1.2 1999-05-06 04:27:49 lockman Exp $
+// $Id: clparse.cc,v 1.3 1999-05-12 08:10:28 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -47,7 +47,7 @@ extern "C" {
 
 extern ofstream ofile;
 
-G3VolTable G3Vol; // volume G3 name <-> G4 pointer tables
+G3VolTable G3Vol;
 G3MatTable G3Mat; // material G3 ID <-> G4 pointer table
 G3MedTable G3Med; // trk media G3 ID <-> G4 pointer table
 G3RotTable G3Rot; // rotation ID <-> G4 transform object table
@@ -119,12 +119,12 @@ void G3CLRead(G4String & fname, char *select = NULL)
       ntokens = G3CLTokens(&line,tokens);  // tokenize the line
       
           // check tokens
-      if (_debug) {
-          G4cout << "==== Line " << count << " Tokens " << ntokens 
-           << " Nvol " << G3Vol.GetEntryCount() << endl;
-      
-          G4cout << line << " // " << G3Vol.GetEntryCount() << endl;
-      }
+      //      if (_debug) {
+      //  G4cout << "==== Line " << count << " Tokens " << ntokens 
+      //   << " Nvol " << G3Vol.GetEntryCount() << endl;
+      //
+      //  G4cout << line << " // " << G3Vol.GetEntryCount() << endl;
+      //}
       
       for (G4int i=0; i < ntokens; i++) ofile << tokens[i] << endl;
       
