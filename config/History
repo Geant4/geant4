@@ -1,4 +1,4 @@
-$Id: History,v 1.162 2001-10-11 14:34:32 gcosmo Exp $
+$Id: History,v 1.163 2001-10-16 07:11:34 gcosmo Exp $
 $Name: not supported by cvs2svn $
 
 -------------------------------------------------------------------
@@ -20,6 +20,10 @@ committal in the CVS repository !
 
 1st October 2001  Joseph Perl
 - Added pure C++ HepRep driver, HepRepFile, needs no external libraries.
+
+1st October 2001  Gabriele Cosmo  (config-V03-02-06a)
+- binmake.gmk: removed include path for processes/electromagnetic/integral
+  according to tag "em-V03-02-02".
 
 30th September 2001  Gabriele Cosmo  (config-V03-02-07)
 - Removed references to STLInterface module in architecture.gmk
