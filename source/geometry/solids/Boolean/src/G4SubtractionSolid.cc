@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SubtractionSolid.cc,v 1.8 2000-06-26 16:16:06 gcosmo Exp $
+// $Id: G4SubtractionSolid.cc,v 1.9 2000-09-13 10:30:40 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -17,6 +17,8 @@
 //          J.Apostolakis recommendations (while loops)
 // 02.08.99 V.Grichine, bugs fixed in DistanceToOut(p,v,...)
 //                      while -> do-while & surfaceA limitations
+// 13.09.00 V.Grichine, bug fixed in SurfaceNormal(p), p can be inside
+//                      
 //
 
 #include "G4SubtractionSolid.hh"
@@ -145,16 +147,24 @@ G4SubtractionSolid::SurfaceNormal( const G4ThreeVector& p ) const
     if( fPtrSolidA->Inside(p) == kSurface && 
         fPtrSolidB->Inside(p) != kInside      ) 
     {
-      normal= fPtrSolidA->SurfaceNormal(p) ;
+      normal = fPtrSolidA->SurfaceNormal(p) ;
     }
     else if( fPtrSolidA->Inside(p) == kInside && 
              fPtrSolidB->Inside(p) != kOutside    )
     {
-      normal= -fPtrSolidB->SurfaceNormal(p) ;
+      normal = -fPtrSolidB->SurfaceNormal(p) ;
     }
     else 
     {
-      G4Exception("Invalid call in G4SubtractionSolid::SurfaceNormal(p),  point p is inside rather than on surface") ;
+      if ( fPtrSolidA->DistanceToOut(p) <= fPtrSolidB->DistanceToIn(p) )
+      {
+        normal = fPtrSolidA->SurfaceNormal(p) ;
+      }
+      else
+      {
+        normal = -fPtrSolidB->SurfaceNormal(p) ;
+      }
+      G4cerr<<"G4SubtractionSolid::SurfaceNormal(p), point p is inside"<<G4endl ;
     }
   }
   return normal;
