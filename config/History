@@ -1,4 +1,4 @@
-$Id: History,v 1.163 2001-10-16 07:11:34 gcosmo Exp $
+$Id: History,v 1.164 2001-10-22 16:59:07 gcosmo Exp $
 $Name: not supported by cvs2svn $
 
 -------------------------------------------------------------------
@@ -18,8 +18,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-1st October 2001  Joseph Perl
-- Added pure C++ HepRep driver, HepRepFile, needs no external libraries.
+22nd October 2001  Gabriele Cosmo  (config-V03-02-06b)
+- binmake.gmk: added include path for geometry/verification
+  according to tag "geometry-V03-02-01".
 
 1st October 2001  Gabriele Cosmo  (config-V03-02-06a)
 - binmake.gmk: removed include path for processes/electromagnetic/integral
