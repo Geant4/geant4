@@ -40,5 +40,12 @@
 /gui/addButton vis Vis10(OIWin32) "/control/execute visTutor/exN03Vis10.mac"
 /gui/addButton vis Vis11(OGLSXm) "/control/execute visTutor/exN03Vis11.mac"
 #
+# Viewer menu :
+/gui/addMenu viewer Viewer
+/gui/addButton viewer "Set style solid" "/vis/viewer/set/style solid"
+/gui/addButton viewer "Set style wireframe" "/vis/viewer/set/style wire"
+#/gui/addButton viewer viewer_update "/vis/viewer/update"
+/gui/addButton viewer "Update scene" "/vis/scene/notifyHandlers"
+#
 # To limit the output flow in the "dump" widget :
 /event/printModulo 100
