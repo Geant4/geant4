@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BremsstrahlungParameters.cc,v 1.6 2001-10-24 22:02:18 pia Exp $
+// $Id: G4BremsstrahlungParameters.cc,v 1.7 2001-10-25 16:54:19 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -60,7 +60,7 @@ G4BremsstrahlungParameters::~G4BremsstrahlungParameters()
   for (pos = paramA.begin(); pos != paramA.end(); pos++)
     {
       G4VEMDataSet* dataSet = (*pos).second;
-      paramA.erase(pos);
+      //      paramA.erase(pos);
       delete dataSet;
     }
 
