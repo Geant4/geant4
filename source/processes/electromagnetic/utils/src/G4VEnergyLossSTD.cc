@@ -283,10 +283,11 @@ void G4VEnergyLossSTD::BuildPhysicsTable(const G4ParticleDefinition& part)
       part.GetParticleSubType() == "generic")
   {
     (G4LossTableManager::Instance())->RegisterIon(&part, this);
-
+    /*
     G4cout << part.GetProcessManager() << "  "
            << (G4GenericIon::GenericIon())->GetProcessManager()
            << G4endl;
+    */
     return;
   }
 
