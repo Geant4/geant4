@@ -179,7 +179,7 @@ void Test17PhysicsList::ConstructProcess()
 #include "G4MuonMinusCaptureAtRest.hh"
 
 #include "G4hIonisation.hh"
-#include "G4hLowEnergyIonisationVI.hh"
+#include "G4hLowEnergyIonisation.hh"
 
 #include "Test17StepCut.hh"
 
@@ -246,7 +246,7 @@ void Test17PhysicsList::ConstructEM()
       //       G4hIonisation* hIon = new G4hIonisation() ;
 
       // Standard ionisation with low energy extention
-      G4hLowEnergyIonisationVI* hIon = new G4hLowEnergyIonisationVI() ;
+      G4hLowEnergyIonisation* hIon = new G4hLowEnergyIonisation() ;
       //      hIon->SetNuclearStoppingOff() ;
       //         hIon->SetBarkasOff() 
       // hIon->SetNuclearStoppingOff() ;
@@ -281,7 +281,7 @@ void Test17PhysicsList::ConstructEM()
       // G4ionIonisation* iIon = new G4ionIonisation() ;
 
       // Standard ionisation with low energy extantion
-        G4hLowEnergyIonisationVI* iIon = new G4hLowEnergyIonisationVI() ;
+        G4hLowEnergyIonisation* iIon = new G4hLowEnergyIonisation() ;
       //      iIon->SetNuclearStoppingOff() ;
 	//  iIon->SetNuclearStoppingOn() ;
 
