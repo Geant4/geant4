@@ -69,6 +69,12 @@ G4PAIModel::G4PAIModel(const G4ParticleDefinition* p, const G4String& nam)
   fProtonEnergyVector = new G4PhysicsLogVector(fLowestKineticEnergy,
 							   fHighestKineticEnergy,
 							   fTotBin);
+  fPAItransferBank   = 0;
+  fPAIdEdxTable      = 0;
+  fSandiaPhotoAbsCof = 0;
+  fdEdxVector        = 0;
+  fLambdaVector      = 0;
+  fdNdxCutVector     = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -76,9 +82,9 @@ G4PAIModel::G4PAIModel(const G4ParticleDefinition* p, const G4String& nam)
 G4PAIModel::~G4PAIModel()
 {
   if(fProtonEnergyVector) delete fProtonEnergyVector;
-  if(fdEdxVector)      delete fdEdxVector ;
-  if ( fLambdaVector)  delete fLambdaVector;
-  if ( fdNdxCutVector) delete fdNdxCutVector;
+  if(fdEdxVector)         delete fdEdxVector ;
+  if ( fLambdaVector)     delete fLambdaVector;
+  if ( fdNdxCutVector)    delete fdNdxCutVector;
   if( fPAItransferBank )
       {
         fPAItransferBank->clearAndDestroy();
@@ -154,9 +160,12 @@ void G4PAIModel::Initialise(const G4ParticleDefinition* p,
     // (*fPAIRegionVector[iRegion])
 
     std::vector<G4Material*>::const_iterator matIter = curReg->GetMaterialIterator();
-    size_t jMat, numOfMat = curReg->GetNumberOfMaterials();
+    size_t jMat; 
+    size_t numOfMat = curReg->GetNumberOfMaterials();
 
     //  for(size_t jMat = 0; jMat < curReg->GetNumberOfMaterials();++jMat){}
+    const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+    size_t numberOfMat = G4Material::GetNumberOfMaterials();
 
     for(jMat = 0 ; jMat < numOfMat; ++jMat) // region material loop
     {
@@ -164,13 +173,10 @@ void G4PAIModel::Initialise(const G4ParticleDefinition* p,
       GetMaterialCutsCouple( *matIter, curReg->GetProductionCuts() );
       fMaterialCutsCoupleVector.push_back(matCouple);
 
-      static const G4MaterialTable* theMaterialTable = 
-                     G4Material::GetMaterialTable();
-      size_t numberOfMat = G4Material::GetNumberOfMaterials();
       size_t iMatGlob;
       for(iMatGlob = 0 ; iMatGlob < numberOfMat ; iMatGlob++ )
       {
-        if( *matIter == (*theMaterialTable)[iMatGlob]) break ;    
+        if( *matIter == (*theMaterialTable)[iMatGlob]) break ;
       }
       fMatIndex = iMatGlob;
 
@@ -344,7 +350,8 @@ G4PAIModel::BuildLambdaVector(const G4MaterialCutsCouple* matCutsCouple)
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
 
-  size_t numOfCouples = theCoupleTable->GetTableSize(), jMatCC;
+  size_t numOfCouples = theCoupleTable->GetTableSize();
+  size_t jMatCC;
   for (jMatCC = 0 ; jMatCC < numOfCouples ; jMatCC++ )
   {
     if( matCutsCouple == theCoupleTable->GetMaterialCutsCouple(jMatCC) ) break;
