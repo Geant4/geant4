@@ -1,4 +1,4 @@
-$Id: History,v 1.47 2001-02-28 07:33:59 kurasige Exp $
+$Id: History,v 1.48 2001-03-05 08:43:19 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+-  Mar. 05, 01 H.Kurashige   (particles-V03-00-02)
+------- partman-V03-00-02
+- Fixed a bug in G4DynamicParticle::SetDefinition() 
+- STL migration for G4ParticleWithCuts::BuildLossTable()
+
 -  Feb. 28, 01 H.Kurashige  (particles-V03-00-01)
 ------- partman-V03-00-01
 - Fixed a bug in calculation of electron energy in G4MuonDecayChannel. 
