@@ -52,8 +52,8 @@
 #######################################################################
 #   Controls on an Inventor examiner viewer are :                     #
 #  - in picking mode (cursor is the upper left arrow)                 #
-#   Ctrl + pick an volume : see daughters.                            #
-#   Shift + pick an volume : see mother.                              #
+#   Ctrl + pick a volume : see daughters.                             #
+#   Shift + pick a volume : see mother.                               #
 #  - in viewing mode (cursor is the hand)                             #
 #   Left-button + pointer move : rotate.                              #
 #   Ctrl+Left-button + pointer move : pane.                           #
