@@ -110,6 +110,8 @@ NI                      [<copy-no>] [<depth>]
 /vis/scene/add/trajectories [<sensitive-volume-name>]
   default:                      (argument not impl'd yet.)
   Causes trajectories, if any, to be drawn at the end of processiing an event.
+  (Enable storing with "/tracking/storeTrajectory 1".)
+  See also "/vis/scene/endOfEventAction".
 
 NI /vis/scene/add/transientObjects ???????????? (JA 9/Aug/01)
 
