@@ -20,42 +20,31 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class header file
-//      CERN Geneva Switzerland
+// -------------------------------------------------------------------
+// $Id: G4LowEnergyIonisation.hh,v 1.26 2001-10-10 11:48:14 pia Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author:        V.Ivanchenko (Vladimir.Ivantchenko@cern.ch)
-// 
-// Creation date: 27 September 2001
+// Author: A. Forti
 //
-// Modifications: 
-//
-// Class Description: 
-//
-// Bremsstrahlung process based on the model developed  
-// by Alessandra Forti, 1999, and Veronique Lefebure, 2000 
+// History:
+// -----------
+// 02 Mar 1999  A. Forti        1st implementation
+// 27 Sep 2001  V. Ivanchenko   Major revision according to a design iteration
+// 10 Oct 2001  M.G. Pia        Revision to improve code quality and consistency with design
 //
 // -------------------------------------------------------------------
 
 // Class description:
-// Low Energy electromagnetic process,
+// Low Energy electromagnetic process, electron ionisation
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
-//
-// Class Description: End 
 
-// -------------------------------------------------------------------
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+// --------------------------------------------------------------
 
-#ifndef G4LowEnergyIonisation_h
-#define G4LowEnergyIonisation_h 1
+#ifndef G4lOWENERGYIONISATION_HH
+#define G4LOWENERGYIONISATION_HH 1
 
 #include "G4eLowEnergyLoss.hh"
-#include "G4Electron.hh"
 #include "G4VEMDataSet.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class G4Track;
 class G4Step;
@@ -66,14 +55,11 @@ class G4ParticleChange;
 class G4VEnergySpectrum;
 class G4VCrossSectionHandler;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 class G4LowEnergyIonisation : public G4eLowEnergyLoss
-
 { 
 public:
  
-  G4LowEnergyIonisation(const G4String& processName = "eLowEnergyIon");
+  G4LowEnergyIonisation(const G4String& processName = "LowEnergyIoni");
   
   ~G4LowEnergyIonisation();
   
@@ -83,61 +69,32 @@ public:
   
   void BuildPhysicsTable(const G4ParticleDefinition& ParticleType);
   
-  
-  G4double GetMeanFreePath(const G4Track& track,
-			         G4double previousStepSize,
-			         G4ForceCondition* condition );
- 
   G4VParticleChange* PostStepDoIt(const G4Track& track,         
-				  const G4Step&  step);                 
+				  const G4Step& step);                 
   
+protected:
+ 
+  G4double GetMeanFreePath(const G4Track& track,
+			   G4double previousStepSize,
+			   G4ForceCondition* condition );
     
 private:
 
   // Hide copy constructor and assignment operator as private 
   G4LowEnergyIonisation(const G4LowEnergyIonisation& );
-  G4LowEnergyIonisation& operator = 
-                             (const G4LowEnergyIonisation& right);
+  G4LowEnergyIonisation& operator = (const G4LowEnergyIonisation& right);
   
   void BuildLossTable(const G4ParticleDefinition& ParticleType);
   
-private:
-
   G4VCrossSectionHandler* crossSectionHandler;
   G4VEMDataSet* theMeanFreePath;
-  G4VEnergySpectrum* theParam;
+  G4VEnergySpectrum* energySpectrum;
 
-  // lower limit for generation of gamma in this model
+  // Lower limit for generation of gamma in this model
   G4DataVector cutForDelta;
 
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4bool G4LowEnergyIonisation::IsApplicable(
-                            const G4ParticleDefinition& particle)
-{
-   return(  (&particle == G4Electron::Electron())
-          /////////////||(&particle == G4Positron::Positron())
-	   );
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4LowEnergyIonisation::GetMeanFreePath(
-                            const G4Track& track,
-                                  G4double,
-                                  G4ForceCondition* cond)
-{
-   *cond = NotForced;
-   G4int index = (track.GetMaterial())->GetIndex();
-   const G4VEMDataSet* data = theMeanFreePath->GetComponent(index);
-   G4double meanFreePath = data->FindValue(track.GetKineticEnergy());
-   return meanFreePath; 
-} 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
 #endif
  
 

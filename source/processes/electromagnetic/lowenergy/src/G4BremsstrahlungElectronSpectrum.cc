@@ -20,13 +20,15 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4BremsstrahlungElectronSpectrum.cc,v 1.3 2001-10-10 11:48:40 pia Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
 //
 //
-// File name:     G4BremsstrahlungElectronSpectrum
+// File name:     G4eBremsstrahlungSpectrum
 //
 // Author:        V.Ivanchenko (Vladimir.Ivanchenko@cern.ch)
 // 
@@ -37,12 +39,12 @@
 //
 // -------------------------------------------------------------------
 
-#include "G4BremsstrahlungElectronSpectrum.hh"
+#include "G4eBremsstrahlungSpectrum.hh"
 #include "G4BremsstrahlungParameters.hh"
 #include "Randomize.hh"
 
 
-G4BremsstrahlungElectronSpectrum::G4BremsstrahlungElectronSpectrum():
+G4eBremsstrahlungSpectrum::G4eBremsstrahlungSpectrum():
   G4VEnergySpectrum(),
   lowestE(0.1*eV)
 {
@@ -50,13 +52,13 @@ G4BremsstrahlungElectronSpectrum::G4BremsstrahlungElectronSpectrum():
 }
 
 
-G4BremsstrahlungElectronSpectrum::~G4BremsstrahlungElectronSpectrum() 
+G4eBremsstrahlungSpectrum::~G4eBremsstrahlungSpectrum() 
 {
   delete theBRparam;
 }
 
 
-G4double G4BremsstrahlungElectronSpectrum::Probability(G4int Z, 
+G4double G4eBremsstrahlungSpectrum::Probability(G4int Z, 
                                                        G4double tmin, 
                                                        G4double tmax, 
                                                        G4double e,
@@ -81,7 +83,7 @@ G4double G4BremsstrahlungElectronSpectrum::Probability(G4int Z,
 }
 
 
-G4double G4BremsstrahlungElectronSpectrum::AverageEnergy(G4int Z,
+G4double G4eBremsstrahlungSpectrum::AverageEnergy(G4int Z,
                                                          G4double tmin, 
                                                          G4double tmax, 
                                                          G4double e,
@@ -106,7 +108,7 @@ G4double G4BremsstrahlungElectronSpectrum::AverageEnergy(G4int Z,
 }
 
 
-G4double G4BremsstrahlungElectronSpectrum::SampleEnergy(G4int Z,
+G4double G4eBremsstrahlungSpectrum::SampleEnergy(G4int Z,
                                                         G4double tmin, 
                                                         G4double tmax, 
                                                         G4double e,
@@ -137,7 +139,5 @@ G4double G4BremsstrahlungElectronSpectrum::SampleEnergy(G4int Z,
   return tgam; 
 }
 
-
-
-
-
+void G4eBremsstrahlungSpectrum::PrintData() const
+{ theBRparam->PrintData(); }

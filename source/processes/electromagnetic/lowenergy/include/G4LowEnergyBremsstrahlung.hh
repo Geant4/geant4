@@ -22,7 +22,7 @@
 //
 // 
 // -------------------------------------------------------------------
-// $Id: G4LowEnergyBremsstrahlung.hh,v 1.22 2001-10-10 09:49:29 pia Exp $
+// $Id: G4LowEnergyBremsstrahlung.hh,v 1.23 2001-10-10 11:48:14 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -38,11 +38,9 @@
 // Class description:
 // Low Energy electromagnetic process, electron Bremsstrahlung
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
-//
-// Class Description: End 
 
 // --------------------------------------------------------------
-//
+
 
 #ifndef G4LOWENERGYBREMSSTRAHLUNG_HH
 #define G4LOWENERGYBREMSSTRAHLUNG_HH 1
@@ -58,13 +56,11 @@ class G4VEMDataSet;
 class G4VEnergySpectrum;
 class G4VCrossSectionHandler;
 
-
 class G4LowEnergyBremsstrahlung : public G4eLowEnergyLoss
-
 { 
 public:
  
-  G4LowEnergyBremsstrahlung(const G4String& processName = "eLowEnergyBrem");
+  G4LowEnergyBremsstrahlung(const G4String& processName = "LowEnBrem");
   
   ~G4LowEnergyBremsstrahlung();
   

@@ -20,96 +20,83 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4BremsstrahlungElectronSpectrum.hh,v 1.2 2001-10-10 11:48:14 pia Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
 //
 //
-// File name:     G4BremsstrahlungElectronSpectrum
+// File name:     G4EBremsstrahlungSpectrum
 //
 // Author:        V.Ivanchenko (Vladimir.Ivantchenko@cern.ch)
 // 
 // Creation date: 27 September 2001
 //
 // Modifications: 
+// 10 Oct 2001  MGP  Revision to improve code quality and consistency with design
 //
 // -------------------------------------------------------------------
 
 // Class Description: 
-//
-// Provides various integration over gamma spectrum of e- bremsstrahlung  
-//
-// Class Description: End 
+// Provides various integration over gamma spectrum of e- Bremsstrahlung  
 
 // -------------------------------------------------------------------
-//
 
-#ifndef G4BremsstrahlungElectronSpectrum_h
-#define G4BremsstrahlungElectronSpectrum_h 1
+#ifndef G4EBREMSSTRAHLUNGSPECTRUM_HH
+#define G4EBREMSSTRAHLUNGSPECTRUM_HH 1
 
+#include "globals.hh"
 #include "G4VEnergySpectrum.hh" 
-#include "G4BremsstrahlungParameters.hh" 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+class G4BremsstrahlungParameters;
 
-class G4BremsstrahlungElectronSpectrum : public G4VEnergySpectrum
+class G4eBremsstrahlungSpectrum : public G4VEnergySpectrum
 {
-
 public:
 
-  G4BremsstrahlungElectronSpectrum();
+  G4eBremsstrahlungSpectrum();
 
-  ~G4BremsstrahlungElectronSpectrum();
+  ~G4eBremsstrahlungSpectrum();
 
   G4double Probability(G4int Z, 
-                       G4double tmin, 
-                       G4double tmax, 
+                       G4double tMin, 
+                       G4double tMax, 
                        G4double kineticEnergy, 
                        G4int shell=0, 
-                 const G4ParticleDefinition* pd=0) const;
+		       const G4ParticleDefinition* pd=0) const;
 
   G4double AverageEnergy(G4int Z, 
-                         G4double tmin, 
-                         G4double tmax,
+                         G4double tMin, 
+                         G4double tMax,
                          G4double kineticEnergy,
                          G4int shell=0, 
-                   const G4ParticleDefinition* pd=0) const;
+			 const G4ParticleDefinition* pd=0) const;
 
   G4double SampleEnergy(G4int Z, 
-                        G4double tmin, 
-                        G4double tmax,
+                        G4double tMin, 
+                        G4double tMax,
                         G4double kineticEnergy,
                         G4int shell=0, 
-                  const G4ParticleDefinition* pd=0) const;
+			const G4ParticleDefinition* pd=0) const;
 
   G4double MaxEnergyOfSecondaries(G4double kineticEnergy,
                                   G4int Z = 0,
-                            const G4ParticleDefinition* pd=0) const
-                       {return kineticEnergy;};
+				  const G4ParticleDefinition* pd=0) const
+  { return kineticEnergy; }
 
-  void PrintData() const {theBRparam->PrintData();};
-
-protected:
+  void PrintData() const;
 
 private:
 
-  // hide assignment operator 
-  G4BremsstrahlungElectronSpectrum(const  G4BremsstrahlungElectronSpectrum&);
-  G4BremsstrahlungElectronSpectrum & operator =
-                             (const G4BremsstrahlungElectronSpectrum &right);
-
-private:
+  // Hide copy constructor and assignment operator 
+  G4eBremsstrahlungSpectrum(const  G4eBremsstrahlungSpectrum&);
+  G4eBremsstrahlungSpectrum & operator = (const G4eBremsstrahlungSpectrum &right);
 
   G4BremsstrahlungParameters* theBRparam;
   G4double                    lowestE;
 
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #endif
-
-
-
