@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.icc,v 1.9 2003-11-08 02:17:33 japost Exp $
+// $Id: G4ChordFinder.icc,v 1.10 2003-11-08 03:56:00 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ChordFinder inline implementations
@@ -89,4 +89,20 @@ inline G4int G4ChordFinder::SetVerbose( G4int newvalue )
   G4int oldval= fStatsVerbose; 
   fStatsVerbose = newvalue;
   return oldval; 
+}
+
+inline  
+void    G4ChordFinder::AccumulateStatistics( G4int noTrials ) 
+{
+  // Statistics 
+  fTotalNoTrials_FNC += noTrials; 
+  fNoCalls_FNC++; 
+  // if( noTrials >= fmaxTrials_FNC ){
+    if (noTrials > fmaxTrials_FNC ) { 
+      fmaxTrials_FNC=noTrials; 
+      // fnoTimesMaxTrFNC=0; 
+    } else { 
+      // fnoTimesMaxTrFNC++; 
+    } 
+  // } 
 }
