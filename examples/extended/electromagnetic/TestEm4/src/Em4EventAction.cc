@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em4EventAction.cc,v 1.8 2001-10-17 14:04:15 maire Exp $
+// $Id: Em4EventAction.cc,v 1.9 2001-11-28 15:07:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,7 +50,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em4EventAction::Em4EventAction(Em4RunAction* run)
-:Em4Run(run),drawFlag("all"),printModulo(10000),eventMessenger(NULL)
+:Em4Run(run),drawFlag("none"),printModulo(10000),eventMessenger(NULL)
 {
   eventMessenger = new Em4EventActionMessenger(this);
 }
@@ -70,15 +70,8 @@ void Em4EventAction::BeginOfEventAction( const G4Event* evt)
 
  //printing survey
  if (evtNb%printModulo == 0) 
-    G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
-  
- //save rndm status
- if (Em4Run->GetRndmFreq() == 2)
-   { 
-    HepRandom::saveEngineStatus("beginOfEvent.rndm");   
-    if (evtNb%printModulo == 0) HepRandom::showEngineStatus();
-   }
-  
+    G4cout << "\n---> Begin of Event: " << evtNb << G4endl;  
+ 
  //additional initializations   
  TotalEnergyDeposit = 0.;
 }
@@ -94,10 +87,8 @@ void Em4EventAction::EndOfEventAction( const G4Event* evt)
 #ifndef G4NOHIST
   Em4Run->GetHisto(0)->accumulate(TotalEnergyDeposit/MeV);
 #endif
-	   
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
 
-  if(pVVisManager)
+  if(G4VVisManager::GetConcreteInstance())
   {
    G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
    G4int n_trajectories = 0;

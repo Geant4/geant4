@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em4RunAction.hh,v 1.7 2001-10-17 14:04:14 maire Exp $
+// $Id: Em4RunAction.hh,v 1.8 2001-11-28 15:07:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,7 +38,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4Run;
-class Em4RunActionMessenger;
 
 #ifndef G4NOHIST
   class HepTupleManager;
@@ -55,9 +54,6 @@ class Em4RunAction : public G4UserRunAction
     void BeginOfRunAction(const G4Run*);
     void   EndOfRunAction(const G4Run*);
 
-    void  SetRndmFreq(G4int    val) {saveRndm = val;}
-    G4int GetRndmFreq()             {return saveRndm;}
-    
 #ifndef G4NOHIST    
     HepHistogram* GetHisto(G4int id) {return histo[id];}
 #endif
@@ -66,8 +62,6 @@ class Em4RunAction : public G4UserRunAction
     void bookHisto();
     
   private:  
-    Em4RunActionMessenger* runMessenger;
-    G4int saveRndm;
     
 #ifndef G4NOHIST         
     HepTupleManager* hbookManager;    
