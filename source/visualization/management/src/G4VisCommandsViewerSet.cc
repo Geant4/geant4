@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.10 2001-03-29 13:46:18 johna Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.11 2001-05-15 15:59:01 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -117,12 +117,12 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet () {
   fpCommandProjection->SetParameter(parameter);
 
   fpCommandSectionPlane = new G4UIcommand 
-    ("/vis/viewer/set/section_plane",this);
+    ("/vis/viewer/set/sectionPlane",this);
   fpCommandSectionPlane -> SetGuidance
     (
      "Set plane for drawing section (DCUT).  Specify plane by"
      "\nx y z units nx ny nz, e.g., for a y-z plane at x = 1 cm:"
-     "\n/vis~/set/section_plane on 1 0 0 cm 1 0 0"
+     "\n/vis~/set/sectionPlane on 1 0 0 cm 1 0 0"
      );
   parameter  =  new G4UIparameter("Selector",'c',true);
   parameter  -> SetDefaultValue  ("?");
