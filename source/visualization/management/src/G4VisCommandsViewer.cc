@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.44 2005-03-10 19:33:03 allison Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.45 2005-03-16 17:55:02 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -81,7 +81,7 @@ G4VisCommandViewerClear::~G4VisCommandViewerClear () {
 
 G4String G4VisCommandViewerClear::GetCurrentValue (G4UIcommand*) {
   G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
-    return viewer ? viewer -> GetName () : "none";
+    return viewer ? viewer -> GetName () : G4String("none");
 }
 
 void G4VisCommandViewerClear::SetNewValue (G4UIcommand*, G4String newValue) {
@@ -384,7 +384,7 @@ G4VisCommandViewerFlush::~G4VisCommandViewerFlush () {
 G4String G4VisCommandViewerFlush::GetCurrentValue 
 (G4UIcommand*) {
   G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
-  return viewer ? viewer -> GetName () : "none";
+  return viewer ? viewer -> GetName () : G4String("none");
 }
 
 void G4VisCommandViewerFlush::SetNewValue (G4UIcommand*, G4String newValue) {
@@ -635,7 +635,7 @@ G4VisCommandViewerRefresh::~G4VisCommandViewerRefresh () {
 
 G4String G4VisCommandViewerRefresh::GetCurrentValue (G4UIcommand*) {
   G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
-  return viewer ? viewer -> GetName () : "none";
+  return viewer ? viewer -> GetName () : G4String("none");
 }
 
 void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand*, G4String newValue) {
