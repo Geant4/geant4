@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ClassicalRK4.cc,v 1.10 2003-10-31 14:35:53 gcosmo Exp $
+// $Id: G4ClassicalRK4.cc,v 1.11 2003-11-05 16:31:48 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -33,7 +33,7 @@
 //
 // Constructor sets the number of variables (default = 6)
 
-G4ClassicalRK4::G4ClassicalRK4(G4Mag_EqRhs *EqRhs, G4int numberOfVariables)
+G4ClassicalRK4::G4ClassicalRK4(G4EquationOfMotion* EqRhs, G4int numberOfVariables)
   : G4MagErrorStepper(EqRhs, numberOfVariables)
     // fNumberOfVariables(numberOfVariables)
 {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImplicitEuler.cc,v 1.7 2003-10-31 14:35:54 gcosmo Exp $
+// $Id: G4ImplicitEuler.cc,v 1.8 2003-11-05 16:31:49 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,7 +45,7 @@
 //
 // Constructor
 
-G4ImplicitEuler::G4ImplicitEuler(G4Mag_EqRhs *EqRhs, 
+G4ImplicitEuler::G4ImplicitEuler(G4EquationOfMotion *EqRhs, 
                                  G4int numberOfVariables): 
 G4MagErrorStepper(EqRhs, numberOfVariables)
 {

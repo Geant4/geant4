@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleHeum.cc,v 1.6 2003-10-31 14:35:55 gcosmo Exp $
+// $Id: G4SimpleHeum.cc,v 1.7 2003-11-05 16:31:49 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  Simple Heum:
@@ -41,7 +41,7 @@
 //
 // Constructor
 
-G4SimpleHeum::G4SimpleHeum(G4Mag_EqRhs *EqRhs, G4int num_variables): 
+G4SimpleHeum::G4SimpleHeum(G4EquationOfMotion *EqRhs, G4int num_variables): 
   G4MagErrorStepper(EqRhs, num_variables),
   fNumberOfVariables(num_variables)
 {
