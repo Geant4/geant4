@@ -15,6 +15,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 27, 99  J.Allison 
+- Created persistency/global/include.
+- Moved management/include/G4PersistentTypes.hh to global/include.
+- Modified GNUmakefiles to add persistency/global/include to -I path.
+
 October 21, 99  Y.Morita (persistency-V00-01-01)
 - One more bug fix in G4PEvent.cc (thePrimaryVertex)
 
