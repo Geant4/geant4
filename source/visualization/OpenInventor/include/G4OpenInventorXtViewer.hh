@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.hh,v 1.4 2004-11-14 14:32:18 gbarrand Exp $
+// $Id: G4OpenInventorXtViewer.hh,v 1.5 2004-11-14 14:42:26 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,6 +54,7 @@ private:
 private:
   static void PostScriptButtonCbk(Widget,XtPointer,XtPointer);
   static void PixmapPostScriptButtonCbk(Widget,XtPointer,XtPointer);
+  static void WriteInventorButtonCbk(Widget,XtPointer,XtPointer);
   static void EscapeButtonCbk(Widget,XtPointer,XtPointer);
   static void CountTrianglesButtonCbk(Widget,XtPointer,XtPointer);
 private:

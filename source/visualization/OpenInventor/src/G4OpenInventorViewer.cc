@@ -28,6 +28,7 @@
 #include <Inventor/nodes/SoSelection.h>
 #include <Inventor/nodes/SoShape.h>
 #include <Inventor/actions/SoCallbackAction.h>
+#include <Inventor/actions/SoWriteAction.h>
 
 #include "HEPVis/nodes/SoImageWriter.h"
 #include "HEPVis/actions/SoGL2PSAction.h"
@@ -163,6 +164,15 @@ void G4OpenInventorViewer::WritePixmapPostScript(const G4String& aFile) {
            << G4endl;
   }
 }  
+
+void G4OpenInventorViewer::WriteInventor(const G4String& aFile) {
+  G4cout << "Produce " << aFile << "..." << G4endl;
+  SoWriteAction writeAction;
+  writeAction.getOutput()->openFile(aFile.c_str());
+  writeAction.getOutput()->setBinary(FALSE);
+  writeAction.apply(fSoSelection);
+  writeAction.getOutput()->closeFile();
+}
 
 static void CountTriangleCB(
  void* userData

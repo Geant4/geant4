@@ -1,4 +1,4 @@
-$Id: History,v 1.28 2004-11-14 14:32:47 gbarrand Exp $
+$Id: History,v 1.29 2004-11-14 14:42:26 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,7 +24,8 @@ History file for visualization/OpenInventor
 - G4OpenInventorSceneHandler.cc : handle transparency.
 - SoImageWriter, SbPainter, SbPainterPS : material to produce pixmap PS.
 - G4OpenInventorViewer : base class for Inventor viewers.
-- Menu Etc/Triangles : to count rendered triangles.
+- Menuitem "Etc/Triangles" : to count rendered triangles.
+- Menuitem "File/IV" : to write the scene in an inventor file.
 
 12th November 2004  Guy Barrand
 - G4OpenInventor.cc : initClass of Geant4_SoPolyhedron.

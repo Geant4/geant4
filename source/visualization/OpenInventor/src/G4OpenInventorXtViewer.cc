@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.cc,v 1.11 2004-11-14 14:31:21 gbarrand Exp $
+// $Id: G4OpenInventorXtViewer.cc,v 1.12 2004-11-14 14:42:26 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -105,6 +105,7 @@ G4OpenInventorXtViewer::G4OpenInventorXtViewer(
    {Widget menu = AddMenu(menuBar,"File","File");
     AddButton(menu,"PS (gl2ps)",PostScriptButtonCbk);
     AddButton(menu,"PS (pixmap)",PixmapPostScriptButtonCbk);
+    AddButton(menu,"IV",WriteInventorButtonCbk);
     AddButton(menu,"Escape",EscapeButtonCbk);}
 
    {Widget menu = AddMenu(menuBar,"Etc","Etc");
@@ -221,6 +222,12 @@ void G4OpenInventorXtViewer::CountTrianglesButtonCbk(
   Widget,XtPointer aData,XtPointer) {
   G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
   This->CountTriangles();
+}
+
+void G4OpenInventorXtViewer::WriteInventorButtonCbk(
+  Widget,XtPointer aData,XtPointer) {
+  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+  This->WriteInventor();
 }
 
 

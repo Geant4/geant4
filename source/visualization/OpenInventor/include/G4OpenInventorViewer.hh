@@ -56,6 +56,7 @@ protected:
   void Escape();
   void WritePostScript(const G4String& file = "g4out.ps");
   void WritePixmapPostScript(const G4String& file = "g4out.ps");
+  void WriteInventor(const G4String& file = "g4out.iv");
   void CountTriangles();
 private:
   G4bool CompareForKernelVisit(G4ViewParameters&);
