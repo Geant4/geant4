@@ -212,7 +212,12 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
     // G4cout << theNumberOfInteractionLengthLeft<<G4endl;
     const G4DynamicParticle *aParticle = aTrack.GetDynamicParticle();
     G4Material *aMaterial = aTrack.GetMaterial();
-    G4double kineticEnergy = aParticle->GetKineticEnergy();
+    G4double originalEnergy = aParticle->GetKineticEnergy();
+    G4double kineticEnergy = originalEnergy;
+    if(aParticle->GetDefinition()->GetBaryonNumber()>1.5)
+    {
+      kineticEnergy/=aParticle->GetDefinition()->GetBaryonNumber();
+    }
     G4Element * anElement = 0;
     try
     {
@@ -222,7 +227,7 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
     {
       aR.Report(G4cout);
       G4cout << "Unrecoverable error for:"<<G4endl;
-      G4cout << " - Particle energy[GeV] = "<< kineticEnergy/GeV<<G4endl;
+      G4cout << " - Particle energy[GeV] = "<< originalEnergy/GeV<<G4endl;
       G4cout << " - Material = "<<aMaterial->GetName()<<G4endl;
       G4cout << " - Particle type = "
              <<aParticle->GetDefinition()->GetParticleName()<<G4endl;
@@ -238,7 +243,7 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
     {
       aE.Report(std::cout);
       G4cout << "Unrecoverable error for:"<<G4endl;
-      G4cout << " - Particle energy[GeV] = "<< kineticEnergy/GeV<<G4endl;
+      G4cout << " - Particle energy[GeV] = "<< originalEnergy/GeV<<G4endl;
       G4cout << " - Material = "<<aMaterial->GetName()<<G4endl;
       G4cout << " - Particle type = "<<aParticle->GetDefinition()->GetParticleName()<<G4endl;
       G4Exception("G4HadronicProcess", "007", FatalException,
@@ -258,7 +263,7 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
       {
         aR.Report(G4cout);
 	G4cout << " G4HadronicProcess re-entering the ApplyYourself call for"<<G4endl;
-        G4cout << " - Particle energy[GeV] = "<< kineticEnergy/GeV<<G4endl;
+        G4cout << " - Particle energy[GeV] = "<< originalEnergy/GeV<<G4endl;
         G4cout << " - Material = "<<aMaterial->GetName()<<G4endl;
         G4cout << " - Particle type = "<<aParticle->GetDefinition()->GetParticleName()<<G4endl;
 	result = 0;
@@ -272,7 +277,7 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
       {
         aR.Report(G4cout);
 	G4cout << " G4HadronicProcess failed in ApplyYourself call for"<<G4endl;
-        G4cout << " - Particle energy[GeV] = "<< kineticEnergy/GeV<<G4endl;
+        G4cout << " - Particle energy[GeV] = "<< originalEnergy/GeV<<G4endl;
         G4cout << " - Material = "<<aMaterial->GetName()<<G4endl;
         G4cout << " - Particle type = "<<aParticle->GetDefinition()->GetParticleName()<<G4endl;
         G4Exception("G4HadronicProcess", "007", FatalException,
@@ -310,7 +315,7 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
       G4cout << "HadronicDoitLogging "
              << GetProcessName() <<" "
              << aParticle->GetDefinition()->GetPDGEncoding()<<" "
-	     << kineticEnergy<<" "
+	     << originalEnergy<<" "
 	     << aParticle->GetMomentum()<<" "
 	     << targetNucleus.GetN()<<" "
 	     << targetNucleus.GetZ()<<" "
