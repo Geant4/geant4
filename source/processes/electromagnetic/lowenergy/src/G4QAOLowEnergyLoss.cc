@@ -287,15 +287,6 @@ G4double G4QAOLowEnergyLoss::GetOscillatorEnergy(const G4Material* material,G4in
    
   oscShellEnergy = sqrt( ionTerm + plasmonTerm );
  
-  if(Z==14){ 
-  G4cout << "Z : "<< Z << G4endl; 
-  G4cout << "Z/A.: "<< Z / element->GetN() << G4endl ;
-  G4cout << "Plasmon energy.: "<< sqrt(squaredPlasmonEnergy)<< G4endl ;
-  G4cout << "Plasmon term "<< plasmonTerm << G4endl; 
-  G4cout << "Ion term "<< ionTerm << G4endl; 
-  G4cout << "Energy excitation of shell "<< nbOfTheShell 
-         << " : "<< oscShellEnergy << G4endl; }
-
   return  oscShellEnergy;
 }
 
