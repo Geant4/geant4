@@ -175,6 +175,7 @@ if ( `uname -n` == aleph ) then
   setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
   setenv G4INSTALL /geant4/geant4-01-00-ref-02
   setenv G4WORKDIR $G4INSTALL
+  setenv G4STTDIR  $G4WORKDIR/stt
   setenv G4LIB     $G4WORKDIR/lib
   setenv G4SYSTEM  HP-aCC
   setenv G4DEBUG   1
@@ -227,6 +228,7 @@ if ( `uname -n` == asc ) then
   setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/rd44/cvs
   setenv G4INSTALL /geant4/geant4-02-00
   setenv G4WORKDIR $G4INSTALL
+  setenv G4STTDIR  $G4WORKDIR/stt
   setenv G4LIB     $G4WORKDIR/lib
   setenv G4SYSTEM DEC-cxx
   setenv G4DEBUG 1
@@ -282,6 +284,7 @@ if ( `uname -n` == "lx1.lal.in2p3.fr" ) then
   setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
   setenv G4INSTALL /geant4/geant4-01-01
   setenv G4WORKDIR $G4INSTALL
+  setenv G4STTDIR  $G4WORKDIR/stt
   setenv G4LIB     $G4WORKDIR/lib
   setenv G4SYSTEM  Linux-g++
   setenv G4DEBUG   1
@@ -331,6 +334,7 @@ if ( `uname -n` == "papou1" ) then
   setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
   setenv G4INSTALL /geant4/geant4-01-00-ref-02
   setenv G4WORKDIR $G4INSTALL
+  setenv G4STTDIR  $G4WORKDIR/stt
   setenv G4LIB     $G4WORKDIR/lib
   setenv G4SYSTEM  SUN-CC5
   setenv G4DEBUG   1
@@ -372,64 +376,64 @@ endif
 # --------
 #
 if ( `uname -n` == "pc-gbp" || `uname -n` == "pc100" ) then
-setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
-setenv G4INSTALL /geant4/geant4-02-00
-setenv G4WORKDIR $G4INSTALL
-setenv G4STTDIR  $G4WORKDIR/stt
-setenv G4LIB     $G4WORKDIR/lib
-setenv G4SYSTEM  Linux-g++
-setenv G4DEBUG   1
-#setenv G4MAKESHLIB                 $G4INSTALL/config/makeshlib.sh
-# G4 build flags :
-setenv G4UI_BUILD_XM_SESSION       1
-setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
-setenv G4VIS_BUILD_OPENGLX_DRIVER  1
-setenv G4VIS_BUILD_OIX_DRIVER      1
-setenv G4VIS_BUILD_DAWN_DRIVER     1
-setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
-setenv G4VIS_BUILD_VRML_DRIVER     1
-setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
-setenv G4ANALYSIS_BUILD_OPEN_SCIENTIST 1
-setenv G4ANALYSIS_BUILD_JAS            1
-# G4 use flags :
-setenv G4UI_USE_XM                 1
-setenv G4VIS_USE_OPENGLXM          1
-setenv G4VIS_USE_OPENGLX           1
-setenv G4VIS_USE_OIX               1
-setenv G4VIS_USE_DAWN              1
-setenv G4VIS_USE_DAWNFILE          1
-setenv G4VIS_USE_VRML              1
-setenv G4VIS_USE_VRMLFILE          1
-setenv G4ANALYSIS_USE_OPEN_SCIENTIST 1
-setenv G4ANALYSIS_USE_JAS            1
-# Specific :
-setenv CLHEP_BASE_DIR /lal/CLHEP/1.5/Linux-gxx
-setenv OGLHOME        /usr/X11R6
-#setenv OGLHOME        /lal/Mesa/3.2/Linux
-setenv OIVHOME        /lal/SoFree/v2r9
-setenv HEPVISHOME     /lal/HEPVis/v5r1-05-LAL
-setenv OIVFLAGS       "-I$OIVHOME/include -I$HEPVISHOME/include"
-setenv OIVLIBS        "-L$HEPVISHOME/Linux-gxx-SF -lHEPVis -L$OIVHOME/Linux-gxx -lSoFree"
-setenv SOFREEUSER     $OIVHOME/user/
-setenv AIDAINCS       /projects/HCL/include
-# OPACS :
-setenv G4UI_BUILD_WO_SESSION       1
-setenv G4VIS_BUILD_OPACS_DRIVER    1
-setenv G4UI_USE_WO                 1
-setenv G4VIS_USE_OPACS             1
-source /lal/OPACS/v3/setup.csh
-setenv JDKHOME /lal/JDK/jdk1.2.2
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$OIVHOME/Linux-gxx:$HEPVISHOME/Linux-gxx-SF:${OGLHOME}/lib
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$JDKHOME/jre/lib/i386:$JDKHOME/jre/lib/i386/classic:$JDKHOME/jre/lib/i386/native_threads
+  setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
+  setenv G4INSTALL /geant4/geant4-02-00
+  setenv G4WORKDIR $G4INSTALL
+  setenv G4STTDIR  $G4WORKDIR/stt
+  setenv G4LIB     $G4WORKDIR/lib
+  setenv G4SYSTEM  Linux-g++
+  setenv G4DEBUG   1
+  #setenv G4MAKESHLIB                 $G4INSTALL/config/makeshlib.sh
+  # G4 build flags :
+  setenv G4UI_BUILD_XM_SESSION       1
+  setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
+  setenv G4VIS_BUILD_OPENGLX_DRIVER  1
+  setenv G4VIS_BUILD_OIX_DRIVER      1
+  setenv G4VIS_BUILD_DAWN_DRIVER     1
+  setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
+  setenv G4VIS_BUILD_VRML_DRIVER     1
+  setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
+  setenv G4ANALYSIS_BUILD_OPEN_SCIENTIST 1
+  setenv G4ANALYSIS_BUILD_JAS            1
+  # G4 use flags :
+  setenv G4UI_USE_XM                 1
+  setenv G4VIS_USE_OPENGLXM          1
+  setenv G4VIS_USE_OPENGLX           1
+  setenv G4VIS_USE_OIX               1
+  setenv G4VIS_USE_DAWN              1
+  setenv G4VIS_USE_DAWNFILE          1
+  setenv G4VIS_USE_VRML              1
+  setenv G4VIS_USE_VRMLFILE          1
+  setenv G4ANALYSIS_USE_OPEN_SCIENTIST 1
+  setenv G4ANALYSIS_USE_JAS            1
+  # Specific :
+  setenv CLHEP_BASE_DIR /lal/CLHEP/1.5/Linux-gxx
+  setenv OGLHOME        /usr/X11R6
+  #  setenv OGLHOME        /lal/Mesa/3.2/Linux
+  setenv OIVHOME        /lal/SoFree/v2r9
+  setenv HEPVISHOME     /lal/HEPVis/v5r1-05-LAL
+  setenv OIVFLAGS       "-I$OIVHOME/include -I$HEPVISHOME/include"
+  setenv OIVLIBS        "-L$HEPVISHOME/Linux-gxx-SF -lHEPVis -L$OIVHOME/Linux-gxx -lSoFree"
+  setenv SOFREEUSER     $OIVHOME/user/
+  setenv AIDAINCS       /projects/HCL/include
+  # OPACS :
+  setenv G4UI_BUILD_WO_SESSION       1
+  setenv G4VIS_BUILD_OPACS_DRIVER    1
+  setenv G4UI_USE_WO                 1
+  setenv G4VIS_USE_OPACS             1
+  source /lal/OPACS/v3/setup.csh
+  setenv JDKHOME /lal/JDK/jdk1.2.2
+  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$OIVHOME/Linux-gxx:$HEPVISHOME/Linux-gxx-SF:${OGLHOME}/lib
+  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$JDKHOME/jre/lib/i386:$JDKHOME/jre/lib/i386/classic:$JDKHOME/jre/lib/i386/native_threads
 set jars=/lal/jas/2.0alpha4/release/lib
-setenv CLASSPATH ${CLASSPATH}:$jars/collections.jar:$jars/hep.jar:$jars/jas.jar
-# OpenScientist :
-#source /projects/Lab/omake/setup.csh
-# Else :
-setenv XENVIRONMENT   g4Xt.xrm
-setenv PATH "${PATH}:/lal/DAWN/dawn_3_85a/Linux/bin"
-setenv CPPVERBOSE 1
-set prompt='g4-pc-gbp> ' 
+  setenv CLASSPATH ${CLASSPATH}:$jars/collections.jar:$jars/hep.jar:$jars/jas.jar
+  # OpenScientist :
+  #source /projects/Lab/omake/setup.csh
+  # Else :
+  setenv XENVIRONMENT   g4Xt.xrm
+  setenv PATH "${PATH}:/lal/DAWN/dawn_3_85a/Linux/bin"
+  setenv CPPVERBOSE 1
+  set prompt='g4-pc-gbp> ' 
 endif
 #
 ####################################################
