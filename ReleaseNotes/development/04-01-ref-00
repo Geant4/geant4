@@ -1,0 +1,276 @@
+
+                       geant4-04-01-ref-00
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Introduced new class G4UIGainServer, socket extension for G4UIGAG.
+  o Added classes for weight window biasing.
+  o Fix in G4Navigator for problem concerning ExitNormal with photons.
+  o Critical bug fix in G4MultipleScattering in method
+    ComputeTransportCrossSection(). The bug affected the scattering for
+    all the low energy (<~ few hundred MeV) heavy particles.
+  o Introduced Auger implementation in low-energy electromagnetic processes;
+    new updated version G4EMLOW1.1 for input data.
+  o New hadronic package "leading_particle" applicable for radiation
+    background simulations, valid for energies below 5 Gev for
+    proton/neutron/pi+-/K+-/gamma/anti_proton.
+  o New extended examples: for importing GDML and STEP geometries, for
+    interfacing to HepMC event generator, for showing usage of
+    GammaConversionToMuons process. Introduced CMS tool for detecting
+    overlapping volumes in geometries.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config                                  config-V04-00-10
+------
+- binmake.gmk: added include path to "leading_particle" hadronic module.
+- Added flag G4NO_ISO_VECDIST for compilers (SUN-CC, HP-aCC) with non ISO
+  call to vector::distance() method.
+- Added -DG4USE_OSPACE for obsolete systems using ObjectSpace STL.
+- Moved STEP PERL scripts to examples/extended/geometry/cad/scripts.
+
+event                                   event-V04-00-04
+-----
+- Added TransferOneStackedTrack() method to G4StackManager.
+- Fix G4TrajectoryContainer for porting on gcc-3.1.
+
+geometry/biasing                        geombias-V04-00-04
+----------------
+- Added classes for weight window biasing. 
+- Changed name ImportanceSampler to ImportanceSplitExaminer.
+
+geometry/magneticfield                  field-V04-00-04
+----------------------
+ - G4MagHelicalStepper.icc: fix to LinearStep.
+ - G4ChordFinder.cc: corrective behaviour for very small or large changes
+   of 'new step' - observed in complex 3-d fields (purging magnet), or
+   approximate equations of motion.
+ - G4MagIntegratorDriver: added more information in debug printing.
+ - G4Mag_SpinEqRhs.cc: fix to momentum component of Rhs.
+
+geometry/management                     geommng-V04-00-08
+-------------------
+- G4AssemblyVolume[.hh.cc]:
+  o Fixed inconsistent handling of input rotation matrices by caching them
+    with corresponding deallocation at destruction time.
+    Comments updated accordingly with a warning about foreseen changes
+    in methods' interfaces expected by next major release 5.0.
+  o Correctly handle cases when pointer to rotation matrix is zero.
+  o Moved accessors to assembly counters to public.
+  o Added support for user definable count base for generated physical volumes.
+    Fixes problem report #382.
+  o Updated unit test.
+
+geometry/volumes                        geomvol-V04-00-10
+----------------
+- G4Navigator.cc:
+  o Corrections for problem reports #351, #284 concerning ExitNormal:
+    - using Daugther's solid preferentially (if applicable)
+    - adjusting fEntering/fEnteredDaugther in LocateGlobalPointAndSetup
+      to enable this 
+    - correcting location of point for which exit normal is requested
+      for 'non-convex point' on solid boundary
+  o Fix for navigation problem (dereference null volume pointer) in
+    exampleN05 caused by fix above. 
+
+geometry/solids/CSG                     geom-csg-V04-00-05
+-------------------
+- G4Sphere.cc: bug fixed in Inside() for treatment of point p on z-axis.
+  Added new condition [(rho2 || p.z()) && fDTheta < M_PI - kAngTolerance*0.5)]
+  for treating special case. Fixes problem report #378.
+
+global                                  global-V04-00-08
+------
+- G4DataVector.cc: initialise to zero values in collection for contructor
+  taking capacity.
+
+intercoms                               intercoms-V04-00-04
+---------
+- Fixed pedantic warnings in G4UIbatch class.
+
+interfaces                              interfaces-V04-00-04
+----------
+- Introduced new class G4UIGainServer, socket extension for G4UIGAG.
+  Compilation for this class is prevented on Windows platforms.
+
+particles                               particles-V04-00-03
+---------
+- Fixed a bug in G4NeutronBetaDecayChannel.
+- Fixed warnings in G4NucleiProperties class.
+
+processes/electromagnetic/lowenergy     emlowen-V04-00-17
+-----------------------------------
+- Bug fix in fluctuations in G4hLowEnergyIonisation.
+  Removed duplicate member function to activate fluorescence.
+- Moved fStopAndKill to fStopAndAlive in G4hLowEnergyIonisation
+  to satisfy UR for activation of further processes for ions.
+- Fixes to Rayleigh. Fixes problem report #371.
+- Introduced Auger implementation (previously handled as local energy
+  deposit), requires new version of G4LEDATA: G4EMLOW1.1.
+- Fixes in Bremsstrahlung - interpolation above 10 MeV.
+- Change parametrisation of e- ionisation - 24-parameters
+  for each shell are used. Corresponding change is sampling and integration.
+- Added excitation cross sections and energy.
+- New interpolation algorithm.
+- Improvements to PolarizedCompton.
+- Fixed max length of ntuple variable names for HBOOK in test/G4ComptonTest.
+- Added protection in G4eIonisationSpectrum.
+- Code and minor design improvements deriving from reviews,
+  inspections and Code Wizard.
+- Added comments for Software Reference Manual.
+- Updates in unit tests.
+
+processes/electromagnetic/muons         muons-V04-00-02
+-------------------------------
+- G4VMuEnergyLoss: bug fix in number of subcutoff delta.
+- Cleared warnings from gcc-3.1 compiler.
+
+processes/electromagnetic/standard      stand-V04-00-13
+----------------------------------
+- Fixed bug for stopping hadrons.
+
+processes/electromagnetic/utils         utils-V04-00-08
+-------------------------------
+- G4MultipleScattering[.hh.cc]:
+  o tuning in angle distribution and boundary algorithm 
+  o critical bug fix in ComputeTransportCrossSection().
+    The bug affected the scattering for all the low energy
+    (<~ few hundred MeV) heavy particles.
+
+processes/hadronic                      had-V04-00-01
+------------------
+- General code cleanup to remove some warnings on the various platforms,
+  including gcc-3.1.
+- cross_sections:
+  o Included the high Q2 part of the cross-section into electro and
+    photo nuclear reaction cross-sections, and into the equivalent photon
+    production.
+  o New class for calculating projectile fragment cross-sections in
+    ion ion reactions. Implements Physical Review C61, 034607 (2000)
+    based on and equivalent to EPAX Version 2, with the kind
+    permission of the authors.
+- management:
+  o Included recoil charge state treatement in HadronicProcess.
+  o Bug-fix affecting energy conservation for anti-protons in hydrogene.
+- chiral_inv_phase_space: 
+  - Included Q2!=0 for gamma and electro nuclear reactions.
+  - Using quark-gluon string model now to simulate reactions with large
+    energy transfers.
+  - Added protection for reactions at threshold.
+- coherent_elastic:
+  o Improvement for coulomb effects.
+  o Correction of array sizes; slightly extends the applicability.
+- high_energy:
+  o Fix for a long standing problem in phi symmetry traced to the Cross
+    method of G4HEVector.
+- leading_particle:
+  o New package, steming from a partial re-implementation of the MARS
+    code. Valid for energies below 5 Gev for proton/neutron/pi+-,
+    K+-/gamma/anti_proton
+    The code is intrinsically leading particle biased, hence applicable
+    for radiation back-ground simulations; no analogue Monte Carlo at
+    present. Typical application of this would be in the ESA MOLASSIS
+    application.
+- low_energy:
+  o Correction for randomization of fermi motion (1 in 1000 effect).
+  o Better treatement for anti-nucleons through accounting of
+    annihilation energy.
+  o Various cross-sections in the accounting of nucleons.
+  o Improved pi-0 to charged pion rations used in low energy models.
+  o Improved treatement of Lorentz transformation, getting rid of the
+    1 in 100 phi=0 peak for nucleons.
+- neutron_hp:
+  o Workaround for a gcc compiler problem.
+  o Resolved a problem in the effective luminosity correction
+    in the doppler broadening on the fly. Removes a bias in capture time
+    on termal neutrons in hydrogen (was off by 10%).
+- radiative_decay:
+  o Removing a warning.
+  o Worked around a linux compiler problem with sort, leading
+    to erroneous behavior (from de_excitation).
+- de_excitation:
+  o Moving the catching of low energy gammas
+  o Work-around for a gcc compiler bug; fixes error seen in radiative_decay.
+  o Adding a complete set of fresh evaporation code, that is more or
+    less equivalent to the GEM evaporation models. It produces fragments up
+    to Na25. Currently at beta level. G4Evaporation::SetGEMChannel() method
+    should be used to activate this.
+- high_energy:
+  o Included direct strong resonance decay in case of scattering off
+    hydrogen, hence removing this boundary use-case from the cascade
+    interface specifications.
+- models/management:
+  o Added utility interface for nucleus and nuclear density functions,
+    for the use of cascade codes.  
+- pre_equilibrium:
+  o Fixed error in the low energy proton distributions
+  o Improvements in the level density.
+  o Bug fixed in angular distributions (theta).
+  o Added G4NO_ISO_VECDIST flag for platforms with non-ISO STL vector
+    distance.
+  o Small bug fixed in the equilibrium exciton number.
+  o Migration to new pairing corrections.
+- quark_gluon_string:
+  o Design iteration to enable specialization of participants
+    in string excitation.
+  o Added gamma nuclear reactions by adding specialised participants for
+    this; based on single nucleon participant model, and mesonic structure;
+    assuming vector meson dominance in the reactions and splitting.
+- util:
+  o Added utility for the decay of strong resonances.
+  o Added consts to enforce few design considerations.
+
+processes/transportation                transport-V04-00-08
+------------------------
+- Made weight window sampling to apply only at inital track step 1.
+- bug fix in G4ParallelScoreSampler.cc and cleared warning from
+  G4ParallelTransport.
+- Renamed Manager classes to Sampler classes.
+- Bug fix in G4PImportanceWWindowScoreManager.cc
+  and G4ParallelImportanceManager.hh.
+- Added classes for wieght window biasing.
+- G4VProcessPlacer, G4ProcessPlacer:
+  o set process vector via process manager not directly. 
+  o added member function RemoveProcess() to properly remove a process.
+- G4ParallelTranport: use StartTracking to signal inital step.
+  This should help to locate "suspended" tracks.
+
+run                                     run-V04-00-03
+---
+- Add G4VModularPhysicsList.cc
+- Use "virtual" inheritance for G4VModularPhysicsList.
+
+visualization                           vis-V04-00-10
+-------------
+- Bug fixes in G4VRMLXFileSceneHandlerFunc.icc
+- Added protection of VRML-Newtork drivers for Windows platform. 
+  (The compilation is avoided on Windows platform.) 
+- Improvement to /vis/scene/add/logicalVolume guidance. 
+- Removed some warnings signalled by gcc-3.1 compiler. 
+
+examples                                examples-V04-00-06
+--------
+- Introduced first implementation of example for importing GDML geometries
+  in examples/extended/gdml.
+- Introduced first implementation of CMS tool for debugging overlapping
+  geometries in examples/extended/geometry/olap.
+- Added example for importing STEP CAD geometries (derived from test05)
+  in examples/extended/geometry/cad.
+- Introduced first implementation of two examples showing usage of HepMC
+  event generator in examples/extended/eventgenerator.
+- Migrated examples in examples/extended/electromagnetic to use AIDA 2.2
+  for histogramming.
+- Added new example TestEm6 for showing usage of GammaConversionToMuons
+  process.
+- Updated advanced examples to recent development and usage of histogramming
+  features in AIDA 2.2.
+- Updated reference outputs.
+
+tests                                   tests-V04-00-05
+-----
+- Added test23 for cut per material and persistency of physics table.
+- Added test32 for leading_particle hadronic model for MARS13 biasing.
+- Updated reference outputs.
