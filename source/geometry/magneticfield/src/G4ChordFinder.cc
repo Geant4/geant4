@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc,v 1.38 2003-10-31 14:35:53 gcosmo Exp $
+// $Id: G4ChordFinder.cc,v 1.39 2003-11-04 15:06:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -117,8 +117,8 @@ G4ChordFinder::AdvanceChordLimited( G4FieldTrack& yCurrent,
   }
 
 #ifdef G4DEBUG_FIELD
-  if( dbg ) G4cerr << "Exiting FindNextChord Limited with:\n yCurrent: " 
-                   << yCurrent<< G4endl; 
+  G4cout << "Exiting FindNextChord Limited with:" << G4endl
+         << "   yCurrent: " << yCurrent<< G4endl; 
 #endif
 
   return stepPossible;
