@@ -1,4 +1,4 @@
-# $Id: globlib.gmk,v 1.22 2004-06-08 09:38:19 gcosmo Exp $
+# $Id: globlib.gmk,v 1.23 2004-06-08 09:58:23 gcosmo Exp $
 # --------------------------------------------------------------
 # Script for compound libraries.  Gabriele Cosmo, 25/6/98.
 # --------------------------------------------------------------
@@ -98,27 +98,32 @@ includes::
 	@for dir in $(SUBDIRS); do (cd $$dir && $(MAKE) $@ ); done
 	
 wipe_libs:
-	@for lib in $(SUBLIBS); do (rm -f $(G4LIBDIR)/lib$$lib.a); done
-	@for lib in $(SUBLIBS); do (rm -f $(G4LIBDIR)/lib$$lib.$(SHEXT)); done
+	@for lib in $(SUBLIBS); do ($(RM) -f $(G4LIBDIR)/lib$$lib.a); done
+	@for lib in $(SUBLIBS); do ($(RM) -f $(G4LIBDIR)/lib$$lib.$(SHEXT)); done
 
 clean:
-	@echo Cleaning up ...
+	@$(ECHO) Cleaning up ...
 	@for lib in $(SUBLIBS); do ( \
-				 rm -rf $(G4TMP)/$(G4SYSTEM)/$$lib;\
-				 rm -f $(G4LIBDIR)/lib$$lib.a;\
-				 rm -f $(G4LIBDIR)/lib$$lib.$(SHEXT) );\
+				 $(RM) -rf $(G4TMP)/$(G4SYSTEM)/$$lib;\
+				 $(RM) -f $(G4LIBDIR)/*$$lib.a;\
+				 $(RM) -f $(G4LIBDIR)/*$$lib.lib;\
+				 $(RM) -f $(G4LIBDIR)/*$$lib.exp;\
+				 $(RM) -f $(G4LIBDIR)/*$$lib.$(SHEXT) );\
 				done
-	@rm -f $(G4LIBDIR)/lib$(name).a
+	@$(RM) -f $(G4LIBDIR)/*$(name).a
+	@$(RM) -f $(G4LIBDIR)/*$(name).lib
+	@$(RM) -f $(G4LIBDIR)/*$(name).exp
+	@$(RM) -f $(G4LIBDIR)/*$(name).$(SHEXT)
 
 clean_libs:
-	@echo Removing lib$(name).a/.$(SHEXT) and sub-libraries ...
+	@$(ECHO) Removing lib$(name).a/.$(SHEXT) and sub-libraries ...
 	@for lib in $(SUBLIBS); do ( \
-				  rm -f $(G4LIBDIR)/*$$lib.a;\
-				  rm -f $(G4LIBDIR)/*$$lib.lib;\
-				  rm -f $(G4LIBDIR)/*$$lib.exp;\
-				  rm -f $(G4LIBDIR)/*$$lib.$(SHEXT) );\
+				  $(RM) -f $(G4LIBDIR)/*$$lib.a;\
+				  $(RM) -f $(G4LIBDIR)/*$$lib.lib;\
+				  $(RM) -f $(G4LIBDIR)/*$$lib.exp;\
+				  $(RM) -f $(G4LIBDIR)/*$$lib.$(SHEXT) );\
 				done
-	@rm -f $(G4LIBDIR)/*$(name).a
-	@rm -f $(G4LIBDIR)/*$(name).lib
-	@rm -f $(G4LIBDIR)/*$(name).exp
-	@rm -f $(G4LIBDIR)/*$(name).$(SHEXT)
+	@$(RM) -f $(G4LIBDIR)/*$(name).a
+	@$(RM) -f $(G4LIBDIR)/*$(name).lib
+	@$(RM) -f $(G4LIBDIR)/*$(name).exp
+	@$(RM) -f $(G4LIBDIR)/*$(name).$(SHEXT)
