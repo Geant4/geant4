@@ -202,7 +202,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.34s Real=0.37s Sys=0.02s
+  User=0.29s Real=0.32s Sys=0.02s
 Idle> #
 Idle> # list the existing physics processes
 Idle> /process/list
@@ -231,7 +231,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.28s Real=0.3s Sys=0.02s
+  User=0.23s Real=0.26s Sys=0.03s
 Idle> #
 Idle> # switch on MultipleScattering
 Idle> /process/activate msc
@@ -264,14 +264,14 @@ Start Run processing.
  Current couple of seeds = 1053016644, 852736205
 ----------------------------------------
 >>> Event 0
-     29 hits are stored in ExN03CalorHitsCollection.
-   Absorber: total energy:   4e+02 MeV       total track length:      87 cm 
-        Gap: total energy:      91 MeV       total track length:     2.5 m  
-    226 trajectories stored in this event.
+     28 hits are stored in ExN03CalorHitsCollection.
+   Absorber: total energy: 4.1e+02 MeV       total track length:      91 cm 
+        Gap: total energy:      85 MeV       total track length:     2.3 m  
+    201 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.1s Real=1.2s Sys=0.1s
+  User=0.86s Real=0.94s Sys=0.08s
 Idle> G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.
