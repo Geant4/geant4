@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.17 2004-06-18 15:43:35 maire Exp $
+# $Id: GNUmakefile,v 1.18 2004-06-21 10:50:26 maire Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -14,7 +14,7 @@ endif
 .PHONY: all
 all: lib bin
 
-#### G4ANALYSIS_USE := true
+G4ANALYSIS_USE := true
 
 ifdef G4ANALYSIS_USE
   USE_AIDA := true
@@ -35,7 +35,7 @@ endif
 
 include $(G4INSTALL)/config/binmake.gmk
 
-histoclean:
+histclean:
 	rm -f $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(G4TARGET)/RunAction.o
 
 visclean:
