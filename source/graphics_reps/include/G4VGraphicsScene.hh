@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VGraphicsScene.hh,v 1.1 1999-01-07 16:09:13 gunter Exp $
+// $Id: G4VGraphicsScene.hh,v 1.2 1999-02-07 17:02:03 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,6 +29,8 @@ class G4Sphere;
 class G4Para;
 class G4Torus;
 class G4PhysicalVolumeModel;
+class G4Polycone;
+class G4Polyhedra;
 
 #include "G4Transform3D.hh"
 
@@ -43,15 +45,17 @@ public:
   // solid to provide a G4Polyhedron or similar primitive - see, for
   // example, G4VScene in the Visualization Category.
 
-  virtual void AddThis (const G4Box&    box)    = 0;
-  virtual void AddThis (const G4Cons&   cons)   = 0;
-  virtual void AddThis (const G4Tubs&   tubs)   = 0;
-  virtual void AddThis (const G4Trd&    trd)    = 0;
-  virtual void AddThis (const G4Trap&   trap)   = 0;
-  virtual void AddThis (const G4Sphere& sphere) = 0;
-  virtual void AddThis (const G4Para&   para  ) = 0;
-  virtual void AddThis (const G4Torus&  torus ) = 0;
-  virtual void AddThis (const G4VSolid& solid)  = 0;  // For solids not above.
+  virtual void AddThis (const G4Box&)       = 0;
+  virtual void AddThis (const G4Cons&)      = 0;
+  virtual void AddThis (const G4Tubs&)      = 0;
+  virtual void AddThis (const G4Trd&)       = 0;
+  virtual void AddThis (const G4Trap&)      = 0;
+  virtual void AddThis (const G4Sphere&)    = 0;
+  virtual void AddThis (const G4Para&)      = 0;
+  virtual void AddThis (const G4Torus&)     = 0;
+  virtual void AddThis (const G4Polycone&)  = 0;
+  virtual void AddThis (const G4Polyhedra&) = 0;
+  virtual void AddThis (const G4VSolid&)    = 0;  // For solids not above.
 
   ///////////////////////////////////////////////////////////////////
   // Other functions.
