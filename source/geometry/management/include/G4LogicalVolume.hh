@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.hh,v 1.19 2004-11-13 17:22:04 gcosmo Exp $
+// $Id: G4LogicalVolume.hh,v 1.20 2005-03-01 09:56:12 santin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -189,17 +189,20 @@ class G4LogicalVolume
       // Sets material and corresponding MaterialCutsCouple.
       // This method is invoked by G4Navigator while it is navigating through 
       // material parameterization.
-    G4double GetMass(G4bool forced=false, G4Material* parMaterial=0);
+    G4double GetMass(G4bool forced=false, G4bool propagate=true, G4Material* parMaterial=0);
       // Returns the mass of the logical volume tree computed from the
       // estimated geometrical volume of each solid and material associated
-      // to the logical volume and its daughters.
+      // to the logical volume and (if requested) its daughters.
       // NOTE: the computation may require a considerable amount of time,
       //       depending from the complexity of the geometry tree.
       //       The returned value is cached and can be used for successive
       //       calls (default), unless recomputation is forced by providing
       //       'true' for the boolean argument in input. Computation should
       //       be forced if the geometry setup has changed after the previous
-      //       call. An optional argument to specify a material is provided.
+      //       call. By setting the 'propagate' boolean flag to 'false' the 
+      //       method returns the mass of the present logical volume only 
+      //       (subtracted for the volume occupied by the daughter volumes).
+      //       An optional argument to specify a material is provided.
 
     inline G4FieldManager* GetFieldManager() const;
       // Gets current FieldManager.

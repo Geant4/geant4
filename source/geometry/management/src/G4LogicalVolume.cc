@@ -21,13 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.cc,v 1.22 2004-11-15 14:15:21 gcosmo Exp $
+// $Id: G4LogicalVolume.cc,v 1.23 2005-03-01 09:56:12 santin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4LogicalVolume Implementation
 //
 // History:
+// 01.03.05 G.Santin: Added flag for optional propagation of GetMass
 // 17.05.02 G.Cosmo: Added flag for optional optimisation
 // 12.02.99 S.Giani: Default initialization of voxelization quality
 // 04.08.97 P.M.DeFreitas: Added methods for parameterised simulation 
@@ -269,11 +270,14 @@ G4int G4LogicalVolume::TotalVolumeEntities() const
 //       calls (default), unless recomputation is forced by providing
 //       'true' for the boolean argument in input. Computation should
 //       be forced if the geometry setup has changed after the previous
-//       call. The extra argument 'parMaterial' is internally used to
+//       call. By setting the 'propagate' boolean flag to 'false' the 
+//       method returns the mass of the present logical volume only 
+//       (subtracted for the volume occupied by the daughter volumes).
+//       The extra argument 'parMaterial' is internally used to
 //       consider cases of geometrical parameterisations by material.
 // ********************************************************************
 //
-G4double G4LogicalVolume::GetMass(G4bool forced, G4Material* parMaterial)
+G4double G4LogicalVolume::GetMass(G4bool forced, G4bool propagate, G4Material* parMaterial)
 {
   // Return the cached non-zero value, if not forced
   //
@@ -303,7 +307,7 @@ G4double G4LogicalVolume::GetMass(G4bool forced, G4Material* parMaterial)
   fMass = fSolid->GetCubicVolume() * globalDensity;
 
   // For each daughter in the tree, subtract the mass occupied
-  // and add the real daughter's one computed recursively
+  // and if required by the propagate flag, add the real daughter's one computed recursively
 
   for (G4PhysicalVolumeList::const_iterator itDau = fDaughters.begin();
        itDau != fDaughters.end(); itDau++)
@@ -335,10 +339,11 @@ G4double G4LogicalVolume::GetMass(G4bool forced, G4Material* parMaterial)
       }
       subMass = daughterSolid->GetCubicVolume() * globalDensity;
 
-      // Subtract the daughter's portion for the mass and add the real
+      // Subtract the daughter's portion for the mass and, if required, add the real
       // daughter's mass computed recursively
       //
-      fMass = fMass - subMass + logDaughter->GetMass(true, daughterMaterial);
+      fMass = fMass - subMass;
+      if (propagate) fMass = fMass + logDaughter->GetMass(true, daughterMaterial);
     }
   }
 
