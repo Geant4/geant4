@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTest.cc,v 1.4 2001-10-29 12:04:36 pia Exp $
+// $Id: G4ProcessTest.cc,v 1.5 2001-10-30 08:35:52 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -101,6 +101,8 @@ void G4ProcessTest::buildTables(const G4String& type, G4bool isPolarised)
   eProcessManager = new G4ProcessManager(electron);
   electron->SetProcessManager(eProcessManager);
 
+  G4cout << "Now building physics tables, it will take a while..." << G4endl;
+
   if (def == G4Electron::ElectronDefinition())
     {
       eProcessManager->AddProcess(process);
@@ -121,9 +123,6 @@ void G4ProcessTest::buildTables(const G4String& type, G4bool isPolarised)
 void G4ProcessTest::postStepTest(const G4Track& track,
 				 const G4Step& step) const
 {
-  G4Material* mat = track.GetMaterial();
-  if (mat == 0) G4cout << "Material = 0 in track" << G4endl;  
-
   G4ParticleChange* particleChange = (G4ParticleChange*) process->PostStepDoIt(track, step);
   
   // Primary physical quantities 

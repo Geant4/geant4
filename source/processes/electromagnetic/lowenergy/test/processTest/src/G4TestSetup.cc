@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TestSetup.cc,v 1.5 2001-10-29 12:04:36 pia Exp $
+// $Id: G4TestSetup.cc,v 1.6 2001-10-30 08:35:52 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -76,9 +76,9 @@ G4TestSetup:: ~G4TestSetup()
 {
   delete physicalFrame;
   physicalFrame = 0;
-  //  delete step;
+  delete step;
   step = 0;
-  // delete track;
+  delete track;
   track = 0;
 }
 
@@ -88,13 +88,13 @@ G4TestSetup:: ~G4TestSetup()
   G4double dimY = 10.*cm;
   G4double dimZ = 10.*cm;
   
-  G4Box box("Frame",dimX, dimY, dimZ);
+  G4Box box("Box",dimX, dimY, dimZ);
   
-  G4LogicalVolume logicalVol(&box,material,"LFrame", 0, 0, 0);
+  G4LogicalVolume logicalVol(&box,material,"LogicalBox", 0, 0, 0);
   logicalVol.SetMaterial(material); 
   
   physicalFrame = new G4PVPlacement(0,G4ThreeVector(),
-				    "PFrame",&logicalVol,0,false,0);
+				    "PhysicalBox",&logicalVol,0,false,0);
 
 }
 
@@ -123,9 +123,8 @@ const G4Track* G4TestSetup::makeTrack()
       track->SetKineticEnergy(energy);
     }
 
-  if (track == 0) G4cout << "Track = 0" << G4endl;
   G4double e = track->GetKineticEnergy();
-  G4cout << "Track energy = " << e << G4endl;
+  G4cout << "Track energy = " << e/MeV << " MeV" << G4endl;
 
   return track;
 }

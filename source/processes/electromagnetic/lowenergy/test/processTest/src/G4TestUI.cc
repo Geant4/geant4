@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TestUI.cc,v 1.3 2001-10-29 12:04:37 pia Exp $
+// $Id: G4TestUI.cc,v 1.4 2001-10-30 08:35:52 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -119,7 +119,7 @@ void G4TestUI::selectProcessCategory()
 
 void G4TestUI::isPolarised()
 {
-  if (type < 5)
+  if (type == 0)
     {
       G4int isPolarised;
       G4cout << "Polarised processes are available for: Compton" 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TestSetup.hh,v 1.4 2001-10-29 12:03:44 pia Exp $
+// $Id: G4TestSetup.hh,v 1.5 2001-10-30 08:35:21 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -42,10 +42,6 @@
 
 #include "globals.hh"
 
-class G4VProcess;
-class G4ParticleDefinition;
-class G4ProcessManager;
-class G4VContinuousDiscreteProcess;
 class G4Material;
 class G4PVPlacement;
 class G4Track;
@@ -72,7 +68,7 @@ private:
   G4TestSetup& operator=(const G4TestSetup& right);
 
   G4ParticleDefinition* part;
-  G4Material* material;
+  G4Material* maXFGterial;
   G4double eMin;
   G4double eMax;
   G4Track* track;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialSetup.cc,v 1.1 2001-10-29 09:30:00 pia Exp $
+// $Id: G4MaterialSetup.cc,v 1.2 2001-10-30 08:36:19 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -77,7 +77,6 @@ void G4MaterialSetup::makeMaterials()
   air->AddElement(O,0.3);
 
   // Dump the material table
-  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
   G4int nMaterials = G4Material::GetNumberOfMaterials();
 
   G4cout << nMaterials << " materials created" << G4endl;
