@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationSpectrum.cc,v 1.12 2001-12-04 11:34:16 vnivanch Exp $
+// $Id: G4eIonisationSpectrum.cc,v 1.13 2002-04-18 15:38:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -39,6 +39,7 @@
 //                          consistency with design
 // 02.11.2001 VI            Optimize sampling of energy 
 // 29.11.2001 VI            New parametrisation 
+// 19.04.2002 VI            Add protection in case of energy below binding  
 //
 // -------------------------------------------------------------------
 //
@@ -83,6 +84,8 @@ G4double G4eIonisationSpectrum::Probability(G4int Z,
 
   G4double bindingEnergy = (G4AtomicTransitionManager::Instance())->
                            Shell(Z, shell)->BindingEnergy();
+
+  if(e <= bindingEnergy) return 0.0;
 
   G4double x1 = G4std::min(0.5,(t0 + bindingEnergy)/(e + bindingEnergy));
   G4double x2 = G4std::min(0.5,(tm + bindingEnergy)/(e + bindingEnergy));
@@ -155,6 +158,8 @@ G4double G4eIonisationSpectrum::AverageEnergy(G4int Z,
 
   G4double bindingEnergy = (G4AtomicTransitionManager::Instance())->
                            Shell(Z, shell)->BindingEnergy();
+
+  if(e <= bindingEnergy) return 0.0;
 
   G4double x1 = G4std::min(0.5,(t0 + bindingEnergy)/(e + bindingEnergy));
   G4double x2 = G4std::min(0.5,(tm + bindingEnergy)/(e + bindingEnergy));
