@@ -68,7 +68,7 @@ help /vis/sceneHandler/create
 # Create another viewer.
 /vis/viewer/create
 #
-/vis/viewer/viewpointThetaPhi 35 35
+/vis/viewer/set/viewpointThetaPhi 35 35
 /vis/viewer/set/style surface
 /vis/viewer/set/projection perspective 30
 #
@@ -85,7 +85,7 @@ help /vis/sceneHandler/create
 /vis/scene/add/logicalVolume expHall_L
 /vis/sceneHandler/create OGLSX
 /vis/viewer/create
-/vis/viewer/viewpointThetaPhi 35 35
+/vis/viewer/set/viewpointThetaPhi 35 35
 /vis/scene/notifyHandlers
 /vis/viewer/update
 #
@@ -95,7 +95,7 @@ help /vis/sceneHandler/create
 /vis/sceneHandler/create OGLSXm
 /vis/viewer/create
 /vis/viewer/reset
-/vis/viewer/viewpointThetaPhi 35 35
+/vis/viewer/set/viewpointThetaPhi 35 35
 /vis/scene/notifyHandlers
 /vis/viewer/update
 #
@@ -103,7 +103,7 @@ help /vis/sceneHandler/create
 /vis/scene/add/logicalVolume subtraction_L
 /vis/sceneHandler/attach
 /vis/viewer/reset
-/vis/viewer/viewpointThetaPhi 35 35
+/vis/viewer/set/viewpointThetaPhi 35 35
 /vis/viewer/refresh
 /vis/viewer/update
 #
@@ -111,7 +111,7 @@ help /vis/sceneHandler/create
 /vis/scene/add/logicalVolume union_L
 /vis/sceneHandler/attach
 /vis/viewer/reset
-/vis/viewer/viewpointThetaPhi 35 35
+/vis/viewer/set/viewpointThetaPhi 35 35
 /vis/viewer/refresh
 /vis/viewer/update
 #
@@ -124,7 +124,7 @@ help /vis/sceneHandler/create
 /vis/sceneHandler/create OGLSXm
 /vis/viewer/create
 /vis/viewer/reset
-/vis/viewer/viewpointThetaPhi 35 35
+/vis/viewer/set/viewpointThetaPhi 35 35
 /vis/scene/notifyHandlers
 /run/beamOn 1
 /vis/viewer/update
@@ -176,7 +176,7 @@ help /vis/sceneHandler/create
 /vis/viewer/reset
 #/vis/viewer/panTo -200 400 cm
 /vis/viewer/pan -275 275 cm
-/vis/viewer/viewpointThetaPhi 90 180
+/vis/viewer/set/viewpointThetaPhi 90 180
 #/vis/viewer/panTo -200 0 cm
 /vis/viewer/pan -200 0 cm
 /vis/viewer/zoom 5
@@ -313,7 +313,7 @@ help /vis/sceneHandler/create
 /vis/viewer/update
 #...end
 #
-/vis/viewer/viewpointThetaPhi 30 30
+/vis/viewer/set/viewpointThetaPhi 30 30
 /vis/viewer/set/projection perspective 30
 /vis/viewer/refresh
 /vis/viewer/update
@@ -321,7 +321,7 @@ help /vis/sceneHandler/create
 /vis/sceneHandler/create RayTracer
 /vis/viewer/create
 /vis/viewer/reset
-/vis/viewer/viewpointThetaPhi 30 30
+/vis/viewer/set/viewpointThetaPhi 30 30
 /vis/viewer/refresh
 /vis/viewer/update
 #
