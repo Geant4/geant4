@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DELPHIMagField.cc,v 1.1 2002-03-28 13:36:10 japost Exp $
+// $Id: G4DELPHIMagField.cc,v 1.2 2002-03-28 13:49:14 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -44,7 +44,7 @@ G4DELPHIMagField::~G4DELPHIMagField()
 
 
 void
-   G4DELPHIMagField::GetFieldValue (const G4double yTrack[3],
+   G4DELPHIMagField::GetFieldValue (const G4double yTrack[4],
                                           G4double *B        )  const
 {
    G4int i, n = 8 ;
