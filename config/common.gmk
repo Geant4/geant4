@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.6 1999-11-11 16:12:36 gunter Exp $
+# $Id: common.gmk,v 1.7 1999-11-12 19:18:54 morita Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -78,7 +78,7 @@ else
 endif
 endif
 # Make the temporary files.
-.PRECIOUS: $(G4TMPDIR)/%_ddl.cc ddl/%.hh $(G4TMPDIR)/%_ref.hh
+.PRECIOUS: $(G4TMPDIR)/%_ddl.cc $(G4TMPDIR)/%.hh $(G4TMPDIR)/%_ref.hh
 
 ifdef G4ODBMS
 $(G4TMPDIR)/%_ddl.cc $(G4TMPDIR)/%.hh $(G4TMPDIR)/%_ref.hh: include/%.ddl
@@ -112,27 +112,33 @@ endif
 # g++ -MM is good at this, except it forgets the subdirectory
 # (hence the use of $G4TMP/).
 
+# define G4SKIP_DEPEND for simplicity
+ifndef G4ODBMS_DEPEND
 ifdef G4ODBMS
-$(G4TMPDIR)/%.d: src/%.cc $(schema_hh)
+  G4SKIP_DEPEND := 1
+endif
+endif
+
+ifdef G4SKIP_DEPEND
+$(G4TMPDIR)/%.d:
+	@echo Skip dependency file creation for file $< ...
 else
 $(G4TMPDIR)/%.d: src/%.cc
-endif
 	@if [ ! -d $(G4TMP)/$(G4SYSTEM) ] ; then mkdir $(G4TMP)/$(G4SYSTEM) ;fi
 	@if [ ! -d $(G4TMPDIR) ] ; then mkdir $(G4TMPDIR) ;fi
 	@echo Making dependency for file $< ...
 	@($(ECHO) $(G4TMPDIR)/\\c ; \
 	g++ -MM $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/$*.o!& $@!' >$@
-ifdef G4ODBMS
-ifndef G4ODBMS_NODDL
--include $(dependencies)
-endif
-else
 -include $(dependencies)
 endif
 
 # .PHONY targets are executed regardless of time-stamp of any file of
 # same name.
+ifdef G4ODBMS_DEPEND
+.PHONY: all obj lib clean clean_libs d_files
+else
 .PHONY: all obj lib clean clean_libs
+endif
 
 obj: $(G4TMPDIR)/obj.last
 
