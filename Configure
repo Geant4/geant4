@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.58 2004-06-24 16:44:36 stesting Exp $
+# $Id: Configure,v 1.59 2004-06-24 16:58:54 stesting Exp $
 #
-# Generated on Thu Jun 24 18:44:17 CEST 2004 [metaconfig 3.0 PL70]
+# Generated on Thu Jun 24 18:58:33 CEST 2004 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -176,10 +176,6 @@ g4clhep_base_dir=''
 g4clhep_include_dir=''
 g4clhep_lib=''
 g4clhep_lib_dir=''
-g4lib_build_shared=''
-g4lib_build_static=''
-g4lib_use_shared=''
-g4lib_use_static=''
 g4global=''
 g4granular=''
 g4lib_use_granular=''
@@ -2950,7 +2946,7 @@ By default 'static'  libraries are built.
 Do you want to build DLL (.dll) libraries?
 EOM`
 
-dflt=$g4lib_build_shared
+dflt=$g4lib_build_dll
 rp=$g4message
 . ./myread
 gans=$ans
@@ -2997,7 +2993,7 @@ By default 'static'  libraries are built.
 Do you want to build dynamic libraries?
 EOM`
 
-dflt=$g4lib_build_shared
+dflt=$g4lib_build_dyn
 rp=$g4message
 . ./myread
 gans=$ans
@@ -3193,7 +3189,7 @@ if test \( \( "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7" \) -a "X
 
 fi
 
-if test \( "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7" \) -o    \( \( "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7" \) -a "X$g4lib_build_dll" = "Xn" \) -o \( "X$g4system" = "XDarwin-g++" -a "X$g4lib_build_dyn" = "Xn" \) ; then
+if test \( "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7" -a "X$g4system" != "XDarwin-g++" \) -o    \( \( "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7" \) -a "X$g4lib_build_dll" = "Xn" \) -o \( "X$g4system" = "XDarwin-g++" -a "X$g4lib_build_dyn" = "Xn" \) ; then
 
 #
 # Ask about g4global - default "(empty)". 
@@ -4538,11 +4534,7 @@ g4install='$g4install'
 g4ledata='$g4ledata'
 g4levelgammadata='$g4levelgammadata'
 g4lib='$g4lib'
-g4lib_build_shared='$g4lib_build_shared'
-g4lib_build_static='$g4lib_build_static'
 g4lib_use_granular='$g4lib_use_granular'
-g4lib_use_shared='$g4lib_use_shared'
-g4lib_use_static='$g4lib_use_static'
 g4make='$g4make'
 g4neutronhpcrosssections='$g4neutronhpcrosssections'
 g4osname='$g4osname'
