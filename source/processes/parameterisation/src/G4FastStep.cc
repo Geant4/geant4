@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastStep.cc,v 1.10 2002-11-20 17:05:14 gcosmo Exp $
+// $Id: G4FastStep.cc,v 1.11 2003-05-21 16:32:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -247,26 +247,31 @@ CreateSecondaryTrack(const G4DynamicParticle& dynamics,
 
 // G4FastStep should never be Initialized in this way
 // but we must define it to avoid warnings.
-void G4FastStep::Initialize(const G4Track&) {
+void G4FastStep::Initialize(const G4Track&)
+{
   G4Exception("G4FastStep::Initialize(const G4Track&) should never be called,\nyou must use instead the G4FastStep::Initialize(const G4FastTrack&)\nmethod!");
 }
 
-G4FastStep::G4FastStep():G4VParticleChange()
+G4FastStep::G4FastStep()
+  : G4VParticleChange()
 {
-  if (verboseLevel>2) {
+  if (verboseLevel>2)
+  {
     G4cerr << "G4FastStep::G4FastStep() " << G4endl;
   }
 }
 
 G4FastStep::~G4FastStep() 
 {
-  if (verboseLevel>2) {
+  if (verboseLevel>2)
+  {
     G4cerr << "G4FastStep::~G4FastStep() " << G4endl;
   }
 }
 
 // copy and assignment operators are implemented as "shallow copy"
 G4FastStep::G4FastStep(const G4FastStep &right)
+  : G4VParticleChange()
 {
    *this = right;
 }
