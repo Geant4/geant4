@@ -22,7 +22,7 @@
 //
 
 //
-// $Id: DetectorConstruction.cc,v 1.4 2003-02-10 17:39:17 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.5 2003-04-01 17:02:21 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -121,8 +121,8 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
                                    
   pBox = new G4PVPlacement(0,				//no rotation
   			   G4ThreeVector(),		//at (0,0,0)
-                           aMaterial->GetName(),	//its name
                            lBox,			//its logical volume
+			   aMaterial->GetName(),	//its name
                            0,	       		        //its mother  volume
                            false,			//no boolean operation
                            0);				//copy number
