@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.hh,v 1.1 2003-09-19 14:42:04 gcosmo Exp $
+// $Id: G4ProductionCutsTable.hh,v 1.2 2003-11-03 02:18:44 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -98,7 +98,6 @@ class G4ProductionCutsTable
    G4VRangeToEnergyConverter* converters[NumberOfG4CutIndex]; 
 
    G4ProductionCuts* defaultProductionCuts;
-   G4bool firstUse;
 
 // These two vectors are for the backward comparibility
    G4double* rangeDoubleVector[NumberOfG4CutIndex];
@@ -187,7 +186,19 @@ class G4ProductionCutsTable
                                    G4bool          ascii = false);
 
   private:
+   G4bool firstUse;
    enum { FixedStringLengthForStore = 32 }; 
+
+  public: // with description  
+      void  SetVerboseLevel(G4int value);
+      G4int GetVerboseLevel() const;
+      // controle flag for output message
+      //  0: Silent
+      //  1: Warning message
+      //  2: More
+
+  private:
+   G4int verboseLevel;
 
 };
 
@@ -297,6 +308,18 @@ G4int G4ProductionCutsTable:: GetCoupleIndex(const G4Material* aMat,
 {
   const G4MaterialCutsCouple* aCouple = GetMaterialCutsCouple(aMat,aCut);
   return GetCoupleIndex(aCouple);
+}
+
+inline 
+ void G4ProductionCutsTable::SetVerboseLevel(G4int value)
+{
+   verboseLevel = value;
+}
+
+inline 
+ G4int G4ProductionCutsTable::GetVerboseLevel() const
+{
+   return verboseLevel;
 }
 
 
