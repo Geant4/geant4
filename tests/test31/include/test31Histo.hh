@@ -126,6 +126,7 @@ private:
     G4int verbose; 
     G4double zend;
     G4double zend2;
+    G4double etot;
     G4double zEvt;
     G4double AbsorberThickness;
     G4double gap;

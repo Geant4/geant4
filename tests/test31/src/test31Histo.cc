@@ -78,6 +78,7 @@ void test31Histo::BeginOfHisto(G4int num)
   zend     = 0.0;
   zend2    = 0.0;
   zEvt     = 0.0;
+  etot     = 0.0;
   
   if(0 < nHisto) bookHisto();
 
@@ -110,11 +111,13 @@ void test31Histo::EndOfHisto()
   }  
   G4double x = (G4double)n_evt;
   if(n_evt > 0) x = 1.0/x;
+  etot *= x;
   G4double xe = x*(G4double)n_elec;
   G4double xg = x*(G4double)n_gam;
   G4double xp = x*(G4double)n_posit;
   G4double xs = x*(G4double)n_step;
   G4cout                    << "Number of events          " << n_evt <<G4endl; 
+  G4cout << setprecision(4) << "Average energy deposit    " << etot/MeV << " MeV" << G4endl; 
   G4cout << setprecision(4) << "Average number of e-      " << xe << G4endl; 
   G4cout << setprecision(4) << "Average number of gamma   " << xg << G4endl; 
   G4cout << setprecision(4) << "Average number of e+      " << xp << G4endl; 
@@ -219,6 +222,7 @@ void test31Histo::bookHisto()
 
 void test31Histo::AddEnergy(G4double edep, G4double z)
 {
+  etot += edep;
   if(0 < nHisto) histo[0]->fill((float)z/mm, (float)edep/MeV);
 }
 
