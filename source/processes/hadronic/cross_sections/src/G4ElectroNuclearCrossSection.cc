@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.cc,v 1.14 2002-12-06 08:57:05 mkossov Exp $
+// $Id: G4ElectroNuclearCrossSection.cc,v 1.15 2002-12-12 19:16:50 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

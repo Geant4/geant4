@@ -1,4 +1,3 @@
-
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -20,9 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+// ********************************************************************
 //
 //
-// $Id: G4VSamplerConfigurator.hh,v 1.2 2002-10-16 16:26:59 dressel Exp $
+// $Id: G4VSamplerConfigurator.hh,v 1.3 2002-12-12 19:18:40 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------

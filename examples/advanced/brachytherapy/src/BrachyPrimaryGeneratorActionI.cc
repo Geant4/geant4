@@ -1,4 +1,3 @@
-
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -20,6 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+// ********************************************************************
 
 //
 // --------------------------------------------------------------
@@ -35,7 +35,7 @@
 //    *                                          *
 //    ********************************************
 //
-// $Id: BrachyPrimaryGeneratorActionI.cc,v 1.3 2002-11-27 11:11:22 guatelli Exp $
+// $Id: BrachyPrimaryGeneratorActionI.cc,v 1.4 2002-12-12 19:16:19 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPrimaryGeneratorActionI.hh"

@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4HEVector.cc,v 1.12 2002-07-16 10:39:53 jwellisc Exp $
+// $Id: G4HEVector.cc,v 1.13 2002-12-12 19:18:03 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

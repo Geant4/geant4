@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -22,7 +22,7 @@
 //
 //
 //
-// $Id: G4ElectroNuclearReaction.hh,v 1.13 2002-06-20 08:43:58 jwellisc Exp $
+// $Id: G4ElectroNuclearReaction.hh,v 1.14 2002-12-12 19:16:59 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

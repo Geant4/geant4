@@ -1,4 +1,3 @@
-
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -20,6 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+// ********************************************************************
 //
 // Code developed by:
 //  S.Guatelli
@@ -31,7 +31,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyFactory.cc,v 1.2 2002-11-18 15:18:38 guatelli Exp $
+// $Id: BrachyFactory.cc,v 1.3 2002-12-12 19:16:18 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include"BrachyFactory.hh"

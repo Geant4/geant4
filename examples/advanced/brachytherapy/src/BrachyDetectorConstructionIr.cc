@@ -1,4 +1,3 @@
-
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -20,6 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+// ********************************************************************
 
 //
 // --------------------------------------------------------------
@@ -35,7 +35,7 @@
 //    *                                      *
 //    ****************************************
 //
-// $Id: BrachyDetectorConstructionIr.cc,v 1.2 2002-11-18 15:18:37 guatelli Exp $
+// $Id: BrachyDetectorConstructionIr.cc,v 1.3 2002-12-12 19:16:18 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyDetectorConstructionIr.hh"

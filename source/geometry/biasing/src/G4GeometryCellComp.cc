@@ -1,4 +1,3 @@
-
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -20,9 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+// ********************************************************************
 //
 //
-// $Id: G4GeometryCellComp.cc,v 1.1 2002-10-22 13:18:46 dressel Exp $
+// $Id: G4GeometryCellComp.cc,v 1.2 2002-12-12 19:16:45 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
