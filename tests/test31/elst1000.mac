@@ -16,7 +16,7 @@
 /test31/NumberOfAbsorbers    60
 /test31/maxDeltaEnergy       1.0 MeV
 /test31/WorldMaterial        Vacuum
-/test31/HistoName            el_st1000_1.paw
+/test31/HistoName            el_st1000_3.paw
 /test31/HistoNumber          5
 /test31/NumberOfEvents       1000
 /test31/gun/beamE            1000.0 MeV

@@ -33,3 +33,7 @@
 /gun/particle ion
 /gun/ion 6 12 6
 /run/beamOn 1000
+#scaled energy
+/gun/particle mu+
+/gun/energy   3.5 MeV
+/run/beamOn 1000
