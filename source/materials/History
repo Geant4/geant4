@@ -1,4 +1,4 @@
-$Id: History,v 1.1 1999-01-07 16:09:39 gunter Exp $
+$Id: History,v 1.2 1999-07-28 12:10:41 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+July    28, 99 M.Maire  - materials-V00-01-00
+               new G4Material constructor with chemical formula
+	                 
 August  13, 98 M.Maire  - materials-00-02-01
                new static method G4Material::GetMaterial(name)     
      
