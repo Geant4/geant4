@@ -1,4 +1,4 @@
-$Id: History,v 1.63 2002-08-07 10:55:39 maire Exp $
+$Id: History,v 1.64 2002-10-14 17:39:14 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+14 oct 02: mma
+-G4PAIxSection and G4PAIonisation : put back on the HEAD the versions as they
+ are in Geant4-04-01-ref-03, namely:
+  G4PAIxSection  hh:1.7             cc:1.10
+  G4PAIonisation hh:1.12  icc:1.10  cc:1.23
+  
+  G4PAIxSectionTest.cc:1.7   G4PAIdNdxTest.cc:1.1   GNUmakefile:1.1
+      
 07 aug 02: mma (stand-V04-01-00)
 - GammaConversionToMuons::DoIt : missprint in OR conditions | instead of || 
 
