@@ -1,3 +1,6 @@
+DAWN-V00-01-05  Satoshi TANAKA  Nov 23, 1999
+- Protection to ill-defined G4Trap in AddThis()
+
 DAWN-V00-01-04  Satoshi TANAKA  Nov 02, 1999
 - Protection to AddPrimitive( G4NURBS )
 
