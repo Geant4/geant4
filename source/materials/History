@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2000-08-04 13:49:25 gcosmo Exp $
+$Id: History,v 1.7 2000-11-09 09:38:45 grichine Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 09, 00 V.Grichine - materials-V02-00-01
+               included test/ directory which was not tagged.
 
 August  04, 00 V.Grichine - materials-V02-00-00
                G4SandiaTable.cc: fixed initialization of pointers in
