@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.10 1999-12-01 17:06:47 stesting Exp $
+# $Id: GNUmakefile,v 1.11 1999-12-10 11:50:33 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -11,22 +11,24 @@ include $(G4INSTALL)/config/architecture.gmk
 
 #Genuine tests...
 SUBDIRS  = test01 ## Geometry - CSG solids and navigator.
-                  ## (Action? Augment, plsu Booleans.)
+                  ## (Action? Augment, plus Booleans.)
 SUBDIRS += test02 ## Standard em processes.  Low energy and high energy
                   ## hadronic processes and stopping, including coherent
                   ## elastic scattering.  (Derived originally from ExN04.)
                   ## (Action? Split into (a) em, (b) had with higher em cuts.)
-SUBDIRS += test03 ## Optical Processes.  (Derived originally from ExN06.)
-                  ## (Action? Shelve if no stronger than N06.)
+# SUBDIRS += test03 ## Optical Processes.  (Derived originally from ExN06.)
+                    ## Archived (cvs rm) - was indentical to ExN06 and no
+                    ## longer maintained.
 # SUBDIRS += test04 ## Persistency.
 SUBDIRS += test05 ## BREPS and STEP Interface.
 SUBDIRS += test06 ## Integral approach electromagnetic processes.  Simple box.
                   ## (Action?  Add muon test script.)
 SUBDIRS += test07 ## Statistical evaluation prototype.  (Derived originally
                   ## from ExN03.)
-# SUBDIRS += test08 ## Old em test.  (Action? Replace with transition radiation
-                  ## and PAI (photoabsorption ionisation) model.)  (Derived
-                  ## from TestEm8.)
+# SUBDIRS += test08 ## Old em test.  Archived (cvs rm) for now.
+                    ## (Action? Replace with transition radiation
+                    ## and PAI (photoabsorption ionisation) model.)  (Derived
+                    ## from TestEm8.)
 SUBDIRS += test09 ## Basic e.m. processes, Polarised Compton, new photelectric
                   ## effect, synchrotron radiation, simple box.  (Action?  Add
                   ## magnetic field, ElossPLus, muon test script.)
