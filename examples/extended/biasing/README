@@ -115,7 +115,7 @@ to demonstrate how to use a customized scorer and importance sampling
 in combination with a scripting language, python.
 Geant4 code is executed from a python session. Therefore, swig is used 
 to create python shadow classes and to generate the code necessary to 
-use the Geant4 libraries from python.
+use the Geant4 libraries from a python session.
 For simplicity it is recommended to use Anaphe. Anaphe comes with 
 python and swig installations. 
   See http://anaphe.web.cern.ch/
@@ -148,17 +148,15 @@ setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/lib/${G4SYSTEM}:${G4WORKD
  You may run gmake now.
  You should be able to execute the file B03RunApplication.py from your 
 shell or from a lizard session now.
+ The histogram is displayed only if the script is beeing ran
+from lizard.
+  
 
 Files in B03;
-env.csh: Is an example script to set the environment. It should work 
-   if you are at CERN and if you are on a redhat7.3 system.
-buildit.sh: You don't need to use this file. Only if you want to
-   make changes to the python interface defined in B03App.i you may need 
-   to use it. 
 B03Application.py: Is a example class utilizing importance sampling
    and scoring using python.
 B03RunApplication.py: Is a python script running the example. 
    It may be executed from the shell or in a python or lizard
    session. In case it is executed from lizard it creates a plot
    with a histogram.
-B03App.py: Is created by swig using the buildit.sh script.
+B03App.py: Is created by swig using swig.

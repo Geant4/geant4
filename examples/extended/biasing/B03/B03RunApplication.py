@@ -1,15 +1,16 @@
-#!/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/PublicDomainPackages/2.0.0/bin/python2.2
+#! /usr/bin/env python2.2
+
+
+# #!/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/PublicDomainPackages/2.0.0/bin/python2.2
 
 # #!/opt/Anaphe/5.0.1/specific/redhat72/gcc-2.95.2/PublicDomainPackages/2.0.0/bin/python2.2
-
-# #!/usr/bin/env python2
 
 
 #  This example needs python2.2 http://www.python.org or later.
 #  
 #  This script may be used without or with ANAPHE e.g. lizard.
-#  Without lizrd:  just execute this file.
-#  With lizrd:     start lizard and than  do
+#  Without lizard:  just execute this file.
+#  With lizard:     start lizard and than  do
 #                    execfile("B03RunApplication.py")
 
 import string
