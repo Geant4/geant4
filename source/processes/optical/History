@@ -16,6 +16,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18th October 2001 Peter Gumplinger (op-V03-02-01)
+              Avoid warnings on Linux (gcc-2.95.2) compiler
+- G4OpRayleigh.cc: remove unused variable 'aMaterial' in PostStepDoIt and
+                   'no_unit' in RayleighAttenuationLengthGenerator
+- G4OpBoundaryProcess.cc: moved definition of E2_perp, E2_parl, E2_total
+                          outside IF-statement
 31st August 2001 Peter Gumplinger (op-V03-02-00)
 - G4OpRayleigh.hh, G4OpBoundary.hh and G4OpAbsorption.hh: changed processName
                    to 'OpRayleigh', 'OpBoundary' and 'OpAbsorption' respectively
