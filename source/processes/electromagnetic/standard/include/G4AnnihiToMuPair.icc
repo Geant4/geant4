@@ -1,0 +1,102 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// alpha version of G4AnnihiToMuPair.hh,v   H.Burkhardt, November 2002
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//         ------------ G4AnnihiToMuPair physics process ------
+//         by H.Burkhardt, S. Kelner and R. Kokoulin, November 2002
+// -----------------------------------------------------------------------------
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4bool G4AnnihiToMuPair::IsApplicable(
+                                        const G4ParticleDefinition& particle)
+{
+   return ( &particle == G4Positron::Positron() );
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4AnnihiToMuPair::GetCrossSectionPerAtom(
+                                   const G4DynamicParticle* aDynamicPositron,
+                                         G4Element*         anElement)
+
+// gives the total cross section per atom in GEANT4 internal units
+{
+   G4double PositronEnergy = aDynamicPositron->GetKineticEnergy()+electron_mass_c2;
+   G4double AtomicZ = anElement->GetZ();
+   G4double crossSection =
+        ComputeCrossSectionPerAtom(PositronEnergy,AtomicZ);
+   return crossSection;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4AnnihiToMuPair::GetCrossSecFactor() // Get the factor to artificially increase the cross section
+{ return CrossSecFactor;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4AnnihiToMuPair::GetMeanFreePath(const G4Track& aTrack,
+                                              G4double, G4ForceCondition*)
+
+// returns the positron mean free path in GEANT4 internal units
+// (MeanFreePath is a private member of the class)
+
+{
+   const G4DynamicParticle* aDynamicPositron = aTrack.GetDynamicParticle();
+   G4double PositronEnergy = aDynamicPositron->GetKineticEnergy()+electron_mass_c2;
+   G4Material* aMaterial = aTrack.GetMaterial();
+
+   if (PositronEnergy <  LowestEnergyLimit)
+     MeanFreePath = DBL_MAX;
+   else
+     MeanFreePath = ComputeMeanFreePath(PositronEnergy,aMaterial);
+
+   return MeanFreePath;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4AnnihiToMuPair::ComputeMeanFreePath(
+                            G4double PositronEnergy, G4Material* aMaterial)
+
+// computes and returns the photon mean free path in GEANT4 internal units
+{
+  const G4ElementVector* theElementVector = aMaterial->GetElementVector();
+  const G4double* NbOfAtomsPerVolume = aMaterial->GetVecNbOfAtomsPerVolume();
+
+  G4double SIGMA = 0 ;
+
+  for ( size_t i=0 ; i < aMaterial->GetNumberOfElements() ; i++ )
+  {
+    G4double AtomicZ = (*theElementVector)[i]->GetZ();
+    SIGMA += NbOfAtomsPerVolume[i] *
+      ComputeCrossSectionPerAtom(PositronEnergy,AtomicZ);
+  }
+  return SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
