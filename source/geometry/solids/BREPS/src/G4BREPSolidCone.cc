@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidCone.cc,v 1.9 2002-12-03 14:16:02 gcosmo Exp $
+// $Id: G4BREPSolidCone.cc,v 1.10 2002-12-03 14:24:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -35,11 +35,6 @@
 #include "G4FConicalSurface.hh"
 #include "G4FCylindricalSurface.hh"
 #include "G4CircularCurve.hh"
-
-G4BREPSolidCone::G4BREPSolidCone()
-  : G4BREPSolid("")
-{
-}
 
 G4BREPSolidCone::G4BREPSolidCone(const G4String& name,
 				 const G4ThreeVector& origin,

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidCone.hh,v 1.7 2002-12-03 14:16:02 gcosmo Exp $
+// $Id: G4BREPSolidCone.hh,v 1.8 2002-12-03 14:24:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -99,14 +99,14 @@ class G4BREPSolidCone : public G4BREPSolid
 
  private:
 
-  G4BREPSolidCone();
   G4BREPSolidCone(const G4BREPSolidCone&);
   G4BREPSolidCone& operator=(const G4BREPSolidCone&);
     // Private copy constructor and assignment operator.
   
  private:
      
-  struct {
+  struct G4BREPConeParams
+  {
     G4ThreeVector origin;
     G4ThreeVector axis;
     G4ThreeVector direction;
