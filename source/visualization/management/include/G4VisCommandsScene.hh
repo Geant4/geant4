@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsScene.hh,v 1.6 1999-10-25 10:27:54 johna Exp $
+// $Id: G4VisCommandsScene.hh,v 1.7 1999-11-05 16:31:56 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -25,6 +25,7 @@ public:
   G4VVisCommandScene ();
   ~G4VVisCommandScene ();
 protected:
+  G4String CurrentSceneName ();
   void UpdateCandidateLists ();
   void UpdateVisManagerScene (const G4String& sceneName = "");
 };
@@ -40,6 +41,17 @@ private:
   G4String NextName ();
   G4UIcmdWithAString* fpCommand;
   G4int fId;
+};
+
+class G4VisCommandSceneEdit: public G4VVisCommandScene {
+public:
+  // Uses compiler defaults for copy constructor and assignment.
+  G4VisCommandSceneEdit ();
+  ~G4VisCommandSceneEdit ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4UIcmdWithAString* fpCommand;
 };
 
 class G4VisCommandSceneList: public G4VVisCommandScene {

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.cc,v 1.9 1999-08-27 15:50:39 johna Exp $
+// $Id: G4VisManager.cc,v 1.10 1999-11-05 16:32:00 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -947,6 +947,15 @@ G4bool G4VisManager::IsValidView () {
 	"\n  Attach a scene with /vis/sceneHandler/attach [<scene-name>]"
 	     << endl;
     }
+    return false;
+  }
+
+  const G4ViewerList& viewerList = fpSceneHandler -> GetViewerList ();
+  if (viewerList.entries () == 0) {
+    G4cout << "G4VisManager::IsValidView (): the current scene handler\n  \""
+	   << fpSceneHandler -> GetName ()
+	   << "\" has no viewers.  Do /vis/viewer/create."
+	   << endl;
     return false;
   }
 
