@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion.hh,v 1.6 2001-08-09 17:24:22 maire Exp $
+// $Id: G4GammaConversion.hh,v 1.7 2001-08-31 16:05:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//      ------------ G4GammaConversion physics process ------
+//      ------------ G4GammaConversion physics process -------------------------
 //                   by Michel Maire, 24 May 1996
 //
 // 11-06-96, Added GetRandomAtom() method and new data member
@@ -37,7 +37,7 @@
 // 13-08-98, new methods SetBining() PrintInfo()
 // 03-08-01, new methods Store/Retrieve PhysicsTable (mma)
 // 06-08-01, BuildThePhysicsTable() called from constructor (mma)  
-// ------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 // class description
 //
@@ -109,7 +109,7 @@ class G4GammaConversion : public G4VDiscreteProcess
        // It returns the MeanFreePath of the process for the current track :
        // (energy, material)
        // The previousStepSize and G4ForceCondition* are not used.
-       // This function overloads a virtual function of the base class.		      
+       // This function overloads a virtual function of the base class.	
        // It is invoked by the ProcessManager of the Particle.
        
      G4double GetCrossSectionPerAtom(const G4DynamicParticle* aDynamicGamma,
@@ -156,7 +156,7 @@ class G4GammaConversion : public G4VDiscreteProcess
      G4double HighestEnergyLimit ;     // high energy limit of the tables 
      G4int NumbBinTable ;              // number of bins in the tables
 
-     G4double MeanFreePath;            // actual Mean Free Path (current medium)
+     G4double MeanFreePath;            // actual MeanFreePath (current medium)
 };
 
 #include "G4GammaConversion.icc"

@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion.icc,v 1.5 2001-08-09 17:24:22 maire Exp $
+// $Id: G4GammaConversion.icc,v 1.6 2001-08-31 16:05:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-//      ------------ G4GammaConversion physics process ---------
+//      ------------ G4GammaConversion physics process -------------------------
 //                   by Michel Maire, 24 May 1996
 // 
 // 11-06-96, in GetMeanFreePath() the partial sum is stored, by M.Maire
@@ -35,16 +35,17 @@
 //           PartialSumSigma removed, by M.Maire
 // 14-01-97, new physics scheme for geant4alpha, M.Maire
 // 28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation 
-// ---------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4bool G4GammaConversion::IsApplicable(const G4ParticleDefinition& particle)
+inline G4bool G4GammaConversion::IsApplicable(
+                                        const G4ParticleDefinition& particle)
 {
    return ( &particle == G4Gamma::Gamma() ); 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4GammaConversion::GetCrossSectionPerAtom(
                                    const G4DynamicParticle* aDynamicGamma,
@@ -60,7 +61,7 @@ inline G4double G4GammaConversion::GetCrossSectionPerAtom(
    if (GammaEnergy <  LowestEnergyLimit)
      crossSection = 0. ;
    else {
-     if (GammaEnergy > HighestEnergyLimit) GammaEnergy = 0.99*HighestEnergyLimit ;
+     if (GammaEnergy > HighestEnergyLimit) GammaEnergy=0.99*HighestEnergyLimit;
      crossSection = (*theCrossSectionTable)(anElement->GetIndex())->
                     GetValue( GammaEnergy, isOutRange );
    }
@@ -68,7 +69,7 @@ inline G4double G4GammaConversion::GetCrossSectionPerAtom(
    return crossSection; 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 inline G4double G4GammaConversion::GetMeanFreePath(const G4Track& aTrack,
                                                      G4double,
@@ -82,12 +83,12 @@ inline G4double G4GammaConversion::GetMeanFreePath(const G4Track& aTrack,
    G4double GammaEnergy = aDynamicGamma->GetKineticEnergy();
    G4Material* aMaterial = aTrack.GetMaterial();
 
-   G4bool isOutRange ;
+   G4bool isOutRange;
 
    if (GammaEnergy <  LowestEnergyLimit)
      MeanFreePath = DBL_MAX;
    else {
-     if (GammaEnergy > HighestEnergyLimit) GammaEnergy = 0.99*HighestEnergyLimit ;
+     if (GammaEnergy > HighestEnergyLimit) GammaEnergy=0.99*HighestEnergyLimit;
      MeanFreePath = (*theMeanFreePathTable)(aMaterial->GetIndex())->
                     GetValue( GammaEnergy, isOutRange );
    }
@@ -95,7 +96,7 @@ inline G4double G4GammaConversion::GetMeanFreePath(const G4Track& aTrack,
    return MeanFreePath; 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4GammaConversion::ComputeMeanFreePath(G4double GammaEnergy,
                                                        G4Material* aMaterial)
@@ -103,14 +104,14 @@ inline G4double G4GammaConversion::ComputeMeanFreePath(G4double GammaEnergy,
 // computes and returns the photon mean free path in GEANT4 internal units
 
 {
-  const G4ElementVector* theElementVector = aMaterial->GetElementVector() ;
-  const G4double* theAtomNumDensityVector = aMaterial->GetAtomicNumDensityVector();   
+  const G4ElementVector* theElementVector = aMaterial->GetElementVector();
+  const G4double* NbOfAtomsPerVolume = aMaterial->GetVecNbOfAtomsPerVolume();   
 
   G4double SIGMA = 0 ;
 
   for ( size_t i=0 ; i < aMaterial->GetNumberOfElements() ; i++ )
       {             
-            SIGMA += theAtomNumDensityVector[i] * 
+            SIGMA += NbOfAtomsPerVolume[i] * 
                      ComputeCrossSectionPerAtom(GammaEnergy,
                                                (*theElementVector)(i)->GetZ());
       }       
@@ -118,7 +119,7 @@ inline G4double G4GammaConversion::ComputeMeanFreePath(G4double GammaEnergy,
   return SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4GammaConversion::ScreenFunction1(G4double ScreenVariable)
 
@@ -130,12 +131,12 @@ inline G4double G4GammaConversion::ScreenFunction1(G4double ScreenVariable)
    if (ScreenVariable > 1.)
      screenVal = 42.24 - 8.368*log(ScreenVariable+0.952);
    else
-     screenVal = 42.392 - ScreenVariable* (7.796 - 1.961*ScreenVariable);
+     screenVal = 42.392 - ScreenVariable*(7.796 - 1.961*ScreenVariable);
 
    return screenVal;
 } 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4GammaConversion::ScreenFunction2(G4double ScreenVariable)
 
@@ -147,9 +148,9 @@ inline G4double G4GammaConversion::ScreenFunction2(G4double ScreenVariable)
    if (ScreenVariable > 1.)
      screenVal = 42.24 - 8.368*log(ScreenVariable+0.952);
    else
-     screenVal = 41.405 - ScreenVariable* (5.828 - 0.8945*ScreenVariable);
+     screenVal = 41.405 - ScreenVariable*(5.828 - 0.8945*ScreenVariable);
 
    return screenVal;
 } 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
