@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryManager.cc,v 1.13 2003-06-16 16:52:04 gunter Exp $
+// $Id: G4GeometryManager.cc,v 1.14 2003-10-24 10:47:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GeometryManager
@@ -153,8 +153,9 @@ void G4GeometryManager::BuildOptimisations(G4bool allOpts, G4bool verbose)
        }
        else
        {
-         G4cout << "ERROR - VoxelHeader new failed." << G4endl;
-         G4Exception("ERROR - G4GeometryManager::BuildOptimisations");
+         G4cerr << "ERROR - Allocation of new VoxelHeader failed." << G4endl;
+         G4Exception("G4GeometryManager::BuildOptimisations()", "FatalError",
+	             FatalException, "VoxelHeader allocation error.");
        }
        if (verbose)
        {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserRegionInformation.hh,v 1.1 2003-10-21 20:22:06 asaim Exp $
+// $Id: G4VUserRegionInformation.hh,v 1.2 2003-10-24 10:47:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -31,14 +31,12 @@
 //
 // Class Description:
 //
-//  Abstract class which the user can derive his/her own concrete
-// class for toring user's information associating with a G4Region
-// class object.
+// Abstract class, the user can subclass for storing information
+// associated with a G4Region class object.
 //
-//  It is user's responsibility to construct a concrete class object 
+// It is user's responsibility to construct a concrete class object 
 // and set the pointer to proper G4Region object.
-//
-//  The concrete class object is deleted by Geant4 kernel when
+// The concrete class object is deleted by Geant4 kernel when
 // associated G4Region object is deleted.
 
 
@@ -48,10 +46,10 @@
 class G4VUserRegionInformation
 {
   public:
-    G4VUserRegionInformation() {;}
-    virtual ~G4VUserRegionInformation() {;}
+  
+    G4VUserRegionInformation() {}
+    virtual ~G4VUserRegionInformation() {}
 
-  public:
     virtual void Print() const = 0;
 };
 

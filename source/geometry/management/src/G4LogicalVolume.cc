@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.cc,v 1.16 2003-05-22 00:50:13 asaim Exp $
+// $Id: G4LogicalVolume.cc,v 1.17 2003-10-24 10:47:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -126,32 +126,23 @@ G4LogicalVolume::ClearEnvelopeForFastSimulation( G4LogicalVolume* motherLogVol )
     {
       motherLogVol = this->FindMotherLogicalVolumeForEnvelope();
     }
-    else
-    {
-      // Check that "motherLogVol" is this mother.
-      // If not, raise exception and set it to 0.
-      //
-      if ( false )
-      {
-        G4cerr << "ERROR - Wrong mother LogicalVolume !" << G4endl;
-        G4Exception("ERROR - G4LogicalVolume::ClearEnvelopeForFastSimulation");
-        motherLogVol = 0;
-      }
-    }
+
     // Reset its ParameterisedSimulation values and those of all daughters
     // (after ensuring the mother was given correctly or was found)
     //
     if( motherLogVol != 0 )
     {
       NewFastSimulationVal = motherLogVol->GetFastSimulationManager();
-      this->SetFastSimulationManager(NewFastSimulationVal, false);
+      SetFastSimulationManager(NewFastSimulationVal, false);
     }
   }
   else
   {
-    G4cerr << "ERROR - Called ClearEnvelope() for non-envelope Logical Volume !"
+    G4cerr << "ERROR - Called ClearEnvelope() for non-envelope logical volume!"
            << G4endl;
-    G4Exception("ERROR - G4LogicalVolume::ClearEnvelope");
+    G4Exception("G4LogicalVolume::ClearEnvelopeForFastSimulation()",
+                "NotApplicable", FatalException,
+		"Cannot be called for non-envelope logical volumes.");
   }
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.22 2003-10-01 15:05:15 gcosmo Exp $
+// $Id: G4SmartVoxelHeader.cc,v 1.23 2003-10-24 10:47:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -346,8 +346,11 @@ void G4SmartVoxelHeader::BuildReplicaVoxels(G4LogicalVolume* pVolume)
           fmaxExtent = offset+width*nReplicas;
           break;
         default:
-          G4cout << "ERROR - Illegal axis !" << G4endl;
-          G4Exception("ERROR - G4SmartVoxelHeader::BuildReplicaVoxels");
+          G4cerr << "ERROR - G4SmartVoxelHeader::BuildReplicaVoxels()"
+                 << G4endl
+                 << "        Illegal axis !" << G4endl;
+          G4Exception("G4SmartVoxelHeader::BuildReplicaVoxels()", "FatalError",
+                      FatalException, "Illegal axis.");
           break;
       }  
       faxis = axis;   // Set axis
@@ -363,17 +366,23 @@ void G4SmartVoxelHeader::BuildReplicaVoxels(G4LogicalVolume* pVolume)
         if ( (fabs((min-fminExtent)/fminExtent) +
               fabs((max-fmaxExtent)/fmaxExtent)) > 0.05)
         {
-          G4cout << "ERROR - Replicated geometry, logical volume: "
+          G4cerr << "ERROR - G4SmartVoxelHeader::BuildReplicaVoxels()"
+                 << G4endl
+                 << "        Replicated geometry, logical volume: "
                  << pVolume->GetName() << G4endl;
-          G4Exception("ERROR - G4SmartVoxelHeader::BuildReplicaVoxels");
+          G4Exception("G4SmartVoxelHeader::BuildReplicaVoxels", "FatalError",
+                      FatalException, "Sanity check: wrong solid extent.");
         }
       }
     }
   }
   else
   {
-    G4cout << "ERROR - There must be a single replicated volume !" << G4endl;
-    G4Exception("ERROR - G4SmartVoxelHeader::BuildReplicaVoxels");
+    G4cerr << "ERROR - G4SmartVoxelHeader::BuildReplicaVoxels()"
+           << G4endl
+           << "        There must be a single replicated volume !" << G4endl;
+    G4Exception("G4SmartVoxelHeader::BuildReplicaVoxels", "InvalidSetup",
+                FatalException, "Only one replicated daughter is allowed !");
   }
 }
 
@@ -399,8 +408,10 @@ void G4SmartVoxelHeader::BuildConsumedNodes(G4int nReplicas)
     pNode=new G4SmartVoxelNode(nNode);
     if (!pNode)
     {
-      G4cout << "ERROR - Node allocation failed." << G4endl;
-      G4Exception("ERROR - G4SmartVoxelHeader::BuildConsumedNodes");
+      G4cerr << "ERROR - G4SmartVoxelHeader::BuildConsumedNodes()" << G4endl
+             << "        Node allocation failed." << G4endl;
+      G4Exception("G4SmartVoxelHeader::BuildConsumedNodes()", "FatalError",
+                  FatalException, "Node allocation error.");
     }
     nodeList.push_back(pNode);
   }
@@ -417,8 +428,10 @@ void G4SmartVoxelHeader::BuildConsumedNodes(G4int nReplicas)
     pProxyNode = new G4SmartVoxelProxy(nodeList[nNode]);
     if (!pProxyNode)
     {
-      G4cout << "ERROR - Proxy Node allocation failed." << G4endl;
-      G4Exception("ERROR - G4SmartVoxelHeader::BuildConsumedNodes");
+      G4cerr << "ERROR - G4SmartVoxelHeader::BuildConsumedNodes()" << G4endl
+             << "        Proxy node allocation failed." << G4endl;
+      G4Exception("G4SmartVoxelHeader::BuildConsumedNodes()", "FatalError",
+                  FatalException, "Proxy node allocation error.");
     }
     fslices.push_back(pProxyNode);
   }
@@ -508,8 +521,12 @@ G4SmartVoxelHeader::BuildVoxelsWithinLimits(G4LogicalVolume* pVolume,
   //
   if (!pGoodSlices)
   {
-    G4cout << "ERROR - Illegal limits: already 3 dimensions of limits !" << G4endl;
-    G4Exception("ERROR - G4SmartVoxelHeader::BuildVoxelsWithinLimits");
+    G4cerr << "ERROR - G4SmartVoxelHeader::BuildVoxelsWithinLimits()"
+           << G4endl
+           << "        Illegal limits: only 3 dimensions allowed." << G4endl;
+    G4Exception("G4SmartVoxelHeader::BuildVoxelsWithinLimits()",
+                "InvalidSetup", FatalException,
+                "Cannot select more than 3 axis for optimisation.");
   }
 
   // 
@@ -778,9 +795,11 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
     pParam = pDaughter->GetParameterisation();
     if (!pParam)
     {
-      G4cout << "PANIC! Replicated volume with no parameterisation object !"
+      G4cerr << "PANIC! - G4SmartVoxelHeader::BuildNodes()" << G4endl
+             << "         Replicated volume with no parameterisation object !"
              << G4endl;
-      G4Exception("ERROR - G4SmartVoxelHeader::BuildNodes");
+      G4Exception("G4SmartVoxelHeader::BuildNodes()", "InvalidSetup",
+                  FatalException, "Missing parameterisation.");
     }
 
     // Setup daughter's transformations
@@ -843,11 +862,13 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
     if ( (!pLimits.IsLimited()) && ((targetMaxExtent<=motherMinExtent)
                                   ||(targetMinExtent>=motherMaxExtent)) )
     {
-      G4cout << "PANIC! Daughter physical volume "
+      G4cerr << "PANIC! - G4SmartVoxelHeader::BuildNodes()" << G4endl
+             << "         Daughter physical volume "
              << pDaughter->GetName() << G4endl
-	     << "is entirely outside mother logical volume "
+	     << "         is entirely outside mother logical volume "
 	     << pVolume->GetName() << " !!" << G4endl;
-      G4Exception("ERROR - G4SmartVoxelHeader::BuildNodes");
+      G4Exception("G4SmartVoxelHeader::BuildNodes()", "InvalidSetup",
+                  FatalException, "Overlapping daughter with mother volume.");
     }
 
 #ifdef G4GEOMETRY_VOXELDEBUG
@@ -931,8 +952,10 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
   nodeList->reserve(noNodes);
   if (!nodeList)
   {
-    G4cout << "ERROR - NodeList allocation failed." << G4endl;
-    G4Exception("ERROR - G4SmartVoxelHeader::BuildNodes");
+    G4cerr << "ERROR - G4SmartVoxelHeader::BuildNodes()" << G4endl
+           << "        NodeList allocation failed." << G4endl;
+    G4Exception("G4SmartVoxelHeader::BuildNodes()", "FatalError",
+                FatalException, "NodeList allocation error.");
   }
   for (nNode=0; nNode<noNodes; nNode++)
   {
@@ -940,8 +963,10 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
     pNode = new G4SmartVoxelNode(nNode);
     if (!pNode)
     {
-      G4cout << "ERROR - Node allocation failed." << G4endl;
-      G4Exception("ERROR - G4SmartVoxelHeader::BuildNodes");
+      G4cerr << "ERROR - G4SmartVoxelHeader::BuildNodes()" << G4endl
+             << "        Node allocation failed." << G4endl;
+      G4Exception("G4SmartVoxelHeader::BuildNodes()", "FatalError",
+                  FatalException, "Node allocation error.");
     }
     nodeList->push_back(pNode);
   }
@@ -990,8 +1015,10 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
   proxyList->reserve(noNodes);
   if (!proxyList)
   {
-    G4cout << "ERROR - Proxy List allocation failed." << G4endl;
-    G4Exception("ERROR - G4SmartVoxelHeader::BuildNodes");
+    G4cerr << "ERROR - G4SmartVoxelHeader::BuildNodes()" << G4endl
+           << "        Proxy list allocation failed." << G4endl;
+    G4Exception("G4SmartVoxelHeader::BuildNodes()", "FatalError",
+                FatalException, "Proxy list allocation error.");
   }
   //
   // Fill proxy List
@@ -1001,8 +1028,10 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
     G4SmartVoxelProxy* pProxyNode = new G4SmartVoxelProxy((*nodeList)[nNode]);
     if (!pProxyNode)
     {
-      G4cout << "ERROR - Proxy Node allocation failed." << G4endl;
-      G4Exception("ERROR - G4SmartVoxelHeader::BuildNodes");
+      G4cerr << "ERROR - G4SmartVoxelHeader::BuildNodes()" << G4endl
+             << "        Proxy node allocation failed." << G4endl;
+      G4Exception("G4SmartVoxelHeader::BuildNodes()", "FatalError",
+                  FatalException, "Proxy node allocation failed.");
     }
     proxyList->push_back(pProxyNode);
   }
@@ -1055,8 +1084,10 @@ G4double G4SmartVoxelHeader::CalculateQuality(G4ProxyVector *pSlice)
     }
     else
     {
-      G4cout << "ERROR - Not defined for sliced volumes." << G4endl;
-      G4Exception("ERROR - G4SmartVoxelHeader::CalculateQuality");
+      G4cout << "ERROR - G4SmartVoxelHeader::CalculateQuality()" << G4endl
+             << "        Not defined for sliced volumes." << G4endl;
+      G4Exception("G4SmartVoxelHeader::CalculateQuality()", "NotApplicable",
+                  FatalException, "Not applicable to replicated volumes.");
     }
   }
 
@@ -1151,8 +1182,12 @@ void G4SmartVoxelHeader::RefineNodes(G4LogicalVolume* pVolume,
         targetList->reserve(noContainedDaughters);
         if (!targetList)
         {
-          G4cout << "ERROR - Target volume no List new failed." << G4endl;
-          G4Exception("ERROR - G4SmartVoxelHeader::RefineNodes");
+          G4cerr << "ERROR - G4SmartVoxelHeader::RefineNodes()" << G4endl
+                 << "        Target volume node list allocation failed."
+                 << G4endl;
+          G4Exception("G4SmartVoxelHeader::RefineNodes()",
+                      "FatalError", FatalException,
+                      "Target volume node list allocation error.");
         }
         for (i=0; i<noContainedDaughters; i++)
         {
@@ -1190,16 +1225,20 @@ void G4SmartVoxelHeader::RefineNodes(G4LogicalVolume* pVolume,
                                                targetList,replaceNo);
         if (!replaceHeader)
         {
-          G4cout << "ERROR - Refined VoxelHeader new failed." << G4endl;
-          G4Exception("ERROR - G4SmartVoxelHeader::RefineNodes");
+          G4cerr << "ERROR - G4SmartVoxelHeader::RefineNodes()" << G4endl
+                 << "        Refined VoxelHeader allocation failed." << G4endl;
+          G4Exception("G4SmartVoxelHeader::RefineNodes()", "FatalError",
+                      FatalException, "Refined VoxelHeader allocation error.");
         }
         replaceHeader->SetMinEquivalentSliceNo(minNo);
         replaceHeader->SetMaxEquivalentSliceNo(maxNo);
         replaceHeaderProxy = new G4SmartVoxelProxy(replaceHeader);
         if (!replaceHeader)
         {
-          G4cout << "ERROR - Refined VoxelProxy new failed." << G4endl;
-          G4Exception("ERROR - G4SmartVoxelHeader::RefineNodes");
+          G4cerr << "ERROR - G4SmartVoxelHeader::RefineNodes()" << G4endl
+                 << "        Refined VoxelProxy allocation failed." << G4endl;
+          G4Exception("G4SmartVoxelHeader::RefineNodes()", "FatalError",
+                      FatalException, "Refined VoxelProxy allocation error.");
         }
         for (replaceNo=minNo; replaceNo<=maxNo; replaceNo++)
         {

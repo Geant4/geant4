@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.cc,v 1.18 2003-06-16 16:52:11 gunter Exp $
+// $Id: G4VSolid.cc,v 1.19 2003-10-24 10:47:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VSolid
@@ -85,11 +85,10 @@ void G4VSolid::ComputeDimensions(G4VPVParameterisation*,
 	                         const G4int,
                                  const G4VPhysicalVolume*)
 {
-    G4cout << "ERROR - Illegal call to G4VSolid::ComputeDimensions()" << G4endl
-           << "        Method not overloaded by derived class !" << G4endl;
     G4cerr << "ERROR - Illegal call to G4VSolid::ComputeDimensions()" << G4endl
            << "        Method not overloaded by derived class !" << G4endl;
-    G4Exception("G4VSolid::ComputeDimensions() - Illegal call");
+    G4Exception("G4VSolid::ComputeDimensions()", "NotApplicable",
+                FatalException, "Illegal call to case class.");
 }
 
 ///////////////////////////////////////////////////////////////////////////
