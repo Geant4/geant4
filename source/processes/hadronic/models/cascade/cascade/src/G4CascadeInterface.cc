@@ -22,7 +22,7 @@ typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 typedef G4std::vector<G4InuclNuclei>::iterator nucleiIterator;
 
 G4CascadeInterface::G4CascadeInterface()
-  :verboseLevel(3)  {
+  :verboseLevel(0)  {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4CascadeInterface::G4CascadeInterface" << G4endl;
