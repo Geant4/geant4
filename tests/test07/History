@@ -1,4 +1,4 @@
-$Id: History,v 1.3 1999-06-07 09:33:28 gunter Exp $
+$Id: History,v 1.4 2000-06-17 12:03:39 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 17, 2000  John Allison  (test07-V01-01-00)
+- Updated test07.out for geant4-01-01-ref-06.
+
  7 June, 1999 G.Folger
 - Modify GNUmakefile for NT.
 17 Apr., 1999 H.Kurashige 
