@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.66 2003-03-11 06:53:07 asaim Exp $
+// $Id: G4RunManager.cc,v 1.67 2003-03-17 21:32:31 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -436,6 +436,8 @@ void G4RunManager::BuildPhysicsTables()
     physicsList->BuildPhysicsTable();
     G4ProductionCutsTable::GetProductionCutsTable()->PhysicsTableUpdated();
   }
+
+  physicsList->DumpCutValuesTableIfRequested();
 }
 
 void G4RunManager::UpdateRegion()

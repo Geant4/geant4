@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.37 2003-03-16 03:57:12 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.38 2003-03-17 21:32:31 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -471,7 +471,7 @@ void G4VUserPhysicsList::DumpCutValuesTableIfRequested()
 {
   if(fDisplayThreshold==0) return;
   G4ProductionCutsTable::GetProductionCutsTable()->DumpCouples();
-  
+  fDisplayThreshold = 0;
 }
 
 
