@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.22 2000-12-08 09:41:27 gcosmo Exp $
+# $Id: common.gmk,v 1.23 2000-12-12 16:32:53 gunter Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -154,7 +154,9 @@ $(G4TMPDIR)/%.d: src/%.cc
 	@echo Making dependency for file $< ...
 	@($(ECHO) $(G4TMPDIR)/\\c ; \
 	g++ $(GPPFLAGS) $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/$*.o!& $@!' >$@
+ ifneq ($(dependencies),)
 -include $(dependencies)
+ endif
 endif
 
 # .PHONY targets are executed regardless of time-stamp of any file of
@@ -184,8 +186,12 @@ installed_includes:=$(foreach file,$(wildcard include/*),$(shell test -f $(file)
 
 installed_includes:=$(patsubst include/%,$(G4INCLUDE)/%,$(installed_includes))
 
+#  note the double colon rule allowing to add other rules for the same target
+#   as in global/STLInterface
 includes::	$(installed_includes)
-	
+
+# Static Pattern rules, see GNU make manual for details.
+#  target(s)            target-pattern  dep-pattern	
 $(installed_includes): $(G4INCLUDE)/% : include/%
 	@cp -p $< $@
 	
