@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.34 2003-11-06 15:09:47 johna Exp $
+// $Id: G4VisCommandsScene.cc,v 1.35 2003-11-06 16:30:38 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -235,11 +235,21 @@ void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand*,
     return;
   }
 
+  G4VSceneHandler* pSceneHandler = fpVisManager->GetCurrentSceneHandler();
+  if (!pSceneHandler) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<	"ERROR: No current sceneHandler.  Please create one." << G4endl;
+    }
+    return;
+  }
+
   if (action == "accumulate") {
     pScene->SetRefreshAtEndOfEvent(false);
+    pSceneHandler->SetMarkForClearingTransientStore(false);
   }
   else if (action == "refresh") {
     pScene->SetRefreshAtEndOfEvent(true);
+    pSceneHandler->SetMarkForClearingTransientStore(true);
   }
   else {
     if (verbosity >= G4VisManager::errors) {
