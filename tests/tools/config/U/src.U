@@ -1,0 +1,117 @@
+?RCS: $Id: src.U,v 1.1 2001-07-03 13:16:59 sadilov Exp $
+?RCS:
+?RCS: Copyright (c) 1996, Cygnus Support
+?RCS: Copyright (c) 1991-1993, Raphael Manfredi
+?RCS: 
+?RCS: You may redistribute only under the terms of the Artistic Licence,
+?RCS: as specified in the README file that comes with the distribution.
+?RCS: You may reuse parts of this distribution only within the terms of
+?RCS: that same Artistic Licence; a copy of which may be found at the root
+?RCS: of the source tree for dist 3.0.
+?RCS:
+?RCS: Original Author: Tom Tromey <tromey@cygnus.com>
+?RCS:
+?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 3.0.1.1  1997/02/28  16:23:54  ram
+?RCS: patch61: created
+?RCS:
+?MAKE:src +rsrc: Options Myread package contains
+?MAKE:	-pick add $@ %<
+?Y:TOP
+?S:src (srcdir):
+?S:	This variable holds the path to the package source. It is up to
+?S:	the Makefile to use this variable and set VPATH accordingly to
+?S:	find the sources remotely.
+?S:.
+?S:rsrc (relsrcdir):
+?S:	This variable holds the relative path to the package source.
+?S:	The contents are correct for the configuration environment,
+?S:	i.e. there is an extra .. either appended or prepended.
+?S:	Configure units should use this, not the src variable.
+?S:.
+?LINT:change package
+: Find the path to the source tree
+case "$src" in
+'') src=`echo $0 | sed -e 's%/[^/][^/]*$%%'`
+echo "src=$src"
+;;
+esac
+case "$src" in
+'')
+	src=.
+	rsrc=..
+	;;
+/*) rsrc="$src/.."
+echo "rsrc=$rsrc"
+;;
+./*) 	cur_dir=`pwd`
+	cd ../$src
+	src=`pwd`
+	cd $cur_dir
+	rsrc="$src/.."
+rsrc="$src/.."
+echo "src=$src"
+echo "rsrc=$rsrc"
+;;
+*) rsrc="../$src"
+echo "rsrc=$rsrc"
+;;
+esac
+?X:
+?X: Now check whether we have found the right source tree (i.e. the one for the
+?X: package we're abount to configure). The original unit from Tom Tromey forced
+?X: the user to pick a unique file from his distribution, and we were merely
+?X: checking the existence of that file. I prefer to rely on Configure (which
+?X: we know *is* present since this unit is part of it!) and look for the
+?X: definition of the package variable, making sure it's the same as ours.
+?X: If it matches, we know we found the right source tree. -- RAM, 15/03/96
+?X:
+cur_dir=`pwd`
+echo "cur_dir=$cur_dir"
+if test -f $src/Configure && \
+	$contains "^package=$package" $src/Configure >/dev/null 2>&1
+then
+   : found it, so we are ok.
+	echo "FOUND"
+else
+?X: Otherwise try "." and up to 4 parent directories...
+?X: Note that we prepend a ".." to get out of the configuration environment.
+	rsrc=''
+	for src in . .. ../.. ../../.. ../../../..; do
+		if test -f ../$src/Configure && \
+			$contains "^package=$package" ../$src/Configure >/dev/null 2>&1
+		then
+			rsrc=../$src
+			break
+		fi
+	done
+fi
+case "$rsrc" in
+'')
+?X: It's too early to use Getfile.U (would stack too much units before this)
+	echo " "
+#	dflt=
+#	rp="Directory where sources for $package are located?"
+#	. ./myread
+#	src="$ans"
+	rsrc="$src"
+echo "src=$src"
+echo "rsrc=$rsrc"
+	if test -f $rsrc/Configure && \
+		$contains "^package=$package" $rsrc/Configure >/dev/null 2>&1
+	then
+		echo "Ok, I've found them under $src"
+	else
+		echo "Sorry, I can't seem to be able to locate $package sources." >&4
+		exit 1
+	fi
+	;;
+?X: Don't echo anything if the sources are in . -- they should know already ;-)
+?X: In that case, rsrc is ../. since we lookup from within UU
+../.) ;;
+*)
+	echo " "
+	echo "Sources for $package found in $src" >&4
+	;;
+esac
+
