@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnitsTable.cc,v 1.8 2000-01-18 17:42:43 maire Exp $
+// $Id: G4UnitsTable.cc,v 1.9 2000-01-19 11:17:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -346,7 +346,7 @@ G4BestUnit::G4BestUnit(G4double value,G4String category)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
        
-G4BestUnit::G4BestUnit(G4ThreeVector value,G4String category)
+G4BestUnit::G4BestUnit(const G4ThreeVector& value,G4String category)
 {
  // find the category
     G4UnitsTable& theUnitsTable = G4UnitDefinition::GetUnitsTable();
@@ -355,9 +355,9 @@ G4BestUnit::G4BestUnit(G4ThreeVector value,G4String category)
     while
      ((i<nbCat)&&(theUnitsTable[i]->GetName()!=category)) i++;
     if (i == nbCat) 
-       { G4cout << " G4BestUnit: the category " << category 
-              << " does not exist; --> G4Exception" << G4endl;
-         G4Exception(" ");
+       { G4cerr << " G4BestUnit: the category " << category 
+                << " does not exist." << G4endl;
+         G4Exception("Unit category not existing !");
        }  
   //
     IndexOfCategory = i;
@@ -385,7 +385,8 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4BestUnit a)
   G4double rsup(DBL_MAX), rinf(0.);
 
   //for a ThreeVector, choose the best unit for the biggest value 
-  G4double value =max(max(fabs(a.Value[0]),fabs(a.Value[1])),fabs(a.Value[2]));
+  G4double value = G4std::max(G4std::max(fabs(a.Value[0]),fabs(a.Value[1])),
+                              fabs(a.Value[2]));
 
   for (G4int k=0; k<List.entries(); k++)
      {
