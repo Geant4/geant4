@@ -104,8 +104,10 @@ g4message=`cat << EOM
 
   G4UI_NONE
 
-If set, no UI sessions nor any UI libraries are built. This can be useful
-when running a pure batch job or in a user framework having its own UI system.
+If this variable is set, no UI sessions nor any UI libraries are built. 
+This can be useful when running a pure batch job or in a user framework 
+having its own UI system.
+Do you want to set this variable ?
 
 EOM`
 
