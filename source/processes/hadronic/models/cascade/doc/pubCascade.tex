@@ -1,90 +1,53 @@
-% ::: Settings
-\documentstyle[palatino, epsf,twoside,fleqn,epsfig,graphics,html,url, makeidx]{article} 
-%\def \SYSTEM {/home/miheikki/public/html/system/}
-\def \SYSTEM {/afs/cern.ch/user/m/miheikki/public/html/system/}
-%\input{\SYSTEM definitions} 
-%\def \PIC {/afs/cern.ch/user/m/miheikki/public/html/inucl/doc/}
-%\def \PIC {/home/miheikki/public/html/inucl/doc/}
-%\def \PIC {/home/miheikki/public/html/geant4/geant4/source/processes/hadronic/models/cascade/doc/pictures}
+ % ::: Settings
+\documentstyle[palatino, epsf, twoside, fleqn, epsfig, graphics, html, url, makeidx]{article} 
+
 \def \PIC {pictures}
+
+
+
 % ::: Frontpage
 \begin{document}
+\vspace{5.5truecm}
 
-% ::: Title
-\vspace{-1.5truecm}
 \begin{center}
-\Large
-{\bf {\sc Geant4} homepage}
-\large
+  \Large {\bf Bertini Intranuclear Cascade Models in {\sc Geant4} } \normalsize 
 
-Aatos Heikkinen \sf{(aatos.heikkinen@cern.ch)}, \normalsize
-Helsinki Institute of Physics
+\vspace{1.5truecm}
+Aatos Heikkinen, Hans-Peter Wellisch
 \end{center}
-
-%\end{titlepage}
-
 \thispagestyle{empty}
+\newpage
 
-% ::: Start with web page 
-\input{manHTML}
-
-\begin{latexonly}
-% ::: General intro
+% ::: Contents
 \tableofcontents
 \newpage
-\end{latexonly}
+
+% ::: Body
+\input{pubAbstract} 
+\input{pubIntro}
+\input{pubModels} 
+%\input{pubImplementation}
+\input{pubResults} 
+\input{pubConclusion}
+\input{pubAcknowledgements}
 
 
-\input{manStatus}
-\begin{latexonly}
-\newpage
-\end{latexonly}
-
-
-% ::: Results
-\input{manResults}
-
-\input{manAbstract}
-\input{manIntro} 
-\input{manG4Intro}
-
-% ::: Models
-\input{manHetc}
-\input{manInucl}
-
-% ::: Conclusion (current performance, project status, plans)
-\input{manConclusion}
-
-% ::: Thanks
-\input{manAcknowledgements}
 
 % ::: References
 \bibliographystyle{unsrt}  % Options plain, unsrt, alpha, abbrv
 \bibstyle{plain}
-%\begin{thebibliography}{99}
-\bibliography{\SYSTEM /references/references.bib} 
-%\end{thebibliography}
 
-% ::: Indexing
-\input{manTables}
+\bibliography{references.bib} 
 
 
-\begin{appendix} % ::: appendix starts
 
-% ::: Report
-\input{manReport}
+% ::: References
+%\bibliographystyle{unsrt}  % Options plain, unsrt, alpha, abbrv
+%\bibstyle{plain}
+%\bibliography{references}
 
-% ::: Manual
-\input{manManual}
-
-% ::: Data for validation and comparison
-\input{manExperiment} 
-
-% ::: practical guidance
-\input{manGuide}
-
-% ::: Notes
-\input{manNotes} 
-
-\end{appendix} % ::: appendix ends
+% ::: Appendix
+\begin{appendix} 
+%\input{pubAppendix}
+\end{appendix} 
 \end{document}
