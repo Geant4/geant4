@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsCompound.cc,v 1.7 2001-01-16 18:32:18 johna Exp $
+// $Id: G4VisCommandsCompound.cc,v 1.8 2001-02-04 20:27:16 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Compound /vis/ commands - John Allison  15th May 2000
@@ -15,6 +15,90 @@
 #include "G4VisManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIcmdWithAString.hh"
+
+////////////// /vis/drawView ///////////////////////////////////////
+
+G4VisCommandDrawView::G4VisCommandDrawView() {
+  G4bool omitable;
+  fpCommand = new G4UIcommand("/vis/drawView", this);
+  fpCommand->SetGuidance
+    ("/vis/drawView [<theta-deg>] [<phi-deg>] [<pan-right>] [<pan-up>]"
+     " [<pan-unit>] [<zoom-factor>] [<dolly>] [<dolly-unit>]");
+  fpCommand->SetGuidance("Default: 0 0 0 0 cm 1 0 cm");
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter("theta-deg", 'd', omitable = true);
+  parameter -> SetDefaultValue(0.);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter("phi-deg", 'd', omitable = true);
+  parameter -> SetDefaultValue(0.);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter("pan-right", 'd', omitable = true);
+  parameter -> SetDefaultValue(0.);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter("pan-up", 'd', omitable = true);
+  parameter -> SetDefaultValue(0.);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter("pan-unit", 's', omitable = true);
+  parameter -> SetDefaultValue("cm");
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter("zoom-factor", 'd', omitable = true);
+  parameter -> SetDefaultValue(1.);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter("dolly", 'd', omitable = true);
+  parameter -> SetDefaultValue(0.);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter("dolly-unit", 's', omitable = true);
+  parameter -> SetDefaultValue("cm");
+  fpCommand -> SetParameter (parameter);
+}
+
+G4VisCommandDrawView::~G4VisCommandDrawView() {
+  delete fpCommand;
+}
+
+void G4VisCommandDrawView::SetNewValue
+(G4UIcommand* command, G4String newValue) {
+
+  G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
+  if (!currentViewer) {
+    G4cout << "G4VisCommandsDrawView::SetNewValue: no current viewer."
+           << G4endl;
+    return;
+  }
+
+  G4String thetaDeg;
+  G4String phiDeg;
+  G4String panRight;
+  G4String panUp;
+  G4String panUnit;
+  G4String zoomFactor;
+  G4String dolly;
+  G4String dollyUnit;
+  const char* t = newValue;
+  G4std::istrstream is((char*)t);
+  is >> thetaDeg >> phiDeg >> panRight >> panUp >> panUnit
+     >> zoomFactor >> dolly >> dollyUnit;
+  
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  G4int keepVerbose = UImanager->GetVerboseLevel();
+  UImanager->SetVerboseLevel(2);
+  G4ViewParameters vp = currentViewer->GetViewParameters();
+  G4bool keepAutoRefresh = vp.IsAutoRefresh();
+  vp.SetAutoRefresh(false);
+  currentViewer->SetViewParameters(vp);
+  UImanager->ApplyCommand
+    ("/vis/viewer/viewpointThetaPhi " + thetaDeg + " " + phiDeg + " deg");
+  UImanager->ApplyCommand
+    ("/vis/viewer/panTo " + panRight + " " + panUp + " " + panUnit);
+  UImanager->ApplyCommand
+    ("/vis/viewer/zoomTo " + zoomFactor);
+  vp = currentViewer->GetViewParameters();
+  vp.SetAutoRefresh(keepAutoRefresh);
+  currentViewer->SetViewParameters(vp);
+  UImanager->ApplyCommand
+    ("/vis/viewer/dollyTo " + dolly + " " + dollyUnit);
+  UImanager->SetVerboseLevel(keepVerbose);
+}
 
 ////////////// /vis/drawVolume ///////////////////////////////////////
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.23 2001-02-04 01:37:42 johna Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.24 2001-02-04 20:27:18 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -293,6 +293,11 @@ to know the type of the parameter, so we need separate commands.)
   Copies view parameters from from-viewer to current viewer.
   Affects current viewer.
 
+/vis/viewer/set/autoRefresh [true|false]
+  default:                    false
+  View is automatically refreshed after a change of view parameters.
+  Affects current viewer.
+
 /vis/viewer/set/culling
   g[lobal]|c[overedDaughters]|i[nvisible]|d[ensity] [true|false]
   [density] [unit]
@@ -401,13 +406,17 @@ Compound Commands
 /vis/open [<graphics-system-name>]     /vis/sceneHandler/create $1
                                        /vis/viewer/create
 default:          error
-Note: this default simply triggers a list of possibilities.
 
 # /vis/draw <physical-volume-name> but this clashes with old /vis~/draw/, so...
 /vis/drawVolume [<physical-volume-name>] /vis/scene/create
 default:             world               /vis/scene/add/volume $1
                                          /vis/sceneHandler/attach
                                          /vis/viewer/refresh
+/vis/drawView [<theta-deg>] [<phi-deg>]
+              [<pan-right>] [<pan-up>] [<pan-unit>]
+              [<zoom-factor>]
+              [<dolly>] [<dolly-unit>]
+default: 0 0 0 0 cm 1 0 cm
 
 /vis/specify <logical-volume-name>  /geometry/print $1
                                     /vis/scene/create
@@ -475,8 +484,9 @@ default:             world               /vis/scene/add/volume $1
   fMessengerList.append (new G4VisCommandsViewerSet);
 
   // Compound commands...
-  fMessengerList.append (new G4VisCommandOpen);
   fMessengerList.append (new G4VisCommandDrawVolume);
+  fMessengerList.append (new G4VisCommandDrawView);
+  fMessengerList.append (new G4VisCommandOpen);
   fMessengerList.append (new G4VisCommandSpecify);
 
   // Camera - OLD STYLE!!
