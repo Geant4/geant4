@@ -27,7 +27,7 @@ $TestTop="/afs/cern.ch/sw/geant4/stt/$DevDir";
        [ qw ( test103   test104   test104.EMtest   test105   test106    )],
        [ qw ( test11    test12    test13           test14    test15     )],
        [ qw ( test16    test17    test18           test501   test502    )], 
-       [ qw ( test503   test504   test505   )] 
+       [ qw ( test503   test504   test505          test601   test602  )] 
       );
 
 opendir(TT,"$TestTop") || die "Failed to opendir TestTop  $TestTop $!";
