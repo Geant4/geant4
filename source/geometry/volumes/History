@@ -1,4 +1,4 @@
-$Id: History,v 1.79 2002-06-18 12:56:08 japost Exp $
+$Id: History,v 1.80 2002-06-18 12:58:11 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,7 @@ committal in the CVS repository !
 Jun 14th, 2002       J. Apostolakis - geomvol-V04-00-11
 - G4PropagatorInField.cc
   o Fix for messaging incorrect ChordFinder with Mass, Charge, Momentum. 
+   ( Problem seen for multiple FieldManagers - reported by Grahame Blair )
 
 Jun 13th, 2002       J. Apostolakis - geomvol-V04-00-10
 - G4Navigator.cc
