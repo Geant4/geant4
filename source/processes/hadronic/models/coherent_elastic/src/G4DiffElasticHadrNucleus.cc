@@ -12,7 +12,7 @@
   
                   if(Nucleus == 208)
                     {  //  R1 = 20.73; R2 = 15.74.
-                  R1       = 4.1408*pow(Nucleus,0.3018);
+                  R1       = 4.1408*pow(static_cast<float>(Nucleus),0.3018);
                   R2       = 3.806*pow(Nucleus-10.068,0.2685);
                   Pnucl    = 0.9;
                   Aeff     = 1.1;
@@ -56,10 +56,10 @@
                     }
                   else
                     {
-                      R1    = 4.45*pow(Nucleus-1,0.309);
+                      R1    = 4.45*pow(static_cast<float>(Nucleus-1),0.309);
                  if(Nucleus == 28)
-                      R1    = 4.25*pow(Nucleus-1,0.309);
-                      R2    = 2.3*pow(Nucleus,0.36);
+                      R1    = 4.25*pow(static_cast<float>(Nucleus-1),0.309);
+                      R2    = 2.3*pow(static_cast<float>(Nucleus),0.36);
                       Pnucl = 0.176+0.00167*Nucleus+
                                  8.69E-6*Nucleus*Nucleus;
                       Aeff  = 0.9;
