@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DataVector.cc,v 1.4 2002-04-19 07:10:32 gcosmo Exp $
+// $Id: G4DataVector.cc,v 1.5 2002-05-30 11:56:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,7 +43,7 @@ G4DataVector::G4DataVector()
 }
 
 G4DataVector::G4DataVector(size_t capacity)
-  : G4std::vector<G4double>(capacity)
+  : G4std::vector<G4double>(capacity, 0.0)
 {
 }
 
