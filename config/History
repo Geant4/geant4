@@ -1,4 +1,4 @@
-$Id: History,v 1.157 2001-08-25 00:38:56 johna Exp $
+$Id: History,v 1.158 2001-08-25 00:39:50 johna Exp $
 $Name: not supported by cvs2svn $
 
 -------------------------------------------------------------------
@@ -18,7 +18,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-24th August 2001  Joseph Perl  (config-V03-02-05))
+24th August 2001  Joseph Perl  (config-V03-02-05)
 - Introduced HepRep graphics driver
 
 11th August 2001  John Allison  (config-V03-02-04)
