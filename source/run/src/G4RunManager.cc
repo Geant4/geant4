@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.67 2003-03-17 21:32:31 asaim Exp $
+// $Id: G4RunManager.cc,v 1.68 2003-04-03 17:47:53 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -380,7 +380,7 @@ void G4RunManager::Initialize()
   if(!physicsInitialized) InitializePhysics();
   if(!cutoffInitialized) InitializeCutOff();
   stateManager->SetNewState(G4State_Idle);
-  if(!initializedAtLeastOnce) initializedAtLeastOnce = true;
+  initializedAtLeastOnce = true;
 }
 
 void G4RunManager::InitializeGeometry()
@@ -509,17 +509,18 @@ void G4RunManager::DefineWorldVolume(G4VPhysicalVolume* worldVol)
   }
 
   currentWorld = worldVol; 
+  geometryNeedsToBeClosed = true;
 
   // set the world volume to the Navigator
   G4TransportationManager::GetTransportationManager()
     ->GetNavigatorForTracking()
     ->SetWorldVolume(worldVol);
+  ResetNavigator();
 
   // Let VisManager know it
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   if(pVVisManager) pVVisManager->GeometryHasChanged();
 
-  geometryNeedsToBeClosed = true;
 }
 
 void G4RunManager::ResetNavigator() const
@@ -527,12 +528,7 @@ void G4RunManager::ResetNavigator() const
   G4StateManager*    stateManager = G4StateManager::GetStateManager();
   G4ApplicationState currentState = stateManager->GetCurrentState();
   
-  if(!initializedAtLeastOnce)
-  {
-    G4cerr << " Geant4 kernel should be initialized" << G4endl;
-    G4cerr << " Navigator is not touched..."         << G4endl;
-    return;
-  }
+  if(!initializedAtLeastOnce) return;
 
   if( currentState != G4State_Idle )
   {
