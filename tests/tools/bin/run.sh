@@ -77,6 +77,7 @@ if [ $1 = "all" ] ; then
   nice $G4INSTALL/tests/tools/bin/run.sh test102
   nice $G4INSTALL/tests/tools/bin/run.sh test103
   nice $G4INSTALL/tests/tools/bin/run.sh test104
+  nice $G4INSTALL/tests/tools/bin/run.sh test104.EMtest
   nice $G4INSTALL/tests/tools/bin/run.sh test105
   nice $G4INSTALL/tests/tools/bin/run.sh test106
   nice $G4INSTALL/tests/tools/bin/run.sh test12
@@ -101,6 +102,7 @@ else
 
     # Other tests :
     shortname=`basename $1 .hadron`
+    shortname=`basename $shortname .EMtest`
     cd $G4INSTALL/tests/$shortname
     /bin/rm -f $dir/$1.out
     /bin/rm -f $dir/$1.diff
