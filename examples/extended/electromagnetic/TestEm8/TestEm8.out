@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (28-Feb-2002)
+                                (28-Jun-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -133,7 +133,7 @@ Irregular X-ray TR model is called
 48	fGamma = 8.085e+04	sumE = 8.377
 49	fGamma = 9.283e+04	sumE = 8.504
 
-total time for build X-ray TR tables = 6.5 s
+total time for build X-ray TR tables = 6.31 s
 
 phot:  Total cross sections from Sandia parametrisation. 
 Em8PhysicsList::SetCuts:CutLength : 1 mm 
@@ -161,7 +161,7 @@ hIoni:    Knock-on electron cross sections .
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-total time(SetCuts)=5.76 s 
+total time(SetCuts)=5.71 s 
 #
 #control/saveHistory
 #
@@ -247,21 +247,21 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-       0.00         0.00         0.54            0k World
-       0.00         0.00         0.54           11k Radiator
+       0.00         0.00         0.64            0k World
+       0.00         0.00         0.64           11k Radiator
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      96.00         11k         1      305        376     42709.36    Radiator
-       4.00          0k         3        7         20     42709.36    World
+      96.00         11k         1      305        376     42709.94    Radiator
+       4.00          0k         3        7         20     42709.94    World
 Start Run processing.
 
 ---> Begin of Event: 0
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=126.19s Real=133.52s Sys=2.13s
+  User=124.71s Real=127.43s Sys=1.91s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
     mean charged track length   in absorber=155.499 +- 3.90364  mm  

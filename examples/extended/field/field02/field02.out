@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (28-Feb-2002)
+                                (28-Jun-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 G4ClassicalRK4 (default) is called
@@ -120,7 +120,7 @@ hIoni:    Knock-on electron cross sections .
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-total time(SetCuts)=15.86 s 
+total time(SetCuts)=15.91 s 
 G4ClassicalRK4 (default) is called
 The minimal step is equal to 10 mm
 ============= The cut Energy ==============================
@@ -3464,7 +3464,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.63s Real=0.97s Sys=0.33s
+  User=0.51s Real=0.98s Sys=0.46s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

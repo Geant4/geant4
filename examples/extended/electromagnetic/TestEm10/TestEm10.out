@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (28-Feb-2002)
+                                (28-Jun-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -224,7 +224,7 @@ Regular X-ray TR  radiator EM process is called
 48	fGamma = 8.085e+04	sumE = 4.344
 49	fGamma = 9.283e+04	sumE = 4.343
 
-total time for build X-ray TR energy loss tables = 74.72 s
+total time for build X-ray TR energy loss tables = 74.94 s
 
 phot:  Total cross sections from Sandia parametrisation. 
 Em10PhysicsList::SetCuts:CutLength : 1 mm 
@@ -252,7 +252,7 @@ hIoni:    Knock-on electron cross sections .
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-total time(SetCuts)=16.33 s 
+total time(SetCuts)=16.52 s 
 ============= The cut Energy ==============================
                             gamma              e-    
 Cut in range       

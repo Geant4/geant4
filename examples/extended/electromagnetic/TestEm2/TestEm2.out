@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (28-Feb-2002)
+                                (28-Jun-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -171,7 +171,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=23.26s Real=43.58s Sys=2.91s
+  User=28s Real=32.45s Sys=2.65s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 
