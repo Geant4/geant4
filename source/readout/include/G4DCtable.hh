@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DCtable.hh,v 1.1 1999-01-07 16:14:12 gunter Exp $
+// $Id: G4DCtable.hh,v 1.2 1999-11-01 03:20:35 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -14,6 +14,18 @@
 
 #include "globals.hh"
 #include <rw/tvordvec.h>
+
+// class description:
+//
+//  This class is used by G4DigiManager for book keeping the
+// digitizer modules and digits collections. The order of
+// digi collections stored in G4DCofThisEvent is same as the
+// order of DClist. 
+//  The order may vary from run to run, if the user adds/changes
+// some of his/her digitizer modules.
+//  In case user wants to make G4Run object persistent, this
+// G4DCtable class object should be copied and stored with
+// G4Run object.
 
 class G4DCtable
 {
