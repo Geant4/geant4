@@ -25,7 +25,7 @@ class Tst34Hit : public G4VHit
       inline void operator delete(void *aHit);
       void *operator new(size_t,void*p){return p;}
 #ifndef G4NOT_ISO_DELETES
-      void operator delete(void *aHit,void*){}
+      void operator delete(void *,void*){}
 #endif
 
       void Draw();
