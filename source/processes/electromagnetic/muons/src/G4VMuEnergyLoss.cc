@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VMuEnergyLoss.cc,v 1.6 2000-08-15 09:40:41 urban Exp $
+// $Id: G4VMuEnergyLoss.cc,v 1.7 2000-10-30 07:17:30 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -24,6 +24,7 @@
 // corrections by L.Urban on 27/05/98 (other corrs come soon!)
 // cleanup  L.Urban on 23/10/98
 // corrections due to new e.m. structure L.Urban 10/02/00
+// signature in GetLossWithFluct changed L.Urban 30/10/00
 // --------------------------------------------------------------
  
 
