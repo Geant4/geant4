@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalVolumeModel.cc,v 1.2 1999-12-15 14:54:31 gunter Exp $
+// $Id: G4LogicalVolumeModel.cc,v 1.3 1999-12-16 17:20:27 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,7 +18,7 @@
 #include "G4PVPlacement.hh"
 #include "G4ModelingParameters.hh"
 #include "G4VGraphicsScene.hh"
-////////////////#include "G4DrawVoxels.hh"
+#include "G4DrawVoxels.hh"
 
 G4LogicalVolumeModel::G4LogicalVolumeModel
 (G4LogicalVolume*            pLV,
@@ -68,7 +68,6 @@ void G4LogicalVolumeModel::DescribeYourselfTo
 
   fpMP = tpMP;
 
-  /*****************************
   // Add Voxels.
   G4DrawVoxels dv;
   G4PlacedPolyhedronList* pPPL =
@@ -81,5 +80,4 @@ void G4LogicalVolumeModel::DescribeYourselfTo
     sceneHandler.EndPrimitives ();
   }
   delete pPPL;
-  *********************************/
 }
