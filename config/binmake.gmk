@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.47 2000-08-22 19:07:43 johna Exp $
+# $Id: binmake.gmk,v 1.48 2000-09-14 11:34:16 barrand Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -13,6 +13,7 @@ G4LIBDIR := $(G4LIB)/$(G4SYSTEM)
 include $(G4INSTALL)/config/G4UI_USE.gmk
 include $(G4INSTALL)/config/G4VIS_USE.gmk
 include $(G4INSTALL)/config/interactivity.gmk
+include $(G4INSTALL)/config/analysis.gmk
 
 ifndef INCFLAGS
   INCFLAGS := \
@@ -174,6 +175,7 @@ endif
 # LDLIBS3 contains the first set of low level libraries...
 #
 LDLIBS3 += $(INTYLIBS)
+LDLIBS3 += $(ANALYSISLIBS)
 
 endif # ifndef USER_DEFINED_LDLIBS
 

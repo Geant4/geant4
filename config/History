@@ -1,4 +1,4 @@
-$Id: History,v 1.110 2000-08-23 06:25:11 gcosmo Exp $
+$Id: History,v 1.111 2000-09-14 11:35:06 barrand Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14 September 2000  Guy Barrand : modifications to handle analysis directory.
+- note : things had been so that by default the analysis things 
+  are not taken into account.
+- analysis.gmk to handle analysis.
+- system/Linux-g++.gmk : add macro DLDLIBS for dynamic loading lib.
+- binmake.gmk : include the analysis.gmk file.
+- binmake.gmk : have LDLIBS3 += $(ANALYSISLIBS) after LDLIBS3 += $(INTYLIBS).
+
+- Changed -MM to -M in dependency file making in binmake.gmk and common.gmk.
 22nd August 2000  John Allison (config-V02-00-02)
 - Changed -MM to -M in dependency file making in binmake.gmk and common.gmk.
   This causes dependencies of both #include "..." and #include <...> to be
