@@ -1,0 +1,79 @@
+# $Id: G4UI_USE.gmk,v 1.1 1999-01-07 15:58:31 gunter Exp $
+# -------------------------------------------------------------
+# GNUmakefile for CPPFLAGS for interfaces USE phase.
+#   John Allison, 6th July 1998.
+
+########################### interfaces/basic #######################
+
+UILIBS :=
+
+ifndef G4UI_USE_TERMINAL
+  G4UI_USE_TERMINAL = 1
+endif
+
+ifdef G4UI_USE_TERMINAL
+  G4UI_USE = 1
+  G4UI_USE_BASIC = 1
+  CPPFLAGS += -DG4UI_USE_TERMINAL
+endif
+
+ifdef G4UI_USE_XM
+  G4UI_USE  = 1
+  G4UI_USE_BASIC = 1
+  G4INTY_USE_XT = 1
+  INC_XM    = 1
+  LOAD_XM   = 1
+  CPPFLAGS += -DG4UI_USE_XM
+endif
+
+ifdef G4UI_USE_XAW
+  G4UI_USE  = 1
+  G4UI_USE_BASIC = 1
+  G4INTY_USE_XT = 1
+  INC_XAW   = 1
+  LOAD_XAW  = 1
+  CPPFLAGS += -DG4UI_USE_XAW
+endif
+
+ifdef G4UI_USE_WIN32
+  G4UI_USE     = 1
+  G4UI_USE_BASIC = 1
+  G4INTY_USE_WIN32 = 1
+  CPPFLAGS    += -DG4UI_USE_WIN32
+endif
+
+ifdef G4UI_USE_BASIC
+  CPPFLAGS += -I$(G4BASE)/interfaces/basic/include
+  UILIBS   += -lG4UIbasic
+endif
+
+########################### interfaces/GAG #######################
+
+ifdef G4UI_USE_GAG
+  G4UI_USE = 1
+  CPPFLAGS += -DG4UI_USE_GAG
+  CPPFLAGS += -I$(G4BASE)/interfaces/GAG/include
+  UILIBS   += -lG4UIGAG
+endif
+
+########################### interfaces/OPACS #######################
+
+ifdef G4UI_USE_WO
+  G4UI_USE   = 1
+  G4INTY_USE_XT  = 1
+  CPPFLAGS  += -DG4UI_USE_WO
+  CPPFLAGS  += -I$(G4BASE)/interfaces/OPACS/include
+  UILIBS    += -lG4UIOPACS
+  INC_OPACS  = 1
+  LOAD_OPACS = 1
+endif
+
+########################### interfaces/XVT - not currently implemented #####
+
+########################### and finally... #######################
+
+ifdef G4UI_USE
+  CPPFLAGS += -DG4UI_USE
+  CPPFLAGS += -I$(G4BASE)/interfaces/common/include
+  UILIBS   += -lG4UIcommon
+endif

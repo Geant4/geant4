@@ -1,0 +1,143 @@
+# $Id: common.gmk,v 1.1 1999-01-07 15:58:32 gunter Exp $
+# ----------------------------------------------------------------
+# Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
+# ----------------------------------------------------------------
+# Libraries are created according to G4SYSTEM. G.Cosmo, 11/6/96.
+# Introduced G4LIBDIR and G4TMPDIR. G.Cosmo, 23/6/98.
+
+ifndef G4LIBDIR
+  G4LIBDIR := $(G4LIB)/$(G4SYSTEM)
+endif
+G4TMPDIR := $(G4TMP)/$(G4SYSTEM)/$(name)
+
+sources := $(wildcard src/*.cc)
+schema_ddl := $(wildcard include/*.ddl)
+schema_hh := $(patsubst include/%.ddl,$(G4TMPDIR)/%.hh,$(schema_ddl))
+objects := $(patsubst src/%.cc,$(G4TMPDIR)/%.o,$(sources))
+dependencies := $(patsubst src/%.cc,$(G4TMPDIR)/%.d,$(sources))
+
+# output of ooddlx in G4TMPDIR (.hh, _ref.hh, _ddl.cc)
+#
+temporaries := $(patsubst include/%.ddl,$(G4TMPDIR)/%.hh,$(schema_ddl))
+
+# output of ooddlx in the current directory (if the process does not finish)
+#
+temporaries2 := $(patsubst include/%.ddl,%.hh,$(schema_ddl))
+
+ifdef G4ODBMS
+  temporaries += $(patsubst include/%.ddl,$(G4TMPDIR)/%_ddl.cc,$(schema_ddl)) \
+                 $(patsubst include/%.ddl,$(G4TMPDIR)/%_ref.hh,$(schema_ddl))
+  temporaries2 += $(patsubst include/%.ddl,%_ddl.cc,$(schema_ddl)) \
+                  $(patsubst include/%.ddl,%_ref.hh,$(schema_ddl))
+  objects += $(patsubst include/%.ddl,$(G4TMPDIR)/%_ddl.o,$(schema_ddl))
+endif
+
+ifneq ($(G4MAKESHLIB),)
+# Make shared library.
+$(G4LIBDIR)/lib$(name).$(SHEXT): $(G4LIBDIR)/lib$(name).a
+	@cp $(objects) $(G4LIBDIR)/.
+	sh $(G4MAKESHLIB) $(G4LIBDIR) $(name)
+	$(RM) $(G4LIBDIR)/*.o
+endif
+
+# Make library.
+$(G4LIBDIR)/lib$(name).a: $(G4TMPDIR)/obj.last
+	@if [ ! -d $(G4LIBDIR) ] ; then mkdir $(G4LIBDIR) ;fi
+	@echo Creating/replacing object files in $(G4LIBDIR)/lib$(name).a
+	@rm -f $(G4LIBDIR)/lib$(name).a
+	@$(AR) $(OUT_LIB)$(G4LIBDIR)/lib$(name).a $(G4TMPDIR)/*.o
+	@if [ -f /usr/bin/ranlib -o -f /bin/ranlib ] ; then ranlib $(G4LIBDIR)/lib$(name).a ;fi
+
+# Touch the versioning file
+$(G4TMPDIR)/obj.last: $(objects)
+	@touch $@
+
+# Make the .o files.
+ifdef G4ODBMS
+$(G4TMPDIR)/%.o: src/%.cc $(schema_hh)
+else
+$(G4TMPDIR)/%.o: src/%.cc
+endif
+ifdef CPPVERBOSE
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $(OUT_OBJ)$(G4TMPDIR)/$(*F).o src/$*.cc
+else
+	@echo Compiling $*.cc ...
+	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $(OUT_OBJ)$(G4TMPDIR)/$(*F).o src/$*.cc
+endif
+ifdef G4ODBMS
+$(G4TMPDIR)/%.o: $(G4TMPDIR)/%.cc
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c -o $(G4TMPDIR)/$(*F).o $(G4TMPDIR)/$*.cc
+endif
+# Make the temporary files.
+.PRECIOUS: $(G4TMPDIR)/%_ddl.cc ddl/%.hh $(G4TMPDIR)/%_ref.hh
+
+ifdef G4ODBMS
+$(G4TMPDIR)/%_ddl.cc $(G4TMPDIR)/%.hh $(G4TMPDIR)/%_ref.hh: include/%.ddl
+	@if [ ! -d $(G4TMP)/$(G4SYSTEM) ] ; then mkdir $(G4TMP)/$(G4SYSTEM) ;fi
+	@if [ ! -d $(G4TMPDIR) ] ; then mkdir $(G4TMPDIR) ;fi
+	ooddlx -notitle -header_suffix .hh -ref_suffix _ref.hh -c++_suffix _ddl.cc \
+	-DRW_NO_CONST_OVERLOAD  -DRW_NO_STL -DTEMPLATEP_HIDES_FNCD \
+	$(CPPFLAGS) $< $(G4EXAMPLE_BOOT)
+	mv -f $*.hh $(G4TMPDIR)/
+	mv -f $*_ref.hh $(G4TMPDIR)/
+	mv -f $*_ddl.cc $(G4TMPDIR)/
+else
+$(G4TMPDIR)/%.hh: include/%.ddl
+	@if [ ! -d $(G4TMP)/$(G4SYSTEM) ] ; then mkdir $(G4TMP)/$(G4SYSTEM) ;fi
+	@if [ ! -d $(G4TMPDIR) ] ; then mkdir $(G4TMPDIR) ;fi
+	ln -s -f ../$< $(G4TMPDIR)/$*.hh
+endif
+
+# Make the .d file(s) and include it(them).
+# g++ -MM is good at this, except it forgets the subdirectory
+# (hence the use of $G4TMP/).
+
+ifdef G4ODBMS
+$(G4TMPDIR)/%.d: src/%.cc $(schema_hh)
+else
+$(G4TMPDIR)/%.d: src/%.cc
+endif
+	@if [ ! -d $(G4TMP)/$(G4SYSTEM) ] ; then mkdir $(G4TMP)/$(G4SYSTEM) ;fi
+	@if [ ! -d $(G4TMPDIR) ] ; then mkdir $(G4TMPDIR) ;fi
+	@echo Making dependency for file $< ...
+	@($(ECHO) $(G4TMPDIR)/\\c ; \
+	g++ -MM $(RWINCGPP) $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/$*.o!& $@!' >$@
+ifdef G4ODBMS
+ifdef G4ODBMS_DEPEND
+-include $(dependencies)
+endif
+else
+-include $(dependencies)
+endif
+
+# .PHONY targets are executed regardless of time-stamp of any file of
+# same name.
+.PHONY: all obj lib clean clean_libs
+
+obj: $(G4TMPDIR)/obj.last
+
+ifdef G4ODBMS
+headers: $(schema_hh)
+
+d_files: $(dependencies)
+
+$(schema_hh): $(schema_ddl)
+endif
+
+ifneq ($(G4MAKESHLIB),)
+lib: $(G4LIBDIR)/lib$(name).$(SHEXT)
+else
+lib: $(G4LIBDIR)/lib$(name).a
+endif
+
+ifndef G4EXLIB
+clean:
+	@echo Cleaning up ...
+	@rm -f $(G4LIBDIR)/lib$(name).a
+	@rm -rf $(G4TMPDIR)
+endif
+
+clean_libs:
+	@if [ -f $(G4LIBDIR)/lib$(name).a ] ; then \
+	$(ECHO) Removing library lib$(name).a ... ; \
+	$(RM) -f $(G4LIBDIR)/lib$(name).a ; fi

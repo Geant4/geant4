@@ -1,0 +1,110 @@
+# $Id: globlib.gmk,v 1.1 1999-01-07 15:58:33 gunter Exp $
+# --------------------------------------------------------------
+# Script for compound libraries.  Gabriele Cosmo, 25/6/98.
+# --------------------------------------------------------------
+
+ifndef G4INSTALL
+  G4INSTALL = ..
+endif
+
+include $(G4INSTALL)/config/architecture.gmk
+
+G4LIBDIR = $(G4LIB)/$(G4SYSTEM)
+
+.PHONY : all glob global objs clean clean_libs wipe_libs
+
+all:
+ifndef G4ODBMS
+	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE)); done
+else
+	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) headers); done
+	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) d_files); done
+	@for dir in $(SUBDIRS); do (cd $$dir; G4ODBMS_DEPEND=1; export G4ODBMS_DEPEND; $(MAKE)); done
+endif
+
+ifndef G4ODBMS
+glob global: objs wipe_libs $(G4LIBDIR)/lib$(name).a
+else
+glob global: all $(G4LIBDIR)/lib$(name).a $(G4SCHEMA_DIR)/G4SCHEMA.FDDB
+endif
+
+$(G4LIBDIR)/lib$(name).a: \
+  $(foreach dir,$(SUBLIBS),$(G4TMP)/$(G4SYSTEM)/$(dir)/obj.last)
+	@if [ ! -d $(G4LIBDIR) ] ; then mkdir $(G4LIBDIR) ; fi
+	@echo Merging object files in $(G4LIBDIR)/lib$(name).a
+	@$(RM) $(G4LIBDIR)/lib$(name).a
+#
+#
+#
+	@if [ X$(G4SYSTEM) = XWIN32-VC-NICE ]  ; i=NO; \
+	then  \
+	(( for lib in $(SUBLIBS); \
+	do ( if [ $$i = NO ]; \
+	then \
+	$(AR) $(OUT_LIB)$(G4LIBDIR)/lib$(name).lib \
+		$(G4TMP)/$(G4SYSTEM)/$$lib/*.o ; \
+	else \
+	$(AR) $(G4LIBDIR)/lib$(name).lib $(G4TMP)/$(G4SYSTEM)/$$lib/*.o; \
+	fi ); \
+	i=YES; \
+	done ) ; \
+	mv $(G4LIBDIR)/lib$(name).lib $(G4LIBDIR)/lib$(name).a); \
+	else \
+	(for lib in $(SUBLIBS); \
+	do ($(AR) $(OUT_LIB)$(G4LIBDIR)/lib$(name).a \
+	$(G4TMP)/$(G4SYSTEM)/$$lib/*.o); \
+	done);\
+	fi	
+#
+#
+#
+	@if [ -f /usr/bin/ranlib -o -f /bin/ranlib ] ; then \
+	ranlib $(G4LIBDIR)/lib$(name).a ; fi
+
+##
+## make shared libraries
+##
+ifneq ($(G4MAKESHLIB),)
+	@for lib in $(SUBLIBS); do (cp $(G4TMP)/$(G4SYSTEM)/$$lib/*.o $(G4LIBDIR)/.); done
+	@sh $(G4MAKESHLIB) $(G4LIBDIR) $(name)
+	$(RM) $(G4LIBDIR)/*.o
+endif
+
+ifdef G4ODBMS
+headers:
+	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) headers); done
+
+d_files:
+	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) d_files); done
+
+$(G4SCHEMA_DIR)/G4SCHEMA.FDDB: $(G4EXAMPLE_BOOT_DIR)/G4EXAMPLE.FDDB
+ifdef G4SCHEMA_DIR
+	@rm -f $(G4SCHEMA_DIR)/G4SCHEMA
+	@rm -f $(G4SCHEMA_DIR)/G4SCHEMA.FDDB
+	@echo Copying schema file to $(G4SCHEMA_DIR) for FDID $(G4SCHEMA_FDID)
+	@$(HEP_ODBMS_DIR)/etc/getdb $(G4EXAMPLE_BOOT) \
+	  $(G4SCHEMA_DIR)/G4SCHEMA $(G4SCHEMA_FDID)
+endif
+endif
+
+objs:
+	@for dir in $(SUBDIRS); \
+	  do (cd $$dir; $(MAKE) -q obj && ok=yes; \
+	    if [ $$ok ]; \
+	    then echo Nothing to be done for lib$(name).a in $$dir/.; \
+	    else $(MAKE) clean_libs; $(MAKE) obj; \
+	    fi; ) \
+	  done
+
+wipe_libs:
+	@for lib in $(SUBLIBS); do (rm -f $(G4LIBDIR)/lib$$lib.a); done
+
+clean:
+	@echo Cleaning up ...
+	@for lib in $(SUBLIBS); do (rm -rf $(G4TMP)/$(G4SYSTEM)/$$lib; rm -f $(G4LIBDIR)/lib$$lib.a); done
+	@rm -f $(G4LIBDIR)/lib$(name).a
+
+clean_libs:
+	@echo Removing lib$(name).a and sub-libraries ...
+	@for lib in $(SUBLIBS); do (rm -f $(G4LIBDIR)/lib$$lib.a); done
+	@rm -f $(G4LIBDIR)/lib$(name).a

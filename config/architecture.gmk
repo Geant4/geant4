@@ -1,0 +1,632 @@
+# $Id: architecture.gmk,v 1.1 1999-01-07 15:58:32 gunter Exp $
+# ------------------------------------------------------------------------
+#       GEANT 4 - Architecture configuration script for GNU Make
+#
+#       First implementation: July 7th 1995
+#
+# Description
+# -----------
+# to override variables defined in this script, use "gmake -e", this will
+# cause environment variables to take precedence. In this case watch for
+# inadvertant overrides!
+#
+# List of the supported architectures/compilers and related flavors for
+# the environment variable G4SYSTEM:
+#
+#          AIX-xlC     AIX 4.3, (xlC) C Set ++ for AIX (default)
+#
+#          SUN-CC      SunOS 5.6, CC 4.2 compiler
+#
+#          HP-aCC      HP-UX 10.20, aCC A.01.09 compiler
+#
+#          SGI-CC      SGI-IRIX 6.2, C++ 7.2 compiler
+#
+#          DEC-cxx     DEC-OSF/1 4.0, DEC C++ 6.1
+#
+#          Linux-g++   Linux (Red Hat 5.1), egcs 1.1
+#
+#          WIN32-VC-NICE  	NiceNT and Microsoft Visual C++ 5.0 installed
+#				locally as CD-ROM intallation
+#				ex. NiceNT at CERN (but CYGWIN32 installed
+#				locally, because not full installation on NICE)
+#
+#	   WIN32-G++-NICE	NiceNT and CYGWIN32 with g++ as base compiler
+#				ex. NiceNT at CERN (but CYGWIN32 and RogueWave
+#				for g++ installed locally, because not full 
+#				installation on NICE)
+#
+
+MAKEFLAGS= --no-print-directory
+
+# If not specified, the default platform for G4SYSTEM is IBM-AIX ...
+#
+ifndef G4SYSTEM
+  G4SYSTEM := AIX-xlC
+endif
+
+# If not specified, the default path for G4 installation G4INSTALL is
+# set to $HOME/geant4beta ...
+#
+ifndef G4INSTALL
+  G4INSTALL := $(HOME)/geant4beta
+endif
+
+# If not specified, the default path for G4 source G4BASE is
+# set to $G4INSTALL/source ...
+#
+ifndef G4BASE
+  G4BASE := $(G4INSTALL)/source
+endif
+
+# If not specified, the default path for the user's workdir is the same
+# as G4INSTALL ...
+#
+ifndef G4WORKDIR
+  G4WORKDIR := $(G4INSTALL)
+endif
+
+# If not specified, the default path for temporary files G4TMP is
+# set to $G4WORKDIR/tmp/$G4SYSTEM ...
+#
+ifndef G4TMP
+  G4TMP := $(G4WORKDIR)/tmp
+endif
+G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4TMP) ] && mkdir -p $(G4TMP) )
+	
+# If not specified, the default path for G4 libraries G4LIB is
+# set to $G4INSTALL/lib/$G4SYSTEM ...
+#
+ifndef G4LIB
+  G4LIB := $(G4INSTALL)/lib
+endif
+G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4LIB) ] && mkdir -p $(G4LIB) )
+
+# If not specified, the default path for G4 binaries G4BIN is
+# set to $G4WORKDIR/bin/$G4SYSTEM ...
+#
+ifndef G4BIN
+  G4BIN := $(G4WORKDIR)/bin
+endif
+G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4BIN) ] && mkdir -p $(G4BIN) )
+
+# If not specified, the default path for G4 schema G4SCHEMA_DIR is
+# set to $G4WORKDIR/schema ...
+#
+ifndef G4SCHEMA_DIR
+  G4SCHEMA_DIR := $(G4WORKDIR)/schema
+  G4SCHEMA_FDID := 207
+endif
+ifdef G4ODBMS
+  G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4SCHEMA_DIR) ] && mkdir -p $(G4SCHEMA_DIR) )
+endif
+
+# If not specified, the default path for G4 example federated database is
+# set to $HOME/G4EXAMPLE ...
+#
+ifndef G4EXAMPLE_BOOT_DIR
+  G4EXAMPLE_BOOT_DIR := $(HOME)/G4EXAMPLE
+  G4EXAMPLE_BOOT := $(G4EXAMPLE_BOOT_DIR)/G4EXAMPLE
+endif
+ifdef G4ODBMS
+  G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4EXAMPLE_BOOT_DIR) ] && mkdir -p $(G4EXAMPLE_BOOT_DIR) )
+endif
+
+# If G4DEBUG not specified, the default compilation is optimised ...
+#
+ifndef G4DEBUG
+  G4OPTIMISE := 1
+endif
+
+#
+# CLHEP path
+#
+
+ifndef CLHEP_BASE_DIR
+  CLHEP_BASE_DIR    := /afs/cern.ch/rd44/dev/CLHEP/$(G4SYSTEM)/pro
+endif
+CLHEP_INCLUDE_DIR := $(CLHEP_BASE_DIR)/include
+CLHEP_LIB_DIR     := $(CLHEP_BASE_DIR)/lib
+ifndef CLHEP_LIB
+  CLHEP_LIB         := CLHEP
+endif
+
+ifeq ($(G4SYSTEM),WIN32-VC-NICE)
+#
+# NiceNT policy for letter drive mapping 
+#
+ifndef CLHEP_BASE_DIR
+  CLHEP_BASE_DIR    := "z:\p32\lhcpp\clhep\1.1"
+endif
+CLHEP_INCLUDE_DIR := $(CLHEP_BASE_DIR)/include
+CLHEP_LIB_DIR     := $(CLHEP_BASE_DIR)/lib
+CLHEP_LIB         := libCLHEP-cl.a
+endif
+
+#
+# Rogue Wave Tools.h++ path
+#
+
+ifndef RWBASE
+  RWBASE    := /afs/cern.ch/rd44/dev/rogue/$(G4SYSTEM)
+endif
+RWINC     := $(RWBASE)
+RWLIBDIR  := $(RWBASE)/lib
+RWLIB     := rwtool
+ 
+ifeq ($(G4SYSTEM),HP-aCC)
+  RWBASE    := /opt/aCC
+  RWINC     := $(RWBASE)/include
+  RWLIBDIR  := /usr/lib
+endif
+
+#
+# Paths for G4 data
+#
+
+ifndef G4DATA
+  G4DATA := $(G4INSTALL)/data
+endif
+
+# Photon evaporation data
+ifndef G4LEVELGAMMADATA
+  G4LEVELGAMMADATA := $(G4DATA)/PhotonEvaporation
+endif
+
+ifeq ($(G4SYSTEM),WIN32-VC-NICE)
+#
+# NiceNT policy for letter drive mapping 
+#
+ifndef RWBASE
+  RWBASE    := "z:\p32\lhcpp\rw\tools\7.0.2\rogue"
+endif
+  RWINC        := $(RWBASE)
+  RWLIBDIR     := $(RWBASE)"\lib"
+  RWLIB        := mtldmt.lib
+  RWINCGPP     := /rogue
+endif
+
+ifeq ($(G4SYSTEM),WIN32-G++-NICE)
+#
+# locally installed RogueWave for g++ (mount mapping)
+#
+  RWBASE       := /rogue
+  RWINC        := $(RWBASE)
+  RWLIBDIR     := $(RWBASE)/lib
+  RWLIB        := rwtool
+endif
+
+#
+# Toggle variables (positional qualifiers) between WIN32-VC and UNIX...
+#
+ifeq ($(G4SYSTEM),WIN32-VC-NICE)
+  OUT_OBJ := -TP '-Fo'
+  FOR_OBJ := '-Fo'
+  OUT_LIB := '-out:'
+  OUT_EXE := '-Fe'
+  LIB_PATH := '-libpath:'
+  CERNLIB_PATH := "z:\p32\cern\new\df\lib"
+  PATH_DEL := \\
+#
+# pattern for next substitution
+#
+  LIB_PATT  := lib(LibName).a
+  FLIB_PATT := (LibName).lib
+else
+  OUT_OBJ := -o 
+  FOR_OBJ := -o 
+  OUT_LIB := 
+  OUT_EXE := -o 
+  LIB_PATH := -L
+  CERNLIB_PATH := /cern/pro/lib
+  PATH_DEL := /
+#
+# pattern for next substitution
+#
+  LIB_PATT  := -l(LibName)
+  FLIB_PATT := $(LIB_PATT)
+endif
+
+#
+# Make dependencies files by g++ then need right RW include
+#
+ifdef RWINCGPP
+  RWINCGPP := -I$(RWINCGPP)
+endif
+
+#
+# Variables for implicit rules, etc., as suggested in GNU Make manual...
+#
+
+CPPFLAGS  += -Iinclude \
+             -I$(CLHEP_INCLUDE_DIR) \
+             -I$(RWINC)
+#
+# Positional qualifiers in action...
+#
+ifeq ($(G4SYSTEM),WIN32-VC-NICE)
+  LDFLAGS   := -link $(LIB_PATH)$(CLHEP_LIB_DIR) $(LIB_PATH)$(RWLIBDIR)
+  LOADLIBS  := $(CLHEP_LIB) $(RWLIB)
+else
+  LDFLAGS   := -L$(CLHEP_LIB_DIR) -L$(RWLIBDIR)
+  LOADLIBS  := -l$(CLHEP_LIB) -l$(RWLIB) -lm
+endif
+
+#
+# Graphic variables...
+#
+ifndef VISLIBS
+  VISLIBS :=
+endif
+# ------------------ X11 ---------------------
+X11FLAGS  :=
+X11LIBS   := -lXmu -lXt -lXext -lX11
+# ----------------- Motif --------------------
+XMFLAGS   :=
+XMLIBS    := -lXm
+# ---------------- Athena --------------------
+XAWFLAGS   :=
+XAWLIBS    := -lXaw
+# ---------------- OpenGL --------------------
+# The user can define his own values of OGLFLAGS and OGLLIBS.
+# OGLFLAGS gives the directory containing include files.
+#   E.g.: OGLFLAGS  := -I$(OGLHOME)/include
+# OGLLIBS gives the libraries.
+#   E.g.: OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
+#   Or  : OGLLIBS   := -L$(OGLHOME)/lib -lMesaGLU -lMesaGL
+# OGLHOME is often /usr or /usr/local.  Or it can point to a special
+# installation.
+# If the user does not set his/her own values, system-dependent values
+# are set below.  Most system-dependent code assumes OGLHOME is set.
+# ------------- OpenInventor -----------------
+ifndef HEPVISINC
+  HEPVISINC := $(HEPVISDIR)/include
+endif
+ifndef HEPVISLIB
+  HEPVISLIB := $(HEPVISDIR)/source
+endif
+ifndef OIVFLAGS
+  OIVFLAGS  := -I${HEPVISINC}
+endif
+ifndef OIVLIBS
+  OIVLIBS   := -L${HEPVISLIB} -lHEPVis -lInventorXt -lInventor -lGLU -lGL
+endif
+# ----------------- OPACS --------------------
+ifndef G4_OPACS_WIDGET_SET
+  G4_OPACS_WIDGET_SET := Xm
+endif
+
+#
+# For cfront compilers the repository location is set to
+# $G4TMP/$G4SYSTEM/g4.ptrepository.
+#
+
+G4TEMPLATE_REPOSITORY := $(G4SYSTEM)/g4.ptrepository
+G4TEMPEXEC_REPOSITORY := $(G4TEMPLATE_REPOSITORY)/exec
+G4TREP := $(G4TMP)/$(G4TEMPLATE_REPOSITORY)
+
+# Default archive call. Changed for: SUN-CC.
+AR := ar r
+
+# Default echo used with makedepend. Changed for SUN-CC, Linux-g++.
+ECHO:= echo
+
+
+#
+# Architecture dependent variables...
+#
+
+# -------- AIX ----------
+#
+ifeq ($(G4SYSTEM),AIX-xlC)
+  CXX       := xlC
+  ifdef G4OPTIMISE
+    CXXFLAGS  := -O3 -qtwolink -+
+  else
+    CXXFLAGS  := -g -qdbxextra -qcheck=all -qfullpath -qtwolink -+
+    FCFLAGS := -g
+  endif
+  FC := xlf
+  FCFLAGS += -qextname
+  FCLIBS := -lxlf90 -lxlf
+  X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
+  X11LIBS   := -L/usr/lib -lXmu -lX11 -lXext
+  XMFLAGS   := -I/usr/include/Motif1.2
+  XMLIBS    := -L/usr/lib -lXm -lXt -lX11
+  XAWFLAGS  := -I/usr/include/X11
+  XAWLIBS   := -L/usr/lib -lXaw -lXmu -lXt -lX11 -lXext
+  ifndef OGLFLAGS
+    OGLFLAGS  := -I$(OGLHOME)/include 
+  endif
+  ifndef OGLLIBS
+    OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
+  endif
+endif
+
+# -------- SUN ---------
+#
+ifeq ($(G4SYSTEM),SUN-CC)
+  CXX       := CC
+  ifdef G4OPTIMISE
+    CXXFLAGS  := -O
+  else
+    CXXFLAGS  := -g
+    FCFLAGS := -g
+  endif
+#  CXXFLAGS += -fnonstd
+  CFRONT_G4TEMPLATE_REPOSITORY  := true
+  FC     := f77
+  SHEXT  := so
+  AR     := $(CXX) -xar -ptr$(G4TREP) -o
+  ECHO   := /bin/echo
+  X11FLAGS  := -I/usr/openwin/include/X11/extensions -I/usr/openwin/include/X11 -I/usr/openwin/include
+  X11LIBS   := -L/usr/openwin/lib -L/usr/dt/lib -L/usr/ucblib -R/usr/openwin/lib -lXmu -lX11 -lXext 
+  
+  XMFLAGS   := -I/usr/include/Motif1.2
+  XMLIBS    := -L/usr/openwin/lib -L/usr/dt/lib -L/usr/ucblib -R/usr/openwin/lib -lXt -lX11
+  XAWFLAGS  := -I/usr/openwin/include/X11
+  XAWLIBS   := -L/usr/openwin/lib -L/usr/dt/lib -L/usr/ucblib -R/usr/openwin/lib -lXaw -lXmu -lXt -lX11 -lXext
+  ifndef OGLFLAGS
+    OGLFLAGS  := -I$(OGLHOME)/include 
+  endif
+  ifndef OGLLIBS
+    OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
+  endif
+  CPPFLAGS += -DSOCKET_IRIX_SOLARIS
+  VISLIBS  +=  -L/usr/lib -lsocket -lnsl
+endif
+
+# -------- HP ---------
+#
+ifeq ($(G4SYSTEM),HP-aCC)
+  CXX       := aCC
+  ifdef G4OPTIMISE
+    CXXFLAGS  := +O2
+  else
+    CXXFLAGS  := -g
+    FCFLAGS  := -g
+  endif
+  CXXFLAGS += +DAportable
+  CPPFLAGS += -I/usr
+  ifdef G4MAKESHLIB
+    CXXFLAGS += +Z
+  endif
+  G4_HAVE_BOOL := yes
+  FC      := f77
+  FCFLAGS += +E6 +ppu
+  X11FLAGS  := -I/usr/include/X11/extensions -I/usr/contrib/X11R6/include -I/usr/contrib/X11R6/include/X11
+  X11LIBS   := -L/usr/contrib/X11R6/lib -lXmu -L/usr/lib -lXt -lXext -lX11
+  XMFLAGS   := -I/usr/include/Motif1.2
+  XMLIBS    := -L/usr/lib/Motif1.2_R6 -lXm
+  XAWFLAGS  := -I/usr/contrib/X11R6/include -I/usr/contrib/X11R6/include/X11
+  XAWLIBS   := -L/usr/contrib/X11R6/lib -lXaw
+  ifndef OGLFLAGS
+    OGLFLAGS  := -I$(OGLHOME)/include 
+  endif
+  ifndef OGLLIBS
+    OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
+    OGLLIBS   += -L/opt/graphics/common/lib -lXwindow -lhpgfx -lXhp11 -ldld
+  endif
+endif
+
+# -------- SGI ---------
+#
+ifeq ($(G4SYSTEM),SGI-CC)
+  CXX       := CC
+  ifdef G4OPTIMISE
+    CXXFLAGS  := -O -ptused
+  else
+    CXXFLAGS  := -g -ptused
+    FCFLAGS := -g
+  endif
+  FC        := f77
+  FCLIBS    := -lftn
+  SHEXT     := so
+  X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
+  X11LIBS   := -L/usr/lib -lXmu -lXt -lXext -lX11
+  XMLIBS    := -L/usr/lib -lXm
+  ifndef OGLFLAGS
+    OGLFLAGS  :=
+  endif
+  ifndef OGLLIBS
+    OGLLIBS   := -L/usr/lib -lGLU -lGL
+  endif
+  CPPFLAGS += -DSOCKET_IRIX_SOLARIS
+endif
+
+# -------- DEC ---------
+#
+ifeq ($(G4SYSTEM),DEC-cxx)
+  CXX		:= cxx
+  ifdef G4OPTIMISE
+    CXXFLAGS	:= -O
+  else
+    CXXFLAGS	:= -gall
+    FCFLAGS	:= -g
+  endif
+  CFRONT_G4TEMPLATE_REPOSITORY  := true
+  G4_HAVE_BOOL  := yes
+  LDFLAGS	+= -taso
+  CXXFLAGS	+= -ieee
+  FC		:= f77
+  FCLIBS	:= -lUfor -lfor -lFutil -lots
+  X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
+  ifndef OGLFLAGS
+    OGLFLAGS  := -I$(OGLHOME)/include 
+#   OGLFLAGS  := -I/usr/include -I/usr/local/include
+  endif
+  ifndef OGLLIBS
+    OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
+#   OGLLIBS   := -lMesaGLU -lMesaGL
+  endif
+endif
+
+# ------ GNU/LINUX ------
+#
+ifeq ($(G4SYSTEM),Linux-g++)
+  CXX       := g++
+  GNU_GCC = 1
+  CXXFLAGS  := -pipe -fno-for-scope -DGNU_GCC
+  ifdef G4OPTIMISE
+    CXXFLAGS  += -O
+  else
+    CXXFLAGS  += -g
+    FCFLAGS := -g
+  endif
+  FC := g77
+  FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
+  FCLIBS := -lf2c
+  ECHO    := /bin/echo
+  X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
+  X11LIBS   := -L/usr/X11/lib  -lXmu -lXt -lXext -lX11 -lSM -lICE
+  XMFLAGS   := -I/usr/X11R6/include
+  XMLIBS    := -lXm -lXpm
+  ifndef OGLFLAGS
+    OGLFLAGS  := -I$(OGLHOME)/include 
+  endif
+  ifndef OGLLIBS
+    OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
+  endif
+  OIVFLAGS  += -I$(OIHOME)/include 
+endif
+
+# ------ WIN32/VC/NICE ------
+#
+ifeq ($(G4SYSTEM),WIN32-VC-NICE)
+  CXX       := CL
+  G4_HAVE_BOOL := yes
+  G4_NO_CBRT := yes
+  ifdef G4OPTIMISE
+    CXXFLAGS  += -Ox
+  else
+    CXXFLAGS  += -Od
+  endif
+  CXXFLAGS += -GX -Zm200 -DWIN32 # -TP
+#
+# Should set $INCLUDE environment, if not set as below
+#
+# CXXFLAGS += -I'\\srv1_info\v2\vc50pro1\DEVSTUDIO\VC\INCLUDE'
+
+  LDFLAGS  += -FORCE
+
+#
+# Should set $LIB environment, if not set as below
+#
+#	$(LIB_PATH)"c:\ProgramFiles\DevStudio\vc\lib" \
+#       $(LIB_PATH)'\\srv1_info\v2\vc50pro1\DEVSTUDIO\VC\LIB' \
+#       $(LIB_PATH)'\\srv1_info\v2\DecFtn5\x86\df\lib'
+	      
+  AR := LIB
+  ECHO := echo -e
+  FC := f77
+#  FCLIBS := -lf2c
+  ifndef OGLFLAGS
+    OGLFLAGS  :=
+  endif
+  ifndef OGLLIBS
+    OGLLIBS   := -lGLU  -lGL
+  endif
+endif
+
+# ------ WIN32/G++/NICE ------
+#
+ifeq ($(G4SYSTEM),WIN32-G++-NICE)
+  CXX       := g++
+  CXXFLAGS  := -fno-for-scope
+  G4_HAVE_BOOL := yes
+  ifdef G4OPTIMISE
+    CXXFLAGS  += -O
+  else
+    CXXFLAGS  += -g
+  endif
+  CXXFLAGS += -DCYGWIN32 
+  ECHO := echo -e
+  FC := g77
+  FCLIBS := -lf2c
+  ifndef OGLFLAGS
+    OGLFLAGS  := 
+  endif
+  ifndef OGLLIBS
+    OGLLIBS   := -lGLU  -lGL
+  endif
+endif
+
+# If compiler recognises implicit C++ type bool...
+ifdef G4_HAVE_BOOL
+  CPPFLAGS += -DG4_HAVE_BOOL
+endif
+
+# If there is no cbrt() function...
+ifdef G4_NO_CBRT
+  CPPFLAGS += -DG4_NO_CBRT
+endif
+
+# Standard Template Library (STL) not installed
+CPPFLAGS += -DRW_NO_STL
+
+# Verbosity code can be left out (for better performance)
+# by defining G4_NO_VERBOSE.
+
+ifndef G4_NO_VERBOSE
+  CPPFLAGS += -DG4VERBOSE
+endif
+
+# Trajectory related classes can be left out (for better performance)
+# by defining G4_NO_STORE_TRAJECTORY.
+
+ifndef G4_NO_STORE_TRAJECTORY
+  CPPFLAGS += -DG4_STORE_TRAJECTORY
+endif
+
+#
+# Enable/disable G4cout/G4cerr
+#
+
+# Set G4STREAM for all platforms.
+
+G4STREAM = 1
+
+# Set G4STREAM_STREAMBUF_IMPLEMENTATION for selected platforms.
+
+ifeq ($(findstring AIX,$(G4SYSTEM)),AIX)
+  G4STREAM_STREAMBUF_IMPLEMENTATION = 1
+endif
+
+ifeq ($(findstring WIN32,$(G4SYSTEM)),WIN32)
+  G4STREAM_STREAMBUF_IMPLEMENTATION = 1
+endif
+
+ifdef G4STREAM
+  CPPFLAGS += -DG4STREAM
+endif
+
+ifdef G4STREAM_STREAMBUF_IMPLEMENTATION
+  CPPFLAGS += -DG4STREAM_STREAMBUF_IMPLEMENTATION
+endif
+
+#
+# Template setup - repositories, special options etc
+#
+ifdef CFRONT_G4TEMPLATE_REPOSITORY
+  ifeq ($(findstring DEC,$(G4SYSTEM)),DEC)
+      ifdef G4EXEC_BUILD
+        CXXTEMPLATE_FLAGS := -ptr $(G4TREP)/exec -ptr $(G4TREP)
+      else
+        CXXTEMPLATE_FLAGS := -ptr $(G4TREP)
+      endif
+  else
+      ifdef G4EXEC_BUILD
+        CXXTEMPLATE_FLAGS := -ptr$(G4TREP)/exec -ptr$(G4TREP)
+      else
+        CXXTEMPLATE_FLAGS := -ptr$(G4TREP)
+      endif
+  endif
+  CXXFLAGS += $(CXXTEMPLATE_FLAGS)
+  CFRONT := true
+endif
+ifdef CFRONT
+  G4TEMPLATE_REPOSITORY_PARENT := $(shell echo $(G4TREP) | sed 's!/[^/][^/]*/*$$!!' )
+  G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4TEMPLATE_REPOSITORY_PARENT) ] && mkdir -p $(G4TEMPLATE_REPOSITORY_PARENT) )
+  G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4TREP) ] && mkdir -p $(G4TREP) )
+  G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4TREP)/exec ] &&mkdir -p $(G4TREP)/exec )
+endif
+

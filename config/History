@@ -1,0 +1,236 @@
+$Id: History,v 1.1 1999-01-07 15:58:31 gunter Exp $
+$Name: not supported by cvs2svn $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+
+History file for Geant4 configuration scripts.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+December 15th, 1998 - G.Cosmo (config-00-04-11)
+- Added G4_HAVE_BOOL to DEC-cxx.
+- Cosmetic changes.
+
+December 12th, 1998 - J.Allison (config-00-04-10)
+- Fixed bug in OGLFLAGS and OGLLIBS user override mechanism.
+
+December 11th, 1998 - J.Allison (config-00-04-09)
+- Removed -fnonstd for SUN-CC.
+
+December 10th, 1998 - G.Cosmo (config-00-04-08)
+- architecture.gmk: introduced $G4DATA variable which can be user
+  defined. Default is set to $G4INSTALL/data.
+- architecture.gmk: introduced $G4LEVELGAMMADATA set as default to
+  $G4DATA/PhotonEvaporation.
+- globlib.gmk: fixed minor bug (courtesy of V.Krylov).
+
+December 10th, 1998 - J.Allison (config-00-04-07)
+- architecture.gmk: allowed environment variables OGLFLAGS and OGLLIBS.
+
+December 7th, 1998 - S.Tanaka, G.Cosmo (config-00-04-06)
+- architecture.gmk: fixed setting of VISLIBS.
+
+December 7th, 1998 - S.Tanaka 
+- Update of architecture.gmk and G4VIS_USE.gmk:
+  In SUN-CC, "-L/usr/lib -lsocket -lnsl"  is  moved from X11LIBS to VISLIBS.
+
+December 5th, 1998 - G.Cosmo (config-00-04-05)
+- architecture.gmk: introduced -fnonstd compiler option for SUN-CC.
+  This option causes non-standard initialization of floating-point
+  arithmetic hardware; it enables hardware traps for floating-point
+  overflow, division by zero, and invalid operation exceptions.
+
+December 4th, 1998 - G.Barrand
+- architecture.gmk: corrected paths for HepVis and HepInventor.
+- interactivity.gmk: fixed setup for LOAD_IV.
+
+December 3rd, 1998 - S.Tanaka
+- Revision to make compilation of DAWN (network) driver 
+  at Solaris and IRIX automatic. See below.
+- Added the following line to SUN-CC and SGI-CC
+  CPPFLAGS += -DSOCKET_IRIX_SOLARIS
+- Added -L/usr/lib -lsocket -lnsl  in X11LIBS for SUN-CC.
+  (This place is strange. But I cannot think of a better place.) 
+
+December 3rd, 1998 - J.Allison (config-00-04-04)
+- Set G4STREAM for all platforms.
+- Set G4STREAM_STREAMBUF_IMPLEMENTATION for selected platforms.
+
+December 3rd, 1998 - S.Sadilov
+- Updated architecture.gmk : G4STREAM_STREAMBUF_IMPLEMENTATION for WIN32.
+- Updated globlib.gmk : right incremental LIB for WIN32.
+
+December 1st, 1998 - G.Cosmo (config-00-04-03)
+- Updated architecture.gmk and binmake.gmk: G4SYSTEM revision.
+- Added +DAportable compiler option to HP-aCC setup to support HPPA 2.0
+  for PA8000 CPUs.
+
+December 1st, 1998 - J.Allison (config-00-04-02)
+- Added generators/include to binmake.gmk.
+
+November 30th, 1998 - J.Allison (config-00-04-01)
+- Added neutron_hp/include to binmake.gmk.
+- CLHEP_BASE_DIR and RWBASE for WIN32 (Serguei Sadilov).
+
+November 18th, 1998 - J.Allison (config-00-03-06)
+- Changed CXXFLAGS for DEC6-AFS debug from -g to -gall.
+
+October 30th, 1998 - G.Cosmo (config-00-03-05)
+- architecture.gmk: added G4STREAM_STREAMBUF_IMPLEMENTATION variable. (G.Barrand)
+- G4UI_BUILD.gmk: removed G4UI_BUILD_XM_REDIRECT_COUT. (G.Barrand)
+
+October 13th, 1998  J.Allison (config-00-03-04)
+- Changed ifdef G4_USE_G4STREAM to ifneq ($(findstring AIX,$(G4SYSTEM)),AIX)
+
+October 13th, 1998  J.Allison (config-00-03-03)
+- Removed G4VIS_DONT_USE. (G.Barrand)
+- Added if G4_USE_G4STREAM, CPPFLAGS += -DG4STREAM. (M.Nagamatu)
+
+October 9th  J.Allison (config-00-03-02)
+- Tagged.
+
+October 2nd, 1998 - M.Asai
+- G4_NO_STORE_TRAJECTORY option is added to architecture.gmk.
+
+September 30th, 1998 - G.Barrand
+- G4VIS_USE.gmk: bracket everything with "ifndef G4VIS_DONT_USE" in order
+  to be able to disconnect easily visualization for tests programs.
+
+September 18th, 1998 - G.Cosmo (config-00-03-01)
+- architecture.gmk: introduced G4DUMMY_VARIABLE to hide $(shell)
+  command not compatible with the new version 3.77 of GMAKE (G.Folger).
+
+September 14th, 1998 - G.Cosmo
+- binmake.gmk: placed digits+hits library in the correct link order
+  according to the category diagram.
+
+August 31st, 1998 - G.Cosmo (config-00-02-05)
+- architecture.gmk: Changed first CPPFLAGS statement from := to +=,
+  to allow additional CPPFLAGS to be defined by the user. Needed for test
+  (F.Behner)
+- binmake.gmk: Added EXTRALIBS to allow a user to add own libraries in the
+  link path. Needed for test.
+  (F.Behner)
+- binmake.gmk: inverted link order of processes and particles libraries
+  which was wrong. (G.Cosmo)
+
+August 26th, 1998 - John Allison (config-00-02-04)
+- Backed out 22nd August change (G4UIGAG as default) - G4UIterminal
+  is now default.
+
+August 24th, 1998 - Y.Morita (config-00-02-03)
+- globlib.gmk: added $(G4LIBDIR)/lib$(name).a for target "global".
+
+August 22nd, 1998 - J.Allison (config-00-02-02)
+- Set GAG variables by default.
+
+August 11th, 1998 - G.Cosmo (config-00-02-01)
+- Tagged.
+
+August 7th, 1998 - John Allison/Michel Maire.
+- Added -I/usr/include before -I/usr/local/include to OGLFLAGS for DEC-AFS.
+- Changed -lGl to -lMesaGL, etc., for DEC-AFS.
+
+August 6th, 1998 - John Allison
+- Added UILIBS := to G4UI_USE.gmk and VISLIBS := to G4VIS_USE.gmk.
+
+August 5th, 1998 - Guy Barrand
+- Added LOAD_XM = 1 and LOAD_XAW = 1 to G4UI_USE.gmk.
+
+July 30th, 1998 - G.Cosmo (config-b01)
+- globlib.gmk: added phony target "wipe_libs". Now target "global"
+  effectively deletes all existent granular libraries.
+- common.gmk: archiving of libraries is silent now by default.
+
+July 23th, 1998 - Y.Morita (config-00-01-16)
+- globlib.gmk: fixed target "global" for G4ODBMS
+- binmake.gmk: fixes for Win/NT.
+
+July 20th, 1998 - John Allison (config-00-01-15)
+- Removed LDFLAGS += -Wl,-Bstatic for G++-Linux introduced by Larry
+  Felawka on July 10th for g++ 2.8.  No longer thought to be necessary.
+
+July 19th, 1998 - G.Cosmo (config-00-01-14)
+- common.gmk: introduced CPPVERBOSE flag.
+- architecture.gmk: protected creation of $G4SCHEMA_DIR and
+  $G4EXAMPLE_BOOT_DIR directories with G4ODBMS.
+- binmake.gmk: fixed bug in creation of $G4TARGET.
+
+July 18th, 1998 - G.Cosmo (config-00-01-13)
+- Added fix to binmake.gmk for WIN32-VC-NICE (G.Folger)
+
+July 16th, 1998 - John Allison
+- Added GNU_GCC makefile flags where omitted.
+
+July 15th, 1998 - Youhei Morita (config-00-01-12)
+- architecture.gmk  added G4EXAMPLE_BOOT_DIR and G4EXAMPLE_BOOT
+- globlib.gmk  revised cleandb target
+
+July 14th, 1998 - Peter Urban (config-00-01-11)
+- added two Perl scripts that correct STEP exchange files.
+
+July 14th, 1998 - Youhei Morita (config-00-01-10)
+- architecture.gmk  added definition of G4SCHEMA_DIR
+- globlib.gmk  added new target G4SCHEMA.FDDB for G4ODBMS
+
+July 10th, 1998 - Youhei Morita (config-00-01-09)
+- binmake.gmk  added following to INCFLAGS
+      -I$(G4BASE)/persistency/digits+hits/hits/include \
+      -I$(G4TMP)/$(G4SYSTEM)/G4phits \
+- binmake.gmk  moved persistency include path to ifdef G4ODBMS block
+
+July 10th, 1998 - John Allison??
+- binmake.gmk  added geometry/solids/STEPinterface/include 
+
+July 10th, 1998 - Youehi Morita (config-00-01-08)
+- globlib.gmk  added new targets 'headers' and 'd_files' for G4ODBMS
+- common.gmk   added new target 'headers'
+               added $(schema_hh) dependency to $(G4TMPDIR)/%.o
+- binmake.gmk  added INCFLAGS, LDLIBS and LDFLAGS for G4ODBMS
+
+July 10th, 1998 - L.Felawka
+- architecture.gmk: updated compilation flags for g++.
+
+July 9th, 1998 - G.Cosmo (config-00-01-07)
+- Removed bug in "all" target in globlib.gmk, introduced recently.
+- Modified "all" target in globlib.gmk to handle G4ODBMS.
+- Added fix for G4ODBMS to common.gmk.
+
+July 9th, 1998 - Youehi Morita
+- Added G4ODBMS_BUILD.gmk for HepODBMS and Objectivity/DB CPPFLAGS.
+
+July 7th, 1998 - John Allison (config-00-01-06)
+- Incorporated Makoto's patches for ifndef G4UI_BUILD_TERMINAL_SESSION and
+  ifndef G4UI_USE_TERMINAL.
+
+July 7th, 1998 - G.Cosmo (config-00-01-05)
+- Added $(schema_hh) target and dependency to it in case of G4ODBMS
+  set when building .d files.
+
+July 7th, 1998 - John Allison (config-00-01-04)
+- Tagged.
+
+July 7th, 1998 - Guy Barrand
+- Introduced interactivity.gmk.
+
+July 6th, 1998 - J.Allison (config-00-01-03)
+- Added G4UI_BUILD.gmk and G4UI_BUILD.gmk.
+
+July 6th, 1998 - G.Cosmo (config-00-01-02)
+- Introduced "glob" and "objs" targets in globlib.gmk. Modified
+  rule to build global library, does not depend anymore on "libs".
+  (by J.Allison)
+- Moved G4VIS_USE.gmk and G4VIS_BUILD.gmk from source/visualization.
+ 
+July 3rd, 1998 - G.Cosmo (config-00-01-01)
+- Created

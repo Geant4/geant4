@@ -1,0 +1,112 @@
+# $Id: G4VIS_USE.gmk,v 1.1 1999-01-07 15:58:31 gunter Exp $
+# -------------------------------------------------------------
+# GNUmakefile for CPPFLAGS for visualization USE phase.
+#   John Allison, 24th January 1998.
+
+ifndef VISLIBS 
+ VISLIBS :=
+endif
+
+ifdef G4VIS_USE_DAWN
+  G4VIS_USE_DAWN_OR_DAWNFILE = 1
+  CPPFLAGS += -DG4VIS_USE_DAWN
+endif
+ifdef G4VIS_USE_DAWNFILE
+  G4VIS_USE_DAWN_OR_DAWNFILE = 1
+  CPPFLAGS += -DG4VIS_USE_DAWNFILE
+endif
+ifdef G4VIS_USE_DAWN_OR_DAWNFILE
+  G4VIS_USE = 1
+  CPPFLAGS += -I$(G4BASE)/visualization/FukuiRenderer/include
+  VISLIBS += -lG4FR
+endif
+
+ifdef G4VIS_USE_OPACS
+  G4VIS_USE  = 1
+  INC_OPACS  = 1
+  LOAD_OPACS = 1
+  CPPFLAGS += -DG4VIS_USE_OPACS
+  CPPFLAGS += -I$(G4BASE)/visualization/OPACS/include
+  VISLIBS += -lG4OPACS
+endif
+
+ifdef G4VIS_USE_OPENGLX
+  G4VIS_USE_OPENGL = 1
+  CPPFLAGS += -DG4VIS_USE_OPENGLX
+  INC_X11   = 1
+  LOAD_X11  = 1
+endif
+ifdef G4VIS_USE_OPENGLXM
+  G4VIS_USE_OPENGL = 1
+  CPPFLAGS += -DG4VIS_USE_OPENGLXM
+  INC_XM    = 1
+  LOAD_XM   = 1
+endif
+ifdef G4VIS_USE_OPENGL
+  G4VIS_USE = 1
+  CPPFLAGS += -DG4VIS_USE_OPENGL
+  CPPFLAGS += -I$(G4BASE)/visualization/OpenGL/include
+  VISLIBS += -lG4OpenGL
+  INC_GL    = 1
+  LOAD_GL   = 1
+endif
+
+ifdef G4VIS_USE_OIX
+  G4VIS_USE_OI = 1
+  CPPFLAGS += -DG4VIS_USE_OIX
+  INC_XM    = 1
+  LOAD_XM   = 1
+endif
+ifdef G4VIS_USE_OIWIN32
+  G4VIS_USE_OI = 1
+  CPPFLAGS += -DG4VIS_USE_OIWIN32
+endif
+ifdef G4VIS_USE_OI
+  G4VIS_USE = 1
+  CPPFLAGS += -DG4VIS_USE_OI
+  CPPFLAGS += -I$(G4BASE)/visualization/OpenInventor/include
+  VISLIBS += -lG4OpenInventor
+  INC_IV    = 1
+  LOAD_IV   = 1
+endif
+
+ifdef G4VIS_USE_RAYX
+  G4VIS_USE = 1
+  CPPFLAGS += -DG4VIS_USE_RAYX
+  CPPFLAGS += -I$(G4BASE)/visualization/G4Ray/include
+  VISLIBS += -lG4Ray
+  INC_X11   = 1
+  LOAD_X11  = 1
+endif
+
+ifdef G4VIS_USE_VRML
+  G4VIS_USE_VRML_OR_VRMLFILE = 1
+  CPPFLAGS += -DG4VIS_USE_VRML
+endif
+ifdef G4VIS_USE_VRMLFILE
+  G4VIS_USE_VRML_OR_VRMLFILE = 1
+  CPPFLAGS += -DG4VIS_USE_VRMLFILE
+endif
+ifdef G4VIS_USE_VRML_OR_VRMLFILE
+  G4VIS_USE = 1
+  CPPFLAGS += -I$(G4BASE)/visualization/VRML/include
+  VISLIBS += -lG4VRML
+endif
+
+ifdef G4VIS_USE
+  ifdef G4_SOLVE_TEMPLATES
+    G4_SOLVE_VIS_TEMPLATES = 1
+  endif
+  ifdef GNU_GCC
+    G4_SOLVE_VIS_TEMPLATES = 1
+  endif
+  ifdef G4_SOLVE_VIS_TEMPLATES
+    CPPFLAGS += -DG4_SOLVE_VIS_TEMPLATES
+  endif
+  CPPFLAGS += -DG4VIS_USE
+  CPPFLAGS += -I$(G4BASE)/visualization/management/include
+  CPPFLAGS += -I$(G4BASE)/visualization/modeling/include
+  VISLIBS  += -lG4vis_management
+  VISLIBS  += -lG4modeling
+endif
+

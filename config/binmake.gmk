@@ -1,0 +1,222 @@
+# $Id: binmake.gmk,v 1.1 1999-01-07 15:58:32 gunter Exp $
+# ----------------------------------------------------------
+# Script defining rules and paths for making binaries.
+#                          Gabriele Cosmo, 25/06/1998.
+# ----------------------------------------------------------
+
+ifndef LDFLAGS
+  include $(G4INSTALL)/config/architecture.gmk
+endif
+
+G4LIBDIR := $(G4LIB)/$(G4SYSTEM)
+
+include $(G4INSTALL)/config/G4UI_USE.gmk
+include $(G4INSTALL)/config/G4VIS_USE.gmk
+include $(G4INSTALL)/config/interactivity.gmk
+
+ifndef INCFLAGS
+  INCFLAGS := \
+              -I$(G4BASE)/global/management/include \
+              -I$(G4BASE)/global/HEPRandom/include \
+              -I$(G4BASE)/global/HEPGeometry/include \
+              -I$(G4BASE)/run/include \
+              -I$(G4BASE)/materials/include \
+              -I$(G4BASE)/particles/management/include \
+              -I$(G4BASE)/particles/bosons/include \
+              -I$(G4BASE)/particles/leptons/include \
+              -I$(G4BASE)/particles/hadrons/barions/include \
+              -I$(G4BASE)/particles/hadrons/ions/include \
+              -I$(G4BASE)/particles/hadrons/mesons/include \
+              -I$(G4BASE)/processes/management/include \
+              -I$(G4BASE)/processes/general/include \
+              -I$(G4BASE)/processes/decay/include \
+              -I$(G4BASE)/processes/optical/include \
+              -I$(G4BASE)/processes/transportation/include \
+              -I$(G4BASE)/processes/parameterisation/include \
+              -I$(G4BASE)/processes/electromagnetic/standard/include \
+              -I$(G4BASE)/processes/electromagnetic/muons/include \
+              -I$(G4BASE)/processes/electromagnetic/utils/include \
+              -I$(G4BASE)/processes/electromagnetic/xrays/include \
+              -I$(G4BASE)/processes/hadronic/management/include \
+              -I$(G4BASE)/processes/hadronic/processes/include \
+              -I$(G4BASE)/processes/hadronic/util/include \
+              -I$(G4BASE)/processes/hadronic/cross_sections/include \
+              -I$(G4BASE)/processes/hadronic/models/generator/de_excitation/include \
+              -I$(G4BASE)/processes/hadronic/models/generator/diffractive_string/include \
+              -I$(G4BASE)/processes/hadronic/models/generator/high_energy/include \
+              -I$(G4BASE)/processes/hadronic/models/generator/kinetic_model/include \
+              -I$(G4BASE)/processes/hadronic/models/generator/management/include \
+              -I$(G4BASE)/processes/hadronic/models/generator/pre_equilibrium/include \
+              -I$(G4BASE)/processes/hadronic/models/generator/quark_gluon_string/include \
+              -I$(G4BASE)/processes/hadronic/models/generator/string_common/include \
+              -I$(G4BASE)/processes/hadronic/models/generator/string_fragmentation/include \
+              -I$(G4BASE)/processes/hadronic/models/generator/util/include \
+              -I$(G4BASE)/processes/hadronic/models/high_energy/include \
+              -I$(G4BASE)/processes/hadronic/models/low_energy/include \
+              -I$(G4BASE)/processes/hadronic/models/neutron_hp/include \
+              -I$(G4BASE)/processes/hadronic/stopping/include \
+              -I$(G4BASE)/geometry/management/include \
+              -I$(G4BASE)/geometry/solids/CSG/include \
+              -I$(G4BASE)/geometry/solids/BREPS/include \
+              -I$(G4BASE)/geometry/solids/STEP/include \
+              -I$(G4BASE)/geometry/solids/STEPinterface/include \
+              -I$(G4BASE)/geometry/volumes/include \
+              -I$(G4BASE)/geometry/magneticfield/include \
+              -I$(G4BASE)/track/include \
+              -I$(G4BASE)/tracking/include \
+              -I$(G4BASE)/digits+hits/detector/include \
+              -I$(G4BASE)/digits+hits/hits/include \
+              -I$(G4BASE)/digits+hits/digits/include \
+              -I$(G4BASE)/readout/include \
+              -I$(G4BASE)/event/include \
+              -I$(G4BASE)/graphics_reps/include \
+              -I$(G4BASE)/intercoms/include
+endif
+
+ifdef G4ODBMS
+  INCFLAGS += \
+              -I$(G4BASE)/persistency/management/include \
+              -I$(G4BASE)/persistency/events/include \
+              -I$(G4BASE)/persistency/digits+hits/hits/include \
+              -I$(G4BASE)/persistency/geometry/management/include \
+              -I$(G4BASE)/persistency/geometry/volumes/include \
+              -I$(G4BASE)/persistency/geometry/solids/CSG/include \
+              -I$(G4TMP)/$(G4SYSTEM)/G4pmanagement \
+              -I$(G4TMP)/$(G4SYSTEM)/G4pevents \
+              -I$(G4TMP)/$(G4SYSTEM)/G4phits \
+              -I$(G4TMP)/$(G4SYSTEM)/G4pgeomn \
+              -I$(G4TMP)/$(G4SYSTEM)/G4pvol \
+              -I$(G4TMP)/$(G4SYSTEM)/G4pcsg \
+              -I$(OBJY_DIR)/include \
+              -I$(HEP_ODBMS_DIR)/include \
+              -DHep_HAS_BUILDIN_BOOL_CONSTANTS
+endif
+
+ifndef LDLIBS
+
+ifdef G4EXLIB
+  LDLIBS := -l$(G4TARGET) $(VISLIBS) $(UILIBS)
+else
+  LDLIBS := $(VISLIBS) $(UILIBS)
+endif
+
+ifdef G4ODBMS
+  LDLIBS += -lG4persistency
+endif
+
+  LDLIBS += \
+            -lG4readout \
+            -lG4run \
+            -lG4event \
+            -lG4tracking \
+            -lG4processes \
+            -lG4particles \
+            -lG4digits+hits \
+            -lG4track \
+            -lG4materials \
+            -lG4geometry \
+            -lG4graphics_reps \
+            -lG4intercoms \
+            -lG4global \
+             $(INTYLIBS)
+endif
+
+ifdef G4ODBMS
+  LDFLAGS  += -L$(OBJY_DIR)/lib \
+              -L$(HEP_ODBMS_DIR)/lib
+
+#  Note: -loo_sahr.4.02 and -lHepODBMS should be placed
+#        _before_ -l$(CLHEP_LIB) -l$(RWLIB)
+
+  LDLIBS += -loo_shar.4.02 -lHepODBMS
+endif
+
+CPPFLAGS += $(INCFLAGS)
+LDFLAGS += -L$(G4LIBDIR)
+LDLIBS += $(LOADLIBS)
+
+G4TMPDIR := $(G4TMP)/$(G4SYSTEM)/$(G4TARGET)
+G4BINDIR := $(G4BIN)/$(G4SYSTEM)
+
+ifdef G4EXLIB
+G4LIBDIR := $(G4TMPDIR)
+LDFLAGS += -L$(G4LIBDIR)
+include $(G4INSTALL)/config/common.gmk
+endif
+
+LDLIBS += $(EXTRALIBS)
+
+sources := $(wildcard $(G4TARGET).cc)
+objects := $(patsubst %.cc,$(G4TMPDIR)/exe/%.o,$(sources))
+dependencies := $(patsubst %.cc,$(G4TMPDIR)/exe/%.d,$(sources))
+
+.PHONY: bin clean clean_bin
+
+# Make $(G4TARGET) executable.
+bin: $(G4BINDIR)/$(G4TARGET)
+
+ifeq ($(G4SYSTEM),WIN32-VC-NICE)
+  WIN32TMP := $(patsubst -L%,$(LIB_PATH)%,$(LDFLAGS))
+  LDFLAGS  = $(patsubst /,$(PATH_DEL),$(WIN32TMP))
+  LDLIBS := $(patsubst -l%,lib%.a,$(LDLIBS))
+endif
+
+$(G4BINDIR)/$(G4TARGET): $(G4TMPDIR)/exe/obj.last
+	@if [ ! -d $(G4BINDIR) ] ; then mkdir $(G4BINDIR) ;fi
+ifdef CPPVERBOSE
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) \
+	-o $(G4BINDIR)/$(G4TARGET) $(objects) $(LDFLAGS) $(LDLIBS)
+else
+	@echo Linking $(G4TARGET) ...
+	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) \
+	-o $(G4BINDIR)/$(G4TARGET) $(objects) $(LDFLAGS) $(LDLIBS)
+endif
+
+# Touch the versioning file
+ifdef G4EXLIB
+$(G4TMPDIR)/exe/obj.last: lib $(objects)
+else
+$(G4TMPDIR)/exe/obj.last: $(objects)
+endif
+	@touch $@
+
+# Make the $(G4TARGET).o file.
+$(G4TMPDIR)/exe/$(G4TARGET).o : $(G4TARGET).cc
+ifdef CPPVERBOSE
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(APPFLAGS) \
+	 -c $(OUT_OBJ)$(G4TMPDIR)/exe/$(G4TARGET).o $(G4TARGET).cc
+else
+	@echo Compiling $(G4TARGET).cc ...
+	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(APPFLAGS) \
+	 -c $(OUT_OBJ)$(G4TMPDIR)/exe/$(G4TARGET).o $(G4TARGET).cc
+endif
+
+# Make the $(G4TARGET).d file and include it.
+$(G4TMPDIR)/exe/$(G4TARGET).d: $(G4TARGET).cc
+	@if [ ! -d $(G4TMP)/$(G4SYSTEM) ] ; then mkdir $(G4TMP)/$(G4SYSTEM) ;fi
+	@if [ ! -d $(G4TMPDIR) ] ; then mkdir $(G4TMPDIR) ;fi
+	@if [ ! -d $(G4TMPDIR)/exe ] ; then mkdir $(G4TMPDIR)/exe ;fi
+	@echo Making dependency for file $<...
+ifeq ($(G4SYSTEM),Linux-g++)
+	@($(ECHO) -n $(G4TMPDIR)/exe/ ; \
+	g++ -MM $(RWINCGPP) $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/exe/$*.o!& $@!' >$@
+else
+	@($(ECHO) $(G4TMPDIR)/\\c ; \
+	g++ -MM $(RWINCGPP) $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/exe/$*.o!& $@!' >$@
+endif
+-include $(dependencies)
+
+clean:
+	@echo Cleaning up ...
+	@rm -f ./core
+	@rm -rf $(G4TMPDIR)
+	@rm -f $(G4LIBDIR)/lib$(G4TARGET).a
+	@rm -f $(G4BINDIR)/$(G4TARGET)
+ifdef CFRONT
+	@rm -rf $(G4TREP)/exec
+endif
+
+clean_bin:
+	@echo Removing application $(G4TARGET) ...
+	@rm -f ./core
+	@rm -f $(G4BINDIR)/$(G4TARGET)
