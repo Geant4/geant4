@@ -20,32 +20,33 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
 //
 //
-// File name:     G4EBremsstrahlungSpectrum
+// File name:  G4hShellCrossSection   
 //
-// Author:        V.Ivanchenko (Vladimir.Ivantchenko@cern.ch)
+// Author:     S. Dussoni and A. Mantero (Alfonso.Mantero@ge.infn.it)
 // 
-// Creation date: 20.10.01
-//
-// Modifications: 
+// History:
+// -----------
+// 23 Oct 2001 A. Mantero   1st implementation
+// 24 Oct 2001 MGP          Cleaned up
 //
 // -------------------------------------------------------------------
 
 // Class Description: 
-// Provides probabilities for shell ionisation
+// Model for shell cross sections in proton ionisation
 
 // -------------------------------------------------------------------
 
-#ifndef G4hShellCrossSection_HH
-#define G4hShellCrossSection_HH 1
+#ifndef G4HSHELLCROSSSECTION_HH
+#define G4HSHELLCROSSSECTION__HH 1
 
 #include "globals.hh"
 #include "G4VhShellCrossSection.hh" 
+#include "g4std/vector"
 
 class G4hShellCrossSection : public G4VhShellCrossSection
 {
@@ -57,15 +58,16 @@ public:
 
 protected:
 
-  virtual G4std::vector<G4double>* Probabilities(G4int Z,
-				   G4double kineticEnergy) const = 0;
+  virtual G4std::vector<G4double> Probabilities(G4int Z,
+						G4double kineticEnergy,
+						G4double mass,
+						G4double momentum) const;
 
 private:
 
   // Hide copy constructor and assignment operator 
-  G4hShellCrossSection(const  G4hShellCrossSection&);
+  G4hShellCrossSection(const G4hShellCrossSection&);
   G4hShellCrossSection & operator = (const G4hShellCrossSection &right);
-
 
 };
 

@@ -230,10 +230,11 @@ private:
                                            G4double step) const;
   // Function to sample electronic losses
 
-  G4std::vector<G4DynamicParticle*>* DeexciteAtom(
-                                     const G4Material* material,
-					   G4double incidentEnergy,
-					   G4double eLoss);
+  G4std::vector<G4DynamicParticle*>* DeexciteAtom(const G4Material* material,
+						  G4double incidentEnergy,
+						  G4double eLoss,
+						  G4double hMass,
+						  G4double hMomentum);
 
   G4int SelectRandomAtom(const G4Material* material, 
                                G4double kineticEnergy) const;
