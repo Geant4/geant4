@@ -755,14 +755,9 @@ G4VParticleChange* G4VEnergyLossSTD::PostStepDoIt(const G4Track& track,
     for (G4int i=0; i<n; i++) {
        dp = (*newp)[i];
        e = dp->GetKineticEnergy();
-       const G4ParticleDefinition* pd = dp->GetDefinition();
-       G4ThreeVector v = dp->GetMomentumDirection();
-       G4double m = pd->GetPDGMass();
-       G4double p = sqrt(e*(e + 2.0*m));
-       if (pd != theGamma && pd != theElectron ) e += m;
-       v *= p;
+       if (dp->GetDefinition() != theElectron ) e += dp->GetMass();
        finalT -= e;
-       finalP -= v;
+       finalP -= dp->GetMomentum();
        aParticleChange.AddSecondary(dp); 
     }
 
