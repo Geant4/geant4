@@ -1,4 +1,4 @@
-$Id: History,v 1.45 2001-05-23 19:11:33 japost Exp $
+$Id: History,v 1.46 2001-05-23 19:30:37 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+May 23rd, 2001       J. Apostolakis - geomvol-V03-01-07
+
+- Added methods to Set the minimum epsilon (relative accuracy) to Propagator In Field.
+
 May 23rd, 2001       J. Apostolakis - geomvol-V03-01-06
 
 - Added new parameter to Propagator In Field, 
