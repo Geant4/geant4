@@ -1,4 +1,4 @@
-$Id: README,v 1.12 2003-11-25 16:50:10 maire Exp $
+$Id: README,v 1.13 2003-12-01 14:49:38 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -151,7 +151,7 @@ $Id: README,v 1.12 2003-11-25 16:50:10 maire Exp $
  		....
  		Idle>      ---> type your commands. For instance:
 		Idle> /run/beamOn 
-		Idle> /vis/viewer/flush      ---> mandatory between run
+		....
 		Idle> /run/beamOn 10
 		....				
  		Idle> /control/execute newgeom.mac
