@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst14DetectorConstruction.cc,v 1.6 2001-05-23 11:01:21 pia Exp $
+// $Id: Tst14DetectorConstruction.cc,v 1.7 2001-05-23 16:38:17 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -100,7 +100,7 @@ void Tst14DetectorConstruction::DefineMaterials()
   density = 2.700*g/cm3;
   a = 26.98*g/mole;
   G4Material* Al = new G4Material(name="Aluminium", z=13., a, density);
-  dummy = Be->GetNumberOfElements();
+  dummy = Al->GetNumberOfElements();
 
   density = 2.330*g/cm3;
   a = 28.09*g/mole;
