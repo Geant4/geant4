@@ -189,6 +189,9 @@ examples                                         examples-V06-00-02
       compiler/system configurations.
   o Rich (Rich-V06-00-00)
     + Fixed compilation errors and warnings for gcc-3.2.
+- extended/biasing/B01 (exampleB01-V06-00-00)
+  o Open the geometry to cleanly clear biasing stores at the end of
+    the application.
 - extended/field (fieldex-V06-00-00)
   o Fixed methods that change the field to update the equation and
     field-manager in field01 & field03.
