@@ -1,4 +1,4 @@
-$Id: History,v 1.205 2004-09-27 16:26:07 pia Exp $
+$Id: History,v 1.206 2004-11-12 18:09:12 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12.11.2004   MGP, tag emlowen-V06-02-01
+             Fixes to tables manipulation, effective charge, graphite
+             problem and Bremsstrhalung low energy edge of the
+             spectrum by Vladimir Ivanchenko 
 
 27.09.2004   MGP, tag emlowen-V06-02-00
              Fixes for compilation with gcc 3.4 (mostly by Gabriele)
