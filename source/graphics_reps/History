@@ -1,4 +1,4 @@
-$Id: History,v 1.42 2002-11-11 12:11:45 johna Exp $
+cvs log $Id: History,v 1.43 2002-11-18 10:25:29 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 11, 2002, E.Chernaev  (greps-V04-01-03)
+- Minor bug fix in HepPolyhedron::GetFacet().
+- HepDouble, HepBoolean --> double, bool in HepPolyhedron
+
 Nov 7, 2002, E.Chernaev  (greps-V04-01-02)
-- Added createTwistedTrap() and createPolyhedron() to HepPolyhedorn.
+- Added createTwistedTrap() and createPolyhedron() to HepPolyhedron.
 
 Oct 28, 2002, J.Allison  (greps-V04-01-01)
 - Changed AttDefStore to return a map.
