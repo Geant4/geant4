@@ -1,9 +1,9 @@
-# $Id: GNUmakefile,v 1.1 2003-10-07 11:24:40 hpw Exp $
+# $Id: GNUmakefile,v 1.2 2003-10-08 15:44:10 hpw Exp $
 # -----------------------------------------------------------
-# GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
+# GNUmakefile for hadronic library.  JPW, 2003.
 # -----------------------------------------------------------
 
-name := G4hadronic_diffstring
+name := G4had_string_diff
 
 ifndef G4INSTALL
   G4INSTALL = ../../../../../..
@@ -21,12 +21,11 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/processes/hadronic/management/include/ \
             -I$(G4BASE)/processes/hadronic/util/include \
-            -I$(G4BASE)/processes/hadronic/processes/include \
-            -I$(G4BASE)/processes/hadronic/cross_sections/include \
-	    -I$(G4BASE)/processes/hadronic/models/generator/management/include \
-	    -I$(G4BASE)/processes/hadronic/models/generator/string_common/include \
-	    -I$(G4BASE)/processes/hadronic/models/generator/string_fragmentation/include \
-	    -I$(G4BASE)/processes/hadronic/models/generator/util/include \
+	    -I$(G4BASE)/processes/hadronic/models/management/include \
+	    -I$(G4BASE)/processes/hadronic/models/util/include \
+	    -I$(G4BASE)/processes/hadronic/models/parton_string/diffraction/include \
+	    -I$(G4BASE)/processes/hadronic/models/parton_string/management/include \
+	    -I$(G4BASE)/processes/hadronic/models/parton_string/hadronization/include \
             -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/particles/leptons/include \
             -I$(G4BASE)/particles/bosons/include \
