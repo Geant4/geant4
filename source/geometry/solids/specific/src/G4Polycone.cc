@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.17 2003-11-18 09:48:20 gcosmo Exp $
+// $Id: G4Polycone.cc,v 1.18 2003-11-18 21:32:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,8 +74,8 @@ G4Polycone::G4Polycone( const G4String& name,
   {
     if ( zPlane[i] == zPlane[i+1] )
     {
-      if( (rInner[i]   >= rOuter[i+1])
-        ||(rInner[i+1] >= rOuter[i])   )
+      if( (rInner[i]   > rOuter[i+1])
+        ||(rInner[i+1] > rOuter[i])   )
       {
         DumpInfo();
         G4cerr << "ERROR - G4Polycone::G4Polycone()"
