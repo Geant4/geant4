@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPNames.hh,v 1.1 1999-01-07 16:13:07 gunter Exp $
+// $Id: G4NeutronHPNames.hh,v 1.2 1999-03-29 09:54:14 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPNames_h
@@ -28,15 +28,18 @@ class G4NeutronHPNames
 {
   public:
   
-  G4NeutronHPNames(){}
+  G4NeutronHPNames(){theMaxOffSet = 5;}
+  G4NeutronHPNames(G4int maxOffSet){theMaxOffSet = maxOffSet;}
   ~G4NeutronHPNames(){}
   
   G4NeutronHPDataUsed GetName(G4int A, G4int Z, G4String base, G4String rest, G4bool & active);
   G4String GetName(G4int i) { return theString[i]; }
+  void SetMaxOffSet(G4double anOffset) { theMaxOffSet = anOffset; }
   
   private:
   
   static const G4String theString[99];
+  G4int theMaxOffSet;
 
 };
 #endif

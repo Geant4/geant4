@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPVector.hh,v 1.1 1999-01-07 16:13:10 gunter Exp $
+// $Id: G4NeutronHPVector.hh,v 1.2 1999-03-29 09:54:14 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPVector_h
@@ -151,6 +151,8 @@ class G4NeutronHPVector
     nEntries=0;   
     theManager.CleanUp();
   }
+
+  // merges the vectors active and passive into *this
   inline void Merge(G4NeutronHPVector * active, G4NeutronHPVector * passive)
   {
     CleanUp();
