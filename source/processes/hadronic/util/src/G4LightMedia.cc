@@ -202,9 +202,7 @@
     
     if( targetParticle->GetDefinition() == aProton ) {
       const G4double cech[] = {0.50,0.45,0.40,0.35,0.30,0.25,0.06,0.04,0.005,0.};
-      G4int iplab = G4int( incidentParticle->GetTotalMomentum()/GeV*10.0 );
-      if( iplab > 9 )iplab = G4int( incidentParticle->GetTotalMomentum()/GeV ) + 9;
-      if( iplab > 19 )iplab = 19;
+      G4int iplab = G4int( std::min( 9.0, incidentParticle->GetTotalMomentum()/GeV*10.0 ) );
       if( G4UniformRand() <= cech[iplab]/pow(atomicNumber,0.75) ) {
         G4DynamicParticle* resultant = new G4DynamicParticle;
         resultant->SetDefinition( anAntiNeutron );
