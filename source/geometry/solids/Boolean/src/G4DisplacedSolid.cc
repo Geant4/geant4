@@ -38,6 +38,23 @@ G4DisplacedSolid( const G4String& pName,
 }
 
 /////////////////////////////////////////////////////////////////////////////////
+//
+//
+G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
+                                    G4VSolid* pSolid ,
+			      const G4Transform3D& transform  ) :
+  G4VSolid(pName)
+{
+  fPtrSolid = pSolid ;
+  fDirectTransform = new G4AffineTransform(transform.getRotation().inverse(),
+                                           transform.getTranslation()) ;
+
+  fPtrTransform    = new G4AffineTransform(transform.getRotation().inverse(),
+                                           transform.getTranslation()) ;
+  fPtrTransform->Invert() ;
+}
+
+/////////////////////////////////////////////////////////////////////////////////
 //  Constructor for use with creation of Transient object from Persistent object
 //
 
