@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMuEnergyLoss.cc,v 1.27 2003-04-09 16:32:53 vnivanch Exp $
+// $Id: G4VMuEnergyLoss.cc,v 1.28 2003-04-26 12:11:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -452,8 +452,7 @@ G4double G4VMuEnergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
          StepLimit = dRoverRange*fRangeNow + r*(1.0 - dRoverRange)*(2.0 - r/fRangeNow);
 
         //  randomise this value
-         if(rndmStepFlag) StepLimit = finalRange+(StepLimit-finalRange)*
-                                                           G4UniformRand() ;
+         if(rndmStepFlag) StepLimit = r+(StepLimit-r)*G4UniformRand() ;
          if(StepLimit > fRangeNow) StepLimit = fRangeNow ;
        }
        else

@@ -36,7 +36,7 @@
 // ************************************************************
 // 28 July   1999 V.Ivanchenko cleen up
 // 17 August 1999 G.Mancinelli added ICRU parametrisations for protons
-// 20 August 1999 G.Mancinelli added ICRU tables for alpha 
+// 20 August 1999 G.Mancinelli added ICRU tables for alpha
 // 31 August 1999 V.Ivanchenko update and cleen up
 // 30 Sept.  1999 V.Ivanchenko minor upgrade
 // 12 Dec.   1999 S. Chauvie added Barkas correction 
@@ -74,7 +74,7 @@
 // 28 Mar   2002 V.Ivanchenko Set fluorescence off by default
 // 09 Apr   2002 V.Ivanchenko Fix table problem of GenericIons
 // 28 May   2002 V.Ivanchenko Remove flag fStopAndKill
-// 31 May   2002 V.Ivanchenko Add path of Fluo + Auger cuts to 
+// 31 May   2002 V.Ivanchenko Add path of Fluo + Auger cuts to
 //                            AtomicDeexcitation
 // 03 Jun   2002 MGP          Restore fStopAndKill
 // 10 Jun   2002 V.Ivanchenko Restore fStopButAlive
@@ -87,7 +87,8 @@
 // 21 Jan   2003 V.Ivanchenko Cut per region
 // 10 Mar   2003 V.Ivanchenko Use SubTypes for ions
 // 12 Apr   2003 V.Ivanchenko Cut per region for fluo AlongStep
-// 18 Apr   2003 V.Ivanchenko finalRange redefinition 
+// 18 Apr   2003 V.Ivanchenko finalRange redefinition
+// 26 Apr   2003 V.Ivanchenko fix for stepLimit
 
 // -----------------------------------------------------------------------
 
@@ -820,16 +821,14 @@ G4double G4hLowEnergyIonisation::GetConstraints(
   G4double r = G4std::min(finalRange, couple->GetProductionCuts()
                  ->GetProductionCut(idxG4ElectronCut));
 
-  if (fRangeNow > r)
+  if (fRangeNow > r) {
     stepLimit = dRoverRange*fRangeNow + r*(1.0 - dRoverRange)*(2.0 - r/fRangeNow);
-
+    if(rndmStepFlag) stepLimit = r + (stepLimit-r)*G4UniformRand() ;
+    if (stepLimit > fRangeNow) stepLimit = fRangeNow;
+  }
   // compute the (random) Step limit in standard energy range
   if(tscaled > highEnergy ) {
 
-      //  randomise this value
-    if(rndmStepFlag) stepLimit = finalRange +
-                                  (stepLimit-finalRange)*G4UniformRand() ;
-    // cut step in front of Bragg's peak
     if(stepLimit > fRangeNow - dx*0.9) stepLimit = fRangeNow - dx*0.9 ;
 
   // Step limit in low energy range

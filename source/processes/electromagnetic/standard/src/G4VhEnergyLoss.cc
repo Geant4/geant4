@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.cc,v 1.44 2003-04-17 17:38:35 vnivanch Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.45 2003-04-26 12:11:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -420,7 +420,7 @@ G4double G4VhEnergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
     //   StepLimit = (c1lim*fRangeNow+c2lim+c3lim/fRangeNow);
 
     //  randomise this value
-    if (rndmStepFlag) StepLimit=finalRange+(StepLimit-finalRange)*G4UniformRand();
+    if (rndmStepFlag) StepLimit=r+(StepLimit-r)*G4UniformRand();
     if (StepLimit > fRangeNow) StepLimit = fRangeNow;
   }
  else StepLimit = fRangeNow;
