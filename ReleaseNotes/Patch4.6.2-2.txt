@@ -1,0 +1,143 @@
+
+                 Geant4 6.2 - patch-02 Release Notes
+                 -----------------------------------
+
+                                                           26 October 2004
+
+List of fixes included in this public patch since release 6.2-patch-01:
+
+  o Geometry:
+    --------
+    + divisions:
+      o Removed unnecessary debug printout in method
+        G4PVDivision::CheckAndSetParamenters().
+    + management:
+      o G4Region: added map for storage of materials/cuts and methods for
+        handling registration of couples in the map, finding a couple
+        according to a given material, clearing the map's storage.
+        Extensions necessary to resolve correct update of material-cut
+        couples in parameterised geometries by material.
+      o G4LogicalVolume: added method UpdateMaterial() to refresh a
+        material/cut couple in the corresponding region.
+        Extension necessary to resolve correct update of material-cut
+        couples in parameterised geometries by material.
+      o Fixed G4RegionStore::Clean() to avoid deletion of world region.
+    + navigation:
+      o G4Navigator: corrected computation of fGrandMotherExitNormal in
+        ComputeStep() in the case where a not valid exit-normal exists.
+      o G4GeomTestSegment: fix to correctly determine whether starting
+        trajectory is entering or exiting the solid when the starting point
+        is on a surface. Added additional tests on solid consistencies
+        (from roundoff sometimes) to avoid incorrect overlap warnings.
+        Addresses problem reports #610 and #652.
+      o Dump out contents from the solid when a fatal G4Exception is thrown
+        from the navigators in ComputeStep().
+      o Invoke G4LogicalVolume::UpdateMaterial() instead of SetMaterial()
+        for parameterised navigation in G4Navigator and specialised
+        G4ParameterisedNavigation.
+        Modification necessary to resolve correct update of material-cut
+        couples in parameterised geometries by material.
+    + solids/CSG:
+      o Fix in G4Cons::DistanceToIn(p,v) on fRmax surface and move in,
+        the condition became a bit more strict && determinant >=0, i.e.
+        intersections in addition to go in.
+        Fixes a rare problem of dIn=dOut=0 observed in 3 events over a
+        statistics of 10^8..
+      o Fix in G4Sphere::DistanceToOut(p,v,...) on fRmin moving outside.
+        The bug showed 3 events of dIn=dOut=0 for 10^7 statistics in the
+        unit testing.
+      o Bug fix in G4Sphere::SurfaceNormal(p) for theta normals.
+    + solids/specific:
+      o G4VCSGfaceted: fix for rare anomalous situation in which
+        DistanceToOut(p,v,..) will report kInfinity, make an additional
+        check for the point p on the surface, in which case will report
+        zero. Addresses problem observed in G4Polyhedra and reported in #650.
+
+  o Materials:
+    ---------
+    + Added protection in G4AtomicShells::GetNumberOfShells(Z).
+      Fixes problem report #643.
+    + Recalculate ionisation parameters after set of new mean ionisation
+      potential; added factor 2 to shell correction term.
+
+  o Processes/cuts:
+    --------------
+    + Fixed bug in G4ProductionCutsTable for the update of materials/cuts
+      couple for dynamic setups where material may vary, like in the case
+      of parameterization of detectors through material.
+
+  o Electromagnetic processes:
+    -------------------------
+    + lowenergy:
+      o Trivial fixes for removal of redundant semicolons in the code.
+    + utils:
+      o Fixed a problem of cut dependence of transmission energy of low
+        energy e- via thin foil
+    + xrays:
+      o Changed "StronglyForced" back to "Forced" in GetMeanLifeTime() for
+        the G4Scintillation process.
+
+  o Hadronic Processes:
+    ------------------
+    + models/cascade:
+      o Fixed bug in G4CascadeInterface for uncorrect deletion of dynamic
+        particles. Fixes problem report #645.
+
+  o Optical Processes:
+    -----------------
+    + Allow for unified model reflectivity parameters to also work in case
+      of dielectric_metal surfaces; in G4OpBoundaryProcess, use GetMaterial()
+      from G4StepPoint directly, sample reflectivity and apply unified model
+      reflection parameters only once even for rough dielectric/metal
+      surfaces. Fixes problem report #654.
+    + Fixed bug in G4PlaneVectorRand for G4OpBoundaryProcess and resample
+      'theFacetNormal' for LobeReflection in DielectricMetal.
+
+  o Run:
+    ---
+    + Updated date to run-manager.
+
+  o Visualization:
+    -------------
+    + OpenGL: G4OpenGLTransform3D.cc: simplified implementation for
+      GetMatrix() to allow for porting on future CLHEP series.
+
+  o Examples:
+    --------
+    + Updated reference outputs.
+    + electromagnetic/MuonProcesses
+      o Modified HistoManager and Messenger in order to allow a multirun job.
+    + electromagnetic/PhotonProcesses
+      o Modified HistoManager and Messenger in order to allow a multirun job.
+    + electromagnetic/TestEm2
+      o Updated acceptance numbers in input macro.
+      o Fixed problem in initialisation of RunAction.
+    + electromagnetic/TestEm4
+      o Modifications in RunAction for histograms management for JAIDA.
+    + electromagnetic/TestEm6
+      o Correctly defined all UI subdirectories.
+      o Modifications in RunAction for histograms management for JAIDA.
+    + electromagnetic/TestEm10
+      o Removed obsolete processes from PhysicsList.
+    + extended/field
+      o Minor cleanup of PhysicsLists.
+    + extended/optical
+      o Fixed compilation error and warnings for LXe on Linux/gcc compiler.
+    + novice/N05
+      o Added protection for negative proposed step in ExN05MinEkineCuts.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 6.2.
+  o  Technical notes distributed for release 6.2 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 6.2 are available through
+our "Source Code" Web page:  http://cern.ch/geant4
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/G4UsersDocuments/Overview/html
+for further information about using Geant4.
