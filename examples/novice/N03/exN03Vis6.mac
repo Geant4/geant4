@@ -7,7 +7,7 @@
 #                                                                     #
 #  CONTENTS: A basic macro for demonstrating Inventor driver          #
 #                                                                     #
-#  USAGE:  % $G4BINDIR/exampleN03  exN03Vis4.mac                      #
+#  USAGE:  % $G4BINDIR/exampleN03  exN03Vis6.mac                      #
 #                                                                     #
 #  REQUIRED PLATFORMS & SOFTWARES: Unix, Motif, X-window, OpenGL,     #
 #                                  HEPVis                             #

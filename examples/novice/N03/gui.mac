@@ -1,6 +1,7 @@
 #
-#  This file permits to customize with commands
+#  This file permits to customize, with commands,
 # the menu bar of the G4UIXm, G4UIWin32 sessions.
+# It has no effect with G4UIterminal.
 #
 # File :
 /gui/addMenu file File
