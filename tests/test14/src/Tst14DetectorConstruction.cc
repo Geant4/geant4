@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14DetectorConstruction.cc,v 1.13 2003-05-15 08:39:28 gcosmo Exp $
+// $Id: Tst14DetectorConstruction.cc,v 1.14 2003-05-16 14:55:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,6 +44,10 @@
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
 
+#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4SolidStore.hh"
+
 #include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -63,6 +67,7 @@ Tst14DetectorConstruction::Tst14DetectorConstruction()
 
   // create commands for interactive definition of the calorimeter  
   detectorMessenger = new Tst14DetectorMessenger(this);
+  DefineMaterials();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -70,13 +75,12 @@ Tst14DetectorConstruction::Tst14DetectorConstruction()
 Tst14DetectorConstruction::~Tst14DetectorConstruction()
 { 
   delete detectorMessenger;
- }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VPhysicalVolume* Tst14DetectorConstruction::Construct()
 {
-  DefineMaterials();
   return ConstructCalorimeter();
 }
 
@@ -183,12 +187,7 @@ G4VPhysicalVolume* Tst14DetectorConstruction::ConstructCalorimeter()
   //     
   // World
   //
-  if (solidWorld) delete solidWorld ;
-  if (logicWorld) delete logicWorld ;
-  if (physiWorld) {
-		delete physiWorld ;
-		worldchanged = true;
-	}	 
+  worldchanged = CleanGeometry();
 		
   solidWorld = new G4Tubs("World",				//its name
 			  0.,WorldSizeR,WorldSizeZ/2.,0.,twopi)       ;//its size
@@ -210,10 +209,6 @@ G4VPhysicalVolume* Tst14DetectorConstruction::ConstructCalorimeter()
   //
   if (AbsorberThickness > 0.) 
     { 
-      if (solidAbsorber) delete solidAbsorber ;
-      if (logicAbsorber) delete logicAbsorber ;
-      if (physiAbsorber) delete physiAbsorber ;
-
       solidAbsorber = new G4Tubs("Absorber",		//its name
 				 0.,AbsorberRadius,AbsorberThickness/2.,0.,twopi); 
                           
@@ -247,7 +242,7 @@ G4VPhysicalVolume* Tst14DetectorConstruction::ConstructCalorimeter()
   //
   //always return the physical World
   //
-	worldchanged = false;
+  worldchanged = false;
 	  
   return physiWorld;
 }
@@ -371,6 +366,24 @@ void Tst14DetectorConstruction::SetMagField(G4double fieldValue)
       magField = 0;
       fieldMgr->SetDetectorField(magField);
     }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  
+G4bool Tst14DetectorConstruction::CleanGeometry()
+{
+  if (physiWorld)
+  {
+    G4PhysicalVolumeStore::Clean();
+    G4LogicalVolumeStore::Clean();
+    G4SolidStore::Clean();
+
+    return true;
+  }
+  else
+  {
+    return false;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

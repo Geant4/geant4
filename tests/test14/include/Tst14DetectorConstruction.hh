@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14DetectorConstruction.hh,v 1.7 2003-02-23 09:49:14 pia Exp $
+// $Id: Tst14DetectorConstruction.hh,v 1.8 2003-05-16 14:55:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,6 +66,7 @@ class Tst14DetectorConstruction : public G4VUserDetectorConstruction
      
      G4VPhysicalVolume* Construct();
 
+     G4bool CleanGeometry();
      void UpdateGeometry();
      
   public:
