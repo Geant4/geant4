@@ -1,5 +1,5 @@
 
-$Id: History,v 1.12 2000-06-26 16:16:06 gcosmo Exp $
+$Id: History,v 1.13 2000-09-21 16:04:57 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ Sept 13  2000  Vladimir Grichine    geom-solid-bool-V02-00-00
+
+  - G4SubtractionSolid.cc: relaxed behavior in SurfaceNormal(p), where
+    it is allowed for a point to be inside the solid. A message is thrown
+    to cerr instead of a G4Exception.
 
  June 26  2000  Vladimir Grichine    geom-solid-bool-V01-01-03
 
