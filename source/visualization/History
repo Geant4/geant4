@@ -1,4 +1,4 @@
-$Id: History,v 1.228 2003-11-04 09:17:12 gcosmo Exp $
+$Id: History,v 1.229 2003-11-06 15:26:00 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,19 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+6th November 2003  John Allison  (vis-V05-02-03)
+- management:
+  o G4VisManager: improved handling of auto refresh at end of event and run.
+  o G4VisCommandsScene: improved guidance.
+  o GNUmakefile: rationalised.
+- GNUmakefile: removed G4LIBDIR and G4TMPDIR.
+- RayTracer/GNUmakefile: rationalised (raytracer-V05-02-04).
+- Tree: improved printing.
+- G4VRML2SceneHandlerFunc: changed const char* pv_name to G4String pv_name.
+- G4XXXViewer: improved comments.
+- modeling: GNUmakefile: rationalised (modeling-V05-02-01).
+- test: changed MyPhysicsList to follow kernel changes.
 
 4th November 2003  Gabriele Cosmo  (vis-V05-02-02)
 - Includes removal of OPACS module.
