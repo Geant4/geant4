@@ -1,4 +1,4 @@
-$Id: History,v 1.41 2001-05-23 17:51:10 japost Exp $
+$Id: History,v 1.42 2001-05-23 17:51:59 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 May 23rd, 2001       J. Apostolakis - geomvol-V03-01-05
 - Moved Delta Intersection and One Step from PropagatorIn Field to Field Manager
    (Incorporating changes into a tag, finally, after fix to G4FieldManager constructors. ) 
+
+   This tag requires and co-works with field-V03-01-01. 
+
 
 May 23rd, 2001       G. Cosmo - geomvol-V03-01-04
 - Fixes in G4ReplicaNavigation for bug reports #253 and #254:
