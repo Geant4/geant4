@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2002-07-04 16:20:09 gcosmo Exp $
+$Id: History,v 1.3 2002-11-18 13:55:19 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 18, 02 G.Cosmo (cadex-V04-01-01)
+- Enhanced corrections for VERTEX_POINT, EDGE_LOOP and POLY_LOOP.
+  (courtesy of Daniel Szepielak).
 
 July 04, 02 G.Cosmo (cadex-V04-01-00)
 - GNUmakefile: parse 'g++' string in G4SYSTEM to detect non-ISO setup for
