@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.2 2003-10-28 10:27:26 vnivanch Exp $
+// $Id: RunAction.cc,v 1.3 2003-11-07 15:38:28 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,6 +37,7 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
+#include "G4UnitsTable.hh"
 
 #include "Randomize.hh"
 #include <iomanip>
@@ -159,8 +160,10 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
              << "\n nb  steps/event"
              << "   neutral: " << std::setw(10) << NbOfSteps0/dNbOfEvents
              << "   charged: " << std::setw(10) << NbOfSteps1/dNbOfEvents
-             << "\n total energy deposit(MeV) " << edep/(G4double)dNbOfEvents
              << G4endl;
+	     
+      G4cout << "\n total energy deposit: " 
+             << G4BestUnit(edep/dNbOfEvents, "Energy") << G4endl;
       
       //frequency of processes call       
       G4cout << "\n nb of process calls per event: \n   ";       

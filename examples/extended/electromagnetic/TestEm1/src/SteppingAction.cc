@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: SteppingAction.cc,v 1.2 2003-10-28 10:27:26 vnivanch Exp $
+// $Id: SteppingAction.cc,v 1.3 2003-11-07 15:38:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,9 +56,8 @@ SteppingAction::~SteppingAction()
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   G4double EdepStep = aStep->GetTotalEnergyDeposit();
-  if (EdepStep > 0.) {
-    runAction->AddEdep(EdepStep);
-    eventAction->AddEdep(EdepStep);
+  if (EdepStep > 0.) {  runAction->AddEdep(EdepStep);
+                      eventAction->AddEdep(EdepStep);
   }
   const G4VProcess* process = aStep->GetPostStepPoint()->GetProcessDefinedStep();
   if (process) runAction->CountProcesses(process->GetProcessName());
