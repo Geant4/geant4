@@ -1,4 +1,4 @@
-$Id: History,v 1.29 2001-08-01 21:41:00 radoone Exp $
+$Id: History,v 1.30 2001-08-13 12:08:19 gcosmo Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -17,12 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-01/08/2001 : Radovan Chytracek
-- Bugfix 266
-  The situation when phi1 = 0 dphi1 = 2*pi and all RMINs = 0.0 is handled
+01/08/2001 : R. Chytracek        breps-V03-02-03
+- The situation when phi1 = 0 dphi1 = 2*pi and all RMINs = 0.0 is handled
   now. In this case the inner planes are not created. The fix goes even
   further this means it's considering more than 2 z-planes and inner planes
-  are not created whenever two consecutive RMINs are = 0.0 .
+  are not created whenever two consecutive RMINs are = 0.0.
+  Fixes problem report #266.
 
 20/07/2001 : G. Cosmo            breps-V03-02-02
 - Still fixed for ambiguous use of casts for G4Point3D, G4ThreeVector
