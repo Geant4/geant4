@@ -78,5 +78,3 @@ inline void ExN04TrackerHit::operator delete(void *aHit)
 }
 
 #endif
-
-
