@@ -1,0 +1,23 @@
+#
+# Macro file for the initialization phase of "test17"
+#
+#
+/control/verbose 2
+/run/verbose 1
+#/calor/setAbsMat Iron
+#/testem/phys/addPhysics  standard
+/testem/phys/addPhysics  lowenergy
+#/testem/phys/addPhysics  lowenergyNew
+/testem/phys/setCuts 1 mm
+#
+/run/initialize
+#
+/gun/particle proton
+/gun/energy 50 keV
+/tracking/verbose 1
+#
+/gun/particle ion
+/gun/ion 26 56 26
+#/gun/ion 24 52 24
+#/gun/ion 14 28 14
+/run/beamOn 100
