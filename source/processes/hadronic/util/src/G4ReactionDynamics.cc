@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ReactionDynamics.cc,v 1.2 1999-03-29 09:50:50 hpw Exp $
+// $Id: G4ReactionDynamics.cc,v 1.3 1999-03-29 09:56:35 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Reaction Dynamics
@@ -35,7 +35,7 @@
 #include "G4ReactionDynamics.hh"
 #include "Randomize.hh"
 #include <iostream.h>
-#include "DumpFrame.hh"
+// #include "DumpFrame.hh"
  //#include "../../alpha_test/cxx/NametoGheishNumber.cc"
  
  G4bool G4ReactionDynamics::GenerateXandPt(
