@@ -37,6 +37,7 @@
 #include "G4ios.hh"
 #include "Randomize.hh"
 #include "G4hLowEnergyLoss.hh"
+#include "G4QAOLowEnergyLoss.hh"
 #include "globals.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
@@ -223,10 +224,11 @@ private:
   
 private:
   //  private data members ...............................
-
+  
 protected:
   //  protected data members ...............................
   
+  G4QAOLowEnergyLoss qaoloss;
   G4PhysicsTable* theMeanFreePathTable;
   
   // interval of parametrisation of electron stopping power 

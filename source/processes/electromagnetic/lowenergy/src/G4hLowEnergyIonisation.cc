@@ -41,6 +41,7 @@
 
 G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
   : G4hLowEnergyLoss(processName),
+    qaoloss(),
     theMeanFreePathTable(NULL),
     ParamLowEnergy(1.*keV),
     ParamHighEnergy(2.*MeV),
@@ -141,6 +142,7 @@ void G4hLowEnergyIonisation::SetNuclearStoppingOff()
 void G4hLowEnergyIonisation::SetAntiProtonStoppingOn()
 {
   pbarStop = true ;
+  ParamLowEnergy = 0.05*MeV ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -855,9 +857,19 @@ G4double G4hLowEnergyIonisation::GetParametrisedLoss(G4Material* material,
   G4double ionloss, ion, ionloss125, ion125;
   G4int molecIndex = 0 ;
   ionloss = 0.0 ;
- 
+   
+  // start with aniproton management with quantum harmonic
+  // oscillator loss model
+  if(-0.5>Charge && pbarStop && qaoloss.IsMaterial(material->GetName())){
+  ionloss = qaoloss.EnergyLoss(Charge, material, KinEnergy);
+  ionloss-=GetDeltaRaysEnergy(material,KinEnergy,DeltaRayCutNow);
+  return ionloss;
+  }
+  
+  
+    
   // First of all check tables for specific materials for ICRU_49 parametrisation
-
+ 
   // Ziegler parametrisation in ICRU49
   if ( DEDXtable == "ICRU_R49p" ) {
 
@@ -2606,6 +2618,7 @@ void G4hLowEnergyIonisation::PrintInfoDefinition()
          << " to " << ParamHighEnergy / MeV << " MeV " << "." << G4endl ;
   if(pbarStop){
     G4cout << "        Parametrization of the Barkas effect is switched on." << G4endl ;
+    G4cout << "        Quantal Harmonic Oscillator Model is switched on " << G4endl ;
   }
   if(nStopping) {
     G4cout << "        Simulation of nuclear stopping is switched on." << G4endl ; 
