@@ -48,7 +48,8 @@ if ( `uname -n | grep rsplus` != "" ) then
 endif
 
 if ( `uname -n | grep dxplus` != "" ) then
-  setenv G4USE_OSPACE 1
+##############  setenv G4USE_OSPACE 1  ### Now using native STL.
+  setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/iso
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
   setenv G4SYSTEM DEC-cxx
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
