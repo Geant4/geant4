@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc,v 1.4 2002-01-21 14:52:20 grichine Exp $
+// $Id: G4VXTRenergyLoss.cc,v 1.5 2002-03-28 07:58:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -371,7 +371,7 @@ G4VParticleChange* G4VXTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
                   (*(*fAngleDistrTable)(iPlace))(0))*W1 + 
                  ((*(*fEnergyDistrTable)(iPlace + 1))(0)+
                   (*(*fAngleDistrTable)(iPlace + 1))(0))*W2)*chargeSq*0.5
-              <<endl ;
+              <<G4endl ;
       }
       numOfTR = RandPoisson::shoot( meanNumOfTR ) ;
     }
@@ -389,7 +389,7 @@ G4VParticleChange* G4VXTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
     {
       if(verboseLevel)
       {
-        G4cout<<"Number of X-ray TR photons = "<<numOfTR<<endl ;
+        G4cout<<"Number of X-ray TR photons = "<<numOfTR<<G4endl ;
       }
       aParticleChange.SetNumberOfSecondaries(numOfTR);
 
@@ -412,7 +412,7 @@ G4VParticleChange* G4VXTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
 
       if(verboseLevel)
       {
-        G4cout<<"energyTR = "<<energyTR/keV<<"keV"<<endl ;
+        G4cout<<"energyTR = "<<energyTR/keV<<"keV"<<G4endl ;
       }
       sumEnergyTR += energyTR ;
 
