@@ -98,9 +98,13 @@ int main(int argc,char** argv) {
 
   // output environment variables:
 #ifdef G4ANALYSIS_USE
-  G4cout << " Using AIDA 2.2 analysis " << G4endl;
+  G4cout << G4endl << G4endl << G4endl 
+	 << " User Environment " << G4endl
+	 << " Using AIDA 2.2 analysis " << G4endl;
 #else
-  G4cout << " G4ANALYSIS_USE environment variable not set, NO ANALYSIS " 
+  G4cout << G4endl << G4endl << G4endl 
+	 << " User Environment " << G4endl
+	 << " G4ANALYSIS_USE environment variable not set, NO ANALYSIS " 
 	 << G4endl;
 #endif
 
