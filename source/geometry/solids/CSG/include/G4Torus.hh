@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Torus.hh,v 1.7 2000-10-23 10:28:56 gcosmo Exp $
+// $Id: G4Torus.hh,v 1.8 2000-10-23 11:01:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -146,7 +146,7 @@ protected:
 
   G4double SolveNumeric(const G4ThreeVector& p,
                         const G4ThreeVector& v,
-			G4bool IsDistanceToIn);
+			G4bool IsDistanceToIn) const;
 
   G4ThreeVectorList*
   CreateRotatedVertices(const G4AffineTransform& pTransform,
@@ -161,7 +161,9 @@ protected:
 
 private:
 
-  inline G4double TorusEquation (G4double x,G4double y,G4double z,G4double R0,G4double R1) {
+  inline G4double TorusEquation (G4double x, G4double y, G4double z,
+                                 G4double R0, G4double R1) const
+  {
 	/* R0 : Radius of all little circles
 	   R1 : Radius of little circles
 	*/
@@ -183,22 +185,27 @@ private:
 	return temp ;
   }
   
-  inline G4double TorusDerivativeX (G4double x,G4double y,G4double z,G4double R0,G4double R1) 
+  inline G4double TorusDerivativeX (G4double x, G4double y, G4double z,
+                                    G4double R0, G4double R1) const
   {
 	return 4*x*(x*x + y*y + z*z +  R0*R0 - R1*R1) - 8*R0*R0*x ;
   }
-  inline G4double TorusDerivativeY (G4double x,G4double y,G4double z,G4double R0,G4double R1) 
+
+  inline G4double TorusDerivativeY (G4double x, G4double y, G4double z,
+                                    G4double R0, G4double R1) const
   {
 	return 4*y*(x*x + y*y + z*z +  R0*R0 - R1*R1) - 8*R0*R0*y ;
   }
-  inline G4double TorusDerivativeZ (G4double x,G4double y,G4double z,G4double R0,G4double R1) 
+
+  inline G4double TorusDerivativeZ (G4double x, G4double y, G4double z,
+                                    G4double R0, G4double R1) const
   {
 	return 4*z*(x*x + y*y + z*z +  R0*R0 - R1*R1) ;
   }
 
   inline G4double TorusGradient(G4double dx, G4double dy, G4double dz,
 				G4double x, G4double y, G4double z,
-				G4double Rmax, G4double Rmin)
+				G4double Rmax, G4double Rmin) const
   {
     /* This tell the normal at a surface point */
     G4double result;
@@ -210,28 +217,28 @@ private:
     return result;
   }
 
-  void BVMIntersection (G4double x,G4double y,G4double z,
-			G4double dx,G4double dy,G4double dz,
+  void BVMIntersection (G4double x, G4double y, G4double z,
+			G4double dx, G4double dy, G4double dz,
 			G4double Rmax, G4double Rmin,
-			G4double *NewL,int *valid);
+			G4double *NewL, G4int *valid) const;
   
   void SortIntervals (G4double *SortL, G4double *NewL,
-                      G4int *valid, G4int *NbIntersection);
+                      G4int *valid, G4int *NbIntersection) const;
   
   G4double DistanceToTorus (G4double x, G4double y, G4double z,
-                            G4double dx,G4double dy,G4double dz,
-                            G4double R0,G4double R1);
+                            G4double dx, G4double dy, G4double dz,
+                            G4double R0,G4double R1) const;
 
   G4int SafeNewton(G4double x, G4double y, G4double z,
 		   G4double dx, G4double dy, G4double dz,
 		   G4double Rmax, G4double Rmin,
-		   G4double *Lmin,G4double *Lmax);
+		   G4double *Lmin,G4double *Lmax) const;
   
   G4double Newton (G4double guess,
 		   G4double x, G4double y, G4double z,
 		   G4double dx, G4double dy, G4double dz,
 		   G4double Rmax, G4double Rmin,
-		   G4double Lmin,G4double Lmax);
+		   G4double Lmin,G4double Lmax) const;
 };
    	
 #endif

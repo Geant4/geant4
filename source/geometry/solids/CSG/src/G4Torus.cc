@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Torus.cc,v 1.13 2000-10-23 10:28:42 gcosmo Exp $
+// $Id: G4Torus.cc,v 1.14 2000-10-23 11:01:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,8 +39,7 @@
 #include "G4NURBScylinder.hh"
 #include "G4NURBStubesector.hh"
 
-#define DEBUGTORUS 1
-
+// #define DEBUGTORUS 1
 
 ///////////////////////////////////////////////////////////////
 //
@@ -2215,7 +2214,7 @@ G4NURBS* G4Torus::CreateNURBS () const
 
 G4double G4Torus::SolveNumeric(const G4ThreeVector& p,
                                const G4ThreeVector& v,
-			       G4bool IsDistanceToIn)
+			       G4bool IsDistanceToIn) const
 {
   /* This methods is a front-end to the numerical computation of roots */
   /* In fact this computation take care only of a perfect Torus */
@@ -2521,22 +2520,11 @@ G4double G4Torus::SolveNumeric(const G4ThreeVector& p,
 
   return lambda;
 }
-/*
-#include <stdio.h>
-#include <math.h>
-
-double cos(double x);
-double sin(double x);
-
-
-double sqrt(double x);
-double fabs(double x);
-*/
 
 void G4Torus::BVMIntersection(G4double x,G4double y,G4double z,
 			      G4double dx,G4double dy,G4double dz,
 			      G4double Rmax, G4double Rmin,
-			      G4double *NewL,int *valid)
+			      G4double *NewL,G4int *valid) const
 {
 
   if (dz != 0) {
@@ -2671,9 +2659,9 @@ void G4Torus::BVMIntersection(G4double x,G4double y,G4double z,
 }
 
 void G4Torus::SortIntervals (G4double *SortL, G4double *NewL,
-                             G4int *valid, G4int *NbIntersection)
+                             G4int *valid, G4int *NbIntersection) const
 {
-  int i,j;
+  G4int i,j;
   G4double swap;
 	
   (*NbIntersection) = 0;
@@ -2721,17 +2709,17 @@ void G4Torus::SortIntervals (G4double *SortL, G4double *NewL,
 
 G4double G4Torus::DistanceToTorus (G4double x,G4double y,G4double z,
 				   G4double dx,G4double dy,G4double dz,
-				   G4double Rmax,G4double Rmin)
+				   G4double Rmax,G4double Rmin) const
 {
   G4double Lmin,Lmax;
   G4double guess;
   G4double SortL[4];
    
-  int NbIntersection = 0;
+  G4int NbIntersection = 0;
 
   G4double NewL[NBPOINT];
-  int valid[] = {1,1,1,1,1,1} ;
-  int j;
+  G4int valid[] = {1,1,1,1,1,1} ;
+  G4int j;
 
   j = 0;
 
@@ -2793,7 +2781,7 @@ G4double G4Torus::DistanceToTorus (G4double x,G4double y,G4double z,
 	
 #if DEBUGTORUS
   {
-    int i;
+    G4int i;
     G4cout.precision(16);
     G4cout << "G4Torus::DistanceToTorus    INTERVALS" << G4endl ;
     for (i=0;i<NbIntersection;i++) {
@@ -2829,7 +2817,7 @@ G4double G4Torus::DistanceToTorus (G4double x,G4double y,G4double z,
   if (((NbIntersection) & (1)) != 0) {
     /*** If we are Inside the BVM Lmin = 0. Lmax is the point ***/
     /***    there is necessary an intersection if the point is inside the Torus ***/
-    int InsideTorus = 0;
+    G4int InsideTorus = 0;
 
     Lmin = 0.0 ;
     Lmax  = SortL[0] ;
@@ -2991,7 +2979,7 @@ G4double G4Torus::DistanceToTorus (G4double x,G4double y,G4double z,
 G4int G4Torus::SafeNewton(G4double x, G4double y, G4double z,
 			  G4double dx, G4double dy, G4double dz,
 			  G4double Rmax, G4double Rmin,
-			  G4double *Lmin,G4double *Lmax)
+			  G4double *Lmin,G4double *Lmax) const
 {
   /** SafeNewton is a clipping interval Newton method **/
   /** This method is at least 3 times slower than Newton but is sure to work **/
@@ -3001,8 +2989,8 @@ G4int G4Torus::SafeNewton(G4double x, G4double y, G4double z,
   G4double Lx,Ly,Lz ;
   G4double NewMin,NewMax;
   
-  int IntervalIsVoid = 1;
-  int NewtonIsSafe = 0;
+  G4int IntervalIsVoid = 1;
+  G4int NewtonIsSafe = 0;
   
   /*** Calculating Control Points  ***/
   
@@ -3092,7 +3080,7 @@ G4int G4Torus::SafeNewton(G4double x, G4double y, G4double z,
    */
   {
     G4double Intersection ;
-    int i,j;
+    G4int i,j;
 
     NewMin = (*Lmax) ;
     NewMax = (*Lmin) ;
@@ -3133,7 +3121,7 @@ G4double G4Torus::Newton (G4double guess,
 			  G4double x, G4double y, G4double z,
 			  G4double dx, G4double dy, G4double dz,
 			  G4double Rmax, G4double Rmin,
-			  G4double Lmin,G4double Lmax)
+			  G4double Lmin,G4double Lmax) const
 {
   /* So now we have a good guess and an interval where
      if there are an intersection the root must be */
@@ -3145,7 +3133,7 @@ G4double G4Torus::Newton (G4double guess,
   G4double Gradient = 0;
   G4double Lambda ;
 
-  int i=0;
+  G4int i=0;
 
   /* Reduce interval before applying Newton Method */
 #if DEBUGTORUS
@@ -3154,8 +3142,8 @@ G4double G4Torus::Newton (G4double guess,
 #endif
   
   {
-    int NewtonIsSafe ;
-    int k;
+    G4int NewtonIsSafe ;
+    G4int k;
       
     for (k=0;
         ((k<ITERATION) &&
@@ -3173,7 +3161,7 @@ G4double G4Torus::Newton (G4double guess,
 #if 0
   {
     FILE *fi;
-    int i;
+    G4int i;
     fi = fopen("GNUplot.out","w+");
     fprintf(fi,"# Newton plot\n");
 	  
