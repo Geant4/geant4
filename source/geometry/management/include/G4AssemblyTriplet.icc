@@ -1,0 +1,67 @@
+G4AssemblyTriplet::G4AssemblyTriplet()
+: fVolume( 0 ), fRotation( 0 )
+{
+  G4ThreeVector v(0.,0.,0.);
+  fTranslation = v;
+}
+
+G4AssemblyTriplet::G4AssemblyTriplet( G4LogicalVolume* pVolume
+                                     ,G4ThreeVector& translation
+                                     ,G4RotationMatrix* pRotation
+                                    )
+: fVolume( pVolume ), fTranslation( translation ), fRotation( pRotation )
+{
+}
+
+G4AssemblyTriplet::G4AssemblyTriplet( const G4AssemblyTriplet& second )
+{
+  fVolume      = second.GetVolume();
+  fRotation    = second.GetRotation();
+  fTranslation = second.GetTranslation();
+}
+
+G4AssemblyTriplet::~G4AssemblyTriplet()
+{
+}
+
+inline G4LogicalVolume* G4AssemblyTriplet::GetVolume() const
+{
+  return fVolume;
+}
+
+inline void G4AssemblyTriplet::SetVolume(G4LogicalVolume* pVolume)
+{
+  fVolume = pVolume;
+}
+
+inline G4ThreeVector G4AssemblyTriplet::GetTranslation() const
+{
+  return fTranslation;
+}
+
+inline void G4AssemblyTriplet::SetTranslation(G4ThreeVector& translation)
+{
+  fTranslation = translation;
+}
+
+inline G4RotationMatrix* G4AssemblyTriplet::GetRotation() const
+{
+  return fRotation;
+}
+
+inline void G4AssemblyTriplet::SetRotation(G4RotationMatrix* pRotation)
+{
+  fRotation = pRotation;
+}
+
+inline G4AssemblyTriplet& G4AssemblyTriplet::operator=( const G4AssemblyTriplet& second )
+{
+  if( this != &second )
+  {
+    fVolume      = second.GetVolume();
+    fRotation    = second.GetRotation();
+    fTranslation = second.GetTranslation();
+  }
+  
+  return *this;
+}
