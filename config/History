@@ -1,5 +1,4 @@
-$Id: History,v 1.257 2004-10-29 17:28:04 gcosmo Exp $
-$Name: not supported by cvs2svn $
+$Id: History,v 1.258 2004-11-27 17:39:42 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +15,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27th November 2004 Gabriele Cosmo (config-V06-02-01)
+- binmake.gmk: added parameterisations/trd_clusters and
+  parameterisations/gflash modules to INCLUDE path.
 
 29th October 2004 Gabriele Cosmo (config-V06-02-00)
 - Archived setup for Windows/VC++6. WIN32-VC now corresponds to WIN32-VC7.
