@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.hh,v 1.17 2004-11-10 08:48:06 vnivanch Exp $
+// $Id: G4VProcess.hh,v 1.18 2004-12-02 13:54:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -373,7 +373,7 @@ inline  G4int G4VProcess::GetVerboseLevel() const
 
 inline void G4VProcess::ResetNumberOfInteractionLengthLeft()
 {
-  theNumberOfInteractionLengthLeft =  -log( G4UniformRand() );
+  theNumberOfInteractionLengthLeft =  -std::log( G4UniformRand() );
 }
 
 inline void G4VProcess::ClearNumberOfInteractionLengthLeft()

@@ -1,4 +1,4 @@
-$Id: History,v 1.34 2004-11-10 08:48:06 vnivanch Exp $
+$Id: History,v 1.35 2004-12-02 13:54:14 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- Dev. 02, 2004 H.Kurasige (procman-V06-02-03)
+- Implemented migration to <cmath> for G4VProcess.hh.
 
 - Nov. 10, 2004 V.Ivanchenko (procman-V06-02-02)
 - Add const cast for argument of one method used in Store/Retrieve PhysicsTable
