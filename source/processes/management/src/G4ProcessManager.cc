@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessManager.cc,v 1.8 1999-06-17 09:02:12 kurasige Exp $
+// $Id: G4ProcessManager.cc,v 1.9 1999-08-19 08:50:39 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -367,18 +367,17 @@ G4int G4ProcessManager::AddProcess(
   aErrorMessage += " particle[" + theParticleType->GetParticleName() + "]";
   
   //check the process is applicable to this particle type
-  if ( ( !aProcess->IsApplicable(*theParticleType) ) ||
-       (theParticleType->IsShortLived() )                ){
+  if (  !aProcess->IsApplicable(*theParticleType) ) {
 #ifdef G4VERBOSE
-    if (GetVerboseLevel()>0) {
+    if (GetVerboseLevel()>1) {
       G4cout << aErrorMessage << endl;
-      G4cout << "This process is not applicable to this particle";
+      G4cout << "This process is not applicable to this particle" << endl;
     }
 #endif
     // --comment out for alpha version   ----
     //  G4Exception((const char*)aErrorMessage); 
     //  return -1;
-   }
+  }
 
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>2) {
