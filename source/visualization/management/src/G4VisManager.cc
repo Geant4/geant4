@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.56 2003-11-27 11:48:27 johna Exp $
+// $Id: G4VisManager.cc,v 1.57 2003-12-01 11:12:59 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -940,9 +940,11 @@ void G4VisManager::EndOfEvent () {
 void G4VisManager::EndOfRun () {
   //G4cout << "G4VisManager::EndOfRun" << G4endl;
   if (GetConcreteInstance() && IsValidView ()) {
-    if (fpScene->GetRefreshAtEndOfRun()) {
-      fpViewer->ShowView();  // ...for systems needing post processing.
-      fpSceneHandler->SetMarkForClearingTransientStore(true);
+    if (!fpSceneHandler->GetMarkForClearingTransientStore()) {
+      if (fpScene->GetRefreshAtEndOfRun()) {
+	fpViewer->ShowView();  // ...for systems needing post processing.
+	fpSceneHandler->SetMarkForClearingTransientStore(true);
+      }
     }
   }
 }
