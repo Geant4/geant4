@@ -108,8 +108,7 @@ int main()
     G4cout<<"x component of point newPoint = "<<newPoint.x()<<G4endl ;
 
     //  G4Transform3D transfomX = G4ReflectX3D() ;
-
-    G4Transform3D transform(xRot,pzero) ;
+    //  G4Transform3D transform(xRot,pzero) ;
 
     G4Box b1("Test Box #1",20,30,40);
     G4Box b2("Test Box #2",10,10,10);
