@@ -343,8 +343,8 @@ XBiasSurvivalProbability()
 {
   G4double result = 0;
   G4double nLTraversed = GetTotalNumberOfInteractionLengthTraversed();
-  G4double biasedProbability = exp(-nLTraversed);
-  G4double realProbability = 1./aScaleFactor*exp(-nLTraversed/aScaleFactor);
+  G4double biasedProbability = 1.-exp(-nLTraversed);
+  G4double realProbability = 1-exp(-nLTraversed/aScaleFactor);
   result = (biasedProbability-realProbability)/biasedProbability;
   return result;
 }
@@ -354,20 +354,26 @@ XBiasSecondaryWeight()
 {
   G4double result = 0;
   G4double nLTraversed = GetTotalNumberOfInteractionLengthTraversed();
-  G4double biasedProbability = exp(-nLTraversed);
-  G4double realProbability = 1./aScaleFactor*exp(-nLTraversed/aScaleFactor);
-  result = realProbability/biasedProbability;
+  result = 1./aScaleFactor*exp(-nLTraversed/aScaleFactor*(1-1./aScaleFactor));
   return result;
 }
 
 void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
 {
+//          G4cout << "############# Entry debug "
+//	         <<GetProcessName()<<" "
+//		 <<aT.GetDynamicParticle()->GetDefinition()->GetParticleName()<<" "
+//		 <<aT.GetDynamicParticle()<<" "
+ //                <<aScaleFactor<<" "
+//		 <<aT.GetWeight()<<" "
+//		 <<G4endl;
       theTotalResult->Clear();
       theTotalResult->Initialize(aT);
       theTotalResult->SetSecondaryWeightByProcess(true);
       theTotalResult->SetStatusChange(fAlive);
       G4double rotation = 2.*pi*G4UniformRand();
       G4ThreeVector it(0., 0., 1.);
+      /*
       if(xBiasOn)
       {
         G4cout << "BiasDebug "<<GetProcessName()<<" "
@@ -376,11 +382,12 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
 		  	      <<XBiasSecondaryWeight()<<" "
 			      <<G4endl;
       }
+      */
       if(aR->GetStatusChange()==stopAndKill)
       {
 	if( xBiasOn && G4UniformRand()<XBiasSurvivalProbability() )
 	{
- 	  theTotalResult->SetWeightChange( XBiasSurvivalProbability() );
+ 	  theTotalResult->SetWeightChange( XBiasSurvivalProbability()*aT.GetWeight() );
 	}
 	else
 	{
@@ -398,10 +405,10 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
       }
       if(aR->GetStatusChange()!=stopAndKill )
       {
-	if(xBiasOn && G4UniformRand()<XBiasSurvivalProbability() )
+	if(xBiasOn && G4UniformRand()<XBiasSurvivalProbability())
 	{
- 	  theTotalResult->SetWeightChange( XBiasSurvivalProbability() );
-	  G4double newWeight = aR->GetWeightChange();
+ 	  theTotalResult->SetWeightChange( XBiasSurvivalProbability()*aT.GetWeight() );
+	  G4double newWeight = aR->GetWeightChange()*aT.GetWeight();
           G4DynamicParticle * aNew = new G4DynamicParticle(aT.GetDefinition(),
 	                                                   aR->GetEnergyChange(),
 							   aR->GetMomentumChange());
@@ -410,7 +417,7 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
 	}
 	else
 	{
-	  G4double newWeight = aR->GetWeightChange();
+	  G4double newWeight = aR->GetWeightChange()*aT.GetWeight();
 	  theTotalResult->SetWeightChange(newWeight); // This is multiplicative
 	  if(aR->GetEnergyChange()>-.5) theTotalResult->SetEnergyChange(aR->GetEnergyChange());
 	  G4LorentzVector newDirection(aR->GetMomentumChange().unit(), 1.);
@@ -432,8 +439,27 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
 				     aT.GetGlobalTime(),
 				     aT.GetPosition());
 	G4double newWeight = aT.GetWeight()*aR->GetSecondary(i)->GetWeight();
+	static G4double pinelcount=0;
 	if(xBiasOn) newWeight *= XBiasSecondaryWeight();
+        /*  G4cout << "#### ParticleDebug "
+	         <<GetProcessName()<<" "
+		 <<aR->GetSecondary(i)->GetParticle()->GetDefinition()->GetParticleName()<<" "
+                 <<aScaleFactor<<" "
+                 <<XBiasSurvivalProbability()<<" "
+	  	 <<XBiasSecondaryWeight()<<" "
+		 <<aT.GetWeight()<<" "
+		 <<aR->GetSecondary(i)->GetWeight()<<" "
+		 <<aR->GetSecondary(i)->GetParticle()<<" "
+		 <<G4endl;*/
 	track->SetWeight(newWeight);
+	/*if(GetProcessName()=="PhotonInelastic")
+	{
+	  if(aR->GetSecondary(i)->GetParticle()->GetDefinition()==G4Neutron::NeutronDefinition())
+	  {
+	   pinelcount+= newWeight;
+	   G4cout << "=======> Neutrons from gamma-nuclear "<<pinelcount<<G4endl;
+	  }
+	}*/
 	theTotalResult->AddSecondary(track);
       }
       return;
