@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.22 2000-04-04 13:51:43 lefebure Exp $
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.22 2000-04-04 13:51:43 lefebure Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.23 2000-04-18 15:24:28 pia Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.23 2000-04-18 15:24:28 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -117,7 +117,7 @@ void G4LowEnergyBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aP
 
     BuildLossTable(aParticleType) ;
  
- /*
+
   if (&aParticleType==G4Electron::Electron()){
 
     RecorderOfElectronProcess[CounterOfElectronProcess] = (*this).theLossTable ;
@@ -128,7 +128,6 @@ void G4LowEnergyBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aP
     RecorderOfPositronProcess[CounterOfPositronProcess] = (*this).theLossTable ;
     CounterOfPositronProcess++;
    }
- */
  
   BuildZVec();
 
