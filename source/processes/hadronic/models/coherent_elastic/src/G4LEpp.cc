@@ -76,11 +76,17 @@ void
 G4LEpp::SetCoulombSuppression(G4int State)
 {
   if (State) {
-    sig = Sig;
+    for(G4int i=0; i<NANGLE; i++)
+    {
+      sig[i] = Sig[i];
+    }
     elab = Elab;
   }
   else {
-    sig = SigCoul;
+    for(G4int i=0; i<NANGLE; i++)
+    {
+      sig[i] = SigCoul[i];
+    }
     elab = ElabCoul;
   }
 }
@@ -107,21 +113,21 @@ G4LEpp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
       G4double N = targetNucleus.GetN();
       G4double Z = targetNucleus.GetZ();
       G4cout << "G4LEpp:ApplyYourself: incident particle: "
-             << aParticle->GetDefinition()->GetParticleName() << endl;
+             << aParticle->GetDefinition()->GetParticleName() << G4endl;
       G4cout << "P = " << P/GeV << " GeV/c"
              << ", Px = " << Px/GeV << " GeV/c"
              << ", Py = " << Py/GeV << " GeV/c"
-             << ", Pz = " << Pz/GeV << " GeV/c" << endl;
+             << ", Pz = " << Pz/GeV << " GeV/c" << G4endl;
       G4cout << "E = " << E/GeV << " GeV"
              << ", kinetic energy = " << ek/GeV << " GeV"
              << ", mass = " << E0/GeV << " GeV"
-             << ", charge = " << Q << endl;
-      G4cout << "G4LEpp:ApplyYourself: material:" << endl;
+             << ", charge = " << Q << G4endl;
+      G4cout << "G4LEpp:ApplyYourself: material:" << G4endl;
       G4cout << "A = " << N
              << ", Z = " << Z
              << ", atomic mass " 
              <<  G4Proton::Proton()->GetPDGMass()/GeV << "GeV" 
-             << endl;
+             << G4endl;
       //
       // GHEISHA ADD operation to get total energy, mass, charge
       //
@@ -130,10 +136,10 @@ G4LEpp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
       E0 = sqrt(abs(E02));
       if (E02 < 0)E0 *= -1;
       Q += Z;
-      G4cout << "G4LEpp:ApplyYourself: total:" << endl;
+      G4cout << "G4LEpp:ApplyYourself: total:" << G4endl;
       G4cout << "E = " << E/GeV << " GeV"
              << ", mass = " << E0/GeV << " GeV"
-             << ", charge = " << Q << endl;
+             << ", charge = " << Q << G4endl;
     }
 
     // Find energy bin
@@ -235,9 +241,9 @@ G4LEpp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
     G4double p = sqrt(px*px + py*py + pz*pz);
 
     if (verboseLevel > 1) {
-      cout << "  E1, M1 (GeV) " << E1/GeV << " " << M1/GeV << G4endl;
-      cout << "  E2, M2 (GeV) " << E2/GeV << " " << M2/GeV << G4endl;
-      cout << "  particle  1 momentum in CM " << px/GeV << " " << py/GeV << " "
+      G4cout << "  E1, M1 (GeV) " << E1/GeV << " " << M1/GeV << G4endl;
+      G4cout << "  E2, M2 (GeV) " << E2/GeV << " " << M2/GeV << G4endl;
+      G4cout << "  particle  1 momentum in CM " << px/GeV << " " << py/GeV << " "
            << pz/GeV << " " << p/GeV << G4endl;
     }
 
@@ -275,8 +281,8 @@ G4LEpp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
     HPzCM->accumulate(pz/GeV);
 
     if (verboseLevel > 1) {
-      cout << "  AFTER SCATTER..." << G4endl;
-      cout << "  particle 1 momentum in CM " << px/GeV << " " << py/GeV << " "
+      G4cout << "  AFTER SCATTER..." << G4endl;
+      G4cout << "  particle 1 momentum in CM " << px/GeV << " " << py/GeV << " "
            << pz/GeV << " " << p/GeV << G4endl;
     }
 
@@ -357,13 +363,13 @@ G4LEpp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
     fprintf(RawData, "%f  %f\n", theta/degree, ektotal/GeV);
 
     if (verboseLevel > 1) {
-      cout << "  particle 1 momentum in LAB " 
+      G4cout << "  particle 1 momentum in LAB " 
            << newP->GetMomentum()*(1./GeV) 
            << " " << newP->GetTotalMomentum()/GeV << G4endl;
-      cout << "  particle 2 momentum in LAB " 
+      G4cout << "  particle 2 momentum in LAB " 
            << targetParticle->GetMomentum()*(1./GeV) 
            << " " << targetParticle->GetTotalMomentum()/GeV << G4endl;
-      cout << "  TOTAL momentum in LAB " 
+      G4cout << "  TOTAL momentum in LAB " 
            << (newP->GetMomentum()+targetParticle->GetMomentum())*(1./GeV) 
            << " " 
            << (newP->GetMomentum()+targetParticle->GetMomentum()).mag()/GeV

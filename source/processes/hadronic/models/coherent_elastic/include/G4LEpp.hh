@@ -65,8 +65,8 @@ class G4LEpp : public G4HadronicInteraction
   
  private:
 
-  G4float sig[NENERGY][NANGLE];
-  G4float elab[NENERGY];
+  G4float * sig[NANGLE];
+  G4float * elab;
 
  // The following arrays are declared static to allow the use of initializers.
  // They are initialized in G4LEppData.hh

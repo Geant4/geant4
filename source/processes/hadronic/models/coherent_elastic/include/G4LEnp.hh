@@ -65,21 +65,10 @@ class G4LEnp : public G4HadronicInteraction
   
  private:
 
-  G4float sig[NENERGY][NANGLE];
-  G4float elab[NENERGY];
+   static G4float sig[NENERGY][NANGLE];
+   static G4float pcm[NENERGY], elab[NENERGY], 
+     dsigmax[NENERGY], sigtot[NENERGY];
 
- // The following arrays are declared static to allow the use of initializers.
- // They are initialized in G4LEnpData.hh
-
- // Coulomb effects suppressed:
-   static G4float Sig[NENERGY][NANGLE];
-   static G4float Pcm[NENERGY], Elab[NENERGY], 
-     dSigmax[NENERGY], Sigtot[NENERGY];
-
- // Coulomb effects not suppressed:
-   static G4float SigCoul[NENERGY][NANGLE];
-   static G4float PcmCoul[NENERGY], ElabCoul[NENERGY], 
-     dSigmaxCoul[NENERGY], SigtotCoul[NENERGY];
 
    HbookHistogram *HPxCM, *HPyCM, *HPzCM;
    HbookHistogram* HAngCM;
