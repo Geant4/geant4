@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogoVisAction.hh,v 1.1 2005-03-03 16:45:34 allison Exp $
+// $Id: G4LogoVisAction.hh,v 1.2 2005-03-16 17:25:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4LOGOVISACTION_HH
@@ -29,8 +29,17 @@
 
 #include "G4VUserVisAction.hh"
 
+class G4VisAttributes;
+class G4Polyhedron;
+
 class G4LogoVisAction: public G4VUserVisAction {
+public:
+  G4LogoVisAction();
+  ~G4LogoVisAction();
   void Draw();
+private:
+  G4VisAttributes* fpVisAtts;
+  G4Polyhedron *fpG, *fp4;
 };
 
 #endif
