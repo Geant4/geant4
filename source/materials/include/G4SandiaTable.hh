@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SandiaTable.hh,v 1.5 1999-12-16 18:11:09 maire Exp $
+// $Id: G4SandiaTable.hh,v 1.6 2000-06-15 17:35:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -139,7 +139,7 @@ G4double  G4SandiaTable::GetSandiaCofPerAtom(G4int Z, G4int interval, G4int j)
    G4int row = fCumulInterval[Z-1] + interval;
    if (j==0) return fSandiaTable[row][0]*keV;
    G4double AoverAvo = Z/(fZtoAratio[Z]*Avogadro*mole);         
-   return fSandiaTable[row][j]*AoverAvo*cm2*pow(keV,(int)j);     
+   return fSandiaTable[row][j]*AoverAvo*cm2*pow(keV,G4double(j));     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
