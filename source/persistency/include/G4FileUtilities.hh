@@ -1,4 +1,4 @@
-// $Id: G4FileUtilities.hh,v 1.1 2002-11-24 13:45:23 morita Exp $
+// $Id: G4FileUtilities.hh,v 1.2 2002-12-04 10:25:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4FileUtilities.hh
@@ -9,6 +9,8 @@
 #ifndef FILE_UTILITIES_HH
 #define FILE_UTILITIES_HH 1
 
+#include "G4Types.hh"
+
 #include <sys/types.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -16,7 +18,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <string>
-#include <iostream.h>
+#include "g4std/iostream"
+
 
 // Class Description:
 //   File utilities to access files with POSIX interface.
@@ -31,22 +34,22 @@ class G4FileUtilities
       // Destructor
 
     public: // With description
-      bool FileExists(const std::string file);
+      G4bool FileExists(const G4std::string file);
       // checks if the "file" exists.  returns true if it does.
 
-      std::string StrErrNo() const { return ::strerror(errno); };
+      G4std::string StrErrNo() const { return ::strerror(errno); };
       // returns the error message of the last system call as string.
 
-      int Shell(std::string s) { return ::system(s.c_str()); };
+      int Shell(G4std::string s) { return ::system(s.c_str()); };
       // execute the shell command.  returns zero if success.
 
-      int CopyFile(const std::string srcFile, const std::string dstFile);
+      int CopyFile(const G4std::string srcFile, const G4std::string dstFile);
       // copies the "srcFile" to "dstFile".  returns zero if success.
 
-      int DeleteFile(const std::string file, const std::string option);
+      int DeleteFile(const G4std::string file, const G4std::string option);
       // deletes the "file" with the "option".  returns zero if success.
 
-      std::string GetEnv(const std::string env) { return ::getenv(env.c_str()); };
+      G4std::string GetEnv(const G4std::string env) { return ::getenv(env.c_str()); };
       // retuns the value of environment variable as string.
 
 }; // End of class G4FileUtilities

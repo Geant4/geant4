@@ -1,9 +1,10 @@
-// $Id: G4MCTSimEvent.cc,v 1.1 2002-11-24 13:45:24 morita Exp $
+// $Id: G4MCTSimEvent.cc,v 1.2 2002-12-04 10:25:50 gcosmo Exp $
 // ====================================================================
 //
 //   G4MCTSimEvent.cc
 //
 // ====================================================================
+#include "G4ios.hh"
 #include "G4MCTSimEvent.hh"
 #include "G4MCTSimParticle.hh"
 #include "G4MCTSimVertex.hh"
@@ -28,14 +29,14 @@ G4MCTSimEvent::~G4MCTSimEvent()
 }
 
 //////////////////////////////////////////////////////////////
-bool G4MCTSimEvent::AddParticle(const G4MCTSimParticle* aparticle)
+G4bool G4MCTSimEvent::AddParticle(const G4MCTSimParticle* aparticle)
 //////////////////////////////////////////////////////////////
 {
   G4MCTSimParticle* qpart= const_cast<G4MCTSimParticle*>(aparticle);
   int trackID= aparticle-> GetTrackID();
   int nc= particleMap.count(trackID);
   if(nc==0) {
-    particleMap.insert(std::make_pair(trackID, qpart));
+    particleMap.insert(G4std::make_pair(trackID, qpart));
     return true;
   } else {
     return false;
@@ -129,26 +130,26 @@ int G4MCTSimEvent::GetNofStoredVertices() const
 
 
 /////////////////////////////////////////////////
-void G4MCTSimEvent::Print(std::ostream& ostr) const
+void G4MCTSimEvent::Print(G4std::ostream& ostr) const
 /////////////////////////////////////////////////
 {
   ostr << "____________________________________________________"
-          "____________________________" << std::endl;
-  ostr << "SimEvent:" << std::endl << std::endl;
+          "____________________________" << G4endl;
+  ostr << "SimEvent:" << G4endl << G4endl;
   ostr << "Current Memory Usage: " 
        << particleMap.size() << " particles, "
        << vertexVec.size() <<  " vertices."
-       << std::endl;				      
+       << G4endl;				      
   ostr << "trk#<ptrk#: P(Px(GeV),     Py,     Pz,     E ) @PDG     %proc\n"
        << "      vtx#- X(    X(mm),        Y,        Z,    T(ns)) @vname-#" 
-       << std::endl;
+       << G4endl;
   ostr << "____________________________________________________"
-          "____________________________" << std::endl;
+          "____________________________" << G4endl;
 
   G4MCTSimParticleContainer::const_iterator itr;
   for(itr= particleMap.begin(); itr!= particleMap.end(); ++itr) {
     itr-> second-> PrintSingle(ostr);
   }
   ostr << "____________________________________________________"
-          "____________________________" << std::endl;
+          "____________________________" << G4endl;
 }

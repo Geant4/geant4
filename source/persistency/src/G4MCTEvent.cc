@@ -1,9 +1,13 @@
-// $Id: G4MCTEvent.cc,v 1.1 2002-11-24 13:45:24 morita Exp $
+// $Id: G4MCTEvent.cc,v 1.2 2002-12-04 10:25:50 gcosmo Exp $
 // ====================================================================
 //
 //   G4MCTEvent.cc
 //
 // ====================================================================
+
+#ifndef WIN32
+
+#include "G4ios.hh"
 #include "G4MCTEvent.hh"
 #include "G4MCTGenEvent.hh"
 #include "G4MCTSimEvent.hh"
@@ -64,9 +68,9 @@ int G4MCTEvent::AddPrimaryPair(const G4MCTGenParticle& genp,
 			     const G4MCTSimParticle* simp)
 ////////////////////////////////////////////////////////
 {
-  gen2simParticleMap.insert(std::make_pair(const_cast<G4MCTGenParticle&>(genp), 
+  gen2simParticleMap.insert(G4std::make_pair(const_cast<G4MCTGenParticle&>(genp), 
 					   const_cast<G4MCTSimParticle*>(simp)));
-  sim2genParticleMap.insert(std::make_pair(const_cast<G4MCTSimParticle*>(simp), 
+  sim2genParticleMap.insert(G4std::make_pair(const_cast<G4MCTSimParticle*>(simp), 
 					   const_cast<G4MCTGenParticle&>(genp)));
 
   return gen2simParticleMap.size();
@@ -85,10 +89,12 @@ void G4MCTEvent::ClearEvent()
 
 
 //////////////////////////////////////////////
-void G4MCTEvent::Print(std::ostream& ostr) const
+void G4MCTEvent::Print(G4std::ostream& ostr) const
 //////////////////////////////////////////////
 {
-  ostr << "Event#:" << eventNumber << std::endl;
+  ostr << "Event#:" << eventNumber << G4endl;
   genEvent-> Print(ostr);
   simEvent-> Print(ostr);
 }
+
+#endif

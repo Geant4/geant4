@@ -1,4 +1,4 @@
-// $Id: G4VDCIOentry.cc,v 1.1 2002-11-24 13:45:24 morita Exp $
+// $Id: G4VDCIOentry.cc,v 1.2 2002-12-04 10:25:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4VDCIOentry.cc
@@ -12,7 +12,7 @@
 #include "G4DCIOcatalog.hh"
 
 // Implementation of Constructor #1
-G4VDCIOentry::G4VDCIOentry(std::string n)
+G4VDCIOentry::G4VDCIOentry(G4std::string n)
  : m_name(n)
 {
   G4DCIOcatalog* c = G4DCIOcatalog::GetG4DCIOcatalog();

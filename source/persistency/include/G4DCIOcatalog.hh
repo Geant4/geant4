@@ -1,4 +1,4 @@
-// $Id: G4DCIOcatalog.hh,v 1.1 2002-11-24 13:45:23 morita Exp $
+// $Id: G4DCIOcatalog.hh,v 1.2 2002-12-04 10:25:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4DCIOcatalog.hh
@@ -9,14 +9,15 @@
 #ifndef DCIO_CATALOG_HH
 #define DCIO_CATALOG_HH 1
 
-#include <map>
+#include "g4std/map"
+#include "G4Types.hh"
 #include "G4VPDigitsCollectionIO.hh"
 
 class G4VDCIOentry;
 
-typedef std::map<std::string, G4VDCIOentry*, std::less<std::string> > DCIOmap;
+typedef G4std::map<G4std::string, G4VDCIOentry*, G4std::less<G4std::string> > DCIOmap;
 
-typedef std::map<std::string, G4VPDigitsCollectionIO*, std::less<std::string> > DCIOstore;
+typedef G4std::map<G4std::string, G4VPDigitsCollectionIO*, G4std::less<G4std::string> > DCIOstore;
 
 // Class Description:
 //   Catalog for the I/O manager of digits collection for each detector.
@@ -43,16 +44,16 @@ class G4DCIOcatalog
       void RegisterDCIOmanager(G4VPDigitsCollectionIO* d);
       // Register I/O manager
 
-      G4VDCIOentry* GetEntry(std::string name);
+      G4VDCIOentry* GetEntry(G4std::string name);
       // Returns the I/O manager entry
 
-      G4VPDigitsCollectionIO* GetDCIOmanager(std::string name);
+      G4VPDigitsCollectionIO* GetDCIOmanager(G4std::string name);
       // Returns the registered I/O manager entry
 
       void PrintEntries();
       // Prints the list of I/O manager entries
 
-      std::string CurrentDCIOmanager();
+      G4std::string CurrentDCIOmanager();
       // Returns the list of I/O managers
 
       void PrintDCIOmanager();

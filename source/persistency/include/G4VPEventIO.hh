@@ -1,4 +1,4 @@
-// $Id: G4VPEventIO.hh,v 1.1 2002-11-24 13:45:24 morita Exp $
+// $Id: G4VPEventIO.hh,v 1.2 2002-12-04 10:25:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4VPEventIO.hh
@@ -47,8 +47,8 @@ class G4VPEventIO
       // Retrieve a Geant4 event.
 
     protected:
-      int m_verbose;
-      int m_currentEvtID;
+      G4int m_verbose;
+      G4int m_currentEvtID;
 
 }; // End of class G4VPEventIO
 

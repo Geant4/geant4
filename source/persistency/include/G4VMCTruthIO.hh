@@ -1,4 +1,4 @@
-// $Id: G4VMCTruthIO.hh,v 1.1 2002-11-24 13:45:23 morita Exp $
+// $Id: G4VMCTruthIO.hh,v 1.2 2002-12-04 10:25:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4VMCTruthIO.hh
@@ -24,12 +24,12 @@ class G4VMCTruthIO
       // Destructor
 
     public: // With description
-      virtual bool Store(G4MCTEvent*) =0;
+      virtual G4bool Store(G4MCTEvent*) =0;
       // Pure virtual method for storing MCTruth Event.
       // Each persistency package should implement a concrete method
       // of storing the G4MCTEvent with this signature.
 
-      virtual bool Retrieve(G4MCTEvent*&) =0;
+      virtual G4bool Retrieve(G4MCTEvent*&) =0;
       // Pure virtual method for retrieving MCTruth Event.
       // Each persistency package should implement a concrete method
       // of storing the G4MCTEvent with this signature.
@@ -38,7 +38,7 @@ class G4VMCTruthIO
       // Set verbose level.
 
     protected:
-      int m_verbose;
+      G4int m_verbose;
 
 }; // End of class G4VMCTruthIO
 

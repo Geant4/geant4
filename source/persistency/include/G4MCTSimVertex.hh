@@ -1,4 +1,4 @@
-// $Id: G4MCTSimVertex.hh,v 1.1 2002-11-24 13:45:23 morita Exp $
+// $Id: G4MCTSimVertex.hh,v 1.2 2002-12-04 10:25:49 gcosmo Exp $
 // ====================================================================
 //
 //   G4MCTSimVertex.hh
@@ -7,8 +7,9 @@
 #ifndef MCT_SIM_VERTEX_H
 #define MCT_SIM_VERTEX_H
 
-#include <iostream>
-#include <vector>
+#include "G4Types.hh"
+#include "g4std/iostream"
+#include "g4std/vector"
 #include <string>
 #include "CLHEP/Vector/ThreeVector.h"
 #include "G4MCTSimParticle.hh"
@@ -22,21 +23,21 @@
 class G4MCTSimVertex {
 private:
   int  inParticleTrackID;
-  std::vector<int> outParticleTrackIDList;
+  G4std::vector<int> outParticleTrackIDList;
 
   int id; // assigned independently from G4
   Hep3Vector position;
   double time;
-  std::string volumeName;
+  G4std::string volumeName;
   int volumeNumber;
-  std::string creatorProcessName;
-  bool storeFlag;
+  G4std::string creatorProcessName;
+  G4bool storeFlag;
   
 public:
   G4MCTSimVertex();
   G4MCTSimVertex(const Hep3Vector& x, double t);
   G4MCTSimVertex(const Hep3Vector& x, double t, 
-	       std::string vname, int ncopy, std::string pname);
+	       G4std::string vname, int ncopy, G4std::string pname);
   ~G4MCTSimVertex();
  
   // copy constructor and assignment operator
@@ -53,17 +54,17 @@ public:
   void SetTime(double t);
   double GetTime() const;
 
-  void SetVolumeName(std::string vname);
-  const std::string& GetVolumeName() const;
+  void SetVolumeName(G4std::string vname);
+  const G4std::string& GetVolumeName() const;
 
   void SetVolumeNumber(int n);
   int GetVolumeNumber() const;
 
-  void SetCreatorProcessName(std::string pname);
-  const std::string& GetCreatorProcessName() const;
+  void SetCreatorProcessName(G4std::string pname);
+  const G4std::string& GetCreatorProcessName() const;
 
-  void SetStoreFlag(bool q);
-  bool GetStoreFlag() const;
+  void SetStoreFlag(G4bool q);
+  G4bool GetStoreFlag() const;
 
   // methods...
   void SetInParticle(const G4MCTSimParticle* in);
@@ -75,7 +76,7 @@ public:
   int AddOutParticle(int out);
   int GetOutParticleTrackID(int i) const;
 
-  void Print(std::ostream& ostr= std::cout) const;
+  void Print(G4std::ostream& ostr= G4std::cout) const;
 };
 
 // ====================================================================
@@ -117,10 +118,10 @@ inline  void G4MCTSimVertex::SetTime(double t)
 inline double G4MCTSimVertex::GetTime() const
 { return time; }
 
-inline  void G4MCTSimVertex::SetVolumeName(std::string vname)
+inline  void G4MCTSimVertex::SetVolumeName(G4std::string vname)
 { volumeName= vname; }
 
-inline  const std::string& G4MCTSimVertex::GetVolumeName() const
+inline  const G4std::string& G4MCTSimVertex::GetVolumeName() const
 { return volumeName; }
 
 inline void G4MCTSimVertex::SetVolumeNumber(int n)
@@ -129,15 +130,15 @@ inline void G4MCTSimVertex::SetVolumeNumber(int n)
 inline int G4MCTSimVertex::GetVolumeNumber() const
 { return volumeNumber; }
 
-inline  void G4MCTSimVertex::SetCreatorProcessName(std::string pname)
+inline  void G4MCTSimVertex::SetCreatorProcessName(G4std::string pname)
 { creatorProcessName= pname; }
 
-inline  const std::string& G4MCTSimVertex::GetCreatorProcessName() const
+inline  const G4std::string& G4MCTSimVertex::GetCreatorProcessName() const
 { return creatorProcessName; }
 
-inline void G4MCTSimVertex::SetStoreFlag(bool q) { storeFlag= q; }
+inline void G4MCTSimVertex::SetStoreFlag(G4bool q) { storeFlag= q; }
 
-inline bool G4MCTSimVertex::GetStoreFlag() const { return storeFlag; }
+inline G4bool G4MCTSimVertex::GetStoreFlag() const { return storeFlag; }
 
 inline void G4MCTSimVertex::SetInParticle(const G4MCTSimParticle* in)
 { inParticleTrackID= in-> GetTrackID(); }

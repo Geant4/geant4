@@ -1,4 +1,4 @@
-// $Id: G4PersistencyCenterMessenger.cc,v 1.1 2002-11-24 13:45:24 morita Exp $
+// $Id: G4PersistencyCenterMessenger.cc,v 1.2 2002-12-04 10:25:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4PersistencyCenterMessenger.cc
@@ -12,11 +12,11 @@
 G4PersistencyCenterMessenger::G4PersistencyCenterMessenger(G4PersistencyCenter* p)
  : pc(p)
 {
-  std::string name = "/persistency/";
+  G4std::string name = "/persistency/";
   directory=new G4UIdirectory(name.c_str());
   directory->SetGuidance("Control commands for Persistency package");
 
-  std::string cmd = name + "verbose";
+  G4std::string cmd = name + "verbose";
 
   verboseCmd = new G4UIcmdWithAnInteger(cmd.c_str(),this);
   verboseCmd->SetGuidance("Set the verbose level of G4PersistencyManager.");
@@ -28,7 +28,7 @@ G4PersistencyCenterMessenger::G4PersistencyCenterMessenger(G4PersistencyCenter* 
   verboseCmd->SetDefaultValue(0);
   verboseCmd->SetRange("level >=0 && level <=3");
 
-  std::string vname = name + "select";
+  G4std::string vname = name + "select";
 
   cmd = vname;
   select = new G4UIcmdWithAString(cmd.c_str(),this);
@@ -47,7 +47,7 @@ G4PersistencyCenterMessenger::G4PersistencyCenterMessenger(G4PersistencyCenter* 
   wrObj.push_back("MCTruth");
   wrObj.push_back("Hits");
 
-  std::string guidance;
+  G4std::string guidance;
   int i;
 
   for ( i = 0; i < 3; i++ )
@@ -159,8 +159,8 @@ void G4PersistencyCenterMessenger::SetNewValue(G4UIcommand* command, G4String ne
         } else if ( newValues == "recycle" ) {
           mode = kRecycle;
         } else {
-          std::cerr << "Unrecognized keyword - \"" << newValues << "\"."
-                    << std::endl;
+          G4cerr << "Unrecognized keyword - \"" << newValues << "\"."
+                 << G4endl;
         }
         pc->SetStoreMode(wrObj[i],mode);
         break;
@@ -226,7 +226,7 @@ G4String G4PersistencyCenterMessenger::GetCurrentValue(G4UIcommand* command)
 }
 
 // Implementation of PopWord
-std::string G4PersistencyCenterMessenger::PopWord(std::string text, int n, std::string delim)
+G4std::string G4PersistencyCenterMessenger::PopWord(G4std::string text, int n, G4std::string delim)
 {
   if ( text.length() <= 0 ) return "";
   int p = 0, p0 = 0;

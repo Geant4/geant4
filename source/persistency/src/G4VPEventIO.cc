@@ -1,10 +1,12 @@
-// $Id: G4VPEventIO.cc,v 1.1 2002-11-24 13:45:25 morita Exp $
+// $Id: G4VPEventIO.cc,v 1.2 2002-12-04 10:25:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4VPEventIO.cc
 //
 // History:
 //   '01.08.10  Youhei Morita  Initial creation (with "fadsclass3")
+
+#ifndef WIN32
 
 #include "G4VPEventIO.hh"
 
@@ -16,3 +18,4 @@ G4VPEventIO::G4VPEventIO()
 
 // End of G4VPEventIO.cc
 
+#endif

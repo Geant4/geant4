@@ -1,4 +1,4 @@
-// $Id: G4VTransactionManager.hh,v 1.1 2002-11-24 13:45:24 morita Exp $
+// $Id: G4VTransactionManager.hh,v 1.2 2002-12-04 10:25:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4VTransactionManager.hh
@@ -9,6 +9,7 @@
 #ifndef V_TRANSACTION_MANAGER_HH
 #define V_TRANSACTION_MANAGER_HH 1
 
+#include "G4Types.hh"
 #include <string>
 
 // Class Description:
@@ -27,16 +28,16 @@ class G4VTransactionManager
       void SetVerboseLevel(int v) { m_verbose = v; };
       // Set verbose level.
 
-      virtual bool SelectReadFile(std::string obj, std::string file)=0;
+      virtual G4bool SelectReadFile(G4std::string obj, G4std::string file)=0;
       // Set the input file name and open it for the object type "obj".
 
-      virtual bool SelectWriteFile(std::string obj, std::string file)=0;
+      virtual G4bool SelectWriteFile(G4std::string obj, G4std::string file)=0;
       // Set the output file name and open it for the object type "obj".
 
-      virtual bool StartUpdate()=0;
+      virtual G4bool StartUpdate()=0;
       // Start an update transaction for event store and retrieve
 
-      virtual bool StartRead()=0;
+      virtual G4bool StartRead()=0;
       // Start a read-only transaction for event store and retrieve
 
       virtual void Commit()=0;
@@ -46,7 +47,7 @@ class G4VTransactionManager
       // abort the transaction for event store and retrieve
 
     protected:
-      int m_verbose;
+      G4int m_verbose;
 
 }; // End of class G4VTransactionManager
 

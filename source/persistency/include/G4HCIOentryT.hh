@@ -1,4 +1,4 @@
-// $Id: G4HCIOentryT.hh,v 1.1 2002-11-24 13:45:23 morita Exp $
+// $Id: G4HCIOentryT.hh,v 1.2 2002-12-04 10:25:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4HCIOentryT.hh
@@ -10,6 +10,7 @@
 #define HCIO_ENTRY_T_HH 1
 
 #include <string>
+#include "G4Types.hh"
 #include "G4VPHitsCollectionIO.hh"
 
 // Class inherited:
@@ -22,12 +23,12 @@ template <class T> class G4HCIOentryT
  : public G4VHCIOentry
 {
     public: // With description
-      G4HCIOentryT<T>(std::string n)
+      G4HCIOentryT<T>(G4std::string n)
        : G4VHCIOentry(n), f_manager(0)
       {
          if ( m_verbose > 2 ) {
-           std::cout << "G4HCIOentryT: Registering HitsCollection IO manager"
-                << " for \"" << n << "\"" <<  std::endl;
+           G4cout << "G4HCIOentryT: Registering HitsCollection IO manager"
+                  << " for \"" << n << "\"" <<  G4endl;
          }
       }
       // Constructor
@@ -36,13 +37,13 @@ template <class T> class G4HCIOentryT
       // Destructor
 
     public: // With description
-      void CreateHCIOmanager(std::string detName, std::string colName)
+      void CreateHCIOmanager(G4std::string detName, G4std::string colName)
       {
         if ( f_manager == 0 ) {
           f_manager = new T( detName, colName );
           if ( m_verbose > 2 ) {
-            std::cout << "G4HCIOentryT: Constructing HitsCollection IO manager"
-                << " for \"" << detName << "\" " << f_manager <<  std::endl;
+            G4cout << "G4HCIOentryT: Constructing HitsCollection IO manager"
+                   << " for \"" << detName << "\" " << f_manager <<  G4endl;
           }
           G4HCIOcatalog::GetG4HCIOcatalog()->RegisterHCIOmanager(f_manager);
           if ( m_verbose > 2 ) {

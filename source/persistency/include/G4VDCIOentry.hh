@@ -1,4 +1,4 @@
-// $Id: G4VDCIOentry.hh,v 1.1 2002-11-24 13:45:23 morita Exp $
+// $Id: G4VDCIOentry.hh,v 1.2 2002-12-04 10:25:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4VDCIOentry.hh
@@ -9,6 +9,7 @@
 #ifndef VDCIO_ENTRY_T_HH
 #define VDCIO_ENTRY_T_HH 1
 
+#include "G4Types.hh"
 #include <string>
 #include "G4PersistencyCenter.hh"
 
@@ -18,7 +19,7 @@
 class G4VDCIOentry
 {
     public: // With description
-      G4VDCIOentry(std::string n);
+      G4VDCIOentry(G4std::string n);
       // Constructor
 
       virtual ~G4VDCIOentry() {};
@@ -28,17 +29,17 @@ class G4VDCIOentry
       void SetVerboseLevel(int v) { m_verbose = v; };
       // Set verbose level.
 
-      std::string GetName() { return m_name; };
+      G4std::string GetName() { return m_name; };
       // Returns the name of the DC I/O manager entry
 
-      virtual void CreateDCIOmanager(std::string detName, std::string colName) {};
+      virtual void CreateDCIOmanager(G4std::string detName, G4std::string colName) {};
       // virtual method for creating DC I/O manager for the detector
 
     protected:
       int m_verbose;
 
     private:
-      std::string m_name;
+      G4std::string m_name;
 
 }; // End of class G4VDCIOentry
 

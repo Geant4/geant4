@@ -1,9 +1,12 @@
-// $Id: G4MCTGenEvent.cc,v 1.1 2002-11-24 13:45:24 morita Exp $
+// $Id: G4MCTGenEvent.cc,v 1.2 2002-12-04 10:25:50 gcosmo Exp $
 // ====================================================================
 //
 //   G4MCTGenEvent.cc
 //
 // ====================================================================
+
+#ifndef WIN32
+
 #include "G4MCTGenEvent.hh"
 
 #include "CLHEP/HepMC/GenParticle.h"
@@ -61,7 +64,7 @@ void G4MCTGenEvent::ClearEvent()
 }
 
 ////////////////////////////////////////////////////////////
-void G4MCTGenEvent::Print(std::ostream& ostr) const
+void G4MCTGenEvent::Print(G4std::ostream& ostr) const
 ////////////////////////////////////////////////////////////
 {
   int nev= eventList.size();
@@ -69,3 +72,5 @@ void G4MCTGenEvent::Print(std::ostream& ostr) const
     eventList[iev]-> print(ostr);
   }
 }
+
+#endif

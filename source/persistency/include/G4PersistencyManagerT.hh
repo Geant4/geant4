@@ -1,4 +1,4 @@
-// $Id: G4PersistencyManagerT.hh,v 1.1 2002-11-24 13:45:23 morita Exp $
+// $Id: G4PersistencyManagerT.hh,v 1.2 2002-12-04 10:25:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4PersistencyManagerT.hh
@@ -21,12 +21,12 @@ template <class T> class G4PersistencyManagerT
  : public G4PersistencyManager
 {
     public: // With description
-      G4PersistencyManagerT(G4PersistencyCenter* pc, std::string n)
+      G4PersistencyManagerT(G4PersistencyCenter* pc, G4std::string n)
        : G4PersistencyManager(pc, n), pm(0)
       {
          if ( m_verbose > 2 ) {
-           std::cout << "G4PersistencyManagerT: Registering G4PersistencyManager \""
-                     << n << "\"" << std::endl;
+           G4cout << "G4PersistencyManagerT: Registering G4PersistencyManager \""
+                  << n << "\"" << G4endl;
          }
          G4PersistencyCenter::GetG4PersistencyCenter()->
                        RegisterG4PersistencyManager(this);

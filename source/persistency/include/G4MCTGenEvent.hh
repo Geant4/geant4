@@ -1,4 +1,4 @@
-// $Id: G4MCTGenEvent.hh,v 1.1 2002-11-24 13:45:23 morita Exp $
+// $Id: G4MCTGenEvent.hh,v 1.2 2002-12-04 10:25:49 gcosmo Exp $
 // ====================================================================
 //
 //   G4MCTGenEvent.hh
@@ -7,8 +7,9 @@
 #ifndef MCT_GEN_EVENT_H
 #define MCT_GEN_EVENT_H
 
-#include <iostream>
-#include <vector>
+#include "G4Types.hh"
+#include "g4std/iostream"
+#include "g4std/vector"
 #include "CLHEP/HepMC/GenEvent.h"
  
 // ====================================================================
@@ -19,7 +20,7 @@
 
 class G4MCTGenEvent {
 protected:
-  std::vector<HepMC::GenEvent*> eventList;
+  G4std::vector<HepMC::GenEvent*> eventList;
 
 public:
   G4MCTGenEvent();
@@ -36,7 +37,7 @@ public:
 
   void ClearEvent();
 
-  void Print(std::ostream& ostr= std::cout) const;
+  void Print(G4std::ostream& ostr= G4std::cout) const;
 };
 
 // ====================================================================

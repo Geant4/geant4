@@ -1,4 +1,4 @@
-// $Id: G4VPHitIO.hh,v 1.1 2002-11-24 13:45:24 morita Exp $
+// $Id: G4VPHitIO.hh,v 1.2 2002-12-04 10:25:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4VPHitIO.hh
@@ -29,12 +29,12 @@ class G4VPHitIO
       G4VPHitIO* GetG4VPHitIO() { return f_G4VPHitIO; };
       // Returns the pointer of the hit collection I/O manager.
 
-      virtual bool Store(const G4HCofThisEvent*) =0;
+      virtual G4bool Store(const G4HCofThisEvent*) =0;
       // Pure virtual method for storing hit collections of this event.
       // Each persistency package should implement a concrete method
       // of storing the hit collection of this event with this signature.
 
-      virtual bool Retrieve(G4HCofThisEvent*&) =0;
+      virtual G4bool Retrieve(G4HCofThisEvent*&) =0;
       // Pure virtual method for retrieving hit collections of this event.
       // Each persistency package should implement a concrete method
       // of storing the hit collection of this event with this signature.
@@ -47,7 +47,7 @@ class G4VPHitIO
       // Registers the hit collection I/O manager.
 
     protected:
-      int m_verbose;
+      G4int m_verbose;
       static G4VPHitIO* f_G4VPHitIO;
       G4HCIOcatalog*    f_catalog;
 

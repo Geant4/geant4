@@ -1,4 +1,4 @@
-// $Id: G4VPDigitsCollectionIO.hh,v 1.1 2002-11-24 13:45:23 morita Exp $
+// $Id: G4VPDigitsCollectionIO.hh,v 1.2 2002-12-04 10:25:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4VPDigitsCollectionIO.hh
@@ -17,39 +17,39 @@
 class G4VPDigitsCollectionIO
 {
     public: // With description
-      G4VPDigitsCollectionIO( std::string detName, std::string colName );
+      G4VPDigitsCollectionIO( G4std::string detName, G4std::string colName );
       // Constructor
 
       virtual ~G4VPDigitsCollectionIO() {};
       // Destructor
 
     public: // With description
-      virtual bool Store(const G4VDigiCollection*) =0;
+      virtual G4bool Store(const G4VDigiCollection*) =0;
       // Pure virtual method for storing the digit collection.
       // Each persistency package should implement a concrete method
       // with this signature.
 
-      virtual bool Retrieve(G4VDigiCollection*&) =0;
+      virtual G4bool Retrieve(G4VDigiCollection*&) =0;
       // Pure virtual method for retrieving the digit collection.
       // Each persistency package should implement a concrete method
       // with this signature.
 
-      bool operator== (const G4VPDigitsCollectionIO& right) const;
+      G4bool operator== (const G4VPDigitsCollectionIO& right) const;
       // virtual operator for comparing digit collections with names.
 
-      std::string DMname() { return f_detName; };
+      G4std::string DMname() { return f_detName; };
       // Returns the digitizer module name.
 
-      std::string CollectionName() { return f_colName; };
+      G4std::string CollectionName() { return f_colName; };
       // Returns the digit collection name.
 
       void SetVerboseLevel(int v) { m_verbose = v; };
       // Sets the verbose level
 
     protected:
-      int m_verbose;
-      std::string f_detName;
-      std::string f_colName;
+      G4int m_verbose;
+      G4std::string f_detName;
+      G4std::string f_colName;
 
 }; // End of class G4VPDigitsCollectionIO
 

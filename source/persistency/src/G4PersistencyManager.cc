@@ -1,4 +1,4 @@
-// $Id: G4PersistencyManager.cc,v 1.2 2002-11-29 09:10:55 morita Exp $
+// $Id: G4PersistencyManager.cc,v 1.3 2002-12-04 10:25:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4PersistencyManager.cc
@@ -9,17 +9,17 @@
 #include "G4PersistencyManager.hh"
 
 // Addtional Include:
-#include <iomanip>
+#include "g4std/iomanip"
 #include "G4PersistencyCenter.hh"
 
 // Implementation of Constructor #1
-G4PersistencyManager::G4PersistencyManager(G4PersistencyCenter* pc, std::string n)
+G4PersistencyManager::G4PersistencyManager(G4PersistencyCenter* pc, G4std::string n)
  : f_pc(pc), nameMgr(n), f_is_initialized(false)
 {
   m_verbose = f_pc->VerboseLevel();
 
-  // std::cout << "G4PersistencyManager is constructed with name \"" << nameMgr
-  //           << "\", " << this << ", verbose = " << m_verbose << std::endl;
+  // G4cout << "G4PersistencyManager is constructed with name \"" << nameMgr
+  //        << "\", " << this << ", verbose = " << m_verbose << G4endl;
 
   // f_GenCenter = GeneratorCenter::GetGeneratorCenter();
   // f_MCTman    = G4MCTManager::GetPointer();
@@ -40,9 +40,9 @@ void G4PersistencyManager::SetVerboseLevel(int v)
 {
   m_verbose = v;
   if ( m_verbose > 2 ) {
-    std::cout << "G4PersistencyManager[\"" << nameMgr << "\"," << this
-              << "]: verbose level is set to " << m_verbose << "."
-              << std::endl;
+    G4cout << "G4PersistencyManager[\"" << nameMgr << "\"," << this
+           << "]: verbose level is set to " << m_verbose << "."
+           << G4endl;
   }
   if (   EventIO() != 0 )   EventIO()->SetVerboseLevel(m_verbose);
   if (   HepMCIO() != 0 )   HepMCIO()->SetVerboseLevel(m_verbose);
@@ -73,14 +73,14 @@ void G4PersistencyManager::SetVerboseLevel(int v)
 G4bool G4PersistencyManager::Store(const G4Event* evt)
 {
   if ( m_verbose > 2 ) {
-    std::cout << "G4PersistencyManager::Store() is called for event# "
-              << evt->GetEventID() << "." << std::endl;
+    G4cout << "G4PersistencyManager::Store() is called for event# "
+           << evt->GetEventID() << "." << G4endl;
   }
 
-  bool is_store = f_pc->CurrentStoreMode("HepMC")   != kOff ||
-                  f_pc->CurrentStoreMode("MCTruth") != kOff ||
-                  f_pc->CurrentStoreMode("Hits")    != kOff ||
-                  f_pc->CurrentStoreMode("Digits")  != kOff;
+  G4bool is_store = f_pc->CurrentStoreMode("HepMC")   != kOff ||
+                    f_pc->CurrentStoreMode("MCTruth") != kOff ||
+                    f_pc->CurrentStoreMode("Hits")    != kOff ||
+                    f_pc->CurrentStoreMode("Digits")  != kOff;
 
   if ( ! is_store ) return true;
 
@@ -89,8 +89,8 @@ G4bool G4PersistencyManager::Store(const G4Event* evt)
   if ( ! f_is_initialized ) {
     f_is_initialized = true;
     if ( m_verbose > 1 ) {
-      std::cout << "G4PersistencyManager:: Initializing Transaction ... "
-                << std::endl;
+      G4cout << "G4PersistencyManager:: Initializing Transaction ... "
+             << G4endl;
     }
     Initialize();
   }
@@ -102,20 +102,20 @@ G4bool G4PersistencyManager::Store(const G4Event* evt)
   //
   if ( TransactionManager()->StartUpdate() ) {
     if ( m_verbose > 2 ) {
-      std::cout << "G4PersistencyManager: Update transaction started for event#"
-                << evt->GetEventID() << "." << std::endl;
+      G4cout << "G4PersistencyManager: Update transaction started for event#"
+             << evt->GetEventID() << "." << G4endl;
     }
   } else {
-    std::cerr << "TransactionManager::Store(G4Event) - StartUpdate() failed."
-              << std::endl;
+    G4cerr << "TransactionManager::Store(G4Event) - StartUpdate() failed."
+           << G4endl;
     return false;
   }
 
-  std::string file;
+  G4std::string file;
 
   // Store HepMC event
   //
-  std::string obj = "HepMC";
+  G4std::string obj = "HepMC";
   HepMC::GenEvent* hepevt = 0;
   if ( f_pc->CurrentStoreMode(obj) == kOn ) {
 
@@ -129,8 +129,8 @@ G4bool G4PersistencyManager::Store(const G4Event* evt)
       if ( TransactionManager()->SelectWriteFile(obj, file) ) {
         sthep = HepMCIO()->Store(hepevt);
         if ( sthep && m_verbose > 1 ) {
-          std::cout << " -- File : " << file << " -- Event# "
-                    << evt->GetEventID() << " -- HepMC Stored." << std::endl;
+          G4cout << " -- File : " << file << " -- Event# "
+                 << evt->GetEventID() << " -- HepMC Stored." << G4endl;
         }
       } else {
         sthep = false;
@@ -155,8 +155,8 @@ G4bool G4PersistencyManager::Store(const G4Event* evt)
       if ( TransactionManager()->SelectWriteFile(obj, file) ) {
         stmct = MCTruthIO()->Store(mctevt);
         if ( stmct && m_verbose > 1 ) {
-          std::cout << " -- File : " << file << " -- Event# "
-                  << evt->GetEventID() << " -- G4MCTEvent Stored." << std::endl;
+          G4cout << " -- File : " << file << " -- Event# "
+                 << evt->GetEventID() << " -- G4MCTEvent Stored." << G4endl;
         }
       } else {
         stmct = false;
@@ -173,9 +173,9 @@ G4bool G4PersistencyManager::Store(const G4Event* evt)
       if ( TransactionManager()->SelectWriteFile(obj, file) ) {
         st1 = HitIO()->Store(hc);
         if ( st1 && m_verbose > 1 ) {
-          std::cout << " -- File : " << file << " -- Event# "
-                    << evt->GetEventID()
-                    << " -- Hit Collections Stored." << std::endl;
+          G4cout << " -- File : " << file << " -- Event# "
+                 << evt->GetEventID()
+                 << " -- Hit Collections Stored." << G4endl;
         }
       } else {
         st1 = false;
@@ -192,9 +192,9 @@ G4bool G4PersistencyManager::Store(const G4Event* evt)
       if ( TransactionManager()->SelectWriteFile(obj, file) ) {
         st2 = DigitIO()->Store(dc);
         if ( st2 && m_verbose > 1 ) {
-          std::cout << " -- File : " << file << " -- Event# "
-                    << evt->GetEventID()
-                    << " -- Digit Collections Stored." << std::endl;
+          G4cout << " -- File : " << file << " -- Event# "
+                 << evt->GetEventID()
+                 << " -- Digit Collections Stored." << G4endl;
         }
       } else {
         st2 = false;
@@ -211,9 +211,9 @@ G4bool G4PersistencyManager::Store(const G4Event* evt)
       // st3 = EventIO()->Store(hepevt, mctevt, evt);
       st3 = EventIO()->Store(hepevt, evt);
       if ( st3 && m_verbose > 1 ) {
-        std::cout << " -- File name: " << f_pc->CurrentWriteFile("Hits")
-                  << " -- Event# "  << evt->GetEventID()
-                  << " -- G4Pevent is Stored." << std::endl;
+        G4cout << " -- File name: " << f_pc->CurrentWriteFile("Hits")
+               << " -- Event# "  << evt->GetEventID()
+               << " -- G4Pevent is Stored." << G4endl;
       }
     } else {
       st3 = false;
@@ -225,11 +225,11 @@ G4bool G4PersistencyManager::Store(const G4Event* evt)
   if ( st ) {
     TransactionManager()->Commit();
     if ( m_verbose > 0 )
-      std::cout << "G4PersistencyManager: event# "
-                << evt->GetEventID() << " is stored." << std::endl;
+      G4cout << "G4PersistencyManager: event# "
+             << evt->GetEventID() << " is stored." << G4endl;
   } else {
-    std::cerr << "G4PersistencyManager::Store(G4Event) - Transaction aborted."
-              << std::endl;
+    G4cerr << "G4PersistencyManager::Store(G4Event) - Transaction aborted."
+           << G4endl;
     TransactionManager()->Abort();
   }
 
@@ -240,8 +240,8 @@ G4bool G4PersistencyManager::Store(const G4Event* evt)
 G4bool G4PersistencyManager::Retrieve(G4Event*& evt)
 {
   if ( m_verbose > 2 ) {
-    std::cout << "G4PersistencyManager::Retrieve(G4Event*&) is called."
-              << std::endl;
+    G4cout << "G4PersistencyManager::Retrieve(G4Event*&) is called."
+           << G4endl;
   }
 
   if ( f_pc->CurrentRetrieveMode("HepMC")   == false &&
@@ -256,8 +256,8 @@ G4bool G4PersistencyManager::Retrieve(G4Event*& evt)
   if ( ! f_is_initialized ) {
     f_is_initialized = true;
     if ( m_verbose > 1 ) {
-      std::cout << "G4PersistencyManager:: Initializing Transaction ... "
-                << std::endl;
+      G4cout << "G4PersistencyManager:: Initializing Transaction ... "
+             << G4endl;
     }
     Initialize();
   }
@@ -266,29 +266,29 @@ G4bool G4PersistencyManager::Retrieve(G4Event*& evt)
   //
   if ( TransactionManager()->StartRead() ) {
     if ( m_verbose > 2 ) {
-      std::cout << "G4PersistencyManager: Read transaction started."
-                << std::endl;
+      G4cout << "G4PersistencyManager: Read transaction started."
+             << G4endl;
     }
   } else {
-    std::cerr << "TransactionManager::Retrieve(G4Event) - StartRead() failed."
-              << std::endl;
+    G4cerr << "TransactionManager::Retrieve(G4Event) - StartRead() failed."
+           << G4endl;
     return false;
   }
 
   G4bool st = false;
-  std::string file;
+  G4std::string file;
 
   // Retrieve a G4EVENT
   //
-  std::string obj = "Hits";
+  G4std::string obj = "Hits";
   if ( f_pc->CurrentRetrieveMode(obj) == true ) {
     file = f_pc->CurrentReadFile(obj);
     if ( TransactionManager()->SelectReadFile(obj, file) ) {
       st = EventIO()->Retrieve(evt);
       if ( st && m_verbose > 1 ) {
-        std::cout << " -- File : " << file << " -- Event# "
-                  << evt->GetEventID()
-                  << " -- G4Event is Retrieved." << std::endl;
+        G4cout << " -- File : " << file << " -- Event# "
+               << evt->GetEventID()
+               << " -- G4Event is Retrieved." << G4endl;
       }
     } else {
       st = false;
@@ -298,8 +298,8 @@ G4bool G4PersistencyManager::Retrieve(G4Event*& evt)
   if ( st ) {
     TransactionManager()->Commit();
   } else {
-    std::cerr << "G4PersistencyManager::Retrieve() - Transaction aborted."
-              << std::endl;
+    G4cerr << "G4PersistencyManager::Retrieve() - Transaction aborted."
+           << G4endl;
     TransactionManager()->Abort();
   }
 
@@ -310,8 +310,8 @@ G4bool G4PersistencyManager::Retrieve(G4Event*& evt)
 G4bool G4PersistencyManager::Retrieve(HepMC::GenEvent*& evt, int id)
 {
   if ( m_verbose > 2 ) {
-    std::cout << "G4PersistencyManager::Retrieve(HepMC::GenEvent*&) is called."
-              << std::endl;
+    G4cout << "G4PersistencyManager::Retrieve(HepMC::GenEvent*&) is called."
+           << G4endl;
   }
 
   // Call package dependent Initialize()
@@ -319,8 +319,8 @@ G4bool G4PersistencyManager::Retrieve(HepMC::GenEvent*& evt, int id)
   if ( ! f_is_initialized ) {
     f_is_initialized = true;
     if ( m_verbose > 1 ) {
-      std::cout << "G4PersistencyManager:: Initializing Transaction ... "
-                << std::endl;
+      G4cout << "G4PersistencyManager:: Initializing Transaction ... "
+             << G4endl;
     }
     Initialize();
   }
@@ -329,29 +329,29 @@ G4bool G4PersistencyManager::Retrieve(HepMC::GenEvent*& evt, int id)
   //
   if ( TransactionManager()->StartRead() ) {
     if ( m_verbose > 2 ) {
-      std::cout << "G4PersistencyManager: Read transaction started."
-                << std::endl;
+      G4cout << "G4PersistencyManager: Read transaction started."
+             << G4endl;
     }
   } else {
-    std::cerr << "TransactionManager::Retrieve(HepMC) - StartRead() failed."
-              << std::endl;
+    G4cerr << "TransactionManager::Retrieve(HepMC) - StartRead() failed."
+           << G4endl;
     return false;
   }
 
   G4bool st = false;
-  std::string file;
+  G4std::string file;
 
   // Retrieve a HepMC GenEvent
   //
-  std::string obj = "HepMC";
+  G4std::string obj = "HepMC";
   if ( f_pc->CurrentRetrieveMode(obj) == true ) {
     file = f_pc->CurrentReadFile(obj);
     if ( TransactionManager()->SelectReadFile(obj, file) ) {
       st = HepMCIO()->Retrieve(evt, id);
       if ( st && m_verbose > 1 ) {
-        std::cout << " -- File: " << file
-                  << " - Event# " << HepMCIO()->LastEventID()
-                  << " - HepMC event is Retrieved." << std::endl;
+        G4cout << " -- File: " << file
+               << " - Event# " << HepMCIO()->LastEventID()
+               << " - HepMC event is Retrieved." << G4endl;
       }
     } else {
       st = false;
@@ -361,8 +361,8 @@ G4bool G4PersistencyManager::Retrieve(HepMC::GenEvent*& evt, int id)
   if ( st ) {
     TransactionManager()->Commit();
   } else {
-    std::cerr << "G4PersistencyManager::Retrieve(HepMC) - Transaction aborted."
-              << std::endl;
+    G4cerr << "G4PersistencyManager::Retrieve(HepMC) - Transaction aborted."
+           << G4endl;
     TransactionManager()->Abort();
   }
 

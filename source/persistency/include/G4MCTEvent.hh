@@ -1,4 +1,4 @@
-// $Id: G4MCTEvent.hh,v 1.1 2002-11-24 13:45:23 morita Exp $
+// $Id: G4MCTEvent.hh,v 1.2 2002-12-04 10:25:49 gcosmo Exp $
 // ====================================================================
 //
 //   G4MCTEvent.hh
@@ -7,8 +7,9 @@
 #ifndef MCT_EVENT_H
 #define MCT_EVENT_H
 
-#include <iostream>
-#include <map>
+#include "G4Types.hh"
+#include "g4std/iostream"
+#include "g4std/map"
 #include "G4MCTGenParticle.hh"
  
 // ====================================================================
@@ -22,8 +23,8 @@ class G4MCTSimParticle;
 class HepMC::GenEvent;
 class HepMC::GenParticle;
 
-typedef std::map<G4MCTGenParticle, G4MCTSimParticle*> MCTGen2SimParticleMap;
-typedef std::map<G4MCTSimParticle*, G4MCTGenParticle> MCTSim2GenParticleMap;
+typedef G4std::map<G4MCTGenParticle, G4MCTSimParticle*> MCTGen2SimParticleMap;
+typedef G4std::map<G4MCTSimParticle*, G4MCTGenParticle> MCTSim2GenParticleMap;
 
 class G4MCTEvent {
 protected:
@@ -57,7 +58,7 @@ public:
   int AddPrimaryPair(const G4MCTGenParticle& genp, 
 		     const G4MCTSimParticle* simp); 
   void ClearEvent();
-  void Print(std::ostream& ostr= std::cout) const;
+  void Print(G4std::ostream& ostr= G4std::cout) const;
 
   // iterators
   typedef MCTGen2SimParticleMap::const_iterator genprimary_const_iterator;

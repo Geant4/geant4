@@ -1,4 +1,4 @@
-// $Id: G4DCIOcatalog.cc,v 1.1 2002-11-24 13:45:24 morita Exp $
+// $Id: G4DCIOcatalog.cc,v 1.2 2002-12-04 10:25:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4DCIOcatalog.cc
@@ -29,11 +29,11 @@ G4DCIOcatalog* G4DCIOcatalog::GetG4DCIOcatalog()
 void G4DCIOcatalog::RegisterEntry(G4VDCIOentry* d)
 {
   if ( m_verbose > 0 ) {
-    std::cout << "registering I/O manager entry \"" << d->GetName()
-              << "\" " << d << "." << std::endl;
+    G4cout << "registering I/O manager entry \"" << d->GetName()
+              << "\" " << d << "." << G4endl;
   }
   if ( theCatalog.find(d->GetName()) != theCatalog.end() ) {
-    std::cout << "Redefining I/O Managers list " << d->GetName() << std::endl;
+    G4cout << "Redefining I/O Managers list " << d->GetName() << G4endl;
   } else {
     theCatalog[d->GetName()] = d;
   }
@@ -43,22 +43,22 @@ void G4DCIOcatalog::RegisterEntry(G4VDCIOentry* d)
 void G4DCIOcatalog::RegisterDCIOmanager(G4VPDigitsCollectionIO* d)
 {
   if ( m_verbose > 0 ) {
-    std::cout << "registering I/O manager \"" << d->DMname()
-              << "\" " << d << "." << std::endl;
+    G4cout << "registering I/O manager \"" << d->DMname()
+              << "\" " << d << "." << G4endl;
   }
   if ( theStore.find(d->DMname()) != theStore.end() ) {
-    std::cout << "Redefining I/O Manager " << d->DMname() << std::endl;
+    G4cout << "Redefining I/O Manager " << d->DMname() << G4endl;
   } else {
     theStore[d->DMname()] = d;
   }
 }
 
 // Implementation of GetEntry
-G4VDCIOentry* G4DCIOcatalog::GetEntry(std::string name)
+G4VDCIOentry* G4DCIOcatalog::GetEntry(G4std::string name)
 {
   if ( theCatalog.find(name) == theCatalog.end() ) {
-    std::cout << "Digit Collection I/O manager entry \"" << name
-              << "\" not found!" << std::endl;
+    G4cout << "Digit Collection I/O manager entry \"" << name
+              << "\" not found!" << G4endl;
     return 0;
   } else {
     G4VDCIOentry* ds = theCatalog[name];
@@ -67,11 +67,11 @@ G4VDCIOentry* G4DCIOcatalog::GetEntry(std::string name)
 }
 
 // Implementation of GetDCIOmanager
-G4VPDigitsCollectionIO* G4DCIOcatalog::GetDCIOmanager(std::string name)
+G4VPDigitsCollectionIO* G4DCIOcatalog::GetDCIOmanager(G4std::string name)
 {
   if ( theStore.find(name) == theStore.end() ) {
-    std::cout << "Digit Collection I/O manager \"" << name
-              << "\" not found!" << std::endl;
+    G4cout << "Digit Collection I/O manager \"" << name
+              << "\" not found!" << G4endl;
     return 0;
   } else {
     G4VPDigitsCollectionIO* ds = theStore[name];
@@ -82,18 +82,18 @@ G4VPDigitsCollectionIO* G4DCIOcatalog::GetDCIOmanager(std::string name)
 // Implementation of PrintEntries
 void G4DCIOcatalog::PrintEntries()
 {
-  std::cout << "I/O manager entries: ";
-  std::cout << theCatalog.size() << std::endl;
+  G4cout << "I/O manager entries: ";
+  G4cout << theCatalog.size() << G4endl;
   DCIOmap::const_iterator it;
   for ( it=theCatalog.begin(); it != theCatalog.end(); it++ ) {
-    std::cout << "  --- " << (*it).first << std::endl;
+    G4cout << "  --- " << (*it).first << G4endl;
   }
 }
 
 // Implementation of CurrentDCIOmanager
-std::string G4DCIOcatalog::CurrentDCIOmanager()
+G4std::string G4DCIOcatalog::CurrentDCIOmanager()
 {
-  std::string list = "";
+  G4std::string list = "";
   DCIOstore::const_iterator it;
   for ( it=theStore.begin(); it != theStore.end(); it++ ) {
     list += (*it).first + " ";
@@ -104,12 +104,12 @@ std::string G4DCIOcatalog::CurrentDCIOmanager()
 // Implementation of PrintDCIOmanager
 void G4DCIOcatalog::PrintDCIOmanager()
 {
-  std::cout << "I/O managers: ";
-  std::cout << theStore.size() << std::endl;
+  G4cout << "I/O managers: ";
+  G4cout << theStore.size() << G4endl;
   DCIOstore::const_iterator it;
   for ( it=theStore.begin(); it != theStore.end(); it++ ) {
-    std::cout << "  --- " << (*it).first
-              << ", " << (*it).second << "." << std::endl;
+    G4cout << "  --- " << (*it).first
+           << ", " << (*it).second << "." << G4endl;
   }
 }
 

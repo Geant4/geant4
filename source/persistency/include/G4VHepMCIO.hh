@@ -1,4 +1,4 @@
-// $Id: G4VHepMCIO.hh,v 1.1 2002-11-24 13:45:23 morita Exp $
+// $Id: G4VHepMCIO.hh,v 1.2 2002-12-04 10:25:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4VHepMCIO.hh
@@ -9,6 +9,7 @@
 #ifndef G4V_HEPMC_IO_HH
 #define G4V_HEPMC_IO_HH 1
 
+#include "G4Types.hh"
 #include "CLHEP/HepMC/GenEvent.h"
 
 // Class Description:
@@ -24,12 +25,12 @@ class G4VHepMCIO
       // Destructor
 
     public: // With description
-      virtual bool Store(HepMC::GenEvent*) =0;
+      virtual G4bool Store(HepMC::GenEvent*) =0;
       // Pure virtual method for storing HepMC GenEvent.
       // Each persistency package should implement a concrete method
       // of storing the HepMC::GenEvent with this signature.
 
-      virtual bool Retrieve(HepMC::GenEvent*&, int id=-1) =0;
+      virtual G4bool Retrieve(HepMC::GenEvent*&, int id=-1) =0;
       // Pure virtual method for retrieving HepMC GenEvent.
       // Each persistency package should implement a concrete method
       // of storing the HepMC::GenEvent with this signature.
@@ -41,7 +42,7 @@ class G4VHepMCIO
       // Set verbose level.
 
     protected:
-      int m_verbose;
+      G4int m_verbose;
 
 }; // End of class G4VHepMCIO
 

@@ -1,4 +1,4 @@
-// $Id: G4PersistencyCenter.hh,v 1.1 2002-11-24 13:45:23 morita Exp $
+// $Id: G4PersistencyCenter.hh,v 1.2 2002-12-04 10:25:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4PersistencyCenter.hh
@@ -9,9 +9,10 @@
 #ifndef PERSISTENCY_CENTER_HH
 #define PERSISTENCY_CENTER_HH 1
 
+#include "G4Types.hh"
 #include <string>
-#include <vector>
-#include <map>
+#include "g4std/vector"
+#include "g4std/map"
 #include "G4HCIOcatalog.hh"
 #include "G4VHCIOentry.hh"
 #include "G4DCIOcatalog.hh"
@@ -21,14 +22,14 @@
 // Forward Declaration to avoid circular dependencies.
 class G4PersistencyManager;
 
-typedef std::map<std::string, G4PersistencyManager*,std::less<std::string> > PMap;
-typedef std::map<int, std::string, std::less<int> > ObjMap;
-typedef std::map<std::string, std::string, std::less<std::string> > FileMap;
+typedef G4std::map<G4std::string, G4PersistencyManager*,G4std::less<G4std::string> > PMap;
+typedef G4std::map<int, G4std::string, G4std::less<int> > ObjMap;
+typedef G4std::map<G4std::string, G4std::string, G4std::less<G4std::string> > FileMap;
 
 enum StoreMode { kOn, kOff, kRecycle };
 
-typedef std::map<std::string, StoreMode, std::less<std::string> > StoreMap;
-typedef std::map<std::string, bool, std::less<std::string> >      BoolMap;
+typedef G4std::map<G4std::string, StoreMode, G4std::less<G4std::string> > StoreMap;
+typedef G4std::map<G4std::string, G4bool, G4std::less<G4std::string> >     BoolMap;
 
 // Forward Declarations:
 class G4PersistencyCenterMessenger;
@@ -50,55 +51,55 @@ class G4PersistencyCenter
       static G4PersistencyCenter* GetG4PersistencyCenter();
       // returns the pointer of singleton G4PersistencyCenter
 
-      void SelectSystem(std::string systemName);
+      void SelectSystem(G4std::string systemName);
       // Select the persistency package
 
-      const std::string CurrentSystem() { return f_currentSystemName; };
+      const G4std::string CurrentSystem() { return f_currentSystemName; };
       // returns the current persistent package name
 
-      void SetHepMCObjyReaderFile(std::string file);
+      void SetHepMCObjyReaderFile(G4std::string file);
       // Sets the name of HepMCObjyReader file name.  To be called by generator.
 
-      std::string CurrentHepMCObjyReaderFile();
+      G4std::string CurrentHepMCObjyReaderFile();
       // Sets the name of HepMCObjyReader file name.  To be called by generator.
 
-      void SetStoreMode(std::string objName, StoreMode mode);
+      void SetStoreMode(G4std::string objName, StoreMode mode);
       // Sets the object store mode.  Modes are kOn, kOff or kRecycle.
 
-      void SetRetrieveMode(std::string objName, bool mode);
+      void SetRetrieveMode(G4std::string objName, G4bool mode);
       // Sets the object retrieve mode.  Modes are true or false.
 
-      StoreMode CurrentStoreMode(std::string objName);
+      StoreMode CurrentStoreMode(G4std::string objName);
       // returns the current object store mode.
 
-      bool CurrentRetrieveMode(std::string objName);
+      G4bool CurrentRetrieveMode(G4std::string objName);
       // returns the current object store mode.
 
-      bool SetWriteFile(std::string objName, std::string writeFileName);
+      G4bool SetWriteFile(G4std::string objName, G4std::string writeFileName);
       // Sets the output filename.
 
-      bool SetReadFile(std::string objName, std::string readFileName);
+      G4bool SetReadFile(G4std::string objName, G4std::string readFileName);
       // Sets the input filename.
 
-      std::string CurrentWriteFile(std::string objName);
+      G4std::string CurrentWriteFile(G4std::string objName);
       // returns the current output filename.
 
-      std::string CurrentReadFile(std::string objName);
+      G4std::string CurrentReadFile(G4std::string objName);
       // returns the current input filename.
 
-      std::string CurrentObject(std::string file);
+      G4std::string CurrentObject(G4std::string file);
       // returns the current object type
 
-      void AddHCIOmanager(std::string detName, std::string colName);
+      void AddHCIOmanager(G4std::string detName, G4std::string colName);
       // add a hits colleciton I/O manager to the catalog
 
-      std::string CurrentHCIOmanager();
+      G4std::string CurrentHCIOmanager();
       // Returns a list of registered hits colleciton I/O managers
 
-      void AddDCIOmanager(std::string detName);
+      void AddDCIOmanager(G4std::string detName);
       // add a digits colleciton I/O manager to the catalog
 
-      std::string CurrentDCIOmanager();
+      G4std::string CurrentDCIOmanager();
       // Returns a list of registered digits colleciton I/O managers
 
       void PrintAll();
@@ -107,10 +108,10 @@ class G4PersistencyCenter
       G4PersistencyManager* CurrentG4PersistencyManager() { return f_currentManager; };
       // returns the pointer of the currnet G4PersistencyManager.
 
-      void SetG4PersistencyManager(G4PersistencyManager* pm, std::string name);
+      void SetG4PersistencyManager(G4PersistencyManager* pm, G4std::string name);
       // returns the pointer of the currnet G4PersistencyManager.
 
-      G4PersistencyManager* GetG4PersistencyManager(std::string nam);
+      G4PersistencyManager* GetG4PersistencyManager(G4std::string nam);
       // returns the pointer of the currnet G4PersistencyManager with name.
 
       void RegisterG4PersistencyManager(G4PersistencyManager* pm);
@@ -126,7 +127,7 @@ class G4PersistencyCenter
       // Return verbose level.
 
     private:
-      std::string PadString(std::string name, unsigned int width);
+      G4std::string PadString(G4std::string name, unsigned int width);
       // truncate or pad a string up to the width.
 
     private:
@@ -136,15 +137,15 @@ class G4PersistencyCenter
       G4PersistencyCenterMessenger* f_theMessenger;
       static G4PersistencyCenter*   f_thePointer;
       G4PersistencyManager*         f_currentManager;
-      std::string                 f_currentSystemName;
-      PMap                        f_theCatalog;
-      ObjMap                      f_wrObj;
-      ObjMap                      f_rdObj;
-      FileMap                     f_writeFileName;
-      FileMap                     f_readFileName;
-      StoreMap                    f_writeFileMode;
-      BoolMap                     f_readFileMode;
-      int                         m_verbose;
+      G4std::string                 f_currentSystemName;
+      PMap                          f_theCatalog;
+      ObjMap                        f_wrObj;
+      ObjMap                        f_rdObj;
+      FileMap                       f_writeFileName;
+      FileMap                       f_readFileName;
+      StoreMap                      f_writeFileMode;
+      BoolMap                       f_readFileMode;
+      G4int                         m_verbose;
       G4FileUtilities               f_ut;
 
 }; // End of class G4PersistencyCenter

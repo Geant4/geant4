@@ -15,6 +15,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04 December, 02   G.Cosmo (persistency-V04-01-01)
+- Corrections to comply to G4 coding rules:
+  o use of g4std/ headers for STL classes;
+  o use G4std:: instead of std::
+  o use of G4 types (limited to G4bool, G4cout, G4endl, G4cerr)
+- Fixes for porting on Windows platform:
+  o HepMC is not currently supported by CLHEP on Windows, so must be
+    excluded from compilation  on Windows systems.
+
 29 November, 02   Y.Morita (persistency-V04-01-00)
 - tools for developers
 

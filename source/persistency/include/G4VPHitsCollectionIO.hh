@@ -1,4 +1,4 @@
-// $Id: G4VPHitsCollectionIO.hh,v 1.1 2002-11-24 13:45:24 morita Exp $
+// $Id: G4VPHitsCollectionIO.hh,v 1.2 2002-12-04 10:25:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4VPHitsCollectionIO.hh
@@ -17,39 +17,39 @@
 class G4VPHitsCollectionIO
 {
     public: // With description
-      G4VPHitsCollectionIO( std::string detName, std::string colName );
+      G4VPHitsCollectionIO( G4std::string detName, G4std::string colName );
       // Constructor
 
       virtual ~G4VPHitsCollectionIO() {};
       // Destructor
 
     public: // With description
-      virtual bool Store(const G4VHitsCollection*) =0;
+      virtual G4bool Store(const G4VHitsCollection*) =0;
       // Pure virtual method for storing the hit collection.
       // Each persistency package should implement a concrete method
       // with this signature.
 
-      virtual bool Retrieve(G4VHitsCollection*&) =0;
+      virtual G4bool Retrieve(G4VHitsCollection*&) =0;
       // Pure virtual method for retrieving the hit collection.
       // Each persistency package should implement a concrete method
       // with this signature.
 
-      bool operator== (const G4VPHitsCollectionIO& right) const;
+      G4bool operator== (const G4VPHitsCollectionIO& right) const;
       // virtual operator for comparing hit collections with names.
 
-      std::string SDname() { return f_detName; };
+      G4std::string SDname() { return f_detName; };
       // Returns the sensitive detector name.
 
-      std::string CollectionName() { return f_colName; };
+      G4std::string CollectionName() { return f_colName; };
       // Returns the hit collection name.
 
       void SetVerboseLevel(int v) { m_verbose = v; };
       // Sets the verbose level
 
     protected:
-      int m_verbose;
-      std::string f_detName;
-      std::string f_colName;
+      G4int m_verbose;
+      G4std::string f_detName;
+      G4std::string f_colName;
 
 }; // End of class G4VPHitsCollectionIO
 

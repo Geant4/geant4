@@ -1,4 +1,4 @@
-// $Id: G4MCTSimEvent.hh,v 1.1 2002-11-24 13:45:23 morita Exp $
+// $Id: G4MCTSimEvent.hh,v 1.2 2002-12-04 10:25:49 gcosmo Exp $
 // ====================================================================
 //
 //   G4MCTSimEvent.hh
@@ -7,9 +7,10 @@
 #ifndef MCT_SIM_EVENT_H
 #define MCT_SIM_EVENT_H
 
-#include <iostream>
-#include <vector>
-#include <map>
+#include "G4Types.hh"
+#include "g4std/iostream"
+#include "g4std/vector"
+#include "g4std/map"
  
 // ====================================================================
 //
@@ -19,8 +20,8 @@
 class G4MCTSimParticle;
 class G4MCTSimVertex;
 
-typedef std::map<int, G4MCTSimParticle*> G4MCTSimParticleContainer;
-typedef std::vector<G4MCTSimVertex*> G4MCTSimVertexContainer;
+typedef G4std::map<int, G4MCTSimParticle*> G4MCTSimParticleContainer;
+typedef G4std::vector<G4MCTSimVertex*> G4MCTSimVertexContainer;
 
 class G4MCTSimEvent {
 protected:
@@ -36,7 +37,7 @@ public:
   const G4MCTSimEvent& operator=(const G4MCTSimEvent& right);
 
   // methods...
-  bool AddParticle(const G4MCTSimParticle* aparticle);
+  G4bool AddParticle(const G4MCTSimParticle* aparticle);
   int GetNofParticles() const;
   int GetNofVertices() const;
   int GetNofStoredParticles() const;
@@ -46,7 +47,7 @@ public:
 
   void BuildVertexContainer();
   void ClearEvent();
-  void Print(std::ostream& ostr= std::cout) const;  
+  void Print(G4std::ostream& ostr= G4std::cout) const;  
 
   // iterators
   typedef G4MCTSimParticleContainer::iterator particle_iterator;

@@ -1,4 +1,4 @@
-// $Id: G4VPDigitIO.hh,v 1.1 2002-11-24 13:45:23 morita Exp $
+// $Id: G4VPDigitIO.hh,v 1.2 2002-12-04 10:25:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4VPDigitIO.hh
@@ -29,12 +29,12 @@ class G4VPDigitIO
       G4VPDigitIO* GetG4VPDigitIO() { return f_G4VPDigitIO; };
       // Returns the pointer of the digit collection I/O manager.
 
-      virtual bool Store(const G4DCofThisEvent*) =0;
+      virtual G4bool Store(const G4DCofThisEvent*) =0;
       // Pure virtual method for storing digit collections of this event.
       // Each persistency package should implement a concrete method
       // of storing the digit collection of this event with this signature.
 
-      virtual bool Retrieve(G4DCofThisEvent*&) =0;
+      virtual G4bool Retrieve(G4DCofThisEvent*&) =0;
       // Pure virtual method for retrieving digit collections of this event.
       // Each persistency package should implement a concrete method
       // of storing the digit collection of this event with this signature.
@@ -47,7 +47,7 @@ class G4VPDigitIO
       // Registers the digit collection I/O manager.
 
     protected:
-      int m_verbose;
+      G4int m_verbose;
       static G4VPDigitIO* f_G4VPDigitIO;
       G4DCIOcatalog*    f_catalog;
 

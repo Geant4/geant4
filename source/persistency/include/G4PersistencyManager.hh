@@ -1,4 +1,4 @@
-// $Id: G4PersistencyManager.hh,v 1.1 2002-11-24 13:45:23 morita Exp $
+// $Id: G4PersistencyManager.hh,v 1.2 2002-12-04 10:25:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4PersistencyManager.hh
@@ -180,7 +180,7 @@ class G4PersistencyManager
       std::string      nameMgr;
       // GeneratorCenter* f_GenCenter;
       // G4MCTManager*      f_MCTman;
-      bool             f_is_initialized;
+      G4bool             f_is_initialized;
 
 }; // End of class G4PersistencyManager
 
