@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.52 2003-11-06 15:12:02 johna Exp $
+// $Id: G4VisManager.cc,v 1.53 2003-11-12 13:11:05 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1026,14 +1026,6 @@ void G4VisManager::EndOfEvent () {
 
 void G4VisManager::EndOfRun () {
   //G4cout << "G4VisManager::EndOfRun" << G4endl;
-  if (GetConcreteInstance() && IsValidView ()) {
-    // Let the behaviour regarding the refreshing of transinet store
-    // at end of run be the same as at end of event...
-    if (fpScene->GetRefreshAtEndOfEvent()) {
-      fpViewer->ShowView();  // ...for systems needing post processing.
-      fpSceneHandler->SetMarkForClearingTransientStore(true);
-    }
-  }
 }
 
 void G4VisManager::ClearTransientStoreIfMarked(){
