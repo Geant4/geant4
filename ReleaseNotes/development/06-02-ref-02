@@ -1,0 +1,124 @@
+
+                       geant4-06-02-ref-02
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Added treatment of G4UnknownParticle for bosons and G4UnknownDecay.
+  o Added new class G4EmCalculator used to access and compute dedx, range,
+    and cross sections for electromagnetic processes.
+  o Introduced force auxiliary edge visible in G4VisAttributes and
+    G4ViewParameters to allow for visualization of wireframe for
+    curved shapes.
+  o Removed deprecated visualization commands.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+event                                            events-V06-02-01
+-----
+- Added treatment of G4UnknownParticle to G4PrimaryTransformer.
+
+geometry/divisions                               geomdiv-V06-02-01
+------------------
+- Removed unnecessary debug printout in method
+  G4PVDivision::CheckAndSetParamenters().
+
+geometry/solids/CSG                              geom-csg-V06-02-02
+-------------------
+- Fix in G4Cons::DistanceToIn(p,v) on fRmax surface and move in,
+  the condition became a bit more strict && determinant >=0, i.e.
+  intersections in addition to go in.
+  Fixes a rare problem of dIn=dOut=0 observed in 3 events over a
+  statistics of 10^8..
+- Fix in G4Sphere::DistanceToOut(p,v,...) on fRmin moving outside.
+  The bug showed 3 events of dIn=dOut=0 for 10^7 statistics in the
+  unit testing.
+
+graphics_reps                                    greps-V06-02-00
+-------------
+- Introduced force auxiliary edge visible in G4VisAttributes.
+
+particles                                        particles-V06-02-00
+---------
+- Introduced G4UnknownParticle class for bosons.
+
+processes/decay                                  decay-V06-02-00
+---------------
+- Introduced G4UnknownDecay class.
+
+processes/electromagnetic/utils                  utils-V06-02-04
+-------------------------------
+- Added G4EmCalculator, a class to access/compute dedx, range, cross
+  sections of electromagnetic processes.
+- Added G4ionEffectiveCharge class needed for ion physics.
+- Fixed a problem of cut dependence of transmission energy of low energy
+  electrons via thin foil.
+- Fixed a problem observed when deactivating muon ionisation.
+
+processes/electromagnetic/xrays                  xrays-V06-02-02
+-------------------------------
+- Changed "StronglyForced" back to "Forced" in GetMeanLifeTime() for
+  G4Scintillation process.
+- Substituted obsolete iterfaces to G4ParticleDefinition.
+
+processes/optical                                op-V06-02-00
+-----------------
+- Allow for unified model reflectivity parameters to also work in case
+  of dielectric_metal surfaces; addresses in part problem report #654.
+
+processes/transportation                         transport-V06-02-00
+------------------------
+- Introduced G4StepLimiter to handle MaxAllowedStep in G4UserLimits.
+
+visualization                                    vis-V06-02-02
+-------------
+- Removed deprecated commands:
+    /vis/viewer/show               (use /vis/viewer/update)
+    /vis/viewer/lightsThetaPhi     (use /vis/viewer/set/lightsThetaPhi)
+    /vis/viewer/lightsVector       (use /vis/viewer/set/lightsVector)
+    /vis/viewer/viewpointThetaPhi  (use /vis/viewer/set/viewpointThetaPhi)
+    /vis/viewer/viewpointVector    (use /vis/viewer/set/viewpointVector)
+  (See geant4/source/visualization/README.built_in_commands for list
+  of current commands.)
+- Added auxiliary edge visible flag to G4ViewParameters and a new
+  command, /vis/viewer/set/auxiliaryEdge.  (Auxiliary edges are not
+  genuine edges of the volume.  They may be in a curved surface made
+  out of polygons, for example, or in plane surface of complicated
+  shape that has to be broken down into simpler polygons.
+  HepPolyhedron breaks all surfaces into triangles or quadrilaterals.
+  There will be auxiliary edges for any volumes with a curved surface,
+  such as a tube or a sphere, or a volume resulting from a Boolean
+  operation.  Normally, they are not shown, but sometimes it is useful
+  to see them.  In particular, a sphere, because it has no egdes, will
+  not be seen in wireframe mode in some graphics systems unless this
+  flag is turned on).
+  Implemented force auxiliary edge visible feature of G4VisAttributes.
+- Refined forced wireframe algorithm: *always* force wireframe even
+  if hidden line removal is specified.
+- Cosmetics to OpenGL driver.
+- Small improvements to G4XXX (sample graphics system).
+- Tidied guidance for /vis/viewer/set.
+- HepRep (vis-HepRep-V06-02-01):
+  fixed a compilation problem in zlib for AMD64.
+
+examples                                         examples-V06-02-01
+--------
+- Updated reference outputs.
+- extended
+  o electromagnetic/TestEm1 (testem1-V06-02-01)
+    + Compute and print CSDA range from G4EmCalculator.
+    + Set default vertex at left side of the box.
+  o electromagnetic/TestEm5 (testem5-V06-02-00)
+    + Print stopping power.
+    + Showing example of use of G4EmCalculator.
+    + Added dedx1.mac and dedx2.mac input macros.
+  o electromagnetic/TestEm7 (testem7-V06-02-02)
+    + Optimised interfaces.
+    + Added proton.mac, updated ionC12.mac and removed run01.mac.
+    + Fixed minor problem in stepping action.
+
+tests                                            tests-V06-02-01
+-----
+- Updated reference outputs.
