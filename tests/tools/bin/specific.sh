@@ -220,7 +220,9 @@ if [ `uname -n | grep pcitasd04` ]; then
   export G4VIS_BUILD_VRMLFILE_DRIVER=1
 fi
 
-if [ `uname -n | grep pcgeant` ]; then
+UNAMEN=`uname -n `
+echo UNAMEN $UNAMEN
+if [ $UNAMEN = pcgeant -o $UNAMEN = pcg4speed ]; then
   if [ $G4_STT_USE_STL ]; then
     export G4USE_STL=1
   fi

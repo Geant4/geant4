@@ -82,7 +82,8 @@ if ( `uname -n | grep dxplus` != "" ) then
   setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
 endif
 
-if ( `uname -n | grep pcgeant` != "" ) then
+if ( `uname -n | grep pcgeant`   != "" || \
+     `uname -n | grep pcg4speed` != "" ) then
   if ( $?G4_STT_USE_STL ) then
     setenv G4USE_STL 1
   endif
