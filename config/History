@@ -1,4 +1,4 @@
-$Id: History,v 1.189 2002-06-14 09:06:48 gcosmo Exp $
+$Id: History,v 1.190 2002-06-17 15:32:30 gcosmo Exp $
 $Name: not supported by cvs2svn $
 
 -------------------------------------------------------------------
@@ -17,6 +17,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17th June 2002  Gabriele Cosmo (config-V04-00-08)
+- Added flag G4NO_ISO_VECDIST for compilers (SUN-CC, HP-aCC) with non ISO
+  call to vector::distance() method.
 
 14th June 2002  Gabriele Cosmo (config-V04-00-07)
 - binmake.gmk: added include path to "leading_particle" hadronic module.
