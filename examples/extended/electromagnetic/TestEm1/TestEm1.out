@@ -1,8 +1,11 @@
-**********************************************
- Geant4 version $Name: not supported by cvs2svn $
-                                (11-February-2004)
-             Copyright : Geant4 Collaboration
-**********************************************
+
+*************************************************************
+ Geant4 version $Name: not supported by cvs2svn $   (25-March-2004)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303.
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
 G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
 
 ***** Table : Nb of materials = 12 *****
@@ -198,20 +201,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=84s Real=1e+02s Sys=15s
+  User=26s Real=41s Sys=10s
 
- nb tracks/event   neutral:    27.4000   charged:   688.9400
- nb  steps/event   neutral:   145.5700   charged:  4748.9500
+ nb tracks/event   neutral:    27.2700   charged:   695.2400
+ nb  steps/event   neutral:   149.2500   charged:  3410.4800
 
  total energy deposit: 100.0000 MeV
 
  nb of process calls per event: 
           eIoni       eBrem       compt        phot        conv     annihil
-      4721.6700     25.8800    118.1700     26.0000      1.4000      1.4000
+      3383.5800     25.3200    121.9800     25.6900      1.5800      1.5800
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1804446829, 260016917
+ Current couple of seeds = 1351988378, 1579045124
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

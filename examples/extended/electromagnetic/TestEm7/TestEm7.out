@@ -1,8 +1,11 @@
-**********************************************
- Geant4 version $Name: not supported by cvs2svn $
-                                (11-February-2004)
-             Copyright : Geant4 Collaboration
-**********************************************
+
+*************************************************************
+ Geant4 version $Name: not supported by cvs2svn $   (25-March-2004)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303.
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
 G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
 
 ***** Table : Nb of materials = 3 *****
@@ -232,20 +235,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=351.71s Real=532.4s Sys=78.13s
+  User=157.8s Real=351.83s Sys=76.83s
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
-tally 0: 	 	10.399 GeV	0.649937 % 	0.000208263 Gy
-tally 1: 	 	7.59729 GeV	0.47483 % 	0.000152152 Gy
-tally 2: 	 	3.22967 GeV	0.201855 % 	6.46814e-05 Gy
-tally 3: 	 	1.62853 GeV	0.101783 % 	3.26149e-05 Gy
+tally 0: 	 	10.392776 GeV	0.64954851 % 	0.00020813838 Gy
+tally 1: 	 	7.8411972 GeV	0.49007483 % 	0.00015703736 Gy
+tally 2: 	 	3.5135969 GeV	0.2195998 % 	7.0367565e-05 Gy
+tally 3: 	 	1.7251868 GeV	0.10782418 % 	3.4550691e-05 Gy
 
 ---------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1070143990, 1826306137
+ Current couple of seeds = 1526069608, 646338923
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

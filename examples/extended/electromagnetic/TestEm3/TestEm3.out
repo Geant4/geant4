@@ -1,8 +1,11 @@
-**********************************************
- Geant4 version $Name: not supported by cvs2svn $
-                                (11-February-2004)
-             Copyright : Geant4 Collaboration
-**********************************************
+
+*************************************************************
+ Geant4 version $Name: not supported by cvs2svn $   (25-March-2004)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303.
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
 G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
 G4Material: Mean excitation energy is changed for CsI Iold= 491.166eV; Inew= 553.1 eV;
 Visualization Manager instantiating...
@@ -205,19 +208,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=95.94s Real=109.92s Sys=6.5s
+  User=37.72s Real=48.71s Sys=6.2s
 
 -------------------------------------------------------------
                                    total energy dep                total tracklen       mean energy leaving per layer 
  
- Absorber0 (        Lead) : 809.91 MeV +- 17.92 MeV       56.14 cm  +-  1.36 cm                 263.87 MeV +- 44.68 MeV
- Absorber1 ( liquidArgon) : 177.78 MeV +- 15.10 MeV       88.06 cm  +-  7.65 cm                 260.19 MeV +- 44.77 MeV
+ Absorber0 (        Lead) : 815.52 MeV +- 17.55 MeV       56.69 cm  +-  1.37 cm                 267.36 MeV +- 45.80 MeV
+ Absorber1 ( liquidArgon) : 174.13 MeV +- 15.78 MeV       86.03 cm  +-  8.19 cm                 263.78 MeV +- 45.88 MeV
 
 -------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2089542955, 2016324627
+ Current couple of seeds = 1809837985, 1683402677
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
