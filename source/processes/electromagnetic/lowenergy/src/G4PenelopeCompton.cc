@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeCompton.cc,v 1.20 2004-06-03 08:17:27 pandola Exp $
+// $Id: G4PenelopeCompton.cc,v 1.21 2004-09-27 13:48:42 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -632,7 +632,7 @@ void G4PenelopeCompton::ReadData()
       G4Exception(excep);
     }
   }while (test != -2); //the very last Z is closed with -2 instead of -1
-};
+}
 
 G4double G4PenelopeCompton::CrossSection(G4double energy,G4int Z)
 {
