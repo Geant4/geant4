@@ -10,7 +10,6 @@
 //
 
 
-
 #include <stdio.h>
 #include <math.h>
 #include <fstream.h>
@@ -117,7 +116,7 @@ int main(int argc, char **argv)
       d = MyPCone->DistanceToOut(start);
       G4cout<<"  closest distance to out="<<d<<endl;
     }
-    else
+    else if( in == kOutside ) 
     {
       G4cout <<" is outside";
 
@@ -126,7 +125,8 @@ int main(int argc, char **argv)
       d = MyPCone->DistanceToIn(start);
       G4cout<<"  closest distance to in="<<d<<endl;
     }
-     
+    else
+      G4cout <<" is on the surface"<<endl;
 
   }
 
