@@ -1,0 +1,10 @@
+opt pto
+fo/file 67 allbe.ps
+meta 67 -111
+exec pBe
+exec pipBe
+exec dBe
+exec tBe
+exec he3Be
+close 67
+

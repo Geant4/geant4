@@ -1,0 +1,13 @@
+ve/cr it(4,25) R
+ve/read it [1]
+ve/cr xxx(25) r
+ve/cr yyy(25) r
+ve/cr errxxx(25) r
+ve/cr erryyy(25) r
+ve/copy it(1,1:25) xxx
+ve/copy it(2,1:25) errxxx
+ve/copy it(3,1:25) yyy
+ve/copy it(4,1:25) erryyy
+*                                            Np Si Size
+/GRAPHICS/HPLOT/ERRORS xxx yyy errxxx erryyy 25 20 0.2
+

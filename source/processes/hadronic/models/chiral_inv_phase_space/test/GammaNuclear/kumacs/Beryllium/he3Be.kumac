@@ -1,0 +1,25 @@
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79   ITEP-79-6'
+ opt liny
+ve/cr q(003)
+ve/cr v(4,003)
+ve/in v(1:4,001)      2.0000E-01     0.0000E+00     1.5000E-03     4.0000E-04
+ve/in v(1:4,002)      2.6000E-01     0.0000E+00     3.7000E-04     1.2000E-04
+ve/in v(1:4,003)      2.9000E-01     0.0000E+00     2.0000E-04     1.3000E-04
+ve/copy v(1,1:003) x
+ve/copy v(2,1:003) q
+ve/copy v(3,1:003) y
+ve/copy v(4,1:003) e
+ null   0.191000   0.299000   -1.13000E-04    2.08300E-03
+exec ../analyse ../../logs/liste.p_be.he3.90degree.p_be
+/GRAPHICS/HPLOT/ERRORS x y q e 003 24 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.245000     1.97320E-03 'RE   P BE --> HE3 X' 0.3
+ text    0.245000     1.86340E-03 'E IN GEV   400.00' 0.3
+ text    0.245000     1.75360E-03 'THETA(P=3,RF=LAB) IN DEG   90.00' 0.3
+ text    0.245000     1.64380E-03 'A   9.01' 0.3

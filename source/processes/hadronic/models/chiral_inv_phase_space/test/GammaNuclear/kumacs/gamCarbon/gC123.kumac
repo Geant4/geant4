@@ -1,0 +1,280 @@
+macro run1 e=123 t=c0606 que=513-2-asd
+* ========= Hear we read the experimental data =========
+*
+* -- in the gamm_c0606_e123.vexp the photon spectra are given in:
+* --  ubarn MeV^-1 Omega^-1, function of Ein-T in MeV 
+* ===================================================
+* Set the global parameters and delete all vectors
+  ve/del *
+  targ =^12!C
+  cs=1.8
+  next=3
+  nvex=60
+  m = 938.273 | mass of proton
+  ve/cr angle(5) r 57 77 97 117 127
+  exec creavec [nvex]
+  do i = 35 , $sigma(34+[next])
+   clo [i]
+  enddo
+* Read the data file --
+  ve/re Pvex,Em,s57,d57,s77,d77,s97,d97,s117,d117,s127,d127 _
+        gamm_[t]_e[e].vexp
+  ve/cr bgr(5) r 0.1e-2 0.65e-3 0.3e-3 0.1e-3 0.1e-4
+
+  do i = 1 , 5
+    a  = angle([i])
+    j1 = $sigma(1+3*([i]-1))
+    j2 = [j1] + 1
+    j3 = [j1] + 2
+    par1 = Pvex([j1])
+    par2 = Pvex([j2])
+    par3 = Pvex([j3])
+    if [par1] = [a] then
+      b = bgr([i])
+*      ve/copy $sigma((s[a]*[par3]/[par2]-450.*[b])+0.10e-12) s[a]
+      ve/copy $sigma(1000.*s[a]*[par3]/[par2]+0.10e-12) s[a]
+      ve/copy $sigma(1000.*d[a]*[par3]/[par2]+0.08e-12) d[a]
+      ve/copy $sigma(s[a]-100.*DEL(s[a])) s[a]
+    else
+      message '%%% error in the data file! %%%'
+    endif
+  enddo
+  ve/copy $sigma([e]-Em) Tp | In the paper there is an "excitation energy"
+
+* === Now it should be ploted as a function of K=(T+p)/2 ==========
+  hi/del *
+*
+  upcol   = violet
+  downcol = red
+  if [e] = 123 then
+    hxmin =  160.
+    hxmax =  270.   | 22 points over 5
+    hnbin =  22
+    kxmin =  160.1
+    kxmax =  269.9
+  else              | = 155
+    hxmin =  175.
+    hxmax =  320.   | 29 points over 5
+    hnbin =  29
+    kxmin =  175.1
+    kxmax =  319.9
+  endif
+  *hymin =  1.1e-4
+  hymin =  1.1e-2
+  hymax =  9.99
+  hzero =  0.1e-12
+  hfbin =  1
+  Cmark =  20
+  ptsize = 0.17
+  lgndsz = 0.35
+  dangle = 2.0
+  pi = 3.141593
+  Alias/del paperX
+  Alias/cr  paperX '12.0' 
+  exec ~/PTOOL/reset
+  exec ~/PTOOL/setpq
+  danrad = $sigma([dangle]/180.*[pi])
+  hlxmin = $sigma(log10([hxmin]))
+  hlxmax = $sigma(log10([hxmax]))
+  halfbn = $sigma(0.5*([hlxmax]-[hlxmin])/[hnbin])
+*
+  1d         61 'T?p! at  57 deg (MeV)' [hnbin] [hxmin] [hxmax]
+  hi/copy 61 62 'T?p! at  77 deg (MeV)'
+  hi/copy 61 63 'T?p! at  97 deg (MeV)'
+  hi/copy 61 64 'T?p! at 117 deg (MeV)'
+  hi/copy 61 65 'T?p! at 127 deg (MeV)'
+  hi/copy 61 66 'T?p! at 57-117-127 deg (MeV)'
+  hi/copy 61 81 'zero level'
+  call hbarx(0)
+*
+* -- adjust zero levels, create dT histogram
+  ve/cr zerol([hnbin]) r [hnbin]*[hzero]
+  put/cont 81 zerol
+  put/err  81 $sigma(0.8*zerol)
+  ve/del zerol
+*
+* === Now we need to get MC points ===== @@ Energy should be specified instead of two "gamma_c"
+  ve/re k57,dk57,si57,ds57 ../../logs/liste.gamma_c.proton.57degrees.gamma_c
+  ve/re k77,dk77,si77,ds77 ../../logs/liste.gamma_c.proton.77degrees.gamma_c
+  ve/re k97,dk97,si97,ds97 ../../logs/liste.gamma_c.proton.97degrees.gamma_c
+  ve/re k117,dk117,si117,ds117 ../../logs/liste.gamma_c.proton.117degrees.gamma_c
+  ve/re k127,dk127,si127,ds127 ../../logs/liste.gamma_c.proton.127degrees.gamma_c
+  if [e] = 123 then
+    put/cont 61  si57(2:23) | 160-270 range
+    put/cont 62  si77(2:23) | 160-270 range
+    put/cont 63  si97(2:23) | 160-270 range
+    put/cont 64 si117(2:23) | 160-270 range
+    put/cont 65 si127(2:23) | 160-270 range
+    put/err  61 ds57(2:23)
+    put/err  62 ds77(2:23)
+    put/err  63 ds97(2:23)
+    put/err  64 ds117(2:23)
+    put/err  65 ds127(2:23)
+  else
+  endif
+*
+  opt zfl
+  swi z
+  zone 2 3
+  pi/del ' '
+* Draw & Create the file
+  swi gz
+* Create the output file only
+*  swi z
+*
+  opt vert
+  set xwin 0.0001
+  set ywin 0.0001
+  title [targ]//'([g],p) reaction at E?[g]! = '//[E]//' MeV'
+  clr
+  zone 1 5
+  set yval 70. | do not write X-values for each histogram (only for the last one)
+  set dmod 1
+  opt tic
+  opt nsta
+  opt utit
+  set errx 0.01
+  set xlab 1.25 | shift Y-title more to the left
+  set xval 70.
+  title ' ' u
+  exec ~/PTOOL/black
+  do i = 1 , 5
+    a  = angle([i])
+    opt logy
+    opt linx
+    if [i] = 5 then
+      set yval
+    endif
+    null [kxmin] [kxmax] [hymin] [hymax]
+    if [i] = 5 then
+      atitle 'k = (p?p!+T?p!)/2 (MeV)       ^!' ' '
+    endif
+    title ' ' 
+*                       X-position     Angle       SizeOfValues
+    exec ~/PTOOL/snotes 149. 1.0 '1.0' 0. [lgndsz] -40
+    exec ~/PTOOL/snotes 149. 0.1 '0.1' 0. [lgndsz] -40
+    exec ~/PTOOL/[upcol]
+    set lwid 1.
+    exec ~/PTOOL/[downcol]
+    set lwid 1.
+    m = 938.273                     | proton
+    ve/copy $sigma(sqrt(Tp*(2.*[m]+Tp))) Pp
+    h/errors $sigma(0.5*(Pp+Tp)) $sigma(s[a]/Pp) _
+                   ?  $sigma(d[a]/Pp) [nvex] 24 [ptsize] 0
+    *exec hsolid 6[i] [hfbin] [hnbin] [downcol] [m]
+    exec ~/PTOOL/black
+    hi/plot 6[i] LSHIST
+    hi/plot 6[i] ESHIST
+    txt = [a]//'[\260]'
+*   .85 means proportion in x (start), .83 - in y
+    exec ~/PTOOL/notes .85 .83 [txt] 0. [lgndsz] -40
+    exec ~/PTOOL/black
+    if [i] = 2 then
+      atitle ' ' 'd[s]/p?p!dE?p!d[W]?p! (nb MeV^-2! sr^-1!) ^!'
+*      exec paramline 0.20 0.92
+    endif
+  enddo
+*
+  exec ~/PTOOL/black
+  set xwin
+  set ywin
+  set xval
+  set yval
+  set errx
+  set xlab
+*
+stop:
+*
+return
+*
+macro file fnam=gamma_c0606_e123 fil=99
+*
+*  for/fil [fil] [fnam].eps
+*  meta -[fil] -113
+*  mess '*** Creating eps-file: '//[fnam]//'.eps'
+  for/fil [fil] [fnam].ps
+  meta -[fil] -115
+  mess '*** Creating ps-file: '//[fnam]//'.ps'
+  pi/pl ' '
+  meta 0
+  for/clo [fil]
+return
+*
+macro print fnam=gamma_c0606_e123 que=513-2-asd
+  exec file [fnam] | first the file should be written and then printed
+*  shell xprint -P[que] [fnam].eps
+  shell xprint -P[que] [fnam].ps
+return
+*
+macro hsolid id=66 hf=1 hn=60 col=black m=939.567
+  nb = $sigma([hn]-[hf]+1)
+  ve/cr wx([nb]) r
+  ve/cr wy([nb]) r
+  ve/cr wd([nb]) r
+  get/abs  [id]([hf]:[hn]) wx
+  get/cont [id]([hf]:[hn]) wy
+  get/err  [id]([hf]:[hn]) wd
+  ve/copy $sigma(10.**wx) wt
+  ve/copy $sigma(sqrt(wt*(2.*[m]+wt))) wp
+  exec ~/PTOOL/white 8
+  set lwid 4
+  graph [nb] $sigma(0.5*(wp+wt)) $sigma(wy/wp) l
+  exec ~/PTOOL/[col]
+  set lwid 1
+  graph [nb] $sigma(0.5*(wp+wt)) $sigma(wy/wp) l
+  exec ~/PTOOL/black
+  set dmod 3
+  graph [nb] $sigma(0.5*(wp+wt)) $sigma(wy/wp) l
+  set lwid 1
+  set dmod 1
+  h/errors $sigma(0.5*(wp+wt)) $sigma(wy/wp) _
+           $sigma(0.*wt) $sigma(wd/wp) [nb] 1 .01
+  ve/del wx,wy,wd,wt,wp
+return
+*
+macro paramline xp=0.05 yp=0.96
+ ttemp   = temp(1)
+ tssse   = ssse(1)
+ teepr   = eepr(1)
+ tmomb   = momb(1)
+ tenb    = enb(1)
+ tfreeN  = freeN(1) 
+ tfreeD  = freeD(1) 
+ tclustP = clustP(1)
+ trMed   = rMed(1)
+ tsolA   = solA(1)
+ txtm = 't='//[ttemp]//' ss='//[tssse]//' eep='//[teepr]//' p='//[tmomb]_
+//' e='//[tenb]//' fN='//[tfreeN]//' fD='//[tfreeD]//' cP='//[tclustP]_
+//' rM='//[trMed]//' sA='//[tsolA]
+ exec ~/PTOOL/snotes [xp] [yp] [txtm] 0. 0.25 40 0
+return
+*
+macro creavec dimvex=60
+ ve/cr temp(1) r 
+ ve/cr ssse(1) r
+ ve/cr eepr(1) r
+ ve/cr nop(1) i
+ ve/cr momb(1) r
+ ve/cr enb(1) r
+ ve/cr pdgpr(1) i
+ ve/cr pdgtg(1) i
+ ve/cr nevnt(1) i
+ ve/cr freeN(1) r
+ ve/cr freeD(1) r
+ ve/cr clustP(1) r
+ ve/cr rMed(1) r
+ ve/cr solA(1) r
+ ve/cr Pvex([dimvex]) r
+ ve/cr Em([dimvex]) r
+ ve/cr s57([dimvex]) r
+ ve/cr d57([dimvex]) r
+ ve/cr s77([dimvex]) r
+ ve/cr d77([dimvex]) r
+ ve/cr s97([dimvex]) r 
+ ve/cr d97([dimvex]) r
+ ve/cr s117([dimvex]) r
+ ve/cr d117([dimvex]) r
+ ve/cr s127([dimvex]) r
+ ve/cr d127([dimvex]) r
+return
+*
