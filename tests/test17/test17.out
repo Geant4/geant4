@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (28-Feb-2002)
+                                (28-Jun-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
@@ -145,6 +145,17 @@ msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
         PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+G4AugerData for Element no. 6 are loaded
+G4AugerData for Element no. 7 are loaded
+G4AugerData for Element no. 8 are loaded
+G4AugerData for Element no. 13 are loaded
+G4AugerData for Element no. 14 are loaded
+G4AugerData for Element no. 18 are loaded
+G4AugerData for Element no. 26 are loaded
+G4AugerData for Element no. 29 are loaded
+G4AugerData for Element no. 54 are loaded
+G4AugerData for Element no. 79 are loaded
+G4AugerData for Element no. 82 are loaded
 AugerTransitionTable complete
 
 hLowEIoni:    Knock-on electron cross sections . 
@@ -387,7 +398,7 @@ EvtNo= 485  length= 0.00934019  xend= 0.00301305
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.49s Real=5.54s Sys=1.55s
+  User=2.3s Real=3.96s Sys=1.66s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 999 for proton with Ekin = 0.5 MeV
@@ -411,7 +422,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.53s Real=4.35s Sys=1.77s
+  User=2.52s Real=4.19s Sys=1.67s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV
@@ -432,7 +443,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.96s Real=4.8s Sys=1.69s
+  User=2.95s Real=4.56s Sys=1.61s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for IonC12 with Ekin = 6 MeV
@@ -458,7 +469,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=168.1s Real=199.62s Sys=5.72s
+  User=136.75s Real=143.65s Sys=5.58s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV
