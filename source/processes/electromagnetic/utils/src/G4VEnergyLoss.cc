@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VEnergyLoss.cc,v 1.8 2000-05-23 14:25:27 urban Exp $
+// $Id: G4VEnergyLoss.cc,v 1.9 2000-05-25 12:32:25 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -116,6 +116,9 @@ void G4VEnergyLoss::BuildRangeVector(G4PhysicsTable* theDEDXTable,
   G4int nbin=100,i;
   G4bool isOut;
 
+  // ??????????????????????????????????
+  static const G4double small = 1.e-6 ;
+
   static G4double masslimit = 0.52*MeV ;
 
   G4double tlim=2.*MeV,t1=0.1*MeV,t2=0.025*MeV ;
@@ -130,6 +133,23 @@ void G4VEnergyLoss::BuildRangeVector(G4PhysicsTable* theDEDXTable,
   const G4MaterialTable* theMaterialTable =
                                 G4Material::GetMaterialTable() ;
 
+  // cure 'accidental' 0. dE/dx vales first .....
+  G4double lossmin = +1.e10 ;
+  for (G4int i=0; i<TotBin; i++)
+  {
+    LowEdgeEnergy = rangeVector->GetLowEdgeEnergy(i) ;
+    Value = physicsVector->GetValue(LowEdgeEnergy,isOut);
+    if((Value < lossmin)&&(Value > 0.))
+      lossmin = Value ;
+  }
+  for (G4int i=0; i<TotBin; i++)
+  {
+    LowEdgeEnergy = rangeVector->GetLowEdgeEnergy(i) ;
+    Value = physicsVector->GetValue(LowEdgeEnergy,isOut);
+    if(Value < lossmin)
+      physicsVector->PutValue(i,small*lossmin) ;
+  }
+        
   // low energy part first...
  // heavy particle
  if(ParticleMass > masslimit)
@@ -187,6 +207,7 @@ void G4VEnergyLoss::BuildRangeVector(G4PhysicsTable* theDEDXTable,
  // electron/positron 
  {
   losslim = physicsVector->GetValue(tlime,isOut) ;
+
   taulim  = tlime/electron_mass_c2;
   clim    = losslim;
   ltaulim = log(taulim);
@@ -1002,7 +1023,9 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       loss = p1*e1Fluct+p2*e2Fluct;
  
       // smearing to avoid unphysical peaks
-      if (loss>0.)
+      if(p2 > 0)
+        loss += (1.-2.*G4UniformRand())*e2Fluct;   
+      else if (loss>0.)
         loss += (1.-2.*G4UniformRand())*e1Fluct;   
 
       // ionisation .......................................
