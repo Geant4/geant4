@@ -89,6 +89,9 @@
 //	    ApproxEqual(check.z(),target.z()))? true : false;
 //}
 
+
+
+
 ///////////////////////////////////////////////////////////////////
 //
 // Dave's auxiliary function
@@ -103,6 +106,8 @@ const G4String OutputInside(const EInside a)
 	}
 	return "????";
 }
+
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Random unit direction vector
@@ -127,11 +132,11 @@ G4ThreeVector GetRandomUnitVector()
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// Random  vector on surface box
+// Random  vector on box surface 
 
 G4ThreeVector GetVectorOnBox( G4Box& box )
 {
-  G4double rand, a, b, c, phi, px, py, pz;
+  G4double rand, a, b, c, px, py, pz;
   G4double part = 1./6.;
 
   a = box.GetXHalfLength();
@@ -180,6 +185,32 @@ G4ThreeVector GetVectorOnBox( G4Box& box )
   return G4ThreeVector(px,py,pz);
 }
 
+/////////////////////////////////////////////////////////////////////////////
+//
+// Random vector on orb surface
+
+G4ThreeVector GetVectorOnOrb(G4Orb& orb)
+{
+  G4double cosTheta, sinTheta, phi, radius, px, py, pz;
+
+  radius = orb.GetRadius();
+  radius += -0.5*kCarTolerance + (kCarTolerance)*G4UniformRand(); 
+
+  cosTheta = -1. + 2.*G4UniformRand();
+  if( cosTheta > 1.)  cosTheta = 1.;
+  if( cosTheta < -1.) cosTheta = -1.;
+  sinTheta = sqrt( 1. - cosTheta*cosTheta );
+  
+  phi = 2*pi*G4UniformRand();
+
+  px = radius*sinTheta*cos(phi);
+  py = radius*sinTheta*sin(phi);
+  pz = radius*cosTheta;
+
+  return G4ThreeVector(px,py,pz);
+}
+
+
 //////////////////////////////////////////////////////////////////////
 //
 // Main executable function
@@ -190,6 +221,10 @@ int main(void)
   EInside surfaceP;
   G4ThreeVector norm,*pNorm;
   G4bool *pgoodNorm, goodNorm, calcNorm=true;
+
+  enum Esolid {kBox, kOrb, kSphere, kCons, kTubs, kTorus, kPara, kTrapezoid, kTrd};
+
+  Esolid useCase = kOrb;
 
   pNorm=&norm;
   pgoodNorm=&goodNorm;
@@ -267,52 +302,106 @@ int main(void)
 
   G4cout.precision(20);
 
-  G4int i,j, iMax=1000, jMax=1000;
+  G4int i,j, iMax=10000, jMax=1000;
   
   // Check box tracking function 
 
-  for(i=0;i<iMax;i++)
+  switch (useCase)
   {
-    G4ThreeVector p = GetVectorOnBox(b1);
+
+    case kBox:
+    G4cout<<"Testing G4Box:"<<G4endl<<G4endl;
+    for(i=0;i<iMax;i++)
+    {
+      G4ThreeVector p = GetVectorOnBox(b1);
     
-    surfaceP = b1.Inside(p);
-    if(surfaceP != kSurface)
-    {
-      G4cout<<"p is out of surface: "<<G4endl;
-      G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl;
-
-    }
-    else
-    {
-      for(j=0;j<jMax;j++)
+      surfaceP = b1.Inside(p);
+      if(surfaceP != kSurface)
       {
-        G4ThreeVector v = GetRandomUnitVector();
+        G4cout<<"p is out of surface: "<<G4endl;
+        G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl<<G4endl;
 
-        distIn  = b1.DistanceToIn(p,v);
-        distOut = b1.DistanceToOut(p,v,calcNorm,pgoodNorm,pNorm); 
+      }
+      else
+      {
+        for(j=0;j<jMax;j++)
+        {
+          G4ThreeVector v = GetRandomUnitVector();
 
-        if( distIn < kCarTolerance && distOut < kCarTolerance )
-	{
-	  G4cout<<" distIn < kCarTolerance && distOut < kCarTolerance"<<G4endl;
-          G4cout<<"distIn = "<<distIn<<";  distOut = "<<distOut<<G4endl;
-          G4cout<<"location p: "<<G4endl;
-          G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl;
-          G4cout<<" direction v: "<<G4endl;
-          G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl;
-	}
-        else if(distIn > 100000*kCarTolerance && distOut > 100*kCarTolerance)
-	{
-	  G4cout<<" distIn > 100000*kCarTolerance && distOut > 100*kCarTolerance"<<G4endl;
-          G4cout<<"distIn = "<<distIn<<";  distOut = "<<distOut<<G4endl;
-          G4cout<<"location p: "<<G4endl;
-          G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl;
-          G4cout<<" direction v: "<<G4endl;
-          G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl;
-	}     
+          distIn  = b1.DistanceToIn(p,v);
+          distOut = b1.DistanceToOut(p,v,calcNorm,pgoodNorm,pNorm); 
+
+          if( distIn < kCarTolerance && distOut < kCarTolerance )
+	  {
+	    G4cout<<" distIn < kCarTolerance && distOut < kCarTolerance"<<G4endl;
+            G4cout<<"distIn = "<<distIn<<";  distOut = "<<distOut<<G4endl;
+            G4cout<<"location p: "<<G4endl;
+            G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl;
+            G4cout<<" direction v: "<<G4endl;
+            G4cout<<"( "<<v.x()<<", "<<v.y()<<", "<<v.z()<<" ); "<<G4endl<<G4endl;
+	  }
+          else if(distIn > 100000*kCarTolerance && distOut > 100*kCarTolerance)
+	  {
+	    G4cout<<" distIn > 100000*kCarTolerance && distOut > 100*kCarTolerance"<<G4endl;
+            G4cout<<"distIn = "<<distIn<<";  distOut = "<<distOut<<G4endl;
+            G4cout<<"location p: "<<G4endl;
+            G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl;
+            G4cout<<" direction v: "<<G4endl;
+            G4cout<<"( "<<v.x()<<", "<<v.y()<<", "<<v.z()<<" ); "<<G4endl<<G4endl;
+	  }     
+        }
       }
     }
-  }   
+    break;
+    
+    case kOrb:
+      G4cout<<"Testing G4Orb:"<<G4endl<<G4endl;
+    for(i=0;i<iMax;i++)
+    {
+      G4ThreeVector p = GetVectorOnOrb(o1);
+    
+      surfaceP = o1.Inside(p);
+      if(surfaceP != kSurface)
+      {
+        G4cout<<"p is out of surface: "<<G4endl;
+        G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl<<G4endl;
 
+      }
+      else
+      {
+        for(j=0;j<jMax;j++)
+        {
+          G4ThreeVector v = GetRandomUnitVector();
+
+          distIn  = o1.DistanceToIn(p,v);
+          distOut = o1.DistanceToOut(p,v,calcNorm,pgoodNorm,pNorm); 
+
+          if( distIn < kCarTolerance && distOut < kCarTolerance )
+	  {
+	    G4cout<<" distIn < kCarTolerance && distOut < kCarTolerance"<<G4endl;
+            G4cout<<"distIn = "<<distIn<<";  distOut = "<<distOut<<G4endl;
+            G4cout<<"location p: "<<G4endl;
+            G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl;
+            G4cout<<" direction v: "<<G4endl;
+            G4cout<<"( "<<v.x()<<", "<<v.y()<<", "<<v.z()<<" ); "<<G4endl<<G4endl;
+	  }
+          else if(distIn > 100000*kCarTolerance && distOut > 100*kCarTolerance)
+	  {
+	    G4cout<<" distIn > 100000*kCarTolerance && distOut > 100*kCarTolerance"<<G4endl;
+            G4cout<<"distIn = "<<distIn<<";  distOut = "<<distOut<<G4endl;
+            G4cout<<"location p: "<<G4endl;
+            G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl;
+            G4cout<<" direction v: "<<G4endl;
+            G4cout<<"( "<<v.x()<<", "<<v.y()<<", "<<v.z()<<" ); "<<G4endl<<G4endl;
+	  }     
+        }
+      }
+    }
+    break;
+
+    default:
+    break;   
+  }
   return 0;
 }
 
