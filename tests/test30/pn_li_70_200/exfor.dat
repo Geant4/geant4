@@ -1,6 +1,3 @@
-ENTRY            O0658   19990527
-SUBENT        O0658001   19990527
-BIB                 18         92
 TITLE      Development of a Quasi-Monoenergetic Neutron Field
            Using the Li-7(P,N)Be-7 Reaction in the 70-210 MeV
            Energy Range at Riken.
@@ -104,11 +101,6 @@ PER-CENT    PER-CENT
          0.        35.5         4.2          1.          3.          6.
          1.          3.         0.5         0.1          3.         15.
          3.        15.6
-ENDCOMMON             9
-ENDSUBENT          105
-------------------------------------------------------------------------
-SUBENT        O0658002   19990527
-BIB                  3         14
 REACTION   (3-LI-7(P,X)0-NN-1,,DA/DE)
 MISC-COL   (MISC) Neutron Fluence Data from Authors' Priv. Comm.
            In Authors' Units: Neutron/Sr/MeV/Micro-Coulomb of the
@@ -123,8 +115,6 @@ COMMENT    -By Compiler- The Contents of Column 'Data' is a
            The Conversion Does not Take Into Account Energy
            Dependence of the Corrections For Neutron Attenuation
            In the Target, the Acrylic Window and the Air.
-ENDBIB              14
-NOCOMMON
 DATA                 4       1078
 EN          E           DATA        MISC
 MEV         MEV         MB/SR/MEV   SEE TEXT
@@ -1206,5 +1196,6 @@ MEV         MEV         MB/SR/MEV   SEE TEXT
        210.        211.      0.2744   71270000.
        210.       211.5      0.2247   58360000.
        210.        212.      0.0614   15950000.
+       0.        212.      0.0614   15950000.
 ENDDATA            1080
 ENDSUBENT         1099

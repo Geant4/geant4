@@ -61,6 +61,7 @@ void Test30Material::Initialise()
 
   ma  = new G4Material("H",     1.,  1.0*g/mole, 1.*g/cm3);
   ma  = new G4Material("D",     1.,  2.0*g/mole, 1.*g/cm3);
+  ma  = new G4Material("Li",    3.,  6.941*g/mole, 1.*g/cm3);
   ma  = new G4Material("Be",    4.,  9.01*g/mole, 1.848*g/cm3);
   ma  = new G4Material("C",     6.,  12.00*g/mole, 2.0*g/cm3);
 	ma  = new G4Material("Graphite",6., 12.00*g/mole, 2.265*g/cm3 );
