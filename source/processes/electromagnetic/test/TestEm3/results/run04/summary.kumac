@@ -1,0 +1,105 @@
+macro summary.kumac
+
+* summary of the sampling calorimeter results 
+* Pb-Fe-Si. e- 6 8 10 12 GeV
+*
+* SICAPO Collaboration. CERN-PPE/91-218  Nov.91
+*                       NIM A332 (85-90) Feb.93
+*
+set * ; opt *
+
+set *fon -40
+set mscf 1.5
+
+set ygti 0.5  ; set gsiz 0.35 ; set ymgu 1.5
+set vsiz 0.25 ; set yval 0.3  ; set ylab 0.55
+set asiz 0.25 ; set yhti 0.9  ; set xlab 1.2 
+
+title 'Pb-Fe-Si   e- 6 8 10 12 GeV   100 evts'
+opt linx
+opt liny
+
+set *fon -40
+set mscf 1.5
+zone 1 2
+
+nbin=4
+*
+vector/create energy([nbin])
+vector/input  energy 6. 8. 10. 12. 
+vector/create erener([nbin]) r 0. 0. 0. 0. 
+
+*
+* Fer only: 23 mm
+*
+vector/create data([nbin])
+vector/input  data 29.3 39.5 49.6 61.1
+
+vector/create G4([nbin])
+vector/input  G4   30.3 41.9 52.5 62.4
+
+vector/create G3([nbin])
+vector/input  G3   32.3 43.4 54.3 64.0
+
+vector/create error([nbin]) r  1. 1. 1. 1.
+
+null 5.8 12.2 25. 65.
+
+set mtyp 20
+set pmci 4
+graph [nbin] energy G3 LP
+graph/hpl/errors energy G3 erener error [nbin]
+set mtyp 21
+set pmci 3
+graph [nbin] energy G4 LP
+graph/hpl/errors energy G4 erener error [nbin]
+set mtyp 22
+set pmci 2
+graph [nbin] energy data LP
+graph/hpl/errors energy data erener error [nbin]
+
+atitle 'E (GeV)' 'Evis (MeV)'
+itx 8.   60. 'Fe(23mm)-Si(0.4mm)'
+set pmci 4
+key 6.4  57. 20 'G3'
+set pmci 3
+key 6.4  54. 21 'G4'
+set pmci 2
+key 6.4  51. 22 'data'
+
+*
+* Pb(13 mm) Fe(10 mm)
+*
+vector/input  data 19.1 25.5 31.8 36.9
+
+vector/input  G4   19.1 24.8 32.8 37.1
+
+vector/input  G3   21.7 29.3 36.3 43.5
+
+vector/input error  1. 1. 1. 1.
+
+null 5.8 12.2 18. 48.
+
+set mtyp 20
+set pmci 4
+graph [nbin] energy G3 LP
+graph/hpl/errors energy G3 erener error [nbin]
+set mtyp 21
+set pmci 3
+graph [nbin] energy G4 LP
+graph/hpl/errors energy G4 erener error [nbin]
+set mtyp 22
+set pmci 2
+graph [nbin] energy data LP
+graph/hpl/errors energy data erener error [nbin]
+
+atitle 'E (GeV)' 'Evis (MeV)'
+itx 7.5   44. 'Pb(13mm)-Fe(10mm)-Si(0.4mm)'
+set pmci 4
+key 6.4  40. 20 'G3'
+set pmci 3
+key 6.4  37. 21 'G4'
+set pmci 2
+key 6.4  34. 22 'data'
+*close 0
+return 	     

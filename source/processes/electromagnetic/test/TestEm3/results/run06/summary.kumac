@@ -1,0 +1,105 @@
+macro summary.kumac
+
+* summary of the sampling calorimeter results 
+* Fe-Si and Pb-Si. e- 2 4 6 GeV
+*
+* SICAPO Collaboration. NIM A345 (244-249) Oct.93
+*
+set * ; opt *
+
+set *fon -40
+set mscf 1.5
+
+set ygti 0.5  ; set gsiz 0.35 ; set ymgu 1.5
+set vsiz 0.25 ; set yval 0.3  ; set ylab 0.55
+set asiz 0.25 ; set yhti 0.9  ; set xlab 1.2 
+
+title '(Fe;Pb)-Si   e- 2 4 6 GeV   500 evts'
+opt linx
+opt liny
+
+set *fon -40
+set mscf 1.5
+zone 1 2
+
+nbin=3
+*
+vector/create energy([nbin])
+vector/input  energy 0.408  0.5  0.707 
+vector/create erener([nbin]) r 0. 0. 0.  
+
+*
+* Fer: 35.7 mm
+*
+vector/create data([nbin])
+vector/input  data 15.72 20.0  27.86
+
+vector/create G4([nbin])
+vector/input  G4   16.80 18.65 28.13
+
+vector/create G3([nbin])
+vector/input  G3   15.23 19.06 27.5
+
+vector/create error([nbin]) r  1.5 1.5 2.
+
+null 0.3 0.8 10. 35.
+
+set mtyp 20
+set pmci 4
+graph [nbin] energy G3 LP
+
+set mtyp 21
+set pmci 3
+graph [nbin] energy G4 LP
+
+set mtyp 22
+set pmci 2
+graph [nbin] energy data LP
+graph/hpl/errors energy data erener error [nbin]
+
+atitle '1/sqrt(E)' 'rmsE/E [%]'
+itx 0.45   31. 'Fe(36mm)-Si(0.4mm)'
+set pmci 4
+key 0.7  20. 20 'G3'
+set pmci 3
+key 0.7  18. 21 'G4'
+set pmci 2
+key 0.7  16. 22 'data'
+
+*
+* Lead: 19 mm
+*
+vector/input  data 15.71 20.0  29.
+
+vector/input  G4   17.   22.   32.
+
+vector/input  G3   15.84 20.14 28.1
+
+vector/input error 1.5 3. 3.
+
+null 0.3 0.8 10. 35.
+
+set mtyp 20
+set pmci 4
+graph [nbin] energy G3 LP
+
+set mtyp 21
+set pmci 3
+graph [nbin] energy G4 LP
+
+set mtyp 22
+set pmci 2
+graph [nbin] energy data LP
+graph/hpl/errors energy data erener error [nbin]
+
+atitle '1/sqrt(E)' 'rmsE/E [%]'
+itx 0.45   31. 'Pb(19mm)-Si(0.4mm)'
+set pmci 4
+key 0.7  20. 20 'G3'
+set pmci 3
+key 0.7  18. 21 'G4'
+set pmci 2
+key 0.7  16. 22 'data'
+
+*close 0
+return 	     

@@ -1,4 +1,4 @@
-$Id: README,v 1.3 1999-07-23 14:29:35 maire Exp $
+$Id: README,v 1.4 1999-08-05 11:14:02 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -118,8 +118,10 @@ $Id: README,v 1.3 1999-07-23 14:29:35 maire Exp $
  
 	Content of this Ntuple:
   
-	EAbsI = energy deposit in absorber[I] per event
-	LAbsI = charged track length in absorber[I] per event
- 
+	EAbs0 = energy deposit in absorber[0] per event
+	LAbs0 = charged track length in absorber[0] per event
+        ........
+	EAbsN = energy deposit in absorber[N] per event
+	LAbsN = charged track length in absorber[N] per event
 	  
  	

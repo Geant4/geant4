@@ -1,0 +1,229 @@
+
+1*****  GEANT Version  3.21/12 Released on 270199
+0*****  Correction Cradle Version  0.1200
+ G3 > gives the filename of the data cards to be read:
+ 
+ 
+1           USER'S DIRECTIVES TO RUN THIS JOB
+            ----------------------------------
+
+
+ ***** DATA CARD CONTENT     LIST                                                                            
+ ***** DATA CARD CONTENT     C                                                                               
+ ***** DATA CARD CONTENT     C  Lead-Silicium  10 layers; electon 2, 4, 6 GeV                                
+ ***** DATA CARD CONTENT     C                                                                               
+ ***** DATA CARD CONTENT     C  SICAPO Collaboration. NIM A345 (244-249) Oct.93                              
+ ***** DATA CARD CONTENT     C                                                                               
+ ***** DATA CARD CONTENT     CALOR  4 (nbAbs) 10 (nbLay)  16. (calorYZ) 0. (field)                           
+ ***** DATA CARD CONTENT     MATE    8 (pb)   12 (G10)   10 (Si)    12 (G10)                                 
+ ***** DATA CARD CONTENT     THICK   1.9 (cm) 0.02 (cm)  0.04 (cm)  0.1 (cm)                                 
+ ***** DATA CARD CONTENT     TRIG   500                                                                      
+ ***** DATA CARD CONTENT     KINE   3 (Itype) 2.0 (Ekine) 1000. (x0) 0. (y0) 0. (z0) 1. (ux) 0. (uy) 0. (uz) 
+ ***** DATA CARD CONTENT     DEBUG  10  5 10                                                                 
+ ***** DATA CARD CONTENT     SWIT   0 (draw) 0 (save)                                                        
+ ***** DATA CARD CONTENT     CUTS    10.0E-6 (cutgam)     10.0E-6 (cutele)  3*10.E-3 (cutneu/had/muo)        
+ ***** DATA CARD CONTENT           2*10.0E-6 (bcute/m)  2*541.E-6 (dcute/m)                                  
+ ***** DATA CARD CONTENT     C   CUTS       10.0e-6 (cutgam)     541.e-6 (cutele)                            
+ ***** DATA CARD CONTENT     ABAN   0                                                                        
+ ***** DATA CARD CONTENT     LOSS   1                                                                        
+ ***** DATA CARD CONTENT     HADR   0                                                                        
+ ***** DATA CARD CONTENT     TIME   2=1.                                                                     
+ ***** DATA CARD CONTENT     END 
+                                                                             
+------------------------------------------------------------
+
+ The calorimeter is 10 layers of:
+     Lead      :   1.9000 cm
+     NemaG10   :   0.0200 cm
+     Silicium  :   0.0400 cm
+     NemaG10   :   0.1000 cm
+
+------------------------------------------------------------
+
+1************************************************************
+ *                                                          *
+ *    G E A N T  Version 3.2112      DATE/TIME 990803/1420  *
+ *                                                          *
+ *                      R U N      1                        *
+ *                                                          *
+ ************************************************************
+ *                                                          *
+ *      Data structure   Date   Time    GVERSN    ZVERSN    *
+ *      --------------   ----   ----    ------    ------    *
+ *                                                          *
+ *           INIT       990803  1420    3.2112     3.77     *
+ *                                                          *
+ *           KINE       990803  1420    3.2112     3.77     *
+ *                                                          *
+ *           HITS       990803  1420    3.2112     3.77     *
+ *                                                          *
+ *           DIGI       990803  1420    3.2112     3.77     *
+ *                                                          *
+ *     Random number seeds:          9876        54321      *
+ *     --------------------                                 *
+ *                                                          *
+ *----------------------------------------------------------*
+ *                                                          *
+ *              Standard TPAR for this run are              *
+ *              ------------------------------              *
+ *                                                          *
+ *  CUTGAM= 10.00 keV  CUTELE= 10.00 keV  CUTNEU= 10.00 MeV *
+ *  CUTHAD= 10.00 MeV  CUTMUO= 10.00 MeV                    *
+ *  BCUTE = 10.00 keV  BCUTM = 10.00 keV                    *
+ *  DCUTE =541.00 keV  DCUTM =541.00 keV  PPCUTM= 10.00 MeV *
+ *  IPAIR =        1.  ICOMP =        1.  IPHOT =        1. *
+ *  IPFIS =        0.  IDRAY =        1.  IANNI =        1. *
+ *  IBREM =        1.  IHADR =        0.  IMUNU =        1. *
+ *  IDCAY =        1.  ILOSS =        1.  IMULS =        1. *
+ *  IRAYL =        0.  ILABS =        0.  ISYNC =        0. *
+ *  ISTRA =        0.                                       *
+ *                                                          *
+ *                                                          *
+ ************************************************************
+
+
+0===================================================     MATERIALS      ==================================================
+0MATERIAL                           A         Z     DENSITY  RADIAT L  ABSORP L NMIXT
+
+        1 Air                     14.607     7.300     0.001 0.284E+05 0.808E+05   2     A      Z     W
+                                                                                        14.01   7.00  0.700
+                                                                                        16.00   8.00  0.300
+        2 CO2 gas                 14.911     7.454     0.027 0.134E+04 0.387E+04   2     A      Z     W
+                                                                                        12.01   6.00  0.273
+                                                                                        16.00   8.00  0.727
+        3 H2 Liquid                1.010     1.000     0.071 0.865E+03 0.790E+03   1
+        4 Water                   14.320     7.215     1.000 0.358E+02 0.949E+02   2     A      Z     W
+                                                                                         1.01   1.00  0.112
+                                                                                        16.00   8.00  0.888
+        5 Liquid Ar               39.950    18.000     1.390 0.140E+02 0.840E+02   1
+        6 Aluminium               26.980    13.000     2.700 0.890E+01 0.372E+02   1
+        7 Iron                    55.850    26.000     7.870 0.176E+01 0.171E+02   1
+        8 Lead                   207.190    82.000    11.350 0.560E+00 0.185E+02   1
+        9 Uranium                238.030    92.000    18.950 0.320E+00 0.120E+02   1
+       10 Silicium                28.090    14.000     2.330 0.936E+01 0.455E+02   1
+       11 Tungsten               183.850    74.000    19.300 0.350E+00 0.960E+01   1
+       12 NemaG10                 17.480     8.755     1.700 0.186E+02 0.614E+02   4     A      Z     W
+                                                                                         1.01   1.00  0.031
+                                                                                        12.00   6.00  0.364
+                                                                                        16.00   8.00  0.323
+                                                                                        28.00  14.00  0.283
+0===================================================   TRACKING MEDIA   ==================================================
+0TMED                          MATERIAL ISVOL IFIELD  FIELDM  TMAXFD  STEMAX    DEEMAX   EPSIL   STMIN
+
+      1 absorber                   8       0     0      0.00   10.00 0.100E+11   0.250   0.001   0.024
+      2 absorber                  12       0     0      0.00   10.00 0.100E+11   0.204   0.001   0.015
+      3 absorber                  10       0     0      0.00   10.00 0.100E+11   0.185   0.001   0.017
+      4 absorber                  12       0     0      0.00   10.00 0.100E+11   0.204   0.001   0.015
+      5 default                    1       0     0      0.00   10.00 0.100E+11   0.249   0.001   0.512
+0===================================================      VOLUMES       ==================================================
+0VOLUME NAME  NUMED SHAPE NPAR  PARAMETERS
+
+      1 worl    5   BOX     3   0.124E+02 0.960E+01 0.960E+01
+      2 calo    5   BOX     3   0.103E+02 0.800E+01 0.800E+01
+      3 layr    5   BOX     3   0.103E+01 0.800E+01 0.800E+01
+      4 abs0    1   BOX     3   0.950E+00 0.800E+01 0.800E+01
+      5 abs1    2   BOX     3   0.100E-01 0.800E+01 0.800E+01
+      6 abs2    3   BOX     3   0.200E-01 0.800E+01 0.800E+01
+      7 abs3    4   BOX     3   0.500E-01 0.800E+01 0.800E+01
+
+   Kine     Name          Type     Px         Py         Pz       Energy     Vorigin  Vgener
+     1      ELECTRON        3     2.0005     0.0000     0.0000     2.0005     1.0000
+------------------------------------------------------------
+
+ Nb of events:   500
+ AbsNo  Material     Energy deposit              Trck length
+    0   Lead         1.959 GeV +-   9.18 MeV  145.123 cm +-   0.98 cm
+    1   NemaG10      3.516 MeV +-   1.19 MeV    1.193 cm +-   0.41 cm
+    2   Silicium     7.798 MeV +-   2.19 MeV    2.100 cm +-   0.59 cm
+    3   NemaG10     14.651 MeV +-   3.59 MeV    4.948 cm +-   1.22 cm
+
+------------------------------------------------------------
+
+1         **** NUMBER OF EVENTS PROCESSED =       500
+          **** RANDOM NUMBER GENERATOR AFTER LAST COMPLETE EVENT    659403379    41852021
+          **** TIME TO PROCESS ONE EVENT IS =    0.3610 SECONDS
+
+
+
+
+ ***** DATA CARD CONTENT     LIST                                                                            
+ ***** DATA CARD CONTENT     C                                                                               
+ ***** DATA CARD CONTENT     C  Lead-Silicium  10 layers; electon 2, 4, 6 GeV                                
+ ***** DATA CARD CONTENT     C                                                                               
+ ***** DATA CARD CONTENT     C  SICAPO Collaboration. NIM A345 (244-249) Oct.93                              
+ ***** DATA CARD CONTENT     C                                                                               
+ ***** DATA CARD CONTENT     CALOR  4 (nbAbs) 10 (nbLay)  16. (calorYZ) 0. (field)                           
+ ***** DATA CARD CONTENT     MATE    8 (pb)   12 (G10)   10 (Si)    12 (G10)                                 
+ ***** DATA CARD CONTENT     THICK   1.9 (cm) 0.02 (cm)  0.04 (cm)  0.1 (cm)                                 
+ ***** DATA CARD CONTENT     TRIG   500                                                                      
+ ***** DATA CARD CONTENT     KINE   3 (Itype) 4.0 (Ekine) 1000. (x0) 0. (y0) 0. (z0) 1. (ux) 0. (uy) 0. (uz) 
+ ***** DATA CARD CONTENT     DEBUG  10  5 10                                                                 
+ ***** DATA CARD CONTENT     SWIT   0 (draw) 0 (save)                                                        
+ ***** DATA CARD CONTENT     CUTS    10.0E-6 (cutgam)     10.0E-6 (cutele)  3*10.E-3 (cutneu/had/muo)        
+ ***** DATA CARD CONTENT           2*10.0E-6 (bcute/m)  2*541.E-6 (dcute/m)                                  
+ ***** DATA CARD CONTENT     C   CUTS       10.0e-6 (cutgam)     541.e-6 (cutele)                            
+ ***** DATA CARD CONTENT     ABAN   0                                                                        
+ ***** DATA CARD CONTENT     LOSS   1                                                                        
+ ***** DATA CARD CONTENT     HADR   0                                                                        
+ ***** DATA CARD CONTENT     TIME   2=1.                                                                     
+ ***** DATA CARD CONTENT     END                                                                             
+
+
+   Kine     Name          Type     Px         Py         Pz       Energy     Vorigin  Vgener
+     1      ELECTRON        3     4.0005     0.0000     0.0000     4.0005     1.0000
+------------------------------------------------------------
+
+ Nb of events:   500
+ AbsNo  Material     Energy deposit              Trck length
+    0   Lead         3.920 GeV +-  13.23 MeV  290.340 cm +-   1.47 cm
+    1   NemaG10      7.227 MeV +-   1.74 MeV    2.441 cm +-   0.60 cm
+    2   Silicium    15.691 MeV +-   3.16 MeV    4.227 cm +-   0.86 cm
+    3   NemaG10     29.526 MeV +-   5.05 MeV    9.951 cm +-   1.73 cm
+
+------------------------------------------------------------
+
+1         **** NUMBER OF EVENTS PROCESSED =       500
+          **** RANDOM NUMBER GENERATOR AFTER LAST COMPLETE EVENT   1462730101   126930335
+          **** TIME TO PROCESS ONE EVENT IS =    0.7078 SECONDS
+
+
+
+ ***** DATA CARD CONTENT     LIST                                                                            
+ ***** DATA CARD CONTENT     C                                                                               
+ ***** DATA CARD CONTENT     C  Lead-Silicium  10 layers; electon 2, 4, 6 GeV                                
+ ***** DATA CARD CONTENT     C                                                                               
+ ***** DATA CARD CONTENT     C  SICAPO Collaboration. NIM A345 (244-249) Oct.93                              
+ ***** DATA CARD CONTENT     C                                                                               
+ ***** DATA CARD CONTENT     CALOR  4 (nbAbs) 10 (nbLay)  16. (calorYZ) 0. (field)                           
+ ***** DATA CARD CONTENT     MATE    8 (pb)   12 (G10)   10 (Si)    12 (G10)                                 
+ ***** DATA CARD CONTENT     THICK   1.9 (cm) 0.02 (cm)  0.04 (cm)  0.1 (cm)                                 
+ ***** DATA CARD CONTENT     TRIG   500                                                                      
+ ***** DATA CARD CONTENT     KINE   3 (Itype) 6.0 (Ekine) 1000. (x0) 0. (y0) 0. (z0) 1. (ux) 0. (uy) 0. (uz) 
+ ***** DATA CARD CONTENT     DEBUG  10  5 10                                                                 
+ ***** DATA CARD CONTENT     SWIT   0 (draw) 0 (save)                                                        
+ ***** DATA CARD CONTENT     CUTS    10.0E-6 (cutgam)     10.0E-6 (cutele)  3*10.E-3 (cutneu/had/muo)        
+ ***** DATA CARD CONTENT           2*10.0E-6 (bcute/m)  2*541.E-6 (dcute/m)                                  
+ ***** DATA CARD CONTENT     C   CUTS       10.0e-6 (cutgam)     541.e-6 (cutele)                            
+ ***** DATA CARD CONTENT     ABAN   0                                                                        
+ ***** DATA CARD CONTENT     LOSS   1                                                                        
+ ***** DATA CARD CONTENT     HADR   0                                                                        
+ ***** DATA CARD CONTENT     TIME   2=1.                                                                     
+ ***** DATA CARD CONTENT     END                                                                             
+
+   Kine     Name          Type     Px         Py         Pz       Energy     Vorigin  Vgener
+     1      ELECTRON        3     6.0005     0.0000     0.0000     6.0005     1.0000
+------------------------------------------------------------
+
+ Nb of events:   500
+ AbsNo  Material     Energy deposit              Trck length
+    0   Lead         5.882 GeV +-  15.36 MeV  435.708 cm +-   1.65 cm
+    1   NemaG10     10.836 MeV +-   2.15 MeV    3.661 cm +-   0.73 cm
+    2   Silicium    23.927 MeV +-   3.79 MeV    6.424 cm +-   1.01 cm
+    3   NemaG10     44.758 MeV +-   7.14 MeV   15.094 cm +-   2.42 cm
+
+------------------------------------------------------------
+
+1         **** NUMBER OF EVENTS PROCESSED =       500
+          **** RANDOM NUMBER GENERATOR AFTER LAST COMPLETE EVENT   1535525916  1097118971
+          **** TIME TO PROCESS ONE EVENT IS =    1.0528 SECONDS
+
