@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Integrator.icc,v 1.4 1999-11-23 14:59:59 gcosmo Exp $
+// $Id: G4Integrator.icc,v 1.5 2000-05-31 09:07:11 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of G4Integrator methods. 
@@ -197,7 +197,7 @@ void G4Integrator::AdaptGauss( T* ptrT, F f, G4double  xInitial,
 			       G4double& sum,
 			       G4int&    depth      ) 
 {
-  return AdaptGauss(*ptrT,f,xInitial,xFinal,fTolerance,sum,depth) ;
+  AdaptGauss(*ptrT,f,xInitial,xFinal,fTolerance,sum,depth) ;
 }
 
 /////////////////////////////////////////////////////////////////////////
