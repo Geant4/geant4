@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm7.cc,v 1.1 2003-04-22 16:25:03 maire Exp $
+// $Id: TestEm7.cc,v 1.2 2004-07-08 16:21:07 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,11 +36,12 @@
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
-#include "SteppingVerbose.hh"
 
 #include "RunAction.hh"
 #include "EventAction.hh"
+#include "TrackingAction.hh"
 #include "SteppingAction.hh"
+#include "SteppingVerbose.hh"
 
 #ifdef G4VIS_USE
  #include "VisManager.hh"
@@ -78,6 +79,7 @@ int main(int argc,char** argv) {
   
   runManager->SetUserAction(run = new RunAction(det,phys,kin)); 
   runManager->SetUserAction(new EventAction);
+  runManager->SetUserAction(new TrackingAction(run));  
   runManager->SetUserAction(new SteppingAction(det,run));
 
   //get the pointer to the User Interface manager 

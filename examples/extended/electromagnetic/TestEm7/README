@@ -1,4 +1,4 @@
-$Id: README,v 1.7 2004-06-23 11:29:50 maire Exp $
+$Id: README,v 1.8 2004-07-08 16:21:07 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -119,10 +119,7 @@ $Id: README,v 1.7 2004-06-23 11:29:50 maire Exp $
   
      The energy deposited in the test-volumes (tallies) defined in
      DetectorConstruction are printed at EndOfRun, both in MeV and gray.
-     
-     Notice that the doses are not re initialized between runs, i.e. they are
-     cumulative over the runs. (idem for the histogram of the Bragg peak.)   
-
+ 
 
  8- Using histograms
  ------------------- 
@@ -154,10 +151,3 @@ gmake
 Before running the example the command should be issued:
 
 eval `aida-config --runtime csh`
-
-It is possible to choose the format of the output file with 
-histograms using UI command:
-
-/testem/histo/setFileType type
-
-The following types are available: hbook, root, xml.
