@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.30 2003-03-10 08:33:56 asaim Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.31 2003-03-10 09:01:24 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -584,70 +584,8 @@ void G4VUserPhysicsList::DumpCutValuesTable(G4int nParticles)
 void G4VUserPhysicsList::DumpCutValuesTableIfRequested()
 {
   if(fDisplayThreshold==0) return;
-
-  // This methods Print out a table of cut value information
-  // for "gamma", "e-", "e+", "proton" and "neutron"
-  G4int prec = G4cout.precision(3);
-  const G4int size = 5;
-  G4String name[size] = {"gamma", "e-", "e+", "proton", "neutron"};
-  G4ParticleDefinition* particle[size];
-  G4int size_display=fDisplayThreshold;
-  if(size_display>size) size_display=size;
-  G4int idx; 
-  for (idx=0; idx <size_display; idx++) {
-    particle[idx] = theParticleTable->FindParticle(name[idx]);
-  }
-
-  G4cout << G4endl;
-  G4cout << "======== Table of production thresholds in range and energy ===========" << G4endl;
-
-  typedef G4std::vector<G4Region*>::iterator regionIterator;
-  G4RegionStore* fG4RegionStore = G4RegionStore::GetInstance();
-  for(regionIterator rItr=fG4RegionStore->begin();rItr!=fG4RegionStore->end();rItr++)
-  {
-    G4cout << G4endl;
-    G4cout << "-----------------------------------------------------------------------" << G4endl;
-    G4cout << "Region : " << (*rItr)->GetName() << G4endl;
-    G4cout << "-----------------------------------------------------------------------" << G4endl;
-
+  G4ProductionCutsTable::GetProductionCutsTable()->DumpCouples();
   
-    G4cout << "                             ";
-    for (idx=0; idx <size_display; idx++) {
-      G4cout << " " << G4std::setw(11) << name[idx] << "    ";
-    }
-    G4cout << G4endl;
-
-    const G4ProductionCuts* aCut = (*rItr)->GetProductionCuts();
-    G4cout << "Threshold in range ";
-    for (idx=0; idx <size_display; idx++) {
-      if(aCut->GetProductionCut(name[idx])<=0.0)
-      { G4cout << " ---------- "; }
-      else
-      { G4cout << " " << G4std::setw(11) << G4BestUnit(aCut->GetProductionCut(name[idx]),"Length"); }
-    }
-    G4cout << G4endl;
-
-    G4std::vector<G4Material*>::const_iterator mItr = (*rItr)->GetMaterialIterator();
-    size_t nMaterial = (*rItr)->GetNumberOfMaterials();
-    for (size_t I=0; I<nMaterial; I++) {
-      G4cout << " " << G4std::setw(19) << (*mItr)->GetName();
-      for (idx=0; idx <size_display; idx++) {
-        G4int coupleIndex = G4ProductionCutsTable::GetProductionCutsTable()->GetCoupleIndex((*mItr),aCut);
-        if(coupleIndex<0)
-        { G4cout << " ---------- "; }
-        else
-        { G4cout << " " << G4std::setw(11) << G4BestUnit((particle[idx]->GetEnergyCuts())[coupleIndex],"Energy"); }
-      }
-      G4cout << G4endl;
-      mItr++;
-    }
-  }
- 
-  G4cout << "=======================================================================" << G4endl;
-  G4cout << G4endl;
-
-  G4cout.precision(prec);
-  //fDisplayThreshold=0;
 }
 
 
