@@ -60,13 +60,6 @@ G4double gammaphi = 0;
 	     ->GetDefinition()-> GetParticleName()) == "gamma" ) 
 	  { gammaPhi = aStep->GetTrack()->GetMomentumDirection().phi();
 	    gammaTheta = aStep->GetTrack()->GetMomentumDirection().theta();
-	    if ((gammaTheta>1.48668)&&(gammaTheta<1.64074))
-	      {if ((gammaPhi>2.28549)&&(gammaPhi<2.41396))
-		{gamma++;
-		G4cout<<"il numero di gamma e' "<<gamma<<G4endl;
-		}
-	      }
-	    
 	    gammaLeavingSample = (aStep->GetPreStepPoint()->GetKineticEnergy());
 	    
 #ifdef G4ANALYSIS_USE
@@ -74,11 +67,12 @@ G4double gammaphi = 0;
 	    analysisManager->InsGamLS(gammaTheta);
 	    analysisManager->InsGamLSP(gammaPhi);
 #endif 
+	  
 	  }
       }
+    
   }
-  
-  
+
    if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Sample"){
     
     if(aStep->GetTrack()->GetNextVolume()->GetName() == "World" ) 

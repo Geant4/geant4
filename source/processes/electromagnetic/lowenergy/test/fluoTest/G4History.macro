@@ -7,16 +7,20 @@
 /vis/viewer/refresh
 /vis/viewer/update
 /tracking/storeTrajectory 1
-/gps/type Beam
-/gps/centre -10 0 0
-/gps/particle gamma
-/gps/monoenergy 3.5 keV
-/gps/shape Circle
-/gps/sigmaposr  0.5 mm
-/gps/posrot1 0 0 1
-/gps/posrot2 0 1 0
-/gps/angtype beam1d
-/gps/sigmaangr 0 deg
-/gps/angrot1 0 0 1
-/gps/angrot2 0 1 0
+/lowenergy/lowlimGE 250 eV
+/lowenergy/cutG 1. mum
+/run/cutoffModified
+/lowenergy/cutE 1. mum
+/run/cutoffModified
+/gun/particle
+/gun/energy 3.5 keV
+/gun/particle gamma
+/run/beamOn 1000000
+/lowenergy/lowlimGE 250 eV
+/lowenergy/cutG 0.1 mum
+/run/cutoffModified
+/lowenergy/cutE 0.1 mum
+/run/cutoffModified
+/gun/particle gamma
+/gun/energy 3.5 keV
 /run/beamOn 1000000

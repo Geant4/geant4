@@ -20,7 +20,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 FluoTestDetectorConstruction::FluoTestDetectorConstruction()
-  : DeviceSizeZ(0),DeviceSizeY(0),DeviceThickness(0),
+  : DeviceSizeX(0),DeviceSizeY(0),DeviceThickness(0),
     solidWorld(0),logicWorld(0),physiWorld(0),
     solidSi(0),logicSi(0),physiSi(0),
     solidHPGe(0),logicHPGe(0),physiHPGe(0),
@@ -41,22 +41,22 @@ FluoTestDetectorConstruction::FluoTestDetectorConstruction()
   NbOfPixelRows     =  1;
   NbOfPixelColumns  =  1;
   NbOfPixels        =  NbOfPixelRows*NbOfPixelColumns;
-  SiSizeYZ = 1. * cm;
+  SiSizeXY = 1. * cm;
   SiThickness = 1.01* mm;
   
-  PixelSizeYZ       = 0.7 * cm; 
+  PixelSizeXY       = 0.7 * cm; 
   PixelThickness =  1. * mm;
-  ContactSizeYZ     = 0.005*mm;
-  //ContactSizeYZ = 0.5 * cm;
+  ContactSizeXY     = 0.005*mm;
+  //ContactSizeXY = 0.5 * cm;
   SampleThickness = 0.125 * mm;
   //SampleThickness = 0.5 * cm;
-  SampleSizeYZ = 3. * cm;
+  SampleSizeXY = 3. * cm;
   Dia1Thickness = 1. *mm;
   Dia2Thickness = 1. *mm;
   Dia3Thickness = 1. *mm;
-  Dia1SizeYZ = 2. *cm;
-  Dia2SizeYZ = 2. *cm;
-  Dia3SizeYZ = 2. *cm;
+  Dia1SizeXY = 2. *cm;
+  Dia2SizeXY = 2. *cm;
+  Dia3SizeXY = 2. *cm;
   DiaInnerSize = 0.6 * cm;
   //DiaInnerSize = 0.3 *cm;
   OhmicNegThickness = 0.005*mm;
@@ -65,8 +65,8 @@ FluoTestDetectorConstruction::FluoTestDetectorConstruction()
   ThetaSi = 210. * deg;
   Dia3Dist =  66.5 * mm;
   Dia3InnerSize = 1.4 * mm;
-  PhiHPGe = 135. * deg;
-  PhiSi = 210. * deg;
+  PhiHPGe = 225. * deg;
+  PhiSi = 150. * deg;
   ThetaDia1 = 135. * deg;
   ThetaDia2 = 210. * deg;
   ThetaDia3 = 180. * deg;
@@ -78,8 +78,8 @@ FluoTestDetectorConstruction::FluoTestDetectorConstruction()
  DistSi = DistDia + SiThickness/2;
   PhiDia1 = 90. * deg;
   PhiDia2 = 90. * deg;
-  AlphaDia1 = 135. * deg;
-  AlphaDia2 = 210. * deg;
+  AlphaDia1 = 225. * deg;
+  AlphaDia2 = 150. * deg;
   AlphaDia3 = 180. * deg;
   PixelCopyNb=0;
   ComputeApparateParameters();
@@ -236,7 +236,7 @@ G4VPhysicalVolume* FluoTestDetectorConstruction::ConstructApparate()
   //world
   
   solidWorld = new G4Box("World",	      		        //its name
-			 WorldSizeX/2,WorldSizeYZ/2,WorldSizeYZ/2);	//its size
+			 WorldSizeXY/2,WorldSizeXY/2,WorldSizeZ/2);	//its size
   
   logicWorld = new G4LogicalVolume(solidWorld,		//its solid
                                    defaultMaterial,	//its material
@@ -256,18 +256,18 @@ G4VPhysicalVolume* FluoTestDetectorConstruction::ConstructApparate()
   if (SiThickness > 0.)  
     {
       solidSi = new G4Box("SiDetector",		//its name
-			  SiThickness/2,SiSizeYZ/2,SiSizeYZ/2);//size
+			  SiSizeXY/2,SiSizeXY/2,SiThickness/2);//size
       
       
       logicSi = new G4LogicalVolume(solidSi,	//its solid
 				    SiMaterial,	//its material
 				    "SiDetector");	//its name
       
-      zRotPhiSi.rotateZ(PhiSi);
+      zRotPhiSi.rotateX(PhiSi);
       G4double x,y,z;
-      x = DistSi * cos(ThetaSi);
+      z = DistSi * cos(ThetaSi);
       y =DistSi * sin(ThetaSi);
-      z = 0.*cm;
+      x = 0.*cm;
       physiSi = new G4PVPlacement(G4Transform3D(zRotPhiSi,G4ThreeVector(x,y,z)),                                           "SiDetector",	//its name
 				  logicSi,	//its logical volume
 				  physiWorld,	//its mother  volume
@@ -282,18 +282,18 @@ G4VPhysicalVolume* FluoTestDetectorConstruction::ConstructApparate()
   if (DeviceThickness > 0.)  
     {
       solidHPGe = new G4Box("HPGeDetector",		//its name
-			    DeviceThickness/2,DeviceSizeY/2,DeviceSizeZ/2);//size
+			    DeviceSizeX/2,DeviceSizeY/2,DeviceThickness/2);//size
       
       
       logicHPGe = new G4LogicalVolume(solidHPGe,	//its solid
 				      defaultMaterial,	//its material
 				      "HPGeDetector");	//its name
       
-      zRotPhiHPGe.rotateZ(PhiHPGe);
+      zRotPhiHPGe.rotateX(PhiHPGe);
       G4double x,y,z;
-      x = DistDe * cos(ThetaHPGe);
+      z = DistDe * cos(ThetaHPGe);
       y =DistDe * sin(ThetaHPGe);
-      z = 0.*cm;
+      x = 0.*cm;
       physiHPGe = new G4PVPlacement(G4Transform3D(zRotPhiHPGe,G4ThreeVector(x,y,z)),                                           "HPGeDetector",	//its name
 				    logicHPGe,	//its logical volume
 				    physiWorld,	//its mother  volume
@@ -309,24 +309,24 @@ G4VPhysicalVolume* FluoTestDetectorConstruction::ConstructApparate()
 	solidPixel=0; logicPixel=0;   physiPixel=0;
 	if (PixelThickness > 0.)
 	  solidPixel = new G4Box("Pixel",			
-				 PixelThickness/2,PixelSizeYZ/2,PixelSizeYZ/2);
+				 PixelSizeXY/2,PixelSizeXY/2, PixelThickness/2);
 	
 	logicPixel = new G4LogicalVolume(solidPixel,	
 					 pixelMaterial,	//its material
 					 "Pixel");	        //its name 
-	zRotPhiHPGe.rotateZ(PhiHPGe);
+	zRotPhiHPGe.rotateX(PhiHPGe);
 	G4double x,y,z;
-	x = DistDe * cos(ThetaHPGe);
+	z = DistDe * cos(ThetaHPGe);
 	y =DistDe * sin(ThetaHPGe);
-	z = 0.*cm; 
+	x = 0.*cm; 
 	
 	physiPixel = new G4PVPlacement(
 				       // G4Transform3D(zRotPhiHPGe,
-				       //    G4ThreeVector(x,y+(i*PixelSizeYZ),z+(j*PixelSizeYZ))),
+				       //    G4ThreeVector(x,y+(i*PixelSizeXY),z+(j*PixelSizeXY))),
 				       0,	       
 				       G4ThreeVector(0,
-						     i*PixelSizeYZ,
-						     j*PixelSizeYZ ),
+						     i*PixelSizeXY,
+						     j*PixelSizeXY ),
 				       "Pixel",  
 				       logicPixel,	 //its logical volume
 				       physiHPGe, //its mother  volume
@@ -339,7 +339,7 @@ G4VPhysicalVolume* FluoTestDetectorConstruction::ConstructApparate()
 	
 	if (OhmicNegThickness > 0.) 
 	  { solidOhmicNeg = new G4Box("OhmicNeg",		//its name
-				      OhmicNegThickness/2,PixelSizeYZ/2,PixelSizeYZ/2); 
+				      PixelSizeXY/2,PixelSizeXY/2,OhmicNegThickness/2); 
 		
 	  logicOhmicNeg = new G4LogicalVolume(solidOhmicNeg,    //its solid
 						    OhmicNegMaterial, //its material
@@ -347,9 +347,9 @@ G4VPhysicalVolume* FluoTestDetectorConstruction::ConstructApparate()
 		
 	  physiOhmicNeg = new G4PVPlacement(0,
 					    G4ThreeVector
-					    ((PixelThickness+OhmicNegThickness)/2, 
+					    (0.,
 					     0.,
-					     0.),
+					      (PixelThickness+OhmicNegThickness)/2),
 					    "OhmicNeg",        //its name
 					    logicOhmicNeg,     //its logical volume
 					    physiHPGe,        //its mother
@@ -362,16 +362,16 @@ G4VPhysicalVolume* FluoTestDetectorConstruction::ConstructApparate()
 	
 	if (OhmicPosThickness > 0.) 
 	  { solidOhmicPos = new G4Box("OhmicPos",		//its name
-				      OhmicPosThickness/2,ContactSizeYZ/2,ContactSizeYZ/2); 
+				      ContactSizeXY/2,ContactSizeXY/2,OhmicPosThickness/2); 
 	  
 	  logicOhmicPos = new G4LogicalVolume(solidOhmicPos,    //its solid
 					      OhmicPosMaterial, //its material
 					      "OhmicPos");      //its name
 	  
 	  physiOhmicPos = new G4PVPlacement(0,	
-					    G4ThreeVector((-PixelThickness-OhmicPosThickness)/2,				
+					    G4ThreeVector(0.,
 							  0.,
-							  0.),  
+							  (-PixelThickness-OhmicPosThickness)/2),  
 					    "OhmicPos",  
 					    logicOhmicPos,
 					    physiHPGe,  
@@ -390,7 +390,7 @@ G4VPhysicalVolume* FluoTestDetectorConstruction::ConstructApparate()
     if (SampleThickness > 0.)  
       {
 	solidSample = new G4Box("Sample",		//its name
-				SampleThickness/2,SampleSizeYZ/2,SampleSizeYZ/2);//size
+				SampleSizeXY/2,SampleSizeXY/2,SampleThickness/2);//size
 	
 	logicSample= new G4LogicalVolume(solidSample,	//its solid
 					 sampleMaterial,	//its material
@@ -413,7 +413,7 @@ G4VPhysicalVolume* FluoTestDetectorConstruction::ConstructApparate()
     {
       solidDia1 = new G4Tubs("Diaphragm1",		//its name
 			     DiaInnerSize/2,
-			     Dia1SizeYZ/2,
+			     Dia1SizeXY/2,
 			     Dia1Thickness/2,
 			     0,
 			     360);//size
@@ -423,12 +423,11 @@ G4VPhysicalVolume* FluoTestDetectorConstruction::ConstructApparate()
 				      Dia1Material,	//its material
 				      "Diaphragm1");	//its name
       
-      zRotPhiDia1.rotateY(PhiDia1);
-      zRotPhiDia1.rotateZ(AlphaDia1);
+      zRotPhiDia1.rotateX(AlphaDia1);
       G4double x,y,z;
-      x = DistDia * cos(ThetaDia1);
+      z = DistDia * cos(ThetaDia1);
       y =DistDia * sin(ThetaDia1);
-      z = 0.*cm;
+      x = 0.*cm;
       physiDia1 = new G4PVPlacement(G4Transform3D(zRotPhiDia1,G4ThreeVector(x,y,z)),                                           "Diaphragm1",	//its name
 				    logicDia1,	//its logical volume
 				    physiWorld,	//its mother  volume
@@ -443,7 +442,7 @@ G4VPhysicalVolume* FluoTestDetectorConstruction::ConstructApparate()
     {
       solidDia2 = new G4Tubs("Diaphragm2",
 			     DiaInnerSize/2,
-			     Dia2SizeYZ/2,
+			     Dia2SizeXY/2,
 			     Dia2Thickness/2,
 			     0,
 			     360);
@@ -453,12 +452,11 @@ G4VPhysicalVolume* FluoTestDetectorConstruction::ConstructApparate()
 				      Dia2Material,	//its material
 				      "Diaphragm2");	//its name
       
-      zRotPhiDia2.rotateY(PhiDia2);
-      zRotPhiDia2.rotateZ(AlphaDia2);
+      zRotPhiDia2.rotateX(AlphaDia2);
       G4double x,y,z;
-      x = DistDia * cos(ThetaDia2);
+      z = DistDia * cos(ThetaDia2);
       y =DistDia * sin(ThetaDia2);
-      z = 0.*cm;
+      x = 0.*cm;
       physiDia2 = new G4PVPlacement(G4Transform3D(zRotPhiDia2,G4ThreeVector(x,y,z)),                                           "Diaphragm2",	//its name
 				logicDia2,	//its logical volume
 				    physiWorld,	//its mother  volume
@@ -473,7 +471,7 @@ G4VPhysicalVolume* FluoTestDetectorConstruction::ConstructApparate()
     {
       solidDia3 = new G4Tubs("Diaphragm3",
 			     Dia3InnerSize/2,
-			     Dia3SizeYZ/2,
+			     Dia3SizeXY/2,
 			     Dia3Thickness/2,
 			     0,
 			     360);
@@ -483,12 +481,11 @@ G4VPhysicalVolume* FluoTestDetectorConstruction::ConstructApparate()
 				      Dia3Material,	//its material
 				      "Diaphragm3");	//its name
       
-      zRotPhiDia3.rotateY(PhiDia3);
-      zRotPhiDia3.rotateZ(AlphaDia3);
+      zRotPhiDia3.rotateX(AlphaDia3);
       G4double x,y,z;
-      x = Dia3Dist * cos(ThetaDia3);
+      z = Dia3Dist * cos(ThetaDia3);
       y =Dia3Dist * sin(ThetaDia3);
-      z = 0.*cm;
+      x = 0.*cm;
       physiDia3 = new G4PVPlacement(G4Transform3D(zRotPhiDia3,G4ThreeVector(x,y,z)),                                           "Diaphragm3",	//its name
 				    logicDia3,	//its logical volume
 				    physiWorld,	//its mother  volume
@@ -524,7 +521,7 @@ G4VPhysicalVolume* FluoTestDetectorConstruction::ConstructApparate()
   logicHPGe->SetVisAttributes(G4VisAttributes::Invisible );
   logicSample->SetVisAttributes(simpleBoxVisAtt);
   logicDia1->SetVisAttributes(simpleBoxVisAtt);
-  logicDia2->SetVisAttributes(G4VisAttributes::Invisible);
+  logicDia2->SetVisAttributes(simpleBoxVisAtt);
   logicDia3->SetVisAttributes(simpleBoxVisAtt);
   logicOhmicNeg->SetVisAttributes(yellow);
   logicOhmicPos->SetVisAttributes(yellow);
@@ -545,16 +542,16 @@ void FluoTestDetectorConstruction::PrintApparateParameters()
 	 << G4endl      
 	 << SampleThickness/cm
 	 << " cm * "
-	 << SampleSizeYZ/cm
+	 << SampleSizeXY/cm
 	 << " cm * "
-	 << SampleSizeYZ/cm
+	 << SampleSizeXY/cm
 	 << " cm"
 	 << G4endl
 	 <<" Material: " << sampleMaterial->GetName() 
 	 <<G4endl
 	 <<"The SiDetector is a slice  " << SiThickness/(1.e-6*m) <<  " micron thick"
 	 <<G4endl
-	 <<"Size: "<< SiSizeYZ/cm<< " cm * "<<SiSizeYZ/cm 
+	 <<"Size: "<< SiSizeXY/cm<< " cm * "<<SiSizeXY/cm 
 	 <<G4endl
 	  <<"The HPGeDetector is a slice  " << DeviceThickness/(1.e-6*m) <<  " micron thick"
 	 <<G4endl
@@ -640,10 +637,10 @@ void FluoTestDetectorConstruction::SetOhmicPosThickness(G4double val)
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void FluoTestDetectorConstruction::SetPixelSizeYZ(G4double val)
+void FluoTestDetectorConstruction::SetPixelSizeXY(G4double val)
 {
   // change the transverse size and recompute the Device parameters
-  PixelSizeYZ = val;
+  PixelSizeXY = val;
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -651,7 +648,7 @@ void FluoTestDetectorConstruction::SetPixelSizeYZ(G4double val)
 void FluoTestDetectorConstruction::SetDeviceSizeZ(G4double val)
 {
   // change the transverse size and recompute the Device parameters
-  DeviceSizeZ = PixelSizeYZ*NbOfPixelColumns;
+  DeviceSizeZ = PixelSizeXY*NbOfPixelColumns;
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -659,15 +656,15 @@ void FluoTestDetectorConstruction::SetDeviceSizeZ(G4double val)
 void FluoTestDetectorConstruction::SetDeviceSizeY(G4double val)
 {
   // change the transverse size and recompute the Device parameters
-  DeviceSizeY = PixelSizeYZ*NbOfPixelRows;
+  DeviceSizeY = PixelSizeXY*NbOfPixelRows;
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void FluoTestDetectorConstruction::SetContactSizeYZ(G4double val)
+void FluoTestDetectorConstruction::SetContactSizeXY(G4double val)
 {
   // change the transverse size and recompute the Device parameters
-  ContactSizeYZ = val;
+  ContactSizeXY = val;
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -781,50 +778,50 @@ void FluoTestDetectorConstruction::SetDia3Thickness(G4double val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void FluoTestDetectorConstruction::SetSampleSizeYZ(G4double val)
+void FluoTestDetectorConstruction::SetSampleSizeXY(G4double val)
 {
   // change the transverse size of the sample and recompute the world size
-  SampleSizeYZ = val;
+  SampleSizeXY = val;
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void FluoTestDetectorConstruction::SetSiSizeYZ(G4double val)
+void FluoTestDetectorConstruction::SetSiSizeXY(G4double val)
 {
   // change the transverse size of the sensor and recompute the world size
-  SiSizeYZ = val;
+  SiSizeXY = val;
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void FluoTestDetectorConstruction::SetHPGeSizeYZ(G4double val)
+void FluoTestDetectorConstruction::SetHPGeSizeXY(G4double val)
 {
   // change the transverse size of the sensor and recompute the world size
-  HPGeSizeYZ = val;
+  HPGeSizeXY = val;
 }
 */
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 /*
-void FluoTestDetectorConstruction::SetDia1SizeYZ(G4double val)
+void FluoTestDetectorConstruction::SetDia1SizeXY(G4double val)
 {
   // change the transverse size of the sensor and recompute the world size
-  Dia1SizeYZ = val;
+  Dia1SizeXY = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void FluoTestDetectorConstruction::SetDia2SizeYZ(G4double val)
+void FluoTestDetectorConstruction::SetDia2SizeXY(G4double val)
 {
   // change the transverse size of the sensor and recompute the world size
-  Dia2SizeYZ = val;
+  Dia2SizeXY = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void FluoTestDetectorConstruction::SetDia3SizeYZ(G4double val)
+void FluoTestDetectorConstruction::SetDia3SizeXY(G4double val)
 {
   // change the transverse size of the sensor and recompute the world size
-  Dia3SizeYZ = val;
+  Dia3SizeXY = val;
 }
 
 
@@ -886,7 +883,7 @@ void FluoTestDetectorConstruction::SetDia3Azimuth(G4double val)
 
 void FluoTestDetectorConstruction::SetSiRotation(G4double val)
 {
-  // change the angle between the sensitive slice and the YZ-plane
+  // change the angle between the sensitive slice and the XY-plane
   PhiSi = val;
 }  
 
@@ -894,7 +891,7 @@ void FluoTestDetectorConstruction::SetSiRotation(G4double val)
 
 void FluoTestDetectorConstruction::SetHPGeRotation(G4double val)
 {
-  // change the angle between the sensitive slice and the YZ-plane
+  // change the angle between the sensitive slice and the XY-plane
   PhiHPGe = val;
 }
 
@@ -902,7 +899,7 @@ void FluoTestDetectorConstruction::SetHPGeRotation(G4double val)
 
 void FluoTestDetectorConstruction::SetDia1Rotation(G4double val)
 {
-  // change the angle between the sensitive slice and the YZ-plane
+  // change the angle between the sensitive slice and the XY-plane
   PhiDia1 = val;
 }
 
@@ -910,13 +907,13 @@ void FluoTestDetectorConstruction::SetDia1Rotation(G4double val)
 
 void FluoTestDetectorConstruction::SetDia2Rotation(G4double val)
 {
-  // change the angle between the sensitive slice and the YZ-plane
+  // change the angle between the sensitive slice and the XY-plane
   PhiDia2 = val;
 }
 
 void FluoTestDetectorConstruction::SetDia3Rotation(G4double val)
 {
-  // change the angle between the sensitive slice and the YZ-plane
+  // change the angle between the sensitive slice and the XY-plane
   PhiDia3 = val;
 }*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

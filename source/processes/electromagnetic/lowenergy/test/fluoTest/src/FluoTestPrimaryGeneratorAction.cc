@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FluoTestPrimaryGeneratorAction.cc,v 1.5 2001-10-15 09:21:08 guardi Exp $
+// $Id: FluoTestPrimaryGeneratorAction.cc,v 1.6 2001-10-15 14:29:52 guardi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,10 +43,10 @@ FluoTestPrimaryGeneratorAction::FluoTestPrimaryGeneratorAction(
   G4ParticleDefinition* particle
                     = particleTable->FindParticle(particleName="e-");
   particleGun->SetParticleDefinition(particle);
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
+  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
   particleGun->SetParticleEnergy(50.*MeV);
-  G4double position = -0.5*(FluoTestDetector->GetWorldSizeX());
-  particleGun->SetParticlePosition(G4ThreeVector(position,0.*cm,0.*cm));
+  G4double position = -0.5*(FluoTestDetector->GetWorldSizeZ());
+  particleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,position));
 
 }
 
@@ -64,11 +64,11 @@ void FluoTestPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   //this function is called at the begining of event
   // 
-  G4double x0 = -0.5*(FluoTestDetector->GetWorldSizeX());
-  G4double y0 = 0.*cm, z0 = 0.*cm;
+  G4double z0 = -0.5*(FluoTestDetector->GetWorldSizeZ());
+  G4double y0 = 0.*cm, x0 = 0.*cm;
   if (rndmFlag == "on")
-     {y0 = (FluoTestDetector->GetSampleSizeYZ())*(G4UniformRand()-0.5);
-      z0 = (FluoTestDetector->GetSampleSizeYZ())*(G4UniformRand()-0.5);
+     {y0 = (FluoTestDetector->GetSampleSizeXY())*(G4UniformRand()-0.5);
+      x0 = (FluoTestDetector->GetSampleSizeXY())*(G4UniformRand()-0.5);
      } 
   particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
 

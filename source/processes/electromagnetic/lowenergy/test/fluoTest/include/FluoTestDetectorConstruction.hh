@@ -34,12 +34,12 @@ class FluoTestDetectorConstruction : public G4VUserDetectorConstruction
   // void SetHPGeMaterial (G4String);     
   // void SetHPGeThickness(G4double);
   void SetPixelMaterial (G4String);
-     void SetSampleSizeYZ (G4double);
-     void SetSiSizeYZ (G4double);
-  //  void SetHPGeSizeYZ (G4double);
-     void SetDia1SizeYZ (G4double);
-     void SetDia2SizeYZ (G4double);
-     void SetDia3SizeYZ (G4double);
+     void SetSampleSizeXY (G4double);
+     void SetSiSizeXY (G4double);
+  //  void SetHPGeSizeXY (G4double);
+     void SetDia1SizeXY (G4double);
+     void SetDia2SizeXY (G4double);
+     void SetDia3SizeXY (G4double);
 
      void SetDia1Thickness (G4double);
      void SetDia2Thickness (G4double);
@@ -66,10 +66,10 @@ void SetOhmicNegMaterial(G4String);
 void SetOhmicPosMaterial(G4String);
 void SetOhmicNegThickness(G4double);
 void SetOhmicPosThickness(G4double);
-  void SetPixelSizeYZ(G4double);
+  void SetPixelSizeXY(G4double);
   void SetDeviceSizeZ(G4double);
  void SetDeviceSizeY(G4double);
-  void SetContactSizeYZ(G4double);
+  void SetContactSizeXY(G4double);
   void SetNbOfPixelRows(G4int);
  void SetNbOfPixelColumns(G4int);
   void SetNbOfPixels(G4int);
@@ -91,14 +91,14 @@ public:
   
      void PrintApparateParameters(); 
                     
-     G4double GetWorldSizeX()           {return WorldSizeX;}; 
-     G4double GetWorldSizeYZ()          {return WorldSizeYZ;};
+     G4double GetWorldSizeZ()           {return WorldSizeZ;}; 
+     G4double GetWorldSizeXY()          {return WorldSizeXY;};
 
   G4double GetDeviceThickness()      {return DeviceThickness;}; 
-  G4double GetDeviceSizeZ()          {return DeviceSizeZ;};
+  G4double GetDeviceSizeX()          {return DeviceSizeX;};
   G4double GetDeviceSizeY()          {return DeviceSizeY;};
-  G4double GetPixelSizeYZ()          {return PixelSizeYZ;};
-  G4double GetContactSizeYZ()        {return ContactSizeYZ;};
+  G4double GetPixelSizeXY()          {return PixelSizeXY;};
+  G4double GetContactSizeXY()        {return ContactSizeXY;};
   
   G4int GetNbOfPixels()              {return NbOfPixels;}; 
   G4int GetNbOfPixelRows()           {return NbOfPixelRows;}; 
@@ -132,7 +132,7 @@ public:
 
   private:
      
- G4double           DeviceSizeZ;
+ G4double           DeviceSizeX;
   G4double           DeviceSizeY;
   G4double           DeviceThickness;
   
@@ -195,8 +195,8 @@ public:
   G4int              NbOfPixelColumns;
   G4double           PixelThickness;
   
-  G4double           PixelSizeYZ;
-  G4double           ContactSizeYZ;
+  G4double           PixelSizeXY;
+  G4double           ContactSizeXY;
  
 public:
 
@@ -210,36 +210,36 @@ public:
 private:
      G4double           SampleThickness;
      G4double           SiThickness;
-  G4double           SampleSizeYZ;
-     G4double           SiSizeYZ; 
+  G4double           SampleSizeXY;
+     G4double           SiSizeXY; 
      G4double           Dia1Thickness;
-     G4double           Dia1SizeYZ;
+     G4double           Dia1SizeXY;
      G4double           Dia2Thickness;
-     G4double           Dia2SizeYZ;
+     G4double           Dia2SizeXY;
      G4double           Dia3Thickness;
-     G4double           Dia3SizeYZ;
+     G4double           Dia3SizeXY;
      G4double           DiaInnerSize;
      G4double           Dia3InnerSize;
  G4double           DistSi;
 public: 
      
      G4double GetSiThickness()       {return SiThickness;}; 
-     G4double GetSiSizeYZ()          {return SiSizeYZ;};
+     G4double GetSiSizeXY()          {return SiSizeXY;};
       
   //  G4double GetHPGeThickness()       {return HPGeThickness;}; 
    
       
      G4double GetSampleThickness()         {return SampleThickness;};
-     G4double GetSampleSizeYZ()              {return SampleSizeYZ;};
+     G4double GetSampleSizeXY()              {return SampleSizeXY;};
     
      G4double GetDia1Thickness()         {return Dia1Thickness;};
-     G4double GetDia1SizeYZ()              {return Dia1SizeYZ;};
+     G4double GetDia1SizeXY()              {return Dia1SizeXY;};
 
   G4double GetDia2Thickness()         {return Dia2Thickness;};
-     G4double GetDia2SizeYZ()              {return Dia2SizeYZ;};
+     G4double GetDia2SizeXY()              {return Dia2SizeXY;};
  
  G4double GetDia3Thickness()         {return Dia3Thickness;};
-     G4double GetDia3SizeYZ()              {return Dia3SizeYZ;};
+     G4double GetDia3SizeXY()              {return Dia3SizeXY;};
  
 
 private:
@@ -270,8 +270,8 @@ private:
   G4RotationMatrix   zRotPhiDia1;
   G4RotationMatrix   zRotPhiDia2;
   G4RotationMatrix   zRotPhiDia3;
-     G4double           WorldSizeYZ;
-     G4double           WorldSizeX;
+     G4double           WorldSizeXY;
+     G4double           WorldSizeZ;
  
 
   FluoTestDetectorMessenger* detectorMessenger; //pointer to the Messenger
@@ -290,12 +290,14 @@ private:
 inline void FluoTestDetectorConstruction::ComputeApparateParameters()
 {     
   // Compute derived parameters of the apparate
-     WorldSizeX = (2 * (DistDe  +1.4142 * max(SiSizeYZ,SiThickness)))+10*m; 
-     WorldSizeYZ = 2 * (DistDe +1.4142 *max(Dia1SizeYZ,max(SiSizeYZ,SiThickness)));
-     
-     DeviceThickness = PixelThickness+OhmicNegThickness+OhmicPosThickness;
-     DeviceSizeY =NbOfPixelRows*max(ContactSizeYZ,PixelSizeYZ);
-     DeviceSizeZ =NbOfPixelColumns*max(ContactSizeYZ,PixelSizeYZ);
+    
+  DeviceThickness = PixelThickness+OhmicNegThickness+OhmicPosThickness;
+  DeviceSizeY =NbOfPixelRows*max(ContactSizeXY,PixelSizeXY);
+  DeviceSizeX =NbOfPixelColumns*max(ContactSizeXY,PixelSizeXY);
+  
+  WorldSizeZ = (2 * (DistDe  +1.4142 *(max(max(DeviceThickness,DeviceSizeY), max(SiSizeXY,SiThickness)), DeviceSizeX)))+5*m; 
+  WorldSizeXY = 2 * (DistDe +1.4142 *max(Dia1SizeXY,max(SiSizeXY,SiThickness)));
+		
 }
 
 #endif
