@@ -64,7 +64,7 @@ void G4Analyser::try_watchers(G4double a,
     G4cout << " >>> G4Analyser::try_watchers" << G4endl;
   }
 
-  for(G4int iw = 0; iw < ana_watchers.size(); iw++) { 
+  for(G4int iw = 0; iw < G4int(ana_watchers.size()); iw++) { 
 
     if(if_nucl) {
       if(ana_watchers[iw].look_forNuclei()) ana_watchers[iw].watch(a, z); 
@@ -89,7 +89,7 @@ void G4Analyser::analyse(const G4CollisionOutput& output) {
       G4int nbig = 0;
       averageNucleiFragments += nucleus.size();
 
-      for(G4int in = 0; in < nucleus.size(); in++) {
+      for(G4int in = 0; in < G4int(nucleus.size()); in++) {
 	averageExitationEnergy += nucleus[in].getExitationEnergy();
 
 	G4double a = nucleus[in].getA();
@@ -107,9 +107,9 @@ void G4Analyser::analyse(const G4CollisionOutput& output) {
       G4std::vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
       averageMultiplicity += particles.size();
 
-      for(G4int i = 0; i < particles.size(); i++) {
-	G4double ap;
-	G4double zp;
+      for(G4int i = 0; i < G4int(particles.size()); i++) {
+	G4double ap = 0.0;
+	G4double zp = 0.0;
 
 	if(particles[i].nucleon()) {
 	  averageNucleonKinEnergy += particles[i].getKineticEnergy();
@@ -153,7 +153,7 @@ void G4Analyser::analyse(const G4CollisionOutput& output) {
     G4std::vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
     averageMultiplicity += particles.size();
 
-    for(G4int i = 0; i < particles.size(); i++) {
+    for(G4int i = 0; i < G4int(particles.size()); i++) {
       if(particles[i].nucleon()) {
 	averageNucleonKinEnergy += particles[i].getKineticEnergy();
 	if(particles[i].type() == 1) {
@@ -245,7 +245,7 @@ void G4Analyser::handleWatcherStatistics() {
     G4cout << " >>> G4Analyser::handleWatcherStatistics" << G4endl;
   }
 
-  const G4double small = 1.0e-10;
+  // const G4double small = 1.0e-10;
 
   if (verboseLevel > 3) {
     G4cout << " ===================================================== " << G4endl;
@@ -262,7 +262,7 @@ void G4Analyser::handleWatcherStatistics() {
   G4double tot_inucl_err = 0.0;
   G4double checked = 0.0;
 
-  for(G4int iw = 0; iw < ana_watchers.size(); iw++) {
+  for(G4int iw = 0; iw < G4int(ana_watchers.size()); iw++) {
     ana_watchers[iw].setInuclCs(inel_csec, eventNumber);
     ana_watchers[iw].print();
 

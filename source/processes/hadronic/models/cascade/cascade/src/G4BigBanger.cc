@@ -235,10 +235,10 @@ G4BigBanger::generateBangInSCM(G4double etot,
 }
 	   
 G4std::vector<G4double> G4BigBanger::generateMomentumModules(G4double etot, 
-						      G4double a, 
-						      G4double z, 
-						      G4double mp, 
-						      G4double mn) const {
+							     G4double a, 
+							     G4double z, 
+							     G4double mp, 
+							     G4double mn) const {
 
 
   if (verboseLevel > 3) {
