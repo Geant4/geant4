@@ -9,9 +9,9 @@
 #  Usage :
 #     UNIX> cd <g4install>/tests/tools/bin
 #     UNIX> chmod u+x build.sh
-#     UNIX> ./build.sh all         - builds all global libraries and builds all
+#     UNIX> ./build.sh all         - builds all libraries and builds all
 #                                    test executables.
-#     UNIX> ./build.sh lib all     - builds all global libraries.
+#     UNIX> ./build.sh lib all     - builds all libraries.
 #     UNIX> ./build.sh lib <category>  - builds a specific category library.
 #     UNIX> ./build.sh test all    - builds all test executables.
 #     UNIX> ./build.sh test <test> - builds a specific test exectable.
@@ -71,12 +71,12 @@ if [ "$1" = "lib" ] ; then
 if [ "$2" = "all" ] ; then 
 # Go in source and spawn libs reconstruction :
 cd $G4INSTALL/source
-(date;time $MAKECMD global;date) > $dir/gmake.log 2>&1
+(date;time $MAKECMD;date) > $dir/gmake.log 2>&1
 exit
 else
 # Go in source/$2 and spawn category reconstruction :
 cd $G4INSTALL/source/$2
-(date;time $MAKECMD global;date) > $dir/gmake.log 2>&1
+(date;time $MAKECMD;date) > $dir/gmake.log 2>&1
 exit
 fi
 else
@@ -115,7 +115,7 @@ fi
 else
 #
 if [ "$1" = "all" ] ; then 
-(date;cd $G4INSTALL/source;time $MAKECMD global;\
+(date;cd $G4INSTALL/source;time $MAKECMD;\
 cd $G4INSTALL/tests;$MAKECMD clean_bin;time $MAKECMD;date) \
 > $dir/gmake.log 2>&1
 exit
