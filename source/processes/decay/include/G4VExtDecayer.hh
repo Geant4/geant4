@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VExtDecayer.hh,v 1.1 2001-02-22 13:29:26 kurasige Exp $
+// $Id: G4VExtDecayer.hh,v 1.2 2001-02-28 06:18:36 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -25,6 +25,7 @@
 #include "G4ios.hh"
 #include "globals.hh"
 #include "G4DecayProducts.hh"
+class G4Track;
 
 class G4VExtDecayer 
 {
@@ -38,7 +39,7 @@ class G4VExtDecayer
     G4VExtDecayer(const G4String& name ="");
 
     //  Destructor
-    virtual ~G4VExtDecayer();
+    virtual ~G4VExtDecayer(){}
 
   private:
     //  copy constructor
