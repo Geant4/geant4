@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLossPlus.cc,v 1.1 1999-03-05 09:03:59 urban Exp $
+// $Id: G4hEnergyLossPlus.cc,v 1.2 1999-03-15 12:11:24 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -1327,12 +1327,13 @@ G4VParticleChange* G4hEnergyLossPlus::AlongStepDoIt(
 
                // update initial particle,fill ParticleChange
                Tkin -= T ;
-               Etot  = Tkin+mass ;
-               Pnew  =sqrt(Tkin*(Etot+mass)) ;
-               Px =(P*ParticleDirection.x()-p*DeltaDirection.x())/Pnew ;
-               Py =(P*ParticleDirection.y()-p*DeltaDirection.y())/Pnew ;
-               Pz =(P*ParticleDirection.z()-p*DeltaDirection.z())/Pnew ;
-
+               Px =(P*ParticleDirection.x()-p*DeltaDirection.x()) ;
+               Py =(P*ParticleDirection.y()-p*DeltaDirection.y()) ;
+               Pz =(P*ParticleDirection.z()-p*DeltaDirection.z()) ;
+               Pnew = sqrt(Px*Px+Py*Py+Pz*Pz) ;
+               Px /= Pnew ;
+               Py /= Pnew ;
+               Pz /= Pnew ;
                P  = Pnew ;
                G4ThreeVector ParticleDirectionnew(Px,Py,Pz) ;
                ParticleDirection = ParticleDirectionnew;
