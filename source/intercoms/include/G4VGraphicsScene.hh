@@ -5,14 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VGraphicsScene.hh,v 1.4 1999-12-15 14:50:40 gunter Exp $
+// $Id: G4VGraphicsScene.hh,v 1.5 2000-05-19 06:29:48 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // John Allison  19th July 1996
 //
 // Class Description:
 // Abstract interface class for a graphics scene handler.
 // It is a minimal scene handler for the GEANT4 kernel.
-// See G4VSceneHadler for a fuller description.  G4VScenehandler is
+// See G4VSceneHandler for a fuller description.  G4VSceneHandler is
 // the full abstract interface to graphics systems.
 
 #ifndef G4VGRAPHICSSCENE_HH
