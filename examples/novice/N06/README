@@ -1,4 +1,4 @@
-$Id: README,v 1.2 2002-05-17 00:13:54 gum Exp $
+$Id: README,v 1.3 2002-11-12 23:05:04 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -47,3 +47,8 @@ G4UserRunAction
 
 ==> define G4Timer (start/stop)
     set verbose levels
+
+G4UserStackingAction
+--------------------
+
+==> show how to count the number of secondary particles in an event

@@ -36,7 +36,10 @@
 // Version:     5.0
 // Created:     1996-04-30
 // Author:      Juliet Armstrong
-// Updated:     1998-06-03 by Peter Gumplinger for example ExN06
+// Updated:     2002-11-12 by Peter Gumplinger
+//              Change user interface to G4Scintillation
+//              Add UserStackingAction
+//              1998-06-03 by Peter Gumplinger for example ExN06
 // mail:        gum@triumf.ca
 //
 // --------------------------------------------------------------
@@ -44,6 +47,7 @@
 #include "ExN06RunAction.hh"
 #include "ExN06DetectorConstruction.hh"
 #include "ExN06PrimaryGeneratorAction.hh"
+#include "ExN06StackingAction.hh"
 #include "ExN06PhysicsList.hh"
 
 #include "G4RunManager.hh"
@@ -75,6 +79,8 @@ int main(int argc,char** argv) {
 
   runManager->SetUserAction(new ExN06RunAction);
   runManager->SetUserAction(new ExN06PrimaryGeneratorAction);
+
+  runManager->SetUserAction(new ExN06StackingAction);
 
   // User interactions
   // Define (G)UI for interactive mode
