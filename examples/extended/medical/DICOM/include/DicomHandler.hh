@@ -31,9 +31,6 @@
 
 #ifndef DicomHandler_h
 #define DicomHandler_h 1
-
-#include <stdio.h>
-#include <stdlib.h>
 #include "globals.hh"
 
 class dicomHandler
@@ -71,7 +68,7 @@ private:
   unsigned int tab[1000][1000];
 
   // Transform a pixel value to a density
-  G4double pixel2density(unsigned int pixel);
+  G4double pixel2density(G4int pixel);
 
   FILE* data;
   FILE* fdensity;

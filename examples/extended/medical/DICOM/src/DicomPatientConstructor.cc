@@ -50,8 +50,6 @@
 #include <stdio.h>
 #include <math.h>
 
-using namespace std;
-
 G4int DicomPatientConstructor::FindingNbOfVoxels(G4double MaxDensity , G4double MinDensity)
 {
   FILE* lecturepref = fopen("Data.dat","r");

@@ -1,6 +1,3 @@
-//   $tigre.2@sympatico.ca, louis.archambault@phy.ulaval.ca
-//   03/10/02
-
 //*******************************************************
 //
 // DicomHandler.cc :
@@ -30,9 +27,7 @@
 
 #include "DicomHandler.hh"
 #include "globals.hh"
-#include <fstream>
-
-using namespace::std;
+#include "g4std/fstream"
 
 G4int dicomHandler::readHeader(FILE *dicom, char filename2[300])
 {
@@ -79,28 +74,28 @@ G4int dicomHandler::readHeader(FILE *dicom, char filename2[300])
 
       if (tag_dictionnary == 0x00280010 ) // Number of Rows
         {
-	  rows=*(unsigned int*)&value[i];
+	  rows=*(G4int*)&value[i];
 	  printf("[0x00280010] Rows -> %i\n",rows);
         }
       if (tag_dictionnary == 0x00280011 ) // Number of columns
         {
-	  columns=*(unsigned int*)&value[i];
+	  columns=*(G4int*)&value[i];
 	  printf("[0x00280011] Columns -> %i\n",columns);
         }
       if (tag_dictionnary == 0x00280102 ) // High bits  ( not used )
         {
-	  high_bits=*(unsigned int*)&value[i];
+	  high_bits=*(G4int*)&value[i];
 	  printf("[0x00280102] High bits -> %i\n",high_bits);
         }
       if (tag_dictionnary == 0x00280100 )  // Bits allocated ( not used )
         {
-	  bits_allocated=*(unsigned int*)&value[i];
+	  bits_allocated=*(G4int*)&value[i];
 	  printf("[0x00280100] Bits allocated -> %i\n",bits_allocated);
 	  bits_allocated=(bits_allocated)/8;
         }
       if (tag_dictionnary == 0x00280101 )  //  Bits stored ( not used )
         {
-	  bits_stored=*(unsigned int*)&value[i];
+	  bits_stored=*(G4int*)&value[i];
 	  printf("[0x00280101] Bits stord -> %i\n",bits_stored);
 	  bits_stored=(bits_stored)/8;
         }
@@ -325,7 +320,7 @@ G4int dicomHandler::readData(FILE *dicom,	char filename2[300])
 
   G4int compSize = 1;
   compSize=compression;
-  unsigned int mean;
+  G4int mean;
   G4bool overflow=false;
   G4int cpt=1;
 
@@ -350,7 +345,7 @@ G4int dicomHandler::readData(FILE *dicom,	char filename2[300])
 	  for(G4int xx =1 ; xx<=columns ; xx=xx+compSize )
             {
 	      overflow=false;
-	      unsigned int mean=tab[ww][xx];
+	      G4int mean=tab[ww][xx];
 	      G4int sumx=compSize-1;
 	      G4int sumy=compSize-1;
 	      for(  ; sumx>0; sumy--, sumx--)
@@ -389,10 +384,10 @@ G4int dicomHandler::displayImage(char command[300])
   sprintf(commandName,"display  %s",command);
   printf(commandName);
   G4int i=system(commandName);
-  return (int )i;
+  return (G4int )i;
 }
 
-G4double dicomHandler::pixel2density(unsigned int pixel)
+G4double dicomHandler::pixel2density(G4int pixel)
 {
   G4double density=-1;
   G4int nbrequali=0;
@@ -458,7 +453,7 @@ void dicomHandler::checkFileFormat()
   G4cout << "\n\n\n#+#+#+#+#+#+#+#+#+#+#+#+#+##+#+#+#+#+#+#+#+#+#\n"
 	 << "  Checking for previously processed image set ...";
 
-  ifstream checkData("Data.dat");
+  G4std::ifstream checkData("Data.dat");
   char * oneLine = new char[101];
   G4int nbImages;
 
@@ -475,7 +470,7 @@ void dicomHandler::checkFileFormat()
   checkData >> nbImages;
   G4String oneName;
   checkData.getline(oneLine,100);
-  ifstream testExistence;
+  G4std::ifstream testExistence;
   G4bool existAlready = true;
   for (G4int rep=0; rep<nbImages; rep++)
     {
@@ -510,7 +505,7 @@ void dicomHandler::checkFileFormat()
       fscanf(lecturepref,"%s",maxc);
       max=atoi(maxc);
 
-      for (int i=1;i<=max;i++) // Begin loop on filenames
+      for (G4int i=1;i<=max;i++) // Begin loop on filenames
         {
 	  fscanf(lecturepref,"%s",name_in_file);
 	  sprintf(name,"%s.dcm",name_in_file);

@@ -1,7 +1,6 @@
 
 #include <stddef.h>
 #include "DicomOctreeNode.hh"
-using namespace std;
 
 G4int OctreeNode::mInstanceCounter = 0;
 

@@ -31,7 +31,7 @@
 // tel (418) 525-4444 #6720
 // fax (418) 691 5268
 //*******************************************************
-
+#include "globals.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
 #include "G4RunManager.hh"
@@ -45,13 +45,7 @@
 #include "DicomEventAction.hh"
 #include "DicomHandler.hh"
 
-//#include <stdio.h>
-//#include "g4std/fstream"
-//#include "g4std/vector"
-
-using namespace std;
-
-int main(int argc,char** argv)
+G4int main(int argc,char** argv)
 {
 				
   // Treatment of DICOM images before creating the G4runManager

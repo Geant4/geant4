@@ -44,8 +44,6 @@
 #include <stdio.h>
 #include <math.h>
 
-using namespace std;
-
 DicomGeometry *DicomGeometry::theDetector=0;
 
 DicomGeometry::DicomGeometry()
@@ -91,7 +89,7 @@ void DicomGeometry::PatientConstruction()
   logical_param->SetVisAttributes(Attributes_param);
 
   G4double MiddleLocationValue=0;
-  for (int i=0;i< totalNumberOfFile;i++)
+  for (G4int i=0;i< totalNumberOfFile;i++)
     {
       ReadConfiguration->ReadG4File( ReadConfiguration->GetListOfFile()[i] );
       MiddleLocationValue=MiddleLocationValue+ReadConfiguration->GetSliceLocation();
