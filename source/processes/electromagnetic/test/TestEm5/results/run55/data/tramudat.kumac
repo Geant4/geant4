@@ -1,0 +1,46 @@
+macro tramudat
+
+*     3x3x3 m Iron
+*
+*     muon 1 TeV/c
+*
+*     Particle Data Book. Phys Rev D54 (p.138) 1996
+*
+
+* distribution of the energy deposit
+*
+* (from 940 GeV to 1000 GeV by bin of 1 GeV --> 60 bins) 
+*
+nbin=60
+vector/create vect([nbin])
+
+**NB: the data are directly entered in mm, and normalized after
+
+vector/input vect _
+     1    1    1    1    1    1    1    1    1    1 _
+     1    1    1    1    2    2    2    2    2    2 _     
+     2    2    3    3    3    3    4    5    4    5 _
+     6    6    6    7    9    8    9   12   13   14 _
+    15   19   24   27   33   34   39   54   66   81 _          
+    84   98   85   50   10    0    0    0    0    0 
+
+* renormalization ! (0.96 according the overflows in our simulation)
+entries=1000
+factor=0.96*[entries]/$SIGMA(VSUM(vect))
+vec/op/vscale vect [factor] vect
+		    
+dE=1.e+3
+Emin= 940.e+3
+Emax= [Emin]+[nbin]*[dE]		     
+create/1dhisto 1 '3m iron.  muon 1TeV/c' [nbin] [Emin] [Emax]
+put/contents 1 vect
+   
+*option logy
+h/pl 1
+
+* save histo
+*
+*h/file 1 tramudat.paw ! n
+*hrout 0
+ 
+return 	     

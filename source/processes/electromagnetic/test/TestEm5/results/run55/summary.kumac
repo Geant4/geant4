@@ -1,0 +1,90 @@
+macro summary.kumac
+
+* summary of the cuts study. 
+* 2x2x2 m Iron. muon 10 GeV --> 10 TeV
+*
+*
+* 	cut		energy gamma	energy e-
+*	------------------------------------------
+*	  1 mm		21   keV	1.3 MeV
+*	  1 m		infinite	infinite
+*
+*
+set * ; opt *
+
+set *fon -40
+set mscf 1.5
+
+set ygti 0.5  ; set gsiz 0.35 ; set ymgu 1.5
+set vsiz 0.25 ; set yval 0.3  ; set ylab 0.55
+set asiz 0.25 ; set yhti 0.9  ; set xlab 1.2 
+
+title '2x2x2 m Iron'
+opt logx
+opt liny
+
+set *fon -40
+set mscf 1.5
+zone 1 2
+
+nbin=5
+*
+vector/create Emu([nbin])
+vector/input  Emu 10. 100. 500. 1000. 10000. 
+vector/create erEmu([nbin]) r 0. 0. 0. 0. 0. 
+
+
+* energy deposit: cut=1mm
+*
+vector/create G3([nbin])
+vector/input  G3  2.8  2.8  3.5  6.0  25.0
+
+vector/create G4([nbin])
+vector/input  G4  2.8  2.8  3.5  5.0  15.0
+
+vector/create erG3([nbin]) r  .2 .2 .5 1. 10.
+vector/create erG4([nbin]) r  .2 .2 .5 1.  5.
+
+set mtyp 20
+set pmci 4
+graph [nbin] Emu G3 LWP
+graph/hpl/errors Emu G3 erEmu erG3 [nbin]
+set mtyp 21
+set pmci 3
+graph [nbin] Emu G4 LP
+graph/hpl/errors Emu G4 erEmu erG4 [nbin]
+
+atitle 'Emu (GeV)' 'E peak (GeV)'
+itx 40.  20. 'cut=1mm =(21 keV, 1.3 MeV)'
+set pmci 4
+key 40. 15.  20 'G3'
+set pmci 3
+key 40. 17.5 21 'G4'
+
+* energy deposit: cut=1m
+*
+vector/input  G3  3.0 3.8 7.5 13. 105.
+
+vector/input  G4  2.8 3.4 6.0 8.0  65.
+
+vector/input erG3([nbin])  .2 .2 .5  1. 5.
+vector/input erG4([nbin])  .2 .2 .5  1. 5.
+
+set mtyp 20
+set pmci 4
+graph [nbin] Emu G3 LWP
+graph/hpl/errors Emu G3 erEmu erG3 [nbin]
+set mtyp 21
+set pmci 3
+graph [nbin] Emu G4 LP
+graph/hpl/errors Emu G4 erEmu erG4 [nbin]
+
+atitle 'Emu (GeV)' 'E peak (GeV)'
+itx 40. 80. 'cut=1m =(infinite)'
+set pmci 4
+key 40. 60. 20 'G3'
+set pmci 3
+key 40. 70. 21 'G4'
+
+*close 0
+return 	     

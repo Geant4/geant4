@@ -1,0 +1,160 @@
+macro plotedep.kumac
+*
+set * ; opt * 
+*
+filecase keep
+
+set *fon -40
+set mscf 1.5
+
+set ygti 0.5  ; set gsiz 0.35 ; set ymgu 1.5
+set vsiz 0.25 ; set yval 0.3  ; set ylab 0.55
+set asiz 0.25 ; set yhti 0.9  ; set xlab 1.2
+
+zone 1 2 
+
+title '10 GeV muon in 2x2x2 m iron'
+h/file 21 g3/10gev.1m.paw
+h/file 22 g3/10gev.1mm.paw
+h/file 23 g4/10gev.1m.paw
+h/file 24 g4/10gev.1mm.paw
+
+set dmod 2 ; set hcol 4 ; set plci 4
+h/pl //lun21/2
+key 7000 250 2  'G3 1m' ! l
+set dmod 1 ; set hcol 2 ; set plci 2
+h/pl //lun22/2 s
+key 7000 200 1  'G3 1mm' ! l
+atitle Edep(MeV) 
+exec Redraw-Axis
+
+set dmod 2 ; set hcol 4 ; set plci 4
+h/pl //lun23/1
+key 7000 250 2 'G4 1m' ! l 
+set dmod 1 ; set hcol 2 ; set plci 2
+h/pl //lun24/1 s
+key 7000 200 1 'G4 1mm' ! l
+atitle Edep(MeV)
+exec Redraw-Axis
+close 21 ; close 22 ; close 23 ; close 24
+
+next
+title '100 GeV muon in 2x2x2 m iron'
+h/file 21 g3/100gev.1m.paw
+h/file 22 g3/100gev.1mm.paw
+h/file 23 g4/100gev.1m.paw
+h/file 24 g4/100gev.1mm.paw
+
+set dmod 2 ; set hcol 4 ; set plci 4
+h/pl //lun21/2
+key 7000 250 2  'G3 1m' ! l
+set dmod 1 ; set hcol 2 ; set plci 2
+h/pl //lun22/2 s
+key 7000 200 1  'G3 1mm' ! l
+atitle Edep(MeV) 
+exec Redraw-Axis
+
+set dmod 2 ; set hcol 4 ; set plci 4
+h/pl //lun23/1
+key 7000 250 2 'G4 1m' ! l 
+set dmod 1 ; set hcol 2 ; set plci 2
+h/pl //lun24/1 s
+key 7000 200 1 'G4 1mm' ! l
+atitle Edep(MeV)
+exec Redraw-Axis
+close 21 ; close 22 ; close 23 ; close 24
+
+next
+title '500 GeV muon in 2x2x2 m iron'
+h/file 21 g3/500gev.1m.paw
+h/file 22 g3/500gev.1mm.paw
+h/file 23 g4/500gev.1m.paw
+h/file 24 g4/500gev.1mm.paw
+
+set dmod 2 ; set hcol 4 ; set plci 4
+h/pl //lun21/2
+key 14000 250 2  'G3 1m' ! l
+set dmod 1 ; set hcol 2 ; set plci 2
+h/pl //lun22/2 s
+key 14000 200 1  'G3 1mm' ! l
+atitle Edep(MeV) 
+exec Redraw-Axis
+
+set dmod 2 ; set hcol 4 ; set plci 4
+h/pl //lun23/1
+key 14000 400 2 'G4 1m' ! l 
+set dmod 1 ; set hcol 2 ; set plci 2
+h/pl //lun24/1 s
+key 14000 300 1 'G4 1mm' ! l
+atitle Edep(MeV)
+exec Redraw-Axis
+close 21 ; close 22 ; close 23 ; close 24
+
+next
+title '1 TeV muon in 2x2x2 m iron'
+h/file 21 g3/1000gev.1m.paw
+h/file 22 g3/1000gev.1mm.paw
+h/file 23 g4/1000gev.1m.paw
+h/file 24 g4/1000gev.1mm.paw
+
+set dmod 2 ; set hcol 4 ; set plci 4
+h/pl //lun21/2
+key 35000 400 2  'G3 1m' ! l
+set dmod 1 ; set hcol 2 ; set plci 2
+h/pl //lun22/2 s
+key 35000 300 1  'G3 1mm' ! l
+atitle Edep(MeV) 
+exec Redraw-Axis
+
+set dmod 2 ; set hcol 4 ; set plci 4
+h/pl //lun23/1
+key 35000 400 2 'G4 1m' ! l 
+set dmod 1 ; set hcol 2 ; set plci 2
+h/pl //lun24/1 s
+key 35000 300 1 'G4 1mm' ! l
+atitle Edep(MeV)
+exec Redraw-Axis
+close 21 ; close 22 ; close 23 ; close 24
+
+next
+title '10 TeV muon in 2x2x2 m iron'
+h/file 21 g3/10000gev.1m.paw
+h/file 22 g3/10000gev.1mm.paw
+h/file 23 g4/10000gev.1m.paw
+h/file 24 g4/10000gev.1mm.paw
+
+set dmod 2 ; set hcol 4 ; set plci 4
+h/pl //lun21/2
+key 160000 300 2  'G3 1m' ! l
+set dmod 1 ; set hcol 2 ; set plci 2
+h/pl //lun22/2 s
+key 160000 250 1  'G3 1mm' ! l
+atitle Edep(MeV) 
+exec Redraw-Axis
+
+set dmod 2 ; set hcol 4 ; set plci 4
+h/pl //lun23/1
+key 160000 400 2 'G4 1m' ! l 
+set dmod 1 ; set hcol 2 ; set plci 2
+h/pl //lun24/1 s
+key 160000 350 1 'G4 1mm' ! l
+atitle Edep(MeV)
+exec Redraw-Axis
+close 21 ; close 22 ; close 23 ; close 24
+
+return
+
+Macro Redraw-Axis
+set plci 1
+   X1 = $GRAFINFO('WNXMIN')
+   X2 = $GRAFINFO('WNXMAX')
+   Y1 = $GRAFINFO('WNYMIN')
+   Y2 = $GRAFINFO('WNYMAX')
+   IS = $GRAFINFO('?FAIS')
+   IC = $GRAFINFO('?FACI')
+   Set FAIS 0 ; Set FACI 1
+   Box [X1] [X2] [Y1] [Y2]
+   Set FAIS [IS] ; Set FACI [IC]
+   Tick XL [X1] !
+*   Tick YB ! [Y1]
+   Return
