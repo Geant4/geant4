@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.2 1999-01-11 00:47:45 allison Exp $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.3 1999-09-15 12:22:03 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -21,6 +21,10 @@
 // other OpenGL's, as far as I'm aware.   John Allison 18/9/96.
 #define CENTERLINE_CLPP  /* CenterLine C++ workaround: */
 // Also seems to be required for HP's CC and AIX xlC, at least.
+
+// GB : put this include before the GL ones. It avoid a clash with stl includes
+// on Linux.
+#include <rw/tvhdict.h>
 
 #include <GL/gl.h>
 #include <GL/glx.h>
