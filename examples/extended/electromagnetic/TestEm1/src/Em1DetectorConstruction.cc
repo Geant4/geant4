@@ -6,7 +6,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em1DetectorConstruction.cc,v 1.3 2000-12-06 13:21:50 maire Exp $
+// $Id: Em1DetectorConstruction.cc,v 1.4 2000-12-13 11:11:59 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -111,7 +111,7 @@ G4Material* Al  = new G4Material(name="Aluminium"  , z=13., a, density);
 
 density = 2.330*g/cm3;
 a = 28.09*g/mole;
-G4Material* Si  = new G4Material(name="Silicium"  , z=14., a, density);
+G4Material* Si  = new G4Material(name="Silicon"    , z=14., a, density);
 
 density = 7.870*g/cm3;
 a = 55.85*g/mole;
