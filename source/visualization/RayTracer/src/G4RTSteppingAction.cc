@@ -6,7 +6,6 @@
 #include "G4Colour.hh"
 #include "G4Track.hh"
 #include "G4StepStatus.hh"
-#include <fstream.h>
 #include "G4TransportationManager.hh"
 
 G4RTSteppingAction::G4RTSteppingAction()
@@ -42,28 +41,3 @@ void G4RTSteppingAction::UserSteppingAction(const G4Step* aStep)
   }
 }
 
-/******************************************************************
-  G4bool visFlag=0;
-  {
-    if(postVisAtt)
-    {
-      if(postVisAtt->IsVisible())
-    G4double postAlpha=(postVisAtt->GetColour()).GetAlpha();
-
-    if(postVisAtt->IsVisible()){
-      if(postVisAtt->IsForceDrawingStyle()){
-        if(postVisAtt->GetForcedDrawingStyle()==1)
-          {visFlag=1;}
-        }
-      else{visFlag=1;}
-    }
-
-    if(postAlpha==1. && visFlag==1)
-    {
-      //----TrackKiller
-      G4Track* currentTrack = aStep -> GetTrack();
-      currentTrack -> SetTrackStatus(fStopAndKill);
-    }
-  }
-}
-*********************************************************************/
