@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.4 1999-05-20 15:32:23 urban Exp $
+// $Id: G4PhotoElectricEffect.cc,v 1.5 1999-06-05 13:05:51 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -225,6 +225,7 @@ G4VParticleChange* G4PhotoElectricEffect::PostStepDoIt(const G4Track& aTrack,
  
 { //  protection !
    static const G4double veryLowEnergy = 1.*eV ;
+   static G4int veryLowEnergyCount = 0;
 
    aParticleChange.Initialize(aTrack);
    G4Material* aMaterial = aTrack.GetMaterial();
@@ -237,6 +238,27 @@ G4VParticleChange* G4PhotoElectricEffect::PostStepDoIt(const G4Track& aTrack,
   //  protection !
    if(PhotonEnergy <= veryLowEnergy)
    {
+     if (++veryLowEnergyCount == 1)
+       {
+	 G4cerr <<
+	   "WARNING: G4PhotoElectricEffect::PostStepDoIt:"
+	   " a very low energy photon encountered and killed."
+		<< endl;
+       }
+     if (veryLowEnergyCount%1000 == 0)
+       {
+	 G4cerr << "WARNING: G4PhotoElectricEffect::PostStepDoIt:"
+		<< veryLowEnergyCount
+		<< " very low energy photons encountered and killed."
+		<< endl;
+       }
+     if (veryLowEnergyCount > 100000)
+       {
+	 G4Exception
+	   ("G4PhotoElectricEffect::PostStepDoIt:"
+	    " over 100000 very low energy photons"
+		" encountered and killed.");
+       }
      aParticleChange.SetLocalEnergyDeposit(PhotonEnergy);  
      aParticleChange.SetStatusChange(fStopAndKill); 
      return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
