@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4Tubs.cc,v 1.7 2001-01-18 14:38:22 grichine Exp $
+// $Id: testG4Tubs.cc,v 1.8 2001-02-15 10:34:50 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -93,6 +93,8 @@ G4bool testG4Tubs()
 
   G4Tubs tube9("tube9",1150,1180,2000,0,2*pi);
 
+  G4Tubs tube10("tube10",400*mm,405*mm,400*mm,0*degree,360*degree) ;
+
 
 // Check name
     assert(t1.GetName()=="Solid Tube #1");
@@ -141,8 +143,15 @@ G4bool testG4Tubs()
     assert(in == kSurface);
     //    G4cout<<"t5.Inside(G4ThreeVector(60,-0.001*kCarTolerance,0)) = "
     //     <<OutputInside(in)<<G4endl;
+    in = tube10.Inside(G4ThreeVector(-114.8213313833317*mm,
+					   382.7843220719649*mm,
+                                           -32.20788536438663*mm)) ;
+    //  assert(in == kSurface);
+    G4cout<<"tube10.Inside(G4ThreeVector(-114.821...)) = "
+         <<OutputInside(in)<<G4endl;
 
 // Check Surface Normal
+
     G4ThreeVector normal;
 
     normal=t1.SurfaceNormal(ponxside);
