@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2000-01-20 17:27:54 maire Exp $
+# $Id: GNUmakefile,v 1.3 2000-05-17 10:56:21 maire Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -19,7 +19,7 @@ include $(G4INSTALL)/config/architecture.gmk
 ifdef G4NOHIST
   CPPFLAGS += -DG4NOHIST
 else
-  LDFLAGS  += -L/cern/pro/lib
+  LDFLAGS  += -L$(CERN)/pro/lib
   LOADLIBS += -lpacklib $(FCLIBS)
 endif
 
