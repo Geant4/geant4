@@ -1,4 +1,4 @@
-$Id: History,v 1.139 2004-03-06 13:47:18 vnivanch Exp $
+$Id: History,v 1.140 2004-03-15 12:10:47 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+  
+12 March 04: V.Ivant
+- G4VEnergyLossProcess: put back lowestKinEnergy = 1.*eV;
+  
+10 March 04: V.Ivant
+- G4LossTableManager.cc: fix a problem of Precise Range table
+- G4VEnergyLossProcess: fix problem of step limit calculation
+  
+10 March 04: L.Urban
+- G4MscModel: changes in data members,
+  corrections in GeomPathLength,TrueStepLength, SampleCosineTheta
+  
 06 March 04: V.Ivant (utils-V06-00-07)
 - fix a bug in link at SUN
 
