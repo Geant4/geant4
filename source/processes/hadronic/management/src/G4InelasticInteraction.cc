@@ -180,6 +180,7 @@
    G4bool quasiElastic )
   {
     what = originalIncident->GetMomentum();
+    cache = 0;
     theReactionDynamics.ProduceStrangeParticlePairs( vec, vecLen,
                                                      modifiedOriginal, originalTarget,
                                                      currentParticle, targetParticle,
