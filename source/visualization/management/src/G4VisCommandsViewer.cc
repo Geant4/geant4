@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewer.cc,v 1.11 2000-01-14 15:30:11 johna Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.12 2000-01-17 10:29:37 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -297,7 +297,7 @@ void G4VisCommandViewerList::SetNewValue (G4UIcommand* command,
     if (name != "all") {
       G4cout << " of name \"" << name << "\"";
     }
-    G4cout << " found." << endl;
+    G4cout << " found." << G4endl;
   }
 }
 
@@ -375,7 +375,7 @@ void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand* command,
     G4cout << " not found - \"/vis/viewer/list\""
       "\n  to see possibilities.";
   }
-  G4cout << endl;
+  G4cout << G4endl;
 }
 
 ////////////// /vis/viewer/remove ///////////////////////////////////////
