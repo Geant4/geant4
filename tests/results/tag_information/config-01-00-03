@@ -1,0 +1,67 @@
+ Dear colleagues,
+
+ config-01-00-03 adds several new features to the previous tag, among
+ all the ability to automatically build granular libraries (type
+ "gmake" from geant4/source). "gmake global" is still the valid
+ command for building compound libraries as before.
+ Tested on DEC-cxx and HP-aCC.
+ Below follows the complete list of changes since the previous tag.
+ Please, include this tag in your tests.
+
+                        Gabriele
+
+ BTW - This tag coworks with the HEAD of source/GNUmakefile. Please,
+       update that file as well !
+------------------
+>From History file:
+
+19th April 1999  Gabriele Cosmo (config-01-00-03)
+- architecture.gmk: introduced CCFLAGS for all platforms. Set CCFLAGS
+  to "-Ae +DAportable" for HP-aCC to overcome compilation problems on
+  liblist.c
+
+18th April 1999  Youhei Morita
+- architecture.gmk, binmake.gmk: introduced OBJY_LDLIB variable for
+  defining Objectivity library within G4ODBMS.
+
+13th April 1999  Gabriele Cosmo
+- architecture.gmk: added the following options in compilation:
+  o HP-aCC, SGI-CC: +Onolimit, -Olimit 5000 respectively.
+    Not suppress any optimization specifying a high or unlimited
+    memory limitation.
+  o DEC-cxx: -timplicit_local.
+    Get rid of the template repository by generating explicit template
+    instantiations used in the code with internal linkage.
+    
+13th April 1999  John Allison
+- In binmake.gmk: - moved libmap target to source/GNUmakefile.
+                  - extensive tidying.
+
+12th April 1999  John Allison
+- In liblist.c:  - fixed bug to distinguish, e.g., track from tracking.
+                 - improved printing.
+                 - improved "Usage" comments.
+                 - improved protection against bad input format.
+- In binmake.gmk, used $(ECHO) to solve platform dependency of echo.
+- In binmake.gmk for granular libraries:
+   - fully implemented -d option.
+   - Gave /tmp files a unique name.
+   - Removed repeated libraries - no longer necessary, all circular
+       dependencies seem solved.
+
+9th April 1999  Frank Behner
+- Fixed bug in liblist in -d option
+- Changed binmake.gmk to use liblist -d
+
+18th February 1999  John Allison
+- Added G4USE_STL flag.
+- Added code for linking granular libraries.
+
+-- 
+
+*---------------------------------------------------------------------*
+ Gabriele Cosmo                       mailto:gcosmo@slac.stanford.edu
+ Phone: +01 650 926 3368              Fax   : +01 650 926 3767
+ Mail : SLAC, P.O.Box 4349 MS-59, CL040 G100, Stanford CA 94309, U.S.
+ Web  : http://www.slac.stanford.edu/~gcosmo
+*---------------------------------------------------------------------*
