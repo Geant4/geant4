@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst14PhysicsList.cc,v 1.6 1999-07-05 14:50:28 aforti Exp $
+// $Id: Tst14PhysicsList.cc,v 1.7 1999-07-06 13:24:31 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -129,7 +129,7 @@ void Tst14PhysicsList::ConstructEM()
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
 
       LeIoprocess = new G4LowEnergyIonisation();
-      pmanager->AddProcess(LeIoprocess, -1, 2, 2);
+      pmanager->AddProcess(LeIoprocess, -1, -1, 2);
 
       LeBrprocess = new G4LowEnergyBremsstrahlung();
       pmanager->AddProcess(LeBrprocess, -1, -1, 3);
