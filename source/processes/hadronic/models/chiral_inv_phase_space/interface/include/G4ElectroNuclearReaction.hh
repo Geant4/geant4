@@ -22,7 +22,7 @@
 //
 //
 //
-// $Id: G4ElectroNuclearReaction.hh,v 1.12 2002-06-18 09:00:19 jwellisc Exp $
+// $Id: G4ElectroNuclearReaction.hh,v 1.13 2002-06-20 08:43:58 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -44,7 +44,7 @@
 #include "G4GammaParticipants.hh"
 #include "G4QGSModel.hh"
 #include "G4TheoFSGenerator.hh"
-#include "G4StringChipsInterface.hh"
+#include "G4GeneratorPrecompoundInterface.hh"
 #include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 
@@ -55,7 +55,7 @@ class G4ElectroNuclearReaction : public G4HadronicInteraction
     G4ElectroNuclearReaction()
     {
       theHEModel = new G4TheoFSGenerator;
-      theCascade = new G4StringChipsInterface;
+      theCascade = new G4GeneratorPrecompoundInterface;
     }
     
     G4VParticleChange * ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus);
@@ -63,7 +63,7 @@ class G4ElectroNuclearReaction : public G4HadronicInteraction
   private:
     G4ChiralInvariantPhaseSpace theLEModel;
     G4TheoFSGenerator * theHEModel;
-    G4StringChipsInterface * theCascade;
+    G4GeneratorPrecompoundInterface * theCascade;
     G4QGSModel< G4GammaParticipants > theStringModel;
     G4QGSMFragmentation theFragmentation;
     G4ExcitedStringDecay * theStringDecay;
