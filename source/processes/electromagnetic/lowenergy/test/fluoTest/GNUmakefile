@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2001-09-16 21:48:51 pia Exp $
+# $Id: GNUmakefile,v 1.6 2001-10-25 16:36:36 elena Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -13,6 +13,22 @@ endif
 
 .PHONY: all
 all: lib bin
+
+include $(G4INSTALL)/config/architecture.gmk
+
+
+C_FLAGS += -I$(LHCXX_REL_DIR)/include
+LDFLAGS += -L$(LHCXX_REL_DIR)/lib
+#LOADLIBS += -L$(LHCXX_REL_DIR)/lib
+# general stuff:
+LOADLIBS += -lHepUtilities -lAIDA_Annotation
+# add for Histograms:
+LOADLIBS += -lAIDA_HBook 
+# add for Ntuples:
+LOADLIBS += -lAIDA_Ntuple -lNtupleTag -lNtupleTag_HBook 
+# ... and finally system stuff and to deal with the "Fortran legacy":
+LOADLIBS += -lCHBook -ldl -lg2c 
+
 
 include $(G4INSTALL)/config/binmake.gmk
 
