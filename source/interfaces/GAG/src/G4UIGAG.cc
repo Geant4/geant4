@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIGAG.cc,v 1.4 1999-09-02 07:40:55 yhajime Exp $
+// $Id: G4UIGAG.cc,v 1.5 1999-10-12 12:02:29 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4UIGAG.cc
@@ -176,7 +176,10 @@ G4String G4UIGAG::GetCommand()
     }
     newCommand.readLine( cin, FALSE );
     if (!cin.good()) { cin.clear(); newCommand = nullString; iExit=false;break;}
+
     newCommand = newCommand.strip(G4String::leading);
+    if( newCommand.length() < 1) { break; }
+
     while( newCommand(newCommand.length()-1) == '_' )
     {
       G4String newLine;
@@ -187,6 +190,8 @@ G4String G4UIGAG::GetCommand()
     }
 
     G4String nC = newCommand.strip(G4String::leading);
+    if( nC.length() < 1) { break; }
+
     // -------------------- nC.toUpper();
     if( nC == "@@GAGmodeJAVA" ) {
       uiMode = java_mode;

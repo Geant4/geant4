@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIterminal.cc,v 1.3 1999-09-02 07:37:52 yhajime Exp $
+// $Id: G4UIterminal.cc,v 1.4 1999-10-12 12:02:28 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -118,9 +118,10 @@ G4String G4UIterminal::GetCommand()
   {
     G4cout << promptCharacter;
     G4cout.flush();
-    newCommand.readLine( cin , FALSE);
+    newCommand.readLine( cin, FALSE );
     if (!cin.good()) { cin.clear(); newCommand = nullString; iExit=false; break; }
     newCommand = newCommand.strip(G4String::leading);
+    if( newCommand.length() < 1 ) { break; }
 
     while( newCommand(newCommand.length()-1) == '_' )
     {
@@ -135,7 +136,7 @@ G4String G4UIterminal::GetCommand()
 
 
     // -------------------- nC.toUpper();
-
+    if( nC.length() < 1 ){ break; }
     if( nC(0) == '#' )
            { G4cout << nC << endl; }
     else if( nC == "ls" || nC(0,3) == "ls " )
