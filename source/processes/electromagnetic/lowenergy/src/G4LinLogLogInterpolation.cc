@@ -63,7 +63,7 @@ G4double G4LinLogLogInterpolation::Calculate(G4double x, G4int bin,
       G4double d2 = data[bin+1];
       if(d1 > 0.0 && d2 > 0.0) {
         value = (log10(d1)*log10(e2/x) + log10(d2)*log10(x/e1)) / log10(e2/e1);
-        value = pow(10,value);
+        value = pow(10.,value);
       } else {
         value = (d1*log10(e2/x) + d2*log10(x/e1)) / log10(e2/e1);
       }
