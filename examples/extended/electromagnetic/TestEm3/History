@@ -1,4 +1,4 @@
-$Id: History,v 1.70 2005-02-02 16:42:43 maire Exp $
+$Id: History,v 1.71 2005-02-22 09:30:24 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
+
+22-02-05 V.Ivant (testem3-V07-00-03)
+- MaxStep : fix infinite loop
      
 02-02-05 mma 
 - SteppingAction : sum charged stepLenght, even if edep=0.
