@@ -361,7 +361,6 @@ void G4OpenInventorViewer::SceneGraphStatistics() {
   counter.fPoints = 0;
 
   SoCallbackAction callbackAction;
-  fSoSelection->ref();
   callbackAction.addTriangleCallback
     (SoShape::getClassTypeId(),CountTrianglesCB,(void*)&counter);
   callbackAction.addLineSegmentCallback
@@ -369,19 +368,14 @@ void G4OpenInventorViewer::SceneGraphStatistics() {
   callbackAction.addPointCallback
     (SoShape::getClassTypeId(),CountPointsCB,(void*)&counter);
   callbackAction.apply(fSoSelection);
-  fSoSelection->unrefNoDelete();
 
   SoCounterAction counterAction;
-  fSoSelection->ref();
   counterAction.apply(fSoSelection);
-  fSoSelection->unrefNoDelete();
   int nodes = counterAction.getCount();
 
   counterAction.setLookFor(SoCounterAction::TYPE);
   counterAction.setType(SoShape::getClassTypeId());
-  fSoSelection->ref();
   counterAction.apply(fSoSelection);
-  fSoSelection->unrefNoDelete();
   int shapes = counterAction.getCount();
 
   G4cout << "Number of triangles : " << counter.fTriangles << G4endl;
