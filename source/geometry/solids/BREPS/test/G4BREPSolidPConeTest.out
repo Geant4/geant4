@@ -1,5 +1,16 @@
 
-=======     PCon test      ========
+=======     PCon test      ========Z0=-20 Rmin0=30 Rmax0=70
+Z1=-10 Rmin1=30 Rmax1=70
+Z2=-10 Rmin2=0 Rmax2=70
+Z3=0 Rmin3=0 Rmax3=40
+Z4=10 Rmin4=0 Rmax4=40
+Z5=20 Rmin5=0 Rmax5=80
+Z6=30 Rmin6=40 Rmax6=80
+Z7=40 Rmin7=40 Rmax7=60
+start angle =0
+open angle =6.28319
+zstart =-20
+
 
 PCone created ! 
 
@@ -7,7 +18,7 @@ PCone created !
 ==================================================
 x=0  y=-100  z=24 is outside
 x=0  y=-90  z=24 is outside
-x=0  y=-80  z=24 is outside
+x=0  y=-80  z=24 is on the surface
 x=0  y=-70  z=24 is inside
 x=0  y=-60  z=24 is inside
 x=0  y=-50  z=24 is inside
@@ -23,73 +34,73 @@ x=0  y=40  z=24 is inside
 x=0  y=50  z=24 is inside
 x=0  y=60  z=24 is inside
 x=0  y=70  z=24 is inside
-x=0  y=80  z=24 is outside
+x=0  y=80  z=24 is on the surface
 x=0  y=90  z=24 is outside
 x=0  y=100  z=24 is outside
 
 ==================================================
 Pdep is (0, 0, z)
 Dir is (1, 1, 0)
-  z=-30  distance to in=9e+99
-  z=-25  distance to in=9e+99
-  z=-20  distance to in=30
-  z=-15  distance to in=30
-  z=-10  distance to in=30
-  z=-5  distance to in=55
-  z=0  distance to in=40
-  z=5  distance to in=40
-  z=10  distance to in=40
-  z=15  distance to in=60
-  z=20  distance to in=80
-  z=25  distance to in=20
-  z=30  distance to in=40
-  z=35  distance to in=40
-  z=40  distance to in=40
-  z=45  distance to in=9e+99
-  z=50  distance to in=9e+99
+x=0  y=0  z=-30 is outside  distance to in=9e+99  closest distance to in=10
+x=0  y=0  z=-25 is outside  distance to in=9e+99  closest distance to in=5
+x=0  y=0  z=-20 is outside  distance to in=30  closest distance to in=0
+x=0  y=0  z=-15 is outside  distance to in=30  closest distance to in=5
+x=0  y=0  z=-10 is on the surface
+x=0  y=0  z=-5 is inside  distance to out=55  closest distance to out=5
+x=0  y=0  z=0 is inside  distance to out=40  closest distance to out=10
+x=0  y=0  z=5 is inside  distance to out=40  closest distance to out=5
+x=0  y=0  z=10 is inside  distance to out=40  closest distance to out=9.70143
+x=0  y=0  z=15 is inside  distance to out=60  closest distance to out=5
+x=0  y=0  z=20 is on the surface
+x=0  y=0  z=25 is outside  distance to in=20  closest distance to in=4.85071
+x=0  y=0  z=30 is outside  distance to in=40  closest distance to in=9.70143
+x=0  y=0  z=35 is outside  distance to in=40  closest distance to in=5
+x=0  y=0  z=40 is outside  distance to in=40  closest distance to in=0
+x=0  y=0  z=45 is outside  distance to in=9e+99  closest distance to in=5
+x=0  y=0  z=50 is outside  distance to in=9e+99  closest distance to in=10
 
 
 ==================================================
 Pdep is (0, -100, z)
 Dir is (0, 1, 0)
-  z=-30  distance to in=9e+99
-  z=-25  distance to in=9e+99
-  z=-20  distance to in=30
-  z=-15  distance to in=30
-  z=-10  distance to in=30
-  z=-5  distance to in=45
-  z=0  distance to in=60
-  z=5  distance to in=60
-  z=10  distance to in=60
-  z=15  distance to in=40
-  z=20  distance to in=20
-  z=25  distance to in=20
-  z=30  distance to in=20
-  z=35  distance to in=30
-  z=40  distance to in=40
-  z=45  distance to in=9e+99
-  z=50  distance to in=9e+99
+  z=-30  distance to in=9e+99  distance to in=10
+  z=-25  distance to in=9e+99  distance to in=5
+  z=-20  distance to in=30  distance to in=0
+  z=-15  distance to in=30  distance to in=5
+  z=-10  distance to in=30  distance to in=0
+  z=-5  distance to in=45  distance to in=5
+  z=0  distance to in=60  distance to in=10
+  z=5  distance to in=60  distance to in=5
+  z=10  distance to in=60  distance to in=10
+  z=15  distance to in=40  distance to in=5
+  z=20  distance to in=20  distance to in=4.85071
+  z=25  distance to in=20  distance to in=5
+  z=30  distance to in=20  distance to in=8.94427
+  z=35  distance to in=30  distance to in=5
+  z=40  distance to in=40  distance to in=0
+  z=45  distance to in=9e+99  distance to in=5
+  z=50  distance to in=9e+99  distance to in=10
 
 
 ==================================================
 Pdep is (0, y, -50)
 Dir is (0, 0, 1)
-  y=0  distance to in=50
-  y=5  distance to in=48.75
-  y=10  distance to in=47.5
-  y=15  distance to in=46.25
-  y=20  distance to in=45
-  y=25  distance to in=43.75
-  y=30  distance to in=42.5
-  y=35  distance to in=41.25
-  y=40  distance to in=40
-  y=45  distance to in=38.75
-  y=50  distance to in=37.5
-  y=55  distance to in=36.25
-  y=60  distance to in=35
-  y=65  distance to in=33.75
-  y=70  distance to in=32.5
-  y=75  distance to in=31.25
-  y=80  distance to in=30
+  y=0  distance to in=40
+  y=5  distance to in=40
+  y=10  distance to in=40
+  y=15  distance to in=40
+  y=20  distance to in=40
+  y=25  distance to in=40
+  y=30  distance to in=30
+  y=35  distance to in=30
+  y=40  distance to in=30
+  y=45  distance to in=30
+  y=50  distance to in=30
+  y=55  distance to in=30
+  y=60  distance to in=30
+  y=65  distance to in=30
+  y=70  distance to in=40
+  y=75  distance to in=68.75
+  y=80  distance to in=70
   y=85  distance to in=9e+99
   y=90  distance to in=9e+99
