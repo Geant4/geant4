@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F03EventAction.cc,v 1.1 2001-10-11 07:18:22 grichine Exp $
+// $Id: F03EventAction.cc,v 1.2 2001-11-12 09:31:54 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,7 +36,6 @@
 #include "F03CalorHit.hh"
 #include "F03EventActionMessenger.hh"
 
-#include "g4rw/tvordvec.h"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
