@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 1999-04-30 16:48:45 johna Exp $
+# $Id: GNUmakefile,v 1.6 1999-05-02 12:07:50 stesting Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake glob" makes global libraries for each subdomain.
@@ -36,7 +36,7 @@ glob global:
 	@for dir in $(SUBDIR2); do (cd $$dir; $(MAKE)); done
 	@for dir in $(SUBDIR3); do (cd $$dir; $(MAKE)); done
 
-libmap:
+libmap: $(G4BINDIR)/liblist
 	@echo "WARNING: Making a library map of granular libraries."
 	@echo "         This is a list of libraries in order of use, and for"
 	@echo "         each library a list of other libraries used."
