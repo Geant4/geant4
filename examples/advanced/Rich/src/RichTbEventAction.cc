@@ -49,7 +49,7 @@ void RichTbEventAction::BeginOfEventAction(const G4Event* evt){
   G4SDManager * SDman = G4SDManager::GetSDMpointer();
   if(RichTbCollID<0){
 
-    G4cout<<"The value of RichTbCollID in BeginOfEventAction is="<<RichTbCollID<<G4endl;
+
 
     RichTbCollID = SDman->GetCollectionID("RichTbHitsCollection");
 
@@ -114,8 +114,8 @@ void RichTbEventAction::EndOfEventAction(const G4Event* evt){
 
 
 
-    G4cout << "     " << n_hit
-	   << " hits are stored in RichTbHitsCollection." << G4endl;
+    //    G4cout << "     " << n_hit
+    //   << " hits are stored in RichTbHitsCollection." << G4endl;
   }
 
     if(RConfig->getRichTbDrawTrajectory() > 0){    
@@ -130,7 +130,7 @@ void RichTbEventAction::EndOfEventAction(const G4Event* evt){
     if(RHC) {
      G4int n_hith = RHC->entries();
     
-     G4cout<<"number of hits inside RichTbEventAction="<<n_hith<<G4endl;
+
 
 
      for (G4int ih=0; ih<n_hith; ih++ ) {

@@ -12,6 +12,7 @@
 #include "G4Transform3D.hh"
 #include "G4LogicalVolume.hh"
 #include "RichTbVisManager.hh"
+#include "G4Transform3D.hh"
 
 G4Allocator<RichTbHit> RichTbHitAllocator;
 
@@ -56,13 +57,15 @@ void RichTbHit::Draw()
   if(pVVisManager)
    {
 
+     G4Transform3D dummy;
+
   G4Circle circle(posAtPhotoCathode);
   circle.SetScreenSize(0.04);
   circle.SetFillStyle(G4Circle::filled);
   G4Colour colour(1.0,0.0,0.0);
   G4VisAttributes attribs(colour);
   circle.SetVisAttributes(attribs);
-  pVVisManager->Draw(circle);
+  pVVisManager->Draw(circle,dummy);
   }
 }
 void RichTbHit::DrawWithVisM(RichTbVisManager* pVisManager)
@@ -70,16 +73,16 @@ void RichTbHit::DrawWithVisM(RichTbVisManager* pVisManager)
 
   G4VisManager* pVVisManager = pVisManager;
   if(pVVisManager)
-   {
-
-  G4Circle circle(posAtPhotoCathode);
-  circle.SetScreenSize(0.04);
-  circle.SetFillStyle(G4Circle::filled);
-  G4Colour colour(1.0,0.0,0.0);
-  G4VisAttributes attribs(colour);
-  circle.SetVisAttributes(attribs);
-  pVVisManager->Draw(circle);
-  }
+    {
+      G4Transform3D dummy2;
+      G4Circle circle(posAtPhotoCathode);
+      circle.SetScreenSize(0.04);
+      circle.SetFillStyle(G4Circle::filled);
+      G4Colour colour(1.0,0.0,0.0);
+      G4VisAttributes attribs(colour);
+      circle.SetVisAttributes(attribs);
+      pVVisManager->Draw(circle,dummy2);
+    }
 }
 void RichTbHit::Print()
 {;}

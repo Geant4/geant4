@@ -53,9 +53,6 @@ G4bool RichTbSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
  
 
 
-   G4cout<<"beginning processhits"<<G4endl;
-
-
   G4Track* aTrack = aStep->GetTrack();
   if(aTrack ->GetDefinition()->GetPDGCharge() == 0.0 ) return false;
   G4double edep = aStep->GetTotalEnergyDeposit();

@@ -97,7 +97,7 @@ void RichTbSteppingAction::RichTbGenericHisto(const G4Step* aStep) {
 	      G4String tpostVol = pPostStepPoint -> GetPhysicalVolume()->GetName();
 	      
 
-	  G4cout<<richtbRunConfig-> GetRichTbParticleTypeCode()<<G4endl;
+
 
 
 	  if(richtbRunConfig-> GetRichTbParticleEnergyCode() == 1 ||

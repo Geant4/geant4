@@ -41,7 +41,7 @@ void  RichTbIOData::WriteOutHitData( const G4Event* evt ) {
   {
     G4int n_hit = RHC->entries();
     G4cout << "     " << n_hit << "Hits being written out "<<G4endl;
-    OutputDataFS<<n_hit<<G4endl;
+    // OutputDataFS<<n_hit<<G4endl;
     for (G4int ih=0; ih<n_hit; ih++ ) {
       RichTbHit* aHit = (*RHC)[ih];
       G4int aHitHpdNum = aHit -> GetCurHpdNum();

@@ -10,6 +10,7 @@
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
 #include "G4ThreeVector.hh"
+#include "G4Transform3D.hh"
 
 class RichTbVisManager;
 class RichTbHit : public G4VHit
@@ -26,9 +27,9 @@ class RichTbHit : public G4VHit
       inline void *operator new(size_t);
       inline void operator delete(void *aHit);
 
-      void Draw();
-      void DrawWithVisM(RichTbVisManager* );
-      void Print();
+  void Draw();
+  void DrawWithVisM(RichTbVisManager*);
+  void Print();
 
   private:
       G4double edep;
