@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.40 2001-09-10 10:42:58 johna Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.41 2001-11-06 13:05:42 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -141,10 +141,14 @@ NI /vis/scene/edit  (Just make a new one? JA 9/Aug/01)
   default:           all             0
   Current scene remains current.
 
-/vis/scene/notifyHandlers [<scene-name>] 
-  default:             current scene name
+/vis/scene/notifyHandlers [<scene-name>] [r[efresh]]|f[lush]]
+  default:             current scene name     refresh
   Clears and refreshes all viewers of current scene.
-  Does not issue "update" (see /vis/viewer/update).
+  The default action "refresh" does not issue "update" (see
+  /vis/viewer/update).
+  If "flush" is specified, it issues an "update" as well as "refresh".  Useful
+  for refreshing and initiating post-processing for graphics systems which
+  need post-processing.
 
 /vis/scene/remove <scene-name>
   Current scene can change or become invalid.
@@ -234,10 +238,11 @@ NI /vis/viewer/clone
   default:         current-value    m
   Moves the camera in this distance relative to standard target point.
 
-/vis/viewer/lightsThetaPhi [<theta>] [<phi>] [deg|rad]
-  default: current as default.
-/vis/viewer/lightsVector [<x>] [<y>] [<z>]
-  default: current as default.
+/vis/viewer/flush [<viewer-name>]
+  Compound command: /vis/viewer/refresh [<viewer-name>]
+                    /vis/viewer/update [<viewer-name>]
+  Useful for refreshing and initiating post-processing for graphics systems
+  which need post-processing.  This viewer becomes current.
 
 /vis/viewer/list   [<viewer-name>]    [<verbosity>]
   default:             all                  0
@@ -271,13 +276,6 @@ NI /vis/viewer/clone
   default:      current viewer name
   Resets view parameters to defaults.
   This viewer becomes current.
-
-/vis/viewer/viewpointThetaPhi [<theta>] [<phi>] [deg|rad]
-  default: current as default.
-/vis/viewer/viewpointVector [<x>] [<y>] [<z>]
-  default: current as default.
-  Set direction from target to camera.  Also changes lightpoint direction if
-  lights are set to move with camera.
 
 /vis/viewer/zoom [<factor>]
   default:            1
@@ -313,6 +311,14 @@ NI /vis/viewer/set/cutawayPlane ...
 
 /vis/viewer/set/lightsMove with-camera|with-object
 
+/vis/viewer/set/lightsThetaPhi [<theta>] [<phi>] [deg|rad]
+  default:                         60       45       deg
+  after first use: <theta> and <phi> use "current as default".
+/vis/viewer/set/lightsVector [<x>] [<y>] [<z>]
+  default:                     1     1     1
+  after first use: current as default.
+  Set direction of main lighting.
+
 /vis/viewer/set/lineSegmentsPerCircle        [<number-of-sides-per-circle>]
   default:                                         24
   Number of sides per circle in polygon/polyhedron graphical representation
@@ -328,6 +334,23 @@ NI /vis/viewer/set/cutawayPlane ...
   /vis/viewer/set/section_plane on 1 0 0 cm 1 0 0
 
 /vis/viewer/set/style w[ireframe]|s[urface]
+
+/vis/viewer/set/upThetaPhi [<theta>] [<phi>] [deg|rad]
+  default:                     90       90      deg
+  after first use: <theta> and <phi> use "current as default".
+/vis/viewer/set/upVector [<x>] [<y>] [<z>]
+  default:                 0     1     0
+  after first use: current as default.
+  Set up vector.  Viewer will attempt always to show this direction upwards.
+
+/vis/viewer/set/viewpointThetaPhi [<theta>] [<phi>] [deg|rad]
+  default:                            0        0       deg
+  after first use: <theta> and <phi> use "current as default".
+/vis/viewer/set/viewpointVector [<x>] [<y>] [<z>]
+  default:                        0     0     1
+  after first use: current as default.
+  Set direction from target to camera.  Also changes lightpoint direction if
+  lights are set to move with camera.
 
 NI /vis/viewer/notifyOption immediate|delayed ?Issue of "update" after "set"?
 
@@ -471,7 +494,9 @@ default:          error                600
   fMessengerList.push_back (new G4VisCommandViewerClear);
   fMessengerList.push_back (new G4VisCommandViewerCreate);
   fMessengerList.push_back (new G4VisCommandViewerDolly);
+  fMessengerList.push_back (new G4VisCommandViewerFlush);
   fMessengerList.push_back (new G4VisCommandViewerLights);
+  // DEPRECATED - moved to /vis/viewer/set/.
   fMessengerList.push_back (new G4VisCommandViewerList);
   fMessengerList.push_back (new G4VisCommandViewerPan);
   fMessengerList.push_back (new G4VisCommandViewerRefresh);
@@ -480,6 +505,7 @@ default:          error                600
   fMessengerList.push_back (new G4VisCommandViewerSelect);
   fMessengerList.push_back (new G4VisCommandViewerUpdate);
   fMessengerList.push_back (new G4VisCommandViewerViewpoint);
+  // DEPRECATED - moved to /vis/viewer/set/.
   fMessengerList.push_back (new G4VisCommandViewerZoom);
 
   directory = new G4UIdirectory ("/vis/viewer/set/");
