@@ -1,4 +1,4 @@
-$Id: History,v 1.3 1999-05-31 17:35:13 stesting Exp $
+$Id: History,v 1.4 1999-05-31 17:38:37 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,8 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
 May 29, 1999: John Allison
-- Added electromagnetic/lowenergy to GNUmakefile.
+- Added electromagnetic/lowenergy to GNUmakefile and
+  electromagnetic/GNUmakefile..
 
 Dec 09: J.P.Wellisch
 -hadronics tagged.
