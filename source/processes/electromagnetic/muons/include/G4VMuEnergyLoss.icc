@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMuEnergyLoss.icc,v 1.3 2001-09-28 15:44:20 maire Exp $
+// $Id: G4VMuEnergyLoss.icc,v 1.4 2003-01-17 18:54:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ---------------------------------------------------------------
 //      GEANT 4 class inlined methods file 
@@ -38,19 +38,20 @@
 // 27-05-98 corrections by L. Urban           
 // 23-10-98 cleanup L.Urban 
 // 28-09-01 suppression of theMuonPlus ..etc..data members (mma)
+// 16-01-03 Migrade to cut per region (V.Ivanchenko)
 // ---------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 inline G4double G4VMuEnergyLoss::GetContinuousStepLimit(
                                                const G4Track& track,
                                                G4double,
                                                G4double currentMinimumStep,
                                                G4double&)
 {
- 
+
   G4double Step =
-    GetConstraints(track.GetDynamicParticle(),track.GetMaterial()) ;
+    GetConstraints(track.GetDynamicParticle(),track.GetMaterialCutsCouple()) ;
 
   if((Step>0.0)&&(Step<currentMinimumStep))
      currentMinimumStep = Step ;
@@ -59,7 +60,7 @@ inline G4double G4VMuEnergyLoss::GetContinuousStepLimit(
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 inline G4bool G4VMuEnergyLoss::IsApplicable(const G4ParticleDefinition&
                                                      particle)
 {
@@ -68,4 +69,4 @@ inline G4bool G4VMuEnergyLoss::IsApplicable(const G4ParticleDefinition&
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+

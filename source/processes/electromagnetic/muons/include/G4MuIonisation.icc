@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuIonisation.icc,v 1.4 2001-08-29 16:38:05 maire Exp $
+// $Id: G4MuIonisation.icc,v 1.5 2003-01-17 18:54:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,9 +31,10 @@
 //                   by Laszlo Urban, September 1997
 // ---------------------------------------------------------------
 //
-// 20/11/97: correction on MeanFreePath for KineticEnergy > HighestLimit
-// 14-08-01: 'cleanup' of GetMeanFreePath (mma)
-// 
+// 20/11/97 correction on MeanFreePath for KineticEnergy > HighestLimit
+// 14-08-01 'cleanup' of GetMeanFreePath (mma)
+// 16-01-03 Migrade to cut per region (V.Ivanchenko)
+//
 // ---------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -41,7 +42,7 @@
 
 inline G4bool G4MuIonisation::IsApplicable(
                               const G4ParticleDefinition& particle)
-{			      
+{
    return ((&particle == G4MuonPlus::MuonPlus()  ) ||
            (&particle == G4MuonMinus::MuonMinus()) );
 }
@@ -49,21 +50,29 @@ inline G4bool G4MuIonisation::IsApplicable(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4MuIonisation::GetMeanFreePath(const G4Track& track, G4double,
-                                                G4ForceCondition*) 
+                                                G4ForceCondition*)
 {
  G4double KineticEnergy = track.GetDynamicParticle()->GetKineticEnergy();
- G4Material* aMaterial  = track.GetMaterial();
-   
+ const G4MaterialCutsCouple* couple  = track.GetMaterialCutsCouple();
+
  G4double MeanFreePath;
  G4bool isOut;
-   
+
  if (KineticEnergy > HighestKineticEnergy) KineticEnergy = HighestKineticEnergy;
  if (KineticEnergy > LowestKineticEnergy)
-         MeanFreePath = ((*theMeanFreePathTable)(aMaterial->GetIndex()))->
-                        GetValue(KineticEnergy, isOut);     
+         MeanFreePath = ((*theMeanFreePathTable)(couple->GetIndex()))->
+                        GetValue(KineticEnergy, isOut);
  else    MeanFreePath = DBL_MAX;
 
  return MeanFreePath;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4MuIonisation::SecondaryEnergyThreshold(size_t index)
+{
+  return (*secondaryEnergyCuts)[index];
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

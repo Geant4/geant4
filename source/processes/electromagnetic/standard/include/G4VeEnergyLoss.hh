@@ -21,18 +21,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeEnergyLoss.hh,v 1.11 2002-04-09 17:34:40 vnivanch Exp $
+// $Id: G4VeEnergyLoss.hh,v 1.12 2003-01-17 18:55:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 // -----------------------------------------------------------------------------
 // 18-11-98 It is a modified version of G4VeEnergyLoss: continuous energy loss
 //          with generation of subcutoff delta rays, L. Urban
-// 02-02-99 new data members ,  L.Urban 
+// 02-02-99 new data members ,  L.Urban
 // 10-02-00 modifications , new e.m. structure, L.Urban
 // 29-10-01 all static functions no more inlined (mma)
 // 08-11-01 Charge,lastCharge not data members, L.Urban
-// 
+// 15-01-03 Migrade to cut per region (V.Ivanchenko)
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
@@ -54,6 +55,7 @@
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsLinearVector.hh"
 #include "G4EnergyLossTables.hh"
+#include "G4MaterialCutsCouple.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
@@ -113,7 +115,7 @@ class G4VeEnergyLoss : public G4VEnergyLoss
     //            Tcut is the cut in energy.
     // --- Updates the value of the mean energy loss and
     //     the direction of the primary
-    // --- Computes the energy loss fluctuation.   
+    // --- Computes the energy loss fluctuation.
 
     virtual G4double GetMeanFreePath(const G4Track& track,
                                      G4double previousStepSize,
@@ -125,23 +127,25 @@ class G4VeEnergyLoss : public G4VEnergyLoss
                                             const G4Step& Step) = 0;
     // Virtual function to be overridden in the derived classes
     // ( ionisation and bremsstrahlung) .
-                                            
-                                            
+
+
   private:
 
 
     G4double GetConstraints(const G4DynamicParticle* aParticle,
-                            G4Material* aMaterial);
-                                                                  
+                            const G4MaterialCutsCouple* couple);
+
     // hide  assignment operator
-    G4VeEnergyLoss (G4VeEnergyLoss &); 
+    G4VeEnergyLoss (G4VeEnergyLoss &);
     G4VeEnergyLoss & operator=(const G4VeEnergyLoss &right);
 
   protected:
 
+    virtual G4double SecondaryEnergyThreshold(size_t index) = 0;
+
     G4PhysicsTable* theLossTable;
-     
-    G4double MinKineticEnergy ;           
+
+    G4double MinKineticEnergy ;
 
   private:
 
@@ -149,7 +153,7 @@ class G4VeEnergyLoss : public G4VEnergyLoss
 
     G4int            CounterOfProcess;
     G4PhysicsTable** RecorderOfProcess;
-                                            
+
     G4double fdEdx;                       // computed in GetConstraints
     G4double fRangeNow;                   // computed in GetConstraints
 
@@ -158,8 +162,8 @@ class G4VeEnergyLoss : public G4VEnergyLoss
     G4double cN ;                         // coeffs to compute nb of deltas
     G4int Ndeltamax ;                    // upper limit for nb of subcutoff
                                          // delta rays in one step
-    
- //  
+
+ //
  // static part of the class
  //
   public:  // With description
@@ -185,9 +189,9 @@ class G4VeEnergyLoss : public G4VEnergyLoss
     static G4double GetUpperBoundEloss();
     static G4int    GetNbinEloss();
 
- 
+
  protected:
- 
+
     //basic DEDX and Range tables
     static G4PhysicsTable* theDEDXElectronTable ;
     static G4PhysicsTable* theDEDXPositronTable ;
@@ -197,26 +201,26 @@ class G4VeEnergyLoss : public G4VEnergyLoss
     //inverse tables of the range tables
     static G4PhysicsTable* theInverseRangeElectronTable;
     static G4PhysicsTable* theInverseRangePositronTable;
-   
+
     // lab and proper time tables
     static G4PhysicsTable* theLabTimeElectronTable ;
     static G4PhysicsTable* theLabTimePositronTable ;
     static G4PhysicsTable* theProperTimeElectronTable ;
     static G4PhysicsTable* theProperTimePositronTable ;
 
-    //processes inherited from G4VeEnergyLoss 
+    //processes inherited from G4VeEnergyLoss
     //register themselves  in the static array Recorder
     //for electrons/positrons separately
     //nb of contributing processes = NbOfProcesses
     static G4int NbOfProcesses;
 
     static G4int CounterOfElectronProcess;
-    static G4int CounterOfPositronProcess ;          
+    static G4int CounterOfPositronProcess ;
     static G4PhysicsTable** RecorderOfElectronProcess;
     static G4PhysicsTable** RecorderOfPositronProcess;
-    
+
   private:
-     
+
     static G4int NbinEloss;               // number of bins in table,
                                           // calculated in BuildPhysicTable
     static G4double LowerBoundEloss;
@@ -232,15 +236,15 @@ class G4VeEnergyLoss : public G4VEnergyLoss
     static G4PhysicsTable* thepRangeCoeffATable;
     static G4PhysicsTable* thepRangeCoeffBTable;
     static G4PhysicsTable* thepRangeCoeffCTable;
-    
+
 
   public: // With description
-     
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 #include "G4VeEnergyLoss.icc"
 
 #endif
- 
+

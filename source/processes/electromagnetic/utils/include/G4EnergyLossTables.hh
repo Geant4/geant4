@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossTables.hh,v 1.12 2001-10-29 09:40:51 maire Exp $
+// $Id: G4EnergyLossTables.hh,v 1.13 2003-01-17 18:55:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id:
@@ -43,7 +43,7 @@
 // A utility class, containing the energy loss tables
 // for each particle
 //
-// Energy loss processes have to register their tables with this 
+// Energy loss processes have to register their tables with this
 // class. The responsibility of creating and deleting the tables
 // remains with the energy loss classes.
 // -----------------------------------------------------------------------------
@@ -51,13 +51,14 @@
 // P. Urban, 06/04/1998
 // L. Urban, 27/05/1988 , modifications + new functions added
 // L.Urban , 13/10/98 , revision
-// L.Urban,  26/10/98 , revision, Interpolate removed 
-// L.Urban , 08/02/99,  cache mechanism 
+// L.Urban,  26/10/98 , revision, Interpolate removed
+// L.Urban , 08/02/99,  cache mechanism
 // L.Urban , 12/04/99 , bug fixed
 // don't use the helper class.
 // It can't be hidden for Rogue Wave uses it.
 // 10.11.99: moved from RWT hash dictionary to STL map, G.Barrand, M.Maire
 // 26.10.01: all static functions movev from .icc to .cc file (mma)
+// 15.01.03 Add interfaces required for "cut per region" (V.Ivanchenko)
 //
 // -----------------------------------------------------------------------------
 
@@ -67,10 +68,10 @@ class G4EnergyLossTablesHelper {
 
 friend class G4EnergyLossTables;
   // the only instances are within the class G4EnergyLossTables
-  
+
 public:
   G4EnergyLossTablesHelper();
-  
+
 private:
   G4EnergyLossTablesHelper(const G4PhysicsTable* aDEDXTable,
 			   const G4PhysicsTable* aRangeTable,
@@ -94,6 +95,8 @@ private:
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class G4MaterialCutsCouple;
 
 class G4EnergyLossTables {
 
@@ -120,25 +123,25 @@ public:
   static G4double GetRange(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergy,
-    const G4Material *aMaterial);  
+    const G4Material *aMaterial);
   static G4double GetLabTime(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergy,
-    const G4Material *aMaterial);  
+    const G4Material *aMaterial);
   static G4double GetDeltaLabTime(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergyStart,
     G4double KineticEnergyEnd,
-    const G4Material *aMaterial);  
+    const G4Material *aMaterial);
   static G4double GetProperTime(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergy,
-    const G4Material *aMaterial);  
+    const G4Material *aMaterial);
   static G4double GetDeltaProperTime(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergyStart,
     G4double KineticEnergyEnd,
-    const G4Material *aMaterial);  
+    const G4Material *aMaterial);
 
   static G4double GetPreciseDEDX(
     const G4ParticleDefinition *aParticle,
@@ -147,12 +150,35 @@ public:
   static G4double GetPreciseRangeFromEnergy(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergy,
-    const G4Material *aMaterial);  
+    const G4Material *aMaterial);
   static G4double GetPreciseEnergyFromRange(
     const G4ParticleDefinition *aParticle,
     G4double range,
-    const G4Material *aMaterial); 
-  
+    const G4Material *aMaterial);
+
+  // get the DEDX or the range for a given particle/energy/materialCutsCouple
+  static G4double GetDEDX(
+    const G4ParticleDefinition *aParticle,
+    G4double KineticEnergy,
+    const G4MaterialCutsCouple *couple);
+  static G4double GetRange(
+    const G4ParticleDefinition *aParticle,
+    G4double KineticEnergy,
+    const G4MaterialCutsCouple *couple);
+
+  static G4double GetPreciseDEDX(
+    const G4ParticleDefinition *aParticle,
+    G4double KineticEnergy,
+    const G4MaterialCutsCouple *couple);
+  static G4double GetPreciseRangeFromEnergy(
+    const G4ParticleDefinition *aParticle,
+    G4double KineticEnergy,
+    const G4MaterialCutsCouple *couple);
+  static G4double GetPreciseEnergyFromRange(
+    const G4ParticleDefinition *aParticle,
+    G4double range,
+    const G4MaterialCutsCouple *couple);
+
   // to be called only by energy loss processes
   static void Register(
     const G4ParticleDefinition* p,
@@ -172,7 +198,7 @@ public:
 private:
   typedef G4std::map<K,G4EnergyLossTablesHelper,G4std::less<K> > helper_map;
   static helper_map dict;
-  
+
   static G4EnergyLossTablesHelper GetTables(const G4ParticleDefinition* p);
 
   static G4EnergyLossTablesHelper t ;

@@ -21,19 +21,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEnergyLoss.hh,v 1.14 2002-09-02 15:46:55 maire Exp $
+// $Id: G4VEnergyLoss.hh,v 1.15 2003-01-17 18:55:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
+//
 // ------------------------------------------------------------
 // 26.10.01 static inline functions moved to .cc file (mma)
 // 08.11.01 some static methods,data members are not static L.Urban
+// 15.01.03 Migrade to cut per region (V.Ivanchenko)
 // ------------------------------------------------------------
-// 
-// Class Description 
+//
+// Class Description
 //
 //  General service class for the energy loss classes
-//  
+//
 //  It contains code needed to compute the range tables,
 //  time tables, the inverse range tables and some auxiliary
 //  tables.
@@ -44,7 +45,7 @@
 //
 
 //  -----------------------------------------------------------
-//  created  on 28 January 2000  by L. Urban               
+//  created  on 28 January 2000  by L. Urban
 //  -----------------------------------------------------------
 
 #ifndef G4VEnergyLoss_h
@@ -61,9 +62,9 @@
 
 class G4EnergyLossMessenger;
 
-class G4VEnergyLoss : public G4VContinuousDiscreteProcess 
+class G4VEnergyLoss : public G4VContinuousDiscreteProcess
 {
-  public:     
+  public:
 
       G4VEnergyLoss(const G4String& ,
 				   G4ProcessType   aType = fNotDefined );
@@ -93,7 +94,7 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
     // code for the energy loss fluctuation
 
     G4double GetLossWithFluct(const G4DynamicParticle* aParticle,
-                              G4Material* aMaterial,
+                              const G4Material* aMaterial,
                               G4double ChargeSquare,
                               G4double	 MeanLoss,
                               G4double step);
@@ -115,7 +116,7 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
                       G4PhysicsTable* ProperTimeTable,
                       G4double Tmin,G4double Tmax,G4int nbin);
 
-    // Build tables of coefficients needed for inverting the range table 
+    // Build tables of coefficients needed for inverting the range table
     G4PhysicsTable*
     BuildRangeCoeffATable(G4PhysicsTable* theRangeTable,
                           G4PhysicsTable* theCoeffATable,
@@ -140,7 +141,7 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
 
    private:
 
-  // hide default constructor and assignment operator as private 
+  // hide default constructor and assignment operator as private
       G4VEnergyLoss();
       G4VEnergyLoss & operator=(const G4VEnergyLoss &right);
 
@@ -179,7 +180,7 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
   private:
 
     // data members to speed up the fluctuation calculation
-    G4Material* lastMaterial;
+    const G4Material* lastMaterial;
     G4int imat;
     G4double f1Fluct,f2Fluct,e1Fluct,e2Fluct,rateFluct,ipotFluct;
     G4double e1LogFluct,e2LogFluct,ipotLogFluct;
@@ -189,7 +190,7 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
     // for some integration routines
     G4double taulow,tauhigh,ltaulow,ltauhigh;
 
-  // static part of the class 
+  // static part of the class
 
   public:  // With description
 
@@ -219,8 +220,9 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
 
   protected: // With description
 
-     static G4bool EqualCutVectors( G4double* vec1, G4double* vec2 );	 
+     static G4bool EqualCutVectors( G4double* vec1, G4double* vec2 );
      static G4double* CopyCutVectors( G4double* dest, G4double* source );
+     G4bool CutsWhereModified();
 
   // data members
   protected:

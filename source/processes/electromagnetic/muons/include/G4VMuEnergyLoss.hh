@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMuEnergyLoss.hh,v 1.7 2001-10-29 13:53:18 maire Exp $
+// $Id: G4VMuEnergyLoss.hh,v 1.8 2003-01-17 18:54:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 //      GEANT 4 class header file 
@@ -41,17 +41,18 @@
 // This class creates static muplus/muminus dE/dx and range tables ,
 // which tables can be used by other processes.
 // ************************************************************
-// 27-05-98 some corrections by L.Urban 
-// 23-10-98 cleanup L.Urban 
-// 10-02-00 corrections due to new e.m. structure L.Urban 
+// 27-05-98 some corrections by L.Urban
+// 23-10-98 cleanup L.Urban
+// 10-02-00 corrections due to new e.m. structure L.Urban
 // 10-09-01 loss+ mechanism has been implemented (subcutoff delta rays), L.Urban
 // 28-09-01 suppression of theMuonPlus ..etc..data members (mma)
 // 29-10-01 all static functions no more inlined (mma)
+// 16-01-03 Migrade to cut per region (V.Ivanchenko)
 // ------------------------------------------------------------
- 
+
 #ifndef G4VMuEnergyLoss_h
 #define G4VMuEnergyLoss_h 1
- 
+
 #include "G4ios.hh"
 #include "g4std/fstream"
 #include "g4std/iomanip"
@@ -71,16 +72,17 @@
 #include "G4MuonPlus.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsLinearVector.hh"
- 
+#include "G4MaterialCutsCouple.hh"
+
 class G4EnergyLossMessenger ;
- 
+
 class G4VMuEnergyLoss : public G4VEnergyLoss
- 
+
 {
   public:
 
     G4VMuEnergyLoss(const G4String& );
-    
+
     virtual ~G4VMuEnergyLoss();
 
     G4bool IsApplicable(const G4ParticleDefinition&);
@@ -91,7 +93,7 @@ class G4VMuEnergyLoss : public G4VEnergyLoss
                                     const G4Track& track,
                                     G4double previousStepSize,
                                     G4double currentMinimumStep,
-                                    G4double& currentSafety) ; 
+                                    G4double& currentSafety) ;
 
     G4VParticleChange* AlongStepDoIt(const G4Track& track ,const G4Step& Step) ;
 
@@ -109,20 +111,19 @@ class G4VMuEnergyLoss : public G4VEnergyLoss
 
   private:
 
-  // hide  assignment operator 
+  // hide  assignment operator
     G4VMuEnergyLoss(G4VMuEnergyLoss &);
     G4VMuEnergyLoss & operator=(const G4VMuEnergyLoss &right);
 
     G4double GetConstraints(const G4DynamicParticle *aParticle,
-                            G4Material *aMaterial);
-                                       
+                            const G4MaterialCutsCouple* couple);
+
 
   protected:
 
+    virtual G4double SecondaryEnergyThreshold(size_t index) = 0;
+
     G4PhysicsTable* theLossTable ;
-   
-    G4double* lastgammaCutInRange ;
-    G4double* lastelectronCutInRange ;
 
   private:
 
@@ -134,13 +135,13 @@ class G4VMuEnergyLoss : public G4VEnergyLoss
 
     G4PhysicsTable** RecorderOfProcess;
     G4int CounterOfProcess;
- 
+
 
     // fdEdx=(-dE/dx)
     // computed in GetConstraints at every call;
     G4double fdEdx;
 
-    // fRangeNow is the actual range of the particle 
+    // fRangeNow is the actual range of the particle
     //  computed in GetConstraints
     G4double fRangeNow ;
 
@@ -181,16 +182,16 @@ class G4VMuEnergyLoss : public G4VEnergyLoss
     static G4PhysicsTable* theRangemuminusTable;
 
     static G4PhysicsTable* theInverseRangemuplusTable;
-    static G4PhysicsTable* theInverseRangemuminusTable; 
+    static G4PhysicsTable* theInverseRangemuminusTable;
 
     static G4PhysicsTable* theLabTimemuplusTable;
-    static G4PhysicsTable* theLabTimemuminusTable; 
-    
+    static G4PhysicsTable* theLabTimemuminusTable;
+
     static G4PhysicsTable* theProperTimemuplusTable;
     static G4PhysicsTable* theProperTimemuminusTable;
 
 
-  //  processes inherited from G4muEnergyLoss 
+  //  processes inherited from G4muEnergyLoss
   //   register themselves  in the static array Recorder
     static G4int NbOfProcesses;
     static G4PhysicsTable** RecorderOfmuplusProcess;
@@ -221,7 +222,7 @@ class G4VMuEnergyLoss : public G4VEnergyLoss
                                          // delta rays in one step
 
 };
- 
+
 #include "G4VMuEnergyLoss.icc"
 
 #endif

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.11 2002-10-30 11:30:47 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.12 2003-01-17 18:55:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------- G4MultipleScattering physics process --------------------------
@@ -39,7 +39,8 @@
 //          (L.Urban)
 // 24-04-02 some minor changes in boundary algorithm, L.Urban
 // 24-05-02 changes in data members, L.Urban
-// 30-10-02 changes in data members, L.Urban 
+// 30-10-02 changes in data members, L.Urban
+// 15-01-03 Migrade to cut per region (V.Ivanchenko)
 //------------------------------------------------------------------------------
 
 // class description
@@ -115,7 +116,7 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
                                    G4double& currentSafety); 
      // It performs the true step length --> geometrical step length
      // transformation. It is invoked by the
-     // AlongStepGetPhysicalInteractionLength method.  
+     // AlongStepGetPhysicalInteractionLength method.
 
    G4double GetMeanFreePath(const G4Track& aTrack,
                             G4double previousStepSize,
@@ -125,19 +126,19 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
      // This function overloads a virtual function of the base class.
      // It is invoked by the ProcessManager of the Particle.
 
-			    
+
    G4double GetTransportMeanFreePath(
-                          G4double KineticEnergy,G4Material* material);
+                          G4double KineticEnergy, const G4Material* material);
      // Just a utility method to get the values of the transport
      //  mean free path . (It is not used inside the class.)
-   
+
    G4VParticleChange* AlongStepDoIt(const G4Track& aTrack,const G4Step& aStep);
      // The geometrical step length --> true path length transformation
      // is performed here (the inverse of the transformation done
-     // by GetContinuousStepLimit).  
+     // by GetContinuousStepLimit).
 
    G4VParticleChange* PostStepDoIt(const G4Track& aTrack,const G4Step& aStep);
-     // It computes the final state of the particle: samples the 
+     // It computes the final state of the particle: samples the
      // scattering angle and computes the lateral displacement.
      // The final state is returned as a ParticleChange object.
      // This function overloads a virtual function of the base class.
@@ -155,14 +156,14 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
    void SetFacrange(G4double val)  {facrange=val;
                                     nsmallstep = G4int(log((cf+facrange-1.)/
                                                  facrange)/log(cf))+1 ;
-                                    G4cout << " fr=" << facrange 
+                                    G4cout << " fr=" << facrange
                                            << "  nsmall=" << nsmallstep << G4endl ;};
      // Steplimit after boundary crossing = facrange*range
      // estimated nb of steps at boundary nsmallstep = 1/facrange
 
    void SetLateralDisplacementFlag(G4bool flag) {fLatDisplFlag = flag;};
      // lateral displacement to be/not to be computed
-   
+
    void SetNuclCorrPar(G4double val)            {NuclCorrPar = val;};
    void SetFactPar(G4double val)                {FactPar = val;};
 
@@ -174,7 +175,7 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
                                    G4double AtomicNumber,
                                    G4double AtomicWeight);
      // It computes the transport cross section.
-     // The transport mean free path is 1/(transport cross section). 
+     // The transport mean free path is 1/(transport cross section).
 
  private:
 
@@ -195,7 +196,8 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
    G4int    TotBin;
 
    G4int       materialIndex;
-  
+   G4int       coupleIndex;
+
    G4double tLast;
    G4double zLast;
 

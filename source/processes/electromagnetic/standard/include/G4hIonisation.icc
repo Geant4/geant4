@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.icc,v 1.11 2002-04-09 17:34:41 vnivanch Exp $
+// $Id: G4hIonisation.icc,v 1.12 2003-01-17 18:55:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,7 +33,8 @@
 // 20/11/97: correction on MeanFreePath for KineticEnergy > HighestLimit
 // 14-08-01: 'cleanup' of GetMeanFreePath (mma)
 // 09-04-02: e+- are not applicable (V.Ivanchenko)
-// 
+// 15-01-03: Migrade to cut per region (V.Ivanchenko)
+//
 //------------------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,24 +49,31 @@ inline G4bool G4hIonisation::IsApplicable(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4hIonisation::GetMeanFreePath(const G4Track& track, G4double,
-                                               G4ForceCondition*) 
+                                               G4ForceCondition*)
 {
  const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
  G4double kinEnergy = (dynParticle->GetKineticEnergy())*initialMass/(dynParticle->GetMass());
  G4double q = dynParticle->GetCharge()/eplus;
  G4double currentChargeSquare = q*q;
- G4Material* aMaterial  = track.GetMaterial();
-   
+ const G4MaterialCutsCouple* couple  = track.GetMaterialCutsCouple();
+
  G4double MeanFreePath;
  G4bool isOut;
-    
+
  if(kinEnergy > UpperBoundLambda) kinEnergy = UpperBoundLambda;
  if(kinEnergy > LowerBoundLambda)
-         MeanFreePath = (((*theMeanFreePathTable)(aMaterial->GetIndex()))->
-                        GetValue(kinEnergy, isOut))/currentChargeSquare; 
+         MeanFreePath = (((*theMeanFreePathTable)(couple->GetIndex()))->
+                        GetValue(kinEnergy, isOut))/currentChargeSquare;
  else    MeanFreePath = DBL_MAX;
 
  return MeanFreePath;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4hIonisation::SecondaryEnergyThreshold(size_t index)
+{
+  return G4std::max((*secondaryEnergyCuts)[index],Tmincut);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

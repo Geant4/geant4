@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisation.hh,v 1.16 2002-04-09 17:34:41 vnivanch Exp $
+// $Id: G4eIonisation.hh,v 1.17 2003-01-17 18:55:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //--------------- G4eIonisation physics process --------------------------------
@@ -32,6 +32,7 @@
 // 13-08-01 new function ComputeRestrictedMeandEdx() (mma)
 // 19-09-01 come back to previous ProcessName "eIoni"
 // 29-10-01 all static functions no more inlined (mma)
+// 15-01-03 Migrade to cut per region (V.Ivanchenko)
 //
 //------------------------------------------------------------------------------
 
@@ -44,31 +45,32 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 #ifndef G4eIonisation_h
 #define G4eIonisation_h 1
- 
+
 #include "G4VeEnergyLoss.hh"
+#include "G4MaterialCutsCouple.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
-class G4eIonisation : public G4VeEnergyLoss 
- 
+
+class G4eIonisation : public G4VeEnergyLoss
+
 {
   public:   // with description
- 
-    G4eIonisation(const G4String& processName = "eIoni"); 
+
+    G4eIonisation(const G4String& processName = "eIoni");
 
    ~G4eIonisation();
 
     G4bool IsApplicable(const G4ParticleDefinition&);
-      // return true for e+/e-, false otherwise 
-    
+      // return true for e+/e-, false otherwise
+
     void BuildPhysicsTable(const G4ParticleDefinition& aParticleType);
       // this function overloads a virtual function of the base class.
       // It is invoked by the G4ParticleWithCuts::SetCut() method.
       // It invokes BuildLambdaTable(), BuildLossTable(), BuildDEDXTable()
-        
+
     void BuildLossTable(const G4ParticleDefinition& aParticleType);
       // build the dE/dx tables due to the ionisation, for every materials.
       // (restricted stopping power, Berger-Seltzer formula)
@@ -76,22 +78,22 @@ class G4eIonisation : public G4VeEnergyLoss
     void BuildLambdaTable(const G4ParticleDefinition& aParticleType);
       // build mean free path tables for the delta rays production.
       // the tables are built for every materials.
-      
+
     G4bool StorePhysicsTable(G4ParticleDefinition* ,
 		             const G4String& directory, G4bool);
       // store eLoss and MeanFreePath tables into an external file
       // specified by 'directory' (must exist before invokation)
-      
-    G4bool RetrievePhysicsTable(G4ParticleDefinition* ,   
+
+    G4bool RetrievePhysicsTable(G4ParticleDefinition* ,
 			        const G4String& directory, G4bool);
       // retrieve eLoss and MeanFreePath tables from an external file
       // specified by 'directory'
-            
+
     void PrintInfoDefinition();
       // Print few lines of informations about the process: validity range,
       // origine ..etc..
       // Invoked by BuildPhysicsTable().
-          
+
     G4double GetMeanFreePath(const G4Track& track,
                              G4double previousStepSize,
                              G4ForceCondition* condition );
@@ -100,52 +102,56 @@ class G4eIonisation : public G4VeEnergyLoss
       // The previousStepSize and G4ForceCondition* are not used.
       // This function overloads a virtual function of the base class.
       // It is invoked by the ProcessManager of the Particle.
-        
-    G4VParticleChange *PostStepDoIt(const G4Track& track,         
-                                    const G4Step& Step );                 
+
+    G4VParticleChange *PostStepDoIt(const G4Track& track,
+                                    const G4Step& Step );
       // It computes the final state of the process (at end of step),
-      // returned as a ParticleChange object.			    
+      // returned as a ParticleChange object.
       // This function overloads a virtual function of the base class.
       // It is invoked by the ProcessManager of the Particle.
-       
-    G4double GetLambda(G4double KineticEnergy, G4Material* material);
+
+    G4double GetLambda(G4double KineticEnergy, const G4MaterialCutsCouple* couple);
       // It returns the MeanFreePath of the process for a (energy, material)
 
   protected:   // with description
-  
+
     virtual G4double ComputeRestrictedMeandEdx(
                             const G4ParticleDefinition& aParticleType,
                             G4double KineticEnergy,
                             const G4Material* material,
                             G4double DeltaThreshold);
-      // computes restricted mean dE/dx in Geant4 internal units. 
-            
+      // computes restricted mean dE/dx in Geant4 internal units.
+
     virtual G4double ComputeCrossSectionPerAtom(
                             const G4ParticleDefinition& aParticleType,
                             G4double KineticEnergy,
                             G4double AtomicNumber,
                             G4double DeltaThreshold);
-      // computes total cross section per atom in Geant4 internal units.      
-     			    
+      // computes total cross section per atom in Geant4 internal units.
+
   protected:
-                                
+
+    virtual G4double SecondaryEnergyThreshold(size_t index);
+
     G4PhysicsTable* theMeanFreePathTable;
 
   private:
 
-  // hide assignment operator 
-  G4eIonisation & operator=(const G4eIonisation &right);
-  G4eIonisation(const G4eIonisation&);
+    // hide assignment operator
+    G4eIonisation & operator=(const G4eIonisation &right);
+    G4eIonisation(const G4eIonisation&);
 
   private:
 
     static G4double LowerBoundLambda;    // binning for mean free path table
     static G4double UpperBoundLambda;
     static G4int    NbinLambda;
-    
+
     G4double LowestKineticEnergy;        // binning for dE/dx table
     G4double HighestKineticEnergy;
     G4int    TotBin;
+
+    const G4std::vector<G4double>* secondaryEnergyCuts;
 
   public:  // with description
 
@@ -153,17 +159,17 @@ class G4eIonisation : public G4VeEnergyLoss
     static void SetUpperBoundLambda(G4double val);
     static void SetNbinLambda(G4int n);
         // set the parameters of the mean free path table.
-	
-    static G4double GetLowerBoundLambda(); 
-    static G4double GetUpperBoundLambda(); 
+
+    static G4double GetLowerBoundLambda();
+    static G4double GetUpperBoundLambda();
     static G4int GetNbinLambda();
         // get the parameters of the mean free path table.
-	
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 #include "G4eIonisation.icc"
- 
+
 #endif
- 
+

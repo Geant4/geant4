@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.hh,v 1.15 2002-04-09 17:34:41 vnivanch Exp $
+// $Id: G4VhEnergyLoss.hh,v 1.16 2003-01-17 18:55:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------- G4VhEnergyLoss physics process --------------------------------
@@ -37,20 +37,21 @@
 // tables with scaled kinetic energy.
 //
 // -----------------------------------------------------------------------------
-// 7/10/98 some bugs fixed + some cleanup , L.Urban 
+// 7/10/98 some bugs fixed + some cleanup , L.Urban
 // 22/10/98 cleanup , L.Urban
 // 02/02/99 several bugs fixed, L.Urban
 // 10/02/00 modifications , new e.m. structure, L.Urban
 // 10/09/01 bugfix in subcutoff delta generation, L.Urban
 // 29-10-01 all static functions no more inlined (mma)
 // 08-11-01 BuildDEDXTable not static,Charge local variable, L.Urban
+// 15-01-03 Migrade to cut per region (V.Ivanchenko)
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef G4VhEnergyLoss_h
 #define G4VhEnergyLoss_h 1
- 
+
 #include "G4ios.hh"
 #include "globals.hh"
 #include "Randomize.hh"
@@ -65,11 +66,12 @@
 #include "G4Step.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsLinearVector.hh"
+#include "G4MaterialCutsCouple.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 class G4VhEnergyLoss : public G4VEnergyLoss
- 
+
 {
   public:
 
@@ -84,7 +86,7 @@ class G4VhEnergyLoss : public G4VEnergyLoss
     G4double GetContinuousStepLimit(const G4Track& track,
                                     G4double previousStepSize,
                                     G4double currentMinimumStep,
-                                    G4double& currentSafety); 
+                                    G4double& currentSafety);
 
     G4VParticleChange* AlongStepDoIt(const G4Track& track, const G4Step& Step);
 
@@ -93,27 +95,29 @@ class G4VhEnergyLoss : public G4VEnergyLoss
                                      G4ForceCondition* condition) = 0;
 
     virtual G4VParticleChange* PostStepDoIt(const G4Track& track,
-                                            const G4Step& Step) = 0; 
+                                            const G4Step& Step) = 0;
 
   private:
 
     G4double GetConstraints(const G4DynamicParticle *aParticle,
-                            G4Material *aMaterial);
+                            const G4MaterialCutsCouple *couple);
 
     G4double EnergyLossFluctuation(const G4DynamicParticle *aParticle,
-                                         G4Material *aMaterial,
+                                   const G4Material *aMaterial,
                                          G4double ChargeSquare,
                                          G4double MeanLoss,
                                          G4double Step);
-					 
+
     //hide assignment operator
     G4VhEnergyLoss(G4VhEnergyLoss &);
     G4VhEnergyLoss & operator=(const G4VhEnergyLoss &right);
-                                       
+
   protected:
 
+    virtual G4double SecondaryEnergyThreshold(size_t index) = 0;
+
     G4PhysicsTable* theLossTable;
-   
+
     G4double MinKineticEnergy;
 
   private:
@@ -141,7 +145,7 @@ class G4VhEnergyLoss : public G4VEnergyLoss
     static G4int GetNbOfProcesses();
     // Gets number of processes giving contribution to the energy loss
     // ( default value = 1)
- 
+
 
     static void SetLowerBoundEloss(G4double val);
     static void SetUpperBoundEloss(G4double val);
@@ -169,7 +173,7 @@ class G4VhEnergyLoss : public G4VEnergyLoss
     static G4PhysicsTable* theProperTimepTable;
     static G4PhysicsTable* theProperTimepbarTable;
 
-    //  processes inherited from G4VhEnergyLoss 
+    //  processes inherited from G4VhEnergyLoss
     //   register themselves  in the static array Recorder
     static G4int NbOfProcesses;
     static G4PhysicsTable** RecorderOfpProcess;
@@ -177,9 +181,6 @@ class G4VhEnergyLoss : public G4VEnergyLoss
     static G4int CounterOfpProcess;
     static G4int CounterOfpbarProcess;
 
-    // cut in range
-    static G4double* ptableElectronCutInRange;
-    static G4double* pbartableElectronCutInRange;
 
   private:
 
@@ -209,8 +210,8 @@ class G4VhEnergyLoss : public G4VEnergyLoss
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 #include "G4VhEnergyLoss.icc"
 
 #endif
- 
+
