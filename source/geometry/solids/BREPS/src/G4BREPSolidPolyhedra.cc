@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPolyhedra.cc,v 1.19 2001-08-01 21:32:59 radoone Exp $
+// $Id: G4BREPSolidPolyhedra.cc,v 1.20 2002-02-12 18:39:25 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -74,10 +74,11 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
 {
   G4int sections           = num_z_planes - 1;
   
-  if(dphi >= 2*pi-perMillion)
+  if( dphi >= 2*pi-perMillion ) {
     nb_of_surfaces = 2*(sections * sides) + 2;
-  else
+  } else {
     nb_of_surfaces = 2*(sections * sides) + 4;
+  }
 
 
   //SurfaceVec = new G4Surface*[nb_of_surfaces];
@@ -102,67 +103,71 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
     TmpAxis= XAxis;
     TmpAxis.rotateZ(phi1);
     Length = z_values[a+1] - z_values[a];
-
-    // L. Broglia
-    // Be careful in the construction of the planes
-    // See G4FPlane 
     
-    // Create sides
-    for(G4int b=0;b<sides;b++)
-    {
-      G4Point3DVector PointList(4);
+    if( Length != 0.0 ) {
+      // L. Broglia: Be careful in the construction of the planes, see G4FPlane 
+      for( G4int b = 0; b < sides; b++ ) {
+        // Create inner side by calculation of points for the planar surface boundary
+        // The order of the points gives the surface sense -> changed to explicit sense set-up by R. Chytracek, 12/02/2002
+        // We must check if a pair of two consecutive RMINs is not = 0.0, this means no inner plane exists!
+        if( RMIN[a] != 0.0 ) {
+          if( RMIN[a+1] != 0.0 ) {
+            // Standard case
+            MaxSurfaceVec[Count] = CreateTrapezoidalSurface( RMIN[a], RMIN[a+1], LocalOrigin, Length,
+                                                             TmpAxis, PartAngle, EInverse );
+          } else {
+            // The special case of r1 > r2 where we end at the point (0,0,z[a+1])
+            MaxSurfaceVec[Count] = CreateTriangularSurface( RMIN[a], RMIN[a+1], LocalOrigin, Length,
+                                                            TmpAxis, PartAngle, EInverse );
+          }
+        } else if( RMIN[a+1] != 0.0 ) {
+            // The special case of r1 < r2 where we start at the point ( 0,0,z[a])
+            MaxSurfaceVec[Count] = CreateTriangularSurface( RMIN[a], RMIN[a+1], LocalOrigin, Length,
+                                                            TmpAxis, PartAngle, EInverse );
+        } else {
+          // Insert nothing into the vector of sufaces, we'll replicate the vector anyway later
+          MaxSurfaceVec[Count] = 0;
+          // We need to reduce the number of planes by 1, one we have just skipped
+          nb_of_surfaces--;
+        }      
 
-      // Create inner side
-      // Calc points for the planar surface boundary
-      // The order of the point give the sense 
-      PointList[0] = LocalOrigin + (RMIN[a] * TmpAxis);
-      PointList[3] = LocalOrigin + (Length*Axis) + (RMIN[a+1] * TmpAxis);
-      TmpAxis.rotateZ(PartAngle);
-      PointList[2] = LocalOrigin + (Length*Axis) + (RMIN[a+1] * TmpAxis);
-      PointList[1] = LocalOrigin + (RMIN[a] * TmpAxis);   
+        Count++;
 
-      // We must check if a pair of two consecutive RMINs is not = 0.0
-      // which means no inner planes can exist!
-      if( RMIN[a] != 0.0 && RMIN[a+1] != 0.0 )
-      {
-        // Add to surface list and reverse sense	  
-        MaxSurfaceVec[Count] = new G4FPlane( &PointList, 0, 0);
+        // Rotate axis back for the other surface point calculation
+        TmpAxis.rotateZ(-PartAngle);
+
+        // Create outer side
+
+        if( RMAX[a] != 0.0 ) {
+          if( RMAX[a+1] != 0.0 ) {
+            // Standard case
+            MaxSurfaceVec[Count] = CreateTrapezoidalSurface( RMAX[a], RMAX[a+1], LocalOrigin, Length,
+                                                             TmpAxis, PartAngle, ENormal );
+          } else {
+            // The special case of r1 > r2 where we end at the point (0,0,z[a+1])
+            MaxSurfaceVec[Count] = CreateTriangularSurface( RMAX[a], RMAX[a+1], LocalOrigin, Length,
+                                                            TmpAxis, PartAngle, ENormal );
+          }
+        } else if( RMAX[a+1] != 0.0 ) {
+            // The special case of r1 < r2 where we start at the point ( 0,0,z[a])
+            MaxSurfaceVec[Count] = CreateTriangularSurface( RMAX[a], RMAX[a+1], LocalOrigin, Length,
+                                                            TmpAxis, PartAngle, ENormal );
+        } else {
+            // Two consecutive RMAX values can't be zero as it's against the definition of BREP polyhedra
+            G4Exception( "\nTwo consecutive RMAX values can't be zero!\n" );
+        }
+
+        Count++;
+
+        LocalOrigin = LocalOrigin + (Length*Axis);
       }
-      else
-      {
-        // Insert nothing into the vector of sufaces, we'll replicate the vector anyway later
-        MaxSurfaceVec[Count] = 0;
-        // We need to reduce the number of planes by 1, one we have just skipped
-        nb_of_surfaces--;
-      }      
-
-      Count++;
-
-      // Rotate axis back for the other surface point calculation
-      TmpAxis.rotateZ(-PartAngle);
-      
-      // Create outer side
-      // Calc points for the planar surface boundary
-      // The order of the point give the sense 	  
-      G4Point3DVector PointList2(4);
-      PointList2[0] = LocalOrigin + (RMAX[a] * TmpAxis);
-      PointList2[3] = LocalOrigin + (Length*Axis) + (RMAX[a+1] * TmpAxis);
-      TmpAxis.rotateZ(PartAngle);
-      PointList2[2] = LocalOrigin + (Length*Axis) + (RMAX[a+1] * TmpAxis);
-      PointList2[1] = LocalOrigin + (RMAX[a] * TmpAxis);	  
-           
-      // Add to surface list and set sense	   
-      MaxSurfaceVec[Count] = new G4FPlane(&PointList2);
-      
-      Count++;
+    } else {
+      // We're about to create a planar surface perpendicular to z-axis
     }
-    
-    LocalOrigin = LocalOrigin + (Length*Axis);
   }
   
   // Create end planes
-  if(dphi >= 2*pi-perMillion)
-  {
+  if(dphi >= 2*pi-perMillion) {
     // Create only end planes
     G4Point3DVector EndPointList(sides);
     G4Point3DVector InnerPointList(sides);
@@ -172,8 +177,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
     TmpAxis.rotateZ(phi1);	
     TmpAxis.rotateZ(dphi);
     
-    for(G4int c=0;c<sides;c++)
-    {
+    for(G4int c=0;c<sides;c++) {
       // outer polyline for origin end
       EndPointList[c] = Origin + (RMAX[0] * TmpAxis);
       InnerPointList[c] = Origin + (RMIN[0] * TmpAxis);
@@ -182,54 +186,36 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
       TmpAxis.rotateZ(-PartAngle);
     }
     
-    if( RMIN[0] != 0.0 )
-    {
+    if( RMIN[0] != 0.0 && RMAX[0] != 0.0 ) {
       // Add to surface list and set sense
-      MaxSurfaceVec[MaxNbOfSurfaces-2] = new G4FPlane(&EndPointList, &InnerPointList);
-    }
-    else
-    {
+//      MaxSurfaceVec[MaxNbOfSurfaces-2] = new G4FPlane(&EndPointList, &InnerPointList);
+      MaxSurfaceVec[Count] = new G4FPlane(&EndPointList, &InnerPointList, EInverse);
+    } else if( RMAX[0] != 0.0 ) {
       // Add to surface list and set sense
-      MaxSurfaceVec[MaxNbOfSurfaces-2] = new G4FPlane(&EndPointList, 0);
+//      MaxSurfaceVec[MaxNbOfSurfaces-2] = new G4FPlane(&EndPointList, 0);
+      MaxSurfaceVec[Count] = new G4FPlane(&EndPointList, 0, EInverse);
+    } else {
+      // No surface being created
+      MaxSurfaceVec[Count] = 0;
+      nb_of_surfaces--;
     }
+    
+    Count++;
 
-    if( RMIN[sections] != 0.0 )
-    {    
+    if( RMIN[sections] != 0.0 && RMAX[sections] != 0.0 ) {    
       // Add to surface list and reverse sense
-      MaxSurfaceVec[MaxNbOfSurfaces-1] = new G4FPlane(&EndPointList2, &InnerPointList2, 0);
-    }
-    else
-    {
+//      MaxSurfaceVec[MaxNbOfSurfaces-1] = new G4FPlane(&EndPointList2, &InnerPointList2, 0);
+      MaxSurfaceVec[Count] = new G4FPlane(&EndPointList2, &InnerPointList2, 0);
+    } else if( RMAX[sections] != 0.0 ) {
       // Add to surface list and reverse sense
-      MaxSurfaceVec[MaxNbOfSurfaces-1] = new G4FPlane(&EndPointList2, 0, 0);
+//      MaxSurfaceVec[MaxNbOfSurfaces-1] = new G4FPlane(&EndPointList2, 0, 0);
+      MaxSurfaceVec[Count] = new G4FPlane(&EndPointList2, 0, 0);
+    } else {
+      // No surface being created
+      MaxSurfaceVec[Count] = 0;
+      nb_of_surfaces--;
     }
-    
-    // Now let's replicate the relevant surfaces into polyhedra's vector of surfaces
-    SurfaceVec = new G4Surface*[nb_of_surfaces];
-    G4int sf = 0;
-    for( G4int srf = 0; srf < MaxNbOfSurfaces; srf++ )
-    {
-      if( MaxSurfaceVec[srf] != 0 )
-      {
-        if( sf < nb_of_surfaces )
-        {
-          SurfaceVec[sf] = MaxSurfaceVec[srf];
-        }
-        sf++;
-      }
-    }
-    
-    if( sf != nb_of_surfaces )
-    {
-      G4cerr << "Bad number of surfaces!\a\n" << "sf: " << sf << " nb_of_surfaces: " << nb_of_surfaces << G4endl;
-      // Should we call G4Exception here ?
-    }
-    
-    // Clean up the temporary vector of surfaces
-    delete [] MaxSurfaceVec;
-  }
-  else
-  {
+  } else {
     // If phi section, create a single boundary (case with RMIN=0 included)
     TmpAxis = XAxis;
     TmpAxis.rotateZ(phi1);	
@@ -239,8 +225,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
     G4Point3DVector EndPointList ((sides+1)*2);
     G4Point3DVector EndPointList2((sides+1)*2);	      
     
-    for(G4int c=0;c<sides+1;c++)
-    {
+    for(G4int c=0;c<sides+1;c++) {
       // outer polylines for origin end and opposite side
       EndPointList[c]  = Origin + (RMAX[0] * TmpAxis);
       EndPointList[(sides+1)*2-1-c]  = Origin + (RMIN[0] * TmpAxis);
@@ -250,27 +235,27 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
     }
     
     // Create the lateral planars
-    TmpAxis = XAxis;
+    TmpAxis             = XAxis;
     G4Vector3D TmpAxis2 = XAxis;
     TmpAxis.rotateZ(phi1);
     TmpAxis2.rotateZ(phi1);
     TmpAxis2.rotateZ(dphi);	
     
-    LocalOrigin=Origin;
-    G4int points = sections*2+2;
+    LocalOrigin      = Origin;
+    G4int points     = sections*2+2;
+    G4int PointCount = 0;
+    
     G4Point3DVector GapPointList(points);
     G4Point3DVector GapPointList2(points);
-    Count=0;
     
-    for(G4int d=0;d<sections+1;d++)
-    {
-      GapPointList[Count] = LocalOrigin + (RMAX[d]*TmpAxis);
-      GapPointList[points-1-Count] = LocalOrigin + (RMIN[d]*TmpAxis);	    
+    for(G4int d=0;d<sections+1;d++) {
+      GapPointList[PointCount] = LocalOrigin + (RMAX[d]*TmpAxis);
+      GapPointList[points-1-PointCount] = LocalOrigin + (RMIN[d]*TmpAxis);	    
       
-      GapPointList2[Count] = LocalOrigin + (RMAX[d]*TmpAxis2);
-      GapPointList2[points-1-Count] = LocalOrigin + (RMIN[d]*TmpAxis2);	 
+      GapPointList2[PointCount] = LocalOrigin + (RMAX[d]*TmpAxis2);
+      GapPointList2[points-1-PointCount] = LocalOrigin + (RMIN[d]*TmpAxis2);	 
    	         
-      Count++;
+      PointCount++;
 
       Length = z_values[d+1] - z_values[d];
       LocalOrigin = LocalOrigin+(Length*Axis);
@@ -278,27 +263,62 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
     
     // Add the lateral planars to the surfaces list and set/reverse sense
     
-    SurfaceVec[nb_of_surfaces-4] = new G4FPlane(&GapPointList);
-    SurfaceVec[nb_of_surfaces-3] = new G4FPlane(&GapPointList2, 0, 0);
+//    SurfaceVec[nb_of_surfaces-4] = new G4FPlane(&GapPointList);
+//    SurfaceVec[nb_of_surfaces-3] = new G4FPlane(&GapPointList2, 0, 0);
+    MaxSurfaceVec[Count++] = new G4FPlane( &GapPointList,  0, ENormal );
+    MaxSurfaceVec[Count++] = new G4FPlane( &GapPointList2, 0, EInverse );
     
     //Add the end planes to the surfaces list and set/reverse sense
     
-    if(RMAX[0]-RMIN[0] >= perMillion){
-      SurfaceVec[nb_of_surfaces-2] = new G4FPlane(&EndPointList);
+    if(RMAX[0]-RMIN[0] >= perMillion) {
+//      SurfaceVec[nb_of_surfaces-2] = new G4FPlane(&EndPointList);
+      MaxSurfaceVec[Count] = new G4FPlane( &EndPointList, 0, EInverse );
     }
-    else{
-      nb_of_surfaces -= 1;
+    else {
+      MaxSurfaceVec[Count] = 0;
+      nb_of_surfaces--;
     };
     
-    if(RMAX[sections]-RMIN[sections] >= perMillion){
-      SurfaceVec[nb_of_surfaces-1] = new G4FPlane(&EndPointList2, 0, 0);
-    }
-    else{
-      nb_of_surfaces -= 1;
-    };    	
+    Count++;
     
+    if(RMAX[sections]-RMIN[sections] >= perMillion) {
+//      SurfaceVec[nb_of_surfaces-1] = new G4FPlane(&EndPointList2, 0, 0);
+      MaxSurfaceVec[Count] = new G4FPlane( &EndPointList2, 0, ENormal );
+    } else {
+      MaxSurfaceVec[Count] = 0;
+      nb_of_surfaces--;
+    };    	    
   }
-  
+
+  // Now let's replicate the relevant surfaces into polyhedra's vector of surfaces
+  SurfaceVec = new G4Surface*[nb_of_surfaces];
+  G4int sf = 0;
+  for( G4int srf = 0; srf < MaxNbOfSurfaces; srf++ ) {
+    if( MaxSurfaceVec[srf] != 0 ) {
+      if( sf < nb_of_surfaces ) {
+        SurfaceVec[sf] = MaxSurfaceVec[srf];
+      }
+      sf++;
+//        SurfaceVec[sf++] = MaxSurfaceVec[srf];
+    }
+  }
+    G4cout << "sf: "              << sf
+           << " nb_of_surfaces: " << nb_of_surfaces
+           << " Count: "          << Count
+           << G4endl;
+
+  if( sf != nb_of_surfaces ) {
+    G4cerr << "Bad number of surfaces!\a\n"
+           << "sf: "              << sf
+           << " nb_of_surfaces: " << nb_of_surfaces
+           << " Count: "          << Count
+           << G4endl;
+    // Should we call G4Exception here ?
+  }
+
+  // Clean up the temporary vector of surfaces
+  delete [] MaxSurfaceVec;
+    
   // Store the original parameters, to be used in visualisation
   // Note radii are not scaled because this BREP uses the radius of the
   // circumscribed circle and also graphics_reps/G4Polyhedron uses the radius of
@@ -743,6 +763,57 @@ G4double G4BREPSolidPolyhedra::DistanceToOut(const G4ThreeVector& Pt) const
     // return Dist;
     return fabs(Dist);
   }
+}
+
+G4Surface* G4BREPSolidPolyhedra::CreateTrapezoidalSurface( G4double r1, G4double r2,
+                                                           const G4Point3D& origin, G4double distance,
+                                                           G4Vector3D& xAxis, G4double partAngle,
+                                                           ESurfaceSense sense )
+{
+  // The surface to be returned
+  G4Surface* trapsrf = 0;
+  G4Point3DVector PointList(4);
+  G4Vector3D zAxis(0,0,1);
+  
+  PointList[0] = origin + ( r1       * xAxis);
+  PointList[3] = origin + ( distance * zAxis)   + (r2 * xAxis);
+  
+  xAxis.rotateZ( partAngle );
+  
+  PointList[2] = origin + ( distance * zAxis)   + (r2 * xAxis);
+  PointList[1] = origin + ( r1       * xAxis);	  
+
+  // Return the planar trapezoidal surface
+  trapsrf = new G4FPlane( &PointList, 0, sense );
+  
+  return trapsrf;
+}
+
+G4Surface* G4BREPSolidPolyhedra::CreateTriangularSurface( G4double r1, G4double r2,
+                                                          const G4Point3D& origin, G4double distance,
+                                                          G4Vector3D& xAxis, G4double partAngle,
+                                                          ESurfaceSense sense )
+{
+  // The surface to be returned
+  G4Surface*      trapsrf = 0;
+  G4Point3DVector PointList(3);
+  G4Vector3D      zAxis(0,0,1);
+  
+  PointList[0] = origin + ( r1       * xAxis);
+  PointList[2] = origin + ( distance * zAxis)   + (r2 * xAxis);
+  
+  xAxis.rotateZ( partAngle );
+  
+  if( r1 < r2 ) {
+    PointList[1] = origin + ( distance * zAxis)   + (r2 * xAxis);
+  } else {
+    PointList[1] = origin + ( r1       * xAxis);	  
+  }
+
+  // Return the planar trapezoidal surface
+  trapsrf = new G4FPlane( &PointList, 0, sense );
+  
+  return trapsrf;
 }
 
 //  In graphics_reps:   
