@@ -17,8 +17,6 @@ Tst50PhotonPenelope::~Tst50PhotonPenelope()
 
 void Tst50PhotonPenelope::ConstructProcess()
 {
-  
-  
   theParticleIterator->reset();
 
   while( (*theParticleIterator)() )

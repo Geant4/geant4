@@ -21,29 +21,28 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.cc,v 1.29 2003-04-28 14:58:57 guatelli Exp $
+// $Id: Tst50SteppingAction.cc,v 1.30 2003-05-15 16:00:59 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "Tst50SteppingAction.hh"
-#include "Tst50DetectorConstruction.hh"
+#include "G4ios.hh"
+#include "g4std/fstream"
+#include "g4std/iomanip"
+#include <math.h> // standard c math library
 #include "G4SteppingManager.hh"
 #include "G4Step.hh"
 #include "G4Track.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4VPhysicalVolume.hh"
+#include "Tst50SteppingAction.hh"
+#include "Tst50DetectorConstruction.hh"
 #include "Tst50EventAction.hh"
-#include <math.h> // standard c math library
 #ifdef G4ANALYSIS_USE
 #include "Tst50AnalysisManager.hh"
 #endif
 #include "Tst50PrimaryGeneratorAction.hh"
 #include "Tst50RunAction.hh"
-#include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,363 +53,120 @@ Tst50SteppingAction::Tst50SteppingAction(Tst50EventAction* EA, Tst50PrimaryGener
   
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 Tst50SteppingAction::~Tst50SteppingAction()
 
 {;}
 
 void Tst50SteppingAction::UserSteppingAction(const G4Step* Step)
-{ 
+{
 #ifdef G4ANALYSIS_USE
 Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
 #endif
-G4int evno = eventaction->GetEventno() ;//mi dice a che evento siamo 
-
- G4int run_ID= runaction-> GetRun_ID();
+  
+G4int evno = eventaction->GetEventno() ;
+G4int run_ID= runaction-> GetRun_ID();
 G4bool flag=runaction-> Get_flag();
-//prendo l'energia iniziale delle particelle primarie
-  initial_energy= p_Primary->GetInitialEnergy();
+
+G4double  initial_energy= p_Primary->GetInitialEnergy();
  
-   //IDnow identifica univocamente la particella//
-IDnow = run_ID+1000*evno+10000*(Step->GetTrack()->GetTrackID())+
+G4int IDnow = run_ID+1000*evno+10000*(Step->GetTrack()->GetTrackID())+
           100000000*(Step->GetTrack()->GetParentID()); 
- 
 
- //G4String CurV;
-  //G4String NexV;
+G4double  KinE = Step->GetTrack()->GetKineticEnergy();
+G4String PrimaryName= p_Primary->GetParticle(); 
 
-    G4String name;
 
-    G4double KinE;
+  G4double  XIMD=0.;
+  G4double  YIMD=0.;
+  G4double  ZIMD=1.;
 
-//    G4double EDep; 
-// commented beacause in class track method
-// GetTotalEnergyDeposit in declared but not implemented 
 
-    G4double XPos;
-    G4double YPos;
-    G4double ZPos;
+  G4double  XPos = Step->GetTrack()->GetPosition().x();
+  G4double  YPos = Step->GetTrack()->GetPosition().y();
+  G4double  ZPos = Step->GetTrack()->GetPosition().z();
+
+  G4double  XMoD = Step->GetTrack()->GetMomentumDirection().x();
+  G4double  YMoD = Step->GetTrack()->GetMomentumDirection().y();
+  G4double  ZMoD = Step->GetTrack()->GetMomentumDirection().z();
     
-    G4double XMoD;
-    G4double YMoD;
-    G4double ZMoD;
+// ---------- energy of primary transmitted particles-----------// 
 
-    G4double XIMD;
-    G4double YIMD;
-    G4double ZIMD;
+  if(PrimaryName=="e-"|| PrimaryName=="e+"|| PrimaryName=="proton" ||
+     PrimaryName=="gamma" )
+    { 
+      if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target")
+	{
+	  if(Step->GetTrack()->GetNextVolume()->GetName() == "World" ) 
+	    {
+	      G4double energy=(KinE/initial_energy);
+	      if(0 == Step->GetTrack()->GetParentID() ) 
+		{ if(IDnow != IDold) 
+		  {
+		    IDold=IDnow ;  
+		    if (ZMoD >= 0. )
+		      {
+			runaction->Trans_number();
+		      }
+		    else
+		      {
+			runaction->Back_number(); 
+		      }
+		    G4double initial=initial_energy/MeV;
+		    if( (initial_energy == KinE) &&( ZMoD==1.))
+		      {
+			runaction->gamma_transmitted();
+		      }
+		  }
+		}
+	    }
+	}
+    }
 
+// Stoppint Power test
 
-    G4double MMoD;
-    G4double MIMD;
-
- 
-    // prendo la particella corrente;
-    name = Step->GetTrack()->GetDefinition()->GetParticleName();    
-  
-    //prendo l'energia cinetica della particella  	
-    KinE = Step->GetTrack()->GetKineticEnergy();
- G4String particle_name= p_Primary->GetParticle(); 
-    
-
-// TestEm1
-   /*
- if(particle_name=="e-"|| particle_name=="e+"|| particle_name=="proton"|| particle_name=="gamma" )
-
+  if (flag==false)
    {
-   if(0 == Step->GetTrack()->GetParentID() ) 
-    {
-    if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target")
-      {
-      G4double steplen = (Step->GetStepLength())/cm;
-
-          eventaction ->Number_Steps(); 
-#ifdef G4ANALYSIS_USE
- analysis->Step(steplen);
-
-#endif
-
-   }
-   }
-   }
-   
-// energy deposit
-	
-    G4double EnergyDeposit = Step->GetTotalEnergyDeposit();
-    eventaction->CalculateEnergyDeposit(EnergyDeposit);
-    
-if(0 == Step->GetTrack()->GetParentID() ) 
-  {
-
-    G4double EnergyDepositPrimary = Step->GetTotalEnergyDeposit();
-    eventaction->CalculateEnergyDepositPrimary(EnergyDepositPrimary);
-
-  }
-
-if(0 != Step->GetTrack()->GetParentID() ) 
-  {
-    G4double EnergyDepositSecondary= Step->GetTotalEnergyDeposit();
-    eventaction->CalculateEnergyDepositSecondary(EnergyDepositSecondary);
-
-  }
-
- 
-   */
-
-    XIMD=0.;
-    YIMD=0.;
-    ZIMD=1.;
-
-
-    XPos = Step->GetTrack()->GetPosition().x();
-    YPos = Step->GetTrack()->GetPosition().y();
-    ZPos = Step->GetTrack()->GetPosition().z();
-
-    XMoD = Step->GetTrack()->GetMomentumDirection().x();
-    YMoD = Step->GetTrack()->GetMomentumDirection().y();
-    ZMoD = Step->GetTrack()->GetMomentumDirection().z();
-    
-    // ---------- energy of primary transmitted particles-----------// 
-
-    
-
-   
-    if(particle_name=="e-"|| particle_name=="e+"|| particle_name=="proton" ||
-         particle_name=="gamma" )
-      { 
-	
-
-   if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target"){
- 
-  
-     if(Step->GetTrack()->GetNextVolume()->GetName() == "World" ) {
-
-   //volume in cui si esce e' il target 
-   
-    MMoD=sqrt(pow(XMoD,2.0)+pow(YMoD,2.0)+pow(ZMoD,2.0));
-    MIMD=sqrt(pow(XIMD,2.0)+pow(YIMD,2.0)+pow(ZIMD,2.0));
-   
-   
-    // G4cout<<(XMoD*XIMD+YMoD*YIMD+ZMoD*ZIMD)/(MMoD*MIMD)<<G4endl;
-     G4double energy=(KinE/initial_energy);
-
-    G4double angle=(acos((XMoD*XIMD+YMoD*YIMD+ZMoD*ZIMD)/(MMoD*MIMD))/deg);
-if(0 == Step->GetTrack()->GetParentID() ) 
-  { if(IDnow != IDold) 
-    {
-
- IDold=IDnow ;  
-     if (ZMoD >= 0. )
+     if(PrimaryName=="e-" || PrimaryName=="proton" || PrimaryName=="e+")
      {
-       runaction->Trans_number();
-#ifdef G4ANALYSIS_USE
-       analysis ->energy_transmitted(energy);
-       analysis ->angleT(angle);
-#endif
-
-
-}
-     // if((ZMoD<0.) && (angle>(90./deg)))
- else
-  {
-
-#ifdef G4ANALYSIS_USE
-       analysis ->energy_backscatter(energy); 
-       analysis ->angleB(angle);
-#endif 
-       runaction->Back_number(); 
-
-  }
-
-    G4double initial=initial_energy/MeV;
-
-#ifdef G4ANALYSIS_USE
-    analysis ->fill_data(initial,energy,angle);
-#endif 
-    if( (initial_energy == KinE) &&( ZMoD==1.))
-      {
-	
-	runaction->gamma_transmitted();
-	
-
-      }}}}}}
-
-    
- if(particle_name=="e-"||particle_name=="e+"|| particle_name=="proton")
-   {   
-    if(name=="gamma")
-  { if(Step->GetTrack()->GetParentID()== 1)
-    { 
-      if(IDnow != IDold) {
-
-	IDnow= IDold;
-if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target"){
-   
-    if(Step->GetTrack()->GetNextVolume()->GetName() == "World" )
-      {
-	
-	G4double kin=KinE/MeV;
-    MMoD=sqrt(pow(XMoD,2.0)+pow(YMoD,2.0)+pow(ZMoD,2.0));
-    MIMD=sqrt(pow(XIMD,2.0)+pow(YIMD,2.0)+pow(ZIMD,2.0));
-     G4double angle=(acos((XMoD*XIMD+YMoD*YIMD+ZMoD*ZIMD)/(MMoD*MIMD))/deg);   
-    
-#ifdef G4ANALYSIS_USE
-     analysis->fill_dataBrem(kin,angle);
-     analysis->angle_energy_gamma(angle,kin);
-#endif
-      }}}}}}
-   
- /*
-   if(particle_name=="gamma")
-     {    
-      if(0 == Step->GetTrack()->GetParentID() ) //primary particle 
-	{ 
-         G4String process=Step->GetPostStepPoint()->GetProcessDefinedStep()
-	   ->GetProcessName();
-
-	 //G4cout<< "processo del fotone-------------------------"
-	 //         << process<<G4endl;
-          if (process=="LowEnPhotoElec"||process=="phot") 
-	    { //G4cout<< "processo del fotone-------------------------"
-	      // <<" 1"<<G4endl; 
-	  runaction->primary_processes(3);
-	}
-      if (process=="Transportation") 
+      if(0 ==Step->GetTrack()->GetParentID() ) 
+       {
+        if(IDnow != IDold)
+         { 
+          IDold=IDnow ; 
+          G4double  XPos_pre=Step->GetPreStepPoint()->GetPosition().x();
+          G4double YPos_pre=Step->GetPreStepPoint()->GetPosition().y();
+          G4double ZPos_pre=Step->GetPreStepPoint()->GetPosition().z();
+          if (0== XPos_pre && 0== YPos_pre && 0== ZPos_pre)
            { 
-
-runaction->primary_processes(1);	
-}
-	
- if (process=="LowEnRayleigh") 
-           {
-
-	     runaction->primary_processes(2);
-	}
- if (process=="LowEnCompton"||process=="compt") 
-           { 
-
-	     runaction->primary_processes(4);	 
-  }
-
-if (process=="LowEnConversion"||process=="conv") 
-           { 
-	     runaction->primary_processes(5);	
+            G4double energyLost=abs(Step->GetDeltaEnergy());
+            G4double stepLength= Step->GetTrack()-> GetStepLength();
+            if(stepLength!=0) 
+             {
+              G4double TotalStoppingPower=(energyLost/stepLength);
+              G4double SP=TotalStoppingPower/(detector->GetDensity());
+              //#ifdef ANALYSIS_USE
+	      analysis->StoppingPower(run_ID,initial_energy/MeV,SP/(MeV*(cm2/g)));
+	      //#endif
+                                   
+              }
+	     }
 	   }
-
- */
-
- if (flag==false)
-   {
- //Stopping Power test
- if(particle_name=="e-" || particle_name=="proton" )
-      {
-
-G4std::ofstream pmtfile("Test50_output.txt", G4std::ios::app);
-    //new particle 
- if(0 ==Step->GetTrack()->GetParentID() ) {
-   
-if(IDnow != IDold){ 
-
- IDold=IDnow ; 
-
-
- G4double  XPos_pre=Step->GetPreStepPoint()->GetPosition().x();
- G4double YPos_pre=Step->GetPreStepPoint()->GetPosition().y();
- G4double ZPos_pre=Step->GetPreStepPoint()->GetPosition().z();
-
-
- if (0== XPos_pre && 0== YPos_pre && 0== ZPos_pre)
-
-    { 
-      G4double energyLost=abs(Step->GetDeltaEnergy());
-      G4double stepLength= Step->GetTrack()-> GetStepLength();
-  
-     
-   
-if(stepLength!=0) 
-{
-G4double TotalStoppingPower=(energyLost/stepLength);
-
-if(pmtfile.is_open()){
-
-  if (run_ID==0 && evno==0) { 
-    pmtfile<<" Test --------->  "<<particle_name<<"  Stopping Power and CSDA range <----------"<< 
-      (detector->GetMaterialName())<<G4endl;
-   pmtfile<<"initial energy (MeV)    SP (MeV * cm2/g)     CSDArange (g/cm2)"<<G4endl;
-     
-  }
-
-
-  pmtfile<<"    "<<initial_energy/MeV<<"                    "<<(TotalStoppingPower/(detector->GetDensity()))/(MeV* (cm2)/g)<<"                     ";
- 
-}}}}
-
-
-range=0.;
-
- if(0.0 == KinE) 
-                   {  
-		   
-                     G4double  xend= Step->GetTrack()->GetPosition().x()/mm ;
-                     G4double yend= Step->GetTrack()->GetPosition().y()/mm ;
-                     G4double  zend= Step->GetTrack()->GetPosition().z()/mm ;
        
-		      range=(sqrt(xend*xend+yend*yend+zend*zend)); 
-
-	 
-	      
-		      G4double range2= range*(detector->GetDensity());
-		   
- 
-		      if(pmtfile.is_open()){
-			
-			pmtfile<<range2/(g/cm2)<<G4endl;}
-	       
-
-		   }
- }}
-
+      //CSDA range
+         range=0.; 
+         if(0.0 == KinE) 
+          {  
+	   G4double  xend= Step->GetTrack()->GetPosition().x()/mm ;
+           G4double yend= Step->GetTrack()->GetPosition().y()/mm ;
+           G4double  zend= Step->GetTrack()->GetPosition().z()/mm ;
+           range=(sqrt(xend*xend+yend*yend+zend*zend)); 
+           G4double range2= range*(detector->GetDensity());
+          
+           analysis->CSDARange(run_ID,initial_energy/MeV,range2/(g/cm2));
+	  }
+       }
+     }
    }
- //Radiation yield
-/*
-if (RadiationY)
-{ 
-if(particle_name=="e-"){
-if(0 ==Step->GetTrack()->GetParentID() )  
-  {
-G4String process=Step->GetPostStepPoint()->GetProcessDefinedStep()
-	   ->GetProcessName();
-
-
-if (process=="LowEnBrem") 
-  { 
-
- G4double energyLostforBremm=abs(Step->GetDeltaEnergy());
- eventaction->RadiationYield( energyLostforBremm);
-  }
-  }
 }
-}
-*/
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

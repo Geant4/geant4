@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50PrimaryGeneratorAction.cc,v 1.8 2003-01-17 17:14:15 guatelli Exp $
+// $Id: Tst50PrimaryGeneratorAction.cc,v 1.9 2003-05-15 16:00:59 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,11 +49,11 @@ Tst50PrimaryGeneratorAction::Tst50PrimaryGeneratorAction():
   gunMessenger = new Tst50PrimaryGeneratorMessenger(this);
   
   
-// default particle
+  // default particle
  
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  //G4ParticleDefinition* particle = particleTable->FindParticle("e-");
-    G4ParticleDefinition* particle = particleTable->FindParticle("gamma");
+ 
+  G4ParticleDefinition* particle = particleTable->FindParticle("gamma");
   particleGun->SetParticleDefinition(particle);
   particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
   particleGun->SetParticleEnergy(1.*MeV);
@@ -72,42 +72,30 @@ Tst50PrimaryGeneratorAction::~Tst50PrimaryGeneratorAction()
 
 void Tst50PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 { 
+   if(rndmDirection=="on")
+   {
+    G4double a,b,c;
+    G4double n;
+    do{
+	a = (G4UniformRand()-0.5)/0.5;
+	b = (G4UniformRand()-0.5)/0.5; 
+	c = (G4UniformRand()-0.5)/0.5;
+	n = a*a+b*b+c*c;
+      }while(n > 1 || n == 0.0);
+    n = sqrt(n);
+    a /= n;
+    b /= n;
+    c /= n;
+    G4ThreeVector direction(a,b,c);
+    particleGun->SetParticleMomentumDirection(direction);
+   }
   
-  if(rndmDirection=="on")
+  if(rndmDirection=="off")
   {
-
-G4double a,b,c;
- G4double n;
- do{
-   a = (G4UniformRand()-0.5)/0.5;
-   b = (G4UniformRand()-0.5)/0.5; 
-   c = (G4UniformRand()-0.5)/0.5;
-   n = a*a+b*b+c*c;
-   }while(n > 1 || n == 0.0);
- n = sqrt(n);
- a /= n;
- b /= n;
- c /= n;
-
- G4ThreeVector direction(a,b,c);
- particleGun->SetParticleMomentumDirection(direction);
-
-
-
-  }
- if(rndmDirection=="off")
-  {
-
-
- particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-
-
-
+   particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
   }
 
   particleGun->GeneratePrimaryVertex(anEvent);
-  
-
 }
 
 G4double Tst50PrimaryGeneratorAction::GetInitialEnergy()
@@ -115,21 +103,13 @@ G4double Tst50PrimaryGeneratorAction::GetInitialEnergy()
   G4double energy= particleGun->GetParticleEnergy(); 
   return energy;
 }
-/*
-//added by albe for theta distribution 8/1/2003
-G4ThreeVector Tst50PrimaryGeneratorAction::GetInitialMomentumDirection()
-{
-   G4ThreeVector MomentumDirection = particleGun->GetParticleMomentumDirection(); 
-  return MomentumDirection;
-}
-*/
 
 G4String Tst50PrimaryGeneratorAction::GetParticle()
 {
   G4String name= particleGun->GetParticleDefinition()->GetParticleName();
   return name;
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 
 
 

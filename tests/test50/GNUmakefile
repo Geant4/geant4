@@ -1,5 +1,5 @@
 # --------------------------------------------------------------
-# $Id: GNUmakefile,v 1.10 2003-04-25 08:43:32 guatelli Exp $
+# $Id: GNUmakefile,v 1.11 2003-05-15 16:00:58 guatelli Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -8,7 +8,7 @@ name := test50
 G4TARGET := $(name)
 G4EXLIB := true
 
-#G4ANALYSIS_USE = 1
+G4ANALYSIS_USE = 1
 
 ifndef G4INSTALL
   G4INSTALL = ../..

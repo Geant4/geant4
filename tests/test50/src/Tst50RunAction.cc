@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50RunAction.cc,v 1.13 2003-04-28 14:58:57 guatelli Exp $
+// $Id: Tst50RunAction.cc,v 1.14 2003-05-15 16:00:59 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,13 +62,7 @@ void Tst50RunAction::BeginOfRunAction(const G4Run* aRun)
   // G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl; 
 
   runID=aRun->GetRunID();
-  G4cout<< flag<<"--------->flag"<<G4endl;
-
-#ifdef G4ANALYSIS_USE   
-Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
-   analysis->book();
-#endif
-
+ 
   if (G4VVisManager::GetConcreteInstance())
     {
       G4UImanager* UI = G4UImanager::GetUIpointer();
@@ -92,6 +86,8 @@ G4int Tst50RunAction::GetRun_ID()
 }
 G4bool Tst50RunAction::Get_flag()
 {
+  //transmission test or CSDA Range and Stopping Power test for massive 
+  //particles 
   return flag;
 }
 
@@ -112,12 +108,6 @@ G4String name=p_Detector->GetMaterialName();
 G4double density =p_Detector->GetDensity();
 G4double thickness =p_Detector->GetTargetThickness();
 
-#ifdef G4ANALYSIS_USE
- Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
-
-  analysis->finish();
-#endif
-
   if (G4VVisManager::GetConcreteInstance())
     {
      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
@@ -130,18 +120,13 @@ G4double thickness =p_Detector->GetTargetThickness();
  
  G4double tran_coeff= -(log(trans))/(thickness*density);
  G4double error= -(log(sqrt(trans)))/(thickness*density);
-G4std::ofstream pmtfile("Test50_output.txt", G4std::ios::app);
-if(pmtfile.is_open()){
-  if (runID==0)
-    { pmtfile<<" TEST ----> gamma attenuation coefficient  <-----"<<name<<G4endl;
-      pmtfile<<" slab absorber material: "<<name<<G4endl;
-      pmtfile<<" slab density: "<<density/(g/cm3)<<G4endl;
-      pmtfile<<"BeamOn events: "<<numberEvents<<G4endl;
-      pmtfile<< " energy gamma ( MeV)"<<"    "<<"attenuation coeff(cm2/g)"<<     G4endl; 
-    }  
- 
-  pmtfile<<energy/MeV <<"                    "<<tran_coeff/(cm2/g)<< G4endl; }
- 
+
+#ifdef G4ANALYSIS_USE
+Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
+ analysis -> attenuation_coeffiecient(runID,energy/MeV,tran_coeff/(cm2/g));
+#endif
+
+
     }
  
   if(flag)
@@ -153,40 +138,12 @@ if(pmtfile.is_open()){
       G4double fb=(numberB/numberEvents);
       G4double fa=(((numberEvents-(numberB+number)))/numberEvents);
       G4double trans=(fg/numberEvents); 
-G4std::ofstream pmtfile("Test50_output.txt", G4std::ios::app);
-if(pmtfile.is_open()){
- 
- if (runID==0)
-    { 
-      pmtfile<<" TEST ----> " <<particle_name << "backscattering  <-----"<<name<<G4endl;
-      pmtfile<<" slab absorber material: "<<name<<G4endl;
-      pmtfile<<" slab density: "<<density/(g/cm3)<<G4endl;
-      pmtfile<<"BeamOn events: "<<numberEvents<<G4endl;
-      pmtfile<< " initial energy e- ( MeV)"<<"    "<<" e- back fraction"<<"      "<<
-	"e- trans fraction"<<"         "<<" e- absorbed"<< G4endl; 
-    }  
- 
- 
- pmtfile<<"   "<<energy/MeV <<"                   ";		
- pmtfile<<fb <<"                      "<<ft<<"                   "<<fa<<G4endl;
-     
-}}}}
 
-  
+ Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
+ analysis-> trasmission(runID,energy/MeV,ft,fb);
 
-  /* 
- if (numberTransp==0 && numberRay==0 && numberPh==0 && numberCo==0 &&numberPair==0){;}
-else
-    { 
-G4cout<<"---------- Particelle primarie gamma -------------- "<<number<<G4endl;
- G4cout<<"--------- Processi verificatesi----------------"<<G4endl;
-  G4cout<<"Number of transmitted gamma: "<<number<<G4endl;
-  G4cout<<numberTransp <<" processo di trasporto"<< G4endl;
-  G4cout<<numberRay<<" processi Rayleigh"<<G4endl;
-  G4cout<<numberPh<< " processi fotoelettrici"<<G4endl;
-  G4cout<<numberCo<< " processi Compton"<< G4endl;
-  G4cout<<numberPair<< " processi di produzione di coppie"<< G4endl;}
-  */
+}}}
+
 void  Tst50RunAction::Set_Trans(G4String newValue)
 {
   if (newValue=="on"){flag=true;} else {flag=false;};
@@ -207,12 +164,4 @@ void  Tst50RunAction::Trans_number()
 void  Tst50RunAction::Back_number()
 {
   numberB= numberB+1;
-}
-void  Tst50RunAction::primary_processes(G4int i)
-{
-  if( i==1) numberTransp=numberTransp+1;
-  if( i==2) numberRay= numberRay+1;
-  if( i==3) numberPh= numberPh+1;
-  if( i==4) numberCo= numberCo+1;
-  if( i==5) numberPair= numberPair+1;
 }

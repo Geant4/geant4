@@ -22,21 +22,20 @@
 // ********************************************************************
 //
 //
-// $Id: test50.cc,v 1.21 2003-04-28 14:58:56 guatelli Exp $
+// $Id: test50.cc,v 1.22 2003-05-15 16:00:58 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
-#include <strstream.h>
-//#include <iostream.h>
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iostream"
-#include "g4std/iomanip" 
+#include "G4RunManager.hh"
+#include "G4UImanager.hh"
+#include "G4UIterminal.hh"
+#include "G4UItcsh.hh"
 #include "Tst50DetectorConstruction.hh"
 #include "Tst50PhysicsList.hh"
 #include "Tst50PrimaryGeneratorAction.hh"
@@ -44,80 +43,59 @@
 #include "Tst50EventAction.hh"
 #include "Tst50SteppingAction.hh"
 #include "Tst50SteppingVerbose.hh"
-
-#include "G4RunManager.hh"
-#include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
-
+#ifdef G4ANALYSIS_USE
+#include "Tst50AnalysisManager.hh"
+#endif
 #ifdef G4VIS_USE
 #include "Tst50VisManager.hh"
 #endif
 
 
 int main(int argc,char** argv) {
-       
-  HepRandom::setTheEngine(new RanecuEngine);
- 
- 
-  G4String filename = "Test50_output.txt";  
-
-  G4cout.setf(G4std::ios::scientific, G4std::ios::floatfield);
-  
-      G4std::ofstream ofs;
-      ofs.open(filename);
-      {
-	ofs << " test50 output "<< G4endl;
-      } 
-      ofs.close();                     
-		
-     
-  G4int seed=time(NULL);
+ 	
+  HepRandom::setTheEngine(new RanecuEngine);   
+  G4int seed=time(0);
   HepRandom ::setTheSeed(seed);
-  // my Verbose output class
-  G4VSteppingVerbose::SetInstance(new Tst50SteppingVerbose);
+ 
+
+  //G4VSteppingVerbose::SetInstance(new Tst50SteppingVerbose);
   
-  // Run manager
+
   G4RunManager * runManager = new G4RunManager;
 
-  // UserInitialization classes (mandatory)
+
   Tst50DetectorConstruction* Tst50detector = new Tst50DetectorConstruction();
   runManager->SetUserInitialization(Tst50detector);
   
 
   Tst50PhysicsList* fisica = new Tst50PhysicsList();
   runManager->SetUserInitialization(fisica);
-  
 
-
-  // Visualization, if you choose to have it!
+#ifdef G4VIS_USE 
   G4VisManager* visManager = new Tst50VisManager;
   visManager->Initialize();
+#endif
 
-
-  // UserAction classes
   Tst50PrimaryGeneratorAction* p_Primary = new Tst50PrimaryGeneratorAction(); 
   runManager->SetUserAction(p_Primary);
 
   Tst50RunAction* p_run=new Tst50RunAction(); 
   runManager->SetUserAction(p_run);  
 
-  Tst50EventAction *pEventAction = new Tst50EventAction(p_Primary);
+  Tst50EventAction *pEventAction = new Tst50EventAction();
  
   runManager->SetUserAction(pEventAction);
      
   Tst50SteppingAction* steppingaction = new Tst50SteppingAction(pEventAction, p_Primary, p_run,Tst50detector);
   runManager->SetUserAction(steppingaction);
 
-  //Initialize G4 kernel
-  //  runManager->Initialize();
+#ifdef G4ANALYSIS_USE 
+  Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
+  analysis->book();
+#endif    
 
-  
   //get the pointer to the User Interface manager 
   G4UImanager * UI = G4UImanager::GetUIpointer();  
-  UI->ApplyCommand("/run/verbose 0");
-  UI->ApplyCommand("/event/verbose 0");
-  UI->ApplyCommand("/tracking/verbose 0");
   
   if (argc == 1)
     // Define (G)UI terminal for interactive mode  
@@ -143,10 +121,15 @@ int main(int argc,char** argv) {
       G4cout << fileName << G4endl;
       UI->ApplyCommand(command+fileName);
     }
+ 
+#ifdef G4ANALYSIS_USE
+  analysis->finish();
+#endif
 
 #ifdef G4VIS_USE
   delete visManager;
 #endif
+
   delete runManager;
 
   return 0;

@@ -20,18 +20,6 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: Tst50PrimaryGeneratorMessenger.hh
-// GEANT4 tag $Name:  xray_fluo-V04-01-03
-//
-// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
-//
-// History:
-// -----------
-//  28 Nov 2001  Elena Guardincerri   Created
-//
-// -------------------------------------------------------------------
-
 
 #ifndef Tst50PrimaryGeneratorMessenger_h
 #define Tst50PrimaryGeneratorMessenger_h 1
@@ -39,14 +27,12 @@
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
-class Tst50PrimaryGeneratorAction;
 class G4UIcmdWithAString;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+class Tst50PrimaryGeneratorAction;
 
 class Tst50PrimaryGeneratorMessenger: public G4UImessenger
 {
-  public:
+public:
   Tst50PrimaryGeneratorMessenger(Tst50PrimaryGeneratorAction*);
   ~Tst50PrimaryGeneratorMessenger();
   
@@ -55,18 +41,8 @@ class Tst50PrimaryGeneratorMessenger: public G4UImessenger
 private:
 
   Tst50PrimaryGeneratorAction* Tst50Action; 
-
- 
- 
-
- //command to choose a plane circular source
   G4UIcmdWithAString*          RndmDir;
- 
-  //command to shot particles according to certain spectra
-  G4UIcmdWithAString*        spectrum;
-
- //command to shot particles from an isotropic source
-  G4UIcmdWithAString*        isoDir;
+  //command to choose a primary particle random direction
 };
 
 #endif

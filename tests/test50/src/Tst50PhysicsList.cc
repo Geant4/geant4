@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst50PhysicsList.cc,v 1.14 2003-04-28 14:58:57 guatelli Exp $
+// $Id: Tst50PhysicsList.cc,v 1.15 2003-05-15 16:00:59 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Unknown (contact: Maria.Grazia.Pia@cern.ch)
@@ -67,17 +67,11 @@ Tst50PhysicsList::Tst50PhysicsList(): G4VModularPhysicsList(),
                                       protonIsRegistered(false)
 {
   defaultCutValue = 1. * mm;
-  //cutForGamma = defaultCutValue;
-  //cutForElectron = defaultCutValue;
-
   SetVerboseLevel(1);
 
-  // UI messenger
   messenger = new Tst50PhysicsListMessenger(this);
  
-  // Particles
   RegisterPhysics( new Tst50Particles("particles") );
-
 }
 
 
@@ -357,19 +351,14 @@ void Tst50PhysicsList::SetElectronCut(G4double value)
 
 void Tst50PhysicsList::SetParticleCut(G4double value)
 {
-  G4cout<<"cambio il cut sulle particelle"<<G4endl;
-  ResetCuts();
+  //ResetCuts();
   defaultCutValue= value;
   
 }
 
-
 void Tst50PhysicsList::SetCuts()
 {
  G4VUserPhysicsList::SetCutsWithDefault();
-//  SetCutValue(cutForGamma,"gamma");
-//  SetCutValue(cutForElectron,"e-");
-//  SetCutValue(cutForElectron,"e+");
  if (verboseLevel>0) DumpCutValuesTable();
 }
 

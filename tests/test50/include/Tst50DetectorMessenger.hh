@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorMessenger.hh,v 1.5 2003-04-25 08:43:33 guatelli Exp $
+// $Id: Tst50DetectorMessenger.hh,v 1.6 2003-05-15 16:00:58 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,34 +35,34 @@
 #include "globals.hh"
 #include "G4UImessenger.hh"
 
-class Tst50DetectorConstruction;
 class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
 class G4UIcmdWithABool;
+class Tst50DetectorConstruction;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Tst50DetectorMessenger: public G4UImessenger
 {
-  public:
+ public:
     Tst50DetectorMessenger(Tst50DetectorConstruction* );
    ~Tst50DetectorMessenger();
     
     void SetNewValue(G4UIcommand*, G4String);
     
-  private:
+ private:
     Tst50DetectorConstruction* Tst50Detector;
     
     G4UIdirectory*             Tst50detDir;
     G4UIcmdWithAString*        AbsMaterCmd;
-  G4UIcmdWithABool* UseUserLimitCmd; 
     G4UIcmdWithADoubleAndUnit* AbsThickCmd; 
-  G4UIcmdWithADoubleAndUnit*   XThickCmd;
-   G4UIcmdWithADoubleAndUnit*   YThickCmd; 
-  G4UIcmdWithADoubleAndUnit*   SetStepCmd;
-       G4UIcmdWithoutParameter*   UpdateCmd;
+    G4UIcmdWithADoubleAndUnit*   XThickCmd;
+    G4UIcmdWithADoubleAndUnit*   YThickCmd; 
+    G4UIcmdWithABool* UseUserLimitCmd; 
+    G4UIcmdWithADoubleAndUnit*   SetStepCmd;
+    G4UIcmdWithoutParameter*   UpdateCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.hh,v 1.8 2003-04-25 08:43:33 guatelli Exp $
+// $Id: Tst50DetectorConstruction.hh,v 1.9 2003-05-15 16:00:58 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,81 +39,58 @@ class G4Box;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
-class  Tst50TrackerSD;
-class Tst50DetectorMessenger;
 class G4UserLimits;
+class Tst50TrackerSD;
+class Tst50DetectorMessenger;
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Tst50DetectorConstruction : public G4VUserDetectorConstruction
 {
-  public:
-  
-    Tst50DetectorConstruction();
-   ~Tst50DetectorConstruction();
+public:
+  Tst50DetectorConstruction();
+  ~Tst50DetectorConstruction();   
+  G4VPhysicalVolume* Construct();
 
-  public:
+private:
+  void DefineMaterials();   
+  G4VPhysicalVolume* ConstructWorld();     
      
-     void SetTargetMaterial (G4String);     
-     void SetTargetThickness(G4double);  
-    
-     void SetTargetX(G4double); 
-     void SetTargetY(G4double); 
-  G4double GetDensity();
-  G4double  GetTargetThickness();
-      
-     G4VPhysicalVolume* Construct();
-
-     void UpdateGeometry();
-     void      UseUserLimits(G4bool value); 
+public:
+  void PrintParameters(); 
+  void SetTargetMaterial (G4String); 
+  G4double GetDensity(); //returns the slab absorber material density
+  G4String  GetMaterialName(); //returns the absorber material name 
+  void SetTargetThickness(G4double);    
+  G4double  GetTargetThickness();    
+  void SetTargetX(G4double); 
+  void SetTargetY(G4double);  
+  void UpdateGeometry(); 
+  void  SetMaxStepInTarget(G4double value); 
+  void UseUserLimits(G4bool value); 
   void SetUserLimits(G4bool);
-     void  SetMaxStepInTarget(G4double value); 
+  G4Material* GetTargetMaterial()  {return TargetMaterial;}; 
+ //returns the absorber material
 
- G4bool           fUseUserLimits;
- G4UserLimits*    theUserLimitsForTarget; 
- G4double         theMaxStepInTarget;
-  public:
-  
-     void PrintParameters(); 
-                    
-  G4String  GetMaterialName();   
-     G4Material* GetTargetMaterial()  {return TargetMaterial;};
-    
-     
-        
-   
-                 
-  private:
-     
-     G4Material*        TargetMaterial;
-     G4double           TargetThickness;
-     G4double targetX;
-     G4double targetY; 
-  G4double density;
-
-     G4Material*        defaultMaterial;
-     G4double           WorldSizeYZ;
-     G4double           WorldSizeX;
-            
-     G4Box*             solidWorld;    //pointer to the solid World 
-     G4LogicalVolume*   logicWorld;    //pointer to the logical World
-     G4VPhysicalVolume* physiWorld;    //pointer to the physical World
-
-   
-         
-     G4Box*             solidTarget; //pointer to the solid Target
-     G4LogicalVolume*   logicTarget; //pointer to the logical Target
-     G4VPhysicalVolume* physiTarget; //pointer to the physical Target
-     
-        
-     Tst50DetectorMessenger* detectorMessenger;  //pointer to the Messenger
-     Tst50TrackerSD* pTargetSD;  //pointer to the sensitive detector
-      
-  private:
+private:
+  G4Material*        TargetMaterial;
+  G4Material*        defaultMaterial;
+  G4Box*             solidWorld; 
+  G4LogicalVolume*   logicWorld; 
+  G4VPhysicalVolume* physiWorld; 
+  G4Box*             solidTarget;
+  G4LogicalVolume*   logicTarget;
+  G4VPhysicalVolume* physiTarget;
+  Tst50TrackerSD* pTargetSD; 
   G4bool  IsRegistered_UseLimits;
-     void DefineMaterials();
-     void ComputeParameters();
-     G4VPhysicalVolume* ConstructWorld();     
+  G4double           TargetThickness;
+  G4double targetX;
+  G4double targetY;
+  G4UserLimits*    theUserLimitsForTarget;    
+  G4bool           fUseUserLimits;
+  G4double         theMaxStepInTarget;
+  Tst50DetectorMessenger* detectorMessenger;   
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50EventAction.hh,v 1.10 2003-04-28 14:58:56 guatelli Exp $
+// $Id: Tst50EventAction.hh,v 1.11 2003-05-15 16:00:59 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  
@@ -30,42 +30,20 @@
 
 #include "globals.hh"
 #include "G4UserEventAction.hh"
-class Tst50TrackerHit;
-class Tst50AnalysisManager;
-class G4Event;
-class Tst50PrimaryGeneratorAction;
 
+class Tst50TrackerHit;
+class G4Event;
 
 class Tst50EventAction : public G4UserEventAction
 {
 public:
-  Tst50EventAction(Tst50PrimaryGeneratorAction*);
+  Tst50EventAction();
   ~Tst50EventAction();
 
   void BeginOfEventAction(const G4Event*);
   void EndOfEventAction(const G4Event*);
   G4int    GetEventno();
-  G4double RadiationYield(G4double);
-  void CalculateEnergyDeposit(G4double);
-  void CalculateEnergyDepositPrimary(G4double);
-  void CalculateEnergyDepositSecondary(G4double);
-  void Number_Steps();
-  void Track_length(G4double);
-
-private:
-  G4int hit_CollID;
-  G4double energy;
-  G4double energyDep;
-  Tst50PrimaryGeneratorAction* p_Primary;
-  G4String filename;
-  G4bool RadiationY; 
-  G4double energyDepPrimary;
-  G4double energyDepSecondary;
-  G4bool Foil;
-  G4int N_Steps;
-  G4double length;
 };
-
 #endif
 
     

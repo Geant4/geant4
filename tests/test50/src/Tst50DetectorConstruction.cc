@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.cc,v 1.19 2003-04-25 08:43:34 guatelli Exp $
+// $Id: Tst50DetectorConstruction.cc,v 1.20 2003-05-15 16:00:59 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -717,7 +717,7 @@ void  Tst50DetectorConstruction::SetMaxStepInTarget(G4double value)
   if (theUserLimitsForTarget != NULL) 
   {
     theUserLimitsForTarget->SetMaxAllowedStep(value);
-    G4cout<<"----- SetMaxStep fixed---- :"  << value; 
+    
 }
 }
 
@@ -737,7 +737,7 @@ void  Tst50DetectorConstruction::SetUserLimits(G4bool isUse)
  if( fUseUserLimits && (theUserLimitsForTarget!= NULL))   
  {logicTarget->SetUserLimits(theUserLimitsForTarget);
   } 
-        G4cout<< " ho switchato FUseUserLimits:  " <<fUseUserLimits <<G4endl;
+        
 	IsRegistered_UseLimits = true; }
  else 
    {
