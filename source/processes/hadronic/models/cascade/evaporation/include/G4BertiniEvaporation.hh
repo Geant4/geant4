@@ -32,23 +32,29 @@
 #include "G4LayeredNucleus.hh"
 #include "G4BertiniEvaporationChannel.hh"
 #include "G4ParticleChange.hh"   
+#include "G4VEvaporation.hh"
 
 
-class G4BertiniEvaporation 
+class G4BertiniEvaporation : G4VEvaporation
 {
 
 public:
   G4BertiniEvaporation();
   ~G4BertiniEvaporation(); 
 
-  G4VParticleChange * BreakItUp( G4LayeredNucleus & nucleus);
+  virtual G4FragmentVector * BreakItUp(const G4Fragment &theNucleus)
+  {
+    G4LayeredNucleus aNuc( theNucleus.GetA(), theNucleus.GetZ() );
+    return BreakItUp(aNuc);
+  }
+  G4FragmentVector * BreakItUp( G4LayeredNucleus & nucleus);
   void setVerboseLevel( const G4int verbose );
   
 private:  
   G4int verboseLevel;
   vector< G4BertiniEvaporationChannel * > channelVector;
-  void G4BertiniEvaporation::fillParticleChange( vector< G4DynamicParticle * > secondaryParticleVector,
-						 G4ParticleChange * theParticleChange );
+  void G4BertiniEvaporation::fillResult( vector< G4DynamicParticle * > secondaryParticleVector,
+				        G4FragmentVector * aResult );
   void G4BertiniEvaporation::splitBe8( const G4double E, 
 				       const G4ThreeVector boost,
 				       vector< G4DynamicParticle * > & secondaryParticleVector);

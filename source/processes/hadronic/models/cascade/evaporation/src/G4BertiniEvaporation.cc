@@ -74,7 +74,7 @@ void G4BertiniEvaporation::setVerboseLevel( const G4int verbose )
 }
 
 
-G4VParticleChange * G4BertiniEvaporation::BreakItUp( G4LayeredNucleus & nucleus )
+G4FragmentVector * G4BertiniEvaporation::BreakItUp( G4LayeredNucleus & nucleus )
 {
   G4int nucleusA;
   G4int nucleusZ;
@@ -88,18 +88,8 @@ G4VParticleChange * G4BertiniEvaporation::BreakItUp( G4LayeredNucleus & nucleus 
   G4ThreeVector nucleusMomentumVector;
   G4DynamicParticle *pEmittedParticle;
   vector< G4DynamicParticle * > secondaryParticleVector;
-  G4ParticleChange *pParticleChange;
-
-  pParticleChange = new G4ParticleChange(); 
-
-  //************
-  //    fillParticleChange( secondaryParticleVector, pParticleChange );
-  //    return pParticleChange;
- //***********
-
-
-
-
+  G4FragmentVector * result = new G4FragmentVector;
+  
   // Read properties of the nucleus.
   nucleusA = ( G4int ) nucleus.GetN(); // GetN should in fact get GetA
   nucleusZ = ( G4int ) nucleus.GetZ();
@@ -117,8 +107,8 @@ G4VParticleChange * G4BertiniEvaporation::BreakItUp( G4LayeredNucleus & nucleus 
   if ( nucleusA == 8 && nucleusZ == 4 )
     {
       splitBe8( excE, boostToLab, secondaryParticleVector );
-      fillParticleChange( secondaryParticleVector, pParticleChange );
-      return pParticleChange;
+      fillResult( secondaryParticleVector, result);
+      return result;
     }
   
   // Initialize evaporation channels and calculate sum of emission
@@ -265,8 +255,8 @@ G4VParticleChange * G4BertiniEvaporation::BreakItUp( G4LayeredNucleus & nucleus 
 	  if ( nucleusA == 8 && nucleusZ == 4 )
 	    {
 	      splitBe8( excE, boostToLab, secondaryParticleVector );
-	      fillParticleChange( secondaryParticleVector, pParticleChange );
-	      return pParticleChange;
+              fillResult( secondaryParticleVector, result);
+	      return result;
 	    }
 
 	  // Update evaporation channels and 
@@ -327,9 +317,9 @@ G4VParticleChange * G4BertiniEvaporation::BreakItUp( G4LayeredNucleus & nucleus 
 
   // Residual nucleus is not returned.
 
-  fillParticleChange( secondaryParticleVector, pParticleChange );
+  fillResult( secondaryParticleVector, result);
   
-  return pParticleChange;
+  return result;
 }
 
 
@@ -383,13 +373,24 @@ void G4BertiniEvaporation::splitBe8( const G4double E,
 }
 
 
-void G4BertiniEvaporation::fillParticleChange( vector<G4DynamicParticle *> secondaryParticleVector,
-					    G4ParticleChange * pParticleChange )
+void G4BertiniEvaporation::fillResult( vector<G4DynamicParticle *> secondaryParticleVector,
+				      G4FragmentVector * aResult )
 {
   // Fill the vector pParticleChange with secondary particles stored in vector.
-  pParticleChange->SetNumberOfSecondaries( secondaryParticleVector.size() );
   for ( G4int i = 0 ; i < secondaryParticleVector.size() ; i++ )
-    pParticleChange->AddSecondary( secondaryParticleVector[i] ); 
+  {
+    G4int aZ = secondaryParticleVector[i]->GetDefinition()->GetPDGCharge();
+    G4int aA = secondaryParticleVector[i]->GetDefinition()->GetBaryonNumber();
+    G4LorentzVector aMomentum = secondaryParticleVector[i]->Get4Momentum();
+    if(aA>0) 
+    {
+      aResult->push_back( new G4Fragment(aA, aZ, aMomentum) ); 
+    }
+    else 
+    {
+      aResult->push_back( new G4Fragment(aMomentum, secondaryParticleVector[i]->GetDefinition()) ); 
+    }
+  }
   return;
 }
 
