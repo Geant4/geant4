@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.33 2001-12-12 14:26:08 gcosmo Exp $
+# $Id: GNUmakefile,v 1.34 2001-12-12 16:21:00 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -59,7 +59,7 @@ endif
 	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE)); done;:
 	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE)); done;:
 ifdef G4USE_HEPODBMS
-	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE)); done;:
+	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE) global); done;:
 endif
 
 
