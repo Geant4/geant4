@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CashKarpRKF45.cc,v 1.1 1999-01-07 16:07:08 gunter Exp $
+// $Id: G4CashKarpRKF45.cc,v 1.2 1999-02-12 12:39:09 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // The Cash-Karp Runge-Kutta-Fehlberg 4/5 method is an embedded fourth
@@ -25,7 +25,7 @@
 // Constructor
 
 G4CashKarpRKF45::G4CashKarpRKF45(G4Mag_EqRhs *EqRhs, G4int numberOfVariables): 
-G4MagIntegratorStepper(EqRhs)
+G4MagIntegratorStepper(EqRhs, numberOfVariables)
 {
   fNumberOfVariables = numberOfVariables ;
 
