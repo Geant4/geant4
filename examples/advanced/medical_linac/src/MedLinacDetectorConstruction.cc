@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MedLinacDetectorConstruction.cc,v 1.4 2004-05-14 18:25:40 mpiergen Exp $
+// $Id: MedLinacDetectorConstruction.cc,v 1.5 2004-11-24 13:49:42 mpiergen Exp $
 //
 // Code developed by: M. Piergentili
 //
@@ -192,21 +192,21 @@ G4VPhysicalVolume* MedLinacDetectorConstruction::ConstructGeom ()
 
   //----1Y------------------------
 
-  G4double thetaY1 = atan(-fieldY1/(100.*cm));// in rad
-  G4double JawY1Pos_y = -((3.9*cm+28.*cm)*sin(thetaY1)+5.*cm*cos(thetaY1));
-  G4double JawY1Pos_z =115.*cm-((3.9*cm+28.*cm)*cos(thetaY1))+5.*cm*sin(thetaY1);
+  G4double thetaY1 = std::atan(-fieldY1/(100.*cm));// in rad
+  G4double JawY1Pos_y = -((3.9*cm+28.*cm)*std::sin(thetaY1)+5.*cm*std::cos(thetaY1));
+  G4double JawY1Pos_z =115.*cm-((3.9*cm+28.*cm)*std::cos(thetaY1))+5.*cm*std::sin(thetaY1);
   //----2Y-------------------------
-  G4double thetaY2 = atan(fieldY2/(100.*cm)); // in rad
-  G4double JawY2Pos_y = (3.9*cm+28.*cm)*sin(thetaY2)+5.*cm*cos(thetaY2);
-  G4double JawY2Pos_z = 115.*cm-(3.9*cm+28.*cm)*cos(thetaY2)+5.*cm*sin(thetaY2);
+  G4double thetaY2 = std::atan(fieldY2/(100.*cm)); // in rad
+  G4double JawY2Pos_y = (3.9*cm+28.*cm)*std::sin(thetaY2)+5.*cm*std::cos(thetaY2);
+  G4double JawY2Pos_z = 115.*cm-(3.9*cm+28.*cm)*std::cos(thetaY2)+5.*cm*std::sin(thetaY2);
   //----1X-------------------------
-  G4double thetaX1 = atan(-fieldX1/(100.*cm));
-  G4double JawX1Pos_x = -((36.7*cm+3.9*cm)*sin(thetaX1)+5.*cm*cos(thetaX1));
-  G4double JawX1Pos_z =115.*cm-(36.7*cm+3.9*cm)*cos(thetaX1)+5.*cm*sin(thetaX1);
+  G4double thetaX1 = std::atan(-fieldX1/(100.*cm));
+  G4double JawX1Pos_x = -((36.7*cm+3.9*cm)*std::sin(thetaX1)+5.*cm*std::cos(thetaX1));
+  G4double JawX1Pos_z =115.*cm-(36.7*cm+3.9*cm)*std::cos(thetaX1)+5.*cm*std::sin(thetaX1);
    //----2X-------------------------
-  G4double thetaX2 = atan(fieldX2/(100.*cm));
-  G4double JawX2Pos_x = (36.7*cm+3.9*cm)*sin(thetaX2)+5.*cm*cos(thetaX2);
-  G4double JawX2Pos_z = 115.*cm-(36.7*cm+3.9*cm)*cos(thetaX2)+5.*cm*sin(thetaX2);
+  G4double thetaX2 = std::atan(fieldX2/(100.*cm));
+  G4double JawX2Pos_x = (36.7*cm+3.9*cm)*std::sin(thetaX2)+5.*cm*std::cos(thetaX2);
+  G4double JawX2Pos_z = 115.*cm-(36.7*cm+3.9*cm)*std::cos(thetaX2)+5.*cm*std::sin(thetaX2);
   //---------rotation jaw1Y--------
 
   G4RotationMatrix* rotatejaw1Y=new G4RotationMatrix();
