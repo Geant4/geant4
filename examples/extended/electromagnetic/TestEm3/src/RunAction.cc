@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.18 2004-06-15 11:39:59 maire Exp $
+// $Id: RunAction.cc,v 1.19 2004-06-16 16:25:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -134,7 +134,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
      rmsres    = resolution*qnorm;
 
      MeanLAbs  = sumLAbs[k]*norm;
-     MeanLAbs2 = sum2LAbs[k]/norm;
+     MeanLAbs2 = sum2LAbs[k]*norm;
       rmsLAbs  = sqrt(abs(MeanLAbs2 - MeanLAbs*MeanLAbs));
 
      //print
