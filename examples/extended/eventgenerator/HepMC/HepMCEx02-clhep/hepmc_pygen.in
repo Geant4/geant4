@@ -1,0 +1,4 @@
+/control/execute pyset.mac
+/run/beamOn 10
+/generator/pythia/pystat 1
+

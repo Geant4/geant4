@@ -1,0 +1,5 @@
+/generator/select hepmcAscii
+/generator/hepmcAscii/open data/example_MyPythia.dat
+/generator/hepmcAscii/verbose 1
+/run/beamOn 3
+
