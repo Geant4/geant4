@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RayTracerViewer.cc,v 1.4 2000-04-12 13:09:23 johna Exp $
+// $Id: G4RayTracerViewer.cc,v 1.5 2000-05-02 10:06:05 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4RayTracerViewer.hh"
@@ -28,13 +28,6 @@ G4RayTracerViewer::~G4RayTracerViewer() {}
 void G4RayTracerViewer::SetView() {
   G4RayTracer* theTracer = 
     (G4RayTracer*) fSceneHandler.GetGraphicsSystem();
-
-  if (fVP.GetFieldHalfAngle() == 0.) { // Orthogonal (parallel) projection.
-    G4cout << 
-      "G4RayTracerViewer::SetView: orthogonal projection not yet implemented."
-	   << G4endl;
-    return;
-  }
 
   // Get radius of scene, etc.  (See G4OpenGLViewer::SetView().)
   // Note that this procedure properly takes into account zoom, dolly and pan.
@@ -62,6 +55,12 @@ void G4RayTracerViewer::SetView() {
 void G4RayTracerViewer::ClearView() {}
 
 void G4RayTracerViewer::DrawView() {
+  if (fVP.GetFieldHalfAngle() == 0.) { // Orthogonal (parallel) projection.
+    G4cout << 
+      "G4RayTracerViewer::SetView: orthogonal projection not yet implemented."
+	   << G4endl;
+    return;
+  }
   SetView();  // Special graphics system - bypass ProcessView().
   G4RayTracer* theTracer = 
     (G4RayTracer*) fSceneHandler.GetGraphicsSystem();
