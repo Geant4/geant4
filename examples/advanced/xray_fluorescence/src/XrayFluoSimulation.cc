@@ -54,7 +54,10 @@
 #include "XrayFluoSteppingAction.hh"
 #include "XrayFluoSteppingVerbose.hh"
 #include "XrayFluoSimulation.hh"
+
+#ifdef G4ANALYSIS_USE
 #include "XrayFluoAnalysisManager.hh"
+#endif
 
 XrayFluoSimulation::XrayFluoSimulation(G4int seed):dir(seed)
 
@@ -145,7 +148,11 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
 
   // set analysis to have the messenger running...
   // XrayFluoAnalysisManager* analysis =
+
+#ifdef G4ANALYSIS_USE
   XrayFluoAnalysisManager::getInstance();
+#endif
+
   XrayFluoEventAction* eventAction = 0;
   XrayFluoRunAction* runAction = new XrayFluoRunAction();
   XrayFluoSteppingAction* stepAction = new XrayFluoSteppingAction();
