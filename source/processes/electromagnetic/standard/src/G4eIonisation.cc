@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisation.cc,v 1.22 2001-11-09 13:59:47 maire Exp $
+// $Id: G4eIonisation.cc,v 1.23 2002-03-26 15:09:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //--------------- G4eIonisation physics process --------------------------------
@@ -40,6 +40,7 @@
 // 21-09-01 completion of RetrievePhysicsTable() (mma)
 // 29-10-01 all static functions no more inlined (mma)
 // 07-11-01 particleMass and Charge become local variables 
+// 26-03-02 change access to cuts in BuildLossTables (V.Ivanchenko)
 //------------------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,7 +60,7 @@ G4int    G4eIonisation::NbinLambda = 100;
 G4eIonisation::G4eIonisation(const G4String& processName)
    : G4VeEnergyLoss(processName),
      theMeanFreePathTable(NULL)
-{ }
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -143,9 +144,22 @@ void G4eIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
 
  if (theLossTable) {theLossTable->clearAndDestroy(); delete theLossTable;}
  theLossTable = new G4PhysicsTable(numOfMaterials);
+
+
+  // get electron  cuts in kinetic energy
+  // The electron cuts needed in the case of the positron , too!
+  // This is the reason why SetCut has to be called for electron first !!
+
+  if((G4Electron::Electron()->GetEnergyCuts() == 0) &&
+      (&aParticleType == G4Positron::Positron()))
+  {
+     G4cout << " The ELECTRON energy cuts needed to compute energy loss"
+               " and mean free path; and for POSITRON, too. " << G4endl;
+     G4Exception(" Call SetCut for e- first !!");
+  }
  
 // get DeltaCut in energy
- G4double* DeltaCutInKineticEnergy = aParticleType.GetEnergyCuts(); 
+ G4double* DeltaCutInKineticEnergy = G4Electron::Electron()->GetEnergyCuts(); 
 
 // loop for materials
 //
@@ -166,6 +180,12 @@ void G4eIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
 	                                           aVector->GetLowEdgeEnergy(i),
 	                                           material,
 	                                           DeltaThreshold);
+      if(1 < verboseLevel) {
+        G4cout << "Material= " << material->GetName()
+               << "   E(MeV)= " << aVector->GetLowEdgeEnergy(i)/MeV 
+               << "  dEdx(MeV/mm)= " << dEdx*mm/MeV 
+               << G4endl;
+      }
           aVector->PutValue(i,dEdx);
          }          
       theLossTable->insert(aVector);
