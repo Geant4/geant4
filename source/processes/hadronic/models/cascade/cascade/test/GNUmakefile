@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 1999-11-15 12:00:52 miheikki Exp $
+# $Id: GNUmakefile,v 1.4 1999-11-26 14:03:32 miheikki Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -98,6 +98,7 @@ LDLIBS   := \
 
 # Spesific for cascade test
 LDLIBS   := \
+	-lG4globman \
 	-lG4hadronic_mgt \
 	-lG4hadronic_stop \
 	-lG4hadronic_util \
@@ -118,10 +119,20 @@ LDLIBS   := \
 	-lG4hadronic_cascade_bertini \
 	-lG4hadronic_cascade_evaporation \
 
-include $(G4INSTALL)/config/binmake.gmk
+#include $(G4INSTALL)/config/binmake.gmk
 
 
 
+SUBDIRS = N03
+.PHONY : all clean clean_libs
+N03:
+	 @for dir in $(SUBDIRS); do (cd $$dir; $(MAKE)); done
+
+clean:
+	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) clean); done
+
+clean_libs:
+	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) clean_libs); done
 
 
 

@@ -1,4 +1,4 @@
-#include "g4templates.hh"
+#include "globals.hh"
 #include "G4NeutronHPVector.hh"
 #include "../src/G4NeutronHPVector.cc"
 

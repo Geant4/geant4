@@ -59,10 +59,10 @@
   */
  int main()
   {
-    cout << "Testing HETC cascade" << endl;
-    cout << " Testing G4Cascade" << endl;
+    G4cout << "Testing HETC cascade" << endl;
+    G4cout << " Testing G4Cascade" << endl;
 
-      G4Cascade myCascade =  G4Cascade();
+    //G4Cascade myCascade =  G4Cascade();
 
     /*
     G4cout.setf( ios::scientific, ios::floatfield );
