@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ViewParameters.hh,v 1.11 2001-02-23 15:43:18 johna Exp $
+// $Id: G4ViewParameters.hh,v 1.12 2001-03-07 14:30:12 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,7 +63,7 @@
 #include "G4VisAttributes.hh"
 #include "G4VMarker.hh"
 
-typedef vector<G4Plane3D> G4Planes;
+typedef G4std::vector<G4Plane3D> G4Planes;
 
 class G4ViewParameters {
 
