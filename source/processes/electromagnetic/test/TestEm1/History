@@ -1,4 +1,4 @@
-$Id: History,v 1.1 1999-01-08 16:32:37 gunter Exp $
+$Id: History,v 1.2 1999-05-10 15:41:12 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+10-05-99  user's actions adapted to geant4-00-ref-04
+     
 03-12-98  subdirectory geant3 which contains the geant3 equivalent
           example.
           
