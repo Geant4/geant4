@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PionMinusAbsorptionAtRest.cc,v 1.7 2002-12-12 19:18:38 gunter Exp $
+// $Id: G4PionMinusAbsorptionAtRest.cc,v 1.8 2003-05-30 10:50:53 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -127,7 +127,7 @@ G4double G4PionMinusAbsorptionAtRest::AtRestGetPhysicalInteractionLength(
 
 G4VParticleChange* G4PionMinusAbsorptionAtRest::AtRestDoIt(
                                             const G4Track& track,
-					    const G4Step& stepData
+					    const G4Step& 
 					    )
 //
 // Handles PionMinuss at rest; a PionMinus can either create secondaries or

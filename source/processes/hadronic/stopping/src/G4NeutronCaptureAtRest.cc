@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronCaptureAtRest.cc,v 1.6 2002-12-12 19:18:38 gunter Exp $
+// $Id: G4NeutronCaptureAtRest.cc,v 1.7 2003-05-30 10:50:52 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -125,7 +125,7 @@ G4double G4NeutronCaptureAtRest::AtRestGetPhysicalInteractionLength(
 
 G4VParticleChange* G4NeutronCaptureAtRest::AtRestDoIt(
                                             const G4Track& track,
-					    const G4Step& stepData
+					    const G4Step& 
 					    )
 //
 // Handles Neutrons at rest; a Neutron can either create secondaries or

@@ -21,9 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonMinusCaptureAtRest.cc,v 1.13 2003-05-02 10:00:52 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file --- Copyright CERN 1998
 //      CERN Geneva Switzerland
@@ -179,7 +176,7 @@ G4bool G4MuonMinusCaptureAtRest::IsApplicable(
 }
 
 G4double G4MuonMinusCaptureAtRest::GetMeanLifeTime(const G4Track& track,
-						   G4ForceCondition* condition)
+						   G4ForceCondition* )
 {
   GetCaptureIsotope( track );
   return (tDelay );
@@ -234,7 +231,7 @@ G4double G4MuonMinusCaptureAtRest::AtRestGetPhysicalInteractionLength(
 
 G4VParticleChange* G4MuonMinusCaptureAtRest::AtRestDoIt(
 							const G4Track& track,
-							const G4Step& stepData
+							const G4Step& 
 							)
 //
 // Handles MuonMinuss at rest; a MuonMinus can either create secondaries or

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonMinusAbsorptionAtRest.hh,v 1.8 2002-12-12 19:18:36 gunter Exp $
+// $Id: G4KaonMinusAbsorptionAtRest.hh,v 1.9 2003-05-30 10:50:52 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -80,7 +80,7 @@ public:
 protected:                         // why?? might be private....
   // zero mean lifetime
      G4double GetMeanLifeTime(const G4Track& aTrack,
-			      G4ForceCondition* condition) 
+			      G4ForceCondition* ) 
      {
      G4double result = 0;
      if(aTrack.GetMaterial()->GetNumberOfElements() == 1)

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiProtonAnnihilationAtRest.cc,v 1.6 2002-12-12 19:18:37 gunter Exp $
+// $Id: G4AntiProtonAnnihilationAtRest.cc,v 1.7 2003-05-30 10:50:52 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -134,7 +134,7 @@ G4double G4AntiProtonAnnihilationAtRest::AtRestGetPhysicalInteractionLength(
 
 G4VParticleChange* G4AntiProtonAnnihilationAtRest::AtRestDoIt(
                                             const G4Track& track,
-					    const G4Step& stepData
+					    const G4Step& 
 					    )
 //
 // Handles AntiProtons at rest; a AntiProton can either create secondaries or

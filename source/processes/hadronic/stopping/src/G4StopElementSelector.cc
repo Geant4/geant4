@@ -210,7 +210,7 @@ G4double  G4StopElementSelector::GetMuonCaptureRate(G4double Z, G4double A)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double  G4StopElementSelector::GetMuonDecayRate(G4double Z, G4double A)
+G4double  G4StopElementSelector::GetMuonDecayRate(G4double Z, G4double /* A */)
 {
   // Decay time on K-shell 
   // N.C.Mukhopadhyay Phys. Rep. 30 (1977) 1.

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PiMinusAbsorptionAtRest.cc,v 1.11 2002-12-12 19:18:38 gunter Exp $
+// $Id: G4PiMinusAbsorptionAtRest.cc,v 1.12 2003-05-30 10:50:53 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -84,7 +84,7 @@ G4PiMinusAbsorptionAtRest::~G4PiMinusAbsorptionAtRest()
 {}
 
 
-G4VParticleChange* G4PiMinusAbsorptionAtRest::AtRestDoIt(const G4Track& track, const G4Step& Step)
+G4VParticleChange* G4PiMinusAbsorptionAtRest::AtRestDoIt(const G4Track& track, const G4Step& )
 {
   const G4DynamicParticle* stoppedHadron = track.GetDynamicParticle();
       

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StopDummyDeexcitation.cc,v 1.8 2002-12-12 19:18:39 gunter Exp $
+// $Id: G4StopDummyDeexcitation.cc,v 1.9 2003-05-30 10:50:53 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -59,9 +59,9 @@ G4StopDummyDeexcitation::~G4StopDummyDeexcitation()
 {
 }
 
-G4ReactionProductVector* G4StopDummyDeexcitation::BreakUp(G4double A, G4double Z, 
-							 G4double excitation, 
-							 const G4ThreeVector& p)
+G4ReactionProductVector* G4StopDummyDeexcitation::BreakUp(G4double /*A*/, G4double /*Z*/, 
+							 G4double /*excitation*/, 
+							 const G4ThreeVector& /*p*/)
 {
   return 0;
 }

@@ -131,7 +131,7 @@ G4double G4AntiNeutronAnnihilationAtRest::AtRestGetPhysicalInteractionLength(
 
 G4VParticleChange* G4AntiNeutronAnnihilationAtRest::AtRestDoIt(
                                             const G4Track& track,
-					    const G4Step& stepData
+					    const G4Step& 
 					    )
 //
 // Handles AntiNeutrons at rest; an AntiNeutron can either create secondaries
