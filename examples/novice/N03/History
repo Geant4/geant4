@@ -1,4 +1,4 @@
-$Id: History,v 1.7 1999-11-09 03:19:41 stanaka Exp $
+$Id: History,v 1.8 1999-11-09 04:58:27 stanaka Exp $
 --------------------------------------------------
 
      =========================================================
@@ -16,7 +16,7 @@ track of all tags.
      ----------------------------------------------------------
 
 09-11-99 Satoshi Tanaka
-  TAG: examples-V00-01-06
+  TAG: examples-V00-01-11
   prerunN03.mac        : /vis/viewer/update  is appended
   src/ExN03RunAction.cc: /vis/scene/notifyHandlers  is in BeginOfRunAction()
                          /vis/viewer/update  is in EndOfRunAction()
