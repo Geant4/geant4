@@ -38,6 +38,7 @@
 // 22 August 2000 V.Ivanchenko Insert paramStepLimit and
 //                reorganise access to Barkas and Bloch terms  
 // 04 Sept.  2000 V.Ivanchenko rename fluctuations
+// 05 Sept.  2000 V.Ivanchenko clean up
 // --------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -51,6 +52,7 @@
 #include "G4Material.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -73,9 +75,9 @@ G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
     theIonYangFluctuationModel(NULL),
     nStopping(true),
     theBarkas(true),
-    theProton (G4Proton::Proton()),
-    theAntiProton (G4AntiProton::AntiProton()),
-    theElectron ( G4Electron::Electron() ),
+    //    theProton (G4Proton::Proton()),
+    //    theAntiProton (G4AntiProton::AntiProton()),
+    //    theElectron ( G4Electron::Electron() ),
     paramStepLimit (0.005),
     factor(twopi_mc2_rcl2),
     protonMass(proton_mass_c2)
@@ -127,10 +129,14 @@ void G4hLowEnergyIonisation::SetElectronicStoppingPowerModel(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4hLowEnergyIonisation::InicialiseParametrisation() 
+void G4hLowEnergyIonisation::InitialiseParametrisation() 
 
 {
+  G4Proton* theProton = G4Proton::Proton();
+  G4AntiProton* theAntiProton = G4AntiProton::AntiProton();
+
   // cuts for  electron 
+  G4Electron* theElectron = G4Electron::Electron();
   deltaCutInKineticEnergy = theElectron->GetCutsInEnergy() ;
 
   // Define models for parametrisation of electronic energy losses
@@ -166,7 +172,10 @@ void G4hLowEnergyIonisation::BuildPhysicsTable(
   
   //  just call BuildLossTable+BuildLambdaTable
 {
-  InicialiseParametrisation() ;
+  InitialiseParametrisation() ;
+  G4Proton* theProton = G4Proton::Proton();
+  G4AntiProton* theAntiProton = G4AntiProton::AntiProton();
+  G4Electron* theElectron = G4Electron::Electron();
 
   charge = aParticleType.GetPDGCharge()/eplus ;
   chargeSquare = charge*charge ;
@@ -211,6 +220,8 @@ void G4hLowEnergyIonisation::BuildLossTable(
   // Inicialisation
   G4double lowEdgeEnergy , ionloss, ionlossBB, paramB ;
   G4double lowEnergy, highEnergy;
+  G4Proton* theProton = G4Proton::Proton();
+  G4AntiProton* theAntiProton = G4AntiProton::AntiProton();
 
   if(aParticleType == *theProton) {
     lowEnergy = protonLowEnergy ;
@@ -450,7 +461,9 @@ G4double G4hLowEnergyIonisation::GetConstraints(
   // returns the Step limit
   // dEdx is calculated as well as the range  
   // based on Effective Charge Approach
-  
+  G4Proton* theProton = G4Proton::Proton();
+  G4AntiProton* theAntiProton = G4AntiProton::AntiProton();
+
   G4double stepLimit ;
   G4bool isOut ;
   G4double dx, s, highEnergy;
@@ -537,7 +550,8 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
                                            const G4Step& stepData) 
 {
   // compute the energy loss after a step 
-  
+  G4Proton* theProton = G4Proton::Proton();
+  G4AntiProton* theAntiProton = G4AntiProton::AntiProton();
   G4double finalT = 0.0 ;
   
   aParticleChange.Initialize(trackData) ;
@@ -661,6 +675,7 @@ G4double G4hLowEnergyIonisation::ProtonParametrisedDEDX(
                                  const G4Material* material, 
 				       G4double kineticEnergy) const
 {
+  G4Proton* theProton = G4Proton::Proton();
   G4double eloss = 0.0;
 
     // Free Electron Gas Model  
@@ -687,6 +702,7 @@ G4double G4hLowEnergyIonisation::AntiProtonParametrisedDEDX(
                                  const G4Material* material, 
 				       G4double kineticEnergy) const
 {
+  G4AntiProton* theAntiProton = G4AntiProton::AntiProton();
   G4double eloss = 0.0 ;
 
   // Choose the model
@@ -913,6 +929,8 @@ G4double G4hLowEnergyIonisation::ComputeDEDX(
                                  const G4Material* material, 
 				       G4double kineticEnergy) 
 {  
+  G4Proton* theProton = G4Proton::Proton();
+  G4AntiProton* theAntiProton = G4AntiProton::AntiProton();
   G4double dedx = 0.0 ;
     
   G4double tscaled = kineticEnergy*protonMass/(aParticle->GetPDGMass()) ; 

@@ -12,7 +12,7 @@
 // For information related to this code contact:
 // Geant4 Collaboration
 //
-// File name:     G4hMollereNuclear
+// File name:     G4hICRU49Nuclear
 //
 // Author:        V.Ivanchenko (Vladimir.Ivanchenko@cern.ch)
 // 
@@ -35,24 +35,24 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4hMollereNuclear.hh"
+#include "G4hICRU49Nuclear.hh"
 #include "G4UnitsTable.hh"
 #include "globals.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4hMollereNuclear::G4hMollereNuclear():G4VhNuclearStoppingPower()
+G4hICRU49Nuclear::G4hICRU49Nuclear():G4VhNuclearStoppingPower()
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4hMollereNuclear::~G4hMollereNuclear() 
+G4hICRU49Nuclear::~G4hICRU49Nuclear() 
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4hMollereNuclear::NuclearStoppingPower(G4double kineticEnergy,
+G4double G4hICRU49Nuclear::NuclearStoppingPower(G4double kineticEnergy,
                                 G4double z1, G4double z2, 
                                 G4double m1, G4double m2) const
 {  

@@ -39,7 +39,7 @@
 #include "globals.hh"
 #include "G4hZiegler1977Nuclear.hh"
 #include "G4hZiegler1985Nuclear.hh"
-#include "G4hMollereNuclear.hh"
+#include "G4hICRU49Nuclear.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ElementVector.hh"
@@ -57,19 +57,19 @@ G4hNuclearStoppingModel::G4hNuclearStoppingModel(const G4String& name):
   if("Ziegler1977" == name) { 
       nStopingPowerTable = new G4hZiegler1977Nuclear();
     
-  } else if("ICRU_R49Mollere" == name || " " == name) {
+  } else if("ICRU_R49" == name || " " == name) {
       nStopingPowerTable = new G4hZiegler1985Nuclear();
 
   } else if("Ziegler1985" == name) {
-      nStopingPowerTable = new G4hMollereNuclear();
+      nStopingPowerTable = new G4hICRU49Nuclear();
         
   } else {
     G4cout << 
     "G4hLowEnergyIonisation warning: There is no table with the name <" 
  << name << ">" 
- << " for nuclear stopping, <ICRU_R49Mollere> is applied " 
+ << " for nuclear stopping, <ICRU_R49> is applied " 
  << G4endl; 
-    nStopingPowerTable = new G4hMollereNuclear();
+    nStopingPowerTable = new G4hICRU49Nuclear();
   }  
 }
 

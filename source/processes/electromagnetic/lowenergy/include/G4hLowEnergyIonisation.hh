@@ -65,10 +65,6 @@ public: // Without description
     
   void BuildPhysicsTable(const G4ParticleDefinition& aParticleType) ;
 
-  void BuildLossTable(const G4ParticleDefinition& aParticleType) ;
-
-  void BuildLambdaTable(const G4ParticleDefinition& aParticleType) ;
-  
   G4double GetMeanFreePath(const G4Track& track,
 			         G4double previousStepSize,
 			    enum G4ForceCondition* condition );
@@ -132,8 +128,12 @@ private:
 
   void SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins);
 
-  void InicialiseParametrisation();
+  void InitialiseParametrisation();
 
+  void BuildLossTable(const G4ParticleDefinition& aParticleType) ;
+
+  void BuildLambdaTable(const G4ParticleDefinition& aParticleType) ;
+  
   void SetProtonElectronicStoppingPowerModel(const G4String& dedxTable) 
                               {theProtonTable = dedxTable ;};
   // This method defines the ionisation parametrisation method via its name 
@@ -216,9 +216,9 @@ private:
   const G4double paramStepLimit; // parameter limits the step at low energy
   
   // particles 
-  const G4Electron* theElectron;
-  const G4Proton* theProton;
-  const G4AntiProton* theAntiProton;
+  //  const G4Electron* theElectron;
+  //  const G4Proton* theProton;
+  //  const G4AntiProton* theAntiProton;
 
   G4double fdEdx;        // computed in GetContraints
   G4double fRangeNow ;   //         
