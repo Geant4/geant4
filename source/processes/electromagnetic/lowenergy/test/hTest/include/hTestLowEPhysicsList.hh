@@ -2,6 +2,14 @@
 #define hTestLowEPhysicsList_h 1
 
 //---------------------------------------------------------------------------
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+//---------------------------------------------------------------------------
 //
 // ClassName:   hTestLowEPhysicsList
 //  
@@ -18,8 +26,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "hTestVEMPhysicsList.hh"
-
-// G4 inludes
 
 class hTestLowEPhysicsList:  public hTestVEMPhysicsList
 {

@@ -2,23 +2,30 @@
 #define hTestHadronPhysicsList1_h 1
 
 //---------------------------------------------------------------------------
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+//---------------------------------------------------------------------------
 //
 // ClassName:   hTestVHadronPhysicsList1
 //  
-// Description: HARP build Hadron Physics List for Geant4 without ions 
+// Description: hTest Hadron Physics List for Geant4 without ions 
 //              and without short lived fragments
 //
-// Authors:     V.Ivanchenko 29/03/01
+// Authors:   07.04.01  V.Ivanchenko 
 //
 // Modified:
 //
 //----------------------------------------------------------------------------
 //
 
-// HARP inludes
 #include "hTestVHadronPhysicsList.h"
 
-// G4 inludes
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class hTestHadronPhysicsList1:  public hTestVHadronPhysicsList
 {
@@ -31,8 +38,9 @@ protected:
   
 private:
 
-
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif
 

@@ -1,25 +1,26 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
-//
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
-//
-// Class Description:
-// The list of particles and processes are defined in this class.
-// Class Description - end
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #ifndef hTestPhysicsList_h
 #define hTestPhysicsList_h 1
 
+//---------------------------------------------------------------------------
+//
+// ClassName:   hTestPhysicsList
+//  
+// Description: hTest PhysicsList 
+//
+// Authors:    07.04.01 V.Ivanchenko
+//
+// Modified:
+//
+//----------------------------------------------------------------------------
+//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 #include "G4VUserPhysicsList.hh"
+#include "hTestDetectorConstruction.hh"
 #include "globals.hh"
 
-class hTestDetectorConstruction;
 class hTestPhysicsListMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -27,18 +28,28 @@ class hTestPhysicsListMessenger;
 class hTestPhysicsList: public G4VUserPhysicsList
 {
 public: // Without description
-
-    hTestPhysicsList( hTestDetectorConstruction*);
+    hTestPhysicsList(hTestDetectorConstruction*);
    ~hTestPhysicsList();
 
-  protected:
+public: // Without description
+    void SetGammaCut(G4double);
+    void SetElectronCut(G4double);
+    void SetProtonCut(G4double);
+    void SetCutsByEnergy(G4double);
+    void GetRange(G4double);
+    void SetMaxStep(G4double);
+    void SetVerbose(G4int val) {verbose = val;};    
+    void SetEMPhysicsList(const G4String&);  
+    void SetHadronPhysicsList(const G4String&);  
+
+protected:
     // Construct particle and physics
     void ConstructParticle();
     void ConstructProcess();
- 
+
+private:
     void SetCuts();
 
-  protected:
     // these methods Construct particles 
     void ConstructBosons();
     void ConstructLeptons();
@@ -46,31 +57,25 @@ public: // Without description
     void ConstructBarions();
     void ConstructIons();
 
-  protected:
   // these methods Construct physics processes and register them
     void ConstructGeneral();
-    void ConstructEM();
-    void ConstructHad();
     
-  public: // Without description
-
-    void SetGammaCut(G4double);
-    void SetElectronCut(G4double);
-    void SetProtonCut(G4double);
-    void SetCutsByEnergy(G4double);
-    void GetRange(G4double);
-    void SetMaxStep(G4double);
-
   private:
+
+    hTestDetectorConstruction* pDet;
+    hTestPhysicsListMessenger* theMessenger;
+    hTestVEMPhysicsList* theHadList;
+    hTestVHadronPhysicsList* theHadList;
 
     G4double cutForGamma;
     G4double cutForElectron;
     G4double cutForProton;
-    
-    G4double MaxChargedStep;    
+    G4double maxChargedStep;    
 
-    hTestDetectorConstruction* pDet;
-    hTestPhysicsListMessenger* physicsListMessenger;
+    G4String emPhysics;
+    G4String hadronPhysics;
+
+    G4int verbose;
 };
 
 #endif

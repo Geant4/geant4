@@ -1,9 +1,16 @@
-
+//---------------------------------------------------------------------------
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
 //---------------------------------------------------------------------------
 //
 // ClassName:   hTestHadronPhysicsList1
 //  
-// Description: Implementation file for Standard HARP HadronPhysicsList1 
+// Description: Implementation file for HadronPhysicsList1 
 //
 // Authors:     V.Ivanchenko 29/03/01 from N.Starkov PhysicsList
 //

@@ -44,12 +44,12 @@ public: // Without description
     void BeginOfEventAction(const G4Event*);
     void   EndOfEventAction(const G4Event*);
     
-    void SetDrawFlag(G4String val)  {drawFlag = val;};
-    G4int GetVerbose() const {return verbose;};
-    G4int GetEventNo() const {return nEvt;};
-    void AddEnergy(G4double, G4int);
-    void AddBackEnergy(G4double de) {backEnergy += de;};
-    void AddLeakEnergy(G4double de) {leakEnergy += de;};
+    inline void SetDrawFlag(G4String val)  {drawFlag = val;};
+    inline G4int GetVerbose() const {return verbose;};
+    inline G4int GetEventNo() const {return nEvt;};
+    inline void AddEnergy(G4double, G4int);
+    inline void AddBackEnergy(G4double de) {backEnergy += de;};
+    inline void AddLeakEnergy(G4double de) {leakEnergy += de;};
     
   private:
 
