@@ -1,4 +1,4 @@
-$Id: History,v 1.72 2004-10-10 10:17:34 johna Exp $
+$Id: History,v 1.73 2004-11-12 09:05:54 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 12, 2004  G.Cosmo                      geommng-V06-02-04
+- Added method GetMass() to G4LogicalVolume, returning the value in absolute
+  units of the mass of the logical volume tree. The mass is computed from the
+  estimated geometrical volume of each solid and material's density associated
+  to the logical volume and its daughters.
+  The returned value is cached and can be used for successive calls (default),
+  unless recomputation is forced by providing 'true' as the first boolean
+  argument in input. Computation should be forced if the geometry setup has
+  changed after the previous call. An optional argument to specify a material
+  is provided; it is implicitely used for geometrical parameterisations by
+  material.
 
 Oct 10, 2004  J.Allison                    geommng-V06-02-03
 - Added GetPolyhedron, a smart access function that creates a G4Polyhedron
