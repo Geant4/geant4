@@ -1,4 +1,4 @@
-$Id: History,v 1.164 2003-02-05 15:40:05 gcosmo Exp $
+$Id: History,v 1.165 2003-02-11 21:00:21 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11.02-2003   MGP, tag emlowen-V05-00-03
+             First tag including Penelope processes for photons and related
+             unit tests, implemented by Luciano Pandola
+
+11.02-2003   MGP, tag emlowen-V05-00-02
+             Included minor editing of header files in the cut-per-region
+             migration and protection of energy loss fluctuations by VI 
 
 05.02-2003   CG, tag emlowen-V05-00-01
              Removed redundant inclusion of headers for units and constants.
