@@ -789,8 +789,8 @@ void G4ElasticHadrNucleusHE::ArrayForHeavy(
        GetNucleusParameters(aNucleus);
 
 //////       G4double aNuc  = aNucleus->GetN();
-       G4double intgrS, intgStep;
-       G4int    ii;
+       G4double intgrS(0), intgStep(0);
+       G4int    ii(0);
 
            iIntgr[0] = 0;
 
