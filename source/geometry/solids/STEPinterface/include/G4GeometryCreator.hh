@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GeometryCreator.hh,v 1.4 2000-11-09 16:35:46 gcosmo Exp $
+// $Id: G4GeometryCreator.hh,v 1.5 2000-11-10 17:44:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -56,6 +56,7 @@ class G4GeometryCreator
     virtual const char* Name() const=0;
     virtual STEPattribute* GetNamedAttribute(const G4String&, STEPentity&);
     virtual STEPentity* GetNamedEntity(const G4String&, STEPentity&);  
+    InstMgr* GetInstanceManager() const;
     G4int GetNextId() { objectId+=10; return objectId; }
 
   protected:

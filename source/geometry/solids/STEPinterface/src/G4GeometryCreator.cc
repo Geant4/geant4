@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GeometryCreator.cc,v 1.4 2000-11-09 16:35:52 gcosmo Exp $
+// $Id: G4GeometryCreator.cc,v 1.5 2000-11-10 17:44:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,6 +39,11 @@ G4bool G4GeometryCreator::operator==(const G4GeometryCreator&)
 void* G4GeometryCreator::GetCreatedObject()
 {
   return createdObject;
+}
+
+InstMgr* G4GeometryCreator::GetInstanceManager() const
+{
+  return &instanceManager;
 }
 
 STEPattribute*
