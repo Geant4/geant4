@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Quasmon.cc,v 1.20 2000-09-25 07:26:36 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.21 2000-09-25 16:24:03 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -46,6 +46,7 @@ G4Quasmon::G4Quasmon(G4QContent qQCont, G4LorentzVector q4M, G4LorentzVector ph4
   G4cout<<"G4Quasmon: Hadronization candidates are initialized with nMesons="<<nMesons
         <<",nBaryons="<<nBaryons<<",nClusters="<<nClusters<<G4endl;
 #endif
+  valQ.DecQAQ(-1);
   status=3;                                   
 }
 
@@ -1848,7 +1849,7 @@ G4double G4Quasmon::GetQPartonMomentum(G4double mR2, G4double mC2)
     kMin  = (Mmum-sqM)/frM;                // kMin=0.
     kMax  = (Mmum+sqM)/frM;                // kMax=2*(QM**2-mR2)/4QM
   }
-  if (kMin<0 || kMin>kLim || kMax<0 || kMax>kLim || qMass<=0. || nOfQ<3)
+  if (kMin<0 || kMin>kLim || kMax<0 || kMax>kLim || qMass<=0. || nOfQ<2)
   {
     G4cerr<<"***G4Q::GetQPartMom: kMax="<<kMax<<", kMin="<<kMin<<", MQ="<<qMass
           <<", n="<<nOfQ<<G4endl;
@@ -1858,6 +1859,7 @@ G4double G4Quasmon::GetQPartonMomentum(G4double mR2, G4double mC2)
   G4cout<<"G4Q::GetQPartonMom: kLim="<<kLim<<",kMin="<<kMin<<",kMax="<<kMax
         <<", nQ="<<nOfQ<<G4endl;
 #endif
+  if(nOfQ==2) return kMax;
   G4int n=nOfQ-2;
   G4double fn=n;
   G4double vRndm = G4UniformRand();
@@ -1994,12 +1996,12 @@ void G4Quasmon::CalculateNumberOfQPartons(G4double qMass)
   else   nOfQ = 1+2*RandomPoisson((1.+sqrt(1.+qMOverT*qMOverT))/4.-0.5); // abs(b) is odd
   //
 #ifdef pdebug
-  cout<<"G4Quasm::Calc#ofQP:QM="<<qMass<<",T="<<Temperature<<",QC="<<valQ<<",nOfQ="<<nOfQ<<endl;
+  G4cout<<"G4Quasm::Calc#ofQP:QM="<<qMass<<",T="<<Temperature<<",QC="<<valQ<<",nOfQ="<<nOfQ<<G4endl;
 #endif
   G4int absb = abs(valQ.GetBaryonNumber());
   G4int tabn = 0;
-  if(absb>0)tabn=3*absb;    // Minimal QC for fragmentation
-  else if(tabn<4) tabn=4;   // Mesonic system
+  if(absb)tabn=3*absb;      // Minimal QC for baryonic system fragmentation
+  else if(tabn<4) tabn=4;   // Minimal QC for mesonic system fragmentation
   if (nOfQ<tabn) nOfQ=tabn;
   G4int nSeaPairs = (nOfQ-valc)/2;
   G4int stran = abs(valQ.GetS());
@@ -2010,23 +2012,22 @@ void G4Quasmon::CalculateNumberOfQPartons(G4double qMass)
 #ifdef pdebug
   G4cout<<"G4Q::Calc#ofQPart:"<<valQ<<",INtot="<<valc<<",FinTot="<<nOfQ<<",Sea="<<nSeaPairs<<G4endl;
 #endif
-  if (nSeaPairs)            // Add sea to initial quark content
+  if (nSeaPairs)            // Add/subtract sea pairs to/from initial quark content
   {
     G4int morDec=0;
     if(nSeaPairs>0)valQ.IncQAQ(nSeaPairs,SSin2Gluons);
-    else    morDec=valQ.DecQAQ(nSeaPairs);
-    if(morDec)
-	{
+    else    morDec=valQ.DecQAQ(-nSeaPairs);
 #ifdef pdebug
-      G4cout<<"***G4Q::Calc#ofQPart: not totally reduced #pairs="<<morDec<<G4endl;
+    if(morDec) G4cout<<"G4Q::Calc#ofQPart: "<<morDec<<" pairs can be reduced more"<<G4endl;
 #endif
-      nOfQ+=morDec+morDec;
-	}
     G4int sSea=valQ.GetS(); // Content of strange quarks
     G4int asSea=valQ.GetAS();
     if(asSea<sSea) sSea=asSea;
     if(sSea>nMaxStrangeSea) // @@@@@@@ Too many strange sea ??????
 	{
+#ifdef pdebug
+      G4cout<<"G4Q::Calc#ofQPart:Reduse S="<<sSea<<",aS="<<asSea<<",maxS="<<nMaxStrangeSea<<G4endl;
+#endif
       sSea-=nMaxStrangeSea; // Strange sea excess
       valQ.DecS(sSea);      // Reduce strange sea to adoptable limit
       valQ.DecAS(sSea);
@@ -2034,7 +2035,7 @@ void G4Quasmon::CalculateNumberOfQPartons(G4double qMass)
 	}
   }
 #ifdef pdebug
-  G4cout<<"G4Quasmon::Calc#ofQPart: FinalQC="<<valQ<<G4endl;
+  G4cout<<"G4Quasmon::Calc#ofQPart: nQ="<<nOfQ<<", FinalQC="<<valQ<<G4endl;
 #endif
 } 
 
@@ -2534,14 +2535,14 @@ void G4Quasmon::CalculateHadronizationProbabilities(G4double kVal, G4double kLS,
                       curParC->SetBind(delta);   // Keep BindingEnerergy for future calculations
                       curParC->SetNQPart2(cNQ);  // Keep a#of quark-partons in the fragment
 #ifdef sdebug
-		 	          cout<<"G4Quasm::CalculateHadrProbab: FillParentClaster="<<*curParC<<endl;
+		 	          G4cout<<"G4Quasm::CalculateHadrProbab: FillParentClaster="<<*curParC<<G4endl;
 #endif
                       curCand->FillPClustVec(curParC);//Fill possible ParentClust to FragmVector
                       delete curParC;
                       comb += probab;
 #ifdef sdebug
-		 	          cout<<"G4Quasmon::CalcHP:i="<<index<<",cC="<<cPDG<<",pc"<<pc<<parQC<<",E="
-						 <<theEnvironment<<",p="<<parCand->GetParPossibility()<<","<<comb<<endl;
+		 	          G4cout<<"G4Quasmon::CalcHP:i="<<index<<",cC="<<cPDG<<",pc"<<pc<<parQC<<",E="
+						    <<theEnvironment<<",p="<<parCand->GetParPossibility()<<","<<comb<<G4endl;
 #endif
                       pc++;
 					}

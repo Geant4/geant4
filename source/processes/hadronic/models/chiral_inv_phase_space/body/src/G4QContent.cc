@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QContent.cc,v 1.7 2000-09-24 11:34:44 mkossov Exp $
+// $Id: G4QContent.cc,v 1.8 2000-09-25 16:24:02 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -21,6 +21,7 @@
 
 //#define debug
 //#define pdebug
+//#define ppdebug
 
 #include "G4QContent.hh"
 
@@ -464,36 +465,36 @@ G4QContent G4QContent::IndAQ (G4int index)
   return G4QContent(0,0,0,0,0,0);
 }
 
-// Reduce a fixet number (if<0:all?) of valence Q-Qbar pairs, returns a#of pairs to reduce more
+// Reduce a fixet number (if nQAQ<0: all) of valence Q-Qbar pairs, returns a#of pairs to reduce more
 G4int G4QContent::DecQAQ(const G4int& nQAQ)
 {//   =====================================
-#ifdef debug
-  G4cout<<"G4QContDecQC: n="<<nQAQ<<","<<GetThis()<<G4endl;
+#ifdef ppdebug
+  G4cout<<"G4QCont::DecQC: n="<<nQAQ<<","<<GetThis()<<G4endl;
 #endif
   G4int ban = GetBaryonNumber();
   G4int tot = GetTot();    // Total number of quarks in QC
-  if (tot==ban*3) return 0;// Nothing to reduce
-  G4int nUP=0;             // U/AU min factor
+  if (tot==ban*3) return 0;// Nothing to reduce & nothing to reduce more
+  G4int nUP=0;             // U/AU min factor (a#of u which can be subtracted)
   if (nU>=nAU) nUP=nAU;
   else         nUP= nU;
 
-  G4int nDP=0;             // D/AD min factor
+  G4int nDP=0;             // D/AD min factor (a#of d which can be subtracted)
   if (nD>=nAD) nDP=nAD;
   else         nDP= nD;
 
-  G4int nSP=0;             // S/AS min factor
+  G4int nSP=0;             // S/AS min factor (a#of s which can be subtracted)
   if (nS>=nAS) nSP=nAS;
   else         nSP= nS;
 
-  G4int nLP  =nUP+nDP;     // a#of light quark pairs
-  G4int nTotP=nLP+nSP;     // total#of existing pairs
-  G4int nReal=nQAQ;        // demanded #of pairs for reduction
-  G4int nRet =nTotP-nQAQ;  // a#of additional pairs for reduction
+  G4int nLP  =nUP+nDP;     // a#of light quark pairs which can be subtracted
+  G4int nTotP=nLP+nSP;     // total#of existing pairs which can be subtracted
+  G4int nReal=nQAQ;        // demanded #of pairs for reduction (by demand)
+  G4int nRet =nTotP-nQAQ;  // a#of additional pairs for further reduction
   if (nQAQ<0)              // === Limited reduction case @@ not tuned for baryons !!
   {
     G4int res=tot+nQAQ;
-#ifdef debug
-	cout<<"DecQC: tot="<<tot<<", nTP="<<nTotP<<", res="<<res<<endl;
+#ifdef ppdebug
+	G4cout<<"G4QC::DecQC: tot="<<tot<<", nTP="<<nTotP<<", res="<<res<<G4endl;
 #endif
     if(res<0)
     {
@@ -514,8 +515,8 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
 
   if (!nReal) return nRet; // Now nothing to be done
   // ---------- Decrimenting by nReal pairs
-#ifdef debug
-  cout << "DecQC: demanded "<<nQAQ<<" pairs, executed "<<nReal<<" pairs"<<endl;
+#ifdef ppdebug
+  G4cout<<"G4QC::DecQC: demanded "<<nQAQ<<" pairs, executed "<<nReal<<" pairs"<<G4endl;
 #endif
   G4int nt = tot - nTotP - nTotP;
   for (int i=0; i<nReal; i++)
@@ -525,8 +526,8 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
     G4int j = static_cast<int>(base*G4UniformRand());            // Random integer "SortOfQuark"
     if (nUP && j<nUP && (nRet>2 || nUP>1 || (nD<2 && nS<2)))     // --- U-Ubar pair
 	{
-#ifdef debug
-      cout << "DecQC: decrementing UAU pair UP="<<nUP<<",nU="<<nU<<",nAU="<<nAU<<endl;
+#ifdef ppdebug
+      G4cout<<"G4QC::DecQC: decrementing UAU pair UP="<<nUP<<", QC="<<GetThis()<<G4endl;
 #endif
       nU--;
       nAU--;
@@ -536,8 +537,8 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
 	} 
     else if (nDP && j<nLP && (nRet>2 || nDP>1 || (nU<2 && nS<2)))// --- D-Ubar pair
 	{
-#ifdef debug
-      G4cout << "DecQC: decrementing DAD pair DP="<<nDP<<",nD="<<nD<<",nAD="<<nAD<<G4endl;
+#ifdef ppdebug
+      G4cout<<"G4QC::DecQC: decrementing DAD pair DP="<<nDP<<", QC="<<GetThis()<<G4endl;
 #endif
       nD--;
       nAD--;
@@ -547,8 +548,8 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
 	} 
     else if (nSP&& (nRet>2 || nSP>1 || (nU<2 && nD<2)))          // --- S-Sbar pair
 	{
-#ifdef debug
-      G4cout << "DecQC: decrementing SAS pair SP="<<nSP<<",nS="<<nS<<",nAS="<<nAS<<G4endl;
+#ifdef ppdebug
+      G4cout<<"G4QC::DecQC: decrementing SAS pair SP="<<nSP<<", QC="<<GetThis()<<G4endl;
 #endif
       nS--;
       nAS--;
@@ -557,8 +558,8 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
 	}
     else if (nUP)                                  // --- U-Ubar pair cancelation (final)
 	{
-#ifdef debug
-      G4cout<<"DecQC: decrementing UAU pair (final) UP="<<nUP<<",nU="<<nU<<",nAU="<<nAU<<G4endl;
+#ifdef ppdebug
+      G4cout<<"G4QC::DecQC: decrementing UAU pair (final) UP="<<nUP<<", QC="<<GetThis()<<G4endl;
 #endif
       nU--;
       nAU--;
@@ -568,8 +569,8 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
 	} 
     else if (nDP)                                 // --- D-Ubar pair cancelation (final)
 	{
-#ifdef debug
-      G4cout<<"DecQC: decrementing DAD pair (final) DP="<<nDP<<", QC="<<GetThis()<<G4endl;
+#ifdef ppdebug
+      G4cout<<"G4QC::DecQC: decrementing DAD pair (final) DP="<<nDP<<", QC="<<GetThis()<<G4endl;
 #endif
       nD--;
       nAD--;
@@ -579,8 +580,8 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
 	} 
     else if (nSP)                                 // --- S-Sbar pair cancelation (final)
 	{
-#ifdef debug
-      G4cout << "DecQC: decrementing SAS pair SP="<<nSP<<", QC="<<GetThis()<<G4endl;
+#ifdef ppdebug
+      G4cout<<"G4QC::DecQC: decrementing SAS pair SP="<<nSP<<", QC="<<GetThis()<<G4endl;
 #endif
       nS--;
       nAS--;
@@ -590,8 +591,8 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
     else G4cout<<"***G4QC::DecQC:i="<<i<<",j="<<j<<",D="<<nDP<<",U="<<nUP<<",S="<<nSP
                <<",T="<<nTotP<<",nRet="<<nRet<<", QC="<<GetThis()<<G4endl;
   }
-#ifdef debug
-  G4cout<<"G4QC::DecQC: >>>OUT<<< QC="<<GetThis()<<G4endl;
+#ifdef ppdebug
+  G4cout<<"G4QC::DecQC: >>>OUT<<< nRet="<<nRet<<", QC="<<GetThis()<<G4endl;
 #endif
   return nRet;
 }

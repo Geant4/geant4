@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QEnvironment.cc,v 1.18 2000-09-25 07:26:36 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.19 2000-09-25 16:24:03 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -84,26 +84,26 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
           G4int hPDG  = curHadr->GetPDGCode();// A PDG Code of the projQHadron
           if(!hPDG||hPDG==10)                 // Check for the validity of the QHadron
           {
-            G4cout<<"***G4QEnvironment::Constructor: wrong PDG("<<ih<<")="<<hPDG
+            G4cerr<<"***G4QEnvironment::Constructor: wrong PDG("<<ih<<")="<<hPDG
                   <<", HQC="<<curHadr->GetQC()<<", HM="<<curHadr->GetMass()<<G4endl;
-            G4Exception("***G4QEnvironment::Constructor: Can not construct QEnvironment");
+            G4Exception("***G4QEnvironment::Constructor: One of input Hadrons is wrong");
           }
           else
           {
             G4int hQ = curHadr->GetQCode();  // One more check for valid of the QHadron
             if(hQ<0)
 	        {
-              G4cout<<"***G4QEnvironment::Constructor: Q<0, projPDG="<<hPDG<<G4endl;
-              G4Exception("***G4QEnvironment::Constructor: Can not construct QEnvironment");
+              G4cerr<<"***G4QEnvironment::Constructor: Q<0, PDG=("<<ih<<")"<<hPDG<<G4endl;
+              G4Exception("***G4QEnvironment::Constructor: One of input Hadrons is wrong");
 	        }
             else
             {
               G4QHadron* newHadr = new G4QHadron(curHadr);
-              theQHadrons.insert(newHadr);  // Fill existing hadron (delete equivalent)
+              theQHadrons.insert(newHadr);   // Fill existing hadron (delete equivalent)
             } // End of Q-Code check
           } // End of proper PDG for i-th Hadron
         }
-        else                                // Nuclear Environment still exists
+        else                                 // Nuclear Environment still exists
 		{
           G4LorentzVector h4Mom = curHadr->Get4Momentum();
           G4QContent      hQC   = curHadr->GetQC();
@@ -114,12 +114,55 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
 		} // End of Existing Nuclear Environment case
 	  } // End of final hadron case
     } // End of the LOOP over input hadrons
-  } // End of interaction with nucleus
-  else
+  } // End of nuclear target case (including neutron=90000001 & proton=90001000)
+  else                                      // => "Unique hadron" case
   {
-    G4cerr<<"***G4QEnvironment: not nuclear targPDG="<<targPDG<<G4endl;
-    G4Exception("***G4QEnvironment::HadrQEnvironment: Target is not a Nucleus");
-  }
+    // the nuclear environment is already initialized as vacuum + get the first hadron
+    G4QHadron* curHadr=projHadrons[0];     // Pointer to the first projectile Hadron (checked)
+    G4int hPDG  = curHadr->GetPDGCode();   // A PDG Code of the projQHadron
+    if(!hPDG||hPDG==10)                    // Check for the validity of the QHadron
+    {
+      G4cerr<<"***G4QEnvironment::Constructor:Vacuum, 1st Hadron wrong PDG="<<hPDG
+            <<", HQC="<<curHadr->GetQC()<<", HM="<<curHadr->GetMass()<<G4endl;
+      G4Exception("***G4QEnvironment::Constructor: Fiest input Hadron is wrong");
+    }
+    else
+    {
+      G4int hQ = curHadr->GetQCode();     // One more check for valid of the QHadron
+      if(hQ<0)
+	  {
+        G4cerr<<"***G4QEnvironment::Constructor:Vacuum, Q<0, 1st HPDG="<<hPDG<<G4endl;
+        G4Exception("***G4QEnvironment::Constructor: First input Hadron is wrong");
+	  }
+      else                                // Now we can get 4Mom &  QC of incedent particle
+      {
+        G4LorentzVector h4Mom = curHadr->Get4Momentum();
+        G4QContent      hQC   = curHadr->GetQC();
+        G4QPDGCode      tQPDG(targPDG);
+        G4int           tQ    = tQPDG.GetQCode();
+        if(tQ<0||targPDG==10)
+		{
+          G4cerr<<"***G4QEnvironment::Constructor:Target Q<0 or Chipolino, PDG="<<targPDG<<G4endl;
+          G4Exception("***G4QEnvironment::Constructor: Target is wrong");
+		}
+        else                              // Now we can create a unique Quasmon
+		{
+          h4Mom+=G4LorentzVector(0.,0.,0.,tQPDG.GetMass());//Projectile + TargetHadron
+          hQC+=tQPDG.GetQuarkContent();
+#ifdef pdebug
+          G4cout<<"G4QEnv::CreateQ:(Vacuum,HadrTarg) Q="<<h4Mom<<hQC<<",QE="<<theEnvironment<<G4endl;
+#endif
+          G4Quasmon* curQuasmon = new G4Quasmon(hQC, h4Mom);
+          theQuasmons.insert(curQuasmon); // Insert Quasmon including hadron/gamma (delete equivalent)     
+		}
+      } // End of Q-Code check
+    } // End of proper PDG for i-th Hadron
+    if(nHadrons>1) for(G4int ih=0; ih<nHadrons; ih++) // fill other Hadrons to Output
+	{
+      G4QHadron* newHadr = new G4QHadron(curHadr);
+      theQHadrons.insert(newHadr);        // Fill existing hadron (delete equivalent)
+	}
+  } // End of Unique Hadron target treatment
 } // End of the G4QEnvironment constructor
 
 G4QEnvironment::G4QEnvironment(const G4QEnvironment &right)
@@ -493,7 +536,7 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
       G4cout<<"G4QEnv::CreateQ:Q="<<q4Mom<<valQ<<"+vg="<<proj4M<<", QEnv="<<theEnvironment<<G4endl;
 #endif
       G4Quasmon* curQuasmon = new G4Quasmon(valQ, q4Mom, proj4M); // Interaction gamma+quark inside
-      theQuasmons.insert(curQuasmon);              // Insert Quasmon without gamma (delete equivalent)
+      theQuasmons.insert(curQuasmon);              // Insert Quasmon without incident gamma (delete equivalent)
 	}
     else
 	{
@@ -503,7 +546,7 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
       G4cout<<"G4QEnv::CreateQ: Q="<<q4Mom<<valQ<<", QEnv="<<theEnvironment<<G4endl;
 #endif
       G4Quasmon* curQuasmon = new G4Quasmon(valQ, q4Mom);
-      theQuasmons.insert(curQuasmon);              // Insert Quasmon with hadron/gamma (delete equivalent)     
+      theQuasmons.insert(curQuasmon);              // Insert Quasmon including hadron/gamma (delete equivalent)     
 	}
   }
   else
