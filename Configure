@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.26 2002-06-26 17:27:19 stesting Exp $
+# $Id: Configure,v 1.27 2002-06-26 17:32:01 stesting Exp $
 #
-# Generated on Wed Jun 26 19:27:06 CEST 2002 [metaconfig 3.0 PL70]
+# Generated on Wed Jun 26 19:31:36 CEST 2002 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2351,7 +2351,7 @@ esac
 
 case "$g4ledata" in
 '')
-	g4ledata=$g4install/../G4EMLOW0.5
+	g4ledata=$g4install/../G4EMLOW1.1
 	;;
 esac
 
@@ -2407,7 +2407,7 @@ gans=$ans
 	3) 
 		dflt=$g4ledata
 		fn='f~'
-		rp="Where is G4EMLOW0.5 data installed ?"
+		rp="Where is G4EMLOW1.1 data installed ?"
 		. ./getfile
 		g4ledata=$ans
 		;;
