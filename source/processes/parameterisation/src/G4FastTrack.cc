@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastTrack.cc,v 1.6 2001-10-26 14:43:37 mverderi Exp $
+// $Id: G4FastTrack.cc,v 1.7 2003-11-10 08:57:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -40,6 +40,7 @@
 #include "G4ios.hh"
 #include "G4FastTrack.hh"
 #include "G4TransportationManager.hh"
+#include "G4TouchableHistoryHandle.hh"
 
 // -----------
 // Constructor
@@ -122,8 +123,8 @@ G4FastTrack::FRecordsAffineTransformation(const G4Navigator* theNavigator)
       G4TransportationManager::GetTransportationManager()->
       GetNavigatorForTracking();
   
-  G4TouchableHistory *history =  
-    NavigatorToUse->CreateTouchableHistory();
+  G4TouchableHistoryHandle history =  
+    NavigatorToUse->CreateTouchableHistoryHandle();
   
   //-----------------------------------------------------
   // Run accross the hierarchy to find the physical volume
@@ -157,12 +158,4 @@ G4FastTrack::FRecordsAffineTransformation(const G4Navigator* theNavigator)
       
       fAffineTransformationDefined = true;
     }
-  
-  //------------------------------------------------------
-  // Delete the TouchableHistory created by the Navigator:
-  //------------------------------------------------------
-  delete history;
-  history = 0;
 }
-
-
