@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryMessenger.cc,v 1.8 2003-02-06 15:37:20 gcosmo Exp $
+// $Id: G4GeometryMessenger.cc,v 1.9 2003-02-06 16:53:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -102,26 +102,31 @@ G4GeometryMessenger::G4GeometryMessenger(G4TransportationManager* tman)
   linCmd->SetGuidance( "Performs test along a single specified direction/position." );
   linCmd->SetGuidance( "Use position and direction commands to change default." );
   linCmd->SetGuidance( "Default: position(0,0,0), direction(0,0,1)." );
+  linCmd->AvailableForStates(G4State_Idle);
 
   grdCmd = new G4UIcmdWithoutParameter( "/geometry/test/grid_test", this );
   grdCmd->SetGuidance( "Start running the default grid test." );
   grdCmd->SetGuidance( "A grid of lines parallel to a cartesian axis is used;" );
   grdCmd->SetGuidance( "Only direct daughters of the mother volumes are checked." );
+  grdCmd->AvailableForStates(G4State_Idle);
 
   recCmd = new G4UIcmdWithoutParameter( "/geometry/test/recursive_test", this );
   recCmd->SetGuidance( "Start running the recursive grid test." );
   recCmd->SetGuidance( "A grid of lines along a cartesian axis is recursively" );
   recCmd->SetGuidance( "to all daughters and daughters of daughters, etc." );
   recCmd->SetGuidance( "WARNING: it may take a very long time, depending on geometry complexity !");
+  recCmd->AvailableForStates(G4State_Idle);
 
   cylCmd = new G4UIcmdWithoutParameter( "/geometry/test/cylinder_test", this );
   cylCmd->SetGuidance( "Start running the cylinder test." );
   cylCmd->SetGuidance( "A set of lines in a cylindrical pattern of gradually" );
   cylCmd->SetGuidance( "increasing mesh size." );
+  cylCmd->AvailableForStates(G4State_Idle);
 
   runCmd = new G4UIcmdWithoutParameter( "/geometry/test/run", this );
   runCmd->SetGuidance( "Start running the default grid test." );
   runCmd->SetGuidance( "Same as the grid_test command." );
+  runCmd->AvailableForStates(G4State_Idle);
 }
 
 //
