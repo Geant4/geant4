@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.23 1999-06-04 12:35:57 stesting Exp $
+# $Id: binmake.gmk,v 1.24 1999-06-04 16:58:17 stesting Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -153,7 +153,7 @@ else
 # The next line specifically should read LDLIBS2 = , not LDLIBS2 :=, so
 #   that it is not expanded until the directory G4TMPDIR is created.
   LDLIBS2 = $(shell \
-        export G4TMP=$(G4TMP); \
+        G4TMP=$(G4TMP); export G4TMP; \
 	if [ \( -f $(G4BINDIR)/liblist \
 	  -a -f $(G4WORKDIR)/tmp/$(G4SYSTEM)/libname.map \) ]; then \
 	$(G4BINDIR)/liblist \
@@ -210,7 +210,7 @@ dependencies := $(patsubst %.cc,$(G4TMPDIR)/exe/%.d,$(sources))
 
 LINK_DEPENDENCIES := $(G4TMPDIR)/exe/obj.last
 
-.PHONY: bin clean clean_bin
+.PHONY: bin clean clean_bin debug
 
 # Make $(G4TARGET) executable.
 bin: $(G4BINDIR)/$(G4TARGET)
