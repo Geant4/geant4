@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 2004-12-08 15:37:15 daquinog Exp $
+# $Id: GNUmakefile,v 1.8 2004-12-14 13:11:07 daquinog Exp $
 # --------------------------------------------------------------
 # GNUmakefile   Michael Dressel
 # --------------------------------------------------------------
@@ -28,12 +28,12 @@ endif
 
 
 CPPFLAGS += -I$(PYTHON_INCLUDE_DIR) \
-            -I$(G4INSTALL)/hadronic_lists/lists/LHEP_BIC/include \
-            -I$(G4INSTALL)/hadronic_lists/lists/LHEP_BIC_HP/include \
-	    -I$(G4INSTALL)/hadronic_lists/lists/LHEP/include \
-	    -I$(G4INSTALL)/hadronic_lists/lists/LHEP_PRECO/include \
-	    -I$(G4INSTALL)/hadronic_lists/lists/LHEP_LEAD/include \
-	    -I$(G4INSTALL)/hadronic_lists/lists/LHEP_PRECO_HP/include
+            -I$(G4INSTALL)/physics_lists/hadronic/LHEP_BIC/include \
+            -I$(G4INSTALL)/physics_lists/hadronic/LHEP_BIC_HP/include \
+	    -I$(G4INSTALL)/physics_lists/hadronic/LHEP/include \
+	    -I$(G4INSTALL)/physics_lists/hadronic/LHEP_PRECO/include \
+	    -I$(G4INSTALL)/physics_lists/hadronic/LHEP_LEAD/include \
+	    -I$(G4INSTALL)/physics_lists/hadronic/LHEP_PRECO_HP/include
 
 LDFLAGS += -L$(PYTHON_LIB_DIR)
 

@@ -1,4 +1,4 @@
-# $Id: History,v 1.23 2004-12-13 15:55:20 gcosmo Exp $
+# $Id: History,v 1.24 2004-12-14 13:12:55 daquinog Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -18,6 +18,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 14th, 2004 G.Daquino - Tiara-V06-02-02
+- update of GNUmakefiles to the new phys_lists structure
 
 Dec 13th, 2004 G.Cosmo - Tiara-V06-02-01
 - Use new phys-lists structure.

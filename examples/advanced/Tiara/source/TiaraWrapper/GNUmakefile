@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.8 2004-12-08 15:37:14 daquinog Exp $
+# $Id: GNUmakefile,v 1.9 2004-12-14 13:11:06 daquinog Exp $
 # --------------------------------------------------------------
 # GNUmakefile   Michael Dressel
 # --------------------------------------------------------------
@@ -19,12 +19,12 @@ SWIGFLAGS = -I../G4KernelWrapper \
 	-I$(G4INSTALL)/source/event/include \
 	-I$(G4INSTALL)/source/processes/transportation/include \
 	-I$(TIARA_BASE)/source/tiara/include \
-	-I$(G4INSTALL)/hadronic_lists/lists/LHEP_BIC/include \
-	-I$(G4INSTALL)/hadronic_lists/lists/LHEP_BIC_HP/include \
-	-I$(G4INSTALL)/hadronic_lists/lists/LHEP/include \
-	-I$(G4INSTALL)/hadronic_lists/lists/LHEP_PRECO/include \
-        -I$(G4INSTALL)/hadronic_lists/lists/LHEP_LEAD/include \
-        -I$(G4INSTALL)/hadronic_lists/lists/LHEP_PRECO_HP/include \
+	-I$(G4INSTALL)/physics_lists/hadronic/LHEP_BIC/include \
+	-I$(G4INSTALL)/physics_lists/hadronic/LHEP_BIC_HP/include \
+	-I$(G4INSTALL)/physics_lists/hadronic/LHEP/include \
+	-I$(G4INSTALL)/physics_lists/hadronic/LHEP_PRECO/include \
+        -I$(G4INSTALL)/physics_lists/hadronic/LHEP_LEAD/include \
+        -I$(G4INSTALL)/physics_lists/hadronic/LHEP_PRECO_HP/include \
 	-I$(TIARA_BASE)/source/CLHEPWrapper/include \
 	-I$(TIARA_BASE)/source/G4KernelWrapper/include \
 	-I${CLHEP_BASE_DIR}/include 
@@ -58,17 +58,17 @@ endif
 
 CPPFLAGS += -I$(TIARA_BASE)/source/tiara/include\
 	    -I$(PYTHON_INCLUDE_DIR) \
-            -I$(G4INSTALL)/hadronic_lists/lists/LHEP_BIC/include \
-            -I$(G4INSTALL)/hadronic_lists/lists/LHEP_BIC_HP/include \
-	    -I$(G4INSTALL)/hadronic_lists/lists/LHEP/include \
-	    -I$(G4INSTALL)/hadronic_lists/lists/LHEP_PRECO/include \
-	    -I$(G4INSTALL)/hadronic_lists/lists/LHEP_LEAD/include \
-	    -I$(G4INSTALL)/hadronic_lists/lists/LHEP_PRECO_HP/include \
+            -I$(G4INSTALL)/physics_lists/hadronic/LHEP_BIC/include \
+            -I$(G4INSTALL)/physics_lists/hadronic/LHEP_BIC_HP/include \
+	    -I$(G4INSTALL)/physics_lists/hadronic/LHEP/include \
+	    -I$(G4INSTALL)/physics_lists/hadronic/LHEP_PRECO/include \
+	    -I$(G4INSTALL)/physics_lists/hadronic/LHEP_LEAD/include \
+	    -I$(G4INSTALL)/physics_lists/hadronic/LHEP_PRECO_HP/include \
 	    -I$(TIARA_BASE)/source/G4KernelWrapper/include
 
 
 LDFLAGS += -L$(G4WORKDIR)/tmp/$(G4SYSTEM)/tiara \
-	-L$(G4WORKDIR)/lib/.lists_build/$(G4SYSTEM) \
+	-L$(G4WORKDIR)/lib/plists/$(G4SYSTEM) \
 	-L$(PYTHON_LIB_DIR)
 
 
