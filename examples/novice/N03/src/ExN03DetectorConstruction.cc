@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03DetectorConstruction.cc,v 1.5 2001-07-11 09:58:22 gunter Exp $
+// $Id: ExN03DetectorConstruction.cc,v 1.6 2001-09-27 16:00:39 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -217,7 +217,7 @@ steam->AddMaterial(H2O, fractionmass=1.);
 density     = universe_mean_density;    //from PhysicalConstants.h
 pressure    = 3.e-18*pascal;
 temperature = 2.73*kelvin;
-new G4Material(name="Galactic", z=1., a=1.01*g/mole, density,
+G4Material* Vacuum = new G4Material(name="Galactic", z=1., a=1.01*g/mole, density,
                    kStateGas,temperature,pressure);
 
 density     = 1.e-5*g/cm3;
