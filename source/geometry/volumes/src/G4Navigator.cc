@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Navigator.cc,v 1.2 1999-01-08 11:23:47 gunter Exp $
+// $Id: G4Navigator.cc,v 1.3 1999-01-29 18:38:57 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -703,7 +703,7 @@ G4ThreeVector  G4Navigator::GetLocalExitNormal(G4bool* valid)
 }
 
 //   It assumes that it assumes that it will be 
-//  i) called with the Point equal to the EndPoint of the ComputeStep.
+//  i) called at the Point in the same volume as the EndPoint of the ComputeStep.
 // ii) after (or at the end of) ComputeStep OR after the relocation.
 
 G4double G4Navigator::ComputeSafety(const G4ThreeVector &pGlobalpoint,
@@ -725,6 +725,9 @@ G4double G4Navigator::ComputeSafety(const G4ThreeVector &pGlobalpoint,
       PrintState();
     }
 #endif
+
+  // Pseudo-relocate to this point (updates voxel information only).
+  LocateGlobalPointWithinVolume( pGlobalpoint );
 
   if( ! (fEnteredDaughter || fExitedMother ) )
     {
