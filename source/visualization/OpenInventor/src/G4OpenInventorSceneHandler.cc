@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.7 2000-04-12 13:09:15 johna Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.8 2000-05-28 13:42:34 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,6 +81,7 @@ G4OpenInventorSceneHandler::G4OpenInventorSceneHandler (G4OpenInventor& system,
 ,root(NULL)
 ,staticRoot(NULL)
 ,transientRoot(NULL)
+,currentSeparator(NULL)
 {
   //
   root = new SoSeparator;
@@ -96,6 +97,8 @@ G4OpenInventorSceneHandler::G4OpenInventorSceneHandler (G4OpenInventor& system,
   root->addChild(transientRoot);
   //
   fSceneCount++;
+  //
+  currentSeparator=transientRoot;
 }
 
 G4OpenInventorSceneHandler::~G4OpenInventorSceneHandler ()
@@ -108,6 +111,8 @@ G4OpenInventorSceneHandler::~G4OpenInventorSceneHandler ()
 // Method for handling G4Polyline objects (from tracking or wireframe).
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line) {
+  if(currentSeparator==NULL) return;
+  
   G4int nPoints = line.entries();
   SbVec3f* pCoords = new SbVec3f[nPoints];
 
@@ -160,7 +165,7 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line) {
 // Method for handling G4Text objects
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Text& text) {
-
+  if(currentSeparator==NULL) return;
   //
   // Color
   //
@@ -195,6 +200,7 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Text& text) {
 // Method for handling G4Circle objects
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Circle& circle) {
+  if(currentSeparator==NULL) return;
   //
   // Color
   //
@@ -235,7 +241,7 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Circle& circle) {
 // Method for handling G4Square objects - defaults to wireframe
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Square& Square) {
-
+  if(currentSeparator==NULL) return;
   //
   // Color
   //
@@ -270,6 +276,7 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Square& Square) {
 // Method for handling G4Polyhedron objects for drawing solids.
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
+  if(currentSeparator==NULL) return;
 #define MAXPOLYH	32767
   //
   // Assume all facets are convex quadrilaterals.
@@ -374,6 +381,7 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 // Knots and Ctrl Pnts MUST be arrays of GLfloats.
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4NURBS& nurb) {
+  if(currentSeparator==NULL) return;
 
   G4float *u_knot_array, *u_knot_array_ptr;
   u_knot_array = u_knot_array_ptr = new G4float [nurb.GetnbrKnots(G4NURBS::U)];
@@ -514,6 +522,7 @@ G4int G4OpenInventorSceneHandler::fSceneCount = 0;
 // These methods add primitives using the HEPVis classes
 //
 void G4OpenInventorSceneHandler::AddThis (const G4Box & Box) {
+  if(currentSeparator==NULL) return;
   SoCube *g4Box = new SoCube();
   g4Box->width =2*Box.GetXHalfLength();
   g4Box->height=2*Box.GetYHalfLength();
@@ -521,6 +530,7 @@ void G4OpenInventorSceneHandler::AddThis (const G4Box & Box) {
   currentSeparator->addChild(g4Box);
 }
 void G4OpenInventorSceneHandler::AddThis (const G4Tubs & Tubs) {
+  if(currentSeparator==NULL) return;
   SoG4Tubs *g4Tubs = new SoG4Tubs();
   g4Tubs->pRMin = Tubs.GetRMin();
   g4Tubs->pRMax = Tubs.GetRMax();
@@ -530,6 +540,7 @@ void G4OpenInventorSceneHandler::AddThis (const G4Tubs & Tubs) {
   currentSeparator->addChild(g4Tubs);
 }
 void G4OpenInventorSceneHandler::AddThis (const G4Cons &cons) {
+  if(currentSeparator==NULL) return;
   SoG4Cons *g4Cons = new SoG4Cons();
   g4Cons->fRmin1 = cons.GetRmin1();
   g4Cons->fRmin2 = cons.GetRmin2();
@@ -542,9 +553,9 @@ void G4OpenInventorSceneHandler::AddThis (const G4Cons &cons) {
 }
 
 void G4OpenInventorSceneHandler::AddThis (const G4Trap &trap) {
+  if(currentSeparator==NULL) return;
   G4ThreeVector SymAxis=trap.GetSymAxis();
-  
-  SoG4Trap *g4Trap = new SoG4Trap();
+    SoG4Trap *g4Trap = new SoG4Trap();
   g4Trap->pDz  = trap.GetZHalfLength();
   g4Trap->pPhi = atan2(SymAxis(kYAxis),SymAxis(kXAxis));
   g4Trap->pTheta = acos(SymAxis(kZAxis));
@@ -558,6 +569,7 @@ void G4OpenInventorSceneHandler::AddThis (const G4Trap &trap) {
 }
 
 void G4OpenInventorSceneHandler::AddThis (const G4Trd &trd) {
+  if(currentSeparator==NULL) return;
   SoG4Trd *g4Trd = new SoG4Trd();
   g4Trd->fDx1 = trd.GetXHalfLength1();
   g4Trd->fDx2 = trd.GetXHalfLength2();
@@ -581,28 +593,37 @@ void G4OpenInventorSceneHandler::PreAddThis
   // This routines prepares to add solids to the scene database.  
   // We are expecting two
   // kinds of solids: leaf parts and non-leaf parts.  For non-leaf parts,
-  // we create a detector tree kit.  This has two separators.  The solid itself
-  // goes in the preview separator, the full separator is forseen for daughters.
+  // we create a detector tree kit.  This has two separators.  
+  // The solid itself
+  // goes in the preview separator, the full separator is 
+  // forseen for daughters.
   // This separator is not only created--it is also put in a dictionary for 
   // future use by the leaf part.
 
   // For leaf parts, we first locate the mother volume and find its separator 
   // through the dictionary.
 
-  // The private member currentSeparator is set to the proper location on in the
-  // scene database so that when the solid is actually added (in addthis), it is
+  // The private member currentSeparator is set to the proper 
+  // location on in the
+  // scene database so that when the solid is actually 
+  // added (in addthis), it is
   //  put in the right place.
 
   // First find the color attributes.
   //
   const G4VisAttributes* pVisAttribs =
-  fpViewer -> GetApplicableVisAttributes (&visAttribs);
+    fpViewer -> GetApplicableVisAttributes (&visAttribs);
   const G4Colour& g4Col =  pVisAttribs -> GetColour ();
   const double red=g4Col.GetRed ();
   const double green=g4Col.GetGreen ();
   const double blue=g4Col.GetBlue ();
                
-  
+  if(!fpCurrentLV || !fpCurrentPV) return; //GB 
+
+  //printf("debug : OIV : LV : %lx %s : %g %g %g\n",
+  // fpCurrentLV,
+  // fpCurrentLV->GetName().c_str(),
+  // red,green,blue);
   //
   // This block of code is executed for non-leaf parts:
   //
@@ -641,6 +662,7 @@ void G4OpenInventorSceneHandler::PreAddThis
         break;
       }
       else {
+	// Could happen if some non-leaf is invisible !
         G4cerr << "OIScene non-leaf protocol error.  Mother volume " << 
 	          MotherVolume->GetName() << " missing." << G4endl;
         G4cerr << "                         Daughter volume was: "
@@ -651,11 +673,10 @@ void G4OpenInventorSceneHandler::PreAddThis
     }
     if (!MotherVolume) staticRoot->addChild(g4DetectorTreeKit);
     currentSeparator = previewSeparator;
-  }
-  //
-  // This block of code is executed for leaf parts.
-  //
-  else {
+  } else {
+    //
+    // This block of code is executed for leaf parts.
+    //
     //
     // Locate the mother volume and find it's corresponding full separator
     //
