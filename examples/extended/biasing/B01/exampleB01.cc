@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB01.cc,v 1.18 2003-07-31 08:28:16 dressel Exp $
+// $Id: exampleB01.cc,v 1.19 2003-08-25 12:32:29 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,13 +59,21 @@
 #include "G4Scorer.hh"
 #include "G4MassGeometrySampler.hh"
 #include "G4IStore.hh"
+#include "G4VWeightWindowStore.hh"
+#include "G4WeightWindowAlgorithm.hh"
 
 // a score table
 #include "G4ScoreTable.hh"
 
 
-int main(int, char **)
+int main(int argc, char **argv)
 {  
+
+  G4int mode = 0;
+  if (argc>1) {
+    mode = atoi(argv[1]);
+  }
+
   std::ostream *myout = &G4cout;
   G4int numberOfEvent = 100;
 
@@ -83,24 +91,60 @@ int main(int, char **)
   runManager->SetUserAction(new B01PrimaryGeneratorAction);
   runManager->Initialize();
 
-  // the IStore is filled during detector construction
-  G4IStore &aIstore = *detector->GetIStore();
+  // pointers for importance store, weight window sotre
+  // and weight window algorithm
+  G4VIStore *aIstore = 0;
+  G4VWeightWindowStore *aWWstore = 0;
+  G4VWeightWindowAlgorithm *wwAlg = 0;
 
-  // create the importance and scoring sampler for biasing and scoring 
-  // in the tracking world
 
+  // use a scorer
   G4Scorer scorer; 
+
+  // create sampler for biasing and scoring 
+  // in the mass geometry
 
   G4MassGeometrySampler mgs("neutron");
   mgs.PrepareScoring(&scorer);
-  mgs.PrepareImportanceSampling(&aIstore, 0);
+
+  if (mode == 0) { 
+    // prepare for importance sampling
+    aIstore = detector->CreateImportanceStore();
+    mgs.PrepareImportanceSampling(aIstore, 0);
+  }
+  else {
+    // prepare for weight window technique
+    // in this case the algoritm is initialized such that
+    // the weight window tehcnique does exactly the same as
+    // the importance sampling technique, therefore
+    // the place of action ( the locations where 
+    // splitting and Russian roulette are to be applied)
+    // is chosen to be on the boundary between cells.
+    aWWstore = detector->CreateWeightWindowStore();
+
+    wwAlg = new G4WeightWindowAlgorithm(1, // upper limit factor
+					1, // survival factor 
+					100); // max. number of splitting
+      
+    mgs.PrepareWeightWindow(aWWstore, wwAlg, 
+			    onBoundary); // place of action
+  }
   mgs.Configure();
 
   runManager->BeamOn(numberOfEvent);
 
   // print a table of the scores
-  G4ScoreTable sp(&aIstore);
+  G4ScoreTable sp(aIstore);
   sp.Print(scorer.GetMapGeometryCellCellScorer(), myout);
-
+  
+  if (aIstore) {
+    delete aIstore;
+  }
+  if (aWWstore) {
+    delete aWWstore;
+  }
+  if (wwAlg) {
+    delete wwAlg;
+  }
   return 0;
 }

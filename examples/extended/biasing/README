@@ -3,20 +3,21 @@
                         --------------------------
 
 This directory includes example applications to demonstrate the usage of
-different biasing techniques supported in Geant4, or possible from the 
-user applications.
+different variance reduction techniques supported in Geant4, or possible 
+from the user applications.
 
 
-General remark to biasing
--------------------------
+General remark to variance reduction
+------------------------------------
 The tools provided for importance sampling (or geometrical splitting and
-Russian roulette) require the user to have a good understanding of the 
-physics in the problem. This is because the user has to decide which 
-particle types have to be biased, define the regions (physical volumes, 
-replicas) and assign importances to that regions. If this is not done 
-properly it can not be expected that the results describe a real 
-experiment. The examples given here only demonstrate how to use the tools
-technically. They don't intend to produce physical correct results.
+Russian roulette) and for the weight window technique require the user to 
+have a good understanding of the physics in the problem. This is because 
+the user has to decide which particle types have to be biased, define the 
+cells (physical volumes, replicas) and assign importances or weight 
+windows to that cells. If this is not done properly it can not be 
+expected that the results describe a real experiment. The examples given 
+here only demonstrate how to use the tools technically. They don't intend 
+to produce physical correct results.
 
 General remark to scoring
 -------------------------
@@ -26,24 +27,27 @@ therefore should inherit from the interface G4VScorer.
 An example of an implementation of a scorer is G4Scorer
 which may be found in source/event. 
 The scoring in these examples is done with a G4Scorer.
-Importance sampling and scoring does not support all options of the 
-Geant4 geometry. It only supports physical volumes and simple replicas.
+The variance reduction techniques and scoring do not support all options
+of the Geant4 geometry. It only supports physical volumes and simple 
+replicas.
 To identify a physical volume (or replica) objects of the class
 G4GeometryCell are used. Scoring is done according to these
-cells and importance values may be assigned to them.
-When scoring is done in a "scoring" or in a "importance" geometry
-special action has to be taken to prevent counting of
-"collisions" with boundaries of the tracking geometry as interactions.
-This is differently handled when scoring is done in the tracking geometry.
+cells and importance values or the weight windows  may be assigned to 
+them.
+When scoring is done in a parallel geometry special action has to be taken
+to prevent counting of "collisions" with boundaries of the mass geometry 
+as interactions. This is differently handled when scoring is done in the 
+mass geometry.
 
---> G4GeometryCell must not share boundaries with the world volume! <--
+--> G4GeometryCell of the parallel geometry must not share boundaries with
+the world volume! <--
 
 Known problems
 --------------
 In the following scenario it can happen that a particle is not
 biased and it's weight is therefore not changed even if it crosses
 a boundary where biasing should happen.
-The importance sampling creates particles on boundaries 
+Importance and weight window sampling create particles on boundaries 
 between volumes. If the GPIL method of a physical process returns 
 0 as step length for a particle on a boundary and if the PostStepDoIt of
 that process changes the direction of the particle to go back in the 
@@ -59,9 +63,21 @@ http://dressel.home.cern.ch/dressel/biasscore/Sampling.html
 Example B01
 ===========
 
-The example uses importance sampling and scoring. Importance values are
-defined according to the mass geometry. Scoring is also done in according
-to the mass geometry.
+The example uses importance sampling or the weight window technique 
+according to an input parameter. It uses scoring in both cases. 
+Importance values or weight windows are defined according to the mass 
+geometry. In this example the weight window technique is configured such 
+that it behaves equivalent to importance sampling: The window is actually 
+not a window but simply the inverse of the importance value and only
+one energy region is used that covers all energies in the problem.
+The user may change the weight window configuration by changing the
+initialization of the weight window algorithm in example,cc. 
+Different energy bounds for the weight window technique may be specified 
+in B01DetectorConstruction.
+
+The executable takes one optional argument: 0 or 1. Without argument or
+with argument: 0, the importance sampling is applied with argument: 1,
+the weight window technique is applied.
 
 
 Example B02
