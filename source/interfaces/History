@@ -1,4 +1,4 @@
-$Id: History,v 1.62 2003-06-04 16:30:01 gcosmo Exp $
+$Id: History,v 1.63 2003-06-11 07:05:59 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 June 2003, Gabriele Cosmo (interfaces-V05-01-02)
+- G4UIWin32.cc: cleared warning on redefinition of 'pascal' reported on
+  WIN32-VC system.
 
 04 June 2003, Gabriele Cosmo (interfaces-V05-01-01)
 - Fixes for inclusion of <strstream> in G4UIXm.cc, G4UItcsh.cc and
