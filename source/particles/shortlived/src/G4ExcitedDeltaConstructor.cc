@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedDeltaConstructor.cc,v 1.2 1999-06-09 17:28:15 kurasige Exp $
+// $Id: G4ExcitedDeltaConstructor.cc,v 1.3 1999-10-04 09:00:00 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -449,7 +449,7 @@ G4DecayTable*  G4ExcitedDeltaConstructor::AddDeltaPiMode(
   return decayTable;
 }
 
-const G4String G4ExcitedDeltaConstructor::name[] = 
+const char* G4ExcitedDeltaConstructor::name[] = 
 {
   "delta(1600)", "delta(1620)", "delta(1700)", "delta(1900)", "delta(1905)",
   "delta(1910)", "delta(1920)", "delta(1930)", "delta(1950)"

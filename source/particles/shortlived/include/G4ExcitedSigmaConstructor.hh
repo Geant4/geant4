@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedSigmaConstructor.hh,v 1.1 1999-01-07 16:10:39 gunter Exp $
+// $Id: G4ExcitedSigmaConstructor.hh,v 1.2 1999-10-04 08:59:23 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,7 +72,7 @@ class G4ExcitedSigmaConstructor: public G4ExcitedBaryonConstructor
     enum     { SigmaIsoSpin = 2 };
 
   private:
-    static const G4String name[ NStates ];
+    static const char* name[ NStates ];
     static const G4double mass[ NStates ];
     static const G4double width[ NStates ];
     static const G4int    iSpin[ NStates ];

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedBaryons.hh,v 1.1 1999-01-07 16:10:37 gunter Exp $
+// $Id: G4ExcitedBaryons.hh,v 1.2 1999-10-04 08:59:18 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

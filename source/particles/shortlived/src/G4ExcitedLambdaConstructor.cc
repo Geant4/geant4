@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedLambdaConstructor.cc,v 1.1 1999-01-07 16:10:41 gunter Exp $
+// $Id: G4ExcitedLambdaConstructor.cc,v 1.2 1999-10-04 09:00:01 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -332,7 +332,7 @@ G4DecayTable*  G4ExcitedLambdaConstructor::AddSigmaStarPiMode(
   return decayTable;
 }
 
-const G4String G4ExcitedLambdaConstructor::name[] = {
+const char* G4ExcitedLambdaConstructor::name[] = {
   "lambda(1405)","lambda(1520)","lambda(1600)","lambda(1670)","lambda(1690)", 
   "lambda(1800)","lambda(1810)","lambda(1820)","lambda(1830)","lambda(1890)",
   "lambda(2100)","lambda(2110)"

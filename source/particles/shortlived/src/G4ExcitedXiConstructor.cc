@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedXiConstructor.cc,v 1.1 1999-01-07 16:10:42 gunter Exp $
+// $Id: G4ExcitedXiConstructor.cc,v 1.2 1999-10-04 09:00:06 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -266,7 +266,7 @@ G4DecayTable*  G4ExcitedXiConstructor::AddXiPiMode(
 }
 
 
-const G4String G4ExcitedXiConstructor::name[] = {
+const char* G4ExcitedXiConstructor::name[] = {
    "xi(1530)", "xi(1690)", "xi(1820)", "xi(1950)", "xi(2030)"
 };
 
