@@ -21,10 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G3PartTable.cc,v 1.10 2001-07-11 09:58:59 gunter Exp $
+// $Id: G3PartTable.cc,v 1.11 2003-06-04 16:40:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
+#include "G4Types.hh"
 #include "g4std/strstream"
 #include "g4std/iomanip"
 #include "G3PartTable.hh"

@@ -21,17 +21,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsmixt.cc,v 1.8 2001-07-11 09:59:01 gunter Exp $
+// $Id: G4gsmixt.cc,v 1.9 2003-06-04 16:40:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, 27 Sep 99
 
+#include "globals.hh"
 #include "g4std/iomanip"
 #include "g4std/strstream"
 #include "g4std/iomanip"
-#include <math.h>
 
-#include "globals.hh"
 #include "G3toG4.hh"
 #include "G3EleTable.hh"
 #include "G3MatTable.hh"
