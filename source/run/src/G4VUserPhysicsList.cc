@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VUserPhysicsList.cc,v 1.10 2000-11-08 10:02:01 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.11 2000-11-16 10:20:03 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -720,7 +720,7 @@ G4bool G4VUserPhysicsList::StoreMaterialInfo(const G4String& directory)
   G4std::ofstream fOut;  
 
   // open output file //
-  fOut.open(fileName,ios::out);
+  fOut.open(fileName,G4std::ios::out);
 
   // check if the file has been opened successfully 
   if (!fOut) {
@@ -740,15 +740,15 @@ G4bool G4VUserPhysicsList::StoreMaterialInfo(const G4String& directory)
   numberOfMaterial = matTable->entries();
   fOut << numberOfMaterial << G4endl;
 
-  fOut.setf(ios::scientific);
+  fOut.setf(G4std::ios::scientific);
 
   // material name and density
   for (G4int idx=0; idx<matTable->entries(); ++idx){
-    fOut << setw(20) << ((*matTable)[idx])->GetName();
-    fOut << setw(20) << ((*matTable)[idx])->GetDensity()/(g/cm3) << G4endl;
+    fOut << G4std::setw(20) << ((*matTable)[idx])->GetName();
+    fOut << G4std::setw(20) << ((*matTable)[idx])->GetDensity()/(g/cm3) << G4endl;
   }
 
-  fOut.unsetf(ios::scientific);
+  fOut.unsetf(G4std::ios::scientific);
 
   fOut.close();
   return true;
@@ -761,7 +761,7 @@ G4bool G4VUserPhysicsList::StoreCutValues(const G4String& directory)
   G4std::ofstream fOut;  
 
   // open output file //
-  fOut.open(fileName,ios::out);
+  fOut.open(fileName,G4std::ios::out);
 
   // check if the file has been opened successfully 
   if (!fOut) {
@@ -775,9 +775,9 @@ G4bool G4VUserPhysicsList::StoreCutValues(const G4String& directory)
   // key word
   fOut << key << G4endl;
  
-  fOut.setf(ios::scientific);
+  fOut.setf(G4std::ios::scientific);
   // default cut value
-  fOut << "Default " <<  setw(20) << defaultCutValue/mm  << G4endl;
+  fOut << "Default " <<  G4std::setw(20) << defaultCutValue/mm  << G4endl;
 
  // loop over all particles in G4ParticleTable 
   theParticleIterator->reset();
@@ -793,8 +793,8 @@ G4bool G4VUserPhysicsList::StoreCutValues(const G4String& directory)
 	 (particle->GetPDGCharge() ==0.0)               ) {
  
       // particle name and cut in length
-      fOut << setw(40) << particle->GetParticleName();
-      fOut << setw(20) << particle->GetLengthCuts()/mm  << G4endl;
+      fOut << G4std::setw(40) << particle->GetParticleName();
+      fOut << G4std::setw(20) << particle->GetLengthCuts()/mm  << G4endl;
       G4double*  cutArray =  particle->GetEnergyCuts(); 
       // cut energy for each material
       G4int jj =0;
@@ -803,12 +803,12 @@ G4bool G4VUserPhysicsList::StoreCutValues(const G4String& directory)
 	  fOut << G4endl;
 	  jj =0;
 	}
-	fOut << setw(20) << cutArray[idx]/keV;
+	fOut << G4std::setw(20) << cutArray[idx]/keV;
       }
       fOut << G4endl;
     }
   }
-  fOut.unsetf(ios::scientific);
+  fOut.unsetf(G4std::ios::scientific);
 
   fOut.close();
   return true;
@@ -861,7 +861,7 @@ G4bool G4VUserPhysicsList::CheckMaterialInfo(const G4String& directory)
   G4std::ifstream fIn;  
 
   // open input file //
-  fIn.open(fileName,ios::in);
+  fIn.open(fileName,G4std::ios::in);
 
   // check if the file has been opened successfully 
   if (!fIn) {
@@ -934,9 +934,9 @@ G4bool G4VUserPhysicsList::CheckMaterialInfo(const G4String& directory)
       if (verboseLevel>0){
 	G4cout << "G4VUserPhysicsList::CheckMaterialInfo  ";
 	G4cout << " Inconsistent material name or density" << G4endl;;
-	G4cout << setw(40) << name;
-	G4cout << setw(20) << setiosflags(ios::scientific) << density << G4endl;
- 	G4cout << resetiosflags(ios::scientific);
+	G4cout << G4std::setw(40) << name;
+	G4cout << G4std::setw(20) << G4std::setiosflags(G4std::ios::scientific) << density << G4endl;
+ 	G4cout << G4std::resetiosflags(G4std::ios::scientific);
      }
 #endif   
       fIn.close();
@@ -954,7 +954,7 @@ G4bool G4VUserPhysicsList::CheckCutValues(const G4String& directory)
   G4std::ifstream fIn;  
 
   // open output file //
-  fIn.open(fileName,ios::in);
+  fIn.open(fileName,G4std::ios::in);
 
   // check if the file has been opened successfully 
   if (!fIn) {
@@ -992,9 +992,9 @@ G4bool G4VUserPhysicsList::CheckCutValues(const G4String& directory)
   } 
 #ifdef G4VERBOSE  
     if (verboseLevel>2){
-      G4cout.setf(ios::scientific);
-      G4cout << "Default " <<  setw(20) << defaultCutValue/mm  << G4endl;
-      G4cout.unsetf(ios::scientific);
+      G4cout.setf(G4std::ios::scientific);
+      G4cout << "Default " <<  G4std::setw(20) << defaultCutValue/mm  << G4endl;
+      G4cout.unsetf(G4std::ios::scientific);
     }
 #endif
 
@@ -1030,9 +1030,9 @@ G4bool G4VUserPhysicsList::CheckCutValues(const G4String& directory)
     }
 #ifdef G4VERBOSE  
     if (verboseLevel>2){
-      G4cout.setf(ios::scientific);
-      G4cout << name << setw(20) << cutLength << G4endl;
-      G4cout.unsetf(ios::scientific);
+      G4cout.setf(G4std::ios::scientific);
+      G4cout << name << G4std::setw(20) << cutLength << G4endl;
+      G4cout.unsetf(G4std::ios::scientific);
     }
 #endif
 
@@ -1067,23 +1067,23 @@ G4bool G4VUserPhysicsList::CheckCutValues(const G4String& directory)
     for(G4int idx=0; idx<numberOfMaterial; ++idx) {
 #ifdef G4VERBOSE  
       if (verboseLevel>2){
-	if(jj==4) G4cout << endl; 
+	if(jj==4) G4cout << G4endl; 
       }
 #endif
       G4double value;
       fIn >> value;
 #ifdef G4VERBOSE  
       if (verboseLevel>2){
-	G4cout.setf(ios::scientific);
-	G4cout << setw(20) << value;
-	G4cout.unsetf(ios::scientific);
+	G4cout.setf(G4std::ios::scientific);
+	G4cout << G4std::setw(20) << value;
+	G4cout.unsetf(G4std::ios::scientific);
 	++jj;
       }
 #endif
     }
 #ifdef G4VERBOSE  
     if (verboseLevel>2){
-      G4cout << endl; 
+      G4cout << G4endl; 
     }
 #endif
   } 
