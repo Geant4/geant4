@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Tubs.cc,v 1.7 1999-06-04 12:43:35 japost Exp $
+// $Id: G4Tubs.cc,v 1.8 1999-06-09 09:31:37 sgiani Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -819,7 +819,7 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 
 	      s=-b+sqrt(d);
 
-	      if (s >= 0)	// check forwards
+	      if (s >= -kRadTolerance*0.5)	// check forwards
 	      {
 // Check z intersection
 
@@ -830,7 +830,7 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 // Z ok. Check phi 
 		    if (!seg)
 		    { 
-                       return s; 
+                       return (s > kRadTolerance*0.5 ? s : 0.); 
                     }
 		    else
 		    {
@@ -843,7 +843,7 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 		       {
 // Good inner radius isect - but earlier phi isect still possible
 
-			  snxt=s;
+			  snxt=(s > kRadTolerance ? s : 0.);
 		       }
 		    }
 		 }	      //    end if fabs(zi)
