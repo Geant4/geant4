@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Cons1.cc,v 1.4 2002-01-08 16:16:56 gcosmo Exp $
+// $Id: testG4Cons1.cc,v 1.5 2002-08-10 13:40:49 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -68,7 +68,14 @@ G4bool testG4Cons()
     pNorm=&norm;
     pgoodNorm=&goodNorm;
 
-    G4Cons t1("Solid TubeLike #1",0,50,0,50,50,0,360);
+    G4Cons  t1("Solid TubeLike #1",0,50,0,50,50,0,360);
+    G4Cons  test10("test10",20.0, 80.0, 60.0, 140.0, 100.0, 
+                           0.17453292519943, 5.235987755983);
+
+
+
+
+
 // Check name
     assert(t1.GetName()=="Solid TubeLike #1");
 
@@ -132,6 +139,20 @@ G4bool testG4Cons()
     assert(ApproxEqual(Dist,50));
     Dist=t1.DistanceToIn(pbigx,vxy);
     assert(ApproxEqual(Dist,kInfinity));
+
+    Dist=test10.DistanceToIn(G4ThreeVector(19.218716967888,5.5354239324172,-100.0),
+		G4ThreeVector(-0.25644483536346,-0.073799216676426,0.96373737191901));
+    G4cout<<"test10::DistToIn ="<<Dist<<G4endl;
+    Dist=test10.DistanceToOut(G4ThreeVector(19.218716967888,5.5354239324172,-100.0),
+		G4ThreeVector(-0.25644483536346,-0.073799216676426,0.96373737191901),
+                             calcNorm,pgoodNorm,pNorm);
+    G4cout<<"test10::DistToOut ="<<Dist<<G4endl;
+
+
+
+
+
+
 
 // CalculateExtent
     G4VoxelLimits limit;		// Unlimited

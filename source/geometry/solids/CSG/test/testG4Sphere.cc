@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Sphere.cc,v 1.6 2002-01-30 14:44:13 grichine Exp $
+// $Id: testG4Sphere.cc,v 1.7 2002-08-10 13:40:51 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Sphere Test File
@@ -95,7 +95,7 @@ int main(void)
     G4ThreeVector pbigx(100,0,0),pbigy(0,100,0),pbigz(0,0,100);
     G4ThreeVector pbigmx(-100,0,0),pbigmy(0,-100,0),pbigmz(0,0,-100);
 
-    G4ThreeVector ponrmin1(45,0,0),ponrmax1(50,0,0),
+    G4ThreeVector ponrmin1(45,0,0),ponrmax1(50,0,0),ponzmax(0,0,50),
 	    ponrmin2(45/sqrt(2.),45/sqrt(2.),0),
             ponrmin3(0,0,-45),ponrminJ(0,0,-300),ponrmaxJ(0,0,-500),
 	    ponrmax2(50/sqrt(2.),50/sqrt(2.),0);
@@ -125,7 +125,7 @@ int main(void)
     pgoodNorm=&goodNorm;
 
     G4Sphere s1("Solid G4Sphere",0,50,0,twopi,0,pi);
-     G4Sphere s2("Spherical Shell",45,50,0,twopi,0,pi);
+    G4Sphere s2("Spherical Shell",45,50,0,twopi,0,pi);
     G4Sphere s3("Band (theta segment)",45,50,0,twopi,pi/4,halfpi);
     G4Sphere s32("Band (theta segment2)",45,50,0,twopi,0,pi/4);
     G4Sphere s33("Band (theta segment1)",45,50,0,twopi,pi*3/4,pi/4);
@@ -144,8 +144,21 @@ int main(void)
 		  0.014642857142857141,
                   1.578117755366325,
                   0.014642857142867141);
+
+    G4Sphere s9("s9",0*mm,410*mm,0*degree,360*degree,90*degree,90*degree);
+
+
 G4ThreeVector p216(1549.9518578505142,1.2195415370970153,-12.155289555510985), 
               v216(-0.61254821852534425,-0.51164551429243466,-0.60249775741147549);
+
+
+ G4ThreeVector s9p(384.8213314370455*mm,
+	       134.264386151667*mm,
+	       -44.56026800002064*mm);
+
+ G4ThreeVector s9v(-0.6542770611918751,
+		   -0.0695116921641141,
+		   -0.7530535517814154);
 
 #ifdef NDEBUG
     G4Exception("FAIL: *** Assertions must be compiled in! ***");
@@ -154,6 +167,9 @@ G4ThreeVector p216(1549.9518578505142,1.2195415370970153,-12.155289555510985),
     //////////////// Check name /////////////////////////
 
     assert(s1.GetName()=="Solid G4Sphere");
+
+
+    // Some user application cases
 
     Dist = s4.DistanceToOut(ponrmin3,vmz,calcNorm,pgoodNorm,pNorm) ;
     G4cout<<"s4.DistanceToOut(ponrmin3,vmz,calcNorm,pgoodNorm,pNorm) = "<<Dist
@@ -202,7 +218,15 @@ G4ThreeVector p216(1549.9518578505142,1.2195415370970153,-12.155289555510985),
     inside = b216.Inside(p216);
     G4cout<<"b216.Inside(p216) = "
           <<OutputInside(inside)<<G4endl ;
+    inside = s1.Inside(pz);
+    G4cout<<"s1.Inside(pz) = "
+          <<OutputInside(inside)<<G4endl ;
+
+    inside = s9.Inside(s9p);
+    G4cout<<"s9.Inside(s9p) = "
+          <<OutputInside(inside)<<G4endl ;
     assert(s1.Inside(pzero)==kInside);
+    // assert(s1.Inside(pz)==kInside);
     assert(s2.Inside(pzero)==kOutside);
     assert(s2.Inside(ponrmin2)==kSurface);
     assert(s2.Inside(ponrmax2)==kSurface);
@@ -224,6 +248,11 @@ G4ThreeVector p216(1549.9518578505142,1.2195415370970153,-12.155289555510985),
     Dist=s1.DistanceToOut(ponrmax1);
     assert(ApproxEqual(Dist,0));
 
+// Checking G4Sphere::DistanceToOut(p,v)
+
+
+        Dist=s1.DistanceToOut(pz,vz,calcNorm,pgoodNorm,pNorm);
+	G4cout<<"Dist=s1.DistanceToOut(pz,vz) = "<<Dist<<G4endl;
 
      Dist=s1.DistanceToOut(ponrmax1,vx,calcNorm,pgoodNorm,pNorm);
      *pNorm=pNorm->unit();
@@ -287,6 +316,9 @@ G4ThreeVector p216(1549.9518578505142,1.2195415370970153,-12.155289555510985),
     Dist=b216.DistanceToOut(p216,v216,calcNorm,pgoodNorm,pNorm);
     G4cout<<"b216.DistanceToOut(p216,v216,... = "<<Dist<<G4endl;
 
+    Dist=s9.DistanceToOut(s9p,s9v,calcNorm,pgoodNorm,pNorm);
+    G4cout<<"s9.DistanceToOut(s9p,s9v,... = "<<Dist<<G4endl;
+
      
 // Checking G4Sphere::DistanceToIn(P)
     Dist=s2.DistanceToIn(pzero);
@@ -295,6 +327,8 @@ G4ThreeVector p216(1549.9518578505142,1.2195415370970153,-12.155289555510985),
     assert(ApproxEqual(Dist,0));
 
 // Checking G4Sphere::DistanceToIn(P,V)
+    Dist=s1.DistanceToIn(ponzmax,vz);
+    G4cout<<"s1.DistanceToIn(ponzmax,vz) = "<<Dist<<G4endl;
     Dist=s1.DistanceToIn(pbigy,vy);
     assert(Dist==kInfinity);
     Dist=s1.DistanceToIn(pbigy,vmy);
