@@ -5,8 +5,6 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Nucleus.hh,v 1.3 2000-12-14 08:56:46 hpw Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
  // original by H.P. Wellisch
  // modified by J.L. Chuma, TRIUMF, 19-Nov-1996
@@ -102,7 +100,9 @@
     
     G4double GetThermalPz( const G4double mass, const G4double temp ) const;
     
-    G4ReactionProduct GetThermalNucleus(G4double aMass) const;
+    G4ReactionProduct GetThermalNucleus(G4double aMass, G4double temp=-1) const;
+    
+    G4ReactionProduct GetBiasedThermalNucleus(G4double aMass, G4ThreeVector aVelocity, G4double temp=-1) const;
 
     G4double Cinema( G4double kineticEnergy );
     

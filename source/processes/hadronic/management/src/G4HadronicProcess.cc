@@ -5,8 +5,6 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronicProcess.cc,v 1.8 1999-12-15 14:52:08 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
  // HPW to implement the choosing of an element for scattering.
 #include "g4std/fstream"
@@ -38,19 +36,21 @@
     }
     
     const G4double *theAtomicNumberDensity = aMaterial->GetAtomicNumDensityVector();
+    G4double aTemp = aMaterial->GetTemperature();
     G4double crossSectionTotal = 0;
     G4int i;
+    G4std::vector<G4double> runningSum;
     for( i=0; i < numberOfElements; ++i )
-      crossSectionTotal += theAtomicNumberDensity[i] *
-        dispatch->GetMicroscopicCrossSection( aParticle, (*theElementVector)(i) );
+    {
+      runningSum.push_back(theAtomicNumberDensity[i] *
+        dispatch->GetMicroscopicCrossSection( aParticle, (*theElementVector)(i), aTemp));
+      crossSectionTotal+=runningSum[i];
+    }
     
-    G4double crossSectionSum= 0.;
-    G4double random = G4UniformRand()*crossSectionTotal;
+    G4double random = G4UniformRand();
     for( i=0; i < numberOfElements; ++i )
     { 
-      crossSectionSum += theAtomicNumberDensity[i] *
-        dispatch->GetMicroscopicCrossSection( aParticle, (*theElementVector)(i) );
-      if( random<=crossSectionSum )
+      if( random<=runningSum[i]/crossSectionTotal )
       {
         currentZ = G4double((*theElementVector)(i)->GetZ());
         currentN = (*theElementVector)(i)->GetN();

@@ -5,7 +5,6 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-//
 // GEANT4 physics class: G4HadronInelasticDataSet -- header file
 // F.W. Jones, TRIUMF, 19-MAY-98
 //

@@ -6,7 +6,6 @@
 // and all its terms.
 //
 //
-//
 // GEANT4 physics class: G4CrossSectionDataStore -- header file
 // F.W. Jones, TRIUMF, 19-NOV-97
 //

@@ -6,7 +6,6 @@
 // and all its terms.
 //
 //
-//
 // GEANT4 physics class: G4HadronCaptureDataSet -- header file
 // F.W. Jones, TRIUMF, 19-MAY-98
 //

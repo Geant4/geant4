@@ -6,7 +6,6 @@
 // and all its terms.
 //
 //
-//
 // GEANT4 physics class: G4HadronElasticDataSet -- header file
 // F.W. Jones, TRIUMF, 28-JAN-97
 //

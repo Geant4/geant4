@@ -5,8 +5,6 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronicProcess.hh,v 1.5 1999-12-15 14:52:07 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
  // This is the top level Hadronic Process class
  // The inelastic, elastic, capture, and fission processes
@@ -79,7 +77,8 @@
     { dispatch=value; }
     
     virtual G4double GetMicroscopicCrossSection( const G4DynamicParticle *aParticle, 
-                                                 const G4Element *anElement ) = 0;
+                                                 const G4Element *anElement, 
+						 G4double aTemp ) = 0;
     
     G4double GetCurrentZ()
     { return currentZ; }

@@ -5,8 +5,6 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronInelasticProcess.hh,v 1.4 2000-09-20 16:52:36 hpw Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Inelastic Process class
  // The specific particle inelastic processes derive from this class
@@ -61,7 +59,8 @@
     
     G4double GetMicroscopicCrossSection(
      const G4DynamicParticle *aParticle,
-     const G4Element *anElement);
+     const G4Element *anElement,
+     G4double aTemp);
 
     G4VParticleChange *PostStepDoIt(
      const G4Track &aTrack, const G4Step &aStep )
