@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2003-11-25 14:55:57 gcosmo Exp $
+$Id: History,v 1.10 2003-11-25 15:08:14 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,6 +18,11 @@ track of all tags.
 25-11-03 Gabriele Cosmo
 -----------------------
 - Open geometry before clearing stores in DetectorConstruction class.
+
+14-11-03 John Apostolakis
+-------------------------
+- F03ElectroMagneticField:
+  o changed minimum step to 0.25 mm, from 1.0 mm.
 
 13-11-03 John Allison
 ---------------------
