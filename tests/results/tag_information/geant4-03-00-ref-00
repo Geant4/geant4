@@ -1,0 +1,19 @@
+                      geant4-03-00-ref-00
+                      ===================
+
+geant4-03-00-ref-00 is the reference tag for release 3.0
+
+geant4-03-00-ref-00 comprises geant4-02-00-cand-05
+
+and new tags
+
+	persistency-V02-00-03
+config		config-V02-00-14
+examples/advanced/brachytherapy		brachy-V02-00-02
+examples/extended/electromagnetic/TestEm1		testem1-V02-00-04
+source/GNUmakefile		source-gmk-V02-00-04
+source/analysis		analysis-V02-00-04
+source/global		global-V02-00-06
+source/processes/electromagnetic/lowenergy		emlowen-V02-00-23
+source/processes/hadronic		had-V02-00-03
+source/run		run-V02-00-06

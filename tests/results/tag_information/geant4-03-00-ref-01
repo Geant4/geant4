@@ -1,0 +1,22 @@
+                      geant4-03-00-ref-01
+                      ===================
+
+geant4-03-00-ref-01 is the reference tag of 28th Jan 2001.
+
+geant4-03-00-ref-01 comprises geant4-03-00-ref-00
+
+and new tags
+
+.		examples-V03-00-00
+./config		config-V03-00-00
+./examples/extended/electromagnetic/TestEm5		testem5-V03-00-00
+./source/geometry/solids/Boolean		geom-solid-bool-V03-00-01
+./source/geometry/solids/CSG		geom-solids-csg-V03-00-00
+./source/geometry/solids/specific		geom-solids-specific-V03-00-00
+./source/global		global-V03-00-01
+./source/materials		materials-V03-00-01
+./source/processes/electromagnetic/muons		muons-V03-00-00
+./source/processes/electromagnetic/standard		stand-V03-00-01
+./source/processes/electromagnetic/utils		utils-V03-00-00
+./source/processes/optical		op-V03-00-03
+./tests		tests-V03-00-00

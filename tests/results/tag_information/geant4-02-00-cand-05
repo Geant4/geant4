@@ -1,0 +1,28 @@
+
+                      geant4-02-00-cand-05
+                      ====================
+
+geant4-02-00-cand-05  comprises geant4-02-00-ref-05
+
+and the new tags
+
+./config		config-V02-00-13
+./examples/advanced/brachytherapy		brachy-V02-00-01
+./examples/advanced/gammaray_telescope		GammaRayTel-V02-00-02
+./examples/advanced/xray_telescope		xraytel-V02-00-10
+./examples/extended/analysis/AnaEx01		AnaEx01-V02-00-02
+./examples/extended/electromagnetic/TestEm1		testem1-V02-00-03
+./examples/extended/electromagnetic/TestEm2		testem2-V02-00-03
+./examples/extended/electromagnetic/TestEm3		testem3-V02-00-03
+./examples/extended/electromagnetic/TestEm4		testem4-V02-00-03
+./examples/extended/electromagnetic/TestEm5		testem5-V02-00-03
+./examples/extended/persistency		PersistentEx-V02-00-00
+./examples/novice/N02		exampleN02-V02-00-03
+./examples/novice/N03		exampleN03-V02-00-05
+./source/geometry/solids/CSG		geom-solids-csg-V02-00-13
+./source/persistency		persistency-V02-00-02
+./source/processes/hadronic		had-V02-00-02
+./source/processes/hadronic/models/generator/util		hadgen-util-V02-00-00
+./tests		tests-V02-00-07
+./tests/test14		test14-V02-00-02
+./tests/test17		test17-V02-00-00
