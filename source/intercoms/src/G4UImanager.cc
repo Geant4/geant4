@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.cc,v 1.24 2002-05-08 16:05:48 gcosmo Exp $
+// $Id: G4UImanager.cc,v 1.25 2002-05-14 01:40:10 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,7 +50,7 @@ G4UImanager * G4UImanager::GetUIpointer()
 {
   if(!fUImanager) 
   {
-    if(fUImanagerHasBeenKilled)
+    if(!fUImanagerHasBeenKilled)
     {
       fUImanager = new G4UImanager;
       fUImanager->CreateMessenger();
@@ -73,6 +73,7 @@ G4UImanager::G4UImanager()
   SetCoutDestination(session);
   pauseAtBeginOfEvent = false;
   pauseAtEndOfEvent = false;
+  maxHistSize = 20;
 }
 
 void G4UImanager::CreateMessenger()
@@ -389,6 +390,8 @@ G4int G4UImanager::ApplyCommand(const char * aCmd)
   { return fIllegalApplicationState; }
  
   if(saveHistory) historyFile << aCommand << G4endl; 
+  if( G4int(histVec.size()) >= maxHistSize )
+  { histVec.erase(histVec.begin()); }
   histVec.push_back(aCommand);
   return targetCommand->DoIt( commandParameter );
 }

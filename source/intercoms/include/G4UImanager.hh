@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.hh,v 1.18 2002-05-03 14:35:43 asaim Exp $
+// $Id: G4UImanager.hh,v 1.19 2002-05-14 01:40:10 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -149,7 +149,7 @@ class G4UImanager : public G4VStateDependent
       G4bool saveHistory;
       G4std::vector<G4String> histVec;
       G4UIaliasList* aliasList;
-      
+      G4int maxHistSize;
       G4bool pauseAtBeginOfEvent;
       G4bool pauseAtEndOfEvent;
 
@@ -218,6 +218,10 @@ class G4UImanager : public G4VStateDependent
         { st = histVec[i]; }
         return st;
       }
+      inline void SetMaxHistSize(G4int mx)
+      { maxHistSize = mx; }
+      inline G4int GetMaxHistSize() const
+      { return maxHistSize; }
 
   // Old methods kept for backward compatibility
   //    inline G4UIcommandTree * GetTree() const
