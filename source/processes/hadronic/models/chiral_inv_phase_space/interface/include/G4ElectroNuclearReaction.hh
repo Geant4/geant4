@@ -22,7 +22,7 @@
 //
 //
 //
-// $Id: G4ElectroNuclearReaction.hh,v 1.14 2002-12-12 19:16:59 gunter Exp $
+// $Id: G4ElectroNuclearReaction.hh,v 1.15 2003-02-04 10:17:51 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -54,6 +54,9 @@ class G4ElectroNuclearReaction : public G4HadronicInteraction
     virtual ~G4ElectroNuclearReaction(){}
     G4ElectroNuclearReaction()
     {
+      SetMinEnergy(0*GeV);
+      SetMaxEnergy(30*TeV);
+      
       theHEModel = new G4TheoFSGenerator;
       theCascade = new G4GeneratorPrecompoundInterface;
     }
@@ -84,8 +87,6 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
   if((aD != G4Electron::ElectronDefinition()) && (aD != G4Positron::PositronDefinition()))
     G4Exception("G4ElectroNuclearReaction::ApplyYourself called for neither electron or positron");
   
-  theResult.Initialize(aTrack);
-
   const G4ElementTable* aTab = G4Element::GetElementTable();
   G4Element * anElement = 0;
   G4int aZ = static_cast<G4int>(aTargetNucleus.GetZ()+.1);
@@ -107,7 +108,11 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
   // Note: high energy gamma nuclear now implemented.
   
   G4double xSec = theElectronData.GetCrossSection(theElectron, anElement); // Check cross section
-  if(xSec<=0.) return &theResult;        // DO-NOTHING condition
+  if(xSec<=0.) 
+  {
+    theResult.Initialize(aTrack);
+    return &theResult;        // DO-NOTHING condition
+  }
   G4double photonEnergy = theElectronData.GetEquivalentPhotonEnergy();
   G4double theElectronKinEnergy=theElectron->GetKineticEnergy();
   if( theElectronKinEnergy < photonEnergy )
@@ -117,7 +122,16 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
   }
   G4double photonQ2 = theElectronData.GetEquivalentPhotonQ2(photonEnergy);
   G4double W=photonEnergy-photonQ2/dM;   // Hadronic energy flow (W-energy) from the virtual photon
-  if(W<0.) G4Exception("G4ElectroNuclearReaction::ApplyYourself: negative equivalent energy");
+  if(getenv("debug_G4ElectroNuclearReaction") )
+  {
+    G4cout << "G4ElectroNuclearReaction: Equivalent Energy = "<<W<<G4endl;
+  }
+  if(W<0.) 
+  {
+    theResult.Initialize(aTrack);
+    return &theResult;        // DO-NOTHING condition
+    G4Exception("G4ElectroNuclearReaction::ApplyYourself: negative equivalent energy");
+  }
   G4DynamicParticle* theDynamicPhoton = new 
                      G4DynamicParticle(G4Gamma::GammaDefinition(), 
 		     G4ParticleMomentum(1.,0.,0.), photonEnergy*MeV);            //->-*
@@ -128,8 +142,12 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
   G4double rndFraction = theElectronData.GetVirtualFactor(photonEnergy, photonQ2);
   if(sigNu*G4UniformRand()>sigK*rndFraction) 
   {
+    theResult.Initialize(aTrack);
     return &theResult; // DO-NOTHING condition
   }
+  theResult.Initialize(aTrack);
+  theResult.Clear();
+  theResult.SetStatusChange(fAlive);
   // Scatter an electron and make gamma+A reaction
   G4double iniE=theElectronKinEnergy+me; // Initial total energy of electron
   G4double finE=iniE-photonEnergy;       // Final total energy of electron
@@ -156,6 +174,7 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
   //G4DynamicParticle localGamma(G4Gamma::GammaDefinition(), photonLorentzVector);
   G4ThreeVector position(0,0,0);
   G4Track localTrack(&localGamma, 0., position);
+  localTrack.SetStep(aTrack.GetStep());
   G4VParticleChange * result;
   if(photonEnergy < 3*GeV)  
   {
@@ -163,6 +182,7 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
   } 
   else 
   {
+    // G4cout << "0) Getting a high energy electro-nuclear reaction"<<G4endl;
     theHEModel->SetTransport(theCascade);
     theHEModel->SetHighEnergyGenerator(&theStringModel);
     theStringDecay = new G4ExcitedStringDecay(&theFragmentation);
