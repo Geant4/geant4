@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: GammaRayTelPayloadSD.cc,v 1.5 2000-12-06 16:53:14 flongo Exp $
+// $Id: GammaRayTelPayloadSD.cc,v 1.6 2000-12-06 17:48:10 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -131,7 +131,7 @@ G4bool GammaRayTelPayloadSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhis
       // This is a new hit
       if (HitXID[StripNumber][PlaneNumber]==-1)
 	{       
-	  GammaRayTelPayloadHit* PayloadHit = new GammaRayTelPayloadHit();
+	  GammaRayTelPayloadHit* PayloadHit = new GammaRayTelPayloadHit;
 	  PayloadHit->SetPlaneType(1);
 	  PayloadHit->AddSil(edep);
 	  PayloadHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
@@ -153,7 +153,7 @@ G4bool GammaRayTelPayloadSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhis
       // This is a new hit
       if (HitYID[StripNumber][PlaneNumber]==-1)
 	{       
-	  GammaRayTelPayloadHit* PayloadHit = new GammaRayTelPayloadHit();
+	  GammaRayTelPayloadHit* PayloadHit = new GammaRayTelPayloadHit;
 	  PayloadHit->SetPlaneType(0);
 	  PayloadHit->AddSil(edep);
 	  PayloadHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
