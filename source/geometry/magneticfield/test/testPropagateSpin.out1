@@ -1,72 +1,10 @@
-
-
-Test PropagateMagField: ***********************
- Starting New Particle with Position (0,0,0)
- and UnitVelocity (0,0.6,0.8)
- Momentum in MeV/c is 50
- Spin is not equal to Momentum  Diff = 0.000116006
-Step#     X(mm)     Y(mm)     Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z    StepLen   PhsStep    Safety         NextVolume 
-    0         0         0         0  0.0896   0.593     0.8  0.0897   0.593     0.8       2.5       2.5        50        World 
- Spin is not equal to Momentum  Diff = 0.000348
-    1     0.112      1.49         2   0.261    0.54     0.8   0.261    0.54     0.8         5         5      49.9        World 
- Spin is not equal to Momentum  Diff = 0.000812
-    2     0.995      4.35         6    0.52   0.299     0.8   0.521   0.298     0.8        10        10        49        World 
- Spin is not equal to Momentum  Diff = 0.00174
-    3      5.02      8.68        14   0.467  -0.376     0.8   0.466  -0.378     0.8        20        20        45        World 
- Spin is not equal to Momentum  Diff = 0.0036
-    4      16.3       7.8        30  -0.599 -0.0393     0.8  -0.599 -0.0357     0.8        40        40      42.2        World 
- Spin is not equal to Momentum  Diff = 0.00731
-    5      10.7     -9.99        62 -0.0112    -0.6     0.8 -0.0185    -0.6     0.8        80        80        40        World 
- Spin is not equal to Momentum  Diff = 0.0147
-    6        20    -0.187       126   0.112    0.59     0.8   0.126   0.587     0.8       160       160      49.8        World 
- Spin is not equal to Momentum  Diff = 0.0296
-    7     0.175      1.86       254     0.3   0.519     0.8   0.326   0.504     0.8       320       320      49.8        World 
- Spin is not equal to Momentum  Diff = 0.0593
-    8      1.34      5.01       510   0.559   0.218     0.8   0.578   0.162     0.8       640       640      48.7        World 
- Spin is not equal to Momentum  Diff = 0.119
-    9      6.37      9.32  1.02e+03   0.336  -0.497     0.8   0.232  -0.554   0.799  1.28e+03  1.28e+03       472        World 
- Spin is not equal to Momentum  Diff = 0.236
-   10      18.3       5.6  2.05e+03  -0.517   0.305     0.8  -0.362   0.482   0.798  2.56e+03  2.56e+03   1.5e+03        World 
- Spin is not equal to Momentum  Diff = 0.288
-   11      4.93     -8.62  4.09e+03  -0.467  -0.377     0.8  -0.592  -0.119   0.797  1.13e+03  5.12e+03       906        World 
- Spin is not equal to Momentum  Diff = 0.72
-   12      16.3     -7.78     5e+03   0.465  -0.379     0.8  -0.226  -0.584    0.78  1.02e+04  1.02e+04         0 Big Target 2 
- Spin is not equal to Momentum  Diff = 1.16
-   13      16.3      7.76  1.32e+04    0.58   0.153     0.8   -0.31  -0.586   0.748  1.48e+04  2.05e+04  8.19e+03 Big Target 2 
-
-Test PropagateMagField: ***********************
- Starting New Particle with Position (0.2,0.3,0.4)
- and UnitVelocity (0.0733,0.587,0.807)
- Momentum in MeV/c is 150
- Spin is not equal to Momentum  Diff = 5.98e-05
-Step#     X(mm)     Y(mm)     Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z    StepLen   PhsStep    Safety         NextVolume 
-    0       0.2       0.3       0.4   0.103   0.582   0.807   0.103   0.582   0.807       2.5       2.5         0        World 
- Spin is not equal to Momentum  Diff = 0.000179
-    1      0.42      1.76      2.42    0.16   0.569   0.807    0.16   0.569   0.807         5         5      49.6        World 
- Spin is not equal to Momentum  Diff = 0.000419
-    2      1.08      4.64      6.45    0.27   0.526   0.807    0.27   0.526   0.807        10        10      48.9        World 
- Spin is not equal to Momentum  Diff = 0.000897
-    3      3.23      10.1      14.5   0.453   0.379   0.807   0.454   0.379   0.807        20        20      46.8        World 
- Spin is not equal to Momentum  Diff = 0.00185
-    4      10.6      19.3      30.6   0.588 -0.0605   0.807   0.588 -0.0623   0.807        40        40      39.4        World 
- Spin is not equal to Momentum  Diff = 0.00377
-    5      32.6      26.1      62.9  -0.077  -0.586   0.807 -0.0807  -0.586   0.807        80        80      23.9        World 
- Spin is not equal to Momentum  Diff = 0.00759
-    6      58.9     -7.22       127    0.11   0.581   0.807   0.117   0.579   0.807       160       160      42.8        World 
- Spin is not equal to Momentum  Diff = 0.0152
-    7     0.486      2.12       256   0.174   0.565   0.807   0.189    0.56   0.807       320       320      49.5        World 
- Spin is not equal to Momentum  Diff = 0.0306
-    8      1.29      5.35       515   0.296   0.512   0.807   0.322   0.496   0.806       640       640      48.7        World 
- Spin is not equal to Momentum  Diff = 0.0612
-    9      3.94      11.4  1.03e+03   0.489   0.332   0.807   0.521   0.281   0.806  1.28e+03  1.28e+03       481        World 
- Spin is not equal to Momentum  Diff = 0.122
-   10      12.9      21.1  2.06e+03   0.564  -0.176   0.807   0.519  -0.289   0.804  2.56e+03  2.56e+03  1.51e+03        World 
- Spin is not equal to Momentum  Diff = 0.148
-   11      38.3      24.9  4.13e+03  -0.589 -0.0477   0.807  -0.588     0.1   0.803  1.08e+03  5.12e+03       872        World 
- Spin is not equal to Momentum  Diff = 0.389
-   12      31.9     -32.8     5e+03    0.55  -0.216   0.807   0.326  -0.533   0.781  1.02e+04  1.02e+04         0 Big Target 2 
- Spin is not equal to Momentum  Diff = 0.714
-   13      40.4      24.2  1.33e+04  -0.385  -0.449   0.807  -0.664   0.203   0.719  1.46e+04  2.05e+04  8.26e+03 Big Target 2 
+ Testing with stepper number 1 and PiF safety optimisation on
+ Using default values for  Min Eps = 1e-07 and  MaxEps = 1e-07
+ Test with no voxels
+Test G4PropInFld with optimise = on
+ The global field manager has the following parameters 
+ Eps min= 1e-07 &  max= 1e-07
+ Delta Intersection=  0.001 Delta One step    =  0.01
 
 
 Test PropagateMagField: ***********************
@@ -74,65 +12,290 @@ Test PropagateMagField: ***********************
  and UnitVelocity (0,0.6,0.8)
  Momentum in MeV/c is 50
  Spin is not equal to Momentum  Diff = 0.000116
-Step#     X(mm)     Y(mm)     Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z    StepLen   PhsStep    Safety         NextVolume 
-    0         0         0         0  0.0896   0.593     0.8  0.0897   0.593     0.8       2.5       2.5         0        World 
+Stp#   X(mm)   Y(mm)   Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z      |S-N|  (S_z-N_z)    StepLen   PhsStep    Safety         NextVolume 
+  0       0       0       0  0.0896   0.593     0.8  0.0897   0.593     0.8  0.00012 -5.2e-10       2.5       2.5        50        World 
  Spin is not equal to Momentum  Diff = 0.000348
-    1     0.112      1.49         2   0.261    0.54     0.8   0.261    0.54     0.8         5         5     0.112        World 
+  1   0.112    1.49       2   0.261    0.54     0.8   0.261    0.54     0.8  0.00035 -4.7e-09         5         5      47.5        World 
  Spin is not equal to Momentum  Diff = 0.000812
-    2     0.995      4.35         6    0.52   0.299     0.8   0.521   0.298     0.8        10        10     0.995        World 
+  2   0.995    4.35       6    0.52   0.299     0.8   0.521   0.298     0.8  0.00081 -2.5e-08        10        10      42.5        World 
  Spin is not equal to Momentum  Diff = 0.00174
-    3      5.02      8.68        14   0.467  -0.376     0.8   0.466  -0.378     0.8        20        20      5.02        World 
- Spin is not equal to Momentum  Diff = 0.0036
-    4      16.3       7.8        30  -0.599 -0.0393     0.8  -0.599 -0.0357     0.8        40        40       7.8        World 
- Spin is not equal to Momentum  Diff = 0.00731
-    5      10.7     -9.99        62 -0.0112    -0.6     0.8 -0.0185    -0.6     0.8        80        80      9.99        World 
- Spin is not equal to Momentum  Diff = 0.0147
-    6        20    -0.187       126   0.112    0.59     0.8   0.126   0.587     0.8       160       160     0.187        World 
- Spin is not equal to Momentum  Diff = 0.0296
-    7     0.175      1.86       254     0.3   0.519     0.8   0.326   0.504     0.8       320       320     0.175        World 
- Spin is not equal to Momentum  Diff = 0.0593
-    8      1.34      5.01       510   0.559   0.218     0.8   0.578   0.162     0.8       640       640      1.34        World 
- Spin is not equal to Momentum  Diff = 0.119
-    9      6.37      9.32  1.02e+03   0.336  -0.497     0.8   0.232  -0.554   0.799  1.28e+03  1.28e+03      6.37        World 
- Spin is not equal to Momentum  Diff = 0.236
-   10      18.3       5.6  2.05e+03  -0.517   0.305     0.8  -0.362   0.482   0.798  2.56e+03  2.56e+03       260        World 
- Spin is not equal to Momentum  Diff = 0.288
-   11      4.93     -8.62  4.09e+03  -0.467  -0.377     0.8  -0.592  -0.119   0.797  1.13e+03  5.12e+03       523        World 
- Spin is not equal to Momentum  Diff = 0.72
-   12      16.3     -7.78     5e+03   0.465  -0.379     0.8  -0.226  -0.584    0.78  1.02e+04  1.02e+04         0 Big Target 2 
- Spin is not equal to Momentum  Diff = 1.16
-   13      16.3      7.76  1.32e+04    0.58   0.153     0.8   -0.31  -0.586   0.748  1.48e+04  2.05e+04  8.19e+03 Big Target 2 
+  3    5.02    8.68      14   0.467  -0.376     0.8   0.466  -0.378     0.8   0.0017 -1.2e-07        20        20      32.8        World 
+ Spin is not equal to Momentum  Diff = 0.003596
+  4    16.3     7.8      30  -0.599 -0.0393     0.8  -0.599 -0.0357     0.8   0.0036   -5e-07        40        40        15        World 
+ Spin is not equal to Momentum  Diff = 0.007308
+  5    10.7   -9.99      62 -0.0112    -0.6     0.8 -0.0185    -0.6     0.8   0.0073 -2.1e-06        80        80      26.7        World 
+ Spin is not equal to Momentum  Diff = 0.01473
+  6      20  -0.187     126   0.112    0.59     0.8   0.126   0.587     0.8    0.015 -8.3e-06       160       160      6.03        World 
+ Spin is not equal to Momentum  Diff = 0.02958
+  7   0.175    1.86     254     0.3   0.519     0.8   0.326   0.504     0.8     0.03 -3.4e-05       320       320      49.8        World 
+ Spin is not equal to Momentum  Diff = 0.05926
+  8    1.34    5.01     510   0.559   0.218     0.8   0.578   0.162     0.8    0.059 -0.00013       640       640      45.8        World 
+ Spin is not equal to Momentum  Diff = 0.1185
+  9    6.37    9.32 1.02e+03   0.336  -0.497     0.8   0.232  -0.554   0.799     0.12 -0.00054      1280      1280       190        World 
+ Spin is not equal to Momentum  Diff = 0.2216
+ 10    18.3     5.6 2.05e+03  -0.558    0.22     0.8  -0.442   0.409   0.798     0.22  -0.0019   2243.01      2560  1.15e+03        World 
+ Spin is not equal to Momentum  Diff = 0.2875
+ 11    6.34   -9.31 3.84e+03  -0.467  -0.377     0.8  -0.592  -0.119   0.797     0.29  -0.0032   1449.49      5120  1.16e+03        World 
+ Spin is not equal to Momentum  Diff = 0.3879
+ 12    16.3   -7.78   5e+03   0.172   0.575     0.8   0.492   0.357   0.794     0.39  -0.0058   2243.01     10240         0 Big Target 2 
+ Spin is not equal to Momentum  Diff = 0.4856
+ 13   0.418    2.86 6.79e+03   0.184  -0.571     0.8    -0.3  -0.533   0.791     0.49  -0.0091   2243.01     20480  1.31e+03 Big Target 2 
 
 Test PropagateMagField: ***********************
  Starting New Particle with Position (0.2,0.3,0.4)
- and UnitVelocity (0.0733,0.587,0.807)
+ and UnitVelocity (0.07332,0.5866,0.8066)
  Momentum in MeV/c is 150
  Spin is not equal to Momentum  Diff = 5.98e-05
-Step#     X(mm)     Y(mm)     Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z    StepLen   PhsStep    Safety         NextVolume 
-    0       0.2       0.3       0.4   0.103   0.582   0.807   0.103   0.582   0.807       2.5       2.5         0        World 
- Spin is not equal to Momentum  Diff = 0.000179
-    1      0.42      1.76      2.42    0.16   0.569   0.807    0.16   0.569   0.807         5         5      0.42        World 
- Spin is not equal to Momentum  Diff = 0.000419
-    2      1.08      4.64      6.45    0.27   0.526   0.807    0.27   0.526   0.807        10        10      1.08        World 
+Stp#   X(mm)   Y(mm)   Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z      |S-N|  (S_z-N_z)    StepLen   PhsStep    Safety         NextVolume 
+  0     0.2     0.3     0.4   0.103   0.582   0.807   0.103   0.582   0.807    6e-05 -6.1e-10       2.5       2.5      49.8        World 
+ Spin is not equal to Momentum  Diff = 0.0001794
+  1    0.42    1.76    2.42    0.16   0.569   0.807    0.16   0.569   0.807  0.00018 -5.5e-09         5         5      47.3        World 
+ Spin is not equal to Momentum  Diff = 0.0004186
+  2    1.08    4.64    6.45    0.27   0.526   0.807    0.27   0.526   0.807  0.00042   -3e-08        10        10      42.3        World 
  Spin is not equal to Momentum  Diff = 0.000897
-    3      3.23      10.1      14.5   0.453   0.379   0.807   0.454   0.379   0.807        20        20      3.23        World 
- Spin is not equal to Momentum  Diff = 0.00185
-    4      10.6      19.3      30.6   0.588 -0.0605   0.807   0.588 -0.0623   0.807        40        40      10.6        World 
- Spin is not equal to Momentum  Diff = 0.00377
-    5      32.6      26.1      62.9  -0.077  -0.586   0.807 -0.0807  -0.586   0.807        80        80      23.9        World 
- Spin is not equal to Momentum  Diff = 0.00759
-    6      58.9     -7.22       127    0.11   0.581   0.807   0.117   0.579   0.807       160       160      7.22        World 
- Spin is not equal to Momentum  Diff = 0.0152
-    7     0.486      2.12       256   0.174   0.565   0.807   0.189    0.56   0.807       320       320     0.486        World 
- Spin is not equal to Momentum  Diff = 0.0306
-    8      1.29      5.35       515   0.296   0.512   0.807   0.322   0.496   0.806       640       640      1.29        World 
- Spin is not equal to Momentum  Diff = 0.0612
-    9      3.94      11.4  1.03e+03   0.489   0.332   0.807   0.521   0.281   0.806  1.28e+03  1.28e+03      3.94        World 
- Spin is not equal to Momentum  Diff = 0.122
-   10      12.9      21.1  2.06e+03   0.564  -0.176   0.807   0.519  -0.289   0.804  2.56e+03  2.56e+03       277        World 
+  3    3.23    10.1    14.5   0.453   0.379   0.807   0.454   0.379   0.807   0.0009 -1.4e-07        20        20      32.3        World 
+ Spin is not equal to Momentum  Diff = 0.001854
+  4    10.6    19.3    30.6   0.588 -0.0605   0.807   0.588 -0.0623   0.807   0.0019 -5.9e-07        40        40      12.6        World 
+ Spin is not equal to Momentum  Diff = 0.003767
+  5    32.6    26.1    62.9  -0.077  -0.586   0.807 -0.0807  -0.586   0.807   0.0038 -2.4e-06        80        80      23.9        World 
+ Spin is not equal to Momentum  Diff = 0.007595
+  6    58.9   -7.22     127    0.11   0.581   0.807   0.117   0.579   0.807   0.0076 -9.9e-06       160       160      42.8        World 
+ Spin is not equal to Momentum  Diff = 0.01525
+  7   0.486    2.12     256   0.174   0.565   0.807   0.189    0.56   0.807    0.015   -4e-05       320       320      7.22        World 
+ Spin is not equal to Momentum  Diff = 0.03056
+  8    1.29    5.35     515   0.296   0.512   0.807   0.322   0.496   0.806    0.031 -0.00016       640       640      19.7        World 
+ Spin is not equal to Momentum  Diff = 0.06116
+  9    3.94    11.4 1.03e+03   0.489   0.332   0.807   0.521   0.281   0.806    0.061 -0.00064      1280      1280        15        World 
+ Spin is not equal to Momentum  Diff = 0.1223
+ 10    12.9    21.1 2.06e+03   0.564  -0.176   0.807   0.519  -0.289   0.804     0.12  -0.0026      2560      2560       440        World 
+ Spin is not equal to Momentum  Diff = 0.1481
+ 11    38.3    24.9 4.13e+03  -0.589 -0.0477   0.807  -0.588     0.1   0.803     0.15  -0.0037   1081.18      5120       320        World 
+ Spin is not equal to Momentum  Diff = 0.308
+ 12    31.9   -32.9   5e+03    0.59  0.0294   0.807   0.547  -0.275    0.79     0.31   -0.016   6760.65     10240         0 Big Target 2 
+ Spin is not equal to Momentum  Diff = 0.4647
+ 13    28.1    26.2 1.05e+04  -0.591 -0.0112   0.807  -0.467   0.435    0.77     0.46   -0.037   6760.65     20480  3.98e+03 Big Target 2 
+ Test with full voxels
+Test G4PropInFld with optimise = on
+ The global field manager has the following parameters 
+ Eps min= 1e-07 &  max= 1e-07
+ Delta Intersection=  0.001 Delta One step    =  0.01
+
+
+Test PropagateMagField: ***********************
+ Starting New Particle with Position (0,0,0)
+ and UnitVelocity (0,0.6,0.8)
+ Momentum in MeV/c is 50
+ Spin is not equal to Momentum  Diff = 0.000116
+Stp#   X(mm)   Y(mm)   Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z      |S-N|  (S_z-N_z)    StepLen   PhsStep    Safety         NextVolume 
+  0       0       0       0  0.0896   0.593     0.8  0.0897   0.593     0.8  0.00012 -5.2e-10       2.5       2.5         0        World 
+ Spin is not equal to Momentum  Diff = 0.000348
+  1   0.112    1.49       2   0.261    0.54     0.8   0.261    0.54     0.8  0.00035 -4.7e-09         5         5     0.112        World 
+ Spin is not equal to Momentum  Diff = 0.000812
+  2   0.995    4.35       6    0.52   0.299     0.8   0.521   0.298     0.8  0.00081 -2.5e-08        10        10     0.995        World 
+ Spin is not equal to Momentum  Diff = 0.00174
+  3    5.02    8.68      14   0.467  -0.376     0.8   0.466  -0.378     0.8   0.0017 -1.2e-07        20        20      5.02        World 
+ Spin is not equal to Momentum  Diff = 0.003596
+  4    16.3     7.8      30  -0.599 -0.0393     0.8  -0.599 -0.0357     0.8   0.0036   -5e-07        40        40       7.8        World 
+ Spin is not equal to Momentum  Diff = 0.007308
+  5    10.7   -9.99      62 -0.0112    -0.6     0.8 -0.0185    -0.6     0.8   0.0073 -2.1e-06        80        80      5.42        World 
+ Spin is not equal to Momentum  Diff = 0.01473
+  6      20  -0.187     126   0.112    0.59     0.8   0.126   0.587     0.8    0.015 -8.3e-06       160       160     0.187        World 
+ Spin is not equal to Momentum  Diff = 0.02958
+  7   0.175    1.86     254     0.3   0.519     0.8   0.326   0.504     0.8     0.03 -3.4e-05       320       320     0.175        World 
+ Spin is not equal to Momentum  Diff = 0.05926
+  8    1.34    5.01     510   0.559   0.218     0.8   0.578   0.162     0.8    0.059 -0.00013       640       640      1.34        World 
+ Spin is not equal to Momentum  Diff = 0.1185
+  9    6.37    9.32 1.02e+03   0.336  -0.497     0.8   0.232  -0.554   0.799     0.12 -0.00054      1280      1280      6.37        World 
+ Spin is not equal to Momentum  Diff = 0.2216
+ 10    18.3     5.6 2.05e+03  -0.558    0.22     0.8  -0.442   0.409   0.798     0.22  -0.0019   2243.01      2560       131        World 
+ Spin is not equal to Momentum  Diff = 0.2875
+ 11    6.34   -9.31 3.84e+03  -0.467  -0.377     0.8  -0.592  -0.119   0.797     0.29  -0.0032   1449.49      5120      56.2        World 
+ Spin is not equal to Momentum  Diff = 0.3879
+ 12    16.3   -7.78   5e+03   0.172   0.575     0.8   0.492   0.357   0.794     0.39  -0.0058   2243.01     10240         0 Big Target 2 
+ Spin is not equal to Momentum  Diff = 0.4856
+ 13   0.418    2.86 6.79e+03   0.184  -0.571     0.8    -0.3  -0.533   0.791     0.49  -0.0091   2243.01     20480  1.31e+03 Big Target 2 
+
+Test PropagateMagField: ***********************
+ Starting New Particle with Position (0.2,0.3,0.4)
+ and UnitVelocity (0.07332,0.5866,0.8066)
+ Momentum in MeV/c is 150
+ Spin is not equal to Momentum  Diff = 5.98e-05
+Stp#   X(mm)   Y(mm)   Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z      |S-N|  (S_z-N_z)    StepLen   PhsStep    Safety         NextVolume 
+  0     0.2     0.3     0.4   0.103   0.582   0.807   0.103   0.582   0.807    6e-05 -6.1e-10       2.5       2.5       0.2        World 
+ Spin is not equal to Momentum  Diff = 0.0001794
+  1    0.42    1.76    2.42    0.16   0.569   0.807    0.16   0.569   0.807  0.00018 -5.5e-09         5         5      0.42        World 
+ Spin is not equal to Momentum  Diff = 0.0004186
+  2    1.08    4.64    6.45    0.27   0.526   0.807    0.27   0.526   0.807  0.00042   -3e-08        10        10      1.08        World 
+ Spin is not equal to Momentum  Diff = 0.000897
+  3    3.23    10.1    14.5   0.453   0.379   0.807   0.454   0.379   0.807   0.0009 -1.4e-07        20        20      3.23        World 
+ Spin is not equal to Momentum  Diff = 0.001854
+  4    10.6    19.3    30.6   0.588 -0.0605   0.807   0.588 -0.0623   0.807   0.0019 -5.9e-07        40        40      10.6        World 
+ Spin is not equal to Momentum  Diff = 0.003767
+  5    32.6    26.1    62.9  -0.077  -0.586   0.807 -0.0807  -0.586   0.807   0.0038 -2.4e-06        80        80      23.9        World 
+ Spin is not equal to Momentum  Diff = 0.007595
+  6    58.9   -7.22     127    0.11   0.581   0.807   0.117   0.579   0.807   0.0076 -9.9e-06       160       160      7.22        World 
+ Spin is not equal to Momentum  Diff = 0.01525
+  7   0.486    2.12     256   0.174   0.565   0.807   0.189    0.56   0.807    0.015   -4e-05       320       320     0.486        World 
+ Spin is not equal to Momentum  Diff = 0.03056
+  8    1.29    5.35     515   0.296   0.512   0.807   0.322   0.496   0.806    0.031 -0.00016       640       640      1.29        World 
+ Spin is not equal to Momentum  Diff = 0.06116
+  9    3.94    11.4 1.03e+03   0.489   0.332   0.807   0.521   0.281   0.806    0.061 -0.00064      1280      1280      3.94        World 
+ Spin is not equal to Momentum  Diff = 0.1223
+ 10    12.9    21.1 2.06e+03   0.564  -0.176   0.807   0.519  -0.289   0.804     0.12  -0.0026      2560      2560       213        World 
+ Spin is not equal to Momentum  Diff = 0.1481
+ 11    38.3    24.9 4.13e+03  -0.589 -0.0477   0.807  -0.588     0.1   0.803     0.15  -0.0037   1081.18      5120      58.5        World 
+ Spin is not equal to Momentum  Diff = 0.308
+ 12    31.9   -32.9   5e+03    0.59  0.0294   0.807   0.547  -0.275    0.79     0.31   -0.016   6760.65     10240         0 Big Target 2 
+ Spin is not equal to Momentum  Diff = 0.4647
+ 13    28.1    26.2 1.05e+04  -0.591 -0.0112   0.807  -0.467   0.435    0.77     0.46   -0.037   6760.65     20480  3.98e+03 Big Target 2 
+
+----------------------------------------------------------
+Test with more accurate parameters 
+ Setting values for Min Eps = 2.5e-08 and MaxEps = 0.001
+Test G4PropInFld with optimise = on
+ The global field manager has the following parameters 
+ Eps min= 2.5e-08 &  max= 0.001
+ Delta Intersection=  0.001 Delta One step    =  0.01
+
+
+Test PropagateMagField: ***********************
+ Starting New Particle with Position (0,0,0)
+ and UnitVelocity (0,0.6,0.8)
+ Momentum in MeV/c is 50
+ Spin is not equal to Momentum  Diff = 0.000116
+Stp#   X(mm)   Y(mm)   Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z      |S-N|  (S_z-N_z)    StepLen   PhsStep    Safety         NextVolume 
+  0       0       0       0  0.0896   0.593     0.8  0.0897   0.593     0.8  0.00012 -9.7e-07       2.5       2.5         0        World 
+ Spin is not equal to Momentum  Diff = 0.0003477
+  1   0.112    1.49       2   0.261    0.54     0.8   0.261    0.54     0.8  0.00035   -3e-06         5         5     0.112        World 
+ Spin is not equal to Momentum  Diff = 0.0008107
+  2   0.995    4.35       6    0.52   0.299     0.8   0.521   0.298     0.8  0.00081 -7.3e-06        10        10     0.995        World 
+ Spin is not equal to Momentum  Diff = 0.001737
+  3    5.02    8.68      14   0.467  -0.376     0.8   0.466  -0.378     0.8   0.0017   -1e-05        20        20      5.02        World 
+ Spin is not equal to Momentum  Diff = 0.003591
+  4    16.3     7.8      30  -0.599 -0.0393     0.8  -0.599 -0.0357     0.8   0.0036 -1.3e-05        40        40       7.8        World 
+ Spin is not equal to Momentum  Diff = 0.007301
+  5    10.7   -9.99      62 -0.0112    -0.6     0.8 -0.0185    -0.6     0.8   0.0073 -1.6e-05        80        80      9.99        World 
+ Spin is not equal to Momentum  Diff = 0.01472
+  6      20  -0.187     126   0.112   0.589     0.8   0.126   0.587     0.8    0.015 -2.3e-05       160       160     0.187        World 
+ Spin is not equal to Momentum  Diff = 0.02956
+  7   0.175    1.86     254     0.3   0.519     0.8   0.326   0.504     0.8     0.03 -4.9e-05       320       320     0.175        World 
+ Spin is not equal to Momentum  Diff = 0.05923
+  8    1.35    5.01     510   0.559   0.218     0.8   0.578   0.162     0.8    0.059 -0.00015       640       640      1.35        World 
+ Spin is not equal to Momentum  Diff = 0.1185
+  9    6.37    9.32 1.02e+03   0.336  -0.497     0.8   0.232  -0.554   0.799     0.12 -0.00056      1280      1280      6.37        World 
+ Spin is not equal to Momentum  Diff = 0.236
+ 10    18.3     5.6 2.05e+03  -0.517   0.305     0.8  -0.362   0.482   0.798     0.24  -0.0022      2560      2560       130        World 
+ Spin is not equal to Momentum  Diff = 0.2875
+ 11    4.93   -8.62 4.09e+03  -0.464  -0.381     0.8  -0.591  -0.123   0.797     0.29  -0.0032   1132.37      5120      99.3        World 
+ Spin is not equal to Momentum  Diff = 0.5917
+ 12    16.4   -7.73   5e+03  -0.112  -0.589     0.8  -0.576  -0.222   0.787     0.59   -0.013   7009.49     10240         0 Big Target 2 
+ Spin is not equal to Momentum  Diff = 0.7848
+ 13    19.8   -1.87 1.06e+04   -0.53   0.282     0.8   0.187   0.602   0.776     0.78   -0.024   4956.45     20480  5.17e+03 Big Target 2 
+
+Test PropagateMagField: ***********************
+ Starting New Particle with Position (0.2,0.3,0.4)
+ and UnitVelocity (0.07332,0.5866,0.8066)
+ Momentum in MeV/c is 150
+ Spin is not equal to Momentum  Diff = 5.98e-05
+Stp#   X(mm)   Y(mm)   Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z      |S-N|  (S_z-N_z)    StepLen   PhsStep    Safety         NextVolume 
+  0     0.2     0.3     0.4   0.103   0.582   0.807   0.103   0.582   0.807    6e-05 -3.7e-08       2.5       2.5       0.2        World 
+ Spin is not equal to Momentum  Diff = 0.0001794
+  1    0.42    1.76    2.42    0.16   0.569   0.807    0.16   0.569   0.807  0.00018 -6.2e-07         5         5      0.42        World 
+ Spin is not equal to Momentum  Diff = 0.0004185
+  2    1.08    4.64    6.45    0.27   0.526   0.807    0.27   0.526   0.807  0.00042 -1.9e-06        10        10      1.08        World 
+ Spin is not equal to Momentum  Diff = 0.0008967
+  3    3.23    10.1    14.5   0.453   0.379   0.807   0.454   0.379   0.807   0.0009   -3e-06        20        20      3.23        World 
+ Spin is not equal to Momentum  Diff = 0.001853
+  4    10.6    19.3    30.6   0.588 -0.0605   0.807   0.588 -0.0623   0.807   0.0019 -4.2e-06        40        40      10.6        World 
+ Spin is not equal to Momentum  Diff = 0.003767
+  5    32.6    26.1    62.9  -0.077  -0.586   0.807 -0.0807  -0.586   0.807   0.0038 -6.5e-06        80        80      23.9        World 
+ Spin is not equal to Momentum  Diff = 0.007593
+  6    58.9   -7.22     127    0.11   0.581   0.807   0.117   0.579   0.807   0.0076 -1.4e-05       160       160      7.22        World 
+ Spin is not equal to Momentum  Diff = 0.01525
+  7   0.486    2.12     256   0.174   0.565   0.807   0.189    0.56   0.807    0.015 -4.4e-05       320       320     0.486        World 
+ Spin is not equal to Momentum  Diff = 0.03055
+  8    1.29    5.35     515   0.296   0.512   0.807   0.322   0.496   0.806    0.031 -0.00016       640       640      1.29        World 
+ Spin is not equal to Momentum  Diff = 0.06116
+  9    3.94    11.4 1.03e+03   0.489   0.332   0.807   0.521   0.281   0.806    0.061 -0.00064      1280      1280      3.94        World 
+ Spin is not equal to Momentum  Diff = 0.1223
+ 10    12.9    21.1 2.06e+03   0.564  -0.176   0.807   0.519  -0.289   0.804     0.12  -0.0026      2560      2560       256        World 
  Spin is not equal to Momentum  Diff = 0.148
-   11      38.3      24.9  4.13e+03  -0.589 -0.0477   0.807  -0.588     0.1   0.803  1.08e+03  5.12e+03       557        World 
- Spin is not equal to Momentum  Diff = 0.389
-   12      31.9     -32.8     5e+03    0.55  -0.216   0.807   0.326  -0.533   0.781  1.02e+04  1.02e+04         0 Big Target 2 
- Spin is not equal to Momentum  Diff = 0.714
-   13      40.4      24.2  1.33e+04  -0.385  -0.449   0.807  -0.664   0.203   0.719  1.46e+04  2.05e+04  8.26e+03 Big Target 2 
+ 11    38.3    24.9 4.13e+03  -0.589 -0.0481   0.807  -0.588  0.0999   0.803     0.15  -0.0038   1081.14      5120       445        World 
+ Spin is not equal to Momentum  Diff = 0.3891
+ 12      32   -32.8   5e+03    0.55  -0.216   0.807   0.327  -0.533   0.781     0.39   -0.026     10240     10240         0 Big Target 2 
+ Spin is not equal to Momentum  Diff = 0.6796
+ 13    40.3    24.2 1.33e+04     0.1  -0.583   0.807  -0.552  -0.408   0.728     0.68   -0.079   12940.9     20480  1.45e+03 Big Target 2 
+ Now test with safety optimisation off
+Test G4PropInFld with optimise = off
+ The global field manager has the following parameters 
+ Eps min= 2.5e-08 &  max= 0.001
+ Delta Intersection=  0.001 Delta One step    =  0.01
+
+
+Test PropagateMagField: ***********************
+ Starting New Particle with Position (0,0,0)
+ and UnitVelocity (0,0.6,0.8)
+ Momentum in MeV/c is 50
+ Spin is not equal to Momentum  Diff = 0.000116
+Stp#   X(mm)   Y(mm)   Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z      |S-N|  (S_z-N_z)    StepLen   PhsStep    Safety         NextVolume 
+  0       0       0       0  0.0896   0.593     0.8  0.0897   0.593     0.8  0.00012 -9.7e-07       2.5       2.5        50        World 
+ Spin is not equal to Momentum  Diff = 0.0003477
+  1   0.112    1.49       2   0.261    0.54     0.8   0.261    0.54     0.8  0.00035   -3e-06         5         5      49.9        World 
+ Spin is not equal to Momentum  Diff = 0.0008107
+  2   0.995    4.35       6    0.52   0.299     0.8   0.521   0.298     0.8  0.00081 -7.3e-06        10        10        49        World 
+ Spin is not equal to Momentum  Diff = 0.001737
+  3    5.02    8.68      14   0.467  -0.376     0.8   0.466  -0.378     0.8   0.0017   -1e-05        20        20        45        World 
+ Spin is not equal to Momentum  Diff = 0.003591
+  4    16.3     7.8      30  -0.599 -0.0393     0.8  -0.599 -0.0357     0.8   0.0036 -1.3e-05        40        40      42.2        World 
+ Spin is not equal to Momentum  Diff = 0.007301
+  5    10.7   -9.99      62 -0.0112    -0.6     0.8 -0.0185    -0.6     0.8   0.0073 -1.6e-05        80        80        40        World 
+ Spin is not equal to Momentum  Diff = 0.01472
+  6      20  -0.187     126   0.112   0.589     0.8   0.126   0.587     0.8    0.015 -2.3e-05       160       160      49.8        World 
+ Spin is not equal to Momentum  Diff = 0.02956
+  7   0.175    1.86     254     0.3   0.519     0.8   0.326   0.504     0.8     0.03 -4.9e-05       320       320      49.8        World 
+ Spin is not equal to Momentum  Diff = 0.05923
+  8    1.35    5.01     510   0.559   0.218     0.8   0.578   0.162     0.8    0.059 -0.00015       640       640      48.7        World 
+ Spin is not equal to Momentum  Diff = 0.1185
+  9    6.37    9.32 1.02e+03   0.336  -0.497     0.8   0.232  -0.554   0.799     0.12 -0.00056      1280      1280       472        World 
+ Spin is not equal to Momentum  Diff = 0.236
+ 10    18.3     5.6 2.05e+03  -0.517   0.305     0.8  -0.362   0.482   0.798     0.24  -0.0022      2560      2560   1.5e+03        World 
+ Spin is not equal to Momentum  Diff = 0.2875
+ 11    4.93   -8.62 4.09e+03  -0.464  -0.381     0.8  -0.591  -0.123   0.797     0.29  -0.0032   1132.37      5120       906        World 
+ Spin is not equal to Momentum  Diff = 0.5917
+ 12    16.4   -7.73   5e+03  -0.112  -0.589     0.8  -0.576  -0.222   0.787     0.59   -0.013   7009.49     10240         0 Big Target 2 
+ Spin is not equal to Momentum  Diff = 0.7848
+ 13    19.8   -1.87 1.06e+04   -0.53   0.282     0.8   0.187   0.602   0.776     0.78   -0.024   4956.45     20480  5.61e+03 Big Target 2 
+
+Test PropagateMagField: ***********************
+ Starting New Particle with Position (0.2,0.3,0.4)
+ and UnitVelocity (0.07332,0.5866,0.8066)
+ Momentum in MeV/c is 150
+ Spin is not equal to Momentum  Diff = 5.98e-05
+Stp#   X(mm)   Y(mm)   Z(mm)    N_x     N_y     N_z     S_x     S_y     S_z      |S-N|  (S_z-N_z)    StepLen   PhsStep    Safety         NextVolume 
+  0     0.2     0.3     0.4   0.103   0.582   0.807   0.103   0.582   0.807    6e-05 -3.7e-08       2.5       2.5      49.8        World 
+ Spin is not equal to Momentum  Diff = 0.0001794
+  1    0.42    1.76    2.42    0.16   0.569   0.807    0.16   0.569   0.807  0.00018 -6.2e-07         5         5      49.6        World 
+ Spin is not equal to Momentum  Diff = 0.0004185
+  2    1.08    4.64    6.45    0.27   0.526   0.807    0.27   0.526   0.807  0.00042 -1.9e-06        10        10      48.9        World 
+ Spin is not equal to Momentum  Diff = 0.0008967
+  3    3.23    10.1    14.5   0.453   0.379   0.807   0.454   0.379   0.807   0.0009   -3e-06        20        20      46.8        World 
+ Spin is not equal to Momentum  Diff = 0.001853
+  4    10.6    19.3    30.6   0.588 -0.0605   0.807   0.588 -0.0623   0.807   0.0019 -4.2e-06        40        40      39.4        World 
+ Spin is not equal to Momentum  Diff = 0.003767
+  5    32.6    26.1    62.9  -0.077  -0.586   0.807 -0.0807  -0.586   0.807   0.0038 -6.5e-06        80        80      23.9        World 
+ Spin is not equal to Momentum  Diff = 0.007593
+  6    58.9   -7.22     127    0.11   0.581   0.807   0.117   0.579   0.807   0.0076 -1.4e-05       160       160      42.8        World 
+ Spin is not equal to Momentum  Diff = 0.01525
+  7   0.486    2.12     256   0.174   0.565   0.807   0.189    0.56   0.807    0.015 -4.4e-05       320       320      49.5        World 
+ Spin is not equal to Momentum  Diff = 0.03055
+  8    1.29    5.35     515   0.296   0.512   0.807   0.322   0.496   0.806    0.031 -0.00016       640       640      48.7        World 
+ Spin is not equal to Momentum  Diff = 0.06116
+  9    3.94    11.4 1.03e+03   0.489   0.332   0.807   0.521   0.281   0.806    0.061 -0.00064      1280      1280       481        World 
+ Spin is not equal to Momentum  Diff = 0.1223
+ 10    12.9    21.1 2.06e+03   0.564  -0.176   0.807   0.519  -0.289   0.804     0.12  -0.0026      2560      2560  1.51e+03        World 
+ Spin is not equal to Momentum  Diff = 0.148
+ 11    38.3    24.9 4.13e+03  -0.589 -0.0481   0.807  -0.588  0.0999   0.803     0.15  -0.0038   1081.14      5120       872        World 
+ Spin is not equal to Momentum  Diff = 0.3891
+ 12      32   -32.8   5e+03    0.55  -0.216   0.807   0.327  -0.533   0.781     0.39   -0.026     10240     10240         0 Big Target 2 
+ Spin is not equal to Momentum  Diff = 0.6796
+ 13    40.3    24.2 1.33e+04     0.1  -0.583   0.807  -0.552  -0.408   0.728     0.68   -0.079   12940.9     20480  8.26e+03 Big Target 2 
