@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999-01-07 16:09:36 gunter Exp $
+# $Id: GNUmakefile,v 1.2 2000-06-21 17:43:37 johna Exp $
 # -------------------------------------------------------------
 # GNUmakefile for interfaces/common library.  John Allison, 6/7/98.
 
@@ -9,6 +9,7 @@ ifndef G4INSTALL
 endif
 
 include $(G4INSTALL)/config/architecture.gmk
+include $(G4INSTALL)/config/G4VIS_BUILD.gmk
 include $(G4INSTALL)/config/G4UI_BUILD.gmk
 include $(G4INSTALL)/config/interactivity.gmk
 
