@@ -1,0 +1,19 @@
+$Id: History,v 1.1 2000-05-23 06:30:16 stesting Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                 test18 (radiative decay) History file
+                 -------------------------------------
+This file should be used by the tests and/or test18 responsible to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+23rd May 2000  John Allison  (test18-V01-01-00)
+- First version from hadronic/models/radiative_decay/test/exrdm02.
