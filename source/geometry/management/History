@@ -1,4 +1,4 @@
-$Id: History,v 1.40 2002-10-14 16:16:39 gcosmo Exp $
+$Id: History,v 1.41 2002-10-16 15:03:09 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-October 14, 2002  G. Cosmo
+October 16, 2002  G. Cosmo                 geommng-V04-01-01
 - G4PVReplica.cc, G4PVParameterised.cc:
   Added checks for illegal geometry contructions; contructors now verify unicity
   of daughter volumes for replicas and parameterised volumes, as well as checks
