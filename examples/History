@@ -1,4 +1,4 @@
-$Id: History,v 1.25 1999-10-20 17:15:19 stesting Exp $
+$Id: History,v 1.26 1999-10-27 14:50:00 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26th Octobre 1999  John Allison (examples-V00-01-07)
+- Tagged Y.Morita's changes to extended/E02 - see extended/E02/History.
 
 20th October 1999  John Allison (examples-V00-01-06)
 - Define G4OODDLX_BOOT in E02/GNUmakefile.
