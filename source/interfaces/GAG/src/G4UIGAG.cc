@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIGAG.cc,v 1.12 2001-10-22 11:18:11 yhajime Exp $
+// $Id: G4UIGAG.cc,v 1.13 2001-11-29 06:04:45 yhajime Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4UIGAG.cc
@@ -99,21 +99,31 @@ void G4UIGAG::ExecuteCommand(G4String aCommand)
 {
   G4UIcommandTree * tree = UI->GetTree();
   if(aCommand.length()<2) return;
-  int commandStatus = UI->ApplyCommand(aCommand);
+  G4int returnVal = UI->ApplyCommand(aCommand);
+  G4int paramIndex = returnVal % 100;
+  G4int commandStatus  = returnVal - paramIndex;
+
   UpdateState();
   if ( uiMode == terminal_mode){
     switch(commandStatus) {
     case fCommandSucceeded:
       break;
     case fCommandNotFound:
-      G4cerr << "command not found" << G4endl;
+      //      G4cerr << "command not found" << G4endl;
+    G4cerr << "command <" << UI->SolveAlias(aCommand) << "> not found" << G4endl;
       break;
     case fIllegalApplicationState:
       G4cerr << "illegal application state -- command refused" << G4endl;
       break;
     case fParameterOutOfRange:
     case fParameterUnreadable:
+      G4cerr << "Parameter is wrong type and/or is not omittable (index " << paramIndex << ")" << G4endl;
+      break;
     case fParameterOutOfCandidates:
+      G4cerr << "Parameter is out of candidate list (index " << paramIndex << ")" << G4endl;
+      //      G4cerr << "Candidates : " << cmd->GetParameter(paramIndex)->GetParameterCandidates() << G4endl;
+      break;
+    case fAliasNotFound:
     default:
       G4cerr << "command refused (" << commandStatus << ")" << G4endl;
     }
@@ -134,7 +144,7 @@ void G4UIGAG::ExecuteCommand(G4String aCommand)
       }
       break;
     case fCommandNotFound:
-      G4cout << "@@ErrResult \"command not found.\"" << G4endl;
+      G4cout << "@@ErrResult \" <" << UI->SolveAlias(aCommand) << "> command not found.\"" << G4endl;
       break;
     case fIllegalApplicationState:
       G4cout << "@@ErrResult \"Illegal application state -- command refused\"" << G4endl;
@@ -143,11 +153,13 @@ void G4UIGAG::ExecuteCommand(G4String aCommand)
       G4cout << "@@ErrResult \"Parameter Out of Range.\"" << G4endl;
       break;
     case fParameterUnreadable:
-      G4cout << "@@ErrResult \"Parameter Unreadable.\"" << G4endl;
+      G4cout << "@@ErrResult \"Parameter is wrong type and/or is not omittable.\"" << G4endl;
       break;
     case fParameterOutOfCandidates:
+//      G4cout << "@@ErrResult \"Parameter Out of Candidates. Candidates : " << cmd->GetParameter(paramIndex)->GetParameterCandidates()<< "\"" << G4endl;
       G4cout << "@@ErrResult \"Parameter Out of Candidates.\"" << G4endl;
       break;
+    case fAliasNotFound:
     default:
       G4cout << "@@ErrResult \"command refused (" << commandStatus << ")\"" << G4endl;
     }
