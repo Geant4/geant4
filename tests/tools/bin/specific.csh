@@ -404,6 +404,11 @@ if ( `uname -n` == "NB-BARRAND" ) then
   setenv CPPVERBOSE 1
   # Specific :
   setenv CLHEP_BASE_DIR /cygdrive/c/barrand/CLHEP/1.8.1.0/VisualC
+  # Does not compile with VisualC++ :
+  unsetenv G4VIS_BUILD_DAWN_DRIVER     1
+  unsetenv G4VIS_BUILD_DAWNFILE_DRIVER 1
+  unsetenv G4VIS_BUILD_VRML_DRIVER     1
+  unsetenv G4VIS_BUILD_VRMLFILE_DRIVER 1
 endif
 
 if ( `uname -n` == "papou1" ) then
