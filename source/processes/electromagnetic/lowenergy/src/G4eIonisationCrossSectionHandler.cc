@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationCrossSectionHandler.cc,v 1.4 2001-10-25 09:44:00 vnivanch Exp $
+// $Id: G4eIonisationCrossSectionHandler.cc,v 1.5 2001-10-25 10:13:44 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -64,7 +64,7 @@ G4eIonisationCrossSectionHandler::G4eIonisationCrossSectionHandler(
 
 G4eIonisationCrossSectionHandler::~G4eIonisationCrossSectionHandler() 
 {
-  // delete interp;
+  delete interp;
 }
 
 
@@ -93,8 +93,9 @@ G4std::vector<G4VEMDataSet*>* G4eIonisationCrossSectionHandler::BuildCrossSectio
     G4int nElements = material->GetNumberOfElements();
 
     G4double tcut  = (*energyCuts)[m];
-
-    G4VEMDataSet* setForMat = new G4CompositeEMDataSet(interp,1.,1.);
+    
+    G4VDataSetAlgorithm* algo = interp->Clone();
+    G4VEMDataSet* setForMat = new G4CompositeEMDataSet(algo,1.,1.);
 
     for (G4int i=0; i<nElements; i++) {
  
@@ -120,7 +121,8 @@ G4std::vector<G4VEMDataSet*>* G4eIonisationCrossSectionHandler::BuildCrossSectio
 	}
         cs->push_back(value);
       } 
-      G4VEMDataSet* elSet = new G4EMDataSet(i,energies,cs,interp,1.,1.);
+      G4VDataSetAlgorithm* algo = interp->Clone();
+      G4VEMDataSet* elSet = new G4EMDataSet(i,energies,cs,algo,1.,1.);
       setForMat->AddComponent(elSet);
     }
     set->push_back(setForMat);
