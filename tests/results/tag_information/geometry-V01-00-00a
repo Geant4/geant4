@@ -1,0 +1,7 @@
+ I made available a general tag of geometry "geometry-V01-00-00a",
+ which includes some minor fixes to the unit tests that were not
+ included in 'geometry-V01-00-00". They essentially refer to some
+ missing G4cout migrations and other minor compilation problems due
+ to the tests not being up-to-date with the recent development.
+ This tag does not invalidate any system test, since no change is
+ apported to the kernel libraries.
