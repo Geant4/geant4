@@ -90,6 +90,7 @@ private:
   void PrintWelcomeMessage();
   void BuildTargetList();
   void FindCollisions(G4KineticTrackVector * secondaries);
+  void FindDecayCollision(G4KineticTrack * secondary);
   G4bool ApplyCollision(G4CollisionInitialState * collision);
   G4bool Capture(G4bool verbose=false);
   G4bool Absorb();
@@ -130,6 +131,7 @@ private:
   G4CollisionManager * theCollisionMgr;
 
   std::vector<G4BCAction *> theImR;
+  G4BCDecay * theDecay;
   G4VFieldPropagation * thePropagator;
   G4double theCurrentTime;
   G4double theCutOnP;

@@ -64,12 +64,17 @@
 //#define debug_1_BinaryCascade 1
 
 //  specific debuuging info per method or functionality
-//#define debug_BIC_ApplyCollision 1
+#define debug_BIC_ApplyCollision 1
 //#define debug_BIC_CheckPauli 1
 //#define debug_BIC_CorrectFinalPandE 1
 //#define debug_BIC_Propagate_Excitation 1
 //#define debug_BIC_DoTimeStep 1
-#define debug_BIC_CorrectBarionsOnBoundary 1
+//#define debug_BIC_CorrectBarionsOnBoundary 1
+#define debug_BIC_GetExcitationEnergy 1
+//#define debug_BIC_FinalNucleusMomentum 1
+
+
+
 //  C O N S T R U C T O R S   A N D   D E S T R U C T O R S
 //
 
@@ -80,8 +85,8 @@ G4BinaryCascade::G4BinaryCascade() : G4VIntraNuclearTransportModel()
   ShortLived.ConstructParticle();
 
   theCollisionMgr = new G4CollisionManager;
-  
-  theImR.push_back(new G4BCDecay);
+  theDecay=new G4BCDecay;
+  theImR.push_back(theDecay);
   theImR.push_back(new G4Scatterer);
   theImR.push_back(new G4MesonAbsorption);
   thePropagator = new G4RKPropagation;
@@ -450,7 +455,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
   G4double ExcitationEnergy=GetExcitationEnergy();
 
   PrintKTVector(&theFinalState,std::string(" FinalState be4 corr"));
-  G4cout << " Excitation Energy final,  #collisions:, out, captured  "
+  G4cout << " Excitation Energy prefinal,  #collisions:, out, captured  "
   << ExcitationEnergy << " "
   << collisionCount << " "
   << theFinalState.size() << " "
@@ -680,6 +685,12 @@ G4double G4BinaryCascade::GetExcitationEnergy()
   #ifdef debug_G4BinaryCascade
   G4int finalA = theTargetList.size()+theCapturedList.size();
   G4int finalZ = GetTotalCharge(theTargetList)+GetTotalCharge(theCapturedList);
+  if ( (currentA - finalA) != 0 || (currentZ - finalZ) != 0 )
+  {
+     G4cerr << "G4BIC:GetExcitationEnergy(): Nucleon counting error current/final{A,Z} " 
+            << currentA << " " << finalA << " "<< currentZ << " " << finalZ << G4endl;
+  }
+  
   #endif
 
   G4double excitationE(0);
@@ -701,7 +712,7 @@ G4double G4BinaryCascade::GetExcitationEnergy()
      return 0;
   }
 
-  #ifdef debug_G4BinaryCascade
+  #ifdef debug_BIC_GetExcitationEnergy
   debug.push_back("====> current A, Z");
   debug.push_back(currentZ);
   debug.push_back(currentA);
@@ -716,19 +727,17 @@ G4double G4BinaryCascade::GetExcitationEnergy()
 
   excitationE = GetFinalNucleusMomentum().mag() - nucleusMass;
 
-#ifdef debug_G4BinaryCascade
+#ifdef debug_BIC_GetExcitationEnergy
 // ------ debug
   if ( excitationE < 0 )
   {
      G4cout << "negative ExE final Ion mass" <<nucleusMass<< G4endl;
-    if(finalZ>.5) G4cout << " Ecitation Energy, Finalnuclmom, nucl mass, excitE "
-	               << GetFinalNucleusMomentum() << G4endl
-	               <<excitationE << " "
-	               << G4endl;
+     G4LorentzVector Nucl_mom=GetFinalNucleusMomentum();
+    if(finalZ>.5) G4cout << " Final nuclmom/mass " << Nucl_mom << " " << Nucl_mom.mag()  
+		       << " (A,Z)=("<< finalA <<","<<finalZ <<")"
+		       << " mass " << nucleusMass << " " 
+	               << " excitE " << excitationE << G4endl;
 
-    if(finalZ>.5) G4cout << " final Excit : a,z, 4mom "
-		         << finalA << " " << finalZ << " "
-		<< GetFinalNucleusMomentum() <<G4endl;
 
     G4int A = the3DNucleus->GetMassNumber();
     G4int Z = the3DNucleus->GetCharge();
@@ -737,18 +746,12 @@ G4double G4BinaryCascade::GetExcitationEnergy()
     {
       initialExc = theInitial4Mom.mag()-
            G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(Z, A);
+	   G4cout << " Initial nucleus A Z" << A << " " << Z << initialExc << G4endl; 
     }
-
-     //G4cout << " theInitial4Mom; 4.mag() " << theInitial4Mom << " "<< theInitial4Mom.mag() << G4endl;
-     if(finalZ>.5)  G4cout << " finalNucleusMomentum; 4.mag() " << GetFinalNucleusMomentum() << " "<< GetFinalNucleusMomentum().mag() << G4endl;
   }
 
-//   G4cout << "theCapturedList" << theCapturedList.size() << G4endl
-//          << "theSecondaryList" << theSecondaryList.size() << G4endl;
-
-// ------ end debug
 #endif
-  //  return excitationE > 0 ? excitationE : 0.0;
+
   return excitationE;
 }
 
@@ -852,8 +855,22 @@ for(std::vector<G4BCAction *>::iterator j = theImR.begin();
   }
 }
 
+//----------------------------------------------------------------------------
+void  G4BinaryCascade::FindDecayCollision(G4KineticTrack * secondary)
+//----------------------------------------------------------------------------
+{
+    if ( secondary->GetTrackingMomentum().mag2() < -1.*eV )
+    {
+      G4cout << "G4BinaryCascade::FindDecayCollision(): negative m2:" << secondary->GetTrackingMomentum().mag2() << G4endl;
+    } 
+    const std::vector<G4CollisionInitialState *> & aCandList
+        = theDecay->GetCollisions(secondary, theTargetList, theCurrentTime);
+    for(size_t count=0; count<aCandList.size(); count++)
+    {
+      theCollisionMgr->AddCollision(aCandList[count]);
+    }
+}
 
-#define debug_BIC_ApplyCollision
 
 //----------------------------------------------------------------------------
 G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
@@ -917,6 +934,7 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
      G4cerr << "G4BinaryCascade::ApplyCollision blocked"<<G4endl;
    #endif
      if (products) ClearAndDestroy(products);
+     if (target_collection.size() == 0 ) FindDecayCollision(primary);  // for decay, sample new decay
      delete products;
      return false;
   }
@@ -1425,7 +1443,7 @@ void G4BinaryCascade::StepParticlesOut()
 
 
 }
-//#define debug_BIC_CorrectFinalPandE
+
 //----------------------------------------------------------------------------
 void G4BinaryCascade::CorrectFinalPandE()
 //----------------------------------------------------------------------------
@@ -1687,32 +1705,38 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
   std::for_each( kt_inside->begin(),kt_inside->end(),
            SelectFromKTV(kt_gone_out, G4KineticTrack::gone_out));
 
-//  PrintKTVector(kt_gone_out, std::string("DoTimeStep - gone out"));	  
+  PrintKTVector(kt_gone_out, std::string("DoTimeStep - gone out"));	  
+  G4KineticTrackVector *fail=CorrectBarionsOnBoundary(kt_gone_in,kt_gone_out);
+  if ( fail )
+  {
+    // some particle(s) supposed to leave was captured by the correction
+     PrintKTVector(fail,std::string(" Failed to go out -> captured"));
+     delete fail;
+     kt_gone_out->clear();
+     std::for_each( kt_inside->begin(),kt_inside->end(),
+           SelectFromKTV(kt_gone_out, G4KineticTrack::gone_out));
+    PrintKTVector(kt_gone_out, std::string("recreated kt_gone_out"));
+	   
+  } 
 
-  CorrectBarionsOnBoundary(kt_gone_in,kt_gone_out); 
-
-// Add track missing nucleus to addFinals
+// Add tracks missing nucleus and tracks going straight though  to addFinals
   std::for_each( kt_outside->begin(),kt_outside->end(),
            SelectFromKTV(kt_gone_out,G4KineticTrack::miss_nucleus));
-//  tracks going straight through in a single step....
   std::for_each( kt_outside->begin(),kt_outside->end(),
            SelectFromKTV(kt_gone_out,G4KineticTrack::gone_out));
     
     #ifdef debug_BIC_DoTimeStep
     PrintKTVector(kt_gone_out, std::string("append to final state.."));
-    G4cout << "Here we are 1"<<G4endl;
     #endif
 
   theFinalState.insert(theFinalState.end(),
 			kt_gone_out->begin(),kt_gone_out->end());
 
-    //G4cout << "Here we are 2"<<G4endl;
 // Partclies which could not leave nucleus,  captured...
   G4KineticTrackVector * kt_captured = new G4KineticTrackVector;
     std::for_each( theSecondaryList.begin(),theSecondaryList.end(),
            SelectFromKTV(kt_captured, G4KineticTrack::captured));
 
-    //G4cout << "Here we are 3"<<G4endl;
 // Check no track is part in next collision, ie.
 //  this step was to far, and collisions should not occur any more 
 
@@ -1745,6 +1769,7 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
 
   }
     //G4cout << "Here we are 4 "<<kt_gone_out->size()<<G4endl;
+     PrintKTVector(kt_gone_out," kt_gone_out be4 updatetrack...");
   UpdateTracksAndCollisions(kt_gone_out,0 ,0);
     //G4cout << "Here we are 5"<<G4endl;
 
@@ -1761,6 +1786,7 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
      {
         (*i_captured)->Hit();
      }
+     PrintKTVector(kt_captured," kt_catured be4 updatetrack...");
      UpdateTracksAndCollisions(kt_captured, NULL, NULL);
   }
   
@@ -1809,7 +1835,7 @@ G4KineticTrackVector* G4BinaryCascade::CorrectBarionsOnBoundary(
                                  G4KineticTrackVector *out)
 //----------------------------------------------------------------------------
 {
-   G4KineticTrackVector * kt_fail=NULL;
+   G4KineticTrackVector * kt_fail(0);
    std::vector<G4KineticTrack *>::iterator iter;
 //  G4cout << "CorrectBarionsOnBoundary,currentZ,currentA," 
 //         << currentZ << " "<< currentA << G4endl;
@@ -1950,22 +1976,29 @@ G4KineticTrackVector* G4BinaryCascade::CorrectBarionsOnBoundary(
 	} else
 	{
 	   // particle cannot go out due to change of nuclear potential! 
-	   //  should capture protons and neutrons; 
-	   //   this will crash, as  
-// 	   if(((*iter)->GetDefinition() == G4Proton::Proton()) ||
-//  	   ((*iter)->GetDefinition() == G4Neutron::Neutron()))
-//            {
-// 	     G4KineticTrackVector captured;
-// 	     captured.push_back(*iter);
-// 	     (*iter)->Hit();				// 
-// 	     theCapturedList.push_back(*iter);
-// 	     UpdateTracksAndCollisions(&captured, NULL, NULL);
-//	   }
- 	   
-	   
-#ifdef debug_BIC_CorrectBarionsOnBoundary
-	      G4cout << "Not correcting outgoing " << *iter << G4endl;	      
-#endif
+	   //  capture protons and neutrons; 
+	   if(((*iter)->GetDefinition() == G4Proton::Proton()) ||
+ 	   ((*iter)->GetDefinition() == G4Neutron::Neutron()))
+           {
+	     G4RKPropagation * RKprop=(G4RKPropagation *)thePropagator;
+	     (*iter)->SetState(G4KineticTrack::captured);
+	     // Undo correction for Colomb Barrier
+	     G4double barrier=RKprop->GetBarrier((*iter)->GetDefinition()->GetPDGEncoding());
+	     (*iter)->UpdateTrackingMomentum((*iter)->GetTrackingMomentum().e() - barrier); 
+	     if ( kt_fail == 0 ) kt_fail=new G4KineticTrackVector;
+	     kt_fail->push_back(*iter);   
+	     currentZ += G4lrint((*iter)->GetDefinition()->GetPDGCharge());
+	     if ((*iter)->GetDefinition()->GetBaryonNumber()==1 ) ++currentA;
+	   } 
+//#ifdef debug_BIC_CorrectBarionsOnBoundary
+	   else
+	   {
+	      G4cout << "Not correcting outgoing " << *iter << " " 
+	             << (*iter)->GetDefinition()->GetPDGEncoding() << " " 
+		     << (*iter)->GetDefinition()->GetParticleName() << G4endl;
+	      PrintKTVector(out,std::string("outgoing, one not corrected"));
+	   }   	      
+//#endif
 	}   
      }
 
@@ -2119,7 +2152,7 @@ G4LorentzVector G4BinaryCascade::GetFinal4Momentum()
   }
   return final4Momentum;
 }
-#define  debug_BIC_FinalNucleusMomentum 1
+
 //----------------------------------------------------------------------------
 G4LorentzVector G4BinaryCascade::GetFinalNucleusMomentum()
 //----------------------------------------------------------------------------
