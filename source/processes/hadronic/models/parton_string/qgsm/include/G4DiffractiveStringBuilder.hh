@@ -35,20 +35,20 @@ public:
       G4DiffractiveStringBuilder(const G4DiffractiveStringBuilder &right);
       ~G4DiffractiveStringBuilder();
       
-      int operator==(const G4DiffractiveStringBuilder &right) const;
-      int operator!=(const G4DiffractiveStringBuilder &right) const;
+      G4int operator==(const G4DiffractiveStringBuilder &right) const;
+      G4int operator!=(const G4DiffractiveStringBuilder &right) const;
       
       G4ExcitedString* BuildString(G4PartonPair* aParton);
       
 private:     
      };
      
-inline int G4DiffractiveStringBuilder::operator==(const G4DiffractiveStringBuilder &right) const
+inline G4int G4DiffractiveStringBuilder::operator==(const G4DiffractiveStringBuilder &) const
     {
     return 1;
     }
 
-inline int G4DiffractiveStringBuilder::operator!=(const G4DiffractiveStringBuilder &right) const
+inline G4int G4DiffractiveStringBuilder::operator!=(const G4DiffractiveStringBuilder &) const
     {
     return  0;
     }

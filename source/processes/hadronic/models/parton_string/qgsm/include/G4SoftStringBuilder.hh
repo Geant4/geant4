@@ -36,20 +36,20 @@ public:
     G4SoftStringBuilder(const G4SoftStringBuilder &right);
     ~G4SoftStringBuilder();
 
-    int operator==(const G4SoftStringBuilder &right) const;
-    int operator!=(const G4SoftStringBuilder &right) const;
+    G4int operator==(const G4SoftStringBuilder &right) const;
+    G4int operator!=(const G4SoftStringBuilder &right) const;
 
     G4ExcitedString* BuildString(G4PartonPair * aPair);        
 
 private:     
     };
      
-inline int G4SoftStringBuilder::operator==(const G4SoftStringBuilder &right) const
+inline G4int G4SoftStringBuilder::operator==(const G4SoftStringBuilder &) const
     {
     return 1;
     }
 
-inline int G4SoftStringBuilder::operator!=(const G4SoftStringBuilder &right) const
+inline G4int G4SoftStringBuilder::operator!=(const G4SoftStringBuilder &) const
     {
     return  0;
     }
