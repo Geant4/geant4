@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2000-11-01 15:15:47 gcosmo Exp $
+$Id: History,v 1.23 2000-11-09 18:06:37 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 9th, 2000  G. Cosmo - field-V02-00-01
+
+- G4FieldManager: added check on existence of allocated fChordFinder
+  in CreateChordFinder(G4MagneticField*) method.
 
 Nov 1st, 2000  G. Cosmo - field-V02-00-00
 
