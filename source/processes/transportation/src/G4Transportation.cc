@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.37 2003-05-13 18:03:59 japost Exp $
+// $Id: G4Transportation.cc,v 1.38 2003-06-21 01:34:02 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -173,7 +173,6 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   G4ParticleDefinition* pParticleDef   = pParticle->GetDefinition() ;
   G4double              particleCharge = pParticleDef->GetPDGCharge() ; 
 
-  G4bool   fieldExertsForce = false ;
   fGeometryLimitedStep = false ;
   // fEndGlobalTimeComputed = false ;
 
@@ -183,26 +182,14 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 
   // Check whether the particle have an (EM) field force exerting upon it
   //
+  G4FieldManager* fieldMgr=0;
+  G4bool          fieldExertsForce = false ;
   if( (particleCharge != 0.0) )
   {
-     G4bool globalFieldExists=false; // , globalFieldExertsForce= false; 
-     G4bool localFieldExists= false;
-     G4FieldManager* localFieldMgr;
-
-     globalFieldExists= DoesGlobalFieldExist();
-     fieldExertsForce = globalFieldExists; 
-
-     // A local field exists if there is a local field manager.
-     // It is non-zero if it points to a field that is not null. 
-     localFieldMgr = track.GetVolume()->GetLogicalVolume()->GetFieldManager();
-
-     // If a local field manager exists, it overrides the global one.
-     if (localFieldMgr != 0) {
-        localFieldExists = localFieldMgr->GetDetectorField() != 0;
-
-        // So if the local one has no field, there is no field even
-        //  if a global field manager exists!!
-        fieldExertsForce = localFieldExists; 
+     fieldMgr= fFieldPropagator->FindAndSetFieldManager( track.GetVolume() ); 
+     if (fieldMgr != 0) {
+        // If the field manager has no field, there is no field !
+        fieldExertsForce = (fieldMgr->GetDetectorField() != 0);
      } 
   }
 
@@ -265,7 +252,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
      fMomentumChanged           = false ; 
      fEndGlobalTimeComputed     = false ;
   }
-  else
+  else   //  A field exerts force
   {
      G4double       momentumMagnitude = pParticle->GetTotalMomentum() ;
      G4ThreeVector  EndUnitMomentum ;
@@ -275,6 +262,9 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
      fFieldPropagator->SetChargeMomentumMass( particleCharge,    // in e+ units
                                               momentumMagnitude, // in Mev/c 
                                               restMass           ) ;  
+
+     // Message the field Manager, to configure it for this track
+     fieldMgr->ConfigureForTrack( &track );
 
      G4ThreeVector spin        = track.GetPolarization() ;
      G4FieldTrack  aFieldTrack = G4FieldTrack( startPosition, 
@@ -326,9 +316,6 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
      fTransportEndMomentumDir = aFieldTrack.GetMomentumDir() ;
 
      fTransportEndKineticEnergy  = aFieldTrack.GetKineticEnergy() ; 
-
-     // if( (track.GetKineticEnergy() - fTransportEndKineticEnergy) 
-     //      > perMillion * fTransportEndKineticEnergy             ){
 
      if( fFieldPropagator->GetCurrentFieldManager()->DoesFieldChangeEnergy() )
      {
