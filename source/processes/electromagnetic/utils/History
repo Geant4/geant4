@@ -1,4 +1,4 @@
-$Id: History,v 1.121 2003-11-07 15:55:30 maire Exp $
+$Id: History,v 1.122 2003-11-10 16:19:22 urban Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+10 Nov 03: Urban
+- highKinEnergy is set back to 100 TeV for multiple scattering
+- number of table bins set to 120             "
+- small change in the tail of the angular distribution (after tuning!)
+- code cleaning in G4MscModel.cc 
+
 07 Nov 03: mma (utils-V05-02-12)
 - Fix problem of rounding of double in G4UniversalFluctuations
 - Fix precision problems for high energy (PeV) particles
