@@ -98,7 +98,7 @@ processes/electromagnetic/utils                  utils-V06-00-08
 
 processes/hadronic                               ghad-V06-00-06
 ------------------
-- management & utils (ghad-man-V06-00-06, ghad-util-V06-00-08)
+- management & utils (ghad-man-V06-00-06, ghad-util-V06-00-09)
   o Added a white-board functionality to allow for in-core inspection of
     reaction conditions in optimized.
   o Added a signal-handler (for SIGSEGV) that prints the reaction 
