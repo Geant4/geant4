@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hIonisationPlus.cc,v 1.2 1999-04-13 09:05:43 urban Exp $
+// $Id: G4hIonisationPlus.cc,v 1.3 1999-07-30 10:16:05 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
@@ -37,9 +37,6 @@
 G4hIonisationPlus::G4hIonisationPlus(const G4String& processName)
    : G4hEnergyLossPlus(processName),
      theMeanFreePathTable(NULL),
-     LowestKineticEnergy(1.00*keV),
-     HighestKineticEnergy(100.*TeV),
-     TotBin(100),
      theProton (G4Proton::Proton()),
      theAntiProton (G4AntiProton::AntiProton()),
      theElectron ( G4Electron::Electron() )
@@ -65,6 +62,13 @@ void G4hIonisationPlus::SetPhysicsTableBining(G4double lowE, G4double highE,
 void G4hIonisationPlus::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 //  just call BuildLossTable+BuildLambdaTable
 {
+  if(&aParticleType == G4Proton::Proton())
+  {
+                        LowestKineticEnergy= 1.00*keV;
+                        HighestKineticEnergy= 100.*TeV;
+                        TotBin=100  ;
+  }
+
   ParticleMass = aParticleType.GetPDGMass() ;
 
   Charge = aParticleType.GetPDGCharge();
@@ -110,6 +114,7 @@ void G4hIonisationPlus::BuildLossTable(const G4ParticleDefinition& aParticleType
 
   G4double LowEdgeEnergy , ionloss ;
   G4double  RateMass ;
+  G4double deltaloss ;
   G4bool isOutRange ;
   static const G4MaterialTable* theMaterialTable=
                                    G4Material::GetMaterialTable();
@@ -182,10 +187,18 @@ void G4hIonisationPlus::BuildLossTable(const G4ParticleDefinition& aParticleType
       LowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;
       tau = LowEdgeEnergy/proton_mass_c2 ;
 
+      gamma = tau +1. ;
+      bg2 = tau*(tau+2.) ;
+      beta2 = bg2/(gamma*gamma) ;
+      Tmax = 2.*electron_mass_c2*bg2
+             /(1.+2.*gamma*RateMass+RateMass*RateMass) ;
+
       if ( tau < taul )
       //  low energy part , parametrized energy loss formulae
       {
         ionloss = 0. ;
+        deltaloss = 0. ;
+
         //  loop for the elements in the material
         for (G4int iel=0; iel<NumberOfElements; iel++)
         {
@@ -199,16 +212,21 @@ void G4hIonisationPlus::BuildLossTable(const G4ParticleDefinition& aParticleType
             ionloss += theAtomicNumDensityVector[iel]
                        *  element->GetIonisation()->GetClow()/sqrt(tau) ;
         }
+        if ( DeltaCutInKineticEnergyNow < Tmax)
+        {
+          deltaloss = log(Tmax/DeltaCutInKineticEnergyNow)-
+                      beta2*(1.-DeltaCutInKineticEnergyNow/Tmax) ;
+          if(aParticleType.GetPDGSpin() == 0.5)
+            deltaloss += 0.25*(Tmax-DeltaCutInKineticEnergyNow)*
+                              (Tmax-DeltaCutInKineticEnergyNow)/
+                        (LowEdgeEnergy*LowEdgeEnergy+proton_mass_c2*proton_mass_c2) ;
+            deltaloss *= Factor*ElectronDensity/beta2 ;
+        }
+        ionloss -= deltaloss ;
       }
       else
       // high energy part , Bethe-Bloch formula 
       {
-        gamma = tau +1. ;
-        bg2 = tau*(tau+2.) ;
-        beta2 = bg2/(gamma*gamma) ;
-        Tmax = 2.*electron_mass_c2*bg2
-               /(1.+2.*gamma*RateMass+RateMass*RateMass) ;
-
         if ( DeltaCutInKineticEnergyNow < Tmax)
           rcut = DeltaCutInKineticEnergyNow/Tmax ;
         else

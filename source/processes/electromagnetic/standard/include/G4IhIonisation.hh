@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IhIonisation.hh,v 1.1 1999-01-07 16:11:13 gunter Exp $
+// $Id: G4IhIonisation.hh,v 1.2 1999-07-30 10:14:51 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -116,10 +116,6 @@ class G4IhIonisation : public G4IhEnergyLoss
     G4PhysicsTable* theCoeffATable;
     G4PhysicsTable* theCoeffBTable;
     G4PhysicsTable* theCoeffCTable;
-
-    G4double LowestKineticEnergy;
-    G4double HighestKineticEnergy;
-    G4int TotBin;
 
     const G4Electron* theElectron;
     const G4Proton* theProton;

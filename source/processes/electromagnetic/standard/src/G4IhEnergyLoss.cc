@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IhEnergyLoss.cc,v 1.4 1999-06-18 11:30:20 urban Exp $
+// $Id: G4IhEnergyLoss.cc,v 1.5 1999-07-30 10:16:06 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -102,8 +102,8 @@ G4double G4IhEnergyLoss::finalRange = 200.*micrometer ;
 G4bool   G4IhEnergyLoss::rndmStepFlag   = false ;
 G4bool   G4IhEnergyLoss::EnlossFlucFlag = true ;
 
-G4double G4IhEnergyLoss::LowestKineticEnergy= 1.00*keV;
-G4double G4IhEnergyLoss::HighestKineticEnergy= 100.*TeV;
+G4double G4IhEnergyLoss::LowestKineticEnergy;
+G4double G4IhEnergyLoss::HighestKineticEnergy;
 G4int G4IhEnergyLoss::TotBin;
 G4double G4IhEnergyLoss::RTable,G4IhEnergyLoss::LOGRTable;
 

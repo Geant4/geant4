@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLossPlus.cc,v 1.7 1999-06-18 11:30:18 urban Exp $
+// $Id: G4hEnergyLossPlus.cc,v 1.8 1999-07-30 10:16:05 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -115,8 +115,8 @@ G4double         G4hEnergyLossPlus::Charge ;
 G4bool   G4hEnergyLossPlus::rndmStepFlag   = false ;
 G4bool   G4hEnergyLossPlus::EnlossFlucFlag = true ;
 
-G4double G4hEnergyLossPlus::LowestKineticEnergy= 1.00*keV;
-G4double G4hEnergyLossPlus::HighestKineticEnergy= 100.*TeV;
+G4double G4hEnergyLossPlus::LowestKineticEnergy;
+G4double G4hEnergyLossPlus::HighestKineticEnergy;
 G4int G4hEnergyLossPlus::TotBin;
 G4double G4hEnergyLossPlus::RTable,G4hEnergyLossPlus::LOGRTable;
 
