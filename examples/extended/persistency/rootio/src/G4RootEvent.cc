@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+// $Id: G4RootEvent.cc,v 1.3 2002-12-13 14:45:42 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // File: G4RootEvent.cc
 //
 // History:

@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+// $Id: G4HepMCRootIO.hh,v 1.3 2002-12-13 14:45:41 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // File: G4HepMCRootIO.hh
 //
 // History:
