@@ -1,4 +1,4 @@
-$Id: History,v 1.72 2002-11-20 00:41:47 kurasige Exp $
+$Id: History,v 1.73 2002-11-21 03:46:12 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-- Nov 30, 2002     (particles-V04-01-01)
+- Nov 21, 2002     (particles-V04-01-02)
+- Fixed G4VDecayChannel::GetNoName() for porting WIndows DLL lib.
+
+- Nov 20, 2002     (particles-V04-01-01)
 - Fixed Warning in G4VDecayChannel::FillDaughters (partman-V04-01-01)
 - Update Mass Width for resonace particles (shortlived-V04-01-01)
  
