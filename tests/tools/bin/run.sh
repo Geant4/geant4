@@ -80,7 +80,7 @@ if [ $1 = "all" ] ; then
   nice $G4STTDIR/bin/run.sh test104
   nice $G4STTDIR/bin/run.sh test104.EMtest
   nice $G4STTDIR/bin/run.sh test105
-  nice $G4STTDIR/bin/run.sh test106
+#  nice $G4STTDIR/bin/run.sh test106
   nice $G4STTDIR/bin/run.sh test501
   nice $G4STTDIR/bin/run.sh test502
   nice $G4STTDIR/bin/run.sh test503
@@ -109,7 +109,7 @@ if [ $1 = "all" ] ; then
   nice $G4STTDIR/bin/run.sh test14
   nice $G4STTDIR/bin/run.sh test15
   nice $G4STTDIR/bin/run.sh test16
-#  nice $G4STTDIR/bin/run.sh test17
+  nice $G4STTDIR/bin/run.sh test17
 
 
 else
