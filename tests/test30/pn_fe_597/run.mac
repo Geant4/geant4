@@ -16,6 +16,8 @@ proton
 Fe
 #energy(MeV)
 597.
+#emax(MeV)
+600.
 #elim(MeV)
 2.
 #nbinse

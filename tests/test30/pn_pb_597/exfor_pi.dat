@@ -1,0 +1,195 @@
+TITLE      Measurment of Cross Sections and Asymmetry Parameters
+           For the Production of Charged Pions from Various Nuclei
+           By 585-MeV Protons.
+AUTHOR     (J.F.CRAWFORD,M.DAUM,G.H.EATON,R.FROSCH,H.HIRSCHMANN,
+           R.HORISBERGER,J.W.MCCULLOCH,E.STEINER,R.HAUSAMMANN,
+           R.HESS,D.WERREN)
+INSTITUTE  (2SWTVIL)
+           (2SWTGVE). Department of Nuclear Physics.
+REFERENCE  (J,PR/C,22,1184,80)
+SAMPLE     The Target Materials are:
+           Ch/2, C/6D/12, be, C, Al, Al/2O/3, Ni, Cu, Mo and Pb.
+           The Three Materials Ch/2, C/6D/12 and Al/2O/3 were Used
+           To Determine the Cross Section For the Proton, the
+           Deuteron, and the Oxigen Nucleus, Respectively.
+DETECTOR   (MWPC).  The Position and Profile of the Polarized
+           Proton  Beam  Near  the  Pion  Production  Target  were
+           Monitored Continually Throughout the Experiment with an
+           Analog Readout Multiwre Proportional Chamber.
+           (TELES,SCIN,SCIN) The Intensity of the Proton Beam was
+           Monutored Using a Scintillation Telescope Detecting
+           Particles Scattered at 30 Degree to the Beam Direction
+           From 5 mm Thick Ch/2 Target.
+           (MAGSP). To Detect the Pions.
+           (COIN,SCIN,SCIN,SCIN). To Detect Pions by Tof Method.
+FACILITY   (SYNCY,2SWTVIL).
+METHOD     (EXTB,SITA,BCINT,TOF)
+HISTORY    (950628C)
+           (961004A). Transformation to Lower Case. Inc-Spect is
+           Included. Part Det in O0156030 is Corrected.
+           (970129U) Last checking has been done.
+ADD-RES    Cross Section For P+P Scattering.
+           Assymetry Parameter For Pions Production.
+ERR-ANALYS (EN-ERR). Standart Deviation of Proton Beam Energy.
+           (ERR-1). The Uncertainty Due to the Monitoring of the
+           Beam Intensity.
+           (ERR-2). This Uncertaity is Arised from the Monte Carlo
+           Calculation of the Direct Muon and Inscattered Pion and
+           Muon Contribution to the Direct Pion Tof Peak.
+           (ERR-3). The Quadratic Sum of the Estimates of All
+           Systematic Uncertainties is 7% (ONE STANDART DEVIATION)
+ENDBIB              40
+COMMON               5          3
+EN         EN-ERR     ERR-1      ERR-2      ERR-3
+MEV        MEV        PER-CENT   PER-CENT   PER-CENT
+       585.         2.         3.         5.         7.
+------------------------------------------------------------------------
+REACTION   (82-PB-0(P,PIN+X),SEQ,DA/DE,,,EXP)
+EN-SEC     (E,PIN)
+PART-DET   (PIN)
+STATUS     (CURVE) By CAJAD.
+ERR-ANALYS (E-ERR). Error Bars As Shown on the Figures.
+           (ERR-T). Error Bars As Shown on the Figures.
+ENDBIB               6
+NOCOMMON
+DATA                 5         25
+ANG        E          E-ERR      DATA       ERR-T
+ADEG       MEV        MEV        MUB/SR/MEV MUB/SR/MEV
+       22.5        24.        1.5        37.         7.
+       22.5        35.        1.4       35.3        2.7
+       22.5        88.        12.        24.        1.3
+       22.5       151.        18.        20.        0.9
+       22.5       254.        30.        7.3        0.6
+        45.        24.        2.5        35.         6.
+        45.        35.         5.        43.         3.
+        45.        88.        12.       22.4        1.2
+        45.       151.        20.        13.        0.5
+        45.       192.        0.7        8.3        0.7
+        60.        24.                   30.         5.
+        60.        35.                  36.8        2.5
+        60.        48.                  28.8        2.7
+        60.        88.                  20.2        0.9
+        60.       151.                   8.8        0.5
+        90.        24.         3.        36.         4.
+        90.        35.         5.       38.6        1.7
+        90.        48.         7.       30.7        1.7
+        90.        88.        11.       14.2        0.7
+        90.       151.        21.        3.6
+       135.        24.                   45.         5.
+       135.        35.                   38.        2.2
+       135.        48.                  33.1        2.2
+       135.        88.                   8.9        0.5
+       135.       151.                  2.25
+ENDDATA             27
+------------------------------------------------------------------------
+REACTION  1(82-PB-0(P,PIP+X),SEQ,SIG,,,EXP)
+          2(82-PB-0(P,PIN+X),SEQ,SIG,,,EXP)
+PART-DET   (PI)
+ERR-ANALYS (ERR-T). This Uncertainty is Shown in Data Table by
+           Authors.
+STATUS     (TABLE)
+ANALYSIS   (INTED)
+           (INTAD)
+ENDBIB               8
+NOCOMMON
+DATA                 4          1
+DATA      1ERR-T     1DATA      2ERR-T     2
+MB         MB         MB         MB
+        86.        11.       41.5        5.1
+ENDDATA              3
+------------------------------------------------------------------------
+TITLE      Measurment of Cross Sections and Asymmetry Parameters
+           For the Production of Charged Pions from Various Nuclei
+           By 585-MeV Protons.
+AUTHOR     (J.F.CRAWFORD,M.DAUM,G.H.EATON,R.FROSCH,H.HIRSCHMANN,
+           R.HORISBERGER,J.W.MCCULLOCH,E.STEINER,R.HAUSAMMANN,
+           R.HESS,D.WERREN)
+INSTITUTE  (2SWTVIL)
+           (2SWTGVE). Department of Nuclear Physics.
+REFERENCE  (J,PR/C,22,1184,80)
+SAMPLE     The Target Materials are:
+           Ch/2, C/6D/12, be, C, Al, Al/2O/3, Ni, Cu, Mo and Pb.
+           The Three Materials Ch/2, C/6D/12 and Al/2O/3 were Used
+           To Determine the Cross Section For the Proton, the
+           Deuteron, and the Oxigen Nucleus, Respectively.
+DETECTOR   (MWPC).  The Position and Profile of the Polarized
+           Proton  Beam  Near  the  Pion  Production  Target  were
+           Monitored Continually Throughout the Experiment with an
+           Analog Readout Multiwre Proportional Chamber.
+           (TELES,SCIN,SCIN) The Intensity of the Proton Beam was
+           Monutored Using a Scintillation Telescope Detecting
+           Particles Scattered at 30 Degree to the Beam Direction
+           From 5 mm Thick Ch/2 Target.
+           (MAGSP). To Detect the Pions.
+           (COIN,SCIN,SCIN,SCIN). To Detect Pions by Tof Method.
+FACILITY   (SYNCY,2SWTVIL).
+METHOD     (EXTB,SITA,BCINT,TOF)
+HISTORY    (950628C)
+           (961004A). Transformation to Lower Case. Inc-Spect is
+           Included. Part Det in O0156030 is Corrected.
+           (970129U) Last checking has been done.
+ADD-RES    Cross Section For P+P Scattering.
+           Assymetry Parameter For Pions Production.
+ERR-ANALYS (EN-ERR). Standart Deviation of Proton Beam Energy.
+           (ERR-1). The Uncertainty Due to the Monitoring of the
+           Beam Intensity.
+           (ERR-2). This Uncertaity is Arised from the Monte Carlo
+           Calculation of the Direct Muon and Inscattered Pion and
+           Muon Contribution to the Direct Pion Tof Peak.
+           (ERR-3). The Quadratic Sum of the Estimates of All
+           Systematic Uncertainties is 7% (ONE STANDART DEVIATION)
+ENDBIB              40
+COMMON               5          3
+EN         EN-ERR     ERR-1      ERR-2      ERR-3
+MEV        MEV        PER-CENT   PER-CENT   PER-CENT
+       585.         2.         3.         5.         7.
+------------------------------------------------------------------------
+REACTION   (82-PB-0(P,PIP+X),SEQ,DA/DE,,,EXP)
+EN-SEC     (E,PIP)
+PART-DET   (PIP)
+STATUS     (CURVE) By CAJAD.
+ERR-ANALYS (E-ERR). Error Bars As Shown on the Figures.
+           (ERR-T). Error Bars As Shown on the Figures.
+ENDBIB               6
+NOCOMMON
+DATA                 5         22
+ANG        E          E-ERR      DATA       ERR-T
+ADEG       MEV        MEV        MUB/SR/MEV MUB/SR/MEV
+       22.5        35.                 21.47
+       22.5        88.                 45.05
+       22.5       151.                  60.4        2.2
+       22.5       254.                 46.48
+        45.        88.        11.        56.         4.
+        45.       151.        21.       40.3        2.4
+        45.       192.                  32.1        1.6
+        60.        24.                 18.22
+        60.        35.                 35.37
+        60.        48.                   44.         4.
+        60.        88.                  50.1        2.3
+        60.       151.                   31.        0.9
+        90.        24.                 26.85
+        90.        35.         5.       51.9        2.7
+        90.        46.         8.        55.         4.
+        90.        88.        12.       45.5        1.6
+        90.       151.        20.       16.2        1.1
+       135.        24.                 38.65
+       135.        35.                   71.         5.
+       135.        48.                   81.         5.
+       135.        88.                  36.5        1.8
+       135.       151.                  8.47
+------------------------------------------------------------------------
+REACTION  1(82-PB-0(P,PIP+X),SEQ,SIG,,,EXP)
+          2(82-PB-0(P,PIN+X),SEQ,SIG,,,EXP)
+PART-DET   (PI)
+ERR-ANALYS (ERR-T). This Uncertainty is Shown in Data Table by
+           Authors.
+STATUS     (TABLE)
+ANALYSIS   (INTED)
+           (INTAD)
+ENDBIB               8
+NOCOMMON
+DATA                 4          1
+DATA      1ERR-T     1DATA      2ERR-T     2
+MB         MB         MB         MB
+        86.        11.       41.5        5.1
+ENDDATA              3
