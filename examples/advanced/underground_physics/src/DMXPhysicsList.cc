@@ -289,8 +289,10 @@ void DMXPhysicsList::ConstructEM() {
     G4LowEnergyBremsstrahlung* loweBrem = new G4LowEnergyBremsstrahlung();
     G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
     G4hLowEnergyIonisation* ahadronLowEIon = new G4hLowEnergyIonisation();
-    G4hLowEnergyIonisation* ahadronLowEAlpha = new G4hLowEnergyIonisation();
-    G4hLowEnergyIonisation* ahadronLowEProton = new G4hLowEnergyIonisation();
+
+    // note LowEIon uses proton as basis for its data-base, therefore
+    // cannot specify different LowEnergyIonisation models for different
+    // particles, but can change model globally for Ion, Alpha and Proton.
 
     if (particleName == "gamma") {
       //gamma
@@ -334,12 +336,12 @@ void DMXPhysicsList::ConstructEM() {
    } else if (particleName == "Alpha") {
      // alpha:
      pmanager->AddProcess(aMultipleScattering,-1,1,1);
-     pmanager->AddProcess(ahadronLowEAlpha,-1,2,2);
+     pmanager->AddProcess(ahadronLowEIon,-1,2,2);
 
    } else if (particleName == "Proton") {
      // alpha:
      pmanager->AddProcess(aMultipleScattering,-1,1,1);
-     pmanager->AddProcess(ahadronLowEProton,-1,2,2);
+     pmanager->AddProcess(ahadronLowEIon,-1,2,2);
 
    } else if (particleName == "deuteron"  
 	      || particleName == "triton"  
@@ -357,20 +359,24 @@ void DMXPhysicsList::ConstructEM() {
     }
 
   ahadronLowEIon->SetNuclearStoppingOn() ;
-  ahadronLowEAlpha->SetNuclearStoppingOn() ;
-  ahadronLowEProton->SetNuclearStoppingOn() ;
+
+  //fluorescence switch off for hadrons (for now):
+  ahadronLowEIon->SetFluorescence(false);
+
+  //fluorescence apply specific cut for flourescence from photons, electrons
+  //and bremsstrahlung photons:
+  G4double cut = 250*eV;
+  lowePhot->SetCutForLowEnSecPhotons(cut);
+  loweIon->SetCutForLowEnSecPhotons(cut);
+  loweBrem->SetCutForLowEnSecPhotons(cut);
+
+  
 
   //    ahadronLowEIon->SetNuclearStoppingOff() ;
-  //    ahadronLowEAlpha->SetNuclearStoppingOff() ;
-  //    ahadronLowEProton->SetNuclearStoppingOff() ;
 
   //ahadronLowEIon->SetStoppingPowerTableName("ICRU_R49p") ;
-  //ahadronLowEAlpha->SetStoppingPowerTableName("ICRU_R49p") ;
-  //ahadronLowEProton->SetStoppingPowerTableName("ICRU_R49p") ;
 
   //ahadronLowEIon->SetStoppingPowerTableName("Ziegler1977H") ;
-  //ahadronLowEAlpha->SetStoppingPowerTableName("Ziegler1977H") ;
-  //ahadronLowEProton->SetStoppingPowerTableName("Ziegler1977H") ;
 
   }
 }

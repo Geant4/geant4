@@ -107,10 +107,13 @@ Macros:
    Forces the decay of 241Am nuclei in the calibrator and tracks the
    resulting particles (237Np + alpha + gamma from 237Np
    de-excitation). All tracks are drawn except scintillation photons.
-   Event summery is written to file "hits.out".
+   Event summery is written to file "hits.out".   
+   -> To be added for a future release
+
 
    sourceAm241_1000.mac
    Similar to above but for 1000 events. No tracks are stored.
+   -> To be added for a future release
 
 
 Note: 
@@ -119,6 +122,30 @@ G4RADIOACTIVEDATA      : points to Radioactive Decay Data files
 G4LEDATA               : points to low energy data base - G4EMLOW0.5
 G4LEVELGAMMADATA       : points to PhotoEvaporation data
 NeutronHPCrossSections : points to neutron data files G4NDL3.5
+
+
+
+ERRORS:
+
+When running interactively the following error will be shown:
+
+BooleanProcessor::caseIE : unimplemented case
+BooleanProcessor::caseIE : unimplemented case
+BooleanProcessor::caseIE : unimplemented case
+BooleanProcessor::caseIE : unimplemented case
+BooleanProcessor::caseIE : unimplemented case
+BooleanProcessor::caseIE : unimplemented case
+BooleanProcessor: boolean operation failed
+BooleanProcessor::caseIE : unimplemented case
+BooleanProcessor::caseIE : unimplemented case
+BooleanProcessor::caseIE : unimplemented case
+BooleanProcessor::caseIE : unimplemented case
+BooleanProcessor: boolean operation failed
+
+This is a "feature" of the visualisation of boolean volumes, but does not
+affect functionality/performance so can be ignored.
+
+
 
 
 NB:
