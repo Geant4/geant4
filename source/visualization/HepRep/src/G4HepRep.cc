@@ -37,7 +37,8 @@
 using namespace HEPREP;
 
 G4HepRep::G4HepRep ()
-        : G4VGraphicsSystem ("HepRep",
+        : G4VGraphicsSystem ("G4HepRep",
+			     "HepRepXML",
         "HepRep Generic Driver for XML, RMI and CORBA",
         G4VGraphicsSystem::threeD) {
 }
