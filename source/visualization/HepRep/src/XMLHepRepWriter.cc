@@ -56,7 +56,7 @@ bool XMLHepRepWriter::write(HepRep* heprep, string name) {
         zip->putNextEntry(ZipCDirEntry(name));
     }
     xml->openDoc();
-    xml->setAttribute("xmlns", "http://www.freehep.org/HepRep");
+    xml->setAttribute("xmlns", "http://java.freehep.org/schemas/heprep/2.0");
     xml->setAttribute("xmlns", "xsi", "http://www.w3.org/2001/XMLSchema-instance");
     xml->setAttribute("xsi", "schemaLocation", "HepRep.xsd");
     xml->openTag(nameSpace, "heprep");
