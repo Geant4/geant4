@@ -9,7 +9,7 @@
 0. INTRODUCTION
 
 The Radioprotection example derives from a Geant4 application
- ( look www.ge.infn.it/space/remsim for more details ) whose scope 
+ ( look www.ge.infn.it/geant4/space/remsim for more details ) whose scope 
 is to evaluate the dose in astronauts, in vehicle concepts and 
 Moon surface habitat configurations, in a defined interplanetary space
 radiation environment. 
