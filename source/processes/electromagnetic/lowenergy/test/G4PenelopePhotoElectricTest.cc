@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopePhotoElectricTest.cc,v 1.3 2003-06-16 17:00:58 gunter Exp $
+// $Id: G4PenelopePhotoElectricTest.cc,v 1.4 2003-07-09 12:34:49 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -148,7 +148,8 @@ G4int main()
   G4Element*  Cs  = new G4Element ("Cesium"  , "Cs", 55. , 132.905*g/mole);
   G4Element*   I  = new G4Element ("Iodine"  , "I", 53. , 126.9044*g/mole);
 
-  G4Material*  maO = new G4Material("Oxygen", 8., 16.00*g/mole, 1.1*g/cm3);
+  G4Material*  maO = new G4Material("Oxygen", 8., 16.00*g/mole, 0.7*mg/cm3);
+  G4Material*  maC = new G4Material("Carbon", 6., 12.00*g/mole, 2.27*g/cm3);
 
   G4Material* water = new G4Material ("Water" , 1.*g/cm3, 2);
   water->AddElement(H,2);
@@ -161,6 +162,10 @@ G4int main()
   G4Material* csi = new G4Material ("CsI" , 4.53*g/cm3, 2);
   csi->AddElement(Cs,1);
   csi->AddElement(I,1);
+
+  G4Material* maH = new G4Material("Gas Hydrogen",0.0893*mg/cm3,1);
+  maH->AddElement(H,2);
+
 
 
   // Interactive set-up
@@ -292,7 +297,7 @@ G4int main()
   G4ProcessManager* gProcessManager = new G4ProcessManager(gamma);
   gamma->SetProcessManager(gProcessManager);
   gProcessManager->AddDiscreteProcess(gammaProcess);
-  G4ForceCondition* condition=0;  //l'ho fissata a zero! E' onesto??
+  G4ForceCondition* condition;
 
   //electron
   
@@ -476,9 +481,6 @@ G4int main()
 	  meanFreePath=gammaStdProcess
 	    ->GetMeanFreePath(*gTrack, sti, condition);
 	}
-
-      //G4cout << "Energia cinetica: " << Tkin[i]/MeV << G4endl;
-      //G4cout << "Mean free path: " << meanFreePath/cm << G4endl;
       ntuple3->fill(ntuple3->findColumn("kinen"),log10(Tkin[i]));
       ntuple3->fill(ntuple3->findColumn("mfp"),log10(meanFreePath/cm));
       ntuple3->addRow();
