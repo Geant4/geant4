@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SolidExtentList.hh,v 1.1 2000-04-07 10:58:50 gcosmo Exp $
+// $Id: G4SolidExtentList.hh,v 1.2 2000-09-12 07:34:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,6 +23,8 @@
 //   to calculate the extent of a CSG solid for a voxel
 //   (G4VSolid::CalculateExtent). 
 
+// Author: 
+//   David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
 #ifndef G4SolidExtentList_hh

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PolyhedraSide.hh,v 1.1 2000-04-07 10:58:14 gcosmo Exp $
+// $Id: G4PolyhedraSide.hh,v 1.2 2000-09-12 07:34:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,6 +20,8 @@
 //   Class implementing a face that represents one segmented side
 //   of a polyhedra.
 
+// Author: 
+//   David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
 #ifndef G4PolyhedraSide_hh

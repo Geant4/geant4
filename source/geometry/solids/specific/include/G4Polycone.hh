@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polycone.hh,v 1.3 2000-06-27 16:20:11 gcosmo Exp $
+// $Id: G4Polycone.hh,v 1.4 2000-09-12 07:34:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,6 +20,8 @@
 //   Class implementing a CSG type "PCON" Geant 3.21 volume,
 //   inherited from  class G4VCSGSolid.
 
+// Author: 
+//   David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
 #ifndef G4Polycone_hh

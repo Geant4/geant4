@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PolyPhiFace.hh,v 1.1 2000-04-07 10:56:52 gcosmo Exp $
+// $Id: G4PolyPhiFace.hh,v 1.2 2000-09-12 07:34:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,6 +25,8 @@
 //   length and direction, but with corners aways on the same side of
 //   the z axis.
 
+// Author: 
+//   David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
 #ifndef G4PolyPhiFace_hh

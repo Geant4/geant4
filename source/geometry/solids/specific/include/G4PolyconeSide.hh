@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PolyconeSide.hh,v 1.1 2000-04-07 10:57:41 gcosmo Exp $
+// $Id: G4PolyconeSide.hh,v 1.2 2000-09-12 07:34:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,6 +20,8 @@
 //   Class implmenting a face that represents one conical side
 //   of a polycone.
 
+// Author: 
+//   David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
 #ifndef G4PolyconeSide_hh

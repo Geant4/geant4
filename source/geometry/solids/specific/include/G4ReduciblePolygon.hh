@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ReduciblePolygon.hh,v 1.1 2000-04-07 10:58:32 gcosmo Exp $
+// $Id: G4ReduciblePolygon.hh,v 1.2 2000-09-12 07:34:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,6 +32,8 @@
 //   The set of manipulations is limited currently to what
 //   is needed for G4Polycone and G4Polyhedra.
 
+// Author: 
+//   David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
 #ifndef G4ReduciblePolygon_hh

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EllipticalTube.hh,v 1.6 2000-04-19 19:08:58 davidw Exp $
+// $Id: G4EllipticalTube.hh,v 1.7 2000-09-12 07:34:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -20,6 +20,8 @@
 //
 //   The equation of the surface in x/y is 1.0 = (x/dx)**2 + (y/dy)**2
 
+// Author: 
+//   David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
 #ifndef G4EllipticalTube_hh

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ClippablePolygon.hh,v 1.2 2000-04-18 19:06:38 davidw Exp $
+// $Id: G4ClippablePolygon.hh,v 1.3 2000-09-12 07:34:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -19,6 +19,8 @@
 //   Declaration of a utility class of a polygon that can be
 //   clipped by a voxel.
 
+// Author:
+//   David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
 #ifndef G4ClippablePolygon_hh

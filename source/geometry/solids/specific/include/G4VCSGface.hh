@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGface.hh,v 1.1 2000-04-07 10:59:18 gcosmo Exp $
+// $Id: G4VCSGface.hh,v 1.2 2000-09-12 07:34:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -27,7 +27,8 @@
 //   Virtual members:
 //
 //	-------------------------------------------------------------------
-//      Intersect( const G4ThreeVector &p, const G4ThreeVector &v,			      const G4bool outGoing, const G4double surfTolerance,
+//      Intersect( const G4ThreeVector &p, const G4ThreeVector &v,
+//		   const G4bool outGoing, const G4double surfTolerance,
 //	           const G4bool outgoing, const G4double surfTolerance,
 //		   G4double &distance, G4double &distFromSurface,
 //		   G4ThreeVector &normal, G4bool &allBehind );
@@ -237,6 +238,8 @@
 //   and save the answer that is smallest. If there is more than one answer,
 //   or if allBehind is false for the one answer, return validNorm as false.
 
+// Author:
+//   David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
 #ifndef G4VCSGface_hh

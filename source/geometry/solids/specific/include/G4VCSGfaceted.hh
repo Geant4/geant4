@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.hh,v 1.3 2000-04-19 17:56:29 davidw Exp $
+// $Id: G4VCSGfaceted.hh,v 1.4 2000-09-12 07:34:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,6 +20,8 @@
 //   Virtual class defining CSG type shape that is built entire
 //   of G4CSGface faces.
 
+// Author:
+//   David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
 #ifndef G4VCSGfaceted_hh

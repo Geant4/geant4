@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnclosingCylinder.hh,v 1.1 2000-04-07 10:55:42 gcosmo Exp $
+// $Id: G4EnclosingCylinder.hh,v 1.2 2000-09-12 07:34:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -20,6 +20,8 @@
 //   is clearly outside a polyhedra or polycone or deciding if
 //   a trajectory is clearly going to miss those shapes.
 
+// Author: 
+//   David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
 #ifndef G4EnclosingCylinder_hh

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polyhedra.hh,v 1.2 2000-06-26 09:54:34 gcosmo Exp $
+// $Id: G4Polyhedra.hh,v 1.3 2000-09-12 07:34:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,6 +20,8 @@
 //   Class implementing a CSG type "PGON" Geant 3.21 volume,
 //   inherited from class G4CSGSolid.
 
+// Author: 
+//   David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
 #ifndef G4Polyhedra_hh
