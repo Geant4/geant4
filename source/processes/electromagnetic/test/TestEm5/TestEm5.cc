@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: TestEm5.cc,v 1.1 1999-01-08 16:33:01 gunter Exp $
+// $Id: TestEm5.cc,v 1.2 1999-03-05 10:09:59 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,25 +24,12 @@
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
 
-#ifdef G4VIS_USE
-#include "Em5VisManager.hh"
-#endif
-
 #include "Em5DetectorConstruction.hh"
 #include "Em5PhysicsList.hh"
 #include "Em5PrimaryGeneratorAction.hh"
 #include "Em5RunAction.hh"
 #include "Em5EventAction.hh"
 #include "Em5SteppingAction.hh"
-
-// Solve templates.
-// Code in g4templates.hh controlled by the macro G4_SOLVE_TEMPLATES
-#ifdef G4_SOLVE_TEMPLATES
-#ifdef G4VIS_USE
-#  define G4_SOLVE_VIS_TEMPLATES
-#endif
-#endif
-#include "g4templates.hh"
 
 #ifdef GNU_GCC
 #include <rw/tpordvec.h>
@@ -63,12 +50,6 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new Em5PhysicsList(detector));
   
-#ifdef G4VIS_USE
-  // visualization manager
-  G4VisManager* visManager = new Em5VisManager;
-  visManager->Initialize();
-#endif
-    
   // set user action classes
   runManager->SetUserAction(new Em5PrimaryGeneratorAction(detector));
   Em5RunAction* runaction = new Em5RunAction;
@@ -97,11 +78,7 @@ int main(int argc,char** argv) {
      G4String fileName = argv[1];
      UI->ApplyCommand(command+fileName);
     }
-
   // job termination
-#ifdef G4VIS_USE
-  delete visManager;
-#endif
   delete runManager;
 
   return 0;
