@@ -1,4 +1,4 @@
-$Id: History,v 1.71 2004-11-21 16:56:33 gbarrand Exp $
+$Id: History,v 1.72 2004-11-25 09:39:53 hajime Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25 November 2004 Hajime Yoshida (interfaces-V06-01-02)
+- tagged
 
 21th November 2004  Guy Barrand
 - G4UIXm.cc: have some nice default resources in case XENVIRONMENT not set.
