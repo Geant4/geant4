@@ -530,7 +530,8 @@ if ( `uname -n` == mac-91114.lal.in2p3.fr || `uname -n` == Ordinateur-de-Guy-Bar
   setenv MAKECMD make
   setenv CVSROOT :ext:gbarrand@sungeant.cern.ch:/afs/cern.ch/sw/geant4/cvs
   setenv CVS_RSH ssh
-  setenv G4INSTALL /geant4/geant4.6.0
+#  setenv G4INSTALL /geant4/geant4.6.0
+  setenv G4INSTALL /geant4/geant4-06-02-cand-02
   setenv G4SYSTEM Darwin-g++
   setenv G4WORKDIR $G4INSTALL/Darwin
   setenv G4STTDIR $G4WORKDIR/stt
@@ -558,12 +559,13 @@ if ( `uname -n` == mac-91114.lal.in2p3.fr || `uname -n` == Ordinateur-de-Guy-Bar
   # Inventor :
   setenv G4VIS_BUILD_OIX_DRIVER 1
   setenv G4VIS_USE_OIX 1
-  setenv OIVHOME $HOME/OpenScientist/v12r0/CoinGL/v1r200p0
-  setenv OIXHOME $HOME/OpenScientist/v12r0/CoinXt/v1r50p0
-  setenv HEPVISHOME $HOME/OpenScientist/v12r0/HEPVis/v6r4
-  setenv OIVFLAGS "-I$OIVHOME/include -I$OIXHOME/include -I$HEPVISHOME/include"
-  setenv OIVLIBS "-L$HEPVISHOME/Darwin -lHEPVisDetector -lHEPVisGeometry -lHEPVisUtils -L$OIXHOME/Darwin -lSoXt -L$OIVHOME/Darwin -lCoin"
-  setenv DYLD_LIBRARY_PATH "$OIVHOME/Darwin:$OIXHOME/Darwin:$HEPVISHOME/Darwin"
+  setenv OIVHOME /usr/local/SGI-Inventor/2.1.5.10/usr
+  setenv DYLD_LIBRARY_PATH "$OIVHOME/lib"
+  #setenv OIVHOME $HOME/OpenScientsit/v12r0/CoinGL/v1r200p0
+  #setenv OIXHOME $HOME/OpenScientsit/v12r0/CoinXt/v1r50p0
+  #setenv OIVFLAGS "-I$OIVHOME/include -I$OIXHOME/include"
+  #setenv OIVLIBS "-L$OIXHOME/Darwin -lSoXt -L$OIVHOME/Darwin -lCoin"
+  #setenv DYLD_LIBRARY_PATH "$OIVHOME/lib:$OIXHOME/Darwin"
   setenv XENVIRONMENT visTutor/g4Xt.xrm
 #  setenv DYLD_BIND_AT_LAUNCH 1
 # AIDA :
