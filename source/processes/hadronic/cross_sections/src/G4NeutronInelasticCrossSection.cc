@@ -4,7 +4,8 @@
 #include "globals.hh"
 
    G4double G4NeutronInelasticCrossSection::
-   GetCrossSection(const G4DynamicParticle* aPart, const G4Element* anEle)
+   GetCrossSection(const G4DynamicParticle* aPart, 
+                   const G4Element* anEle, G4double aTemperature)
    {
       G4double atomicNumber = anEle->GetN();
       G4double nOfProtons = anEle->GetZ();

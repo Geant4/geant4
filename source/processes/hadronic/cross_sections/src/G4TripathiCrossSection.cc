@@ -5,7 +5,8 @@
 #include "G4IonTable.hh"
 
 G4double G4TripathiCrossSection::
-GetCrossSection(const G4DynamicParticle* aPart, const G4Element*anEle)
+GetCrossSection(const G4DynamicParticle* aPart, 
+                const G4Element*anEle, G4double aTemperature)
 {
   G4double result = 0;
   

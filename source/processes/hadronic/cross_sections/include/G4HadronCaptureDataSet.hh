@@ -5,8 +5,6 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronCaptureDataSet.hh,v 1.3 2000-12-14 08:33:03 hpw Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // GEANT4 physics class: G4HadronCaptureDataSet -- header file
@@ -48,7 +46,7 @@ public:
    }
 
    G4double GetCrossSection(const G4DynamicParticle* aParticle,
-                            const G4Element* anElement)
+                            const G4Element* anElement, G4double aTemperature)
    {
       return theHadronCrossSections->GetCaptureCrossSection(aParticle,
                                                               anElement);

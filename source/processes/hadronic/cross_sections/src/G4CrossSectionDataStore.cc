@@ -5,8 +5,6 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CrossSectionDataStore.cc,v 1.2 1999-12-15 14:52:06 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // GEANT4 physics class: G4CrossSectionDataStore
@@ -18,7 +16,8 @@
 
 G4double
 G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* aParticle,
-                                         const G4Element* anElement)
+                                         const G4Element* anElement,
+					 G4double aTemperature)
 {
    if (NDataSetList == 0) {
       G4Exception("G4CrossSectionDataStore: no data sets registered");
@@ -26,7 +25,7 @@ G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* aParticle,
    }
    for (G4int i = NDataSetList-1; i >= 0; i--) {
       if (DataSetList[i]->IsApplicable(aParticle, anElement))
-             return DataSetList[i]->GetCrossSection(aParticle, anElement);
+             return DataSetList[i]->GetCrossSection(aParticle, anElement, aTemperature);
    }
    G4Exception("G4CrossSectionDataStore: no applicable data set found "
                "for particle/element");

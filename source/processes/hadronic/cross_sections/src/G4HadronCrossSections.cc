@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronCrossSections.cc,v 1.3 2001-02-26 17:09:14 hpw Exp $
+// $Id: G4HadronCrossSections.cc,v 1.4 2001-06-06 12:58:25 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1485,7 +1485,7 @@ G4HadronCrossSections::GetCaptureCrossSection(
 
    G4double ekx = G4std::max(ek, 1.e-9);
    G4double z = anElement->GetZ();
-   G4int izno = z + 0.01;
+   G4int izno = static_cast<G4int> (z + 0.01);
    if (izno > 100) izno = 100;      // Not in GHESIG
    izno = izno - 1;      // For array indexing
    G4double sigcap = 11.12*cscap[izno]/pow(ekx*1.e6, 0.577);

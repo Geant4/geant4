@@ -5,8 +5,6 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCrossSectionDataSet.hh,v 1.4 2000-12-14 11:25:57 hpw Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // GEANT4 physics abstract class: G4VCrossSectionData -- header file
@@ -45,7 +43,9 @@ public: //with description
    G4bool IsApplicable(const G4DynamicParticle*, const G4Element*) = 0;
 
    virtual
-   G4double GetCrossSection(const G4DynamicParticle*, const G4Element*) = 0;
+   G4double GetCrossSection(const G4DynamicParticle*, 
+                            const G4Element*, 
+			    G4double aTemperature = 0.) = 0;
 
    virtual
    void BuildPhysicsTable(const G4ParticleDefinition&) = 0;
