@@ -1,5 +1,5 @@
 ?RCS:
-?MAKE:g4install g4include g4base g4workdir g4conf: \
+?MAKE:g4install g4includes_flag g4include g4base g4workdir g4conf: \
 	Myread Getfile cat rm g4system
 ?MAKE:	-pick add $@ %<
 ?S:g4osname:
@@ -34,6 +34,22 @@ case "$g4install" in
 	HOME=""
 	fi
 	g4install=$HOME/geant4
+
+# Check for Windows!
+if test $g4system = "WIN32-VC" -o $g4system = "WIN32-VC7"; then
+
+checkdrive=`echo $g4install|cut -d"/" -f2`
+
+if test $checkdrive = "cygdrive"; then
+
+windrive=`echo $g4install|cut -d"/" -f3`
+winpath=`echo $g4install|cut -d"/" -f4-`
+
+fullwinpath="$windrive:/$winpath"
+g4install=$fullwinpath
+
+fi
+fi
 	;;
 esac
 
@@ -49,12 +65,6 @@ case "$g4includes_flag" in
 	;;
 esac
 
-case "$g4include" in
-'')
-#	g4include=$g4install/include
-	g4include=''
-	;;
-esac
 
 g4message=`cat << EOM
 
@@ -84,13 +94,21 @@ g4includes_flag=$ans
 
 if [ X$g4includes_flag = Xy ] ; then
 
+case "$g4include" in
+'')
+	g4include=$g4install/include
+#	g4include=''
+	;;
+esac
+
 g4message=`cat << EOM
 
 Where will be directory to copy all Geant4 headers?
 EOM`
 
 #dflt="NO DEFAULT ANSWER"
-dflt=$g4install/include
+###dflt=$g4install/include
+dflt=$g4include
 fn='d~+'
 rp=$g4message
 . ./getfile
