@@ -1,0 +1,102 @@
+$Id: README,v 1.1 1999-10-11 13:07:24 maire Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            TestEm1
+                            -------
+
+	This example has been setup to test individualy the electromagnetic
+	processes. 
+	
+ 1- GEOMETRY DEFINITION
+ 
+ 	It is a simple box which represente an 'infinite' homogeneous medium.
+ 	
+ 	Two parameters define the geometry :
+ 	- the material of the box,
+	- the (full) size of the box.
+	 	
+ 	In addition a transverse uniform magnetic field can be applied.
+ 	
+ 	The default geometry is constructed in DetectorConstruction class,
+ 	but all of the above parameters can be changed interactively via
+ 	the commands defined in the DetectorMessenger class.
+ 	
+ 2- PHYSICS LIST
+ 
+ 	The particle list is the one of novice/exampleN03.
+ 	The physics list contains the 'standard' electromagnetic processes,
+ 	and decay.
+ 		
+ 	Few commands have been added to PhysicsList, in order to set the
+ 	production threshold for secondaries either in range for gamma,
+ 	e-/e+, proton or directly in energy for all charged.
+ 	 
+ 3- AN EVENT : THE PRIMARY GENERATOR
+ 
+ 	The primary kinematic consists of a single particle starting at the
+ 	middle of the box. The type of the particle and its energy are set 
+ 	in the PrimaryGeneratorAction class, and can be changed via the G4 
+ 	build-in commands of ParticleGun class (see the macros provided with 
+ 	this example).
+ 	
+ 	A RUN is a set of events.
+ 	
+ 				
+ 4- VISUALIZATION
+ 
+ 	The Visualization Manager is set in the main().
+ 	The initialisation of the drawing is done via the command
+ 	/vis~/create_view in the macro init.mac. This macro is
+ 	automatically read from the main in case of interactive running mode.
+ 	
+ 	The detector has a default view which is a longitudinal view of the 
+ 	box.
+ 	
+ 	The tracks are drawn at the end of event, and erased at the end of run.
+ 	Optionaly one can choose to draw all particles, only the charged one,
+ 	or none. This command is defined in EventActionMessenger class.
+ 	
+ 5- PHYSICS SURVEY
+ 
+ 	The particle's type and the physic processes which will be available
+ 	in this example are set in PhysicsList class.
+ 	
+ 	A set of macros defining various run conditions are provided.
+ 	The processes are actived/inactived together with differents
+ 	cuts, in order to survey the processes one by one.
+
+	The number of produced secondaries are counted, the number of steps,
+	and the number of process calls responsible of the step.
+ 	
+ 6- HOW TO START ?
+ 
+ 	- compile and link to generate an executable
+ 		% cd geant4/examples/extended/electromagnetic/TestEm1
+ 		% gmake
+ 		
+ 	- execute TestEm1 in 'batch' mode from macro files
+ 		% TestEm1   run10.mac
+ 		
+ 	- execute TestEm1 in 'interactive mode' with visualization
+ 		% TestEm1
+ 		....
+ 		Idle> type your commands
+ 		....
+ 		Idle> exit
+ 	
+ 7- HISTOGRAMS
+ 
+     Testem1 produces several histo which are saved as testem1.histo
+     
+     Content of these histo:
+  
+      1 : track length of a charged particle
+      2 : number of steps per track (charged particle)
+      3 : step length (charged particle)
+ 	
+ 	  
+ 	

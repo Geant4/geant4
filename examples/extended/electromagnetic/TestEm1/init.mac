@@ -1,0 +1,41 @@
+#
+# Macro file for the initialization phase of "TestEm1.cc"
+#
+# Sets some default verbose
+# and initializes the graphic.
+#
+/control/verbose 2
+#
+####/run/initialize
+#
+####/process/eLoss/StepFunction 0.183  170 micrometer
+####/calor/cutG 2.2 mm
+####/calor/cutE 1.4 micrometer    #before beta03-00  (17.11.98)
+####/calor/cutE 6.05 micrometer     #from beta03-00  (17.11.98)
+####/run/initialize
+####/run/particle/dumpCutValues
+#
+# Create empty scene ("world" is default)
+/vis/scene/create
+#
+# Add volume to scene
+/vis/scene/add/volume
+#
+# Create a scene handler for a specific graphics system
+# Edit the next line(s) to choose another graphic system
+#
+/vis/sceneHandler/create DAWNFILE
+#/vis/sceneHandler/create OGLIX
+#
+# Create a viewer
+/vis/viewer/create
+#
+# Draw scene
+/vis/scene/notifyHandlers
+#
+# for drawing the tracks
+# if too many tracks cause core dump => storeTrajectory 0
+/tracking/storeTrajectory 1
+/event/drawTracks all
+#
+/run/verbose 2

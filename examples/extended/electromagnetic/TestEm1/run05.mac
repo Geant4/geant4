@@ -1,0 +1,28 @@
+# $Id: run05.mac,v 1.1 1999-10-11 13:07:27 maire Exp $
+#
+# Macro file for "TestEm1.cc"
+# (can be run in batch, without graphic)
+#
+# full Brems only; e- 1 GeV
+#
+/control/verbose 2
+#
+/run/initialize
+#
+/process/eLoss/StepFunction 0.183 170 micrometer
+/calor/cutG  2.2 mm
+/calor/cutE  95 cm
+/run/initialize
+/run/particle/dumpCutValues
+#
+/process/inactivate phot
+/process/inactivate compt
+/process/inactivate conv
+/process/inactivate msc
+#
+/run/verbose 2
+/event/drawTracks none
+#
+/gun/particle e-
+/gun/energy 1 GeV
+/run/beamOn 100
