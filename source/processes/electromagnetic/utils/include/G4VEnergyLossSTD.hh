@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossSTD.hh,v 1.28 2003-07-21 14:18:55 vnivanch Exp $
+// $Id: G4VEnergyLossSTD.hh,v 1.29 2003-07-23 11:36:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -338,8 +338,6 @@ private:
   const G4ParticleDefinition* particle;
   const G4ParticleDefinition* baseParticle;
   const G4ParticleDefinition* secondaryParticle;
-  const G4ParticleDefinition* theGamma;
-  const G4ParticleDefinition* theElectron;
 
   // cash
   const G4Material*           currentMaterial;

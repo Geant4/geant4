@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossSTD.cc,v 1.45 2003-07-21 13:59:03 vnivanch Exp $
+// $Id: G4VEnergyLossSTD.cc,v 1.46 2003-07-23 11:36:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -115,17 +115,11 @@ G4VEnergyLossSTD::G4VEnergyLossSTD(const G4String& name, G4ProcessType type):
   particle(0),
   baseParticle(0),
   secondaryParticle(0),
-  theGamma(G4Gamma::Gamma()),
-  theElectron(G4Electron::Electron()),
   currentCouple(0),
   nDEDXBins(90),
   nDEDXBinsForRange(70),
   nLambdaBins(90),
   faclow(1.5),
-  minKinEnergy(0.1*keV),
-  maxKinEnergy(100.0*GeV),
-  maxKinEnergyForRange(1.0*GeV),
-  lowKinEnergy(minKinEnergy*faclow),
   linLossLimit(0.05),
   minSubRange(0.1),
   rangeCoeff(1.0),
@@ -136,9 +130,14 @@ G4VEnergyLossSTD::G4VEnergyLossSTD(const G4String& name, G4ProcessType type):
   integral(true),
   meanFreePath(true)
 {
+
+  minKinEnergy         = 0.1*keV;
+  maxKinEnergy         = 100.0*GeV;
+  maxKinEnergyForRange = 1.0*GeV;
+  lowKinEnergy         = minKinEnergy*faclow;
   // default dRoverRange and finalRange
   SetStepLimits(0.2, 1.0*mm);
-  //SetVerboseLevel(0);
+  SetVerboseLevel(0);
 
   modelManager = new G4EmModelManager();
   (G4LossTableManager::Instance())->Register(this);
@@ -708,7 +707,7 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
         t = (*newp)[i];
         e = t->GetKineticEnergy();
         const G4ParticleDefinition* pd = t->GetDefinition();
-        if (pd != theGamma && pd != theElectron ) e += pd->GetPDGMass();
+        if (pd != G4Gamma::Gamma() && pd != G4Electron::Electron() ) e += pd->GetPDGMass();
 
         preStepKinEnergy -= e;
         aParticleChange.AddSecondary(t);
@@ -1207,36 +1206,6 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
   return res;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-/*
-
-G4double G4VEnergyLossSTD::GetContinuousStepLimit(const G4Track&,
-                                               G4double, G4double currentMinimumStep, G4double& currentSafety)
-{
-  G4double x = DBL_MAX;
-
-  if (theRangeTable) {
-    G4bool b;
-    fRange = ((*theRangeTable)[currentMaterialIndex])->
-            GetValue(preStepScaledEnergy, b)*reduceFactor;
-    x = fRange;
-    G4double r = std::min(finalRange, currentCouple->GetProductionCuts()
-                 ->GetProductionCut(idxG4ElectronCut));
-    if( integral ) {
-      if(x < currentMinimumStep && x > r) x *= 0.8;
-    } else {
-      if (fRange > r) {
-
-        x = dRoverRange*fRange + r*(1.0 - dRoverRange)*(2.0 - r/fRange);
-        if(rndmStepFlag) x = r + (x-r)*G4UniformRand();
-        if(x > fRange) x = fRange;
-      }
-    }
-  }
-
-  return x;
-}
-*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VEnergyLossSTD::SetRangeCoeff(G4double val)

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.10 2003-07-21 15:04:24 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.11 2003-07-23 11:36:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -36,7 +36,7 @@
 //
 // Modifications:
 //
-// 16-07-03 Use G4VMscModel interface (V.Ivanchenko)
+// 16-07-03 Update GetRange interface (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -278,7 +278,7 @@ inline G4double G4VMultipleScattering::GetContinuousStepLimit(
   truePathLength = TruePathLengthLimit(track,lambda0,currentMinimalStep);
   //G4cout << "StepLimit: tpl= " << truePathLength << " lambda0= "
   //       << lambda0 << " range= " << currentRange
-  //	 << " currentMinStep= " << currentMinimalStep << G4endl;
+  //       << " currentMinStep= " << currentMinimalStep << G4endl;
   if (truePathLength < currentMinimalStep) valueGPILSelectionMSC = CandidateForSelection;
   geomPathLength = currentModel->GeomPathLength(theLambdaTable,currentCouple,
            p,e,lambda0,currentRange,truePathLength);

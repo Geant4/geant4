@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScatteringSTD.cc,v 1.24 2003-07-21 15:04:25 vnivanch Exp $
+// $Id: G4MultipleScatteringSTD.cc,v 1.25 2003-07-23 11:36:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -72,12 +72,8 @@
 
 G4MultipleScatteringSTD::G4MultipleScatteringSTD(const G4String& processName)
      : G4VMultipleScattering(processName),
-       lowKineticEnergy(0.1*keV),
-       highKineticEnergy(100.*TeV),
        totBins(100),
        facrange(0.199),
-       tlimit(1.e10*mm),
-       tlimitmin(1.e-7*mm),
        dtrl(0.15),
        NuclCorrPar (0.0615),
        FactPar(0.40),
@@ -87,6 +83,12 @@ G4MultipleScatteringSTD::G4MultipleScatteringSTD(const G4String& processName)
        nsmallstep(5),
        samplez(true)
 {
+  lowKineticEnergy = 0.1*keV;
+  highKineticEnergy= 100.*TeV;
+  
+  tlimit           = 1.e10*mm;
+  tlimitmin        = 1.e-7*mm;
+
   SetBinning(totBins);
   SetMinKinEnergy(lowKineticEnergy);
   SetMaxKinEnergy(highKineticEnergy);
@@ -111,8 +113,8 @@ void G4MultipleScatteringSTD::InitialiseProcess(const G4ParticleDefinition& part
     SetBuildLambdaTable(true);
   }
   G4MscModel* em = new G4MscModel(dtrl,NuclCorrPar,FactPar,facxsi,samplez);
-  em->SetLowEnergyLimit(0.1*keV);
-  em->SetHighEnergyLimit(100.0*TeV);
+  em->SetLowEnergyLimit(lowKineticEnergy);
+  em->SetHighEnergyLimit(highKineticEnergy);
   AddEmModel(1, em);
   boundary = BoundaryAlgorithmFlag();
 }
@@ -120,8 +122,8 @@ void G4MultipleScatteringSTD::InitialiseProcess(const G4ParticleDefinition& part
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4MultipleScatteringSTD::TruePathLengthLimit(const G4Track&  track,
-                                                               G4double& lambda,
-                                                               G4double  currentMinimalStep)
+                                                            G4double& lambda,
+                                                            G4double  currentMinimalStep)
 {
 
   G4double tPathLength = currentMinimalStep;

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.12 2003-07-21 15:04:24 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.13 2003-07-23 11:36:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -40,8 +40,7 @@
 // 24-01-03 Cut per region (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
 // 25-02-03 Add sample theta and displacement (V.Ivanchenko)
-// 16-07-03 Move MSC methods to the derived class;
-//          replace G4Material by G4MaterialCutCouple in dE/dx and CrossSection
+// 23-07-03 Replace G4Material by G4MaterialCutCouple in dE/dx and CrossSection
 //          calculation (V.Ivanchenko)
 //
 
@@ -116,6 +115,7 @@ public:
 
   G4String GetName() const {return name;};
 
+  // Methods for msc simulation
   virtual G4double GeomPathLength(G4PhysicsTable*,
                             const G4MaterialCutsCouple*,
 		            const G4ParticleDefinition*,

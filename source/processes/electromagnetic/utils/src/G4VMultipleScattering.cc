@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.10 2003-07-21 15:04:25 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.11 2003-07-23 11:36:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -75,12 +75,13 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name, G4ProcessType
   theLambdaTable(0),
   currentCouple(0),
   nBins(110),
-  minKinEnergy(1.0*eV),
-  maxKinEnergy(100.0*GeV),
   boundary(false),
   latDisplasment(true),
   buildLambdaTable(true)
 {
+  minKinEnergy = 1.0*eV;
+  maxKinEnergy = 100.0*GeV;
+  SetVerboseLevel(0);
   modelManager = new G4EmModelManager();
   (G4LossTableManager::Instance())->Register(this);
 

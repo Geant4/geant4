@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.cc,v 1.4 2003-07-21 15:04:25 vnivanch Exp $
+// $Id: G4MscModel.cc,v 1.5 2003-07-23 11:36:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -71,8 +71,6 @@ G4MscModel::G4MscModel(G4double& m_dtrl, G4double& m_NuclCorrPar,
                            G4double& m_FactPar, G4double& m_facxsi,
 			   G4bool& m_samplez, const G4String& nam)
   : G4VEmModel(nam),
-  highKinEnergy(10.0*TeV),
-  lowKinEnergy(0.1*keV),
   taubig(8.0),
   tausmall(1.e-14),
   taulim(1.e-5),
@@ -80,9 +78,12 @@ G4MscModel::G4MscModel(G4double& m_dtrl, G4double& m_NuclCorrPar,
   NuclCorrPar (m_NuclCorrPar),
   FactPar(m_FactPar),
   facxsi(m_facxsi),
-  samplez(m_samplez),
-  stepmin(1.e-6*mm)
-{}
+  samplez(m_samplez)
+{
+  highKinEnergy = 10.0*TeV;
+  lowKinEnergy  = 0.1*keV;
+  stepmin       = 1.e-6*mm;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
