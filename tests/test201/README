@@ -1,4 +1,4 @@
-$Id: README,v 1.3 2000-05-26 14:16:01 barrand Exp $
+$Id: README,v 1.4 2003-11-14 15:41:18 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,7 +19,6 @@ $Id: README,v 1.3 2000-05-26 14:16:01 barrand Exp $
  to the GUI choosed. For example :
  - G4UIterminal, G4UIXm, G4UIWin32, G4UIXaw, start test from 
    basic subdirectory.
- - G4UIWo, start test from OPACS subdirectory.
 
   Examples ; for G4UIXm :
 
@@ -31,15 +30,6 @@ $Id: README,v 1.3 2000-05-26 14:16:01 barrand Exp $
    ( sh> XENVIRONMENT=$G4INSTALL/tests/test201/test201.xrm;export XENVIRONMENT)
    UNIX> cd $G4INSTALL/tests/test201/basic
    UNIX> $G4WORKDIR/bin/$G4SYSTEM/test201 Xm
-
- and for G4UIWo :
-   UNIX> cd $G4INSTALL/tests/tools/bin
-   UNIX> edit the specific.csh file for your environment.
-    csh> source setup.csh
-    csh> setenv XENVIRONMENT $G4INSTALL/tests/test201/test201.xrm
-   ( sh> XENVIRONMENT=$G4INSTALL/tests/test201/test201.xrm;export XENVIRONMENT)
-   UNIX> cd $G4INSTALL/tests/test201/OPACS
-   UNIX> $G4WORKDIR/bin/$G4SYSTEM/test201 Wo
 
   The upper assume that Geant4 libraries has been reconstructed
  with the correct :

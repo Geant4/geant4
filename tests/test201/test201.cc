@@ -22,7 +22,7 @@
 //
 
 //
-// $Id: test201.cc,v 1.13 2003-06-16 17:15:27 gunter Exp $
+// $Id: test201.cc,v 1.14 2003-11-14 15:41:20 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,17 +44,13 @@ std::ostream& g4cerr = G4cerr;
 #include "MyPrimaryGeneratorAction.hh"
 #include "MyEventAction.hh"
 #include "MySteppingAction.hh"
-
+#include "G4UIsession.hh"
+#include "G4UImanager.hh"
+#include "G4UIterminal.hh"
 #include "G4StateManager.hh"
 
-#ifdef G4UI_USE_TERMINAL
-  #include "G4UIterminal.hh"
-#endif
 #ifdef G4UI_USE_GAG
   #include "G4UIGAG.hh"
-#endif
-#ifdef G4UI_USE_WO
-  #include "G4UIWo.hh"
 #endif
 #ifdef G4UI_USE_XM
   #include "G4UIXm.hh"
@@ -92,9 +88,6 @@ int main (int argc, char** argv) {
 #else
   if (argc >= 2) {
     if (strcmp (argv[1], "dumb")==0)     session = new G4UIterminal;
-#ifdef G4UI_USE_WO
-    else if (strcmp (argv[1], "Wo")==0)  session = new G4UIWo (argc, argv);
-#endif
 #ifdef G4UI_USE_XM
     else if (strcmp (argv[1], "Xm")==0)  session = new G4UIXm (argc, argv);
 #endif
