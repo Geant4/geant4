@@ -191,6 +191,26 @@ if [ `uname -n | grep pcitasd04` ]; then
 #  export G4VIS_BUILD_VRMLFILE_DRIVER=1
 fi
 
+if [ `uname -n | grep pcgeant` ]; then
+  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
+  export G4SYSTEM=Linux-g++
+  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
+  export G4LIB=$G4WORKDIR/lib
+  # G4 build flags :
+#  export G4UI_BUILD_TERMINAL_SESSION=1
+#  export G4UI_BUILD_GAG_SESSION=1
+  ######export G4UI_BUILD_XM_SESSION=1
+#  export G4VIS_BUILD_OPENGLXM_DRIVER=1
+#  export G4VIS_BUILD_OPENGLX_DRIVER=1
+#  export G4VIS_BUILD_RAYX_DRIVER=1
+#  export G4VIS_BUILD_OIX_DRIVER=1
+#  export G4VIS_BUILD_DAWN_DRIVER=1
+#  export G4VIS_BUILD_DAWNFILE_DRIVER=1
+#  export G4VIS_BUILD_VRML_DRIVER=1
+#  export G4VIS_BUILD_VRMLFILE_DRIVER=1
+fi
+
 
 if [ `uname -n | grep sgmedia` ]; then
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
