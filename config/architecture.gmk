@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.22 1999-05-14 01:32:45 gcosmo Exp $
+# $Id: architecture.gmk,v 1.23 1999-05-15 00:47:01 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -383,7 +383,7 @@ ifeq ($(G4SYSTEM),AIX-xlC)
   endif
   ifdef G4USE_OSPACE
     CPPFLAGS += -DOS_AIX_4 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING  -DOS_NO_ALLOCATORS
-    CPPFLAGS += $(OSPACEINC) -I$(OSPACEDIR)
+    CPPFLAGS += -I$(RWINC)/wrappers/$(G4SYSTEM) $(OSPACEINC) -I$(OSPACEDIR)
   endif
 endif
 
