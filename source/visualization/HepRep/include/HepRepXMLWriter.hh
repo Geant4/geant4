@@ -22,7 +22,7 @@
 //
 //--------------------------------------------------------------------------
 // File and Version Information:
-// 	$Id: HepRepXMLWriter.hh,v 1.7 2002-01-29 21:03:51 perl Exp $
+// 	$Id: HepRepXMLWriter.hh,v 1.8 2002-02-02 04:00:19 perl Exp $
 //
 // Description:
 //	Create a HepRep XML File (HepRep version 1).
@@ -79,8 +79,7 @@ public:
 
   void endTypes();
 
-  bool hasTypes;
-
+  bool isOpen;
   int typeDepth;
   bool inType[50];
   bool inInstance[50];
@@ -88,8 +87,6 @@ public:
   
 private:
   G4std::ofstream fout;
-
-  bool isOpen;
 
   void init();
 

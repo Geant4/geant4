@@ -22,7 +22,7 @@
 //
 //--------------------------------------------------------------------------
 // File and Version Information:
-// 	$Id: HepRepXMLWriter.cc,v 1.6 2002-01-29 21:04:04 perl Exp $
+// 	$Id: HepRepXMLWriter.cc,v 1.7 2002-02-02 04:00:30 perl Exp $
 //
 // Description:
 //	Create a HepRep XML File (HepRep version 1).
@@ -53,7 +53,6 @@ void HepRepXMLWriter::init()
 
   int i = -1;
   while (i++<49) {
-    delete [] prevTypeName[i];
     prevTypeName[i] = new char[1];
     strcpy(prevTypeName[i],"");
 
@@ -63,15 +62,12 @@ void HepRepXMLWriter::init()
 
   inPrimitive = false;
   inPoint = false;
-  hasTypes = false;
 }
 
 void HepRepXMLWriter::addType(const char* name,int newTypeDepth)
 {
   if (fout.good())
   {
-    hasTypes = true;
-
     // Flatten structure if it exceeds maximum allowed typeDepth of 49.
     if (newTypeDepth > 49)
       newTypeDepth = 49;
@@ -93,8 +89,7 @@ void HepRepXMLWriter::addType(const char* name,int newTypeDepth)
       if (inType[newTypeDepth])
 	endType();
 
-      delete [] prevTypeName[newTypeDepth];
-      prevTypeName[newTypeDepth] = new char[strlen(name)];
+      prevTypeName[newTypeDepth] = new char[strlen(name)+1];
       strcpy(prevTypeName[newTypeDepth],name);
 
       inType[newTypeDepth] = true;
@@ -238,7 +233,10 @@ void HepRepXMLWriter::addAttValue (const char* name,
     indent();
     fout << "  <heprep:attvalue showLabel=\"NONE\" name=\"" << name << "\"" << G4endl;
     indent();
-    fout << "    value=\"" << value << "\"/>" << G4endl;
+    if (value)
+      fout << "    value=\"True\"/>" << G4endl;
+    else
+      fout << "    value=\"False\"/>" << G4endl;
   } else {
     G4cout << "HepRepXMLWriter:addAttValue No file is currently open" << G4endl;
   }

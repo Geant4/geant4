@@ -1,4 +1,4 @@
-$Id: History,v 1.175 2002-01-29 21:04:27 perl Exp $
+$Id: History,v 1.176 2002-02-02 03:59:33 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,14 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+1st February 2002  Joseph Perl
+- Improvements to HepRep:
+- Defer file opening until first real HepRepType is to be written.
+- Moved HepRep code from AddThis to AddPrimitive.
+- Add additional levels to hierarchy if any appear to have been
+  removed by culling.
+- Add visibility attribute.
 
 29th January 2002  Joseph Perl
 - Relocate HepRep file-opening logic to constructor and ShowView
