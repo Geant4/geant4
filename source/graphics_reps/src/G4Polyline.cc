@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyline.cc,v 1.6 2001-07-11 10:01:08 gunter Exp $
+// $Id: G4Polyline.cc,v 1.7 2001-08-14 18:24:58 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,6 +48,11 @@ G4VVisPrim & G4Polyline::operator = (const G4VVisPrim &right) {
 G4Polyline & G4Polyline::operator = (const G4Polyline &right) {
   if (&right == this) return *this;
   G4VVisPrim::operator = (right);
+  return *this;
+}
+
+G4Polyline& G4Polyline::transform (const G4Transform3D& transformation) {
+  for (iterator i = begin(); i != end(); ++i) i->transform(transformation);
   return *this;
 }
 
