@@ -1,4 +1,4 @@
-$Id: History,v 1.78 2004-12-02 09:34:33 gcosmo Exp $
+$Id: History,v 1.79 2005-03-02 08:38:03 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mar 02, 2005  G.Cosmo                      geommng-V07-00-00
+- Added optional boolean argument 'propagate' to GetMass() to avoid
+  propagation of computation of masses to the daughter volumes (courtesy
+  of G.Santin). Propagation to daughters is done by default.
+
+Feb 18, 2005  M.Asai
+- Added G4UserLimits pointer to G4Region and added access from G4LogicalVolume.
 
 Dec 02, 2004  G.Cosmo                      geommng-V06-02-08
 - Implemented migration to <cmath> for standard mathematical functions.
