@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2003-01-23 11:30:27 gcosmo Exp $
+$Id: History,v 1.6 2003-02-12 08:49:13 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Feb 12th, 2003 G.Cosmo - (parmodels-V05-00-01)
+----------------------
+- Replaced call to RandPoisson::shoot() with G4Poisson(), more performant.
+  Affected files: G4IrregularXrayTRmodel.cc, G4VXTRdEdx.cc, G4VXrayTRadModel.cc.
 
 Jan 23rd, 2003 G.Cosmo - (parmodels-V05-00-00)
 ----------------------
