@@ -569,6 +569,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 #endif
          (*j)->SetTotalEnergy(pProduct.e());
          (*j)->SetMomentum(pProduct.vect());
+	 (*j)->SetNewlyAdded(true);
 	 products->push_back(*j);
        }
 
@@ -850,6 +851,8 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
   G4cerr << "G4BinaryCascade::ApplyCollision start 1"<<G4endl;
     products = theScatterer->Scatter(*primary, target_reloc);
   G4cerr << "G4BinaryCascade::ApplyCollision start 2"<<G4endl;
+
+// @@@@@ also decay needs to be blocked...for after this release - hpw.
 
     if(!products || !CheckPauliPrinciple(products))
     {

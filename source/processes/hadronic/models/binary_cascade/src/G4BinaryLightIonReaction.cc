@@ -71,19 +71,13 @@
       debug.dump();
 
       G4KineticTrackVector * initalState = new G4KineticTrackVector;
-      G4LorentzVector cache = mom;
-      cache.setZ(-cache.getZ());
-      projectile->DoLorentzBoost(cache);
       projectile->StartLoop();
       G4Nucleon * aNuc;
-      debug.push_back("Constituent energies after push");
-      debug.push_back(mom);
       G4LorentzVector tmpV(0,0,0,0);
       G4LorentzVector nucleonMom(1./a1*mom);
       nucleonMom.setZ(nucleonMom.vect().mag());
       nucleonMom.setX(0);
       nucleonMom.setY(0);
-      nucleonMom.setZ(0);
       while( (aNuc=projectile->GetNextNucleon()) )
       {
 	G4LorentzVector p4 = aNuc->GetMomentum();	
@@ -162,7 +156,7 @@
     aProRes.SetZ(resZ);
     aProRes.SetNumberOfParticles(0);
     aProRes.SetNumberOfCharged(0);
-    aProRes.SetNumberOfHoles(a2-resA);
+    aProRes.SetNumberOfHoles(a1-resA);
     aProRes.SetMomentum(momentum);
 
     // call precompound model
