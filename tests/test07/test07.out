@@ -43,7 +43,7 @@
    --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
    --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
 
- Material: Galactic  density:  0.000 mg/cm3  temperature:   0.10 K  pressure:   0.00 atm  RadLength: 6317232936888469300000.000  km
+ Material: Galactic  density:  0.000 mg/cm3  temperature:   0.10 K  pressure:   0.00 atm  RadLength: 6317232936888469234686909429987059695616.000  fm
    --->  Element: Galactic      Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:     Beam  density:  0.010 mg/cm3  temperature: 273.15 K  pressure:   0.02 atm  RadLength:  36.786  km
@@ -112,26 +112,26 @@ MuPairProd:  cross sections from R. Kokoulin
           Good description up to 1000 TeV.
     PhysicsTables from 1 GeV to 1e+03 PeV in 50 bins. 
 Idle> Idle> /control/saveHistory
-Idle> /run/verbose 2
+Idle> # /run/verbose 2
 Idle> #
 Idle> /run/particle/dumpCutValues
 ============= The cut Energy ==============================
-                          gamma          e-         mu-      proton     neutron
-Cut in range [mm]             2           2           2           2           2
-Cut in energy [KeV]
-          Aluminium         9.6       1e+03     7.4e+03     1.9e+04        0.99
-        liquidArgon         8.6     5.6e+02     4.8e+03     1.2e+04        0.99
-             Copper          36     2.7e+03     1.3e+04     3.4e+04        0.99
-               Lead     1.2e+02     2.6e+03     1.3e+04     3.2e+04        0.99
-              Water         3.9     5.7e+02       5e+03     1.3e+04        0.99
-       Scintillator         3.1     5.8e+02       5e+03     1.3e+04        0.99
-             quartz         7.6     9.1e+02     6.9e+03     1.8e+04        0.99
-                Air        0.99        0.99          82     1.7e+02        0.99
-            Aerogel         2.3     1.8e+02     1.9e+03     4.8e+03        0.99
-        CarbonicGas        0.99          54       6e+02     1.3e+03        0.99
-         WaterSteam        0.99        0.99          30          45        0.99
-           Galactic        0.99        0.99        0.99        0.99        0.99
-               Beam        0.99        0.99        0.99        0.99        0.99
+                            gamma              e-             mu-          proton         neutron    
+Cut in range                  2  mm           2  mm           2  mm           2  mm           2  mm
+Cut in energy
+          Aluminium        9.56 keV        1.03 MeV        7.44 MeV        19.4 MeV         990  eV
+        liquidArgon        8.59 keV         561 keV        4.78 MeV        12.3 MeV         990  eV
+             Copper        35.7 keV        2.68 MeV        13.3 MeV        34.3 MeV         990  eV
+               Lead         121 keV        2.61 MeV        12.6 MeV        31.8 MeV         990  eV
+              Water        3.89 keV         568 keV        4.96 MeV        13.1 MeV         990  eV
+       Scintillator        3.07 keV         575 keV        5.02 MeV        13.4 MeV         990  eV
+             quartz        7.59 keV         907 keV        6.91 MeV        18.1 MeV         990  eV
+                Air         990  eV         990  eV        82.2 keV         174 keV         990  eV
+            Aerogel        2.32 keV         181 keV         1.9 MeV        4.84 MeV         990  eV
+        CarbonicGas         990  eV        54.1 keV         597 keV        1.34 MeV         990  eV
+         WaterSteam         990  eV         990  eV        29.6 keV          45 keV         990  eV
+           Galactic         990  eV         990  eV         990  eV         990  eV         990  eV
+               Beam         990  eV         990  eV         990  eV         990  eV         990  eV
 ===================================================
 Idle> #
 Idle> #
@@ -139,12 +139,6 @@ Idle> /gun/particle e+
 Idle> /gun/energy 300 MeV
 Idle> /run/beamOn 500
 ### Run 0 start.
-Start closing geometry.
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 500
-  User=54s Real=59s Sys=5.7s
 Idle> /calor/setAbsMat Aluminium
 
  The calorimeter is made of 10 layers of: [ 10mm of Aluminium + 5mm of liquidArgon ] 
@@ -170,20 +164,4 @@ Idle> /gun/particle gamma
 Idle> /gun/energy 500 MeV
 Idle> /run/beamOn 500
 ### Run 1 start.
-Start closing geometry.
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 500
-  User=1.5e+02s Real=1.6e+02s Sys=15s
-Idle> G4 kernel has come to Quit state.
-Deletion of G4 kernel class start.
-UserDetectorConstruction deleted.
-UserPhysicsList deleted.
-UserRunAction deleted.
-UserPrimaryGenerator deleted.
-G4SDManager deleted.
-EventManager deleted.
-UImanager deleted.
-StateManager deleted.
-RunManager is deleting.
+Idle> 
