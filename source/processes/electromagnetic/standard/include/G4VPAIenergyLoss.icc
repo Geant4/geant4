@@ -14,7 +14,7 @@
 //      CERN, IT Division, ASD group
 //      History: based on object model of
 //      2nd December 1995, G.Cosmo
-//      ------------ G4PAIenergyLoss physics process ------------
+//      ------------ G4VPAIenergyLoss physics process ------------
 //                  by Laszlo Urban, 30 May 1997
 // ***************************************************************
 // It is the first implementation of the NEW UNIFIED ENERGY LOSS PROCESS.               
@@ -29,10 +29,10 @@
 //
 
 inline G4double
- G4PAIenergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
+ G4VPAIenergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
                                               G4Material *aMaterial    ) 
 {
-  //  G4cout<<"G4PAIenergyLoss::GetConstraints is called"<<endl ; 
+  //  G4cout<<"G4VPAIenergyLoss::GetConstraints is called"<<endl ; 
   //  return   2*mm ;
      if(aMaterial->GetState() == kStateGas) 
     {
@@ -51,7 +51,7 @@ inline G4double
 
 /* ***********************************************************************
 
-inline G4double G4PAIenergyLoss::GetContinuousStepLimit(
+inline G4double G4VPAIenergyLoss::GetContinuousStepLimit(
                                                const G4Track& track,
                                                G4double,
                                                G4double currentMinimumStep,
@@ -68,7 +68,7 @@ inline G4double G4PAIenergyLoss::GetContinuousStepLimit(
 
 *********************************************************** */
 
-inline G4bool G4PAIenergyLoss::IsApplicable(const G4ParticleDefinition&
+inline G4bool G4VPAIenergyLoss::IsApplicable(const G4ParticleDefinition&
                                                      particle)
 {
    return(particle.GetPDGCharge()!= 0.);

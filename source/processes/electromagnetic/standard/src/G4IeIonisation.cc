@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IeIonisation.cc,v 1.4 1999-12-15 14:51:50 gunter Exp $
+// $Id: G4IeIonisation.cc,v 1.5 2000-04-25 14:33:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -33,7 +33,7 @@
 
  
 G4IeIonisation::G4IeIonisation(const G4String& processName)
-   : G4IeEnergyLoss(processName),
+   : G4VIeEnergyLoss(processName),
      theMeanFreePathTable(NULL),
      theNlambdaTable(NULL),
      theInverseNlambdaTable(NULL),

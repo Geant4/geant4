@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eIonisation.cc,v 1.7 2000-03-24 11:25:30 urban Exp $
+// $Id: G4eIonisation.cc,v 1.8 2000-04-25 14:33:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,7 @@ G4int    G4eIonisation::NbinLambda = 100 ;
 // constructor and destructor
  
 G4eIonisation::G4eIonisation(const G4String& processName)
-   : G4eEnergyLoss(processName),
+   : G4VeEnergyLoss(processName),
      theMeanFreePathTable(NULL)
 { }
 

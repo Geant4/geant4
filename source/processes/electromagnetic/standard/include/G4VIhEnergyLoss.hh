@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IhEnergyLoss.hh,v 1.3 1999-12-15 14:51:46 gunter Exp $
+// $Id: G4VIhEnergyLoss.hh,v 1.1 2000-04-25 14:33:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -16,7 +16,7 @@
 //      CERN, IT Division, ASD group
 //      History: first implementation, based on object model of
 //      2nd December 1995, G.Cosmo
-//      ---------- G4IhEnergyLoss physics process -----------
+//      ---------- G4VIhEnergyLoss physics process -----------
 //                by Laszlo Urban, 30 May 1997 
 //
 // ************************************************************             
@@ -38,8 +38,8 @@
 // 26/10/98 cleanup , L.Urban
 //
 
-#ifndef G4IhEnergyLoss_h
-#define G4IhEnergyLoss_h 1
+#ifndef G4VIhEnergyLoss_h
+#define G4VIhEnergyLoss_h 1
  
 #include "G4ios.hh"
 #include "globals.hh"
@@ -58,14 +58,14 @@
  
 class G4EnergyLossMessenger;
  
-class G4IhEnergyLoss : public G4IVContinuousDiscreteProcess
+class G4VIhEnergyLoss : public G4IVContinuousDiscreteProcess
  
 {
   public:
 
-    G4IhEnergyLoss(const G4String& );
+    G4VIhEnergyLoss(const G4String& );
 
-    ~G4IhEnergyLoss();
+    ~G4VIhEnergyLoss();
 
     G4bool IsApplicable(const G4ParticleDefinition&);
 
@@ -88,8 +88,8 @@ class G4IhEnergyLoss : public G4IVContinuousDiscreteProcess
 
   // hide  assignment operator 
 
-    G4IhEnergyLoss(G4IhEnergyLoss &);
-    G4IhEnergyLoss & operator=(const G4IhEnergyLoss &right);
+    G4VIhEnergyLoss(G4VIhEnergyLoss &);
+    G4VIhEnergyLoss & operator=(const G4VIhEnergyLoss &right);
 
     G4double GetConstraints(const G4DynamicParticle *aParticle,
                             G4Material *aMaterial);
@@ -225,7 +225,7 @@ class G4IhEnergyLoss : public G4IVContinuousDiscreteProcess
     static G4PhysicsTable* theProperTimepTable ;
     static G4PhysicsTable* theProperTimepbarTable ;
 
-    //  processes inherited from G4IhEnergyLoss 
+    //  processes inherited from G4VIhEnergyLoss 
     //   register themselves  in the static array Recorder
     static G4PhysicsTable** RecorderOfpProcess;
     static G4PhysicsTable** RecorderOfpbarProcess;
@@ -287,7 +287,7 @@ class G4IhEnergyLoss : public G4IVContinuousDiscreteProcess
 
 };
  
-#include "G4IhEnergyLoss.icc"
+#include "G4VIhEnergyLoss.icc"
 
 #endif
  

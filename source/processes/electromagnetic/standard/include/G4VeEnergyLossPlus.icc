@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eEnergyLossPlus.icc,v 1.5 2000-02-10 08:53:58 urban Exp $
+// $Id: G4VeEnergyLossPlus.icc,v 1.1 2000-04-25 14:33:03 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------
@@ -15,20 +15,20 @@
 //      CERN, IT Division, ASD group
 //      History: based on object model of
 //      2nd December 1995, G.Cosmo
-//      ------------ G4eEnergyLossPlus physics process ------------
+//      ------------ G4VeEnergyLossPlus physics process ------------
 //                  by Laszlo Urban, 20 March 1997
 // ***************************************************************
 // It is the first implementation of the NEW UNIFIED ENERGY LOSS PROCESS.               
 // It calculates the energy loss of e+/e-.
 // -------------------------------------------------------------
 // 18/11/98  , L. Urban
-//  It is a modified version of G4eEnergyLoss:
+//  It is a modified version of G4VeEnergyLoss:
 //  continuous energy loss with generation of subcutoff delta rays
 // ---------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4eEnergyLossPlus::GetConstraints(
+inline G4double G4VeEnergyLossPlus::GetConstraints(
                                  const G4DynamicParticle* aParticle,
                                               G4Material* aMaterial)
 {
@@ -70,7 +70,7 @@ inline G4double G4eEnergyLossPlus::GetConstraints(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4eEnergyLossPlus::GetContinuousStepLimit(
+inline G4double G4VeEnergyLossPlus::GetContinuousStepLimit(
                                                const G4Track& track,
                                                G4double,
                                                G4double currentMinimumStep,
@@ -87,7 +87,7 @@ inline G4double G4eEnergyLossPlus::GetContinuousStepLimit(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4bool G4eEnergyLossPlus::IsApplicable(const G4ParticleDefinition&
+inline G4bool G4VeEnergyLossPlus::IsApplicable(const G4ParticleDefinition&
                                                      particle)
 {
    return(   (&particle == G4Electron::Electron())

@@ -5,9 +5,10 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLoss.icc,v 1.4 2000-02-10 08:53:59 urban Exp $
+// $Id: G4VIhEnergyLoss.icc,v 1.1 2000-04-25 14:33:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// $Id:
 // ---------------------------------------------------------------
 //      GEANT 4 class inlined methods file 
 //
@@ -15,22 +16,22 @@
 //      CERN, IT Division, ASD group
 //      History: based on object model of
 //      2nd December 1995, G.Cosmo
-//      ------------ G4hEnergyLoss physics process ------------
+//      ------------ G4VIhEnergyLoss physics process ------------
 //                  by Laszlo Urban, 30 May 1997
 // ***************************************************************
 // It is the first implementation of the NEW UNIFIED ENERGY LOSS PROCESS.   
 // It calculates the energy loss of charged hadrons.
 // ***************************************************************
-// 22/10/98: cleanup , L.Urban
+// 26/10/98: cleanup , L.Urban
 // ---------------------------------------------------------------
 
-inline G4bool G4hEnergyLoss::IsApplicable(const G4ParticleDefinition&
+inline G4bool G4VIhEnergyLoss::IsApplicable(const G4ParticleDefinition&
                                                      particle)
 {
    return(particle.GetPDGCharge()!= 0.);
 }
          
-inline G4double G4hEnergyLoss::GetContinuousStepLimit(
+inline G4double G4VIhEnergyLoss::GetContinuousStepLimit(
                                                const G4Track& track,
                                                G4double,
                                                G4double currentMinimumStep,

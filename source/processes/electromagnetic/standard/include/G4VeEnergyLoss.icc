@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eEnergyLoss.icc,v 1.6 2000-02-10 08:53:58 urban Exp $
+// $Id: G4VeEnergyLoss.icc,v 1.1 2000-04-25 14:33:03 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------
@@ -15,7 +15,7 @@
 //      CERN, IT Division, ASD group
 //      History: based on object model of
 //      2nd December 1995, G.Cosmo
-//      ------------ G4eEnergyLoss physics process ------------
+//      ------------ G4VeEnergyLoss physics process ------------
 //                  by Laszlo Urban, 20 March 1997
 // ***************************************************************
 // It is the first implementation of the NEW UNIFIED ENERGY LOSS PROCESS.               
@@ -26,7 +26,7 @@
 //
 // ---------------------------------------------------------------
 
-inline G4double G4eEnergyLoss::GetConstraints(
+inline G4double G4VeEnergyLoss::GetConstraints(
                                       const G4DynamicParticle* aParticle,
                                             G4Material* aMaterial)
 {
@@ -66,7 +66,7 @@ inline G4double G4eEnergyLoss::GetConstraints(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4eEnergyLoss::GetContinuousStepLimit(
+inline G4double G4VeEnergyLoss::GetContinuousStepLimit(
                                                const G4Track& track,
                                                G4double,
                                                G4double currentMinimumStep,
@@ -82,7 +82,7 @@ inline G4double G4eEnergyLoss::GetContinuousStepLimit(
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-inline G4bool G4eEnergyLoss::IsApplicable(const G4ParticleDefinition&
+inline G4bool G4VeEnergyLoss::IsApplicable(const G4ParticleDefinition&
                                                      particle)
 {
    return(   (&particle == G4Electron::Electron())

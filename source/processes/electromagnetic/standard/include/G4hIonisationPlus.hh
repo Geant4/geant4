@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hIonisationPlus.hh,v 1.5 2000-02-22 10:37:50 urban Exp $
+// $Id: G4hIonisationPlus.hh,v 1.6 2000-04-25 14:33:06 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,7 +35,7 @@
 #include "G4ios.hh"
 #include "globals.hh"
 #include "Randomize.hh"
-#include "G4hEnergyLossPlus.hh"
+#include "G4VhEnergyLossPlus.hh"
 #include "globals.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
@@ -44,7 +44,7 @@
 #include "G4PhysicsLinearVector.hh"
  
  
-class G4hIonisationPlus : public G4hEnergyLossPlus 
+class G4hIonisationPlus : public G4VhEnergyLossPlus 
  
 {
   public:

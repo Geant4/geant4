@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLossPlus.hh,v 1.6 2000-02-22 10:37:49 urban Exp $
+// $Id: G4VhEnergyLossPlus.hh,v 1.1 2000-04-25 14:33:04 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -15,7 +15,7 @@
 //      CERN, IT Division, ASD group
 //      History: first implementation, based on object model of
 //      2nd December 1995, G.Cosmo
-//      ---------- G4hEnergyLossPlus physics process -----------
+//      ---------- G4VhEnergyLossPlus physics process -----------
 //                by Laszlo Urban, 30 May 1997 
 //
 // ************************************************************             
@@ -39,8 +39,8 @@
 // 10/02/00  modifications , new e.m. structure, L.Urban
 //
 
-#ifndef G4hEnergyLossPlus_h
-#define G4hEnergyLossPlus_h 1
+#ifndef G4VhEnergyLossPlus_h
+#define G4VhEnergyLossPlus_h 1
  
 #include "G4ios.hh"
 #include "globals.hh"
@@ -59,14 +59,14 @@
  
 class G4EnergyLossMessenger;
  
-class G4hEnergyLossPlus : public G4VEnergyLoss
+class G4VhEnergyLossPlus : public G4VEnergyLoss
  
 {
   public:
 
-    G4hEnergyLossPlus(const G4String& );
+    G4VhEnergyLossPlus(const G4String& );
 
-    ~G4hEnergyLossPlus();
+    ~G4VhEnergyLossPlus();
 
     G4bool IsApplicable(const G4ParticleDefinition&);
 
@@ -95,8 +95,8 @@ class G4hEnergyLossPlus : public G4VEnergyLoss
 
   // hide  assignment operator 
 
-    G4hEnergyLossPlus(G4hEnergyLossPlus &);
-    G4hEnergyLossPlus & operator=(const G4hEnergyLossPlus &right);
+    G4VhEnergyLossPlus(G4VhEnergyLossPlus &);
+    G4VhEnergyLossPlus & operator=(const G4VhEnergyLossPlus &right);
 
     G4double GetConstraints(const G4DynamicParticle *aParticle,
                             G4Material *aMaterial);
@@ -183,7 +183,7 @@ class G4hEnergyLossPlus : public G4VEnergyLoss
     static G4PhysicsTable* theProperTimepTable ;
     static G4PhysicsTable* theProperTimepbarTable ;
 
-    //  processes inherited from G4hEnergyLossPlus 
+    //  processes inherited from G4VhEnergyLossPlus 
     //   register themselves  in the static array Recorder
     static G4int NbOfProcesses     ;
     static G4PhysicsTable** RecorderOfpProcess;
@@ -228,7 +228,7 @@ class G4hEnergyLossPlus : public G4VEnergyLoss
 
 };
  
-#include "G4hEnergyLossPlus.icc"
+#include "G4VhEnergyLossPlus.icc"
 
 #endif
  

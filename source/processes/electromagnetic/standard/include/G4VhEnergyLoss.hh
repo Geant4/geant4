@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLoss.hh,v 1.9 2000-02-25 07:35:02 urban Exp $
+// $Id: G4VhEnergyLoss.hh,v 1.1 2000-04-25 14:33:03 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -15,7 +15,7 @@
 //      CERN, IT Division, ASD group
 //      History: first implementation, based on object model of
 //      2nd December 1995, G.Cosmo
-//      ---------- G4hEnergyLoss physics process -----------
+//      ---------- G4VhEnergyLoss physics process -----------
 //                by Laszlo Urban, 30 May 1997 
 //
 // ************************************************************             
@@ -39,8 +39,8 @@
 // 10/02/00  modifications , new e.m. structure, L.Urban
 //
 
-#ifndef G4hEnergyLoss_h
-#define G4hEnergyLoss_h 1
+#ifndef G4VhEnergyLoss_h
+#define G4VhEnergyLoss_h 1
  
 #include "G4ios.hh"
 #include "globals.hh"
@@ -59,14 +59,14 @@
  
 class G4EnergyLossMessenger;
  
-class G4hEnergyLoss : public G4VEnergyLoss
+class G4VhEnergyLoss : public G4VEnergyLoss
  
 {
   public:
 
-    G4hEnergyLoss(const G4String& );
+    G4VhEnergyLoss(const G4String& );
 
-    ~G4hEnergyLoss();
+    ~G4VhEnergyLoss();
 
     G4bool IsApplicable(const G4ParticleDefinition&);
 
@@ -97,8 +97,8 @@ class G4hEnergyLoss : public G4VEnergyLoss
 
   // hide  assignment operator 
 
-    G4hEnergyLoss(G4hEnergyLoss &);
-    G4hEnergyLoss & operator=(const G4hEnergyLoss &right);
+    G4VhEnergyLoss(G4VhEnergyLoss &);
+    G4VhEnergyLoss & operator=(const G4VhEnergyLoss &right);
 
 
 // =====================================================================
@@ -159,7 +159,7 @@ class G4hEnergyLoss : public G4VEnergyLoss
     static G4PhysicsTable* theProperTimepTable ;
     static G4PhysicsTable* theProperTimepbarTable ;
 
-    //  processes inherited from G4hEnergyLoss 
+    //  processes inherited from G4VhEnergyLoss 
     //   register themselves  in the static array Recorder
 
     static G4int NbOfProcesses     ;
@@ -219,7 +219,7 @@ class G4hEnergyLoss : public G4VEnergyLoss
 
 };
  
-#include "G4hEnergyLoss.icc"
+#include "G4VhEnergyLoss.icc"
 
 #endif
  

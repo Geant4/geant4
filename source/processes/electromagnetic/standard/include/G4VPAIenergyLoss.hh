@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIenergyLoss.hh,v 1.6 2000-02-22 10:37:49 urban Exp $
+// $Id: G4VPAIenergyLoss.hh,v 1.1 2000-04-25 14:33:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -15,7 +15,7 @@
 //      CERN, IT Division, ASD group
 //      History: first implementation, based on object model of
 //      2nd December 1995, G.Cosmo
-//      ---------- G4PAIenergyLoss physics process -----------
+//      ---------- G4VPAIenergyLoss physics process -----------
 //                by V. Grichine, 30 Nov 97 
 // ************************************************************             
 // It is the first implementation of the NEW UNIFIED ENERGY LOSS PROCESS.
@@ -35,8 +35,8 @@
 // 10/02/00  modifications , new e.m. structure, L.Urban
 // ------------------------------------------------------------
  
-#ifndef G4PAIenergyLoss_h
-#define G4PAIenergyLoss_h 1
+#ifndef G4VPAIenergyLoss_h
+#define G4VPAIenergyLoss_h 1
  
 #include "G4ios.hh"
 #include "g4std/fstream"
@@ -61,21 +61,21 @@
 #include "G4PhysicsFreeVector.hh"
  
  
-class G4PAIenergyLoss : public G4VEnergyLoss
+class G4VPAIenergyLoss : public G4VEnergyLoss
  
 {
   public:
-    G4PAIenergyLoss(const G4String& );
-    G4PAIenergyLoss(G4PAIenergyLoss &);
+    G4VPAIenergyLoss(const G4String& );
+    G4VPAIenergyLoss(G4VPAIenergyLoss &);
 
-    ~G4PAIenergyLoss();
+    ~G4VPAIenergyLoss();
 
     G4bool IsApplicable(const G4ParticleDefinition&);
 
   private:
 
   // hide  assignment operator 
-    G4PAIenergyLoss & operator=(const G4PAIenergyLoss &right);
+    G4VPAIenergyLoss & operator=(const G4VPAIenergyLoss &right);
 
   public:
 
@@ -187,7 +187,7 @@ class G4PAIenergyLoss : public G4VEnergyLoss
 
 
 
-  //  processes inherited from G4hEnergyLoss 
+  //  processes inherited from G4VhEnergyLoss 
   //   register themselves  in the static array Recorder
 
     static G4int NbOfProcesses     ;
@@ -255,7 +255,7 @@ class G4PAIenergyLoss : public G4VEnergyLoss
 
 };
  
-#include "G4PAIenergyLoss.icc"
+#include "G4VPAIenergyLoss.icc"
 
 #endif
  

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IhEnergyLoss.cc,v 1.8 1999-12-15 14:51:50 gunter Exp $
+// $Id: G4VIhEnergyLoss.cc,v 1.1 2000-04-25 14:33:10 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -16,7 +16,7 @@
 //      CERN, IT Division, ASD group
 //      History: based on object model of
 //      2nd December 1995, G.Cosmo
-//      ---------- G4IhEnergyLoss physics process -----------
+//      ---------- G4VIhEnergyLoss physics process -----------
 //                by Laszlo Urban, 30 May 1997 
 //
 // **************************************************************
@@ -28,7 +28,7 @@
 // 26/10/98 : cleanup + TOF tables, L.Urban
 // --------------------------------------------------------------
 
-#include "G4IhEnergyLoss.hh"
+#include "G4VIhEnergyLoss.hh"
 #include "G4EnergyLossTables.hh"
 #include "G4Poisson.hh"
 
@@ -40,77 +40,77 @@
 //   NumberOfProcesses should be 2 in this case,
 //  or for debugging purposes.
 //  The NumberOfProcesses data member can be changed using the (public static)
-//  functions Get/Set/Plus/MinusNumberOfProcesses (see G4IhEnergyLoss.hh)
+//  functions Get/Set/Plus/MinusNumberOfProcesses (see G4VIhEnergyLoss.hh)
 
-G4int G4IhEnergyLoss::NumberOfProcesses = 1 ;
+G4int G4VIhEnergyLoss::NumberOfProcesses = 1 ;
 
-G4int            G4IhEnergyLoss::CounterOfProcess = 0 ;
-G4PhysicsTable** G4IhEnergyLoss::RecorderOfProcess =
+G4int            G4VIhEnergyLoss::CounterOfProcess = 0 ;
+G4PhysicsTable** G4VIhEnergyLoss::RecorderOfProcess =
                                            new G4PhysicsTable*[10] ;
 
-G4int            G4IhEnergyLoss::CounterOfpProcess = 0 ;
-G4PhysicsTable** G4IhEnergyLoss::RecorderOfpProcess =
+G4int            G4VIhEnergyLoss::CounterOfpProcess = 0 ;
+G4PhysicsTable** G4VIhEnergyLoss::RecorderOfpProcess =
                                            new G4PhysicsTable*[10] ;
 
-G4int            G4IhEnergyLoss::CounterOfpbarProcess = 0 ;
-G4PhysicsTable** G4IhEnergyLoss::RecorderOfpbarProcess =
+G4int            G4VIhEnergyLoss::CounterOfpbarProcess = 0 ;
+G4PhysicsTable** G4VIhEnergyLoss::RecorderOfpbarProcess =
                                            new G4PhysicsTable*[10] ;
 
-G4PhysicsTable* G4IhEnergyLoss::theDEDXpTable = NULL ;
-G4PhysicsTable* G4IhEnergyLoss::theDEDXpbarTable = NULL ;
-G4PhysicsTable* G4IhEnergyLoss::theRangepTable = NULL ;
-G4PhysicsTable* G4IhEnergyLoss::theRangepbarTable = NULL ;
-G4PhysicsTable* G4IhEnergyLoss::theInverseRangepTable = NULL ;
-G4PhysicsTable* G4IhEnergyLoss::theInverseRangepbarTable = NULL ;
-G4PhysicsTable* G4IhEnergyLoss::theLabTimepTable = NULL ;
-G4PhysicsTable* G4IhEnergyLoss::theLabTimepbarTable = NULL ;
-G4PhysicsTable* G4IhEnergyLoss::theProperTimepTable = NULL ;
-G4PhysicsTable* G4IhEnergyLoss::theProperTimepbarTable = NULL ;
+G4PhysicsTable* G4VIhEnergyLoss::theDEDXpTable = NULL ;
+G4PhysicsTable* G4VIhEnergyLoss::theDEDXpbarTable = NULL ;
+G4PhysicsTable* G4VIhEnergyLoss::theRangepTable = NULL ;
+G4PhysicsTable* G4VIhEnergyLoss::theRangepbarTable = NULL ;
+G4PhysicsTable* G4VIhEnergyLoss::theInverseRangepTable = NULL ;
+G4PhysicsTable* G4VIhEnergyLoss::theInverseRangepbarTable = NULL ;
+G4PhysicsTable* G4VIhEnergyLoss::theLabTimepTable = NULL ;
+G4PhysicsTable* G4VIhEnergyLoss::theLabTimepbarTable = NULL ;
+G4PhysicsTable* G4VIhEnergyLoss::theProperTimepTable = NULL ;
+G4PhysicsTable* G4VIhEnergyLoss::theProperTimepbarTable = NULL ;
 
-G4PhysicsTable* G4IhEnergyLoss::thepRangeCoeffATable = NULL ;
-G4PhysicsTable* G4IhEnergyLoss::thepRangeCoeffBTable = NULL ;
-G4PhysicsTable* G4IhEnergyLoss::thepRangeCoeffCTable = NULL ;
-G4PhysicsTable* G4IhEnergyLoss::thepbarRangeCoeffATable = NULL ;
-G4PhysicsTable* G4IhEnergyLoss::thepbarRangeCoeffBTable = NULL ;
-G4PhysicsTable* G4IhEnergyLoss::thepbarRangeCoeffCTable = NULL ;
+G4PhysicsTable* G4VIhEnergyLoss::thepRangeCoeffATable = NULL ;
+G4PhysicsTable* G4VIhEnergyLoss::thepRangeCoeffBTable = NULL ;
+G4PhysicsTable* G4VIhEnergyLoss::thepRangeCoeffCTable = NULL ;
+G4PhysicsTable* G4VIhEnergyLoss::thepbarRangeCoeffATable = NULL ;
+G4PhysicsTable* G4VIhEnergyLoss::thepbarRangeCoeffBTable = NULL ;
+G4PhysicsTable* G4VIhEnergyLoss::thepbarRangeCoeffCTable = NULL ;
 
-G4PhysicsTable* G4IhEnergyLoss::theDEDXTable = NULL ;
-G4PhysicsTable* G4IhEnergyLoss::theRangeTable = NULL ;
-G4PhysicsTable* G4IhEnergyLoss::theInverseRangeTable = NULL ;
-G4PhysicsTable* G4IhEnergyLoss::theLabTimeTable = NULL ;
-G4PhysicsTable* G4IhEnergyLoss::theProperTimeTable = NULL ;
+G4PhysicsTable* G4VIhEnergyLoss::theDEDXTable = NULL ;
+G4PhysicsTable* G4VIhEnergyLoss::theRangeTable = NULL ;
+G4PhysicsTable* G4VIhEnergyLoss::theInverseRangeTable = NULL ;
+G4PhysicsTable* G4VIhEnergyLoss::theLabTimeTable = NULL ;
+G4PhysicsTable* G4VIhEnergyLoss::theProperTimeTable = NULL ;
 
-G4PhysicsTable* G4IhEnergyLoss::theRangeCoeffATable = NULL ;
-G4PhysicsTable* G4IhEnergyLoss::theRangeCoeffBTable = NULL ;
-G4PhysicsTable* G4IhEnergyLoss::theRangeCoeffCTable = NULL ;
+G4PhysicsTable* G4VIhEnergyLoss::theRangeCoeffATable = NULL ;
+G4PhysicsTable* G4VIhEnergyLoss::theRangeCoeffBTable = NULL ;
+G4PhysicsTable* G4VIhEnergyLoss::theRangeCoeffCTable = NULL ;
 
-const G4Proton*     G4IhEnergyLoss::theProton    =G4Proton::Proton() ;
-const G4AntiProton* G4IhEnergyLoss::theAntiProton=G4AntiProton::AntiProton() ;
+const G4Proton*     G4VIhEnergyLoss::theProton    =G4Proton::Proton() ;
+const G4AntiProton* G4VIhEnergyLoss::theAntiProton=G4AntiProton::AntiProton() ;
 
-G4double G4IhEnergyLoss::ParticleMass;
+G4double G4VIhEnergyLoss::ParticleMass;
 
-G4double G4IhEnergyLoss::Mass,
-         G4IhEnergyLoss::taulow, 
-         G4IhEnergyLoss::tauhigh, 
-         G4IhEnergyLoss::ltaulow, 
-         G4IhEnergyLoss::ltauhigh; 
+G4double G4VIhEnergyLoss::Mass,
+         G4VIhEnergyLoss::taulow, 
+         G4VIhEnergyLoss::tauhigh, 
+         G4VIhEnergyLoss::ltaulow, 
+         G4VIhEnergyLoss::ltauhigh; 
 
-G4double G4IhEnergyLoss::CutInRange = 0. ;
+G4double G4VIhEnergyLoss::CutInRange = 0. ;
 
-G4double G4IhEnergyLoss::dRoverRange = 0.20 ;
-G4double G4IhEnergyLoss::finalRange = 200.*micrometer ;
+G4double G4VIhEnergyLoss::dRoverRange = 0.20 ;
+G4double G4VIhEnergyLoss::finalRange = 200.*micrometer ;
 
-G4bool   G4IhEnergyLoss::rndmStepFlag   = false ;
-G4bool   G4IhEnergyLoss::EnlossFlucFlag = true ;
+G4bool   G4VIhEnergyLoss::rndmStepFlag   = false ;
+G4bool   G4VIhEnergyLoss::EnlossFlucFlag = true ;
 
-G4double G4IhEnergyLoss::LowestKineticEnergy;
-G4double G4IhEnergyLoss::HighestKineticEnergy;
-G4int G4IhEnergyLoss::TotBin;
-G4double G4IhEnergyLoss::RTable,G4IhEnergyLoss::LOGRTable;
+G4double G4VIhEnergyLoss::LowestKineticEnergy;
+G4double G4VIhEnergyLoss::HighestKineticEnergy;
+G4int G4VIhEnergyLoss::TotBin;
+G4double G4VIhEnergyLoss::RTable,G4VIhEnergyLoss::LOGRTable;
 
 // constructor and destructor
  
-G4IhEnergyLoss::G4IhEnergyLoss(const G4String& processName)
+G4VIhEnergyLoss::G4VIhEnergyLoss(const G4String& processName)
    : G4IVContinuousDiscreteProcess (processName),
      theLossTable (NULL),
      lastMaterial (NULL),
@@ -121,7 +121,7 @@ G4IhEnergyLoss::G4IhEnergyLoss(const G4String& processName)
      nmaxCont2(16) 
 { }
 
-G4IhEnergyLoss::~G4IhEnergyLoss() 
+G4VIhEnergyLoss::~G4VIhEnergyLoss() 
 {
      if(theLossTable) {
         theLossTable->clearAndDestroy();
@@ -129,7 +129,7 @@ G4IhEnergyLoss::~G4IhEnergyLoss()
      }
 }
  
-void G4IhEnergyLoss::BuildDEDXTable(
+void G4VIhEnergyLoss::BuildDEDXTable(
                          const G4ParticleDefinition& aParticleType)
 {
   //  calculate data members TotBin,LOGRTable,RTable first
@@ -276,7 +276,7 @@ void G4IhEnergyLoss::BuildDEDXTable(
     proton_mass_c2/aParticleType.GetPDGMass(),TotBin);
 }
       
-void G4IhEnergyLoss::BuildRangeTable(
+void G4VIhEnergyLoss::BuildRangeTable(
                              const G4ParticleDefinition& aParticleType)
 // Build range table from the energy loss table
 {
@@ -316,7 +316,7 @@ void G4IhEnergyLoss::BuildRangeTable(
    }
 }    
 
-void G4IhEnergyLoss::BuildTimeTables(
+void G4VIhEnergyLoss::BuildTimeTables(
                              const G4ParticleDefinition& aParticleType)
 {
   const G4MaterialTable* theMaterialTable=
@@ -372,7 +372,7 @@ void G4IhEnergyLoss::BuildTimeTables(
   }
 }
 
-void G4IhEnergyLoss::BuildRangeVector(G4int materialIndex,
+void G4VIhEnergyLoss::BuildRangeVector(G4int materialIndex,
                                      G4PhysicsLogVector* rangeVector)
 //  create range vector for a material
 {
@@ -449,7 +449,7 @@ void G4IhEnergyLoss::BuildRangeVector(G4int materialIndex,
   }
 }    
 
-void G4IhEnergyLoss::BuildLabTimeVector(G4int materialIndex,
+void G4VIhEnergyLoss::BuildLabTimeVector(G4int materialIndex,
                                      G4PhysicsLogVector* timeVector)
 //  create lab time vector for a material
 {
@@ -509,7 +509,7 @@ void G4IhEnergyLoss::BuildLabTimeVector(G4int materialIndex,
   }
 }
 
-void G4IhEnergyLoss::BuildProperTimeVector(G4int materialIndex,
+void G4VIhEnergyLoss::BuildProperTimeVector(G4int materialIndex,
                                      G4PhysicsLogVector* timeVector)
 //  create proper time vector for a material
 {
@@ -568,7 +568,7 @@ void G4IhEnergyLoss::BuildProperTimeVector(G4int materialIndex,
   }
 }
 
-G4double G4IhEnergyLoss::RangeIntLin(G4PhysicsVector* physicsVector,
+G4double G4VIhEnergyLoss::RangeIntLin(G4PhysicsVector* physicsVector,
                                     G4int nbin)
 //  num. integration, linear binning
 {
@@ -598,7 +598,7 @@ G4double G4IhEnergyLoss::RangeIntLin(G4PhysicsVector* physicsVector,
 }
 
 
-G4double G4IhEnergyLoss::RangeIntLog(G4PhysicsVector* physicsVector,
+G4double G4VIhEnergyLoss::RangeIntLog(G4PhysicsVector* physicsVector,
                                     G4int nbin)
 //  num. integration, logarithmic binning
 {
@@ -629,7 +629,7 @@ G4double G4IhEnergyLoss::RangeIntLog(G4PhysicsVector* physicsVector,
   return Value;
 }
 
-G4double G4IhEnergyLoss::LabTimeIntLog(G4PhysicsVector* physicsVector,
+G4double G4VIhEnergyLoss::LabTimeIntLog(G4PhysicsVector* physicsVector,
                                     G4int nbin)
 //  num. integration, logarithmic binning
 {
@@ -660,7 +660,7 @@ G4double G4IhEnergyLoss::LabTimeIntLog(G4PhysicsVector* physicsVector,
   return Value;
 }
 
-G4double G4IhEnergyLoss::ProperTimeIntLog(G4PhysicsVector* physicsVector,
+G4double G4VIhEnergyLoss::ProperTimeIntLog(G4PhysicsVector* physicsVector,
                                     G4int nbin)
 //  num. integration, logarithmic binning
 {
@@ -691,7 +691,7 @@ G4double G4IhEnergyLoss::ProperTimeIntLog(G4PhysicsVector* physicsVector,
   return Value;
 }
 
-void G4IhEnergyLoss::BuildRangeCoeffATable(
+void G4VIhEnergyLoss::BuildRangeCoeffATable(
                             const G4ParticleDefinition& aParticleType)
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "A"
@@ -764,7 +764,7 @@ void G4IhEnergyLoss::BuildRangeCoeffATable(
 }
 
 
-void G4IhEnergyLoss::BuildRangeCoeffBTable(
+void G4VIhEnergyLoss::BuildRangeCoeffBTable(
                             const G4ParticleDefinition& aParticleType)
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "B"
@@ -835,7 +835,7 @@ void G4IhEnergyLoss::BuildRangeCoeffBTable(
   } 
 }
 
-void G4IhEnergyLoss::BuildRangeCoeffCTable(
+void G4VIhEnergyLoss::BuildRangeCoeffCTable(
                             const G4ParticleDefinition& aParticleType)
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "C"
@@ -906,7 +906,7 @@ void G4IhEnergyLoss::BuildRangeCoeffCTable(
   } 
 }
 
-void G4IhEnergyLoss::BuildInverseRangeTable(
+void G4VIhEnergyLoss::BuildInverseRangeTable(
                              const G4ParticleDefinition& aParticleType)
 // Build inverse table of the range table
 {
@@ -960,7 +960,7 @@ void G4IhEnergyLoss::BuildInverseRangeTable(
   }
 }
 
-void G4IhEnergyLoss::InvertRangeVector(G4int materialIndex,
+void G4VIhEnergyLoss::InvertRangeVector(G4int materialIndex,
                                      G4PhysicsLogVector* aVector)
 //  invert range vector for a material
 {
@@ -1008,7 +1008,7 @@ void G4IhEnergyLoss::InvertRangeVector(G4int materialIndex,
   }
 }
 
-G4double G4IhEnergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
+G4double G4VIhEnergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
                                               G4Material *aMaterial)
 {
   // returns the Step limit = range !
@@ -1051,7 +1051,7 @@ G4double G4IhEnergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
   return StepLimit ;
 }
 
-G4VParticleChange* G4IhEnergyLoss::AlongStepDoIt( 
+G4VParticleChange* G4VIhEnergyLoss::AlongStepDoIt( 
                               const G4Track& trackData,const G4Step& stepData) 
  // compute the energy loss after a step 
 {
@@ -1169,7 +1169,7 @@ G4VParticleChange* G4IhEnergyLoss::AlongStepDoIt(
 }
 
 
-G4double G4IhEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
+G4double G4VIhEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
                                                G4Material* aMaterial,
                                                G4double    MeanLoss)
 //  calculate actual loss from the mean loss

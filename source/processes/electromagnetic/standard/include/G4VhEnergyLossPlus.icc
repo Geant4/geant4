@@ -5,10 +5,9 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IeEnergyLoss.icc,v 1.2 1999-12-15 14:51:46 gunter Exp $
+// $Id: G4VhEnergyLossPlus.icc,v 1.1 2000-04-25 14:33:04 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// $Id: 
 // ---------------------------------------------------------------
 //      GEANT 4 class inlined methods file 
 //
@@ -16,28 +15,22 @@
 //      CERN, IT Division, ASD group
 //      History: based on object model of
 //      2nd December 1995, G.Cosmo
-//      ------------ G4IeEnergyLoss physics process ------------
-//                  by Laszlo Urban, 20 March 1997
+//      ------------ G4VhEnergyLoss physics process ------------
+//                  by Laszlo Urban, 30 May 1997
 // ***************************************************************
-// It is the first implementation of the NEW UNIFIED ENERGY LOSS PROCESS.       
-// It calculates the energy loss of e+/e-.
-// -------------------------------------------------------------
-//
-// 27-05-98: new randomization of the Step limit , new extrapolations for
-//           high/low energies. L.Urban
-// 26-10-98: cleanup , L.Urban
+// It is the first implementation of the NEW UNIFIED ENERGY LOSS PROCESS.   
+// It calculates the energy loss of charged hadrons.
+// ***************************************************************
+// 22/10/98: cleanup , L.Urban
 // ---------------------------------------------------------------
 
-inline G4bool G4IeEnergyLoss::IsApplicable(const G4ParticleDefinition&
+inline G4bool G4VhEnergyLossPlus::IsApplicable(const G4ParticleDefinition&
                                                      particle)
 {
-   return(   (&particle == G4Electron::Electron())
-           ||(&particle == G4Positron::Positron()) );
+   return(particle.GetPDGCharge()!= 0.);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4IeEnergyLoss::GetContinuousStepLimit(
+         
+inline G4double G4VhEnergyLossPlus::GetContinuousStepLimit(
                                                const G4Track& track,
                                                G4double,
                                                G4double currentMinimumStep,
@@ -45,11 +38,11 @@ inline G4double G4IeEnergyLoss::GetContinuousStepLimit(
 {
  
   G4double Step =
-    GetConstraints(track.GetDynamicParticle(),track.GetMaterial());
+    GetConstraints(track.GetDynamicParticle(),track.GetMaterial()) ;
 
-  if ((Step>0.0)&&(Step<currentMinimumStep)) currentMinimumStep = Step;
+  if((Step>0.0)&&(Step<currentMinimumStep))
+     currentMinimumStep = Step ;
 
   return Step ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

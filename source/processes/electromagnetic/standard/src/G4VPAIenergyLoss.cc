@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIenergyLoss.cc,v 1.5 2000-03-02 16:21:27 maire Exp $
+// $Id: G4VPAIenergyLoss.cc,v 1.1 2000-04-25 14:33:10 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------
@@ -15,7 +15,7 @@
 //      CERN, IT Division, ASD group
 //      History: based on object model of
 //      2nd December 1995, G.Cosmo
-//      ---------- G4PAIenergyLoss physics process -----------
+//      ---------- G4VPAIenergyLoss physics process -----------
 //                by V. Grichine, 30 Nov 1997 
 // **************************************************************
 // It is the first implementation of the NEW UNIFIED ENERGY LOSS PROCESS.
@@ -29,7 +29,7 @@
 //
  
 
-#include "G4PAIenergyLoss.hh"
+#include "G4VPAIenergyLoss.hh"
 #include "G4PAIonisation.hh"
 #include "G4EnergyLossTables.hh"
 
@@ -37,50 +37,50 @@
 //
 // Initialisation of static members 
 
-G4int            G4PAIenergyLoss::NbOfProcesses      = 1 ;
-G4PhysicsTable** G4PAIenergyLoss::RecorderOfpProcess =
+G4int            G4VPAIenergyLoss::NbOfProcesses      = 1 ;
+G4PhysicsTable** G4VPAIenergyLoss::RecorderOfpProcess =
                                            new G4PhysicsTable*[10] ;
-G4int       G4PAIenergyLoss::CounterOfpProcess = 0 ;
+G4int       G4VPAIenergyLoss::CounterOfpProcess = 0 ;
 
-G4PhysicsTable* G4PAIenergyLoss::theDEDXpTable = NULL ;
-G4PhysicsTable* G4PAIenergyLoss::theRangepTable = NULL ;
-G4PhysicsTable* G4PAIenergyLoss::theInverseRangepTable = NULL ;
-G4PhysicsTable* G4PAIenergyLoss::theLabTimepTable = NULL ;
-G4PhysicsTable* G4PAIenergyLoss::theProperTimepTable = NULL ;
+G4PhysicsTable* G4VPAIenergyLoss::theDEDXpTable = NULL ;
+G4PhysicsTable* G4VPAIenergyLoss::theRangepTable = NULL ;
+G4PhysicsTable* G4VPAIenergyLoss::theInverseRangepTable = NULL ;
+G4PhysicsTable* G4VPAIenergyLoss::theLabTimepTable = NULL ;
+G4PhysicsTable* G4VPAIenergyLoss::theProperTimepTable = NULL ;
 
-G4PhysicsTable* G4PAIenergyLoss::thepRangeCoeffATable = NULL ;
-G4PhysicsTable* G4PAIenergyLoss::thepRangeCoeffBTable = NULL ;
-G4PhysicsTable* G4PAIenergyLoss::thepRangeCoeffCTable = NULL ;
+G4PhysicsTable* G4VPAIenergyLoss::thepRangeCoeffATable = NULL ;
+G4PhysicsTable* G4VPAIenergyLoss::thepRangeCoeffBTable = NULL ;
+G4PhysicsTable* G4VPAIenergyLoss::thepRangeCoeffCTable = NULL ;
 
-G4PhysicsTable** G4PAIenergyLoss::RecorderOfpbarProcess =
+G4PhysicsTable** G4VPAIenergyLoss::RecorderOfpbarProcess =
                                            new G4PhysicsTable*[10] ;
-G4int       G4PAIenergyLoss::CounterOfpbarProcess = 0 ;
+G4int       G4VPAIenergyLoss::CounterOfpbarProcess = 0 ;
 
-G4PhysicsTable* G4PAIenergyLoss::theDEDXpbarTable = NULL ;
-G4PhysicsTable* G4PAIenergyLoss::theRangepbarTable = NULL ;
-G4PhysicsTable* G4PAIenergyLoss::theInverseRangepbarTable = NULL ;
-G4PhysicsTable* G4PAIenergyLoss::theLabTimepbarTable = NULL ;
-G4PhysicsTable* G4PAIenergyLoss::theProperTimepbarTable = NULL ;
+G4PhysicsTable* G4VPAIenergyLoss::theDEDXpbarTable = NULL ;
+G4PhysicsTable* G4VPAIenergyLoss::theRangepbarTable = NULL ;
+G4PhysicsTable* G4VPAIenergyLoss::theInverseRangepbarTable = NULL ;
+G4PhysicsTable* G4VPAIenergyLoss::theLabTimepbarTable = NULL ;
+G4PhysicsTable* G4VPAIenergyLoss::theProperTimepbarTable = NULL ;
 
-G4PhysicsTable* G4PAIenergyLoss::thepbarRangeCoeffATable = NULL ;
-G4PhysicsTable* G4PAIenergyLoss::thepbarRangeCoeffBTable = NULL ;
-G4PhysicsTable* G4PAIenergyLoss::thepbarRangeCoeffCTable = NULL ;
+G4PhysicsTable* G4VPAIenergyLoss::thepbarRangeCoeffATable = NULL ;
+G4PhysicsTable* G4VPAIenergyLoss::thepbarRangeCoeffBTable = NULL ;
+G4PhysicsTable* G4VPAIenergyLoss::thepbarRangeCoeffCTable = NULL ;
 
-// G4PhysicsTable* G4PAIenergyLoss::fPAItransferBank = NULL ;
+// G4PhysicsTable* G4VPAIenergyLoss::fPAItransferBank = NULL ;
 
-G4PhysicsTable* G4PAIenergyLoss::theDEDXTable = NULL ;
+G4PhysicsTable* G4VPAIenergyLoss::theDEDXTable = NULL ;
 
-G4double G4PAIenergyLoss::CutInRange = 0;
+G4double G4VPAIenergyLoss::CutInRange = 0;
 
-G4double G4PAIenergyLoss::LowerBoundEloss= 1.00*keV ;
-G4double G4PAIenergyLoss::UpperBoundEloss= 100.*TeV ;
-G4int G4PAIenergyLoss::NbinEloss =100 ;
-G4double G4PAIenergyLoss::RTable,G4PAIenergyLoss::LOGRTable;
+G4double G4VPAIenergyLoss::LowerBoundEloss= 1.00*keV ;
+G4double G4VPAIenergyLoss::UpperBoundEloss= 100.*TeV ;
+G4int G4VPAIenergyLoss::NbinEloss =100 ;
+G4double G4VPAIenergyLoss::RTable,G4VPAIenergyLoss::LOGRTable;
 
 
 // constructor and destructor
  
-G4PAIenergyLoss::G4PAIenergyLoss(const G4String& processName)
+G4VPAIenergyLoss::G4VPAIenergyLoss(const G4String& processName)
    : G4VEnergyLoss (processName),
      dToverTini(0.20),   // max.relative range loss in one Step = 20%
      theElectron ( G4Electron::Electron() ),
@@ -97,7 +97,7 @@ G4PAIenergyLoss::G4PAIenergyLoss(const G4String& processName)
 
 }
 
-G4PAIenergyLoss::~G4PAIenergyLoss() 
+G4VPAIenergyLoss::~G4VPAIenergyLoss() 
 {
      if(theLossTable) {
         theLossTable->clearAndDestroy();
@@ -111,7 +111,7 @@ G4PAIenergyLoss::~G4PAIenergyLoss()
 //
 //
 
-void G4PAIenergyLoss::BuildDEDXTable(const G4ParticleDefinition& aParticleType)
+void G4VPAIenergyLoss::BuildDEDXTable(const G4ParticleDefinition& aParticleType)
 {
 
   G4bool MakeTable = false ;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IeEnergyLoss.hh,v 1.2 1999-12-15 14:51:46 gunter Exp $
+// $Id: G4VIeEnergyLoss.hh,v 1.1 2000-04-25 14:33:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -16,7 +16,7 @@
 //      CERN, IT Division, ASD group
 //      History: first implementation, based on object model of
 //      2nd December 1995, G.Cosmo
-//      ---------- G4IeEnergyLoss physics process -----------
+//      ---------- G4VIeEnergyLoss physics process -----------
 //                by Laszlo Urban, 20 March 1997 
 // ************************************************************             
 // It is the first implementation of the new unified Energy Loss process.
@@ -33,8 +33,8 @@
 //  26.10.98 revision , L.Urban
 // ------------------------------------------------------------
  
-#ifndef G4IeEnergyLoss_h
-#define G4IeEnergyLoss_h 1
+#ifndef G4VIeEnergyLoss_h
+#define G4VIeEnergyLoss_h 1
  
 #include "G4ios.hh"
 #include "globals.hh"
@@ -54,14 +54,14 @@
 class G4EnergyLossMessenger;
  
  
-class G4IeEnergyLoss : public G4IVContinuousDiscreteProcess
+class G4VIeEnergyLoss : public G4IVContinuousDiscreteProcess
  
 {
   public:
  
-    G4IeEnergyLoss(const G4String& );
+    G4VIeEnergyLoss(const G4String& );
 
-   ~G4IeEnergyLoss();
+   ~G4VIeEnergyLoss();
 
     G4bool IsApplicable(const G4ParticleDefinition&);
 
@@ -120,8 +120,8 @@ class G4IeEnergyLoss : public G4IVContinuousDiscreteProcess
                               G4double   threshold);
 
     // hide  assignment operator
-    G4IeEnergyLoss (G4IeEnergyLoss &); 
-    G4IeEnergyLoss & operator=(const G4IeEnergyLoss &right);
+    G4VIeEnergyLoss (G4VIeEnergyLoss &); 
+    G4VIeEnergyLoss & operator=(const G4VIeEnergyLoss &right);
 
   protected:
 
@@ -193,7 +193,7 @@ class G4IeEnergyLoss : public G4IVContinuousDiscreteProcess
     static G4PhysicsTable* theProperTimeElectronTable ;
     static G4PhysicsTable* theProperTimePositronTable ;
 
-    //processes inherited from G4IeEnergyLoss 
+    //processes inherited from G4VIeEnergyLoss 
     //register themselves  in the static array Recorder
     //for electrons/positrons separately
     //nb of contributing processes = NbOfProcesses
@@ -235,7 +235,7 @@ class G4IeEnergyLoss : public G4IVContinuousDiscreteProcess
                                       {dRoverRange = c1; finalRange = c2;}         
 };
  
-#include "G4IeEnergyLoss.icc"
+#include "G4VIeEnergyLoss.icc"
 
 #endif
  

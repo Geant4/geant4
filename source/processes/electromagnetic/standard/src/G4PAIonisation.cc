@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIonisation.cc,v 1.6 2000-03-21 11:24:33 urban Exp $
+// $Id: G4PAIonisation.cc,v 1.7 2000-04-25 14:33:09 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -52,7 +52,7 @@ G4PAIonisation::fProtonEnergyVector = new G4PhysicsLogVector(LowestKineticEnergy
  
 G4PAIonisation::G4PAIonisation( const G4String& materialName,
                                 const G4String& processName)
-   : G4PAIenergyLoss(processName),
+   : G4VPAIenergyLoss(processName),
      theElectron ( G4Electron::Electron() )
 {
   G4int numberOfMat, iMat ;
@@ -179,7 +179,7 @@ G4PAIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
        lastCutInRange = CutInRange ;
        BuildLambdaTable(aParticleType) ;
     }
-    //  G4PAIenergyLoss::BuildDEDXTable(aParticleType) ;
+    //  G4VPAIenergyLoss::BuildDEDXTable(aParticleType) ;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -729,7 +729,7 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
   G4int       index = aMaterial->GetIndex() ;
   G4bool isOutRange ;
 
-  // G4cout<<"G4PAIenergyLoss::GetLossWithFluct"<<G4endl ;
+  // G4cout<<"G4VPAIenergyLoss::GetLossWithFluct"<<G4endl ;
 
   G4double loss = 0.0 ;
   G4double transfer, position, E1, E2, W1, W2, W, firstMu, secondMu ;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eBremsstrahlungPlus.cc,v 1.10 2000-03-01 09:06:37 urban Exp $
+// $Id: G4eBremsstrahlungPlus.cc,v 1.11 2000-04-25 14:33:11 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,7 +46,7 @@ G4int	 G4eBremsstrahlungPlus::NbinLambda = 100 ;
 // constructor
  
 G4eBremsstrahlungPlus::G4eBremsstrahlungPlus(const G4String& processName)
-  : G4eEnergyLossPlus(processName),      // initialization
+  : G4VeEnergyLossPlus(processName),      // initialization
     theMeanFreePathTable(NULL)
 { }
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IhIonisation.cc,v 1.6 1999-12-15 14:51:51 gunter Exp $
+// $Id: G4IhIonisation.cc,v 1.7 2000-04-25 14:33:09 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
@@ -34,7 +34,7 @@
 // constructor and destructor
  
 G4IhIonisation::G4IhIonisation(const G4String& processName)
-   : G4IhEnergyLoss(processName),
+   : G4VIhEnergyLoss(processName),
      theMeanFreePathTable(NULL),
      NumberOfBuildPhysicsTableCalls(0),
      theProton (G4Proton::Proton()),
