@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventor.cc,v 1.4 1999-05-10 15:39:00 johna Exp $
+// $Id: G4OpenInventor.cc,v 1.5 1999-05-12 14:00:58 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifdef G4VIS_BUILD_OI_DRIVER
@@ -52,12 +52,6 @@ G4VViewer* G4OpenInventor::CreateViewer (G4VSceneHandler& scene, const G4String&
 {
   G4OpenInventorSceneHandler* pScene = (G4OpenInventorSceneHandler*)&scene;
   G4OpenInventorViewer*  pView  = new G4OpenInventorViewer (*pScene, name);
-  if (pView -> GetOIVisualFound ()) {
-  }
-  else {
-    delete pView;
-    pView  = NULL;
-  }
   return   pView;
 }
 

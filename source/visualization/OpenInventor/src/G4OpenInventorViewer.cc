@@ -5,28 +5,27 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorViewer.cc,v 1.1 1999-04-08 15:31:23 johna Exp $
+// $Id: G4OpenInventorViewer.cc,v 1.2 1999-05-12 14:01:02 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
  * jck 05 Feb 1997 - Initial Implementation
  * jck 21 Apr 1997 
  *	Mods for SoXtHepViewer
- *
+ * gb : on Win32 use an SoXtExaminerViewer.
  */
 #ifdef G4VIS_BUILD_OI_DRIVER
 
-#ifndef WIN32  //SoXtHepViewer not ported on Windows/NT.
-#define HEP_VIEWER
-#endif
-
 #include <Inventor/Xt/SoXt.h>
 #include <Inventor/nodes/SoSelection.h>
+#include <Inventor/nodes/SoSelection.h>
 
-#ifdef HEP_VIEWER
-#include <HEPVis/Xt/viewers/SoXtHepViewer.h>
-#else
+#include <HEPVis/viewers/SoWindow.h>
+
+#ifdef WIN32
 #include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
+#else
+#include <HEPVis/Xt/viewers/SoXtHepViewer.h>
 #endif
 
 #include "G4OpenInventor.hh"
@@ -42,12 +41,13 @@
 //static void SecondaryLoopPostAction ();
 
 void G4OpenInventorViewer::FinishView () {
-#ifdef HEP_VIEWER
-  ((SoXtHepViewer*)G4OIViewer)->getCurrentViewer()->viewAll();
-  ((SoXtHepViewer*)G4OIViewer)->getCurrentViewer()->saveHomePosition();
+  if(fViewer==NULL) return;
+#ifdef WIN32
+  ((SoXtViewer*)fViewer)->viewAll();
+  ((SoXtViewer*)fViewer)->saveHomePosition();
 #else
-  ((SoXtViewer*)G4OIViewer)->viewAll();
-  ((SoXtViewer*)G4OIViewer)->saveHomePosition();
+  ((SoXtHepViewer*)fViewer)->getCurrentViewer()->viewAll();
+  ((SoXtHepViewer*)fViewer)->getCurrentViewer()->saveHomePosition();
 #endif
 }
 
@@ -62,10 +62,10 @@ int quitCB(void* interactorManager) {
 
 //static void SecondaryLoopPostAction ()
 //{
-//  Display *display = G4OIViewer->getDisplay();
+//  Display *display = fViewer->getDisplay();
 //  XSync(display, False);
 //  if(interactorManager -> GetExitSecondaryLoopCode ()==OIV_EXIT_CODE) {
-//    if (G4OIShell!=NULL) XtRealizeWidget(G4OIShell);
+//    if (fShell!=NULL) XtRealizeWidget(fShell);
 //  }
 //}
 
@@ -110,102 +110,88 @@ void G4OpenInventorViewer::KernelVisitDecision () {
 }
 
 G4OpenInventorViewer::G4OpenInventorViewer (G4OpenInventorSceneHandler& scene,
-					const G4String& name):
-G4VViewer (scene, scene.IncrementViewCount (), name),
-fSceneHandler (scene),
-OIvisualfound (false),
-G4OIViewer(NULL),
-G4OIShell(NULL)
+					const G4String& name)
+:G4VViewer (scene, scene.IncrementViewCount(), name)
+,fSceneHandler(scene)
+,fShell(NULL)
+,fWindow(NULL)
+,fViewer(NULL)
+,fSelection(NULL)
+,fInteractorManager(NULL)
 {
-  interactorManager = ((G4OpenInventor*)fSceneHandler.GetGraphicsSystem()) -> 
-    GetInteractorManager ();
-  Widget toplevel = (Widget)interactorManager->GetMainInteractor ();
+  fInteractorManager = 
+    ((G4OpenInventor*)fSceneHandler.GetGraphicsSystem())->
+    GetInteractorManager();
+  Widget toplevel = (Widget)fInteractorManager->GetMainInteractor ();
 
-//interactorManager->
+//fInteractorManager->
 //AddSecondaryLoopPostAction ((G4SecondaryLoopAction)SecondaryLoopPostAction);
-
-  OIvisualfound = true;
 
   G4cout << "Window name: " << fName << endl;
   // 
   // Selection
   //
-  G4OISelection = new SoSelection;
-  G4OISelection->policy = SoSelection::SINGLE;
-  G4OISelection->ref();
-  G4OISelection->addChild(fSceneHandler.root);
+  fSelection = new SoSelection;
+  fSelection->policy = SoSelection::SINGLE;
+  fSelection->ref();
+  fSelection->addChild(fSceneHandler.root);
 
-  Widget    parent = (Widget)interactorManager->GetParentInteractor ();
-  SbBool    buildInsideParent;
-  char charOIName[100];
-  strncpy (charOIName, fName, 100);
-  char*     wname = charOIName;
+  Widget    parent = (Widget)fInteractorManager->GetParentInteractor ();
 
-  if(parent==NULL) {  //Ask Inventor to create a viewer in its own shell.
-    parent            = toplevel;
-    buildInsideParent = FALSE;
-  } else {            //Ask Inventor to create a viewer in the given parent.
-    buildInsideParent = TRUE;
-    char* str = interactorManager->GetCreationString ();
+  G4String wName = fName;
+  const char* wname = wName.data();
+
+#define SIZE 400
+  if(parent==NULL) {  //Create a shell window :
+    fWindow = new SoWindow(wname);
+    fWindow->setTitle(wname);
+    fWindow->setSize(SbVec2s(SIZE,SIZE));
+    fShell = parent = fWindow->getWidget();
+    fInteractorManager->AddShell(fShell);
+  } else {
+    char* str = fInteractorManager->GetCreationString ();
     if(str!=NULL) wname = str;
   }
   //
   // Create and Customize the Viewer
   //
-#ifdef HEP_VIEWER
-  G4OIViewer = new SoXtHepViewer (parent,wname,buildInsideParent);
-  ((SoXtHepViewer*)G4OIViewer)->hideTextArea();
-  ((SoXtHepViewer*)G4OIViewer)->resizeMain(550,550);
-  ((SoXtHepViewer*)G4OIViewer)->setQuitCallback(quitCB, interactorManager);
-  ((SoXtHepViewer*)G4OIViewer)->setSceneGraph(G4OISelection);
-  ((SoXtHepViewer*)G4OIViewer)->getCurrentViewer()->viewAll();
-  ((SoXtHepViewer*)G4OIViewer)->getCurrentViewer()->saveHomePosition();
+#ifdef WIN32
+  fViewer = new SoXtExaminerViewer(parent,wname,TRUE);
+  fViewer->setSize(SbVec2s(SIZE,SIZE));
+  ((SoXtViewer*)fViewer)->setSceneGraph(fSelection);
+  ((SoXtViewer*)fViewer)->viewAll();
+  ((SoXtViewer*)fViewer)->saveHomePosition();
 #else
-  G4OIViewer = new SoXtExaminerViewer(parent,wname,buildInsideParent);
-  G4OIViewer->setSize(SbVec2s(550,550));
-  ((SoXtViewer*)G4OIViewer)->setSceneGraph(G4OISelection);
-  ((SoXtViewer*)G4OIViewer)->viewAll();
-  ((SoXtViewer*)G4OIViewer)->saveHomePosition();
+  fViewer = new SoXtHepViewer (parent,wname,TRUE);
+  ((SoXtHepViewer*)fViewer)->hideTextArea();
+  ((SoXtHepViewer*)fViewer)->resizeMain(SIZE,SIZE);
+  ((SoXtHepViewer*)fViewer)->setQuitCallback(quitCB, fInteractorManager);
+  ((SoXtHepViewer*)fViewer)->setSceneGraph(fSelection);
+  ((SoXtHepViewer*)fViewer)->getCurrentViewer()->viewAll();
+  ((SoXtHepViewer*)fViewer)->getCurrentViewer()->saveHomePosition();
 #endif
-  G4OIViewer->setTitle(fName);
-  G4OIViewer->show();
+  fViewer->setTitle(fName);
+  fViewer->show();
  
-#if defined(WIN32) && !defined(SoFreePackage)
-  //  buildInsideParent==FALSE, isTopLevel, getShellWidget 
-  // do not work with Inventor-2.4 on Win32 !
-  // All viewers are going to be put in the same shell window !
-  if(buildInsideParent==FALSE) {
-    G4OIShell  = toplevel; 
-    interactorManager->AddShell (G4OIShell);
-    SoXt::show(G4OIShell);
-    interactorManager->FlushAndWaitExecution ();
+  if(fWindow!=NULL) {
+    fWindow->show();
+    fInteractorManager->FlushAndWaitExecution ();
   }
-#else
-  if(G4OIViewer->isTopLevelShell()==TRUE) {
-    G4OIShell  = G4OIViewer -> getShellWidget();
-    if(G4OIShell!=NULL) {
-      interactorManager->AddShell (G4OIShell);
-      SoXt::show(G4OIShell);
-      interactorManager->FlushAndWaitExecution ();
-    }
-  }
-#endif
 
-  interactorManager->SetCreatedInteractor (G4OIViewer -> getWidget());
+  fInteractorManager->SetCreatedInteractor (fViewer -> getWidget());
 }
 
 G4OpenInventorViewer::~G4OpenInventorViewer () {
-  if(G4OIShell!=NULL) {
-    interactorManager -> RemoveShell (G4OIShell);
-  }
-#ifdef HEP_VIEWER
-  delete ((SoXtHepViewer*)G4OIViewer);
+  if(fShell!=NULL) fInteractorManager -> RemoveShell (fShell);
+  if(fViewer!=NULL) {
+#ifdef WIN32
+    delete ((SoXtExaminerViewer*)fViewer);
 #else
-  delete ((SoXtExaminerViewer*)G4OIViewer);
+    delete ((SoXtHepViewer*)fViewer);
 #endif
-  if(G4OISelection!=NULL) {
-    G4OISelection->unref();
   }
+  if(fWindow!=NULL) delete fWindow;
+  if(fSelection!=NULL) fSelection->unref();
 }
 
 void G4OpenInventorViewer::ClearView () {
@@ -215,13 +201,14 @@ void G4OpenInventorViewer::SetView () {
 }
 
 void G4OpenInventorViewer::DrawView () {
+  G4cout << "debug Iv::DrawViewer " <<endl;
   KernelVisitDecision ();
   ProcessView         ();
   FinishView          ();
 }
 
 void G4OpenInventorViewer::ShowView () {
-  interactorManager -> SecondaryLoop ();
+  fInteractorManager -> SecondaryLoop ();
 }
 
 #endif

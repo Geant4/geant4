@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.2 1999-01-11 00:47:54 allison Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.3 1999-05-12 14:01:00 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -80,15 +80,27 @@ inline static unsigned pVPhysicalVolumeHashFun
 }
 
 G4OpenInventorSceneHandler::G4OpenInventorSceneHandler (G4OpenInventor& system,
-					  const G4String& name):
-G4VSceneHandler (system, fSceneIdCount++, name),
-fSolidDictionary (pSolidHashFun),
-SeparatorSet(pVPhysicalVolumeHashFun),
-root(NULL)
+					  const G4String& name)
+:G4VSceneHandler (system, fSceneIdCount++, name)
+,fSolidDictionary (pSolidHashFun)
+,SeparatorSet(pVPhysicalVolumeHashFun)
+,root(NULL)
+,staticRoot(NULL)
+,transientRoot(NULL)
 {
+  //
   root = new SoSeparator;
   root->ref();
   root->setName("Root");
+  //
+  staticRoot = new SoSeparator;
+  staticRoot->setName("StaticRoot");
+  root->addChild(staticRoot);
+  //
+  transientRoot = new SoSeparator;
+  transientRoot->setName("TransientRoot");
+  root->addChild(transientRoot);
+  //
   fSceneCount++;
 }
 
@@ -102,7 +114,7 @@ G4OpenInventorSceneHandler::~G4OpenInventorSceneHandler ()
 // Method for handling G4Polyline objects (from tracking or wireframe).
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line) {
-  G4int nPoints = line.entries () - 1;
+  G4int nPoints = line.entries();
   SbVec3f* pCoords = new SbVec3f[nPoints];
 
   SoCoordinate3 *polyCoords = new SoCoordinate3;
@@ -458,21 +470,21 @@ void G4OpenInventorSceneHandler::BeginPrimitives
   //  
   if (fReadyForTransients) {
     //  
-    // set the destination to "root"
+    // set the destination to "transientRoot"
     //  
-    currentSeparator=root;
+    currentSeparator=transientRoot;
     //  
     // place the transient object:
     //  
     G4OpenInventorTransform3D oiTran (objectTransformation);
     SoSFMatrix *oiMat = oiTran.GetOIMatrix();
-    SoMatrixTransform *rootXform = new SoMatrixTransform;
-    rootXform->matrix.setValue(oiMat->getValue());
+    SoMatrixTransform *xform = new SoMatrixTransform;
+    xform->matrix.setValue(oiMat->getValue());
     //  
     // add a transform.
     //  
     currentSeparator->addChild(new SoResetTransform);
-    currentSeparator->addChild(rootXform);
+    currentSeparator->addChild(xform);
   }
 }
 
@@ -484,7 +496,12 @@ void G4OpenInventorSceneHandler::EndModeling () {
 }
 
 void G4OpenInventorSceneHandler::ClearStore () {
+  staticRoot->removeAllChildren();
+  transientRoot->removeAllChildren();
+}
 
+void G4OpenInventorSceneHandler::ClearTransientStore () {
+  transientRoot->removeAllChildren();
 }
 
 void G4OpenInventorSceneHandler::RequestPrimitives (const G4VSolid& solid) {
@@ -637,7 +654,7 @@ void G4OpenInventorSceneHandler::PreAddThis
       }
       MotherVolume=MotherVolume->GetMother();
     }
-    if (!MotherVolume) root->addChild(g4DetectorTreeKit);
+    if (!MotherVolume) staticRoot->addChild(g4DetectorTreeKit);
     currentSeparator = previewSeparator;
   }
   //
@@ -665,13 +682,13 @@ void G4OpenInventorSceneHandler::PreAddThis
     }
     //
     // If the mother volume has no full separator, then the solid and its 
-    // attributes will go under "root"
+    // attributes will go under "staticRoot"
     //
     if (!currentSeparator) {
       SoMaterial* newColor = new SoMaterial();
       newColor->diffuseColor.setValue(red,green,blue);
-      root->addChild(newColor);
-      currentSeparator=root;
+      staticRoot->addChild(newColor);
+      currentSeparator=staticRoot;
     }
     else {
       SoMaterial* newColor = new SoMaterial();
@@ -684,10 +701,10 @@ void G4OpenInventorSceneHandler::PreAddThis
   //
   G4OpenInventorTransform3D oiTran (objectTransformation);
   SoSFMatrix* oiMat = oiTran.GetOIMatrix();
-  SoMatrixTransform* rootXform = new SoMatrixTransform;
-  rootXform->matrix.setValue(oiMat->getValue());
+  SoMatrixTransform* xform = new SoMatrixTransform;
+  xform->matrix.setValue(oiMat->getValue());
   currentSeparator->addChild(new SoResetTransform);
-  currentSeparator->addChild(rootXform);
+  currentSeparator->addChild(xform);
 }
 
 

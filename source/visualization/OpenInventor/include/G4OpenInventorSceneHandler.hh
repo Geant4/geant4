@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorSceneHandler.hh,v 1.2 1999-05-10 15:38:54 johna Exp $
+// $Id: G4OpenInventorSceneHandler.hh,v 1.3 1999-05-12 14:00:44 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,6 +69,7 @@ public:
 
 private:
   void 		ClearStore ();
+  void 		ClearTransientStore ();
   void 		RequestPrimitives (const G4VSolid& solid);
   static 	G4int    fSceneIdCount;   // static counter for OpenInventor scenes.
   static 	G4int    fSceneCount;     // No. of extanct scenes.
@@ -81,6 +82,8 @@ private:
   RWTValHashDictionary<G4VSolidPointer, G4int> fSolidDictionary;
   RWTValHashDictionary<G4VPhysicalVolumePointer, SoSeparatorPointer> SeparatorSet;
   SoSeparator *root;
+  SoSeparator *staticRoot;
+  SoSeparator *transientRoot;
   SoSeparator *currentSeparator;
 };
 
