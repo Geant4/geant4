@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.6 1999-04-18 15:43:33 morita Exp $
+# $Id: architecture.gmk,v 1.7 1999-04-19 21:29:25 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -335,6 +335,7 @@ ifeq ($(G4SYSTEM),AIX-xlC)
   else
     CXXFLAGS  := -g -qdbxextra -qcheck=all -qfullpath -qtwolink -+
     FCFLAGS := -g
+    CCFLAGS := -g
   endif
   FC := xlf
   FCFLAGS += -qextname
@@ -367,6 +368,7 @@ ifeq ($(G4SYSTEM),SUN-CC)
   else
     CXXFLAGS  := -g
     FCFLAGS := -g
+    CCFLAGS := -g
   endif
 #  CXXFLAGS += -fnonstd
   CFRONT_G4TEMPLATE_REPOSITORY  := true
@@ -404,8 +406,9 @@ ifeq ($(G4SYSTEM),HP-aCC)
   ifdef G4OPTIMISE
     CXXFLAGS  := +O2 +Onolimit
   else
-    CXXFLAGS  := -g
+    CXXFLAGS := -g
     FCFLAGS  := -g
+    CCFLAGS  := -g
   endif
   CXXFLAGS += +DAportable
   CPPFLAGS += -I/usr
@@ -415,6 +418,7 @@ ifeq ($(G4SYSTEM),HP-aCC)
   G4_HAVE_BOOL := yes
   FC      := f77
   FCFLAGS += +E6 +ppu
+  CCFLAGS += -Ae +DAportable
   X11FLAGS  := -I/usr/include/X11/extensions -I/usr/contrib/X11R6/include -I/usr/contrib/X11R6/include/X11
   X11LIBS   := -L/usr/contrib/X11R6/lib -lXmu -L/usr/lib -lXt -lXext -lX11
   XMFLAGS   := -I/usr/include/Motif1.2
@@ -443,7 +447,8 @@ ifeq ($(G4SYSTEM),SGI-CC)
     CXXFLAGS  := -O -Olimit 5000
   else
     CXXFLAGS  := -g 
-    FCFLAGS := -g
+    FCFLAGS   := -g
+    CCFLAGS   := -g
   endif
   CXXFLAGS  += -ptused
   FC        := f77
@@ -470,6 +475,7 @@ ifeq ($(G4SYSTEM),DEC-cxx)
   else
     CXXFLAGS	:= -gall
     FCFLAGS	:= -g
+    CCFLAGS     := -g
   endif
   CFRONT_G4TEMPLATE_REPOSITORY  := true
   G4_HAVE_BOOL  := yes
@@ -498,7 +504,8 @@ ifeq ($(G4SYSTEM),Linux-g++)
     CXXFLAGS  += -O
   else
     CXXFLAGS  += -g
-    FCFLAGS := -g
+    FCFLAGS   := -g
+    CCFLAGS   := -g
   endif
   FC := g77
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
