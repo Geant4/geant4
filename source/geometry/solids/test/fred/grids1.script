@@ -1,0 +1,298 @@
+/fred/gun GRID
+/fred/draw SHADOW
+/gridGun/grid1   4.00000000   0.00000000   0.00000000
+/gridGun/grid2   0.00000000   4.00000000   0.00000000
+/vis~/camera/viewpoint   0.000000000    0.000000000
+/gridGun/origin   -2.00000000  -2.00000000  -2.00000000
+/gridGun/direction    0.00000000   0.00000000   1.00000000
+/run/beamOn 1
+# view number    0
+/fred/pause
+/vis~/camera/viewpoint   5.710592747    0.000000000
+/gridGun/origin   -2.20000005  -2.00000000  -2.00000000
+/gridGun/direction    0.10000000   0.00000000   1.00000000
+/run/beamOn 1
+# view number    1
+/fred/pause
+/vis~/camera/viewpoint   5.710592747  180.000000000
+/gridGun/origin   -1.79999995  -2.00000000  -2.00000000
+/gridGun/direction   -0.10000000   0.00000000   1.00000000
+/run/beamOn 1
+# view number    2
+/fred/pause
+/vis~/camera/viewpoint  11.309931755    0.000000000
+/gridGun/origin   -2.40000010  -2.00000000  -2.00000000
+/gridGun/direction    0.20000000   0.00000000   1.00000000
+/run/beamOn 1
+# view number    3
+/fred/pause
+/vis~/camera/viewpoint  11.309931755  180.000000000
+/gridGun/origin   -1.60000002  -2.00000000  -2.00000000
+/gridGun/direction   -0.20000000   0.00000000   1.00000000
+/run/beamOn 1
+# view number    4
+/fred/pause
+/vis~/camera/viewpoint  21.801408768    0.000000000
+/gridGun/origin   -2.79999995  -2.00000000  -2.00000000
+/gridGun/direction    0.40000001   0.00000000   1.00000000
+/run/beamOn 1
+# view number    5
+/fred/pause
+/vis~/camera/viewpoint  30.963756561    0.000000000
+/gridGun/origin   -3.20000005  -2.00000000  -2.00000000
+/gridGun/direction    0.60000002   0.00000000   1.00000000
+/run/beamOn 1
+# view number    6
+/fred/pause
+/vis~/camera/viewpoint   5.710592747   90.000000000
+/gridGun/origin   -2.00000000  -2.20000005  -2.00000000
+/gridGun/direction    0.00000000   0.10000000   1.00000000
+/run/beamOn 1
+# view number    7
+/fred/pause
+/vis~/camera/viewpoint   8.049468040   45.000000000
+/gridGun/origin   -2.20000005  -2.20000005  -2.00000000
+/gridGun/direction    0.10000000   0.10000000   1.00000000
+/run/beamOn 1
+# view number    8
+/fred/pause
+/vis~/camera/viewpoint   8.049468040  135.000000000
+/gridGun/origin   -1.79999995  -2.20000005  -2.00000000
+/gridGun/direction   -0.10000000   0.10000000   1.00000000
+/run/beamOn 1
+# view number    9
+/fred/pause
+/vis~/camera/viewpoint  12.604383469   26.565050125
+/gridGun/origin   -2.40000010  -2.20000005  -2.00000000
+/gridGun/direction    0.20000000   0.10000000   1.00000000
+/run/beamOn 1
+# view number   10
+/fred/pause
+/vis~/camera/viewpoint  12.604383469  153.434951782
+/gridGun/origin   -1.60000002  -2.20000005  -2.00000000
+/gridGun/direction   -0.20000000   0.10000000   1.00000000
+/run/beamOn 1
+# view number   11
+/fred/pause
+/vis~/camera/viewpoint  22.406871796   14.036243439
+/gridGun/origin   -2.79999995  -2.20000005  -2.00000000
+/gridGun/direction    0.40000001   0.10000000   1.00000000
+/run/beamOn 1
+# view number   12
+/fred/pause
+/vis~/camera/viewpoint  31.311153412    9.462321281
+/gridGun/origin   -3.20000005  -2.20000005  -2.00000000
+/gridGun/direction    0.60000002   0.10000000   1.00000000
+/run/beamOn 1
+# view number   13
+/fred/pause
+/vis~/camera/viewpoint   5.710592747  -90.000000000
+/gridGun/origin   -2.00000000  -1.79999995  -2.00000000
+/gridGun/direction    0.00000000  -0.10000000   1.00000000
+/run/beamOn 1
+# view number   14
+/fred/pause
+/vis~/camera/viewpoint   8.049468040  -45.000000000
+/gridGun/origin   -2.20000005  -1.79999995  -2.00000000
+/gridGun/direction    0.10000000  -0.10000000   1.00000000
+/run/beamOn 1
+# view number   15
+/fred/pause
+/vis~/camera/viewpoint   8.049468040 -135.000000000
+/gridGun/origin   -1.79999995  -1.79999995  -2.00000000
+/gridGun/direction   -0.10000000  -0.10000000   1.00000000
+/run/beamOn 1
+# view number   16
+/fred/pause
+/vis~/camera/viewpoint  12.604383469  -26.565050125
+/gridGun/origin   -2.40000010  -1.79999995  -2.00000000
+/gridGun/direction    0.20000000  -0.10000000   1.00000000
+/run/beamOn 1
+# view number   17
+/fred/pause
+/vis~/camera/viewpoint  12.604383469 -153.434951782
+/gridGun/origin   -1.60000002  -1.79999995  -2.00000000
+/gridGun/direction   -0.20000000  -0.10000000   1.00000000
+/run/beamOn 1
+# view number   18
+/fred/pause
+/vis~/camera/viewpoint  22.406871796  -14.036243439
+/gridGun/origin   -2.79999995  -1.79999995  -2.00000000
+/gridGun/direction    0.40000001  -0.10000000   1.00000000
+/run/beamOn 1
+# view number   19
+/fred/pause
+/vis~/camera/viewpoint  31.311153412   -9.462321281
+/gridGun/origin   -3.20000005  -1.79999995  -2.00000000
+/gridGun/direction    0.60000002  -0.10000000   1.00000000
+/run/beamOn 1
+# view number   20
+/fred/pause
+/vis~/camera/viewpoint  11.309931755   90.000000000
+/gridGun/origin   -2.00000000  -2.40000010  -2.00000000
+/gridGun/direction    0.00000000   0.20000000   1.00000000
+/run/beamOn 1
+# view number   21
+/fred/pause
+/vis~/camera/viewpoint  12.604383469   63.434947968
+/gridGun/origin   -2.20000005  -2.40000010  -2.00000000
+/gridGun/direction    0.10000000   0.20000000   1.00000000
+/run/beamOn 1
+# view number   22
+/fred/pause
+/vis~/camera/viewpoint  12.604383469  116.565040588
+/gridGun/origin   -1.79999995  -2.40000010  -2.00000000
+/gridGun/direction   -0.10000000   0.20000000   1.00000000
+/run/beamOn 1
+# view number   23
+/fred/pause
+/vis~/camera/viewpoint  15.793169975   45.000000000
+/gridGun/origin   -2.40000010  -2.40000010  -2.00000000
+/gridGun/direction    0.20000000   0.20000000   1.00000000
+/run/beamOn 1
+# view number   24
+/fred/pause
+/vis~/camera/viewpoint  15.793169975  135.000000000
+/gridGun/origin   -1.60000002  -2.40000010  -2.00000000
+/gridGun/direction   -0.20000000   0.20000000   1.00000000
+/run/beamOn 1
+# view number   25
+/fred/pause
+/vis~/camera/viewpoint  24.094842911   26.565050125
+/gridGun/origin   -2.79999995  -2.40000010  -2.00000000
+/gridGun/direction    0.40000001   0.20000000   1.00000000
+/run/beamOn 1
+# view number   26
+/fred/pause
+/vis~/camera/viewpoint  32.311531067   18.434947968
+/gridGun/origin   -3.20000005  -2.40000010  -2.00000000
+/gridGun/direction    0.60000002   0.20000000   1.00000000
+/run/beamOn 1
+# view number   27
+/fred/pause
+/vis~/camera/viewpoint  11.309931755  -90.000000000
+/gridGun/origin   -2.00000000  -1.60000002  -2.00000000
+/gridGun/direction    0.00000000  -0.20000000   1.00000000
+/run/beamOn 1
+# view number   28
+/fred/pause
+/vis~/camera/viewpoint  12.604383469  -63.434947968
+/gridGun/origin   -2.20000005  -1.60000002  -2.00000000
+/gridGun/direction    0.10000000  -0.20000000   1.00000000
+/run/beamOn 1
+# view number   29
+/fred/pause
+/vis~/camera/viewpoint  12.604383469 -116.565040588
+/gridGun/origin   -1.79999995  -1.60000002  -2.00000000
+/gridGun/direction   -0.10000000  -0.20000000   1.00000000
+/run/beamOn 1
+# view number   30
+/fred/pause
+/vis~/camera/viewpoint  15.793169975  -45.000000000
+/gridGun/origin   -2.40000010  -1.60000002  -2.00000000
+/gridGun/direction    0.20000000  -0.20000000   1.00000000
+/run/beamOn 1
+# view number   31
+/fred/pause
+/vis~/camera/viewpoint  15.793169975 -135.000000000
+/gridGun/origin   -1.60000002  -1.60000002  -2.00000000
+/gridGun/direction   -0.20000000  -0.20000000   1.00000000
+/run/beamOn 1
+# view number   32
+/fred/pause
+/vis~/camera/viewpoint  24.094842911  -26.565050125
+/gridGun/origin   -2.79999995  -1.60000002  -2.00000000
+/gridGun/direction    0.40000001  -0.20000000   1.00000000
+/run/beamOn 1
+# view number   33
+/fred/pause
+/vis~/camera/viewpoint  32.311531067  -18.434947968
+/gridGun/origin   -3.20000005  -1.60000002  -2.00000000
+/gridGun/direction    0.60000002  -0.20000000   1.00000000
+/run/beamOn 1
+# view number   34
+/fred/pause
+/vis~/camera/viewpoint  21.801408768   90.000000000
+/gridGun/origin   -2.00000000  -2.79999995  -2.00000000
+/gridGun/direction    0.00000000   0.40000001   1.00000000
+/run/beamOn 1
+# view number   35
+/fred/pause
+/vis~/camera/viewpoint  22.406871796   75.963760376
+/gridGun/origin   -2.20000005  -2.79999995  -2.00000000
+/gridGun/direction    0.10000000   0.40000001   1.00000000
+/run/beamOn 1
+# view number   36
+/fred/pause
+/vis~/camera/viewpoint  22.406871796  104.036231995
+/gridGun/origin   -1.79999995  -2.79999995  -2.00000000
+/gridGun/direction   -0.10000000   0.40000001   1.00000000
+/run/beamOn 1
+# view number   37
+/fred/pause
+/vis~/camera/viewpoint  24.094842911   63.434947968
+/gridGun/origin   -2.40000010  -2.79999995  -2.00000000
+/gridGun/direction    0.20000000   0.40000001   1.00000000
+/run/beamOn 1
+# view number   38
+/fred/pause
+/vis~/camera/viewpoint  24.094842911  116.565040588
+/gridGun/origin   -1.60000002  -2.79999995  -2.00000000
+/gridGun/direction   -0.20000000   0.40000001   1.00000000
+/run/beamOn 1
+# view number   39
+/fred/pause
+/vis~/camera/viewpoint  29.496210098   45.000000000
+/gridGun/origin   -2.79999995  -2.79999995  -2.00000000
+/gridGun/direction    0.40000001   0.40000001   1.00000000
+/run/beamOn 1
+# view number   40
+/fred/pause
+/vis~/camera/viewpoint  35.795761108   33.690063477
+/gridGun/origin   -3.20000005  -2.79999995  -2.00000000
+/gridGun/direction    0.60000002   0.40000001   1.00000000
+/run/beamOn 1
+# view number   41
+/fred/pause
+/vis~/camera/viewpoint  30.963756561   90.000000000
+/gridGun/origin   -2.00000000  -3.20000005  -2.00000000
+/gridGun/direction    0.00000000   0.60000002   1.00000000
+/run/beamOn 1
+# view number   42
+/fred/pause
+/vis~/camera/viewpoint  31.311153412   80.537673950
+/gridGun/origin   -2.20000005  -3.20000005  -2.00000000
+/gridGun/direction    0.10000000   0.60000002   1.00000000
+/run/beamOn 1
+# view number   43
+/fred/pause
+/vis~/camera/viewpoint  31.311153412   99.462318420
+/gridGun/origin   -1.79999995  -3.20000005  -2.00000000
+/gridGun/direction   -0.10000000   0.60000002   1.00000000
+/run/beamOn 1
+# view number   44
+/fred/pause
+/vis~/camera/viewpoint  32.311531067   71.565048218
+/gridGun/origin   -2.40000010  -3.20000005  -2.00000000
+/gridGun/direction    0.20000000   0.60000002   1.00000000
+/run/beamOn 1
+# view number   45
+/fred/pause
+/vis~/camera/viewpoint  32.311531067  108.434951782
+/gridGun/origin   -1.60000002  -3.20000005  -2.00000000
+/gridGun/direction   -0.20000000   0.60000002   1.00000000
+/run/beamOn 1
+# view number   46
+/fred/pause
+/vis~/camera/viewpoint  35.795761108   56.309932709
+/gridGun/origin   -2.79999995  -3.20000005  -2.00000000
+/gridGun/direction    0.40000001   0.60000002   1.00000000
+/run/beamOn 1
+# view number   47
+/fred/pause
+/vis~/camera/viewpoint  40.315540314   45.000000000
+/gridGun/origin   -3.20000005  -3.20000005  -2.00000000
+/gridGun/direction    0.60000002   0.60000002   1.00000000
+/run/beamOn 1
+# view number   48
+/fred/pause

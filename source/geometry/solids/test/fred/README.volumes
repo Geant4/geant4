@@ -1,0 +1,24 @@
+README.volumes
+
+Fred has several test volumes currently available.
+
+Before run initialization, a test volume should be selected. Several
+volumes are currently implemented. Unless otherwise specified, they have
+dimensions of 1 m.
+
+/fred/volume BOX              # a simple box
+/fred/volume TUBS             # a tube of 1 m inner and 1.2 m outer radii
+/fred/volume CONE             # a cone a 1 m inner and 1.2 m radii at one
+                              # end and 0.4 m and 0.6 m radii at the other
+/fred/volume PCON             # A polycone (crashes with beta 1)
+/fred/volume PGON             # A eight sided polygon of 1 m inner and 
+                              # 1.2 m outer transverse size
+/fred/volume PGON2            # The same as above but rotated by 22.5 degrees
+			      
+For all volumes except BOX, a start phi angle and delta phi angle
+can be specified by the commands:
+
+/fred/startPhi <value degrees>
+/fred/deltaPhi <value degrees>
+
+By default, startPhi=0 and deltaPhi=360 (i.e. no phi segmentation).

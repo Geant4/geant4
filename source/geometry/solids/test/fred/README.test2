@@ -1,0 +1,89 @@
+README.test2          DCW    10/9/98
+
+Test 2 sends many geantinos at once through a volume and displays which tracks
+intersect a volume. Human judgement is used to decide if there are errors.
+To make this easier, the origins of the tracks are evenly placed on a grid
+that is large enough to cover the cross section of the volume. All of the
+tracks are sent in the same direction. In the display, the starting points
+of the tracks are drawn as blue if there is no intersection with the volume,
+red if they intersect correctly, and white if they intersect incorrectly.
+If the angle of the view is selected such that the tracks move exactly
+in or out of the view plane, these points will form a silhouette of the 
+cross section of the volume if tracking is working properly.
+
+Since it is assumed that all tracks start from outside the test volume,
+an incorrect intersecting track is one that does not have the same
+number of entrances into the volume as exits.
+
+For this test, the grid gun should be selected:
+
+/fred/gun GRID
+
+And the "shadow" display mode should be selected:
+
+/fred/draw SHADOW
+
+Before run initialization, the test volume should be selected. See
+README.volumes for more information.
+
+This test does not work for 3D views with perspective. Instead, the OpenGL
+interface is a good choice for this test. It can be invoked with
+the script "draw.script".
+
+The following commands control the grid gun:
+
+/gridGun/n1 <n1>
+/gridGun/n2 <n2>
+/gridGun/position <x> <y> <z> [<units>]
+/gridGun/grid1 <g1x> <g1y> <g1z> [<units>]
+/gridGun/grid2 <g2x> <g2y> <g2z> [<units>]
+/gridGun/direction <vx> <vy> <vz>
+
+n1 = the number of grid points along the first axis (default 10)
+n2 = the number of grid points along the second axis (default 10)
+
+The total number of tracks = (n1+1)*(n2+1)
+            
+x,y,z   = the origin of the grid
+g1x,y,z = the direction and length of the first grid axis
+g2x,y,z = the direction and length of the second grid axis
+
+The x origin of track i,j (0 <= i <= n1, 0 <= j <= n2) is:
+
+           x(i,j) = x + g1x*i/n1 + g2x*i/n2
+           
+and similar for y and z.
+
+vx,y,z  = the direction of the tracks.
+
+If n1=0 and n2=0, only one track is generated, starting at (x,y,z)
+and in direction (vx,vy,vz). This can be convenient for debugging.
+
+The somewhat awkward view port controls of GEANT4's visualization
+can make it difficult to adjust the viewport angle to line up with
+the direction of the tracks. To simplify this, and generate many
+different test angles, the scripts "grids1.script", "grids2.script",
+and "grids3.script" have been supplied. These scripts have been
+generated using the FORTRAN program "makegridscripts.f".
+
+An example test session:
+
+# select GRID gun
+/fred/gun GRID
+# select SHADOW draw mode
+/fred/draw SHADOW
+# select BOX test volume
+/fred/volume BOX
+# initialize
+/run/initialize
+# initialize x-windows OpenGL viewer
+/control/execute draw.script
+# select a large but not too time consuming number of tracks
+/gridGun/n1 40
+/gridGun/n2 40
+# run script 1
+/control/execute grids1.script
+# run script 2
+/control/execute grids2.script
+# run script 3
+/control/execute grids3.script

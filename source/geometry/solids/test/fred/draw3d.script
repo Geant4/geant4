@@ -1,0 +1,7 @@
+#
+# VRML mode. A server must be specified before
+#
+/vis~/create_view/new_graphics_system VRML1
+/vis~/camera/zoom 16
+/tracking/storeTrajectory 1
+

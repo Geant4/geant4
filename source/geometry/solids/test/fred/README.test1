@@ -1,0 +1,73 @@
+README.test1       DCW Oct 8, 1998
+
+The first test involves the use of a particle generator called "SprayGun",
+controlled interactively, and an event display.
+
+I have found the VRML display to be particularly useful for this.
+A VRML display can be selected by executing the script "draw3d.script".
+See GEANT4 documentation for more information on setting up a VRML display.
+
+For this test, the spray gun as a particle generator should be selected
+(this is by default):
+
+/fred/gun SPRAY
+
+In addition, the "NORMAL" drawing mode should be selected (this is by default):
+
+/fred/draw NORMAL
+
+Before run initialize, a volume should be specified. See README.volumes
+for details.
+
+Fred displays the event at the end of each event (as activated by command
+/run/beamOn). Drawn in red is the test volume and in green are trajectories
+of geantinos. For every exit intersection of the trajectory with the
+test volume, a white sphere is drawn. For every entry intersection, a
+blue sphere is drawn.
+
+The spray gun creates geantinos emitted from a central point along
+x, y, and z angles in increments of 45 degrees. The position of the central
+point is controlled by the command:
+
+/sprayGun/position <x> <y> <z> [<units>]
+
+The angles are controlled by the commands:
+
+/sprayGun/xSpray  <xmask>
+/sprayGun/ySpray  <ymask>
+/sprayGun/zSpray  <zmask>
+
+Each mask has the following meaning:
+    Bit 0: add tracks with a positive momentum with respect to this axis
+    Bit 1: add tracks with zero momentum with respect to this axis
+    Bit 2: add tracks with a negative momentum with respect to this axis
+By default, xmask=7, ymask=7, and zmask=2, which produces 8 geantinos
+in the x/y plane at angles of 45 degree increments with respect to the x 
+or y axes.
+
+To test a volume: interactively place the sprayGun central point along
+difficult positions around or in the volume, and visually inspect the
+results for errors. A knowledge of the difficulties of correctly
+implementing volumes is important to select challenging positions for
+tests.
+
+If an error is found, the xmask, ymask, and zmask values can be specified
+to produce only the one track that causes the error. This can greatly
+simplify the task of debugging.
+
+A example debugging session is included below:
+
+# select test volume BOX
+/fred/volume BOX
+# initialize
+/run/initialize
+# select VRML display
+/control/execute draw3d.script
+# display an event 
+/run/beamOn 1
+# change spray gun to send trajectories at +/- z
+/sprayGun/zSpray 7
+# change position of particle sources
+/sprayGun/position 1.0 1.0 0.0 m
+# display results
+/run/beamOn 1

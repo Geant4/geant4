@@ -1,0 +1,111 @@
+Fred's 3rd test suite            DCW 10/12/98
+
+Test 3 is designed to thoroughly test volumes without user intervention
+(i.e. batch job) looking for logical contradictions between the routines:
+
+        DistanceToIn(p,v)
+	DistanceToOut(p,v)
+	Inside(p)
+
+A list of errors are reported for later debugging.
+
+Test 3 does not use GEANT4 tracking: instead, it calls a volume's
+routines directly. Errors are output to an error file with enough
+information to reproduce them for later debugging.
+
+Algorithm:
+
+   1. A random point is three dimensions is generated. The distribution
+      of these points is roughly Gaussian in each dimension, 
+      centered on a user defined point (default 0,0,0) with a user
+      defined width (detault 1,1,1). Points beyond a 10 meter box
+      are discarded. Optionally, points are rounded to the nearest
+      specified increment (i.e. moved to the nearest point on a grid).
+   
+   2. Inside is called to determine if the point is inside, outside,
+      or on the surface of the test volume.
+      
+   3. Depending on the result, the point is placed in a list of 100
+      inside, outside, or surface points. If the list is full, it
+      replaces a random point on the list.
+      
+   4. If the point is outside, then, for each point in the inside list:
+      
+        4.1 A directional vector to the inside point is calculated
+	    and DistanceToIn(p,v) is called.
+	    
+	4.2 The result must not be kInfinity nor zero, or it's an error.
+	    If the result is less than the answer from DistanceToIn(p),
+	    it is an error.
+	    
+	4.3 The point is moved to the calculated intersection point
+	    and Inside is called. The result must be on the surface,
+	    or it is an error.
+	    
+	4.4 Using this surface point, DistanceToIn(p,v) is invoked.
+	    The result must be zero, or it is an error.
+	    
+***	4.5 Using this surface point, DistanceToOut(p,v) is invoked.
+***	    The result must be > zero, or it is an error.
+ 
+        4.6 The plane normal returned by the previous routine,
+	    if valid, is checked against the trajectory. If
+	    incorrect (i.e. dot product < 0), this is an error.
+
+        4.7 The point is moved by the result of 4.5. Inside is
+	    invoked. If the point is not on the surface, it is
+	    an error.
+
+        4.8 Using this point, DistanceToOut(p,v) is invoked. If
+	    the result is zero, it is an error.
+	    
+   5. If the point is inside, then, for each point in the outside list:
+
+        5.1 A directional vector to the outside point is calculated
+	    and DistanceToOut(p,v) is called.
+	    
+	5.2 The result must not be kInfinity nor zero, or it's an error.
+	    If it is less than DistanceToOut(p), it is an error.
+	    
+	5.3 The plane normal returned in step 5.1, if valid, is
+	    checked against the trajectory. If incorrect (i.e. dot
+	    product < 0), this is an error.
+	
+	5.4 The point is moved to the calculated intersection point
+	    and Inside is called. The result must be on the surface,
+	    or it is an error.
+
+***	5.5 Using this surface point, DistanceToOut(p,v) is invoked.
+***	    The result must not be zero, or it is an error.
+***	
+*** Waiting for clarification of DistanceToIn specification?
+***	    
+***	5.6 DistanceToIn(p,v) is invoked. If the result is zero,
+***         it is an error.
+***
+***     5.7 If the result of the previous step is not kInfinity,
+***         the point is moved by the specified distance and
+***         inside is called. The result must be on the surface,
+***         or it is an error.
+***
+***     5.8 Go back to step 5.5 and repeat.
+***
+	    
+   6. If the point is on the surface, then, for each point in the
+      outside list:
+      
+        6.1 A directional vector to the outside point is calculated
+	    and DistanceToOut(p,v) is called.
+	    
+	6.2 If the result of the previous step is zero, it is an error.
+
+   7. If the point is on the surface, then, for each point in the
+      inside list:
+      
+        7.1 A directional vector to the inside point is calculated
+	    and DistanceToIn(p,v) is called.
+
+        7.2 If the result is kInfinity, it is an error.
+
+   8. Step 1 is repeated until: a maximum number of points have been
+      generated or a maximum number of errors have been generated.
