@@ -1,4 +1,4 @@
-$Id: History,v 1.147 2001-06-25 10:59:11 morita Exp $
+$Id: History,v 1.148 2001-06-26 06:33:40 gcosmo Exp $
 $Name: not supported by cvs2svn $
 
 -------------------------------------------------------------------
@@ -17,6 +17,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26th June 2001 Youhei Morita (config-V03-01-09)
+- globlib.gmk: added block for copying headers for persistency in $G4INCLUDE
+  when invoking the 'includes' target.
 
 25th June 2001 Youhei Morita (config-V03-01-08)
 - Restored lib_d target (again) in common.gmk with a protection of G4ODBMS.
