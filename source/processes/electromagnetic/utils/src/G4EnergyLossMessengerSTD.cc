@@ -68,42 +68,42 @@ G4EnergyLossMessengerSTD::G4EnergyLossMessengerSTD()
   RndmStepCmd->SetGuidance("Randomize the proposed step by eLoss.");
   RndmStepCmd->SetParameterName("rndmStep",true);
   RndmStepCmd->SetDefaultValue(false);
-  RndmStepCmd->AvailableForStates(PreInit,Idle);
+  RndmStepCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   EnlossFlucCmd = new G4UIcmdWithABool("/process/eLoss/fluct",this);
   EnlossFlucCmd->SetGuidance("Switch true/false the energy loss fluctuations.");
   EnlossFlucCmd->SetParameterName("fluct",true);
   EnlossFlucCmd->SetDefaultValue(true);
-  EnlossFlucCmd->AvailableForStates(PreInit,Idle);
+  EnlossFlucCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   SubSecCmd = new G4UIcmdWithABool("/process/eLoss/subsec",this);
   SubSecCmd->SetGuidance("Switch true/false the subcutoff generation.");
   SubSecCmd->SetParameterName("subsec",true);
   SubSecCmd->SetDefaultValue(true);
-  SubSecCmd->AvailableForStates(PreInit,Idle);
+  SubSecCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   IntegCmd = new G4UIcmdWithABool("/process/eLoss/integral",this);
   IntegCmd->SetGuidance("Switch true/false the integration of cross section over step.");
   IntegCmd->SetParameterName("integ",true);
   IntegCmd->SetDefaultValue(true);
-  IntegCmd->AvailableForStates(PreInit,Idle);
+  IntegCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   MinSubSecCmd = new G4UIcmdWithADoubleAndUnit("/process/eLoss/minsubsec",this);
   MinSubSecCmd->SetGuidance("Set the min. cut for subcutoff delta in range.");
   MinSubSecCmd->SetParameterName("minsubsec",true);
-  MinSubSecCmd->AvailableForStates(PreInit,Idle);
+  MinSubSecCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   MinEnCmd = new G4UIcmdWithADoubleAndUnit("/process/eLoss/minKinEnergy",this);
   MinEnCmd->SetGuidance("Set the min kinetic energy");
   MinEnCmd->SetParameterName("emin",true);
   MinEnCmd->SetUnitCategory("Energy");
-  MinEnCmd->AvailableForStates(PreInit,Idle);
+  MinEnCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   MaxEnCmd = new G4UIcmdWithADoubleAndUnit("/process/eLoss/maxKinEnergy",this);
   MaxEnCmd->SetGuidance("Set the max kinetic energy");
   MaxEnCmd->SetParameterName("emax",true);
   MaxEnCmd->SetUnitCategory("Energy");
-  MaxEnCmd->AvailableForStates(PreInit,Idle);
+  MaxEnCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   StepFuncCmd = new G4UIcommand("/process/eLoss/StepFunction",this);
   StepFuncCmd->SetGuidance("Set the energy loss step limitation parameters.");
@@ -127,7 +127,7 @@ G4EnergyLossMessengerSTD::G4EnergyLossMessengerSTD()
   unitPrm->SetParameterCandidates(unitCandidates);
   
   StepFuncCmd->SetParameter(unitPrm);
-  StepFuncCmd->AvailableForStates(PreInit,Idle);
+  StepFuncCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
