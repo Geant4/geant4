@@ -79,6 +79,9 @@ public:
       delete theUpper;
       theUpper = 0;
     }
+    theIndex.clear();
+    theData.clear();
+    prepared = false;
   }
   
   G4bool Prepared() const {return prepared;}

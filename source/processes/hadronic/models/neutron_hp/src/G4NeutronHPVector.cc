@@ -331,6 +331,12 @@
   G4double G4NeutronHPVector::Sample() // Samples X according to distribution Y
   {
     G4double result;
+    G4int j;
+    for(j=0; j<GetVectorLength(); j++)
+    {
+      if(GetY(j)<0) SetY(j, 0);
+    }
+    
     if(theBuffered.size() !=0 && G4UniformRand()<0.5) 
     {
       result = theBuffered[0];

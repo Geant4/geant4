@@ -13,16 +13,10 @@
 // * regarding  this  software system or assume any liability for its *
 // * use.                                                             *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-//
-//
-// $Id: G4NeutronHPVector.hh,v 1.16 2001-07-11 10:07:07 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPVector_h
 #define G4NeutronHPVector_h 1
@@ -249,6 +243,7 @@ class G4NeutronHPVector
     nEntries=0;   
     theManager.CleanUp();
     maxValue = -DBL_MAX;
+    theHash.Clear();
   }
 
   // merges the vectors active and passive into *this
