@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.3 2000-04-11 10:08:28 lefebure Exp $
+// $Id: G4eLowEnergyLoss.cc,v 1.4 2000-04-19 13:26:48 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // -----------------------------------------------------------
@@ -51,7 +51,7 @@
 // The NbOfProcesses data member can be changed using the (public static)
 // functions Get/Set/Plus/MinusNbOfProcesses (see G4eLowEnergyLoss.hh)
 
-G4int            G4eLowEnergyLoss::NbOfProcesses = 1;
+G4int            G4eLowEnergyLoss::NbOfProcesses = 2;
 
 G4int            G4eLowEnergyLoss::CounterOfElectronProcess = 0;
 G4int            G4eLowEnergyLoss::CounterOfPositronProcess = 0;
@@ -81,7 +81,7 @@ G4PhysicsTable*  G4eLowEnergyLoss::thepRangeCoeffCTable         = NULL;
 
 G4double         G4eLowEnergyLoss::LowerBoundEloss = 250.*eV ;
 G4double         G4eLowEnergyLoss::UpperBoundEloss = 100.*GeV ;
-G4int            G4eLowEnergyLoss::NbinEloss = 100 ;
+G4int            G4eLowEnergyLoss::NbinEloss = 1000 ;
 G4double         G4eLowEnergyLoss::RTable ;
 G4double         G4eLowEnergyLoss::LOGRTable ;
 
@@ -185,7 +185,6 @@ void G4eLowEnergyLoss::BuildDEDXTable(
                     LowerBoundEloss, UpperBoundEloss, NbinEloss);   
 
          // loop for the kinetic energy
-   
          for (G4int i=0; i<NbinEloss; i++) 
             {
               LowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;      
