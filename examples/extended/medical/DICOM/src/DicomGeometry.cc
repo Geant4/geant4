@@ -44,18 +44,23 @@
 #include <stdio.h>
 #include <math.h>
 
-DicomGeometry *DicomGeometry::theDetector=0;
-
 DicomGeometry::DicomGeometry()
 {
   patientConstructor = new DicomPatientConstructor();
-  theDetector=this;
+  trabecularBone = 0;
+  dense_bone = 0;
+  liver = 0;  
+  muscle = 0;
+  phantom = 0;
+  breast = 0;
+  adipose_tissue = 0;
+  lungexhale = 0;
+  lunginhale = 0;
+  air = 0;
 }
 
 DicomGeometry::~DicomGeometry()
 {
-  theDetector=0;
-  delete patientConstructor;
   delete air;
   delete lunginhale;
   delete lungexhale;
@@ -65,13 +70,17 @@ DicomGeometry::~DicomGeometry()
   delete muscle;
   delete liver;
   delete dense_bone;
-  delete trabecular_bone;
+  delete trabecularBone; 
+  delete patientConstructor;
 }
 void DicomGeometry::PatientConstruction()
 {
   DicomConfiguration* ReadConfiguration = new DicomConfiguration;
-  ReadConfiguration->ReadDataFile();					// images must have the same dimension
-  ReadConfiguration->ReadG4File( ReadConfiguration->GetListOfFile()[0] );		//  open a .g4 file to read some values
+  ReadConfiguration->ReadDataFile();
+					
+  // images must have the same dimension ... 
+  ReadConfiguration->ReadG4File( ReadConfiguration->GetListOfFile()[0] );
+  // open a .g4 file to read some values ...
 		
   PatientX = (ReadConfiguration->IsCompressionUsed()*(ReadConfiguration->GetXPixelSpacing())/2.0) *mm;
   PatientY = (ReadConfiguration->IsCompressionUsed()*(ReadConfiguration->GetYPixelSpacing())/2.0) *mm;
@@ -114,7 +123,7 @@ void DicomGeometry::PatientConstruction()
 						      muscle,
 						      liver,
 						      dense_bone,
-						      trabecular_bone);
+						      trabecularBone);
   Physical_LungINhale = new G4PVParameterised( "Physical_LungINhale" , Logical_LungINhale, logical_param, kZAxis, numberOfVoxels, Param_LungINhale );
 }
 
@@ -141,32 +150,72 @@ G4VPhysicalVolume* DicomGeometry::Construct()
 void DicomGeometry::InitialisationOfMaterials()
 {
   // Creating elements :
-  G4double z,a,density;
+  G4double z, a, density;
   G4String name, symbol;
 
-  G4Element* elC = new G4Element(name="Carbon",symbol="C",z=6.0,a=12.011 * g/mole);
-  G4Element* elH = new G4Element(name="Hydrogen",symbol="H",z=1.0,a=1.008  * g/mole);
-  G4Element* elN = new G4Element(name="Nitrogen",symbol="N",z=7.0,a=14.007 * g/mole);
-  G4Element* elO = new G4Element(name="Oxygen",symbol="O",z=8.0,a=16.00  * g/mole);
-  G4Element* elNa = new G4Element(name="Sodium",symbol="Na",z=11.0,a=22.98977* g/mole);
-  G4Element* elS = new G4Element(name="Sulfur",symbol="S",z=16.0,a=32.065* g/mole);
-  G4Element* elCl = new G4Element(name="Chlorine",symbol="P",z=17.0,a=35.453* g/mole);
-  G4Element* elK = new G4Element(name="Potassium",symbol="P",z=19.0,a=30.0983* g/mole);
-  G4Element* elP = new G4Element(name="Phosphorus",symbol="P",z=30.0,a=30.973976* g/mole);
-  G4Element* elFe = new G4Element(name="Iron",symbol="Fe",z=26,a=56.845* g/mole);
-  G4Element* elMg = new G4Element(name="Magnesium",symbol="Mg",z=12.0,a=24.3050* g/mole);
-  G4Element* elCa = new G4Element(name="Calcium",symbol="Ca",z=20.0,a=40.078* g/mole);
-
+  G4Element* elC = new G4Element( name = "Carbon",
+                                  symbol = "C",
+                                  z = 6.0, a = 12.011 * g/mole );
+  G4Element* elH = new G4Element( name = "Hydrogen",
+                                 symbol = "H",
+                                 z = 1.0, a = 1.008  * g/mole );
+  G4Element* elN = new G4Element( name = "Nitrogen",
+                                 symbol = "N",
+                                 z = 7.0, a = 14.007 * g/mole );
+  G4Element* elO = new G4Element( name = "Oxygen",
+                                  symbol = "O",
+                                  z = 8.0, a = 16.00  * g/mole );
+  G4Element* elNa = new G4Element( name = "Sodium",
+                                   symbol = "Na",
+                                   z= 11.0, a = 22.98977* g/mole );
+  G4Element* elS = new G4Element( name = "Sulfur",
+                                  symbol = "S",
+                                  z = 16.0,a = 32.065* g/mole );
+  G4Element* elCl = new G4Element( name = "Chlorine",
+                                   symbol = "P",
+                                   z = 17.0, a = 35.453* g/mole );
+  G4Element* elK = new G4Element( name = "Potassium",
+                                  symbol = "P",
+                                  z = 19.0, a = 30.0983* g/mole );
+  G4Element* elP = new G4Element( name = "Phosphorus",
+                                  symbol = "P",
+                                  z = 30.0, a = 30.973976* g/mole );
+  G4Element* elFe = new G4Element( name = "Iron",
+                                   symbol = "Fe",
+                                   z = 26, a = 56.845* g/mole );
+  G4Element* elMg = new G4Element( name = "Magnesium",
+                                   symbol = "Mg",
+                                   z = 12.0, a = 24.3050* g/mole );
+  G4Element* elCa = new G4Element( name="Calcium",
+                                   symbol = "Ca",
+                                   z = 20.0, a = 40.078* g/mole );
   // Creating Materials :
-  G4int nel;
+  G4int numberofElements;
+
+  // Trabecular Bone 
+  trabecularBone = new G4Material( "Skeleton_Spongiosa", 
+                                  density = 1159*kg/m3, 
+                                  numberofElements = 12 );
+  trabecularBone->AddElement(elH,0.085);
+  trabecularBone->AddElement(elC,0.404);
+  trabecularBone->AddElement(elN,0.058);
+  trabecularBone->AddElement(elO,0.367);
+  trabecularBone->AddElement(elNa,0.001);
+  trabecularBone->AddElement(elMg,0.001);
+  trabecularBone->AddElement(elP,0.034);
+  trabecularBone->AddElement(elS,0.002);
+  trabecularBone->AddElement(elCl,0.002);
+  trabecularBone->AddElement(elK,0.001);
+  trabecularBone->AddElement(elCa,0.044);
+  trabecularBone->AddElement(elFe,0.001);
 
   // Air
-  air = new G4Material("Air",1.290*mg/cm3,nel=2);
+  air = new G4Material("Air",1.290*mg/cm3,numberofElements=2);
   air->AddElement(elN, 0.7);
   air->AddElement(elO, 0.3);
 
   //  LungINhale
-  lunginhale = new G4Material("Lung_Inhale", density = 217*kg/m3, nel=9);
+  lunginhale = new G4Material("Lung_Inhale", density = 217*kg/m3, numberofElements=9);
   lunginhale->AddElement(elH,0.103);
   lunginhale->AddElement(elC,0.105);
   lunginhale->AddElement(elN,0.031);
@@ -178,7 +227,7 @@ void DicomGeometry::InitialisationOfMaterials()
   lunginhale->AddElement(elK,0.003);//=1
 
   //  LungEXhale  (seulement la densite change)
-  lungexhale = new G4Material("Lung_Exhale", density = 508*kg/m3, nel=9);
+  lungexhale = new G4Material("Lung_Exhale", density = 508*kg/m3, numberofElements=9);
   lungexhale->AddElement(elH,0.103);
   lungexhale->AddElement(elC,0.105);
   lungexhale->AddElement(elN,0.031);
@@ -190,7 +239,7 @@ void DicomGeometry::InitialisationOfMaterials()
   lungexhale->AddElement(elK,0.003);//=1
 
   // Adipose tissue
-  adipose_tissue = new G4Material("Adipose_tissue", density = 967*kg/m3, nel=7);
+  adipose_tissue = new G4Material("Adipose_tissue", density = 967*kg/m3, numberofElements=7);
   adipose_tissue->AddElement(elH,0.114);
   adipose_tissue->AddElement(elC,0.598);
   adipose_tissue->AddElement(elN,0.007);
@@ -200,7 +249,7 @@ void DicomGeometry::InitialisationOfMaterials()
   adipose_tissue->AddElement(elCl,0.001);//=1
 
   // Breast
-  breast = new G4Material("Breast", density = 990*kg/m3, nel=8);
+  breast = new G4Material("Breast", density = 990*kg/m3, numberofElements=8);
   breast->AddElement(elH,0.109);
   breast->AddElement(elC,0.506);
   breast->AddElement(elN,0.023);
@@ -211,12 +260,12 @@ void DicomGeometry::InitialisationOfMaterials()
   breast->AddElement(elCl,0.001);	//=1
 
   // Phantom
-  phantom = new G4Material("Phantom", density = 1.018*kg/m3, nel=2);
+  phantom = new G4Material("Phantom", density = 1.018*kg/m3, numberofElements=2);
   phantom->AddElement(elH,0.112);
   phantom->AddElement(elO,0.888);	//=1
 
   // Muscle
-  muscle = new G4Material("Muscle", density = 1061*kg/m3, nel=9);
+  muscle = new G4Material("Muscle", density = 1061*kg/m3, numberofElements=9);
   muscle->AddElement(elH,0.102);
   muscle->AddElement(elC,0.143);
   muscle->AddElement(elN,0.034);
@@ -228,7 +277,7 @@ void DicomGeometry::InitialisationOfMaterials()
   muscle->AddElement(elK,0.004);	//=1
 
   // Liver
-  liver = new G4Material("Liver", density = 1071*kg/m3, nel=9);
+  liver = new G4Material("Liver", density = 1071*kg/m3, numberofElements=9);
   liver->AddElement(elH,0.102);
   liver->AddElement(elC,0.139);
   liver->AddElement(elN,0.030);
@@ -240,7 +289,7 @@ void DicomGeometry::InitialisationOfMaterials()
   liver->AddElement(elK,0.003);	//=1
 
   // Dense Bone (not sure about composition)
-  dense_bone = new G4Material("Skeleton_ribs", density = 1575*kg/m3, nel=11);
+  dense_bone = new G4Material("Skeleton_ribs", density = 1575*kg/m3, numberofElements=11);
   dense_bone->AddElement(elH,0.056);
   dense_bone->AddElement(elC,0.235);
   dense_bone->AddElement(elN,0.050);
@@ -254,20 +303,6 @@ void DicomGeometry::InitialisationOfMaterials()
   dense_bone->AddElement(elCa,0.146);
   //dense_bone->AddElement(elCa,0.156);// not = 1
 
-  // Trabecular Bone (not sure about composition)
-  trabecular_bone = new G4Material("Skeleton_Spongiosa", density = 1159*kg/m3, nel=12);
-  trabecular_bone->AddElement(elH,0.085);
-  trabecular_bone->AddElement(elC,0.404);
-  trabecular_bone->AddElement(elN,0.058);
-  trabecular_bone->AddElement(elO,0.367);
-  trabecular_bone->AddElement(elNa,0.001);
-  trabecular_bone->AddElement(elMg,0.001);
-  trabecular_bone->AddElement(elP,0.034);
-  trabecular_bone->AddElement(elS,0.002);
-  trabecular_bone->AddElement(elCl,0.002);
-  trabecular_bone->AddElement(elK,0.001);
-  trabecular_bone->AddElement(elCa,0.044);
-  trabecular_bone->AddElement(elFe,0.001);
 }
 
 

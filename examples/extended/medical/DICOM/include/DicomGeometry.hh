@@ -65,8 +65,12 @@ private:
 
   // Materials
   void InitialisationOfMaterials();
-
+  
+  //Materials ...
+ 
+  G4Material* trabecularBone; // Trabecular Bone
   // Air
+
   G4Material* air;
   G4Box* AirBox;
   G4LogicalVolume* Logical_air;
@@ -120,8 +124,7 @@ private:
   G4VPhysicalVolume* Physical_Liver;
   G4VPVParameterisation* Param_Liver;
 
-  // Trabecular Bone
-  G4Material* trabecular_bone;
+ 
   G4Box* TrabecularBone;
   G4LogicalVolume* Logical_TrabecularBone;
   G4VPhysicalVolume* Physical_TrabecularBone;

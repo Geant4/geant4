@@ -462,7 +462,7 @@ void dicomHandler::checkFileFormat()
   char * oneLine = new char[101];
   G4int nbImages;
 
-  if (!(checkData.is_open()))
+  if (!(checkData.is_open())) //Check existance of Data.dat
     {
       G4cout << "\nDicomG4 needs Data.dat :\n\tFirst line: number of image pixel for a "
 	     << "voxel (G4Box)\n\tSecond line: number of images (CT slices) to "
@@ -477,11 +477,11 @@ void dicomHandler::checkFileFormat()
   checkData.getline(oneLine,100);
   G4std::ifstream testExistence;
   G4bool existAlready = true;
-  for (G4int rep=0; rep<nbImages; rep++)
-    {
+  for (G4int rep = 0; rep < nbImages; rep++)
+    { 
       checkData.getline(oneLine,100);
       oneName = oneLine;
-      oneName += ".g4";
+      oneName += ".g4"; // create dicomFile.g4
       testExistence.open(oneName.data());
       if (!(testExistence.is_open()))
         {
@@ -504,7 +504,7 @@ void dicomHandler::checkFileFormat()
       FILE* dicom;
       FILE *lecturepref;
       char compressionc[300],maxc[300];
-      lecturepref= G4std::fopen("Data.dat","r");
+      lecturepref = G4std::fopen("Data.dat","r");
       G4std::fscanf(lecturepref,"%s",compressionc);
       compression=atoi(compressionc);
       G4std::fscanf(lecturepref,"%s",maxc);
