@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Torus.cc,v 1.6 2003-02-13 15:51:48 grichine Exp $
+// $Id: testG4Torus.cc,v 1.7 2004-04-09 13:40:24 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -47,6 +47,21 @@
 #include "G4AffineTransform.hh"
 #include "G4VoxelLimits.hh"
 
+///////////////////////////////////////////////////////////////////
+//
+// Dave's auxiliary function
+
+const G4String OutputInside(const EInside a)
+{
+	switch(a) 
+        {
+		case kInside:  return "Inside"; 
+		case kOutside: return "Outside";
+		case kSurface: return "Surface";
+	}
+	return "????";
+}
+
 
 G4bool testG4Torus()
 {
@@ -60,6 +75,7 @@ G4bool testG4Torus()
    G4double z;
  
    G4double Dist;
+   EInside side;
    G4ThreeVector *pNorm,norm;
    G4bool *pgoodNorm,goodNorm,calcNorm=true;
 
@@ -111,7 +127,22 @@ G4bool testG4Torus()
    
    G4Torus * aTub = new G4Torus("Ring1", 0*cm, 10*cm, 
                                          1*m, 0*deg, 360*deg ); 
-   
+   G4Torus t6("t6",100*mm, 150*mm, 200*mm,0*degree,
+                                       59.99999999999999*degree);
+
+   G4ThreeVector p1t6( 60.73813233071262,  
+                      -27.28494547459707,
+                       37.47827539879173);
+
+   G4ThreeVector vt6( 0.3059312222729116,
+		      0.8329513862588347,
+		     -0.461083588265824);
+
+   G4ThreeVector p2t6(70.75950555416668,
+		      -3.552713678800501e-15,
+                      22.37458414788935       );
+
+
 //   num = t1.TorusRoots(Ri,pstart,vdirect) ;
 //   num = t1.TorusRoots(Ri,pother,vx) ;
     
@@ -127,6 +158,11 @@ G4bool testG4Torus()
     assert(t2.Inside(ponphi2)==kOutside);
     assert(t2.Inside(ponphi12)==kSurface);
     assert(t2.Inside(ponphi22)==kSurface);
+
+    side=t6.Inside(p1t6);    
+    G4cout<<"t6.Inside(p1t6) = "<<OutputInside(side)<<G4endl;
+    side=t6.Inside(p2t6);    
+    G4cout<<"t6.Inside(p2t6) = "<<OutputInside(side)<<G4endl;
 
 // Check Surface Normal
     G4ThreeVector normal;
@@ -271,6 +307,12 @@ G4bool testG4Torus()
     assert(ApproxEqual(Dist,kInfinity));
     Dist=t3.DistanceToIn(ponrtor,vmx);
     assert(ApproxEqual(Dist,kInfinity));
+
+    Dist=t6.DistanceToIn(p1t6,vt6);
+    G4cout<<"t6.DistanceToIn(p1t6,vt6) = "<<Dist<<G4endl;
+
+
+
 
 // Check for Distance to In ( start from an external point )
 
