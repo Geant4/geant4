@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.9 2001-12-06 20:37:18 pfeiffer Exp $
+# $Id: GNUmakefile,v 1.10 2001-12-07 07:45:42 pfeiffer Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -12,7 +12,7 @@ ifndef G4INSTALL
 endif
 
 .PHONY: all
-all: lib bin
+all: tmpana lib bin
 
 include $(G4INSTALL)/config/architecture.gmk
 
