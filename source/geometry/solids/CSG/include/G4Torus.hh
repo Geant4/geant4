@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Torus.hh,v 1.11 2000-11-02 17:06:39 gcosmo Exp $
+// $Id: G4Torus.hh,v 1.12 2001-01-12 09:01:53 medernac Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -228,17 +228,138 @@ private:
   G4double DistanceToTorus (G4double x, G4double y, G4double z,
                             G4double dx, G4double dy, G4double dz,
                             G4double R0,G4double R1) const;
-
-  G4int SafeNewton(G4double x, G4double y, G4double z,
-		   G4double dx, G4double dy, G4double dz,
-		   G4double Rmax, G4double Rmin,
-		   G4double *Lmin,G4double *Lmax) const;
-  
-  G4double Newton (G4double guess,
-		   G4double x, G4double y, G4double z,
-		   G4double dx, G4double dy, G4double dz,
-		   G4double Rmax, G4double Rmin,
-		   G4double Lmin,G4double Lmax) const;
 };
-   	
+
+
+class TorusEquationClass
+{
+public:
+  TorusEquationClass()
+  {
+    ;    
+  }
+
+  TorusEquationClass(G4double Rmax, G4double Rmin)		
+  {
+    R0 = Rmax;
+    R1 = Rmin;
+  }
+  
+  ~TorusEquationClass() {;}
+
+  void setRadius (G4double Rmax, G4double Rmin)		
+  {
+    R0 = Rmax;
+    R1 = Rmin;
+  }
+  
+  
+  void setPosition (G4double x,G4double y,G4double z)
+  {
+    Px = x;
+    Py = y;
+    Pz = z;
+  }
+
+  void setPosition (const G4ThreeVector& p)
+  {
+    Px = p.x();
+    Py = p.y();
+    Pz = p.z();
+  }
+
+  
+  void setDirection (G4double dirx,G4double diry,G4double dirz)
+  {
+    dx = dirx;
+    dy = diry;
+    dz = dirz;    
+  }
+
+  void setDirection (const G4ThreeVector& v)
+  {
+    dx = v.x();
+    dy = v.y();
+    dz = v.z();    
+  }
+
+  
+
+private:
+  G4double R0;
+  G4double R1;
+
+  G4double Px,Py,Pz;
+  G4double dx,dy,dz;
+  
+  
+  G4double TorusEquation (G4double x, G4double y, G4double z) //const
+  {
+	/*
+	  An interesting property is that the sign
+	  tell if the point is inside or outside
+	  or if > EPSILON on the surface
+	*/
+	G4double temp;
+
+	temp = ((x*x + y*y + z*z) + R0*R0 - R1*R1) ;
+	temp = temp*temp ;
+	temp = temp - 4*R0*R0*(x*x + y*y) ;
+
+	/*
+	  > 0 Outside
+	  < 0 Inside
+	*/
+	return temp ;
+  }
+  
+  G4double TorusDerivativeX (G4double x, G4double y, G4double z) // const
+  {
+	return 4*x*(x*x + y*y + z*z +  R0*R0 - R1*R1) - 8*R0*R0*x ;
+  }
+
+  G4double TorusDerivativeY (G4double x, G4double y, G4double z) // const
+  {
+	return 4*y*(x*x + y*y + z*z +  R0*R0 - R1*R1) - 8*R0*R0*y ;
+  }
+
+  G4double TorusDerivativeZ (G4double x, G4double y, G4double z) // const
+  {
+	return 4*z*(x*x + y*y + z*z +  R0*R0 - R1*R1) ;
+  }
+
+public:  
+  G4double Function (G4double value)
+  {
+    G4double Lx,Ly,Lz;
+    G4double result;  
+       
+    Lx = Px + value*dx;
+    Ly = Py + value*dy;
+    Lz = Pz + value*dz;
+       
+    result = TorusEquation(Lx,Ly,Lz);
+         
+    return result ;  
+  }
+
+  G4double Derivative(G4double value)
+  {
+    G4double Lx,Ly,Lz;
+    G4double result;
+
+     Lx = Px + value*dx;
+     Ly = Py + value*dy;
+     Lz = Pz + value*dz;
+      
+     result = dx*TorusDerivativeX(Lx,Ly,Lz);
+     result += dy*TorusDerivativeY(Lx,Ly,Lz);
+     result += dz*TorusDerivativeZ(Lx,Ly,Lz);
+   
+     return result;
+  }
+} ;
+
+
+
 #endif
