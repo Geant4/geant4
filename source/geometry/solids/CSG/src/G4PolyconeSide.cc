@@ -69,29 +69,48 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
 	rNorm = +zS;
 	zNorm = -rS;
 	
-	G4double rAdj = r[0]-prevRZ->r, zAdj = z[0]-prevRZ->z;
-	G4double lAdj = sqrt( rAdj*rAdj + zAdj*zAdj );
-	rAdj /= lAdj;
-	zAdj /= lAdj;
+	if (r[0] < 1/kInfinity) {
+		//
+		// This segment begins at R=0 
+		//
+		prevRNorm = 0;
+		rNormEdge[0] = rNorm;
+		zNormEdge[0] = zNorm;
+	}
+	else {
+		G4double rAdj = r[0]-prevRZ->r, zAdj = z[0]-prevRZ->z;
+		G4double lAdj = sqrt( rAdj*rAdj + zAdj*zAdj );
+		rAdj /= lAdj;
+		zAdj /= lAdj;
+
+		prevRNorm = zAdj;
+
+		rNormEdge[0] = rNorm + zAdj;
+		zNormEdge[0] = zNorm - rAdj;
+		lAdj = sqrt( rNormEdge[0]*rNormEdge[0] + zNormEdge[0]*zNormEdge[0] );
+		rNormEdge[0] /= lAdj;
+		zNormEdge[0] /= lAdj;
+	}
 	
-	prevRNorm = zAdj;
-	
-	rNormEdge[0] = rNorm + zAdj;
-	zNormEdge[0] = zNorm - rAdj;
-	lAdj = sqrt( rNormEdge[0]*rNormEdge[0] + zNormEdge[0]*zNormEdge[0] );
-	rNormEdge[0] /= lAdj;
-	zNormEdge[0] /= lAdj;
-	
-	rAdj = nextRZ->r-r[1], zAdj = nextRZ->z-z[1];
-	lAdj = sqrt( rAdj*rAdj + zAdj*zAdj );
-	rAdj /= lAdj;
-	zAdj /= lAdj;
-	
-	rNormEdge[1] = rNorm + zAdj;
-	zNormEdge[1] = zNorm - rAdj;
-	lAdj = sqrt( rNormEdge[1]*rNormEdge[1] + zNormEdge[1]*zNormEdge[1] );
-	rNormEdge[1] /= lAdj;
-	zNormEdge[1] /= lAdj;
+	if (r[1] < 1/kInfinity) {
+		//
+		// This segment ends at R=0
+		//
+		rNormEdge[1] = rNorm;
+		zNormEdge[1] = zNorm;
+	}
+	else {
+		G4double rAdj = nextRZ->r-r[1], zAdj = nextRZ->z-z[1];
+		G4double lAdj = sqrt( rAdj*rAdj + zAdj*zAdj );
+		rAdj /= lAdj;
+		zAdj /= lAdj;
+
+		rNormEdge[1] = rNorm + zAdj;
+		zNormEdge[1] = zNorm - rAdj;
+		lAdj = sqrt( rNormEdge[1]*rNormEdge[1] + zNormEdge[1]*zNormEdge[1] );
+		rNormEdge[1] /= lAdj;
+		zNormEdge[1] /= lAdj;
+	}
 }
 
 
