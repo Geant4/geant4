@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2003-09-19 14:18:22 gcosmo Exp $
+$Id: History,v 1.2 2003-09-19 14:49:21 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,5 +20,5 @@ committal in the CVS repository !
 September 19th, 2003 - G.Cosmo  (procuts-V05-02-00)
 --------------------
 - Created new sub-category 'cuts'.
-  Moved classes from processes/management.
+  Moved classes from particles/management.
 
