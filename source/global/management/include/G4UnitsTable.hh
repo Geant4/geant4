@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.hh,v 1.11 2001-07-11 10:00:52 gunter Exp $
+// $Id: G4UnitsTable.hh,v 1.12 2002-11-20 11:25:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -89,7 +89,7 @@ public:  // with description
     static void BuildUnitsTable();    
     static void PrintUnitsTable();
     
-    static G4UnitsTable& GetUnitsTable() {return theUnitsTable;}
+    static G4UnitsTable& GetUnitsTable();
 
     static G4double GetValueOf (G4String);
     static G4String GetCategory(G4String);
