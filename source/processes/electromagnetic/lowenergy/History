@@ -1,4 +1,4 @@
-$Id: History,v 1.134 2002-03-27 09:41:44 vnivanch Exp $
+$Id: History,v 1.135 2002-03-28 11:54:12 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28.03.2002 - VNI, tag emlowen-V04-00-??
+             Add Fluorescence flag to electron and hadron ionisation 
 
 27.03.2002 - VNI, tag emlowen-V04-00-01
              Bug fix in hadron Fluo  and in deexcitation 
