@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4Cons2.cc,v 1.5 2000-08-16 08:02:36 grichine Exp $
+// $Id: testG4Cons2.cc,v 1.6 2000-10-05 09:02:03 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Simple test of G4Cons
@@ -100,6 +100,9 @@ int main(void)
 	    0,           // 1.0e-7,   500*kRadTolerance,
                            10,50,0,2*M_PI), 
 	 cms("cms cone",0.0,70.0,0.0,157.8,2949.0,0.0,6.2831853071796);
+
+  G4Cons cms2("RearAirCone",401.0,1450.0,
+                            1020.0,1450.0,175.0,0.0,6.2831853071796) ;
 
 	G4ThreeVector norm,*pNorm;
 	G4bool *pgoodNorm,goodNorm,calcNorm=true;
@@ -442,13 +445,25 @@ G4cout<<"Error:c9.Out((1e3*kRadTolerance,0,50),vx2mz,...) = " <<dist << G4endl;
 	if (OutRange(dist,5898.0))
 	G4cout << "Error:cms.DistToOut(+) =  " <<dist << G4endl;
 
-	dist=cms.DistanceToOut(
-        G4ThreeVector(0.28628920024909,-0.43438111004815,
-                      -2949.0 - kCarTolerance*0.25),
-        G4ThreeVector(6.0886686196674e-05,-9.2382200635766e-05,0.99999999387917),
+	dist=cms.DistanceToOut(G4ThreeVector(0.28628920024909,
+                                            -0.43438111004815,
+                                            -2949.0 - kCarTolerance*0.25),
+                               G4ThreeVector(6.0886686196674e-05,
+                                            -9.2382200635766e-05,
+                                             0.99999999387917),
         calcNorm,pgoodNorm,pNorm);
 	if (OutRange(dist,5898.0))
 	G4cout << "Error:cms.DistToOut(-) =  " <<dist << G4endl;
+
+	dist=cms2.DistanceToOut(G4ThreeVector(-344.13684353113,
+		                               258.98049377272,
+                                              -158.20772167926),
+                                G4ThreeVector(-0.30372024336672,
+                                              -0.5581146924652,
+                                               0.77218003329776),
+                                calcNorm,pgoodNorm,pNorm);
+ G4cout<<"cms2.DistanceToOut(G4ThreeVector(-344.13684 ... = "<<dist<<G4endl;
+
 
 	/////////////////////////////////////////////
 	//
@@ -657,6 +672,15 @@ G4cout<<"Error:c9.Out((1e3*kRadTolerance,0,50),vx2mz,...) = " <<dist << G4endl;
 	dist=c8c.DistanceToIn(proot2,vz);
 	if (OutRange(dist,1000))
 	    G4cout << "Error shadow rmin root problem " << dist << G4endl;
+
+        dist = cms2.DistanceToIn(G4ThreeVector(-344.13684353113,
+                                                258.98049377272,
+                                               -158.20772167926),
+				 G4ThreeVector(-0.30372022869765,
+					       -0.55811472925794,
+					       0.77218001247454)) ;
+	G4cout<<"cms2.DistanceToIn(G4ThreeVector(-344.1 ... = "<<dist<<G4endl;
+
 
 	G4cout << "NOT Checking G4Cons::ScopeCar...\n";
 	G4cout << "NOT Checking G4Cons::ScopePhi...\n";

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Cons.cc,v 1.12 2000-08-16 08:01:30 grichine Exp $
+// $Id: G4Cons.cc,v 1.13 2000-10-05 09:01:33 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Cons
@@ -14,6 +14,7 @@
 //
 // History:
 //
+// 05.10.00 V. Grichine bugs fixed in   Distance ToIn(p,v)
 // 17.08.00 V.Grichine, if one and only one Rmin=0, it'll be 1e3*kRadTolerance 
 // 08.08.00 V.Grichine, more stable roots of 2-equation in DistanceToOut(p,v,...) 
 // 06.03.00 V.Grichine, modifications in DistanceToOut(p,v,...) 
@@ -773,7 +774,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 
   if (fabs(nt1) > kRadTolerance)  // Equation quadratic => 2 roots
   {
-    if ( nt3 > kRadTolerance*0.5 || rout < 0 )
+    if ( nt3 > rout*kRadTolerance*secRMax || rout < 0 )
     {
 // If outside real cone (should be rho-rout>kRadTolerance*0.5 NOT rho^2 etc)
 // saves a sqrt() at expense of accuracy
@@ -820,12 +821,12 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 	    if ( ! seg )  return s ;
 	    else
 	    {
-	      xi=p.x()+s*v.x() ;
-	      yi=p.y()+s*v.y() ;
-	      ri=rMaxAv+zi*tanRMax ;
-	      cosPsi=(xi*cosCPhi + yi*sinCPhi)/ri ;
+	      xi     = p.x() + s*v.x() ;
+	      yi     = p.y() + s*v.y() ;
+	      ri     = rMaxAv + zi*tanRMax ;
+	      cosPsi = (xi*cosCPhi + yi*sinCPhi)/ri ;
 
-	      if (cosPsi>=cosHDPhiOT) return s ;
+	      if ( cosPsi >= cosHDPhiOT ) return s ;
 	    }
 	  }             
 	}                // end if (s>0)
@@ -836,8 +837,9 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 // Inside outer cone
 // check not inside, and heading through G4Cons (-> 0 to in)
 
-      if ( t3  > (rin + kRadTolerance*0.5)*(rin + kRadTolerance*0.5) && 
-           nt2 < 0                                                   && 
+      if ( t3  > (rin + kRadTolerance*0.5*secRMin)*
+                 (rin + kRadTolerance*0.5*secRMin) && 
+           nt2 < 0                                 && 
            fabs(p.z()) <= tolIDz )
       {
 // Inside cones, delta r -ve, inside z extent
@@ -902,7 +904,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
  
     if ( nt1 )
     {
-      if (nt3 > kRadTolerance*0.5)
+      if ( nt3 > rin*kRadTolerance*secRMin )
       {
 // At radius greater than real & imaginary cones
 // -> 2nd root, with zi check
@@ -934,7 +936,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 	  }
 	}
       }
-      else  if ( nt3 < -kRadTolerance*0.5 )
+      else  if ( nt3 < -rin*kRadTolerance*secRMin )
       {
 // Within radius of inner cone (real or imaginary)
 // -> Try 2nd root, with checking intersection is with real cone
