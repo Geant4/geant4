@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.16 2001-04-20 20:46:23 gcosmo Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.17 2001-05-03 11:12:59 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -426,7 +426,8 @@ G4VisCommandSceneAddVolume::G4VisCommandSceneAddVolume () {
   //  fpCommand -> SetGuidance  // Not implemented - should be in geom?
   //    ("               \"list\" to list all volumes.");
   fpCommand -> SetGuidance
-    ("2nd parameter: copy number (default 0).");
+    ("2nd parameter: copy number (default -1)."
+     "\n  If negative, first occurrence of physical-volume-name is selected.");
   fpCommand -> SetGuidance
     ("3rd parameter: depth of descending geometry hierarchy"
      " (default G4Scene::UNLIMITED (-1)).");
@@ -435,7 +436,7 @@ G4VisCommandSceneAddVolume::G4VisCommandSceneAddVolume () {
   parameter -> SetDefaultValue ("world");
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("copy-no", 'i', omitable = true);
-  parameter -> SetDefaultValue (0);
+  parameter -> SetDefaultValue (-1);
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("depth", 'i', omitable = true);
   parameter -> SetDefaultValue (G4Scene::UNLIMITED);
@@ -507,8 +508,11 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand* command,
 					 transformation);
     }
     else {
-      G4cout << "Volume \"" << name << "\", copy no. " << copyNo
-	     << " not found." << G4endl;
+      G4cout << "Volume \"" << name << "\"";
+      if (copyNo >= 0) {
+	G4cout << ", copy no. " << copyNo << ",";
+      }
+      G4cout << " not found." << G4endl;
     }
   }
 
@@ -518,12 +522,22 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand* command,
     G4bool successful = pScene -> AddRunDurationModel (model);
     UpdateVisManagerScene (currentSceneName);
     if (successful) {
-      G4cout << "First occurrence of \"" << foundVolume -> GetName ()
-	     << "\", copy no. " << copyNo
-	     << ", found at depth " << foundDepth
-	     << ",\n  with further requested depth of descent "
-	     << requestedDepthOfDescent
-	     << ", has been added to scene \"" << currentSceneName << "\""
+      G4cout << "First occurrence of \""
+	     << foundVolume -> GetName ()
+	     << "\"";
+      if (copyNo >= 0) {
+	G4cout << ", copy no. " << copyNo << ",";
+      }
+      G4cout << " found at depth " << foundDepth
+	     << ",\n  with ";
+      if (requestedDepthOfDescent < 0) {
+	G4cout << "unlimited (-1)";
+	  }
+      else {
+	G4cout << requestedDepthOfDescent;
+      }
+      G4cout << " further requested depth of descent"
+	     << ",\n  has been added to scene \"" << currentSceneName << "\""
 	     << G4endl;
     }
   }
