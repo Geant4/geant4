@@ -393,7 +393,7 @@ int main(int argc,char** argv)
 
     gamma->SetCuts(cutG);
     electron->SetCuts(cutE);
-    positron->SetCuts(cutE);
+    //    positron->SetCuts(cutE);
   
     // Processes - all new 
     G4bool success = false;
