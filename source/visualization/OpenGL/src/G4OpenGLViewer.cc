@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLViewer.cc,v 1.4 1999-12-15 14:54:08 gunter Exp $
+// $Id: G4OpenGLViewer.cc,v 1.5 2000-02-24 12:18:02 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -95,16 +95,14 @@ void G4OpenGLViewer::SetView () {
   glLightfv (GL_LIGHT0, GL_AMBIENT, ambient);
   glLightfv (GL_LIGHT0, GL_DIFFUSE, diffuse);
   
-  const G4Point3D& target = fVP.GetCurrentTargetPoint ();
-
-  // Get radius of scene.
+  // Get radius of scene, etc.
+  // Note that this procedure properly takes into account zoom, dolly and pan.
+  const G4Point3D& targetPoint = fVP.GetCurrentTargetPoint ();
   G4double radius = fSceneHandler.GetScene()->GetExtent().GetExtentRadius();
   if(radius<=0.) radius = 1.;
   const G4double cameraDistance = fVP.GetCameraDistance (radius);
-
-  const G4Point3D& pCamera =
-    target + cameraDistance * fVP.GetViewpointDirection().unit();
-  
+  const G4Point3D cameraPosition =
+    targetPoint + cameraDistance * fVP.GetViewpointDirection().unit();
   const GLdouble near   = fVP.GetNearDistance (cameraDistance, radius);
   const GLdouble far    = fVP.GetFarDistance  (cameraDistance, near, radius);
   const GLdouble right  = fVP.GetFrontHalfHeight (near, radius);
@@ -128,12 +126,13 @@ void G4OpenGLViewer::SetView () {
   const G4Normal3D& upVector = fVP.GetUpVector ();  
   G4Point3D gltarget;
   if (cameraDistance > 1.e-6 * radius) {
-    gltarget = target;
+    gltarget = targetPoint;
   }
   else {
-    gltarget = target - radius * fVP.GetViewpointDirection().unit();
+    gltarget = targetPoint - radius * fVP.GetViewpointDirection().unit();
   }
-  
+
+  const G4Point3D& pCamera = cameraPosition;  // An alias for brevity.
   gluLookAt (pCamera.x(),  pCamera.y(),  pCamera.z(),       // Viewpoint.
 	     gltarget.x(), gltarget.y(), gltarget.z(),      // Target point.
 	     upVector.x(), upVector.y(), upVector.z());     // Up vector.
