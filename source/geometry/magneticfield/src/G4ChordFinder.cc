@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc,v 1.42 2003-11-08 02:18:28 japost Exp $
+// $Id: G4ChordFinder.cc,v 1.43 2003-11-08 03:58:26 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,7 +39,7 @@
 // ..........................................................................
 
 G4ChordFinder::G4ChordFinder(G4MagInt_Driver* pIntegrationDriver)
-  : fDefaultDeltaChord( 3.00 * mm),     // Change to 0.25 * mm ? 
+  : fDefaultDeltaChord( 0.25 * mm ), 
     fDeltaChord( fDefaultDeltaChord ),
     fAllocatedStepper(false),
     fEquation(0), 
@@ -63,7 +63,7 @@ G4ChordFinder::G4ChordFinder(G4MagInt_Driver* pIntegrationDriver)
 G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
                               G4double                stepMinimum, 
                               G4MagIntegratorStepper* pItsStepper )
-  : fDefaultDeltaChord( 3.00 * mm),     // Change to 0.25 * mm ? 
+  : fDefaultDeltaChord( 0.25 * mm ), 
     fDeltaChord( fDefaultDeltaChord ),
     fAllocatedStepper(false),
     fEquation(0), 
@@ -281,21 +281,11 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
   }
   while( ! validEndPoint );   // End of do-while  RKD 
 
-  // Statistics 
-  fTotalNoTrials_FNC += noTrials; 
-  fNoCalls_FNC++; 
-  if( noTrials >= fmaxTrials_FNC ){
-    if (noTrials > fmaxTrials_FNC ) { 
-      fmaxTrials_FNC=noTrials; 
-      // fnoTimesMaxTrFNC=0; 
-    } else { 
-      // fnoTimesMaxTrFNC++; 
-    } 
-  } 
-
   if( newStepEst_Uncons > 0.0  ){ 
     fLastStepEstimate_Unconstrained= newStepEst_Uncons;
   }
+
+  AccumulateStatistics( noTrials );
 
   // stepOfLastGoodChord = stepTrial;
 
