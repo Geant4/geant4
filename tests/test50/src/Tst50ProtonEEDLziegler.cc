@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst50ProtonEEDLziegler.cc,v 1.2 2003-05-17 18:11:54 guatelli Exp $
+// $Id: Tst50ProtonEEDLziegler.cc,v 1.3 2003-07-29 10:24:53 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -68,7 +68,7 @@ void Tst50ProtonEEDLziegler::ConstructProcess()
 	  ion ->SetElectronicStoppingPowerModel(particle, "G4hZiegler1985p");
   
 	  //  manager->AddProcess(multipleScattering,-1,1,1);  	
-	  G4hLowEnergyLoss::SetEnlossFluc(false);
+	  ion -> SetEnlossFluc(false);
 	}
     }
 }

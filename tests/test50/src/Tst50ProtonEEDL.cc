@@ -47,8 +47,11 @@ theParticleIterator->reset();
      
       if (particleName == "proton") 
 	{
-	  // G4VProcess*  multipleScattering= new G4MultipleScattering(); 
-   manager->AddProcess(new G4hLowEnergyIonisation(),-1,2,2);
-   //  manager->AddProcess(multipleScattering,-1,1,1);  	
-    G4hLowEnergyLoss::SetEnlossFluc(false);
-	}}}
+	  G4hLowEnergyIonisation* ionisation = new G4hLowEnergyIonisation();
+          // G4VProcess*  multipleScattering= new G4MultipleScattering(); 
+          manager->AddProcess(ionisation,-1,2,2);
+          //  manager->AddProcess(multipleScattering,-1,1,1);  	
+          ionisation -> SetEnlossFluc(false);
+	}
+    }
+}
