@@ -123,7 +123,7 @@ cd ${G4WORKDIR}
 
 if [ X$ACTION = Xbuild -o X$ACTION = Xall  ]
 then
-  . ${G4STTDIR}/tmpenv.sh
+  . ${G4STTDIR}/bin/tmpenv.sh
   ${G4STTDIR}/bin/build.sh $ACTARG1 $ACTARG2
 fi
 
