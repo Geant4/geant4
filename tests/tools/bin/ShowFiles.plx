@@ -38,7 +38,7 @@ foreach $Platform (@Platforms) {
 #  next unless (-d "$TestTop/$Platform");
    $PDir="$TestTop/$Platform";
    next unless (-d "$PDir");
-   opendir(PLATFORM,"$PDir")  || die "Failed to opendir $PDir $! ";
+   opendir(PLATFORM,"$PDir")  || die "Failed to opendir Platform $PDir $! ";
    @Options=grep(!m/^\.\.?$/,readdir(PLATFORM));
    closedir(PLATFORM);
 #
@@ -47,7 +47,7 @@ foreach $Platform (@Platforms) {
 #
    foreach $Option (@Options) {
       $TestDir="$PDir/$Option/$SttTag/$Platform";
-      opendir(TD,"$TestDir") || { print  "Failed to opendir TestDir $TestDir $! "} ;
+      opendir(TD,"$TestDir") || { print  "Failed to opendir TestDir $TestDir $! \n"} ;
       opendir(TD,"$TestDir") || { next };
 
       $Heading="$Platform  $Option  $SttTag";
@@ -82,6 +82,8 @@ foreach $Platform (@Platforms) {
                  $FileType=$2;
 #                print "$Platform  $Option  $SttTag $TestName $FileType $fsize \n";
                  if ( "err" eq "$FileType" ) {
+                     $ErrorLines=0;
+                     $MaxErrorLines=100;
                      open(ANAERR,"$TestDir/$tfile");
                      while ($line=<ANAERR>) {
                          next if ($line =~m/^real\s+\d/);
@@ -93,7 +95,14 @@ foreach $Platform (@Platforms) {
                          chomp($line);
                          $report_err=sprintf("%-16s %-9s %-14s \"%s\".",$TestName,$Platform,$Option,$line);
 #                        print "ERROR: $report_err\n";
-                         push(@ErrorReports,$report_err);
+                         $ErrorLines++;
+                         if ( $ErrorLines < $MaxErrorLines ) {
+                             push(@ErrorReports,$report_err);
+                         } else {
+                             if ( $ErrorLines == $MaxErrorLines ) {
+                                 push(@ErrorReports,"Reporting limit reached for $fsize bytes \n$TestDir/$tfile");
+                             }
+                         }
                      }
                      close(ANAERR);
                  }
@@ -106,8 +115,8 @@ foreach $Platform (@Platforms) {
                          next if ($line =~m/^\s+$/);                       # blank 
                          next if ($line =~m/^---$/);                       # diff marks end of compared sections
                          next if ($line =~m/Geant4 version \$Name:/);      # CVS Tags
-#                        next if ($line =~m/\$Id: ShowFiles.plx,v 1.2 2000-06-05 14:54:42 stesting Exp $/);               # CVS Tags
-                         next if ($line =~m/\$Id:/);               # CVS Tags
+                         $cvsid = "\\\$\uid:";                               # Avoid cvs substitution
+                         next if ($line =~m/$cvsid/); 
                          next if ($line =~m/\s+\(\d{2}-[A-Z][a-z]{2}-\d{2,4}\)/);
                          next if ($line =~ m/User=.*Real=.*Sys=/);
                          next if ($line =~ m/Material:.* 6317232936888469/);     # ISO printing
@@ -169,7 +178,7 @@ if (defined(@ErrorReports)) {
    $sameagain="no";
    print "\n\n\n                 ERRORS seen in $SttTag\n\n";
    foreach $line (sort(@ErrorReports)) {
-       $same=substr($line,0,16);
+       $same=substr($line,50,16);
        print "\n" if ("$same" ne "$sameagain" );
        print "$line\n";
        $sameagain=$same;
