@@ -1,4 +1,4 @@
-# $Id: G4Kernel.i,v 1.2 2003-06-16 17:06:44 dressel Exp $
+# $Id: G4Kernel.i,v 1.3 2003-06-17 15:24:43 mdressel Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -19,7 +19,6 @@
 #include "G4UserLimits.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
-#include "G4String.hh"
 #include "G4VScorer.hh"
 #include "G4VCellScorer.hh"
 #include "G4CellScorer.hh"
@@ -49,8 +48,7 @@
 %}
 
 %include std_string.i
-
-//%include G4ThreeVector.hh
+%include G4String.i
 
 %import CLHEP.i
 %inline %{
@@ -58,7 +56,7 @@
   typedef double G4double;
   typedef int G4int;
 %}
-typedef std::string G4String;
+
 
 namespace G4Dimensions {
   const G4double cm;
@@ -99,9 +97,9 @@ namespace G4Dimensions {
 %include G4ScoreTable.hh
 %extend G4ScoreTable {
   const char *Write(const G4MapGeometryCellCellScorer &cs){
-    G4std::ostrstream tmpout;
+    std::ostrstream tmpout;
     self->Print(cs, &tmpout);
-    G4std::string *value = new G4std::string(tmpout.str());
+    std::string *value = new std::string(tmpout.str());
     return value->c_str();
   };
 }
@@ -163,68 +161,40 @@ class G4CSGSolid : public G4VSolid{
 
 class G4Box : public G4CSGSolid
 {
-public:  // with description
-  %extend {
-    G4Box(const char* pName, G4double pX, G4double pY, G4double pZ){
-      G4String name(pName);
-      return new G4Box(name, pX, pY, pZ);
-    }
-  }
-      // Construct a box with name, and half lengths pX,pY,pZ
+public:  
+  G4Box(const G4String &pName, G4double pX, G4double pY, G4double pZ);
 };
 
 
 class G4Tubs : public G4CSGSolid
 {
-public:  // with description
-  %extend {
-    G4Tubs(const char* pName, 
-	   G4double pRMin,
-	   G4double pRMax,
-	   G4double pDz,
-	   G4double pSPhi,
-	   G4double pDPhi ){
-      G4String name(pName);
-      return new G4Tubs(name,
-			pRMin,
-			pRMax,
-			pDz,
-			pSPhi,
-			pDPhi );
-    }
-  }
+public:  
+  G4Tubs(const G4String &pName, 
+	 G4double pRMin,
+	 G4double pRMax,
+	 G4double pDz,
+	 G4double pSPhi,
+	 G4double pDPhi );
 };
 
 
 
 class G4LogicalVolume
 {
-public:  // with description
-  %extend {
-    G4LogicalVolume(G4VSolid *pSolid,
-                    G4Material *pMaterial,
-		    const char *pName,
-                    G4FieldManager* pFieldMgr=0,
-                    G4VSensitiveDetector* pSDetector=0,
-                    G4UserLimits* pULimits=0,
-                    G4bool optimise=true){
-      G4String name(pName);
-      return new G4LogicalVolume(pSolid,
-				 pMaterial,
-				 name,
-				 pFieldMgr,
-				 pSDetector,
-				 pULimits,
-				 optimise);
-      // Constructor. The solid and material pointer must be non null.
-      // The parameters for field, detector and user limits are optional.
-      // The volume also enters itself into the logical volume Store.
-      // Optimisation of the geometry (voxelisation) for the volume
-      // hierarchy is applied by default. For parameterised volumes in
-      // the hierarchy, optimisation is -always- applied.
-    }  
-  }  
-  
+public:  
+  G4LogicalVolume(G4VSolid *pSolid,
+		  G4Material *pMaterial,
+		  const G4String &pName,
+		  G4FieldManager* pFieldMgr=0,
+		  G4VSensitiveDetector* pSDetector=0,
+		  G4UserLimits* pULimits=0,
+		  G4bool optimise=true);
+  // Constructor. The solid and material pointer must be non null.
+  // The parameters for field, detector and user limits are optional.
+  // The volume also enters itself into the logical volume Store.
+  // Optimisation of the geometry (voxelisation) for the volume
+  // hierarchy is applied by default. For parameterised volumes in
+  // the hierarchy, optimisation is -always- applied.
 
 };
 
@@ -239,23 +209,13 @@ public:
 class G4PVPlacement : public G4VPhysicalVolume
 {
 public:  
-  %extend {
-    G4PVPlacement(G4RotationMatrix *pRot,
-		  const Hep3Vector &tlate,
-		  G4LogicalVolume *pCurrentLogical,
-		  const char *pName,
-		  G4LogicalVolume *pMotherLogical = 0,
-		  G4bool pMany = false,
-		  G4int pCopyNo = 0){
-      return new G4PVPlacement(pRot,
-			       tlate,
-			       pCurrentLogical,
-			       pName,
-			       pMotherLogical,
-			       pMany,
-			       pCopyNo);
-    }
-  }
+  G4PVPlacement(G4RotationMatrix *pRot,
+		const Hep3Vector &tlate,
+		G4LogicalVolume *pCurrentLogical,
+		const G4String &pName,
+		G4LogicalVolume *pMotherLogical = 0,
+		G4bool pMany = false,
+		G4int pCopyNo = 0);
 };
 
 

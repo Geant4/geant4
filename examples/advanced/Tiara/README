@@ -1,4 +1,4 @@
-# $Id: README,v 1.7 2003-06-16 17:06:43 dressel Exp $
+# $Id: README,v 1.8 2003-06-17 15:24:42 mdressel Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -81,6 +81,11 @@ in the three cases:
 ----------------------------------------------------------------
    You don't want to use Anaphe and AIDA and you don't have no afs access.
    Make sure "G4ANALYSIS_USE" is unset (e.g. unsetenv G4ANALYSIS_USE).
+
+   Note: python must be built against a "libc". 
+         You may do this by creating a shared library by a command
+         simular to this 
+         "ld -shared -o libpython2.2.so --whole-archive libpython2.2.a /usr/lib/libc.so"
 
    Set "PYTHONVERSION" (2.2 or higher)
    Set "PYTHON_INCLUDE_DIR" (e.g. to  /usr/include/python${PYTHONVERSION})

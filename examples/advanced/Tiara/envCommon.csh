@@ -1,4 +1,4 @@
-# $Id: envCommon.csh,v 1.3 2003-06-16 15:49:06 dressel Exp $
+# $Id: envCommon.csh,v 1.4 2003-06-17 15:24:42 mdressel Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -55,7 +55,7 @@ setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/tmp/${G4SYSTEM}/tiara
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/tmp/${G4SYSTEM}/tiaraPhysicsPackaging
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/tmp/${G4SYSTEM}/tiaraPhysicsLists
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/lib/${G4SYSTEM}
-
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${PYTHON_LIB_DIR}
 setenv TIARA_BASE `pwd`
 setenv TIARASCRIPTS ${TIARA_BASE}/source/py_modules
 

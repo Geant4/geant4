@@ -1,4 +1,4 @@
-# $Id: Tiara.i,v 1.2 2003-06-16 17:06:44 dressel Exp $
+# $Id: Tiara.i,v 1.3 2003-06-17 15:24:44 mdressel Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -47,10 +47,8 @@
 %include CLHEP.i
 %import G4Kernel.i
 
-//typedef std::string G4String;
 
 
-typedef std G4std;
 
 %include TiaraDimensions.hh
 %include TiaraMaterials.hh
