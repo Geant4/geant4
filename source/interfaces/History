@@ -1,4 +1,4 @@
-$Id: History,v 1.52 2002-06-12 14:39:31 gcosmo Exp $
+$Id: History,v 1.53 2002-06-12 15:28:46 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12 June 2002, Gabriele Cosmo (interfaces-V04-00-03)
+- Fixes for porting on platforms other than Linux.
+  o socklen_t is Linux specific and not defined elsewhere; changed to int*.
+  o Fixed usage g4std/iostream, globals.hh and endl/G4endl.
 
 12 June 2002, Hajime Yoshida (interfaces-V04-00-02)
 - Introduced new class G4UIGainServer, socket extension for G4UIGAG.
