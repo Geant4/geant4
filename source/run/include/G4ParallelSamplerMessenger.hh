@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelSamplerMessenger.hh,v 1.2 2002-07-12 09:30:23 dressel Exp $
+// $Id: G4ParallelSamplerMessenger.hh,v 1.3 2002-07-12 13:39:52 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -63,7 +63,7 @@ class G4ParallelScoreSampler;
 class G4StandardScorer;
 
 typedef G4std::map<G4String, G4VSampler *> G4MapNameSampler;
-typedef G4Std::map<G4String, G4StandardScorer *> G4MapNameScorer;
+typedef G4std::map<G4String, G4StandardScorer *> G4MapNameScorer;
 
 class G4ParallelSamplerMessenger : public G4UImessenger {
 public:
