@@ -66,7 +66,7 @@ void Tst22SteppingAction::UserSteppingAction(const G4Step* theStep)
               << G4std::setw( 9) << theStep->GetTotalEnergyDeposit() /MeV << " "
                 << G4std::setw( 9) << theStep->GetStepLength() / mm << " "
                   << G4std::setw( 9) << theTrack->GetTrackLength() / mm << " ";
-    if(theStep->GetPostStepPoint()->GetProcessDefinedStep() != NULL){
+    if(theStep->GetPostStepPoint()->GetProcessDefinedStep() != 0){
       G4cout << theStep->GetPostStepPoint()->GetProcessDefinedStep()
         ->GetProcessName();
     } else {
@@ -77,7 +77,7 @@ void Tst22SteppingAction::UserSteppingAction(const G4Step* theStep)
    G4TrackVector* fSecondary = SM->GetfSecondary();
        G4cout << "   -- List of secondaries generated : "
          << "(x,y,z,kE,t,PID) --" << G4endl;
-       for( G4int lp1=0;lp1<(*fSecondary).size(); lp1++){
+       for( size_t lp1=0;lp1<(*fSecondary).size(); lp1++){
          G4cout << "      "
            << G4std::setw( 9)
              << (*fSecondary)[lp1]->GetPosition().x() / mm << " "
@@ -94,6 +94,5 @@ void Tst22SteppingAction::UserSteppingAction(const G4Step* theStep)
                                    ->GetParticleName();
          G4cout << G4endl;
        }
-
 }
 
