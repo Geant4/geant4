@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em8RunAction.hh,v 1.5 2003-06-16 16:47:59 gunter Exp $
+// $Id: Em8RunAction.hh,v 1.6 2003-11-24 18:09:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,7 @@
 class Em8RunMessenger;
 class G4Run;
 
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
   class HepTupleManager;
   class HepHistogram;
 #endif
@@ -132,7 +132,7 @@ class Em8RunAction : public G4UserRunAction
 
     G4String histName ;
 
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
     HepTupleManager* hbookManager;
     HepHistogram *histo1, *histo2, *histo3, *histo4, *histo5 ;
     HepHistogram *histo6, *histo7, *histo8, *histo9, *histo10;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em8RunAction.cc,v 1.9 2003-11-24 16:34:09 grichine Exp $
+// $Id: Em8RunAction.cc,v 1.10 2003-11-24 18:09:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,10 +37,7 @@
 #include <iomanip>
 
 #include "Randomize.hh"
-#ifndef G4NOHIST
-  #include "CLHEP/Hist/HBookFile.h"
-#endif
-#include <assert.h>
+
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -51,7 +48,7 @@ Em8RunAction::Em8RunAction()
 {
   runMessenger = new Em8RunMessenger(this);
   saveRndm = 1;  
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
   histo1=0; histo2=0; histo3=0; histo4=0; histo5=0;
   histo6=0; histo7=0; histo8=0; histo9=0; histo10=0;
 #endif
@@ -62,7 +59,7 @@ Em8RunAction::Em8RunAction()
 Em8RunAction::~Em8RunAction()
 {
   delete runMessenger;
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
   if(histo1) delete histo1 ;
   if(histo2) delete histo2 ;
   if(histo3) delete histo3 ;
@@ -81,7 +78,7 @@ Em8RunAction::~Em8RunAction()
 
 void Em8RunAction::bookHisto()
 {
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
   // init hbook
 
   hbookManager = new HBookFile(histName, 68);
@@ -751,7 +748,7 @@ void Em8RunAction::EndOfRunAction(const G4Run* aRun)
   }
   // Write histogram file
 
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
   hbookManager->write();
 #endif
 
@@ -815,7 +812,7 @@ void Em8RunAction::AddTrRef(G4double tr,G4double ref)
 
 void Em8RunAction::FillNbOfSteps(G4double ns)
 {
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
   const G4double eps = 1.e-10 ;
   G4double n,bin ;
   G4int ibin;
@@ -844,7 +841,7 @@ void Em8RunAction::FillNbOfSteps(G4double ns)
 
 void Em8RunAction::FillEn(G4double En)
 {
-  // #ifndef G4NOHIST
+  // #ifdef G4ANALYSIS_USE
   G4double bin ;
   G4int ibin;
 
@@ -869,7 +866,7 @@ void Em8RunAction::FillEn(G4double En)
 
 void Em8RunAction::FillTt(G4double En)
 {
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
   G4double bin ;
   G4int ibin;
 
@@ -898,7 +895,7 @@ void Em8RunAction::FillTt(G4double En)
 
 void Em8RunAction::FillTb(G4double En)
 {
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
   G4double bin ;
   G4int ibin;
   
@@ -927,7 +924,7 @@ void Em8RunAction::FillTb(G4double En)
 
 void Em8RunAction::FillTsec(G4double En)
 {
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
   G4double bin ;
   G4int ibin;
 
@@ -954,7 +951,7 @@ void Em8RunAction::FillTsec(G4double En)
 
 void Em8RunAction::FillGammaSpectrum(G4double En)
 {
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
   G4double bin ;
   G4int ibin;
 
@@ -981,7 +978,7 @@ void Em8RunAction::FillGammaSpectrum(G4double En)
 
 void Em8RunAction::FillTh(G4double Th)
 {
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
   static const G4double cn=pi/(64800.*dTh) ;
   static const G4double cs=pi/
         (64800.*(cos(Thlow)-cos(Thlow+dTh)));      
@@ -1024,7 +1021,7 @@ void Em8RunAction::FillTh(G4double Th)
 
 void Em8RunAction::FillThBack(G4double Th)
 {
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
   static const G4double cn=pi/(64800.*dThback) ;
   static const G4double cs=pi/
         (64800.*(cos(Thlowback)-cos(Thlowback+dThback)));      
@@ -1064,7 +1061,7 @@ void Em8RunAction::FillThBack(G4double Th)
 
 void Em8RunAction::FillR(G4double R )
 {
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
   G4double bin ;
   G4int ibin;
 
@@ -1093,7 +1090,7 @@ void Em8RunAction::FillR(G4double R )
 
 void Em8RunAction::Fillvertexz(G4double z )
 {
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
   G4double bin ;
   G4int ibin;
   

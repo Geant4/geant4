@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2003-11-13 15:25:37 johna Exp $
+$Id: History,v 1.10 2003-11-24 18:09:22 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24-11-03 V.Ivant (testem8-V05-02-01)
+- Remove obsolete classes
+- Introduce model variant of PAI + general cleanup (V.Grichine)
 
 13-11-03 John Allison
 - Added HepRep and removed OPACS from Vis Manager.
