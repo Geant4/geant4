@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FCylindricalSurface.cc,v 1.2 1999-01-14 16:08:40 broglia Exp $
+// $Id: G4FCylindricalSurface.cc,v 1.3 1999-01-19 13:16:54 broglia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*  /usr/local/gismo/repo/geometry/FG4Cylinder.cc,v 1.1 1992/10/27 22:02:29 alanb Exp  */
@@ -235,17 +235,17 @@ int G4FCylindricalSurface::Intersect( const G4Ray& ry )
   G4int nbinter = 0;
   distance = kInfinity;
 
-  for ( G4int isoln = 0; isoln < 2; isoln++ ) 
-  {
-    if ( s[isoln] >= kCarTolerance*0.5 ) 
-    {
-      if( distance > s[isoln]*s[isoln])
-	distance = s[isoln]*s[isoln];
-
-      nbinter ++;
-    }    
-    else
-      if ( s[isoln] >= -kCarTolerance*0.5 ) 
+  for ( G4int i = 0; i < 2; i++ ) 
+  {  
+    if(s[i] < kInfinity)
+      if ( s[i] >= kCarTolerance*0.5 ) 
+      {   
+	if( distance > s[i]*s[i])
+	  distance = s[i]*s[i];
+	
+	nbinter ++;
+      }    
+      else if ( s[i] >= -kCarTolerance*0.5 ) 
       {
 	// the point is on the surface
 	distance = 0;
@@ -254,13 +254,6 @@ int G4FCylindricalSurface::Intersect( const G4Ray& ry )
   }
 
   return nbinter;
-
-/*
-  if(nbinter&1)
-    return 1;
-  else
-    return 0;
-*/
 }
 
 
@@ -275,6 +268,10 @@ G4double G4FCylindricalSurface::HowNear( const G4Vector3D& x ) const
   G4double rad = sqrt( d.mag2() - dA*dA );
   G4double hownear;
 
+  // solve problem of tolerance
+  if(fabs(dA) < kCarTolerance)
+    dA = 0;
+  
   if(dA > length)
     hownear = length - dA;
   else if(dA < 0)

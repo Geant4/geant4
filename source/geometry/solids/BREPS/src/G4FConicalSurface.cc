@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FConicalSurface.cc,v 1.3 1999-01-15 14:29:00 broglia Exp $
+// $Id: G4FConicalSurface.cc,v 1.4 1999-01-19 13:16:53 broglia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*  /usr/local/gismo/repo/geometry/G4FConicalSurface.cc,v 1.2 1993/02/05 00:38:39 alanb Exp  */
@@ -365,17 +365,17 @@ int G4FConicalSurface::Intersect(const G4Ray& ry )
   G4int nbinter = 0;
   distance = kInfinity;
 
-  for ( G4int isoln = 0; isoln < 2; isoln++ ) 
-  {
-    if ( s[isoln] >= kCarTolerance*0.5 ) 
-    {   
-      if( distance > s[isoln]*s[isoln])
-	distance = s[isoln]*s[isoln];
-
-      nbinter ++;
-    }    
-    else
-      if ( s[isoln] >= -kCarTolerance*0.5 ) 
+  for ( G4int i = 0; i < 2; i++ ) 
+  {  
+    if(s[i] < kInfinity)
+      if ( s[i] >= kCarTolerance*0.5 ) 
+      {   
+	if( distance > s[i]*s[i])
+	  distance = s[i]*s[i];
+	
+	nbinter ++;
+      }    
+      else if ( s[i] >= -kCarTolerance*0.5 ) 
       {
 	// the point is on the surface
 	distance = 0;
@@ -384,12 +384,6 @@ int G4FConicalSurface::Intersect(const G4Ray& ry )
   }
 
   return nbinter;
-/*
-  if(nbinter&1)
-    return 1;
-  else
-    return 0;
-*/
 }
 
 
@@ -408,6 +402,10 @@ G4double G4FConicalSurface::HowNear( const G4Vector3D& x ) const
   G4double   radiu   = fabs( rad - large_radius + dA*tan_angle );
   G4double   hownear ;
 
+  // solve problem of tolerance
+  if(fabs(dA) < kCarTolerance)
+    dA = 0;
+
   if (dA > length)
     hownear =dA - length;
   else if (dA < 0)
@@ -419,8 +417,6 @@ G4double G4FConicalSurface::HowNear( const G4Vector3D& x ) const
 }
 
 
-// Add by L. Broglia
-// Verify this function
 G4Vector3D G4FConicalSurface::SurfaceNormal( const G4Point3D& p ) const
 {  
   //  return the Normal unit vector to the G4ConicalSurface at a point p 
