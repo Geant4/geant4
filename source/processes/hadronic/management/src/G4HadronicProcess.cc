@@ -227,6 +227,12 @@
 	 G4double charge = aCalculator.GetCharge(aMaterial, kineticEnergy,
 	                                        aSecTrack->GetDefinition()->GetPDGMass(),
 						aSecTrack->GetDefinition()->GetPDGCharge());
+         if(getenv("GHADChargeDebug")) 
+         {
+            std::cout << "Recoil fractional charge is "
+                      << charge/aSecTrack->GetDefinition()->GetPDGCharge()<<" "
+                      << charge <<" "<<aSecTrack->GetDefinition()->GetPDGCharge()<<std::endl;
+         }
 	 aSecTrack->SetCharge(charge);
       }
     }
