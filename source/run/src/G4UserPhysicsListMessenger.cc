@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.cc,v 1.13 2003-03-10 08:33:56 asaim Exp $
+// $Id: G4UserPhysicsListMessenger.cc,v 1.14 2003-03-11 02:18:45 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -79,12 +79,12 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   param = new G4UIparameter("Region",'s',false);
   setCutRCmd->SetParameter(param);
   param = new G4UIparameter("cut",'d',false);
+  param->SetParameterRange("cut >0.0");
   setCutRCmd->SetParameter(param);
   param = new G4UIparameter("Unit",'s',true);
   param->SetDefaultValue("mm");
   param->SetParameterCandidates(setCutRCmd->UnitsList(setCutRCmd->CategoryOf("mm")));
   setCutRCmd->SetParameter(param);
-  setCutRCmd->SetRange("cut >0.0");
   setCutRCmd->AvailableForStates(G4State_Idle);
 
   // /run/particle/DumpList command
@@ -175,6 +175,7 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newV
   if( command==setCutCmd ){
     G4double newCut = setCutCmd->GetNewDoubleValue(newValue); 
     thePhysicsList->SetDefaultCutValue(newCut);
+    thePhysicsList->SetCutsWithDefault();
 
   } else if( command==setCutRCmd ){
     G4Tokenizer next( newValue );
