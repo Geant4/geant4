@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.23 2001-12-11 17:46:49 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.24 2002-01-10 16:04:38 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation  Paul Kent July 95/96
@@ -505,7 +505,7 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
               // G4cerr << "    -  ." << G4endl;
 #endif 
 	   }
-#ifdef DEBUG
+#ifdef G4DEBUG_NAVIGATION
 	   else
 	   {
  	      G4cerr << " Warning in G4Navigator::ComputeStep: " << G4endl

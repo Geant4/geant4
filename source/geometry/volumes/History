@@ -1,4 +1,4 @@
-$Id: History,v 1.65 2002-01-08 17:42:32 japost Exp $
+$Id: History,v 1.66 2002-01-10 16:04:38 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jan 10th, 2002       G. Cosmo
+- Activated mechanism in GNUmakefile for allowing compilation with
+  G4DEBUG_FIELD or G4DEBUG_NAVIGATION flags. Replaced DEBUG with
+  G4DEBUG_NAVIGATION in G4Navigator.cc.
 
 Jan  8th, 2002       J. Apostolakis - geomvol-V04-00-00
 - G4AuxiliaryNavServices
