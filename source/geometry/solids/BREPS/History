@@ -1,6 +1,66 @@
 History file for geometry/solids/BREPS
 
-27/01/199 : L. Broglia ( new tag : breps-01-00-01 )
+21/05/1999 : J. Apostolakis       breps-01-00-02
+
+ - Tagged.
+
+21/05/1999 : S. Magni
+ G4BREPSolidPCone: Further minor corrections several methods
+        - protecting HowNear with fabs when cheching against tolearance ..
+
+21/05/1999 : J. Apostolakis
+ G4BSplineSurface.hh,
+ G4PointRat.hh,
+ G4BREPSolid.cc,
+ G4ProjectedSurface.cc
+ G4Surface.cc
+ G4BREPSolid.cc
+        - changed INFINITY to kInfinity
+
+20/05/1999 : S. Giani
+ G4Line.cc:
+        - A preliminary fix to avoid 0-lenght segments has been introduced.
+
+19/05/1999 : S. Magni
+
+ G4BREPSolidPCone: Corrected several methods 
+        - constructor          to take into account the changed G4FPlane 
+
+	- Inside
+	- SurfaceNormal
+	- DistanceToIn( p, v)
+	- DistanceToOut( p, v) 
+            for 
+                corrected behaviour of HowNear, which is for finite surfaces.
+		...
+ G4FCylindricalSurface, 
+ G4FConicalSurface.cc: 
+        Corrected the following methods:
+	- Intersect
+	- HowNear
+
+12/05/1999 : S.Giani
+  
+ G4BREPSolidPolyhedra Corrections by S.Giani:
+        - Xaxis now corresponds to phi=0
+        - partial angle = phiTotal / Nsides
+        - end planes exact boundary calculation for phiTotal < 2pi 
+           (also including case with RMIN=RMAX) 
+        - Xaxis now properly rotated to compute correct scope of vertixes
+        - corrected surface orientation for outer faces parallel to Z
+        - completed explicit setting of the orientation for all faces
+        - some comparison between doubles avoided by using tolerances. 
+
+  G4FPlane corrections 
+	- The constructor using iVec now properly stores both the internal
+	  and external boundaries in the bounds vector.
+	- Proper initialization of sameSense in both the constructors. 
+	- Addition of third argument (sense) in the second constructor 
+	  to ensure consistent setting of the normal in all the client code.
+
+
+
+27/01/1999 : L. Broglia ( new tag : breps-01-00-01 )
 
  - functions Inside, DistanceToIn and DistanceToOut
    are re-written to satisfy requirements
