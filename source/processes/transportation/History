@@ -1,4 +1,4 @@
-$Id: History,v 1.63 2002-11-20 19:27:39 japost Exp $
+$Id: History,v 1.64 2002-12-16 11:22:01 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec, 16th, G. Cosmo        transport-V05-00-00
+-------------------
+- Merged branch "geant4-04-01-ref-02-cuts-branch" to HEAD.
+  Included development for 'cuts-by-region' in G4Transportation.cc.
 
 Nov, 20th, J. Apostolakis  transport-V04-01-05
 -------------------------
