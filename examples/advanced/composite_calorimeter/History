@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.18 2003-11-25 08:16:46 ribon Exp $
+$Id: History,v 1.19 2003-12-04 08:55:16 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,13 @@ $Id: History,v 1.18 2003-11-25 08:16:46 ribon Exp $
 
                       Example History file
                       ---------------------
+
+04.12.03 - G.Cosmo (ccal-V05-02-05)
+- Corrected GNUmakefile and updated scripts to Anaphe 5.0.6.
+
+03.12.03 - H.P.Wellisch
+- Removed physics-lists, now using default setup provided in
+  $G4INSTALL/hadronic_lists.
 
 25.11.03 - A.Ribon (ccal-V05-02-04)
 - Changes in the Physics Lists to be compatible with the latest
