@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test40.cc,v 1.1 2002-12-16 11:41:45 stesting Exp $
+// $Id: test40.cc,v 1.2 2004-05-28 08:51:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,6 +45,7 @@
 #include "Em2TrackingAction.hh"
 #include "Em2SteppingAction.hh"
 #include "Em2SteppingVerbose.hh"
+#include "Em2ConstRandEngine.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -52,6 +53,7 @@ int main(int argc,char** argv) {
  
   //choose the Random engine
   HepRandom::setTheEngine(new RanecuEngine);
+  // HepRandom::setTheEngine(new Em2ConstRandEngine);
   
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new Em2SteppingVerbose);
