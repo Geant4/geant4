@@ -12,11 +12,12 @@
 /gun/particle deuteron
 /gun/energy 2.0 GeV
 /mydet/SelectMaterial U
-/run/beamOn 0
+/run/beamOn 200
 #
 # beyond what we really can do.... we think.
 # O(16,8) charge 2 at 2 GeV in U
 #
+/gun/particle ion
 /gun/ion 8 16 2
 /gun/energy 2.0 GeV
 /mydet/SelectMaterial U
