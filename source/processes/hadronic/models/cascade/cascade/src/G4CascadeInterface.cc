@@ -37,7 +37,7 @@ G4ReactionProductVector* G4CascadeInterface::Propagate(G4KineticTrackVector* the
   return NULL;
 };
 
-#define debug_G4CascadeInterface
+// #define debug_G4CascadeInterface
 
 G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack, 
 						     G4Nucleus& theNucleus) {
@@ -170,13 +170,17 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
       switch(outgoingParticle) {
 
       case proton: 
+#ifdef debug_G4CascadeInterface
 	G4cerr << "proton "<< counter<<G4endl;
+#endit
 	cascadeParticle = 
 	  new G4DynamicParticle(G4Proton::ProtonDefinition(), aMom, ekin);
 	break; 
 
       case neutron: 
+#ifdef debug_G4CascadeInterface
 	G4cerr << "neutron "<< counter<<G4endl;
+#endif
 	cascadeParticle = 
 	  new G4DynamicParticle(G4Neutron::NeutronDefinition(), aMom, ekin);
 	break;
@@ -184,25 +188,33 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
       case pionPlus: 
 	cascadeParticle = 
 	  new G4DynamicParticle(G4PionPlus::PionPlusDefinition(), aMom, ekin);
+#ifdef debug_G4CascadeInterface
 	G4cerr << "pionPlus "<< counter<<G4endl;
+#endif
 	break;
 
       case pionMinus:
 	cascadeParticle = 
 	  new G4DynamicParticle(G4PionMinus::PionMinusDefinition(), aMom, ekin);
+#ifdef debug_G4CascadeInterface
 	G4cerr << "pionMinus "<< counter<<G4endl;
+#endif
 	break;
 
       case pionZero: 
 	cascadeParticle = 
 	  new G4DynamicParticle(G4PionZero::PionZeroDefinition(), aMom, ekin);
+#ifdef debug_G4CascadeInterface
 	G4cerr << "pionZero "<< counter<<G4endl;
+#endif
 	break;
 
       case photon: 
 	cascadeParticle = 
 	  new G4DynamicParticle(G4Gamma::Gamma(), aMom, ekin);
+#ifdef debug_G4CascadeInterface
 	G4cerr << "photon "<< counter<<G4endl;
+#endif
 	break;
 
       default: cout << " ERROR: G4CascadeInterface::Propagate undefined particle type";
