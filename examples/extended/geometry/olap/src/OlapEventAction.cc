@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: OlapEventAction.cc,v 1.1 2002-06-04 07:40:21 gcosmo Exp $
+// $Id: OlapEventAction.cc,v 1.2 2003-06-12 12:24:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,6 +32,7 @@
 //
 // --------------------------------------------------------------
 //
+#include "globals.hh"
 #include "g4std/vector"
 #include "g4std/strstream"
 
@@ -145,11 +146,8 @@ OlapEventAction::~OlapEventAction()
 }
 
 
-void OlapEventAction::BeginOfEventAction(const G4Event* anEvent)
+void OlapEventAction::BeginOfEventAction(const G4Event*)
 {
-   // G4cout << ">>>evt=" << anEvent->GetEventID() << " run=" << 
-   // anEvent->G4endl;
-    
     while (!ABSteps.empty())
     {
        if (! dontDelete ) 

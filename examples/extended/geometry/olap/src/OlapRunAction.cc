@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: OlapRunAction.cc,v 1.2 2002-06-04 09:23:45 gcosmo Exp $
+// $Id: OlapRunAction.cc,v 1.3 2003-06-12 12:24:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,7 +53,7 @@ OlapRunAction::~OlapRunAction()
 }
 
             
-void OlapRunAction::BeginOfRunAction(const G4Run* aRun)
+void OlapRunAction::BeginOfRunAction(const G4Run*)
 {
   while ( !theOlaps.empty() )
   {

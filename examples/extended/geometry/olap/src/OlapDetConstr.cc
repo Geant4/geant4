@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: OlapDetConstr.cc,v 1.1 2002-06-04 07:40:20 gcosmo Exp $
+// $Id: OlapDetConstr.cc,v 1.2 2003-06-12 12:24:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -602,7 +602,7 @@ void OlapDetConstr::ColorFirstLevel()
 
 
 // sets NewWorld invisible
-void OlapDetConstr::ResetColors(G4LogicalVolume* lv)
+void OlapDetConstr::ResetColors(G4LogicalVolume*)
 {
 /*
    G4ColorMap * aColMap = G4ColorMap::GetColorMap();
