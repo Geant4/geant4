@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopeRayleigh.hh,v 1.2 2003-02-22 18:06:03 pia Exp $
+// $Id: G4PenelopeRayleigh.hh,v 1.3 2003-03-13 16:53:50 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -102,7 +102,7 @@ private:
 
   G4VEMDataSet* meanFreePathTable;
   
-  G4Material* material;
+  const G4Material* material;
   const G4int nBins;
   const G4double intrinsicLowEnergyLimit; // intrinsic validity range
   const G4double intrinsicHighEnergyLimit;

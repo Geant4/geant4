@@ -22,7 +22,7 @@
 //
 // --------------------------------------------------------------------
 //
-// $Id: G4PenelopeRayleigh.cc,v 1.6 2003-03-10 12:18:35 vnivanch Exp $
+// $Id: G4PenelopeRayleigh.cc,v 1.7 2003-03-13 16:55:35 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: L. Pandola (luciano.pandola@cern.ch)
@@ -31,8 +31,8 @@
 // --------
 // 14 Feb 2003   MG Pia       Corrected compilation errors and warnings
 //                            from SUN
-// 10 Mar 2003 V.Ivanchenko   Remome CutPerMaterial warning
-//
+// 10 Mar 2003 V.Ivanchenko   Remove CutPerMaterial warning
+// 12 Mar 2003 L.Pandola      Code "cleaned" - Cuts per region 
 // --------------------------------------------------------------------
 
 #include "G4PenelopeRayleigh.hh"
@@ -54,6 +54,7 @@
 #include "G4VDataSetAlgorithm.hh"
 #include "G4LogLogInterpolation.hh"
 #include "G4PenelopeIntegrator.hh"
+#include "G4MaterialCutsCouple.hh"
 
 G4PenelopeRayleigh::G4PenelopeRayleigh(const G4String& processName)
   : G4VDiscreteProcess(processName),
@@ -113,15 +114,12 @@ void G4PenelopeRayleigh::BuildPhysicsTable(const G4ParticleDefinition& photon)
   G4VEMDataSet* materialSet = new G4CompositeEMDataSet(algo,1.,1.);
   G4std::vector<G4VEMDataSet*> matCrossSections;
 
-  //G4CompositeEMDataSet dovrebbe essere un Vettore di EMDataSet
-  //matCrossSection e' un vettore di G4CompositeEMDataSet
-
   G4int m;
   for (m=0; m<nMaterials; m++)
     {
       G4DataVector* energies = new G4DataVector;
       G4DataVector* data = new G4DataVector;
-      material= (*materialTable)[m];
+      material = (*materialTable)[m];
 
       G4int nElements = material->GetNumberOfElements();
       const G4ElementVector* elementVector = material->GetElementVector();
@@ -163,26 +161,21 @@ void G4PenelopeRayleigh::BuildPhysicsTable(const G4ParticleDefinition& photon)
 	  G4double cross = density*cs;
 	  data->push_back(cross);
 	}
-      G4VEMDataSet* elSet = new G4EMDataSet(0,energies,data,algo); //0 perche' c'e' una sola sez d'urto (1 solo el.)
+      G4VEMDataSet* elSet = new G4EMDataSet(0,energies,data,algo); 
       G4VEMDataSet* setForMat = new G4CompositeEMDataSet(algo);
-      setForMat->AddComponent(elSet); //ogni componente (elemento) contiene i vettori di energie e di cs
-      matCrossSections.push_back(setForMat); //gli elementi di questo vettore sono i vettori di energie e cs di ogni elemento
+      setForMat->AddComponent(elSet); 
+      matCrossSections.push_back(setForMat);
     }
-
-  //sono state calcolate le sezioni d'urto dei vari materiali
   G4double matCS = 0.0;
 
   for (m=0; m<nMaterials; m++)
     {
       G4DataVector* energies = new G4DataVector;
       G4DataVector* data = new G4DataVector;
-      //      G4Material* material= (*materialTable)[m];
       for (bin=0;bin<nOfBins;bin++){
 	energies->push_back(energyVector[bin]);
 	matCS = (matCrossSections[m]->GetComponent(0))->FindValue(energyVector[bin]);
-	//recupera la componente relativa
-	//all'elemento 0 (l'unica che c'e') e trova il valore corrispondente ad una data energia
-	if (matCS > 0.){//total cross section for that material
+	if (matCS > 0.){
 	  data->push_back(1./matCS);
 	}
 	else
@@ -190,9 +183,8 @@ void G4PenelopeRayleigh::BuildPhysicsTable(const G4ParticleDefinition& photon)
 	    data->push_back(DBL_MAX);
 	  }
       }
-      G4VEMDataSet* dataSet = new G4EMDataSet(m,energies,data,algo,1.,1.); //vettore che, per ogni materiale, contiene
-      //i vettori di energia e cammino libero medio (complessivi dell'intero materiale)
-      materialSet->AddComponent(dataSet); //aggiunge il materiale m-esimo alla lista
+      G4VEMDataSet* dataSet = new G4EMDataSet(m,energies,data,algo,1.,1.); 
+      materialSet->AddComponent(dataSet); 
     }
   meanFreePathTable = materialSet;
 }
@@ -216,10 +208,13 @@ G4VParticleChange* G4PenelopeRayleigh::PostStepDoIt(const G4Track& aTrack,
 
 
   G4ParticleMomentum photonDirection0 = incidentPhoton->GetMomentumDirection();
-  material = aTrack.GetMaterial();
+  const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
+  material = couple->GetMaterial();
+  
   // Sampling inizialitation (build internal table)
-  //  InizialiseSampling(material);
+ 
   InizialiseSampling();
+
   // Sample the angle of the scattered photon
   const G4double xpar=41.2148;
   G4double x2max = 2.0*log(xpar*photonEnergy0/electron_mass_c2);
@@ -320,7 +315,6 @@ G4double G4PenelopeRayleigh::GetMeanFreePath(const G4Track& track,
   return meanFreePath;
 }
 
-//void G4PenelopeRayleigh::InizialiseSampling(const G4Material* material)
 void G4PenelopeRayleigh::InizialiseSampling()
 {
   const G4int points=241;
