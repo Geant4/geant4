@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Cons.cc,v 1.3 1999-04-16 09:28:43 grichine Exp $
+// $Id: G4Cons.cc,v 1.4 1999-04-29 09:46:34 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Cons
@@ -13,9 +13,12 @@
 // Implementation for G4Cons class
 //
 // History:
-// ~1994 P. Kent: main part of geometry functions
-// 13.9.96 V. Grichine: final modifications to commit
+//
+// 28.04.99 V. Grichine bugs fixed in  Distance ToOut(p,v,...) and  
+//          Distance ToIn(p,v)
 // 09.10.98 V. Grichine modifications in Distance ToOut(p,v,...)
+// 13.09.96 V. Grichine: final modifications to commit
+// ~1994 P. Kent: main part of geometry functions
 
 #include "G4Cons.hh"
 
@@ -619,8 +622,8 @@ G4ThreeVector G4Cons::SurfaceNormal( const G4ThreeVector& p) const
     return norm;
 }
 
-// ---------------------------------------------------------------------------------------
-
+////////////////////////////////////////////////////////////////////////
+//
 // Calculate distance to shape from outside, along normalised vector
 // - return kInfinity if no intersection, or intersection distance <= tolerance
 //
@@ -720,61 +723,65 @@ G4double G4Cons::DistanceToIn(const G4ThreeVector& p,
     tolIDz=fDz-kCarTolerance/2;
     tolODz=fDz+kCarTolerance/2;
     if (fabs(p.z())>=tolIDz)
-	{
-	    if (p.z()*v.z()<0)		// at +Z going in -Z or visa versa
-		{
-		    s=(fabs(p.z())-fDz)/fabs(v.z());	// Z intersect distance
-		    xi=p.x()+s*v.x();	// Intersection coords
-		    yi=p.y()+s*v.y();
-		    rho2=xi*xi+yi*yi;
-// Check validity of intersection
+    {
+       if (p.z()*v.z()<0)		// at +Z going in -Z or visa versa
+       {
+	  s=(fabs(p.z())-fDz)/fabs(v.z());	// Z intersect distance
 
-// Calculate (outer) tolerant radi^2 at intersecion
-		    if (v.z()>0)
-			{
-			    tolORMin=fRmin1-kRadTolerance;
-			    tolORMax2=(fRmax1+kRadTolerance)*(fRmax1+kRadTolerance);
-			}
-		    else
-			{
-			    tolORMin=fRmin2-kRadTolerance;
-			    tolORMax2=(fRmax2+kRadTolerance)*(fRmax2+kRadTolerance);
-			}
-		    if (tolORMin>0)
-			{
+          if(s<0.0) s = 0.0 ;                  // negative dist -> zero
+
+	  xi=p.x()+s*v.x();	// Intersection coords
+	  yi=p.y()+s*v.y();
+	  rho2=xi*xi+yi*yi;
+
+          // Check validity of intersection
+	  //
+          // Calculate (outer) tolerant radi^2 at intersecion
+
+	  if (v.z()>0)
+	  {
+	     tolORMin=fRmin1-kRadTolerance;
+	     tolORMax2=(fRmax1+kRadTolerance)*(fRmax1+kRadTolerance);
+	  }
+	  else
+	  {
+	     tolORMin=fRmin2-kRadTolerance;
+	     tolORMax2=(fRmax2+kRadTolerance)*(fRmax2+kRadTolerance);
+	  }
+	  if ( tolORMin > 0 )
+	  {
 			    tolORMin2=tolORMin*tolORMin;
-			}
-		    else
-			{
-			    tolORMin2=0;
-			}
-		    
-
-		    if (tolORMin2<=rho2&&rho2<=tolORMax2)
-			{
-			    if (seg&&rho2)
-				{
+	  }
+	  else
+	  {
+	     tolORMin2=0;
+	  }
+	  if (tolORMin2 <= rho2 && rho2 <= tolORMax2)
+	  {
+	     if (seg&&rho2)
+	     {
 // Psi = angle made with central (average) phi of shape
-				    cosPsi=(xi*cosCPhi+yi*sinCPhi)/sqrt(rho2);
-				    if (cosPsi>=cosHDPhiOT)
-					{
-					    return s;
-					}
-				}
-			    else
-				{
-				    return s;
-				}
 
-			}
-		}
-	    else
+		cosPsi=(xi*cosCPhi+yi*sinCPhi)/sqrt(rho2);
+
+		if (cosPsi >= cosHDPhiOT)
 		{
-		    return snxt;	// On/outside extent, and heading away
-					// -> cannot intersect
+		   return s ;
 		}
-	}
-// -> Can not intersect z surfaces
+	     }
+	     else
+	     {
+		return s ;
+	     }
+	  }
+       }
+       else  // On/outside extent, and heading away  -> cannot intersect
+       {
+	  return snxt ;	
+       }
+    }
+    //
+    // -> Can not intersect z surfaces
 
 
 
@@ -1249,7 +1256,7 @@ G4double G4Cons::DistanceToIn(const G4ThreeVector& p,
     return snxt;
 }
 
-// -------------------------------------------------------------------------------------------
+
 
 /*  ****************************************************************************************
 
@@ -1705,8 +1712,8 @@ G4double G4Cons::DistanceToIn(const G4ThreeVector& p) const
     return safe;
 }
 
-// -----------------------------------------------------------------------------------
-
+///////////////////////////////////////////////////////////////
+//
 // Calculate distance to surface of shape from `inside', allowing for tolerance
 // - Only Calc rmax intersection if no valid rmin intersection
 
@@ -1737,55 +1744,54 @@ G4double G4Cons::DistanceToOut(const G4ThreeVector& p,
 // Z plane intersection
 //
     if (v.z()>0)
-	{
-	    pdist=fDz-p.z();
-	    if (pdist>kCarTolerance/2)
-		{
-		    snxt=pdist/v.z();
-		    side=kPZ;
-		}
-	    else
-		{
-		    if (calcNorm)
-			{
-			    *n=G4ThreeVector(0,0,1);
-			    *validNorm=true;
-			}
-		    return snxt=0;
-		}
-	}
+    {
+       pdist=fDz-p.z();
+
+       if (pdist > kCarTolerance*0.5)
+       {
+	  snxt=pdist/v.z();
+	  side=kPZ;
+       }
+       else
+       {
+	  if (calcNorm)
+	  {
+	     *n=G4ThreeVector(0,0,1);
+	     *validNorm=true;
+	  }
+	  return snxt=0;
+       }
+    }
     else if (v.z()<0)
-	{
-	    pdist=fDz+p.z();
-	    if (pdist>kCarTolerance/2)
-		{
-		    snxt=-pdist/v.z();
-		    side=kMZ;
-		}
-	    else
-		{
-		    if (calcNorm)
-			{
-			    *n=G4ThreeVector(0,0,-1);
-			    *validNorm=true;
-			}
-		    return snxt=0;
-		}
-	}
+    {
+       pdist=fDz+p.z();
+
+       if (pdist > kCarTolerance*0.5)
+       {
+	  snxt=-pdist/v.z();
+	  side=kMZ;
+       }
+       else
+       {
+	  if (calcNorm)
+	  {
+	     *n=G4ThreeVector(0,0,-1);
+	     *validNorm=true;
+	  }
+	  return snxt=0;
+       }
+    }
     else
-	{
-	    snxt=kInfinity;		// Travel perpendicular to z axis
-	    side=kNull;
-	}
+    {
+       snxt=kInfinity;		// Travel perpendicular to z axis
+       side=kNull;
+    }
 //
 // Radial Intersections
-//
-
 //
 // Intersection with outer cone (possible return) and
 //                   inner cone (must also check phi)
 //
-
 // Intersection point (xi,yi,zi) on line x=p.x+t*v.x etc.
 //
 // Intersects with x^2+y^2=(a*z+b)^2
@@ -1812,138 +1818,146 @@ G4double G4Cons::DistanceToOut(const G4ThreeVector& p,
     nt2=t2-tanRMax*v.z()*rout;
     nt3=t3-rout*rout;
     if (nt1)
-	{
+    {
 //
 // Equation quadratic => 2 roots : second root must be leaving
 //
-	    b=nt2/nt1;
-	    c=nt3/nt1;
-	    d=b*b-c;
-	    if (d>=0)
-		{
+       b=nt2/nt1;
+       c=nt3/nt1;
+       d=b*b-c;
+
+       if ( d >= 0 )
+       {
 // Check if on outer cone & heading outwards
-// NOTE: Should use rho-rout>-kRadtolerance/2		    
-		    if (nt3>-kRadTolerance/2&&nt2>=0)
-			{
-			    if (calcNorm)
-				{
-				    risec=sqrt(t3)*secRMax;
-				    *validNorm=true;
-				    *n=G4ThreeVector(p.x()/risec,p.y()/risec,-tanRMax/secRMax);
-				}
-			    return snxt=0;
-			}
-		    else
-			{
+// NOTE: Should use rho-rout>-kRadtolerance/2
+		    
+	  if (nt3 > -kRadTolerance*0.5 && nt2 >= 0 )
+	  {
+	     if (calcNorm)
+	     {
+		risec=sqrt(t3)*secRMax;
+		*validNorm=true;
+		*n=G4ThreeVector(p.x()/risec,p.y()/risec,-tanRMax/secRMax);
+	     }
+	     return snxt=0;
+	  }
+	  else
+	 {
 // // -*-* ORIG ROOT CODE    
 // 			    sr=-b+sqrt(d);
 // 			    sider=kRMax;
 // // -*-* ORIG ROOT CODE    
 
 // Patch 4.4.95 - root above cross-over point
-			    sider=kRMax;
-			    sr=-b+sqrt(d);
-			    zi=p.z()+sr*v.z();
-			    ri=tanRMax*zi+rMaxAv;
-			    
-			    if( (ri>=0) 
-				 && (-kRadTolerance/2 <= sr)
-				 && ( sr <= kRadTolerance/2)  )
-			      {
-				// An intersection within the tolerance
-				//   we will Store it in case it is good -
-				// 
-				slentol = sr;
-				sidetol= kRMax;
-			      }
-			      
-			    if ( (ri<0) 
-				 || (sr<kRadTolerance/2) )
-			      {
-				    sr2=-b+sqrt(d);
-// Safety: if both roots -ve ensure that sr cannot `win' distancetoout
-				    zi=p.z()+sr2*v.z();
-				    ri=tanRMax*zi+rMaxAv;
-				    if (ri>=0&&sr2>kRadTolerance/2)
-				      {
-					sr=sr2;
-				      }
-				    else
-				      {
-					sr=kInfinity;
-					if(  (-kRadTolerance/2 <= sr2)
-					     &&( sr2 <= kRadTolerance/2)  )
-					  {
-					    // An intersection within the
-					    // tolerance. Storing it
-					    // in case it is good.
-					    slentol = sr2;
-					    sidetol= kRMax;
-					  }
-				      }
-			      }
 
-			}
-		}
-	    else
+	     sider=kRMax ;
+	     sr=-b - sqrt(d); // was +srqrt(d), vmg 28.04.99
+	     zi=p.z()+sr*v.z();
+	     ri=tanRMax*zi+rMaxAv;
+			    
+	     if (    (ri >= 0) 
+                 && (-kRadTolerance/2 <= sr)
+		 && ( sr <= kRadTolerance/2)  )
+	     {
+// An intersection within the tolerance
+//   we will Store it in case it is good -
+// 
+		 slentol = sr;
+		 sidetol= kRMax;
+	     }			      
+	     if ( (ri < 0) || (sr < kRadTolerance/2) )
+	     {
+// Safety: if both roots -ve ensure that sr cannot `win' distancetoout
+
+		sr2=-b+sqrt(d);
+		zi=p.z()+sr2*v.z();
+		ri=tanRMax*zi+rMaxAv;
+
+	        if (ri>=0&&sr2>kRadTolerance/2)
 		{
+		   sr=sr2;
+		}
+		else
+		{
+		   sr = kInfinity ;
+
+		   if(    (-kRadTolerance/2 <= sr2)
+		       && ( sr2 <= kRadTolerance/2)  )
+		   {
+// An intersection within the tolerance. Storing it in case it is good.
+
+		      slentol = sr2;
+		      sidetol= kRMax;
+		   }
+		}
+	     }
+	  }
+       }
+       else
+       {
 // No intersection with outer cone & not parallel -> already outside, no
 // intersection
-		    if (calcNorm)
-			{
-			    risec=sqrt(t3)*secRMax;
-			    *validNorm=true;
-			    *n=G4ThreeVector(p.x()/risec,p.y()/risec,-tanRMax/secRMax);
-			}
-		    return snxt=0;
-		}
-	}
+
+	  if (calcNorm)
+	  {
+	     risec=sqrt(t3)*secRMax;
+	    *validNorm=true;
+	    *n=G4ThreeVector(p.x()/risec,p.y()/risec,-tanRMax/secRMax);
+	  }
+	  return snxt=0;
+       }
+    }
     else if (nt2)
-	{
+    {
 //
 // Linear case (only one intersection) => point outside outer cone
 //
-	    if (calcNorm)
-		{
-		    risec=sqrt(t3)*secRMax;
-		    *validNorm=true;
-		    *n=G4ThreeVector(p.x()/risec,p.y()/risec,-tanRMax/secRMax);
-		}
-	    return snxt=0;
-	}
+       if (calcNorm)
+       {
+	  risec=sqrt(t3)*secRMax;
+	 *validNorm=true;
+	 *n=G4ThreeVector(p.x()/risec,p.y()/risec,-tanRMax/secRMax);
+       }
+       return snxt=0;
+    }
     else
-	{
+    {
 // No intersection -> parallel to outer cone => Z or inner cone intersection
-	    sr=kInfinity;
-	}
+
+       sr=kInfinity;
+    }
 
 // Check possible intersection within tolerance
-  if( slentol <= kCarTolerance/2 )
+
+    if ( slentol <= kCarTolerance/2 )
     {
-      // An intersection within the tolerance was found.  
-      // We must accept it only if the momentum points outwards.  
+//
+// An intersection within the tolerance was found.  
+// We must accept it only if the momentum points outwards.  
+//
+// G4ThreeVector ptTol;  // The point of the intersection  
+// ptTol= p + slentol*v;
+// ri=tanRMax*zi+rMaxAv;
+//
+// Calculate a normal vector,  as below
 
-      // G4ThreeVector ptTol;  // The point of the intersection  
-      // ptTol= p + slentol*v;
-      // ri=tanRMax*zi+rMaxAv;
+       xi=p.x()+slentol*v.x();
+       yi=p.y()+slentol*v.y();
+       risec=sqrt(xi*xi+yi*yi)*secRMax;
+       G4ThreeVector Normal=G4ThreeVector(xi/risec,yi/risec,-tanRMax/secRMax);
 
-      // Calculate a normal vector,  as below
-      xi=p.x()+slentol*v.x();
-      yi=p.y()+slentol*v.y();
-      risec=sqrt(xi*xi+yi*yi)*secRMax;
-      G4ThreeVector Normal=G4ThreeVector(xi/risec,yi/risec,-tanRMax/secRMax);
-
-      if( Normal.dot(v) > 0 )
-	{
+       if ( Normal.dot(v) > 0 )
+       {
 	  // We will leave the Cone immediatelly
-	  if(calcNorm) 
-	    {
-	      *n= Normal.unit();
-	      *validNorm=true;
-	    }
+
+	  if ( calcNorm ) 
+	  {
+	    *n= Normal.unit();
+	    *validNorm=true;
+	  }
 	  return snxt = 0.0;
 	}
-      else 
+        else 
 	{ 
 	  // On the surface, but not heading out
 	  //  so we ignore this intersection (as it is within tolerance).
