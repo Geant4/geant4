@@ -7,7 +7,7 @@
 #verbose
 0
 #events
-20000
+100000
 //--------Proton_processes
 #particle
 proton
@@ -40,7 +40,7 @@ Ni
 22.  55.  90.  120.  155.
 //--------
 #generator
-kinetic
+binary
 #paw
 kin.paw
 #run
