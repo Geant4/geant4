@@ -177,7 +177,7 @@ G4FragmentVector * G4BertiniEvaporation::BreakItUp( G4LayeredNucleus & nucleus )
 
 	  const G4int zRes = nucleusZ - pSelectedChannel->getParticleZ(); 
 	  const G4int aRes  = nucleusA - pSelectedChannel->getParticleA(); 
-	  const G4double eBind = G4NucleiProperties::GetBindingEnergy( aRes, zRes );  // Binding energy of the nucleus.
+	  // const G4double eBind = G4NucleiProperties::GetBindingEnergy( aRes, zRes );  // Binding energy of the nucleus.
 	  mRes  = G4NucleiProperties::GetAtomicMass( aRes, zRes ); // Mass of the target nucleus
 	  //      In HETC88:
 	  //   	  eBind = Z * (-0.78244) + A * 8.36755 - cameron ( A , Z );

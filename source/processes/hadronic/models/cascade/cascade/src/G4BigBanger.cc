@@ -35,7 +35,7 @@ G4BigBanger::G4BigBanger()
   }
 }
 
-G4CollisionOutput G4BigBanger::collide(G4InuclParticle* bullet,
+G4CollisionOutput G4BigBanger::collide(G4InuclParticle* /*bullet*/,
 				       G4InuclParticle* target) {
 
   if (verboseLevel > 3) {

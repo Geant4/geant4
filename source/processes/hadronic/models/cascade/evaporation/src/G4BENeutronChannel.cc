@@ -75,8 +75,8 @@ void G4BENeutronChannel::calculateProbability()
   const G4double levelParam = getLevelDensityParameter();
   
   const G4double s    = 2 * sqrt( levelParam  * ( excitationEnergy - getThresh() - correction ) );
-  const G4double temp = ( pow( s, 2 ) - 3 * s + 3 ) / ( 4 * pow( levelParam, 2 ) ) 
-    + beta() * ( s - 1 ) /  ( 2 * levelParam );
+  // const G4double temp = ( pow( s, 2 ) - 3 * s + 3 ) / ( 4 * pow( levelParam, 2 ) ) 
+  //  + beta() * ( s - 1 ) /  ( 2 * levelParam );
   const G4double eye0 = exp( s ) * ( s - 1 ) /  ( 2 * levelParam );
   const G4double eye1 = ( pow( s, 2 ) - 3*s +3 ) * exp( s ) / ( 4 * pow( levelParam, 2 ) ) ;
   

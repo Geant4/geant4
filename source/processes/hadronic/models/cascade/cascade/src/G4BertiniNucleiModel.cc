@@ -216,7 +216,7 @@ void G4BertiniNucleiModel::generateModel(G4double a,
 
 G4double G4BertiniNucleiModel::volNumInt(G4double r1, 
 					 G4double r2, 
-					 G4double cu,
+					 G4double /*cu*/,
 					 G4double d1) const {
 
   if (verboseLevel > 3) {

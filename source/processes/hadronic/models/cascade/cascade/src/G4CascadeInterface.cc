@@ -53,8 +53,8 @@ G4CascadeInterface::G4CascadeInterface()
   }
 };
    
-G4ReactionProductVector* G4CascadeInterface::Propagate(G4KineticTrackVector* theSecondaries, 
-						       G4V3DNucleus* theNucleus) {
+G4ReactionProductVector* G4CascadeInterface::Propagate(G4KineticTrackVector* , 
+						       G4V3DNucleus* ) {
   return NULL;
 };
 

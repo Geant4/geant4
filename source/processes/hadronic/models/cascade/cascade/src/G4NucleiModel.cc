@@ -225,7 +225,7 @@ void G4NucleiModel::generateModel(G4double a,
 
 G4double G4NucleiModel::volNumInt(G4double r1, 
 				  G4double r2, 
-				  G4double cu,
+				  G4double ,
 				  G4double d1) const {
 
   if (verboseLevel > 3) {

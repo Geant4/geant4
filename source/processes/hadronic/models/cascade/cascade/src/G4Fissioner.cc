@@ -33,7 +33,7 @@ G4Fissioner::G4Fissioner()
   }
 }
 
-G4CollisionOutput G4Fissioner::collide(G4InuclParticle* bullet,
+G4CollisionOutput G4Fissioner::collide(G4InuclParticle* /*bullet*/,
 				       G4InuclParticle* target) {
 
   if (verboseLevel > 3) {
@@ -280,7 +280,7 @@ void G4Fissioner::potentialMinimization(G4double& VP,
     itry++;
     G4double S = 0.0;
 
-    for (G4int i = 0; i < 2; i++) {
+    for (i = 0; i < 2; i++) {
       S += R[i] * (1.0 + AL1[i] + BET1[i] - 0.257 * AL1[i] * BET1[i]);
     };
     R12 = 0.0;
