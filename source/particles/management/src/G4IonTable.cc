@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.cc,v 1.15 1999-10-05 06:45:17 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.16 1999-10-14 04:17:55 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,6 +37,7 @@
 #include "G4VIsotopeTable.hh"
 
 #include "G4ios.hh"
+#include <iostream.h>               
 #include <iomanip.h>               
 
 #ifdef WIN32
@@ -248,6 +249,7 @@ G4String G4IonTable::GetIonName(G4int Z, G4int A, G4double E) const
   }
   char val[50];
   ostrstream os(val,50);
+  os.setf(ios::fixed);
   os << A << '[' << setprecision(1) << E/keV << ']' << '\0';
   name += val;
   return name;
@@ -446,7 +448,10 @@ void  G4IonTable::SetCuts(G4ParticleDefinition* ion)
 {
   // Set cut value same as "GenericIon"
   G4ParticleDefinition* genericIon=G4ParticleTable::GetParticleTable()->FindParticle("GenericIon");
-  
+  if (genericIon == 0) {
+    G4Exception("G4IonTable::SetCuts : GenericIon is not defined !!");
+  }  
+
   if (genericIon->GetEnergyCuts() != 0) {
     ion->SetCuts( genericIon->GetLengthCuts());
 #ifdef G4VERBOSE
@@ -475,7 +480,12 @@ void  G4IonTable::SetCuts(G4ParticleDefinition* ion)
     G4UImanager::GetUIpointer()->SetVerboseLevel(tempVerboseLevel);
 
   } else {
-    G4Exception("G4IonTable::SetCuts : GenericIon is not defined !!");
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()> 1) {
+      G4cout << "G4IonTable::GetIon() : ";
+      G4cout << " cut value of GenericIon has not be defined yet";
+    } 
+#endif      
 
   }
 }
