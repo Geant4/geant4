@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.11 1999-06-06 16:26:17 aforti Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.12 1999-06-07 09:59:15 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,7 +59,7 @@ G4LowEnergyPhotoElectric::G4LowEnergyPhotoElectric(const G4String& processName)
     theMeanFreePathTable(0),
     theFluorTransitionTable(0),
     theAugerTransitionTable(0),
-    NumbBinTable(100)
+    NumbBinTable(200)
 {
    if (verboseLevel>0) {
      G4cout << GetProcessName() << " is created "<< endl;

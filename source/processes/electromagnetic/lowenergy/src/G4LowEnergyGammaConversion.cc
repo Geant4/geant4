@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyGammaConversion.cc,v 1.6 1999-06-04 14:01:10 aforti Exp $
+// $Id: G4LowEnergyGammaConversion.cc,v 1.7 1999-06-07 09:59:14 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,7 +51,7 @@ G4LowEnergyGammaConversion::G4LowEnergyGammaConversion(const G4String& processNa
   : G4VDiscreteProcess(processName),   
     LowestEnergyLimit (2*electron_mass_c2),
     HighestEnergyLimit(100*GeV),
-    NumbBinTable(100)
+    NumbBinTable(200)
 {
    if (verboseLevel>0) {
      G4cout << GetProcessName() << " is created "<< endl;

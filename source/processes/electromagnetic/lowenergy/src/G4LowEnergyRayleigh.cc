@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyRayleigh.cc,v 1.6 1999-06-05 14:04:07 aforti Exp $
+// $Id: G4LowEnergyRayleigh.cc,v 1.7 1999-06-07 09:59:15 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,7 +44,7 @@ G4LowEnergyRayleigh::G4LowEnergyRayleigh(const G4String& processName)
   : G4VDiscreteProcess(processName),
     LowestEnergyLimit (100*eV),              // initialization
     HighestEnergyLimit(100*GeV),
-    NumbBinTable(100)
+    NumbBinTable(200)
 {
    if (verboseLevel>0) {
      G4cout << GetProcessName() << " is created "<< endl;

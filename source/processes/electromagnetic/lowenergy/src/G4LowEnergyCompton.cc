@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyCompton.cc,v 1.7 1999-06-06 16:26:16 aforti Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.8 1999-06-07 09:59:13 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,7 +57,7 @@ G4LowEnergyCompton::G4LowEnergyCompton(const G4String& processName)
   : G4VDiscreteProcess(processName),
     LowestEnergyLimit (100*eV),              // initialization
     HighestEnergyLimit(100*GeV),
-    NumbBinTable(100)
+    NumbBinTable(200)
 {
    if (verboseLevel>0) {
      G4cout << GetProcessName() << " is created "<< endl;

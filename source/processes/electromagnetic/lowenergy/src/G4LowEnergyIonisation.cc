@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.11 1999-06-06 16:26:17 aforti Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.12 1999-06-07 09:59:14 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -623,13 +623,14 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
                         - DeltaTotalMomentum*DeltaDirection.y())/finalMomentum; 
     G4double finalPz = (TotalMomentum*ParticleDirection.z()
                         - DeltaTotalMomentum*DeltaDirection.z())/finalMomentum; 
-#ifdef G4VERBOSE 
-    G4double momdiff = sqrt(finalPx*finalPx + finalPy*finalPy + finalPz*finalPz);
+
+    G4double momtot = sqrt(finalPx*finalPx + finalPy*finalPy + finalPz*finalPz);
+
     if(momdiff-1. > 1e-6){
-      cout<<"Error!!!! momentum change: "<<momdiff-1<<endl;
-      G4Exception("G4LowEnergyIonisation: Error!!!! momentum change");
+
+      finalPx /= momtot; finalPy /= momtot; finalPz /= momtot;
     }
-#endif    
+
     aParticleChange.SetMomentumChange( finalPx,finalPy,finalPz );
     aParticleChange.SetEnergyChange( finalKineticEnergy );
     aParticleChange.SetLocalEnergyDeposit (theEnergyDeposit);
@@ -637,10 +638,10 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
   else{
 
     finalKineticEnergy = 0.;
+
     if (charge < 0.) aParticleChange.SetStatusChange(fStopAndKill);
     else             aParticleChange.SetStatusChange(fStopButAlive);
   }
-      
       
   return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
 }
