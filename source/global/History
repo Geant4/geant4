@@ -1,4 +1,4 @@
-$Id: History,v 1.45 2000-03-22 08:05:37 gcosmo Exp $
+$Id: History,v 1.46 2000-03-23 09:21:46 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 23, 2000 G.Cosmo (global-V01-01-02)
+- Added class G4PhysicsLnVector[.hh.cc] implementing a physics vector
+  with natural logarithmic scale for energy/momentum bins. (M.G.Pia)
 
 March 21, 2000 G.Cosmo (global-V01-01-01)
 - STLInterface: forced initialization of vectors' members also for
