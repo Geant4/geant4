@@ -1,4 +1,4 @@
-$Id: History,v 1.186 2003-11-05 17:10:15 pia Exp $
+$Id: History,v 1.187 2003-11-05 17:28:34 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+05.11-2003   MGP, tag emlowen-V05-02-04
+             New models of Bremsstrahlung angular distribution (2BN, 2BS),
+             provided by LIP group
 
 05.11-2003   MGP, tag emlowen-V05-02-03
              Bug fix in G4hLowEnergyIonisation (provided by V. Ivanchenko)
