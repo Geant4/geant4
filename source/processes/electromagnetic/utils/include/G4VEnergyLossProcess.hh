@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.2 2004-01-12 18:59:41 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.3 2004-01-14 18:01:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -48,6 +48,7 @@
 // 13-05-03 Add calculation of precise range (V.Ivanchenko)
 // 21-07-03 Add UpdateEmModel method (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
+// 14-01-04 Activate precise range calculation (V.Ivanchenko)
 //
 // Class Description:
 //

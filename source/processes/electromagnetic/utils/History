@@ -1,4 +1,4 @@
-$Id: History,v 1.129 2003-11-26 16:09:26 vnivanch Exp $
+$Id: History,v 1.130 2004-01-14 18:01:33 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14 Jan 04: V.Ivant (utils-V06-00-00)
+- Activate precise range calculation
+- Add Set methods to G4LossTablemanager to define: binning, maxEnergy for muon
+  tables, maxEnergy for precise range.
 
 26 Nov 03: V.Ivant (utils-V05-02-17)
 - Close precise range feature for the time being
