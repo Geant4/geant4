@@ -1,4 +1,4 @@
-$Id: History,v 1.15 1999-06-24 07:51:00 stesting Exp $
+$Id: History,v 1.16 1999-07-06 18:15:39 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+6th July 1999  John Allison (examples-01-00-13)
+- Relaxed non-optimised compiling for ExN04PhysicsList.cc for Linux.
 
 24th June 1999  John Allison (examples-01-00-12)
 - Updated some .out files for geant4-00-cand-13.

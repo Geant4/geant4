@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 1999-06-07 16:45:04 stesting Exp $
+# $Id: GNUmakefile,v 1.4 1999-07-06 18:15:43 johna Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -28,8 +28,8 @@ endif
 endif
 
 ifeq ($(G4SYSTEM),Linux-g++)
-COMPILER := $(shell g++ -v 2>&1 | grep version)
-ifeq ($(COMPILER), gcc version egcs-2.91.60 19981201 (egcs-1.1.1 release))
+COMPILER := $(shell g++ -v 2>&1 | grep version | grep egcs)
+ifeq ($(findstring 1.1,$(COMPILER)),1.1)
 $(G4TMP)/$(G4SYSTEM)/$(name)/ExN04PhysicsList.o: src/ExN04PhysicsList.cc
 	$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c $(OUT_OBJ)$@ src/ExN04PhysicsList.cc
 endif
