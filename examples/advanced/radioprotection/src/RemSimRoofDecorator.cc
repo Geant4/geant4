@@ -26,7 +26,7 @@
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
 //
 //
-// $Id: RemSimRoofDecorator.cc,v 1.2 2004-05-22 12:57:07 guatelli Exp $
+// $Id: RemSimRoofDecorator.cc,v 1.3 2004-05-27 12:31:31 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "RemSimVGeometryComponent.hh"
@@ -119,13 +119,5 @@ void RemSimRoofDecorator::ChangeThickness(G4double thick)
 
 void RemSimRoofDecorator::PrintDetectorParameters()
 {
-  G4cout << "-----------------------------------------------------------------------"
-         << G4endl
-         << "the roof is a pyramid log whose thickness is: " << G4endl
-         << ((roof -> GetZHalfLength())*2.)/cm
-         << " cm along the Z axis"
-         << G4endl
-         << "material of the roof: "
-         << roofLog -> GetMaterial() -> GetName() <<G4endl
-         << G4endl;
+  ;
 }

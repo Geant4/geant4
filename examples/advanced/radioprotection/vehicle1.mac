@@ -28,15 +28,17 @@
 #/vis/viewer/zoom 2
 #/tracking/storeTrajectory 1
 ################
+# Generation of primary particles
 /gun/generator Basic
 /gun/particle proton
 /gun/energy 500. MeV
-/run/initialize
+# Geometrical configuration
 /configuration/choose vehicle
 /configuration/AddShielding On
 /configuration/AddSPE On
 /shielding/thickness 30. cm
-/run/beamOn 1000
+# Number of events
+/run/beamOn 2000
 
 
 

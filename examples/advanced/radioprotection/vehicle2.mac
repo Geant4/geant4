@@ -29,9 +29,11 @@
 #/tracking/storeTrajectory 1
 ################
 /run/initialize
+# Generation of primary particles
 /gun/generator Interplanetary
 /gun/particle IonC12
 /run/data gcrZ=6.txt
+# Geometry configuration
 /configuration/choose vehicle
 /configuration/AddShielding On
 #/configuration/AddShielding Off

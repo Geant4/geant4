@@ -27,7 +27,7 @@
 //    **********************************
 //
 //
-// $Id: RemSimEventAction.cc,v 1.6 2004-05-27 08:36:51 guatelli Exp $
+// $Id: RemSimEventAction.cc,v 1.7 2004-05-27 12:31:31 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author : Susanna Guatelli, guatelli@ge.infn.it
@@ -50,6 +50,9 @@ RemSimEventAction::~RemSimEventAction()
 void RemSimEventAction::BeginOfEventAction(const G4Event* evt)
 { 
   evtNo = evt -> GetEventID(); 
+  G4int printModul = 500;
+  if (evtNo%printModul == 0) 
+   G4cout << "\n---> Begin Of Event: " << evtNo << G4endl;
 }
 
 void RemSimEventAction::EndOfEventAction(const G4Event* evt)
