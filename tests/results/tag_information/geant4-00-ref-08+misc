@@ -1,8 +1,21 @@
   cvs update -r1.5 run/src/G4RunManager.cc
+In G4RunManager.cc, moved G4Timer.hh to prevent conflict with ObjectSpace
+on Sun when using the STL Interface.
+
   cvs update -r1.8 geometry/volumes/include/G4NavigationLevel.hh
   cvs update -r1.8 geometry/volumes/include/G4NavigationLevel.icc
+Made deletes ISO compliant and protected against non ISO compilers
+Changed operator delete to have a default second argument
+Changed new,delete to void* for preallocation
+Changed operator new for benefit of Sun.
+
   cvs update -r1.6 geometry/volumes/src/G4Navigator.cc
+Changed cout -> G4cout
+Changed protection for printing of Physical volume name:
+(because of warning on SUN.  same functionality)
+
   cvs update -r1.2 geometry/management/src/G4SolidStore.cc
-  cvs update -r1.3 particles/management/include/G4NucleiPropertiesTable.hh
+Changed while ((!isEmpty()) delete first() to clearAndDestroy()
+
   cvs update -r1.4 particles/management/src/G4ParticleTable.cc
-  cvs update -r1.4 particles/management/src/G4ParticleTable.cc
+Fixed cleanup for STL
