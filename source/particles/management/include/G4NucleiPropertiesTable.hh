@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NucleiPropertiesTable.hh,v 1.2 1999-04-13 07:58:29 kurasige Exp $
+// $Id: G4NucleiPropertiesTable.hh,v 1.3 1999-05-12 11:40:49 larazb Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -28,6 +28,7 @@
 //
 // Migrate into particles category by H.Kurashige (17 Nov. 98)
 // Subtract electron mass by H.Kurashige
+// Avoid substraction of electron mass in Atomic masses by V.Lara (12 May 99)
 // -------------------------------------------------------------------
 #include "globals.hh"
 
@@ -74,7 +75,6 @@ public:
   static G4double GetBetaDecayEnergy(G4int Z, G4int A);
 
   // Operation: GetAtomicMass .. in Geant4 Energy units!
-  //   subtract electron mass  by H.K  
   static G4double GetAtomicMass(G4int Z, G4int A);
 
   // Operation: GetName
@@ -174,7 +174,7 @@ inline G4double  G4NucleiPropertiesTable::GetAtomicMass(G4int Z, G4int A)
 {
     G4int i=GetIndex(Z, A);
     if (i >= 0) {
-      return AtomicMass[i]*amu_c2-Z*electron_mass_c2;
+      return AtomicMass[i]*amu_c2;
     } else {
       return 0.0;
     }
