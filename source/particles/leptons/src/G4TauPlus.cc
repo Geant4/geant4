@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TauPlus.cc,v 1.7 2001-10-16 08:16:19 kurasige Exp $
+// $Id: G4TauPlus.cc,v 1.8 2002-03-08 08:48:31 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,6 +39,7 @@
 #include "G4TauPlus.hh"
 
 #include "G4PhaseSpaceDecayChannel.hh"
+#include "G4TauLeptonicDecayChannel.hh"
 #include "G4DecayTable.hh"
 
 // ######################################################################
@@ -70,9 +71,9 @@ G4TauPlus::G4TauPlus(
   // create decay channels
   G4VDecayChannel** mode = new G4VDecayChannel*[6];
   // tau+ -> mu+ + nu_mu + anti_nu_tau
-  mode[0] = new G4PhaseSpaceDecayChannel("tau+",0.174,3,"mu+","nu_mu","anti_nu_tau");
+  mode[0] = new G4TauLeptonicDecayChannel("tau+",0.174,"mu+");
   // tau+ -> e+ + nu_e + anti_nu_tau
-  mode[1] = new G4PhaseSpaceDecayChannel("tau+",0.178,3,"e+","nu_e","anti_nu_tau");
+  mode[1] = new G4TauLeptonicDecayChannel("tau+",0.178,"e+");
   // tau+ -> pi+ + anti_nu_tau
   mode[2] = new G4PhaseSpaceDecayChannel("tau+",0.113,2,"pi+","anti_nu_tau");
   // tau+ -> pi0 + pi0 + pi+ + anti_nu_tau
