@@ -389,7 +389,8 @@ G4PAIonisation::BuildLambdaTable(const G4ParticleDefinition&)
   }
   theMeanFreePathTable = new G4PhysicsTable(1);
 
-  DeltaCutInKineticEnergy = theCoupleTable->GetEnergyCutsVector(idxG4ElectronCut);
+  const std::vector<G4double>*  deltaCutInKineticEnergy = 
+  theCoupleTable->GetEnergyCutsVector(idxG4ElectronCut);
 
   if (fLambdaVector)   delete fLambdaVector;
   if (fdNdxCutVector)  delete fdNdxCutVector;
@@ -403,15 +404,16 @@ G4PAIonisation::BuildLambdaTable(const G4ParticleDefinition&)
 
   // DeltaCutInKineticEnergyNow = (*DeltaCutInKineticEnergy)[fMatIndex] ;
   //  DeltaCutInKineticEnergyNow = (*DeltaCutInKineticEnergy)[fMatCutsIndex] ;
-  DeltaCutInKineticEnergyNow = fSandiaPhotoAbsCof[0][0] ;      // low energy Sandia interval
+  // DeltaCutInKineticEnergyNow = fSandiaPhotoAbsCof[0][0] ;  // low energy Sandia ??
 
+  G4double deltaCutInKineticEnergyNow = (*deltaCutInKineticEnergy)[fMatCutsIndex] ;
 
   G4cout<<"PAI DeltaCutInKineticEnergyNow = "
-        <<DeltaCutInKineticEnergyNow/keV<<" keV"<<G4endl;
+        <<deltaCutInKineticEnergyNow/keV<<" keV"<<G4endl;
 
   for ( i = 0 ; i < TotBin ; i++ )
   {
-    dNdxCut = GetdNdxCut(i,DeltaCutInKineticEnergyNow) ;
+    dNdxCut = GetdNdxCut(i,deltaCutInKineticEnergyNow) ;
     lambda = dNdxCut <= DBL_MIN ? DBL_MAX: 1.0/dNdxCut ;
     if (lambda <= 1000*kCarTolerance) lambda = 1000*kCarTolerance ; // Mmm ???
     fLambdaVector->PutValue(i, lambda) ;
