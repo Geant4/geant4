@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 
-// $Id: G4PenelopeCompton.hh,v 1.2 2003-02-12 11:44:43 pia Exp $
+// $Id: G4PenelopeCompton.hh,v 1.3 2003-02-22 18:06:03 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -29,6 +29,9 @@
 // -----------
 // 05 Dec 2002   L. Pandola   1st implementation
 // 12 Feb 2003   MG Pia       const argument in SelectRandomAtomForCompton
+// 14 Feb 2003   MG Pia       Removed data member material
+//                            Modified some variables to lowercase initial 
+//
 // -------------------------------------------------------------------
 
 // Class description:
@@ -93,17 +96,15 @@ private:
   G4VEMDataSet* meanFreePathTable;
   G4VRangeTest* rangeTest;
 
-  G4Material* material;
-
   const G4double intrinsicLowEnergyLimit; // intrinsic validity range
   const G4double intrinsicHighEnergyLimit;
 
   G4double energyForIntegration; //for numerical integration of
   G4int ZForIntegration;// analytical cross section
 
-  G4std::vector<G4DataVector*> *IonizationEnergy;
-  G4std::vector<G4DataVector*> *HartreeFunction;
-  G4std::vector<G4DataVector*> *OccupationNumber;
+  G4std::vector<G4DataVector*> *ionizationEnergy;
+  G4std::vector<G4DataVector*> *hartreeFunction;
+  G4std::vector<G4DataVector*> *occupationNumber;
   
   G4int SelectRandomAtomForCompton(const G4Material* material,G4double e) const;
 

@@ -27,6 +27,7 @@
 // History:
 // -----------
 // 30 Nov 2002   LP        Created
+// 14 Feb 2003   MGP       Corrected compilation errors from SUN
 //
 // -------------------------------------------------------------------
 
@@ -35,7 +36,7 @@ G4double G4PenelopeIntegrator<T,F>::Calculate(T& typeT, F f,
 					      G4double LowPoint,G4double HighPoint,
 					      G4double MaxError)
 {
-  const G4int npoints=10;
+	  const G4int npoints=10;
   const G4int ncallsmax=20000;
   const G4int nst=256;
   static G4double Abscissas[10] = {7.652651133497334e-02,2.2778585114164508e-01,3.7370608871541956e-01,
@@ -59,7 +60,8 @@ G4double G4PenelopeIntegrator<T,F>::Calculate(T& typeT, F f,
   b=0.5*(HighPoint+LowPoint);
   c=a*Abscissas[0];
   d=Weights[0]*((typeT.*f)(b+c)+(typeT.*f)(b-c));
-  for (G4int i=2;i<=npoints;i++){
+  G4int i;
+  for (i=2;i<=npoints;i++){
     c=a*Abscissas[i-1];
     d=d+Weights[i-1]*((typeT.*f)(b+c)+(typeT.*f)(b-c));
   }
@@ -85,7 +87,8 @@ G4double G4PenelopeIntegrator<T,F>::Calculate(T& typeT, F f,
     b=0.5*(xb+xa);
     c=a*Abscissas[0];
     d=Weights[0]*((typeT.*f)(b+c)+(typeT.*f)(b-c));
-    for (G4int j=1;j<npoints;j++){
+    G4int j;
+    for (j=1;j<npoints;j++){
       c=a*Abscissas[j];
       d=d+Weights[j]*((typeT.*f)(b+c)+(typeT.*f)(b-c));
     }    
@@ -128,7 +131,7 @@ G4double G4PenelopeIntegrator<T,F>::Calculate(T& typeT, F f,
    Err=abs(sumr)/G4std::max(abs(sumr+sumga),1e-35);
    if (Err < Ctol || LHN == 0) return sumga; //end of cycle
    LH=LHN;
-   for (i=0;i<LH;i++){
+   for (G4int i=0;i<LH;i++){
      S[i]=sn[i];
      x[i]=xrn[i];
    }

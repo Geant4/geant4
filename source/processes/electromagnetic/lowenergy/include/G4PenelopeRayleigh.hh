@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopeRayleigh.hh,v 1.1 2002-12-06 16:25:21 pandola Exp $
+// $Id: G4PenelopeRayleigh.hh,v 1.2 2003-02-22 18:06:03 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -29,6 +29,8 @@
 // History:
 // -----------
 // 01 Dec 2002   L.Pandola  1st implementation
+// 14 Feb 2003   MG Pia     Removed data member material
+//
 // -------------------------------------------------------------------
 // Class description:
 // Low Energy Electromagnetic process, Rayleigh effect
@@ -89,9 +91,9 @@ private:
   G4double lowEnergyLimit;  // low energy limit  applied to the process
   G4double highEnergyLimit; // high energy limit applied to the process
 
+  //void InizialiseSampling(const G4Material* material);
   void InizialiseSampling();
 
-  G4Material* material;
   G4DataVector* samplingFunction_x;
   G4DataVector* samplingFunction_y;
 
@@ -100,6 +102,7 @@ private:
 
   G4VEMDataSet* meanFreePathTable;
   
+  G4Material* material;
   const G4int nBins;
   const G4double intrinsicLowEnergyLimit; // intrinsic validity range
   const G4double intrinsicHighEnergyLimit;

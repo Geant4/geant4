@@ -22,13 +22,18 @@
 //
 // --------------------------------------------------------------------
 //
-// $Id: G4PenelopeRayleigh.cc,v 1.3 2003-02-12 11:44:43 pia Exp $
+// $Id: G4PenelopeRayleigh.cc,v 1.4 2003-02-22 18:06:13 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: L. Pandola (luciano.pandola@cern.ch)
 //
 // History:
 // -------- 
+// 14 Feb 2003   MG Pia       Corrected compilation errors and warnings
+//                            from SUN
+//
+// --------------------------------------------------------------------
+
 #include "G4PenelopeRayleigh.hh"
 #include "Randomize.hh"
 #include "G4ParticleDefinition.hh"
@@ -66,8 +71,7 @@ G4PenelopeRayleigh::G4PenelopeRayleigh(const G4String& processName)
     {
       G4Exception("G4PenelopeRayleigh::G4PenelopeRayleigh - energy limit outside intrinsic process validity range");
     }
-  
-  material = 0;
+
   samplingFunction_x = new G4DataVector();
   samplingFunction_y = new G4DataVector();
   meanFreePathTable = 0;
@@ -101,21 +105,21 @@ void G4PenelopeRayleigh::BuildPhysicsTable(const G4ParticleDefinition& photon)
       energyVector.push_back(pow(10.,log10(lowEnergyLimit)+i*dBin));
     }
 
- const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
- G4int nMaterials = G4Material::GetNumberOfMaterials();
+  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
+  G4int nMaterials = G4Material::GetNumberOfMaterials();
   
- size_t nOfBins = energyVector.size();
- size_t bin=0;
+  size_t nOfBins = energyVector.size();
+  size_t bin=0;
  
- G4VDataSetAlgorithm* algo = new G4LogLogInterpolation();
- G4VEMDataSet* materialSet = new G4CompositeEMDataSet(algo,1.,1.);
- G4std::vector<G4VEMDataSet*> matCrossSections;
+  G4VDataSetAlgorithm* algo = new G4LogLogInterpolation();
+  G4VEMDataSet* materialSet = new G4CompositeEMDataSet(algo,1.,1.);
+  G4std::vector<G4VEMDataSet*> matCrossSections;
    
- //G4CompositeEMDataSet dovrebbe essere un Vettore di EMDataSet
- //matCrossSection e' un vettore di G4CompositeEMDataSet
+  //G4CompositeEMDataSet dovrebbe essere un Vettore di EMDataSet
+  //matCrossSection e' un vettore di G4CompositeEMDataSet
 
-
- for (G4int m=0; m<nMaterials; m++)
+  G4int m;
+  for (m=0; m<nMaterials; m++)
     {
       G4DataVector* energies = new G4DataVector;
       G4DataVector* data = new G4DataVector;
@@ -136,56 +140,57 @@ void G4PenelopeRayleigh::BuildPhysicsTable(const G4ParticleDefinition& photon)
 	}
       }
   
-        for (bin=0; bin<nOfBins; bin++)
-	  {
-	    energies->push_back(energyVector[bin]);
-	    G4double ec=G4std::min(energyVector[bin],0.5*IZZ);
-	    facte=k1*pow(ec/electron_mass_c2,2);
-	    G4double cs=0;
-	    G4PenelopeIntegrator<G4PenelopeRayleigh,G4double(G4PenelopeRayleigh::*)(G4double)> theIntegrator;
-	    cs = 
-	      theIntegrator.Calculate(this,&G4PenelopeRayleigh::DifferentialCrossSection,-1.0,0.90,1e-06); 
-	    cs += theIntegrator.Calculate(this,&G4PenelopeRayleigh::DifferentialCrossSection,0.90,0.9999999,1e-06);
-	    cs = cs*pow((ec/energyVector[bin]),2)*pi*pow(classic_electr_radius,2); 
-	    const G4double* vector_of_atoms = material->GetVecNbOfAtomsPerVolume();
-	    const G4int* stechiometric = material->GetAtomsVector();
-	    G4double density;
-	    if (stechiometric)
-	      {
-		density = vector_of_atoms[iright]/stechiometric[iright]; //number of molecules per volume 
-	      }
-	    else
-	      {
-		density = vector_of_atoms[iright]; //non-bound molecules
-	      }
-	    G4double cross = density*cs; 
-	    data->push_back(cross);
-	  }
-	G4VEMDataSet* elSet = new G4EMDataSet(0,energies,data,algo); //0 perche' c'e' una sola sez d'urto (1 solo el.)
-        G4VEMDataSet* setForMat = new G4CompositeEMDataSet(algo);
-	setForMat->AddComponent(elSet); //ogni componente (elemento) contiene i vettori di energie e di cs
-	matCrossSections.push_back(setForMat); //gli elementi di questo vettore sono i vettori di energie e cs di ogni elemento
+      for (bin=0; bin<nOfBins; bin++)
+	{
+	  energies->push_back(energyVector[bin]);
+	  G4double ec=G4std::min(energyVector[bin],0.5*IZZ);
+	  facte=k1*pow(ec/electron_mass_c2,2);
+	  G4double cs=0;
+	  G4PenelopeIntegrator<G4PenelopeRayleigh,G4double(G4PenelopeRayleigh::*)(G4double)> theIntegrator;
+	  cs = 
+	    theIntegrator.Calculate(this,&G4PenelopeRayleigh::DifferentialCrossSection,-1.0,0.90,1e-06); 
+	  cs += theIntegrator.Calculate(this,&G4PenelopeRayleigh::DifferentialCrossSection,0.90,0.9999999,1e-06);
+	  cs = cs*pow((ec/energyVector[bin]),2)*pi*pow(classic_electr_radius,2); 
+	  const G4double* vector_of_atoms = material->GetVecNbOfAtomsPerVolume();
+	  const G4int* stechiometric = material->GetAtomsVector();
+	  G4double density;
+	  if (stechiometric)
+	    {
+	      density = vector_of_atoms[iright]/stechiometric[iright]; //number of molecules per volume 
+	    }
+	  else
+	    {
+	      density = vector_of_atoms[iright]; //non-bound molecules
+	    }
+	  G4double cross = density*cs; 
+	  data->push_back(cross);
+	}
+      G4VEMDataSet* elSet = new G4EMDataSet(0,energies,data,algo); //0 perche' c'e' una sola sez d'urto (1 solo el.)
+      G4VEMDataSet* setForMat = new G4CompositeEMDataSet(algo);
+      setForMat->AddComponent(elSet); //ogni componente (elemento) contiene i vettori di energie e di cs
+      matCrossSections.push_back(setForMat); //gli elementi di questo vettore sono i vettori di energie e cs di ogni elemento
     }
 
- //sono state calcolate le sezioni d'urto dei vari materiali
- G4double matCS = 0.0;
+  //sono state calcolate le sezioni d'urto dei vari materiali
+  G4double matCS = 0.0;
+ 
   for (m=0; m<nMaterials; m++)
     { 
       G4DataVector* energies = new G4DataVector;
       G4DataVector* data = new G4DataVector;
-      material= (*materialTable)[m];
+      //      G4Material* material= (*materialTable)[m];
       for (bin=0;bin<nOfBins;bin++){
-       energies->push_back(energyVector[bin]);
-       matCS = (matCrossSections[m]->GetComponent(0))->FindValue(energyVector[bin]); 
-       //recupera la componente relativa 
-       //all'elemento 0 (l'unica che c'e') e trova il valore corrispondente ad una data energia
-       if (matCS > 0.){//total cross section for that material
-	 data->push_back(1./matCS);
-       }
-       else
-	 {
-	   data->push_back(DBL_MAX);
-	 }
+	energies->push_back(energyVector[bin]);
+	matCS = (matCrossSections[m]->GetComponent(0))->FindValue(energyVector[bin]); 
+	//recupera la componente relativa 
+	//all'elemento 0 (l'unica che c'e') e trova il valore corrispondente ad una data energia
+	if (matCS > 0.){//total cross section for that material
+	  data->push_back(1./matCS);
+	}
+	else
+	  {
+	    data->push_back(DBL_MAX);
+	  }
       }
       G4VEMDataSet* dataSet = new G4EMDataSet(m,energies,data,algo,1.,1.); //vettore che, per ogni materiale, contiene
       //i vettori di energia e cammino libero medio (complessivi dell'intero materiale)
@@ -213,8 +218,9 @@ G4VParticleChange* G4PenelopeRayleigh::PostStepDoIt(const G4Track& aTrack,
 
 
   G4ParticleMomentum photonDirection0 = incidentPhoton->GetMomentumDirection();
-  //  G4Material* material = aTrack.GetMaterial();
+  material = aTrack.GetMaterial();
   // Sampling inizialitation (build internal table) 
+  //  InizialiseSampling(material);
   InizialiseSampling();
   // Sample the angle of the scattered photon 
   const G4double xpar=41.2148;
@@ -303,7 +309,7 @@ G4double G4PenelopeRayleigh::GetMeanFreePath(const G4Track& track,
 {
   const G4DynamicParticle* photon = track.GetDynamicParticle();
   G4double energy = photon->GetKineticEnergy(); 
-  G4Material* material = track.GetMaterial();
+  material = track.GetMaterial();
   size_t materialIndex = material->GetIndex();
 
   G4double meanFreePath;
@@ -316,34 +322,36 @@ G4double G4PenelopeRayleigh::GetMeanFreePath(const G4Track& track,
   return meanFreePath;
 }
 
+//void G4PenelopeRayleigh::InizialiseSampling(const G4Material* material)
 void G4PenelopeRayleigh::InizialiseSampling()
 {
- const G4int points=241;
- samplingFunction_x->clear();
- samplingFunction_y->clear();
- G4double sum = 0.0;
- G4double Xlow=0;
- G4double Xhigh=1e-04;
- G4double fact = pow((1e06/Xhigh),(1/240.0));
- G4PenelopeIntegrator<G4PenelopeRayleigh,G4double(G4PenelopeRayleigh::*)(G4double)> theIntegrator;
- sum = theIntegrator.Calculate(this,&G4PenelopeRayleigh::MolecularFormFactor,
+  const G4int points=241;
+  samplingFunction_x->clear();
+  samplingFunction_y->clear();
+  G4double sum = 0.0;
+  G4double Xlow=0;
+  G4double Xhigh=1e-04;
+  G4double fact = pow((1e06/Xhigh),(1/240.0));
+  G4PenelopeIntegrator<G4PenelopeRayleigh,G4double(G4PenelopeRayleigh::*)(G4double)> theIntegrator;
+  sum = theIntegrator.Calculate(this,&G4PenelopeRayleigh::MolecularFormFactor,
 				Xlow,Xhigh,1e-10); 
- samplingFunction_x->push_back(Xhigh);
- samplingFunction_y->push_back(sum);
- for (G4int i=1;i<points;i++){
-   Xlow=Xhigh;
-   Xhigh=Xhigh*fact;
-   sum = theIntegrator.Calculate(this,
+  samplingFunction_x->push_back(Xhigh);
+  samplingFunction_y->push_back(sum);
+  G4int i;
+  for (i=1;i<points;i++){
+    Xlow=Xhigh;
+    Xhigh=Xhigh*fact;
+    sum = theIntegrator.Calculate(this,
 				  &G4PenelopeRayleigh::MolecularFormFactor,
-				 Xlow,Xhigh,1e-10);
-   samplingFunction_x->push_back(Xhigh);
-   samplingFunction_y->push_back(sum+(*samplingFunction_y)[i-1]);
- }
- for (i=0;i<points;i++){
-   (*samplingFunction_x)[i]=log((*samplingFunction_x)[i]);
-   (*samplingFunction_y)[i]=log((*samplingFunction_y)[i]);
- }
- samplingConstant=log(fact);
+				  Xlow,Xhigh,1e-10);
+    samplingFunction_x->push_back(Xhigh);
+    samplingFunction_y->push_back(sum+(*samplingFunction_y)[i-1]);
+  }
+  for (i=0;i<points;i++){
+    (*samplingFunction_x)[i]=log((*samplingFunction_x)[i]);
+    (*samplingFunction_y)[i]=log((*samplingFunction_y)[i]);
+  }
+  samplingConstant=log(fact);
 }
 
 
@@ -454,6 +462,7 @@ G4double G4PenelopeRayleigh::MolecularFormFactor(G4double y)
   G4double x=sqrt(y);
   G4double gradx1=0.0;
   G4double fa=0.0;
+
   G4int nElements = material->GetNumberOfElements();
   const G4ElementVector* elementVector = material->GetElementVector();
   const G4int* stechiometric = material->GetAtomsVector();
