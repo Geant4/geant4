@@ -25,7 +25,7 @@
 // S.Guatelli
 //
 //
-// $Id: Tst50AnalysisManager.hh,v 1.2 2002-11-27 18:14:18 guatelli Exp $
+// $Id: Tst50AnalysisManager.hh,v 1.3 2002-12-16 13:50:08 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    **********************************
@@ -37,6 +37,7 @@
 
 // the class Analysis creates and managed histograms and ntuples
 //
+#ifdef G4ANALYSIS_USE
 #ifndef G4PROCESSTESTANALYSIS_HH
 #define G4PROCESSTESTANALYSIS_HH
 
@@ -92,7 +93,7 @@ AIDA::IHistogram1D *h1;
 AIDA::IHistogram1D *h2;
 AIDA::IHistogram1D *h3;
 };
-
+#endif
 #endif
 
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50TrackerSD.cc,v 1.1 2002-11-26 17:57:49 guatelli Exp $
+// $Id: Tst50TrackerSD.cc,v 1.2 2002-12-16 13:50:08 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -90,11 +90,11 @@ G4bool Tst50TrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
      newHit->SetEdep     (edep); 
 
      hit_ID[0] = trackerCollection->insert(newHit) - 1;
-    G4cout << " New Hit: "  << G4endl;
+     // G4cout << " New Hit: "  << G4endl;
  }
   else
     { (*trackerCollection)[hit_ID[0]]->AddEnergy(edep); 
-   G4cout << " add Hit: "  << G4endl;
+    //G4cout << " add Hit: "  << G4endl;
     }
  
  

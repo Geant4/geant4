@@ -22,7 +22,7 @@
 // ********************************************************************
 //
 //
-// $Id: test50.cc,v 1.2 2002-11-29 11:19:29 guatelli Exp $
+// $Id: test50.cc,v 1.3 2002-12-16 13:50:08 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,7 +49,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
-
+HepRandom::setTheEngine(new RanecuEngine);
+ 
+   G4int seed=time(NULL);
+   HepRandom ::setTheSeed(seed);
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new Tst50SteppingVerbose);
   
@@ -70,13 +73,14 @@ int main(int argc,char** argv) {
   // UserAction classes
   Tst50PrimaryGeneratorAction* p_Primary=new Tst50PrimaryGeneratorAction(); 
   runManager->SetUserAction(p_Primary);
-  runManager->SetUserAction(new Tst50RunAction);  
+  Tst50RunAction* p_run=new Tst50RunAction(); 
+  runManager->SetUserAction(p_run);  
 
   Tst50EventAction *pEventAction=new Tst50EventAction();
  
    runManager->SetUserAction(pEventAction );
      
- Tst50SteppingAction* steppingaction =new Tst50SteppingAction(pEventAction, p_Primary);
+ Tst50SteppingAction* steppingaction =new Tst50SteppingAction(pEventAction, p_Primary,p_run);
  runManager->SetUserAction(steppingaction);
 
   //Initialize G4 kernel
@@ -84,10 +88,10 @@ int main(int argc,char** argv) {
       
   //get the pointer to the User Interface manager 
   G4UImanager * UI = G4UImanager::GetUIpointer();  
- UI->ApplyCommand("/run/verbose 5");
-  UI->ApplyCommand("/event/verbose 2");
-  UI->ApplyCommand("/tracking/verbose 1");
-
+ UI->ApplyCommand("/run/verbose 0");
+  UI->ApplyCommand("/event/verbose 0");
+  UI->ApplyCommand("/tracking/verbose 0");
+  
   if(argc==1)
   // Define (G)UI terminal for interactive mode  
   { 
@@ -110,7 +114,8 @@ int main(int argc,char** argv) {
     G4String fileName = argv[1];
     UI->ApplyCommand(command+fileName);
   }
-
+  
+  // runManager->BeamOn(500000);
 #ifdef G4VIS_USE
   delete visManager;
 #endif

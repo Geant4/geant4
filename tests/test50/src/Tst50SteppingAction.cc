@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.cc,v 1.3 2002-11-29 11:19:30 guatelli Exp $
+// $Id: Tst50SteppingAction.cc,v 1.4 2002-12-16 13:50:08 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,12 +35,15 @@
 #include "G4VPhysicalVolume.hh"
 #include "Tst50EventAction.hh"
 #include <math.h> // standard c math library
+#ifdef G4ANALYSIS_USE
 #include "Tst50AnalysisManager.hh"
+#endif
 #include "Tst50PrimaryGeneratorAction.hh"
+#include "Tst50RunAction.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Tst50SteppingAction::Tst50SteppingAction(Tst50EventAction* EA, Tst50PrimaryGeneratorAction* PG):
-  IDold(-1),eventaction (EA), p_Primary(PG) 
+Tst50SteppingAction::Tst50SteppingAction(Tst50EventAction* EA, Tst50PrimaryGeneratorAction* PG, Tst50RunAction* RA ):
+  IDold(-1),eventaction (EA), p_Primary(PG), runaction(RA) 
 { 
   initial_energy= p_Primary->GetInitialEnergy();
 }
@@ -48,8 +51,10 @@ Tst50SteppingAction::Tst50SteppingAction(Tst50EventAction* EA, Tst50PrimaryGener
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Tst50SteppingAction::UserSteppingAction(const G4Step* Step)
-{ Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
-
+{ 
+#ifdef G4ANALYSIS_USE
+Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
+#endif
 G4int evno = eventaction->GetEventno() ;//mi dice a che evento siamo 
  
   //IDnow identifica univocamente la particella//
@@ -117,37 +122,48 @@ IDnow = evno+10000*(Step->GetTrack()->GetTrackID())+
          G4String process=Step->GetPostStepPoint()->GetProcessDefinedStep()
 	   ->GetProcessName();
 
-          G4cout<< "processo del fotone-------------------------"
-                      << process<<G4endl;
+	 //G4cout<< "processo del fotone-------------------------"
+	 //         << process<<G4endl;
           if (process=="LowEnPhotoElec") 
-	    { G4cout<< "processo del fotone-------------------------"
-                      <<" 1"<<G4endl; 
+	    { //G4cout<< "processo del fotone-------------------------"
+	      // <<" 1"<<G4endl; 
+#ifdef G4ANALYSIS_USE
 	  analysis->primary_processes(3);
+#endif
 	}
       if (process=="Transportation") 
            { 
+#ifdef G4ANALYSIS_USE
 	     analysis->primary_processes(1);
+#endif
 	}
+	
  if (process=="LowEnRayleigh") 
-           { 
+           {
+#ifdef G4ANALYSIS_USE
 	     analysis->primary_processes(2);
- G4cout<< "processo del fotone-------------------------"
-                      << 2<<G4endl;
+	     // G4cout<< "processo del fotone-------------------------"
+	     //      << 2<<G4endl;
+#endif
 	}
  if (process=="LowEnCompton") 
            { 
+#ifdef G4ANALYSIS_USE
 	     analysis->primary_processes(4);
+#endif
 	   }
 
 if (process=="LowEnConversion") 
            { 
-	     analysis->primary_processes(5); 
+#ifdef G4ANALYSIS_USE
+	     analysis->primary_processes(5);
+#endif 
 	   }
 
 
 	}
       //per il coeff di attenuazione// 
-      G4cout<<Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()<<G4endl; 
+      // G4cout<<Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()<<G4endl; 
  if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target"){
    
     if(Step->GetTrack()->GetNextVolume()->GetName() == "World" ) {
@@ -157,7 +173,12 @@ if (process=="LowEnConversion")
       
       if(KinE ==initial_energy)
 	{
-analysis->trans_particles(); G4cout<<" fotone trasmesso"<<G4endl;}}}}
+#ifdef G4ANALYSIS_USE
+analysis->trans_particles(); 
+#endif 
+//G4cout<<" fotone trasmesso"<<G4endl;
+ runaction->Trans_number();
+}}}}
 }
   
     /*

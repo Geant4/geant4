@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingVerbose.cc,v 1.2 2002-11-29 11:19:30 guatelli Exp $
+// $Id: Tst50SteppingVerbose.cc,v 1.3 2002-12-16 13:50:08 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,9 +50,9 @@ void Tst50SteppingVerbose::StepInfo()
   
   G4int prec = G4cout.precision(3);
 
-  if( verboseLevel >= 0 ){
+  if( verboseLevel >= 10){
     //  if( verboseLevel >= 1 ) VerboseTrack();
-    if( verboseLevel >= 1){
+    if( verboseLevel >= 10){
       G4cout << G4endl;    
       G4cout << G4std::setw( 5) << "#Step#"     << " "
 	     << G4std::setw( 6) << "X"          << "    "
@@ -152,7 +152,7 @@ void Tst50SteppingVerbose::TrackingStarted()
 
   CopyState();
 G4int prec = G4cout.precision(3);
-  if( verboseLevel > 0 ){
+  if( verboseLevel > 10){
 
     G4cout << G4std::setw( 5) << "Step#"      << " "
            << G4std::setw( 6) << "X"          << "    "
@@ -185,5 +185,7 @@ G4int prec = G4cout.precision(3);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+
 
 

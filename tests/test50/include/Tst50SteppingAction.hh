@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.hh,v 1.2 2002-11-29 11:19:29 guatelli Exp $
+// $Id: Tst50SteppingAction.hh,v 1.3 2002-12-16 13:50:08 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,11 +39,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 class Tst50AnalysisManager;
 class Tst50EventAction;
+class Tst50RunAction;
 class Tst50PrimaryGeneratorAction;
 class Tst50SteppingAction : public G4UserSteppingAction
 {
   public:
-    Tst50SteppingAction(Tst50EventAction*,Tst50PrimaryGeneratorAction*);
+    Tst50SteppingAction(Tst50EventAction*,Tst50PrimaryGeneratorAction*,Tst50RunAction*);
    ~Tst50SteppingAction(){};
 
     void UserSteppingAction(const G4Step* Step);
@@ -53,6 +54,7 @@ private:
  G4int IDold;
  Tst50EventAction*          eventaction;
   Tst50PrimaryGeneratorAction* p_Primary;
+  Tst50RunAction* runaction;      
   G4double initial_energy;
 };
 

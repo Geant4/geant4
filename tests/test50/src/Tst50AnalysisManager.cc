@@ -29,9 +29,11 @@
 //    *                             *
 //    *******************************
 //
-// $Id: Tst50AnalysisManager.cc,v 1.2 2002-11-27 18:14:18 guatelli Exp $
+// $Id: Tst50AnalysisManager.cc,v 1.3 2002-12-16 13:50:08 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+#ifdef  G4ANALYSIS_USE
+
 #include <stdlib.h>
 #include "g4std/fstream"
 #include "Tst50AnalysisManager.hh"
@@ -66,7 +68,7 @@ Tst50AnalysisManager::Tst50AnalysisManager() :
   
  //parameters for the TreeFactory
  
-  std::string fileName="Test_output.hbk";
+  std::string fileName="Test_500kev.hbk";
   theTree = treeFact->create(fileName,"hbook",false, true);
 
   delete treeFact;
@@ -144,7 +146,7 @@ void Tst50AnalysisManager::finish()
   theTree->close();
 
 }
-
+#endif
 
 
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50VisManager.cc,v 1.1 2002-11-26 17:57:49 guatelli Exp $
+// $Id: Tst50VisManager.cc,v 1.2 2002-12-16 13:50:08 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

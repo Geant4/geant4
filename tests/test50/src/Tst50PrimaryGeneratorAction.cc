@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50PrimaryGeneratorAction.cc,v 1.2 2002-11-29 11:19:30 guatelli Exp $
+// $Id: Tst50PrimaryGeneratorAction.cc,v 1.3 2002-12-16 13:50:08 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,7 +43,7 @@ Tst50PrimaryGeneratorAction::Tst50PrimaryGeneratorAction()
 {
   G4int n_particle = 1;
   particleGun = new G4ParticleGun(n_particle);
-  energy=200.0*keV;   
+  energy=3.*MeV;   
 // default particle
 
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();

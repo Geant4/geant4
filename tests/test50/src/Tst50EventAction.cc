@@ -21,14 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50EventAction.cc,v 1.2 2002-11-27 18:14:18 guatelli Exp $
+// $Id: Tst50EventAction.cc,v 1.3 2002-12-16 13:50:08 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 #include "G4UnitsTable.hh" 
 #include "Tst50EventAction.hh"
+#ifdef G4ANALYSIS_USE
 #include "Tst50AnalysisManager.hh"
+#endif
+
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4TrajectoryContainer.hh"
@@ -86,13 +89,13 @@ void Tst50EventAction::EndOfEventAction(const G4Event* evt)
       for (G4int i=0;i<n_hit;i++)
 	{ 
 	   energyDep= (((*hit_HC)[i]->GetEdep()))/MeV; 
-	  G4cout<<"energia depositata per ogni evento:"<<energyDep<<G4endl; 
+	   //  G4cout<<"energia depositata per ogni evento:"<<energyDep<<G4endl; 
          
-	  
+#ifdef G4ANALYSIS_USE
 	    Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
 	    if(energyDep!=0)
 	        analysis-> energy_deposit(energyDep);
-
+#endif
 	}
     }
   // get number of stored trajectories

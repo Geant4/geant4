@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.cc,v 1.2 2002-11-29 11:19:30 guatelli Exp $
+// $Id: Tst50DetectorConstruction.cc,v 1.3 2002-12-16 13:50:08 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -116,7 +116,11 @@ density=4.51*g/cm3;
 
     CsI->AddElement(Cs, .5);
     CsI->AddElement(I, .5);
- 
+  
+a=26.98*g/mole;
+  density=2.699*g/cm3;
+  G4Material* elAll=new G4Material("Aluminum", z=13.,a,density);
+
  
 //Pb
     a = 207.19*g/mole;
@@ -142,7 +146,7 @@ density=4.51*g/cm3;
 
     G4double xtarget = 20.0*cm;
     G4double ytarget = 20.0*cm;
-    G4double ztarget = 5.*mm;
+    G4double ztarget =0.5*mm;
       
    
 
