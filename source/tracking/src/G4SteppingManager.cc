@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc,v 1.23 2001-12-04 17:15:50 radoone Exp $
+// $Id: G4SteppingManager.cc,v 1.24 2002-01-21 21:17:13 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -258,9 +258,18 @@ void G4SteppingManager::SetInitialStep(G4Track* valueTrack)
 
 // If the primary track has 'zero' kinetic energy, set the track
 // state to 'StopButAlive'.
+   //   if(fTrack->GetKineticEnergy() <= 0.0){
+   //     fTrack->SetTrackStatus( fStopButAlive );
+   //   }
    if(fTrack->GetKineticEnergy() <= 0.0){
-     fTrack->SetTrackStatus( fStopButAlive );
+     if( !(fTrack->IsGoodForTracking()) ){
+       fTrack->SetTrackStatus( fStopAndKill );
+     }
+     else {
+       fTrack->SetTrackStatus( fStopButAlive );
+     }
    }
+
 
 // Set Touchable to track and a private attribute of G4SteppingManager
  
