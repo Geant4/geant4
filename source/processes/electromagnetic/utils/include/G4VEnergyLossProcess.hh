@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.8 2004-03-10 11:34:51 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.9 2004-03-11 14:43:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -368,6 +368,7 @@ private:
   G4int    nDEDXBinsForRange;
   G4int    nLambdaBins;
 
+  G4double lowestKinEnergy;
   G4double minKinEnergy;
   G4double maxKinEnergy;
   G4double maxKinEnergyForRange;

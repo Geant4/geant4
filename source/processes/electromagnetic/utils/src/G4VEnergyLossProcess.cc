@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.8 2004-03-10 11:34:52 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.9 2004-03-11 14:43:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -139,6 +139,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name, G4ProcessType t
   meanFreePath(true)
 {
 
+  lowestKinEnergy      = 1.*eV;
   minKinEnergy         = 0.1*keV;
   maxKinEnergy         = 100.0*GeV;
   maxKinEnergyForRange = 1.0*GeV;
@@ -667,7 +668,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 */
 
   // Sample fluctuations
-  if (lossFluctuationFlag && eloss < preStepKinEnergy && eloss > 0.0) {
+  if (lossFluctuationFlag && eloss + lowestKinEnergy <= preStepKinEnergy) {
 
     eloss = modelManager->SampleFluctuations(currentMaterial, dynParticle,
                                        tmax, length, eloss, preStepScaledEnergy,
@@ -719,7 +720,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   }
 */
 
-  if (preStepKinEnergy <= 0.0) {
+  if (preStepKinEnergy <= lowestKinEnergy) {
 
     eloss += preStepKinEnergy;
     preStepKinEnergy = 0.0;
