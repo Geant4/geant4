@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsScene.hh,v 1.10 2005-01-27 19:52:19 johna Exp $
+// $Id: G4VGraphicsScene.hh,v 1.11 2005-01-27 20:01:11 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // John Allison  19th July 1996
 //
@@ -89,7 +89,7 @@ public: // With description
   virtual void AddThis (const G4VHit& hit)            {AddCompound(hit);}
 
   ///////////////////////////////////////////////////////////////////
-  // Methods for adding raw GEANT4 objects to the scene handler.  They
+  // Methods for adding solids to the scene handler.  They
   // must always be called in the triplet PreAddSolid, AddSolid and
   // PostAddSolid.  The transformation and visualization attributes
   // must be set by the call to PreAddSolid.  A possible default
