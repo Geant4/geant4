@@ -1,0 +1,341 @@
+// neutron_hp -- source file
+// J.P. Wellisch, Nov-1996
+// A prototype of the low energy neutron transport model.
+//
+#include "G4NeutronHPInelasticCompFS.hh"
+#include "G4Nucleus.hh"
+#include "G4NucleiPropertiesTable.hh"
+#include "G4He3.hh"
+#include "G4Alpha.hh"
+#include "G4Electron.hh"
+#include "G4NeutronHPDataUsed.hh"
+
+void G4NeutronHPInelasticCompFS::InitGammas(G4double AR, G4double ZR)
+{
+   char the[100] = {""};
+   ostrstream ost(the, 100, ios::out);
+   ost <<gammaPath<<"z"<<ZR<<".a"<<AR;
+   G4String * aName = new G4String(the);
+   ifstream from(*aName, ios::in);
+   if(!from) return; // no data found for this isotope
+   ifstream theGammaData(*aName, ios::in);
+    
+   theGammas.Init(theGammaData);
+   delete aName;
+}
+
+void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType)
+{
+  gammaPath = "/Inelastic/Gammas/";
+  G4String tBase = getenv("NeutronHPCrossSections");
+  gammaPath = tBase+gammaPath;
+  G4String tString = dirName;
+  G4bool dbool;
+  G4NeutronHPDataUsed aFile = theNames.GetName(A, Z, tString, aFSType, dbool);
+  G4String filename = aFile.GetName();
+  theBaseA = aFile.GetA();
+  theBaseZ = aFile.GetZ();
+  if(!dbool)
+  {
+    hasAnyData = false;
+    hasFSData = false; 
+    hasXsec = false;
+    return;
+  }
+  ifstream theData(filename, ios::in);
+  if(!theData)
+  {
+    hasAnyData = false;
+    hasFSData = false; 
+    hasXsec = false;
+    return;
+  }
+  // here we go
+  G4int infoType, dataType, dummy;
+  G4int sfType, it;
+  hasFSData = false; 
+  while (theData >> infoType)
+  {
+    hasFSData = true; 
+    theData >> dataType;
+    theData >> sfType >> dummy;
+    it = 50;
+    if(sfType>600||(sfType<100&&sfType>50)) it = sfType%50;
+    if(dataType==3) 
+    {
+      theData >> dummy >> dummy;
+      theXsection[it] = new G4NeutronHPVector;
+      G4int total;
+      theData >> total;
+      theXsection[it]->Init(theData, total, eV);
+    }
+    else if(dataType==4)
+    {
+      theAngularDistribution[it] = new G4NeutronHPAngular;
+      theAngularDistribution[it]->Init(theData);
+    }
+    else if(dataType==5)
+    {
+      theEnergyDistribution[it] = new G4NeutronHPEnergyDistribution;
+      theEnergyDistribution[it]->Init(theData);
+    }
+    else if(dataType==6)
+    {
+      theEnergyAngData[it] = new G4NeutronHPEnAngCorrelation;
+      theEnergyAngData[it]->Init(theData);
+    }
+    else if(dataType==12)
+    {
+      theFinalStatePhotons[it] = new G4NeutronHPPhotonDist;
+      theFinalStatePhotons[it]->InitMean(theData);
+    }
+    else if(dataType==13)
+    {
+      theFinalStatePhotons[it] = new G4NeutronHPPhotonDist;
+      theFinalStatePhotons[it]->InitPartials(theData);
+    }
+    else if(dataType==14)
+    {
+      theFinalStatePhotons[it]->InitAngular(theData);
+    }
+    else if(dataType==15)
+    {
+      theFinalStatePhotons[it]->InitEnergies(theData);
+    }
+    else
+    {
+      G4Exception("Data-type unknown to G4NeutronHPInelasticCompFS");
+    }
+  }
+}
+
+G4int G4NeutronHPInelasticCompFS::SelectExitChannel(G4double eKinetic)
+{
+  G4double running[50];
+  running[0] = 0;
+  G4int i;
+  for(i=0; i<50; i++)
+  {
+    if(i!=0) running[i]=running[i-1];
+    if(theXsection[i] != NULL) 
+    {
+      running[i] += theXsection[i]->GetXsec(eKinetic);
+    }
+  }
+  G4double random = G4UniformRand();
+  G4double sum = running[49];
+  G4int it = 0;
+  for(i=0; i<50; i++)
+  {
+    it = i;
+    if(random < running[i]/sum) break;
+  }
+//debug:  it = 1;
+  return it;
+}
+
+void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4ParticleDefinition * aDefinition)
+{
+  theResult.Initialize(theTrack); 
+
+// prepare neutron
+    G4double eKinetic = theTrack.GetKineticEnergy();
+    const G4DynamicParticle *incidentParticle = theTrack.GetDynamicParticle();
+    G4ReactionProduct theNeutron( incidentParticle->GetDefinition() );
+    theNeutron.SetMomentum( incidentParticle->GetMomentum() );
+    theNeutron.SetKineticEnergy( eKinetic );
+
+// prepare target
+    G4int i;
+    for(i=0; i<50; i++) if(theXsection[i] != NULL) break; 
+    G4double targetMass=0;
+    G4double eps = 0.0001;
+    targetMass = ( G4NucleiPropertiesTable::GetAtomicMass(theBaseZ+eps, theBaseA+eps)-
+                            theBaseZ*G4Electron::ElectronDefinition()->GetPDGMass() ) /
+                 G4Neutron::Neutron()->GetPDGMass();
+    if(theEnergyAngData[i]!=NULL)
+        targetMass = theEnergyAngData[i]->GetTargetMass();
+    else if(theAngularDistribution[i]!=NULL)
+        targetMass = theAngularDistribution[i]->GetTargetMass();
+    else if(theFinalStatePhotons[50]!=NULL)
+        targetMass = theFinalStatePhotons[50]->GetTargetMass();
+    G4Nucleus aNucleus;
+    G4ReactionProduct theTarget; 
+    theTarget = aNucleus.GetThermalNucleus(targetMass);
+
+// prepare the residual mass
+    G4double residualMass=0;
+    G4double residualZ = theBaseZ - aDefinition->GetPDGCharge();
+    G4double residualA = theBaseA - aDefinition->GetBaryonNumber()+1;
+    residualMass = ( G4NucleiPropertiesTable::GetAtomicMass(residualZ+eps, residualA+eps)-
+                            residualZ*G4Electron::ElectronDefinition()->GetPDGMass() ) /
+                     G4Neutron::Neutron()->GetPDGMass();
+
+// prepare energy in target rest frame
+    G4ReactionProduct boosted;
+    boosted.Lorentz(theNeutron, theTarget);
+    eKinetic = boosted.GetKineticEnergy();
+  
+// select exit channel for composite FS class.
+    G4int it = SelectExitChannel(eKinetic);
+   
+// set target and neutron in the relevant exit channel
+    InitDistributionInitialState(theNeutron, theTarget, it);    
+
+    G4ReactionProductVector * thePhotons = NULL;
+    G4ReactionProductVector * theParticles = NULL;
+    G4ReactionProduct aHadron;
+    aHadron.SetDefinition(aDefinition); // what if only cross-sections exist ==> Na 23 11 @@@@    
+    aHadron.SetKineticEnergy(theNeutron.GetKineticEnergy() +
+                             theNeutron.GetMass() - aHadron.GetMass() +
+                             (targetMass - residualMass)*G4Neutron::Neutron()->GetPDGMass());
+    aHadron.SetMomentum(theNeutron.GetMomentum()*(1./theNeutron.GetTotalMomentum())*
+                         sqrt(aHadron.GetTotalEnergy()*aHadron.GetTotalEnergy()-
+                              aHadron.GetMass()*aHadron.GetMass())
+                       );
+    G4int dummy;
+    G4int nSecGamma = 0;
+    G4double eGamm = 0;
+    G4int iLevel=it-1;
+    while( iLevel!=-1 && theGammas.GetLevel(iLevel)==NULL ) iLevel--;
+    if(theAngularDistribution[it]!= NULL)
+    {
+      if(theEnergyDistribution[it]!=NULL)
+      {
+        aHadron.SetKineticEnergy(theEnergyDistribution[it]->Sample(eKinetic, dummy));
+        G4double eSecN = aHadron.GetKineticEnergy();
+        eGamm = eKinetic-eSecN;
+        for(iLevel=theGammas.GetNumberOfLevels()-1; iLevel>=0; iLevel--)
+        {
+          if(theGammas.GetLevelEnergy(iLevel)<eGamm) break;
+        }
+        G4double random = 2*G4UniformRand();
+        iLevel+=G4int(random);
+        if(iLevel>theGammas.GetNumberOfLevels()-1)iLevel = theGammas.GetNumberOfLevels()-1;
+      }
+      else
+      {
+        G4double eExcitation = 0;
+        if(iLevel>=0) eExcitation = theGammas.GetLevel(iLevel)->GetLevelEnergy();    
+        aHadron.SetKineticEnergy(eKinetic - eExcitation);
+      }
+      theAngularDistribution[it]->SampleAndUpdate(aHadron);
+      if(theFinalStatePhotons[it] == NULL)
+      {
+	thePhotons = theGammas.GetDecayGammas(iLevel);
+	eGamm -= theGammas.GetLevelEnergy(iLevel);
+	if(eGamm>0) // @ ok for now, but really needs an efficient way of correllated sampling @
+	{
+          G4ReactionProduct * theRestEnergy = new G4ReactionProduct;
+          theRestEnergy->SetDefinition(G4Gamma::Gamma());
+          theRestEnergy->SetKineticEnergy(eGamm);
+          G4double costh = 2.*G4UniformRand()-1.;
+          G4double phi = twopi*G4UniformRand();
+          theRestEnergy->SetMomentum(eGamm*sin(acos(costh))*cos(phi), 
+                                     eGamm*sin(acos(costh))*sin(phi),
+                                     eGamm*costh);
+          if(thePhotons == NULL) thePhotons = new G4ReactionProductVector;
+          thePhotons->insert(theRestEnergy);
+	}
+      }
+    }
+    else if(theEnergyAngData[it]!= NULL)  
+    {
+      theParticles = theEnergyAngData[it]->Sample(eKinetic);
+    }
+    else
+    {
+      // @@@ what to do, if we have photon data, but no info on the proton itself
+    }
+    if(theFinalStatePhotons[it]!=NULL) 
+    {
+      // the photon distributions are in the Nucleus rest frame.
+      G4ReactionProduct boosted;
+      boosted.Lorentz(theNeutron, theTarget);
+      G4double anEnergy = boosted.GetKineticEnergy();
+      thePhotons = theFinalStatePhotons[it]->GetPhotons(anEnergy);
+      G4double aBaseEnergy = theFinalStatePhotons[it]->GetLevelEnergy();
+      G4double testEnergy = 0;
+      if(thePhotons!=NULL && thePhotons->entries()!=0) aBaseEnergy-=thePhotons->at(0)->GetTotalEnergy();
+      if(theFinalStatePhotons[it]->NeedsCascade())
+      {
+        while(abs(aBaseEnergy)>0.01*keV)
+        {
+          // cascade down the levels
+          for(G4int i=1; i<it; i++)
+          {
+            if(theFinalStatePhotons[i]!=NULL) 
+            {
+              testEnergy = theFinalStatePhotons[i]->GetLevelEnergy();
+            }
+            else
+            {
+              testEnergy = 0;
+            }
+            if(abs(testEnergy-aBaseEnergy)<0.1*keV)
+            {
+              G4ReactionProductVector * theNext = 
+        	theFinalStatePhotons[i]->GetPhotons(anEnergy);
+              thePhotons->insert(theNext->at(0));
+              aBaseEnergy = testEnergy-theNext->at(0)->GetTotalEnergy();
+              delete theNext;
+              break;
+            }
+          }
+        } // <=== the break goes here.
+      }
+    }
+    if(thePhotons!=NULL)
+    {
+      for(i=0; i<thePhotons->length(); i++)
+      {
+	// back to lab
+	thePhotons->at(i)->Lorentz(*(thePhotons->at(i)), -1.*theTarget);
+      }
+    }
+
+// fill the result
+    G4int nSecondaries = 1; // the hadron
+    if(theParticles != NULL) nSecondaries = theParticles->length();
+    G4int nPhotons = 0;
+    if(thePhotons!=NULL) nPhotons = thePhotons->length();
+    nSecondaries += nPhotons;
+    theResult.SetNumberOfSecondaries(nSecondaries);
+    
+    G4DynamicParticle * theSec;
+    
+    if( theParticles==NULL )
+    {
+      theSec = new G4DynamicParticle;   
+      theSec->SetDefinition(aHadron.GetDefinition());
+      theSec->SetMomentum(aHadron.GetMomentum());
+      theResult.AddSecondary(theSec);    
+    }
+    else
+    {
+      for(i=0; i<theParticles->length(); i++)
+      {
+        theSec = new G4DynamicParticle; 
+        theSec->SetDefinition(theParticles->at(i)->GetDefinition());
+        theSec->SetMomentum(theParticles->at(i)->GetMomentum());
+        theResult.AddSecondary(theSec); 
+        delete theParticles->at(i); 
+      } 
+      delete theParticles;
+    }
+    if(thePhotons!=NULL)
+    {
+      for(i=0; i<nPhotons; i++)
+      {
+        theSec = new G4DynamicParticle;    
+        theSec->SetDefinition(G4Gamma::Gamma());
+        theSec->SetMomentum(thePhotons->at(i)->GetMomentum());
+        theResult.AddSecondary(theSec); 
+        delete thePhotons->at(i);
+      }
+// some garbage collection
+      delete thePhotons;
+    }
+// clean up the primary neutron
+    theResult.SetStatusChange(fStopAndKill);
+}

@@ -1,0 +1,223 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4ParameterisedNavigation.icc,v 1.1 1999-01-07 16:08:44 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// class G4ParameterisedNavigation Inline implementation
+
+
+inline G4ParameterisedNavigation::G4ParameterisedNavigation() :
+    fVoxelNode(0),fVoxelHeader(0)
+{
+}
+
+inline G4SmartVoxelNode* G4ParameterisedNavigation::VoxelLocate(G4SmartVoxelHeader *pHead,
+                           const G4ThreeVector &localPoint)
+{
+	EAxis targetHeaderAxis;
+	G4double targetHeaderMin,targetHeaderNodeWidth;
+	G4int targetHeaderNoSlices,targetNodeNo;
+
+	targetHeaderAxis=pHead->GetAxis();
+	targetHeaderNoSlices=pHead->GetNoSlices();
+	targetHeaderMin=pHead->GetMinExtent();
+	targetHeaderNodeWidth=(pHead->GetMaxExtent()-targetHeaderMin)/targetHeaderNoSlices;
+	targetNodeNo=G4int ((localPoint(targetHeaderAxis)-targetHeaderMin)/targetHeaderNodeWidth);
+// Rounding protection
+	if (targetNodeNo<0)
+		{
+		targetNodeNo=0;
+		}
+	else if (targetNodeNo>=targetHeaderNoSlices)
+		{
+		targetNodeNo=targetHeaderNoSlices-1;
+		}
+	fVoxelAxis=targetHeaderAxis;
+	fVoxelNoSlices=targetHeaderNoSlices;
+	fVoxelSliceWidth=targetHeaderNodeWidth;
+	fVoxelNodeNo=targetNodeNo;
+	fVoxelHeader=pHead;		
+	fVoxelNode=pHead->GetSlice(targetNodeNo)->GetNode();
+	return fVoxelNode;
+}
+
+// Compute safety from specified point to collected voxel boundaries
+// using already located point
+
+inline G4double G4ParameterisedNavigation::ComputeVoxelSafety(const G4ThreeVector&localPoint) const
+	{
+
+	G4double voxelSafety, plusVoxelSafety, minusVoxelSafety;
+	G4double curNodeOffset,minCurCommonDelta,maxCurCommonDelta;
+	G4int minCurNodeNoDelta,maxCurNodeNoDelta;
+	
+// Compute linear intersection distance to boundaries of max/min
+// to collected nodes at current level
+	curNodeOffset=fVoxelNodeNo*fVoxelSliceWidth;
+	minCurCommonDelta=localPoint(fVoxelAxis)
+	    -fVoxelHeader->GetMinExtent()
+	    -curNodeOffset;
+	maxCurNodeNoDelta=fVoxelNode->GetMaxEquivalentSliceNo()-fVoxelNodeNo;
+	minCurNodeNoDelta=fVoxelNodeNo-fVoxelNode->GetMinEquivalentSliceNo();
+	maxCurCommonDelta=fVoxelSliceWidth-minCurCommonDelta;
+
+	plusVoxelSafety= minCurNodeNoDelta*fVoxelSliceWidth+minCurCommonDelta;
+	minusVoxelSafety=maxCurNodeNoDelta*fVoxelSliceWidth+maxCurCommonDelta;
+
+	voxelSafety= min(plusVoxelSafety,minusVoxelSafety);
+
+	if (voxelSafety<0)
+		{
+		voxelSafety=0;
+		}
+
+	return voxelSafety;
+	}
+
+
+// Find the next voxel from the current voxel and point in the specified
+// direction
+//
+// Return false if all voxels considered
+//              [current Step ends inside same voxel or leaves all voxels]
+//        true  otherwise
+inline G4bool G4ParameterisedNavigation::LocateNextVoxel(const G4ThreeVector& localPoint,
+					    const G4ThreeVector& localDirection,
+					    const G4double currentStep)
+{
+
+
+    G4bool isNewVoxel;
+    G4int newNodeNo;
+    G4double minVal,maxVal,curMinExtent,curCoord;
+
+    curMinExtent=fVoxelHeader->GetMinExtent();
+    curCoord=localPoint(fVoxelAxis)+currentStep*localDirection(fVoxelAxis);
+    minVal=curMinExtent
+	+fVoxelNode->GetMinEquivalentSliceNo()*fVoxelSliceWidth;
+
+    isNewVoxel=false;
+
+    if (minVal<=curCoord)
+	{
+    	maxVal=curMinExtent
+		+(fVoxelNode->GetMaxEquivalentSliceNo()+1)*fVoxelSliceWidth;
+	if (maxVal<curCoord)
+		{
+	        newNodeNo=fVoxelNode->GetMaxEquivalentSliceNo()+1;
+		if (newNodeNo<fVoxelHeader->GetNoSlices())
+			{
+			fVoxelNodeNo=newNodeNo;
+			fVoxelNode=fVoxelHeader->GetSlice(newNodeNo)->GetNode();
+			isNewVoxel=true;
+			}
+		}
+	}
+    else
+	{
+	newNodeNo=fVoxelNode->GetMinEquivalentSliceNo()-1;
+// Must locate from newNodeNo no and down to setup stack and fVoxelNode
+// Repeat or earlier code...
+	if (newNodeNo>=0)
+		{
+		fVoxelNodeNo=newNodeNo;
+		fVoxelNode=fVoxelHeader->GetSlice(newNodeNo)->GetNode();
+		isNewVoxel=true;
+		}
+	}
+    return isNewVoxel;
+}
+
+inline G4bool G4ParameterisedNavigation::LevelLocate(G4NavigationHistory& history,
+			   const G4VPhysicalVolume *blockedVol,
+                           const G4int blockedNum,
+                           const G4ThreeVector &globalPoint,
+                           const G4ThreeVector* globalDirection,
+			   const G4bool pLocatedOnEdge, 
+			   G4ThreeVector &localPoint)
+{
+
+  G4SmartVoxelHeader *motherVoxelHeader;
+  G4SmartVoxelNode *motherVoxelNode;
+  G4VPhysicalVolume *motherPhysical,*pPhysical;
+  G4VPVParameterisation *pParam;
+  G4LogicalVolume *motherLogical;
+  G4VSolid *pSolid;
+  G4ThreeVector samplePoint;
+  G4int voxelNoDaughters,sampleNo,replicaNo;
+  
+  motherPhysical=history.GetTopVolume();
+  motherLogical=motherPhysical->GetLogicalVolume();
+  motherVoxelHeader=motherLogical->GetVoxelHeader();
+  //        localPoint=history.GetTopTransform().TransformPoint(globalPoint);
+// Find the voxel containing the point
+  motherVoxelNode=VoxelLocate(motherVoxelHeader,localPoint);
+  
+  voxelNoDaughters=motherVoxelNode->GetNoContained();
+  if (voxelNoDaughters==0) return false;
+  
+  pPhysical=motherLogical->GetDaughter(0);
+  // pSolid=pPhysical->GetLogicalVolume()->GetSolid(); // Now it can vary
+  pParam=pPhysical->GetParameterisation();
+
+//
+// Search replicated daughter volume
+//
+  for (sampleNo=voxelNoDaughters-1;sampleNo>=0;sampleNo--)
+    {
+      replicaNo=motherVoxelNode->GetVolume(sampleNo);
+      if (replicaNo!=blockedNum||pPhysical!=blockedVol)
+	{
+	  // Obtain solid (as it can vary) and 
+	  //  obtain its parameters
+          pSolid=pParam->ComputeSolid(replicaNo, pPhysical); 
+	  pSolid->ComputeDimensions(pParam,
+				    replicaNo,
+				    pPhysical);
+	  pParam->ComputeTransformation(replicaNo,
+					pPhysical);
+// Setup volume with mother ptr
+	  pPhysical->Setup(motherPhysical);
+	  history.NewLevel(pPhysical,
+			   kParameterised,
+			   replicaNo);
+	  samplePoint=history.GetTopTransform().TransformPoint(globalPoint);
+	  if (! G4AuxiliaryNavServices::
+	       CheckPointOnSurface(pSolid, samplePoint, globalDirection, 
+				  history.GetTopTransform(), pLocatedOnEdge) )
+	    {
+	      history.BackLevel();
+	    }
+	  else
+	    {
+	      // Enter this daughter
+	      // blockedVol=0;
+	      localPoint=samplePoint;
+	      // Set the correct copy number in physical
+	      pPhysical->SetCopyNo(replicaNo);
+	      // Set the correct solid and material in Logical Volume
+	      G4LogicalVolume *pLogical=pPhysical->GetLogicalVolume();
+	      pLogical->SetSolid( pSolid );
+	      pLogical->SetMaterial( pParam->ComputeMaterial(replicaNo, 
+							     pPhysical));
+	      return true;
+	    }
+	}
+    }
+  
+  return false;
+}
+
+
+
+
+
+
+
+

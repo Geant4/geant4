@@ -1,0 +1,41 @@
+inline G4Point3D G4Ray::GetPoint(G4double i) const {
+  return start+i*dir;
+}
+
+inline G4double G4Ray::GetPPoint(const G4Point3D& p) const {
+  // |dir|==1
+  return (p-start)*dir;
+}
+
+inline const G4Vector3D& G4Ray::GetDir() const {
+  return dir;
+}
+
+inline const G4Point3D& G4Ray::GetStart() const {
+  return start;
+}
+
+inline void G4Ray::SetDir(const G4Vector3D& dir0) {
+  dir= dir0.unit();
+}
+
+inline void G4Ray::SetStart(const G4Point3D& start0) {
+  start= start0;
+}
+
+inline void G4Ray::Init(const G4Point3D& start0, const G4Vector3D& dir0)
+{
+  start= start0;
+  dir=   dir0;
+  RayCheck();
+  CreatePlanes();
+}
+
+inline G4Ray::G4Ray(const G4Point3D& start0, const G4Vector3D& dir0) {
+  Init(start0, dir0);
+}
+
+inline G4Ray::G4Ray()
+{
+}
+

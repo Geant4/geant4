@@ -1,0 +1,146 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4IMuEnergyLoss.icc,v 1.1 1999-01-07 16:11:02 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id: 
+// ---------------------------------------------------------------
+//      GEANT 4 class inlined methods file 
+//
+//      For information related to this code contact:
+//      CERN, CN Division, ASD group
+//      History: first implementation, based on object model of
+//      2nd December 1995, G.Cosmo
+//      ------------ G4IMuEnergyLoss physics process ------------
+//                 by Laszlo Urban, September 1997
+// ***************************************************************
+// It is the implementation of the NEW UNIFIED ENERGY LOSS PROCESS.               
+// It calculates the energy loss of muons.
+// ***************************************************************
+// correction for KineticEnergy< LowestKineticEnergy by L.Urban on 27/11/97
+// corrections by L. Urban on 27/05/98 ( other corrs come soon!)           
+// ---------------------------------------------------------------
+
+inline G4double G4IMuEnergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
+                                              G4Material *aMaterial) 
+{
+
+  // returns the Step limit 
+  // dToverTini is the max. allowed relative range loss in one Step
+  // it calculates dEdx and the range as well....
+
+  G4double KineticEnergy,StepLimit; 
+  const G4double BigStep = DBL_MAX  ;
+  G4bool isOutRange ;
+  G4int index,bin ;  
+
+  if(aParticle->GetDefinition()->GetPDGCharge()>0.)
+  {
+    theDEDXTable = theDEDXmuplusTable ;
+    theRangeTable = theRangemuplusTable ;
+    theRangeCoeffATable=themuplusRangeCoeffATable ;
+    theRangeCoeffBTable=themuplusRangeCoeffBTable ;
+    theRangeCoeffCTable=themuplusRangeCoeffCTable ;
+  }
+  else
+  {
+    theDEDXTable = theDEDXmuminusTable ;
+    theRangeTable = theRangemuminusTable ;
+    theRangeCoeffATable=themuminusRangeCoeffATable ;
+    theRangeCoeffBTable=themuminusRangeCoeffBTable ;
+    theRangeCoeffCTable=themuminusRangeCoeffCTable ;
+  }
+
+
+  // min.stepsize = p*CutInRange at energy , where range=p*CutInRange
+  //  random steplimit.........................
+  const G4double p=1. , cc=p*CutInRange ;
+  const G4double c1=dToverTini , c2=(1.-2.*dToverTini)*cc ,
+                 c3=dToverTini*cc*cc ;
+  const G4double rangelim=1.5*cc ;
+  const G4double Thigh = 0.9*HighestKineticEnergy ;
+  const G4double alfa = 0.05 , alfa1 = 1.-alfa , alfa2 = 2.*alfa ;
+  KineticEnergy = aParticle->GetKineticEnergy();
+  bin = G4int(log(KineticEnergy/LowestKineticEnergy)/LOGRTable) ;
+  EnergyBinNumber = bin ;
+  index = aMaterial->GetIndex() ;
+ 
+  if( KineticEnergy < LowestKineticEnergy )
+    {
+      fdEdx = sqrt(KineticEnergy/LowestKineticEnergy)*
+             (*theDEDXTable)(index)->GetValue(LowestKineticEnergy,isOutRange) ;       
+      fRangeNow = sqrt(KineticEnergy/LowestKineticEnergy)*
+                  (*theRangeTable)(index)->GetValue(LowestKineticEnergy,isOutRange) ;
+      StepLimit = fRangeNow ;
+    }
+  else
+    {
+      if ( KineticEnergy > HighestKineticEnergy )
+         StepLimit = BigStep ;
+      else
+      {
+    
+         fdEdx = (*theDEDXTable)(index)->
+                            GetValue(KineticEnergy,isOutRange) ;
+     
+  
+         RangeCoeffA = (*(*theRangeCoeffATable)(index))(EnergyBinNumber) ;
+         RangeCoeffB = (*(*theRangeCoeffBTable)(index))(EnergyBinNumber) ;
+         RangeCoeffC = (*(*theRangeCoeffCTable)(index))(EnergyBinNumber) ;
+
+         fRangeNow = (RangeCoeffA*KineticEnergy+RangeCoeffB)
+                    *KineticEnergy+RangeCoeffC ;         
+
+  //  vacuum ?
+    if(fRangeNow>=BigStep)
+     StepLimit = BigStep ;
+    else  
+    {
+  //  new method to compute the (random) Step limit ..............
+       if(fRangeNow>cc)
+       {
+         StepLimit = c1*fRangeNow+c2+c3/fRangeNow ;
+
+        //  randomise this value
+            StepLimit = cc + (StepLimit-cc)*G4UniformRand() ;
+            if(StepLimit > fRangeNow) StepLimit = fRangeNow ;
+       }
+       else
+         StepLimit = fRangeNow ;
+      }
+     }  
+    }   
+
+  return StepLimit ;
+ 
+}
+
+
+inline G4double G4IMuEnergyLoss::GetContinuousStepLimit(
+                                               const G4Track& track,
+                                               G4double,
+                                               G4double currentMinimumStep,
+                                               G4double&)
+{
+ 
+  G4double Step =
+    GetConstraints(track.GetDynamicParticle(),track.GetMaterial()) ;
+
+  if((Step>0.0)&&(Step<currentMinimumStep))
+     currentMinimumStep = Step ;
+
+  return Step ;
+}
+
+inline G4bool G4IMuEnergyLoss::IsApplicable(const G4ParticleDefinition&
+                                                     particle)
+{
+   return (  (&particle == (const G4ParticleDefinition *)theMuonPlus)
+           ||(&particle == (const G4ParticleDefinition *)theMuonMinus)
+          );  
+}

@@ -1,0 +1,105 @@
+$Id: History,v 1.1 1999-01-07 16:14:28 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+Nov 25, 98 T.Sasaki    (tracking-00-04-03)
+- Fix to G4SteppingManager.cc to set proper 2ndary numbers.
+Nov 17 ,98 H.Kurashige (tracking-00-04-01)
+- Fixed treatment of safety in case of ApplyCuts flag is ON
+
+August 25, 98 G.Cosmo (tracking-00-02-01)
+- Minor fix to G4SteppingManager.hh, G4SteppingVerbose.hh
+  and G4TrackVector.hh.
+  Angle brackets should be used for inclusion of RW classes!
+
+July  1, 98 K. Amako
+- Tag for tracking-00-07-02. This includes the following features.
+- Because J. Apostolakis changed  the way to calcluate safety in the 
+  transportation AlongStepGPIL, the way to set safety of the PostStepPoint
+  was modified. Except the first step, the safety of the PreStepPoint
+  is also valid in this scheme.
+- The coherent energy cut scheme is implemented. This means that 
+  the energy of a secondary particle is checked against the energy
+  cut value and also safety. Also the 'GoodForTracking' flag is 
+  checked. A warning message will be issued if a secondary particle
+  has illegal status (i.e. below energy cut and 'GoodForTracking' is off).
+  Because processes don't set properly the 'GoodForTracking' yet, this
+  waning message is temporary suppressed in the current tag.
+
+June 22, 98 J.Apostolakis 
+
+- Added fix to implementation of new scheme of 'Safety'.
+
+June 16, 98 P.Urban                      -- recorded by J. Apostolakis
+
+- Added changes for tracking optimisation.  (Merged from branch)
+- tagged tracking-00-06-03.
+
+June 11, 98 G.Cosmo (tracking-00-06-02)
+- Tagged tracking-00-06-02.
+  Includes changes by P.Mora de Freitas and M.Asai which were missing in
+  the previous tag.
+
+June 6, 98  M.Asai
+- GNUmakefile is modified to correspond to the new "digits+hits" structure.
+
+Jun  3, 98  P.Mora de Freitas/M.Verderi
+- Implement new scheme of 'Safety' where it becomes the 'range within 
+  the assumptions of all processes are valid'. In the G4SteppingManager
+  GetPIL loop the safety becomes "competitive" like the step limitation. 
+  This means that at the begining of every step the G4SteppingManager 
+  will initialize it to DBLMAX and that processes can only decrease it.
+
+May 22, 98  T.Sasaki
+- Verbose codes are separated from SteppingManager. 2 files are aded.
+April 21, 98 G.Cosmo (tracking-00-05-01)
+- Tagged.
+
+April 12, 98 H.Kuraashige
+- Implement new scheme of 'Particle Change'. Please see 
+  particle_change.asc in geant4alpha/documents/particles+matter/.
+  G4SteppingManager.hh,  .cc have been modified.
+
+April 9, 98 G.Cosmo
+- Porting on DEC-cxx 6.0.
+  Removed meaningless usage of "const" qualifier from functions
+  return type for basic types by value. Modified files: G4Trajectory.hh
+
+March 18, 1998 K. Amako
+  Add following information to G4Track: 
+     1.Momentum direction at the start point (vertex position) of the track 
+     2.Kinetic energy at the start point (vertex position) of the track 
+     3.Pointer to the process which created the current track 
+  Due to this, the following files have modififed and committed.
+     1.NewDesignDoc.txt 
+     2.G4Track.hh, G4Track.cc 
+     3.G4SteppingManager.cc 
+
+January  29, 97 K. Amako
+  Following changes have been done and committed/tagged to cvs.
+  Tag# is tracking-00-03-01. 
+    - G4SteppingManager.cc: Corrected so that the verbose 
+      'AlongStepDoItAllDone' is invokded after the 'safety' update.
+    - G4SteppingManager.cc: Added a comment in the 'G4Step Information' 
+      table of the verbose output of 'AlongStepDoIt (process by process)' 
+      so that 'safety' value in it is not updated yet.
+    - G4TrackingMessanger.cc: Help for verbose has been updated.
+  
+
+December 19, 97 G. Cosmo - (alpha03)
+
+- Created.

@@ -1,0 +1,55 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4ParticleChangeForMSC.icc,v 1.1 1999-01-07 16:14:22 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+
+inline 
+ const G4ParticleMomentum* G4ParticleChangeForMSC::GetMomentumChange() const
+{
+  return &theMomentumChange;
+}
+
+inline 
+ void G4ParticleChangeForMSC::SetMomentumChange(
+						G4double Px, 
+						G4double Py, 
+						G4double Pz	)
+{
+  theMomentumChange.setX(Px);
+  theMomentumChange.setY(Py);
+  theMomentumChange.setZ(Pz);
+}
+
+inline 
+ void G4ParticleChangeForMSC::SetMomentumChange(const G4ThreeVector& P)
+{
+  theMomentumChange = P;
+}
+
+inline 
+ const G4ThreeVector* G4ParticleChangeForMSC::GetPositionChange() const
+{
+  return &thePositionChange;
+}
+
+inline 
+ void G4ParticleChangeForMSC::SetPositionChange(const G4ThreeVector& finalPosition)
+{
+  thePositionChange= finalPosition;
+}
+
+inline 
+ void G4ParticleChangeForMSC::SetPositionChange(G4double x,G4double y, G4double z)
+{
+  thePositionChange.setX(x);
+  thePositionChange.setY(y);
+  thePositionChange.setZ(z);
+}
+

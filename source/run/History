@@ -1,0 +1,204 @@
+$Id: History,v 1.1 1999-01-07 16:14:14 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+Dec. 9 98 H.Kurashige (tag run-00-04-01)
+- G4VUserPhysicsList is updated to use G4GenericIon (Hisaya)
+- G4VUserPhysicsList::ConstructAllParticles method is added (Hisaya)
+- G4VUserPhysicsList::DumpCutValues use BestOfUnits (Michel)
+
+Nov 12, 98 M.Asai (tag run-00-03-05)
+- G4VUserPhysicsList.cc is updated for new EM physics processes (L.Urban).
+
+Oct 13, 98 M.Asai (tag run-00-03-04)
+- PostStepDoIt of transportation is registered (J.Apostolakis).
+
+Oct 01, 98 M.Asai (tag run-00-03-03)
+- G4RunManager now has a switch for optimizing the geometry.
+- G4RunMessenger has a UI command for above switch.
+
+Sep 29, 98 M.Asai (tag run-00-03-02)
+- Modifications on G4VUserPhysicsList (M.Maire and L.Urban)
+
+Sep 25, 98 M.Asai (tag run-00-03-01)
+- "BeamOn" accepts a macro file.
+    affected files : G4RunManager.hh .cc, G4RunMessenger.hh .cc
+
+Aug 31, 98 John Allison (tag run-00-02-02)
+- Re-implemented pVVisManager->GeometryHasChanged()!
+
+Aug 17, 98 H.Kurashige (tag run-00-02-03)
+- Added create/delete G4ProcessTableMessenger
+
+Aug 14, 98 John Allison (tag run-00-02-02)
+- Implemented pVVisManager->GeometryHasChanged() - code by M.Asai.
+
+Aug 12, 98 M.Asai (tag run-00-02-01)
+- Modification of G4VUserPhysicsList.cc (H.Kurashige)
+
+July 21, 98 M.Asai (tag run-00-01-06)
+
+July 15, 98 M.Asai (tag-run-00-01-05)
+
+July 13, 98 M.Asai (tag run-00-01-04)
+
+July12 , 98 H.Kurashige
+- Added "/run/particle/addProcManager" command in G4UserPhysicsListMesseneger
+- Modified G4VUserPhysicsList:AddProcessManager
+
+July 9, 98 M.Asai (tag run-00-01-03)
+- Bug fix for G4VUserPhysicsList.cc
+
+July 7, 98 M.Asai (tag run-00-01-02)
+- G4RunManager trigger the construction of G4ParticleTableMessenger
+ to avoid inconsistent ordering of command / unit objects' building.
+
+
+July 4, 98 M.Asai (tag run-00-01-01)
+- Includes the modification in G4VUserPhysicsList.cc (P.Urban)
+
+June 30, 98 M.Asai (tag run-00-07-01)
+- G4Run uses G4Allocator.
+- example4 is updated with the new G4THitsCollection template.
+
+June 30, 98 H.Kurashige
+- Modified G4VUserPhysicsList.cc and MyPhysicsList.cc in example4
+  for shortlived particles 
+
+June 26, 98 G.Cosmo (run-00-06-06)
+- Modified GNUmakefiles for new electromagnetics structure.
+  (by J.Allison)
+
+June 25, 98 G.Cosmo (run-00-06-05)
+- Updated reference output and reference error of
+  example1, example2, example7, EmPhys2, example_demo and example_ghost.
+- Protected visualization code with G4VIS_USE in EmPhys2.
+
+June 25, 98 M.Asai (run-00-06-04)
+- Bug fixes for example4 (J.Allison)
+- Update ".out" for EmPhys2 (M.Maire)
+
+June 22, 98 G.Cosmo (run-00-06-03 - re-tagged) 
+- Added missing include paths to digits+hits/* (fix which was already 
+  in place in run-00-06-02 ...) to almost all GNUmakefiles.
+- Removed inclusion/usage of MyTrackerHit.hh (!?) in example4.cc and
+  example_demo.cc.
+
+June 22, 98 J.Allison (run-00-06-03)
+- Changed G4BASE = ../.. to G4BASE = $(shell (cd ../..; pwd)), etc.
+
+June 19, 98 J.Allison
+- Changed many GNUmakefiles to use visualization/G4VIS_USE.gmk
+
+June 15, 98 G.Cosmo (run-00-06-02)
+- Fixed bug in MyEventAction.cc for example5 (M.Asai).
+- Updated reference input macros for example4 (M.Asai).
+
+June 12, 98 G.Cosmo
+- Added path to digits+hits/digits/include to GNUmakefiles in all
+  examples.
+
+June 9, 98 M.Asai
+- Some changes affected by new aspects of Particles.
+- Tagged as run-00-06-01. 
+
+June 6, 98 M.Asai
+- Modify G4Run and G4RunManager for the new "digits+hits" scheme
+- Update GNUmakefile
+
+April 29, 98 G.Cosmo (run-00-05-05)
+- Updated reference output files in almost all examples
+  (P.Urban and J.Apostolakis)
+- Updated MyPhysicsList in example2 and related input reference
+  file (J.Apostolakis)
+- Set G4EXEC_BUILD flag inside all examples' GNUmakefiles.
+
+April 23, 98 G.Cosmo (run-00-05-03)
+- Fixes and updated reference output files for exampleEmPhys1 and
+  exampleEmPhys2 (by M.Maire).
+
+April 21, 98 M.Asai (run-00-05-02)
+- Tagged as run-00-05-02.
+
+April 08, 98 G.Cosmo
+- Added fixes for DEC-cxx 6.0 compiler, related to for-loop index
+  declarations. List of modified files: G4VUserPhysicsList.cc
+
+April 2, 98 G.Barrand
+- G4VIS_USE_OPENINVENTOR -> G4VIS_USE_OIX in example GNUmakefile.
+
+March 27, 98 M.Asai (run-00-05-01)
+- G4RunManager can be derived to a user class
+- tagged as run-00-05-01
+
+26th March 1998  John Allison
+- Changed G4VisManager to MyVisManager in the following files for
+  vis-00-05-01 and later:
+    run/example/example2.cc
+    run/example4/example4.cc
+    run/example_param/example_demo.cc
+    run/example_param/example_ghost.cc
+    run/exampleEmPhys2/EmPhys2.cc
+
+March 24, 98 G.Barrand
+- run/example5/GNUmakefile.common : MAKESHLIB changed in G4MAKESHLIB
+
+13th  March 1998 G.Cosmo (run-00-04-04)
+- Fixed problems in example_param causing unresolveds at link time
+  in case no visualization used. Co-works with param-00-04-06 in
+  processes category. (P.Mora de Freitas)
+- Corrected reference input files for EmPhys1 (M.Maire)
+
+12th  March 1998 H.Kurashige (run-00-04-03)
+- Added the reference files for  EmPhys1 and EmPhys2 (M.Maire)
+
+11th  March 1998 H.Kurashige (run-00-04-02)
+- Fixed bug in example2.cc (J.APOSTOLAKIS)
+- Fixed bug in G4RunManager (H.Kurashige)
+
+5th  March 1998 H.Kurashige (run-00-04-01)
+- Remove old sceme for initialization (G4UserProcessList,
+  G4UserProcessList, G4UserParticleListMessenger) 
+- Fixed bugs in MyPhysicsList.cc
+
+27th February 1998 H.Kurashige
+- Fixed MyPhysicsList::constructGeneral() to add decay at rest
+
+5th February 1998 G.Cosmo (run-00-03-04)
+- Added explicit build of G4paramenterisation library in GNUmakefile
+  for example_param.
+
+4th February 1998 G.Cosmo on behalf of M.Asai (run-00-03-03)
+- Added .in, .out, .err to several examples (P.Urban)
+- Fixed bug in MyEventAction for example5 (M.Asai)
+- G4UserParticleList updated (H.Kurasige)
+
+2nd February 1998 G.Cosmo
+- Fixed bug in example5/GNUmakefile for target "clean". g4* files
+  were all removed !
+
+30th January 1998  G.Cosmo (run-00-03-02)
+- Updated order of libraries for example7 (G4intercoms)
+
+27th January 1998  John Allison
+- Simplified use of G4VIS flags in test GNUmakefiles.
+- New way of instantiating G4VisManager in test main() programs.
+- Removed all references to G4VVisManager from G4RunManager.
+
+December 19, 97 G. Cosmo - (alpha03)
+
+- Created.

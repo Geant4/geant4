@@ -1,0 +1,19 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4VSolid.icc,v 1.1 1999-01-07 16:07:18 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+
+inline G4Polyhedron* G4VSolid::CreatePolyhedron () const {
+  return 0;
+}
+
+inline G4NURBS* G4VSolid::CreateNURBS () const {
+  return 0;
+}

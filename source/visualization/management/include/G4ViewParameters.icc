@@ -1,0 +1,284 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4ViewParameters.icc,v 1.1 1999-01-07 16:15:20 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// John Allison  20th October 1996
+// View parameters and options.
+
+inline G4ViewParameters::DrawingStyle
+G4ViewParameters::GetDrawingStyle () const {
+  return fDrawingStyle;
+}
+
+inline G4ViewParameters::RepStyle G4ViewParameters::GetRepStyle () const {
+  return fRepStyle;
+}
+
+inline G4bool G4ViewParameters::IsCulling () const {
+  return fCulling;
+}
+
+inline G4bool G4ViewParameters::IsCullingInvisible () const {
+  return fCullInvisible;
+}
+
+inline G4bool G4ViewParameters::IsDensityCulling () const {
+  return fDensityCulling;
+}
+
+inline G4double G4ViewParameters::GetVisibleDensity () const {
+  return fVisibleDensity;
+}
+
+inline G4bool G4ViewParameters::IsCullingCovered () const {
+  return fCullCovered;
+}
+
+inline G4bool G4ViewParameters::IsSection () const {
+  return fSection;
+}
+
+inline const G4Plane3D& G4ViewParameters::GetSectionPlane () const {
+  return fSectionPlane;
+}
+
+inline G4bool G4ViewParameters::IsCutaway () const {
+  return fCutaway;
+}
+
+inline const G4Planes& G4ViewParameters::GetCutawayPlanes () const {
+  return fCutawayPlanes;
+}
+
+inline G4bool G4ViewParameters::IsExplode () const {
+  return fExplode;
+}
+
+inline G4double G4ViewParameters::GetExplodeFactor () const {
+  return fExplodeFactor;
+}
+
+inline G4int G4ViewParameters::GetNoOfSides () const {
+  return fNoOfSides;
+}
+
+inline const G4Vector3D& G4ViewParameters::GetViewpointDirection () const {
+  return fViewpointDirection;
+}
+
+inline const G4Vector3D& G4ViewParameters::GetUpVector () const {
+  return fUpVector;
+}
+
+inline G4double G4ViewParameters::GetFieldHalfAngle () const {
+  return fFieldHalfAngle;
+}
+
+inline G4double G4ViewParameters::GetZoomFactor () const {
+  return fZoomFactor;
+}
+
+inline const G4Point3D& G4ViewParameters::GetCurrentTargetPoint () const {
+  return fCurrentTargetPoint;
+}
+
+inline G4double G4ViewParameters::GetDolly () const {
+  return fDolly;
+}
+
+inline const G4Vector3D& G4ViewParameters::GetLightpointDirection () const {
+  return fRelativeLightpointDirection;
+}
+
+inline G4bool G4ViewParameters::GetLightsMoveWithCamera () const {
+  return fLightsMoveWithCamera;
+}
+
+inline G4bool G4ViewParameters::IsViewGeom () const {
+  return fViewGeom;
+}
+
+inline G4bool G4ViewParameters::IsViewHits () const {
+  return fViewHits;
+}
+
+inline G4bool G4ViewParameters::IsViewDigis () const {
+  return fViewDigis;
+}
+
+inline const G4VisAttributes*
+G4ViewParameters::GetDefaultVisAttributes () const {
+  return &fDefaultVisAttributes;
+}
+
+inline const G4VisAttributes*
+G4ViewParameters::GetDefaultTextVisAttributes () const {
+  return &fDefaultTextVisAttributes;
+}
+
+inline const G4VMarker& G4ViewParameters::GetDefaultMarker () const {
+  return fDefaultMarker;
+}
+
+inline G4double G4ViewParameters::GetGlobalMarkerScale () const {
+  return fGlobalMarkerScale;
+}
+
+inline G4bool G4ViewParameters::IsMarkerNotHidden () const {
+  return fMarkerNotHidden;
+}
+
+inline G4int G4ViewParameters::GetWindowSizeHintX () const {
+  return fWindowSizeHintX;
+}
+
+inline G4int G4ViewParameters::GetWindowSizeHintY () const {
+  return fWindowSizeHintY;
+}
+
+inline void
+G4ViewParameters::SetDrawingStyle (G4ViewParameters::DrawingStyle style) {
+  fDrawingStyle = style;
+}
+
+inline void
+G4ViewParameters::SetRepStyle (G4ViewParameters::RepStyle style) {
+  fRepStyle = style;
+}
+
+inline void G4ViewParameters::SetCulling (G4bool value) {
+  fCulling = value;
+}
+
+inline void G4ViewParameters::SetCullingInvisible (G4bool value) {
+  fCullInvisible = value;
+}
+
+inline void G4ViewParameters::SetDensityCulling (G4bool value) {
+  fDensityCulling = value;
+}
+
+inline void G4ViewParameters::SetCullingCovered (G4bool value) {
+  fCullCovered = value;
+}
+
+inline void G4ViewParameters::SetSectionPlane (const G4Plane3D& sectionPlane) {
+  fSection = true;
+  fSectionPlane = sectionPlane;
+}
+
+inline void G4ViewParameters::UnsetSectionPlane () {
+  fSection = false;
+}
+
+inline void G4ViewParameters::SetViewpointDirection
+(const G4Vector3D& viewpointDirection) {
+  fViewpointDirection = viewpointDirection;
+}
+
+inline void G4ViewParameters::SetExplodeFactor (G4double explodeFactor) {
+  fExplode = true;
+  fExplodeFactor = explodeFactor;
+}
+
+inline void G4ViewParameters::UnsetExplodeFactor () {
+  fExplode = false;
+}
+
+inline void G4ViewParameters::SetUpVector (const G4Vector3D& upVector) {
+  fUpVector = upVector;
+}
+
+inline void G4ViewParameters::SetFieldHalfAngle (G4double fieldHalfAngle) {
+  fFieldHalfAngle = fieldHalfAngle;
+}
+
+inline void G4ViewParameters::SetZoomFactor (G4double zoomFactor) {
+  fZoomFactor = zoomFactor;
+}
+
+inline void
+G4ViewParameters::MultiplyZoomFactor (G4double zoomFactorMultiplier) {
+  fZoomFactor *= zoomFactorMultiplier;
+}
+
+inline void
+G4ViewParameters::SetCurrentTargetPoint (const G4Point3D& currentTargetPoint) {
+  fCurrentTargetPoint = currentTargetPoint;
+}
+
+inline void G4ViewParameters::SetDolly (G4double dolly) {
+  fDolly = dolly;
+}
+
+inline void G4ViewParameters::IncrementDolly (G4double dollyIncrement) {
+  fDolly += dollyIncrement;
+}
+
+inline void G4ViewParameters::SetLightsMoveWithCamera (G4bool moves) {
+  fLightsMoveWithCamera = moves;
+}
+
+inline void G4ViewParameters::SetViewGeom () {
+  fViewGeom = true;
+}
+
+inline void G4ViewParameters::UnsetViewGeom () {
+  fViewGeom = false;
+}
+
+inline void G4ViewParameters::SetViewHits () {
+  fViewHits = true;
+}
+
+inline void G4ViewParameters::UnsetViewHits () {
+  fViewHits = false;
+}
+
+inline void G4ViewParameters::SetViewDigis () {
+  fViewDigis = true;
+}
+
+inline void G4ViewParameters::UnsetViewDigis () {
+  fViewDigis = false;
+}
+
+inline void G4ViewParameters::SetDefaultVisAttributes
+(const G4VisAttributes& defaultVisAttributes) {
+  fDefaultVisAttributes = defaultVisAttributes;
+}
+
+inline void G4ViewParameters::SetDefaultTextVisAttributes
+(const G4VisAttributes& defaultTextVisAttributes) {
+  fDefaultTextVisAttributes = defaultTextVisAttributes;
+}
+
+inline void
+G4ViewParameters::SetDefaultMarker (const G4VMarker& defaultMarker) {
+  fDefaultMarker = defaultMarker;
+}
+
+inline void
+G4ViewParameters::SetGlobalMarkerScale (G4double globalMarkerScale) {
+  fGlobalMarkerScale = globalMarkerScale;
+}
+
+inline void G4ViewParameters::SetMarkerHidden () {
+  fMarkerNotHidden = false;
+}
+
+inline void G4ViewParameters::SetMarkerNotHidden () {
+  fMarkerNotHidden = true;
+}
+
+inline void G4ViewParameters::SetWindowSizeHint (G4int xHint, G4int yHint) {
+  fWindowSizeHintX = xHint;
+  fWindowSizeHintY = yHint;
+}

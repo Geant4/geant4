@@ -1,0 +1,18 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4VVisCommand.icc,v 1.1 1999-01-07 16:15:19 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+
+// Base class for visualization commands - John Allison  9th August 1998
+// It is really a messenger - we have one command per messenger.
+
+inline G4VVisCommand::G4VVisCommand () {}
+
+inline void G4VVisCommand::SetVisManager (G4VisManager* pVisManager) {
+  fpVisManager = pVisManager;
+}

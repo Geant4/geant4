@@ -1,0 +1,41 @@
+# $Id: GNUmakefile,v 1.1 1999-01-07 16:10:59 gunter Exp $
+# ----------------------------------------------------------------------
+# GNUmakefile for processes library, Gabriele Cosmo 27-Jun-1998
+# ----------------------------------------------------------------------
+
+name := G4processes
+
+SUBDIRS  = management optical decay transportation parameterisation
+SUBDIRS += electromagnetic/muons electromagnetic/standard
+SUBDIRS += electromagnetic/utils electromagnetic/xrays
+SUBDIRS += hadronic/management hadronic/util hadronic/processes 
+SUBDIRS += hadronic/cross_sections hadronic/stopping
+SUBDIRS += hadronic/models/low_energy hadronic/models/high_energy
+SUBDIRS += hadronic/models/neutron_hp
+SUBDIRS += hadronic/models/generator/de_excitation
+SUBDIRS += hadronic/models/generator/diffractive_string
+SUBDIRS += hadronic/models/generator/high_energy
+SUBDIRS += hadronic/models/generator/kinetic_model
+SUBDIRS += hadronic/models/generator/management
+SUBDIRS += hadronic/models/generator/pre_equilibrium
+#SUBDIRS += hadronic/models/generator/quark_gluon_string
+SUBDIRS += hadronic/models/generator/string_common
+SUBDIRS += hadronic/models/generator/string_fragmentation
+SUBDIRS += hadronic/models/generator/util
+
+
+SUBLIBS  = G4procman G4optical G4decay G4transportation G4parameterisation
+SUBLIBS += G4muons G4emstandard G4emutils G4xrays
+SUBLIBS += G4hadronic_mgt G4hadronic_util G4hadronic_proc
+SUBLIBS += G4hadronic_xsect G4hadronic_stop G4hadronic_LE G4hadronic_HE
+SUBLIBS += G4hadronic_neu
+SUBLIBS += G4hadronic_deex G4hadronic_diffstring G4hadronic_HE_gen G4hadronic_kinetic
+#SUBLIBS += G4hadronic_qgstring
+SUBLIBS += G4hadronic_man_gen G4hadronic_preequ G4hadronic_string_common
+SUBLIBS += G4hadronic_stringfrag G4hadronic_util_gen
+
+ifndef G4INSTALL
+  G4INSTALL = ../..
+endif
+
+include $(G4INSTALL)/config/globlib.gmk

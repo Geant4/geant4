@@ -1,0 +1,225 @@
+History file for geometry/solids/BREPS
+
+
+
+
+
+
+
+November 11, 1998 : L. Broglia
+
+ - correct Inside function for G4SphericalSurface
+ - create (but now is empty) Inside function for
+   G4CylindricalSurface
+ - new implementation into G4CylindricalSurface::Intersect
+
+
+November 04, 1998  L. Broglia    geometry-00-03-04
+
+- Cleaned up trivial errors on DEC (undefined loop variables).
+- Removed old CurveTest, now separate in G4BREPSolidxxxTest files
+- Changing the name of the output files. All the tests run correctly with
+  Linux, Sun, HP and DEC compilers
+
+------------------------------------------------------------------------------
+
+date: 1998/10/30 22:20:16;  author: japost;  state: Exp;  lines: +11 -5
+Changed
+
+<           HitDistance = closest_point.distance2(RayStart);
+
+to
+>           HitDistance = closest_point.distance2((G4Point3D &)RayStart);
+
+   because
+              distance2( HepPoint3D &p )
+   in CLHEP/Point3D
+   should be
+              distance2( const HepPoint3D &p )
+   as it is const!
+
+
+October 29, 1998  L. Broglia
+
+ - Changed all the occurences of G4Placement into G4Axis2Placement3D.
+ - Modified G4FPlane - new implementation, inheriting from G4Axis2Placement3D
+ - Create in G4PointRat INFINITY which is a double and PINFINITY which is a 
+   HepVector3D
+ - Corrected a bug into G4BREPSolidCylinder
+ - Created  a test for the curves
+ - Created tests for all BREP solids.
+   For the moment, only test for the sphere and test for the torus 
+   run correctly
+ - Created a test which read a STEP file and created the BREP solid
+
+
+
+
+October 20, 1998  L. Broglia    Breps-lionel-tag1-point3D
+
+- Changed all the occurences of G4Point3d, G4Point2d into G4Point3D, which 
+  is a HepPoint3D.
+- Modified G4PointRat - new implementation, inheriting from G4Point3D.
+- Changed ThreeVec into Vector3D or Point3D, depending on its use.
+
+------------------------------------------------------------------------------
+
+October 13, 1998  J. Apostolakis  geometry-00-03-01
+
+- Tag created.
+
+October 12, 1998  J. Apostolakis  geometry-00-03-01
+
+- Small (cosmetic) changes to aid in compilation on Sun, HP.  
+   Renamed local variables, whose name was the same as a class variable or method.
+
+July   9, 1998: J. Apostolakis  breps-00-01-02
+
+- Fixes to G4Assembly, to aid STEPinterface.  (Jari).
+- Fix to G4Placement equality operator.   (J.A.)
+  Compiles on AIX.
+
+
+July   8, 1998: J. Apostolakis  breps-00-01-01
+
+- Tagged. 
+
+
+July   5, 1998: P. Urban
+
+  - Fixes to compile on AIX-AFS.
+
+
+July   2, 1998: J. Apostolakis (for P. Urban)
+
+- All of Peter Urban's development of Curves is added from 
+  the head of the alpha repository.
+
+
+July   1, 1998: J. Apostolakis (pre-beta01-01)
+
+- Geant4beta created from alpha07 tag (which was on a branch).
+
+
+-----------------------------------------------------------------
+These fixes were added to alpha07 - which was on a branch from
+  the head
+
+June  12, 1998: J. Apostolakis (for J. Sulkimo) 
+
+- Correction to constructor of BREPSolidPCone. 
+   (An out-of-date version was mistakenly included in fix to
+    Conical Surface). 
+
+June  10, 1998: J. Apostolakis (for J. Sulkimo) 
+
+- Bug fixes to Conical Surface (FConical and Conical) to get
+ PCone to work.  
+
+------------------------------------------------------------------
+
+June   8, 1998: J. Apostolakis breps-00-06-01
+
+- Tagged what seems to be the last version before the merge 
+of Peter Urban's code. Found this by using day before merge,
+May 27th. 
+
+April 28, 1998: G. Cosmo, breps-00-05-07
+
+- Cleaned up trivial warnings on DEC (Extraneous semicolons).
+- Removed -cfront option from GNUmakefile for DEC. -cfront
+  overrides ANSI standard rules in cxx-6.0.
+
+April 24, 1998: J. Sulkimo, breps-00-05-06
+
+- fixed scope bugs in for loops
+
+April 24, 1998: J. Sulkimo, breps-00-05-05-assembly
+
+- G4Assembly.cc bug fixes in STEP file interaction & placed solids
+  creation. Heavy changes in method G4Assembly::CopySTEPData
+
+April 24, 1998: J. Sulkimo, breps-00-05-05-point3d
+
+- rerenamed G4Point3d.hh to G4Point3d.h to avoid file name conflict on
+  NT
+
+April 23, 1998: G. Cosmo
+- Added missing canonical implementation of operator== in G4PlacedSolid.hh
+
+
+April 22, 1998: J. Sulkimo, breps-00-05-03-assembly (recorded by J.Apostolakis)
+
+- Bug Fixes to G4Assembly, requiring changes to the files:
+
+  include/G4Assembly.hh
+  include/G4PlacedSolid.hh
+  include/G4StepFileReader.hh
+  src/G4Assembly.cc
+  src/G4BREPSolid.cc
+  src/G4CurveBoundary.cc
+  src/G4PlacedSolid.cc
+  src/G4Surface.cc
+
+
+March 18, 1998: P. Urban, breps-00-05-02
+
+- Names of lots of member functions changed:
+
+  BoxOrNo to IsBox
+  ConvexOrConcave to IsConvex
+  + removing _ and capitalization.
+
+  Cleanup of the code will continue later.
+
+
+March 18, 1998: P. Urban, breps-00-05-01d
+
+- Some member functions were removed. Renamed G4B_SplineCurve.
+
+March 18, 1998: P. Urban, breps-00-05-01c
+
+- the following classes have been renamed:
+
+  from to
+
+  G4B_SplineCurve G4BSplineCurve
+  G4B_SplineCurve_With_Knots G4BSplineCurveWithKnots
+  G4B_SplineSurface G4BSplineSurface
+  G4Conic G4ConicalSurface
+  G4Cylinder G4CylindricalSurface
+  G4EllipticCurve G4Ellipse
+  G4FConic G4FConicalSurface
+  G4FCylinder G4FCylindricalSurface
+  G4HyperbolicCurve G4Hyperbola
+  G4ParabolicCurve G4Parabola
+  G4PlaneSurface G4FPlane
+  G4Rational_B_SplineCurve G4RationalBSplineCurve
+  G4SpheShell G4SphericalSurface
+  plane G4Plane
+  uv_hit G4UVHit
+
+March 18, 1998: P. Urban, breps-00-05-01b
+
+- some class names will be changed; renaming the files (but not the classes!)
+  was done.
+
+March 18, 1998: P. Urban, breps-00-05-01a
+
+- *.h files renamed to *.hh.
+
+March 18, 1998: P. Urban, breps-00-05-01
+
+- Modifications made before alpha05 which are not part of alpha05
+  for some reason.
+
+
+
+
+
+
+
+
+
+
+

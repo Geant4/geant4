@@ -1,0 +1,38 @@
+$Id: History,v 1.1 1999-01-07 16:14:12 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+July 15, 98 M.Asai (tag readout-00-01-02)
+
+July 4, 98 M.Asai (tag readout-00-01-01)
+- Ready for the beta release
+
+June 30, 98 M.Asai (tag readout-00-07-01)
+- G4Allocator is introduced to G4DCofThisEvnet and G4DigiCollection.
+
+June 11, 98 G.Cosmo (readout-00-06-02)
+- removed CR characters from G4DCtable.hh.cc and
+  G4VDigitizerModule.hh.cc (P.Urban)
+
+June 8, 98 M.Asai
+- tagged as readout-00-06-01
+
+June 6, 98 M.Asai
+- Created.
+- Introduce first versions of codes
+

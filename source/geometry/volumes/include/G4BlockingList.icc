@@ -1,0 +1,67 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4BlockingList.icc,v 1.1 1999-01-07 16:08:41 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+// class G4BlockingList  Inlined Implementation
+//
+
+inline G4int G4BlockingList::Length() const
+{
+	return fBlockingList.length();
+}
+
+inline void G4BlockingList::BlockVolume(const G4int v)
+{
+	fBlockingList(v)=fBlockTagNo;
+}
+
+inline G4bool G4BlockingList::IsBlocked(const G4int v) const
+{
+	return (fBlockingList(v)==fBlockTagNo) ? true:false;
+}
+
+
+inline void G4BlockingList::Reset()
+{
+	if (fBlockTagNo!=kBlockTagNoMax)
+		{
+			fBlockTagNo+=1;
+		}
+	else
+		{
+			FullyReset();
+		}		
+} 
+
+inline void G4BlockingList::Enlarge(const G4int nv)
+{
+	G4int len=fBlockingList.length();
+	if (len<nv)
+		{
+			G4int newlen=(nv/fStride+1)*fStride;
+			fBlockingList.reshape(newlen);
+			for (G4int i=len;i<newlen;i++)
+				{
+					fBlockingList(i)=0;
+				}
+		}
+}
+
+inline G4BlockingList::G4BlockingList(G4int maxDefault,G4int stride) :
+fBlockingList(maxDefault),fStride(stride)
+{
+	FullyReset();
+}
+
+// Do nothing destructor
+inline G4BlockingList::~G4BlockingList()
+{
+}
+

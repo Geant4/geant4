@@ -1,0 +1,73 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4ModelingParameters.icc,v 1.1 1999-01-07 16:15:35 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// John Allison  31st December 1997.
+// Parameters associated with the modeling of GEANT4 objects.
+
+inline const G4VisAttributes*
+G4ModelingParameters::GetDefaultVisAttributes () const {
+  return fpDefaultVisAttributes;
+}
+
+inline G4ModelingParameters::RepStyle
+G4ModelingParameters::GetRepStyle () const {
+  return fRepStyle;
+}
+
+inline G4bool G4ModelingParameters::IsCulling () const {
+  return fCulling;
+}
+
+inline G4bool G4ModelingParameters::IsCullingInvisible () const {
+  return fCullInvisible;
+}
+
+inline G4bool G4ModelingParameters::IsDensityCulling () const {
+  return fDensityCulling;
+}
+
+inline G4double G4ModelingParameters::GetVisibleDensity () const {
+  return fVisibleDensity;
+}
+
+inline G4bool G4ModelingParameters::IsCullingCovered () const {
+  return fCullCovered;
+}
+
+inline G4int G4ModelingParameters::GetNoOfSides () const {
+  return fNoOfSides;
+}
+
+inline void G4ModelingParameters::SetDefaultVisAttributes
+(const G4VisAttributes* pDefaultVisAttributes) {
+  fpDefaultVisAttributes = pDefaultVisAttributes;
+}
+
+inline void
+G4ModelingParameters::SetRepStyle (G4ModelingParameters::RepStyle style) {
+  fRepStyle = style;
+}
+
+inline void G4ModelingParameters::SetCulling (G4bool value) {
+  fCulling = value;
+}
+
+inline void G4ModelingParameters::SetCullingInvisible (G4bool value) {
+  fCullInvisible = value;
+}
+
+inline void G4ModelingParameters::SetDensityCulling (G4bool value) {
+  fDensityCulling = value;
+}
+
+inline void G4ModelingParameters::SetCullingCovered (G4bool value) {
+  fCullCovered = value;
+}

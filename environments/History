@@ -1,0 +1,66 @@
+$Id: History,v 1.1 1999-01-07 16:03:49 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Super-Category History file
+                    ---------------------------
+
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+at this level and keep track of all relavant tags.
+It DOES NOT substitute the CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+envs-00-04-01  11th December 1998  Hajime Yoshida Masayasu Nagamatu
+- The latest version of GGE, the whole *.java, *.class and example files committed
+
+10th December Hajime Yoshida
+- Tcl/Tk GAG warns to the binaries compiled with G4UIterminal session
+	and stops it.
+
+envs-00-03-04  12th November 1998  John Allison
+- Tagged (what was envs-00-30-03?).
+
+12th Nov. 1998 Hajime Yoshida
+-many new features added to Momo/java/Momo/GGE
+-minor modification to Momo/GGEmake
+-addition of Momo/java/Momo/Momo
+
+envs-00-03-02  14th Sep 1998 Hajime Yoshida
+	- minor updates in GGE
+envs-00-03-01  13th Sep 1998 Hajime Yoshida
+	-Momo/GGEmake added README and a macro file
+	-Momo/java/Momo/GGE updated. 
+		BREPs, sample persistent files etc.
+envs-00-02-01  3rd Sep 1998 Hajime Yoshida
+	Momo/GGEmake
+	Momo/java/Momo/GGE
+	GGE committed
+envs-00-01-03  17th Aug 1998 Hajime Yoshida
+- touched many files in Momo Tcl/Tk and Java
+
+envs-00-01-02  15th July 1998  John Allison
+- Removed some files in OPACS for beta01 - see OPACS/History.
+
+envs-00-01-01  8th July 1998  John Allison
+- Added XVT (moved from interfaces/xvt_standalone_test).
+- Forced revision 2.0 on Momo.
+
+6th July 1998  Satoshi Tanaka
+- Added Momo (moved from interfaces/standalone_test).
+
+^^^^^^^^^^^^^^^^^^^^ geant4beta  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+=========================================================================
+vvvvvvvvvvvvvvvvvvvv geant4alpha vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+
+envs-00-05-01  23rd April 1998  Gabriele Cosmo
+- Added OPACS directory tagged as OPACS-00-05-01.
+
+envs-00-05-00  19th March 1998  John Allison
+- First creation of this super-category.

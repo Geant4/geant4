@@ -1,0 +1,80 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4MagIntegratorDriver.icc,v 1.1 1999-01-07 16:07:05 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+inline G4double G4MagInt_Driver::ComputeAndSetErrcon()
+{
+      errcon = pow(max_stepping_increase/GetSafety(),1.0/GetPgrow());
+      return errcon;
+} 
+
+inline void G4MagInt_Driver::ReSetParameters( G4double new_safety )
+{
+      safety = new_safety;
+      pshrnk = -1.0 / pIntStepper->IntegratorOrder();
+      pgrow  = -1.0 / (1.0 + pIntStepper->IntegratorOrder());
+      ComputeAndSetErrcon();
+}
+
+inline void G4MagInt_Driver::SetSafety(G4double val)
+{ 
+      safety=val;
+      ComputeAndSetErrcon();
+}
+
+inline void G4MagInt_Driver::SetPgrow(G4double  val)
+{ 
+      pgrow=val;
+      ComputeAndSetErrcon(); 
+}
+
+inline void G4MagInt_Driver::SetErrcon(G4double val)
+{ 
+      errcon=val;
+}
+
+inline void G4MagInt_Driver::RenewStepperAndAdjust(G4MagIntegratorStepper *pItsStepper)
+{  
+      pIntStepper = pItsStepper; 
+      ReSetParameters();
+}
+
+inline void  G4MagInt_Driver:: SetChargeMomentumMass(                
+		     const G4double particleCharge,    // in e+ units
+		     const G4double MomentumXc,
+		     const G4double Mass )
+{ 
+      pIntStepper->GetEquationOfMotion()
+                 ->SetChargeMomentumMass(particleCharge, MomentumXc, Mass); 
+}
+
+//    Constructor
+//
+inline G4MagInt_Driver::G4MagInt_Driver( G4double                hminimum, 
+					 G4MagIntegratorStepper *pItsStepper,
+					 G4int                   numComponents)
+  : nvar(numComponents)
+{  
+      RenewStepperAndAdjust( pItsStepper );
+      hminimum_val= hminimum;
+}
+
+inline G4MagIntegratorStepper* G4MagInt_Driver::GetStepper()
+{  return pIntStepper; }
+
+inline void G4MagInt_Driver::GetDerivatives( 
+				 const G4FieldTrack y_curr,    // const, INput
+				       G4double     dydx[]  )  // OUTput
+{ 
+  G4double  tmpValArr[G4FieldTrack::ncompSVEC];
+  y_curr.DumpToArray( tmpValArr  );
+  pIntStepper -> RightHandSide( tmpValArr , dydx );
+  
+}
+

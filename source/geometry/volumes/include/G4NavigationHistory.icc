@@ -1,0 +1,216 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4NavigationHistory.icc,v 1.1 1999-01-07 16:08:42 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+// class G4NavigationHistory Inline implementation
+//
+
+// `Reset' history. It now does clear most entries  (It used to not do this).
+// Level 0 is preserved
+inline void G4NavigationHistory::Reset()
+{
+	fStackDepth=0;
+}
+
+
+// 'Clear' entries, zeroing transforms, matrices & negating replica history
+//  
+inline void G4NavigationHistory::Clear()
+{
+	G4AffineTransform dummyTransform(G4ThreeVector(0.));
+
+	G4NavigationLevel  tmpNavLevel;
+	tmpNavLevel=G4NavigationLevel(0, dummyTransform, kParameterised, -1) ;
+
+	Reset();
+	for (G4int ilev=fNavHistory.length()-1; ilev>=0; ilev--)
+	{
+	   // fNavHistory(ilev)= 0;
+	   fNavHistory(ilev)= tmpNavLevel;
+	}
+}
+
+
+// Constructor
+//	Size history lists & reset histories
+inline G4NavigationHistory::G4NavigationHistory() :
+        fNavHistory(kHistoryMax),
+	fStackDepth(0)
+{
+	Reset();	// Reset depth
+	Clear();
+}
+
+// Constructor
+//	Size history lists & reset histories
+inline G4NavigationHistory::G4NavigationHistory(const G4NavigationHistory &h):
+        fNavHistory(h.fNavHistory),
+	fStackDepth(h.fStackDepth)
+{
+}
+
+// Destructor
+inline G4NavigationHistory::~G4NavigationHistory()
+{
+	Reset();	// To delete all but one current entries!
+        // delete fNavHistory(0);
+}
+
+// Setup initial entry in stack: copies through volume transform & matrix
+// The volume is assumed to be unrotated
+//
+inline void G4NavigationHistory::SetFirstEntry(G4VPhysicalVolume* pVol)
+{
+	G4ThreeVector translation(0.,0.,0.);
+
+   	// Protection needed in case pVol=null 
+        //   so that a touchable-history can signal OutOfWorld 
+	//   
+	if(pVol !=0) {
+	    translation=pVol->GetTranslation();
+	}
+	fNavHistory(0)= G4NavigationLevel( pVol,
+					   G4AffineTransform(translation), 
+					  kNormal );
+
+}
+
+// Return topmost transform
+inline const G4AffineTransform* G4NavigationHistory::GetPtrTopTransform() const
+{
+	return   fNavHistory(fStackDepth).GetPtrTransform();
+}
+
+// Return topmost transform
+inline const G4AffineTransform& G4NavigationHistory::GetTopTransform() const
+{
+	return fNavHistory(fStackDepth).GetTransform();
+}
+
+// Return topmost replica no record
+inline G4int G4NavigationHistory::GetTopReplicaNo() const
+{
+	return fNavHistory(fStackDepth).GetReplicaNo();
+}
+
+// Return topmost volume type
+inline EVolume G4NavigationHistory::GetTopVolumeType() const
+{
+	return fNavHistory(fStackDepth).GetVolumeType();
+}
+
+// Return topmost physical volume ptr
+inline G4VPhysicalVolume* G4NavigationHistory::GetTopVolume() const
+{
+	return fNavHistory(fStackDepth).GetPhysicalVolume();
+}
+
+// Return current history depth 
+inline G4int G4NavigationHistory::GetDepth() const
+{
+	return fStackDepth;
+}
+
+// Return specified transform
+inline const G4AffineTransform& G4NavigationHistory::GetTransform(const G4int n) const
+{
+	return fNavHistory(n).GetTransform();
+}
+
+// Return specified replica no record
+inline G4int G4NavigationHistory::GetReplicaNo(const G4int n) const
+{
+	return fNavHistory(n).GetReplicaNo();
+}
+
+// Return specified volume type
+inline EVolume G4NavigationHistory::GetVolumeType(const G4int n) const
+{
+	return fNavHistory(n).GetVolumeType();
+}
+
+// Return specified physical volume ptr
+inline G4VPhysicalVolume* G4NavigationHistory::GetVolume(const G4int n) const
+{
+	return fNavHistory(n).GetPhysicalVolume();
+}
+
+
+// Return current maximum size of history.
+// Note: MaxDepth of 16 mean history entries 0 - 15 inclusive may be used
+inline G4int G4NavigationHistory::GetMaxDepth() const
+{
+	return fNavHistory.length();
+}
+
+// Back up one level in history: from mother to grandmother
+// It does not erase history record of current mother
+inline void G4NavigationHistory::BackLevel()
+{
+	assert(fStackDepth>0);
+
+        //  Tell  the  level  that I am forgetting it
+        // delete fNavHistory(fStackDepth); 
+        fStackDepth--;
+}
+
+// Back up specified no of levels in history
+inline void G4NavigationHistory::BackLevel(G4int n)
+{
+	assert(n<=fStackDepth);
+        fStackDepth-=n;
+}
+
+inline G4NavigationHistory& G4NavigationHistory::operator=(const G4NavigationHistory &h)
+{
+  // fNavHistory=h.fNavHistory;   // This works, but is very slow.
+  if( this->GetMaxDepth() < h.fStackDepth ){
+     fNavHistory.reshape( h.fStackDepth ); 
+  }
+  register G4int ilev= h.fStackDepth;
+  for ( ; ilev>=0; ilev--) { 
+     fNavHistory(ilev) = h.fNavHistory(ilev); 
+  } 
+
+  fStackDepth=h.fStackDepth;
+
+  return *this;
+}
+
+// Enlarge history if required
+// Increase size by kHistoryStride. Note that additional
+// history entries are `dirty' (non zero) apart from volume history
+inline void G4NavigationHistory::EnlargeHistory()
+{
+	G4int len=fNavHistory.length();
+	if (len==fStackDepth)
+		{
+			G4int nlen=len+kHistoryStride;
+			fNavHistory.reshape(nlen);
+// Note: Resize operation clears additional entries
+		}	
+}
+
+
+inline void G4NavigationHistory::NewLevel(G4VPhysicalVolume *pNewMother,
+					  EVolume vType,
+					  G4int nReplica)
+{
+	EnlargeHistory();	// Enlarge if required
+	fStackDepth++;
+	fNavHistory(fStackDepth) = 
+	       G4NavigationLevel(pNewMother, 
+				 fNavHistory(fStackDepth-1).GetTransform(),
+				 G4AffineTransform(pNewMother->GetRotation(),
+						pNewMother->GetTranslation()),
+				 vType,
+				 nReplica); 
+	// The constructor computes the new global->local transform
+}

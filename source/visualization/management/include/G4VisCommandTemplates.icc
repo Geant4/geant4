@@ -1,0 +1,118 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4VisCommandTemplates.icc,v 1.1 1999-01-07 16:15:20 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// Command Messenger Templates.
+// John Allison  7th September 1997
+
+#include "G4UIcommand.hh"
+#include "G4UIdirectory.hh"
+#include "G4UIcmdWithoutParameter.hh"
+#include "G4ios.hh"
+
+/**************************************
+
+// What follows is just a try at a general template.  But I think I'll
+abandon templates for this job - JA.
+
+template <class T>
+G4VisCommandMessenger <T> ::G4VisCommandMessenger () {
+  fpCommand = G4VisCommandMessengerRegister
+    (fCommand.GetCommandName (),
+     fCommand.GetGuidance (),
+     this);
+}
+
+template <class T>
+G4VisCommandMessenger <T>
+::~G4VisCommandMessenger () {
+  delete fpCommand;
+}
+
+template <class T>
+void G4VisCommandMessenger <T> ::SetNewValue
+(G4UIcommand*, G4String newValues) {
+  switch (G4VisCommandMessengerInterpret (newValues)) {
+  case 0: fCommand.SetValue (false); break;
+  case 1: fCommand.SetValue (true); break;
+  default: break;
+  }
+  G4cout << "Current value of " << fCommand.GetValueName ()
+       << " is " << fCommand.GetValue () << endl;
+}
+************************************/
+
+// OLD STYLE!!
+template <class tCommandDirectory>
+G4VisCommandDirectoryMessenger <tCommandDirectory>
+::G4VisCommandDirectoryMessenger () {
+  fpCommand = new G4UIdirectory (fCommandDirectory.GetCommandName ());
+  fpCommand -> SetGuidance (fCommandDirectory.GetGuidance ());
+}
+
+// OLD STYLE!!
+template <class tCommandDirectory>
+G4VisCommandDirectoryMessenger <tCommandDirectory>
+::~G4VisCommandDirectoryMessenger () {
+  delete fpCommand;
+}
+
+// OLD STYLE!!
+template <class tSimpleCommand>
+G4VisSimpleCommandMessenger <tSimpleCommand>
+::G4VisSimpleCommandMessenger () {
+  fpCommand = new G4UIcmdWithoutParameter
+    (fSimpleCommand.GetCommandName (), this);
+  fpCommand -> SetGuidance (fSimpleCommand.GetGuidance ());
+}
+
+// OLD STYLE!!
+template <class tSimpleCommand>
+G4VisSimpleCommandMessenger <tSimpleCommand>
+::~G4VisSimpleCommandMessenger () {
+  delete fpCommand;
+}
+
+// OLD STYLE!!
+template <class tSimpleCommand>
+void G4VisSimpleCommandMessenger <tSimpleCommand> ::SetNewValue
+(G4UIcommand*, G4String) {
+  fSimpleCommand.SetValue ();
+}
+
+// OLD STYLE!!
+template <class tButtonCommand>
+G4VisButtonCommandMessenger <tButtonCommand>
+::G4VisButtonCommandMessenger () {
+  fpCommand = G4VisButtonCommandMessengerRegister
+    (fButtonCommand.GetCommandName (),
+     fButtonCommand.GetGuidance (),
+     this);
+}
+
+// OLD STYLE!!
+template <class tButtonCommand>
+G4VisButtonCommandMessenger <tButtonCommand>
+::~G4VisButtonCommandMessenger () {
+  delete fpCommand;
+}
+
+// OLD STYLE!!
+template <class tButtonCommand>
+void G4VisButtonCommandMessenger <tButtonCommand> ::SetNewValue
+(G4UIcommand*, G4String newValues) {
+  switch (G4VisButtonCommandMessengerInterpret (newValues)) {
+  case 0: fButtonCommand.SetValue (false); break;
+  case 1: fButtonCommand.SetValue (true); break;
+  default: break;
+  }
+  G4cout << "Current value of " << fButtonCommand.GetValueName ()
+       << " is " << fButtonCommand.GetValue () << endl;
+}

@@ -1,0 +1,180 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4LogicalVolume.icc,v 1.1 1999-01-07 16:07:15 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// class G4LogicalVolume Inline Implementation file
+//
+// 10.20.97 - P. MoraDeFreitas : Added SetFastSimulation method.
+// 05.11.98 - M. Verderi: Add Get/Set methods for fBiasWeight
+// 09.11.98 - J. Apostolakis:  Changed MagneticField to FieldManager
+
+inline G4String G4LogicalVolume::GetName() const
+    {
+	return fName;
+    }
+    
+inline void G4LogicalVolume::SetName(const G4String& pName)
+    {
+	fName=pName;
+    }
+
+inline G4FieldManager* G4LogicalVolume::GetFieldManager() const
+    {
+	return fFieldManager;
+    }
+
+inline G4int G4LogicalVolume::GetNoDaughters() const
+    {
+	return fDaughters.entries();
+    }
+
+inline G4VPhysicalVolume* G4LogicalVolume::GetDaughter(const G4int i) const
+    {
+	return fDaughters(i);
+    }
+
+inline G4FastSimulationManager* 
+G4LogicalVolume::GetFastSimulationManager () const 
+    {
+	return fFastSimulationManager;
+    }
+
+inline void G4LogicalVolume::AddDaughter(G4VPhysicalVolume* pNewDaughter)
+{
+// manual resize operation to avoid Rogue grabbing RW_DEFAULT
+      fDaughters.resize(fDaughters.entries()+1);
+      fDaughters.insert(pNewDaughter);
+// Propagates the mother's FastSimulationManager pointer. If we are in
+// the World logical volume, propagates only if pointer != 0.
+// (perhaps someone would like to parametrize all the World volume 
+// for a particle type, why not ?).
+      G4VPhysicalVolume *myPhysical= pNewDaughter->GetMother();
+      G4VPhysicalVolume *pMotherPhys;
+      G4LogicalVolume *pDaughterLogical;
+
+      if( myPhysical !=0 ){
+         pMotherPhys= myPhysical->GetMother();
+         pDaughterLogical = pNewDaughter->GetLogicalVolume();
+
+	 if( (pMotherPhys!=0) ||
+	    ( pMotherPhys==0) && (fFastSimulationManager!=0)) 
+	 {
+	   if(pDaughterLogical->GetFastSimulationManager() != fFastSimulationManager)
+	     pDaughterLogical->
+	       SetFastSimulationManager(fFastSimulationManager,FALSE);
+	 }
+	 else {
+	   pDaughterLogical->SetFastSimulationManager(NULL,FALSE);
+	 }
+      }
+      
+
+ // Propagate the Field Manager, if the daughter has no field Manager.
+      pDaughterLogical = pNewDaughter->GetLogicalVolume();
+      G4FieldManager* pDaughterFieldManager = pDaughterLogical->GetFieldManager();
+
+      if( pDaughterFieldManager == 0 ){
+ 	 pDaughterLogical->SetFieldManager(fFieldManager,
+					   true);
+      }
+    
+}
+
+inline G4bool G4LogicalVolume::IsDaughter(const G4VPhysicalVolume* p) const
+    {
+	return fDaughters.contains(p);
+    }
+
+inline void G4LogicalVolume::RemoveDaughter(const G4VPhysicalVolume* p)
+    {
+	fDaughters.remove(p);
+	fDaughters.resize(fDaughters.entries());
+    }
+
+inline G4VSolid* G4LogicalVolume::GetSolid() const
+    {
+	return fSolid;
+    }
+
+inline void G4LogicalVolume::SetSolid(G4VSolid *pSolid)
+    {
+        assert(pSolid != 0);
+	fSolid=pSolid;
+    }
+
+inline G4Material* G4LogicalVolume::GetMaterial() const
+    {
+	return fMaterial;
+    }
+
+inline void G4LogicalVolume::SetMaterial(G4Material *pMaterial)
+    {
+      //        assert(pMaterial != 0);
+        fMaterial=pMaterial;
+    }
+
+inline G4VSensitiveDetector* G4LogicalVolume::GetSensitiveDetector() const
+    {
+	return fSensitiveDetector;
+    }
+
+inline void G4LogicalVolume::SetSensitiveDetector(G4VSensitiveDetector *pSDetector)
+    {
+	fSensitiveDetector=pSDetector;
+    }
+
+inline G4UserLimits* G4LogicalVolume::GetUserLimits() const
+    {
+	return fUserLimits;
+    }
+
+inline void G4LogicalVolume::SetUserLimits(G4UserLimits *pULimits)
+    {
+	fUserLimits=pULimits;
+    }
+
+inline G4SmartVoxelHeader* G4LogicalVolume::GetVoxelHeader() const
+    {
+	return fVoxel;
+    }
+
+inline void G4LogicalVolume::SetVoxelHeader(G4SmartVoxelHeader *pVoxel)
+    {
+	fVoxel=pVoxel;
+    }
+    
+inline G4bool G4LogicalVolume::operator == ( const G4LogicalVolume& lv) const
+    {
+	return (this==&lv) ? true : false;
+    }
+
+inline const G4VisAttributes* G4LogicalVolume::GetVisAttributes () const {
+  return fVisAttributes;
+}
+
+inline void G4LogicalVolume::SetVisAttributes (const G4VisAttributes* pVA) {
+  fVisAttributes = pVA;
+}
+
+inline void G4LogicalVolume::SetVisAttributes (const G4VisAttributes& VA) {
+  fVisAttributes = &VA;
+}
+
+inline void 
+G4LogicalVolume::BecomeEnvelopeForFastSimulation(G4FastSimulationManager* pPA) {
+  SetFastSimulationManager(pPA,TRUE);
+}
+
+inline void G4LogicalVolume::SetBiasWeight(G4double w)
+{ fBiasWeight = w; }
+
+inline G4double G4LogicalVolume::GetBiasWeight() const
+{ return fBiasWeight; }
+

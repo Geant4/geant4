@@ -1,0 +1,18 @@
+//
+//   g4geom
+//
+//   Use the geometry code built by G3->G4 conversion to create the
+//   Geant4 geometry
+//
+//   T. Wenaus  LLNL  6/95
+//
+#include "G3toG4.hh"
+#include "G4GeometryManager.hh"
+void G3toG4code();
+void G3G4init();
+int main(int argc, char* argv[])
+{
+    G3toG4code();
+    G4GeometryManager::GetInstance()->CloseGeometry();
+    return 0;
+}

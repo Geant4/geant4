@@ -1,0 +1,52 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4MuEnergyLoss.icc,v 1.1 1999-01-07 16:11:04 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id: 
+// ---------------------------------------------------------------
+//      GEANT 4 class inlined methods file 
+//
+//      For information related to this code contact:
+//      CERN, CN Division, ASD group
+//      History: first implementation, based on object model of
+//      2nd December 1995, G.Cosmo
+//      ------------ G4MuEnergyLoss physics process ------------
+//                 by Laszlo Urban, September 1997
+// ***************************************************************
+// It is the implementation of the NEW UNIFIED ENERGY LOSS PROCESS.             
+// It calculates the energy loss of muons.
+// ***************************************************************
+// correction for KineticEnergy< LowestKineticEnergy by L.Urban on 27/11/97
+// corrections by L. Urban on 27/05/98 ( other corrs come soon!)           
+// cleanup L.Urban on 23/10/98
+// ---------------------------------------------------------------
+
+inline G4double G4MuEnergyLoss::GetContinuousStepLimit(
+                                               const G4Track& track,
+                                               G4double,
+                                               G4double currentMinimumStep,
+                                               G4double&)
+{
+ 
+  G4double Step =
+    GetConstraints(track.GetDynamicParticle(),track.GetMaterial()) ;
+
+  if((Step>0.0)&&(Step<currentMinimumStep))
+     currentMinimumStep = Step ;
+
+  return Step ;
+}
+
+inline G4bool G4MuEnergyLoss::IsApplicable(const G4ParticleDefinition&
+                                                     particle)
+{
+   return (  (&particle == (const G4ParticleDefinition *)theMuonPlus)
+           ||(&particle == (const G4ParticleDefinition *)theMuonMinus)
+          );  
+}

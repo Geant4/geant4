@@ -1,0 +1,52 @@
+# --------------------------------------------------------------
+# GNUmakefile for persistency.  Youhei Morita, 16/06/98.
+# --------------------------------------------------------------
+# object files are compiled from DDL files as well as from CC files
+#
+#  include/*.ddl --> $(G4SYSTEM)/*.hh
+#                    $(G4SYSTEM)/*_ref.hh
+#                    $(G4SYSTEM)/*_ddl.cc --> $(G4SYSTEM)/*_ddl.o
+#  (schema) -------> $(G4EXAMPLE_BOOT)
+#  src/*.cc --------------------------------> $(G4SYSTEM)/*.o
+#
+# You must have unique G4EXAMPLE_FDID assigned by your local 
+# manager of Objectivity/DB lock server.
+#
+# G4EXAMPLE_BOOT is defined as $HOME/G4EXAMPLE by default.
+
+name := G4persistency
+G4ODBMS := true
+
+SUBDIRS = events run geometry/management geometry/solids/CSG \
+          geometry/volumes management
+SUBLIBS = G4pevents G4prun G4pgeomn G4pcsg G4pvol G4pmanagement
+
+ifndef G4INSTALL
+  G4INSTALL = ../..
+endif
+include $(G4INSTALL)/config/globlib.gmk
+
+# --------------------------------------------------------------
+
+.PHONY : all global clean clean_libs cleandb
+
+# override the target all, and warn if G4ODBMS flag is not defined.
+ifndef G4ODBMS
+all:
+	@echo Error - Persistency requires G4ODBMS and related database setup.
+	exit 1
+endif
+
+cleandb:
+ifndef G4EXAMPLE_FDID
+	@echo G4EXAMPLE_FDID is not defined.  Stop.
+	exit 1
+endif
+	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) clean); done
+	@rm -f $(G4EXAMPLE_BOOT_DIR)/G4EXAMPLE
+	@rm -f $(G4EXAMPLE_BOOT_DIR)/G4EXAMPLE.FDDB
+	@rm -f $(G4EXAMPLE_BOOT_DIR)/*.G4EXAMPLE.DB
+	@echo Copying schema file to $(G4EXAMPLE_BOOT) for FDID $(G4EXAMPLE_FDID)
+	@$(HEP_ODBMS_DIR)/etc/getdb $(HEP_ODBMS_DIR)/schema/HEP_BASE \
+	  $(G4EXAMPLE_BOOT) $(G4EXAMPLE_FDID)
+

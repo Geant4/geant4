@@ -1,0 +1,286 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4VParticleChange.icc,v 1.1 1999-01-07 16:14:25 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//----------------------------------------------------------------
+// Virtual methods for updating G4Step 
+//
+
+inline G4Step* G4VParticleChange::UpdateStepInfo(G4Step* pStep)
+{
+  // Apply math fomula if Event Biasing is active
+  if (fUseEB) theEBMechanism->ApplyMath( this, *pStep);
+
+  // Update the G4Step specific attributes
+  pStep->SetStepLength( theTrueStepLength );
+  pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
+  pStep->SetControlFlag( theSteppingControlFlag );
+  return pStep;
+}
+ 
+inline
+ G4Step* G4VParticleChange::UpdateStepForAtRest(G4Step* Step)
+{ 
+  return UpdateStepInfo(Step);
+}
+
+inline
+ G4Step* G4VParticleChange::UpdateStepForAlongStep(G4Step* Step)
+{
+  return UpdateStepInfo(Step);
+}
+
+inline
+ G4Step* G4VParticleChange::UpdateStepForPostStep(G4Step* Step)
+{
+  return UpdateStepInfo(Step);
+}
+
+//----------------------------------------------------------------
+// Set/Get inline functions
+//
+inline
+ G4Track* G4VParticleChange::GetSecondary(G4int anIndex) const
+{
+  return (*theListOfSecondaries)[anIndex];
+}
+
+inline 
+ G4int G4VParticleChange::GetNumberOfSecondaries() const
+{
+  return theNumberOfSecondaries;
+}
+
+inline 
+ void G4VParticleChange::SetStatusChange(G4TrackStatus aStatus)
+{
+  theStatusChange = aStatus;
+}
+
+inline 
+ G4TrackStatus G4VParticleChange::GetStatusChange() const
+{
+  return theStatusChange;
+}
+
+inline 
+G4SteppingControl G4VParticleChange::GetSteppingControl() const
+{
+  return theSteppingControlFlag;    
+}
+
+inline
+void G4VParticleChange::SetSteppingControl(G4SteppingControl StepControlFlag)
+{
+  theSteppingControlFlag = StepControlFlag;
+}
+
+//----------------------------------------------------------------
+// Set/Get inline functions
+//
+
+inline 
+ G4double G4VParticleChange::GetLocalEnergyDeposit() const
+{
+  return theLocalEnergyDeposit;
+}
+
+inline 
+ void G4VParticleChange::SetLocalEnergyDeposit(G4double anEnergyPart)
+{
+  theLocalEnergyDeposit = anEnergyPart;
+}
+
+inline 
+ G4double G4VParticleChange::GetTrueStepLength() const
+{
+  return theTrueStepLength;
+}
+
+inline 
+ void G4VParticleChange::SetTrueStepLength(G4double aLength)
+{
+  theTrueStepLength = aLength;
+}
+
+
+inline 
+ void G4VParticleChange::SetVerboseLevel(G4int vLevel)
+{ 
+  verboseLevel = vLevel; 
+}
+
+inline 
+ G4int G4VParticleChange::GetVerboseLevel() const 
+{ 
+  return verboseLevel; 
+}
+
+inline 
+ G4double G4VParticleChange::GetParentWeight() const
+{
+   return theParentWeight;
+}
+
+//----------------------------------------------------------------
+// inline functions for Initialization
+//
+
+inline 
+ void G4VParticleChange::InitializeLocalEnergyDeposit(const G4Track&)
+{  
+  // clear theLocalEnergyDeposited   
+  theLocalEnergyDeposit = 0.0;
+}
+
+inline
+ void G4VParticleChange::InitializeSteppingControl(const G4Track& )
+{
+  // SteppingControlFlag
+  theSteppingControlFlag = NormalCondition;     
+}
+
+inline 
+ void G4VParticleChange::Clear()
+{
+  theNumberOfSecondaries = 0;
+}
+
+//----------------------------------------------------------------
+// functions for Initialization
+//
+
+inline void G4VParticleChange::InitializeStatusChange(const G4Track& track)
+{
+  // set TrackStatus equal to the parent track's one
+  theStatusChange = track.GetTrackStatus();
+}
+
+inline void G4VParticleChange::InitializeParentWeight(const G4Track& track)
+{
+  // set the parent track's weight
+  theParentWeight = track.GetWeight();
+}
+
+inline void G4VParticleChange::InitializeTrueStepLength(const G4Track& track)
+{
+  // Reset theTrueStepLength
+  // !! Caution  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  theTrueStepLength = track.GetStep()->GetStepLength();
+  // !!  TrueStepLength should be copied from G4Step not G4Track
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+}
+
+inline void G4VParticleChange::InitializeSecondaries(const G4Track&)
+{
+  // clear secondaries
+  if (theNumberOfSecondaries>0) {
+#ifdef G4VERBOSE
+    if (verboseLevel>0) {
+      G4cerr << "G4VParticleChange::Initialize() Warning  ";
+      G4cerr << "theListOfSecondaries is not empty " << endl;
+      G4cerr << "All objects in theListOfSecondaries are destroyed!" << endl;
+    }
+#endif
+    for (G4int index= 0; index<theNumberOfSecondaries; index++){
+      if ( (*theListOfSecondaries)[index] ){ 
+         delete (*theListOfSecondaries)[index] ;
+       }
+    }
+  }
+  theNumberOfSecondaries = 0;
+}
+
+//----------------------------------------------------------------
+// methods for handling secondaries 
+//
+
+inline void G4VParticleChange::AddSecondary(G4Track *aTrack)
+{
+  // pass the weight of parent track if this particle change use no EB
+  aTrack->SetWeight(theParentWeight);
+  
+  // add a secondary after size check
+  if (theSizeOftheListOfSecondaries > theNumberOfSecondaries) {
+    theListOfSecondaries->SetElement(theNumberOfSecondaries, aTrack);
+    theNumberOfSecondaries++;
+  } else {
+#ifdef G4VERBOSE
+    if (verboseLevel>0) {
+      G4cerr << "G4VParticleChange::AddSecondary() Warning  ";
+      G4cerr << "theListOfSecondaries is full !! " << endl;
+      G4cerr << " The object will not be added in theListOfSecondaries" << endl;
+    }
+#endif
+  }
+}
+
+
+inline void G4VParticleChange::SetNumberOfSecondaries(G4int totSecondaries)
+{
+  // check if tracks still exist in theListOfSecondaries
+  if (theNumberOfSecondaries>0) {
+#ifdef G4VERBOSE
+    if (verboseLevel>0) {
+      G4cerr << "G4VParticleChange::SetNumberOfSecondaries() Warning  ";
+      G4cerr << "theListOfSecondaries is not empty ";
+    }
+#endif
+    for (G4int index= 0; index<theNumberOfSecondaries; index++){
+      if ( (*theListOfSecondaries)[index] ){
+	delete (*theListOfSecondaries)[index] ;
+      }
+    }
+  }
+  theNumberOfSecondaries = 0;
+  theSizeOftheListOfSecondaries = totSecondaries;
+
+  // Initialize ListOfSecondaries
+  theListOfSecondaries->Initialize(totSecondaries);
+}
+
+inline void G4VParticleChange::Initialize(const G4Track& track)
+{
+  InitializeStatusChange(track);
+  InitializeLocalEnergyDeposit(track);
+  InitializeSteppingControl(track);
+  InitializeTrueStepLength(track);
+  InitializeSecondaries(track);
+  InitializeParentWeight(track);
+}
+
+inline 
+ void G4VParticleChange::RegisterEBMechanism(G4VEvtBiasMechanism* pEB)
+{
+  theEBMechanism = pEB;
+}
+
+inline 
+ void G4VParticleChange::SwOnEB()
+{
+  if (theEBMechanism!=NULL) fUseEB = true;
+}
+
+inline 
+ void G4VParticleChange::SwOffEB()
+{
+  fUseEB = false;
+}
+
+inline 
+ G4bool G4VParticleChange::IsEBActive() const
+{
+  return fUseEB;
+}
+
+inline 
+ G4VEvtBiasMechanism* G4VParticleChange::GetEBMechanism() const
+{
+  return theEBMechanism;
+}

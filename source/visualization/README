@@ -1,0 +1,389 @@
+$Id: README,v 1.1 1999-01-07 16:14:33 gunter Exp $
+
+Below are some steps for making GEANT4 with visualization run on
+rsplus.cern.ch.
+
+On other machines, in other locations, you will have to check the
+availability and location of graphics libraries.  Also, you will need
+RogueWave tools.h++ - headers usually in /usr/local/include/rw/,
+library in /usr/local/lib.  See global/GNUmakefile.architecture for
+clues to what is required.
+
+We will assume that you have a checked-out or updated version of
+geant4 with the visualization/ directory and sub-directories.  For
+that you will needed to have done the following.
+
+1) Set the following environment variables:
+
+     setenv CVSROOT /afs/cern.ch/rd44/cvs
+     setenv G4SYSTEM AIX-AFS
+     setenv G4INSTALL ~/GEANT4/geant4beta
+     setenv G4WORKDIR /scratch/geant4beta_workdir
+     setenv G4LIB $G4WORKDIR
+
+Now, here are the visualization-specific actions.
+
+2) Decide which graphics systems drivers you want.  The choice depends
+   on what graphics libraries you have access to.  Set the appropriate
+   environment variables.  Here are the current possibilities:
+
+     setenv G4VIS_BUILD_DAWN_DRIVER         1  # DAWN is the Fukui Renderer
+     setenv G4VIS_BUILD_DAWNFILE_DRIVER     1  
+     setenv G4VIS_BUILD_OPACS_DRIVER        1  # Uses OPACS graphics libraries
+     setenv G4VIS_BUILD_OPENGLX_DRIVER      1
+     setenv G4VIS_BUILD_OPENGLXM_DRIVER     1
+     setenv G4VIS_BUILD_OPENINVENTOR_DRIVER 1
+     setenv G4VIS_BUILD_RAYX_DRIVER         1  # GEANT4 Ray Tracing
+     setenv G4VIS_BUILD_VRML_DRIVER         1  # Spawns VRML viewer
+     setenv G4VIS_BUILD_VRMLFILE_DRIVER     1  # Writes VRML ascii file
+
+   Setting any of these sets a C-pre-processor flag of the same name
+   and a C-pre-processor flag G4VIS_BUILD.
+
+   In some cases you will need additional variables, e.g.:
+
+     setenv DAWN_HOME /afs/cern.ch/rd44/dev/DAWN/AIX-AFS
+
+     # setenv G4DAWN_NAMED_PIPE     1
+               # Comment out this line at cernsp. (See  DAWN/README)
+
+     set path=( $path $DAWN_HOME )
+
+     # setenv OPACS_HOME ~/private/GEANT4/OPACS
+
+     setenv OGLHOME /afs/cern.ch/rd44/dev/Mesa/Mesa-1.2.8
+
+   If you are going to use widgets, then you mught need to set the
+   environment variable:
+
+     setenv XKEYSYMDB /usr/lib/X11/XKeysymDB
+
+   If you decided to use the Fukui Renderer (DAWN), you will also need
+   to set, on rsplus (it is not always necessary on other machines):
+
+     setenv TCL_LIBRARY /usr/local/lib/tcl7.4
+     setenv TK_LIBRARY /usr/local/lib/tk4.0
+
+3) Compile and build the visualization and interfaces libraries from clean.
+
+   *******************************************************************
+   NOTE THAT IF YOU CHANGE ANY OF THE ABOVE ENVIRONMENT VARIABLES THEN
+   YOU WILL HAVE TO:
+   a) "gmake clean" IN THE APPROPRIATE SUBDIRECTORY - E.G.,
+      (cd visualization/OpenGL/; gmake clean; gmake)
+   b) TOUCH AND RECOMPILE G4VisManager - E.G.
+      (cd visualization/; touch management/src/G4VisManager.cc; make global)
+   *******************************************************************
+
+
+4) Decide which graphics systems you want to use in your particular
+   excutable.  Of course, this has to be chosen from the set you
+   installed in (2) above.  Here are the current possibilities:
+
+     setenv G4VIS_USE_DAWN         1
+     setenv G4VIS_USE_DAWNFILE     1
+     setenv G4VIS_USE_OPACS        1
+     setenv G4VIS_USE_OPENGLX      1
+     setenv G4VIS_USE_OPENGLXM     1
+     setenv G4VIS_USE_OPENINVENTOR 1
+     setenv G4VIS_USE_RAYX         1
+     setenv G4VIS_USE_VRML         1
+     setenv G4VIS_USE_VRMLFILE     1
+
+   Setting any of these sets a C-pre-processor flag of the same name.
+   Also, setting any of these sets the G4VIS_USE C-pre-processor flag
+   - see examples/novices/N02/exampleN02.cc to see a use of this.
+
+   The default graphics systems are registered when you execute
+   G4VisManager::Initialise() (or G4VisManager::Initialize()).  Note
+   also that you can register graphics systems directly, e.g.,
+   pVisManager->RegisterGraphicsSystem (new FukuiRenderer).  You can
+   also register your own graphics system, e.g.,
+   pVisManager->RegisterGraphicsSystem (new MyGraphicsSystem).
+
+
+5) Compile and link your code.
+
+   *******************************************************************
+   NOTE THAT IF YOU CHANGE ANY OF THE ABOVE ENVIRONMENT VARIABLES THEN
+   YOU WILL HAVE TO RECOMPILE YOUR DERIVED VIS MANAGER CLASS, E.G.,
+      touch src/MyVisManager.cc; gmake
+   *******************************************************************
+
+
+6) Optional environment variables specific to the test/GNUmakefile:
+   (a) If you want the visualization components, i.e., visualization/
+       and graphics_reps/, compiled in debug mode:
+         setenv G4VISDEBUG 1
+   (b) If you want the non-visualization components compiled in debug mode:
+         setenv G4DEBUG 1
+
+7) To compile and link the current test program (currently test19):
+
+     cd source/visualization/test
+     gmake anew
+
+   To save time (it checks only graphics_reps and visualization):
+
+     gmake quick
+
+10) To run:
+
+     setenv DISPLAY <local IP address>:0
+     $G4WORKDIR/bin/$G4SYSTEM/test19
+
+   (On my machine, echo $G4WORKDIR/bin/$G4SYSTEM/test19 gives
+   /scratch/geant4beta_workdir/bin/G++-Linux/test19.  You can always
+   make a symbolic link or an alias if the above is too long to type.
+   Or even better, add $G4WORKDIR/bin/$G4SYSTEM to your PATH.)
+
+   Note: because the test program uses the command macro facility, you
+   have to run it in the directory visualization/test which contains
+   the macros test19.g4m.  Edit these files to change startup
+   behaviour.
+
+   test19 takes optional arguments:
+
+     $G4WORKDIR/bin/$G4SYSTEM/test19 <session-type> <verbosity-integer>
+
+   where defaults are GAG and 0 respectively.
+
+
+On other machines.
+------------------
+
+OpenGL: You might find libGLX.a and/or libGLU.a are missing.  Ask your system
+        administrator to make a link:
+          ln -s libGL.a libGLX.a
+          ln -s libGL.a libGLU.a
+
+        Also, if you are using Mesa, you might need:
+          ln -s libMesaGL.a libGL.a
+        etc.
+
+
+
+As an example of environment variables on another machine
+---------------------------------------------------------
+
+export G4SYSTEM=G++-Linux
+export G4INSTALL=~/GEANT4/geant4beta
+#########export G4WORKDIR=/scratch/geant4beta_workdir
+export G4WORKDIR=$G4INSTALL
+
+export PATH=$G4WORKDIR/bin/$G4SYSTEM:$PATH
+
+export CLHEP_BASE_DIR=/usr/local
+export RWBASE=/usr/local
+
+export G4VIS_DEBUG=1
+export G4DEBUG=1
+
+export MOMOPATH=~/GEANT4/geant4beta/environments/Momo/tcltk
+
+export CVSROOT=:pserver:allison@g4cvs.cern.ch:/afs/cern.ch/rd44/cvs
+export CVSEDITOR=emacs
+
+########## DAWN (Fukui) Renderer
+export G4VIS_BUILD_DAWN_DRIVER=1
+export G4VIS_USE_DAWN=1
+export DAWN_BSD_UNIX_DOMAIN=1
+export DAWN_GUI_ALWAYS=1
+export DAWN_HOME=/home/johna/GEANT4/DAWN
+#export PATH=$PATH:$DAWN_HOME ###### Moved to .g4profile
+
+########## OPACS graphics
+#export G4VIS_BUILD_OPACS_DRIVER=1
+#export G4VIS_USE_OPACS=1
+#export OPACS_HOME=/home/johna/GEANT4/OPACS
+#export OPACS_VERSION=v3
+#export OPACS_SYSTEM=Linux-gxx
+#export OCONFIG=Linux-gxx
+#. ~/GEANT4/OPACS/OPACS/v3/setup.sh
+
+########### OpenGL
+export G4VIS_BUILD_OPENGLX_DRIVER=1
+export G4VIS_USE_OPENGLX=1
+export G4VIS_BUILD_OPENGLXM_DRIVER=1
+export G4VIS_USE_OPENGLXM=1
+export XM_INSTALLED=1
+export XKEYSYMDB=/usr/lib/X11/XKeysymDB
+export OGLHOME=/usr/X11
+
+########### OpenInventor
+#export G4VIS_BUILD_OIX_DRIVER=1
+#export G4VIS_USE_OIX=1
+#export OIHOME=/home/johna
+#export HEPVISINC=/home/johna/include/Hepvis
+
+############ RayX
+export G4VIS_BUILD_RAYX_DRIVER=1
+export G4VIS_USE_RAYX=1
+
+############ VRML
+export G4VIS_BUILD_VRML_DRIVER=1
+export G4VIS_USE_VRML=1
+export G4VIS_BUILD_VRMLFILE_DRIVER=1
+export G4VIS_USE_VRMLFILE=1
+
+########### Interfaces
+export G4UI_BUILD_TERMINAL_SESSION=1
+export G4UI_USE_TERMINAL=1
+export G4UI_BUILD_GAG_SESSION=1
+export G4UI_USE_GAG=1
+export G4UI_BUILD_XM_SESSION=1
+#export G4UI_USE_XM=1
+#export G4UI_BUILD_WO_SESSION=1
+#export G4UI_USE_WO=1
+
+
+Here is a sample session.
+-------------------------
+
+$ test19
+
+RunManager construction starting....
+
+Constructing Visualization Manager.
+
+Initialising Visualization Manager.
+
+The following graphics systems drivers are supported in the GEANT4 distribution:
+
+  DAWN (the Fukui Renderer: socket connection) High quality technical renderer.
+    Features:      exact hidden line, hidden surface algorithms.
+                   high (unlimited) resolution.
+                   renders to PostScript for viewing and/or hardcopy.
+                   remote rendering.
+                   off-line rendering.
+                   graphical user interface.
+    Disadvantages: compute intensive, takes time (use a fast graphics
+                   system, such as OpenGL, to select view, then copy
+                   to this renderer - /vis~/copy/view, /vis~/set/view).
+
+  OPACS (the Orsay Package) 
+
+  OpenGLIX (direct/immediate drawing on X Windows)
+    Dumb single buffered X Window, No Graphics Database.
+    Advantages:    does not gobble server memory.
+                   good for drawing steps and hits.
+    Disadvantages: needs G4 kernel for re-draw.
+                   cannot take advantage of graphics accelerators.
+
+  OpenGLSX (display list/stored drawing on X Windows)
+    Dumb double buffered X Window with Graphics Database.
+    Advantages:    uses display lists as graphics database.
+                   fastest possible redraw, e.g., on simple change
+                     of viewpoint.
+                   uses client-server model for remote viewing
+                     (but only if you have a full client-server
+                     implementation of OpenGL, i.e., not Mesa).
+    Disadvantages: not advised for viewing large numbers of steps
+                     and/or hits, because it gobbles memory for database.
+
+  OpenGLIXm (with Motif widgets)
+    Smart single buffered X Window, No Graphics Database.
+    Advantages:    resizeable, and has Motif-based view-control panel.
+                   does not gobble server memory.
+                   good for drawing steps and hits.
+    Disadvantages: currently locks out GEANT4 commands, until "exit".
+                   needs G4 kernel for re-draw.
+                   cannot take advantage of graphics accelerators.
+
+  OpenGLSXm (with Motif widgets)
+    Smart double buffered X Window with Graphics Database.
+    Advantages:    resizeable, and has Motif-based view-control panel.
+                   uses display lists as graphics database.
+                   fastest possible redraw, e.g., on simple change
+                     of viewpoint.
+                   uses client-server model for remote viewing
+                     (but only if you have a full client-server
+                     implementation of OpenGL, i.e., not Mesa).
+    Disadvantages: currently locks out GEANT4 commands, until "exit".
+                   not advised for viewing large numbers of steps
+                     and/or hits, because it gobbles memory for database.
+
+  Open Inventor
+
+  G4RayX (ray tracing on X Windows)
+    GEANT4 Ray Tracing to a dumb single buffered X Window.
+    Advantages:    uses GEANT4's own tracking algorithms.
+                   photo-realistic.
+    Disadvantages: slow.
+
+  VRML1 (produces VRML1 file)
+
+The following graphics systems drivers are installed on your system:
+  DAWN     (the Fukui Renderer: socket connection)
+  OPACS (the Orsay Package)
+  OpenGLIX (direct/immediate drawing on X Windows)
+  OpenGLSX (display list/stored drawing on X Windows)
+  OpenGLIXm (with Motif widgets)
+  OpenGLSXm (with Motif widgets)
+  G4RayX (ray tracing on X Windows)
+  VRML1 (produces VRML1 file)
+
+You can accept the default, which is to register all of the above,
+  or instantiate your own Visualization Manager, inheriting
+  G4VisManager and implementing RegisterGraphicsSystems.  An example
+  class MyVisManager is provided which is controlled by the
+  following environment variables:
+    G4VIS_USE_DAWN
+    G4VIS_USE_OPACS
+    G4VIS_USE_OPENGLX
+    G4VIS_USE_OPENGLXM
+    G4VIS_USE_RAYX
+    G4VIS_USE_VRML
+    G4VIS_USE_VRMLFILE
+  Thus, in your main() you should have:
+    G4VisManager* visManager = new G4VisManager;
+  or:
+    G4VisManager* visManager = new MyVisManager;
+  then in either case:
+    visManager -> initialize ();  // or visManager -> Initialise ();
+  (Don't forget to delete visManager;)
+
+Registering graphics systems.
+G4VisManager::RegisterGraphicsSystem: FukuiRenderer (DAWN) registered.
+G4VisManager::RegisterGraphicsSystem: Wo registered.
+G4VisManager::RegisterGraphicsSystem: Xo registered.
+G4VisManager::RegisterGraphicsSystem: OpenGLImmediateX (OGLIX) registered.
+G4VisManager::RegisterGraphicsSystem: OpenGLStoredX (OGLSX) registered.
+G4VisManager::RegisterGraphicsSystem: OpenGLImmediateXm (OGLIXm) registered.
+G4VisManager::RegisterGraphicsSystem: OpenGLStoredXm (OGLSXm) registered.
+G4VisManager::RegisterGraphicsSystem: G4RayX (RayX) registered.
+G4VisManager::RegisterGraphicsSystem: VRML1.0 (VRML1) registered.
+G4VisManager::RegisterGraphicsSystem: VRML1.0File (VRML1File) registered.
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  FukuiRenderer (DAWN)
+  Wo
+  Xo
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  OpenGLImmediateXm (OGLIXm)
+  OpenGLStoredXm (OGLSXm)
+  G4RayX (RayX)
+  VRML1.0 (VRML1)
+  VRML1.0File (VRML1File)
+PreInit> vis/create_view/new_graphics_system OGLIX
+1 OpenGLImmediateX scenes extanct.
+OpenGLImmediateX.0.0 (i.e., scene 0, view 0) instantiated.
+Got standard cmap
+Window name: OpenGLStoredX.0.0
+G4VisManager::CreateView: new view created:
+  NOTE: objects with visibility flag set to "false" will not be drawn!
+  "/vis~/set/culling off" to draw such objects.
+  ALSO: covered objects in solid mode will not be part of the scene!
+  "/vis~/set/cull_covered_daughters off" to reverse this.
+  Also see other "/vis~/set" commands.
+#/vis~/create_view/new_graphics_system VRML1
+#/vis~/create_view/new_graphics_system VRML1File
+#/vis~/create_view/new_graphics_system Xo
+#/vis~/create_view/new_graphics_system Wo
+#
+# Draw current scene
+G4VisManager: scene has been set to "world".
+Traverse geometry tree and draw expHall_P
+Choose a detector with /test19det/detector (or let default be constructed).

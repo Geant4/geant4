@@ -1,0 +1,197 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4IeplusAnnihilation.icc,v 1.1 1999-01-07 16:11:12 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id: 
+// ---------------------------------------------------------------
+//      GEANT 4 class inlined methods file
+//
+//      For information related to this code contact:
+//      CERN, CN Division, ASD group
+//      History: first implementation, based on object model of
+//      2nd December 1995, G.Cosmo
+//      ------------ G4IeplusAnnihilation process ---------
+//                   by Michel Maire, 7 July 1996
+// ***************************************************************
+// ************************************************************
+// It is the first implementation of the 
+//          eplusANNIHILATION  PROCESS
+//   using an INTEGRAL APPROACH instead of the differential
+//   one used in the standard implementation .
+// ************************************************************
+//                by Laszlo Urban, 23 June 1998
+// ---------------------------------------------------------
+// 28/10/98:  some cleanup , L.Urban
+
+inline G4bool G4IeplusAnnihilation::IsApplicable(const G4ParticleDefinition& particle)
+{
+   return ( &particle == G4Positron::Positron() ); 
+}
+inline G4double G4IeplusAnnihilation::GetMicroscopicCrossSection(
+                                                     G4DynamicParticle* aDynamicPositron,
+                                                     G4Element*         anElement)
+ 
+// gives the microscopic total cross section in GEANT4 internal units
+
+{
+   G4double crossSection;
+   G4double PositronEnergy = aDynamicPositron->GetKineticEnergy();
+   G4bool isOutRange ;
+
+   if (PositronEnergy > HighestEnergyLimit)
+     crossSection = 0. ;
+   else {
+     if (PositronEnergy < LowestEnergyLimit) PositronEnergy = 1.01*LowestEnergyLimit;
+     crossSection = (*theCrossSectionTable)(anElement->GetIndex())->
+                    GetValue( PositronEnergy, isOutRange );
+   }
+
+   return crossSection; 
+}
+
+
+inline G4double G4IeplusAnnihilation::PostStepGetPhysicalInteractionLength(
+                             const G4Track& track,
+                             G4double   previousStepSize,
+                             G4ForceCondition* condition
+                            )
+{// get particle,particle type,kin.energy,material,mat.index
+  const G4double Tfac=0.95,Tfac1=1.-Tfac,eps=1.e-2  ;
+  G4double nl,nll,nlold,range,rangeold,rangenext,
+           dEdx,KineticEnergyOld,KineticEnergyNext,value;
+  G4bool isOut;
+  const G4DynamicParticle* particle = track.GetDynamicParticle();
+  const G4ParticleDefinition* particletype = particle->GetDefinition() ;
+  G4double KineticEnergy = particle->GetKineticEnergy();
+  G4Material* material = track.GetMaterial();
+  const G4MaterialTable* theMaterialTable =
+                         G4Material::GetMaterialTable();
+  G4int materialindex = material->GetIndex();
+
+  nl = (*theNlambdaTable)[materialindex]->
+                           GetValue(KineticEnergy,isOut);
+  range = G4EnergyLossTables::GetPreciseRangeFromEnergy(particletype,
+                                       KineticEnergy,material) ;
+
+  if ( (previousStepSize <=0.0) || (theNumberOfInteractionLengthLeft<=0.0)) {
+    ResetNumberOfInteractionLengthLeft();
+  } else {
+   if(previousStepSize/range < eps)
+   {
+    nll = (*theNlambdaTable)[materialindex]->
+                             GetValue(Tfac*KineticEnergy,isOut) ;
+    dEdx = G4EnergyLossTables::GetPreciseDEDX(particletype,
+                                              KineticEnergy,
+                                              material) ;
+    nlold = nl + dEdx*previousStepSize*(nl-nll)/
+                                  (Tfac1*KineticEnergy) ;
+   }
+   else
+   {
+    rangeold = range + previousStepSize ;
+    KineticEnergyOld = G4EnergyLossTables::GetPreciseEnergyFromRange(
+                                             particletype,
+                                       rangeold,material);
+    nlold = (*theNlambdaTable)[materialindex]->
+                           GetValue(KineticEnergyOld,isOut);
+
+    if(nlold < nl)
+     {
+     if(verboseLevel>2)
+     {
+      G4cout << "G4IeplusAnnihilation PostStepGPIL : Nlambda has been" <<
+              " increased at update.Nlambda old/new :" << nlold <<
+              "  " << nl << endl;
+      G4cout << "(theNumberOfInteractionLengthLeft has been increased!)" << endl;
+      G4cout << " correction : Nlambda old=new ........." << endl;
+     }
+      nlold = nl ;
+     }
+    }
+
+    theNumberOfInteractionLengthLeft -= nlold-nl ;
+
+    if(theNumberOfInteractionLengthLeft<perMillion)
+       theNumberOfInteractionLengthLeft=0.;
+  }
+
+
+ // condition is set to "Not Forced"
+  *condition = NotForced;
+  if(nl <= theNumberOfInteractionLengthLeft)
+  {
+    value = DBL_MAX ;
+  }
+  else
+  {
+   if(theNumberOfInteractionLengthLeft/nl < eps)
+   {
+    nll = (*theNlambdaTable)[materialindex]->
+                             GetValue(Tfac*KineticEnergy,isOut) ;
+    dEdx = G4EnergyLossTables::GetPreciseDEDX(particletype,
+                                              KineticEnergy,
+                                              material) ;
+
+    value = theNumberOfInteractionLengthLeft*Tfac1*KineticEnergy/(dEdx*(nl-nll)) ;
+   }
+   else
+   {
+
+    KineticEnergyNext = (*theInverseNlambdaTable)[materialindex]->
+                        GetValue(nl-theNumberOfInteractionLengthLeft,isOut);
+    rangenext = G4EnergyLossTables::GetPreciseRangeFromEnergy(particletype,
+                                       KineticEnergyNext,material);
+
+    value = range - rangenext ;
+
+    if(range<rangenext)
+    {
+    if(verboseLevel>2)
+    {
+     G4cout << "G4IeplusAnnihilation PostStepGPIL: Step < 0.!, Step=" <<
+             value << endl;
+     G4cout << "range,rangenext:" << range << "  " << rangenext << endl ;
+     G4cout << "correction : rangenext=range ....." << endl;
+    }
+     rangenext = range ;
+     value = range - rangenext ;
+    }
+   }
+  }
+  return value;
+}
+ 
+inline G4double G4IeplusAnnihilation::ComputeMeanFreePath(G4double PositKinEnergy,
+                                                       G4Material* aMaterial)
+
+// returns the positron mean free path in GEANT4 internal units
+
+{
+  const G4ElementVector* theElementVector = aMaterial->GetElementVector() ;
+  const G4double* theAtomNumDensityVector = aMaterial->GetAtomicNumDensityVector();   
+
+  G4double SIGMA = 0 ;
+
+  for ( G4int i=0 ; i < aMaterial->GetNumberOfElements() ; i++ )
+      {             
+            SIGMA += theAtomNumDensityVector[i] * 
+                     ComputeMicroscopicCrossSection( PositKinEnergy,
+                                                    (*theElementVector)(i)->GetZ() );
+      }       
+
+  return SIGMA<=0.0 ? DBL_MAX : 1./SIGMA ;
+}
+
+inline G4double G4IeplusAnnihilation::GetMeanLifeTime(const G4Track&,
+                                                     G4ForceCondition*)
+// returns the annihilation mean life time in GEANT4 internal units
+
+{
+   return 0.0; 
+} 

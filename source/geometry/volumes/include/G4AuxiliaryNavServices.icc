@@ -1,0 +1,33 @@
+
+inline G4bool G4AuxiliaryNavServices::CheckPointOnSurface( const G4VSolid* sampleSolid, 
+			    const G4ThreeVector& localPoint, 
+			    const G4ThreeVector* globalDirection, 
+			    const G4AffineTransform& sampleTransform,
+			    const G4bool  locatedOnEdge)
+{
+  G4ThreeVector localDirection, sampleNormal;
+  G4bool enter=false;
+
+  if (sampleSolid->Inside(localPoint)!=kOutside) 
+    {
+      if(locatedOnEdge && (globalDirection!=0))
+	{
+	  // We are probably located on an edge.
+	  localDirection= sampleTransform.TransformAxis(*globalDirection); 
+	  
+	  // Check whether we enter the volume
+	  // 
+	  sampleNormal= sampleSolid->SurfaceNormal(localPoint);
+	  if ( sampleNormal.dot(localDirection) <= 0 )
+	    {
+	      enter= true;
+	    }
+	}
+      else
+	{
+	  enter= true;
+	}
+    }
+  return enter;
+}
+

@@ -1,0 +1,152 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4Navigator.icc,v 1.1 1999-01-07 16:08:43 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// class G4Navigator Inline implementation
+
+// Return the local coordinate of the current track
+inline G4ThreeVector G4Navigator::GetCurrentLocalCoordinate() const
+{
+    return fLastLocatedPointLocal;
+}
+
+
+// Return local direction of vector direction in world coord system
+inline G4ThreeVector G4Navigator::ComputeLocalAxis(const G4ThreeVector& pVec) const
+{
+  return (fHistory.GetTopTransform().IsRotated()) ? fHistory.GetTopTransform().TransformAxis(pVec) : pVec ;
+}
+
+// Return local coordinates of a point in the world coord system
+inline G4ThreeVector G4Navigator::ComputeLocalPoint(const G4ThreeVector& pGlobalPoint) const
+{
+  return ( fHistory.GetTopTransform().TransformPoint(pGlobalPoint) ) ;
+}
+
+// Return the current  world (`topmost') volume
+inline G4VPhysicalVolume* G4Navigator::GetWorldVolume() const
+{
+    return fTopPhysical;
+}
+
+// Inform the navigator that the previous Step calculated
+// by the geometry was taken in its entirety
+inline void G4Navigator::SetGeometricallyLimitedStep()
+{
+    fWasLimitedByGeometry=true;
+}
+
+// Reset stack and minimum of navigator state `machine'
+inline void G4Navigator::ResetStackAndState()
+{
+    fHistory.Reset();
+
+    fWasLimitedByGeometry=false;
+    fEntering=false;
+    fExiting=false;
+    fLastStepWasZero= false;
+
+    fBlockedPhysicalVolume=0;
+    fBlockedReplicaNo=-1;
+}
+
+inline EVolume G4Navigator::VolumeType(const G4VPhysicalVolume *pVol) const
+{
+  EVolume type;
+  EAxis axis;
+  G4int nReplicas;
+  G4double width,offset;
+  G4bool consuming;
+  if (pVol->IsReplicated())
+    {
+      pVol->GetReplicationData(axis,nReplicas,width,offset,consuming);
+      type=(consuming) ? kReplica : kParameterised;
+    }
+  else
+    {
+      type=kNormal;
+    }
+  return type;
+}
+
+inline EVolume G4Navigator::CharacteriseDaughters(const G4LogicalVolume *pLog) const
+{
+  EVolume type;
+  EAxis axis;
+  G4int nReplicas;
+  G4double width,offset;
+  G4bool consuming;
+  G4VPhysicalVolume *pVol;
+
+  if (pLog->GetNoDaughters()==1)
+    {
+      pVol=pLog->GetDaughter(0);
+      if (pVol->IsReplicated())
+	{
+	  pVol->GetReplicationData(axis,nReplicas,width,offset,consuming);
+	  type=(consuming) ? kReplica : kParameterised;
+	}
+      else
+	{
+	  type=kNormal;
+	}
+    }
+  else
+    {
+      type=kNormal;
+    }
+  return type;
+}
+
+//    JA  April 30th, 1997
+//
+//  Is the Surface Normal valid?
+inline  G4bool G4Navigator::IsExitNormalValid()
+{
+  return fExiting && fValidExitNormal;
+}
+
+//  Obtain the Normal vector to a surface (in local coordinates)
+//    ( It is valid only if Navigator replied true to above function)
+inline G4ThreeVector  G4Navigator::GetLocalExitNormal()
+{
+  return fExitNormal;
+}
+
+// Return local to global transformation 
+//  ie transformation that will take point or axis in world coord system
+//  and return one in the local coord system
+inline const G4AffineTransform& G4Navigator::GetGlobalToLocalTransform() const
+{
+  return fHistory.GetTopTransform();
+}
+
+
+inline void G4Navigator::LocateGlobalPointAndUpdateTouchable(
+			  const G4ThreeVector&       position,
+				G4VTouchable*        touchableToUpdate,
+			  const G4bool               RelativeSearch )
+{
+  G4VPhysicalVolume* pPhysVol;
+  pPhysVol= LocateGlobalPointAndSetup( position, 0, RelativeSearch);  
+  touchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
+}
+
+inline void G4Navigator::LocateGlobalPointAndUpdateTouchable(
+			  const G4ThreeVector&       position,
+                          const G4ThreeVector&       direction,
+				G4VTouchable*        touchableToUpdate,
+			  const G4bool               RelativeSearch  )
+{
+  G4VPhysicalVolume* pPhysVol;
+  pPhysVol= LocateGlobalPointAndSetup( position, &direction, RelativeSearch);  
+  touchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
+}
+

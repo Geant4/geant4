@@ -1,0 +1,117 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4VMarker.icc,v 1.1 1999-01-07 16:09:14 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+
+inline G4VMarker::G4VMarker ():
+  fPosition   (G4Point3D ()),
+  fWorldSize  (0.),
+  fScreenSize (0.),
+  fFillStyle  (noFill),
+  fInfo()
+{}
+
+inline G4VMarker::G4VMarker (const G4VMarker& marker):
+  G4VVisPrim  (marker),
+  fPosition   (marker.fPosition),
+  fWorldSize  (marker.fWorldSize),
+  fScreenSize (marker.fScreenSize),
+  fFillStyle  (marker.fFillStyle),
+  fInfo       (marker.fInfo)
+{}  
+
+
+inline G4VMarker& G4VMarker::operator = (const G4VMarker& right) {
+  ((G4VVisPrim*) this) -> operator = (right);
+  fPosition   = right.fPosition;
+  fWorldSize  = right.fWorldSize;  
+  fScreenSize = right.fScreenSize;
+  fFillStyle  = right.fFillStyle;
+  fInfo       = right.fInfo;
+
+  return *this;
+}
+
+inline G4VMarker::G4VMarker (const G4Point3D& pos):
+  fPosition   (pos),
+  fWorldSize  (0.),
+  fScreenSize (0.),
+  fFillStyle  (noFill),
+  fInfo       ()
+{}
+
+inline G4Point3D G4VMarker::GetPosition () const {
+  return fPosition;
+}
+
+inline G4double G4VMarker::GetWorldSize () const {
+  return fWorldSize;
+}
+
+inline G4double G4VMarker::GetWorldDiameter () const {
+  return fWorldSize;
+}
+
+inline G4double G4VMarker::GetWorldRadius () const {
+  return fWorldSize / 2.;
+}
+
+inline G4double G4VMarker::GetScreenSize () const {
+  return fScreenSize;
+}
+
+inline G4double G4VMarker::GetScreenDiameter () const {
+  return fScreenSize;
+}
+
+inline G4double G4VMarker::GetScreenRadius () const {
+  return fScreenSize / 2.;
+}
+
+inline G4VMarker::FillStyle G4VMarker::GetFillStyle () const {
+  return fFillStyle;
+}
+
+inline void G4VMarker::SetPosition (const G4Point3D& pos) {
+  fPosition = pos;
+}
+
+inline void G4VMarker::SetWorldSize (G4double ws) {
+  fWorldSize = ws;
+}
+
+inline void G4VMarker::SetWorldDiameter (G4double wd) {
+  fWorldSize = wd;
+}
+
+inline void G4VMarker::SetWorldRadius (G4double wr) {
+  fWorldSize = 2. * wr;
+}
+
+inline void G4VMarker::SetScreenSize (G4double ss) {
+  fWorldSize  = 0.;
+  fScreenSize = ss;
+}
+
+inline void G4VMarker::SetScreenDiameter (G4double sd) {
+  fWorldSize  = 0.;
+  fScreenSize = sd;
+}
+
+inline void G4VMarker::SetScreenRadius (G4double sr) {
+  fWorldSize  = 0.;
+  fScreenSize = 2. * sr;
+}
+
+inline void G4VMarker::SetFillStyle (G4VMarker::FillStyle style) {
+  fFillStyle = style;
+}
+
+

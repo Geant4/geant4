@@ -1,0 +1,62 @@
+inline void G4CurvePoint::Init(G4Curve& c0)
+{
+  c= &c0;
+  notComputed= allFlags;
+}
+
+inline G4CurvePoint::G4CurvePoint(G4Curve& c0)
+{
+  Init(c0);
+}
+
+inline G4Curve& G4CurvePoint::GetCurve() const 
+{
+  return *c;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+inline void G4CurvePoint::Reset()
+{
+  notComputed= allFlags;
+}
+
+inline void G4CurvePoint::Reset(G4double u0)
+{
+  u= u0;
+  notComputed= pFlag;
+}
+
+inline void G4CurvePoint::Reset(const G4Point3D& p0)
+{
+  p= p0;
+  notComputed= uFlag;
+}
+
+inline void G4CurvePoint::Reset(G4double u0, const G4Point3D& p0)
+{
+  u= u0;
+  p= p0;
+  notComputed= 0;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+inline G4double G4CurvePoint::GetPPoint()
+{
+  if (notComputed & uFlag) {
+    u= c->GetPPoint(p);
+    notComputed &= ~uFlag;
+  }
+  return u;
+}
+
+inline const G4Point3D& G4CurvePoint::GetPoint()
+{
+  if (notComputed & pFlag) {
+    p= c->GetPoint(u);
+    notComputed &= ~pFlag;
+  }
+  return p;
+}
+

@@ -1,0 +1,132 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4VoxelNavigation.icc,v 1.1 1999-01-07 16:08:47 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// class G4VoxelNavigation Inline implementation
+
+inline G4VoxelNavigation::G4VoxelNavigation() :
+    fVoxelAxisStack(kNavigatorVoxelStackMax),
+    fVoxelNoSlicesStack(kNavigatorVoxelStackMax),
+    fVoxelSliceWidthStack(kNavigatorVoxelStackMax),
+    fVoxelNodeNoStack(kNavigatorVoxelStackMax),
+    fVoxelHeaderStack(kNavigatorVoxelStackMax),
+    fVoxelDepth(-1),fVoxelNode(0)
+{
+}
+
+inline G4SmartVoxelNode* G4VoxelNavigation::VoxelLocate(G4SmartVoxelHeader *pHead,
+                           const G4ThreeVector &localPoint)
+{
+	G4SmartVoxelHeader *targetVoxelHeader=pHead;
+	G4SmartVoxelNode *targetVoxelNode=0;
+	G4SmartVoxelProxy *sampleProxy;
+	EAxis targetHeaderAxis;
+	G4double targetHeaderMin,targetHeaderNodeWidth;
+	G4int targetHeaderNoSlices,targetNodeNo;
+	fVoxelDepth=0;
+
+	do {
+		targetHeaderAxis=targetVoxelHeader->GetAxis();
+		targetHeaderNoSlices=targetVoxelHeader->GetNoSlices();
+		targetHeaderMin=targetVoxelHeader->GetMinExtent();
+		targetHeaderNodeWidth=(targetVoxelHeader->GetMaxExtent()-targetHeaderMin)/targetHeaderNoSlices;
+		targetNodeNo=G4int ((localPoint(targetHeaderAxis)-targetHeaderMin)/targetHeaderNodeWidth);
+// Rounding protection
+		if (targetNodeNo<0)
+			{
+			targetNodeNo=0;
+			}
+		else if (targetNodeNo>=targetHeaderNoSlices)
+			{
+			targetNodeNo=targetHeaderNoSlices-1;
+			}
+// Stack info for stepping
+		fVoxelAxisStack(fVoxelDepth)=targetHeaderAxis;
+		fVoxelNoSlicesStack(fVoxelDepth)=targetHeaderNoSlices;
+		fVoxelSliceWidthStack(fVoxelDepth)=targetHeaderNodeWidth;
+		fVoxelNodeNoStack(fVoxelDepth)=targetNodeNo;
+		fVoxelHeaderStack(fVoxelDepth)=targetVoxelHeader;
+		
+		sampleProxy=targetVoxelHeader->GetSlice(targetNodeNo);
+		if (sampleProxy->IsNode())
+			{
+			targetVoxelNode=sampleProxy->GetNode();
+			}
+		else
+			{
+		        targetVoxelHeader=sampleProxy->GetHeader();
+			fVoxelDepth++;
+			}
+		} while (!targetVoxelNode);
+	fVoxelNode=targetVoxelNode;
+	return targetVoxelNode;
+}
+
+inline G4bool G4VoxelNavigation::LevelLocate(G4NavigationHistory& history,
+			   const G4VPhysicalVolume *blockedVol,
+                           const G4int,
+                           const G4ThreeVector &globalPoint,
+                           const G4ThreeVector* globalDirection,
+			   const G4bool  pLocatedOnEdge, 
+			   G4ThreeVector &localPoint)
+{
+  G4SmartVoxelHeader *targetVoxelHeader;
+  G4SmartVoxelNode *targetVoxelNode;
+  G4VPhysicalVolume *targetPhysical,*samplePhysical;
+  G4LogicalVolume *targetLogical;
+  G4VSolid *sampleSolid;
+  G4ThreeVector samplePoint;
+  G4int targetNoDaughters,sampleNo;
+  
+  targetPhysical=history.GetTopVolume();
+  targetLogical=targetPhysical->GetLogicalVolume();
+  targetVoxelHeader=targetLogical->GetVoxelHeader();
+  //  localPoint=history.GetTopTransform().TransformPoint(globalPoint);
+// Find the voxel containing the point
+  targetVoxelNode=VoxelLocate(targetVoxelHeader,localPoint);
+
+  targetNoDaughters=targetVoxelNode->GetNoContained();
+  if (targetNoDaughters==0) return false;
+
+//
+// Search daughters in volume
+//
+  for (sampleNo=targetNoDaughters-1;sampleNo>=0;sampleNo--)
+    {
+      samplePhysical=targetLogical->
+	GetDaughter(targetVoxelNode->
+		    GetVolume(sampleNo));
+      if (samplePhysical!=blockedVol)
+	{
+// Setup volume with mother ptr
+	  samplePhysical->Setup(targetPhysical);
+	  history.NewLevel(samplePhysical, kNormal, samplePhysical->GetCopyNo());
+	  sampleSolid=samplePhysical->GetLogicalVolume()->GetSolid();
+	  samplePoint=history.GetTopTransform().TransformPoint(globalPoint);
+
+	  if( G4AuxiliaryNavServices::
+	      CheckPointOnSurface(sampleSolid, samplePoint, globalDirection, 
+				  history.GetTopTransform(), pLocatedOnEdge) 
+	    )
+	    {
+	      // Enter this daughter
+	      //      blockedVol=0;
+	      localPoint=samplePoint;
+	      return true;
+	    }
+	  else
+	    {
+	      history.BackLevel();
+	    }
+	}
+    }
+  return false;
+}
+

@@ -1,0 +1,148 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4VScene.icc,v 1.1 1999-01-07 16:15:18 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// John Allison  19th July 1996.
+
+inline G4bool G4VScene::operator == (const G4VScene& scene) const {
+  return this == &scene;
+}
+
+inline void G4VScene::EndModeling () {}
+
+inline void G4VScene::AddThis (const G4Box& box) {
+  RequestPrimitives (box);
+// If your graphics system is sophisticated enough to handle a
+//  particular solid shape as a primitive, in your derived class write a
+//  function to override this.  (Note: some compilers warn that your
+//  function "hides" this one.  That's OK.)
+// Your function might look like this...
+// void G4MyScene::AddThis (const G4Box& box) {
+// Get parameters of appropriate object, e.g.:
+//   G4double dx = box.GetXHalfLength ();
+//   G4double dy = box.GetYHalfLength ();
+//   G4double dz = box.GetZHalfLength ();
+// and Draw or Store in your display List.
+}
+
+inline void G4VScene::AddThis (const G4Tubs& tubs) {
+  RequestPrimitives (tubs);
+}
+
+inline void G4VScene::AddThis (const G4Cons& cons) {
+  RequestPrimitives (cons);
+}
+
+inline void G4VScene::AddThis (const G4Trd& trd) {
+  RequestPrimitives (trd);
+}
+
+inline void G4VScene::AddThis (const G4Trap& trap) {
+  RequestPrimitives (trap);
+}
+
+inline void G4VScene::AddThis (const G4Sphere& sphere) {
+  RequestPrimitives ( sphere );
+}
+
+inline void G4VScene::AddThis (const G4Para&  para ) {
+  RequestPrimitives ( para );
+}
+
+inline void G4VScene::AddThis (const G4Torus& torus ) {
+  RequestPrimitives ( torus );
+}
+
+inline void G4VScene::AddThis (const G4VSolid& solid) {
+  RequestPrimitives (solid);
+}
+
+inline void G4VScene::PreAddThis (const G4Transform3D& objectTransformation,
+                                  const G4VisAttributes& visAttribs) {
+  fpObjectTransformation = &objectTransformation;
+  fpVisAttribs = &visAttribs;
+}
+
+inline void G4VScene::PostAddThis () {}
+
+inline void G4VScene::ClearStore () {}
+
+inline G4VGraphicsSystem* G4VScene::GetGraphicsSystem () const {
+  return &fSystem;
+}
+
+inline G4int G4VScene::GetSceneId () const {
+  return fSceneId;
+}
+
+inline G4int G4VScene::GetViewCount () const {
+  return fViewCount;
+}
+
+inline
+G4double G4VScene::GetMarkerDiameter (const G4VMarker& marker,
+                                      G4VScene::MarkerSizeType& sizeType) {
+  return GetMarkerSize (marker, sizeType);
+}
+
+inline
+G4double G4VScene::GetMarkerRadius (const G4VMarker& marker,
+                                    G4VScene::MarkerSizeType& sizeType) {
+  return GetMarkerSize (marker, sizeType) / 2.;
+}
+
+inline G4int G4VScene::IncrementViewCount () {
+  return fViewCount++;
+}
+
+inline const G4String& G4VScene::GetName () const {
+  return fName;
+}
+
+inline void G4VScene::SetName (const G4String& name) {
+  fName = name;
+}
+
+inline const G4SceneData& G4VScene::GetSceneData () const {
+  return fSD;
+}
+
+inline const G4VViewList& G4VScene::GetViewList () const {
+  return fViewList;
+}
+
+inline const G4VModel* G4VScene::GetModel () const {
+  return fpModel;
+}
+
+inline G4VView* G4VScene::GetCurrentView () const {
+  return fpView;
+}
+
+inline void G4VScene::SetCurrentView (G4VView* pView) {
+  fpView = pView;
+}
+
+inline G4VViewList& G4VScene::SetViewList () {
+  return fViewList;
+}
+
+inline void
+G4VScene::SetModel (const G4VModel* pModel) {
+  fpModel = pModel;
+}
+
+inline const G4Colour& G4VScene::GetColor (const G4Visible& visible) {
+  return GetColour (visible);
+}
+
+inline const G4Colour& G4VScene::GetTextColor (const G4Text& text) {
+  return GetTextColour (text);
+}

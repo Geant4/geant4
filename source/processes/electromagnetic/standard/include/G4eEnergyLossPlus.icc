@@ -1,0 +1,54 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4eEnergyLossPlus.icc,v 1.1 1999-01-07 16:11:17 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id: 
+// ---------------------------------------------------------------
+//      GEANT 4 class inlined methods file 
+//
+//      For information related to this code contact:
+//      CERN, IT Division, ASD group
+//      History: based on object model of
+//      2nd December 1995, G.Cosmo
+//      ------------ G4eEnergyLossPlus physics process ------------
+//                  by Laszlo Urban, 20 March 1997
+// ***************************************************************
+// It is the first implementation of the NEW UNIFIED ENERGY LOSS PROCESS.               
+// It calculates the energy loss of e+/e-.
+// -------------------------------------------------------------
+// 18/11/98  , L. Urban
+//  It is a modified version of G4eEnergyLoss:
+//  continuous energy loss with generation of subcutoff delta rays
+// ---------------------------------------------------------------
+
+inline G4bool G4eEnergyLossPlus::IsApplicable(const G4ParticleDefinition&
+                                                     particle)
+{
+   return(   (&particle == G4Electron::Electron())
+           ||(&particle == G4Positron::Positron()) );
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4eEnergyLossPlus::GetContinuousStepLimit(
+                                               const G4Track& track,
+                                               G4double,
+                                               G4double currentMinimumStep,
+                                               G4double&)
+{
+ 
+  G4double Step =
+    GetConstraints(track.GetDynamicParticle(),track.GetMaterial());
+
+  if ((Step>0.0)&&(Step<currentMinimumStep)) currentMinimumStep = Step;
+
+  return Step ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

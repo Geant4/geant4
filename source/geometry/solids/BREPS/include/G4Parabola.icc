@@ -1,0 +1,70 @@
+inline void G4Parabola::Init(const G4Axis2Placement3D& position0,
+			     G4double focalDist0) {
+  position= position0;
+  focalDist= focalDist0;
+
+  // focus
+  F= position.GetLocation()+focalDist*position.GetPX();
+  // line
+  L0= position.GetLocation()-focalDist*position.GetPX();
+  //l= position.GetPY();
+}
+
+inline double G4Parabola::GetFocalDist() const {
+  return focalDist;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+inline G4double G4Parabola::GetPMax() {
+  return -1;
+}
+
+inline G4Point3D G4Parabola::GetPoint(G4double param) {
+  return position.GetLocation()
+    + focalDist* (param*param*position.GetPX() + 2*param*position.GetPY());
+}
+
+inline G4double G4Parabola::GetPPoint(const G4Point3D& pt) {
+  G4Point3D ptLocal= position.GetToPlacementCoordinates()*pt;
+  return ptLocal.y()/(2*focalDist);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+#include "G4CurveRayIntersection.hh"
+
+inline void G4Parabola::IntersectRay2D(const G4Ray& ray,
+				       G4CurveRayIntersection& is)
+{
+  is.Init(*this, ray);
+
+  const G4Point3D& S= ray.GetStart();
+  const G4Vector3D& d= ray.GetDir();
+
+  const G4Vector3D& l= position.GetPY();
+
+  // a == 1
+  G4Vector3D SMinusF= S-F;
+  G4double bHalf= SMinusF*d - (d.x()*l.y()-d.y()*l.x());
+  G4double c= SMinusF.mag2() + ( (S.x()-L0.x())*l.y() - (S.y()-L0.y())*l.x() );
+
+  G4double discr= bHalf*bHalf-c;
+  if (discr >= 0) {
+
+    // 2 intersections (maybe 1, but this case is rare)
+    G4double sqrtdiscr= sqrt(discr);
+    // find the smallest positive i
+    G4double i= -bHalf-sqrtdiscr;
+    if (i<kCarTolerance) {
+      i= -bHalf+sqrtdiscr;
+      if (i<kCarTolerance) {
+	return;
+      }
+    }
+    G4CurveRayIntersection isTmp(*this, ray);
+    isTmp.ResetDistance(i);
+    is.Update(isTmp);
+
+  }
+}

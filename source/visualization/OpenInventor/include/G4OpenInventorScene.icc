@@ -1,0 +1,38 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4OpenInventorScene.icc,v 1.1 1999-01-07 16:15:05 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// J Kallenbach  27th Aug 1996
+// OpenInventor scene - creates OpenInventor Display lists.
+// 26th January 1998 - added base class callbacks.  John Allison.
+
+inline G4int G4OpenInventorScene::GetSceneCount () {
+  return fSceneCount;
+}
+
+inline void G4OpenInventorScene::AddThis (const G4Sphere& sphere) {
+  G4VScene::AddThis (sphere);
+}
+
+inline void G4OpenInventorScene::AddThis (const G4Para& para) {
+  G4VScene::AddThis (para);
+}
+
+inline void G4OpenInventorScene::AddThis (const G4Torus& torus) {
+  G4VScene::AddThis (torus);
+}
+
+inline void G4OpenInventorScene::AddThis (const G4VSolid& vsolid) {
+  G4VScene::AddThis (vsolid);
+}
+
+inline void G4OpenInventorScene::AddPrimitive (const G4Polymarker& polymarker) {
+  G4VScene::AddPrimitive (polymarker);
+}

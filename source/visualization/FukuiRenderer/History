@@ -1,0 +1,56 @@
+DAWN-00-03-06	Satoshi TANAKA	Dec 04, 1998  
+- Maximun number of generated g4.prim files in the destination
+  directory is customizable as: "setenv G4DAWNFILE_MAX_FILE_NUM  N"
+  (N is the integer greater than or equal to 1. The default value is 1.)
+
+DAWN-00-03-05	Satoshi TANAKA	Dec 04, 1998  
+- Revised G4FRSocketConfig.hh together with architecture.gmk.
+  Compilation at SUN-CC was made automatic
+
+DAWN-00-03-04	Satoshi TANAKA	Dec 04, 1998  
+- Bug fix
+
+DAWN-00-03-03	Satoshi TANAKA	Nov 30, 1998  
+- Destination directiory of g4.prim and g4.eps is customizable 
+  with the environmental variable "G4DAWNFILE_DEST_DIR".
+
+  Unix:
+   % setenv G4DAWNFILE_DEST_DIR   directory_name/
+
+   For example, 
+
+   % setenv G4DAWNFILE_DEST_DIR   /tmp/
+
+   Do not forget to add "/" at the end of the directory name.
+
+  NT: 
+   DOS> set G4DAWNFILE_DEST_DIR   directory_name\
+
+   Do not forget to add "\" at the end of the directory name.
+
+- Auto incremetaion of output file names is supported.
+  Names of generated files are:
+
+   DAWN-format files: g4.prim, g4_1.prim, g4_2.prim, ... , g4_100.prim 
+   EPS files        : g4.eps , g4_1.eps , g4_2.eps , ... , g4_100.eps
+
+  Maximal number of files in one directory is restricted in order to 
+  avoid explosion of your hard disk. The maximal number is hard-coded.
+  You can revise is by editing enum of G4DAWNFILEScene.hh.
+
+  Note that the incrementation is done as follows (pseudo codes)
+
+    filename = "g4.prim" // initialization
+
+    while( filename already exists in the dest directory )
+    {
+	  increment filename
+    }
+
+  It means that if you delete file "g4.prim" in the destination directory,
+  the file name in the next generation is still g4.prim.
+ 
+
+DAWN-00-03-02	Satoshi TANAKA	Nov 30, 1998  
+
+- Backup before going on to tag DAWN-00-03-03.

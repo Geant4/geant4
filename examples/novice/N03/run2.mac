@@ -1,0 +1,27 @@
+# $Id: run2.mac,v 1.1 1999-01-07 16:05:53 gunter Exp $
+#
+# Macro file of "exampleN03.cc"
+#
+# (in iteractive it must be executed after initialization)
+# (otherwise type: /control/execute ../prerunN03.mac)
+# (graphic needed: OpenGL or Mesa) 
+#
+# 
+# electron 30 MeV to the direction (1.,0.,0.)
+# 1 event
+#
+/run/beamOn 1
+#
+# shoot randomly 20 events
+#
+/gun/random on
+/run/beamOn 20
+#
+# activate/inactivate physic processes
+#
+/process/list
+/process/inactivate eBrem
+#
+/run/beamOn 20
+#
+

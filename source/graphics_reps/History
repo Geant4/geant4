@@ -1,0 +1,101 @@
+$Id: History,v 1.1 1999-01-07 16:09:08 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+greps-00-04-02 02 December 1998 Evgeni Tcherniaev
+- Added G4NURBS::CalcPoint() for calculation coordinates of a
+point lying on the nurbs surface.
+
+greps-00-04-01  25th November 1998  John Allison
+- Added void G4VisAttributes::SetDaughtersInvisible (G4bool).
+
+greps-00-03-03  9th November 1998 Satoshi Tanaka
+Added G4String fInfo and its access functions to G4VMarker
+
+greps-00-03-02  6th November 1998  John Allison
+- Cleaned up GNUmakefile - no longer includes unnecesary -I's
+
+greps-00-03-01  26th September 1998  John Allison
+- Removed SetWorldVolume from G4VVisManager - no longer used.
+
+greps-00-02-03  21st August 1998  John Allison
+- Rationalised G4VisExtent::G4VisExtent (const G4Point3D& centre,
+  G4double radius) so that iit is a true "inverse" of GetExtentRadius.
+- Added global target to GNUmakefile (Gabriele Cosmo).
+
+greps-00-02-02  14th August 1998  John Allison
+- Added GeometryHasChanged() to G4VVisManager.  To be used by the run manager.
+
+greps-00-02-01  6th August 1998  John Allison
+- Removed Draw, ClearView and Show in G4VVisManager.
+
+greps-00-06-03  26th June 1998  Gabriele Cosmo
+- Updated test/GNUmakefile to new electromagnetics.
+
+greps-00-06-02  10th June 1998  John Allison
+- Changed defaults in G4VisExtent to 0.
+
+1st June 1998  Satoshi Tanaka
+- Added Draw(), ClearView(), Show() to G4VVisManager.
+
+greps-00-06-01  29th April 1998  John Allison
+- Introduced Establish/DecommissionSpecials (G4PhysicalVolumeModel&)
+  in place of BeginModeling (G4PhysicalVolumeModel&).
+
+April 21st, 98 G.Cosmo (greps-00-05-03)
+- Tagged.
+
+April 9th, 98 G.Cosmo
+- Porting on DEC-cxx 6.0.
+  Removed meaningless usage of "const" qualifier from functions
+  return type for basic types by value. Modified files: G4NURBS.cc
+
+greps-00-05-02  4th April 1998  John Allison
+- Re-engineered maintenance of current depth, etc.  Needed new method
+  G4VGraphicsScene::BeginModeling (G4PhysicalVolumeModel&) in
+  graphics_reps.  The result is much cleaner model and modeling
+  parameters classes.  Also, the current depth, physical volume and
+  logical volume are immediately available as protected pointers in
+  G4VScene.
+
+HEAD  3rd April 1998  John Allison
+- Added GetWorld/ScreenDiameter/Radius to G4VMarker.
+
+April 2, 1998 G.Barrand :
+- G4Polyhedron.cc : add a G4double cast to help NT/Visual compiler.
+
+greps-00-05-01  26th March 1998  John Allison
+- Removed #if defined(__DECCXX) || defined(WIN32) from G4NURBS.hh.
+- Improved comments in G4VMarker.hh
+
+7th January 1998  John Allison
+- Added arguments to PreAddThis in G4VGraphicsScene.hh.
+- Added virtual destructor to G4VVisManager.
+
+December 19, 97 G. Cosmo - (alpha03)
+
+- Created.
+
+- Previous history (from README)
+
+vis-00-01-02  13th July 1997  John Allison
+- Consolidation of previous tag.
+
+vis-00-01-01  8th June 1997  John Allison
+- First systematic tag.
+- G4Polyhedron - can now set number of sides for circle polygon approximation

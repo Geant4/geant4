@@ -1,0 +1,84 @@
+$Id: History,v 1.1 1999-01-07 16:06:32 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Nov 11, 98 M.Asai (tag event-00-03-04)
+- Optimize G4PrimaryVertex for events such as having huge number
+  of primaries.
+
+Oct 10, 98 M.Asai (tag event-00-03-03)
+- Bug fix in G4PrimaryVertex.
+- Add verbosity to G4PrimaryXXX.
+
+Oct 01, 98 M.Asai (tag event-00-03-02)
+- Introducing a new inlined method in G4ParticleGun.hh.
+
+Sep. 21, 98 M.Asai (tag event-00-03-01)
+- Inclusion of "G4HCofThisEvent.hh" and "G4DCofThisEvent.hh" moved
+  from "G4Event.cc" to "G4Event.hh", to avoid the link problem on
+  HP-CC (not aCC).
+
+July 19, 98 M.Asai (tag event-00-01-03)
+- More tight check against EoF in G4HEPEvtInterface
+
+July 15, 98 M.Asai (tag event-00-01-02)
+
+July 4, 98 M.Asai (tag event-00-01-01)
+- ready for the beta release
+
+June 30, 98 M.Asai (tag event-00-07-01)
+- Introduce shortlived particles
+
+June 22, 98 P. Urban
+- Preliminary results of tracking optimisation merged into the HEAD.
+- tagged as event-00-06-03
+
+June 10, 98 M.Asai
+- G4ParticleGunMessenger.cc is modified to catch up the new G4UIcommand
+- tagged as event-00-06-02
+
+June 8, 98 M.Asai
+- tagged as event-00-06-01
+
+June 6, 98 M.Asai
+- G4Event and G4EventManager is updated for the new "digita+hits" scheme
+- GNUmakefile is updated
+
+May 6, 98 M.Asai
+- G4ParticleGun is cleaned up.
+
+April 29, 98 G.Cosmo (event-00-05-02)
+- Removed print-out of track's pointers from verbose level in
+  G4EventManager.cc (P.Urban)
+
+April 22, 98 M.Asai
+- Tagged as event-00-05-01
+
+April 9, 98 G.Cosmo
+- Porting on DEC-cxx 6.0.
+  Removed meaningless usage of "const" qualifier from functions
+  return type for basic types by value. Modified files:
+  G4StackManager.hh, G4TrackStack.hh
+
+April 6, 97 M.Nagamatu
+- modified G4ParticleGunMessenger.cc to fix the "Unit length" of
+ /gun/position command.
+
+December 19, 97 G. Cosmo - (alpha03)
+
+- Created.

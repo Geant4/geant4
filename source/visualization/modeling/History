@@ -1,0 +1,54 @@
+$Id: History,v 1.1 1999-01-07 16:15:34 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+History file for visualization/modeling
+---------------------------------------
+
+vis-00-04-01  25th November 1998  John Allison.
+- Added const G4VisAttributes* fpDefaultVisAttributes and access
+  functions to G4ModelingParameters.
+- Reverted to default assignment operator and copy constructor for
+  G4ModelingParameters.
+- G4PhysicalVolumeModel can now handle invisible daughters.
+
+31st August 1998  John Allison
+- Added G4VModel::Validate() and in subclasses.
+
+vis-00-02-05  27th August 1998  John Allison
+- Added G4HitsModel and G4TrajectoriesModel.
+
+vis-00-02-04  22nd August 1998  John Allison
+- Made G4Transform3D fTransform a member of G4VModel (instead of pointer).
+- Reversed order of parameters in G4VModel constructor.
+- Much bug fixing.
+
+vis-00-06-06  11th June 1998  John Allison
+- G4PhysicalVolumeModel handles parametrised solids and materials.
+
+vis-00-06-04  10th June 1998  John Allison
+- Moved G4BoundingSphereScene from management to modeling.
+- Added G4Transform3D data member.
+
+modeling-00-04-01  4th March 1998  John Allison
+- Last tag before moving to visualization.
+- Removed G4ModelingParameters:: from G4ModelingParameters.hh constructor.
+
+27th January 1998  John Allison
+- New (temporay?) category.
+- Incorporates modeling code which was in G4VScene.

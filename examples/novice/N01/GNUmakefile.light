@@ -1,0 +1,37 @@
+# $Id: GNUmakefile.light,v 1.1 1999-01-07 16:05:40 gunter Exp $
+# --------------------------------------------------------------
+# GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
+# --------------------------------------------------------------
+
+name := exampleN01
+G4TARGET := $(name)
+G4EXLIB := true
+
+ifndef G4INSTALL
+  G4INSTALL = ../../..
+endif
+
+LDLIBS := \
+          -l$(G4TARGET) \
+          -lG4run \
+          -lG4event \
+          -lG4tracking \
+          -lG4bosons \
+          -lG4partman \
+          -lG4transportation \
+          -lG4procman \
+          -lG4track \
+          -lG4materials \
+          -lG4digits+hits \
+          -lG4csg \
+          -lG4geometrymng \
+          -lG4volumes \
+          -lG4magneticfield \
+          -lG4graphics_reps \
+          -lG4intercoms \
+          -lG4global
+
+.PHONY: all
+all: lib bin
+
+include $(G4INSTALL)/config/binmake.gmk

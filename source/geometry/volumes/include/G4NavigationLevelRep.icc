@@ -1,0 +1,140 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4NavigationLevelRep.icc,v 1.1 1999-01-07 16:08:43 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//  1 October 1997 J.Apostolakis Initial version. 
+//                        
+
+// Constructors
+//--------------
+
+inline G4NavigationLevelRep::G4NavigationLevelRep(G4VPhysicalVolume* pPhysVol,
+				     const G4AffineTransform& afTransform,
+				     EVolume            volTp,
+				     G4int              repNo)
+   :  sPhysicalVolumePtr(pPhysVol),
+      sTransform(afTransform),
+      sVolumeType(volTp),
+      sReplicaNo(repNo),
+      fCountRef(1) 
+{
+}
+
+inline G4NavigationLevelRep::G4NavigationLevelRep()
+   :  sPhysicalVolumePtr(0),
+      sTransform(), 
+      sVolumeType(kReplica),
+      sReplicaNo(-1),
+      fCountRef(1) 
+{
+}
+
+inline G4NavigationLevelRep::
+   G4NavigationLevelRep(   G4VPhysicalVolume* pPhysVol,
+		     const G4AffineTransform& levelAbove,
+		     const G4AffineTransform& relativeCurrent,
+		           EVolume            volTp,
+		           G4int              repNo )
+   :  sPhysicalVolumePtr(pPhysVol),
+      sReplicaNo(repNo),
+      sVolumeType(volTp),
+      fCountRef(1) 
+{
+      sTransform.InverseProduct( levelAbove, relativeCurrent );
+}
+
+inline G4NavigationLevelRep::G4NavigationLevelRep(G4NavigationLevelRep& right)
+   :  sTransform(right.sTransform), 
+      sPhysicalVolumePtr(right.sPhysicalVolumePtr),
+      sReplicaNo(right.sReplicaNo),
+      sVolumeType(right.sVolumeType),
+      fCountRef(1) 
+{
+}
+
+// Destructor
+//--------------
+
+inline G4NavigationLevelRep::~G4NavigationLevelRep()
+{
+#ifdef DEBUG_NAVIG_LEVEL
+    if(fCountRef>0){ 
+	G4Exception( " A G4NavigationLevelRep is being deleted that has a positive of reference counts (fCountRef > 0) " ); 
+    } 
+#endif
+}
+
+// Operators
+// --------------
+
+inline G4NavigationLevelRep& 
+G4NavigationLevelRep::operator=(const G4NavigationLevelRep &right)
+{ 
+  sTransform=  right.sTransform;  
+  sPhysicalVolumePtr=right.sPhysicalVolumePtr;
+  sVolumeType= right.sVolumeType;
+  sReplicaNo=  right.sReplicaNo;
+  return *this;
+} 
+
+inline G4VPhysicalVolume* G4NavigationLevelRep::GetPhysicalVolume() const 
+{ 
+  return sPhysicalVolumePtr; 
+}
+
+inline const G4AffineTransform& G4NavigationLevelRep::GetTransform() const 
+{ 
+      return sTransform; 
+} 
+
+#if 0
+inline       G4AffineTransform& G4NavigationLevelRep::GetTransform()       
+{ 
+      return sTransform; 
+} 
+#endif
+
+inline const G4AffineTransform* G4NavigationLevelRep::GetTransformPtr() const 
+{ 
+      return &sTransform; 
+} 
+
+inline EVolume            G4NavigationLevelRep::GetVolumeType() const 
+{ 
+  return sVolumeType; 
+}
+inline G4int              G4NavigationLevelRep::GetReplicaNo() const 
+{ 
+  return sReplicaNo; 
+}
+
+inline void   G4NavigationLevelRep::AddAReference() 
+{
+   fCountRef++; 
+}
+inline G4bool G4NavigationLevelRep::RemoveAReference() 
+{
+   return( --fCountRef <= 0); 
+}
+
+extern G4Allocator<G4NavigationLevelRep> aNavigLevelRepAllocator;
+
+// There is no provision that this class is subclassed.
+// If it is subclassed & new data members are added then the
+// following "new" & "delete" will fail and give errors. 
+//
+inline void* G4NavigationLevelRep::operator new(size_t)
+{
+  return (void *) aNavigLevelRepAllocator.MallocSingle();
+}
+
+inline void G4NavigationLevelRep::operator delete(void *aLevelRep)
+{
+  aNavigLevelRepAllocator.FreeSingle((G4NavigationLevelRep *) aLevelRep);
+}

@@ -1,0 +1,618 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4VRML2SceneFunc.icc,v 1.1 1999-01-07 16:15:15 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// G4VRML2SceneFunc.icc
+// Satoshi Tanaka & Yasuhide Sawada
+
+//#define DEBUG_SCENE_FUNC
+
+void G4VRML2SCENE::AddThis(const G4Trd& trd)
+{
+#if defined DEBUG_SCENE_FUNC
+	G4cerr << "***** AddThis trd\n";
+#endif
+	G4VScene::AddThis(trd);
+}
+
+void G4VRML2SCENE::AddThis(const G4Trap& trap)
+{
+#if defined DEBUG_SCENE_FUNC
+	G4cerr << "***** AddThis trap\n";
+#endif
+	G4VScene::AddThis(trap);
+}
+
+void G4VRML2SCENE::AddThis(const G4Para& para)
+{
+#if defined DEBUG_SCENE_FUNC
+	G4cerr << "***** AddThis para\n";
+#endif
+	G4VScene::AddThis(para);
+}
+
+void G4VRML2SCENE::AddThis(const G4Torus& torus )
+{
+#if defined DEBUG_SCENE_FUNC
+	G4cerr << "***** AddThis torus\n";
+#endif
+	G4VScene::AddThis(torus);
+}
+
+
+void G4VRML2SCENE::AddThis(const G4VSolid& vsolid)
+{
+#if defined DEBUG_SCENE_FUNC
+	G4cerr << "***** AddThis vsolid\n";
+#endif
+	G4VScene::AddThis(vsolid);
+}
+
+void G4VRML2SCENE::AddThis(const G4Tubs& tubs)
+{
+#if defined DEBUG_SCENE_FUNC
+	G4cerr << "***** AddThis tubs\n";
+#endif
+	G4VScene::AddThis(tubs) ;
+
+}
+
+
+void G4VRML2SCENE::AddThis(const G4Cons& cons)
+{
+#if defined DEBUG_SCENE_FUNC
+    G4cerr << "***** AddThis cons\n";
+#endif
+	G4VScene::AddThis(cons) ;
+}
+
+void G4VRML2SCENE::AddThis(const G4Box& box)
+{
+#if defined DEBUG_SCENE_FUNC
+	G4cerr << "***** AddThis box\n";
+#endif
+	G4VScene::AddThis(box) ;
+}
+
+
+void G4VRML2SCENE::AddThis(const G4Sphere& sphere)
+{
+#if defined DEBUG_SCENE_FUNC
+	G4cerr << "***** AddThis sphere\n";
+#endif
+	G4VScene::AddThis(sphere) ;
+}
+
+void G4VRML2SCENE::AddPrimitive(const G4Polyline& polyline)
+{
+#if defined DEBUG_SCENE_FUNC
+	G4cerr << "***** AddPrimitive polyline\n";
+#endif 
+
+	// VRML codes are generated below
+
+	fDest << "#---------- POLYLINE" << endl;
+	fDest << "Shape {" << endl;
+
+	SendLineColor   ( polyline.GetVisAttributes() );
+
+	fDest << "\t" << "geometry IndexedLineSet {" << endl;
+
+	fDest << "\t\t"   << "coord Coordinate {" << endl;
+	fDest << "\t\t\t" <<      "point [" << endl;
+	G4int e, i;
+	for (i = 0, e = polyline.entries(); e; i++, e--) {
+
+		G4Point3D point = polyline(i);
+		point.transform( *fpObjectTransformation );
+
+		fDest << "\t\t\t\t";
+		fDest <<                  point.x() << " ";
+		fDest <<                  point.y() << " ";
+		fDest <<                  point.z() << "," << endl;
+
+	} // for
+
+	fDest << "\t\t\t" <<      "]" << endl; // point
+	fDest << "\t\t"   << "}"      << endl; // coord
+
+	fDest << "\t\t" << "coordIndex [";
+	for (i = 0, e = polyline.entries(); e; i++, e--) {
+		if (i % 10 == 0)
+			fDest << endl << "\t\t\t";
+		fDest << i << ", ";
+	}
+	fDest << "-1" << endl;
+	fDest << "\t\t" << "]"        << endl; // coordIndex
+	fDest << "\t" << "}" << endl; // geometry IndexedLineSet
+
+	fDest << "}" << endl; // Shape
+}
+
+
+void G4VRML2SCENE::AddPrimitive(const G4Polyhedron& polyhedron)
+{
+#if defined DEBUG_SCENE_FUNC
+	cerr << "***** AddPrimitive(G4Polyhedron)" << endl;
+#endif
+
+	// Transparency checking: If completely transparent, skip drawing 
+	if ( GetPVTransparency() > 0.99 ) { return ; }
+
+	// Current Model
+	const G4VModel* pv_model  = GetModel();
+	const char* pv_name = pv_model->GetCurrentTag() ;
+
+	// VRML codes are generated below
+
+	fDest << "#---------- SOLID: " << pv_name << endl;
+
+	if ( IsPVPickable() ) {
+
+	 fDest << "Anchor {" << endl;
+	 fDest << " description " << "\"" << pv_name << "\"" << endl;
+	 fDest << " url \"\" " << endl;
+	 fDest << " children [" << endl;
+	}
+
+	fDest << "\t"; fDest << "Shape {" << endl;
+
+	SendMaterialNode();
+
+	fDest << "\t\t" << "geometry IndexedFaceSet {" << endl;
+
+	fDest << "\t\t\t"   << "coord Coordinate {" << endl;
+	fDest << "\t\t\t\t" <<      "point [" << endl;
+	G4int i, j;
+	for (i = 1, j = polyhedron.GetNoVertices(); j; j--, i++) {
+		G4Point3D point = polyhedron.GetVertex(i);
+
+		point.transform( *fpObjectTransformation );
+
+		fDest << "\t\t\t\t\t";
+		fDest <<                   point.x() << " ";
+		fDest <<                   point.y() << " ";
+		fDest <<                   point.z() << "," << endl;
+	}
+	fDest << "\t\t\t\t" <<      "]" << endl; // point
+	fDest << "\t\t\t"   << "}"      << endl; // coord
+
+	fDest << "\t\t\t"   << "coordIndex [" << endl;
+
+	// facet loop
+	G4int f;
+	for (f = polyhedron.GetNoFacets(); f; f--) {
+
+		// edge loop  
+		G4bool notLastEdge;
+		G4int index = -1, edgeFlag = 1;
+		fDest << "\t\t\t\t";
+		do {
+			notLastEdge = polyhedron.GetNextVertexIndex(index, edgeFlag);
+			fDest << index - 1 << ", ";
+		} while (notLastEdge);
+		fDest << "-1," << endl;
+	}
+	fDest << "\t\t\t"   << "]" << endl; // coordIndex
+
+	fDest << "\t\t\t"   << "solid FALSE" << endl; // draw backfaces
+
+	fDest << "\t\t" << "}"     << endl; // IndexFaceSet
+	fDest << "\t" << "}"       << endl; // Shape
+
+	if ( IsPVPickable() ) {
+	 fDest << " ]"              << endl; // children
+	 fDest << "}"               << endl; // Anchor
+	}
+
+#if defined DEBUG_SCENE_FUNC
+	cerr << "***** end of AddPrimitive(G4Polyhedron)\n";
+#endif
+} 
+
+
+void G4VRML2SCENE::AddPrimitive(const G4NURBS& nurb)
+{
+#if defined DEBUG_SCENE_FUNC
+	G4cerr << "***** AddPrimitive nurbs\n";
+#endif 
+	G4cerr << "G4VRML2File::AddPrimitive(G4NURBS&): not implemented. \n";
+}
+
+void G4VRML2SCENE::AddPrimitive( const G4Text& text ) 
+{
+#if defined DEBUG_SCENE_FUNC
+	G4cerr << "***** AddPrim mark text\n";
+#endif
+	G4cerr <<
+          "***** void G4VRML2SCENE::AddPrimitive( const G4Text& text )"
+          " not implemented yet."
+             << endl;
+}
+
+void G4VRML2SCENE::AddPrimitive( const G4Circle& circle ) 
+{
+#if defined DEBUG_SCENE_FUNC
+	G4cerr << "***** AddPrim mark circle\n";
+#endif
+	// Information 
+//	const char* info = NULL ;
+	const char* info = circle.GetInfo() ;
+
+	// Position and half size of circle
+	G4double X, Y, Z ; GetMarkerWorldPosition( circle, &X, &Y, &Z ) ;
+	G4double radius = GetMarkerHalfSize ( circle );
+
+	// VRML codes are generated below
+	fDest << "#---------- 3D MARKER (Circle)" << endl;
+	fDest << "Anchor {" << endl;
+
+	if( circle.GetInfo().isNull() ) {
+		fDest << " description " << "\"(" <<  X <<  "  " ;
+		fDest <<                              Y <<  "  " ;
+		fDest <<                              Z <<  ")\"" << endl;
+	} else {
+		fDest << " description " << "\"" <<  info << "\"" << endl;
+	}
+
+
+	fDest << " url \"\" " << endl;
+
+	fDest << " children [" << endl;
+
+	fDest << "  Transform {" << endl;
+
+	fDest << "   translation ";
+	fDest <<      X << " " << Y << " " << Z << endl;
+
+	fDest << "   children ["   << endl;
+
+	fDest << "\t" << "Shape {" << endl;
+
+	SendMarkerColor( circle );
+
+	// send shape with size 
+	fDest << "\t\t"   << "geometry Sphere {" << endl;
+	fDest << "\t\t\t" <<      "radius " << radius << endl;
+	fDest << "\t\t"   << "}" << endl;
+
+	fDest << "\t" << "}"       << endl; // Shape
+
+	fDest << "   ]"            << endl; //  children 
+	fDest << "  }"             << endl; //  Transform
+	
+	fDest << " ]"              << endl; //  children
+	fDest << "}"               << endl; //  Anchor
+
+}
+
+void G4VRML2SCENE::AddPrimitive(const G4Square& square) // mark Square
+{
+#if defined DEBUG_SCENE_FUNC
+	G4cerr << "***** AddPrim mark Square\n";
+#endif
+
+	// Information 
+//	const char* info = NULL ;
+	const char* info = square.GetInfo() ;
+
+	// Position and size of square 
+	G4double X, Y, Z ; GetMarkerWorldPosition  ( square, &X, &Y, &Z ) ;
+	G4double radius   = GetMarkerHalfSize ( square );
+	G4double diameter = 2.0 * radius ;
+
+	// VRML codes are generated below
+	fDest << "#---------- 3D MARKER (Square)" << endl;
+	fDest << "Anchor {" << endl;
+
+	if( square.GetInfo().isNull() ) {
+		fDest << " description " << "\"(" <<  X <<  "  " ;
+		fDest <<                              Y <<  "  " ;
+		fDest <<                              Z <<  ")\"" << endl;
+	} else {
+		fDest << " description " << "\"" <<  info << "\"" << endl;
+	}
+
+	fDest << " url \"\" " << endl;
+
+	fDest << " children [" << endl;
+
+	fDest << "  Transform {" << endl;
+
+	fDest << "   translation ";
+	fDest <<      X << " " << Y << " " << Z << endl;
+
+	fDest << "   children ["   << endl;
+
+	fDest << "\t" << "Shape {" << endl;
+
+	SendMarkerColor( square );
+
+	// send shape with size 
+	fDest << "\t\t"   << "geometry Box {" << endl;
+	fDest << "\t\t\t" <<      "size "   << diameter << " "  ;
+	fDest                               << diameter << " "  ;
+	fDest                               << diameter << endl ;
+	fDest << "\t\t"   << "}"                        << endl;
+
+	fDest << "\t" << "}"       << endl; //  Shape
+
+	fDest << "   ]"            << endl; //  children 
+	fDest << "  }"             << endl; //  Transform
+	
+	fDest << " ]"              << endl; //  children
+	fDest << "}"               << endl; //  Anchor
+
+}
+
+void G4VRML2SCENE::ClearStore()
+{
+#if defined DEBUG_SCENE_FUNC
+	G4cerr << "***** ClearStore()\n";
+#endif 
+}
+
+void G4VRML2SCENE::BeginModeling()
+{
+#if defined DEBUG_SCENE_FUNC
+	G4cerr << "***** BeginModeling\n";
+#endif
+	G4VScene::BeginModeling();
+	beginSending(); // error recovery: 
+			//   This function should be already called in 
+			//   DrawView()  of the View class
+			//   before camera setting 
+}
+
+void G4VRML2SCENE::EndModeling()
+{
+#if defined DEBUG_SCENE_FUNC
+	G4cerr << "***** EndModeling \n";
+#endif
+	G4VScene::EndModeling();
+}
+
+void G4VRML2SCENE::BeginPrimitives(const G4Transform3D& objectTransformation)
+{
+  G4VScene::BeginPrimitives (objectTransformation);
+  fpObjectTransformation = &objectTransformation;
+#if defined DEBUG_SCENE_FUNC
+	G4cerr << "***** BeginPrimitives \n";
+#endif
+	beginSending(); // error recovery: 
+			//   This function should be already called in 
+			//   DrawView()  of the View class
+			//   before camera setting 
+}
+
+void G4VRML2SCENE::EndPrimitives()
+{
+#if defined DEBUG_SCENE_FUNC
+	G4cerr << "***** EndPrimitives \n";
+#endif
+  G4VScene::EndPrimitives();
+}
+
+void G4VRML2SCENE::SendMaterialNode( const G4VisAttributes*  pVA )
+{
+	// Initialization of drawing parameters 	
+	G4bool		flagWF       = false ; 
+	G4double	TRANSPARENCY = GetPVTransparency() ;
+
+	//  Wireframe or not
+	const	G4ViewParameters& cur_view_param = fpView -> GetViewParameters ();
+	if (pVA->IsForceDrawingStyle() &&
+	   (pVA->GetForcedDrawingStyle() == G4VisAttributes::wireframe)) 
+	{
+		// wireframe style is assigned to this object
+		flagWF = true ;
+
+	} else if ( cur_view_param.GetDrawingStyle() == G4ViewParameters::wireframe )   
+	{
+		// current viewing style is  wireframe 
+		flagWF = true  ;
+	} 
+
+	// VRML codes are generated below
+	if (!pVA) { 
+		
+		// Error recovery: Use default values of VRML browser
+		fDest << "\t\t" ;
+		fDest << "appearance Appearance { material Material {} }";
+		fDest << endl;
+		
+	} else {
+
+		const G4Color& color = pVA->GetColor();
+
+		fDest << "\t\t"   << "appearance Appearance {" << endl;
+		fDest << "\t\t\t" <<      "material Material {" << endl;
+
+		// diffuse color 	
+		fDest << "\t\t\t\t" << "diffuseColor ";
+		fDest <<                   color.GetRed()   << " " ;
+		fDest <<                   color.GetGreen() << " " ;
+		fDest <<                   color.GetBlue()  << endl; 
+
+		// emmisive color 	
+		// fDest << "\t\t\t\t" << "emissiveColor ";
+		// fDest <<                   color.GetRed()   << " " ;
+		// fDest <<                   color.GetGreen() << " " ;
+		//fDest <<                   color.GetBlue()  << endl; 
+		//
+
+		// wireframe is expressed as transparency
+		if ( flagWF ) 
+		{
+			fDest << "\t\t\t\t" << "transparency " << TRANSPARENCY << endl;
+		}
+
+		fDest << "\t\t\t" <<      "}" << endl; // material
+		fDest << "\t\t"   << "}"      << endl; // appearance
+	}
+
+}
+
+
+void G4VRML2SCENE::SendMaterialNode()
+{
+	SendMaterialNode
+	( fpView->GetApplicableVisAttributes (fpVisAttribs) );
+}
+
+
+void G4VRML2SCENE::beginSending()
+{
+	if (!IS_CONNECTED ) {
+		this->connectPort();
+		fDest << "#VRML V2.0 utf8" << endl;
+		fDest << "# Generated by VRML 2.0 driver of GEANT4\n" << endl;
+	}
+}
+
+void G4VRML2SCENE::endSending()
+{
+	if ( IS_CONNECTED ) {
+		fDest << "#End of file." << endl;
+		this->closePort();
+	}
+}
+
+void      G4VRML2SCENE::SendMarkerColor ( const G4VMarker& mark ) 
+{
+	const G4Color& color = GetColor( mark );
+
+	fDest << "\t\t"     << "appearance Appearance {" << endl;
+	fDest << "\t\t\t"   <<      "material Material {" << endl;
+	fDest << "\t\t\t\t" <<      "diffuseColor ";
+	fDest <<                   color.GetRed()    << " " ;
+	fDest <<                   color.GetGreen()  << " " ;
+	fDest <<                   color.GetBlue()   << endl;
+	fDest << "\t\t\t\t" <<    "emissiveColor ";
+	fDest <<                   color.GetRed()    << " " ;
+	fDest <<                   color.GetGreen()  << " " ;
+	fDest <<                   color.GetBlue()   << endl;
+	fDest << "\t\t\t"   <<      "}"              << endl; // material
+	fDest << "\t\t"     << "}"                   << endl; // appearance
+
+}
+
+void      
+G4VRML2SCENE::SendMarkerWorldPosition ( const G4VMarker& mark )
+{
+	G4Point3D point = mark.GetPosition();
+
+	point.transform( *fpObjectTransformation );
+
+	fDest << "   translation ";
+	fDest <<      point.x() << " " << point.y() << " " << point.z() << endl;
+
+}
+
+void  G4VRML2SCENE::GetMarkerWorldPosition    (	const G4VMarker&  mark , 
+						double* pX             ,
+						double* pY             ,
+						double* pZ              ) 
+{
+	G4Point3D point = mark.GetPosition();
+
+	point.transform( *fpObjectTransformation );
+
+	*pX = point.x() ;
+	*pY = point.y() ;
+	*pZ = point.z() ;
+}
+
+G4double  G4VRML2SCENE::GetMarkerHalfSize ( const G4VMarker& mark ) 
+{
+	//----- return value ( marker radius in 3d units) 
+	G4double size       = 1.0 ; // initialization
+
+	//----- parameters to calculate 3d size from 2d size
+	const double HALF_SCREEN_SIZE_2D = 300.0 ; // pixels
+	double zoom_factor  = fpView->GetViewParameters().GetZoomFactor() ;
+	if ( zoom_factor <=  0.0 ) { zoom_factor = 1.0 ; }
+	double extent_radius_3d = GetSceneData().GetExtent().GetExtentRadius() ;
+	if ( extent_radius_3d <= 0.0 ) { extent_radius_3d = 1.0 ; } 
+
+	//----- get marker radius in 3D units
+	if        ( size = mark.GetWorldSize()  ) {
+
+		// get mark radius in 3D units
+		size = 0.5 * mark.GetWorldSize()  ; 
+
+	} else if ( size = mark.GetScreenSize() ) {
+
+		// local
+		double mark_radius_2d   = 0.5 * mark.GetScreenSize() ;
+
+		// get mark radius in 3D units
+		size \
+		 = extent_radius_3d * ( mark_radius_2d / HALF_SCREEN_SIZE_2D );
+		size *= zoom_factor ;
+
+	} else {
+		// local
+		double mark_radius_2d \
+		 = fpView->GetViewParameters().GetDefaultMarker().GetScreenSize();
+
+		// get mark radius in 3D units
+		size \
+		 = extent_radius_3d * ( mark_radius_2d / HALF_SCREEN_SIZE_2D );
+		size *= zoom_factor ;
+	}
+
+		//----- global rescaling
+	size *= fpView->GetViewParameters().GetGlobalMarkerScale(); 
+
+		//----- return size
+	return size ;
+
+} 
+
+void G4VRML2SCENE::SendLineColor ( const G4VisAttributes*  pVA )
+{
+	const G4Color& color = pVA->GetColor();
+
+
+	fDest << "\t"   << "appearance Appearance {" << endl;
+	fDest << "\t\t" <<      "material Material {" << endl;
+	fDest << "\t\t\t" <<      "diffuseColor ";
+	fDest <<                   color.GetRed()    << " " ;
+	fDest <<                   color.GetGreen()  << " " ;
+	fDest <<                   color.GetBlue()   << endl;
+	fDest << "\t\t\t" <<    "emissiveColor ";
+	fDest <<                   color.GetRed()    << " " ;
+	fDest <<                   color.GetGreen()  << " " ;
+	fDest <<                   color.GetBlue()   << endl;
+	fDest << "\t\t" <<      "}"                  << endl; // material
+	fDest << "\t"   << "}"                       << endl; // appearance
+}
+
+G4double      G4VRML2SCENE::SetPVTransparency ()
+{
+
+	G4double	TRANSPARENCY = 0.7   ;	// initialization
+						
+	if( getenv( "G4VRML_TRANSPARENCY" ) != NULL ) {
+
+		// get a value from the env value
+		sscanf( getenv("G4VRML_TRANSPARENCY"), "%lg", &TRANSPARENCY ) ;
+
+		// truncation 
+		TRANSPARENCY = fabs ( TRANSPARENCY ) ; 
+		if ( TRANSPARENCY > 1.0 ) { TRANSPARENCY = 1.0 ; }
+	} 
+
+	fPVTransparency = TRANSPARENCY ;
+
+	return fPVTransparency ;
+}
+
+// End of file.

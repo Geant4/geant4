@@ -1,0 +1,140 @@
+$Id: History,v 1.1 1999-01-07 16:06:09 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example N05 History file
+                    ------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+11 December 1998 M. Verderi
+- fix made in ExN05CalorimeterSD to allow several instanciations of this class.
+  The problem was a static variable (HCID) used in EndOfEventAction which made
+  confusion to get the hits collection. HCID is now put as private (non static!) 
+  member of the class.
+- the example.in/.out are updated accordingly
+
+
+9 December 1998 M. Verderi
+- Added ExN05PionShowerModel: a model producing hits
+  for pi+/pi-
+- Modify ExN05EMShowerModel to produce a "less unrealistic"
+  shower shape: now the longitudinal profile is according to
+  the Gamma distribution. Transverse profile is two cylinder:
+  the 1 moliere radius receive 90% of the energy, the 3.5 one
+  receives the rest.
+- Added RandomGamma: shoot at random according to the Gamma
+  distribution. Adapted from RNGAMA function of KERNLIB.
+  (thanks to D. Bernard who gave me the source).
+- ExN05DetectorConstruction. Many changes:
+	- EM calo size reduced, crytals also;
+	- addition of an hadronic calorimeter
+	- addition of a ghost volume
+  The G4VFastSimulationModel are instanciated(?) here, and
+  no more in exampleN05.cc
+- exampleN05.in modified to shoot pions in order to test
+  the ghost geometry.
+- ExN05PhysicsList modified to add the parameterisation
+  process as a Post&Along process, because of the ghost.
+
+
+
+16th August 1998 H.Kurashige
+- Added ExN05MinRangeCuts, ExN05MinEkineCuts, ExN05MaxTimeCuts
+  and their base class of ExN05SpecialCuts for using UserLimits.
+- Modified ExN05PhysicsList to register above processes.
+- Modified ExN05DetectorConstruction to attach Userlimits to crystal.
+- Added ExN05DetectorMessenger to switch on/off UserLimits.
+- Modified exampleN05.in 
+ 
+
+9th August 1998  John Allison
+- Changed G4UIterminal to G4UIGAG.
+
+16th July 1998  John Allison
+- Changed /vis~/Draw... to /vis~/draw.
+
+June 26th 98 Marc Verderi:
+
+Remove previous files, and add new ones with the
+good (hopefully) naming conventions this time.
+Improvements done in ExN05EMShowerModel by using
+a private navigator, rather than the one for tracking.
+
+   include:
+	ExN05CalorimeterHit.hh
+	ExN05CalorimeterHitsCollection.hh
+	ExN05CalorimeterSD.hh
+	ExN05DetectorConstruction.hh
+	ExN05EMShowerModel.hh
+	ExN05EnergySpot.hh
+	ExN05EventAction.hh
+	ExN05EventActionMessenger.hh
+	ExN05PhysicsList.hh
+	ExN05PiModel.hh
+	ExN05PrimaryGeneratorAction.hh
+	ExN05RunAction.hh
+	ExN05SteppingAction.hh
+	ExN05SteppingActionMessenger.hh
+   src:
+	ExN05CalorimeterHit.cc
+	ExN05CalorimeterHitsCollection.cc
+	ExN05CalorimeterSD.cc
+	ExN05DetectorConstruction.cc
+	ExN05EMShowerModel.cc
+	ExN05EnergySpot.cc
+	ExN05EventAction.cc
+	ExN05EventActionMessenger.cc
+	ExN05PhysicsList.cc
+	ExN05PiModel.cc
+	ExN05PrimaryGeneratorAction.cc
+	ExN05RunAction.cc
+	ExN05SteppingAction.cc
+	ExN05SteppingActionMessenger.cc
+
+May 07, 98 M. Verderi
+
+- First commit (many improvements needed):
+	- main() coded in exampleN05.cc 
+	- include:
+		MyCalorimeterHit.hh
+		MyCalorimeterHitsCollection.hh
+		MyCalorimeterSD.hh
+		MyDetectorBox.hh
+		MyEMCShower.hh
+		MyEnergySpot.hh
+		MyEventAction.hh
+		MyEventActionMessenger.hh 
+		MyPhysicsList.hh
+		MyPiModel.hh
+		MyPrimaryGeneratorAction.hh
+		MyRunAction.hh
+		MySteppingAction.hh
+		MySteppingActionMessenger.hh
+	- src:
+		MyCalorimeterHit.cc
+		MyCalorimeterHitsCollection.cc
+		MyCalorimeterSD.cc
+		MyDetectorBox.cc
+		MyEMCShower.cc
+		MyEnergySpot.cc
+		MyEventAction.cc
+		MyEventActionMessenger.cc
+		MyPhysicsList.cc
+		MyPiModel.cc
+		MyPrimaryGeneratorAction.cc
+		MyRunAction.cc
+		MySteppingAction.cc
+		MySteppingActionMessenger.cc
+
+
+April 09, 98 G. Cosmo
+
+- Created.

@@ -1,0 +1,97 @@
+$Id: History,v 1.1 1999-01-07 16:05:16 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+13th December 1998  John Allison  (examples-00-04-03)
+- N04: New em processes for ions (Hans-Peter)
+- N05: Bug fix in ExN05CalorimeterSD (Marc).
+
+8th December 1998  John Allison  (examples-00-04-02)
+- Removed #include "g4templates.hh" from all main program files.
+- Small refinements to N02 - see N02/History.
+
+30th November 1998  John Allison (examples-00-04-01)
+- Added initial / to commands in exampleN04.in.
+- Added VRML2 driver code to ExNnnVisManager.cc, nn = 02, 03.
+
+21st November 1998  John Allison (examples-00-03-05)
+- Made ExN04Field compatible with G4Field.
+
+14th October 1998  M.Asai (examples-00-03-04)
+- Moved N07/8/9 to E01/2/3. (John Allison)
+
+14th October 1998  John Allison  (examples-00-03-03)
+- Committed new reference files based on beta02-ref-01 + event-00-03-03
+  + examples-00-03-02 + vis-00-03-03 on sunasd1.
+
+09th Octorber 1998 M.Asai (examples-00-03-02)
+- Replace N02 and N03.
+- Bug fix in N04.
+
+26th September 1998 Michel Maire (examples-00-03-01)
+- removed any use of cin
+
+27th August 1998  John Allison (examples-00-02-05)
+- Removed /vis~/camera/zoom 3 in N02 - coworks with vis-00-02-05.
+
+August 26th, 1998 - John Allison (examples-00-02-04)
+- Backed out G4UIGAG as default - G4UIterminal is now default.
+
+Aug 26, 98 M.Asai (examples-00-02-03)
+- Some modifications in exampleN02 and exampleN05 by H.Kurashige
+- Debugged in exampleN05
+- Rename classes in exampleN08
+
+Aug 21, 98 J.Allison (examples-00-02-02)
+- Renamed classes in N06/7/8/9.
+
+Aug 13, 98 M.Asai (examples-00-02-01)
+- Rename classes in exampleN02
+
+July 21, 98 M.Asai (examples-00-01-10)
+- several bug fixes in exampleN02.
+- reference file of exampleN02 is updated.
+
+July 20, 98 G.Cosmo (examples-00-01-09)
+- several fixes and updates of reference output files.
+
+July 15, 98 M.Asai (examples-00-01-08)
+- some debugging, updates...
+
+July 10, 98 G.Cosmo (examples-00-01-05)
+- N02: Updated reference I/O
+- N04: Updated PhysicsList
+- N06: Updated reference I/O and PhysicsList
+
+July 10, 98 M.Asai (examples-00-01-04)
+- Updated reference I/O.
+
+July 9, 98 G.Cosmo (examples-00-01-03)
+- Protected visualization code in N02 and N03 with G4VIS_USE
+- Added G4VIS_USE_DAWNFILE and G4VIS_USE_OPENGLWIN32 to N02 and
+  N03 (J.Allison)
+
+July 8, 98 M.Asai
+- Tagged as examples-00-01-02
+
+22nd June 1998  John Allison
+- Changed G4BASE = ../../prototype to
+  G4BASE = $(shell (cd ../../prototype; pwd))
+
+10th June 1998  John Allison
+- Modified examples.gmk to use G4VIS_USE.gmk.

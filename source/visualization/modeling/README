@@ -1,0 +1,6 @@
+Modeling
+=======
+
+The idea is to put GEANT4-aware but user-enviroment-independent code
+here.  It introduces the concept of a G4VModel.
+

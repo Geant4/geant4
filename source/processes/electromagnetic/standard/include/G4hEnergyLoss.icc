@@ -1,0 +1,49 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4hEnergyLoss.icc,v 1.1 1999-01-07 16:11:18 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id:
+// ---------------------------------------------------------------
+//      GEANT 4 class inlined methods file 
+//
+//      For information related to this code contact:
+//      CERN, IT Division, ASD group
+//      History: based on object model of
+//      2nd December 1995, G.Cosmo
+//      ------------ G4hEnergyLoss physics process ------------
+//                  by Laszlo Urban, 30 May 1997
+// ***************************************************************
+// It is the first implementation of the NEW UNIFIED ENERGY LOSS PROCESS.   
+// It calculates the energy loss of charged hadrons.
+// ***************************************************************
+// 22/10/98: cleanup , L.Urban
+// ---------------------------------------------------------------
+
+inline G4bool G4hEnergyLoss::IsApplicable(const G4ParticleDefinition&
+                                                     particle)
+{
+   return(particle.GetPDGCharge()!= 0.);
+}
+         
+inline G4double G4hEnergyLoss::GetContinuousStepLimit(
+                                               const G4Track& track,
+                                               G4double,
+                                               G4double currentMinimumStep,
+                                               G4double&)
+{
+ 
+  G4double Step =
+    GetConstraints(track.GetDynamicParticle(),track.GetMaterial()) ;
+
+  if((Step>0.0)&&(Step<currentMinimumStep))
+     currentMinimumStep = Step ;
+
+  return Step ;
+}
+

@@ -1,0 +1,74 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4VTouchable.icc,v 1.1 1999-01-07 16:07:19 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// class G4VTouchable Inline implementation
+
+inline G4VTouchable::G4VTouchable()
+{
+}
+
+inline G4VTouchable::~G4VTouchable()
+{
+}
+
+inline G4VPhysicalVolume* G4VTouchable::GetVolume(G4int) const
+{
+  G4Exception("G4VTouchable::GetVolume(G4int depth) undefined");
+  return NULL;
+}
+
+inline G4VSolid* G4VTouchable::GetSolid(G4int) const
+{
+  G4Exception("G4VTouchable::GetSolid(G4int depth) undefined");
+  return NULL;
+}
+
+inline G4int   G4VTouchable::GetReplicaNumber(G4int) const
+{
+  G4Exception("G4VTouchable::GetReplicaNumber(G4int depth) undefined");
+  return 0;
+}
+
+inline G4int   G4VTouchable::MoveUpHistory( G4int )
+{
+  G4Exception("G4VTouchable::MoveUpHistory(G4int) undefined ");
+  return 0;                                // for this touchable subclass 
+}
+
+inline void  G4VTouchable::UpdateYourself(     G4VPhysicalVolume*   ,
+					 const G4NavigationHistory* ) 
+{
+  G4Exception("G4VTouchable::UpdateYourself( G4VPhysicalVolume*, const G4NavigationHistory* ) undefined ");
+}
+
+inline G4int   G4VTouchable::GetHistoryDepth()  const
+{
+  G4Exception("G4VTouchable::GetHistoryDepth()  undefined ");
+  return  0;
+}
+
+inline const G4NavigationHistory* G4VTouchable::GetHistory() const
+{
+  G4Exception("G4VTouchable::GetHistory() undefined");
+  return NULL;
+}
+
+#if 0
+inline void G4VTouchable::ResetLevel() 
+{
+  G4Exception("G4VTouchable::ResetLevel() undefined");
+}
+#endif
+
+
+
+
+

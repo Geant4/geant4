@@ -1,0 +1,168 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4ParticleChange.icc,v 1.1 1999-01-07 16:14:21 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+inline
+ G4Step* G4ParticleChange::UpdateStepInfo(G4Step* pStep)
+{
+  // use fUseEBForAll instead of fUseEB
+  fUseEB = fUseEBForAll;
+  return G4VParticleChange::UpdateStepInfo(pStep);
+}
+
+inline 
+ G4double G4ParticleChange::GetEnergyChange() const
+{
+  return theEnergyChange;
+}
+
+inline
+ void G4ParticleChange::SetEnergyChange(G4double Energy)
+{
+  theEnergyChange = Energy;
+}
+
+inline 
+ const G4ParticleMomentum* G4ParticleChange::GetMomentumChange() const
+{
+  return &theMomentumChange;
+}
+
+inline 
+ void G4ParticleChange::SetMomentumChange(
+						G4double Px, 
+						G4double Py, 
+						G4double Pz	)
+{
+  theMomentumChange.setX(Px);
+  theMomentumChange.setY(Py);
+  theMomentumChange.setZ(Pz);
+}
+
+inline 
+ void G4ParticleChange::SetMomentumChange(const G4ThreeVector& P)
+{
+  theMomentumChange = P;
+}
+
+inline 
+ const G4ThreeVector* G4ParticleChange::GetPolarizationChange() const
+{
+  return &thePolarizationChange;
+}
+
+inline 
+ void G4ParticleChange::SetPolarizationChange( const G4ThreeVector& finalPoralization)
+{
+  thePolarizationChange = finalPoralization;
+}
+
+inline 
+ void G4ParticleChange::SetPolarizationChange(
+						G4double Px, 
+						G4double Py, 
+						G4double Pz	)
+{
+  thePolarizationChange.setX(Px);
+  thePolarizationChange.setY(Py);
+  thePolarizationChange.setZ(Pz);
+}
+
+inline 
+ const G4ThreeVector* G4ParticleChange::GetPositionChange() const
+{
+  return &thePositionChange;
+}
+
+inline 
+  G4double  G4ParticleChange::GetProperTimeChange() const
+{
+  return  theProperTimeChange;
+}
+
+inline 
+  void G4ParticleChange::SetProperTimeChange(G4double tau)
+{
+  theProperTimeChange = tau;
+
+}
+
+inline 
+ void G4ParticleChange::SetPositionChange(const G4ThreeVector& finalPosition)
+{
+  thePositionChange= finalPosition;
+}
+
+inline 
+ void G4ParticleChange::SetPositionChange(G4double x,G4double y, G4double z)
+{
+  thePositionChange.setX(x);
+  thePositionChange.setY(y);
+  thePositionChange.setZ(z);
+}
+
+inline
+ G4ThreeVector G4ParticleChange::GetGlobalPosition(const G4ThreeVector& displacement) const
+{
+  return thePositionChange + displacement;
+}
+
+
+inline
+ G4double  G4ParticleChange::GetGlobalTime(G4double timeDelay) const
+{
+      //  Convert the time delay to the global time.
+  return theTimeChange + timeDelay;
+}
+
+inline 
+  G4double  G4ParticleChange::GetTimeChange() const
+{
+  return  theTimeChange;
+}
+
+inline 
+  void G4ParticleChange::SetTimeChange(G4double t)
+{
+  theTimeChange = t;
+}
+
+inline 
+  G4double  G4ParticleChange::GetWeightChange() const
+{
+  return  theWeightChange;
+}
+
+inline 
+  void G4ParticleChange::SetWeightChange(G4double w)
+{
+  if(fUseEB) theWeightChange = w;
+}
+
+inline  
+  G4ThreeVector G4ParticleChange::CalcMomentum(G4double          energy,
+			    	              G4ParticleMomentum direction,
+			                      G4double           mass      
+					      ) const
+{
+  G4double tMomentum = sqrt(energy*energy + 2*energy*mass);
+  return direction*tMomentum; 
+}
+
+inline
+  void G4ParticleChange::SwOnAllEB()
+{
+  fUseEBForAll = true;
+}
+
+inline void G4ParticleChange::SwOffAllEB()
+{
+  fUseEBForAll = false;
+}

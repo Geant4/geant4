@@ -1,0 +1,29 @@
+
+$Id: History,v 1.1 1999-01-07 16:07:48 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+   Please keep a summary of these message in geometry/History!
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+  Dec  1   1998   John Apostolakis                       geom-boolean-4-ja
+
+    Code portability changes.
+
+  Nov 27   1998   John Apostolakis & Vladimir Grichine   geom-boolean-3-vg
+
+    Fixes agreed in code review were implemented.

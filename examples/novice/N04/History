@@ -1,0 +1,32 @@
+$Id: History,v 1.1 1999-01-07 16:05:59 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example N04 History file
+                    ------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+21st November 1998  John Allison
+- Made ExN04Field compatible with G4Field.
+
+9 Oct, 1998  M.Asai
+- A bug fixed in ExN04DetectorParameterDef.icc.
+
+26th August 1998  John Allison.
+- /vis/Draw/current -> /vis/draw/current in ExN04EventAction.cc.
+
+9th August 1998  John Allison.
+- Changed G4UIterminal to G4UIGAG.
+
+April 09, 98 G. Cosmo
+
+- Created.

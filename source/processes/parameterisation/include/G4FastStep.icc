@@ -1,0 +1,102 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4FastStep.icc,v 1.1 1999-01-07 16:14:04 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $id: G4ParticleChange.icc,v 1.6 1998/04/14 02:25:54 kurasige Exp $
+
+inline void 
+G4FastStep::SetPrimaryTrackFinalTime(G4double time)
+{
+  theTimeChange = time;
+}
+
+inline void 
+G4FastStep::SetPrimaryTrackFinalProperTime(G4double properTime)
+{
+  theProperTimeChange = properTime;
+}
+
+inline void 
+G4FastStep::
+SetPrimaryTrackFinalKineticEnergy(G4double kineticEnergy)
+{
+  theEnergyChange = kineticEnergy;
+}
+
+inline void 
+G4FastStep::SetPrimaryTrackPathLength(G4double pathLength)
+{
+  SetTrueStepLength(pathLength);
+}
+//-----------------------------------------
+//
+// Creation of eventual secondaries: 
+//
+//-----------------------------------------
+
+inline void 
+G4FastStep::SetNumberOfSecondaryTracks(G4int nSecondaries)
+{
+  SetNumberOfSecondaries(nSecondaries);
+}
+
+inline G4int 
+G4FastStep::GetNumberOfSecondaryTracks()
+{
+  return GetNumberOfSecondaries();
+}
+
+inline G4Track* G4FastStep::GetSecondaryTrack(G4int i)
+{
+  return GetSecondary(i);
+}
+
+
+//---------------------------------------
+//
+//---------------------------------------
+inline void G4FastStep::SetTotalEnergyDeposited(G4double anEnergyPart)
+{
+  SetLocalEnergyDeposit(anEnergyPart);
+}
+
+
+inline G4double G4FastStep::GetTotalEnergyDeposited() const
+{
+  return GetLocalEnergyDeposit();
+}
+
+
+inline void G4FastStep::ForceSteppingHitInvocation()
+{
+  SetSteppingControl(NormalCondition);
+}
+
+inline 
+void G4FastStep::SetMomentumChange(
+				   G4double Px, 
+				   G4double Py, 
+				   G4double Pz	)
+{
+  theMomentumChange.setX(Px);
+  theMomentumChange.setY(Py);
+  theMomentumChange.setZ(Pz);
+}
+
+inline 
+void G4FastStep::SetMomentumChange(const G4ThreeVector& P)
+{
+  theMomentumChange = P;
+}
+
+inline
+void G4FastStep::SetPrimaryTrackFinalEventBiasingWeight (G4double w)
+{
+  theWeightChange = w;
+}

@@ -1,0 +1,140 @@
+$Id: History,v 1.1 1999-01-07 16:09:29 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+interfaces-00-03-07 9th December 1998 Hajime Yoshida/Masayasu Nagamatu
+- minor improvements in Help of G4UIterminal.cc
+- G4UIGAG's Help in terminal mode is now equivalent to G4UIterminal.cc
+
+interfaces-00-03-06 27th November 1998 Hajime Yoshida/Masayasu Nagamatu
+- added 'if' protection to the destructor of G4UIterminal/G4UIGAG.
+
+interfaces-00-03-05 12th November 1998 Masayasu Nagamatu
+-test/G4cout_test01/ added an example for redirectiong stream using G4cout
+
+interfaces-00-03-04  13th October 1998  Masayasu Nagamatu
+- G4cout - changes to G4UIterminal.cc, G4UIGAG.hh, G4UIGAG.cc.
+
+07 Ocotober 1998  Guy Barrand:
+- G4UIXm.cc, G4UIWin32.cc : cout, cerr control.
+
+interfaces-00-03-03 7th  October Hajime Yoshida
+- Bug fix to prevent "help" crashing in some circumstances.
+
+interfaces-00-03-02 14th Sep. Hajime Yoshida
+	- fix to G4UIGAG (not bugs but correction of minor 
+		ydifferences with G4UIterminal)
+
+interfaces-00-03-01  12th Sep.  Hajime Yoshida and Masayasu Nagamatu
+- CTRL-D doesn't invoke infinite loop.
+- CRTL-D now means
+	- EOF in the redirected cin
+	- End of Session, just as "exit" command of GEANT4
+- Affected files are basic/src/G4UIterminal.cc
+			GAG/src/G4UIGAG.cc
+
+interfaces-00-02-01  9th August  John Allison
+- Tagged Guy's changes.
+
+7th August  Guy Barrand.
+- common, OPACS : new interactor parenting logic.
+
+interfaces-00-01-04  8th July 1998  John Allison
+- Emptied xvt_standalone_test; files moved to environments/XVT.
+
+interfaces-00-01-03  7th July 1998  John Allison
+- Emptied standalone_test; files moved to environments/Momo or no
+  longer needed.
+
+7th July 1998  Guy Barrand
+- Added include $(G4INSTALL)/config/interactivity.gmk to GNUmakefiles.
+
+interfaces-00-01-02 7th July 1998  John Allison
+- Forced revision 2.1 on files in newly committed directories.
+
+interfaces-00-01-01 6th July 1998  John Allison
+- Big restructuring.  Moved files from include/ and src/ to:
+  common/, basic/, GAG/, OPACS/, XVT/.
+  Created G4UI_BUILD.gmk and G4UI_USE.gmk in config/.
+  Changed the GNUmakefiles accordingly.
+
+interfaces-00-07-01 2nd July 1998  Gabriele Cosmo
+- Updates to G4UIWo and G4VInteractorManager by G.Barrand.
+
+interfaces-00-06-05 26th June 1998  Gabriele Cosmo
+- Updated GNUmakefiles to new electromagnetics structure.
+
+interfaces-00-06-04a 22nd June 1998  John Allison
+- Removed ./standalone_test/run/example34/GNUmakefile.G4VIS_USE and
+  ./standalone_test/run/example35/GNUmakefile.G4VIS_USE
+
+interfaces-00-06-04 22nd June 1998  John Allison
+- Added #ifdef GNU_GCC for template instantiation in src/G4UIGAG.cc.
+- Changed GNUmakefiles for G4VIS_USE.gmk.
+
+May 6, 98 M.Asai
+- Introducing a new abstract base class G4VBasicShell.
+- G4UIterminal has been modified according to use G4VBasicShell.
+
+22th April 1998  Hajime Yoshida / Masayasu Nagamatsu (interfaces-00-05-03)
+-  the following three directories are tagged.
+ interfaces/standalone_test/Momo/java/GGE
+ interfaces/standalone_test/Momo/java/RMI
+ interfaces/standalone_test/run/example35
+
+20th April 1998  Hajime Yoshida / Masayasu Nagamatsu (interfaces-00-05-02)
+- update for Momo and G4UIGAG, including many improvement and bug fixes.
+  see the interfaces/standalone_test/README_Momo.html for datails.
+- example35 is added; new example program to show the capability of GUI(GAG).
+
+15th April 1998 : Guy Barrand
+- From discussion with John and Simone G4VToolkit 
+  has been renamed to G4VInteractorManager.
+
+4th April 1998 Nagamatu Masayasu (interfaces-00-05-01)
+- correspond to the modification by  G.Barrand
+  G4UI_BUILD_xxx_DRIVER -> G4UI_BUILD_xxx_SESSION
+  Modifications for Win32/NT.
+
+April 2, 98 G.Barrand
+- G4UI_BUILD_xxx_DRIVER -> G4UI_BUILD_xxx_SESSION
+- Modifications for Win32/NT.
+
+26th March 1998  John Allison
+- Changed G4VisManager to MyVisManager in example34.cc and xvt.benchmark.cc
+  for vis-00-05-01 and later.
+
+6th March 1998 Hajime Yoshida / Nagamatu Masayasu (interfaces-00-04-01)
+- First tag with modeling under visualization
+- small bug fix for Momo
+
+29th January 1998 Masayasu Nagamatu / Hajime Yoshida (interfaces-00-03-01)
+- Update of Momo(GAG/GGE), standalone_test/ directory.
+
+27th January 1998  John Allison
+- Simplfied use of G4VIS flags in test GNUmakefiles.
+- New way of instantiating G4VisManager in test main() programs.
+
+December 19, 97 G. Cosmo - (alpha03)
+
+- Created.
+
+Januray 19 , 98 G. Barrand
+
+- Update G4UIXaw, G4UIXm to take into account
+  pauseStartSession method.
+

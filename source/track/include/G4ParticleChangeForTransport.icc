@@ -1,0 +1,73 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4ParticleChangeForTransport.icc,v 1.1 1999-01-07 16:14:22 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+
+inline 
+ void G4ParticleChangeForTransport::SetTouchableChange(G4VTouchable* fTouchable)
+{
+  theTouchableChange =   fTouchable;
+}
+
+inline 
+ G4VTouchable* G4ParticleChangeForTransport::GetTouchableChange() const
+{
+  return theTouchableChange;
+}
+
+inline
+G4bool G4ParticleChangeForTransport::GetMomentumChanged() const 
+{
+  return isMomentumChanged;
+}
+
+inline
+void G4ParticleChangeForTransport::SetMomentumChanged(G4bool b)
+{
+  isMomentumChanged= b;
+}
+
+//----------------------------------------------------------------
+// functions for Initialization
+//
+
+inline void G4ParticleChangeForTransport::Initialize(const G4Track& track)
+{
+  // use base class's method at first
+  InitializeStatusChange(track);
+//  InitializeLocalEnergyDeposit(track);
+  InitializeSteppingControl(track);
+//  InitializeTrueStepLength(track);
+//  InitializeSecondaries(track);
+
+  // set Energy/Momentum etc. equal to those of the parent particle
+//  const G4DynamicParticle*  pParticle = track.GetDynamicParticle();
+//  theEnergyChange          = pParticle->GetKineticEnergy();
+//  theMomentumChange        = pParticle->GetMomentumDirection();
+//  thePolarizationChange    = pParticle->GetPolarization();
+//  theProperTimeChange      = pParticle->GetProperTime();
+
+  // set Position/Time etc. equal to those of the parent track
+//  thePositionChange      = track.GetPosition();
+//  theTimeChange          = track.GetGlobalTime();
+
+  // set touchable equal to the next touchable of the parent track
+  // not set as for now
+  //theTouchableChange     = track.GetNextTouchable();
+
+// So almost nothing is initialized here.
+// theMomentumChange, theProperTimeChange, thePositionChange and theTimeChange
+// are set by G4Transportation::AlongStepDoIt;
+// the others are not needed.
+// Take care when implementing the PostStep related things!
+// (P. Urban)
+}
+
+

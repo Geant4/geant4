@@ -1,0 +1,148 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4IeIonisation.icc,v 1.1 1999-01-07 16:11:11 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id: 
+// ---------------------------------------------------------------
+//      GEANT 4 class inlined methods file 
+//
+//      For information related to this code contact:
+//      CERN, IT Division, ASD group
+//      ------------ G4IeIonisation physics process ------------
+//                by Laszlo Urban, 23 June 1998
+// ************************************************************
+// It is the first implementation of the IONISATION
+// PROCESS. ( delta rays + continuous energy loss)
+//   using an INTEGRAL APPROACH instead of the differential
+//   one used in the standard implementation .
+// ************************************************************
+// 27/10/98: minor changes , cleanup , L.Urban
+// ------------------------------------------------------------
+
+inline G4double G4IeIonisation::PostStepGetPhysicalInteractionLength(
+                             const G4Track& track,
+                             G4double   previousStepSize,
+                             G4ForceCondition* condition)
+{
+  const G4double eps=1.e-2,Tfac=0.95,Tfac1=1.-Tfac  ;
+
+  G4double nl,nll,nlold,range,rangeold,rangenext,
+           dEdx,KineticEnergyOld,KineticEnergyNext,value;
+  G4bool isOut;
+
+  const G4DynamicParticle* particle = track.GetDynamicParticle();
+  const G4ParticleDefinition* particletype = particle->GetDefinition() ;
+  G4double KineticEnergy = particle->GetKineticEnergy();
+  G4Material* material = track.GetMaterial();
+  const G4MaterialTable* theMaterialTable =
+                                    G4Material::GetMaterialTable();
+  G4int materialindex = material->GetIndex();  
+
+  nl = (*theNlambdaTable)[materialindex]->
+                           GetValue(KineticEnergy,isOut);
+  range = G4EnergyLossTables::GetPreciseRangeFromEnergy(particletype,
+                                       KineticEnergy,material) ;
+
+  if ( (previousStepSize <=0.0) || (theNumberOfInteractionLengthLeft<=0.0)) {
+    // beggining of tracking (or just after DoIt of this process)
+    ResetNumberOfInteractionLengthLeft();
+  } else {
+   if(previousStepSize/range < eps)
+   {
+    nll = (*theNlambdaTable)[materialindex]->
+                             GetValue(Tfac*KineticEnergy,isOut) ;
+    dEdx = G4EnergyLossTables::GetPreciseDEDX(particletype,
+                                              KineticEnergy,
+                                              material) ;
+    nlold = nl + dEdx*previousStepSize*(nl-nll)/
+                                  (Tfac1*KineticEnergy) ;
+   }
+   else 
+   {
+    rangeold = range + previousStepSize ;
+    KineticEnergyOld = G4EnergyLossTables::GetPreciseEnergyFromRange(
+                                             particletype,
+                                       rangeold,material);   
+    nlold = (*theNlambdaTable)[materialindex]->
+                           GetValue(KineticEnergyOld,isOut);
+
+    if(nlold < nl)
+     {
+     if(verboseLevel>2)
+     {
+      G4cout << "G4IeIonisation PostStepGPIL : Nlambda has been" <<
+              " increased at update.Nlambda old/new :" << nlold <<
+              "  " << nl << endl;
+      G4cout << "(theNumberOfInteractionLengthLeft has been increased!)"
+                                                                     << endl; 
+      G4cout << " correction : Nlambda old=new ........." << endl;
+     }
+      nlold = nl ;
+     }
+    }
+
+    theNumberOfInteractionLengthLeft -= nlold-nl ; 
+
+    if(theNumberOfInteractionLengthLeft<perMillion)
+       theNumberOfInteractionLengthLeft=0.;
+  }
+
+
+  // condition is set to "Not Forced"
+  *condition = NotForced;
+  if(nl <= theNumberOfInteractionLengthLeft)
+  {
+    value = DBL_MAX ;
+  }
+  else
+  {
+   if(theNumberOfInteractionLengthLeft/nl < eps)
+   {
+    nll = (*theNlambdaTable)[materialindex]->
+                             GetValue(Tfac*KineticEnergy,isOut) ;
+    dEdx = G4EnergyLossTables::GetPreciseDEDX(particletype,
+                                              KineticEnergy,
+                                              material) ;
+    
+    value = theNumberOfInteractionLengthLeft*Tfac1*
+                                      KineticEnergy/(dEdx*(nl-nll)) ;
+   }
+   else
+   {
+
+    KineticEnergyNext = (*theInverseNlambdaTable)[materialindex]->
+                        GetValue(nl-theNumberOfInteractionLengthLeft,isOut);
+    rangenext = G4EnergyLossTables::GetPreciseRangeFromEnergy(particletype,
+                                       KineticEnergyNext,material);
+    value = range - rangenext ;
+    if(range<rangenext)
+    {
+     if(verboseLevel>2)
+     {
+      G4cout << "G4IeIonisation PostStepGPIL: Step < 0.!, Step="
+                                                        << value << endl; 
+      G4cout << "range,rangenext:" << range << "  " << rangenext << endl ;
+      G4cout << "correction : rangenext=range ....." << endl;
+     }
+     rangenext = range ;
+     value = range - rangenext ;
+    }
+   }
+  }
+  return value;
+}
+
+inline G4bool G4IeIonisation::IsApplicable(
+                            const G4ParticleDefinition& particle)
+{
+   return(   (&particle == (const G4ParticleDefinition *)theElectron)
+           ||(&particle == (const G4ParticleDefinition *)thePositron)
+         ) ;
+}
+         

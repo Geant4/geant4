@@ -1,0 +1,103 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4NormalNavigation.icc,v 1.1 1999-01-07 16:08:44 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// G4NormalNavigation Inline Implementation
+
+inline G4bool G4NormalNavigation::LevelLocate(G4NavigationHistory &history,
+			   const G4VPhysicalVolume *blockedVol,
+                           const G4int,
+                           const G4ThreeVector &globalPoint,
+                           const G4ThreeVector* globalDirection,
+			   const G4bool  pLocatedOnEdge, 
+			   G4ThreeVector &localPoint)
+{
+  G4VPhysicalVolume *targetPhysical,*samplePhysical;
+  G4LogicalVolume *targetLogical;
+  G4VSolid *sampleSolid;
+  G4ThreeVector samplePoint;
+  G4int targetNoDaughters,sampleNo;
+  
+  targetPhysical=history.GetTopVolume();
+  targetLogical=targetPhysical->GetLogicalVolume();
+  targetNoDaughters=targetLogical->GetNoDaughters();
+  
+  if (targetNoDaughters==0) return false;
+  
+//
+// Search daughters in volume
+//
+  for (sampleNo=targetNoDaughters-1;sampleNo>=0;sampleNo--)
+    {
+      samplePhysical=targetLogical->GetDaughter(sampleNo);
+      if (samplePhysical!=blockedVol)
+	{
+          EInside sampleInside;
+
+	  // Setup volume with mother ptr
+	  samplePhysical->Setup(targetPhysical);
+	  history.NewLevel(samplePhysical, kNormal, samplePhysical->GetCopyNo());
+	  sampleSolid=samplePhysical->GetLogicalVolume()->GetSolid();
+	  samplePoint=history.GetTopTransform().TransformPoint(globalPoint);
+#if 1
+	  if( G4AuxiliaryNavServices::
+              CheckPointOnSurface(sampleSolid, samplePoint, globalDirection, 
+				  history.GetTopTransform(), pLocatedOnEdge) 
+	    )
+	    {
+	      // Enter this daughter
+	      //      blockedVol=0;
+	      localPoint=samplePoint;
+	      return true;
+	    }
+	  else
+	    {
+	      history.BackLevel();
+	    }
+#else
+	  sampleInside= sampleSolid->Inside(samplePoint);
+	  if( sampleInside == kOutside)
+	    {
+	      history.BackLevel();
+	    }
+	  else
+	    {
+	      if( !pLocatedOnEdge )
+	        {
+		  // Enter this daughter
+		  // blockedVol=0;
+		  localPoint=samplePoint;
+		  return true;
+		}
+	      else
+		{
+                  // We are probably located on an edge.
+		  sampleDirection= history.GetTopTransform()
+		                          .TransformAxis(globalDirection); 
+
+		  // Check whether we enter the volume
+		  // 
+                  sampleNormal= sampleSolid->SurfaceNormal(samplePoint);
+		  if ( sampleNormal.dot(sampleDirection) <= 0 )
+		    {
+		      // Enter this daughter
+		      // blockedVol=0;
+		      localPoint=samplePoint;
+		      return true;
+		    }
+		}
+	    }
+#endif
+	}
+    }
+  return false;
+}
+
+

@@ -1,0 +1,374 @@
+$Id: History,v 1.1 1999-01-07 16:10:59 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+Sep 25: H.Kurashige.
+- procman-00-02-05 has tagged 
+    Added deleteion of all processes  in the destructor of G4ProcessTable
+Aug 27: HP Wellisch.
+- collected the fixes in a  new processes-tag; trying Harm's improved code.
+The following in  included:
+decay - pro-00-02-01
+electromagnetic - em-00-02-02
+  standard/src/G4GammaConversion.cc - head
+  xrays/include/G4Cerenkov.hh - head
+  xrays/src/G4Cerenkov.cc - head
+management - procman-00-02-04
+optical - head
+parameterisation - param-00-02-03
+transportation - pro-00-02-01
+  src/G4Transportation.cc - head
+  src/G4UserSpecialCuts.cc - head
+hadronic/cross_sections - pro-00-02-01
+hadronic/management - pro-00-02-01
+  include/G4HadronicInteraction.hh - head
+  src/G4HadronInelasticProcess.cc - head
+hadronic/processes - pro-00-02-01
+hadronic/stopping - pro-00-02-01
+  include/G4PiMinusAbsorptionAtRest.hh - head
+hadronic/util - pro-00-02-01
+  src/G4LightMedia.cc - head
+  src/G4Nucleus.cc - head
+  src/G4ReactionDynamics.cc - head
+hadronic/models/generator - generator-01-02-branch-01
+hadronic/models/high_energy - had_high-00-02-01
+hadronic/models/low_energy - pro-00-02-01
+hadronic/models/neutron_hp - neutron-00-02-03
+
+Aug 19 :  HP Wellisch.
+- Collected the last fixes in an overal processes tag.
+- Two fixes inluded in stopping, and generator.
+- (The problem in generator is not understood. This can
+  never have compiled on any platform, which it did
+  before tagging beta01 in Niigata.)
+
+Aug 16 :  H.Kurashige (procman-00-02-03)
+- Added G4ProcessTable (procman-00-02-02)
+- Added G4ProcessTableMessenger
+- Added fUserDefined to G4ProcessType.hh
+
+Aug 10: H.Kurashige (decay-00-02-01)
+- Modified G4Decay to adapt the removal of G4VProcess::thePhysicsTable
+
+Aug 10: H.Kurashige (procman-00-02-01)
+- Removed G4VProcess::thePhysicsTable  
+
+Jul 19: HP Wellisch
+(pro-00-01-05)
+Collecting all the fixes, and doing a process tag.
+
+jul 18: H.Kurashige (procman-00-01-03)
+- Fixed bugs in g4ProcessManager
+- Fixed command name in G4ProcessManagerMesseneger
+
+Jul 14: HP Wellisch
+
+Tagging the process tag as basis for the final validation procedure
+of geant4-beta.
+
+Jul 09: G.Cosmo 
+- Fixed bug in electromagnetics/util/GNUmakefile and in
+  electromagnetics/xrays/GNUmakefile. G4EXEC_BUILD was erroneously
+  set.
+
+Jul 08: HP Wellisch (pro-00-01-02)
+
+changes to accommodate modifications in the
+material category, mainly include statements
+
+Jul 08: HP Wellisch (pro-00-01-01)
+The process tag pro-00-01-01 contains the following tags:
+
+decay : pre-beta01-02
+electromagnetic: head
+hadronics/cross-sections: head
+                /management: pre-beta01-02
+		/processes: pre-beta01-02
+		/stopping: head
+		/util: pre-beta01-02
+		/models/low_energy: pre-beta01-02
+		             /high_energy: pre-beta01-02
+			     /generator: head
+			     /neutron_hp: head
+management: pre-beta01-02 (procman-00-01-01, is newer, but incompatible for the moment)
+optical: head
+parametrisation: pre-beta01-02
+transportation: pre-beta01-02
+
+Changes to accommodate the material-00-01-01 tag are not 
+present for the moment.
+
+Jul 08: H.Kurashige (procman-00-01-01)
+- Removed G4MaterialTable.hh  
+
+Jul 07: G.Cosmo
+- Added models/generator and models/neutron_hp to compile sequence
+  in models/GNUmakefile.
+
+Jul 01: HPW tagging pro-00-07-01
+ 
+Jun 30: H.Kurashige procman-00-07-03
+ - Added G4IVContinuousDiscreteProcess and G4IVRestDiscreteProcess.hh
+   for em-00-07-01   (by Michel)
+
+Jun 30: Paulo & Marc - param-00-07-01
+
+  Changes in parameterisation:
+
+ - The "G4ParallelWorld" class becomes the
+   "G4FlavoredParallelWorld" with some improvements;
+
+ - To starting allowing the vis/draw/Ghosts command
+   implementation, the 
+
+   G4VPhysicalVolume* 
+   GetWorldForThis (G4ParticleDefinition *)
+
+   from G4GlobalFastSimulationManager becomes 
+
+   G4FlavoredParallelWorld* 
+   GetFlavoredWorldForThis(G4ParticleDefinition *);
+
+ - A few changes in the G4FastSimulationManagerProcess 
+   to deal with these changes.
+
+Jun 28:H.Kurashige procman-00-06-03
+- Fixed bugs of InsertAt, SetProcessOrdering methods in G4ProcessManager	
+- Added copy constructor in G4ProcessManager
+
+Jun 28:H.Kurashige decay-06-01
+- Modified for new unified cut scheme 
+
+Jun 27: L. Felawka
+- added new processes G4MuonMinusCaptureatRest and
+  G4KaonMinusAbsorption (GHEISHA version)
+
+Jun 26: G.Cosmo pro-00-06-05
+- Added GNUmakefiles to electromagnetic test directories.
+- Tagged.
+
+Jun 26: J. Allison
+- Modified GNUmakefiles in electromagnetic for sub-structure.
+
+Jun 20: H.P.Wellisch pro-00-06-04
+includes trans-06-05
+otherwise it is alpha07-02
+
+Jun 15: G.Cosmo pro-00-06-03
+- Includes tag op-00-06-02.
+- Fixed "ambiguity" for pow() function in G4HadronCrossSections.cc
+  (F.Jones)
+
+Jun 10: H.P. Wellisch pro-00-06-02
+As pro-00-06-01, gut includes the corrected transportation tag
+trans-06-04a
+
+Tue Jun  9, Overloading of cross-sections enabled.
+tag for hadronics and processes.
+The tag pro-00-06-01 includes
+decay:           alpha06
+electromagnetic: em-00-06-01
+hadronic:        had-00-06-01
+optical:         op-00-06-01
+parametrisation: alpha06
+transportation:  trans-06-03
+management:      procman-00-06-01
+
+June 8, 98 H.Kurashige (procman-00-06-01)
+- modify G4ProcessManager and G4ProcessManagerMesseneger
+
+Apr 27, 98 G.Cosmo (pro-00-05-03)
+  Bug fixes in AlongDoIt of all EnergyLoss classes, by M.Maire
+  (it corresponds to tag em-00-05-02 for electromagnetics).
+
+Apr 23, 98 H.P. Wellisch
+  processes tagged pro-00-05-02.
+  please see the sub-tags for information.
+  (In addition, the electromagnetic/test were changed to conform
+   with the new G4VParticleChange.)
+processes:
+  param param-00-05-01
+  emlem head
+  optic head 
+  decay decay-05-01
+  hadro had-00-06-00
+  manag head
+  trans trans-05-01
+
+Apr 22, 98 G.Cosmo
+- Fixed usage of for-loop index - porting on cxx 6.0.
+  Modified files:
+  G4AntiNeutronAnnihilationAtRest.cc
+  G4AntiProtonAnnihilationAtRest.cc
+  G4NeutronCaptureAtRest.cc
+  G4PionMinusAbsorptionAtRest.cc
+
+Apr 22, 98 P.Urban
+- Added forward declaration for template specialization
+  needed by g++ compiler. Modified file:
+  G4EnergyLossTables.cc
+
+Apr 21, 98 H.P. Wellisch
+
+  please see the sub-tags for more information.
+  processes tagged pro-00-05-01.
+processes:
+  param param-00-05-01
+  emlem em-00-05-01
+  optic head, no garantees
+  decay decay-05-01
+  hadro had-00-05-01
+  manag procman-05-01
+  trans trans-05-01
+
+the tag were tested with 
+
+* digits+hits   hits-00-05-01
+* events+tracks alpha05
+* geometry      alpha05
+* global        global-00-05-02
+* graphics_reps greps-00-05-02
+* intercoms     intercoms-00-05-03
+* interfaces    interfaces-00-05-01
+* materials     materials-00-05-01
+* particles     alpha05
+* run           run-00-05-02
+* track         track-00-05-01
+* tracking      head
+* visualization vis-00-05-04a
+
+April 20, 98 MMa
+  em-00-05-01 suppression of any 'tracking'cut
+              ready for alpha06     
+     
+April 16, 98 L. Felawka
+  Replaced compound stopped particle process class "G4HadronAtRest" by
+  individual stopped particle process classes "G4PionMinusAbsorptionAtRest",
+  "G4NeutronCaptureAtRest", "G4AntiProtonAnnihilationAtRest" and
+  "G4AntiNeutronAnnihilationAtRest"
+     
+April 12, 98 H.Kuraashige
+  Implement new scheme of 'Particle Change'. Please see 
+  particle_change.asc in geant4alpha/documents/particles+matter/.
+  Following files have been modified.
+   management: all abstract classes of G4V*Process.hh
+   decay:      G4Decay.hh, .cc
+   transportation: G4Transportation.hh , .cc
+   electromagnetic: all classes
+   optical:             all classes
+
+
+April 9, 98 G.Cosmo
+- Porting on DEC-cxx 6.0.
+  Removed meaningless usage of "const" qualifier from functions
+  return type for basic types by value. Modified files:
+  G4MuEnergyLoss.hh, .cc
+  G4eEnergyLoss.hh, .cc
+  G4hEnergyLoss.hh, .cc
+  G4HadronicInteraction.hh
+
+April 08, 98 G.Cosmo
+- Added fixes for DEC-cxx 6.0 compiler, related to for-loop index
+  declarations. List of modified files:
+  electromagnetic/G4ComptonScattering.cc, G4GammaConversion.cc,
+                  G4MuBremsstrahlung.cc, G4MuEnergyLoss.cc,
+                  G4PAIxSection.cc, G4PhotoElectricEffect.cc,
+                  G4eplusAnnihilation.cc
+  management/G4ProcessManager.cc
+  hadronic/G4HadronicCrossSections.cc, G4HadronicInteraction.cc,
+           G4HadronicProcess.cc, G4LFission.cc, G4HadronAtRest.cc,
+           G4KaonMinusAbsorptionAtRest.cc, G4ReactionDynamics.cc
+
+March 24, 98 G.Barrand
+- GNUmakefile, hadronic/GNUmakefile, hadronic/models/GNUmakefile : 
+  MAKESHLIB changed in G4MAKESHLIB
+
+March 13 1998, Hans-Peter Wellisch
+- Tagged processes pro-00-04-02 to include param-00-04-06, and
+  had-00-04-02.
+
+March 06 1998, Hans-Peter Wellisch
+- Tagged the processes, including the new tags on em, para, and 
+  had: em-00-04-02, param-00-04-04, had-00-04-01
+  as pro-00-04-01.
+
+March 03 1998, Marc Verderi
+- The tag param-00-04-02 introduces the possibility for the
+  parameterisation models to parameterise also particles at 
+  rest.
+
+March 02 1998, P.MoradeFreitas
+- The param-00-04-01 processes/parameterisation tag introducing 
+  the Ghost volumes.
+
+March 02 1998, S.Sadilov
+- fix processes/hadronic/util/src/GNUmakefile for compiling 
+  processes/hadronic/util/src/G4NucleiPropertiesTable.cc on WinNT.
+
+Feb 05 1998, G.Cosmo (pro-00-03-03)
+- Committed fix to G4MuIonisation.cc, which was causing run/example4
+  to crash. Courtesy of L.Urban
+
+Feb 04 1998, HPW: Retagged pro-00-03-02
+It is a collection of:
+       decay-03-01
+       em-00-03-01 (including changes in G4MultipleScattering.hh,cc and test/GNUmakefile)
+       had-00-03-01
+       procman-03-01
+       optical-03-01
+       param-00-03-00
+       trans-03-01
+It works with particles-00-03-01
+              greps-00-03-01
+              global-00-03-01
+              event-00-03-01
+              digi-00-03-01
+              geometry-00-03-01
+              interfaces-00-03-01
+              magfield-00-03-01
+and alpha03 of the other cathegories.
+GNUmakefile (acc to Gunthers work), and history was updated.
+
+January 28 1998, HPW: Tagged pro-00-03-01
+It is a collection of:
+       decay-03-01
+       em-00-03-01
+       had-00-03-01
+       procman-03-01
+       optical-03-01
+       param-00-03-00
+       trans-03-01
+It works with particles-00-03-01
+              greps-00-03-01
+              global-00-03-01
+              event-00-03-01
+              digi-00-03-01
+              geometry-00-03-01
+              interfaces-00-03-01
+              magfield-00-03-01
+and alpha03 of the other cathegories,
+except for intercoms.
+
+January 28, 98 S. Sadilov
+- For Win/NT port in GNUmakefile used $OUT_LIB introduced in 
+  GNUmakefile.architecture as positional qualifier for creating 
+  composite-library.
+
+January 24, 98  H.Kurashige - (procman-03-01)(decay-03-01)
+December 19, 97 G. Cosmo - (alpha03)
+
+- Created.

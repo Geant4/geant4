@@ -1,0 +1,48 @@
+$Id: README,v 1.1 1999-01-07 16:06:20 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            ExampleN06
+                            ----------
+
+This example presently illustrates the following basic concepts, and in
+particular (indicated with ***), how to use G4 for optical photon
+generation and transport: 
+
+main()
+------
+
+ ==> define Random Number Engine and initial seed
+
+G4VUserPhysicsList 
+------------------
+
+ ==> define particles; including *** G4OpticalPhoton     ***
+     define processes; including *** G4Cerenkov          ***
+                                 *** G4OpAbsorption      ***
+                                 *** G4OpRayleigh        ***
+                                 *** G4OpBoundaryProcess ***
+
+G4VUserDetectorConstruction 
+---------------------------
+
+ ==> define material: Air and Water
+     define simple G4box geometry (with translation and rotation)
+     *** add G4MaterialPropertiesTable to G4Material       ***
+     *** define G4LogicalSurface(s)                        ***
+     *** define G4OpticalSurface                           ***
+     *** add G4MaterialPropertiesTable to G4OpticalSurface ***
+
+G4VUserPrimaryGeneratorAction
+-----------------------------
+
+ ==> Use G4ParticleGun to shoot a charge particle into a Cerenkov radiator
+     
+G4UserRunAction 
+---------------
+
+==> define G4Timer (start/stop)
+    set verbose levels

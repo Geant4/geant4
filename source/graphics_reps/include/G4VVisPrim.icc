@@ -1,0 +1,32 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4VVisPrim.icc,v 1.1 1999-01-07 16:09:14 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// John Allison  August 1995
+
+inline G4VVisPrim::G4VVisPrim () {}
+
+inline G4VVisPrim::G4VVisPrim (const G4VVisPrim& prim):
+G4Visible (prim)
+{}
+
+inline G4VVisPrim& G4VVisPrim::operator = (const G4VVisPrim& right) {
+  ((G4Visible*) this) -> operator = (right);
+  return *this;
+}
+
+inline G4VVisPrim::G4VVisPrim (const G4VisAttributes* pVA):
+G4Visible (pVA)
+{}
+
+inline G4bool G4VVisPrim::operator == (const G4VVisPrim& prim) const{
+  return this == &prim;
+}
+

@@ -1,0 +1,152 @@
+inline void G4CurveRayIntersection::Init(G4Curve& c0, const G4Ray& r0)
+{
+  c= &c0;
+  r= &r0;
+  d= kInfinity;
+  notComputed= allFlags;
+}
+
+inline G4CurveRayIntersection::G4CurveRayIntersection(G4Curve& c0, const G4Ray& r0)
+{
+  Init(c0, r0);
+}
+
+inline G4CurveRayIntersection::G4CurveRayIntersection()
+{
+  d= kInfinity;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+inline const G4Ray& G4CurveRayIntersection::GetRay() const
+{
+  return *r;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+inline void G4CurveRayIntersection::Reset()
+{
+  d= +kInfinity;
+  notComputed= uFlag|pFlag;
+}
+
+inline void G4CurveRayIntersection::ResetPPoint(G4double u0)
+{
+  d= 0;
+  u= u0;
+  notComputed= pFlag|dFlag;
+}
+
+inline void G4CurveRayIntersection::Reset(const G4Point3D& p0)
+{
+  d= 0;
+  p= p0;
+  notComputed= uFlag|dFlag;
+}
+
+inline void G4CurveRayIntersection::Reset(G4double u0, const G4Point3D& p0)
+{
+  d= 0;
+  u= u0;
+  p= p0;
+  notComputed= dFlag;
+}
+
+inline void G4CurveRayIntersection::ResetDistance(G4double d0)
+{
+  d= d0;
+  notComputed= uFlag|pFlag;
+}
+inline void G4CurveRayIntersection::Reset(G4double u0, G4double d0)
+{
+  d= d0;
+  u= u0;
+  notComputed= pFlag;
+}
+
+inline void G4CurveRayIntersection::Reset(const G4Point3D& p0, G4double d0)
+{
+  d= d0;
+  p= p0;
+  notComputed= uFlag;
+}
+
+inline void G4CurveRayIntersection::Reset(G4double u0, const G4Point3D& p0, G4double d0)
+{
+  d= d0;
+  u= u0;
+  p= p0;
+  notComputed= 0;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+inline G4double G4CurveRayIntersection::GetPPoint()
+{
+  if (notComputed & uFlag) {
+    if (notComputed & pFlag) {
+      p= r->GetPoint(d);
+      notComputed &= ~pFlag;
+    }
+    u= c->GetPPoint(p);
+    notComputed &= ~uFlag;
+  }
+  return u;
+}
+
+inline const G4Point3D& G4CurveRayIntersection::GetPoint()
+{
+  if (notComputed & pFlag) {
+    if (notComputed & dFlag) {
+      p= c->GetPoint(u);
+    } else {
+      p= r->GetPoint(d);
+    }
+    notComputed &= ~pFlag;
+  }
+  return p;
+}
+
+inline G4double G4CurveRayIntersection::GetDistance()
+{
+  if (notComputed & dFlag) {
+    if (notComputed & pFlag) {
+      p= c->GetPoint(u);
+      notComputed &= ~pFlag;
+    }
+    d= r->GetPPoint(p);
+    notComputed &= ~dFlag;
+  }
+  return d;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+inline void G4CurveRayIntersection::UpdateWithPointOnCurve(
+  G4CurveRayIntersection& is)
+{
+  if (d!=kInfinity) {
+    // not the first intersection
+    G4double dTmp= is.GetDistance();
+    if (dTmp < kCarTolerance || GetDistance() <= dTmp) {
+      // not on ray or not the closest intersection
+      return;
+    }
+  }
+  // accepted
+  *this= is;
+}	
+
+inline void G4CurveRayIntersection::Update(G4CurveRayIntersection& is)
+{
+  if (c->IsBounded()) {
+    if (!c->IsPOn(is.GetPPoint())) {
+      return;
+    }	
+  }
+  UpdateWithPointOnCurve(is);
+}
+
+
+

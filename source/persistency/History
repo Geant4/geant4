@@ -1,0 +1,84 @@
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+November 15, 98  Y.Morita (persistency-00-03-03)
+- Fix bug in G4PVPhysicalVolume.cc
+
+November 10, 98  Y.Morita (persistency-00-03-02)
+- G4PersistentGeomMan now handle Replica geometry
+
+November 10, 98  Y.Morita (persistency-00-03-01)
+- G4PersistencyManager splitted into G4PersistentEventMan, 
+  G4PersistentGeomMan, G4PersistentRunMan
+- G4Run is now persistent
+
+July 23, 98   Y.Morita (persistency-00-01-09)
+- G4PVPhysicalVolume: protect declare of d_Double with 
+  OO_VARRAY_D_DOUBLE for different version of HepODBMS
+- G4PVPhysicalVolume: added G4Exception for restoring rotation matrix
+  (for now)
+
+July 15, 98   Y.Morita (persistency-00-01-08)
+- revised "cleandb" target in GNUmakefile
+- g4odbms_setup.csh cosmetics
+
+July 15, 98   Y.Morita (persistency-00-01-07)
+- absorb oodlx compiler differences on CERN AIX-AFS
+
+July 14, 98   Y.Morita (persistency-00-01-06)
+- Bug fix on store geometry
+- added G4ODBMS := true to GNUmakefile
+
+July 11, 98   Y.Morita (persistency-00-01-05)
+- script clean up for test/g4odbms_setup.csh
+
+July 10, 98   Y.Morita (persistency-00-01-04)
+- updated test/GNUmakefile
+- fixed a bug in G4PersistencyManager
+- digits+hits/hits added
+
+July 10, 98   Y.Morita (persistency-00-01-03)
+- moved GNUmakefile targes 'headers' and 'd_files' to common.gmk and
+  globlib.gmk.
+- a few bug fix in G4PPVPlacement.cc, G4PVSolid.cc,
+  G4PGeometryObjectMap.ddl, G4PersistencyManager.hh, 
+  G4PGeometryObjectMap.cc, G4PersistencyManager.cc
+
+July  9, 98   Y.Morita
+- new GNUmakefile for pre-beta01 (persistency-00-01-02)
+
+July  8, 98   Y.Morita
+- debug physics volume and logical volume (persistency-00-01-01)
+
+June 30, 98  Y.Morita
+- added geometry persistency: (persistency-00-07-01)
+
+June 15, 98  Y.Morita
+- made new subcategories: digits+hits, geometry, events, management, run
+
+June 11, 98  Y.Morita (persistency-00-06-01)
+- G4PersistencyManager uses HepDbApplication rather than inherit
+- Tagged.
+
+April 21, 98 G.Cosmo (persistency-00-05-01)
+- Tagged.
+
+March 24, 98 G.Barrand
+- GNUmakefile : MAKESHLIB changed in G4MAKESHLIB
+
+March 24, 98 G.Barrand
+- Creation of this file.

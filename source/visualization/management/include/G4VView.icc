@@ -1,0 +1,42 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4VView.icc,v 1.1 1999-01-07 16:15:19 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// John Allison  30th December 1996
+
+inline G4bool G4VView::operator == (const G4VView& view) const{
+  return this == &view;
+}
+
+inline G4int G4VView::GetViewId () const {
+  return fViewId;
+}
+
+inline const G4String& G4VView::GetName () const {
+  return fName;
+}
+
+inline void G4VView::SetName (const G4String& name) {
+  fName = name;
+}
+
+inline G4VScene* G4VView::GetScene () const {
+  return &fScene;
+}
+
+inline const G4ViewParameters& G4VView::GetViewParameters () const {
+  return fVP;
+}
+
+inline void G4VView::SetNeedKernelVisit () {
+  fNeedKernelVisit = true;
+}
+
+inline void G4VView::FinishView () {}

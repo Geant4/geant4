@@ -1,0 +1,14 @@
+$Id: README,v 1.1 1999-01-07 16:05:02 gunter Exp $
+-----------------------------------------------------------------------------
+$Name: not supported by cvs2svn $
+-----------------------------------------------------------------------------
+
+                          XVT GUI - Release Notes
+                          -----------------------
+                          
+The code included in this directory implements a Graphical User Interface
+based on the XVT commercial product. The code has been extracted from Geant4
+release "alpha02" from what was the directory xvt_standalone_test in
+geant4alpha/prototype/interfaces.
+
+ NB - This code has _not_ been ported and tested on Geant4 "beta" yet !

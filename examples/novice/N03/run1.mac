@@ -1,0 +1,19 @@
+# $Id: run1.mac,v 1.1 1999-01-07 16:05:53 gunter Exp $
+#
+# Macro file for "exampleN03.cc"
+# 
+# (can be run in batch, without graphic)
+#
+/control/verbose 2
+/control/saveHistory
+#
+/run/verbose 2
+/event/verbose 0
+/tracking/verbose 1
+# 
+# muon 300 MeV to the direction (1.,0.,0.)
+# 3 events
+#
+/gun/particle mu+
+/gun/energy 300 MeV
+/run/beamOn 3

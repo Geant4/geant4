@@ -1,0 +1,66 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4LogicalSurface.icc,v 1.1 1999-01-07 16:07:14 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+////////////////////////////////////////////////////////////////////////
+// Surface Class Inline Methods
+////////////////////////////////////////////////////////////////////////
+//
+// File:        G4LogicalSurface.icc
+// Description: A Surface class 
+// Version:     1.0
+// Created:     1997-06-26
+// Author:      John Apostolakis
+//
+////////////////////////////////////////////////////////////////////////
+
+// #include "G4ios.hh"
+
+/////////////////////////
+// Class Inline Methods
+/////////////////////////
+
+
+  //////////////
+  // Operators
+  //////////////
+
+inline const G4LogicalSurface & G4LogicalSurface::operator=(const G4LogicalSurface &right)
+{
+	return right;
+}
+
+inline G4int G4LogicalSurface::operator==(const G4LogicalSurface &right) const
+{
+	return (this == (G4LogicalSurface *) &right);
+}
+
+inline G4int G4LogicalSurface::operator!=(const G4LogicalSurface &right) const
+{
+	return (this != (G4LogicalSurface *) &right);
+}
+  /////////////////
+  // Constructors 
+  /////////////////
+
+inline G4LogicalSurface::G4LogicalSurface(const G4String&         name,
+					 G4OpticalSurface* opticalSurface) 
+		: theName(name),
+		  theOpticalSurface(opticalSurface)
+{
+}
+
+inline G4LogicalSurface::G4LogicalSurface(const G4LogicalSurface &right)
+{
+	*this = right;
+}
+
+inline G4LogicalSurface::~G4LogicalSurface()
+{
+}

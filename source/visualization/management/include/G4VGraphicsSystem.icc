@@ -1,0 +1,37 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4VGraphicsSystem.icc,v 1.1 1999-01-07 16:15:17 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// John Allison  27th March 1996
+// Abstract interface class for graphics systems.
+
+inline G4VGraphicsSystem::~G4VGraphicsSystem () {}
+
+inline G4bool
+G4VGraphicsSystem::operator == (const G4VGraphicsSystem& system) const {
+  return this == &system;
+}
+
+inline const G4String& G4VGraphicsSystem::GetName () const {
+  return fName;
+}
+
+inline const G4String& G4VGraphicsSystem::GetNickname () const {
+  return fNickname;
+}
+
+inline const G4String& G4VGraphicsSystem::GetDescription () const {
+  return fDescription;
+}
+
+inline G4VGraphicsSystem::Functionality
+G4VGraphicsSystem::GetFunctionality () const {
+  return fFunctionality;
+}

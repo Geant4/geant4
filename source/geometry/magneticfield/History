@@ -1,0 +1,116 @@
+$Id: History,v 1.1 1999-01-07 16:07:00 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Nov   19th, 1998   J. Apostolakis  -  field-00-03-03b
+
+ Subtle fix to interface of G4UniformMagField::GetFieldValue  
+         ( that tripped Visual C++ )
+
+ G4PropagatorInField:  added printing method for verboseness.
+
+Nov   19th, 1998   J. Apostolakis  -  field-00-03-03a
+
+   Steppers:  Fixed instance variables construction (SimpleRunge)
+              and clash of names in CashKarp::StepWithEstimate
+
+   Added post-const to all Field classes for
+           void GetFieldValue(const G4double yTrack[] ,
+                                 G4double B[]      ) const ;
+
+   Added SetFieldValue methods to UniformMagField
+
+   Added GetConstantFieldValue() methods to Uniform Mag & Electric Fields
+
+
+Nov   19th, 1998   J. Apostolakis  -  field-00-03-03
+
+   Fixes to Propagate and Steppers
+
+Nov   19th, 1998   J. Apostolakis  -  field-00-03-02
+
+   Minor corrections  (???)
+
+Nov   19th, 1998   J. Apostolakis  -  field-00-03-02
+ 
+   Major development to allow Electric Field
+   
+
+
+June  17th, 1998   J. Apostolakis  -  magfield-06-03
+
+ Modified Files:
+        include/G4PropagatorInField.hh
+            src/G4PropagatorInField.cc
+           test/testPropagateInField.cc
+----------------------------------------------------------------------
+
+ 1)  Added an assertion after each call to LocateGlobalPointAndSetup. 
+     It checks that the located volume is equal to the current volume.
+     If this check fails, the Propagator does not know how to continue.
+
+ 2)  Added an argument  to ComputeStep method of G4PropagatorInField.
+  The new volume argument is used to check the current volume during the step.
+
+ 3)  When G4Navigator's ComputeStep returned  stepLength==stepRequested,  this
+used to be treated as a failure to intersect.  This is incorrect.
+
+    stepLength==stepRequested is an intersection,
+      so I am now treating it as such in each comparison (of 3).
+      Ignoring it causes problems, including volume being skipped.
+      --> but treating it as an intersection used to cause problems too ??
+
+
+May    7th, 1998    J. Apostolakis  -  magfield-06-02-helix01
+
+- Tag includes new version of G4ChordFinder (not used by W.Wander).
+
+
+May    7th, 1998    W. Wander     (recorded/commited by  J. Apostolakis)
+
+- New "helical" RK steppers that move in helical segments, not linear.
+    * Several changes to add steppers 
+
+ Modified Files:
+        G4MagErrorStepper.hh 
+        G4MagErrorStepper.cc 
+           added Helical stepping methods to this general ABC.
+        
+        G4MagIntegratorStepper.hh
+           made RightHandSide virtual   (this will be reversed very soon)
+
+        testPropagateMagField.cc
+           Test of Helical stepping functionality added.
+           
+ Added Files for new Helical RK steppers, deriving from G4MagErrorStepper:
+        G4HelixExplicitEuler.cc  ( and .hh )
+        G4HelixHeum.cc
+        G4HelixImplicitEuler.cc
+        G4HelixSimpleRunge.cc  
+
+ Added File for implementation:
+        G4MagErrorStepper.icc
+
+
+May    7th, 1998    J. Apostolakis   -  magfield-06-01
+
+- added small changes to 
+    * G4ChordFinder:           methods to get/set IntegratorDriver
+    * G4MagIntegratorDriver:   made OneGoodStep method public
+- created the file.
+

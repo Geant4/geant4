@@ -1,0 +1,171 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4IMuBremsstrahlung.icc,v 1.1 1999-01-07 16:11:01 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ---------------------------------------------------------------
+//      GEANT 4 class inlined methods file 
+//
+//      For information related to this code contact:
+//      CERN, CN Division, ASD group
+//      History: first implementation, based on object model of
+//      2nd December 1995, G.Cosmo
+//      -------- G4IMuBremsstrahlung physics process ---------
+//                by Laszlo Urban, September 1997
+// ***************************************************************
+inline G4double G4IMuBremsstrahlung::PostStepGetPhysicalInteractionLength(
+                             const G4Track& track,
+                             G4double   previousStepSize,
+                             G4ForceCondition* condition
+                            )
+{// get particle,particle type,kin.energy,material,mat.index
+  const G4double eps=1.e-2 ;
+  const G4double Tfac=0.95,Tfac1=1.-Tfac  ;
+  G4double nl,nll,nlold,range,rangeold,rangenext,
+           dEdx,KineticEnergyOld,KineticEnergyNext,value;
+  G4bool isOut;
+  const G4DynamicParticle* particle = track.GetDynamicParticle();
+  const G4ParticleDefinition* particletype = particle->GetDefinition() ;
+  G4double KineticEnergy = particle->GetKineticEnergy();
+  G4Material* material = track.GetMaterial();
+  const G4MaterialTable* theMaterialTable =
+                         G4Material::GetMaterialTable();
+  G4int materialindex = material->GetIndex();
+
+  nl = (*theNlambdaTable)[materialindex]->
+                           GetValue(KineticEnergy,isOut);
+  range = G4EnergyLossTables::GetPreciseRangeFromEnergy(particletype,
+                                       KineticEnergy,material) ;
+
+  if ( (previousStepSize <=0.0) || (theNumberOfInteractionLengthLeft<=0.0)) {
+    // beggining of tracking (or just after DoIt of this process)
+    ResetNumberOfInteractionLengthLeft();
+  } else {
+    // subtract NumberOfInteractionLengthLeft
+   if(previousStepSize/range < eps)
+   {
+    nll = (*theNlambdaTable)[materialindex]->
+                             GetValue(Tfac*KineticEnergy,isOut) ;
+    dEdx = G4EnergyLossTables::GetPreciseDEDX(particletype,
+                                              KineticEnergy,
+                                              material) ;
+    nlold = nl + dEdx*previousStepSize*(nl-nll)/
+                                  (Tfac1*KineticEnergy) ;
+   }
+   else
+   {
+    rangeold = range + previousStepSize ;
+    KineticEnergyOld = G4EnergyLossTables::GetPreciseEnergyFromRange(
+                                             particletype,
+                                       rangeold,material);
+    nlold = (*theNlambdaTable)[materialindex]->
+                           GetValue(KineticEnergyOld,isOut);
+    if(nlold < nl)
+     {
+     if(verboseLevel>2)
+     {
+      G4cout << "G4IMuBremsstrahlung PostStepGPIL : Nlambda has been" <<
+              " increased at update.Nlambda old/new :" << nlold <<
+              "  " << nl << endl;
+      G4cout << "(theNumberOfInteractionLengthLeft has been increased!)" << endl
+;
+      G4cout << " correction : Nlambda old=new ........." << endl;
+     }
+      //corr. of num errror
+      nlold = nl ;
+     }
+    }
+
+    theNumberOfInteractionLengthLeft -= nlold-nl ;
+
+    if(theNumberOfInteractionLengthLeft<perMillion)
+       theNumberOfInteractionLengthLeft=0.;
+  }
+
+
+ // condition is set to "Not Forced"
+  *condition = NotForced;
+  if(nl <= theNumberOfInteractionLengthLeft)
+  {
+    value = BIGSTEP ;
+  }
+  else
+  {
+   if(theNumberOfInteractionLengthLeft/nl < eps)
+   {
+    nll = (*theNlambdaTable)[materialindex]->
+                             GetValue(Tfac*KineticEnergy,isOut) ;
+    dEdx = G4EnergyLossTables::GetPreciseDEDX(particletype,
+                                              KineticEnergy,
+                                              material) ;
+
+    value = theNumberOfInteractionLengthLeft*Tfac1*KineticEnergy/(dEdx*(nl-nll))
+ ;
+   }
+   else
+   {
+
+    KineticEnergyNext = (*theInverseNlambdaTable)[materialindex]->
+                        GetValue(nl-theNumberOfInteractionLengthLeft,isOut);
+    rangenext = G4EnergyLossTables::GetPreciseRangeFromEnergy(particletype,
+                                       KineticEnergyNext,material);
+
+    value = range - rangenext ;
+
+     if(range<rangenext)
+    {
+    if(verboseLevel>2)
+    {
+     G4cout << "G4IhIonisation PostStepGPIL: Step < 0.!, Step=" << value << endl
+;
+     G4cout << "range,rangenext:" << range << "  " << rangenext << endl ;
+     G4cout << "correction : rangenext=range ....." << endl;
+    }
+     //corr. of num error
+     rangenext = range ;
+     value = range - rangenext ;
+    }
+   }
+  }
+
+  return value;
+}
+
+
+inline G4double G4IMuBremsstrahlung::ComputeMeanFreePath(
+                                     const G4ParticleDefinition* ParticleType,
+                                           G4double KineticEnergy,
+                                           const G4Material* aMaterial)
+{
+  const G4ElementVector* theElementVector = aMaterial->GetElementVector() ;
+  const G4double* theAtomNumDensityVector = aMaterial->GetAtomicNumDensityVector();
+  G4double GammaEnergyCut = (G4Gamma::GetCutsInEnergy())[aMaterial->GetIndex()];   
+
+  const G4double BigPath= DBL_MAX;
+
+  G4double SIGMA = 0 ;
+
+  for ( G4int i=0 ; i < aMaterial->GetNumberOfElements() ; i++ )
+      {             
+            SIGMA += theAtomNumDensityVector[i] * 
+                     ComputeMicroscopicCrossSection( ParticleType, KineticEnergy,
+                                                     (*theElementVector)(i)->GetZ(), 
+                                                     GammaEnergyCut );
+      }       
+
+  return SIGMA<=0.0 ? BigPath : 1./SIGMA ;
+}
+
+
+inline G4bool G4IMuBremsstrahlung::IsApplicable(
+                            const G4ParticleDefinition& particle)
+{
+   return(   (&particle == (const G4ParticleDefinition *)theMuonMinus)
+           ||(&particle == (const G4ParticleDefinition *)theMuonPlus)
+         ) ;
+}

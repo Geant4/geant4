@@ -1,0 +1,55 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4VModel.icc,v 1.1 1999-01-07 16:15:37 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// John Allison  31st December 1997.
+// Base class for models.
+
+inline G4VModel::~G4VModel () {}
+
+inline G4bool G4VModel::operator == (const G4VModel& model) const{
+  return this == &model;
+}
+
+inline const G4ModelingParameters* G4VModel::GetModelingParameters () const {
+  return fpMP;
+}
+
+inline const G4String& G4VModel::GetGlobalTag () const {
+  return fGlobalTag;
+}
+
+inline const G4String& G4VModel::GetGlobalDescription () const {
+  return fGlobalDescription;
+}
+
+inline G4String G4VModel::GetCurrentTag () const {
+  return "Default Current Tag";
+}
+
+inline G4String G4VModel::GetCurrentDescription () const {
+  return "Default Current Description";
+}
+
+inline G4bool G4VModel::Validate () {
+  return false;
+}
+
+inline const G4VisExtent& G4VModel::GetExtent () const {
+  return fExtent;
+}
+
+inline const G4Transform3D& G4VModel::GetTransformation () const {
+  return fTransform;
+}
+
+inline void G4VModel::SetModelingParameters (const G4ModelingParameters* pMP) {
+  fpMP = pMP;
+}

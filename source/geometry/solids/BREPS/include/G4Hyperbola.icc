@@ -1,0 +1,98 @@
+inline void G4Hyperbola::Init(G4Axis2Placement3D position0,
+			      G4double semiAxis0, G4double semiImagAxis0) {
+  position= position0;
+  semiAxis= semiAxis0;
+  semiImagAxis= semiImagAxis0;
+
+  ratioAxisImagAxis= semiAxis/semiImagAxis;
+
+  // needed only for 2D hyperbolas
+  toUnitHyperbola = G4Scale3D(1/semiAxis, 1/semiImagAxis, 0)
+                    * position.GetToPlacementCoordinates();
+
+  forTangent= semiAxis*semiAxis/(semiImagAxis*semiImagAxis);
+}
+
+inline G4double G4Hyperbola::GetSemiAxis() const {
+  return semiAxis;
+}
+
+inline G4double G4Hyperbola::GetSemiImagAxis() const {
+  return semiImagAxis;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+inline G4double G4Hyperbola::GetPMax() {
+  return -1;
+}
+
+inline G4Point3D G4Hyperbola::GetPoint(G4double param) {
+  return position.GetLocation()
+    + semiAxis*cosh(param)*position.GetPX()
+    + semiImagAxis*sinh(param)*position.GetPY();
+}
+
+inline G4double G4Hyperbola::GetPPoint(const G4Point3D& pt) {
+  G4Point3D ptLocal= position.GetToPlacementCoordinates()*pt;
+  G4double xval= ptLocal.y()/ptLocal.x()*ratioAxisImagAxis;
+  #ifdef WIN32
+    G4double ppoint= 0.5*log((1+xval)/(1-xval));
+  #else
+    G4double ppoint= atanh(xval);
+  #endif
+  return ppoint;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+#include "G4CurveRayIntersection.hh"
+
+inline void G4Hyperbola::IntersectRay2D(const G4Ray& ray,
+					G4CurveRayIntersection& is)
+{
+  is.Init(*this, ray);
+
+  // similar to G4Ellipse::IntersectRay2D
+
+  // 2D operations would be faster
+  G4Point3D s= toUnitHyperbola*ray.GetStart();
+  G4Vector3D d= toUnitHyperbola*ray.GetDir();
+  
+  // solve (s+i*t)^2 = 1 for i (the distance)
+
+  G4double sd= s.x()*d.x()-s.y()*d.y();
+  G4double dd= d.x()*d.x()-d.y()*d.y(); // can be 0
+  G4double ss= s.x()*s.x()-s.y()*s.y();
+
+  if (abs(dd) < kCarTolerance*kCarTolerance) {
+
+    // coeff of i^2 == 0
+    G4double i= (1-ss)/(2*sd);
+    G4CurveRayIntersection isTmp(*this, ray);
+    isTmp.ResetDistance(i);
+    is.Update(isTmp);
+    return;
+
+  }
+
+  G4double discr= sd*sd-dd*(ss-1);
+  if (discr >= 0) {
+
+    // 2 intersections (maybe 1, but this case is rare)
+    G4double sqrtdiscr= sqrt(discr);
+    // find the smallest positive i
+    G4double i= -sd-sqrtdiscr;
+    if (i<kCarTolerance) {
+      i= -sd+sqrtdiscr;
+      if (i<kCarTolerance) {
+	return;
+      }
+    }
+    i/= dd;
+    G4CurveRayIntersection isTmp(*this, ray);
+    isTmp.ResetDistance(i);
+    is.Update(isTmp);
+
+  }
+}

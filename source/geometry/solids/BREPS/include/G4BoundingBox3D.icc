@@ -1,0 +1,30 @@
+inline G4Point3D G4BoundingBox3D::GetBoxMin() const 
+{
+  return box_min;
+}
+
+
+inline G4Point3D G4BoundingBox3D::GetBoxMax() const 
+{
+  return box_max;
+}
+
+
+inline G4double G4BoundingBox3D::GetDistance() const 
+{
+  return distance;
+}
+
+
+inline void G4BoundingBox3D::SetDistance(G4double distance0) 
+{
+  distance = distance0;
+}
+
+
+inline int G4BoundingBox3D::GetTestResult() const 
+{
+  return test_result;
+}
+
+

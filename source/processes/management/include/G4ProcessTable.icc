@@ -1,0 +1,94 @@
+#include "G4ParticleTable.hh"
+
+//////////////////////////
+inline 
+ G4ProcessTable::G4ProcNameVector*  G4ProcessTable::GetNameList() const
+{
+   return  fProcNameVector;
+}
+
+//////////////////////////
+inline 
+ G4ProcessTable::G4ProcTableVector* G4ProcessTable::GetProcTableVector() 
+{ 
+  return fProcTblVector; 
+}
+
+
+//////////////////////////
+inline
+ G4VProcess* G4ProcessTable::FindProcess(const G4String& processName, 
+			  		 const G4ParticleDefinition* particle)
+					 const
+{
+  if ( particle == NULL ) return NULL; 
+  else return FindProcess(processName, particle->GetProcessManager());
+}
+
+//////////////////////////
+inline  
+ G4VProcess* G4ProcessTable::FindProcess(const G4String& processName, 
+					 const G4String& particleName) const
+{
+  return FindProcess(processName,
+	  G4ParticleTable::GetParticleTable()->FindParticle(particleName));
+}
+
+
+//////////////////////////
+inline 
+ void G4ProcessTable::SetProcessActivation(
+				const G4String&       processName, 	
+				G4ParticleDefinition* particle, 
+			     	G4bool                fActive)
+{	
+  if ( particle != NULL ) { 
+    SetProcessActivation(processName, particle->GetProcessManager(), fActive);	
+  }	
+}	
+//////////////////////////
+inline
+ void  G4ProcessTable::SetProcessActivation( 
+				const G4String& processName, 
+			  	const G4String& particleName, 
+			        G4bool          fActive )
+{
+  if (particleName == "ALL" ) {
+    SetProcessActivation( processName , fActive); 
+  } else {
+    SetProcessActivation(
+	processName, 
+	G4ParticleTable::GetParticleTable()->FindParticle(particleName),
+     	fActive );
+  }
+}
+
+//////////////////////////
+inline 
+ void G4ProcessTable::SetProcessActivation(  
+				G4ProcessType   processType,
+			  	G4ParticleDefinition* particle, 
+			     	G4bool          fActive)
+{	
+  if ( particle != NULL ) { 
+    SetProcessActivation( processType, particle->GetProcessManager(), fActive);	
+  }	
+}	
+
+//////////////////////////
+inline
+ void  G4ProcessTable::SetProcessActivation( 
+				G4ProcessType   processType,
+				const G4String& particleName , 
+			     	G4bool          fActive)
+{
+  if ((particleName == "ALL" )||(particleName == "all" )) {
+    SetProcessActivation( processType, fActive ); 
+  } else {
+    SetProcessActivation( 
+	processType, 	
+	G4ParticleTable::GetParticleTable()->FindParticle(particleName),
+	fActive );
+  }
+}
+

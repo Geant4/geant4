@@ -1,0 +1,611 @@
+$Id: History,v 1.1 1999-01-07 16:14:33 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     *************************************************************
+     * Note that modeling and test have their own History files. *
+     *************************************************************
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+History file for visualization category
+---------------------------------------
+
+vis-00-04-04  16th December 1998  John Allison
+- test/GNUmakefile for Linux-g++
+- test/test19.cc - removed g4templates.hh
+- OpenGL - reverted to 100%.
+
+vis-00-04-03  9th December 1998  John Allison
+- Made /vis/ commands from /vis~/.  The idea is to maintain backwards
+  compatibility while allowing us to "deprecate" the old commands over
+  a period of time.  Some of these /vis/ commands respond with "superceded",
+  i.e., superceded by new commands, but still available in /vis~/.
+- OpenGL viewing volume increased by 20% to prevent corners being clipped.
+
+- 08/12/98 : G.Barrand : OpenInventor : due to 
+  huge load problems on various platforms, init only
+  the HEPVis things that are needed.
+
+vis-00-04-02  30th November 1998  Satoshi Tanaka
+- G4VRMLFILE_DEST_DIR for customising out file name - see VRML/History.
+
+29th November 1998
+- Added CPPFLAGS += -I....electromagnetic/utils/include to test/GNUmakefile.
+- Added fName to G4SceneData.
+
+vis-00-04-01  25th November 1998  John Allison.
+- G4Ray/GNUmakefile update for move of files in particles.
+- Added const G4VisAttributes* fpDefaultVisAttributes and access
+  functions to G4ModelingParameters.
+- Reverted to default assignment operator and copy constructor for
+  G4ModelingParameters and G4ViewParameters.
+- G4PhysicalVolumeModel can now handle invisible daughters.
+- More new /vis/ commands - depends on intercoms-00-04-01.
+- G4VScene passes DefaultVisAttributes* to ModelingParameters.
+
+vis-00-03-07  23rd November 1998  John Allison.
+- modeling/GNUmakefile update for move of files in particles (Hisaya).
+- Removed semi-colon in G4BoundingSphereScene.cc.
+
+vis-00-03-06  9th November 1998  John Allison.
+- Small change to a message in G4VisManager.
+- VRML refinement - see VRML/History.
+- Needs greps-00-03-03.
+
+vis-00-03-05b  9th November 1998  John Allison.
+- Merged 6th November changes with vis-00-03-05a
+- Bug fix in G4VisManager::IsValidView for batch running.
+- Needs greps-00-03-03.
+
+vis-00-03-05a  9th November 1998  Satoshi Tanaka
+- VRML 2.0 Visualization driver is added to 
+  management/include/MyVisManager.cc.
+
+vis-00-03-05  9th November 1998  Satoshi Tanaka
+- VRML 2.0 Visualization driver is commited:
+ (1) Generatin of VRML 2.0 format files to describe Geant4 simulation.
+ (2) Interactive displaying of physiccal-volume names and copy numbers
+ (3) Interactive displaying of hit positions (displayed strings are
+     costomizable.
+ (4) Wireframe drawing style of Geant4 visualization is reflected as
+     transparency = 0.7.  This value is customizable.
+     If transparency is 1.0, drawing of detector geometry is skipped,
+     and hits can be picked easily.
+
+6th November 1998  John Allison
+- Implemented basic /vis/viewer commands.
+- Added `const G4String& name' argument to G4VScene and G4VView constructors.
+
+vis-00-03-04  30th October 1998  John Allison
+- Tagged.
+
+29th October 1998  Guy Barrand
+- G4OpenGLXView.hh, G4OpenGLXmView.cc, G4OpenGLXmWindowHandlingCallbacks.cc
+  in order that things compile and compile without warnings on HP/aCC
+
+14th October 1998  John Allison
+- Augmented the new /vis/ commands.  Still not complete but they
+  co-work with the old commands.
+- Changed char* fName to G4String fName in G4VScene and G4VView.
+  Consequent changes in G4OpenGLView.  Also OpenInventor?  Etc.
+
+11th October 1998 Andy Walkden
+- added (not a very good) version of hidden lines removal code. This code 
+  suffers from depth buffering artefacts. glPolygonOffset is a feature of 
+  OpenGL version 1.1, and can help overcome depth buffer problems. The code 
+  to utilise glPolygonOffset is committed, but commented out, as it doesn't 
+  seem to work with the version of Mesa available on rsplus currently. My 
+  ideal strategy is to enable depth testing, draw the model as lines, enable 
+  filled polygon offsetting (glPolygonOffset(1.0 /*offset scale factor*/, 
+  2/*offset bias*/); glEnable (GL_POLYGON_OFFSET_FILLED);) then draw the 
+  model as filled polygons. The offsetting should just add `2' (in window 
+  coordinates, I think) onto the z value of all vertices relating to filled 
+  polygons, thus dismissing the conflict between almost identical z values 
+  for lines and filled polygon edges.
+
+vis-00-03-03 9th October 1998  John Allison
+- G4VisManager inherits G4VStateDependent.  This is used to draw
+  end-of-event models.
+
+4th October 1998 Andy Walkden
+- Added ability for all G4OpenGLX derived graphics systems to produce
+  vectored PostScript hardcopy. Facility for `automated screen dump'
+  (i.e. pixmap output) still kept, as some rasterization features
+  don't make it into the vectored PostScript output (such as haloing
+  effects). Facility currently available via G4OpenGLXm by clicking
+  `Miscellany' then `Create .eps file', to get a popup printing
+  window.
+
+vis-00-03-02a  26th September 1998  
+- DAWNFILE driver is made platform dependent.
+  (It is now compilable both at both Unix and NT without necessity
+   of C macros like WIN32.)
+
+vis-00-03-02  25th September 1998  
+- DAWNFILE driver is ported to VC++
+
+vis-00-03-01  24th September 1998  John Allison
+- Eliminated G4VPhysicalVolume* fpWorld data memebr from G4VisManager.
+
+22th September 1998 Guy Barrand.
+- Correct modeling, management, G4Ray /GNUmakefile to have
+  correct digits+hits includes.
+
+19th September 1998 Guy Barrand.
+- Due to a correction in globals.h restore correct code
+  so that OpenInventor files compile correctly on NT.
+
+vis-00-02-06  31st August 1998  John Allison
+- Added G4VModel::Validate() and in subclasses.
+- Reverted to default copy constructir and assignment operator in G4SceneData.
+- Implemented G4VisManager::GeometryHasChanged().
+- Switched on echoing of commands and history mechanism in test19.g4m.
+
+vis-00-02-05  27th August 1998  John Allison
+- Added G4HitsModel and G4TrajectoriesModel.
+- Added /vis/scene/include/hits and trajectories, and some bug fixes.
+
+vis-00-02-04  22nd August 1998  John Allison
+- Many changes in modeling - see modeling/History.
+- New commands: /vis/scene/create, list, add/volume, add/ghosts.
+
+vis-00-02-03a  20th August 1998  John Allison
+- Restored some code in G4SceneData.cc
+- Fixed syntax bug in G4PhysicalVolumeSearchScene.hh
+
+vis-00-02-03  14th August 1998  John Allison
+- Added G4VisManager::GeometryHasChanged() - run manager can notify change.
+- Removed AddRun(Event)DurationModelToCurrentSceneData - no longer used.
+- Some bug corrections in visualization/OpenGL (Guy Barrand - see
+  vis blackboard for details).
+- Some protection added in visualization/OPACS (do.)
+- Created visualization/test/OPACS (do.)
+
+12th August 1998  John Allison
+- More new commands - not fully functional yet.
+
+11th August 1998  Guy Barrand
+- G4OpenInventor : remove uneccesary includes.
+
+vis-00-02-02b  11th August  Satoshi Tanaka
+- AddPrimitive() for polymarker are implemented in DAWN and VRML drivers.
+
+vis-00-02-02a  9th August  John Allison
+- Small bug fix in G4VisCommandsScene.cc.
+
+vis-00-02-02  9th August  John Allison
+- Changed '.' to '-' in scene/view names.
+- Began introduction of new /vis/ commands.
+- Consequent changes to test - see test/History.
+
+7th August  Guy Barrand.
+- OPACS : use G4VView name to build widget names.
+- OPACS : use new interactor parenting logic.
+- OpenGL, OpenInventor, G4Ray : clean compilation warnings for OSF1/cxx, HP/aCC.
+
+7th August  John Allison/Satoshi Tanaka/Guy Barrand.
+- Added G4<driver>Scene::AddPrimitive (const G4Polymarker&) to keep
+  compilers happy.
+
+vis-00-02-01  6th August  John Allison
+- Created G4VisManagerRegisterMessengers.cc.
+- Bug fix in G4VisManager: now follows change of world volume after
+  /vis~/clear/scene.
+- OpenInventor: Correct some upper -> lower case mess (Guy Barrand)
+- G4RayView: syntax bug fixes.
+
+4th August 1998 Andy Walkden
+I made some changes to OpenGL code...
+The changes are (i) to tidy up some redundant hidden line 
+removal function calls, (ii) to put some hidden line removal 
+code in G4OpenGLScene::AddPrimitive(G4Polyhedron) and 
+(iii) to add an option to generate an encapsulated postscript 
+file of the current view in OpenGLXm. There is now a button 
+in the Miscellany pulldown of the main menubar to bring up 
+a shell in which you can specify a filename, colour or black 
+and white and request the creation of a .eps file. The 
+code is to be found in G4OpenGLXView, and so is not bound 
+to the Xm user. Also it needs fixing for some Mesa 
+implementations, and the HP CDE environment manages to stuff 
+things up when rendering to a pixmap (although CDE makes a 
+mess of most other things as well, so this isn't
+disastrous).
+
+
+vis-00-01-08  21th July 1998  John Allison
+- Removed automatic refresh from /vis/camera/reset in G4VisCommandsCamera.cc.
+
+vis-00-01-07b  21th July 1998  Satoshi Tanaka
+- Revised G4FRSCENE::SendBoundingBox() so that 
+  zooming polycy of  DAWN drivers becomes consistent with 
+  OpenGL drivers
+
+vis-00-01-07  20th July 1998  John Allison
+- Corrected bug in G4VisManager::IsViewValid to trap drawing commands
+  before geometry is available.
+
+vis-00-01-06  19th July 1998  John Allison
+- Default culling: culling - on, culling of invisible objects - on.
+- set/drawing_style does *not* change culling flags.
+- Minor bug fixes.
+
+vis-00-01-05  15th July 1998  John Allison
+- Cleaned up after name changes.
+- Minor bug fixes.
+
+vis-00-01-04  7th July 1998  Guy Barrand
+- Introduced interactivity.gmk into GNUmakefiles.
+
+vis-00-01-03  6th July 1998  John Allison
+- Changes for interface restructuring.
+- Simplified MyVisManager.
+
+vis-00-01-02  5th July 1998  John Allison
+- Changed visualization/GNUmakefile to use globlib.gmk.
+- Updated README for geant4beta.
+- Changed /vis~/draw/Ghosts to /vis~/draw/ghosts.
+
+vis-00-01-01  4th July 1998  John Allison
+- Moved G4VIS_BUILD.gmk and G4VIS_USE.gmk to geant4beta/config.
+- Changed /vis/ to /vis~/.
+
+3rd July 1998  John Allison
+- Small changes to test - see test/History.
+- Tidied.
+- Removed GNUmakefile.G4VIS_USE and make_list.sh.
+
+30th June 1998 - Paulo & Marc
+- added the G4FlavoredParallelWorldModel.hh file to 
+  visualization/modeling/include;
+- added the /vis~/draw/Ghosts [particle name] command
+  in the G4VisManMessDraw.cc file;
+- added 
+  CPPFLAGS += -I$(G4BASE)/geometry/magneticfield/include and
+  CPPFLAGS += -I$(G4BASE)/processes/parameterisation/include
+  lines to GNUmakefile to compile G4VisManMessDraw.cc.
+
+geant4beta
+============================================================
+geant4alpha
+
+vis-00-06-09  26th June 1998  John Allison
+- OPACS and Open Inventor - something about widget parents (GB)
+- Removed /new_vis/ commands.
+
+vis-00-06-08a  26th June 1998 Satoshi Tanaka
+- Updated G4VIS_USE.gmk
+- (1) Macro -DG4VIS_USE_DAWNFILE is made properly set
+- (2) G4VIS_USE_DAWN_ is renamed to G4VIS_USE_DAWN_OR_DAWNFILE
+- (3) G4VIS_USE_VRML_ is renamed to G4VIS_USE_VRML_OR_VRMLFILE
+
+vis-00-06-08  22nd June 1998  John Allison
+- Changed G4BASE = ../.. to G4BASE = $(shell (cd ../..; pwd))
+- Changed GNUmakefile.G4VIS_BUILD to G4VIS_BUILD.gmk
+
+vis-00-06-07  19th June 1998  John Allison
+- Defined G4_SOLVE_VIS_TEMPLATES in G4VIS_USE.gmk.  Needs
+  the head version of GNUmakefile.architecture.
+- Consequential changes (improvements) to template handling in test19.cc
+- Some minor improvements in modeling.
+
+vis-00-06-06  11th June 1998  John Allison
+- Fixes to test_utils - see test/History.
+- Improvements in modeling - see modeling/History.
+
+vis-00-06-05  11th June 1998  Satoshi Tanaka
+- In G4VisManMessDraw.cc and G4VisManMessSet.cc , ...
+  //    G4double unit = G4UIcommand::valueOf (unitString);
+        G4double unit = G4UnitDefinition::GetValueOf (unitString);
+
+vis-00-06-04  10th June 1998  John Allison
+- Created G4VIS_USE.gmk to replace GNUmakefile.G4VIS_USE.
+- Changed test/GNUmakefile to use G4VIS_USE.gmk.
+- Separate libraries are now default in GNUmakefile.
+- Committed an interim version of README.
+- Moved G4BoundingSphereScene from management to modeling.
+- First attempt at defining the "scene" as lists of models.
+- Removed some unnecessary checks in G4VisManMess*.
+
+vis-00-06-03  27th May   1998  Satoshi Tanaka
+- DAWNFILE driver is added. It is to generate g4.prim file
+  under the current directory.  And make DAWN or DAVID invoke 
+  using the g4.prim file as an input. For details, see the blackboard 
+  document.
+
+21st May 1998 Andy Walkden
+- Added hidden line removal code to G4OpenGLView. HLR utilises OpenGL's
+  stencil buffer, but still the drawn lines are a little fragmented
+  (an effect seen often when depth buffering is used to resolve pixel
+  rendering disputes). 
+- HLR requires wireframe rendering, filled polygon rendering and then wireframe
+  rendering again. Hence, three visits to the kernel help to slow HLR
+  rendering right down.
+
+vis-00-06-02  20th May   1998  Satoshi Tanaka
+- Added G4VisFeaturesOfDAWNFILE.hh, cc
+- Revised visualization/GNUmakefile, GNUmakefile.G4VIS_BUILD,
+  GNUmakefile.G4VIS_USE
+- These are for DAWNFILE driver in preparation, which enables to
+  invoke DAVID directly from Geant4.
+
+vis-00-06-01a 20th May   1998  Satoshi Tanaka
+- code refinement of FukuiRenderer driver
+
+vis-00-06-01  29th April 1998  John Allison
+- Introduced non-pure virtual functions
+  Establish/DecommissionSpecials (G4PhysicalVolumeModel&) in
+  G4VGraphicsScene with implementation of the former in G4VScene.
+  Modified G4PhysicalVolumeModel to use it; also protected
+  G4PhysicalVolumeModel against non-implementation of
+  Establish/DecommissionSpecials.
+- Template instantiations in G4RayView made exclusive to GNU_GCC
+- Some minor changes under test - see test/History.
+
+27th April 1998 Andy Walkden
+- altered OpenGLView's structure a little. Now, G4OpenGLXmView is a
+  type of (inherits from) G4OpenGLXView.
+- made code for haloing effects common to all OpenGL views.
+- changed XUnmapWindow in G4OpenGLXView::~G4OpenGLXView to XDestroyWindow
+  (idea of Guy's)
+
+27th April 1998 Guy Barrand
+- vis/OPACS : remove Begin/EndModeling in G4GoScene.
+
+vis-00-05-06  23rd April 1998  John Allison
+- Changed test19.mac to test19.g4m and consequent change in test19.cc.
+- Fixed order of linking vis-a-vis -lG4track and -lG4tracking (GB).
+- Fixed inadvertent bug in test_utils/src/MyPhysicsList.cc.
+- Bug fix in G4OpenGLXmConvenienceRoutines.cc (GB).
+
+vis-00-05-05  21st April 1998  John Allison
+- Added run-time command line argument: test19 [<session-type>] [<verbosity>]
+- Removed #if GNU_GCC from template instantiation requests in test19.cc.
+- Added fDefaultTextVisAttributes to G4ViewParameters.
+- Added G4VScene::GetTextColour (changed G4FukuiRendererScene, G4GoScene and
+  G4OpenInventorScene.
+- Changed default view parameters: culling on and invisible object culling on.
+- Tidied CreateScene/View.
+- Continued BaBar development.
+
+15th April 1998  John Allison
+- Added test/EucIntfce/, test/Bogus/ and test/babar_utils/ for BaBar test code.
+  Also a new main() in BaBarCallListTest.cc.  Also a data file call_list.dat.
+  See babar_utils/README.
+- Camera commands, except spin and orbit, no longer initiate draw.
+- Text is blue for time being (visible on black or white background.)
+
+15th April 1998 : Guy Barrand
+- From discussion with John and Simone G4VToolkit 
+  has been renamed to G4VInteractorManager.
+
+vis-00-05-04a  11th April 1998  Satoshi Tanaka
+- Code improvements in DAWN driver
+- (1) View parameters are sent to DAWN only at drawing times.
+- (2) Way of getting marker size are made simpler by using
+-     G4VScene::GetMarkerRadius ()  etc.
+
+vis-00-05-04  8th April 1998  John Allison
+- Small bug fix - then tag for Easter.
+
+HEAD  6th April 1998  John Allison
+- Added error printing to G4OpenGLScene::AddPrimitive (const G4Text& text).
+- Added /vis~/draw/text.
+- Added units to /vis~/draw/axes.
+- Began the job of restructuring vis commands; so there is a new class
+  G4VisCommandsCameraMessengers for starters!
+
+HEAD  4th April 1998  John Allison
+- Removed automatic drawing after /vis~/set commands.  Now an explicit
+  redraw is necessary, but it allows you to change parameters during
+  building a view.  For example to superimpose projected hits on a
+  section:
+    /vis~/clear/view
+    /vis~/set/section_plane on 0 0 20 cm 0 0 1
+    /vis~/draw/current
+    /vis~/set/section_plane off
+    /run/beamOn
+- Fixed small bug in OpenGL for section drawing.
+- Made some small improvements in G4ViewParameters.
+
+vis-00-05-03  4th April 1998  John Allison
+- Re-engineered maintenance of current depth, etc.  Needed new method
+  G4VGraphicsScene::BeginModeling (G4PhysicalVolumeModel&) in
+  graphics_reps.  The result is much cleaner model and modeling
+  parameters classes.  Also, the current depth, physical volume and
+  logical volume are immediately available as protected pointers in
+  G4VScene.
+- Required G4VScene::Begin/EndModeling to be invoked from subclass.
+- Introduced G4NullModel to hold modeling parameters.  This avoids
+  having to create a G4VModel for each graphics primitive.
+
+HEAD  3rd April 1998  John Allison
+- Added GetMarkerDiameter/Radius to G4VScene.
+- Bug fix in G4VScene::GetMarkerSize.
+- Removed GetCurrentPhysicalVolume from G4PhysicalVolumeModel - now in
+  G4ModelingParameters (but might move again soon!).
+- test/GNUmakefile now uses "$(MAKE) separate" for vis libraries.
+- test19 recognises argument "1" as a verbose flag value.
+
+HEAD April 2, 98 G.Barrand
+- Modifications for Win32/NT.
+- G4VIS_BUILD_[OIX, OIWIN32]_DRIVER, G4VIS_USE_[OIX, OIWIN32]
+
+vis-00-05-02  26th March 1998  John Allison
+- Added GetMarkerSize to G4VScene.
+- Made ~G4VisManager virtual.
+- Added current logical volume and current physical volume to working
+  space in modeling parameters.  So it is no longer necessary to cast
+  to G4PhysicalVolumeModel; all such casts removed.
+- Moved nested classes out of G4RayView.
+
+HEAD March 24, 98 G.Cosmo
+- Modified G4VisManMessExpert.cc to correctly use random numbers
+  by calling directly G4UniformRand().
+
+HEAD March 24, 98 G.Barrand
+- GNUmakefile : MAKESHLIB changed in G4MAKESHLIB
+
+vis-00-05-01a  24 March 1998  Satoshi Tanaka
+- Geometry tree can be obtained by, e.g., 
+  % grep PVName g4.prim > g4.tree
+
+vis-00-05-01  23rd March 1998  John Allison
+- Made RegisterGraphicsSystems pure virtual.
+- Added verbose level control to printing at initialization.
+- Fixed (hopefully) bug in scene deletion.
+- Made AddPrimitive (const G4Text/Circle/Square) pure virtual.
+  (Had to add dummy void G4VRML1SCENE::AddPrimitive (const G4Text&).)
+- Made AddPrimitive (const G4Polymarker&) virtual again.
+- Opened some .hh files to G4VIS_USE flags.
+- Removed Pre/PostAddThis from some graphics systems (not OPACS, OI).
+- First implementation of G4ModelingParameters::hierarchy (DTREE).
+- Added Get Global/Current Tag/Description to G4VModel.
+- Introduced "working space" in G4ModelingParameters for geometry depth.
+- Relocated some template instantiation requests (might give trouble on DEC).
+
+vis-00-04-05a  16th March 1998  Satoshi Tanaka
+- DAWN driver outputs physical-volume names and copy number.
+
+vis-00-04-05  5th March 1998  John Allison
+- Added G4Text/Circle/Square in G4RayScene.hh.
+- Added G4Text/Circle/Square in G4BoundingSphereScene.hh.
+- Made AddPrimitive (const G4Polymarker&) non-virtual in G4VScene.hh.
+
+HEAD  5th March 1998  Andy Walkden
+- Implemented G4Circle/Square.
+- Added haloing to OpenGLXm "value added" options.
+
+HEAD  5th March 1998  S.Sadilov
+- visualization/GNUmakefile - using $OUT_LIB intoduced in
+  GNUmakefile.architecture
+- visualization/management/GNUmakefile - compiling G4VisManMessSet.cc
+  without optimization on WinNT
+
+vis-00-04-04a  5th March 1998  Satoshi TANAKA
+- Environmental variables  to customized DAWN driver is
+  renamed from DAWN_... to G4DAWN_...
+- Default mode of DAWN driver is  EPS mode, i.e. 
+  mode in which EPS files are generated.
+
+vis-00-04-04  4th March 1998  John Allison
+- First tag with modeling under visualization.
+  Here's what you need to do...
+    cd prototype
+    cvs update -A -d -P modeling
+    cd visualization
+    cvs update -r vis-00-04-04 -d -P
+  Change the following lines in your GNUmakefile...
+    CPPFLAGS += -I../../visualization/modeling/include
+    LDFLAGS  += -L../../visualization/modeling/$(G4SYSTEM)
+    Remove: @cd ../../modeling      &&   $(MAKE)
+
+vis-00-04-03  4th March 1998  John Allison
+- Last tag with modeling at same level as visualization.
+- Renamed near and far (VC++ keywords) in G4ViewParameters.cc.
+- Removed unnecessary #include <strstream.h> or adapted for WIN32.
+
+vis-00-04-02b  22nd February 1998  Satoshi Tanaka
+- Split G4VIS_BUILD_VRML1_DRIVER into G4VIS_BUILD_VRML_DRIVER 
+                                 and  G4VIS_BUILD_VRMLFILE_DRIVER.
+- Split G4VIS_USE_VRML1          into G4VIS_USE_VRML           
+                                 and  G4VIS_USE_VRMLFILE.
+
+vis-00-04-02a  18th February 1998  John Allison
+- Bug fix in G4RayView!
+
+vis-00-04-02  18th February 1998  John Allison
+- Introduced /vis~/set/section_plane.
+
+vis-00-04-01  13th February 1998  John Allison
+- Made messengers compatible with the new style.
+
+vis-00-03-02a  3rd February 1998  John Allison
+- Bug fix for 02.
+- Changed GNUmakefile to use processes sub-libraries.
+
+vis-00-03-02  2nd February 1998  John Allison
+- Modernised messengers.
+
+vis-00-03-01a 29th January 1998  John Allison
+- Tagged a few improvement in OpenGL
+
+vis-00-03-01 26th January 1998  John Allison
+- Old environment variables abandoned - see visualization/README.
+- G4VisManager is now instantiated *and* deleted in main().
+- G4VisRegisterGraphicsSystem.icc replaced by
+  MyVisManager::RegisterGraphicsSystems as a way - now optional - of
+  a user overriding the default graphics system registration.
+
+Januray 20 , 98 G. Barrand
+
+- Implement object rotation in OPACS driver
+  
+Januray 19 , 98 G. Barrand
+
+- Correct OpenInventor code so that it is ANSI-C++
+  and then compiles with OSF1/cxx, HP-UX/aCC.
+
+7th January 1998  John Allison
+- Restructuring to use modeling category.
+
+December 19, 97 G. Cosmo - (alpha03)
+
+- 1st December 1997 - John Allison.
+- This is interim code for testing by the visualization
+  group and it will be tagged soon.  You must update to the
+  head of graphics_reps and visualization simulatanouesly.
+  It coworks (I hope - it's difficult to be 100% sure about
+  this since I have a few changes for other categories in
+  the pipeline - see previous email) with:
+    digits+hits              digi-00-02-01
+    events+tracks            event-00-02-01
+    geometry                 HEAD
+    global                   global-00-02-01
+    intercoms                intercoms-00-02-01
+    interfaces               interfaces-00-02-01
+    particle+matter          piim-00-02-01
+    run                      run-00-02-01
+    track                    track-00-02-01
+    tracking                 tracking-00-02-01
+- Addition of:
+    visualization/GNUmakefile.transition_to_G4VIS_BUILD
+    visualization/GNUmakefile.transition_to_G4VIS_USE
+    visualization/GNUmakefile.vis_cppflags_for_G4VIS_USE
+  to turn the existing environment variables into the
+  to-be-adopted G4VIS_... variables - see visualization/test/README.
+- Consequent changes to other visualization GNUmakefiles.
+- New way of instantiating graphics systems:
+  Set the appropriate environment variables and include and
+  compile G4VisRegisterGraphicsSystems.icc in your main():
+    ...
+    #include G4VisRegisterGraphicsSystems.icc
+    ...
+    main() {
+      ...
+- Added G4VisFeaturesOfXXX files which simple return a G4String.
+ (Guy, Jeff, would you like to join this scheme?)
+- Added commands /vis~/delete/scene and /vis~/delete/view.
+- Added /vis~/show/view to test19.odb.
+
+vis-00-02-01 to vis-00-02-05a not logged!!!
+
+vis-00-01-02  13th July 1997  John Allison
+- Consolidation of previous tag.
+
+vis-00-01-01  8th June 1997  John Allison
+- First systematic tag.
+- G4Ray introduced.

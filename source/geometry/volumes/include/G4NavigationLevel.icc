@@ -1,0 +1,115 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4NavigationLevel.icc,v 1.1 1999-01-07 16:08:43 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 30.09.97 J.Apostolakis Initial version. 
+//                        
+
+inline G4NavigationLevel::G4NavigationLevel(G4VPhysicalVolume*   pPhysVol,
+					const G4AffineTransform& afTransform,
+					      EVolume            volTp,
+					      G4int              repNo)
+{
+      fLevelRep=new G4NavigationLevelRep( pPhysVol, 
+				          afTransform,
+					  volTp, 
+					  repNo );
+}
+
+inline G4NavigationLevel::
+   G4NavigationLevel(G4VPhysicalVolume* pPhysVol,
+		     const G4AffineTransform& levelAbove,
+		     const G4AffineTransform& relativeCurrent,
+		     EVolume            volTp,
+		     G4int              repNo)
+{
+      fLevelRep=new G4NavigationLevelRep( pPhysVol, 
+					  levelAbove, 
+					  relativeCurrent, 
+					  volTp, 
+					  repNo );
+}
+
+inline G4NavigationLevel::G4NavigationLevel()
+{
+      fLevelRep= new G4NavigationLevelRep();
+}
+
+inline G4NavigationLevel::G4NavigationLevel(G4NavigationLevel& right)
+   :  fLevelRep( right.fLevelRep )
+{
+      fLevelRep->AddAReference(); 
+}
+
+inline G4NavigationLevel::~G4NavigationLevel()
+{
+      if( fLevelRep->RemoveAReference() ) delete fLevelRep; 
+}
+
+inline G4NavigationLevel& 
+G4NavigationLevel::operator=(const G4NavigationLevel &right)
+{ 
+      // The order of these two lines is needed to handle "a=a"
+      right.fLevelRep->AddAReference(); 
+      if( fLevelRep->RemoveAReference() ) delete fLevelRep; 
+
+      fLevelRep= right.fLevelRep;
+      return *this;
+} 
+
+inline G4VPhysicalVolume* G4NavigationLevel::GetPhysicalVolume() const 
+{ 
+      return fLevelRep->GetPhysicalVolume(); 
+}
+
+#if 0
+inline       G4AffineTransform& G4NavigationLevel::GetTransform()
+{ 
+      return fLevelRep->GetTransform() ; 
+} 
+#endif
+
+inline const G4AffineTransform& G4NavigationLevel::GetTransform() const 
+{ 
+      return fLevelRep->GetTransform() ; 
+} 
+
+inline const G4AffineTransform* G4NavigationLevel::GetPtrTransform() const 
+{ 
+      return fLevelRep->GetTransformPtr() ; 
+} 
+
+inline EVolume  G4NavigationLevel::GetVolumeType() const 
+{ 
+      return fLevelRep->GetVolumeType() ; 
+}
+
+inline G4int    G4NavigationLevel::GetReplicaNo() const 
+{ 
+      return fLevelRep->GetReplicaNo() ; 
+}
+
+extern G4Allocator<G4NavigationLevel> aNavigationLevelAllocator;
+
+// I believe that there is no provision in case this class is subclassed.
+// If it is subclassed, this will fail and may not give errors!
+//
+inline void* G4NavigationLevel::operator new(size_t)
+{
+  // void *aNavigationLevel;
+  // aNavigationLevel= (void *) aNavigationLevelAllocator.MallocSingle();
+  // return aNavigationLevel;
+  return (void *) aNavigationLevelAllocator.MallocSingle();
+}
+
+inline void G4NavigationLevel::operator delete(void *aLevel)
+{
+  aNavigationLevelAllocator.FreeSingle((G4NavigationLevel *) aLevel);
+}
+

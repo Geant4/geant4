@@ -1,0 +1,123 @@
+// inline members of G4Curve
+
+inline const G4BoundingBox3D* G4Curve::BBox() const 
+{
+  return &bBox;
+}
+
+// bounds related
+
+inline const G4Point3D& G4Curve::GetStart() const 
+{
+  return start;
+}
+
+inline const G4Point3D& G4Curve::GetEnd() const 
+{
+  // workaround for an xlC bug
+  const G4Point3D& lof= end;
+  return lof;
+}
+
+inline G4double G4Curve::GetPStart() const 
+{
+  return pStart;
+}
+
+inline G4double G4Curve::GetPEnd() const 
+{
+  return pEnd;
+}
+
+inline void G4Curve::SetStart(const G4Point3D& pt) 
+{
+  start= pt;
+  pStart= GetPPoint(pt);
+}
+
+inline void G4Curve::SetStart(G4double p) 
+{
+  pStart= p;
+  start= GetPoint(p);
+}
+
+inline void G4Curve::SetEnd(const G4Point3D& pt) 
+{
+  end= pt;
+  pEnd= GetPPoint(pt);
+}
+
+inline void G4Curve::SetEnd(G4double p) 
+{
+  pEnd= p;
+  end= GetPoint(p);
+}
+
+inline void G4Curve::SetBoundsRest()
+{
+  pRange= pEnd-pStart;
+  G4double pMax= GetPMax();
+  if (pMax>0) 
+  {     
+    // Find the range in the first determination
+    pRange-= (ceil(pRange/pMax)-1)*pMax;
+  }
+
+  bounded= true;
+  InitBounded();
+}
+
+inline void G4Curve::SetBounds(G4double p1, G4double p2) 
+{
+  SetStart(p1); 
+  SetEnd(p2);
+  SetBoundsRest();
+}
+
+inline void G4Curve::SetBounds(G4double p1, const G4Point3D& p2)
+{
+  SetStart(p1);
+  SetEnd(p2);
+  SetBoundsRest();
+}
+
+inline void G4Curve::SetBounds(const G4Point3D& p1, G4double p2) 
+{
+  SetStart(p1);
+  SetEnd(p2);
+  SetBoundsRest();
+}
+
+inline void G4Curve::SetBounds(const G4Point3D& p1, const G4Point3D& p2)
+{
+  SetStart(p1);
+  SetEnd(p2);
+  SetBoundsRest();
+}
+
+inline G4bool G4Curve::IsPOn(G4double param)
+{
+  G4double diff= param-pStart;
+  G4double pMax= GetPMax();
+
+  if (pMax>0) 
+    diff-= floor(diff/pMax)*pMax;
+  
+  return diff<=pRange;
+}
+
+inline G4bool G4Curve::IsBounded() const 
+{
+  return bounded;
+}
+
+inline void G4Curve::SetSameSense(G4int sameSense0) 
+{
+  sameSense= sameSense0;
+}
+
+inline G4int G4Curve::GetSameSense() const 
+{
+  return sameSense;
+}
+

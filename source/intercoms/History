@@ -1,0 +1,124 @@
+$Id: History,v 1.1 1999-01-07 16:09:20 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Dec 03, 98 J.Allison (tag intercoms-00-04-04)
+- Protected G4UImanager::SetCoutDestination with #ifdef G4STREAM.
+
+Dec 02, 98 M.Asai (tag intercoms-00-04-03)
+- G4UnitsMessenger is constructed/destructed by G4UImanager.
+
+Nov 27, 98 M.Asai (tag intercoms-00-04-02)
+- G4UnitsMessenger has been inported from global/management to avoid a loop dependency.
+
+Nov 25, 98 J.Allison (tag intercoms-00-04-01)
+- Allowed quotation-mark-enclosed blank-embedded parameters in GetCurrentValue.
+- "Cosmetic" change to G4UIparameter (M.Asai).
+
+Nov 05, 98 M.Asai (tag intercoms-00-03-07)
+- Move G4strstreambuf.hh to global category to avoid a loop dependency (M.Nagamatsu)
+  affected files are G4UImanager.hh G4UImanager.cc, G4UIsession.hh.
+
+Oct 26, 98 M.Asai (tag intercoms-00-03-06)
+- Add SetCoutDestination(NULL) to the constructor and destructor of G4UImanager.
+
+Oct 20, 98 M.Asai (tag intercoms-00-03-05)
+- Change static methods in G4UIcommand which are for unit conversion from protected
+  to public.
+
+Oct 13, 98 M.Asai (tag intercoms-00-03-04)
+- Interoducing a concrete implementation of G4cout/G4cerr (M.Nagamatsu).
+   affected files : include/G4UImanager.hh G4strstreambuf.hh
+                    src/G4UImanager.cc G4UIsession.cc
+
+Oct 01, 98 M.Asai (tag intercoms-00-03-03)
+- Introducing a new UI command named "manual".
+
+Sep 27, 98 M.Asai (tag intercoms-00-03-02)
+- Fixes a bug in G4UIparameter. This bug caused a trouble of range
+ checking *only* for the parameter(s) atouched to the G4UIcommand
+ base class objects.
+
+Sep 25, 98 M.Asai (tag intercoms-00-03-01)
+- Minor modification in G4UIcommand.cc.
+- "DeregisterDependent()" method is implemented in G4StateManager and
+  this method is invoked by the destructor of G4VStateDependent base class.
+
+Aug 11, 98 M.Asai (tag intercoms-00-02-01)
+- G4UIcommand.cc corresponds to "string with blanks".
+
+July 15, 98 M.Asai (tag intercoms-00-01-03)
+
+July 13, 98 M.Asai (tag intercoms-00-01-02)
+- Bug in G4UIcommand.hh is fixed.
+
+July 4, 98 <.Asai (tag intercoms-00-01-01)
+- Ready for the beta release.
+
+June 30, 98 M.Asai (tag intercoms-00-07-01)
+- Debug G4UIdirectory.cc for protecting against missing "/" at the tail.
+
+June 10, 98 M.Asai
+- Introducing more methods in G4UIcommand, G4UIcmdWithADoubleAndUnit,
+G4UIcmdWith3VectorAndUnit with the new G4UnitsTable
+- Tagged as intercoms-00-06-02
+
+June 8, 98 M.Asai
+- Introducing new methods in G4UIcommand, G4UIcmdWithADoubleAndUnit,
+G4UIcmdWith3VectorAndUnit with the new G4UnitsTable
+- Tagged as intercoms-00-06-01
+
+April 21, 98 M.Asai
+- G5ApplicationState.hh, G4StateManager.h and .cc, G4VStateDependent.hh
+  and .cc are moved from "globals/management".
+- Tagged as intercoms-00-05-03.
+
+April 20, 98 M.Asai
+- tagged intercoms-00-05-02.
+
+April 9, 98 G.Cosmo
+- Porting on DEC-cxx 6.0.
+  Removed meaningless usage of "const" qualifier from functions
+  return type for basic types by value. Modified files:
+  G4UIcommand.hh, G4UIcommandTree.hh, G4UIparameter.hh
+
+April 6, 98 M.Nagamatu
+- added getRange() to G4UIcommand.hh
+
+March 27, 98 M.Asai
+- remove redandant constructors/methods from
+ G4UIparameter, G4UIcommand, G4UIcmd***
+- tagged intercoms-00-05-01
+
+March 2, 98 S.Sadilov
+- fix include <strstrea.h> in G4UIcommand.cc for WinNT
+
+February 18, 98  John Allison
+- made G4UIcommand::valueOf a static member function.
+- tagged intercoms-00-04-01
+
+February 3, 98 M.Asai - (intercoms-00-03-02)
+- Debugged : G4UImanager.cc
+- Tagged as intercoms-00-03-02
+
+January 29, 98 M.Asai - (intercoms-00-03-01)
+- Tagged as intercoms-00-03-01
+
+December 19, 97 G. Cosmo - (alpha03)
+- Created.
+

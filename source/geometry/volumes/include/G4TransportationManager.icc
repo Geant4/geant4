@@ -1,0 +1,59 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4TransportationManager.icc,v 1.1 1999-01-07 16:08:46 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//  
+// ------------------------------------------------------------
+//	GEANT 4  inlined function members implementation
+//
+//	For information related to this code contact:
+//	CERN, CN Division, ASD group
+// ------------------------------------------------------------
+//
+// Created:  10 March 1997, J. Apostolakis
+//  
+
+inline G4Navigator* G4TransportationManager::GetNavigatorForTracking()
+{
+   return fNavigatorForTracking;
+}
+
+inline G4PropagatorInField* G4TransportationManager::GetPropagatorInField()
+{
+   return fPropagatorInField;
+}
+
+inline G4FieldManager*   G4TransportationManager::GetFieldManager()
+{
+   return fFieldManager;
+}
+
+inline void G4TransportationManager::SetNavigatorForTracking( 
+	        G4Navigator* newNavigator)
+{
+   fNavigatorForTracking= newNavigator;
+   // fPropagatorInField->setNavigator(newNavigator);
+}
+
+inline void  G4TransportationManager::SetPropagatorInField( 
+		G4PropagatorInField*  newFieldPropagator )
+{
+   fPropagatorInField=    newFieldPropagator;
+}
+
+inline void  G4TransportationManager::SetFieldManager(      
+		G4FieldManager*         newFieldManager)
+{
+   fFieldManager=      newFieldManager; 
+}
+
+inline G4TransportationManager* G4TransportationManager::GetTransportationManager()
+{
+   return &fTransportationManager;
+}

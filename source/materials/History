@@ -1,0 +1,64 @@
+$Id: History,v 1.1 1999-01-07 16:09:39 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+     
+August  13, 98 M.Maire  - materials-00-02-01
+               new static method G4Material::GetMaterial(name)     
+     
+July    17, 98 M.Maire  - materials-00-01-04
+               correction in ComputeDensityCorrection() for gas
+               (G4IonisParamMat.cc)    
+     
+July    10, 98 M.Maire  - materials-00-01-03
+               Ionisation parameters put in a subclass
+               coworks with em-00-01-03
+                   
+July     8, 98 M.Maire  - materials-00-01-02
+               restored G4MaterialTable, ElementTable, ElementVector 
+               to be compatible with pre-beta01-02
+               
+July     7, 98 M.Maire  - materials-00-01-01
+               continue cleanup: Elements and Materials
+               new output formats: operator<< overloaded
+               
+June    30, 98 M.Maire  - materials-00-07-01
+               new method AddMaterial() for mixture of mixtures.
+               start the cleanup of the category. G4Isotope done. 
+               G4IsotopeTable typedef directly include in G4Isotope.hh
+               G4MaterialTest.cc illustrate all possible case to 
+               define materials.
+               
+     
+June    06, 98 M.Maire  - materials-00-06-01
+               new G4AtomicShells class (Vladimir)
+               kState = kVacuum removed (minimal lower density set
+                                         by default)
+
+April   17, 98 M.Maire  - materials-00-05-01
+ 
+April   08, 98 G.Cosmo
+- Added fixes for DEC-cxx 6.0 compiler, related to for-loop index
+  declarations. Modified G4SandiaTable.cc.
+
+March     5, 98 M.Maire - materials-00-04-01
+
+January  29, 98 M.Maire - materials-00-03-01
+
+December 19, 97 G.Cosmo - (alpha03)
+- Created.
+

@@ -1,0 +1,119 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4eplusAnnihilation.icc,v 1.1 1999-01-07 16:11:18 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// ---------------------------------------------------------------
+//      GEANT 4 class inlined methods file
+//
+//      For information related to this code contact:
+//      CERN, CN Division, ASD group
+//      History: first implementation, based on object model of
+//      2nd December 1995, G.Cosmo
+//      ------------ G4eplusAnnihilation process ---------
+//                   by Michel Maire, 7 July 1996
+// ***************************************************************
+// 10-01-97, crossection table + meanfreepath table, M.Maire
+// 17-03-97, merge 'in fly' and 'at rest', M.Maire
+// ---------------------------------------------------------------
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4bool G4eplusAnnihilation::IsApplicable(const G4ParticleDefinition& particle)
+{
+   return ( &particle == G4Positron::Positron() ); 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4eplusAnnihilation::GetCrossSectionPerAtom(
+                                           G4DynamicParticle* aDynamicPositron,
+                                           G4Element*         anElement)
+ 
+// gives the microscopic total cross section in GEANT4 internal units
+
+{
+   G4double crossSection;
+   G4double PositronEnergy = aDynamicPositron->GetKineticEnergy();
+   G4bool isOutRange ;
+
+   if (PositronEnergy > HighestEnergyLimit)
+     crossSection = 0. ;
+   else {
+     if (PositronEnergy < LowestEnergyLimit) PositronEnergy = 1.01*LowestEnergyLimit;
+     crossSection = (*theCrossSectionTable)(anElement->GetIndex())->
+                    GetValue( PositronEnergy, isOutRange );
+   }
+
+   return crossSection; 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+ 
+inline G4double G4eplusAnnihilation::GetMeanFreePath(const G4Track& aTrack,
+                                                     G4double,
+                                                     G4ForceCondition*)
+ 
+// returns the positron mean free path in GEANT4 internal units
+
+{
+   const G4DynamicParticle* aDynamicPositron = aTrack.GetDynamicParticle();
+   G4double PositronEnergy = aDynamicPositron->GetKineticEnergy();
+   G4Material* aMaterial = aTrack.GetMaterial();
+
+   G4double MeanFreePath;
+   G4bool isOutRange ;
+
+   if (PositronEnergy > HighestEnergyLimit)
+     MeanFreePath = DBL_MAX;
+   else {
+     if (PositronEnergy < LowestEnergyLimit) PositronEnergy = 1.01*LowestEnergyLimit;
+     MeanFreePath = (*theMeanFreePathTable)(aMaterial->GetIndex())->
+                    GetValue( PositronEnergy, isOutRange );
+   }
+
+   return MeanFreePath; 
+} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4eplusAnnihilation::ComputeMeanFreePath(G4double PositKinEnergy,
+                                                       G4Material* aMaterial)
+
+// returns the positron mean free path in GEANT4 internal units
+
+{
+  const G4ElementVector* theElementVector = aMaterial->GetElementVector() ;
+  const G4double* NbOfAtomsPerVolume      = aMaterial->GetVecNbOfAtomsPerVolume();   
+
+  G4double SIGMA = 0 ;
+
+  for ( G4int elm=0 ; elm < aMaterial->GetNumberOfElements() ; elm++ )
+      {             
+            SIGMA += NbOfAtomsPerVolume[elm] * 
+                     ComputeCrossSectionPerAtom(PositKinEnergy,
+                                               (*theElementVector)(elm)->GetZ());
+      }       
+
+  return SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4eplusAnnihilation::GetMeanLifeTime(const G4Track&,
+                                                     G4ForceCondition*)
+ 
+// returns the annihilation mean life time in GEANT4 internal units
+
+{
+   return 0.0; 
+} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+

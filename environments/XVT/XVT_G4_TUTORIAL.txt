@@ -1,0 +1,197 @@
+XVT_G4_TUTORIAL
+================
+
+Written by: S.Prior
+      Date: 15/08/97
+  Platform: HP-UX (10.20)
+  
+==============================================================================
+
+Firstly, make sure both the XVT GUI and the xvt.benchmark files are compiled.
+
+Please follow the instructions in the 'readme.txt' file in the 
+xvt_standalone_test directory on compiling the xvt.benchmark executable.
+
+After compilation please move the xvt.benchmark file from the HP-AFS/ 
+directory up on level to the xvt_standalone_test directory.
+
+To compile the XVT GUI, go to the HP_GUI sub-directory and type 'make'.
+
+After this has compiled please move the files 'GUI' and 'GUI.uid' into the
+xvt_standalone_test directory.
+
+Now you are ready to start.
+
+==============================================================================
+
+At the command prompt, type 'GUI > file1.txt &' to run the XVT GUI and pipe
+the output to a file - this will catch all the output from the simulation.
+
+The GUI will now startup and connect to Geant (after a while you will see this
+in the Output log window.)
+
+It will then do a listing of all the commands available to the user from Geant.
+
+Once this has finished listing you are ready to begin executing commands.
+(you will know it has finished because the scrollbar will stop sizing and the
+last command: (currently) /vis~/expert/draw_square will be at the bottom of the
+list).
+
+==============================================================================
+
+STEP 1: Getting the command widget
+-----------------------------------
+
+OK, what you should do now is get the command widget (you will use this to
+enter commands later on).
+
+Click the button on the toolbar that is immediately to the left of the green
+coloured text box (you will see a message in the status bar if you move the
+mouse over the button).
+
+The button will 'deselect' itself so that it is no longer clickable and a
+palette of buttons will appear after a short while - also the buttons to the
+right of the green text area will be enabled.
+
+==============================================================================
+
+STEP 2: Using the command widget
+---------------------------------
+
+To familiarise yourself with the command widget use the mouse to click on the
+area which has the title in it - this will allow you to drag and drop the widget
+in the area of the screen under the text boxes.
+
+Use the mouse to drag and drop the widget.  You will notice that it is not
+allowed to move out of the area under the text boxes.
+
+You can drop the palette of buttons into the border of this area - click down
+on the palettes title area and move it towards an edge of the area - you will
+notice the dragging frame changes and if you release the mouse button the 
+palette will now be contained in the border - with its layout changed slightly. 
+
+******************************************************************************
+WARNING: whatever you do, do not click the small button in the left top corner
+         as this will permanently close the command palette.
+         
+         In the future code will be written to allow you to regenerate the
+         palette - this has not yet been implemented.
+******************************************************************************
+
+Now, regardless of whether the palette is in the border or floating click on 
+the first button on the palette and hold the mouse down.
+
+You will now see the palette cascade into another set of buttons.  Still with
+the mouse held down drag it over the cascade of buttons and off into the main
+area and you will see that the new palette is free floating in its own right 
+- you can now drag and drop this into the area or border as well.
+
+Play about with this mechanism with the other command palette sub cascades to
+familiarise yourself with them.
+
+You are perfectly free to drag the palette(s) out of the border again - just
+click somewhere on the space around the buttons and it will be possible to drag
+it out again.
+
+******************************************************************************
+NOTE: The cascaded palettes CAN be closed with no problems as these will be
+      regenerated automatically if you click on the same main palette button 
+      as you did before - only the main command palette must remain open.
+******************************************************************************
+
+==============================================================================
+
+STEP 3: Entering commands
+--------------------------
+
+There are currently 2 methods to enter commands and you will do both here.
+
+Firstly (the recommended way) - Using the command palette.
+
+You are going to enter '/gun/particle kaon0s'.
+
+Using the command palette, locate the '/gun/' cascade (3rd from last button) -
+tear it off so it is free floating.
+
+Click on the 'particle' button (2nd button).
+
+Now, if you are unsure on this selection click the HELP BUTTON on the toolbar
+(it is the rightmost button on the bar).  
+
+This will display a small help message in the Output log window to guide you.
+
+Now that you are satisfied it is the correct command to execute you click the
+EXECUTE BUTTON on the toolbar (located immediately after the green text box).
+
+A small dialog box will pop up asking you for a parameter, in this you 
+type kaon0s and return.
+
+The command will then be sent to Geant for processing and you will then see
+the command you have just entered appear in the COMMAND LOG text box.
+
+This is the recommended way of entering commands.
+
+The other method is to simply click the COMMAND ENTRY button which is located
+on the toolbar in between the execute button and the help button.
+
+This will pop up a dialog box and you can simply type the command in.
+
+Try it by typing '/gun/direction 1 1 0' then enter.
+
+This method is only really offered as an extra means to enter a command.
+
+==============================================================================
+
+STEP 4: Doing a full simulation including visualisation
+--------------------------------------------------------
+
+Please enter the following commands using the method(s) you have learn't:
+
+/gun/particle kaon0s
+/gun/direction 1 1 0
+/gun/energy 100 GeV
+/vis~/create_view/new_graphics_system DAWN
+/event/draw 1
+/step/draw 1
+/event/verbose 1
+/tracking/verbose 1
+/run/beamOn 2
+
+This will then start the simulation and you will see DAWN appear and start
+rendering the visualisation output.
+
+Follow any instructions given until finished.
+
+==============================================================================
+
+STEP 5: Incorporating BreakPoints
+----------------------------------
+
+If you require breakpoints in the program you can put these in using the
+command palette.
+
+The setBreakPoint command is located in the CONTROL cascade palette.
+
+If you execute the command you will be prompted as always for the parameter(s).
+
+Then you must follow the instructions in the usual manner until finished.
+
+==============================================================================
+
+STEP 6: Quitting the application
+---------------------------------
+
+This is most important, you MUST execute the /control/exit command before
+quitting the GUI otherwise the xvt.benchmark program will remain active and
+have to be killed.
+
+You will know it has been executed when the DAWN rendering window has
+disappeared - then it is safe to exit the program.
+
+Currently there is no in-built checking on the GUI quit command so you can
+actually quit the GUI but leave the benchmark file going - not advisable.
+
+It will be changed in the future.
+
+==============================================================================
+S.Prior - August '97

@@ -1,0 +1,73 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4VisManager.icc,v 1.1 1999-01-07 16:15:25 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// GEANT4 Visualization Manager - John Allison 02/Jan/1996.
+
+inline void G4VisManager::Initialize () {
+  Initialise ();
+}
+
+inline G4VScene* G4VisManager::GetCurrentScene () const {
+  return fpScene;
+}
+
+inline G4VView* G4VisManager::GetCurrentView () const {
+  return fpView;
+}
+
+inline const G4SceneData& G4VisManager::GetCurrentSceneData () const {
+  return fSD;
+}
+
+inline const G4ViewParameters&
+G4VisManager::GetCurrentViewParameters () const {
+  return fVP;
+}
+
+inline const G4SceneList&
+G4VisManager::GetAvailableScenes () const {
+  return fAvailableScenes;
+}
+
+inline const G4SceneDataObjectList&
+G4VisManager::GetSceneDataObjectList () const {
+  return fSceneDataObjectList;
+}
+
+inline G4VGraphicsSystem*
+G4VisManager::GetCurrentGraphicsSystem () const {
+  return fpGraphicsSystem;
+}
+
+inline G4int G4VisManager::GetVerboseLevel () const {
+  return fVerbose;
+}
+
+inline G4SceneData& G4VisManager::SetCurrentSceneData () {
+  return fSD;
+}
+
+inline G4ViewParameters& G4VisManager::SetCurrentViewParameters () {
+  return fVP;
+}
+
+inline G4SceneDataObjectList&
+G4VisManager::SetSceneDataObjectList () {
+  return fSceneDataObjectList;
+}
+
+inline G4SceneList& G4VisManager::SetAvailableScenes () {
+  return fAvailableScenes;
+}
+
+inline void G4VisManager::SetVerboseLevel (G4int vLevel) {
+  fVerbose = vLevel;
+}

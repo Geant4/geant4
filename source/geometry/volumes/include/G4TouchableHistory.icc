@@ -1,0 +1,125 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4TouchableHistory.icc,v 1.1 1999-01-07 16:08:45 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// class G4TouchableHistory inline implementation
+
+inline G4TouchableHistory::G4TouchableHistory()
+  : fhistory()
+{
+  ftlate= G4ThreeVector(0.,0.,0.);
+  frot= G4RotationMatrix();
+}
+
+inline G4TouchableHistory::G4TouchableHistory(const G4NavigationHistory &history)
+  : fhistory(history)
+{
+  G4AffineTransform tf(fhistory.GetTopTransform().Inverse());
+  ftlate=tf.NetTranslation();
+  frot=tf.NetRotation();
+}
+
+inline 
+void  G4TouchableHistory::UpdateYourself(     G4VPhysicalVolume*   pPhysVol,
+			   const G4NavigationHistory* pHistory) 
+{
+  fhistory= *pHistory;  
+  G4AffineTransform tf(fhistory.GetTopTransform().Inverse());
+  if( pPhysVol == 0 ){
+    // This means that the track has left the World Volume.
+    // Since the Navigation History does not already reflect this,
+    // we must correct this problem here. John A. (--> K. Amako)
+    fhistory.SetFirstEntry(pPhysVol);
+  }
+  ftlate=tf.NetTranslation();
+  frot=tf.NetRotation();
+}
+
+G4int
+inline G4TouchableHistory::CalculateHistoryIndex(G4int stackDepth) const
+{
+  return (fhistory.GetDepth()-stackDepth); // was -1
+}
+
+inline G4VPhysicalVolume* G4TouchableHistory::GetVolume(G4int depth) const
+{
+  return fhistory.GetVolume(CalculateHistoryIndex(depth));
+}
+
+inline G4VSolid* G4TouchableHistory::GetSolid(G4int depth) const
+{
+  return fhistory.GetVolume(CalculateHistoryIndex(depth))->GetLogicalVolume()->GetSolid();
+}
+
+inline const G4ThreeVector& G4TouchableHistory::GetTranslation(G4int depth) const
+{
+   // The value returned will change at the next call
+   //  Copy it if you want to use it!
+   //   
+   static G4ThreeVector currTranslation;
+   if(depth==0.0) {
+      return ftlate;
+   }else{
+      currTranslation= fhistory.GetTransform(CalculateHistoryIndex(depth)).NetTranslation();
+      return currTranslation;
+   }
+}
+
+inline const G4RotationMatrix* G4TouchableHistory::GetRotation(G4int depth) const
+{
+   // The value returned will change at the next call
+   //  Copy it if you want to use it!
+   //
+   static G4RotationMatrix rotM;
+
+   if(depth==0.0) {
+      return &frot;
+   }else{
+      rotM= fhistory.GetTransform(CalculateHistoryIndex(depth)).NetRotation();
+      return &rotM;
+   }
+}
+
+inline G4int   G4TouchableHistory::GetReplicaNumber(G4int depth) const
+{
+  // return this->GetHistory()->GetTopReplicaNo();
+  return fhistory.GetReplicaNo(CalculateHistoryIndex(depth));
+}
+
+inline G4int  G4TouchableHistory::GetHistoryDepth()  const
+{
+  return  fhistory.GetDepth();
+}
+
+inline G4int  G4TouchableHistory::MoveUpHistory( G4int num_levels )
+{
+  G4NavigationHistory* nHistory= &fhistory;
+  G4int maxLevelsMove=  nHistory->GetDepth();
+  G4int minLevelsMove=  0;                      // Cannot redescend today!
+				        // Soon it will be possible
+					// by adding a data member here
+				        //     fCurrentDepth;
+
+  if( num_levels > maxLevelsMove ){
+      num_levels = maxLevelsMove;
+  }
+  else if( num_levels < minLevelsMove ){
+      num_levels = minLevelsMove;
+  }
+
+  nHistory->BackLevel( num_levels ); 
+
+  return num_levels;
+}
+
+inline const G4NavigationHistory* G4TouchableHistory::GetHistory() const
+{
+  return &fhistory;
+}

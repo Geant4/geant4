@@ -1,0 +1,188 @@
+$Id: History,v 1.1 1999-01-07 16:14:02 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+December 7, 1998 M. Verderi
+   G4FastSimulationManagerProcess class:
+   Fixes made for ghost navigation with
+   mag-field:
+	LocateGlobalPointAndUpdateTouchable is
+	always used (in not the Locate...Setup
+	method)
+	In PostStepDoIt: correction of position and
+	direction of the track are made when 
+	possible in case of mag-field.
+	This correction comes from the fact that a
+	small discrepancy appears on those quantities
+	because of the numerical integration along
+	the field on the track path: the G4FSMP
+	proposes a curve-length, the transportation
+	moves the track along this curve, however
+	the end point position and direction are
+	slightly different from those expected by
+	the G4FSMP when it proposed the length.
+
+November 20,1998 M. Verderi
+   G4FastStep class:
+   Remove track/G4BiasingTag.hh dependancy (obsolete).
+   Adapted to new shceme of Event Biasing mechanism,
+   consistently with track-00-04-01 tag.
+
+November 11,1998 M. Verderi
+   Merge of param-00-03-02 & param-00-03-02a into
+   param-00-03-04a (hopefully...)
+   The point is the chnage of signature in the
+   LocateGlobalPointAndSetup(..) of the G4Navigator making use now
+   of the track direction. The G4FastSimulationManagerProcess is
+   changed accordingly:
+   fGhostNavigator.LocateGlobalPointAndSetup(track.GetPosition(), &direction, true);
+
+
+November 6, 1998 M. Verderi
+   - Extension of the G4FastStep to allow the biasing technic.
+     Changes are made in:
+                - G4FastStep.hh/.icc:
+                        new member G4BiasingTag fBiasTag;
+                        new method SetPrimaryTrackFinalBiasingTag
+                                ( G4BiasingTag aTag );
+                - G4FastStep.cc:
+                        Initialize();
+                        operator=;   
+                        UpdateForPostStep();
+                        UpdateForAtRest();  
+
+October 26, 1998  P.Mora de Freitas
+   - G4FastSimulationManagerProcess and G4FastSimulationManager adapted to deal
+     with at rest parameterisations also when using parallel geometry.
+
+October  8, 1998  P.Mora de Freitas
+   - The G4VFastSimulationModel::IsApplicable() becomes a pure virtual
+     methode.
+   - G4FastSimulationManager optimisation:
+     - New G4ParticleDefinition* fLastCrossedParticle data member, keeps
+       the last particle type with touched the envelope;
+     - New RWTPtrOrderedVector<G4VFastSimulationModel> fApplicableModelList
+       data member, keeps the model list of the applicable models for 
+       the actual fLastCrossedParticle particle type;
+     - Changes in the PostStepGetFastSimulationManagerTrigger() and 
+       AtRestGetFastSimulationManagerTrigger()methodes to update the 
+       fApplicableModelList when needed (fLastCrossedParticle !=
+       the actual tracked particle);
+     - Changes in the 
+	G4FastSimulationManager() (Constructor)
+	ActivateFastSimulationModel(),
+	InActivateFastSimulationModel(),
+	AtRestGetFastSimulationManagerTrigger(),
+	AddFastSimulationModel(),
+	RemoveFastSimulationModel()
+	methodes to set the fLastCrossedParticle to NULL, forcing the
+	fApplicableModelList to be rebuilt.
+
+September 22, 1998  P.Mora de Freitas
+   Fixed bug in parallel navigation. 
+   File touched: G4FastSimulationManagerProcess.cc
+   Tested on HP-aCC.
+
+September 17, 1998  P.Mora de Freitas
+   G4FastSimulationManager::RemoveFastSimulationModel() updated to look
+for also in the fInactivatedModels list.
+
+  Tested on HP-aCC.
+
+September 16, 1998  P.Mora de Freitas
+   New /param/ control commands:
+
+  /param/ActivateModel <ModelName>
+  /param/InActivateModel <ModelName>
+
+  Activate or inactivate a given parameterisation model.
+
+  Tested on HP-aCC.
+
+August 21, 1998  P.Mora de Freitas
+  G4FastSimulationManagerProcess's G4ProcessType set to
+fParameterisation, accordingly with procman-00-02-03.
+
+  Tested on HP-aCC.
+
+August 12, 1998  P.Mora de Freitas
+  Improved the "close parameterisation control" to 
+
+  1) avoid the close looping when unnecessary (mostly cases);
+  2) force re-close when necessary (insert/remove ghosts).
+
+  Changes:
+
+  1) the G4GlobalFastSimulationManager::fClosed is now initialised 
+     to true by the G4GlobalFastSimulationManager constructor;
+
+  2) new method 
+
+     void 
+     G4GlobalFastSimulationManager::FastSimulationNeedsToBeClosed();
+
+     called by the AddGhostPlacement and RemoveGhostPlacement 
+     G4FastSimulationManager methods to set false the fClosed flag;
+
+  3) changes in the G4GlobalFastSimulationManager::Notify method
+     to deal with these changes.
+
+  Tested on HP-aCC.
+
+August 11, 1998  P.Mora de Freitas
+  Fix to the G4FastStep::KillPrimaryTrack() method to drop the
+nonsense line
+
+  SetMomentumChange(0.,0.,0.) ; /* necessary ? */
+
+  Tested on HP-aCC.
+  (Thanks to Willy Langeveld)
+
+
+August 10, 1998  P.Mora de Freitas
+  Fix to the SetPrimaryTrackFinalKineticEnergyAndDirection() method
+from the G4FastStep class the SetMomentumChange() call to insure that
+the new momentum direction is a unit vector (as asked by the 
+G4DynamicParticle::SetMomentumDirection method).
+
+  Touched files: G4FastStep.hh (improved comments)
+                 G4FastStep.cc (fixed)
+
+  Tested on HP-aCC.
+  (Thanks to Willy Langeveld)
+
+August 7, 1998  P.Mora de Freitas
+  New /param/ commands directory with the commands:
+
+  /param/listEnvelopes [ParticleName]
+
+  - List all the envelope names for a given particle
+    (or for all particles if without parameters).
+
+  /param/listModels [EnvelopeName]
+
+  - List all the Model names for a given envelope
+    (or for all envelopes if without parameters).
+
+  /param/listIsApplicable [ModelName]
+
+  - List all the particle names a given model is applicable
+    (or for all models if without parameters).
+
+
+August 7, 1998  P.Mora de Freitas
+  History file Created.

@@ -1,0 +1,200 @@
+$Id: History,v 1.1 1999-01-07 16:09:46 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+- Dec 11, 98  H.Kurashige (particles-00-04-07a)
+- Fixed bugs in G4IonTable::GetIonMass (Hisaya)
+
+- Dec. 10, 98 H.Kurashige (particles-00-04-06)
+- Fixed bugs in G4NuclearProperties::GetAtomicMass (Hisaya)
+
+- Dec 9, 98 H.Kurashige (particles-00-04-05)
+- Modified G4NuclearProperties::GetAtomicMass (Vicente)
+- Modified G4IonTable::GetIonMass (Hisaya)
+  (partman-00-04-05)
+
+- Dec 5, 98 H.Kurashige (particles-00-04-04)
+- Added G4GenericIon for Process List (partman-00-04-04,hadrons-00-04-01)
+
+- Dec 2, 98 H.Kurashige (particles-00-04-03)
+- Added G4ParticleTypes.hh in management/include. Moved from
+  global/management/include. (G.Cosmo) (partman-00-04-03)
+- Added mechanism to prevent multiple instanciation of resonaces (Hisaya)
+  (shortlived-00-04-03)
+
+- Nov 25, 98   H.Kurashige (particles-00-04-02)
+- Fixed bugs in shortlived particle table (shortlived-00-04-02)
+- More modification for E ~= p, i.e., photons in G4DynamicParticles
+- Added command of /particle/find in G4ParticleMessenger
+- Modified cut scheme for G4Ions
+  (partman-00-04-02)
+
+- Nov 20, 98   J.Allison (particles-00-04-01a)
+- Protected G4DynamicParticles::Set4Momentum sqrt for E ~= p, i.e., photons.
+
+- Nov 18, 98   H.Kurashige (particles-00-04-01)    
+- Changed G4VDecayChannel::DecayIt for treating dynamical mass (Hisaya)    
+- Migreted G4NucleiPropoerties from /processes/hadronic                    
+  to get precise mass for ions    (Hisaya)                                 
+  (partman-00-04-01)                                                       
+- Fixed minor bugs in G4ShortLivedConstructor (Hisaya)                     
+  (shortlived-00-04-01)                                                    
+
+- Nov 17, 98  John Allison and Hans-Peter Wellisch
+- SetApplyCutsFlag(false) in G4ParticleWithCuts constructor.
+- Initialise cuts at construction of G4Ions.
+
+- Nov 14, 98   H.Kurashige (particles-00-03-05)
+- Fixed a bug in G4ParticleWithCuts::CalcEnergyCuts
+- Suppress messages in construction of static objects (partman-00-03-06) 
+
+- Nov 13, 98   H.Kurashige (particles-00-03-04)
+- Fixed bugs in G4ParticleTable::Remove() (partman-00-03-04)
+- Fixed bugs in resonace constuctors (shortlived-00-03-04)
+  
+- Nov 8, 98    H.Kurashige (particles-00-03-03)
+- Fixed bugs in deletion of IonTable 
+- Modified G4PprticleWithCuts not to use EnergyLossTable 
+  (partman-00-03-03)
+- Chnage some enum numbers to public member  for SUN complier
+  (shortlived-00-03-03)
+
+-Oct 27, 98   H.Kurashige (particles-00-03-02)
+- Added higher excited  mesons (f0, a1, a2, K1, K2 etc.)
+  (shortlived-00-03-02)
+- Modified encoding rule for resonances  
+- Added four bodys decay in G4PhaseSpaceDecayChannel
+  (partman-00-03-02)
+
+-Oct 16, 98   H.Kurashige (particles-00-03-01)
+- Added higher excited baryons (N*, delta*, sigma* lambda* and xi*)
+  (shortlived-00-03-01)
+- Added rho+, rho-   (hadrons-00-03-01)
+- Modified encoding rule for resonances  (partman-00-03-01)
+
+-Sep 25, 98  H.Kurashige (particles-00-02-03)
+- reverted static methods for getting the particle pointer as inlined
+- modified PDG encoding of Xi_c 
+     (leptons-00-02-02, bosons-00-02-03, hadrons-00-02-02 )
+- modified G4ParticleTable to improve search by encoding ( partman-00-02-03 )
+
+-Aug 26, 98  H.Kurashige (particles-00-02-02)
+- Fixed sum bugs (bosons-00-02-02, partman-00-02-02)
+
+-Aug 10, 98  H.Kurashige (particles-00-02-01)
+- modified G4ParticleTable::FindIon (partman-00-02-01)
+- changed all static methods for getting the particle pointer as non-inlined   
+   tagged with following sub-directories
+        leptons:        leptons-00-02-01
+        bosons:         bosons-00-02-01
+        hadrons:        hadrons-00-02-01
+
+July 20, 98  H.Kurashige (particles-00-01-07)
+- fixed comnands in G4ParticleMessenger
+
+July 19, 98  H.Kurashige (particles-00-01-06)
+- tagged 
+
+July 12, 98  H.Kurashige (particles-00-01-05)
+- modified G4IonTable::GetIon (partman-00-01-04)
+
+July 10, 98  98 H.Kurashige (particles-00-01-04)
+- fixed G4ShortLivedConstructor.cc (shortlived-00-01-02)
+
+July 8, 98 H.Kurashige (particles-00-01-03)
+- fixed G4ShortLivedConstructor.cc
+- removed G4MaterialTable.hh and G4ElementVector.hh
+- fixed G4ParticlePropertyMessenger
+- tagged with following sub-directories
+        management:     partman-00-01-03
+        leptons:        leptons-00-01-02
+        bosons:         bosons-00-01-02
+        hadrons:        hadrons-00-01-02
+	shortlived:	shortlived-00-01-01
+
+July 6, 98 H.Kurashige (partman-00-01-01)
+- modified G4ParticleWithCuts
+- modified G4ParticleTable
+
+July 1, 98 H.Kurashige (particles-00-07-01)
+- add G4shortlived.a in GNUmakefile
+- tagged with following sub-directories
+	management:	partman-00-07-03
+	leptons:	leptons-00-07-01
+	bosons:		bosons-00-07-01
+	hadrons:	hadrons-00-07-01
+	shorrtlived:	shortlived-00-07-03
+
+June 28,  98 H.Kurashige
+- add shortlived directory for G4VShortLivedParticle and its derived classes
+- add G4Ions for nucleus in management
+- add G4TonTable and G4ShortLivedTable and modify G4ParticleTable
+- modify G4ParticleDefinition
+
+June 27,  98 L. Felawka
+- remove particle "Helium3" (duplicate particle "He3" already exists)
+
+June 26,  98 L. Felawka
+- add new particle: "Helium3" (type hadron/ion)
+
+June 23,  98 H.Kurashige (paricles-06-03)
+- fix bugs in G4ParticleWithCuts by Laszlo (partman-06-05)
+- modification for new SetCuts by Hisaya
+		 (hadrons-06-03,bosons-06-01,leptons-06-01)
+
+June 18 , 98 H.Kurashige (partman-00-06-04)
+- fix bugs in initialization of G4PaarticleWithCuts
+
+June 8, 98 H.Kurashige (partman-00-06-03)
+- add GetEnergyThreshold method in G4ParticleDefinition
+
+June 7, 98 H.Kurashige (partman-00-06-02)
+- remove theKillProcess from G4DynamicParticle
+
+June 7, 98 H.Kurashige (partman-00-06-01)
+- modify in order to avoid dependencies to process category
+  remove invocation of G4VProcess::BuildPhysicsTable in G4ParticleWithCuts::SetCuts
+  remove aggregation of G4ProcessManagerMessenger in G4PaerticleMessenger
+
+April 25, 98 H.Kurashige (hadrons-06-01)
+- Added G4He3 and fixed some parameters in ions
+
+April 21, 98 G.Cosmo (particles-00-05-01)
+- Tagged.
+
+April 08, 98 G.Cosmo
+- Added fixes for DEC-cxx 6.0 compiler, related to for-loop index
+  declarations. List of modified files:
+  management/G4DecayProducts.cc .hh, G4DecayTable.cc, G4KL3DecayChannel.cc
+             G4ParticleWithCuts.cc, G4PhaseSpaceDecayChannel.cc,
+             G4VDecayChannel.cc
+  leptons/G4Electron.cc
+
+March 24, 98 G.Barrand
+- GNUmakefile : MAKESHLIB changed in G4MAKESHLIB
+
+January 28, 98 S. Sadilov
+- For Win/NT port in GNUmakefile used $OUT_LIB introduced in 
+  GNUmakefile.architecture as positional qualifier for creating 
+  composite-library.
+
+January 28, 98 H.Kurashige - (particles-00-03-01)
+January 24, 98 H.Kurashige - (partman-03-01) 
+January 24, 98 H.Kurashige - (hadrons-03-01) (leptons-03-01) (bosons-03-01)
+December 19, 97 G. Cosmo - (alpha03)
+
+- Created.

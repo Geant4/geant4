@@ -1,0 +1,5 @@
+/mydet/generator particleGun
+/mydet/reqmuon 1
+/mydet/isomuon 1
+/run/beamOn 10
+exit

@@ -1,0 +1,77 @@
+$Id: History,v 1.1 1999-01-07 16:05:43 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example N02 History file
+                    ------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+ 4th December 1998 John Apostolakis
+
+- corrected the Magnetic Field  SetField methods
+- cosmetic change to the name of a volume (chamber), as it was too long.
+     
+12th Sptember 1998 Michel Maire
+- removed the function SetEmProcess() ( contained cin) 
+  and the class ExN02PhysicsListMessenger
+
+    Interchanged N02 and N03.
+  
+9th August 1998  John Allison
+- Removed trackerChamber_logVisAtt->SetForceWireframe(true);
+- Removed G4_SOLVE_TEMPLATES macros (now done in architecture.gmk).
+- Change G4UIterminal to G4UIGAG.
+
+16th July 1998  John Allison
+- Changed /vis~/Draw... to /vis~/draw.
+
+9th July 1998  John Allison
+- Added G4VIS_USE_DAWNFILE and G4VIS_USE_OPENGLWIN32 to ExN03VisManager.cc.
+
+8th July 1998  G.Cosmo
+- Protected visualization code with G4VIS_USE.
+
+6th July 1998  John Allison
+- Simplified ExN03VisManager.
+
+June 29 , 98 H.Kurashige
+- Modified ExN03PhysicsList. 
+
+May   15, 98 G. Cosmo
+
+- Added #ifdef protection to ExN03MagneticField.hh. Header now
+  included explicitly in ExN03DetectorConstruction.hh. Example now
+  links.
+
+May   07, 98 J. Apostolakis
+
+- Created Physical Volume Parameterisation for Tracker Chambers.
+- Copied from example6:
+       MyTrackerHit into ExN03TrackerHit
+
+May   05, 98 J. Apostolakis
+
+- Changed the geometry in DetectorConstruction.
+- Created the Magnetic Field
+
+May   01, 98 J. Apostolakis
+
+- Files created by copying from exampleEmPhys2, renaming the files 
+    and the classes within them, changing the string "My" into 
+
+- Major changes made:
+  * Event action: deleted energy counting.
+
+
+April 09, 98 G. Cosmo
+
+- Created.

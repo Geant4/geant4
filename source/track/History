@@ -1,0 +1,121 @@
+$Id: History,v 1.1 1999-01-07 16:14:19 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+December 15,  1998 H.Kurashige (track-00-04-05)
+- G4ParticleChange::CheckIt is activated in VERBOSE mode (Hisaya) 
+
+December 12, 1998 H.Kurashige (track-00-04-04)
+- Fixed bugs in G4Mars5GeVMechanism (Hisaya) 
+- Added SwOnAllEB/SwOffAllEB in G4ParticleChange (Hisaya)
+- Added GetEBMechanis and IsEBActive in G4VParticleChange (Hisaya)
+
+December 11, 1998 H.Kurashige (track-00-04-03)
+- Fixed bugs in G4Mars5GeVMechanism (Hisaya)
+
+December 9, 1998 L.Urban (track-00-04-02)
+- Added G4ParticleChangeForLoss and G4ParticleChangeForMSC.
+
+November 18, 98 H.Kurashige (track-00-04-01)A
+- Added new member of weight in G4Track and removed G4BiasingTag
+- Added Event Biasing based on MARS
+- Modified argument type in G4Track  
+  ( this tag requires particles-00-04-01 tag)
+
+November 9, 98  H.Kurashige (track-00-03-05)
+- Added Event Biasing Mechanism in G4VParticleChange
+
+November 8, 98 H.Kurashige (track-00-03-04)
+- Added G4BiasingTag as a member of G4Track
+- Modified G4Step, and G4StepPoint for managing  G4BiasingTag 
+
+Octorber 17, 98 H.Kurashige (track-00-03-03)
+- Fixed bugs in G4VParticleChange and G4ParticleChange
+
+October 14 19 H.Kurashige (track-00-03-01)
+- Modified G4ParticleChangeForTransportation for new relocation algorism.
+  (J.Apost.)
+
+August 31, 98 G.Cosmo (track-00-02-01)
+- Added "global" phony target to GNUmakefile.
+- Added comment to G4StepPoint.hh (J.Apostolakis).
+
+July 20,98 H.Kurashige (track-00-01-05)
+- Modified G4ParticleChangeForDecay 
+
+July 10, 98 P.Urban (track-00-01-02)
+- Optimised G4ParticleChangeForTransport. Much less data
+  is copied -> increased performance.
+
+July 1, 98 H.Kurashige (track-00-07-02)
+- Moved UpdateStepForAlongStep into G4ParticleChangeForTransport.cc file 
+  
+June 30, 98 P. Urban (track-00-07-01)
+- Some more tracking optimisation results.
+
+June 22, 98 P. Urban (track-00-06-04)
+- Preliminary results of tracking optimisation merged into HEAD.
+
+June 11, 98 G.Cosmo (track-00-06-03)
+- Tagged track-00-06-03.
+
+June 11, 98  J.Allison
+- Added a missing inline keyword to G4Track.hh:341.
+
+June 8, 98  H.Kurashige
+- Add GoodForTracking and BelowThreshold flags in G4Track
+  for new COHERENT scheme for the Cuts
+
+May 12, 98 H.Kurashige
+- Fix bugs in G4Step, G4ParticleChange
+  Add new class of G4ParticleChangeForTransport
+
+April 12, 98 H.Kuraashige
+  Implement new scheme of 'Particle Change'. Please see 
+  particle_change.asc in geant4alpha/documents/particles+matter/.
+  Following files are modified (or added)
+    G4ParticleChange.hh, .icc, .cc
+    G4VParticleChange.hh, .icc, .cc
+    G4ParticleChangeForDecay.hh, .cc
+    G4Step.hh,  G4TrackFastVector.hh
+
+April 9, 98 G.Cosmo
+- Porting on DEC-cxx 6.0.
+  Removed meaningless usage of "const" qualifier from functions
+  return type for basic types by value. Modified files:
+  G4ParticleChange.hh, .icc,
+  G4Step.hh, G4StepPoint.hh, G4Track.hh
+
+March 18, 1998 K. Amako
+  Add following information to G4Track:
+     1.Momentum direction at the start point (vertex position) of the track
+     2.Kinetic energy at the start point (vertex position) of the track
+     3.Pointer to the process which created the current track
+  Due to this, the following files have modififed and committed.
+     1.NewDesignDoc.txt
+     2.G4Track.hh, G4Track.cc
+     3.G4SteppingManager.cc
+
+
+January  29, 97 K. Amako
+  Following changes have been done and committed/tagged to cvs.
+  Tag# is track-00-03-01. 
+    - G4Step.cc: Output format has been changed in showStep().
+  
+December 19, 97 G. Cosmo - (alpha03)
+
+- Created.

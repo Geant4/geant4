@@ -1,0 +1,278 @@
+$Id: History,v 1.1 1999-01-07 16:08:50 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+December 2, 1998 M.Asai (global-00-04-02)
+- Remove the construction of G4UnitsMessenger in G4UnitsTable. This messenger is
+  constructed/destructed by G4UImanager to avoid a loop dependency.
+
+December 1, 1998 G.Cosmo (global-00-04-01)
+- Removed G4Allocator.cc containing all template declarations for GNU-g++
+  compiler not supported anymore.
+- Removed g4templates.hh contining all template declarations for the old
+  DEC cxx 5.X compiler not supported anymore.
+- Moved G4ParticleTypes.hh to particles/management/include to remove
+  dependency over particles category.
+- Updated management/GNUmakefile: not anymore dependencies over external
+  categories. Dependency over intercoms to be fixed still.
+
+December 1, 1998 M.Nagamatu, H Yoshida
+- G4ios.cc guarded by G4STREAM
+
+November 27, 98 M.Asai
+- G4UnitsMessenger has been moved to intercoms category to avoid a loop dependency.
+
+November 12, 98 K. Amako (global-00-03-05)
+- Corrected a bug in the GetVectorLength() method of 
+  management/src/G4PhysicsVector.cc. The fixed bug has nothing
+  to do with the basic behavior of G4PhysicsVector.
+
+November 11, 98 P.Gumplinger
+- Initialized all data members of the base class in G4PhysicsOrderedFreeVector
+  constructors.
+
+November 6, 98 J.Allison (global-00-03-04)
+- #ifdef WIN32 in G4strstreambuf.hh (Guy Barrand).
+
+November 4, 98 G.Cosmo (global-00-03-03)
+- Added G4coutDestination.hh, G4strstreambuf.hh and G4ios.cc
+  in global/management to resolve a circular dependency previously
+  existing with intercoms category (H.Yoshida, M.Nagamatu).
+
+October 21, 98 G.Cosmo (global-00-03-02)
+- Fixed initialization of G4UnitDefinition::UnitsMessenger in
+  G4UnitesTable.cc.
+
+October 17, 98 H.Kurasige
+- Modified G4FastVector.hh:
+  new array is now created only if (items > N) in Initialize() method
+  (in old version new array was created even when items are equal to N).
+
+October 13, 98  M.Nagamatu (global-00-03-01)
+- Added extern ostream G4cout/G4cerr under G4STREAM control.
+
+October 13, 98 M.Maire
+- Fixed length for printing the units. Add messenger file.
+
+September 23, 98 G.Cosmo
+- Replaced definition of min/max/sqr/abs with inclusion of
+  CLHEP/config/TemplateFunctions.h. Now compliant with CLHEP-1.3.
+- Replaced definition of G4UniformRand() with explicit call to the static
+  engine of the generator. This obviates to a silly bug in the AIX compiler
+  when treating static objects via -qtwolink option.
+
+September 10, 98 G.Cosmo
+- Added #undef min/max/sqr/abs to prevent possible macros definition
+  (temporary solution to allow backward compatibility with CLHEP-1.2).
+
+September 1, 98 M.Maire
+- Changed Watt to watt in SystemOfUnits.h and G4UnitsTable.cc.
+
+August 26, 98 J.Allison (global-00-02-02)
+- Introduced globals.hh for CLHEP-1.3 (backwards compatible with CLHEP-1.2):
+  added definitions of template functions min/max/sqr/abs.
+
+August 11, 98 G.Cosmo (global-00-02-01)
+- Modified SystemOfUnits.h and G4UnitsTable.cc (M.Maire):
+  introduced - angstrom, microbarn, picobarn, petaelectronvolt.
+
+July 17, 98 G.Cosmo (global-00-01-07)
+- Fixed bug in G4Timer introduced by methods renaming (G.Folger).
+
+July 15, 98 Y.Morita (global-00-01-06)
+- G4ios.hh: Added following lines for ooddlx compiler on CERN AFS-AIX
+   #if defined(OO_DDL_TRANSLATION)
+   #include <stdlib.h>
+   #endif
+
+July 14, 98 G.Cosmo (global-00-01-05)
+- Modified key value for G4Allocator for porting on CC compiler.
+  (H.Kurasige)
+
+July 8, 98 G.Cosmo (global-00-01-04)
+- Removed forward declarations of RWTPtrOrderedVector<G4KineticTrack>
+  and RWTPtrSortedVector<G4CollisionInitialState> from g4templates.hh.
+
+July 7, 98 G.Cosmo (global-00-01-03)
+- Removed old unit symbols in globals.hh (M.Maire)
+- Added units for density in G4UnitsTable.cc (M.Maire)
+
+July 6, 98 G.Cosmo (global-00-01-02)
+- Tagged.
+
+July 3, 98 J.Allison
+- Added run/include to management/GNUmakefile for G4Allocator.cc ifdef GNU_GCC.
+- Added G4Allocator<G4HitsCollection> to G4Allocator.cc for GNU_GCC.
+
+July 3, 98 G.Cosmo (global-00-01-01)
+- Moved template declarations of G4Allocator for GNU_GCC from
+  g4templates.hh to G4Allocator.cc.
+- Tagged.
+
+July 3, 98 J.Allison
+- Added G4Allocator<G4Run>,<G4HCofThisEvent>,<G4DCofThisEvent> for GNU_GCC.
+
+July 2, 98 G.Cosmo (global-00-07-01)
+- Updated g4templates.hh.
+
+June 26, 98 G.Cosmo (global-00-06-04)
+- Removed obsolete directory "benchmarks".
+
+June 22, 98 G.Cosmo (global-00-06-03)
+- Tagged.
+
+June 19, 98 J.Allison
+- In GNUmakefile.architecture, defined G4_SOLVE_TEMPLATES and GNU_GCC.
+- In g4templates.hh, protected G4Ray.
+
+June 15, 98 G.Cosmo (global-00-06-02)
+- Modified G4UnitsTable, "SymbolName" instead of "Symbol" (M.Asai).
+- Added few template declarations to g4templates.hh for DEC-AFS.
+
+June 10, 98 G.Cosmo (global-00-06-01)
+- Added forward declarations in g4templates.hh for BREPS classes
+  which were removed by mistake in a committal by M.Maire.
+
+June 10, 98 P.Urban
+- Added G4VERBOSE symbol to the compilation command line.
+
+June 08, 98 H.Kurasige & M.Maire
+- Added particles G4EtaPrime and G4RhoZero in G4ParticleTypes.hh
+- Created G4UnitsTable (.hh and .cc) and G4UnitsTableTest.cc
+
+June 05, 98 M.Maire
+- Temporarily added PhysicalConstants.h and SystemOfUnits.h from
+  CLHEP. Modified globals.hh accordingly.
+- Updated G4UnitsTest.cc
+
+May 12, 98 G.Cosmo
+- Fixed bug in GNUmakefile.architecture for OSF platforms. LDFLAGS
+  was explicitly overriden (!?).
+
+April 23, 98 G.Cosmo (global-00-05-03)
+- Added forward declarations in g4templates.hh for BREPS classes.
+- Modified OpenInventor setup and added -woff option to CXXFLAGS in
+  SGI-Local environment (J.Kallenbach).
+
+April 21, 98 M.Asai (global-00-05-02)
+- G4ApplicationState.hh, G4StateManager.hh and .cc, G4VStateDependent.hh
+  and .cc are moved to "intercoms".
+- Tagged as global-00-05-02.
+
+April 20, 98 G.Cosmo
+- Added handling of native boolean types in globals.hh through the
+  variable G4_HAVE_BOOL (before controlled only through CLHEP variable
+  HEP_HAVE_BOOL).
+- Added G4_HAVE_BOOL to HP-aCC setup in GNUmakefile.architecture.
+
+April 15, 98 H.Kurasige
+- Removed post-const qualifier from following methods in G4UserLimits:
+  GetMaxAllowedStep, GetUserMaxTrackLength, GetUserMaxTime,
+  GetUserMinEkine, GetUserMinRange.
+
+April 09, 98 G.Cosmo (global-00-05-01)
+- Modified G4Allocator::AddNewPage(). Now used "register int"
+  instead of "unsigned" for page chunks index.
+
+April 09, 98 M.Maire
+- Added new data and member functions to G4UserLimits class.
+
+March 24, 98 G.Barrand
+- GNUmakefile, GNUmakefile.architecture, GNUmakefile.common : 
+  MAKESHLIB changed in G4MAKESHLIB
+
+March 13, 98 G.Cosmo (global-00-04-04)
+- Added inclusion of G4GlobalFastSimulationManager.hh in g4templates.hh,
+  courtesy of P.Mora de Freitas.
+
+March 12, 98 G.Cosmo (global-00-04-03)
+- Updated description of supported OS/compilers.
+
+March 07, 98 G.Cosmo (global-00-04-02)
+- Modified CPPFLAGS setup for HP-aCC.
+- Added -lftn to FCLIBS for SGI setup (P.Urban)
+
+March 05, 98 G.Cosmo (global-00-04-01)
+- Removed warnings of unused variables.
+
+March 03, 98 G.Cosmo
+- Changed NO_CBRT to G4_NO_CBRT in GNUmakefile.architecture and
+  globals.hh.
+- Changed default constructor in G4StateManager.hh to be protected
+  instead of private.
+
+March 02, 98 S.Sadilov
+- add (temporary solution?) MAXFLOAT macros in
+  management/include/templates.hh for WinNT because of using
+  its in processes/hadronic/models/high_energy/src/*.cc
+
+February 2, 98 G. Cosmo (global-00-03-04)
+- Added -ptr option to DEC-AFS. Now sharing a unique template
+  repository.
+
+January 29, 98 G. Cosmo (global-00-03-03)
+- Added template definitions in G4Allocator.cc (M.Nagamatu)
+- Removed -DNO_NATIVE_GENERIC_H -I$(RWINC)/rw from compile command
+  for HP-aCC. Optimised compilation is now +O2.
+
+January 29, 98 G. Cosmo (global-00-03-02)
+- Tagged global-00-03-02
+
+January 29, 98 S. Sadilov
+- Included new G4SYSTEMS for Win/NT platform: WIN32-VC-NICE and 
+  WIN32-G++-NICE in GNUmakefiles.architecture.
+  Added CLHEP, RW, architecture dependant variables and variables for 
+  positional qualifiers (different between UNIX and VC). 
+- In GNUmakefile.common and GNUmakefile used $OUT_LIB introduced in 
+  GNUmakefile.architecture as positional qualifier for creating
+  simple-libraries and composite-library.
+- In GNUmakefile.common used $RWINCGPP introduced in GNUmakefiles.architecture
+  as right path on RW includes: different compilers (g++ for dependencies 
+  and VC compiler for buiding) use different RW.
+
+January 27, 98 G. Cosmo (global-00-03-01)
+- Introduced G4EXEC_BUILD and G4TEMPEXEC_REPOSITORY flags for C_FRONT based
+  compilers. These flags allow to distinguish between the template repository
+  used for building G4 libraries and the one used to build executables.
+  When building an executable and G4EXEC_BUILD is set, the original template
+  repository $G4TEMPLATE_REPOSITORY used to build libraries becomes read-only
+  $G4TEMPEXEC_REPOSITORY is used instead.
+
+January 23, 98 G. Cosmo
+- Added "-DNO_NATIVE_GENERIC_H -I$(RWINC)/rw" to CPPFLAGS for HP-aCC
+  in GNUmakefile.architecture.
+- Removed duplicated definition of G4Allocator<G4DecayProducts> from
+  g4templates.hh.
+
+January 20, 98 G. Cosmo
+- Modified GNUmakefile.architecture, adding -DRW_NO_STL option to
+  CPPFLAGS and removing it from CXXFLAGS.
+
+January 19, 98 E. Tcherniaev
+- Removed files Hep3Vector.hh, HepRotation.hh and G4SystemofUnits.cc
+- Updated several classes/files to use "#include <CLHEP/...>" instead
+  of "#include "CLHEP/..."".
+
+January 15, 98 G. Cosmo
+- Updated GNUmakefile.architecture to support aCC A.01.06 compiler.
+  Standardized definitions of variables related to CLHEP and RW.
+- Removed patches/template-definitions for HP-aCC from g4templates.hh
+  and G4Allocator.cc.
+
+December 19, 97 G. Cosmo - (alpha03)
+- Created.

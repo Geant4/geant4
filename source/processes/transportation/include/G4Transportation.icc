@@ -1,0 +1,63 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4Transportation.icc,v 1.1 1999-01-07 16:14:11 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+
+// 
+//
+//        Inline function implementation.
+//
+// =======================================================================
+// Created:  9 June 1998, J. Apostolakis
+// =======================================================================
+//
+
+inline void G4Transportation::SetPropagatorInField( G4PropagatorInField* pFieldPropagator)
+{
+   fFieldPropagator= pFieldPropagator;
+}
+
+inline G4PropagatorInField* G4Transportation::GetPropagatorInField()
+{
+   return fFieldPropagator;
+}
+
+inline G4bool G4Transportation::DoesGlobalFieldExist()
+{
+  G4TransportationManager* transportMgr;
+  transportMgr= G4TransportationManager::GetTransportationManager();
+
+  // fFieldExists= transportMgr->GetFieldManager()->DoesFieldExist();
+  // return fFieldExists;
+  return transportMgr->GetFieldManager()->DoesFieldExist();
+}
+
+inline void G4Transportation::SetTheOtherTouchableFree(G4VTouchable* value)
+{
+  if(value == fTouchable1){
+     fIsTouchable2Free = true;
+  }
+  else if(value == fTouchable2){
+     fIsTouchable1Free = true;
+  }
+}
+
+inline G4VTouchable* G4Transportation::GetFreeTouchable(){
+  if(fIsTouchable1Free){
+    fIsTouchable1Free = false;
+    return fTouchable1;
+  } 
+  else if(fIsTouchable2Free){
+    fIsTouchable2Free = false;
+    return fTouchable2;
+  }
+  else {
+    return NULL;
+  }
+}

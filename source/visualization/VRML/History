@@ -1,0 +1,68 @@
+VRML-00-03-07	Satoshi TANAKA	Dec 07, 1998  
+- An environmental variable "G4VRML_VIEWER" is renames to 
+  "G4VRMLFILE_VIEWER" for consistency.
+
+VRML-00-03-06	Satoshi TANAKA	Dec 04, 1998  
+- Maximun number of generated g4.wrl files in the destination
+  directory is customizable as: "setenv G4VRMLFILE_MAX_FILE_NUM  N"
+  (N is the integer greater than or equal to 1. The default value is 1.)
+
+VRML-00-03-04	Satoshi TANAKA	Dec 03, 1998  
+- Bug fix of SetPVPickability();
+
+VRML-00-03-03	Satoshi TANAKA	Nov 30, 1998  
+- Destination directiory of g4.wrl and g4_X.wrl is customizable 
+  with the environmental variable "G4VRMLFILE_DEST_DIR".
+
+  Unix:
+   % setenv G4VRMLFILE_DEST_DIR   directory_name/
+
+   For example, 
+
+   % setenv G4VRMLFILE_DEST_DIR   /tmp/
+
+   Do not forget to add "/" at the end of the directory name.
+
+  NT: 
+   DOS> set G4VRMLFILE_DEST_DIR   directory_name\
+
+   Do not forget to add "\" at the end of the directory name.
+
+- Minor change in policy of automatic incremation of output VRML file:
+
+  OLD way: g4.wrl, g4_2.wrl, .....           , g4_100.wrl
+  NEW way: g4.wrl, g4_1.wrl, g4_2.wrl, ..... , g4_100.wrl
+
+  Maximal number of files in one directory is restricted in order to 
+  avoid explosion of your hard disk. The maximal number is hard-coded.
+  You can revise is by editing enum's of G4VRML1FILEScene.hh and 
+  G4VRML2FILESchene.hh
+
+  Note that the incrementation is done as follows (pseudo codes)
+
+    filename = "g4.wrl" // initialization
+
+    while( filename already exists in the dest directory )
+    {
+	  increment filename
+    }
+
+  It means that if you delete file "g4.wrl" in the destination directory,
+  the file name in the next generation is still g4.wrl.
+
+  The JAVA application VRML/g4vrmlview/g4vrmlview.java 
+  for network visualization is also updated.
+
+
+VRML-00-03-02	Satoshi TANAKA	Nov 13, 1998  
+- Code refinement of VRML 2.0 driver
+- Pickability of Physical volume is controllable with 
+  setenv G4VRML_PV_PICKABLE  1/0
+- Nickname of VRML drivers are renames:
+  (Old names were, e.g., "VRML1File")
+
+  VRML1 file    : VRML1FILE
+  VRML1 network : VRML1
+
+  VRML2 file    : VRML2FILE
+  VRML1 network : VRML2

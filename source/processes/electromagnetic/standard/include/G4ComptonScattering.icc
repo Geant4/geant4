@@ -1,0 +1,108 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4ComptonScattering.icc,v 1.1 1999-01-07 16:11:09 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// ---------------------------------------------------------------
+//      GEANT 4 class inlined methods file
+//
+//      For information related to this code contact:
+//      CERN, CN Division, ASD group
+//      History: first implementation, based on object model of
+//      2nd December 1995, G.Cosmo
+//      ------------ G4ComptonScattering physics process ---------
+//                   by Michel Maire, April 1996
+// ***************************************************************
+// 10-06-96, updated by M.Maire
+// 06-01-97, crossection table + meanfreepath table, M.Maire
+// 12-03-97, new Physics scheme
+// 21-11-97, change for lowest energy limit default action
+// 15-12-98, return DBL_MAX below LowestEnergyLimit
+// ---------------------------------------------------------------
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4bool G4ComptonScattering::IsApplicable(const G4ParticleDefinition& particle)
+{
+   return ( &particle == G4Gamma::Gamma() ); 
+}
+ 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4ComptonScattering::GetMeanFreePath(const G4Track& aTrack,
+                                                     G4double,
+                                                     G4ForceCondition*)
+
+// returns the gamma mean free path in GEANT4 internal units
+
+{
+   const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
+   G4double GammaEnergy = aDynamicGamma->GetKineticEnergy();
+   G4Material* aMaterial = aTrack.GetMaterial();
+
+   G4double MeanFreePath;
+   G4bool isOutRange ;
+
+   if (GammaEnergy > HighestEnergyLimit || GammaEnergy < LowestEnergyLimit)
+     MeanFreePath = DBL_MAX;
+   else
+     MeanFreePath = (*theMeanFreePathTable)(aMaterial->GetIndex())->
+                                       GetValue(GammaEnergy, isOutRange);                                     
+
+   return MeanFreePath;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4ComptonScattering::ComputeMeanFreePath(G4double GammaEnergy,
+                                                         G4Material* aMaterial)
+
+// returns the gamma mean free path in GEANT4 internal units
+
+{
+  const G4ElementVector* theElementVector = aMaterial->GetElementVector() ;
+  const G4double* NbOfAtomsPerVolume      = aMaterial->GetVecNbOfAtomsPerVolume();
+
+  G4double SIGMA = 0. ;
+
+  for ( G4int elm=0 ; elm < aMaterial->GetNumberOfElements() ; elm++ )
+      {             
+            SIGMA += NbOfAtomsPerVolume[elm] * 
+                     ComputeCrossSectionPerAtom( GammaEnergy,
+                                                (*theElementVector)(elm)->GetZ());
+      }       
+
+  return SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+ 
+inline G4double G4ComptonScattering::GetMicroscopicCrossSection(
+                                                 G4DynamicParticle* aDynamicGamma,
+                                                 G4Element*         anElement)
+ 
+// gives the microscopic total cross section in GEANT4 internal units
+
+{
+   G4double crossSection;
+   G4double GammaEnergy = aDynamicGamma->GetKineticEnergy();
+   G4bool isOutRange ;
+
+   if (GammaEnergy < LowestEnergyLimit || GammaEnergy > HighestEnergyLimit)
+      crossSection = 0.;
+   else
+      crossSection = (*theCrossSectionTable)(anElement->GetIndex())->
+                                       GetValue(GammaEnergy, isOutRange);                                    
+
+   return crossSection;
+} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+

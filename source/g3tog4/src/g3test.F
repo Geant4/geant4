@@ -1,0 +1,77 @@
+*     This code implementation is the intellectual property of
+*     the RD44 GEANT4 collaboration.
+*    
+*     By copying, distributing or modifying the Program (or any work
+*     based on the Program) you indicate your acceptance of this statement,
+*     and all its terms.
+*    
+*     $Id: g3test.F,v 1.1 1999-01-07 16:06:53 gunter Exp $
+*     GEANT4 tag $Name: not supported by cvs2svn $
+*    
+*
+*       g3test
+*
+*       Test G3toG4 Geant3 -> Geant4 geometry code convertor
+*
+      implicit none
+      real par(20), bratio(6)
+      integer npar, i, ivol, mode(6), idum
+      character*4 charray(10)
+      integer iarray(10)
+      npar = 3
+      do i=1,3
+        par(i) = i**2
+      enddo
+      call G3toG4(10,11,' ')
+      call g3context('TRAK')
+      call gsmate(1,'material 1',16.,8.,1.001,.0002,.3,par,3)
+      call gstmed(1,'muon med',1,1,2,1.5,5.,.3,.001,.00001,
+     +  .0000001, par, 3)
+      call gsmixt(2,'mixture 2',16.,8.,.77,-3,par)
+      call gsvolu('NAM1','BOX ', 1, par, npar, ivol)
+      call gsmate(3,'material 3',16.,8.,1.001,.0002,.3,par,3)
+      call gstmed(2,'trak med',3,1,2,1.5,5.,.3,.001,.00001,
+     +  .0000001, par, 3)
+      call gsmixt(4,'mixture 4',16.,8.,.77,3,par)
+      call gsvolu('NAM2','TUBS', 2, par, npar, ivol)
+      call gsvolu('NAM3','TUBS', 2, par, npar, ivol)
+      call gsvolu('NAM4','TUBS', 2, par, npar, ivol)
+      call gsvolu('NAM5','TUBS', 2, par, npar, ivol)
+      call gsvolu('NAM6','TUBS', 2, par, npar, ivol)
+      call gspos('NAM2', 3, 'NAM1', 10., 20., 30., 0, 'ONLY')
+c      call gsposp('NAMP', 3, 'MOTH', 10., 20., 30., 99, 'ONLY',
+c     +  par, npar)
+      call gsatt('NAM1', 'COLO', 66)
+      call gsrotm(44, 90., 91., 180., 181., -270., -271.)
+      call gsdvn('NDVN','NAM2',22,3)
+      call gsdvt('NDV2','NAM3',2.,1,-1,20)
+      call gsdvx('NDV3','NAM4',6,3,2.,0.,2,20)
+      call gsdvn2('NDV4','NAM5',6,3,0.,2)
+      call gsdvt2('NDV5','NAM5',1.5,1,0.,2,20)
+      call gstpar(33,'PHOT',2.)
+      call gspart(22,'particle',8,91.14,0.,1.e-24,0.,0)
+      bratio(1)=1.1
+      bratio(2)=2.2
+      bratio(3)=3.3
+      bratio(4)=4.4
+      bratio(5)=5.5
+      bratio(6)=6.6
+      mode(1)=101
+      mode(2)=202
+      mode(3)=303
+      mode(4)=404
+      mode(5)=505
+      mode(6)=606
+      call gsdk(22,bratio,mode)
+      charray(1) = 'Hit1'
+      charray(2) = 'Hit2'
+      iarray(1) = 1
+      iarray(2) = 2
+      call gsdet('DETT','SETT',2,charray,iarray,1001,4,4,idum,idum)
+      call gsdetv('DETT','SETT',1001,4,4,idum,idum)
+      call gsdeta('DETT','SETT', 'ALIA', 4,4,idum)
+      call gsdeth('DETT','SETT',1,'Hit1',16,0.,.01)
+      call gsdetd('DETT','SETT',1,'Digi',16)
+      call gsdetu('DETT','SETT',3,par)
+      call ggclos
+      end

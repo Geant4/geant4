@@ -1,0 +1,39 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4Visible.icc,v 1.1 1999-01-07 16:09:15 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// John Allison  30th October 1996
+
+inline G4Visible::G4Visible (): fpVisAttributes (0) {}
+
+inline G4Visible::G4Visible (const G4Visible& visible):
+  fpVisAttributes (visible.fpVisAttributes)
+{}
+
+inline G4Visible& G4Visible::operator = (const G4Visible& right) {
+  fpVisAttributes = right.fpVisAttributes;
+  return *this;
+}
+
+inline G4Visible::G4Visible (const G4VisAttributes* pVA):
+  fpVisAttributes (pVA)
+{}
+
+inline const G4VisAttributes* G4Visible::GetVisAttributes () const {
+  return fpVisAttributes;
+}
+
+inline void G4Visible::SetVisAttributes (const G4VisAttributes* pVA) {
+  fpVisAttributes = pVA;
+}
+
+inline void G4Visible::SetVisAttributes (const G4VisAttributes& VA) {
+  fpVisAttributes = &VA;
+}

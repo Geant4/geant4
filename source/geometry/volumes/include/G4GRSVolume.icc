@@ -1,0 +1,69 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4GRSVolume.icc,v 1.1 1999-01-07 16:08:41 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// class G4GRSVolume inline implementation
+
+inline G4GRSVolume::G4GRSVolume(G4VPhysicalVolume *pVol,
+			 const G4RotationMatrix *pRot,
+			 const G4ThreeVector &tlate)
+  : fvol(pVol),ftlate(tlate), G4VTouchable()
+{
+  if (pRot)
+    {
+      frot=new G4RotationMatrix(*pRot);
+      if (!frot) G4Exception ("G4GRSVolume::G4GRSVolume cannot alloc G4RotationMatrix");
+    }
+  else
+    {
+      frot=0;
+    }
+}
+
+inline G4GRSVolume::G4GRSVolume(G4VPhysicalVolume *pVol,
+			 const G4RotationMatrix &rot,
+			 const G4ThreeVector &tlate)
+  : fvol(pVol),ftlate(tlate), G4VTouchable()
+{
+  frot=new G4RotationMatrix(rot);
+  if (!frot) G4Exception ("G4GRSVolume::G4GRSVolume cannot alloc G4RotationMatrix");
+}
+
+inline G4VPhysicalVolume* G4GRSVolume::GetVolume(G4int depth) const
+{
+  if( depth != 0 ) {
+     G4Exception("G4GRSSolid::GetSolid: has no meaning for depth!=0");
+  }
+  return fvol;
+}
+
+inline G4VSolid* G4GRSVolume::GetSolid(G4int depth) const
+{
+  if( depth != 0 ) {
+     G4Exception("G4GRSSolid::GetSolid: has no meaning for depth!=0");
+  }
+  return fvol->GetLogicalVolume()->GetSolid();
+}
+
+inline const G4ThreeVector& G4GRSVolume::GetTranslation(G4int depth) const
+{
+  if( depth != 0 ) {
+     G4Exception("G4GRSSolid::GetSolid: has no meaning for depth!=0");
+  }
+  return ftlate;
+}
+
+inline const G4RotationMatrix* G4GRSVolume::GetRotation(G4int depth) const
+{
+  if( depth != 0 ) {
+     G4Exception("G4GRSSolid::GetSolid: has no meaning for depth!=0");
+  }
+  return frot;
+}

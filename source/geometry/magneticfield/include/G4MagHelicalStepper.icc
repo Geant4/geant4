@@ -1,0 +1,25 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4MagHelicalStepper.icc,v 1.1 1999-01-07 16:07:04 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+
+// linear Step in regions of no field
+
+inline void
+G4MagHelicalStepper::LinearStep( const G4double  yIn[],
+			       const G4double  h,
+			       G4double  yLinear[])
+{
+  for( G4int i = 0; i < 3; i++ ) {
+    yLinear[i]   = yIn[i] + h * yIn[i+3];
+    yLinear[i+3] = yIn[i+3];
+  }
+}
+
+

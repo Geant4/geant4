@@ -1,0 +1,148 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4ReplicaNavigation.icc,v 1.1 1999-01-07 16:08:44 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// class G4ReplicaNavigation Inline implementation
+
+inline G4int G4ReplicaNavigation::VoxelLocate(const G4SmartVoxelHeader *pHead,
+					      const G4ThreeVector &localPoint,
+					      const G4int blocked) const
+{
+  EAxis targetHeaderAxis;
+  G4double coord,targetHeaderMin;
+  G4double targetHeaderNodeWidth,targetNodePos;
+  G4int targetHeaderNoSlices,targetNodeNo;
+  
+  targetHeaderAxis=pHead->GetAxis();
+  targetHeaderNoSlices=pHead->GetNoSlices();
+  targetHeaderMin=pHead->GetMinExtent();
+  targetHeaderNodeWidth=(pHead->GetMaxExtent()-targetHeaderMin)/targetHeaderNoSlices;
+  switch (targetHeaderAxis)
+    {
+    case kXAxis:
+      coord=localPoint.x();
+      break;
+    case kYAxis:
+      coord=localPoint.y();
+      break;
+    case kZAxis:
+      coord=localPoint.z();
+      break;
+    case kRho:
+      coord=localPoint.perp();
+      break;
+    case kPhi:
+      coord=localPoint.phi();
+      if (coord<0&&coord<targetHeaderMin) coord+=2.0*M_PI;
+      break;
+    case kRadial3D:
+    default:
+      break;
+    }
+  targetNodePos=(coord-targetHeaderMin)/targetHeaderNodeWidth;
+  targetNodeNo=(G4int) targetNodePos;
+
+  if (targetNodeNo==blocked)
+    {
+      targetNodeNo=(targetNodePos-targetNodeNo<0.5)
+	? targetNodeNo-1 : targetNodeNo+1;
+      
+      // Do not need to check range: If on outer edge of zeroth
+      // voxel & it is blocked => should have exited mother
+      // (or similar)       P.Kent
+      // assert(targetNodeNo>=0&&targetNodeNo<targetHeaderNoSlices);
+
+      //  The assert above fails for simulation of high energy electrons 
+      //  It is not clear what is the cause for this failure.
+      //  The code below attempts to rectify this problem until a
+      //   complete resolution is possible.    
+      // 					J.Apostolakis, June 12, 1998
+      if((targetNodeNo<0) || (targetNodeNo>=targetHeaderNoSlices))
+        {
+#ifdef G4_REPORT_REPLICA_NAV
+          G4cerr << " ERROR: assert in G4ReplicaNavigation::VoxelLocate " 
+               << " has failed : " << endl <<
+               << " (targetNodeNo>=0&&targetNodeNo<targetHeaderNoSlices) " 
+    	       << " targetNodeNo= " << targetNodeNo 
+               << " Number of Slices =  " << targetHeaderNoSlices << endl;
+#endif
+	  if (targetNodeNo<0)
+	    {
+	      targetNodeNo=0;
+	    }
+	  else if (targetNodeNo>=targetHeaderNoSlices)
+	    {
+	      targetNodeNo=targetHeaderNoSlices-1;
+	    }
+        }
+    }
+  else
+    {
+// Rounding protection
+      if (targetNodeNo<0)
+	{
+	  targetNodeNo=0;
+	}
+      else if (targetNodeNo>=targetHeaderNoSlices)
+	{
+	  targetNodeNo=targetHeaderNoSlices-1;
+	}
+    }
+  return targetNodeNo;
+}
+
+inline G4bool G4ReplicaNavigation::LevelLocate(G4NavigationHistory& history,
+					const G4VPhysicalVolume *blockedVol,
+					const G4int         blockedNum,
+					const G4ThreeVector &,
+					const G4ThreeVector* globalDirection,
+				        const G4bool        pLocatedOnEdge, 
+					      G4ThreeVector &localPoint)
+{
+  G4VPhysicalVolume *motherPhysical,*pPhysical;
+  G4LogicalVolume *motherLogical;
+  G4SmartVoxelHeader *motherVoxelHeader;
+  G4int nodeNo;
+
+  //  localPoint=history.GetTopTransform().TransformPoint(globalPoint);
+  motherPhysical=history.GetTopVolume();
+  motherLogical=motherPhysical->GetLogicalVolume();
+  motherVoxelHeader=motherLogical->GetVoxelHeader();
+  pPhysical=motherLogical->GetDaughter(0);
+
+  if (blockedVol==pPhysical)
+    {
+      nodeNo=VoxelLocate(motherVoxelHeader,localPoint,blockedNum);
+    }
+  else
+    {
+      nodeNo=VoxelLocate(motherVoxelHeader,localPoint);
+    }
+
+  ComputeTransformation(nodeNo,
+			pPhysical,
+			localPoint);
+  pPhysical->Setup(motherPhysical);
+  history.NewLevel(pPhysical,
+		   kReplica,
+		   nodeNo);
+  pPhysical->SetCopyNo(nodeNo); 
+  //    localPoint=history.GetTopTransform().TransformPoint(globalPoint);
+  return true;
+}
+
+inline void G4ReplicaNavigation::SetPhiTransformation(const G4double ang,
+					        G4VPhysicalVolume *pVol) const
+{
+  G4RotationMatrix rm;
+  rm.rotateZ(ang);
+  if (pVol)  *pVol->GetRotation()=rm;
+}
+
