@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisManager.hh,v 1.7 2002-11-20 14:46:00 gcosmo Exp $
+// $Id: G4VVisManager.hh,v 1.8 2003-01-20 14:17:20 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // John Allison 19/Oct/1996.
 // 
@@ -78,6 +78,8 @@ class G4Polymarker;
 class G4Polyhedron;
 class G4NURBS;
 class G4VSolid;
+class G4VHit;
+class G4VTrajectory;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4VisAttributes;
@@ -125,8 +127,19 @@ public: // With description
     const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
 
   ///////////////////////////////////////////////////////////////////////
-  // Draw methods for Geant4 Geometry Objects as if they were
-  // Visualization Primitives.  Useful for representing hits.
+  // Draw methods for Geant4 Objects as if they were Visualization
+  // Primitives.  Note that the visualization attributes needed in
+  // some cases override any visualization attributes that are
+  // associated with the object itself - thus you can, for example,
+  // change the colour of a physical volume.
+
+  virtual void Draw (const G4VHit&,
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
+
+  virtual void Draw (const G4VTrajectory&, G4int i_mode = 0,
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
+  // i_mode is a parameter that can be used to control the drawing of
+  // the trajectory.  See, e.g., G4VTrajectory::DrawTrajectory.
 
   virtual void Draw (const G4LogicalVolume&, const G4VisAttributes&,
     const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
