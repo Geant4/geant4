@@ -1,4 +1,4 @@
-?RCS: $Id: src.U,v 1.1 2001-07-03 13:16:59 sadilov Exp $
+?RCS: $Id: src.U,v 1.2 2001-07-20 17:15:02 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1996, Cygnus Support
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
@@ -12,6 +12,9 @@
 ?RCS: Original Author: Tom Tromey <tromey@cygnus.com>
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.1  2001/07/03 13:16:59  sadilov
+?RCS: Some 'strange' paths to Configure.
+?RCS:
 ?RCS: Revision 3.0.1.1  1997/02/28  16:23:54  ram
 ?RCS: patch61: created
 ?RCS:
@@ -33,7 +36,7 @@
 : Find the path to the source tree
 case "$src" in
 '') src=`echo $0 | sed -e 's%/[^/][^/]*$%%'`
-echo "src=$src"
+#echo "src=$src"
 ;;
 esac
 case "$src" in
@@ -42,7 +45,7 @@ case "$src" in
 	rsrc=..
 	;;
 /*) rsrc="$src/.."
-echo "rsrc=$rsrc"
+#echo "rsrc=$rsrc"
 ;;
 ./*) 	cur_dir=`pwd`
 	cd ../$src
@@ -50,11 +53,11 @@ echo "rsrc=$rsrc"
 	cd $cur_dir
 	rsrc="$src/.."
 rsrc="$src/.."
-echo "src=$src"
-echo "rsrc=$rsrc"
+#echo "src=$src"
+#echo "rsrc=$rsrc"
 ;;
 *) rsrc="../$src"
-echo "rsrc=$rsrc"
+#echo "rsrc=$rsrc"
 ;;
 esac
 ?X:
@@ -66,13 +69,12 @@ esac
 ?X: definition of the package variable, making sure it's the same as ours.
 ?X: If it matches, we know we found the right source tree. -- RAM, 15/03/96
 ?X:
-cur_dir=`pwd`
-echo "cur_dir=$cur_dir"
+#cur_dir=`pwd`
+#echo "cur_dir=$cur_dir"
 if test -f $src/Configure && \
 	$contains "^package=$package" $src/Configure >/dev/null 2>&1
 then
    : found it, so we are ok.
-	echo "FOUND"
 else
 ?X: Otherwise try "." and up to 4 parent directories...
 ?X: Note that we prepend a ".." to get out of the configuration environment.
@@ -95,8 +97,8 @@ case "$rsrc" in
 #	. ./myread
 #	src="$ans"
 	rsrc="$src"
-echo "src=$src"
-echo "rsrc=$rsrc"
+#echo "src=$src"
+#echo "rsrc=$rsrc"
 	if test -f $rsrc/Configure && \
 		$contains "^package=$package" $rsrc/Configure >/dev/null 2>&1
 	then
