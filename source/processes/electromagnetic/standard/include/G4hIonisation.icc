@@ -21,55 +21,50 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.icc,v 1.4 2001-07-11 10:03:29 gunter Exp $
+// $Id: G4hIonisation.icc,v 1.5 2001-08-14 17:31:05 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// ---------------------------------------------------------------
 //      GEANT 4 class inlined methods file 
 //
 //      ------------ G4hIonisation physics process ------------
-//                  by Laszlo Urban, 30 May 1997
-// ***************************************************************
-// It is the first implementation of the NEW IONISATION PROCESS.               
-// It calculates the ionisation of charged hadrons.
-// ***************************************************************
+//                   by Laszlo Urban, 30 May 1997
+// ---------------------------------------------------------------
+//
 // 24/09/97: corrected by L.Urban
 // 20/11/97: correction on MeanFreePath for KineticEnergy > HighestLimit
+// 14-08-01: 'cleanup' of GetMeanFreePath (mma)
+// 
 // ---------------------------------------------------------------
 
-inline G4double G4hIonisation::GetMeanFreePath(
-                                               const G4Track& trackData,
-                                               G4double previousStepSize,
-                                               G4ForceCondition* condition) 
-{
-   const G4DynamicParticle* aParticle ;
-   G4Material* aMaterial ;
-   G4double MeanFreePath;
-   G4bool isOutRange ;
- 
-   *condition = NotForced ;
-
-   aParticle = trackData.GetDynamicParticle() ;
-   aMaterial = trackData.GetMaterial() ;
-
-   G4double KineticEnergy = aParticle->GetKineticEnergy() ;
-
-   if(KineticEnergy < LowestKineticEnergy)
-     MeanFreePath = DBL_MAX;
-   else {
-     if(KineticEnergy > HighestKineticEnergy)
-                                   KineticEnergy = HighestKineticEnergy;
-     MeanFreePath = ((*theMeanFreePathTable)(aMaterial->GetIndex()))->
-                    GetValue(KineticEnergy,isOutRange) ;
-     }
-
-   return MeanFreePath ;
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4bool G4hIonisation::IsApplicable(
                             const G4ParticleDefinition& particle)
 {
    return(particle.GetPDGCharge() != 0.);
 }
-         
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....         
+
+inline G4double G4hIonisation::GetMeanFreePath(const G4Track& track, G4double,
+                                               G4ForceCondition*) 
+{
+ G4double KineticEnergy = track.GetDynamicParticle()->GetKineticEnergy();
+ G4Material* aMaterial  = track.GetMaterial();
+   
+ G4double MeanFreePath;
+ G4bool isOut;
+   
+ if (KineticEnergy > HighestKineticEnergy) KineticEnergy = HighestKineticEnergy;
+ if (KineticEnergy > LowestKineticEnergy)
+         MeanFreePath = ((*theMeanFreePathTable)(aMaterial->GetIndex()))->
+                        GetValue(KineticEnergy, isOut);     
+ else    MeanFreePath = DBL_MAX;
+
+ return MeanFreePath;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
