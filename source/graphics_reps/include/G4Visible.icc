@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Visible.icc,v 1.4 2001-07-11 10:01:06 gunter Exp $
+// $Id: G4Visible.icc,v 1.5 2005-03-09 16:37:25 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,8 +43,4 @@ inline const G4VisAttributes* G4Visible::GetVisAttributes () const {
 
 inline void G4Visible::SetVisAttributes (const G4VisAttributes* pVA) {
   fpVisAttributes = pVA;
-}
-
-inline void G4Visible::SetVisAttributes (const G4VisAttributes& VA) {
-  fpVisAttributes = &VA;
 }

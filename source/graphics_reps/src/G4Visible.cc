@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Visible.cc,v 1.5 2003-06-16 16:55:29 gunter Exp $
+// $Id: G4Visible.cc,v 1.6 2005-03-09 16:37:25 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,6 +42,23 @@ G4Visible& G4Visible::operator = (const G4Visible& right) {
 
 G4bool G4Visible::operator == (const G4Visible& right) const{
   return fpVisAttributes == right.fpVisAttributes;
+}
+
+void G4Visible::SetVisAttributes (const G4VisAttributes& VA) {
+  fpVisAttributes = &VA;
+  static G4bool firstCall = true;
+  if (firstCall) {
+    firstCall = false;
+    G4cout << 
+"WARNING: G4Visible::SetVisAttributes: the G4VisAttributes object is"
+"\n       not stored in a G4Visible; only a reference, a const pointer, is"
+"\n       kept.  Therefore the G4VisAttributes object to which it refers must"
+"\n       have a life long enough to satisfy all uses of the G4Visible object."
+"\n       E.g., if the G4Visible object is created on the heap (using `new')"
+"\n       then the associated G4VisAttributes object would normally also be"
+"\n       created on the heap and managed in the same way."
+	   << G4endl;
+  }
 }
 
 std::ostream& operator << (std::ostream& os, const G4Visible& v) {
