@@ -1,10 +1,10 @@
+// $Id: Tst05DetectorMessenger.cc,v 1.3 2000-02-25 16:56:42 gcosmo Exp $
+// ------------------------------------------------------------
+
 #include "Tst05DetectorConstruction.hh"
 #include "Tst05DetectorMessenger.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
-#include "globals.hh"
-
-#include "G4ios.hh"
 
 Tst05DetectorMessenger::Tst05DetectorMessenger(Tst05DetectorConstruction * myDC):myDetector(myDC)
 {

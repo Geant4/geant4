@@ -1,9 +1,13 @@
+// $Id: Tst05RunAction.cc,v 1.6 2000-02-25 16:56:43 gcosmo Exp $
+// ------------------------------------------------------------
+
+// Make this appear first!
+#include "G4Timer.hh"
 
 #include "Tst05RunAction.hh"
 
 #include "G4Run.hh"
 #include "G4UImanager.hh"
-#include "G4ios.hh"
 
 Tst05RunAction::Tst05RunAction()
 {

@@ -1,3 +1,5 @@
+// $Id: Tst05DetectorMessenger.hh,v 1.2 2000-02-25 16:56:41 gcosmo Exp $
+// ------------------------------------------------------------
 
 #ifndef Tst05DetectorMessenger_h
 #define Tst05DetectorMessenger_h 1

@@ -1,10 +1,11 @@
-// $Id: Tst05PhysicsList.hh,v 1.3 1999-10-03 09:55:06 kurasige Exp $
+// $Id: Tst05PhysicsList.hh,v 1.4 2000-02-25 16:56:41 gcosmo Exp $
 // ------------------------------------------------------------
+
 #ifndef Tst05PhysicsList_h
 #define Tst05PhysicsList_h 1
 
-#include "G4VUserPhysicsList.hh"
 #include "globals.hh"
+#include "G4VUserPhysicsList.hh"
 
 class Tst05PhysicsList: public G4VUserPhysicsList
 {

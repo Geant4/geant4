@@ -1,3 +1,5 @@
+// $Id: Tst05PrimaryGeneratorAction.hh,v 1.2 2000-02-25 16:56:41 gcosmo Exp $
+// ------------------------------------------------------------
 
 #ifndef Tst05PrimaryGeneratorAction_h
 #define Tst05PrimaryGeneratorAction_h 1

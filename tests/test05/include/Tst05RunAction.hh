@@ -1,11 +1,13 @@
+// $Id: Tst05RunAction.hh,v 1.5 2000-02-25 16:56:41 gcosmo Exp $
+// ------------------------------------------------------------
 
 #ifndef Tst05RunAction_h
 #define Tst05RunAction_h 1
 
-#include "G4Timer.hh"
-#include "G4UserRunAction.hh"
 #include "globals.hh"
+#include "G4UserRunAction.hh"
 
+class G4Timer;
 class G4Run;
 
 class Tst05RunAction : public G4UserRunAction

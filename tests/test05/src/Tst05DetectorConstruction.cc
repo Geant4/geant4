@@ -1,6 +1,17 @@
-#include "Tst05DetectorConstruction.hh"
+// $Id: Tst05DetectorConstruction.cc,v 1.5 2000-02-25 16:56:42 gcosmo Exp $
+// ------------------------------------------------------------
 
+#include "G4AssemblyCreator.hh"
+#include "G4Assembly.hh"
+#include "Tst05DetectorConstruction.hh"
 #include "Tst05DetectorMessenger.hh"
+
+#include "G4PVPlacement.hh"
+#include "G4LogicalVolume.hh"
+#include "G4Box.hh"
+#include "G4Tubs.hh"
+#include "G4Material.hh"
+#include "G4Element.hh"
 
 Tst05DetectorConstruction::Tst05DetectorConstruction():detectorChoice(0)
 {

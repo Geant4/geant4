@@ -1,14 +1,20 @@
-// $Id: test05.cc,v 1.1 1999-01-08 16:34:49 gunter Exp $
+// $Id: test05.cc,v 1.2 2000-02-25 16:56:40 gcosmo Exp $
+// ------------------------------------------------------------
+
 #include "Tst05DetectorConstruction.hh"
 #include "Tst05RunAction.hh"
 #include "Tst05PrimaryGeneratorAction.hh"
 #include "Tst05PhysicsList.hh"
-#include "G4AssemblyCreator.hh"
+
+#ifdef G4VIS_USE
+  #include "Tst05VisManager.hh"
+#endif
+
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
 
-int main(int argc,char** argv) {
+int main(int argc, char** argv) {
 
   // Set the default random engine to RanecuEngine
   RanecuEngine defaultEngine;
@@ -21,6 +27,12 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(new Tst05DetectorConstruction);
   runManager->SetUserInitialization(new Tst05PhysicsList);
 
+  // Visualization manager
+  #if defined(G4VIS_USE)
+    G4VisManager* visManager = new Tst05VisManager;
+    visManager->Initialize();
+  #endif
+
   // UserAction classes
   runManager->SetUserAction(new Tst05RunAction);
   runManager->SetUserAction(new Tst05PrimaryGeneratorAction);
@@ -29,7 +41,7 @@ int main(int argc,char** argv) {
   // Define (G)UI GAG for interactive mode
   if(argc==1)
   {
-    // G4UIterminal is a (dumb) terminal.
+    // G4UIterminal is a (dumb) terminal
     G4UIsession * session = new G4UIterminal;
     session->SessionStart();
     delete session;
@@ -43,13 +55,11 @@ int main(int argc,char** argv) {
     UI->ApplyCommand(command+fileName);
   }
 
+  // Job termination
+  #if defined(G4VIS_USE)
+    delete visManager;
+  #endif
   delete runManager;
+
   return 0;
 }
-
-
-
-
-
-
-

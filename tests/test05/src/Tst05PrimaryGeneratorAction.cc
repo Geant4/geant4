@@ -1,11 +1,13 @@
+// $Id: Tst05PrimaryGeneratorAction.cc,v 1.2 2000-02-25 16:56:43 gcosmo Exp $
+// ------------------------------------------------------------
 
 #include "Tst05PrimaryGeneratorAction.hh"
 
+#include "globals.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
-#include "globals.hh"
 
 Tst05PrimaryGeneratorAction::Tst05PrimaryGeneratorAction()
 {

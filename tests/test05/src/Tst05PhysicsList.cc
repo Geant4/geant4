@@ -1,6 +1,6 @@
-// $Id: Tst05PhysicsList.cc,v 1.4 1999-12-15 14:54:37 gunter Exp $
+// $Id: Tst05PhysicsList.cc,v 1.5 2000-02-25 16:56:42 gcosmo Exp $
+// ------------------------------------------------------------
 
-#include "globals.hh"
 #include "Tst05PhysicsList.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"
@@ -15,8 +15,6 @@
 #include "G4IonConstructor.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
-#include "G4ios.hh"
-#include "g4std/iomanip"                
 
 
 Tst05PhysicsList::Tst05PhysicsList():  G4VUserPhysicsList()

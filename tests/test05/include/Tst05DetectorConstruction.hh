@@ -1,17 +1,11 @@
+// $Id: Tst05DetectorConstruction.hh,v 1.3 2000-02-25 16:56:41 gcosmo Exp $
+// ------------------------------------------------------------
 
 #ifndef Tst05DetectorConstruction_h
 #define Tst05DetectorConstruction_h 1
-#include "G4Timer.hh"
-#include "G4PVPlacement.hh"
-#include "G4LogicalVolume.hh"
-#include "G4Box.hh"
-#include "G4Tubs.hh"
-#include "G4Material.hh"
-#include "G4Element.hh"
-#include "G4VUserDetectorConstruction.hh"
-#include "G4Assembly.hh"
-#include "G4AssemblyCreator.hh"
+
 #include "globals.hh"
+#include "G4VUserDetectorConstruction.hh"
 
 class Tst05DetectorMessenger;
 

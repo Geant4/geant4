@@ -1,0 +1,23 @@
+/vis/scene/create
+/vis/sceneHandler/create OGLSX
+/vis/sceneHandler/attach
+/vis/viewer/create
+/vis/scene/notifyHandlers
+/mydet/SelectDetector rod_place_asm
+/control/verbose 2
+#/tracking/verbose 1
+#
+# Initialize GEANT4
+#
+/run/initialize
+/vis/camera/zoom 4.2
+/vis/refresh/view
+#
+# Run 100 events
+#
+#/run/beamOn 1
+#
+# Termination
+#
+#exit
+
