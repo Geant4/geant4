@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopePhotoElectric.cc,v 1.2 2003-01-15 09:14:26 pandola Exp $
+// $Id: G4PenelopePhotoElectric.cc,v 1.3 2003-02-12 11:44:43 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: L. Pandola
@@ -29,6 +29,7 @@
 // History:
 // --------
 // January 2003 - Created
+// 12 Feb 2003   MG Pia     Migration to "cuts per region"
 // --------------------------------------------------------------
 
 #include "G4PenelopePhotoElectric.hh"
@@ -52,6 +53,8 @@
 #include "G4RangeNoTest.hh"
 #include "G4AtomicTransitionManager.hh"
 #include "G4AtomicShell.hh"
+#include "G4MaterialCutsCouple.hh"
+#include "G4ProductionCutsTable.hh"
 
 #include "G4CutsPerMaterialWarning.hh"
 
@@ -132,8 +135,10 @@ G4VParticleChange* G4PenelopePhotoElectric::PostStepDoIt(const G4Track& aTrack,
   G4ParticleMomentum photonDirection = incidentPhoton->GetMomentumDirection();
    
   // Select randomly one element in the current material
-  G4Material* material = aTrack.GetMaterial();
-  G4int Z = crossSectionHandler->SelectRandomAtom(material,photonEnergy);
+  //  G4Material* material = aTrack.GetMaterial();
+  const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
+  
+  G4int Z = crossSectionHandler->SelectRandomAtom(couple,photonEnergy);
 
   // Select the ionised shell in the current atom according to shell cross sections
   size_t shellIndex = shellCrossSectionHandler->SelectRandomShell(Z,photonEnergy);
@@ -163,7 +168,7 @@ G4VParticleChange* G4PenelopePhotoElectric::PostStepDoIt(const G4Track& aTrack,
       // Generate the electron only if with large enough range w.r.t. cuts and safety
       G4double safety = aStep.GetPostStepPoint()->GetSafety();
 
-      if (rangeTest->Escape(G4Electron::Electron(),material,eKineticEnergy,safety))
+      if (rangeTest->Escape(G4Electron::Electron(),couple,eKineticEnergy,safety))
 	{
 	  // The electron is created in the direction of the incident photon ...  
 	  G4DynamicParticle* electron = new G4DynamicParticle (G4Electron::Electron(), 
@@ -184,10 +189,17 @@ G4VParticleChange* G4PenelopePhotoElectric::PostStepDoIt(const G4Track& aTrack,
   G4int nElectrons = electronVector.size();
   size_t nTotPhotons = 0;
   G4int nPhotons=0;
-  G4double cutg = G4std::min(cutForLowEnergySecondaryPhotons,
-                             G4Gamma::Gamma()->GetEnergyThreshold(material));
-  G4double cute = G4std::min(cutForLowEnergySecondaryElectrons,
-                             G4Electron::Electron()->GetEnergyThreshold(material));
+ 
+  const G4ProductionCutsTable* theCoupleTable=
+        G4ProductionCutsTable::GetProductionCutsTable();
+
+  size_t index = couple->GetIndex();
+  G4double cutg = (*(theCoupleTable->GetEnergyCutsVector(0)))[index];
+  cutg = G4std::min(cutForLowEnergySecondaryPhotons,cutg);
+  
+  G4double cute = (*(theCoupleTable->GetEnergyCutsVector(1)))[index];
+  cute = G4std::min(cutForLowEnergySecondaryPhotons,cute);
+
   G4DynamicParticle* aPhoton;  
 
   // Generation of fluorescence

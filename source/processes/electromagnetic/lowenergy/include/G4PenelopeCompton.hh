@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 
-// $Id: G4PenelopeCompton.hh,v 1.1 2002-12-06 16:24:37 pandola Exp $
+// $Id: G4PenelopeCompton.hh,v 1.2 2003-02-12 11:44:43 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -28,6 +28,7 @@
 // History:
 // -----------
 // 05 Dec 2002   L. Pandola   1st implementation
+// 12 Feb 2003   MG Pia       const argument in SelectRandomAtomForCompton
 // -------------------------------------------------------------------
 
 // Class description:
@@ -104,7 +105,7 @@ private:
   G4std::vector<G4DataVector*> *HartreeFunction;
   G4std::vector<G4DataVector*> *OccupationNumber;
   
-  G4int SelectRandomAtomForCompton(G4Material* material,G4double e) const;
+  G4int SelectRandomAtomForCompton(const G4Material* material,G4double e) const;
 
   const G4int nBins; //for building cross section table
 

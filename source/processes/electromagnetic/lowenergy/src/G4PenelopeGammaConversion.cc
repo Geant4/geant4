@@ -22,7 +22,7 @@
 //
 // --------------------------------------------------------------------
 ///
-// $Id: G4PenelopeGammaConversion.cc,v 1.1 2002-12-06 16:21:38 pandola Exp $
+// $Id: G4PenelopeGammaConversion.cc,v 1.2 2003-02-12 11:44:43 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,6 +32,7 @@
 // History:
 // -------- 
 // 02/12/2002 L.Pandola 1st implementation
+// 12 Feb 2003   MG Pia     Migration to "cuts per region"
 // --------------------------------------------------------------
 
 #include "G4PenelopeGammaConversion.hh"
@@ -56,6 +57,7 @@
 #include "G4LogLogInterpolation.hh"
 #include "G4VRangeTest.hh"
 #include "G4RangeTest.hh"
+#include "G4MaterialCutsCouple.hh"
 
 #include "G4CutsPerMaterialWarning.hh"
 
@@ -116,7 +118,8 @@ G4VParticleChange* G4PenelopeGammaConversion::PostStepDoIt(const G4Track& aTrack
 {
   aParticleChange.Initialize(aTrack);
 
-  G4Material* material = aTrack.GetMaterial();
+  const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
+  //  G4Material* material = aTrack.GetMaterial();
   
   const G4DynamicParticle* incidentPhoton = aTrack.GetDynamicParticle();
   G4double photonEnergy = incidentPhoton->GetKineticEnergy();
@@ -133,7 +136,7 @@ G4VParticleChange* G4PenelopeGammaConversion::PostStepDoIt(const G4Track& aTrack
   else
     {  
       // Select randomly one element in the current material
-      const G4Element* element = crossSectionHandler->SelectRandomElement(material,photonEnergy);
+      const G4Element* element = crossSectionHandler->SelectRandomElement(couple,photonEnergy);
 
       if (element == 0) 
 	{
@@ -237,7 +240,7 @@ G4VParticleChange* G4PenelopeGammaConversion::PostStepDoIt(const G4Track& aTrack
 
   G4double safety = aStep.GetPostStepPoint()->GetSafety();
 
-  if (rangeTest->Escape(G4Electron::Electron(),material,electronKineEnergy,safety))
+  if (rangeTest->Escape(G4Electron::Electron(),couple,electronKineEnergy,safety))
     {
       G4ThreeVector electronDirection ( dirX_el, dirY_el, dirZ_el);
       electronDirection.rotateUz(photonDirection);   
@@ -252,7 +255,7 @@ G4VParticleChange* G4PenelopeGammaConversion::PostStepDoIt(const G4Track& aTrack
     }
 
   // Is the local energy deposit correct, if the positron is always created?
-  if (! (rangeTest->Escape(G4Positron::Positron(),material,positronKineEnergy,safety)))
+  if (! (rangeTest->Escape(G4Positron::Positron(),couple,positronKineEnergy,safety)))
     {
       localEnergyDeposit += positronKineEnergy ;
       positronKineEnergy = 0. ;

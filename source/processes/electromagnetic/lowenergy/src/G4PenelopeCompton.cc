@@ -20,13 +20,15 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeCompton.cc,v 1.5 2002-12-20 12:01:47 pandola Exp $
+// $Id: G4PenelopeCompton.cc,v 1.6 2003-02-12 11:44:43 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
 //
 // History:
 // --------
+// 12 Feb 2003   MG Pia       const argument in SelectRandomAtomForCompton
+//                            Migration to "cuts per region"
 // -------------------------------------------------------------------
 
 #include "G4PenelopeCompton.hh"
@@ -51,6 +53,7 @@
 #include "G4VRangeTest.hh"
 #include "G4RangeTest.hh"
 #include "G4PenelopeIntegrator.hh"
+#include "G4MaterialCutsCouple.hh"
 
 #include "G4CutsPerMaterialWarning.hh"
 
@@ -216,7 +219,8 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 
   G4ParticleMomentum photonDirection0 = incidentPhoton->GetMomentumDirection();
 
-  G4Material* material = aTrack.GetMaterial();
+  const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
+  const G4Material* material = couple->GetMaterial();
   G4int Z = SelectRandomAtomForCompton(material,photonEnergy0);
   //La routine di estrazione funziona
   const G4int nmax = 64;
@@ -442,7 +446,7 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 
   G4double safety = aStep.GetPostStepPoint()->GetSafety();
 
-  if (rangeTest->Escape(G4Electron::Electron(),material,eKineticEnergy,safety))
+  if (rangeTest->Escape(G4Electron::Electron(),couple,eKineticEnergy,safety))
     {
       G4double xEl = sinThetaE * cos(phi+pi); 
       G4double yEl = sinThetaE * sin(phi+pi);
@@ -620,7 +624,7 @@ G4double G4PenelopeCompton::DifferentialCrossSection(G4double cosTheta)
   return DiffCS;
 }
 
-G4int G4PenelopeCompton::SelectRandomAtomForCompton(G4Material* material,G4double energy) const
+G4int G4PenelopeCompton::SelectRandomAtomForCompton(const G4Material* material,G4double energy) const
 {
   G4int nElements = material->GetNumberOfElements();
   //Special case: the material consists of one element

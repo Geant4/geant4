@@ -22,7 +22,7 @@
 //
 // --------------------------------------------------------------------
 //
-// $Id: G4PenelopeRayleigh.cc,v 1.2 2002-12-10 11:08:08 pandola Exp $
+// $Id: G4PenelopeRayleigh.cc,v 1.3 2003-02-12 11:44:43 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: L. Pandola (luciano.pandola@cern.ch)
@@ -213,7 +213,7 @@ G4VParticleChange* G4PenelopeRayleigh::PostStepDoIt(const G4Track& aTrack,
 
 
   G4ParticleMomentum photonDirection0 = incidentPhoton->GetMomentumDirection();
-  G4Material* material = aTrack.GetMaterial();
+  //  G4Material* material = aTrack.GetMaterial();
   // Sampling inizialitation (build internal table) 
   InizialiseSampling();
   // Sample the angle of the scattered photon 
