@@ -42,7 +42,7 @@
 
 //          R0      =  sqrt(0.64);
 
-          Rnucl   = R0*pow(static_cast<float>(Anucleus),0.3333);            //{In Fermi }
+          Rnucl   = R0*pow(static_cast<double>(Anucleus),0.3333);            //{In Fermi }
 
         if(Anucleus == 4) Rnucl = 1.2;
 
