@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Quasmon.cc,v 1.27 2001-09-17 14:19:56 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.28 2001-09-18 13:42:54 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -1838,6 +1838,9 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
 		}
         else if(totBN==1&&nQuasms==1) // Decay of the baryonic total state
 		{
+#ifdef debug
+          G4cout<<"G4Q::HQ:tB=1,nQ=1,tZ="<<totZ<<",tS="<<totS<<",T="<<totQC<<",M="<<totMass<<G4endl;
+#endif
           G4double nucM= mProt;
           G4double piM = 0.;
           G4int nucPDG = 2212;
@@ -2068,8 +2071,8 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
         }
   	  }
       G4double freeRQM=rQPDG.GetMass();
-      G4double RQB=rQPDG.GetBaryNum();
-      G4double fRQW=3*rQPDG.GetWidth();
+      G4int    RQB = rQPDG.GetBaryNum();
+      G4double fRQW= 3*rQPDG.GetWidth();
       if(fRQW<.001) fRQW=.001;
       G4QPDGCode sQPDG(sPDG);
       G4int sChg=sQPDG.GetCharge();
@@ -2115,6 +2118,9 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
 #ifdef debug
 	      G4cout<<"G4Q::HQ:NCB="<<rCB<<",NC="<<rChg<<",rqB="<<sBaryn<<",rQPDG="<<rQPDG<<G4endl;
 #endif
+          freeRQM=mNeut;
+          RQB=1;
+          fRQW=0.;
           sMass =mK;
           if(mNeut+mK<=quasM) sMass=quasM-mNeut;
           sPDG  =321;

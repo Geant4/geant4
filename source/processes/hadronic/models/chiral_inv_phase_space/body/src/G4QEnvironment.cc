@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QEnvironment.cc,v 1.27 2001-09-17 14:19:53 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.28 2001-09-18 13:42:52 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -949,8 +949,8 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
 #ifdef pdebug
     G4cout<<"G4QEnv::HadrQE:FRAGMENTATION IN NUCLEAR ENVIRONMENT nQ="<<nQuasmons<<G4endl;
 #endif
-    //G4int   c3Max = 27;
-    G4int   c3Max = 3;
+    G4int   c3Max = 27;
+    //G4int   c3Max = 3;
     //G4int   premC = 27;
     //G4int   premC = 3;
     G4int   premC = 1;
@@ -2843,14 +2843,15 @@ G4QHadronVector* G4QEnvironment::Fragment()
       if(!hF&&(hPDG>80000000&&hPDG<90000000||hPDG==90000000||
                hPDG>90000000&&(hPDG%1000000>200000||hPDG%1000>300)))
         G4cerr<<"***G4QEnv::Fragment: PDG("<<hadron<<")="<<hPDG<<", M="<<hM<<G4endl;
-#ifdef pdebug
-      G4cout<<"G4QE::Fr:h="<<hPDG<<",hF="<<hF<<",hB="<<hB<<",h#"<<hadron<<" < nH="<<nHadr<<G4endl;
+#ifdef ppdebug
+      G4cout<<"G4QE::Fr:>>>h="<<hPDG<<",hS="<<hS<<",hB="<<hB<<",h#"<<hadron<<"<nH="<<nHadr<<G4endl;
 #endif
-	  if(hB>0&&!hS&&(nHadr>3||hB<2))      // ThermonuclBackFusion condition (VIMP for gamA TotCS)
+	  if(hadron&&!hF&&hB>0&&!hS&&(nHadr>3||hB<2)) // ThermonuclBackFusion condition (VIMP for gamA TotCS)
 	  //if(2>3)                           // Close the ThermonuclearBackFusion (VIMP for gamA TotCS)
       {
-#ifdef pdebug
-        if(nHadr==3) G4cout<<"G4QE::Fr:h="<<hPDG<<",B="<<hB<<",h#"<<hadron<<" < nH="<<nHadr<<G4endl;
+#ifdef ppdebug
+        //if(nHadr==3)
+          G4cout<<"G4QE::Fr:h="<<hPDG<<",B="<<hB<<",h#"<<hadron<<" < nH="<<nHadr<<G4endl;
 #endif
         G4QContent hQC = curHadr->GetQC();
         if(hadron&&!hF&&hB>0) for(G4int pt=0; pt<hadron; pt++)
@@ -2875,11 +2876,13 @@ G4QHadronVector* G4QEnvironment::Fragment()
           G4double rm=bM-hM;
           G4double sm=bM+hM;
           G4double pCM2=(sM2-rm*rm)*(sM2-sm*sm)/(dsM2+dsM2);
-#ifdef pdebug
-          if(nHadr==3)G4cout<<"G4QE::F:"<<pt<<",B="<<bB<<",f="<<bF<<",p="<<pCM2<<">"<<p2cut<<G4endl;
+#ifdef ppdebug
+          //if(nHadr==3)
+		  G4cout<<"G4QE::F:"<<pt<<",B="<<bB<<",S="<<bS<<",p="<<pCM2<<"<"<<p2cut<<",hB="<<hB
+                <<",bM+hM="<<bM+hM<<">tM="<<tM<<",tQC="<<sQC<<G4endl;
 #endif
           //if(!bF&&(bB==1||hB==1)&&bM+hM>tM+.001&&pCM2<p2cut)           // Only baryons == pcut
-		  if(bF>0&&!bS&&(bB==1&&hB>0||hB==1&&bB>0)&&bM+hM>tM+.001
+		  if(!bF&&!bS&&(bB==1&&hB>0||hB==1&&bB>0)&&bM+hM>tM+.001
              && (pCM2<p2cut&&nHadr>3||pCM2<p2cut2&&nHadr==3))
 		  //if(!bF&&(bB==1||hB==1)&&bM+hM>tM+.001&&(pCM2<p2cut&&nHadr>3 ||
 		  //   pCM2<p2cut2&&nHadr==3&&bPDG>90000000))
@@ -2889,7 +2892,7 @@ G4QHadronVector* G4QEnvironment::Fragment()
 		  //if(!bF&&(bB==1||hB==1)&&bM+hM>tM+.001&&sM-bM-hM<cut)         // Only baryons == ecut
 		  //if(!bF&&bB&&bB<fL&&bM+hM>tM+.001&&sM-bM-hM<cut)              // Light fragments == ecut
 	      {
-#ifdef pdebug
+#ifdef ppdebug
             //if(nHadr==3)
 	        G4cout<<"G4QE::Fr:*FUSION*#"<<hadron<<"["<<hPDG<<"]"<<hM<<"+#"<<pt<<"["<<bPDG<<"]"<<bM
                   <<"="<<bM+hM<<", sM="<<sM<<">["<<sPDG<<"]"<<tM<<",p2="<<pCM2<<"<"<<p2cut<<G4endl;
@@ -3028,7 +3031,7 @@ G4QHadronVector* G4QEnvironment::Fragment()
               f4Mom=G4LorentzVector(0.,0.,0.,mO14);
               three=true;
 		    }
-#ifdef pdebug
+#ifdef ppdebug
             G4cout<<"G4QE::Fr:**three="<<three<<"**, r="<<rQPDG<<",f="<<fQPDG<<",t="<<tQPDG<<G4endl;
 #endif
             if(!three)
@@ -3038,7 +3041,7 @@ G4QHadronVector* G4QEnvironment::Fragment()
                 G4cerr<<"***G4QE::Fr:(2)***FUSION*** tM["<<sPDG<<"]="<<tM<<" > sM="<<sM<<G4endl;
                 G4Exception("***G4QEnvironment::Fragment:DecayIn2 didn't succeed for the fusion");
               }
-#ifdef pdebug
+#ifdef ppdebug
               G4cout<<"G4QE::Fr:*FUSION DONE*,fPDG=="<<sPDG<<",PDG1="<<hPDG<<",PDG2="<<bPDG<<G4endl;
 #endif
               curHadr->SetQPDG(fQPDG);
@@ -3053,7 +3056,7 @@ G4QHadronVector* G4QEnvironment::Fragment()
                 G4cerr<<"***G4QE::Fr:(3)***FUSION*** tM["<<sPDG<<"]="<<tM<<" > sM="<<sM<<G4endl;
                 G4Exception("***G4QEnvironment::Fragment:DecayIn3 didn't succeed for the fusion");
               }
-#ifdef pdebug
+#ifdef ppdebug
               G4cout<<"G4QE::Fr:*DONE*,nH="<<nHadr<<",PDG="<<sPDG<<",1="<<hPDG<<",2="<<bPDG<<G4endl;
 #endif
               curHadr->SetQPDG(fQPDG);
@@ -3063,7 +3066,7 @@ G4QHadronVector* G4QEnvironment::Fragment()
               G4QHadron* newH = new G4QHadron(tQPDG.GetPDGCode(),t4Mom);
               theQHadrons.insert(newH); // (delete equivalent for newH)
               nHadr=theQHadrons.entries();
-#ifdef pdebug
+#ifdef ppdebug
               G4cout<<"G4QE::Fr:*Products*,nH="<<nHadr<<",f="<<fQPDG<<f4Mom<<",b="<<rQPDG<<g4Mom
                     <<",new="<<tQPDG<<t4Mom<<",i="<<nHadr<<",f="<<theQHadrons.entries()<<G4endl;
 #endif

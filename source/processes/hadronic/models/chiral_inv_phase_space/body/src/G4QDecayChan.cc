@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QDecayChan.cc,v 1.8 2001-09-17 14:19:52 mkossov Exp $
+// $Id: G4QDecayChan.cc,v 1.9 2001-09-18 13:42:52 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
