@@ -23,6 +23,10 @@
 #/gun/position 0 -100 0 cm
 #/gun/direction 0 1 0
 #
+# for drawing the tracks
+/tracking/storeTrajectory 1
+# if too many tracks cause core dump =storeTrajectory 0
+#
 # Create empty scene.
 /vis/scene/create
 #
@@ -57,18 +61,19 @@ help /vis/sceneHandler/create
 /vis/draw/text     0 0 0 mm 50 -120 -200   exampleN03
 /vis/viewer/show
 #
+# Start a run to initialise/optimise geometry.
+/run/beamOn
+#
 # Test logical volume model...
 /vis/scene/create
 /vis/scene/add/logicalVolume expHall_L
 /vis/sceneHandler/create OGLSX
 /vis/viewer/create
 /vis/camera/viewpoint 35 35
-#/vis/scene/notifyHandlers
-#/vis/viewer/show
+/vis/scene/notifyHandlers
+/vis/viewer/show
 #
-# for drawing the tracks
-/tracking/storeTrajectory 1
-# if too many tracks cause core dump =storeTrajectory 0
+# Send geantino through...
 /vis/scene/create
 /vis/scene/add/volume
 /vis/scene/include/trajectories
@@ -79,9 +84,19 @@ help /vis/sceneHandler/create
 /run/beamOn 1
 /vis/viewer/show
 #
+# Displaced solid.
+/vis/camera/reset
+#/vis/viewer/panTo 200 -200 cm
+/vis/camera/pan 1250 -3250
+/vis/camera/zoom 5
+/vis/viewer/refresh
+/gun/position 100 -180 0 cm
+/gun/direction 1 0 0
+/run/beamOn
+/vis/viewer/show
+#
 # Boolean solid.
 /vis/camera/reset
-/vis/camera/viewpoint 0 0
 #/vis/viewer/panTo 200 -50 cm
 /vis/camera/pan 1250 -1750
 /vis/camera/zoom 5
@@ -96,7 +111,6 @@ help /vis/sceneHandler/create
 # G4SmartVoxelHeader::BuildNodes - PANIC! Daughter physical volume
 # name = EB20 is entirely outside mother logical volume name = EBMX
 /vis/camera/reset
-/vis/camera/viewpoint 0 0
 #/vis/viewer/panTo -200 0 cm
 /vis/camera/pan -2750 -1250
 /vis/camera/zoom 7
