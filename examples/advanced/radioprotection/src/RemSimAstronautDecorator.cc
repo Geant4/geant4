@@ -19,7 +19,8 @@ RemSimAstronautDecorator::RemSimAstronautDecorator(RemSimVGeometryComponent* com
   : RemSimDecorator(comp),phantom(0), phantomLog(0), phantomPhys(0)
 { 
  phantomZ = 30.*cm;
- translation = 0.*m;
+ motherAstronaut = 0;
+ flag = false;
 }
 RemSimAstronautDecorator::~RemSimAstronautDecorator()
 {
@@ -27,7 +28,8 @@ RemSimAstronautDecorator::~RemSimAstronautDecorator()
 void RemSimAstronautDecorator::ConstructComponent(G4VPhysicalVolume* motherVolume)
 {
   RemSimDecorator::ConstructComponent(motherVolume);
-  ConstructAstronaut(motherVolume);
+  if (flag == false) ConstructAstronaut(motherVolume);
+  else ConstructAstronaut(motherAstronaut);
 }
 
 void RemSimAstronautDecorator::DestroyComponent()
@@ -54,7 +56,7 @@ void RemSimAstronautDecorator::ConstructAstronaut(G4VPhysicalVolume* motherVolum
                                    0,0,0);
  
   phantomPhys = new G4PVPlacement(0,
-                                  G4ThreeVector(0.,0.,translation),
+                                  G4ThreeVector(0.,0.,0.),
                                   "phantom",phantomLog, 
                                   motherVolume,false,0);
 
@@ -72,11 +74,20 @@ void RemSimAstronautDecorator::ConstructAstronaut(G4VPhysicalVolume* motherVolum
   RemSimSensitiveDetector* sensitiveDetector = new  
                                  RemSimSensitiveDetector(sensitiveDetectorName);
   G4int VoxelNbAlongZ = 30;
-
+ 
+  G4double translation = 0;
+    
+  if (flag == true) 
+    {
+      G4double thickShelter = 4.5 *m;
+      translation = 0.5*m + thickShelter/2.;
+   }
+ 
   RemSimROGeometry* ROGeometry = new RemSimROGeometry(phantomX,
                                                       phantomY,
                                                       phantomZ,
-						      VoxelNbAlongZ);
+						      VoxelNbAlongZ, 
+                                                      translation);
   ROGeometry -> BuildROGeometry();
   sensitiveDetector -> SetROgeometry(ROGeometry);
   SDman->AddNewDetector(sensitiveDetector);
@@ -86,10 +97,8 @@ void RemSimAstronautDecorator::ConstructAstronaut(G4VPhysicalVolume* motherVolum
 
 void RemSimAstronautDecorator::ChangeThickness(G4double thick)
 {
-  PrintDetectorParameters();
-  phantom -> SetZHalfLength(thick/2.);
-  phantomPhys -> SetTranslation(G4ThreeVector 
-                            (0.,0.,translation + thick/2.));
+  G4cout << "It is not possible to change the sizes of the Astronaut"
+         << G4endl;
 }
 
 void RemSimAstronautDecorator::ChangeMaterial(G4String materialName)
@@ -115,4 +124,9 @@ void RemSimAstronautDecorator::PrintDetectorParameters()
          << "material of the astronaut: "
          << phantomLog -> GetMaterial() -> GetName() <<G4endl
          << G4endl;
+}
+void RemSimAstronautDecorator::ChangeMother(G4VPhysicalVolume* mother)
+{
+ motherAstronaut = mother; 
+ flag = true;                      
 }

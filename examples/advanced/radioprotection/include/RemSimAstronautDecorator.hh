@@ -24,13 +24,16 @@ public:
   void ChangeThickness(G4double);
   void ChangeMaterial(G4String);
   void PrintDetectorParameters();
+  G4VPhysicalVolume* GetShelter(){return 0;};
+  void ChangeMother(G4VPhysicalVolume*);
 
 private:
-  void ConstructAstronaut(G4VPhysicalVolume*); 
+  void ConstructAstronaut(G4VPhysicalVolume*);  
+  G4VPhysicalVolume* motherAstronaut;
   G4double phantomZ;
-  G4double translation;
+  G4VPhysicalVolume* phantomPhys;
+  G4bool flag;
   G4Box* phantom;
   G4LogicalVolume* phantomLog;
-  G4VPhysicalVolume* phantomPhys;
 };
 #endif

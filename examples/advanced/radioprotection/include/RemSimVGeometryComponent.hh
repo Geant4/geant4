@@ -10,7 +10,8 @@ public:
   RemSimVGeometryComponent();
   virtual ~RemSimVGeometryComponent();
 
-  virtual void ConstructComponent(G4VPhysicalVolume*)=0;
-  virtual void DestroyComponent()=0;
+  virtual void ConstructComponent(G4VPhysicalVolume*)= 0;
+  virtual void DestroyComponent()= 0;
+  virtual G4VPhysicalVolume* GetShelter()= 0;
 };
 #endif

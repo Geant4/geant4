@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimSteppingAction.cc,v 1.3 2004-05-17 10:34:57 guatelli Exp $
+// $Id: RemSimSteppingAction.cc,v 1.4 2004-05-21 13:49:23 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -69,7 +69,7 @@ void RemSimSteppingAction::UserSteppingAction(const G4Step* aStep)
                           -> GetDefinition() -> GetParticleName());
 
  //Analysis of other particles of interest
-   if(oldVolumeName == "shelter") 
+   if(oldVolumeName != "phantom") 
    { 
     if (volume) 
       {
@@ -92,9 +92,9 @@ void RemSimSteppingAction::UserSteppingAction(const G4Step* aStep)
      { 
        if (volume) 
 	 {
-	   G4String volumeName = volume-> GetName();
+	   G4String volumeName = volume -> GetName();
              
-	   if (volumeName == "shelter") 
+	   if (volumeName != "phantom") 
 	     {
                G4double initialEnergy = primaryAction -> GetInitialEnergy(); 
                G4double particleEnergy = aStep->GetTrack()->GetKineticEnergy();

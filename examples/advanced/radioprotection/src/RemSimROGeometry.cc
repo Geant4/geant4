@@ -30,7 +30,7 @@
 //    *                                  *
 //    ************************************
 //
-// $Id: RemSimROGeometry.cc,v 1.3 2004-03-12 10:55:55 guatelli Exp $
+// $Id: RemSimROGeometry.cc,v 1.4 2004-05-21 13:49:23 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "RemSimROGeometry.hh"
@@ -49,11 +49,14 @@
 RemSimROGeometry::RemSimROGeometry(G4double astronautDimX,
                                    G4double astronautDimY,
                                    G4double astronautDimZ,
-                                   G4int numberOfVoxelsZ):
+                                   G4int numberOfVoxelsZ, 
+                                   G4double trans):
+
   astronautDimensionX(astronautDimX),
   astronautDimensionY(astronautDimY),
   astronautDimensionZ(astronautDimZ),
-  numberOfVoxelsAlongZ(numberOfVoxelsZ),
+  numberOfVoxelsAlongZ(numberOfVoxelsZ), 
+  translation(trans),
   ROAstronautZDivisionPhys(0)
 {
 }
@@ -70,9 +73,9 @@ G4VPhysicalVolume* RemSimROGeometry::Build()
 
   G4Material* dummyMat = new G4Material(name="dummyMat", 1., 1.*g/mole, 1.*g/cm3);
 
-  G4double worldDimensionX = 20.0*m;
-  G4double worldDimensionY = 20.0*m;
-  G4double worldDimensionZ = 20.0*m;
+  G4double worldDimensionX = 30.0*m;
+  G4double worldDimensionY = 30.0*m;
+  G4double worldDimensionZ = 30.0*m;
 
   // world volume of ROGeometry ...
   G4Box *ROWorld = new G4Box("ROWorld",
@@ -103,7 +106,7 @@ G4VPhysicalVolume* RemSimROGeometry::Build()
 						      0,0,0);
 
   G4VPhysicalVolume *ROAstronautPhys = new G4PVPlacement(0,
-						       G4ThreeVector(0.,0.,156.*cm),
+						       G4ThreeVector(0.,0.,translation),
 						       "AstronautPhys",
                                                        ROAstronautLog,
                                                        ROWorldPhys,

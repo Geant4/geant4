@@ -15,7 +15,7 @@ public:
   ~RemSimVehicle1();
   void ConstructComponent(G4VPhysicalVolume*);
   void DestroyComponent(); 
-  void ChooseConfiguration(G4String);
+  G4VPhysicalVolume* GetShelter(){return 0;};
 
 private:
   RemSimMaterial* pMaterial;

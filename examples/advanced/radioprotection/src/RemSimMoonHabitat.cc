@@ -9,10 +9,12 @@
 #include "G4PVPlacement.hh"
 #include "G4VisAttributes.hh"
 #include "G4UserLimits.hh"
-
+#include "RemSimDecorator.hh"
+#include "RemSimAstronautDecorator.hh"
 RemSimMoonHabitat::RemSimMoonHabitat()
 {
- pMaterial = new RemSimMaterial();
+ pMaterial = new RemSimMaterial(); 
+ shelterPhys = 0;
 }
 RemSimMoonHabitat::~RemSimMoonHabitat()
 {
@@ -47,10 +49,10 @@ void RemSimMoonHabitat::ConstructComponent(G4VPhysicalVolume* motherVolume)
  
   G4double translation = - sizeZ + thick/2. + 0.5 *m;
  
-  G4VPhysicalVolume* shelterPhys = new G4PVPlacement(0,
-                                       G4ThreeVector(0.,0.,translation),
-                                       "shelter",shelterLog, 
-                                       moonPhys,false,0);
+  shelterPhys = new G4PVPlacement(0,
+                                  G4ThreeVector(0.,0.,translation),
+                                  "shelter",shelterLog, 
+                                  moonPhys,false,0);
 
 //     G4double roofThick = 3.*m;
 //      G4Trd* roof = new G4Trd("roof",2.25*m,7.*m,5.*m, 8.*m,roofThick/2.);
@@ -84,4 +86,9 @@ void RemSimMoonHabitat::ConstructComponent(G4VPhysicalVolume* motherVolume)
 
 void RemSimMoonHabitat::DestroyComponent()
 {
+}
+ 
+G4VPhysicalVolume* RemSimMoonHabitat::GetShelter()
+{
+  return shelterPhys;
 }

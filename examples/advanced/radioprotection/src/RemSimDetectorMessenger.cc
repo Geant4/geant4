@@ -31,7 +31,7 @@
 //    *********************************
 //
 //
-// $Id: RemSimDetectorMessenger.cc,v 1.6 2004-05-21 11:14:52 guatelli Exp $
+// $Id: RemSimDetectorMessenger.cc,v 1.7 2004-05-21 13:49:23 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,16 +54,16 @@ RemSimDetectorMessenger::RemSimDetectorMessenger( RemSimDetectorConstruction* De
   vehicleCmd -> AvailableForStates(G4State_Idle); 
 
   shieldingCmd =  new G4UIcmdWithAString("/configuration/AddShielding",this); 
-  shieldingCmd -> SetGuidance("Add shielding."); 
+  shieldingCmd -> SetGuidance("Add shielding layer in vehicle configuration."); 
   shieldingCmd -> SetParameterName("choice",true);
   shieldingCmd -> SetCandidates("On Off");
   shieldingCmd -> AvailableForStates(G4State_PreInit,G4State_Idle); 
 
-  astronautCmd =  new G4UIcmdWithAString("/configuration/AddAstronaut",this); 
-  astronautCmd -> SetGuidance("Add Astronaut."); 
-  astronautCmd -> SetParameterName("choice",true);
-  astronautCmd -> SetCandidates("On Off");
-  astronautCmd -> AvailableForStates(G4State_PreInit,G4State_Idle); 
+  SPECmd =  new G4UIcmdWithAString("/configuration/AddSPE",this); 
+  SPECmd -> SetGuidance("Add SPE shelter in vehicle configuration."); 
+  SPECmd -> SetParameterName("choice",true);
+  SPECmd -> SetCandidates("On Off");
+  SPECmd -> AvailableForStates(G4State_PreInit,G4State_Idle); 
 
   // Fix the parameters of the shielding: material and thickness
   shieldingDir = new G4UIdirectory("/shielding/");
@@ -87,7 +87,7 @@ RemSimDetectorMessenger::~RemSimDetectorMessenger()
   delete thicknessCmd;
   delete materialCmd;
   delete shieldingDir;
-  delete astronautCmd; 
+  delete SPECmd; 
   delete shieldingCmd; 
   delete vehicleCmd;
   delete vehicleDir; 
@@ -101,15 +101,12 @@ void RemSimDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue
   if(command == shieldingCmd)
     detector -> AddShielding(newValue); 
 
-  if(command == astronautCmd)
-    {
-    if (newValue == "On")
-    detector -> AddAstronaut(); 
-    }
+  if(command == SPECmd)
+    detector -> AddShelterSPE(newValue); 
+
   if(command == materialCmd)
-    {
-      detector -> ChangeShieldingMaterial(newValue);
-    }
+    detector -> ChangeShieldingMaterial(newValue);
+
  
   if(command == thicknessCmd)
     {

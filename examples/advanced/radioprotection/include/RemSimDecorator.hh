@@ -16,7 +16,7 @@ public:
   virtual void DestroyComponent(); 
   virtual void ChangeThickness(G4double)=0;
   virtual void ChangeMaterial(G4String)=0;
- 
+  virtual void ChangeMother(G4VPhysicalVolume*)=0;
 private:
    RemSimVGeometryComponent* component;
 };

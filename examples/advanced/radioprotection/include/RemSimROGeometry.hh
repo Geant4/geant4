@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimROGeometry.hh,v 1.3 2004-03-12 10:55:54 guatelli Exp $
+// $Id: RemSimROGeometry.hh,v 1.4 2004-05-21 13:49:22 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    ************************************
@@ -43,8 +43,11 @@ public:
   RemSimROGeometry( G4double phantomDimX,
                     G4double phantomDimY,
 		    G4double phantomDimZ,
-		    G4int numberOfVoxelsZ);
+		    G4int numberOfVoxelsZ,
+                    G4double trans);
+
   ~RemSimROGeometry();
+
 private:
   G4VPhysicalVolume* Build();
 
@@ -53,6 +56,7 @@ private:
   const G4double astronautDimensionY;
   const G4double astronautDimensionZ;
   const G4int numberOfVoxelsAlongZ; 
+  const G4double translation; 
   G4VPhysicalVolume *ROAstronautZDivisionPhys; 
 };
 #endif

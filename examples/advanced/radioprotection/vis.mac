@@ -30,12 +30,15 @@
 # draw scene
 #
 /configuration/choose moon
-#/configuration/choose vehicle
-#/configuration/AddShielding On
+/configuration/choose vehicle
+/configuration/AddShielding On
+#/configuration/AddSPE On
 /vis/viewer/set/viewpointThetaPhi 90 180 deg
-/vis/viewer/zoom 0.5
+/vis/viewer/zoom 2.
 /tracking/storeTrajectory 1
 /gun/particle proton
-/gun/energy 1. GeV
-/step/hadronicVerbose On
-#/vis/viewer/zoom 10
+/gun/energy 300. MeV
+/vis/scene/endOfEventAction accumulate
+/step/hadronicVerbose Off
+#/run/beamOn 500
+

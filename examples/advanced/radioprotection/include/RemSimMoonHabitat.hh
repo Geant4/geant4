@@ -15,8 +15,10 @@ public:
   ~RemSimMoonHabitat();
   void ConstructComponent(G4VPhysicalVolume*);
   void DestroyComponent(); 
- 
+  G4VPhysicalVolume* GetShelter();
+
 private:
   RemSimMaterial* pMaterial;
+  G4VPhysicalVolume* shelterPhys;
 };
 #endif

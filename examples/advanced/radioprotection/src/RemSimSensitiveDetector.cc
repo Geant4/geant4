@@ -55,7 +55,7 @@ G4bool RemSimSensitiveDetector::ProcessHits(G4Step* aStep,
 {
   G4double edep = aStep -> GetTotalEnergyDeposit();
   if(edep==0.) return false;
- 
+
   G4int i = ROhist -> GetReplicaNumber();
   
   RemSimHit* newHit = new RemSimHit();

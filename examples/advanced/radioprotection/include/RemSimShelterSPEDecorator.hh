@@ -1,5 +1,5 @@
-#ifndef RemSimShieldingDecorator_h
-#define RemSimShieldingDecorator_h 1
+#ifndef RemSimShelterSPEDecorator_h
+#define RemSimShelterSPEDecorator_h 1
 
 #include "RemSimDecorator.hh"
 #include "RemSimVGeometryComponent.hh"
@@ -14,11 +14,12 @@ class RemSimDecorator;
 class G4VPhysicalVolume;
 class G4VisAttributes;
 
-class RemSimShieldingDecorator: public RemSimDecorator
+class RemSimShelterSPEDecorator: public RemSimDecorator
 {
 public:
-  RemSimShieldingDecorator(RemSimVGeometryComponent*);
-  ~RemSimShieldingDecorator();
+  RemSimShelterSPEDecorator(RemSimVGeometryComponent*);
+  ~RemSimShelterSPEDecorator();
+
   void ConstructComponent(G4VPhysicalVolume*);
   void DestroyComponent(); 
   void ChangeThickness(G4double);
@@ -26,18 +27,19 @@ public:
   void PrintDetectorParameters();
   G4VPhysicalVolume* GetShelter(){return 0;};
   void ChangeMother(G4VPhysicalVolume*){;};
-private:
-  void ConstructShielding(G4VPhysicalVolume*);
 
-  G4double shieldingX;
-  G4double shieldingY;
-  G4double shieldingZ;
+private:
+  void ConstructShelterSPE(G4VPhysicalVolume*);
+
+  G4double shelterSPEX;
+  G4double shelterSPEY;
+  G4double shelterSPEZ;
   G4double translation;
   RemSimMaterial* pMaterial; 
-  G4String shieldingMaterial;
-  G4VisAttributes* shieldingVisAtt;
-  G4Box* shielding;
-  G4LogicalVolume* shieldingLog;
-  G4VPhysicalVolume* shieldingPhys;
+  G4String shelterSPEMaterial;
+  G4VisAttributes* shelterSPEVisAtt;
+  G4Box* shelterSPE;
+  G4LogicalVolume* shelterSPELog;
+  G4VPhysicalVolume* shelterSPEPhys;
 };
 #endif
