@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.59 1999-12-07 08:37:13 gracia Exp $
+# $Id: architecture.gmk,v 1.60 1999-12-15 18:06:19 gracia Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -674,10 +674,14 @@ ifeq ($(G4SYSTEM),WIN32-VC)
   #
   ifdef G4USE_OSPACE
     CXXFLAGS += $(OSPACEINC)
-  else
+  else 
     ifdef G4USE_STLPORT
       CXXFLAGS += $(OSPACEINC)
-    endif   #stlport
+    else
+  #  If native STL is selected, use ISO standard version.
+      G4USE_STD_NAMESPACE := yes 
+      CPPFLAGS += -DG4USE_STD_NAMESPACE
+    endif
   endif   #ospace
 
   LDFLAGS  += -FORCE /NODEFAULTLIB:MSVCRT.dll

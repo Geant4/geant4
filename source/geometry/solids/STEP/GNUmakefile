@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999-01-07 16:08:00 gunter Exp $
+# $Id: GNUmakefile,v 1.2 1999-12-15 18:06:43 gracia Exp $
 # -------------------------------------------------------------
 # GNUmakefile for STEP library.  Gabriele Cosmo, 15/11/96.
 # -------------------------------------------------------------
@@ -27,3 +27,13 @@ $(G4TMP)/$(G4SYSTEM)/$(name)/SdaiCONFIG_CONTROL_DESIGN.o: src/SdaiCONFIG_CONTROL
 	$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c $(OUT_OBJ)$@ src/SdaiCONFIG_CONTROL_DESIGN.cc
 $(G4TMP)/$(G4SYSTEM)/$(name)/SdaiCONFIG_CONTROL_DESIGN_init.o: src/SdaiCONFIG_CONTROL_DESIGN_init.cc
 	$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c $(OUT_OBJ)$@ src/SdaiCONFIG_CONTROL_DESIGN_init.cc
+
+
+
+ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+  CXXFLAGS_WITH_ZM = $(filter-out -Zm%,$(CXXFLAGS)) -Zm500
+
+$(G4TMPDIR)/SdaiCONFIG_CONTROL_DESIGN.o: src/SdaiCONFIG_CONTROL_DESIGN.cc
+	$(CXX) $(CXXFLAGS_WITH_ZM) $(CPPFLAGS) -c $(OUT_OBJ)$@ \
+	  src/SdaiCONFIG_CONTROL_DESIGN.cc
+endif

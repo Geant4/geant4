@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: globals.hh,v 1.11 1999-11-23 15:00:04 gcosmo Exp $
+// $Id: globals.hh,v 1.12 1999-12-15 18:05:20 gracia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -23,6 +23,7 @@
 // 26.08.98 J.Allison,E.Tcherniaev - introduced min/max/sqr/abs functions
 // 22.09.98 G.Cosmo - removed min/max/sqr/abs functions and replaced with
 //                    inclusion of CLHEP/config/TemplateFunctions.h for CLHEP-1.3
+// 15/12/99 G.Gracia  Include min, max definitions for NT with ISO standard
 
 #ifndef GLOBALS_HH
 #define GLOBALS_HH
@@ -48,6 +49,14 @@
   #include "g4std/algorithm"
   #define CLHEP_MAX_MIN_DEFINED
 #endif
+
+#if defined(WIN32) && defined(G4USE_STD_NAMESPACE)
+// For NT with Native STL (used in ISO standard mode)
+// templated functions min and max should be _MIN _MAX
+  #define min _MIN
+  #define max _MAX
+#endif
+
 // min, max, abs and sqr are in TemplateFunctions.h.
 // Includes also CLHEP.h with typedef for numeric types and
 // implicit inclusions of <stdlib.h>, <limits.h>, <math.h>.

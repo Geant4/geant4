@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Types.hh,v 1.3 1999-11-16 17:40:48 gcosmo Exp $
+// $Id: G4Types.hh,v 1.4 1999-12-15 18:05:19 gracia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -15,6 +15,12 @@
 
 #ifndef G4TYPES_HH
 #define G4TYPES_HH
+
+
+#ifdef WIN32
+// Disable warning C4786: identifier was truncated to '255' characters in the debug information
+  #pragma warning ( disable : 4786 )
+#endif
 
 #include <CLHEP/config/CLHEP.h>
 
