@@ -1,4 +1,3 @@
-
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
 //
@@ -10,6 +9,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
    
+//
 // Always place it in front!
 //
 #include "G4Timer.hh"
@@ -39,14 +39,15 @@ Em6PhysicsList::Em6PhysicsList(Em6DetectorConstruction* p)
 {
   pDet = p;
 
-  defaultCutValue = 0.5*mm;
+  defaultCutValue = 1*mm;
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
   cutForProton    = defaultCutValue;
   
-  MaxChargedStep = DBL_MAX; 
+  //  MaxChargedStep = DBL_MAX; 
+  MaxChargedStep = 1*mm; 
   
-  SetVerboseLevel(1);
+  SetVerboseLevel(2);
   physicsListMessenger = new Em6PhysicsListMessenger(this);
 }
 
@@ -68,8 +69,8 @@ void Em6PhysicsList::ConstructParticle()
 
   ConstructBosons();
   ConstructLeptons();
-  ConstructMesons();
   ConstructBarions();
+  ConstructMesons();
   ConstructIons();
 }
 
@@ -128,9 +129,9 @@ void Em6PhysicsList::ConstructIons()
 //  Ions
   G4Deuteron::DeuteronDefinition();
   G4Alpha::AlphaDefinition();
-  //  G4IonC12::IonC12Definition();
-  //  G4IonAr40::IonAr40Definition();
-  //  G4IonFe56::IonFe56Definition();
+  G4IonC12::IonC12Definition();
+  G4IonAr40::IonAr40Definition();
+  G4IonFe56::IonFe56Definition();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -211,7 +212,7 @@ void Em6PhysicsList::ConstructEM()
 
     } else if (
                 particleName == "proton"  
-               || particleName == "antiproton"  
+               || particleName == "anti_proton"  
                || particleName == "pi+"  
                || particleName == "pi-"  
                || particleName == "kaon+"  
@@ -220,21 +221,25 @@ void Em6PhysicsList::ConstructEM()
     {
       pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
 
-      cout << "Hadronic processes for " << particleName << G4endl; 
+      G4cout << "Hadronic processes for " << particleName << G4endl; 
 
       // Standard ionisation
       // G4hIonisation* hIon = new G4hIonisation() ;
 
       // Standard ionisation with low energy extantion
+      // G4ionLowEnergyIonisation* hIon = new G4ionLowEnergyIonisation() ;
+      //    hIon->SetNuclearStoppingOff() ;
          G4hLowEnergyIonisation* hIon = new G4hLowEnergyIonisation() ;
          hIon->SetNuclearStoppingOff() ;
        //hIon->SetNuclearStoppingOn() ;
 
        //hIon->SetStoppingPowerTableName("Ziegler1977He") ;
        //hIon->SetStoppingPowerTableName("Ziegler1977H") ;
-         hIon->SetStoppingPowerTableName("ICRU_R49p") ;
+       //  hIon->SetStoppingPowerTableName("ICRU_R49p") ;
        //hIon->SetStoppingPowerTableName("ICRU_R49He") ;
        //hIon->SetStoppingPowerTableName("ICRU_R49PowersHe") ;
+
+      if( particleName == "anti_proton" ) hIon->SetAntiProtonStoppingOn(); 
 
       pmanager->AddProcess(hIon,-1,2,2);
       
@@ -244,14 +249,14 @@ void Em6PhysicsList::ConstructEM()
    
     } else if (   particleName == "alpha"  
                || particleName == "deuteron"  
-//               || particleName == "IonC12"  
-//               || particleName == "IonAr40"  
-//               || particleName == "IonFe56"  
+               || particleName == "IonC12"  
+               || particleName == "IonAr40"  
+               || particleName == "IonFe56"  
               )
     {
       pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
 
-      cout << "Ionic processes for " << particleName << G4endl; 
+      G4cout << "Ionic processes for " << particleName << G4endl; 
 
       // Standard ionisation
       // G4hIonisation* hIon = new G4ionIonisation() ;
@@ -264,7 +269,7 @@ void Em6PhysicsList::ConstructEM()
 
       //iIon->SetStoppingPowerTableName("Ziegler1977He") ;
       //iIon->SetStoppingPowerTableName("Ziegler1977H") ;
-	iIon->SetStoppingPowerTableName("ICRU_R49p") ;
+        iIon->SetStoppingPowerTableName("ICRU_R49p") ;
       //iIon->SetStoppingPowerTableName("ICRU_R49He") ;
       //iIon->SetStoppingPowerTableName("ICRU_R49PowersHe") ;
 
@@ -273,6 +278,7 @@ void Em6PhysicsList::ConstructEM()
       Em6StepCut* theIonStepCut = new Em6StepCut();
       theIonStepCut->SetMaxStep(MaxChargedStep);          		       
       pmanager->AddProcess( theIonStepCut,       -1,-1,3);
+
     }
   }
 }
@@ -302,14 +308,18 @@ void Em6PhysicsList::ConstructGeneral()
 
 void Em6PhysicsList::SetCuts()
 {
-  ////G4Timer theTimer ;
-  ////theTimer.Start() ;
+  // G4Timer theTimer ;
+  // theTimer.Start() ;
+
   if (verboseLevel >0){
     G4cout << "Em6PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
   }  
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma 
+
+      G4cout << "Set cuts for all particles! " << G4endl; 
+
    SetCutValue(cutForGamma,"gamma");
 
    SetCutValue(cutForElectron,"e-");
@@ -322,16 +332,19 @@ void Em6PhysicsList::SetCuts()
   // because some processes for hadrons need cut values for proton/anti_proton 
 
   SetCutValue(defaultCutValue, "proton");
+
   SetCutValue(defaultCutValue, "anti_proton");
 
   SetCutValueForOthers(defaultCutValue);
+
+  G4cout << "Dump the table!" << G4endl;
               
   if (verboseLevel>0) DumpCutValuesTable();
 
-  ////theTimer.Stop();
-  ////G4cout.precision(6);
-  ////G4cout << G4endl ;
-  ////G4cout << "total time(SetCuts)=" << theTimer.GetUserElapsed() << " s " <<G4endl;
+  //  theTimer.Stop();
+  //  G4cout.precision(6);
+  //  G4cout << G4endl ;
+  //  G4cout << "total time(SetCuts)=" << theTimer.GetUserElapsed() << " s " <<G4endl;
 
 }
 

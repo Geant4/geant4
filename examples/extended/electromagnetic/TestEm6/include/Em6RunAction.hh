@@ -30,8 +30,10 @@
 
 class Em6RunMessenger;
 
+#ifndef G4NOHIST
 class HepTupleManager;
 class HepHistogram;
+#endif
 
 class G4Run;
 
@@ -75,7 +77,9 @@ public: // Without description
     void FillNbOfSteps(G4double nstep);
     void Fillvertexz(G4double z);
 
+#ifndef G4NOHIST
     void SethistName(G4String name) ;
+#endif
 
     void SetnbinStep(G4int nbin);
     void SetSteplow(G4double Slow);
@@ -119,11 +123,14 @@ public: // Without description
 
   private:
 
+#ifndef G4NOHIST
     void bookHisto();
     void FillLowEnergyTest();
+#endif
 
   private:
 
+#ifndef G4NOHIST
     G4String histName ;
     HepTupleManager* hbookManager;
     HepHistogram *histo1, *histo2, *histo3, *histo4, *histo5 ;
@@ -136,6 +143,7 @@ public: // Without description
     HepHistogram *histo61, *histo62, *histo63, *histo64, *histo65;
     HepHistogram *histo71, *histo72, *histo73, *histo74, *histo75, *histo76;
     HepHistogram *histo81, *histo82, *histo83, *histo84, *histo85, *histo86;
+#endif
 
     G4double LowestEnergy,HighestEnergy;
     G4int TotBin;

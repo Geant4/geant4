@@ -11,46 +11,41 @@
 #/stepping/verbose 2
 #/event/verbose 2
 #
-#/run/initialize
-#
 #/calor/setAbsMat Silicon   
 #/calor/setAbsThick 50. mum  
 #/calor/setAbsYZ 10. cm
 #/calor/update
-#
-#  PLOT: angle distr. of transmitted particles
-/plots/setnbinTh 60
-/plots/setThlow 0.0 deg
-/plots/setThhigh 6.0 deg
-#
-#/calor/cutG 2130.0 micrometer
-#/calor/cutE 50.0 mm
 #/calor/cutG 100.0 micrometer
 #/calor/cutE 100.0 micrometer
 #  hist file name
 #/plots/sethistName p.plot 
-/run/initialize
+#/run/initialize
 #/run/particle/dumpCutValues
 #/event/drawTracks none
 #
-#/gun/particle gamma
+# Gun with Protons 10 MeV
+#
 /gun/particle proton
 #/gun/particle IonC12
-#/gun/energy 6.56 MeV
 /gun/energy 10.0 MeV
 #
-/run/beamOn 10
+/run/beamOn 1000
+#
+# Gun with antiProtons 10 MeV
+#
 #/plots/sethistName antip.plot 
-#/run/initialize
-#/gun/particle antiproton
-#/gun/energy 10.0 MeV
-#/run/beamOn 100
+/run/initialize
+/gun/particle anti_proton
+/gun/energy 10.0 MeV
+/run/beamOn 1000
+#
+# Gun with IonC12 100 MeV
 #
 #/plots/sethistName ionc12.plot 
-#/run/initialize
-#/gun/particle IonC12
-#/gun/energy 100.0 MeV
-#/run/beamOn 100
+/run/initialize
+/gun/particle IonC12
+/gun/energy 100.0 MeV
+/run/beamOn 1000
 
 
 

@@ -19,8 +19,11 @@
 #include "G4ios.hh"
 #include "g4std/iomanip"
 
+#ifndef G4NOHIST
 #include "CLHEP/Hist/HBookFile.h"
 #include <assert.h>
+//#include <assert.h>
+#endif
 
 #include "G4hEnergyLoss.hh"
 #include "G4EnergyLossTables.hh"
@@ -30,10 +33,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Em6RunAction::Em6RunAction()
-  :histName("histfile"),nbinStep(0.),nbinEn(0.),nbinTt(0.),nbinTb(0.),
+  :nbinStep(0.),nbinEn(0.),nbinTt(0.),nbinTb(0.),
    nbinTsec(0.),nbinTh(0.),nbinThback(0.),nbinR(0.),nbinGamma(0.),
-   nbinvertexz(0.),histo1(0),histo2(0),histo3(0),histo4(0),histo5(0),
+   nbinvertexz(0.),
+#ifndef G4NOHIST
+   histName("histfile"),histo1(0),histo2(0),histo3(0),histo4(0),histo5(0),
    histo6(0),histo7(0),histo8(0),histo9(0),histo10(0),
+#endif
    theProton (G4Proton::Proton()),
    theElectron ( G4Electron::Electron() ),
    LowestEnergy(0.01*keV),
@@ -48,6 +54,7 @@ Em6RunAction::Em6RunAction()
 Em6RunAction::~Em6RunAction()
 {
   delete runMessenger;
+#ifndef G4NOHIST
   if(histo1) delete histo1 ;
   if(histo2) delete histo2 ;
   if(histo3) delete histo3 ;
@@ -101,78 +108,80 @@ Em6RunAction::~Em6RunAction()
   delete histo85 ;
   delete histo86 ;
   delete hbookManager;
+#endif
 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+#ifndef G4NOHIST
 void Em6RunAction::bookHisto()
 {
   // init hbook
   hbookManager = new HBookFile(histName, 68);
-  assert (hbookManager != 0);
+  //  assert (hbookManager != 0);
 
   // book histograms
   if(nbinStep>0)
   {
     histo1 = hbookManager->histogram("number of steps/event"
                                    ,nbinStep,Steplow,Stephigh) ;
-    assert (histo1 != 0);
+    //    assert (histo1 != 0);
   }
   if(nbinEn>0)
   {
     histo2 = hbookManager->histogram("energy deposit in absorber(in MeV)"
                                      ,nbinEn,Enlow,Enhigh) ;
-    assert (histo2 != 0);
+    //    assert (histo2 != 0);
   }
   if(nbinTh>0)
   {
     histo3 = hbookManager->histogram("angle distribution at exit(deg)"
                                      ,nbinTh,Thlow/deg,Thhigh/deg) ;
-    assert (histo3 != 0);
+    //    assert (histo3 != 0);
   }
   if(nbinR>0)
   {
     histo4 = hbookManager->histogram("lateral distribution at exit(mm)"
                                      ,nbinR ,Rlow,Rhigh)  ;
-    assert (histo4 != 0);
+    //    assert (histo4 != 0);
   }
   if(nbinTt>0)
   {
     histo5 = hbookManager->histogram("kinetic energy of the primary at exit(MeV)"
                                      ,nbinTt,Ttlow,Tthigh)  ;
-    assert (histo5 != 0);
+    //    assert (histo5 != 0);
   }
   if(nbinThback>0)
   {
     histo6 = hbookManager->histogram("angle distribution of backscattered primaries(deg)"
                                      ,nbinThback,Thlowback/deg,Thhighback/deg) ;
-    assert (histo6 != 0);
+    //    assert (histo6 != 0);
   }
   if(nbinTb>0)
   {
     histo7 = hbookManager->histogram("kinetic energy of the backscattered primaries (MeV)"
                                      ,nbinTb,Tblow,Tbhigh)  ;
-    assert (histo7 != 0);
+    //    assert (histo7 != 0);
   }
   if(nbinTsec>0)
   {
     histo8 = hbookManager->histogram("kinetic energy of the charged secondaries (MeV)"
                                      ,nbinTsec,Tseclow,Tsechigh)  ;
-    assert (histo8 != 0);
+    //    assert (histo8 != 0);
   }
   if(nbinvertexz>0)
   {
     histo9 = hbookManager->histogram("z of secondary charged vertices(mm)"
                                      ,nbinvertexz ,zlow,zhigh)  ;
-    assert (histo9 != 0);
+    //    assert (histo9 != 0);
   }
   if(nbinGamma>0)
   {
     histo10= hbookManager->histogram("kinetic energy of gammas escaping the absorber (MeV)"
                                 //     ,nbinGamma,ElowGamma,EhighGamma)  ;
                                 ,nbinGamma,log10(ElowGamma),log10(EhighGamma))  ;
-    assert (histo10 != 0);
+    //    assert (histo10 != 0);
   }
 
   // Test on G4hLowEnergyIonisation
@@ -268,6 +277,7 @@ void Em6RunAction::bookHisto()
                                                   ,92,0.5,92.5) ;
 
 }
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -425,7 +435,9 @@ void Em6RunAction::BeginOfRunAction(const G4Run* aRun)
     }
   }
 
+#ifndef G4NOHIST
   bookHisto();
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -846,8 +858,10 @@ void Em6RunAction::EndOfRunAction(const G4Run* aRun)
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
     
    // Write histogram file
+#ifndef G4NOHIST
    FillLowEnergyTest() ;
    hbookManager->write();
+#endif
 
 }
 
@@ -906,6 +920,7 @@ void Em6RunAction::FillNbOfSteps(G4double ns)
   G4double n,bin ;
   G4int ibin;
  
+#ifndef G4NOHIST
   if(histo1)
   {
     entryStep += 1. ;
@@ -923,6 +938,7 @@ void Em6RunAction::FillNbOfSteps(G4double ns)
     }
    histo1->accumulate(ns) ;
   }
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -932,6 +948,7 @@ void Em6RunAction::FillEn(G4double En)
   G4double bin ;
   G4int ibin;
 
+#ifndef G4NOHIST
   if(histo2)
   {
     entryEn += 1. ;
@@ -948,6 +965,7 @@ void Em6RunAction::FillEn(G4double En)
     }
   histo2->accumulate(En/MeV) ;
   }
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -957,6 +975,7 @@ void Em6RunAction::FillTt(G4double En)
   G4double bin ;
   G4int ibin;
 
+#ifndef G4NOHIST
   if(histo5)
   {
     entryTt += 1. ;
@@ -975,6 +994,7 @@ void Em6RunAction::FillTt(G4double En)
     }
   histo5->accumulate(En/MeV) ;
   }
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -984,6 +1004,7 @@ void Em6RunAction::FillTb(G4double En)
   G4double bin ;
   G4int ibin;
   
+#ifndef G4NOHIST
   if(histo7)
   {
     entryTb += 1. ;
@@ -1002,6 +1023,7 @@ void Em6RunAction::FillTb(G4double En)
     }
   histo7->accumulate(En/MeV) ;
   }
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1011,6 +1033,7 @@ void Em6RunAction::FillTsec(G4double En)
   G4double bin ;
   G4int ibin;
 
+#ifndef G4NOHIST
   if(histo8)
   {
     entryTsec += 1. ;
@@ -1027,6 +1050,7 @@ void Em6RunAction::FillTsec(G4double En)
     }
   histo8->accumulate(En/MeV) ;
   }
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1036,6 +1060,7 @@ void Em6RunAction::FillGammaSpectrum(G4double En)
   G4double bin ;
   G4int ibin;
 
+#ifndef G4NOHIST
   if(histo10)
   {
     entryGamma += 1. ;
@@ -1052,6 +1077,7 @@ void Em6RunAction::FillGammaSpectrum(G4double En)
     }
   histo10->accumulate(log10(En/MeV)) ;
   }
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1064,6 +1090,7 @@ void Em6RunAction::FillTh(G4double Th)
   G4double bin,Thbin ,wg;
   G4int ibin;
 
+#ifndef G4NOHIST
   if(histo3)
   {
     entryTh += 1. ;
@@ -1093,6 +1120,7 @@ void Em6RunAction::FillTh(G4double Th)
 
   histo3->accumulate(Th/deg, wg) ;
   }
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1105,6 +1133,7 @@ void Em6RunAction::FillThBack(G4double Th)
   G4double bin,Thbin,wg ;
   G4int ibin;
 
+#ifndef G4NOHIST
   if(histo6)
   {
     entryThback += 1. ;
@@ -1131,6 +1160,7 @@ void Em6RunAction::FillThBack(G4double Th)
     }
   histo6->accumulate(Th/deg, wg) ;
   }
+#endif
 
 }
 
@@ -1141,6 +1171,7 @@ void Em6RunAction::FillR(G4double R )
   G4double bin ;
   G4int ibin;
 
+#ifndef G4NOHIST
   if(histo4)
   {
     entryR  += 1. ;
@@ -1159,6 +1190,7 @@ void Em6RunAction::FillR(G4double R )
     }
   histo4->accumulate(R/mm) ;
   }
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1168,6 +1200,7 @@ void Em6RunAction::Fillvertexz(G4double z )
   G4double bin ;
   G4int ibin;
   
+#ifndef G4NOHIST
   if(histo9)
   {
     entryvertexz  += 1. ;
@@ -1184,15 +1217,18 @@ void Em6RunAction::Fillvertexz(G4double z )
     }
   histo9->accumulate(z/mm) ;
   }
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+#ifndef G4NOHIST
 void Em6RunAction::SethistName(G4String name)
 {
   histName = name ;
   G4cout << " hist file = " << histName << G4endl;
 }
+#endif
 
 void Em6RunAction::SetnbinStep(G4int nbin)
 {
@@ -1396,6 +1432,7 @@ void Em6RunAction::AddEP(G4double nele,G4double npos)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+#ifndef G4NOHIST
 void Em6RunAction::FillLowEnergyTest( )
 {
   G4int J ;
@@ -1732,7 +1769,7 @@ void Em6RunAction::FillLowEnergyTest( )
     //    delete ionLEIonAr ;
     //    delete ionLEIonFe ;
 }
-
+#endif
 
 
 

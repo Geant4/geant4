@@ -8,7 +8,6 @@
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "Em6EventAction.hh"
 
@@ -16,8 +15,6 @@
 
 #include "Em6CalorHit.hh"
 #include "Em6EventActionMessenger.hh"
-
-#include "g4rw/tvordvec.h"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
@@ -207,4 +204,12 @@ void Em6EventAction::SetRef()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   
+
+
+
+
+
+
+
+
 

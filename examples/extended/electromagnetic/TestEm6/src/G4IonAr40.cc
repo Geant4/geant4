@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonAr40.cc,v 1.2 1999-12-15 14:49:15 gunter Exp $
+// $Id: G4IonAr40.cc,v 1.3 2000-01-19 20:55:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,4 +74,6 @@ G4IonAr40* G4IonAr40::IonAr40Definition(){return &theIonAr40;}
 // initialization for static cut values
 G4double   G4IonAr40::theIonAr40LengthCut;
 G4double*  G4IonAr40::theIonAr40KineticEnergyCuts;
+
+
 
