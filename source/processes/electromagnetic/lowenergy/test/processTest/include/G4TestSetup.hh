@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TestSetup.hh,v 1.1 2001-10-15 13:02:09 pia Exp $
+// $Id: G4TestSetup.hh,v 1.2 2001-10-15 15:27:17 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -62,6 +62,7 @@ public:
   void init();
 
   const G4Track* makeTrack();
+
   const G4Step* makeStep();
 
   G4VProcess* createTestProcess();
@@ -74,7 +75,7 @@ private:
   G4TestSetup(const G4TestSetup&);
   G4TestSetup& operator=(const G4TestSetup& right);
 
-  void createElectronProcesses();
+  void makeElectronProcesses();
   void makeGeometry();
   void makeMaterials();
 

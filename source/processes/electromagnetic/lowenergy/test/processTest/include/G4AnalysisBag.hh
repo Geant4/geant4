@@ -51,9 +51,9 @@
 #include "CLHEP/Hist/Histogram.h"
 #include "CLHEP/Hist/Tuple.h"
 
-
+class IHistoManager;
 class G4Ntuple;
-
+class NTupleFactory;
 
 class G4AnalysisBag {
 
@@ -65,23 +65,28 @@ public:
 
   void init(const G4String& file);
 
-  void addNtuple(G4Ntuple* ntuple);
+  void addNtuple(G4Ntuple* ntuple, const G4String& name);
 
-  const G4Ntuple* retrieveNtuple(G4int id) const;
+  void addHisto1D(IHistogram* histo, const G4String& name);
 
-  void write();
+  const G4Ntuple* getNtuple(const G4String& name) const;
 
-  // For CLHEP histos
-  const HepTupleManager* getManager() const;
+  const IHistogram* getHisto1D(const G4String& name) const;
+
+  void store();
+
+  const IHistogramManager* getManager() const { return histoManager; }
 
 private:
  
   G4AnalysisBag();
- 
+
   static G4AnalysisBag* instance;
   
   G4std::vector<G4Ntuple*> ntuples;
-  HepTupleManager* hbookManager;
+  IHistoManager* histoManager;
+  NTupleFactory* factory;
+
 
 };
 

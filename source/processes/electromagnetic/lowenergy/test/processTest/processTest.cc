@@ -21,15 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: processTest.cc,v 1.1 2001-10-15 12:30:27 pia Exp $
+// $Id: processTest.cc,v 1.2 2001-10-15 15:27:17 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
-//      GEANT 4 class file --- Copyright CERN 1998
-//      CERN Geneva Switzerland
 //
-//
-//      File name:     G4ProcessTest
+//      File name:     processTest
 //
 //      Author:        Maria Grazia Pia
 // 
@@ -44,44 +41,15 @@
 #include "g4std/fstream"
 #include "g4std/iomanip"
 
-#include "G4Material.hh"
-#include "G4VContinuousDiscreteProcess.hh"
-#include "G4ProcessManager.hh"
-#include "G4LowEnergyBremsstrahlung.hh"
-#include "G4eBremsstrahlung.hh"
-#include "G4LowEnergyPhotoElectric.hh"
-#include "G4PhotoElectricEffect.hh"
-#include "G4LowEnergyIonisation.hh"
-#include "G4eIonisation.hh"
-#include "G4VeLowEnergyLoss.hh"
-#include "G4EnergyLossTables.hh"
-#include "G4VParticleChange.hh"
-#include "G4ParticleChange.hh"
-#include "G4DynamicParticle.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-#include "G4Gamma.hh"
-
-#include "G4Box.hh"
-#include "G4PVPlacement.hh"
-
+#include "G4VProcess.hh"
 #include "G4Step.hh"
-#include "G4GRSVolume.hh"
-#include "G4ProcessTest.hh"
+#include "G4Track.hh"
 
 #include "G4ProcessTest.hh"
-#include "G4PhysicsSetup.hh"
-
-#include "G4UnitsTable.hh"
-
-#include "CLHEP/Hist/TupleManager.h"
-#include "CLHEP/Hist/HBookFile.h"
-#include "CLHEP/Hist/Histogram.h"
-#include "CLHEP/Hist/Tuple.h"
+#include "G4TestSetup.hh"
 
 int main()
 {
-
   // Setup
 
   G4int nIterations;
@@ -89,9 +57,10 @@ int main()
   G4cin >> nIterations;
   if (nIterations <= 0) G4Exception("Wrong input");
 
-  G4PhysicsSetup setup;
+  G4TestSetup setup;
   setup.init();
 
+  // Process to be tested
   G4VProcess* process = setup.createTestProcess();
 
   G4ProcessTest test;
@@ -99,6 +68,7 @@ int main()
   // DoIt test
   for (G4int iter=0; iter<nIterations; iter++)
     {
+      G4cout << "---- Iteration " << iter << G4endl;
       G4Track* track = setup.makeTrack();
       G4Step* step = setup.makeStep();
       test.postStepTest(process,*track,*step);
@@ -106,3 +76,4 @@ int main()
   
   cout << "End of the test" << G4endl;
 }
+

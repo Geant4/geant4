@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TestSetup.cc,v 1.1 2001-10-15 13:03:12 pia Exp $
+// $Id: G4TestSetup.cc,v 1.2 2001-10-15 15:27:18 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -42,24 +42,19 @@
 #include "G4VContinuousDiscreteProcess.hh"
 #include "G4ProcessManager.hh"
 #include "G4VProcess.hh"
-
 #include "G4LowEnergyPhotoElectric.hh"
 #include "G4PhotoElectricEffect.hh"
-
 #include "G4LowEnergyGammaConversion.hh"
 #include "G4GammaConversion.hh"
-
 #include "G4LowEnergyRayleigh.hh"
-
 #include "G4LowEnergyCompton.hh"
 #include "G4LowEnergyPolarizedCompton.hh"
 #include "G4ComptonScattering.hh"
-
 #include "G4LowEnergyBremsstrahlung.hh"
 #include "G4eBremsstrahlung.hh"
-
 #include "G4LowEnergyIonisation.hh"
 #include "G4eIonisation.hh"
+#include "G4EnergyLossTables.hh"
 
 #include "G4Electron.hh"
 #include "G4Positron.hh"
@@ -69,17 +64,17 @@
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
+
+#include "G4GRSVolume.hh"
 #include "G4Step.hh"
 #include "G4StepPoint.hh"
-#include "G4GRSVolume.hh"
-#include "G4UnitsTable.hh"
-
-#include "G4EnergyLossTables.hh"
+#include "G4Track.hh"
 
 #include "G4VParticleChange.hh"
 #include "G4ParticleChange.hh"
 #include "G4DynamicParticle.hh"
 
+#include "G4UnitsTable.hh"
 #include "Randomize.hh"
 
 
@@ -164,7 +159,7 @@ G4VProcess* G4TestSetup::createTestProcess()
   return process;
 }
 
-void G4TestSetup::createElectronProcesses()
+void G4TestSetup::makeElectronProcesses()
 {
   G4ParticleDefinition* gamma = G4Gamma::GammaDefinition();
   G4ParticleDefinition* electron = G4Electron::ElectronDefinition();
@@ -364,5 +359,11 @@ void G4TestSetup::init()
 
   makeMaterials();
   makeGeometry();
-  createElectronProcesses();
+  makeElectronProcesses();
+}
+
+G4String  G4TestSetup::setupName()
+{
+  G4String name = pName + "_" + selName;
+  return name;
 }
