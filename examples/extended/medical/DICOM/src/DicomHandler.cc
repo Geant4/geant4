@@ -34,9 +34,9 @@
 
 using namespace::std;
 
-int dicomHandler::readHeader(FILE *dicom, char filename2[300])
+G4int dicomHandler::readHeader(FILE *dicom, char filename2[300])
 {
-  int returnvalue=0;
+  G4int returnvalue=0;
   // The first 128 bytes are not important
   fread( buffer, 1, 128, dicom );
 
@@ -45,7 +45,7 @@ int dicomHandler::readHeader(FILE *dicom, char filename2[300])
 
   // Read information up to the pixel data
   // note: it should be a while instead of a for
-  for (int i=0;i<=100000000;i++)
+  for (G4int i=0;i<=100000000;i++)
     {
       //Reading groups and elements :
       fread(&read_group_id,1,2,dicom);
@@ -208,7 +208,8 @@ int dicomHandler::readHeader(FILE *dicom, char filename2[300])
   // Creating files to store information
   char compressionbuf[100],maxbuf[100];
   char filename[300];
-  int compression=0, max=0;
+  G4int compression=0;
+  G4int  max=0;
   FILE* configuration;
 
   configuration=fopen("Data.dat","r");
@@ -231,9 +232,9 @@ int dicomHandler::readHeader(FILE *dicom, char filename2[300])
   // Note: the .dat files contain basic information on the images.
 
   char exception = '\\';
-  bool toggle=false;
-  int z=0;
-  for (int y=0;y<=300;y++)
+  G4bool toggle=false;
+  G4int z=0;
+  for (G4int y=0;y<=300;y++)
     {
       if ( pixel_spacing[y] != exception )
         {
@@ -260,11 +261,11 @@ int dicomHandler::readHeader(FILE *dicom, char filename2[300])
   return returnvalue;
 }
 
-int dicomHandler::readData(FILE *dicom,	char filename2[300])
+G4int dicomHandler::readData(FILE *dicom,	char filename2[300])
 {
-  int returnvalue=0;
+  G4int returnvalue=0;
   char compressionbuf[100],maxbuf[100];
-  int compression=0, max=0;
+  G4int compression=0, max=0;
 
   FILE* configuration=fopen("Data.dat","r");
   fscanf(configuration,"%s",compressionbuf);
@@ -274,13 +275,13 @@ int dicomHandler::readData(FILE *dicom,	char filename2[300])
   fclose(configuration);
 
   //  READING THE PIXELS :
-  int w=0;
+  G4int w=0;
   if (bits_allocated == 2) // Case 16 bits :
     {
       len = rows*columns;
-      for (int j=1;j<=rows;j++)
+      for (G4int j=1;j<=rows;j++)
         {
-	  for (int i=1;i<=columns;i++)
+	  for (G4int i=1;i<=columns;i++)
             {
 	      w++;
 	      fread(&Int_Buffer[w],1,2,dicom);
@@ -295,9 +296,9 @@ int dicomHandler::readData(FILE *dicom,	char filename2[300])
       printf("@@@ Error! Picture != 16 bits...\n"); // Expect the program to CRASH !!!
       // We still try to read the image as if it were 16 bits
       len = rows*columns;
-      for (int j=1;j<=rows;j++)
+      for (G4int j=1;j<=rows;j++)
         {
-	  for (int i=1;i<=columns;i++)
+	  for (G4int i=1;i<=columns;i++)
             {
 	      w++;
 	      fread(&Int_Buffer[w],1,2,dicom);
@@ -322,17 +323,17 @@ int dicomHandler::readData(FILE *dicom,	char filename2[300])
   fprintf(processed,"%8f\n",slice_location);
   fprintf(processed,"%8i\n",compression);
 
-  int compSize = 1;
+  G4int compSize = 1;
   compSize=compression;
   unsigned int mean;
-  bool overflow=false;
-  int cpt=1;
+  G4bool overflow=false;
+  G4int cpt=1;
 
   if (compSize == 1) // no compression: each pixel has a density value)
     {
-      for (int ww =1;ww<=rows; ww++)
+      for (G4int ww =1;ww<=rows; ww++)
         {
-	  for(int xx =1 ;xx<=columns;xx++)
+	  for(G4int xx =1 ;xx<=columns;xx++)
             {
 	      mean=(tab[ww][xx])/1;
 	      fprintf(processed,"%f   ",pixel2density(mean) );
@@ -344,14 +345,14 @@ int dicomHandler::readData(FILE *dicom,	char filename2[300])
     {
       // density value is the average of a square region of
       // compression*compression pixels
-      for (int ww =1 ; ww<=rows ; ww=ww+compSize )
+      for (G4int ww =1 ; ww<=rows ; ww=ww+compSize )
         {
-	  for(int xx =1 ; xx<=columns ; xx=xx+compSize )
+	  for(G4int xx =1 ; xx<=columns ; xx=xx+compSize )
             {
 	      overflow=false;
 	      unsigned int mean=tab[ww][xx];
-	      int sumx=compSize-1;
-	      int sumy=compSize-1;
+	      G4int sumx=compSize-1;
+	      G4int sumy=compSize-1;
 	      for(  ; sumx>0; sumy--, sumx--)
                 {
 		  if (ww+sumy > rows|| xx+sumx > columns)
@@ -360,7 +361,7 @@ int dicomHandler::readData(FILE *dicom,	char filename2[300])
 		      break;
                     }
 		  mean=mean+tab[ww+sumy][xx+sumx];
-		  for ( int m=sumx ; m>0 ; m--)
+		  for (G4int m=sumx ; m>0 ; m--)
                     {
 		      mean=mean+tab[ww+sumy-m][xx+sumx];
 		      mean=mean+tab[ww+sumy][xx+sumx-m];
@@ -381,27 +382,27 @@ int dicomHandler::readData(FILE *dicom,	char filename2[300])
   return returnvalue;
 }
 
-int dicomHandler::displayImage(char command[300])
+G4int dicomHandler::displayImage(char command[300])
 {
   //   Display DICOM images using ImageMagick
   char commandName[500];
   sprintf(commandName,"display  %s",command);
   printf(commandName);
-  int i=system(commandName);
+  G4int i=system(commandName);
   return (int )i;
 }
 
-double dicomHandler::pixel2density(unsigned int pixel)
+G4double dicomHandler::pixel2density(unsigned int pixel)
 {
-  double density=-1;
-  int nbrequali=0;
+  G4double density=-1;
+  G4int nbrequali=0;
   char nbrequalibuf[100];
-  double deltaCT=0;
-  double deltaDensity=0;
+  G4double deltaCT=0;
+  G4double deltaDensity=0;
   char valuedensitybuf[100][100];
   char valueCTbuf[100][100];
-  double valuedensity[100];
-  double valueCT[100];
+  G4double valuedensity[100];
+  G4double valueCT[100];
   FILE* calibration;
 
   // CT2Density.dat contains the calibration curve to convert CT (Hounsfield) number to
@@ -417,7 +418,7 @@ double dicomHandler::pixel2density(unsigned int pixel)
     }
   else // calibration != NULL
     {
-      for (int i=1;i<=nbrequali;i++) // Loop to store all the pts in CT2Density.dat
+      for (G4int i=1;i<=nbrequali;i++) // Loop to store all the pts in CT2Density.dat
         {
 	  fscanf(calibration,"%s %s",valueCTbuf[i-1],valuedensitybuf[i-1]);
 	  valueCT[i-1]=atof(valueCTbuf[i-1]);
@@ -426,7 +427,7 @@ double dicomHandler::pixel2density(unsigned int pixel)
     }
   fclose(calibration);
 
-  for (int j=1;j<nbrequali;j++)
+  for (G4int j=1;j<nbrequali;j++)
     {
       if ( pixel >= valueCT[j-1] && pixel < valueCT[j])
         {
@@ -449,7 +450,7 @@ double dicomHandler::pixel2density(unsigned int pixel)
     }
 
   return density;
-}//$   vihut@phy.ulaval.ca
+}
 
 
 void dicomHandler::checkFileFormat()

@@ -72,29 +72,21 @@ private:
   G4int bits_allocated;
   G4int high_bits;
   G4int len;
-public:
- 
   char pixel_spacing[300],pixel_spacing_X[300],pixel_spacing_Y[300];
   char slice_tickness[300];
-  int rescale_slope, rescale_intercept;
-  double slice_location;
+  G4int rescale_slope;
+  G4int rescale_intercept;
+  G4double slice_location;
 
-  int readHeader(FILE *,char[300]);
-  int readData(FILE *,char[300]); // note: always use readHeader before readDat
+public:
+
+  G4int readHeader(FILE *,char[300]);
+  G4int readData(FILE *,char[300]); // note: always use readHeader 
+                                    //before readData
 
   // use ImageMagick to display the image
-  int displayImage(char[500]);
-
-  //************************************************************************
-  // The goals of this function are:
-  //	- assure that the Data.dat file exist
-  //	- check if files *.g4 exists for every images (.dcm) in Data.dat
-  //        If they don't exist, they are created
-  // after running checkFileFormat, all the data needed for the G4simulation
-  // should be ready
-  //************************************************************************
+  G4int displayImage(char[500]);
   void checkFileFormat();
-
 };
 #endif
 
