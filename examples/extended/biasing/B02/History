@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2005-03-17 17:12:03 daquinog Exp $
+$Id: History,v 1.4 2005-03-18 17:36:47 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-March 17th, 2005 G.Daquino - B02-V07-01-00
+March 17th, 2005 G.Daquino - B02-V07-00-00
 - porting B02 from PI working with rh73 to PI working with slc3
 
 Jun 18th, 2004  G.Daquino - B02-V06-01-00
