@@ -4,7 +4,7 @@
 G4Analyser::G4Analyser()
   :verboseLevel(1)  {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4Analyser::G4Analyser" << G4endl;
   }
 
@@ -52,7 +52,7 @@ void G4Analyser::setWatchers(const G4std::vector<G4NuclWatcher>& watchers) {
 
   ana_watchers = watchers;
   if (verboseLevel > 3) {
-  G4cout << " watchers set " << watchers.size() << G4endl;
+    G4cout << " watchers set " << watchers.size() << G4endl;
   }
 };
 
@@ -64,13 +64,15 @@ void G4Analyser::try_watchers(G4double a,
     G4cout << " >>> G4Analyser::try_watchers" << G4endl;
   }
 
-  for(G4int iw = 0; iw < G4int(ana_watchers.size()); iw++) { 
+  for (G4int iw = 0; iw < G4int(ana_watchers.size()); iw++) { 
 
-    if(if_nucl) {
-      if(ana_watchers[iw].look_forNuclei()) ana_watchers[iw].watch(a, z); 
-    }
-    else {
-      if(!ana_watchers[iw].look_forNuclei()) ana_watchers[iw].watch(a, z); 
+    if (if_nucl) {
+
+      if (ana_watchers[iw].look_forNuclei()) ana_watchers[iw].watch(a, z); 
+
+    } else {
+
+      if (!ana_watchers[iw].look_forNuclei()) ana_watchers[iw].watch(a, z); 
     }; 
   };
 };
@@ -82,64 +84,67 @@ void G4Analyser::analyse(const G4CollisionOutput& output) {
     G4cout << " >>> G4Analyser::analyse" << G4endl;
   }
 
-  if(withNuclei) {
+  if (withNuclei) {
     G4std::vector<G4InuclNuclei> nucleus = output.getNucleiFragments();
 
-    if(nucleus.size() >= 0) {
+    if (nucleus.size() >= 0) {
       G4int nbig = 0;
       averageNucleiFragments += nucleus.size();
 
-      for(G4int in = 0; in < G4int(nucleus.size()); in++) {
+      for (G4int in = 0; in < G4int(nucleus.size()); in++) {
 	averageExitationEnergy += nucleus[in].getExitationEnergy();
 
 	G4double a = nucleus[in].getA();
 	G4double z = nucleus[in].getZ();
 
-	if(in == 0) { 
+	if (in == 0) { 
 	  averageA += a; 
 	  averageZ += z; 
 	};
-	if(a > 10.0) nbig++;
+
+	if (a > 10.0) nbig++;
 	try_watchers(a, z, true);
       };
-      if(nbig > 1) fissy_prob += 1.0;
+
+      if (nbig > 1) fissy_prob += 1.0;
       eventNumber += 1.0;
       G4std::vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
       averageMultiplicity += particles.size();
 
-      for(G4int i = 0; i < G4int(particles.size()); i++) {
+      for (G4int i = 0; i < G4int(particles.size()); i++) {
 	G4double ap = 0.0;
 	G4double zp = 0.0;
 
-	if(particles[i].nucleon()) {
+	if (particles[i].nucleon()) {
 	  averageNucleonKinEnergy += particles[i].getKineticEnergy();
-	  if(particles[i].type() == 1) {
+
+	  if (particles[i].type() == 1) {
 	    zp = 1.0;
 	    ap = 1.0;
 	    averageProtonNumber += 1.0;
 	    averageProtonKinEnergy += particles[i].getKineticEnergy();
-	  }
-	  else {
+
+	  } else {
 	    ap = 1.0;
 	    zp = 0.0;
 	    averageNeutronNumber += 1.0;
 	    averageNeutronKinEnergy += particles[i].getKineticEnergy();
 	  };  
-	}
-	else if(particles[i].pion()) {
+
+	} else if (particles[i].pion()) {
 	  averagePionKinEnergy += particles[i].getKineticEnergy();
 	  averagePionNumber += 1.0;
 	  ap = 0.0;
 
-	  if(particles[i].type() == 3) {
+	  if (particles[i].type() == 3) {
 	    zp = 1.0;
 	    averagePionPl += 1.0;
-	  }
-	  else if(particles[i].type() == 5) {  
+
+	  } else if (particles[i].type() == 5) {  
 	    zp = -1.0;
 	    averagePionMin += 1.0;
-	  }
-	  else if(particles[i].type() == 7) { 
+
+	  } else if (particles[i].type() == 7) { 
 	    zp = 0.0;
 	    averagePion0 += 1.0;
 	  };
@@ -147,25 +152,27 @@ void G4Analyser::analyse(const G4CollisionOutput& output) {
 	try_watchers(ap, zp, false);
       };
     };
-  }
-  else {
+
+  } else {
     eventNumber += 1.0;
     G4std::vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
     averageMultiplicity += particles.size();
 
-    for(G4int i = 0; i < G4int(particles.size()); i++) {
-      if(particles[i].nucleon()) {
+    for (G4int i = 0; i < G4int(particles.size()); i++) {
+
+      if (particles[i].nucleon()) {
 	averageNucleonKinEnergy += particles[i].getKineticEnergy();
-	if(particles[i].type() == 1) {
+
+	if (particles[i].type() == 1) {
 	  averageProtonNumber += 1.0;
 	  averageProtonKinEnergy += particles[i].getKineticEnergy();
-	}
-	else {
+
+	} else {
 	  averageNeutronNumber += 1.0;
 	  averageNeutronKinEnergy += particles[i].getKineticEnergy();
 	};  
-      }
-      else if(particles[i].pion()) {
+
+      } else if (particles[i].pion()) {
 	averagePionKinEnergy += particles[i].getKineticEnergy();
 	averagePionNumber += 1.0;
       };
@@ -192,7 +199,7 @@ void G4Analyser::printResultsSimple() {
 	 << " average pion number " << averagePionNumber / eventNumber << G4endl
 	 << " average pion Ekin " << averagePionKinEnergy / (averagePionNumber +
 							     1.0e-10) << G4endl;
-  if(withNuclei) {
+  if (withNuclei) {
     G4cout		   
       << " average Exitation Energy " << 
       averageExitationEnergy / averageNucleiFragments << G4endl
@@ -225,7 +232,7 @@ void G4Analyser::printResults() {
 	 << " average pi- " << averagePionMin / eventNumber << G4endl
 	 << " average pi0 " << averagePion0 / eventNumber << G4endl;
      		   
-  if(withNuclei) {
+  if (withNuclei) {
 
     G4cout
       << " average A " << averageA / eventNumber << G4endl 		   
@@ -248,8 +255,7 @@ void G4Analyser::handleWatcherStatistics() {
   // const G4double small = 1.0e-10;
 
   if (verboseLevel > 3) {
-    G4cout << " ===================================================== " << G4endl;
-    G4cout << " ********** Izotop analysis ****************** " << G4endl;
+    G4cout << " >>>Izotop analysis:" << G4endl;
   };
 
   G4double fgr = 0.0;
@@ -262,37 +268,31 @@ void G4Analyser::handleWatcherStatistics() {
   G4double tot_inucl_err = 0.0;
   G4double checked = 0.0;
 
-  for(G4int iw = 0; iw < G4int(ana_watchers.size()); iw++) {
+  for (G4int iw = 0; iw < G4int(ana_watchers.size()); iw++) {
     ana_watchers[iw].setInuclCs(inel_csec, eventNumber);
     ana_watchers[iw].print();
 
-    if(ana_watchers[iw].to_check()) {
+    if (ana_watchers[iw].to_check()) {
       G4std::pair<G4double, G4double> rat_err = ana_watchers[iw].getAverageRatio();
-
       averat += rat_err.first;
       ave_err += rat_err.second;
       gl_chsq += ana_watchers[iw].getChsq();   
-
       G4std::pair<G4double, G4double> cs_err = ana_watchers[iw].getExpCs();
-
       tot_exper += cs_err.first;
       tot_exper_err += cs_err.second;
-
       G4std::pair<G4double, G4double> inucl_cs_err = ana_watchers[iw].getInuclCs();
-
       tot_inucl += inucl_cs_err.first;
       tot_inucl_err += inucl_cs_err.second;
-
       G4double iz_checked = ana_watchers[iw].getNmatched();
 
-      if(iz_checked > 0.0) {
+      if (iz_checked > 0.0) {
 	fgr += ana_watchers[iw].getLhood();
 	checked += iz_checked;    
       };
     };
   };
 
-  if(checked > 0.0) {
+  if (checked > 0.0) {
     gl_chsq = sqrt(gl_chsq) / checked;
     averat /= checked;
     ave_err /= checked;
@@ -300,7 +300,6 @@ void G4Analyser::handleWatcherStatistics() {
   };
 
   if (verboseLevel > 3) {
-    G4cout << " ===================================================== " << G4endl;
     G4cout << " total exper c.s. " << tot_exper << " err " << tot_exper_err <<
       " tot inucl c.s. " << tot_inucl << " err " << tot_inucl_err << G4endl;
     G4cout << " checked total " << checked << " lhood " << fgr << G4endl
