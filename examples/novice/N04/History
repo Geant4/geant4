@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2001-02-09 01:26:19 kurasige Exp $
+$Id: History,v 1.15 2001-02-09 10:15:51 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,10 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-February 9 2001 H.Kurashige (exampleN04-V03-00-00)
-- Introduce Modular Physics List
+February 9 2001 S.W.O'Neale (exampleN04-V03-00-04)
+- Update SUN CC reference outouts for test104 and test104.EMtest
 
-4-Feb-2001 update two reference outputs and history
+February 9 2001 H.Kurashige (exampleN04-V03-00-03)
+- Introduce Modular Physics List
 
 25th November 2000 Steve O'Neale (tagset210)
 - Update test outputs for min.delta energy cut
