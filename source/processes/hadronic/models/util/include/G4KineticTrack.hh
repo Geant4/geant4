@@ -119,6 +119,9 @@ class G4KineticTrack : public G4VKineticNucleon
       
       CascadeState SetState(const CascadeState new_state);
       CascadeState GetState() const;
+      void SetProjectilePotential(const G4double aPotential);
+      G4double GetProjectilePotential() const;
+
       
   private:
 
@@ -185,6 +188,7 @@ public:
 
       CascadeState theStateToNucleus;
 
+      G4double theProjectilePotential;
 };
 
 extern G4Allocator<G4KineticTrack> theKTAllocator;
@@ -428,6 +432,17 @@ G4KineticTrack::CascadeState G4KineticTrack::SetState(const CascadeState new_sta
 	CascadeState old_state=theStateToNucleus;
 	theStateToNucleus=new_state;
 	return old_state;
+}
+
+inline
+void G4KineticTrack::SetProjectilePotential(G4double aPotential)
+{
+	theProjectilePotential = aPotential;
+}
+inline
+G4double G4KineticTrack::GetProjectilePotential() const
+{
+	return theProjectilePotential;
 }
 
 #endif

@@ -72,7 +72,8 @@ G4KineticTrack::G4KineticTrack() :
                 theActualWidth(0),            
                 theDaughterMass(0),
                 theDaughterWidth(0),
-		theStateToNucleus(undefined)
+		theStateToNucleus(undefined),
+		theProjectilePotential(0)
 {
 ////////////////
 //    DEBUG   //
@@ -111,6 +112,7 @@ G4KineticTrack::G4KineticTrack(const G4KineticTrack &right) : G4VKineticNucleon(
   theDaughterMass = 0;
   theDaughterWidth = 0;
   theStateToNucleus=right.theStateToNucleus;
+  theProjectilePotential=right.theProjectilePotential;
  
 ////////////////
 //    DEBUG   //
@@ -139,7 +141,8 @@ G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
 		theFermi3Momentum(0),
 		theTotal4Momentum(a4Momentum),
 		theNucleon(0),
-		theStateToNucleus(undefined)
+		theStateToNucleus(undefined),
+		theProjectilePotential(0)
 {
   if(G4KaonZero::KaonZero() == theDefinition ||
     G4AntiKaonZero::AntiKaonZero() == theDefinition)
@@ -416,7 +419,8 @@ G4KineticTrack::G4KineticTrack(G4Nucleon * nucleon,
 	theActualWidth(0),
 	theDaughterMass(0),
 	theDaughterWidth(0),
-	theStateToNucleus(undefined)
+	theStateToNucleus(undefined),
+	theProjectilePotential(0)
 {
 	theFermi3Momentum.setE(0);
 	Set4Momentum(a4Momentum);
