@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ViewParameters.hh,v 1.9 2001-02-04 01:37:27 johna Exp $
+// $Id: G4ViewParameters.hh,v 1.10 2001-02-04 20:22:45 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -129,6 +129,7 @@ public: // With description
         G4bool           IsMarkerNotHidden       () const;
         G4int            GetWindowSizeHintX      () const;
         G4int            GetWindowSizeHintY      () const;
+        G4bool           IsAutoRefresh           () const;
 
   // Here Follow functions to evaluate the above algorithms as a
   // function of the radius of the Bounding Sphere of the object being
@@ -185,6 +186,7 @@ public: // With description
   void SetMarkerHidden         ();
   void SetMarkerNotHidden      ();
   void SetWindowSizeHint       (G4int xHint, G4int yHint);
+  void SetAutoRefresh          (G4bool);
 
   void PrintDifferences (const G4ViewParameters& v) const;
 
@@ -229,6 +231,7 @@ private:
   // removed.
   G4int        fWindowSizeHintX; // Size hints for pixel-based window systems.
   G4int        fWindowSizeHintY;
+  G4bool       fAutoRefresh;     // ...after change of view parameters.
 };
 
 #include "G4ViewParameters.icc"

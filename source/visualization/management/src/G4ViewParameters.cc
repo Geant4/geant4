@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ViewParameters.cc,v 1.8 2001-02-04 01:37:35 johna Exp $
+// $Id: G4ViewParameters.cc,v 1.9 2001-02-04 20:23:07 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,7 +51,8 @@ G4ViewParameters::G4ViewParameters ():
   fGlobalMarkerScale (1.),
   fMarkerNotHidden (true),
   fWindowSizeHintX (600),
-  fWindowSizeHintY (600)
+  fWindowSizeHintY (600),
+  fAutoRefresh (false)
 {
   fDefaultMarker.SetScreenSize (5.);
   // Markers are 5 pixels radius, 10 pixels diameter.
@@ -226,7 +227,8 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
       (fDefaultMarker        != v.fDefaultMarker)        ||
       (fGlobalMarkerScale    != v.fGlobalMarkerScale)    ||
       (fMarkerNotHidden      != v.fMarkerNotHidden)      ||
-      (fWindowSizeHintY      != v.fWindowSizeHintY))
+      (fWindowSizeHintY      != v.fWindowSizeHintY)      ||
+      (fAutoRefresh          != v.fAutoRefresh))
     G4cout << "Difference in 1st batch." << G4endl;
 
   if (fSection) {
@@ -388,6 +390,10 @@ G4std::ostream& operator << (G4std::ostream& os, const G4ViewParameters& v) {
   os << "\n  Window size hint: "
      << v.fWindowSizeHintX << 'x'<< v.fWindowSizeHintX;
 
+  os << "\n  Auto refresh: ";
+  if (v.fAutoRefresh) os << "true";
+  else os << "false";
+
   return os;
 }
 
@@ -425,7 +431,8 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
       (fGlobalMarkerScale    != v.fGlobalMarkerScale)    ||
       (fMarkerNotHidden      != v.fMarkerNotHidden)      ||
       (fWindowSizeHintX      != v.fWindowSizeHintX)      ||
-      (fWindowSizeHintY      != v.fWindowSizeHintY))
+      (fWindowSizeHintY      != v.fWindowSizeHintY)      ||
+      (fAutoRefresh          != v.fAutoRefresh))
     return true;
 
   if (fDensityCulling &&
