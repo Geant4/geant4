@@ -1,4 +1,4 @@
-$Id: History,v 1.1 1999-10-11 13:07:24 maire Exp $
+$Id: History,v 1.2 1999-10-11 13:14:31 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,8 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+11-10-99  moved from: source/processes/electromagnetic/test
+          to: examples/extended/electromagnetic
      
 09-08-99  Commands for save/read Rndm status 
       
