@@ -1,4 +1,4 @@
-$Id: History,v 1.71 2002-03-22 15:52:22 japost Exp $
+$Id: History,v 1.72 2002-04-03 11:51:45 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr 3rd, 2002       G. Cosmo - geomvol-V04-00-05
+- G4GeometryMessenger[.hh.cc]: added new commands to exploit more features of the
+  G4GeomTestVolume class for detecting geometry overlaps:
+  o /geometry/test/grid_test - runs the default grid test, same as "run".
+  o /geometry/test/recursive_test - runs the grid test in recursive mode.
+  o /geometry/test/cylinder_test - to shoot lines in a cylindrical pattern.
+  o /geometry/test/line_test - to shoot a line according to position and direction.
+
 Mar 22nd, 2002 	     J. Apostolakis - geomvol-V04-00-04
 - G4PropagatorInField: added Set/Get methods for MaximumEpsilonStep
 
