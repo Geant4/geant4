@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.icc,v 1.6 1999-06-04 12:56:10 aforti Exp $
+// $Id: G4LowEnergyPhotoElectric.icc,v 1.7 1999-06-04 14:02:12 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -111,7 +111,7 @@ inline G4double G4LowEnergyPhotoElectric::GetCrossSection(G4DynamicParticle* aDy
       crossSection = 0.;
    else{
 
-      G4int elemZ = anElement->GetZ();	
+      G4int elemZ = (G4int) anElement->GetZ();	
       crossSection = DataLogInterpolation(GammaEnergy, elemZ-1, theCrossSectionTable);
    }
    return crossSection*barn;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.icc,v 1.2 1999-06-04 12:56:09 aforti Exp $
+// $Id: G4LowEnergyIonisation.icc,v 1.3 1999-06-04 14:02:11 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,13 +72,8 @@ inline G4double G4LowEnergyIonisation::DataLogInterpolation(const G4double Argum
   G4double theVal = (log10(val1)*log10(arg2/Argument)
                      +log10(val2)*log10(Argument/arg1))/log10(arg2/arg1);
   
-//  cout<<"theLoc: "<<theLoc<<" val1: "<<val1<<" arg1: "<<arg1<<endl;
-//  cout<<"theLoc+1: "<<theLoc+1<<" val2: "<<val2<<" arg2: "<<arg2<<endl;
-//  cout<<"theVal: "<<theVal<<endl;
-
   theVal = pow(10,theVal);
 
-//  cout<<"theVal real: "<<theVal<<endl;
   return theVal;
 }
 

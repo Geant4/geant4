@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.icc,v 1.5 1999-06-04 12:56:09 aforti Exp $
+// $Id: G4LowEnergyBremsstrahlung.icc,v 1.6 1999-06-04 14:02:11 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -150,7 +150,6 @@ inline G4double G4LowEnergyBremsstrahlung::ComputeA(G4int AtomicNumber, G4double
   G4FirstLevel* oneAtomCoeff = (*ATable)[AtomicNumber-1];
   G4Data* ElectEnVec = (*oneAtomCoeff)[0];
   G4Data* AValueVec = (*oneAtomCoeff)[1];
-  cout<<"EEV Length: "<<ElectEnVec->entries()<<endl;
 
   aVal = DataLogInterpolation(ElectronKinEnergy, (*ElectEnVec), (*AValueVec));
 	
