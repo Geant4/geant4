@@ -89,10 +89,10 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         void BeginModeling ();
         void EndModeling ();
 
-        static G4int GetSceneCount ()                       { return sceneCount; }
+        static G4int getSceneCount ()                       { return sceneCount; }
 
-        void OpenHepRep();
-        bool CloseHepRep();
+        void openHepRep();
+        bool closeHepRep();
 
     private:
         static G4int sceneCount;
@@ -106,17 +106,23 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         HEPREP::HepRepWriter* writer;
         
         // Methods
-        void SetColor (HEPREP::HepRepAttribute *attribute, const G4Color& color,
+        void setColor (HEPREP::HepRepInstance *instance, const G4Color& color,
 			            const G4String& key = G4String("Color"));
-        void SetLine   (HEPREP::HepRepInstance *instance, const G4Visible& visible);
-        void SetMarker (HEPREP::HepRepInstance *instance, const G4VMarker& marker);
+        void setLine   (HEPREP::HepRepInstance *instance, const G4Visible& visible);
+        void setMarker (HEPREP::HepRepInstance *instance, const G4VMarker& marker);
 
-        bool IsEventData ();
+        void setAttribute (HEPREP::HepRepInstance *instance, G4String name, G4String value);
+        void setAttribute (HEPREP::HepRepInstance *instance, G4String name, bool value);
+        void setAttribute (HEPREP::HepRepInstance *instance, G4String name, double value);
+        void setAttribute (HEPREP::HepRepInstance *instance, G4String name, int value);
+        void setAttribute (HEPREP::HepRepInstance *instance, G4String name, double red, double green, double blue, double alpha);
 
-        void Open(G4String name);
-        void Close();
+        bool isEventData ();
 
-        void addAttDefs(HEPREP::HepRepType* type, const std::map<G4String,G4AttDef>* attDefs);
+        void open(G4String name);
+        void close();
+
+        void addAttDefs(HEPREP::HepRepDefinition* definition, const std::map<G4String,G4AttDef>* attDefs);
         void addAttVals(HEPREP::HepRepInstance* instance, std::vector<G4AttValue>* attValues);
 
 
@@ -137,7 +143,6 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         HEPREP::HepRepType*         getTrajectoryPointType  (const std::map<G4String,G4AttDef>* attDefs = NULL);
         HEPREP::HepRepType*         getHitType              (const std::map<G4String,G4AttDef>* attDefs = NULL);
         HEPREP::HepRepType*         getCalHitType           (const std::map<G4String,G4AttDef>* attDefs = NULL);
-        HEPREP::HepRepType*         getCalHitFaceType       (const std::map<G4String,G4AttDef>* attDefs = NULL);
 
         G4String getFullTypeName(G4String volumeName, int depth);
         G4String getParentTypeName(int currentDepth);

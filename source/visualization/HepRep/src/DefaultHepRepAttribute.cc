@@ -3,6 +3,7 @@
 #include "DefaultHepRepAttValue.h"
 
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 using namespace HEPREP;
@@ -66,13 +67,16 @@ bool DefaultHepRepAttribute::addAttValue(string key, double red, double green, d
 }
 
 HepRepAttValue* DefaultHepRepAttribute::getAttValueFromNode(string name) {
-    map<string, HepRepAttValue*>::iterator i = attValues.find(name);
-    return i != attValues.end() ? (*i).second : NULL;
+    string s = name;
+    transform(s.begin(), s.end(), s.begin(), (int(*)(int)) tolower);
+    return (attValues.count(s) > 0) ? attValues[s] : NULL;    
 }
 
 HepRepAttValue* DefaultHepRepAttribute::removeAttValue(string name) {
-    HepRepAttValue* attValue = attValues[name];
-    attValues.erase(name);
+    string s = name;
+    transform(s.begin(), s.end(), s.begin(), (int(*)(int)) tolower);
+    HepRepAttValue* attValue = attValues[s];
+    attValues.erase(s);
     return attValue;
 }
 

@@ -3,6 +3,7 @@
 #include "DefaultHepRepAttDef.h"
 
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 using namespace HEPREP;
@@ -36,7 +37,8 @@ bool DefaultHepRepDefinition::addAttDef(string name, string desc, string type, s
 }
 
 HepRepAttDef* DefaultHepRepDefinition::getAttDefFromNode(string name) {
-    map<string, HepRepAttDef*>::iterator i = attDefs.find(name);
-    return i != attDefs.end() ? (*i).second : NULL;
+    string s = name;
+    transform(s.begin(), s.end(), s.begin(), (int(*)(int)) tolower);
+    return (attDefs.count(s) > 0) ? attDefs[s] : NULL;    
 }
 

@@ -101,7 +101,7 @@ bool XMLHepRepWriter::write(HepRepType* type) {
     xml->openTag(nameSpace, "type");
     write((HepRepDefinition*)type);
     write((HepRepAttribute*)type);
-
+    
     vector<HepRepType*>* list = type->getTypes();
     for (vector<HepRepType*>::iterator i=list->begin(); i != list->end(); i++) {
         write(*i);
@@ -168,9 +168,13 @@ bool XMLHepRepWriter::write(HepRepPoint* point) {
     xml->setAttribute("x", point->getX());
     xml->setAttribute("y", point->getY());
     xml->setAttribute("z", point->getZ());
-    xml->openTag(nameSpace, "point");
-    write((HepRepAttribute*)point);
-    xml->closeTag();
+    if (point->getAttValuesFromNode()->size() != 0) {
+        xml->openTag(nameSpace, "point");
+        write((HepRepAttribute*)point);
+        xml->closeTag();
+    } else {
+        xml->printTag(nameSpace, "point");
+    }
     return true;
 }
 
@@ -200,10 +204,15 @@ bool XMLHepRepWriter::write(HepRepAttValue* attValue) {
 
     xml->setAttribute("name", name);
     xml->setAttribute("value", attValue->getAsString());
-    xml->setAttribute("type", attValue->getTypeName());
 
-    string label = dynamic_cast<DefaultHepRepAttValue*>(attValue)->toShowLabel();
-    xml->setAttribute("showlabel", label);
+    if (attValue->getType() != HepRepConstants::TYPE_STRING) {
+        xml->setAttribute("type", attValue->getTypeName());
+    }
+        
+    if (attValue->showLabel() != HepRepConstants::SHOW_NONE) {
+        string label = dynamic_cast<DefaultHepRepAttValue*>(attValue)->toShowLabel();
+        xml->setAttribute("showlabel", label);
+    }
     xml->printTag(nameSpace, "attvalue");
     return true;
 }

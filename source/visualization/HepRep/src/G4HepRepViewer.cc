@@ -59,7 +59,7 @@ G4HepRepViewer::~G4HepRepViewer () {
 #ifdef SDEBUG
     cout << "G4HepRepViewer::~G4HepRepViewer" << endl;
 #endif
-    dynamic_cast<G4HepRep*>(GetSceneHandler()->GetGraphicsSystem())->RemoveViewer();
+    dynamic_cast<G4HepRep*>(GetSceneHandler()->GetGraphicsSystem())->removeViewer();
 }
 
 
@@ -69,13 +69,8 @@ void G4HepRepViewer::ClearView () {
 #endif
 }
 
-/***************************************************************************/
-// Calculates view representation based on extent of object being
-// viewed and (initial) direction of camera.  (Note: it can change
-// later due to user interaction via visualization system's GUI.)
-/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 void G4HepRepViewer::SetView () {
-#ifdef DEBUG
+#ifdef SDEBUG
     cout << "G4HepRepViewer::SetView" << endl;
 #endif
 }
@@ -99,8 +94,8 @@ void G4HepRepViewer::ShowView () {
     G4VViewer::ShowView();
 
     G4HepRepSceneHandler* sceneHandler = dynamic_cast<G4HepRepSceneHandler*>(GetSceneHandler());
-    if (sceneHandler->CloseHepRep()) {
-        sceneHandler->OpenHepRep();
+    if (sceneHandler->closeHepRep()) {
+        sceneHandler->openHepRep();
     }
 }
 

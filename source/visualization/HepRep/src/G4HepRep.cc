@@ -61,11 +61,6 @@ G4VSceneHandler* G4HepRep::CreateSceneHandler (const G4String& name) {
     return sceneHandler;
 }
 
-void G4HepRep::RemoveSceneHandler() {
-    // actual deletion is done in VisManager
-    sceneHandler = NULL;
-}
-
 G4VViewer* G4HepRep::CreateViewer (G4VSceneHandler& scene, const G4String& name) {
     if (viewer != NULL) {
         cout << "G4HepRep::CreateViewer: Cannot create more than one G4HepRepViewer" << endl;
@@ -75,7 +70,12 @@ G4VViewer* G4HepRep::CreateViewer (G4VSceneHandler& scene, const G4String& name)
     return viewer;
 }
 
-void G4HepRep::RemoveViewer() {
+void G4HepRep::removeSceneHandler() {
+    // actual deletion is done in VisManager
+    sceneHandler = NULL;
+}
+
+void G4HepRep::removeViewer() {
     // actual deletion is done in VisManager
     viewer = NULL;
 }

@@ -104,8 +104,8 @@ G4HepRepSceneHandler::G4HepRepSceneHandler (G4VGraphicsSystem& system, const G4S
     factory = new XMLHepRepFactory();
     writer = NULL;
 
-    Open(GetScene() == NULL ? G4String("G4HepRepOutput.heprep.zip") : GetScene()->GetName());
-    OpenHepRep();
+    open(GetScene() == NULL ? G4String("G4HepRepOutput.heprep.zip") : GetScene()->GetName());
+    openHepRep();
 }
 
 
@@ -113,16 +113,16 @@ G4HepRepSceneHandler::~G4HepRepSceneHandler () {
 #ifdef SDEBUG
     cout << "G4HepRepSceneHandler::~G4HepRepSceneHandler() " << endl;
 #endif
-    Close();
+    close();
 
     delete factory;
     factory = NULL;
 
-    dynamic_cast<G4HepRep*>(GetGraphicsSystem())->RemoveSceneHandler();
+    dynamic_cast<G4HepRep*>(GetGraphicsSystem())->removeSceneHandler();
 }
 
 
-void G4HepRepSceneHandler::Open(G4String name) {
+void G4HepRepSceneHandler::open(G4String name) {
     if (writer != NULL) return;
 
     if (strcmp(name, "stdout") == 0) {
@@ -143,20 +143,24 @@ void G4HepRepSceneHandler::Open(G4String name) {
 #endif
         out = new ofstream(name.c_str(), std::ios::out | std::ios::binary );
         bool heprep = name.substr(name.size()-7, 7) == G4String(".heprep");
+        bool heprepxml = name.substr(name.size()-11, 11) == G4String(".heprep.xml");
         bool heprepzip = name.substr(name.size()-11, 11) == G4String(".heprep.zip");
+        bool heprepgz = name.substr(name.size()-10, 10) == G4String(".heprep.gz");
+        
         bool zip = name.substr(name.size()-4, 4) == G4String(".zip");
         bool gz = name.substr(name.size()-3, 3) == G4String(".gz");
-        writer = factory->createHepRepWriter(out, heprepzip || zip, heprepzip || zip || gz);
+        
+        writer = factory->createHepRepWriter(out, heprepzip || zip, heprepzip || heprepgz || zip || gz);
         
         // write warning
-        if (!heprepzip && !heprep) {
-            cout << "WARNING HepRep file: '" << name << "' cannot be read by JAS/WIRED, use extensions .heprep or .heprep.zip" << endl;
+        if (!heprep && !heprepxml && !heprepzip && !heprepgz) {
+            cout << "WARNING HepRep file: '" << name << "' cannot be read by JAS/WIRED, use extensions .heprep, .heprep.xml, .heprep.zip or .heprep.gz" << endl;
         }
     }
 }
 
 
-void G4HepRepSceneHandler::OpenHepRep() {
+void G4HepRepSceneHandler::openHepRep() {
 #ifdef SDEBUG
     cout << "G4HepRepSceneHandler::OpenHepRep() " << endl;
 #endif
@@ -186,7 +190,7 @@ void G4HepRepSceneHandler::OpenHepRep() {
 /**
  * Returns true if the HepRep was (already) closed, false if the HepRep is still open
  */
-bool G4HepRepSceneHandler::CloseHepRep() {
+bool G4HepRepSceneHandler::closeHepRep() {
     if (_heprep == NULL) return true;
 
 #ifdef SDEBUG
@@ -222,7 +226,7 @@ bool G4HepRepSceneHandler::CloseHepRep() {
 }
 
 
-void G4HepRepSceneHandler::Close() {
+void G4HepRepSceneHandler::close() {
 
 #ifdef SDEBUG
     cout << "G4HepRepSceneHandler::Close() " << endl;
@@ -230,7 +234,7 @@ void G4HepRepSceneHandler::Close() {
 
     if (writer == NULL) return;
 
-    CloseHepRep();
+    closeHepRep();
 
     writer->close();
     delete writer;
@@ -273,9 +277,9 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyline& line) {
 
     HepRepInstance* instance = factory->createHepRepInstance(getEventInstance(), getTrajectoryType());
 
-    SetColor(instance, GetColor(line));
+    setColor(instance, GetColor(line));
 
-    SetLine(instance, line);
+    setLine(instance, line);
 
     for (size_t i=0; i < line.size(); i++) {
         G4Point3D vertex = transform * line[i];
@@ -292,24 +296,24 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polymarker& line) {
 
     HepRepInstance* instance = factory->createHepRepInstance(getEventInstance(), getHitType());
 
-    SetColor(instance, GetColor(line));
+    setColor(instance, GetColor(line));
 
-    SetMarker(instance, line);
+    setMarker(instance, line);
 
     // Default MarkName is set to Circle for this Type.
     switch (line.GetMarkerType()) {
         case line.dots:
-            instance->addAttValue("Fill", true);
-            SetColor(instance, GetColor(line), G4String("FillColor"));
+            setAttribute(instance, "Fill", true);
+            setColor(instance, GetColor(line), G4String("FillColor"));
             break;
         case line.circles:
             break;
         case line.squares:
-            instance->addAttValue("MarkName", G4String("Box"));
+            setAttribute(instance, "MarkName", G4String("Box"));
             break;
         case line.line:
         default:
-            instance->addAttValue("MarkName", G4String("Plus"));
+            setAttribute(instance, "MarkName", G4String("Plus"));
             break;
     }
 
@@ -329,9 +333,9 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Circle& circle) {
 
     G4Point3D center = transform * circle.GetPosition();
 
-    SetColor (instance, GetColor(circle));
+    setColor (instance, GetColor(circle));
 
-    SetMarker(instance, circle);
+    setMarker(instance, circle);
 
     factory->createHepRepPoint(instance, center.x(), center.y(), center.z());
 }
@@ -348,7 +352,7 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     if (polyhedron.GetNoFacets()==0) return;
 
     HepRepInstance* instance;
-    if (IsEventData()) {
+    if (isEventData()) {
         instance = factory->createHepRepInstance(getEventInstance(), getCalHitType());
     } else {
         instance = getGeometryInstance(currentLV, currentDepth);
@@ -357,15 +361,15 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     G4bool notLastFace;
     do {
         HepRepInstance* face;
-        if (IsEventData()) {
+        if (isEventData()) {
             face = factory->createHepRepInstance(instance, getCalHitType());
         } else {
             face = getGeometryInstance("*Face", currentDepth+1);
         }
         
-        SetLine(face, polyhedron);
-        SetColor(face, GetColor(polyhedron));
-        if (IsEventData()) SetColor(face, GetColor(polyhedron), G4String("FillColor"));
+        setLine(face, polyhedron);
+        setColor(face, GetColor(polyhedron));
+        if (isEventData()) setColor(face, GetColor(polyhedron), G4String("FillColor"));
 
         notLastFace = polyhedron.GetNextNormal (surfaceNormal);
 
@@ -397,11 +401,9 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Square& square) {
 
     G4Point3D center = transform * square.GetPosition();
 
-    SetColor (instance, GetColor(square));
+    setColor (instance, GetColor(square));
 
-    SetMarker(instance, square);
-
-    instance->addAttValue("MarkName", G4String("Box"));
+    setMarker(instance, square);
 
     factory->createHepRepPoint(instance, center.x(), center.y(), center.z());
 }
@@ -431,6 +433,7 @@ void G4HepRepSceneHandler::AddThis (const G4VTrajectory& trajectory) {
     delete trajectoryAttValues;
 
     // Set the LineColor attribute according to the particle charge.
+    // FIXME move this to converter method, should the user put this color?
     float red = 0.;
     float green = 0.;
     float blue = 0.;
@@ -438,26 +441,41 @@ void G4HepRepSceneHandler::AddThis (const G4VTrajectory& trajectory) {
     if(charge>0.0)      blue =  1.0; // Blue = positive.
     else if(charge<0.0) red  =  1.0; // Red = negative.
     else                green = 1.0; // Green = neutral.
-    SetColor(trajectoryInstance, G4Color(red, green, blue));
+    setColor(trajectoryInstance, G4Color(red, green, blue));
 
     // Specify the polyline by using the trajectory points.
     G4int i;
     for (i = 0; i < trajectory.GetPointEntries(); i++) {
         G4VTrajectoryPoint* trajectoryPoint = trajectory.GetPoint(i);
         G4Point3D vertex = trajectoryPoint->GetPosition();
-        factory->createHepRepPoint(trajectoryInstance, vertex.x(), vertex.y(), vertex.z());
+        HepRepPoint* point = factory->createHepRepPoint(trajectoryInstance, vertex.x(), vertex.y(), vertex.z());
 
-        // add all points also as separate instances (MD -> JP: why?), with single points
         vector<G4AttValue>* pointAttValues = trajectoryPoint->CreateAttValues();
+/* This uses way too much memory...
+        // add all points also as separate instances (MD -> JP: why?), with single points
         const map<G4String,G4AttDef>* pointAttDefs = trajectoryPoint->GetAttDefs();
         HepRepInstance* pointInstance = factory->createHepRepInstance(trajectoryInstance, 
                                                         getTrajectoryPointType(pointAttDefs));
 
-        addAttVals(pointInstance, pointAttValues);
-        delete pointAttValues;
-
         // Specify the position of the trajectory point.
         factory->createHepRepPoint(pointInstance, vertex.x(), vertex.y(), vertex.z());
+*/
+
+// We cannot call addAttVals since it will only accept an instance and not a point.
+// For now we just copy the attvals on a point and do not search the instance or type.
+//        addAttVals(point, pointAttValues);
+        if (pointAttValues != NULL) {
+            // Copy the point's G4AttValues to HepRepAttValues.
+            vector<G4AttValue>::iterator attValIterator;
+            for (attValIterator = pointAttValues->begin(); attValIterator != pointAttValues->end(); attValIterator++) {
+                // Pos already in points being written
+                if (attValIterator->GetName() == "Pos") continue;
+                
+                point->addAttValue(attValIterator->GetName(), attValIterator->GetValue());
+            }
+        }
+        delete pointAttValues;
+
     }
 }
 
@@ -502,28 +520,30 @@ void G4HepRepSceneHandler::EndPrimitives () {
 }
 
 
-void G4HepRepSceneHandler::SetColor (HepRepAttribute *attribute,
+void G4HepRepSceneHandler::setColor (HepRepInstance *instance,
 				      const G4Color& color,
 				      const G4String& key) {
 #ifdef CDEBUG
-    cout << "G4HepRepSceneHandler::SetColor : red : " << color.GetRed ()   <<
+    cout << "G4HepRepSceneHandler::setColor : red : " << color.GetRed ()   <<
                                   " green : " << color.GetGreen () <<
                                   " blue : " << color.GetBlue ()   << endl;
 #endif
 
-    attribute->addAttValue(key, color.GetRed(), color.GetGreen(), color.GetBlue(),color.GetAlpha());
+    setAttribute(instance, key, color.GetRed(), color.GetGreen(), color.GetBlue(),color.GetAlpha());
 }
 
 
-void G4HepRepSceneHandler::SetLine (HepRepInstance *instance, const G4Visible& visible) {
+void G4HepRepSceneHandler::setLine (HepRepInstance *instance, const G4Visible& visible) {
     G4VisAttributes atts = visible.GetVisAttributes();
-    instance->addAttValue("LineWidth", atts.GetLineWidth());
+    
+    setAttribute(instance, "LineWidth", atts.GetLineWidth());
+    
     switch (atts.GetLineStyle()) {
         case G4VisAttributes::dotted:
-            instance->addAttValue("LineStyle", G4String("Dotted"));
+            setAttribute(instance, "LineStyle", G4String("Dotted"));
             break;
         case G4VisAttributes::dashed:
-            instance->addAttValue("LineStyle", G4String("Dashed"));
+            setAttribute(instance, "LineStyle", G4String("Dashed"));
             break;
         case G4VisAttributes::unbroken:
         default:
@@ -532,20 +552,93 @@ void G4HepRepSceneHandler::SetLine (HepRepInstance *instance, const G4Visible& v
 }
 
 
-void G4HepRepSceneHandler::SetMarker (HepRepInstance *instance, const G4VMarker& marker) {
+void G4HepRepSceneHandler::setMarker (HepRepInstance *instance, const G4VMarker& marker) {
     MarkerSizeType markerType;
     G4double size = GetMarkerRadius( marker , markerType );
-    instance->addAttValue("MarkSize", size);
+// FIXME make things visible by default, multiply by 4
+    setAttribute(instance, "MarkSize", size*4);
 
-    if (markerType == screen) instance->addAttValue("MarkType", G4String("Symbol"));
+    if (markerType == screen) setAttribute(instance, "MarkType", G4String("Symbol"));
     if (marker.GetFillStyle() == G4VMarker::noFill) {
-        instance->addAttValue("Fill", false);
+        setAttribute(instance, "Fill", false);
     } else {
-        SetColor(instance, GetColor(marker), G4String("FillColor"));
+        setColor(instance, GetColor(marker), G4String("FillColor"));
     }
 }
 
-void G4HepRepSceneHandler::addAttDefs(HepRepType* type, const map<G4String,G4AttDef>* attDefs) {
+void G4HepRepSceneHandler::setAttribute(HepRepInstance *instance, G4String name, G4String value) {
+    HepRepAttValue* attValue = instance->getAttValue(name);
+    if ((attValue == NULL) || (attValue->getString() != value)) {
+        HepRepAttribute* attribute = instance;
+        // look for definition on type (node only)
+        if (instance->getType()->getAttValueFromNode(name) == NULL) {
+            attribute = instance->getType();
+        }   
+        
+        attribute->addAttValue(name, value);
+    }
+}
+
+void G4HepRepSceneHandler::setAttribute(HepRepInstance *instance, G4String name, bool value) {
+    HepRepAttValue* attValue = instance->getAttValue(name);
+    if ((attValue == NULL) || (attValue->getBoolean() != value)) {
+        HepRepAttribute* attribute = instance;
+        // look for definition on type (node only)
+        if (instance->getType()->getAttValueFromNode(name) == NULL) {
+            attribute = instance->getType();
+        }   
+        
+        attribute->addAttValue(name, value);
+    }
+}
+
+void G4HepRepSceneHandler::setAttribute(HepRepInstance *instance, G4String name, double value) {
+    HepRepAttValue* attValue = instance->getAttValue(name);
+    if ((attValue == NULL) || (attValue->getDouble() != value)) {
+        HepRepAttribute* attribute = instance;
+        // look for definition on type (node only)
+        if (instance->getType()->getAttValueFromNode(name) == NULL) {
+            attribute = instance->getType();
+        }   
+        
+        attribute->addAttValue(name, value);
+    }
+}
+
+void G4HepRepSceneHandler::setAttribute(HepRepInstance *instance, G4String name, int value) {
+    HepRepAttValue* attValue = instance->getAttValue(name);
+    if ((attValue == NULL) || (attValue->getInteger() != value)) {
+        HepRepAttribute* attribute = instance;
+        // look for definition on type (node only)
+        if (instance->getType()->getAttValueFromNode(name) == NULL) {
+            attribute = instance->getType();
+        }   
+        
+        attribute->addAttValue(name, value);
+    }
+}
+
+void G4HepRepSceneHandler::setAttribute(HepRepInstance *instance, G4String name, double red, double green, double blue, double alpha) {
+    HepRepAttValue* attValue = instance->getAttValue(name);
+    vector<double> color;
+    if (attValue != NULL) color = attValue->getColor();
+    if ((color.size() == 0) ||
+        (color[0] != red) ||
+        (color[1] != green) ||
+        (color[2] != blue) ||
+        ((color.size() > 3) && (color[3] != alpha))) {
+        
+        HepRepAttribute* attribute = instance;
+        // look for definition on type (node only)
+        if (instance->getType()->getAttValueFromNode(name) == NULL) {
+            attribute = instance->getType();
+        }   
+        
+        attribute->addAttValue(name, red, green, blue, alpha);
+    }
+}
+
+void G4HepRepSceneHandler::addAttDefs(HepRepDefinition* definition, const map<G4String,G4AttDef>* attDefs) {
     if (attDefs == NULL) return;
 
     // Specify additional attribute definitions.  Assumes that all attributes for
@@ -562,7 +655,7 @@ void G4HepRepSceneHandler::addAttDefs(HepRepType* type, const map<G4String,G4Att
 
             category = "Physics";
         }
-        type->addAttDef(attDefIterator->first, attDefIterator->second.GetDesc(),
+        definition->addAttDef(attDefIterator->first, attDefIterator->second.GetDesc(),
                         category, attDefIterator->second.GetExtra());
         attDefIterator++;
     }
@@ -575,13 +668,33 @@ void G4HepRepSceneHandler::addAttVals(HepRepInstance* instance, vector<G4AttValu
     vector<G4AttValue>::iterator attValIterator;
     for (attValIterator = attValues->begin(); attValIterator != attValues->end(); attValIterator++) {
         // Use GetDesc rather than GetName once WIRED can handle names with spaces in them.
-        //instance->addAttValue(iAttDef->second.GetDesc(), iAttVal->GetValue());
-        instance->addAttValue(attValIterator->GetName(), attValIterator->GetValue());
+        //attribute->addAttValue(iAttDef->second.GetDesc(), iAttVal->GetValue());
+        
+        G4String name = attValIterator->GetName();
+
+        // Pos already in points being written
+        if (name == "Pos") continue;
+        
+        // NTP already in points being written
+        if (name == "NTP") continue;
+        
+        // FIXME get type from attDef
+        if ((name == "Ch") ||
+            (name == "ID") ||
+            (name == "NTP") ||
+            (name == "PDG") ||
+            (name == "PID")) {
+            // Ch, ID, NTP, PDG and PID are of type int
+            setAttribute(instance, attValIterator->GetName(), atoi(attValIterator->GetValue()));           
+        } else {
+            // rest is String           
+            setAttribute(instance, attValIterator->GetName(), attValIterator->GetValue());
+        }
     }
 }
 
 
-bool G4HepRepSceneHandler::IsEventData () {
+bool G4HepRepSceneHandler::isEventData () {
     return !currentPV || fReadyForTransients;
 }
 
@@ -613,16 +726,15 @@ HepRepInstance* G4HepRepSceneHandler::getGeometryRootInstance() {
 HepRepInstance* G4HepRepSceneHandler::getGeometryInstance(G4LogicalVolume* volume, int depth) {
     HepRepInstance* instance = getGeometryInstance(volume->GetName(), depth);
 
-    // FIXME we could avoid some copying here    
-    instance->addAttValue("LVol",     volume->GetName());
-    instance->addAttValue("Solid",    volume->GetSolid()->GetName());
-    instance->addAttValue("EType",    volume->GetSolid()->GetEntityType());
-    instance->addAttValue("Material", volume->GetMaterial()->GetName());
-    instance->addAttValue("Density",  volume->GetMaterial()->GetDensity());
-    instance->addAttValue("Radlen",   volume->GetMaterial()->GetRadlen());
+    setAttribute(instance, "LVol",     volume->GetName());
+    setAttribute(instance, "Solid",    volume->GetSolid()->GetName());
+    setAttribute(instance, "EType",    volume->GetSolid()->GetEntityType());
+    setAttribute(instance, "Material", volume->GetMaterial()->GetName());
+    setAttribute(instance, "Density",  volume->GetMaterial()->GetDensity());
+    setAttribute(instance, "Radlen",   volume->GetMaterial()->GetRadlen());
     
     G4String state = materialState[volume->GetMaterial()->GetState()];
-    instance->addAttValue("State", state);
+    setAttribute(instance, "State", state);
     
     return instance;
 }
@@ -640,7 +752,6 @@ HepRepInstance* G4HepRepSceneHandler::getGeometryInstance(G4String volumeName, i
     
     // get type
     HepRepType* type = getGeometryType(volumeName, depth);
-    type->addAttValue("DrawAs", G4String("Polygon"));
     
     // create instance
     HepRepInstance* instance = factory->createHepRepInstance(parent, type);
@@ -666,13 +777,27 @@ HepRepType* G4HepRepSceneHandler::getGeometryRootType() {
         _geometryRootType->addAttValue("Layer", geometryLayer);
     
         // Add attdefs used by all geometry types.
-        _geometryRootType->addAttDef("LVol", "Logical Volume", "Physics","");
-        _geometryRootType->addAttDef("Solid", "Solid Name", "Physics","");
-        _geometryRootType->addAttDef("EType", "Entity Type", "Physics","");
-        _geometryRootType->addAttDef("Material", "Material Name", "Physics","");
-        _geometryRootType->addAttDef("Density", "Material Density", "Physics","");
-        _geometryRootType->addAttDef("State", "Material State", "Physics","");
-        _geometryRootType->addAttDef("Radlen", "Material Radiation Length", "Physics","");
+        _geometryRootType->addAttDef  ("LVol", "Logical Volume", "Physics","");
+        _geometryRootType->addAttValue("LVol", "");
+        _geometryRootType->addAttDef  ("Solid", "Solid Name", "Physics","");
+        _geometryRootType->addAttValue("Solid", "");
+        _geometryRootType->addAttDef  ("EType", "Entity Type", "Physics","");
+        _geometryRootType->addAttValue("EType", "G4Box");
+        _geometryRootType->addAttDef  ("Material", "Material Name", "Physics","");
+        _geometryRootType->addAttValue("Material", "Air");
+        _geometryRootType->addAttDef  ("Density", "Material Density", "Physics","");
+        _geometryRootType->addAttValue("Density", 0.0);
+        _geometryRootType->addAttDef  ("State", "Material State", "Physics","");
+        _geometryRootType->addAttValue("State", "Gas");
+        _geometryRootType->addAttDef  ("Radlen", "Material Radiation Length", "Physics","");
+        _geometryRootType->addAttValue("Radlen", 0.0);
+        
+        // add defaults for Geometry
+        _geometryRootType->addAttValue("Color", 0.8, 0.8, 0.8, 1.0);
+        _geometryRootType->addAttValue("FillColor", 0.8, 0.8, 0.8, 1.0);
+        _geometryRootType->addAttValue("LineWidth", 1.0);
+        _geometryRootType->addAttValue("DrawAs", G4String("Polygon"));
+        
         getGeometryTypeTree()->addType(_geometryRootType);
         
         _geometryType["/"+_geometryRootType->getName()] = _geometryRootType;
@@ -760,6 +885,11 @@ HepRepType* G4HepRepSceneHandler::getEventType() {
         // Create the top level Event Type.
         _eventType = factory->createHepRepType(NULL, "Event");
         _eventType->addAttValue("Layer", eventLayer);
+
+        // add defaults for Events
+        _eventType->addAttValue("Color", 1.0, 1.0, 1.0, 1.0);
+        _eventType->addAttValue("FillColor", 1.0, 1.0, 1.0, 1.0);
+        _eventType->addAttValue("LineWidth", 1.0);
     
         getEventTypeTree()->addType(_eventType);
     }
@@ -769,6 +899,16 @@ HepRepType* G4HepRepSceneHandler::getEventType() {
 HepRepType* G4HepRepSceneHandler::getTrajectoryType(const map<G4String,G4AttDef>* attDefs) {
     if (_trajectoryType == NULL) {
         _trajectoryType = factory->createHepRepType(getEventType(), "Trajectory");
+        
+        _trajectoryType->addAttValue("Ch", 0);
+        // FIXME should call color converter
+        _trajectoryType->addAttValue("Color", 0.0, 1.0, 0.0, 1.0);  // green
+        _trajectoryType->addAttValue("ID", -1);
+        _trajectoryType->addAttValue("IMom", "");
+        _trajectoryType->addAttValue("PDG", -1);
+        _trajectoryType->addAttValue("PN", "");
+        _trajectoryType->addAttValue("PID", -1);
+
         _trajectoryType->addAttValue("Layer", trajectoryLayer);
         _trajectoryType->addAttValue("DrawAs", G4String("Line"));
 
@@ -784,7 +924,7 @@ HepRepType* G4HepRepSceneHandler::getTrajectoryPointType(const map<G4String,G4At
         _trajectoryPointType->addAttValue("DrawAs", G4String("Point"));
         _trajectoryPointType->addAttValue("MarkName", G4String("Box"));
         _trajectoryPointType->addAttValue("MarkSize", 4);
-//        _trajectoryPointType->addAttValue("MarkType", G4String("Real"));
+        _trajectoryPointType->addAttValue("MarkType", G4String("Symbol"));
         _trajectoryPointType->addAttValue("Fill", true);
         _trajectoryPointType->addAttValue("Visibility", true);
 
@@ -798,8 +938,9 @@ HepRepType* G4HepRepSceneHandler::getHitType(const map<G4String,G4AttDef>* attDe
         _hitType = factory->createHepRepType(getEventType(), "Hit");
         _hitType->addAttValue("Layer", hitLayer);
         _hitType->addAttValue("DrawAs", G4String("Point"));
-        _hitType->addAttValue("MarkName", G4String("Circle"));
-        _hitType->addAttValue("MarkType", G4String("Real"));
+        _hitType->addAttValue("MarkName", G4String("Box"));
+        _hitType->addAttValue("MarkSize", 4.0);
+        _hitType->addAttValue("MarkType", G4String("Symbol"));
         _hitType->addAttValue("Fill", true);
 
         addAttDefs(_hitType, attDefs);
@@ -811,21 +952,11 @@ HepRepType* G4HepRepSceneHandler::getCalHitType(const map<G4String,G4AttDef>* at
     if (_calHitType == NULL) {
         _calHitType = factory->createHepRepType(getEventType(), "CalHit");
         _calHitType->addAttValue("Layer", calHitLayer);
-        _calHitType->addAttValue("Fill", true);
+        _calHitType->addAttValue("Fill", false);
+        _calHitType->addAttValue("DrawAs", "Polygon");
 
         addAttDefs(_calHitType, attDefs);
     }
     return _calHitType;
-}
-
-HepRepType* G4HepRepSceneHandler::getCalHitFaceType(const map<G4String,G4AttDef>* attDefs) {
-    if (_calHitFaceType == NULL) {
-        _calHitFaceType = factory->createHepRepType(getCalHitType(), "CalHit/Face");
-        _calHitFaceType->addAttValue("Layer", calHitLayer);
-        _calHitFaceType->addAttValue("DrawAs", G4String("Line"));
-
-        addAttDefs(_calHitFaceType, attDefs);
-    }
-    return _calHitFaceType;
 }
 

@@ -32,8 +32,10 @@ HepRepAttDef* DefaultHepRepType::getAttDef(string defName) {
         def = type->getAttDefFromNode(defName);
         type = type->getSuperType();
     }
-    cerr << "Get Def " << defName << endl;
-    // FIXME, no HepRepDefaults
+    if (def == NULL) {
+        cerr << "ERROR: No HepRepDefaults, trying to get definition for: " << defName << endl;
+        // FIXME, no HepRepDefaults
+    }
     return def;
 }
 
@@ -47,8 +49,10 @@ HepRepAttValue* DefaultHepRepType::getAttValue(string attName) {
         value = type->getAttValueFromNode(attName);
         type = type->getSuperType();
     }
-    cerr << "Get Value " << attName << endl;
-    // FIXME, no HepRepDefaults
+    if (value == NULL) {
+        cerr << "ERROR: No HepRepDefaults, trying to get value for: " << attName << endl;
+        // FIXME, no HepRepDefaults
+    }
     return value;
 }
 
