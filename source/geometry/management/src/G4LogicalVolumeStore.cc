@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolumeStore.cc,v 1.8 2002-04-26 16:24:36 gcosmo Exp $
+// $Id: G4LogicalVolumeStore.cc,v 1.9 2003-01-30 07:57:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4LogicalVolumeStore
@@ -128,6 +128,8 @@ void G4LogicalVolumeStore::DeRegister(G4LogicalVolume* pVolume)
     {
       if (**i==*pVolume)
       {
+        if (pVolume->IsRootRegion())
+          pVolume->GetRegion()->RemoveRootLogicalVolume(pVolume);
         GetInstance()->erase(i);
         break;
       }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.icc,v 1.9 2002-12-16 09:24:02 gcosmo Exp $
+// $Id: G4LogicalVolume.icc,v 1.10 2003-01-30 07:57:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -369,7 +369,7 @@ void G4LogicalVolume::SetRegion(G4Region* reg)
 // ********************************************************************
 //
 inline
-const G4Region* G4LogicalVolume::GetRegion() const
+G4Region* G4LogicalVolume::GetRegion() const
 {
   return fRegion;
 }

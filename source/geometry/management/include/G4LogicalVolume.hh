@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.hh,v 1.10 2002-12-16 09:24:02 gcosmo Exp $
+// $Id: G4LogicalVolume.hh,v 1.11 2003-01-30 07:57:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -217,7 +217,7 @@ class G4LogicalVolume
       // Replies if the logical volume is part of a cuts region or not.
     inline void SetRegion(G4Region* reg);
       // Sets/unsets the volume as cuts region.
-    inline const G4Region* GetRegion() const;
+    inline G4Region* GetRegion() const;
       // Return the region to which the volume belongs, if any.
     inline void PropagateRegion();
       // Propagates region pointer to daughters.
