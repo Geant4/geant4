@@ -646,7 +646,7 @@ int main(int argc, char** argv)
 
         cngpi[k] = cross_sec*MeV*1000.0*(G4double)nbinspi/
          (twopi*(cos(degree*bngpi1[k]) - cos(degree*bngpi2[k]))*
-                 barn*emax*(G4double)nevt);
+                 barn*emaxpi*(G4double)nevt);
       }
     }
 
