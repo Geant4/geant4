@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.hh,v 1.6 2002-05-09 19:33:17 gum Exp $
+// $Id: G4Scintillation.hh,v 1.7 2002-05-09 20:37:03 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,7 +34,8 @@
 // Version:     1.0
 // Created:     1998-11-07
 // Author:      Peter Gumplinger
-// Updated:     1999-10-29 add method and class descriptors
+// Updated:     2002-05-09 changed IsApplicable method
+//              1999-10-29 add method and class descriptors
 //
 // mail:        gum@triumf.ca
 //
