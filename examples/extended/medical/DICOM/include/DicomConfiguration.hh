@@ -1,4 +1,4 @@
-//   $tigre.2@sympatico.ca
+
 //   08/05/03
 
 //*******************************************************
@@ -56,6 +56,8 @@ public:
   G4double GetYPixelSpacing(){return  Y_PixelSpacing;}
   G4double GetSliceThickness(){return SliceTickness;} 
   G4double GetSliceLocation(){return  SliceLocation;} 
+  G4int IsCompressionUsed(){return CompressionUsed;}
+ 
 private:
 	
   G4int CompressionValue;
@@ -67,10 +69,10 @@ private:
   G4double Y_PixelSpacing;
   G4double SliceTickness;
   G4double SliceLocation; 
-public:
+  G4int CompressionUsed;
 
-	int CompressionUsed;
-	vector<double> DensityValue;
+public:
+  G4std::vector<G4double> DensityValue;
 	
 private:
 

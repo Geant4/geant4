@@ -58,8 +58,8 @@ void DicomGeometry::patientConstruction()
   ReadConfiguration->ReadDataFile();					// images must have the same dimension
   ReadConfiguration->ReadG4File( ReadConfiguration->GetListOfFile()[0] );		//  open a .g4 file to read some values
 		
-  PatientX = (ReadConfiguration->CompressionUsed*(ReadConfiguration->GetXPixelSpacing())/2.0) *mm;
-  PatientY = (ReadConfiguration->CompressionUsed*(ReadConfiguration->GetYPixelSpacing())/2.0) *mm;
+  PatientX = (ReadConfiguration->IsCompressionUsed()*(ReadConfiguration->GetXPixelSpacing())/2.0) *mm;
+  PatientY = (ReadConfiguration->IsCompressionUsed()*(ReadConfiguration->GetYPixelSpacing())/2.0) *mm;
   PatientZ = ((ReadConfiguration->GetSliceThickness()/2.0) *mm);
 
   // Logical Box to place Parameteristion inside it
