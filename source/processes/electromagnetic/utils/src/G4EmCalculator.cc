@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.13 2005-02-27 18:07:33 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.14 2005-03-14 18:37:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -620,6 +620,9 @@ const G4Region* G4EmCalculator::FindRegion(const G4String& reg)
 const G4MaterialCutsCouple* G4EmCalculator::FindCouple(const G4Material* material,
                                                        const G4Region* region)
 {
+  if(!material) return 0;
+  currentMaterial = material;
+  currentMaterialName = material->GetName();
   // Access to materials
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
