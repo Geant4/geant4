@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (31-Jul-2002)
+                                (13-Dec-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
@@ -166,7 +166,7 @@ hLowEIoni:    Knock-on electron cross sections .
         from 1 keV  to 2 MeV .
 
         Parametrisation model for antiprotons is  ICRU_R49p
-        from 5 keV  to 2 MeV .
+        from 25 keV  to 2 MeV .
         Parametrization of the Barkas effect is switched on.
         Nuclear stopping power model is ICRU_R49
 G4VUserPhysicsList::SetCutValue       :Set cuts for anti_proton
@@ -317,7 +317,7 @@ hLowEIoni:    Knock-on electron cross sections .
         from 1 keV  to 2 MeV .
 
         Parametrisation model for antiprotons is  ICRU_R49p
-        from 5 keV  to 2 MeV .
+        from 25 keV  to 2 MeV .
         Parametrization of the Barkas effect is switched on.
         Nuclear stopping power model is ICRU_R49
 G4VUserPhysicsList::SetCutValue       :Set cuts for anti_proton
@@ -397,18 +397,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.28s Real=8.2s Sys=1.86s
+  User=2.58s Real=4.48s Sys=1.78s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV
-    Track Length in absorber = 9.17774 +- 0.00537296  microns 
-    CSDA  Range  in absorber = 8.15743 +- 0.0318151  microns 
+    Track Length in absorber = 9.17788 +- 0.00529524  microns 
+    CSDA  Range  in absorber = 8.99079 +- 0.00701811  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.118745 +- 0.00537296 microns 
-    CSDA  Range  (G4 - ICRU49) = -0.711569 +- 0.0318151 microns 
+    Track Length (G4 - ICRU49) = 0.118879 +- 0.00529524 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.12179 +- 0.00701811 microns 
 
 Average Number electrons per event = 0
 Average Number photons per event   = 0
@@ -418,16 +418,17 @@ Average Number photons per event   = 0
 /run/beamOn 1000
 ### Run 1 start.
 Start Run processing.
-EvtNo= 722  length= 0.00701738  xend= -1.1672e-15
+EvtNo= 754  length= 0.00963588  xend= 0.00456584
+EvtNo= 969  length= 0.0051801  xend= -5.76131e-16
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=6.01s Real=11.62s Sys=2.26s
+  User=5.69s Real=8.38s Sys=2.68s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 999 for anti_proton with Ekin = 0.5 MeV
-    Track Length in absorber = 9.48684 +- 0.00551475  microns 
-    CSDA  Range  in absorber = 8.42745 +- 0.0304287  microns 
+ end of Run TotNbofEvents = 998 for anti_proton with Ekin = 0.5 MeV
+    Track Length in absorber = 9.58206 +- 0.00603945  microns 
+    CSDA  Range  in absorber = 9.39903 +- 0.0062174  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
@@ -440,19 +441,16 @@ Average Number photons per event   = 0
 /run/beamOn 1000
 ### Run 2 start.
 Start Run processing.
-EvtNo= 14  length= 0.00896266  xend= 0.00427919
-EvtNo= 233  length= 0.00895587  xend= 0.00441922
-EvtNo= 484  length= 0.00891318  xend= 0.00444439
-EvtNo= 980  length= 0.00895993  xend= 0.00440458
+EvtNo= 703  length= 0.00849365  xend= 0.00341386
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=6.48s Real=11.75s Sys=1.76s
+  User=2.99s Real=4.67s Sys=1.68s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 996 for IonC12 with Ekin = 6 MeV
-    Track Length in absorber = 8.75221 +- 0.00391071  microns 
-    CSDA  Range  in absorber = 8.2981 +- 0.0316258  microns 
+ end of Run TotNbofEvents = 999 for IonC12 with Ekin = 6 MeV
+    Track Length in absorber = 8.6147 +- 0.00271458  microns 
+    CSDA  Range  in absorber = 8.25211 +- 0.0141119  microns 
 
     Energy deposit in absorber = 6  MeV 
 
@@ -470,20 +468,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=34.26s Real=46.9s Sys=0.24s
+  User=8.53s Real=8.73s Sys=0.2s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV
-    Track Length in absorber = 9.18349 +- 0.0164595  microns 
-    CSDA  Range  in absorber = 8.09119 +- 0.105006  microns 
+    Track Length in absorber = 9.19759 +- 0.0171765  microns 
+    CSDA  Range  in absorber = 8.99303 +- 0.0199127  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.12449 +- 0.0164595 microns 
-    CSDA  Range  (G4 - ICRU49) = -0.777813 +- 0.105006 microns 
+    Track Length (G4 - ICRU49) = 0.138586 +- 0.0171765 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.124026 +- 0.0199127 microns 
 
-Average Number electrons per event = 0.08
+Average Number electrons per event = 0.19
 Average Number photons per event   = 0.08
 
 #
@@ -495,20 +493,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=35.14s Real=51.6s Sys=0.2s
+  User=8.75s Real=8.94s Sys=0.19s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV
-    Track Length in absorber = 9.19414 +- 0.0154856  microns 
-    CSDA  Range  in absorber = 8.24025 +- 0.0919459  microns 
+    Track Length in absorber = 9.20604 +- 0.0148695  microns 
+    CSDA  Range  in absorber = 9.01773 +- 0.0183679  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.135144 +- 0.0154856 microns 
-    CSDA  Range  (G4 - ICRU49) = -0.628752 +- 0.0919459 microns 
+    Track Length (G4 - ICRU49) = 0.147044 +- 0.0148695 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.148734 +- 0.0183679 microns 
 
-Average Number electrons per event = 19.1
+Average Number electrons per event = 19.32
 Average Number photons per event   = 0.12
 
 G4 kernel has come to Quit state.

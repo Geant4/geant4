@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (31-Jul-2002)
+                                (13-Dec-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -17,16 +17,10 @@ Current available graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
 
-***** Table : Nb of materials = 13 *****
-
- Material: Aluminium     density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
-   --->  Element: Aluminium      Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+***** Table : Nb of materials = 11 *****
 
  Material: liquidArgon     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065 cm 
    --->  Element: liquidArgon      Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
- Material:   Copper     density:  8.960 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.436 cm 
-   --->  Element:   Copper      Z = 29.0   N =  63.5   A =  63.55 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:     Lead     density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm 
    --->  Element:     Lead      Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
@@ -136,9 +130,7 @@ MuPairProd:  theoretical cross sections
 ============= The cut Energy ==============================
                             gamma              e-    
 Cut in range       
-          Aluminium           2 mm            2 mm 
         liquidArgon           2 mm            2 mm 
-             Copper           2 mm            2 mm 
                Lead           2 mm            2 mm 
               Water           2 mm            2 mm 
        Scintillator           2 mm            2 mm 
@@ -150,9 +142,7 @@ Cut in range
            Galactic           2 mm            2 mm 
                Beam           2 mm            2 mm 
 Cut in energy
-          Aluminium        9.56 keV        1.03 MeV
         liquidArgon        8.59 keV         561 keV
-             Copper        35.7 keV        2.68 MeV
                Lead         121 keV        2.61 MeV
               Water        3.89 keV         568 keV
        Scintillator        3.07 keV         575 keV
@@ -171,26 +161,24 @@ Cut in energy
 /run/beamOn 500
 ### Run 0 start.
 /calor/setAbsMat Aluminium
-
- The calorimeter is made of 10 layers of: [ 10mm of Aluminium + 5mm of liquidArgon ] 
 /calor/setGapMat Aerogel
 
- The calorimeter is made of 10 layers of: [ 10mm of Aluminium + 5mm of Aerogel ] 
+ The calorimeter is made of 10 layers of: [ 10mm of Lead + 5mm of Aerogel ] 
 /calor/setAbsThick 2. cm
 
- The calorimeter is made of 10 layers of: [ 20mm of Aluminium + 5mm of Aerogel ] 
+ The calorimeter is made of 10 layers of: [ 20mm of Lead + 5mm of Aerogel ] 
 /calor/setGapThick 5. cm
 
- The calorimeter is made of 10 layers of: [ 20mm of Aluminium + 50mm of Aerogel ] 
+ The calorimeter is made of 10 layers of: [ 20mm of Lead + 50mm of Aerogel ] 
 /calor/setNbOfLayers 30
 
- The calorimeter is made of 30 layers of: [ 20mm of Aluminium + 50mm of Aerogel ] 
+ The calorimeter is made of 30 layers of: [ 20mm of Lead + 50mm of Aerogel ] 
 /calor/setSizeYZ   1.5 m
 
- The calorimeter is made of 30 layers of: [ 20mm of Aluminium + 50mm of Aerogel ] 
+ The calorimeter is made of 30 layers of: [ 20mm of Lead + 50mm of Aerogel ] 
 /calor/update
 
- The calorimeter is made of 30 layers of: [ 20mm of Aluminium + 50mm of Aerogel ] 
+ The calorimeter is made of 30 layers of: [ 20mm of Lead + 50mm of Aerogel ] 
 /gun/particle gamma
 /gun/energy 500 MeV
 /run/beamOn 500

@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (31-Jul-2002)
+                                (13-Dec-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 SimpleBox is now made of Pb
@@ -199,8 +199,8 @@ msc:   Tables of transport mean free paths.
 /gun/energy 100 GeV
 /run/beamOn 1
 >>> Event 0
-     Total energy deposition in 0-th BOX: 17.3973 (GeV)
-     Total energy deposition in 1-th BOX: 25.5833 (GeV)
+     Total energy deposition in 0-th BOX: 16.9671 (GeV)
+     Total energy deposition in 1-th BOX: 27.0131 (GeV)
 #
 /run/particle/dumpCutValues
 ============= The cut Energy ==============================
