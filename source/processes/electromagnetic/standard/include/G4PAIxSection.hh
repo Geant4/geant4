@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSection.hh,v 1.7 2002-04-09 17:34:40 vnivanch Exp $
+// $Id: G4PAIxSection.hh,v 1.8 2002-05-24 09:05:20 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -161,6 +161,8 @@ public:
 	  inline G4double GetIntegralPAIxSection(G4int i) const ;
 	  inline G4double GetIntegralCerenkov(G4int i) const ;
 	  inline G4double GetIntegralPlasmon(G4int i) const ;
+	  inline G4double GetIntegralTerm(G4int i) const ;
+	  inline G4double GetNormalisedTerm(G4int i) const ;
 
 protected :
 
@@ -179,6 +181,8 @@ const G4int fRefGammaNumber  ; // The number of gamma for creation of spline (15
 
 G4int    fIntervalNumber  ;    //  The number of energy intervals
 G4double fNormalizationCof ;   // Normalization cof for PhotoAbsorptionXsection
+G4double fThomasReicheKuhn ;   // Normalization cof for oscillator strength
+
 // G4double fBetaGammaSq ;        // (beta*gamma)^2
 
 G4double fDensity ;            // Current density
@@ -207,6 +211,7 @@ G4double          fSplineEnergy[500] ;   // energy points of splain
 G4double fRePartDielectricConst[500] ;   // Real part of dielectric const
 G4double fImPartDielectricConst[500] ;   // Imaginary part of dielectric const
 G4double          fIntegralTerm[500] ;   // Integral term in PAI cross section
+G4double          fNormalisedTerm[500] ;   // Normalised term in PAI cross section
 G4double        fDifPAIxSection[500] ;   // Differential PAI cross section
 G4double          fdNdxCerenkov[500] ;   // dNdx of Cerenkov collisions
 G4double          fdNdxPlasmon[500] ;   // dNdx of Plasmon collisions
@@ -267,6 +272,24 @@ inline G4double G4PAIxSection::GetIntegralPlasmon(G4int i) const
     G4Exception("Invalid argument in G4PAIxSection::GetIntegralPlasmon");
    }
    return fIntegralPlasmon[i] ;
+}
+
+inline G4double G4PAIxSection::GetIntegralTerm(G4int i) const 
+{
+   if(i < 1 || i > fSplineNumber)
+   {
+    G4Exception("Invalid argument in G4PAIxSection::GetIntegralTerm");
+   }
+   return fIntegralTerm[i] ;
+}
+
+inline G4double G4PAIxSection::GetNormalisedTerm(G4int i) const 
+{
+   if(i < 1 || i > fSplineNumber)
+   {
+    G4Exception("Invalid argument in G4PAIxSection::GetNormalisedTerm");
+   }
+   return fNormalisedTerm[i] ;
 }
 
 #endif   
