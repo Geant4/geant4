@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.6 1999-07-23 14:10:14 japost Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.7 1999-07-27 20:30:21 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,7 +17,8 @@
 //  7 Oct 96  V. Grichine       First version
 // 28 Jan 98  W. Wander:        Added ability for low order integrators
 // 30 Jan 98  J. Apostolakis:   Made method parameters into instance variables
-
+// 27 Jul 99  J. Apostolakis:   Ensured that AccurateAdvance does not loop 
+//                                due to very small eps & step size (precision)
 #include <math.h>
 #include "G4ios.hh"
 #include "G4MagIntegratorDriver.hh"
@@ -30,6 +31,9 @@
 //
 const G4double G4MagInt_Driver::max_stepping_increase = 5.0;
 const G4double G4MagInt_Driver::max_stepping_decrease = 0.1;
+
+//  The (default) maximum number of steps is Base divided by the order of Stepper
+const G4int  G4MagInt_Driver::fMaxStepBase = 5000;  
 
 G4bool
 G4MagInt_Driver::AccurateAdvance( 
@@ -51,7 +55,7 @@ G4MagInt_Driver::AccurateAdvance(
 // minimum allowed stepsize. On output nOK and nBAD are the numbers of
 // good and bad (but retried and fixed) steps taken.
 {
-  static const G4int maxstp = 5000;
+  // static const G4int maxstp = 5000;
 
   G4int nstp, i; 
   static G4int dbg=1;
@@ -83,6 +87,7 @@ G4MagInt_Driver::AccurateAdvance(
 
   G4bool  lastStep= false;
   nstp=1;
+  G4double  lastStepThreshold = min( eps * hstep, Hmin() ); 
 
   do{
      G4ThreeVector StartPos( y[0], y[1], y[2] );   
@@ -136,18 +141,17 @@ G4MagInt_Driver::AccurateAdvance(
      }
 
      h = hnext ;
-  }while (((nstp++)<=maxstp) &&
+  }while (((nstp++)<=fMaxNoSteps) &&
           (x < x2)           //  Have we reached the end ?
                              //   --> a better test might be x-x2 > an_epsilon
           && (!lastStep)
          );
 
-  if(lastStep) 
-     succeeded= lastStepSucceeded;   // If it was a "forced" last step
+  succeeded=  (x>=x2);  // If it was a "forced" last step
 
   for(i=0;i<nvar;i++)  ystart[i] = y[i] ;
 
-  if(nstp > maxstp){
+  if(nstp > fMaxNoSteps){
      WarnTooManyStep( x1, x2, x );  //  Issue WARNING
      succeeded = false;
   }
