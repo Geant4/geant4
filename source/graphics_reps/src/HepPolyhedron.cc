@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: HepPolyhedron.cc,v 1.1 2000-02-22 15:31:35 johna Exp $
+// $Id: HepPolyhedron.cc,v 1.2 2000-02-22 16:41:47 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -804,7 +804,7 @@ HepBoolean HepPolyhedron::GetNextVertexIndex(int &index, int &edgeFlag) const
   static int iQVertex = 0;
   int vIndex = pF[iFace].edge[iQVertex].v;
 
-  edgeFlag = (vIndex > 0) ? 1 : -1;
+  edgeFlag = (vIndex > 0) ? 1 : 0;
   index = abs(vIndex);
 
   if (iQVertex >= 3 || pF[iFace].edge[iQVertex+1].v == 0) {
@@ -928,7 +928,7 @@ HepBoolean HepPolyhedron::GetNextEdgeIndeces(int &i1, int &i2, int &edgeFlag,
     }
   } while (iOrder*k1 > iOrder*k2);
 
-  i1 = k1; i2 = k2; edgeFlag = (kflag > 0) ? 1 : -1;
+  i1 = k1; i2 = k2; edgeFlag = (kflag > 0) ? 1 : 0;
   iface1 = kface1; iface2 = kface2; 
 
   if (iFace > nface) {
@@ -1327,7 +1327,7 @@ HepPolyhedronCons::HepPolyhedronCons(HepDouble Rmn1,
 
   //   R O T A T E    P O L Y L I N E S
 
-  RotateAroundZ(0, phi1, dphi, 2, 2, zz, rr, 1, -1); 
+  RotateAroundZ(0, phi1, dphi, 2, 2, zz, rr, -1, -1); 
   SetReferences();
 }
 
@@ -1413,7 +1413,7 @@ HepPolyhedronPgon::HepPolyhedronPgon(HepDouble phi,
 
   //   R O T A T E    P O L Y L I N E S
 
-  RotateAroundZ(npdv, phi, dphi, nz, nz, zz, rr, 1, (npdv == 0) ? -1 : 1); 
+  RotateAroundZ(npdv, phi, dphi, nz, nz, zz, rr, -1, (npdv == 0) ? -1 : 1); 
   SetReferences();
   
   delete [] zz;
