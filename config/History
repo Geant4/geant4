@@ -1,4 +1,4 @@
-$Id: History,v 1.119 2000-11-14 17:47:58 gcosmo Exp $
+$Id: History,v 1.120 2000-11-30 15:10:13 gunter Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17th November 2000 Gunter Folger
+- Link with CLHEP using -L/-l instead of absolute filename; this allows 
+  to link with shared lib of Anaphe, or static lib of Geant4.
 
 14th November 2000  Gabriele Cosmo (config-V02-00-05)
 - Added reference to new "parameterisations" top category.
