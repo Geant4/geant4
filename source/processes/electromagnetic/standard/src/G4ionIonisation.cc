@@ -73,6 +73,8 @@ G4ionIonisation::~G4ionIonisation()
 
 void G4ionIonisation::InitialiseProcess()
 {
+  SetVerboseLevel(0);
+
   SetSecondaryParticle(G4Electron::Electron());
 
   SetDEDXBinning(120);
@@ -90,6 +92,7 @@ void G4ionIonisation::InitialiseProcess()
   em1->SetLowEnergyLimit(2.0*MeV);
   em1->SetHighEnergyLimit(100.0*TeV);
   AddEmModel(2, em1, fm);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
