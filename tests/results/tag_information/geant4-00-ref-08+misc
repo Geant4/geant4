@@ -3,5 +3,7 @@
   cvs update -d -A geometry/volumes/include/G4NavigationLevel.icc
   cvs update -d -A geometry/volumes/src/G4Navigator.cc
   cvs update -d -A geant4/source/geometry/management/src/G4SolidStore.cc
-  cvs update -d -A geant4/source/particlesmanagement/include/G4NucleiPropertiesTable.hh
-  cvs update -d -A geant4/source/particlesmanagement/src/G4ParticleTable.cc
+  cvs update -d -A geant4/source/particles/management/include/G4NucleiPropertiesTable.hh
+  cvs update -d -A geant4/source/particles/management/src/G4ParticleTable.cc
+  cvs update -d -A geant4/source/particles/management/src/G4ParticleTable.cc
+  cvs update -d -A geant4/source/processes/hadronic/models/generator/de_excitation/src/G4NuclearLevelManager.cc
