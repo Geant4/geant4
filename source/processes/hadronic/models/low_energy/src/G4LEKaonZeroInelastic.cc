@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEKaonZeroInelastic.cc,v 1.1 2002-11-16 10:36:33 jwellisc Exp $
+// $Id: G4LEKaonZeroInelastic.cc,v 1.2 2002-11-16 10:50:21 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Low Energy KaonZeroShort Inelastic Process
@@ -29,11 +29,11 @@
  // Last modified: 27-Mar-1997
  // Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
  
-#include "G4LEKaonZeroSInelastic.hh"
+#include "G4LEKaonZeroInelastic.hh"
 #include "Randomize.hh"
  
  G4VParticleChange *
-  G4LEKaonZeroSInelastic::ApplyYourself( const G4Track &aTrack,
+  G4LEKaonZeroInelastic::ApplyYourself( const G4Track &aTrack,
                                          G4Nucleus &targetNucleus )
   {
     theParticleChange.Initialize( aTrack );
@@ -47,7 +47,7 @@
     if( verboseLevel > 1 )
     {
       G4Material *targetMaterial = aTrack.GetMaterial();
-      G4cout << "G4LEKaonZeroSInelastic::ApplyYourself called" << G4endl;
+      G4cout << "G4LEKaonZeroInelastic::ApplyYourself called" << G4endl;
       G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
       G4cout << "target material = " << targetMaterial->GetName() << ", ";
       G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
@@ -119,7 +119,7 @@
   }
  
  void
-  G4LEKaonZeroSInelastic::Cascade(
+  G4LEKaonZeroInelastic::Cascade(
    G4FastVector<G4ReactionProduct,128> &vec,
    G4int& vecLen,
    const G4DynamicParticle *originalIncident,
