@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalBorderSurface.hh,v 1.10 2003-11-02 16:06:05 gcosmo Exp $
+// $Id: G4LogicalBorderSurface.hh,v 1.11 2003-11-28 00:35:14 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4LogicalBorderSurface
@@ -36,11 +36,16 @@
 // Created:     1997-06-17
 // Author:      John Apostolakis (John.Apostolakis@cern.ch)
 //
-// --------------------------------------------------------------------
+//              27-11-2003: Fan Lei
+//                - chnanged to use G4SurfaceProperty insdead of G4OpticalSurface
+//
+// ********************************************************************
+
 #ifndef G4LogicalBorderSurface_h
 #define G4LogicalBorderSurface_h 1
 
-#include "G4LogicalSurface.hh"
+#include  "G4LogicalSurface.hh"
+#include "G4VPhysicalVolume.hh"
 
 #include <vector>
 
@@ -55,7 +60,7 @@ class G4LogicalBorderSurface : public G4LogicalSurface
     G4LogicalBorderSurface( const G4String& name,
                                   G4VPhysicalVolume* vol1, 
                                   G4VPhysicalVolume* vol2,
-                                  G4OpticalSurface* opticsSurface );
+                                  G4SurfaceProperty* surfaceProperty );
     ~G4LogicalBorderSurface();
       // Constructor and destructor
 
