@@ -7,6 +7,7 @@
 #        May      20, 2000                                            # 
 #        June     06, 2000                                            # 
 #        October  17, 2000                                            # 
+#        November 26, 2000                                            #
 #                                                                     #
 #  CONTENTS: A basic macro for demonstrating various drawing styles   #
 #                                                                     #
@@ -41,7 +42,7 @@
 #######################################################################
 
 ##############################################
-Store particle trajactories for visualization
+# Store particle trajactories for visualization
 ##############################################
 /tracking/storeTrajectory 1
 
@@ -55,14 +56,17 @@ Store particle trajactories for visualization
 # Create a new scene
 /vis/scene/create
 
+# Add detector geometry to the current scene
+/vis/scene/add/volume
+
 # Attach the current visualization driver 
 # to the current scene (omitable)
 /vis/sceneHandler/attach
 
-# Add detector geometry to the current scene
-/vis/scene/add/volume
-
 # Add trajectories to the current scene
+#  Note: This command is not necessary in exampleN03,
+#        since the C++ method DrawTrajectory() is 
+#        described in the event action.
 #/vis/scene/add/trajectories
 
 # Bird-eye view of events with 
@@ -83,8 +87,9 @@ Store particle trajactories for visualization
 #    You can do it with the 4th page of the DAWN GUI panel
 #    or by editing the file by hand.
 #
-#  * Set an environmental variable to skip DAWN GUI:
-#    % setenv G4DAWNFILE_VIEWER "dawn -d"
+#  * Set an environmental variable if you wish to 
+#    skip DAWN GUI:
+#     % setenv G4DAWNFILE_VIEWER "dawn -d"
 #
 ##########################################################
 
@@ -94,14 +99,17 @@ Store particle trajactories for visualization
 # Create a new scene
 /vis/scene/create
 
+# Add detector geometry to the current scene
+/vis/scene/add/volume
+
 # Attach the current visualization driver 
 # to the current scene (omitable)
 /vis/sceneHandler/attach
 
-# Add detector geometry to the current scene
-/vis/scene/add/volume
-
 # Add trajectories to the current scene
+#  Note: This command is not necessary in exampleN03,
+#        since the C++ method DrawTrajectory() is 
+#        described in the event action.
 #/vis/scene/add/trajectories
 
 # Set camera 
@@ -126,3 +134,12 @@ Store particle trajactories for visualization
 /vis/set/cull_by_density on 999
 /vis/viewer/set/style    wireframe
 /run/beamOn              10
+
+# Reset the culling policy for next visualization
+#  The default culling policy is:
+#   global          : on
+#   invisible       : on 
+#   low density     : off 
+#   covered daughter: off
+/vis/set/cull_by_density off
+

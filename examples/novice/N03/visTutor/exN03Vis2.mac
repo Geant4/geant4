@@ -7,6 +7,7 @@
 #        May      20, 2000                                            #
 #        June     06, 2000                                            # 
 #        October  17, 2000                                            # 
+#        November 26, 2000                                            #
 #                                                                     #
 #  CONTENTS: A basic macro for visualization of events                #
 #                                                                     #
@@ -55,14 +56,17 @@
 # Create a new scene 
 /vis/scene/create
 
+# Add detector geometry to the current scene
+/vis/scene/add/volume
+
 # Attach the current visualization driver 
 # to the current scene (omitable)
 /vis/sceneHandler/attach
 
-# Add detector geometry to the current scene
-/vis/scene/add/volume
-
 # Add trajectories to the current scene
+#  Note: This command is not necessary in exampleN03,
+#        since the C++ method DrawTrajectory() is 
+#        described in the event action.
 #/vis/scene/add/trajectories
 
 # Set drawing style to "surface"
@@ -98,8 +102,9 @@
 #    You can do it with the 4th page of the DAWN GUI panel
 #    or by editing the file by hand.
 #
-#  * Set an environmental variable to skip DAWN GUI:
-#    % setenv G4DAWNFILE_VIEWER "dawn -d"
+#  * Set an environmental variable if you wish to 
+#    skip DAWN GUI:
+#     % setenv G4DAWNFILE_VIEWER "dawn -d"
 ##########################################################
 
 # Invoke the DAWNFILE driver 
@@ -108,14 +113,17 @@
 # Create a new scene
 /vis/scene/create
 
+# Add detector geometry to the current scene
+/vis/scene/add/volume
+
 # Attach the current visualization driver 
 # to the current scene (omitable)
 /vis/sceneHandler/attach
 
-# Add detector geometry to the current scene
-/vis/scene/add/volume
-
 # Add trajectories to the current scene
+#  Note: This command is not necessary in exampleN03,
+#        since the C++ method DrawTrajectory() is 
+#        described in the event action.
 #/vis/scene/add/trajectories
 
 # Set the drawing style to "wireframe". 

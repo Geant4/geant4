@@ -7,6 +7,7 @@
 #        May      20, 2000                                            # 
 #        June     06, 2000                                            # 
 #        October  17, 2000                                            # 
+#        November 26, 2000                                            #
 #                                                                     #
 #  CONTENTS: A basic macro for visualization of detector geometry     #
 #                                                                     #
@@ -90,7 +91,6 @@
 /vis/draw/axes         0 0 0 500
 /vis/viewer/update
 
-
 ##########################################################
 # Visualization with DAWNFILE driver
 #
@@ -102,19 +102,13 @@
 #    You can do it with the 4th page of the DAWN GUI panel 
 #    or by editing the file by hand.
 #
-#  * Set an environmental variable to skip DAWN GUI:
-#    % setenv G4DAWNFILE_VIEWER "dawn -d"
+#  * Set an environmental variable if you wish to 
+#    skip DAWN GUI:
+#     % setenv G4DAWNFILE_VIEWER "dawn -d"
 ##########################################################
 
 # Invoke the DAWNFILE driver 
 /vis/open DAWNFILE
-
-# Create a new scene 
-/vis/scene/create
-
-# Attach the current visualization driver 
-# to the current scene (omitable)
-/vis/sceneHandler/attach
 
 # Bird's-eye view of a detector component (Absorber)
 #  viewpoint  : (theta,phi) = (35*deg, 35*deg), 
@@ -156,3 +150,5 @@
 /vis/draw/text         0 0 0 mm 50 -50 -200   world
 /vis/viewer/update
 
+# Make the culling on for next visualization
+/vis/set/culling       on

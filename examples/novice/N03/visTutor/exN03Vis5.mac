@@ -8,7 +8,7 @@
 #  CONTENTS: A basic macro for demonstrating OPACS/Xo driver          #
 #                                                                     #
 #  USAGE:  % gmake visclean                                           #
-#          % $G4BINDIR/exampleN03  exN03Vis5.mac                      #
+#          % $G4BINDIR/exampleN03  visTutor/exN03Vis5.mac             #
 #                                                                     #
 #  REQUIRED PLATFORMS & SOFTWARES: Unix, Motif, X-window, OpenGL,     #
 #                                  OPACS (version 3.0)                #
@@ -47,7 +47,7 @@
 # Add detector geometry to the current scene
 /vis/scene/add/volume
 /tracking/storeTrajectory 1
-/vis/scene/include/trajectories
+#/vis/scene/add/trajectories
 
 # Bird-eye view of events
 /vis/camera/reset

@@ -7,7 +7,7 @@
 #                                                                     #
 #  CONTENTS: A basic macro for demonstrating Inventor driver          #
 #                                                                     #
-#  USAGE:  % $G4BINDIR/exampleN03  exN03Vis6.mac                      #
+#  USAGE:  % $G4BINDIR/exampleN03  visTutor/exN03Vis6.mac             #
 #                                                                     #
 #  REQUIRED PLATFORMS & SOFTWARES: Unix, Motif, X-window, OpenGL,     #
 #                                  HEPVis                             #
@@ -36,7 +36,7 @@
 
 # Add detector geometry to the current scene
 /vis/scene/add/volume
-/vis/scene/include/trajectories
+#/vis/scene/add/trajectories
 /tracking/storeTrajectory 1
 
 # Bird-eye view of events

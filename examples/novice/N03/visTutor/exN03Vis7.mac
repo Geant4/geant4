@@ -4,12 +4,13 @@
 #  AUTHOR(S): Satoshi Tanaka                                          #
 #                                                                     #
 #  DATE: October  17, 2000                                            # 
+#        November 26, 2000                                            #
 #                                                                     #
 #  CONTENTS: A macro to demonstrate the VRMLFILE driver               #
 #                                                                     #
 #  USAGE:  % gmake visclean                                           #
 #          % $G4BINDIR/exampleN03                                     #
-#          Idle> /control/execute exN03Vis7.mac                       #
+#          Idle> /control/execute visTutor/exN03Vis7.mac              #
 #                                                                     #
 #  REQUIRED PLATFORMS & SOFTWARES: Unix, X-window,                    #
 #                                  VRML viewer (e.g. VRMLview)        #
@@ -36,50 +37,37 @@
 #                                                                     #
 #######################################################################
 
-#################################################
-# Visualization of detector geometry with 
-# the VRML2FILE driver.
-#################################################
-
-# Invoke the OGLIX driver
-/vis/open VRML2FILE
-
-# Visualize of the whole detector geometry
-/vis/viewer/set/style surface
-/vis/drawVolume
-/vis/viewer/update
-
 ###################################################
 # Visualization of detector geometry and events 
 # with the VRML2FILE driver.
 #
 # Note: "/vis/viewer/set/style wireframe" means 
 #       "half-transparent" in the VRML2FILE driver. 
-#       It is a convention of the driver.
+#       It is a convention of this driver.
 ###################################################
 
 # Store particle trajactories for visualization
 /tracking/storeTrajectory 1
 
-# Invoke the DAWNFILE driver
+# Invoke the VRML2FILE driver
 /vis/open VRML2FILE
 
 # Create a new scene 
 /vis/scene/create
 
-# Add the world volume to the current scene
-/vis/scene/add/volume
-
 # Attach the current scene handler 
 # to the current scene
 /vis/sceneHandler/attach 
 
+# Add the world volume to the current scene
+/vis/scene/add/volume
+
 # Visualize one event added to the current scene
-# * Command "/vis/scene/notifyHandlers" is written in 
-#   ExN03RunAction::BeginOfRunAction()
-# * Command "/vis/viewer/update" is written in 
-#   ExN03RunAction::EndOfRunAction()
-/vis/scene/add/trajectories
+#  Note: The command /vis/scene/add/trajectories
+#        is not necessary in exampleN03,
+#        since the C++ method DrawTrajectory() is 
+#        described in the event action.
+#/vis/scene/add/trajectories
 /vis/viewer/set/style wireframe
-/run/beamOn 10
+/run/beamOn 3
 

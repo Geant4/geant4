@@ -5,6 +5,7 @@
 #                                                                     #
 #  DATE: June     06, 2000                                            # 
 #        October  17, 2000                                            # 
+#        November 26, 2000                                            #
 #                                                                     #
 #  CONTENTS: An example for the compound command,                     #
 #            "/vis/specify  <logical_volume_name>"                    #
@@ -62,8 +63,9 @@
 #    You can do it with the 4th page of the DAWN GUI panel 
 #    or by editing the file by hand.
 #
-#  * Set an environmental variable to skip DAWN GUI:
-#    % setenv G4DAWNFILE_VIEWER "dawn -d"
+#  * Set an environmental variable if you wish to 
+#    skip DAWN GUI:
+#     % setenv G4DAWNFILE_VIEWER "dawn -d"
 ##########################################################
 
 

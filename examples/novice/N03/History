@@ -1,4 +1,4 @@
-$Id: History,v 1.31 2000-11-24 09:45:01 stesting Exp $
+$Id: History,v 1.32 2000-11-27 02:58:04 stanaka Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,28 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21-11-27, Satoshi Tanake (exampleN03-V02-00-04)
+- The macro initInter.mac (by Michel) is revised.
+  1) The command "/vis/scene/create" is removed, 
+     since it is already included in "/vis/drawVolume".
+  2) /vis/viewer/update is added, since it becomes necessary 
+     when the OpenGL driver is switched to another driver.
+- In visTutor/exN03Vis5,6.mac (by Guy) 
+   "/vis/include/trajectories" is renamed into 
+   "/vis/scene/add/trajectories" and also commented out. 
+  (All other "/vis/scene/add/trajectories"'s are already commented out 
+   by Michel, since the C++ method DrawTrajectory() is now described 
+   in the event action.
+- Unnecessary "/vis/scene/create" are removed from 
+  visTutor/exN03VisX.mac when it is already included in 
+  "/vis/drawVolume" or "/vis/specify". 
+- The command /vis/camera/viewpoint is removed from visTutor/exN03Vis0.mac
+  in order to avoid crushing in reading it in execution of 
+  the G4 executable: $(G4BINDIR)/exampleN03 exN03Vis0.mac .
+- Comments updated in visTutor/exN03VisX.mac.
+
+
 25th November 2000 Steve O'Neale (tagset210)
 - Update test outputs for min.delta energy cut
 - Update test outputs for energy cut table only for e- and gamma
