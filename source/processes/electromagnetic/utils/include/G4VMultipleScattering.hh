@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.18 2004-05-12 12:25:26 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.19 2004-05-25 11:30:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -45,6 +45,7 @@
 // part of calculations for all charged particles
 //
 // 26-11-03 bugfix in AlongStepDoIt (L.Urban)
+// 25-05-04 add protection against case when range is less than steplimit (V.Ivanchenko)
 
 // -------------------------------------------------------------------
 //
@@ -279,6 +280,7 @@ inline G4double G4VMultipleScattering::GetContinuousStepLimit(
   const G4ParticleDefinition* p = track.GetDefinition();
   lambda0 = GetLambda(p, e);
   currentRange = G4LossTableManager::Instance()->GetTrancatedRange(p,e,currentCouple);
+  if(currentRange < currentMinimalStep) currentRange = currentMinimalStep;
   truePathLength = TruePathLengthLimit(track,lambda0,currentMinimalStep);
   //G4cout << "StepLimit: tpl= " << truePathLength << " lambda0= "
   //       << lambda0 << " range= " << currentRange
