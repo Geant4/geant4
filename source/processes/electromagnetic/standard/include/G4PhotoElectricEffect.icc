@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoElectricEffect.icc,v 1.9 2002-01-10 18:26:36 maire Exp $
+// $Id: G4PhotoElectricEffect.icc,v 1.10 2002-04-18 10:12:01 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,7 +36,9 @@
 // 06-01-99, use Sandia crossSection, V.Grichine mma
 // 28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation
 // 17-09-01, migration of Materials to pure STL (mma)  
-// 10-01-02, moved few function from icc to cc 
+// 10-01-02, moved few function from icc to cc
+// 17-04-02, Keep only Sandia crossSections. Remove BuildPhysicsTables.
+//           Simplify public interface (mma) 
   
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,51 +55,22 @@ inline G4double G4PhotoElectricEffect::GetMeanFreePath(const G4Track& aTrack,
                                                        G4double,
                                                        G4ForceCondition*)
 
-
 // returns the gamma mean free path in GEANT4 internal units
-// ( MeanFreePath is a private data member of the class)
-
 {
-   const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
-   G4double GammaEnergy = aDynamicGamma->GetKineticEnergy();
-   G4Material* aMaterial = aTrack.GetMaterial();
+ G4double  GammaEnergy = aTrack.GetDynamicParticle()->GetKineticEnergy();
+ G4double* SandiaCof   = aTrack.GetMaterial()->GetSandiaTable()
+                                   ->GetSandiaCofForMaterial(GammaEnergy);
+				    
+ G4double energy2 = GammaEnergy*GammaEnergy, energy3 = GammaEnergy*energy2, 
+          energy4 = energy2*energy2;
 
-   G4bool isOutRange ;
-
-   if (GammaEnergy > HighestEnergyLimit)
-     MeanFreePath = DBL_MAX;
-   else if (GammaEnergy > LowestEnergyLimit) 
-     MeanFreePath = (*theMeanFreePathTable)(aMaterial->GetIndex())->
-                                       GetValue(GammaEnergy, isOutRange); 
-   else
-     MeanFreePath = ComputeSandiaMeanFreePath(GammaEnergy, aMaterial);   
-
-   return MeanFreePath;
+ 
+ G4double SIGMA = SandiaCof[0]/GammaEnergy + SandiaCof[1]/energy2 +
+                  SandiaCof[2]/energy3     + SandiaCof[3]/energy4; 
+          
+ MeanFreePath = SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX;
+ return MeanFreePath;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4PhotoElectricEffect::GetCrossSectionPerAtom(
-                                       const G4DynamicParticle* aDynamicGamma,
-                                             G4Element* anElement)
- 
-// gives the microscopic total cross section in GEANT4 internal units
-
-{
-   G4double crossSection;
-   G4double GammaEnergy  = aDynamicGamma->GetKineticEnergy();
-   G4double AtomicNumber = anElement->GetZ();
-   G4bool isOutRange;
-
-   if (GammaEnergy > HighestEnergyLimit) 
-     crossSection = 0.;
-   else if (GammaEnergy > LowestEnergyLimit)
-     crossSection = (*theCrossSectionTable)(anElement->GetIndex())->
-                                       GetValue(GammaEnergy, isOutRange);
-   else
-     crossSection = ComputeSandiaCrossSection(GammaEnergy,AtomicNumber);     
-
-   return crossSection;
-} 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

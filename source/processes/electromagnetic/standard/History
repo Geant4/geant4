@@ -1,4 +1,4 @@
-$Id: History,v 1.53 2002-03-28 14:21:24 maire Exp $
+$Id: History,v 1.54 2002-04-18 10:11:58 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+18 apr 02: mma (stand-V04-00-07)
+- G4ComptonScattering: LowestEnergyLimit=1*keV
+- G4PhotoElectric: Keep only Sandia crossSections. Remove BuildPhysicsTables.
+  Simplify public interface.     
      
 27 mar 02: V.Ivanchenko (stand-V04-00-06)
 - G4hIonisation: Bug fix in scaling of lambda table

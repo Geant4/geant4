@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComptonScattering.cc,v 1.15 2002-04-09 17:34:41 vnivanch Exp $
+// $Id: G4ComptonScattering.cc,v 1.16 2002-04-18 10:12:01 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,7 +46,8 @@
 // 06-08-01, BuildThePhysicsTable() called from constructor (mma)
 // 17-09-01, migration of Materials to pure STL (mma)
 // 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)
-// 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)     
+// 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)
+// 17-04-02, LowestEnergyLimit = 1*keV     
 // -----------------------------------------------------------------------------
 
 #include "G4ComptonScattering.hh"
@@ -60,9 +61,9 @@ G4ComptonScattering::G4ComptonScattering(const G4String& processName)
   : G4VDiscreteProcess (processName),
     theCrossSectionTable(NULL),
     theMeanFreePathTable(NULL),  
-    LowestEnergyLimit ( 10*keV),              
+    LowestEnergyLimit (  1*keV),              
     HighestEnergyLimit(100*GeV),
-    NumbBinTable(100),
+    NumbBinTable(80),
     fminimalEnergy(1*eV)
 {}
 
@@ -170,7 +171,7 @@ G4double G4ComptonScattering::ComputeCrossSectionPerAtom
 {
  G4double CrossSection = 0.0 ;
  if ( Z < 1. )                     return CrossSection;
- if ( GammaEnergy < 10.*keV      ) return CrossSection;
+ if ( GammaEnergy < 1.*keV       ) return CrossSection;
  if ( GammaEnergy > (100.*GeV/Z) ) return CrossSection;
 
  static const G4double a = 20.0 , b = 230.0 , c = 440.0;
