@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.16 2003-11-04 15:12:36 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.17 2003-11-06 16:28:57 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -41,6 +41,7 @@
 // 16-07-03 Use G4VMscModel interface (V.Ivanchenko)
 // 03-11-03 Fix initialisation problem in RetrievePhysicsTable (V.Ivanchenko)
 // 04-11-03 Update PrintInfoDefinition (V.Ivanchenko)
+// 06-11-03 maxKinEnergy = 100.0*PeV, nBins=120 (L.Urban)
 //
 //
 // Class Description:
@@ -76,13 +77,15 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name, G4ProcessType
   navigator(0),
   theLambdaTable(0),
   currentCouple(0),
-  nBins(110),
+ // nBins(110),
+  nBins(120),
   boundary(false),
   latDisplasment(true),
   buildLambdaTable(true)
 {
   minKinEnergy = 1.0*eV;
-  maxKinEnergy = 100.0*GeV;
+ // maxKinEnergy = 100.0*GeV;
+  maxKinEnergy = 100.0*PeV;
   SetVerboseLevel(0);
   modelManager = new G4EmModelManager();
   (G4LossTableManager::Instance())->Register(this);

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.cc,v 1.9 2003-09-12 18:59:17 urban Exp $
+// $Id: G4MscModel.cc,v 1.10 2003-11-06 16:28:57 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -44,7 +44,9 @@
 // 30-05-03 misprint in SampleCosineTheta corrected(L.Urban)
 // 27-03-03 Rename (V.Ivanchenko)
 // 05-08-03 angle distribution has been modified (L.Urban)
-//
+// 06-11-03 precision problems solved for high energy (PeV) particles
+//          change in the tail of the angular distribution
+//          highKinEnergy is set to 100 PeV (L.Urban) 
 //
 
 // Class Description:
@@ -72,15 +74,16 @@ G4MscModel::G4MscModel(G4double& m_dtrl, G4double& m_NuclCorrPar,
 			   G4bool& m_samplez, const G4String& nam)
   : G4VEmModel(nam),
   taubig(8.0),
-  tausmall(1.e-14),
-  taulim(1.e-5),
+  tausmall(1.e-20),
+  taulim(1.e-6),
   dtrl(m_dtrl),
   NuclCorrPar (m_NuclCorrPar),
   FactPar(m_FactPar),
   facxsi(m_facxsi),
   samplez(m_samplez)
 {
-  highKinEnergy = 10.0*TeV;
+ // highKinEnergy = 10.0*TeV;
+  highKinEnergy = 100.0*PeV;
   lowKinEnergy  = 0.1*keV;
   stepmin       = 1.e-6*mm;
 }
@@ -103,7 +106,7 @@ void G4MscModel::Initialise(const G4ParticleDefinition* p,
                               const G4DataVector&)
 {
   // set values of some data members
-  xsi = facxsi*2.82144 ;
+  xsi = facxsi*2.25  ;
   b = 1. ;
   sigmafactor = twopi*classic_electr_radius*classic_electr_radius;
   particle = p;
@@ -424,10 +427,9 @@ G4double G4MscModel::GeomPathLength(
   if (tau <= tausmall) return tPathLength;
 
   G4double zmean = tPathLength;
-
   if (tPathLength < range*dtrl) {
     zmean = lambda0*(1.-exp(-tau));
-
+    if(tau < taulim) zmean = tPathLength*(1.-0.5*tPathLength/lambda0) ;
   } else {
     G4LossTableManager* theManager = G4LossTableManager::Instance();
     G4double T1 = theManager->GetEnergy(particle,range-tPathLength,couple);
@@ -521,7 +523,9 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength)
     cth = exp(-currentTau) ;
   else
   {
-    if (currentTau > taubig) cth = -1.+2.*G4UniformRand();
+   // if (currentTau > taubig) cth = -1.+2.*G4UniformRand();
+    if (currentTau > taubig) 
+       cth = -1.+2.*G4UniformRand();
     else if (currentTau >= tausmall)
     {
       if(lambda1 > 0.)
@@ -532,22 +536,19 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength)
           currentTau = -log(cthm)-alam*
                        log(1.-(trueStepLength-0.5*tPathLength)/alam)/lambdam ;
       }
-      if(currentTau > taubig) cth = -1.+2.*G4UniformRand();
+     // if(currentTau > taubig) cth = -1.+2.*G4UniformRand();
+    if (currentTau > taubig) 
+       cth = -1.+2.*G4UniformRand();
       else
       {
        // const G4double tau0 = 0.02, tau1 = 1.e-4  ;
         const G4double c_highland = 13.6*MeV, corr_highland=0.038 ;
 
-        const G4double x1fac1 = exp(-xsi) ;
-        const G4double x1fac2 = (1.-(1.+xsi)*x1fac1)/(1.-x1fac1) ;
-        const G4double x1fac3 = 1.3      ; // x1fac3 >= 1.  !!!!!!!!!
-
         G4double a ;
 
-        // for heavy particles take the width of the cetral part
+        // for all particles take the width of the central part
         //  from the Highland formula
         // (Particle Physics Booklet, July 2002, eq. 26.10)
-        // a <---------- Highland for all particle
         G4double Q = abs(charge) ;
         G4double xx0 = trueStepLength/currentRadLength;
         G4double betacp = currentKinEnergy*(currentKinEnergy+2.*mass)/
@@ -577,28 +578,41 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength)
           theta0 *= corrbeta ;
         }
 
-        if (theta0 > tausmall) a = 0.5/(1.-cos(theta0)) ;
+        if (theta0 > taulim) a = 0.5/(1.-cos(theta0)) ;
         else                   a = 1.0/(theta0*theta0) ;
 
+
         G4double xmeanth = exp(-currentTau);
+        G4double xmeanth1 = 1.-xmeanth ;
+        if(currentTau < taulim) xmeanth1 = currentTau ;	  
+
+        const G4double x1fac1 = exp(-xsi) ;
+        const G4double x1fac2 = (1.-(1.+xsi)*x1fac1)/(1.-x1fac1) ;
+        const G4double x1fac3 = 1.3      ; // x1fac3 >= 1.  !!!!!!!!!
 
         G4double xmean1,xmean2,eaa,b1,bx,qprob,prob;
         G4double c=1., c1=0., eb1=0., ebx=0. ;
         G4double x0 = 1.-xsi/a;
-        G4double x01=1.+x0 ;
+      	G4double oneminusx0=xsi/a ;
+	G4double oneplusx0=2.+xsi/a ;
         G4double ea = 0.;
+
         if (x0 <= -1.)
         {
-          // 1 model fuction only
+          // 2 model fuctions only
           // in order to have xmean1 > xmeanth -> qprob < 1
           x0 = -1.;
 
-          if( a < 1./(1.-xmeanth)) a = 1./(1.-xmeanth) ;
-
-          ea = exp(-a*(1.-x0));
+          if( a < 1./xmeanth1)
+	    a = 1./xmeanth1 ;
+          
+	  oneminusx0 = 1.-x0 ;
+	  oneplusx0 =  1.+x0 ;
+          ea = exp(-a*oneminusx0);
           eaa = 1.-ea ;
-          xmean1 = 1.-1./a+(1.-x0)*ea/eaa ;
+          xmean1 = 1.-1./a+oneminusx0*ea/eaa ;
 
+	  b = 1. ; 
           b1 = 2. ;
           bx = b1 ;
           xmean2 = 0. ;
@@ -608,46 +622,44 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength)
         }
         else
         {
-          // 2 model fuctions
+          // 3 model fuctions
           // in order to have xmean1 > xmeanth
           if((1.-x1fac2/a) < xmeanth)
           {
-            a = x1fac3*x1fac2/(1.-xmeanth) ;
-            ea = exp(-a*(1.-x0));
-            eaa = 1.-ea ;
-            xmean1 = 1.-1./a+(1.-x0)*ea/eaa ;
-          }
-          else
-          {
-            ea = x1fac1 ;
-            eaa = 1.-ea ;
-            xmean1 = 1.-x1fac2/a ;
+            a = x1fac3*x1fac2/xmeanth1 ;
+	    x0 = 1.-xsi/a ;
+	    oneminusx0=xsi/a ;
+	    oneplusx0=2.+xsi/a ;
           }
 
-          // b = xmean1
-          b = xmean1 ;
+          ea = x1fac1 ;
+          eaa = 1.-ea ;
+          xmean1 = 1.-x1fac2/a ;
+
+	  b = 1.+xmeanth1/a ; // ??????? empirical     
           b1 = b+1. ;
-          bx=b-x0 ;
+	  bx = (xsi+xmeanth1)/a ; 
+	  
           // c from continuity of the 1st derivative
-          c = a*(b-x0) ;
-          if(c == 3.) c = 3.000001 ;
+	  c = xsi+xmeanth1 ; 
           if(c == 2.)
           {
-            xmean2 = b-b1*bx*log(b1/bx)/x01  ;
+            xmean2 = b-b1*bx*log(b1/bx)/oneplusx0  ;
           }
           else
           {
-            c1 = 1.-c ;
+            c1 = c-1. ;
             eb1 = exp(c1*log(b1)) ;
             ebx = exp(c1*log(bx)) ;
-            xmean2 = ((b1*eb1-bx*ebx)/(2.-c)-(eb1+x0*ebx))/(eb1-ebx) ;
+            xmean2 = ((b1*ebx-eb1*bx)/(c-2.)+ebx+x0*eb1)/(eb1-ebx) ;
           }
 
-          G4double cnorm1 = a/eaa ;
-          G4double f1x0 = cnorm1*exp(-a*(1.-x0)) ;
-          G4double cnorm2 = b1*bx/x01 ;
-          G4double f2x0 = cnorm2/exp(c*log(b-x0)) ;
-
+	  G4double f1x0 = a*ea/eaa ;
+          G4double f2x0 ;
+	  if(c == 2.)
+	    f2x0 = b1/(oneplusx0*bx) ;
+          else
+	    f2x0 = c1*eb1/(bx*(eb1-ebx)) ; 	  
           // from continuity at x=x0
           prob = f2x0/(f1x0+f2x0) ;
           // from xmean = xmeanth
@@ -656,7 +668,7 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength)
 
         // protection against qprob > 1
         if(qprob > 1.) qprob = 1. ;
-
+	
         // sampling of costheta
         if (G4UniformRand() < qprob)
         {
@@ -665,9 +677,9 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength)
           else
           {
             if(c == 2.)
-             cth = b-b1*bx/(bx+x01*G4UniformRand()) ;
+             cth = b-b1*bx/(bx+oneplusx0*G4UniformRand()) ;
             else
-             cth = b-exp(log(eb1-(eb1-ebx)*G4UniformRand())/c1) ;
+             cth = b-b1*bx/exp(log(ebx+(eb1-ebx)*G4UniformRand())/c1) ;
           }
         }
         else
