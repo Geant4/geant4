@@ -198,7 +198,7 @@ g4message=`cat << EOM
 
   G4VIS_NONE
 
-DESCRIPTION
+If specified, no visualization drivers will be built or used.
 
 EOM`
 
@@ -216,6 +216,10 @@ gans=$ans
 		g4vis_none=y
 		;;
 	esac
+
+case $g4vis_none in
+
+n)
 
 g4message=`cat << EOM
 
@@ -609,3 +613,6 @@ gans=y
 		g4vis_use_gagtree=y
 		;;
 	esac
+
+;;
+esac
