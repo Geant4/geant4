@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ViewParameters.hh,v 1.6 1999-12-15 14:54:20 gunter Exp $
+// $Id: G4ViewParameters.hh,v 1.7 2000-05-02 09:52:29 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,46 +17,44 @@
 //
 // THE STANDARD VIEW AND ALL THAT.
 //
-// In GEANT4 visualization, we have the concept of a ``Standard
-// View''.  This is the view when the complete set of objects being
+// In GEANT4 visualization, we have the concept of a "Standard
+// View".  This is the view when the complete set of objects being
 // viewed is comfortably in view from any viewpoint.  It is defined by
-// the ``Bounding Sphere'' of ``visible'' objects when initially
+// the "Bounding Sphere" of "visible" objects when initially
 // registered in the scene, and by the View Parameters.
 //
-// There is also the ``Standard Target Point'', which is the centre of
+// There is also the "Standard Target Point", which is the centre of
 // the Bounding Sphere (note that this belongs to the scene and is
-// stored in the G4Scene object).  The ``Current Target Point'', initially
-// set to the Standard Target Point, is incremented by the ``dolly''
-// and ``zoom'' commands, and can be reset to the Standard Target
-// Point with the {\tt /vis~/camera/reset} command.
+// stored in the G4Scene object).  The "Current Target Point", initially
+// set to the Standard Target Point, is incremented by the "dolly"
+// and "zoom" commands, and can be reset to the Standard Target
+// Point with the "/vis/viewer/reset" command.
 //
-// Also, the ``Standard Camera Position'' is the ``Standard Camera
-// Distance'' along the Viewpoint Direction vector from the Standard
+// Also, the "Standard Camera Position" is the "Standard Camera
+// Distance" along the Viewpoint Direction vector from the Standard
 // Target Point.  The Standard Camera Distance is the radius of the
-// Bounding Sphere divided by {\tt fFieldHalfAngle}.  It is not stored
-// explicitly because of the singularity at {\tt fFieldHalfAngle} = 0,
+// Bounding Sphere divided by fFieldHalfAngle.  It is not stored
+// explicitly because of the singularity at fFieldHalfAngle = 0,
 // which implies parallel projection.
 //
-// Similarly, the ``Current Camera Position'' is the ``Current Camera
-// Distance'' along the Viewpoint Direction vector from the Current
+// Similarly, the "Current Camera Position" is the "Current Camera
+// Distance" along the Viewpoint Direction vector from the Current
 // Target Point.  The Current Camera Distance is given by the formulae
 // below, but note that it can be negative, meaning that the camera
-// has moved {\em beyond} the Current Target Point, which is
+// has moved *beyond* the Current Target Point, which is
 // conceptually possible, but which might give some problems when
-// setting up the view matrix --- see, for example, {\tt
-// G4OpenGLView::SetView ()}.
+// setting up the view matrix - see, for example, G4OpenGLView::SetView ().
 //
-// All viewers are expected to keep the ``Up Vector'' vertical.
+// All viewers are expected to keep the "Up Vector" vertical.
 //
-// Finally, the view is magnified by the ``Zoom Factor'' which is
-// reset to 1 by the \linebreak {\tt /vis~/camera/reset} command.
+// Finally, the view is magnified by the "Zoom Factor" which is
+// reset to 1 by the "/vis/viewer/reset" command.
 //
 // Note: the camera movements pan, dolly and zoom, are currently coded
-// in \linebreak {\tt G4VisManMessenger.cc}.
+// in "G4VisManMessenger.cc".
 //
 // The algorithms for calculating various useful quantities from the
-// View Parameters are encapsulated in the functions described in
-// Appendix \ref{ap:useful}.
+// View Parameters, such as GetCameraDistance, are described below.
 
 #ifndef G4VIEWPARAMETERS_HH
 #define G4VIEWPARAMETERS_HH
