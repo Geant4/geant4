@@ -307,10 +307,10 @@ void G4SPSEneDistribution::LinearInterpolation()
   // made differential and if momentum it has to be made energy.
   if(DiffSpec == false) {
     // Converts integral point-wise spectra to Differential
-    for( count=0;count<=maxi-1;count++) {
-      Arb_y[count] = Arb_y[count] - Arb_y[count+1];
+    for( count=0;count < maxi-1;count++) {
+      Arb_y[count] = (Arb_y[count] - Arb_y[count+1])/(Arb_x[count+1]-Arb_x[count]);
     }
-    //    Arb_y[maxi] = 0.;
+    maxi--;
   }
   //
   if(EnergySpec == false) {
@@ -408,10 +408,10 @@ void G4SPSEneDistribution::LogInterpolation()
   // made differential and if momentum it has to be made energy.
   if(DiffSpec == false) {
     // Converts integral point-wise spectra to Differential
-    for( count=0;count<=maxi-1;count++) {
-      Arb_y[count] = Arb_y[count] - Arb_y[count+1];
+    for( count=0;count<maxi-1;count++) {
+      Arb_y[count] = (Arb_y[count] - Arb_y[count+1])/(Arb_x[count+1]-Arb_x[count]);
     }
-    //    Arb_y[maxi] = 0.;
+    maxi--;
   }
   //
   if(EnergySpec == false) {
@@ -505,10 +505,10 @@ void G4SPSEneDistribution::ExpInterpolation()
   // made differential and if momentum it has to be made energy.
   if(DiffSpec == false) {
     // Converts integral point-wise spectra to Differential
-    for( count=0;count<=maxi-1;count++) {
-      Arb_y[count] = Arb_y[count] - Arb_y[count+1];
+    for( count=0;count< maxi-1;count++) {
+      Arb_y[count] = (Arb_y[count] - Arb_y[count+1])/(Arb_x[count+1]-Arb_x[count]);
     }
-    //    Arb_y[maxi] = 0.;
+    maxi--;
   }
   //
   if(EnergySpec == false) {
@@ -589,10 +589,10 @@ void G4SPSEneDistribution::SplineInterpolation()
   // made differential and if momentum it has to be made energy.
   if(DiffSpec == false) {
     // Converts integral point-wise spectra to Differential
-    for( count=0;count<=maxi-1;count++) {
-      Arb_y[count] = Arb_y[count] - Arb_y[count+1];
+    for( count=0;count< maxi-1;count++) {
+      Arb_y[count] = (Arb_y[count] - Arb_y[count+1])/(Arb_x[count+1]-Arb_x[count]);
     }
-    //    Arb_y[maxi] = 0.;
+    maxi--;
   }
   //
   if(EnergySpec == false) {

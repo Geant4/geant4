@@ -181,7 +181,7 @@ private:
   G4String UserDistType; //String to hold user distributions
   G4bool UserWRTSurface; // G4bool to tell whether user wants distribution wrt
                        // surface normals or co-ordinate system
-  G4bool UserAngRef; // Set to true when user defines aaa new coordinates
+  G4bool UserAngRef; // Set to true when user defines a new coordinates
   //
   G4ParticleMomentum     particle_momentum_direction;
   //

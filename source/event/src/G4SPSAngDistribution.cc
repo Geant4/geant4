@@ -43,6 +43,8 @@ G4SPSAngDistribution::G4SPSAngDistribution()
   DX = 0.;
   DY = 0.;
   UserDistType = "NULL";
+  UserWRTSurface = true;
+  UserAngRef = false;
   IPDFThetaExist = false;
   IPDFPhiExist = false;
   verbosityLevel = 0 ;
@@ -359,93 +361,93 @@ void G4SPSAngDistribution::GenerateUserDefFlux()
 
   if(UserDistType == "NULL")
     G4cout << "Error: UserDistType undefined" << G4endl;
-  else if(UserDistType == "theta")
-    {
+  else if(UserDistType == "theta") {
+    Theta = 10.;
+    while(Theta > MaxTheta || Theta < MinTheta)
       Theta = GenerateUserDefTheta();
-      Phi = 10.;
-      while(Phi > MaxPhi || Phi < MinPhi)
-	{
-	  rndm = angRndm->GenRandPhi();
-	  Phi = twopi * rndm;
-	}
+    Phi = 10.;
+    while(Phi > MaxPhi || Phi < MinPhi) {
+      rndm = angRndm->GenRandPhi();
+      Phi = twopi * rndm;
     }
-  else if(UserDistType == "phi")
-    {
-      Theta = 10.;
-      while(Theta > MaxTheta || Theta < MinTheta)
-	{
-	  rndm = angRndm->GenRandTheta();
-	  Theta = acos(1. - (2. * rndm));
-	}
+  }
+  else if(UserDistType == "phi") {
+    Theta = 10.;
+    while(Theta > MaxTheta || Theta < MinTheta)
+      {
+	rndm = angRndm->GenRandTheta();
+	Theta = acos(1. - (2. * rndm));
+      }
+    Phi = 10.;
+    while(Phi > MaxPhi || Phi < MinPhi)
       Phi = GenerateUserDefPhi();
-    }
+  }
   else if(UserDistType == "both")
     {
-      Theta = GenerateUserDefTheta();
-      Phi = GenerateUserDefPhi();
+      Theta = 10.;
+      while(Theta > MaxTheta || Theta < MinTheta)      
+	Theta = GenerateUserDefTheta();
+      Phi = 10.;
+      while(Phi > MaxPhi || Phi < MinPhi)
+	Phi = GenerateUserDefPhi();
     }
-
   px = -sin(Theta) * cos(Phi);
   py = -sin(Theta) * sin(Phi);
   pz = -cos(Theta);
 
   pmag = sqrt((px*px) + (py*py) + (pz*pz));
 
-  if(UserWRTSurface == false)
-    {
-      G4double finx, finy, finz;      
-      if (UserAngRef) {
-	// Apply Rotation Matrix
-	// x * AngRef1, y * AngRef2 and z * AngRef3
-	finx = (px * AngRef1.x()) + (py * AngRef2.x()) + (pz * AngRef3.x());
-	finy = (px * AngRef1.y()) + (py * AngRef2.y()) + (pz * AngRef3.y());
-	finz = (px * AngRef1.z()) + (py * AngRef2.z()) + (pz * AngRef3.z());
-      } else {  // use mother co-ordinates
-	finx = px;
-	finy = py;
-	finz = pz;
-      }
-      G4double ResMag = sqrt((finx*finx) + (finy*finy) + (finz*finz));
-      finx = finx/ResMag;
-      finy = finy/ResMag;
-      finz = finz/ResMag;
-      
-      particle_momentum_direction.setX(finx);
-      particle_momentum_direction.setY(finy);
-      particle_momentum_direction.setZ(finz);     
+  if(!UserWRTSurface) {
+    G4double finx, finy, finz;      
+    if (UserAngRef) {
+      // Apply Rotation Matrix
+      // x * AngRef1, y * AngRef2 and z * AngRef3
+      finx = (px * AngRef1.x()) + (py * AngRef2.x()) + (pz * AngRef3.x());
+      finy = (px * AngRef1.y()) + (py * AngRef2.y()) + (pz * AngRef3.y());
+      finz = (px * AngRef1.z()) + (py * AngRef2.z()) + (pz * AngRef3.z());
+    } else {  // use mother co-ordinates
+      finx = px;
+      finy = py;
+      finz = pz;
     }
-  else if(UserWRTSurface == true)
-    {
-      G4double pxh = px/pmag;
-      G4double pyh = py/pmag;
-      G4double pzh = pz/pmag;
-
-      if(verbosityLevel == 2)
-	{
-	  G4cout <<"SideRefVecs " <<posDist->SideRefVec1<<posDist->SideRefVec2<<posDist->SideRefVec3<<G4endl;
-	  G4cout <<"Raw Unit vector "<<pxh<<","<<pyh<<","<<pzh<<G4endl;
-	}
-      G4double resultx = (pxh*posDist->SideRefVec1.x()) + (pyh*posDist->SideRefVec2.x()) + 
-	(pzh*posDist->SideRefVec3.x());
-
-      G4double resulty = (pxh*posDist->SideRefVec1.y()) + (pyh*posDist->SideRefVec2.y()) + 
-	(pzh*posDist->SideRefVec3.y());
-
-      G4double resultz = (pxh*posDist->SideRefVec1.z()) + (pyh*posDist->SideRefVec2.z()) + 
-	(pzh*posDist->SideRefVec3.z());
-
-      G4double ResMag = sqrt((resultx*resultx) + (resulty*resulty) + (resultz*resultz));
-      resultx = resultx/ResMag;
-      resulty = resulty/ResMag;
-      resultz = resultz/ResMag;
-      
-      particle_momentum_direction.setX(resultx);
-      particle_momentum_direction.setY(resulty);
-      particle_momentum_direction.setZ(resultz);
+    G4double ResMag = sqrt((finx*finx) + (finy*finy) + (finz*finz));
+    finx = finx/ResMag;
+    finy = finy/ResMag;
+    finz = finz/ResMag;
+    
+    particle_momentum_direction.setX(finx);
+    particle_momentum_direction.setY(finy);
+    particle_momentum_direction.setZ(finz);     
+  } 
+  else  {  // UserWRTSurface = true
+    G4double pxh = px/pmag;
+    G4double pyh = py/pmag;
+    G4double pzh = pz/pmag;
+    if(verbosityLevel > 1) {
+      G4cout <<"SideRefVecs " <<posDist->SideRefVec1<<posDist->SideRefVec2<<posDist->SideRefVec3<<G4endl;
+      G4cout <<"Raw Unit vector "<<pxh<<","<<pyh<<","<<pzh<<G4endl;
     }
+    G4double resultx = (pxh*posDist->SideRefVec1.x()) + (pyh*posDist->SideRefVec2.x()) + 
+      (pzh*posDist->SideRefVec3.x());
+    
+    G4double resulty = (pxh*posDist->SideRefVec1.y()) + (pyh*posDist->SideRefVec2.y()) + 
+      (pzh*posDist->SideRefVec3.y());
+    
+    G4double resultz = (pxh*posDist->SideRefVec1.z()) + (pyh*posDist->SideRefVec2.z()) + 
+      (pzh*posDist->SideRefVec3.z());
+    
+    G4double ResMag = sqrt((resultx*resultx) + (resulty*resulty) + (resultz*resultz));
+    resultx = resultx/ResMag;
+    resulty = resulty/ResMag;
+    resultz = resultz/ResMag;
+    
+    particle_momentum_direction.setX(resultx);
+    particle_momentum_direction.setY(resulty);
+    particle_momentum_direction.setZ(resultz);
+  }
   
   // particle_momentum_direction now contains unit momentum vector.
-  if(verbosityLevel >= 1)
+  if(verbosityLevel > 0 )
     {
       G4cout << "Final User Defined momentum vector " << particle_momentum_direction << G4endl;
     }
@@ -481,7 +483,6 @@ G4double G4SPSAngDistribution::GenerateUserDefTheta()
 	      vals[ii] = UDefThetaH(size_t(ii)) + vals[ii-1];
 	      sum = sum + UDefThetaH(size_t(ii));
 	    }
-
 	  for(ii=0;ii<maxbin;ii++)
 	    {
 	      vals[ii] = vals[ii]/sum;

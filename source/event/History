@@ -1,4 +1,4 @@
-$Id: History,v 1.72 2004-04-01 11:02:57 flei Exp $
+$Id: History,v 1.73 2004-04-05 13:59:20 flei Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Apr, 5, 2004, F. Lei (event-V06-01-01)
+- Added "UserWRTSurace = true", "UserAngRef= flase" to constructor of 
+  G4SPSAngDistribution.
+- Apply the Max/Min angle limits to the User defined angular distribution case.
+- New formula for conevrting integral spectrum to differential one.
+ 
 Apr, 1, 2004, F. Lei (event-V06-01-00) 
 - Major design iteration of the G4GeneralParticleSource class. The following 
   new classes have been added:
