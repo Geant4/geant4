@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: SAXEventGun.cc,v 1.3 2003-07-04 14:55:40 gcosmo Exp $
+// $Id: SAXEventGun.cc,v 1.4 2003-10-27 10:55:48 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,11 +55,13 @@
 #include <iostream>
 #include <strstream>
 
+using namespace xercesc;
+
 StatusCode SAXEventGun::Run()
 {
   StatusCode sc;
 
-  fParser = new SAXParser();
+  fParser = new xercesc::SAXParser();
   
   fParser->setDocumentHandler( this );
   fParser->setErrorHandler( this );
