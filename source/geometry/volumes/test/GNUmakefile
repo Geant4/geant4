@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2001-12-20 20:07:11 radoone Exp $
+# $Id: GNUmakefile,v 1.6 2002-01-11 08:28:31 gcosmo Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -21,6 +21,7 @@ INCFLAGS := -I$(G4BASE)/geometry/management/include \
             -I$(G4BASE)/geometry/volumes/include \
             -I$(G4BASE)/geometry/magneticfield/include \
             -I$(G4BASE)/geometry/solids/CSG/include \
+            -I$(G4BASE)/geometry/verification/include \
             -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPGeometry/include \
