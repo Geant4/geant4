@@ -473,8 +473,8 @@ int main(int argc, char** argv)
         pt = sqrt(px*px +py*py);
 
         theta = mom.theta();
-        G4int i = (G4int)(theta/dtet);
-        sint  = sin(dtet*(0.5 + (G4double)i));
+        G4int itet = (G4int)(theta/dtet);
+        sint  = sin(dtet*(0.5 + (G4double)itet));
 				
 	if(usepaw && e > 0.0 && pt > 0.0) {
           h[2]->accumulate(mom.phi()/degree,1.0);
