@@ -1,0 +1,54 @@
+#include "G4HadFinalState.hh"
+
+   G4HadFinalState::G4HadFinalState()
+   : theDirection(0,0,1), theEnergy(-1), theStat(isAlive), theW(1.), hasStaleSecondaries(false){}
+   G4int G4HadFinalState::GetNumberOfSecondaries() {return theSecs.size();}
+   void G4HadFinalState::SetEnergyChange(G4double anEnergy) 
+   {
+     theEnergy=anEnergy;
+     if(theEnergy<0) G4Exception("G4HadFinalState: fatal - negative energy");
+   }
+   G4double G4HadFinalState::GetEnergyChange() {return theEnergy;}
+   void G4HadFinalState::SetMomentumChange(G4ThreeVector aV) {theDirection=aV;}
+   void G4HadFinalState::SetMomentumChange(G4double x, G4double y, G4double z) 
+   {
+     theDirection = G4ThreeVector(x,y,z);
+     if(fabs(theDirection.mag()-1)>0.001) 
+     {
+       G4cout <<"What is theDirection.mag() "<<theDirection.mag()<<G4endl;
+       G4Exception("");
+     }
+   }
+   G4ThreeVector G4HadFinalState::GetMomentumChange() {return theDirection;}
+   void G4HadFinalState::AddSecondary(G4DynamicParticle * aP) {theSecs.push_back(new G4HadSecondary(aP));}
+   void G4HadFinalState::AddSecondary(G4HadSecondary * aP) {theSecs.push_back(aP);}
+   void G4HadFinalState::SetStatusChange(G4HadFinalStateStatus aS){theStat=aS;}
+   G4HadFinalStateStatus G4HadFinalState::GetStatusChange(){return theStat;}
+   void G4HadFinalState::Clear()
+   {
+     theDirection = G4ThreeVector(0,0,1);
+     theEnergy = -1;
+     theStat = isAlive;
+     theW = 1.;
+     if(!hasStaleSecondaries) 
+     {
+       for(size_t i=0; i<theSecs.size(); i++) delete theSecs[i];
+     }
+     hasStaleSecondaries = false;
+     theSecs.resize(0);
+   }
+   void G4HadFinalState::SecondariesAreStale() {hasStaleSecondaries = true;}
+   G4LorentzRotation & G4HadFinalState::GetTrafoToLab() {return theT;}
+   void G4HadFinalState::SetTrafoToLab(G4LorentzRotation & aT) {theT = aT;}
+   void G4HadFinalState::SetWeightChange(G4double aW){ theW=aW;}
+   G4double G4HadFinalState::GetWeightChange() {return theW;}
+   G4HadSecondary * G4HadFinalState::GetSecondary(size_t i) 
+   {
+     if(i>theSecs.size())
+     {
+       G4Exception("G4HadFinalState::GetSecondary no way this can work");
+     }
+     return theSecs[i];
+   }
+   void G4HadFinalState::SetLocalEnergyDeposit(G4double aE) {theEDep=aE;}
+   G4double G4HadFinalState::GetLocalEnergyDeposit() {return theEDep;}
