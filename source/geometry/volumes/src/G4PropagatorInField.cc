@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.cc,v 1.5 1999-07-23 11:53:29 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.6 1999-07-27 20:57:28 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,6 +30,7 @@
 const G4double G4PropagatorInField::fDefault_Delta_Intersection_Val= 0.1 * mm;
 const G4double G4PropagatorInField::fDefault_Delta_One_Step_Value = 0.25 * mm;
 
+// -------------------------------------------------------------------------
 G4double 
 G4PropagatorInField::
   ComputeStep(const  G4ThreeVector &   StartPointA,
@@ -54,6 +55,7 @@ G4PropagatorInField::
 			    currentSafety );
 }
 
+// -------------------------------------------------------------------------
 G4double 
 G4PropagatorInField::
   ComputeStep(G4FieldTrack& pFieldTrack,
@@ -101,10 +103,29 @@ G4PropagatorInField::
   }
   this->SetEpsilonStep( GetDeltaOneStep() / CurrentProposedStepLength);
 
+  if( fNoZeroStep > fThresholdNo_ZeroSteps ) {
+     G4double stepTrial; //  = fMidPoint_CurveLen_of_LastAttempt;
+     stepTrial= 0.5 * fFull_CurveLen_of_LastAttempt; 
+     if( (stepTrial <= 0.0) && (fLast_ProposedStepLength>0.0) ) 
+        stepTrial=0.5 * fLast_ProposedStepLength; 
+     if( fNoZeroStep > 2*fThresholdNo_ZeroSteps ){
+        stepTrial *= 0.5;     // Ensure quicker convergence.
+	if(   (stepTrial == 0.0) 
+	   || ( fNoZeroStep > 5*fThresholdNo_ZeroSteps ) ) { 
+ 	   G4cerr << " G4PropagatorInField::ComputeStep "
+		  << "  ERROR : attempting a zero step= " << stepTrial << endl
+		  << " and/or no progress after "  << fNoZeroStep 
+		  << " trial steps.  ABORTING." << endl;
+	   G4Exception("G4PropagatorInField::ComputeStep No progress - Looping with zero steps"); 
+	} 
+     }
+     CurrentProposedStepLength = stepTrial;
+  }
+  fLast_ProposedStepLength= CurrentProposedStepLength;
+
   G4int  do_loop_count=0; 
   do
   { 
-     do_loop_count++;
      G4FieldTrack   SubStepStartState= CurrentState;
      G4ThreeVector SubStartPoint= CurrentState.GetPosition(); 
 					  // WAS = G4Navigator::Locate...
@@ -131,6 +152,7 @@ G4PropagatorInField::
 				       h_TrialStepSize,
                                        GetEpsilonStep() );
 
+     fFull_CurveLen_of_LastAttempt= s_length_taken;
      //    On Exit:
      //         CurrentState is updated with the final position and velocity. 
 
@@ -178,21 +200,15 @@ G4PropagatorInField::
 	if( found_intersection )
 	{
 	   //  G is our EndPoint ...
-	   G4ThreeVector IntersectPoint_G = IntersectPointVelct_G.Position(); 
-
 	   End_PointAndTangent= IntersectPointVelct_G;
-	   G4ThreeVector NewChord= IntersectPoint_G - SubStartPoint;
-	   // LinearStepLength= NewChord.mag();  
 	   StepTaken = 
 	   TruePathLength= IntersectPointVelct_G.CurveS()
 	                         - OriginalState.CurveS(); // which is Zero now.
 #ifdef G4VERBOSE
-	   if( Verbose() > 0 ){
-	      G4cout << " Found an intersection after a Step of length " << 
+	   if( Verbose() > 0 )
+	      G4cout << " Found intersection after Step of length " << 
 	           StepTaken << endl;
-	   }
 #endif
-	   // TruePathLength= StepTaken;
 	}
 	else
 	{
@@ -216,6 +232,7 @@ G4PropagatorInField::
 		   pPhysVol);
 #endif
 
+     do_loop_count++;
   }
   while( (!intersects ) && (StepTaken < CurrentProposedStepLength) 
                         && ( do_loop_count < GetMaxLoopCount() ) );
@@ -265,6 +282,15 @@ G4PropagatorInField::
               - End_PointAndTangent.CurveS() << endl;
   }
 #endif
+
+  // In particular anomalous cases, we can get repeated zero steps
+  //   In order to correct this efficiently, we identify these cases
+  //   and only take corrective action when they occur.
+  // 
+  if( TruePathLength == 0.0 )
+    fNoZeroStep++;
+  else
+    fNoZeroStep= 0;
 
   return TruePathLength;
 
@@ -337,12 +363,11 @@ G4PropagatorInField::LocateIntersectionPoint(
 					    this->GetEpsilonStep() );
 
     //  The above function is the most difficult part ...
-    // 
-    //   Another approach would be for the curved true path 
-    //  to be an object and this should be a member function.
-    //  -> The Curve Start and End point would not be needed as arguments.
     //        
     G4ThreeVector CurrentF_Point= ApproxIntersecPointV.Position();
+      // fMidPoint_CurveLen_of_LastAttempt = 
+      //                         ApproxIntersecPointV.  GetCurveLength() -
+      //                         CurrentA_PointVelocity.GetCurveLength(); 
 
     // First check whether EF is small - then F is a good approx. point 
     //  
@@ -477,6 +502,7 @@ G4PropagatorInField::LocateIntersectionPoint(
 	  GetChordFinder()->GetIntegrationDriver()
 	    ->AccurateAdvance(newEndpoint, curveDist, GetEpsilonStep() );
 	  CurrentB_PointVelocity= newEndpoint;
+#ifdef G4DEBUG
 	  G4cerr << "G4PropagatorInField::LocateIntersectionPoint: " 
 		 << "  Warning: Integration inaccuracy requires an adjustment in the step's endpoint " 
 		 << "   Two mid-points are further apart than their curve length difference" 
@@ -484,6 +510,7 @@ G4PropagatorInField::LocateIntersectionPoint(
 		 << "   Dist = "       << sqrt(linDistSq)
 		 << " curve length = " << curveDist
 		 << endl; 
+#endif
        }
        if( curveDist < 0.0 ) {
 	  G4Exception("G4PropagatorInField::LocateIntersectionPoint : the final curve point is not further along than the original.");
@@ -528,7 +555,8 @@ void G4PropagatorInField::printStatus(
       
     if( (stepNo == 0) && (verboseLevel <= 3) )
     {
-       G4cout.precision(3);
+       static G4int noPrecision= 4;
+       G4cout.precision(noPrecision);
        // G4cout.setf(ios_base::fixed,ios_base::floatfield);
        G4cout << setw( 6)  << " " 
 	      << setw( 25) << " Current Position  and  Direction" << " "
@@ -546,14 +574,14 @@ void G4PropagatorInField::printStatus(
             << setw(18) << "NextVolume" << " "
             << endl;
         // Recurse to print the start values 
-        printStatus( CurrentFT,   CurrentFT,   // 
+        printStatus( StartFT,   StartFT,   // 
                  -1.0, safety,  -1, 0);     //  startVolume);
     }
 
     if( verboseLevel <= 3 )
     {
        G4cout.precision(3);
-       if( stepNo < 0)
+       if( stepNo >= 0)
  	  G4cout << setw( 5) << stepNo << " ";
        else
 	  G4cout << setw( 5) << "Start" << " ";
