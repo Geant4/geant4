@@ -21,6 +21,7 @@
 #include "G4WatcherGun.hh"
 
 #include "vector"
+#include "G4ThreeVector.hh"
 
 typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 typedef G4std::vector<G4InuclNuclei>::iterator nucleiIterator;
@@ -30,7 +31,7 @@ enum particleType { nuclei = 0, proton = 1, neutron = 2, pionPlus = 3, pionMinus
 G4int nCollisions = 10;      // collisions to be generated
 G4int  bulletType = proton;    // bullet particle
 G4double     momZ = 160;      // momentum in z-direction
-G4double        N = 27.0;      // target atomic weight Al
+G4double        A = 27.0;      // target atomic weight Al
 G4double        Z = 13.0;      // target atomic number
 
 G4CollisionOutput output;
@@ -53,19 +54,19 @@ int main(int argc, char **argv ) {
   nCollisions =           (argc > 1) ? atoi(argv[1]) : nCollisions;
   bulletType  =           (argc > 2) ? atoi(argv[2]) : proton;
   momZ        = G4double(((argc > 3) ? atoi(argv[3]) : momZ)) / GeV;
-  N           = G4double(((argc > 4) ? atoi(argv[4]) : N));
+  A           = G4double(((argc > 4) ? atoi(argv[4]) : A));
   Z           = G4double(((argc > 5) ? atoi(argv[5]) : Z));
 
   if (verboseLevel > 1) {
     G4cout << " nCollisions " << nCollisions << G4endl;
     G4cout << "  bulletType " << bulletType  << G4endl;
     G4cout << "        momZ " << momZ        << G4endl;
-    G4cout << "           N " << N           << G4endl;
+    G4cout << "           A " << A           << G4endl;
     G4cout << "           Z " << Z           << G4endl;
   }
 
-  //testINC(nCollisions, bulletType, momZ, N, Z);     // Only INC model  
-  testINCAll(nCollisions, bulletType, momZ, N, Z);  // INC, pre-eq, evap, fission
+  //testINC(nCollisions, bulletType, momZ, A, Z);     // Only INC model  
+  testINCAll(nCollisions, bulletType, momZ, A, Z);  // INC, pre-eq, evap, fission
  
   //testINCEvap(); // INC and evaporation 
   test();        // misc. testing
@@ -84,7 +85,7 @@ G4int testINCEvap() {
   return 0;
 };
 
-G4int testINC(G4int nCollisions, G4int bulletType, G4double momZ, G4double N, G4double Z) {
+G4int testINC(G4int nCollisions, G4int bulletType, G4double momZ, G4double A, G4double Z) {
   G4int verboseLevel = 1; // eguals 1 for data file production, 2 for testing, 3 all
 
   if (verboseLevel > 1) {
@@ -98,7 +99,7 @@ G4int testINC(G4int nCollisions, G4int bulletType, G4double momZ, G4double N, G4
   // Set target
   G4std::vector<G4double> targetMomentum(4, 0.0);
 
-  G4InuclNuclei * target = new G4InuclNuclei(0.0, N, Z);
+  G4InuclNuclei * target = new G4InuclNuclei(0.0, A, Z);
   target->setEnergy();
 
   // Resigister collider
@@ -131,7 +132,7 @@ G4int testINC(G4int nCollisions, G4int bulletType, G4double momZ, G4double N, G4
   return 0;
 };
 
-G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double N, G4double Z) {
+G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A, G4double Z) {
 
   G4int verboseLevel = 1;
 
@@ -149,6 +150,8 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double N,
     // Colliders initialisation
     G4ElementaryParticleCollider*   colep = new G4ElementaryParticleCollider;
     G4IntraNucleiCascader*        cascade = new G4IntraNucleiCascader; // the actual cascade
+    cascade->setInteractionCase(1); // Interaction type is particle with nuclei.
+
     G4NonEquilibriumEvaporator*     noneq = new G4NonEquilibriumEvaporator;
     G4EquilibriumEvaporator*         eqil = new G4EquilibriumEvaporator;
     G4Fissioner*                     fiss = new G4Fissioner;
@@ -167,7 +170,7 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double N,
 
     G4InuclParticle* bull = new G4InuclElementaryParticle(momZ, bulletType);  
 
-    G4InuclNuclei* targ = new G4InuclNuclei(0.0, N, Z);
+    G4InuclNuclei* targ = new G4InuclNuclei(0.0, A, Z);
     targ->setEnergy(); 
 
     if (verboseLevel > 2) {
@@ -181,10 +184,22 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double N,
       }
 
       output = collider->collide(bull, targ); // standard method
-      printData(i);
+      G4int p = printData(i);
+      G4cout << p << G4endl;
     }
 
+    delete bull;
+    delete targ;
+
+    delete colep;
+    delete cascade; 
+    delete noneq;
+    delete eqil;
+    delete fiss;
+    delete bigb;
+    delete collider;
   }
+
   return 0;
 };
 
@@ -203,12 +218,19 @@ G4int printData(G4int i) {
 
   if(!nucleiFragments.empty()) { 
     nucleiIterator ifrag;
-    G4std::vector<G4double> mom(3);
-
+    
+    
     for(ifrag = nucleiFragments.begin(); ifrag != nucleiFragments.end(); ifrag++) {
-      mom = ifrag->getMomentum();
+      G4std::vector<G4double> m = ifrag->getMomentum();
+      G4ThreeVector mom(m[1], m[2], m[3]);    
       G4double ekin = ifrag->getKineticEnergy() * GeV;
-      G4int type = 0; // ::: fix
+
+      G4int type = 0; // :::
+
+      if (verboseLevel > 2) {
+	G4cout << " Fragment mass: " << ifrag->getMass()  << G4endl;
+        G4cout << " Momentum magnitude: " << mom.mag() << G4endl;
+      }
 
       G4double fEx = ifrag->getExitationEnergyInGeV();
       G4int fA = G4int(ifrag->getA());
@@ -229,9 +251,9 @@ G4int printData(G4int i) {
 	  setw(6)  << i            << 
 	  setw(6)  << type         << 
 	  setw(11) << ekin         << 
+	  setw(11) << mom[0] * GeV << 
 	  setw(11) << mom[1] * GeV << 
 	  setw(11) << mom[2] * GeV << 
-	  setw(11) << mom[3] * GeV << 
 	  setw(13) << fA           << 
 	  setw(13) << fZ           << 
 	  setw(13) << fEx          << G4endl;
@@ -255,9 +277,9 @@ G4int printData(G4int i) {
 	  setw(6)  << i            << 
 	  setw(6)  << type         << 
 	  setw(11) << ekin         << 
+	  setw(11) << mom[0] * GeV << 
 	  setw(11) << mom[1] * GeV << 
 	  setw(11) << mom[2] * GeV << 
-	  setw(11) << mom[3] * GeV << 
 	  setw(13) << 0            << 
 	  setw(13) << 0            << 
 	  setw(13) << 0.0          << G4endl;
