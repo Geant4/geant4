@@ -221,7 +221,8 @@ setenv G4VIS_USE_OPACS             1
 setenv OCONFIG HP-UX-aCC
 source /lal/OPACS/v3/setup.csh
 # Else :
-setenv XENVIRONMENT   $G4INSTALL/tests/test201/test201.xrm
+#setenv XENVIRONMENT   $G4INSTALL/tests/test201/test201.xrm
+setenv XENVIRONMENT   g4.xrm
 setenv PATH "${PATH}:/lal/DAWN/3.72b/HP-UX-aCC"
 setenv CPPVERBOSE 1
 set prompt='g4-aleph> ' 
@@ -269,7 +270,8 @@ setenv OIVHOME        /lal/OpenInventor/2.5
 setenv HEPVISHOME     /projects/HEPVis
 setenv OIVFLAGS       "-I$OIVHOME/include -I$HEPVISHOME/include"
 setenv OIVLIBS        "-L$HEPVISHOME/OSF1-cxx-TGS -lHEPVis -L$OIVHOME/lib -lInventorXt -lInventor -limage"
-setenv XENVIRONMENT   $OIVHOME/app-defaults/Inventor
+#setenv XENVIRONMENT   $OIVHOME/app-defaults/Inventor
+setenv XENVIRONMENT   g4.xrm
 # OPACS :
 setenv G4UI_BUILD_WO_SESSION       1
 setenv G4VIS_BUILD_OPACS_DRIVER    1
@@ -327,7 +329,8 @@ setenv G4VIS_USE_OPACS             1
 source /lal/OPACS/v3/setup.csh
 setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$OIVHOME/Linux-gxx:$HEPVISHOME/Linux-gxx-SF"
 # Else :
-setenv XENVIRONMENT   $G4INSTALL/tests/test201/test201.xrm
+#setenv XENVIRONMENT   $G4INSTALL/tests/test201/test201.xrm
+setenv XENVIRONMENT   g4.xrm
 setenv PATH "${PATH}:/lal/DAWN/3.72b/Linux-egcs"
 setenv CPPVERBOSE 1
 set prompt='g4-lx1> ' 
