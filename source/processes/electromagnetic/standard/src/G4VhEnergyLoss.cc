@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.cc,v 1.19 2001-09-10 14:04:34 urban Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.20 2001-09-11 07:30:11 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -595,8 +595,7 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
         //   assuming an 1/E**2 delta spectrum
 
         G4double deldedx=cN*aMaterial->GetDensity()*
-                         ((E+mass)*(E+mass)*log(Tc/T0)/(E*(E+mass))-
-                          0.5*(Tc-T0)/Tmax) ;
+                         ((E+mass)*(E+mass)*log(Tc/T0)/(E*(E+mass))) ;
         G4double delToverTc=1.-T0/Tc ;
         G4double N = G4int(deldedx*fragment*delToverTc/(T0*log(Tc/T0))+0.5) ;
         if(N > Ndeltamax) N = Ndeltamax ;
@@ -614,7 +613,7 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
         if(N > 0)
         {
           G4double Tkin,Etot,P,T,p,costheta,sintheta,phi,dirx,diry,dirz,
-                   Pnew,delToverTc,urandom;
+                   Pnew,urandom;
 	  //delTkin,delLoss,rate,
           //G4StepPoint *point ;
   

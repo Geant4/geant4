@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeEnergyLoss.cc,v 1.14 2001-08-06 11:48:49 maire Exp $
+// $Id: G4VeEnergyLoss.cc,v 1.15 2001-09-11 07:29:35 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 
@@ -35,6 +35,7 @@
 // 23/01/01  bug fixed in AlongStepDoIt , L.Urban
 // 27/03/01 : commented out the printing of subcutoff energies
 // 28/05/01  V.Ivanchenko minor changes to provide ANSI -wall compilation 
+// 11/09/01  minor correction in 'subcutoff' delta generation, L.Urban
 // --------------------------------------------------------------
 
  
@@ -92,8 +93,7 @@ G4VeEnergyLoss::G4VeEnergyLoss(const G4String& processName)
      lastCharge(0.),
      theDEDXTable(0),
      linLossLimit(0.05),
-     c1N(2.86e-23*MeV*mm*mm),
-     c2N(c1N*MeV/10.),
+     cN(0.077*MeV*cm2/g),
      Ndeltamax(100)
 {}
 
@@ -490,8 +490,15 @@ G4VParticleChange* G4VeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
       if(fragment>0.)
       {
         // compute nb of delta rays to be generated
-        G4int N=int(fragment*(c1N*(1.-T0/Tc)+c2N/E)*
-                (aMaterial->GetTotNbOfElectPerVolume())/T0+0.5) ;
+        // from the de/dx formula (approximately)
+        // and assuming an 1/T**2 delta energy spectrum
+
+        G4double delToverTc=1.-T0/Tc ;
+        G4double deldedx=cN*aMaterial->GetDensity()*
+                         ((E+electron_mass_c2)*(E+electron_mass_c2)*
+                         log(Tc/T0)/(E*(E+electron_mass_c2))) ;
+        G4int N=G4int(deldedx*fragment*delToverTc/(T0*log(Tc/T0))+0.5) ;
+
         if(N > Ndeltamax)
            N = Ndeltamax ;
         G4double Px,Py,Pz ;
@@ -507,7 +514,7 @@ G4VParticleChange* G4VeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
         if(N > 0)
         {
           G4double Tkin,Etot,P,T,p,costheta,sintheta,phi,dirx,diry,dirz,
-                   Pnew,delToverTc,sumT,urandom ;
+                   Pnew,sumT,urandom ;
           //delTkin,delLoss,rate,
           //G4StepPoint *point ;
    

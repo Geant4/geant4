@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeEnergyLoss.hh,v 1.7 2001-08-06 11:48:48 maire Exp $
+// $Id: G4VeEnergyLoss.hh,v 1.8 2001-09-11 07:29:34 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -156,7 +156,7 @@ class G4VeEnergyLoss : public G4VEnergyLoss
 
     G4double linLossLimit ;               //
 
-    G4double c1N,c2N ;                   // coeffs to compute nb of deltas
+    G4double cN ;                         // coeffs to compute nb of deltas
     G4int Ndeltamax ;                    // upper limit for nb of subcutoff
                                          // delta rays in one step
     
