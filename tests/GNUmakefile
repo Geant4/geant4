@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.42 2002-06-14 11:38:45 gcosmo Exp $
+# $Id: GNUmakefile,v 1.43 2002-06-25 14:34:19 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -17,7 +17,7 @@ PERSISTENCY += 01 02
 
 # Symbolic links to extended electromagnetic examples using test501, etc...
 ELECTROMAGNETIC += 1 2 3 4 5 ## Awaiting description.
-# ELECTROMAGNETIC += 6 ## Low energy electromagnetic processes (moved to lowenergy).
+ELECTROMAGNETIC += 6 ## Tests GammaConversionToMuons EM process.
 ELECTROMAGNETIC += 8 10 ## Transistion radiation and PAI (photoabsorption
                        ## ionisation) model.
 
