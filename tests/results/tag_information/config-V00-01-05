@@ -1,1 +1,6 @@
-
+- binmake.gmk: added path to HEPNumerics/include which was missing.
+- architecture.gmk, interactivity.gmk: introduced
+  "G4_OPACS_WIDGET_SET lesstif" logic to handle the case
+  of using, on Linux, the bugged lesstif with the non bugged OPACS.
+- Introduced fixes for shared library setup. Modified files:
+  architecture.gmk, common.gmk, globlib.gmk, makeshlib.sh.
