@@ -21,49 +21,47 @@
 // ********************************************************************
 //
 //
-// $Id: ProcessesCount.hh,v 1.9 2003-10-06 10:02:25 maire Exp $
+// $Id: PrimaryGeneratorAction.hh,v 1.1 2003-10-06 10:02:25 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// 08.03.01 Hisaya: adapted for STL   
-// 26.10.98 mma   : first version
+// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef ProcessesCount_HH
-#define ProcessesCount_HH
+#ifndef PrimaryGeneratorAction_h
+#define PrimaryGeneratorAction_h 1
 
+#include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
-#include <vector>
+
+class G4ParticleGun;
+class G4Event;
+class DetectorConstruction;
+class PrimaryGeneratorMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class OneProcessCount
+class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-public:
-    OneProcessCount(G4String name) {Name=name; Counter=0;};
-   ~OneProcessCount() {};
-   
-public:
-    G4String      GetName()       {return Name;};
-    G4int         GetCounter()    {return Counter;};
-    void          Count()         {Counter++;};
-    
-private:
-    G4String Name;            // process name
-    G4int    Counter;         // process counter
+  public:
+    PrimaryGeneratorAction(DetectorConstruction*);    
+   ~PrimaryGeneratorAction();
+
+  public:
+    void SetDefaultKinematic(G4int);
+    void SetRndmBeam(G4double val)  {rndmBeam = val;}   
+    void GeneratePrimaries(G4Event*);
+
+  private:
+    G4ParticleGun*                particleGun;
+    DetectorConstruction*      Detector;
+    G4double                      rndmBeam;       
+    PrimaryGeneratorMessenger* gunMessenger;     
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-typedef std::vector<OneProcessCount*> ProcessesCount;
-
 #endif
-
-
-
-
 
 

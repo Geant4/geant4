@@ -21,49 +21,35 @@
 // ********************************************************************
 //
 //
-// $Id: ProcessesCount.hh,v 1.9 2003-10-06 10:02:25 maire Exp $
+// $Id: SteppingVerbose.hh,v 1.1 2003-10-06 10:02:25 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+//   This class manages the verbose outputs in G4SteppingManager. 
+//   It inherits from G4SteppingVerbose.
+//   It shows how to extract informations during the tracking of a particle.
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// 08.03.01 Hisaya: adapted for STL   
-// 26.10.98 mma   : first version
+#ifndef SteppingVerbose_h
+#define SteppingVerbose_h 1
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#ifndef ProcessesCount_HH
-#define ProcessesCount_HH
-
-#include "globals.hh"
-#include <vector>
+#include "G4SteppingVerbose.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class OneProcessCount
-{
-public:
-    OneProcessCount(G4String name) {Name=name; Counter=0;};
-   ~OneProcessCount() {};
-   
-public:
-    G4String      GetName()       {return Name;};
-    G4int         GetCounter()    {return Counter;};
-    void          Count()         {Counter++;};
-    
-private:
-    G4String Name;            // process name
-    G4int    Counter;         // process counter
+class SteppingVerbose : public G4SteppingVerbose {
+
+public:   
+
+  SteppingVerbose();
+ ~SteppingVerbose();
+
+  void StepInfo();
+  void TrackingStarted();
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-typedef std::vector<OneProcessCount*> ProcessesCount;
-
 #endif
-
-
-
-
-
-

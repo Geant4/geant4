@@ -21,46 +21,42 @@
 // ********************************************************************
 //
 //
-// $Id: ProcessesCount.hh,v 1.9 2003-10-06 10:02:25 maire Exp $
+// $Id: PhysListParticles.hh,v 1.1 2003-10-06 10:02:25 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// 08.03.01 Hisaya: adapted for STL   
-// 26.10.98 mma   : first version
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef ProcessesCount_HH
-#define ProcessesCount_HH
+#ifndef PhysListParticles_h
+#define PhysListParticles_h 1
 
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
-#include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class OneProcessCount
+class PhysListParticles : public G4VPhysicsConstructor
 {
-public:
-    OneProcessCount(G4String name) {Name=name; Counter=0;};
-   ~OneProcessCount() {};
-   
-public:
-    G4String      GetName()       {return Name;};
-    G4int         GetCounter()    {return Counter;};
-    void          Count()         {Counter++;};
-    
-private:
-    G4String Name;            // process name
-    G4int    Counter;         // process counter
+  public: 
+    PhysListParticles(const G4String& name = "particles");
+   ~PhysListParticles();
+
+  public: 
+    // This method will be invoked in the Construct() method. 
+    // each particle type will be instantiated
+    void ConstructParticle();
+ 
+    // This method is dummy.
+    void ConstructProcess() {};
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-typedef std::vector<OneProcessCount*> ProcessesCount;
-
 #endif
+
+
 
 
 

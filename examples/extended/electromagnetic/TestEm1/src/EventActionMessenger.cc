@@ -21,49 +21,59 @@
 // ********************************************************************
 //
 //
-// $Id: ProcessesCount.hh,v 1.9 2003-10-06 10:02:25 maire Exp $
+// $Id: EventActionMessenger.cc,v 1.1 2003-10-06 10:02:32 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// 08.03.01 Hisaya: adapted for STL   
-// 26.10.98 mma   : first version
+// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef ProcessesCount_HH
-#define ProcessesCount_HH
+#include "EventActionMessenger.hh"
 
-#include "globals.hh"
-#include <vector>
+#include "EventAction.hh"
+#include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithAnInteger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class OneProcessCount
+EventActionMessenger::EventActionMessenger(EventAction* EvAct)
+:eventAction(EvAct)
+{ 
+  DrawCmd = new G4UIcmdWithAString("/testem/event/drawTracks",this);
+  DrawCmd->SetGuidance("Draw the tracks in the event");
+  DrawCmd->SetGuidance("  Choice : none,charged, all");
+  DrawCmd->SetParameterName("choice",true);
+  DrawCmd->SetDefaultValue("all");
+  DrawCmd->SetCandidates("none charged all");
+  DrawCmd->AvailableForStates(G4State_Idle);
+  
+  PrintCmd = new G4UIcmdWithAnInteger("/testem/event/printModulo",this);
+  PrintCmd->SetGuidance("Print events modulo n");
+  PrintCmd->SetParameterName("EventNb",false);
+  PrintCmd->SetRange("EventNb>0");
+  PrintCmd->AvailableForStates(G4State_Idle);      
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+EventActionMessenger::~EventActionMessenger()
 {
-public:
-    OneProcessCount(G4String name) {Name=name; Counter=0;};
-   ~OneProcessCount() {};
-   
-public:
-    G4String      GetName()       {return Name;};
-    G4int         GetCounter()    {return Counter;};
-    void          Count()         {Counter++;};
-    
-private:
-    G4String Name;            // process name
-    G4int    Counter;         // process counter
-};
+  delete DrawCmd;
+  delete PrintCmd;   
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-typedef std::vector<OneProcessCount*> ProcessesCount;
+void EventActionMessenger::SetNewValue(G4UIcommand* command,
+                                          G4String newValue)
+{ 
+  if(command == DrawCmd)
+    {eventAction->SetDrawFlag(newValue);}
+    
+  if(command == PrintCmd)
+    {eventAction->SetPrintModulo(PrintCmd->GetNewIntValue(newValue));}           
+   
+}
 
-#endif
-
-
-
-
-
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

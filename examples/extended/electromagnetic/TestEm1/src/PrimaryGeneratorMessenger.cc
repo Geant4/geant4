@@ -21,49 +21,60 @@
 // ********************************************************************
 //
 //
-// $Id: ProcessesCount.hh,v 1.9 2003-10-06 10:02:25 maire Exp $
+// $Id: PrimaryGeneratorMessenger.cc,v 1.1 2003-10-06 10:02:33 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// 08.03.01 Hisaya: adapted for STL   
-// 26.10.98 mma   : first version
+// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef ProcessesCount_HH
-#define ProcessesCount_HH
+#include "PrimaryGeneratorMessenger.hh"
 
-#include "globals.hh"
-#include <vector>
+#include "PrimaryGeneratorAction.hh"
+#include "G4UIcmdWithAnInteger.hh"
+#include "G4UIcmdWithADouble.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class OneProcessCount
+PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
+                                             PrimaryGeneratorAction* Gun)
+:Action(Gun)
+{ 
+  DefaultCmd = new G4UIcmdWithAnInteger("/testem/gun/setDefault",this);
+  DefaultCmd->SetGuidance("set/reset kinematic defined in PrimaryGenerator");
+  DefaultCmd->SetGuidance("0=boxCenter, else=frontFace");
+  DefaultCmd->SetParameterName("position",true);
+  DefaultCmd->SetDefaultValue(0);
+  DefaultCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  
+  RndmCmd = new G4UIcmdWithADouble("/testem/gun/rndm",this);
+  RndmCmd->SetGuidance("random lateral extension on the beam");
+  RndmCmd->SetGuidance("in fraction of 0.5*sizeYZ");
+  RndmCmd->SetParameterName("rBeam",false);
+  RndmCmd->SetRange("rBeam>=0.&&rBeam<=1.");
+  RndmCmd->AvailableForStates(G4State_Idle);  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
 {
-public:
-    OneProcessCount(G4String name) {Name=name; Counter=0;};
-   ~OneProcessCount() {};
-   
-public:
-    G4String      GetName()       {return Name;};
-    G4int         GetCounter()    {return Counter;};
-    void          Count()         {Counter++;};
-    
-private:
-    G4String Name;            // process name
-    G4int    Counter;         // process counter
-};
+  delete DefaultCmd;
+  delete RndmCmd;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-typedef std::vector<OneProcessCount*> ProcessesCount;
+void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
+                                               G4String newValue)
+{ 
+  if (command == DefaultCmd)
+   {Action->SetDefaultKinematic(DefaultCmd->GetNewIntValue(newValue));}
+   
+  if (command == RndmCmd)
+   {Action->SetRndmBeam(RndmCmd->GetNewDoubleValue(newValue));}   
+}
 
-#endif
-
-
-
-
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

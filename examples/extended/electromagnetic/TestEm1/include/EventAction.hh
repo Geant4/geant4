@@ -21,49 +21,49 @@
 // ********************************************************************
 //
 //
-// $Id: ProcessesCount.hh,v 1.9 2003-10-06 10:02:25 maire Exp $
+// $Id: EventAction.hh,v 1.1 2003-10-06 10:02:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// 08.03.01 Hisaya: adapted for STL   
-// 26.10.98 mma   : first version
+// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef ProcessesCount_HH
-#define ProcessesCount_HH
+#ifndef EventAction_h
+#define EventAction_h 1
 
+#include "G4UserEventAction.hh"
 #include "globals.hh"
-#include <vector>
+
+class EventActionMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class OneProcessCount
+class EventAction : public G4UserEventAction
 {
-public:
-    OneProcessCount(G4String name) {Name=name; Counter=0;};
-   ~OneProcessCount() {};
-   
-public:
-    G4String      GetName()       {return Name;};
-    G4int         GetCounter()    {return Counter;};
-    void          Count()         {Counter++;};
+  public:
+    EventAction();
+   ~EventAction();
+
+  public:
+    void BeginOfEventAction(const G4Event*);
+    void   EndOfEventAction(const G4Event*);
     
-private:
-    G4String Name;            // process name
-    G4int    Counter;         // process counter
+    void addEdep(G4double Edep)    {TotalEnergyDeposit += Edep;};      
+    G4double GetEnergyDeposit()    {return TotalEnergyDeposit;};    
+    void SetDrawFlag(G4String val) {drawFlag = val;};
+    void SetPrintModulo(G4int val) {printModulo = val;};
+            
+    
+  private:
+    G4double                  TotalEnergyDeposit;   
+    G4String                  drawFlag;
+    G4int                     printModulo;                    
+    EventActionMessenger*  eventMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-typedef std::vector<OneProcessCount*> ProcessesCount;
-
 #endif
 
-
-
-
-
-
+    

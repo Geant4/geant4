@@ -21,49 +21,54 @@
 // ********************************************************************
 //
 //
-// $Id: ProcessesCount.hh,v 1.9 2003-10-06 10:02:25 maire Exp $
+// $Id: SteppingAction.cc,v 1.1 2003-10-06 10:02:34 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// 08.03.01 Hisaya: adapted for STL   
-// 26.10.98 mma   : first version
+// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef ProcessesCount_HH
-#define ProcessesCount_HH
+#include "SteppingAction.hh"
+#include "RunAction.hh"
+#include "EventAction.hh"
 
-#include "globals.hh"
-#include <vector>
+#include "G4SteppingManager.hh"
+#include "G4VProcess.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class OneProcessCount
-{
-public:
-    OneProcessCount(G4String name) {Name=name; Counter=0;};
-   ~OneProcessCount() {};
-   
-public:
-    G4String      GetName()       {return Name;};
-    G4int         GetCounter()    {return Counter;};
-    void          Count()         {Counter++;};
-    
-private:
-    G4String Name;            // process name
-    G4int    Counter;         // process counter
-};
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-typedef std::vector<OneProcessCount*> ProcessesCount;
-
+#ifdef G4ANALYSIS_USE
+ #include "AIDA/IHistogram1D.h"
 #endif
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+SteppingAction::SteppingAction(RunAction* RuAct, EventAction* EvAct)
+:runAction(RuAct),eventAction(EvAct)
+{ }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+SteppingAction::~SteppingAction()
+{ }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void SteppingAction::UserSteppingAction(const G4Step* aStep)
+{
+  G4double EdepStep = aStep->GetTotalEnergyDeposit();
+  if (EdepStep > 0.) eventAction->addEdep(EdepStep);
+
+  const G4VProcess* process = aStep->GetPostStepPoint()->GetProcessDefinedStep();
+  if (process) runAction->CountProcesses(process->GetProcessName());
 
 
+#ifdef G4ANALYSIS_USE
+  G4double charge  = aStep->GetTrack()->GetDefinition()->GetPDGCharge();
+  G4double steplen = aStep->GetStepLength();
+  if (charge != 0.) runAction->GetHisto(2)->fill(steplen);
+#endif                    
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 

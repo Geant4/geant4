@@ -21,49 +21,73 @@
 // ********************************************************************
 //
 //
-// $Id: ProcessesCount.hh,v 1.9 2003-10-06 10:02:25 maire Exp $
+// $Id: DetectorConstruction.hh,v 1.1 2003-10-06 10:02:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// 08.03.01 Hisaya: adapted for STL   
-// 26.10.98 mma   : first version
+// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef ProcessesCount_HH
-#define ProcessesCount_HH
+#ifndef DetectorConstruction_h
+#define DetectorConstruction_h 1
 
+#include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
-#include <vector>
+
+class G4LogicalVolume;
+class G4Material;
+class G4UniformMagField;
+class DetectorMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class OneProcessCount
+class DetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
-    OneProcessCount(G4String name) {Name=name; Counter=0;};
-   ~OneProcessCount() {};
-   
-public:
-    G4String      GetName()       {return Name;};
-    G4int         GetCounter()    {return Counter;};
-    void          Count()         {Counter++;};
+  public:
+  
+    DetectorConstruction();
+   ~DetectorConstruction();
+
+  public:
+  
+     G4VPhysicalVolume* Construct();
+     
+     void SetSize     (G4double);              
+     void SetMaterial (G4String);            
+     void SetMagField (G4double);
+
+     void UpdateGeometry();
+     
+  public:
+  
+     const
+     G4VPhysicalVolume* GetWorld()      {return pBox;};           
+                    
+     G4double           GetSize()       {return BoxSize;};      
+     G4Material*        GetMaterial()   {return aMaterial;};
+     
+     void               PrintParameters();
+                       
+  private:
+  
+     G4VPhysicalVolume*    pBox;
+     G4LogicalVolume*      lBox;
+     
+     G4double              BoxSize;
+     G4Material*           aMaterial;     
+     G4UniformMagField*    magField;
+     
+     DetectorMessenger* detectorMessenger;
+
+  private:
     
-private:
-    G4String Name;            // process name
-    G4int    Counter;         // process counter
+     void               DefineMaterials();
+     G4VPhysicalVolume* ConstructVolumes();     
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-typedef std::vector<OneProcessCount*> ProcessesCount;
 
 #endif
-
-
-
-
-
 

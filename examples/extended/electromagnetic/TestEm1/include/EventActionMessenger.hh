@@ -21,49 +21,40 @@
 // ********************************************************************
 //
 //
-// $Id: ProcessesCount.hh,v 1.9 2003-10-06 10:02:25 maire Exp $
+// $Id: EventActionMessenger.hh,v 1.1 2003-10-06 10:02:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// 08.03.01 Hisaya: adapted for STL   
-// 26.10.98 mma   : first version
+// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef ProcessesCount_HH
-#define ProcessesCount_HH
+#ifndef EventActionMessenger_h
+#define EventActionMessenger_h 1
 
+#include "G4UImessenger.hh"
 #include "globals.hh"
-#include <vector>
+
+class EventAction;
+class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class OneProcessCount
+class EventActionMessenger: public G4UImessenger
 {
-public:
-    OneProcessCount(G4String name) {Name=name; Counter=0;};
-   ~OneProcessCount() {};
-   
-public:
-    G4String      GetName()       {return Name;};
-    G4int         GetCounter()    {return Counter;};
-    void          Count()         {Counter++;};
+  public:
+    EventActionMessenger(EventAction*);
+   ~EventActionMessenger();
     
-private:
-    G4String Name;            // process name
-    G4int    Counter;         // process counter
+    void SetNewValue(G4UIcommand*, G4String);
+    
+  private:
+    EventAction* eventAction;   
+    G4UIcmdWithAString* DrawCmd;
+    G4UIcmdWithAnInteger* PrintCmd;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-typedef std::vector<OneProcessCount*> ProcessesCount;
-
 #endif
-
-
-
-
-
-

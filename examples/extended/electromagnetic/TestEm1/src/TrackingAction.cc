@@ -20,50 +20,55 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+
 //
-// $Id: ProcessesCount.hh,v 1.9 2003-10-06 10:02:25 maire Exp $
+// $Id: TrackingAction.cc,v 1.1 2003-10-06 10:02:34 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// 08.03.01 Hisaya: adapted for STL   
-// 26.10.98 mma   : first version
+// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef ProcessesCount_HH
-#define ProcessesCount_HH
+#include "TrackingAction.hh"
+#include "RunAction.hh"
 
-#include "globals.hh"
-#include <vector>
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class OneProcessCount
-{
-public:
-    OneProcessCount(G4String name) {Name=name; Counter=0;};
-   ~OneProcessCount() {};
-   
-public:
-    G4String      GetName()       {return Name;};
-    G4int         GetCounter()    {return Counter;};
-    void          Count()         {Counter++;};
-    
-private:
-    G4String Name;            // process name
-    G4int    Counter;         // process counter
-};
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-typedef std::vector<OneProcessCount*> ProcessesCount;
-
+#include "G4Track.hh"
+ 
+#ifdef G4ANALYSIS_USE
+ #include "AIDA/IHistogram1D.h"
 #endif
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+TrackingAction::TrackingAction(RunAction* RunAct)
+:runAction(RunAct)
+{ }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
+{
+  //increase nb of processed tracks 
+  //count nb of steps of this track
+  
+  G4int   nbSteps = aTrack->GetCurrentStepNumber();
 
+  if (aTrack->GetDefinition()->GetPDGCharge() == 0.) {
+     runAction->CountTraks0(1); 
+     runAction->CountSteps0(nbSteps);
+  
+  } else {
+     runAction->CountTraks1(1); 
+     runAction->CountSteps1(nbSteps);
+
+#ifdef G4ANALYSIS_USE
+     G4double Trleng = aTrack->GetTrackLength();
+     runAction->GetHisto(0)->fill(Trleng);
+     runAction->GetHisto(1)->fill((float)nbSteps);
+#endif	
+  }    
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

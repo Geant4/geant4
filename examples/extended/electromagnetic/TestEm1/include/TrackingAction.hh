@@ -21,49 +21,33 @@
 // ********************************************************************
 //
 //
-// $Id: ProcessesCount.hh,v 1.9 2003-10-06 10:02:25 maire Exp $
+// $Id: TrackingAction.hh,v 1.1 2003-10-06 10:02:26 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// 08.03.01 Hisaya: adapted for STL   
-// 26.10.98 mma   : first version
-
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#ifndef TrackingAction_h
+#define TrackingAction_h 1
 
-#ifndef ProcessesCount_HH
-#define ProcessesCount_HH
+#include "G4UserTrackingAction.hh"
 
-#include "globals.hh"
-#include <vector>
+class RunAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class OneProcessCount
-{
-public:
-    OneProcessCount(G4String name) {Name=name; Counter=0;};
-   ~OneProcessCount() {};
+class TrackingAction : public G4UserTrackingAction {
+
+  public:  
+    TrackingAction(RunAction*);
+   ~TrackingAction() {};
    
-public:
-    G4String      GetName()       {return Name;};
-    G4int         GetCounter()    {return Counter;};
-    void          Count()         {Counter++;};
+    void PostUserTrackingAction(const G4Track*);
     
-private:
-    G4String Name;            // process name
-    G4int    Counter;         // process counter
+  private:
+    RunAction* runAction;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-typedef std::vector<OneProcessCount*> ProcessesCount;
-
 #endif
-
-
-
-
-
-

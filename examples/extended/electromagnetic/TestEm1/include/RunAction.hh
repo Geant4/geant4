@@ -21,49 +21,68 @@
 // ********************************************************************
 //
 //
-// $Id: ProcessesCount.hh,v 1.9 2003-10-06 10:02:25 maire Exp $
+// $Id: RunAction.hh,v 1.1 2003-10-06 10:02:25 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// 08.03.01 Hisaya: adapted for STL   
-// 26.10.98 mma   : first version
+// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef ProcessesCount_HH
-#define ProcessesCount_HH
+#ifndef RunAction_h
+#define RunAction_h 1
 
+#include "G4UserRunAction.hh"
+#include "ProcessesCount.hh"
 #include "globals.hh"
-#include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class OneProcessCount
+class G4Run;
+
+#ifdef G4ANALYSIS_USE
+namespace AIDA {
+ class ITree;
+ class IHistogram1D;
+} 
+#endif
+
+class RunAction : public G4UserRunAction
 {
-public:
-    OneProcessCount(G4String name) {Name=name; Counter=0;};
-   ~OneProcessCount() {};
-   
-public:
-    G4String      GetName()       {return Name;};
-    G4int         GetCounter()    {return Counter;};
-    void          Count()         {Counter++;};
+  public:
+    RunAction();
+   ~RunAction();
+
+  public:
+    void BeginOfRunAction(const G4Run*);
+    void   EndOfRunAction(const G4Run*);
     
-private:
-    G4String Name;            // process name
-    G4int    Counter;         // process counter
+    void CountTraks0(G4int nt) { NbOfTraks0 += nt;}
+    void CountTraks1(G4int nt) { NbOfTraks1 += nt;}
+    void CountSteps0(G4int ns) { NbOfSteps0 += ns;}
+    void CountSteps1(G4int ns) { NbOfSteps1 += ns;}
+    void CountProcesses(G4String);
+
+#ifdef G4ANALYSIS_USE   
+    AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}
+#endif
+           
+  private:  
+    void bookHisto();
+    void cleanHisto();
+          
+  private:
+    G4int NbOfTraks0, NbOfTraks1;
+    G4int NbOfSteps0, NbOfSteps1;
+    ProcessesCount*   ProcCounter;   
+
+#ifdef G4ANALYSIS_USE       
+    AIDA::ITree*        tree;
+    AIDA::IHistogram1D* histo[3];
+#endif                     
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-typedef std::vector<OneProcessCount*> ProcessesCount;
-
 #endif
-
-
-
-
-
 

@@ -21,49 +21,48 @@
 // ********************************************************************
 //
 //
-// $Id: ProcessesCount.hh,v 1.9 2003-10-06 10:02:25 maire Exp $
+// $Id: VisManager.hh,v 1.1 2003-10-06 10:02:26 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// 08.03.01 Hisaya: adapted for STL   
-// 26.10.98 mma   : first version
+// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef ProcessesCount_HH
-#define ProcessesCount_HH
+// Example Visualization Manager implementing virtual function
+//   RegisterGraphicsSystems.  Exploits C-pre-processor variables
+//   G4VIS_USE_DAWN, etc., which are set by the GNUmakefiles if
+//   environment variables of the same name are set.
 
-#include "globals.hh"
-#include <vector>
+// So all you have to do is set environment variables and compile and
+//   instantiate this in your main().
+
+// Alternatively, you can implement an empty function here and just
+//   register the systems you want in your main(), e.g.:
+//   G4VisManager* myVisManager = new MyVisManager;
+//   myVisManager -> RegisterGraphicsSystem (new MyGraphicsSystem);
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class OneProcessCount
-{
+#ifndef VisManager_h
+#define VisManager_h 1
+
+#include "G4VisManager.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class VisManager: public G4VisManager {
+
 public:
-    OneProcessCount(G4String name) {Name=name; Counter=0;};
-   ~OneProcessCount() {};
-   
-public:
-    G4String      GetName()       {return Name;};
-    G4int         GetCounter()    {return Counter;};
-    void          Count()         {Counter++;};
-    
+
+  VisManager ();
+
 private:
-    G4String Name;            // process name
-    G4int    Counter;         // process counter
+
+  void RegisterGraphicsSystems ();
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-typedef std::vector<OneProcessCount*> ProcessesCount;
-
 #endif
-
-
-
-
-
-

@@ -21,49 +21,60 @@
 // ********************************************************************
 //
 //
-// $Id: ProcessesCount.hh,v 1.9 2003-10-06 10:02:25 maire Exp $
+// $Id: PhysicsList.hh,v 1.1 2003-10-06 10:02:25 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// 08.03.01 Hisaya: adapted for STL   
-// 26.10.98 mma   : first version
-
+//
+// 14.10.02 (V.Ivanchenko) provide modular list on base of old PhysicsList
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef ProcessesCount_HH
-#define ProcessesCount_HH
+#ifndef PhysicsList_h
+#define PhysicsList_h 1
 
+#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
-#include <vector>
+
+class DetectorConstruction;
+class PhysicsListMessenger;
+class G4VPhysicsConstructor;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class OneProcessCount
+class PhysicsList: public G4VModularPhysicsList
 {
-public:
-    OneProcessCount(G4String name) {Name=name; Counter=0;};
-   ~OneProcessCount() {};
-   
-public:
-    G4String      GetName()       {return Name;};
-    G4int         GetCounter()    {return Counter;};
-    void          Count()         {Counter++;};
+  public:
+    PhysicsList(DetectorConstruction*);
+   ~PhysicsList();
+
+    void ConstructParticle();
+    void ConstructProcess();
+    void AddPhysicsList(const G4String& name);
+
+    void SetCuts();
+    void SetCutForGamma(G4double);
+    void SetCutForElectron(G4double);
+    void SetCutForPositron(G4double);
+    void GetRange(G4double);
+      
+  private:
+    G4double cutForGamma;
+    G4double cutForElectron;
+    G4double cutForPositron;
+    G4double currentDefaultCut;
     
-private:
-    G4String Name;            // process name
-    G4int    Counter;         // process counter
+    G4VPhysicsConstructor*  emPhysicsList;
+    G4VPhysicsConstructor*  generalPhysicsList;
+    G4VPhysicsConstructor*  particleList;
+    G4String emName;
+    
+    DetectorConstruction* pDet;
+    PhysicsListMessenger* pMessenger;         
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-typedef std::vector<OneProcessCount*> ProcessesCount;
-
 #endif
-
-
-
-
-
 
