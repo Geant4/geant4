@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test11.hadronic.exerciser.cc,v 1.14 2001-11-28 15:28:34 stesting Exp $
+// $Id: test11.hadronic.exerciser.cc,v 1.15 2001-11-28 15:41:39 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -82,7 +82,7 @@ int main (int argc, char** argv) {
     "\n# /run/verbose 2"
     "\n/run/particle/setCut 1 m"
     "\n/run/initialize"
-    "\n/gun/direction 1 0 0";
+    "\n/gun/direction 0 0 1";
 
   G4std::vector <G4String> particleNameList;
   particleNameList.push_back ("proton");
@@ -98,7 +98,6 @@ int main (int argc, char** argv) {
   energyList.push_back (10 * GeV);
 
   G4std::vector <G4String> materialNameList;
-  materialNameList.push_back ("U");
   materialNameList.push_back ("Pb");
   materialNameList.push_back ("Al");
   materialNameList.push_back ("Air");
