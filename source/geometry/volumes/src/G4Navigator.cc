@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.25 2002-01-21 22:04:35 japost Exp $
+// $Id: G4Navigator.cc,v 1.26 2002-04-02 12:54:03 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation  Paul Kent July 95/96
@@ -697,13 +697,12 @@ G4ThreeVector  G4Navigator::GetLocalExitNormal(G4bool* valid)
 {
   G4ThreeVector ExitNormal(0.,0.,0.);
 
-  if( fExitedMother ){
-     ExitNormal=fExitNormal;
-     *valid = true;
-     
-  }else if (EnteredDaughterVolume()) {
+  if (EnteredDaughterVolume()) {
      ExitNormal= -(fHistory.GetTopVolume()->GetLogicalVolume()
 			 ->GetSolid()->SurfaceNormal(fLastLocatedPointLocal));
+     *valid = true;
+  }else if( fExitedMother ){
+     ExitNormal=fExitNormal;
      *valid = true;
   }else{
      // We are not at a boundary.
