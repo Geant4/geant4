@@ -6,18 +6,7 @@
 // Date:         18/10/00
 // Author:       C Ferguson, F Lei, P Truscott
 // Organisation: University of Southampton / DERA
-// Customer:     ESA/DERA
-//
-// Detailed documenets on this code are available on
-//
-//    http://www.space.dera.gov.uk/space_env/gspm.html
-//
-//     these include 
-//                   User Requirement Document (URD)
-//                   Software Specification Document (SSD)
-//                   Software User Manual (SUM)
-//                   Saftware Verification and Validation Plan (SVVP)
-//                   and a Technical Note (TN) on the algorithms.
+// Customer:     ESA/ESTEC
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -164,7 +153,7 @@ void G4GeneralParticleSource::SetPosRot1(G4ThreeVector posrot1)
   Rotx = posrot1;
   if(verbosityLevel == 2)
     {
-      G4cout << "Vector x' " << Rotx << endl;
+      G4cout << "Vector x' " << Rotx << G4endl;
     }
   GenerateRotationMatrices();
 }
@@ -176,7 +165,7 @@ void G4GeneralParticleSource::SetPosRot2(G4ThreeVector posrot2)
   Roty = posrot2;
   if(verbosityLevel == 2)
     {
-      G4cout << "The vector in the x'-y' plane " << Roty << endl;
+      G4cout << "The vector in the x'-y' plane " << Roty << G4endl;
     }
   GenerateRotationMatrices();
 }
@@ -233,7 +222,7 @@ void G4GeneralParticleSource::GenerateRotationMatrices()
   Roty = Rotz.cross(Rotx); // y'
   if(verbosityLevel == 2)
     {
-      G4cout << "The new axes, x', y', z' " << Rotx << " " << Roty << " " << Rotz << endl;
+      G4cout << "The new axes, x', y', z' " << Rotx << " " << Roty << " " << Rotz << G4endl;
     }
 }
 
@@ -241,7 +230,7 @@ void G4GeneralParticleSource::ConfineSourceToVolume(G4String Vname)
 {
   VolName = Vname;
   if(verbosityLevel == 2)
-    G4cout << VolName << endl;
+    G4cout << VolName << G4endl;
   G4VPhysicalVolume *tempPV      = NULL;
   G4PhysicalVolumeStore *PVStore = 0;
   G4String theRequiredVolumeName = VolName;
@@ -249,12 +238,12 @@ void G4GeneralParticleSource::ConfineSourceToVolume(G4String Vname)
   G4int      i = 0;
   G4bool found = false;
   if(verbosityLevel == 2)
-    G4cout << PVStore->length() << endl;
+    G4cout << PVStore->length() << G4endl;
   while (!found && i<PVStore->length()) {
     tempPV = (*PVStore)[i];
     found  = tempPV->GetName() == theRequiredVolumeName;
     if(verbosityLevel == 2)
-      G4cout << i << " " << " " << tempPV->GetName() << " " << theRequiredVolumeName << " " << found << endl;
+      G4cout << i << " " << " " << tempPV->GetName() << " " << theRequiredVolumeName << " " << found << G4endl;
 
     if (!found)
       {i++;}
@@ -263,13 +252,13 @@ void G4GeneralParticleSource::ConfineSourceToVolume(G4String Vname)
   if(found == true)
     {
       if(verbosityLevel >= 1)
-	G4cout << "Volume " << VolName << " exists" << endl;
+	G4cout << "Volume " << VolName << " exists" << G4endl;
       Confine = true;
     }
   else
     {
-      G4cout << " **** Error: Volume does not exist **** " << endl;
-      G4cout << " Ignoring confine condition" << endl;
+      G4cout << " **** Error: Volume does not exist **** " << G4endl;
+      G4cout << " Ignoring confine condition" << G4endl;
       Confine = false;
       VolName = "NULL";
     }
@@ -283,7 +272,7 @@ void G4GeneralParticleSource::GeneratePointSource()
     particle_position = CentreCoords;
   else
     if(verbosityLevel >= 1)
-      G4cout << "Error SourcePosType is not set to Point" << endl;
+      G4cout << "Error SourcePosType is not set to Point" << G4endl;
 }
 
 void G4GeneralParticleSource::GeneratePointsInPlane()
@@ -296,7 +285,7 @@ void G4GeneralParticleSource::GeneratePointsInPlane()
   z = 0.;
 
   if(SourcePosType != "Plane" && verbosityLevel >= 1)
-    G4cout << "Error: SourcePosType is not Plane" << endl;
+    G4cout << "Error: SourcePosType is not Plane" << G4endl;
 
   // Private Method to create points in a plane
   if(Shape == "Circle")
@@ -354,13 +343,13 @@ void G4GeneralParticleSource::GeneratePointsInPlane()
       y = (y*2.*halfy) - halfy;
     }
   else
-    G4cout << "Shape not one of the plane types" << endl;
+    G4cout << "Shape not one of the plane types" << G4endl;
 
   // Apply Rotation Matrix
   // x * Rotx, y * Roty and z * Rotz
   if(verbosityLevel == 2)
     {
-      G4cout << "Raw position " << x << "," << y << "," << z << endl;
+      G4cout << "Raw position " << x << "," << y << "," << z << G4endl;
     }
   tempx = (x * Rotx.x()) + (y * Roty.x()) + (z * Rotz.x());
   tempy = (x * Rotx.y()) + (y * Roty.y()) + (z * Rotz.y());
@@ -376,9 +365,9 @@ void G4GeneralParticleSource::GeneratePointsInPlane()
     {
       if(verbosityLevel == 2)
 	{
-	  G4cout << "Rotated Position " << RandPos << endl;
+	  G4cout << "Rotated Position " << RandPos << G4endl;
 	}
-      G4cout << "Rotated and Translated position " << particle_position << endl;
+      G4cout << "Rotated and Translated position " << particle_position << G4endl;
     }
 
   // For Cosine-Law make SideRefVecs = to Rotation matrix vectors
@@ -400,7 +389,7 @@ void G4GeneralParticleSource::GeneratePointsInPlane()
     }
   if(verbosityLevel == 2)
     {
-      G4cout << "Reference vectors for cosine-law " << SideRefVec1 << " " << SideRefVec2 << " " << SideRefVec3 << endl;
+      G4cout << "Reference vectors for cosine-law " << SideRefVec1 << " " << SideRefVec2 << " " << SideRefVec3 << G4endl;
     }
 }
 
@@ -413,7 +402,7 @@ void G4GeneralParticleSource::GeneratePointsOnSurface()
   G4double tempx, tempy, tempz;
 
   if(SourcePosType != "Surface" && verbosityLevel >= 1)
-    G4cout << "Error SourcePosType not Surface" << endl;
+    G4cout << "Error SourcePosType not Surface" << G4endl;
 
   if(Shape == "Sphere")
     {
@@ -511,7 +500,7 @@ void G4GeneralParticleSource::GeneratePointsOnSurface()
 		 (coordz*coordz)/(halfz*halfz));
       
       if(fabs(lhs-1.) > 0.001 && verbosityLevel >= 1)
-	G4cout << "Error: theta, phi not really on ellipsoid" << endl;
+	G4cout << "Error: theta, phi not really on ellipsoid" << G4endl;
 
       // coordx, coordy and coordz are all positive
       G4double TestRandVar = G4UniformRand();
@@ -564,8 +553,8 @@ void G4GeneralParticleSource::GeneratePointsOnSurface()
       if(fabs(prob3 - (AreaLat/AreaTotal)) >= 0.001)
 	{
 	  if(verbosityLevel >= 1)
-	    G4cout << AreaLat/AreaTotal << " " << prob3<<endl;
-	  G4cout << "Error in prob3" << endl;
+	    G4cout << AreaLat/AreaTotal << " " << prob3<<G4endl;
+	  G4cout << "Error in prob3" << G4endl;
 	}
 
       // Decide surface to calculate point on.
@@ -639,7 +628,7 @@ void G4GeneralParticleSource::GeneratePointsOnSurface()
 	  SideRefVec3 = zdash;
 	}
       else
-	G4cout << "Error: testrand " << testrand << endl;
+	G4cout << "Error: testrand " << testrand << G4endl;
 
       RandPos.setX(x);
       RandPos.setY(y);
@@ -772,9 +761,9 @@ void G4GeneralParticleSource::GeneratePointsOnSurface()
 	}
       else
 	{
-	  G4cout << "Error: testrand out of range" << endl;
+	  G4cout << "Error: testrand out of range" << G4endl;
 	  if(verbosityLevel >= 1)
-	    G4cout << "testrand=" << testrand << " Probs[5]=" << Probs[5] <<endl;
+	    G4cout << "testrand=" << testrand << " Probs[5]=" << Probs[5] <<G4endl;
 	}
 
       RandPos.setX(x);
@@ -785,7 +774,7 @@ void G4GeneralParticleSource::GeneratePointsOnSurface()
   // Apply Rotation Matrix
   // x * Rotx, y * Roty and z * Rotz
   if(verbosityLevel == 2)
-    G4cout << "Raw position " << RandPos << endl;
+    G4cout << "Raw position " << RandPos << G4endl;
 
   x=(RandPos.x()*Rotx.x())+(RandPos.y()*Roty.x())+(RandPos.z()*Rotz.x());
   y=(RandPos.x()*Rotx.y())+(RandPos.y()*Roty.y())+(RandPos.z()*Rotz.y());
@@ -801,12 +790,12 @@ void G4GeneralParticleSource::GeneratePointsOnSurface()
   if(verbosityLevel >= 1)
     {
       if(verbosityLevel == 2)
-	G4cout << "Rotated position " << RandPos << endl;
-      G4cout << "Rotated and translated position " << particle_position << endl;
+	G4cout << "Rotated position " << RandPos << G4endl;
+      G4cout << "Rotated and translated position " << particle_position << G4endl;
     }
   if(verbosityLevel == 2)
     {
-      G4cout << "Reference vectors for cosine-law " << SideRefVec1 << " " << SideRefVec2 << " " << SideRefVec3 << endl;
+      G4cout << "Reference vectors for cosine-law " << SideRefVec1 << " " << SideRefVec2 << " " << SideRefVec3 << G4endl;
     }
 }
 
@@ -817,7 +806,7 @@ void G4GeneralParticleSource::GeneratePointsInVolume()
   G4double x, y, z;
 
   if(SourcePosType != "Volume" && verbosityLevel >= 1)
-    G4cout << "Error SourcePosType not Volume" << endl;
+    G4cout << "Error SourcePosType not Volume" << G4endl;
   //Private method to create points in a volume
   if(Shape == "Sphere")
     {
@@ -881,7 +870,7 @@ void G4GeneralParticleSource::GeneratePointsInVolume()
       z = z;
     }
   else
-    G4cout << "Error: Volume Shape Doesnt Exist" << endl;
+    G4cout << "Error: Volume Shape Doesnt Exist" << G4endl;
 
   RandPos.setX(x);
   RandPos.setY(y);
@@ -902,11 +891,11 @@ void G4GeneralParticleSource::GeneratePointsInVolume()
 
   if(verbosityLevel == 2)
     {
-      G4cout << "Raw position " << x << "," << y << "," << z << endl;
-      G4cout << "Rotated position " << RandPos << endl;
+      G4cout << "Raw position " << x << "," << y << "," << z << G4endl;
+      G4cout << "Rotated position " << RandPos << G4endl;
     }
   if(verbosityLevel >= 1)
-    G4cout << "Rotated and translated position " << particle_position << endl;
+    G4cout << "Rotated and translated position " << particle_position << G4endl;
 
   // Cosine-law (not a good idea to use this here)
   G4ThreeVector zdash(tempx,tempy,tempz);
@@ -919,7 +908,7 @@ void G4GeneralParticleSource::GeneratePointsInVolume()
 
   if(verbosityLevel == 2)
     {
-      G4cout << "Reference vectors for cosine-law " << SideRefVec1 << " " << SideRefVec2 << " " << SideRefVec3 << endl;
+      G4cout << "Reference vectors for cosine-law " << SideRefVec1 << " " << SideRefVec2 << " " << SideRefVec3 << G4endl;
     } 
 }
 
@@ -927,7 +916,7 @@ G4bool G4GeneralParticleSource::IsSourceConfined()
 {
   // Method to check point is within the volume specified
   if(Confine == false)
-    G4cout << "Error: Confine is false" << endl;
+    G4cout << "Error: Confine is false" << G4endl;
   G4ThreeVector null(0.,0.,0.);
   G4ThreeVector *ptr;
   ptr = &null;
@@ -940,7 +929,7 @@ G4bool G4GeneralParticleSource::IsSourceConfined()
   if(theVolName == VolName)
     {
       if(verbosityLevel >= 1)
-	G4cout << "Particle is in volume " << VolName << endl;
+	G4cout << "Particle is in volume " << VolName << G4endl;
       return(true);
     }
   else
@@ -952,7 +941,7 @@ G4bool G4GeneralParticleSource::IsSourceConfined()
 void G4GeneralParticleSource::SetAngDistType(G4String atype)
 {
   if(atype != "iso" && atype != "cos" && atype != "user")
-    G4cout << "Error, distribution must be iso, cos or user" << endl;
+    G4cout << "Error, distribution must be iso, cos or user" << G4endl;
   else
     AngDistType = atype;
 }
@@ -974,7 +963,7 @@ void G4GeneralParticleSource::DefineAngRefAxes(G4String refname, G4ThreeVector r
   AngRef2 = AngRef3.cross(AngRef1); // y'
   if(verbosityLevel == 2)
     {
-      G4cout << "Angular distribution rotation axes " << AngRef1 << " " << AngRef2 << " " << AngRef3 << endl;
+      G4cout << "Angular distribution rotation axes " << AngRef1 << " " << AngRef2 << " " << AngRef3 << G4endl;
     }
 }
 
@@ -1006,7 +995,7 @@ void G4GeneralParticleSource::UserDefAngTheta(G4ThreeVector input)
   thi = input.x();
   val = input.y();
   if(verbosityLevel >= 1)
-    G4cout << "In UserDefAngTheta" << endl;
+    G4cout << "In UserDefAngTheta" << G4endl;
   UDefThetaH.InsertValues(thi, val);
 }
 
@@ -1018,7 +1007,7 @@ void G4GeneralParticleSource::UserDefAngPhi(G4ThreeVector input)
   phhi = input.x();
   val = input.y();
   if(verbosityLevel >= 1)
-    G4cout << "In UserDefAngPhi" << endl;
+    G4cout << "In UserDefAngPhi" << G4endl;
   UDefPhiH.InsertValues(phhi, val); 
 }
 
@@ -1075,7 +1064,7 @@ void G4GeneralParticleSource::GenerateIsotropicFlux()
   // use particle position to calculate theta and phi - posthe and posphi
 
   G4double posthe, posphi;
-  //  G4cout << "particle_position " << particle_position << endl;
+  //  G4cout << "particle_position " << particle_position << G4endl;
   G4double tx, ty, tz, tt;
   tx = particle_position.x();
   ty = particle_position.y();
@@ -1084,15 +1073,15 @@ void G4GeneralParticleSource::GenerateIsotropicFlux()
   tx = tx/tt;
   ty = ty/tt;
   tz = tz/tt;
-  //  G4cout << "unit position " << tx << " " << ty << " " << tz << endl;
+  //  G4cout << "unit position " << tx << " " << ty << " " << tz << G4endl;
   posthe = acos(tz);
   posphi = acos(tx/sin(posthe));
-  //  G4cout << "Posthe and posphi " << posthe << " " << posphi << endl;
+  //  G4cout << "Posthe and posphi " << posthe << " " << posphi << G4endl;
   G4double finx, finy, finz;
   finx = (px*cos(posthe)*cos(posphi)) - (py*sin(posphi)) + (pz*sin(posthe)*cos(posphi));
   finy = (px*cos(posthe)*sin(posphi)) + (py*cos(posphi)) + (pz*sin(posthe)*sin(posphi));
   finz = (-px*sin(posthe)) + (pz*cos(posthe));
-  //  G4cout << "finx... " << finx << " " << finy << " " << finz << endl;
+  //  G4cout << "finx... " << finx << " " << finy << " " << finz << G4endl;
 
   particle_momentum_direction.setX(finx);
   particle_momentum_direction.setY(finy);
@@ -1100,7 +1089,7 @@ void G4GeneralParticleSource::GenerateIsotropicFlux()
 
   // particle_momentum_direction now holds unit momentum vector.
   if(verbosityLevel >= 1)
-    G4cout << "Generating isotropic vector: " << particle_momentum_direction << endl;
+    G4cout << "Generating isotropic vector: " << particle_momentum_direction << G4endl;
 }
 
 void G4GeneralParticleSource::GenerateCosineLawFlux()
@@ -1140,8 +1129,8 @@ void G4GeneralParticleSource::GenerateCosineLawFlux()
 
   if(verbosityLevel == 2)
     {
-      G4cout <<"SideRefVecs " <<SideRefVec1<<SideRefVec2<<SideRefVec3<<endl;
-      G4cout <<"Raw Unit vector "<<pxh<<","<<pyh<<","<<pzh<<endl;
+      G4cout <<"SideRefVecs " <<SideRefVec1<<SideRefVec2<<SideRefVec3<<G4endl;
+      G4cout <<"Raw Unit vector "<<pxh<<","<<pyh<<","<<pzh<<G4endl;
     }
   resultx = (pxh*SideRefVec1.x()) + (pyh*SideRefVec2.x()) + 
     (pzh*SideRefVec3.x());
@@ -1164,7 +1153,7 @@ void G4GeneralParticleSource::GenerateCosineLawFlux()
   // particle_momentum_direction now contains unit momentum vector.
   if(verbosityLevel >= 1)
     {
-      G4cout << "Resultant cosine-law unit momentum vector " << particle_momentum_direction << endl;
+      G4cout << "Resultant cosine-law unit momentum vector " << particle_momentum_direction << G4endl;
     }
 }
 
@@ -1173,7 +1162,7 @@ void G4GeneralParticleSource::GenerateUserDefFlux()
   G4double rndm, px, py, pz, pmag;
 
   if(UserDistType == "NULL")
-    G4cout << "Error: UserDistType undefined" << endl;
+    G4cout << "Error: UserDistType undefined" << G4endl;
   else if(UserDistType == "theta")
     {
       Theta = GenerateUserDefTheta();
@@ -1220,8 +1209,8 @@ void G4GeneralParticleSource::GenerateUserDefFlux()
 
       if(verbosityLevel == 2)
 	{
-	  G4cout <<"SideRefVecs " <<SideRefVec1<<SideRefVec2<<SideRefVec3<<endl;
-	  G4cout <<"Raw Unit vector "<<pxh<<","<<pyh<<","<<pzh<<endl;
+	  G4cout <<"SideRefVecs " <<SideRefVec1<<SideRefVec2<<SideRefVec3<<G4endl;
+	  G4cout <<"Raw Unit vector "<<pxh<<","<<pyh<<","<<pzh<<G4endl;
 	}
       G4double resultx = (pxh*SideRefVec1.x()) + (pyh*SideRefVec2.x()) + 
 	(pzh*SideRefVec3.x());
@@ -1245,7 +1234,7 @@ void G4GeneralParticleSource::GenerateUserDefFlux()
   // particle_momentum_direction now contains unit momentum vector.
   if(verbosityLevel >= 1)
     {
-      G4cout << "Final User Defined momentum vector " << particle_momentum_direction << endl;
+      G4cout << "Final User Defined momentum vector " << particle_momentum_direction << G4endl;
     }
 }
 
@@ -1256,8 +1245,8 @@ G4double G4GeneralParticleSource::GenerateUserDefTheta()
   if(UserDistType == "NULL" || UserDistType == "phi")
     {
       // No user defined theta distribution
-      G4cout << "Error ***********************" << endl;
-      G4cout << "UserDistType = " << UserDistType << endl;
+      G4cout << "Error ***********************" << G4endl;
+      G4cout << "UserDistType = " << UserDistType << G4endl;
     }
   else
     {
@@ -1301,8 +1290,8 @@ G4double G4GeneralParticleSource::GenerateUserDefPhi()
   if(UserDistType == "NULL" || UserDistType == "theta")
     {
       // No user defined phi distribution
-      G4cout << "Error ***********************" << endl;
-      G4cout << "UserDistType = " << UserDistType << endl;
+      G4cout << "Error ***********************" << G4endl;
+      G4cout << "UserDistType = " << UserDistType << G4endl;
     }
   else
     {
@@ -1393,9 +1382,9 @@ void G4GeneralParticleSource::UserEnergyHisto(G4ThreeVector input)
   ehi = input.x();
   val = input.y();
   if(verbosityLevel == 2)
-    G4cout << " " << ehi << " " << val << endl;
+    G4cout << " " << ehi << " " << val << G4endl;
   if(verbosityLevel == 2)
-    G4cout << "In UserEnergyHisto" << endl;
+    G4cout << "In UserEnergyHisto" << G4endl;
   UDefEnergyH.InsertValues(ehi, val);
   Emax = ehi;
 }
@@ -1406,7 +1395,7 @@ void G4GeneralParticleSource::ArbEnergyHisto(G4ThreeVector input)
   ehi = input.x();
   val = input.y();
   if(verbosityLevel == 2)
-    G4cout << "In ArbEnergyHisto" << endl;
+    G4cout << "In ArbEnergyHisto" << G4endl;
   ArbEnergyH.InsertValues(ehi, val);
 }
 
@@ -1416,7 +1405,7 @@ void G4GeneralParticleSource::EpnEnergyHisto(G4ThreeVector input)
   ehi = input.x();
   val = input.y();
   if(verbosityLevel == 2)
-    G4cout << "In EpnEnergyHisto" << endl;
+    G4cout << "In EpnEnergyHisto" << G4endl;
   EpnEnergyH.InsertValues(ehi, val);
   Emax = ehi;
   Epnflag = true;
@@ -1476,7 +1465,7 @@ void G4GeneralParticleSource::CalculateCdgSpectrum()
   while(i < n_par)
     {
       CDGhist[i+1] = CDGhist[i+1]/CDGhist[n_par];
-      //      G4cout << CDGhist[i] << CDGhist[n_par] << endl;
+      //      G4cout << CDGhist[i] << CDGhist[n_par] << G4endl;
       i++;
     }
 }
@@ -1525,7 +1514,7 @@ void G4GeneralParticleSource::InputEnergySpectra(G4bool value)
   // Allows user to specifiy spectrum is momentum
   EnergySpec = value; // false if momentum
   if(verbosityLevel == 2)
-    G4cout << "EnergySpec has value " << EnergySpec << endl;
+    G4cout << "EnergySpec has value " << EnergySpec << G4endl;
 }
 
 void G4GeneralParticleSource::InputDifferentialSpectra(G4bool value)
@@ -1533,13 +1522,13 @@ void G4GeneralParticleSource::InputDifferentialSpectra(G4bool value)
   // Allows user to specify integral or differential spectra
   DiffSpec = value; // true = differential, false = integral
   if(verbosityLevel == 2)
-    G4cout << "Diffspec has value " << DiffSpec << endl;
+    G4cout << "Diffspec has value " << DiffSpec << G4endl;
 }
 
 void G4GeneralParticleSource::ArbInterpolate(G4String IType)
 {
   if(EnergyDisType != "Arb")
-    G4cout << "Error: this is for arbitrary distributions" << endl;
+    G4cout << "Error: this is for arbitrary distributions" << G4endl;
   IntType = IType;
   G4int i=0;
 
@@ -1582,7 +1571,7 @@ void G4GeneralParticleSource::LinearInterpolation()
       // change currently stored values (emin etc) which are actually momenta
       // to energies.
       if(particle_definition == NULL)
-	G4cout << "Error: particle not defined" << endl;
+	G4cout << "Error: particle not defined" << G4endl;
       else
 	{
       // Apply Energy**2 = p**2c**2 + m0**2c**4
@@ -1629,23 +1618,23 @@ void G4GeneralParticleSource::LinearInterpolation()
       // calc gradient and intercept for each segment
       Arb_grad[i] = (Arb_y[i] - Arb_y[i-1]) / (Arb_x[i] - Arb_x[i-1]);
       if(verbosityLevel == 2)
-	G4cout << Arb_grad[i] << endl;
+	G4cout << Arb_grad[i] << G4endl;
       if(Arb_grad[i] > 0.)
 	{
 	  if(verbosityLevel == 2)
-	    G4cout << "Arb_grad is positive" << endl;
+	    G4cout << "Arb_grad is positive" << G4endl;
 	  Arb_cept[i] = Arb_y[i] - (Arb_grad[i] * Arb_x[i]);
 	}
       else if(Arb_grad[i] < 0.)
 	{
 	  if(verbosityLevel == 2)
-	    G4cout << "Arb_grad is negative" << endl;
+	    G4cout << "Arb_grad is negative" << G4endl;
 	  Arb_cept[i] = Arb_y[i] + (-Arb_grad[i] * Arb_x[i]);
 	}
       else
 	{
 	  if(verbosityLevel == 2)
-	    G4cout << "Arb_grad is 0." << endl;
+	    G4cout << "Arb_grad is 0." << G4endl;
 	  Arb_cept[i] = Arb_y[i];
 	}
 
@@ -1653,7 +1642,7 @@ void G4GeneralParticleSource::LinearInterpolation()
       Arb_Cum_Area[i] = Arb_Cum_Area[i-1] + Area_seg[i];
       sum = sum + Area_seg[i];
       if(verbosityLevel == 2)
-	G4cout << Arb_x[i] << Arb_y[i] << Area_seg[i] << sum << Arb_grad[i] << endl;
+	G4cout << Arb_x[i] << Arb_y[i] << Area_seg[i] << sum << Arb_grad[i] << G4endl;
       i++;
     }
 
@@ -1667,7 +1656,7 @@ void G4GeneralParticleSource::LinearInterpolation()
 
   if(verbosityLevel >= 1)
     {
-      G4cout << "Leaving LinearInterpolation" << endl;
+      G4cout << "Leaving LinearInterpolation" << G4endl;
       ArbEnergyH.DumpValues();
       IPDFArbEnergyH.DumpValues();
     }
@@ -1700,7 +1689,7 @@ void G4GeneralParticleSource::LogInterpolation()
       // change currently stored values (emin etc) which are actually momenta
       // to energies.
       if(particle_definition == NULL)
-	G4cout << "Error: particle not defined" << endl;
+	G4cout << "Error: particle not defined" << G4endl;
       else
 	{
       // Apply Energy**2 = p**2c**2 + m0**2c**4
@@ -1743,8 +1732,8 @@ void G4GeneralParticleSource::LogInterpolation()
   Area_seg[0] = 0.;
   if(Arb_x[0] <= 0. || Arb_y[0] <= 0.)
     {
-      G4cout << "You should not use log interpolation with points <= 0." << endl;
-      G4cout << "These will be changed to 1e-20, which may cause problems" << endl;
+      G4cout << "You should not use log interpolation with points <= 0." << G4endl;
+      G4cout << "These will be changed to 1e-20, which may cause problems" << G4endl;
       if(Arb_x[0] <= 0.)
 	Arb_x[0] = 1e-20;
       if(Arb_y[0] <= 0.)
@@ -1756,8 +1745,8 @@ void G4GeneralParticleSource::LogInterpolation()
       // Incase points are negative or zero
       if(Arb_x[i] <= 0. || Arb_y[i] <= 0.)
 	{
-	  G4cout << "You should not use log interpolation with points <= 0." << endl;
-	  G4cout << "These will be changed to 1e-20, which may cause problems" << endl;
+	  G4cout << "You should not use log interpolation with points <= 0." << G4endl;
+	  G4cout << "These will be changed to 1e-20, which may cause problems" << G4endl;
 	  if(Arb_x[i] <= 0.)
 	    Arb_x[i] = 1e-20;
 	  if(Arb_y[i] <= 0.)
@@ -1771,7 +1760,7 @@ void G4GeneralParticleSource::LogInterpolation()
       sum = sum + Area_seg[i];
       Arb_Cum_Area[i] = Arb_Cum_Area[i-1] + Area_seg[i];
       if(verbosityLevel == 2)
-	G4cout << Arb_alpha[i] << Arb_Const[i] << Area_seg[i] << endl;
+	G4cout << Arb_alpha[i] << Arb_Const[i] << Area_seg[i] << G4endl;
       i++;
     }
   
@@ -1783,7 +1772,7 @@ void G4GeneralParticleSource::LogInterpolation()
       i++;
     }
   if(verbosityLevel >= 1)
-    G4cout << "Leaving LogInterpolation " << endl;
+    G4cout << "Leaving LogInterpolation " << G4endl;
 }
 
 void G4GeneralParticleSource::ExpInterpolation()
@@ -1813,7 +1802,7 @@ void G4GeneralParticleSource::ExpInterpolation()
       // change currently stored values (emin etc) which are actually momenta
       // to energies.
       if(particle_definition == NULL)
-	G4cout << "Error: particle not defined" << endl;
+	G4cout << "Error: particle not defined" << G4endl;
       else
 	{
       // Apply Energy**2 = p**2c**2 + m0**2c**4
@@ -1866,7 +1855,7 @@ void G4GeneralParticleSource::ExpInterpolation()
 	}
       else 
 	{
-	  G4cout << "Flat line segment: problem" << endl;
+	  G4cout << "Flat line segment: problem" << G4endl;
 	  Arb_ezero[i] = 0.;
 	  Arb_Const[i] = 0.;
 	  Area_seg[i] = 0.;
@@ -1874,7 +1863,7 @@ void G4GeneralParticleSource::ExpInterpolation()
       sum = sum + Area_seg[i];
       Arb_Cum_Area[i] = Arb_Cum_Area[i-1] + Area_seg[i];
       if(verbosityLevel == 2)
-	G4cout << Arb_ezero[i] << Arb_Const[i] << Area_seg[i] << endl;
+	G4cout << Arb_ezero[i] << Arb_Const[i] << Area_seg[i] << G4endl;
       i++;
     }
   
@@ -1886,7 +1875,7 @@ void G4GeneralParticleSource::ExpInterpolation()
       i++;
     }
   if(verbosityLevel >= 1)
-    G4cout << "Leaving ExpInterpolation " << endl;
+    G4cout << "Leaving ExpInterpolation " << G4endl;
 }
 
 void G4GeneralParticleSource::SplineInterpolation()
@@ -1917,7 +1906,7 @@ void G4GeneralParticleSource::SplineInterpolation()
       // change currently stored values (emin etc) which are actually momenta
       // to energies.
       if(particle_definition == NULL)
-	G4cout << "Error: particle not defined" << endl;
+	G4cout << "Error: particle not defined" << G4endl;
       else
 	{
       // Apply Energy**2 = p**2c**2 + m0**2c**4
@@ -1989,7 +1978,7 @@ void G4GeneralParticleSource::SplineInterpolation()
   for(i=0;i<=maxi;i++)
     {
       if(verbosityLevel == 2)
-	G4cout << i <<" "<< Arb_x[i] << " " << Arb_y[i] << endl;
+	G4cout << i <<" "<< Arb_x[i] << " " << Arb_y[i] << G4endl;
       IPDFArbEnergyH.InsertValues(Arb_x[i], Arb_y[i]);
     }
 
@@ -2002,11 +1991,11 @@ void G4GeneralParticleSource::SplineInterpolation()
   SplineInt = new G4DataInterpolation(Arb_y,Arb_x,maxi,1e30,1e30);
   if(verbosityLevel == 2)
     {
-      G4cout << SplineInt << endl;
-      G4cout << SplineInt->LocateArgument(1.0) << endl;
+      G4cout << SplineInt << G4endl;
+      G4cout << SplineInt->LocateArgument(1.0) << G4endl;
     }
   if(verbosityLevel >= 1)
-    G4cout << "Leaving SplineInterpolation " << endl;
+    G4cout << "Leaving SplineInterpolation " << G4endl;
 }
 
 void G4GeneralParticleSource::GenerateMonoEnergetic()
@@ -2029,11 +2018,11 @@ void G4GeneralParticleSource::GenerateLinearEnergies()
   bracket = bracket + (grad/2.)*eminsq + cept*Emin;
   // Now have a quad of form m/2 E**2 + cE - bracket = 0
   bracket = -bracket;
-  //  G4cout << "BRACKET" << bracket << endl;
+  //  G4cout << "BRACKET" << bracket << G4endl;
   if(grad != 0.)
     {
       G4double sqbrack = (intersq - 4*(grad/2.)*(bracket));
-      //      G4cout << "SQBRACK" << sqbrack << endl;
+      //      G4cout << "SQBRACK" << sqbrack << G4endl;
       sqbrack = sqrt(sqbrack);
       G4double root1 = -cept + sqbrack; 
       root1 = root1/(2.*(grad/2.));
@@ -2041,7 +2030,7 @@ void G4GeneralParticleSource::GenerateLinearEnergies()
       G4double root2 = -cept - sqbrack;
       root2 = root2/(2.*(grad/2.));
 
-      //      G4cout << root1 << " roots " << root2 << endl;
+      //      G4cout << root1 << " roots " << root2 << G4endl;
 
       if(root1 > Emin && root1 < Emax)
 	particle_energy = root1;
@@ -2056,7 +2045,7 @@ void G4GeneralParticleSource::GenerateLinearEnergies()
     particle_energy = -particle_energy;
   
   if(verbosityLevel >= 1)
-    G4cout << "Energy is " << particle_energy << endl;
+    G4cout << "Energy is " << particle_energy << G4endl;
 }
 
 void G4GeneralParticleSource::GeneratePowEnergies()
@@ -2083,7 +2072,7 @@ void G4GeneralParticleSource::GeneratePowEnergies()
       particle_energy = exp(particle_energy);
     }
   if(verbosityLevel >= 1)
-    G4cout << "Energy is " << particle_energy << endl;
+    G4cout << "Energy is " << particle_energy << G4endl;
 }
 
 void G4GeneralParticleSource::GenerateExpEnergies()
@@ -2096,7 +2085,7 @@ void G4GeneralParticleSource::GenerateExpEnergies()
   particle_energy = -Ezero*(log(rndm*(exp(-Emax/Ezero) - exp(-Emin/Ezero)) + 
 				exp(-Emin/Ezero)));
   if(verbosityLevel >= 1)
-    G4cout << "Energy is " << particle_energy << endl;
+    G4cout << "Energy is " << particle_energy << G4endl;
 }
 
 void G4GeneralParticleSource::GenerateBremEnergies()
@@ -2120,9 +2109,9 @@ void G4GeneralParticleSource::GenerateBremEnergies()
   // Most probably this will be because T is too low or E is too high
 
   if(expmax == 0.)
-    G4cout << "*****EXPMAX=0. Choose different E's or Temp" << endl;
+    G4cout << "*****EXPMAX=0. Choose different E's or Temp" << G4endl;
   if(expmin == 0.)
-    G4cout << "*****EXPMIN=0. Choose different E's or Temp" << endl;
+    G4cout << "*****EXPMIN=0. Choose different E's or Temp" << G4endl;
 
   G4double tempvar = rndm *((-k)*Temp*(Emax*expmax - Emin*expmin) -
     (ksq*Tsq*(expmax-expmin)));
@@ -2156,7 +2145,7 @@ void G4GeneralParticleSource::GenerateBremEnergies()
 	}
     }  
   if(verbosityLevel >= 1)
-    G4cout << "Energy is " << particle_energy << endl;
+    G4cout << "Energy is " << particle_energy << G4endl;
 }
 
 void G4GeneralParticleSource::GenerateBbodyEnergies()
@@ -2192,7 +2181,7 @@ void G4GeneralParticleSource::GenerateBbodyEnergies()
 
   if(verbosityLevel >= 1)
     {
-      G4cout << "Energy is " << particle_energy << endl;
+      G4cout << "Energy is " << particle_energy << G4endl;
     }
 }
 
@@ -2241,13 +2230,13 @@ void G4GeneralParticleSource::GenerateCdgEnergies()
   particle_energy = pow(particle_energy,(1./omalpha[i-1]));
 
   if(verbosityLevel >= 1)
-    G4cout << "Energy is " << particle_energy << endl;
+    G4cout << "Energy is " << particle_energy << G4endl;
 }
 
 void G4GeneralParticleSource::GenUserHistEnergies()
 {
   // Histograms are DIFFERENTIAL.
-  //  G4cout << "In GenUserHistEnergies " << endl;
+  //  G4cout << "In GenUserHistEnergies " << G4endl;
   if(IPDFEnergyExist == false)
     {
       G4int ii;
@@ -2255,22 +2244,22 @@ void G4GeneralParticleSource::GenUserHistEnergies()
       G4double bins[256], vals[256], sum;
       //      UDefEnergyH.DumpValues();
       G4double mass = particle_definition->GetPDGMass();
-      //      G4cout << mass << endl;
-      //      G4cout << EnergySpec << " " << DiffSpec << endl;
+      //      G4cout << mass << G4endl;
+      //      G4cout << EnergySpec << " " << DiffSpec << G4endl;
       if((EnergySpec == false) && (particle_definition == NULL))
-	G4cout << "Error: particle definition is NULL" << endl;
+	G4cout << "Error: particle definition is NULL" << G4endl;
       
       if(maxbin > 256)
 	{
-	  G4cout << "Maxbin > 256" << endl;
-	  G4cout << "Setting maxbin to 256, other bins are lost" << endl;
+	  G4cout << "Maxbin > 256" << G4endl;
+	  G4cout << "Setting maxbin to 256, other bins are lost" << G4endl;
 	}
 
       if(DiffSpec == false)
-	G4cout << "Histograms are Differential!!! " << endl;
+	G4cout << "Histograms are Differential!!! " << G4endl;
       else
 	{
-	  //	  G4cout << "Here 2" << endl;
+	  //	  G4cout << "Here 2" << G4endl;
 	  bins[0] = UDefEnergyH.GetLowEdgeEnergy(size_t(0));
 	  vals[0] = UDefEnergyH(size_t(0));
 	  sum = vals[0];
@@ -2289,7 +2278,7 @@ void G4GeneralParticleSource::GenUserHistEnergies()
 	  // dependence).
 	  for(ii=1;ii<maxbin;ii++)
 	    {
-	      //	      G4cout << vals[ii] << " " << bins[ii] << " " << bins[ii-1] << endl;
+	      //	      G4cout << vals[ii] << " " << bins[ii] << " " << bins[ii-1] << G4endl;
 	      vals[ii] = vals[ii] * (bins[ii] - bins[ii-1]);
 	    }
 	  // Put energy bins into new histo, plus divide by energy bin width
@@ -2297,11 +2286,11 @@ void G4GeneralParticleSource::GenUserHistEnergies()
 	  for(ii=0;ii<maxbin;ii++)
 	    {
 	      bins[ii] = sqrt((bins[ii]*bins[ii]) + (mass*mass));
-	      //	      G4cout << bins[ii] << " " << mass << endl;
+	      //	      G4cout << bins[ii] << " " << mass << G4endl;
 	    }
 	  for(ii=1;ii<maxbin;ii++)
 	    {
-	      //	      G4cout << vals[ii] << " " << bins[ii] << " " << bins[ii-1] << endl;
+	      //	      G4cout << vals[ii] << " " << bins[ii] << " " << bins[ii-1] << G4endl;
 	      vals[ii] = vals[ii]/(bins[ii] - bins[ii-1]);
 	    }
 	  sum = vals[maxbin-1];
@@ -2325,13 +2314,13 @@ void G4GeneralParticleSource::GenUserHistEnergies()
   particle_energy = IPDFEnergyH.GetEnergy(rndm);
   
   if(verbosityLevel >= 1)
-    G4cout << "Energy is " << particle_energy << endl;
+    G4cout << "Energy is " << particle_energy << G4endl;
 }
 
 void G4GeneralParticleSource::GenArbPointEnergies()
 {
   if(verbosityLevel >= 1)
-    G4cout << "In GenArbPointEnergies" << endl;
+    G4cout << "In GenArbPointEnergies" << G4endl;
   G4double rndm;
   rndm = GenRandEnergy();
 
@@ -2342,7 +2331,7 @@ void G4GeneralParticleSource::GenArbPointEnergies()
       // have x, y, no of points, and cumulative area distribution
       G4int nabove, nbelow = 0, middle;
       nabove = IPDFArbEnergyH.GetVectorLength();
-      //      G4cout << nabove << endl;
+      //      G4cout << nabove << G4endl;
       // Binary search to find bin that rndm is in
       while(nabove-nbelow > 1)
 	{
@@ -2357,7 +2346,7 @@ void G4GeneralParticleSource::GenArbPointEnergies()
 	  Emin = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow));
 	  grad = Arb_grad[nbelow+1];
 	  cept = Arb_cept[nbelow+1];
-	  //	  G4cout << rndm << " " << Emax << " " << Emin << " " << grad << " " << cept << endl;
+	  //	  G4cout << rndm << " " << Emax << " " << Emin << " " << grad << " " << cept << G4endl;
 	  GenerateLinearEnergies();
 	}
       else if(IntType == "Log")
@@ -2365,7 +2354,7 @@ void G4GeneralParticleSource::GenArbPointEnergies()
 	  Emax = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow+1));
 	  Emin = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow));
 	  alpha = Arb_alpha[nbelow+1];
-	  //	  G4cout << rndm << " " << Emax << " " << Emin << " " << alpha << endl;
+	  //	  G4cout << rndm << " " << Emax << " " << Emin << " " << alpha << G4endl;
 	  GeneratePowEnergies();
 	}
       else if(IntType == "Exp")
@@ -2373,28 +2362,28 @@ void G4GeneralParticleSource::GenArbPointEnergies()
 	  Emax = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow+1));
 	  Emin = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow));
 	  Ezero = Arb_ezero[nbelow+1];
-	  //	  G4cout << rndm << " " << Emax << " " << Emin << " " << Ezero << endl;
+	  //	  G4cout << rndm << " " << Emax << " " << Emin << " " << Ezero << G4endl;
 	  GenerateExpEnergies();
 	}
     }
   else if(IntType == "Spline")
     {
       if(verbosityLevel == 2)
-	G4cout << "IntType = Spline " << rndm << endl;
+	G4cout << "IntType = Spline " << rndm << G4endl;
       // in SplineInterpolation created SplineInt
       // Now generate a random number put it into CubicSplineInterpolation
       // and you should get out an energy!?!
       particle_energy = SplineInt->CubicSplineInterpolation(rndm);
       if(verbosityLevel >= 1)
-	G4cout << "Energy is " << particle_energy << endl;
+	G4cout << "Energy is " << particle_energy << G4endl;
     }
   else
-    G4cout << "Error: IntType unknown type" << endl;
+    G4cout << "Error: IntType unknown type" << G4endl;
 }
 
 void G4GeneralParticleSource::GenEpnHistEnergies()
 {
-  //  G4cout << "In GenEpnHistEnergies " << Epnflag << endl;
+  //  G4cout << "In GenEpnHistEnergies " << Epnflag << G4endl;
   
   // Firstly convert to energy if not already done.
   if(Epnflag == true)
@@ -2406,7 +2395,7 @@ void G4GeneralParticleSource::GenEpnHistEnergies()
       //      UDefEnergyH.DumpValues();
     }
 
-  //  G4cout << "Creating IPDFEnergy if not already done so" << endl;
+  //  G4cout << "Creating IPDFEnergy if not already done so" << G4endl;
   if(IPDFEnergyExist == false)
     {
       // IPDF has not been created, so create it
@@ -2437,7 +2426,7 @@ void G4GeneralParticleSource::GenEpnHistEnergies()
   particle_energy = IPDFEnergyH.GetEnergy(rndm);
 
   if(verbosityLevel >= 1)
-    G4cout << "Energy is " << particle_energy << endl;
+    G4cout << "Energy is " << particle_energy << G4endl;
 }
 
 void G4GeneralParticleSource::ConvertEPNToEnergy()
@@ -2445,24 +2434,24 @@ void G4GeneralParticleSource::ConvertEPNToEnergy()
   // Use this before particle generation to convert  the
   // currently stored histogram from energy/nucleon 
   // to energy.
-  //  G4cout << "In ConvertEpntoEnergy " << endl;
+  //  G4cout << "In ConvertEpntoEnergy " << G4endl;
   if(particle_definition==NULL)
-    G4cout << "Error: particle not defined" << endl;
+    G4cout << "Error: particle not defined" << G4endl;
   else
     {
       // Need to multiply histogram by the number of nucleons.
       // Baryon Number looks to hold the no. of nucleons.
       G4int Bary = particle_definition->GetBaryonNumber();
-      //      G4cout << "Baryon No. " << Bary << endl;
+      //      G4cout << "Baryon No. " << Bary << G4endl;
       // Change values in histogram, Read it out, delete it, re-create it
       G4int count, maxcount;
       maxcount = G4int(EpnEnergyH.GetVectorLength());
-      //      G4cout << maxcount << endl;
+      //      G4cout << maxcount << G4endl;
       G4double ebins[256],evals[256];
       if(maxcount > 256)
 	{
-	  G4cout << "Histogram contains more than 256 bins!" << endl;
-	  G4cout << "Those above 256 will be ignored" << endl;
+	  G4cout << "Histogram contains more than 256 bins!" << G4endl;
+	  G4cout << "Those above 256 will be ignored" << G4endl;
 	  maxcount = 256;
 	}
       for(count=0;count<maxcount;count++)
@@ -2550,7 +2539,7 @@ void G4GeneralParticleSource::SetEnergyBias(G4ThreeVector input)
 G4double G4GeneralParticleSource::GenRandX()
 {
   if(verbosityLevel >= 1)
-    G4cout << "In GenRandX" << endl;
+    G4cout << "In GenRandX" << G4endl;
   if(XBias == false)
     {
       // X is not biased
@@ -2607,11 +2596,11 @@ G4double G4GeneralParticleSource::GenRandX()
       G4double xaxisl = IPDFXBiasH.GetLowEdgeEnergy(size_t(biasn2-1));
       G4double xaxisu = IPDFXBiasH.GetLowEdgeEnergy(size_t(biasn2));
       G4double NatProb = xaxisu - xaxisl;
-      //G4cout << "X Bin weight " << bweights[0] << " " << rndm << endl;
-      //G4cout << "lower and upper xaxis vals "<<xaxisl<<" "<<xaxisu<<endl;
+      //G4cout << "X Bin weight " << bweights[0] << " " << rndm << G4endl;
+      //G4cout << "lower and upper xaxis vals "<<xaxisl<<" "<<xaxisu<<G4endl;
       bweights[0] = NatProb/bweights[0];
       if(verbosityLevel >= 1)
-	G4cout << "X bin weight " << bweights[0] << " " << rndm << endl;
+	G4cout << "X bin weight " << bweights[0] << " " << rndm << G4endl;
       return(IPDFXBiasH.GetEnergy(rndm));
     }
 }
@@ -2619,7 +2608,7 @@ G4double G4GeneralParticleSource::GenRandX()
 G4double G4GeneralParticleSource::GenRandY()
 {
   if(verbosityLevel >= 1)
-    G4cout << "In GenRandY" << endl;
+    G4cout << "In GenRandY" << G4endl;
   if(YBias == false)
     {
       // Y is not biased
@@ -2672,7 +2661,7 @@ G4double G4GeneralParticleSource::GenRandY()
       G4double NatProb = xaxisu - xaxisl;
       bweights[1] = NatProb/bweights[1];
       if(verbosityLevel >= 1)
-	G4cout << "Y bin weight " << bweights[1] << " " << rndm << endl;
+	G4cout << "Y bin weight " << bweights[1] << " " << rndm << G4endl;
       return(IPDFYBiasH.GetEnergy(rndm));
     }
 }
@@ -2680,7 +2669,7 @@ G4double G4GeneralParticleSource::GenRandY()
 G4double G4GeneralParticleSource::GenRandZ()
 {
   if(verbosityLevel >= 1)
-    G4cout << "In GenRandZ" << endl;
+    G4cout << "In GenRandZ" << G4endl;
   if(ZBias == false)
     {
       // Z is not biased
@@ -2734,7 +2723,7 @@ G4double G4GeneralParticleSource::GenRandZ()
       G4double NatProb = xaxisu - xaxisl;
       bweights[2] = NatProb/bweights[2];
       if(verbosityLevel >= 1)
-	G4cout << "Z bin weight " << bweights[2] << " " << rndm << endl;
+	G4cout << "Z bin weight " << bweights[2] << " " << rndm << G4endl;
       return(IPDFZBiasH.GetEnergy(rndm));
     }
 }
@@ -2743,8 +2732,8 @@ G4double G4GeneralParticleSource::GenRandTheta()
 {
   if(verbosityLevel >= 1)
     {
-      G4cout << "In GenRandTheta" << endl;
-      G4cout << "Verbosity " << verbosityLevel << endl;
+      G4cout << "In GenRandTheta" << G4endl;
+      G4cout << "Verbosity " << verbosityLevel << G4endl;
     }
   if(ThetaBias == false)
     {
@@ -2799,7 +2788,7 @@ G4double G4GeneralParticleSource::GenRandTheta()
       G4double NatProb = xaxisu - xaxisl;
       bweights[3] = NatProb/bweights[3];
       if(verbosityLevel >= 1)
-	G4cout << "Theta bin weight " << bweights[3] << " " << rndm << endl;
+	G4cout << "Theta bin weight " << bweights[3] << " " << rndm << G4endl;
       return(IPDFThetaBiasH.GetEnergy(rndm));
     }
 }
@@ -2807,7 +2796,7 @@ G4double G4GeneralParticleSource::GenRandTheta()
 G4double G4GeneralParticleSource::GenRandPhi()
 {
   if(verbosityLevel >= 1)
-    G4cout << "In GenRandPhi" << endl;
+    G4cout << "In GenRandPhi" << G4endl;
   if(PhiBias == false)
     {
       // Phi is not biased
@@ -2861,7 +2850,7 @@ G4double G4GeneralParticleSource::GenRandPhi()
       G4double NatProb = xaxisu - xaxisl;
       bweights[4] = NatProb/bweights[4];
       if(verbosityLevel >= 1)
-	G4cout << "Phi bin weight " << bweights[4] << " " << rndm << endl;
+	G4cout << "Phi bin weight " << bweights[4] << " " << rndm << G4endl;
       return(IPDFPhiBiasH.GetEnergy(rndm));
     }
 }
@@ -2869,7 +2858,7 @@ G4double G4GeneralParticleSource::GenRandPhi()
 G4double G4GeneralParticleSource::GenRandEnergy()
 {
   if(verbosityLevel >= 1)
-    G4cout << "In GenRandEnergy" << endl;
+    G4cout << "In GenRandEnergy" << G4endl;
   if(EnergyBias == false)
     {
       // Energy is not biased
@@ -2923,7 +2912,7 @@ G4double G4GeneralParticleSource::GenRandEnergy()
       G4double NatProb = xaxisu - xaxisl;
       bweights[5] = NatProb/bweights[5];
       if(verbosityLevel >= 1)
-	G4cout << "Energy bin weight " << bweights[5] << " " << rndm << endl;
+	G4cout << "Energy bin weight " << bweights[5] << " " << rndm << G4endl;
       return(IPDFEnergyBiasH.GetEnergy(rndm));
     }
 }
@@ -2932,7 +2921,7 @@ G4double G4GeneralParticleSource::GenRandEnergy()
 void G4GeneralParticleSource::SetVerbosity(int vL)
 {
   verbosityLevel = vL;
-  G4cout << "Verbosity Set to: " << verbosityLevel << endl;
+  G4cout << "Verbosity Set to: " << verbosityLevel << G4endl;
 }
 
 void G4GeneralParticleSource::SetParticleDefinition
@@ -2962,7 +2951,6 @@ void G4GeneralParticleSource::SetParticleDefinition
 
 void G4GeneralParticleSource::GeneratePrimaryVertex(G4Event *evt)
 {
-  G4cout << "Here 1" << G4endl;
   if(particle_definition==NULL) return;
 
   // Position stuff
@@ -2980,8 +2968,8 @@ void G4GeneralParticleSource::GeneratePrimaryVertex(G4Event *evt)
 	GeneratePointsInVolume();
       else
 	{
-	  G4cout << "Error: SourcePosType undefined" << endl;
-	  G4cout << "Generating point source" << endl;
+	  G4cout << "Error: SourcePosType undefined" << G4endl;
+	  G4cout << "Generating point source" << G4endl;
 	  GeneratePointSource();
 	}
       if(Confine == true)
@@ -2996,15 +2984,15 @@ void G4GeneralParticleSource::GeneratePrimaryVertex(G4Event *evt)
       LoopCount++;
       if(LoopCount == 100000)
 	{
-	  G4cout << "*************************************" << endl;
-	  G4cout << "LoopCount = 100000" << endl;
-	  G4cout << "Either the source distribution >> confinement" << endl;
-	  G4cout << "or any confining volume may not overlap with" << endl;
-	  G4cout << "the source distribution or any confining volumes" << endl;
-	  G4cout << "may not exist"<< endl;
-	  G4cout << "If you have set confine then this will be ignored" <<endl;
-	  G4cout << "for this event." << endl;
-	  G4cout << "*************************************" << endl;
+	  G4cout << "*************************************" << G4endl;
+	  G4cout << "LoopCount = 100000" << G4endl;
+	  G4cout << "Either the source distribution >> confinement" << G4endl;
+	  G4cout << "or any confining volume may not overlap with" << G4endl;
+	  G4cout << "the source distribution or any confining volumes" << G4endl;
+	  G4cout << "may not exist"<< G4endl;
+	  G4cout << "If you have set confine then this will be ignored" <<G4endl;
+	  G4cout << "for this event." << G4endl;
+	  G4cout << "*************************************" << G4endl;
 	  srcconf = true; //Avoids an infinite loop
 	}
     }
@@ -3016,7 +3004,7 @@ void G4GeneralParticleSource::GeneratePrimaryVertex(G4Event *evt)
   else if(AngDistType == "user")
     GenerateUserDefFlux();
   else
-    G4cout << "Error: AngDistType has unusual value" << endl;
+    G4cout << "Error: AngDistType has unusual value" << G4endl;
   // Energy stuff
   if(EnergyDisType == "Mono")
     GenerateMonoEnergetic();
@@ -3039,14 +3027,14 @@ void G4GeneralParticleSource::GeneratePrimaryVertex(G4Event *evt)
   else if(EnergyDisType == "Epn")
     GenEpnHistEnergies();
   else
-    G4cout << "Error: EnergyDisType has unusual value" << endl;
+    G4cout << "Error: EnergyDisType has unusual value" << G4endl;
 
   // create a new vertex
   G4PrimaryVertex* vertex = 
     new G4PrimaryVertex(particle_position,particle_time);
 
   if(verbosityLevel == 2)
-    G4cout << "Creating primaries and assigning to vertex" << endl;
+    G4cout << "Creating primaries and assigning to vertex" << G4endl;
   // create new primaries and set them to the vertex
   G4double mass =  particle_definition->GetPDGMass();
   G4double energy = particle_energy + mass;
