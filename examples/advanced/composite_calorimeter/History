@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.21 2003-12-05 07:38:38 gcosmo Exp $
+$Id: History,v 1.22 2004-05-18 14:57:48 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.21 2003-12-05 07:38:38 gcosmo Exp $
 
                       Example History file
                       ---------------------
+
+18.05.04 - A.Ribon (ccal-V06-01-00)
+- Ported to PI.Only the setup is changed, no changes in the code.
 
 05.12.03 - G.Cosmo (ccal-V05-02-07)
 - Changed LISTS_BASE to G4LISTS_BASE for hadronic physics lists path.
