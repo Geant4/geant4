@@ -5,7 +5,7 @@
 #include "G4KineticTrack.hh"
 #include "G4KineticTrackVector.hh"
 #include "G4Fancy3DNucleus.hh"
-#include "G4Cascade.hh"
+//#include "G4Cascade.hh"
 
 int main() {
   G4cout << G4endl << "       ... intra-nuclear cascade toy model ..." << G4endl;
@@ -16,18 +16,17 @@ int main() {
   // Herceg-Novi, Yugoslavia, 1968   
   // Ed. M. Mikolic
 
-  // set constanst and create terminology
+  // Set constanst and create terminology
   G4double cutOff = 20 * MeV;
-  G4double fm = 1.0 * pow(10.0,-15);
+  G4double fm = 1.0 * pow(10.0, -15);
   G4double oneThird = 0.3333333333333;
   enum particleType {proton, neutron};
-  //  enum channelType {pionProduction, };
+  // Eenum channelType {pionProduction, };
   enum collisionType {elastic, inelastic};
 
   vector<G4KineticTrack*>  particleVector;   
 
-
-  // set test parameters
+  // Set test parameters
   G4int        numberOfCascades       = 3;
   G4int        targetNucleusN         = 10;
   G4int        targetNucleusZ         = 10;
@@ -52,8 +51,7 @@ int main() {
     G4cout << G4endl << "........................ cascade " << cascadeIndex << 
                         " .............................." << G4endl;
 
-
-    // select the impact parameter b
+    // Select the impact parameter b
     G4double targetNucleusA = targetNucleusN + targetNucleusZ;
     G4double radius0        = 1.0 * fm;                                       // radius of hydrogen atom nucleus
     G4double bMax           = radius0 * fm / pow(targetNucleusA, oneThird) ;  // radius of atom with a = n + z
@@ -64,9 +62,7 @@ int main() {
     //    G4cout << radius0 << " " << bMax << endl;
     G4cout << "impact point (x, y, z) : "  << "\t" << x <<", " << "\t" << y << ", " << "\t" << z  << G4endl;
 
-
-
-    // *) find the interaction distance b
+    // *) Find the interaction distance b
     G4double xSecNeutron = 1 * millibarn;
     G4double xSecProton  = 1 * millibarn;
     G4double lambda      = 4 * pi * targetNucleusA * pow(radius0, 3) /
@@ -75,9 +71,7 @@ int main() {
 
     G4cout << "interaction distance   : " << "\t" << b << G4endl;
 
-
-
-    // choose the sruck particle (n/p)
+    // Choose the sruck particle (n/p)
     particleType targetParticle;
     if (G4UniformRand() < targetNucleusZ * xSecProton / 
                         ( targetNucleusZ * xSecProton + targetNucleusN * xSecNeutron))
@@ -87,24 +81,18 @@ int main() {
 
     G4cout << "target particle        : " << "\t" << targetParticle << G4endl;
 
-
-
-    // choose the struck nucleon momentum
+    // Choose the struck nucleon momentum
     G4double qMax = (300.0 / radius0) * pow(10, -15) * MeV;
     G4double q    = qMax * sqrt(G4UniformRand());
 
     G4cout << "target  momentum       : " << "\t" << q << G4endl;
 
-
-
-    // choose the direction of the struck nucleon
+    // Choose the direction of the struck nucleon
     G4double mu  = 1 - 2 * G4UniformRand();
     G4double phi = 2 * pi * G4UniformRand();
     G4cout << "target direction       : " << "\t" << mu << ", " << "\t" << phi << G4endl;
 
-
-
-    // choose the nature of the collision (elastic/inelastic)
+    // Choose the nature of the collision (elastic/inelastic)
     collisionType collision;
     if (G4UniformRand() < 0.8) // replace with more realistic 
       collision = elastic;
@@ -113,7 +101,7 @@ int main() {
     G4cout << "collision type         : " << "\t" << collision << G4endl;
 
     if (collision == elastic) {
-      // choose the scattering angle theta
+      // Choose the scattering angle theta
       G4double thetaCos = 2 *G4UniformRand() - 1;                           // dummy
       G4cout << " scattering angle      : " << "\t" << thetaCos << G4endl;
     }
@@ -144,49 +132,37 @@ int main() {
 
     }
 
-
-
-    // choose the azimuthal angle of rotation
+    // Choose the azimuthal angle of rotation
     G4double alpha = 2 * pi * G4UniformRand();
     G4cout << " azimuthal angle       : " << "\t" << alpha << G4endl;
 
-
-
-    // transform the energy back to the laboratory system (lab)
+    // Transform the energy back to the laboratory system (lab)
     G4double energy =  50 * MeV* G4UniformRand();                            //dummy
 
-
-
-    //    for all items in particleVectos
-    // pauli exclusion principle
+    // For all items in particleVectos
+    // Pauli exclusion principle
     G4double M = 0.5 ;                                                       //dummy
     G4double fermiEnergy = sqr(qMax)/(2 * M);
     if (energy <  fermiEnergy)  {                                            // state occupied
       G4cout << "pauli blocking " << G4endl;
-      // add article to traced list  
+      // Add article to traced list  
     }          
 
+    // Transform the allowed collision products to the laboratory system
 
-
-    // transform the allowed collision products to the laboratory system
-
-
-
-    // follow the products until the escape the nucleus or energy is below cut-off
+    // Follow the products until the escape the nucleus or energy is below cut-off
     if (energy < cutOff) {
       G4cout << "energy below cut-off   "<< G4endl;
-      // add energy to atom exitation
+      // Add energy to atom exitation
       // exitation += particle.energy 
       // update atom quantum numbers
       // if particle = proton, a += 1, z += 1 
       // if particle = neutron, a += 1, n += 1 
-
     }
   }
    
 }    
 /*
-
        ... intra-nuclear cascade toy model ...
 
  Nucleus mass number = 12
@@ -221,3 +197,7 @@ pauli plocking
 energy below cut-off  
 
 */
+
+
+
+

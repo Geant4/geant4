@@ -12,17 +12,18 @@
 
 int main() {
  
-  G4int verboseLevel                = 2;                          // set test parameters
+  // Set test parameters
+  G4int verboseLevel                = 2;                          
   G4int numberOfCascades            = 10; 
   G4double projectileMomentum       = 1.0 * GeV;
   //G4ParticleDefinition *particle = G4PionMinus::PionMinus();  
   //G4ParticleDefinition *particle = G4Neutron::Neutron();  
   G4ParticleDefinition *particle = G4Proton::Proton();  
 
-
-  G4DynamicParticle *projectile = new G4DynamicParticle(); // create projectile particle
+  // Create projectile particle
+  G4DynamicParticle *projectile = new G4DynamicParticle(); 
   projectile->SetDefinition(particle);
-  // projectile->SetKineticEnergy( 1.0 * GeV);
+  //projectile->SetKineticEnergy( 1.0 * GeV);
   projectile->SetMomentum(projectileMomentum);
   projectile->SetMomentumDirection(1.0, 0.0, 0.0);  
 
@@ -34,13 +35,15 @@ int main() {
     G4cout << " p direction    : " << projectile->GetMomentumDirection() << G4endl;
   }
 
-  G4ThreeVector v;                                             // set projectile particle track
+  // Set projectile particle track
+  G4ThreeVector v;                                            
   v.setX(0.0 * fermi); 
   v.setY(0.0 * fermi); 
   v.setZ(0.0 * fermi);
   G4Track aTrack(projectile, 0, v);
 
-  G4Nucleus targetNucleus;                                        // set target nucleus
+  // Set target nucleus
+  G4Nucleus targetNucleus;                                        
   G4double a(10);
   G4double z(10);
   targetNucleus.SetParameters(a, z);
@@ -61,20 +64,4 @@ int main() {
 
   delete projectile;
   delete theCascade;   
-}  
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}

@@ -1,0 +1,4 @@
+Main document is manCascade.tex.
+Create documentation with 'gmake' or 
+full release (ps, html and pdf-versions)
+with 'gmake release'.

@@ -1,122 +1,122 @@
 %manual.tex
-\documentclass[a4paper,12pt,twoside]{article} 
+%\documentclass[a4paper,12pt,twoside]{article} 
 %:::packages
-\usepackage[dvips]{epsfig}
+%\usepackage[dvips]{epsfig}
 %eps-printing when clipping is needed -> use graphics-package 
-\usepackage{graphics}
-\usepackage{html}
+%\usepackage{graphics}
+%\usepackage{html}
 %:::definitions
-%\def \AATOS {/afs/cern.ch/user/m/miheikki/public/html/}
-%\def \DATE {12.6.2001}
+\def \AATOS {/afs/cern.ch/user/m/miheikki/public/html/}
+\def \DATE {12.6.2001}
 \def \L{\item  \htmladdnormallink}
 \def \AATOS {/home/miheikki/public/html/}
 \def \WORKTITLE {High Energy Transport Code (HETC) for Geant4}
-%\def \WORKTITLE {Intranuclear cascades in Geant4}
+\def \WORKTITLE {Intranuclear cascades in Geant4}
 \def \GEV {\mbox{GeV}}
 \def \HET{$^3$He}
 \def \HEF{$^4$He}
 \def \BEE{$^8$Be}
 
 %:::margins and page settings
-\oddsidemargin=5mm
-\evensidemargin=-5mm
-\topmargin=0mm
-\headheight=0mm
-\headsep=0mm
-\textheight=252mm
-\textwidth=160mm
+%\oddsidemargin=5mm
+%\evensidemargin=-5mm
+%\topmargin=0mm
+%\headheight=0mm
+%\headsep=0mm
+%\textheight=252mm
+%\textwidth=160mm
 
-\begin{document}
-\begin{titlepage}
-\input{epsf.sty}
+%\begin{document}
+%\begin{titlepage}
+%\input{epsf.sty}
 
 %:::HIP logo
-\begin{figure}[h]
-\leavevmode
-\begin{flushleft}
-\mbox{\epsfxsize=10cm\epsfysize=3.286cm\epsffile{\AATOS pictures/hip.eps}}
-\end{flushleft}
-\end{figure}
+%\begin{figure}[h]
+%\leavevmode
+%\begin{flushleft}
+%\mbox{\epsfxsize=10cm\epsfysize=3.286cm\epsffile{\AATOS pictures/hip.eps}}
+%\end{flushleft}
+%\end{figure}
 
 %:::titlepage texts
-\vspace{-1.5truecm}
-\begin{center}
-\large
+%\vspace{-1.5truecm}
+%\begin{center}
+%\large
 %PREPRINT SERIES
 
-\vspace{0.2 cm}
-\large
+%\vspace{0.2 cm}
+%\large
 %:::choose TH, EXP, TECH
 %:::change the report number
 %HIP - 2001 - XX 
 
-\vspace{4.0 cm}
-\Large
+%\vspace{4.0 cm}
+%\Large
 %:::title
-{\bf \WORKTITLE }
-\vspace{1.0 cm}
+%{\bf \WORKTITLE }
+%\vspace{1.0 cm}
 
 
-\vspace{1.0 cm}
+%\vspace{1.0 cm}
 
 %\large \DATE
-\large \today
+%\large \today
 
 %\Huge
-\vspace{1.5 cm}
-\large
+%\vspace{1.5 cm}
+%\large
 
 %:::authors
-Joe Chuma$^a$, Aatos Heikkinen, Tapio Lampen and Laura Tillikainen
+%Joe Chuma$^a$, Aatos Heikkinen, Tapio Lampen and Laura Tillikainen
 
-\vspace{0.4 cm}
-\normalsize
+%\vspace{0.4 cm}
+%\normalsize
 
 %:::address
-$^a$TRIUMF, Vancouver, Canada\\
-Helsinki Institute of Physics,
-P.O.Box 9,
-FIN-00014 University of Helsinki, Finland \\
+%$^a$TRIUMF, Vancouver, Canada\\
+%Helsinki Institute of Physics,
+%P.O.Box 9,
+%FIN-00014 University of Helsinki, Finland \\
 
 
 \vfill
 %------------------------------------------
 %(Submitted to Phys. Rev. Lett.)
 
-{HELSINKI INSTITUTE OF PHYSICS}\\
-\vspace{0.2 cm}
-P.O.Box 9 $\bullet$ FIN-00014 UNIVERSITY OF HELSINKI $\bullet$ FINLAND
-\end{center}
-\end{titlepage}
+%{HELSINKI INSTITUTE OF PHYSICS}\\
+%\vspace{0.2 cm}
+%P.O.Box 9 $\bullet$ FIN-00014 UNIVERSITY OF HELSINKI $\bullet$ FINLAND
+%\end{center}
+%\end{titlepage}
 
 %:::one empty page
-\thispagestyle{empty}
-\cleardoublepage
+%\thispagestyle{empty}
+%\cleardoublepage
 
-\pagebreak[4]
+%\pagebreak[4]
 
 %:::contents page
-\newpage
-\pagebreak[4]
+%\newpage
+%\pagebreak[4]
 
-\pagenumbering{roman}
-\tableofcontents
+%\pagenumbering{roman}
+%\tableofcontents
 
 %::: special first page of article with abstract
-\newpage
-\pagebreak[4] 
+%\newpage
+%\pagebreak[4] 
 
-\pagestyle{headings}
-\pagestyle{plain}
-\pagenumbering{arabic}
 %\pagestyle{headings}
-\begin{center}
-{\Large{\bf \WORKTITLE}}
-\end{center}
+%\pagestyle{plain}
+%\pagenumbering{arabic}
+%\pagestyle{headings}
+%\begin{center}
+%{\Large{\bf \WORKTITLE}}
+%\end{center}
 
-\vspace*{0.5cm}
+%\vspace*{0.5cm}
 
-\begin{abstract} %:::
+%\begin{abstract} %:::
 %We present Geant4 implementation of Bertini intranuclear cascade model based on High Energy Transport Code (HETC)
 We describe here project to implement High Energy Transport Code
 (HETC) software into Geant4. 
@@ -124,7 +124,7 @@ We give on overview of the hadronic Monte Carlo models used and present
 first results from evaporation part of HETC. 
 We also outline project goals and future development.
 
-\end{abstract}
+%\end{abstract}
 
 
 \section{Outline} %:::
@@ -1657,15 +1657,14 @@ void G4ReactionKinematics::TwoBodyScattering(
 \end{verbatim}
 
 \begin{itemize}
-\item x
-\begin{itemize}
 \item 
 \item 
 \item 
-\end{itemize}
-
 \item {\bf pre-quilibrium}
 Joe Chumas work.
+
+\end{itemize}
+
  
 \begin{itemize}
 \item study pre-equilibrium theory
@@ -1681,9 +1680,10 @@ Joe Chumas work.
 \item use ROOT to visualize test results
 \item run code and study results using ROOT
 \item document your work in special assignment paper
+\item {\bf documentation} 
 \end{itemize}
 
-\item {\bf documentation} 
+
 
 \begin{itemize}
 \item collect all material to this working document
@@ -1693,22 +1693,22 @@ Joe Chumas work.
 
 \end{itemize}
 
-\item {\bf testing} 
+
 
 \begin{itemize}
+\item {\bf testing} 
 \item make test for key functions, classe,and modules
 \item use ROOT
 \item 
 \end{itemize}
 
-\item {\bf results} 
+
 
 \begin{itemize}
+\item {\bf results} 
 \item collect Tapios results to common results area (?)
 \item make use of ROOT scripts to visualize some INC function outputs
 \item 
-\end{itemize}
-
 \end{itemize}
 
 \section{APPENDIX / G4 coding style} %:::
@@ -2275,6 +2275,7 @@ generates:
   dofio(c1, (char *)&ne, (ftnlen)sizeof(G4int));
   ewsfe();
 
+\end{verbatim}
 
 This is left from BertiniUtils.hh 29.7:
 
@@ -2324,7 +2325,7 @@ G4double locx[4][4];
 \end{verbatim}
 
 
-\end{verbatim}
+
 \section{Terms}
 
 \begin{description}
@@ -2371,7 +2372,6 @@ spelling made possible'Heik\-ki\-nen'
 1-2 1--2 1---2
 
 \end{appendix}
-\end{document}
 
 % End of file
 

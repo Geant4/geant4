@@ -1,7 +1,3 @@
-//This class represents one region in a nucleus of the Bertini INC model.
-//Hides the properties of the region and the generation of interaction partner. 
-//The radiuses and densities are not the original.
-
 #ifndef G4REGIONMODEL
 #define G4REGIONMODEL
 
@@ -9,66 +5,47 @@
 #include <vector>
 #include <math.h>
 #include "globals.hh"
-#include "G4DynamicParticle.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
-#include "G4VRegionModel.hh"
-#include "Randomize.hh"
+//#include "G4NucleusModel.hh"
+
+
 typedef std::vector<G4double>::const_iterator iterator; 
 
-class G4RegionModel : public G4VRegionModel
+class G4RegionModel //:public G4VRegionModel
 {
 public:
-  
-  G4RegionModel();
+  G4RegionModel(const G4int numberOfLayers, const G4int A, const G4int Z);
   ~G4RegionModel();
 
-  void CreateRegion(G4int A, G4int Z);
-  void PrintRegion();
-
-  G4double GetOuterRadius(); 
-  G4double GetProtonDensity();
-  G4double GetNeutronDensity();
-  G4double GetProtonPotentialEnergy();
-  G4double GetNeutronPotentialEnergy();
-  G4double GetProtonMaximumMomentum();
-  G4double GetNeutronMaximumMomentum();
-  G4double GetProtonMaximumEnergy();
-  G4double GetNeutronMaximumEnergy();
-  
-  G4DynamicParticle* GenerateProton();
-  G4DynamicParticle* GenerateNeutron();    
+  //instead of A and Z outer radius of the nucleus?
+  //void Init(const G4int numberOfLayers, const G4int A, const G4int Z);
+  G4double GetDensity(G4double radius);
+  G4double GetPotentialEnergy(G4double r, G4int particle);
+  G4double GetMaximumNucleonMomentum(G4double radius, G4int nucleon);
+  // G4double NumberOfRegions();   
 
 private:
-  G4int nucleusA; //A of the whole nucleus
-  G4int nucleusZ;
 
-  static G4int numberOfRegions;
-  G4int myRegionNumber;
- 
-  G4double innerRadius;
-  G4double outerRadius;
-  G4double nuclearRadius;
+  G4int massNumber;
+  G4int protonNumber;
+  vector<G4double> radius; //contains the outer radiuses of the shells
+  vector<G4double> density;
 
-  G4double protonDensity;
-  G4double neutronDensity;
+  vector<G4double> protonFermiEnergy;
+  vector<G4double> neutronFermiEnergy;
+  vector<G4double> protonFermiMomentum;
+  vector<G4double> neutronFermiMomentum;
+  
+  vector<G4double> protonPotentialEnergy;
+  vector<G4double> neutronPotentialEnergy;
 
-  G4double protonFermiMomentum;
-  G4double neutronFermiMomentum;
-  G4double protonFermiEnergy;
-  G4double neutronFermiEnergy;
+  static const G4double radius0=1.0E-15; 
+  static const G4double BE = 7;
+  //static const G4double pi = 3.141592;
 
-  G4double protonPotentialEnergy;
-  G4double neutronPotentialEnergy;
-
-
-  //methods:
-  void InitializeRadius();
-  void InitializeDensity();
-  void InitializeFermi();
-  void InitializePotentialEnergy();
   G4double GetFermiMomentum(G4double density, G4double mass);
-
+  G4double GetFermiEnergy(G4double density, G4double mass);
 };  
 #endif
 
