@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticleVector.hh,v 1.7 2001-10-05 16:10:06 hpw Exp $
+// $Id: G4DynamicParticleVector.hh,v 1.8 2001-10-06 06:53:06 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,7 +39,7 @@
 #include "G4DynamicParticle.hh"
 #include "g4std/vector" 
 
-typedef vector<G4DynamicParticle *> G4DynamicParticleVector;
+typedef G4std::vector<G4DynamicParticle *> G4DynamicParticleVector;
 struct DeleteDynamicParticle {void operator()(G4DynamicParticle*aP) {delete aP;}};
 
 #endif
