@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.21 2003-11-12 16:23:42 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.22 2004-05-11 15:56:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -97,7 +97,7 @@ void G4ionIonisation::InitialiseProcess()
 
   SetIntegral(false);
   chargeLowLimit = 0.1;
-  energyLowLimit = 250.*MeV;
+  energyLowLimit = 25.*MeV;
   SetLinearLossLimit(0.15);
   //SetStepLimits(0.1, 0.1*mm);
 }
@@ -265,7 +265,7 @@ G4double G4ionIonisation::EffectiveCharge(const G4ParticleDefinition* p,
     chargeCorrection = s * (1.0 + 0.5*(1.0/q - 1.0)*log(1.0 + lambda*lambda)/(vF*vF) );
   }
   //  G4cout << "G4ionIonisation: charge= " << charge << " q= " << q 
-  //       << " chargeCor= " << chargeCorrection << G4endl; 
+  //       << " chargeCor= " << chargeCorrection << G4endl;
   return charge*q;
 }
 
