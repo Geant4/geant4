@@ -1,4 +1,4 @@
-$Id: README,v 1.7 2003-10-14 01:18:02 perl Exp $
+$Id: README,v 1.8 2003-12-01 19:12:38 perl Exp $
 
     =========================================================
     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -130,8 +130,33 @@ $Id: README,v 1.7 2003-10-14 01:18:02 perl Exp $
   5. VISUALIZATION:
   
      Simulated events can be displayed on top of a representation of 
-     the spectrometer.  vis.mac outputs .heprep files suitable for
-     viewing in WIRED and .prims files suitable for viewing in DAWN.
+     the spectrometer.
+
+     vis.mac outputs HepRep version 1 files suitable for viewing in WIRED.
+     Change the /vis/open line from HepRepFile to DAWNFILE to instead
+     make .prim files suitable for viewing in DAWN.
+
+     heprep2-000-gz.mac outputs a series of gzipped HepRep version 2 files
+     each containing a single event, suitable for viewing in WIRED (there
+     is no need to ungzip them since WIRED can do this itself).
+
+     heprep2zip.mac outputs a single zip file that unzips to a series of
+     HepRep version 2 files, each each containing a single event (unzip
+     the single file by hand, then view the resulting individial HepRep
+     files in WIRED).
+
+     heprep2-000-zip.mac outputs a series of zipped HepRep version 2 files
+     each containing a single event (not yet viewable in WIRED unless you
+     explicitly unzip them before viewing).
+
+     heprep2.mac outputs a HepRep version 2 file with multiple events
+     appended to a single file in an experimental manner (not yet viewable
+     in WIRED).
+
+     heprep2gz.mac outputs a HepRep version 2 file with multiple events
+     appended to a single file in an experimental manner (not yet viewable
+     in WIRED).
+
      For more information on visualization with this A01 example,
      see the visualization tutorials on the Geant4 Workshop Tutorial CD
      available at:
