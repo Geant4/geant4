@@ -81,24 +81,27 @@
   {
     if( np+nm+nz == 0 )return;
     G4int i;
-    G4ReactionProduct *p = new G4ReactionProduct [np+nm+nz];
+    G4ReactionProduct *p;
     for( i=0; i<np; ++i )
     {
-      p[i].SetDefinition( G4PionPlus::PionPlus() );
-      (G4UniformRand() < 0.5) ? p[i].SetSide( -1 ) : p[i].SetSide( 1 );
-      vec.SetElement( vecLen++, &p[i] );
+      p = new G4ReactionProduct;
+      p->SetDefinition( G4PionPlus::PionPlus() );
+      (G4UniformRand() < 0.5) ? p->SetSide( -1 ) : p->SetSide( 1 );
+      vec.SetElement( vecLen++, p );
     }
     for( i=np; i<np+nm; ++i )
     {
-      p[i].SetDefinition( G4PionMinus::PionMinus() );
-      (G4UniformRand() < 0.5) ? p[i].SetSide( -1 ) : p[i].SetSide( 1 );
-      vec.SetElement( vecLen++, &p[i] );
+      p = new G4ReactionProduct;
+      p->SetDefinition( G4PionMinus::PionMinus() );
+      (G4UniformRand() < 0.5) ? p->SetSide( -1 ) : p->SetSide( 1 );
+      vec.SetElement( vecLen++, p );
     }
     for( i=np+nm; i<np+nm+nz; ++i )
     {
-      p[i].SetDefinition( G4PionZero::PionZero() );
-      (G4UniformRand() < 0.5) ? p[i].SetSide( -1 ) : p[i].SetSide( 1 );
-      vec.SetElement( vecLen++, &p[i] );
+      p = new G4ReactionProduct;
+      p->SetDefinition( G4PionZero::PionZero() );
+      (G4UniformRand() < 0.5) ? p->SetSide( -1 ) : p->SetSide( 1 );
+      vec.SetElement( vecLen++, p );
     }
   }
  
@@ -358,6 +361,7 @@
       p->SetDefinition( vec[i]->GetDefinition() );
       p->SetMomentum( vec[i]->GetMomentum() );
       theParticleChange.AddSecondary( p );
+      delete vec[i];
     }
   }
  

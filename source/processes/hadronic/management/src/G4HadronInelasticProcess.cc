@@ -5,8 +5,6 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronInelasticProcess.cc,v 1.3 1999-12-15 14:52:08 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Inelastic Process Class
  // J.L. Chuma, TRIUMF, 24-Mar-1997
@@ -21,6 +19,7 @@
 //
  
 #include "G4HadronInelasticProcess.hh"
+#include "G4GenericIon.hh"
  
  G4double G4HadronInelasticProcess::GetMeanFreePath(
   const G4Track &aTrack,
@@ -28,7 +27,8 @@
   G4ForceCondition *condition )
   {
     const G4DynamicParticle *aParticle = aTrack.GetDynamicParticle();
-    if( aParticle->GetDefinition() != theParticle )
+    if( aParticle->GetDefinition() != theParticle && 
+        theParticle != G4GenericIon::GenericIon())
       G4Exception( this->GetProcessName()+
                    " called for "+
                    aParticle->GetDefinition()->GetParticleName() );
