@@ -1,4 +1,4 @@
-$Id: History,v 1.3 1999-03-18 15:06:25 johna Exp $
+$Id: History,v 1.4 1999-04-29 18:00:52 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-March 18th  John Allison
+April 29th  G.Cosmo
+- Moved SystemOfUnits.SI.h to G4UnitsTest.hh in management/include. This file is
+  used only for test purposes and will not be tagged for public versions.
+
+March 30th  M.Maire
+- CodeWizard cleanup in G4UnitsTable. Fixed definition of operator=.
+
+March 18th  J.Allison
 - globals.hh: Added #ifdef G4USE_STL, changed position of
   #include <rw/cstring.h>.
 
