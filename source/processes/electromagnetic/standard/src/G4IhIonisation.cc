@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IhIonisation.cc,v 1.2 1999-04-13 09:05:43 urban Exp $
+// $Id: G4IhIonisation.cc,v 1.3 1999-04-28 13:46:20 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
@@ -240,7 +240,7 @@ void G4IhIonisation::BuildNlambdaVector(
                                        G4PhysicsLogVector* nlambdaVector)
 {
   G4double LowEdgeEnergy,T,Tlast,dEdx,Value,Vlast,u,du,coeff ;
-  G4double thresholdEnergy ;
+  G4double Tcut,thresholdEnergy,w1,w2 ;
   const G4int nbin = 100 ;
   G4bool isOut ;
   const G4double small = 1.e-100;
@@ -249,9 +249,12 @@ void G4IhIonisation::BuildNlambdaVector(
   const G4MaterialTable* theMaterialTable=
                           G4Material::GetMaterialTable();
 
-  //  it is a lower limit for the threshold energy ....?????
-    thresholdEnergy =    DeltaCutInKineticEnergy[materialIndex];
-
+  //  the threshold energy for delta production
+    Tcut =  DeltaCutInKineticEnergy[materialIndex];
+    w1 = electron_mass_c2*(2.*ParticleMass-Tcut) ;
+    w2 = electron_mass_c2+ParticleMass ;
+    thresholdEnergy = 0.5*(sqrt(w1*w1+2.*electron_mass_c2*Tcut*w2*w2)-w1)
+                      /electron_mass_c2 ;
   // here assumed that the threshold energy for the process >=
   //                LowestKineticEnergy (temporarily )
   if(thresholdEnergy >= LowestKineticEnergy)
@@ -307,7 +310,6 @@ void G4IhIonisation::BuildNlambdaVector(
 
     Tlast = LowEdgeEnergy ;
     Vlast = Value ;
-
   }
 
 }
@@ -538,6 +540,7 @@ void G4IhIonisation::BuildInverseNlambdaTable(
     for (G4int J=0;  J<numOfMaterials; J++)
     {
       T = LowestKineticEnergy ;
+      Smallest = 0. ;
       do
       {
         Smallest = (*theNlambdaTable)[J]->
