@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogoVisAction.cc,v 1.2 2005-03-16 17:25:15 allison Exp $
+// $Id: G4LogoVisAction.cc,v 1.3 2005-03-16 17:35:10 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4LogoVisAction.hh"
@@ -106,6 +106,7 @@ G4LogoVisAction::G4LogoVisAction() {
 G4LogoVisAction::~G4LogoVisAction() {
   delete fpG;
   delete fp4;
+  delete fpVisAtts;
 }
 
 void G4LogoVisAction::Draw() {
