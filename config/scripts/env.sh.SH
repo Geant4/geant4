@@ -37,18 +37,24 @@ fi
 # g4dirs.U
 #
 #+
-G4INSTALL="$g4final_install/include/geant4"
+G4INSTALL="$g4final_install/src/geant4"
 export G4INSTALL
 if [ X\$g4non_display = X ] ; then
 echo "On this machine the G4INSTALL=\$G4INSTALL"
 fi
 
 #+
-if [ X$g4include != X ] ; then 
-G4INCLUDE="$g4include"
+if [ X$g4includes_flag != X ] ; then 
+G4INCLUDE="$g4final_install/include/geant4"
 export G4INCLUDE
 if [ X\$g4non_display = X ] ; then
 echo "On this machine the G4INCLUDE=\$G4INCLUDE"
+fi
+else
+G4BASE="$g4final_install/include/geant4/source"
+export G4BASE
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the G4BASE=\$G4BASE"
 fi
 fi
 
@@ -414,6 +420,19 @@ if [ X\$g4non_display = X ] ; then
 echo "On this machine the G4LIB_USE_GRANULAR=\$G4LIB_USE_GRANULAR"
 fi
 fi 
+
+# Check for Windows!
+if test "X$G4SYSTEM" != "XWIN32-VC" -a "X$G4SYSTEM" != "XWIN32-VC7"; then
+#+
+#
+# UI_USE_TCSH for Unix
+#
+G4UI_USE_TCSH=1
+export G4UI_USE_TCSH
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the G4UI_USE_TCSH=\$G4UI_USE_TCSH"
+fi 
+fi
 
 #####################################################################
 

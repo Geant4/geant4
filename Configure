@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.63 2004-12-06 05:47:53 stesting Exp $
+# $Id: Configure,v 1.64 2004-12-09 22:19:49 stesting Exp $
 #
-# Generated on Mon Dec  6 06:44:42 CET 2004 [metaconfig 3.0 PL70]
+# Generated on Thu Dec  9 23:06:17 CET 2004 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2512,18 +2512,21 @@ case "$g4include" in
 	;;
 esac
 
-g4message=`cat << EOM
+#g4message=`cat << EOM
+#
+#Where will be directory to copy all Geant4 headers?
+#EOM`
+#
+##dflt="NO DEFAULT ANSWER"
+####dflt=$g4install/include
+#dflt=$g4include
+#fn='d~+'
+#rp=$g4message
+#. ./getfile
+#g4include=$ans
 
-Where will be directory to copy all Geant4 headers?
-EOM`
-
-#dflt="NO DEFAULT ANSWER"
-###dflt=$g4install/include
-dflt=$g4include
-fn='d~+'
-rp=$g4message
-. ./getfile
-g4include=$ans
+# Set constantly!
+g4include=$g4final_install/include/geant4
 
 fi
 
@@ -4087,9 +4090,8 @@ g4message=`cat << EOM
   G4VIS_BUILD_OIX_DRIVER
   G4VIS_USE_OIX
 
-This driver is based on the "Hepvis" class library.
-The OpenInventor driver and the Hepvis class library are based
-on OpenInventor technology for scientific visualization.
+The OpenInventor driver is based on OpenInventor technology 
+for scientific visualizarion.
 The X11 version of OpenInventor is required.
 
 EOM`

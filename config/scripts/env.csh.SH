@@ -34,13 +34,16 @@ echo "On this machine the G4SYSTEM=\$G4SYSTEM"
 # g4dirs.U
 #
 #+
-setenv G4INSTALL "$g4final_install/include/geant4"
+setenv G4INSTALL "$g4final_install/src/geant4"
 echo "On this machine the G4INSTALL=\$G4INSTALL"
 
 #+
-if ( X$g4include != X ) then
-setenv G4INCLUDE "$g4include"
+if ( X$g4includes_flag != X ) then
+setenv G4INCLUDE "$g4final_install/include/geant4"
 echo "On this machine the G4INCLUDE=\$G4INCLUDE"
+else
+setenv G4BASE "$g4final_install/include/geant4/source"
+echo "On this machine the G4BASE=\$G4BASE"
 endif
 
 #+
@@ -290,6 +293,12 @@ endif
 if ( X$g4lib_use_granular == Xy ) then
 setenv G4LIB_USE_GRANULAR 1
 echo "On this machine the G4LIB_USE_GRANULAR=\$G4LIB_USE_GRANULAR"
+endif
+
+# Check for Windows!
+if ( "X$G4SYSTEM" != "XWIN32-VC" && "X$G4SYSTEM" != "XWIN32-VC7" ) then
+setenv G4UI_USE_TCSH 1
+echo "On this machine the G4UI_USE_TCSH=\$G4UI_USE_TCSH"
 endif
 
 #####################################################################
