@@ -12,6 +12,18 @@
 /vis/viewer/set/viewpointThetaPhi  60 30
 /vis/viewer/refresh
 /vis/scene/endOfEventAction accumulate
-/run/beamOn 100000
+/run/beamOn 100
+/vis/scene/notifyHandlers
+/vis/viewer/update
+/run/beamOn 100
+/vis/scene/notifyHandlers
+/vis/viewer/update
+/run/beamOn 100
+/vis/scene/notifyHandlers
+/vis/viewer/update
+/run/beamOn 100
+/vis/scene/notifyHandlers
+/vis/viewer/update
+/run/beamOn 1000
 /vis/scene/notifyHandlers
 /vis/viewer/update

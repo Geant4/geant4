@@ -47,7 +47,7 @@ XrayFluoAnalysisManager* XrayFluoAnalysisManager::instance = 0;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayFluoAnalysisManager::XrayFluoAnalysisManager()
-  :outputFileName("xrayfluo.hbk"), visPlotter(true), persistencyType("hbook"), 
+  :outputFileName("xrayfluo.hbk"), visPlotter(false), persistencyType("hbook"), 
    analysisFactory(0), tree(0),histogramFactory(0)
 {
   //creating the messenger
@@ -101,6 +101,8 @@ XrayFluoAnalysisManager::~XrayFluoAnalysisManager()
 
   delete plotterFactory;
   plotterFactory=0;
+
+  delete tree;
 
   delete instance;
 
@@ -175,8 +177,7 @@ void XrayFluoAnalysisManager::finish()
     tree->close();
   }
 
-  delete tree;
-  
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
