@@ -45,7 +45,7 @@ Em6PhysicsList::Em6PhysicsList(Em6DetectorConstruction* p)
   cutForProton    = defaultCutValue;
   
   //  MaxChargedStep = DBL_MAX; 
-  MaxChargedStep = 0.1*mm; 
+  MaxChargedStep = 1*mm; 
   
   SetVerboseLevel(2);
   physicsListMessenger = new Em6PhysicsListMessenger(this);
@@ -158,6 +158,7 @@ void Em6PhysicsList::ConstructProcess()
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
+#include "G4MuonMinusCaptureAtRest.hh"
 
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
@@ -210,6 +211,7 @@ void Em6PhysicsList::ConstructEM()
      pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
      pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-1,3);
      pmanager->AddProcess(new G4MuPairProduction,  -1,-1,4);       	       
+     pmanager->AddProcess(new G4MuonMinusCaptureAtRest,0,-1,-1);       	       
 
     } else if (
                 particleName == "proton"  
@@ -439,6 +441,7 @@ void Em6PhysicsList::SetMaxStep(G4double step)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 
 
 

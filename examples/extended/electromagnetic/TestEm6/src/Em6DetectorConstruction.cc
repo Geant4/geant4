@@ -174,9 +174,12 @@ Air->AddElement(elO, fractionmass=0.3);
 G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
   //default materials of the calorimeter
-  // AbsorberMaterial = H2O;
-  AbsorberMaterial = Si;
+   AbsorberMaterial = H2O;
+// AbsorberMaterial = Si;
+  // AbsorberMaterial = Cu;
+//   AbsorberMaterial = Fe;
   // AbsorberMaterial = Al;
+
   WorldMaterial    = Air;
 }
 
