@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2001-01-26 15:16:18 flei Exp $
+$Id: History,v 1.18 2001-02-05 01:31:43 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Feb 5 2001, M.Asai (event-V03-00-00)
+
 Jan 26 2001, F. Lei
 - bug fixing in G4GeneralSourceParticle.cc
  replace: 
