@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polyhedron.cc,v 1.7 2000-01-11 17:35:09 johna Exp $
+// $Id: HepPolyhedron.cc,v 1.1 2000-02-22 15:31:35 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -27,53 +27,52 @@
 // 01.06.97 E.Chernyaev
 // - modified RotateAroundZ, added SetSideFacets
   
-#include "G4Polyhedron.hh"
+#include "HepPolyhedron.h"
 
 /***********************************************************************
  *                                                                     *
- * Name: G4Polyhedron << operator                    Date:    09.05.96 *
+ * Name: HepPolyhedron operator <<                   Date:    09.05.96 *
  * Author: E.Chernyaev (IHEP/Protvino)               Revised:          *
  *                                                                     *
  * Function: Print contents of G4 polyhedron                           *
  *                                                                     *
  ***********************************************************************/
-G4std::ostream& operator<<(G4std::ostream &ostr, const G4Facet &facet) {
-  for (G4int k=0; k<4; k++) {
+std::ostream & operator<<(std::ostream & ostr, const G4Facet & facet) {
+  for (int k=0; k<4; k++) {
     ostr << " " << facet.edge[k].v << "/" << facet.edge[k].f;
   }
   return ostr;
 }
 
-G4std::ostream& operator<<(G4std::ostream &ostr, const G4Polyhedron &ph) {
-  G4int i;
-
-  ostr << G4endl;
-  ostr << "Nverteces=" << ph.nvert << ", Nfacets=" << ph.nface << G4endl;
+std::ostream & operator<<(std::ostream & ostr, const HepPolyhedron & ph) {
+  ostr << std::endl;
+  ostr << "Nverteces=" << ph.nvert << ", Nfacets=" << ph.nface << std::endl;
+  int i;
   for (i=1; i<=ph.nvert; i++) {
-     ostr << "xyz(" << i << ")=" <<
-       ph.pV[i].x() << ' ' << ph.pV[i].y() << ' ' << ph.pV[i].z() << G4endl;
+     ostr << "xyz(" << i << ")="
+	  << ph.pV[i].x() << ' ' << ph.pV[i].y() << ' ' << ph.pV[i].z()
+	  << std::endl;
   }
   for (i=1; i<=ph.nface; i++) {
-    ostr << "face(" << i << ")=" << ph.pF[i] << G4endl;
+    ostr << "face(" << i << ")=" << ph.pF[i] << std::endl;
   }
   return ostr;
 }
 
-G4Polyhedron::G4Polyhedron(const G4Polyhedron &from)
+HepPolyhedron::HepPolyhedron(const HepPolyhedron &from)
 /***********************************************************************
  *                                                                     *
- * Name: G4Polyhedron copy constructor              Date:    23.07.96  *
+ * Name: HepPolyhedron copy constructor             Date:    23.07.96  *
  * Author: E.Chernyaev (IHEP/Protvino)              Revised:           *
  *                                                                     *
  ***********************************************************************/
 {
-  G4VVisPrim::operator = (from);
   if (from.nvert > 0 && from.nface > 0) {
-    G4int i;
     nvert = from.nvert;
     nface = from.nface;
-    pV = new G4Point3D[nvert + 1];
+    pV = new HepPoint3D[nvert + 1];
     pF = new G4Facet[nface + 1];
+    int i;
     for (i=1; i<=nvert; i++) pV[i] = from.pV[i];
     for (i=1; i<=nface; i++) pF[i] = from.pF[i];
   }else{
@@ -81,122 +80,10 @@ G4Polyhedron::G4Polyhedron(const G4Polyhedron &from)
   }
 }
 
-G4Visible & G4Polyhedron::operator=(const G4Visible &from) {
-  return G4Visible::operator = (from);
-}
-
-G4VVisPrim & G4Polyhedron::operator=(const G4VVisPrim &from) {
-  return G4VVisPrim::operator = (from);
-}
-
-G4Visible & G4PolyhedronTrd2::operator=(const G4Visible &from) {
-  return G4Visible::operator = (from);
-}
-
-G4VVisPrim & G4PolyhedronTrd2::operator=(const G4VVisPrim &from) {
-  return G4VVisPrim::operator = (from);
-}
-
-G4Visible & G4PolyhedronTrd1::operator=(const G4Visible &from) {
-  return G4Visible::operator = (from);
-}
-
-G4VVisPrim & G4PolyhedronTrd1::operator=(const G4VVisPrim &from) {
-  return G4VVisPrim::operator = (from);
-}
-
-G4Visible & G4PolyhedronBox::operator=(const G4Visible &from) {
-  return G4Visible::operator = (from);
-}
-
-G4VVisPrim & G4PolyhedronBox::operator=(const G4VVisPrim &from) {
-  return G4VVisPrim::operator = (from);
-}
-
-G4Visible & G4PolyhedronTrap::operator=(const G4Visible &from) {
-  return G4Visible::operator = (from);
-}
-
-G4VVisPrim & G4PolyhedronTrap::operator=(const G4VVisPrim &from) {
-  return G4VVisPrim::operator = (from);
-}
-
-G4Visible & G4PolyhedronPara::operator=(const G4Visible &from) {
-  return G4Visible::operator = (from);
-}
-
-G4VVisPrim & G4PolyhedronPara::operator=(const G4VVisPrim &from) {
-  return G4VVisPrim::operator = (from);
-}
-
-G4Visible & G4PolyhedronCons::operator=(const G4Visible &from) {
-  return G4Visible::operator = (from);
-}
-
-G4VVisPrim & G4PolyhedronCons::operator=(const G4VVisPrim &from) {
-  return G4VVisPrim::operator = (from);
-}
-
-G4Visible & G4PolyhedronCone::operator=(const G4Visible &from) {
-  return G4Visible::operator = (from);
-}
-
-G4VVisPrim & G4PolyhedronCone::operator=(const G4VVisPrim &from) {
-  return G4VVisPrim::operator = (from);
-}
-
-G4Visible & G4PolyhedronTubs::operator=(const G4Visible &from) {
-  return G4Visible::operator = (from);
-}
-
-G4VVisPrim & G4PolyhedronTubs::operator=(const G4VVisPrim &from) {
-  return G4VVisPrim::operator = (from);
-}
-
-G4Visible & G4PolyhedronTube::operator=(const G4Visible &from) {
-  return G4Visible::operator = (from);
-}
-
-G4VVisPrim & G4PolyhedronTube::operator=(const G4VVisPrim &from) {
-  return G4VVisPrim::operator = (from);
-}
-
-G4Visible & G4PolyhedronPgon::operator=(const G4Visible &from) {
-  return G4Visible::operator = (from);
-}
-
-G4VVisPrim & G4PolyhedronPgon::operator=(const G4VVisPrim &from) {
-  return G4VVisPrim::operator = (from);
-}
-
-G4Visible & G4PolyhedronPcon::operator=(const G4Visible &from) {
-  return G4Visible::operator = (from);
-}
-
-G4VVisPrim & G4PolyhedronPcon::operator=(const G4VVisPrim &from) {
-  return G4VVisPrim::operator = (from);
-}
-
-G4Visible & G4PolyhedronSphere::operator=(const G4Visible &from) {
-  return G4Visible::operator = (from);
-}
-
-G4VVisPrim & G4PolyhedronSphere::operator=(const G4VVisPrim &from) {
-  return G4VVisPrim::operator = (from);
-}
-
-G4Visible & G4PolyhedronTorus::operator=(const G4Visible &from) {
-  return G4Visible::operator = (from);
-}
-
-G4VVisPrim & G4PolyhedronTorus::operator=(const G4VVisPrim &from) {
-  return G4VVisPrim::operator = (from);
-}
-
-G4Polyhedron & G4Polyhedron::operator=(const G4Polyhedron &from)
+HepPolyhedron & HepPolyhedron::operator=(const HepPolyhedron &from)
 /***********************************************************************
  *                                                                     *
- * Name: G4Polyhedron = operator                    Date:    23.07.96  *
+ * Name: HepPolyhedron operator =                   Date:    23.07.96  *
  * Author: E.Chernyaev (IHEP/Protvino)              Revised:           *
  *                                                                     *
  * Function: Copy contents of one GEANT4 polyhedron to another         *
@@ -204,15 +91,14 @@ G4Polyhedron & G4Polyhedron::operator=(const G4Polyhedron &from)
  ***********************************************************************/
 {
   if (this == &from) return *this;
-  G4VVisPrim::operator=(from);
   delete [] pV;
   delete [] pF;
   if (from.nvert > 0  && from.nface > 0) {
-    G4int i;
     nvert = from.nvert;
     nface = from.nface;
-    pV = new G4Point3D[nvert + 1];
+    pV = new HepPoint3D[nvert + 1];
     pF = new G4Facet[nface + 1];
+    int i;
     for (i=1; i<=nvert; i++) pV[i] = from.pV[i];
     for (i=1; i<=nface; i++) pF[i] = from.pF[i];
   }else{
@@ -221,29 +107,89 @@ G4Polyhedron & G4Polyhedron::operator=(const G4Polyhedron &from)
   return *this;
 }
 
-void G4Polyhedron::SetNumberOfRotationSteps(G4int n)
+int
+HepPolyhedron::FindNeighbour(int iFace, int iNode, int iOrder) const
 /***********************************************************************
  *                                                                     *
- * Name: G4Polyhedron::SetNumberOfRotationSteps      Date:    24.06.97 *
+ * Name: HepPolyhedron::FindNeighbour                Date:    22.11.99 *
+ * Author: E.Chernyaev                               Revised:          *
+ *                                                                     *
+ * Function: Find neighbouring face                                    *
+ *                                                                     *
+ ***********************************************************************/
+{
+  int i;
+  for (i=0; i<4; i++) {
+    if (iNode == abs(pF[iFace].edge[i].v)) break;
+  }
+  if (i == 4) {
+    std::cerr
+      << "HepPolyhedron::FindNeighbour: face " << iFace
+      << " has no node " << iNode
+      << std::endl; 
+    return 0;
+  }
+  if (iOrder < 0) {
+    if ( --i < 0) i = 3;
+    if (pF[iFace].edge[i].v == 0) i = 2;
+  }
+  return (pF[iFace].edge[i].v > 0) ? 0 : pF[iFace].edge[i].f;
+}
+
+HepNormal3D HepPolyhedron::FindNodeNormal(int iFace, int iNode) const
+/***********************************************************************
+ *                                                                     *
+ * Name: HepPolyhedron::FindNodeNormal               Date:    22.11.99 *
+ * Author: E.Chernyaev                               Revised:          *
+ *                                                                     *
+ * Function: Find normal at given node                                 *
+ *                                                                     *
+ ***********************************************************************/
+{
+  HepNormal3D  normal = GetUnitNormal(iFace);
+  int          k = iFace, iOrder = 1, n = 1;
+
+  for(;;) {
+    k = FindNeighbour(k, iNode, iOrder);
+    if (k == iFace) break; 
+    if (k > 0) {
+      n++;
+      normal += GetUnitNormal(k);
+    }else{
+      if (iOrder < 0) break;
+      k = iFace;
+      iOrder = -iOrder;
+    }
+  }
+  return normal.unit();
+}
+
+void HepPolyhedron::SetNumberOfRotationSteps(int n)
+/***********************************************************************
+ *                                                                     *
+ * Name: HepPolyhedron::SetNumberOfRotationSteps     Date:    24.06.97 *
  * Author: J.Allison (Manchester University)         Revised:          *
  *                                                                     *
  * Function: Set number of steps for whole circle                      *
  *                                                                     *
  ***********************************************************************/
 {
-  const G4int  nMin = 3;
+  const int nMin = 3;
   if (n < nMin) {
-    n = nMin;
-    G4cout << "G4Polyhedron::SetNumberOfRotationSteps: attempt to set the"
-      "\nnumber of steps per circle < " << nMin << "; forced to " << n << G4endl;
-  }
-  fNumberOfRotationSteps = n;
+    std::cerr 
+      << "HepPolyhedron::SetNumberOfRotationSteps: attempt to set the\n"
+      << "number of steps per circle < " << nMin << "; forced to " << nMin
+      << std::endl;
+    fNumberOfRotationSteps = nMin;
+  }else{
+    fNumberOfRotationSteps = n;
+  }    
 }
 
-void G4Polyhedron::AllocateMemory(G4int Nvert, G4int Nface)
+void HepPolyhedron::AllocateMemory(int Nvert, int Nface)
 /***********************************************************************
  *                                                                     *
- * Name: G4Polyhedron::AllocateMemory                Date:    19.06.96 *
+ * Name: HepPolyhedron::AllocateMemory               Date:    19.06.96 *
  * Author: E.Chernyaev (IHEP/Protvino)               Revised:          *
  *                                                                     *
  * Function: Allocate memory for GEANT4 polyhedron                     *
@@ -255,14 +201,14 @@ void G4Polyhedron::AllocateMemory(G4int Nvert, G4int Nface)
 {
   nvert = Nvert;
   nface = Nface;
-  pV    = new G4Point3D[nvert+1];
+  pV    = new HepPoint3D[nvert+1];
   pF    = new G4Facet[nface+1];
 }
 
-void G4Polyhedron::CreatePrism()
+void HepPolyhedron::CreatePrism()
 /***********************************************************************
  *                                                                     *
- * Name: G4Polyhedron::CreatePrism                   Date:    15.07.96 *
+ * Name: HepPolyhedron::CreatePrism                  Date:    15.07.96 *
  * Author: E.Chernyaev (IHEP/Protvino)               Revised:          *
  *                                                                     *
  * Function: Set facets for a prism                                    *
@@ -279,12 +225,12 @@ void G4Polyhedron::CreatePrism()
   pF[6] = G4Facet(5,FRONT, 6,RIGHT, 7,BACK,   8,LEFT);
 }
 
-void G4Polyhedron::RotateEdge(G4int k1, G4int k2, G4double r1, G4double r2,
-			      G4int v1, G4int v2, G4int vEdge,
-                              G4bool ifWholeCircle, G4int ns, G4int &kface)
+void HepPolyhedron::RotateEdge(int k1, int k2, HepDouble r1, HepDouble r2,
+			      int v1, int v2, int vEdge,
+                              HepBoolean ifWholeCircle, int ns, int &kface)
 /***********************************************************************
  *                                                                     *
- * Name: G4Polyhedron::RotateEdge                    Date:    05.12.96 *
+ * Name: HepPolyhedron::RotateEdge                   Date:    05.12.96 *
  * Author: E.Chernyaev (IHEP/Protvino)               Revised:          *
  *                                                                     *
  * Function: Create set of facets by rotation of an edge around Z-axis *
@@ -303,12 +249,12 @@ void G4Polyhedron::RotateEdge(G4int k1, G4int k2, G4double r1, G4double r2,
 {
   if (r1 == 0. && r2 == 0) return;
 
-  G4int i;
-  G4int i1  = k1;
-  G4int i2  = k2;
-  G4int ii1 = ifWholeCircle ? i1 : i1+ns;
-  G4int ii2 = ifWholeCircle ? i2 : i2+ns;
-  G4int vv  = ifWholeCircle ? vEdge : 1;
+  int i;
+  int i1  = k1;
+  int i2  = k2;
+  int ii1 = ifWholeCircle ? i1 : i1+ns;
+  int ii2 = ifWholeCircle ? i2 : i2+ns;
+  int vv  = ifWholeCircle ? vEdge : 1;
 
   if (ns == 1) {
     if (r1 == 0.) {
@@ -341,12 +287,12 @@ void G4Polyhedron::RotateEdge(G4int k1, G4int k2, G4double r1, G4double r2,
   }
 }
 
-void G4Polyhedron::SetSideFacets(G4int ii[4], G4int vv[4],
-				 G4int *kk, G4double *r,
-                                 G4double dphi, G4int ns, G4int &kface)
+void HepPolyhedron::SetSideFacets(int ii[4], int vv[4],
+				 int *kk, HepDouble *r,
+                                 HepDouble dphi, int ns, int &kface)
 /***********************************************************************
  *                                                                     *
- * Name: G4Polyhedron::SetSideFacets                 Date:    20.05.97 *
+ * Name: HepPolyhedron::SetSideFacets                Date:    20.05.97 *
  * Author: E.Chernyaev (IHEP/Protvino)               Revised:          *
  *                                                                     *
  * Function: Set side facets for the case of incomplete rotation       *
@@ -361,10 +307,10 @@ void G4Polyhedron::SetSideFacets(G4int ii[4], G4int vv[4],
  *                                                                     *
  ***********************************************************************/
 {
-  G4int k1, k2, k3, k4;
+  int k1, k2, k3, k4;
   
-  if (abs((G4double)(dphi-M_PI)) < perMillion) {          // half a circle
-    for (G4int i=0; i<4; i++) {
+  if (abs((HepDouble)(dphi-M_PI)) < perMillion) {          // half a circle
+    for (int i=0; i<4; i++) {
       k1 = ii[i];
       k2 = (i == 3) ? ii[0] : ii[i+1];
       if (r[k1] == 0. && r[k2] == 0.) vv[i] = -1;      
@@ -412,16 +358,16 @@ void G4Polyhedron::SetSideFacets(G4int ii[4], G4int vv[4],
   }
 }
 
-void G4Polyhedron::RotateAroundZ(G4int nstep, G4double phi, G4double dphi,
-                                 G4int np1, G4int np2,
-				 const G4double *z, G4double *r,
-				 G4int nodeVis, G4int edgeVis)
+void HepPolyhedron::RotateAroundZ(int nstep, HepDouble phi, HepDouble dphi,
+                                 int np1, int np2,
+				 const HepDouble *z, HepDouble *r,
+				 int nodeVis, int edgeVis)
 /***********************************************************************
  *                                                                     *
- * Name: G4Polyhedron::RotateAroundZ                 Date:    27.11.96 *
+ * Name: HepPolyhedron::RotateAroundZ                Date:    27.11.96 *
  * Author: E.Chernyaev (IHEP/Protvino)               Revised:          *
  *                                                                     *
- * Function: Create G4Polyhedron for a solid produced by rotation of   *
+ * Function: Create HepPolyhedron for a solid produced by rotation of  *
  *           two polylines around Z-axis                               *
  *                                                                     *
  * Input: nstep - number of discrete steps, if 0 then default          *
@@ -438,27 +384,28 @@ void G4Polyhedron::RotateAroundZ(G4int nstep, G4double phi, G4double dphi,
  *                                                                     *
  ***********************************************************************/
 {
-  static G4double wholeCircle   = 2*M_PI;
+  static HepDouble wholeCircle   = 2*M_PI;
     
   //   S E T   R O T A T I O N   P A R A M E T E R S
 
-  G4bool   ifWholeCircle = abs(dphi-wholeCircle) < perMillion ? true : false;
-  G4double delPhi        = ifWholeCircle ? wholeCircle : dphi;  
-  G4int    nSphi         = nstep > 0 ? nstep :
-    G4int(delPhi*GetNumberOfRotationSteps()/wholeCircle+.5);
-  if (nSphi == 0)  nSphi = 1;
-  G4int    nVphi         = ifWholeCircle ? nSphi : nSphi+1;
-  G4bool   ifClosed      = np1 > 0 ? false : true;
+  HepBoolean ifWholeCircle = (abs(dphi-wholeCircle) < perMillion) ?
+    true : false;
+  HepDouble   delPhi  = ifWholeCircle ? wholeCircle : dphi;  
+  int        nSphi    = (nstep > 0) ?
+    nstep : int(delPhi*GetNumberOfRotationSteps()/wholeCircle+.5);
+  if (nSphi == 0) nSphi = 1;
+  int        nVphi    = ifWholeCircle ? nSphi : nSphi+1;
+  HepBoolean ifClosed = np1 > 0 ? false : true;
   
   //   C O U N T   V E R T E C E S
 
-  G4int absNp1 = abs(np1);
-  G4int absNp2 = abs(np2);
-  G4int i1beg = 0;
-  G4int i1end = absNp1-1;
-  G4int i2beg = absNp1;
-  G4int i2end = absNp1+absNp2-1; 
-  G4int i, j, k;
+  int absNp1 = abs(np1);
+  int absNp2 = abs(np2);
+  int i1beg = 0;
+  int i1end = absNp1-1;
+  int i2beg = absNp1;
+  int i2end = absNp1+absNp2-1; 
+  int i, j, k;
 
   for(i=i1beg; i<=i2end; i++) {
     if (abs(r[i]) < perMillion) r[i] = 0.;
@@ -469,8 +416,8 @@ void G4Polyhedron::RotateAroundZ(G4int nstep, G4double phi, G4double dphi,
     j += (r[i] == 0.) ? 1 : nVphi;
   }
 
-  G4bool ifSide1 = false;                               // internal nodes
-  G4bool ifSide2 = false;
+  HepBoolean ifSide1 = false;                           // internal nodes
+  HepBoolean ifSide2 = false;
 
   if (r[i2beg] != r[i1beg] || z[i2beg] != z[i1beg]) {
     j += (r[i2beg] == 0.) ? 1 : nVphi;
@@ -515,51 +462,51 @@ void G4Polyhedron::RotateAroundZ(G4int nstep, G4double phi, G4double dphi,
 
   //   G E N E R A T E   V E R T E C E S
 
-  G4int *kk;
-  kk = new G4int[absNp1+absNp2];
+  int *kk;
+  kk = new int[absNp1+absNp2];
 
   k = 1;
   for(i=i1beg; i<=i1end; i++) {
     kk[i] = k;
-    if (r[i] == 0.) { pV[k++] = G4Point3D(0., 0., z[i]); } else { k += nVphi; }
+    if (r[i] == 0.) { pV[k++] = HepPoint3D(0, 0, z[i]); } else { k += nVphi; }
   }
 
   i = i2beg;
   if (ifSide1) {
     kk[i] = k;
-    if (r[i] == 0.) { pV[k++] = G4Point3D(0., 0., z[i]); } else { k += nVphi; }
+    if (r[i] == 0.) { pV[k++] = HepPoint3D(0, 0, z[i]); } else { k += nVphi; }
   }else{
     kk[i] = kk[i1beg];
   }
 
   for(i=i2beg+1; i<i2end; i++) {
     kk[i] = k;
-    if (r[i] == 0.) { pV[k++] = G4Point3D(0., 0., z[i]); } else { k += nVphi; }
+    if (r[i] == 0.) { pV[k++] = HepPoint3D(0, 0, z[i]); } else { k += nVphi; }
   }
 
   if (absNp2 > 1) {
     i = i2end;
     if (ifSide2) {
       kk[i] = k;
-      if (r[i] == 0.) pV[k] = G4Point3D(0., 0., z[i]);
+      if (r[i] == 0.) pV[k] = HepPoint3D(0, 0, z[i]);
     }else{
       kk[i] = kk[i1end];
     }
   }
 
-  G4double cosPhi, sinPhi;
+  HepDouble cosPhi, sinPhi;
 
   for(j=0; j<nVphi; j++) {
     cosPhi = cos(phi+j*delPhi/nSphi);
     sinPhi = sin(phi+j*delPhi/nSphi);
     for(i=i1beg; i<=i2end; i++) {
-      if (r[i] != 0.) pV[kk[i]+j] = G4Point3D(r[i]*cosPhi, r[i]*sinPhi, z[i]);
+      if (r[i] != 0.) pV[kk[i]+j] = HepPoint3D(r[i]*cosPhi,r[i]*sinPhi,z[i]);
     }
   }
 
   //   G E N E R A T E   E X T E R N A L   F A C E S
 
-  G4int v1,v2;
+  int v1,v2;
 
   k = 1;
   v2 = ifClosed ? nodeVis : 1;
@@ -615,7 +562,7 @@ void G4Polyhedron::RotateAroundZ(G4int nstep, G4double phi, G4double dphi,
 
   if (!ifWholeCircle) {
 
-    G4int  ii[4], vv[4];
+    int  ii[4], vv[4];
 
     if (ifClosed) {
       for (i=i1beg; i<=i1end; i++) {
@@ -647,16 +594,18 @@ void G4Polyhedron::RotateAroundZ(G4int nstep, G4double phi, G4double dphi,
   delete [] kk;
 
   if (k-1 != nface) {
-    G4cerr << "Polyhedron::RotateAroundZ: number of generated faces ("
-         << k-1 << ") is not equal to the number of allocated faces ("
-         << nface << ")" << G4endl;
+    std::cerr
+      << "Polyhedron::RotateAroundZ: number of generated faces ("
+      << k-1 << ") is not equal to the number of allocated faces ("
+      << nface << ")"
+      << std::endl;
   }
 }
 
-void G4Polyhedron::SetReferences()
+void HepPolyhedron::SetReferences()
 /***********************************************************************
  *                                                                     *
- * Name: G4Polyhedron::SetReferences                 Date:    04.12.96 *
+ * Name: HepPolyhedron::SetReferences                Date:    04.12.96 *
  * Author: E.Chernyaev (IHEP/Protvino)               Revised:          *
  *                                                                     *
  * Function: For each edge set reference to neighbouring facet         *
@@ -667,9 +616,9 @@ void G4Polyhedron::SetReferences()
 
   struct edgeListMember {
     edgeListMember *next;
-    G4int v2;
-    G4int iface;
-    G4int iedge;
+    int v2;
+    int iface;
+    int iedge;
   } *edgeList, *freeList, **headList;
 
   
@@ -678,7 +627,7 @@ void G4Polyhedron::SetReferences()
   edgeList = new edgeListMember[2*nface];
   headList = new edgeListMember*[nvert];
   
-  G4int i;
+  int i;
   for (i=0; i<nvert; i++) {
     headList[i] = 0;
   }
@@ -690,7 +639,7 @@ void G4Polyhedron::SetReferences()
 
   //   L O O P   A L O N G   E D G E S
 
-  G4int iface, iedge, nedge, i1, i2, k1, k2;
+  int iface, iedge, nedge, i1, i2, k1, k2;
   edgeListMember *prev, *cur;
   
   for(iface=1; iface<=nface; iface++) {
@@ -700,8 +649,8 @@ void G4Polyhedron::SetReferences()
       i2 = (iedge < nedge-1) ? iedge+1 : 0;
       i1 = abs(pF[iface].edge[i1].v);
       i2 = abs(pF[iface].edge[i2].v);
-      k1 = G4std::min(i1,i2);
-      k2 = G4std::max(i1,i2);
+      k1 = (i1 < i2) ? i1 : i2;          // k1 = ::min(i1,i2);
+      k2 = (i1 > i2) ? i1 : i2;          // k2 = ::max(i1,i2);
       
       // check head of the List corresponding to k1
       cur = headList[k1];
@@ -725,11 +674,13 @@ void G4Polyhedron::SetReferences()
         i1 = (pF[iface].edge[iedge].v < 0) ? -1 : 1;
 	i2 = (pF[cur->iface].edge[cur->iedge].v < 0) ? -1 : 1;
         if (i1 != i2) {
-	  G4cerr << "Polyhedron::SetReferences: different edge visibility "
-	       << iface << "/" << iedge << "/"
-	       << pF[iface].edge[iedge].v << " and "
-	       << cur->iface << "/" << cur->iedge << "/"
-	       << pF[cur->iface].edge[cur->iedge].v << G4endl;
+	  std::cerr
+	    << "Polyhedron::SetReferences: different edge visibility "
+	    << iface << "/" << iedge << "/"
+	    << pF[iface].edge[iedge].v << " and "
+	    << cur->iface << "/" << cur->iedge << "/"
+	    << pF[cur->iface].edge[cur->iedge].v
+	    << std::endl;
 	}
 	continue;
       }
@@ -758,11 +709,13 @@ void G4Polyhedron::SetReferences()
 	  i1 = (pF[iface].edge[iedge].v < 0) ? -1 : 1;
 	  i2 = (pF[cur->iface].edge[cur->iedge].v < 0) ? -1 : 1;
 	    if (i1 != i2) {
-	      G4cerr << "Polyhedron::SetReferences: different edge visibility "
-		   << iface << "/" << iedge << "/"
-		   << pF[iface].edge[iedge].v << " and "
-		   << cur->iface << "/" << cur->iedge << "/"
-		   << pF[cur->iface].edge[cur->iedge].v << G4endl;
+	      std::cerr
+		<< "Polyhedron::SetReferences: different edge visibility "
+		<< iface << "/" << iedge << "/"
+		<< pF[iface].edge[iedge].v << " and "
+		<< cur->iface << "/" << cur->iedge << "/"
+		<< pF[cur->iface].edge[cur->iedge].v
+		<< std::endl;
 	    }
 	  break;
 	}
@@ -774,8 +727,9 @@ void G4Polyhedron::SetReferences()
 
   for (i=0; i<nvert; i++) {
     if (headList[i] != 0) {
-      G4cerr << "Polyhedron::SetReferences: List " << i << " is not empty"
-	   << G4endl;
+      std::cerr
+	<< "Polyhedron::SetReferences: List " << i << " is not empty"
+	<< std::endl;
     }
   }
 
@@ -785,10 +739,10 @@ void G4Polyhedron::SetReferences()
   delete [] headList;
 }
 
-void G4Polyhedron::InvertFacets()
+void HepPolyhedron::InvertFacets()
 /***********************************************************************
  *                                                                     *
- * Name: G4Polyhedron::InvertFacets                 Date:    01.12.99  *
+ * Name: HepPolyhedron::InvertFacets                Date:    01.12.99  *
  * Author: E.Chernyaev                              Revised:           *
  *                                                                     *
  * Function: Invert the order of the nodes in the facets               *
@@ -796,7 +750,7 @@ void G4Polyhedron::InvertFacets()
  ***********************************************************************/
 {
   if (nface <= 0) return;
-  G4int i, k, nnode, v[4],f[4];
+  int i, k, nnode, v[4],f[4];
   for (i=1; i<=nface; i++) {
     nnode =  (pF[i].edge[3].v == 0) ? 3 : 4;
     for (k=0; k<nnode; k++) {
@@ -811,10 +765,10 @@ void G4Polyhedron::InvertFacets()
   }
 }
 
-G4Polyhedron & G4Polyhedron::Transform(const G4Transform3D &t)
+HepPolyhedron & HepPolyhedron::Transform(const HepTransform3D &t)
 /***********************************************************************
  *                                                                     *
- * Name: G4Polyhedron::Transform                    Date:    01.12.99  *
+ * Name: HepPolyhedron::Transform                    Date:    01.12.99  *
  * Author: E.Chernyaev                              Revised:           *
  *                                                                     *
  * Function: Make transformation of the polyhedron                     *
@@ -822,36 +776,35 @@ G4Polyhedron & G4Polyhedron::Transform(const G4Transform3D &t)
  ***********************************************************************/
 {
   if (nvert > 0) {
-    for (G4int i=1; i<=nvert; i++) { pV[i] = t * pV[i]; }
+    for (int i=1; i<=nvert; i++) { pV[i] = t * pV[i]; }
 
     //  C H E C K   D E T E R M I N A N T   A N D
     //  I N V E R T   F A C E T S   I F   I T   I S   N E G A T I V E
 
-    G4Vector3D d = t * G4Vector3D(0,0,0);
-    G4Vector3D x = t * G4Vector3D(1,0,0) - d;
-    G4Vector3D y = t * G4Vector3D(0,1,0) - d;
-    G4Vector3D z = t * G4Vector3D(0,0,1) - d;
+    HepVector3D d = t * HepVector3D(0,0,0);
+    HepVector3D x = t * HepVector3D(1,0,0) - d;
+    HepVector3D y = t * HepVector3D(0,1,0) - d;
+    HepVector3D z = t * HepVector3D(0,0,1) - d;
     if ((x.cross(y))*z < 0) InvertFacets();
   }
   return *this;
 }
 
-G4bool G4Polyhedron::GetNextVertexIndex(G4int &index, G4int &edgeFlag) const
+HepBoolean HepPolyhedron::GetNextVertexIndex(int &index, int &edgeFlag) const
 /***********************************************************************
  *                                                                     *
- * Name: G4Polyhedron::GetNextVertexIndex           Date:    03.09.96  *
+ * Name: HepPolyhedron::GetNextVertexIndex          Date:    03.09.96  *
  * Author: Yasuhide Sawada                          Revised:           *
  *                                                                     *
  * Function:                                                           *
  *                                                                     *
  ***********************************************************************/
 {
-  static G4int iFace = 1;
-  static G4int iQVertex = 0;
-  G4int vIndex = pF[iFace].edge[iQVertex].v;
+  static int iFace = 1;
+  static int iQVertex = 0;
+  int vIndex = pF[iFace].edge[iQVertex].v;
 
-//edgeFlag = vIndex > 0 ? true : false;
-  edgeFlag = vIndex > 0 ? 1 : 0;
+  edgeFlag = (vIndex > 0) ? 1 : -1;
   index = abs(vIndex);
 
   if (iQVertex >= 3 || pF[iFace].edge[iQVertex+1].v == 0) {
@@ -864,27 +817,30 @@ G4bool G4Polyhedron::GetNextVertexIndex(G4int &index, G4int &edgeFlag) const
   }
 }
 
-G4Point3D G4Polyhedron::GetVertex(G4int index) const
+HepPoint3D HepPolyhedron::GetVertex(int index) const
 /***********************************************************************
  *                                                                     *
- * Name: G4Polyhedron::GetVertex                    Date:    03.09.96  *
- * Author: Yasuhide Sawada                          Revised:           *
+ * Name: HepPolyhedron::GetVertex                   Date:    03.09.96  *
+ * Author: Yasuhide Sawada                          Revised: 17.11.99  *
  *                                                                     *
  * Function: Get vertex of the index.                                  *
  *                                                                     *
  ***********************************************************************/
 {
-  if (index <= 0 || index > nvert){
-    G4cerr << "Error: irrelevant vertex label " << index << G4endl;
-      return G4Point3D();
+  if (index <= 0 || index > nvert) {
+    std::cerr
+      << "HepPolyhedron::GetVertex: irrelevant index " << index
+      << std::endl;
+    return HepPoint3D();
   }
   return pV[index];
 }
 
-G4bool G4Polyhedron::GetNextVertex(G4Point3D &vertex, G4int &edgeFlag) const
+HepBoolean
+HepPolyhedron::GetNextVertex(HepPoint3D &vertex, int &edgeFlag) const
 /***********************************************************************
  *                                                                     *
- * Name: G4Polyhedron::GetNextVertex                Date:    22.07.96  *
+ * Name: HepPolyhedron::GetNextVertex               Date:    22.07.96  *
  * Author: John Allison                             Revised:           *
  *                                                                     *
  * Function: Get vertices of the quadrilaterals in order for each      *
@@ -893,79 +849,61 @@ G4bool G4Polyhedron::GetNextVertex(G4Point3D &vertex, G4int &edgeFlag) const
  *                                                                     *
  ***********************************************************************/
 {
-  G4int index;
-  G4bool rep = GetNextVertexIndex(index, edgeFlag);
+  int index;
+  HepBoolean rep = GetNextVertexIndex(index, edgeFlag);
   vertex = pV[index];
   return rep;
 }
 
-G4bool G4Polyhedron::GetNextNormal(G4Normal3D &normal) const
+HepBoolean HepPolyhedron::GetNextVertex(HepPoint3D &vertex, int &edgeFlag,
+				       HepNormal3D &normal) const
 /***********************************************************************
  *                                                                     *
- * Name: G4Polyhedron::GetNextNormal                Date:    22.07.96  *
- * Author: John Allison                             Revised:           *
+ * Name: HepPolyhedron::GetNextVertex               Date:    26.11.99  *
+ * Author: E.Chernyaev                              Revised:           *
  *                                                                     *
- * Function: Get normals of each face in face order.  Returns false    *
- *           when finished all faces.                                  *
+ * Function: Get vertices with normals of the quadrilaterals in order  *
+ *           for each face in face order.                              *
+ *           Returns false when finished each face.                    *
  *                                                                     *
  ***********************************************************************/
 {
-  static G4int iFace = 1;
-  G4int vIndex;
+  static int iFace = 1;
+  static int iNode = 0;
 
-  vIndex       = pF[iFace].edge[0].v;
-  G4Point3D v0 = pV[abs(vIndex)];
-  vIndex       = pF[iFace].edge[1].v;
-  G4Point3D v1 = pV[abs(vIndex)];
-  vIndex       = pF[iFace].edge[2].v;
-  G4Point3D v2 = pV[abs(vIndex)];
-  vIndex       = pF[iFace].edge[3].v;
-  G4Point3D v3 = vIndex > 0 ? pV[abs(vIndex)] : v0;
+  if (nface == 0) return false;  // empty polyhedron
 
-  // Use diagonals - safer.
-  normal = (v2 - v0).cross(v3 - v1);
-
-  if (++iFace <= nface) {
-    return true;
-  }
-  else {
-    iFace = 1;
-    return false;
+  int k = pF[iFace].edge[iNode].v;
+  if (k > 0) { edgeFlag = 1; } else { edgeFlag = -1; k = -k; }
+  vertex = pV[k];
+  normal = FindNodeNormal(iFace,k);
+  if (iNode >= 3 || pF[iFace].edge[iNode+1].v == 0) {
+    iNode = 0;
+    if (++iFace > nface) iFace = 1;
+    return false;                // last node
+  }else{
+    ++iNode;
+    return true;                 // not last node
   }
 }
 
-G4bool G4Polyhedron::GetNextUnitNormal(G4Normal3D &normal) const
+HepBoolean HepPolyhedron::GetNextEdgeIndeces(int &i1, int &i2, int &edgeFlag,
+					    int &iface1, int &iface2) const
 /***********************************************************************
  *                                                                     *
- * Name: G4Polyhedron::GetNextUnitNormal            Date:    16.09.96  *
- * Author: E.Chernyaev                              Revised:           *
+ * Name: HepPolyhedron::GetNextEdgeIndeces          Date:    30.09.96  *
+ * Author: E.Chernyaev                              Revised: 17.11.99  *
  *                                                                     *
- * Function: Get normals of unit length of each face in face order.    *
- *           Returns false when finished all faces.                    *
- *                                                                     *
- ***********************************************************************/
-{
-  G4bool rep = GetNextNormal(normal);
-  normal = normal.unit();
-  return rep;
-}
-
-G4bool
-G4Polyhedron::GetNextEdgeIndeces(G4int &i1, G4int &i2, G4int &edgeFlag) const
-/***********************************************************************
- *                                                                     *
- * Name: G4Polyhedron::GetNextEdgeIndeces           Date:    30.09.96  *
- * Author: E.Chernyaev                              Revised:           *
- *                                                                     *
- * Function: Get indeces of the next edge.                             *
+ * Function: Get indeces of the next edge together with indeces of     *
+ *           of the faces which share the edge.                        *
  *           Returns false when the last edge.                         *
  *                                                                     *
  ***********************************************************************/
 {
-  static G4int iFace    = 1;
-  static G4int iQVertex = 0;
-  static G4int iOrder   = 1;
-  G4int  k1, k2, kflag;
+  static int iFace    = 1;
+  static int iQVertex = 0;
+  static int iOrder   = 1;
+  int  k1, k2, kflag, kface1, kface2;
 
   if (iFace == 1 && iQVertex == 0) {
     k2 = pF[nface].edge[0].v;
@@ -975,9 +913,11 @@ G4Polyhedron::GetNextEdgeIndeces(G4int &i1, G4int &i2, G4int &edgeFlag) const
   }
 
   do {
-    k1    = pF[iFace].edge[iQVertex].v;
-    kflag = k1;
-    k1    = abs(k1);
+    k1     = pF[iFace].edge[iQVertex].v;
+    kflag  = k1;
+    k1     = abs(k1);
+    kface1 = iFace; 
+    kface2 = pF[iFace].edge[iQVertex].f;
     if (iQVertex >= 3 || pF[iFace].edge[iQVertex+1].v == 0) {
       iQVertex = 0;
       k2 = abs(pF[iFace].edge[iQVertex].v);
@@ -988,7 +928,8 @@ G4Polyhedron::GetNextEdgeIndeces(G4int &i1, G4int &i2, G4int &edgeFlag) const
     }
   } while (iOrder*k1 > iOrder*k2);
 
-  i1 = k1; i2 = k2; edgeFlag = kflag > 0 ? 1 : -1;
+  i1 = k1; i2 = k2; edgeFlag = (kflag > 0) ? 1 : -1;
+  iface1 = kface1; iface2 = kface2; 
 
   if (iFace > nface) {
     iFace  = 1; iOrder = 1;
@@ -998,11 +939,29 @@ G4Polyhedron::GetNextEdgeIndeces(G4int &i1, G4int &i2, G4int &edgeFlag) const
   }
 }
 
-G4bool
-G4Polyhedron::GetNextEdge(G4Point3D &p1, G4Point3D &p2, G4int &edgeFlag) const
+HepBoolean
+HepPolyhedron::GetNextEdgeIndeces(int &i1, int &i2, int &edgeFlag) const
 /***********************************************************************
  *                                                                     *
- * Name: G4Polyhedron::GetNextEdge                  Date:    30.09.96  *
+ * Name: HepPolyhedron::GetNextEdgeIndeces          Date:    17.11.99  *
+ * Author: E.Chernyaev                              Revised:           *
+ *                                                                     *
+ * Function: Get indeces of the next edge.                             *
+ *           Returns false when the last edge.                         *
+ *                                                                     *
+ ***********************************************************************/
+{
+  int kface1, kface2;
+  return GetNextEdgeIndeces(i1, i2, edgeFlag, kface1, kface2);
+}
+
+HepBoolean
+HepPolyhedron::GetNextEdge(HepPoint3D &p1,
+			   HepPoint3D &p2,
+			   int &edgeFlag) const
+/***********************************************************************
+ *                                                                     *
+ * Name: HepPolyhedron::GetNextEdge                 Date:    30.09.96  *
  * Author: E.Chernyaev                              Revised:           *
  *                                                                     *
  * Function: Get next edge.                                            *
@@ -1010,18 +969,213 @@ G4Polyhedron::GetNextEdge(G4Point3D &p1, G4Point3D &p2, G4int &edgeFlag) const
  *                                                                     *
  ***********************************************************************/
 {
-  G4int i1,i2;
-  G4bool rep = GetNextEdgeIndeces(i1,i2,edgeFlag);
+  int i1,i2;
+  HepBoolean rep = GetNextEdgeIndeces(i1,i2,edgeFlag);
   p1 = pV[i1];
   p2 = pV[i2];
   return rep;
 }
 
-G4PolyhedronTrd2::G4PolyhedronTrd2(G4double Dx1, G4double Dx2,
-                                   G4double Dy1, G4double Dy2, G4double Dz)
+HepBoolean
+HepPolyhedron::GetNextEdge(HepPoint3D &p1, HepPoint3D &p2,
+			  int &edgeFlag, int &iface1, int &iface2) const
 /***********************************************************************
  *                                                                     *
- * Name: G4PolyhedronTrd2                            Date:    22.07.96 *
+ * Name: HepPolyhedron::GetNextEdge                 Date:    17.11.99  *
+ * Author: E.Chernyaev                              Revised:           *
+ *                                                                     *
+ * Function: Get next edge with indeces of the faces which share       *
+ *           the edge.                                                 *
+ *           Returns false when the last edge.                         *
+ *                                                                     *
+ ***********************************************************************/
+{
+  int i1,i2;
+  HepBoolean rep = GetNextEdgeIndeces(i1,i2,edgeFlag,iface1,iface2);
+  p1 = pV[i1];
+  p2 = pV[i2];
+  return rep;
+}
+
+void HepPolyhedron::GetFacet(int iFace, int &n, int *iNodes,
+			    int *edgeFlags, int *iFaces) const
+/***********************************************************************
+ *                                                                     *
+ * Name: HepPolyhedron::GetFacet                    Date:    15.12.99  *
+ * Author: E.Chernyaev                              Revised:           *
+ *                                                                     *
+ * Function: Get face by index                                         *
+ *                                                                     *
+ ***********************************************************************/
+{
+  if (iFace < 1 || iFace > nface) {
+    std::cerr 
+      << "HepPolyhedron::GetFacet: irrelevant index " << iFace
+      << std::endl;
+    n = 0;
+  }else{
+    int i, k;
+    for (i=0; i<4; i++) { 
+      k = pF[iFace].edge[i].v;
+      if (k == 0) break;
+      if (iFaces != 0) iFaces[i] = pF[iFace].edge[i].f;
+      if (k > 0) { 
+	iNodes[i] = k;
+	if (edgeFlags != 0) edgeFlags[i] = 1;
+      }else{
+	iNodes[i] = -k;
+	if (edgeFlags != 0) edgeFlags[i] = -1;
+      }
+    }
+    n = i;
+  }
+}
+
+void HepPolyhedron::GetFacet(int index, int &n, HepPoint3D *nodes,
+			    int *edgeFlags, HepNormal3D *normals) const
+/***********************************************************************
+ *                                                                     *
+ * Name: HepPolyhedron::GetFacet                    Date:    17.11.99  *
+ * Author: E.Chernyaev                              Revised:           *
+ *                                                                     *
+ * Function: Get face by index                                         *
+ *                                                                     *
+ ***********************************************************************/
+{
+  int iNodes[4];
+  GetFacet(index, n, iNodes, edgeFlags);
+  if (n != 0) {
+    for (int i=0; i<4; i++) {
+      nodes[i] = pV[iNodes[i]];
+      if (normals != 0) normals[i] = FindNodeNormal(index,iNodes[i]);
+    }
+  }
+}
+
+HepBoolean
+HepPolyhedron::GetNextFacet(int &n, HepPoint3D *nodes,
+			   int *edgeFlags, HepNormal3D *normals) const
+/***********************************************************************
+ *                                                                     *
+ * Name: HepPolyhedron::GetNextFacet                Date:    19.11.99  *
+ * Author: E.Chernyaev                              Revised:           *
+ *                                                                     *
+ * Function: Get next face with normals of unit length at the nodes.   *
+ *           Returns false when finished all faces.                    *
+ *                                                                     *
+ ***********************************************************************/
+{
+  static int iFace = 1;
+
+  if (edgeFlags == 0) {
+    GetFacet(iFace, n, nodes);
+  }else if (normals == 0) {
+    GetFacet(iFace, n, nodes, edgeFlags);
+  }else{
+    GetFacet(iFace, n, nodes, edgeFlags, normals);
+  }
+
+  if (++iFace > nface) {
+    iFace  = 1;
+    return false;
+  }else{
+    return true;
+  }
+}
+
+HepNormal3D HepPolyhedron::GetNormal(int iFace) const
+/***********************************************************************
+ *                                                                     *
+ * Name: HepPolyhedron::GetNormal                    Date:    19.11.99 *
+ * Author: E.Chernyaev                               Revised:          *
+ *                                                                     *
+ * Function: Get normal of the face given by index                     *
+ *                                                                     *
+ ***********************************************************************/
+{
+  if (iFace < 1 || iFace > nface) {
+    std::cerr 
+      << "HepPolyhedron::GetNormal: irrelevant index " << iFace 
+      << std::endl;
+    return HepNormal3D();
+  }
+
+  int i0  = abs(pF[iFace].edge[0].v);
+  int i1  = abs(pF[iFace].edge[1].v);
+  int i2  = abs(pF[iFace].edge[2].v);
+  int i3  = abs(pF[iFace].edge[3].v);
+  if (i3 == 0) i3 = i0;
+  return (pV[i2] - pV[i0]).cross(pV[i3] - pV[i1]);
+}
+
+HepNormal3D HepPolyhedron::GetUnitNormal(int iFace) const
+/***********************************************************************
+ *                                                                     *
+ * Name: HepPolyhedron::GetNormal                    Date:    19.11.99 *
+ * Author: E.Chernyaev                               Revised:          *
+ *                                                                     *
+ * Function: Get unit normal of the face given by index                *
+ *                                                                     *
+ ***********************************************************************/
+{
+  if (iFace < 1 || iFace > nface) {
+    std::cerr 
+      << "HepPolyhedron::GetUnitNormal: irrelevant index " << iFace
+      << std::endl;
+    return HepNormal3D();
+  }
+
+  int i0  = abs(pF[iFace].edge[0].v);
+  int i1  = abs(pF[iFace].edge[1].v);
+  int i2  = abs(pF[iFace].edge[2].v);
+  int i3  = abs(pF[iFace].edge[3].v);
+  if (i3 == 0) i3 = i0;
+  return ((pV[i2] - pV[i0]).cross(pV[i3] - pV[i1])).unit();
+}
+
+HepBoolean HepPolyhedron::GetNextNormal(HepNormal3D &normal) const
+/***********************************************************************
+ *                                                                     *
+ * Name: HepPolyhedron::GetNextNormal               Date:    22.07.96  *
+ * Author: John Allison                             Revised: 19.11.99  *
+ *                                                                     *
+ * Function: Get normals of each face in face order.  Returns false    *
+ *           when finished all faces.                                  *
+ *                                                                     *
+ ***********************************************************************/
+{
+  static int iFace = 1;
+  normal = GetNormal(iFace);
+  if (++iFace > nface) {
+    iFace = 1;
+    return false;
+  }else{
+    return true;
+  }
+}
+
+HepBoolean HepPolyhedron::GetNextUnitNormal(HepNormal3D &normal) const
+/***********************************************************************
+ *                                                                     *
+ * Name: HepPolyhedron::GetNextUnitNormal           Date:    16.09.96  *
+ * Author: E.Chernyaev                              Revised:           *
+ *                                                                     *
+ * Function: Get normals of unit length of each face in face order.    *
+ *           Returns false when finished all faces.                    *
+ *                                                                     *
+ ***********************************************************************/
+{
+  HepBoolean rep = GetNextNormal(normal);
+  normal = normal.unit();
+  return rep;
+}
+
+HepPolyhedronTrd2::HepPolyhedronTrd2(HepDouble Dx1, HepDouble Dx2,
+				     HepDouble Dy1, HepDouble Dy2,
+				     HepDouble Dz)
+/***********************************************************************
+ *                                                                     *
+ * Name: HepPolyhedronTrd2                           Date:    22.07.96 *
  * Author: E.Chernyaev (IHEP/Protvino)               Revised:          *
  *                                                                     *
  * Function: Create GEANT4 TRD2-trapezoid                              *
@@ -1036,25 +1190,33 @@ G4PolyhedronTrd2::G4PolyhedronTrd2(G4double Dx1, G4double Dx2,
 {
   AllocateMemory(8,6);
 
-  pV[1] = G4Point3D(-Dx1,-Dy1,-Dz);
-  pV[2] = G4Point3D( Dx1,-Dy1,-Dz);
-  pV[3] = G4Point3D( Dx1, Dy1,-Dz);
-  pV[4] = G4Point3D(-Dx1, Dy1,-Dz);
-  pV[5] = G4Point3D(-Dx2,-Dy2, Dz);
-  pV[6] = G4Point3D( Dx2,-Dy2, Dz);
-  pV[7] = G4Point3D( Dx2, Dy2, Dz);
-  pV[8] = G4Point3D(-Dx2, Dy2, Dz);
+  pV[1] = HepPoint3D(-Dx1,-Dy1,-Dz);
+  pV[2] = HepPoint3D( Dx1,-Dy1,-Dz);
+  pV[3] = HepPoint3D( Dx1, Dy1,-Dz);
+  pV[4] = HepPoint3D(-Dx1, Dy1,-Dz);
+  pV[5] = HepPoint3D(-Dx2,-Dy2, Dz);
+  pV[6] = HepPoint3D( Dx2,-Dy2, Dz);
+  pV[7] = HepPoint3D( Dx2, Dy2, Dz);
+  pV[8] = HepPoint3D(-Dx2, Dy2, Dz);
 
   CreatePrism();
 }
 
-G4PolyhedronTrap::G4PolyhedronTrap(G4double Dz, G4double Theta, G4double Phi,
-                     G4double Dy1, G4double Dx1, G4double Dx2, G4double Alp1,
-                     G4double Dy2, G4double Dx3, G4double Dx4, G4double Alp2)
+HepPolyhedronTrap::HepPolyhedronTrap(HepDouble Dz,
+				     HepDouble Theta,
+				     HepDouble Phi,
+				     HepDouble Dy1,
+				     HepDouble Dx1,
+				     HepDouble Dx2,
+				     HepDouble Alp1,
+				     HepDouble Dy2,
+				     HepDouble Dx3,
+				     HepDouble Dx4,
+				     HepDouble Alp2)
 /***********************************************************************
  *                                                                     *
- * Name: G4PolyhedronTrap                            Date:    20.11.96 *
- * Author: E.Chernyaev (IHEP/Protvino)               Revised:          *
+ * Name: HepPolyhedronTrap                           Date:    20.11.96 *
+ * Author: E.Chernyaev                               Revised:          *
  *                                                                     *
  * Function: Create GEANT4 TRAP-trapezoid                              *
  *                                                                     *
@@ -1074,31 +1236,35 @@ G4PolyhedronTrap::G4PolyhedronTrap(G4double Dz, G4double Theta, G4double Phi,
  *                                                                     *
  ***********************************************************************/
 {
-  G4double DzTthetaCphi = Dz*tan(Theta)*cos(Phi);
-  G4double DzTthetaSphi = Dz*tan(Theta)*sin(Phi);
-  G4double Dy1Talp1 = Dy1*tan(Alp1);
-  G4double Dy2Talp2 = Dy2*tan(Alp2);
+  HepDouble DzTthetaCphi = Dz*tan(Theta)*cos(Phi);
+  HepDouble DzTthetaSphi = Dz*tan(Theta)*sin(Phi);
+  HepDouble Dy1Talp1 = Dy1*tan(Alp1);
+  HepDouble Dy2Talp2 = Dy2*tan(Alp2);
   
   AllocateMemory(8,6);
 
-  pV[1] = G4Point3D(-DzTthetaCphi-Dy1Talp1-Dx1,-DzTthetaSphi-Dy1,-Dz);
-  pV[2] = G4Point3D(-DzTthetaCphi-Dy1Talp1+Dx1,-DzTthetaSphi-Dy1,-Dz);
-  pV[3] = G4Point3D(-DzTthetaCphi+Dy1Talp1+Dx2,-DzTthetaSphi+Dy1,-Dz);
-  pV[4] = G4Point3D(-DzTthetaCphi+Dy1Talp1-Dx2,-DzTthetaSphi+Dy1,-Dz);
-  pV[5] = G4Point3D( DzTthetaCphi-Dy2Talp2-Dx3, DzTthetaSphi-Dy2, Dz);
-  pV[6] = G4Point3D( DzTthetaCphi-Dy2Talp2+Dx3, DzTthetaSphi-Dy2, Dz);
-  pV[7] = G4Point3D( DzTthetaCphi+Dy2Talp2+Dx4, DzTthetaSphi+Dy2, Dz);
-  pV[8] = G4Point3D( DzTthetaCphi+Dy2Talp2-Dx4, DzTthetaSphi+Dy2, Dz);
+  pV[1] = HepPoint3D(-DzTthetaCphi-Dy1Talp1-Dx1,-DzTthetaSphi-Dy1,-Dz);
+  pV[2] = HepPoint3D(-DzTthetaCphi-Dy1Talp1+Dx1,-DzTthetaSphi-Dy1,-Dz);
+  pV[3] = HepPoint3D(-DzTthetaCphi+Dy1Talp1+Dx2,-DzTthetaSphi+Dy1,-Dz);
+  pV[4] = HepPoint3D(-DzTthetaCphi+Dy1Talp1-Dx2,-DzTthetaSphi+Dy1,-Dz);
+  pV[5] = HepPoint3D( DzTthetaCphi-Dy2Talp2-Dx3, DzTthetaSphi-Dy2, Dz);
+  pV[6] = HepPoint3D( DzTthetaCphi-Dy2Talp2+Dx3, DzTthetaSphi-Dy2, Dz);
+  pV[7] = HepPoint3D( DzTthetaCphi+Dy2Talp2+Dx4, DzTthetaSphi+Dy2, Dz);
+  pV[8] = HepPoint3D( DzTthetaCphi+Dy2Talp2-Dx4, DzTthetaSphi+Dy2, Dz);
 
   CreatePrism();
 }
 
-G4PolyhedronCons::G4PolyhedronCons(G4double Rmn1, G4double Rmx1,
-                                   G4double Rmn2, G4double Rmx2, 
-                                   G4double Dz, G4double Phi1, G4double Dphi) 
+HepPolyhedronCons::HepPolyhedronCons(HepDouble Rmn1,
+				     HepDouble Rmx1,
+				     HepDouble Rmn2,
+				     HepDouble Rmx2, 
+				     HepDouble Dz,
+				     HepDouble Phi1,
+				     HepDouble Dphi) 
 /***********************************************************************
  *                                                                     *
- * Name: G4PolyhedronCons::G4PolyhedronCons          Date:    15.12.96 *
+ * Name: HepPolyhedronCons::HepPolyhedronCons        Date:    15.12.96 *
  * Author: E.Chernyaev (IHEP/Protvino)               Revised: 15.12.96 *
  *                                                                     *
  * Function: Constructor for CONS, TUBS, CONE, TUBE                    *
@@ -1111,18 +1277,18 @@ G4PolyhedronCons::G4PolyhedronCons(G4double Rmn1, G4double Rmx1,
  *                                                                     *
  ***********************************************************************/
 {
-  static G4double wholeCircle=2*M_PI;
+  static HepDouble wholeCircle=2*M_PI;
 
   //   C H E C K   I N P U T   P A R A M E T E R S
 
-  G4int k = 0;
+  int k = 0;
   if (Rmn1 < 0. || Rmx1 < 0. || Rmn2 < 0. || Rmx2 < 0.)        k = 1;
   if (Rmn1 > Rmx1 || Rmn2 > Rmx2)                              k = 1;
   if (Rmn1 == Rmx1 && Rmn2 == Rmx2)                            k = 1;
 
   if (Dz <= 0.) k += 2;
  
-  G4double phi1, phi2, dphi;
+  HepDouble phi1, phi2, dphi;
   if (Dphi < 0.) {
     phi2 = Phi1; phi1 = phi2 - Dphi;
   }else if (Dphi == 0.) {
@@ -1135,20 +1301,21 @@ G4PolyhedronCons::G4PolyhedronCons(G4double Rmn1, G4double Rmx1,
   if (dphi > wholeCircle) k += 4; 
 
   if (k != 0) {
-    G4cerr << "G4PolyhedronCone(s)/Tube(s): error in input parameters";
-    if ((k & 1) != 0) G4cerr << " (radiuses)";
-    if ((k & 2) != 0) G4cerr << " (half-length)";
-    if ((k & 4) != 0) G4cerr << " (angles)";
-    G4cerr << G4endl;
-    G4cerr << " Rmn1=" << Rmn1 << " Rmx1=" << Rmx1;
-    G4cerr << " Rmn2=" << Rmn2 << " Rmx2=" << Rmx2;
-    G4cerr << " Dz=" << Dz << " Phi1=" << Phi1 << " Dphi=" << Dphi << G4endl;
+    std::cerr << "HepPolyhedronCone(s)/Tube(s): error in input parameters";
+    if ((k & 1) != 0) std::cerr << " (radiuses)";
+    if ((k & 2) != 0) std::cerr << " (half-length)";
+    if ((k & 4) != 0) std::cerr << " (angles)";
+    std::cerr << std::endl;
+    std::cerr << " Rmn1=" << Rmn1 << " Rmx1=" << Rmx1;
+    std::cerr << " Rmn2=" << Rmn2 << " Rmx2=" << Rmx2;
+    std::cerr << " Dz=" << Dz << " Phi1=" << Phi1 << " Dphi=" << Dphi
+	      << std::endl;
     return;
   }
   
   //   P R E P A R E   T W O   P O L Y L I N E S
 
-  G4double zz[4], rr[4];
+  HepDouble zz[4], rr[4];
   zz[0] =  Dz; 
   zz[1] = -Dz; 
   zz[2] =  Dz; 
@@ -1164,17 +1331,17 @@ G4PolyhedronCons::G4PolyhedronCons(G4double Rmn1, G4double Rmx1,
   SetReferences();
 }
 
-G4PolyhedronPgon::G4PolyhedronPgon(G4double phi,
-				   G4double dphi,
-				   G4int    npdv,
-				   G4int    nz,
-				   const G4double *z,
-				   const G4double *rmin,
-				   const G4double *rmax)
+HepPolyhedronPgon::HepPolyhedronPgon(HepDouble phi,
+				     HepDouble dphi,
+				     int    npdv,
+				     int    nz,
+				     const HepDouble *z,
+				     const HepDouble *rmin,
+				     const HepDouble *rmax)
 /***********************************************************************
  *                                                                     *
- * Name: G4PolyhedronPgon                            Date:    09.12.96 *
- * Author: E.Chernyaev (IHEP/Protvino)               Revised:          *
+ * Name: HepPolyhedronPgon                           Date:    09.12.96 *
+ * Author: E.Chernyaev                               Revised:          *
  *                                                                     *
  * Function: Constructor of polyhedron for PGON, PCON                  *
  *                                                                     *
@@ -1191,36 +1358,42 @@ G4PolyhedronPgon::G4PolyhedronPgon(G4double phi,
   //   C H E C K   I N P U T   P A R A M E T E R S
 
   if (dphi <= 0. || dphi > 2*M_PI) {
-    G4cerr << "G4PolyhedronPgon/Pcon: wrong delta phi = " << dphi << G4endl;
+    std::cerr
+      << "HepPolyhedronPgon/Pcon: wrong delta phi = " << dphi
+      << std::endl;
     return;
   }    
     
   if (nz < 2) {
-    G4cerr << "G4PolyhedronPgon/Pcon: number of z-planes less than two = " << nz
-         << G4endl;
+    std::cerr
+      << "HepPolyhedronPgon/Pcon: number of z-planes less than two = " << nz
+      << std::endl;
     return;
   }
 
   if (npdv < 0) {
-    G4cerr << "G4PolyhedronPgon/Pcon: error in number of phi-steps =" << npdv
-         << G4endl;
+    std::cerr
+      << "HepPolyhedronPgon/Pcon: error in number of phi-steps =" << npdv
+      << std::endl;
     return;
   }
 
-  G4int i;
+  int i;
   for (i=0; i<nz; i++) {
     if (rmin[i] < 0. || rmax[i] < 0. || rmin[i] > rmax[i]) {
-      G4cerr << "G4PolyhedronPgon: error in radiuses rmin[" << i << "]="
-	   << rmin[i] << " rmax[" << i << "]=" << rmax[i] << G4endl;
+      std::cerr
+	<< "HepPolyhedronPgon: error in radiuses rmin[" << i << "]="
+	<< rmin[i] << " rmax[" << i << "]=" << rmax[i]
+	<< std::endl;
       return;
     }
   }
 
   //   P R E P A R E   T W O   P O L Y L I N E S
 
-  G4double *zz, *rr;
-  zz = new G4double[2*nz];
-  rr = new G4double[2*nz];
+  HepDouble *zz, *rr;
+  zz = new HepDouble[2*nz];
+  rr = new HepDouble[2*nz];
 
   if (z[0] > z[nz-1]) {
     for (i=0; i<nz; i++) {
@@ -1247,12 +1420,12 @@ G4PolyhedronPgon::G4PolyhedronPgon(G4double phi,
   delete [] rr;
 }
 
-G4PolyhedronSphere::G4PolyhedronSphere(G4double rmin, G4double rmax,
-				       G4double phi, G4double dphi,
-				       G4double the, G4double dthe)
+HepPolyhedronSphere::HepPolyhedronSphere(HepDouble rmin, HepDouble rmax,
+				       HepDouble phi, HepDouble dphi,
+				       HepDouble the, HepDouble dthe)
 /***********************************************************************
  *                                                                     *
- * Name: G4PolyhedronSphere                          Date:    11.12.96 *
+ * Name: HepPolyhedronSphere                         Date:    11.12.96 *
  * Author: E.Chernyaev (IHEP/Protvino)               Revised:          *
  *                                                                     *
  * Function: Constructor of polyhedron for SPHERE                      *
@@ -1269,46 +1442,56 @@ G4PolyhedronSphere::G4PolyhedronSphere(G4double rmin, G4double rmax,
   //   C H E C K   I N P U T   P A R A M E T E R S
 
   if (dphi <= 0. || dphi > 2*M_PI) {
-    G4cerr << "G4PolyhedronSphere: wrong delta phi = " << dphi << G4endl;
+    std::cerr
+      << "HepPolyhedronSphere: wrong delta phi = " << dphi
+      << std::endl;
     return;
   }    
 
   if (the < 0. || the > M_PI) {
-    G4cerr << "G4PolyhedronSphere: wrong theta = " << the << G4endl;
+    std::cerr
+      << "HepPolyhedronSphere: wrong theta = " << the
+      << std::endl;
     return;
   }    
   
   if (dthe <= 0. || dthe > M_PI) {
-    G4cerr << "G4PolyhedronSphere: wrong delta theta = " << dthe << G4endl;
+    std::cerr
+      << "HepPolyhedronSphere: wrong delta theta = " << dthe
+      << std::endl;
     return;
   }    
 
   if (the+dthe > M_PI) {
-    G4cerr << "G4PolyhedronSphere: wrong theta + delta theta = "
-         << the << " " << dthe << G4endl;
+    std::cerr
+      << "HepPolyhedronSphere: wrong theta + delta theta = "
+      << the << " " << dthe
+      << std::endl;
     return;
   }    
   
   if (rmin < 0. || rmin >= rmax) {
-    G4cerr << "G4PolyhedronSphere: error in radiuses"
-         << " rmin=" << rmin << " rmax=" << rmax << G4endl;
+    std::cerr
+      << "HepPolyhedronSphere: error in radiuses"
+      << " rmin=" << rmin << " rmax=" << rmax
+      << std::endl;
     return;
   }
 
   //   P R E P A R E   T W O   P O L Y L I N E S
 
-  G4int ns = (GetNumberOfRotationSteps() + 1) / 2;
-  G4int np1 = G4int(dthe*ns/M_PI+.5) + 1;
+  int ns = (GetNumberOfRotationSteps() + 1) / 2;
+  int np1 = int(dthe*ns/M_PI+.5) + 1;
   if (np1 <= 1) np1 = 2;
-  G4int np2 = rmin < perMillion ? 1 : np1;
+  int np2 = rmin < perMillion ? 1 : np1;
 
-  G4double *zz, *rr;
-  zz = new G4double[np1+np2];
-  rr = new G4double[np1+np2];
+  HepDouble *zz, *rr;
+  zz = new HepDouble[np1+np2];
+  rr = new HepDouble[np1+np2];
 
-  G4double a = dthe/(np1-1);
-  G4double cosa, sina;
-  for (G4int i=0; i<np1; i++) {
+  HepDouble a = dthe/(np1-1);
+  HepDouble cosa, sina;
+  for (int i=0; i<np1; i++) {
     cosa  = cos(the+i*a);
     sina  = sin(the+i*a);
     zz[i] = rmax*cosa;
@@ -1325,19 +1508,21 @@ G4PolyhedronSphere::G4PolyhedronSphere(G4double rmin, G4double rmax,
 
   //   R O T A T E    P O L Y L I N E S
 
-  RotateAroundZ(0, phi, dphi, np1, np2, zz, rr, -1, 1); 
+  RotateAroundZ(0, phi, dphi, np1, np2, zz, rr, -1, -1); 
   SetReferences();
   
   delete [] zz;
   delete [] rr;
 }
 
-G4PolyhedronTorus::G4PolyhedronTorus(G4double rmin, G4double rmax,
-				     G4double rtor,
-                                     G4double phi, G4double dphi)
+HepPolyhedronTorus::HepPolyhedronTorus(HepDouble rmin,
+				       HepDouble rmax,
+				       HepDouble rtor,
+				       HepDouble phi,
+				       HepDouble dphi)
 /***********************************************************************
  *                                                                     *
- * Name: G4PolyhedronTorus                           Date:    11.12.96 *
+ * Name: HepPolyhedronTorus                          Date:    11.12.96 *
  * Author: E.Chernyaev (IHEP/Protvino)               Revised:          *
  *                                                                     *
  * Function: Constructor of polyhedron for TORUS                       *
@@ -1353,29 +1538,32 @@ G4PolyhedronTorus::G4PolyhedronTorus(G4double rmin, G4double rmax,
   //   C H E C K   I N P U T   P A R A M E T E R S
 
   if (dphi <= 0. || dphi > 2*M_PI) {
-    G4cerr << "G4PolyhedronTorus: wrong delta phi = " << dphi << G4endl;
+    std::cerr
+      << "HepPolyhedronTorus: wrong delta phi = " << dphi
+      << std::endl;
     return;
   }
 
   if (rmin < 0. || rmin >= rmax || rmax >= rtor) {
-    G4cerr << "G4PolyhedronTorus: error in radiuses"
-         << " rmin=" << rmin << " rmax=" << rmax
-         << " rtorus=" << rtor << G4endl;
+    std::cerr
+      << "HepPolyhedronTorus: error in radiuses"
+      << " rmin=" << rmin << " rmax=" << rmax << " rtorus=" << rtor
+      << std::endl;
     return;
   }
 
   //   P R E P A R E   T W O   P O L Y L I N E S
 
-  G4int np1 = GetNumberOfRotationSteps();
-  G4int np2 = rmin < perMillion ? 1 : np1;
+  int np1 = GetNumberOfRotationSteps();
+  int np2 = rmin < perMillion ? 1 : np1;
 
-  G4double *zz, *rr;
-  zz = new G4double[np1+np2];
-  rr = new G4double[np1+np2];
+  HepDouble *zz, *rr;
+  zz = new HepDouble[np1+np2];
+  rr = new HepDouble[np1+np2];
 
-  G4double a = 2*M_PI/np1;
-  G4double cosa, sina;
-  for (G4int i=0; i<np1; i++) {
+  HepDouble a = 2*M_PI/np1;
+  HepDouble cosa, sina;
+  for (int i=0; i<np1; i++) {
     cosa  = cos(i*a);
     sina  = sin(i*a);
     zz[i] = rmax*cosa;
@@ -1393,19 +1581,21 @@ G4PolyhedronTorus::G4PolyhedronTorus(G4double rmin, G4double rmax,
 
   //   R O T A T E    P O L Y L I N E S
 
-  RotateAroundZ(0, phi, dphi, -np1, -np2, zz, rr, 1,-1); 
+  RotateAroundZ(0, phi, dphi, -np1, -np2, zz, rr, -1,-1); 
   SetReferences();
   
   delete [] zz;
   delete [] rr;
 }
 
-G4int G4Polyhedron::fNumberOfRotationSteps = 24;
+int HepPolyhedron::fNumberOfRotationSteps = DEFAULT_NUMBER_OF_STEPS;
 /***********************************************************************
  *                                                                     *
- * Name: G4Polyhedron::fNumberOfRotationSteps        Date:    24.06.97 *
+ * Name: HepPolyhedron::fNumberOfRotationSteps       Date:    24.06.97 *
  * Author: J.Allison (Manchester University)         Revised:          *
  *                                                                     *
  * Function: Number of steps for whole circle                          *
  *                                                                     *
  ***********************************************************************/
+
+//#include "processor.cc"

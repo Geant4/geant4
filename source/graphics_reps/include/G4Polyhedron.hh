@@ -5,18 +5,21 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polyhedron.hh,v 1.5 1999-12-16 15:26:03 johna Exp $
+// $Id: G4Polyhedron.hh,v 1.6 2000-02-22 15:31:33 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
-//
+
+#ifndef G4POLYHEDRON_HH
+#define G4POLYHEDRON_HH
 
 // Class Description:
 // G4Polyhedron is an intermediate class between G4 and visualization
 // systems. It is intended to provide some service like:
 //   - polygonization of the G4 shapes with triangulization
 //     (quadrilaterization) of complex polygons;
-//   - calculation of normals for faces and vertices;
+//   - calculation of normals for faces and vertices.
+//
+// Inherits from HepPolyhedron, to which reference should be made for
+// functionality.
 //
 // Public constructors:
 //   G4PolyhedronBox(dx,dy,dz)            - create G4Polyhedron for G4 Box;
@@ -47,7 +50,8 @@
 //   G4PolyhedronTorus(rmin,rmax,rtor,
 //                     phi,dphi)            - create G4Polyhedron for Torus;
 //
-// Public functions:
+// Public functions inherited from HepPolyhedron (this list might be
+// incomplete):
 //   GetNoVertices()  - returns number of vertices
 //   GetNoFacets()    - returns number of faces
 //   GetNextVertexIndex(index, edgeFlag) - get vertex indeces of the
@@ -69,315 +73,139 @@
 //   GetNextEdge(p1, p2, edgeFlag) - get next edge;
 //                      returns false for the last edge;
 //   SetNumberOfRotationSteps(G4int n) - Set number of steps for whole circle;
-// Class Description - End:
 
 // History:
-// 20.06.96 Evgeni Chernyaev <Evgueni.Tcherniaev@cern.ch> - initial version
-//
-// 23.07.96 John Allison
-// - added GetNoVertices, GetNoFacets, GetNextVertex, GetNextNormal
-//
-// 30.09.96 E.Chernyaev
-// - added GetNextVertexIndex, GetVertex by Yasuhide Sawada
-// - added GetNextUnitNormal, GetNextEdgeIndeces, GetNextEdge
-// - improvements: angles now expected in radians
-//                 int -> G4int, double -> G4double  
-// - G4ThreeVector replaced by either G4Point3D or G4Normal3D
-//
-// 15.12.96 E.Chernyaev
-// - private functions G4PolyhedronAlloc, G4PolyhedronPrism renamed
-//   to AllocateMemory and CreatePrism
-// - added private functions GetNumberOfRotationSteps, RotateEdge,
-//   RotateAroundZ, SetReferences
-// - rewritten G4PolyhedronCons;
-// - added G4PolyhedronPara, ...Trap, ...Pgon, ...Pcon, ...Sphere, ...Torus,
-//   so full List of implemented shapes now looks like:
-//   BOX, TRD1, TRD2, TRAP, TUBE, TUBS, CONE, CONS, PARA, PGON, PCON,
-//   SPHERE, TORUS
-//
-// 01.06.97 E.Chernyaev
-// - RotateAroundZ modified and SetSideFacets added to allow Rmin=Rmax
-//   in bodies of revolution
-//
-// 24.06.97 J.Allison
-// - added static private member fNumberOfRotationSteps and static public
-//   functions void SetNumberOfRotationSteps (G4int n) and
-//   void ResetNumberOfRotationSteps ().  Modified
-//   GetNumberOfRotationSteps() appropriately.  Made all three functions
-//   inline (at end of this .hh file).
-//   Usage:
-//    G4Polyhedron::SetNumberOfRotationSteps
-//     (fpView -> GetViewParameters ().GetNoOfSides ());
-//    pPolyhedron = solid.CreatePolyhedron ();
-//    G4Polyhedron::ResetNumberOfRotationSteps ();
+// 21st February 2000  Evgeni Chernaev, John Allison
+// - Re-written to inherit HepPolyhedron.
 
-
-#ifndef G4POLYHEDRON_HH
-#define G4POLYHEDRON_HH
-
-#include "G4ios.hh"
+#include "globals.hh"
+#include "HepPolyhedron.h"
 #include "G4VVisPrim.hh"
-#include "G4Point3D.hh"
-#include "G4Normal3D.hh"
-#include "G4Vector3D.hh"
-#include "G4Transform3D.hh"
 
-class G4Facet {
-  friend class G4Polyhedron;
-  friend G4std::ostream& operator<<(G4std::ostream&, const G4Facet &facet);
-
- private:
-  struct G4Edge { G4int v,f; };
-  G4Edge edge[4];
-
- public: // With description
-
-  G4Facet(G4int v1=0, G4int f1=0, G4int v2=0, G4int f2=0, 
-	  G4int v3=0, G4int f3=0, G4int v4=0, G4int f4=0)
-  { edge[0].v=v1; edge[0].f=f1; edge[1].v=v2; edge[1].f=f2;
-    edge[2].v=v3; edge[2].f=f3; edge[3].v=v4; edge[3].f=f4; }
+class G4Polyhedron : public HepPolyhedron, public G4VVisPrim {
+public:
+  G4Polyhedron () {}
+  G4Polyhedron (const G4Polyhedron& from) {
+    *this = from;
+  }
+  G4Polyhedron (const HepPolyhedron& from) {
+    *this = from;
+  }
+  virtual G4Visible& operator = (const G4Visible& from) {
+    return G4Visible::operator = (from);
+  }
+  virtual G4VVisPrim& operator = (const G4VVisPrim& from) {
+    return G4VVisPrim::operator = (from);
+  }
+  virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
+    return HepPolyhedron::operator = (from);
+  }
+  G4Polyhedron& operator = (const G4Polyhedron& from) {
+    if (&from == this) return *this;
+    HepPolyhedron::operator = (from);
+    G4VVisPrim::operator = (from);
+    return *this;
+  }
 };
 
-class G4Polyhedron: public G4VVisPrim {
-  friend G4std::ostream& operator<<(G4std::ostream&, const G4Polyhedron &ph);
-
- private:
-  static G4int fNumberOfRotationSteps;
-
- protected:
-  G4int nvert, nface;
-  G4Point3D *pV;
-  G4Facet   *pF;
-
-  // Allocate memory for G4Polyhedron
-  void AllocateMemory(G4int Nvert, G4int Nface);
-
-  // Create G4Polyhedron for prism with quadrilateral base
-  void CreatePrism();
-
-  // Get number of steps for whole circle
-  G4int GetNumberOfRotationSteps();
-
-  // Generate facets by revolving an edge around Z-axis
-  void RotateEdge(G4int k1, G4int k2, G4double r1, G4double r2,
-                  G4int v1, G4int v2, G4int vEdge,
-                  G4bool ifWholeCircle, G4int ns, G4int &kface);
-
-  // Set side facets for the case of incomplete rotation
-  void SetSideFacets(G4int ii[4], G4int vv[4],
-                     G4int *kk, G4double *r,
-                     G4double dphi, G4int ns, G4int &kface);
-
-  // Create G4Polyhedron for body of revolution around Z-axis
-  void RotateAroundZ(G4int nstep, G4double phi, G4double dphi,
-                     G4int np1, G4int np2,
-                     const G4double *z, G4double *r,
-                     G4int nodeVis, G4int edgeVis);
-
-  // For each edge set reference to neighbouring facet
-  void SetReferences();
-
-  // Invert the order on nodes in facets
-  void InvertFacets();
-
- public:
-  // Constructor
-  G4Polyhedron(G4int Nvert=0, G4int Nface=0)
-    : nvert(Nvert), nface(Nface),
-      pV(Nvert ? new G4Point3D[Nvert+1] : 0),
-      pF(Nface ? new G4Facet[Nface+1] : 0) {}
-
-  // Copy constructor
-  G4Polyhedron(const G4Polyhedron &from);
-
-  // Destructor
-  ~G4Polyhedron() { delete [] pV; delete [] pF; }
-
-  // Assignment
-  virtual G4Visible& operator=(const G4Visible &from);
-  virtual G4VVisPrim& operator=(const G4VVisPrim &from);
-  G4Polyhedron& operator=(const G4Polyhedron &from);
-
-  // Get number of vertices
-  G4int GetNoVertices() const { return nvert; }
-
-  // Get number of facets
-  G4int GetNoFacets() const { return nface; }
-
-  // Transform the polyhedron
-  G4Polyhedron & Transform(const G4Transform3D &t);
-
-  // Get next vertex index of the quadrilateral
-  G4bool GetNextVertexIndex(G4int &index, G4int &edgeFlag) const;
-
-  // Get vertex by index 
-  G4Point3D GetVertex(G4int index) const;
-
-  // Get next vertex + edge visibility of the quadrilateral
-  G4bool GetNextVertex(G4Point3D &vertex, G4int &edgeFlag) const;
-
-  // Get next vertex + edge visibility + normal of the quadrilateral
-  //G4bool GetNextVertex
-  //(G4Point3D &vertex, G4int &edgeFlag, G4Normal3D &normal) const;
-
-  // Get normal of the next face 
-  G4bool GetNextNormal(G4Normal3D &normal) const;
-
-  // Get normal of unit length of the next face 
-  G4bool GetNextUnitNormal(G4Normal3D &normal) const;
-
-  // Get indeces of the next edge
-  G4bool GetNextEdgeIndeces(G4int &i1, G4int &i2, G4int &edgeFlag) const;
-
-  // Get next edge
-  G4bool GetNextEdge(G4Point3D &p1, G4Point3D &p2, G4int &edgeFlag) const;
-
-  // Set number of steps for whole circle
-  static void SetNumberOfRotationSteps(G4int n);
-
-  // Reset number of steps for whole circle to default value
-  static void ResetNumberOfRotationSteps();
+class G4PolyhedronBox: public G4Polyhedron {
+public:
+  G4PolyhedronBox (G4double dx, G4double dy, G4double dz):
+    G4Polyhedron (HepPolyhedronBox (dx, dy, dz)) {}
 };
 
-class G4PolyhedronTrd2 : public G4Polyhedron {
- public:
-  G4PolyhedronTrd2(G4double Dx1, G4double Dx2,
-		   G4double Dy1, G4double Dy2, G4double Dz);
-  virtual G4Visible& operator=(const G4Visible &from);
-  virtual G4VVisPrim& operator=(const G4VVisPrim &from);
+class G4PolyhedronCone: public G4Polyhedron {
+public:
+  G4PolyhedronCone (G4double Rmn1, G4double Rmx1, 
+                    G4double Rmn2, G4double Rmx2, G4double Dz):
+    G4Polyhedron (HepPolyhedronCone (Rmn1, Rmx1, Rmn2, Rmx2, Dz)) {}
 };
 
-class G4PolyhedronTrd1 : public G4PolyhedronTrd2 {
- public:
-  G4PolyhedronTrd1(G4double Dx1, G4double Dx2, G4double Dy, G4double Dz) :
-    G4PolyhedronTrd2(Dx1, Dx2, Dy, Dy, Dz) {}
-  virtual G4Visible& operator=(const G4Visible &from);
-  virtual G4VVisPrim& operator=(const G4VVisPrim &from);
+class G4PolyhedronCons: public G4Polyhedron {
+public:
+  G4PolyhedronCons (G4double Rmn1, G4double Rmx1, 
+                    G4double Rmn2, G4double Rmx2, G4double Dz,
+                    G4double Phi1, G4double Dphi):
+    G4Polyhedron (HepPolyhedronCons (Rmn1, Rmx1, Rmn2, Rmx2, Dz, Phi1, Dphi))
+  {}
 };
 
-class G4PolyhedronBox : public G4PolyhedronTrd2 {
- public:
-  G4PolyhedronBox(G4double Dx, G4double Dy, G4double Dz) :
-    G4PolyhedronTrd2(Dx, Dx, Dy, Dy, Dz) {}
-  virtual G4Visible& operator=(const G4Visible &from);
-  virtual G4VVisPrim& operator=(const G4VVisPrim &from);
+class G4PolyhedronPara: public G4Polyhedron {
+public:
+  G4PolyhedronPara (G4double Dx, G4double Dy, G4double Dz,
+                    G4double Alpha, G4double Theta, G4double Phi):
+    G4Polyhedron (HepPolyhedronPara (Dx, Dy, Dz, Alpha, Theta, Phi)) {}
 };
 
-class G4PolyhedronTrap : public G4Polyhedron {
- public:
-  G4PolyhedronTrap(G4double Dz, G4double Theta, G4double Phi,
-                   G4double Dy1, G4double Dx1, G4double Dx2, G4double Alp1,
-                   G4double Dy2, G4double Dx3, G4double Dx4, G4double Alp2);
-  virtual G4Visible& operator=(const G4Visible &from);
-  virtual G4VVisPrim& operator=(const G4VVisPrim &from);
+class G4PolyhedronPcon: public G4Polyhedron {
+public:
+  G4PolyhedronPcon (G4double phi, G4double dphi, G4int nz,
+                    const G4double *z,
+                    const G4double *rmin,
+                    const G4double *rmax):
+    G4Polyhedron (HepPolyhedronPcon (phi, dphi, nz, z, rmin, rmax)) {}
 };
 
-class G4PolyhedronPara : public G4PolyhedronTrap {
- public:
-  G4PolyhedronPara(G4double Dx, G4double Dy, G4double Dz,
-                   G4double Alpha, G4double Theta, G4double Phi) :
-    G4PolyhedronTrap(Dz, Theta, Phi, Dy, Dx, Dx, Alpha, Dy, Dx, Dx, Alpha) {}
-  virtual G4Visible& operator=(const G4Visible &from);
-  virtual G4VVisPrim& operator=(const G4VVisPrim &from);
+class G4PolyhedronPgon: public G4Polyhedron {
+public:
+  G4PolyhedronPgon (G4double phi, G4double dphi, G4int npdv, G4int nz,
+                    const G4double *z,
+                    const G4double *rmin,
+                    const G4double *rmax):
+    G4Polyhedron (HepPolyhedronPgon (phi, dphi, npdv, nz, z, rmin, rmax)) {}
 };
 
-class G4PolyhedronCons : public G4Polyhedron {
- public:
-  G4PolyhedronCons(G4double Rmn1, G4double Rmx1, 
-		   G4double Rmn2, G4double Rmx2, G4double Dz,
-		   G4double Phi1, G4double Dphi); 
-  virtual G4Visible& operator=(const G4Visible &from);
-  virtual G4VVisPrim& operator=(const G4VVisPrim &from);
+class G4PolyhedronSphere: public G4Polyhedron {
+public:
+  G4PolyhedronSphere (G4double rmin, G4double rmax,
+                      G4double phi, G4double dphi,
+                      G4double the, G4double dthe):
+    G4Polyhedron (HepPolyhedronSphere (rmin, rmax, phi, dphi, the, dthe)) {}
 };
 
-class G4PolyhedronCone : public G4PolyhedronCons {
- public:
-  G4PolyhedronCone(G4double Rmn1, G4double Rmx1, 
-		   G4double Rmn2, G4double Rmx2, G4double Dz)
-    : G4PolyhedronCons(Rmn1, Rmx1, Rmn2, Rmx2, Dz, 0*deg, 360*deg) {}
-  virtual G4Visible& operator=(const G4Visible &from);
-  virtual G4VVisPrim& operator=(const G4VVisPrim &from);
+class G4PolyhedronTorus: public G4Polyhedron {
+public:
+  G4PolyhedronTorus (G4double rmin, G4double rmax, G4double rtor,
+                    G4double phi, G4double dphi):
+    G4Polyhedron (HepPolyhedronTorus (rmin, rmax, rtor, phi, dphi)) {}
 };
 
-class G4PolyhedronTubs : public G4PolyhedronCons {
- public:
-  G4PolyhedronTubs(G4double Rmin, G4double Rmax, G4double Dz, 
-		   G4double Phi1, G4double Dphi)
-    : G4PolyhedronCons(Rmin, Rmax, Rmin, Rmax, Dz, Phi1, Dphi) {}
-  virtual G4Visible& operator=(const G4Visible &from);
-  virtual G4VVisPrim& operator=(const G4VVisPrim &from);
+class G4PolyhedronTrap: public G4Polyhedron {
+public:
+  G4PolyhedronTrap (G4double Dz, G4double Theta, G4double Phi,
+                    G4double Dy1,
+                    G4double Dx1, G4double Dx2, G4double Alp1,
+                    G4double Dy2,
+                    G4double Dx3, G4double Dx4, G4double Alp2):
+    G4Polyhedron (HepPolyhedronTrap (Dz, Theta, Phi, Dy1, Dx1, Dx2, Alp1,
+				     Dy2, Dx3, Dx4, Alp2)) {}
 };
 
-class G4PolyhedronTube : public G4PolyhedronCons {
- public:
-  G4PolyhedronTube (G4double Rmin, G4double Rmax, G4double Dz)
-    : G4PolyhedronCons(Rmin, Rmax, Rmin, Rmax, Dz, 0*deg, 360*deg) {}
-  virtual G4Visible& operator=(const G4Visible &from);
-  virtual G4VVisPrim& operator=(const G4VVisPrim &from);
+class G4PolyhedronTrd1: public G4Polyhedron {
+public:
+  G4PolyhedronTrd1 (G4double Dx1, G4double Dx2,
+                    G4double Dy, G4double Dz):
+    G4Polyhedron (HepPolyhedronTrd1 (Dx1, Dx2, Dy, Dz)) {}
 };
 
-class G4PolyhedronPgon : public G4Polyhedron {
- public:
-  G4PolyhedronPgon(G4double phi, G4double dphi, G4int npdv, G4int nz,
-                   const G4double *z,
-                   const G4double *rmin,
-                   const G4double *rmax);
-  virtual G4Visible& operator=(const G4Visible &from);
-  virtual G4VVisPrim& operator=(const G4VVisPrim &from);
+class G4PolyhedronTrd2: public G4Polyhedron {
+public:
+  G4PolyhedronTrd2 (G4double Dx1, G4double Dx2,
+                    G4double Dy1, G4double Dy2, G4double Dz):
+    G4Polyhedron (HepPolyhedronTrd2 (Dx1, Dx2, Dy1, Dy2, Dz)) {}
 };
 
-class G4PolyhedronPcon : public G4PolyhedronPgon {
- public:
-  G4PolyhedronPcon(G4double phi, G4double dphi, G4int nz,
-                   const G4double *z,
-                   const G4double *rmin,
-                   const G4double *rmax)
-    : G4PolyhedronPgon(phi, dphi, 0, nz, z, rmin, rmax) {}	
-  virtual G4Visible& operator=(const G4Visible &from);
-  virtual G4VVisPrim& operator=(const G4VVisPrim &from);
+class G4PolyhedronTube: public G4Polyhedron {
+public:
+  G4PolyhedronTube (G4double Rmin, G4double Rmax, G4double Dz):
+    G4Polyhedron (HepPolyhedronTube (Rmin, Rmax, Dz)) {}
 };
 
-class G4PolyhedronSphere : public G4Polyhedron {
- public:
-  G4PolyhedronSphere(G4double rmin, G4double rmax,
-                     G4double phi, G4double dphi,
-                     G4double the, G4double dthe);
-  virtual G4Visible& operator=(const G4Visible &from);
-  virtual G4VVisPrim& operator=(const G4VVisPrim &from);
+class G4PolyhedronTubs: public G4Polyhedron {
+public:
+  G4PolyhedronTubs (G4double Rmin, G4double Rmax, G4double Dz, 
+                    G4double Phi1, G4double Dphi):
+    G4Polyhedron (HepPolyhedronTubs (Rmin, Rmax, Dz, Phi1, Dphi)) {}
 };
-
-class G4PolyhedronTorus : public G4Polyhedron {
- public:
-  G4PolyhedronTorus(G4double rmin, G4double rmax, G4double rtor,
-                    G4double phi, G4double dphi);
-  virtual G4Visible& operator=(const G4Visible &from);
-  virtual G4VVisPrim& operator=(const G4VVisPrim &from);
-};
-
-inline G4int G4Polyhedron::GetNumberOfRotationSteps()
-/***********************************************************************
- *                                                                     *
- * Name: G4Polyhedron::GetNumberOfRotationSteps      Date:    11.12.96 *
- * Author: E.Chernyaev (IHEP/Protvino)               Revised: 24.06.97 *
- *                                                                     *
- * Function: Get number of steps for whole circle                      *
- *                                                                     *
- ***********************************************************************/
-{
-  return fNumberOfRotationSteps;
-}
-
-inline void G4Polyhedron::ResetNumberOfRotationSteps()
-/***********************************************************************
- *                                                                     *
- * Name: G4Polyhedron::ResetNumberOfRotationSteps    Date:    24.06.97 *
- * Author: J.Allison (Manchester University)         Revised:          *
- *                                                                     *
- * Function: Reset number of steps for whole circle to default value   *
- *                                                                     *
- ***********************************************************************/
-{
-  fNumberOfRotationSteps = 24;
-}
 
 #endif /* G4POLYHEDRON_HH */
