@@ -117,16 +117,6 @@ setenv G4ANALYSIS_USE 1
 echo "On this machine the G4ANALYSIS_USE=\$G4ANALYSIS_USE"
 endif
 
-#+
-#
-# g4persistency
-#
-if ( X$g4use_hepodbms == Xy ) then
-setenv G4USE_HEPODBMS 1
-source  \$G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.csh
-echo "On this machine the G4USE_HEPODBMS=\$G4USE_HEPODBMS"
-endif
-
 #
 # g4ui
 #
