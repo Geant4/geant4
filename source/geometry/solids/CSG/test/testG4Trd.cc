@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4Trd.cc,v 1.2 1999-12-15 14:50:10 gunter Exp $
+// $Id: testG4Trd.cc,v 1.3 2000-05-05 10:05:12 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  
@@ -22,6 +22,7 @@
 
 #include "G4ThreeVector.hh"
 #include "G4Trd.hh"
+#include "G4Box.hh"
 #include "G4RotationMatrix.hh"
 #include "G4AffineTransform.hh"
 #include "G4VoxelLimits.hh"
@@ -52,6 +53,10 @@ G4bool testG4Trd()
 
     G4Trd trd1("Test Box #1",20,20,30,30,40);
     G4Trd trd2("Test Trd",10,30,20,40,40);
+    G4Trd trd3("BABAR Trd",0.14999999999999999,0.14999999999999999, 
+                           24.707000000000001, 24.707000000000001, 
+	                   22.699999999999999) ;
+
 
 // Check name
     assert(trd1.GetName()=="Test Box #1");
@@ -253,6 +258,20 @@ G4bool testG4Trd()
     assert(ApproxEqual(Dist,kInfinity));
     Dist=trd2.DistanceToIn(pbigmx,vxy);
     assert(ApproxEqual(Dist,kInfinity));
+
+    Dist=trd3.DistanceToIn(G4ThreeVector(  0.15000000000000185,
+                                         -22.048743592955137,
+                                           2.4268539333219472),
+                           G4ThreeVector(-0.76165597579890043,
+                                          0.64364445891356026,
+                                         -0.074515708658524193)) ;
+
+    //    G4cout<<"BABAR trd distance = "<<Dist<<G4endl ;
+    assert(ApproxEqual(Dist,0.0));
+
+   // return-value = 2.4415531753644804e-15
+
+
 
 
 // CalculateExtent
