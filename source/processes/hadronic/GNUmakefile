@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.13 2003-10-09 06:53:20 hpw Exp $
+# $Id: GNUmakefile,v 1.14 2003-10-31 09:14:54 hpw Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic processes library.  G.Folger 10-Dec-97.
 # ----------------------------------------------------------------
@@ -13,6 +13,9 @@ SUBDIRS += stopping
 
 
 SUBDIRS += models/binary_cascade
+SUBDIRS += models/cascade/evaporation
+SUBDIRS += models/cascade/utils
+SUBDIRS += models/cascade/cascade
 SUBDIRS += models/chiral_inv_phase_space/body
 SUBDIRS += models/chiral_inv_phase_space/interface
 SUBDIRS += models/coherent_elastic
