@@ -1,0 +1,13 @@
+process.c
+
+This is a tool to look for fatal
+execution error on fred. It could be
+used to test a volume with a grid point
+and direction.
+
+	gcc -lm process.c -o process
+	process 2> Errors.process
+	Graph.awk Errors.process > Graph.fred
+	fred Graph.fred			
+
+Medernach Emmanuel  Aug  8, 2000

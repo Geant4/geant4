@@ -1,0 +1,6 @@
+/fred/volume CONE2
+/fred/gun G4
+/gun/position 10.000000 -1.000000 125.000000
+/gun/direction -30.000000 -5.000000 -20.000000
+/run/initialize 
+/run/beamOn
