@@ -3,7 +3,7 @@
 
 This is a "convenience" tag for the use of testing and release
 procedures.  Roughly speaking it is geant4-01-01-ref-05 plus Group 2
-tags, plus a view "safe" tags from Group 3.  It includes tags of all
+tags, plus a few "safe" tags from Group 3.  It includes tags of all
 electromagnetic processes for the release but no hadron tags.
 
 geant4-01-01-ref-06 is:
