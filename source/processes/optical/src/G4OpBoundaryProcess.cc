@@ -558,7 +558,7 @@ void G4OpBoundaryProcess::DielectricDielectric()
                     PdotN = OldMomentum * theFacetNormal;
 	            NewMomentum = OldMomentum - (2.*PdotN)*theFacetNormal;
 
-	            if (sint1 > 0.0) {              // incident ray oblique
+	            if (sint1 > 0.0) {   // incident ray oblique
 
 		       E2_parl   = Rindex2*E2_parl/Rindex1 - E1_parl;
 		       E2_perp   = E2_perp - E1_perp;
@@ -571,14 +571,19 @@ void G4OpBoundaryProcess::DielectricDielectric()
 
                        NewPolarization = C_parl*A_paral + C_perp*A_trans;
 
-	             }
+	            }
 
-	             else if (Rindex2 > Rindex1) { // incident ray perpendicular
+	            else {               // incident ray perpendicular
 
-		       NewPolarization = - OldPolarization;
+	               if (Rindex2 > Rindex1) {
+		          NewPolarization = - OldPolarization;
+	               }
+	               else {
+	                  NewPolarization =   OldPolarization;
+	               }
 
-	             }
-		 }
+	            }
+	         }
 	      }
 	      else { // photon gets transmitted
 

@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+4th February 2003 Peter Gumplinger (op-V04-00-00)
+                Fix calculation of polarization for perpendicular
+                incidence when Rindex1 > Rindex2; bug report #442 
 12th November 2002 Peter Gumplinger (op-V04-01-01)
                 Fix calculation of polarization on dielectric dielectric
                 interfaces; bug report #427
