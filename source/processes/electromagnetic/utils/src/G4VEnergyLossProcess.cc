@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.19 2004-05-12 08:33:44 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.20 2004-05-12 12:25:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -815,7 +815,7 @@ void G4VEnergyLossProcess::SetDEDXTable(G4PhysicsTable* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossProcess::SetRangeTable(G4PhysicsTable* p)
+void G4VEnergyLossProcess::SetPreciseRangeTable(G4PhysicsTable* p)
 {
   if(thePreciseRangeTable) thePreciseRangeTable->clearAndDestroy();
   if(theDEDXAtMaxEnergy) delete [] theDEDXAtMaxEnergy;
@@ -1168,7 +1168,7 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(G4ParticleDefinition* part,
       yes = table->ExistPhysicsTable(filename);
       if(yes) yes = table->RetrievePhysicsTable(filename,ascii);
       if(yes) {
-        SetRangeTable(table);
+        SetPreciseRangeTable(table);
         if (-1 < verboseLevel) {
           G4cout << "Precise Range table for " << particleName << " is retrieved from <"
                  << filename << ">"

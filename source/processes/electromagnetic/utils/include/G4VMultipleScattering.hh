@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.17 2004-04-29 18:40:53 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.18 2004-05-12 12:25:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -278,7 +278,7 @@ inline G4double G4VMultipleScattering::GetContinuousStepLimit(
   if(!theLambdaTable) currentModel->SetDynamicParticle(track.GetDynamicParticle());
   const G4ParticleDefinition* p = track.GetDefinition();
   lambda0 = GetLambda(p, e);
-  currentRange = G4LossTableManager::Instance()->GetRange(p,e,currentCouple,true);
+  currentRange = G4LossTableManager::Instance()->GetTrancatedRange(p,e,currentCouple);
   truePathLength = TruePathLengthLimit(track,lambda0,currentMinimalStep);
   //G4cout << "StepLimit: tpl= " << truePathLength << " lambda0= "
   //       << lambda0 << " range= " << currentRange

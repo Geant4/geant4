@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.23 2004-05-05 18:34:57 vnivanch Exp $
+// $Id: G4LossTableManager.hh,v 1.24 2004-05-12 12:25:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -100,8 +100,12 @@ public:
   G4double GetRange(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
-    const G4MaterialCutsCouple *couple,
-    G4bool forMSC = false);
+    const G4MaterialCutsCouple *couple);
+
+  G4double GetTrancatedRange(
+    const G4ParticleDefinition *aParticle,
+    G4double kineticEnergy,
+    const G4MaterialCutsCouple *couple);
 
   G4double GetEnergy(
     const G4ParticleDefinition *aParticle,
@@ -264,18 +268,16 @@ inline G4double G4LossTableManager::GetDEDX(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-inline G4double G4LossTableManager::GetRange(
+inline G4double G4LossTableManager::GetTrancatedRange(
           const G4ParticleDefinition *aParticle,
                 G4double kineticEnergy,
-          const G4MaterialCutsCouple *couple,
-                G4bool forMSC)
+          const G4MaterialCutsCouple *couple)
 {
   if(aParticle != currentParticle) {
     currentParticle = aParticle;
     std::map<PD, G4VEnergyLossProcess*, std::less<PD> >::const_iterator pos;
     if ((pos = loss_map.find(currentParticle)) != loss_map.end()) {
       currentLoss = (*pos).second;
-      if(!currentLoss->RangeTable()) currentLoss = 0;
     } else {
       currentLoss = 0;
 //      ParticleHaveNoLoss(aParticle);
@@ -283,8 +285,33 @@ inline G4double G4LossTableManager::GetRange(
   }
   G4double x;
   if(currentLoss) {
-    if(forMSC) x = currentLoss->GetRangeForLoss(kineticEnergy);
-    else       x = currentLoss->GetRange(kineticEnergy, couple);
+    x = currentLoss->GetRangeForLoss(kineticEnergy, couple);
+  } else {           
+    x = G4EnergyLossTables::GetRange(currentParticle,kineticEnergy,couple,false);
+  }
+  return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+inline G4double G4LossTableManager::GetRange(
+          const G4ParticleDefinition *aParticle,
+                G4double kineticEnergy,
+          const G4MaterialCutsCouple *couple)
+{
+  if(aParticle != currentParticle) {
+    currentParticle = aParticle;
+    std::map<PD, G4VEnergyLossProcess*, std::less<PD> >::const_iterator pos;
+    if ((pos = loss_map.find(currentParticle)) != loss_map.end()) {
+      currentLoss = (*pos).second;
+    } else {
+      currentLoss = 0;
+//      ParticleHaveNoLoss(aParticle);
+    }
+  }
+  G4double x;
+  if(currentLoss) {
+    x = currentLoss->GetRange(kineticEnergy, couple);
   } else {           
     x = G4EnergyLossTables::GetRange(currentParticle,kineticEnergy,couple,false);
   }
