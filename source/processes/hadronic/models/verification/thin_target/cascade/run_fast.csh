@@ -1,13 +1,11 @@
 
 echo "Start of run for " $TARGET
 
-rm kin.paw
-rm ber.paw
+rm $TARGET/res.log
 
-$G4MY/test30 $TARGET/run_fast.mac  >& /dev/null
+$G4MY/test30 $TARGET/run_fast.mac  >& $TARGET/res.log
 
-mv kin*.paw   $TARGET/
-mv ber.paw   $TARGET/
+mv *.paw   $TARGET/
 
 echo $TARGET " is done!"
 

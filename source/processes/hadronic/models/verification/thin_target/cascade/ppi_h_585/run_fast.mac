@@ -38,7 +38,12 @@ H
 #generator
 binary
 #paw
-kin.paw
+bic.paw
+#run
+#generator
+bertini
+#paw
+ber.paw
 #run
 //--------Exit
 #exit

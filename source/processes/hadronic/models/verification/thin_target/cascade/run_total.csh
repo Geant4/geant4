@@ -1,4 +1,13 @@
 
+setenv TARGET dn_al_022
+source run_fast.csh
+
+setenv TARGET ta_al_022
+source run_fast.csh
+
+setenv TARGET zr_al_022
+source run_fast.csh
+
 setenv TARGET pn_al_022
 source run_fast.csh
 
