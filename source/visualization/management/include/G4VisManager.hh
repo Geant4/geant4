@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.27 2001-09-10 11:00:36 johna Exp $
+// $Id: G4VisManager.hh,v 1.28 2002-11-11 18:33:30 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,6 +85,8 @@
 #include "G4SceneList.hh"
 #include "G4Transform3D.hh"
 #include "G4UImessenger.hh"
+#include "G4NullModel.hh"
+#include "G4ModelingParameters.hh"
 
 #include "g4std/iostream"
 #include "g4std/vector"
@@ -323,6 +325,8 @@ protected:
   void ClearTransientStoreIfMarked();
   // Clears transient store of current scene handler if it is marked
   // for clearing.  Assumes view is valid.
+  void CheckModel ();
+  // If a scene handler has no model, provides a null model.
 
   static G4VisManager*  fpInstance;         // Pointer to single instance.
   G4bool                fInitialised;
@@ -343,6 +347,8 @@ protected:
   G4std::vector<G4UIcommand*>   fDirectoryList;
   G4VisStateDependent*  fpStateDependent;   // Friend state dependent class.
   G4int fWindowSizeHintX, fWindowSizeHintY; // For viewer construction.
+  G4NullModel fVisManagerNullModel;         // As a default.
+  G4ModelingParameters fVisManagerModelingParameters;  // Useful memory.
 
 };
 

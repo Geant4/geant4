@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.46 2002-10-24 15:12:39 johna Exp $
+// $Id: G4VisManager.cc,v 1.47 2002-11-11 18:33:36 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -288,15 +288,10 @@ void G4VisManager::Draw (const G4Circle& circle,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
-    G4VModel* pModel = new G4NullModel (pMP);
-    fpSceneHandler -> SetModel (pModel);
+    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (circle);
     fpSceneHandler -> EndPrimitives ();
-    fpSceneHandler -> SetModel (0);
-    delete pModel;
-    delete pMP;
   }
 }
 
@@ -304,15 +299,10 @@ void G4VisManager::Draw (const G4NURBS& nurbs,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
-    G4VModel* pModel = new G4NullModel (pMP);
-    fpSceneHandler -> SetModel (pModel);
+    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (nurbs);
     fpSceneHandler -> EndPrimitives ();
-    fpSceneHandler -> SetModel (0);
-    delete pModel;
-    delete pMP;
   }
 }
 
@@ -320,15 +310,10 @@ void G4VisManager::Draw (const G4Polyhedron& polyhedron,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
-    G4VModel* pModel = new G4NullModel (pMP);
-    fpSceneHandler -> SetModel (pModel);
+    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (polyhedron);
     fpSceneHandler -> EndPrimitives ();
-    fpSceneHandler -> SetModel (0);
-    delete pModel;
-    delete pMP;
   }
 }
 
@@ -336,15 +321,10 @@ void G4VisManager::Draw (const G4Polyline& line,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
-    G4VModel* pModel = new G4NullModel (pMP);
-    fpSceneHandler -> SetModel (pModel);
+    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (line);
     fpSceneHandler -> EndPrimitives ();
-    fpSceneHandler -> SetModel (0);
-    delete pModel;
-    delete pMP;
   }
 }
 
@@ -352,15 +332,10 @@ void G4VisManager::Draw (const G4Polymarker& polymarker,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
-    G4VModel* pModel = new G4NullModel (pMP);
-    fpSceneHandler -> SetModel (pModel);
+    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (polymarker);
     fpSceneHandler -> EndPrimitives ();
-    fpSceneHandler -> SetModel (0);
-    delete pModel;
-    delete pMP;
   }
 }
 
@@ -368,15 +343,10 @@ void G4VisManager::Draw (const G4Scale& scale,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
-    G4VModel* pModel = new G4NullModel (pMP);
-    fpSceneHandler -> SetModel (pModel);
+    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (scale);
     fpSceneHandler -> EndPrimitives ();
-    fpSceneHandler -> SetModel (0);
-    delete pModel;
-    delete pMP;
   }
 }
 
@@ -384,15 +354,10 @@ void G4VisManager::Draw (const G4Square& square,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
-    G4VModel* pModel = new G4NullModel (pMP);
-    fpSceneHandler -> SetModel (pModel);
+    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (square);
     fpSceneHandler -> EndPrimitives ();
-    fpSceneHandler -> SetModel (0);
-    delete pModel;
-    delete pMP;
   }
 }
 
@@ -400,15 +365,10 @@ void G4VisManager::Draw (const G4Text& text,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
-    G4VModel* pModel = new G4NullModel (pMP);
-    fpSceneHandler -> SetModel (pModel);
+    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (text);
     fpSceneHandler -> EndPrimitives ();
-    fpSceneHandler -> SetModel (0);
-    delete pModel;
-    delete pMP;
   }
 }
 
@@ -425,15 +385,10 @@ void G4VisManager::Draw (const G4VSolid& solid,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
-    G4VModel* pModel = new G4NullModel (pMP);
-    fpSceneHandler -> SetModel (pModel);
+    CheckModel();
     fpSceneHandler -> PreAddThis (objectTransform, attribs);
     solid.DescribeYourselfTo (*fpSceneHandler);
     fpSceneHandler -> PostAddThis ();
-    fpSceneHandler -> SetModel (0);
-    delete pModel;
-    delete pMP;
   }
 }
 
@@ -1031,23 +986,21 @@ void G4VisManager::EndOfEvent () {
   //G4cout << "G4VisManager::EndOfEvent" << G4endl;
   if (fpConcreteInstance && IsValidView ()) {
     ClearTransientStoreIfMarked();
-    G4ModelingParameters* pMP =
-      fpSceneHandler -> CreateModelingParameters ();
+    fVisManagerModelingParameters
+      = *(fpSceneHandler -> CreateModelingParameters ());
     const G4std::vector<G4VModel*>& EOEModelList =
       fpScene -> GetEndOfEventModelList ();
     for (size_t i = 0; i < EOEModelList.size (); i++) {
       G4VModel* pModel = EOEModelList [i];
-      pModel -> SetModelingParameters (pMP);
+      pModel -> SetModelingParameters (&fVisManagerModelingParameters);
       fpSceneHandler -> SetModel (pModel);
       pModel -> DescribeYourselfTo (*fpSceneHandler);
-      pModel -> SetModelingParameters (0);
-      fpSceneHandler -> SetModel (0);
     }
-    delete pMP;
     if (fpScene->GetRefreshAtEndOfEvent()) {
       fpViewer->ShowView();  // ...for systems needing post processing.
       fpSceneHandler->SetMarkForClearingTransientStore(true);
     }
+    fpSceneHandler -> SetModel (0);  // Flags invalid model.
   }
 }
 
@@ -1064,6 +1017,18 @@ void G4VisManager::ClearTransientStoreIfMarked(){
     fpSceneHandler->SetMarkForClearingTransientStore(false);
     fpSceneHandler->ClearTransientStore();
   }
+}
+
+void G4VisManager::CheckModel () {
+  G4VModel* pModel = fpSceneHandler->GetModel();
+  if (!pModel) {  // provide a null model.
+    pModel = &fVisManagerNullModel;
+    fpSceneHandler -> SetModel (pModel);
+  }
+  // Ensure modeling parameters are right for this view...
+  fVisManagerModelingParameters
+    = *(fpSceneHandler -> CreateModelingParameters ());
+  pModel->SetModelingParameters (&fVisManagerModelingParameters);
 }
 
 G4String G4VisManager::ViewerShortName (const G4String& viewerName) const {
