@@ -3,8 +3,8 @@ Attempting to read 4 bytes at address 0x76c518
     which is 8 bytes into a heap block of size 40 bytes at 0x76c510
 This block was allocated from:
 	[1] operator new() at 0xeb10dca8 
-	[2] RWTValVector<double>::RWTValVector<double>() at 0x1cc01c 
-	[3] RWTValOrderedVector<double>::RWTValOrderedVector<double>() at 0x1cbf34 
+	[2] G4RWTValVector<double>::G4RWTValVector<double>() at 0x1cc01c 
+	[3] G4RWTValOrderedVector<double>::G4RWTValOrderedVector<double>() at 0x1cbf34 
 	[4] G4ValVector::G4ValVector() at 0x1cb95c 
 	[5] G4SandiaTable::ComputeMatSandiaMatrix() at 0x1caaf8 
 	[6] G4SandiaTable::G4SandiaTable() at 0x1ca844 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXViewer.hh,v 1.4 1999-06-29 18:06:56 johna Exp $
+// $Id: G4OpenGLXViewer.hh,v 1.5 1999-11-11 15:38:04 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -21,7 +21,7 @@
 #include "G4VViewer.hh"
 #include "G4OpenGLSceneHandler.hh"
 #include "globals.hh"
-#include <rw/tvordvec.h>
+#include "g4rw/tvordvec.h"
 
 #include <X11/Xlib.h>
 #include <X11/Intrinsic.h>

@@ -1,8 +1,8 @@
 #ifndef _VOLTABLEENTRY_
 #define _VOLTABLEENTRY_ 1
 
-#include <rw/tphdict.h>
-#include <rw/tpordvec.h>
+#include "g4rw/tphdict.h"
+#include "g4rw/tpordvec.h"
 #include "G4ThreeVector.hh"
 #include "G3Pos.hh"
 
@@ -25,8 +25,8 @@ private:
   G4bool _OKAxis[3];
   G4int _DivisionAxis;
   VolTableEntry* _Mother;
-  RWTPtrOrderedVector <VolTableEntry> _Daughters; // VolTableEntry Daughters
-  RWTPtrOrderedVector <G3Pos> _G3Pos; // associated G3Pos objects
+  G4RWTPtrOrderedVector <VolTableEntry> _Daughters; // VolTableEntry Daughters
+  G4RWTPtrOrderedVector <G3Pos> _G3Pos; // associated G3Pos objects
 
 public:
   VolTableEntry(G4String& v, G4String& sh, G4double* R, 

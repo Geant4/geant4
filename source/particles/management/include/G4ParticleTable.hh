@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleTable.hh,v 1.11 1999-10-30 04:33:42 kurasige Exp $
+// $Id: G4ParticleTable.hh,v 1.12 1999-11-11 15:36:18 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,7 @@
 #include "g4std/map"
 #include "G4ParticleTableIterator.hh"
 #else
-#include <rw/tphdict.h>
+#include "g4rw/tphdict.h"
 #endif 
 
 class G4UImessenger;
@@ -64,10 +64,10 @@ class G4ParticleTable
    typedef G4ParticleTableIterator<G4int, G4ParticleDefinition*>::Map G4PTblEncodingDictionary;
    typedef G4ParticleTableIterator<G4int, G4ParticleDefinition*> G4PTblEncodingDicIterator;
 #else
-   typedef RWTPtrHashDictionary<G4String,G4ParticleDefinition> G4PTblDictionary;
-   typedef RWTPtrHashDictionaryIterator<G4String,G4ParticleDefinition> G4PTblDicIterator;
-   typedef RWTPtrHashDictionary<G4int,G4ParticleDefinition> G4PTblEncodingDictionary;
-   typedef RWTPtrHashDictionaryIterator<G4int,G4ParticleDefinition> G4PTblEncodingDicIterator;
+   typedef G4RWTPtrHashDictionary<G4String,G4ParticleDefinition> G4PTblDictionary;
+   typedef G4RWTPtrHashDictionaryIterator<G4String,G4ParticleDefinition> G4PTblDicIterator;
+   typedef G4RWTPtrHashDictionary<G4int,G4ParticleDefinition> G4PTblEncodingDictionary;
+   typedef G4RWTPtrHashDictionaryIterator<G4int,G4ParticleDefinition> G4PTblEncodingDicIterator;
 #endif
 
  protected:

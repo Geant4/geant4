@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PiMinusStopAbsorption.hh,v 1.2 1999-05-26 18:44:50 pia Exp $
+// $Id: G4PiMinusStopAbsorption.hh,v 1.3 1999-11-11 15:37:43 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -29,7 +29,7 @@
 #ifndef G4PIMINUSSTOPABSORPTION_HH
 #define G4PIMINUSSTOPABSORPTION_HH
 
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
 #include "globals.hh"
 #include "G4DynamicParticle.hh"

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3VolTable.cc,v 1.14 1999-07-29 03:44:38 lockman Exp $
+// $Id: G3VolTable.cc,v 1.15 1999-11-11 15:35:46 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -16,7 +16,7 @@
 
 G3VolTable::G3VolTable() 
   : _VTD(0), G3toG4TopVTE(0), _FirstKey("UnDefined"), _NVTE(0), _NG3Pos(0){
-    _VTD = new RWTPtrHashDictionary<G4String,VolTableEntry>(RWCString::hash);
+    _VTD = new G4RWTPtrHashDictionary<G4String,VolTableEntry>(RWCString::hash);
 };
 
 G3VolTable::~G3VolTable(){
@@ -32,7 +32,7 @@ G3VolTable::GetVTE(const G4String& Vname) {
 
 void 
 G3VolTable::ListVTE(){
-  RWTPtrHashDictionaryIterator<G4String, VolTableEntry> iter(*_VTD);
+  G4RWTPtrHashDictionaryIterator<G4String, VolTableEntry> iter(*_VTD);
   if (_VTD->entries()>0) {
     for (int i=0;iter();i++){
       _VTE = iter.value();
@@ -43,7 +43,7 @@ G3VolTable::ListVTE(){
   }
 }
 
-RWTPtrHashDictionary <G4String, VolTableEntry>* 
+G4RWTPtrHashDictionary <G4String, VolTableEntry>* 
 G3VolTable::GetVTD() {return _VTD;}
 
 VolTableEntry*

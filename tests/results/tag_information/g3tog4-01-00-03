@@ -7,7 +7,7 @@ when a G3 mixture is encountered.
 built from the component elements.
 
 3. References to RWGDlist class  have been replaced with
-RWTPtrOrderedVector in most (but not yet all) methods.
+G4RWTPtrOrderedVector in most (but not yet all) methods.
 
 4. The code to handle G3 divisions has been temporarily disabled until
 the algorithms can be updated.

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SolidStore.cc,v 1.2 1999-05-18 15:26:56 stesting Exp $
+// $Id: G4SolidStore.cc,v 1.3 1999-11-11 15:35:53 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4SolidStore
@@ -20,7 +20,7 @@
 
 // Protected constructor: Construct underlying container with
 // initial size of 100 entries
-G4SolidStore::G4SolidStore() : RWTPtrOrderedVector<G4VSolid>(100)
+G4SolidStore::G4SolidStore() : G4RWTPtrOrderedVector<G4VSolid>(100)
 {
 }
 

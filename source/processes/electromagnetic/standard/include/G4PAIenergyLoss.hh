@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIenergyLoss.hh,v 1.2 1999-04-16 09:06:01 grichine Exp $
+// $Id: G4PAIenergyLoss.hh,v 1.3 1999-11-11 15:36:34 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -41,7 +41,7 @@
 #include "G4ios.hh"
 #include <fstream.h>
 #include <iomanip.h>
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
 #include "globals.hh"
 #include "Randomize.hh"

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalVolume.hh,v 1.2 1999-02-15 10:58:13 japost Exp $
+// $Id: G4LogicalVolume.hh,v 1.3 1999-11-11 15:35:49 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -140,7 +140,7 @@
 //
 // Member data:
 //
-// RWTPtrOrderedVector<G4VPhysicalVolume> fDaughters
+// G4RWTPtrOrderedVector<G4VPhysicalVolume> fDaughters
 //   Vector of daughters. Given initial size of 0.
 // G4FieldManager *fFieldManager 
 //   Pointer (possibly NULL) to (magnetic or other) field manager object
@@ -180,7 +180,7 @@
 
 #include "globals.hh"
 #include "G4VPhysicalVolume.hh"	// Need operator == for vector fdaughters
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 #include <assert.h>
 
 // Forward declarations
@@ -255,7 +255,7 @@ private:
 //  Data members:   
 
 private:
-    RWTPtrOrderedVector<G4VPhysicalVolume> fDaughters;    
+    G4RWTPtrOrderedVector<G4VPhysicalVolume> fDaughters;    
     G4FieldManager *fFieldManager;
     G4Material *fMaterial;
     G4String fName;

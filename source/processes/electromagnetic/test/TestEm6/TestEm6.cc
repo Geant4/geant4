@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: TestEm6.cc,v 1.1 1999-07-05 09:23:03 aforti Exp $
+// $Id: TestEm6.cc,v 1.2 1999-11-11 15:37:05 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,10 +37,10 @@
 #endif
 
 #ifdef GNU_GCC
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 #include "Em6CalorHit.hh"
-template class RWTPtrOrderedVector <Em6CalorHit>;
-template class RWTPtrVector <Em6CalorHit>;
+template class G4RWTPtrOrderedVector <Em6CalorHit>;
+template class G4RWTPtrVector <Em6CalorHit>;
 template class G4Allocator <Em6CalorHit>;
 #endif
 

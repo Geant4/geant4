@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ReactionProductVector.hh,v 1.1 1999-01-07 16:13:50 gunter Exp $
+// $Id: G4ReactionProductVector.hh,v 1.2 1999-11-11 15:37:50 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -23,14 +23,14 @@
 #include "G4ios.hh"
 
 class G4ReactionProduct;
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
 // #ifdef STL
 // //in future use STL vector as container of reaction products ...
 // typedef Vector<G4ReactionProduct> G4ReactionProductVector;
 // #elseifdef RWT
 
-typedef RWTPtrOrderedVector<G4ReactionProduct> G4ReactionProductVector;
+typedef G4RWTPtrOrderedVector<G4ReactionProduct> G4ReactionProductVector;
 
 // #endif
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05PionShowerModel.hh,v 1.1 1999-01-07 16:06:14 gunter Exp $
+// $Id: ExN05PionShowerModel.hh,v 1.2 1999-11-11 15:41:25 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -21,7 +21,7 @@
 #include "G4Step.hh"
 #include "G4VTouchable.hh"
 #include "G4TouchableHistory.hh"
-#include <rw/tvordvec.h>
+#include "g4rw/tvordvec.h"
 
 class ExN05PionShowerModel : public G4VFastSimulationModel
 {
@@ -56,7 +56,7 @@ private:
   G4Navigator *fpNavigator;
   G4bool       fNaviSetup;
 
-  RWTValOrderedVector<ExN05EnergySpot> feSpotList;
+  G4RWTValOrderedVector<ExN05EnergySpot> feSpotList;
 
 };
 #endif

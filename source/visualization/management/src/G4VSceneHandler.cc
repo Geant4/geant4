@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSceneHandler.cc,v 1.6 1999-11-05 16:25:22 johna Exp $
+// $Id: G4VSceneHandler.cc,v 1.7 1999-11-11 15:38:11 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -281,7 +281,7 @@ void G4VSceneHandler::ProcessScene (G4VViewer& view) {
 
   // Traverse geometry tree and send drawing primitives to window(s).
 
-  const RWTPtrOrderedVector <G4VModel>& runDurationModelList =
+  const G4RWTPtrOrderedVector <G4VModel>& runDurationModelList =
     fpScene -> GetRunDurationModelList ();
 
   if (runDurationModelList.entries ()) {

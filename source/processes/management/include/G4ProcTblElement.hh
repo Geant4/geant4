@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcTblElement.hh,v 1.4 1999-11-07 17:11:43 kurasige Exp $
+// $Id: G4ProcTblElement.hh,v 1.5 1999-11-11 15:37:50 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,7 +26,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
 #include "G4ParticleDefinition.hh"
 #include "G4VProcess.hh"
@@ -55,7 +55,7 @@ class G4ProcTblElement
     // equal / unequal operator
 
   protected:
-    typedef RWTPtrOrderedVector<G4ProcessManager> G4ProcMgrVector;
+    typedef G4RWTPtrOrderedVector<G4ProcessManager> G4ProcMgrVector;
 
     inline G4int Length() const ;
     inline void  Insert(G4ProcessManager* aProcMgr);

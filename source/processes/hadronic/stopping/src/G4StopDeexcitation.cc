@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StopDeexcitation.cc,v 1.2 1999-04-18 11:28:59 hpw Exp $
+// $Id: G4StopDeexcitation.cc,v 1.3 1999-11-11 15:37:47 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -26,9 +26,9 @@
 
 
 #include "G4StopDeexcitation.hh"
-#include <rw/tpordvec.h>
-#include <rw/tvordvec.h>
-#include <rw/cstring.h>
+#include "g4rw/tpordvec.h"
+#include "g4rw/tvordvec.h"
+#include "g4rw/cstring.h"
 
 #include "globals.hh"
 #include "Randomize.hh"

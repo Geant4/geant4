@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Element.hh,v 1.2 1999-04-14 12:48:57 maire Exp $
+// $Id: G4Element.hh,v 1.3 1999-11-11 15:36:08 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -52,17 +52,17 @@
 #define G4ELEMENT_HH
 
 #include "G4ios.hh"
-#include <rw/tpvector.h>
-#include <rw/tpordvec.h>
+#include "g4rw/tpvector.h"
+#include "g4rw/tpordvec.h"
 #include "globals.hh"
 #include "G4Isotope.hh"
 #include "G4AtomicShells.hh"
 #include "G4IonisParamElm.hh"
 
-typedef RWTPtrVector<G4Isotope> G4IsotopeVector;
+typedef G4RWTPtrVector<G4Isotope> G4IsotopeVector;
 
 class G4Element;              //forward declaration
-typedef RWTPtrOrderedVector<G4Element> G4ElementTable;
+typedef G4RWTPtrOrderedVector<G4Element> G4ElementTable;
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

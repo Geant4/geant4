@@ -5,14 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyTrackerHitsCollection.hh,v 1.1 1999-01-08 16:35:54 gunter Exp $
+// $Id: MyTrackerHitsCollection.hh,v 1.2 1999-11-11 15:41:17 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef MyTrackerHitsCollection_h
 #define MyTrackerHitsCollection_h 1
 
-#include <rw/tvordvec.h>
+#include "g4rw/tvordvec.h"
 
 #include "G4VHitsCollection.hh"
 #include "MyTrackerHit.hh"
@@ -28,9 +28,9 @@ class MyTrackerHitsCollection : public G4VHitsCollection
     void DrawAllHits();
     void PrintAllHits();
   private:
-    RWTValOrderedVector<MyTrackerHit> theCollection;
+    G4RWTValOrderedVector<MyTrackerHit> theCollection;
   public:
-    inline RWTValOrderedVector<MyTrackerHit>& GetVector()
+    inline G4RWTValOrderedVector<MyTrackerHit>& GetVector()
     { return theCollection; };
     inline void insert(MyTrackerHit* pHit)
     { theCollection.insert(*pHit); }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3EventAction.cc,v 1.1 1999-10-11 16:55:52 maire Exp $
+// $Id: Em3EventAction.cc,v 1.2 1999-11-11 15:41:21 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,7 +20,7 @@
 #include "Em3CalorHit.hh"
 #include "Em3EventActionMessenger.hh"
 
-#include <rw/tvordvec.h>
+#include "g4rw/tvordvec.h"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"

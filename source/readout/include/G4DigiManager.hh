@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DigiManager.hh,v 1.2 1999-11-01 03:20:36 asaim Exp $
+// $Id: G4DigiManager.hh,v 1.3 1999-11-11 15:37:55 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -21,7 +21,7 @@ class G4DMmessenger;
 #include "G4DCtable.hh"
 class G4RunManager;
 class G4SDManager;
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
 // class description:
 //
@@ -85,7 +85,7 @@ class G4DigiManager
   private: 
       static G4DigiManager * fDManager;
       G4int verboseLevel;
-      RWTPtrOrderedVector<G4VDigitizerModule> DMtable;
+      G4RWTPtrOrderedVector<G4VDigitizerModule> DMtable;
       G4DCtable* DCtable;
       G4DMmessenger* theMessenger;
       G4RunManager* runManager;

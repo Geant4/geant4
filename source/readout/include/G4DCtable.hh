@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DCtable.hh,v 1.2 1999-11-01 03:20:35 asaim Exp $
+// $Id: G4DCtable.hh,v 1.3 1999-11-11 15:37:54 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -13,7 +13,7 @@
 #define G4DCtable_H 1
 
 #include "globals.hh"
-#include <rw/tvordvec.h>
+#include "g4rw/tvordvec.h"
 
 // class description:
 //
@@ -38,8 +38,8 @@ class G4DCtable
     G4int GetCollectionID(G4String DCname);
 
   private:
-    RWTValOrderedVector<G4String> DMlist;
-    RWTValOrderedVector<G4String> DClist;
+    G4RWTValOrderedVector<G4String> DMlist;
+    G4RWTValOrderedVector<G4String> DClist;
 
   public:
     inline G4int entries() const

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ShortLivedTable.hh,v 1.6 1999-10-30 04:33:43 kurasige Exp $
+// $Id: G4ShortLivedTable.hh,v 1.7 1999-11-11 15:36:18 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,7 +30,7 @@
 #ifdef G4USE_STL
 #include "g4std/vector"
 #else
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 #endif 
 
 class G4ParticleTable;
@@ -47,8 +47,8 @@ class G4ShortLivedTable
    // Use STL Vector as list of shortlives
    typedef G4std::vector<G4ParticleDefinition*>  G4ShortLivedList;
 #else
-   // Use  RWTPtrOrderedVector as list of shortlives
-   typedef RWTPtrOrderedVector<G4ParticleDefinition> G4ShortLivedList;
+   // Use  G4RWTPtrOrderedVector as list of shortlives
+   typedef G4RWTPtrOrderedVector<G4ParticleDefinition> G4ShortLivedList;
 #endif
 
  public:

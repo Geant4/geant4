@@ -4,7 +4,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: tst2ParticleContainer.hh,v 1.1 1999-06-17 04:42:45 kurasige Exp $
+// $Id: tst2ParticleContainer.hh,v 1.2 1999-11-11 15:36:19 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -14,7 +14,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <rw/tpsrtvec.h>
+#include "g4rw/tpsrtvec.h"
 
 #include "tst2ContainerElement.hh"
 
@@ -24,7 +24,7 @@
 class tst2ParticleContainer
 {
  public:
-   typedef RWTPtrSortedVector<tst2ContainerElement> tst2ParticleVector;
+   typedef G4RWTPtrSortedVector<tst2ContainerElement> tst2ParticleVector;
 
  public:
   //constructors

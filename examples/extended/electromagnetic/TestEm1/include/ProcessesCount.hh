@@ -6,7 +6,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ProcessesCount.hh,v 1.1 1999-10-11 13:07:43 maire Exp $
+// $Id: ProcessesCount.hh,v 1.2 1999-11-11 15:41:19 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -27,7 +27,7 @@
 #define ProcessesCount_HH
 
 #include "globals.hh"
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -56,6 +56,6 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
-typedef RWTPtrOrderedVector<OneProcessCount> ProcessesCount;
+typedef G4RWTPtrOrderedVector<OneProcessCount> ProcessesCount;
 
 #endif

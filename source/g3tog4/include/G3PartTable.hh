@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3PartTable.hh,v 1.2 1999-05-18 03:49:01 lockman Exp $
+// $Id: G3PartTable.hh,v 1.3 1999-11-11 15:35:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -13,12 +13,12 @@
 // Maps G3 material indices to their G4 material object counterparts.
 // Maintains a linked List of G3 material index/G4 material pointer pairs.
 
-#include <rw/tphdict.h>
+#include "g4rw/tphdict.h"
 #include "G4ParticleDefinition.hh"
 
 class G3PartTable {
 private:
-  RWTPtrHashDictionary<G4String, G4ParticleDefinition>* _PTD;
+  G4RWTPtrHashDictionary<G4String, G4ParticleDefinition>* _PTD;
   void HashID(G4int partid, G4String* _HID);
   void HashID(G4int partid, G4String& _HID);
 public:

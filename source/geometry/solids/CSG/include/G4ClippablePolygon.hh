@@ -25,8 +25,8 @@ class G4AffineTransform;
 class G4AffineTransform;
 class G4VoxelLimits;
 
-#include <rw/tvordvec.h>
-typedef RWTValOrderedVector<G4ThreeVector> G4ThreeVectorList;
+#include "g4rw/tvordvec.h"
+typedef G4RWTValOrderedVector<G4ThreeVector> G4ThreeVectorList;
 
 class G4ClippablePolygon {
 	public:

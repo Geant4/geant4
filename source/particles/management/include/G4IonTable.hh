@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.hh,v 1.12 1999-10-30 04:33:41 kurasige Exp $
+// $Id: G4IonTable.hh,v 1.13 1999-11-11 15:36:17 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,7 +34,7 @@
 #ifdef G4USE_STL
 #include "g4std/vector"
 #else
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 #endif 
 
 class G4ParticleTable;
@@ -53,8 +53,8 @@ class G4IonTable
    // Use STL Vector as list of ions
    typedef G4std::vector<G4ParticleDefinition*> G4IonList;
 #else
-   // Use  RWTPtrOrderedVector as list of ions
-   typedef RWTPtrOrderedVector<G4ParticleDefinition> G4IonList;
+   // Use  G4RWTPtrOrderedVector as list of ions
+   typedef G4RWTPtrOrderedVector<G4ParticleDefinition> G4IonList;
 #endif
 
  public:

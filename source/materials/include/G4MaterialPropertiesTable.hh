@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MaterialPropertiesTable.hh,v 1.5 1999-11-09 20:28:15 gum Exp $
+// $Id: G4MaterialPropertiesTable.hh,v 1.6 1999-11-11 15:36:09 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,7 +19,7 @@
 // Version:     1.0
 // Created:     1996-02-08
 // Author:      Juliet Armstrong
-// Updated:     1999-11-05 Migration from RWTPtrHashDictionary to STL
+// Updated:     1999-11-05 Migration from G4RWTPtrHashDictionary to STL
 //                         by John Allison
 //              1999-10-29 add method and class descriptors
 //              1997-03-25 by Peter Gumplinger
@@ -36,7 +36,7 @@
 /////////////
 
 #include <math.h>
-#include <rw/tphdict.h>
+#include "g4rw/tphdict.h"
 #include "g4std/map"
 #include "globals.hh"
 #include "G4MaterialPropertyVector.hh"

@@ -5,13 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineCurve.hh,v 1.3 1999-01-19 10:12:56 broglia Exp $
+// $Id: G4BSplineCurve.hh,v 1.4 1999-11-11 15:35:54 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef __BSPLINECURVE_H
 #define __BSPLINECURVE_H 
 
-#include <rw/tvvector.h>
+#include "g4rw/tvvector.h"
 #include "G4Curve.hh"
 
 class G4ControlPoints;
@@ -21,8 +21,8 @@ class G4BSplineCurve : public G4Curve
 {
 public:
 
-  typedef RWTValVector<G4double> G4doubleVector;
-  typedef RWTValVector<G4Point3D> G4Point3DVector;
+  typedef G4RWTValVector<G4double> G4doubleVector;
+  typedef G4RWTValVector<G4Point3D> G4Point3DVector;
 
 public:
 

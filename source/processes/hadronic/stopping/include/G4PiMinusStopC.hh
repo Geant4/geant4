@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PiMinusStopC.hh,v 1.1 1999-01-07 16:13:39 gunter Exp $
+// $Id: G4PiMinusStopC.hh,v 1.2 1999-11-11 15:37:43 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -27,9 +27,9 @@
 #ifndef G4PIMINUSSTOPC_HH
 #define G4PIMINUSSTOPC_HH 
 
-#include <rw/tpordvec.h>
-#include <rw/tvordvec.h>
-#include <rw/cstring.h>
+#include "g4rw/tpordvec.h"
+#include "g4rw/tvordvec.h"
+#include "g4rw/cstring.h"
 
 #include "G4PiMinusStopMaterial.hh"
 #include "globals.hh"

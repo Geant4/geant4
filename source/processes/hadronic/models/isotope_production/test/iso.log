@@ -3,8 +3,8 @@ Attempting to read 4 bytes at address 0x699e20
     which is 8 bytes into a heap block of size 40 bytes at 0x699e18
 This block was allocated from:
 	[1] operator new() at 0xef6da7a4 
-	[2] RWTValVector<double>::RWTValVector<double>() at line 145 in "tvvector.h"
-	[3] RWTValOrderedVector<double>::RWTValOrderedVector<double>() at line 166 in "xvordvec.h"
+	[2] G4RWTValVector<double>::G4RWTValVector<double>() at line 145 in "tvvector.h"
+	[3] G4RWTValOrderedVector<double>::G4RWTValOrderedVector<double>() at line 166 in "xvordvec.h"
 	[4] G4ValVector::G4ValVector() at line 33 in "G4OrderedTable.hh"
 	[5] G4SandiaTable::ComputeMatSandiaMatrix() at line 67 in "G4SandiaTable.cc"
 	[6] G4SandiaTable::G4SandiaTable() at line 37 in "G4SandiaTable.cc"
@@ -142,8 +142,8 @@ Attempting to read 4 bytes at address 0x69a640
     which is 8 bytes into a heap block of size 40 bytes at 0x69a638
 This block was allocated from:
 	[1] operator new() at 0xef6da7a4 
-	[2] RWTValVector<double>::RWTValVector<double>() at line 145 in "tvvector.h"
-	[3] RWTValOrderedVector<double>::RWTValOrderedVector<double>() at line 166 in "xvordvec.h"
+	[2] G4RWTValVector<double>::G4RWTValVector<double>() at line 145 in "tvvector.h"
+	[3] G4RWTValOrderedVector<double>::G4RWTValOrderedVector<double>() at line 166 in "xvordvec.h"
 	[4] G4ValVector::G4ValVector() at line 33 in "G4OrderedTable.hh"
 	[5] G4SandiaTable::ComputeMatSandiaMatrix() at line 67 in "G4SandiaTable.cc"
 	[6] G4SandiaTable::G4SandiaTable() at line 37 in "G4SandiaTable.cc"

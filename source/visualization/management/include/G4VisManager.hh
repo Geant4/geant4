@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.hh,v 1.6 1999-08-27 10:25:00 johna Exp $
+// $Id: G4VisManager.hh,v 1.7 1999-11-11 15:38:09 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,7 +57,7 @@
 #include "G4UImessenger.hh"
 #include "G4VStateDependent.hh"
 
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
 class G4VisManMessenger;
 class G4VPhysicalVolume;
@@ -273,7 +273,7 @@ protected:
   G4ViewParameters      fVP;                // Current viewing parameters.
   G4int                 fVerbose;           // Verbosity level 0-10.
   G4VisManMessenger*    fpMessenger;        // Pointer to messenger.
-  RWTPtrOrderedVector <G4UImessenger> fMessengerList;
+  G4RWTPtrOrderedVector <G4UImessenger> fMessengerList;
 };
 
 #include "G4VisManager.icc"

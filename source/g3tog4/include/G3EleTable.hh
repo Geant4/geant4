@@ -7,11 +7,11 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3EleTable.hh,v 1.1 1999-05-06 04:19:58 lockman Exp $
+// $Id: G3EleTable.hh,v 1.2 1999-11-11 15:35:41 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-#include <rw/ctoken.h>
-#include <rw/tpordvec.h>
+#include "g4rw/ctoken.h"
+#include "g4rw/tpordvec.h"
 #include "globals.hh"
 #include "G4Element.hh"
 

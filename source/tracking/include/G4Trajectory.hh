@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trajectory.hh,v 1.6 1999-10-14 05:39:46 tsasaki Exp $
+// $Id: G4Trajectory.hh,v 1.7 1999-11-11 15:38:02 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -38,7 +38,7 @@ class G4Trajectory;
 #include "G4Allocator.hh"
 #include <stdlib.h>                 // Include from 'system'
 #include "G4ios.hh"               // Include from 'system'
-#include <rw/tpordvec.h>            // RWTValOrderedVector
+#include "g4rw/tpordvec.h"            // G4RWTValOrderedVector
 #include "globals.hh"               // Include from 'global'
 #include "G4ParticleDefinition.hh"  // Include from 'particle+matter'
 #include "G4TrajectoryPoint.hh"     // Include from 'tracking'
@@ -96,7 +96,7 @@ class G4Trajectory : public G4VTrajectory
    private:
 //---------
 
-  RWTPtrOrderedVector<G4VTrajectoryPoint>* positionRecord;
+  G4RWTPtrOrderedVector<G4VTrajectoryPoint>* positionRecord;
   G4int fTrackID;
   G4int fParentID;
   G4String ParticleName;

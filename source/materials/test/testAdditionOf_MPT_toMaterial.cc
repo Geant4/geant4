@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testAdditionOf_MPT_toMaterial.cc,v 1.1 1999-01-08 16:32:10 gunter Exp $
+// $Id: testAdditionOf_MPT_toMaterial.cc,v 1.2 1999-11-11 15:36:12 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,13 +16,13 @@
 
 #include "G4ios.hh"
 
-//void RWTPtrOrderedVector<G4MPVEntry>::clearAndDestroy(void);
-//G4MPVEntry* RWTPtrOrderedVector<G4MPVEntry>::find(const G4MPVEntry*) const;
-//void RWTPtrOrderedVector<G4DecayChannel>::clearAndDestroy(void);
+//void G4RWTPtrOrderedVector<G4MPVEntry>::clearAndDestroy(void);
+//G4MPVEntry* G4RWTPtrOrderedVector<G4MPVEntry>::find(const G4MPVEntry*) const;
+//void G4RWTPtrOrderedVector<G4DecayChannel>::clearAndDestroy(void);
 
-RWTPtrOrderedVector<G4MPVEntry> lof;
+G4RWTPtrOrderedVector<G4MPVEntry> lof;
 #include "G4DecayChannel.hh"
-RWTPtrOrderedVector<G4DecayChannel> lof3;
+G4RWTPtrOrderedVector<G4DecayChannel> lof3;
 void lof2() {
   lof.clearAndDestroy();
   lof3.clearAndDestroy();

@@ -5,18 +5,18 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test12.hadronic.exerciser.cc,v 1.2 1999-02-12 10:15:22 stesting Exp $
+// $Id: test12.hadronic.exerciser.cc,v 1.3 1999-11-11 15:41:15 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "globals.hh"
 #include "G4UnitsTable.hh"
-#include <rw/tvordvec.h>
+#include "g4rw/tvordvec.h"
 
 static void OutputCases
-(const RWTValOrderedVector <G4String> & particleNameList,
- const RWTValOrderedVector <G4double> & energyList,
- const RWTValOrderedVector <G4String> & materialNameList) {
+(const G4RWTValOrderedVector <G4String> & particleNameList,
+ const G4RWTValOrderedVector <G4double> & energyList,
+ const G4RWTValOrderedVector <G4String> & materialNameList) {
 
   for (int iMaterial = 0;
        iMaterial < materialNameList.entries ();
@@ -59,7 +59,7 @@ int main (int argc, char** argv) {
     "\n/gun/direction 1 0 0"
     "\n#";
 
-  RWTValOrderedVector <G4String> particleNameList;
+  G4RWTValOrderedVector <G4String> particleNameList;
   particleNameList.append ("proton");
   particleNameList.append ("neutron");
   particleNameList.append ("pi+");
@@ -69,10 +69,10 @@ int main (int argc, char** argv) {
   particleNameList.append ("kaon0S");
   particleNameList.append ("kaon0L");
 
-  RWTValOrderedVector <G4double> energyList;
+  G4RWTValOrderedVector <G4double> energyList;
   energyList.append (100 * GeV);
 
-  RWTValOrderedVector <G4String> materialNameList;
+  G4RWTValOrderedVector <G4String> materialNameList;
   materialNameList.append ("Pb");
   materialNameList.append ("Al");
   materialNameList.append ("Air");

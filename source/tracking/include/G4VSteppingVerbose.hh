@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSteppingVerbose.hh,v 1.2 1999-10-14 05:39:47 tsasaki Exp $
+// $Id: G4VSteppingVerbose.hh,v 1.3 1999-11-11 15:38:02 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -147,11 +147,11 @@ protected:
 
   G4int verboseLevel;
 
-  typedef RWTValOrderedVector<G4int> 
+  typedef G4RWTValOrderedVector<G4int> 
              G4SelectedAtRestDoItVector;
-  typedef RWTValOrderedVector<G4int> 
+  typedef G4RWTValOrderedVector<G4int> 
              G4SelectedAlongStepDoItVector;
-  typedef RWTValOrderedVector<G4int>
+  typedef G4RWTValOrderedVector<G4int>
              G4SelectedPostStepDoItVector;
   G4SelectedAtRestDoItVector *fSelectedAtRestDoItVector;
   G4SelectedAlongStepDoItVector *fSelectedAlongStepDoItVector;

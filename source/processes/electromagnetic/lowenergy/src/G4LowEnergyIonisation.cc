@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.24 1999-11-05 12:10:46 urban Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.25 1999-11-11 15:36:25 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,7 @@
 #include "G4UnitsTable.hh"
 #include <fstream.h>
 
-typedef RWTPtrOrderedVector<G4DynamicParticle> G4ParticleVector;
+typedef G4RWTPtrOrderedVector<G4DynamicParticle> G4ParticleVector;
 
 // constructor and destructor
 G4LowEnergyIonisation::G4LowEnergyIonisation(const G4String& processName)

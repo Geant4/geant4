@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SmartVoxelHeader.hh,v 1.1 1999-01-07 16:07:16 gunter Exp $
+// $Id: G4SmartVoxelHeader.hh,v 1.2 1999-11-11 15:35:50 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4SmartVoxelHeader
@@ -42,7 +42,7 @@
 // Private functions:
 // 
 // G4SmartVoxelHeader(G4LogicalVolume* pVolume,G4VoxelLimits& pLimits,
-//                    RWTValOrderedVector<G4int>& pCandidates,
+//                    G4RWTValOrderedVector<G4int>& pCandidates,
 //                    const G4int pSlice=0)
 //   Build and refine voxels between specified limits, considering only
 //   the physical volumes numbered `pCandidates'. pSlice is used to set max
@@ -59,7 +59,7 @@
 // G4double fmaxExtent
 // G4double fminExtent
 //   Minimum and maximum coordiantes along the axis
-// RWTPtrOrderedVector<G4SmartVoxelProxy> fslices
+// G4RWTPtrOrderedVector<G4SmartVoxelProxy> fslices
 //   The slices along the axis
 //
 // G4int fminEquivalent
@@ -82,19 +82,19 @@
 
 #include "G4ios.hh"
 
-#include <rw/tvvector.h>
-#include <rw/tpordvec.h>
-#include <rw/tvordvec.h>
+#include "g4rw/tvvector.h"
+#include "g4rw/tpordvec.h"
+#include "g4rw/tvordvec.h"
 // Forward declarations
 class G4LogicalVolume;
 class G4VoxelLimits;
 class G4VPhysicalVolume;
 
 
-typedef RWTPtrOrderedVector<G4SmartVoxelProxy> G4ProxyVector;
-typedef RWTPtrOrderedVector<G4SmartVoxelNode> G4NodeVector;
-typedef RWTValOrderedVector<G4int> G4VolumeNosVector;
-typedef RWTValVector<G4double> G4VolumeExtentVector;
+typedef G4RWTPtrOrderedVector<G4SmartVoxelProxy> G4ProxyVector;
+typedef G4RWTPtrOrderedVector<G4SmartVoxelNode> G4NodeVector;
+typedef G4RWTValOrderedVector<G4int> G4VolumeNosVector;
+typedef G4RWTValVector<G4double> G4VolumeExtentVector;
 
 class G4SmartVoxelHeader
 {

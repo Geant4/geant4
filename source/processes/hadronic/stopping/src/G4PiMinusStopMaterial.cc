@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PiMinusStopMaterial.cc,v 1.1 1999-01-07 16:13:46 gunter Exp $
+// $Id: G4PiMinusStopMaterial.cc,v 1.2 1999-11-11 15:37:47 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -28,9 +28,9 @@
 
 #include "G4PiMinusStopMaterial.hh"
 
-#include <rw/tpordvec.h>
-#include <rw/tvordvec.h>
-#include <rw/cstring.h>
+#include "g4rw/tpordvec.h"
+#include "g4rw/tvordvec.h"
+#include "g4rw/cstring.h"
 
 #include "globals.hh"
 #include "Randomize.hh"
@@ -51,8 +51,8 @@
 G4PiMinusStopMaterial::G4PiMinusStopMaterial()
   
 {
-  //  _definitions = new RWTPtrOrderedVector<G4ParticleDefinition>();
-  //  _momenta = new RWTPtrOrderedVector<G4LorentzVector>();
+  //  _definitions = new G4RWTPtrOrderedVector<G4ParticleDefinition>();
+  //  _momenta = new G4RWTPtrOrderedVector<G4LorentzVector>();
   _definitions = 0;
   _momenta = 0;
   _distributionE = 0;
@@ -76,7 +76,7 @@ G4PiMinusStopMaterial::~G4PiMinusStopMaterial()
   delete _distributionAngle;
 }
 
-RWTPtrOrderedVector<G4ParticleDefinition>* G4PiMinusStopMaterial::DefinitionVector()
+G4RWTPtrOrderedVector<G4ParticleDefinition>* G4PiMinusStopMaterial::DefinitionVector()
 {
 
   _definitions->append(G4Neutron::Neutron());
@@ -91,7 +91,7 @@ RWTPtrOrderedVector<G4ParticleDefinition>* G4PiMinusStopMaterial::DefinitionVect
 
 }
 
-RWTPtrOrderedVector<G4LorentzVector>* G4PiMinusStopMaterial::P4Vector(const G4double binding,
+G4RWTPtrOrderedVector<G4LorentzVector>* G4PiMinusStopMaterial::P4Vector(const G4double binding,
 								      const G4double massNucleus)
 {
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Material.hh,v 1.4 1999-07-28 11:48:18 maire Exp $
+// $Id: G4Material.hh,v 1.5 1999-11-11 15:36:09 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -59,18 +59,18 @@
 #define G4MATERIAL_HH
 
 #include "G4ios.hh"
-#include <rw/tpvector.h>
-#include <rw/tpordvec.h>
+#include "g4rw/tpvector.h"
+#include "g4rw/tpordvec.h"
 #include "globals.hh"
 #include "G4Element.hh"
 #include "G4MaterialPropertiesTable.hh"
 #include "G4IonisParamMat.hh"
 #include "G4SandiaTable.hh"
 
-typedef RWTPtrVector<G4Element> G4ElementVector;
+typedef G4RWTPtrVector<G4Element> G4ElementVector;
 
 class G4Material;              //forward declaration
-typedef RWTPtrOrderedVector<G4Material> G4MaterialTable;
+typedef G4RWTPtrOrderedVector<G4Material> G4MaterialTable;
 
 enum G4State { kStateUndefined, kStateSolid, kStateLiquid, kStateGas };
 

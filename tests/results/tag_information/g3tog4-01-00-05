@@ -6,6 +6,6 @@ actual methods to handle deferred /divided volumes have not yet been
 implemented.
 
 The code compiles without any error messages on Sun and HP.  The only RW
-classes in use are RWCStrring, RWTPtrHashDictionary and
-RWTPtrOrderedVector. clGeometry, the test example with visualization,
+classes in use are RWCStrring, G4RWTPtrHashDictionary and
+G4RWTPtrOrderedVector. clGeometry, the test example with visualization,
 has been successfully run on both platforms.

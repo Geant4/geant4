@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MPVEntry.cc,v 1.3 1999-11-05 21:14:12 gum Exp $
+// $Id: G4MPVEntry.cc,v 1.4 1999-11-11 15:36:10 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,7 +35,7 @@
 
 // Overload the == operator
 // ------------------------
-// Well defined == semantics required by RWTPtrSortedVector
+// Well defined == semantics required by G4RWTPtrSortedVector
 //
 G4bool G4MPVEntry::operator ==(const G4MPVEntry &right) const  
 {
@@ -47,7 +47,7 @@ G4bool G4MPVEntry::operator ==(const G4MPVEntry &right) const
 
 // Overload the < operator
 // -----------------------
-// Well defined < semantics required by RWTPtrSortedVector
+// Well defined < semantics required by G4RWTPtrSortedVector
 //
 G4bool G4MPVEntry::operator <(const G4MPVEntry &right) const  
 {
@@ -59,7 +59,7 @@ G4bool G4MPVEntry::operator <(const G4MPVEntry &right) const
 
 // Overload the = operator
 // -----------------------
-// Well defined = semantics required by RWTPtrSortedVector
+// Well defined = semantics required by G4RWTPtrSortedVector
 //
 G4MPVEntry& G4MPVEntry::operator =(const G4MPVEntry& right)
 {

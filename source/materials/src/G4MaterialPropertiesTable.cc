@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MaterialPropertiesTable.cc,v 1.5 1999-11-05 21:29:13 gum Exp $
+// $Id: G4MaterialPropertiesTable.cc,v 1.6 1999-11-11 15:36:10 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,7 +17,7 @@
 // Version:     1.0
 // Created:     1996-02-08
 // Author:      Juliet Armstrong
-// Updated:     1999-11-05 Migration from RWTPtrHashDictionary to STL
+// Updated:     1999-11-05 Migration from G4RWTPtrHashDictionary to STL
 //                         by John Allison
 //              1997-03-26 by Peter Gumplinger
 //              > cosmetics (only)
@@ -45,9 +45,9 @@ G4MaterialPropertiesTable::operator =(const G4MaterialPropertiesTable& right)
         // want to make an actual copy -- not a shallow copy which is
 	// the default for RWTPrtHashDictionary's assignment operator
  
-        RWTPtrHashDictionary<G4String, G4MaterialPropertyVector> 
+        G4RWTPtrHashDictionary<G4String, G4MaterialPropertyVector> 
 						rightMPT(right.MPT);
-        RWTPtrHashDictionaryIterator<G4String, G4MaterialPropertyVector> 
+        G4RWTPtrHashDictionaryIterator<G4String, G4MaterialPropertyVector> 
 						rightIterator(rightMPT); 
         rightIterator.reset();
         while (++rightIterator) {
@@ -75,9 +75,9 @@ G4MaterialPropertiesTable::G4MaterialPropertiesTable
         // want to make an actual copy -- not a shallow copy which is
 	// the default for RWTPrtHashDictionary's assignment operator
 
-        RWTPtrHashDictionary<G4String, G4MaterialPropertyVector> 
+        G4RWTPtrHashDictionary<G4String, G4MaterialPropertyVector> 
 						rightMPT(right.MPT);
-        RWTPtrHashDictionaryIterator<G4String, G4MaterialPropertyVector> 
+        G4RWTPtrHashDictionaryIterator<G4String, G4MaterialPropertyVector> 
 						rightIterator(rightMPT); 
 
         rightIterator.reset();

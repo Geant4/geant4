@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSolid.hh,v 1.2 1999-11-09 18:41:44 japost Exp $
+// $Id: G4VSolid.hh,v 1.3 1999-11-11 15:35:50 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -229,8 +229,8 @@ class G4VisExtent;
 class G4DisplacedSolid;
 
 #include "G4ThreeVector.hh"
-#include <rw/tvordvec.h>
-typedef RWTValOrderedVector<G4ThreeVector> G4ThreeVectorList;
+#include "g4rw/tvordvec.h"
+typedef G4RWTValOrderedVector<G4ThreeVector> G4ThreeVectorList;
 typedef G4String   G4GeometryType;
 
 class G4VSolid {

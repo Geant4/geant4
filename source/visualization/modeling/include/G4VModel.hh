@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VModel.hh,v 1.2 1999-01-11 00:48:49 allison Exp $
+// $Id: G4VModel.hh,v 1.3 1999-11-11 15:38:14 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,7 +34,7 @@ public:
    
   virtual ~G4VModel ();
 
-  // For RWTPtrOrderedVector...
+  // For G4RWTPtrOrderedVector...
   G4bool operator == (const G4VModel&) const;
 
   virtual void DescribeYourselfTo (G4VGraphicsScene&) = 0;

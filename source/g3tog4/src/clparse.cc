@@ -5,13 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: clparse.cc,v 1.5 1999-05-26 03:50:35 lockman Exp $
+// $Id: clparse.cc,v 1.6 1999-11-11 15:35:47 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
 #include <fstream.h>
-#include <rw/rstream.h>
-#include <rw/ctoken.h>
+#include "g4rw/rstream.h"
+#include "g4rw/ctoken.h"
 #include "G3toG4.hh"
 #include "G3EleTable.hh"
 #include "G3VolTable.hh"

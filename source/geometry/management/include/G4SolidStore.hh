@@ -5,13 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SolidStore.hh,v 1.1 1999-01-07 16:07:17 gunter Exp $
+// $Id: G4SolidStore.hh,v 1.2 1999-11-11 15:35:50 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4SolidStore
 //
 // Container for all solids, with functionality derived from
-// RWTPtrOrderedVector<T>. The class is `singleton', in that only
+// G4RWTPtrOrderedVector<T>. The class is `singleton', in that only
 // one can exist, and access is facillitated via G4SolidStore::GetInstance()
 //
 // All solids should be registered with G4SolidStore, and removed on their
@@ -19,7 +19,7 @@
 // container initially has a capacity of 100.
 //
 // If much additional functionality is added, should consider containment
-// instead of inheritance for RWTPtrOrderedVector<T>
+// instead of inheritance for G4RWTPtrOrderedVector<T>
 //
 // Class member functions:
 //
@@ -48,11 +48,11 @@
 #ifndef G4VSOLIDSTORE_HH
 #define G4VSOLIDSTORE_HH
 
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
 #include "G4VSolid.hh"
 
-class G4SolidStore : public RWTPtrOrderedVector<G4VSolid>
+class G4SolidStore : public G4RWTPtrOrderedVector<G4VSolid>
 {
   public:
     static void Register(G4VSolid* pSolid);

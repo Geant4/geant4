@@ -10,7 +10,7 @@ RD44 - comment changes only.
 
 G4MaterialPropertiesTable.hh
 
-The above, and the migration from RWTPtrHashDictionary to STL map;
+The above, and the migration from G4RWTPtrHashDictionary to STL map;
 thanks to John and Gabriele.
 
 I have also made the following commits to the HEAD of
@@ -24,7 +24,7 @@ no longer refer to RD44 - comment changes only.
 
 G4MaterialPropertiesTable.cc
 
-The above, and the migration from RWTPtrHashDictionary to STL map;
+The above, and the migration from G4RWTPtrHashDictionary to STL map;
 thanks to John and Gabriele.
 
 The /source/material HEAD should be tagged for the next global tag for

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastSimulationManager.hh,v 1.3 1999-10-29 15:39:35 mora Exp $
+// $Id: G4FastSimulationManager.hh,v 1.4 1999-11-11 15:37:53 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,7 +25,7 @@
 #ifndef G4FastSimulationManager_h
 #define G4FastSimulationManager_h 1
 
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
 #include "globals.hh"
 #include "G4LogicalVolume.hh"
@@ -163,12 +163,12 @@ private:
   G4FastTrack fFastTrack;
   G4FastStep  fFastStep;
   G4VFastSimulationModel* fTriggedFastSimulationModel;
-  RWTPtrOrderedVector<G4VFastSimulationModel> ModelList;
-  RWTPtrOrderedVector<G4VFastSimulationModel> fInactivatedModels;
-  RWTPtrOrderedVector<G4Transform3D> GhostPlacements;
+  G4RWTPtrOrderedVector<G4VFastSimulationModel> ModelList;
+  G4RWTPtrOrderedVector<G4VFastSimulationModel> fInactivatedModels;
+  G4RWTPtrOrderedVector<G4Transform3D> GhostPlacements;
 
   G4ParticleDefinition* fLastCrossedParticle;
-  RWTPtrOrderedVector<G4VFastSimulationModel> fApplicableModelList;
+  G4RWTPtrOrderedVector<G4VFastSimulationModel> fApplicableModelList;
 };
 
 inline void 

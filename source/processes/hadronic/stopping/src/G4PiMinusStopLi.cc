@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PiMinusStopLi.cc,v 1.1 1999-01-07 16:13:45 gunter Exp $
+// $Id: G4PiMinusStopLi.cc,v 1.2 1999-11-11 15:37:47 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -28,9 +28,9 @@
 
 #include "G4PiMinusStopLi.hh"
 
-#include <rw/tpordvec.h>
-#include <rw/tvordvec.h>
-#include <rw/cstring.h>
+#include "g4rw/tpordvec.h"
+#include "g4rw/tvordvec.h"
+#include "g4rw/cstring.h"
 
 #include "globals.hh"
 #include "Randomize.hh"
@@ -99,11 +99,11 @@ G4PiMinusStopLi::G4PiMinusStopLi()
   // R ratio
   _R = 1. / (1. + npRatio);
 
-  _definitions = new RWTPtrOrderedVector<G4ParticleDefinition>();
-  _momenta = new RWTPtrOrderedVector<G4LorentzVector>();
+  _definitions = new G4RWTPtrOrderedVector<G4ParticleDefinition>();
+  _momenta = new G4RWTPtrOrderedVector<G4LorentzVector>();
 
-  RWTValOrderedVector<double> eKinVector;
-  RWTValOrderedVector<double> eKinDataVector;
+  G4RWTValOrderedVector<double> eKinVector;
+  G4RWTValOrderedVector<double> eKinDataVector;
   int i;
   for (i=0; i<eKinEntries; i++)
     {
@@ -113,8 +113,8 @@ G4PiMinusStopLi::G4PiMinusStopLi()
   eKinVector.insert(eKin[eKinEntries]);
   _distributionE = new G4DistributionGenerator(eKinVector,eKinDataVector);
 
-  RWTValOrderedVector<double> angleVector;
-  RWTValOrderedVector<double> angleDataVector;
+  G4RWTValOrderedVector<double> angleVector;
+  G4RWTValOrderedVector<double> angleDataVector;
   for (i=0; i<angleEntries; i++)
     {
       angleVector.insert(angle[i]);

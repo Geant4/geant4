@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: locg4templates.hh,v 1.1 1999-01-08 16:31:55 gunter Exp $
+// $Id: locg4templates.hh,v 1.2 1999-11-11 15:36:02 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -23,34 +23,34 @@
 
 #ifdef G4_SOLVE_TEMPLATES
 
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 #include "G4Allocator.hh"
 #include "G4VSolid.hh"
-static RWTPtrOrderedVector<G4VSolid>          dummy1;
+static G4RWTPtrOrderedVector<G4VSolid>          dummy1;
 #include "G4VPhysicalVolume.hh"
-static RWTPtrOrderedVector<G4VPhysicalVolume> dummy2;
+static G4RWTPtrOrderedVector<G4VPhysicalVolume> dummy2;
 #include "G4LogicalVolume.hh"
-static RWTPtrOrderedVector<G4LogicalVolume>   dummy3;
+static G4RWTPtrOrderedVector<G4LogicalVolume>   dummy3;
 #include "G4SmartVoxelProxy.hh"
-static RWTPtrOrderedVector<G4SmartVoxelProxy> dummy5;
+static G4RWTPtrOrderedVector<G4SmartVoxelProxy> dummy5;
 #include "G4SmartVoxelNode.hh"
-static RWTPtrOrderedVector<G4SmartVoxelNode>  dummy6;
+static G4RWTPtrOrderedVector<G4SmartVoxelNode>  dummy6;
 #include "G4ThreeVector.hh"
-static RWTValOrderedVector<G4ThreeVector>     dummy20;
-static RWTValOrderedVector<G4int>             dummy21;
+static G4RWTValOrderedVector<G4ThreeVector>     dummy20;
+static G4RWTValOrderedVector<G4int>             dummy21;
 #include "G4OrderedTable.hh"
-static RWTPtrOrderedVector<G4ValVector>       dummy24;
-static RWTValVector<double>                   dummy26;
+static G4RWTPtrOrderedVector<G4ValVector>       dummy24;
+static G4RWTValVector<double>                   dummy26;
 #include "G4Point3D.hh"
-static RWTValOrderedVector<G4Point3D>            dummy41;
+static G4RWTValOrderedVector<G4Point3D>            dummy41;
 #include "G4VStateDependent.hh"
-static RWTPtrOrderedVector<G4VStateDependent>    dummy48;
+static G4RWTPtrOrderedVector<G4VStateDependent>    dummy48;
 #include "G4AffineTransform.hh"
-static RWTValVector<G4AffineTransform>           dummy49;
-static RWTValVector<EVolume>                     dummy50;
+static G4RWTValVector<G4AffineTransform>           dummy49;
+static G4RWTValVector<EVolume>                     dummy50;
 #include "G4Transform3D.hh"
-static RWTValVector<G4Transform3D>               dummy53;
-static RWTValOrderedVector<G4Transform3D>        dummy54;
+static G4RWTValVector<G4Transform3D>               dummy53;
+static G4RWTValOrderedVector<G4Transform3D>        dummy54;
 
 
 // To have a clean shared lib link with option -Wl,-v :
@@ -70,11 +70,11 @@ void dummyUse () {
 #ifdef G4_SOLVE_VIS_TEMPLATES
 
 #include <G4RayView.hh>
-static RWTValVector<G4RayView::ColourCell>                                     vis_1;
+static G4RWTValVector<G4RayView::ColourCell>                                     vis_1;
 inline static unsigned vis_hash_fun_1 (const G4RayView::RayCoordinate&) {return (unsigned) 1;}
-static RWTValHashDictionary<G4RayView::RayCoordinate, G4RayView::RayHitColour> vis_2(vis_hash_fun_1);
+static G4RWTValHashDictionary<G4RayView::RayCoordinate, G4RayView::RayHitColour> vis_2(vis_hash_fun_1);
 inline static unsigned vis_hash_fun_2 (const G4RayView::RayHitColour&)  {return (unsigned) 1;}
-static RWTValHashDictionary<G4RayView::RayHitColour, int>                      vis_3(vis_hash_fun_2);
+static G4RWTValHashDictionary<G4RayView::RayHitColour, int>                      vis_3(vis_hash_fun_2);
 
 #endif //G4_SOLVE_VIS_TEMPLATES
 
@@ -86,65 +86,65 @@ static RWTValHashDictionary<G4RayView::RayHitColour, int>                      v
 //
 //
 #ifdef HP_aCC
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 // #include "G4PhysicsVector.hh"
-// template class RWTPtrOrderedVector<G4PhysicsVector>;
+// template class G4RWTPtrOrderedVector<G4PhysicsVector>;
 #include "G4VSolid.hh"
-template class RWTPtrOrderedVector<G4VSolid>;
+template class G4RWTPtrOrderedVector<G4VSolid>;
 #include "globals.hh"
-#include <rw/tvhdict.h>
+#include "g4rw/tvhdict.h"
 inline static unsigned dummyHashFun1 (const unsigned long&) {return (unsigned) 1;}
-static RWTValHashDictionary<unsigned long,int> dummy_aCC_2047 (dummyHashFun1);
+static G4RWTValHashDictionary<unsigned long,int> dummy_aCC_2047 (dummyHashFun1);
 #include <CLHEP/Vector/ThreeVector.h>
-template class RWTValOrderedVector<Hep3Vector>;
-static RWTValOrderedVector<Hep3Vector> dummy_aCC_1011;
+template class G4RWTValOrderedVector<Hep3Vector>;
+static G4RWTValOrderedVector<Hep3Vector> dummy_aCC_1011;
 #include "G4VPhysicalVolume.hh"
-template class RWTPtrOrderedVector<G4VPhysicalVolume>;
+template class G4RWTPtrOrderedVector<G4VPhysicalVolume>;
 #include "G4LogicalVolume.hh"
-template class RWTPtrOrderedVector<G4LogicalVolume>;
+template class G4RWTPtrOrderedVector<G4LogicalVolume>;
 #include "G4SmartVoxelNode.hh"
-template class RWTPtrOrderedVector<G4SmartVoxelNode>;
+template class G4RWTPtrOrderedVector<G4SmartVoxelNode>;
 #include "G4SmartVoxelProxy.hh"
-template class RWTPtrOrderedVector<G4SmartVoxelProxy>;
-template class RWTValOrderedVector<G4int>;
+template class G4RWTPtrOrderedVector<G4SmartVoxelProxy>;
+template class G4RWTValOrderedVector<G4int>;
 #include "G4OrderedTable.hh"
-template class RWTValOrderedVector<G4double>;
-static RWTPtrOrderedVector<G4ValVector> dummy_aCC_1010;
-template class RWTPtrOrderedVector<G4ValVector>;
-template class RWTValVector<double>;
-static RWTValVector<double> dummy_aCC_1014;
+template class G4RWTValOrderedVector<G4double>;
+static G4RWTPtrOrderedVector<G4ValVector> dummy_aCC_1010;
+template class G4RWTPtrOrderedVector<G4ValVector>;
+template class G4RWTValVector<double>;
+static G4RWTValVector<double> dummy_aCC_1014;
 #include "G4Point3D.hh"
-template class RWTValOrderedVector<G4Point3D>;
-template class RWTValVector<G4Point3D>;
+template class G4RWTValOrderedVector<G4Point3D>;
+template class G4RWTValVector<G4Point3D>;
 #include "G4Plane3D.hh"
-template class RWTValOrderedVector<G4Plane3D>;
-template class RWTValVector<G4Plane3D>;
+template class G4RWTValOrderedVector<G4Plane3D>;
+template class G4RWTValVector<G4Plane3D>;
 #include "G4VStateDependent.hh"
-template class RWTPtrOrderedVector<G4VStateDependent>;
+template class G4RWTPtrOrderedVector<G4VStateDependent>;
 #include "G4AffineTransform.hh"
-template class RWTValVector<G4AffineTransform>;
-static RWTValVector<G4AffineTransform> dummy_aCC_1015;
-template class RWTValVector<EVolume>;
-static RWTValVector<EVolume> dummy_aCC_1016;
+template class G4RWTValVector<G4AffineTransform>;
+static G4RWTValVector<G4AffineTransform> dummy_aCC_1015;
+template class G4RWTValVector<EVolume>;
+static G4RWTValVector<EVolume> dummy_aCC_1016;
 #include "G4Transform3D.hh"
-template class RWTValOrderedVector<G4Transform3D>;
-template class RWTValOrderedVector<RWCString>;
-template class RWTValVector<int>;
-static RWTValVector<int> dummy_aCC_1017;
-template class RWTValVector<EAxis>;
-static RWTValVector<EAxis> dummy_aCC_1018;
+template class G4RWTValOrderedVector<G4Transform3D>;
+template class G4RWTValOrderedVector<RWCString>;
+template class G4RWTValVector<int>;
+static G4RWTValVector<int> dummy_aCC_1017;
+template class G4RWTValVector<EAxis>;
+static G4RWTValVector<EAxis> dummy_aCC_1018;
 
 #ifdef G4VISMANAGER_HH
 #include "G4VScene.hh"
-template class RWTPtrOrderedVector<G4VScene>;
+template class G4RWTPtrOrderedVector<G4VScene>;
 #include "G4VView.hh"
-template class RWTPtrOrderedVector<G4VView>;
+template class G4RWTPtrOrderedVector<G4VView>;
 #include "G4VGraphicsSystem.hh"
-template class RWTPtrOrderedVector<G4VGraphicsSystem>;
+template class G4RWTPtrOrderedVector<G4VGraphicsSystem>;
 //#include "G4RayView.hh"
-//template class RWTValHashDictionary<G4RayView::RayHitColour,int>;
-//template class RWTValHashDictionary<G4RayView::RayCoordinate,G4RayView::RayHitColour>;
-//template class RWTValOrderedVector<G4RayView::ColourCell>;
+//template class G4RWTValHashDictionary<G4RayView::RayHitColour,int>;
+//template class G4RWTValHashDictionary<G4RayView::RayCoordinate,G4RayView::RayHitColour>;
+//template class G4RWTValOrderedVector<G4RayView::ColourCell>;
 #endif // G4VISMANAGER_HH
 #endif //HP_aCC
 

@@ -5,18 +5,18 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3MatTable.cc,v 1.10 1999-10-20 13:28:09 stesting Exp $
+// $Id: G3MatTable.cc,v 1.11 1999-11-11 15:35:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#include <rw/tphdict.h>
+#include "g4rw/tphdict.h"
 #include <strstream.h>
 #include "globals.hh"
 #include "G3MatTable.hh"
 #include "G4Material.hh"
 
 G3MatTable::G3MatTable(){
-  _Mat = new RWTPtrHashDictionary<G4String,G4Material>(G4String::hash);
+  _Mat = new G4RWTPtrHashDictionary<G4String,G4Material>(G4String::hash);
 };
 
 G3MatTable::~G3MatTable(){
@@ -60,7 +60,7 @@ G3MatTable::print(G4int matid){
     Mat = get(matid);
     G4cout << Mat << endl;
   } else {
-    RWTPtrHashDictionaryIterator<G4String,G4Material> iter(*_Mat);
+    G4RWTPtrHashDictionaryIterator<G4String,G4Material> iter(*_Mat);
     if (_Mat->entries() > 0) {
       for (;iter();){
 	G4String a = *iter.key();

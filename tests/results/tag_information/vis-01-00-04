@@ -1,7 +1,7 @@
 vis-01-00-04 11th January 1999  John Allison
 - Completed change of names from scene to sceneHandler, view to viewer.
 - Vis manager and scene handlers now keep pointer to scene, rather than a copy.
-- G4SceneList now a simple RWTPtrOrderedVector.
+- G4SceneList now a simple G4RWTPtrOrderedVector.
 - /vis/camera/reset now resets viewpoint direction and up vector.
 
 vis-01-00-03 10th January 1999  John Allison

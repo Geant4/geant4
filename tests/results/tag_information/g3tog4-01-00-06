@@ -5,7 +5,7 @@ geant4-00-cand-09b. Please include this tag in the May release.
 The ability to handle deferred and divided volumes is not fully
 implemented, but the foundation code is there. The logical and physical
 volumes are 'cached' in G3toG4 RW lists (RWTPtrOrderVector and
-RWTPtrHashDictionary) and then placed after the reading of the call list
+G4RWTPtrHashDictionary) and then placed after the reading of the call list
 is completed. The caching involves the creation of a logical volume node
 tree (G3VolTable containing VolTableEntry objects). Each VolTableEntry
 (the equivalent of a G4LogicalVolume) knows its mother and  daughter

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3MedTable.cc,v 1.8 1999-07-29 03:43:02 lockman Exp $
+// $Id: G3MedTable.cc,v 1.9 1999-11-11 15:35:45 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -15,7 +15,7 @@
 #include "G4Material.hh"
 
 G3MedTable::G3MedTable(){
-  _Med = new RWTPtrHashDictionary<G4String,G4Material>(G4String::hash);
+  _Med = new G4RWTPtrHashDictionary<G4String,G4Material>(G4String::hash);
 };
 
 G3MedTable::~G3MedTable(){

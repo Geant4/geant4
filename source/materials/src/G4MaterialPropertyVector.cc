@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MaterialPropertyVector.cc,v 1.3 1999-11-05 21:14:27 gum Exp $
+// $Id: G4MaterialPropertyVector.cc,v 1.4 1999-11-11 15:36:10 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,7 +60,7 @@ G4MaterialPropertyVector::operator =(const G4MaterialPropertyVector& right)
 	MPV.clearAndDestroy();
 
         // create an actual copy (instead of the shallow copy that the
-        // assignment operator defaults to for RWTPtrSortedVector)
+        // assignment operator defaults to for G4RWTPtrSortedVector)
 
         NumEntries = 0;
         CurrentEntry = -1;
@@ -97,7 +97,7 @@ G4MaterialPropertyVector::G4MaterialPropertyVector
 			  (const G4MaterialPropertyVector &right)
 {
 	// create an actual copy (instead of the shallow copy that the
-	// assignment operator defaults to for RWTPtrSortedVector)
+	// assignment operator defaults to for G4RWTPtrSortedVector)
 
         NumEntries = 0;
         CurrentEntry = -1;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: exampleN05.cc,v 1.2 1999-05-28 12:55:34 stesting Exp $
+// $Id: exampleN05.cc,v 1.3 1999-11-11 15:41:25 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,7 +47,7 @@
 
 #ifdef GNU_GCC
   #include "ExN05CalorimeterHit.hh"
-  template class RWTValVector<ExN05CalorimeterHit>;
+  template class G4RWTValVector<ExN05CalorimeterHit>;
   template class G4Allocator<ExN05CalorimeterHit>;
 #endif
 

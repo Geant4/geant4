@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3PartTable.cc,v 1.5 1999-07-29 03:43:30 lockman Exp $
+// $Id: G3PartTable.cc,v 1.6 1999-11-11 15:35:45 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -14,7 +14,7 @@
 #include "G3PartTable.hh"
 
 G3PartTable::G3PartTable(){
-  _PTD = new RWTPtrHashDictionary<G4String,G4ParticleDefinition>(G4String::hash);
+  _PTD = new G4RWTPtrHashDictionary<G4String,G4ParticleDefinition>(G4String::hash);
 }
 
 G3PartTable::~G3PartTable(){

@@ -5,10 +5,10 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsatt.cc,v 1.3 1999-05-22 06:31:38 lockman Exp $
+// $Id: G4gsatt.cc,v 1.4 1999-11-11 15:35:47 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-#include <rw/cstring.h>
+#include "g4rw/cstring.h"
 #include "G3toG4.hh"
 #include "G3VolTable.hh"
 

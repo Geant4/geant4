@@ -8,18 +8,18 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3MedTable.hh,v 1.4 1999-07-20 14:16:23 lockman Exp $
+// $Id: G3MedTable.hh,v 1.5 1999-11-11 15:35:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Maps G3 tracking media indices to G4Material*
 
-#include <rw/tphdict.h>
+#include "g4rw/tphdict.h"
 class G4Material;
 
 class G3MedTable {
 private:
-  RWTPtrHashDictionary<G4String, G4Material>* _Med;
+  G4RWTPtrHashDictionary<G4String, G4Material>* _Med;
   void HashID(G4int matid, G4String* _HID);
   void HashID(G4int matid, G4String& _HID);
 public:

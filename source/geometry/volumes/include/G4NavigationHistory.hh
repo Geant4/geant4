@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NavigationHistory.hh,v 1.1 1999-01-07 16:08:42 gunter Exp $
+// $Id: G4NavigationHistory.hh,v 1.2 1999-11-11 15:36:00 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4NavigationHistory
@@ -29,8 +29,8 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4NavigationLevel.hh"
 
-#include <rw/tvvector.h>
-#include <rw/tpvector.h>
+#include "g4rw/tvvector.h"
+#include "g4rw/tpvector.h"
 
 const G4int kHistoryMax=15;	// Default max size of history
 const G4int kHistoryStride=16;   // History increase stride
@@ -80,8 +80,8 @@ private:
 // Depth of stack: effectively depth in geometrical tree
   G4int fStackDepth;
 
-  RWTValVector<G4NavigationLevel>  fNavHistory;
-  // RWTPtrVector<G4NavigationLevel>  fNavHistory;
+  G4RWTValVector<G4NavigationLevel>  fNavHistory;
+  // G4RWTPtrVector<G4NavigationLevel>  fNavHistory;
 
 };
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UImanager.hh,v 1.2 1999-10-29 06:06:45 asaim Exp $
+// $Id: G4UImanager.hh,v 1.3 1999-11-11 15:36:04 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -13,8 +13,8 @@
 #define G4UImanager_h 1
 
 #include "globals.hh"
-#include <rw/ctoken.h>
-#include <rw/tvordvec.h>
+#include "g4rw/ctoken.h"
+#include "g4rw/tvordvec.h"
 #include <fstream.h>
 class G4UIcommandTree;
 class G4UIcommand;
@@ -103,7 +103,7 @@ class G4UImanager
       G4int verboseLevel;
       ofstream historyFile;
       G4bool saveHistory;
-      RWTValOrderedVector<G4String> histVec;
+      G4RWTValOrderedVector<G4String> histVec;
 
   public: // with description
       G4String GetCurrentStringValue(const char * aCommand, 

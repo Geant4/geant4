@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.cc,v 1.10 1999-11-05 16:32:00 johna Exp $
+// $Id: G4VisManager.cc,v 1.11 1999-11-11 15:38:13 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -428,7 +428,7 @@ G4bool G4VisManager::Notify (G4ApplicationState requestedState) {
     if (fpConcreteInstance && IsValidView ()) {
       G4ModelingParameters* pMP =
 	fpSceneHandler -> CreateModelingParameters ();
-      const RWTPtrOrderedVector <G4VModel>& EOEModelList =
+      const G4RWTPtrOrderedVector <G4VModel>& EOEModelList =
 	fpScene -> GetEndOfEventModelList ();
       fpSceneHandler->ClearTransientStore(); //GB
       for (int i = 0; i < EOEModelList.entries (); i++) {
@@ -606,7 +606,7 @@ void G4VisManager::GeometryHasChanged () {
   G4int iScene, nScenes = sceneList.entries ();
   for (iScene = 0; iScene < nScenes; iScene++) {
     G4Scene* pScene = sceneList [iScene];
-    RWTPtrOrderedVector <G4VModel>& modelList =
+    G4RWTPtrOrderedVector <G4VModel>& modelList =
       pScene -> SetRunDurationModelList ();
 
     G4int nModels, iModel;

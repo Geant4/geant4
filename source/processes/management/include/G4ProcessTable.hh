@@ -6,7 +6,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessTable.hh,v 1.4 1999-11-07 17:11:44 kurasige Exp $
+// $Id: G4ProcessTable.hh,v 1.5 1999-11-11 15:37:52 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,8 +32,8 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <rw/tpordvec.h>
-#include <rw/tvordvec.h>
+#include "g4rw/tpordvec.h"
+#include "g4rw/tvordvec.h"
 
 #include "G4ProcTblElement.hh"
 #include "G4ProcessVector.hh"
@@ -112,8 +112,8 @@ class G4ProcessTable
   // These methods are provided to activate or inactivate processes
 
  public:
-  typedef RWTPtrOrderedVector<G4ProcTblElement>  G4ProcTableVector;
-  typedef RWTValOrderedVector<G4String> G4ProcNameVector;
+  typedef G4RWTPtrOrderedVector<G4ProcTblElement>  G4ProcTableVector;
+  typedef G4RWTValOrderedVector<G4String> G4ProcNameVector;
 
  public: // with description
   G4ProcNameVector*  GetNameList();

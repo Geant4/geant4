@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronFissionProcess.hh,v 1.1 1999-01-07 16:13:33 gunter Exp $
+// $Id: G4HadronFissionProcess.hh,v 1.2 1999-11-11 15:37:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -102,7 +102,7 @@ private:
 // Note: DEC compiler won't accept "const G4ParticleDefinition" here
 // because it instantiates the ClearAndDestroy method that deletes the 
 // pointers in the dictionary.
-  //   RWTPtrHashDictionary<G4ParticleDefinition, G4PhysicsTable> 
+  //   G4RWTPtrHashDictionary<G4ParticleDefinition, G4PhysicsTable> 
   //     thePhysicsDictionary;
 
   //   G4HadronicCrossSections theCrossSectionData;

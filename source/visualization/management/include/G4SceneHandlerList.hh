@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SceneHandlerList.hh,v 1.1 1999-01-09 16:30:42 allison Exp $
+// $Id: G4SceneHandlerList.hh,v 1.2 1999-11-11 15:38:07 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -14,10 +14,10 @@
 #ifndef G4SCENEHANDLERLIST_HH
 #define G4SCENEHANDLERLIST_HH
 
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 #include "G4VSceneHandler.hh"
 
-class G4SceneHandlerList: public RWTPtrOrderedVector<G4VSceneHandler> {
+class G4SceneHandlerList: public G4RWTPtrOrderedVector<G4VSceneHandler> {
 };
 
 #endif

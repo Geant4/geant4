@@ -26,9 +26,9 @@
 #define G4THIRDLEVEL_HH
 
 #include "G4SecondLevel.hh"
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
-class G4ThirdLevel : public RWTPtrOrderedVector< G4SecondLevel >{
+class G4ThirdLevel : public G4RWTPtrOrderedVector< G4SecondLevel >{
 
 
 public:

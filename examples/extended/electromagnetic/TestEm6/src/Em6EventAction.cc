@@ -17,7 +17,7 @@
 #include "Em6CalorHit.hh"
 #include "Em6EventActionMessenger.hh"
 
-#include <rw/tvordvec.h>
+#include "g4rw/tvordvec.h"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"

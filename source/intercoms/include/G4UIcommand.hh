@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcommand.hh,v 1.3 1999-10-29 06:06:44 asaim Exp $
+// $Id: G4UIcommand.hh,v 1.4 1999-11-11 15:36:04 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,8 +17,8 @@
 class G4UImessenger;
 #include "globals.hh"
 #include "G4ApplicationState.hh"
-#include <rw/tpordvec.h>
-#include <rw/tvordvec.h>
+#include "g4rw/tpordvec.h"
+#include "g4rw/tvordvec.h"
 #include "G4UItokenNum.hh"
 
 // class description:
@@ -74,9 +74,9 @@ class G4UIcommand
       G4String commandPath;
       G4String commandName;
       G4String rangeString;
-      RWTPtrOrderedVector<G4UIparameter> parameter;
-      RWTValOrderedVector<G4String> commandGuidance;
-      RWTValOrderedVector<G4ApplicationState> availabelStateList;
+      G4RWTPtrOrderedVector<G4UIparameter> parameter;
+      G4RWTValOrderedVector<G4String> commandGuidance;
+      G4RWTValOrderedVector<G4ApplicationState> availabelStateList;
 
   public: // with description
       inline void SetRange(const char* rs)
@@ -168,7 +168,7 @@ class G4UIcommand
     int bp;                      // buffer pointer for rangeBuf
     tokenNum token;
     yystype yylval;
-    RWTValOrderedVector<yystype>  newVal;
+    G4RWTValOrderedVector<yystype>  newVal;
     int paramERR;
 };
 

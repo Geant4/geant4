@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LCapture.hh,v 1.1 1999-01-07 16:12:38 gunter Exp $
+// $Id: G4LCapture.hh,v 1.2 1999-11-11 15:37:40 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -22,7 +22,7 @@
 #ifndef G4LCapture_h
 #define G4LCapture_h 1
  
-#include <rw/tphdict.h>
+#include "g4rw/tphdict.h"
 #include "globals.hh"
 #include "Randomize.hh"
 #include "G4Element.hh"

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SmartVoxelNode.hh,v 1.1 1999-01-07 16:07:16 gunter Exp $
+// $Id: G4SmartVoxelNode.hh,v 1.2 1999-11-11 15:35:50 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4SmartVoxelNode
@@ -25,7 +25,7 @@
 // ~G4SmartVoxelNode()
 //   Destructor. No actions.
 //
-// RWTValOrderedVector<G4int>* GetContents()
+// G4RWTValOrderedVector<G4int>* GetContents()
 //   Return ptr to vector of volume no.s in the node. Use with care.
 //   Intended for inspection by navigator at tracking time only.
 //
@@ -56,7 +56,7 @@
 // G4int fmaxEquivalent
 //   Min and maximum nodes with same contents. Set by constructor
 //   and set methods.
-// RWTValOrderedVector<G4int>(1) fcontents
+// G4RWTValOrderedVector<G4int>(1) fcontents
 //   Vector of no.s of volumes inside the node
 //
 // History:
@@ -69,10 +69,10 @@
 #include "voxeldefs.hh"
 
 #include "G4VPhysicalVolume.hh"
-#include <rw/tvordvec.h>
+#include "g4rw/tvordvec.h"
 
 
-typedef RWTValOrderedVector<G4int> G4SliceVector;
+typedef G4RWTValOrderedVector<G4int> G4SliceVector;
 
 class G4SmartVoxelNode
 {

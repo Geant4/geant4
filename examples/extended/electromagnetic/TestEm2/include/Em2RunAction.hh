@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em2RunAction.hh,v 1.1 1999-10-11 15:08:43 maire Exp $
+// $Id: Em2RunAction.hh,v 1.2 1999-11-11 15:41:20 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,8 +24,8 @@
 #include "G4Positron.hh"
 #include "globals.hh"
 
-#include <rw/tvvector.h>
-typedef RWTValVector<G4double> MyVector;
+#include "g4rw/tvvector.h"
+typedef G4RWTValVector<G4double> MyVector;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

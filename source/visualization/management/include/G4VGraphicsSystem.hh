@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VGraphicsSystem.hh,v 1.3 1999-01-11 00:48:14 allison Exp $
+// $Id: G4VGraphicsSystem.hh,v 1.4 1999-11-11 15:38:08 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,7 +47,7 @@ public:
 
   virtual ~G4VGraphicsSystem ();
 
-  // For RWTPtrOrderedVector...
+  // For G4RWTPtrOrderedVector...
   G4bool operator == (const G4VGraphicsSystem& system) const;
 
   virtual G4VSceneHandler* CreateSceneHandler (const G4String& name) = 0;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DistributionGenerator.hh,v 1.1 1999-01-07 16:13:38 gunter Exp $
+// $Id: G4DistributionGenerator.hh,v 1.2 1999-11-11 15:37:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -27,7 +27,7 @@
 #ifndef G4DISTRIBUTIONGENERATOR_HH
 #define G4DISTRIBUTIONGENERATOR_HH
 
-#include <rw/tvordvec.h>
+#include "g4rw/tvordvec.h"
 
 #include "globals.hh"
 #include "Randomize.hh"
@@ -38,8 +38,8 @@ class G4DistributionGenerator
 public:
 
   // Constructor
-  G4DistributionGenerator(RWTValOrderedVector<G4double>& x,
-  			  RWTValOrderedVector<G4double>& values);
+  G4DistributionGenerator(G4RWTValOrderedVector<G4double>& x,
+  			  G4RWTValOrderedVector<G4double>& values);
   G4DistributionGenerator();
 
   // Destructor
@@ -55,8 +55,8 @@ private:
   // Copy constructor
   //  G4DistributionGenerator(const G4DistributionGenerator& );
 
-  RWTValOrderedVector<G4double> _x;
-  RWTValOrderedVector<G4double> _cumProb;
+  G4RWTValOrderedVector<G4double> _x;
+  G4RWTValOrderedVector<G4double> _cumProb;
 
 };
  

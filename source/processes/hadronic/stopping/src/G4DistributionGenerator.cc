@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DistributionGenerator.cc,v 1.2 1999-05-25 00:24:19 gcosmo Exp $
+// $Id: G4DistributionGenerator.cc,v 1.3 1999-11-11 15:37:45 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -31,8 +31,8 @@
 
 // Constructor
 
-G4DistributionGenerator::G4DistributionGenerator(RWTValOrderedVector<G4double>& x,
-						 RWTValOrderedVector<G4double>& values)
+G4DistributionGenerator::G4DistributionGenerator(G4RWTValOrderedVector<G4double>& x,
+						 G4RWTValOrderedVector<G4double>& values)
   
 {
   _x = x;

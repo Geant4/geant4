@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessManager.hh,v 1.5 1999-11-07 17:11:44 kurasige Exp $
+// $Id: G4ProcessManager.hh,v 1.6 1999-11-11 15:37:52 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,7 +52,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
 #include "G4VProcess.hh"
 #include "G4ProcessVector.hh"
@@ -258,7 +258,7 @@ class G4ProcessManager
       G4ProcessVector* theProcVector[SizeOfProcVectorArray];
       // vector for processes with GetPhysicalInteractionLength/DoIt
 
-      typedef RWTPtrOrderedVector<G4ProcessAttribute> G4ProcessAttrVector; 
+      typedef G4RWTPtrOrderedVector<G4ProcessAttribute> G4ProcessAttrVector; 
       G4ProcessAttrVector*  theAttrVector;
       // vector for process attribute  
 

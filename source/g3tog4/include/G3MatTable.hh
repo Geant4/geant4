@@ -8,18 +8,18 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3MatTable.hh,v 1.5 1999-07-21 08:39:43 lockman Exp $
+// $Id: G3MatTable.hh,v 1.6 1999-11-11 15:35:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Maps G3 material indices to G4Material*
 
-#include <rw/tphdict.h>
+#include "g4rw/tphdict.h"
 class G4Material;
 
 class G3MatTable {
 private:
-  RWTPtrHashDictionary<G4String, G4Material>* _Mat;
+  G4RWTPtrHashDictionary<G4String, G4Material>* _Mat;
   void HashID(G4int matid, G4String* _HID);
   void HashID(G4int matid, G4String& _HID);
 public:

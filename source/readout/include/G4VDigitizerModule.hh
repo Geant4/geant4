@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VDigitizerModule.hh,v 1.2 1999-11-01 03:20:36 asaim Exp $
+// $Id: G4VDigitizerModule.hh,v 1.3 1999-11-11 15:37:55 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -15,7 +15,7 @@
 class G4DigiManager;
 class G4VDigiCollection;
 #include "globals.hh"
-#include <rw/tvordvec.h>
+#include "g4rw/tvordvec.h"
 
 // class description:
 //
@@ -52,7 +52,7 @@ class G4VDigitizerModule
   protected:
     G4DigiManager* DigiManager;
     G4String moduleName;
-    RWTValOrderedVector<G4String> collectionName;
+    G4RWTValOrderedVector<G4String> collectionName;
     G4int verboseLevel;
 
   public:

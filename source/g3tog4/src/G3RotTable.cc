@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3RotTable.cc,v 1.8 1999-07-29 03:43:56 lockman Exp $
+// $Id: G3RotTable.cc,v 1.9 1999-11-11 15:35:45 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -16,7 +16,7 @@
 #include "G3RotTable.hh"
 
 G3RotTable::G3RotTable(){
-  _Rot = new RWTPtrHashDictionary<G4String,G3toG4RotationMatrix>(G4String::hash);
+  _Rot = new G4RWTPtrHashDictionary<G4String,G3toG4RotationMatrix>(G4String::hash);
 };
 
 G3RotTable::~G3RotTable(){

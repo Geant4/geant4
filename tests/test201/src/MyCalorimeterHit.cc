@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyCalorimeterHit.cc,v 1.1 1999-01-08 16:35:56 gunter Exp $
+// $Id: MyCalorimeterHit.cc,v 1.2 1999-11-11 15:41:18 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -18,8 +18,8 @@
 
 #ifdef GNU_GCC
   template class G4Allocator<MyCalorimeterHit>;
-  #include <rw/tvvector.h>
-  template class RWTValVector<MyCalorimeterHit>;
+  #include "g4rw/tvvector.h"
+  template class G4RWTValVector<MyCalorimeterHit>;
 #endif
 
 G4Allocator<MyCalorimeterHit> MyCalorimeterHitAllocator;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VViewer.hh,v 1.2 1999-01-11 00:48:16 allison Exp $
+// $Id: G4VViewer.hh,v 1.3 1999-11-11 15:38:08 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,7 +30,7 @@ public:
   G4VViewer (G4VSceneHandler& scene, G4int id, const G4String& name = "");
   virtual ~G4VViewer ();
 
-  // For RWTPtrOrderedVector...
+  // For G4RWTPtrOrderedVector...
   G4bool operator == (const G4VViewer& view) const;
 
   //////////////////////////////////////////////////////////////

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Isotope.hh,v 1.1 1999-01-07 16:09:41 gunter Exp $
+// $Id: G4Isotope.hh,v 1.2 1999-11-11 15:36:08 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,11 +40,11 @@
 #define G4ISOTOPE_HH
 
 #include "G4ios.hh"
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 #include "globals.hh"
 
 class G4Isotope;
-typedef RWTPtrOrderedVector<G4Isotope> G4IsotopeTable;
+typedef G4RWTPtrOrderedVector<G4Isotope> G4IsotopeTable;
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

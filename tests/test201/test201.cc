@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test201.cc,v 1.2 1999-05-10 15:01:27 barrand Exp $
+// $Id: test201.cc,v 1.3 1999-11-11 15:41:16 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,10 +60,10 @@ ostream& g4cerr = G4cerr;
 // This :
 #include "MyTrackerHit.hh"
 #include "MyCalorimeterHit.hh"
-template class RWTValOrderedVector<MyTrackerHit>;
-template class RWTValOrderedVector<MyCalorimeterHit>;
-template class RWTValVector<MyTrackerHit>;
-template class RWTValVector<MyCalorimeterHit>;
+template class G4RWTValOrderedVector<MyTrackerHit>;
+template class G4RWTValOrderedVector<MyCalorimeterHit>;
+template class G4RWTValVector<MyTrackerHit>;
+template class G4RWTValVector<MyCalorimeterHit>;
 template class G4Allocator<MyCalorimeterHit>;
 template class G4Allocator<MyTrackerHit>;
 #endif

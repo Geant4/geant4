@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnergyLossTables.hh,v 1.5 1999-04-15 07:46:10 urban Exp $
+// $Id: G4EnergyLossTables.hh,v 1.6 1999-11-11 15:37:07 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id:
@@ -15,7 +15,7 @@
 #define included_G4EnergyLossTables
 
 #include "globals.hh"
-#include <rw/tvhdict.h>
+#include "g4rw/tvhdict.h"
 
 #include "G4PhysicsTable.hh"
 #include "G4ParticleDefinition.hh"
@@ -140,7 +140,7 @@ public:
   typedef const G4ParticleDefinition* K;
 
 private:
-  static RWTValHashDictionary<K, G4EnergyLossTablesHelper> dict;
+  static G4RWTValHashDictionary<K, G4EnergyLossTablesHelper> dict;
   
   static unsigned HashFun(const K& particle);
 

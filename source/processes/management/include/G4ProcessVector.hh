@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessVector.hh,v 1.3 1999-11-07 17:11:45 kurasige Exp $
+// $Id: G4ProcessVector.hh,v 1.4 1999-11-11 15:37:52 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,7 +19,7 @@
 //
 // Class Description
 //  This class is a container for pointers to physics process objects. Its 
-//  functionality is derived from RWTPtrOrderedVector<T>.
+//  functionality is derived from G4RWTPtrOrderedVector<T>.
 // ------------------------------------------------------------
 
 #ifndef G4ProcessVector_h
@@ -27,19 +27,19 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
 #include "G4VProcess.hh"
 
-class G4ProcessVector : public RWTPtrOrderedVector<G4VProcess>
+class G4ProcessVector : public G4RWTPtrOrderedVector<G4VProcess>
 {
   //  Is a container for pointers to physics process objects. Its 
-  //  functionality is derived from RWTPtrOrderedVector<T>.
+  //  functionality is derived from G4RWTPtrOrderedVector<T>.
 
   public:
 
       G4ProcessVector(size_t capac=RWDEFAULT_CAPACITY)
-        : RWTPtrOrderedVector<G4VProcess>(capac) {;}
+        : G4RWTPtrOrderedVector<G4VProcess>(capac) {;}
       //  Constructor.
 
       virtual ~G4ProcessVector() {;}

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunManager.hh,v 1.6 1999-11-01 03:12:02 asaim Exp $
+// $Id: G4RunManager.hh,v 1.7 1999-11-11 15:37:55 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,7 +68,7 @@ class G4Run;
 
 #include "G4EventManager.hh"
 #include "globals.hh"
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
 class G4RunManager
 {
@@ -194,7 +194,7 @@ class G4RunManager
 
     G4Run* currentRun;
     G4Event* currentEvent;
-    RWTPtrOrderedVector<G4Event>* previousEvents;
+    G4RWTPtrOrderedVector<G4Event>* previousEvents;
     G4int n_perviousEventsToBeStored;
 
     G4int storeRandomNumberStatus;

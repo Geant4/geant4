@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05EnergySpot.hh,v 1.1 1999-01-07 16:06:12 gunter Exp $
+// $Id: ExN05EnergySpot.hh,v 1.2 1999-11-11 15:41:25 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef ExN05EnergySpot_h
@@ -28,7 +28,7 @@ public:
   inline G4ThreeVector GetPosition() const {return Point;}
 
   // Required by Rogue Wave explicitely,
-  // when using RWTValOrderedVector<ExN05EnergySpot>
+  // when using G4RWTValOrderedVector<ExN05EnergySpot>
   int operator==(const ExN05EnergySpot& eSpot) const
   {
     return (Energy==eSpot.Energy && Point==eSpot.Point) ? 1 : 0;

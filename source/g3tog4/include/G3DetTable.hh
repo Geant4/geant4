@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3DetTable.hh,v 1.2 1999-05-07 04:15:57 lockman Exp $
+// $Id: G3DetTable.hh,v 1.3 1999-11-11 15:35:41 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -13,7 +13,7 @@
 // Maps G3 material indices to their G4 material object counterparts.
 // Maintains a linked List of G3 material index/G4 material pointer pairs.
 
-#include <rw/tphdict.h>
+#include "g4rw/tphdict.h"
 
 #include "globals.hh"
 
@@ -38,7 +38,7 @@ public:
 
 class G3DetTable {
 private:
-  RWTPtrHashDictionary<G4String, DetTableEntry>* _Det;
+  G4RWTPtrHashDictionary<G4String, DetTableEntry>* _Det;
   G4String MakeHash(G4String& set, G4String& det);
   DetTableEntry* _DTE;
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.20 1999-11-05 12:10:47 urban Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.21 1999-11-11 15:36:27 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,7 +47,7 @@
 #include "G4EnergyLossTables.hh"
 #include "G4Electron.hh"
 
-typedef RWTPtrOrderedVector<G4DynamicParticle> G4ParticleVector;
+typedef G4RWTPtrOrderedVector<G4DynamicParticle> G4ParticleVector;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.hh,v 1.6 1999-10-14 05:39:43 tsasaki Exp $
+// $Id: G4SteppingManager.hh,v 1.7 1999-11-11 15:38:00 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,7 +25,7 @@
 //---------------------------------------------------------------
 //   modified for new ParticleChange 12 Mar. 1998  H.Kurashige
 
-#include <rw/tvordvec.h>            // Include from 'RogueWave'
+#include "g4rw/tvordvec.h"            // Include from 'RogueWave'
 
 class G4SteppingManager;
 
@@ -59,11 +59,11 @@ class G4VSensitiveDetector;
 //  must be changed in elegant way
 static const G4int SIZEofSelectedDoIt=100;
 // RogueWave Tools.h++
-   typedef RWTValOrderedVector<G4int> 
+   typedef G4RWTValOrderedVector<G4int> 
              G4SelectedAtRestDoItVector;
-   typedef RWTValOrderedVector<G4int> 
+   typedef G4RWTValOrderedVector<G4int> 
              G4SelectedAlongStepDoItVector;
-   typedef RWTValOrderedVector<G4int>
+   typedef G4RWTValOrderedVector<G4int>
              G4SelectedPostStepDoItVector;
 
 

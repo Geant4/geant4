@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MaterialPropertyVector.hh,v 1.3 1999-11-05 21:11:47 gum Exp $
+// $Id: G4MaterialPropertyVector.hh,v 1.4 1999-11-11 15:36:09 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,8 +34,8 @@
 // Includes
 /////////////
 
-#include <rw/tpsrtvec.h>
-#include <rw/cstring.h>
+#include "g4rw/tpsrtvec.h"
+#include "g4rw/cstring.h"
 #include "G4MPVEntry.hh"
 
 // Class Description:
@@ -140,7 +140,7 @@ private:
         // Private Data Members
 	/////////////////////////
 
-	RWTPtrSortedVector<G4MPVEntry> MPV;
+	G4RWTPtrSortedVector<G4MPVEntry> MPV;
 	G4int NumEntries;
 	G4int CurrentEntry;
 };

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DecayTable.hh,v 1.2 1999-04-13 07:58:23 kurasige Exp $
+// $Id: G4DecayTable.hh,v 1.3 1999-11-11 15:36:13 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -23,7 +23,7 @@
 #define G4DecayTable_h 1
 
 #include "G4ios.hh"
-#include <rw/tpsrtvec.h>
+#include "g4rw/tpsrtvec.h"
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4VDecayChannel.hh"
@@ -31,7 +31,7 @@
 class G4DecayTable 
 {
  public:
-   typedef RWTPtrSortedVector<G4VDecayChannel> G4VDecayChannelVector;
+   typedef G4RWTPtrSortedVector<G4VDecayChannel> G4VDecayChannelVector;
 
   //constructors
  public:

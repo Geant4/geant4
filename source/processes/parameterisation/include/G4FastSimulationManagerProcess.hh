@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastSimulationManagerProcess.hh,v 1.4 1999-10-29 15:39:36 mora Exp $
+// $Id: G4FastSimulationManagerProcess.hh,v 1.5 1999-11-11 15:37:54 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,7 +30,7 @@
 #ifndef G4FastSimulationManagerProcess_h
 #define G4FastSimulationManagerProcess_h 1
 
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
 #include "globals.hh"
 #include "G4VProcess.hh"

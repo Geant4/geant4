@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalBorderSurface.hh,v 1.1 1999-01-07 16:08:41 gunter Exp $
+// $Id: G4LogicalBorderSurface.hh,v 1.2 1999-11-11 15:35:59 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -34,8 +34,8 @@
 #include  "G4LogicalSurface.hh"
 #include "G4VPhysicalVolume.hh"
 
-// RWTPtrOrderedVector
-#include <rw/tpordvec.h>
+// G4RWTPtrOrderedVector
+#include "g4rw/tpordvec.h"
 
 class G4Event;
 
@@ -84,7 +84,7 @@ public:
 
 	//   Methods dealing with the table of surfaces.
 	//
-        static const RWTPtrOrderedVector<G4LogicalBorderSurface>* GetSurfaceTable()
+        static const G4RWTPtrOrderedVector<G4LogicalBorderSurface>* GetSurfaceTable()
 					   { return &theBorderSurfaceTable; }
         static size_t GetNumberOfBorderSurfaces()
 				   { return theBorderSurfaceTable.length(); }
@@ -112,13 +112,13 @@ private:
 	G4VPhysicalVolume* Volume2;	// Physical Volume pointer on side 2
 
 //	The static Table of Surfaces
-	static RWTPtrOrderedVector<G4LogicalBorderSurface> theBorderSurfaceTable;
+	static G4RWTPtrOrderedVector<G4LogicalBorderSurface> theBorderSurfaceTable;
 
 	size_t theIndexInTable;		// Index of surface in the surface table
 
 };
 
-typedef RWTPtrOrderedVector<G4LogicalBorderSurface> G4LogicalBorderSurfaceTable;
+typedef G4RWTPtrOrderedVector<G4LogicalBorderSurface> G4LogicalBorderSurfaceTable;
 
 ////////////////////
 // Inline methods

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ViewerList.hh,v 1.1 1999-01-09 16:30:53 allison Exp $
+// $Id: G4ViewerList.hh,v 1.2 1999-11-11 15:38:09 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -14,9 +14,9 @@
 #ifndef G4VIEWERLIST_HH
 #define G4VIEWERLIST_HH
 
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 #include "G4VViewer.hh"
 
-class G4ViewerList: public RWTPtrOrderedVector<G4VViewer> {};
+class G4ViewerList: public G4RWTPtrOrderedVector<G4VViewer> {};
 
 #endif

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronicProcess.hh,v 1.2 1999-05-02 10:06:37 hpw Exp $
+// $Id: G4HadronicProcess.hh,v 1.3 1999-11-11 15:37:09 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // This is the top level Hadronic Process class
@@ -34,7 +34,7 @@
 #include "G4PhysicsVector.hh"
 #include "G4Nucleus.hh" 
 #include "G4ReactionProduct.hh"
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 #include "G4VIsotopeProduction.hh"
 #include "G4IsoParticleChange.hh"
  
@@ -131,7 +131,7 @@
     G4int isoIsOnAnyway; // true(1), false(-1) or default(0)
     
     G4IsoParticleChange theIsoPC;
-    RWTPtrOrderedVector<G4VIsotopeProduction> theProductionModels;
+    G4RWTPtrOrderedVector<G4VIsotopeProduction> theProductionModels;
     
  };
  

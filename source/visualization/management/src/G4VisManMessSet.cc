@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessSet.cc,v 1.3 1999-01-11 00:48:39 allison Exp $
+// $Id: G4VisManMessSet.cc,v 1.4 1999-11-11 15:38:13 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -631,7 +631,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
   ///////////////////////////////////////////  /vis~/set/view  /////////
   if (commandPath == "/vis~/set/view") {
     // Make List of available views.
-    RWTPtrOrderedVector<G4VViewer> vList;
+    G4RWTPtrOrderedVector<G4VViewer> vList;
     const G4SceneHandlerList& gml = fpVMan -> GetAvailableSceneHandlers ();
     G4int nViewTotal = 0;
     G4int iGM, nScenes = gml.entries ();

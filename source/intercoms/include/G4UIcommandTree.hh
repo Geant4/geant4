@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcommandTree.hh,v 1.2 1999-10-29 06:06:44 asaim Exp $
+// $Id: G4UIcommandTree.hh,v 1.3 1999-11-11 15:36:04 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -15,7 +15,7 @@
 
 #include "G4UIcommand.hh"
 #include "globals.hh"
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
 // class description:
 //
@@ -42,8 +42,8 @@ class G4UIcommandTree
       void ListCurrentWithNum();
 
   private:
-      RWTPtrOrderedVector<G4UIcommand> command;
-      RWTPtrOrderedVector<G4UIcommandTree> tree;
+      G4RWTPtrOrderedVector<G4UIcommand> command;
+      G4RWTPtrOrderedVector<G4UIcommandTree> tree;
       G4UIcommand *guidance;
       G4String pathName;
 

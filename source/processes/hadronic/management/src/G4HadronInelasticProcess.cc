@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronInelasticProcess.cc,v 1.1 1999-01-07 16:11:36 gunter Exp $
+// $Id: G4HadronInelasticProcess.cc,v 1.2 1999-11-11 15:37:09 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Inelastic Process Class
@@ -37,7 +37,7 @@
     
     // returns the mean free path in GEANT4 internal units
     
-    const RWTPtrVector<G4Element> *theElementVector =
+    const G4RWTPtrVector<G4Element> *theElementVector =
       aMaterial->GetElementVector();
     
     const G4double *theAtomicNumDensityVector =

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StopTheoDeexcitation.cc,v 1.2 1999-04-18 11:29:00 hpw Exp $
+// $Id: G4StopTheoDeexcitation.cc,v 1.3 1999-11-11 15:37:48 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -30,8 +30,8 @@
 
 #include "G4StopTheoDeexcitation.hh"
 
-#include <rw/tpordvec.h>
-#include <rw/tvordvec.h>
+#include "g4rw/tpordvec.h"
+#include "g4rw/tvordvec.h"
 
 #include "globals.hh"
 #include "G4ThreeVector.hh"

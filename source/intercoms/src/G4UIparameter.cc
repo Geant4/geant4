@@ -5,14 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIparameter.cc,v 1.1 1999-01-07 16:09:28 gunter Exp $
+// $Id: G4UIparameter.cc,v 1.2 1999-11-11 15:36:07 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4UIparameter.hh"
 #include "G4UIcommandStatus.hh"
 
-#include <rw/ctoken.h>
+#include "g4rw/ctoken.h"
 
 #include "G4ios.hh"
 G4UIparameter::G4UIparameter():paramERR(0)

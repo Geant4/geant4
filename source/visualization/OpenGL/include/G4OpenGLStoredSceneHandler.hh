@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.5 1999-11-05 15:49:30 johna Exp $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.6 1999-11-11 15:38:04 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,12 +50,12 @@ friend class G4OpenGLStoredViewer;
   
   // PODL = Persistent Object Display List.
   GLint           fTopPODL;       // List which calls the other PODLs.
-  RWTValOrderedVector<G4int> fPODLList; 
-  RWTValOrderedVector<G4Transform3D> fPODLTransformList; 
+  G4RWTValOrderedVector<G4int> fPODLList; 
+  G4RWTValOrderedVector<G4Transform3D> fPODLTransformList; 
   
   // TODL = Transient  Object Display List.
-  RWTValOrderedVector<G4int> fTODLList; 
-  RWTValOrderedVector<G4Transform3D> fTODLTransformList; 
+  G4RWTValOrderedVector<G4int> fTODLList; 
+  G4RWTValOrderedVector<G4Transform3D> fTODLTransformList; 
   
   // Stop-gap solution of structure re-use.
   // A proper implementation would use geometry hierarchy.

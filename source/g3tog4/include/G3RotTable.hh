@@ -8,18 +8,18 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3RotTable.hh,v 1.6 1999-07-20 14:16:27 lockman Exp $
+// $Id: G3RotTable.hh,v 1.7 1999-11-11 15:35:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Maps G3 rotation indices to G3toG4RotationMatrix*
 
-#include <rw/tphdict.h>
+#include "g4rw/tphdict.h"
 class G3toG4RotationMatrix;
 
 class G3RotTable {
 private:
-  RWTPtrHashDictionary<G4String, G3toG4RotationMatrix>* _Rot;
+  G4RWTPtrHashDictionary<G4String, G3toG4RotationMatrix>* _Rot;
   void HashID(G4int rotid, G4String* _HID);
   void HashID(G4int rotid, G4String& _HID);
 public:

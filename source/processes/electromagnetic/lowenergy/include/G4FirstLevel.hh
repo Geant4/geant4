@@ -26,9 +26,9 @@
 #define G4FIRSTLEVEL_HH
 
 #include "G4Data.hh"
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
-class G4FirstLevel : public RWTPtrOrderedVector< G4Data >{
+class G4FirstLevel : public G4RWTPtrOrderedVector< G4Data >{
 
 
 public:

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PiMinusStopMaterial.hh,v 1.1 1999-01-07 16:13:40 gunter Exp $
+// $Id: G4PiMinusStopMaterial.hh,v 1.2 1999-11-11 15:37:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -29,9 +29,9 @@
 #ifndef G4PIMINUSSTOPMATERIAL_HH
 #define G4PIMINUSSTOPMATERIAL_HH
 
-#include <rw/tvordvec.h>
-#include <rw/tpordvec.h>
-#include <rw/cstring.h>
+#include "g4rw/tvordvec.h"
+#include "g4rw/tpordvec.h"
+#include "g4rw/cstring.h"
 #include "globals.hh"
 #include "G4LorentzVector.hh"
 //#include "G4String.hh"
@@ -59,10 +59,10 @@ public:
   virtual ~G4PiMinusStopMaterial();
 
   // Definitions of absorption products
-  virtual RWTPtrOrderedVector<G4ParticleDefinition>* DefinitionVector();
+  virtual G4RWTPtrOrderedVector<G4ParticleDefinition>* DefinitionVector();
 
   // 4-vectors of absorption products
-  virtual RWTPtrOrderedVector<G4LorentzVector>* P4Vector(const G4double binding, 
+  virtual G4RWTPtrOrderedVector<G4LorentzVector>* P4Vector(const G4double binding, 
 							 const G4double mass);
 
   // Number of final nucleons, out of generated absorption products
@@ -70,8 +70,8 @@ public:
 
 protected:
    
-  RWTPtrOrderedVector<G4ParticleDefinition>* _definitions;
-  RWTPtrOrderedVector<G4LorentzVector>* _momenta; 
+  G4RWTPtrOrderedVector<G4ParticleDefinition>* _definitions;
+  G4RWTPtrOrderedVector<G4LorentzVector>* _momenta; 
   G4DistributionGenerator* _distributionE;
   G4DistributionGenerator* _distributionAngle;
   G4double _R; 

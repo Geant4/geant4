@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleVector.hh,v 1.1 1999-01-07 16:13:49 gunter Exp $
+// $Id: G4ParticleVector.hh,v 1.2 1999-11-11 15:37:50 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -18,13 +18,13 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include "G4DynamicParticle.hh"
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
 // #ifdef STL
 // for future use STL vector as container 
 // typedef Vector<G4DynamicParticle> G4ParticleVector;
 // #elseifdef RWT
 
-typedef RWTPtrOrderedVector<G4DynamicParticle> G4ParticleVector;
+typedef G4RWTPtrOrderedVector<G4DynamicParticle> G4ParticleVector;
 
 #endif

@@ -13,7 +13,7 @@ March 30th  M.Maire
  
 March 18th  J.Allison
 - globals.hh: Added #ifdef G4USE_STL, changed position of
-  #include <rw/cstring.h>.
+  #include "g4rw/cstring.h".
 
 December 17th 1998  J.Allison
 - Added first version of STL interface.

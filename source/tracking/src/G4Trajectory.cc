@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trajectory.cc,v 1.5 1999-10-14 05:39:52 tsasaki Exp $
+// $Id: G4Trajectory.cc,v 1.6 1999-11-11 15:38:03 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,7 +57,7 @@ G4Trajectory::G4Trajectory(const G4Track* aTrack)
    PDGEncoding = fpParticleDefinition->GetPDGEncoding();
    fTrackID = aTrack->GetTrackID();
    fParentID = aTrack->GetParentID();
-   positionRecord = new RWTPtrOrderedVector<G4VTrajectoryPoint>;
+   positionRecord = new G4RWTPtrOrderedVector<G4VTrajectoryPoint>;
    positionRecord->insert(new G4TrajectoryPoint(aTrack->GetPosition()));
 }
 
@@ -70,7 +70,7 @@ G4Trajectory::G4Trajectory(G4Trajectory & right)
   PDGEncoding = right.PDGEncoding;
   fTrackID = right.fTrackID;
   fParentID = right.fParentID;
-  positionRecord = new RWTPtrOrderedVector<G4VTrajectoryPoint>;
+  positionRecord = new G4RWTPtrOrderedVector<G4VTrajectoryPoint>;
   for(int i=0;i<right.positionRecord->entries();i++)
   {
     G4TrajectoryPoint* rightPoint = (G4TrajectoryPoint*)((*(right.positionRecord))[i]);

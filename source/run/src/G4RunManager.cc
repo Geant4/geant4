@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunManager.cc,v 1.8 1999-07-25 15:37:25 asaim Exp $
+// $Id: G4RunManager.cc,v 1.9 1999-11-11 15:38:00 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,7 +67,7 @@ G4RunManager::G4RunManager()
   eventManager = new G4EventManager();
   timer = new G4Timer();
   runMessenger = new G4RunMessenger(this);
-  previousEvents = new RWTPtrOrderedVector<G4Event>;
+  previousEvents = new G4RWTPtrOrderedVector<G4Event>;
   G4ParticleTable::GetParticleTable()->CreateMessenger();
   G4ProcessTable::GetProcessTable()->CreateMessenger();
 }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GlobalFastSimulationManager.hh,v 1.4 1999-10-29 15:39:37 mora Exp $
+// $Id: G4GlobalFastSimulationManager.hh,v 1.5 1999-11-11 15:37:54 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -29,7 +29,7 @@
 #ifndef  G4GlobalFastSimulationManager_hh
 #define  G4GlobalFastSimulationManager_hh
 
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
 #include "G4VGlobalFastSimulationManager.hh"
 #include "G4FastSimulationManager.hh"
@@ -121,13 +121,13 @@ private:
   G4FastSimulationMessenger* fTheFastSimulationMessenger;
 
   // List of G4FastSimulationManagers
-  RWTPtrOrderedVector<G4FastSimulationManager> ManagedManagers;
+  G4RWTPtrOrderedVector<G4FastSimulationManager> ManagedManagers;
 
   // fClosed flags if the NeededFlavoredWorlds List was Build.
   G4bool fClosed;
 
   // List of needed ParallelWorlds after close
-  RWTPtrOrderedVector<G4FlavoredParallelWorld> NeededFlavoredWorlds;
+  G4RWTPtrOrderedVector<G4FlavoredParallelWorld> NeededFlavoredWorlds;
 
   // Internal fonction to Build world volume clones.
   G4VPhysicalVolume* GiveMeAWorldVolumeClone();

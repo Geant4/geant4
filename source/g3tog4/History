@@ -1,4 +1,4 @@
-$Id: History,v 1.22 1999-10-26 10:16:35 johna Exp $
+$Id: History,v 1.23 1999-11-11 15:35:40 gunter Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
@@ -10,8 +10,8 @@ g3tog4-V00-01-00 28-Jul-1999 Lockman
 - Commented out "Deleted..." in destructors.
 
 g3tog4-01-01-00 19-Jul-1999 Lockman
-- G3matTable, G3MedTable, G3RotTable: convert from lists RWTPtrOrderedVector 
-  to RWTPtrHashDictionary to allow for noncontiguous indices
+- G3matTable, G3MedTable, G3RotTable: convert from lists G4RWTPtrOrderedVector 
+  to G4RWTPtrHashDictionary to allow for noncontiguous indices
 - G3RotTable::Put,Get->put,get. 
 - G3toG4BuildGeom, G4gsrotm: put,get signature change 
 
@@ -36,16 +36,16 @@ g3tog4-01-00-06 28-May-1999 Lockman
 
 g3tog4-01-00-05 Lockman
 - G3G4Interface: G4Strings passed by reference in G4gspos, G4gsposp
-- G3PartTable: now uses RWTPtrHashDictionary instead of RWGDList
+- G3PartTable: now uses G4RWTPtrHashDictionary instead of RWGDList
 - G3RotTable: method name "get" changed to "Get". Space for unit rotation
-  matrix at element 0 in RWTPtrOrderedVector. This matrix is instantiated
+  matrix at element 0 in G4RWTPtrOrderedVector. This matrix is instantiated
   in G4BuildGeom prior to call list read.
 - G3VolTable: many new methods to handle VolTableEntry and G3Pos objects.
   removed GetPV method.
 - G3toG4.hh: removed G3NegVolPars method
 - G3DetTable: commented out some G4cerr's
 - G3EleTable: some minor internal changes
-- G3PartTable: convert to use RWTPtrHashDictionary
+- G3PartTable: convert to use G4RWTPtrHashDictionary
 - Added G3Pos class
 - Added G3toG4BuildTree which calls G4LogicalVolume and G4PVPlacement based on
   G3VolTable
@@ -70,7 +70,7 @@ g3tog4-01-00-05 Lockman
 
 17-May-1999 Lockman
 - converted G3PartTable to RWTPtrhaswhDictionary
-- reinstituted VolTableEntry and G3VolTable RWTPtrHashDictionary. Creation of
+- reinstituted VolTableEntry and G3VolTable G4RWTPtrHashDictionary. Creation of
   logical volume now done in G3VolTable::PutLV
 - G4makevol.cc: added interface to G4Hype
 
@@ -82,14 +82,14 @@ g3tog4-01-00-04 11-May-1999 Lockman
   with header file
 
 g3tog4-01-00-03  6-May-1999 Lockman
-- G3MatTable, G3RotTable, G3MedTable: updated to use RWTPtrOrderedVector 
-  instead of RWTPtrHashDictionary
+- G3MatTable, G3RotTable, G3MedTable: updated to use G4RWTPtrOrderedVector 
+  instead of G4RWTPtrHashDictionary
 
 g3tog4-01-00-02  5-May-1999 Lockman
 - temporarily comment out G4gsdv* code
 - G4gstmed: now just store a link between tracking medium number and assoicated
   G4Material pointer
-- replaced rw/gdlist with RWTPtrHashDictionary
+- replaced rw/gdlist with G4RWTPtrHashDictionary
 - replaced iostream.h with G4ios.hh everywhere
 - added G3EleTable to manage elements in G3toG4
 - tog4.F, g3routines.F: generate gsmixt instructions in call list
@@ -323,7 +323,7 @@ G3toG4.hh: commented out extern declaration of min(). Porting on HP-UX10.
 
 16-Jul 1997 B. Lockman
 G3Mother.cc: set the vis attributes of the mother to be invisible
-G4makevol.cc: commented out the forward declaration class RWTValVector<double>;
+G4makevol.cc: commented out the forward declaration class G4RWTValVector<double>;
 
 17-Jun-1997  T. Wenaus
 - GNUmakefile mod to exclude g4geom.cc from library
