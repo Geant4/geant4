@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedMesonConstructor.cc,v 1.10 2001-07-11 10:02:08 gunter Exp $
+// $Id: G4ExcitedMesonConstructor.cc,v 1.11 2002-10-01 04:30:58 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,7 +30,7 @@
 //      History: first implementation, based on object model of
 //      10 oct 1998  H.Kurashige
 // ---------------------------------------------------------------
-
+//    01 Oct. 02 Fixed PDG codes for a0(1450), f0(1370), k0_star(1430)
 
 #include "G4ExcitedMesonConstructor.hh"
 
@@ -1458,7 +1458,7 @@ const G4int    G4ExcitedMesonConstructor::iGParity[G4ExcitedMesonConstructor::NM
 
 
 const G4int    G4ExcitedMesonConstructor::encodingOffset[]=
-{ 10000, 20000, 20000,      0, 10000, 30000,     0, 100000,100000,100000};
+{ 10000, 10000, 20000,      0, 10000, 30000,     0, 100000,100000,100000};
 
 
 
