@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2003-06-12 12:24:46 gcosmo Exp $
+$Id: History,v 1.6 2003-11-13 15:26:54 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 13th, 2003  John Allison
+- Reconstructed Vis Manager.
 
 June, 12th, 2003  G.Cosmo - olapex-V05-01-00
 - Fixed pedantic warnings on Linux-g++.

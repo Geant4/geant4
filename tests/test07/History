@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2003-03-19 12:44:41 gcosmo Exp $
+$Id: History,v 1.11 2003-11-13 15:27:33 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 13th, 2003  John Allison
+- Removed OPACS from Vis Manager.
 
 Mar 12, 2003  John Allison (test07-V05-00-00)
 - Added HepRep to vis manager.

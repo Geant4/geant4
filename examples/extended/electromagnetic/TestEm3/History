@@ -1,4 +1,4 @@
-$Id: History,v 1.37 2003-11-03 16:42:46 maire Exp $
+$Id: History,v 1.38 2003-11-13 15:25:23 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+13-11-03 John Allison
+- Removed OPACS from Vis Manager.
+
 03-11-03 mma (testem3-V05-02-05)
 - add an estimation of the mean energy leaving each absorber
 

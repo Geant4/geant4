@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2003-10-24 12:42:02 maire Exp $
+$Id: History,v 1.7 2003-11-13 15:27:17 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+13-11-03 John Allison
+- Removed OPACS from Vis Manager.
 
 24-10-03 mma (exampleN07-V05-02-00)
 - PhysicsList: AddProcess(Bremsstrahlung,-1,3,3) ..etc..
