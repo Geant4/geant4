@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryManager.cc,v 1.8 2002-04-22 14:18:47 gcosmo Exp $
+// $Id: G4GeometryManager.cc,v 1.9 2002-04-26 16:23:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GeometryManager
@@ -78,6 +78,15 @@ void G4GeometryManager::OpenGeometry()
      DeleteOptimisations();
      fIsClosed=false;
   }
+}
+
+// ***************************************************************************
+// Returns status of geometry
+// ***************************************************************************
+//
+G4bool G4GeometryManager::IsGeometryClosed()
+{
+  return fIsClosed;
 }
 
 // ***************************************************************************

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryManager.hh,v 1.5 2001-10-22 16:08:04 gcosmo Exp $
+// $Id: G4GeometryManager.hh,v 1.6 2002-04-26 16:23:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GeometryManager
@@ -68,6 +68,9 @@ class G4GeometryManager
     void OpenGeometry();
       // Open (`unlock') the geometry and remove optimisation information if
       // present.
+
+    G4bool IsGeometryClosed();
+      // Return true/false according to state of optimised geoemtry.
 
     static G4GeometryManager* GetInstance();
       // Return ptr to singleton instance of the class.
