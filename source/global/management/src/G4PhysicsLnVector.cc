@@ -1,10 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// $Id: G4PhysicsLnVector.cc,v 1.3 2000-03-23 09:21:24 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
@@ -12,11 +14,8 @@
 //
 //  G4PhysicsLnVector.cc
 //
-//  History: first implementation, based on object model of
-//    02 Dec. 1995, G.Cosmo : Structure created based on object model
-//    15 Feb. 1996, K.Amako : Implemented the 1st version
-//    01 Jul. 1996, K.Amako : Hidden bin from the user introduced
-//    26 Sep. 1996, K.Amako : Constructor with only 'bin size' added.
+//  History:
+//    27 Apr. 1999, M.G. Pia: Created, copying from G4PhysicsLogVector
 //
 // --------------------------------------------------------------
 
@@ -24,12 +23,8 @@
 
 
 G4PhysicsLnVector::G4PhysicsLnVector()
-{
-  ptrNextTable = 0;
-  edgeMin = 0.0;
-  edgeMax = 0.0;
-  numberOfBin = 0;
-}
+  : dBin(0.), baseBin(0.)
+{}
 
 
 G4PhysicsLnVector::G4PhysicsLnVector(size_t theNbin)
@@ -82,9 +77,3 @@ G4PhysicsLnVector::G4PhysicsLnVector(G4double theEmin,
 
 
 G4PhysicsLnVector::~G4PhysicsLnVector(){}
-
-
-
-
-
-
