@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ViewParameters.cc,v 1.6 2000-05-18 13:45:12 johna Exp $
+// $Id: G4ViewParameters.cc,v 1.7 2000-07-03 10:36:33 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -27,7 +27,9 @@ G4ViewParameters::G4ViewParameters ():
   fVisibleDensity (0.01 * g / cm3),
   fCullCovered (false),
   fSection (false),
+  fSectionPlane (),
   fCutaway (false),
+  fCutawayPlanes (),
   fExplode (false),
   fExplodeFactor (1.),
   fNoOfSides (24),
@@ -35,19 +37,21 @@ G4ViewParameters::G4ViewParameters ():
   fUpVector (G4Vector3D (0., 1., 0.)),            // y-axis up.
   fFieldHalfAngle (0.),                           // Orthogonal projection.
   fZoomFactor (1.),
+  fCurrentTargetPoint (),
   fDolly (0.),
+  fLightsMoveWithCamera (false),
   fRelativeLightpointDirection (G4Vector3D (1., 1., 1.)),
   fActualLightpointDirection (G4Vector3D (1., 1., 1.)),
-  fLightsMoveWithCamera (false),
   fViewGeom (true),
   fViewHits (true),
   fViewDigis (true),
+  fDefaultVisAttributes (),
   fDefaultTextVisAttributes (G4Colour (0., 0., 1.)),
+  fDefaultMarker (),
   fGlobalMarkerScale (1.),
   fMarkerNotHidden (true),
   fWindowSizeHintX (600),
   fWindowSizeHintY (600)
-// Note: all other parameters use default constructors.
 {
   fDefaultMarker.SetScreenSize (5.);
   // Markers are 5 pixels radius, 10 pixels diameter.
