@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChangeForMSC.cc,v 1.2 1999-02-06 10:44:57 kurasige Exp $
+// $Id: G4ParticleChangeForMSC.cc,v 1.3 1999-04-13 09:44:32 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,7 +50,9 @@ G4ParticleChangeForMSC::G4ParticleChangeForMSC(
    if (verboseLevel>1) {
     G4cerr << "G4ParticleChangeForMSC::  copy constructor is called " << endl;
    }
-   *this = right;
+      theMomentumDirectionChange = right.theMomentumDirectionChange;
+      thePositionChange = right.thePositionChange;
+      theTrueStepLength = right.theTrueStepLength;
 }
 
 // assignment operator
@@ -61,7 +63,15 @@ G4ParticleChangeForMSC & G4ParticleChangeForMSC::operator=(
     G4cerr << "G4ParticleChangeForMSC:: assignment operator is called " << endl;
    }
    if (this != &right)
-   {
+   {  
+      theListOfSecondaries = right.theListOfSecondaries;
+      theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
+      theNumberOfSecondaries = right.theNumberOfSecondaries;
+      theStatusChange = right.theStatusChange;
+      theLocalEnergyDeposit = right.theLocalEnergyDeposit;
+      theSteppingControlFlag = right.theSteppingControlFlag;
+
+
       theMomentumDirectionChange = right.theMomentumDirectionChange;
       thePositionChange = right.thePositionChange;
       theTrueStepLength = right.theTrueStepLength;
@@ -117,6 +127,10 @@ G4Step* G4ParticleChangeForMSC::UpdateStepForPostStep(G4Step* pStep)
   // update position 
   pPostStepPoint->SetPosition( thePositionChange  );
 
+#ifdef G4VERBOSE
+  if (debugFlag) CheckIt(*aTrack);
+#endif
+
   //  Update the G4Step specific attributes 
   return UpdateStepInfo(pStep);
 }
@@ -158,6 +172,25 @@ void G4ParticleChangeForMSC::DumpInfo() const
        << endl;
 }
 
+
+G4bool G4ParticleChangeForMSC::CheckIt(const G4Track& aTrack)
+{
+  G4bool    itsOK = true;
+  if ( abs(theMomentumDirectionChange.mag2()-1.0) > perMillion ) {
+    G4cout << " !!! the Momentum Change is not unit vector !!!!"
+         << " :  " << theMomentumDirectionChange.mag()
+         << endl;
+    itsOK = false;
+  }
+
+  if (!itsOK) { 
+    G4cout << " G4ParticleChangeForMSC::CheckIt " <<endl;
+    G4cout << " pointer : " << this <<endl ;
+    DumpInfo();
+    G4Exception("G4ParticleChange::CheckIt");
+  }
+  return itsOK;
+}
 
 
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Mars5GeVMechanism.hh,v 1.1 1999-01-07 16:14:21 gunter Exp $
+// $Id: G4Mars5GeVMechanism.hh,v 1.2 1999-04-13 09:43:21 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,7 +61,7 @@ class G4Mars5GeVMechanism :public G4VEvtBiasMechanism
   G4Mars5GeVMechanism(const G4String& name = "MARS5GeV");
   G4Mars5GeVMechanism(const G4Mars5GeVMechanism&);
 
-  ~G4Mars5GeVMechanism();
+  virtual ~G4Mars5GeVMechanism();
 
   virtual G4VParticleChange* ApplyMath( G4VParticleChange*, const G4Step& );
   virtual G4bool IsApplicable(G4ParticleDefinition*) const;
@@ -121,7 +121,7 @@ class G4Mars5GeVMechanism :public G4VEvtBiasMechanism
          MarsMUplus, MarsMUminus, MarsGAM, MarsEminus, MarsEplus, MarsAP,
          MarsPI0, MarsD, MarsT, MarsHe3, MarsHe4 };
 
-  G4int GetMarsEncoding(G4ParticleDefinition* )const;
+  G4int GetMarsEncoding(const G4ParticleDefinition* )const;
   const G4String& GetParticleName(G4int marsEncoding) const;
   G4ParticleDefinition* GetParticleDefinition(G4int marsEncoding) const;   
 
@@ -161,7 +161,7 @@ class G4Mars5GeVMechanism :public G4VEvtBiasMechanism
 #include "G4ParticleTable.hh"
 
 inline
- G4int G4Mars5GeVMechanism::GetMarsEncoding(G4ParticleDefinition* particle) const{
+ G4int G4Mars5GeVMechanism::GetMarsEncoding(const G4ParticleDefinition* particle) const{
   const G4String& name = particle->GetParticleName();
   G4int encoding = MarsUndefined;
   if (name == "proton") {
@@ -270,7 +270,7 @@ inline
  G4ParticleDefinition* G4Mars5GeVMechanism::GetParticleDefinition(G4int encoding) const
 {
   G4String name = GetParticleName(encoding);
-  G4ParticleDefinition* particle = NULL;
+  G4ParticleDefinition* particle = 0;
   if (name != "None") {
 	particle = theParticleTable->FindParticle(name);
   }

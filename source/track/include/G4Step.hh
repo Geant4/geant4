@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Step.hh,v 1.2 1999-02-17 12:49:09 tsasaki Exp $
+// $Id: G4Step.hh,v 1.3 1999-04-13 09:43:26 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -228,7 +228,7 @@ class G4Step
      fpPreStepPoint->SetPolarization(fpTrack->GetPolarization());
      fpPreStepPoint->SetSafety(0.);
      fpPreStepPoint->SetStepStatus(fUndefined);
-     fpPreStepPoint->SetProcessDefinedStep(NULL);
+     fpPreStepPoint->SetProcessDefinedStep(0);
      fpPreStepPoint->SetMass(fpTrack->GetDynamicParticle()->GetMass());    
      fpPreStepPoint->SetWeight(fpTrack->GetWeight());
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VParticleChange.hh,v 1.1 1999-01-07 16:14:24 gunter Exp $
+// $Id: G4VParticleChange.hh,v 1.2 1999-04-13 09:43:30 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -79,6 +79,11 @@ class G4VParticleChange
     G4bool operator==(const G4VParticleChange &right) const;
     G4bool operator!=(const G4VParticleChange &right) const;
     // "equal" means that teo objects have the same pointer.
+
+  protected:
+    // hide copy constructor and assignment operaor as protected
+    G4VParticleChange(const G4VParticleChange &right);
+    G4VParticleChange & operator=(const G4VParticleChange &right);
  
   public:
     // --- the following methods are for updating G4Step -----   
@@ -197,11 +202,15 @@ class G4VParticleChange
     G4int verboseLevel;
     //  The Verbose level
 
-  protected:
-    // hide copy constructor and assignment operaor as protected
-    G4VParticleChange(const G4VParticleChange &right);
-    G4VParticleChange & operator=(const G4VParticleChange &right);
-
+  public:
+    // for Debug 
+    virtual G4bool CheckIt(const G4Track&);
+    void   ClearDebugFlag();
+    void   SetDebugFlag();
+    G4bool GetDebugFlag() const;
+    
+  protected: 
+    G4bool debugFlag;
 
   //---- following methods and members are used for Event Biasing
   public:
@@ -209,7 +218,7 @@ class G4VParticleChange
     virtual void   SwOnEB();
     virtual void   SwOffEB();
     virtual G4bool IsEBActive() const;
-    virtual G4VEvtBiasMechanism* GetEBMechanism() const;
+    virtual G4VEvtBiasMechanism* GetEBMechanism();
 
   protected:
     G4VEvtBiasMechanism* theEBMechanism;

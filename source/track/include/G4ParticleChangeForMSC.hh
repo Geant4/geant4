@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChangeForMSC.hh,v 1.2 1999-02-06 10:44:35 kurasige Exp $
+// $Id: G4ParticleChangeForMSC.hh,v 1.3 1999-04-13 09:43:25 kurasige Exp $
 // GEANT4 tag $ $
 //
 // 
@@ -93,11 +93,17 @@ class G4ParticleChangeForMSC: public G4VParticleChange
     
     G4ThreeVector thePositionChange;
     //  The changed (final) position of a given particle.
-    
+
+  public:
+    // for Debug 
+    virtual G4bool CheckIt(const G4Track&);
+  
 };
 
 #include "G4ParticleChangeForMSC.icc"
 
 #endif
+
+
 
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessAttribute.cc,v 1.1 1999-01-07 16:13:57 gunter Exp $
+// $Id: G4ProcessAttribute.cc,v 1.2 1999-04-13 09:47:58 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,7 +26,7 @@
 G4ProcessAttribute::G4ProcessAttribute():
 	 isActive(true)
 {
-  pProcess = NULL;
+  pProcess = 0;
   idxProcessList = -1;
 }
 
@@ -54,6 +54,7 @@ G4ProcessAttribute & G4ProcessAttribute::operator=(G4ProcessAttribute &right)
   if (this != &right) {
     pProcess       = right.pProcess;
     idxProcessList = right.idxProcessList;
+    isActive = right.isActive;
     // copy all contents in idxProcVector[] and ordProcVector[]
     //   deep copy 
     for (G4int idx=0; idx<G4ProcessManager::SizeOfProcVectorArray; idx++){

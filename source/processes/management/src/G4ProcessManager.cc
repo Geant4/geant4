@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessManager.cc,v 1.2 1999-01-08 11:23:57 gunter Exp $
+// $Id: G4ProcessManager.cc,v 1.3 1999-04-13 09:47:59 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,7 +32,7 @@
 // ---------------------------------
 //  function members implementation
 // ---------------------------------
-G4ProcessManagerMessenger* G4ProcessManager::fProcessManagerMessenger = NULL;
+G4ProcessManagerMessenger* G4ProcessManager::fProcessManagerMessenger = 0;
 G4int  G4ProcessManager::counterOfObjects = 0;
 // ///////////////////////////////////////
 G4ProcessManager::G4ProcessManager(const G4ParticleDefinition* aParticleType):
@@ -43,7 +43,7 @@ G4ProcessManager::G4ProcessManager(const G4ParticleDefinition* aParticleType):
 {
   // create the process List
   theProcessList = new G4ProcessVector();
-  if ( theProcessList == NULL) {
+  if ( theProcessList == 0) {
     const G4String aErrorMessage("G4ProcessManager::G4ProcessManager():");
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
@@ -56,7 +56,7 @@ G4ProcessManager::G4ProcessManager(const G4ParticleDefinition* aParticleType):
   //create process vector
   for (G4int i=0; i<SizeOfProcVectorArray; ++i) {
     theProcVector[i] = new G4ProcessVector();
-    if ( theProcVector[i] == NULL) {
+    if ( theProcVector[i] == 0) {
       G4String aErrorMessage("G4ProcessManager::G4ProcessManager():");
 #ifdef G4VERBOSE
       if (GetVerboseLevel()>0) {
@@ -68,7 +68,7 @@ G4ProcessManager::G4ProcessManager(const G4ParticleDefinition* aParticleType):
     }
   }
   theAttrVector = new G4ProcessAttrVector();
-  if (fProcessManagerMessenger == NULL){
+  if (fProcessManagerMessenger == 0){
     fProcessManagerMessenger = new G4ProcessManagerMessenger();
 #ifdef G4VERBOSE
     if (GetVerboseLevel() > 1) {
@@ -97,9 +97,9 @@ G4ProcessManager::G4ProcessManager(G4ProcessManager &right)
    // create the process List
    theProcessList = new G4ProcessVector();
    theAttrVector = new G4ProcessAttrVector();
-   if ( ( theProcessList == NULL) || (theAttrVector == NULL) ){
+   if ( ( theProcessList == 0) || (theAttrVector == 0) ){
      G4String aErrorMessage("G4ProcessManager::G4ProcessManager():");
-     G4Exception((const char*)aErrorMessage);
+     G4Exception((const char*)(aErrorMessage));
    }
 
    for (G4int idx=0; idx < right.numberOfProcesses; idx++) {
@@ -118,9 +118,9 @@ G4ProcessManager::G4ProcessManager(G4ProcessManager &right)
   for (G4int i=0; i<SizeOfProcVectorArray; ++i) {
     // create i-th ProcessVector in theProcVector
     theProcVector[i] = new G4ProcessVector();
-    if ( theProcVector[i] == NULL) {
+    if ( theProcVector[i] == 0) {
       G4String aErrorMessage("G4ProcessManager::G4ProcessManager():");
-      G4Exception((const char*)aErrorMessage);
+      G4Exception((const char*)(aErrorMessage));
     }
     G4ProcessVector* src = right.theProcVector[i];
     for (G4int j=0; j< src->entries() ; j++){
@@ -134,7 +134,7 @@ G4ProcessManager::G4ProcessManager(G4ProcessManager &right)
 
 // ///////////////////////////////////////
 G4ProcessManager::G4ProcessManager():
-                theParticleType(NULL),
+                theParticleType(0),
                 numberOfProcesses(0)
 {
   if (GetVerboseLevel()>0) {
@@ -163,9 +163,9 @@ G4ProcessManager::~G4ProcessManager()
   counterOfObjects-=1; 
 
   if ( counterOfObjects == 0 ){
-    if (fProcessManagerMessenger != NULL){
+    if (fProcessManagerMessenger != 0){
       delete fProcessManagerMessenger;
-      fProcessManagerMessenger = NULL;
+      fProcessManagerMessenger = 0;
 #ifdef G4VERBOSE
       if (GetVerboseLevel() > 1) {
 	G4cerr << "G4ProcessManagerMessenger is deleted" << endl;
@@ -221,12 +221,12 @@ G4ProcessAttribute* G4ProcessManager::GetAttribute(G4int index) const
       G4cerr << "  index [" << index << "]" << endl;
     }
 #endif
-    return NULL;
+    return 0;
   } 
 
-  // check process pointer is not NULL
+  // check process pointer is not 0
   G4VProcess* aProcess = (*theProcessList)[index];
-  if (aProcess == NULL) {
+  if (aProcess == 0) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
       G4cerr << "G4ProcessManager::GetAttribute():";
@@ -237,8 +237,8 @@ G4ProcessAttribute* G4ProcessManager::GetAttribute(G4int index) const
 #endif
     G4String aErrorMessage("G4ProcessManager::GetAttribute():");
     aErrorMessage += " particle[" + theParticleType->GetParticleName() + "]";
-    G4Exception((const char*)aErrorMessage); 
-    return NULL;
+    G4Exception((const char*)(aErrorMessage)); 
+    return 0;
   }    
 
   //find the process attribute
@@ -253,7 +253,7 @@ G4ProcessAttribute* G4ProcessManager::GetAttribute(G4int index) const
       G4cerr << "Warning:: attribute vector index is inconsistent with process List index" << endl; 
     }
 #endif
-    G4ProcessAttribute *pAttr = NULL;
+    G4ProcessAttribute *pAttr = 0;
     for (G4int i=0; i<theAttrVector->length(); i++){
       if ( ((*theAttrVector)[i])->idxProcessList == index) {
 	pAttr = (*theAttrVector)[i];
@@ -281,7 +281,7 @@ G4int G4ProcessManager::InsertAt(G4int ip, G4VProcess* process, G4int ivec)
   //correct index in ProcessAttributes of processes
   for (G4int iproc=0; iproc<numberOfProcesses; iproc++) {
     G4ProcessAttribute* aAttr = (*theAttrVector)[iproc];
-    if (aAttr != NULL) {
+    if (aAttr != 0) {
       if (aAttr->idxProcVector[ivec] >= ip){
 	aAttr->idxProcVector[ivec] += 1;
       }
@@ -311,7 +311,7 @@ G4int G4ProcessManager::RemoveAt(G4int ip, G4VProcess* process, G4int ivec)
   // correct index
   for(G4int iproc=0; iproc<numberOfProcesses; iproc++) {
     G4ProcessAttribute* aAttr = (*theAttrVector)[iproc];
-    if (aAttr != NULL) {
+    if (aAttr != 0) {
       if (ip < aAttr->idxProcVector[ivec]) {
 	aAttr->idxProcVector[ivec] -=1;
       } else if (ip ==  aAttr->idxProcVector[ivec]) {
@@ -460,7 +460,7 @@ G4VProcess* G4ProcessManager::RemoveProcess(G4int index)
 {
   //find the process attribute
   G4ProcessAttribute* pAttr = GetAttribute(index);
-  if (pAttr == NULL) return NULL;
+  if (pAttr == 0) return 0;
 
   // remove process
   G4VProcess* removedProcess = (*theProcessList)[index];
@@ -484,8 +484,8 @@ G4VProcess* G4ProcessManager::RemoveProcess(G4int index)
 	    G4cerr << idx << "->" << pVector->index(removedProcess) << endl;
 	  }
 #endif
-          G4Exception((const char*)aErrorMessage); 
-	  return NULL;
+          G4Exception((const char*)(aErrorMessage)); 
+	  return 0;
 	}    
       } else if (idx<0) {
         // corresponding DoIt is not active  
@@ -500,8 +500,8 @@ G4VProcess* G4ProcessManager::RemoveProcess(G4int index)
 	  G4cerr << "[size:" << pVector->length() << "] out of range" <<endl;
 	}
 #endif
-	G4Exception((const char*)aErrorMessage); 
-	return NULL;
+	G4Exception((const char*)(aErrorMessage)); 
+	return 0;
       }
     }
     pAttr->isActive = false;
@@ -552,7 +552,7 @@ G4int G4ProcessManager::GetProcessOrdering(
       return -1;
     }
 #endif
-  } else if (pAttr != NULL) { 
+  } else if (pAttr != 0) { 
     return pAttr->ordProcVector[ivec];
   } else {
     return -1;
@@ -591,7 +591,7 @@ void G4ProcessManager::SetProcessOrdering(
       G4cerr << endl;
     }
 #endif
-  } else if (pAttr != NULL) {
+  } else if (pAttr != 0) {
     G4int ip = pAttr->idxProcVector[ivec];
     // remove a process from the process vector
     if ( ip >=0 ) {
@@ -643,7 +643,7 @@ void G4ProcessManager::SetProcessOrderingToFirst(
       G4cerr << endl;
     }
 #endif
-  } else if (pAttr != NULL) {
+  } else if (pAttr != 0) {
     G4int ip = pAttr->idxProcVector[ivec];
     // remove a process from the process vector
     if ( ip >=0 ) {
@@ -684,7 +684,7 @@ G4VProcess* G4ProcessManager::InActivateProcess(G4int index)
 {
   //find the process attribute
   G4ProcessAttribute* pAttr = GetAttribute(index);
-  if (pAttr == NULL) return NULL;
+  if (pAttr == 0) return 0;
 
   // remove process
   G4VProcess* pProcess = (*theProcessList)[index];
@@ -699,9 +699,9 @@ G4VProcess* G4ProcessManager::InActivateProcess(G4int index)
       if (idx<0) {
         // corresponding DoIt is not active  
       } else if ((idx >= 0)  && (idx < pVector->length())) {
-        //check pointer and set to NULL
+        //check pointer and set to 0
         if ((*pVector)[idx]== pProcess) {
-	  (*pVector)[idx]= NULL;
+	  (*pVector)[idx]= 0;
 	} else {
 #ifdef G4VERBOSE
 	  if (GetVerboseLevel()>0) {
@@ -713,7 +713,7 @@ G4VProcess* G4ProcessManager::InActivateProcess(G4int index)
 	  }
 #endif
           G4Exception((const char*)aErrorMessage); 
-	  return NULL;
+	  return 0;
 	}    
       } else {
         // idx is out of range
@@ -727,7 +727,7 @@ G4VProcess* G4ProcessManager::InActivateProcess(G4int index)
 	}
 #endif
 	G4Exception((const char*)aErrorMessage); 
-	return NULL;
+	return 0;
       }
     } 
     pAttr->isActive = false;
@@ -749,7 +749,7 @@ G4VProcess* G4ProcessManager::ActivateProcess(G4int index)
 {
   //find the process attribute
   G4ProcessAttribute* pAttr = GetAttribute(index);
-  if (pAttr == NULL) return NULL;
+  if (pAttr == 0) return 0;
 
   // remove process
   G4VProcess* pProcess = (*theProcessList)[index];
@@ -772,7 +772,7 @@ G4VProcess* G4ProcessManager::ActivateProcess(G4int index)
         // corresponding DoIt is not active  
        } else if ((idx >= 0)  && (idx < pVector->length())) {
         //check pointer and set
-	if ((*pVector)[idx]== NULL) {
+	if ((*pVector)[idx]== 0) {
 	  (*pVector)[idx] = pProcess;
 	} else {
 #ifdef G4VERBOSE
@@ -785,7 +785,7 @@ G4VProcess* G4ProcessManager::ActivateProcess(G4int index)
 	  }
 #endif
           G4Exception((const char*)aErrorMessage); 
-	  return NULL;
+	  return 0;
 	}    
       } else {
         // idx is out of range
@@ -799,7 +799,7 @@ G4VProcess* G4ProcessManager::ActivateProcess(G4int index)
 	}
 #endif
 	G4Exception((const char*)aErrorMessage); 
-	return NULL;
+	return 0;
       }
     } 
     pAttr->isActive = true;

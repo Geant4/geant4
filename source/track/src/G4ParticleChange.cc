@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChange.cc,v 1.3 1999-02-09 14:20:01 kurasige Exp $
+// $Id: G4ParticleChange.cc,v 1.4 1999-04-13 09:44:27 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,11 +34,6 @@ G4bool G4ParticleChange::fUseEBForAll = false;
 
 G4ParticleChange::G4ParticleChange():G4VParticleChange(false)
 {
-  debugFlag = false;
-#ifdef G4VERBOSE
-  // activate CHeckIt if in VERBOSE mode
-  debugFlag = true;
-#endif
 #ifdef G4VERBOSE
   if (verboseLevel>2) {
     G4cerr << "G4ParticleChange::G4ParticleChange() " << endl;
@@ -48,11 +43,6 @@ G4ParticleChange::G4ParticleChange():G4VParticleChange(false)
 
 G4ParticleChange::G4ParticleChange(G4bool useEB):G4VParticleChange(useEB)
 {
-  debugFlag = false;
-#ifdef G4VERBOSE
-  // activate CHeckIt if in VERBOSE mode
-  debugFlag = true;
-#endif
 #ifdef G4VERBOSE
   if (verboseLevel>2) {
     G4cerr << "G4ParticleChange::G4ParticleChange() " << endl;
@@ -133,7 +123,7 @@ void G4ParticleChange::AddSecondary(G4DynamicParticle* aParticle,
   if (IsGoodForTracking) aTrack->SetGoodForTrackingFlag();
 
   //   Touchable is a temporary object, so you cannot keep the pointer
-  aTrack->SetTouchable(NULL);
+  aTrack->SetTouchable(0);
 
   //  add a secondary
   G4VParticleChange::AddSecondary(aTrack);
@@ -150,7 +140,7 @@ void G4ParticleChange::AddSecondary(G4DynamicParticle* aParticle,
   if (IsGoodForTracking) aTrack->SetGoodForTrackingFlag();
 
   //   Touchable is a temporary object, so you cannot keep the pointer
-  aTrack->SetTouchable(NULL);
+  aTrack->SetTouchable(0);
 
   //  add a secondary
   G4VParticleChange::AddSecondary(aTrack);
@@ -167,7 +157,7 @@ void G4ParticleChange::AddSecondary(G4DynamicParticle* aParticle,
   if (IsGoodForTracking) aTrack->SetGoodForTrackingFlag();
  
   //   Touchable is a temporary object, so you cannot keep the pointer
-  aTrack->SetTouchable(NULL);
+  aTrack->SetTouchable(0);
 
   //  add a secondary
   G4VParticleChange::AddSecondary(aTrack);
@@ -263,7 +253,9 @@ G4Step* G4ParticleChange::UpdateStepForAlongStep(G4Step* pStep)
   // update weight if use EB
   pPostStepPoint->SetWeight( theWeightChange );
 
+#ifdef G4VERBOSE
   if (debugFlag) CheckIt(*aTrack);
+#endif
 
   //  Update the G4Step specific attributes 
   return UpdateStepInfo(pStep);
@@ -299,7 +291,9 @@ G4Step* G4ParticleChange::UpdateStepForPostStep(G4Step* pStep)
   // update weight if use EB
   pPostStepPoint->SetWeight( theWeightChange );
 
+#ifdef G4VERBOSE
   if (debugFlag) CheckIt(*aTrack);
+#endif
 
   //  Update the G4Step specific attributes 
   return UpdateStepInfo(pStep);
@@ -332,7 +326,9 @@ G4Step* G4ParticleChange::UpdateStepForAtRest(G4Step* pStep)
   // update weight if use EB
   pPostStepPoint->SetWeight( theWeightChange );
 
+#ifdef G4VERBOSE
   if (debugFlag) CheckIt(*aTrack);
+#endif
 
   //  Update the G4Step specific attributes 
   return UpdateStepInfo(pStep);

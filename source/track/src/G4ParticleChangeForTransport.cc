@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChangeForTransport.cc,v 1.2 1999-02-06 10:44:58 kurasige Exp $
+// $Id: G4ParticleChangeForTransport.cc,v 1.3 1999-04-13 09:44:33 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -201,8 +201,4 @@ void G4ParticleChangeForTransport::DumpInfo() const
        << setw(20) << theTouchableChange
        << endl; 
 }
-
-
-
-
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EvtBiasMechanism.cc,v 1.1 1999-01-07 16:14:25 gunter Exp $
+// $Id: G4EvtBiasMechanism.cc,v 1.2 1999-04-13 09:44:26 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +29,7 @@
 G4EvtBiasMechanism::G4EvtBiasMechanism(const G4String& name, G4int mulFactor):
    G4VEvtBiasMechanism(name),
    MultiplicationForSecondaries(mulFactor),
-   particleToBeBiased(NULL)
+   particleToBeBiased(0)
 {
 }  
 
@@ -47,7 +47,7 @@ G4EvtBiasMechanism::~G4EvtBiasMechanism()
 G4VParticleChange* G4EvtBiasMechanism::ApplyMath( G4VParticleChange* pChange, 
 						  const G4Step& aStep )
 {  
-  if (particleToBeBiased != NULL) {
+  if (particleToBeBiased != 0) {
     G4int currentNumberOfSecondaries = pChange->GetNumberOfSecondaries();
     G4int totalNumberOfSecondaries = currentNumberOfSecondaries;
     G4int idx;

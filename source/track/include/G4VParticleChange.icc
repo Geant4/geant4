@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VParticleChange.icc,v 1.1 1999-01-07 16:14:25 gunter Exp $
+// $Id: G4VParticleChange.icc,v 1.2 1999-04-13 09:43:31 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //----------------------------------------------------------------
@@ -264,7 +264,7 @@ inline
 inline 
  void G4VParticleChange::SwOnEB()
 {
-  if (theEBMechanism!=NULL) fUseEB = true;
+  if (theEBMechanism!=0) fUseEB = true;
 }
 
 inline 
@@ -280,7 +280,25 @@ inline
 }
 
 inline 
- G4VEvtBiasMechanism* G4VParticleChange::GetEBMechanism() const
+ G4VEvtBiasMechanism* G4VParticleChange::GetEBMechanism() 
 {
   return theEBMechanism;
+}
+
+inline 
+ void G4VParticleChange::ClearDebugFlag()
+{
+  debugFlag = false;
+}
+
+inline 
+ void G4VParticleChange::SetDebugFlag()
+{
+  debugFlag = true;
+}
+
+inline 
+ G4bool G4VParticleChange::GetDebugFlag() const
+{
+  return debugFlag;
 }

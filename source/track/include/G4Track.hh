@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Track.hh,v 1.1 1999-01-07 16:14:23 gunter Exp $
+// $Id: G4Track.hh,v 1.2 1999-04-13 09:43:28 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -138,7 +138,7 @@ class G4Track
 
    G4ThreeVector GetMomentum() const;
 
-   const G4DynamicParticle* GetDynamicParticle() const;
+   G4DynamicParticle* GetDynamicParticle() const;
 
    G4ParticleDefinition* GetDefinition() const;
 
@@ -319,9 +319,9 @@ class G4Track
      {
        G4Material*
         mat=fpTouchable->GetVolume()->GetLogicalVolume()->GetMaterial();
-       if(mat->GetMaterialPropertiesTable() != NULL)
+       if(mat->GetMaterialPropertiesTable() != 0)
        {
-        if(mat->GetMaterialPropertiesTable()->GetProperty("RINDEX") != NULL ) 
+        if(mat->GetMaterialPropertiesTable()->GetProperty("RINDEX") != 0 ) 
           velocity /= 
           mat->GetMaterialPropertiesTable()->GetProperty("RINDEX")->
           GetMinProperty() ; 
@@ -367,7 +367,7 @@ class G4Track
    inline G4ThreeVector G4Track::GetMomentum() const
    { return fpDynamicParticle->GetMomentum(); }
 
-   inline const G4DynamicParticle* G4Track::GetDynamicParticle() const
+   inline G4DynamicParticle* G4Track::GetDynamicParticle() const
    { return fpDynamicParticle; }
 
    inline G4ParticleDefinition* G4Track::GetDefinition() const
@@ -400,9 +400,9 @@ class G4Track
 
    inline const G4VProcess* G4Track::GetCreatorProcess() const
    { return fpCreatorProcess; }
-     // If the pointer is NULL, this means the track is created
+     // If the pointer is 0, this means the track is created
      // by the event generator, i.e. the primary track.If it is not
-     // NULL, it points to the process which created this track.
+     // 0, it points to the process which created this track.
    inline void G4Track::SetCreatorProcess(G4VProcess* aValue)
    { fpCreatorProcess = aValue; }
 
@@ -438,6 +438,12 @@ class G4Track
    { fpStep = aValue; }
 
 #endif
+
+
+
+
+
+
 
 
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessTableMessenger.cc,v 1.1 1999-01-07 16:13:58 gunter Exp $
+// $Id: G4ProcessTableMessenger.cc,v 1.2 1999-04-13 09:48:04 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,12 +51,11 @@ G4int G4ProcessTableMessenger::NumberOfProcessType = 10;
 
 //////////////////////////
 G4ProcessTableMessenger::G4ProcessTableMessenger(G4ProcessTable* pTable)
-                        :theProcessTable(pTable)
-{
-  currentProcessTypeName  = "all";
-  currentProcessName      = "all";
-  currentParticleName     = "all";
- 
+                        :theProcessTable(pTable), 
+			 currentProcessTypeName("all"),
+			 currentProcessName("all"),
+			 currentParticleName("all")
+{ 
   //Commnad   /particle/process
   thisDirectory = new G4UIdirectory("/process/");
   thisDirectory->SetGuidance("Process Table control commands.");
@@ -71,12 +70,12 @@ G4ProcessTableMessenger::G4ProcessTableMessenger(G4ProcessTable* pTable)
   listCmd->SetDefaultValue("all");
   SetNumberOfProcessType();
  
-  G4String candidates = "all";
+  G4String candidates("all");
   for (G4int idx = 0; idx < NumberOfProcessType ; idx ++ ) {
     candidates += " " + 
       G4VProcess::GetProcessTypeName(G4ProcessType(idx));
   }
-  listCmd->SetCandidates(candidates);
+  listCmd->SetCandidates((const char*)(candidates));
 
   //Commnad   /particle/process/Verbose
   verboseCmd = new G4UIcmdWithAnInteger("/process/verbose",this);
@@ -186,7 +185,7 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
     RWCTokenizer next( newValue );
 
     // check 1st argument
-    currentProcessName = next();
+    currentProcessName = G4String(next());
     G4bool isNameFound = false;
     G4bool isProcName = false; 
     if ( procNameVector->contains(currentProcessName) ){
@@ -205,9 +204,9 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
     }
   
     // check 2nd argument
-    currentParticleName = next();
+    currentParticleName = G4String(next());
     G4bool isParticleFound = false;
-    G4ParticleDefinition* currentParticle = NULL;
+    G4ParticleDefinition* currentParticle = 0;
     if ( currentParticleName == "all" ) {
       isParticleFound = true;
 
@@ -243,7 +242,7 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
       // process/activate , inactivate
       G4bool fActive = (command==activateCmd);
       if (isProcName) {
-	if ( currentParticle == NULL ) {
+	if ( currentParticle == 0 ) {
 	  theProcessTable->SetProcessActivation(currentProcessName, 
 						fActive);
 	} else {
@@ -252,7 +251,7 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
 						fActive);
 	}
       } else {
-	if ( currentParticle == NULL ) {
+	if ( currentParticle == 0 ) {
 	  theProcessTable->SetProcessActivation(G4ProcessType(type),
 						fActive);
 	} else {
@@ -294,7 +293,7 @@ G4String G4ProcessTableMessenger::GetCurrentValue(G4UIcommand * command)
       candidates += " " + 
 	       G4VProcess::GetProcessTypeName(G4ProcessType(idx));
     }
-    listCmd->SetCandidates(candidates);
+    listCmd->SetCandidates((const char*)(candidates));
     returnValue =  currentProcessTypeName;
 
   } else {
@@ -305,7 +304,7 @@ G4String G4ProcessTableMessenger::GetCurrentValue(G4UIcommand * command)
     for (idx = 0; idx < procNameVector->length() ; idx ++ ) {
       candidates += " " + (*procNameVector)(idx);
     }
-    param->SetParameterCandidates(candidates);
+    param->SetParameterCandidates((const char*)(candidates));
     // particle name
     param = command->GetParameter(1);
     candidates = "all";
@@ -316,7 +315,7 @@ G4String G4ProcessTableMessenger::GetCurrentValue(G4UIcommand * command)
       G4ParticleDefinition *particle = piter->value();
       candidates += " " + particle->GetParticleName();
     }
-    param->SetParameterCandidates(candidates);
+    param->SetParameterCandidates((const char*)(candidates));
 
     returnValue =  currentProcessName + " " + currentParticleName;
 

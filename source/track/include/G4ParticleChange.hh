@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChange.hh,v 1.2 1999-02-06 10:44:33 kurasige Exp $
+// $Id: G4ParticleChange.hh,v 1.3 1999-04-13 09:43:22 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -217,8 +217,7 @@ class G4ParticleChange: public G4VParticleChange
 
   public:
     // for Debug 
-    G4bool debugFlag;
-    G4bool CheckIt(const G4Track&);
+    virtual G4bool CheckIt(const G4Track&);
 };
 
 #include "G4ParticleChange.icc"

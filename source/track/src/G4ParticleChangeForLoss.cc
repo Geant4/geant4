@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChangeForLoss.cc,v 1.1 1999-01-07 16:14:26 gunter Exp $
+// $Id: G4ParticleChangeForLoss.cc,v 1.2 1999-04-13 09:44:30 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,6 +62,14 @@ G4ParticleChangeForLoss & G4ParticleChangeForLoss::operator=(const G4ParticleCha
    }
    if (this != &right)
    {
+      theListOfSecondaries = right.theListOfSecondaries;
+      theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
+      theNumberOfSecondaries = right.theNumberOfSecondaries;
+      theStatusChange = right.theStatusChange;
+      theTrueStepLength = right.theTrueStepLength;
+      theLocalEnergyDeposit = right.theLocalEnergyDeposit;
+      theSteppingControlFlag = right.theSteppingControlFlag;
+     
       theEnergyChange = right.theEnergyChange;
       theLocalEnergyDeposit = right.theLocalEnergyDeposit ;
    }
@@ -113,7 +121,9 @@ G4Step* G4ParticleChangeForLoss::UpdateStepForAlongStep(G4Step* pStep)
     pPostStepPoint->SetKineticEnergy(0.0);
   }
 
+#ifdef G4VERBOSE
   if (debugFlag) CheckIt(*aTrack);
+#endif
 
   //  Update the G4Step specific attributes 
   return UpdateStepInfo(pStep);

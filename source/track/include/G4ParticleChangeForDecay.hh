@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChangeForDecay.hh,v 1.2 1999-02-06 10:44:35 kurasige Exp $
+// $Id: G4ParticleChangeForDecay.hh,v 1.3 1999-04-13 09:43:23 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,7 +59,7 @@ class G4ParticleChangeForDecay: public G4VParticleChange
     // by using final state information of the track given by a physics
     // process    
  
-    // !!! No effect for  AlongStep
+    // !!! No effect for  AlongSteyp
     // virtual G4Step* UpdateStepForAlongStep(G4Step* Step);
 
     virtual G4Step* UpdateStepForAtRest(G4Step* Step);
@@ -78,7 +78,10 @@ class G4ParticleChangeForDecay: public G4VParticleChange
   protected:
     G4double theTimeChange;
     //  The change of global time of a given particle.
-
+ 
+ public:
+    // for Debug 
+    virtual G4bool CheckIt(const G4Track&);
 };
 
 inline 

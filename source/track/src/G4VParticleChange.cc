@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VParticleChange.cc,v 1.1 1999-01-07 16:14:27 gunter Exp $
+// $Id: G4VParticleChange.cc,v 1.2 1999-04-13 09:44:34 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,10 +32,15 @@ G4VParticleChange::G4VParticleChange():
    theSteppingControlFlag(NormalCondition),     
    theLocalEnergyDeposit(0.0),
    theParentWeight(1.0),
-   theEBMechanism(NULL),
+   theEBMechanism(0),
    fUseEB(false),
    verboseLevel(1)
 {
+   debugFlag = false;
+#ifdef G4VERBOSE
+  // activate CHeckIt if in VERBOSE mode
+  debugFlag = true;
+#endif
    theListOfSecondaries = new G4TrackFastVector();
 }
 
@@ -46,10 +51,16 @@ G4VParticleChange::G4VParticleChange(G4bool useEB):
    theSteppingControlFlag(NormalCondition),     
    theLocalEnergyDeposit(0.0),
    theParentWeight(1.0),
-   fUseEB(useEB),
    verboseLevel(1)
 {
-   theListOfSecondaries = new G4TrackFastVector();
+   fUseEB = useEB;
+   // debug flag (activate CheckIt() )
+   debugFlag = false;
+#ifdef G4VERBOSE
+  // activate CHeckIt if in VERBOSE mode
+  debugFlag = true;
+#endif
+  theListOfSecondaries = new G4TrackFastVector();
    // register  G4EvtBiasMechanism as a default
    theEBMechanism = new G4Mars5GeVMechanism();
 }
@@ -67,19 +78,44 @@ G4VParticleChange::~G4VParticleChange() {
       if ( (*theListOfSecondaries)[index] ) delete (*theListOfSecondaries)[index] ;
     }
   }
-  if (theEBMechanism !=NULL) delete theEBMechanism;
+  if (theEBMechanism !=0) delete theEBMechanism;
   delete theListOfSecondaries; 
 }
 
 // copy and assignment operators are implemented as "shallow copy"
-G4VParticleChange::G4VParticleChange(const G4VParticleChange &right)
+G4VParticleChange::G4VParticleChange(const G4VParticleChange &right):
+   theNumberOfSecondaries(0),
+   theSizeOftheListOfSecondaries(G4TrackFastVectorSize),
+   theStatusChange(fAlive),
+   theSteppingControlFlag(NormalCondition),     
+   theLocalEnergyDeposit(0.0),
+   theParentWeight(1.0),
+   fUseEB(false),
+   verboseLevel(1)
 {
-   *this = right;
+   debugFlag = false;
+#ifdef G4VERBOSE
+  // activate CHeckIt if in VERBOSE mode
+  debugFlag = true;
+#endif
+
+  theListOfSecondaries = right.theListOfSecondaries;
+  theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
+  theNumberOfSecondaries = right.theNumberOfSecondaries;
+  theStatusChange = right.theStatusChange;
+  theTrueStepLength = right.theTrueStepLength;
+  theLocalEnergyDeposit = right.theLocalEnergyDeposit;
+  theSteppingControlFlag = right.theSteppingControlFlag;
 }
 
 
 G4VParticleChange & G4VParticleChange::operator=(const G4VParticleChange &right)
 {
+   debugFlag = false;
+#ifdef G4VERBOSE
+  // activate CHeckIt if in VERBOSE mode
+  debugFlag = true;
+#endif
    if (this != &right)
    {
       theListOfSecondaries = right.theListOfSecondaries;
@@ -166,6 +202,16 @@ void G4VParticleChange::DumpInfo() const
   }
   G4cout << endl;      
 }
+
+G4bool G4VParticleChange::CheckIt(const G4Track& aTrack)
+{
+  // this is dummy routine for base class 
+  G4bool    itsOK = true;
+  return itsOK;
+}
+
+
+
 
 
 

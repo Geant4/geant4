@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StepPoint.hh,v 1.1 1999-01-07 16:14:23 gunter Exp $
+// $Id: G4StepPoint.hh,v 1.2 1999-04-13 09:43:27 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -160,7 +160,7 @@ class G4StepPoint
 
    inline const G4VProcess* GetProcessDefinedStep() const
    { return fpProcessDefinedStep; }
-     // If the pointer is NULL, this means the Step is defined
+     // If the pointer is 0, this means the Step is defined
      // by the user defined limit in the current volume.
    inline void SetProcessDefinedStep(G4VProcess* aValue)
    { fpProcessDefinedStep = aValue; }
