@@ -51,6 +51,7 @@
 // 10 May   2001 V.Ivanchenko Clean up againist Linux compilation with -Wall
 // 23 May   2001 V.Ivanchenko Minor fix in PostStepDoIt
 // 07 June  2001 V.Ivanchenko Clean up AntiProtonDEDX + add print out
+// 18 June  2001 V.Ivanchenko Cleanup print out
 // -----------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -330,6 +331,11 @@ void G4hLowEnergyIonisation::BuildLossTable(
       }      
 	  
       // now put the loss into the vector
+      if(verboseLevel > 1) {
+        G4cout << "E(MeV)= " << lowEdgeEnergy/MeV
+               << "  dE/dx(MeV/mm)= " << ionloss*mm/MeV
+               << " in " << material->GetName() << G4endl;
+      }
       aVector->PutValue(i,ionloss) ;
     }
     // Insert vector for this material into the table
@@ -638,9 +644,17 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
     G4double eFinal = kineticEnergy - step*fdEdx - nloss ;
     
     if(0.0 < eFinal) {
-      eloss = (fdEdx + 
-               ProtonParametrisedDEDX(material,eFinal*massRatio)*chargeSquare)
-            *  step * 0.5 ;
+
+      G4double ts = eFinal*massRatio;
+      G4double fdEdx1 = ProtonParametrisedDEDX(material,ts)*chargeSquare;
+
+      // Correction for positive ions
+      //if(theBarkas && 1.0 < charge) {
+      //  fdEdx1 += BarkasTerm(material,ts)*(charge -1.0) * chargeSquare ;
+      //  fdEdx1 += BlochTerm(material,ts,chargeSquare) ; 
+      //  fdEdx1 -= BlochTerm(material,ts,1.0) ; 
+      // }
+      eloss = (fdEdx + fdEdx1) * step * 0.5 ;
     } else {
       eloss = kineticEnergy - nloss ;
     }
@@ -741,7 +755,7 @@ G4double G4hLowEnergyIonisation::ProtonParametrisedDEDX(
   // Delta rays energy
   eloss -= DeltaRaysEnergy(material,kineticEnergy,proton_mass_c2) ;
 
-  if(verboseLevel > 1) {
+  if(verboseLevel > 2) {
     G4cout << "p E(MeV)= " << kineticEnergy/MeV
            << " dE/dx(MeV/mm)= " << eloss*mm/MeV 
            << " for " << material->GetName() 
@@ -791,7 +805,7 @@ G4double G4hLowEnergyIonisation::AntiProtonParametrisedDEDX(
   // Delta rays energy
   eloss -= DeltaRaysEnergy(material,kineticEnergy,proton_mass_c2) ;
 
-  if(verboseLevel > 0) {
+  if(verboseLevel > 2) {
     G4cout << "pbar E(MeV)= " << kineticEnergy/MeV
            << " dE/dx(MeV/mm)= " << eloss*mm/MeV 
            << " for " << material->GetName() 
@@ -887,8 +901,8 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
       // pathological case (it should not happen ,
       // there is no change at all).....
       
-      return &aParticleChange;
-      //return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
+      //return &aParticleChange;
+      return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
     }
   else
     {

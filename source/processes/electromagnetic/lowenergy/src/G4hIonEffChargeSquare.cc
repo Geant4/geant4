@@ -20,6 +20,7 @@
 //
 // Modifications: 
 // 20/07/2000  V.Ivanchenko First implementation
+// 18/06/2001  V.Ivanchenko Continuation for eff.charge (small change of y)
 //
 // Class Description: 
 //
@@ -240,7 +241,7 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
 
       // Slower than Fermi velocity
     } else {
-      y = 0.75 * vF * (1.0 + 2.0*v1*v1/3.0 + v1*v1*v1*v1/15.0) / (z13*z13) ;
+      y = 0.6923 * vF * (1.0 + 2.0*v1*v1/3.0 + v1*v1*v1*v1/15.0) / (z13*z13) ;
     }
 
     G4double y3 = pow(y, 0.3) ;
