@@ -5,6 +5,7 @@
 #                                                                     #
 #  DATE: November 10, 1999                                            #
 #        May      20, 2000                                            # 
+#        June     06, 2000                                            # 
 #                                                                     #
 #  CONTENTS: A simplest macro to demonstrate visualization of         #
 #            detector geometry and events                             #
@@ -30,38 +31,44 @@
 #    % setenv G4VIS_USE_DAWNFILE           1                          #
 #                                                                     #
 #  Addional Notes:                                                    #
+#    The compound command "/vis/open <graphics-system-name>"          #
+#    is equivalent to the following set of commands:                  #
+#                                                                     #
+#      /vis/sceneHandler/create $1                                    #
+#      /vis/viewer/create                                             #
+#                                                                     #
+#    The compound command "/vis/drawVolume <physical-volume-name>"    #
+#    is equivalent to the following set of commands:                  #
+#                                                                     #
+#      /vis/scene/create                                              #
+#      /vis/scene/add/volume $1                                       #
+#      /vis/sceneHandler/attach                                       #
+#      /vis/viewer/refresh                                            #
+#      /vis/viewer/update                                             #
 #                                                                     #
 #######################################################################
 
-#####################################
+##############################################
 # Visualization of detector geometry 
-#  with the OGLSX driver
-#####################################
-
-# Create "scene-0" 
-/vis/scene/create
+#  with the OGLIX (OpenGL Immediate X) driver
+##############################################
 
 # Invoke the OGLIX driver
-/vis/sceneHandler/create OGLIX
-/vis/viewer/create
+/vis/open OGLIX
 
-# Add volume to scene-0
-/vis/scene/add/volume
-
-# Set camera parameters
+# Set camera 
+#  Note: Camera setting should be done
+#        for each scene handler.
 /vis/camera/reset 
 /vis/camera/viewpoint 70 20
 
-# Visualize detector geometry
-#  * Command /vis/viewer/update is omittable in the OpenGL drivers,
-#    but it is harmless to execute it.
-/vis/scene/notifyHandlers
-/vis/viewer/update
+# Visualize of the whole detector geometry
+/vis/drawVolume
 
 #########################################################
 # Visualization of events with the DAWNFILE driver
 #
-#  * The visualized view is saved to a file "g4_XX.eps"  
+#  * Each visualized view is saved to a file "g4_XX.eps"  
 #    with the "vectorized" PostScript format.
 #
 #  * In order to make the file "g4_XX.eps" printable, 
@@ -69,35 +76,38 @@
 #    You can do it with the 4th page of the DAWN GUI panel 
 #    or by editing the file by hand.
 #
-#  * Set as follows to skip DAWN GUI.
+#  * Set as follows to skip DAWN GUI:
 #    % setenv G4DAWNFILE_VIEWER "dawn -d"
 ##########################################################
 
-# Create "scene-1" 
-/vis/scene/create
+# Store particle trajactories for visualization
+/tracking/storeTrajectory 1
 
 # Invoke the DAWNFILE driver
-/vis/sceneHandler/create DAWNFILE
-/vis/viewer/create
+/vis/open DAWNFILE
 
-# Add volume to scene-1
+# Create a new scene 
+/vis/scene/create
+
+# Add the world volume to the current scene
 /vis/scene/add/volume
 
-# Add trajectories to scene-1
-/vis/scene/add/trajectories
+# Attach the current scene handler 
+# to the current scene
+/vis/sceneHandler/attach 
 
-# Set camera parameters
+# Set camera 
+#  Note: Camera setting should be done 
+#        for each scene handler.
 /vis/camera/reset 
 /vis/camera/zoom      1.2
 /vis/camera/viewpoint 20 70
 
-# Visualize one event
+# Visualize one event added to the current scene
 # * Command "/vis/scene/notifyHandlers" is written in 
 #   ExN03RunAction::BeginOfRunAction()
 # * Command "/vis/viewer/update" is written in 
 #   ExN03RunAction::EndOfRunAction()
-/tracking/storeTrajectory 1
+/vis/scene/add/trajectories
 /run/beamOn 10
-
-
 

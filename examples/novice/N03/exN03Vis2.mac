@@ -5,6 +5,7 @@
 #                                                                     #
 #  DATE: November 10, 1999                                            #
 #        May      20, 2000                                            #
+#        June     06, 2000                                            # 
 #                                                                     #
 #  CONTENTS: A basic macro for visualization of events                #
 #                                                                     #
@@ -29,12 +30,17 @@
 #    % setenv G4VIS_USE_DAWNFILE           1                          #
 #                                                                     # 
 #  Addional Notes:                                                    #
+#    The compound command "/vis/open <graphics-system-name>"          #
+#    is equivalent to the following set of commands:                  #
+#                                                                     #
+#      /vis/sceneHandler/create $1                                    #
+#      /vis/viewer/create                                             #
 #                                                                     #
 #######################################################################
 
-#########################################################
-Setting to store particle trajactories for visualization
-#########################################################
+#################################################
+# Store particle trajactories for visualization
+#################################################
 /tracking/storeTrajectory 1
 
 
@@ -42,12 +48,15 @@ Setting to store particle trajactories for visualization
 # Visualization with OGLSX (OpenGL Stored X) driver
 #####################################################
 
-# Create "scene-0" 
+# Invoke the OGLSX driver 
+/vis/open OGLSX
+
+# Create a new scene 
 /vis/scene/create
 
-# Invoke the OGLSX driver 
-/vis/sceneHandler/create OGLSX
-/vis/viewer/create
+# Attach the current visualization driver 
+# to the current scene
+/vis/sceneHandler/attach
 
 # Add detector geometry to the current scene
 /vis/scene/add/volume
@@ -55,16 +64,15 @@ Setting to store particle trajactories for visualization
 # Add trajectories to the current scene
 /vis/scene/add/trajectories
 
-# Set drawing style.
-#   The drawing style is "hidden-surface removal",
-#   with which the low-density culling set above works.
-#   Commonly-used drawing styles are as follows:
+# Set drawing style
+#   The drawing style is "hidden-surface removal".
+#   The commonly-used drawing styles are:
 #        0: wireframe  
 #        1: hidden-line removal 
 #        2: hidden-surface removal 
 /vis/set/drawing_style  2
 
-# Set camera parameters. 
+# Set camera 
 #  viewpoint  : (theta,phi) = (10*deg, 10*deg).
 #  zoom factor: 0.9 x (full screen size)
 /vis/camera/reset
@@ -79,11 +87,10 @@ Setting to store particle trajactories for visualization
 /run/beamOn 1
 
 # Slide show (spinning). 
-#  Draw 18 frames with steps of 10 degrees.
-#  The stored mode of the OpenGL driver keeps the 
-#  previously visualized event in the display list. 
-#  So the particle trajectories are also rotated 
-#  together with the detector geometry.
+#  Draw 18 frames with steps of 20 degrees.
+#  The OGLSX driver stores the previously visualized view
+#  in the display list.  So the particle trajectories are 
+#  also rotated together with the detector geometry.
 #  
 /vis/camera/spin      18 20
 
@@ -91,24 +98,27 @@ Setting to store particle trajactories for visualization
 ##########################################################
 # Visualization with DAWNFILE driver
 #
-#  * The visualized view is saved to a file "g4_XX.eps"  
+#  * Each visualized view is saved to a file "g4_XX.eps"  
 #    with the "vectorized" PostScript format.
 #
 #  * In order to make the file "g4_XX.eps" printable, 
 #    append the "showpage" PostScript command to the file 
-#    You can do it with the 4th page of the DAWN GUI panel.
-#    or by hand.
+#    You can do it with the 4th page of the DAWN GUI panel
+#    or by editing the file by hand.
 #
-#  * Set as follows to skip DAWN GUI.
+#  * Set as follows to skip DAWN GUI:
 #    % setenv G4DAWNFILE_VIEWER "dawn -d"
 ##########################################################
 
-# Create "scene-1" 
+# Invoke the DAWNFILE driver 
+/vis/open DAWNFILE
+
+# Create a new scene
 /vis/scene/create
 
-# Invoke the DAWNFILE driver 
-/vis/sceneHandler/create DAWNFILE
-/vis/viewer/create
+# Attach the current visualization driver 
+# to the current scene
+/vis/sceneHandler/attach
 
 # Add detector geometry to the current scene
 /vis/scene/add/volume
@@ -137,6 +147,4 @@ Setting to store particle trajactories for visualization
 /vis/camera/viewpoint   90 0
 /vis/camera/zoom        5
 /run/beamOn             50
-
-
 
