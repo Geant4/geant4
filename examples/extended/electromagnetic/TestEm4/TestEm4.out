@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (27-August-2003)
+                                (3-October-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -22,7 +22,7 @@ Current available graphics systems are:
    --->  Element: Fluorine  N   Z =  9.0   N =  19.0   A =  18.99 g/mole  fractionMass:  61.26 %  Abundance  50.00 %
 
 phot:  Total cross sections from Sandia parametrisation. 
-Em4PhysicsList::SetCuts:CutLength : 1 (mm)
+PhysicsList::SetCuts:CutLength : 1 (mm)
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
@@ -79,6 +79,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
  Initial seed (index) = 0
  Current couple of seeds = 9876, 54321
 ----------------------------------------
+Start Run processing.
 
 ---> Begin of Event: 0
 
@@ -89,10 +90,15 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 ---> Begin of Event: 30000
 
 ---> Begin of Event: 40000
+Run terminated.
+Run Summary
+  Number of events processed : 50000
+  User=9.42s Real=9.64s Sys=0.2s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 597757297, 299215401
+ Current couple of seeds = 1395899808, 1145248803
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
+G4 kernel has come to Quit state.

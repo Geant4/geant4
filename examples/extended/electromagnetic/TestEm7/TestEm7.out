@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (27-August-2003)
+                                (3-October-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
@@ -102,6 +102,25 @@ conv:  Total cross sections from a parametrisation. Good description from 1.5 Me
 msc:  Model variant of multiple scattering 
       Lambda tables from 100 eV  to 100 TeV in 100 bins.
       Boundary algorithm is active with facrange= 0.199
+He3: f78db0 f7d110
+alpha: f77f40 f7d110
+anti_omega-: f7a0f0 f7d110
+anti_proton: f7a5c0 f7d110
+anti_sigma+: f7af60 f7d110
+anti_sigma-: f7aa90 f7d110
+anti_xi-: f7b900 f7d110
+deuteron: f78410 f7d110
+ionC12: e851f8 f7d110
+kaon+: f6a630 f7d110
+kaon-: f6a160 f7d110
+omega-: f7cc40 f7d110
+pi+: f6be40 f7d110
+pi-: f6b970 f7d110
+proton: f7d110 0
+sigma+: f7dab0 f7d110
+sigma-: f7d5e0 f7d110
+triton: f79280 f7d110
+xi-: f7e450 f7d110
 
 eIoni:  
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -238,20 +257,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=218.05s Real=388.75s Sys=71.28s
+  User=215.02s Real=702.51s Sys=75.55s
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
-tally 0: 	 	10.5839 GeV	0.661495 % 	0.000211967 Gy
-tally 1: 	 	7.35039 GeV	0.4594 % 	0.000147208 Gy
-tally 2: 	 	2.90011 GeV	0.181257 % 	5.80811e-05 Gy
-tally 3: 	 	1.32232 GeV	0.0826453 % 	2.64825e-05 Gy
+tally 0: 	 	10.4353 GeV	0.652207 % 	0.00020899 Gy
+tally 1: 	 	7.44737 GeV	0.465461 % 	0.00014915 Gy
+tally 2: 	 	3.06271 GeV	0.191419 % 	6.13375e-05 Gy
+tally 3: 	 	1.45902 GeV	0.091189 % 	2.92202e-05 Gy
 
 ---------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1291616465, 2050820174
+ Current couple of seeds = 2033851110, 1438465481
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
