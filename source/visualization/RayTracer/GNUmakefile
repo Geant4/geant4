@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2003-09-25 05:28:46 kurasige Exp $
+# $Id: GNUmakefile,v 1.5 2003-10-03 15:04:58 gcosmo Exp $
 
 name := G4RayTracer
 
@@ -12,7 +12,6 @@ include $(G4INSTALL)/config/interactivity.gmk
 
 CPPFLAGS += -I$(G4BASE)/graphics_reps/include \
             -I$(G4BASE)/event/include \
-            -I$(G4BASE)/digits+hits/detector/include \
             -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPGeometry/include \
@@ -31,11 +30,12 @@ CPPFLAGS += -I$(G4BASE)/graphics_reps/include \
             -I$(G4BASE)/materials/include \
             -I$(G4BASE)/geometry/management/include \
             -I$(G4BASE)/geometry/volumes/include \
+            -I$(G4BASE)/geometry/navigation/include \
             -I$(G4BASE)/geometry/solids/CSG/include \
             -I$(G4BASE)/geometry/solids/specific/include \
-            -I$(G4BASE)/digits+hits/detector/include \
-            -I$(G4BASE)/digits+hits/hits/include \
-            -I$(G4BASE)/digits+hits/digits/include \
+            -I$(G4BASE)/digits_hits/detector/include \
+            -I$(G4BASE)/digits_hits/hits/include \
+            -I$(G4BASE)/digits_hits/digits/include \
             -I$(G4BASE)/intercoms/include \
             -I$(G4BASE)/visualization/management/include \
             -I$(G4BASE)/visualization/modeling/include
