@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.74 2001-10-11 14:34:33 gcosmo Exp $
+# $Id: architecture.gmk,v 1.75 2001-12-10 13:40:44 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -19,14 +19,10 @@
 #
 #          SUN-CC      SunOS 5.7, CC 5.2
 #
-#          HP-aCC      HP-UX 10.20, aCC A.01.23
-#
 #          DEC-cxx     DEC-OSF/1 4.0, DEC C++ 6.1
 #
-#          WIN32-VC    Windows/NT and Microsoft Visual C++ 6.0 - SP4
-#                      Adding CYGWIN32 tools (make, g++ as "makedepend", sh...)
-#                      Note: you will need to set your environment, see the
-#                            installation guide.
+#          WIN32-VC    Windows/2000 and Microsoft Visual C++ 6.0 - SP5
+#                      Adding CYGWIN32 tools
 # -------------------------------------------------------------------------
 
 # Definition of HEP_ODBMS_LIBS, OBJY_LIBS and OSPACE_LIBS by HepODBMS.
@@ -200,43 +196,6 @@ endif
 # Native STL is the default
 #
 CPPFLAGS += -DG4USE_STL
-
-# Path to ObjectSpace STL (or STLport <- only test for Win/NT)
-#
-ifdef G4USE_OSPACE
-
-  # ObjectSpace STL implementation
-  #
-  ifndef OSPACE_BASE_DIR
-    OSPACE_BASE_DIR := /afs/cern.ch/sw/geant4/dev/ObjectSpace/$(G4SYSTEM)/pro/ToolKit
-  endif
-  OSPACEINC       := -I$(OSPACE_BASE_DIR)/ospace/std -I$(OSPACE_BASE_DIR)/ospace/stl
-  OSPACELIBS      := -L$(OSPACE_BASE_DIR)/lib -lospace
-
-  ifeq ($(G4SYSTEM),WIN32-VC)
-    OSPACE_BASE_DIR := $(OBJECT_SPACE_BASE)
-    OSPACEINC  := -I$(OSPACE_BASE_DIR)/ospace/std -I$(OSPACE_BASE_DIR)/ospace/stl -I$(OSPACE_BASE_DIR)
-    OSPACELIBS := '-libpath':$(OSPACE_BASE_DIR)/lib std-2.1-vc5.0-mt.lib
-    CPPFLAGS   += -DG4USE_OLDSTL 
-    CPPFLAGS   += -DOS_WIN_NT_4_0 -DOS_MULTI_THREADED -D_WIN32_WINNT $(OSPACEINC)
-  endif
-
-else 
-ifdef G4USE_STLPORT
-
-  # STLport STL implementation
-  # (derived from SGI implementation) - TEST on WIN32
-  #
-  ifeq ($(G4SYSTEM),WIN32-VC)
-    STLPORT_BASE_DIR := $(STLPORT_BASE)
-    OSPACEINC  := -I$(STLPORT_BASE_DIR)/stl
-    CPPFLAGS   += -DG4USE_OLDSTL
-    CPPFLAGS   += -D_NOTHREADS -D__STL_NO_NEW_IOSTREAMS -D__STL_NO_NAMESPACES
-    CPPFLAGS   += -D__STL_NO_NEW_STYLE_HEADERS
-  endif
-
-endif   #STLport
-endif   #OPSPACE
 
 # Paths for G4 data
 #
