@@ -35,7 +35,7 @@
 #include "G4VEvaporation.hh"
 
 
-class G4BertiniEvaporation : G4VEvaporation
+class G4BertiniEvaporation : public G4VEvaporation
 {
 
 public:
