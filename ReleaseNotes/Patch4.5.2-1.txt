@@ -26,11 +26,13 @@ List of fixes included in this public patch to release 5.2:
       o Fixed usage of arguments to pow() function (porting on
         .NET 7.1 compiler).
     + models/generator/quark_gluon_string
-      o Bug fix for implementing phoenix for gamma.
     + models/generator/string_fragmentation
-      o Bug fix for implementing phoenix for gamma.
+      - Implemented the handling of diffractive photon scattering in
+        the parton string models. Mandatory for high energy gamma and
+        electro-nuclear reactions.
     + models/neutron_hp:
-      o Bug fixes in G4NeutronHPInterpolator and G4NeutronHPFissionFS.
+      o Corrected an error affecting the neutron energy distribution 
+        in Fission. Mandatory for fission in Uranium 235.
     + stopping:
       o Fixed few cases of memory leaks occuring at every new run.
 
