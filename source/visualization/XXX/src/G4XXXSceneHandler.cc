@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.cc,v 1.8 2002-10-28 11:14:56 johna Exp $
+// $Id: G4XXXSceneHandler.cc,v 1.9 2002-11-01 14:08:44 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -218,6 +218,16 @@ void G4XXXSceneHandler::AddThis(const G4VTrajectory& traj) {
 	     << G4endl;
     }
     else {
+
+      G4std::map<G4String,G4AttDef>::const_iterator i;
+      for (i = attDefs->begin(); i != attDefs->end(); ++i) {
+	G4cout << "attdef: " << i->second.GetName()
+	       << ", description: " << i->second.GetDesc()
+	       << ", category: " << i->second.GetCategory()
+	       << ", type: " << i->second.GetValueType()
+	       << G4endl;
+      }
+
       G4std::vector<G4AttValue>::iterator iAttVal;
       for (iAttVal = attValues->begin();
 	   iAttVal != attValues->end(); ++iAttVal) {
@@ -247,7 +257,6 @@ void G4XXXSceneHandler::AddThis(const G4VHit& hit) {
 #endif
   G4VSceneHandler::AddThis(hit);  // Invoke default action.
 }
-
 
 void G4XXXSceneHandler::AddPrimitive(const G4Polyline& polyline) {
 #ifdef G4XXXDEBUG
