@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.cc,v 1.1 2003-10-01 15:13:53 gcosmo Exp $
+// $Id: G4TransportationManager.cc,v 1.2 2003-10-24 12:51:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -60,7 +60,9 @@ G4TransportationManager::G4TransportationManager()
   {
     G4cerr << "Only ONE instance of G4TransportationManager is allowed!"
            << G4endl;
-    G4Exception("ERROR - G4TransportationManager::G4TransportationManager()");
+    G4Exception("G4TransportationManager::G4TransportationManager()",
+                "InvalidSetup", FatalException,
+                "Only ONE instance of G4TransportationManager is allowed!");
   }
 } 
 

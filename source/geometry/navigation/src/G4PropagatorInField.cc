@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.1 2003-10-01 15:11:59 gcosmo Exp $
+// $Id: G4PropagatorInField.cc,v 1.2 2003-10-24 12:51:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -568,10 +568,11 @@ G4PropagatorInField::LocateIntersectionPoint(
                 << "Error in advancing propagation." << G4endl;
          printStatus( CurrentA_PointVelocity,  CurrentB_PointVelocity,
                       -1.0, NewSafety,  substep_no, 0);
-         G4cout << G4endl
+         G4cerr << G4endl
                 << "The final curve point is not further along"
                 << " than the original!" << G4endl;
-         G4Exception("ERROR - G4PropagatorInField::LocateIntersectionPoint()");
+         G4Exception("G4PropagatorInField::LocateIntersectionPoint()", "FatalError",
+                     FatalException, "Error in advancing propagation.");
        }
      } // EndIf ( E is close enough to the curve, ie point F. )
        // tests ChordAF_Vector.mag() <= maximum_lateral_displacement 
@@ -780,9 +781,13 @@ G4PropagatorInField::IntersectChord( G4ThreeVector  StartPointA,
 
 G4FieldTrack G4PropagatorInField::
 ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,  
-		    const G4FieldTrack &EstimatedEndStateB,	
-		    double              linearDistSq,
-		    double              curveDist
+                    const G4FieldTrack &EstimatedEndStateB,
+#ifdef G4DEBUG_FIELD
+                          G4double      linearDistSq,
+#else
+                          G4double,
+#endif
+                          G4double      curveDist
 		  )
 {
   G4FieldTrack newEndPoint( CurrentStateA );
@@ -849,8 +854,8 @@ G4PropagatorInField::SetTrajectoryFilter(G4VCurvedTrajectoryFilter* filter) {
 
 void G4PropagatorInField::ClearPropagatorState()
 {
-  G4Exception("G4PropagatorInField::ClearPropagatorState is not yet implemented");
-
+  G4Exception("G4PropagatorInField::ClearPropagatorState()", "NotImplemented",
+              FatalException, "Functionality not yet implemented.");
 }
 
 G4FieldManager* 

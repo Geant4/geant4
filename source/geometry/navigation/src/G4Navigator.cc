@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.1 2003-10-01 15:09:51 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.2 2003-10-24 12:51:03 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -438,7 +438,8 @@ G4Navigator::LocateGlobalPointWithinVolume(const G4ThreeVector& pGlobalpoint)
          break;
 
        case kReplica:
-         G4Exception("ERROR - G4Navigator::LocateGlobalPointWithinVolume()");
+         G4Exception("G4Navigator::LocateGlobalPointWithinVolume()", "NotApplicable",
+                     FatalException, "Not applicable for replicated volumes.");
          break;
      }
    }
@@ -694,7 +695,8 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
                                      fBlockedReplicaNo);
         break;
       case kReplica:
-        G4Exception("ERROR - G4Navigator::ComputeStep()");
+        G4Exception("G4Navigator::ComputeStep()", "NotApplicable",
+                    FatalException, "Not applicable for replicated volumes.");
         break;
     }
   }
@@ -942,7 +944,8 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
           newSafety = fparamNav.ComputeSafety(localPoint,fHistory,pMaxLength);
           break;
         case kReplica:
-          G4Exception("ERROR - G4Navigator::ComputeSafety()");
+          G4Exception("G4Navigator::ComputeSafety()", "NotApplicable",
+                      FatalException, "Not applicable for replicated volumes.");
           break;
       }
     }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.cc,v 1.1 2003-10-01 15:13:31 gcosmo Exp $
+// $Id: G4ReplicaNavigation.cc,v 1.2 2003-10-24 12:51:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -143,7 +143,8 @@ G4ReplicaNavigation::Inside(const G4VPhysicalVolume *pVol,
       }
       break;
     default:
-      G4Exception("ERROR - G4ReplicaNavigation::Inside(). Unknown axis!");
+      G4Exception("G4ReplicaNavigation::Inside()", "WrongArgumentValue",
+                  FatalException, "Unknown axis!");
       break;
   }
   return in;
@@ -207,7 +208,8 @@ G4ReplicaNavigation::DistanceToOut(const G4VPhysicalVolume *pVol,
       }
       break;
     default:
-     G4Exception("ERROR - G4ReplicaNavigation::DistanceToOut(). Unknown axis!");
+     G4Exception("G4ReplicaNavigation::DistanceToOut()", "WrongArgumentValue",
+                 FatalException, "Unknown axis!");
      break;
   }
   return (safety >= kCarTolerance) ? safety : 0;
@@ -264,7 +266,8 @@ G4ReplicaNavigation::DistanceToOut(const G4VPhysicalVolume *pVol,
       Dist=DistanceToOutRad(localPoint,localDirection,width,offset,replicaNo);
       break;
     default:
-     G4Exception("ERROR - G4ReplicaNavigation::DistanceToOut(). Unknown axis!");
+     G4Exception("G4ReplicaNavigation::DistanceToOut()", "WrongArgumentValue",
+                 FatalException, "Unknown axis!");
      break;
   }
   return Dist;
@@ -940,7 +943,8 @@ G4ReplicaNavigation::BackLocate(G4NavigationHistory &history,
     // This is an error, as the World volume must be a Placement
     //
     G4cerr << "The World volume must be a Placement!" << G4endl;
-    G4Exception("ERROR - G4ReplicaNavigation::BackLocate()");
+    G4Exception("G4ReplicaNavigation::BackLocate()", "InvalidSetup",
+                FatalException, "The World volume must be a Placement!");
   }
 
   motherSolid = pNRMother->GetLogicalVolume()->GetSolid();

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.1 2003-10-01 15:12:45 gcosmo Exp $
+// $Id: G4PropagatorInField.hh,v 1.2 2003-10-24 12:51:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PropagatorInField 
@@ -174,20 +174,20 @@ class G4PropagatorInField
      // (Should use lateral displacement as measure of convergence). 
 
    G4bool IntersectChord( G4ThreeVector  StartPointA, 
-			    G4ThreeVector  EndPointB,
-			    G4double      &NewSafety,
-			    G4double      &LinearStepLength,
-			    G4ThreeVector &IntersectionPoint);
+                          G4ThreeVector  EndPointB,
+                          G4double      &NewSafety,
+                          G4double      &LinearStepLength,
+                          G4ThreeVector &IntersectionPoint);
      // Intersect the chord from StartPointA to EndPointB
-     //  and return whether an intersection occurred
+     // and return whether an intersection occurred
 
    G4FieldTrack ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,  
-				    const G4FieldTrack &EstimtdEndStateB,
-				    double              linearDistSq,
- 				    double              curveDist);
+                                    const G4FieldTrack &EstimtdEndStateB,
+                                          G4double      linearDistSq,
+                                          G4double      curveDist);
      // Return new estimate for state after curveDist 
-     //    starting from CurrentStateA,  to replace EstimtdEndStateB,
-     //    (and report displacement -- if field is compiled verbose.)
+     // starting from CurrentStateA,  to replace EstimtdEndStateB,
+     // (and report displacement -- if field is compiled verbose.)
 
    void PrintStepLengthDiagnostic( G4double      currentProposedStepLength,
                                    G4double      decreaseFactor,

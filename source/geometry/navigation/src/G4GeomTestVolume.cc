@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestVolume.cc,v 1.1 2003-10-01 14:39:28 gcosmo Exp $
+// $Id: G4GeomTestVolume.cc,v 1.2 2003-10-24 12:51:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -333,7 +333,8 @@ void G4GeomTestVolume::TestCartGrid( const G4ThreeVector &theG1,
                                      G4int n1, G4int n2 )
 {
   if (n1 <= 0 || n2 <= 0) 
-    G4Exception( "G4GeomTestVolume::TestCartGrid -- n1 and n2 must be >= 1" );
+    G4Exception( "G4GeomTestVolume::TestCartGrid()", "WrongArgumentValue",
+                 FatalException, "Arguments n1 and n2 must be >= 1" );
     
   G4ThreeVector xMin( extent.GetXmin(), extent.GetYmin(),
                       extent.GetZmin() );
