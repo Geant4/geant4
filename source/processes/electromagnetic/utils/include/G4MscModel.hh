@@ -20,10 +20,11 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.hh,v 1.4 2003-07-21 15:04:24 vnivanch Exp $
+// $Id: G4MscModel.hh,v 1.5 2003-08-05 14:35:19 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
+//
 //
 // GEANT4 Class header file
 //
@@ -39,6 +40,7 @@
 // 27-03-03 Move model part from G4MultipleScattering (V.Ivanchenko)
 // 27-03-03 Rename (V.Ivanchenko)
 //
+// 05-08-03 angle distribution has been modified (L.Urban)
 //
 // Class Description:
 //
@@ -52,7 +54,6 @@
 #define G4MscModel_h 1
 
 #include "G4VEmModel.hh"
-
 class G4MscModel : public G4VEmModel
 {
 
@@ -88,7 +89,6 @@ public:
                               G4double kineticEnergy,
                               G4double cutEnergy,
                               G4double maxEnergy);
-
   G4DynamicParticle* SampleSecondary(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
@@ -103,11 +103,11 @@ public:
 
   G4double GeomPathLength(G4PhysicsTable* theLambdaTable,
                     const G4MaterialCutsCouple* couple,
-		    const G4ParticleDefinition* particle,
-		          G4double& kineticEnergy,
-			  G4double lambda,
-			  G4double range,
-			  G4double truePathLength);
+                    const G4ParticleDefinition* particle,
+                          G4double& kineticEnergy,
+                          G4double lambda,
+                          G4double range,
+                          G4double truePathLength);
 
   G4double TrueStepLength(G4double geomStepLength);
 
@@ -121,7 +121,6 @@ protected:
 
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
                                     G4double) {return 0.0;};
-
 private:
 
   G4double ComputeTransportCrossSection(
@@ -151,12 +150,8 @@ private:
   G4double facxsi;
 
   G4double sigmafactor;
-  G4double alfa1;
-  G4double alfa2;
-  G4double alfa3;
   G4double b;
   G4double xsi;
-  G4double c0;
 
   G4double lambda0;
   G4double lambda1;
@@ -172,8 +167,10 @@ private:
 
   G4double currentRadLength;
   G4double currentKinEnergy;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif
+

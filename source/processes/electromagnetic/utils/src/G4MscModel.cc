@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.cc,v 1.5 2003-07-23 11:36:26 vnivanch Exp $
+// $Id: G4MscModel.cc,v 1.6 2003-08-05 14:35:19 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -43,7 +43,7 @@
 //          (L.Urban)
 // 30-05-03 misprint in SampleCosineTheta corrected(L.Urban)
 // 27-03-03 Rename (V.Ivanchenko)
-// 04-06-03 Fix compilation warnings (V.Ivanchenko)
+// 05-08-03 angle distribution has been modified (L.Urban)
 //
 //
 
@@ -97,33 +97,14 @@ G4bool G4MscModel::IsInCharge(const G4ParticleDefinition* p)
 {
   return (p->GetPDGCharge() != 0.0);
 }
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4MscModel::Initialise(const G4ParticleDefinition* p,
                               const G4DataVector&)
 {
   // set values of some data members
-  if((p->GetParticleName() == "e-") || (p->GetParticleName() == "e+"))
-  {
-    // parameters for e+/e-
-    alfa1 = 1.45 ;
-    alfa2 = 0.60 ;
-    alfa3 = 0.30 ;
-    b = 1. ;
-    xsi = facxsi*2.22 ;
-    c0 = 2.30 ;
-  }
-  else
-  {
-    // parameters for heavy particles
-    alfa1 = 1.10 ;
-    alfa2 = 0.14 ;
-    alfa3 = 0.07 ;
-    b = 1. ;
-    xsi = facxsi*2.70 ;
-    c0 = 1.40 ;
-  }
+  xsi = facxsi*2.82144 ;
+  b = 1. ;
   sigmafactor = twopi*classic_electr_radius*classic_electr_radius;
   particle = p;
   mass = particle->GetPDGMass();
@@ -154,7 +135,6 @@ G4double G4MscModel::CrossSection(const G4MaterialCutsCouple* couple,
              kineticEnergy,atomicNumber,atomicWeight);
   }
   sigma *= sigmafactor;
-
   // Calculate lambda
   if ( sigma > 0.0) sigma = 1.0/sigma;
   else              sigma = DBL_MAX;
@@ -185,7 +165,6 @@ G4double G4MscModel::ComputeTransportCrossSection(
                              10000.0*MeV};
 
  // corr. factors for e-/e+ lambda
-
           G4double celectron[15][23] =
           {{1.125,1.072,1.051,1.047,1.047,1.050,1.052,1.054,
             1.054,1.057,1.062,1.069,1.075,1.090,1.105,1.111,
@@ -330,7 +309,7 @@ G4double G4MscModel::ComputeTransportCrossSection(
   if ( x0 < -1. || eKineticEnergy  <= 10.*MeV)
       {
         x0 = -1.;
-	corrnuclsize = 1.;
+        corrnuclsize = 1.;
       }
   else
       {
@@ -368,7 +347,6 @@ G4double G4MscModel::ComputeTransportCrossSection(
   T = Tdat[iT+1]; E = T + electron_mass_c2;
   G4double b2big = T*(E+electron_mass_c2)/(E*E);
   G4double ratb2 = (beta2-b2small)/(b2big-b2small);
-
   G4double c1,c2,cc1,cc2,corr;
   if (charge < 0.)
     {
@@ -412,11 +390,11 @@ G4double G4MscModel::ComputeTransportCrossSection(
 G4double G4MscModel::GeomPathLength(
                           G4PhysicsTable* theLambdaTable,
                     const G4MaterialCutsCouple* couple,
-		    const G4ParticleDefinition* theParticle,
-		          G4double& T0,
-			  G4double lambda,
-			  G4double range,
-			  G4double truePathLength)
+                    const G4ParticleDefinition* theParticle,
+                          G4double& T0,
+                          G4double lambda,
+                          G4double range,
+                          G4double truePathLength)
 {
   //  do the true -> geom transformation
   const G4double ztmin = 1./3., ztmax = 0.98 ;
@@ -449,8 +427,8 @@ G4double G4MscModel::GeomPathLength(
     G4double T1 = theManager->GetEnergy(particle,range-tPathLength,couple);
 
     if (theLambdaTable) {
-      G4bool bb;
-      lambda1 = ((*theLambdaTable)[couple->GetIndex()])->GetValue(T1,bb);
+      G4bool b;
+      lambda1 = ((*theLambdaTable)[couple->GetIndex()])->GetValue(T1,b);
     } else {
       lambda1 = CrossSection(couple,particle,T1,0.0,1.0);
     }
@@ -480,9 +458,6 @@ G4double G4MscModel::GeomPathLength(
     do {
         u = exp(log(G4UniformRand())/cz1) ;
         grej  = exp(cz*log(u))*(1.-u) ;
-        if (grej > grej0)
-            G4cout << "G4MscModel: Warning! majorant "
-                   << grej0 << " < " << grej << G4endl;
       } while (grej < grej0*G4UniformRand()) ;
    zPathLength = tPathLength*u ;
   }
@@ -505,23 +480,20 @@ G4double G4MscModel::TrueStepLength(G4double geomStepLength)
         trueLength = alam*(1.-exp(log(1.-blam*geomStepLength/alam)/blam));
       else
         trueLength = tPathLength;
-
     } else {
       if (geomStepLength <= zm) {
 
-         // ??? here is a problems - redefine variable
         lambdam = -1.;
 
-	if(blam*geomStepLength < alam )
+        if(blam*geomStepLength < alam )
           trueLength = alam*(1.-exp(log(1.-blam*geomStepLength/alam)/blam));
         else
           trueLength = 0.5*tPathLength;
-
       } else {
         G4double clam = 1.+alam/lambdam;
         if(clam*(geomStepLength-zm)/(alam*cthm) < 1.)
           trueLength = 0.5*tPathLength + alam*(1.-
-                exp(log(1.-clam*(geomStepLength-zm)/(alam*cthm)))/clam) ;
+                exp(log(1.-clam*(geomStepLength-zm)/(alam*cthm))/clam)) ;
         else
           trueLength = tPathLength;
       }
@@ -539,7 +511,6 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength)
 {
   G4double cth = 1.;
   currentTau = trueStepLength/lambda0;
-  // G4cout << "tau= " << currentTau << G4endl;
   if(trueStepLength < stepmin)
     cth = exp(-currentTau) ;
   else
@@ -558,64 +529,72 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength)
       if(currentTau > taubig) cth = -1.+2.*G4UniformRand();
       else
       {
-        const G4double amax = 25. ;
-        const G4double tau0 = 0.02  ;
+       // const G4double tau0 = 0.02, tau1 = 1.e-4  ;
         const G4double c_highland = 13.6*MeV, corr_highland=0.038 ;
 
         const G4double x1fac1 = exp(-xsi) ;
         const G4double x1fac2 = (1.-(1.+xsi)*x1fac1)/(1.-x1fac1) ;
         const G4double x1fac3 = 1.3      ; // x1fac3 >= 1.  !!!!!!!!!
 
-        G4double a;
+        G4double a ;
 
         // for heavy particles take the width of the cetral part
         //  from the Highland formula
         // (Particle Physics Booklet, July 2002, eq. 26.10)
-        if(mass > electron_mass_c2) // + other conditions (beta, x/X0,...?)
-        {
-          G4double Q = abs(charge) ;
-          G4double xx0 = trueStepLength/currentRadLength;
-          G4double betacp = currentKinEnergy*(currentKinEnergy+2.*mass)/
-                           (currentKinEnergy+mass) ;
-          G4double theta0 = c_highland*Q*sqrt(xx0)*
-                         (1.+corr_highland*log(xx0))/betacp ;
+        // a <---------- Highland for all particle
+        G4double Q = abs(charge) ;
+        G4double xx0 = trueStepLength/currentRadLength;
+        G4double betacp = currentKinEnergy*(currentKinEnergy+2.*mass)/
+                         (currentKinEnergy+mass) ;
+        G4double theta0 = c_highland*Q*sqrt(xx0)*
+                       (1.+corr_highland*log(xx0))/betacp ;
+        G4double beta=sqrt(currentKinEnergy*(currentKinEnergy+2.*mass))/
+                      (currentKinEnergy+mass) ;
 
-          if (theta0 > tausmall) a = 0.5/(1.-cos(theta0)) ;
-          else                   a = 1.0/(theta0*theta0) ;
-
-        } 
-        else 
+        // corrs to Highland for small t/X0
+        const G4double xx0lim1=1.e-3,xx0lim2=0.055,
+                       corr1=0.88, corr2=-0.03 ;
+        G4double corr = 1. ;
+        if(xx0 < xx0lim2)
         {
-          G4double w = log(currentTau/tau0) ;
-          if (currentTau < tau0) a = (alfa1-alfa2*w)/currentTau ;
-          else                   a = (alfa1+alfa3*w)/currentTau ;
-	}
+            corr = corr1/(1.+corr2*log(xx0/xx0lim1)) ;
+          theta0 *= corr ;
+        }
+
+
+        const G4double blim = 0.400, corr3 = 1.733 ,
+                   corr4 = 1.+blim*corr3 ;
+        G4double corrbeta = 1. ;
+        if(beta < blim)
+        {
+          corrbeta = corr4/(1.+beta*corr3) ;
+          theta0 *= corrbeta ;
+        }
+
+        if (theta0 > tausmall) a = 0.5/(1.-cos(theta0)) ;
+        else                   a = 1.0/(theta0*theta0) ;
 
         G4double xmeanth = exp(-currentTau);
 
-        G4double xmean1,xmean2,eaa,b1,bx,ebx,eb1,c,qprob,prob;
-
+        G4double xmean1,xmean2,eaa,b1,bx,qprob,prob;
+        G4double c=1., c1=0., eb1=0., ebx=0. ;
         G4double x0 = 1.-xsi/a;
+        G4double x01=1.+x0 ;
         G4double ea = 0.;
-
-        if (x0 <= -1.) 
-        { 
+        if (x0 <= -1.)
+        {
           // 1 model fuction only
           // in order to have xmean1 > xmeanth -> qprob < 1
           x0 = -1.;
 
           if( a < 1./(1.-xmeanth)) a = 1./(1.-xmeanth) ;
 
-          if(a*(1.-x0) < amax) ea = exp(-a*(1.-x0));
-         
+          ea = exp(-a*(1.-x0));
           eaa = 1.-ea ;
           xmean1 = 1.-1./a+(1.-x0)*ea/eaa ;
 
-          c = 2. ;
-          b1 = b+1. ;
+          b1 = 2. ;
           bx = b1 ;
-          eb1 = b1 ;
-          ebx = b1 ;
           xmean2 = 0. ;
 
           prob = 1. ;
@@ -628,9 +607,7 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength)
           if((1.-x1fac2/a) < xmeanth)
           {
             a = x1fac3*x1fac2/(1.-xmeanth) ;
-
-            if(a*(1.-x0) < amax) ea = exp(-a*(1.-x0));
-
+            ea = exp(-a*(1.-x0));
             eaa = 1.-ea ;
             xmean1 = 1.-1./a+(1.-x0)*ea/eaa ;
           }
@@ -641,23 +618,28 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength)
             xmean1 = 1.-x1fac2/a ;
           }
 
-          // from continuity of the 1st derivatives
-          c = a*(b-x0);
-          if(a*currentTau < c0) c = c0*(b-x0)/currentTau ;
-
-          if(c == 1.) c=1.000001 ;
-          if(c == 2.) c=2.000001 ;
-          if(c == 3.) c=3.000001 ;
-
+          // b = xmean1
+          b = xmean1 ;
           b1 = b+1. ;
           bx=b-x0 ;
-          eb1=exp((c-1.)*log(b1)) ;
-          ebx=exp((c-1.)*log(bx)) ;
-          xmean2 = (x0*eb1+ebx+(eb1*bx-b1*ebx)/(2.-c))/(eb1-ebx) ;
+          // c from continuity of the 1st derivative
+          c = a*(b-x0) ;
+          if(c == 3.) c = 3.000001 ;
+          if(c == 2.)
+          {
+            xmean2 = b-b1*bx*log(b1/bx)/x01  ;
+          }
+          else
+          {
+            c1 = 1.-c ;
+            eb1 = exp(c1*log(b1)) ;
+            ebx = exp(c1*log(bx)) ;
+            xmean2 = ((b1*eb1-bx*ebx)/(2.-c)-(eb1+x0*ebx))/(eb1-ebx) ;
+          }
 
           G4double cnorm1 = a/eaa ;
           G4double f1x0 = cnorm1*exp(-a*(1.-x0)) ;
-          G4double cnorm2 = (c-1.)*eb1*ebx/(eb1-ebx) ;
+          G4double cnorm2 = b1*bx/x01 ;
           G4double f2x0 = cnorm2/exp(c*log(b-x0)) ;
 
           // from continuity at x=x0
@@ -666,21 +648,21 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength)
           qprob = (f1x0+f2x0)*xmeanth/(f2x0*xmean1+f1x0*xmean2) ;
         }
 
+        // protection against qprob > 1
+        if(qprob > 1.) qprob = 1. ;
 
-        // protection against prob or qprob > 1 and
-        //  prob or qprob < 0
-        if((qprob > 1.) || (qprob < 0.) || (prob > 1.) || (prob < 0.))
-        {
-          qprob = 1. ;
-          prob = (xmeanth-xmean2)/(xmean1-xmean2);
-        }
         // sampling of costheta
         if (G4UniformRand() < qprob)
         {
           if (G4UniformRand() < prob)
              cth = 1.+log(ea+G4UniformRand()*eaa)/a ;
           else
-             cth = b-b1*bx/exp(log(ebx-G4UniformRand()*(ebx-eb1))/(c-1.)) ;
+          {
+            if(c == 2.)
+             cth = b-b1*bx/(bx+x01*G4UniformRand()) ;
+            else
+             cth = b-exp(log(eb1-(eb1-ebx)*G4UniformRand())/c1) ;
+          }
         }
         else
         {
@@ -689,10 +671,8 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength)
       }
     }
   }
-  //G4cout << "cth= " << cth << G4endl;
   return cth;
 }
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4MscModel::SampleDisplacement()
@@ -711,14 +691,15 @@ G4double G4MscModel::SampleDisplacement()
       rmean = -kappa*currentTau;
       rmean = -exp(rmean)/(kappa*kappami1);
       rmean += currentTau-kappapl1/kappa+kappa*etau/kappami1;
-   // G4cout << "tau= " << currentTau << " lambda0= " << lambda0 << " etau= " << etau << " kappa= " << kappa << G4endl;
     }
     if (rmean>0.) rmean = 2.*lambda0*sqrt(rmean/3.0);
     else          rmean = 0.;
-    //    G4cout << "rmean= " << rmean << G4endl;
  }
   return rmean;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+
 
