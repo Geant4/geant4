@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hLETestLossTable.cc,v 1.1 2000-05-03 16:32:20 chauvie Exp $
+// $Id: G4hLETestLossTable.cc,v 1.2 2000-05-03 16:35:56 chauvie Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // -------------------------------------------------------------------
@@ -15,11 +15,11 @@
 //      For information related to this code contact:
 //      CERN, IT Division, ASD group
 //
-//      File name:     CremonesiUT.cc
+//      File name:     G4hLETestLossTable.cc
 //
 //      Author:        Stephane Chauvie
 // 
-//      Creation date: 5 January 2000
+//      Creation date: 2 May 2000
 //
 //      Modifications: 
 //
