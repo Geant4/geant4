@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2000-06-15 17:35:24 gcosmo Exp $
+$Id: History,v 1.6 2000-08-04 13:49:25 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+August  04, 00 V.Grichine - materials-V02-00-00
+               G4SandiaTable.cc: fixed initialization of pointers in
+	       constructor and corrected deletion of fPhotoAbsorptionCof
+	       in destructor.
 
 June    15, 00 G.Cosmo  - materials-V01-01-00
                fixed usage of pow(double,double) in G4SandiaTable.
