@@ -463,6 +463,10 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
 		 <<aR->GetSecondary(i)->GetParticle()<<" "
 		 <<G4endl;*/
 	track->SetWeight(newWeight);
+	if(track->GetKineticEnergy()<0)
+	{
+	  G4cout << "Debugging hadronin processes"<<track->GetKineticEnergy()<<G4endl;
+	}
 	/*if(GetProcessName()=="PhotonInelastic")
 	{
 	  if(aR->GetSecondary(i)->GetParticle()->GetDefinition()==G4Neutron::NeutronDefinition())
