@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.hh,v 1.12 2003-08-12 02:21:56 asaim Exp $
+// $Id: G4DynamicParticle.hh,v 1.13 2003-10-21 20:56:13 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,7 +62,7 @@
 
 class  G4VProcess;
 class  G4DecayProducts;
-
+class  G4PrimaryParticle;
 
 class G4DynamicParticle 
 {
@@ -222,14 +222,14 @@ class G4DynamicParticle
    //  2: More
 
  private:
-   void* primaryParticle;
+   G4PrimaryParticle* primaryParticle;
    // This void pointer is used by G4EventManager to maintain the
    // link between pre-assigned decay products and corresponding
    // primary particle.
 
  public:
-   inline void SetPrimaryParticle(void* p) {primaryParticle=p;}
-   inline void* GetPrimaryParticle() const {return primaryParticle;}
+   inline void SetPrimaryParticle(G4PrimaryParticle* p) {primaryParticle=p;}
+   inline G4PrimaryParticle* GetPrimaryParticle() const {return primaryParticle;}
 };
 
 #include "G4DynamicParticle.icc"
