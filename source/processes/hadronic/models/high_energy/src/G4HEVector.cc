@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4HEVector.cc,v 1.8 2001-07-11 10:06:12 gunter Exp $
+// $Id: G4HEVector.cc,v 1.9 2001-08-01 17:10:12 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -54,7 +54,11 @@ G4HEVector::G4HEVector(const G4DynamicParticle * aParticle)
      baryon           = aParticle->GetDefinition()->GetBaryonNumber();
      particleName     = getParticleName(code, baryon);
      particleType     = aParticle->GetDefinition()->GetParticleType();
+<<<<<<< G4HEVector.cc
+     strangeness      = aParticle->GetDefinition()->GetQuarkContent(2);
+=======
      strangeness       = aParticle->GetDefinition()->GetQuarkContent(2);
+>>>>>>> 1.8
   }
   
 G4double G4HEVector::Amax(G4double a, G4double b)

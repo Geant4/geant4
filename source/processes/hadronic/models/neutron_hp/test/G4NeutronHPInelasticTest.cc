@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPInelasticTest.cc,v 1.8 2001-07-11 10:07:30 gunter Exp $
+// $Id: G4NeutronHPInelasticTest.cc,v 1.9 2001-08-01 17:11:27 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -126,10 +126,12 @@
       theMaterials[1] = thePS;
 // 
 //      // Init runs
-//      G4Material *theLi = new G4Material(name="Lithium", density=0.534*g/cm3, nEl=1);
-//      G4Element *elLi = new G4Element(name="Lithium", symbol="Li", iz=3., a=6.941*g/mole);
-//      theLi->AddElement( elLi, 1);
-//      theMaterials[2] =theLi ;
+      G4Material *theLi = new G4Material(name="Lithium", density=0.534*g/cm3, nEl=1);
+      G4Element *elLi = new G4Element(name="Lithium", symbol="Li", 1);
+      G4Isotope * isoLi6 = new G4Isotope(name="Li6", 3, 6, a=3.*g/mole);
+      elLi->AddIsotope(isoLi6, 1);
+      theLi->AddElement( elLi, 1);
+      theMaterials[2] =theLi ;
 //      
 //      // Init runs
 //      G4Material *theB = new G4Material(name="Boron", density=0.9*g/cm3, nEl=1);
@@ -148,10 +150,10 @@
 //      theMaterials[4] = theN;
 // 
 //      // Init runs
-//      G4Material *theO = new G4Material(name="Oxygen", density=1.1*g/cm3, nEl=1);
-//      G4Element *elO = new G4Element(name="Oxygen", symbol="O", iz=8., a=15.9994*g/mole);
-//      theO->AddElement( elO,  1 );
-//      theMaterials[5] = theO;
+      G4Material *theO = new G4Material(name="Oxygen", density=1.1*g/cm3, nEl=1);
+      G4Element *elO = new G4Element(name="Oxygen", symbol="O", iz=8., a=15.9994*g/mole);
+      theO->AddElement( elO,  1 );
+      theMaterials[5] = theO;
 //      
 //      // G4NeutronHPPhotonDist: Transition probability array not sampled for the moment.
 //      // *** G4Exception: Aborting execution ***

@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4HETest.cc,v 1.3 2001-07-11 10:06:13 gunter Exp $
+// $Id: G4HETest.cc,v 1.4 2001-08-01 17:10:18 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -259,6 +259,7 @@
    thePionPlus->SetProcessManager(thePionPlusProcessManager);
    G4PionPlusInelasticProcess theInelasticProcess; 
    G4HEPionPlusInelastic thePionPlusInelastic;
+   thePionPlusInelastic.SetMaxEnergy(1.*TeV);
    G4cout << "Inelastic instanciated!!!"<<G4endl;
    theInelasticProcess.RegisterMe(&thePionPlusInelastic);
    thePionPlusProcessManager->AddDiscreteProcess(&theInelasticProcess);
@@ -351,6 +352,7 @@ int j = 0;
            G4DynamicParticle * aSec;
            G4int isec;
 	   G4double totalEnergy = 0;
+	   G4double totalKineic = 0;
            for(isec=0;isec<aFinalState->GetNumberOfSecondaries();isec++)
            {
              second = aFinalState->GetSecondary(isec);
@@ -360,10 +362,12 @@ int j = 0;
              G4cout << aSec->GetMomentum();
 	     G4cout << (1-isec)*aFinalState->GetNumberOfSecondaries();
 	     G4cout << G4endl;
+	     totalKineic += aSec->GetKineticEnergy();
 	     totalEnergy += aSec->GetTotalEnergy();
              delete second;
            }
 	   cout << "Total energy "<<totalEnergy<<endl;
+	   cout << "Total kinetic energy "<<totalKineic<<endl;
            delete aParticle;
            delete aTrack;
            aFinalState->Clear();

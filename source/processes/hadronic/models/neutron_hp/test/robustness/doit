@@ -1,43 +1,43 @@
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Sodium 
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Magnesium
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Aluminum
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Silicon
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Phosphorous
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Sulfur
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Chlorine
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Potassium
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Hydrogen
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Calcium
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Titanium
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Vanadium
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Chromium
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Manganese
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Iron
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Cobalt
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Nickel
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Copper
-../../../../../../../bin/Linux-g++/robustness inputs/data.10  < inputs/Helium
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Gallium
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Germanium
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Arsenic
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Lithium
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Zirconium
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Niobium
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Molybdenum
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Cadmium
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Indium
-../../../../../../../bin/Linux-g++/robustness inputs/data.10  < inputs/Berylium
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Tellurium
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Iodine
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Cesium
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Barium
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Boron
-../../../../../../../bin/Linux-g++/robustness inputs/data.10  < inputs/Carbon
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Tungsten
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Gold
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Nitrogen
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Lead
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Bismuth
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Oxygen
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Uranium
-../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Fluorine
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Sodium > logs/Sodium
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Magnesium > logs/Magnesium
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Aluminum > logs/Aluminum
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Silicon > logs/Silicon
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Phosphorous > logs/Phosphorous
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Sulfur > logs/Sulfur
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Chlorine > logs/Chlorine
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Potassium > logs/Potassium
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Hydrogen > logs/Hydrogen
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Calcium > logs/Calcium
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Titanium > logs/Titanium
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Vanadium > logs/Vanadium
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Chromium > logs/Chromium
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Manganese > logs/Manganese
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Iron > logs/Iron
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Cobalt > logs/Cobalt
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Nickel > logs/Nickel
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Copper > logs/Copper
+../../../../../../../bin/Linux-g++/robustness inputs/data.10  < inputs/Helium > logs/Helium
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Gallium > logs/Gallium
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Germanium > logs/Germanium
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Arsenic > logs/Arsenic
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Lithium > logs/Lithium
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Zirconium > logs/Zirconium
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Niobium > logs/Niobium
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Molybdenum > logs/Molybdenum
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Cadmium > logs/Cadmium
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Indium > logs/Indium
+../../../../../../../bin/Linux-g++/robustness inputs/data.10  < inputs/Berylium > logs/Berylium
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Tellurium > logs/Tellurium
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Iodine > logs/Iodine
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Cesium > logs/Cesium
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Barium > logs/Barium
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Boron > logs/Boron
+../../../../../../../bin/Linux-g++/robustness inputs/data.10  < inputs/Carbon > logs/Carbon
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Tungsten > logs/Tungsten
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Gold > logs/Gold
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Nitrogen > logs/Nitrogen
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Lead > logs/Lead
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Bismuth > logs/Bismuth
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Oxygen > logs/Oxygen
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Uranium > logs/Uranium
+../../../../../../../bin/Linux-g++/robustness inputs/data.100 < inputs/Fluorine > logs/Fluorine

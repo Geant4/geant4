@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4LFission.cc,v 1.6 2001-07-11 10:06:52 gunter Exp $
+// $Id: G4LFission.cc,v 1.7 2001-08-01 17:11:19 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
