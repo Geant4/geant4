@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Navigator.hh,v 1.1 1999-01-07 16:08:43 gunter Exp $
+// $Id: G4Navigator.hh,v 1.2 1999-07-27 21:03:28 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -336,15 +336,18 @@ private:
   G4bool fEntering,fExiting;
 
 // Entering/Exiting volumes blocking/setup
+
 // o If exiting
 //      volume ptr & replica number (set & used by Locate..())
 //      used for blocking on redescent of geometry
+  G4VPhysicalVolume *fBlockedPhysicalVolume;
+  G4int fBlockedReplicaNo;
+
 // o If entering
 //      volume ptr & replica number (set by ComputeStep(),used by
 //      Locate..()) of volume for `automatic' entry
-
-  G4VPhysicalVolume *fBlockedPhysicalVolume;
-  G4int fBlockedReplicaNo;
+  G4VPhysicalVolume *fCandidatePhysicalVolume;
+  G4int fCandidateReplicaNo;
 
   G4bool fEnteredDaughter;    // A memory of whether in this Step a daughter
                               //  volume is entered (set in Compute & Locate)

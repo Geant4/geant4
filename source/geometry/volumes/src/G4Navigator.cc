@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Navigator.cc,v 1.7 1999-07-21 10:47:29 japost Exp $
+// $Id: G4Navigator.cc,v 1.8 1999-07-27 21:03:31 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -121,51 +121,51 @@ G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector& globalPoint,
 	  else if (fEntering)
 	    {
 	      G4VPhysicalVolume *curPhysical=fHistory.GetTopVolume();
-	      switch (VolumeType(fBlockedPhysicalVolume))
+	      switch (VolumeType(fCandidatePhysicalVolume))
 		{
 		case kNormal:
-		  fBlockedPhysicalVolume->Setup(curPhysical);
-		  fHistory.NewLevel(fBlockedPhysicalVolume);
+		  fCandidatePhysicalVolume->Setup(curPhysical);
+		  fHistory.NewLevel(fCandidatePhysicalVolume);
 		  break;
 		case kReplica:
-		  freplicaNav.ComputeTransformation(fBlockedReplicaNo,
-						    fBlockedPhysicalVolume);
-		  fBlockedPhysicalVolume->Setup(curPhysical);
-		  fHistory.NewLevel(fBlockedPhysicalVolume,
+		  freplicaNav.ComputeTransformation(fCandidateReplicaNo,
+						    fCandidatePhysicalVolume);
+		  fCandidatePhysicalVolume->Setup(curPhysical);
+		  fHistory.NewLevel(fCandidatePhysicalVolume,
 				    kReplica,
-				    fBlockedReplicaNo);
-		  fBlockedPhysicalVolume->SetCopyNo(fBlockedReplicaNo);
+				    fCandidateReplicaNo);
+		  fCandidatePhysicalVolume->SetCopyNo(fCandidateReplicaNo);
 		  
 		  break;
 		case kParameterised:
 		  G4VSolid *pSolid;
-		  // G4VSolid *pSolid=fBlockedPhysicalVolume->
+		  // G4VSolid *pSolid=fCandidatePhysicalVolume->
 		  // GetLogicalVolume()-> GetSolid();
-		  G4VPVParameterisation *pParam=fBlockedPhysicalVolume->
+		  G4VPVParameterisation *pParam=fCandidatePhysicalVolume->
 		    GetParameterisation();
-		  pSolid= pParam->ComputeSolid(fBlockedReplicaNo,
-						fBlockedPhysicalVolume);
+		  pSolid= pParam->ComputeSolid(fCandidateReplicaNo,
+						fCandidatePhysicalVolume);
 		  pSolid->ComputeDimensions(pParam,
-					    fBlockedReplicaNo,
-					    fBlockedPhysicalVolume);
-		  pParam->ComputeTransformation(fBlockedReplicaNo,
-						fBlockedPhysicalVolume);
-		  fBlockedPhysicalVolume->Setup(curPhysical);
-		  fHistory.NewLevel(fBlockedPhysicalVolume,
+					    fCandidateReplicaNo,
+					    fCandidatePhysicalVolume);
+		  pParam->ComputeTransformation(fCandidateReplicaNo,
+						fCandidatePhysicalVolume);
+		  fCandidatePhysicalVolume->Setup(curPhysical);
+		  fHistory.NewLevel(fCandidatePhysicalVolume,
 				    kParameterised,
-				    fBlockedReplicaNo);
-		  fBlockedPhysicalVolume->SetCopyNo(fBlockedReplicaNo);
+				    fCandidateReplicaNo);
+		  fCandidatePhysicalVolume->SetCopyNo(fCandidateReplicaNo);
 		  // Set the correct solid and material in Logical Volume
 		  G4LogicalVolume *pLogical;
-		  pLogical= fBlockedPhysicalVolume->GetLogicalVolume();
+		  pLogical= fCandidatePhysicalVolume->GetLogicalVolume();
 		  pLogical->SetSolid( pSolid );
 		  pLogical->SetMaterial( 
-			     pParam->ComputeMaterial(fBlockedReplicaNo, 
-						     fBlockedPhysicalVolume));
+			     pParam->ComputeMaterial(fCandidateReplicaNo, 
+						     fCandidatePhysicalVolume));
 		  break;
 		}
 	      fEntering=false;
-	      fBlockedPhysicalVolume=0;
+	      fCandidatePhysicalVolume=0;
 	      localPoint=fHistory.GetTopTransform().TransformPoint(globalPoint);
 	      notKnownContained=false;
 	    }
@@ -173,6 +173,7 @@ G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector& globalPoint,
       else
 	{
 	  fBlockedPhysicalVolume=0;
+	  fCandidatePhysicalVolume=0;
 	  fEntering=false;
 	  fEnteredDaughter=false;  // Full Step was not taken, did not enter
 	  fExiting=false;
@@ -363,8 +364,8 @@ G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector& globalPoint,
 //                    reference system
 // fExiting          - True if exiting mother
 // fEntering         - True if entering `daughter' volume (or replica)
-// fBlockedPhysicalVolume - Ptr to candidate (entered) volume
-// fBlockedReplicaNo - Replication no of candidate (entered) volume
+// fCandidatePhysicalVolume - Ptr to candidate (entered) volume
+// fCandidateReplicaNo - Replication no of candidate (entered) volume
 // fLastStepWasZero  - True if this Step size was zero.
 
 G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
@@ -496,6 +497,14 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
       }
     }
 
+  G4VPhysicalVolume *lBlockedOrCandidatePhysicalVolume;
+  G4int lBlockedOrCandidateReplicaNo;
+
+  // We need to give the "blocked volume" as input to the subNavigators
+  //   and receive the "Candidate volume"
+  lBlockedOrCandidatePhysicalVolume = fBlockedPhysicalVolume;
+  lBlockedOrCandidateReplicaNo      = fBlockedReplicaNo;
+
   if (fHistory.GetTopVolumeType()!=kReplica)
     {
       switch(CharacteriseDaughters(motherLogical))
@@ -512,8 +521,8 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
 					 fExitNormal,
 					 fExiting,
 					 fEntering,
-					 &fBlockedPhysicalVolume,
-					 fBlockedReplicaNo);
+					 &lBlockedOrCandidatePhysicalVolume,
+					 lBlockedOrCandidateReplicaNo);
 	      
 	    }
 	  else
@@ -527,8 +536,8 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
 					  fExitNormal,
 					  fExiting,
 					  fEntering,
-					  &fBlockedPhysicalVolume,
-					  fBlockedReplicaNo);
+					  &lBlockedOrCandidatePhysicalVolume,
+					  lBlockedOrCandidateReplicaNo);
 	    }
 	  break;
 	case kParameterised:
@@ -541,8 +550,8 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
 				     fExitNormal,
 				     fExiting,
 				     fEntering,
-				     &fBlockedPhysicalVolume,
-				     fBlockedReplicaNo);
+				     &lBlockedOrCandidatePhysicalVolume,
+				     lBlockedOrCandidateReplicaNo);
 	  break;
 	case kReplica:
 	  G4Exception("Logic Error in G4Navigator::ComputeStep()");
@@ -565,11 +574,15 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
 				   fExitNormal,
 				   exitingReplica,
 				   fEntering,
-				   &fBlockedPhysicalVolume,
-				   fBlockedReplicaNo);
+				   &lBlockedOrCandidatePhysicalVolume,
+				   lBlockedOrCandidateReplicaNo);
       // still ok to set it ??
       fExiting= exitingReplica;
      }
+
+  // We receive the "Candidate volume"
+  fCandidatePhysicalVolume= lBlockedOrCandidatePhysicalVolume;
+  fCandidateReplicaNo     = lBlockedOrCandidateReplicaNo;  
 
   if( (Step == pCurrentProposedStepLength) && (!fExiting) && (!fEntering) )
     {
@@ -600,8 +613,10 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
 #ifdef G4VERBOSE
   if( fVerbose > 1 ) 
     {
-      cout << " Upon exiting my state is: " << endl;
+      G4cout << " Upon exiting my state is: " << endl;
       PrintState();
+      G4cout << "--> am returning a Step= " << setw(6) << Step << endl 
+	     << endl;
     }
 #endif
 
@@ -749,9 +764,10 @@ G4double G4Navigator::ComputeSafety(const G4ThreeVector &pGlobalpoint,
   if( fVerbose > 0 ) 
     {
       G4cout << "*** G4Navigator::ComputeSafety: ***" << endl; 
-      G4cout.precision(8);
+      G4cout.precision(5);
       G4cout << " I was called with the following arguments: " << endl
-	   << " Globalpoint = " << pGlobalpoint << endl;
+	     << " Globalpoint = " 
+	     << setw(24) << pGlobalpoint << endl;
       //       cout << "  pMaxLength  = " << pMaxLength  << endl;
 
       G4cout << " Upon entering my state is: " << endl;
@@ -860,25 +876,33 @@ void  G4Navigator::PrintState()
   if( ( 1 < fVerbose) && (fVerbose < 4) )
     {
       G4cout.precision(3);
-      G4cout << setw(18) << " ExitNormal "  << " "     
-	   << setw( 5) << " Valid "       << " "     
-	   << setw( 9) << " Exiting "     << " "      
-	   << setw( 9) << " Entering"     << " " 
-	   << setw(15) << " Blocked:Volume "  << " "   
-	   << setw( 9) << " ReplicaNo"        << " "  
-	   << setw( 8) << " LastStepZero  "   << " "   
+      G4cout << setw(15) << "   ExitNormal  "  << " "     
+	   << setw( 5) << "Valid"       << " "     
+ 	   << setw(10) << "Exit/Enter"     << " "        //  Values use 7
+	   << setw(15) << "Blocked:Volume "  << " "   
+	   << setw( 5) << "Repl#"        << " "  
+	   << setw( 7) << "lStep=0"   << " "   
+	   << setw(12) << "Candidate:Volume "  << " "   
 	   << endl;   
-      G4cout << setw(18)  << fExitNormal       << " "
-	   << setw( 5)  << fValidExitNormal  << " "   
-	   << setw( 9)  << fExiting          << " "
-	   << setw( 9)  << fEntering         << " ";
+
+      G4cout << setw(10)  << fExitNormal       << " "
+	   << setw( 4)  << fValidExitNormal  << " "   
+	   << setw( 3)  << fExiting          << " "
+	   << setw( 2)  << fEntering         << " ";
       if (fBlockedPhysicalVolume==0 )
-	 G4cout << setw(15) << "None";
+	 G4cout << setw(12) << "None";
       else
- 	 G4cout << setw(15)<< fBlockedPhysicalVolume->GetName();
-      G4cout << setw( 9)  << fBlockedReplicaNo  << " "
-	   << setw( 8)  << fLastStepWasZero   << " "
-	   << endl;   
+ 	 G4cout << setw(12)<< fBlockedPhysicalVolume->GetName();
+      G4cout << setw( 8) << fBlockedPhysicalVolume << " "; // Hex would be better
+      G4cout << setw( 6)  << fBlockedReplicaNo  << " "
+	     << setw( 4)  << fLastStepWasZero   << " "; 
+      if (fCandidatePhysicalVolume==0 )
+	 G4cout << setw(12) << "None";
+      else
+ 	 G4cout << setw(12)<< fCandidatePhysicalVolume->GetName();
+      G4cout << setw( 4)  << fCandidateReplicaNo  << " ";
+      G4cout << setw(12)  << fCandidatePhysicalVolume << " "
+	     << endl;   
     }
   if( fVerbose > 2 ) 
     {
@@ -938,14 +962,17 @@ void G4Navigator::LocateGlobalPointWithinVolume(const  G4ThreeVector& pGlobalpoi
 	 }
      }
 
-#if 0
    else
      {
        // There is no state stored in G4ReplicaNavigation
        // freplicaNav.VoxelLocate( pVoxelHeader, localPoint );                
      }
-#endif
 
+   // Since we are doing a (fast) relocation,  invalidate 
+   //  any old values of fEntering, fExiting - which could no longer hold!
+   //                            July 20, 1999
+   fEntering = false;
+   fExiting  = false;
 
 #ifdef OLD_LOCATE
    //  An alternative implementation using LocateGlobalPointAndSetup.
