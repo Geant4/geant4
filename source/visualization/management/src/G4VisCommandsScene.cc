@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsScene.cc,v 1.13 2000-05-15 11:21:19 johna Exp $
+// $Id: G4VisCommandsScene.cc,v 1.14 2000-05-28 13:52:48 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -318,6 +318,7 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand* command,
   for (G4int iSH = 0; iSH < nSceneHandlers; iSH++) {
     G4VSceneHandler* aSceneHandler = sceneHandlerList [iSH];
     G4Scene* aScene = aSceneHandler -> GetScene ();
+    if(aScene) {
     const G4String& aSceneName = aScene -> GetName ();
     if (sceneName == aSceneName) {
       aSceneHandler -> ClearStore ();
@@ -337,6 +338,7 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand* command,
 	       << "\"\n  prepared at request of scene \"" << sceneName
 	       << "\"." << G4endl;
       }
+    }
     }
   }
 }
