@@ -273,13 +273,14 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
     if(!GetSphereIntersectionTimes(kt, t_enter, t_leave))
     {
        kt->SetState(G4KineticTrack::miss_nucleus);
-       G4cout << " kt missing nucleus... " << kt << G4endl;
        continue;
     }  
 
 
+#ifdef debug_1_RKPropagation
      G4cout <<" kt,timeStep, Intersection times tenter, tleave  "
      	<<kt<<" "<< currTimeStep << " / " << t_enter << " / " << t_leave <<G4endl;
+#endif
  
 // if the particle is already outside nucleus go to next  @@GF should never happen? check!
     if(t_leave < 0)
@@ -300,7 +301,6 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 	   { kt->SetState(G4KineticTrack::gone_out); }
 	 else
 	   { kt->SetState(G4KineticTrack::miss_nucleus);}
-//      G4cout << " Particle not in model : " << kt->GetDefinition()->GetParticleName() << G4endl;
        }
        continue;
     }
@@ -361,8 +361,8 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 	is_exiting=true;
     }
 
- G4cerr << "RKPropagation is_exiting?, t_leave, curTimeStep " <<is_exiting<<" "<<t_leave << " " <<currTimeStep<<G4endl;
 #ifdef debug_1_RKPropagation
+     G4cerr << "RKPropagation is_exiting?, t_leave, curTimeStep " <<is_exiting<<" "<<t_leave << " " <<currTimeStep<<G4endl;
         G4cout << "RKPropagation Ekin, field, p "
 	<< kt->GetTrackingMomentum().e() - kt->GetTrackingMomentum().mag() << " "
 	<< kt->GetPosition()<<" "
@@ -425,8 +425,10 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 
 	   if(newE < kt->GetActualMass())
 	   {
+#ifdef debug_1_RKPropagation
 	     G4cout << "RKPropagation-Transport: problem with particle exiting - ignored" << G4endl;
              G4cout << " cannot leave nucleus, E in/out: " << kt->GetTrackingMomentum() << " / " << newE <<G4endl;
+#endif
              if (kt->GetDefinition() == G4Proton::Proton() ||
 	         kt->GetDefinition() == G4Neutron::Neutron() ) {
                 kt->SetState(G4KineticTrack::captured);
@@ -447,7 +449,9 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 	G4double newE = kt->GetTrackingMomentum().e()+currentField->GetField(kt->GetPosition());
 	if(newE < kt->GetActualMass())
 	{  // the particle cannot exit the nucleus  @@@ GF check.
+#ifdef debug_1_RKPropagation
           G4cout << " cannot leave nucleus, E in/out: " << kt->GetTrackingMomentum() << " / " << newE <<G4endl;
+#endif
              if (kt->GetDefinition() == G4Proton::Proton() ||
 	         kt->GetDefinition() == G4Neutron::Neutron() ) {
                 kt->SetState(G4KineticTrack::captured);
@@ -612,7 +616,6 @@ G4bool G4RKPropagation::GetSphereIntersectionTimes(const G4KineticTrack * kt,
     speedMag*speedMag*(kt->GetPosition().mag2()-radius*radius);
   if(sqrtArg <= 0.) // particle will not intersect the sphere
   {
-//     G4cout << " GetSphereIntersectionTimes sqrtArg negative:  " << sqrtArg << G4endl;
      return false;
   }
   t1 = (-scalarProd - sqrt(sqrtArg))/speedMag/speedMag/c_light;
