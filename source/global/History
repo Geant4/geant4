@@ -1,4 +1,4 @@
-$Id: History,v 1.99 2002-05-15 09:32:28 gcosmo Exp $
+$Id: History,v 1.100 2002-05-24 15:02:20 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 24, 2002 G.Cosmo (global-V04-00-07)
+- Introduced temporary modifications for porting on gcc-3.1 compiler:
+  o g4std/strstream: deactivate gcc-3.1 specific __DEPRECATED flag.
+  o G4strstreambuf.icc: correct patch for overflow() to be specific only to
+    gcc-3.0.X versions of the compiler. Behavior now fixed in gcc-3.1.
+  o G4llocator.hh: use pointer to member data to compute offset in FreeSingle().
+    for gcc-3.1 compiler. gcc-3.1 complains and does not correctly handle offsets
+    computed from non-POD types. Pointers to member data should be used instead.
+    This advanced C++ feature seems not to work on earlier versions of the same
+    compiler or on other system configurations.
+- Cosmetics for Software Reference Manual on G4Allocator related headers.
 
 May 15, 2002 G.Cosmo (global-V04-00-06)
 - G4UnitsTable.cc: fixed bug in operator<< to use the argument 'flux'
