@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (17-December-2004)
+ Geant4 version $Name: not supported by cvs2svn $   (23-February-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -205,20 +205,20 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ### Run 0 start.
 number of event = 1000
- User=15.8s Real=19.23s Sys=2.32s
+ User=14.84s Real=16.95s Sys=2.11s
 #
 /gun/particle proton
 /run/beamOn 1000
 ### Run 1 start.
 number of event = 1000
- User=12.01s Real=14.17s Sys=1.92s
+ User=11.03s Real=12.9s Sys=1.87s
 /gun/particle pi-
 /run/beamOn 1000
 ### Run 2 start.
 number of event = 1000
- User=14.54s Real=17.47s Sys=2.3s
+ User=14.78s Real=17.13s Sys=2.34s
 /gun/particle pi+
 /run/beamOn 1000
 ### Run 3 start.
 number of event = 1000
- User=14.77s Real=20.46s Sys=2.52s
+ User=14.86s Real=17.41s Sys=2.55s
