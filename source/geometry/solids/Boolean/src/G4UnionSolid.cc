@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnionSolid.cc,v 1.13 2001-01-23 08:26:44 gcosmo Exp $
+// $Id: G4UnionSolid.cc,v 1.14 2001-01-31 16:59:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -249,7 +249,6 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p,
       //     while( Inside(p+dist*v) == kInside ) ;
            while( fPtrSolidA->Inside(p+dist*v) != kOutside && 
                   disTmp > 0.5*kCarTolerance ) ;
-      *n = *nTmp ; 
     }
     else // if( positionB != kOutside )
     {
