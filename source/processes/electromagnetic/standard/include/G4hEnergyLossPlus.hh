@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLossPlus.hh,v 1.5 2000-02-10 08:53:59 urban Exp $
+// $Id: G4hEnergyLossPlus.hh,v 1.6 2000-02-22 10:37:49 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -143,10 +143,6 @@ class G4hEnergyLossPlus : public G4VEnergyLoss
     static void SetMinDeltaCutInRange(G4double value)
                                     {MinDeltaCutInRange = value;}
 
-  protected:
-
-    static void BuildDEDXTable(const G4ParticleDefinition& aParticleType);
-
     static void SetLowerBoundEloss(G4double val) {LowerBoundEloss=val;};
     static void SetUpperBoundEloss(G4double val) {UpperBoundEloss=val;};
     static void SetNbinEloss(G4int nb)           {NbinEloss=nb;};
@@ -154,6 +150,10 @@ class G4hEnergyLossPlus : public G4VEnergyLoss
     static G4double GetLowerBoundEloss() {return LowerBoundEloss;};
     static G4double GetUpperBoundEloss() {return UpperBoundEloss;};
     static G4int    GetNbinEloss()       {return NbinEloss;};
+
+  protected:
+
+    static void BuildDEDXTable(const G4ParticleDefinition& aParticleType);
 
 
   private:

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuBremsstrahlung.hh,v 1.5 2000-02-10 09:08:53 urban Exp $
+// $Id: G4MuBremsstrahlung.hh,v 1.6 2000-02-22 10:40:01 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -103,9 +103,9 @@ class G4MuBremsstrahlung : public G4MuEnergyLoss
 
      G4OrderedTable PartialSumSigma;   
 
-     G4double LowerBoundLambda ; // bining for lambda table
-     G4double UpperBoundLambda ;
-     G4int    NbinLambda ;
+     static G4double LowerBoundLambda ; // bining for lambda table
+     static G4double UpperBoundLambda ;
+     static G4int    NbinLambda ;
      G4double LowestKineticEnergy,HighestKineticEnergy ;
      G4int    TotBin ;
 
@@ -118,6 +118,14 @@ class G4MuBremsstrahlung : public G4MuEnergyLoss
      static G4double zdat[5],adat[5],tdat[8] ;
      static G4double ya[1000],proba[5][8][1000] ;
 
+  public:
+
+    static void SetLowerBoundLambda(G4double val) {LowerBoundLambda = val;};
+    static void SetUpperBoundLambda(G4double val) {UpperBoundLambda = val;};
+    static void SetNbinLambda(G4int n) {NbinLambda = n;};
+    static G4double GetLowerBoundLambda() { return LowerBoundLambda;};
+    static G4double GetUpperBoundLambda() { return UpperBoundLambda;};
+    static G4int GetNbinLambda() {return NbinLambda;};
 
 };
 

@@ -54,8 +54,6 @@ public: // Without description
   
   G4bool IsApplicable(const G4ParticleDefinition&);
   
-  void SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins);
-  
   void BuildPhysicsTable(const G4ParticleDefinition& aParticleType);
   
   void BuildLambdaTable(const G4ParticleDefinition& aParticleType);
@@ -262,12 +260,21 @@ protected:
   // unit [ev/(10^15 atoms/cm^2]
   // into the Geant4 dE/dx unit
     
-   G4double LowerBoundLambda ; // bining for lambda table
-   G4double UpperBoundLambda ;
-   G4int    NbinLambda ;
+   static G4double LowerBoundLambda ; // bining for lambda table
+   static G4double UpperBoundLambda ;
+   static G4int    NbinLambda ;
 
    G4double LowestKineticEnergy,HighestKineticEnergy ;
    G4int    TotBin ;
+
+  public:
+
+    static void SetLowerBoundLambda(G4double val) {LowerBoundLambda = val;};
+    static void SetUpperBoundLambda(G4double val) {UpperBoundLambda = val;};
+    static void SetNbinLambda(G4int n) {NbinLambda = n;};
+    static G4double GetLowerBoundLambda() { return LowerBoundLambda;};
+    static G4double GetUpperBoundLambda() { return UpperBoundLambda;};
+    static G4int GetNbinLambda() {return NbinLambda;};
 
 };
 

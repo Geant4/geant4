@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuBremsstrahlung.cc,v 1.8 2000-02-10 09:10:39 urban Exp $
+// $Id: G4MuBremsstrahlung.cc,v 1.9 2000-02-22 10:40:37 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    
@@ -37,14 +37,16 @@ G4double G4MuBremsstrahlung::ya[1000]={0.};
 G4double G4MuBremsstrahlung::proba[5][8][1000]={0.};
 
 
+G4double G4MuBremsstrahlung::LowerBoundLambda = 1.*keV ;
+G4double G4MuBremsstrahlung::UpperBoundLambda = 10000.*TeV ;
+G4int	 G4MuBremsstrahlung::NbinLambda = 100 ;
+
+
 // constructor
  
 G4MuBremsstrahlung::G4MuBremsstrahlung(const G4String& processName)
   : G4MuEnergyLoss(processName),  
-    theMeanFreePathTable(NULL),
-    LowerBoundLambda(1.*keV),
-    UpperBoundLambda(10000.*TeV),
-    NbinLambda(100)
+    theMeanFreePathTable(NULL)
 {  }
  
 G4MuBremsstrahlung::~G4MuBremsstrahlung()

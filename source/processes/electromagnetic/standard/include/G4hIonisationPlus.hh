@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hIonisationPlus.hh,v 1.4 2000-02-10 08:54:00 urban Exp $
+// $Id: G4hIonisationPlus.hh,v 1.5 2000-02-22 10:37:50 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -98,11 +98,20 @@ class G4hIonisationPlus : public G4hEnergyLossPlus
  
     G4double DeltaCutInKineticEnergyNow ;
 
-    G4double LowerBoundLambda ; // bining for lambda table
-    G4double UpperBoundLambda ;
-    G4int    NbinLambda ;
+    static G4double LowerBoundLambda ; // bining for lambda table
+    static G4double UpperBoundLambda ;
+    static G4int    NbinLambda ;
     G4double LowestKineticEnergy,HighestKineticEnergy ;
     G4int    TotBin ;
+
+  public:
+
+    static void SetLowerBoundLambda(G4double val) {LowerBoundLambda = val;};
+    static void SetUpperBoundLambda(G4double val) {UpperBoundLambda = val;};
+    static void SetNbinLambda(G4int n) {NbinLambda = n;};
+    static G4double GetLowerBoundLambda() { return LowerBoundLambda;};
+    static G4double GetUpperBoundLambda() { return UpperBoundLambda;};
+    static G4int GetNbinLambda() {return NbinLambda;};
 
 };
  

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eBremsstrahlungPlus.cc,v 1.8 2000-02-10 09:06:30 urban Exp $
+// $Id: G4eBremsstrahlungPlus.cc,v 1.9 2000-02-22 10:39:06 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,16 +37,17 @@
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
 
+G4double G4eBremsstrahlungPlus::LowerBoundLambda = 1.*keV ;
+G4double G4eBremsstrahlungPlus::UpperBoundLambda = 100.*TeV ;
+G4int	 G4eBremsstrahlungPlus::NbinLambda = 100 ;
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 // constructor
  
 G4eBremsstrahlungPlus::G4eBremsstrahlungPlus(const G4String& processName)
   : G4eEnergyLossPlus(processName),      // initialization
-    theMeanFreePathTable(NULL),
-     LowerBoundLambda(1.*keV),
-     UpperBoundLambda(100.*TeV),
-     NbinLambda(100)
+    theMeanFreePathTable(NULL)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

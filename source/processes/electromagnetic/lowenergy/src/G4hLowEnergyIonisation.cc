@@ -34,6 +34,11 @@
 #include "G4UnitsTable.hh"
 #include "G4EnergyLossTables.hh"
 
+G4double G4hLowEnergyIonisation::LowerBoundLambda = 10.*eV ;
+G4double G4hLowEnergyIonisation::UpperBoundLambda = 100.*TeV ;
+G4int	 G4hLowEnergyIonisation::NbinLambda = 200 ;
+
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
@@ -64,10 +69,6 @@ G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
     SetUpperBoundEloss(HighestKineticEnergy) ;
     SetNbinEloss(TotBin) ;
 
-    // bining for the lambda table
-    LowerBoundLambda  = 10.*eV ;
-    UpperBoundLambda  = 100.*TeV ;
-    NbinLambda = 200 ;
     MassRatio = 1.0 ;
     DeltaCutInKineticEnergy = 0; 
 }
@@ -313,15 +314,6 @@ G4double G4hLowEnergyIonisation::GetPreciseDEDX  (G4Material* aMaterial,
   }
 
   return ionloss ;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4hLowEnergyIonisation::SetPhysicsTableBining(G4double lowE, G4double highE,
-						   G4int nBins)
-{
-  LowestKineticEnergy = lowE;  HighestKineticEnergy = highE;
-  TotBin = nBins ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

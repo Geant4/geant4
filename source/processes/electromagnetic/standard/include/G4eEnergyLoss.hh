@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eEnergyLoss.hh,v 1.6 2000-02-10 08:53:58 urban Exp $
+// $Id: G4eEnergyLoss.hh,v 1.7 2000-02-22 10:37:49 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -155,8 +155,6 @@ class G4eEnergyLoss : public G4VEnergyLoss
     // Gets number of processes giving contribution to the energy loss
     // ( default value = 2)
     
- protected:
-
     static void SetLowerBoundEloss(G4double val) {LowerBoundEloss=val;}; 
     static void SetUpperBoundEloss(G4double val) {UpperBoundEloss=val;}; 
     static void SetNbinEloss(G4int nb)           {NbinEloss=nb;};

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eIonisation.cc,v 1.5 2000-02-10 09:06:30 urban Exp $
+// $Id: G4eIonisation.cc,v 1.6 2000-02-22 10:39:05 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,20 +30,20 @@
 // 10/02/00  modifications , new e.m. structure, L.Urban
 // --------------------------------------------------------------
  
-
 #include "G4eIonisation.hh"
 #include "G4EnergyLossTables.hh"
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
 
+G4double G4eIonisation::LowerBoundLambda = 1.*keV ;
+G4double G4eIonisation::UpperBoundLambda = 100.*TeV ;
+G4int    G4eIonisation::NbinLambda = 100 ;
+
 // constructor and destructor
  
 G4eIonisation::G4eIonisation(const G4String& processName)
    : G4eEnergyLoss(processName),
-     theMeanFreePathTable(NULL),
-     LowerBoundLambda(1.*keV),
-     UpperBoundLambda(100.*TeV),
-     NbinLambda(100)
+     theMeanFreePathTable(NULL)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hIonisationPlus.cc,v 1.5 2000-02-10 09:06:30 urban Exp $
+// $Id: G4hIonisationPlus.cc,v 1.6 2000-02-22 10:39:06 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
@@ -33,14 +33,15 @@
 #include "G4hIonisationPlus.hh"
 #include "G4UnitsTable.hh"
 
+G4double G4hIonisationPlus::LowerBoundLambda = 1.*keV ;
+G4double G4hIonisationPlus::UpperBoundLambda = 100.*TeV ;
+G4int	 G4hIonisationPlus::NbinLambda = 100 ;
+
 // constructor and destructor
  
 G4hIonisationPlus::G4hIonisationPlus(const G4String& processName)
    : G4hEnergyLossPlus(processName),
      theMeanFreePathTable(NULL),
-     LowerBoundLambda(1.*keV),
-     UpperBoundLambda(100.*TeV),
-     NbinLambda(100),
      theProton (G4Proton::Proton()),
      theAntiProton (G4AntiProton::AntiProton()),
      theElectron ( G4Electron::Electron() )

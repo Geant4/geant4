@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuEnergyLoss.hh,v 1.5 2000-02-10 08:22:28 urban Exp $
+// $Id: G4MuEnergyLoss.hh,v 1.6 2000-02-22 10:40:01 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 //      GEANT 4 class header file 
@@ -154,9 +154,6 @@ class G4MuEnergyLoss : public G4VEnergyLoss
     // Gets number of processes giving contribution to the energy loss
     // ( default value = 3)
 
-
-  protected:
-
     static void SetLowerBoundEloss(G4double val) {LowerBoundEloss=val;};
     static void SetUpperBoundEloss(G4double val) {UpperBoundEloss=val;};
     static void SetNbinEloss(G4int nb)           {NbinEloss=nb;};
@@ -164,6 +161,8 @@ class G4MuEnergyLoss : public G4VEnergyLoss
     static G4double GetLowerBoundEloss() {return LowerBoundEloss;};
     static G4double GetUpperBoundEloss() {return UpperBoundEloss;};
     static G4int    GetNbinEloss()       {return NbinEloss;};
+
+  protected:
 
     static G4PhysicsTable* theDEDXmuplusTable ;
     static G4PhysicsTable* theDEDXmuminusTable ;

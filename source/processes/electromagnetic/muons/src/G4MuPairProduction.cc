@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuPairProduction.cc,v 1.11 2000-02-21 08:31:26 urban Exp $
+// $Id: G4MuPairProduction.cc,v 1.12 2000-02-22 10:40:37 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -37,13 +37,15 @@ G4double G4MuPairProduction::tdat[]={1.e3,1.e4,1.e5,1.e6,1.e7,1.e8,1.e9,1.e10};
 G4int G4MuPairProduction::NBIN = 100 ; //500 ;
 G4double G4MuPairProduction::ya[1000]={0.};
 G4double G4MuPairProduction::proba[5][8][1000]={0.};
- 
+
+G4double G4MuPairProduction::LowerBoundLambda = 1.*keV ;
+G4double G4MuPairProduction::UpperBoundLambda = 10000.*TeV ;
+G4int	 G4MuPairProduction::NbinLambda = 100 ;
+
+
 G4MuPairProduction::G4MuPairProduction(const G4String& processName)
   : G4MuEnergyLoss(processName),  
-    theMeanFreePathTable(NULL),
-    LowerBoundLambda(1.*keV),
-    UpperBoundLambda(10000.*TeV),
-    NbinLambda(100)
+    theMeanFreePathTable(NULL)
 {  }
  
  

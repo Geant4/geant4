@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eBremsstrahlung.hh,v 1.3 2000-02-10 08:53:59 urban Exp $
+// $Id: G4eBremsstrahlung.hh,v 1.4 2000-02-22 10:37:50 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -120,11 +120,21 @@ class G4eBremsstrahlung : public G4eEnergyLoss
 
      G4OrderedTable PartialSumSigma;    // partial sum of total crosssection
 
-     G4double LowerBoundLambda;     // low  energy limit of the crossection formula
-     G4double UpperBoundLambda;    // high energy limit of the crossection formula 
-     G4int    NbinLambda ;                 // number of bins in the tables 
+     static G4double LowerBoundLambda;     // low  energy limit of the crossection formula
+     static G4double UpperBoundLambda;    // high energy limit of the crossection formula 
+     static G4int    NbinLambda ;                 // number of bins in the tables 
      G4double LowestKineticEnergy,HighestKineticEnergy ;
      G4int    TotBin ;
+
+  public:
+
+    static void SetLowerBoundLambda(G4double val) {LowerBoundLambda = val;};
+    static void SetUpperBoundLambda(G4double val) {UpperBoundLambda = val;};
+    static void SetNbinLambda(G4int n) {NbinLambda = n;};
+    static G4double GetLowerBoundLambda() { return LowerBoundLambda;};
+    static G4double GetUpperBoundLambda() { return UpperBoundLambda;};
+    static G4int GetNbinLambda() {return NbinLambda;};
+
 };
 
 #include "G4eBremsstrahlung.icc"
