@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.23 2004-06-30 14:36:50 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.24 2004-07-05 13:36:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -51,6 +51,7 @@
 // 14-01-04 Activate precise range calculation (V.Ivanchenko)
 // 10-03-04 Fix problem of step limit calculation (V.Ivanchenko)
 // 30-06-04 make destructor virtual (V.Ivanchenko)
+// 05-07-04 fix problem of GenericIons seen at small cuts (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -575,7 +576,7 @@ inline void G4VEnergyLossProcess::ComputeLambda(G4double e)
     if(e > emax) {
       mfpKinEnergy = e;
       preStepLambda = GetLambda(e);
-    } else preStepLambda = theCrossSectionMax[currentMaterialIndex];
+    } else preStepLambda = chargeSqRatio*theCrossSectionMax[currentMaterialIndex];
   }
 }
 
@@ -609,12 +610,8 @@ inline G4double G4VEnergyLossProcess::GetContinuousStepLimit(const G4Track&,
     x = fRange;
     G4double y = x*dRoverRange;
 
-    if(x > minStepLimit && y < currentMinStep ) {
-
+    if(x > minStepLimit && y < currentMinStep ) 
       x = y + minStepLimit*(1.0 - dRoverRange)*(2.0 - minStepLimit/fRange);
-      //if(x >fRange || x<minStepLimit) G4cout << "!!! StepLimit problem!!!" << G4endl;
-      //if(rndmStepFlag) x = minStepLimit + G4UniformRand()*(x-minStepLimit);
-    }
   }
   return x;
 }
