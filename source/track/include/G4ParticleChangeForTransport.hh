@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForTransport.hh,v 1.8 2001-10-22 04:19:39 kurasige Exp $
+// $Id: G4ParticleChangeForTransport.hh,v 1.9 2002-11-01 15:55:30 jacek Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,6 +45,7 @@
 #include "G4ios.hh"
 #include "G4TouchableHandle.hh"
 #include "G4ParticleChange.hh"
+
 
 class G4ParticleChangeForTransport: public G4ParticleChange
 { 
@@ -105,24 +106,25 @@ class G4ParticleChangeForTransport: public G4ParticleChange
     //  The flag which is set if mometum is changed in this stepi
     G4Material* theMaterialChange;
      //  The material where given track currently locates
+
+  // Prototyping implementation of smooth representation of curved
+  // trajectories. (jacek 30/10/2002)
+public:
+  // Auxiliary points are ThreeVectors for now; change to
+  // G4AuxiliaryPoints or some such (jacek 30/10/2002)
+  void SetPointerToVectorOfAuxiliaryPoints( G4std::vector<G4ThreeVector>* theNewVectorPointer ) {
+    fpVectorOfAuxiliaryPointsPointer = theNewVectorPointer;
+  }
+  G4std::vector<G4ThreeVector>* GetPointerToVectorOfAuxiliaryPoints() const {
+    return fpVectorOfAuxiliaryPointsPointer;
+  }
+private:
+  // Explicity including the word "Pointer" in the name as I keep
+  // forgetting the * (jacek 30/10/2002)
+  G4std::vector<G4ThreeVector>* fpVectorOfAuxiliaryPointsPointer;
+
 };
 
 #include "G4ParticleChangeForTransport.icc"
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

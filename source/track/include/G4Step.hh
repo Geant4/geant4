@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.hh,v 1.8 2001-07-11 10:08:36 gunter Exp $
+// $Id: G4Step.hh,v 1.9 2002-11-01 15:55:30 jacek Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -65,6 +65,7 @@
 #include "G4StepStatus.hh"          // Include from 'track'
 class G4Polyline;                   // Forward declaration.
 class G4Track;                      // Forward declaration.
+
 
 ////////////
 class G4Step
@@ -152,19 +153,27 @@ class G4Step
      //
    G4SteppingControl fpSteppingControlFlag;     
     // A flag to control SteppingManager behavier from process
+
+
+  // Prototyping implementation of smooth representation of curved
+  // trajectories. (jacek 30/10/2002)
+public:
+  // Auxiliary points are ThreeVectors for now; change to
+  // G4VAuxiliaryPoints or some such (jacek 30/10/2002)
+  void SetPointerToVectorOfAuxiliaryPoints( G4std::vector<G4ThreeVector>* theNewVectorPointer ) {
+    fpVectorOfAuxiliaryPointsPointer = theNewVectorPointer;
+  }
+  G4std::vector<G4ThreeVector>* GetPointerToVectorOfAuxiliaryPoints() const {
+    return fpVectorOfAuxiliaryPointsPointer;
+  }
+private:
+  // Explicity including the word "Pointer" in the name as I keep
+  // forgetting the * (jacek 30/10/2002)
+  G4std::vector<G4ThreeVector>* fpVectorOfAuxiliaryPointsPointer;
+
 };
 
 #include "G4Step.icc"
 
 
 #endif
-
-
-
-
-
-
-
-
-
-
