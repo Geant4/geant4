@@ -368,6 +368,14 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
       theTotalResult->SetStatusChange(fAlive);
       G4double rotation = 2.*pi*G4UniformRand();
       G4ThreeVector it(0., 0., 1.);
+      if(xBiasOn)
+      {
+        G4cout << "BiasDebug "<<GetProcessName()<<" "
+                              <<aScaleFactor<<" "
+                              <<XBiasSurvivalProbability()<<" "
+		  	      <<XBiasSecondaryWeight()<<" "
+			      <<G4endl;
+      }
       if(aR->GetStatusChange()==stopAndKill)
       {
 	if( xBiasOn && G4UniformRand()<XBiasSurvivalProbability() )
@@ -390,16 +398,25 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
       }
       if(aR->GetStatusChange()!=stopAndKill )
       {
-	if(xBiasOn)
+	if(xBiasOn && G4UniformRand()<XBiasSurvivalProbability() )
 	{
-	  G4Exception("Cross-section biasing applicable only to destructive processes.");
+ 	  theTotalResult->SetWeightChange( XBiasSurvivalProbability() );
+	  G4double newWeight = aR->GetWeightChange();
+          G4DynamicParticle * aNew = new G4DynamicParticle(aT.GetDefinition(),
+	                                                   aR->GetEnergyChange(),
+							   aR->GetMomentumChange());
+	  G4HadSecondary * theSec = new G4HadSecondary(aNew, newWeight);
+	  aR->AddSecondary(theSec);
 	}
-	G4double newWeight = aR->GetWeightChange();
-	theTotalResult->SetWeightChange(newWeight); // This is multiplicative
-	if(aR->GetEnergyChange()>-.5) theTotalResult->SetEnergyChange(aR->GetEnergyChange());
-	G4LorentzVector newDirection(aR->GetMomentumChange().unit(), 1.);
-	newDirection*=aR->GetTrafoToLab();
-	theTotalResult->SetMomentumDirectionChange(newDirection.vect());
+	else
+	{
+	  G4double newWeight = aR->GetWeightChange();
+	  theTotalResult->SetWeightChange(newWeight); // This is multiplicative
+	  if(aR->GetEnergyChange()>-.5) theTotalResult->SetEnergyChange(aR->GetEnergyChange());
+	  G4LorentzVector newDirection(aR->GetMomentumChange().unit(), 1.);
+	  newDirection*=aR->GetTrafoToLab();
+	  theTotalResult->SetMomentumDirectionChange(newDirection.vect());
+	}
       }
       theTotalResult->SetLocalEnergyDeposit(aR->GetLocalEnergyDeposit());
       theTotalResult->SetNumberOfSecondaries(aR->GetNumberOfSecondaries());
