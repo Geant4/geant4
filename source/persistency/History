@@ -15,6 +15,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 23, 99  Y.Morita (persistency-V00-01-07)
+- bug fix in G4PersistentEventMan, G4PersistentGeomMan, G4PersistentRunMan
+- use /db commands
+
 November 22, 99  Y.Morita
 - added digits+hits/digits
 - removed dependency of transient hits
