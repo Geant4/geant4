@@ -52,7 +52,8 @@ hTestCalorimeterSD::hTestCalorimeterSD(G4String name)
   theHisto(hTestHisto::GetPointer()),
   evno(0),
   evnOld(-1),
-  trIDold(-1)
+  trIDold(-1),
+  delta(1.0e-6*mm)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -75,7 +76,8 @@ void hTestCalorimeterSD::Initialize(G4HCofThisEvent*)
   for(G4int i=0; i<numAbs; i++) { energy[i] = 0.0; }
   backEnergy = 0.0;
   leakEnergy = 0.0;
-  zmax = (theHisto->GetAbsorberThickness())*numAbs;
+  G4double gap = theHisto->GetGap();
+  zmax = (theHisto->GetAbsorberThickness() + gap)*numAbs - gap - delta;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -83,7 +85,7 @@ void hTestCalorimeterSD::Initialize(G4HCofThisEvent*)
 G4bool hTestCalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
-  if(0.0 == edep) return true;
+  //  if(0.0 == edep) return true;
 
   theHisto->AddTrackLength(aStep->GetStepLength());
 
@@ -113,7 +115,8 @@ G4bool hTestCalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   G4bool stop = false;
   G4bool primary = false;
   G4bool outAbs = false;
-  if(track->GetNextVolume()->GetName() == "World") outAbs = true;
+  if(track->GetNextVolume()->GetName() == "World"
+     && (zend <= delta || zend >= zmax)  ) outAbs = true;
 
   if(tkin == 0.0) stop = true;
   if(0 == aStep->GetTrack()->GetParentID()) primary = true;
@@ -149,8 +152,8 @@ G4bool hTestCalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   // After step in absorber
 
   if(outAbs) {
-      if(zend >= zmax) leakEnergy += tkin;
-      else             backEnergy += tkin;
+      if(zend >= zmax)       leakEnergy += tkin;
+      else                   backEnergy += tkin;
   }
   return true;
 }

@@ -96,6 +96,8 @@ public: // Without description
     G4int GetNumberOfAbsorbers() const {return NumberOfAbsorbers;};
     void SetAbsorberThickness(G4double val) {AbsorberThickness = val;};     
     G4double  GetAbsorberThickness() const {return AbsorberThickness;};
+    void SetGap(G4double val) {gap = val;};     
+    G4double  GetGap() const {return gap;};
     void SetNumAbsorbersSaved(G4int val) {nAbsSaved = val;};
     G4int GetNumAbsorbersSaved() const {return nAbsSaved;};
     void SetMaxEnergy(G4double val) {maxEnergy = val;};     
@@ -120,6 +122,7 @@ private:
     G4double zend2;
     G4double zEvt;
     G4double AbsorberThickness;
+    G4double gap;
     G4int NumberOfAbsorbers;
     G4int nAbsSaved;
     G4double maxEnergy;

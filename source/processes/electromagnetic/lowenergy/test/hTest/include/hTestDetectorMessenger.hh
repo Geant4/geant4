@@ -72,6 +72,7 @@ public: // Without description
     G4UIcmdWithAnInteger*      NumOfAbsCmd;
     G4UIcmdWithAString*        AbsMaterCmd;
     G4UIcmdWithADoubleAndUnit* AbsThickCmd;
+    G4UIcmdWithADoubleAndUnit* AbsGapCmd;
     G4UIcmdWithADoubleAndUnit* AbsSizYZCmd;
     G4UIcmdWithAString*        WorldMaterCmd;
     G4UIcmdWithADoubleAndUnit* WorldXCmd;

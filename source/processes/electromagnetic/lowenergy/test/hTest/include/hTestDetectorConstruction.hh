@@ -76,8 +76,8 @@ class hTestDetectorConstruction : public G4VUserDetectorConstruction
     inline G4Material* GetWorldMaterial() const {return WorldMaterial;};
     void SetWorldSizeZ   (G4double);
     inline G4double    GetWorldSizeZ() const {return WorldSizeZ;}; 
-    void SetGapBetweenAbsorbers   (G4double);
-    inline G4double    GetGapBetweenAbsorbers() const {return gap;}; 
+    void SetGap(G4double val);
+    inline G4double    GetGap() const {return gap;}; 
     inline void SetHistoName(G4String name) {histoName = name;};
     inline G4String GetHistoName() const {return histoName;};
     inline void SetNumberOfEvents(G4int val) {nEvents = val;};

@@ -83,7 +83,7 @@ hTestDetectorConstruction::hTestDetectorConstruction():
   // corresponds to water test
   nameMatAbsorber   = G4String("Water");
   AbsorberThickness = 1.0*mm;    
-  SizeXY            = 100.0*mm;
+  SizeXY            = 1000.0*mm;
   gap               = 0.0;
   NumberOfAbsorbers = 300;
   nameMatWorld      = G4String("Air");
@@ -176,11 +176,11 @@ void hTestDetectorConstruction::DefineMaterials()
 
   density = 1.390*g/cm3;
   a = 39.95*g/mole;
-  G4Material* lAr = new G4Material(name="liquidArgon", z=18., a, density);
+  G4Material* lAr = new G4Material(name="LiquidArgon", z=18., a, density);
 
   density = 3.02*g/cm3;
   a = 131.29*g/mole;
-  G4Material* lXe = new G4Material(name="liquidXenon", z=54., a, density);
+  G4Material* lXe = new G4Material(name="LiquidXenon", z=54., a, density);
 
   density = 7.870*g/cm3;
   a = 55.85*g/mole;
@@ -390,7 +390,7 @@ void hTestDetectorConstruction::SetWorldSizeZ(G4double val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void hTestDetectorConstruction::SetGapBetweenAbsorbers(G4double val)
+void hTestDetectorConstruction::SetGap(G4double val)
 {
   gap = val;
   if(detIsConstructed) GeometryIsChanged();

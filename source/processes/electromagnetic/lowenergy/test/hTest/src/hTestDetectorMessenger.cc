@@ -82,6 +82,13 @@ hTestDetectorMessenger::hTestDetectorMessenger(hTestDetectorConstruction* h):
   AbsThickCmd->SetRange("SizeZ>0.");
   AbsThickCmd->SetUnitCategory("Length");  
   AbsThickCmd->AvailableForStates(PreInit,Idle);
+
+  AbsGapCmd = new G4UIcmdWithADoubleAndUnit("/hTest/AbsorberGap",this);
+  AbsGapCmd->SetGuidance("Set gap between absorbers");
+  AbsGapCmd->SetParameterName("SizeZ",false);  
+  AbsGapCmd->SetRange("SizeZ>0.");
+  AbsGapCmd->SetUnitCategory("Length");  
+  AbsGapCmd->AvailableForStates(PreInit,Idle);
   
   AbsSizYZCmd = new G4UIcmdWithADoubleAndUnit("/hTest/AbsorberXY",this);
   AbsSizYZCmd->SetGuidance("Set sizeXY of the Absorber");
@@ -175,6 +182,7 @@ hTestDetectorMessenger::~hTestDetectorMessenger()
   delete NumOfAbsCmd; 
   delete AbsMaterCmd; 
   delete AbsThickCmd; 
+  delete AbsGapCmd; 
   delete AbsSizYZCmd;  
   delete WorldMaterCmd;
   delete WorldXCmd;
@@ -214,6 +222,11 @@ void hTestDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if( command == AbsThickCmd )
    { hDet->SetAbsorberThickness(AbsThickCmd->GetNewDoubleValue(newValue));
     (hTestHisto::GetPointer())->SetAbsorberThickness(AbsThickCmd->GetNewDoubleValue(newValue));
+   }
+
+  if( command == AbsGapCmd )
+   { hDet->SetGap(AbsGapCmd->GetNewDoubleValue(newValue));
+    (hTestHisto::GetPointer())->SetGap(AbsGapCmd->GetNewDoubleValue(newValue));
    }
 
   if( command == WorldMaterCmd )

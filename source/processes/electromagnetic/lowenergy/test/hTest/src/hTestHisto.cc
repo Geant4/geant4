@@ -148,7 +148,7 @@ void hTestHisto::SaveToTuple(const G4String& parname,G4double val,G4double defva
 
 void hTestHisto::bookHisto()
 {
-  G4double zmax = AbsorberThickness * NumberOfAbsorbers / mm;
+  G4double zmax = (AbsorberThickness + gap) * NumberOfAbsorbers / mm;
   G4cout << "hTestHisto: Histograms will be saved to the file <" 
          << histName << ">"
          << " AbsThick(mm)= " << AbsorberThickness/mm

@@ -74,6 +74,7 @@ public: // Without description
       G4double leakEnergy;
       G4double zmax;
       G4double tkinold;
+      G4double delta;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
