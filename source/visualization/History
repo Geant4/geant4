@@ -1,4 +1,4 @@
-$Id: History,v 1.168 2001-11-16 10:52:28 johna Exp $
+$Id: History,v 1.169 2001-11-19 15:05:40 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+19th November 2001  John Allison  (vis-V03-02-19 needs config-V03-02-09+)
+- Cosmetic changes to HepRep.
 
 16th November 2001  John Allison
 - Added G4XXXDEBUG to XXX dummy system.
