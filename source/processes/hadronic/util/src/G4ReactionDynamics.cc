@@ -97,6 +97,7 @@
 
     G4int i, l;
     G4double forVeryForward = 0.;
+    G4bool veryForward = false;
     
     const G4double ekOriginal = modifiedOriginal.GetKineticEnergy()/GeV;
     const G4double etOriginal = modifiedOriginal.GetTotalEnergy()/GeV;
@@ -108,6 +109,18 @@
                                         2.0*targetMass*etOriginal );  // GeV
     G4double currentMass = currentParticle.GetMass()/GeV;
     targetMass = targetParticle.GetMass()/GeV;
+    //
+    //  randomize the order of the secondary particles
+    //  note that the current and target particles are not affected
+    //
+    for( i=0; i<vecLen; ++i )
+    {
+      G4int itemp = G4int( G4UniformRand()*vecLen );
+      G4ReactionProduct pTemp = *vec[itemp];
+      *vec[itemp] = *vec[i];
+      *vec[i] = pTemp;
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
+    }
     if( currentMass == 0.0 && targetMass == 0.0 )       // annihilation
     {
       // no kinetic energy in target .....
@@ -128,6 +141,7 @@
       currentParticle.SetKineticEnergy( ek );
       currentParticle.SetMomentum( m );
       forVeryForward = aProton->GetPDGMass();
+      veryForward = true;
     }
     const G4double atomicWeight = targetNucleus.GetN();
     const G4double atomicNumber = targetNucleus.GetZ();
@@ -155,17 +169,22 @@
     
     G4double backwardEnergy = centerofmassEnergy/2.0 - targetMass;
     G4int backwardCount = 1;           // number of particles in backward hemisphere
-    //
-    //  randomize the order of the secondary particles
-    //  note that the current and target particles are not affected
-    //
-    for( i=0; i<vecLen; ++i )
+    if(veryForward)
     {
-      G4int itemp = G4int( G4UniformRand()*vecLen );
-      G4ReactionProduct pTemp = *vec[itemp];
-      *vec[itemp] = *vec[i];
-      *vec[i] = pTemp;
-      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
+      if(currentParticle.GetSide()==-1)
+      {
+        forwardEnergy += currentMass;
+	forwardCount --;
+	backwardEnergy -= currentMass;
+	backwardCount ++;
+      }
+      if(targetParticle.GetSide()!=-1)
+      {
+        backwardEnergy += targetMass;
+	backwardCount --;
+	forwardEnergy -= targetMass;
+	forwardCount ++;
+      }
     }
     for( i=0; i<vecLen; ++i )
     {
@@ -850,11 +869,11 @@
           }
         }
       }    // closes outer loop
-      if( eliminateThisParticle )  // not enough energy, eliminate target
-      {
-        G4cerr << "Warning: eliminating target particle" << G4endl;
+//      if( eliminateThisParticle )  // not enough energy, eliminate target
+//      {
+//        G4cerr << "Warning: eliminating target particle" << G4endl;
 //        exit( EXIT_FAILURE );
-      }
+//      }
     }
     //
     //  this finishes the target particle
@@ -1820,13 +1839,16 @@
     // Lorentz transformation in lab system
     //
     G4int numberofFinalStateNucleons = 0;
-    if( currentParticle.GetMass() > 0.5*GeV )++numberofFinalStateNucleons;
+    if( currentParticle.GetDefinition() ==aProton ||
+        currentParticle.GetDefinition() == aNeutron ) ++numberofFinalStateNucleons;
     currentParticle.Lorentz( currentParticle, pseudoParticle[2] );
-    if( targetParticle.GetMass() > 0.5*GeV )++numberofFinalStateNucleons;
+    if( targetParticle.GetDefinition() ==aProton ||
+        targetParticle.GetDefinition() == aNeutron) ++numberofFinalStateNucleons;
     targetParticle.Lorentz( targetParticle, pseudoParticle[2] );
     for( i=0; i<vecLen; ++i )
     {
-      if( vec[i]->GetMass() > 0.5*GeV )++numberofFinalStateNucleons;
+      if( vec[i]->GetDefinition() ==aProton ||
+          vec[i]->GetDefinition() == aNeutron)++numberofFinalStateNucleons;
       vec[i]->Lorentz( *vec[i], pseudoParticle[2] );
     }
       // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
