@@ -21,10 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4BremsstrahlungParameters.cc,v 1.3 2001-10-09 11:23:27 vnivanch Exp $
+// $Id: G4BremsstrahlungParameters.cc,v 1.4 2001-10-10 16:46:05 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
+//         V.Ivanchenko (Vladimir.Ivantchenko@cern.ch)
 //
 // History:
 // -----------
@@ -42,17 +43,15 @@
 #include "g4std/fstream"
 #include "g4std/strstream"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4BremsstrahlungParameters:: G4BremsstrahlungParameters(G4int minZ, G4int maxZ)
-  : zMin(minZ), 
-    zMax(maxZ), 
-    interpolation(0)
+  : interpolation(0),
+    zMin(minZ), 
+    zMax(maxZ)
 {
   LoadData();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4BremsstrahlungParameters::~G4BremsstrahlungParameters()
 { 
@@ -61,7 +60,7 @@ G4BremsstrahlungParameters::~G4BremsstrahlungParameters()
 
   for (pos = paramA.begin(); pos != paramA.end(); pos++)
     {
-      G4VEMDataSet* dataSet = pos->second;
+      G4VEMDataSet* dataSet = (*pos).second;
       paramA.erase(pos);
       delete dataSet;
     }
@@ -73,7 +72,6 @@ G4BremsstrahlungParameters::~G4BremsstrahlungParameters()
   paramC.clear();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4BremsstrahlungParameters::ParameterA(G4int Z, G4double energy) const
 {
@@ -90,7 +88,6 @@ G4double G4BremsstrahlungParameters::ParameterA(G4int Z, G4double energy) const
   return value;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4BremsstrahlungParameters::ParameterB(G4int Z, G4double energy) const
 {
@@ -107,7 +104,6 @@ G4double G4BremsstrahlungParameters::ParameterB(G4int Z, G4double energy) const
   return b;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4BremsstrahlungParameters::LoadData()
 {
@@ -234,7 +230,7 @@ void G4BremsstrahlungParameters::LoadData()
 	  G4Exception(excep);
 	}
 
-  G4int nParam = 2;
+  //  G4int nParam = 2;
   a = 0;
   e = 0;
 
@@ -257,12 +253,11 @@ void G4BremsstrahlungParameters::LoadData()
   file.close();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4BremsstrahlungParameters::ParameterC(G4int id) const
 {
-  G4double value = 0.;
-  if (id < 0 || id >= paramC.size()) {
+  G4int n = paramC.size();
+  if (id < 0 || id >= n) {
     G4String ex = "G4BremsstrahlungParameters::ParameterC - wrong id=" + id; 
     G4Exception(ex);
   }
@@ -270,7 +265,6 @@ G4double G4BremsstrahlungParameters::ParameterC(G4int id) const
   return paramC[id];
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4BremsstrahlungParameters::PrintData() const
 {
@@ -284,12 +278,12 @@ void G4BremsstrahlungParameters::PrintData() const
   size_t nZ = activeZ.size();
   G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::const_iterator pos;
 
-  for (G4int j=0; j<nZ; j++) {
+  for (size_t j=0; j<nZ; j++) {
     G4int Z = (G4int)activeZ[j];   
     pos = paramA.find(Z);
     if (pos!= paramA.end()) {
       G4cout << "===== Z= " << Z << " =====" << G4endl;
-      G4VEMDataSet* dataSet = pos->second;
+      G4VEMDataSet* dataSet = (*pos).second;
       dataSet->PrintData();
     }
   }
@@ -311,5 +305,3 @@ void G4BremsstrahlungParameters::PrintData() const
   G4cout << "==========================================" << G4endl;
 }
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

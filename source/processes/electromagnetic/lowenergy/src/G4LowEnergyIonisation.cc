@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.62 2001-10-10 11:48:40 pia Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.63 2001-10-10 16:46:05 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -94,8 +94,8 @@
 
 G4LowEnergyIonisation::G4LowEnergyIonisation(const G4String& nam)
   : G4eLowEnergyLoss(nam), 
-  theMeanFreePath(0),
   crossSectionHandler(0),
+  theMeanFreePath(0),
   energySpectrum(0)
 {
   verboseLevel = 0;
@@ -204,7 +204,7 @@ void G4LowEnergyIonisation::BuildLossTable(
 
   G4double lowKineticEnergy  = GetLowerBoundEloss();
   G4double highKineticEnergy = GetUpperBoundEloss();
-  G4int    totBin = GetNbinEloss();
+  size_t   totBin = GetNbinEloss();
  
   //  create table
   
@@ -238,7 +238,7 @@ void G4LowEnergyIonisation::BuildLossTable(
     cutForDelta[J] = tcut;
 
     const G4ElementVector* theElementVector = material->GetElementVector();
-    G4int NumberOfElements = material->GetNumberOfElements() ;
+    size_t NumberOfElements = material->GetNumberOfElements() ;
     const G4double* theAtomicNumDensityVector = 
                     material->GetAtomicNumDensityVector();
     if(verboseLevel > 1) {
@@ -405,12 +405,12 @@ void G4LowEnergyIonisation::PrintInfoDefinition()
   comments += " in the energy range [250eV,100GeV]";
   comments += "\n the process must work with G4LowEnergyBremsstrahlung";
   
-  G4cout << G4endl << GetProcessName() << ":  " << comments<<G4endl;
+  G4cout << G4endl << GetProcessName() << ":  " << comments << G4endl;
 }         
 
 G4bool G4LowEnergyIonisation::IsApplicable(const G4ParticleDefinition& particle)
 {
-   return ( (&particle == G4Electron::Electron() );
+   return ( (&particle == G4Electron::Electron()) );
 }
 
 
@@ -424,3 +424,4 @@ G4double G4LowEnergyIonisation::GetMeanFreePath(const G4Track& track,
    G4double meanFreePath = data->FindValue(track.GetKineticEnergy());
    return meanFreePath; 
 } 
+

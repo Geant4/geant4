@@ -21,10 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4BremsstrahlungParameters.hh,v 1.3 2001-10-09 11:23:24 vnivanch Exp $
+// $Id: G4BremsstrahlungParameters.hh,v 1.4 2001-10-10 16:45:56 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
+//         V. Ivanchenko (Vladimir.Ivantchenko@cern.ch)
 //
 // History:
 // -----------
@@ -48,7 +49,6 @@
 #include "globals.hh"
 #include "G4DataVector.hh"
 #include "g4std/map"
-#include "g4std/vector"
 
 class G4VEMDataSet;
 class G4VDataSetAlgorithm;
@@ -73,8 +73,7 @@ private:
 
   // hide assignment operator 
   G4BremsstrahlungParameters(const G4BremsstrahlungParameters&);
-  G4BremsstrahlungParameters & operator=(
-                             const G4BremsstrahlungParameters &right);
+  G4BremsstrahlungParameters & operator=(const G4BremsstrahlungParameters &right);
 
   void LoadData();
 

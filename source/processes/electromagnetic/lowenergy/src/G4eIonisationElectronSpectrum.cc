@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4eIonisationElectronSpectrum.cc,v 1.3 2001-10-10 16:46:06 pia Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -44,7 +46,6 @@
 #include "G4DataVector.hh"
 #include "Randomize.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4eIonisationElectronSpectrum::G4eIonisationElectronSpectrum():
                                G4VEnergySpectrum(),
@@ -54,14 +55,12 @@ G4eIonisationElectronSpectrum::G4eIonisationElectronSpectrum():
   theParam = new G4eIonisationParameters();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4eIonisationElectronSpectrum::~G4eIonisationElectronSpectrum() 
 {
   delete theParam;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4eIonisationElectronSpectrum::Probability(G4int Z, 
                                                     G4double tMin, 
@@ -70,6 +69,10 @@ G4double G4eIonisationElectronSpectrum::Probability(G4int Z,
                                                     G4int shell,
 						    const G4ParticleDefinition*) const
 {
+  // Please comment what Probability does and what are the three 
+  // functions mentioned below
+  // Describe the algorithms used
+
   G4double eMax = MaxEnergyOfSecondaries(e);
   G4double t0 = G4std::max(tMin, lowestE);
   G4double tm = G4std::min(tMax, eMax);
@@ -159,7 +162,6 @@ G4double G4eIonisationElectronSpectrum::Probability(G4int Z,
   return val; 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4eIonisationElectronSpectrum::AverageEnergy(G4int Z,
                                                       G4double tMin, 
@@ -168,6 +170,10 @@ G4double G4eIonisationElectronSpectrum::AverageEnergy(G4int Z,
                                                       G4int shell,
 						      const G4ParticleDefinition*) const
 {
+  // Please comment what AverageEnergy does and what are the three 
+  // functions mentioned below
+  // Describe the algorithms used
+
   G4double eMax = MaxEnergyOfSecondaries(e);
   G4double t0 = G4std::max(tMin, lowestE);
   G4double tm = G4std::min(tMax, eMax);
@@ -261,8 +267,6 @@ G4double G4eIonisationElectronSpectrum::AverageEnergy(G4int Z,
   return val; 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 
 G4double G4eIonisationElectronSpectrum::SampleEnergy(G4int Z,
                                                      G4double tMin, 
@@ -271,6 +275,7 @@ G4double G4eIonisationElectronSpectrum::SampleEnergy(G4int Z,
                                                      G4int shell,
 						     const G4ParticleDefinition*) const
 {
+  // Please comment what SampleEnergy does
   G4double tdel = 0.0;
   G4double t0 = G4std::max(tMin, lowestE);
   G4double tm = G4std::min(tMax, MaxEnergyOfSecondaries(e));
@@ -376,7 +381,6 @@ G4double G4eIonisationElectronSpectrum::SampleEnergy(G4int Z,
   return tdel; 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4eIonisationElectronSpectrum::IntSpectrum(size_t n, 
                                                     G4double tMin, 
@@ -384,6 +388,7 @@ G4double G4eIonisationElectronSpectrum::IntSpectrum(size_t n,
                                                     G4double b,
 						    const G4DataVector& p) const
 {
+  // Please comment what IntSpectrum does
   G4int k = 0;
   if(n == 4) k = 7;
   G4double zMax = 1./(tMax + b);
@@ -400,7 +405,6 @@ G4double G4eIonisationElectronSpectrum::IntSpectrum(size_t n,
   return x;
 } 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4eIonisationElectronSpectrum::AverageValue(size_t n, 
                                                      G4double tMin, 
@@ -415,7 +419,6 @@ G4double G4eIonisationElectronSpectrum::AverageValue(size_t n,
   G4double yMax = zMax;
   G4double yMin = zMin;
   G4double x = p[k]*log(zMin/zMax) + p[k + 1]*(yMin - yMax);
-  G4double y;
   for(size_t i=2; i<n; i++) {
     yMax *= zMax;
     yMin *= zMin;
@@ -425,13 +428,13 @@ G4double G4eIonisationElectronSpectrum::AverageValue(size_t n,
   return x;
 } 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4eIonisationElectronSpectrum::Function(size_t n, 
                                                  G4double e, 
                                                  G4double b,
 						 const G4DataVector& p) const
 {
+  // Please comment what Function does
   G4int k = 0;
   if(n == 4) k = 7;
   G4double z = 1./(e + b);
@@ -445,7 +448,6 @@ G4double G4eIonisationElectronSpectrum::Function(size_t n,
   return x;
 } 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4eIonisationElectronSpectrum::MaxFunction(size_t n, 
                                                     G4double tMin, 
@@ -453,7 +455,9 @@ G4double G4eIonisationElectronSpectrum::MaxFunction(size_t n,
                                                     G4double b,
 						    const G4DataVector& p) const
 {
-  G4int nbin  = 11;
+  // Please comment what MaxFunction does
+
+  size_t nbin  = 11;
   G4double de = 0.1*(tMax - tMin);
   G4double x = 0.0;
   G4double y, e;
@@ -466,8 +470,7 @@ G4double G4eIonisationElectronSpectrum::MaxFunction(size_t n,
   return x*1.2;
 } 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-
-
+void G4eIonisationElectronSpectrum::PrintData() const 
+{
+  theParam->PrintData();
+}

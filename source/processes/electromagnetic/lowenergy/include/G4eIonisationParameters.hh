@@ -21,17 +21,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationParameters.hh,v 1.3 2001-10-09 11:23:26 vnivanch Exp $
+// $Id: G4eIonisationParameters.hh,v 1.4 2001-10-10 16:45:56 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
-//                          Values of the parameters from A. Forti's fit
+//         V. Ivanchenko 
+//         Values of the parameters from A. Forti's fit
 //
 // History:
 // -----------
 // 31 Jul 2001   MGP        Created
 // 12.09.01 V.Ivanchenko    Add param and interpolation of parameters  
-// 04.10.01 V.Ivanchenko    Add BindingEnergy method  
+// 10.10.2001 MGP           Revision to improve code quality and 
+//                          consistency with design
 //
 // -------------------------------------------------------------------
 
@@ -60,14 +62,14 @@ public:
 
   ~G4eIonisationParameters();
  
-  G4double Parameter(G4int Z, G4int shellIndex, G4int parameterIndex,
-                     G4double e) const;
+  G4double Parameter(G4int Z, G4int shellIndex, 
+		     G4int parameterIndex, G4double e) const;
   
   void PrintData() const;
 
 private:
 
-  // hide assignment operator 
+  // Hide copy constructor and assignment operator 
   G4eIonisationParameters(const G4eIonisationParameters&);
   G4eIonisationParameters & operator=(const G4eIonisationParameters &right);
 
@@ -76,9 +78,9 @@ private:
   G4int zMin;
   G4int zMax;
 
-  // Parameters of the energy spectra
   G4DataVector activeZ;
 
+  // Parameters of the energy spectra
   G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> > param;
 
   size_t length;
@@ -88,14 +90,3 @@ private:
 };
  
 #endif
- 
-
-
-
-
-
-
-
-
-
-

@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4eIonisationElectronSpectrum.hh,v 1.2 2001-10-10 16:45:56 pia Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -33,30 +35,24 @@
 // Creation date: 27 September 2001
 //
 // Modifications: 
+// 10.10.01 MGP             Revision to improve code quality and 
+//                          consistency with design
 //
 // -------------------------------------------------------------------
 
 // Class Description: 
-//
 // Provides various integration over delta-electron spectrum for e- 
 // ionisation process
-//
-// Class Description: End 
 
 // -------------------------------------------------------------------
-//
 
-#ifndef G4eIonisationElectronSpectrum_h
-#define G4eIonisationElectronSpectrum_h 1
+#ifndef G4EIONISATIONELECTRONSPECTRUM_HH
+#define GG4EIONISATIONELECTRONSPECTRUM_HH 1
 
-#include "G4VEnergySpectrum.hh" 
-#include "G4eIonisationParameters.hh" 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+#include "G4VEnergySpectrum.hh"
+ 
+class G4eIonisationParameters;
 class G4DataVector;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class G4eIonisationElectronSpectrum : public G4VEnergySpectrum
 {
@@ -68,23 +64,23 @@ public:
   ~G4eIonisationElectronSpectrum();
 
   G4double Probability(G4int Z, G4double tmin, G4double tmax, 
-                                G4double kineticEnergy, G4int shell,
-                          const G4ParticleDefinition* pd=0) const;
+		       G4double kineticEnergy, G4int shell,
+		       const G4ParticleDefinition* pd=0) const;
 
   G4double AverageEnergy(G4int Z, G4double tmin, G4double tmax,
-                                  G4double kineticEnergy, G4int shell,
-                            const G4ParticleDefinition* pd=0) const;
+			 G4double kineticEnergy, G4int shell,
+			 const G4ParticleDefinition* pd=0) const;
 
   G4double SampleEnergy(G4int Z, G4double tmin, G4double tmax,
-                                 G4double kineticEnergy, G4int shell,
-                           const G4ParticleDefinition* pd=0) const;
+			G4double kineticEnergy, G4int shell,
+			const G4ParticleDefinition* pd=0) const;
 
   G4double MaxEnergyOfSecondaries(G4double kineticEnergy,
                                   G4int Z = 0,
-                            const G4ParticleDefinition* pd=0) const
-                         {return 0.5*kineticEnergy;};
-
-  void PrintData() const {theParam->PrintData();};
+				  const G4ParticleDefinition* pd=0) const
+  { return 0.5*kineticEnergy; }
+  
+  void PrintData() const;
 
 protected:
 
@@ -102,10 +98,9 @@ private:
   G4double MaxFunction(size_t n, G4double tmin, G4double tmax, G4double b, 
                        const G4DataVector& p) const; 
 
-  // hide assignment operator 
+  // Hide copy constructor and assignment operator 
   G4eIonisationElectronSpectrum(const  G4eIonisationElectronSpectrum&);
-  G4eIonisationElectronSpectrum & operator =
-                               (const G4eIonisationElectronSpectrum &right);
+  G4eIonisationElectronSpectrum & operator = (const G4eIonisationElectronSpectrum &right);
 
 private:
 
@@ -115,9 +110,5 @@ private:
 
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif
-
-
-

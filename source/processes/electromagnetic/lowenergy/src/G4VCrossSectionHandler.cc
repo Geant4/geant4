@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCrossSectionHandler.cc,v 1.7 2001-10-09 15:35:02 pia Exp $
+// $Id: G4VCrossSectionHandler.cc,v 1.8 2001-10-10 16:46:06 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -360,7 +360,8 @@ G4double G4VCrossSectionHandler::FindValue(G4int Z, G4double energy,
       G4VEMDataSet* dataSet = (*pos).second;
       if (shellIndex >= 0) 
 	{
-	  if(shellIndex < dataSet->NumberOfComponents())    
+	  G4int nComponents = dataSet->NumberOfComponents();
+	  if(shellIndex < nComponents)    
 	    // - MGP - Why doesn't it use G4VEMDataSet::FindValue directly?
 	    value = dataSet->GetComponent(shellIndex)->FindValue(energy);
 	  else 
