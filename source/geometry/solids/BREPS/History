@@ -1,4 +1,4 @@
-$Id: History,v 1.42 2002-04-19 08:29:41 gcosmo Exp $
+$Id: History,v 1.43 2002-10-16 15:48:54 gcosmo Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16/10/2002 : R. Chytracek      breps-V04-01-00
+- G4BREPSolidPCone.cc: fixed creation of begin & end planar surfaces in the case where
+  [RMIN[0] == 0.0 && RMAX[0] > 0.0] and/or [RMIN[sections] == 0.0 && RMAX[sections] > 0.0].
+  Fixes problem report #419.
 
 19/04/2002 : R. Chytracek      breps-V04-00-05
 - G4BREPSolidPCone.cc: added sanity check of delta phi section value and
