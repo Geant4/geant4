@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpAbsorption.hh,v 1.6 2001-07-11 10:08:22 gunter Exp $
+// $Id: G4OpAbsorption.hh,v 1.7 2001-08-31 16:43:32 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -85,7 +85,7 @@ public: // Without description
         // Constructors and Destructor
         ////////////////////////////////
 
-        G4OpAbsorption(const G4String& processName = "Absorption");
+        G4OpAbsorption(const G4String& processName = "OpAbsorption");
 
         // G4OpAbsorption(const G4OpAbsorption &right);
 
