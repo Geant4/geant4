@@ -785,7 +785,7 @@ G4PAIPhotonModel::SampleSecondary( const G4MaterialCutsCouple* matCC,
     G4double deltaTkin     = GetPostStepTransfer(fPAIplasmonTable, fdNdxCutPlasmonVector,
                                                  iPlace, scaledTkin);
 
-    G4cout<<"PAIPhotonModel PlasmonPostStepTransfer = "<<deltaTkin/keV<<" keV"<<G4endl ; 
+    //G4cout<<"PAIPhotonModel PlasmonPostStepTransfer = "<<deltaTkin/keV<<" keV"<<G4endl ; 
 
     if( deltaTkin <= 0. ) return 0;
 
@@ -819,7 +819,7 @@ G4PAIPhotonModel::SampleSecondary( const G4MaterialCutsCouple* matCC,
     G4double deltaTkin     = GetPostStepTransfer(fPAIphotonTable, fdNdxCutPhotonVector,
                                                  iPlace,scaledTkin);
 
-    G4cout<<"PAIPhotonModel PhotonPostStepTransfer = "<<deltaTkin/keV<<" keV"<<G4endl ; 
+    //G4cout<<"PAIPhotonModel PhotonPostStepTransfer = "<<deltaTkin/keV<<" keV"<<G4endl ; 
 
     if( deltaTkin <= 0. ) return 0;
 
