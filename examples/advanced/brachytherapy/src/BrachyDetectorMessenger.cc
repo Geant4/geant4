@@ -31,7 +31,7 @@
 //    *********************************
 //
 //
-// $Id: BrachyDetectorMessenger.cc,v 1.7 2003-05-22 17:20:43 guatelli Exp $
+// $Id: BrachyDetectorMessenger.cc,v 1.8 2003-05-26 09:20:14 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,9 +57,7 @@ BrachyDetectorMessenger::BrachyDetectorMessenger( BrachyDetectorConstruction* De
   phantomMaterialCmd->AvailableForStates(G4State_Idle);
   
   sourceCmd = new G4UIcmdWithAString("/source/switch",this);
-  sourceCmd->SetGuidance("Assign the selected geometry to G4RunManager.");
-  sourceCmd->SetGuidance("In case the choice is present to this command,");
-  sourceCmd->SetGuidance("\"/geom/select\" will be invoked and then switched.");
+  sourceCmd->SetGuidance("Assign the selected geometry to G4RunManager."); 
   sourceCmd->SetParameterName("choice",true);
   sourceCmd->SetDefaultValue(" ");
   sourceCmd->SetCandidates("Iridium Iodium Leipzig ");

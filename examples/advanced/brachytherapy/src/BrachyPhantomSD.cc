@@ -30,7 +30,7 @@
 //    *                              *
 //    ********************************
 //
-// $Id: BrachyPhantomSD.cc,v 1.4 2003-05-22 17:20:43 guatelli Exp $
+// $Id: BrachyPhantomSD.cc,v 1.5 2003-05-26 09:20:14 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPhantomSD.hh"
@@ -62,7 +62,7 @@ BrachyPhantomSD::~BrachyPhantomSD()
  delete[] voxelID;
 }
 
-void BrachyPhantomSD::Initialize(G4HCofThisEvent*HCE)
+void BrachyPhantomSD::Initialize(G4HCofThisEvent*)
 {
   G4int numberOfVoxelsY = 300;
   phantomHitsCollection = new BrachyPhantomHitsCollection(SensitiveDetectorName,collectionName[0]);
@@ -86,7 +86,7 @@ G4bool BrachyPhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
     return false;
 
   G4VPhysicalVolume* physVol = ROhist->GetVolume();
-  G4VPhysicalVolume* mothVol = ROhist->GetVolume(1);
+  //G4VPhysicalVolume* mothVol = ROhist->GetVolume(1);
   
   // Read Voxel indexes: i is the x index, k is the z index
   G4int k = ROhist->GetReplicaNumber(1);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyMaterial.hh,v 1.3 2003-05-22 17:20:41 guatelli Exp $
+// $Id: BrachyMaterial.hh,v 1.4 2003-05-26 09:20:13 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    **********************************
@@ -41,15 +41,13 @@
 class G4Material;
 
 class BrachyMaterial
-{ public:
+{ 
+public:
   BrachyMaterial();
   ~ BrachyMaterial();
 
 public:
   void  DefineMaterials();
-
-public:
   G4Material* GetMat(G4String); //returns the material
 };
-
 #endif

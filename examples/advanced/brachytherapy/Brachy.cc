@@ -108,7 +108,8 @@ int main(int argc ,char ** argv)
 	 << " G4ANALYSIS_USE environment variable not set, NO ANALYSIS " 
 	 << G4endl;
 #endif
-  
+  // uncomment if interactive mode is needed ... 
+  /* 
   G4UIsession* session=0;
 
 
@@ -121,7 +122,7 @@ int main(int argc ,char ** argv)
       session = new G4UIterminal();
 #endif
     }
-
+  */
   BrachyEventAction *pEventAction=new BrachyEventAction(sensitiveDetectorName);
   pRunManager->SetUserAction(pEventAction );
 
@@ -133,16 +134,11 @@ int main(int argc ,char ** argv)
 
   // get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  
-
-
+ 
+  // uncomment if interactive mode is needed ...
+  /*
   if (session)   // Define UI session for interactive mode.
-    {
-      // G4UIterminal is a (dumb) terminal.
-      UI->ApplyCommand("/control/execute initInter.mac");    
-#ifdef G4UI_USE_XM
-      // Customize the G4UIXm menubar with a macro file :
-      UI->ApplyCommand("/control/execute gui.mac");
-#endif
+    {    
       session->SessionStart();
       delete session;
     }
@@ -152,10 +148,10 @@ int main(int argc ,char ** argv)
       G4String fileName = argv[1];
       UI->ApplyCommand(command+fileName);
     }  
-
+  */
+  // comment if interactive mode is needed ...
+  pRunManager -> BeamOn(100);
   // Job termination
-
-
 #ifdef G4VIS_USE
   delete visManager;
 #endif

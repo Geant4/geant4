@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyPhantomSD.hh,v 1.4 2003-05-22 17:20:42 guatelli Exp $
+// $Id: BrachyPhantomSD.hh,v 1.5 2003-05-26 09:20:13 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    ********************************
@@ -46,7 +46,7 @@ public:
   BrachyPhantomSD(G4String name, G4int NumVoxelX, G4int NumVoxelZ);
   ~BrachyPhantomSD();
 
-  void Initialize(G4HCofThisEvent*HCE);
+  void Initialize(G4HCofThisEvent*);
   G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
   void EndOfEvent(G4HCofThisEvent*HCE);
   void clear();

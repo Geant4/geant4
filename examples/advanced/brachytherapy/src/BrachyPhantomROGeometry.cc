@@ -30,7 +30,7 @@
 //    *                                  *
 //    ************************************
 //
-// $Id: BrachyPhantomROGeometry.cc,v 1.4 2003-05-22 17:20:43 guatelli Exp $
+// $Id: BrachyPhantomROGeometry.cc,v 1.5 2003-05-26 09:20:14 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPhantomROGeometry.hh"
@@ -72,10 +72,6 @@ G4VPhysicalVolume* BrachyPhantomROGeometry::Build()
   // division in future, since this material is irrelevant for tracking.)
 
   G4Material* dummyMat = new G4Material(name="dummyMat", 1., 1.*g/mole, 1.*g/cm3);
-
-  // Slice thickness is the average of voxel X and Z sizes
-  G4double voxelThicknessY = (phantomDimensionX/numberOfVoxelsAlongX+
-			      phantomDimensionZ/numberOfVoxelsAlongZ)/2.0;
 
   G4double worldDimensionX = 4.0*m;
   G4double worldDimensionY = 4.0*m;

@@ -30,7 +30,7 @@
 //    *                                *
 //    **********************************
 //
-// $Id: BrachyPhysicsList.cc,v 1.7 2003-05-22 17:20:43 guatelli Exp $
+// $Id: BrachyPhysicsList.cc,v 1.8 2003-05-26 09:20:14 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPhysicsList.hh"
@@ -152,8 +152,6 @@ void BrachyPhysicsList::SetCuts()
   SetCutValue(cutForGamma, "gamma");
   SetCutValue(cutForElectron, "e-");
   SetCutValue(cutForPositron, "e+");
-  
-  SetCutValueForOthers(defaultCutValue);
   
   if (verboseLevel>0) DumpCutValuesTable();
 }

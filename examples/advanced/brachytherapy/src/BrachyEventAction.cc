@@ -29,7 +29,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyEventAction.cc,v 1.15 2003-05-22 17:20:43 guatelli Exp $
+// $Id: BrachyEventAction.cc,v 1.16 2003-05-26 09:20:14 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyEventAction.hh"
@@ -79,10 +79,8 @@ void BrachyEventAction::BeginOfEventAction(const G4Event*)
 
 void BrachyEventAction::EndOfEventAction(const G4Event* evt)
 {
-  G4int numberOfVoxelX = detector->GetNumVoxelX();
   G4int numberOfVoxelZ = detector->GetNumVoxelZ();
   G4double voxelWidthZ = 0.1*cm;
-  G4double voxelWidthX = 0.1*cm;
   
   if(hitsCollectionID < 0) return; 
 
@@ -110,7 +108,7 @@ void BrachyEventAction::EndOfEventAction(const G4Event* evt)
 
 	  G4double EnergyDep=((*CHC)[h]->GetEdep());
                       
-	  G4double x = (-numberOfVoxelZ+1+2*k)*voxelWidthX/2; 
+	  G4double x = (-numberOfVoxelZ+1+2*k)*voxelWidthZ/2; 
 	  G4double z = (- numberOfVoxelZ+1+2*i)*voxelWidthZ/2;
 	  G4double y = (- numberOfVoxelZ+1+2*j)*voxelWidthZ/2;
 #ifdef G4ANALYSIS_USE
