@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.cc,v 1.5 2004-11-09 09:16:47 gbarrand Exp $
+// $Id: G4OpenInventorXtViewer.cc,v 1.6 2004-11-09 11:25:37 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -249,7 +249,7 @@ void G4OpenInventorXtViewer::SetView () {
 }
 
 void G4OpenInventorXtViewer::DrawView () {
-  G4cout << "debug Iv::DrawViewer " <<G4endl;
+  //G4cout << "debug Iv::DrawViewer " <<G4endl;
   KernelVisitDecision();
   ProcessView();
   FinishView();
