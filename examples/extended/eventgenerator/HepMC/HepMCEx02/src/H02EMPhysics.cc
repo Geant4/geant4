@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: H02EMPhysics.cc,v 1.1 2002-05-28 14:15:46 murakami Exp $
+// $Id: H02EMPhysics.cc,v 1.2 2002-11-19 10:25:49 murakami Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

@@ -23,7 +23,7 @@
 // ====================================================================
 //
 //   HepMCG4Interface.hh
-//   $Id: HepMCG4Interface.hh,v 1.1 2002-05-28 14:10:53 murakami Exp $
+//   $Id: HepMCG4Interface.hh,v 1.2 2002-11-19 10:25:08 murakami Exp $
 //
 //   A base class for primary generation via HepMC object.
 //   This class is derived from G4VPrimaryGenerator.

@@ -23,7 +23,7 @@
 // ====================================================================
 //
 //   HepMCG4PythiaMessenger.cc
-//   $Id: HepMCG4PythiaMessenger.cc,v 1.1 2002-05-28 14:15:50 murakami Exp $
+//   $Id: HepMCG4PythiaMessenger.cc,v 1.2 2002-11-19 10:25:49 murakami Exp $
 //
 // ====================================================================
 #include "HepMCG4PythiaMessenger.hh"

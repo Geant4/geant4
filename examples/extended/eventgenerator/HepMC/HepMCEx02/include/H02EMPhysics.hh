@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: H02EMPhysics.hh,v 1.1 2002-05-28 14:10:50 murakami Exp $
+// $Id: H02EMPhysics.hh,v 1.2 2002-11-19 10:25:08 murakami Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -86,3 +86,8 @@ class H02EMPhysics : public G4VPhysicsConstructor
 
 
 #endif
+
+
+
+
+

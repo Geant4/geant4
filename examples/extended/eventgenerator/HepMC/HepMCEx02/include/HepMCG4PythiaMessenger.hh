@@ -23,7 +23,7 @@
 // ====================================================================
 //
 //   HepMCG4GenericPythiaMessenger.hh
-//   $Id: HepMCG4PythiaMessenger.hh,v 1.1 2002-05-28 14:10:53 murakami Exp $
+//   $Id: HepMCG4PythiaMessenger.hh,v 1.2 2002-11-19 10:25:08 murakami Exp $
 //
 // ====================================================================
 #ifndef HEPMC_G4_PYTHIA_MESSENGER_H
