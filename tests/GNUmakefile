@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.21 2000-05-18 17:20:01 stesting Exp $
+# $Id: GNUmakefile,v 1.22 2000-05-22 14:05:17 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -31,8 +31,7 @@ SUBDIRS += test02 ## Standard em processes.  Low energy and high energy
 # SUBDIRS += test03 ## Optical Processes.  (Derived originally from ExN06.)
                     ## Archived (cvs rm) - was indentical to ExN06 and no
                     ## longer maintained.
-SUBDIRS += test04 ## Persistency.
-                  ## reactivated 19-May-2000
+# SUBDIRS += test04 ## Persistency.  Retired.
 SUBDIRS += test05 ## BREPS and STEP Interface.
 SUBDIRS += test06 ## Integral approach electromagnetic processes.  Simple box.
                   ## (Action?  Add muon test script.)
