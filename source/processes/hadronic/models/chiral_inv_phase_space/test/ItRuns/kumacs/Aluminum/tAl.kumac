@@ -1,3 +1,5 @@
+fo/file 66 tal.ps
+meta 66 -111
  ve/de *
  opt zfl1
  opt nbox
@@ -17,7 +19,7 @@ ve/copy v(3,1:003) y
 ve/copy v(4,1:003) e
  null    0.   0.4    1.E-05   10.
 /GRAPHICS/HPLOT/ERRORS x y q e 003 29 0.2
-exec ../analyse ../../logs/liste.triton.70degree
+exec ../analyse ../../logs/liste.p_al.triton.70degree.p_al
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
  text    0.125000    2.5 'P AL - T X' 0.3
  text    0.175000    0.134848 'THETA(P=3,RF=LAB) IN DEG   70.00' 0.3
@@ -32,7 +34,7 @@ ve/copy v(3,1:002) y
 ve/copy v(4,1:002) e
  null    0.   0.4    1.E-05   10.
 /GRAPHICS/HPLOT/ERRORS x y q e 002 25 0.2
-exec ../analyse ../../logs/liste.triton.90degree
+exec ../analyse ../../logs/liste.p_al.triton.90degree.p_al
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
  text    0.125000    2.5 'P AL - T X' 0.3
 text    0.120000    0.278720 'THETA(P=3,RF=LAB) IN DEG   90.00' 0.3
@@ -50,7 +52,7 @@ ve/copy v(3,1:003) y
 ve/copy v(4,1:003) e
  null    0.   0.4    1.E-05   10.
 /GRAPHICS/HPLOT/ERRORS x y q e 003 21 0.2
-exec ../analyse ../../logs/liste.triton.118degree
+exec ../analyse ../../logs/liste.p_al.triton.118degree.p_al
 text    0.125000    0.186560 'THETA(P=3,RF=LAB) IN DEG   118.00' 0.3
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
  text    0.125000    2.5 'P AL - T X' 0.3
@@ -65,7 +67,7 @@ ve/copy v(3,1:002) y
 ve/copy v(4,1:002) e
  null    0.   0.4    1.E-05   10.
 /GRAPHICS/HPLOT/ERRORS x y q e 002 24 0.2
-exec ../analyse ../../logs/liste.triton.137degree
+exec ../analyse ../../logs/liste.p_al.triton.137degree.p_al
 text    0.135000     4.46240E-02 'THETA(P=3,RF=LAB) IN DEG   137.00' 0.3
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
  text    0.125000    2.5 'P AL - T X' 0.3
@@ -82,7 +84,8 @@ ve/copy v(3,1:004) y
 ve/copy v(4,1:004) e
  null    0.   0.4    1.E-05   10.
 /GRAPHICS/HPLOT/ERRORS x y q e 004 20 0.2
-exec ../analyse ../../logs/liste.triton.160degree
+exec ../analyse ../../logs/liste.p_al.triton.160degree.p_al
 text    0.120000     8.12720E-02 'THETA(P=3,RF=LAB) IN DEG   160.00' 0.3
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
  text    0.125000    2.5 'P AL - T X' 0.3
+close 66

@@ -1,4 +1,9 @@
-*** Begin of history file: Wed Aug 30 11:38:55 2000
-exec pAl
+*** Begin of history file: Tue Sep 12 09:50:57 2000
+exec pipAl
+opt pto
+exec pipAl
+shell vi pipal.kumac
+shell vi pipAl.kumac
+exec pipAl
 exit
-*** End   of history file: Wed Aug 30 11:39:00 2000
+*** End   of history file: Tue Sep 12 09:52:41 2000

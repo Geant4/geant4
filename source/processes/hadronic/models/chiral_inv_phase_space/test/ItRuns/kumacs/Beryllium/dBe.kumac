@@ -18,7 +18,7 @@ ve/copy v(2,1:003) q
 ve/copy v(3,1:003) y
 ve/copy v(4,1:003) e
  null   0.   0.6    1.E-04   10.
-exec ../analyse ../../logs/liste.deuteron.70degree.p_Be.p_Be
+exec ../analyse ../../logs/liste.p_be.deuteron.70degree.p_Be.p_Be
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
  text    0.15    5. 'P BE - D X' 0.3
 /GRAPHICS/HPLOT/ERRORS x y q e 003 29 0.2
@@ -36,7 +36,7 @@ ve/copy v(2,1:005) q
 ve/copy v(3,1:005) y
 ve/copy v(4,1:005) e
  null   0.   0.6    1.E-04   10.
-exec ../analyse ../../logs/liste.deuteron.90degree.p_Be
+exec ../analyse ../../logs/liste.p_be.deuteron.90degree.p_Be
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
  text    0.15    5. 'P BE - D X' 0.3
 /GRAPHICS/HPLOT/ERRORS x y q e 005 25 0.2
@@ -56,7 +56,7 @@ ve/copy v(2,1:007) q
 ve/copy v(3,1:007) y
 ve/copy v(4,1:007) e
  null   0.   0.6    1.E-04   10.
-exec ../analyse ../../logs/liste.deuteron.118degree.p_Be
+exec ../analyse ../../logs/liste.p_be.deuteron.118degree.p_Be
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
  text    0.15    5. 'P BE - D X' 0.3
 /GRAPHICS/HPLOT/ERRORS x y q e 007 21 0.2
@@ -72,7 +72,7 @@ ve/copy v(2,1:003) q
 ve/copy v(3,1:003) y
 ve/copy v(4,1:003) e
  null   0.   0.6    1.E-04   10.
-exec ../analyse ../../logs/liste.deuteron.137degree.p_Be
+exec ../analyse ../../logs/liste.p_be.deuteron.137degree.p_Be
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
  text    0.15    5. 'P BE - D X' 0.3
 /GRAPHICS/HPLOT/ERRORS x y q e 003 24 0.2
@@ -92,7 +92,7 @@ ve/copy v(2,1:007) q
 ve/copy v(3,1:007) y
 ve/copy v(4,1:007) e
  null   0.   0.6    1.E-04   10.
-exec ../analyse ../../logs/liste.deuteron.160degree.p_Be
+exec ../analyse ../../logs/liste.p_be.deuteron.160degree.p_Be
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
  text    0.15    5. 'P BE - D X' 0.3
 /GRAPHICS/HPLOT/ERRORS x y q e 007 20 0.2

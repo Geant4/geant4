@@ -1,3 +1,5 @@
+fo/file 66 tli6.ps
+meta 66 -111
  ve/de *
  opt zfl1
  opt nbox
@@ -16,7 +18,7 @@ ve/copy v(2,1:003) q
 ve/copy v(3,1:003) y
 ve/copy v(4,1:003) e
  null    0.   0.4   1.E-05    10.
-exec ../analyse ../../logs/liste.triton.70degree
+exec ../analyse ../../logs/liste.p_li6.triton.70degree.p_li6
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
  text    0.125     2.5 'P LI - T X' 0.3
 /GRAPHICS/HPLOT/ERRORS x y q e 003 29 0.2
@@ -34,7 +36,7 @@ ve/copy v(2,1:005) q
 ve/copy v(3,1:005) y
 ve/copy v(4,1:005) e
  null    0.   0.4   1.E-05    10.
-exec ../analyse ../../logs/liste.triton.90degree
+exec ../analyse ../../logs/liste.p_li6.triton.90degree.p_li6
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
  text    0.125     2.5 'P LI - T X' 0.3
 /GRAPHICS/HPLOT/ERRORS x y q e 005 25 0.2
@@ -53,7 +55,7 @@ ve/copy v(2,1:006) q
 ve/copy v(3,1:006) y
 ve/copy v(4,1:006) e
  null    0.   0.4   1.E-05    10.
-exec ../analyse ../../logs/liste.triton.118degree
+exec ../analyse ../../logs/liste.p_li6.triton.118degree.p_li6
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
  text    0.125     2.5 'P LI - T X' 0.3
 /GRAPHICS/HPLOT/ERRORS x y q e 006 21 0.2
@@ -68,7 +70,7 @@ ve/copy v(2,1:002) q
 ve/copy v(3,1:002) y
 ve/copy v(4,1:002) e
  null    0.   0.4   1.E-05    10.
-exec ../analyse ../../logs/liste.triton.137degree
+exec ../analyse ../../logs/liste.p_li6.triton.137degree.p_li6
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
  text    0.125     2.5 'P LI - T X' 0.3
 /GRAPHICS/HPLOT/ERRORS x y q e 002 24 0.2
@@ -85,8 +87,9 @@ ve/copy v(2,1:004) q
 ve/copy v(3,1:004) y
 ve/copy v(4,1:004) e
  null    0.   0.4   1.E-05    10.
-exec ../analyse ../../logs/liste.triton.160degree
+exec ../analyse ../../logs/liste.p_li6.triton.160degree.p_li6
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
  text    0.125     2.5 'P LI - T X' 0.3
 /GRAPHICS/HPLOT/ERRORS x y q e 004 20 0.2
  text    0.115000     6.89360E-03 'THETA(P=3,RF=LAB) IN DEG   160.00' 0.3
+close 66

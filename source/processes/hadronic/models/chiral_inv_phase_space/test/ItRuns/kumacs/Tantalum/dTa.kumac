@@ -1,3 +1,5 @@
+fo/file 66 dta.ps
+meta 66 -111
  ve/de *
  opt zfl1
  opt nbox
@@ -18,7 +20,7 @@ ve/copy v(2,1:005) q
 ve/copy v(3,1:005) y
 ve/copy v(4,1:005) e
  null    0.   0.6  1.E-04    10.
-exec ../analyse ../../logs/liste.deuteron.70degree
+exec ../analyse ../../logs/liste.p_ta.deuteron.70degree.p_ta
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
  text    0.15     5. 'P TA - D X' 0.3
 /GRAPHICS/HPLOT/ERRORS x y q e 005 29 0.2
@@ -42,7 +44,7 @@ ve/copy v(2,1:011) q
 ve/copy v(3,1:011) y
 ve/copy v(4,1:011) e
  null    0.   0.6  1.E-04    10.
-exec ../analyse ../../logs/liste.deuteron.90degree
+exec ../analyse ../../logs/liste.p_ta.deuteron.90degree.p_ta
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
  text    0.15     5. 'P TA - D X' 0.3
 /GRAPHICS/HPLOT/ERRORS x y q e 011 25 0.2
@@ -64,7 +66,7 @@ ve/copy v(2,1:009) q
 ve/copy v(3,1:009) y
 ve/copy v(4,1:009) e
  null    0.   0.6  1.E-04    10.
-exec ../analyse ../../logs/liste.deuteron.118degree
+exec ../analyse ../../logs/liste.p_ta.deuteron.118degree.p_ta
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
  text    0.15     5. 'P TA - D X' 0.3
 /GRAPHICS/HPLOT/ERRORS x y q e 009 21 0.2
@@ -84,7 +86,7 @@ ve/copy v(2,1:007) q
 ve/copy v(3,1:007) y
 ve/copy v(4,1:007) e
  null    0.   0.6  1.E-04    10.
-exec ../analyse ../../logs/liste.deuteron.137degree
+exec ../analyse ../../logs/liste.p_ta.deuteron.137degree.p_ta
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
  text    0.15     5. 'P TA - D X' 0.3
 /GRAPHICS/HPLOT/ERRORS x y q e 007 24 0.2
@@ -107,8 +109,9 @@ ve/copy v(2,1:010) q
 ve/copy v(3,1:010) y
 ve/copy v(4,1:010) e
  null    0.   0.6  1.E-04    10.
-exec ../analyse ../../logs/liste.deuteron.160degree
+exec ../analyse ../../logs/liste.p_ta.deuteron.160degree.p_ta
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
  text    0.15     5. 'P TA - D X' 0.3
 /GRAPHICS/HPLOT/ERRORS x y q e 010 20 0.2
 text    0.270000     1.77828 'THETA(P=3,RF=LAB) IN DEG   160.00' 0.3
+close 66

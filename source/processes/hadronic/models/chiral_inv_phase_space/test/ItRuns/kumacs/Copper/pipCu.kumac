@@ -1,3 +1,5 @@
+fo/file 66 pipcu.ps
+meta 66 -111
  ve/de *
  opt zfl1
  opt nbox
@@ -19,7 +21,7 @@ ve/copy v(2,1:006) q
 ve/copy v(3,1:006) y
 ve/copy v(4,1:006) e
  null    0.    1.4    1.00000E-05   100.
-exec ../analyse ../../logs/liste.piplus.70degree
+exec ../analyse ../../logs/liste.p_cu.piplus.70degree.p_cu
  atitle 'EKIN(LAB),GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
  text    0.200000     25. 'P CU - PI+ X' 0.3
 /GRAPHICS/HPLOT/ERRORS x y q e 006 29 0.2
@@ -40,7 +42,7 @@ ve/copy v(2,1:008) q
 ve/copy v(3,1:008) y
 ve/copy v(4,1:008) e
  null    0.    1.4    1.00000E-05   100.
-exec ../analyse ../../logs/liste.piplus.90degree
+exec ../analyse ../../logs/liste.p_cu.piplus.90degree.p_cu
  atitle 'EKIN(LAB),GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
  text    0.200000     25. 'P CU - PI+ X' 0.3
 /GRAPHICS/HPLOT/ERRORS x y q e 008 25 0.2
@@ -62,7 +64,7 @@ ve/copy v(2,1:009) q
 ve/copy v(3,1:009) y
 ve/copy v(4,1:009) e
  null    0.    1.4    1.00000E-05   100.
-exec ../analyse ../../logs/liste.piplus.118degree
+exec ../analyse ../../logs/liste.p_cu.piplus.118degree.p_cu
  atitle 'EKIN(LAB),GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
  text    0.200000     25. 'P CU - PI+ X' 0.3
 /GRAPHICS/HPLOT/ERRORS x y q e 009 21 0.2
@@ -80,7 +82,7 @@ ve/copy v(2,1:005) q
 ve/copy v(3,1:005) y
 ve/copy v(4,1:005) e
  null    0.    1.4    1.00000E-05   100.
-exec ../analyse ../../logs/liste.piplus.137degree
+exec ../analyse ../../logs/liste.p_cu.piplus.137degree.p_cu
  atitle 'EKIN(LAB),GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
  text    0.200000     25. 'P CU - PI+ X' 0.3
 /GRAPHICS/HPLOT/ERRORS x y q e 005 24 0.2
@@ -103,8 +105,9 @@ ve/copy v(2,1:010) q
 ve/copy v(3,1:010) y
 ve/copy v(4,1:010) e
  null    0.    1.4    1.00000E-05   100.
-exec ../analyse ../../logs/liste.piplus.160degree
+exec ../analyse ../../logs/liste.p_cu.piplus.160degree.p_cu
  atitle 'EKIN(LAB),GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
  text    0.200000     25. 'P CU - PI+ X' 0.3
 /GRAPHICS/HPLOT/ERRORS x y q e 010 20 0.2
 text    0.450000     1.77828 'THETA(P=3,RF=LAB) IN DEG   160.00' 0.3
+close 66

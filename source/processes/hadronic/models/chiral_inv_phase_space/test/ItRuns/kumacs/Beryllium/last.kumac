@@ -1,5 +1,7 @@
-*** Begin of history file: Thu Aug 31 12:05:19 2000
+*** Begin of history file: Fri Sep  8 11:54:15 2000
 opt pto
-exec pBe
+exec pipBe
+exec pipBe
+exec pipBe
 exit
-*** End   of history file: Thu Aug 31 12:06:27 2000
+*** End   of history file: Fri Sep  8 11:55:21 2000

@@ -22,7 +22,7 @@ ve/copy v(2,1:007) q
 ve/copy v(3,1:007) y
 ve/copy v(4,1:007) e
  null    0.    1.4    1.00000E-05   100.00000
-exec ../analyse ../../logs/liste.piplus.70degree.p_c.p_c
+exec ../analyse ../../logs/liste.p_c.piplus.70degree.p_c
  atitle 'EKIN(LAB),GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
  text    0.2     25. 'P C - PI+ X' 0.3
 /GRAPHICS/HPLOT/ERRORS x y q e 007 29 0.2
@@ -47,7 +47,7 @@ ve/copy v(2,1:012) q
 ve/copy v(3,1:012) y
 ve/copy v(4,1:012) e
  null    0.    1.4    1.00000E-05   100.00000
-exec ../analyse ../../logs/liste.piplus.90degree.p_c
+exec ../analyse ../../logs/liste.p_c.piplus.90degree.p_c
  atitle 'EKIN(LAB),GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
  text    0.2     25. 'P C - PI+ X' 0.3
 /GRAPHICS/HPLOT/ERRORS x y q e 012 25 0.2
@@ -68,7 +68,7 @@ ve/copy v(2,1:008) q
 ve/copy v(3,1:008) y
 ve/copy v(4,1:008) e
  null    0.    1.4    1.00000E-05   100.00000
-exec ../analyse ../../logs/liste.piplus.118degree.p_c
+exec ../analyse ../../logs/liste.p_c.piplus.118degree.p_c
  atitle 'EKIN(LAB),GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
  text    0.2     25. 'P C - PI+ X' 0.3
 /GRAPHICS/HPLOT/ERRORS x y q e 008 21 0.2
@@ -86,7 +86,7 @@ ve/copy v(2,1:005) q
 ve/copy v(3,1:005) y
 ve/copy v(4,1:005) e
  null    0.    1.4    1.00000E-05   100.00000
-exec ../analyse ../../logs/liste.piplus.137degree.p_c
+exec ../analyse ../../logs/liste.p_c.piplus.137degree.p_c
  atitle 'EKIN(LAB),GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
  text    0.2     25. 'P C - PI+ X' 0.3
 /GRAPHICS/HPLOT/ERRORS x y q e 005 24 0.2
@@ -110,7 +110,7 @@ ve/copy v(2,1:011) q
 ve/copy v(3,1:011) y
 ve/copy v(4,1:011) e
  null    0.    1.4    1.00000E-05   100.00000
-exec ../analyse ../../logs/liste.piplus.160degree.p_c
+exec ../analyse ../../logs/liste.p_c.piplus.160degree.p_c
  atitle 'EKIN(LAB),GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
  text    0.2     25. 'P C - PI+ X' 0.3
 /GRAPHICS/HPLOT/ERRORS x y q e 011 24 0.2

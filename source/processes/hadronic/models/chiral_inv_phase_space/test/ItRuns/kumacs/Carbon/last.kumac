@@ -1,18 +1,7 @@
-*** Begin of history file: Thu Aug 31 12:44:39 2000
-exec dC.kumac
-opt pto
-exec dC.kumac
-shell ls -1
-exec pC
-exec ipiC
+*** Begin of history file: Tue Sep 12 09:14:52 2000
+shell
 exec pipC
-shell ls ../../logs/liste.proton
-shell ls ../../logs/liste.proton*
-shell less ../../logs/liste.proton.90degree.p_c
-ed pC.kumac
-shell iv pC.kumac
-shell vi pC.kumac
-exec pC
-exec tC
+opt pto
+exec pipC
 exit
-*** End   of history file: Thu Aug 31 12:48:47 2000
+*** End   of history file: Tue Sep 12 09:16:30 2000

@@ -1,3 +1,5 @@
+fo/file 66 pli6.ps
+meta 66 -111
 *option *
  ve/de *
  opt zfl1
@@ -19,7 +21,7 @@ ve/copy v(2,1:005) q
 ve/copy v(3,1:005) y
 ve/copy v(4,1:005) e
  null    0.   0.9    1.00000E-05   100.0000
-exec ../analyse ../../logs/liste.proton.70degree
+exec ../analyse ../../logs/liste.p_li6.proton.70degree.p_li6
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
  text    0.250000     25.0000 'P LI6 --> P X' 0.3
 /GRAPHICS/HPLOT/ERRORS x y q e 005 29 0.2
@@ -42,7 +44,7 @@ ve/copy v(2,1:010) q
 ve/copy v(3,1:010) y
 ve/copy v(4,1:010) e
  null    0.   0.9    1.00000E-05   100.0000
-exec ../analyse ../../logs/liste.proton.90degree
+exec ../analyse ../../logs/liste.p_li6.proton.90degree.p_li6
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
  text    0.250000     25.0000 'P LI6 --> P X' 0.3
 /GRAPHICS/HPLOT/ERRORS x y q e 010 25 0.2
@@ -64,7 +66,7 @@ ve/copy v(2,1:009) q
 ve/copy v(3,1:009) y
 ve/copy v(4,1:009) e
  null    0.   0.9    1.00000E-05   100.0000
-exec ../analyse ../../logs/liste.proton.118degree
+exec ../analyse ../../logs/liste.p_li6.proton.118degree.p_li6
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
  text    0.250000     25.0000 'P LI6 --> P X' 0.3
 /GRAPHICS/HPLOT/ERRORS x y q e 009 21 0.2
@@ -81,7 +83,7 @@ ve/copy v(2,1:004) q
 ve/copy v(3,1:004) y
 ve/copy v(4,1:004) e
  null    0.   0.9    1.00000E-05   100.0000
-exec ../analyse ../../logs/liste.proton.137degree
+exec ../analyse ../../logs/liste.p_li6.proton.137degree.p_li6
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
  text    0.250000     25.0000 'P LI6 --> P X' 0.3
 /GRAPHICS/HPLOT/ERRORS x y q e 004 24 0.2
@@ -102,8 +104,9 @@ ve/copy v(2,1:008) q
 ve/copy v(3,1:008) y
 ve/copy v(4,1:008) e
  null    0.   0.9    1.00000E-05   100.0000
-exec ../analyse ../../logs/liste.proton.160degree
+exec ../analyse ../../logs/liste.p_li6.proton.160degree.p_li6
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
  text    0.250000     25.0000 'P LI6 --> P X' 0.3
 /GRAPHICS/HPLOT/ERRORS x y q e 008 20 0.2
 text    0.270000     1.25893 'THETA(P=3,RF=LAB) IN DEG   160.00' 0.3
+close 66

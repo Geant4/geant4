@@ -1,3 +1,5 @@
+fo/file 66 pipal.ps
+meta 66 -111
  ve/de *
  opt zfl1
  opt nbox
@@ -20,8 +22,8 @@ ve/copy v(2,1:007) q
 ve/copy v(3,1:007) y
 ve/copy v(4,1:007) e
  null   0.    1.4    1.00000E-05   100.0000
-/GRAPHICS/HPLOT/ERRORS x y q e 007 29 0.2
-exec ../analyse ../../logs/liste.piplus.70degree
+/GRAPHICS/HPLOT/ERRORS x y q e 007 24 0.2
+exec ../analyse ../../logs/liste.p_al.piplus.70degree.p_al
  atitle 'EKIN(LAB),GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
  text    0.2     25. 'P AL - PI+ X' 0.3
 text    0.610000     25.1189 'THETA(P=3,RF=LAB) IN DEG   70.00' 0.3
@@ -41,8 +43,8 @@ ve/copy v(2,1:008) q
 ve/copy v(3,1:008) y
 ve/copy v(4,1:008) e
  null   0.    1.4    1.00000E-05   100.0000
-/GRAPHICS/HPLOT/ERRORS x y q e 008 25 0.2
-exec ../analyse ../../logs/liste.piplus.90degree
+/GRAPHICS/HPLOT/ERRORS x y q e 008 24 0.2
+exec ../analyse ../../logs/liste.p_al.piplus.90degree.p_al
  atitle 'EKIN(LAB),GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
  text    0.2     25. 'P AL - PI+ X' 0.3
  text    0.490000     3.54813 'THETA(P=3,RF=LAB) IN DEG   90.00' 0.3
@@ -62,8 +64,8 @@ ve/copy v(2,1:008) q
 ve/copy v(3,1:008) y
 ve/copy v(4,1:008) e
  null   0.    1.4    1.00000E-05   100.0000
-/GRAPHICS/HPLOT/ERRORS x y q e 008 21 0.2
-exec ../analyse ../../logs/liste.piplus.118degree
+/GRAPHICS/HPLOT/ERRORS x y q e 008 24 0.2
+exec ../analyse ../../logs/liste.p_al.piplus.118degree.p_al
  atitle 'EKIN(LAB),GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
  text    0.2     25. 'P AL - PI+ X' 0.3
  text    0.470000     12.5893 'THETA(P=3,RF=LAB) IN DEG   118.00' 0.3
@@ -81,7 +83,7 @@ ve/copy v(3,1:005) y
 ve/copy v(4,1:005) e
  null   0.    1.4    1.00000E-05   100.0000
 /GRAPHICS/HPLOT/ERRORS x y q e 005 24 0.2
-exec ../analyse ../../logs/liste.piplus.137degree
+exec ../analyse ../../logs/liste.p_al.piplus.137degree.p_al
  atitle 'EKIN(LAB),GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
  text    0.2     25. 'P AL - PI+ X' 0.3
  text    0.500000     1.77828 'THETA(P=3,RF=LAB) IN DEG   137.00' 0.3
@@ -104,8 +106,9 @@ ve/copy v(2,1:011) q
 ve/copy v(3,1:011) y
 ve/copy v(4,1:011) e
  null   0.    1.4    1.00000E-05   100.0000
-/GRAPHICS/HPLOT/ERRORS x y q e 011 20 0.2
-exec ../analyse ../../logs/liste.piplus.160degree
+/GRAPHICS/HPLOT/ERRORS x y q e 011 24 0.2
+exec ../analyse ../../logs/liste.p_al.piplus.160degree.p_al
  atitle 'EKIN(LAB),GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
  text    0.2     25. 'P AL - PI+ X' 0.3
 text    0.455000     1.77828 'THETA(P=3,RF=LAB) IN DEG   160.00' 0.3
+close 66
