@@ -20,47 +20,44 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: IonC12.hh,v 1.4 2004-06-21 10:57:10 maire Exp $
+// $Id: PhysListEmPenelope.hh,v 1.1 2005-03-16 12:08:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Each class inheriting from G4VIon
-// corresponds to a particle type; one and only one
-// instance for each class is guaranteed.
-//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef IonC12_h
-#define IonC12_h 1
+#ifndef PhysListEmPenelope_h
+#define PhysListEmPenelope_h 1
 
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
-#include "G4VIon.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class IonC12 : public G4VIon
+class PhysListEmPenelope : public G4VPhysicsConstructor
 {
- private:
-   static IonC12 theIon;
+  public: 
+    PhysListEmPenelope(const G4String& name = "penelope");
+   ~PhysListEmPenelope();
 
- public:
-   IonC12(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable
-   );
-   virtual ~IonC12();
-  
-   static IonC12*    IonDefinition();
-   static IonC12*    Ion();
+  public: 
+    // This method is dummy for physics
+    void ConstructParticle() {};
+ 
+    // This method will be invoked in the Construct() method.
+    // each physics process will be instantiated and
+    // registered to the process manager of each particle type 
+    void ConstructProcess();
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
+
+
+
+
+
+
+

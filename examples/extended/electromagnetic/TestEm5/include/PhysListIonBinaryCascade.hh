@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysListIonBinaryCascade.hh,v 1.3 2004-06-21 10:57:11 maire Exp $
+// $Id: PhysListIonBinaryCascade.hh,v 1.4 2005-03-16 12:08:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class Description:
@@ -66,8 +66,6 @@ class PhysListIonBinaryCascade : public G4VPhysicsConstructor
     G4DeuteronInelasticProcess      theIPdeuteron;
     G4TritonInelasticProcess        theIPtriton;
     G4AlphaInelasticProcess         theIPalpha;
-    G4HadronInelasticProcess*       theIPHe3;
-    G4HadronInelasticProcess*       theIPIonC12;
     G4HadronInelasticProcess*       theIPGenericIon;
 
 };
