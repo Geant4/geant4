@@ -1,9 +1,9 @@
-# $Id: GNUmakefile,v 1.1 1999-06-17 04:49:19 kurasige Exp $
+# $Id: GNUmakefile,v 1.2 2003-09-21 19:38:02 kurasige Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
 
-# $Id: GNUmakefile,v 1.1 1999-06-17 04:49:19 kurasige Exp $
+# $Id: GNUmakefile,v 1.2 2003-09-21 19:38:02 kurasige Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -25,3 +25,6 @@ all: lib bin
 # LDLIBS   :=
 
 include $(G4INSTALL)/config/binmake.gmk
+
+CPPFLAGS += \
+            -I$(G4BASE)/particles/utils/include 
