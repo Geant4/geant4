@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4StandardScorer.hh,v 1.1 2002-07-11 16:19:43 dressel Exp $
+// $Id: G4StandardScorer.hh,v 1.2 2002-07-18 14:59:22 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -66,6 +66,7 @@ public:
     // used to avoid counting reantrance of tracks in the population
 
 private:
+  void ScorePopulation(G4PTouchableKey p, G4int trid);
   G4MapPtkStandardCellScorer fPtkScores;
   MapPtkTrackLogger fMapPtkTrackLogger;
 };

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StandardScorer.cc,v 1.1 2002-07-11 16:19:44 dressel Exp $
+// $Id: G4StandardScorer.cc,v 1.2 2002-07-18 14:59:22 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -53,17 +53,12 @@ void G4StandardScorer::Score(const G4Step &aStep, const G4PStep &aPstep)
     G4PTouchableKey post_ptk(aPstep.fPostTouchableKey); 
     G4PTouchableKey *sl_ptk = 0;
 
-    fMapPtkTrackLogger[post_ptk].
-      SetEventID(G4EventManager::GetEventManager()->
-		 GetConstCurrentEvent()->
-		 GetEventID());
-    
-    // create the raw values for the step length estimators
-    // for a cell
-    G4SLRawValues slr(aStep);
-    
+
+    // population counting
+    ScorePopulation(post_ptk, track->GetTrackID());
+        
     // find which cell to score 
-    // and score non sl scores
+    // and score non step length scores
     if (aPstep.fCrossBoundary) { 
       // the sl scores belong to the pre_ptk cell
       sl_ptk = &pre_ptk;
@@ -71,19 +66,10 @@ void G4StandardScorer::Score(const G4Step &aStep, const G4PStep &aPstep)
       fPtkScores[post_ptk].TrackEnters();
       // check if track entered the post_ptk cell
       // and increment population if track is new
-      if (fMapPtkTrackLogger[post_ptk].
-	  FirstEnterance(track->GetTrackID())) {
-	fPtkScores[post_ptk].NewTrackPopedUp();
-      }
     } 
     else { 
       // the sl scores belong to the post_cell
       sl_ptk = &post_ptk;
-      // add up tracks created inside post ptk cell to population
-      if  (track->GetCurrentStepNumber() == 1) {
-	fPtkScores[post_ptk].NewTrackPopedUp();
-      }
-      
       // score collisions 
       // don't count collisions with mass geometry bounderies
       if (aStep.GetPostStepPoint()->GetStepStatus() != fGeomBoundary) {
@@ -91,12 +77,31 @@ void G4StandardScorer::Score(const G4Step &aStep, const G4PStep &aPstep)
       }
       
     }
+
+    // create the raw values for the step length estimators
+    // for a cell
+    G4SLRawValues slr(aStep);
     // score the sl estimators
     fPtkScores[*sl_ptk].SetSLRawValues(slr);
   }
   
 
   
+}
+
+
+void G4StandardScorer::ScorePopulation(G4PTouchableKey post_ptk, 
+				       G4int trid) {
+  //    check for new event
+  fMapPtkTrackLogger[post_ptk].
+    SetEventID(G4EventManager::GetEventManager()->
+	       GetConstCurrentEvent()->
+	       GetEventID());
+  //    increase population
+  if (fMapPtkTrackLogger[post_ptk].
+      FirstEnterance(trid)) {
+    fPtkScores[post_ptk].NewTrackPopedUp();
+  }
 }
 
 G4std::ostream& operator<<(G4std::ostream &out, 

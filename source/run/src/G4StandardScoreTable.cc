@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StandardScoreTable.cc,v 1.1 2002-07-11 16:19:44 dressel Exp $
+// $Id: G4StandardScoreTable.cc,v 1.2 2002-07-18 14:59:22 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -101,7 +101,9 @@ void G4StandardScoreTable::PrintTable(const G4MapPtkStandardCellScorer
 
     G4double importance = 1;
     if (fIStore) {
-      importance = fIStore->GetImportance(ptk);
+      if (fIStore->IsKnown(ptk)) {
+	importance = fIStore->GetImportance(ptk);
+      }
     }
     MapStringSCScorer[name] = (*mit).second;
     MapStringSCScorer[name].SetImportnace(importance);
