@@ -129,6 +129,7 @@ examples/extended/geometry   Gabriele.Cosmo@cern.ch          Gabriele Cosmo
   olap                       Martin.Liendl@cern.ch           Martin Liendl
 examples/extended/medical    MariaGrazia.Pia@ge.infn.it	     Maria Grazia Pia
   DICOM                      Susanna.Guatelli@ge.infn.it     Susanna Guatelli
+  GammaTherapy               Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
 examples/extended/optical    gum@triumf.ca                   Peter Gumplinger
 examples/extended/parallel:
   ParN02, ParN04             gene@ccs.neu.edu                Gene Cooperman
