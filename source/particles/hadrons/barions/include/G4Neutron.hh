@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Neutron.hh,v 1.2 1999-04-13 08:32:56 kurasige Exp $
+// $Id: G4Neutron.hh,v 1.3 1999-10-03 09:11:36 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,7 +22,7 @@
 //  Added not static GetEnergyCuts() and GetLengthCuts(), G.Cosmo, 11 July 1996
 //----------------------------------------------------------------
 
-// Each class inheriting from G4VBarion
+// Each class inheriting from G4VBaryon
 // corresponds to a particle type; one and only one
 // instance for each class is guaranteed.
 
@@ -31,13 +31,13 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4VBarion.hh"
+#include "G4VBaryon.hh"
 
 // ######################################################################
 // ###                         NEUTRON                                ###
 // ######################################################################
 
-class G4Neutron : public G4VBarion
+class G4Neutron : public G4VBaryon
 {
  private:
    static G4Neutron theNeutron;

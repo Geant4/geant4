@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SigmaMinus.hh,v 1.2 1999-04-13 08:28:22 kurasige Exp $
+// $Id: G4SigmaMinus.hh,v 1.3 1999-10-03 09:11:40 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,7 +20,7 @@
 //  Added particle definitions, H.Kurashige, 14 Feb 19
 // ----------------------------------------------------------------
 
-// Each class inheriting from G4VBarion
+// Each class inheriting from G4VBaryon
 // corresponds to a particle type; one and only one
 // instance for each class is guaranteed.
 
@@ -29,13 +29,13 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4VBarion.hh"
+#include "G4VBaryon.hh"
 
 // ######################################################################
 // ###                          SigmaMinus                            ###
 // ######################################################################
 
-class G4SigmaMinus : public G4VBarion
+class G4SigmaMinus : public G4VBaryon
 {
  private:
    static G4SigmaMinus theSigmaMinus;

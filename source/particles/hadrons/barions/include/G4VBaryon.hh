@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VBarion.hh,v 1.1 1999-01-07 16:09:56 gunter Exp $
+// $Id: G4VBaryon.hh,v 1.1 1999-10-03 09:11:48 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,8 +22,8 @@
 // ------------------------------------------------------------
 
 
-#ifndef G4VBarion_h
-#define G4VBarion_h 1
+#ifndef G4VBaryon_h
+#define G4VBaryon_h 1
 
 #include "G4ios.hh"
 #include "globals.hh"
@@ -32,7 +32,7 @@
 #include "G4PhysicsLogVector.hh"
 #include "G4ParticleWithCuts.hh"
 
-class G4VBarion : public G4ParticleWithCuts
+class G4VBaryon : public G4ParticleWithCuts
 {
   //  A virtual class for Barions particles. It defines
   //  public methods which describe the behavior of a
@@ -40,11 +40,11 @@ class G4VBarion : public G4ParticleWithCuts
 
   private:
 
-      const G4VBarion & operator=(const G4VBarion &right);
+      const G4VBaryon & operator=(const G4VBaryon &right);
 
   public:
 
-      G4VBarion(const G4String&  aName,  
+      G4VBaryon(const G4String&  aName,  
                 G4double         mass,     
                 G4double         width,
                 G4double         charge,   
@@ -66,7 +66,7 @@ class G4VBarion : public G4ParticleWithCuts
                                pType, lepton, baryon, encoding, stable,
                                lifetime, decaytable) {};
 
-      virtual ~G4VBarion() {};
+      virtual ~G4VBaryon() {};
 
 };
 

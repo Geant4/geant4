@@ -5,36 +5,36 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BarionConstructor.hh,v 1.1 1999-01-07 16:09:53 gunter Exp $
+// $Id: G4BaryonConstructor.hh,v 1.1 1999-10-03 09:11:34 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
 //	GEANT 4 class implementation file 
 //
-#ifndef G4BarionConstructor_h
-#define G4BarionConstructor_h 1
+#ifndef G4BaryonConstructor_h
+#define G4BaryonConstructor_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
 
-class G4BarionConstructor
+class G4BaryonConstructor
 {
   //This class is a utility class for construction 
   //short lived particles
 
   public:
-    G4BarionConstructor();
-    ~G4BarionConstructor();
+    G4BaryonConstructor();
+    ~G4BaryonConstructor();
   
   public:
     void ConstructParticle();
 
   protected:
     void ConstructNucleons();
-    void ConstructStrangeBarions();
-    void ConstructCharmBarions();
-    void ConstructBottomBarions();
+    void ConstructStrangeBaryons();
+    void ConstructCharmBaryons();
+    void ConstructBottomBaryons();
 };
 
 #endif

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AntiSigmacPlus.hh,v 1.2 1999-04-13 08:25:15 kurasige Exp $
+// $Id: G4AntiSigmacPlus.hh,v 1.3 1999-10-03 09:11:27 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -21,7 +21,7 @@
 //  Change both methods to get the pointer into non-inlined H.Kurashige 4 Aug. 1998
 // ----------------------------------------------------------------
 
-// Each class inheriting from G4VBarion
+// Each class inheriting from G4VBaryon
 // corresponds to a particle type; one and only one
 // instance for each class is guaranteed.
 
@@ -30,13 +30,13 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4VBarion.hh"
+#include "G4VBaryon.hh"
 
 // ######################################################################
 // ###                          AntiSigmacPlus                             ###
 // ######################################################################
 
-class G4AntiSigmacPlus : public G4VBarion
+class G4AntiSigmacPlus : public G4VBaryon
 {
  private:
    static G4AntiSigmacPlus theAntiSigmacPlus;
