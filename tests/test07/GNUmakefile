@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 1999-06-07 09:31:16 gunter Exp $
+# $Id: GNUmakefile,v 1.3 1999-07-20 15:30:48 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -28,6 +28,10 @@ else
 CPPFLAGS+=-I$(G4INSTALL)/tests/tools/include
 EXTRALIBS+=$(LIB_PATH)$(G4INSTALL)/tests/tools/lib/$(G4SYSTEM) -lG4TestTool
 endif
+EXTRA_LINK_DEPENDENCIES := \
+  $(G4INSTALL)/tests/tools/lib/$(G4SYSTEM)/libG4TestTool.a
 
 include $(G4INSTALL)/config/binmake.gmk
 
+$(G4INSTALL)/tests/tools/lib/$(G4SYSTEM)/libG4TestTool.a:
+	cd $(G4INSTALL)/tests/tools/lib; gmake
