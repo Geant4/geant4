@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.hh,v 1.8 2000-05-16 17:39:00 japost Exp $
+// $Id: G4PropagatorInField.hh,v 1.9 2000-06-02 09:53:30 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,10 +73,10 @@ class G4PropagatorInField
    G4bool         IsParticleLooping();
      // Return the state after the Step
 
-   G4double  DeltaIntersection(); 
+   // G4double  DeltaIntersection();          //  Obsolete
      // The accuracy of finding an intersection
 
-   G4double  DeltaOneStep();
+   // G4double  DeltaOneStep();               //  Obsolete 
      // The accuracy of a single Step
 
    G4double  GetEpsilonStep();  // Relative accuracy for current Step (Calc.)
@@ -99,13 +99,14 @@ class G4PropagatorInField
      // Accuracy for one tracking/physics step.
                                     
    void    SetAccuraciesWithDeltaOneStep(G4double deltaOneStep);  
-     // Sets both accuracies, maintaining a particular ratio
-     //  for accuracties of volume Intersection and Integration (in One Step)
+     // Sets both accuracies for the Global (Detector) field, 
+     //  maintaining a particular ratio for accuracties 
+     //  of volume Intersection and Integration (in One Step) 
 
-   void    SetDeltaOneStep(G4double deltaOneStep);  
-     // Set accuracy for integration of one step.   (only)
    void    SetDeltaIntersection(G4double deltaIntersection);
      // Set accuracy of  intersection of a volume.  (only)
+   void    SetDeltaOneStep(G4double deltaOneStep);  
+     // Set accuracy for integration of one step.   (only)
 
    G4int   GetMaxLoopCount();
    void    SetMaxLoopCount(G4int new_max);
@@ -146,7 +147,10 @@ class G4PropagatorInField
  private:
 
    G4FieldManager *fDetectorFieldMgr; 
-     // The  Field Manager of the whole Detector.
+     // The  Field Manager of the whole Detector.  (default)
+
+   G4FieldManager *fCurrentFieldMgr;
+     // The  Field Manager of the current volume (may be the one above.)
 
    G4Navigator   *fNavigator;
 
@@ -163,16 +167,6 @@ class G4PropagatorInField
 
    G4int  fVerboseLevel;
      // For debuging purposes
-
-   //  Values for the required accuracies
-   //
-   G4double  fDelta_One_Step_Value;      //  for one tracking/physics step
-   G4double  fDelta_Intersection_Val;    //  for boundary intersection
-
-   //  Their default values ...  (set in G4PropagatemagField.cc)
-   //
-   static const G4double  fDefault_Delta_One_Step_Value;   // = 0.25 * mm;
-   static const G4double  fDefault_Delta_Intersection_Val; // = 0.1 * mm;
 
    G4int  fmax_loop_count;
 

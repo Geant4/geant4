@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.cc,v 1.10 2000-05-05 18:20:09 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.11 2000-06-02 09:53:29 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -79,6 +79,15 @@ G4PropagatorInField::
   G4double	    NewSafety;
   fParticleIsLooping= false;
 
+  // Set the field manager if the volume has one, else use the global one
+  fCurrentFieldMgr = fDetectorFieldMgr;
+  if( pPhysVol) {
+     G4FieldManager *newFieldMgr=0;
+     newFieldMgr= pPhysVol->GetLogicalVolume()->GetFieldManager(); 
+     if ( newFieldMgr ) 
+        fCurrentFieldMgr = newFieldMgr;
+  }
+  
   G4FieldTrack  CurrentState(pFieldTrack);
 
 #if 0

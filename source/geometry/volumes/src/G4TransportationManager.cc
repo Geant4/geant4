@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TransportationManager.cc,v 1.5 1999-12-15 14:50:27 gunter Exp $
+// $Id: G4TransportationManager.cc,v 1.6 2000-06-02 09:53:29 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -26,8 +26,8 @@ G4Allocator<G4NavigationLevel>     aNavigationLevelAllocator;
 G4Allocator<G4NavigationLevelRep>  aNavigLevelRepAllocator;
 
 // Ditto: correct order initialisation of class (class) data members
-const G4double G4PropagatorInField::fDefault_Delta_Intersection_Val= 0.1 * mm;
-const G4double G4PropagatorInField::fDefault_Delta_One_Step_Value = 0.25 * mm;
+const G4double G4FieldManager::fDefault_Delta_Intersection_Val= 0.1 * mm;
+const G4double G4FieldManager::fDefault_Delta_One_Step_Value = 0.25 * mm;
 
 
 G4TransportationManager* G4TransportationManager::fTransportationManager=0;
