@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.icc,v 1.5 2000-08-28 02:58:09 tsasaki Exp $
+// $Id: G4SteppingManager.icc,v 1.6 2000-08-30 07:10:01 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -234,8 +234,7 @@ inline void G4SteppingManager::InvokeAtRestDoItProcs()
 // at least one process is necessary to destory the particle  
 // exit with warning 
    if(NofInactiveProc==MAXofAtRestLoops){ 
-      G4Exception("G4SteppingManager::InvokeAtRestDoItProcs: 
-                    No AtRestDoIt process is active. " );
+     G4Exception("G4SteppingManager::InvokeAtRestDoItProcs: No AtRestDoIt process is active. " );
    }
 
    (*fSelectedAtRestDoItVector)(fAtRestDoItProcTriggered) = 1;
