@@ -1,4 +1,7 @@
 DAWN-V00-01-03  Satoshi TANAKA  Nov 02, 1999
+- Protection to AddPrimitive( G4NURBS )
+
+DAWN-V00-01-03  Satoshi TANAKA  Nov 02, 1999
 - Environmental variable G4DAWN_MULTI_WINDOW is	
   renamed to G4DAWNFILE_MULTI_WINDOW for DAWN-file driver.
   (G4DAWN_MULTI_WINDOW	still works for a while.)
