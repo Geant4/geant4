@@ -1,10 +1,10 @@
 # Prevent any core dumps.  (You have to run indepently to get one.)
 # This could be tidies up.
-###if [ `uname -n | grep pcgeant` ]; then
-limit coredumpsize 0
-###else
-ulimit -c 0
-###fi
+if [ `uname -n | grep pcgeant` ]; then
+  limit coredumpsize 0
+else
+  ulimit -c 2000000
+fi
 
 if [ `uname -n | grep rsplus` ]; then
 ulimit -d 400000
