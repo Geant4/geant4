@@ -22,7 +22,7 @@
 //
 
 //
-// $Id: TrackingAction.cc,v 1.1 2003-08-11 10:22:23 maire Exp $
+// $Id: TrackingAction.cc,v 1.2 2003-08-27 17:18:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,11 +68,10 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 {
   G4ThreeVector position = aTrack->GetPosition();
   G4double charge    = aTrack->GetDefinition()->GetPDGCharge();
-  
+
   G4bool transmit = (position.x() >=  worldLimit);
   G4bool reflect  = (position.x() <= -worldLimit);
-  G4bool charged  = (charge != 0.); G4bool neutral = !charged;
-  
+
   //transmitted + reflected particles counter
   //
   G4int flag = 0;
@@ -86,7 +85,9 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   //histograms
   // 
   G4int id = 0;
-  
+  G4bool charged  = (charge != 0.);
+  G4bool neutral = !charged;
+
   //energy spectrum at exit
   //
        if (transmit && charged) id =  4;

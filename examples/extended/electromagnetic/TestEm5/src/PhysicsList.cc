@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.1 2003-08-11 10:21:20 maire Exp $
+// $Id: PhysicsList.cc,v 1.2 2003-08-27 17:18:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -42,6 +42,7 @@
 #include "G4Positron.hh"
 
 #include "G4UnitsTable.hh"
+#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -167,7 +168,7 @@ void PhysicsList::SetCuts()
   SetCutValue(cutForGamma, "gamma");
   SetCutValue(cutForElectron, "e-");
   SetCutValue(cutForPositron, "e+");   
-    
+
   if (verboseLevel>0) DumpCutValuesTable();
 }
 
@@ -202,12 +203,12 @@ void PhysicsList::SetCutForPositron(G4double cut)
 G4double PhysicsList::GetRange(G4double val)
 {
   G4ParticleTable* theParticleTable =  G4ParticleTable::GetParticleTable();
-  G4Material* currMat = pDet->GetAbsorberMaterial();
+  const G4MaterialCutsCouple* couple = pDet->GetAbsorberMaterial();
 
   G4ParticleDefinition* part = theParticleTable->FindParticle("e-");
-  G4double range = G4EnergyLossTables::GetRange(part,val,currMat);
-  
-  G4cout << "material : " << currMat->GetName() << G4endl;
+  G4double range = G4LossTableManager::Instance()->GetRange(part,val,couple);
+
+  G4cout << "material : " << couple->GetMaterial()->GetName() << G4endl;
   G4cout << "particle : " << part->GetParticleName() << G4endl;
   G4cout << "energy   : " << G4BestUnit(val,  "Energy") << G4endl;
   G4cout << "range    : " << G4BestUnit(range,"Length") << G4endl;
