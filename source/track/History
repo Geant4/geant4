@@ -1,4 +1,4 @@
-$Id: History,v 1.44 2001-12-24 05:14:27 kurasige Exp $
+$Id: History,v 1.45 2002-02-12 01:48:52 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Feb. 09 ,02    H.Kurashige (track-V04-00-02)
+- Modify G4Track::GetVelocity to get better performance for massless particles
+
 Dec. 24 ,01   H.Kurashige (track-V04-00-01)
 - Remove event biasing mechanism from track category
   ( it is moved to hadronic/models )
