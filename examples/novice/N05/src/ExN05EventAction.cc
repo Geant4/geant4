@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05EventAction.cc,v 1.6 2001-07-11 09:58:34 gunter Exp $
+// $Id: ExN05EventAction.cc,v 1.7 2001-11-05 08:24:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -71,8 +71,8 @@ void ExN05EventAction::EndOfEventAction(const G4Event* evt )
    G4cout << ">>> Event " << evt->GetEventID() << G4endl;
   
   G4HCofThisEvent * HCE = evt->GetHCofThisEvent();
-  ExN05CalorimeterHitsCollection* CaloHC    = NULL;
-  ExN05CalorimeterHitsCollection* HadCaloHC = NULL;
+  ExN05CalorimeterHitsCollection* CaloHC    = 0;
+  ExN05CalorimeterHitsCollection* HadCaloHC = 0;
   if(HCE)
     {
       CaloHC    = (ExN05CalorimeterHitsCollection*)(HCE->GetHC(calorimeterCollID));

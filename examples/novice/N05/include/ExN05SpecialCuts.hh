@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05SpecialCuts.hh,v 1.4 2001-07-11 09:58:33 gunter Exp $
+// $Id: ExN05SpecialCuts.hh,v 1.5 2001-11-05 08:24:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,7 +69,7 @@ class ExN05SpecialCuts : public G4VProcess
      virtual G4VParticleChange* AtRestDoIt(
 			     const G4Track& ,
 			     const G4Step&
-			    ){return NULL;};
+			    ){return 0;};
 
      //  no operation in  AlongStepGPIL
      virtual G4double AlongStepGetPhysicalInteractionLength(
@@ -84,7 +84,7 @@ class ExN05SpecialCuts : public G4VProcess
      virtual G4VParticleChange* AlongStepDoIt(
 			     const G4Track& ,
 			     const G4Step& 
-			    ) {return NULL;};
+			    ) {return 0;};
 
   private:
   

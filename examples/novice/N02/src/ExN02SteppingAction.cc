@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02SteppingAction.cc,v 1.6 2001-10-11 12:32:37 maire Exp $
+// $Id: ExN02SteppingAction.cc,v 1.7 2001-11-05 08:24:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,10 +37,8 @@ ExN02SteppingAction::ExN02SteppingAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN02SteppingAction::UserSteppingAction(const G4Step* aStep)
+void ExN02SteppingAction::UserSteppingAction(const G4Step*)
 { 
-  const G4VPhysicalVolume* currentVolume =
-                           aStep->GetPreStepPoint()->GetPhysicalVolume();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

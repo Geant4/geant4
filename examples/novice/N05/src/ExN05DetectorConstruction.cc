@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05DetectorConstruction.cc,v 1.3 2001-07-11 09:58:34 gunter Exp $
+// $Id: ExN05DetectorConstruction.cc,v 1.4 2001-11-05 08:24:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "ExN05DetectorConstruction.hh"
@@ -48,7 +48,7 @@
 
 ExN05DetectorConstruction::ExN05DetectorConstruction()
 {
-  theUserLimitsForCrystal = NULL; 
+  theUserLimitsForCrystal = 0; 
   fUseUserLimits = false;
   theMaxTimeCutsInCrystal   = 1000.0 * ns;
   theMinEkineCutsInCrystal  = 1.0 * MeV;
@@ -58,7 +58,7 @@ ExN05DetectorConstruction::ExN05DetectorConstruction()
 
 ExN05DetectorConstruction::~ExN05DetectorConstruction()
 {
-  if (theUserLimitsForCrystal != NULL) delete theUserLimitsForCrystal;
+  if (theUserLimitsForCrystal != 0) delete theUserLimitsForCrystal;
   delete theMessenger;
 }
 
@@ -90,12 +90,6 @@ G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
   density = 0.1786e-03*g/cm3;
   G4Material* He  = new G4Material(name="He", z=2., a, density);
   
-  a = 26.98*g/mole;
-  density = 2.7*g/cm3;
-  G4Material* Al = new G4Material(name="Aluminium", z=13., a, density);
-  a = 207.19*g/mole;
-  density = 11.35*g/cm3;
-  G4Material* Pb = new G4Material(name="Lead", z=82., a, density);
   a = 55.85*g/mole;
   density = 7.87*g/cm3;
   G4Material* Fe = new G4Material(name="Fer", z=26., a, density);
@@ -103,10 +97,6 @@ G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
   G4Material* Air = new G4Material(name="Air", density, nel=2);
   Air->AddElement(elN, .7);
   Air->AddElement(elO, .3);
-
-
-  
-  
   
   //--------- G4VSolid, G4LogicalVolume, G4VPhysicalVolume  ---------
   
@@ -130,13 +120,15 @@ G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
   // -- Logical volume:
   G4Box *driftChamberBox
     = new G4Box("DriftChamberSolid", detectSize, detectSize, 40*cm);
-  G4LogicalVolume *driftChamberLog = new G4LogicalVolume(driftChamberBox,He,
-							 "DriftChamberLogical", 0, 0, 0);
+  G4LogicalVolume *driftChamberLog
+    = new G4LogicalVolume(driftChamberBox,He,
+			  "DriftChamberLogical", 0, 0, 0);
   // -- Placement:
-  G4PVPlacement *driftChamberPhys  = new G4PVPlacement(0,G4ThreeVector(0., 0., 50*cm),
-						       "DriftChamberPhysical",
-						       driftChamberLog,
-						       WorldPhys,false,0);
+  // G4PVPlacement *driftChamberPhys  =
+      new G4PVPlacement(0,G4ThreeVector(0., 0., 50*cm),
+			"DriftChamberPhysical",
+		        driftChamberLog,
+			WorldPhys,false,0);
   
   //--------------------------
   // "Calorimeter": used in
@@ -165,7 +157,7 @@ G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
   theCrystalLog       = new G4LogicalVolume(CrystalSolid,CsI,
 					    "CrystalLogical", 0, 0, 0);
   // create UserLimits
-  if (theUserLimitsForCrystal != NULL) delete theUserLimitsForCrystal;
+  if (theUserLimitsForCrystal != 0) delete theUserLimitsForCrystal;
   theUserLimitsForCrystal = new G4UserLimits( DBL_MAX,  //step max
 					      DBL_MAX,  // track max
 					      theMaxTimeCutsInCrystal,
@@ -292,11 +284,11 @@ G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
   
   //------------------ Parameterisation ------------------------------
   // builds a model and sets it to the envelope of the calorimeter:
-  ExN05EMShowerModel* emShowerModel =
+  // ExN05EMShowerModel* emShowerModel =
     new ExN05EMShowerModel("emShowerModel",calorimeterLog);
   
   // and a model attached to the ghost:
-  ExN05PionShowerModel* ghostPionShowerModel =
+  // ExN05PionShowerModel* ghostPionShowerModel =
     new ExN05PionShowerModel("ghostPionShowerModel",ghostLogical);
   
   //--------- Visualization attributes -------------------------------
@@ -345,21 +337,21 @@ G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
 void  ExN05DetectorConstruction::SetMaxTimeInCrystal(G4double value)
 { 
   theMaxTimeCutsInCrystal = value;  
-  if (theUserLimitsForCrystal != NULL) {
+  if (theUserLimitsForCrystal != 0) {
     theUserLimitsForCrystal->SetUserMaxTime(value);
   }
 }
 void  ExN05DetectorConstruction::SetMinEkineInCrystal(G4double value)
 { 
   theMinEkineCutsInCrystal = value;  
-  if (theUserLimitsForCrystal != NULL) {
+  if (theUserLimitsForCrystal != 0) {
     theUserLimitsForCrystal->SetUserMinEkine(value);
   }
 }
 void  ExN05DetectorConstruction::SetMinRangeInCrystal(G4double value)
 { 
   theMinRangeCutsInCrystal = value; 
-  if (theUserLimitsForCrystal != NULL) {
+  if (theUserLimitsForCrystal != 0) {
     theUserLimitsForCrystal->SetUserMinRange(value);
   }
 }
@@ -367,7 +359,7 @@ void  ExN05DetectorConstruction::SetMinRangeInCrystal(G4double value)
 void  ExN05DetectorConstruction::UseUserLimits(G4bool isUse)
 {
   fUseUserLimits = isUse;
-  if ( fUseUserLimits && (theUserLimitsForCrystal!= NULL)) {
+  if ( fUseUserLimits && (theUserLimitsForCrystal!= 0)) {
     theCrystalLog->SetUserLimits(theUserLimitsForCrystal);
   }    
 } 

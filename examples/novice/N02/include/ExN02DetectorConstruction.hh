@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02DetectorConstruction.hh,v 1.5 2001-10-11 12:32:35 maire Exp $
+// $Id: ExN02DetectorConstruction.hh,v 1.6 2001-11-05 08:24:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,28 +64,28 @@ class ExN02DetectorConstruction : public G4VUserDetectorConstruction
      void SetMagField(G4double);
      
   private:
-    
-     G4Box*             solidWorld;    //pointer to the solid enveloppe 
-     G4LogicalVolume*   logicWorld;    //pointer to the logical enveloppe
-     G4VPhysicalVolume* physiWorld;    //pointer to the physical enveloppe
+
+     G4Box*             solidWorld;    // pointer to the solid envelope 
+     G4LogicalVolume*   logicWorld;    // pointer to the logical envelope
+     G4VPhysicalVolume* physiWorld;    // pointer to the physical envelope
      
-     G4Box*             solidTarget;   //pointer to the solid Target
-     G4LogicalVolume*   logicTarget;   //pointer to the logical Target
-     G4VPhysicalVolume* physiTarget;   //pointer to the physical Target
+     G4Box*             solidTarget;   // pointer to the solid Target
+     G4LogicalVolume*   logicTarget;   // pointer to the logical Target
+     G4VPhysicalVolume* physiTarget;   // pointer to the physical Target
                
-     G4Box*             solidTracker;  //pointer to the solid Tracker
-     G4LogicalVolume*   logicTracker;  //pointer to the logical Tracker
-     G4VPhysicalVolume* physiTracker;  //pointer to the physical Tracker
+     G4Box*             solidTracker;  // pointer to the solid Tracker
+     G4LogicalVolume*   logicTracker;  // pointer to the logical Tracker
+     G4VPhysicalVolume* physiTracker;  // pointer to the physical Tracker
      
-     G4Box*             solidChamber;  //pointer to the solid Chamber
-     G4LogicalVolume*   logicChamber;  //pointer to the logical Chamber
-     G4VPhysicalVolume* physiChamber;  //pointer to the physical Chamber
+     G4Box*             solidChamber;  // pointer to the solid Chamber
+     G4LogicalVolume*   logicChamber;  // pointer to the logical Chamber
+     G4VPhysicalVolume* physiChamber;  // pointer to the physical Chamber
      
-     G4Material*         TargetMater;  //pointer to the target  material
-     G4Material*         ChamberMater; //pointer to the chamber material     
-     ExN02MagneticField* fpMagField;   //pointer to the magnetic field 
+     G4Material*         TargetMater;  // pointer to the target  material
+     G4Material*         ChamberMater; // pointer to the chamber material     
+     ExN02MagneticField* fpMagField;   // pointer to the magnetic field 
      
-     ExN02DetectorMessenger* detectorMessenger;  //pointer to the Messenger
+     ExN02DetectorMessenger* detectorMessenger;  // pointer to the Messenger
        
      G4double fWorldLength;            // Full length of the world volume
      G4double fTargetLength;           // Full length of Target
@@ -98,4 +98,3 @@ class ExN02DetectorConstruction : public G4VUserDetectorConstruction
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

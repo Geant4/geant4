@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05EnergySpot.hh,v 1.5 2001-07-11 09:58:32 gunter Exp $
+// $Id: ExN05EnergySpot.hh,v 1.6 2001-11-05 08:24:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef ExN05EnergySpot_h
@@ -49,7 +49,7 @@ public:
   }
 
   // Draw:
-  void Draw(G4Colour* color = NULL);
+  void Draw(G4Colour* color = 0);
   // Print:
   void Print();
 

@@ -204,8 +204,8 @@ G4VPhysicalVolume* ExN06DetectorConstruction::Construct()
 //    = new G4PVPlacement(rot2,G4ThreeVector(0,2.5*m,0),"Bubble",
 //                        bubbleAir_log,waterTank_phys,false,0);
 
-  G4VPhysicalVolume * bubbleAir_phys
-    = new G4PVPlacement(0,G4ThreeVector(0,2.5*m,0),"Bubble",
+//  G4VPhysicalVolume * bubbleAir_phys =
+      new G4PVPlacement(0,G4ThreeVector(0,2.5*m,0),"Bubble",
                         bubbleAir_log,waterTank_phys,false,0);
 
 //	------------- Surfaces --------------
@@ -239,9 +239,9 @@ G4VPhysicalVolume* ExN06DetectorConstruction::Construct()
 
   if( AirSurface->GetLogicalVolume() == bubbleAir_log ) G4cout << " Equal " << G4endl;
 
-  G4LogicalBorderSurface * Tmp1Surface = WaterSurface->
-				 GetSurface(waterTank_phys,expHall_phys);
-
+//  G4LogicalBorderSurface * Tmp1Surface = WaterSurface->
+//				 GetSurface(waterTank_phys,expHall_phys);
+//
 //  if (Tmp1Surface == *WaterSurface) G4cout << " Equal "     << G4endl;
 
   G4LogicalSkinSurface * Tmp2Surface = AirSurface->GetSurface(bubbleAir_log);

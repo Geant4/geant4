@@ -160,8 +160,8 @@ G4VPhysicalVolume* ExN04DetectorConstruction::Construct()
   G4VPVParameterisation * trackerParam
     = new ExN04TrackerParametrisation;
   // dummy value : kXAxis -- modified by parameterised volume
-  G4VPhysicalVolume *trackerLayer_phys
-    = new G4PVParameterised("trackerLayer_phys",trackerLayer_log,tracker_phys,
+  // G4VPhysicalVolume *trackerLayer_phys =
+      new G4PVParameterised("trackerLayer_phys",trackerLayer_log,tracker_phys,
 			   kXAxis, notrkLayers, trackerParam);
   G4VisAttributes* trackerLayer_logVisAtt
     = new G4VisAttributes(G4Colour(0.5,0.0,1.0));
@@ -193,8 +193,8 @@ G4VPhysicalVolume* ExN04DetectorConstruction::Construct()
   G4VPVParameterisation * calorimeterParam
     = new ExN04CalorimeterParametrisation;
   // dummy value : kXAxis -- modified by parameterised volume
-  G4VPhysicalVolume * caloLayer_phys
-    = new G4PVParameterised("caloLayer_phys",caloLayer_log,calorimeter_phys,
+  // G4VPhysicalVolume * caloLayer_phys =
+      new G4PVParameterised("caloLayer_phys",caloLayer_log,calorimeter_phys,
 			   kXAxis, nocaloLayers, calorimeterParam);
   G4VisAttributes* caloLayer_logVisAtt
     = new G4VisAttributes(G4Colour(0.7,1.0,0.0));

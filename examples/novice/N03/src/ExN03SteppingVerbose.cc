@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03SteppingVerbose.cc,v 1.7 2001-10-10 14:58:13 maire Exp $
+// $Id: ExN03SteppingVerbose.cc,v 1.8 2001-11-05 08:24:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,7 +82,7 @@ void ExN03SteppingVerbose::StepInfo()
       G4cout << G4std::setw(10) << "OutOfWorld";
     }
 
-    if(fStep->GetPostStepPoint()->GetProcessDefinedStep() != NULL){
+    if(fStep->GetPostStepPoint()->GetProcessDefinedStep() != 0){
       G4cout << "  "
              << G4std::setw(10)
 	     << fStep->GetPostStepPoint()->GetProcessDefinedStep()

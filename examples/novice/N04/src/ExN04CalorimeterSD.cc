@@ -62,7 +62,7 @@ G4bool ExN04CalorimeterSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
 
   G4VPhysicalVolume* physVol = ROhist->GetVolume();
   //ROhist->MoveUpHistory();
-  G4VPhysicalVolume* mothVol = ROhist->GetVolume(1);
+  //G4VPhysicalVolume* mothVol = ROhist->GetVolume(1);
   int copyIDinZ = ROhist->GetReplicaNumber();
   int copyIDinPhi = ROhist->GetReplicaNumber(1);
 

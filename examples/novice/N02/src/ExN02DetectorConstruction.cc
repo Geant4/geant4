@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02DetectorConstruction.cc,v 1.9 2001-10-11 12:32:36 maire Exp $
+// $Id: ExN02DetectorConstruction.cc,v 1.10 2001-11-05 08:24:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -50,11 +50,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 ExN02DetectorConstruction::ExN02DetectorConstruction()
-:solidWorld(NULL),  logicWorld(NULL),  physiWorld(NULL),
- solidTarget(NULL), logicTarget(NULL), physiTarget(NULL), 
- solidTracker(NULL),logicTracker(NULL),physiTracker(NULL), 
- solidChamber(NULL),logicChamber(NULL),physiChamber(NULL), 
- TargetMater(NULL), ChamberMater(NULL),fpMagField(NULL),
+:solidWorld(0),  logicWorld(0),  physiWorld(0),
+ solidTarget(0), logicTarget(0), physiTarget(0), 
+ solidTracker(0),logicTracker(0),physiTracker(0), 
+ solidChamber(0),logicChamber(0),physiChamber(0), 
+ TargetMater(0), ChamberMater(0),fpMagField(0),
  fWorldLength(0.),  fTargetLength(0.), fTrackerLength(0.),
  NbOfChambers(0) ,  ChamberWidth(0.),  ChamberSpacing(0.)
 {
@@ -65,7 +65,7 @@ ExN02DetectorConstruction::ExN02DetectorConstruction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 ExN02DetectorConstruction::~ExN02DetectorConstruction()
-{ 
+{
   delete fpMagField;
   delete detectorMessenger;             
 }
@@ -90,11 +90,6 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
     G4Material* Air = new G4Material(name="Air", density, nel=2);
     Air->AddElement(elN, .7);
     Air->AddElement(elO, .3);
-    
-  //Al
-    a = 26.98*g/mole;
-    density = 2.7*g/cm3;
-    G4Material* Al = new G4Material(name="Al", z=13., a, density);
 
   //Pb
     a = 207.19*g/mole;
@@ -246,14 +241,14 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
   
 //--------- example of User Limits -------------------------------
 
-  //below is an example of how to set tracking constraints in a given
-  //logical volume(see also in N02PhysicsList how to setup the process
-  //G4UserSpecialCuts).  
-  //set a max Step length in the tracker region
-  ///G4double maxStep = 0.5*ChamberWidth, maxLength = 2*fTrackerLength;
-  ///G4double maxTime = 0.1*ns, minEkin = 10*MeV;
-  ///logicTracker->SetUserLimits(new G4UserLimits(maxStep,maxLength,maxTime,
-  ///                                              minEkin));
+  // below is an example of how to set tracking constraints in a given
+  // logical volume(see also in N02PhysicsList how to setup the process
+  // G4UserSpecialCuts).  
+  // Sets a max Step length in the tracker region
+  // G4double maxStep = 0.5*ChamberWidth, maxLength = 2*fTrackerLength;
+  // G4double maxTime = 0.1*ns, minEkin = 10*MeV;
+  // logicTracker->SetUserLimits(new G4UserLimits(maxStep,maxLength,maxTime,
+  //                                               minEkin));
   
   return physiWorld;
 }

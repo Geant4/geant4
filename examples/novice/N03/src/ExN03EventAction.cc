@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventAction.cc,v 1.14 2001-10-10 14:58:12 maire Exp $
+// $Id: ExN03EventAction.cc,v 1.15 2001-11-05 08:24:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,7 +50,7 @@
 
 ExN03EventAction::ExN03EventAction()
 :calorimeterCollID(-1),drawFlag("all"),printModulo(1),
- eventMessenger(NULL)
+ eventMessenger(0)
 {
   eventMessenger = new ExN03EventActionMessenger(this);
 }
@@ -91,7 +91,7 @@ void ExN03EventAction::EndOfEventAction(const G4Event* evt)
   // track length) in all absorbers and in all gaps
 
   G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
-  ExN03CalorHitsCollection* CHC = NULL;
+  ExN03CalorHitsCollection* CHC = 0;
   G4int n_hit = 0;
   G4double totEAbs=0, totLAbs=0, totEGap=0, totLGap=0;
     

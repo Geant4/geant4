@@ -31,10 +31,10 @@
 G4Allocator<ExN04CalorimeterHit> ExN04CalorimeterHitAllocator;
 
 ExN04CalorimeterHit::ExN04CalorimeterHit()
-{pLogV=NULL;}
+{pLogV=0;}
 
 ExN04CalorimeterHit::ExN04CalorimeterHit(G4LogicalVolume* logVol,G4int z,G4int phi)
-:pLogV(logVol),ZCellID(z),PhiCellID(phi)
+: ZCellID(z), PhiCellID(phi), pLogV(logVol)
 {;}
 
 ExN04CalorimeterHit::~ExN04CalorimeterHit()

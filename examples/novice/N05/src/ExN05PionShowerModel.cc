@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05PionShowerModel.cc,v 1.5 2001-07-11 09:58:35 gunter Exp $
+// $Id: ExN05PionShowerModel.cc,v 1.6 2001-11-05 08:24:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "ExN05PionShowerModel.hh"
@@ -146,7 +146,7 @@ void ExN05PionShowerModel::Explode(const G4FastTrack& fastTrack)
 void ExN05PionShowerModel::BuildDetectorResponse()
 {
   // Does the assignation of the energy spots to the sensitive volumes:
-  for (int i = 0; i < feSpotList.size(); i++)
+  for (size_t i = 0; i < feSpotList.size(); i++)
     {
       // Draw the energy spot:
       G4Colour red(1.,0.,0.);

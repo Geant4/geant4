@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05EMShowerModel.cc,v 1.4 2001-07-11 09:58:34 gunter Exp $
+// $Id: ExN05EMShowerModel.cc,v 1.5 2001-11-05 08:24:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "ExN05EMShowerModel.hh"
@@ -173,7 +173,7 @@ void ExN05EMShowerModel::Explode(const G4FastTrack& fastTrack)
 void ExN05EMShowerModel::BuildDetectorResponse()
 {
   // Does the assignation of the energy spots to the sensitive volumes:
-  for (int i = 0; i < feSpotList.size(); i++)
+  for (size_t i = 0; i < feSpotList.size(); i++)
     {
       // Draw the energy spot:
       feSpotList[i].Draw();

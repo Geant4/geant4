@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05EnergySpot.cc,v 1.4 2001-07-11 09:58:34 gunter Exp $
+// $Id: ExN05EnergySpot.cc,v 1.5 2001-11-05 08:24:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "ExN05EnergySpot.hh"
@@ -54,7 +54,6 @@ void ExN05EnergySpot::Draw(G4Colour *color)
       G4Polyline polyline;
       G4Colour colour(1.,.5,.5);
       if (color != 0) colour = *color;
-      G4VisAttributes attribs(colour);
       polyline.SetVisAttributes(colour);
       G4ThreeVector pp(Point);
       // Draw a "home made" marker:
