@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 1999-06-03 16:17:26 stesting Exp $
+# $Id: GNUmakefile,v 1.5 1999-06-09 13:20:34 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -28,6 +28,8 @@ EXAMPLES = 01 02 03 04 05 06
 all:
 	@rm -f test104/test104.EMtest.in
 	@rm -f test104/test104.EMtest.out
+	@rm -f test104
+	@ln -s $(G4INSTALL)/examples/novice/N04 test104
 	@ln -s $(G4INSTALL)/examples/novice/N04/exampleN04.EMtest.in \
           test104/test104.EMtest.in
 	@ln -s $(G4INSTALL)/examples/novice/N04/exampleN04.EMtest.out \
