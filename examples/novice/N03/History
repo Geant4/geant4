@@ -1,4 +1,4 @@
-$Id: History,v 1.56 2003-02-11 14:21:06 maire Exp $
+$Id: History,v 1.57 2003-02-20 14:46:57 vnivanch Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,7 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+20-02-03 V.Ivant (exampleN03-V05-00-04)
+- Migrade to cut per region
+
 11-02-03 mma (exampleN03-V05-00-03)
 - DetectorConstruction : change names of volumes
 
