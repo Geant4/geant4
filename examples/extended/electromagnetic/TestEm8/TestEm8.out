@@ -133,7 +133,7 @@ Irregular X-ray TR model is called
 48	fGamma = 8.085e+04	sumE = 8.377
 49	fGamma = 9.283e+04	sumE = 8.504
 
-total time for build X-ray TR tables = 11.03 s
+total time for build X-ray TR tables = 6.41 s
 Em8PhysicsList::SetCuts:CutLength : 1 mm 
 
 phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
@@ -163,7 +163,7 @@ hIoni:    Knock-on electron cross sections .
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-total time(SetCuts)=11.97 s 
+total time(SetCuts)=5.72 s 
 #
 #control/saveHistory
 #
@@ -244,26 +244,26 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   11 kByte
-    Total CPU time elapsed for geometry optimisation: 0.02 seconds
+    Total CPU time elapsed for geometry optimisation: 0.01 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-       0.00         0.00         0.93           11k Radiator
-       0.00         0.00         0.93            0k World
+427261800.00     42726.18         0.55           11k Radiator
+427261700.00     42726.17         0.55            0k World
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      96.00         11k         1      305        376         0.00    Radiator
-       4.00          0k         3        7         20         0.00    World
+      96.00         11k         1      305        376     42726.18    Radiator
+       4.00          0k         3        7         20     42726.17    World
 Start Run processing.
 
 ---> Begin of Event: 0
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=468.9s Real=477.82s Sys=1.64s
+  User=90.16s Real=94.71s Sys=1.31s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
     mean charged track length   in absorber=74.8793 +- 1.10279  mm  

@@ -9,6 +9,7 @@ Material available: Aluminum
 Material available: Carbon
 Material available: Silicon
 Material available: liquidArgon
+Material available: liquidXenon
 Material available: Iron
 Material available: Copper
 Material available: Gold
@@ -17,7 +18,7 @@ Material available: Water
 Material available: Methane
 Material available: Graphite
 
-***** Table : Nb of materials = 13 *****
+***** Table : Nb of materials = 14 *****
 
  Material: Beryllium     density:  1.848 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  35.267 cm 
    --->  Element: Beryllium      Z =  4.0   N =   9.0   A =   9.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
@@ -33,6 +34,9 @@ Material available: Graphite
 
  Material: liquidArgon     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065 cm 
    --->  Element: liquidArgon      Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: liquidXenon     density:  3.020 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   2.808 cm 
+   --->  Element: liquidXenon      Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:     Iron     density:  7.870 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm 
    --->  Element:     Iron      Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
@@ -69,6 +73,7 @@ Material available: Graphite
 G4VUserPhysicsList::Construct()
 Construct particles 
 Construct processes 
+Ionic processes for GenericIon
 Ionic processes for IonC12
 Ionic processes for alpha
 Hadronic processes for anti_proton
@@ -156,12 +161,33 @@ hLowEIoni:    Knock-on electron cross sections .
         Nuclear stopping power model is ICRU_R49
 G4VUserPhysicsList::SetCutValue       :Set cuts for anti_proton
 G4VUserPhysicsList::SetCutValueForOthers   :0.1[mm]
+G4hLowEnergyIonisation::BuildPhysicsTable for GenericIon
+Cuts are defined 
+G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built
+G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built
+G4hLowEnergyIonisation::BuildPhysicsTable: end for GenericIon
+Set cuts for GenericIon
 Set cuts for He3
+G4hLowEnergyIonisation::BuildPhysicsTable for IonC12
+Cuts are defined 
+G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built
+G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built
+G4hLowEnergyIonisation::BuildPhysicsTable: end for IonC12
 Set cuts for IonC12
+G4hLowEnergyIonisation::BuildPhysicsTable for alpha
+Cuts are defined 
+G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built
+G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built
+G4hLowEnergyIonisation::BuildPhysicsTable: end for alpha
 Set cuts for alpha
 Set cuts for anti_nu_e
 Set cuts for anti_nu_mu
 Set cuts for chargedgeantino
+G4hLowEnergyIonisation::BuildPhysicsTable for deuteron
+Cuts are defined 
+G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built
+G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built
+G4hLowEnergyIonisation::BuildPhysicsTable: end for deuteron
 Set cuts for deuteron
 Set cuts for geantino
 Set cuts for kaon+
@@ -181,6 +207,7 @@ Cut in range
              Carbon         100 mum         100 mum
             Silicon         100 mum         100 mum
         liquidArgon         100 mum         100 mum
+        liquidXenon         100 mum         100 mum
                Iron         100 mum         100 mum
              Copper         100 mum         100 mum
                Gold         100 mum         100 mum
@@ -195,6 +222,7 @@ Cut in energy
              Carbon        1.32 keV         118 keV
             Silicon        2.29 keV         121 keV
         liquidArgon        1.99 keV        82.5 keV
+        liquidXenon        7.15 keV         112 keV
                Iron        6.26 keV         235 keV
              Copper        7.32 keV         250 keV
                Gold        40.5 keV         348 keV
@@ -288,12 +316,33 @@ hLowEIoni:    Knock-on electron cross sections .
         Nuclear stopping power model is ICRU_R49
 G4VUserPhysicsList::SetCutValue       :Set cuts for anti_proton
 G4VUserPhysicsList::SetCutValueForOthers   :0.1[mm]
+G4hLowEnergyIonisation::BuildPhysicsTable for GenericIon
+Cuts are defined 
+G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built
+G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built
+G4hLowEnergyIonisation::BuildPhysicsTable: end for GenericIon
+Set cuts for GenericIon
 Set cuts for He3
+G4hLowEnergyIonisation::BuildPhysicsTable for IonC12
+Cuts are defined 
+G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built
+G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built
+G4hLowEnergyIonisation::BuildPhysicsTable: end for IonC12
 Set cuts for IonC12
+G4hLowEnergyIonisation::BuildPhysicsTable for alpha
+Cuts are defined 
+G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built
+G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built
+G4hLowEnergyIonisation::BuildPhysicsTable: end for alpha
 Set cuts for alpha
 Set cuts for anti_nu_e
 Set cuts for anti_nu_mu
 Set cuts for chargedgeantino
+G4hLowEnergyIonisation::BuildPhysicsTable for deuteron
+Cuts are defined 
+G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built
+G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built
+G4hLowEnergyIonisation::BuildPhysicsTable: end for deuteron
 Set cuts for deuteron
 Set cuts for geantino
 Set cuts for kaon+
@@ -313,6 +362,7 @@ Cut in range
              Carbon          10 mum          10 mum
             Silicon          10 mum          10 mum
         liquidArgon          10 mum          10 mum
+        liquidXenon          10 mum          10 mum
                Iron          10 mum          10 mum
              Copper          10 mum          10 mum
                Gold          10 mum          10 mum
@@ -327,6 +377,7 @@ Cut in energy
              Carbon           1 eV         31.2 keV
             Silicon           1 eV         31.6 keV
         liquidArgon           1 eV         7.71 keV
+        liquidXenon        1.72 keV        15.5 keV
                Iron        1.89 keV        58.5 keV
              Copper        2.15 keV        61.4 keV
                Gold        8.26 keV        80.5 keV
@@ -348,18 +399,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=7.5s Real=9.22s Sys=1.72s
+  User=7.57s Real=9.53s Sys=1.78s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV
-    Track Length in absorber = 9.21859 +- 0.00658229  microns 
-    CSDA  Range  in absorber = 9.00111 +- 0.00846196  microns 
+    Track Length in absorber = 9.21469 +- 0.0067762  microns 
+    CSDA  Range  in absorber = 9.00677 +- 0.00713821  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.15959 +- 0.00658229 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.13211 +- 0.00846196 microns 
+    Track Length (G4 - ICRU49) = 0.155693 +- 0.0067762 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.137768 +- 0.00713821 microns 
 
 Average Number electrons per event = 0
 Average Number photons per event   = 0
@@ -369,15 +420,16 @@ Average Number photons per event   = 0
 /run/beamOn 1000
 ### Run 1 start.
 Start Run processing.
+EvtNo= 212  length= 0.0100815  xend= 0.000831034
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=8.18s Real=10.28s Sys=1.95s
+  User=8.35s Real=10.79s Sys=2.06s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV
-    Track Length in absorber = 9.59382 +- 0.00669146  microns 
-    CSDA  Range  in absorber = 9.28303 +- 0.00784963  microns 
+ end of Run TotNbofEvents = 999 for anti_proton with Ekin = 0.5 MeV
+    Track Length in absorber = 9.59041 +- 0.0067708  microns 
+    CSDA  Range  in absorber = 9.2736 +- 0.00846982  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
@@ -393,12 +445,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=8.89s Real=10.51s Sys=1.61s
+  User=9.16s Real=11.08s Sys=1.8s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for IonC12 with Ekin = 6 MeV
-    Track Length in absorber = 8.56319 +- 0.00455615  microns 
-    CSDA  Range  in absorber = 7.72945 +- 0.0195789  microns 
+    Track Length in absorber = 8.56513 +- 0.0046503  microns 
+    CSDA  Range  in absorber = 7.72847 +- 0.0196611  microns 
 
     Energy deposit in absorber = 6  MeV 
 
@@ -419,21 +471,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1263.22s Real=1334.09s Sys=53.44s
+  User=604.16s Real=666.54s Sys=36.36s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV
-    Track Length in absorber = 9.21786 +- 0.00695673  microns 
-    CSDA  Range  in absorber = 9.0069 +- 0.00641099  microns 
+    Track Length in absorber = 9.2154 +- 0.00662701  microns 
+    CSDA  Range  in absorber = 9.0123 +- 0.00595908  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.158858 +- 0.00695673 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.137903 +- 0.00641099 microns 
+    Track Length (G4 - ICRU49) = 0.156401 +- 0.00662701 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.143303 +- 0.00595908 microns 
 
-Average Number electrons per event = 126.38
-Average Number photons per event   = 51.426
+Average Number electrons per event = 71.282
+Average Number photons per event   = 22.366
 
 #
 G4 kernel has come to Quit state.

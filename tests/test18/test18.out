@@ -94,6 +94,9 @@ MuPairProd:  theoretical cross sections
 ### Run : 0
 /gun/direction 1.0 0.0 0.0
        0.001           1           0     Na24[0.0]
+        46.4           1   3.284e+04     e-
+    1.34e+03           1   3.284e+04     anti_nu_e
+      0.0429           1   3.284e+04     Mg24[0.0]
 
 #
 #
@@ -106,6 +109,9 @@ MuPairProd:  theoretical cross sections
 /run/beamOn
 /gun/direction 1.0 0.0 0.0
        0.001           1           0     Ne24[0.0]
+         576           1         379     e-
+         547           1         379     anti_nu_e
+     0.00652           1         379     Na24[0.0]
 
 #
 #
@@ -118,6 +124,10 @@ MuPairProd:  theoretical cross sections
 /run/beamOn 
 /gun/direction 1.0 0.0 0.0
        0.001           1           0     F24[0.0]
+    7.67e+03           1       1.916     e-
+    5.05e+03           1       1.916     anti_nu_e
+    1.98e+03           1       1.916     gamma
+        2.43           1       1.916     Ne24[0.0]
 
 #
 #
@@ -130,6 +140,11 @@ MuPairProd:  theoretical cross sections
 /run/beamOn 
 /gun/direction 1.0 0.0 0.0
        0.001           1           0     Al24[0.0]
+    3.95e+03           1       5.005     e+
+    3.43e+03           1       5.005     gamma
+    1.09e+03           1       5.005     gamma
+    4.78e+03           1       5.005     nu_e
+        1.73           1       5.005     Mg24[0.0]
 
 #
 #
@@ -142,6 +157,10 @@ MuPairProd:  theoretical cross sections
 /run/beamOn
 /gun/direction 1.0 0.0 0.0
        0.001           1           0     Na24[472.0]
+           0           1     0.03244     Na24[0.0]
+         530           1    2.36e+05     e-
+         861           1    2.36e+05     anti_nu_e
+      0.0552           1    2.36e+05     Mg24[0.0]
 
 #
 #
@@ -154,6 +173,11 @@ MuPairProd:  theoretical cross sections
 /run/beamOn
 /gun/direction 1.0 0.0 0.0
        0.001           1           0     Cr46[0.0]
+    4.61e+03           1      0.1528     e+
+         511           1      0.1528     gamma
+         511           1      0.1528     gamma
+    1.97e+03           1      0.1528     nu_e
+       0.503           1      0.1528     V46[0.0]
 
 #
 #
@@ -166,6 +190,8 @@ MuPairProd:  theoretical cross sections
 /run/beamOn
 /gun/direction 1.0 0.0 0.0
        0.001           1           0     Po215[0.0]
+    7.39e+03           1    0.003667     alpha
+         140           1    0.003667     Pb211[0.0]
 
 Graphics systems deleted.
 Visualization Manager deleting...

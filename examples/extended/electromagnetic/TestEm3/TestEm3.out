@@ -228,14 +228,14 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-       0.00         0.00         0.82            2k Calorimeter
-       0.00         0.00         0.82            0k Layer
+       0.00         0.00         0.00            2k Calorimeter
+       0.00         0.00         0.00            0k Layer
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      91.70          1k         1       50         50        41.68    Calorimeter
-       8.30          0k         1        3          4        41.68    Layer
+      91.70          1k         1       50         50         0.00    Calorimeter
+       8.30          0k         1        3          4         0.00    Layer
 Start Run processing.
 
 ---> Begin Of Event: 0
@@ -244,19 +244,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=159.28s Real=173.04s Sys=11.21s
+  User=44.99s Real=62.4s Sys=11.71s
 
 -------------------------------------------------------------
                                    total energy dep            total tracklen 
  
- Absorber0 (        Lead) : 803.97 MeV +- 14.54 MeV       56.56 cm  +-  1.13 cm 
- Absorber1 ( liquidArgon) : 186.45 MeV +- 13.89 MeV       92.83 cm  +-  7.22 cm 
+ Absorber0 (        Lead) : 803.13 MeV +- 14.80 MeV       56.40 cm  +-  1.30 cm 
+ Absorber1 ( liquidArgon) : 186.63 MeV +- 14.83 MeV       92.96 cm  +-  7.48 cm 
 
 -------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2064113543, 1362958908
+ Current couple of seeds = 419644579, 916943976
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

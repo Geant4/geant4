@@ -168,8 +168,8 @@ Cut in energy
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 245.648 MeV       total track length: 16.9701 cm 
-        Gap: total energy:  16.641 MeV       total track length: 8.19589 cm 
+   Absorber: total energy: 283.131 MeV       total track length: 19.9534 cm 
+        Gap: total energy: 12.4027 MeV       total track length: 6.03802 cm 
 
      10 hits are stored in ExN03CalorHitsCollection.
      Transportation,              hIoni,                msc,              eIoni
@@ -182,11 +182,11 @@ Cut in energy
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1082355994, 1488603275
+ Current couple of seeds = 1291960900, 759167195
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 289.062 MeV       total track length:  19.499 cm 
-        Gap: total energy: 11.4486 MeV       total track length: 5.58057 cm 
+   Absorber: total energy: 281.881 MeV       total track length: 19.6742 cm 
+        Gap: total energy: 15.4463 MeV       total track length: 8.07961 cm 
 
      10 hits are stored in ExN03CalorHitsCollection.
 
@@ -207,12 +207,12 @@ Cut in energy
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1188599885, 738400153
+ Current couple of seeds = 796806890, 2027378855
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 401.863 MeV       total track length: 95.9539 cm 
-        Gap: total energy: 82.1407 MeV       total track length: 2.30339 m  
+   Absorber: total energy: 374.373 MeV       total track length: 90.1156 cm 
+        Gap: total energy: 92.9847 MeV       total track length: 2.59813 m  
 
-     26 hits are stored in ExN03CalorHitsCollection.
+     18 hits are stored in ExN03CalorHitsCollection.
 Graphics systems deleted.
 Visualization Manager deleting...

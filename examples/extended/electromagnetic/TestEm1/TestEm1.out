@@ -17,8 +17,8 @@ Current available graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
 #
-/calor/cutG 2.20 mm
-/calor/cutE 6.05 mum
+/run/particle/setGCut 2.20 mm
+/run/particle/setECut 6.05 mum
 # 
 /run/initialize
 
@@ -59,7 +59,7 @@ Current available graphics systems are:
 
 
  The Box is 20 m   of Aluminium
-Em1PhysicsList::SetCuts:CutLength : 1 (mm)
+Em1PhysicsList::SetCuts:CutLength : 1 mm 
 
 phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
         Sandia crossSection below 50 KeV
@@ -169,7 +169,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=34s Real=37s Sys=2.3s
+  User=11s Real=17s Sys=2.3s
 
  nb tracks/event   neutral:    27.2900   charged:   692.9700
  nb  steps/event   neutral:   145.4900   charged:  1331.6300

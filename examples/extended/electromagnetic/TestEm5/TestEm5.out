@@ -18,8 +18,8 @@ Current available graphics systems are:
   VRML2FILE (VRML2FILE)
 /run/verbose 2
 #
-/calor/cutG 2.13 mm    
-/calor/cutE 7.0  mum
+/run/particle/setGCut 2.13 mm    
+/run/particle/setECut 7.0  mum
 /run/initialize
 userDetector->Construct() start.
 
@@ -265,7 +265,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=1.4e+02s Real=2.3e+03s Sys=1.6e+02s
+  User=70s Real=2e+03s Sys=1.5e+02s
  ================== run summary =====================
  end of Run TotNbofEvents = 100000
     mean charged track length   in absorber=0.0209601 +- 1.47921e-05  mm  

@@ -122,7 +122,7 @@ hIoni:    Knock-on electron cross sections .
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-total time(SetCuts)=25.23 s 
+total time(SetCuts)=16.03 s 
 G4ClassicalRK4 (default) is called
 The minimal step is equal to 1 mm
 ============= The cut Energy ==============================
@@ -1159,7 +1159,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.73s Real=0.9s Sys=0.17s
+  User=0.37s Real=0.73s Sys=0.11s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
