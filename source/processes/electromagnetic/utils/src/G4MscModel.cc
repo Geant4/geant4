@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.cc,v 1.13 2003-11-26 10:01:13 urban Exp $
+// $Id: G4MscModel.cc,v 1.14 2004-03-01 12:17:07 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -52,6 +52,9 @@
 //          cleaning (L.Urban) 
 // 26-11-03 correction in TrueStepLength : 
 //          trueLength <= currentRange (L.Urban) 
+// 01-03-04 signature changed in SampleCosineTheta,
+//          energy dependence calculations has been simplified,
+//
 
 // Class Description:
 //
@@ -90,7 +93,6 @@ G4MscModel::G4MscModel(G4double& m_dtrl, G4double& m_NuclCorrPar,
   lowKinEnergy  = 0.1*keV;
   stepmin       = 1.e-6*mm;
   currentRange  = 0. ;
-  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -415,11 +417,7 @@ G4double G4MscModel::GeomPathLength(
   currentRadLength = couple->GetMaterial()->GetRadlen();
 
   lambda0 = lambda;
-  lambda1 = -1.;
-  lambdam = -1.;
-  alam    = range;
-  zm      = 1.;
-  cthm    = 1.;
+  lambda1 = lambda;
   tPathLength = truePathLength;
 
   // this correction needed to run MSC with eIoni and eBrem inactivated
@@ -446,19 +444,8 @@ G4double G4MscModel::GeomPathLength(
       lambda1 = CrossSection(couple,particle,T1,0.0,1.0);
     }
 
-    if (T0 > particle->GetPDGMass()) alam = lambda0*tPathLength/(lambda0-lambda1) ;
-    G4double blam = 1.+alam/lambda0 ;
-    if (tPathLength < 2.*dtrl*range) {
-      zmean = alam*(1.-exp(blam*log(1.-tPathLength/alam)))/blam ;
-
-    } else {
-      G4double w = 1.-0.5*tPathLength/alam ;
-      lambdam = lambda0*w ;
-      G4double clam = 1.+alam/lambdam ;
-      cthm = exp(alam*log(w)/lambda0) ;
-      zm = alam*(1.-exp(blam*log(w)))/blam ;
-      zmean = zm + alam*(1.-exp(clam*log(w)))*cthm/clam ;
-    }
+    G4double lambdaeff = 2./(1./lambda0+1./lambda1) ;
+    zmean = lambdaeff*(1.-exp(-tPathLength/lambdaeff));
   }
     //  sample z
   G4double zPathLength = zmean ;
@@ -485,38 +472,11 @@ G4double G4MscModel::TrueStepLength(G4double geomStepLength)
 {
   G4double trueLength = geomStepLength;
   trueLength = geomStepLength;
-  if (geomStepLength > lambda0*tausmall) {
-    G4double blam = 1.+alam/lambda0;
-    if (lambda1 < 0.) {
-      trueLength = -lambda0*log(1.-geomStepLength/lambda0) ;
+  if(geomStepLength > lambda0*tausmall) 
+    trueLength = -lambda0*log(1.-geomStepLength/lambda0) ;
 
-    } else if (lambdam < 0.) {
-      if (blam*geomStepLength < alam)
-        trueLength = alam*(1.-exp(log(1.-blam*geomStepLength/alam)/blam));
-      else
-        trueLength = tPathLength;
-    } else {
-      if (geomStepLength <= zm) {
-
-        lambdam = -1.;
-
-        if(blam*geomStepLength < alam )
-          trueLength = alam*(1.-exp(log(1.-blam*geomStepLength/alam)/blam));
-        else
-          trueLength = 0.5*tPathLength;
-      } else {
-        G4double clam = 1.+alam/lambdam;
-        if(clam*(geomStepLength-zm)/(alam*cthm) < 1.)
-          trueLength = 0.5*tPathLength + alam*(1.-
-                exp(log(1.-clam*(geomStepLength-zm)/(alam*cthm))/clam)) ;
-        else
-          trueLength = tPathLength;
-      }
-    }
-    if(trueLength > tPathLength) trueLength = tPathLength;
-    if(trueLength < geomStepLength) trueLength = geomStepLength;
-  }
-
+  if(trueLength > tPathLength) trueLength = tPathLength;
+  if(trueLength < geomStepLength) trueLength = geomStepLength;
   if(trueLength > currentRange) trueLength = currentRange ;
 
   return trueLength;
@@ -524,11 +484,18 @@ G4double G4MscModel::TrueStepLength(G4double geomStepLength)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MscModel::SampleCosineTheta(G4double trueStepLength)
+G4double G4MscModel::SampleCosineTheta(G4double trueStepLength, G4double KineticEnergy,
+                                       G4double lambda)
 {
+  currentKinEnergy = sqrt(currentKinEnergy*KineticEnergy) ; 
+
   G4double cth = 1. ;
 
-  currentTau = trueStepLength/lambda0;
+  if(trueStepLength < currentRange*dtrl)
+    currentTau = trueStepLength/lambda;
+  else
+    currentTau = 0.5*trueStepLength*(1./lambda0+1./lambda) ;
+
   if(trueStepLength < stepmin)
     cth = exp(-currentTau) ;
   else
@@ -536,14 +503,6 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength)
     if (currentTau > taubig) cth = -1.+2.*G4UniformRand();
     else if (currentTau >= tausmall)
     {
-      if(lambda1 > 0.)
-      {
-        if (lambdam < 0.)
-          currentTau = -alam*log(1.-trueStepLength/alam)/lambda0 ;
-        else
-          currentTau = -log(cthm)-alam*
-                       log(1.-(trueStepLength-0.5*tPathLength)/alam)/lambdam ;
-      }
       if(currentTau > taubig) cth = -1.+2.*G4UniformRand();
       else
       {
@@ -587,7 +546,6 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength)
         if (theta0 > taulim) a = 0.5/(1.-cos(theta0)) ;
         else                   a = 1.0/(theta0*theta0) ;
 
-
         G4double xmeanth = exp(-currentTau);
         G4double xmeanth1 = 1.-xmeanth ;
         if(currentTau < taulim) xmeanth1 = currentTau ;	  
@@ -596,14 +554,16 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength)
         const G4double x1fac2 = (1.-(1.+xsi)*x1fac1)/(1.-x1fac1) ;
         const G4double x1fac3 = 1.3      ; // x1fac3 >= 1.  !!!!!!!!!
 
+        // exponent c is fixed to 2. in f2(x) now (tail) ~1/(b-x)**2
+        const G4double wb = 1.-2./xsi ;
+
 	G4double ea,eaa,xmean1 ;
-	G4double b1 = 2., bx = 2., c = 1., c1 = 0.,
-	         eb1 = 0., ebx = 0., xmean2 = 0. ;
+	G4double b1 = 2., bx = 2.,
+	         xmean2 = 0. ;
         G4double prob = 1., qprob ;		 
         G4double x0 = 1.-xsi/a;
       	G4double oneminusx0=xsi/a ;
 	G4double oneplusx0=2.+xsi/a ;
-
 
         if (x0 <= -1.)
         {
@@ -631,37 +591,23 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength)
             a = x1fac3*x1fac2/xmeanth1 ;
 	    x0 = 1.-xsi/a ;
 	    oneminusx0=xsi/a ;
-	    oneplusx0=2.+xsi/a ;
+	    oneplusx0=2.-xsi/a ;
           }
 
           ea = x1fac1 ;
           eaa = 1.-ea ;
           xmean1 = 1.-x1fac2/a ;
 
-	  b = xmean1 ;
+          b = 1.-wb*xsi/a ;
+
           b1 = b+1. ;
-	  bx = (xsi/eaa-1.)/a ;
+	  bx = (1.-wb)*xsi/a ;
 	  
-          // c from continuity of the 1st derivative
-	  c = xsi/eaa-1. ;
-          if(c == 2.)
-          {
-            xmean2 = b-b1*bx*log(b1/bx)/oneplusx0  ;
-          }
-          else
-          {
-            c1 = c-1. ;
-            eb1 = exp(c1*log(b1)) ;
-            ebx = exp(c1*log(bx)) ;
-            xmean2 = ((b1*ebx-eb1*bx)/(c-2.)+ebx+x0*eb1)/(eb1-ebx) ;
-          }
+          xmean2 = b-b1*bx*log(b1/bx)/oneplusx0  ;
 
 	  G4double f1x0 = a*ea/eaa ;
           G4double f2x0 ;
-	  if(c == 2.)
-	    f2x0 = b1/(oneplusx0*bx) ;
-          else
-	    f2x0 = c1*eb1/(bx*(eb1-ebx)) ; 	  
+	  f2x0 = b1/(oneplusx0*bx) ;
           // from continuity at x=x0
           prob = f2x0/(f1x0+f2x0) ;
           // from xmean = xmeanth
@@ -669,20 +615,19 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength)
         }
 
         // protection against qprob > 1
-        if(qprob > 1.) qprob = 1. ;
-	
+        if(qprob > 1.) 
+        {
+          qprob = 1. ;
+          prob = (xmeanth-xmean2)/(xmean1-xmean2) ;
+        }
+
         // sampling of costheta
         if (G4UniformRand() < qprob)
         {
           if (G4UniformRand() < prob)
              cth = 1.+log(ea+G4UniformRand()*eaa)/a ;
           else
-          {
-            if(c == 2.)
              cth = b-b1*bx/(bx+oneplusx0*G4UniformRand()) ;
-            else
-             cth = b-b1*bx/exp(log(ebx+(eb1-ebx)*G4UniformRand())/c1) ;
-          }
         }
         else
         {

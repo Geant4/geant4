@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.hh,v 1.7 2004-01-21 18:05:06 vnivanch Exp $
+// $Id: G4MscModel.hh,v 1.8 2004-03-01 12:17:06 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -42,6 +42,7 @@
 //
 // 05-08-03 angle distribution has been modified (L.Urban)
 // 26-11-03 new data member currentRange (L.Urban)
+// 01-03-04 changes in data members + signature changed in SampleCosineTheta
 //
 // Class Description:
 //
@@ -113,7 +114,8 @@ public:
 
   G4double TrueStepLength(G4double geomStepLength);
 
-  G4double SampleCosineTheta(G4double trueStepLength);
+  G4double SampleCosineTheta(G4double trueStepLength,G4double KineticEnergy,
+                             G4double lambda);
 
   G4double SampleDisplacement();
 
@@ -157,10 +159,6 @@ private:
 
   G4double lambda0;
   G4double lambda1;
-  G4double lambdam;
-  G4double alam;
-  G4double zm;
-  G4double cthm;
   G4double tPathLength;
 
   G4bool   samplez;

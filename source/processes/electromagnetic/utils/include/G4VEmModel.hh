@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.15 2004-01-27 11:21:07 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.16 2004-03-01 12:17:06 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -42,6 +42,7 @@
 // 25-02-03 Add sample theta and displacement (V.Ivanchenko)
 // 23-07-03 Replace G4Material by G4MaterialCutCouple in dE/dx and CrossSection
 //          calculation (V.Ivanchenko)
+// 01-03-04 L.Urban signature changed in SampleCosineTheta 
 //
 
 //
@@ -129,8 +130,8 @@ public:
 
   virtual G4double TrueStepLength(G4double geomStepLength) {return geomStepLength;};
 
-  virtual G4double SampleCosineTheta(G4double ) {return 1.0;};
-  // G4double parameter trueStepLength
+  virtual G4double SampleCosineTheta(G4double,G4double,G4double ) {return 1.0;};
+  //  trueStepLength + Tkin + lambda   !!!!!!!!!!!
 
   virtual G4double SampleDisplacement() {return 0.0;};
 
