@@ -1,4 +1,4 @@
-$Id: README,v 1.8 2001-12-07 11:04:00 pfeiffer Exp $
+$Id: README,v 1.9 2001-12-07 11:08:41 pfeiffer Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -188,7 +188,20 @@ The main features of this example are
  The hit information are saved on an ASCII file named Tracks_N.dat, where 
  N is the progressive ID number associated to the run. 
 
-8. Histogramming
+8. Analysis
+----------------
+
+ At present there are two options for analysis packages: either 
+ explicitely the Anaphe 3.6.5 (or compatible) version is selected, 
+ or any AIDA-2.2 compliant analysis system is chosen.  This dual
+ approach will be removed in the next release when only the AIDA
+ compliant version will be present. Presently, the OpenScientist 
+ package (version 8) provides an implementation of AIDA 2.2, 
+ other packages as Anaphe and JAS will follow soon. The AIDA 
+ compliant version has not been tested by the developers and is
+ here as a example of "forward compatibility" on how to use analysis.
+
+9. Histogramming
 ----------------
 
  Some hits information can be visualized runtime using Lizard (if it is 
@@ -219,7 +232,7 @@ The main features of this example are
  for next releases. 
 
 
-9. Digi
+10. Digi
 --------
 
  For the TKR also the digits corresponding to the Hits are generated. 
@@ -232,7 +245,7 @@ The main features of this example are
   c) Number of the plane
   d) Type of the plane (1=X  0=Y)
 
-10. Classes Overview
+11. Classes Overview
 -------------------
 
  This is the overview of the classes defined in this example
