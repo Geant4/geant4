@@ -1,4 +1,4 @@
-$Id: History,v 1.36 2001-06-21 06:28:03 stanaka Exp $
+$Id: History,v 1.37 2001-09-18 08:16:31 stanaka Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18-09-01 Satoshi Tanaka (exampleN03-V03-02-00)
+- Updation for automatic visualization at Hebden Bridge mini-workshop.
+- /vis/viewer/flush and /vis/flushAll are not included yet.
+  (To be included in the next tag.) 
+- /vis/drawTree may still require /vis/scene/notifyHandlers.
+  (John Allison will revise the /vis/drawTree command soon.)
 
 21-06-01 Satoshi Tanaka (exampleN03-V03-00-02)
 - visTutor/*.mac updated
