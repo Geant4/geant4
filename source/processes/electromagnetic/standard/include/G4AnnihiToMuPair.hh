@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AnnihiToMuPair.hh,v 1.5 2004-05-07 16:52:42 vnivanch Exp $
+// $Id: G4AnnihiToMuPair.hh,v 1.6 2004-08-13 14:47:50 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //         ------------ G4AnnihiToMuPair physics process ------
@@ -78,7 +78,8 @@ class G4AnnihiToMuPair : public G4VDiscreteProcess
 
      G4double GetCrossSecFactor() {return CrossSecFactor;};
        // Get the factor to artificially increase the cross section
-       
+
+     virtual       
      G4double ComputeCrossSectionPerAtom(G4double PositronEnergy,
                                          G4double AtomicZ);
        // Compute total cross section					 

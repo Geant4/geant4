@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion.hh,v 1.12 2004-08-13 13:14:43 maire Exp $
+// $Id: G4GammaConversion.hh,v 1.13 2004-08-13 14:47:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------------ G4GammaConversion physics process -------------------------
@@ -130,6 +130,7 @@ class G4GammaConversion : public G4VDiscreteProcess
        // This function overloads a virtual function of the base class.
        // It is invoked by the ProcessManager of the Particle.
 
+     virtual
      G4double ComputeCrossSectionPerAtom(G4double GammaEnergy, 
                                          G4double AtomicNumber);
 

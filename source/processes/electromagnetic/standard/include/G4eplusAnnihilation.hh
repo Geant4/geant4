@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eplusAnnihilation.hh,v 1.13 2004-08-13 12:51:27 maire Exp $
+// $Id: G4eplusAnnihilation.hh,v 1.14 2004-08-13 14:47:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -137,7 +137,7 @@ class G4eplusAnnihilation : public G4VRestDiscreteProcess
        // This function overloads a virtual function of the base class.
        // It is invoked by the ProcessManager of the Particle.
 
-
+     virtual
      G4double ComputeCrossSectionPerAtom(G4double PositKinEnergy,
                                          G4double AtomicNumber);
 

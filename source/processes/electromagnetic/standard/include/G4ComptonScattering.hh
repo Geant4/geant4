@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComptonScattering.hh,v 1.11 2004-08-13 13:44:19 maire Exp $
+// $Id: G4ComptonScattering.hh,v 1.12 2004-08-13 14:47:50 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------------ G4ComptonScattering physics process -----------------------
@@ -125,6 +125,7 @@ class G4ComptonScattering : public G4VDiscreteProcess
        // This function overloads a virtual function of the base class.
        // It is invoked by the ProcessManager of the Particle.
 
+     virtual
      G4double ComputeCrossSectionPerAtom(G4double GammaEnergy, 
                                          G4double AtomicNumber);
 
