@@ -74,7 +74,7 @@ export G4RADIOACTIVEDATA=$G4INSTALL/data/RadiativeDecay
 #export G4LEDATA=$G4INSTALL/../G4EMLOW0.3
 # New data for emlowen-V03-02-45: affected tests 14,17,20!
 #export G4LEDATA=$G4INSTALL/../G4EMLOW0.4
-export G4LEDATA=/afs/cern.ch/sw/geant4/dev/data/G4EMLOW0.5
+export G4LEDATA=/afs/cern.ch/sw/geant4/dev/data/G4EMLOW1.1
 export G4ANALYSIS_BUILD=1
 #
 # Some alias -kes :
