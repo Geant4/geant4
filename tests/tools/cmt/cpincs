@@ -4,7 +4,7 @@
 #
 #set -v
 
-echo "Warning : test, tests directories under source must had been removed."
+echo "Warning : test, tests directories under source must be removed."
 
 /bin/rm -R -f $G4INSTALL/include
 mkdir $G4INSTALL/include
