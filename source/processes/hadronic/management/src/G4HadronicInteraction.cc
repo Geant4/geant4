@@ -21,9 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronicInteraction.cc,v 1.4 2001-08-01 17:03:27 hpw Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
  // Hadronic Interaction  base class
  // original by H.P. Wellisch
  // modified by J.L. Chuma, TRIUMF, 21-Mar-1997
@@ -46,6 +43,7 @@
     {
       if( aMaterial == theMinMaterials[i] )return theMinEnergyList[i];
     }
+    if(IsBlocked()) return 0.*GeV;
     if( verboseLevel > 0 )
       G4cout << "*** Warning from HadronicInteraction::GetMinEnergy" << G4endl
            << "    material " << aMaterial->GetName()
@@ -116,6 +114,7 @@
     {
       if( aMaterial == theMaxMaterials[i] )return theMaxEnergyList[i];
     }
+    if(IsBlocked()) return 0.*GeV;
     if( verboseLevel > 0 )
       G4cout << "*** Warning from HadronicInteraction::GetMaxEnergy" << G4endl
            << "    material " << aMaterial->GetName()
