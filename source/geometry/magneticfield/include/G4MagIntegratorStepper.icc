@@ -5,11 +5,20 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagIntegratorStepper.icc,v 1.1 1999-01-07 16:07:05 gunter Exp $
+// $Id: G4MagIntegratorStepper.icc,v 1.2 1999-02-12 12:28:40 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 inline G4EquationOfMotion* G4MagIntegratorStepper::GetEquationOfMotion() const
- { return theEquation_Rhs; } 
+ { return  fEquation_Rhs; } 
+
+inline void G4MagIntegratorStepper::RightHandSide( const  double y[], double dydx[] )   
+	{  fEquation_Rhs-> RightHandSide(y, dydx); }
+
+inline G4int   G4MagIntegratorStepper::GetNumberOfVariables()
+ { return fNumberOfVariables; } 
+inline void  G4MagIntegratorStepper::SetNumberOfVariables(G4int newNo)
+ { fNumberOfVariables = newNo; } 
+
 
 inline void G4MagIntegratorStepper::
 NormaliseTangentVector( G4double vec[6] )
