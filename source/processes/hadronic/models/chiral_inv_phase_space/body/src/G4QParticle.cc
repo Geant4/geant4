@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QParticle.cc,v 1.12 2001-10-30 08:32:39 mkossov Exp $
+// $Id: G4QParticle.cc,v 1.13 2001-10-31 17:34:04 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -111,7 +111,8 @@ ostream& operator<<(ostream& lhs, G4QParticle& rhs)
 G4QDecayChanVector G4QParticle::InitDecayVector(G4int nQ)
 //    ===================================================
 {
-  static G4int nP = 486;                  // Up to A=80
+  //static G4int nP = 486;                  // Up to A=80
+  static G4int nP = 494;                  // Up to A=80 "Isonuclear revision"
   static G4QDecayChanVector* DecayDB = new G4QDecayChanVector[nP];
   static int limit= 0;
   if(nQ>=limit && nQ<nP)
@@ -637,13 +638,21 @@ G4QDecayChanVector G4QParticle::InitDecayVector(G4int nQ)
       DecayDB[ 70].push_back(new G4QDecayChan(1.00, 321, 111));
 	}
     if(limit<= 71 && nQ>= 71)DecayDB[ 71].push_back(new G4QDecayChan(1.00, 333, 333));//phi_4(2300)
-    if(limit<= 75 && nQ>= 75)DecayDB[ 75].push_back(new G4QDecayChan(1.00, 2112, 2112)); //nn
-    if(limit<= 76 && nQ>= 76)DecayDB[ 76].push_back(new G4QDecayChan(1.00, 2212, 2112)); //pn
-    if(limit<= 77 && nQ>= 77)DecayDB[ 77].push_back(new G4QDecayChan(1.00, 2212, 2212)); //pp
+    if(limit<= 72 && nQ>= 72)DecayDB[ 72].push_back(new G4QDecayChan(1.00, 2212, 2224)); //pDelta++
+    if(limit<= 73 && nQ>= 73)DecayDB[ 73].push_back(new G4QDecayChan(1.00, 2112, 1114)); //nDelta-
+    if(limit<= 74 && nQ>= 74)DecayDB[ 74].push_back(new G4QDecayChan(1.00, 2224, 2224)); //D++D++
+    if(limit<= 75 && nQ>= 75)DecayDB[ 75].push_back(new G4QDecayChan(1.00, 1114, 1114)); //Del-Del-
+    if(limit<= 76 && nQ>= 76)DecayDB[ 76].push_back(new G4QDecayChan(1.,2212,2212,2224));//ppDelta++
+    if(limit<= 77 && nQ>= 77)DecayDB[ 77].push_back(new G4QDecayChan(1.,2112,2112,1114));//nnDelta-
+    if(limit<= 78 && nQ>= 78)DecayDB[ 78].push_back(new G4QDecayChan(1.,2212,2224,2224));//pD++D++
+    if(limit<= 79 && nQ>= 79)DecayDB[ 79].push_back(new G4QDecayChan(1.,2112,1114,1114));//nDel-Del-
+    if(limit<= 83 && nQ>= 83)DecayDB[ 83].push_back(new G4QDecayChan(1.00, 2112, 2112)); //nn
+    if(limit<= 84 && nQ>= 84)DecayDB[ 84].push_back(new G4QDecayChan(1.00, 2212, 2112)); //pn
+    if(limit<= 85 && nQ>= 85)DecayDB[ 85].push_back(new G4QDecayChan(1.00, 2212, 2212)); //pp
     // ------- Nuclear fragments
-    //if(limit<= 72 && nQ>=72)
+    //if(limit<= 80 && nQ>=80)
 	//{
-    //  if(limit<72) limit=72;
+    //  if(limit<80) limit=80;
     //  for (int i=limit; i<nQ; i++) DecayDB[i] = NULL;
     //}
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QNucleus.cc,v 1.21 2001-10-30 08:32:38 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.22 2001-10-31 17:34:03 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------
@@ -1329,7 +1329,8 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
       // @@ Here one can put a condition for the Baryon Gun
       G4int    cntr= 0;
       //G4int    cntm= 27;
-      G4int    cntm= 72;                         // Important difference !!DOn't change
+      //G4int    cntm= 72;                         // Important difference !!DOn't change
+      G4int    cntm= 80;                         // Important difference !!DOn't change "IsoNuclei"
       if((pFlag&&pExcess>pMin ||nFlag&&nExcess>nMin ||lFlag&&lExcess>lMin ||aFlag&&aExcess>aMin)
          && minE<maxE)
       {

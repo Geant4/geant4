@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QEnvironment.cc,v 1.34 2001-10-31 11:10:01 hpw Exp $
+// $Id: G4QEnvironment.cc,v 1.35 2001-10-31 17:34:02 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -71,7 +71,8 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
   G4cout<<"G4QEnv: nF="<<projHadrons[0]->GetNFragments()<<", tot4Mom="<<tot4Mom<<G4endl;
 #endif
   G4int nP=theWorld.GetQPEntries();           // A#of init'ed particles in CHIPS World
-  G4int nCl=nP-72;                            // A#of init'ed clusters in CHIPS World
+  //G4int nCl=nP-72;                            // A#of init'ed clusters in CHIPS World
+  G4int nCl=nP-80;                            // A#of init'ed clusters in CHIPS World "IsoNuclei"
 #ifdef pdebug
   G4cout<<"G4QEnv: before NucClustInit: nP="<<nP<<",nF="<<projHadrons[0]->GetNFragments()<<G4endl;
 #endif
@@ -363,7 +364,8 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
     G4int envN=theEnvironment.GetN();            // A#of neutrons in the nucleus
     G4int envS=theEnvironment.GetS();            // A#of lambdas in the nucleus
     G4int nP  =theWorld.GetQPEntries();          // A#of initialized particles in CHIPS World
-    G4int nCl =nP-72;                            // A#of initialized clusters in CHIPS World
+	//G4int nCl =nP-72;                            // A#of initialized clusters in CHIPS World
+    G4int nCl =nP-80;                            // A#of initialized clusters in CHIPS World "IsoN"
     if(nCl<0)G4cout<<"***G4QEnv::CreateQ: nP="<<nP<<" for NuclTarg="<<targPDG<<G4endl;
     if     (nCl<3) nBarClust=1;                  // Fix the maximum Baryon Number for clusters
     else if(nCl<9) nBarClust=2;
@@ -509,15 +511,15 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
 		    G4cout<<"G4QE::CrQ: Fill OUT #"<<ind<<",PDG="<<hPDG<<",h4M="<<h4M<<G4endl; //        ^ ^
 #endif
             G4QHadron* curHadron = new G4QHadron(curHadr);
-            theQHadrons.push_back(curHadron);         // TheQHadrons are filled by new hadr-copies  ^ ^
+            theQHadrons.push_back(curHadron);      // TheQHadrons are filled by new hadr-copies    ^
           }
 		} // End of the LOOP over projectiles                                                    ^ ^
 	  } // End of LOOP over "output" of annihilation                                             ^ ^
-      G4std::for_each(output->begin(), output->end(), DeleteQHadron());// Here we are DESTROING output >---------------^
+      G4std::for_each(output->begin(), output->end(), DeleteQHadron()); // DESTROING output >------^
       delete output;                               // =============================================^
       if(!efFlag)                                  // => Not Energy Flux case: MultyQuasmon case ^
 	  {
-        if(!(input.size())) return;             // *** RETURN *** Without Quasmon creation----^
+        if(!(input.size())) return;             // *** RETURN *** Without Quasmon creation-------^
 #ifdef pdebug
 	    G4cout<<"G4QEnvironment::CreateQ: Creation of a fake Quasmon to restore parameters"<<G4endl;
 #endif
@@ -717,7 +719,8 @@ void G4QEnvironment::InitClustersVector(G4int maxClust, G4int maxA)
 #endif
   if(maxClust>=0) for (G4int i=0; i<maxClust; i++) 
   {
-    G4int clustQCode = i+72; // Q-code of the cluster in the CHIPS World
+    //G4int clustQCode = i+72; // Q-code of the cluster in the CHIPS World
+    G4int clustQCode = i+80; // Q-code of the cluster in the CHIPS World "IsoNuclei"
     G4QPDGCode clustQPDG;
 #ifdef sdebug
 	G4cout<<"G4QEnvironment::InitClustersVector: Before Init Q ="<<clustQCode<<G4endl;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QPDGCode.cc,v 1.18 2001-10-30 08:32:39 mkossov Exp $
+// $Id: G4QPDGCode.cc,v 1.19 2001-10-31 17:34:03 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -177,7 +177,8 @@ G4bool G4QPDGCode::TestRealNeutral(const G4int& PDGCode)
 // Make a Q Code out of the PDG Code
 G4int G4QPDGCode::MakePDGCode(const G4int& QCode)
 {//   ===========================================
-  static const G4int modi = 81;      // Q Codes for more than di-baryon nuclei
+  //static const G4int modi = 81;      // Q Codes for more than di-baryon nuclei
+  static const G4int modi = 89;      // Q Codes for more than di-baryon nuclei "IsoNuclei"
   static G4int qC[modi] = { 22,  110,  220,  330,  111,  211,  221,  311,  321,  331,
                           2112, 2212, 3122, 3112, 3212, 3222, 3312, 3322,  113,  213,
                            223,  313,  323,  333, 1114, 2114, 2214, 2224, 3124, 3114,
@@ -185,13 +186,15 @@ G4int G4QPDGCode::MakePDGCode(const G4int& QCode)
                            335, 2116, 2216, 3126, 3116, 3216, 3226, 3316, 3326,  117,
                            217,  227,  317,  327,  337, 1118, 2118, 2218, 2228, 3128,
                           3118, 3218, 3228, 3318, 3328, 3338,  119,  219,  229,  319,
-                           329,  339,  90000001 ,  90001000 ,  91000000 ,  90000002 ,
-                           90001001 ,  90002000 ,  91000001 ,  91001000 ,  92000000};
+                           329,  339, 90002999 , 89999003 , 90003998 , 89998004 ,
+                           90003999 , 89999004 , 90004998 , 89998005 ,
+                           90000001 , 90001000 ,  91000000 ,  90000002 ,
+                           90001001 , 90002000 ,  91000001 ,  91001000 ,  92000000};
   static G4int aC[15] = {1,1000,999001,1000000,1000999,1999000,1999999,        // sum 1
                          2,1001,2000,1000001,1001000,1999001,2000000,2000999}; // sum 2
   if      (QCode<0)
   {
-    cerr<<"***G4QPDGCode::MakePDGCode: negative Q Code ="<<QCode<<endl;
+    G4cerr<<"***G4QPDGCode::MakePDGCode: negative Q Code ="<<QCode<<endl;
     return 0;
   }
   else if (QCode>=modi)
@@ -297,7 +300,15 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
   }
   else                        // Nuclear Fragments
   {
-    G4int r=PDGC-90000000;      // cut the fake 90000000
+    if(PDGC==90002999) return 71;
+    if(PDGC==89999003) return 72;
+    if(PDGC==90003998) return 73;
+    if(PDGC==89998004) return 74;
+    if(PDGC==90003999) return 75;
+    if(PDGC==89999004) return 76;
+    if(PDGC==90004998) return 77;
+    if(PDGC==89998005) return 78;
+    G4int r=PDGC-90000000;      // cut the fake 90000000 for the Normal and Hypernuclei
     if(!r) return -2;
     G4int ds=0;
     G4int dz=0;
@@ -349,9 +360,9 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
       G4int b=t/3;            // baryon number
       if(b==1)                // baryons
       {
-        if     (s==0&&u==1&&d==2) return 72;
-        else if(s==0&&u==2&&d==1) return 73;
-        else if(s==1&&u==1&&d==1) return 74;
+        if     (s==0&&u==1&&d==2) return 80;
+        else if(s==0&&u==2&&d==1) return 81;
+        else if(s==1&&u==1&&d==1) return 82;
         else
         {
 #ifdef pdebug
@@ -362,12 +373,12 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
       }
       else if(b==2)           // di-baryons
       {
-        if     (s==0&&u==2&&d==4) return 75;
-        else if(s==0&&u==3&&d==3) return 76;
-        else if(s==0&&u==4&&d==2) return 77;
-        else if(s==1&&u==2&&d==3) return 78;
-        else if(s==1&&u==3&&d==2) return 79;
-        else if(s==2&&u==2&&d==2) return 80;
+        if     (s==0&&u==2&&d==4) return 83;
+        else if(s==0&&u==3&&d==3) return 84;
+        else if(s==0&&u==4&&d==2) return 85;
+        else if(s==1&&u==2&&d==3) return 86;
+        else if(s==1&&u==3&&d==2) return 87;
+        else if(s==2&&u==2&&d==2) return 88;
         else
         {
 #ifdef pdebug
@@ -379,7 +390,8 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
       G4int c=b/2;
       G4int g=b%2;
       G4int h=c*3;
-      G4int Q=57+c*15;
+      //G4int Q=57+c*15;
+      G4int Q=65+c*15;           // "IsoNuclei"
       u-=h;
       d-=h;
       if(g)
@@ -428,7 +440,8 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
 // Get the mean mass value for the PDG
 G4double G4QPDGCode::GetMass()
 {//      =====================
-  static const int nM = 72;
+  //static const int nM = 72;
+  static const int nM = 80;
   static G4double m[nM] = {0., 980., 780., 1500., 134.98, 139.57, 547.3, 497.67, 493.68, 957.78
     , 939.5656, 938.2723, 1115.684,  1197.44, 1192.55, 1189.37, 1321.3, 1314.9,   770.,   770.
     ,   781.94,    896.1,   891.66, 1019.413,   1232.,   1232.,  1232.,  1232., 1519.5, 1387.2
@@ -436,7 +449,7 @@ G4double G4QPDGCode::GetMass()
     ,    1525.,    1680.,    1680.,    1820.,   1915.,   1915.,  1915.,  2025.,  2025.,  1691.
     ,    1691.,    1667.,    1776.,    1776.,   1854.,   1950.,  1950.,  1950.,  1950.,  2100.
     ,    2030.,    2030.,    2030.,    2127.,   2127.,   2252.,  2020.,  2020.,  2044.,  2045.
-    ,    2045.,    2297.
+	,    2045.,    2297., 2170.272, 2171.565,  2464.,  2464., 3108.544,3111.13, 3402.272, 3403.565
     };
   //static G4int n[15]={-1, 0, 1,-1, 0,-2,-1, 0, 0, 1,-1, 0, 1,-1, 0}; 
   //static G4int z[15]={ 1, 0,-1, 0,-1, 0,-1,-2, 1, 0, 1, 0,-1, 0,-1};
@@ -501,17 +514,17 @@ G4double G4QPDGCode::GetMass()
   G4int a=ab-66;
   G4int c=a%15;
   G4int b=a/15;      // b_base/2
-  if (ab<81)
+  if (ab<89)
   {
-    if     (ab==72) return GetNuclMass(0,1,0); //  n
-    else if(ab==73) return GetNuclMass(1,0,0); //  p
-    else if(ab==74) return GetNuclMass(0,0,1); //  L
-    else if(ab==75) return GetNuclMass(0,2,0); // nn
-    else if(ab==76) return GetNuclMass(1,1,0); //  d
-    else if(ab==77) return GetNuclMass(2,0,0); // pp
-    else if(ab==78) return GetNuclMass(0,1,1); // nL
-    else if(ab==79) return GetNuclMass(1,0,1); // pL
-    else if(ab==80) return GetNuclMass(0,0,2); // LL
+    if     (ab==80) return GetNuclMass(0,1,0); //  n
+    else if(ab==81) return GetNuclMass(1,0,0); //  p
+    else if(ab==82) return GetNuclMass(0,0,1); //  L
+    else if(ab==83) return GetNuclMass(0,2,0); // nn
+    else if(ab==84) return GetNuclMass(1,1,0); //  d
+    else if(ab==85) return GetNuclMass(2,0,0); // pp
+    else if(ab==86) return GetNuclMass(0,1,1); // nL
+    else if(ab==87) return GetNuclMass(1,0,1); // pL
+    else if(ab==88) return GetNuclMass(0,0,2); // LL
   }
   return GetNuclMass(b+z[c],b+n[c],s[c]);
 }
@@ -520,7 +533,8 @@ G4double G4QPDGCode::GetMass()
 G4double G4QPDGCode::GetWidth()
 //      =====================
 {
-  static const int nW = 72;
+  //static const int nW = 72;
+  static const int nW = 80;
   static G4double width[nW] = {   0.,  70., 450., 112.,   0.,   0., .00118,  0.,   0., .203
                               ,   0.,   0.,   0.,   0.,   0.,   0.,   0.,    0., 160., 160.
                               , 8.41, 50.5, 50.8, 4.43, 120., 120., 120.,  120., 15.6,  39.
@@ -528,7 +542,7 @@ G4double G4QPDGCode::GetWidth()
                               ,  76., 130., 130.,  80., 120., 120., 120.,   20.,  20., 160.
                               , 160., 168., 159., 159.,  87., 300., 300.,  300., 300., 200.
                               , 180., 180., 180.,  99.,  99.,  55., 387.,  387., 208., 198.
-                              , 198., 149.
+							  , 198., 149., 120., 120., 170., 170., 120.,  120., 170., 170.
                               };
   G4int ab=abs(theQCode);
   if(ab<nW) return width[ab];
@@ -965,12 +979,13 @@ G4int G4QPDGCode::GetRelCrossIndex(G4int i, G4int o)  const
   //static const G4int m12[15]={ 7, 7,-2,-2, 7,-2,-2, 7, 7, 7,-2,-2,-2,-2, 7}; // 12-> 2, 21-> -2
   //static const G4int m20[15]={ 3, 3, 3, 3, 7, 7, 7, 3, 3, 7, 3, 3, 7, 7, 7}; // 02-> 3, 20-> -3 
   //static const G4int m21[15]={ 2, 2, 7, 2, 2, 7, 7, 7, 2, 2, 2, 2, 7, 7, 7};
-  static const G4int fragmStart = 72;
+  //static const G4int fragmStart = 72;
+  static const G4int fragmStart = 80;    // "Isonuclei are added"
 
   if(theQCode<fragmStart)
   {
 #ifdef debug
-    cerr<<"***G4QPDGCode::RelGetCrossIndex: not nucleus QCode="<<theQCode<<endl;
+    G4cerr<<"***G4QPDGCode::RelGetCrossIndex: not nucleus QCode="<<theQCode<<G4endl;
 #endif
     return 7;
   }
@@ -979,7 +994,7 @@ G4int G4QPDGCode::GetRelCrossIndex(G4int i, G4int o)  const
   if     (sub>8)rel =(sub-9)%15;         // case of heavy fragments (BaryNum>2)
   else if(sub>2)rel = sub-3;             // case of nuclear di-baryon
 #ifdef debug
-	cout<<"G4QPDGCode::RelGetCrossIndex:i="<<i<<",o="<<o<<",sub="<<sub<<",rel="<<rel<<endl;
+	G4cout<<"G4QPDGCode::RelGetCrossIndex:i="<<i<<",o="<<o<<",sub="<<sub<<",rel="<<rel<<G4endl;
 #endif
   if     (!i)
   {
