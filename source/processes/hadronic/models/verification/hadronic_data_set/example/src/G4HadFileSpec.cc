@@ -123,7 +123,7 @@ G4String G4HadFileSpec::G4HDSFilename()
 
   G4String name(nameChar);
 
-  return nameChar;
+  return name;
 }
 
 
@@ -230,7 +230,8 @@ G4String G4HadFileSpec::G4HDSFilepath()
 	} 
 	
   }
-
-  int err=chdir(getenv("G4HADWORKING"));
+  // int err = chdir(getenv("G4HADWORKING"));
+  chdir(getenv("G4HADWORKING"));
+  
   return dirFile;
 }
