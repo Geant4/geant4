@@ -1,4 +1,4 @@
-$Id: History,v 1.28 1999-05-17 15:08:31 stesting Exp $
+$Id: History,v 1.29 1999-05-18 01:29:41 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17th May 1999  Gabriele Cosmo
+- Added -DG4NOT_ISO_DELETES for DEC and AIX and moved inside G4USE_STL or
+  G4USE_OSPACE scope for all platforms which need it.
+- Added path to wrappers for AIX.
 
 17th May 1999  John Allison
 - Added -DG4NOT_ISO_DELETES for Sun and HP.
