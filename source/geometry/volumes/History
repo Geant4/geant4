@@ -1,4 +1,4 @@
-$Id: History,v 1.33 2001-03-19 12:10:41 japost Exp $
+$Id: History,v 1.34 2001-03-28 16:46:06 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,7 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-March 12th, 2001     J. Apostolakis - geomvol-V03-00-03
+March 19th, 2001     J. Apostolakis - geomvol-V03-00-03
 - G4PropagatorInField: 
      Modified to use new (not obsolete) methods of G4FieldTrack. 
      Deleted old/obsolete ComputeStep method 
