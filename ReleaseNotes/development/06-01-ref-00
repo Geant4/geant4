@@ -131,6 +131,10 @@ run                                              run-V06-00-02
 - Updated date to run-manager kernel, added reference and WWW information
   to run-time header.
 
+tracking                                         tracking-V06-00-01
+--------
+- Restored G4SteppingManager to original 6.0.p01 version.
+
 visualization                                    vis-V06-00-01
 -------------
 - HepRep (vis-HepRep-V06-00-06):
