@@ -1,4 +1,4 @@
-$Id: History,v 1.28 1999-09-15 12:26:03 barrand Exp $
+$Id: History,v 1.29 1999-09-15 12:27:06 barrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,7 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+15 Sep 1999  Guy Barrand
 - Modify  G4OpenGLStoredSceneHandler.cc to compile on Linux-g++ with STL.
 
 vis-V00-01-03  27th August  John Allison
