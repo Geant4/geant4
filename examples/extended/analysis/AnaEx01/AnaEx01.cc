@@ -21,16 +21,20 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01.cc,v 1.7 2001-07-11 09:57:08 gunter Exp $
+// $Id: AnaEx01.cc,v 1.8 2001-11-16 14:35:10 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
-//      GEANT 4 - exampleN03 
+//      GEANT 4 - AnaEx01
 //
 // --------------------------------------------------------------
 // Comments
-//
+//   Example of histogram and tuple manipulations using an AIDA compliant 
+//  system. All analysis manipulations (hooking an AIDA implementation,
+//  histo booking, filling, etc...) are concentrated in one 
+//  class : AnaEx01AnalysisManager.
+//   See the README file within the same directory to have more infos.
 // --------------------------------------------------------------
 
 #include "G4RunManager.hh"
@@ -39,9 +43,7 @@
 
 #include "Randomize.hh"
 
-#ifdef G4ANALYSIS_USE
 #include "AnaEx01AnalysisManager.hh"
-#endif
 
 #include "AnaEx01DetectorConstruction.hh"
 #include "AnaEx01PhysicsList.hh"
@@ -66,16 +68,15 @@ int main(int argc,char** argv) {
   AnaEx01DetectorConstruction* detector = new AnaEx01DetectorConstruction;
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new AnaEx01PhysicsList);
-  
-#ifdef G4ANALYSIS_USE
-  AnaEx01AnalysisManager* analysisManager = 
-    new AnaEx01AnalysisManager(argc==1?"Lab":argv[1]);
+
   runManager->SetUserAction(new AnaEx01PrimaryGeneratorAction(detector));
+
+#ifdef G4ANALYSIS_USE
+  AnaEx01AnalysisManager* analysisManager = new AnaEx01AnalysisManager();
   runManager->SetUserAction(new AnaEx01RunAction(analysisManager));
   runManager->SetUserAction(new AnaEx01EventAction(analysisManager));
   runManager->SetUserAction(new AnaEx01SteppingAction(analysisManager));
 #else
-  runManager->SetUserAction(new AnaEx01PrimaryGeneratorAction(detector));
   runManager->SetUserAction(new AnaEx01RunAction());
   runManager->SetUserAction(new AnaEx01EventAction());
   runManager->SetUserAction(new AnaEx01SteppingAction());

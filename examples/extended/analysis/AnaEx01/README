@@ -1,4 +1,4 @@
-$Id: README,v 1.6 2000-12-06 13:08:13 barrand Exp $
+$Id: README,v 1.7 2001-11-16 14:35:09 barrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,61 +8,92 @@ $Id: README,v 1.6 2000-12-06 13:08:13 barrand Exp $
                             AnaEx01
                             -------
 
-  This example shows the usage of histogramming with the
- analysis category. 	
- 	  
-  To use the G4AnalysisManager the source/analysis category
- must have been reconstructed with one of the environment
- variable setted :
-    G4ANALYSIS_BUILD_JAS
-    G4ANALYSIS_BUILD_LAB
-    G4ANALYSIS_BUILD_LIZARD
+  This example shows the usage of histogram and tuple manipulations using 
+ an AIDA compliant system. In this example, all analysis manipulations 
+ (hooking an AIDA implementation, histo booking, filling, etc...) are 
+ concentrated in one class : AnaEx01AnalysisManager.
 
-  To use an analysis system with this example, the coresponding
- environment variable must be setted :
-    G4ANALYSIS_USE_JAS
-    G4ANALYSIS_USE_LAB
-    G4ANALYSIS_USE_LIZARD
-
-  Then to cosntruct this example :
+  To use an AIDA compliant analysis system with this example, 
+ the environment variables :
+    G4ANALYSIS_USE_AIDA  
+    G4ANALYSIS_AIDA_CONFIG_CFLAGS
+    G4ANALYSIS_AIDA_CONFIG_LIBS
+ must be properly set.
+  The first one permits to validate/devalidate the AIDA analysis code
+ in the example code. The two others permit to give the compilation 
+ and link flags of the AIDA compliant system used.
+  An AIDA compliant system should define the command 'aida-config' that 
+ permits to retrieve the correct values. For example under some 
+ UNIX csh flavour :
+    csh> source <your Geant4 setup script>.csh
+    csh> source <AIDA_SYSTEM setup>.csh     (or some equivalent)
+    csh> setenv G4ANALYSIS_USE_AIDA 1
+    csh> setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --cflags`
+    csh> setenv G4ANALYSIS_AIDA_CONFIG_LIBS `aida-config --libs`
     csh> cd $G4INSTALL/examples/extended/analysis/AnaEx01
-    csh> setenv G4ANALYSIS_USE_JAS 1
-    csh> setenv G4ANALYSIS_USE_LAB 1
-    csh> setenv G4ANALYSIS_USE_LIZARD 1
     csh> gmake
- 
- Working with the Lab package :
- ----------------------------
-  If working with the Lab package run the program
- from the analysis/Lab directory :
-   csh> cd analyis/Lab
-   csh> $G4WORKDIR/bin/$G4SYSTEM/AnaEx01 Lab
-  It must produce a g4osc.root file that contains
- some histograms. You can visualize them with :
-   csh> source <path>/Lab/<version>/cmt/setup.csh
-   csh> oxm
- and click in File/session to execute the session.tcl 
- file.
 
- Working with jas :
- --------------------------
-  If working with jas :
+  For info, the CPP macros G4ANALYSIS_*_AIDA_* are used in the 
+ config/analysis.gmk file of the Geant4 GNUmakefile system.
+
+ Working with the Falsetto package :
+ ---------------------------------
+  Falsetto is a little package containing a dummy 
+ AIDA analysis factory. It permits to check compilation
+ and link of some user AIDA code without embarquing a 
+ full analysis system.
+
+  To reconstruct this example by using the Falsetto
+ package (assuming that it is installed !), do :
+   csh> source <your Geant4 setup script>.csh
+   csh> source <some directory>/Falsetto/<version>/cmt/setup.csh
+   csh> setenv G4ANALYSIS_USE_AIDA 1
+   csh> setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --cflags`
+   csh> setenv G4ANALYSIS_AIDA_CONFIG_LIBS `aida-config --libs`
    csh> cd $G4INSTALL/examples/extended/analysis/AnaEx01
-   csh> $G4WORKDIR/bin/$G4SYSTEM/AnaEx01 jas
-  The program will pend for a connection toward jas, then
- spawn jas :
-   csh> <path_to_jas_bin>/jas
+   csh> gmake
 
-  From jas panel, open a connection toward the AnaEx01 job :
-  - File/Reconnect
-  - Give no server name if running on same machine.
-  - Next to end the connect panel.
+ To run :
+   csh> cd analyis/Falsetto
+   csh> $G4WORKDIR/bin/$G4SYSTEM/AnaEx01
+ At the beginning of output ;should appear :
+   AIDA analysis factory not found.
 
-  When connection is established, the tree widget 
- on the left of jas panel must display "G4Job".
- Click on the tree items to access an histogram.
- Double click on the histogram name to visualize it.
- 
-  The histogram will update itself according time.
+ The Falsetto URL is : http://www.lal.in2p3.fr/SI/Falsetto
+
+ Working with the OpenScientist/Lab package :
+ ------------------------------------------
+  To reconstruct this example by using the OpenScientist/Lab 
+ package (assuming that OpenScientist is installed ! ) do :
+   csh> source <some directory>/Lab/<version>/cmt/setup.csh
+   csh> source <your Geant4 setup script>.csh
+   csh> setenv G4ANALYSIS_USE_AIDA 1
+   csh> setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --cflags`
+   csh> setenv G4ANALYSIS_AIDA_CONFIG_LIBS `aida-config --libs`
+   csh> cd $G4INSTALL/examples/extended/analysis/AnaEx01
+   csh> gmake
+
+ To run :
+   csh> cd analyis/Lab
+   csh> $G4WORKDIR/bin/$G4SYSTEM/AnaEx01
+
+  It must produce an AnaEx01.root file that contains
+ some HCL histograms and a Lab tuple (stored as a ROOT/TTree). 
+
+  To plot some histograms, spawn the Lab interactive tool with :
+   csh> onx
+ click in File/Python to map a file chooser, choose AnaEx01.py
+ to execute the AnaEx01.py that contains a Python script that
+ do some analysis over the AnaEx01.root file (it gets an histo, plots it
+ in a first drawing region, gets the tuple, books and fills another histo
+ from the tuple colum and plots it in another drawing region).
+
+  The AnaEx01.C file could also be used, within the ROOT tool, 
+ to see a projection of the first column of the tuple contained
+ in the AnaEx01.root file. For example :
+     csh> root
+     root[0] .X AnaEx01.C
+
+  The OpenScientist URL is : http://www.lal.in2p3.fr/OpenScientist
 
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01DetectorConstruction.cc,v 1.2 2001-07-11 09:57:10 gunter Exp $
+// $Id: AnaEx01DetectorConstruction.cc,v 1.3 2001-11-16 14:31:12 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01AnalysisManager.cc,v 1.10 2001-07-11 09:57:10 gunter Exp $
+// $Id: AnaEx01AnalysisManager.cc,v 1.11 2001-11-16 14:31:11 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,54 +35,102 @@
 #include "G4Event.hh"
 #include "G4HCofThisEvent.hh"
 
-#include <IHistogramFactory.h>
-
-#ifdef G4ANALYSIS_USE_JAS
-#include "G4JasSystem.hh"
-#endif
-#ifdef G4ANALYSIS_USE_LAB
-#include "G4LabSystem.hh"
-#endif
-#ifdef G4ANALYSIS_USE_LIZARD
-#include "G4LizardSystem.hh"
-#endif
+#include <AIDA/IAnalysisFactory.h>
+#include <AIDA/ITreeFactory.h>
+#include <AIDA/ITupleFactory.h>
+#include <AIDA/IHistogramFactory.h>
+#include <AIDA/ITree.h>
+#include <AIDA/IHistogram1D.h>
+#include <AIDA/ITuple.h>
 
 #include "AnaEx01CalorHit.hh"
 #include "AnaEx01AnalysisManager.hh"
 
-AnaEx01AnalysisManager::AnaEx01AnalysisManager(
-  const G4String& aSystem
-)
+AnaEx01AnalysisManager::AnaEx01AnalysisManager()
 :fCalorimeterCollID(-1)
+,fAnalysisFactory(0)
+,fTree(0)
 ,fEAbs(0)
 ,fLAbs(0)
 ,fEGap(0)
 ,fLGap(0)
+,fTuple(0)
 {
-#ifdef G4ANALYSIS_USE_JAS
-  RegisterAnalysisSystem(new G4JasSystem);
-#endif
-#ifdef G4ANALYSIS_USE_LAB
-  RegisterAnalysisSystem(new G4LabSystem);
-#endif
-#ifdef G4ANALYSIS_USE_LIZARD
-  RegisterAnalysisSystem(new G4LizardSystem);
-#endif
-  // The factory and histograms will be deleted by the analysis manager.
-  IHistogramFactory* hfactory = GetHistogramFactory(aSystem);
-  if(!hfactory) return;
-  fEAbs = hfactory->create1D("EAbs",100,0,100);
-  fLAbs = hfactory->create1D("LAbs",100,0,100);
-  fEGap = hfactory->create1D("EGap",100,0,10);
-  fLGap = hfactory->create1D("LGap",100,0,100);
+  fAnalysisFactory = AIDA_createAnalysisFactory();
+
+  // Could fail if no AIDA implementation found :
+  if(!fAnalysisFactory) {
+    G4cout << "AIDA analysis factory not found." << G4endl;
+    return;
+  }
+
+  ITreeFactory* treeFactory = fAnalysisFactory->createTreeFactory();
+  if(!treeFactory) {
+    delete fAnalysisFactory;
+    fAnalysisFactory = 0;
+    return;
+  }
+
+  // Create a "tree" to handle histograms.
+  // This tree is associated to a ROOT "store" (in RECREATE mode).
+  fTree = treeFactory->create("AnaEx01.root",false,false,"ROOT");
+
+  // Factories are not "managed" by an AIDA analysis system.
+  // They must be deleted by the AIDA user code.
+  delete treeFactory; 
+
+  if(!fTree) {
+    delete fAnalysisFactory;
+    fAnalysisFactory = 0;
+    return;
+  }
+
+  fTree->mkdir("histograms");
+  fTree->cd("histograms");
+      
+  // Create an histo factory that will create histo in the tree :
+  IHistogramFactory* histoFactory = 
+    fAnalysisFactory->createHistogramFactory(*fTree);
+  if(histoFactory) {
+    fEAbs = histoFactory->create1D("EAbs",100,0,100);
+    fLAbs = histoFactory->create1D("LAbs",100,0,100);
+    fEGap = histoFactory->create1D("EGap",100,0,10);
+    fLGap = histoFactory->create1D("LGap",100,0,100);
+    delete histoFactory;
+  }
+    
+  fTree->cd("..");
+  fTree->mkdir("tuples");
+  fTree->cd("tuples");
+    
+  // Get a tuple factory :
+  ITupleFactory* tupleFactory = 
+    fAnalysisFactory->createTupleFactory(*fTree);
+  if(tupleFactory) {
+    
+    // Create a tuple :
+    fTuple = tupleFactory->create("AnaEx01","AnaEx01","EAbs LAbs EGap LGap");
+    
+    delete tupleFactory;
+  }
+
 }
+AnaEx01AnalysisManager::~AnaEx01AnalysisManager() {
+  delete fAnalysisFactory;
+}
+
 void AnaEx01AnalysisManager::BeginOfRun(const G4Run* aRun){
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 }
 
 void AnaEx01AnalysisManager::EndOfRun(const G4Run*){
-  Store();
-  //if(fEAbs) Plot(fEAbs);
+  if(fTree) fTree->commit();
+  if(fEAbs) {
+    G4cout << "Histo : EAbs : mean " << fEAbs->mean() << " rms : " << fEAbs->rms() << G4endl;
+    G4cout << "Histo : LAbs : mean " << fLAbs->mean() << " rms : " << fLAbs->rms() << G4endl;
+    G4cout << "Histo : EGap : mean " << fEGap->mean() << " rms : " << fEGap->rms() << G4endl;
+    G4cout << "Histo : LGap : mean " << fLGap->mean() << " rms : " << fLGap->rms() << G4endl;
+  }
 }
 
 void AnaEx01AnalysisManager::BeginOfEvent(const G4Event*){
@@ -94,9 +142,9 @@ void AnaEx01AnalysisManager::BeginOfEvent(const G4Event*){
 
 void AnaEx01AnalysisManager::EndOfEvent(const G4Event* aEvent){
   if(!fEAbs) return; // No histo booked !
-  //if(!fTuple) return; // No tuple booked !
+  if(!fTuple) return; // No tuple booked !
 
-  G4int evtNb = aEvent->GetEventID();
+  //G4int evtNb = aEvent->GetEventID();
 
   G4HCofThisEvent* HCE = aEvent->GetHCofThisEvent();
   AnaEx01CalorHitsCollection* CHC = 
@@ -104,16 +152,21 @@ void AnaEx01AnalysisManager::EndOfEvent(const G4Event* aEvent){
 
   if(CHC) {
     G4int n_hit = CHC->entries();
-    //G4double totEAbs=0, totLAbs=0, totEGap=0, totLGap=0;
     for (G4int i=0;i<n_hit;i++) {
-      //totEAbs += (*CHC)[i]->GetEdepAbs(); 
-      //totLAbs += (*CHC)[i]->GetTrakAbs();
-      //totEGap += (*CHC)[i]->GetEdepGap(); 
-      //totLGap += (*CHC)[i]->GetTrakGap();
-      fEAbs->fill((*CHC)[i]->GetEdepAbs());
-      fLAbs->fill((*CHC)[i]->GetTrakAbs());
-      fEGap->fill((*CHC)[i]->GetEdepGap());
-      fLGap->fill((*CHC)[i]->GetTrakGap());
+      G4double EAbs = (*CHC)[i]->GetEdepAbs();
+      G4double LAbs = (*CHC)[i]->GetTrakAbs();
+      G4double EGap = (*CHC)[i]->GetEdepGap();
+      G4double LGap = (*CHC)[i]->GetTrakGap();
+      fEAbs->fill(EAbs);
+      fLAbs->fill(LAbs);
+      fEGap->fill(EGap);
+      fLGap->fill(LGap);
+
+      fTuple->fill(0,EAbs);
+      fTuple->fill(1,LAbs);
+      fTuple->fill(2,EGap);
+      fTuple->fill(3,LGap);
+      fTuple->addRow();
     }
   }	
   

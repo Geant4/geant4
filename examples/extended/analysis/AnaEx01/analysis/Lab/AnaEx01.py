@@ -24,48 +24,65 @@
 #/////////////////////////////////////////////////////////////////////////////
 #/////////////////////////////////////////////////////////////////////////////
 #
-# Example of tcl script using a root file.
+# Example of a Python script using the AnaEx01.root file.
 #
 #/////////////////////////////////////////////////////////////////////////////
-# If reexecuted :
-delete storage
-delete v
-#
-# Get a SWIG handler over the current viewer :
-IViewer v -this [ui getCurrentViewer]
-v reset page
-#
-# 2x2 regions :
-#v set page "2 2"
-v set pageTitle "G4 analysis with Open Scientist"
-#
-RioStorage storage g4osc.root READ
-storage ls
-#
-delete EAbs
-#
-#storage cd histograms
-#storage ls
-# 
+
+
+page = ui.getCurrentPage()
+page.reset('page') 
+
+
+page.set('pageTitle','AnaEx01 analysis')
+
+# 2 regions :
+page.set('page','1 2')
+
+rootTree = RootTree('AnaEx01.root','READ')
+rootTree.ls()
+
+#/////////////////////////////////////////////////////////////////////////////
+# In first region, get and plot the EAbs histo :
+#/////////////////////////////////////////////////////////////////////////////
+page.set('region','0')
+
+rootTree.cd('histograms')
+rootTree.ls()
+
 #  Get some histograms with the H1Get 
-# builtin procedure defined in Lab/user/init.tcl :
-#  In the below the first "EAbs" is a variable and
-# the second is the name of the object in the storage
-# (the SID, storage identifier) :
-#   H1DGet <variable> <storage> <SID>
-H1DGet EAbs storage EAbs
-#
+# builtin Python procedure (defined in Lab/scripts/Python/Lab_init.py).
+
+EAbs = H1D_get(rootTree,'EAbs')
+
 # Plot the histo :
-EAbs vis
-#
-v set textContext "color black fontName TTF/couri"
-v set histogramContext "color red modeling solid"
-#
-# Fit :
-#delete fitExp
-#
-#Exponential fitExp 0. 1.
-#fitExp fit [& EAbs]
-#
-#fitExp vis
-#
+EAbs.show()
+
+#/////////////////////////////////////////////////////////////////////////////
+# In second region plot the EAbs histo built from the tuple :
+#/////////////////////////////////////////////////////////////////////////////
+page.set('region','1')
+
+rootTree.cd('..')
+rootTree.cd('tuples')
+rootTree.ls()
+
+tuple = Tuple("AnaEx01","AnaEx01","",rootTree)
+
+# Create an histo in the default memory tree :
+tuple_EAbs = H1D('tuple_EAbs','AnaEx01/EAbs',100,0,100)
+
+# Create an Evaluator and a Filter object :
+evaluator = Evaluator(tuple,'EAbs')
+filter = Filter(tuple,'')
+
+# Project tuple AnaEx01/EAbs column on the tuple_EAbs histo :
+tuple.project(tuple_EAbs,evaluator,filter)
+tuple_EAbs.show()
+
+# Evaluators and Filters are not managed, delete them explicitly :
+delete_IEvaluator(evaluator)
+delete_IFilter(filter)
+
+page.set('histogramContext','color red modeling solid')
+
+echo('The two histos must give the same information !')
