@@ -41,12 +41,11 @@ CLHEP_BASE_DIR:			$g4clhep_base_dir
 
 According to it will be set:
 
-CLHEP_INCLUDE_DIR:		\\$CLHEP_BASE_DIR/include
-CLHEP_LIB_DIR:			\\$CLHEP_BASE_DIR/lib
-CLHEP_LIB:			CLHEP
+CLHEP_INCLUDE_DIR		
+CLHEP_LIB_DIR			
+CLHEP_LIB		
 
-If you need to change one of those last three you can do it by editing
-the generated config.sh at the end of this session.
+You will be asked about customizing these next.
 EOM`
 
 
@@ -96,3 +95,55 @@ rp=$g4message
 #		;;
 #	esac
 #done
+
+while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+You can customize paths of you CLHEP installation:
+
+1) CLHEP_INCLUDE_DIR:		$g4clhep_include_dir
+2) CLHEP_LIB_DIR:		$g4clhep_lib_dir
+3) CLHEP_LIB:			$g4clhep_lib
+
+Select from list above (e.g. 2) 
+EOM`
+
+
+dflt="Press [Enter] for default settings"
+#fn='d~'
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+
+	1) 
+		dflt=$g4clhep_include_dir
+		fn='d~'
+		rp="Where is CLHEP include directory?"
+		. ./getfile
+		g4clhep_include_dir=$ans
+		;;
+	2) 
+		dflt=$g4clhep_lib_dir
+		fn='d~'
+		rp="Where is CLHEP lib directory?"
+		. ./getfile
+		g4clhep_lib_dir=$ans
+		;;
+	3) 
+		dflt=$g4clhep_lib
+		rp="What is CLHEP lib title?"
+		. ./myread
+		g4clhep_lib=$ans
+		;;
+#	[eE]) 
+##		break
+##		;;
+	*) 
+#		echo " "
+		break
+		;;
+	esac
+done
