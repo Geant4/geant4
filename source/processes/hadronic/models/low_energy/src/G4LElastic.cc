@@ -260,8 +260,16 @@ G4LElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleu
    }
    else
    {
-      theParticleChange.SetMomentumChange(pxnew, pynew, pznew);
-      theParticleChange.SetEnergyChange(sqrt(m1*m1+it0.mag2())-m1);
+      try
+      {
+        theParticleChange.SetMomentumChange(pxnew, pynew, pznew);
+        theParticleChange.SetEnergyChange(sqrt(m1*m1+it0.mag2())-m1);
+      }
+      catch(G4HadronicException)
+      {
+        std::cerr << "GHADException originating from components of G4LElastic"<<std::cout;
+        throw;
+      }
       G4ParticleDefinition * theDef = G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z);
       G4ThreeVector it(pxre*GeV, pyre*GeV, pzre*GeV);
       G4DynamicParticle * aSec = 
