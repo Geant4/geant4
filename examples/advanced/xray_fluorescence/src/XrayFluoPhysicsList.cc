@@ -22,82 +22,43 @@
 //
 //
 // $Id: XrayFluoPhysicsList.cc
-// GEANT4 tag $Name: xray_fluo-V03-02-00
+// GEANT4 tag $Name: xray_fluo-V04-01-03
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
 // History:
 // -----------
 // 28 Nov 2001 Elena Guardincerri     Created
+// 29 Nov 2002 Auger Effect Added (Alfonso.mantero@ge.infn.it)
 //
 // -------------------------------------------------------------------
 
 #include "XrayFluoPhysicsList.hh"
 #include "XrayFluoPhysicsListMessenger.hh"
 #include "XrayFluoDetectorConstruction.hh"
-#include "XrayFluoPlaneDetectorConstruction.hh"
+
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
 #include "G4ios.hh"
-
+#include "XrayFluoDetectorConstruction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayFluoPhysicsList::XrayFluoPhysicsList(XrayFluoDetectorConstruction* p)
-  : G4VUserPhysicsList(),pDet(0),planeDet(0)//,mercuryDet(0)
-
+: G4VUserPhysicsList()
 {
   pDet = p;
-
-  SetGELowLimit(250*eV);
-
-  defaultCutValue = 0.000001*mm;
+  defaultCutValue = 0.00001*mm;
 
   cutForGamma = defaultCutValue;
   cutForElectron = defaultCutValue;
-
+  cutForProton    = 0.00001*mm;
   SetVerboseLevel(1);
   physicsListMessenger = new XrayFluoPhysicsListMessenger(this);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-XrayFluoPhysicsList::XrayFluoPhysicsList(XrayFluoPlaneDetectorConstruction* p)
-  : G4VUserPhysicsList(),pDet(0),planeDet(0)//,mercuryDet(0)
-{
-  planeDet = p;
-
-  SetGELowLimit(250*eV);
-
-  defaultCutValue = 0.000001*mm;
-
-  cutForGamma = defaultCutValue;
-  cutForElectron = defaultCutValue;
-
-  SetVerboseLevel(1);
-  physicsListMessenger = new XrayFluoPhysicsListMessenger(this);
-}
-
-// //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-// XrayFluoPhysicsList::XrayFluoPhysicsList(XrayFluoMercuryDetectorConstruction* p)
-// : G4VUserPhysicsList(),pDet(0),planeDet(0),mercuryDet(0)
-// {
-//   mercuryDet = p;
-
-//   SetGELowLimit(250*eV);
-
-//   defaultCutValue = 0.000001*mm;
-
-//   cutForGamma = defaultCutValue;
-//   cutForElectron = defaultCutValue;
-//   cutForProton    = 0.001*mm;
-//   SetVerboseLevel(1);
-//   physicsListMessenger = new XrayFluoPhysicsListMessenger(this);
-// }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -189,32 +150,27 @@ void XrayFluoPhysicsList::ConstructEM()
       pmanager->AddDiscreteProcess(new G4LowEnergyCompton);
      
       LePeprocess = new G4LowEnergyPhotoElectric();
-
-      LePeprocess->ActivateAuger(true);
+      //LePeprocess->ActivateAuger(false);
       //LePeprocess->SetCutForLowEnSecPhotons(10000 * keV);
       //LePeprocess->SetCutForLowEnSecElectrons(10000 * keV);
-
       pmanager->AddDiscreteProcess(LePeprocess);
 
-      //pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh("Rayleigh"));
+      pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh);
       
     } else if (particleName == "e-") {
       //electron
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
 
-
-      
-      LeIoprocess = new G4LowEnergyIonisation("IONI");
-      LeIoprocess->ActivateAuger(true);
-      //eIoProcess = new G4eIonisation("stdIONI");
-      LeIoprocess->SetCutForLowEnSecPhotons(10000*keV);
-      LeIoprocess->SetCutForLowEnSecElectrons(10000*keV);
-      pmanager->AddProcess(LeIoprocess, -1,  2, 2); 
+      LeIoprocess = new G4LowEnergyIonisation();
+      //LeIoprocess->ActivateAuger(false);
+      //LeIoprocess->SetCutForLowEnSecPhotons(10000 keV);
+      //LeIoprocess->SetCutForLowEnSecElectrons(10000 keV);
+      pmanager->AddProcess(LeIoprocess, -1,  2, 2);
 
       LeBrprocess = new G4LowEnergyBremsstrahlung();
       pmanager->AddProcess(LeBrprocess, -1, -1, 3);
-      
-      } else if (particleName == "e+") {
+
+    } else if (particleName == "e+") {
       //positron
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4eIonisation,      -1, 2,2);
@@ -239,26 +195,6 @@ void XrayFluoPhysicsList::ConstructEM()
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void XrayFluoPhysicsList::SetGELowLimit(G4double lowcut)
-{
-  if (verboseLevel >0){
-    G4cout << "XrayFluoPhysicsList::SetCuts:";
-    G4cout << "Gamma and Electron cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;
-  }  
-  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(lowlimit,1e5);
-}
-
-void XrayFluoPhysicsList::SetGammaLowLimit(G4double lowcut)
-{
-  SetGELowLimit(lowcut);
-}
-
-void XrayFluoPhysicsList::SetElectronLowLimit(G4double lowcut)
-{
-  SetGELowLimit(lowcut);
-}
 void XrayFluoPhysicsList::SetGammaCut(G4double val)
 {
   ResetCuts();
@@ -278,6 +214,8 @@ void XrayFluoPhysicsList::SetCuts(){
    SetCutValue(cutForGamma,"gamma");
    SetCutValue(cutForElectron,"e-");
    SetCutValue(cutForElectron,"e+");
+   SetCutValue(cutForProton, "proton");
+   SetCutValueForOthers(cutForProton);
    if (verboseLevel>0) DumpCutValuesTable();
 }
 
@@ -313,27 +251,31 @@ void XrayFluoPhysicsList::SetProtonCut(G4double val)
 void XrayFluoPhysicsList::SetCutsByEnergy(G4double val)
 {
   G4ParticleTable* theXrayFluoParticleTable =  G4ParticleTable::GetParticleTable();
-
-  G4Material* currMat;
-    
-  if(pDet){
-    currMat = pDet->XrayFluoDetectorConstruction::GetSampleMaterial();
-  }
-  else if(planeDet){
-    currMat = planeDet->XrayFluoPlaneDetectorConstruction::GetPlaneMaterial(); 
-  }
-  
-//   else if(mercuryDet){
-//     currMat = mercuryDet->GetSampleMaterial();
-//   }
-  
+  G4Material* currMat = pDet->GetSampleMaterial();
   G4ParticleDefinition* part;
   G4double cut;
-  
+
   part = theXrayFluoParticleTable->FindParticle("e-");
   cut = G4EnergyLossTables::GetRange(part,val,currMat);
   SetCutValue(cut, "e-");
+ 
+  part = theXrayFluoParticleTable->FindParticle("proton");
+  cut = G4EnergyLossTables::GetRange(part,val,currMat);
+  SetCutValue(cut, "proton");
+ 
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoPhysicsListMessenger.cc
-// GEANT4 tag $Name: xray_fluo-V03-02-00
+// GEANT4 tag $Name: xray_fluo-V04-01-03
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -48,27 +48,6 @@ XrayFluoPhysicsListMessenger::XrayFluoPhysicsListMessenger(XrayFluoPhysicsList *
 
   lowEnDir = new G4UIdirectory("/lowenergy/");
   lowEnDir->SetGuidance("LowEnergy commands");
-
-  cutGLowLimCmd = new G4UIcmdWithADoubleAndUnit("/lowenergy/lowlimG",this);
-  cutGLowLimCmd->SetGuidance("Set ENERGY low limit for Gamma.");
-  cutGLowLimCmd->SetParameterName("energy",true);
-  cutGLowLimCmd->SetDefaultValue(1e-3);
-  cutGLowLimCmd->SetDefaultUnit("MeV");
-  cutGLowLimCmd->AvailableForStates(G4State_Idle);
-
-  cutELowLimCmd = new G4UIcmdWithADoubleAndUnit("/lowenergy/lowlimE",this);
-  cutELowLimCmd->SetGuidance("Set ENERGY low limit for e-.");
-  cutELowLimCmd->SetParameterName("energy",true);
-  cutELowLimCmd->SetDefaultValue(1e-3);
-  cutELowLimCmd->SetDefaultUnit("MeV");
-  cutELowLimCmd->AvailableForStates(G4State_Idle);
-
-  cutGELowLimCmd = new G4UIcmdWithADoubleAndUnit("/lowenergy/lowlimGE",this);
-  cutGELowLimCmd->SetGuidance("Set ENERGY low limit for e- and Gamma.");
-  cutGELowLimCmd->SetParameterName("energy",true);
-  cutGELowLimCmd->SetDefaultValue(1e-3);
-  cutGELowLimCmd->SetDefaultUnit("MeV");
-  cutGELowLimCmd->AvailableForStates(G4State_Idle);
 
   cutSecPhotCmd = new G4UIcmdWithADoubleAndUnit("/lowenergy/secphotcut",this);
   cutSecPhotCmd->SetGuidance("Set production threshold for secondary Gamma.");
@@ -98,20 +77,32 @@ XrayFluoPhysicsListMessenger::XrayFluoPhysicsListMessenger(XrayFluoPhysicsList *
   cutECmd->SetDefaultUnit("mm");
   cutECmd->AvailableForStates(G4State_Idle);
 
+  cutPCmd = new G4UIcmdWithADoubleAndUnit("/lowenergy/cutP",this);
+  cutPCmd->SetGuidance("Set cut values by RANGE for proton and others.");
+  cutPCmd->SetParameterName("cutP",false);
+  cutPCmd->SetRange("cutP>0.");
+  cutPCmd->SetUnitCategory("Length");    
+  cutPCmd->AvailableForStates(G4State_Idle);
+ 
+  eCmd = new G4UIcmdWithADoubleAndUnit("/lowenergy/cutEnergy",this);
+  eCmd->SetGuidance("Set cut values by ENERGY for charged particles.");
+  eCmd->SetParameterName("cutenergy",false);
+  eCmd->SetRange("cutenergy>0.");
+  eCmd->SetUnitCategory("Energy");   
+  eCmd->AvailableForStates(G4State_Idle);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayFluoPhysicsListMessenger::~XrayFluoPhysicsListMessenger()
 {
-
-  delete cutGLowLimCmd;
-  delete cutELowLimCmd;
-  delete cutGELowLimCmd;
   delete cutSecElecCmd;
   delete cutSecPhotCmd;
   delete cutGCmd;
   delete cutECmd;
+  delete cutPCmd;
+  delete eCmd;
 
 }
 
@@ -119,15 +110,6 @@ XrayFluoPhysicsListMessenger::~XrayFluoPhysicsListMessenger()
   
 void XrayFluoPhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {
-  if(command == cutGLowLimCmd)
-    { XrayFluoList->SetGammaLowLimit(cutGLowLimCmd->GetNewDoubleValue(newValue));}
-
-  if(command == cutELowLimCmd)
-    { XrayFluoList->SetElectronLowLimit(cutELowLimCmd->GetNewDoubleValue(newValue));}
-
-  if(command == cutGELowLimCmd)
-    { XrayFluoList->SetGELowLimit(cutGELowLimCmd->GetNewDoubleValue(newValue));}
-
   if(command == cutSecPhotCmd)
     { XrayFluoList->SetLowEnSecPhotCut(cutSecPhotCmd->GetNewDoubleValue(newValue));}
 
@@ -139,6 +121,12 @@ void XrayFluoPhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String new
 
   if(command == cutECmd)
     { XrayFluoList->SetElectronCut(cutECmd->GetNewDoubleValue(newValue));}
+
+ if(command == cutPCmd)
+    { XrayFluoList->SetProtonCut(cutPCmd->GetNewDoubleValue(newValue));}
+
+ if(command == eCmd)
+    { XrayFluoList->SetCutsByEnergy(eCmd->GetNewDoubleValue(newValue));}
 
 }
 

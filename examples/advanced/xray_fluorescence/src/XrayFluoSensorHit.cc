@@ -22,14 +22,14 @@
 //
 //
 // $Id: XrayFluoSensorHit.cc
-// GEANT4 tag $Name: xray_fluo-V04-01-03
+// GEANT4 tag $Name: xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
 // History:
 // -----------
 // 28 Nov 2001 Elena Guardincerri     Created
-// 29 Nov 2002 Alfonso Mantero minor modifications (Alfonso.mantero@ge.infn.it)
+//
 // -------------------------------------------------------------------
 
 #include "XrayFluoSensorHit.hh"
@@ -40,30 +40,28 @@ G4Allocator<XrayFluoSensorHit> XrayFluoSensorHitAllocator;
 
 XrayFluoSensorHit::XrayFluoSensorHit()
 {
-  EdepTot = 0.;  
-  EdepDetect = 0.;
-
- 
-  //  G4cout << "XrayFluoSensorHit created" << G4endl;   
- }
+   EdepTot = 0.;  
+   EdepDetect = 0.;
+   
+  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XrayFluoSensorHit::XrayFluoSensorHit(const XrayFluoSensorHit& right):
-  G4VHit(right)
+XrayFluoSensorHit::XrayFluoSensorHit(const XrayFluoSensorHit& right)
+  :G4VHit(right)
 {
+  
   EdepTot = right.EdepTot ; 
-
   EdepDetect = right.EdepDetect;
-
-  //G4cout << "XrayFluoSensorHit created" << G4endl;  
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayFluoSensorHit::~XrayFluoSensorHit()
 {
-  //G4cout << "XrayFluo SensorHit deleted" << G4endl; 
+ 
 }
 
 
@@ -79,8 +77,10 @@ const XrayFluoSensorHit& XrayFluoSensorHit::operator=(const XrayFluoSensorHit& r
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-int XrayFluoSensorHit::operator==(const XrayFluoSensorHit&) const
+int XrayFluoSensorHit::operator==(const XrayFluoSensorHit& right) const
 {
+  if(EdepTot == right.EdepTot && EdepDetect == right.EdepDetect)
+    {return 1;}
   return 0;
 }
 
@@ -94,7 +94,6 @@ void XrayFluoSensorHit::Print()
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 
 
 

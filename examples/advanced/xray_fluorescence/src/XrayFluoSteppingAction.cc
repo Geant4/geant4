@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoSteppingAction.cc
-// GEANT4 tag $Name: xray_fluo-V03-02-00
+// GEANT4 tag $Name: xray_fluo-V04-01-03
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -33,7 +33,7 @@
 // -------------------------------------------------------------------
 
 #include "XrayFluoSteppingAction.hh"
-//#include "XrayFluoDetectorConstruction.hh"
+#include "XrayFluoDetectorConstruction.hh"
 #include "G4SteppingManager.hh"
 #include "G4TrackVector.hh"
 #include "G4ios.hh"
@@ -44,16 +44,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayFluoSteppingAction::XrayFluoSteppingAction()
-{
-  G4cout << "XrayFluoSteppingAction created" << G4endl; 
- }
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayFluoSteppingAction::~XrayFluoSteppingAction()
-{ 
-  G4cout << "XrayFluoSteppingAction deleted" << G4endl;
-}
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -67,4 +63,3 @@ void XrayFluoSteppingAction::UserSteppingAction(const G4Step* aStep)
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-

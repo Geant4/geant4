@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoSteppingVerbose.cc
-// GEANT4 tag $Name: xray_fluo-V03-02-00
+// GEANT4 tag $Name: xray_fluo-V04-01-03
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -41,18 +41,12 @@
 XrayFluoSteppingVerbose::XrayFluoSteppingVerbose()
 ////////////////////////////////////////////////
 {
-
-  G4cout << "XrayFluoSteppingVerbose created" << G4endl;
-
 }
 
 //////////////////////////////////////////////////
 XrayFluoSteppingVerbose::~XrayFluoSteppingVerbose()
 //////////////////////////////////////////////////
 {
-
-  G4cout << "XrayFluoSteppingVerbose deleted" << G4endl;
-
 }
 
 /////////////////////////////////////////
