@@ -1,4 +1,4 @@
-$Id: README,v 1.1 1999-01-07 16:05:17 gunter Exp $
+$Id: README,v 1.2 2001-10-23 15:09:27 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,4 +7,13 @@ $Id: README,v 1.1 1999-01-07 16:05:17 gunter Exp $
 
                          Advanced Examples
                          -----------------
+
+In this directory one can find examples of real complete applications used
+for different simulation studies. The applications included here may require
+third party products for handling of the data produced (visualization,
+analysis or persistency tools). Refer to the README and documentation provided
+in each example for the details.
+These application are made part of the official GEANT4 distribution, however
+their maintenance and updates is under responsibility of the authors. These
+applications are not subject to regular system testing.
 
