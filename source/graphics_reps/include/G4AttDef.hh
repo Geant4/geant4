@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttDef.hh,v 1.1 2002-10-23 12:08:17 johna Exp $
+// $Id: G4AttDef.hh,v 1.2 2002-10-23 14:59:10 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4ATTDEF_HH
 #define G4ATTDEF_HH
 
-#include <string>
+#include "globals.hh"
 
 // Class Description:
 //
@@ -53,9 +53,9 @@
   class G4AttDef{
 
   public:
-    G4AttDef(G4std::string name, G4std::string desc, 
-	   G4std::string category, G4std::string extra, 
-	   G4std::string valueType):
+    G4AttDef(G4String name, G4String desc, 
+	   G4String category, G4String extra, 
+	   G4String valueType):
       m_name(name),m_desc(desc),
       m_category(category),
       m_extra(extra),m_valueType(valueType){};
@@ -65,28 +65,28 @@
       m_category(""),
       m_extra(""),m_valueType(""){};
     
-    G4std::string getName(){return m_name;};
-    G4std::string getDesc(){return m_desc;};
-    G4std::string getCategory(){return m_category;};
-    G4std::string getExtra(){return m_extra;};
-    G4std::string getValueType(){return m_valueType;};
+    G4String getName(){return m_name;};
+    G4String getDesc(){return m_desc;};
+    G4String getCategory(){return m_category;};
+    G4String getExtra(){return m_extra;};
+    G4String getValueType(){return m_valueType;};
 
-    void setName(G4std::string name){m_name = name;};
-    void setDesc(G4std::string desc){m_desc = desc;};
-    void setCategory(G4std::string cat){m_category = cat;};
-    void setExtra(G4std::string extra){m_extra = extra;};
-    void setValueType(G4std::string type){m_valueType = type;};
+    void setName(G4String name){m_name = name;};
+    void setDesc(G4String desc){m_desc = desc;};
+    void setCategory(G4String cat){m_category = cat;};
+    void setExtra(G4String extra){m_extra = extra;};
+    void setValueType(G4String type){m_valueType = type;};
 
   private:
     /// The name of the attribute
-    G4std::string m_name;
+    G4String m_name;
     /// A short description of the attribute
-    G4std::string m_desc;
+    G4String m_desc;
     /// The category (Draw, Physics, PickAction, Association) 
-    G4std::string m_category;
+    G4String m_category;
     /// Some extra property of the attribute (units etc)
-    G4std::string m_extra;
+    G4String m_extra;
     /// The type of the value of the attribute (int, double, string)
-    G4std::string m_valueType;
+    G4String m_valueType;
   };
 #endif //G4ATTDEF_H

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttValue.hh,v 1.1 2002-10-23 12:08:18 johna Exp $
+// $Id: G4AttValue.hh,v 1.2 2002-10-23 14:59:11 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4ATTVALUE_HH
 #define G4ATTVALUE_HH
 
-#include <string>
+#include "globals.hh"
 
 // Class Description:
 //
@@ -51,28 +51,28 @@
   class G4AttValue {
     
   public:
-    G4AttValue(G4std::string name, G4std::string value, 
-             G4std::string showLabel): 
+    G4AttValue(G4String name, G4String value, 
+             G4String showLabel): 
       m_name(name),m_value(value),
       m_showLabel(showLabel){};
     G4AttValue():
       m_name(""),m_value(""),
       m_showLabel(""){};
     
-    virtual G4std::string getName(){return m_name;};
-    virtual G4std::string getValue(){return m_value;};
-    virtual G4std::string getShowLabel(){return m_showLabel;};
+    virtual G4String getName(){return m_name;};
+    virtual G4String getValue(){return m_value;};
+    virtual G4String getShowLabel(){return m_showLabel;};
 
-    virtual void setName(G4std::string name){m_name = name;};
-    virtual void setValue(G4std::string val){m_value = val;};
-    virtual void setShowLabel(G4std::string lab){m_showLabel = lab;};
+    virtual void setName(G4String name){m_name = name;};
+    virtual void setValue(G4String val){m_value = val;};
+    virtual void setShowLabel(G4String lab){m_showLabel = lab;};
 
   private:
     /// The name of the attribute 
-    G4std::string m_name;
+    G4String m_name;
     /// The value of the attribute
-    G4std::string m_value;
+    G4String m_value;
     /// The bitmap for the label display
-    G4std::string m_showLabel;
+    G4String m_showLabel;
   };
 #endif //G4ATTVALUE_H
