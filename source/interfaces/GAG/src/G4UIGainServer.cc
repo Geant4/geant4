@@ -22,7 +22,7 @@
 //
 //
 // 12/06/2002 G4UIGainServer H. MInamimoto and H. Yoshida created
-// $Id: G4UIGainServer.cc,v 1.3 2002-06-14 02:18:00 yhajime Exp $
+// $Id: G4UIGainServer.cc,v 1.4 2002-11-08 09:52:32 yhajime Exp $
 // $Name: not supported by cvs2svn $
 //
 #ifndef WIN32
@@ -404,7 +404,8 @@ void G4UIGainServer::WaitingConnection(){
     len = sizeof(caddr);
 
     for(int i=1;i<=2;i++){
-        if((socketD[i] = accept(socketD[0], (struct sockaddr *)&caddr,(int *)&len))<0){
+      //        if((socketD[i] = accept(socketD[0], (struct sockaddr *)&caddr,(int *)&len))<0){
+        if((socketD[i] = accept(socketD[0], (struct sockaddr *)&caddr,(socklen_t *)&len))<0){
             G4cerr<<"accept:"<<i<<G4endl;
             exit(1);
         }
