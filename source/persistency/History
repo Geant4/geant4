@@ -15,6 +15,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 8, 99  Y.Morita (persistency-V00-01-00)
+- GNUmakefile changes for G4TMPSCHEMA_BOOT (requires config-V00-01-01)
+- Bug fix in G4PEvent.cc (thePrimaryVertex)
+
 April 29, 99  Y.Morita (persistency-00-04-01)
 - removed overlapping definition of HepRefVArray for G4PVPhysicalVolume
   in G4PGeometryObjectMap.cc
