@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedBoxSide.cc,v 1.3 2004-11-29 16:26:10 link Exp $
+// $Id: G4TwistedBoxSide.cc,v 1.4 2004-11-29 16:34:38 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -701,6 +701,10 @@ void G4TwistedBoxSide::GetPhiUAtX( G4ThreeVector p, G4double &phi, G4double &u)
   u = ( xx - X0 ).mag() ;  // X0 is choosen such that u = 0
 
 #endif
+
+
+  // analytical form of the above calculation.
+  // See mathematica notbook: dirBox.m
 
   u = p.y() * cos(phi) - p.x()*sin(phi) ;
 

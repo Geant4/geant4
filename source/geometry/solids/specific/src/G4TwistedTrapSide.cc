@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrapSide.cc,v 1.7 2004-11-29 16:26:11 link Exp $
+// $Id: G4TwistedTrapSide.cc,v 1.8 2004-11-29 16:34:39 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -739,6 +739,7 @@ void G4TwistedTrapSide::GetPhiUAtX( G4ThreeVector p, G4double &phi, G4double &u)
 #endif
 
   // phi is given by the z coordinate of p
+
   phi = p.z()/(2*fDz)*fPhiTwist ;
 
   G4double cphi = cos(phi) ;
@@ -747,6 +748,8 @@ void G4TwistedTrapSide::GetPhiUAtX( G4ThreeVector p, G4double &phi, G4double &u)
 
   // this formula is the analytical form of the procedure used above.
   // this is not faster, but removes some spourious events.
+  // See Mathematica notebook: dirTrap.m 
+
   u = ( (fDx1*fDx1-fDx2*fDx2)/(4*fDy) + c0*cphi*p.x() + c0*sphi*p.y() + 
 	( p.y() * cphi - p.x() * sphi ) ) / 
     ( ( c0*cphi - sphi)*(c0*cphi - sphi)  + ( cphi + c0*sphi )*(cphi + c0*sphi ));
