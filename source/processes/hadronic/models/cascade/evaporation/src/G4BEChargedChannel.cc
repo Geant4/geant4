@@ -133,7 +133,7 @@ G4double G4BEChargedChannel::sampleKineticEnergy()
     }
   while (  r1 * exp ( 2 * sqrt ( levelParam * ( xMax - r1 ) ) )  < r2 );
 
-  G4cout << "Q ch " << koe << endl;
+//  G4cout << "Q ch " << koe << endl;
   G4double kineticEnergy = r1 + getCoulomb(); // add coulomb potential;
 
   if ( verboseLevel >= 10 )

@@ -156,7 +156,7 @@ G4double  G4BENeutronChannel::sampleKineticEnergy()
     }
   while (  r1 * exp ( 2 * sqrt ( levelParam * ( xMax - r1 ) ) )  < r2 );
 
-  G4cout <<  koe << endl;
+//  G4cout <<  koe << endl;
   G4double kineticEnergy = r1 - beta();
 
   if ( verboseLevel >= 10 )

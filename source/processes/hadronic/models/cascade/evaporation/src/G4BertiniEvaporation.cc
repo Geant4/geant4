@@ -42,6 +42,8 @@
 
 G4BertiniEvaporation::G4BertiniEvaporation()
 {
+    G4cout << "Info G4BertiniEvaporation: This is still very fresh code."<<G4endl;
+    G4cout << "     G4BertiniEvaporation: feed-back for improvement is very wellcome."<<G4endl;
     verboseLevel = 0;
  
     channelVector.push_back( new G4BENeutronChannel );
@@ -168,6 +170,7 @@ G4FragmentVector * G4BertiniEvaporation::BreakItUp( G4LayeredNucleus & nucleus )
 
       do
 	{
+	  pEmittedParticle = pSelectedChannel->emit();
 	  // This loop checks that particle with too large energy is not emitted.
 	  // CMS frame is considered in this loop. Nonrelativistic treatment. xxx
 
