@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: fractionProcess.cc,v 1.2 2002-06-03 12:09:32 radoone Exp $
+// $Id: fractionProcess.cc,v 1.3 2003-07-04 14:55:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,12 +68,12 @@ public:
   }
   
   // Analogical to SAX characters callback, it's called for ignorableWhitespace too!
-  virtual void Characters( const std::string& name ) {
+  virtual void Characters( const std::string& ) {
   }
   
   // Invoked whenever one of the daughter state processes has been popped-out of the state stack
   // The name passed-in as the argument is the name of the XML element for which that's been done
-  virtual void StackPopNotify( const std::string& name ) {
+  virtual void StackPopNotify( const std::string& ) {
   }
   
   // The name of the state this object will process

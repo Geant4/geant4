@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MaterialTypeProcess.hh,v 1.3 2002-06-03 12:09:31 radoone Exp $
+// $Id: MaterialTypeProcess.hh,v 1.4 2003-07-04 14:55:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,15 +69,15 @@ public:
   }
 
   // Analogical to SAX startElement callback
-  virtual void StartElement( const std::string& name, const ASCIIAttributeList& attrs ) { 
+  virtual void StartElement( const std::string&, const ASCIIAttributeList& ) { 
   }
   
   // Analogical to SAX endElement callback
-  virtual void EndElement( const std::string& name ) {
+  virtual void EndElement( const std::string& ) {
   }
   
   // Analogical to SAX characters callback, it's called for ignorableWhitespace too!
-  virtual void Characters( const std::string& name ) {
+  virtual void Characters( const std::string& ) {
   }
   
   // Invoked whenever one of the daughter state processes has been popped-out of the state stack

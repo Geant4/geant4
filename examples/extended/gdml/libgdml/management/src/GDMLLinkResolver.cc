@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GDMLLinkResolver.cc,v 1.3 2002-07-24 17:48:42 radoone Exp $
+// $Id: GDMLLinkResolver.cc,v 1.4 2003-07-04 14:55:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,8 +45,7 @@
 #include "ASCIIAttributeList.hh"
 #include "ProcessingConfigurator.hh"
 
-
-//#include <strstream>
+#include <iostream>
 
 StatusCode GDMLLinkResolver::Run()
 {
