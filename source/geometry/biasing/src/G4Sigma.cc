@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sigma.cc,v 1.4 2002-04-09 16:23:50 gcosmo Exp $
+// $Id: G4Sigma.cc,v 1.5 2002-07-10 14:07:21 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -52,6 +52,7 @@ void G4Sigma::Init()
   fXsum = 0;
   fXXsum = 0;
   fWsum = 0;
+  fWWsum = 0;
   fWXsum = 0;
   fWXXsum = 0;
   fcalc = 0;
@@ -64,6 +65,7 @@ G4int G4Sigma::Xin(G4double x, G4double w)
   fXsum+=x;
   fXXsum+=x*x;
   fWsum += w;
+  fWWsum += w*w;
   fWXsum += w*x;
   fWXXsum += w*x*x;
   fcalc = 0;
@@ -110,25 +112,66 @@ G4double G4Sigma::GetSigma() const
 
 G4double G4Sigma::GetXsum() const {return fXsum;}
 G4double G4Sigma::GetXXsum() const {return fXXsum;}
-G4double G4Sigma::GetSumOfWeights() const {return fWsum;}
-G4double G4Sigma::GetWeightedXsum() const {return fWXsum;}
-G4double G4Sigma::GetWeightedXXsum() const {return fWXXsum;}
+G4double G4Sigma::GetWsum() const {return fWsum;}
+G4double G4Sigma::GetWWsum() const {return fWWsum;}
+G4double G4Sigma::GetWXsum() const {return fWXsum;}
+G4double G4Sigma::GetWXXsum() const {return fWXXsum;}
 
 void G4Sigma::Error(const G4String &m)
 {
   G4cout << "ERROR: G4Sigma::" << m << G4endl;
 }
 
+
+G4double G4Sigma::GetValueByname(const G4String &sigspec){
+  if (sigspec=="Mean") {
+    return GetMean();
+  }
+  else if (sigspec=="Sigma") {
+    return GetSigma();
+  }
+  else if (sigspec=="Entries") {
+    return GetEntries();
+  }
+  else if (sigspec=="Xsum") {
+    return GetXsum();
+  }
+  else if (sigspec=="XXsum") {
+    return GetXXsum();
+  }
+  else if (sigspec=="Wsum") {
+    return GetWsum();
+  }
+  else if (sigspec=="WWsum") {
+    return GetWWsum();
+  }
+  else if (sigspec=="WXsum") {
+    return GetWXsum();
+  }
+  else if (sigspec=="WXXsum") {
+    return GetWXXsum();
+  }
+  else {
+    G4cout << "Error:G4Sigma::GetValueByname: can't " 
+	   << "read sigmas: Get"
+	   << sigspec << "() function" << G4endl;
+    return -1;
+  }
+}
+
+
 G4std::ostream& operator<<(G4std::ostream &out, const G4Sigma &s)
 {
   out << "entries                             : " << s.GetEntries() << "\n";
-  out << "Sum(w)                              : " << s.GetSumOfWeights()<<"\n";
-  out << "Sum(w*x)                            : " << s.GetWeightedXsum() << "\n";
-  out << "Sum(w*x*x)                          : " << s.GetWeightedXXsum() << "\n";
   out << "mean=Sum(w*x) / Sum(w)              : " << s.GetMean() << "\n";
   out << "sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): " << s.GetSigma() << "\n";
   out << "Sum(x)                              : " << s.GetXsum() << "\n";
   out << "Sum(x^2)                            : " << s.GetXXsum() << "\n";
+  out << "Sum(w)                              : " << s.GetWsum()<<"\n";
+  out << "Sum(w*w)                            : " << s.GetWWsum()<<"\n";
+  out << "Sum(w*x)                            : " << s.GetWXsum() << "\n";
+  out << "Sum(w*x*x)                          : " << s.GetWXXsum() << "\n";
   
   return out;
 }
+

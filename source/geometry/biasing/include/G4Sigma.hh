@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sigma.hh,v 1.6 2002-04-10 13:13:07 dressel Exp $
+// $Id: G4Sigma.hh,v 1.7 2002-07-10 14:07:21 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -72,14 +72,20 @@ class G4Sigma
   G4double GetXXsum() const;
     // get sum over squared x: Sum(x*x)
 
-  G4double GetSumOfWeights() const;
+  G4double GetWsum() const;
     // get sum over weights: Sum(w) 
 
-  G4double GetWeightedXsum() const;
+  G4double GetWWsum() const;
+    // get sum over squared weights: Sum(w*w) 
+
+  G4double GetWXsum() const;
     // get weighted sum over x*w: Sum(w*x)
 
-  G4double GetWeightedXXsum() const;
+  G4double GetWXXsum() const;
     // get weighted sum over squarted x: Sum(W*x*x)
+
+  G4double GetValueByname(const G4String &sigspec);
+    // return a value by the name of the Get<name>() function. 
 
  private:
 
@@ -92,9 +98,11 @@ class G4Sigma
   G4int fEntries;
   mutable G4double fMean;
   mutable G4double fSigma;
+
   G4double fXsum;
   G4double fXXsum;
   G4double fWsum;
+  G4double fWWsum;
   G4double fWXsum;
   G4double fWXXsum;
   mutable G4int fcalc;
