@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalSurface.hh,v 1.8 2003-11-28 00:39:29 gum Exp $
+// $Id: G4LogicalSurface.hh,v 1.9 2003-12-01 14:41:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -52,16 +52,11 @@
 //   G4SurfaceProperty*              theSurfaceProperty
 //   G4TransitionRadiationSurface*  theTransRadSurface
 
-// Version:     1.0
 // Created:     1997, June, 4th to 17th
 // Author:      John Apostolakis, (with help of Peter Gumplinger)
 // mail:        japost@mail.cern.ch
-// Modified:    1997, June 26th  John Apostolakis
-//              27-11-2003: Fan Lei
-//                - chnanged to use G4SurfaceProperty insdead of G4OpticalSurface
 //
-////////////////////////////////////////////////////////////////////////
-
+// ------------------------------------------------------------------------
 #ifndef G4LogicalSurface_h
 #define G4LogicalSurface_h 1
 
@@ -69,7 +64,8 @@
 // Includes
 /////////////
 
-#include "globals.hh"
+#include "G4Types.hh"
+#include "G4String.hh"
 
 class G4SurfaceProperty;
 class G4TransitionRadiationSurface;
@@ -80,10 +76,9 @@ class G4TransitionRadiationSurface;
 
 class G4LogicalSurface
 {
-	////////////
-	// Methods
-        ////////////
- public:
+
+ public:  // with description
+
    G4SurfaceProperty*  GetSurfaceProperty() const;
    void     SetSurfaceProperty(G4SurfaceProperty* ptrSurfaceProperty);
 
@@ -93,16 +88,12 @@ class G4LogicalSurface
    G4TransitionRadiationSurface*  GetTransitionRadiationSurface() const;
    void SetTransitionRadiationSurface(G4TransitionRadiationSurface* transRadSurf);
 
-        ////////////////////////////////
-        // Constructors and Destructor
-        ////////////////////////////////
-
  protected:
 
         // There should be no instances of this class
 
    G4LogicalSurface(const G4String&         name,
-		    G4SurfaceProperty* surfaceProperty); 
+                    G4SurfaceProperty* surfaceProperty); 
         // Is the name more meaningful for the properties or the logical
         // surface ?  
 
@@ -118,13 +109,9 @@ class G4LogicalSurface
    G4LogicalSurface(const G4LogicalSurface &right); // Copying restricted
    const G4LogicalSurface& operator=(const G4LogicalSurface& right);
 
-	// ------------------
-	// Basic data members ( To define a 'logical' surface)
-	// ------------------
-
  private:
 
-   G4String theName;		// Surface name
+   G4String theName;              // Surface name
 
    G4SurfaceProperty*              theSurfaceProperty;
    G4TransitionRadiationSurface*  theTransRadSurface;

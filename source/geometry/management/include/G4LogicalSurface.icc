@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalSurface.icc,v 1.7 2003-11-28 00:39:34 gum Exp $
+// $Id: G4LogicalSurface.icc,v 1.8 2003-12-01 14:41:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -30,51 +30,46 @@
 //
 // File:        G4LogicalSurface.icc
 // Description: A Surface class 
-// Version:     1.0
 // Created:     1997-06-26
 // Author:      John Apostolakis
 //
-////////////////////////////////////////////////////////////////////////
-
-/////////////////////////
-// Class Inline Methods
-/////////////////////////
+// ------------------------------------------------------------------------
 
 inline G4SurfaceProperty*
 G4LogicalSurface::GetSurfaceProperty() const
 {
-	return theSurfaceProperty;
+        return theSurfaceProperty;
 } 
 
 inline void
 G4LogicalSurface::SetSurfaceProperty(G4SurfaceProperty* ptrSurfaceProperty) 
 {
-	theSurfaceProperty = ptrSurfaceProperty;
+        theSurfaceProperty = ptrSurfaceProperty;
 } 
 
 inline G4String
 G4LogicalSurface::GetName() const
 {
-	return theName;
+        return theName;
 }
 
 inline void
 G4LogicalSurface::SetName(const G4String& name)
 {
-	theName = name;
+        theName = name;
 }
 
 inline G4TransitionRadiationSurface*
 G4LogicalSurface::GetTransitionRadiationSurface() const
 {
-	return theTransRadSurface;
+        return theTransRadSurface;
 } 
 
 inline void
 G4LogicalSurface::SetTransitionRadiationSurface(G4TransitionRadiationSurface*
                                                 transRadSurf )
 {
-	theTransRadSurface= transRadSurf;
+        theTransRadSurface= transRadSurf;
 } 
 
 
@@ -85,24 +80,24 @@ G4LogicalSurface::SetTransitionRadiationSurface(G4TransitionRadiationSurface*
 inline const G4LogicalSurface &
 G4LogicalSurface::operator=(const G4LogicalSurface &right)
 {
-	if (&right == this) return *this;
-	theName = right.theName;
-	theSurfaceProperty = right.theSurfaceProperty;
-	theTransRadSurface = right.theTransRadSurface;
-	
-	return *this;
+        if (&right == this) return *this;
+        theName = right.theName;
+        theSurfaceProperty = right.theSurfaceProperty;
+        theTransRadSurface = right.theTransRadSurface;
+        
+        return *this;
 }
 
 inline G4int
 G4LogicalSurface::operator==(const G4LogicalSurface &right) const
 {
-	return (this == (G4LogicalSurface *) &right);
+        return (this == (G4LogicalSurface *) &right);
 }
 
 inline G4int
 G4LogicalSurface::operator!=(const G4LogicalSurface &right) const
 {
-	return (this != (G4LogicalSurface *) &right);
+        return (this != (G4LogicalSurface *) &right);
 }
 
   /////////////////
@@ -110,15 +105,15 @@ G4LogicalSurface::operator!=(const G4LogicalSurface &right) const
   /////////////////
 
 inline G4LogicalSurface::G4LogicalSurface(const G4String&         name,
-					 G4SurfaceProperty* surfaceProperty) 
-		: theName(name),
-		  theSurfaceProperty(surfaceProperty)
+                                         G4SurfaceProperty* surfaceProperty) 
+                : theName(name),
+                  theSurfaceProperty(surfaceProperty)
 {
 }
 
 inline G4LogicalSurface::G4LogicalSurface(const G4LogicalSurface &right)
 {
-	*this = right;
+        *this = right;
 }
 
 inline G4LogicalSurface::~G4LogicalSurface()
