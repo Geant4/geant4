@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Neutron.cc,v 1.7 2001-07-11 10:01:41 gunter Exp $
+// $Id: G4Neutron.cc,v 1.8 2001-09-18 02:18:10 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,11 +32,15 @@
 //      4th April 1996, G.Cosmo
 //                          H.Kurashige 7 July 1996
 //      add neutron life time    Oct 17 2000 
+//      add neutron beta decay   Sep 17 2001 
 // **********************************************************************
 #include "g4std/fstream"
 #include "g4std/iomanip"
 
 #include "G4Neutron.hh"
+
+#include "G4NeutronBetaDecayChannel.hh"
+#include "G4DecayTable.hh"
 
 // ######################################################################
 // ###                           NEUTRON                              ###
@@ -57,6 +61,17 @@ G4Neutron::G4Neutron(
               lepton,baryon,encoding,stable,lifetime,decaytable )
 {
    SetParticleSubType("nucleon");
+
+   //create Decay Table 
+   G4DecayTable*   table = GetDecayTable();
+   if (table!=NULL) delete table;
+   table = new G4DecayTable();
+   
+   // create a decay channel
+   G4VDecayChannel* mode = new G4NeutronBetaDecayChannel("neutron",1.00);
+   table->Insert(mode);
+   
+   SetDecayTable(table);
 }
 
 // ......................................................................
