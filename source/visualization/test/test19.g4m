@@ -23,19 +23,18 @@
 #/gun/position 0 -100 0 cm
 #/gun/direction 0 1 0
 #
-# G4Ray demo
-#/vis/camera/zoom 2
-#/vis/camera/viewpoint 20 20
-#/vis/set/drawing_style 2
-#/vis/create_view/new_graphics_system RayX
-#/vis/ray/resolution 1
-#/vis/draw/current
+# Create empty scene.
+/vis/scene/create
+#
+# Add volume to scene - "world" is default.
+/vis/scene/add/volume
 #
 # See list of graphics systems possibilities.
 help /vis/sceneHandler/create
 #
-# Create view.
-/vis/scene/create
+# Create a scene handler for a specific graphics system.
+# Edit the next line(s) to choose another graphic system
+/vis/sceneHandler/create DAWNFILE
 #/vis/sceneHandler/create DAWN
 #/vis/sceneHandler/create RayX
 #/vis/sceneHandler/create OGLIX
@@ -44,8 +43,15 @@ help /vis/sceneHandler/create
 #/vis/sceneHandler/create VRML1FILE
 #/vis/sceneHandler/create Xo
 #/vis/sceneHandler/create Wo
+#
+# Create a viewer.
 /vis/viewer/create
 #
 # Draw current scene
-#/vis/draw/current
-#/vis/show/view
+/vis/scene/notifyHandlers
+/vis/show/view
+#
+# for drawing the tracks
+# if too many tracks cause core dump => storeTrajectory 0
+/tracking/storeTrajectory 1
+/vis/scene/include/trajectories
