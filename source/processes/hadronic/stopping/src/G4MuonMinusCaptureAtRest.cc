@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonMinusCaptureAtRest.cc,v 1.8 2002-08-31 15:40:53 vnivanch Exp $
+// $Id: G4MuonMinusCaptureAtRest.cc,v 1.9 2002-10-27 18:22:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -41,6 +41,7 @@
 //                                capture and cascade
 //      V.Ivanchenko  10 Aug 2002 Add control on G4ParticleDefinition 
 //                                of secondaries
+//      V.Ivanchenko  27 Oct 2002 NeutrinoE->NeutrinoMu
 //-----------------------------------------------------------------------------
 
 #include "G4MuonMinusCaptureAtRest.hh"
@@ -113,11 +114,11 @@
 G4MuonMinusCaptureAtRest::G4MuonMinusCaptureAtRest(const G4String& processName)
   : G4VRestProcess (processName),       // initialization
     massGamma(G4Gamma::Gamma()->GetPDGMass()/GeV),
-    massNeutrinoE(G4NeutrinoE::NeutrinoE()->GetPDGMass()/GeV),
+    massNeutrinoMu(G4NeutrinoMu::NeutrinoMu()->GetPDGMass()/GeV),
     massProton(G4Proton::Proton()->GetPDGMass()/GeV),
     massNeutron(G4Neutron::Neutron()->GetPDGMass()/GeV),
     pdefGamma(G4Gamma::Gamma()),
-    pdefNeutrinoE(G4NeutrinoE::NeutrinoE()),
+    pdefNeutrinoMu(G4NeutrinoMu::NeutrinoMu()),
     pdefMuonMinus(G4MuonMinus::MuonMinus()),
     pdefNeutron(G4Neutron::Neutron())
 {
@@ -3547,9 +3548,9 @@ void G4MuonMinusCaptureAtRest::DoMuCapture()
   // ==     Put neutrino on the stack IF DESIRED.
   ++nGkine;
   Gkin[nGkine-1].SetZero();
-  Gkin[nGkine-1].SetMass( massNeutrinoE  );
+  Gkin[nGkine-1].SetMass( massNeutrinoMu  );
   Gkin[nGkine-1].SetMomentumAndUpdate( -txi * enu, -tyi * enu, -tzi * enu  );
-  Gkin[nGkine-1].SetParticleDef( pdefNeutrinoE );
+  Gkin[nGkine-1].SetParticleDef( pdefNeutrinoMu );
   Gkin[nGkine-1].SetTOF( tDelay );
   // ==
   i__1 = nstak1;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonMinusCaptureAtRest.hh,v 1.6 2001-08-01 17:12:20 hpw Exp $
+// $Id: G4MuonMinusCaptureAtRest.hh,v 1.7 2002-10-27 18:22:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -188,13 +188,13 @@ class G4MuonMinusCaptureAtRest : public G4VRestProcess
      G4int    chargeResidNucl;
 
      G4double  massGamma;
-     G4double  massNeutrinoE;
+     G4double  massNeutrinoMu;
      G4double  massProton;
      G4double  massNeutron;
      G4double  massFragm[6];
 
      G4ParticleDefinition* pdefGamma;
-     G4ParticleDefinition* pdefNeutrinoE;
+     G4ParticleDefinition* pdefNeutrinoMu;
      G4ParticleDefinition* pdefMuonMinus;
      G4ParticleDefinition* pdefNeutron;
      G4ParticleDefinition* pdefFragm[6];
