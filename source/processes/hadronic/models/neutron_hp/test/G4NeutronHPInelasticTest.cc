@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInelasticTest.cc,v 1.4 2000-08-10 12:53:00 hpw Exp $
+// $Id: G4NeutronHPInelasticTest.cc,v 1.5 2000-09-15 13:56:30 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -33,6 +33,8 @@
 #include "G4PVPlacement.hh"
 
 #include "G4Step.hh"
+#include "G4StepPoint.hh"
+
 
 #include "../src/G4NeutronHPInelasticCompFS.cc"
 #include "../src/G4NeutronHPInelasticBaseFS.cc"
@@ -72,7 +74,7 @@
 
     G4String name, symbol;
     G4double a, iz, z, density;
-    G4int nEl;
+    G4int nEl, nIso;
     
  // constructing the particles
  
@@ -156,10 +158,10 @@
 // // natural silicon only; swiches to aluminium
 // // copied to 14_28_Silicon
 //   //Init runs 
-//      G4Material *theSi = new G4Material(name="Silicon", density=2.33*g/cm3, nEl=1);
-//      G4Element *elSi  = new G4Element(name="Silicon", symbol="Al", iz=14., a=28.0855*g/mole);
-//      theSi->AddElement( elSi, 1 );
-//      theMaterials[9] = theSi;
+      G4Material *theSi = new G4Material(name="Silicon", density=2.33*g/cm3, nEl=1);
+      G4Element *elSi  = new G4Element(name="Silicon", symbol="Al", iz=14., a=28.0855*g/mole);
+      theSi->AddElement( elSi, 1 );
+      theMaterials[9] = theSi;
 //      
 //      // Init runs
 //      G4Material *theCl = new G4Material(name="Chloron", density=3*g/cm3, nEl=1);
@@ -242,10 +244,10 @@
 //      //G4NeutronHPPhotonDist: Transition probability array not sampled for the moment.
 // // Fix for reading, sampling to be tested
 //      // Init runs
-       G4Material *thePb = new G4Material(name="Lead", density=11.35*g/cm3, nEl=1);
-       G4Element *elPb = new G4Element(name="Lead", symbol="Pb", iz=82., a=207.19*g/mole);
-       thePb->AddElement( elPb, 1 );
-      theMaterials[21] = thePb;
+//       G4Material *thePb = new G4Material(name="Lead", density=11.35*g/cm3, nEl=1);
+//       G4Element *elPb = new G4Element(name="Lead", symbol="Pb", iz=82., a=207.19*g/mole);
+//       thePb->AddElement( elPb, 1 );
+//      theMaterials[21] = thePb;
 //
 //     // Init runs
 //     G4Material *theU = new G4Material(name="Uranium", density=18.95*g/cm3, nEl=1);
@@ -258,6 +260,12 @@
 //     theAu->AddElement( elAu, 1 );
 //     theMaterials[23] = theAu;
 //    
+//      G4Material *theHe3 = new G4Material(name="Helium3", density=2.70*g/cm3, nEl=1);
+//      G4Element *elHe3  = new G4Element(name="Helium3", symbol="He", nIso = 1);
+//      G4Isotope * isoHe3 = new G4Isotope(name="Helium3", 2, 3, a=3.*g/mole);
+//      elHe3->AddIsotope(isoHe3, 1);
+//      theHe3->AddElement(elHe3 , 1 );
+//      theMaterials[24] = theHe3;
     G4cout << "Please enter material number"<<G4endl;
     G4int inputNumber;
     G4cin >> inputNumber;
@@ -324,7 +332,9 @@
    
    // --------- Test the GetMeanFreePath
    
+   G4StepPoint aStepPoint;
    G4Step aStep;
+   aStep.SetPreStepPoint(&aStepPoint);
    G4double meanFreePath;
    G4double incomingEnergy;
    G4int k, i, l, hpw = 0;   
@@ -339,6 +349,9 @@
 //   G4cin >> debugThisOne;
    G4cout << "Please enter the neutron energy"<<G4endl;
    G4cin >> incomingEnergy;
+   G4int errorOne;
+   G4cout << "Please enter the problematic event number"<<endl;
+   G4cin >> errorOne;
    for (i=0; i<numberOfParticles; i++)
    {
      outFile << G4endl
@@ -360,16 +373,22 @@ int j = 0;
            G4Track* aTrack = new G4Track( aParticle, aTime, aPosition );
            aTrack->SetTouchable(theTouchable);
            aStep.SetTrack( aTrack );
+           aStepPoint.SetTouchable(theTouchable);
+	   aStepPoint.SetMaterial(theMaterials[0]);
+           aStep.SetPreStepPoint(&aStepPoint);
+	   aStep.SetPostStepPoint(&aStepPoint);
+	   aTrack->SetStep(&aStep);
            ++hpw;
            if(hpw == 1000*(hpw/1000))
            G4cerr << "FINAL EVENTCOUNTER=" << hpw
                 << " current energy: " << incomingEnergy
                 << " of particle " << aParticle->GetDefinition()->GetParticleName() 
                 << " in material " << theMaterials[k]->GetName() << G4endl;
-           if (hpw==debugThisOne)
-           {
-            debugThisOne+=0;
-           }
+	   if(hpw == errorOne)
+	   {
+	      hpw --;
+	      hpw ++;
+	   }
            G4cout << "Last chance before DoIt call: "
 //                << theNeutronHPInelastic.GetNiso()
                 <<G4endl;
