@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuBremsstrahlung.hh,v 1.7 2000-04-25 14:18:58 maire Exp $
+// $Id: G4MuBremsstrahlung.hh,v 1.8 2000-05-23 09:55:37 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -59,6 +59,13 @@ class G4MuBremsstrahlung : public G4VMuEnergyLoss
  
      G4VParticleChange *PostStepDoIt(const G4Track& track,
                                      const G4Step& Step  ) ;                 
+
+     G4double GetDMicroscopicCrossSection(
+                                      const G4ParticleDefinition* ParticleType,
+                                            G4double KineticEnergy, 
+                                            G4double AtomicNumber,
+                                            G4double AtomicMass,  
+                                            G4double GammaEnergy);
 
   protected:
 
@@ -116,7 +123,8 @@ class G4MuBremsstrahlung : public G4VMuEnergyLoss
      // tables for sampling ..............
      static G4int nzdat,ntdat,NBIN ;
      static G4double zdat[5],adat[5],tdat[8] ;
-     static G4double ya[1000],proba[5][8][1000] ;
+     static G4double ya[1001],proba[5][8][1001] ;
+     static G4double CutFixed ;
 
   public:
 
