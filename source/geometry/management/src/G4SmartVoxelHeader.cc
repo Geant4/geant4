@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.3 1999-02-15 10:54:22 japost Exp $
+// $Id: G4SmartVoxelHeader.cc,v 1.4 1999-06-04 17:26:37 sgiani Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -325,6 +325,7 @@ void G4SmartVoxelHeader::BuildVoxelsWithinLimits(G4LogicalVolume* pVolume,
     G4double goodSliceScore=kInfinity,testSliceScore;
     EAxis goodSliceAxis,testAxis;
     G4int node,maxNode,iaxis;
+    G4VoxelLimits noLimits;
 
 // Try all non-limited cartesian axes
     for (iaxis=0;iaxis<3;iaxis++)
@@ -404,9 +405,10 @@ void G4SmartVoxelHeader::BuildVoxelsWithinLimits(G4LogicalVolume* pVolume,
 // Calculate and set min and max extents given our axis
     G4VSolid* outerSolid=pVolume->GetSolid();
     const G4AffineTransform origin;
-    outerSolid->CalculateExtent(faxis,pLimits,
-				origin,
-				fminExtent,fmaxExtent);
+    if(!outerSolid->CalculateExtent(faxis,pLimits,origin,fminExtent,fmaxExtent)){
+        outerSolid->CalculateExtent(faxis,noLimits,origin,fminExtent,fmaxExtent);
+    };
+
 // Calculate equivalent nos
     BuildEquivalentSliceNos();
     CollectEquivalentNodes();	// Collect common nodes
@@ -647,6 +649,8 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
     G4bool replicated;
     G4int nCandidates;
     G4int nVol,nNode,targetVolNo;
+    G4VoxelLimits noLimits;
+    
     nCandidates=pCandidates->entries();
 #ifdef G4GEOMETRY_VOXELDEBUG
     G4cout << "**** G4SmartVoxelHeader::BuildNodes" << endl
@@ -659,9 +663,9 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
 // NOTE: results stored locally and not preserved/reused
     G4VSolid* outerSolid=pVolume->GetSolid();
     const G4AffineTransform origin;
-    outerSolid->CalculateExtent(pAxis,pLimits,
-				origin,
-				motherMinExtent,motherMaxExtent);
+    if(!outerSolid->CalculateExtent(pAxis,pLimits,origin,motherMinExtent,motherMaxExtent)){
+      outerSolid->CalculateExtent(pAxis,noLimits,origin,motherMinExtent,motherMaxExtent);
+    };
 
     G4VolumeExtentVector minExtents(nCandidates);
     G4VolumeExtentVector maxExtents(nCandidates);
@@ -721,10 +725,9 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
 		}
 
 // Calc extents
-	    targetSolid->CalculateExtent(pAxis,pLimits,
-					 targetTransform,
-					 targetMinExtent,
-					 targetMaxExtent);
+	    if(!targetSolid->CalculateExtent(pAxis,pLimits,targetTransform,targetMinExtent,targetMaxExtent)){
+	        targetSolid->CalculateExtent(pAxis,noLimits,targetTransform,targetMinExtent,targetMaxExtent);
+	    };
 	    minExtents(nVol)=targetMinExtent;
 	    maxExtents(nVol)=targetMaxExtent;
 // Check not entirely outside mother when processing toplevel nodes
