@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.37 2005-03-03 16:35:25 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.38 2005-03-09 16:27:09 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -275,22 +275,22 @@ void G4VSceneHandler::AddPrimitive (const G4Scale& scale) {
 
   // Transform appropriately...
 
-  G4Transform3D rotation;
-  switch (scale.GetDirection()) {
-  case G4Scale::x:
-    break;
-  case G4Scale::y:
-    rotation = G4RotateZ3D(piBy2);
-    break;
-  case G4Scale::z:
-    rotation = G4RotateY3D(piBy2);
-    break;
-  }
-
-  G4double sxmid(scale.GetXmid());
-  G4double symid(scale.GetYmid());
-  G4double szmid(scale.GetZmid());
+  G4Transform3D transformation;
   if (scale.GetAutoPlacing()) {
+    G4Transform3D rotation;
+    switch (scale.GetDirection()) {
+    case G4Scale::x:
+      break;
+    case G4Scale::y:
+      rotation = G4RotateZ3D(piBy2);
+      break;
+    case G4Scale::z:
+      rotation = G4RotateY3D(piBy2);
+      break;
+    }
+    G4double sxmid(scale.GetXmid());
+    G4double symid(scale.GetYmid());
+    G4double szmid(scale.GetZmid());
     sxmid = xmin + oneMinusMargin * (xmax - xmin);
     symid = ymin + margin * (ymax - ymin);
     szmid = zmin + oneMinusMargin * (zmax - zmin);
@@ -305,11 +305,11 @@ void G4VSceneHandler::AddPrimitive (const G4Scale& scale) {
       szmid -= halfLength;
       break;
     }
+    G4Translate3D translation(sxmid, symid, szmid);
+    transformation = translation * rotation;
+  } else {
+    if (fpModel) transformation = fpModel->GetTransformation();
   }
-
-  G4Translate3D translation(sxmid, symid, szmid);
-
-  G4Transform3D transformation(translation * rotation);
 
   // Draw...
   // We would like to call BeginPrimitives(transformation) here but
