@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeCompton.cc,v 1.4 2002-12-16 11:34:46 pandola Exp $
+// $Id: G4PenelopeCompton.cc,v 1.5 2002-12-20 12:01:47 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -255,8 +255,10 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 	}while (G4UniformRand()> TST);
 	epsilon=tau;
 	cosTheta = 1.0 - (1.0-tau)/(ki*tau);
-	//Target shell electron
-	TST = Z*G4UniformRand(); 
+	//Target shell electrons
+	TST = Z*G4UniformRand();
+	iosc = nosc;
+	S=0.0;
 	for (G4int j=0;j<nosc;j++)
 	  {
 	    OccupNb = (G4int) (*((*OccupationNumber)[Z-1]))[j];
@@ -276,12 +278,13 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
       G4double aux=0.0;
       for (G4int i=0;i<nosc;i++){
 	IonEnergy = (*((*IonizationEnergy)[Z-1]))[i];
-	if (IonEnergy < photonEnergy0)
+	if (photonEnergy0 > IonEnergy)
 	  {
 	    G4double aux = photonEnergy0*(photonEnergy0-IonEnergy)*2.0;
-	    HarFunc = (*((*HartreeFunction)[Z-1]))[i];
+	    HarFunc = (*((*HartreeFunction)[Z-1]))[i]/fine_structure_const;
 	    OccupNb = (G4int) (*((*OccupationNumber)[Z-1]))[i];
-	    pzomc = HarFunc*(aux-electron_mass_c2*IonEnergy)/(electron_mass_c2*sqrt(2.0*aux+pow(IonEnergy,2)));
+	    pzomc = HarFunc*(aux-electron_mass_c2*IonEnergy)/
+	      (electron_mass_c2*sqrt(2.0*aux+pow(IonEnergy,2)));
 	    if (pzomc > 0) 
 	      {
 		rni = 1.0-0.5*exp(0.5-pow(sqrt(0.5)+sqrt(2.0)*pzomc,2));
@@ -298,7 +301,7 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
       G4double cdt1;
       do
 	{
-	  if ((G4UniformRand()*a2) > a1)
+	  if ((G4UniformRand()*a2) < a1)
 	    {
 	      tau = pow(taumin,G4UniformRand());
 	    }
@@ -307,16 +310,17 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 	      tau = sqrt(1.0+G4UniformRand()*(taumin*taumin-1.0));
 	    }
 	  cdt1 = (1.0-tau)/(ki*tau);
-	  
+	  S=0.0;
 	  //Incoherent scattering function
 	  for (i=0;i<nosc;i++){
 	    IonEnergy = (*((*IonizationEnergy)[Z-1]))[i];
-	    if (IonEnergy < photonEnergy0)
+	    if (photonEnergy0 > IonEnergy) //sum only on excitable levels
 	      {
 		aux = photonEnergy0*(photonEnergy0-IonEnergy)*cdt1;
-		HarFunc = (*((*HartreeFunction)[Z-1]))[i];
+		HarFunc = (*((*HartreeFunction)[Z-1]))[i]/fine_structure_const;
 		OccupNb = (G4int) (*((*OccupationNumber)[Z-1]))[i];
-		pzomc = HarFunc*(aux-electron_mass_c2*IonEnergy)/(electron_mass_c2*sqrt(2.0*aux+pow(IonEnergy,2)));
+		pzomc = HarFunc*(aux-electron_mass_c2*IonEnergy)/
+		  (electron_mass_c2*sqrt(2.0*aux+pow(IonEnergy,2)));
 		if (pzomc > 0) 
 		  {
 		    rn[i] = 1.0-0.5*exp(0.5-pow(sqrt(0.5)+sqrt(2.0)*pzomc,2));
@@ -330,35 +334,38 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 	      }
 	    else
 	      {
-		pac[i] = S-1e-06;
+		pac[i] = S-(1e-06);
 	      }
 	  }
 	  //Rejection function
 	  TST = S*(1.0+tau*(ki1+tau*(ki2+tau*ki3)))/(ki3*tau*(1.0+tau*tau));  
 	}while ((G4UniformRand()*s0) > TST);
-      
+
       //Target electron shell
       cosTheta = 1.0 - cdt1;
-      iosc=nosc;
       G4double fpzmax=0.0,fpz=0.0;
+      G4double A=0.0;
       do
 	{
 	  do
 	    {
 	      TST =S*G4UniformRand();
+	      iosc=nosc;
 	      for (i=0;i<nosc;i++){
 		if (pac[i]>TST) iosc = i;
 		if (pac[i]>TST) break; //funziona anche nello stesso if?
 	      }
-	      G4double A = G4UniformRand()*rn[iosc];
-	      HarFunc = (*((*HartreeFunction)[Z-1]))[iosc];
+	      A = G4UniformRand()*rn[iosc];
+	      HarFunc = (*((*HartreeFunction)[Z-1]))[iosc]/fine_structure_const;
 	      OccupNb = (G4int) (*((*OccupationNumber)[Z-1]))[iosc];
 	      if (A < 0.5) {
-		pzomc = (sqrt(0.5)-sqrt(0.5-log(2*A)))/(sqrt(2)*HarFunc);
+		pzomc = (sqrt(0.5)-sqrt(0.5-log(2.0*A)))/
+		  (sqrt(2.0)*HarFunc);
 	      }
 	      else
 		{
-		  pzomc = (sqrt(0.5-log(2.0-2.0*A))-sqrt(0.5))/(sqrt(2.0)*HarFunc);
+		  pzomc = (sqrt(0.5-log(2.0-2.0*A))-sqrt(0.5))/
+		    (sqrt(2.0)*HarFunc);
 		}
 	    } while (pzomc < -1);
 	  // F(EP) rejection
@@ -373,7 +380,7 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 	    }
 	  fpz = 1.0+AF*G4std::max(G4std::min(pzomc,0.2),-0.2);
 	}while ((fpzmax*G4UniformRand())>fpz);
-     
+  
       //Energy of the scattered photon
       G4double T = pow(pzomc,2);
       G4double b1 = 1.0-T*tau*tau;
@@ -594,7 +601,7 @@ G4double G4PenelopeCompton::DifferentialCrossSection(G4double cosTheta)
       {
 	G4double aux = energy * (energy-IonEnergy)*cdt1;
 	Pzimax = (aux - electron_mass_c2*IonEnergy)/(electron_mass_c2*sqrt(2*aux+pow(IonEnergy,2)));
-	HarFunc = (*((*HartreeFunction)[Z-1]))[i];
+	HarFunc = (*((*HartreeFunction)[Z-1]))[i]/fine_structure_const;
 	OccupNb = (G4int) (*((*OccupationNumber)[Z-1]))[i];
 	x = HarFunc*Pzimax;
 	if (x > 0) 
