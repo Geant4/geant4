@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunManager.cc,v 1.6 1999-06-09 01:08:22 asaim Exp $
+// $Id: G4RunManager.cc,v 1.7 1999-07-25 05:05:20 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,6 +37,12 @@
 #include "G4VVisManager.hh"
 
 #include "G4ios.hh"
+#ifdef WIN32
+#  include <Strstrea.h>
+#else
+#  include <strstream.h>
+#endif
+
 
 G4RunManager* G4RunManager::fRunManager = NULL;
 
@@ -192,7 +198,7 @@ void G4RunManager::RunInitialization()
 
   runAborted = false;
 
-  if(storeRandomNumberStatus>0) HepRandom::saveEngineStatus();
+  if(storeRandomNumberStatus==1 || storeRandomNumberStatus==-1) StoreRandomNumberStatus();
   
   if(verboseLevel>0) G4cout << "Start Run processing." << endl;
 }
@@ -218,7 +224,6 @@ void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_selec
   for( i_event=0; i_event<n_event; i_event++ )
   {
     stateManager->SetNewState(EventProc);
-    if(storeRandomNumberStatus==2) HepRandom::saveEngineStatus();
 
     if(pauseAtBeginOfEvent) stateManager->Pause("BeginOfEvent");
 
@@ -256,7 +261,11 @@ G4Event* G4RunManager::GenerateEvent(G4int i_event)
     G4Exception
     ("G4RunManager::BeamOn - G4VUserPrimaryGeneratorAction is not defined.");
   }
+
   G4Event* anEvent = new G4Event(i_event);
+
+  if(storeRandomNumberStatus==2 || storeRandomNumberStatus==-2) StoreRandomNumberStatus();
+
   userPrimaryGeneratorAction->GeneratePrimaries(anEvent);
   return anEvent;
 }
@@ -384,9 +393,32 @@ void G4RunManager::DefineWorldVolume(G4VPhysicalVolume* worldVol)
   geometryNeedsToBeClosed = true;
 }
 
-void G4RunManager::RestoreRandomNumberStatus()
+void G4RunManager::StoreRandomNumberStatus()
 {
-  HepRandom::restoreEngineStatus();
+  G4String fileN = "RandEngine";
+  if(storeRandomNumberStatus>0 && currentRun != NULL)
+  {
+    char st[20];
+    ostrstream os(st,20);
+    os << currentRun->GetRunID() << '\0';
+    fileN += "R";
+    fileN += st;
+  }
+  if(storeRandomNumberStatus==2 && currentEvent != NULL)
+  {
+    char st[20];
+    ostrstream os(st,20);
+    os << currentEvent->GetEventID() << '\0';
+    fileN += "E";
+    fileN += st;
+  }
+  fileN += ".stat";
+  HepRandom::saveEngineStatus(fileN);
+}
+  
+void G4RunManager::RestoreRandomNumberStatus(G4String fileN)
+{
+  HepRandom::restoreEngineStatus(fileN);
 }
 
 

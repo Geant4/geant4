@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunManager.hh,v 1.3 1999-06-09 01:08:16 asaim Exp $
+// $Id: G4RunManager.hh,v 1.4 1999-07-25 05:05:18 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -136,7 +136,8 @@ class G4RunManager
     G4int storeRandomNumberStatus;
 
   public:
-    void RestoreRandomNumberStatus();
+    virtual void StoreRandomNumberStatus();
+    virtual void RestoreRandomNumberStatus(G4String fileN);
 
   public:
     inline void SetUserInitialization(G4VUserDetectorConstruction* userInit)

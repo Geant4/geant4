@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunMessenger.cc,v 1.2 1999-06-09 01:08:22 asaim Exp $
+// $Id: G4RunMessenger.cc,v 1.3 1999-07-25 05:05:20 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -13,6 +13,7 @@
 #include "G4RunManager.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithoutParameter.hh"
+#include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcommand.hh"
@@ -111,18 +112,28 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   storeRandCmd->SetGuidance("See CLHEP manual for detail.");
   storeRandCmd->SetGuidance("Frequency : 0 - not stored");
   storeRandCmd->SetGuidance("            1 - begining of each run");
+  storeRandCmd->SetGuidance("           -1 - begining of each run (file overwritten)");
   storeRandCmd->SetGuidance("            2 - begining of each event before generating primaries");
+  storeRandCmd->SetGuidance("           -2 - begining of each event before generating primaries (file overwritten)");
   storeRandCmd->SetGuidance("Stored status can be restored by ");
   storeRandCmd->SetGuidance("  /run/restoreRandomNumberStatus command.");
+  storeRandCmd->SetGuidance("In case Frequency is negative, a output file (file name RandEngine.stat)");
+  storeRandCmd->SetGuidance("  is overwitten every time.");
+  storeRandCmd->SetGuidance("In case Frequency is 1, file names are RandEngineRxxx.stat,");
+  storeRandCmd->SetGuidance("  where xxx is the run number.");
+  storeRandCmd->SetGuidance("In case Frequency is 1, file names are RandEngineRxxxEyyy.stat,");
+  storeRandCmd->SetGuidance("  where xxx is the run number and yyy is the event number.");
   storeRandCmd->AvailableForStates(PreInit,Idle);
   storeRandCmd->SetParameterName("frequency",true);
   storeRandCmd->SetDefaultValue(1);
-  storeRandCmd->SetRange("frequency >=0 && frequency <=2");
+  storeRandCmd->SetRange("frequency >=-2 && frequency <=2");
 
-  restoreRandCmd = new G4UIcmdWithoutParameter("/run/restoreRandomNumberStatus",this);
+  restoreRandCmd = new G4UIcmdWithAString("/run/restoreRandomNumberStatus",this);
   restoreRandCmd->SetGuidance("Restore the status of the random number engine from a file.");
   restoreRandCmd->SetGuidance("See CLHEP manual for detail.");
   restoreRandCmd->SetGuidance("The engine status must be stored beforehand.");
+  restoreRandCmd->SetParameterName("fileName",true);
+  restoreRandCmd->SetDefaultValue("RandEngine.stat");
   restoreRandCmd->AvailableForStates(PreInit,Idle,GeomClosed);
 
 }
@@ -176,7 +187,7 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   else if( command==storeRandCmd )
   { runManager->SetRandomNumberStore(storeRandCmd->GetNewIntValue(newValue)); }
   else if( command==restoreRandCmd )
-  { runManager->RestoreRandomNumberStatus(); }
+  { runManager->RestoreRandomNumberStatus(newValue); }
 }
 
 G4String G4RunMessenger::GetCurrentValue(G4UIcommand * command)
