@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsLnVector.cc,v 1.8 2001-03-09 03:39:31 kurasige Exp $
+// $Id: G4PhysicsLnVector.cc,v 1.9 2001-03-10 04:59:15 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,6 +73,7 @@ G4PhysicsLnVector::G4PhysicsLnVector(G4double theEmin,
 
   for (size_t i=0; i<numberOfBin+1; i++) {
     binVector.push_back(exp(log(theEmin)+i*dBin));
+    dataVector.push_back(0.0);
   }
   binVector.push_back(0.0);
   dataVector.push_back(0.0);
