@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.57 2005-02-19 22:00:11 allison Exp $
+cvs log $Id: History,v 1.58 2005-03-09 16:44:23 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+9th March 2005  John Allison  (greps-V07-00-01, needed by vis-V07-00-10)
+- HepPolyhedron: Added IsErrorBooleanProcess().
+- BooleanProcessor: Added get_processor_error().
+- G4Visible: Moved SetVisAttributes (const G4VisAttributes&) from .icc
+  to .cc file and added warning message.
 
 19th February 2005  John Allison  (greps-V07-00-00)
 - Needed for vis-V07-00-06.
