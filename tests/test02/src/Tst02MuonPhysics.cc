@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst02MuonPhysics.cc,v 1.1 2001-01-06 07:04:26 kurasige Exp $
+// $Id: Tst02MuonPhysics.cc,v 1.2 2001-03-06 10:38:35 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -95,7 +95,7 @@ void Tst02MuonPhysics::ConstructProcess()
   pManager->AddProcess(&fTauPlusMultipleScattering);
   pManager->SetProcessOrdering(&fTauPlusMultipleScattering, idxAlongStep,  1);
   pManager->SetProcessOrdering(&fTauPlusMultipleScattering, idxPostStep,  1);
-
+  pManager->AddRestProcess(&fMuonMinusCaptureAtRest);
   // Tau Minus Physics
   pManager = G4TauMinus::TauMinus()->GetProcessManager();
    // add processes

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst02MuonPhysics.hh,v 1.1 2001-01-06 07:04:25 kurasige Exp $
+// $Id: Tst02MuonPhysics.hh,v 1.2 2001-03-06 10:38:35 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,6 +30,7 @@
 #include "G4MuPairProduction.hh"
 #include "G4MuIonisation.hh"
 #include "G4hIonisation.hh"
+#include "G4MuonMinusCaptureAtRest.hh"
 
 class Tst02MuonPhysics : public G4VPhysicsConstructor
 {
@@ -58,7 +59,7 @@ class Tst02MuonPhysics : public G4VPhysicsConstructor
    G4MuBremsstrahlung     fMuMinusBremsstrahlung ;
    G4MuPairProduction     fMuMinusPairProduction;
    G4MuIonisation         fMuMinusIonisation;
-
+   G4MuonMinusCaptureAtRest fMuonMinusCaptureAtRest;
    // Tau physics
    G4MultipleScattering   fTauPlusMultipleScattering;
    G4hIonisation          fTauPlusIonisation;
