@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrajectory.hh,v 1.7 2002-09-04 02:09:37 asaim Exp $
+// $Id: G4VTrajectory.hh,v 1.8 2002-09-16 13:34:20 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -88,6 +88,9 @@ class G4VTrajectory
    // Draw the trajectory
    virtual const G4AttValueList* GetAttValues() const
    { return 0; }
+   // If implemented by a derived class, returns a pointer to a list
+   // of attribute values suitable, e.g., for picking.  The user must
+   // test the validity of this pointer and delete the list after use.
 
  public:
    // Following methods MUST be invoked exclusively by G4TrackingManager
