@@ -1,4 +1,4 @@
-# $Id: stt-ref+.sdb,v 1.43 1999-05-20 10:29:26 stesting Exp $
+# $Id: stt-ref+.sdb,v 1.44 1999-05-25 13:10:38 stesting Exp $
 # .sdb files are read by checkout.sh and update.sh
 # Lines beginning "# " are ignored (the space after the '#' is important!
 # Blank lines are not allowed!
@@ -15,12 +15,12 @@ geant4/source/GNUmakefile      geant4-00-ref-09
 geant4/source/digits+hits      geant4-00-ref-09
 geant4/source/event            geant4-00-ref-09
 geant4/source/g3tog4           geant4-00-ref-09
-geant4/source/geometry/GNUmakefile   geant4-00-ref-09
-geant4/source/geometry/History       geant4-00-ref-09
-geant4/source/geometry/magneticfield geant4-00-ref-09
-geant4/source/geometry/management    geant4-00-ref-09
-geant4/source/geometry/solids        geant4-00-ref-09
-geant4/source/geometry/volumes       geant4-00-ref-09
+geant4/source/geometry/GNUmakefile   geometry-01-00-05
+geant4/source/geometry/History       geometry-01-00-05
+geant4/source/geometry/magneticfield geometry-01-00-05
+geant4/source/geometry/management    geometry-01-00-05
+geant4/source/geometry/solids        geometry-01-00-05
+geant4/source/geometry/volumes       geometry-01-00-05
 geant4/source/global           HEAD
 geant4/source/graphics_reps    geant4-00-ref-09
 geant4/source/intercoms        geant4-00-ref-09
@@ -32,6 +32,7 @@ geant4/source/processes/GNUmakefile         geant4-00-ref-09
 geant4/source/processes/History             geant4-00-ref-09
 geant4/source/processes/decay	            geant4-00-ref-09
 geant4/source/processes/electromagnetic	    em-01-00-05a
+geant4/source/processes/electromagnetic/standard/src/G4PhotonElectricEffect.cc -r1.4
 geant4/source/processes/hadronic            geant4-00-ref-09
 geant4/source/processes/management          geant4-00-ref-09
 geant4/source/processes/optical	            geant4-00-ref-09
@@ -41,5 +42,5 @@ geant4/source/processes/transportation      geant4-00-ref-09
 geant4/source/readout          geant4-00-ref-09
 geant4/source/run              geant4-00-ref-09
 geant4/source/track            geant4-00-ref-09
-geant4/source/tracking         geant4-00-ref-09
+geant4/source/tracking         tracking-01-00-04
 geant4/source/visualization    geant4-00-ref-09
