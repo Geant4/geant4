@@ -15,12 +15,12 @@ set NDVY 010205
  atitle 'cos(theta) secondary neutron' 'ds/do (mb/sr)'
  
  
- hi/file 1 prec.paw
- set dmod 2
- hi/pl 26 shist
- line 0 2.5 0.1 2.5
- itx 0.15 300 'PREC'
- close 1
+* hi/file 1 prec.paw
+* set dmod 2
+* hi/pl 26 shist
+* line 0 2.5 0.1 2.5
+* itx 0.15 300 'PREC'
+* close 1
  
  
  hi/file 1 kin.paw
@@ -31,11 +31,11 @@ set NDVY 010205
  close 1
  
 ve/create X(5) R 0.991445 0.866025 0.5 -0.5 -0.866025
-ve/create Y(5) R 109.835 96.2125 18.2232 8.06627 1.29657
+ve/create Y(5) R 378.905 130.935 35.48 16.25 2.99
 gr/h/symb X Y 5 21 0.2
  
- ve/create X1(4) R  0.991445 0.866025 0.5  -0.866025
-ve/create Y1(4) R 18.88 22.74 14.74  2.05
+ve/create X1(4) R  0.866025 0.5 -0.5 -0.866025
+ve/create Y1(4) R 86.99 39.95 7.87 5.59
 gr/h/symb X1 Y1 4 25 0.2
 
  exe ../prf n_a eps
@@ -43,6 +43,9 @@ gr/h/symb X1 Y1 4 25 0.2
   null -1.0 1.0 0.01 10000
  atitle 'cos(theta) secondary neutron' 'ds/do (mb/sr)'
  
+ gr/h/symb X Y   5 21 0.2
+ gr/h/symb X1 Y1 4 25 0.2
+
 
   hi/file 1 par.paw
  set dmod 2
@@ -58,8 +61,6 @@ gr/h/symb X1 Y1 4 25 0.2
  itx 0.15 150 'CHIPS'
  close 1
 
- gr/h/symb X Y 14 21 0.2
-gr/h/symb X1 Y1 4 25 0.2
  
  opt liny
 

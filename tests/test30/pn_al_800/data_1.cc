@@ -221,21 +221,28 @@ int main(int argc, char** argv)
             f1  = cs[j];  
             y1  = (*f1)[i];  
             ct1 = cos((*angle)[j]);
-            if(j < na-2) {
+            if(j == 0) {
               f2  = cs[j+1]; 
               y2  = (*f2)[i]; 
               ct2 = cos((*angle)[j+1]);
-	    } else {
+              y1 += (y2 - y1)*(1.0 - ct1)/(ct2 - ct1);
+              ct1 = 1.0;
+              if(y1 < 0.0) y1 = 0.0;
+	    } else if (j == na-2) {
               f2  = cs[j-1]; 
               y2  = (*f2)[i]; 
               ct2 = cos((*angle)[j-1]);
-              y2 += (y2 - y1)*(ct2 + 1.0)/(ct2 - ct1);
+              y2 -= (y2 - y1)*(ct2 + 1.0)/(ct2 - ct1);
               ct2 = -1.0;
               if(y2 < 0.0) y2 = 0.0;
+            } else {
+              f2  = cs[j+1]; 
+              y2  = (*f2)[i]; 
+              ct2 = cos((*angle)[j+1]);
 	    }
 	 //         cout << "f1= " << f1 << " f2= " << f2 << endl;
-	 //         cout << "y1= " << y1 << " y2= " << y2 << endl;
-	 //         cout << "ct1= " << ct1 << " ct2= " << ct2 << endl;
+	    //   cout << "y1= " << y1 << " y2= " << y2 << endl;
+	    //   cout << "ct1= " << ct1 << " ct2= " << ct2 << endl;
             x  += 0.5*(y1 + y2)*(ct1 - ct2);  
           }        
           x *= twopi;
