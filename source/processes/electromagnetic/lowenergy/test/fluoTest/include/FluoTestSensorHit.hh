@@ -26,38 +26,19 @@ public:
 
   void Draw();
   void Print();
-      
-
-public:
-
- 
-  G4double GetEdepTot()      { return EdepTot; };
- G4double GetEdepDetect()   { return EdepDetect; };
-
- G4double RandomCut(G4double EdepUnDop)
-{
-    Efficiency = 0.9;
-    Random = G4UniformRand(); 
-
-    if ( Random<Efficiency )
-      {
-	G4double GINO =EdepUnDop /10.;
-	RandEngine FluoTestEngine;
-	EdepDetect = RandGaussQ::shoot(&FluoTestEngine, EdepUnDop , GINO );
-      }
-    else EdepDetect = 0.;
-    return   EdepDetect;
-    
-};
-
-
+  G4double GetEdepTot()      { return EdepTot;};
+  G4double GetEdepDetect()   { return EdepDetect;};
+  // G4double RandomCut (G4double energy);
+  G4double RandomCut ();
+  
 private:
 
    G4double EdepTot;
   G4double Efficiency; 
-  G4double Random;
   G4double EdepDetect; 
- 
+  G4double F;
+  G4double deltaE;
+  G4double epsilon;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

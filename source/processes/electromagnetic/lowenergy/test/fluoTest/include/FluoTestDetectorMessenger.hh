@@ -25,16 +25,18 @@ class FluoTestDetectorMessenger: public G4UImessenger
  private:
     FluoTestDetectorConstruction*    Detector;
     G4UIdirectory*             detDir;
-  /*
-    G4UIcmdWithAString*        SiMaterCmd;
+  
+  //  G4UIcmdWithAString*        SiMaterCmd;
     G4UIcmdWithAString*        SamMaterCmd;
-    G4UIcmdWithAString*        HPGeMaterCmd;
+  /*G4UIcmdWithAString*        HPGeMaterCmd;
     G4UIcmdWithAString*        Dia1MaterCmd;
     G4UIcmdWithAString*        Dia2MaterCmd;
     G4UIcmdWithAString*        Dia3MaterCmd;
 
-    G4UIcmdWithADoubleAndUnit* SiThickCmd;
+    G4UIcmdWithADoubleAndUnit* SiThickCmd;*/
+
     G4UIcmdWithADoubleAndUnit* SamThickCmd;
+  /*
     G4UIcmdWithADoubleAndUnit* HPGeThickCmd;
     G4UIcmdWithADoubleAndUnit* Dia1ThickCmd;
     G4UIcmdWithADoubleAndUnit* Dia2ThickCmd;
