@@ -1,4 +1,4 @@
-$Id: History,v 1.27 1999-09-03 09:30:53 johna Exp $
+$Id: History,v 1.28 1999-09-15 12:26:03 barrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,8 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+- Modify  G4OpenGLStoredSceneHandler.cc to compile on Linux-g++ with STL.
 
 vis-V00-01-03  27th August  John Allison
 - Modified GNUmakefile to prevent building of global libraries.
