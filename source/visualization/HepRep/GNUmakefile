@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2003-07-11 07:19:40 duns Exp $
+# $Id: GNUmakefile,v 1.7 2003-07-11 07:53:46 duns Exp $
 
 name := G4visHepRep
 
@@ -15,7 +15,7 @@ CPPFLAGS += -I$(G4BASE)/visualization/HepRep/include/ref
 CPPFLAGS += -I$(G4BASE)/visualization/HepRep/include/zipios++
 CPPFLAGS += -I$(G4BASE)/visualization/HepRep/include/zlib
 
-ifeq ($(G4SYSTEM),Linux-g++)
+ifneq ($(G4_NO_STD_IOSTREAM),)
 # Add extra directory for sstream 2.95.2 (is available in 2.95.3)
 CPPFLAGS += -I$(G4BASE)/visualization/HepRep/include/g++iostream
 endif
