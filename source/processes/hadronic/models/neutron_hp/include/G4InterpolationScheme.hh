@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InterpolationScheme.hh,v 1.5 2002-12-12 19:18:09 gunter Exp $
+// $Id: G4InterpolationScheme.hh,v 1.6 2004-01-23 16:58:59 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4InterpolationScheme_h
@@ -36,7 +36,7 @@
 enum G4InterpolationScheme 
 {
   START,  HISTO,  LINLIN,  LINLOG,  LOGLIN,  LOGLOG, RANDOM, 
-  CSTART, CHISTO, CLINLIN, CLINLOG, CLOGLIN, CLOGLOG, CRANDOM, 
+  CSTART_,CHISTO, CLINLIN, CLINLOG, CLOGLIN, CLOGLOG, CRANDOM, 
   USTART, UHISTO, ULINLIN, ULINLOG, ULOGLIN, ULOGLOG, URANDOM 
 };
 
