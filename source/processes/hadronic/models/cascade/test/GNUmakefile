@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2002-11-05 12:35:23 miheikki Exp $
+# $Id: GNUmakefile,v 1.2 2002-11-06 13:21:20 miheikki Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -16,6 +16,8 @@ G4EXEC_BUILD = true
 include $(G4INSTALL)/config/architecture.gmk
 
 #INCFLAGS := \
+
+CPPFLAGS += -Wall
 
 CPPFLAGS  += \
 	    -I$(G4BASE)/processes/hadronic/models/generator/include \
@@ -116,20 +118,24 @@ diffCc:
 	diff $(GM)/cascade/cascade/src/$(NEWCC) $(GM)/cascade/doc/inucl/inuclC/$(OLDCC)
 
  
-t1:
+t1: # :::(t for test)
 	rm -r hetcCascadeTest; rm -r hetcCascadeTest.out; gmake hetcCascadeTest; hetcCascadeTest > hetcCascadeTest.out;cat hetcCascadeTest.out
 
  
-t2: # integrated g4, root, latex analysis
+t2: # ::: integrated test 
 	rm -r cascade; rm -r cascade.out; gmake cascade; cascade > cascade.out; 
 
-analysis: # ::: integrated analysis 
-	root -b -q cascade.C; convert cascade.ps cascade.eps;mv cascade.eps ../doc/pictures/cascade.eps; gv cascade.ps;
+tt2: # :: timing for t1
+	time -v gmake t2
 
-release: #::: release files and manual
+a1: # ::: (a for analysis) Integrated analysis root, eps generation for latex 
+	root -b -q cascade.C; convert cascade.ps cascade.eps; mv cascade.eps ../doc/pictures/cascade.eps; gv cascade.ps;
+
+
+release: #::: release latex manual with new pictures
 	cp -r $(GC)/test ~/public/html/geant4/cascade/;cp -r $(GC)/cascade ~/public/html/geant4/cascade/; cd ../doc; p release manCascade
 
-
+cvsUpdate: # ::: use SCRATCH/geant4/head/geant4 istallation to put updated files to cvs
 
 
 
