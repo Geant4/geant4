@@ -397,8 +397,10 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc100" ) then
   setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
   setenv G4ANALYSIS_BUILD_OPEN_SCIENTIST 1
   setenv G4ANALYSIS_BUILD_JAS            1
-  setenv G4ANALYSIS_TUPLE 1
   setenv G4ANALYSIS_BUILD_LIZARD         1
+  setenv G4ANALYSIS_TUPLE 1
+  setenv G4ANALYSIS_CLOUD 1
+  setenv G4ANALYSIS_OPEN_SCIENTIST_VISUALIZATION 1
   # G4 use flags :
   setenv G4UI_USE_XM                 1
   setenv G4VIS_USE_OPENGLXM          1
