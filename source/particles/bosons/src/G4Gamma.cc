@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Gamma.cc,v 1.4 2001-07-11 10:01:33 gunter Exp $
+// $Id: G4Gamma.cc,v 1.5 2001-09-19 11:15:37 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -134,7 +134,7 @@ void G4Gamma::BuildAbsorptionLengthVector(
     for (G4int iel=0; iel<NumEl; iel++)
     {
       G4bool isOut;
-      G4int IndEl = (*elementVector)(iel)->GetIndex();
+      G4int IndEl = (*elementVector)[iel]->GetIndex();
       SIGMA +=  atomicNumDensityVector[iel]*
                 (*aCrossSectionTable)[IndEl]->GetValue(lowEdgeEnergy,isOut);
     }

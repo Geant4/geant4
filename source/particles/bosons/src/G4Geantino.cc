@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Geantino.cc,v 1.5 2001-07-11 10:01:33 gunter Exp $
+// $Id: G4Geantino.cc,v 1.6 2001-09-19 11:15:37 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -98,22 +98,11 @@ void G4Geantino::SetCuts(G4double aCut)
 {
   theCutInMaxInteractionLength = aCut;
 
-  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-  // Create the vector of cuts in energy
-  // corresponding to the stopping range cut
-  if(theKineticEnergyCuts) delete theKineticEnergyCuts;
-  theKineticEnergyCuts = new G4double [materialTable->length()];
+  // Set Energy Cut values to zero  for all materials
+  SetEnergyCutValues( 0.0*keV);
 
-  // Build range vector for every material, convert cut into energy-cut,
-  // fill theKineticEnergyCuts and delete the range vector
   theGeantinoLengthCut = theCutInMaxInteractionLength;  
   theGeantinoKineticEnergyCuts = theKineticEnergyCuts;
-  for (size_t J=0; J<materialTable->length(); J++)
-  {
-    theKineticEnergyCuts[J] = 0.0*keV;
-  }
-  // Rebuild the physics tables for every process for this particle type
-  
 
 }
 
