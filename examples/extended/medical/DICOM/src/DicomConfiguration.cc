@@ -34,7 +34,7 @@ G4bool DicomConfiguration::ReadDataFile()
   dataFile >> compressionValue;
   dataFile >> totalNumberOfFile;
  
-  for (G4int i=1;i<=totalNumberOfFile;i++)
+  for ( G4int i = 1;i <= totalNumberOfFile;i++ )
     {
       dataFile >> nameOfFileBuffer;
       listOfFile.push_back( nameOfFileBuffer );
@@ -72,9 +72,13 @@ G4int DicomConfiguration::ReadG4File( G4String g4File )
 }
 
 G4double DicomConfiguration::GetDensityValue(G4int i)
-{
+{ 
   G4double value = 0.;
-  if (i < 0 || i >= densityValue.size() )
+  if (i <0.) G4cout << "out of range in GetDensityValue()!"<<G4endl; 
+  if ( i>=0) 
+    {
+     unsigned int j = i;
+     if(j >= densityValue.size() )
     {
       // Throw exception, return dummy, cerr error message...
       G4cout << "out of range in GetDensityValue()!"<<G4endl;
@@ -83,6 +87,6 @@ G4double DicomConfiguration::GetDensityValue(G4int i)
     {
       value = densityValue[i];
     }
- 
+    }
   return value;
 }

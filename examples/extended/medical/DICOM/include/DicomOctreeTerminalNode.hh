@@ -13,7 +13,7 @@ public:
   G4int MemSize();
 
   OctreeNodeType Type()                      {return TERMINAL_NODE;}
-  G4int FindChild( const DicomOctreeNode* pNode ) {return -1;}
+  G4int FindChild( const DicomOctreeNode* ) {return -1;}
 
 private:
   static DicomOctreeNode* mNull;
