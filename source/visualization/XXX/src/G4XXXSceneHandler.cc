@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.cc,v 1.9 2002-11-01 14:08:44 johna Exp $
+// $Id: G4XXXSceneHandler.cc,v 1.10 2002-11-11 18:26:35 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,7 +31,16 @@
 
 #include "G4XXXSceneHandler.hh"
 
-#include "G4VSolid.hh"
+#include "G4Box.hh"
+#include "G4Cons.hh"
+#include "G4Tubs.hh"
+#include "G4Trd.hh"
+#include "G4Trap.hh"
+#include "G4Sphere.hh"
+#include "G4Para.hh"
+#include "G4Torus.hh"
+#include "G4Polycone.hh"
+#include "G4Polyhedra.hh"
 #include "G4PhysicalVolumeModel.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
@@ -209,44 +218,11 @@ void G4XXXSceneHandler::AddThis(const G4VTrajectory& traj) {
     "G4XXXSceneHandler::AddThis(const G4VTrajectory& traj) called."
 	 << G4endl;
 #endif
-  G4std::vector<G4AttValue>* attValues = traj.CreateAttValues();
-  if (attValues) {
-    const G4std::map<G4String,G4AttDef>* attDefs = traj.GetAttDefs();
-    if (!attDefs) {
-      G4cout <<
-	"  ERROR: no attribute definitions for attribute values."
-	     << G4endl;
-    }
-    else {
 
-      G4std::map<G4String,G4AttDef>::const_iterator i;
-      for (i = attDefs->begin(); i != attDefs->end(); ++i) {
-	G4cout << "attdef: " << i->second.GetName()
-	       << ", description: " << i->second.GetDesc()
-	       << ", category: " << i->second.GetCategory()
-	       << ", type: " << i->second.GetValueType()
-	       << G4endl;
-      }
+  G4VSceneHandler::AddThis(traj);  // Draw trajectory in good old way for now.
 
-      G4std::vector<G4AttValue>::iterator iAttVal;
-      for (iAttVal = attValues->begin();
-	   iAttVal != attValues->end(); ++iAttVal) {
-	G4std::map<G4String,G4AttDef>::const_iterator iAttDef =
-	  attDefs->find(iAttVal->GetName());
-	if (iAttDef == attDefs->end()) {
-	  G4cout <<
-	    "  WARNING: no matching definition for attribute \""
-		 << iAttVal->GetName() << "\", value: "
-		 << iAttVal->GetValue() << G4endl;
-	}
-	else {
-	  G4cout << "  " << iAttDef->second.GetDesc() << ": "
-		 << iAttVal->GetValue() << G4endl;
-	}
-      }
-    }
-    delete attValues;  // AttValues must be deleted by the user.
-  }
+  traj.ShowTrajectory();
+  G4cout << G4endl;
 }
 
 void G4XXXSceneHandler::AddThis(const G4VHit& hit) {
@@ -281,9 +257,21 @@ void G4XXXSceneHandler::AddPrimitive(const G4Text& text) {
 void G4XXXSceneHandler::AddPrimitive(const G4Circle& circle) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddPrimitive(const G4Circle& circle) called:"
-    "\n  radius: " << circle.GetWorldRadius()
-	 << G4endl;
+    "G4XXXSceneHandler::AddPrimitive(const G4Circle& circle) called:\n  ";
+  MarkerSizeType sizeType;
+  G4double size = GetMarkerSize (circle, sizeType);
+  switch (sizeType) {
+  default:
+  case screen:
+    // Draw in screen coordinates.
+    G4cout << "screen";
+    break;
+  case world:
+    // Draw in world coordinates.
+    G4cout << "world";
+    break;
+  }
+  G4cout << " size: " << size << G4endl;
   PrintThings();
 #endif
 }
@@ -291,9 +279,21 @@ void G4XXXSceneHandler::AddPrimitive(const G4Circle& circle) {
 void G4XXXSceneHandler::AddPrimitive(const G4Square& square) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddPrimitive(const G4Square& square) called:"
-    "\n  side: " << square.GetWorldRadius()
-	 << G4endl;
+    "G4XXXSceneHandler::AddPrimitive(const G4Square& square) called:\n  ";
+  MarkerSizeType sizeType;
+  G4double size = GetMarkerSize (square, sizeType);
+  switch (sizeType) {
+  default:
+  case screen:
+    // Draw in screen coordinates.
+    G4cout << "screen";
+    break;
+  case world:
+    // Draw in world coordinates.
+    G4cout << "world";
+    break;
+  }
+  G4cout << " size: " << size << G4endl;
   PrintThings();
 #endif
 }
