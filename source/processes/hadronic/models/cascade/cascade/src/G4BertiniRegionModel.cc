@@ -28,7 +28,8 @@ const G4double G4BertiniRegionModel::BE = 7;
 G4BertiniRegionModel::G4BertiniRegionModel(const G4int numberOfLayers, const G4int A, const G4int Z)
 {
   //count the radiuses, densities and fermi momenta with A and Z
-  G4double r = radius0*pow(A, 1/3);
+  G4double oneThird = 1.0/3.0;
+  G4double r = radius0*pow(A, oneThird);
 
   if(numberOfLayers==1){ 
     radius.push_back(r);
@@ -169,7 +170,8 @@ G4double G4BertiniRegionModel::GetFermiEnergy(G4double aDensity,
 					 G4double aMass){
   
   //G4double hbar = 1.0E-6;
-    return (pow(hbar_Planck,2)/(2*aMass)*pow((3*pi2*aDensity),2/3)); 
+G4double twoThirds = 2.0/3.0;
+    return (pow(hbar_Planck,2)/(2*aMass)*pow((3*pi2*aDensity),twoThirds)); 
  
  
 }
