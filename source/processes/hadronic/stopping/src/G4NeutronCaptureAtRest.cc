@@ -68,7 +68,12 @@ G4NeutronCaptureAtRest::G4NeutronCaptureAtRest(const G4String& processName)
  
 // destructor
  
-G4NeutronCaptureAtRest::~G4NeutronCaptureAtRest(){;}
+G4NeutronCaptureAtRest::~G4NeutronCaptureAtRest()
+{
+  delete [] pv;
+  delete [] eve;
+  delete [] gkin;
+}
  
  
 // methods.............................................................................

@@ -75,7 +75,12 @@ G4KaonMinusAbsorption::G4KaonMinusAbsorption(const G4String& processName)
  
 // destructor
  
-G4KaonMinusAbsorption::~G4KaonMinusAbsorption(){;}
+G4KaonMinusAbsorption::~G4KaonMinusAbsorption()
+{
+  delete [] pv;
+  delete [] eve;
+  delete [] gkin;
+}
  
  
 // methods.............................................................................

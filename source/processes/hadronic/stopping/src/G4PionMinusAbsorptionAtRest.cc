@@ -72,9 +72,9 @@ G4PionMinusAbsorptionAtRest::G4PionMinusAbsorptionAtRest(const G4String& process
  
 G4PionMinusAbsorptionAtRest::~G4PionMinusAbsorptionAtRest()
 {
-  delete pv;
-  delete eve;
-  delete gkin;
+  delete [] pv;
+  delete [] eve;
+  delete [] gkin;
 }
  
  

@@ -77,7 +77,12 @@ G4AntiProtonAnnihilationAtRest::G4AntiProtonAnnihilationAtRest(const G4String& p
  
 // destructor
  
-G4AntiProtonAnnihilationAtRest::~G4AntiProtonAnnihilationAtRest(){;}
+G4AntiProtonAnnihilationAtRest::~G4AntiProtonAnnihilationAtRest()
+{
+  delete [] pv;
+  delete [] eve;
+  delete [] gkin;
+}
  
  
 // methods.............................................................................
