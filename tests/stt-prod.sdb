@@ -1,4 +1,4 @@
-# $Id: stt-prod.sdb,v 1.9 2000-02-26 14:16:53 stesting Exp $
+# $Id: stt-prod.sdb,v 1.10 2000-02-27 14:39:42 stesting Exp $
 # .sdb files are read by checkout.sh and update.sh
 # Lines beginning "# " are ignored (the space after the '#' is important!
 # Blank lines are not allowed!
@@ -11,7 +11,7 @@ geant4/examples         examples-V01-00-01a
 # geant4/source - split into categories - see below.
 # geant4/tests - checkout HEAD by hand and use this script.
 # Source categories
-geant4/source/GNUmakefile      geant4-01-00-ISO_branch
+geant4/source/GNUmakefile      source-gmk-V01-00-00
 geant4/source/digits+hits      geant4-01-00-ISO_branch
 geant4/source/event            event-V01-00-01
 geant4/source/g3tog4           geant4-01-00-ISO_branch
@@ -27,16 +27,14 @@ geant4/source/intercoms        intercoms-V01-00-00
 geant4/source/interfaces       geant4-01-00-ISO_branch
 geant4/source/materials        geant4-01-00-ISO_branch
 geant4/source/particles        geant4-01-00-ISO_branch
-# geant4/source/persistency      persistency-V01-00-00 ###
-geant4/source/persistency      geant4-01-00-ref-06
+geant4/source/persistency      persistency-V01-00-00
 geant4/source/processes/GNUmakefile         geant4-01-00-ISO_branch
 geant4/source/processes/History             geant4-01-00-ISO_branch
 geant4/source/processes/decay	            geant4-01-00-ISO_branch
 geant4/source/processes/electromagnetic	    geant4-01-00-ISO_branch
 geant4/source/processes/electromagnetic/lowenergy  emlowen-V01-00-11
 geant4/source/processes/hadronic            geant4-01-00-ISO_branch
-# geant4/source/processes/hadronic/models/neutron_hp neu-V01-00-01a ###
-geant4/source/processes/hadronic/models/neutron_hp  geant4-01-00-ref-06
+geant4/source/processes/hadronic/models/neutron_hp neu-V01-00-01a
 geant4/source/processes/management          geant4-01-00-ISO_branch
 geant4/source/processes/optical	            geant4-01-00-ISO_branch
 geant4/source/processes/parameterisation    geant4-01-00-ISO_branch
@@ -45,6 +43,5 @@ geant4/source/processes/transportation      geant4-01-00-ISO_branch
 geant4/source/readout          geant4-01-00-ISO_branch
 geant4/source/run              geant4-01-00-ISO_branch
 geant4/source/track            track-V01-00-00
-geant4/source/tracking         tracking-V01-00-00
-geant4/source/visualization    geant4-01-00-ISO_branch
-geant4/source/visualization/modeling vis-modeling-V01-00-00
+geant4/source/tracking         tracking-V01-00-01
+geant4/source/visualization    vis-V01-00-03
