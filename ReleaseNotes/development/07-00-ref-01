@@ -1,0 +1,156 @@
+
+                       geant4-07-00-ref-01
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Fix in UniversalFluctuation to improve simulation of energy loss in
+    thin absorbers.
+  o Fixed initialisation problem for ion beam observed in CMS.
+  o Fixed problem of inconsistency for masses of hadrons and nuclear
+    fragments in CHIPS hadronic model.
+  o Fix in G4ProcessManager to correct ordering of processes.
+  o Migration from AddThis() to AddSolid() and AddCompound() for
+    visualization. Introduced G4VisExecutive and deprecated MyVisManager.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+(*) tag also included in patch-01 to release 7.0.
+
+Configure                                        Configure-V07-00-00	  (*)
+---------
+- Fix in Configure script for unnecessary check on setting of
+  CLHEP_BASE_DIR to /usr, /usr/local on Linux platforms.
+
+event                                            event-V07-00-00	  (*)
+-----
+- Fixed bug on binning in G4SPSRandomGenerator.
+- Fixed reset of histogram energy limits in G4SPSEneDistribution.
+- Restored the inheritance to G4VPrimaryGenerator for the
+  G4GeneralParticleSource class.
+
+geometry/solids/specific                         geom-specific-V07-00-00  (*)
+------------------------
+- Use new polynom approximations based on new solver based on
+  Jenkins-Traub algorithm, for twisted-box and twisted-trap.
+- Fixed bug in the usage of 'fmod' and adopt special treatment for
+  'parallel' events in G4TwistedBoxSide and G4TwistedTrapSide.
+
+global                                           global-V07-00-00	  (*)
+------
+- Added polynom-solver class G4JTPolynomialSolver implementing the
+  Jenkins-Traub algorithm for real polynomial root finding. To be used
+  by the twisted-trap shape for precise computation of intersections.
+
+intercoms                                        intercoms-V07-00-00
+---------
+- Interim tag for migration from AddThis() to AddSolid() and AddCompound().
+- G4VGraphicsScene: introduced new names.
+  Old methods call new methods as interim solution.
+- G4VVisManager::Draw(): removed default argument.
+
+interfaces                                       interfaces-V07-00-00	  (*)
+----------
+- Minor fix in GNUmakefiles to remove unnecessary definition of G4TMPDIR.
+
+parameterisations/gflash                         gflash-V07-00-01	  (*)
+------------------------
+- Fix in GFlashHitMaker for treatment of detector sensitivity.
+
+particles                                        particles-V07-00-00	  (*)
+---------
+- Fix in G4UnknownParticle to make it non-static, in order to avoid
+  unnecessary linking without its definition in the physics list.
+
+processes/electromagnetic/standard               stand-V07-00-01	  (*)
+----------------------------------
+- Fix in UniversalFluctuation: setting proper constants for probLim 
+  and minimum energy-loss, to improve simulation of energy loss in
+        thin absorbers.
+- Fix in MultipleScattering for function SetSamplez().
+- Add extra protection to G4PAIModel to fix cases of NaN observed
+  in production for ALICE. 
+
+processes/electromagnetic/utils                  utils-V07-00-00	  (*)
+-------------------------------
+- Bug fix to avoid crash in the inactivation of e- ionisation.
+- Added protection on the value of effective charge to ensure energy
+  loss for low energy ions.
+- Fixing initialisation problem for ion beam observed in CMS.
+
+processes/hadronic/models/chiral.../body         ghad-chips-body-V07-00-04 (*)
+----------------------------------------
+- Fixed problem of inconsistency between masses of hadrons and nuclear
+  fragments and masses defined in Geant4. Conversion of the CHIPS hadrons
+  to Geant4  secondaries uses now a kinetic energy of the particle, so
+  Geant4 automatically puts particles on the mass shell.
+- Complete usage of the existing nuclear mass approximation of Geant4
+  [including M(Z,N)_G4>m_p*Z+m_n*N].
+- Improvement in G4QEnvironmemt in the usage of FinalStateInteraction
+  A few cases of the secondary particles below mass shell have been
+  corrected. 
+
+processes/management                             procman-V07-00-00	  (*)
+--------------------
+- Fix in G4ProcessManager to correct ordering of processes.
+
+run                                              run-V07-00-00		  (*)
+---
+- Fix in G4RunManager and G4RunManagerKernel to correctly reset static
+  pointers in the case when RunManager is deleted.
+- Updated date to run-manager.
+
+visualization                                    vis-V07-00-03
+-------------
+- Migration from AddThis() to AddSolid() and AddCompound():
+  o AddSolid: methods for adding solids to the scene handler.
+  o AddCompound: methods for adding "compound" objects to the scene
+    handler.  These methods may either (a) invoke "user code" through
+    G4VVisManager or (b) invoke AddPrimitives() or (c) use
+    graphics-system-specific code or (d) any combination of the above.
+- Introduced G4VisExecutive. MyVisManager deprecated.
+- G4VisManager:: removed optional argument from Draw() methods for hit
+  and trajectory.
+- Added fpCurrentMaterial to G4VSceneHandler and relevant derived
+  classes and models for work with G4PhysicalVolumeModel via
+  EstablishSpecials.  So now, the material is also available (in addition
+  to current depth, logical and physical volum) during drawing of geometry
+  items.
+- Changed ASCIITree to use G4VSolid::GetCubicVolume() and
+  G4LogicalVolume::GetMass().
+- Changed G4PhysicalVolumeMassScene to use G4VSolid::GetCubicVolume().
+- Improved guidance for /vis/viewer/set/hiddenMarker.
+- G4VisCommandsViewerSet: made Up and Viewpoint vectors unit for safety.
+- HepRep (vis-HepRep-V07-00-00):					  (*)
+  o Minor fix for compilation problem on the obsolete gcc-2.95.2.
+
+physics_lists/hadronic                           ghad-lists-V07-00-01	  (*)
+----------------------
+- Fixed compilation problems on gcc-3.4.X compiler series:
+  Added explicit 'typename' keywords to template class declarations.
+  Use 'this' pointer to access data-members of base class for
+  unqualified names in physics-lists inline definitions.
+
+examples                                         examples-V07-00-00
+--------
+- Updated reference outputs.
+- extended
+  o electromagnetic/TestEm1 (testem1-V07-00-00)
+    + HistoManager: added protection for the creation of the analysis
+      factory. File extension is fileType.
+    + HistoMessenger: new command 'setFileOption'.
+  o electromagnetic/TestEm3 (testem3-V07-00-03)
+    + Fix in SteppingAction to correct the energy flow.
+    + Added new macros linac.mac and geant3/linac.dat.
+- novice
+  o N02 (exampleN02-V07-00-00)
+    + PhysicsList: added usage of G4StepLimiter (as commented line).
+  o N03 (exampleN03-V07-00-00)
+    + Fix in SteppingAction: sum stepLength of charged particle
+      even if edep=0.
+
+tests                                            tests-V07-00-00
+-----
+- Updated reference outputs.
