@@ -22,17 +22,17 @@ class IndentPrintWriter {
         virtual ~IndentPrintWriter();
 
         void close();
-        IndentPrintWriter& operator<< (const char *s);
+        IndentPrintWriter& operator<< (const std::string & s);
         IndentPrintWriter& operator<< (std::ostream& (*pf)(std::ostream&));
-	    void println(std::string s);
-        void print(std::string s);
+	    void println(const std::string & s);
+        void print(const std::string & s);
 	    void println();
 	    void indent();
 	    void outdent();
-	    int getIndent();
-        void setIndent(int level);
-        std::string getIndentString();
-        void setIndentString(std::string indentString);
+	    int getIndent() const;
+        void setIndent(const int level);
+        std::string getIndentString() const;
+        void setIndentString(const std::string & indentString);
 
     private:
         void doIndent();

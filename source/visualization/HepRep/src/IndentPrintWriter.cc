@@ -27,7 +27,7 @@ void IndentPrintWriter::close() {
     }
 }
 
-IndentPrintWriter& IndentPrintWriter::operator<< (const char* s) {
+IndentPrintWriter& IndentPrintWriter::operator<< (const std::string & s) {
     if (!indented) doIndent();
     *out << s;
     return *this;
@@ -39,12 +39,12 @@ IndentPrintWriter& IndentPrintWriter::operator<< (ostream& (*)(ostream&)) {
     return *this;
 }
 
-void IndentPrintWriter::println(string s) {
-	*this << s.c_str() << endl;
+void IndentPrintWriter::println(const string & s) {
+	*this << s << endl;
 }
 
-void IndentPrintWriter::print(string s) {
-    *this << s.c_str();
+void IndentPrintWriter::print(const string & s) {
+    *this << s;
 }
 
 void IndentPrintWriter::println() {
@@ -54,7 +54,7 @@ void IndentPrintWriter::println() {
 
 void IndentPrintWriter::doIndent() {
 	for (int i=0; i<indentLevel; i++) {
-//	    *out << indentString.c_str();
+	    *out << indentString;
 	}
 	indented = true;
 }
@@ -67,19 +67,19 @@ void IndentPrintWriter::outdent() {
     indentLevel--;
 }
 
-int IndentPrintWriter::getIndent() {
+int IndentPrintWriter::getIndent() const {
     return indentLevel;
 }
 
-void IndentPrintWriter::setIndent(int level) {
+void IndentPrintWriter::setIndent(const int level) {
     indentLevel = level;
 }
 
-string IndentPrintWriter::getIndentString() {
+string IndentPrintWriter::getIndentString() const {
     return indentString;
 }
 
-void IndentPrintWriter::setIndentString(string indent) {
+void IndentPrintWriter::setIndentString(const string & indent) {
     indentString = indent;
 }
 
