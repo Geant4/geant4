@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManager.cc,v 1.19 2001-08-16 06:06:38 kurasige Exp $
+// $Id: G4ProcessManager.cc,v 1.20 2001-09-01 02:22:55 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -473,6 +473,9 @@ G4int G4ProcessManager::AddProcess(
   numberOfProcesses += 1;
 
   CreateGPILvectors();
+
+  // inform process manager pointer to the process 
+  aProcess->SetProcessManager(this);
 
   return idx;
 }

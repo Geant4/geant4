@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.hh,v 1.10 2001-07-11 10:08:18 gunter Exp $
+// $Id: G4VProcess.hh,v 1.11 2001-09-01 02:22:55 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -251,7 +251,16 @@ class G4VProcess
       virtual void EndTracking();
       // inform Start/End of tracking for each track to the physics process 
  
-
+  public:
+      virtual void SetProcessManager(const G4ProcessManager*); 
+      // A process manager set its own pointer when the process is registered
+      // the process Manager
+      virtual  const G4ProcessManager* GetProcessManager(); 
+      // Get the process manager which the process belongs to
+  
+  protected:
+      const G4ProcessManager* aProcessManager; 
+ 
   protected:
       G4VParticleChange* pParticleChange;
       //  The pointer to G4VParticleChange object 
@@ -399,6 +408,18 @@ inline G4double G4VProcess::PostStepGPIL( const G4Track& track,
   G4double value
    =PostStepGetPhysicalInteractionLength(track, previousStepSize, condition);
   return thePILfactor*value;
+}
+      
+inline 
+ void G4VProcess::SetProcessManager(const G4ProcessManager* procMan)
+{
+   aProcessManager = procMan; 
+}
+
+inline
+ const G4ProcessManager* G4VProcess::GetProcessManager()
+{
+  return  aProcessManager; 
 }
 #endif
 
