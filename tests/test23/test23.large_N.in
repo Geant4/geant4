@@ -1,24 +1,15 @@
 #
-# Macro file test80.in
-# for tests of basic e.m. processes
+# Auto-generated test input file for test23 of CHIPS Capture.
 #
 /control/verbose 2
 # /run/verbose 2
+/run/particle/setCut 1 m
 /run/initialize
 /gun/direction 1 0 0
 #
-# gamma 500 MeV in Al
+# mu- at 1 MeV in Pb
 #
-/mydet/SelectMaterial Al
-/gun/particle gamma
-/gun/energy 500 MeV
-/run/beamOn 10000
-#
-# electron 500 MeV in Air
-#
-/mydet/SelectMaterial Air
-/gun/particle e-
-/gun/energy 500 MeV
-/run/beamOn 10000
-#
-exit
+/gun/particle mu-
+/gun/energy 1 MeV
+/mydet/SelectMaterial Pb
+/run/beamOn 100000
