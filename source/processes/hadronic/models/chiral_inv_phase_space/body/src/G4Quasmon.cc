@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.cc,v 1.57 2003-11-17 16:58:45 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.58 2003-11-20 18:02:33 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -2372,24 +2372,26 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
         }
         else
         {
-          G4cerr<<"***G4Quasmon::HadronizeQuasmon:(NK) QM="<<quasM<<",d="<<quasM-mNeut-mK<<G4endl;
+          G4cerr<<"***G4Quasm::HadronizeQ:(NK) QM="<<quasM<<",d="<<quasM-mNeut-mK<<G4endl;
           throw G4QException("***G4Quasmon::HadronizeQuasmon: Can't decay Q in N and K");
         }
       }
+      G4QPDGCode tmpQPDG(rPDG);
+      if(tmpQPDG.GetWidth()<.000001) reMass=tmpQPDG.GetMass();
       G4LorentzVector r4Mom(0.,0.,0.,reMass);
-      G4LorentzVector s4Mom(0.,0.,0.,sMass);         // Mass is random since probab. time
-      if(sPDG>MINPDG)                              // @@ For the Quark-Exchange hadronization (??)
+      G4LorentzVector s4Mom(0.,0.,0.,sMass);// Mass is random since probab. time
+      if(sPDG>MINPDG)                       // @@ For the Quark-Exchange hadronization (??)
       {
 #ifdef debug
-        G4cout<<"G4Q::HQ:Q->RQ+QEXF s="<<sPDG<<",pM="<<pMass<<",E="<<theEnvironment<<G4endl;
+        G4cout<<"G4Q::HQ:Q->RQ+QEX s="<<sPDG<<",pM="<<pMass<<",E="<<theEnvironment<<G4endl;
 #endif
         q4Mom+=G4LorentzVector(0.,0.,0.,pMass);
       }
       if(!G4QHadron(q4Mom).DecayIn2(r4Mom, s4Mom))
       {
-        G4cerr<<"***G4Q::HQ: M="<<q4Mom.m()<<" => rPDG="<<rPDG<<"(rM="<<reMass<<") + sPDG="<<sPDG
-              <<"(sM="<<sMass<<")"<<G4endl;
-    	throw G4QException("***G4Quasmon::HadronizeQuasmon: Hadron+SHadron DecayIn2 didn't succeed");
+        G4cerr<<"***G4Q::HQ:M="<<q4Mom.m()<<"=>rPDG="<<rPDG<<"(rM="<<reMass<<")+sPDG="
+              <<sPDG<<"(sM="<<sMass<<")"<<G4endl;
+    	throw G4QException("***G4Quasmon::HadronizeQuasmon: Hadron+SHadron DecayIn2");
       }
       G4double sKE=s4Mom.e()-sMass;
 #ifdef debug
