@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.27 2000-06-23 14:16:18 stesting Exp $
+# $Id: GNUmakefile,v 1.28 2000-07-26 13:32:27 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -12,14 +12,17 @@ include $(G4INSTALL)/config/architecture.gmk
 # Symbolic links to novice examples using test101, etc...
 EXAMPLES = 01 02 03 04 05 06
 
+# Symbolic links to extended persistency examples using test401, etc...
+PERSISTENCY += 01 02
+
 # Symbolic links to extended electromagnetic examples using test501, etc...
 ELECTROMAGNETIC += 1 2 3 4 5 ## Awaiting description.
 # ELECTROMAGNETIC += 6 ## Low energy electromagnetic processes (moved to lowenergy).
 ELECTROMAGNETIC += 8 ## Transistion radiation and PAI (photoabsorption
                        ## ionisation) model.
 
-# Symbolic links to extended persistency examples using test401, etc...
-PERSISTENCY += 01 02
+# Symbolic links to extended g3tog4 examples using test601, etc...
+G3TOG4 += 01 02   ## 01 - clGeometry  02 cltog4 (actually hand coded for now)
 
 # System Tests...
 SUBDIRS += test01 ## Geometry - CSG solids and navigator.
@@ -98,8 +101,8 @@ clean_libs:
 	done;:
 	@for dir in $(SUBDIRS); do (cd $$dir && $(MAKE) clean_libs); done;:
 
+#	@$(MAKE) clean_examples_links_source
 examples_links_source:
-	@$(MAKE) clean_examples_links_source
 	@for nn in $(EXAMPLES); do \
 	  testdir=test1$$nn; \
 	  exdir=$(G4INSTALL)/examples/novice/N$$nn; \
@@ -139,9 +142,20 @@ examples_links_source:
 	    ln -s $$exout $$testdir/$$testout; \
 	  done; \
 	done;:
+	testdir=test601; \
+         exdir=$(G4INSTALL)/examples/extended/g3tog4/clGeometry; \
+         ln -s $$exdir $$testdir; \
+         ln -s clGeometry.in  $$testdir/test601.in;  \
+         ln -s clGeometry.out $$testdir/test601.out; \
+         true
+	testdir=test602; \
+	exdir=$(G4INSTALL)/examples/extended/g3tog4/cltog4; \
+         ln -s $$exdir $$testdir; \
+         ln -s cltog4.in  $$testdir/test602.in;  \
+         ln -s cltog4.out $$testdir/test602.out; :
 
+#	@$(MAKE) clean_examples_links_binaries
 examples_links_binaries:
-	@$(MAKE) clean_examples_links_binaries
 	@for nn in $(EXAMPLES); do \
 	  ln -s exampleN$$nn $(G4WORKDIR)/bin/$(G4SYSTEM)/test1$$nn; \
 	done;:
@@ -153,6 +167,9 @@ examples_links_binaries:
 	  ln -s $$exdir/PersistentEx$${nn}run \
 	    $(G4WORKDIR)/bin/$(G4SYSTEM)/test4$$nn; \
 	done;:
+	ln -s clGeometry $(G4WORKDIR)/bin/$(G4SYSTEM)/test601; \
+	ln -s cltog4    $(G4WORKDIR)/bin/$(G4SYSTEM)/test602; \
+        true
 
 clean_examples_links_source:
 	@rm -f test104/test104.EMtest.in
