@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50PhysicsList.cc,v 1.6 2003-01-17 17:14:14 guatelli Exp $
+// $Id: Tst50PhysicsList.cc,v 1.7 2003-02-07 13:27:49 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,7 +43,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Tst50PhysicsList::Tst50PhysicsList(G4bool LowEn,G4bool range,G4bool SP,G4bool RY):  G4VUserPhysicsList()
+Tst50PhysicsList::Tst50PhysicsList(G4bool LowEn,G4bool range,G4bool SP,G4bool RY,G4bool adr):  G4VUserPhysicsList()
 { RangeOn=range;
  Stopping= SP;
   Low=LowEn;
@@ -51,6 +51,7 @@ Tst50PhysicsList::Tst50PhysicsList(G4bool LowEn,G4bool range,G4bool SP,G4bool RY
   rangeOn = "off";
   defaultCutValue = 1.*mm;
    SetVerboseLevel(1);
+   Adronic=adr;
  physicsListMessenger = new Tst50PhysicsListMessenger(this);
  // cutForElectron = defaultCutValue ;
 }
@@ -146,6 +147,7 @@ void Tst50PhysicsList::ConstructProcess()
 {
   AddTransportation();
   ConstructEM();
+  ConstructHad();
   ConstructGeneral();
 }
 
@@ -180,7 +182,9 @@ void Tst50PhysicsList::ConstructProcess()
 // e-
 #include "G4LowEnergyIonisation.hh" 
 #include "G4LowEnergyBremsstrahlung.hh" 
-
+//proton
+#include "G4hLowEnergyIonisation.hh"
+#include "G4hIonisation.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void Tst50PhysicsList::ConstructEM()
 {
@@ -257,8 +261,24 @@ pmanager->AddProcess(theeminusMultipleScattering,-1,1,1);
       pmanager->AddProcess(theeplusBremsstrahlung, -1,-1,3);
       pmanager->AddProcess(theeplusAnnihilation,0,-1,4);
     }
+else if (particleName == "proton")
+          { G4VProcess*  multipleScattering= new G4MultipleScattering(); 
+        G4hLowEnergyIonisation* ahadronLowEIon = new G4hLowEnergyIonisation();
+	    if(Low)
+	      {
+		G4cout<<"proton processes"<< G4endl; 
+	// OBJECT may be dynamically created as either a GenericIon or nucleus
+	// G4Nucleus exists and therefore has particle type nucleus
+	// genericIon:
+	pmanager->AddProcess(multipleScattering,-1,1,1);
+	pmanager->AddProcess(ahadronLowEIon,-1,2,2); 
+	      } 
+	    else{  
+	      G4VProcess* anIonisation= new G4hIonisation();   
+     pmanager->AddProcess(anIonisation,-1,2,2);
+     pmanager->AddProcess(multipleScattering,-1,1,1);  
 
-  
+	    }}
 
 
   }}
@@ -284,7 +304,42 @@ void Tst50PhysicsList::ConstructGeneral()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "G4ProtonInelasticProcess.hh"
+#include "G4HadronElasticProcess.hh"
+#include "G4LElastic.hh"
+#include "G4LEProtonInelastic.hh"
+#include "G4HEProtonInelastic.hh"
 
+void Tst50PhysicsList:: ConstructHad()
+{
+  if(Adronic)
+    {
+G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess;
+  G4LElastic* theElasticModel = new G4LElastic;
+  theElasticProcess->RegisterMe(theElasticModel);
+  
+  theParticleIterator->reset();
+  while ((*theParticleIterator)()) 
+    {
+      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ProcessManager* pmanager = particle->GetProcessManager();
+      G4String particleName = particle->GetParticleName();
+      
+	
+if (particleName == "proton") 
+	{
+	  pmanager->AddDiscreteProcess(theElasticProcess);
+	  G4ProtonInelasticProcess* theInelasticProcess = 
+	    new G4ProtonInelasticProcess("inelastic");
+	  G4LEProtonInelastic* theLEInelasticModel = new G4LEProtonInelastic;
+	  theInelasticProcess->RegisterMe(theLEInelasticModel);
+	  G4HEProtonInelastic* theHEInelasticModel = new G4HEProtonInelastic;
+	  theInelasticProcess->RegisterMe(theHEInelasticModel);
+	  pmanager->AddDiscreteProcess(theInelasticProcess);
+	}
+
+    }}
+}
 void Tst50PhysicsList::SetCuts()
 { 
 if (verboseLevel >0)

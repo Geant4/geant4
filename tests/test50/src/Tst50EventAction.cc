@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50EventAction.cc,v 1.11 2003-02-06 14:42:37 guatelli Exp $
+// $Id: Tst50EventAction.cc,v 1.12 2003-02-07 13:27:49 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -84,12 +84,13 @@ void Tst50EventAction::EndOfEventAction(const G4Event* evt)
  if (Foil)
    {
 #ifdef G4ANALYSIS_USE
+    
 	    Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
-	    if(energyDep!=0)
+	    
 	        analysis->energy_deposit(energyDep);
-            if(energyDepPrimary!=0)
+            
 	        analysis->energy_depositPrimary(energyDepPrimary);
-           if(energyDepSecondary!=0)
+           
 	        analysis->energy_depositSecondary(energyDepSecondary);
 #endif
 	

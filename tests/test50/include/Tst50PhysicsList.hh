@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50PhysicsList.hh,v 1.5 2003-01-17 17:14:14 guatelli Exp $
+// $Id: Tst50PhysicsList.hh,v 1.6 2003-02-07 13:27:49 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,7 +44,7 @@ class Tst50PhysicsListMessenger;
 class Tst50PhysicsList: public G4VUserPhysicsList
 {
   public:
-    Tst50PhysicsList(G4bool,G4bool,G4bool,G4bool);
+    Tst50PhysicsList(G4bool,G4bool,G4bool,G4bool,G4bool);
    ~Tst50PhysicsList();
 public:
   void SetRangeConditions(G4String );
@@ -69,7 +69,7 @@ public:
   // these methods Construct physics processes and register them
     void ConstructGeneral();
     void ConstructEM();
-
+  void ConstructHad();
 private: 
   G4LowEnergyIonisation*  loweIon;
   G4LowEnergyPhotoElectric* lowePhot;
@@ -81,6 +81,7 @@ private:
   G4bool  RangeOn;
   G4bool Stopping;
   G4bool RadiationY;
+  G4bool Adronic;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

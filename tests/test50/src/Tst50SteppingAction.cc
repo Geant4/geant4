@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.cc,v 1.20 2003-02-06 14:42:37 guatelli Exp $
+// $Id: Tst50SteppingAction.cc,v 1.21 2003-02-07 13:27:49 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -114,11 +114,13 @@ IDnow = run_ID+1000*evno+10000*(Step->GetTrack()->GetTrackID())+
     if (Foil)
       {
     // energy deposit
+	
     G4double EnergyDeposit = Step->GetTotalEnergyDeposit();
     eventaction->CalculateEnergyDeposit(EnergyDeposit);
-
+    
 if(0 == Step->GetTrack()->GetParentID() ) 
   {
+
 G4double EnergyDepositPrimary = Step->GetTotalEnergyDeposit();
     eventaction->CalculateEnergyDepositPrimary(EnergyDepositPrimary);
 
@@ -153,13 +155,13 @@ G4double EnergyDepositSecondary= Step->GetTotalEnergyDeposit();
 if(0 == Step->GetTrack()->GetParentID() ) 
   {
    
-    if(particle_name=="e-"|| particle_name=="e+")
-      {  
+    if(particle_name=="e-"|| particle_name=="e+"|| particle_name=="proton")
+      { 
 if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target"){
  
  
     if(Step->GetTrack()->GetNextVolume()->GetName() == "World" ) {
-
+ 
    //volume in cui si esce e' il target 
  
     MMoD=sqrt(pow(XMoD,2.0)+pow(YMoD,2.0)+pow(ZMoD,2.0));
@@ -199,7 +201,7 @@ if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target"){
 
     if (Foil)
       {
- if(particle_name=="e-"||particle_name=="e+" )
+ if(particle_name=="e-"||particle_name=="e+"|| particle_name=="proton")
    {   
     if(name=="gamma")
   { if(Step->GetTrack()->GetParentID()== 1)

@@ -22,7 +22,7 @@
 // ********************************************************************
 //
 //
-// $Id: test50.cc,v 1.13 2003-02-06 14:42:35 guatelli Exp $
+// $Id: test50.cc,v 1.14 2003-02-07 13:27:49 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,6 +64,7 @@ HepRandom::setTheEngine(new RanecuEngine);
  G4bool end=true;
  G4bool SP=false;
  G4bool Foil= false;
+ G4bool Adronic= false;
  G4String filename="test50.txt";
  G4cout<<argc<<":argc"<<G4endl;
  G4cout.setf(ios::scientific, ios::floatfield);
@@ -83,7 +84,9 @@ if (argc==1){G4cout <<"Input file is not specified!"<<G4endl;}
  G4cout<<"#setMaxStep (on/off)"<<G4endl;
  G4cout<<"#StoppingPower(on/off)"<<G4endl; 
  G4cout<<"#RadiationYield(on/off)"<<G4endl; 
- G4cout<<"#Foil(on/off)"<<G4endl; 
+ G4cout<<"#Foil(on/off)"<<G4endl;
+ G4cout<<"#Hadronic(on/off)"<<G4endl; 
+
  G4String line, line1, line2;
  
    do
@@ -115,6 +118,9 @@ if (argc==1){G4cout <<"Input file is not specified!"<<G4endl;}
  if (line=="#Foil"){line1="";(*fin)>>line1;
 
        if(line1=="on"){Foil=true; G4cout<<Foil<<" :Foil configuration set"<<G4endl;}}    
+ if (line=="#Hadronic"){line1="";(*fin)>>line1;
+
+       if(line1=="on"){Adronic=true; G4cout<<Adronic<<" :Hadronic proton processes switched on"<<G4endl;}}
 
 if (line=="end"){end=false;}
 
@@ -138,7 +144,7 @@ if (line=="end"){end=false;}
   Tst50DetectorConstruction* Tst50detector = new Tst50DetectorConstruction( MaxStep);
   runManager->SetUserInitialization(Tst50detector);
 
-  Tst50PhysicsList* fisica = new Tst50PhysicsList(lowE,RangeOn,SP,RY);
+  Tst50PhysicsList* fisica = new Tst50PhysicsList(lowE,RangeOn,SP,RY,Adronic);
   runManager->SetUserInitialization(fisica);
   
 #ifdef G4VIS_USE

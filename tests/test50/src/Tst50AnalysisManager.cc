@@ -29,7 +29,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: Tst50AnalysisManager.cc,v 1.10 2003-02-05 16:23:38 guatelli Exp $
+// $Id: Tst50AnalysisManager.cc,v 1.11 2003-02-07 13:27:49 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifdef  G4ANALYSIS_USE
@@ -116,7 +116,7 @@ void Tst50AnalysisManager::book()
 
  G4double initial_energy= p_Primary->GetInitialEnergy();
 
- h1= histFact->createHistogram1D("10","Energy Deposit X event",100.*initial_energy ,0.,initial_energy);
+ h1= histFact->createHistogram1D("10","Energy Deposit X event",100.*initial_energy ,0.,initial_energy*2.);
 
  h2=histFact->createHistogram1D("20","Primary transmitted particle energy/initial_energy",1000. ,0.,1.);
  h3=histFact->createHistogram1D("30","Primary backscattered  particle energy/initial_energy",1000. ,0.,1.);
@@ -125,9 +125,9 @@ h4=histFact->createHistogram1D("40","angle of backscattered particles",80.*2, 80
 
  h5=histFact->createHistogram1D("50","angle of transmitted  particles",100.*2,0.,100.);
  h6=histFact->createHistogram2D("60","angle, energy of bremmstrahlung gamma",180.*4,0., 180.,100.*initial_energy,0.,initial_energy);
-h7= histFact->createHistogram1D("70","Primary  Energy Deposit X event",100.*initial_energy ,0.,initial_energy);
+h7= histFact->createHistogram1D("70","Primary  Energy Deposit X event",100.*initial_energy ,0.,initial_energy*2.);
 
-h8= histFact->createHistogram1D("80","Secondary Energy Deposit",100.*initial_energy ,0.,initial_energy);
+h8= histFact->createHistogram1D("80","Secondary Energy Deposit",100.*initial_energy ,0.,initial_energy*2.);
  // in questo istogramma  metto il deposito di energia di ogni evento nel target
 
  std::string columnNames = "double initial_energy; double energy; double angle";
@@ -147,7 +147,7 @@ h8= histFact->createHistogram1D("80","Secondary Energy Deposit",100.*initial_ene
 
 
 void Tst50AnalysisManager::energy_deposit(G4double En)
-{
+{ 
    h1->fill(En);
 }
 void Tst50AnalysisManager::energy_depositPrimary(G4double En3)
