@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidPolyhedra.hh,v 1.7 2001-07-11 09:59:31 gunter Exp $
+// $Id: G4BREPSolidPolyhedra.hh,v 1.8 2002-02-12 18:37:42 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -56,7 +56,6 @@
 
 class G4BREPSolidPolyhedra : public G4BREPSolid
 {
-
 public:  // with description
 
   G4BREPSolidPolyhedra( const G4String& name,
@@ -126,6 +125,22 @@ private:
   G4BREPSolidPolyhedra(const G4BREPSolidPolyhedra&);
   G4BREPSolidPolyhedra& operator=(const G4BREPSolidPolyhedra&);
     // Private copy constructor and assignment operator.
+  
+  typedef enum {
+    EInverse = 0,
+    ENormal = 1
+  } ESurfaceSense;
+    
+  G4Surface* CreateTrapezoidalSurface( G4double r1, G4double r2,
+                                       const G4Point3D& origin, G4double zDistance,
+                                       G4Vector3D& xAxis, G4double partAngle,
+                                       ESurfaceSense sense );
+  
+  G4Surface* CreateTriangularSurface( G4double r1, G4double r2,
+                                      const G4Point3D& origin, G4double zDistance,
+                                      G4Vector3D& xAxis, G4double partAngle,
+                                      ESurfaceSense sense );
+  
 
   //   The following is only utilised in storing the shape parameters for
   //  use in visualising this shape.  J.A. Feb  24, 1997
