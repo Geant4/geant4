@@ -1,4 +1,4 @@
-# $Id: run.mac,v 1.1 2002-12-04 02:44:24 morita Exp $
+# $Id: run.mac,v 1.2 2002-12-04 11:32:59 morita Exp $
 #
 # Macro file for "G4PersEx01.cc"
 # 
@@ -14,9 +14,9 @@
 #
 /persistency/verbose 1
 /persistency/select ROOT
-#/persistency/store/using/hitIO CalorSD     Pers01CalorHit
-/persistency/store/using/hitIO Pers01CalorHit Pers01CalorHit
+/persistency/store/using/hitIO  CalorSD     CalCollection
 #                              <IOmanager> <collectionName>
+/persistency/set/writeFile/Hits  G4run0001.root
 /persistency/printall
 # 
 # e+  30 MeV to the direction (1.,0.,0.)
