@@ -1,4 +1,4 @@
-$Id: History,v 1.34 2000-07-31 08:01:59 gracia Exp $
+$Id: History,v 1.35 2000-08-01 08:02:20 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+1 August 2000 Gabriele Cosmo (interfaces-V02-00-01)
+- Fixed warnings on HP-aCC system in G4UItcsh.cc, due to unproper usage of G4int
+  where unsigned (size_t) was requested instead.
+
 31 July 2000 Gonzalo Gracia
 - Modifications required to compile on NT
   Operator string::[] requires size_t argument. 
