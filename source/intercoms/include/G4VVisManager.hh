@@ -21,11 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisManager.hh,v 1.6 2001-08-17 22:49:26 johna Exp $
+// $Id: G4VVisManager.hh,v 1.7 2002-11-20 14:46:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // John Allison 19/Oct/1996.
 // 
 // Class Description:
+//
 // G4VVisManager is an abstract interface for the GEANT4 Visualization Manager.
 // The inheritance hierarchy is:
 //   G4VVisManager <- G4VisManager <- YourVisManager
@@ -144,12 +145,10 @@ public: // With description
 
 protected:
 
+  static void SetConcreteInstance (G4VVisManager*);
+
   static G4VVisManager* fpConcreteInstance;  // Pointer to real G4VisManager.
 
 };
-
-inline G4VVisManager* G4VVisManager::GetConcreteInstance () {
-  return fpConcreteInstance;
-}
 
 #endif

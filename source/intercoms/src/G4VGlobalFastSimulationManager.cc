@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGlobalFastSimulationManager.cc,v 1.3 2001-07-11 10:01:17 gunter Exp $
+// $Id: G4VGlobalFastSimulationManager.cc,v 1.4 2002-11-20 14:46:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,3 +32,16 @@
 
 G4VGlobalFastSimulationManager* 
 G4VGlobalFastSimulationManager::fpConcreteInstance = 0;
+
+G4VGlobalFastSimulationManager* 
+G4VGlobalFastSimulationManager::GetConcreteInstance ()
+{
+  return fpConcreteInstance;
+}
+
+void
+G4VGlobalFastSimulationManager::
+SetConcreteInstance (G4VGlobalFastSimulationManager* m)
+{
+  fpConcreteInstance = m;
+}

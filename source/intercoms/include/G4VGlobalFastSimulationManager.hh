@@ -21,12 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGlobalFastSimulationManager.hh,v 1.3 2001-07-11 10:01:15 gunter Exp $
+// $Id: G4VGlobalFastSimulationManager.hh,v 1.4 2002-11-20 14:46:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Abstract interface for GEANT4 Global Fast Simulation Manager.
 // P. Mora de Freitas & M. Verderi 14/April/1999.
+//
+// Class description:
 //
 // G4GlobalFastSimulationManager is a "Singleton", i.e., only one instance 
 // of it may exist. This is ensured by making the constructor private.
@@ -54,29 +56,29 @@
 class G4VFlavoredParallelWorld;
 class G4ParticleDefinition;
 
-class G4VGlobalFastSimulationManager {
+class G4VGlobalFastSimulationManager
+{
 
-public:
-  // Returns pointer to actual Global Fast Simulation manager if
-  // at least a parameterisation envelope exists. Always check value.
+public:  // with description
+
   static G4VGlobalFastSimulationManager* GetConcreteInstance ();
+    // Returns pointer to actual Global Fast Simulation manager if
+    // at least a parameterisation envelope exists. Always check value.
 
   virtual ~G4VGlobalFastSimulationManager () {}
 
-  // VGlobalFastSimulationManager Interface for visualisation.
-
   virtual
   G4VFlavoredParallelWorld* GetFlavoredWorldForThis(G4ParticleDefinition*)=0;
+    // VGlobalFastSimulationManager interface for visualisation.
 
 protected:
-  // Pointer to real G4GlobalFastSimulationManager.
+
+  static void SetConcreteInstance (G4VGlobalFastSimulationManager*);
+    // Sets the pointer to actual Global Fast Simulation manager.
+
   static G4VGlobalFastSimulationManager* fpConcreteInstance;  
+    // Pointer to real G4GlobalFastSimulationManager.
 
 };
 
-inline 
-G4VGlobalFastSimulationManager* 
-G4VGlobalFastSimulationManager::GetConcreteInstance () {
-  return fpConcreteInstance;
-}
 #endif
