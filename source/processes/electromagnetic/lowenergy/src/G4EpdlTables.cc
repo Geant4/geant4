@@ -35,9 +35,6 @@
 #include <iostream.h>
 #include <fstream.h>
 
-//RW Headers
-#include <rw/tpslist.h>
-
 // Constructors
 G4EpdlTables::G4EpdlTables(G4VDataFile& DFile):
   G4VTables(), 
