@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ClosedShellCreator.cc,v 1.3 2000-02-25 16:36:18 gcosmo Exp $
+// $Id: G4ClosedShellCreator.cc,v 1.4 2000-11-08 14:32:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -72,7 +72,7 @@ void G4ClosedShellCreator::CreateSTEPGeometry(void* G4obj)
   G4BREPSolid* bSld = (G4BREPSolid*)G4obj;
   SdaiClosed_shell* sld = new SdaiClosed_shell();
 
-  G4int surfaceCount  = bSld->NumberOfFaces();
+  G4int surfaceCount  = bSld->GetNumberOfFaces();
 
   EntityAggregate eAggr;
   EntityNode* eNode=0;
