@@ -21,65 +21,73 @@
 // ********************************************************************
 //
 //
-// $Id: G4LPhysicsFreeVector.cc,v 1.9 2005-03-15 19:11:35 gcosmo Exp $
+// $Id: G4DataVector.icc,v 1.1 2005-03-15 19:11:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+//
+// class G4DataVector inline implementation
 // 
-// --------------------------------------------------------------------
-// Class G4LPhysicsFreeVector
-// Derived from base class G4PhysicsVector
-// This is a free vector for Low Energy Physics cross section data
-//
-// F.W. Jones, TRIUMF, 04-JUN-96
-//
-// 27-MAR-97 FWJ: first version for Alpha release
-// 11-NOV-00 H.Kurashige : use STL vector for dataVector and binVector
-//
 
-#include "G4LPhysicsFreeVector.hh"
-
-#include <stdio.h>
-
-G4LPhysicsFreeVector::G4LPhysicsFreeVector()
-   : verboseLevel(0)
-{
-   type = T_G4LPhysicsFreeVector;
-
-   edgeMin = 0.0;
-   edgeMax = 0.0;
-   numberOfBin = 0;
+inline
+void G4DataVector::insertAt(size_t pos, const G4double& a) 
+{ 
+  iterator i = begin();
+  for (size_t ptn=0; (ptn<pos)&&(i!=end()); i++,ptn++) {;}
+  if (i!=end())
+    { insert(i,a); }
+  else
+    { push_back(a); }
 }
 
-G4LPhysicsFreeVector::G4LPhysicsFreeVector(size_t nbin,
-                                           G4double binmin,
-                                           G4double binmax)
-   : verboseLevel(0)
-{
-   type = T_G4LPhysicsFreeVector;
+inline
+size_t G4DataVector::index(const G4double& a) 
+{ 
+  size_t ptn = 0;
+  for (iterator i=begin(); i!=end(); i++,ptn++)
+    { if (!(*i!=a)) { return ptn; } }
 
-   edgeMin = binmin;
-   edgeMax = binmax;
-   numberOfBin = nbin;
-   lastEnergy = 0.;
-   lastValue = 0.;
-   lastBin = 0;
-   binVector.reserve(nbin);
-   dataVector.reserve(nbin);
-   for (size_t i=0; i<numberOfBin; i++)
-   {
-     binVector.push_back(0.0);
-     dataVector.push_back(0.0);
-   }
-}  
-
-G4LPhysicsFreeVector::~G4LPhysicsFreeVector()
-{
+  return (ptn=~(size_t)0);
 }
 
-void G4LPhysicsFreeVector::DumpValues()
+inline
+G4bool G4DataVector::contains(const G4double& a) const
 {
-   for (size_t i = 0; i < numberOfBin; i++)
-   {
-      printf(" %12.4f   %7.1f\n", binVector[i], dataVector[i]/millibarn);
-   }
+  for (const_iterator i=begin(); i!=end(); i++)
+    { if (!(*i!=a)) { return true; } }
+
+  return false;
+}
+
+inline 
+G4bool G4DataVector::remove(const G4double& a)
+{
+  G4bool found = false;
+
+  for (iterator i=begin(); i!=end(); i++)
+  {
+    if (!(*i!=a))
+    {
+      erase(i);
+      found = true;
+      break;
+    }
+  }
+  return found;
+}
+
+inline 
+size_t G4DataVector::removeAll(const G4double& a)
+{
+  size_t ptn=0;
+
+  for (iterator i=begin(); i!=end(); i++)
+  {
+    if (!(*i!=a))
+    {
+      erase(i);
+      ptn++;
+      i--;
+    } 
+  }
+  return ptn;
 }

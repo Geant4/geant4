@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AllocatorPool.cc,v 1.2 2004-11-12 16:25:34 gcosmo Exp $
+// $Id: G4AllocatorPool.cc,v 1.3 2005-03-15 19:11:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,11 +41,9 @@
 //
 G4AllocatorPool::G4AllocatorPool( unsigned int sz )
   : esize(sz<sizeof(G4PoolLink) ? sizeof(G4PoolLink) : sz),
-    csize(sz<1024/2-16 ? 1024-16 : sz*10-16)
+    csize(sz<1024/2-16 ? 1024-16 : sz*10-16),
+    chunks(0), head(0), nchunks(0)
 {
-  chunks = 0;
-  head = 0;
-  nchunks = 0;
 }
 
 // ************************************************************
@@ -65,7 +63,7 @@ G4AllocatorPool::G4AllocatorPool(const G4AllocatorPool& right)
 G4AllocatorPool&
 G4AllocatorPool::operator= (const G4AllocatorPool& right)
 {
-  if (&right == this) return *this;
+  if (&right == this) { return *this; }
   chunks  = right.chunks;
   head    = right.head;
   nchunks = right.nchunks;

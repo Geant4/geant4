@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4JTPolynomialSolver.cc,v 1.1 2005-02-09 15:31:46 gcosmo Exp $
+// $Id: G4JTPolynomialSolver.cc,v 1.2 2005-03-15 19:11:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------------
@@ -41,37 +41,45 @@ const G4double G4JTPolynomialSolver::are    = DBL_EPSILON;
 const G4double G4JTPolynomialSolver::mre    = DBL_EPSILON;
 const G4double G4JTPolynomialSolver::lo     = DBL_MIN/DBL_EPSILON ;
 
+G4JTPolynomialSolver::G4JTPolynomialSolver()
+{
+}
+
+G4JTPolynomialSolver::~G4JTPolynomialSolver()
+{
+}
+
 G4int G4JTPolynomialSolver::FindRoots(G4double *op, G4int degree,
                                       G4double *zeror, G4double *zeroi) 
 {
-  G4double t,aa,bb,cc,factor,rot;
-  G4double max,min,xx,yy,cosr,sinr,xxx,x,sc,bnd;
-  G4double xm,ff,df,dx;
-  G4int cnt,nz,i,j,jj,l,nm1,zerok;
+  G4double t=0.0, aa=0.0, bb=0.0, cc=0.0, factor=1.0;
+  G4double max=0.0, min=infin, xxx=0.0, x=0.0, sc=0.0, bnd=0.0;
+  G4double xm=0.0, ff=0.0, df=0.0, dx=0.0;
+  G4int cnt=0, nz=0, i=0, j=0, jj=0, l=0, nm1=0, zerok=0;
 
   // Initialization of constants for shift rotation.
   //        
-  xx = std::sqrt(0.5);
-  yy = -xx;
-  rot = 94.0*deg;
-  cosr = std::cos(rot);
-  sinr = std::sin(rot);
+  G4double xx = std::sqrt(0.5);
+  G4double yy = -xx,
+           rot = 94.0*deg;
+  G4double cosr = std::cos(rot),
+           sinr = std::sin(rot);
   n = degree;
-  nz = 0;
 
   //  Algorithm fails if the leading coefficient is zero.
   //
-  if (op[0] == 0.0) return -1;
+  if (!(op[0] != 0.0))  { return -1; }
 
   //  Remove the zeros at the origin, if any.
   //
-  while (op[n] == 0.0) {
+  while (!(op[n] != 0.0))
+  {
     j = degree - n;
     zeror[j] = 0.0;
     zeroi[j] = 0.0;
     n--;
   }
-  if (n < 1) return -1;
+  if (n < 1) { return -1; }
 
   // Allocate buffers here
   //
@@ -87,7 +95,7 @@ G4int G4JTPolynomialSolver::FindRoots(G4double *op, G4int degree,
   // Make a copy of the coefficients.
   //
   for (i=0;i<=n;i++)
-    p[i] = op[i];
+    { p[i] = op[i]; }
 
   do
   {
@@ -113,8 +121,8 @@ G4int G4JTPolynomialSolver::FindRoots(G4double *op, G4int degree,
     for (i=0;i<=n;i++)
     {
       x = std::fabs(p[i]);
-      if (x > max) max = x;
-      if (x != 0.0 && x < min) min = x;
+      if (x > max)  { max = x; }
+      if (x != 0.0 && x < min)  { min = x; }
     }
 
     // Scale if there are large or very small coefficients.
@@ -129,14 +137,14 @@ G4int G4JTPolynomialSolver::FindRoots(G4double *op, G4int degree,
       || sc > 1.0 && infin/sc >= max 
       || infin/sc >= max && max >= 10 )
     {
-      if ( sc == 0.0 ) 
-        sc = smalno ;
+      if (!( sc != 0.0 ))
+        { sc = smalno ; }
       l = (G4int)(std::log(sc)/std::log(base) + 0.5);
       factor = std::pow(base*1.0,l);
       if (factor != 1.0)
       {
         for (i=0;i<=n;i++) 
-          p[i] = factor*p[i];  // Scale polynomial.
+          { p[i] = factor*p[i]; }  // Scale polynomial.
       }
     }
 
@@ -157,7 +165,7 @@ G4int G4JTPolynomialSolver::FindRoots(G4double *op, G4int degree,
     if (pt[n-1] != 0.0)
     {
       xm = -pt[n]/pt[n-1];
-      if (xm < x)  x = xm;
+      if (xm < x)  { x = xm; }
     }
 
     // Chop the interval (0,x) until ff <= 0
@@ -167,8 +175,8 @@ G4int G4JTPolynomialSolver::FindRoots(G4double *op, G4int degree,
       xm = x*0.1;
       ff = pt[0];
       for (i=1;i<=n;i++) 
-        ff = ff*xm + pt[i];
-      if (ff <= 0.0) break;
+        { ff = ff*xm + pt[i]; }
+      if (ff <= 0.0)  { break; }
       x = xm;
     }
     dx = x;
@@ -195,7 +203,7 @@ G4int G4JTPolynomialSolver::FindRoots(G4double *op, G4int degree,
     //
     nm1 = n - 1;
     for (i=1;i<n;i++)
-      k[i] = (G4double)(n-i)*p[i]/(G4double)n;
+      { k[i] = (G4double)(n-i)*p[i]/(G4double)n; }
     k[0] = p[0];
     aa = p[n];
     bb = p[n-1];
@@ -224,14 +232,14 @@ G4int G4JTPolynomialSolver::FindRoots(G4double *op, G4int degree,
           k[j] = k[j-1];
         }
         k[0] = 0.0;
-        zerok = (k[n-1] == 0.0);
+        zerok = (!(k[n-1] != 0.0));
       }
     }
 
     // Save k for restarts with new shifts.
     //
     for (i=0;i<n;i++) 
-      temp[i] = k[i];
+      { temp[i] = k[i]; }
 
     // Loop to select the quadratic corresponding to each new shift.
     //
@@ -262,7 +270,7 @@ G4int G4JTPolynomialSolver::FindRoots(G4double *op, G4int degree,
         zeroi[j] = szi;
         n -= nz;
         for (i=0;i<=n;i++)
-          p[i] = qp[i];
+          { p[i] = qp[i]; }
         if (nz != 1)
         {
           zeror[j+1] = lzr;
@@ -295,18 +303,14 @@ void G4JTPolynomialSolver::ComputeFixedShiftPolynomial(G4int l2, G4int *nz)
   // in the linear or quadratic case. Initiates one of the variable shift
   // iterations and returns with the number of zeros found.
 
-  G4double svu,svv,ui,vi,s;
-  G4double betas,betav,oss,ovv,ss,vv,ts,tv;
-  G4double ots=0.;
-  G4double otv=0.;
-  G4double tvv,tss;
-  G4int type, i,j,iflag,vpass,spass,vtry,stry;
+  G4double svu=0.0, svv=0.0, ui=0.0, vi=0.0, s=0.0;
+  G4double betas=0.25, betav=0.25, oss=sr, ovv=v,
+           ss=0.0, vv=0.0, ts=1.0, tv=1.0;
+  G4double ots=0.0, otv=0.0;
+  G4double tvv=1.0, tss=1.0;
+  G4int type=0, i=0, j=0, iflag=0, vpass=0, spass=0, vtry=0, stry=0;
 
   *nz = 0;
-  betav = 0.25;
-  betas = 0.25;
-  oss = sr;
-  ovv = v;
 
   // Evaluate polynomial by synthetic division.
   //
@@ -324,7 +328,7 @@ void G4JTPolynomialSolver::ComputeFixedShiftPolynomial(G4int l2, G4int *nz)
     // Estimate s.
     //
     ss = 0.0;
-    if (k[n-1] != 0.0) ss = -p[n]/k[n-1];
+    if (k[n-1] != 0.0)  { ss = -p[n]/k[n-1]; }
     tv = 1.0;
     ts = 1.0;
     if (j == 0 || type == 3)
@@ -338,14 +342,14 @@ void G4JTPolynomialSolver::ComputeFixedShiftPolynomial(G4int l2, G4int *nz)
 
     // Compute relative measures of convergence of s and v sequences.
     //
-    if (vv != 0.0) tv = std::fabs((vv-ovv)/vv);
-    if (ss != 0.0) ts = std::fabs((ss-oss)/ss);
+    if (vv != 0.0)  { tv = std::fabs((vv-ovv)/vv); }
+    if (ss != 0.0)  { ts = std::fabs((ss-oss)/ss); }
 
     // If decreasing, multiply two most recent convergence measures.
     tvv = 1.0;
-    if (tv < otv) tvv = tv*otv;
+    if (tv < otv)  { tvv = tv*otv; }
     tss = 1.0;
-    if (ts < ots) tss = ts*ots;
+    if (ts < ots)  { tss = ts*ots; }
 
     // Compare with convergence criteria.
     vpass = (tvv < betav);
@@ -377,14 +381,14 @@ void G4JTPolynomialSolver::ComputeFixedShiftPolynomial(G4int l2, G4int *nz)
     if (spass && (!vpass) || tss < tvv)
     {
       RealPolynomialIteration(&s,nz,&iflag);
-      if (*nz > 0) return;
+      if (*nz > 0)  { return; }
 
       // Linear iteration has failed. Flag that it has been
       // tried and decrease the convergence criterion.
       //
       stry = 1;
       betas *=0.25;
-      if (iflag == 0) goto _restore_variables;
+      if (iflag == 0)  { goto _restore_variables; }
 
       // If linear iteration signals an almost double real
       // zero attempt quadratic iteration.
@@ -398,7 +402,7 @@ _quadratic_iteration:
     do
     {
       QuadraticPolynomialIteration(&ui,&vi,nz);
-      if (*nz > 0) return;
+      if (*nz > 0)  { return; }
 
       // Quadratic iteration has failed. Flag that it has
       // been tried and decrease the convergence criterion.
@@ -409,20 +413,20 @@ _quadratic_iteration:
       // Try linear iteration if it has not been tried and
       // the S sequence is converging.
       //
-      if (stry || !spass) break;
+      if (stry || !spass)  { break; }
       for (i=0;i<n;i++)
       {
         k[i] = svk[i];
       }
       RealPolynomialIteration(&s,nz,&iflag);
-      if (*nz > 0) return;
+      if (*nz > 0)  { return; }
 
       // Linear iteration has failed. Flag that it has been
       // tried and decrease the convergence criterion.
       //
       stry = 1;
       betas *=0.25;
-      if (iflag == 0) break;
+      if (iflag == 0)  { break; }
 
       // If linear iteration signals an almost double real
       // zero attempt quadratic iteration.
@@ -446,7 +450,7 @@ _restore_variables:
     // Try quadratic iteration if it has not been tried
     // and the V sequence is converging.
     //
-    if (vpass && !vtry) goto _quadratic_iteration;
+    if (vpass && !vtry)  { goto _quadratic_iteration; }
 
     // Recompute QP and scalar values to continue the
     // second stage.
@@ -470,17 +474,16 @@ QuadraticPolynomialIteration(G4double *uu, G4double *vv, G4int *nz)
   // uu, vv - coefficients of starting quadratic.
   // nz - number of zeros found.
   //
-  G4double ui,vi;
-  G4double omp=0.;
-  G4double relstp=0.;
-  G4double mp,ee,t,zm;
-  G4int type,i,j,tried;
+  G4double ui=0.0, vi=0.0;
+  G4double omp=0.0;
+  G4double relstp=0.0;
+  G4double mp=0.0, ee=0.0, t=0.0, zm=0.0;
+  G4int type=0, i=1, j=0, tried=0;
 
   *nz = 0;
   tried = 0;
   u = *uu;
   v = *vv;
-  j = 0;
 
   // Main loop.
 
@@ -493,7 +496,7 @@ QuadraticPolynomialIteration(G4double *uu, G4double *vv, G4int *nz)
     // sign.
     //
     if (std::fabs(std::fabs(szr)-std::fabs(lzr)) > 0.01 * std::fabs(lzr))
-      return;
+      { return; }
 
     // Evaluate polynomial by quadratic synthetic division.
     //
@@ -526,14 +529,15 @@ QuadraticPolynomialIteration(G4double *uu, G4double *vv, G4int *nz)
 
     // Stop iteration after 20 steps.
     //
-    if (j > 20) return;
+    if (j > 20)  { return; }
     if (j >= 2)
+    {
       if (!(relstp > 0.01 || mp < omp || tried))
       {
         // A cluster appears to be stalling the convergence.
         // Five fixed shift steps are taken with a u,v close to the cluster.
         //
-        if (relstp < eta) relstp = eta;
+        if (relstp < eta)  { relstp = eta; }
         relstp = std::sqrt(relstp);
         u = u - u*relstp;
         v = v + v*relstp;
@@ -546,6 +550,7 @@ QuadraticPolynomialIteration(G4double *uu, G4double *vv, G4int *nz)
         tried = 1;
         j = 0;
       }
+    }
     omp = mp;
 
     // Calculate next k polynomial and new u and v.
@@ -557,7 +562,7 @@ QuadraticPolynomialIteration(G4double *uu, G4double *vv, G4int *nz)
 
     // If vi is zero the iteration is not converging.
     //
-    if (vi == 0.0) return;
+    if (!(vi != 0.0))  { return; }
     relstp = std::fabs((vi-v)/vi);
     u = ui;
     v = vi;
@@ -574,14 +579,12 @@ RealPolynomialIteration(G4double *sss, G4int *nz, G4int *iflag)
 
   G4double t=0.;
   G4double omp=0.;
-  G4double pv,kv,s;
-  G4double ms,mp,ee;
-  G4int i,j;
+  G4double pv=0.0, kv=0.0, s= *sss;
+  G4double ms=0.0, mp=0.0, ee=0.0;
+  G4int i=1, j=0;
 
   *nz = 0;
-  s = *sss;
   *iflag = 0;
-  j = 0;
 
   // Main loop
   //
@@ -622,7 +625,7 @@ RealPolynomialIteration(G4double *sss, G4int *nz, G4int *iflag)
 
     // Stop iteration after 10 steps.
     //
-    if (j > 10) return;
+    if (j > 10)  { return; }
     if (j >= 2)
       if (!(std::fabs(t) > 0.001*std::fabs(s-t) || mp < omp))
       {
@@ -668,7 +671,7 @@ RealPolynomialIteration(G4double *sss, G4int *nz, G4int *iflag)
       kv = kv*s + k[i];
     }
     t = 0.0;
-    if (std::fabs(kv) > std::fabs(k[n-1]*10.0*eta)) t = -pv/kv;
+    if (std::fabs(kv) > std::fabs(k[n-1]*10.0*eta))  { t = -pv/kv; }
     s += t;
   }
 }
@@ -685,11 +688,13 @@ void G4JTPolynomialSolver::ComputeScalarFactors(G4int *type)
   //
   QuadraticSyntheticDivision(n-1,&u,&v,k,qk,&c,&d);
   if (std::fabs(c) <= std::fabs(k[n-1]*100.0*eta))
+  {
     if (std::fabs(d) <= std::fabs(k[n-2]*100.0*eta))
     {
       *type = 3; // Type=3 indicates the quadratic is almost a factor of k.
       return;
     }
+  }
 
   if (std::fabs(d) < std::fabs(c))
   {
@@ -718,8 +723,7 @@ void G4JTPolynomialSolver::ComputeNextPolynomial(G4int *type)
   // Computes the next k polynomials using scalars 
   // computed in ComputeScalarFactors.
 
-  G4double temp;
-  G4int i;
+  G4int i=2;
 
   if (*type == 3)  // Use unscaled form of the recurrence if type is 3.
   {
@@ -731,8 +735,8 @@ void G4JTPolynomialSolver::ComputeNextPolynomial(G4int *type)
     }
     return;
   }
-  temp = a;
-  if (*type == 1) temp = b;
+  G4double temp = a;
+  if (*type == 1)  { temp = b; }
   if (std::fabs(a1) <= std::fabs(temp)*eta*10.0)
   {
     // If a1 is nearly zero then use a special form of the recurrence.
@@ -764,7 +768,8 @@ ComputeNewEstimate(G4int type, G4double *uu, G4double *vv)
   // Compute new estimates of the quadratic coefficients
   // using the scalars computed in calcsc.
 
-  G4double a4,a5,b1,b2,c1,c2,c3,c4,temp;
+  G4double a4=0.0, a5=0.0, b1=0.0, b2=0.0,
+           c1=0.0, c2=0.0, c3=0.0, c4=0.0, temp=0.0;
 
   // Use formulas appropriate to setting of type.
   //
@@ -794,7 +799,7 @@ ComputeNewEstimate(G4int type, G4double *uu, G4double *vv)
   c3 = b1*b1*a3;
   c4 = c1 - c2 - c3;
   temp = a5 + b1*a4 - c4;
-  if (temp == 0.0)
+  if (!(temp != 0.0))
   {
     *uu = 0.0;
     *vv = 0.0;
@@ -813,13 +818,12 @@ QuadraticSyntheticDivision(G4int nn, G4double *u, G4double *v,
   // Divides p by the quadratic 1,u,v placing the quotient
   // in q and the remainder in a,b.
 
-  G4double c;
-  G4int i;
+  G4double c=0.0;
   *b = p[0];
   q[0] = *b;
   *a = p[1] - (*b)*(*u);
   q[1] = *a;
-  for (i=2;i<=nn;i++)
+  for (G4int i=2;i<=nn;i++)
   {
     c = p[i] - (*a)*(*u) - (*b)*(*v);
     q[i] = c;
@@ -839,20 +843,20 @@ void G4JTPolynomialSolver::Quadratic(G4double a,G4double b1,
   // are complex. The smaller real zero is found directly from 
   // the product of the zeros c/a.
 
-  G4double b,d,e;
+  G4double b=0.0, d=0.0, e=0.0;
 
-  if (a == 0.0)     // less than two roots
+  if (!(a != 0.0))     // less than two roots
   {
     if (b1 != 0.0)     
-      *sr = -c/b1;
+      { *sr = -c/b1; }
     else 
-      *sr = 0.0;
+      { *sr = 0.0; }
     *lr = 0.0;
     *si = 0.0;
     *li = 0.0;
     return;
   }
-  if (c == 0.0)     // one real root, one zero root
+  if (!(c != 0.0))     // one real root, one zero root
   {
     *sr = 0.0;
     *lr = -b1/a;
@@ -867,9 +871,9 @@ void G4JTPolynomialSolver::Quadratic(G4double a,G4double b1,
   if (std::fabs(b) < std::fabs(c))
   { 
     if (c < 0.0) 
-      e = -a;
+      { e = -a; }
     else
-      e = a;
+      { e = a; }
     e = b*(b/std::fabs(c)) - e;
     d = std::sqrt(std::fabs(e))*std::sqrt(std::fabs(c));
   }
@@ -888,11 +892,11 @@ void G4JTPolynomialSolver::Quadratic(G4double a,G4double b1,
   else
   {
     if (b >= 0.0)   // real zeros.
-      d = -d;
+      { d = -d; }
     *lr = (-b+d)/a;
     *sr = 0.0;
     if (*lr != 0.0) 
-      *sr = (c/ *lr)/a;
+      { *sr = (c/ *lr)/a; }
     *si = 0.0;
     *li = 0.0;
   }

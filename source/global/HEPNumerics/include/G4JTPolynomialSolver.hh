@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4JTPolynomialSolver.hh,v 1.3 2005-03-01 17:20:35 gcosmo Exp $
+// $Id: G4JTPolynomialSolver.hh,v 1.4 2005-03-15 19:11:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class description:
@@ -70,8 +70,8 @@ class G4JTPolynomialSolver
 
   public:
 
-    G4JTPolynomialSolver(){}
-    ~G4JTPolynomialSolver(){}
+    G4JTPolynomialSolver();
+    ~G4JTPolynomialSolver();
   
     G4int FindRoots(G4double *op, G4int degree,
                     G4double *zeror, G4double *zeroi);

@@ -21,65 +21,90 @@
 // ********************************************************************
 //
 //
-// $Id: G4LPhysicsFreeVector.cc,v 1.9 2005-03-15 19:11:35 gcosmo Exp $
+// $Id: G4UnitsTable.icc,v 1.1 2005-03-15 19:11:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// --------------------------------------------------------------------
-// Class G4LPhysicsFreeVector
-// Derived from base class G4PhysicsVector
-// This is a free vector for Low Energy Physics cross section data
-//
-// F.W. Jones, TRIUMF, 04-JUN-96
-//
-// 27-MAR-97 FWJ: first version for Alpha release
-// 11-NOV-00 H.Kurashige : use STL vector for dataVector and binVector
-//
+// ------------------------------------------------------------
+//      GEANT 4 class inline implementation
+// ------------------------------------------------------------
 
-#include "G4LPhysicsFreeVector.hh"
+// --------------------
+// --- G4UnitDefinition
+// --------------------
 
-#include <stdio.h>
-
-G4LPhysicsFreeVector::G4LPhysicsFreeVector()
-   : verboseLevel(0)
+inline
+const G4String& G4UnitDefinition::GetName() const
 {
-   type = T_G4LPhysicsFreeVector;
-
-   edgeMin = 0.0;
-   edgeMax = 0.0;
-   numberOfBin = 0;
+  return Name;
 }
 
-G4LPhysicsFreeVector::G4LPhysicsFreeVector(size_t nbin,
-                                           G4double binmin,
-                                           G4double binmax)
-   : verboseLevel(0)
+inline
+const G4String& G4UnitDefinition::GetSymbol() const
 {
-   type = T_G4LPhysicsFreeVector;
-
-   edgeMin = binmin;
-   edgeMax = binmax;
-   numberOfBin = nbin;
-   lastEnergy = 0.;
-   lastValue = 0.;
-   lastBin = 0;
-   binVector.reserve(nbin);
-   dataVector.reserve(nbin);
-   for (size_t i=0; i<numberOfBin; i++)
-   {
-     binVector.push_back(0.0);
-     dataVector.push_back(0.0);
-   }
-}  
-
-G4LPhysicsFreeVector::~G4LPhysicsFreeVector()
-{
+  return SymbolName;
 }
 
-void G4LPhysicsFreeVector::DumpValues()
+inline
+G4double G4UnitDefinition::GetValue() const
 {
-   for (size_t i = 0; i < numberOfBin; i++)
-   {
-      printf(" %12.4f   %7.1f\n", binVector[i], dataVector[i]/millibarn);
-   }
+  return Value;
+}
+
+// -------------------
+// --- G4UnitsCategory
+// -------------------
+
+inline
+const G4String& G4UnitsCategory::GetName() const
+{
+  return Name;
+}
+ 
+inline
+G4UnitsContainer& G4UnitsCategory::GetUnitsList()
+{
+  return UnitsList;
+}
+
+inline
+G4int G4UnitsCategory::GetNameMxLen() const
+{
+  return NameMxLen;
+}
+
+inline
+G4int G4UnitsCategory::GetSymbMxLen() const
+{
+  return SymbMxLen;
+}
+
+inline
+void G4UnitsCategory::UpdateNameMxLen(G4int len)
+{
+  if (NameMxLen<len) { NameMxLen=len; }
+}
+
+inline
+void G4UnitsCategory::UpdateSymbMxLen(G4int len)
+{
+  if (SymbMxLen<len) { SymbMxLen=len; }
+}
+
+inline
+G4double* G4BestUnit::GetValue()
+{
+  return Value;
+}
+
+inline
+const G4String& G4BestUnit::GetCategory() const
+{
+  return Category;
+}
+
+inline
+size_t G4BestUnit::GetIndexOfCategory() const
+{
+  return IndexOfCategory;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4coutDestination.hh,v 1.4 2001-07-11 10:00:53 gunter Exp $
+// $Id: G4coutDestination.hh,v 1.5 2005-03-15 19:11:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,11 +40,11 @@ class G4coutDestination
 {
   public:
 
-    G4coutDestination(){}
-    virtual ~G4coutDestination(){}
+    G4coutDestination();
+    virtual ~G4coutDestination();
 
-    virtual G4int ReceiveG4cout(G4String){return 0;}
-    virtual G4int ReceiveG4cerr(G4String){return 0;}
+    virtual G4int ReceiveG4cout(G4String);
+    virtual G4int ReceiveG4cerr(G4String);
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VExceptionHandler.cc,v 1.1 2002-08-19 18:20:12 asaim Exp $
+// $Id: G4VExceptionHandler.cc,v 1.2 2005-03-15 19:11:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,7 +52,7 @@ G4VExceptionHandler::G4VExceptionHandler(const G4VExceptionHandler &right)
 
 G4VExceptionHandler& G4VExceptionHandler::operator=(const G4VExceptionHandler &right)
 {
-   if (&right == this) return *this;
+   if (&right == this)  { return *this; }
    *this = right;
    return *this;
 }
