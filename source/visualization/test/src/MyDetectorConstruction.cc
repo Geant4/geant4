@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyDetectorConstruction.cc,v 1.9 2000-02-24 11:46:07 johna Exp $
+// $Id: MyDetectorConstruction.cc,v 1.10 2000-04-12 12:53:03 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,6 +28,8 @@
 #include "G4Sphere.hh"
 #include "G4Trap.hh"
 #include "G4IntersectionSolid.hh"
+#include "G4SubtractionSolid.hh"
+#include "G4UnionSolid.hh"
 #include "G4DisplacedSolid.hh"
 #include "G4LogicalVolume.hh"
 #include "G4RotationMatrix.hh"
@@ -164,16 +166,49 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   G4RotationMatrix* rm2 = new G4RotationMatrix;
   rm2->rotateZ(60*deg);
 
-  G4IntersectionSolid* cyl1Ubox1 =
+  G4IntersectionSolid* cyl1Ibox1 =
     new G4IntersectionSolid("cylinder1-intersection-box1", cylinder1, box1,
 		     rm1,G4ThreeVector(30.*cm,30.*cm,0.));
-  G4IntersectionSolid* cyl1Ubox1Ubox2 =
-    new G4IntersectionSolid("cylinder1-intersection-box1-intersection-box2", cyl1Ubox1, box2,
+  G4IntersectionSolid* cyl1Ibox1Ibox2 =
+    new G4IntersectionSolid("cylinder1-intersection-box1-intersection-box2", cyl1Ibox1, box2,
 		     rm2,G4ThreeVector(0.,40*cm,0.));
   G4LogicalVolume * intersection_log
-    = new G4LogicalVolume(cyl1Ubox1Ubox2,Ar,"intersection_L",0,0,0);
-  new G4PVPlacement(0,G4ThreeVector(200.*cm,-50*cm,0.*cm),
+    = new G4LogicalVolume(cyl1Ibox1Ibox2,Ar,"intersection_L",0,0,0);
+  const G4VisAttributes* bool_red =
+    new G4VisAttributes(G4Colour(1.,0.,0.));
+  intersection_log->SetVisAttributes(bool_red);
+  new G4PVPlacement(0,G4ThreeVector(100.*cm,-50*cm,0.*cm),
                     "intersection_phys",intersection_log,experimentalHall_phys,
+                    false,0);
+
+  G4SubtractionSolid* cyl1Sbox1 =
+    new G4SubtractionSolid("cylinder1-subtraction-box1", cylinder1, box1,
+		     rm1,G4ThreeVector(30.*cm,30.*cm,0.));
+  G4SubtractionSolid* cyl1Sbox1Sbox2 =
+    new G4SubtractionSolid("cylinder1-subtraction-box1-subtraction-box2", cyl1Sbox1, box2,
+		     rm2,G4ThreeVector(0.,40*cm,0.));
+  G4LogicalVolume * subtraction_log
+    = new G4LogicalVolume(cyl1Sbox1Sbox2,Ar,"subtraction_L",0,0,0);
+  const G4VisAttributes* bool_green =
+    new G4VisAttributes(G4Colour(0.,1.,0.));
+  subtraction_log->SetVisAttributes(bool_green);
+  new G4PVPlacement(0,G4ThreeVector(200.*cm,-50*cm,0.*cm),
+                    "subtraction_phys",subtraction_log,experimentalHall_phys,
+                    false,0);
+
+  G4UnionSolid* cyl1Ubox1 =
+    new G4UnionSolid("cylinder1-union-box1", cylinder1, box1,
+		     rm1,G4ThreeVector(30.*cm,30.*cm,0.));
+  G4UnionSolid* cyl1Ubox1Ubox2 =
+    new G4UnionSolid("cylinder1-union-box1-union-box2", cyl1Ubox1, box2,
+		     rm2,G4ThreeVector(0.,40*cm,0.));
+  G4LogicalVolume * union_log
+    = new G4LogicalVolume(cyl1Ubox1Ubox2,Ar,"union_L",0,0,0);
+  const G4VisAttributes* bool_blue =
+    new G4VisAttributes(G4Colour(0.,0.,1.));
+  union_log->SetVisAttributes(bool_blue);
+  new G4PVPlacement(0,G4ThreeVector(300.*cm,-50*cm,0.*cm),
+                    "union_phys",union_log,experimentalHall_phys,
                     false,0);
 
   //----------- Tubes, replicas(!?) and daughter boxes

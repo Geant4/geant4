@@ -87,6 +87,27 @@ help /vis/sceneHandler/create
 /vis/scene/notifyHandlers
 /vis/viewer/show
 #
+# Logical volume of Boolean solids...
+/vis/scene/create
+/vis/scene/add/logicalVolume intersection_L
+/vis/sceneHandler/create OGLSXm
+/vis/viewer/create
+/vis/camera/viewpoint 35 35
+/vis/scene/notifyHandlers
+/vis/viewer/show
+#
+/vis/scene/create
+/vis/scene/add/logicalVolume subtraction_L
+/vis/sceneHandler/attach
+/vis/viewer/refresh
+/vis/viewer/show
+#
+/vis/scene/create
+/vis/scene/add/logicalVolume union_L
+/vis/sceneHandler/attach
+/vis/viewer/refresh
+/vis/viewer/show
+#
 # Send geantino through...
 /vis/scene/create
 /vis/scene/add/volume
@@ -251,20 +272,20 @@ help /vis/sceneHandler/create
 #
 # Boolean solid.
 /vis/camera/reset
-#/vis/viewer/panTo 200 -50 cm
-/vis/camera/pan 1250 -1750
-/vis/camera/zoom 5
+#/vis/viewer/panTo 250 -50 cm
+/vis/camera/pan 1750 -1750
+/vis/camera/zoom 3
 /vis/viewer/refresh
 /gun/direction 1 0 0
-/gun/position 100 -40 0 cm
+/gun/position 50 -40 0 cm
 /run/beamOn
-/gun/position 100 -30 0 cm
+/gun/position 50 -30 0 cm
 /run/beamOn
-/gun/position 100 -20 0 cm
+/gun/position 50 -20 0 cm
 /run/beamOn
-/gun/position 100 -10 0 cm
+/gun/position 50 -10 0 cm
 /run/beamOn
-/gun/position 100 0 0 cm
+/gun/position 50 0 0 cm
 /run/beamOn
 /vis/viewer/show
 #
@@ -318,6 +339,8 @@ help /vis/sceneHandler/create
 #
 /vis/sceneHandler/create RayTracer
 /vis/viewer/create
+/vis/camera/reset
+/vis/camera/viewpoint 30 30
 /vis/viewer/refresh
 /vis/viewer/show
 #
