@@ -1,14 +1,12 @@
-# $Id: GNUmakefile,v 1.1 2003-11-14 14:50:34 vnivanch Exp $
-# --------------------------------------------------------------
-# GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
+# $Id: GNUmakefile,v 1.2 2003-11-14 17:02:42 vnivanch Exp $
 # --------------------------------------------------------------
 
-name := test30
+name := cascade
 G4TARGET := $(name)
 G4EXLIB := true
 
 ifndef G4INSTALL
-  G4INSTALL = ../../
+  G4INSTALL = ../../../../../../../
 endif
 
 .PHONY: all tools
@@ -27,14 +25,6 @@ ifdef G4ANALYSIS_USE
   CPPFLAGS += `aida-config --include`
   LDFLAGS  += `aida-config --lib`
 endif
-
-#
-# NEW: this requires the env-var LHCXX_REL_DIR to be set up correctly,
-# see the first lines in G4ComptonTest.cc
-#
-#CPPFLAGS += `aida-config --useHBook --include`
-#LDFLAGS  += `aida-config --useHBook --lib`
-#EXTRALIBS += -L$(OGLHOME)/lib -lGL
 
 
 include $(G4INSTALL)/config/binmake.gmk
