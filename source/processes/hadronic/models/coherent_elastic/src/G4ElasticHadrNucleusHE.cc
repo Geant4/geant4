@@ -205,9 +205,11 @@
      
 //     G4cout<<G4endl;
 
+// Add the recoil nucleus for tracking
           theParticleChange.AddSecondary( &secNuclTrack);
 //  G4cout<<" 11 "<<G4endl;
 
+// Provide the information on the final state of the scattered hadron
           theParticleChange.SetEnergyChange(outEnHadr*1000);
           theParticleChange.SetMomentumDirectionChange(pxnew, pynew, pznew);
 
