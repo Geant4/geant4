@@ -67,7 +67,7 @@ protected:
   void SetSolid();
   void SetWireFrame();
   void UpdateScene();
-  void Help(const G4String& topic = "controls");
+  G4String Help(const G4String& topic = "controls");
 private:
   static void SelectionCB(void*,SoPath*);
   //static void DeselectionCB(void*,SoPath*);

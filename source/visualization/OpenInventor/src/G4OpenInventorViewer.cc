@@ -436,10 +436,10 @@ void G4OpenInventorViewer::UpdateScene() {
   DrawView();
   //ShowView();
 }
-void G4OpenInventorViewer::Help(const G4String& aTopic) {
+G4String G4OpenInventorViewer::Help(const G4String& aTopic) {
   if(aTopic=="controls") {
-  G4cout <<
-"Controls on an Inventor examiner viewer are :\n\
+    return G4String("\
+Controls on an Inventor examiner viewer are :\n\
 - in picking mode (cursor is the upper left arrow)\n\
   Ctrl + pick a volume : see daughters.\n\
   Shift + pick a volume : see mother.\n\
@@ -448,7 +448,7 @@ void G4OpenInventorViewer::Help(const G4String& aTopic) {
   Ctrl+Left-button + pointer move : pane.\n\
   Ctrl+Shift+Left-button + pointer move : scale.\n\
   Middle-button + pointer move : pane.\n\
-  Right-button : popup menu.\n" << G4endl;
+  Right-button : popup menu.\n");
   }
 }
 
