@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.24 2003-10-07 08:31:05 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.25 2003-10-17 17:59:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -45,7 +45,8 @@
 // 26-04-03 Fix retrieve tables (V.Ivanchenko)
 // 13-05-03 Add calculation of precise range (V.Ivanchenko)
 // 23-07-03 Add exchange with G4EnergyLossTables (V.Ivanchenko)
-// 05-10-03 Add G4VEmProcesses registration andd Verbose command (V.Ivanchenko)
+// 05-10-03 Add G4VEmProcesses registration and Verbose command (V.Ivanchenko)
+// 17-10-03 Add SetParameters method (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -124,6 +125,7 @@ G4LossTableManager::G4LossTableManager()
   buildPreciseRange = false;
   minEnergyActive = false;
   maxEnergyActive = false;
+  stepFunctionActive = false;
   verbose = 0;
 }
 
@@ -163,9 +165,13 @@ void G4LossTableManager::Register(G4VEnergyLossSTD* p)
   inv_range_vector.push_back(0);
   tables_are_built.push_back(false);
   all_tables_are_built = false;
-  if(integralActive) p->SetIntegral(integral);
-  if(minEnergyActive) p->SetMinKinEnergy(minKinEnergy);
-  if(maxEnergyActive) p->SetMaxKinEnergy(maxKinEnergy);
+  if(!lossFluctuationFlag) p->SetLossFluctuations(false);
+  if(subCutoffFlag)        p->SetSubCutoff(true);
+  if(rndmStepFlag)         p->SetRandomStep(true);
+  if(stepFunctionActive)   p->SetStepFunction(maxRangeVariation, maxFinalStep);
+  if(integralActive)       p->SetIntegral(integral);
+  if(minEnergyActive)      p->SetMinKinEnergy(minKinEnergy);
+  if(maxEnergyActive)      p->SetMaxKinEnergy(maxKinEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -310,6 +316,7 @@ void G4LossTableManager::BuildPhysicsTable(const G4ParticleDefinition* aParticle
       electron_table_are_built = true;
       for(G4int i=0; i<n_loss; i++) {
         G4VEnergyLossSTD* em = loss_vector[i];
+        if(aParticle == part_vector[i]) SetParameters(loss_vector[i]);
         if (tables_are_built[i] && em->SecondaryParticle() == theElectron) {
                 em->SetSecondaryRangeTable(eIonisation->RangeTable());
         }
@@ -320,6 +327,7 @@ void G4LossTableManager::BuildPhysicsTable(const G4ParticleDefinition* aParticle
     for(G4int i=0; i<n_loss; i++) {
 
       if(aParticle == part_vector[i]) {
+        SetParameters(loss_vector[i]);
         if(tables_are_built[i]) break;
         if(!base_part_vector[i]) {
           G4VEnergyLossSTD* hIonisation = BuildTables(aParticle);
@@ -686,6 +694,7 @@ void G4LossTableManager::SetVerbose(G4int val)
 
 void G4LossTableManager::SetStepLimits(G4double v1, G4double v2)
 {
+  stepFunctionActive = true;
   maxRangeVariation = v1;
   maxFinalStep = v2;
   for(G4int i=0; i<n_loss; i++) {
@@ -698,6 +707,16 @@ void G4LossTableManager::SetStepLimits(G4double v1, G4double v2)
 void G4LossTableManager::SetBuildPreciseRange(G4bool val)
 {
   buildPreciseRange = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4LossTableManager::SetParameters(G4VEnergyLossSTD* p)
+{
+  if(stepFunctionActive) p->SetStepFunction(maxRangeVariation, maxFinalStep);
+  if(integralActive)     p->SetIntegral(integral);
+  if(minEnergyActive)    p->SetMinKinEnergy(minKinEnergy);
+  if(maxEnergyActive)    p->SetMaxKinEnergy(maxKinEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

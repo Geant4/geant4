@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.16 2003-10-07 08:31:05 vnivanch Exp $
+// $Id: G4LossTableManager.hh,v 1.17 2003-10-17 17:59:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -46,6 +46,7 @@
 // 02-04-03 Change messenger (V.Ivanchenko)
 // 23-07-03 Add exchange with G4EnergyLossTables (V.Ivanchenko)
 // 05-10-03 Add G4VEmProcesses registration (V.Ivanchenko)
+// 17-10-03 Add SetParameters method (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -160,6 +161,8 @@ private:
 
   void ParticleHaveNoLoss(const G4ParticleDefinition* aParticle);
 
+  void SetParameters(G4VEnergyLossSTD*);
+
 private:
 
   static G4LossTableManager* theInstance;
@@ -196,6 +199,7 @@ private:
   G4bool buildPreciseRange;
   G4bool minEnergyActive;
   G4bool maxEnergyActive;
+  G4bool stepFunctionActive;
 
   G4double minSubRange;
   G4double maxRangeVariation;

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossSTD.cc,v 1.51 2003-10-14 07:50:35 vnivanch Exp $
+// $Id: G4VEnergyLossSTD.cc,v 1.52 2003-10-17 17:59:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -795,7 +795,9 @@ G4VParticleChange* G4VEnergyLossSTD::PostStepDoIt(const G4Track& track,
 
 void G4VEnergyLossSTD::PrintInfoDefinition()
 {
-  G4cout << G4endl << GetProcessName() << ":  " << G4endl
+  G4cout << G4endl << GetProcessName() << ":   tables are built for  " 
+         << particle->GetParticleName()
+         << G4endl
          << "      dE/dx and range tables from "
 	 << G4BestUnit(minKinEnergy,"Energy")
          << " to " << G4BestUnit(maxKinEnergy,"Energy")
@@ -804,6 +806,12 @@ void G4VEnergyLossSTD::PrintInfoDefinition()
          << G4BestUnit(maxKinEnergy,"Energy")
          << " in " << nLambdaBins << " bins."
          << G4endl;
+  if(theRangeTable) {
+    G4cout << "      Step function: finalRange(mm)= " << finalRange/mm
+           << ", dRoverRange= " << dRoverRange 
+           << ", integral: " << integral
+           << G4endl;
+  }
   /*
       G4cout << "DEDXTable address= " << theDEDXTable << G4endl;
       if(theDEDXTable) G4cout << (*theDEDXTable) << G4endl;
