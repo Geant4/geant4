@@ -12,7 +12,6 @@ ifeq ($(G4SYSTEM),DEC-cxx)
       CCFLAGS   := -g
     endif
   endif
-  G4_HAVE_BOOL  := yes
   CXXFLAGS	+= -ieee -timplicit_local
   SHEXT         := so
 #future  G4RUNPATHOPTION := -rpath

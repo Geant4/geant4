@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.86 2003-05-28 08:02:47 gcosmo Exp $
+# $Id: architecture.gmk,v 1.87 2003-06-06 16:20:57 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -271,12 +271,6 @@ GREP := grep
 # Include architecture dependent setups...
 #
 include $(G4INSTALL)/config/sys/$(G4SYSTEM).gmk
-
-# If compiler recognises implicit C++ type bool...
-#
-ifdef G4_HAVE_BOOL
-  CPPFLAGS += -DG4_HAVE_BOOL
-endif
 
 # If there is no cbrt() function...
 #

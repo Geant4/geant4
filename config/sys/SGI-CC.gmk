@@ -12,7 +12,6 @@ ifeq ($(G4SYSTEM),SGI-CC)
       CCFLAGS   := -g
     endif
   endif
-  G4_HAVE_BOOL := yes
   CXXFLAGS  += -ptused
   FC        := f77
   FCLIBS    := -lftn
