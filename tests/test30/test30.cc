@@ -121,21 +121,24 @@ int main(int argc, char** argv)
   G4int     nbinsa   = 40;
   G4int     nbinse   = 80;
   G4int     nbinsd   = 20;
+  G4int     nbinspi  = 20;
   G4int     nangl    = 0;
+  G4int     nanglpi  = 0;
   G4String hFile     = "";
   G4double theStep   = 0.01*micrometer;
   G4double range     = 1.0*micrometer;
   G4double  emax     = 160.*MeV;
+  G4double  emaxpi   = 200.*MeV;
   G4Material* material = 0; 
 
-  G4double ang[20] = {0.0};
-  G4double bng1[20] = {0.0};
-  G4double bng2[20] = {0.0};
-  G4double cng[20] = {0.0};
-
-  //  G4double ang[13] = {0.,11.,24.,35.,45.,56.,69.,82.,95.,106.,121.,134.,145.};
-  //G4double bng[14] = {0.,6.,18.,30.,40.,50.,62.,75.,88.,100.,114.,127.,140.,180.};
-  //G4double cng[13];
+  G4double ang[15] = {0.0};
+  G4double bng1[15] = {0.0};
+  G4double bng2[15] = {0.0};
+  G4double cng[15] = {0.0};
+  G4double angpi[10] = {0.0};
+  G4double bngpi1[10] = {0.0};
+  G4double bngpi2[10] = {0.0};
+  G4double cngpi[10] = {0.0};
 
 
   // Track 
@@ -191,12 +194,16 @@ int main(int argc, char** argv)
   G4cout << "#nbinsa" << G4endl;
   G4cout << "#nbinse" << G4endl;
   G4cout << "#nbinsd" << G4endl;
+  G4cout << "#nbinspi" << G4endl;
+  G4cout << "#nanglepi" << G4endl;
+  G4cout << "#anglespi" << G4endl;
   G4cout << "#nangle" << G4endl;
   G4cout << "#angles" << G4endl;
   G4cout << "#dangle" << G4endl;
   G4cout << "#particle" << G4endl;
   G4cout << "#energy(MeV)" << G4endl;
   G4cout << "#emax(MeV)" << G4endl;
+  G4cout << "#emaxpi(MeV)" << G4endl;
   G4cout << "#elim(MeV)" << G4endl;
   G4cout << "#range(mm)" << G4endl;
   G4cout << "#step(mm)" << G4endl;
@@ -227,6 +234,9 @@ int main(int argc, char** argv)
       } else if(line == "#emax(MeV)") {
         (*fin) >> emax;
         emax *= MeV;
+      } else if(line == "#emaxpi(MeV)") {
+        (*fin) >> emaxpi;
+        emaxpi *= MeV;
       } else if(line == "#elim(MeV)") {
         (*fin) >> elim;
         elim *= MeV;
@@ -240,8 +250,14 @@ int main(int argc, char** argv)
         (*fin) >> nbinsa;
       } else if(line == "#nbinsd") {
         (*fin) >> nbinsd;
+      } else if(line == "#nbinspi") {
+        (*fin) >> nbinspi;
       } else if(line == "#nangle") {
         (*fin) >> nangl;
+      } else if(line == "#nanglepi") {
+        (*fin) >> nanglpi;
+      } else if(line == "#anglespi") {
+        for(int k=0; k<nanglpi; k++) {(*fin) >> angpi[k];}
       } else if(line == "#dangle") {
         (*fin) >> dangl;
       } else if(line == "#angles") {
@@ -341,7 +357,7 @@ int main(int argc, char** argv)
     // Creating a tuple factory, whose tuples will be handled by the tree
     //   G4std::auto_ptr< ITupleFactory > tpf( af->createTupleFactory( *tree ) );
 
-    const G4int nhisto = 40; 
+    const G4int nhisto = 50; 
     IHistogram1D* h[nhisto];
     //ITuple* ntuple1 = 0;
 
@@ -391,19 +407,54 @@ int main(int argc, char** argv)
 
       h[26]=hf->create1D("27","Baryon number (mbn)",maxn,-0.5,(G4double)maxn + 0.5);
 
-      h[27]=hf->create1D("28","ds/dE at theta = 0",nbinsd,0.,emax);
-      h[28]=hf->create1D("29","ds/dE at theta = 1",nbinsd,0.,emax);
-      h[29]=hf->create1D("30","ds/dE at theta = 2",nbinsd,0.,emax);
-      h[30]=hf->create1D("31","ds/dE at theta = 3",nbinsd,0.,emax);
-      h[31]=hf->create1D("32","ds/dE at theta = 4",nbinsd,0.,emax);
-      h[32]=hf->create1D("33","ds/dE at theta = 5",nbinsd,0.,emax);
-      h[33]=hf->create1D("34","ds/dE at theta = 6",nbinsd,0.,emax);
-      h[34]=hf->create1D("35","ds/dE at theta = 7",nbinsd,0.,emax);
-      h[35]=hf->create1D("36","ds/dE at theta = 8",nbinsd,0.,emax);
-      h[36]=hf->create1D("37","ds/dE at theta = 9",nbinsd,0.,emax);
-      h[37]=hf->create1D("38","ds/dE at theta = 10",nbinsd,0.,emax);
-      h[38]=hf->create1D("39","ds/dE at theta = 11",nbinsd,0.,emax);
-      h[39]=hf->create1D("40","ds/dE at theta = 12",nbinsd,0.,emax);
+      if(nangl>0)
+       h[27]=hf->create1D("28","ds/dE for neutrons at theta = 0",nbinsd,0.,emax);
+      if(nangl>1)
+       h[28]=hf->create1D("29","ds/dE for neutrons at theta = 1",nbinsd,0.,emax);
+      if(nangl>2)
+       h[29]=hf->create1D("30","ds/dE for neutrons at theta = 2",nbinsd,0.,emax);
+      if(nangl>3)
+       h[30]=hf->create1D("31","ds/dE for neutrons at theta = 3",nbinsd,0.,emax);
+      if(nangl>4)
+       h[31]=hf->create1D("32","ds/dE for neutrons at theta = 4",nbinsd,0.,emax);
+      if(nangl>5)
+       h[32]=hf->create1D("33","ds/dE for neutrons at theta = 5",nbinsd,0.,emax);
+      if(nangl>6)
+       h[33]=hf->create1D("34","ds/dE for neutrons at theta = 6",nbinsd,0.,emax);
+      if(nangl>7)
+       h[34]=hf->create1D("35","ds/dE for neutrons at theta = 7",nbinsd,0.,emax);
+      if(nangl>8)
+       h[35]=hf->create1D("36","ds/dE for neutrons at theta = 8",nbinsd,0.,emax);
+      if(nangl>9)
+       h[36]=hf->create1D("37","ds/dE for neutrons at theta = 9",nbinsd,0.,emax);
+      if(nangl>10)
+       h[37]=hf->create1D("38","ds/dE for neutrons at theta = 10",nbinsd,0.,emax);
+      if(nangl>11)
+       h[38]=hf->create1D("39","ds/dE for neutrons at theta = 11",nbinsd,0.,emax);
+      if(nangl>12)
+       h[39]=hf->create1D("40","ds/dE for neutrons at theta = 12",nbinsd,0.,emax);
+
+      if(nanglpi>0)
+       h[40]=hf->create1D("41","ds/dE for pi- at theta = 0",nbinspi,0.,emaxpi);
+      if(nanglpi>1)
+       h[41]=hf->create1D("42","ds/dE for pi- at theta = 1",nbinspi,0.,emaxpi);
+      if(nanglpi>2)
+       h[42]=hf->create1D("43","ds/dE for pi- at theta = 2",nbinspi,0.,emaxpi);
+      if(nanglpi>3)
+       h[43]=hf->create1D("44","ds/dE for pi- at theta = 3",nbinspi,0.,emaxpi);
+      if(nanglpi>4)
+       h[44]=hf->create1D("45","ds/dE for pi- at theta = 4",nbinspi,0.,emaxpi);
+      if(nanglpi>0)
+       h[45]=hf->create1D("46","ds/dE for pi+ at theta = 0",nbinspi,0.,emaxpi);
+      if(nanglpi>1)
+       h[46]=hf->create1D("47","ds/dE for pi+ at theta = 1",nbinspi,0.,emaxpi);
+      if(nanglpi>2)
+       h[47]=hf->create1D("48","ds/dE for pi+ at theta = 2",nbinspi,0.,emaxpi);
+      if(nanglpi>3)
+       h[48]=hf->create1D("49","ds/dE for pi+ at theta = 3",nbinspi,0.,emaxpi);
+      if(nanglpi>4)
+       h[49]=hf->create1D("50","ds/dE for pi+ at theta = 4",nbinspi,0.,emaxpi);
+
       	
       G4cout << "Histograms is initialised nbins=" << nbins
              << G4endl;
@@ -433,11 +484,11 @@ int main(int argc, char** argv)
     G4cout << "### factor  = " << factor
            << "### factora = " << factor 
            << "    cross(b)= " << cross_sec/barn << G4endl;
-    bng1[0] = 0.0;
   
     for(G4int k=0; k<nangl; k++) {
    
       if(k == 0) {
+        bng1[0] = G4std::max(0.0,ang[0] - dangl);
         bng2[0] = G4std::min(0.5*(ang[0] + ang[1]), ang[0] + dangl);
       } else if(k < nangl-1) {
         bng1[k] = G4std::max(bng2[k-1], ang[k]-dangl);
@@ -449,6 +500,23 @@ int main(int argc, char** argv)
 
       cng[k] = cross_sec*MeV*1000.0*(G4double)nbinsd/
          (twopi*(cos(degree*bng1[k]) - cos(degree*bng2[k]))*barn*emax*(G4double)nevt);
+    }
+
+    for(k=0; k<nanglpi; k++) {
+   
+      if(k == 0) {
+        bngpi1[0] = G4std::max(0.0,angpi[0] - dangl);
+        bngpi2[0] = G4std::min(0.5*(angpi[0] + angpi[1]), angpi[0] + dangl);
+      } else if(k < nanglpi-1) {
+        bngpi1[k] = G4std::max(bngpi2[k-1], angpi[k]-dangl);
+        bngpi2[k] = G4std::min(0.5*(angpi[k] + angpi[k+1]), angpi[k] + dangl);
+      } else {
+        bngpi1[k] = G4std::max(bngpi2[k-1], angpi[k]-dangl);
+        bngpi2[k] = G4std::min(180., angpi[k] + dangl);
+      }
+
+      cngpi[k] = cross_sec*MeV*1000.0*(G4double)nbinspi/
+         (twopi*(cos(degree*bngpi1[k]) - cos(degree*bngpi2[k]))*barn*emax*(G4double)nevt);
     }
 
     G4Track* gTrack;
@@ -546,6 +614,7 @@ int main(int argc, char** argv)
         pt = sqrt(px*px +py*py);
 
         theta = mom.theta();
+        G4double thetad = theta/degree;
 				
 	if(usepaw && e > 0.0 && pt > 0.0) {
           h[2]->fill(mom.phi()/degree,1.0);
@@ -585,6 +654,12 @@ int main(int argc, char** argv)
             h[4]->fill(pz/MeV, 1.0); 
             h[8]->fill(pt/MeV, 1.0);
             h[12]->fill(e/MeV, 1.0);
+            for(G4int kk=0; kk<nanglpi; kk++) {
+              if(bngpi1[kk] <= thetad && thetad <= bngpi2[kk]) {
+                h[40+kk]->fill(e/MeV, cngpi[kk]); 
+                break;
+	      }
+	    }
 						
           } else if(pd == pip) {
     
@@ -592,6 +667,12 @@ int main(int argc, char** argv)
             h[5]->fill(pz/MeV, 1.0); 
             h[9]->fill(pt/MeV, 1.0);
             h[13]->fill(e/MeV, 1.0);
+            for(G4int kk=0; kk<nanglpi; kk++) {
+              if(bngpi1[kk] <= thetad && thetad <= bngpi2[kk]) {
+                h[45+kk]->fill(e/MeV, cngpi[kk]); 
+                break;
+	      }
+	    }
 
 	  } else if(pd == pi0) {
     
@@ -608,10 +689,8 @@ int main(int argc, char** argv)
             h[14]->fill(e/MeV, 1.0);
 	    h[22]->fill(e/MeV, factor);
 	    if(e >= elim) h[25]->fill(cos(theta), factora);
-            theta /= degree;
-	    G4int kk=0;
-            for(kk=0; kk<13; kk++) {
-              if(bng1[kk] <= theta && theta <= bng2[kk]) {
+            for(G4int kk=0; kk<nangl; kk++) {
+              if(bng1[kk] <= thetad && thetad <= bng2[kk]) {
                 h[27+kk]->fill(e/MeV, cng[kk]); 
                 break;
 	      }
