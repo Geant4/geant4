@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.24 2001-11-09 15:58:31 radoone Exp $
+// $Id: G4Transportation.cc,v 1.25 2001-11-09 23:17:58 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -297,6 +297,9 @@ AlongStepGetPhysicalInteractionLength(  const G4Track&  track,
      fMomentumChanged         = true ; 
      fTransportEndMomentumDir = aFieldTrack.GetMomentumDir() ;
 
+     // If the time was integrated, this will have been updated
+     fCandidateEndGlobalTime   = aFieldTrack.GetLabTimeOfFlight();
+
 #if VELOCITY_RETURNED
      G4ThreeVector endVelocity   = aFieldTrack.GetVelocity() ;
      G4double  veloc_sq          = endVelocity.mag2() ;
@@ -380,23 +383,27 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
   
   G4double deltaTime = 0.0 ;
 
-#if HARMONIC_MEAN_VELOCITY
+  // Calculate  Lab Time of Flight (ONLY if field Equations used it!)
+  G4double endTime   = fCandidateEndGlobalTime;
+  G4double startTime = track.GetGlobalTime();
+  G4double delta_time = endTime - startTime;
+  
+  if (delta_time == 0.0){
+     //  The time was not integrated .. make the best estimate possible
+     G4double finalVelocity   = track.GetVelocity() ;
+     G4double initialVelocity = stepData.GetPreStepPoint()->GetVelocity();
+     G4double stepLength = track.GetStepLength();
 
-  G4double meanInverseVelocity ;
-  meanInverseVelocity = 0.5/stepData.GetPreStepPoint()->GetVelocity() +
-                        0.5/stepData.GetPostStepPoint()->GetVelocity() ; 
- 
-  if ( meanInverseVelocity < kInfinity ) 
-  {
-     deltaTime = track.GetStepLength() * meanInverseVelocity ; 
+     if (finalVelocity > 0.0) { 
+        G4double meanInverseVelocity ;
+        // deltaTime = stepLength/finalVelocity ;  
+        meanInverseVelocity= 0.5 * ( 1.0 / initialVelocity + 1.0 / finalVelocity );
+        deltaTime = stepLength * meanInverseVelocity ; 
+     }else
+        deltaTime = stepLength/initialVelocity;
   }
-#endif
 
-  G4double finalVelocity = track.GetVelocity() ;
-
-  if ( finalVelocity > 0.0 )  deltaTime = track.GetStepLength()/finalVelocity ;  
-
-  fParticleChange. SetTimeChange( track.GetGlobalTime() + deltaTime ) ;
+  fParticleChange. SetTimeChange( startTime + deltaTime ) ;
 
   // Now Correct by Lorentz factor to get "proper" deltaTime
   
@@ -404,8 +411,6 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
   G4double deltaProperTime = deltaTime*( restMass/track.GetTotalEnergy() ) ;
 
   fParticleChange.SetProperTimeChange( track.GetProperTime() + deltaProperTime ) ;
-
-  // fParticleChange.SetEnergyChange( Energy ) ;
   //fParticleChange. SetTrueStepLength( track.GetStepLength() ) ;
 
 #ifdef DETECT_LOOPER
