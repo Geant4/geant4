@@ -1,4 +1,4 @@
-$Id: History,v 1.3 1999-02-12 23:08:25 davidw Exp $
+$Id: History,v 1.4 1999-02-17 03:33:53 davidw Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Feb 16,   99   David Williams
+
+  Repaired bugs in G4Polycone (G4PolyconeSide.cc) as found in
+  test/testG4Polycone and missed in below.
+  
+  Updated definition of DistanceToIn(p) and DistanceToOut(p) to
+  return zero when the point p is on the surface of the solid.
+
+Feb 12,   99   David Williams
+
+  src/G4PolyconeSide.cc updated (revision 1.4) to fix a bug discovered by
+  test/testG4Polycone.
 
 Feb   9,  99   David C. Williams      (davidw@scipp.ucsc.edu)
 
@@ -36,9 +49,4 @@ Feb   9,  99   David C. Williams      (davidw@scipp.ucsc.edu)
 Feb  10,  99   John Apostolakis   
 
   History file created.
-
-Feb 12,   99   David Williams
-
-  src/G4PolyconeSide.cc updated (revision 1.4) to fix a bug discovered by
-  test/testG4Polycone.
   
