@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2000-10-06 06:46:12 gcosmo Exp $
+$Id: History,v 1.5 2000-11-13 20:17:51 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12 Nov 00: pg  (xrays-V02-00-04)
+- G4Cerenkov.cc: add check on CerenkovAngleIntegrals->IsFilledVectorExist()
+-                in method GetAverageNumberOfPhotons
+-                and a test for MeanNumPhotons <= 0.0 in DoIt
+
+09 Nov 00: mma (xrays-V02-00-03)
 
 04 oct 00: pg  (xrays-V02-00-02)
 - G4Cerenkov.cc: calculate secondary position from aStep.GetDeltaPosition().
