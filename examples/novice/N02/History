@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2000-12-06 12:33:38 stesting Exp $
+$Id: History,v 1.14 2001-01-31 18:05:28 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,29 +15,40 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+31-01-01 G.Cosmo (exampleN02-V03-00-00)
+- fix to ExN02ChamberParameterisation and ExN02DetectorConstruction
+  to cope with bug report #186. Parameterisation of chambers was not
+  taking into account that copyNo starts from 0, therefore dimensions
+  of the first chamber (parametrised G4Box) were set to negative values (!).
+  This was causing the side-effect of visualising a "ghost" chamber (the
+  first one close to the target), which was correctly not seen by tracking.
+  Therefore, number of chambers is now reduced to 5 but global positioning
+  and parameters have been preserved.
+
 06-12-00 S.O'Neale (exampleN02-V02-00-03)
--update reference output for Batch Mode system testing
- in this context 0 trajectories stored is normal.
+- update reference output for Batch Mode system testing
+  in this context 0 trajectories stored is normal.
+
 03-12-00 M.Maire (exampleN02-V02-00-02)
--README updated
--prerun.g4mac updated for new vis commands, and renamed initInter.mac
--new examples of macro: run1.mac, run2.mac
--G4UItcsh in the main, under the control of G4UI_USE_TCSH (for Linux)
--visualisation on interactive mode
--DetectorConstruction: tracker region in the centre of the world.
- default target material: Pb, chamber material: Xenon
--interactive commands to change the materials and to setup a magnetic field
--the magnetic field is transverse to the beam (i.e. along x)
--PhysicsList: copy of N03. defaultCut = 1 cm
--PrimaryGenerator: default momentum direction corrected: along z.
- Suppress the possibility of random impact and the associated messenger.
--RunAction and EventAction updated for vis commands
--SteppingAction: cleanup because no specific actions
--SteppingVerbose: see README
--TrackerHit: a Hit = 4 informations: trackID, chamberNb, edep, position.
- Draw and Print
--TrackerSD: ProcessHits.
- Print HitsCollection at end of event 
+- README updated
+- prerun.g4mac updated for new vis commands, and renamed initInter.mac
+- new examples of macro: run1.mac, run2.mac
+- G4UItcsh in the main, under the control of G4UI_USE_TCSH (for Linux)
+- visualisation on interactive mode
+- DetectorConstruction: tracker region in the centre of the world.
+  default target material: Pb, chamber material: Xenon
+- interactive commands to change the materials and to setup a magnetic field
+- the magnetic field is transverse to the beam (i.e. along x)
+- PhysicsList: copy of N03. defaultCut = 1 cm
+- PrimaryGenerator: default momentum direction corrected: along z.
+  Suppress the possibility of random impact and the associated messenger.
+- RunAction and EventAction updated for vis commands
+- SteppingAction: cleanup because no specific actions
+- SteppingVerbose: see README
+- TrackerHit: a Hit = 4 informations: trackID, chamberNb, edep, position.
+  Draw and Print
+- TrackerSD: ProcessHits.
+  Print HitsCollection at end of event 
 
 25th November 2000 Steve O'Neale (tagset210)
 - Update test outputs for min.delta energy cut

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02DetectorConstruction.cc,v 1.5 2000-12-04 16:24:07 maire Exp $
+// $Id: ExN02DetectorConstruction.cc,v 1.6 2001-01-31 18:05:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
@@ -99,12 +99,12 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
 
 //--------- Sizes of the principal geometrical components (solids)  ---------
   
-  NbOfChambers = 6;
+  NbOfChambers = 5;
   ChamberWidth = 20*cm;
   ChamberSpacing = 80*cm;
   
-  fTrackerLength = NbOfChambers*ChamberSpacing;  // Full length of the Tracker
-  fTargetLength  = 5.0 * cm;                     // Full length of the Target
+  fTrackerLength = (NbOfChambers+1)*ChamberSpacing; // Full length of the Tracker
+  fTargetLength  = 5.0 * cm;                        // Full length of the Target
   
   TargetMater  = Pb;
   ChamberMater = Xenon;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02ChamberParameterisation.cc,v 1.3 2000-12-04 16:24:07 maire Exp $
+// $Id: ExN02ChamberParameterisation.cc,v 1.4 2001-01-31 18:05:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -33,8 +33,8 @@ ExN02ChamberParameterisation::ExN02ChamberParameterisation(
    fSpacing    =  spacingZ;
    fHalfLengthFirst = 0.5 * lengthInitial; 
    // fHalfLengthLast = lengthFinal;
-   if( NoChambers > 1 ){
-      fHalfLengthIncr =  0.5 * (lengthFinal-lengthInitial)/(NoChambers-1);
+   if( NoChambers > 0 ){
+      fHalfLengthIncr =  0.5 * (lengthFinal-lengthInitial)/NoChambers;
 
       if( spacingZ < widthChamber ) {
          G4Exception( "ExN02ChamberParameterisation construction: Width > Spacing" );
@@ -51,9 +51,9 @@ ExN02ChamberParameterisation::~ExN02ChamberParameterisation()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void ExN02ChamberParameterisation::ComputeTransformation
-(const G4int copyNo,G4VPhysicalVolume *physVol) const
+(const G4int copyNo, G4VPhysicalVolume* physVol) const
 {
-  G4double      Zposition= fStartZ + copyNo * fSpacing;
+  G4double      Zposition= fStartZ + (copyNo+1) * fSpacing;
   G4ThreeVector origin(0,0,Zposition);
   physVol->SetTranslation(origin);
   physVol->SetRotation(0);
@@ -62,10 +62,10 @@ void ExN02ChamberParameterisation::ComputeTransformation
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void ExN02ChamberParameterisation::ComputeDimensions
-(G4Box & trackerChamber, const G4int copyNo,
- const G4VPhysicalVolume * physVol) const
+(G4Box& trackerChamber, const G4int copyNo,
+ const G4VPhysicalVolume* physVol) const
 {
-  G4double  halfLength= fHalfLengthFirst + (copyNo-1) * fHalfLengthIncr;
+  G4double  halfLength= fHalfLengthFirst + copyNo * fHalfLengthIncr;
   trackerChamber.SetXHalfLength(halfLength);
   trackerChamber.SetYHalfLength(halfLength);
   trackerChamber.SetZHalfLength(fHalfWidth);
