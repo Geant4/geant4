@@ -42,7 +42,8 @@ public:
   inline G4FermiPhaseSpaceDecay();
   inline ~G4FermiPhaseSpaceDecay();
   
-  inline std::vector<G4LorentzVector*> * Decay(const G4double,  const std::vector<G4double>&) const;
+  inline std::vector<G4LorentzVector*> * 
+  Decay(const G4double,  const std::vector<G4double>&) const;
 
 private:
   inline G4FermiPhaseSpaceDecay(const G4FermiPhaseSpaceDecay&);
@@ -56,9 +57,14 @@ private:
 
   inline G4double BetaKopylov(const G4int) const; 
 
-  std::vector<G4LorentzVector*> * TwoBodyDecay(const G4double, const std::vector<G4double>&) const;
-  std::vector<G4LorentzVector*> * NBodyDecay(const G4double, const std::vector<G4double>&) const;
-  std::vector<G4LorentzVector*> * KopylovNBodyDecay(const G4double, const std::vector<G4double>&) const;
+  std::vector<G4LorentzVector*> * 
+  TwoBodyDecay(const G4double, const std::vector<G4double>&) const;
+
+  std::vector<G4LorentzVector*> * 
+  NBodyDecay(const G4double, const std::vector<G4double>&) const;
+
+  std::vector<G4LorentzVector*> * 
+  KopylovNBodyDecay(const G4double, const std::vector<G4double>&) const;
 };
 
 #include "G4FermiPhaseSpaceDecay.icc"

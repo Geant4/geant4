@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FermiBreakUp.cc,v 1.1 2003-08-26 18:34:44 lara Exp $
+// $Id: G4FermiBreakUp.cc,v 1.2 2003-11-03 09:43:20 lara Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -67,7 +67,7 @@ G4bool G4FermiBreakUp::operator!=(const G4FermiBreakUp &) const
 G4FragmentVector * G4FermiBreakUp::BreakItUp(const G4Fragment &theNucleus)
 {
   // CHECK that Excitation Energy > 0
-  if (theNucleus.GetExcitationEnergy() <= theNucleus.GetBindingEnergy()) 
+  if (theNucleus.GetExcitationEnergy() <= 0) 
     {
       G4FragmentVector * theResult = new G4FragmentVector;
       theResult->push_back(new G4Fragment(theNucleus));
@@ -80,10 +80,10 @@ G4FragmentVector * G4FermiBreakUp::BreakItUp(const G4Fragment &theNucleus)
   //     G4ParticleTable::GetParticleTable()->GetIonTable()->
   //     GetIonMass(static_cast<G4int>(theNucleus.GetZ()),static_cast<G4int>(theNucleus.GetA()));
   
-
+  
   G4FermiConfigurationList theConfigurationList;
-
-
+  
+  
   // Split the nucleus
   G4bool Split = theConfigurationList.Initialize(static_cast<G4int>(theNucleus.GetA()), 
 						 static_cast<G4int>(theNucleus.GetZ()),

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FermiConfiguration.hh,v 1.1 2003-08-26 18:34:14 lara Exp $
+// $Id: G4FermiConfiguration.hh,v 1.2 2003-11-03 09:38:59 lara Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -68,11 +68,6 @@ private:
 
   G4double CoulombBarrier(void);
 
-
-  std::deque<G4LorentzVector*>* FragmentsMomentum(G4double KineticEnergy);
-  
-  G4double RNKSI(const G4int K);
-
   G4ParticleMomentum IsotropicVector(const G4double Magnitude = 1.0);
 
 
@@ -84,7 +79,6 @@ private:
   static const G4double r0;
   
   std::vector<const G4VFermiFragment*> Configuration;
-
 
   struct DeleteFragment 
   {

@@ -33,13 +33,13 @@
 
 
 std::vector<G4LorentzVector*> *
-G4FermiPhaseSpaceDecay::KopylovNBodyDecay(const G4double M,  const std::vector<G4double>& m) const
+G4FermiPhaseSpaceDecay::KopylovNBodyDecay(const G4double M, const std::vector<G4double>& m) const
   // Calculates momentum for N fragments (Kopylov's method of sampling is used)
 {
   G4int N = m.size();
 
   std::vector<G4LorentzVector*>* P = new std::vector<G4LorentzVector*>;
-  P->insert(P->begin(),N, static_cast<G4LorentzVector*>(0));
+  P->insert(P->begin(), N, static_cast<G4LorentzVector*>(0));
 
   G4double mtot = std::accumulate( m.begin(), m.end(), 0.0);
   G4double mu = mtot;
@@ -60,6 +60,8 @@ G4FermiPhaseSpaceDecay::KopylovNBodyDecay(const G4double M,  const std::vector<G
       G4double RestMass = mu + T;
 
       PFragMagCM = PtwoBody(Mass,m[k],RestMass);
+      if (PFragMagCM < 0) 
+        G4Exception("G4FermiPhaseSpaceDecay::KopylovNBodyDecay: Error sampling fragments momenta!!");
 
       // Create a unit vector with a random direction isotropically distributed
       G4ParticleMomentum RandVector(IsotropicVector(PFragMagCM));
@@ -79,12 +81,12 @@ G4FermiPhaseSpaceDecay::KopylovNBodyDecay(const G4double M,  const std::vector<G
       PRestLab.boost(BoostV);
 
       P->operator[](k) = new G4LorentzVector(PFragLab);
-
+      
       Mass = RestMass;
     }
 
+    P->operator[](0) = new G4LorentzVector(PRestLab);
 
-  P->operator[](0) = new G4LorentzVector(PRestLab);
   return P;
 
 }
@@ -187,16 +189,16 @@ TwoBodyDecay(const G4double M, const std::vector<G4double>& m) const
 {
   G4double m0 = m.front();
   G4double m1 = m.back();
+  G4double psqr = this->PtwoBody(M,m0,m1);
+  G4ParticleMomentum p = this->IsotropicVector(sqrt(psqr));
 
-  G4ParticleMomentum p = this->IsotropicVector(this->PtwoBody(M,m0,m1));
-  
   G4LorentzVector * P41 = new G4LorentzVector;
   P41->setVect(p);
-  P41->setE(sqrt(p.mag2()+m0*m0));
+  P41->setE(sqrt(psqr+m0*m0));
 
   G4LorentzVector * P42 = new G4LorentzVector;
   P42->setVect(-p);
-  P42->setE(sqrt(p.mag2()+m1*m1));
+  P42->setE(sqrt(psqr+m1*m1));
 
   std::vector<G4LorentzVector*> * result = new std::vector<G4LorentzVector*>;
   result->push_back(P41);
