@@ -14,6 +14,7 @@ List of fixes included in this public patch to release 4.1:
   o Electromagnetic processes (low-energy):
     --------------------------------------
     - Bug fixes to cross sections and spectrum for electron processes. 
+    - Optimised loading of data in G4AugerData.
 
   o Event:
     -----

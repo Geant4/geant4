@@ -93,6 +93,7 @@ global                                  global-V04-01-00
 processes/electromagnetic/lowenergy     emlowen-V04-01-01
 -----------------------------------
 - Bug fixes to cross sections and spectrum for electron processes. 
+- Optimised loading of data in G4AugerData.
 
 processes/hadronic                      ghad-V04-01-00
 ------------------
