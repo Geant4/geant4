@@ -106,7 +106,7 @@ void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4String & dirNam
     else if(dataType==5)
     {
       theEnergyDistribution[it] = new G4NeutronHPEnergyDistribution;
-      theEnergyDistribution[it]->Init(theData);
+      theEnergyDistribution[it]->Init(theData); 
     }
     else if(dataType==6)
     {
