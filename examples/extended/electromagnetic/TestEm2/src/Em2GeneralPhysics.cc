@@ -40,26 +40,24 @@ Em2GeneralPhysics::~Em2GeneralPhysics()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2GeneralPhysics::ConstructParticle()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void Em2GeneralPhysics::ConstructProcess()
 {
   // Add Decay Process
+
+  G4Decay* fDecayProcess = new G4Decay();
+
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
-    if (fDecayProcess.IsApplicable(*particle)) { 
+    if (fDecayProcess->IsApplicable(*particle)) { 
 
-      pmanager ->AddProcess(&fDecayProcess);
+      pmanager ->AddProcess(fDecayProcess);
 
       // set ordering for PostStepDoIt and AtRestDoIt
-      pmanager ->SetProcessOrdering(&fDecayProcess, idxPostStep);
-      pmanager ->SetProcessOrdering(&fDecayProcess, idxAtRest);
+      pmanager ->SetProcessOrdering(fDecayProcess, idxPostStep);
+      pmanager ->SetProcessOrdering(fDecayProcess, idxAtRest);
 
     }
   }

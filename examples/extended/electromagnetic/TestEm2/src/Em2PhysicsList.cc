@@ -33,7 +33,6 @@
 #include "Em2GeneralPhysics.hh"
 #include "Em2StandardEM.hh"
 #include "Em2ModelEM.hh"
-#include "Em2HadronElastic.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -98,10 +97,6 @@ void Em2PhysicsList::AddPhysicsList(const G4String& name)
       RegisterPhysics( new Em2ModelEM(name) );
       emPhysicsListIsRegistered = true;
     }
-
-  } else if("elastic" == name) {
-
-    RegisterPhysics( new Em2HadronElastic(name) );
 
   } else {
 

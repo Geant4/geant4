@@ -50,9 +50,8 @@ class Em2StandardEM : public G4VPhysicsConstructor
     virtual ~Em2StandardEM();
 
   public: 
-    // This method will be invoked in the Construct() method. 
-    // each particle type will be instantiated
-    virtual void ConstructParticle();
+    // This method is dummy for physics
+    virtual void ConstructParticle() {};
  
     // This method will be invoked in the Construct() method.
     // each physics process will be instantiated and

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2EventActionMessenger.cc,v 1.6 2002-10-14 15:56:26 vnivanch Exp $
+// $Id: Em2EventActionMessenger.cc,v 1.7 2002-10-29 19:10:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,7 @@
 Em2EventActionMessenger::Em2EventActionMessenger(Em2EventAction* EvAct)
 :eventAction(EvAct)
 { 
-  DrawCmd = new G4UIcmdWithAString("/em2/drawTracks",this);
+  DrawCmd = new G4UIcmdWithAString("/testem/event/drawTracks",this);
   DrawCmd->SetGuidance("Draw the tracks in the event");
   DrawCmd->SetGuidance("  Choice : none, charged, all");
   DrawCmd->SetParameterName("choice",true);
@@ -49,7 +49,7 @@ Em2EventActionMessenger::Em2EventActionMessenger(Em2EventAction* EvAct)
   DrawCmd->SetCandidates("none charged all");
   DrawCmd->AvailableForStates(Idle);
   
-  PrintCmd = new G4UIcmdWithAnInteger("/em2/printModulo",this);
+  PrintCmd = new G4UIcmdWithAnInteger("/testem/event/printModulo",this);
   PrintCmd->SetGuidance("Print events modulo n");
   PrintCmd->SetParameterName("EventNb",false);
   PrintCmd->SetRange("EventNb>0");

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2PhysicsListMessenger.cc,v 1.4 2002-10-14 15:56:27 vnivanch Exp $
+// $Id: Em2PhysicsListMessenger.cc,v 1.5 2002-10-29 19:10:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,35 +40,35 @@
 Em2PhysicsListMessenger::Em2PhysicsListMessenger(Em2PhysicsList* pPhys)
 :pPhysicsList(pPhys)
 {   
-  gammaCutCmd = new G4UIcmdWithADoubleAndUnit("/em2/setGCut",this);  
+  gammaCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setGCut",this);  
   gammaCutCmd->SetGuidance("Set gamma cut.");
   gammaCutCmd->SetParameterName("Gcut",false);
   gammaCutCmd->SetUnitCategory("Length");
   gammaCutCmd->SetRange("Gcut>0.0");
   gammaCutCmd->AvailableForStates(PreInit,Idle);
 
-  electCutCmd = new G4UIcmdWithADoubleAndUnit("/em2/setECut",this);  
+  electCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setECut",this);  
   electCutCmd->SetGuidance("Set electron cut.");
   electCutCmd->SetParameterName("Ecut",false);
   electCutCmd->SetUnitCategory("Length");
   electCutCmd->SetRange("Ecut>0.0");
   electCutCmd->AvailableForStates(PreInit,Idle);
   
-  protoCutCmd = new G4UIcmdWithADoubleAndUnit("/em2/setPCut",this);  
+  protoCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setPCut",this);  
   protoCutCmd->SetGuidance("Set positron cut.");
   protoCutCmd->SetParameterName("Pcut",false);
   protoCutCmd->SetUnitCategory("Length");
   protoCutCmd->SetRange("Pcut>0.0");
   protoCutCmd->AvailableForStates(PreInit,Idle);  
 
-  allCutCmd = new G4UIcmdWithADoubleAndUnit("/em2/setCut",this);  
+  allCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setCuts",this);  
   allCutCmd->SetGuidance("Set cut for all.");
   allCutCmd->SetParameterName("cut",false);
   allCutCmd->SetUnitCategory("Length");
   allCutCmd->SetRange("cut>0.0");
   allCutCmd->AvailableForStates(PreInit,Idle);  
 
-  pListCmd = new G4UIcmdWithAString("/em2/addPhysics",this);  
+  pListCmd = new G4UIcmdWithAString("/testem/phys/addPhysics",this);  
   pListCmd->SetGuidance("Add modula physics list.");
   pListCmd->SetParameterName("PList",false);
   pListCmd->AvailableForStates(PreInit);  

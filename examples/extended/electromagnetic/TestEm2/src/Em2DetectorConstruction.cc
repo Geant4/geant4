@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2DetectorConstruction.cc,v 1.8 2002-10-14 15:56:26 vnivanch Exp $
+// $Id: Em2DetectorConstruction.cc,v 1.9 2002-10-29 19:10:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -126,6 +126,8 @@ void Em2DetectorConstruction::DefineMaterials()
     G4Material* H2O = new G4Material(name="Water", density, ncomponents=2);
     H2O->AddElement(H, natoms=2);
     H2O->AddElement(O, natoms=1);
+    //  G4double exc = H2O->GetIonisation()->FindMeanExcitationEnergy("H_2O");
+    //  H2O->GetIonisation()->SetMeanExcitationEnergy(exc);
     
   //liquid argon
     a = 39.95*g/mole;

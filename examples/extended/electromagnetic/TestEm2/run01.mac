@@ -1,4 +1,4 @@
-# $Id: run01.mac,v 1.7 2002-10-14 16:00:07 vnivanch Exp $
+# $Id: run01.mac,v 1.8 2002-10-29 19:10:39 vnivanch Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -7,13 +7,16 @@
 #
 /control/verbose 2
 #
-#/em2/setCut 1 mm
+#/testem/phys/addPhysics      model
+/testem/phys/addPhysics      standard
+/testem/phys/setCuts 1 mm
+#
 /run/initialize
 #
 /run/particle/applyCuts
 #
 /run/verbose 1
-/em2/printModulo 10
+/testem/event/printModulo 10
 #
 /gun/particle e-
 /gun/energy 5 GeV

@@ -52,10 +52,8 @@ class Em2Particles : public G4VPhysicsConstructor
     // each particle type will be instantiated
     virtual void ConstructParticle();
  
-    // This method will be invoked in the Construct() method.
-    // each physics process will be instantiated and
-    // registered to the process manager of each particle type 
-    virtual void ConstructProcess();
+    // This method is dummy.
+    virtual void ConstructProcess() {};
 
 };
 

@@ -56,11 +56,6 @@ Em2StandardEM::~Em2StandardEM()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2StandardEM::ConstructParticle()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void Em2StandardEM::ConstructProcess()
 {
   // Add standard EM Processes

@@ -57,11 +57,6 @@ Em2ModelEM::~Em2ModelEM()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2ModelEM::ConstructParticle()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void Em2ModelEM::ConstructProcess()
 {
   // Add EM processes realised on base of prototype of model approach design
