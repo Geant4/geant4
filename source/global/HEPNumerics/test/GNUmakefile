@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999-01-07 16:08:57 gunter Exp $
+# $Id: GNUmakefile,v 1.2 2004-12-10 17:03:29 link Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -20,6 +20,6 @@ include $(G4INSTALL)/config/architecture.gmk
 INCFLAGS := -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPNumerics/include
-LDLIBS   := -lG4global
+LDLIBS   := -lG4hepnumerics -lG4globman
 
 include $(G4INSTALL)/config/binmake.gmk
