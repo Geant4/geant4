@@ -1,8 +1,11 @@
-**********************************************
- Geant4 version $Name: not supported by cvs2svn $
-                                (11-February-2004)
-             Copyright : Geant4 Collaboration
-**********************************************
+
+*************************************************************
+ Geant4 version $Name: not supported by cvs2svn $   (25-March-2004)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303.
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
 G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
 G4Material: Mean excitation energy is changed for CsI Iold= 491.166eV; Inew= 415.689 eV;
 
@@ -241,7 +244,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=45.55s Real=56.87s Sys=2.63s
+  User=18.86s Real=24.84s Sys=2.88s
 
 ============   SUMMARY   ============
 
@@ -252,30 +255,30 @@ Run Summary
 
              World         Vertex Detector       Muon Detector
 
-  Gammas:    480.56000        0.54000        0.40000
-  Electrons: 839.60000        3.15000        5.86000
-  Positrons:  54.46000        0.02000        5.86000
+  Gammas:    482.50000        0.53000        0.61000
+  Electrons: 839.24000        3.19000        7.35000
+  Positrons:  55.73000        0.00000        7.35000
 
     Normalised energy deposition in the calorimeter
 
-  E1 = 0.87089 +- 0.00298 RMS(E1) = 0.02980 +- 0.00298
-  E9 = 0.97491 +- 0.00105 RMS(E9) = 0.01046 +- 0.00105
-  E25= 0.98841 +- 0.00062 RMS(E25)= 0.00617 +- 0.00062
+  E1 = 0.87100 +- 0.00263 RMS(E1) = 0.02633 +- 0.00263
+  E9 = 0.97302 +- 0.00106 RMS(E9) = 0.01057 +- 0.00106
+  E25= 0.98695 +- 0.00064 RMS(E25)= 0.00638 +- 0.00064
 
     Energy deposition in the absorbers
 
-  Eabs1(MeV)= 0.96377 +- 0.05407 RMS(Eabs1)= 0.54073 +- 0.05407
-  Eabs2(MeV)= 0.96254 +- 0.03795 RMS(Eabs2)= 0.37949 +- 0.03795
-  Eabs3(MeV)= 0.00521 +- 0.00280 RMS(Eabs3)= 0.02804 +- 0.00280
-  Eabs4(MeV)= 0.00000 +- 0.00000 RMS(Eabs4)= 0.00000 +- 0.00000
+  Eabs1(MeV)= 0.87521 +- 0.02629 RMS(Eabs1)= 0.26295 +- 0.02629
+  Eabs2(MeV)= 1.08937 +- 0.06156 RMS(Eabs2)= 0.61561 +- 0.06156
+  Eabs3(MeV)= 0.02750 +- 0.02012 RMS(Eabs3)= 0.20119 +- 0.02012
+  Eabs4(MeV)= 0.00032 +- 0.00032 RMS(Eabs4)= 0.00319 +- 0.00032
 
     Average number of hits in the vertex detector
 
-  Nhit= 3.23000 +- 0.12795
+  Nhit= 3.09000 +- 0.03491
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1568295415, 964329266
+ Current couple of seeds = 751293126, 1093366131
 ----------------------------------------
 #
 /gun/particle mu-
@@ -346,7 +349,7 @@ Index : 7     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1568295415, 964329266
+ Current couple of seeds = 751293126, 1093366131
 ----------------------------------------
 Start Run processing.
 
@@ -354,7 +357,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.03000s Real=3.18000s Sys=0.28000s
+  User=0.85000000s Real=2.14000000s Sys=0.31000000s
 
 ============   SUMMARY   ============
 
@@ -365,30 +368,30 @@ Run Summary
 
              World         Vertex Detector       Muon Detector
 
-  Gammas:    6.72000        0.04000        1.87000
-  Electrons: 12.86000        4.36000        7.85000
-  Positrons:  0.32000        0.00000        7.85000
+  Gammas:    7.43000        0.05000        1.13000
+  Electrons: 14.36000        4.54000        5.11000
+  Positrons:  0.37000        0.00000        5.11000
 
     Normalised energy deposition in the calorimeter
 
-  E1 = 0.21914 +- 0.00192 RMS(E1) = 0.01923 +- 0.00192
-  E9 = 0.22212 +- 0.00162 RMS(E9) = 0.01621 +- 0.00162
-  E25= 0.22317 +- 0.00188 RMS(E25)= 0.01875 +- 0.00188
+  E1 = 0.22365 +- 0.00157 RMS(E1) = 0.01569 +- 0.00157
+  E9 = 0.22524 +- 0.00171 RMS(E9) = 0.01709 +- 0.00171
+  E25= 0.22534 +- 0.00172 RMS(E25)= 0.01723 +- 0.00172
 
     Energy deposition in the absorbers
 
-  Eabs1(MeV)= 0.83416 +- 0.02832 RMS(Eabs1)= 0.28324 +- 0.02832
-  Eabs2(MeV)= 0.83871 +- 0.03838 RMS(Eabs2)= 0.38385 +- 0.03838
-  Eabs3(MeV)= 0.81384 +- 0.03276 RMS(Eabs3)= 0.32760 +- 0.03276
-  Eabs4(MeV)= 0.95232 +- 0.06198 RMS(Eabs4)= 0.61979 +- 0.06198
+  Eabs1(MeV)= 0.82072 +- 0.01983 RMS(Eabs1)= 0.19832 +- 0.01983
+  Eabs2(MeV)= 0.85561 +- 0.03496 RMS(Eabs2)= 0.34963 +- 0.03496
+  Eabs3(MeV)= 0.85711 +- 0.04643 RMS(Eabs3)= 0.46426 +- 0.04643
+  Eabs4(MeV)= 0.82865 +- 0.02006 RMS(Eabs4)= 0.20062 +- 0.02006
 
     Average number of hits in the vertex detector
 
-  Nhit= 3.41000 +- 0.25733
+  Nhit= 3.12000 +- 0.06210
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 685908201, 396793894
+ Current couple of seeds = 2027267792, 698804570
 ----------------------------------------
 #
 /testem/phys/VertexCuts 1 mm
@@ -458,7 +461,7 @@ Index : 7     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 685908201, 396793894
+ Current couple of seeds = 2027267792, 698804570
 ----------------------------------------
 Start Run processing.
 
@@ -466,7 +469,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.00000s Real=3.19000s Sys=0.35000s
+  User=0.88000000s Real=2.04000000s Sys=0.26000000s
 
 ============   SUMMARY   ============
 
@@ -477,30 +480,30 @@ Run Summary
 
              World         Vertex Detector       Muon Detector
 
-  Gammas:    8.73000        0.05000        1.24000
-  Electrons: 16.64000        3.83000        4.97000
-  Positrons:  0.60000        0.00000        4.97000
+  Gammas:    7.17000        0.08000        1.26000
+  Electrons: 14.06000        4.37000        5.22000
+  Positrons:  0.46000        0.00000        5.22000
 
     Normalised energy deposition in the calorimeter
 
-  E1 = 0.22495 +- 0.00166 RMS(E1) = 0.01660 +- 0.00166
-  E9 = 0.22740 +- 0.00187 RMS(E9) = 0.01873 +- 0.00187
-  E25= 0.22751 +- 0.00188 RMS(E25)= 0.01884 +- 0.00188
+  E1 = 0.22376 +- 0.00161 RMS(E1) = 0.01611 +- 0.00161
+  E9 = 0.22488 +- 0.00167 RMS(E9) = 0.01673 +- 0.00167
+  E25= 0.22501 +- 0.00168 RMS(E25)= 0.01682 +- 0.00168
 
     Energy deposition in the absorbers
 
-  Eabs1(MeV)= 0.78638 +- 0.02390 RMS(Eabs1)= 0.23903 +- 0.02390
-  Eabs2(MeV)= 0.86306 +- 0.03664 RMS(Eabs2)= 0.36637 +- 0.03664
-  Eabs3(MeV)= 0.84972 +- 0.03435 RMS(Eabs3)= 0.34347 +- 0.03435
-  Eabs4(MeV)= 0.82775 +- 0.03417 RMS(Eabs4)= 0.34173 +- 0.03417
+  Eabs1(MeV)= 0.85145 +- 0.03535 RMS(Eabs1)= 0.35354 +- 0.03535
+  Eabs2(MeV)= 0.85033 +- 0.03671 RMS(Eabs2)= 0.36708 +- 0.03671
+  Eabs3(MeV)= 0.84944 +- 0.03768 RMS(Eabs3)= 0.37683 +- 0.03768
+  Eabs4(MeV)= 1.07701 +- 0.09948 RMS(Eabs4)= 0.99484 +- 0.09948
 
     Average number of hits in the vertex detector
 
-  Nhit= 3.13000 +- 0.05596
+  Nhit= 3.15000 +- 0.06225
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1251086261, 1561114780
+ Current couple of seeds = 2106932874, 360522585
 ----------------------------------------
 #
 /gun/particle e-
@@ -570,7 +573,7 @@ Index : 7     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1251086261, 1561114780
+ Current couple of seeds = 2106932874, 360522585
 ----------------------------------------
 Start Run processing.
 
@@ -578,7 +581,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=45.64000s Real=49.71000s Sys=2.56000s
+  User=18.77000000s Real=22.82000000s Sys=2.93000000s
 
 ============   SUMMARY   ============
 
@@ -589,30 +592,30 @@ Run Summary
 
              World         Vertex Detector       Muon Detector
 
-  Gammas:    483.62000        0.44000        0.53000
-  Electrons: 843.16000        3.43000        5.90000
-  Positrons:  55.22000        0.00000        5.90000
+  Gammas:    478.91000        0.43000        0.93000
+  Electrons: 837.45000        3.31000        8.32000
+  Positrons:  54.52000        0.02000        8.32000
 
     Normalised energy deposition in the calorimeter
 
-  E1 = 0.87023 +- 0.00316 RMS(E1) = 0.03163 +- 0.00316
-  E9 = 0.97328 +- 0.00135 RMS(E9) = 0.01350 +- 0.00135
-  E25= 0.98762 +- 0.00070 RMS(E25)= 0.00696 +- 0.00070
+  E1 = 0.87592 +- 0.00304 RMS(E1) = 0.03037 +- 0.00304
+  E9 = 0.97500 +- 0.00138 RMS(E9) = 0.01377 +- 0.00138
+  E25= 0.98689 +- 0.00132 RMS(E25)= 0.01316 +- 0.00132
 
     Energy deposition in the absorbers
 
-  Eabs1(MeV)= 0.96539 +- 0.04776 RMS(Eabs1)= 0.47765 +- 0.04776
-  Eabs2(MeV)= 1.04833 +- 0.05547 RMS(Eabs2)= 0.55475 +- 0.05547
-  Eabs3(MeV)= 0.03180 +- 0.01869 RMS(Eabs3)= 0.18689 +- 0.01869
-  Eabs4(MeV)= 0.00000 +- 0.00000 RMS(Eabs4)= 0.00000 +- 0.00000
+  Eabs1(MeV)= 0.97879 +- 0.04541 RMS(Eabs1)= 0.45405 +- 0.04541
+  Eabs2(MeV)= 0.91386 +- 0.02719 RMS(Eabs2)= 0.27195 +- 0.02719
+  Eabs3(MeV)= 0.05604 +- 0.02966 RMS(Eabs3)= 0.29659 +- 0.02966
+  Eabs4(MeV)= 0.00127 +- 0.00126 RMS(Eabs4)= 0.01261 +- 0.00126
 
     Average number of hits in the vertex detector
 
-  Nhit= 3.09000 +- 0.04711
+  Nhit= 3.12000 +- 0.07250
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2136731375, 1095056782
+ Current couple of seeds = 69943159, 67607078
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
