@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27th September 2004 Peter Gumplinger (op-V06-02-02)
+                Fix bug in G4PlaneVectorRand and resample
+                theFacetNormal for LobeReflection in DielectricMetal
+
 12th August 2004 Peter Gumplinger (op-V06-02-01)
                 In G4OpBoundaryProcess.cc: use GetMaterial from 
                 G4StepPoint directly; apply/sample reflectivity and 
