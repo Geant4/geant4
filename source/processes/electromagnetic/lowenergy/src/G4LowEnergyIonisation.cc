@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.10 1999-06-05 14:12:06 aforti Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.11 1999-06-06 16:26:17 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -486,10 +486,8 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
   G4double DeltaTotalMomentum = sqrt(DeltaKineticEnergy * (DeltaKineticEnergy +
                                                        2. * electron_mass_c2 ));
    
-  G4double finalKineticEnergy = KineticEnergy - DeltaKineticEnergy - BindingEn;
+  G4double finalKineticEnergy = KineticEnergy - DeltaKineticEnergy;
 
-  //  G4double costheta = DeltaKineticEnergy * (TotalEnergy + electron_mass_c2)
-  //                  /(DeltaTotalMomentum * TotalMomentum); 
   if(finalKineticEnergy > 0.){
 
     G4double finalMomentum=sqrt(finalKineticEnergy*
@@ -504,6 +502,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
     //  direction of the delta electron
     G4double phi = twopi * G4UniformRand(); 
     G4double sintheta = sqrt((1.+costheta)*(1.-costheta));
+
     G4double dirx = sintheta * cos(phi), diry = sintheta * sin(phi), dirz = costheta;
     
     G4ThreeVector DeltaDirection(dirx,diry,dirz);
@@ -565,7 +564,8 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
 	diry = newsinTh*cos(newPhi);
 	dirx = newsinTh*sin(newPhi);
 	G4ThreeVector newPartDirection(dirx, diry, dirz);
-	
+	newPartDirection.rotateUz(ParticleDirection);
+
 	if(ThereAreShells != FALSE){
 	  
 	  thePrimaryShell = (G4int) fluorPar[0];
@@ -623,7 +623,13 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
                         - DeltaTotalMomentum*DeltaDirection.y())/finalMomentum; 
     G4double finalPz = (TotalMomentum*ParticleDirection.z()
                         - DeltaTotalMomentum*DeltaDirection.z())/finalMomentum; 
-    
+#ifdef G4VERBOSE 
+    G4double momdiff = sqrt(finalPx*finalPx + finalPy*finalPy + finalPz*finalPz);
+    if(momdiff-1. > 1e-6){
+      cout<<"Error!!!! momentum change: "<<momdiff-1<<endl;
+      G4Exception("G4LowEnergyIonisation: Error!!!! momentum change");
+    }
+#endif    
     aParticleChange.SetMomentumChange( finalPx,finalPy,finalPz );
     aParticleChange.SetEnergyChange( finalKineticEnergy );
     aParticleChange.SetLocalEnergyDeposit (theEnergyDeposit);

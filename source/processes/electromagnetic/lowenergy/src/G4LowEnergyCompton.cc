@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyCompton.cc,v 1.6 1999-06-05 14:04:07 aforti Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.7 1999-06-06 16:26:16 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -169,7 +169,6 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const
   //
   
   G4ThreeVector GammaDirection1 ( dirx,diry,dirz );
-  
   GammaDirection1.rotateUz(GammaDirection0);
   aParticleChange.SetMomentumChange( GammaDirection1 ) ;
   G4double GammaEnergy1 = epsilon*GammaEnergy0;

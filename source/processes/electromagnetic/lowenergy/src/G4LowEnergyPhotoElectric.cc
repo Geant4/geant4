@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.10 1999-06-05 13:43:15 aforti Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.11 1999-06-06 16:26:17 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -201,7 +201,8 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
 	diry = newsinTh*cos(newPhi);
 	dirx = newsinTh*sin(newPhi);
 	G4ThreeVector newPartDirection(dirx, diry, dirz);
-	
+	newPartDirection.rotateUz(PhotonDirection);
+
 	if(ThereAreShells != FALSE){
 	  
 	  thePrimaryShell = (G4int) fluorPar[0];
