@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VeEnergyLoss.cc,v 1.8 2000-10-30 07:01:09 urban Exp $
+// $Id: G4VeEnergyLoss.cc,v 1.9 2001-01-11 10:42:01 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 
@@ -98,6 +98,14 @@ void G4VeEnergyLoss::BuildDEDXTable(
   G4double lrate = log(UpperBoundEloss/LowerBoundEloss);
   LOGRTable=lrate/NbinEloss;
   RTable   =exp(LOGRTable);
+
+  //set physically consistent value for finalRange 
+  //  and parameters for en.loss step limit
+  if(finalRange > G4Electron::Electron()->GetCuts())
+    finalRange = G4Electron::Electron()->GetCuts() ;
+  c1lim = dRoverRange ;
+  c2lim = 2.*(1.-dRoverRange)*finalRange ;
+  c3lim = -(1.-dRoverRange)*finalRange*finalRange;
 
   // Build energy loss table as a sum of the energy loss due to the
   // different processes.                                           
@@ -370,7 +378,7 @@ G4VParticleChange* G4VeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   if(finalT < MinKineticEnergy) finalT = 0. ;
 
   MeanLoss = E - finalT ;
- 
+
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   //  start of subcutoff generation
 

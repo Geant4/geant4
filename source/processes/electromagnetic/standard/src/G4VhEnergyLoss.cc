@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VhEnergyLoss.cc,v 1.13 2000-10-30 07:01:09 urban Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.14 2001-01-11 10:42:01 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -116,6 +116,14 @@ void G4VhEnergyLoss::BuildDEDXTable(
   G4double lrate = log(UpperBoundEloss/LowerBoundEloss);
   LOGRTable=lrate/NbinEloss;
   RTable   =exp(LOGRTable);
+
+  //set physically consistent value for finalRange
+  //  and parameters for en.loss step limit
+  if(finalRange > G4Electron::Electron()->GetCuts())
+    finalRange = G4Electron::Electron()->GetCuts() ;
+  c1lim = dRoverRange ;
+  c2lim = 2.*(1.-dRoverRange)*finalRange ;
+  c3lim = -(1.-dRoverRange)*finalRange*finalRange;
 
   // create table if there is no table or there is a new cut value
   G4bool MakeTable = false ;
