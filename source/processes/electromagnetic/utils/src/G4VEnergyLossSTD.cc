@@ -124,9 +124,6 @@ G4VEnergyLossSTD::G4VEnergyLossSTD(const G4String& name, G4ProcessType type):
 G4VEnergyLossSTD::~G4VEnergyLossSTD()
 {
   Clear();
-  if(theLambdaTable) theLambdaTable->clearAndDestroy();
-  if(theSubLambdaTable) theSubLambdaTable->clearAndDestroy();
-  delete modelManager;
 
   (G4LossTableManager::Instance())->Clear();
 
@@ -142,6 +139,7 @@ G4VEnergyLossSTD::~G4VEnergyLossSTD()
     scoffProcessors.clear();
     scoffRegions.clear();
   }
+  delete modelManager;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -841,7 +839,7 @@ G4VParticleChange* G4VEnergyLossSTD::PostStepDoIt(const G4Track& track,
   }
   */
 
-  if (tcut < tmax)    
+  if (tcut < tmax)
     SecondariesPostStep(currentModel,currentCouple,dynParticle,tcut,finalT);
 
   if (finalT < minKinEnergy) {
