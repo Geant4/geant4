@@ -4,7 +4,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.cc,v 1.4 2000-04-19 19:18:17 davidw Exp $
+// $Id: G4VCSGfaceted.cc,v 1.5 2000-06-08 17:54:01 gracia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -331,8 +331,8 @@ G4VisExtent G4VCSGfaceted::GetExtent() const
 	do {
 		G4double vmax;
 		
-		const G4ThreeVector **axis(axes+5);
-		G4double *answer(answers+5);
+		const G4ThreeVector **axis = axes+5 ;
+		G4double *answer = answers+5;
 		do {
 			G4double testFace = (*face)->Extent( **axis );
 			if (testFace > *answer) *answer = testFace;
