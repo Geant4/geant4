@@ -91,7 +91,8 @@ tests                       fwj@Triumf.CA                   Fred Jones
 tests                       Makoto.Asai@cern.ch             Makoto Asai
 tests                       Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 tests/test01                John.Apostolakis@cern.ch        John Apostolakis
-tests/test02                Makoto.Asai@cern.ch             Makoto Asai
+tests/test02                Michel.Maire@cern.ch            Michel Maire
+tests/test02.hadron         Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 tests/test03                (not currently used - see tests/GNUmakefile)
 tests/test04                (not currently used - see tests/GNUmakefile)
 tests/test05                Gabriele.Cosmo@cern.ch          Gabriele Cosmo
