@@ -92,13 +92,13 @@ inline const G4ThreeVector& G4MuonDecayChannelWithSpin::GetPolarization() const
 
 inline G4double G4MuonDecayChannelWithSpin::F_c(G4double x, G4double x0)
 {
-  G4double omega = log(EMMU/EMASS);
+  G4double omega = std::log(EMMU/EMASS);
 
   G4double f_c;
 
-  f_c = (5.+17.*x-34.*x*x)*(omega+log(x))-22.*x+34.*x*x;
+  f_c = (5.+17.*x-34.*x*x)*(omega+std::log(x))-22.*x+34.*x*x;
   f_c = (1.-x)/(3.*x*x)*f_c;
-  f_c = (6.-4.*x)*R_c(x)+(6.-6.*x)*log(x) + f_c;
+  f_c = (6.-4.*x)*R_c(x)+(6.-6.*x)*std::log(x) + f_c;
   f_c = (fine_structure_const/twopi) * (x*x-x0*x0) * f_c;
 
   return f_c;
@@ -106,14 +106,14 @@ inline G4double G4MuonDecayChannelWithSpin::F_c(G4double x, G4double x0)
 
 inline G4double G4MuonDecayChannelWithSpin::F_theta(G4double x, G4double x0)
 {
-  G4double omega = log(EMMU/EMASS);
+  G4double omega = std::log(EMMU/EMASS);
 
   G4double f_theta;
 
-  f_theta = (1.+x+34*x*x)*(omega+log(x))+3.-7.*x-32.*x*x;
-  f_theta = f_theta + ((4.*(1.-x)*(1.-x))/x)*log(1.-x);
+  f_theta = (1.+x+34*x*x)*(omega+std::log(x))+3.-7.*x-32.*x*x;
+  f_theta = f_theta + ((4.*(1.-x)*(1.-x))/x)*std::log(1.-x);
   f_theta = (1.-x)/(3.*x*x) * f_theta;
-  f_theta = (2.-4.*x)*R_c(x)+(2.-6.*x)*log(x)-f_theta;
+  f_theta = (2.-4.*x)*R_c(x)+(2.-6.*x)*std::log(x)-f_theta;
   f_theta = (fine_structure_const/twopi) * (x*x-x0*x0) * f_theta;
 
   return f_theta;
