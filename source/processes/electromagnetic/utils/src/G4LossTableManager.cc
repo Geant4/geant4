@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.36 2003-11-25 18:01:49 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.37 2003-11-26 14:55:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -577,9 +577,11 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(const G4ParticleDefinition
   em->SetInverseRangeTable(invrange);
   inv_range_vector[iem] = invrange;
 
+  /*
   if(buildPreciseRange) {
     range->clearAndDestroy();
     std::vector<G4PhysicsTable*> newlist;
+    newlist.clear();
     for (G4int i=0; i<n_dedx; i++) {
       newlist.push_back(loss_list[i]->BuildDEDXTableForPreciseRange());
     }
@@ -589,7 +591,9 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(const G4ParticleDefinition
     for(G4int j=0; j<n_dedx; j++) {
       newlist[j]->clearAndDestroy();
     }
+    newlist.clear();
   }
+  */
 
   em->SetRangeTable(range);
   range_vector[iem] = range;
@@ -612,6 +616,8 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(const G4ParticleDefinition
 	   << "; ionisation process: " << em->GetProcessName()
            << G4endl;
   }
+  list.clear();
+  loss_list.clear();
   return em;
 }
 
