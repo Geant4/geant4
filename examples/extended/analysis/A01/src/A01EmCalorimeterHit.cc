@@ -19,11 +19,9 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// $Id: A01EmCalorimeterHit.cc,v 1.4 2002-12-13 11:34:34 gunter Exp $
+// --------------------------------------------------------------
 //
 
 #include "A01EmCalorimeterHit.hh"

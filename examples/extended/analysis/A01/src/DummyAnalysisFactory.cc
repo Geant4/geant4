@@ -19,6 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+#include <AIDA/IAnalysisFactory.h>
+
+#ifndef G4ANALYSIS_USE
 #include "G4ios.hh"
 extern "C" {
 AIDA::IAnalysisFactory* AIDA_createAnalysisFactory();
