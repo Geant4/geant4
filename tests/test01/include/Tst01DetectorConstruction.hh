@@ -4,12 +4,16 @@
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
+class G4AssemblyVolume;
 class G4VSolid ;
 class G4Material;
 class Tst01DetectorMessenger;
 
 #include "G4VUserDetectorConstruction.hh"
+
 #include "globals.hh"
+
+#include <vector>
 
 class Tst01DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -74,6 +78,13 @@ class Tst01DetectorConstruction : public G4VUserDetectorConstruction
 
      G4int       fChoiceCSG ;
      G4int       fChoiceBool ;
+
+     // ------------------------------------------
+     // Assembly
+     G4LogicalVolume*                AssemblyDetectorLog;
+     G4VPhysicalVolume*              AssemblyDetector;
+     G4AssemblyVolume*               AssemblyCalo;
+     G4LogicalVolume*                AssemblyCellLog;
 };
 
 #endif
