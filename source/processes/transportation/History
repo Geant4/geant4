@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2001-03-19 12:13:38 japost Exp $
+$Id: History,v 1.9 2001-04-13 01:06:31 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,25 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr  11, 2001   P. Gumplinger   (transport-V03-01-01)
+-----------------------------
+
+Replaced the line originally commented out:
+
+        // fTransportEndPolarization= aFieldTrack.GetSpin() ; // Not yet possible
+
+with: 
+
+         fTransportEndSpin = aFieldTrack.GetSpin();
+
+and added to the AlongStepDoIt:
+
+      fParticleChange.SetPolarizationChange(fTransportEndSpin);
+
+These changes are needed to make spin tracking work correctly.
+
+
 Mar  19, 2001   J. Apostolakis  transport-V03-00-01
 ------------------------------
 G4Transportation modified to use new FieldTrack, and get Kinetic Energy from it. 
