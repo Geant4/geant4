@@ -1,4 +1,4 @@
-$Id: History,v 1.189 2003-11-06 19:06:21 pia Exp $
+$Id: History,v 1.190 2003-11-18 16:43:28 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18.11.2003   MGP, tag emlowen-V05-02-10
+             Performance optimization in Bremsstrahlung angular distribution
+
+18.11.2003   MGP, tag emlowen-V05-02-09
+             Performance optimisation in Penelope Bremsstrahlung
+
+18.11.2003   MGP, tag emlowen-V05-02-08
+             Fixed compilation problem on Windows in G4Generator2BS.cc
+ 
+10.11.2003   MGP, tag emlowen-V05-02-07
+             Fix to Penelope Bremsstrahlung angular distribution
+  
 06.11.2003   MGP, tag emlowen-V05-02-06
              New processes for electrons and positrons according to 
              Penelope models
