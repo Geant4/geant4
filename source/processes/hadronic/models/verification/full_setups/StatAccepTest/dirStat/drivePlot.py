@@ -15,6 +15,8 @@
 import os
 import sys
 
+print '   ========== BEGIN drivePlot.py ========== '
+
 if ( len( sys.argv ) > 3 ) :
     caseA = sys.argv[1]
     caseB = sys.argv[2]
@@ -58,3 +60,5 @@ os.rename( "histo_b.hbook", "histo_b.hbook" + "-" + generalCase )
 
 os.rename( "cloudsA.xml", "cloudsA.xml" + "-" + generalCase )
 os.rename( "cloudsB.xml", "cloudsB.xml" + "-" + generalCase )
+
+print '   ========== END drivePlot.py ========== '

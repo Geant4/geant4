@@ -22,6 +22,8 @@
 import os
 import sys
  
+print '    ========== BEGIN plot.py ========== '
+
 inputFile = ""
 
 if ( len( sys.argv ) > 1 ) :
@@ -98,13 +100,15 @@ for line in pfile :
             if ( os.path.exists("main.kumac") ) :
                 os.system("rm main.kumac")
                 
-                mainKumac = open("main.kumac", 'w')
-                command = "exec plot.kumac " + id + "\n"
-                mainKumac.write(command)
-                mainKumac.close();
+            mainKumac = open("main.kumac", 'w')
+            command = "exec plot.kumac " + id + "\n"
+            mainKumac.write(command)
+            mainKumac.close();
 
-                # Execute in batch the kumac (without arguments) main.kumac
-                os.system("paw -w 0 -b main.kumac")
+            # Execute in batch the kumac (without arguments) main.kumac
+            os.system("paw -w 0 -b main.kumac")
 
-                # Rename the .ps file to remember the observable
-                os.rename( "plot.ps" , "plot.ps-" + numObservable + label )
+            # Rename the .ps file to remember the observable
+            os.rename( "plot.ps" , "plot.ps-" + numObservable + label )
+
+print '    ========== END plot.py ========== '

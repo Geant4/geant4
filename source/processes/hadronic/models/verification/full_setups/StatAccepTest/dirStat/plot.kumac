@@ -11,6 +11,8 @@
 * The two plots are then saved in the file  plot.ps  
 *---------------------------------------------------------
 *
+message "   ========== BEGIN plot.kumac ========== " 
+*
 histo/file 1 histo_a.hbook
 histo/file 2 histo_b.hbook
 *
@@ -129,3 +131,4 @@ vec/del sv
 close 1
 close 2
 *
+message "   ========== END plot.kumac ========== " 
