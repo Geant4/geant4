@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.hh,v 1.9 2004-03-10 08:38:39 urban Exp $
+// $Id: G4MscModel.hh,v 1.10 2004-04-23 05:52:07 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -44,6 +44,9 @@
 // 26-11-03 new data member currentRange (L.Urban)
 // 01-03-04 changes in data members + signature changed in SampleCosineTheta
 // 11-03-04 changes in data members (L.Urban)
+// 23-04-04 changes in data members and in signature of SampleCosineTheta
+//          (L.Urban)
+
 //
 // Class Description:
 //
@@ -115,8 +118,7 @@ public:
 
   G4double TrueStepLength(G4double geomStepLength);
 
-  G4double SampleCosineTheta(G4double trueStepLength,G4double KineticEnergy,
-                             G4double lambda);
+  G4double SampleCosineTheta(G4double trueStepLength,G4double KineticEnergy);
 
   G4double SampleDisplacement();
 
@@ -159,8 +161,8 @@ private:
   G4double xsi;
 
   G4double lambda0;
-  G4double parlowen ;
   G4double tPathLength;
+  G4double par1,par2,par3 ;
 
   G4bool   samplez;
 

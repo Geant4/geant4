@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.46 2003-11-12 16:11:56 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.47 2004-04-23 05:52:08 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -60,6 +60,7 @@
 //          method
 // 28-03-03 Move to model design (V.Ivanchenko)
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
+// 23-04-04 value of data member dtrl changed from 0.15 to 0.05 (L.Urban)
 //
 // -----------------------------------------------------------------------------
 //
@@ -75,7 +76,7 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
      : G4VMultipleScattering(processName),
        totBins(120),
        facrange(0.199),
-       dtrl(0.15),
+       dtrl(0.05),
        NuclCorrPar (0.0615),
        FactPar(0.40),
        facxsi(1.0),
