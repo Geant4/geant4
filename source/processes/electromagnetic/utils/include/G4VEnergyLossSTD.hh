@@ -109,7 +109,8 @@ public:
   virtual G4bool IsApplicable(const G4ParticleDefinition& p) = 0;
     // True for all charged particles
 
-  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
+  virtual
+  void BuildPhysicsTable(const G4ParticleDefinition&);
   // Build physics table during initialisation
 
   virtual void PrintInfoDefinition() const;
@@ -170,7 +171,8 @@ public:
 
   void AddSubCutoffProcessor(G4VSubCutoffProcessor*, const G4Region* region = 0);
 
-  virtual void SetSubCutoff(G4bool) {};
+  virtual
+  void SetSubCutoff(G4bool) {};
 
   void SetDEDXTable(G4PhysicsTable* p);
   G4PhysicsTable* DEDXTable() const {return theDEDXTable;};
@@ -236,23 +238,29 @@ public:
 
 protected:
 
-  virtual G4double GetMeanFreePath(const G4Track& track,
+  virtual
+  G4double GetMeanFreePath(const G4Track& track,
                                          G4double previousStepSize,
                                          G4ForceCondition* condition);
 
-  virtual G4double GetContinuousStepLimit(const G4Track& track,
+  virtual
+  G4double GetContinuousStepLimit(const G4Track& track,
                                                 G4double previousStepSize,
                                                 G4double currentMinimumStep,
                                                 G4double& currentSafety);
 
-  virtual const G4ParticleDefinition* DefineBaseParticle(
+  virtual
+  const G4ParticleDefinition* DefineBaseParticle(
           const G4ParticleDefinition*) {return 0;};
 
-  virtual G4PhysicsVector* DEDXPhysicsVector(const G4MaterialCutsCouple*);
+  virtual
+  G4PhysicsVector* DEDXPhysicsVector(const G4MaterialCutsCouple*);
 
-  virtual G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*);
+  virtual
+  G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*);
 
-  virtual G4PhysicsVector* SubLambdaPhysicsVector(const G4MaterialCutsCouple*);
+  virtual
+  G4PhysicsVector* SubLambdaPhysicsVector(const G4MaterialCutsCouple*);
 
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
                                     const G4Material*, G4double cut) = 0;
@@ -353,7 +361,7 @@ inline void G4VEnergyLossSTD::DefineMaterial(const G4MaterialCutsCouple* couple)
     currentCouple   = couple;
     currentMaterial = couple->GetMaterial();
     currentMaterialIndex = couple->GetIndex();
-    meanFreePath = true;
+    if(integral) ResetNumberOfInteractionLengthLeft();
   }
 }
 
