@@ -47,7 +47,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ComptonTest.cc,v 1.16 2002-05-27 17:10:13 pia Exp $
+// $Id: G4ComptonTest.cc,v 1.17 2002-06-02 16:11:26 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -140,13 +140,15 @@ int main()
   G4std::auto_ptr< ITupleFactory > tpf( af->createTupleFactory( *tree ) );
 
   // ---- primary ntuple ------
+  // If using Anaphe HBOOK implementation, there is a limitation on the length of the
+  // variable names in a ntuple
   ITuple* ntuple1 = tpf->create( "1", "Primary tuple", 
-			     "float initialEnergy, energyChange, dedx, dedxNow, pxChange, pyChange, pzChange, pChange, thetaChange, nElectrons, nPositrons, nPhotons" );
+			     "float initen, eChng, dedx, dedxNow, pxChng, pyChng, pzChng, pChng, thChng, nElec, nPos, nPhot" );
 
 
   // ---- secondary ntuple ------   
   ITuple* ntuple2 = tpf->create( "2", "Secondary tuple", 
-			     "float px,py,pz,p,e,eKin,theta,phi,partType" );
+			     "float px,py,pz,p,e,eKin,theta,phi,partTyp" );
 
 
   // ---- secondaries histos ----
@@ -501,15 +503,15 @@ int main()
 	    }
 	
 	  // Fill the secondaries ntuple
-          ntuple2->fill( ntuple2->findColumn( "px      " ), px       );
-          ntuple2->fill( ntuple2->findColumn( "py      " ), py       );
-          ntuple2->fill( ntuple2->findColumn( "pz      " ), pz       );
-          ntuple2->fill( ntuple2->findColumn( "p       " ), p        );
-          ntuple2->fill( ntuple2->findColumn( "e       " ), e        );
-          ntuple2->fill( ntuple2->findColumn( "eKin    " ), eKin     );
-          ntuple2->fill( ntuple2->findColumn( "theta   " ), theta    );
-          ntuple2->fill( ntuple2->findColumn( "phi     " ), phi      );
-          ntuple2->fill( ntuple2->findColumn( "partType" ), partType );
+          ntuple2->fill( ntuple2->findColumn( "px     " ), px       );
+          ntuple2->fill( ntuple2->findColumn( "py     " ), py       );
+          ntuple2->fill( ntuple2->findColumn( "pz     " ), pz       );
+          ntuple2->fill( ntuple2->findColumn( "p      " ), p        );
+          ntuple2->fill( ntuple2->findColumn( "e      " ), e        );
+          ntuple2->fill( ntuple2->findColumn( "eKin   " ), eKin     );
+          ntuple2->fill( ntuple2->findColumn( "theta  " ), theta    );
+          ntuple2->fill( ntuple2->findColumn( "phi    " ), phi      );
+          ntuple2->fill( ntuple2->findColumn( "partTyp" ), partType );
 	  
           // NEW: Values of attributes are prepared; store them to the nTuple:
           ntuple2->addRow(); // check for returning true ...
@@ -518,18 +520,18 @@ int main()
 	}
 
       // Fill the primaries ntuple
-      ntuple1->fill( ntuple1->findColumn( "initialEnergy" ), initialEnergy );
-      ntuple1->fill( ntuple1->findColumn( "energyChange " ), energyChange  );
-      ntuple1->fill( ntuple1->findColumn( "dedx         " ), dedx          );
-      ntuple1->fill( ntuple1->findColumn( "dedxNow      " ), dedxNow       );
-      ntuple1->fill( ntuple1->findColumn( "pxChange     " ), pxChange      );
-      ntuple1->fill( ntuple1->findColumn( "pyChange     " ), pyChange      );
-      ntuple1->fill( ntuple1->findColumn( "pzChange     " ), pzChange      );
-      ntuple1->fill( ntuple1->findColumn( "pChange      " ), pChange       );
-      ntuple1->fill( ntuple1->findColumn( "thetaChange  " ), thetaChange   );
-      ntuple1->fill( ntuple1->findColumn( "nElectrons   " ), nElectrons    );
-      ntuple1->fill( ntuple1->findColumn( "nPositrons   " ), nPositrons    );
-      ntuple1->fill( ntuple1->findColumn( "nPhotons     " ), nPhotons      );
+      ntuple1->fill( ntuple1->findColumn( "initen"  ), initialEnergy );
+      //  ntuple1->fill( ntuple1->findColumn( "eChng"   ), energyChange );
+      //  ntuple1->fill( ntuple1->findColumn( "dedx"    ), dedx          );
+      //  ntuple1->fill( ntuple1->findColumn( "dedxNow" ), dedxNow       );
+      //  ntuple1->fill( ntuple1->findColumn( "pxChng"  ), pxChange      );
+      //   ntuple1->fill( ntuple1->findColumn( "pyChng"  ), pyChange      );
+      //   ntuple1->fill( ntuple1->findColumn( "pzChng"  ), pzChange      );
+      //   ntuple1->fill( ntuple1->findColumn( "pChng"   ), pChange       );
+      //   ntuple1->fill( ntuple1->findColumn( "thChng"  ), thetaChange   );
+      //   ntuple1->fill( ntuple1->findColumn( "nElec"   ), nElectrons    );
+      //   ntuple1->fill( ntuple1->findColumn( "nPos"    ), nPositrons    );
+      //   ntuple1->fill( ntuple1->findColumn( "nPhot"   ), nPhotons      );
 
       //NEW: Values of attributes are prepared; store them to the nTuple:
       ntuple1->addRow();
