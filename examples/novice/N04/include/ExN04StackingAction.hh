@@ -25,7 +25,7 @@ class ExN04StackingAction : public G4UserStackingAction
     virtual void PrepareNewEvent();
 
   private:
-    G4bool InsideRoI(G4Track *const aTrack,G4double ang);
+    G4bool InsideRoI(const G4Track * aTrack,G4double ang);
     G4VHitsCollection* GetCollection(G4String colName);
     
     ExN04TrackerHitsCollection* trkHits;

@@ -65,7 +65,7 @@ ExN04StackingAction::ClassifyNewTrack(const G4Track * aTrack)
   return classification;
 }
 
-G4bool ExN04StackingAction::InsideRoI(G4Track *const aTrack,G4double ang)
+G4bool ExN04StackingAction::InsideRoI(const G4Track * aTrack,G4double ang)
 {
   if(!muonHits)
   { muonHits = (ExN04MuonHitsCollection*)GetCollection("muonCollection"); }
