@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ReplicaNavigation.cc,v 1.7 2001-03-05 10:44:26 grichine Exp $
+// $Id: G4ReplicaNavigation.cc,v 1.8 2001-03-09 15:32:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -639,10 +639,12 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
 			localDirection);
       if (sampleStep<ourStep)
 	{
-	  if (sampleStep != 0)
-	    ourStep=sampleStep;
 	  exiting=true;
 	  validExitNormal=false;
+	  if (sampleStep != 0)
+	    ourStep=sampleStep;
+	  else
+	    ourStep=sampleStep+kCarTolerance;
 	}
     }
 
