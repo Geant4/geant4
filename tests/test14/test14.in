@@ -26,6 +26,10 @@
 #=========================
 /gun/particle gamma
 #------------------
+/gun/energy 2 MeV
+/tracking/verbose 0
+/run/beamOn 50
+# 
 /gun/energy 10 keV
 /tracking/verbose 2
 /run/beamOn 1
@@ -81,6 +85,10 @@
 #
 /gun/particle gamma
 #------------------
+/gun/energy 2 MeV
+/tracking/verbose 0
+/run/beamOn 50
+#
 /gun/energy 10 keV
 /tracking/verbose 2
 /run/beamOn 1
@@ -137,6 +145,10 @@
 #
 /gun/particle gamma
 #------------------
+/gun/energy 2 MeV
+/tracking/verbose 0
+/run/beamOn 50
+#
 /gun/energy 10 keV
 /tracking/verbose 2
 /run/beamOn 1
