@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DrawVoxels.hh,v 1.11 2002-04-19 08:20:16 gcosmo Exp $
+// $Id: G4DrawVoxels.hh,v 1.1 2003-10-01 14:59:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,8 +84,6 @@ class G4DrawVoxels
     G4VisAttributes fBoundingBoxVisAttributes;
     
     void ComputeVoxelPolyhedra(const G4LogicalVolume*,const G4SmartVoxelHeader*,G4VoxelLimits&,G4PlacedPolyhedronList*) const;
-    
-    G4AffineTransform GetAbsoluteTransformation(const G4VPhysicalVolume*) const;
     
     // Copy constructor Assignment operator not supported (array
     // fvoxelcolours ...)
