@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.4 2003-11-05 11:59:42 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.5 2003-11-10 08:58:42 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -54,13 +54,13 @@ G4Navigator::~G4Navigator()
 {;}
 
 // ********************************************************************
-// LocateGlobalPointAndSetup
+// ResetHierarchyAndLocate
 // ********************************************************************
 //
 G4VPhysicalVolume*
-G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector &p,
-                                       const G4ThreeVector &direction,
-                                       const G4TouchableHistory &h)
+G4Navigator::ResetHierarchyAndLocate(const G4ThreeVector &p,
+                                     const G4ThreeVector &direction,
+                                     const G4TouchableHistory &h)
 {
   ResetState();
   fHistory = *h.GetHistory();
@@ -504,20 +504,29 @@ G4Navigator::LocateGlobalPointWithinVolume(const G4ThreeVector& pGlobalpoint)
 }
 
 // ********************************************************************
-// LocateGlobalPointAndUpdateTouchable
-//
-// Use direction
+// LocateGlobalPointAndUpdateTouchableHandle
 // ********************************************************************
 //
-void G4Navigator::LocateGlobalPointAndUpdateTouchable(
-                           const G4ThreeVector&       position,
-                           const G4ThreeVector&       direction,
-                                 G4VTouchable*        touchableToUpdate,
-                           const G4bool               RelativeSearch  )
+void G4Navigator::LocateGlobalPointAndUpdateTouchableHandle(
+                               const G4ThreeVector&       position,
+                               const G4ThreeVector&       direction,
+                                     G4TouchableHandle&   oldTouchableToUpdate,
+                               const G4bool               RelativeSearch )
 {
   G4VPhysicalVolume* pPhysVol;
-  pPhysVol = LocateGlobalPointAndSetup( position, &direction, RelativeSearch);  
-  touchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
+  pPhysVol = LocateGlobalPointAndSetup( position,&direction,RelativeSearch );
+  if( fEnteredDaughter || fExitedMother )
+  {
+     oldTouchableToUpdate = CreateTouchableHistory();
+     if( pPhysVol == 0 )
+     {
+       // We want to ensure that the touchable is correct in this case.
+       //  The method below should do this and recalculate a lot more ....
+       //
+       oldTouchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
+     }
+  }
+  return;
 }
 
 // ********************************************************************
@@ -1032,6 +1041,15 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
 #endif
 
   return newSafety;
+}
+
+// ********************************************************************
+// CreateTouchableHistoryHandle
+// ********************************************************************
+//
+G4TouchableHistoryHandle G4Navigator::CreateTouchableHistoryHandle() const
+{
+  return G4TouchableHistoryHandle( CreateTouchableHistory() );
 }
 
 // ********************************************************************

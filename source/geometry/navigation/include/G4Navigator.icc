@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.icc,v 1.3 2003-11-05 11:59:42 gcosmo Exp $
+// $Id: G4Navigator.icc,v 1.4 2003-11-10 08:58:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -188,31 +188,6 @@ EVolume G4Navigator::CharacteriseDaughters(const G4LogicalVolume *pLog) const
 }
 
 // ********************************************************************
-// IsExitNormalCalid
-//
-// Is the Surface Normal valid?
-// ********************************************************************
-//
-inline
-G4bool G4Navigator::IsExitNormalValid()
-{
-  return fExiting && fValidExitNormal;
-}
-
-// ********************************************************************
-// GetLocalExitNormal
-//
-// Obtains the Normal vector to a surface (in local coordinates)
-// (It is valid only if Navigator replied true to above function)
-// ********************************************************************
-//
-inline
-G4ThreeVector G4Navigator::GetLocalExitNormal()
-{
-  return fExitNormal;
-}
-
-// ********************************************************************
 // GetGlobalToLocalTransform
 //
 // Returns local to global transformation.
@@ -320,11 +295,23 @@ G4bool  G4Navigator::EnteredDaughterVolume()
   return fEnteredDaughter;
 }
 
-// inline
-// G4bool G4Navigator::ExitedVolume()
-// {
-//   return fExitedCurrent;
-// }
+// ********************************************************************
+// LocateGlobalPointAndUpdateTouchable
+//
+// Use direction
+// ********************************************************************
+//
+inline
+void G4Navigator::LocateGlobalPointAndUpdateTouchable(
+                           const G4ThreeVector&       position,
+                           const G4ThreeVector&       direction,
+                                 G4VTouchable*        touchableToUpdate,
+                           const G4bool               RelativeSearch  )
+{
+  G4VPhysicalVolume* pPhysVol;
+  pPhysVol = LocateGlobalPointAndSetup( position, &direction, RelativeSearch);  
+  touchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
+}
 
 // ********************************************************************
 // LocateGlobalPointAndUpdateTouchable
@@ -339,43 +326,6 @@ void G4Navigator::LocateGlobalPointAndUpdateTouchable(
   G4VPhysicalVolume* pPhysVol;
   pPhysVol = LocateGlobalPointAndSetup( position, 0, RelativeSearch);  
   touchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
-}
-
-// ********************************************************************
-// LocateGlobalPointAndUpdateTouchableHandle
-// ********************************************************************
-//
-inline
-void G4Navigator::LocateGlobalPointAndUpdateTouchableHandle(
-                               const G4ThreeVector&       position,
-                               const G4ThreeVector&       direction,
-                                     G4TouchableHandle&   oldTouchableToUpdate,
-                               const G4bool               RelativeSearch )
-{
-  G4VPhysicalVolume* pPhysVol;
-  pPhysVol = LocateGlobalPointAndSetup( position,&direction,RelativeSearch );
-  if( fEnteredDaughter || fExitedMother )
-  {
-     oldTouchableToUpdate = CreateTouchableHistory();
-     if( pPhysVol == 0 )
-     {
-       // We want to ensure that the touchable is correct in this case.
-       //  The method below should do this and recalculate a lot more ....
-       //
-       oldTouchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
-     }
-  }
-  return;
-}
-
-// ********************************************************************
-// CreateTouchableHistoryHandle
-// ********************************************************************
-//
-inline
-G4TouchableHistoryHandle G4Navigator::CreateTouchableHistoryHandle() const
-{
-  return G4TouchableHistoryHandle( CreateTouchableHistory() );
 }
 
 // ********************************************************************
