@@ -21,55 +21,42 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorMessenger.hh,v 1.4 2004-05-25 20:24:11 vnivanch Exp $
+// $Id: EmAcceptance.hh,v 1.1 2004-05-25 20:24:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
+//
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#ifndef DetectorMessenger_h
-#define DetectorMessenger_h 1
+#ifndef EmAcceptance_h
+#define EmAcceptance_h 1
 
 #include "globals.hh"
-#include "G4UImessenger.hh"
-
-class DetectorConstruction;
-class G4UIdirectory;
-class G4UIcommand;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
-class G4UIcmdWith3Vector;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorMessenger: public G4UImessenger
+class EmAcceptance
 {
-  public:
-    DetectorMessenger(DetectorConstruction* );
-   ~DetectorMessenger();
 
-    void SetNewValue(G4UIcommand*, G4String);
+public:
+  EmAcceptance();
+  ~EmAcceptance();
 
-  private:
-    DetectorConstruction* Detector;
+  void BeginOfAcceptance(const G4String& title, G4int stat);
+  void EndOfAcceptance();
 
-    G4UIdirectory*             testemDir;
+  void EmAcceptanceGauss(const G4String& title, G4int stat, 
+                               G4double avr, G4double avr0, 
+		               G4double rms, G4double limit);
 
-    G4UIcmdWithADoubleAndUnit* SizeYZCmd;
-    G4UIcmdWithAnInteger*      NbLayersCmd;
-    G4UIcmdWithAnInteger*      NbAbsorCmd;
-    G4UIcommand*               AbsorCmd;
-    G4UIcmdWithADoubleAndUnit* MagFieldCmd;
-    G4UIcmdWithADoubleAndUnit* MaxStepCmd;
-    G4UIcmdWithoutParameter*   UpdateCmd;
-    G4UIcmdWith3Vector*        accCmd1;
-    G4UIcmdWith3Vector*        accCmd2;
+private:
+
+  // hide assignment operator
+  EmAcceptance & operator=(const EmAcceptance &right);
+  EmAcceptance(const EmAcceptance&);
+
+  G4bool isAccepted;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

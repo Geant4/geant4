@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.hh,v 1.7 2004-04-28 16:58:47 maire Exp $
+// $Id: DetectorConstruction.hh,v 1.8 2004-05-25 20:24:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,6 +33,7 @@
 
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
+#include "G4ThreeVector.hh"
 
 class G4Box;
 class G4LogicalVolume;
@@ -40,7 +41,6 @@ class G4VPhysicalVolume;
 class G4Material;
 class G4UniformMagField;
 class G4UserLimits;
-
 class DetectorMessenger;
 
      const G4int MaxAbsor = 10;
@@ -60,10 +60,10 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      void SetAbsorMaterial (G4int,G4String);     
      void SetAbsorThickness(G4int,G4double);
           
-     void SetWorldMaterial (G4String);          
+     void SetWorldMaterial (G4String);
      void SetCalorSizeYZ   (G4double);          
      void SetNbOfLayers    (G4int);   
-      
+
      void SetMagField   (G4double);
      void SetMaxStepSize(G4double);
      
@@ -86,27 +86,39 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      G4int       GetNbOfAbsor()             {return NbOfAbsor;}; 
      G4Material* GetAbsorMaterial(G4int i)  {return AbsorMaterial[i];};
      G4double    GetAbsorThickness(G4int i) {return AbsorThickness[i];};      
-     
+
      const G4VPhysicalVolume* GetphysiWorld()        {return physiWorld;};
      const G4Material*        GetWorldMaterial()     {return defaultMaterial;};
      const G4VPhysicalVolume* GetAbsorber(G4int i)   {return physiAbsor[i];};
-                 
+
+     // Acceptance parameters
+     void     SetEdepAndRMS(G4int, G4ThreeVector);
+     G4double GetAverageEdep(G4int i) const    {return edeptrue[i];};
+     G4double GetRMSEdep(G4int i) const        {return rmstrue[i];};
+     G4double GetLimitEdep(G4int i) const      {return limittrue[i];};
+
+     // Histogram name and type
+     void SetHistoName(G4String& val)   {histoName = val;};
+     void SetHistoType(G4String& val)   {histoType = val;};
+     const G4String& HistoName() const  {return histoName;};
+     const G4String& HistoType() const  {return histoType;};
+
   private:
-     
-     G4int              NbOfAbsor;     
+
+     G4int              NbOfAbsor;
      G4Material*        AbsorMaterial [MaxAbsor];
      G4double           AbsorThickness[MaxAbsor];
-     
+
      G4int              NbOfLayers;
      G4double           LayerThickness;
-          
+
      G4double           CalorSizeYZ;
      G4double           CalorThickness;
-     
+
      G4Material*        defaultMaterial;
      G4double           WorldSizeYZ;
      G4double           WorldSizeX;
-            
+
      G4Box*             solidWorld;
      G4LogicalVolume*   logicWorld;
      G4VPhysicalVolume* physiWorld;
@@ -114,25 +126,32 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      G4Box*             solidCalor;
      G4LogicalVolume*   logicCalor;
      G4VPhysicalVolume* physiCalor;
-     
+
      G4Box*             solidLayer;
      G4LogicalVolume*   logicLayer;
      G4VPhysicalVolume* physiLayer;
-         
+
      G4Box*             solidAbsor[MaxAbsor];
      G4LogicalVolume*   logicAbsor[MaxAbsor];
      G4VPhysicalVolume* physiAbsor[MaxAbsor];
-     
+
      G4UniformMagField* magField;
      G4UserLimits*      userLimits;
-     
+
      DetectorMessenger* detectorMessenger;
-      
+
+     G4double           edeptrue[MaxAbsor];
+     G4double           rmstrue[MaxAbsor];
+     G4double           limittrue[MaxAbsor];
+     G4String           histoName;
+     G4String           histoType;
+
+
   private:
-    
+
      void DefineMaterials();
      void ComputeCalorParameters();
-     G4VPhysicalVolume* ConstructCalorimeter();     
+     G4VPhysicalVolume* ConstructCalorimeter();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

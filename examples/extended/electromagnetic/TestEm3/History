@@ -1,4 +1,4 @@
-$Id: History,v 1.51 2004-04-29 08:46:07 maire Exp $
+$Id: History,v 1.52 2004-05-25 20:24:09 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
-     
+25-05-04 V.Ivanchenko
+- Update printout
+- Fix problem of dE/dx printout
+- Add acceptance check activated by UI command
+
 28-04-04 mma (testem3-V06-01-01)
 - print resolution at EndOfRun
 - suppress PhysListParticles and General
