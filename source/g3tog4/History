@@ -1,7 +1,10 @@
-$Id: History,v 1.23 1999-11-11 15:35:40 gunter Exp $
+$Id: History,v 1.24 1999-11-23 03:31:46 lockman Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V00-01-02 22-Nov-1999 Lockman
+- g3test.F renamed to g3test.F.save
 
 g3tog4-V00-01-01 20-Oct-99 Allison
 - G3MatTable.cc: introduced G4String matid (a(3,lngth)) to help STL Interface.
