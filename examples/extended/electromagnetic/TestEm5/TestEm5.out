@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (25-June-2004)
+ Geant4 version $Name: not supported by cvs2svn $   (26-October-2004)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -116,25 +116,25 @@ msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
-muIoni:   tables are built for  mu+
+MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
-muBrems:   tables are built for  mu+
+MuBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
-muPairProd:   tables are built for  mu+
+MuPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 ### All dEdx and Range tables are built #####
 
-muIoni:   tables are built for  mu-
+MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
@@ -202,24 +202,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=46.56s Real=1048.91s Sys=88.98s
+  User=48.99s Real=857.45s Sys=87.3s
 
  ======================== run summary ======================
 
- The run was 100000 pi+ of 5 GeV through 20 mum of Silicon (density: 2.3 g/cm3 )
+ Number of Events = 100000
 
- Total energy deposit in absorber per event = 6.701 keV +- 21.71 eV   meanEinAbs= 5 GeV
+ Total energy deposit in absorber per event = 6.7 keV +- 21.82 eV 
 
- Mean dE/dx  = 3.269 MeV/cm	 stopping Power = 1.403 MeV*cm2/g
- (from Table = 2.803 MeV/cm)	 (from Table    = 1.203 MeV*cm2/g)
+ Total track length (charged) in absorber per event = 20.97 mum +- 15.24 nm 
+ Total track length (neutral) in absorber per event = 1.319 nm  +- 9.342 Ang
 
- Total track length (charged) in absorber per event = 20.97 mum +- 15.49 nm 
- Total track length (neutral) in absorber per event = 6173 fm  +- 4626 fm 
+ Number of steps (charged) in absorber per event = 1.08 +- 1.234e-05
+ Number of steps (neutral) in absorber per event = 3e-05 +- 1.234e-05
 
- Number of steps (charged) in absorber per event = 1.081 +- 1.244e-05
- Number of steps (neutral) in absorber per event = 2e-05 +- 1.244e-05
-
- Number of secondaries per event : Gammas = 2e-05;   electrons = 0.0375;   positrons = 0
+ Number of secondaries per event : Gammas = 3e-05;   electrons = 0.03719;   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -229,7 +226,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1492258000, 1938858686
+ Current couple of seeds = 1636731634, 910890274
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

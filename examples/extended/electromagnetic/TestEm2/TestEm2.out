@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (25-June-2004)
+ Geant4 version $Name: not supported by cvs2svn $   (26-October-2004)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -85,7 +85,6 @@ Current available graphics systems are:
 /testem/run/acceptance  0.9412 0.0491 3.0
 #
 /testem/phys/addPhysics  standard
-PhysicsList::AddPhysicsList <standard> fail - name is unknown 
 ### /testem/phys/addPhysics  g4v52
 #
 /testem/phys/setCuts 5.0 mm
@@ -159,25 +158,25 @@ msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
       Boundary algorithm is active with facrange= 0.199
 
-muIoni:   tables are built for  mu+
+MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
       Lambda tables from threshold to 100 GeV in 90 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
-muBrems:   tables are built for  mu+
+MuBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
       Lambda tables from threshold to 100 GeV in 90 bins.
       Parametrised model 
 
-muPairProd:   tables are built for  mu+
+MuPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
       Lambda tables from threshold to 100 GeV in 90 bins.
       Parametrised model 
 ### All dEdx and Range tables are built #####
 
-muIoni:   tables are built for  mu-
+MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
       Lambda tables from threshold to 100 GeV in 90 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
@@ -219,20 +218,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=18.12s Real=26.56s Sys=0.89s
+  User=18.88s Real=24.04s Sys=0.79s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 1.11 radl:   13.27%       4.86%             0-> 1.11 radl:   13.27%     4.86% 
-    1.11-> 2.22 radl:   21.98%       9.68%             0-> 2.22 radl:   35.25%    12.18% 
-    2.22-> 3.33 radl:   23.19%       9.70%             0-> 3.33 radl:   58.44%    15.79% 
-    3.33-> 4.44 radl:   13.84%       8.00%             0-> 4.44 radl:   72.28%    16.15% 
-    4.44-> 5.55 radl:    9.16%       7.16%             0-> 5.55 radl:   81.44%    13.66% 
-    5.55-> 6.66 radl:    5.65%       5.78%             0-> 6.66 radl:   87.09%    11.22% 
-    6.66-> 7.77 radl:    3.55%       4.57%             0-> 7.77 radl:   90.64%     9.04% 
-    7.77-> 8.88 radl:    1.61%       3.42%             0-> 8.88 radl:   92.25%     7.43% 
-    8.88-> 9.99 radl:    0.99%       2.41%             0-> 9.99 radl:   93.25%     6.65% 
+    0.00-> 1.11 radl:   14.01%       5.24%             0-> 1.11 radl:   14.01%     5.24% 
+    1.11-> 2.22 radl:   26.41%      10.51%             0-> 2.22 radl:   40.42%    13.56% 
+    2.22-> 3.33 radl:   22.03%       9.66%             0-> 3.33 radl:   62.45%    17.75% 
+    3.33-> 4.44 radl:   13.12%       8.21%             0-> 4.44 radl:   75.57%    18.24% 
+    4.44-> 5.55 radl:    7.74%       7.19%             0-> 5.55 radl:   83.31%    16.72% 
+    5.55-> 6.66 radl:    4.64%       5.55%             0-> 6.66 radl:   87.95%    14.52% 
+    6.66-> 7.77 radl:    3.28%       6.33%             0-> 7.77 radl:   91.23%    10.09% 
+    7.77-> 8.88 radl:    1.76%       4.65%             0-> 8.88 radl:   92.99%     7.49% 
+    8.88-> 9.99 radl:    0.52%       1.41%             0-> 9.99 radl:   93.50%     6.85% 
 
 
 
@@ -240,27 +239,27 @@ Run Summary
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 0.11 radl:   61.61%      11.78%             0-> 0.11 radl:   61.61%    11.78% 
-    0.11-> 0.22 radl:   17.42%       7.26%             0-> 0.22 radl:   79.02%     9.44% 
-    0.22-> 0.33 radl:    7.05%       4.89%             0-> 0.33 radl:   86.08%     7.31% 
-    0.33-> 0.44 radl:    3.43%       2.46%             0-> 0.44 radl:   89.51%     6.88% 
-    0.44-> 0.56 radl:    2.21%       1.65%             0-> 0.56 radl:   91.72%     6.67% 
-    0.56-> 0.67 radl:    1.53%       1.46%             0-> 0.67 radl:   93.25%     6.65% 
+    0.00-> 0.11 radl:   65.30%      10.66%             0-> 0.11 radl:   65.30%    10.66% 
+    0.11-> 0.22 radl:   16.19%       6.96%             0-> 0.22 radl:   81.49%     8.44% 
+    0.22-> 0.33 radl:    5.91%       3.25%             0-> 0.33 radl:   87.39%     7.78% 
+    0.33-> 0.44 radl:    3.12%       3.02%             0-> 0.44 radl:   90.51%     7.27% 
+    0.44-> 0.56 radl:    1.75%       1.40%             0-> 0.56 radl:   92.25%     7.05% 
+    0.56-> 0.67 radl:    1.25%       1.19%             0-> 0.67 radl:   93.50%     6.85% 
 
                               SUMMARY
-                         energy deposit :   93.25 % E0 +-    6.65 % E0
-                         charged traklen:   13.55 radl +-    0.97 radl
-                         neutral traklen:  192.76 radl +-   21.01 radl
+                         energy deposit :   93.50 % E0 +-    6.85 % E0
+                         charged traklen:   13.55 radl +-    1.02 radl
+                         neutral traklen:  196.98 radl +-   19.27 radl
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1618273327, 139810353
+ Current couple of seeds = 2114702195, 43731533
 ----------------------------------------
 
-<<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.932483  delEdep= -0.0087170039 nrms= -1.7753572
-Erms: 0.066471678  delErms= 0.017371678 nrms= 3.5380201
-<<<<END>>>>   IS ACCEPTED
+<<<<<ACCEPTANCE>>>>> 100 events for Total Energy in Absorber
+Edep: 0.93503688  delEdep= -0.0061631232 nrms= -1.2552186
+Erms: 0.068480567  delErms= 0.019380567 nrms= 3.9471623
+<<<<<END>>>>>   IS ACCEPTED
 
 #
 Graphics systems deleted.

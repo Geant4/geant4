@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (25-June-2004)
+ Geant4 version $Name: not supported by cvs2svn $   (26-October-2004)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -85,25 +85,25 @@ msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
-muIoni:   tables are built for  mu+
+MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
-muBrems:   tables are built for  mu+
+MuBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
-muPairProd:   tables are built for  mu+
+MuPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 ### All dEdx and Range tables are built #####
 
-muIoni:   tables are built for  mu-
+MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
@@ -1030,7 +1030,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     1      5 m    2.18 m   -2.15 m    3.74 eV      0 eV   5.86 m    5.86 m          Tank  Transportation
     2     10 m    5.76 m   -5.69 m    3.74 eV      0 eV    7.1 m      13 m    OutOfWorld  Transportation
 Number of optical photons produces in this event : 53
-number of event = 1 User=0.11s Real=0.3s Sys=0.12s
+number of event = 1 User=0.12s Real=0.23s Sys=0.11s
 #
 /process/inactivate Scintillation
 /N06/phys/verbose 0
@@ -1364,6 +1364,6 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     1      5 m   -45.2 cm  -2.94 m    2.42 eV      0 eV   5.82 m    5.82 m          Tank  Transportation
     2     10 m   -1.17 m   -7.64 m    2.42 eV      0 eV    6.9 m    12.7 m    OutOfWorld  Transportation
 Number of optical photons produces in this event : 34
-number of event = 1 User=0.06s Real=0.09s Sys=0.02s
+number of event = 1 User=0.03s Real=0.09s Sys=0.05s
 Graphics systems deleted.
 Visualization Manager deleting...

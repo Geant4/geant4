@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (25-June-2004)
+ Geant4 version $Name: not supported by cvs2svn $   (26-October-2004)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -156,25 +156,25 @@ msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
-muIoni:   tables are built for  mu+
+MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
-muBrems:   tables are built for  mu+
+MuBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
-muPairProd:   tables are built for  mu+
+MuPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 ### All dEdx and Range tables are built #####
 
-muIoni:   tables are built for  mu-
+MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
@@ -185,26 +185,26 @@ msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
-cell_01_rep:0............ |           1 |         114 |         131 |         102 |         102 |   9.0629787 |   9.3816796 |           1 |
-cell_02_rep:0............ |           2 |          87 |         188 |         186 |          93 |  0.10948507 |   8.8215045 |           1 |
-cell_03_rep:0............ |           4 |         118 |         246 |         282 |        70.5 |   7.0602946 |    8.431295 |           1 |
-cell_04_rep:0............ |           8 |         126 |         277 |         321 |      40.125 |   6.0901992 |   7.6719303 |           1 |
-cell_05_rep:0............ |          16 |         152 |         307 |         351 |     21.9375 |   6.2587612 |   7.9916131 |           1 |
-cell_06_rep:0............ |          32 |         188 |         385 |         500 |      15.625 |   5.9034582 |   7.6029349 |           1 |
-cell_07_rep:0............ |          64 |         209 |         440 |         617 |    9.640625 |   4.9574998 |    7.178638 |           1 |
-cell_08_rep:0............ |         128 |         229 |         477 |         667 |   5.2109375 | 0.073161067 |   7.0450928 |           1 |
-cell_09_rep:0............ |         256 |         254 |         559 |         806 |   3.1484375 |   3.6630107 |   6.7132557 |           1 |
-cell_10_rep:0............ |         512 |         276 |         570 |         813 |   1.5878906 |   3.2319426 |   6.3057613 |           1 |
-cell_11_rep:0............ |        1024 |         315 |         626 |         925 |  0.90332031 |   3.1442272 |   6.1574117 |           1 |
-cell_12_rep:0............ |        2048 |         339 |         690 |        1176 |  0.57421875 | 0.027458883 |   5.4745464 |           1 |
-cell_13_rep:0............ |        4096 |         382 |         781 |        1407 |  0.34350586 |   1.9088646 |   5.1636915 |           1 |
-cell_14_rep:0............ |        8192 |         385 |         803 |        1580 |  0.19287109 |   1.6672966 |   4.7083252 |           1 |
-cell_15_rep:0............ |       16384 |         417 |         826 |        1560 | 0.095214844 |  0.13970085 |   4.5455423 |           1 |
-cell_16_rep:0............ |       32768 |         493 |         976 |        1735 | 0.052947998 |   1.7784499 |   4.5335469 |           1 |
-cell_17_rep:0............ |       65536 |         545 |        1127 |        2234 | 0.034088135 |   1.5453158 |   4.1681222 |           1 |
-cell_18_rep:0............ |      131072 |         535 |        1219 |        2747 | 0.020957947 |   1.3195513 |   3.8074997 |           1 |
-rest_rep:0............... |      131072 |         586 |         586 |           0 |           0 |           0 |           0 |           0 |
-shieldWorld_rep:0........ |           1 |           9 |         109 |           0 |           0 |          10 |          10 |           1 |
+cell_01_rep:0............ |           1 |         110 |         131 |         118 |         118 |   8.5562926 |    9.237997 |           1 |
+cell_02_rep:0............ |           2 |          73 |         167 |         174 |          87 |   7.1601913 |   8.7864585 |           1 |
+cell_03_rep:0............ |           4 |          88 |         191 |         196 |          49 |   7.5359216 |   8.6869605 |           1 |
+cell_04_rep:0............ |           8 |         104 |         214 |         305 |      38.125 |   3.1115996 |   7.4269722 |           1 |
+cell_05_rep:0............ |          16 |         105 |         228 |         302 |      18.875 |   3.5556678 |    7.357289 |           1 |
+cell_06_rep:0............ |          32 |         110 |         230 |         286 |      8.9375 |   6.3052811 |   7.3525379 |           1 |
+cell_07_rep:0............ |          64 |         119 |         256 |         350 |     5.46875 |   5.6560453 |   6.8402582 |           1 |
+cell_08_rep:0............ |         128 |         137 |         281 |         407 |   3.1796875 |   4.9128142 |     6.36468 |           1 |
+cell_09_rep:0............ |         256 |         158 |         320 |         491 |   1.9179688 |   4.5960987 |   6.3811044 |           1 |
+cell_10_rep:0............ |         512 |         183 |         386 |         561 |   1.0957031 |   4.6296183 |   6.3449131 |           1 |
+cell_11_rep:0............ |        1024 |         190 |         403 |         606 |  0.59179688 |   4.3429934 |   6.1812327 |           1 |
+cell_12_rep:0............ |        2048 |         188 |         381 |         698 |  0.34082031 | 0.036896157 |   5.4227668 |           1 |
+cell_13_rep:0............ |        4096 |         211 |         440 |         822 |  0.20068359 |   3.0971965 |   4.9838145 |           1 |
+cell_14_rep:0............ |        8192 |         216 |         452 |         781 | 0.095336914 |   3.0991602 |   4.9325683 |           1 |
+cell_15_rep:0............ |       16384 |         251 |         510 |         901 | 0.054992676 |   1.9544162 |    4.851316 |           1 |
+cell_16_rep:0............ |       32768 |         256 |         516 |         958 |  0.02923584 |   2.5277374 |   4.4940816 |           1 |
+cell_17_rep:0............ |       65536 |         290 |         564 |        1105 | 0.016860962 |   2.5106552 |   4.1521405 |           1 |
+cell_18_rep:0............ |      131072 |         265 |         624 |        1379 | 0.010520935 |  0.22549469 |    4.019048 |           1 |
+rest_rep:0............... |      131072 |         267 |         267 |           0 |           0 |           0 |           0 |           0 |
+shieldWorld_rep:0........ |           1 |          10 |         109 |           0 |           0 |          10 |          10 |           1 |
 === G4ProcessPlacer::RemoveProcess: for: neutron
   ProcessName: MassImportanceProcess, will be removed!
   The initial Vectors: 

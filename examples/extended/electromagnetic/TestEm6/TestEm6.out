@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (25-June-2004)
+ Geant4 version $Name: not supported by cvs2svn $   (26-October-2004)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -90,25 +90,25 @@ msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
-muIoni:   tables are built for  mu+
+MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
-muBrems:   tables are built for  mu+
+MuBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
-muPairProd:   tables are built for  mu+
+MuPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 ### All dEdx and Range tables are built #####
 
-muIoni:   tables are built for  mu-
+MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
@@ -215,20 +215,17 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0  -84.8 m       0 fm      0 fm   8.02 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1    119 m   -4.14 cm      8 cm   2.06 TeV  5.96 TeV   204 m     204 m          Iron      muIoni
-    2    125 m   -59.1 m    95.6 m    1.42 TeV   638 GeV   112 m     316 m          Iron      muIoni
-    3    209 m   -91.8 m    87.8 m    1.03 TeV   393 GeV  91.1 m     408 m          Iron      muIoni
-    4    230 m   -90.8 m     159 m     700 GeV   327 GeV  74.7 m     482 m          Iron      muIoni
-    5    215 m   -43.7 m     130 m     525 GeV   175 GeV  57.5 m     540 m          Iron      muIoni
-    6    250 m   -53.1 m     140 m     429 GeV  96.3 GeV  37.9 m     578 m    OutOfWorld  Transportation
+    1    119 m   -3.42 mm   8.94 cm   2.06 TeV  5.96 TeV   204 m     204 m          Iron      MuIoni
+    2    232 m   -9.57 cm   18.7 cm   1.39 TeV   666 GeV   112 m     316 m          Iron      MuIoni
+    3    250 m   -9.27 cm   18.1 cm   1.31 TeV  83.5 GeV  18.4 m     335 m    OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.01s Real=0.19s Sys=0.01s
+  User=0.01s Real=0.05s Sys=0s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 814344007, 1595462682
+ Current couple of seeds = 1362242984, 2014133420
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
