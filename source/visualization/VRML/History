@@ -1,3 +1,6 @@
+VRML-V01-00-00 27th December 1999  Satoshi Tanaka
+- G4endl ==> "\n" for fDest objects
+
 VRML-V00-01-01 4th November 1999  Satoshi Tanaka
 - Introduction of VRMLBeginModeling() for new vis commands
 
