@@ -404,7 +404,7 @@ g4message=`cat << EOM
 
 OPACS is a visualization environment based on X windows and OpenGL. 
 It is written in ANSI C and is highly portable (UNIX, NT/X11, VMS). 
-The version of OPACS installed is required.
+The OPACS tool is required to activate and build this driver.
 
 EOM`
 

@@ -193,7 +193,8 @@ g4message=`cat << EOM
 
   Specifies to include and use the XAW interfaces in the
   application to be built.
-  The XAW (X11 Athena Widget set) are required to activate these driver.
+  The XAW (X11 Athena Widget set) extensions are required to activate 
+  and build this driver.
 EOM`
 
 dflt=$g4ui_use_xaw
@@ -216,12 +217,12 @@ gans=$ans
 g4message=`cat << EOM
 
   G4UI_BUILD_XM_SESSION
-  Specifies to include in kernel library the XM
-  Motif-based user interfaces.
-
   G4UI_USE_XM
-  Specifies to use the XM interfaces in the
-  application to be built.
+
+  Specifies to include and use the XM Motif based user interfaces.
+  The XM Motif exteansions are required to activate and build this
+  driver.
+
 EOM`
 
 dflt=$g4ui_use_xm
@@ -245,12 +246,11 @@ gans=$ans
 g4message=`cat << EOM
 
   G4UI_BUILD_WIN32_SESSION
-  Specifies to include in kernel library the WIN32 terminal interface
-  for Windows systems.
-
   G4UI_USE_WIN32
-  Specifies to use the WIN32 interfaces in the application to be built
-  on Windows systems.
+
+  Specifies to include and use the terminal interface for 
+  Windows systems.
+
 EOM`
 
 dflt=$g4ui_use_win32
@@ -273,7 +273,6 @@ gans=$ans
 g4message=`cat << EOM
 
   G4UI_BUILD_WO_SESSION
-
   G4UI_USE_WO
 
   Specifies to include in kernel library and use the OPACS WO terminal
