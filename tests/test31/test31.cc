@@ -143,9 +143,9 @@ int main(int argc,char** argv) {
   delete visManager;
 #endif
 
-  G4cout << "runManager will be deleted" << G4endl;  
+  //  G4cout << "runManager will be deleted" << G4endl;  
   delete runManager;
-  G4cout << "runManager is deleted" << G4endl;  
+  //  G4cout << "runManager is deleted" << G4endl;  
 
   return 0;
 }

@@ -3,7 +3,7 @@
 #         10.04.01 V.Ivanchneko
 #================================================ 
 /control/verbose 2
-/run/verbose 2
+/run/verbose 1
 /tracking/verbose 0
 /event/verbose 0
 /test31/verbose 0

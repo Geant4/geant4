@@ -56,6 +56,7 @@
 #include "G4MuonMinusCaptureAtRest.hh"
 
 #include "G4hIonisationSTD.hh"
+#include "G4ionIonisation.hh"
 #include "G4Proton.hh"
 #include "G4AntiProton.hh"
 
@@ -173,10 +174,7 @@ void test31StanMAPhysicsList::ConstructProcess()
                || particleName == "triton"  
                || particleName == "IonC12"  
                || particleName == "IonAr40"  
-               || particleName == "IonFe56"  
-               || particleName == "GenericIon"  
-               || (particleType == "nucleus" && charge != 0.0) 
-              )
+               || particleName == "IonFe56")
     {
       pmanager->AddProcess(new G4MultipleScatteringSTD,-1,1,1);
 
@@ -185,6 +183,21 @@ void test31StanMAPhysicsList::ConstructProcess()
       }
 
       G4hIonisationSTD* iIon = new G4hIonisationSTD();
+      iIon->SetParticle(particle);
+      iIon->SetSubCutoff(false);
+      iIon->SetBaseParticle(G4Proton::Proton());
+      pmanager->AddProcess(iIon,-1,2,2);
+
+    } else if (particleName == "GenericIon"  
+               || (particleType == "nucleus" && charge != 0.0) )
+    {
+      pmanager->AddProcess(new G4MultipleScatteringSTD,-1,1,1);
+
+      if(0 < verbose) {
+        G4cout << "Ionic processes for " << particleName << G4endl; 
+      }
+
+      G4ionIonisation* iIon = new G4ionIonisation();
       iIon->SetParticle(particle);
       iIon->SetSubCutoff(false);
       iIon->SetBaseParticle(G4Proton::Proton());
