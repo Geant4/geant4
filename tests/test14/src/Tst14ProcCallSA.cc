@@ -12,13 +12,25 @@
 #include "G4ParticleDefinition.hh"
 #include "G4VProcess.hh"
 
-Tst14ProcCallSA::Tst14ProcCallSA():
-nparticles(0), 
-nprocesses(0),
-nmaterials(0)
-{}
+#ifdef histo
+#include "CLHEP/Hist/HBookFile.h"
+#include <assert.h>
+#endif
+
+Tst14ProcCallSA::Tst14ProcCallSA()
+{
+#ifdef histo
+  // init hbook
+  hbookManager = new HBookFile("proccall.his", 1);
+  assert (hbookManager != 0);
+#endif
+}
 
 Tst14ProcCallSA::~Tst14ProcCallSA(){
+#ifdef histo
+   // Write histogram file
+  hbookManager->write();
+#endif
 
   print();
   
@@ -37,37 +49,43 @@ void Tst14ProcCallSA::execute(const G4Step* aStep){
      G4Material* material = postStepPoint->GetMaterial();
      G4String matname = material->GetName();
      
-     if(particles[particleType] == 0) particles[particleType] = ++nparticles;
-     if(processes[procname]     == 0) processes[procname] = ++nprocesses;
-     if(materials[matname]      == 0) materials[matname] = ++nmaterials;
-     
-     G4int index = 100*materials[matname]
-                   +10*particles[particleType] 
-		   +   processes[procname];
+     G4String index = procname
+	              + G4String(" for ") + particleType 
+	              + G4String(" in ") + matname;
      calls[index] ++; 
+
+#ifdef histo
+     G4String sIndex =  particleType + G4String(" in ") + matname;
+		      
+     if(start[sIndex] == 0 ) {
+        G4String name = G4String("All ") + sIndex
+		      + G4String(" : logE (MeV)");
+       char* histoName = name.data() ;
+       start[sIndex] = hbookManager->histogram(histoName,220,-6.,5.);	
+     }
+			
+     if(hist[index] == 0 ) {
+        G4String name = index + G4String(" : logE (MeV)");
+        char* histoName = name.data() ;
+        hist[index] = hbookManager->histogram(histoName,220,-6.,5.);
+     }
+     G4double energy = aStep->GetPreStepPoint()->GetKineticEnergy();
+     G4double stepL  = aStep->GetStepLength();
+     
+     if(energy>0. && stepL>1e-20) {
+        
+        G4double weight = 1./stepL;
+        start[sIndex]->accumulate(log10(energy) , 1 ) ;
+        hist[index]->accumulate(log10(energy) , weight ) ;   
+     }	 
+#endif     
 }
 
 void Tst14ProcCallSA::print(){
 
-     for(iter ipart=particles.begin(); ipart!=particles.end(); ipart++){
-         G4cout<<G4endl<<"Particle "<<(*ipart).first<<G4endl;
-
-	 G4cout<<G4std::setw(30)<<" ";
-	 for(iter imat=materials.begin(); imat!=materials.end(); imat++){
-	     	 G4cout<<G4std::setw(10)<<(*imat).first;
-	 }
-	 G4cout<<G4endl;
-	 
-         for(iter iproc=processes.begin(); iproc!=processes.end(); iproc++){
-	     G4cout<<G4std::setw(20) <<(*iproc).first
-	           <<" called ";
-	           for(iter imat=materials.begin(); imat!=materials.end(); imat++){
-	               G4int index= 100*(*imat).second
-		                    +10*(*ipart).second 
-				    +   (*iproc).second ;
-	     	       G4cout<<G4std::setw(10)<<calls[index];
-	           }
-	     G4cout<<" times"<<G4endl;
-	 }
+     for(intMapIter icall=calls.begin(); icall!=calls.end(); icall++){
+         G4cout<<(*icall).first<<" : "<<(*icall).second<<" calls"<<G4endl;
      }
+
 }
+

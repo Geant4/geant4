@@ -14,8 +14,16 @@
 // 
 //  veronique.lefebure@cern.ch  20.01.2000
 //
+
+//#define histo
+
 #include "globals.hh"
 #include <g4std/map>
+
+#ifdef histo
+class HepTupleManager;
+class HepHistogram;
+#endif
 class G4Step;
 class Tst14ProcCallSA{
   public:
@@ -28,13 +36,19 @@ class Tst14ProcCallSA{
      void print();
           
   private:
-     typedef map<G4String, G4int, less<G4String> >::iterator iter;
-     G4std::map<G4String, G4int, less<G4String> > particles;   
-     G4std::map<G4String, G4int, less<G4String> > processes;  
-     G4std::map<G4String, G4int, less<G4String> > materials;  
-     G4std::map<G4int, G4int, less<G4int> > calls;  
+     typedef G4std::map<G4String, G4int, less<G4String> > intMap;
+     typedef G4std::map<G4String, G4int, less<G4String> >::iterator intMapIter;
+     intMap calls;  
+    
      
-     G4int  nparticles, nprocesses, nmaterials;
+#ifdef histo
+private:
+
+  typedef G4std::map<G4String, HepHistogram*, less<G4String> > histoMap;
+  typedef G4std::map<G4String, HepHistogram*, less<G4String> >::iterator histoMapIter;
+  HepTupleManager* hbookManager;
+  histoMap       hist,start;
+#endif
 };
 
 #endif
