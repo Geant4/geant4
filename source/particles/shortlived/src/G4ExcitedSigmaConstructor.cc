@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedSigmaConstructor.cc,v 1.7 2002-11-19 11:49:24 jwellisc Exp $
+// $Id: G4ExcitedSigmaConstructor.cc,v 1.8 2003-06-20 00:40:04 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -312,11 +312,12 @@ G4DecayTable*  G4ExcitedSigmaConstructor::AddNKStarMode(
   }
   if (fAnti) daughterN = "anti_" + daughterN;
   // create decay channel  [parent    BR     #daughters]
-  mode = new G4PhaseSpaceDecayChannel(nameParent, r, 2,
+  if (r>0.) {
+    mode = new G4PhaseSpaceDecayChannel(nameParent, r, 2,
                                            daughterN,daughterK);
-  // add decay table
-  decayTable->Insert(mode);
-
+    // add decay table
+    decayTable->Insert(mode);
+  }
 
   return decayTable;
 }
