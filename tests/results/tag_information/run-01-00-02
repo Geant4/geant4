@@ -1,0 +1,10 @@
+PLEASE NOTE that these modifications affect on ALL examples and test 
+programs. I'm affraid to say but I will start committing the corrections 
+on geant4/examples and geant4/test directories on the coming week.
+Please correct your local test codes by yourself... Please consult to
+the newly committed header files of the user action classes. I'm soory
+for my lazyness but, you know, these modifications affect on so many
+places as we had already realized at the last TSB meeting.
+
+                                        Cheers,
+                                                Makoto Asai
