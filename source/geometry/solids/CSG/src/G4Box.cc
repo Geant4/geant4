@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Box.cc,v 1.12 2001-01-31 17:30:53 grichine Exp $
+// $Id: G4Box.cc,v 1.13 2001-02-01 08:22:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -21,7 +21,6 @@
 //                                     algorithm for rotated vertices
 // 
 //
-
 
 #include "G4Box.hh"
 
@@ -40,8 +39,9 @@
 //
 // Constructor - check & set half widths
 
-G4Box::G4Box(const G4String& pName, G4double pX,
-	  G4double pY, G4double pZ) : G4CSGSolid(pName)
+G4Box::G4Box(const G4String& pName,
+             G4double pX, G4double pY, G4double pZ)
+  : G4CSGSolid(pName)
 {
   if ( pX > 2*kCarTolerance && pY > 2*kCarTolerance&& pZ > 2*kCarTolerance)
   {
@@ -51,7 +51,7 @@ G4Box::G4Box(const G4String& pName, G4double pX,
   }
   else
   {
-    G4Exception("Error in G4Box::Box - invalid (<2*kCarTolerance) parameters");
+    G4Exception("G4Box::G4Box(...) - invalid dimensions");
   }	
 
 }
@@ -69,20 +69,26 @@ G4Box::~G4Box()
 
 void G4Box::SetXHalfLength(G4double dx)
 {
-  if(dx > 2*kCarTolerance) fDx = dx ;
-  else G4Exception("G4Box::SetXHalfLength - invalid (<2*kCarTolerance) parameters");
+  if(dx > 2*kCarTolerance)
+    fDx = dx;
+  else
+    G4Exception("G4Box::SetXHalfLength(...) - invalid dimensions");
 } 
 
 void G4Box::SetYHalfLength(G4double dy) 
 {
-  if(dy > 2*kCarTolerance) fDy = dy ;
-  else G4Exception("G4Box::SetYHalfLength - invalid (<2*kCarTolerance) parameters");
+  if(dy > 2*kCarTolerance)
+    fDy = dy;
+  else
+    G4Exception("G4Box::SetYHalfLength(...) - invalid dimensions");
 } 
 
 void G4Box::SetZHalfLength(G4double dz) 
 {
-  if(dz > 2*kCarTolerance) fDz = dz ;
-  else G4Exception("G4Box::SetZHalfLength - invalid (<2*kCarTolerance) parameters");
+  if(dz > 2*kCarTolerance)
+    fDz = dz;
+  else
+    G4Exception("G4Box::SetZHalfLength(...) - invalid dimensions");
 } 
     
 
