@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.20 1999-06-02 07:48:18 stesting Exp $
+# $Id: binmake.gmk,v 1.21 1999-06-03 15:51:21 gunter Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -152,6 +152,7 @@ else
 # The next line specifically should read LDLIBS2 = , not LDLIBS2 :=, so
 #   that it is not expanded until the directory G4TMPDIR is created.
   LDLIBS2 = $(shell \
+        export G4TMP=$(G4TMP); \
 	if [ \( -f $(G4BINDIR)/liblist \
 	  -a -f $(G4WORKDIR)/tmp/$(G4SYSTEM)/libname.map \) ]; then \
 	$(G4BINDIR)/liblist \
@@ -189,15 +190,18 @@ LDLIBS4 += $(LOADLIBS)
 # Finally assemble libraries...
 #
 ifndef USER_DEFINED_LDLIBS
-  LDLIBS = $(LDLIBS1) $(LDLIBS2) $(LDLIBS3)
+  LDLIBS_PREFINAL = $(LDLIBS1) $(LDLIBS2) $(LDLIBS3)
 endif
-LDLIBS += $(LDLIBS4)
+LDLIBS_PREFINAL += $(LDLIBS4)
 
 ifeq ($(G4SYSTEM),WIN32-VC-NICE)
   WIN32TMP := $(patsubst -L%,$(LIB_PATH)%,$(LDFLAGS))
   LDFLAGS  = $(patsubst /,$(PATH_DEL),$(WIN32TMP))
-  LDLIBS = $(patsubst -l%,lib%.a,$(LDLIBS))
+  LDLIBS = $(patsubst -l%,lib%.a,$(LDLIBS_PREFINAL))
+else
+  LDLIBS = LDLIBS_PREFINAL
 endif
+
 
 sources := $(wildcard $(G4TARGET).cc)
 objects := $(patsubst %.cc,$(G4TMPDIR)/exe/%.o,$(sources))
