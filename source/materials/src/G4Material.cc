@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.cc,v 1.14 2001-09-14 16:36:56 maire Exp $
+// $Id: G4Material.cc,v 1.15 2001-09-19 08:02:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -93,7 +93,7 @@ G4Material::G4Material(const G4String& name, G4double z,
   // element corresponding to this material
   maxNbComponents        = fNumberOfComponents = fNumberOfElements = 1;
   fImplicitElement       = true;
-  theElementVector       = new G4ElementVector(1);
+  theElementVector       = new G4ElementVector(1,0);
   (*theElementVector)[0] = new G4Element(name, " ", z, a);
   fMassFractionVector    = new G4double[1];
   fMassFractionVector[0] = 1. ;
@@ -142,7 +142,7 @@ G4Material::G4Material(const G4String& name, G4double density,
   maxNbComponents     = nComponents;
   fNumberOfComponents = fNumberOfElements = 0;
   fImplicitElement    = false;
-  theElementVector    = new G4ElementVector(maxNbComponents);
+  theElementVector    = new G4ElementVector(maxNbComponents,0);
     
   if (fState == kStateUndefined) 
     {
@@ -180,7 +180,7 @@ G4Material::G4Material(const G4String& name, const G4String& chFormula,
   // element corresponding to this material
   maxNbComponents        = fNumberOfComponents = fNumberOfElements = 1;
   fImplicitElement       = true;
-  theElementVector       = new G4ElementVector(1);
+  theElementVector       = new G4ElementVector(1,0);
   (*theElementVector)[0] = new G4Element(name, " ", z, a);
   fMassFractionVector    = new G4double[1];
   fMassFractionVector[0] = 1. ;
@@ -230,7 +230,7 @@ G4Material::G4Material(const G4String& name, const G4String& chFormula,
   maxNbComponents     = nComponents;
   fNumberOfComponents = fNumberOfElements = 0;
   fImplicitElement    = false;
-  theElementVector    = new G4ElementVector(maxNbComponents);
+  theElementVector    = new G4ElementVector(maxNbComponents,0);
     
   if (fState == kStateUndefined) 
     {
@@ -544,12 +544,12 @@ const G4Material& G4Material::operator=(const G4Material& right)
       if (fImplicitElement) {
         G4double z = (*right.theElementVector)[0]->GetZ();
 	G4double a = (*right.theElementVector)[0]->GetA();
-        theElementVector          = new G4ElementVector(1);
+        theElementVector          = new G4ElementVector(1,0);
 	(*theElementVector)[0]    = new G4Element(fName," ",z,a);
 	fMassFractionVector       = new G4double[1];
 	fMassFractionVector[0]    = 1.;
       } else {		
-        theElementVector       = new G4ElementVector(fNumberOfElements);
+        theElementVector       = new G4ElementVector(fNumberOfElements,0);
         fMassFractionVector    = new G4double[fNumberOfElements];     
         for (size_t i=0; i<fNumberOfElements; i++) {
            (*theElementVector)[i]= (*right.theElementVector)[i];

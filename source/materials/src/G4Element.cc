@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.cc,v 1.11 2001-09-14 16:36:56 maire Exp $
+// $Id: G4Element.cc,v 1.12 2001-09-19 08:02:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -105,7 +105,7 @@ G4Element::G4Element(const G4String& name, const G4String& symbol, G4int nIsotop
 
     fNumberOfIsotopes = 0;
 
-    theIsotopeVector         = new G4IsotopeVector(n);
+    theIsotopeVector         = new G4IsotopeVector(n,0);
     fRelativeAbundanceVector = new G4double[nIsotopes];
     
     fCountUse = 0;           //nb of materials which use this element    
@@ -292,7 +292,7 @@ const G4Element& G4Element::operator=(const G4Element& right)
       fNumberOfIsotopes        = right.fNumberOfIsotopes;
       if (fNumberOfIsotopes > 0)
         {
-	 theIsotopeVector         = new G4IsotopeVector(fNumberOfIsotopes);
+	 theIsotopeVector         = new G4IsotopeVector(fNumberOfIsotopes,0);
 	 fRelativeAbundanceVector = new G4double[fNumberOfIsotopes];
 	 for (size_t i=0;i<fNumberOfIsotopes;i++)
 	    {
