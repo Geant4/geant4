@@ -106,7 +106,7 @@ void FluoTestDataSet::LoadData(const G4String& fileName)
   
   G4String name(nameChar);
   
-  char* path = "/mnt/home/guardi/workdir/Simulazione/fluoTest";
+  char* path = "/home3/elena/applicazioni/fluoGunEv/fluoTest";
  
   G4String pathString(path);
   G4String dirFile = pathString + "/" + name;

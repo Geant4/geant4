@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FluoTestPrimaryGeneratorMessenger.cc,v 1.3 2001-10-16 08:16:04 guardi Exp $
+// $Id: FluoTestPrimaryGeneratorMessenger.cc,v 1.4 2001-10-25 16:35:47 elena Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,6 +53,8 @@ FluoTestPrimaryGeneratorMessenger::FluoTestPrimaryGeneratorMessenger(FluoTestPri
 FluoTestPrimaryGeneratorMessenger::~FluoTestPrimaryGeneratorMessenger()
 {
   delete RndmCmd;
+  delete RndmPart;
+  delete  RndmVert;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

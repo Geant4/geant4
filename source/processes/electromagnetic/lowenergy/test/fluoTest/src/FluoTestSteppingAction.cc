@@ -12,10 +12,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 #ifdef G4ANALYSIS_USE
 FluoTestSteppingAction::FluoTestSteppingAction(
-				   //FluoTestDetectorConstruction* DET,
  FluoTestAnalysisManager *aMgr )
   :
-  //detector(DET),
     analysisManager(aMgr)
 {
   gamma=0;
@@ -37,16 +35,16 @@ void FluoTestSteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   G4double gammaAtTheDetPre=0;
   G4double gammaTheta = 0;
-G4double gammatheta = 0;
- G4double gammaPhi = 0;
-G4double gammaphi = 0;
+  G4double gammatheta = 0;
+  G4double gammaPhi = 0;
+  G4double gammaphi = 0;
   //G4double gammaAtTheDetPost=0;
   G4double gammaLeavingSample=0;
   G4double eleLeavingSample=0;
   // G4double gammaLSBackw=0;
   
   G4double gammaBornInSample=0;
- 
+  
   G4double eleBornInSample=0;
   //G4double otherParticlesAtDetPre=0;
   //counters for data files  
@@ -59,21 +57,27 @@ G4double gammaphi = 0;
 	if ((aStep->GetTrack()->GetDynamicParticle()
 	     ->GetDefinition()-> GetParticleName()) == "gamma" ) 
 	  { gammaPhi = aStep->GetTrack()->GetMomentumDirection().phi();
-	    gammaTheta = aStep->GetTrack()->GetMomentumDirection().theta();
-	    gammaLeavingSample = (aStep->GetPreStepPoint()->GetKineticEnergy());
-	    
+	  gammaTheta = aStep->GetTrack()->GetMomentumDirection().theta();
+	  /* if ((gammaPhi> 1.45649)&&(gammaPhi>1.70049))
+	     {if(( gammaTheta>2.27673)&&(gammaPhi>2.43589))
+	     {gamma++;
+	     G4cout<<"gamma = "<<gamma<<G4endl;
+	      }
+	      }*/
+	  gammaLeavingSample = (aStep->GetPreStepPoint()->GetKineticEnergy());
+	  
 #ifdef G4ANALYSIS_USE
-	    analysisManager->InsGamLeavSam(gammaLeavingSample/keV);  
-	    analysisManager->InsGamLS(gammaTheta);
-	    analysisManager->InsGamLSP(gammaPhi);
+	  analysisManager->InsGamLeavSam(gammaLeavingSample/keV);  
+	  analysisManager->InsGamLS(gammaTheta);
+	  analysisManager->InsGamLSP(gammaPhi);
 #endif 
 	  
 	  }
       }
     
   }
-
-   if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Sample"){
+  
+  if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Sample"){
     
     if(aStep->GetTrack()->GetNextVolume()->GetName() == "World" ) 
       { 
@@ -90,32 +94,32 @@ G4double gammaphi = 0;
   }
   
   
-   if((aStep->GetTrack()->GetDynamicParticle()
-       ->GetDefinition()-> GetParticleName()) == "gamma" )
+  if((aStep->GetTrack()->GetDynamicParticle()
+      ->GetDefinition()-> GetParticleName()) == "gamma" )
     
-     {if(1== (aStep->GetTrack()->GetCurrentStepNumber()))
-       
-       {if(0 != aStep->GetTrack()->GetParentID())
-	 
-	 {if(aStep->GetTrack()->GetVolume()->GetName() == "Sample")
-	   {
-	     gammaBornInSample = (aStep->GetPreStepPoint()->GetKineticEnergy());
-	     
-	     
+    {if(1== (aStep->GetTrack()->GetCurrentStepNumber()))
+      
+      {if(0 != aStep->GetTrack()->GetParentID())
+	
+	{if(aStep->GetTrack()->GetVolume()->GetName() == "Sample")
+	  {
+	    gammaBornInSample = (aStep->GetPreStepPoint()->GetKineticEnergy());
+	    
+	    
 #ifdef G4ANALYSIS_USE
-	     analysisManager->InsGamBornSample(gammaBornInSample/keV);  
+	    analysisManager->InsGamBornSample(gammaBornInSample/keV);  
 #endif 
-	     
-	   }
-	 }
-       }
-     }
-   
-    if((aStep->GetTrack()->GetDynamicParticle()
+	    
+	  }
+	}
+      }
+    }
+  
+  if((aStep->GetTrack()->GetDynamicParticle()
        ->GetDefinition()-> GetParticleName()) == "e-" )
     
-     {if(1== (aStep->GetTrack()->GetCurrentStepNumber()))
-       
+    {if(1== (aStep->GetTrack()->GetCurrentStepNumber()))
+      
        {if(0 != aStep->GetTrack()->GetParentID())
 	 
 	 {if(aStep->GetTrack()->GetVolume()->GetName() == "Sample")
@@ -129,30 +133,30 @@ G4double gammaphi = 0;
 	   }
 	 }
        }
-     }
-
- if(aStep->GetTrack()->GetNextVolume()){
- 
-  if(aStep->GetTrack()->GetVolume()->GetName() == "World"){
-     
-    if(aStep->GetTrack()->GetNextVolume()->GetName() == "HPGeDetector")
+    }
+  
+  if(aStep->GetTrack()->GetNextVolume()){
+    
+    if(aStep->GetTrack()->GetVolume()->GetName() == "World"){
       
-      { 
-	if ((aStep->GetTrack()->GetDynamicParticle()
-	     ->GetDefinition()-> GetParticleName()) == "gamma" ) 
-	  {gammaphi = aStep->GetTrack()->GetMomentumDirection().phi();
-	  gammatheta = aStep->GetTrack()->GetMomentumDirection().theta();
-	  G4cout<<"il phi e' "<<gammaphi<<", il theta e' "<< gammatheta<<G4endl;
+      if(aStep->GetTrack()->GetNextVolume()->GetName() == "HPGeDetector")
+	
+	{ 
+	  if ((aStep->GetTrack()->GetDynamicParticle()
+	       ->GetDefinition()-> GetParticleName()) == "gamma" ) 
+	    {gammaphi = aStep->GetTrack()->GetMomentumDirection().phi();
+	    gammatheta = aStep->GetTrack()->GetMomentumDirection().theta();
+	    //  G4cout<<"il phi e' "<<gammaphi<<", il theta e' "<< gammatheta<<G4endl;
 	    gammaAtTheDetPre = (aStep->GetPreStepPoint()->GetKineticEnergy());
 	    
 #ifdef G4ANALYSIS_USE
 	    analysisManager->InsGamDetPre(gammaAtTheDetPre/keV);  
 #endif 
-	  }
+	    }
       }
-  }
+    }
  }
-
+  
   /*
      {if(1== (aStep->GetTrack()->GetCurrentStepNumber()))
        

@@ -76,12 +76,14 @@ G4double FluoTestSensorHit::RandomCut()
   G4VDataSetAlgorithm* interpolation = new G4LogLogInterpolation();
   FluoTestDataSet* dataSet = new FluoTestDataSet(1,fileName,interpolation,keV,1);
 
-  G4double id = 0;
+  //G4double id = 0;
  
-  Efficiency = dataSet->FindValue(EdepTot,id);
-  
+  // Efficiency = dataSet->FindValue(EdepTot,id);
+  Efficiency = 1.;
+  delete dataSet;
+  delete interpolation;
   G4double  Random = G4UniformRand(); 
-  
+
     if ( Random<Efficiency )
       {
 	G4double sigma = sqrt(F*epsilon*EdepTot+pow(deltaE/2355,2));

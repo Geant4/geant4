@@ -59,10 +59,11 @@ int main(int argc,char** argv) {
   visManager->Initialize();
 #endif
   
-#ifdef G4ANALYSIS_USE
+  #ifdef G4ANALYSIS_USE
   // Creation of the analysis manager
   FluoTestAnalysisManager* analysisMgr = new FluoTestAnalysisManager(detector);
-#endif
+  G4cout<<"000000000000000000000000000"<<G4endl;
+  #endif
   
  // Set optional user action classes
 #ifdef G4ANALYSIS_USE
@@ -112,14 +113,15 @@ int main(int argc,char** argv) {
     }
 
   // job termination
-  /*
+  
 #ifdef G4VIS_USE
    delete visManager;
-  #endif
-  */
-#ifdef G4ANALYSIS_USE
+#endif
+  
+   #ifdef G4ANALYSIS_USE
+  
   delete analysisMgr;  
- #endif
+  #endif
 delete runManager;
   return 0;
 }

@@ -43,8 +43,8 @@ FluoTestDetectorConstruction::FluoTestDetectorConstruction()
   NbOfPixels        =  NbOfPixelRows*NbOfPixelColumns;
   SiSizeXY = 1. * cm;
   SiThickness = 1.01* mm;
-  
-  PixelSizeXY       = 0.7 * cm; 
+  //  PixelSizeXY       = 0.7 * cm; 
+  PixelSizeXY       = 2. * cm; 
   PixelThickness =  1. * mm;
   ContactSizeXY     = 0.005*mm;
   //ContactSizeXY = 0.5 * cm;
@@ -54,10 +54,10 @@ FluoTestDetectorConstruction::FluoTestDetectorConstruction()
   Dia1Thickness = 1. *mm;
   Dia2Thickness = 1. *mm;
   Dia3Thickness = 1. *mm;
-  Dia1SizeXY = 2. *cm;
-  Dia2SizeXY = 2. *cm;
-  Dia3SizeXY = 2. *cm;
-  DiaInnerSize = 0.6 * cm;
+  Dia1SizeXY = 3. *cm;
+  Dia2SizeXY = 3. *cm;
+  Dia3SizeXY = 3. *cm;
+  DiaInnerSize = 1.8 * cm;
   //DiaInnerSize = 0.3 *cm;
   OhmicNegThickness = 0.005*mm;
   OhmicPosThickness = 0.005*mm;
@@ -72,7 +72,7 @@ FluoTestDetectorConstruction::FluoTestDetectorConstruction()
   ThetaDia3 = 180. * deg;
   PhiDia3 = 90. * deg;
   //DistDia = 66.5 * mm;
- DistDia = 36.5 * mm;
+ DistDia = 26.5 * mm;
   DistDe =DistDia+ (Dia1Thickness
 		    +PixelThickness)/2+OhmicPosThickness ;
  DistSi = DistDia + SiThickness/2;

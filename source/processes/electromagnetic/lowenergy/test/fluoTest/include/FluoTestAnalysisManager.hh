@@ -2,7 +2,7 @@
 #ifndef FluoTestAnalysisManager_h
 #define FluoTestAnalysisManager_h 1
 
-#include "G4VAnalysisManager.hh"
+//#include "G4VAnalysisManager.hh"
 
 #include "globals.hh"
 #include "g4std/vector"
@@ -10,25 +10,27 @@
 
 class FluoTestAnalysisMessenger;
 class FluoTestDetectorConstruction;
-class IHistogramFactory;
+//class IHistogramFactory;
+class IHistoManager;
 class IHistogram1D;
-class IPlotter;
-class IVectorFactory;
+//class IPlotter;
+namespace Lizard {
+class NTupleFactory;
+class NTuple;
+};
+//class IVectorFactory;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class FluoTestAnalysisManager: public G4VAnalysisManager
+class FluoTestAnalysisManager
+//: public G4VAnalysisManager
 {
 public:
   FluoTestAnalysisManager(FluoTestDetectorConstruction*);
   virtual ~FluoTestAnalysisManager();
   
 public:
-  G4bool RegisterAnalysisSystem(G4VAnalysisSystem*);
-  IHistogramFactory* GetHistogramFactory(const G4String&);
- 
-  void Store(IHistogram* = 0, const G4String& = "");
-  void Plot(IHistogram* = 0);
+  
   void InsGamBornSample(double gBs);
   void InsEleBornSample(double eBs);
    void InsGamLS(double gS);
@@ -45,18 +47,14 @@ public:
   void EndOfRun(G4int n);
   void EndOfEvent(G4int flag);
   
-  void SetHisto1DDraw(G4String str) {histo1DDraw = str;};
-  void SetHisto1DSave(G4String str) {histo1DSave = str;};
  
 private:
-  G4VAnalysisSystem* analysisSystem;
-  IPlotter* pl;
-  IVectorFactory* fVectorFactory;
-  IHistogramFactory* histoFactory;
-  FluoTestDetectorConstruction*    Detector;
-  G4String histo1DDraw;
-  G4String histo1DSave;
+  
+  IHistoManager* histoManager;
+  Lizard::NTupleFactory* factory;
 
+  FluoTestDetectorConstruction*    Detector;
+  Lizard::NTuple* ntuple;
   IHistogram1D* histoGamDet;
   IHistogram1D*  histoGamDetPre;
   // IHistogram1D* histoGamDetPost;

@@ -2,7 +2,7 @@
 
 #ifndef FluoTestSteppingAction_h
 #define FluoTestSteppingAction_h 1
-
+#include "globals.hh"
 #include "G4UserSteppingAction.hh"
 #ifdef G4ANALYSIS_USE
 #include "FluoTestAnalysisManager.hh"
@@ -24,7 +24,8 @@ class FluoTestSteppingAction : public G4UserSteppingAction
    ~FluoTestSteppingAction();
 
     void UserSteppingAction(const G4Step*);
- private:
+private:
+
   G4int gamma;
   //FluoTestDetectorConstruction* detector;
 #ifdef G4ANALYSIS_USE   

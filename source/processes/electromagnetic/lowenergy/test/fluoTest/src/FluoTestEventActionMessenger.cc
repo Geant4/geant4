@@ -13,8 +13,6 @@
 FluoTestEventActionMessenger::FluoTestEventActionMessenger(FluoTestEventAction* EvAct)
 :eventAction(EvAct)
 { 
-  G4cout<<"EventActionMessenger"
-	<<G4endl;
   DrawCmd = new G4UIcmdWithAString("/event/drawTracks",this);
   DrawCmd->SetGuidance("Draw the tracks in the event");
   DrawCmd->SetGuidance("  Choice : none, charged(default),neutral, all");
