@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VoxelNavigation.hh,v 1.2 1999-01-08 11:23:47 gunter Exp $
+// $Id: G4VoxelNavigation.hh,v 1.3 1999-02-17 17:31:05 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,12 +66,6 @@ public:
         G4double ComputeSafety(const G4ThreeVector &globalpoint,
 			       const G4NavigationHistory &history,
     		               const G4double pMaxLength=DBL_MAX );
-
-private:
-        // Debug printing methods
-        void printHeaderLocNxVox();
-        void printStateLocNxVox();
-
 private:
 	G4double ComputeVoxelSafety(const G4ThreeVector &localPoint) const;
 	G4bool LocateNextVoxel(const G4ThreeVector &localPoint,

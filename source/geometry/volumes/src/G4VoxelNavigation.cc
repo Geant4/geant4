@@ -5,22 +5,18 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VoxelNavigation.cc,v 1.2 1999-01-08 11:23:47 gunter Exp $
+// $Id: G4VoxelNavigation.cc,v 1.3 1999-02-17 17:29:24 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4VoxelNavigation Implementation
 //
-// $ Id: $
 //
 // Modified by:
 //   J. Apostolakis,  29 Apr 98 Fixed error in LocateNextVoxel that
 //                              ignored voxels at lower levels 
 
 #include "G4VoxelNavigation.hh"
-#include <iomanip.h>
-
-#define EBUG_VOXEL_NAV 1
 
 G4double G4VoxelNavigation::ComputeStep(const G4ThreeVector &localPoint,
 			     const G4ThreeVector &localDirection,
@@ -83,7 +79,6 @@ G4double G4VoxelNavigation::ComputeStep(const G4ThreeVector &localPoint,
 
 	initialNode=true;
 	noStep=true;
-        G4int countStep= 0;
 
 	do {
 
@@ -192,38 +187,18 @@ G4double G4VoxelNavigation::ComputeStep(const G4ThreeVector &localPoint,
 		}
 
 	if (noStep)
-          {
-#ifdef EBUG_VOXEL_NAV
-                if (countStep == 0)
-		  {
-		    G4cout << "**** G4VoxelNavigation::ComputeStep ****" << endl;
-		    G4cout << " Location: "  << localPoint     << " " 
-			   << " Direction: " << localDirection << " " << endl;
-		    printHeaderLocNxVox();
-		  }
-		G4cout << setw(12) << "LocNxVox bef:" 
-		       << setw(6) << countStep << " ";
-		G4cout << setw(4) <<  "    " ; 
-		printStateLocNxVox();
-#endif
-
+		{
 		noStep=LocateNextVoxel(localPoint,
 				       localDirection,
 				       ourStep);
-#ifdef EBUG_VOXEL_NAV
-		G4cout << setw(12) << "LocNxVox ret:" 
-		       << setw(4)  << noStep 
-		       << setw(6)  << countStep << " ";
-		printStateLocNxVox();
-
-                countStep++;
-#endif
-	  }
+		}
 
 	} while (noStep);
 
 	return ourStep;
 }
+
+
 
 
 // Compute safety from specified point to voxel boundaries
@@ -307,7 +282,6 @@ G4double G4VoxelNavigation::ComputeVoxelSafety(const G4ThreeVector&localPoint) c
 	return voxelSafety;
 	}
 
-
 // Find the next voxel from the current voxel and point in the specified
 // direction
 //
@@ -335,13 +309,6 @@ G4bool G4VoxelNavigation::LocateNextVoxel(const G4ThreeVector& localPoint,
 	
 	G4double currentDistance= currentStep;
 
-#ifdef EBUG_VOXEL_NAV_MORE
-        G4cout << "*** Entered G4VoxelNavigation::LocateNextVoxel ***" << endl;
-	G4cout << " Arguments localPoint, localDirection are " 
-	       << localPoint << localDirection << endl; 
-        G4cout << " Voxel Depth = " << fVoxelDepth << endl;
-#endif 
-
 // Determine if end of Step within current voxel
 	for (depth=0;depth<fVoxelDepth;depth++)
 	    {
@@ -352,90 +319,32 @@ G4bool G4VoxelNavigation::LocateNextVoxel(const G4ThreeVector& localPoint,
 		workNodeNo=fVoxelNodeNoStack(depth);
 		workNodeWidth=fVoxelSliceWidthStack(depth);
 		workMinExtent=workHeader->GetMinExtent();
-
-		// #define EBUG_NEXT_VOXEL 1
-
-#ifdef EBUG_NEXT_VOXEL
-		G4cout << "WorkHeader " << endl ;
-		G4cout << "Depth Axis NodeNo  Width    Extent  WorkCoord     minVal      maxVal " << endl;
-		G4cout << setw(5) << depth 
-		       << setw(5) << workHeaderAxis  
-		       << setw(5) << workNodeNo << "   "
-		       << setw(8) << workNodeWidth
-		       << setw(8) << workMinExtent << " " ;
-#endif
-
+		    
 		workCoord=targetPoint(workHeaderAxis);
 		minVal=workMinExtent+workNodeNo*workNodeWidth;
-#ifdef EBUG_NEXT_VOXEL
-		G4cout << setw(8) << workCoord << " " 
-		       << setw(8) << minVal;
-#endif
 		if (minVal<=workCoord+kCarTolerance*0.5)
 		    {
 			maxVal=minVal+workNodeWidth;
-#ifdef EBUG_NEXT_VOXEL
-			G4cout << setw(8) << maxVal << endl;
-#endif
 			if (maxVal<=workCoord-kCarTolerance*0.5)
-			  {
-#ifdef EBUG_NEXT_VOXEL
-			    G4cout << "Considering next voxel in +direction" << endl;
-#endif
-			    // Ensure that it is moving in negative direction
-			    // (not simply within kCarTolerance of the surface)
-                            //  Enforces a logical decision on the surface
-			    if( localDirection(workHeaderAxis) > 0 ) 
-			      {
+				{
+			        // G4cout << "Must consider next voxel" << endl;
 				newNodeNo=workNodeNo+1;
 				newHeader=workHeader;
 				newDistance=(maxVal-localPoint(workHeaderAxis))/localDirection(workHeaderAxis);
 				isNewVoxel=true;
 				newDepth= depth;
-			      }
-			  }
+				}
 		    }
 		else
 		    {
-#ifdef EBUG_NEXT_VOXEL
-		      G4cout << endl;
-		      G4cout << "Considering next voxel in -direction" << endl;
-#endif
-                      // Ensure that it is moving in negative direction
-		      //  (not simply within kCarTolerance of the surface)
-		      if( localDirection(workHeaderAxis) < 0 ) 
-                        {
 				newNodeNo=workNodeNo-1;
 				newHeader=workHeader;
 				newDistance=(minVal-localPoint(workHeaderAxis))/localDirection(workHeaderAxis);
 				isNewVoxel=true;
 				newDepth= depth;
-			}
 		    }
-
-	        if( newDistance >= kCarTolerance * 0.5 ) 
-		  {
-		    currentDistance= newDistance;
-		  }
-                else if ( newDistance >= - kCarTolerance * 0.5 ) 
-                  {
-                    currentDistance = newDistance = 0; 
-		  }
-#ifdef EBUG_VOXEL_NAV
-		G4cout << " Depth = " << depth; 
-		G4cout << " New distance = " << newDistance 
-		       << " Current dist = " << currentDistance; 
-		G4cout << endl;
-		// assert ( newDistance >= 0 );
-		// if( newDistance < 0 )  
-		//  G4Exception(" ERROR in G4VoxelNavigation::LocateNextVoxel  newDistance is negative.");
-#endif
+	        currentDistance= newDistance;
 	    }
-
-#ifdef CHECK_PRE_CONDITIONS
-        minVal=workMinExtent+fVoxelNode->GetMinEquivalentSliceNo()*workNodeWidth;
-        assert( (minVal-localPoint(workHeaderAxis)) * localDirection(workHeaderAxis) >= 0 );        
-#endif
 
 	targetPoint=localPoint+localDirection*currentDistance;
 // Check if end of Step within collected boundaries of current voxel
@@ -454,43 +363,23 @@ G4bool G4VoxelNavigation::LocateNextVoxel(const G4ThreeVector& localPoint,
 			maxVal=workMinExtent+(fVoxelNode->GetMaxEquivalentSliceNo()+1)*workNodeWidth;
 			if (maxVal<=workCoord-kCarTolerance*0.5)
 			    {
-			    // Ensure that it is moving in negative direction
-			    // (not simply within kCarTolerance of the surface)
-                            //  Enforces a logical decision on the surface
-			    if( localDirection(workHeaderAxis) > 0 ) 
-			      {
 				newNodeNo=fVoxelNode->GetMaxEquivalentSliceNo()+1;
 				newHeader=workHeader;
 				newDistance=(maxVal-localPoint(workHeaderAxis))/localDirection(workHeaderAxis);
 				isNewVoxel=true;
 				newDepth= depth;
-			      }
 			    }
 		    }
 		else
 		    {
-                      // Ensure that it is moving in negative direction
-		      //  (not simply within kCarTolerance of the surface)
-		      if( localDirection(workHeaderAxis) < 0 ) 
-                        {
 				newNodeNo=fVoxelNode->GetMinEquivalentSliceNo()-1;
 				newHeader=workHeader;
 				newDistance=(minVal-localPoint(workHeaderAxis))/localDirection(workHeaderAxis);
 				isNewVoxel=true;
 				newDepth= depth;
-			}
 		    }
 
 	        currentDistance= newDistance;
-
-#ifdef EBUG_VOXEL_NAV
-		G4cout << " Depth = " << depth; 
-		G4cout << " New distance = " << currentDistance ; 
-		G4cout << "  -- full depth, ie equivalent nodes used" << endl;
-		// assert ( newDistance >= 0 );
-		if( newDistance < 0 )  
-		  G4Exception(" ERROR in G4VoxelNavigation::LocateNextVoxel  newDistance is negative.");
-#endif
 	    }
 
 	if (isNewVoxel)
@@ -553,9 +442,6 @@ G4bool G4VoxelNavigation::LocateNextVoxel(const G4ThreeVector& localPoint,
 		    }
 	    }
 
-#ifdef EBUG_NEXT_VOXEL
-        G4cout << "*** Exiting G4VoxelNavigation::LocateNextVoxel ***" << endl;
-#endif
 	return isNewVoxel;				
 }
 
@@ -638,34 +524,4 @@ G4VoxelNavigation::~G4VoxelNavigation()
 #ifdef G4DEBUG_NAVIGATION
   cout << "G4VoxelNavigation::~G4VoxelNavigation() called." << endl;
 #endif
-}
-
-void G4VoxelNavigation::printHeaderLocNxVox()
-{
-  G4cout << setw(12) << "-Print From-" 
-	 << setw(6)  << "Count "       << " "  
-	 << setw(4)  << "bool"         
-	 << setw(12) << "Voxel:Depth"  << " " 
-	 << setw(10) << "NodeNumbers"  << " " 
-	 << setw( 6) << "AxisNo" << " " 
-	 << endl;
-  //  G4cout << " Before calling LocateNextVoxel: " 
-  //     << endl;
-}
-
-void G4VoxelNavigation::printStateLocNxVox()
-{
-  G4cout <<  setw(10) << fVoxelDepth << " ";
-  G4int depth;
-  for (depth=0;depth<=fVoxelDepth;depth++)
-     G4cout <<  setw(3) << fVoxelNodeNoStack(depth) << " "; 
-  for (depth=fVoxelDepth;depth<=3;depth++)
-     G4cout <<  setw(3) << "    " << " " ; 
-  G4cout << "    " ; 
-  for (depth=0;depth<=fVoxelDepth;depth++)
-     G4cout <<  setw(1) << fVoxelAxisStack(depth) << " "; 
-  for (depth=fVoxelDepth;depth<=3;depth++)
-     G4cout <<  setw(1) << " " << " " ; 
-  G4cout << " " ; 
-  G4cout << endl;
 }
