@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc,v 1.8 2003-03-21 08:01:09 gcosmo Exp $
+// $Id: G4VXTRenergyLoss.cc,v 1.9 2003-06-03 08:11:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -65,7 +65,7 @@ G4double G4VXTRenergyLoss::fCofTR     = fine_structure_const/pi ;
 //
 // Constructor, destructor
 
-G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume *anEnvelope, 
+G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume *anEnvelope,
 				   G4Material* foilMat,G4Material* gasMat,
                                     G4double a, G4double b,
                                     G4int n,const G4String& processName) :
@@ -84,7 +84,7 @@ G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume *anEnvelope,
   fPlateThick = a ;
   fGasThick   = b ;
 
-  fTotalDist  = fPlateNumber*(fPlateThick+fGasThick) ;  
+  fTotalDist  = fPlateNumber*(fPlateThick+fGasThick) ;
   G4cout<<"total radiator thickness = "<<fTotalDist/cm<<" cm"<<G4endl ;
 
   // index of plate material
@@ -131,7 +131,7 @@ G4VXTRenergyLoss::~G4VXTRenergyLoss()
    {
      delete[] fPlatePhotoAbsCof[i] ;
    }
-   delete[] fPlatePhotoAbsCof ; 
+   delete[] fPlatePhotoAbsCof ;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -141,7 +141,7 @@ G4VXTRenergyLoss::~G4VXTRenergyLoss()
 
 G4bool G4VXTRenergyLoss::IsApplicable(const G4ParticleDefinition& particle)
 {
-  return  ( particle.GetPDGCharge() != 0.0 ) ; 
+  return  ( particle.GetPDGCharge() != 0.0 ) ;
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -149,8 +149,8 @@ G4bool G4VXTRenergyLoss::IsApplicable(const G4ParticleDefinition& particle)
 // GetContinuousStepLimit
 //
 
-G4double 
-G4VXTRenergyLoss::GetContinuousStepLimit(const G4Track& aTrack,
+G4double
+G4VXTRenergyLoss::GetContinuousStepLimit(const G4Track& ,
 				         G4double  ,
 				         G4double  ,
                                          G4double& )
@@ -164,7 +164,7 @@ G4VXTRenergyLoss::GetContinuousStepLimit(const G4Track& aTrack,
 //
 // Build integral energy distribution of XTR photons
 
-void G4VXTRenergyLoss::BuildTable() 
+void G4VXTRenergyLoss::BuildTable()
 {
   G4int iTkin, iTR, iPlace ;
   G4double radiatorCof = 1.0 ;           // for tuning of XTR yield

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ForwardXrayTR.hh,v 1.9 2003-03-11 08:43:34 vnivanch Exp $
+// $Id: G4ForwardXrayTR.hh,v 1.10 2003-06-03 08:11:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ForwardXrayTR -- header file
@@ -39,6 +39,7 @@
 // 22.09.97, V. Grichine (Vladimir.Grichine@cern.ch)
 // 26.01.00, V.Grichine, new constructor and protected DM for fast sim. models
 // 10.03.03, V.Ivanchenko migrade to "cut per region"
+// 03.06.03, V.Ivanchenko fix compilation warnings
 
 #ifndef G4FORWARDXRAYTR_H
 #define G4FORWARDXRAYTR_H
@@ -92,8 +93,8 @@ public:
 
         void BuildXrayTRtables();
 
-	G4double GetMeanFreePath(const G4Track& aTrack,
-				 G4double previousStepSize,
+	G4double GetMeanFreePath(const G4Track&,
+				 G4double,
 				 G4ForceCondition* condition)
         {
           *condition = Forced;
