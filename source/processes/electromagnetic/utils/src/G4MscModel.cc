@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.cc,v 1.16 2004-04-23 05:52:08 urban Exp $
+// $Id: G4MscModel.cc,v 1.17 2004-04-29 18:40:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -509,9 +509,8 @@ G4double G4MscModel::TrueStepLength(G4double geomStepLength)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-// G4double G4MscModel::SampleCosineTheta(G4double trueStepLength, G4double KineticEnergy,
-//                                       G4double lambda)
-G4double G4MscModel::SampleCosineTheta(G4double trueStepLength, G4double KineticEnergy)
+G4double G4MscModel::SampleCosineTheta(G4double trueStepLength, 
+                                       G4double KineticEnergy)
 {
   G4double cth = 1. ;
   G4double tau = trueStepLength/lambda0 ;

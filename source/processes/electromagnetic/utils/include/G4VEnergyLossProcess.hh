@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.10 2004-04-05 08:00:18 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.11 2004-04-29 18:40:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -79,7 +79,6 @@ class G4ParticleDefinition;
 class G4VEmModel;
 class G4VEmFluctuationModel;
 class G4DataVector;
-//class G4VParticleChange;
 class G4PhysicsTable;
 class G4PhysicsVector;
 class G4VSubCutoffProcessor;
@@ -134,9 +133,6 @@ public:
 
   G4PhysicsTable* BuildLambdaSubTable();
 
-  void SetParticles(const G4ParticleDefinition*,
-                    const G4ParticleDefinition*);
-
   void SetParticle(const G4ParticleDefinition* p);
   void SetBaseParticle(const G4ParticleDefinition* p);
   void SetSecondaryParticle(const G4ParticleDefinition* p);
@@ -190,6 +186,10 @@ public:
 
   void AddSubCutoffProcessor(G4VSubCutoffProcessor*, const G4Region* region = 0);
   // Add subcutoff processor for the region
+
+  void ActivateFluorescence(G4bool val, const G4Region* region = 0) {};
+  void ActivateAugerElectrons(G4bool val, const G4Region* region = 0) {};
+  // Activate deexcitation code
 
   virtual void SetSubCutoff(G4bool) {};
 
@@ -260,6 +260,8 @@ public:
   void      ResetNumberOfInteractionLengthLeft();
   // reset (determine the value of)NumberOfInteractionLengthLeft
 
+  G4double GetRangeForLoss(G4double kineticEnergy);
+
 protected:
 
   virtual
@@ -315,8 +317,6 @@ private:
   void DefineMaterial(const G4MaterialCutsCouple* couple);
 
   G4double GetDEDXForLoss(G4double kineticEnergy);
-
-  G4double GetRangeForLoss(G4double kineticEnergy);
 
   G4double GetPreciseRange(G4double kineticEnergy);
 
@@ -439,8 +439,8 @@ inline G4double G4VEnergyLossProcess::GetRange(G4double& kineticEnergy,
 {
   DefineMaterial(couple);
   G4double x = DBL_MAX;
-  if(thePreciseRangeTable)      x = GetPreciseRange(kineticEnergy);
-  else if(theRangeTableForLoss) x = GetRangeForLoss(kineticEnergy);
+  if(thePreciseRangeTable)       x = GetPreciseRange(kineticEnergy);
+  else if(theRangeTableForLoss)  x = GetRangeForLoss(kineticEnergy);
   return x;
 }
 
@@ -551,8 +551,8 @@ inline G4double G4VEnergyLossProcess::GetContinuousStepLimit(const G4Track&,
     if(x > minStepLimit && y < currentMinStep ) {
 
       x = y + minStepLimit*(1.0 - dRoverRange)*(2.0 - minStepLimit/fRange);
-      if(x >fRange || x<minStepLimit) G4cout << "!!! StepLimit problem!!!" << G4endl;
-      if(rndmStepFlag) x = minStepLimit + G4UniformRand()*(x-minStepLimit);
+      //if(x >fRange || x<minStepLimit) G4cout << "!!! StepLimit problem!!!" << G4endl;
+      //if(rndmStepFlag) x = minStepLimit + G4UniformRand()*(x-minStepLimit);
     }
   }
   return x;

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.42 2004-03-10 11:34:52 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.43 2004-04-29 18:40:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------

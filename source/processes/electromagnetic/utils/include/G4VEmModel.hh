@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.18 2004-04-23 05:52:06 urban Exp $
+// $Id: G4VEmModel.hh,v 1.19 2004-04-29 18:40:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -136,6 +136,8 @@ public:
   virtual G4double SampleDisplacement() {return 0.0;};
 
   virtual void DefineForRegion(const G4Region*) {};
+
+  virtual void SetDynamicParticle(const G4DynamicParticle*) {};
 
 protected:
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.hh,v 1.10 2004-04-23 05:52:07 urban Exp $
+// $Id: G4MscModel.hh,v 1.11 2004-04-29 18:40:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -124,6 +124,8 @@ public:
 
   G4double MaxSecondaryEnergy(const G4DynamicParticle*) {return 0.0;};
 
+  void SetDynamicParticle(const G4DynamicParticle*);
+
 protected:
 
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
@@ -173,6 +175,13 @@ private:
   G4double currentRadLength;
 
 };
+
+inline void G4MscModel::SetDynamicParticle(const G4DynamicParticle* dp)
+{
+  particle = dp->GetDefinition();
+  mass = dp->GetMass();
+  charge = dp->GetCharge()/eplus;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

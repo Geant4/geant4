@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.21 2004-02-27 17:54:48 vnivanch Exp $
+// $Id: G4LossTableManager.hh,v 1.22 2004-04-29 18:40:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -100,7 +100,8 @@ public:
   G4double GetRange(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
-    const G4MaterialCutsCouple *couple);
+    const G4MaterialCutsCouple *couple,
+    G4bool forMSC = false);
 
   G4double GetEnergy(
     const G4ParticleDefinition *aParticle,
@@ -259,7 +260,6 @@ inline G4double G4LossTableManager::GetDEDX(
   if(currentLoss) x = currentLoss->GetDEDX(kineticEnergy, couple);
   else            x = G4EnergyLossTables::GetDEDX(currentParticle,kineticEnergy,couple,false);
   return x;
-//  return currentLoss->GetDEDX(kineticEnergy, couple);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -267,7 +267,8 @@ inline G4double G4LossTableManager::GetDEDX(
 inline G4double G4LossTableManager::GetRange(
           const G4ParticleDefinition *aParticle,
                 G4double kineticEnergy,
-          const G4MaterialCutsCouple *couple)
+          const G4MaterialCutsCouple *couple,
+                G4bool forMSC)
 {
   if(aParticle != currentParticle) {
     currentParticle = aParticle;
@@ -278,12 +279,16 @@ inline G4double G4LossTableManager::GetRange(
       currentLoss = 0;
 //      ParticleHaveNoLoss(aParticle);
     }
+    if(!currentLoss->RangeTable()) currentLoss = 0;
   }
   G4double x;
-  if(currentLoss) x = currentLoss->GetRange(kineticEnergy, couple);
-  else            x = G4EnergyLossTables::GetRange(currentParticle,kineticEnergy,couple,false);
+  if(currentLoss) {
+    if(forMSC) x = currentLoss->GetRangeForLoss(kineticEnergy);
+    else       x = currentLoss->GetRange(kineticEnergy, couple);
+  } else {           
+    x = G4EnergyLossTables::GetRange(currentParticle,kineticEnergy,couple,false);
+  }
   return x;
-//  return currentLoss->GetRange(kineticEnergy, couple);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -305,9 +310,9 @@ inline G4double G4LossTableManager::GetEnergy(
   }
   G4double x;
   if(currentLoss) x = currentLoss->GetKineticEnergy(range, couple);
-  else            x = G4EnergyLossTables::GetPreciseEnergyFromRange(currentParticle,range,couple,false);
+  else            x = G4EnergyLossTables::GetPreciseEnergyFromRange(currentParticle,
+                                          range,couple,false);
   return x;
-//  return currentLoss->GetKineticEnergy(range, couple);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.15 2004-04-05 08:00:19 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.16 2004-04-29 18:40:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -331,30 +331,6 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
              << " and particle " << part.GetParticleName()
              << G4endl;
     }
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4VEnergyLossProcess::SetParticles(const G4ParticleDefinition* p1,
-                                    const G4ParticleDefinition* p2)
-{
-  particle = p1;
-  baseParticle = p2;
-  G4bool yes = true;
-  if(particle && baseParticle) {
-    if((particle->GetPDGMass() < MeV && baseParticle->GetPDGMass() > MeV) ||
-       (particle->GetPDGMass() > MeV && baseParticle->GetPDGMass() < MeV)) yes = false;
-
-  }
-  if(!yes) {
-    G4cout << "Warning in G4VEnergyLossProcess::SetParticle: "
-           << particle->GetParticleName()
-           << " losses cannot be obtained from "
-           << baseParticle->GetParticleName()
-           << " losses" << G4endl;
-  } else {
-    DefineBaseParticle(p1);
   }
 }
 
