@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScattering.hh,v 1.1 1999-01-07 16:11:13 gunter Exp $
+// $Id: G4MultipleScattering.hh,v 1.2 1999-02-16 13:21:23 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id:
@@ -76,6 +76,12 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
 
    G4double GetLambda(G4double KineticEnergy,G4Material* material);
 
+   void SetScatteringParameter(G4double value)
+           { scatteringparameter = value ; } ;
+   void SetTuning(G4double value) { tuning = value ; };
+   void SetCpar  (G4double value) { cpar   = value ; };
+   void SetLateralDisplacementFlag(G4bool flag) {fLatDisplFlag = flag;};
+
  protected:
 
    G4double ComputeTransportCrossSection(
@@ -100,8 +106,10 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
    G4PhysicsTable* theTransportMeanFreePathTable ;
 
    G4double fTransportMeanFreePath ;
+   G4double range,alpha1 ;
+   G4int stepFlag ;
 
-   G4double fMeanLateralDisplacement ;
+   G4double biglambda ;
 
    G4double LowestKineticEnergy ;
    G4double HighestKineticEnergy ;
@@ -109,14 +117,20 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
 
    const G4Electron* theElectron ;
    const G4Positron* thePositron ;
-   
+
    G4Material* lastMaterial;
    G4double lastKineticEnergy;
-
+   G4int materialIndex ;
+  
    G4double tLast ;
    G4double zLast ;
 
+   G4double Tlimit ;
+
+   G4double scatteringparameter;
    G4double tuning;
+   G4double cpar;
+   G4bool fLatDisplFlag ;
 
    //New ParticleChange
    G4ParticleChangeForMSC fParticleChange ;

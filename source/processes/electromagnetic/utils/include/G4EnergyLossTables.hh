@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnergyLossTables.hh,v 1.1 1999-01-07 16:11:27 gunter Exp $
+// $Id: G4EnergyLossTables.hh,v 1.2 1999-02-16 13:18:01 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id:
@@ -33,6 +33,7 @@
 // L. Urban, 27/05/1988 , modifications + new functions added
 // L.Urban , 13/10/98 , revision
 // L.Urban,  26/10/98 , revision, Interpolate removed 
+// L.Urban , 08/02/99,  cache mechanism 
 // don't use the helper class.
 // It can't be hidden for Rogue Wave uses it.
 
@@ -143,6 +144,10 @@ private:
   static unsigned HashFun(const K& particle);
 
   static G4EnergyLossTablesHelper GetTables(const G4ParticleDefinition* p);
+
+  static G4EnergyLossTablesHelper t ;
+  static const G4ParticleDefinition* lastParticle ;
+  static G4double Chargesquare ;
 
 };
 
