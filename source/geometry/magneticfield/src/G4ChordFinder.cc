@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ChordFinder.cc,v 1.16 2000-11-20 17:29:04 gcosmo Exp $
+// $Id: G4ChordFinder.cc,v 1.17 2001-02-20 18:16:41 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -290,8 +290,8 @@ G4FieldTrack G4ChordFinder::ApproxCurvePointV(
 
   G4FieldTrack    Current_PointVelocity= CurveA_PointVelocity; 
 
-  G4ThreeVector  CurveA_Point= CurveA_PointVelocity.Position();
-  G4ThreeVector  CurveB_Point= CurveB_PointVelocity.Position();
+  G4ThreeVector  CurveA_Point= CurveA_PointVelocity.GetPosition();
+  G4ThreeVector  CurveB_Point= CurveB_PointVelocity.GetPosition();
 
   G4ThreeVector  ChordAB_Vector= CurveB_Point   - CurveA_Point;
   G4ThreeVector  ChordAE_Vector= CurrentE_Point - CurveA_Point;
@@ -301,7 +301,7 @@ G4FieldTrack G4ChordFinder::ApproxCurvePointV(
   G4double  AE_fraction; 
   
   curve_length= 
-       CurveB_PointVelocity.CurveS() - CurveA_PointVelocity.CurveS();  
+       CurveB_PointVelocity.GetCurveLength() - CurveA_PointVelocity.GetCurveLength();  
 
   // const 
   G4double  integrationInaccuracyLimit= G4std::max( perMillion, 0.5*eps_step ); 
