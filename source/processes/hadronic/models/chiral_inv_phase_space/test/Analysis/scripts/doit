@@ -9,15 +9,16 @@ echo ">>>>>>>"
 echo ">>>>>>> Now building $1 <<<<<<<"
 echo ">>>>>>>"
  rm ./$1
- gmake clean
- gmake
+# gmake clean
+# gmake
 echo ">>>>>>>"
 echo ">>>>>>> Now running $1 <<<<<<<"
 echo ">>>>>>>"
 pwd
 rm ../logs/$1.$2.log
 ln -s ../../../../../../../../bin/Linux-g++/$1 $1
-./$1 < ../inputs/$1.$2.in > ../logs/$1.$2.log
+# ./$1 < ../inputs/$1.$2.in > ../logs/$1.$2.log
+./$1 < ../inputs/$1.$2.in > /dev/null
 echo ">>>>>>>"
 echo ">>>>>>> Stripping out the info <<<<<<<"
 echo ">>>>>>>"

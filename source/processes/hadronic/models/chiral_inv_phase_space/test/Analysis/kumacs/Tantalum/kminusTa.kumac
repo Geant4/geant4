@@ -8,7 +8,7 @@ meta 66 -111
  opt grid
  set pass 4
  title_gl 'BAYUKOV 80   ITEP-80-37'
- opt liny
+ opt logy
 ve/cr q(006)
 ve/cr v(4,006)
 ve/in v(1:4,001)      1.1000E-01     0.0000E+00     2.9800E-02     1.2400E-02
@@ -21,7 +21,7 @@ ve/copy v(1,1:006) x
 ve/copy v(2,1:006) q
 ve/copy v(3,1:006) y
 ve/copy v(4,1:006) e
- null    9.50000E-02   0.275000   -2.26200E-03    4.62420E-02
+ null    9.50000E-02   0.275000   -2.26200E-03    4.62420E-01
 exec ../analyse ../../logs/liste.p_ta.kaonminus.90degree.p_ta
 /GRAPHICS/HPLOT/ERRORS x y q e 006 24 0.2
  atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'

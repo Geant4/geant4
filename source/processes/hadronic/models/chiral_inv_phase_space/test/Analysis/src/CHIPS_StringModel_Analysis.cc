@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: CHIPS_StringModel_Analysis.cc,v 1.4 2001-07-11 10:04:08 gunter Exp $
+// $Id: CHIPS_StringModel_Analysis.cc,v 1.5 2001-07-16 11:48:55 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -70,6 +70,7 @@
  
 #include "G4TheoFSGenerator.hh"
 #include "G4StringChipsParticleLevelInterface.hh"
+#include "G4StringChipsInterface.hh"
 #include "G4Fancy3DNucleus.hh"
 #include "G4StringModel.hh"
 #include "G4VPreCompoundModel.hh"
@@ -670,8 +671,10 @@
     incomingEnergy *= GeV/MeV;
 
 //    theTheoModel->SetTransport(theCascade);
-    G4StringChipsParticleLevelInterface * theChipsCascade = new G4StringChipsParticleLevelInterface();
-    theTheoModel->SetTransport(theChipsCascade);
+     G4StringChipsParticleLevelInterface * theChipsCascade = new G4StringChipsParticleLevelInterface();
+     theTheoModel->SetTransport(theChipsCascade);
+//    G4StringChipsInterface * theChips = new G4StringChipsInterface();
+//    theTheoModel->SetTransport(theChips);
 //    G4StringInfoDump * theDummyCascade = new G4StringInfoDump;
 //    G4DymmyINC * theDummyCascade = new G4DymmyINC;
 //    theTheoModel->SetTransport(theDummyCascade);
@@ -810,7 +813,7 @@
           }
           delete aTrack;
 	  aFinalState->Clear();
-	  if(l==1000*(l/1000)) 
+	  if(l==100*(l/100)) 
 	  {
 	    theInformation.Analyse();
 	    theInformation.Plot(fileName, l);

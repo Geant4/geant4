@@ -7,7 +7,7 @@ meta 66 -111
  opt grid
  set pass 4
  title_gl 'BAYUKOV 79   ITEP-79-6'
- opt liny
+ opt logy
 ve/cr q(003)
 ve/cr v(4,003)
 ve/in v(1:4,001)      1.9000E-01     0.0000E+00     3.9000E-03     7.0000E-04
@@ -17,7 +17,7 @@ ve/copy v(1,1:003) x
 ve/copy v(2,1:003) q
 ve/copy v(3,1:003) y
 ve/copy v(4,1:003) e
- null   0.181000   0.289000   -2.07000E-04    5.03700E-03
+ null   0.181000   0.289000   2.07000E-04    5.03700E-02
 exec ../analyse ../../logs/liste.p_c.he3.90degree.p_c
 /GRAPHICS/HPLOT/ERRORS x y q e 003 24 0.2
  atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
@@ -32,7 +32,7 @@ exec ../analyse ../../logs/liste.p_c.he3.90degree.p_c
  opt grid
  set pass 4
  title_gl 'BAYUKOV 79   ITEP-79-6'
- opt liny
+ opt logy
 ve/cr q(001)
 ve/cr v(4,001)
 ve/in v(1:4,001)      1.7000E-01     0.0000E+00     1.1000E-03     8.0000E-04
@@ -40,7 +40,7 @@ ve/copy v(1,1:001) x
 ve/copy v(2,1:001) q
 ve/copy v(3,1:001) y
 ve/copy v(4,1:001) e
- null   0.170000   0.170000    1.40000E-04    2.06000E-03
+ null   0.170000   0.170000    1.40000E-04    2.06000E-02
 exec ../analyse ../../logs/liste.p_c.he3.118degree.p_c
 /GRAPHICS/HPLOT/ERRORS x y q e 001 24 0.2
  atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
