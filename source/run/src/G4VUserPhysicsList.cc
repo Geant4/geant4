@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.31 2003-03-10 09:01:24 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.32 2003-03-11 03:11:46 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -388,8 +388,7 @@ void G4VUserPhysicsList::SetParticleCuts( G4double cut, G4ParticleDefinition* pa
       G4cout << particle->GetParticleName() << G4endl;
     }
 #endif
-    fCutsTable->RetrieveCutsTable(directoryPhysicsTable, fStoredInAscii);
-    fIsRestoredCutValues = true;
+    fIsRestoredCutValues = fCutsTable->RetrieveCutsTable(directoryPhysicsTable, fStoredInAscii);
   } else {
     G4ProductionCuts* pcuts = region->GetProductionCuts();
     pcuts->SetProductionCut(cut,particle);
@@ -638,7 +637,7 @@ G4bool G4VUserPhysicsList::StorePhysicsTable(const G4String& directory)
 
 
 ///////////////////////////////////////////////////////////////
- void  G4VUserPhysicsList::SetPhysicsTableRetrieved(const G4String& directory)
+void  G4VUserPhysicsList::SetPhysicsTableRetrieved(const G4String& directory)
 {
   fRetrievePhysicsTable = true;
   if(!directory.isNull()) {

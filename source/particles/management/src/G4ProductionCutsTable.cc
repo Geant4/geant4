@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.9 2003-03-10 08:14:07 kurasige Exp $
+// $Id: G4ProductionCutsTable.cc,v 1.10 2003-03-11 03:10:45 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -424,6 +424,7 @@ G4bool  G4ProductionCutsTable::StoreCutsTable(const G4String& dir,
 {
   if (!StoreMaterialInfo(dir, ascii)) return false;
   if (!StoreMaterialCutsCoupleInfo(dir, ascii)) return false;
+  if (!StoreCutsInfo(dir, ascii)) return false;
 
   return true;
 }
@@ -432,7 +433,8 @@ G4bool  G4ProductionCutsTable::RetrieveCutsTable(const G4String& dir,
 						 G4bool          ascii)
 {
   if (!CheckForRetrieveCutsTable(dir, ascii)) return false;
-  
+  if (!RetrieveCutsInfo(dir, ascii)) return false;
+
   return true;
 }
 
@@ -877,7 +879,8 @@ G4bool  G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& direc
       } else {
 	fIn.read( (char*)(&(cutValues[idx])), sizeof (G4double));
       }
-      if ( cutValues[idx] != aCut->GetProductionCut(idx) ) {
+      G4double ratio =  cutValues[idx]/aCut->GetProductionCut(idx);
+      if ((0.999>ratio) || (ratio>1.001) ){
 #ifdef G4VERBOSE  
 	G4cout << "G4ProductionCutTable::CheckMaterialCutsCoupleInfo ";
 	G4cout << "CutValue for " << idx << " is inconsistent ";
