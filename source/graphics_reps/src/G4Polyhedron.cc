@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polyhedron.cc,v 1.5 1999-12-15 14:50:36 gunter Exp $
+// $Id: G4Polyhedron.cc,v 1.6 1999-12-16 15:26:04 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -783,6 +783,57 @@ void G4Polyhedron::SetReferences()
 
   delete [] edgeList;
   delete [] headList;
+}
+
+void G4Polyhedron::InvertFacets()
+/***********************************************************************
+ *                                                                     *
+ * Name: G4Polyhedron::InvertFacets                 Date:    01.12.99  *
+ * Author: E.Chernyaev                              Revised:           *
+ *                                                                     *
+ * Function: Invert the order of the nodes in the facets               *
+ *                                                                     *
+ ***********************************************************************/
+{
+  if (nface <= 0) return;
+  G4int i, k, nnode, v[4],f[4];
+  for (i=1; i<=nface; i++) {
+    nnode =  (pF[i].edge[3].v == 0) ? 3 : 4;
+    for (k=0; k<nnode; k++) {
+      v[k] = (k+1 == nnode) ? pF[i].edge[0].v : pF[i].edge[k+1].v;
+      if (v[k] * pF[i].edge[k].v < 0) v[k] = -v[k];
+      f[k] = pF[i].edge[k].f;
+    }
+    for (k=0; k<nnode; k++) {
+      pF[i].edge[nnode-1-k].v = v[k];
+      pF[i].edge[nnode-1-k].f = f[k];
+    }
+  }
+}
+
+G4Polyhedron & G4Polyhedron::Transform(const G4Transform3D &t)
+/***********************************************************************
+ *                                                                     *
+ * Name: G4Polyhedron::Transform                    Date:    01.12.99  *
+ * Author: E.Chernyaev                              Revised:           *
+ *                                                                     *
+ * Function: Make transformation of the polyhedron                     *
+ *                                                                     *
+ ***********************************************************************/
+{
+  if (nvert > 0) {
+    for (G4int i=1; i<=nvert; i++) { pV[i] = t * pV[i]; }
+
+    //  C H E C K   D E T E R M I N A N T   A N D
+    //  I N V E R T   F A C E T S   I F   I T   I S   N E G A T I V E
+
+    G4Vector3D d = t * G4Vector3D(0,0,0);
+    G4Vector3D x = t * G4Vector3D(1,0,0) - d;
+    G4Vector3D y = t * G4Vector3D(0,1,0) - d;
+    G4Vector3D z = t * G4Vector3D(0,0,1) - d;
+    if ((x.cross(y))*z < 0) InvertFacets();
+  }
+  return *this;
 }
 
 G4bool G4Polyhedron::GetNextVertexIndex(G4int &index, G4int &edgeFlag) const
