@@ -21,7 +21,7 @@ G4std::string FillString(const G4std::string &name, char c, G4int n, G4bool back
 int main(int argc, char **argv) {
   
 
-  ostream *myout = &G4cout;
+  G4std::ostream *myout = &G4cout;
   G4int numberOfEvent = 1000;
 
   G4String random_status_out_file, random_status_in_file;
