@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.19 2001-08-03 05:59:05 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.20 2001-09-19 11:22:34 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -640,10 +640,10 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
   G4int j;
   // Rebuild the physics tables for every process for this particle type
   G4ProcessVector* pVector = (particle->GetProcessManager())->GetProcessList();
-  for ( j=0; j < pVector->entries(); ++j) {
+  for ( j=0; j < pVector->size(); ++j) {
     (*pVector)[j]->BuildPhysicsTable(*particle);
   }
-  for ( j=0; j < pVector->entries(); ++j) {
+  for ( j=0; j < pVector->size(); ++j) {
     // temporary addition to make the integral schema
     BuildIntegralPhysicsTable((*pVector)[j], particle); 
   }
@@ -734,7 +734,7 @@ void G4VUserPhysicsList::DumpCutValues( G4ParticleDefinition* particle) const
     if (theKineticEnergyCuts != 0) {
       const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
       G4cout << "   - Material ---------------- Energy Cut ---" << G4endl;
-      for (size_t idx=0; idx<materialTable->entries(); idx++){
+      for (size_t idx=0; idx<materialTable->size(); idx++){
 	G4cout << "     " << G4std::setw(19) << (*materialTable)[idx]->GetName(); 
 	G4cout << " : "   << G4std::setw(10) << G4BestUnit(theKineticEnergyCuts[idx],"Energy");
 	G4cout << G4endl;
@@ -796,7 +796,7 @@ void G4VUserPhysicsList::DumpCutValuesTable() const
 
  // line 6 ..
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-  for (size_t J=0; J<materialTable->entries(); J++) {
+  for (size_t J=0; J<materialTable->size(); J++) {
     G4cout << " " << G4std::setw(18) << ((*materialTable)[J])->GetName();
     for (idx=0; idx <size_display; idx++) {
       if (particle[idx] == 0) {
@@ -829,7 +829,7 @@ void G4VUserPhysicsList::DumpCutValuesTable() const
 G4bool G4VUserPhysicsList::StorePhysicsTable(const G4String& directory)
 {
   const G4MaterialTable* matTable = G4Material::GetMaterialTable(); 
-  numberOfMaterial = matTable->entries();
+  numberOfMaterial = matTable->size();
 
   G4bool   ascii = fStoredInAscii;
   G4String dir   = directory;
@@ -853,7 +853,7 @@ G4bool G4VUserPhysicsList::StorePhysicsTable(const G4String& directory)
     // Store physics tables for every process for this particle type
     G4ProcessVector* pVector = (particle->GetProcessManager())->GetProcessList();
     G4int  j;
-    for ( j=0; j < pVector->entries(); ++j) {
+    for ( j=0; j < pVector->size(); ++j) {
       if (!(*pVector)[j]->StorePhysicsTable(particle,dir,ascii)){   
 #ifdef G4VERBOSE  
 	if (verboseLevel>2){
@@ -901,7 +901,7 @@ G4bool G4VUserPhysicsList::StoreMaterialInfo(const G4String& directory,
   
   const G4MaterialTable* matTable = G4Material::GetMaterialTable(); 
   // number of materials in the table
-  numberOfMaterial = matTable->entries();
+  numberOfMaterial = matTable->size();
 
   if (ascii) {
     /////////////// ASCII mode  /////////////////
@@ -914,7 +914,7 @@ G4bool G4VUserPhysicsList::StoreMaterialInfo(const G4String& directory,
     fOut.setf(G4std::ios::scientific);
   
     // material name and density
-    for (size_t idx=0; idx<matTable->entries(); ++idx){
+    for (size_t idx=0; idx<matTable->size(); ++idx){
       fOut << G4std::setw(FixedStringLengthForStore) << ((*matTable)[idx])->GetName();
       fOut << G4std::setw(FixedStringLengthForStore) << ((*matTable)[idx])->GetDensity()/(g/cm3) << G4endl;
     }
@@ -935,7 +935,7 @@ G4bool G4VUserPhysicsList::StoreMaterialInfo(const G4String& directory,
     fOut.write( (char*)(&numberOfMaterial), sizeof (G4int));
     
     // material name and density
-    for (size_t imat=0; imat<matTable->entries(); ++imat){
+    for (size_t imat=0; imat<matTable->size(); ++imat){
       G4String name =  ((*matTable)[imat])->GetName();
       G4double density = ((*matTable)[imat])->GetDensity()/(g/cm3);
       for (i=0; i<FixedStringLengthForStore; ++i) temp[i] = '\0'; 
@@ -1093,7 +1093,7 @@ void G4VUserPhysicsList::RetrievePhysicsTable(G4ParticleDefinition* particle,
   G4bool success[100];  
   // Retrieve physics tables for every process for this particle type
   G4ProcessVector* pVector = (particle->GetProcessManager())->GetProcessList();
-  for ( j=0; j < pVector->entries(); ++j) {
+  for ( j=0; j < pVector->size(); ++j) {
     success[j] = 
        (*pVector)[j]->RetrievePhysicsTable(particle,directory,ascii);
 
@@ -1109,7 +1109,7 @@ void G4VUserPhysicsList::RetrievePhysicsTable(G4ParticleDefinition* particle,
       (*pVector)[j]->BuildPhysicsTable(*particle);
     }
   }
-  for ( j=0; j < pVector->entries(); ++j) {
+  for ( j=0; j < pVector->size(); ++j) {
     // temporary addition to make the integral schema
     if (!success[j]) BuildIntegralPhysicsTable((*pVector)[j], particle); 
   }
@@ -1120,7 +1120,7 @@ G4bool  G4VUserPhysicsList::CheckForRetrievePhysicsTable(const G4String& directo
 							 G4bool          ascii)
 {
   const G4MaterialTable* matTable = G4Material::GetMaterialTable(); 
-  numberOfMaterial = matTable->entries();
+  numberOfMaterial = matTable->size();
 
   if (!fIsCheckedForRetrievePhysicsTable) {
     if (CheckMaterialInfo(directory, ascii)) {
@@ -1177,7 +1177,7 @@ G4bool G4VUserPhysicsList::CheckMaterialInfo(const G4String& directory,
   }
 
   const G4MaterialTable* matTable = G4Material::GetMaterialTable(); 
-  numberOfMaterial = matTable->entries();
+  numberOfMaterial = matTable->size();
   // number of materials in the table
   G4int nmat;
   if (ascii) {
@@ -1196,7 +1196,7 @@ G4bool G4VUserPhysicsList::CheckMaterialInfo(const G4String& directory,
   }
   
   // list of material
-  for (size_t idx=0; idx<matTable->entries(); ++idx){
+  for (size_t idx=0; idx<matTable->size(); ++idx){
     // check eof
     if(fIn.eof()) {
 #ifdef G4VERBOSE  
@@ -1486,7 +1486,7 @@ G4bool  G4VUserPhysicsList::RetrieveCutValues(const G4String&  directory,
 
   // number of materials in the table
   const G4MaterialTable* matTable = G4Material::GetMaterialTable(); 
-  numberOfMaterial = matTable->entries();
+  numberOfMaterial = matTable->size();
 
   // loop over all particles 
   while(!fIn.eof()){
