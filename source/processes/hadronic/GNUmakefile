@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.11 2002-11-16 17:07:10 hpw Exp $
+# $Id: GNUmakefile,v 1.12 2002-12-13 12:57:24 gcosmo Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic processes library.  G.Folger 10-Dec-97.
 # ----------------------------------------------------------------
@@ -19,7 +19,6 @@ SUBDIRS += models/generator/de_excitation
 SUBDIRS += models/generator/diffractive_string
 SUBDIRS += models/generator/high_energy
 SUBDIRS += models/generator/kinetic_model 
-SUBDIRS += models/generator/scattering
 SUBDIRS += models/generator/management
 SUBDIRS += models/generator/pre_equilibrium
 SUBDIRS += models/generator/quark_gluon_string
