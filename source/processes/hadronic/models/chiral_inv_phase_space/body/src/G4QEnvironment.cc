@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QEnvironment.cc,v 1.2 2000-09-10 13:58:57 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.3 2000-09-13 08:14:31 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -65,34 +65,37 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
       G4int hNFrag = curHadr->GetNFragments();// #0 means intermediate (skip)
       if(!hNFrag)                             // => Final hadron case
 	  {
-        G4int hPDG  = curHadr->GetPDGCode();  // A PDG Code of the projQHadron
-        if(!hPDG||hPDG==10)                   // Check for the validity of the QHadron
+        if(theEnvironment.GetPDG()==90000000)
         {
-          G4cout<<"***G4QEnvironment::Constructor: wrong PDG("<<ih<<")="<<hPDG<<G4endl;
-          G4Exception("***G4QEnvironment::Constructor: Can not construct QEnvironment");
-        }
-        else
-        {
-          G4int hQ = curHadr->GetQCode();     // One more check for valid of the QHadron
-          if(hQ<0)
-	      {
-            G4cout<<"***G4QEnvironment::Constructor: Q<0, projPDG="<<hPDG<<G4endl;
+          G4int hPDG  = curHadr->GetPDGCode();// A PDG Code of the projQHadron
+          if(!hPDG||hPDG==10)                 // Check for the validity of the QHadron
+          {
+            G4cout<<"***G4QEnvironment::Constructor: wrong PDG("<<ih<<")="<<hPDG<<G4endl;
             G4Exception("***G4QEnvironment::Constructor: Can not construct QEnvironment");
-	      }
+          }
           else
           {
-            if(theEnvironment.GetPDG()==90000000) theQHadrons.insert(curHadr);
-            else                              // Nuclear Environment still exists
-			{
-              G4LorentzVector h4Mom = curHadr->Get4Momentum();
-              G4QContent      hQC   = curHadr->GetQC();
+            G4int hQ = curHadr->GetQCode();  // One more check for valid of the QHadron
+            if(hQ<0)
+	        {
+              G4cout<<"***G4QEnvironment::Constructor: Q<0, projPDG="<<hPDG<<G4endl;
+              G4Exception("***G4QEnvironment::Constructor: Can not construct QEnvironment");
+	        }
+            else
+            {
+              theQHadrons.insert(curHadr);  // This is a real hadron and can be filled
+            } // End of Q-Code check
+          } // End of proper PDG for i-th Hadron
+        }
+        else                                // Nuclear Environment still exists
+		{
+          G4LorentzVector h4Mom = curHadr->Get4Momentum();
+          G4QContent      hQC   = curHadr->GetQC();
 #ifdef pdebug
-              G4cout<<"G4QEnvironment: (1) CreateQuasmon h4M="<<h4Mom<<",hQC="<<hQC<<G4endl;
+          G4cout<<"G4QEnvironment: (1) CreateQuasmon h4M="<<h4Mom<<",hQC="<<hQC<<G4endl;
 #endif
-              CreateQuasmon(hQC, h4Mom);
-			} // End of Existing Nuclear Environment case
-          } // End of Q-Code check
-        } // End of proper PDG for i-th Hadron
+          CreateQuasmon(hQC, h4Mom);
+		} // End of Existing Nuclear Environment case
 	  } // End of final hadron case
     } // End of the LOOP over input hadrons
   } // End of interaction with nucleus
