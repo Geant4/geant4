@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3RunAction.hh,v 1.4 2000-12-07 12:38:24 maire Exp $
+// $Id: Em3RunAction.hh,v 1.5 2001-02-21 11:17:03 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,6 +26,11 @@
 class G4Run;
 class Em3RunActionMessenger;
 
+#ifndef G4NOHIST
+ class HepTupleManager;
+ class HepTuple;
+#endif
+
 class Em3RunAction : public G4UserRunAction
 {
   public:
@@ -40,7 +45,11 @@ class Em3RunAction : public G4UserRunAction
     
     void  SetRndmFreq(G4int   val)  {saveRndm = val;}
     G4int GetRndmFreq()             {return saveRndm;}
-                
+    
+#ifndef G4NOHIST
+    HepTuple* GetnTuple() {return ntuple;}
+#endif
+            
   private:
     void bookHisto();
     
@@ -52,6 +61,11 @@ class Em3RunAction : public G4UserRunAction
     Em3DetectorConstruction* Detector;    
     Em3RunActionMessenger*   runMessenger;        
     G4int saveRndm;
+    
+#ifndef G4NOHIST    
+    HepTupleManager* hbookManager;    
+    HepTuple* ntuple;
+#endif               
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
