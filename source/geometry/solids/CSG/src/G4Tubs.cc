@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Tubs.cc,v 1.25 2001-01-18 14:40:51 grichine Exp $
+// $Id: G4Tubs.cc,v 1.26 2001-02-20 12:07:17 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,6 +29,8 @@
 // 31.10.00 V.Grichine, assign sr, sphi in Distance ToOut(p,v,...)
 // 28.11.00 V.Grichine, bug fixed in Inside(p)
 // 07.12.00 V.Grichine, phi-section algorithm was changed in Inside(p)
+// 20.02.01 V.Grichine, bug fixed in Inside(p) and CalculateExtent was 
+//                      simplified base on G4Box::CalculateExtent
 
 #include "G4Tubs.hh"
 
@@ -45,6 +47,7 @@
 #include "G4NURBStube.hh"
 #include "G4NURBScylinder.hh"
 #include "G4NURBStubesector.hh"
+#include "G4Box.hh"
 
 /////////////////////////////////////////////////////////////////////////
 //
@@ -140,6 +143,9 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
 			              G4double&          pMin, 
                                       G4double&          pMax    ) const
 {
+  G4Box box("box",fRMax,fRMax,fDz) ;
+  return box.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax) ;
+
   if ( !pTransform.IsRotated() && fDPhi == 2.0*M_PI && fRMin == 0 )
   {
 // Special case handling for unrotated solid tubes
@@ -360,6 +366,11 @@ EInside G4Tubs::Inside(const G4ThreeVector& p) const
 
 	if ( fSPhi >= 0 )
 	{
+	  if ( abs(pPhi) < kAngTolerance*0.5 &&
+               abs(fSPhi + fDPhi - 2*M_PI) < kAngTolerance*0.5 )
+          { 
+            pPhi += 2*M_PI ; // 0 <= pPhi < 2pi
+          }
 	  if ( pPhi >= fSPhi + kAngTolerance*0.5 &&
                pPhi <= fSPhi + fDPhi - kAngTolerance*0.5 ) in = kInside ;
 
