@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2002-12-05 09:28:55 grichine Exp $
+# $Id: GNUmakefile,v 1.6 2003-02-13 16:39:29 gcosmo Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -21,8 +21,6 @@ INCFLAGS := -I$(G4BASE)/geometry/management/include \
             -I$(G4BASE)/geometry/volumes/include \
             -I$(G4BASE)/geometry/solids/CSG/include \
             -I$(G4BASE)/geometry/solids/specific/include \
-            -I$(G4BASE)/geometry/solids/BREPS/include \
-            -I$(G4BASE)/geometry/solids/Boolean/include \
             -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPGeometry/include \
