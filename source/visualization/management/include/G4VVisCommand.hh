@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VVisCommand.hh,v 1.3 1999-05-10 14:04:05 johna Exp $
+// $Id: G4VVisCommand.hh,v 1.4 1999-11-05 16:31:02 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Base class for visualization commands - John Allison  9th August 1998
@@ -29,6 +29,7 @@ public:
 protected:
   static G4VisManager* fpVisManager;
   // Commands which need to be accessed by other messengers...
+  static G4UIcmdWithAString* fpCommandSceneEdit;
   static G4UIcmdWithAString* fpCommandSceneNotifyHandlers;
   static G4UIcmdWithAString* fpCommandSceneRemove;
   static G4UIcmdWithAString* fpCommandSceneSelect;
@@ -38,6 +39,7 @@ protected:
   static G4UIcommand*        fpCommandViewerCreate;
   static G4UIcmdWithAString* fpCommandViewerRemove;
   static G4UIcmdWithAString* fpCommandViewerSelect;
+  static G4UIcmdWithAString* fpCommandViewerUpdate;
 };
 
 #include "G4VVisCommand.icc"
