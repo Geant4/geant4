@@ -1,4 +1,4 @@
-$Id: History,v 1.111 2001-10-12 16:06:24 pia Exp $
+$Id: History,v 1.112 2001-10-18 10:54:14 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18.10.2001 - MGP, tag emlowen-V03-02-29
+             Modification of G4hNuclearStoppingModel and 
+	     G4hParametrisedLossModel by G. Cosmo required for
+             compatibility with materials-V03-02-04
+
 12.10.2001 - MGP, tag emlowen-V03-02-28
              Cosmetics in the source code (FALSE/TRUE moved to false/true)
              and update of all tests to new materials migrated to STL
@@ -32,11 +37,11 @@ committal in the CVS repository !
 10.10.2001 - MGP, tag emlowen-V03-02-26
              Code for implementation of design iteration for electrons 
              by V. Ivanchenko
-             Major revision of new code to improve code quality and consistency 
+             Major revision of new code to improve code quality and consistency
              with design by MGP
-             Since the new code does not respect the design and broke system test
-             and user code, this tag is only for internal debugging purpose and
-             should not be used by developers
+             Since the new code does not respect the design and broke system 
+             test and user code, this tag is only for internal debugging 
+             purpose and should not be used by developers
 
 09.10.2001 - MGP, tag emlowen-V03-02-25
              Identical to the previous one, but restored G4VDataSetAlgorithm
