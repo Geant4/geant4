@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScatteringSTD.cc,v 1.8 2003-01-22 14:04:12 vnivanch Exp $
+// $Id: G4MultipleScatteringSTD.cc,v 1.9 2003-02-06 15:40:07 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -55,6 +55,9 @@
 // 11-12-02 precision problem in ComputeTransportCrossSection 
 //          for small Tkin/for heavy particles cured from L.Urban
 // 20-01-03 Migrade to cut per region (V.Ivanchenko)
+// 05-02-03 changes in data members, new sampling for geom.
+//          path length, step dependence reduced with new
+//          method
 //
 // -----------------------------------------------------------------------------
 //
@@ -72,7 +75,6 @@
 G4MultipleScatteringSTD::G4MultipleScatteringSTD(const G4String& processName)
      : G4VContinuousDiscreteProcess(processName),
        theTransportMeanFreePathTable(0),
-       fTransportMeanFreePath (1.e12),kappa(2.5),
        taubig(8.0),tausmall(1.e-14),taulim(1.e-5),
        LowestKineticEnergy(0.1*keV),
        HighestKineticEnergy(100.*TeV),
@@ -86,8 +88,10 @@ G4MultipleScatteringSTD::G4MultipleScatteringSTD(const G4String& processName)
        stepno(0),stepnolastmsc(-1000000),nsmallstep(5),
        laststep(0.),
        valueGPILSelectionMSC(NotCandidateForSelection),
-       pcz(0.17),zmean(0.),
-       range(1.0),T1(1.0),lambda1(-1.),cth1(1.),z1(1.e10),dtrl(0.15),
+       zmean(0.),samplez(true),
+       range(1.),T0(1.),T1(1.),lambda0(1.),lambda1(-1.),
+       Tlow(0.),alam(1.),blam(1.),dtrl(0.15),
+       lambdam(-1.),clam(1.),zm(1.),cthm(1.),
        fLatDisplFlag(true),
        NuclCorrPar (0.0615),
        FactPar(0.40),
@@ -117,7 +121,8 @@ void G4MultipleScatteringSTD::BuildPhysicsTable(
        // parameters for e+/e-
        alfa1 = 1.45 ;
        alfa2 = 0.60 ;
-       alfa3 = 1.80 ;
+       alfa3 = 0.30 ;
+       b = 1. ;
        xsi = facxsi*2.22 ;
        c0 = 2.30 ;
     }
@@ -126,10 +131,13 @@ void G4MultipleScatteringSTD::BuildPhysicsTable(
        // parameters for heavy particles
        alfa1 = 1.10 ;
        alfa2 = 0.14 ;
-       alfa3 = 0.42 ;
+       alfa3 = 0.07 ;
+       b = 1. ;
        xsi = facxsi*2.70 ;
        c0 = 1.40 ;
     }
+
+    Tlow = aParticleType.GetPDGMass();
 
   // tables are built for MATERIALS
     const G4double sigmafactor = twopi*classic_electr_radius*
@@ -442,7 +450,10 @@ G4double G4MultipleScatteringSTD::GetContinuousStepLimit(
 {
   G4double zPathLength,tPathLength;
   const G4DynamicParticle* aParticle;
-  G4double KineticEnergy,tau,z0,kz;
+  G4double tau,zt,cz,cz1,grej,grej0;
+  const G4double expmax = 100., ztmax = (2.*expmax+1.)/(2.*expmax+3.) ;
+  const G4double tmax = 1.e20*mm ;
+
   G4bool isOut;
 
   G4LossTableManager* theManager = G4LossTableManager::Instance();
@@ -457,13 +468,13 @@ G4double G4MultipleScatteringSTD::GetContinuousStepLimit(
   materialIndex = aMaterial->GetIndex();
 
   aParticle = track.GetDynamicParticle();
-  KineticEnergy = aParticle->GetKineticEnergy();
+  T0 = aParticle->GetKineticEnergy();
 
-  fTransportMeanFreePath = (*theTransportMeanFreePathTable)
-                           (materialIndex)->GetValue(KineticEnergy,isOut);
+  lambda0 = (*theTransportMeanFreePathTable)
+            (materialIndex)->GetValue(T0,isOut);
 
   range = theManager->GetRange(aParticle->GetDefinition(),
-                                       KineticEnergy,couple);
+                                                T0,couple);
 
   // special treatment near boundaries ?
   if (boundary)
@@ -482,10 +493,10 @@ G4double G4MultipleScatteringSTD::GetContinuousStepLimit(
       {
         stepnolastmsc = stepno ;
         //  if : diff.treatment for small/not small Z
-        if(range > fTransportMeanFreePath)
+        if(range > lambda0)
           tlimit = facrange*range ;
         else
-          tlimit = facrange*fTransportMeanFreePath ;
+          tlimit = facrange*lambda0 ;
 
         if(tlimit < tlimitmin) tlimit = tlimitmin ;
         laststep = tlimit ;
@@ -512,41 +523,63 @@ G4double G4MultipleScatteringSTD::GetContinuousStepLimit(
 
   //  do the true -> geom transformation
   lambda1 = -1.;
-  z1 = 1.e10 ;
+  zmean = tPathLength;
 
-  tau   = tPathLength/fTransportMeanFreePath ;
+  tau   = tPathLength/lambda0 ;
 
   if(tau < tausmall) zPathLength = tPathLength;
-
   else
   {
-    if(tPathLength/range < dtrl) zmean = fTransportMeanFreePath*(1.-exp(-tau));
+    if(tPathLength/range < dtrl) zmean = lambda0*(1.-exp(-tau));
     else
-    {
+    { 
       T1 = theManager->GetEnergy(
-                   aParticle->GetDefinition(),range-0.5*tPathLength,couple);
+                   aParticle->GetDefinition(),range-tPathLength,couple);
       lambda1 = (*theTransportMeanFreePathTable)
                         (materialIndex)->GetValue(T1,isOut);
-      z1    = fTransportMeanFreePath*(1.-exp(-0.5*tau));
-      cth1  = exp(-0.5*tau);
-      zmean = z1 + lambda1*(1.-exp(-0.5*tPathLength/lambda1))*cth1;
+      if(T0 < Tlow)
+        alam = range ;
+      else
+        alam = lambda0*tPathLength/(lambda0-lambda1) ;
+      blam = 1.+alam/lambda0 ;
+      if(tPathLength/range < 2.*dtrl)
+      {
+        zmean = alam*(1.-exp(blam*log(1.-tPathLength/alam)))/blam ;
+        lambdam = -1. ;
+      }
+      else
+      {
+        G4double w = 1.-0.5*tPathLength/alam ;
+        lambdam = lambda0*w ;
+        clam = 1.+alam/lambdam ;
+        cthm = exp(alam*log(w)/lambda0) ;
+        zm = alam*(1.-exp(blam*log(w)))/blam ;
+        zmean = zm + alam*(1.-exp(clam*log(w)))*cthm/clam ;
+      }
     }
 
     //  sample z
-    if ((pcz > 0.) && (2.*zmean > tPathLength))
+    zt = zmean/tPathLength ;
+    if (samplez && (zt < ztmax) && (zt > 0.5))
     {
-      z0 = zmean+pcz*(tPathLength-zmean);
-      kz = (2.*zmean-tPathLength)/(z0-zmean)+1.;
-      if (G4UniformRand() < z0/tPathLength)
-            zPathLength = z0*exp(log(G4UniformRand())/kz);
-      else  zPathLength = tPathLength-(tPathLength-z0)
-                                      *exp(log(1.-G4UniformRand())/kz);
+      cz = 0.5*(3.*zt-1.)/(1.-zt) ;
+      if(tPathLength < exp(log(tmax)/(2.*cz)))
+      {
+        cz1 = 1.+cz ;
+        grej0 = exp(cz1*log(cz*tPathLength/cz1))/cz ;
+        do
+        {
+          zPathLength = tPathLength*exp(log(G4UniformRand())/cz1) ;
+          grej = exp(cz*log(zPathLength))*(tPathLength-zPathLength)/grej0 ;
+        } while (grej < G4UniformRand()) ;
+      }
+      else zPathLength = zmean;
     }
-    else
-    {
-      zPathLength = zmean;
-    }
+    else zPathLength = zmean;
   }
+  // protection against z > lambda
+  if(zPathLength > lambda0)
+    zPathLength = lambda0 ;
 
   tLast = tPathLength;
   zLast = zPathLength;
@@ -565,29 +598,45 @@ G4VParticleChange* G4MultipleScatteringSTD::AlongStepDoIt(
 
   G4double geomPathLength = track.GetStepLength();
 
-  G4double truePathLength;
+  G4double truePathLength = 0. ;
 
-  if (geomPathLength/fTransportMeanFreePath < tausmall)
-                                          truePathLength = geomPathLength;
+  if(geomPathLength/lambda0 < tausmall) truePathLength = geomPathLength;
   else if(geomPathLength == zLast)        truePathLength = tLast;
   else
   {
-     if (geomPathLength <= z1)
-       {
-         if (geomPathLength < fTransportMeanFreePath)
-               truePathLength = -fTransportMeanFreePath
-	                       *log(1.-geomPathLength/fTransportMeanFreePath);
-         else  truePathLength = range;
+    if(lambda1 < 0.) truePathLength = -lambda0*log(1.-geomPathLength/lambda0) ;
+    else if(lambdam < 0.)
+    {
+      if(blam*geomPathLength/alam < 1.)
+        truePathLength = alam*(1.-exp(log(1.-blam*geomPathLength/alam)/
+                                    blam)) ;
+      else
+        truePathLength = tLast; 
+    }
+    else
+    {
+      if(geomPathLength <= zm)
+      {
+        if(blam*geomPathLength/alam < 1.)
+          truePathLength = alam*(1.-exp(log(1.-blam*geomPathLength/alam)/
+                                    blam)) ;
+        else
+          truePathLength = 0.5*tLast;
 
-         lambda1 = -1.;
-       }
-     else
-       {
-         if ((geomPathLength-z1)/(cth1*lambda1) < 1.)
-               truePathLength = 0.5*tLast-lambda1
-	                       *log(1.-(geomPathLength-z1)/(cth1*lambda1));
-         else  truePathLength = range;
-       }
+        lambdam = -1. ;
+      }
+      else
+      {
+        if(clam*(geomPathLength-zm)/(alam*cthm) < 1.)
+          truePathLength = 0.5*tLast + alam*(1.-
+                      exp(log(1.-clam*(geomPathLength-zm)/(alam*cthm)))/clam) ;
+        else
+          truePathLength = tLast ;
+      }
+    }    
+    // protection ....
+    if(truePathLength > tLast)
+      truePathLength = tLast ;
   }
 
   fParticleChange.SetTrueStepLength(truePathLength);
@@ -603,8 +652,7 @@ G4VParticleChange* G4MultipleScatteringSTD::PostStepDoIt(
                                                const G4Step& stepData)
 {
   // angle distribution parameters
-  const G4double kappapl1 = kappa+1., kappami1 = kappa-1. ;
-  G4bool isOut;
+  const G4double kappa = 2.5, kappapl1 = kappa+1., kappami1 = kappa-1. ;
 
   fParticleChange.Initialize(trackData);
   G4double truestep = stepData.GetStepLength();
@@ -612,29 +660,30 @@ G4VParticleChange* G4MultipleScatteringSTD::PostStepDoIt(
   const G4DynamicParticle* aParticle = trackData.GetDynamicParticle();
   G4double KineticEnergy = aParticle->GetKineticEnergy();
 
-  fTransportMeanFreePath = (*theTransportMeanFreePathTable)
-                           (materialIndex)->GetValue(KineticEnergy,isOut);
-
-  //  change direction first ( scattering )
-  G4double cth =1 ;
-  G4double tau = truestep/fTransportMeanFreePath;
-
-  if(KineticEnergy <= 0.)
-     ;
-  else
+  // do nothing for stopped particles !
+  if(KineticEnergy > 0.)
   {
+    //  change direction first ( scattering )
+    G4double cth =1 ;
+    G4double tau = truestep/lambda0 ;
+
     if     (tau < tausmall) cth =  1.;
     else if(tau > taubig)   cth = -1.+2.*G4UniformRand();
     else
     {
-      if(lambda1 > 0.) tau = 0.5*tLast/lambda1
-                         +(truestep-0.5*tLast)/fTransportMeanFreePath;
+      if(lambda1 > 0.)
+      {
+       if(lambdam < 0.)
+        tau = -alam*log(1.-truestep/alam)/lambda0 ;
+       else
+        tau = -log(cthm)-alam*log(1.-(truestep-0.5*tLast)/alam)/lambdam ;
+      }
+
       if(tau > taubig)   cth = -1.+2.*G4UniformRand();
       else
       {
        const G4double amax=25. ;
        const G4double tau0 = 0.02  ;
-       const G4double b = 1. ;
 
        G4double a,x0,c,xmean1,xmean2,
                  xmeanth,prob,qprob ;
@@ -650,7 +699,7 @@ G4VParticleChange* G4MultipleScatteringSTD::PostStepDoIt(
        if(x0 < 0.) x0 = 0. ;
 
        // from continuity of the 1st derivatives
-       c =  a*(b-x0) ;
+       c = a*(b-x0) ;
        if(a*tau < c0)
         c = c0*(b-x0)/tau ;
 
@@ -663,7 +712,6 @@ G4VParticleChange* G4MultipleScatteringSTD::PostStepDoIt(
        else
          ea = 0. ;
        eaa = 1.-ea ;
-
        xmean1 = 1.-1./a+(1.-x0)*ea/eaa ;
 
        b1 = b+1. ;
@@ -705,7 +753,6 @@ G4VParticleChange* G4MultipleScatteringSTD::PostStepDoIt(
          cth = -1.+2.*G4UniformRand() ;
       }
     }
-  }
 
   G4double sth  = sqrt(1.-cth*cth);
   G4double phi  = twopi*G4UniformRand();
@@ -738,7 +785,7 @@ G4VParticleChange* G4MultipleScatteringSTD::PostStepDoIt(
           rmean += tau-kappapl1/kappa+kappa*etau/kappami1;
         }
 
-        if (rmean>0.) rmean = 2.*fTransportMeanFreePath*sqrt(rmean/3.);
+        if (rmean>0.) rmean = 2.*lambda0*sqrt(rmean/3.);
         else          rmean = 0.;
 
         // for rmean > 0) only
@@ -766,7 +813,7 @@ G4VParticleChange* G4MultipleScatteringSTD::PostStepDoIt(
         }
       }
     }
-
+  }
   return &fParticleChange;
 }
 
