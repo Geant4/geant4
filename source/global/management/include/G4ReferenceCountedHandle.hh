@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReferenceCountedHandle.hh,v 1.12 2001-11-07 00:13:10 stesting Exp $
+// $Id: G4ReferenceCountedHandle.hh,v 1.13 2001-11-07 00:32:06 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -107,15 +107,10 @@ public: // with description
   inline void operator delete( void *pObj );
     // Operator delete defined for G4Allocator.
   
-#if defined( WIN32 ) || defined ( __DECCXX )
   void* operator new( size_t, void *pObj );
-    // This is required by Windows/VC++ and Digital's cxx in order to compile.
-    // A warning will be issued for not existing correspondent delete...
-    // Normally this variant is not needed but when this class is used
-    // in the context of STL container.
-#endif
-
-public: // with description
+    // This is required when this class is used in the context of STL container.
+    // On Windows/VC++ and Digital's cxx it will compile with
+    // a warning saying something about not existing correspondent delete...
 
 private:
 
@@ -299,13 +294,11 @@ void G4ReferenceCountedHandle<X>::operator delete( void *pObj )
     aRCHAllocator.FreeSingle( (G4ReferenceCountedHandle<X>*)pObj );
 }
 
-#if defined( WIN32 ) || defined ( __DECCXX )
 template <class X>
 void* G4ReferenceCountedHandle<X>::operator new( size_t, void *pObj )
 {
     return pObj;
 }
-#endif
 
 // ------------------------------------------------------------------
 
