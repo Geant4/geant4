@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2003-10-31 12:08:50 vnivanch Exp $
+# $Id: GNUmakefile,v 1.6 2003-11-13 12:00:27 vnivanch Exp $
 # GEANT4 tag $Name: not supported by cvs2svn $
 # --------------------------------------------------------------
 # GNUmakefile for examples module with AIDA interface
@@ -33,6 +33,6 @@ analclean:
 	rm -f $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(G4TARGET)/Histo.o
 
 visclean:
-	rm -f g4*.prim g4*.eps g4*.wrl
-	rm -f .DAWN_*
+	rm -f $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(G4TARGET)/VisManager.o
+
 
