@@ -5,12 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: AnaEx01SteppingAction.cc,v 1.2 2000-10-31 13:10:01 barrand Exp $
+// $Id: AnaEx01SteppingAction.cc,v 1.3 2000-11-10 14:08:10 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
+#ifdef G4ANALYSIS_USE
 #include "AnaEx01AnalysisManager.hh"
+#endif
 
 #include "AnaEx01SteppingAction.hh"
 
@@ -20,7 +22,9 @@ AnaEx01SteppingAction::AnaEx01SteppingAction(
 
 AnaEx01SteppingAction::~AnaEx01SteppingAction(){}
 void AnaEx01SteppingAction::UserSteppingAction(const G4Step* aStep){
+#ifdef G4ANALYSIS_USE
   if(fAnalysisManager) fAnalysisManager->Step(aStep);
+#endif
 }
 
 

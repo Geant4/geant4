@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: AnaEx01.cc,v 1.4 2000-11-07 14:39:17 barrand Exp $
+// $Id: AnaEx01.cc,v 1.5 2000-11-10 14:08:02 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,19 +53,20 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new AnaEx01PhysicsList);
   
-  AnaEx01AnalysisManager* analysisManager = 
 #ifdef G4ANALYSIS_USE
+  AnaEx01AnalysisManager* analysisManager = 
     new AnaEx01AnalysisManager(argc==1?"Lab":argv[1]);
-#else
-    0;
-#endif
-    
-  // set user action classes
   runManager->SetUserAction(new AnaEx01PrimaryGeneratorAction(detector));
   runManager->SetUserAction(new AnaEx01RunAction(analysisManager));
   runManager->SetUserAction(new AnaEx01EventAction(analysisManager));
   runManager->SetUserAction(new AnaEx01SteppingAction(analysisManager));
-  
+#else
+  runManager->SetUserAction(new AnaEx01PrimaryGeneratorAction(detector));
+  runManager->SetUserAction(new AnaEx01RunAction());
+  runManager->SetUserAction(new AnaEx01EventAction());
+  runManager->SetUserAction(new AnaEx01SteppingAction());
+#endif
+    
   //Initialize G4 kernel
   runManager->Initialize();
     
@@ -76,7 +77,9 @@ int main(int argc,char** argv) {
   UI->ApplyCommand("/control/execute run.mac");
 
   // job termination
+#ifdef G4ANALYSIS_USE
   delete analysisManager;
+#endif
   delete runManager;
 
   return 0;
