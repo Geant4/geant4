@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegionStore.hh,v 1.2 2002-12-16 09:24:02 gcosmo Exp $
+// $Id: G4RegionStore.hh,v 1.3 2003-02-07 11:32:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4RegionStore
@@ -81,8 +81,13 @@ class G4RegionStore : public G4std::vector<G4Region*>
       // Forces recomputation of material lists in all regions
       // in the store.
 
-    G4Region* GetRegion(const G4String& name) const;
+    G4Region* GetRegion(const G4String& name, G4bool verbose=true) const;
       // Returns a region through its name specification.
+
+    G4Region* FindOrCreateRegion(const G4String& name);
+      // Returns a region through its name specification, if it exists.
+      // If it does not exist it will allocate one delegating ownership
+      // to the client.
 
     virtual ~G4RegionStore();
       // Destructor: takes care to delete allocated regions.

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegionStore.cc,v 1.2 2002-12-16 09:24:04 gcosmo Exp $
+// $Id: G4RegionStore.cc,v 1.3 2003-02-07 11:32:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4RegionStore
@@ -193,13 +193,32 @@ void G4RegionStore::UpdateMaterialList()
 // Returns a region through its name specification.
 // ***************************************************************************
 //
-G4Region* G4RegionStore::GetRegion(const G4String& name) const
+G4Region* G4RegionStore::GetRegion(const G4String& name, G4bool verbose) const
 {
   for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
   {
     if ((*i)->GetName() == name)
       return *i;
   }
-  G4cerr << "ERROR - Region " << name << " NOT found in store !" << G4endl;
+  if (verbose)
+  {
+    G4cerr << "ERROR - Region " << name << " NOT found in store !" << G4endl;
+  }
   return 0;
+}
+
+// ***************************************************************************
+// Returns a region through its name specification, if it exists.
+// If it does not exist it will allocate a new region with the given
+// name, delegating the ownership to the caller client.
+// ***************************************************************************
+//
+G4Region* G4RegionStore::FindOrCreateRegion(const G4String& name)
+{
+  G4Region* target = GetRegion(name,false);
+  if (!target)
+  {
+    target = new G4Region(name);
+  }
+  return target;
 }
