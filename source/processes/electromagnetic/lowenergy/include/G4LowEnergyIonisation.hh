@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyIonisation.hh,v 1.30 2001-10-11 12:01:08 pia Exp $
+// $Id: G4LowEnergyIonisation.hh,v 1.31 2001-10-18 14:15:19 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -122,11 +122,9 @@ public:
 
 private:
   
-  // hide assignment operator 
+  // Hide copy constructor and assignment operator 
   G4LowEnergyIonisation & operator=(const G4LowEnergyIonisation &right);
   G4LowEnergyIonisation(const G4LowEnergyIonisation&);
-  
-private:
   
   G4int SelectRandomShell(const G4int AtomIndex
                         , const G4double IncEnergy

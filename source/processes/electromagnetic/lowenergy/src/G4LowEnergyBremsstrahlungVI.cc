@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyBremsstrahlungVI.cc,v 1.1 2001-10-11 12:25:09 pia Exp $
+// $Id: G4LowEnergyBremsstrahlungVI.cc,v 1.2 2001-10-18 14:15:27 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -47,6 +47,7 @@
 // 24.04.01 V.Ivanchenko remove RogueWave 
 // 29.09.2001 V.Ivanchenko: revision based on design iteration
 // 10.10.2001 MGP Revision to improve code quality and consistency with design
+// 18.10.2001 MGP Revision to improve code quality 
 //
 // --------------------------------------------------------------
 
@@ -92,7 +93,7 @@ void G4LowEnergyBremsstrahlungVI::BuildPhysicsTable(const G4ParticleDefinition& 
   cutForSecondaryPhotons.clear();
 
   // Create and fill BremsstrahlungParameters once
-  if( energySpectrum ) delete energySpectrum;
+  if( energySpectrum != 0 ) delete energySpectrum;
   energySpectrum = new G4eBremsstrahlungSpectrum();
 
   if(verboseLevel > 0) {
@@ -102,7 +103,7 @@ void G4LowEnergyBremsstrahlungVI::BuildPhysicsTable(const G4ParticleDefinition& 
 
   // Create and fill G4CrossSectionHandler once
 
-  if( crossSectionHandler ) delete crossSectionHandler;
+  if( crossSectionHandler != 0 ) delete crossSectionHandler;
   G4VDataSetAlgorithm* interpolation = new G4LogLogInterpolation();
   G4double lowKineticEnergy  = GetLowerBoundEloss();
   G4double highKineticEnergy = GetUpperBoundEloss();
@@ -144,7 +145,7 @@ void G4LowEnergyBremsstrahlungVI::BuildPhysicsTable(const G4ParticleDefinition& 
 
   // Build mean free path data using cuts values
 
-  if( theMeanFreePath ) delete theMeanFreePath;
+  if( theMeanFreePath != 0 ) delete theMeanFreePath;
   theMeanFreePath = crossSectionHandler->
                     BuildMeanFreePathForMaterials(&cutForSecondaryPhotons);
 
@@ -165,8 +166,7 @@ void G4LowEnergyBremsstrahlungVI::BuildPhysicsTable(const G4ParticleDefinition& 
 }
 
 
-void G4LowEnergyBremsstrahlungVI::BuildLossTable(
-                          const G4ParticleDefinition& aParticleType)
+void G4LowEnergyBremsstrahlungVI::BuildLossTable(const G4ParticleDefinition& aParticleType)
 {
   // Build table for energy loss due to soft brems
   // the tables are built for *MATERIALS* binning is taken from LowEnergyLoss
@@ -252,18 +252,18 @@ G4VParticleChange* G4LowEnergyBremsstrahlungVI::PostStepDoIt(const G4Track& trac
 {
   aParticleChange.Initialize(track);
 
-  const G4Material* mat = track.GetMaterial();
+  const G4Material* material = track.GetMaterial();
   G4double kineticEnergy = track.GetKineticEnergy();
-  G4int index = mat->GetIndex();
-  G4double tcut = cutForSecondaryPhotons[index];
+  G4int index = material->GetIndex();
+  G4double tCut = cutForSecondaryPhotons[index];
 
   // Control limits
-  if(tcut >= kineticEnergy) 
+  if(tCut >= kineticEnergy) 
      return G4VContinuousDiscreteProcess::PostStepDoIt(track, step);
 
-  G4int Z = crossSectionHandler->SelectRandomAtom(mat, kineticEnergy);
+  G4int Z = crossSectionHandler->SelectRandomAtom(material, kineticEnergy);
 
-  G4double tgam = energySpectrum->SampleEnergy(Z, tcut, kineticEnergy, kineticEnergy);
+  G4double tGamma = energySpectrum->SampleEnergy(Z, tCut, kineticEnergy, kineticEnergy);
 
   // Sample gamma angle (Z - axis along the parent particle).
   // Universal distribution suggested by L. Urban (Geant3 manual (1993) 
@@ -279,33 +279,33 @@ G4VParticleChange* G4LowEnergyBremsstrahlungVI::PostStepDoIt(const G4Track& trac
     
   G4double theta = u*electron_mass_c2/totalEnergy;
   G4double phi   = twopi * G4UniformRand();
-  G4double dirz  = cos(theta);
-  G4double sint  = sqrt(1. - dirz*dirz);
-  G4double dirx  = sint*cos(phi);
-  G4double diry  = sint*sin(phi); 
+  G4double dirZ  = cos(theta);
+  G4double sinTheta  = sqrt(1. - dirZ*dirZ);
+  G4double dirX  = sinTheta*cos(phi);
+  G4double dirY  = sinTheta*sin(phi); 
     
-  G4ThreeVector gamDirection (dirx, diry, dirz);
-  G4ThreeVector elecDirection = track.GetMomentumDirection();
+  G4ThreeVector gammaDirection (dirX, dirY, dirZ);
+  G4ThreeVector electronDirection = track.GetMomentumDirection();
     
-  gamDirection.rotateUz(elecDirection);   
+  gammaDirection.rotateUz(electronDirection);   
   
   //
   // Update the incident particle 
   //
     
-  G4double finalEnergy = kineticEnergy - tgam;  
+  G4double finalEnergy = kineticEnergy - tGamma;  
     
   // Kinematic problem
   if (finalEnergy < 0.) {
-    tgam += finalEnergy;
+    tGamma += finalEnergy;
     finalEnergy = 0.0;
   }
 
-  G4double mom = sqrt((totalEnergy + electron_mass_c2)*kineticEnergy);
+  G4double momentum = sqrt((totalEnergy + electron_mass_c2)*kineticEnergy);
 
-  G4double finalX = mom*elecDirection.x() - tgam*gamDirection.x();
-  G4double finalY = mom*elecDirection.y() - tgam*gamDirection.y();
-  G4double finalZ = mom*elecDirection.z() - tgam*gamDirection.z();
+  G4double finalX = momentum*electronDirection.x() - tGamma*gammaDirection.x();
+  G4double finalY = momentum*electronDirection.y() - tGamma*gammaDirection.y();
+  G4double finalZ = momentum*electronDirection.z() - tGamma*gammaDirection.z();
       
   aParticleChange.SetNumberOfSecondaries(1);
   aParticleChange.SetMomentumChange(finalX, finalY, finalZ);
@@ -313,7 +313,7 @@ G4VParticleChange* G4LowEnergyBremsstrahlungVI::PostStepDoIt(const G4Track& trac
 
   // create G4DynamicParticle object for the gamma 
   G4DynamicParticle* aGamma= new G4DynamicParticle (G4Gamma::Gamma(),
-						    gamDirection, tgam);
+						    gammaDirection, tGamma);
   aParticleChange.AddSecondary(aGamma); 
 
   return G4VContinuousDiscreteProcess::PostStepDoIt(track, step);

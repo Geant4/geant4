@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisationVI.cc,v 1.4 2001-10-18 09:56:39 vnivanch Exp $
+// $Id: G4LowEnergyIonisationVI.cc,v 1.5 2001-10-18 14:15:27 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -72,11 +72,11 @@
 //                          according to design iteration
 // 04.10.01 MGP             Minor clean-up in the fluo section, removal of
 //                          compilation warnings and extra protection to
-//                          prevent from accessing a null pointer                                               
+//                          prevent from accessing a null pointer        
 // 29.09.01 V.Ivanchenko    revision based on design iteration
-// 10.10.01 MGP             Revision to improve code quality and consistency 
-//                          with design
+// 10.10.01 MGP             Revision to improve code quality and consistency with design
 // 18.10.01 V.Ivanchenko    Add fluorescence AlongStepDoIt
+// 18.10.01 MGP             Revision to improve code quality and consistency with design
 //
 // --------------------------------------------------------------
 
@@ -105,7 +105,6 @@ G4LowEnergyIonisationVI::G4LowEnergyIonisationVI(const G4String& nam)
   energySpectrum(0),
   shellVacancy(0)
 {
-  interp = new G4LogLogInterpolation();
   cutForPhotons = 0.;
   cutForElectrons = 0.;
   verboseLevel = 0;
@@ -118,13 +117,11 @@ G4LowEnergyIonisationVI::~G4LowEnergyIonisationVI()
   delete energySpectrum;
   delete theMeanFreePath;
   delete shellVacancy;
-  delete interp;
   cutForDelta.clear();
 }
 
 
-void G4LowEnergyIonisationVI::BuildPhysicsTable(
-                        const G4ParticleDefinition& aParticleType)
+void G4LowEnergyIonisationVI::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 {
   if(verboseLevel > 0) {
     G4cout << "G4LowEnergyIonisation::BuildPhysicsTable start"
@@ -134,7 +131,7 @@ void G4LowEnergyIonisationVI::BuildPhysicsTable(
   cutForDelta.clear();
 
   // Create and fill IonisationParameters once
-  if( energySpectrum ) delete energySpectrum;
+  if( energySpectrum != 0 ) delete energySpectrum;
   energySpectrum = new G4eIonisationSpectrum();
 
   if(verboseLevel > 0) {
@@ -144,7 +141,7 @@ void G4LowEnergyIonisationVI::BuildPhysicsTable(
 
   // Create and fill G4CrossSectionHandler once
 
-  if( crossSectionHandler ) delete crossSectionHandler;
+  if ( crossSectionHandler != 0 ) delete crossSectionHandler;
   G4VDataSetAlgorithm* interpolation = new G4SemiLogInterpolation();
   G4double lowKineticEnergy  = GetLowerBoundEloss();
   G4double highKineticEnergy = GetUpperBoundEloss();
@@ -229,16 +226,20 @@ void G4LowEnergyIonisationVI::BuildLossTable(
   const size_t numOfMaterials = G4Material::GetNumberOfMaterials();
   theLossTable = new G4PhysicsTable(numOfMaterials);
 
-  if(shellVacancy) delete shellVacancy;
+  if (shellVacancy != 0) delete shellVacancy;
   shellVacancy = new G4ShellVacancy();
   G4DataVector* ksi = 0;
   G4DataVector* energy = 0;
-  G4int binForFlu = totBin/10;
+  G4int binForFluo = totBin/10;
+
+  // Do you really need to create a G4PhysicsLogVector object just for the modest
+  // service of calculating the bin coordinate? 
+  // Waste of memory and loss of performance.
+  // - MGP -
   G4PhysicsLogVector* bVector = new G4PhysicsLogVector(lowKineticEnergy,
 		                		       highKineticEnergy,
-						       binForFlu);
-  G4AtomicTransitionManager* transitionManager = 
-                             G4AtomicTransitionManager::Instance();
+						       binForFluo);
+  G4AtomicTransitionManager* transitionManager = G4AtomicTransitionManager::Instance();
   
   // Clean up the vector of cuts
 
@@ -257,9 +258,9 @@ void G4LowEnergyIonisationVI::BuildLossTable(
     const G4Material* material= (*theMaterialTable)[J];
 
     // the cut cannot be below lowest limit
-    G4double tcut = ((G4Electron::Electron())->GetCutsInEnergy())[J];
-    if(tcut > highKineticEnergy) tcut = highKineticEnergy;
-    cutForDelta[J] = tcut;
+    G4double tCut = ((G4Electron::Electron())->GetCutsInEnergy())[J];
+    if(tCut > highKineticEnergy) tCut = highKineticEnergy;
+    cutForDelta[J] = tCut;
 
     const G4ElementVector* theElementVector = material->GetElementVector();
     size_t NumberOfElements = material->GetNumberOfElements() ;
@@ -267,7 +268,7 @@ void G4LowEnergyIonisationVI::BuildLossTable(
                     material->GetAtomicNumDensityVector();
     if(verboseLevel > 1) {
       G4cout << "Energy loss for material # " << J
-             << " tcut(keV)= " << tcut/keV
+             << " tCut(keV)= " << tCut/keV
              << G4endl;
       }
       
@@ -286,9 +287,9 @@ void G4LowEnergyIonisationVI::BuildLossTable(
 
         for (G4int n=0; n<nShells; n++) {
 
-          G4double e = energySpectrum->AverageEnergy(Z, 0.0, tcut, 
+          G4double e = energySpectrum->AverageEnergy(Z, 0.0, tCut, 
                                                              lowEdgeEnergy, n);
-          G4double pro = energySpectrum->Probability(Z, 0.0, tcut, 
+          G4double pro = energySpectrum->Probability(Z, 0.0, tCut, 
                                                              lowEdgeEnergy, n);
           G4double cs= crossSectionHandler->FindValue(Z, lowEdgeEnergy, n);
           ionloss   += e * cs * pro * theAtomicNumDensityVector[iel];
@@ -310,6 +311,7 @@ void G4LowEnergyIonisationVI::BuildLossTable(
 
     // fill data for fluorescence
 
+    G4VDataSetAlgorithm* interp = new G4LogLogInterpolation();
     G4VEMDataSet* xsis = new G4CompositeEMDataSet(interp, 1., 1.);
     for (size_t iel=0; iel<NumberOfElements; iel++ ) {
 
@@ -317,7 +319,7 @@ void G4LowEnergyIonisationVI::BuildLossTable(
       energy = new G4DataVector();
       ksi    = new G4DataVector();
 
-      for (size_t j = 0; j<binForFlu; j++) {
+      for (size_t j = 0; j<binForFluo; j++) {
 
         G4double lowEdgeEnergy = bVector->GetLowEdgeEnergy(j);
         G4double cross   = 0.;
@@ -326,7 +328,7 @@ void G4LowEnergyIonisationVI::BuildLossTable(
 
         for (G4int n=0; n<nShells; n++) {
 
-          G4double e = energySpectrum->AverageEnergy(Z, 0.0, tcut, 
+          G4double e = energySpectrum->AverageEnergy(Z, 0.0, tCut, 
                                                              lowEdgeEnergy, n);
           G4double cs= crossSectionHandler->FindValue(Z, lowEdgeEnergy, n);
           eAverage   += e * cs * theAtomicNumDensityVector[iel];
@@ -339,6 +341,7 @@ void G4LowEnergyIonisationVI::BuildLossTable(
         energy->push_back(lowEdgeEnergy);
         ksi->push_back(cross);
       }
+      interp = new G4LogLogInterpolation();
       G4VEMDataSet* set = new G4EMDataSet(Z,energy,ksi,interp,1.,1.);
       xsis->AddComponent(set);
     }
@@ -360,26 +363,25 @@ G4VParticleChange* G4LowEnergyIonisationVI::PostStepDoIt(const G4Track& track,
 
   aParticleChange.Initialize(track);
 
-  const G4Material* mat = track.GetMaterial();
+  const G4Material* material = track.GetMaterial();
   G4double kineticEnergy = track.GetKineticEnergy();
 
-  G4int index = mat->GetIndex();
-  G4double tcut = cutForDelta[index];
+  G4int index = material->GetIndex();
+  G4double tCut = cutForDelta[index];
 
   G4double tmax = energySpectrum->MaxEnergyOfSecondaries(kineticEnergy);
 
   // Select atom and shell
 
-  G4int Z = crossSectionHandler->SelectRandomAtom(mat, kineticEnergy);
+  G4int Z = crossSectionHandler->SelectRandomAtom(material, kineticEnergy);
   G4int shell = crossSectionHandler->SelectRandomShell(Z, kineticEnergy);
-  const G4AtomicShell* atomicShell = (G4AtomicTransitionManager::Instance())
-                                   ->Shell(Z, shell);
+  const G4AtomicShell* atomicShell = (G4AtomicTransitionManager::Instance())->Shell(Z, shell);
   G4double bindingEnergy = atomicShell->BindingEnergy();
   G4int shellId = atomicShell->ShellId();
 
   // Sample delta energy
 
-  G4double tDelta = energySpectrum->SampleEnergy(Z, tcut, tmax, 
+  G4double tDelta = energySpectrum->SampleEnergy(Z, tCut, tmax, 
                                                  kineticEnergy, shell);
 
   if(tDelta == 0.0) 
@@ -538,6 +540,7 @@ G4bool G4LowEnergyIonisationVI::IsApplicable(const G4ParticleDefinition& particl
    return ( (&particle == G4Electron::Electron()) );
 }
 
+/*
 G4std::vector<G4Track*>* G4LowEnergyIonisationVI::SecondariesAlongStep(
                                             const G4Step& step,
                                                   G4double edep) 
@@ -651,6 +654,7 @@ G4std::vector<G4Track*>* G4LowEnergyIonisationVI::SecondariesAlongStep(
   }
   return vectorTracks;
 }
+*/
 
 G4double G4LowEnergyIonisationVI::GetMeanFreePath(const G4Track& track,
 						G4double previousStepSize,

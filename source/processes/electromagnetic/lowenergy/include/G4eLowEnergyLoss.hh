@@ -21,11 +21,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.hh,v 1.4 2001-10-18 09:47:42 vnivanch Exp $
+// $Id: G4eLowEnergyLoss.hh,v 1.5 2001-10-18 14:15:19 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
+// -------------------------------------------------------------------
+
+// Class description:
+// Low Energy electromagnetic process, electron energy loss
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
+// -------------------------------------------------------------------
 //
 //      History: first implementation, based on object model of
 //      2nd December 1995, G.Cosmo
@@ -37,6 +42,7 @@
 //  16.10.98 public method SetStepFunction() + messenger class 
 //  20.01.99 new data members , L.Urban
 //  10.02.00 modifications, new e.m. structure , L.Urban
+//  18.10.01 Revision to improve code quality and consistency with design
 // ------------------------------------------------------------
  
 #ifndef G4eLowEnergyLoss_h
@@ -83,8 +89,6 @@ class G4eLowEnergyLoss : public G4VeLowEnergyLoss
 
    ~G4eLowEnergyLoss();
 
-  public: // With description
-
     G4bool IsApplicable(const G4ParticleDefinition&);
     //  true for e+/e- , false otherwise
   
@@ -114,52 +118,6 @@ class G4eLowEnergyLoss : public G4VeLowEnergyLoss
     // Virtual function to be overridden in the derived classes
     // ( ionisation and bremsstrahlung) .
                                             
-                                            
-  private:
-
-    G4double GetConstraints(const G4DynamicParticle* aParticle,
-                            G4Material* aMaterial); 
-                                                                  
-    // hide  assignment operator
-    G4eLowEnergyLoss (G4eLowEnergyLoss &); 
-    G4eLowEnergyLoss & operator=(const G4eLowEnergyLoss &right);
-
-  protected:
-
-
-    virtual G4std::vector<G4Track*>* SecondariesAlongStep(const G4Step& step,
-                                     G4double edep) {return 0;};
-
-    G4PhysicsTable* theLossTable;
-     
-    G4double MinKineticEnergy ;     // particle with kinetic energy
-                                    // smaller than MinKineticEnergy
-                                    // is stopped in  AlongStepDoIt
-
-    G4double Charge,lastCharge ;
-
-    
-  private:
-
-    G4PhysicsTable* theDEDXTable;
-
-    G4int            CounterOfProcess;
-    G4PhysicsTable** RecorderOfProcess;
-                                            
-    G4double fdEdx;                       // computed in GetConstraints
-    G4double fRangeNow;                   // computed in GetConstraints
-
-    G4double linLossLimit ;               // used in AlongStepDoIt
-
-    
-    //New ParticleChange
-    G4ParticleChangeForLoss fParticleChange ;
-
- //  
- // static part of the class
- //
- public:  // With description
-     
     static void  SetNbOfProcesses(G4int nb) {NbOfProcesses=nb;};
     // Sets number of processes giving contribution to the energy loss
 
@@ -181,8 +139,25 @@ class G4eLowEnergyLoss : public G4VeLowEnergyLoss
     static G4double GetUpperBoundEloss() {return UpperBoundEloss;}; 
     static G4int    GetNbinEloss()       {return NbinEloss;}; 
  
- protected:
- 
+                                            
+  protected:
+
+  /*
+    virtual G4std::vector<G4Track*>* SecondariesAlongStep(const G4Step& step,
+							  G4double edep) { return 0; }
+  */
+  virtual G4std::vector<G4DynamicParticle*>* DeexciteAtom(const G4Material* material,
+							  G4double incidentEnergy,
+							  G4double eLoss) { return 0; }
+
+    G4PhysicsTable* theLossTable;
+     
+    G4double MinKineticEnergy ;     // particle with kinetic energy
+                                    // smaller than MinKineticEnergy
+                                    // is stopped in  AlongStepDoIt
+
+    G4double Charge,lastCharge ;
+
     //basic DEDX and Range tables
     static G4PhysicsTable* theDEDXElectronTable ;
     static G4PhysicsTable* theDEDXPositronTable ;
@@ -209,7 +184,34 @@ class G4eLowEnergyLoss : public G4VeLowEnergyLoss
     static G4PhysicsTable** RecorderOfElectronProcess;
     static G4PhysicsTable** RecorderOfPositronProcess;
     
+    
   private:
+
+    G4double GetConstraints(const G4DynamicParticle* aParticle,
+                            G4Material* aMaterial); 
+                                                                  
+    // hide  assignment operator
+    G4eLowEnergyLoss (G4eLowEnergyLoss &); 
+    G4eLowEnergyLoss & operator=(const G4eLowEnergyLoss &right);
+
+
+    G4PhysicsTable* theDEDXTable;
+
+    G4int            CounterOfProcess;
+    G4PhysicsTable** RecorderOfProcess;
+                                            
+    G4double fdEdx;                       // computed in GetConstraints
+    G4double fRangeNow;                   // computed in GetConstraints
+
+    G4double linLossLimit ;               // used in AlongStepDoIt
+
+    
+    //New ParticleChange
+    G4ParticleChangeForLoss fParticleChange ;
+
+ //  
+ // static part of the class
+ //
      
     static G4int NbinEloss;               // number of bins in table, 
                                           // calculated in BuildPhysicTable

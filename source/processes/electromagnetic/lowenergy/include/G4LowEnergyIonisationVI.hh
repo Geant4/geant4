@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4LowEnergyIonisationVI.hh,v 1.2 2001-10-18 09:47:42 vnivanch Exp $
+// $Id: G4LowEnergyIonisationVI.hh,v 1.3 2001-10-18 14:15:19 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -31,6 +31,7 @@
 // 02 Mar 1999  A. Forti        1st implementation
 // 27 Sep 2001  V. Ivanchenko   Major revision according to a design iteration
 // 10 Oct 2001  M.G. Pia        Revision to improve code quality and consistency with design
+// 18 Oct 2001  M.G. Pia        Revision to improve code quality and consistency with design
 //
 // -------------------------------------------------------------------
 
@@ -44,7 +45,6 @@
 #define G4LOWENERGYIONISATIONVI_HH 1
 
 #include "G4eLowEnergyLoss.hh"
-#include "G4VEMDataSet.hh"
 #include "G4AtomicDeexcitation.hh"
 
 class G4Track;
@@ -56,6 +56,7 @@ class G4ParticleChange;
 class G4VEnergySpectrum;
 class G4VCrossSectionHandler;
 class G4ShellVacancy;
+class G4VEMDataSet;
 
 class G4LowEnergyIonisationVI : public G4eLowEnergyLoss
 { 
@@ -105,8 +106,10 @@ private:
   G4double cutForElectrons;
   G4AtomicDeexcitation deexcitationManager;
   G4ShellVacancy* shellVacancy;
-  G4VDataSetAlgorithm* interp;
-
+  
+  virtual G4std::vector<G4DynamicParticle*>* DeexciteAtom(const G4Material* material,
+							  G4double incidentEnergy,
+							  G4double eLoss);
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.14 2001-10-18 09:56:40 vnivanch Exp $
+// $Id: G4eLowEnergyLoss.cc,v 1.15 2001-10-18 14:15:27 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // -----------------------------------------------------------
@@ -32,7 +32,6 @@
 //      ---------- G4eLowEnergyLoss physics process -----------
 //                by Laszlo Urban, 20 March 1997 
 // **************************************************************
-// It is the first implementation of the NEW UNIFIED ENERGY LOSS PROCESS.
 // It calculates the energy loss of e+/e-.
 // --------------------------------------------------------------
 //
@@ -50,6 +49,8 @@
 // 19-09-00  change of fluctuation sampling V.Ivanchenko
 // 20/09/00  update fluctuations V.Ivanchenko
 // 18/10/01  add fluorescence AlongStepDoIt V.Ivanchenko
+// 18/10/01  Revision to improve code quality and consistency with design, MGP
+//
 // --------------------------------------------------------------
  
 #include "G4eLowEnergyLoss.hh"
@@ -392,6 +393,8 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   fParticleChange.SetEnergyChange(finalT);
   fParticleChange.SetLocalEnergyDeposit(edep);
 
+  
+  /*
   G4std::vector<G4Track*>* vt = SecondariesAlongStep(stepData, edep);
 
   if(vt) {
@@ -403,7 +406,9 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
       fParticleChange.AddSecondary((*vt)[i]);
     }
     delete vt;   
+
   }
+  */
   
   return &fParticleChange;
 }
