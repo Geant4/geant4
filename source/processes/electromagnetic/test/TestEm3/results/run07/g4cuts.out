@@ -1,0 +1,361 @@
+
+***** Table : Nb of materials = 17 *****
+
+ Material: Aluminium     density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
+   --->  Element: Aluminium      Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: liquidArgon     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065 cm 
+   --->  Element: liquidArgon      Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:     Iron     density:  7.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.797 cm 
+   --->  Element:     Iron      Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:   Copper     density:  8.960 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.436 cm 
+   --->  Element:   Copper      Z = 29.0   N =  63.5   A =  63.55 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Tungsten     density: 19.300 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.504 mm 
+   --->  Element: Tungsten      Z = 74.0   N = 183.8   A = 183.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:     Lead     density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm 
+   --->  Element:     Lead      Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
+
+ Material: Scintillator     density:  1.032 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  42.549 cm 
+   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  91.45 %  Abundance  47.37 %
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   8.55 %  Abundance  52.63 %
+
+ Material: Silicium     density:  2.330 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.368 cm 
+   --->  Element:  Silicon Si   Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:   quartz     density:  2.200 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  12.295 cm 
+   --->  Element:  Silicon Si   Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass:  46.75 %  Abundance  33.33 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  53.25 %  Abundance  66.67 %
+
+ Material:  NemaG10     density:  1.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  18.733 cm 
+   --->  Element:  Silicon Si   Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass:  28.33 %  Abundance  11.11 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  32.27 %  Abundance  22.22 %
+   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  36.34 %  Abundance  33.33 %
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   3.06 %  Abundance  33.33 %
+
+ Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
+   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+
+ Material:  Aerogel     density: 200.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.493 m  
+   --->  Element:  Silicon Si   Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass:  29.22 %  Abundance  11.12 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  66.49 %  Abundance  44.42 %
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   4.19 %  Abundance  44.37 %
+   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   0.10 %  Abundance   0.09 %
+
+ Material: CarbonicGas     density: 27.000 mg/cm3  temperature: 325.00 K  pressure:  50.00 atm  RadLength:  13.406 m  
+   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  27.29 %  Abundance  33.33 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  72.71 %  Abundance  66.67 %
+
+ Material: WaterSteam     density:  0.300 mg/cm3  temperature: 500.00 K  pressure:   2.00 atm  RadLength:   1.203 km 
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
+
+ Material: Galactic     density:  0.000 mg/cm3  temperature:   2.73 K  pressure:   0.00 atm  RadLength: 6317232936888469300000.000 km 
+   --->  Element: Galactic      Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:     Beam     density:  0.010 mg/cm3  temperature: 273.15 K  pressure:   0.02 atm  RadLength:  36.786 km 
+   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+
+
+===================================================
+# $Id: g4cuts.out,v 1.1 1999-08-18 14:29:26 maire Exp $
+#
+# Macro file for "TestEm3.cc" 
+# (can be run in batch, without graphic)
+#
+# LiquidArgon-Lead 2 layers; proton 500 MeV
+#
+#
+/calor/setNbOfLayers 2
+/calor/setNbOfAbsor 2
+/calor/setAbsor 0 liquidArgon 4 mm
+/calor/setAbsor 1 Lead 4 mm
+/calor/setSizeYZ 16 mm
+/calor/update
+
+-------------------------------------------------------------
+ ---> The calorimeter is 2 layers of:
+ 	 liquidArgon:      4 mm 
+ 	        Lead:      4 mm 
+-------------------------------------------------------------
+/gun/setDefault
+#
+/run/particle/setCut 1.5 mm
+/run/initialize
+Em3PhysicsList::SetCuts:CutLength : 1.5 mm 
+
+============= The cut Energy ==============================
+                            gamma              e-             mu-          proton         neutron    
+Cut in range                1.5 mm          1.5 mm          1.5 mm          1.5 mm          1.5 mm 
+Cut in energy
+          Aluminium        8.27 keV         812 keV        6.34 MeV        16.6 MeV         990 eV 
+        liquidArgon        7.56 keV         455 keV        4.07 MeV        10.5 MeV         990 eV 
+               Iron        25.3 keV        1.81 MeV        10.5 MeV        27.1 MeV         990 eV 
+             Copper        30.6 keV        2.02 MeV        11.3 MeV        28.8 MeV         990 eV 
+           Tungsten         119 keV        3.43 MeV          15 MeV        37.3 MeV         990 eV 
+               Lead         111 keV        1.99 MeV        10.8 MeV        26.8 MeV         990 eV 
+              Water        3.48 keV         461 keV        4.22 MeV        11.2 MeV         990 eV 
+       Scintillator        2.78 keV         466 keV        4.28 MeV        11.5 MeV         990 eV 
+           Silicium        8.35 keV         736 keV        5.89 MeV        15.4 MeV         990 eV 
+             quartz        6.63 keV         727 keV        5.85 MeV        15.4 MeV         990 eV 
+            NemaG10        4.99 keV         627 keV        5.27 MeV        13.9 MeV         990 eV 
+                Air         990 eV          990 eV         66.7 keV         133 keV         990 eV 
+            Aerogel        2.06 keV         150 keV        1.62 MeV        4.07 MeV         990 eV 
+        CarbonicGas         990 eV         46.1 keV         502 keV        1.12 MeV         990 eV 
+         WaterSteam         990 eV          990 eV           22 keV        29.6 keV         990 eV 
+           Galactic         990 eV          990 eV          990 eV          990 eV          990 eV 
+               Beam         990 eV          990 eV          990 eV          990 eV          990 eV 
+===================================================
+#
+/run/verbose 2
+/event/drawTracks none
+/event/printModulo 100
+#/run/save on
+#
+/gun/particle proton
+/gun/energy 500 MeV
+/run/beamOn 1000
+### Run 0 start.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.61667s Real=2.05s Sys=0.11667s
+
+-------------------------------------------------------------
+                                   total energy dep            total tracklen 
+ 
+ Absorber0 ( liquidArgon) :   2.17 MeV +- 321.90 keV        8.37 mm  +-  1.04 mm 
+ Absorber1 (        Lead) :  13.06 MeV +- 949.12 keV        8.02 mm  +- 79.87 mum
+
+-------------------------------------------------------------
+
+
+
+===================================================
+# $Id: g4cuts.out,v 1.1 1999-08-18 14:29:26 maire Exp $
+#
+# Macro file for "TestEm3.cc" 
+# (can be run in batch, without graphic)
+#
+# LiquidArgon-Lead 2 layers; proton 500 MeV
+#
+#
+/calor/setNbOfLayers 2
+/calor/setNbOfAbsor 2
+/calor/setAbsor 0 liquidArgon 4 mm
+/calor/setAbsor 1 Lead 4 mm
+/calor/setSizeYZ 16 mm
+/calor/update
+
+-------------------------------------------------------------
+ ---> The calorimeter is 2 layers of:
+ 	 liquidArgon:      4 mm 
+ 	        Lead:      4 mm 
+-------------------------------------------------------------
+/gun/setDefault
+#
+/run/particle/setCut 0.7 mm
+/run/initialize
+Em3PhysicsList::SetCuts:CutLength : 700 mum
+
+============= The cut Energy ==============================
+                            gamma              e-             mu-          proton         neutron    
+Cut in range                700 mum         700 mum         700 mum         700 mum         700 mum
+Cut in energy
+          Aluminium        5.85 keV         461 keV        4.12 MeV        10.8 MeV         990 eV 
+        liquidArgon        5.14 keV         271 keV        2.65 MeV        6.74 MeV         990 eV 
+               Iron          17 keV         929 keV        6.83 MeV        17.6 MeV         990 eV 
+             Copper        20.5 keV        1.03 MeV        7.26 MeV        18.7 MeV         990 eV 
+           Tungsten        97.4 keV        1.64 MeV        9.58 MeV          24 MeV         990 eV 
+               Lead        94.7 keV           1 MeV        6.91 MeV          17 MeV         990 eV 
+              Water        2.49 keV         275 keV        2.78 MeV        7.26 MeV         990 eV 
+       Scintillator        2.08 keV         282 keV        2.81 MeV        7.44 MeV         990 eV 
+           Silicium        5.85 keV         423 keV        3.83 MeV          10 MeV         990 eV 
+             quartz        4.68 keV         412 keV        3.83 MeV          10 MeV         990 eV 
+            NemaG10        3.59 keV         365 keV        3.47 MeV        9.06 MeV         990 eV 
+                Air         990 eV          990 eV         36.5 keV        50.9 keV         990 eV 
+            Aerogel        1.46 keV        95.9 keV        1.05 MeV        2.58 MeV         990 eV 
+        CarbonicGas         990 eV         12.7 keV         318 keV         667 keV         990 eV 
+         WaterSteam         990 eV          990 eV         8.64 keV        8.03 keV         990 eV 
+           Galactic         990 eV          990 eV          990 eV          990 eV          990 eV 
+               Beam         990 eV          990 eV          990 eV          990 eV          990 eV 
+===================================================
+#
+/run/verbose 2
+/event/drawTracks none
+/event/printModulo 100
+#/run/save on
+#
+/gun/particle proton
+/gun/energy 500 MeV
+/run/beamOn 1000
+### Run 0 start.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.76667s Real=1.4s Sys=0.11667s
+
+-------------------------------------------------------------
+                                   total energy dep            total tracklen 
+ 
+ Absorber0 ( liquidArgon) :   2.17 MeV +- 340.09 keV        8.58 mm  +-  1.21 mm 
+ Absorber1 (        Lead) :  13.05 MeV +- 927.74 keV        8.08 mm  +- 249.51 mum
+
+-------------------------------------------------------------
+
+
+
+===================================================
+# $Id: g4cuts.out,v 1.1 1999-08-18 14:29:26 maire Exp $
+#
+# Macro file for "TestEm3.cc" 
+# (can be run in batch, without graphic)
+#
+# LiquidArgon-Lead 2 layers; proton 500 MeV
+#
+#
+/calor/setNbOfLayers 2
+/calor/setNbOfAbsor 2
+/calor/setAbsor 0 liquidArgon 4 mm
+/calor/setAbsor 1 Lead 4 mm
+/calor/setSizeYZ 16 mm
+/calor/update
+
+-------------------------------------------------------------
+ ---> The calorimeter is 2 layers of:
+ 	 liquidArgon:      4 mm 
+ 	        Lead:      4 mm 
+-------------------------------------------------------------
+/gun/setDefault
+#
+/run/particle/setCut 0.15 mm
+/run/initialize
+Em3PhysicsList::SetCuts:CutLength : 150 mum
+
+============= The cut Energy ==============================
+                            gamma              e-             mu-          proton         neutron    
+Cut in range                150 mum         150 mum         150 mum         150 mum         150 mum
+Cut in energy
+          Aluminium        2.82 keV         166 keV        1.74 MeV        4.38 MeV         990 eV 
+        liquidArgon        2.41 keV         104 keV         1.1 MeV        2.61 MeV         990 eV 
+               Iron        7.68 keV         299 keV        2.85 MeV        7.17 MeV         990 eV 
+             Copper        9.01 keV         326 keV        3.03 MeV        7.63 MeV         990 eV 
+           Tungsten        47.6 keV         466 keV        3.92 MeV         9.4 MeV         990 eV 
+               Lead          39 keV         315 keV        2.81 MeV         6.5 MeV         990 eV 
+              Water        1.32 keV         106 keV        1.17 MeV        2.96 MeV         990 eV 
+       Scintillator        1.16 keV         109 keV         1.2 MeV        3.03 MeV         990 eV 
+           Silicium        2.81 keV         154 keV        1.62 MeV        4.02 MeV         990 eV 
+             quartz        2.31 keV         152 keV        1.62 MeV        4.07 MeV         990 eV 
+            NemaG10        1.81 keV         136 keV        1.47 MeV        3.74 MeV         990 eV 
+                Air         990 eV          990 eV         6.59 keV        3.56 keV         990 eV 
+            Aerogel         990 eV         39.3 keV         428 keV         929 keV         990 eV 
+        CarbonicGas         990 eV         1.66 keV         112 keV         237 keV         990 eV 
+         WaterSteam         990 eV          990 eV         1.01 keV         990 eV          990 eV 
+           Galactic         990 eV          990 eV          990 eV          990 eV          990 eV 
+               Beam         990 eV          990 eV          990 eV          990 eV          990 eV 
+===================================================
+#
+/run/verbose 2
+/event/drawTracks none
+/event/printModulo 100
+#/run/save on
+#
+/gun/particle proton
+/gun/energy 500 MeV
+/run/beamOn 1000
+### Run 0 start.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=1.3333s Real=1.8s Sys=0.26667s
+
+-------------------------------------------------------------
+                                   total energy dep            total tracklen 
+ 
+ Absorber0 ( liquidArgon) :   2.17 MeV +- 340.86 keV        8.83 mm  +-  1.28 mm 
+ Absorber1 (        Lead) :  13.15 MeV +- 939.85 keV        8.67 mm  +- 556.67 mum
+
+-------------------------------------------------------------
+
+
+
+===================================================
+# $Id: g4cuts.out,v 1.1 1999-08-18 14:29:26 maire Exp $
+#
+# Macro file for "TestEm3.cc" 
+# (can be run in batch, without graphic)
+#
+# LiquidArgon-Lead 2 layers; proton 500 MeV
+#
+#
+/calor/setNbOfLayers 2
+/calor/setNbOfAbsor 2
+/calor/setAbsor 0 liquidArgon 4 mm
+/calor/setAbsor 1 Lead 4 mm
+/calor/setSizeYZ 16 mm
+/calor/update
+
+-------------------------------------------------------------
+ ---> The calorimeter is 2 layers of:
+ 	 liquidArgon:      4 mm 
+ 	        Lead:      4 mm 
+-------------------------------------------------------------
+/gun/setDefault
+#
+/run/particle/setCut 0.01 mm
+/run/initialize
+Em3PhysicsList::SetCuts:CutLength : 10 mum
+
+============= The cut Energy ==============================
+                            gamma              e-             mu-          proton         neutron    
+Cut in range                 10 mum          10 mum          10 mum          10 mum          10 mum
+Cut in energy
+          Aluminium         990 eV         33.9 keV         356 keV         754 keV         990 eV 
+        liquidArgon         990 eV         7.68 keV         210 keV         433 keV         990 eV 
+               Iron        1.86 keV        57.5 keV         589 keV        1.28 MeV         990 eV 
+             Copper        2.16 keV        61.2 keV         627 keV        1.38 MeV         990 eV 
+           Tungsten         7.7 keV        81.2 keV         763 keV        1.62 MeV         990 eV 
+               Lead        5.97 keV        57.5 keV         521 keV        1.08 MeV         990 eV 
+              Water         990 eV         6.45 keV         237 keV         496 keV         990 eV 
+       Scintillator         990 eV         6.68 keV         243 keV         508 keV         990 eV 
+           Silicium         990 eV         31.5 keV         326 keV         692 keV         990 eV 
+             quartz         990 eV         31.5 keV         330 keV         700 keV         990 eV 
+            NemaG10         990 eV         11.5 keV         303 keV         635 keV         990 eV 
+                Air         990 eV          990 eV          990 eV          990 eV          990 eV 
+            Aerogel         990 eV          990 eV         69.2 keV         140 keV         990 eV 
+        CarbonicGas         990 eV          990 eV         9.08 keV        6.43 keV         990 eV 
+         WaterSteam         990 eV          990 eV          990 eV          990 eV          990 eV 
+           Galactic         990 eV          990 eV          990 eV          990 eV          990 eV 
+               Beam         990 eV          990 eV          990 eV          990 eV          990 eV 
+===================================================
+#
+/run/verbose 2
+/event/drawTracks none
+/event/printModulo 100
+#/run/save on
+#
+/gun/particle proton
+/gun/energy 500 MeV
+/run/beamOn 1000
+### Run 0 start.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=5.7333s Real=7.7167s Sys=1.1667s
+
+-------------------------------------------------------------
+                                   total energy dep            total tracklen 
+ 
+ Absorber0 ( liquidArgon) :   2.18 MeV +- 324.86 keV        9.18 mm  +-  1.17 mm 
+ Absorber1 (        Lead) :  13.11 MeV +- 982.65 keV        9.18 mm  +- 598.03 mum
+
+-------------------------------------------------------------

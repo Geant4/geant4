@@ -1,0 +1,183 @@
+
+1*****  GEANT Version  3.21/12 Released on 270199
+0*****  Correction Cradle Version  0.1200
+ G3 > gives the filename of the data cards to be read:
+1           USER'S DIRECTIVES TO RUN THIS JOB
+            ----------------------------------
+
+
+ ***** DATA CARD CONTENT     LIST                                                                            
+ ***** DATA CARD CONTENT     C                                                                               
+ ***** DATA CARD CONTENT     C     LiquidArgon-Lead 2 layers; proton 500 MeV                                 
+ ***** DATA CARD CONTENT     C                                                                               
+ ***** DATA CARD CONTENT     CALOR  2 (nbAbs) 2 (nbLay)  1.6 (calorYZ) 0. (field)                            
+ ***** DATA CARD CONTENT     MATE   5 (larg)    8 (lead)                                                     
+ ***** DATA CARD CONTENT     THICK  0.4(cm)  0.4 (cm)                                                        
+ ***** DATA CARD CONTENT     TRIG   1000                                                                     
+ ***** DATA CARD CONTENT     KINE   14 (Itype) 0.5 (Ekine) 1000. (x0) 0. (y0) 0. (z0) 1. (ux) 0. (uy) 0. (uz)
+ ***** DATA CARD CONTENT     DEBUG  10  5 100                                                                
+ ***** DATA CARD CONTENT     SWIT   0 (draw) 1 (save)                                                        
+ ***** DATA CARD CONTENT     CUTS    10.0E-6 (cutgam)     10.0E-6 (cutele)  3*10.E-3 (cutneu/had/muo)        
+ ***** DATA CARD CONTENT           2*111.0E-6 (bcute/m)  2*2.0E-3 (dcute/m)                                  
+ ***** DATA CARD CONTENT     ABAN   0                                                                        
+ ***** DATA CARD CONTENT     LOSS   1                                                                        
+ ***** DATA CARD CONTENT     HADR   0                                                                        
+ ***** DATA CARD CONTENT     TIME   2=1.                                                                     
+ ***** DATA CARD CONTENT     END                                                                             
+-----------------------------------------------------------
+
+ The calorimeter is  2 layers of:
+     Liquid Ar :   0.4000 cm
+     Lead      :   0.4000 cm
+
+------------------------------------------------------------
+
+1************************************************************
+ *                                                          *
+ *    G E A N T  Version 3.2112      DATE/TIME 990817/1240  *
+ *                                                          *
+ *                      R U N      1                        *
+ *                                                          *
+ ************************************************************
+ *                                                          *
+ *      Data structure   Date   Time    GVERSN    ZVERSN    *
+ *      --------------   ----   ----    ------    ------    *
+ *                                                          *
+ *           INIT       990817  1240    3.2112     3.77     *
+ *                                                          *
+ *           KINE       990817  1240    3.2112     3.77     *
+ *                                                          *
+ *           HITS       990817  1240    3.2112     3.77     *
+ *                                                          *
+ *           DIGI       990817  1240    3.2112     3.77     *
+ *                                                          *
+ *     Random number seeds:          9876        54321      *
+ *     --------------------                                 *
+ *                                                          *
+ *----------------------------------------------------------*
+ *                                                          *
+ *              Standard TPAR for this run are              *
+ *              ------------------------------              *
+ *                                                          *
+ *  CUTGAM= 10.00 keV  CUTELE= 10.00 keV  CUTNEU= 10.00 MeV *
+ *  CUTHAD= 10.00 MeV  CUTMUO= 10.00 MeV                    *
+ *  BCUTE =111.00 keV  BCUTM =111.00 keV                    *
+ *  DCUTE =  2.00 MeV  DCUTM =  2.00 MeV  PPCUTM= 10.00 MeV *
+ *  IPAIR =        1.  ICOMP =        1.  IPHOT =        1. *
+ *  IPFIS =        0.  IDRAY =        1.  IANNI =        1. *
+ *  IBREM =        1.  IHADR =        0.  IMUNU =        1. *
+ *  IDCAY =        1.  ILOSS =        1.  IMULS =        1. *
+ *  IRAYL =        0.  ILABS =        0.  ISYNC =        0. *
+ *  ISTRA =        0.                                       *
+ *                                                          *
+ *                                                          *
+ ************************************************************
+
+
+
+   Kine     Name          Type     Px         Py         Pz       Energy     Vorigin  Vgener
+     1      PROTON         14     1.0901     0.0000     0.0000     1.4383     1.0000
+
+------------------------------------------------------------
+
+ Nb of events:  1000
+ AbsNo  Material     Energy deposit              Trck length
+    0   Liquid Ar    2.216 MeV +- 339.27 keV    0.800 cm +-   0.00 cm
+    1   Lead        13.486 MeV +-   1.03 MeV    0.800 cm +-   0.00 cm
+
+------------------------------------------------------------
+
+1         **** NUMBER OF EVENTS PROCESSED =      1000
+          **** RANDOM NUMBER GENERATOR AFTER LAST COMPLETE EVENT    124542315   502404920
+          **** TIME TO PROCESS ONE EVENT IS =    0.0003 SECONDS
+
+
+
+1           USER'S DIRECTIVES TO RUN THIS JOB
+            ----------------------------------
+
+
+ ***** DATA CARD CONTENT     LIST                                                                            
+ ***** DATA CARD CONTENT     C                                                                               
+ ***** DATA CARD CONTENT     C     LiquidArgon-Lead 2 layers; proton 500 MeV                                 
+ ***** DATA CARD CONTENT     C                                                                               
+ ***** DATA CARD CONTENT     CALOR  2 (nbAbs) 2 (nbLay)  1.6 (calorYZ) 0. (field)                            
+ ***** DATA CARD CONTENT     MATE   5 (larg)    8 (lead)                                                     
+ ***** DATA CARD CONTENT     THICK  0.4(cm)  0.4 (cm)                                                        
+ ***** DATA CARD CONTENT     TRIG   1000                                                                     
+ ***** DATA CARD CONTENT     KINE   14 (Itype) 0.5 (Ekine) 1000. (x0) 0. (y0) 0. (z0) 1. (ux) 0. (uy) 0. (uz)
+ ***** DATA CARD CONTENT     DEBUG  10  5 100                                                                
+ ***** DATA CARD CONTENT     SWIT   0 (draw) 1 (save)                                                        
+ ***** DATA CARD CONTENT     CUTS    10.0E-6 (cutgam)     10.0E-6 (cutele)  3*10.E-3 (cutneu/had/muo)        
+ ***** DATA CARD CONTENT           2*10.0E-6 (bcute/m)  2*455.0E-6 (dcute/m)                                 
+ ***** DATA CARD CONTENT     ABAN   0                                                                        
+ ***** DATA CARD CONTENT     LOSS   1                                                                        
+ ***** DATA CARD CONTENT     HADR   0                                                                        
+ ***** DATA CARD CONTENT     TIME   2=1.                                                                     
+ ***** DATA CARD CONTENT     END                                                                             
+
+------------------------------------------------------------
+
+ The calorimeter is  2 layers of:
+     Liquid Ar :   0.4000 cm
+     Lead      :   0.4000 cm
+
+------------------------------------------------------------
+
+1************************************************************
+ *                                                          *
+ *    G E A N T  Version 3.2112      DATE/TIME 990817/1243  *
+ *                                                          *
+ *                      R U N      1                        *
+ *                                                          *
+ ************************************************************
+ *                                                          *
+ *      Data structure   Date   Time    GVERSN    ZVERSN    *
+ *      --------------   ----   ----    ------    ------    *
+ *                                                          *
+ *           INIT       990817  1243    3.2112     3.77     *
+ *                                                          *
+ *           KINE       990817  1243    3.2112     3.77     *
+ *                                                          *
+ *           HITS       990817  1243    3.2112     3.77     *
+ *                                                          *
+ *           DIGI       990817  1243    3.2112     3.77     *
+ *                                                          *
+ *     Random number seeds:          9876        54321      *
+ *     --------------------                                 *
+ *                                                          *
+ *----------------------------------------------------------*
+ *                                                          *
+ *              Standard TPAR for this run are              *
+ *              ------------------------------              *
+ *                                                          *
+ *  CUTGAM= 10.00 keV  CUTELE= 10.00 keV  CUTNEU= 10.00 MeV *
+ *  CUTHAD= 10.00 MeV  CUTMUO= 10.00 MeV                    *
+ *  BCUTE = 10.00 keV  BCUTM = 10.00 keV                    *
+ *  DCUTE =455.00 keV  DCUTM =455.00 keV  PPCUTM= 10.00 MeV *
+ *  IPAIR =        1.  ICOMP =        1.  IPHOT =        1. *
+ *  IPFIS =        0.  IDRAY =        1.  IANNI =        1. *
+ *  IBREM =        1.  IHADR =        0.  IMUNU =        1. *
+ *  IDCAY =        1.  ILOSS =        1.  IMULS =        1. *
+ *  IRAYL =        0.  ILABS =        0.  ISYNC =        0. *
+ *  ISTRA =        0.                                       *
+ *                                                          *
+ *                                                          *
+ ************************************************************
+
+
+   Kine     Name          Type     Px         Py         Pz       Energy     Vorigin  Vgener
+
+------------------------------------------------------------
+
+ Nb of events:  1000
+ AbsNo  Material     Energy deposit              Trck length
+    0   Liquid Ar    2.228 MeV +- 328.94 keV    0.832 cm +-   0.10 cm
+    1   Lead        13.448 MeV +- 961.38 keV    0.847 cm +-   0.05 cm
+
+------------------------------------------------------------
+
+1         **** NUMBER OF EVENTS PROCESSED =      1000
+          **** RANDOM NUMBER GENERATOR AFTER LAST COMPLETE EVENT   1416578384  1421041719
+          **** TIME TO PROCESS ONE EVENT IS =    0.0006 SECONDS
+

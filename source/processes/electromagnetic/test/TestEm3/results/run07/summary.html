@@ -1,0 +1,67 @@
+<html>
+<head>  
+    <title> Production threshold in range</title>
+</head>
+
+<boby>
+<div align=center><h1><font color="#800000">Production threshold expressed in range
+                  </font></h1>
+</div>
+<hr>
+
+<p>
+In Geant4 the threshold for producing secondaries are expressed in range,
+ universal for all medium. This range is converted in energy for each kind 
+ of particle and each material.<br>
+ We illustrate here the advantages of this procedure.
+</p>
+ 
+<h2><font color="#0000FF">Description </font></h2>
+The setup is a sandwich of non-dense and dense materials:
+<p align=center>Liquid Argon(4 mm)--Lead(4 mm)--Liquid Argon(4 mm)--Lead(4 mm)</p>
+The incident particle is a ionising particle: proton of 500 MeV.<br>
+The threshold to produce delta-rays is 1.5 mm. For an electron, it means:
+</p>
+<table border width=90%>
+  <tr align=center>
+  <th>Threshold in range<th>e- Energy in Liquid Argon<th>e- Energy in Lead</tr>
+  <tr align=center><td> 1.5 mm<td> 455 keV<td> 2 MeV<br></tr>
+</table>
+<p>
+On the <a href="g4view.eps">picture</a>, one can see the delta-rays
+produced and travelling in Liquid Argon, while nothing in produced in Lead.<br>
+(on purpose the multiple scattering is off, and 1000 events are surimposed)
+</p>
+
+<h2><font color="#0000FF">Geant3 </font></h2>
+On Geant3 one must set the cut for delta-rays (DCUTE) either to the Liquid
+Argon value, and producing many small unnecessary d-rays in Lead, or to the
+Lead value, and killing the d-rays production everywhere.
+<br><a href="g3view.455keV.ps">case 1</a>
+<br><a href="g3view.2MeV.ps"  >case 2</a>
+
+<h2><font color="#0000FF">Stability of results </font></h2>
+<p>
+It should be noticed that the relevant physics quantities are quite stable
+versus the production threshold, both in Geant4 and in Geant3.
+</p>
+<table border width=90%>
+  <tr align=center>
+  <th>Threshold in range<th>Edep in lArg<th>Edep in Pb
+                        <th>Track length in lArg<th>Track length in Pb</tr>
+  <tr align=center><td>1.5 mm <td>2.17 MeV+- 322 keV<td>13.06 MeV+- 949 keV
+                   <td>8.37 mm+- 1.04 mm<td>8.02 mm+- 80 mum<br></tr>
+  <tr align=center><td>0.15 mm<td>2.17 MeV+- 341 keV<td>13.15 MeV+- 940 keV
+                   <td>8.83 mm+- 1.28 mm<td>8.67 mm+- 557 mum<br></tr>
+</table>
+<p>
+Changing the threshold by a factor 10 lets the energy deposit unchanged
+(as it must be: the energy loss is independant of DCUTE)<br>
+and the charged track length variation within 1 percent.
+(Remember that on the pictures 1000 events are surimposed) 
+</p>
+
+<hr>
+<p align=center><a href="../index.html">back</a></p>   
+</body>
+</html>
