@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FieldManager.cc,v 1.3 2000-11-09 18:06:37 gcosmo Exp $
+// $Id: G4FieldManager.cc,v 1.4 2001-05-23 17:43:57 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4FieldManager.hh"
@@ -14,6 +14,9 @@ G4FieldManager::G4FieldManager()
 { 
    fDetectorField= 0;
    fAllocatedChordFinder= false;
+
+   fDelta_One_Step_Value= fDefault_Delta_One_Step_Value;
+   fDelta_Intersection_Val= fDefault_Delta_Intersection_Val;
 }
 
 G4FieldManager::G4FieldManager(G4MagneticField *detectorField)
@@ -21,6 +24,9 @@ G4FieldManager::G4FieldManager(G4MagneticField *detectorField)
    fDetectorField= detectorField;
 
    this->CreateChordFinder(detectorField);
+
+   fDelta_One_Step_Value= fDefault_Delta_One_Step_Value;
+   fDelta_Intersection_Val= fDefault_Delta_Intersection_Val;
 }
 
 
