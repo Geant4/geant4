@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BremsstrahlungParameters.cc,v 1.13 2002-05-30 17:53:07 vnivanch Exp $
+// $Id: G4BremsstrahlungParameters.cc,v 1.14 2002-11-18 18:08:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -33,6 +33,7 @@
 // 12.09.01 V.Ivanchenko    Add activeZ and paramA
 // 25.09.01 V.Ivanchenko    Add parameter C and change interface to B
 // 29.11.01 V.Ivanchenko    Update parametrisation
+// 18.11.02 V.Ivanchenko    Fix problem of load
 //
 // -------------------------------------------------------------------
 
@@ -166,7 +167,6 @@ void G4BremsstrahlungParameters::LoadData()
   data       = new G4DataVector(); 
   G4int z    = 0;
 
-  G4bool used = false;
   G4std::vector<G4DataVector*> a;
   for (size_t j=0; j<length; j++) {
     G4DataVector* aa = new G4DataVector();
@@ -203,17 +203,14 @@ void G4BremsstrahlungParameters::LoadData()
 	    G4VEMDataSet* set = new G4EMDataSet(id,eVector,a[k],inter,1.,1.);
     	    param[id] = set;
 	}
-        used = true;
         a.clear();
         for (size_t j=0; j<length; j++) {
             G4DataVector* aa = new G4DataVector();
             a.push_back(aa);
         } 
-      }
-      if(!used) {
+      } else {
         for (size_t j=0; j<length; j++) {
           a[j]->clear();
-          used = false; 
         }
       }
       e.clear();
