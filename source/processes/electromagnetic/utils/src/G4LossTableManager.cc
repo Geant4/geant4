@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.44 2004-05-12 12:25:26 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.45 2004-08-06 11:30:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -177,7 +177,6 @@ void G4LossTableManager::Register(G4VEnergyLossProcess* p)
   all_tables_are_built = false;
   if(!lossFluctuationFlag) p->SetLossFluctuations(false);
   if(subCutoffFlag)        p->SetSubCutoff(true);
-  if(rndmStepFlag)         p->SetRandomStep(true);
   if(stepFunctionActive)   p->SetStepFunction(maxRangeVariation, maxFinalStep);
   if(integralActive)       p->SetIntegral(integral);
   if(minEnergyActive)      p->SetMinKinEnergy(minKinEnergy);
@@ -429,6 +428,7 @@ void G4LossTableManager::BuildPhysicsTable(const G4ParticleDefinition* aParticle
   }
   if(all_tables_are_built) {
       G4cout << "### All dEdx and Range tables are built #####" << G4endl;
+      CopyDEDXTables();
   }
 }
 
@@ -472,8 +472,8 @@ void G4LossTableManager::RetrievePhysicsTables(const G4ParticleDefinition* aPart
     }
   }
 
-  if ( hasRange ) {
-    for (G4int j=0; j<n_loss; j++) {
+  for (G4int j=0; j<n_loss; j++) {
+    if ( hasRange ) {
       if ( base_part_vector[j] == aParticle && !tables_are_built[j] ) {
         G4VEnergyLossProcess* em = loss_vector[j];
         tables_are_built[j] = true;
@@ -503,7 +503,13 @@ void G4LossTableManager::RetrievePhysicsTables(const G4ParticleDefinition* aPart
                  << " tables_are_built= " << tables_are_built[j]
                  << G4endl;
         }
+
+      } else if( part_vector[j] == aParticle && theLoss != loss_vector[j] ) {
+         loss_vector[j]->SetDEDXTable(theLoss->DEDXTable());
       }
+    } else if(   part_vector[j] == aParticle && theLoss != loss_vector[j] &&
+                 loss_vector[j]->RangeTableForLoss() ) {
+         theLoss->SetDEDXTable(loss_vector[j]->DEDXTable());
     }
   }
 
@@ -523,8 +529,29 @@ void G4LossTableManager::RetrievePhysicsTables(const G4ParticleDefinition* aPart
   }
   if(all_tables_are_built) {
       G4cout << "##### All dEdx and Range tables are retrieved #####" << G4endl;
+      CopyDEDXTables();
   } else if(isLast) {
       G4Exception("G4LossTableManager ERROR: not all dEdx and Range tables are retrieved");
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4LossTableManager::CopyDEDXTables()
+{
+  G4int n = emp_vector.size();
+  if(n > 0) {
+    for(G4int i=0; i<n; i++) {
+      G4VEmProcess* emp = emp_vector[i];
+      PD part = emp->Particle();
+      for(G4int j=0; j<n_loss; j++) {
+        G4VEnergyLossProcess* p = loss_vector[j];
+        if(part_vector[j] == part && p->RangeTableForLoss()) {
+          emp->SetDEDXTable(p->DEDXTable());
+	  break;
+        }
+      }
+    }
   }
 }
 
@@ -582,7 +609,9 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(const G4ParticleDefinition
       list[i]->clearAndDestroy();
     }
   }
-  em->SetDEDXTable(dedx);
+  for(G4int i=0; i<n_dedx; i++) {
+    loss_list[i]->SetDEDXTable(dedx);
+  }
   dedx_vector[iem] = dedx;
   G4PhysicsTable* range = tableBuilder->BuildRangeTable(dedx);
   G4PhysicsTable* invrange = tableBuilder->BuildInverseRangeTable(dedx, range);
@@ -663,6 +692,10 @@ void G4LossTableManager::SetIntegral(G4bool val)
   for(G4int i=0; i<n_loss; i++) {
     if(loss_vector[i]) loss_vector[i]->SetIntegral(val);
   }
+  size_t emp = emp_vector.size();
+  for (size_t k=0; k<emp; k++) {
+    if(emp_vector[k]) emp_vector[k]->SetIntegral(val);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -677,13 +710,8 @@ void G4LossTableManager::SetMinSubRange(G4double val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4LossTableManager::SetRandomStep(G4bool val)
-{
-  rndmStepFlag = val;
-  for(G4int i=0; i<n_loss; i++) {
-    if(loss_vector[i]) loss_vector[i]->SetRandomStep(val);
-  }
-}
+void G4LossTableManager::SetRandomStep(G4bool)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

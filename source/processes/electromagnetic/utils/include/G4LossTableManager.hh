@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.24 2004-05-12 12:25:26 vnivanch Exp $
+// $Id: G4LossTableManager.hh,v 1.25 2004-08-06 11:30:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -187,6 +187,8 @@ private:
   void ParticleHaveNoLoss(const G4ParticleDefinition* aParticle);
 
   void SetParameters(G4VEnergyLossProcess*);
+  
+  void CopyDEDXTables();
 
 private:
 
