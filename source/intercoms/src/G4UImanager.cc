@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.cc,v 1.23 2002-05-07 20:32:19 asaim Exp $
+// $Id: G4UImanager.cc,v 1.24 2002-05-08 16:05:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,7 +50,7 @@ G4UImanager * G4UImanager::GetUIpointer()
 {
   if(!fUImanager) 
   {
-    if(!fUImanagerHasBeenKilled)
+    if(fUImanagerHasBeenKilled)
     {
       fUImanager = new G4UImanager;
       fUImanager->CreateMessenger();
