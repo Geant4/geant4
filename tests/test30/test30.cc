@@ -158,7 +158,7 @@ int main(int argc, char** argv)
     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //130 
     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //140 
     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //150 
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //160 
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //160
     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //170 
     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //180 
     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //190 
@@ -198,7 +198,7 @@ int main(int argc, char** argv)
 
   // -------------------------------------------------------------------
   //--------- Materials definition ---------
- 
+
   Test30Material*  mate = new Test30Material();
   Test30Physics*   phys = new Test30Physics();
 	
@@ -518,7 +518,7 @@ int main(int argc, char** argv)
           h[54]=hf->createHistogram1D("55","ds/dE for neutrons at theta = 3",nbinlog,0.,logmax);
         if(nangl>4)
           h[55]=hf->createHistogram1D("56","ds/dE for neutrons at theta = 4",nbinlog,0.,logmax);
-      	
+
       G4cout << "Histograms is initialised nbins=" << nbins
              << G4endl;
     }		
@@ -684,7 +684,7 @@ int main(int argc, char** argv)
 
 	if(i<n) {
 	   sec = aChange->GetSecondary(i)->GetDynamicParticle();
-	   pd  = sec->GetDefinition();					
+	   pd  = sec->GetDefinition();
 	   mom = sec->GetMomentumDirection();
 	   e   = sec->GetKineticEnergy();
 
@@ -805,8 +805,8 @@ int main(int argc, char** argv)
 	    if(e >= elim) h[25]->fill(cos(theta), factora);
             for(G4int kk=0; kk<nangl; kk++) {
               if(bng1[kk] <= thetad && thetad <= bng2[kk]) {
-                h[27+kk]->fill(e/MeV, cng[kk]); 
-                if(kk < 5) h[50+kk]->fill(ee, cng[kk]*bind/e2); 
+                h[27+kk]->fill(e/MeV, cng[kk]);
+                if(kk < 5) h[51+kk]->fill(ee, cng[kk]*bind/e2);
                 break;
 	      }
 	    }
