@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.cc,v 1.19 2003-10-20 13:00:51 maire Exp $
+// $Id: G4UnitsTable.cc,v 1.20 2003-11-24 11:34:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
@@ -32,8 +32,7 @@
 // 01-03-01: parsec, M.Maire
 // 06-03-01: migration to STL vectors, G.Cosmo
 // 06-05-02: BestUnit operator<<  flux instead of G4cout (mma)
-// 20-10-03: add symbol um for micrometer (mma)
-
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
@@ -70,7 +69,12 @@ G4UnitDefinition::G4UnitDefinition(G4String name, G4String symbol,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 G4UnitDefinition::~G4UnitDefinition()
-{}
+{
+  for (size_t i=0;i<theUnitsTable.size();i++)
+  {
+    delete theUnitsTable[i];
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
@@ -175,7 +179,7 @@ void G4UnitDefinition::BuildUnitsTable()
  new G4UnitDefinition(     "meter","m"       ,"Length",meter);
  new G4UnitDefinition("centimeter","cm"      ,"Length",centimeter); 
  new G4UnitDefinition("millimeter","mm"      ,"Length",millimeter);
- new G4UnitDefinition("micrometer","um"      ,"Length",micrometer);
+ // new G4UnitDefinition("micrometer","um"      ,"Length",micrometer);
  new G4UnitDefinition("micrometer","mum"     ,"Length",micrometer);
  new G4UnitDefinition( "nanometer","nm"      ,"Length",nanometer);
  new G4UnitDefinition(  "angstrom","Ang"     ,"Length",angstrom);    
@@ -289,27 +293,29 @@ void G4UnitDefinition::PrintUnitsTable()
 {
   G4cout << "\n          ----- The Table of Units ----- \n";
   for(size_t i=0;i<theUnitsTable.size();i++)
-      theUnitsTable[i]->PrintCategory();
+  {
+    theUnitsTable[i]->PrintCategory();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
    
 G4UnitsCategory::G4UnitsCategory(G4String name)
-:Name(name),NameMxLen(0),SymbMxLen(0)
+:Name(name),UnitsList(),NameMxLen(0),SymbMxLen(0)
 {
-    UnitsList = *(new G4UnitsContainer);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 G4UnitsCategory::~G4UnitsCategory()
-{}
+{
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 G4UnitsCategory::G4UnitsCategory(G4UnitsCategory& right)
 {
-    *this = right;
+  *this = right;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
