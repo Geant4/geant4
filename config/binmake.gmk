@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.98 2004-06-01 06:38:08 hpw Exp $
+# $Id: binmake.gmk,v 1.99 2004-06-01 07:54:09 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -65,49 +65,46 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/hadronic/cross_sections/include \
 	      -I$(G4BASE)/processes/hadronic/management/include \
 	      -I$(G4BASE)/processes/hadronic/models/abrasion/include \
+              -I$(G4BASE)/processes/hadronic/models/binary_cascade/include \
 	      -I$(G4BASE)/processes/hadronic/models/cascade/cascade/include \
 	      -I$(G4BASE)/processes/hadronic/models/cascade/evaporation/include \
 	      -I$(G4BASE)/processes/hadronic/models/cascade/utils/include \
               -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/body/include \
               -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/interface/include \
               -I$(G4BASE)/processes/hadronic/models/coherent_elastic/include \
-              -I$(G4BASE)/processes/hadronic/models/em_dissociation/include \
-              -I$(G4BASE)/processes/hadronic/models/high_energy/include \
-              -I$(G4BASE)/processes/hadronic/models/isotope_production/include \
-              -I$(G4BASE)/processes/hadronic/models/leading_particle/include \
-              -I$(G4BASE)/processes/hadronic/models/low_energy/include \
-              -I$(G4BASE)/processes/hadronic/models/neutron_hp/include \
-              -I$(G4BASE)/processes/hadronic/models/binary_cascade/include \
+	      -I$(G4BASE)/processes/hadronic/models/de_excitation/ablation/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/evaporation/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/fermi_breakup/include \
 	      -I$(G4BASE)/processes/hadronic/models/de_excitation/fission/include \
-	      -I$(G4BASE)/processes/hadronic/models/de_excitation/ablation/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/gem_evaporation/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/handler/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/management/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/multifragmentation/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/photon_evaporation/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/util/include \
-              -I$(G4BASE)/processes/hadronic/models/de_excitation/ablation/include \
-              -I$(G4BASE)/processes/hadronic/models/inucl/include \
-              -I$(G4BASE)/processes/hadronic/models/photolepton_hadron/muon_nuclear/include \
-              -I$(G4BASE)/processes/hadronic/models/pre_equilibrium/exciton_model/include \
-              -I$(G4BASE)/processes/hadronic/models/quark_molecular_dynamics/body/include \
-              -I$(G4BASE)/processes/hadronic/models/quark_molecular_dynamics/util/include \
-              -I$(G4BASE)/processes/hadronic/models/relativistic_qmd/include \
-              -I$(G4BASE)/processes/hadronic/models/relativistic_qmd/uplusplus/include \
+              -I$(G4BASE)/processes/hadronic/models/em_dissociation/include \
+              -I$(G4BASE)/processes/hadronic/models/general_finalstate/include \
+              -I$(G4BASE)/processes/hadronic/models/high_energy/include \
               -I$(G4BASE)/processes/hadronic/models/im_r_matrix/include \
+              -I$(G4BASE)/processes/hadronic/models/inucl/include \
+              -I$(G4BASE)/processes/hadronic/models/isotope_production/include \
+              -I$(G4BASE)/processes/hadronic/models/leading_particle/include \
+              -I$(G4BASE)/processes/hadronic/models/low_energy/include \
               -I$(G4BASE)/processes/hadronic/models/management/include \
+              -I$(G4BASE)/processes/hadronic/models/neutron_hp/include \
               -I$(G4BASE)/processes/hadronic/models/parton_string/diffraction/include \
               -I$(G4BASE)/processes/hadronic/models/parton_string/hadronization/include \
               -I$(G4BASE)/processes/hadronic/models/parton_string/management/include \
               -I$(G4BASE)/processes/hadronic/models/parton_string/qgsm/include \
+              -I$(G4BASE)/processes/hadronic/models/photolepton_hadron/muon_nuclear/include \
+              -I$(G4BASE)/processes/hadronic/models/pre_equilibrium/exciton_model/include \
+              -I$(G4BASE)/processes/hadronic/models/quark_molecular_dynamics/body/include \
+              -I$(G4BASE)/processes/hadronic/models/quark_molecular_dynamics/util/include \
+              -I$(G4BASE)/processes/hadronic/models/radioactive_decay/include \
+              -I$(G4BASE)/processes/hadronic/models/relativistic_qmd/include \
+              -I$(G4BASE)/processes/hadronic/models/relativistic_qmd/uplusplus/include \
               -I$(G4BASE)/processes/hadronic/models/theo_high_energy/include \
               -I$(G4BASE)/processes/hadronic/models/util/include \
-              -I$(G4BASE)/processes/hadronic/models/general_finalstate/include \
-              -I$(G4BASE)/processes/hadronic/models/radioactive_decay/include \
-	      -I$(G4BASE)/processes/hadronic/models/abrasion/include \
-	      -I$(G4BASE)/processes/hadronic/models/em_dissociation/include \
               -I$(G4BASE)/processes/hadronic/processes/include \
               -I$(G4BASE)/processes/hadronic/stopping/include \
               -I$(G4BASE)/processes/hadronic/util/include \
