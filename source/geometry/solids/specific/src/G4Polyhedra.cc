@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.8 2003-06-17 08:07:22 gcosmo Exp $
+// $Id: G4Polyhedra.cc,v 1.9 2003-10-20 11:06:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -422,6 +422,55 @@ void G4Polyhedra::CopyStuff( const G4Polyhedra &source )
   // Enclosing cylinder
   //
   enclosingCylinder = new G4EnclosingCylinder( *source.enclosingCylinder );
+}
+
+
+//
+// Reset
+//
+// Recalculates and reshapes the solid, given pre-assigned
+// original_parameters.
+//
+G4bool G4Polyhedra::Reset()
+{
+  if (!original_parameters)
+  {
+    G4Exception("G4Polyhedra::Reset()", "NotApplicableConstruct",
+                JustWarning, "Parameters NOT resetted.");
+    G4cerr << "Solid " << GetName() << " built using generic construct."
+           << G4endl << "Specify original parameters first !" << G4endl;
+    return 1;
+  }
+
+  //
+  // Clear old setup
+  //
+  DeleteStuff();
+  delete [] corners;
+  delete enclosingCylinder;
+
+  //
+  // Rebuild polyhedra
+  //
+  G4ReduciblePolygon *rz =
+    new G4ReduciblePolygon( original_parameters->Rmin,
+                            original_parameters->Rmax,
+                            original_parameters->Z_values,
+                            original_parameters->Num_z_planes );
+  //
+  // Calculate conversion factor
+  //
+  G4double phiTotal = original_parameters->Opening_angle;
+  if ( (phiTotal <=0) || (phiTotal >= 2*M_PI*(1-DBL_EPSILON)) )
+    phiTotal = 2*M_PI;
+  G4double convertRad = cos(0.5*phiTotal/original_parameters->numSide);
+  rz->ScaleA( 1/convertRad );
+
+  Create( original_parameters->Start_angle, phiTotal,
+          original_parameters->numSide, rz );
+  delete rz;
+
+  return 0;
 }
 
 

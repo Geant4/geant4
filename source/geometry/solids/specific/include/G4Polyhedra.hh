@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.hh,v 1.8 2003-06-17 08:07:20 gcosmo Exp $
+// $Id: G4Polyhedra.hh,v 1.9 2003-10-20 11:06:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -125,6 +125,8 @@ class G4Polyhedra : public G4VCSGfaceted
 
   G4Polyhedron* CreatePolyhedron() const;
   G4NURBS*      CreateNURBS() const;
+
+  G4bool Reset();
 
   // Accessors
 

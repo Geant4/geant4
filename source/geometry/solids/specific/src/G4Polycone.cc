@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.10 2003-06-17 08:07:22 gcosmo Exp $
+// $Id: G4Polycone.cc,v 1.11 2003-10-20 11:06:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -370,6 +370,43 @@ void G4Polycone::CopyStuff( const G4Polycone &source )
   // Enclosing cylinder
   //
   enclosingCylinder = new G4EnclosingCylinder( *source.enclosingCylinder );
+}
+
+
+//
+// Reset
+//
+G4bool G4Polycone::Reset()
+{
+  if (!original_parameters)
+  {
+    G4Exception("G4Polycone::Reset()", "NotApplicableConstruct",
+                JustWarning, "Parameters NOT resetted.");
+    G4cerr << "Solid " << GetName() << " built using generic construct."
+           << G4endl << "Specify original parameters first !" << G4endl;
+    return 1;
+  }
+
+  //
+  // Clear old setup
+  //
+  DeleteStuff();
+  delete [] corners;
+  delete enclosingCylinder;
+
+  //
+  // Rebuild polycone
+  //
+  G4ReduciblePolygon *rz =
+    new G4ReduciblePolygon( original_parameters->Rmin,
+                            original_parameters->Rmax,
+                            original_parameters->Z_values,
+                            original_parameters->Num_z_planes );
+  Create( original_parameters->Start_angle,
+          original_parameters->Opening_angle, rz );
+  delete rz;
+
+  return 0;
 }
 
 
