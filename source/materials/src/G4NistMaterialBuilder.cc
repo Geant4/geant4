@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.2 2005-02-22 10:11:09 maire Exp $
+// $Id: G4NistMaterialBuilder.cc,v 1.3 2005-03-01 12:14:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -123,8 +123,7 @@ G4Material* G4NistMaterialBuilder::BuildMaterial(const G4String& name,
 	G4int idx = indexes[i];
 	for (G4int j=0; j<nc; j++) {
 	  G4int Z = elements[idx+j];
-	  G4Element* elm = 
-	    const_cast<G4Element*>(elmBuilder->FindOrBuildElement(Z, isotopes));
+	  G4Element* elm = elmBuilder->FindOrBuildElement(Z, isotopes);
 	  mat->AddElement(elm,fractions[idx+j]);
 	}
       }

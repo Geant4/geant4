@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistManager.hh,v 1.1 2005-02-22 10:11:09 maire Exp $
+// $Id: G4NistManager.hh,v 1.2 2005-03-01 12:14:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -72,14 +72,13 @@ public:
   void RegisterElement  (G4Element*);
   void DeRegisterElement(G4Element*);
 
-  const G4Element* GetElement(size_t index);
+  G4Element* GetElement(size_t index);
   
   // Find or build G4Element by atomic number
-  const G4Element* FindOrBuildElement(G4int Z, G4bool isotopes=true);
+  G4Element* FindOrBuildElement(G4int Z, G4bool isotopes=true);
   
- // Find or build G4Element by symbol
-  const G4Element* FindOrBuildElement(const G4String& symb,
-                                      G4bool isotopes=true);
+  // Find or build G4Element by symbol
+  G4Element* FindOrBuildElement(const G4String& symb, G4bool isotopes=true);
 
   size_t   GetNumberOfElements() {return nElements;};
   G4int    GetZ (const G4String& symb);
@@ -127,8 +126,8 @@ private:
   G4NistManager();
   static G4NistManager* instance;
   
-  std::vector<G4Element*>        elements;
-  std::vector<G4Material*>       materials;
+  std::vector<G4Element*>   elements;
+  std::vector<G4Material*>  materials;
   
   size_t   nElements;
   size_t   nMaterials;
@@ -143,9 +142,10 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline const G4Element* G4NistManager::GetElement(size_t index)
+inline 
+G4Element* G4NistManager::GetElement(size_t index)
 {
-  const G4Element* elm = 0;
+  G4Element* elm = 0;
   if(index < nElements) elm = elements[index];
   return elm;
 }
@@ -153,8 +153,7 @@ inline const G4Element* G4NistManager::GetElement(size_t index)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline 
-const G4Element* G4NistManager::FindOrBuildElement(G4int Z,
-                                                           G4bool isotopes)
+G4Element* G4NistManager::FindOrBuildElement(G4int Z, G4bool isotopes)
 {
   return elmBuilder->FindOrBuildElement(Z, isotopes);
 }
@@ -162,29 +161,32 @@ const G4Element* G4NistManager::FindOrBuildElement(G4int Z,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline 
-const G4Element* G4NistManager::FindOrBuildElement(const G4String& symb,
-                                                             G4bool isotopes)
+G4Element* G4NistManager::FindOrBuildElement(const G4String& symb,
+                                                   G4bool isotopes)
 {
   return elmBuilder->FindOrBuildElement(symb, isotopes);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4int G4NistManager::GetZ(const G4String& symb)
+inline 
+G4int G4NistManager::GetZ(const G4String& symb)
 {
   return elmBuilder->GetZ(symb);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4NistManager::GetIsotopeMass(G4int Z, G4int N)
+inline 
+G4double G4NistManager::GetIsotopeMass(G4int Z, G4int N)
 {
   return elmBuilder->GetIsotopeMass(Z, N);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4Material* G4NistManager::GetMaterial(size_t index)
+inline 
+G4Material* G4NistManager::GetMaterial(size_t index)
 {
   G4Material* mat = 0;
   if(index < nMaterials) mat = materials[index];

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.cc,v 1.2 2005-02-22 10:11:09 maire Exp $
+// $Id: G4NistElementBuilder.cc,v 1.3 2005-03-01 12:14:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -57,11 +57,11 @@ G4NistElementBuilder::~G4NistElementBuilder()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const G4Element* G4NistElementBuilder::FindOrBuildElement(const G4String& symb,
+G4Element* G4NistElementBuilder::FindOrBuildElement(const G4String& symb,
                                                           G4bool buildIsotopes)
 {
   G4int Z = 0;
-  const G4Element* elm = 0;
+  G4Element* elm = 0;
   do {Z++;} while (Z<maxNumElements && !(symb == elmSymbol[Z]));
   if(Z<maxNumElements) elm = FindOrBuildElement(Z, buildIsotopes);
   return elm;
@@ -70,14 +70,14 @@ const G4Element* G4NistElementBuilder::FindOrBuildElement(const G4String& symb,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const G4Element* G4NistElementBuilder::FindOrBuildElement(G4int Z,
-                                                          G4bool buildIsotopes)
+G4Element* G4NistElementBuilder::FindOrBuildElement(G4int Z,
+                                                    G4bool buildIsotopes)
 {
   // already existing in G4ElementTable ?
   //
   const G4ElementTable* theElementTable = G4Element::GetElementTable();
   size_t nelm = theElementTable->size();
-  const G4Element* anElement = 0;
+  G4Element* anElement = 0;
   if (nelm>0) {
     for(size_t i=0; i<nelm; i++) {
       G4int iz = G4int(((*theElementTable)[i])->GetZ());
@@ -97,8 +97,7 @@ const G4Element* G4NistElementBuilder::FindOrBuildElement(G4int Z,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const G4Element* G4NistElementBuilder::BuildElement(G4int Z,
-                                                    G4bool buildIsotopes)
+G4Element* G4NistElementBuilder::BuildElement(G4int Z, G4bool buildIsotopes)
 {
   G4double Zeff = (G4double)Z;
   G4double Aeff = atomicMass[Z];

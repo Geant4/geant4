@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.hh,v 1.3 2005-02-22 10:11:09 maire Exp $
+// $Id: G4NistElementBuilder.hh,v 1.4 2005-03-01 12:14:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4NistElementBuilder_h
@@ -66,11 +66,11 @@ public:
   void PrintElement (G4int Z);
     
   // Find or build a G4Element by atomic number  
-  const G4Element* FindOrBuildElement (G4int Z, G4bool buildIsotopes = true);
+  G4Element* FindOrBuildElement (G4int Z, G4bool buildIsotopes = true);
 
   // Find  or build a G4Element by symbol
-  const G4Element* FindOrBuildElement (const G4String& symb,
-                                       G4bool buildIsotopes = true);
+  G4Element* FindOrBuildElement (const G4String& symb,
+                                          G4bool buildIsotopes = true);
 
 private:
 
@@ -80,7 +80,7 @@ private:
                   const G4double& A, const G4double& sA, const G4double& W);
 		  
   // Build a G4Element from dataBase		  
-  const G4Element* BuildElement(G4int Z, G4bool buildIsotopes);
+  G4Element* BuildElement(G4int Z, G4bool buildIsotopes);
   
 private:
 
