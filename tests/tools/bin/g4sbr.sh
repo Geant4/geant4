@@ -6,10 +6,6 @@
 #############set -x
 
 TREE=`echo $1|cut -c 1`
-if [ X`echo $1 | ggrep -q -i stl && echo 1` = X1 ]
-then
-  export G4_STT_USE_STL=1
-fi
 DEBOPT=`echo $2|cut -c 1`
 REFTAG=$3
 ACTION=$4
@@ -25,7 +21,7 @@ THISTAG=`echo $REFTAG|cut -d + -f1`
 if [ X$TREE = X -o X$DEBOPT = X -o X$REFTAG = X ]
 then
   echo
-  echo "Usage: g4sbr.sh dev[_stl]|prod[_stl] debug|opt TAG_NAME Act arg1 arg2 arg3 NonIncrementalFlag"
+  echo "Usage: g4sbr.sh dev|prod debug|opt TAG_NAME Act arg1 arg2 arg3 NonIncrementalFlag"
   echo
   exit
 fi

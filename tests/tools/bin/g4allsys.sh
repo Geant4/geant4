@@ -6,7 +6,7 @@
 ############################################################
 # 'account' MUST have next in PATH:
 # /afs/cern.ch/sw/geant4/stt/prod[dev]/src/geant4/tests/tools/bin 
-# This is no loner required - but leave because there are side effects
+# This is no longer required - but leave because there are side effects
 #   to solve.
 ############################################################
 account=stesting

@@ -86,16 +86,6 @@ if [ "$1" = "test201" ] ; then
 cd $G4INSTALL/tests/test201
 (date;time $MAKECMD;date) > $dir/gmake.log 2>&1
 else
-# Do not use visualization :
-G4VIS_USE_DAWN=;export G4VIS_USE_DAWN
-G4VIS_USE_DAWNFILE=;export G4VIS_USE_DAWNFILE
-G4VIS_USE_OPACS=;export G4VIS_USE_OPACS
-G4VIS_USE_OPENGLX=;export G4VIS_USE_OPENGLX
-G4VIS_USE_OPENGLXM=;export G4VIS_USE_OPENGLXM
-G4VIS_USE_OIX=;export G4VIS_USE_OIX
-G4VIS_USE_OIWIN32=;export G4VIS_USE_OIWIN32
-G4VIS_USE_VRML=;export G4VIS_USE_VRML
-G4VIS_USE_VRMLFILE=;export G4VIS_USE_VRMLFILE
 #
 if [ "$1" = "test" ] ; then 
 if [ "$2" = "all" ] ; then 

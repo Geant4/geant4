@@ -23,12 +23,14 @@ endif
 #
 if ( $?G4WORKDIR ) then
 else
-setenv G4WORKDIR $G4INSTALL
+  echo "You have first to set environment variable G4WORKDIR !"
+  exit
 endif
 #
 if ( $?G4LIB ) then
 else
-setenv G4LIB $G4INSTALL/lib
+  echo "You have first to set environment variable G4LIB !"
+  exit
 endif
 #
 # Other G4 environment variables.

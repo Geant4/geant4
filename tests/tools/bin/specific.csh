@@ -23,17 +23,8 @@ else
   setenv DEBOPT optim
 endif
 
-if ( $?G4_STT_USE_STL ) then
-  setenv DEBOPT ${DEBOPT}_STL
-else
-  unsetenv G4USE_STL
-  unsetenv G4USE_OSPACE
-endif
-
 if ( `uname -n | grep rsplus` != "" ) then
-  if ( $?G4_STT_USE_STL ) then
-    setenv G4USE_OSPACE 1
-  endif
+  setenv G4USE_OSPACE 1
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
   setenv G4SYSTEM AIX-xlC
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
@@ -57,9 +48,7 @@ if ( `uname -n | grep rsplus` != "" ) then
 endif
 
 if ( `uname -n | grep dxplus` != "" ) then
-  if ( $?G4_STT_USE_STL ) then
-    setenv G4USE_OSPACE 1
-  endif
+  setenv G4USE_OSPACE 1
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
   setenv G4SYSTEM DEC-cxx
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
@@ -84,9 +73,6 @@ endif
 
 if ( `uname -n | grep pcgeant`   != "" || \
      `uname -n | grep pcg4speed` != "" ) then
-  if ( $?G4_STT_USE_STL ) then
-    setenv G4USE_STL 1
-  endif
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
   setenv G4SYSTEM Linux-g++
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
@@ -110,9 +96,7 @@ if ( `uname -n | grep pcgeant`   != "" || \
 endif
 
 if ( `uname -n | grep sgmedia` != "" ) then
-  if ( $?G4_STT_USE_STL ) then
-    setenv G4USE_OSPACE 1
-  endif
+  setenv G4USE_OSPACE 1
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
   setenv G4SYSTEM SGI-CC
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
@@ -132,9 +116,7 @@ if ( `uname -n | grep sgmedia` != "" ) then
 endif
 
 if ( `uname -n | grep sun` != "" ) then
-  if ( $?G4_STT_USE_STL ) then
-    setenv G4USE_OSPACE 1
-  endif
+  setenv G4USE_OSPACE 1
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
   setenv G4SYSTEM SUN-CC
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
@@ -158,9 +140,7 @@ if ( `uname -n | grep sun` != "" ) then
 endif
 
 if ( `uname -n | grep hp` != "" ) then
-  if ( $?G4_STT_USE_STL ) then
-    setenv G4USE_OSPACE 1
-  endif
+  setenv G4USE_OSPACE 1
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
   setenv G4SYSTEM HP-aCC
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
@@ -180,14 +160,10 @@ if ( `uname -n | grep hp` != "" ) then
 endif
 
 if ( `uname -n` == aleph ) then
-#  if ( $?G4_STT_USE_STL ) then
-#    setenv G4USE_OSPACE 1
-#  endif
 setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
 setenv G4INSTALL /geant4/dev
 setenv G4SYSTEM  HP-aCC
 setenv G4DEBUG   1
-# RW comes with the compiler : setenv G4USE_STL 1
 #setenv G4MAKESHLIB                 $G4INSTALL/config/makeshlib.sh
 # G4 build flags :
 setenv G4UI_BUILD_XM_SESSION       1
@@ -236,9 +212,7 @@ endif
 if ( `uname -n` == asc ) then
 # In CLHEP-default.h : //GB #define HEP_USE_STD 1
 #                      //GB #define HEP_HAVE_BOOL 1
-#if ( $?G4_STT_USE_STL ) then
-#???  setenv G4USE_OSPACE 1
-#endif
+setenv G4USE_OSPACE 1
 setenv G4USE_STL 1
 setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/rd44/cvs
 setenv G4INSTALL /geant4/dev
@@ -295,7 +269,6 @@ setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
 setenv G4INSTALL /geant4/dev
 setenv G4SYSTEM  Linux-g++
 setenv G4DEBUG   1
-setenv G4USE_STL 1
 #setenv G4MAKESHLIB                 $G4INSTALL/config/makeshlib.sh
 # G4 build flags :
 setenv G4UI_BUILD_XM_SESSION       1
@@ -346,9 +319,7 @@ endif
 # tvsldict.h. Solved by editing directly the file !
 #---------------------------------------------------
 if ( `uname -n` == "papou1" ) then
-  if ( $?G4_STT_USE_STL ) then
-    setenv G4USE_OSPACE 1
-  endif
+setenv G4USE_OSPACE 1
 setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/rd44/cvs
 setenv G4INSTALL /geant4/dev
 setenv G4SYSTEM  SUN-CC

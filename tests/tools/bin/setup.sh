@@ -17,34 +17,31 @@ fi
 
 if [ -z "$G4SYSTEM" ]; then
   echo "You have first to set environment variable G4SYSTEM !"
+  exit
 else
   echo "You are working on a $G4SYSTEM system"
 #...
 
-# we are working in the stt afs ref area
-if [ "$1" = "sttref" ]; then
-export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
-export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM
-export G4LIB=$G4WORKDIR/lib
-fi
-
 # Some checks :
 if [ -z "$G4INSTALL" ]; then
  echo "You have first to set environment variable G4INSTALL !"
+ exit
 else
  echo "You use for the source $G4INSTALL"
 #...
 
-if [ -n "$G4WORKDIR" ]; then
-    echo "You use as a work directory $G4WORKDIR "
+if [ -z "$G4WORKDIR" ]; then
+ echo "You have first to set environment variable G4WORKDIR !"
+ exit
 else
-export G4WORKDIR=$G4INSTALL
+ echo "You use as a work directory $G4WORKDIR "
 fi
 #
-if [ -n "$G4LIB" ]; then
-    echo "You are using as a library directory $G4LIB "
+if [ -z "$G4LIB" ]; then
+ echo "You have first to set environment variable G4LIB !"
+ exit
 else
-export G4LIB=$G4INSTALL/lib
+ echo "You are using as a library directory $G4LIB "
 fi
 #
 # Other G4 environment variables.
