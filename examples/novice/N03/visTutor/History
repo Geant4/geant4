@@ -2,6 +2,10 @@
 examples/novice/N03/visTutor/History
 ====================================
 
+14-11-01 Satoshi Tanaka (exN03VisTutor-V03-02-02)
+- exN03Vis8.mac : Batch visualization with the DAWNFILE driver
+- exN03Vis9.mac : Multi-page PostScript file generation (old exN03Vis8.mac)
+
 08-11-01 Satoshi Tanaka (exN03VisTutor-V03-02-01a)
 - /vis/viewer/viewpointThetaPhi ==> /vis/viewer/set/viewpointThetaPhi
 
