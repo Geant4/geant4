@@ -1,4 +1,4 @@
-$Id: History,v 1.41 2001-10-29 16:23:40 maire Exp $
+$Id: History,v 1.42 2001-11-08 11:28:31 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,7 +23,12 @@ committal in the CVS repository !
 23 oct 01: mma (stand-V03-02-12)
 - cut per material: Ve(h)EnergyLoss, e(h)Ionisation, eBremsstrahlung,
   PAIEnergyLoss, PAIonisation, SynchrotronRadiation     
-     
+
+08 nov 01: G.Cosmo (stand-V03-02-11a)
+- Introduced changes to G4VeEnergyLoss.cc and G4VhEnergyLoss.cc for reference
+  counted touchables (R.Chytracek). Not included in "stand-V03-02-12" and
+  "stand-V03-02-13".
+
 23 oct 01: G.Cosmo (stand-V03-02-11)
 - Minor fix to G4PAIxSection.cc, added inclusion of G4Material.hh to cope
   with latest updates included in materials-V03-02-04.
