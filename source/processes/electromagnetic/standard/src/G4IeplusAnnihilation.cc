@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IeplusAnnihilation.cc,v 1.3 1999-04-30 08:05:57 urban Exp $
+// $Id: G4IeplusAnnihilation.cc,v 1.4 1999-05-03 11:04:14 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -320,11 +320,12 @@ void G4IeplusAnnihilation::BuildNlambdaVector(
                                        G4int materialIndex,
                                        G4PhysicsLogVector* nlambdaVector)
 {
-  G4double LowEdgeEnergy,T,Tlast,dEdx,Value,Vlast,u,du,coeff ;
-  const G4int nbin = 100 ;
+  G4double LowEdgeEnergy,T,Tlast,dEdx,Value,Vlast,u,du,coeff,l ;
+  const G4int nbin = 20 ;
   G4bool isOut ;
   const G4double small = 1.e-100;
   const G4double plowloss = 0.5 ;  //this should be a data member of en.loss!
+  const G4double lmin=1.e-100,lmax=1.e100;
 
   const G4MaterialTable* theMaterialTable=
                           G4Material::GetMaterialTable();
@@ -365,9 +366,10 @@ void G4IeplusAnnihilation::BuildNlambdaVector(
       else
        coeff=1.0 ;
 
-      Value += coeff*T/(G4EnergyLossTables::GetPreciseDEDX(&aParticleType,
-                                   T,(*theMaterialTable)[materialIndex])*
-                      (*theMeanFreePathTable)[materialIndex]->GetValue(T,isOut));
+      l = (*theMeanFreePathTable)[materialIndex]->GetValue(T,isOut);
+      if((l>lmin) && (l<lmax))
+        Value += coeff*T/(G4EnergyLossTables::GetPreciseDEDX(&aParticleType,
+                                   T,(*theMaterialTable)[materialIndex])*l);
     }
 
     Value *= du ;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IeIonisation.cc,v 1.2 1999-04-13 09:05:40 urban Exp $
+// $Id: G4IeIonisation.cc,v 1.3 1999-05-03 11:04:12 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -245,12 +245,12 @@ void G4IeIonisation::BuildNlambdaVector(
                                        G4int materialIndex,
                                        G4PhysicsLogVector* nlambdaVector)
 {
-  G4double LowEdgeEnergy,T,Tlast,dEdx,Value,Vlast,u,du,coeff ;
+  G4double LowEdgeEnergy,T,Tlast,dEdx,Value,Vlast,u,du,coeff,l ;
   G4double thresholdEnergy ;
-  const G4int nbin = 100 ;
+  const G4int nbin = 20 ;
   G4bool isOut ;
   const G4double small = 1.e-100;
-  const G4double plowloss = 0.5 ;  //this should be a data member of en.loss!
+  const G4double lmin=1.e-100,lmax=1.e100;
 
   const G4MaterialTable* theMaterialTable=
                           G4Material::GetMaterialTable();
@@ -294,9 +294,10 @@ void G4IeIonisation::BuildNlambdaVector(
         else
           coeff=1.0 ;
 
-        Value += coeff*T/(G4EnergyLossTables::GetPreciseDEDX(&aParticleType,
-                                   T,(*theMaterialTable)[materialIndex])*
-                  (*theMeanFreePathTable)[materialIndex]->GetValue(T,isOut));
+        l = (*theMeanFreePathTable)[materialIndex]->GetValue(T,isOut);
+        if((l>lmin) && (l<lmax))
+          Value += coeff*T/(G4EnergyLossTables::GetPreciseDEDX(&aParticleType,
+                                   T,(*theMaterialTable)[materialIndex])*l);
       }
 
       Value *= du ;  
@@ -535,9 +536,6 @@ void G4IeIonisation::BuildInverseNlambdaTable(
      // inverse can be built for "meaningful" cut value only!
       if(Smallest >= Biggest)
       {
-         G4cout << endl ;
-  G4cout << "material=" << (*theMaterialTable)[J]->GetName() <<
-            "  smallest=" << Smallest << "  biggest=" << Biggest << endl;
          G4Exception(
         "Cut value is too big , smaller value should be used !");  
       }
