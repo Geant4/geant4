@@ -84,7 +84,7 @@ int main(int argc, char **argv) {
     for (G4PMapNameTally::iterator mt = mtallies.begin();
 	 mt != mtallies.end(); mt++) {
       G4String tmp(mt->first);
-      if (tmp == "WeightedHistorysEntering") {
+      if (tmp == "WeighteOfHistorysEntering") {
 	avweight =  mt->second.GetMean();
 	avsig = mt->second.GetSigma();
       }

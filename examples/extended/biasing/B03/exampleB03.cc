@@ -4,6 +4,8 @@
 #define _GNU_SOURCE
 #include <getopt.h>
 #include "g4std/set"
+#include "G4UImanager.hh"
+
 
 #include <iomanip>
 
@@ -41,6 +43,13 @@ int main(int argc, char **argv) {
   // create the importance manager for biasing in the tracking world
   G4MassImportanceManager mim(aIstore, "neutron");
   mim.Initialize();
+
+
+  G4UImanager* UI;
+
+  UI = G4UImanager::GetUIpointer();
+  UI->ApplyCommand("/control/execute init.mac");   
+
 
   runManager->BeamOn(numberOfEvent);
 
