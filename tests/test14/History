@@ -1,11 +1,11 @@
-$Id: History,v 1.7 2000-06-24 07:54:56 stesting Exp $
+$Id: History,v 1.8 2000-11-04 09:17:13 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                    Test 09 History file
+                    Test 14 History file
                     --------------------
 This file should be used by the test developer to briefly
 summarize all major modifications introduced in the code and keep
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 4, 2000  Steve O'Neale (test14-V02-00-00)
+- Updated test14.out.
 
 June 24, 2000  John Allison  (test14-V01-01-04)
 - Updated test14.out for emlowen-V01-01-21.
