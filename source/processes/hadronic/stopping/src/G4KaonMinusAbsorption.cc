@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonMinusAbsorption.cc,v 1.4 2001-08-01 17:12:29 hpw Exp $
+// $Id: G4KaonMinusAbsorption.cc,v 1.5 2001-10-19 11:55:43 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -169,14 +169,14 @@ G4VParticleChange* G4KaonMinusAbsorption::AtRestDoIt(
                                               // probabilities are included.
     if (random<=runningSum)
     {
-      targetCharge = G4double((*theElementVector)(i2)->GetZ());
-      targetAtomicMass = (*theElementVector)(i2)->GetN();
+      targetCharge = G4double( ((*theElementVector)[i2])->GetZ());
+      targetAtomicMass = (*theElementVector)[i2]->GetN();
     }
   }
   if (random>runningSum)
   {
-    targetCharge = G4double((*theElementVector)(numberOfElements-1)->GetZ());
-    targetAtomicMass = (*theElementVector)(numberOfElements-1)->GetN();
+    targetCharge = G4double((*theElementVector)[numberOfElements-1]->GetZ());
+    targetAtomicMass = (*theElementVector)[numberOfElements-1]->GetN();
 
   }
 

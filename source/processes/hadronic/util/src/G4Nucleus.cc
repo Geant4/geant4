@@ -102,8 +102,8 @@ G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass, G4double tem
     {
       running += aMaterial->GetAtomicNumDensityVector()[i];
       if( running/sum > random ) {
-        aEff = (*theElementVector)(i)->GetA()*mole/g;
-        zEff = (*theElementVector)(i)->GetZ();
+        aEff = (*theElementVector)[i]->GetA()*mole/g;
+        zEff = (*theElementVector)[i]->GetZ();
         break;
       }
     }

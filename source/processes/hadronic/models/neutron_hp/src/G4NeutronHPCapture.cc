@@ -49,7 +49,7 @@
     for (G4int i=0; i<numEle; i++)
     {
 //      G4cout << "initializing theCapture "<<i<<" "<< numEle<<G4endl;
-      theCapture[i].Init((*(G4Element::GetElementTable()))(i), dirName);
+      theCapture[i].Init((*(G4Element::GetElementTable()))[i], dirName);
       theCapture[i].Register(theFS);
     }
     delete theFS;

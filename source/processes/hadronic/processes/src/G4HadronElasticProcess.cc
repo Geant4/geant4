@@ -116,7 +116,7 @@ GetMeanFreePathBasic(const G4DynamicParticle* aParticle,
 
    for (unsigned int i = 0; i < aMaterial->GetNumberOfElements(); i++) {
      sigma = sigma + theAtomicNumDensityVector[i] *
-             GetMicroscopicCrossSection(aParticle, (*theElementVector)(i), aTemp);
+             GetMicroscopicCrossSection(aParticle, (*theElementVector)[i], aTemp);
    }
    if (verboseLevel > 1)
      G4cout << "G4HadronElasticProcess::GetMeanFreePathBasic: sigma="

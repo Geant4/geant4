@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PiMinusAbsorptionAtRest.cc,v 1.8 2001-10-05 16:09:44 hpw Exp $
+// $Id: G4PiMinusAbsorptionAtRest.cc,v 1.9 2001-10-19 11:55:43 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -109,15 +109,15 @@ G4VParticleChange* G4PiMinusAbsorptionAtRest::AtRestDoIt(const G4Track& track, c
   G4double totalsum=0;
   for(i=0; i<material->GetNumberOfElements(); ++i)
     {
-      if((*theElementVector)(i)->GetZ()!=1) totalsum+=material->GetFractionVector()[i];
+      if((*theElementVector)[i]->GetZ()!=1) totalsum+=material->GetFractionVector()[i];
     }
   for (i = 0; i<material->GetNumberOfElements(); ++i)
     {
-      if((*theElementVector)(i)->GetZ()!=1) sum += material->GetFractionVector()[i];
+      if((*theElementVector)[i]->GetZ()!=1) sum += material->GetFractionVector()[i];
       if ( sum/totalsum > random )  
 	{ 
-	  A = (*theElementVector)(i)->GetA()*mole/g;
-	  Z = (*theElementVector)(i)->GetZ();
+	  A = (*theElementVector)[i]->GetA()*mole/g;
+	  Z = (*theElementVector)[i]->GetZ();
           break;
 	}
     }

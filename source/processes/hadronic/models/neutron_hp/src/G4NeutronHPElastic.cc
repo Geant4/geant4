@@ -40,7 +40,7 @@
     theElastic = new G4NeutronHPChannel[numEle];
     for (G4int i=0; i<numEle; i++)
     {
-      theElastic[i].Init((*(G4Element::GetElementTable()))(i), dirName);
+      theElastic[i].Init((*(G4Element::GetElementTable()))[i], dirName);
       while(!theElastic[i].Register(theFS));
     }
     delete theFS;

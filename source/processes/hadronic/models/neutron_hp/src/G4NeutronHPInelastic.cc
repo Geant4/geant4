@@ -29,7 +29,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInelastic.cc,v 1.11 2001-10-05 16:11:55 hpw Exp $
+// $Id: G4NeutronHPInelastic.cc,v 1.12 2001-10-19 11:54:51 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4NeutronHPInelastic.hh"
@@ -50,7 +50,7 @@
 
     for (G4int i=0; i<numEle; i++)
     { 
-      theInelastic[i].Init((*(G4Element::GetElementTable()))(i), dirName);
+      theInelastic[i].Init((*(G4Element::GetElementTable()))[i], dirName);
       do
       {
 	theInelastic[i].Register(&theNFS, "F01"); // has

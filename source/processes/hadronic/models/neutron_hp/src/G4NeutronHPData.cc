@@ -36,7 +36,7 @@
 //     G4cout << "G4NeutronHPData::G4NeutronHPData(): numEle="<<numEle<<G4endl;
      for (G4int i=0; i<numEle; i++)
      {
-       theData[i].Init((*(G4Element::GetElementTable()))(i));
+       theData[i].Init((*(G4Element::GetElementTable()))[i]);
      }
   }
   
