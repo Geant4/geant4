@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03DetectorMessenger.cc,v 1.4 2001-07-11 09:58:22 gunter Exp $
+// $Id: ExN03DetectorMessenger.cc,v 1.5 2001-10-10 14:58:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExN03DetectorMessenger.hh"
 
@@ -38,9 +38,10 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN03DetectorMessenger::ExN03DetectorMessenger(ExN03DetectorConstruction * ExN03Det)
+ExN03DetectorMessenger::ExN03DetectorMessenger(
+                                           ExN03DetectorConstruction* ExN03Det)
 :ExN03Detector(ExN03Det)
 { 
   ExN03detDir = new G4UIdirectory("/calor/");
@@ -97,7 +98,7 @@ ExN03DetectorMessenger::ExN03DetectorMessenger(ExN03DetectorConstruction * ExN03
   MagFieldCmd->AvailableForStates(Idle);  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN03DetectorMessenger::~ExN03DetectorMessenger()
 {
@@ -109,7 +110,7 @@ ExN03DetectorMessenger::~ExN03DetectorMessenger()
   delete ExN03detDir;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
@@ -120,7 +121,8 @@ void ExN03DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
    { ExN03Detector->SetGapMaterial(newValue);}
   
   if( command == AbsThickCmd )
-   { ExN03Detector->SetAbsorberThickness(AbsThickCmd->GetNewDoubleValue(newValue));}
+   { ExN03Detector->SetAbsorberThickness(AbsThickCmd
+                                               ->GetNewDoubleValue(newValue));}
    
   if( command == GapThickCmd )
    { ExN03Detector->SetGapThickness(GapThickCmd->GetNewDoubleValue(newValue));}
@@ -138,4 +140,4 @@ void ExN03DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
    { ExN03Detector->SetMagField(MagFieldCmd->GetNewDoubleValue(newValue));}
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

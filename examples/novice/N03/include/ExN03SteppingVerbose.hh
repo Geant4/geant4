@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03SteppingVerbose.hh,v 1.5 2001-07-11 09:58:22 gunter Exp $
+// $Id: ExN03SteppingVerbose.hh,v 1.6 2001-10-10 14:58:11 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class ExN03SteppingVerbose;
 
@@ -35,7 +35,7 @@ class ExN03SteppingVerbose;
 
 #include "G4SteppingVerbose.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class ExN03SteppingVerbose : public G4SteppingVerbose
 {
@@ -48,5 +48,7 @@ class ExN03SteppingVerbose : public G4SteppingVerbose
    void TrackingStarted();
 
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

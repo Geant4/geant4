@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03RunAction.cc,v 1.8 2001-07-11 09:58:23 gunter Exp $
+// $Id: ExN03RunAction.cc,v 1.9 2001-10-10 14:58:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExN03RunAction.hh"
 
@@ -36,18 +36,17 @@
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN03RunAction::ExN03RunAction()
-{
-}
+{}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN03RunAction::~ExN03RunAction()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03RunAction::BeginOfRunAction(const G4Run* aRun)
 {
@@ -61,7 +60,7 @@ void ExN03RunAction::BeginOfRunAction(const G4Run* aRun)
     } 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03RunAction::EndOfRunAction(const G4Run* )
 {
@@ -70,4 +69,4 @@ void ExN03RunAction::EndOfRunAction(const G4Run* )
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

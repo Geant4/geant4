@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03CalorHit.hh,v 1.3 2001-07-11 09:58:21 gunter Exp $
+// $Id: ExN03CalorHit.hh,v 1.4 2001-10-10 14:58:11 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef ExN03CalorHit_h
 #define ExN03CalorHit_h 1
@@ -36,48 +36,47 @@
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class ExN03CalorHit : public G4VHit
 {
-  public:
+ public:
 
-      ExN03CalorHit();
-     ~ExN03CalorHit();
-      ExN03CalorHit(const ExN03CalorHit&);
-      const ExN03CalorHit& operator=(const ExN03CalorHit&);
-      int operator==(const ExN03CalorHit&) const;
+   ExN03CalorHit();
+  ~ExN03CalorHit();
+   ExN03CalorHit(const ExN03CalorHit&);
+   const ExN03CalorHit& operator=(const ExN03CalorHit&);
+   int operator==(const ExN03CalorHit&) const;
 
-      inline void* operator new(size_t);
-      inline void  operator delete(void*);
+   inline void* operator new(size_t);
+   inline void  operator delete(void*);
 
-      void Draw();
-      void Print();
+   void Draw();
+   void Print();
       
-  public:
+ public:
   
-      void AddAbs(G4double de, G4double dl) {EdepAbs += de; TrackLengthAbs += dl;};
-      void AddGap(G4double de, G4double dl) {EdepGap += de; TrackLengthGap += dl;};      
+   void AddAbs(G4double de, G4double dl) {EdepAbs += de; TrackLengthAbs += dl;};
+   void AddGap(G4double de, G4double dl) {EdepGap += de; TrackLengthGap += dl;};
                  
-      G4double GetEdepAbs()     { return EdepAbs; };
-      G4double GetTrakAbs()     { return TrackLengthAbs; };
-      G4double GetEdepGap()     { return EdepGap; };
-      G4double GetTrakGap()     { return TrackLengthGap; };
-     
-  private:
+   G4double GetEdepAbs()     { return EdepAbs; };
+   G4double GetTrakAbs()     { return TrackLengthAbs; };
+   G4double GetEdepGap()     { return EdepGap; };
+   G4double GetTrakGap()     { return TrackLengthGap; };
+    
+ private:
   
-      G4double EdepAbs, TrackLengthAbs;
-      G4double EdepGap, TrackLengthGap;
-      
+   G4double EdepAbs, TrackLengthAbs;
+   G4double EdepGap, TrackLengthGap;     
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 typedef G4THitsCollection<ExN03CalorHit> ExN03CalorHitsCollection;
 
 extern G4Allocator<ExN03CalorHit> ExN03CalorHitAllocator;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void* ExN03CalorHit::operator new(size_t)
 {
@@ -86,12 +85,14 @@ inline void* ExN03CalorHit::operator new(size_t)
   return aHit;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void ExN03CalorHit::operator delete(void* aHit)
 {
   ExN03CalorHitAllocator.FreeSingle((ExN03CalorHit*) aHit);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

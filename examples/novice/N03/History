@@ -1,4 +1,4 @@
-$Id: History,v 1.37 2001-09-18 08:16:31 stanaka Exp $
+$Id: History,v 1.38 2001-10-10 14:58:10 maire Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+10-10-01 mma (exampleN03-V03-02-01)
+- /vis/scene/endOfEventAction accumulate
+  /vis/viewer/zoom (in newgeom.mac)
+- 80 columns everywhere
 
 18-09-01 Satoshi Tanaka (exampleN03-V03-02-00)
 - Updation for automatic visualization at Hebden Bridge mini-workshop.

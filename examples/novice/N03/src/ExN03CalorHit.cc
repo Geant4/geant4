@@ -21,19 +21,19 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03CalorHit.cc,v 1.3 2001-07-11 09:58:22 gunter Exp $
+// $Id: ExN03CalorHit.cc,v 1.4 2001-10-10 14:58:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExN03CalorHit.hh"
 
 G4Allocator<ExN03CalorHit> ExN03CalorHitAllocator;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN03CalorHit::ExN03CalorHit()
 {
@@ -41,12 +41,12 @@ ExN03CalorHit::ExN03CalorHit()
    EdepGap = 0.; TrackLengthGap = 0.;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN03CalorHit::~ExN03CalorHit()
-{;}
+{}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN03CalorHit::ExN03CalorHit(const ExN03CalorHit& right)
 {
@@ -54,7 +54,7 @@ ExN03CalorHit::ExN03CalorHit(const ExN03CalorHit& right)
   EdepGap = right.EdepGap; TrackLengthGap = right.TrackLengthGap;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 const ExN03CalorHit& ExN03CalorHit::operator=(const ExN03CalorHit& right)
 {
@@ -63,22 +63,22 @@ const ExN03CalorHit& ExN03CalorHit::operator=(const ExN03CalorHit& right)
   return *this;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int ExN03CalorHit::operator==(const ExN03CalorHit& right) const
 {
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03CalorHit::Draw()
-{;}
+{}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03CalorHit::Print()
-{;}
+{}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

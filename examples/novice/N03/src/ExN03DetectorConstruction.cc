@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03DetectorConstruction.cc,v 1.6 2001-09-27 16:00:39 maire Exp $
+// $Id: ExN03DetectorConstruction.cc,v 1.7 2001-10-10 14:58:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExN03DetectorConstruction.hh"
 #include "ExN03DetectorMessenger.hh"
@@ -50,15 +50,15 @@
 
 #include "G4ios.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN03DetectorConstruction::ExN03DetectorConstruction()
-:solidWorld(NULL),logicWorld(NULL),physiWorld(NULL),
+:AbsorberMaterial(NULL),GapMaterial(NULL),defaultMaterial(NULL),
+ solidWorld(NULL),logicWorld(NULL),physiWorld(NULL),
  solidCalor(NULL),logicCalor(NULL),physiCalor(NULL),
  solidLayer(NULL),logicLayer(NULL),physiLayer(NULL),
  solidAbsorber(NULL),logicAbsorber(NULL),physiAbsorber(NULL),
  solidGap (NULL),logicGap (NULL),physiGap (NULL),
- AbsorberMaterial(NULL),GapMaterial(NULL),defaultMaterial(NULL),
  magField(NULL),calorimeterSD(NULL)
 {
   // default parameter values of the calorimeter
@@ -72,12 +72,12 @@ ExN03DetectorConstruction::ExN03DetectorConstruction()
   detectorMessenger = new ExN03DetectorMessenger(this);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN03DetectorConstruction::~ExN03DetectorConstruction()
 { delete detectorMessenger;}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume* ExN03DetectorConstruction::Construct()
 {
@@ -85,7 +85,7 @@ G4VPhysicalVolume* ExN03DetectorConstruction::Construct()
   return ConstructCalorimeter();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03DetectorConstruction::DefineMaterials()
 { 
@@ -129,7 +129,7 @@ G4Element* Fe = new G4Element(name="Iron"    ,symbol="Fe", z=26., a);
 G4Isotope* U5 = new G4Isotope(name="U235", iz=92, n=235, a=235.01*g/mole);
 G4Isotope* U8 = new G4Isotope(name="U238", iz=92, n=238, a=238.03*g/mole);
 
-G4Element* U  = new G4Element(name="enriched Uranium", symbol="U", ncomponents=2);
+G4Element* U  = new G4Element(name="enriched Uranium",symbol="U",ncomponents=2);
 U->AddIsotope(U5, abundance= 90.*perCent);
 U->AddIsotope(U8, abundance= 10.*perCent);
 
@@ -217,8 +217,8 @@ steam->AddMaterial(H2O, fractionmass=1.);
 density     = universe_mean_density;    //from PhysicalConstants.h
 pressure    = 3.e-18*pascal;
 temperature = 2.73*kelvin;
-G4Material* Vacuum = new G4Material(name="Galactic", z=1., a=1.01*g/mole, density,
-                   kStateGas,temperature,pressure);
+G4Material* Vacuum = new G4Material(name="Galactic", z=1., a=1.01*g/mole,
+                     density,kStateGas,temperature,pressure);
 
 density     = 1.e-5*g/cm3;
 pressure    = 2.e-2*bar;
@@ -235,7 +235,7 @@ G4cout << *(G4Material::GetMaterialTable()) << G4endl;
   defaultMaterial  = Air;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
 G4VPhysicalVolume* ExN03DetectorConstruction::ConstructCalorimeter()
 {
@@ -383,7 +383,7 @@ G4VPhysicalVolume* ExN03DetectorConstruction::ConstructCalorimeter()
   return physiWorld;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03DetectorConstruction::PrintCalorParameters()
 {
@@ -395,7 +395,7 @@ void ExN03DetectorConstruction::PrintCalorParameters()
          << "\n------------------------------------------------------------\n";
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
 {
@@ -408,7 +408,7 @@ void ExN03DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
      }             
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03DetectorConstruction::SetGapMaterial(G4String materialChoice)
 {
@@ -421,7 +421,7 @@ void ExN03DetectorConstruction::SetGapMaterial(G4String materialChoice)
      }             
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03DetectorConstruction::SetAbsorberThickness(G4double val)
 {
@@ -429,7 +429,7 @@ void ExN03DetectorConstruction::SetAbsorberThickness(G4double val)
   AbsorberThickness = val;
 }  
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03DetectorConstruction::SetGapThickness(G4double val)
 {
@@ -437,7 +437,7 @@ void ExN03DetectorConstruction::SetGapThickness(G4double val)
   GapThickness = val;
 }  
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03DetectorConstruction::SetCalorSizeYZ(G4double val)
 {
@@ -445,14 +445,14 @@ void ExN03DetectorConstruction::SetCalorSizeYZ(G4double val)
   CalorSizeYZ = val;
 }  
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03DetectorConstruction::SetNbOfLayers(G4int val)
 {
   NbOfLayers = val;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03DetectorConstruction::SetMagField(G4double fieldValue)
 {
@@ -472,11 +472,11 @@ void ExN03DetectorConstruction::SetMagField(G4double fieldValue)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
 void ExN03DetectorConstruction::UpdateGeometry()
 {
   G4RunManager::GetRunManager()->DefineWorldVolume(ConstructCalorimeter());
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

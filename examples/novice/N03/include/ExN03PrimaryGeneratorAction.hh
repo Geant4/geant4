@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PrimaryGeneratorAction.hh,v 1.3 2001-07-11 09:58:22 gunter Exp $
+// $Id: ExN03PrimaryGeneratorAction.hh,v 1.4 2001-10-10 14:58:11 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef ExN03PrimaryGeneratorAction_h
 #define ExN03PrimaryGeneratorAction_h 1
@@ -40,7 +40,7 @@ class G4Event;
 class ExN03DetectorConstruction;
 class ExN03PrimaryGeneratorMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class ExN03PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
@@ -53,12 +53,14 @@ class ExN03PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     void SetRndmFlag(G4String val) { rndmFlag = val;}
 
   private:
-    G4ParticleGun*                particleGun;	  //pointer a to G4 service class
+    G4ParticleGun*                particleGun;	  //pointer a to G4  class
     ExN03DetectorConstruction*    ExN03Detector;  //pointer to the geometry
     
     ExN03PrimaryGeneratorMessenger* gunMessenger; //messenger of this class
-    G4String                      rndmFlag;	  //flag for a random impact point       
+    G4String                      rndmFlag;	  //flag for a rndm impact point
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

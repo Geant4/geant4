@@ -1,4 +1,3 @@
-#
 # Example of interactive redefinition
 # of the geometry
 #
@@ -22,6 +21,7 @@
 #
 /calor/setField 3 tesla
 #
-/vis/camera/zoom 1.3
+/vis/viewer/zoom 1.3
 /vis/drawVolume
-
+#
+/vis/scene/endOfEventAction accumulate

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03CalorimeterSD.cc,v 1.4 2001-07-11 09:58:22 gunter Exp $
+// $Id: ExN03CalorimeterSD.cc,v 1.5 2001-10-10 14:58:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExN03CalorimeterSD.hh"
 
@@ -42,7 +42,7 @@
 
 #include "G4ios.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN03CalorimeterSD::ExN03CalorimeterSD(G4String name,
                                    ExN03DetectorConstruction* det)
@@ -52,14 +52,14 @@ ExN03CalorimeterSD::ExN03CalorimeterSD(G4String name,
   HitID = new G4int[500];
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN03CalorimeterSD::~ExN03CalorimeterSD()
 {
   delete [] HitID;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03CalorimeterSD::Initialize(G4HCofThisEvent*HCE)
 {
@@ -68,7 +68,7 @@ void ExN03CalorimeterSD::Initialize(G4HCofThisEvent*HCE)
   for (G4int j=0;j<Detector->GetNbOfLayers();j++) {HitID[j] = -1;};
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool ExN03CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
 {
@@ -86,7 +86,7 @@ G4bool ExN03CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
   G4VPhysicalVolume* physVol = theTouchable->GetVolume(); 
   //theTouchable->MoveUpHistory();
   G4int LayerNumber = 0;
-  if (Detector->GetNbOfLayers()>1) LayerNumber=theTouchable->GetReplicaNumber(1);
+  if(Detector->GetNbOfLayers()>1) LayerNumber=theTouchable->GetReplicaNumber(1);
 
   if (HitID[LayerNumber]==-1)
     { 
@@ -110,7 +110,7 @@ G4bool ExN03CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
   return true;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03CalorimeterSD::EndOfEvent(G4HCofThisEvent* HCE)
 {
@@ -120,20 +120,20 @@ void ExN03CalorimeterSD::EndOfEvent(G4HCofThisEvent* HCE)
   HCE->AddHitsCollection(HCID,CalCollection);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03CalorimeterSD::clear()
 {} 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03CalorimeterSD::DrawAll()
 {} 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03CalorimeterSD::PrintAll()
 {} 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

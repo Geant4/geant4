@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03DetectorConstruction.hh,v 1.3 2001-07-11 09:58:21 gunter Exp $
+// $Id: ExN03DetectorConstruction.hh,v 1.4 2001-10-10 14:58:11 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef ExN03DetectorConstruction_h
 #define ExN03DetectorConstruction_h 1
@@ -43,7 +43,7 @@ class G4UniformMagField;
 class ExN03DetectorMessenger;
 class ExN03CalorimeterSD;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class ExN03DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -141,7 +141,7 @@ class ExN03DetectorConstruction : public G4VUserDetectorConstruction
      G4VPhysicalVolume* ConstructCalorimeter();     
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void ExN03DetectorConstruction::ComputeCalorParameters()
 {
@@ -151,6 +151,8 @@ inline void ExN03DetectorConstruction::ComputeCalorParameters()
      
      WorldSizeX = 1.2*CalorThickness; WorldSizeYZ = 1.2*CalorSizeYZ;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventAction.hh,v 1.5 2001-07-11 09:58:21 gunter Exp $
+// $Id: ExN03EventAction.hh,v 1.6 2001-10-10 14:58:11 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef ExN03EventAction_h
 #define ExN03EventAction_h 1
@@ -37,7 +37,7 @@
 
 class ExN03EventActionMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class ExN03EventAction : public G4UserEventAction
 {
@@ -58,6 +58,8 @@ class ExN03EventAction : public G4UserEventAction
     G4int                       printModulo;                         
     ExN03EventActionMessenger*  eventMessenger;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

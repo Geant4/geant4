@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PhysicsList.cc,v 1.10 2001-07-11 09:58:23 gunter Exp $
+// $Id: ExN03PhysicsList.cc,v 1.11 2001-10-10 14:58:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExN03PhysicsList.hh"
 
@@ -40,7 +40,7 @@
 #include "G4Material.hh"
 #include "G4ios.hh"              
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN03PhysicsList::ExN03PhysicsList():  G4VUserPhysicsList()
 {
@@ -52,12 +52,12 @@ ExN03PhysicsList::ExN03PhysicsList():  G4VUserPhysicsList()
  SetVerboseLevel(1);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN03PhysicsList::~ExN03PhysicsList()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03PhysicsList::ConstructParticle()
 {
@@ -72,7 +72,7 @@ void ExN03PhysicsList::ConstructParticle()
   ConstructBaryons();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03PhysicsList::ConstructBosons()
 {
@@ -86,7 +86,8 @@ void ExN03PhysicsList::ConstructBosons()
   // optical photon
   G4OpticalPhoton::OpticalPhotonDefinition();
 }
- //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03PhysicsList::ConstructLeptons()
 {
@@ -102,7 +103,7 @@ void ExN03PhysicsList::ConstructLeptons()
   G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03PhysicsList::ConstructMesons()
 {
@@ -120,7 +121,7 @@ void ExN03PhysicsList::ConstructMesons()
   G4KaonZeroShort::KaonZeroShortDefinition();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03PhysicsList::ConstructBaryons()
 {
@@ -132,7 +133,7 @@ void ExN03PhysicsList::ConstructBaryons()
 }
 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03PhysicsList::ConstructProcess()
 {
@@ -141,7 +142,7 @@ void ExN03PhysicsList::ConstructProcess()
   ConstructGeneral();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
@@ -159,7 +160,7 @@ void ExN03PhysicsList::ConstructProcess()
 
 #include "G4hIonisation.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03PhysicsList::ConstructEM()
 {
@@ -267,7 +268,7 @@ void ExN03PhysicsList::ConstructEM()
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4Decay.hh"
 
@@ -288,7 +289,7 @@ void ExN03PhysicsList::ConstructGeneral()
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03PhysicsList::SetCuts()
 {
@@ -303,7 +304,7 @@ void ExN03PhysicsList::SetCuts()
     
   if (verboseLevel >0){
     G4cout << "ExN03PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;    
+    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
   }  
 
   // set cut values for gamma at first and for e- second and next for e+,
@@ -322,7 +323,7 @@ void ExN03PhysicsList::SetCuts()
   if (verboseLevel>0) DumpCutValuesTable();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
 void ExN03PhysicsList::SetCutForGamma(G4double cut)
@@ -358,15 +359,5 @@ G4double ExN03PhysicsList::GetCutForProton() const
   return cutForProton;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-
-
-
-
-
-
-
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
