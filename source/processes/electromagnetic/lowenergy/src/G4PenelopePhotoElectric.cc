@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopePhotoElectric.cc,v 1.1 2003-01-15 09:11:34 pandola Exp $
+// $Id: G4PenelopePhotoElectric.cc,v 1.2 2003-01-15 09:14:26 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: L. Pandola
@@ -141,9 +141,9 @@ G4VParticleChange* G4PenelopePhotoElectric::PostStepDoIt(const G4Track& aTrack,
   // Retrieve the corresponding identifier and binding energy of the selected shell
   const G4AtomicTransitionManager* transitionManager = G4AtomicTransitionManager::Instance();
   const G4AtomicShell* shell = transitionManager->Shell(Z,shellIndex);
-  G4cout << "Indice di shell: " << shellIndex << G4endl;
+  //G4cout << "Indice di shell: " << shellIndex << G4endl;
   G4double bindingEnergy = shell->BindingEnergy();
-  G4cout << "Energia di legame: " << bindingEnergy/keV << " keV" << G4endl;
+  //G4cout << "Energia di legame: " << bindingEnergy/keV << " keV" << G4endl;
   G4int shellId = shell->ShellId();
 
   // Create lists of pointers to DynamicParticles (photons and electrons)
