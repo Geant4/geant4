@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VEnergyLoss.hh,v 1.1 2000-02-09 10:21:03 urban Exp $
+// $Id: G4VEnergyLoss.hh,v 1.2 2000-02-10 14:22:52 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -94,7 +94,7 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
     G4double f1Fluct,f2Fluct,e1Fluct,e2Fluct,rateFluct,ipotFluct;
     G4double e1LogFluct,e2LogFluct,ipotLogFluct;
     const G4double MaxExcitationNumber ;
-    const long nmaxDirectFluct,nmaxCont1,nmaxCont2 ;
+    const G4int nmaxDirectFluct,nmaxCont1,nmaxCont2 ;
 
 
   // static part of the class 
