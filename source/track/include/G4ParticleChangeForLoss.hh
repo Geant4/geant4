@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.hh,v 1.8 2004-05-11 15:20:41 vnivanch Exp $
+// $Id: G4ParticleChangeForLoss.hh,v 1.9 2004-05-11 15:39:45 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -124,20 +124,10 @@ inline G4double G4ParticleChangeForLoss::GetProposedKineticEnergy() const
   return proposedKinEnergy;
 }
 
-//inline G4double G4ParticleChangeForLoss::GetEnergy() const
-//{
-//  return kinEnergy;
-//}
-
 inline void G4ParticleChangeForLoss::SetProposedKineticEnergy(G4double energy)
 {
   proposedKinEnergy = energy;
 }
-
-//inline void G4ParticleChangeForLoss::ProposeEnergy(G4double energy)
-//{
-//  kinEnergy = energy;
-//}
 
 inline G4double G4ParticleChangeForLoss::GetProposedCharge() const
 {

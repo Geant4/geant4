@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.cc,v 1.10 2004-05-11 15:20:41 vnivanch Exp $
+// $Id: G4ParticleChangeForLoss.cc,v 1.11 2004-05-11 15:39:45 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -226,7 +226,7 @@ G4bool G4ParticleChangeForLoss::CheckIt(const G4Track& aTrack)
 
   //correction
   if (!itsOK) {
-    kinEnergy = aTrack.GetKineticEnergy();
+    proposedKinEnergy = aTrack.GetKineticEnergy();
   }
 
   itsOK = (itsOK) && G4VParticleChange::CheckIt(aTrack);
