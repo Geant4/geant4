@@ -1107,6 +1107,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
         pt    = sqrt(pow(-log(1.-G4UniformRand())/bp[j],ptex[j]));
         if(pt<0.05) pt = Amax(0.001, 0.3*G4UniformRand());
         aspar = maspar[j]; 
+        phi = G4UniformRand()*M_2PI;
         pv[i].setMomentum( pt*cos(phi), pt*sin(phi) );        // set x- and y-momentum
 
         for( j=0; j<20; j++ ) binl[j] = j/(19.*pt);           // set the lambda - bins.
@@ -1182,7 +1183,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
                               if( pvmx[6].getMomentum().y() < 0.0 ) phi = M_2PI - phi;
                               phi += M_PI + normal()*M_PI/12.0;
                               if( phi > M_2PI )phi -= M_2PI;
-                              if( phi < 0.0 )phi = M_2PI - phi;
+                              if( phi < 0.0 )phi = M_2PI + phi;
                               outerCounter = 2;                     // leave outer loop
                               eliminateThisParticle = false;        // don't eliminate this particle
                               resetEnergies = false;
@@ -1211,7 +1212,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
                               if( pvmx[6].getMomentum().y() < 0.0 )phi = M_2PI - phi;
                               phi += M_PI + normal() * M_PI / 12.0;
                               if( phi > M_2PI )phi -= M_2PI;
-                              if( phi < 0.0 )phi = M_2PI - phi;
+                              if( phi < 0.0 )phi = M_2PI + phi;
                               outerCounter = 2;                    // leave outer iteration
                               eliminateThisParticle = false;       // don't eliminate this particle
                               resetEnergies = false;
@@ -1290,7 +1291,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
             if( pvmx[6].getMomentum().y() < 0.0 )phi = M_2PI - phi;
             phi += M_PI + normal() * M_PI / 12.0;
             if( phi > M_2PI )phi -= M_2PI;
-            if( phi < 0.0 )phi = M_2PI - phi;
+            if( phi < 0.0 )phi = M_2PI + phi;
           }
       }                                                                  // closes main for loop
    if (verboseLevel > 1)
@@ -2016,7 +2017,7 @@ G4HEInelastic::TuningOfHighEnergyCascading( G4HEVector pv[],
                if(pv[i].getCode() == pionZeroCode) sbqwgt = 0.15;  
              }
            ppp = pvmx[5].Length();
-           if ( (sbqwgt>0.) && (ppp>1.e-6))
+           if ( (sbqwgt>0.) && (ppp>1.e-6) )
              { 
                G4double pthmf = ppp*sqrt(1.-cost*cost);
                G4double plhmf = ppp*cost*(1.-sbqwgt);
@@ -2055,6 +2056,7 @@ G4HEInelastic::TuningOfHighEnergyCascading( G4HEVector pv[],
        pvmx[8].Add3(pvmx[8], pv[i] );
      } 
 
+       for(i=0; i<vecLen; i++) pv[i].Print(i);
   if (ledpar >= 0)
      { 
        if(verboseLevel > 1)
@@ -3392,6 +3394,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
         if (j == 6 && pv[i].getType() == baryonType) j = 7;
         pt    = Amax(0.001, sqrt(pow(-log(1.-G4UniformRand())/bp[j],ptex[j])));
         aspar = maspar[j]; 
+        phi = G4UniformRand()*M_2PI;
         pv[i].setMomentum( pt*cos(phi), pt*sin(phi) );        // set x- and y-momentum
 
         for( j=0; j<20; j++ ) binl[j] = j/(19.*pt);           // set the lambda - bins.
@@ -3468,7 +3471,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
                               if( pvmx[6].getMomentum().y() < 0.0 ) phi = M_2PI - phi;
                               phi += M_PI + normal()*M_PI/12.0;
                               if( phi > M_2PI )phi -= M_2PI;
-                              if( phi < 0.0 )phi = M_2PI - phi;
+                              if( phi < 0.0 )phi = M_2PI + phi;
                               outerCounter = 2;                     // leave outer loop
                               eliminateThisParticle = false;        // don't eliminate this particle
                               resetEnergies = false;
@@ -3497,7 +3500,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
                               if( pvmx[6].getMomentum().y() < 0.0 )phi = M_2PI - phi;
                               phi += M_PI + normal() * M_PI / 12.0;
                               if( phi > M_2PI )phi -= M_2PI;
-                              if( phi < 0.0 )phi = M_2PI - phi;
+                              if( phi < 0.0 )phi = M_2PI + phi;
                               outerCounter = 2;                    // leave outer iteration
                               eliminateThisParticle = false;       // don't eliminate this particle
                               resetEnergies = false;
@@ -3568,7 +3571,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
             if( pvmx[6].getMomentum().y() < 0.0 )phi = M_2PI - phi;
             phi += M_PI + normal() * M_PI / 12.0;
             if( phi > M_2PI )phi -= M_2PI;
-            if( phi < 0.0 )phi = M_2PI - phi;
+            if( phi < 0.0 )phi = M_2PI + phi;
           }
       }                                                                  // closes main for loop
    if (verboseLevel > 1)
