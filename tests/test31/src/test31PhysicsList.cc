@@ -167,7 +167,7 @@ void test31PhysicsList::AddPhysicsList(const G4String& name)
 
   } else {
 
-    G4cout << "test31PhysicsList::AddPhysicsList: <" << name << ">" 
+    G4cout << "test31PhysicsList::AddPhysicsList: <" << name << ">"
            << " is not defined"
            << G4endl;
   }
@@ -177,16 +177,16 @@ void test31PhysicsList::AddPhysicsList(const G4String& name)
 
 void test31PhysicsList::SetCuts()
 {
-     
+
   if (verboseLevel >0){
     G4cout << "test31PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  }  
+  }
 
   // Limit for low energy electromagnetic particles
-  G4Gamma   ::SetEnergyRange(100.0*eV,100.0*GeV);
-  G4Electron::SetEnergyRange(100.0*eV,100.0*GeV);
-  G4Positron::SetEnergyRange(100.0*eV,100.0*GeV);
+  //  G4Gamma   ::SetEnergyRange(100.0*eV,100.0*GeV);
+  //  G4Electron::SetEnergyRange(100.0*eV,100.0*GeV);
+  //  G4Positron::SetEnergyRange(100.0*eV,100.0*GeV);
 
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma
