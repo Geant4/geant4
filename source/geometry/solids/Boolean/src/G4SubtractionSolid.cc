@@ -2,9 +2,11 @@
 //
 // History:
 //
-// 14.10.98 V.Grichine 
-// 19.10.98 V.Grichine new algorithm of DistanceToIn(p,v) according to
-//          J.Apostolakis recommendations
+// 14.10.98 V.Grichine, implementation of the first version 
+// 19.10.98 V.Grichine, new algorithm of DistanceToIn(p,v) according to
+//          J.Apostolakis recommendations (while loops)
+// 02.08.99 V.Grichine, bugs fixed in DistanceToOut(p,v,...)
+//                      while -> do-while & surfaceA limitations
 //
 
 #include "G4SubtractionSolid.hh"
@@ -157,32 +159,38 @@ G4double
 G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
                                    const G4ThreeVector& v  ) const 
 {
-  G4double dist,dist2 ;
+  G4double dist = 0.0,disTmp = 0.0 ;
     
   if( Inside(p) == kInside )
   {
     G4Exception("Invalid call in G4SubtractionSolid::DistanceToIn(p,v),  point p is inside") ;
   }
 
-  if( ( fPtrSolidA->Inside(p) != kOutside) &&     // case1:p in both A&B 
+  if( // ( fPtrSolidA->Inside(p) != kOutside) &&     // case1:p in both A&B 
+
       ( fPtrSolidB->Inside(p) != kOutside)    )   // start: out of B
     {
       dist = fPtrSolidB->DistanceToOut(p,v) ; // ,calcNorm,validNorm,n) ;
-
-      while( Inside(p+dist*v) == kOutside )
+      
+      if( fPtrSolidA->Inside(p+dist*v) != kInside )
       {
-        dist2 = fPtrSolidA->DistanceToIn(p+dist*v,v) ;
+        do
+        {
+          disTmp = fPtrSolidA->DistanceToIn(p+dist*v,v) ;
 
-        if(dist2 == kInfinity)
-        {  
-          return kInfinity ;
-	}
-        dist += dist2 ;
+          if(disTmp == kInfinity)
+          {  
+            return kInfinity ;
+	  }
+          dist += disTmp ;
 
-        if( Inside(p+dist*v) == kOutside )
-	{
-          dist += fPtrSolidB->DistanceToOut(p+dist*v,v) ;
-	}         
+          if( Inside(p+dist*v) == kOutside )
+	  {
+            disTmp = fPtrSolidB->DistanceToOut(p+dist*v,v) ; 
+            dist += disTmp ;
+	  }         
+        }
+        while( Inside(p+dist*v) == kOutside ) ;
       }
     }
   else // p outside A, start in A
@@ -195,21 +203,24 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
       }
       else
       {
-        while( Inside(p+dist*v) == kOutside )  // pushing loop
+	 while( Inside(p+dist*v) == kOutside )  // pushing loop
+	//  do
 	{
-          dist += fPtrSolidB->DistanceToOut(p+dist*v,v) ;
+          disTmp = fPtrSolidB->DistanceToOut(p+dist*v,v) ;
+          dist += disTmp ;
 
           if( Inside(p+dist*v) == kOutside )
 	  { 
-            dist2 = fPtrSolidA->DistanceToIn(p+dist*v,v) ;
+            disTmp = fPtrSolidA->DistanceToIn(p+dist*v,v) ;
 
-            if(dist2 == kInfinity) // past A, hence past A\B
+            if(disTmp == kInfinity) // past A, hence past A\B
             {  
               return kInfinity ;
 	    }                 
-            dist += dist2 ;
+            dist += disTmp ;
 	  }
 	}
+	//  while( Inside(p+dist*v) == kOutside ) ;
       }
     }
   
