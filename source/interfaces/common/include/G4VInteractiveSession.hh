@@ -35,7 +35,7 @@ public:
   G4Interactor GetInteractor(G4String);
 private:
   G4UImessenger* messenger;
-  typedef G4std::map<G4String,G4Interactor,less<G4String> > G4interactor_map;
+  typedef G4std::map<G4String,G4Interactor, G4std::less<G4String> > G4interactor_map;
   G4interactor_map interactors;
 };
 
