@@ -1,6 +1,6 @@
 /control/verbose 2
 /vis/verbose c
-/vis/open OGLIXm
+/vis/open OGLSXm
 /vis/scene/create
 #/vis/scene/add/userAction
 /vis/scene/add/userAction -10 10 -10 10 -10 10 m
