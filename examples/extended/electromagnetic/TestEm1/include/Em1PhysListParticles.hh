@@ -21,49 +21,45 @@
 // ********************************************************************
 //
 //
-// $Id: Em1PhysicsListMessenger.hh,v 1.7 2003-03-27 11:16:19 maire Exp $
+// $Id: Em1PhysListParticles.hh,v 1.1 2003-03-27 11:16:19 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef Em1PhysicsListMessenger_h
-#define Em1PhysicsListMessenger_h 1
+#ifndef Em1PhysListParticles_h
+#define Em1PhysListParticles_h 1
 
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
-#include "G4UImessenger.hh"
-
-class Em1PhysicsList;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithAString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Em1PhysicsListMessenger: public G4UImessenger
+class Em1PhysListParticles : public G4VPhysicsConstructor
 {
-  public:
-  
-    Em1PhysicsListMessenger(Em1PhysicsList* );
-   ~Em1PhysicsListMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
-  private:
-  
-    Em1PhysicsList* pPhysicsList;
-    
-    G4UIcmdWithADoubleAndUnit* gammaCutCmd;
-    G4UIcmdWithADoubleAndUnit* electCutCmd;
-    G4UIcmdWithADoubleAndUnit* protoCutCmd;    
-    G4UIcmdWithADoubleAndUnit* allCutCmd;
-    G4UIcmdWithADoubleAndUnit* rCmd;    
-    G4UIcmdWithAString*        pListCmd;
-    
+  public: 
+    Em1PhysListParticles(const G4String& name = "particles");
+    virtual ~Em1PhysListParticles();
+
+  public: 
+    // This method will be invoked in the Construct() method. 
+    // each particle type will be instantiated
+    virtual void ConstructParticle();
+ 
+    // This method is dummy.
+    virtual void ConstructProcess() {};
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
+
+
+
+
+
+
 
