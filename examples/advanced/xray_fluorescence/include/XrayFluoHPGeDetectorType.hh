@@ -84,6 +84,8 @@ private:
   //stores the data of the efficience of the detector
   const XrayFluoDataSet* efficiencySet;
 
+  G4VDataSetAlgorithm* interpolation4;
+
   //stores the energy data (first column of the file) of the 
   //response function 
   std::map<G4int,G4DataVector*,std::less<G4int> > energyMap;
