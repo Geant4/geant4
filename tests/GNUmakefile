@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.37 2001-11-21 16:06:32 stesting Exp $
+# $Id: GNUmakefile,v 1.38 2001-11-21 22:05:53 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -65,7 +65,7 @@ SUBDIRS += test21 ## added nov 2001 (info to come).
 SUBDIRS += test22 ## added nov 2001 (info to come).
 
 # Tests with hadronic exercisers.
-HADEXERDIRS = test02 test11 test12 test13 test15 test16 test21 test22
+HADEXERDIRS = test02 test11 test12 test13 test15 test16 test21
 
 .PHONY : all examples_links clean clean_libs clean_examples_links
 
