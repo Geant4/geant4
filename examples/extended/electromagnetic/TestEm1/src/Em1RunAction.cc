@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: Em1RunAction.cc,v 1.11 2001-07-11 09:57:15 gunter Exp $
+// $Id: Em1RunAction.cc,v 1.12 2001-10-26 12:51:25 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // 08.03.01 Hisaya: adapted for STL   
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em1RunAction.hh"
 #include "Em1RunActionMessenger.hh"
@@ -46,7 +46,7 @@
  #include "CLHEP/Hist/HBookFile.h"
 #endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em1RunAction::Em1RunAction()
   : ProcCounter(0), saveRndm (1),
@@ -57,7 +57,7 @@ Em1RunAction::Em1RunAction()
 #endif 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em1RunAction::~Em1RunAction()
 {
@@ -65,7 +65,7 @@ Em1RunAction::~Em1RunAction()
  delete runMessenger;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em1RunAction::bookHisto()
 {
@@ -73,13 +73,16 @@ void Em1RunAction::bookHisto()
   hbookManager = new HBookFile("testem1.paw", 68);
 
   // booking histograms
-  histo[0] = hbookManager->histogram("track length (mm) of a charged particle",100,0.,50*cm);
-  histo[1] = hbookManager->histogram("Nb of steps per track (charged particle)",100,0.,100.);
-  histo[2] = hbookManager->histogram("step length (mm) charged particle",100,0.,10*mm);
+  histo[0] = hbookManager->histogram
+                       ("track length (mm) of a charged particle",100,0.,50*cm);
+  histo[1] = hbookManager->histogram
+                       ("Nb of steps per track (charged particle)",100,0.,100.);
+  histo[2] = hbookManager->histogram
+                       ("step length (mm) charged particle",100,0.,10*mm);
 #endif   
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em1RunAction::cleanHisto()
 {
@@ -91,7 +94,7 @@ void Em1RunAction::cleanHisto()
 #endif   
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em1RunAction::BeginOfRunAction(const G4Run* aRun)
 {  
@@ -117,7 +120,7 @@ void Em1RunAction::BeginOfRunAction(const G4Run* aRun)
     }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em1RunAction::CountProcesses(G4String procName)
 {
@@ -130,7 +133,7 @@ void Em1RunAction::CountProcesses(G4String procName)
    (*ProcCounter)[i]->Count();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em1RunAction::EndOfRunAction(const G4Run* aRun)
 {
@@ -143,21 +146,22 @@ void Em1RunAction::EndOfRunAction(const G4Run* aRun)
       G4int  oldprec = G4cout.precision(2);
       
       G4cout << "\n nb tracks/event"
-                      << "   neutral: " << G4std::setw(7) << NbOfTraks0/dNbOfEvents
-                      << "   charged: " << G4std::setw(7) << NbOfTraks1/dNbOfEvents
+             << "   neutral: " << G4std::setw(7) << NbOfTraks0/dNbOfEvents
+             << "   charged: " << G4std::setw(7) << NbOfTraks1/dNbOfEvents
              << "\n nb  steps/event"
-                      << "   neutral: " << G4std::setw(7) << NbOfSteps0/dNbOfEvents
-                      << "   charged: " << G4std::setw(7) << NbOfSteps1/dNbOfEvents
+             << "   neutral: " << G4std::setw(7) << NbOfSteps0/dNbOfEvents
+             << "   charged: " << G4std::setw(7) << NbOfSteps1/dNbOfEvents
              << G4endl;
       
       //frequency of processes call       
       G4cout << "\n nb of process calls per event: \n   ";       
-      for (G4int i=0; i< ProcCounter->size();i++)
+      for (size_t i=0; i< ProcCounter->size();i++)
            G4cout << G4std::setw(9) << (*ProcCounter)[i]->GetName();
            
       G4cout << "\n   ";       
-      for (G4int j=0; j< ProcCounter->size();j++)
-           G4cout << G4std::setw(9) << ((*ProcCounter)[j]->GetCounter())/dNbOfEvents;
+      for (size_t j=0; j< ProcCounter->size();j++)
+      G4cout << G4std::setw(9) << ((*ProcCounter)[j]->GetCounter())
+                                                               /dNbOfEvents;
       G4cout << G4endl;    
                          
       G4cout.setf(oldform,G4std::ios::floatfield);
@@ -183,4 +187,4 @@ void Em1RunAction::EndOfRunAction(const G4Run* aRun)
     }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

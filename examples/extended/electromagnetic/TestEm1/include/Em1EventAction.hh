@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em1EventAction.hh,v 1.3 2001-07-11 09:57:12 gunter Exp $
+// $Id: Em1EventAction.hh,v 1.4 2001-10-26 12:51:23 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em1EventAction_h
 #define Em1EventAction_h 1
@@ -38,7 +38,7 @@
 class Em1RunAction;
 class Em1EventActionMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em1EventAction : public G4UserEventAction
 {
@@ -63,6 +63,8 @@ class Em1EventAction : public G4UserEventAction
     G4int                     printModulo;                    
     Em1EventActionMessenger*  eventMessenger;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

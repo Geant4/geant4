@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em1PrimaryGeneratorAction.cc,v 1.3 2001-07-11 09:57:15 gunter Exp $
+// $Id: Em1PrimaryGeneratorAction.cc,v 1.4 2001-10-26 12:51:25 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em1PrimaryGeneratorAction.hh"
 
@@ -36,7 +36,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em1PrimaryGeneratorAction::Em1PrimaryGeneratorAction()
 {
@@ -53,19 +53,19 @@ Em1PrimaryGeneratorAction::Em1PrimaryGeneratorAction()
   particleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,0.*cm));
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em1PrimaryGeneratorAction::~Em1PrimaryGeneratorAction()
 {
   delete particleGun;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em1PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 { 
   particleGun->GeneratePrimaryVertex(anEvent);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

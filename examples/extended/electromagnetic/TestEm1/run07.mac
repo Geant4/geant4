@@ -1,4 +1,4 @@
-# $Id: run07.mac,v 1.1 1999-10-11 13:07:27 maire Exp $
+# $Id: run07.mac,v 1.2 2001-10-26 12:51:21 maire Exp $
 #
 # Macro file for "TestEm1.cc"
 # (can be run in batch, without graphic)
@@ -12,15 +12,12 @@
 /process/eLoss/StepFunction 0.183 170 micrometer
 /calor/cutG  95 cm
 /calor/cutE  30 mm
-/run/initialize
-/run/particle/dumpCutValues
 #
 /process/inactivate phot
 /process/inactivate compt
 /process/inactivate msc
 #
 /run/verbose 2
-/event/drawTracks none
 #
 /gun/particle gamma
 /gun/energy 100 MeV

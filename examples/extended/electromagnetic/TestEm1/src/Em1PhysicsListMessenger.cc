@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em1PhysicsListMessenger.cc,v 1.3 2001-07-11 09:57:15 gunter Exp $
+// $Id: Em1PhysicsListMessenger.cc,v 1.4 2001-10-26 12:51:25 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em1PhysicsListMessenger.hh"
 
@@ -35,7 +35,7 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em1PhysicsListMessenger::Em1PhysicsListMessenger(Em1PhysicsList* EvAct)
 :physList(EvAct)
@@ -76,7 +76,7 @@ Em1PhysicsListMessenger::Em1PhysicsListMessenger(Em1PhysicsList* EvAct)
   rCmd->AvailableForStates(Idle);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em1PhysicsListMessenger::~Em1PhysicsListMessenger()
 {
@@ -87,9 +87,10 @@ Em1PhysicsListMessenger::~Em1PhysicsListMessenger()
   delete eCmd;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em1PhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
+void Em1PhysicsListMessenger::SetNewValue(G4UIcommand* command,
+                                          G4String newValue)
 { 
   if(command == cutGCmd)
     {physList->SetGammaCut(cutGCmd->GetNewDoubleValue(newValue));}
@@ -104,4 +105,4 @@ void Em1PhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newValu
    
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

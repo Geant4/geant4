@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em1DetectorMessenger.hh,v 1.3 2001-07-11 09:57:12 gunter Exp $
+// $Id: Em1DetectorMessenger.hh,v 1.4 2001-10-26 12:51:23 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em1DetectorMessenger_h
 #define Em1DetectorMessenger_h 1
@@ -41,7 +41,7 @@ class G4UIcmdWithAString;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em1DetectorMessenger: public G4UImessenger
 {
@@ -62,6 +62,8 @@ class Em1DetectorMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* MagFieldCmd;
     G4UIcmdWithoutParameter*   UpdateCmd;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

@@ -7,14 +7,7 @@
 /control/verbose 2
 /run/verbose 2
 #
-####/run/initialize
-#
-####/process/eLoss/StepFunction 0.183  170 micrometer
-####/calor/cutG 2.2 mm
-####/calor/cutE 1.4 micrometer    #before beta03-00  (17.11.98)
-####/calor/cutE 6.05 micrometer     #from beta03-00  (17.11.98)
-####/run/initialize
-####/run/particle/dumpCutValues
+/run/initialize
 #
 # Create empty scene ("world" is default)
 /vis/scene/create
@@ -22,15 +15,21 @@
 # Create a scene handler for a specific graphics system
 # Edit the next line(s) to choose another graphic system
 #
-#/vis/open DAWNFILE
 /vis/open OGLIX
 #
+#/vis/open DAWNFILE
+#
 # Draw scene
-/vis/camera/zoom 1.4
-/vis/drawVolume
+/vis/viewer/zoom 1.4
+#
+# flush visualisation
+/vis/viewer/refresh
+/vis/viewer/update
 #
 # for drawing the tracks
 # if too many tracks cause core dump => storeTrajectory 0
 /tracking/storeTrajectory 1
+/vis/scene/endOfEventAction accumulate
+#
 /event/drawTracks all
 

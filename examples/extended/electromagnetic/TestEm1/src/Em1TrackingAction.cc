@@ -22,13 +22,13 @@
 //
 
 //
-// $Id: Em1TrackingAction.cc,v 1.6 2001-07-11 09:57:17 gunter Exp $
+// $Id: Em1TrackingAction.cc,v 1.7 2001-10-26 12:51:26 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em1TrackingAction.hh"
 #include "Em1RunAction.hh"
@@ -39,13 +39,13 @@
  #include "CLHEP/Hist/HBookFile.h"
 #endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em1TrackingAction::Em1TrackingAction(Em1RunAction* RunAct)
 :runAction(RunAct)
 { }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em1TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 {
@@ -65,4 +65,5 @@ void Em1TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   }    
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em1RunAction.hh,v 1.6 2001-07-11 09:57:12 gunter Exp $
+// $Id: Em1RunAction.hh,v 1.7 2001-10-26 12:51:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em1RunAction_h
 #define Em1RunAction_h 1
@@ -36,7 +36,7 @@
 #include "ProcessesCount.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4Run;
 class Em1RunActionMessenger;
@@ -77,16 +77,18 @@ class Em1RunAction : public G4UserRunAction
   private:
     G4int NbOfTraks0, NbOfTraks1;
     G4int NbOfSteps0, NbOfSteps1;
-    ProcessesCount*   ProcCounter;
-
-    Em1RunActionMessenger* runMessenger;    
+    ProcessesCount*   ProcCounter;   
     G4int saveRndm;
+    
+    Em1RunActionMessenger* runMessenger;    
     
 #ifndef G4NOHIST       
     HepTupleManager* hbookManager;
     HepHistogram* histo[3];
 #endif                     
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

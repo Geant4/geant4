@@ -21,16 +21,16 @@
 // ********************************************************************
 //
 //
-// $Id: ProcessesCount.hh,v 1.6 2001-07-11 09:57:13 gunter Exp $
+// $Id: ProcessesCount.hh,v 1.7 2001-10-26 12:51:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // 08.03.01 Hisaya: adapted for STL   
 // 26.10.98 mma   : first version
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef ProcessesCount_HH
 #define ProcessesCount_HH
@@ -38,7 +38,7 @@
 #include "globals.hh"
 #include "g4std/vector"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class OneProcessCount
 {
@@ -56,8 +56,7 @@ private:
     G4int    Counter;         // process counter
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 typedef G4std::vector<OneProcessCount*> ProcessesCount;
 

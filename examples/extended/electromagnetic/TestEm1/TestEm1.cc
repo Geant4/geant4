@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm1.cc,v 1.5 2001-07-11 09:57:11 gunter Exp $
+// $Id: TestEm1.cc,v 1.6 2001-10-26 12:51:21 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
 #define Em1NoOptimize 1
 
@@ -51,7 +51,7 @@
  #endif
 #endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 int main(int argc,char** argv) {
  
@@ -86,10 +86,7 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(new Em1TrackingAction(RunAct));
   runManager->SetUserAction(new Em1SteppingAction(RunAct,EvtAct));
 #endif
-  
-  //Initialize G4 kernel
-  runManager->Initialize();
-    
+   
   // get the pointer to the User Interface manager 
     G4UImanager* UI = G4UImanager::GetUIpointer();  
 
@@ -101,7 +98,6 @@ int main(int argc,char** argv) {
 #else
       session = new G4UIterminal();
 #endif     
-     UI->ApplyCommand("/control/execute init.mac");    
      session->SessionStart();
      delete session;
     }
@@ -124,4 +120,4 @@ int main(int argc,char** argv) {
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 

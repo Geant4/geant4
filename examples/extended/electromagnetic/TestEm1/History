@@ -1,4 +1,4 @@
-$Id: History,v 1.12 2001-10-19 05:40:14 stesting Exp $
+$Id: History,v 1.13 2001-10-26 12:51:20 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,67 +15,72 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
-Oct 19, 2001  Steve O'Neale (examples-V03-02-00)
+26-10-01 mma (testem1-V03-02-00)
+- mods in TestEm1.cc: the initialisation and vis initialisation are
+  not done gy default. --> inserted /run/initialize in all macros.
+- To get visualisation: > /control/execute vis.mac  (new vis commands)
+- 80 columns everywhere  
+     
+19-10-01 Steve O'Neale (examples-V03-02-00)
 - Update reference output
 
-27-03-01  mma (testem1-V03-00-05)
-	  - set cppflag G4NOHIST = true in gnumakefile
+27-03-01 mma (testem1-V03-00-05)
+- set cppflag G4NOHIST = true in gnumakefile
 	  	       
-08-03-01  Hisaya (testem1-V03-00-04)
-          - adapted ProcessesCount to STL
+08-03-01 Hisaya (testem1-V03-00-04)
+- adapted ProcessesCount to STL
 	       
-21-02-01  mma (testem1-V03-00-03)
-          - hbook histograms restored
+21-02-01 mma (testem1-V03-00-03)
+- hbook histograms restored
 	       
-20-02-01  mma (testem1-V03-00-02)
-          - verbose stepping adapted for STL
-	  - save rndm at begin of event     
+20-02-01 mma (testem1-V03-00-02)
+- verbose stepping adapted for STL
+- save rndm at begin of event     
      
-07-12-00  mma (testem1-V02-00-03 & testem-noHist)
-          remove hbook histograms: GNUmakefile,runAction,trackingAction,
-	                           steppingAction
+07-12-00 mma (testem1-V02-00-03 & testem-noHist)
+- remove hbook histograms: GNUmakefile,runAction,trackingAction,steppingAction
 				   
-06-12-00  mma (testem1-V02-00-02 & testem-withHist)
-          update of init.mac for new vis commands.
-	  G4UItcsh in the main()
+06-12-00 mma (testem1-V02-00-02 & testem-withHist)
+- update of init.mac for new vis commands.
+- G4UItcsh in the main()
 	  				        
-24-11-00  Steve O'Neale (tagset210) (testem1-V02-00-01)
-          Update test output Change in processes below ~ 5 per cent
-          eIoni and hIoni  min.delta energy(keV) and energy cut table
+24-11-00 Steve O'Neale (tagset210) (testem1-V02-00-01)
+- Update test output Change in processes below ~ 5 per cent
+  eIoni and hIoni  min.delta energy(keV) and energy cut table
 
-13-11-00  G.Cosmo  (testem1-V02-00-00)
-          Fixed memory leak in Em1RunAction: added call to clearAndDestroy()
-	  in EndOfRunAction() to clean ProcCounter vector.
+13-11-00 G.Cosmo  (testem1-V02-00-00)
+- Fixed memory leak in Em1RunAction: added call to clearAndDestroy()
+  in EndOfRunAction() to clean ProcCounter vector.
 
-17-06-00  J.Allison  (testem1-V01-00-00)
-          Updated TestEm1.out for geant4-01-01-ref-06.
+17-06-00 J.Allison  (testem1-V01-00-00)
+- Updated TestEm1.out for geant4-01-01-ref-06.
 
-21-01-00  cppflag G4NOHIST to protect hbook histograms.
+21-01-00 cppflag G4NOHIST to protect hbook histograms.
           
-11-10-99  moved from: source/processes/electromagnetic/test
-          to: examples/extended/electromagnetic
+11-10-99 moved from: source/processes/electromagnetic/test
+         to: examples/extended/electromagnetic
      
-09-08-99  Commands for save/read Rndm status 
+09-08-99 Commands for save/read Rndm status 
       
-17-06-99  added histogramming facility
+17-06-99 added histogramming facility
      
-10-05-99  user's actions adapted to geant4-00-ref-04
+10-05-99 user's actions adapted to geant4-00-ref-04
      
-03-12-98  subdirectory geant3 which contains the geant3 equivalent
-          example.
+03-12-98 subdirectory geant3 which contains the geant3 equivalent
+         example.
           
-24.11.98  due to new computation of SetCut for electron, the cut in range
-          for e-/+ has been modified in init.mac and run10.mac (beta03-00)
+24.11.98 due to new computation of SetCut for electron, the cut in range
+         for e-/+ has been modified in init.mac and run10.mac (beta03-00)
      
-27.10.98  interactive command for setting StepFunction: deemax + stmin.
-          modifs in setxxCut functions (Hisaya).
-          Count occurence of processes.
-          Now TestEm1 is equivalent to g3-testem1
-          Both can be run in batch with reference files: 
-          run1.mac (g4), run1.dat (g3).
+27.10.98 interactive command for setting StepFunction: deemax + stmin.
+         modifs in setxxCut functions (Hisaya).
+         Count occurence of processes.
+         Now TestEm1 is equivalent to g3-testem1
+         Both can be run in batch with reference files: 
+         run1.mac (g4), run1.dat (g3).
                
-19.10.98  Moved in subdirectory electromagnetic/test/TestEm1.
-          Interactive commands in PhysicsList for setting cuts.
+19.10.98 Moved in subdirectory electromagnetic/test/TestEm1.
+         Interactive commands in PhysicsList for setting cuts.
               
-14.09.98  Created, Michel Maire
+14.09.98 Created, Michel Maire
      

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em1DetectorMessenger.cc,v 1.3 2001-07-11 09:57:14 gunter Exp $
+// $Id: Em1DetectorMessenger.cc,v 1.4 2001-10-26 12:51:25 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em1DetectorMessenger.hh"
 
@@ -37,7 +37,7 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em1DetectorMessenger::Em1DetectorMessenger(Em1DetectorConstruction * Em1Det)
 :Em1Detector(Em1Det)
@@ -48,21 +48,21 @@ Em1DetectorMessenger::Em1DetectorMessenger(Em1DetectorConstruction * Em1Det)
   MaterCmd = new G4UIcmdWithAString("/calor/setMat",this);
   MaterCmd->SetGuidance("Select material of the box.");
   MaterCmd->SetParameterName("choice",false);
-  MaterCmd->AvailableForStates(Idle);
+  MaterCmd->AvailableForStates(PreInit,Idle);
   
   SizeCmd = new G4UIcmdWithADoubleAndUnit("/calor/setSize",this);
   SizeCmd->SetGuidance("Set size of the box");
   SizeCmd->SetParameterName("Size",false);
   SizeCmd->SetRange("Size>0.");
   SizeCmd->SetUnitCategory("Length");
-  SizeCmd->AvailableForStates(Idle);
+  SizeCmd->AvailableForStates(PreInit,Idle);
       
   MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/calor/setField",this);  
   MagFieldCmd->SetGuidance("Define magnetic field.");
   MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
   MagFieldCmd->SetParameterName("Bz",false);
   MagFieldCmd->SetUnitCategory("Magnetic flux density");
-  MagFieldCmd->AvailableForStates(Idle);
+  MagFieldCmd->AvailableForStates(PreInit,Idle);
     
   UpdateCmd = new G4UIcmdWithoutParameter("/calor/update",this);
   UpdateCmd->SetGuidance("Update calorimeter geometry.");
@@ -71,7 +71,7 @@ Em1DetectorMessenger::Em1DetectorMessenger(Em1DetectorConstruction * Em1Det)
   UpdateCmd->AvailableForStates(Idle);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em1DetectorMessenger::~Em1DetectorMessenger()
 {
@@ -82,7 +82,7 @@ Em1DetectorMessenger::~Em1DetectorMessenger()
   delete Em1detDir;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em1DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
@@ -99,4 +99,4 @@ void Em1DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
    { Em1Detector->UpdateGeometry(); }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

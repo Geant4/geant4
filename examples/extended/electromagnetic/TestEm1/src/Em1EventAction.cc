@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em1EventAction.cc,v 1.4 2001-07-11 09:57:14 gunter Exp $
+// $Id: Em1EventAction.cc,v 1.5 2001-10-26 12:51:25 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em1EventAction.hh"
 
@@ -43,7 +43,7 @@
 #include "G4UnitsTable.hh"
 #include "Randomize.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em1EventAction::Em1EventAction(Em1RunAction* run)
 :Em1Run(run),drawFlag("all"),printModulo(10000),eventMessenger(NULL)
@@ -51,14 +51,14 @@ Em1EventAction::Em1EventAction(Em1RunAction* run)
   eventMessenger = new Em1EventActionMessenger(this);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em1EventAction::~Em1EventAction()
 {
   delete eventMessenger;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em1EventAction::BeginOfEventAction(const G4Event* evt)
 {
@@ -79,7 +79,7 @@ void Em1EventAction::BeginOfEventAction(const G4Event* evt)
  TotalEnergyDeposit = 0.;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em1EventAction::EndOfEventAction(const G4Event* evt)
 {
@@ -94,7 +94,8 @@ void Em1EventAction::EndOfEventAction(const G4Event* evt)
    G4int n_trajectories = 0;
    if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();  
    for(G4int i=0; i<n_trajectories; i++) 
-      { G4Trajectory* trj = (G4Trajectory*)((*(evt->GetTrajectoryContainer()))[i]);
+      { G4Trajectory* trj = (G4Trajectory*)
+                                       ((*(evt->GetTrajectoryContainer()))[i]);
         if (drawFlag == "all") trj->DrawTrajectory(50);
         else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
                                trj->DrawTrajectory(50); 
@@ -102,6 +103,6 @@ void Em1EventAction::EndOfEventAction(const G4Event* evt)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 

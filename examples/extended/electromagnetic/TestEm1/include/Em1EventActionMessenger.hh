@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em1EventActionMessenger.hh,v 1.3 2001-07-11 09:57:12 gunter Exp $
+// $Id: Em1EventActionMessenger.hh,v 1.4 2001-10-26 12:51:23 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em1EventActionMessenger_h
 #define Em1EventActionMessenger_h 1
@@ -39,7 +39,7 @@ class Em1EventAction;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em1EventActionMessenger: public G4UImessenger
 {
@@ -54,5 +54,7 @@ class Em1EventActionMessenger: public G4UImessenger
     G4UIcmdWithAString* DrawCmd;
     G4UIcmdWithAnInteger* PrintCmd;    
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em1PhysicsList.hh,v 1.3 2001-07-11 09:57:12 gunter Exp $
+// $Id: Em1PhysicsList.hh,v 1.4 2001-10-26 12:51:23 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em1PhysicsList_h
 #define Em1PhysicsList_h 1
@@ -38,7 +38,7 @@
 class Em1DetectorConstruction;
 class Em1PhysicsListMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em1PhysicsList: public G4VUserPhysicsList
 {
@@ -77,6 +77,8 @@ class Em1PhysicsList: public G4VUserPhysicsList
     G4double cutForProton;
 
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em1RunActionMessenger.hh,v 1.3 2001-07-11 09:57:12 gunter Exp $
+// $Id: Em1RunActionMessenger.hh,v 1.4 2001-10-26 12:51:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em1RunActionMessenger_h
 #define Em1RunActionMessenger_h 1
@@ -40,7 +40,7 @@ class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em1RunActionMessenger: public G4UImessenger
 {
@@ -57,5 +57,7 @@ class Em1RunActionMessenger: public G4UImessenger
     G4UIcmdWithAString*    RndmReadCmd;
     
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

@@ -22,13 +22,13 @@
 //
 
 //
-// $Id: Em1DetectorConstruction.cc,v 1.5 2001-07-11 09:57:14 gunter Exp $
+// $Id: Em1DetectorConstruction.cc,v 1.6 2001-10-26 12:51:25 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em1DetectorConstruction.hh"
 #include "Em1DetectorMessenger.hh"
@@ -49,7 +49,7 @@
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em1DetectorConstruction::Em1DetectorConstruction()
 :pBox     (NULL), lBox (NULL),
@@ -60,12 +60,12 @@ Em1DetectorConstruction::Em1DetectorConstruction()
   detectorMessenger = new Em1DetectorMessenger(this);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em1DetectorConstruction::~Em1DetectorConstruction()
 { delete detectorMessenger;}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume* Em1DetectorConstruction::Construct()
 {
@@ -74,7 +74,7 @@ G4VPhysicalVolume* Em1DetectorConstruction::Construct()
   return ConstructVolumes();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em1DetectorConstruction::DefineMaterials()
 { 
@@ -148,7 +148,7 @@ G4cout << *(G4Material::GetMaterialTable()) << G4endl;
   aMaterial = Al;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
 G4VPhysicalVolume* Em1DetectorConstruction::ConstructVolumes()
 {    
@@ -184,7 +184,7 @@ G4VPhysicalVolume* Em1DetectorConstruction::ConstructVolumes()
   return pBox;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em1DetectorConstruction::PrintParameters()
 {
@@ -192,7 +192,7 @@ void Em1DetectorConstruction::PrintParameters()
          << " of " << aMaterial->GetName() << G4endl;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em1DetectorConstruction::SetMaterial(G4String materialChoice)
 {
@@ -204,14 +204,14 @@ void Em1DetectorConstruction::SetMaterial(G4String materialChoice)
      }             
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em1DetectorConstruction::SetSize(G4double value)
 {
   BoxSize = value;
 }  
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em1DetectorConstruction::SetMagField(G4double fieldValue)
 {
@@ -234,11 +234,11 @@ void Em1DetectorConstruction::SetMagField(G4double fieldValue)
     }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
 void Em1DetectorConstruction::UpdateGeometry()
 {
   G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
