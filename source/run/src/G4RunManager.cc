@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.54 2002-12-12 08:33:51 gcosmo Exp $
+// $Id: G4RunManager.cc,v 1.55 2002-12-16 11:33:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,6 +43,10 @@
 #include "G4SDManager.hh"
 #include "G4TransportationManager.hh"
 #include "G4VPhysicalVolume.hh"
+#include "G4LogicalVolume.hh"
+#include "G4Region.hh"
+#include "G4RegionStore.hh"
+#include "G4ProductionCutsTable.hh"
 #include "G4ApplicationState.hh"
 #include "G4StateManager.hh"
 #include "G4VPersistencyManager.hh"
@@ -83,7 +87,7 @@ G4RunManager::G4RunManager()
  geometryNeedsToBeClosed(true),runAborted(false),initializedAtLeastOnce(false),
  geometryToBeOptimized(true),runIDCounter(0),verboseLevel(0),DCtable(0),
  currentRun(0),currentEvent(0),n_perviousEventsToBeStored(0),
- storeRandomNumberStatus(false)
+ storeRandomNumberStatus(false),currentWorld(0)
 {
   defaultExceptionHandler = new G4ExceptionHandler();
   if(fRunManager)
@@ -94,6 +98,8 @@ G4RunManager::G4RunManager()
   timer = new G4Timer();
   runMessenger = new G4RunMessenger(this);
   previousEvents = new G4std::vector<G4Event*>;
+  defaultRegion = new G4Region("DefaultRegionForTheWorld");
+  defaultRegion->SetProductionCuts(G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
   G4ParticleTable::GetParticleTable()->CreateMessenger();
   G4ProcessTable::GetProcessTable()->CreateMessenger();
   randomNumberStatusDir = "./";
@@ -405,6 +411,14 @@ void G4RunManager::InitializeCutOff()
   {
     if(verboseLevel>1) G4cout << "physicsList->setCut() start." << G4endl;
     physicsList->SetCuts();
+    if(G4ProductionCutsTable::GetProductionCutsTable()->IsModified())
+    {
+      G4ProductionCutsTable::GetProductionCutsTable()->UpdateCoupleTable();
+      physicsList->BuildPhysicsTable();
+      G4ProductionCutsTable::GetProductionCutsTable()->UpdateCutsValues();
+      G4ProductionCutsTable::GetProductionCutsTable()->PhysicsTableUpdated();
+      physicsList->DumpCutValuesTable();
+    }
   }
   cutoffInitialized = true;
 }
@@ -447,6 +461,35 @@ void G4RunManager::AbortEvent()
 
 void G4RunManager::DefineWorldVolume(G4VPhysicalVolume* worldVol)
 {
+  // check if this is different from previous
+  if(currentWorld==worldVol) return;
+  // The world volume MUST NOT have a region defined by the user.
+  if(worldVol->GetLogicalVolume()->GetRegion())
+  {
+    G4cerr << "The world volume has a user-defined region <" 
+           << worldVol->GetLogicalVolume()->GetRegion()->GetName()
+           << ">." << G4endl;
+    G4Exception("G4RunManager::DefineWorldVolume",
+                "RUN:WorldHasUserDefinedRegion",
+                FatalException,
+                "World would have a default region assigned by RunManager.");
+  }
+
+  // Check if this is not the first time, i.e. replacing the world
+  if(currentWorld)
+  {
+    defaultRegion->RemoveRootLogicalVolume(currentWorld->GetLogicalVolume());
+  }
+
+  // set the default region to the world
+  currentWorld = worldVol; 
+  G4LogicalVolume* worldLog = currentWorld->GetLogicalVolume();
+  worldLog->SetRegion(defaultRegion);
+  defaultRegion->AddRootLogicalVolume(worldLog);
+
+  // Let G4RegionStore scan materials
+  G4RegionStore::GetInstance()->UpdateMaterialList();
+
   // set the world volume to the Navigator
   G4TransportationManager::GetTransportationManager()
     ->GetNavigatorForTracking()
