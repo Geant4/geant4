@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastStep.cc,v 1.1 1999-01-07 16:14:06 gunter Exp $
+// $Id: G4FastStep.cc,v 1.2 1999-04-14 14:25:35 mora Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //$Id:
@@ -238,7 +238,6 @@ void G4FastStep::Initialize(const G4Track&) {
 
 G4FastStep::G4FastStep():G4VParticleChange()
 {
-  debugFlag = true;
   if (verboseLevel>2) {
     G4cerr << "G4FastStep::G4FastStep() " << endl;
   }
@@ -262,22 +261,27 @@ G4FastStep & G4FastStep::operator=(const G4FastStep &right)
 {
    if (this != &right)
    {
-      theListOfSecondaries          = right.theListOfSecondaries;
-      theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
-      theNumberOfSecondaries        = right.theNumberOfSecondaries;
-      theStatusChange               = right.theStatusChange;
-      theMomentumChange             = right.theMomentumChange;
-      thePolarizationChange         = right.thePolarizationChange;
-      thePositionChange             = right.thePositionChange;
-      theTimeChange                 = right.theTimeChange;
-      theEnergyChange               = right.theEnergyChange;
-      theTrueStepLength             = right.theTrueStepLength;
-      theLocalEnergyDeposit         = right.theLocalEnergyDeposit;
-      theSteppingControlFlag        = right.theSteppingControlFlag;
-      theWeightChange               = right.theWeightChange;
+     G4VParticleChange::operator=(right);
+     theListOfSecondaries          = right.theListOfSecondaries;
+     theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
+     theNumberOfSecondaries        = right.theNumberOfSecondaries;
+     theStatusChange               = right.theStatusChange;
+     theMomentumChange             = right.theMomentumChange;
+     thePolarizationChange         = right.thePolarizationChange;
+     thePositionChange             = right.thePositionChange;
+     theTimeChange                 = right.theTimeChange;
+     theEnergyChange               = right.theEnergyChange;
+     theTrueStepLength             = right.theTrueStepLength;
+     theLocalEnergyDeposit         = right.theLocalEnergyDeposit;
+     theSteppingControlFlag        = right.theSteppingControlFlag;
+     theWeightChange               = right.theWeightChange;
    }
    return *this;
 }
+
+
+
+
 
 G4bool G4FastStep::operator==(const G4FastStep &right) const
 {
@@ -323,9 +327,11 @@ G4Step* G4FastStep::UpdateStepForPostStep(G4Step* pStep)
   // update weight
   pPostStepPoint->SetWeight( theWeightChange );
 
-
-  if (debugFlag) CheckIt(*aTrack);
-
+  //#define FAST_STEP_DEBUG 1
+#ifdef FAST_STEP_DEBUG
+  CheckIt(*aTrack);
+#endif
+  
   //  Update the G4Step specific attributes 
   return UpdateStepInfo(pStep);
 }
@@ -356,8 +362,9 @@ G4Step* G4FastStep::UpdateStepForAtRest(G4Step* pStep)
   // update weight
   pPostStepPoint->SetWeight( theWeightChange );
 
-
-  if (debugFlag) CheckIt(*aTrack);
+#ifdef FAST_STEP_DEBUG
+  CheckIt(*aTrack);
+#endif
 
   //  Update the G4Step specific attributes 
   return UpdateStepInfo(pStep);
@@ -411,40 +418,44 @@ void G4FastStep::DumpInfo() const
        << endl;
 }
 
-G4bool G4FastStep::CheckIt(const G4Track& aTrack)
+#ifdef FAST_STEP_DEBUG
+void G4FastStep::CheckIt(const G4Track& aTrack)
 {
   G4bool    itsOK = true;
   if (theEnergyChange > aTrack.GetKineticEnergy()) {
     G4cout << " !!! the energy becomes larger than the initial energy !!!"
-         << " :  " << (theEnergyChange -aTrack.GetKineticEnergy())/MeV
-         << "MeV " <<endl;
+	   << " :  " << (theEnergyChange -aTrack.GetKineticEnergy())/MeV
+	   << "MeV " <<endl;
     itsOK = false;
   }
   if ( (theEnergyChange >0.) && 
-        ( abs(theMomentumChange.mag2()-1.0) > 1.0e-5 ) ){
+       ( abs(theMomentumChange.mag2()-1.0) > 1.0e-5 ) ){
     G4cout << " !!! the Momentum Change is not unit vector !!!!"
-         << " :  " << theMomentumChange.mag()
-         << endl;
+	   << " :  " << theMomentumChange.mag()
+	   << endl;
     itsOK = false;
   }
   if (theTimeChange < aTrack.GetGlobalTime()) {
     G4cout << " !!! the global time goes back  !!!"
-         << " :  " << aTrack.GetGlobalTime()/ns
-         << " -> " << theTimeChange/ns
-         << "[ns] " <<endl;
+	   << " :  " << aTrack.GetGlobalTime()/ns
+	   << " -> " << theTimeChange/ns
+	   << "[ns] " <<endl;
     itsOK = false;
   }
   if (theProperTimeChange < aTrack.GetProperTime()) {
     G4cout << " !!! the poper time goes back  !!!"
-         << " :  " << aTrack.GetProperTime()/ns
-         << " -> " << theProperTimeChange/ns
-         << "[ns] " <<endl;
+	   << " :  " << aTrack.GetProperTime()/ns
+	   << " -> " << theProperTimeChange/ns
+	   << "[ns] " <<endl;
     itsOK = false;
   }
+  
   if (!itsOK) { 
     G4cout << " G4FastStep::CheckIt " <<endl;
     G4cout << " pointer : " << this <<endl ;
     DumpInfo();
+    G4Exception("\nG4FastStep was compiled with FAST_STEP_DEBUG option.\nG4FastStep::CheckIt detected a fatal error. \nPlease report the problem via the Geant4 Web site,\naddress http://wwwinfo.cern.ch/asd/geant4.");
   }
-  return itsOK;
 }
+
+#endif

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastSimulationManager.hh,v 1.1 1999-01-07 16:14:03 gunter Exp $
+// $Id: G4FastSimulationManager.hh,v 1.2 1999-04-14 14:25:23 mora Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -114,17 +114,14 @@ public:
   //----------------------------------------------
   // Trigger
   G4bool PostStepGetFastSimulationManagerTrigger(const G4Track &,
-					 const G4Navigator* a = NULL);
+					 const G4Navigator* a = 0);
   // DoIt
-  void InvokePostStepDoIt();
+  G4VParticleChange* InvokePostStepDoIt();
 
   // AtRest methods:
   G4bool AtRestGetFastSimulationManagerTrigger(const G4Track &,
-					       const G4Navigator* a = NULL);
-  void InvokeAtRestDoIt();
-
-  //Final G4VParticleChange* to return to the Stepping.
-  G4VParticleChange* GettheParticleChange();
+					       const G4Navigator* a = 0);
+  G4VParticleChange*  InvokeAtRestDoIt();
 
   // For RW management
   G4bool operator == ( const G4FastSimulationManager&) const;
@@ -147,7 +144,7 @@ G4FastSimulationManager::AddFastSimulationModel(G4VFastSimulationModel* fsm)
 {
   ModelList.insert(fsm);
   // forces the fApplicableModelList to be rebuild
-  fLastCrossedParticle=NULL;
+  fLastCrossedParticle = 0;
 }
 
 inline void 
@@ -155,12 +152,7 @@ G4FastSimulationManager::RemoveFastSimulationModel(G4VFastSimulationModel* fsm)
 {
   if(!ModelList.remove(fsm)) fInactivatedModels.remove(fsm);
   // forces the fApplicableModelList to be rebuild
-  fLastCrossedParticle=NULL;
-}
-
-inline G4VParticleChange* G4FastSimulationManager::GettheParticleChange()
-{
-  return &fFastStep;
+  fLastCrossedParticle = 0;
 }
 
 inline G4bool 

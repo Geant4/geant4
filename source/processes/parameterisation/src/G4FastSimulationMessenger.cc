@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastSimulationMessenger.cc,v 1.1 1999-01-07 16:14:05 gunter Exp $
+// $Id: G4FastSimulationMessenger.cc,v 1.2 1999-04-14 14:25:35 mora Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -60,11 +60,17 @@ G4FastSimulationMessenger(G4GlobalFastSimulationManager* theGFSM)
 G4FastSimulationMessenger::~G4FastSimulationMessenger()
 {
   delete fListIsApplicableCmd;
+  fListIsApplicableCmd = 0;
   delete fActivateModel;
+  fActivateModel = 0;
   delete fInActivateModel;
+  fInActivateModel = 0;
   delete fListModelsCmd;
+  fListModelsCmd = 0;
   delete fListEnvelopesCmd;
+  fListEnvelopesCmd = 0;
   delete fFSDirectory;
+  fFSDirectory = 0;
 }
 
 void G4FastSimulationMessenger::SetNewValue(G4UIcommand * command,G4String newValue)

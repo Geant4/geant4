@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastStep.hh,v 1.1 1999-01-07 16:14:03 gunter Exp $
+// $Id: G4FastStep.hh,v 1.2 1999-04-14 14:25:26 mora Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -212,7 +212,7 @@ public:
   // Constructor/Destructor
   //------------------------
   G4FastStep();
-  ~G4FastStep();
+  virtual ~G4FastStep();
   
   // equal/unequal operator
   G4bool operator==(const G4FastStep &right) const;
@@ -302,8 +302,7 @@ private:
 public:
   // for Debug 
   void DumpInfo() const;
-  G4bool debugFlag;
-  G4bool CheckIt(const G4Track&);
+  void CheckIt(const G4Track&);
 };
 
 //*******************************************************************

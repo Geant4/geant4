@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastSimulationMessenger.hh,v 1.1 1999-01-07 16:14:03 gunter Exp $
+// $Id: G4FastSimulationMessenger.hh,v 1.2 1999-04-14 14:25:24 mora Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,7 +36,7 @@ class G4FastSimulationMessenger: public G4UImessenger
 {
 public:
   G4FastSimulationMessenger(G4GlobalFastSimulationManager* theGFSM);
-  ~G4FastSimulationMessenger();
+  virtual ~G4FastSimulationMessenger();
   
 public:
   void SetNewValue(G4UIcommand * command,G4String newValues);

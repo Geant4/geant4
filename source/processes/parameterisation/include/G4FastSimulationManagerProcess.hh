@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastSimulationManagerProcess.hh,v 1.1 1999-01-07 16:14:03 gunter Exp $
+// $Id: G4FastSimulationManagerProcess.hh,v 1.2 1999-04-14 14:25:24 mora Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,7 +62,7 @@ public:
 				 "G4FastSimulationManagerProcess",
 				 G4ProcessType
 				 theType = fParameterisation);
-  ~G4FastSimulationManagerProcess();
+  virtual ~G4FastSimulationManagerProcess();
   
   //--------------------------------------------------------------
   //     Process interface

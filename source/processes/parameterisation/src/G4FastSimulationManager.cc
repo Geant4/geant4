@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastSimulationManager.cc,v 1.1 1999-01-07 16:14:05 gunter Exp $
+// $Id: G4FastSimulationManager.cc,v 1.2 1999-04-14 14:25:31 mora Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //$Id:
@@ -32,8 +32,8 @@
 G4FastSimulationManager::
 G4FastSimulationManager(G4Envelope *anEnvelope,
 			G4bool IsUnique) :
-  fFastTrack(anEnvelope,IsUnique),fTriggedFastSimulationModel(NULL),
-  fLastCrossedParticle(NULL)
+  fFastTrack(anEnvelope,IsUnique),fTriggedFastSimulationModel(0),
+  fLastCrossedParticle(0)
 {
   // Communicates to the Logical Volume that it becomes a
   // envelope and with this fast simulation manager.
@@ -81,7 +81,7 @@ G4FastSimulationManager::ActivateFastSimulationModel(const G4String& aName)
       ModelList.
 	insert(fInactivatedModels.removeAt(iModel));
       // forces the fApplicableModelList to be rebuild
-      fLastCrossedParticle=NULL;
+      fLastCrossedParticle=0;
       return true;
     }
   return false;
@@ -97,7 +97,7 @@ G4FastSimulationManager::InActivateFastSimulationModel(const G4String& aName)
       fInactivatedModels.
 	insert(ModelList.removeAt(iModel));
       // forces the fApplicableModelList to be rebuild
-      fLastCrossedParticle=NULL;
+      fLastCrossedParticle=0;
       return true;
     }
   return false;
@@ -131,7 +131,7 @@ G4bool
 G4FastSimulationManager::RemoveGhostPlacement(const G4Transform3D *trans3d)
 {
   G4bool found;
-  if((found=(GhostPlacements.remove(trans3d) != NULL)))
+  if((found=(GhostPlacements.remove(trans3d) != 0)))
     G4GlobalFastSimulationManager::GetGlobalFastSimulationManager()->
       FastSimulationNeedsToBeClosed();
   return found;
@@ -217,10 +217,11 @@ PostStepGetFastSimulationManagerTrigger(const G4Track& track,
   return false;
 }
 
-void G4FastSimulationManager::InvokePostStepDoIt() 
+G4VParticleChange* G4FastSimulationManager::InvokePostStepDoIt() 
 {
   //  const G4FastTrack& parFastTrack=fFastTrack;
   fTriggedFastSimulationModel->DoIt(fFastTrack,fFastStep);
+  return &fFastStep;
 }
 
 // -------------------------------------------------------------
@@ -268,11 +269,12 @@ G4FastSimulationManager::AtRestGetFastSimulationManagerTrigger(const G4Track& tr
   return false;
 }
 
-void G4FastSimulationManager::InvokeAtRestDoIt() 
+G4VParticleChange* G4FastSimulationManager::InvokeAtRestDoIt() 
 {
   fTriggedFastSimulationModel->AtRestDoIt(fFastTrack,fFastStep);
+  return &fFastStep;
 }
-  
+
 G4bool 
 G4FastSimulationManager::
 InsertGhostHereIfNecessary(G4VPhysicalVolume* theClone,

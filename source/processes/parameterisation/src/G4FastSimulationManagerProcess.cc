@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastSimulationManagerProcess.cc,v 1.1 1999-01-07 16:14:05 gunter Exp $
+// $Id: G4FastSimulationManagerProcess.cc,v 1.2 1999-04-14 14:25:34 mora Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -53,7 +53,9 @@ G4FastSimulationManagerProcess(const G4String& processName,
 G4FastSimulationManagerProcess::~G4FastSimulationManagerProcess()
 {
   delete fGhostTouchable;
+  fGhostTouchable = 0;
   delete fGhostFieldPropagator;
+  fGhostFieldPropagator = 0;
 }
 
 
@@ -110,7 +112,7 @@ G4FastSimulationManagerProcess::PostStepGetPhysicalInteractionLength(
 	G4GlobalFastSimulationManager::GetGlobalFastSimulationManager()->
 	GetFlavoredWorldForThis(track.GetDynamicParticle()->GetDefinition());
 
-      fGhostWorld               = NULL;
+      fGhostWorld               = 0;
       if (flavoredWorld)
 	fGhostWorld             = flavoredWorld->GetThePhysicalVolumeWorld();
 
@@ -182,7 +184,7 @@ G4FastSimulationManagerProcess::PostStepGetPhysicalInteractionLength(
 						  track.GetMomentumDirection(),
 						  fGhostTouchable);
 	    }
-	  fOutOfGhostWorld = (fGhostTouchable->GetVolume() == NULL);
+	  fOutOfGhostWorld = (fGhostTouchable->GetVolume() == 0);
 	}
       else if (previousStepSize > 0.0)
 	{
@@ -237,9 +239,10 @@ G4VParticleChange* G4FastSimulationManagerProcess::PostStepDoIt(
   if (fFastSimulationTrigger) 
     {
       // Executes the ParameterisedSimulation code.
-      fFastSimulationManager->InvokePostStepDoIt();
-      // Gets the ParameterisedSimulation response.
-      G4VParticleChange* Response=fFastSimulationManager->GettheParticleChange();
+      // and gets the ParameterisedSimulation response.
+      G4VParticleChange* Response=
+	fFastSimulationManager->InvokePostStepDoIt();
+
       // If the particle is still alive, suspend it
       // to re-initialise the other process.
       if (Response->GetStatusChange() != fStopAndKill)
@@ -410,7 +413,7 @@ G4FastSimulationManagerProcess::AtRestGetPhysicalInteractionLength(
 {
   if ( (fFastSimulationManager =
 	track.GetVolume()->GetLogicalVolume()->GetFastSimulationManager())
-       !=  NULL )
+       !=  0 )
     if (fFastSimulationManager->AtRestGetFastSimulationManagerTrigger(track))
       {
 	// "*condition = ExclusivelyForced;" Not yet available
@@ -453,7 +456,7 @@ G4FastSimulationManagerProcess::AtRestGetPhysicalInteractionLength(
 					          fGhostTouchable);
 
 	    }
-	  fOutOfGhostWorld = (fGhostTouchable->GetVolume() == NULL);
+	  fOutOfGhostWorld = (fGhostTouchable->GetVolume() == 0);
 	}
 
       if (!fOutOfGhostWorld)
@@ -493,9 +496,7 @@ G4VParticleChange* G4FastSimulationManagerProcess::AtRestDoIt(
      const G4Track& track,
      const G4Step& Step)
 {
-  fFastSimulationManager->InvokeAtRestDoIt();
-  G4VParticleChange* Response = fFastSimulationManager->GettheParticleChange();
-  return Response;
+  return fFastSimulationManager->InvokeAtRestDoIt();
 }
 
 void G4FastSimulationManagerProcess::StartTracking() 

@@ -1,4 +1,4 @@
-$Id: History,v 1.1 1999-01-07 16:14:02 gunter Exp $
+$Id: History,v 1.2 1999-04-14 14:25:18 mora Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,239 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 14, 1999 M. Verderi & P. Mora de Freitas
+
+Several consolidation tasks (thanks to G. Cosmo):
+
+1) Warning: 
+-----------
+
+Pointers usage
+
+- Setting pointers to 0 after delete:
+
+  delete pA;
+  pA = 0;
+
+- Avoid to use "NULL".
+
+Modified files:
+---------------
+G4FastSimulationManager.hh
+G4FastTrack.hh
+G4FlavoredParallelWorld.hh
+G4FastSimulationManager.cc
+G4FastSimulationMessenger.cc
+G4FastSimulationManagerProcess.cc
+G4FastTrack.cc
+G4GlobalFastSimulationManager.cc
+G4VFastSimulationModel.cc
+
+Status: 
+-------
+Done, tested, system-tested on HP-aCC with exemple N05.
+
+2) Warning:
+-----------
+include/G4FastSimulationManager.hh:163
+    Public member functions shall always return const handles to member data
+    Severe violation: Universal Coding Standards item 18
+
+offending code:
+---------------
+inline G4VParticleChange* G4FastSimulationManager::GettheParticleChange()
+{
+  return &fFastStep;
+}
+
+Diagnostic:
+----------
+
+ Called by the G4FastSimulationManagerProcess to return it in the 
+PostStepDoIt call. 
+
+Action:
+-------
+The G4FastSimulationManager::GettheParticleChange() method doesn't exist any
+more. The G4VParticleChange* is now returned directly when invoking the
+G4FastSimulationManager::InvokePostStepDoIt() and
+G4FastSimulationManager::InvokeAtRestDoIt() methodes.
+
+Modified files:
+---------------
+G4FastSimulationManager.hh
+G4FastSimulationManager.cc
+G4FastSimulationManagerProcess.cc
+
+Status: 
+-------
+Done, tested, system-tested on HP-aCC with exemple N05.
+
+3) Warning:
+-----------
+include/G4FastSimulationManagerProcess.hh:52
+    If a class has virtual functions it shall have a virtual destructor
+    Severe violation: Universal Coding Standards item 17
+    class G4FastSimulationManagerProcess has virtual functions without a virtual destructor.
+
+offending code:
+---------------
+  ~G4FastSimulationManagerProcess();
+
+Diagnostic:
+----------
+  Nobody should inherites from G4FastSimulationManagerProcess BUT for virtual 
+is added.
+
+Action:
+-------
+  virtual ~G4FastSimulationManagerProcess();
+
+Modified files:
+---------------
+G4FastSimulationManagerProcess.hh
+
+Status: 
+-------
+Done.
+
+4) Warning:
+-----------
+include/G4FastSimulationMessenger.hh:36
+    If a class has virtual functions it shall have a virtual destructor
+    Severe violation: Universal Coding Standards item 17
+    class G4FastSimulationMessenger has virtual functions without a virtual destructor.
+
+
+offending code:
+---------------
+  ~G4FastSimulationMessenger();
+
+Diagnostic:
+----------
+  Nobody should inherites from G4FastSimulationMessenger BUT for virtual 
+is added.
+
+Action:
+-------
+  virtual ~G4FastSimulationMessenger();
+
+Modified files:
+---------------
+G4FastSimulationMessenger.hh
+
+Status: 
+-------
+Done.
+
+5) Warning:
+-----------
+include/G4FastStep.hh:224
+    Operator= should call base class operator=
+    Possible severe violation: Effective C++ item 16
+    operator= in class G4FastStep, should call operator= in base class G4VParticleChange
+
+offending code:
+---------------
+G4FastStep & G4FastStep::operator=(const G4FastStep &right)
+{
+   if (this != &right)
+   {
+      theListOfSecondaries          = right.theListOfSecondaries;
+      theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
+      theNumberOfSecondaries        = right.theNumberOfSecondaries;
+      theStatusChange               = right.theStatusChange;
+      theMomentumChange             = right.theMomentumChange;
+      thePolarizationChange         = right.thePolarizationChange;
+      thePositionChange             = right.thePositionChange;
+      theTimeChange                 = right.theTimeChange;
+      theEnergyChange               = right.theEnergyChange;
+      theTrueStepLength             = right.theTrueStepLength;
+      theLocalEnergyDeposit         = right.theLocalEnergyDeposit;
+      theSteppingControlFlag        = right.theSteppingControlFlag;
+      theWeightChange               = right.theWeightChange;
+   }
+   return *this;
+}
+
+Diagnostic:
+----------
+  Bug detected.
+
+Action:
+-------
+  Insert the call
+  G4VParticleChange::operator=(right);
+
+Status:
+-------
+  Done, tested, system-tested on HP-aCC with exemple N05.
+
+Modified files:
+---------------
+  G4FastStep.cc
+
+6) Warning:
+-----------
+include/G4FastStep.hh:59
+    Avoid data members in the public interface
+    Violation: Effective C++ item 20
+    Public data members for class G4FastStep:
+      debugFlag
+
+
+offending code:
+---------------
+  public:
+  ...
+  G4bool debugFlag;
+
+Diagnostic:
+----------
+  Historical usage.
+
+Action:
+-------
+  Replaced by #ifdef FAST_STEP_DEBUG in the G4FastStep.cc file.
+
+Modified files:
+---------------
+  G4FastStep.hh, G4FastStep.cc
+
+Status:
+-------
+  Done, tested, system-tested on HP-aCC with exemple N05.
+
+7) Warning:
+-----------
+include/G4FastStep.hh:59
+    If a class has virtual functions it shall have a virtual destructor
+    Severe violation: Universal Coding Standards item 17
+    class G4FastStep has virtual functions without a virtual destructor.
+
+
+offending code:
+---------------
+  ~G4FastStep();
+
+Diagnostic:
+----------
+   Nobody should inherites from G4FastStep BUT virtual added.
+
+Action:
+-------
+  virtual ~G4FastStep();
+
+Modified files:
+---------------
+  G4FastStep.hh
+
+Status:
+-------
+  Done, tested, system-tested on HP-aCC with exemple N05.
+
+
 December 7, 1998 M. Verderi
    G4FastSimulationManagerProcess class:
    Fixes made for ghost navigation with

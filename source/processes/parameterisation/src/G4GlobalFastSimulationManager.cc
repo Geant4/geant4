@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GlobalFastSimulationManager.cc,v 1.1 1999-01-07 16:14:06 gunter Exp $
+// $Id: G4GlobalFastSimulationManager.cc,v 1.2 1999-04-14 14:25:37 mora Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -62,6 +62,7 @@ G4GlobalFastSimulationManager::G4GlobalFastSimulationManager()
 G4GlobalFastSimulationManager::~G4GlobalFastSimulationManager()
 {
   delete fTheFastSimulationMessenger;
+  fTheFastSimulationMessenger = 0;
 }
 
 void G4GlobalFastSimulationManager::FastSimulationNeedsToBeClosed()
@@ -125,7 +126,7 @@ GetFlavoredWorldForThis(G4ParticleDefinition* particle)
   for (G4int ipw=0; ipw<NeededFlavoredWorlds.length(); ipw++)
     if(NeededFlavoredWorlds(ipw)->GetTheParticleType()==particle)
       return NeededFlavoredWorlds(ipw);
-  return NULL;
+  return 0;
 }
 
 void 
