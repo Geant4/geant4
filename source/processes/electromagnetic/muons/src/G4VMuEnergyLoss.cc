@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMuEnergyLoss.cc,v 1.12 2001-09-11 07:32:03 urban Exp $
+// $Id: G4VMuEnergyLoss.cc,v 1.13 2001-09-13 11:17:14 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -41,6 +41,7 @@
 // signature in GetLossWithFluct changed L.Urban 30/10/00
 // 29/05/01 V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // 10/09/01 L.Urban : loss+ mechanism (subcutoff delta rays) implemented
+// 12/09/01  min.delta cut is set as rcut/100 + some optimisation, L.Urban
 // --------------------------------------------------------------
  
 
@@ -322,7 +323,7 @@ G4VMuEnergyLoss::~G4VMuEnergyLoss()
 
    // create array for the min. delta cuts in kinetic energy
    if(!setMinDeltaCutInRange)
-     MinDeltaCutInRange = G4Electron::Electron()->GetCuts()/10.;
+     MinDeltaCutInRange = G4Electron::Electron()->GetCuts()/100.;
 
  // if((subSecFlag) && (aParticleType.GetParticleName()=="mu+"))
  // {
@@ -505,7 +506,7 @@ G4VParticleChange* G4VMuEnergyLoss::AlongStepDoIt(
   MeanLoss = E-finalT ; 
 
   //   subcutoff delta ray production start 
- if(subSecFlag)
+ if((subSecFlag) && (trackData.GetCurrentStepNumber() > 1))
  {
   G4double MinDeltaEnergyNow,Tc,TmintoProduceDelta,w,ww ;
   G4double rcut,T0,presafety,postsafety,safety,delta,Tmax,mass ;

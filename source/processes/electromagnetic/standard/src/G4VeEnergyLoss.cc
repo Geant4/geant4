@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeEnergyLoss.cc,v 1.15 2001-09-11 07:29:35 urban Exp $
+// $Id: G4VeEnergyLoss.cc,v 1.16 2001-09-13 11:16:20 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 
@@ -36,6 +36,7 @@
 // 27/03/01 : commented out the printing of subcutoff energies
 // 28/05/01  V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // 11/09/01  minor correction in 'subcutoff' delta generation, L.Urban
+// 12/09/01  min.delta cut is set as rcut/100 + some optimisation, L.Urban
 // --------------------------------------------------------------
 
  
@@ -303,9 +304,9 @@ void G4VeEnergyLoss::BuildDEDXTable(
      // create array for the min. delta cuts in kinetic energy 
      G4double absLowerLimit = 1.*keV ;
 
-     // set default MinDeltaCutInRange to rcut/10.
+     // set default MinDeltaCutInRange to rcut/100.
      if(!setMinDeltaCutInRange )
-     MinDeltaCutInRange = G4Electron::Electron()->GetCuts()/10. ;
+     MinDeltaCutInRange = G4Electron::Electron()->GetCuts()/100. ;
 
 //     if((subSecFlag) && (&aParticleType==G4Electron::Electron()))
 //     {
@@ -403,7 +404,8 @@ G4VParticleChange* G4VeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   //  start of subcutoff generation
 
- if(subSecFlag)
+ // do not generate subdeltas for the initial step !! (time..)
+ if((subSecFlag) && (trackData.GetCurrentStepNumber() > 1))
  {
   G4double MinDeltaEnergyNow = MinDeltaEnergy[index] ;
   G4double TmintoProduceDelta=0.5*(3.-Charge)*MinDeltaEnergyNow ;
@@ -449,11 +451,12 @@ G4VParticleChange* G4VeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
       {
         T0=G4EnergyLossTables::GetPreciseEnergyFromRange(
                      G4Electron::Electron(),safety,aMaterial) ;   
-
+  
         // absolute lower limit for T0 
      //   if(T0<MinDeltaEnergyNow) T0=MinDeltaEnergyNow ;
         if((T0<MinDeltaEnergyNow)||(LowerLimitForced[aMaterial->GetIndex()]))
                               T0=MinDeltaEnergyNow ;
+  
  // ..................................................................
 
         x1=stepData.GetPreStepPoint()->GetPosition().x();

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.cc,v 1.20 2001-09-11 07:30:11 urban Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.21 2001-09-13 11:16:20 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -43,6 +43,7 @@
 // 27/03/01 : commented out the printing of subcutoff energies
 // 28/05/01 : V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // 10/09/01 : bugfix in subcutoff delta generation, L.Urban
+// 12/09/01  min.delta cut is set as rcut/100 + some optimisation, L.Urban
 // --------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -338,7 +339,7 @@ void G4VhEnergyLoss::BuildDEDXTable(
 
    // create array for the min. delta cuts in kinetic energy
    if(!setMinDeltaCutInRange)
-     MinDeltaCutInRange = G4Electron::Electron()->GetCuts()/10.;
+     MinDeltaCutInRange = G4Electron::Electron()->GetCuts()/100.;
 
 //  if((subSecFlag) && (aParticleType.GetParticleName()=="proton"))
 //  {
@@ -500,7 +501,7 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
   finalT = E - MeanLoss ;
 
   //   subcutoff delta ray production start                          
- if(subSecFlag)
+ if((subSecFlag) && (trackData.GetCurrentStepNumber() > 1))
  {
   G4double MinDeltaEnergyNow,Tc,TmintoProduceDelta,w,ww ;
   G4double rcut,T0,presafety,postsafety,safety,delta,Tmax,mass ;
