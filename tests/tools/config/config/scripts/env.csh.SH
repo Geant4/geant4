@@ -52,25 +52,23 @@ echo "On this machine the G4LIB=\$G4LIB"
 endif
 
 #+
-if ( X$g4data != X ) then
-setenv G4DATA "$g4data"
-echo "On this machine the G4DATA=\$G4DATA"
-endif
-#+
 if ( X$g4levelgammadata != X ) then
 setenv G4LEVELGAMMADATA "$g4levelgammadata"
 echo "On this machine the G4LEVELGAMMADATA=\$G4LEVELGAMMADATA"
 endif
+
 #+
 if ( X$g4radioactivedata != X ) then
 setenv G4RADIOACTIVEDATA "$g4radioactivedata"
 echo "On this machine the G4RADIOACTIVEDATA=\$G4RADIOACTIVEDATA"
 endif
+
 #+
 if ( X$g4ledata != X ) then
 setenv G4LEDATA "$g4ledata"
 echo "On this machine the G4LEDATA=\$G4LEDATA"
 endif
+
 #+
 if ( X$g4neutronhpcrosssections != X ) then
 setenv NeutronHPCrossSections "$g4neutronhpcrosssections"
@@ -84,16 +82,19 @@ if ( X$g4clhep_base_dir != X ) then
 setenv CLHEP_BASE_DIR "$g4clhep_base_dir"
 echo "On this machine the CLHEP_BASE_DIR=\$CLHEP_BASE_DIR"
 endif
+
 #+
 if ( X$g4clhep_include_dir != X ) then
 setenv CLHEP_INCLUDE_DIR "$g4clhep_include_dir"
 echo "On this machine the CLHEP_INCLUDE_DIR=\$CLHEP_INCLUDE_DIR"
 endif
+
 #+
 if ( X$g4clhep_lib_dir != X ) then
 setenv CLHEP_LIB_DIR "$g4clhep_lib_dir"
 echo "On this machine the CLHEP_LIB_DIR=\$CLHEP_LIB_DIR"
 endif
+
 #+
 if ( X$g4clhep_lib != X ) then
 setenv CLHEP_LIB "$g4clhep_lib"

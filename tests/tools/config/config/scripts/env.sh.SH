@@ -56,29 +56,26 @@ echo "On this machine the G4LIB=\$G4LIB"
 fi
 
 #+
-if [ X$g4data != X ] ; then 
-G4DATA="$g4data"
-export G4DATA
-echo "On this machine the G4DATA=\$G4DATA"
-fi
-#+
 if [ X$g4levelgammadata != X ] ; then 
 G4LEVELGAMMADATA="$g4levelgammadata"
 export G4LEVELGAMMADATA
 echo "On this machine the G4LEVELGAMMADATA=\$G4LEVELGAMMADATA"
 fi
+
 #+
 if [ X$g4radioactivedata != X ] ; then 
 G4RADIOACTIVEDATA="$g4radioactivedata"
 export G4RADIOACTIVEDATA
 echo "On this machine the G4RADIOACTIVEDATA=\$G4RADIOACTIVEDATA"
 fi
+
 #+
 if [ X$g4ledata != X ] ; then 
 G4LEDATA="$g4ledata"
 export G4LEDATA
 echo "On this machine the G4LEDATA=\$G4LEDATA"
 fi
+
 #+
 if [ X$g4neutronhpcrosssections != X ] ; then 
 NeutronHPCrossSections="$g4neutronhpcrosssections"
@@ -94,18 +91,21 @@ CLHEP_BASE_DIR="$g4clhep_base_dir"
 export CLHEP_BASE_DIR
 echo "On this machine the CLHEP_BASE_DIR=\$CLHEP_BASE_DIR"
 fi
+
 #+
 if [ X$g4clhep_include_dir != X ] ; then 
 CLHEP_INCLUDE_DIR="$g4clhep_include_dir"
 export CLHEP_INCLUDE_DIR
 echo "On this machine the CLHEP_INCLUDE_DIR=\$CLHEP_INCLUDE_DIR"
 fi
+
 #+
 if [ X$g4clhep_lib_dir != X ] ; then 
 CLHEP_LIB_DIR="$g4clhep_lib_dir"
 export CLHEP_LIB_DIR
 echo "On this machine the CLHEP_LIB_DIR=\$CLHEP_LIB_DIR"
 fi
+
 #+
 if [ X$g4clhep_lib != X ] ; then 
 CLHEP_LIB="$g4clhep_lib"

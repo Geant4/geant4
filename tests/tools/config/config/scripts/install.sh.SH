@@ -57,13 +57,6 @@ echo "On this machine the G4LIB=\$G4LIB"
 fi
 
 #+
-if [ X$g4data != X ] ; then 
-G4DATA="$g4data"
-export G4DATA
-echo "On this machine the G4DATA=\$G4DATA"
-fi
-
-#+
 if [ X$g4levelgammadata != X ] ; then 
 G4LEVELGAMMADATA="$g4levelgammadata"
 export G4LEVELGAMMADATA
