@@ -80,13 +80,13 @@ if [ $1 = "all" ] ; then
   nice $G4STTDIR/bin/run.sh test104
   nice $G4STTDIR/bin/run.sh test104.EMtest
   nice $G4STTDIR/bin/run.sh test105
-#  nice $G4STTDIR/bin/run.sh test106
+  nice $G4STTDIR/bin/run.sh test106
   nice $G4STTDIR/bin/run.sh test501
   nice $G4STTDIR/bin/run.sh test502
   nice $G4STTDIR/bin/run.sh test503
   nice $G4STTDIR/bin/run.sh test504
   nice $G4STTDIR/bin/run.sh test505
-  nice $G4STTDIR/bin/run.sh test506
+#   nice $G4STTDIR/bin/run.sh test506
 #   nice $G4STTDIR/bin/run.sh test508
   if [ $G4USE_HEPODBMS ] ; then
     nice $G4STTDIR/bin/run.sh test401
