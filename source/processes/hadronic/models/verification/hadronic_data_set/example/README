@@ -1,0 +1,70 @@
+Example to use G4HDS
+
+
+Vladimir.Grichine@cern.ch
+Simone.Gilardoni@cern.ch
+
+Last update: 24/10/2003
+
+
+
+1. Environmental variables declaration
+
+The use of the Geant4 Hadronic Data Set (G4HDS) requires the declaration 
+of three environmental variables:
+	
+	G4HADWORKING = where the example file is located
+	G4HADATASET=$G4HADWORKING/../HadronicDataSet 
+	G4HADWRITTINGRIGHTS=0
+
+G4HADWORKING tells to the G4HDS where the program is located
+G4HADATASET tells to the program where the data sets is located
+G4HADWRITTINGRIGHTS gives the user the possibility to add files and directory to 
+the G4HDS. For normal use as reading from G4HDS it should be set to 0.
+
+2. Example description
+
+The file HadDataSetTest.cc is an example to learn how to use the Geant4 Hadronic Data Set.  
+The file reads from a macro file a simple number from 1 to 4 to choose between the 
+implemented examples.
+
+o	Parameter =1. 
+G4HDS can read from the EXFOR database the double differential cross sections 
+files and convert the in the G4HDS format. The files in the G4HADWORKING dir 
+(Al_n_113MeV, C_n_200MeV, Li_n_186MeV) are taken from EXFOR but they 
+needed a little bit of manipulation from their original EXFOR version. 
+First, one has to insert in the EXFOR file before every comment line a #, 
+then insert after the comments "Tkin" followed by a tab and then the kinetic 
+energy of the incident particles. Then in the next line the "no" special word followed by a 0.  
+The EXFOR format is usually (in columns): bins in angle, energy, error on 
+the energy, cross section, error on the cross section. If in the original 
+file version there are not 5 columns, for example one column of errors is missing, 
+the user has to insert by hand a column with 0.0 (a simple 0 is not accepted).  
+The columns have to be separated by spaces and not by tabs.
+Then one has to create the primary and secondary particles, the process 
+abbreviation (see file $G4HADATASET/G4HDSprocesses.txt for the list of process 
+abbreviations) and the target material.
+The line G4HadFileSpec fileIwant(primary,target,secondary,process) produces the 
+file name and path inside the G4HDS (see $G4HADATASET/REAMEG4HDS.txt for 
+the formats).  The target can be a G4Material, G4Isotope or a G4element.
+One as to be sure that the variable G4HADWRITTINGRIGHTS=1 to have writing 
+permission. Then the proper file is created and written by new ExforHadData(exforfile,g4hdsfile). 
+ 
+
+o	Parameter=2  
+Between the G4HDS functionalities, the file search is done by the class methods 
+G4FileFinder which receives as parameters the directory from where to start the 
+search (for the complete dataset the path=$G4HADATASET) and the file to search. 
+The filename of the file to search can be either written or built by the 
+G4HadFileSpec method as described before. 
+In this case the example return the help file which describes the syntax to 
+be use to search for files inside the G4HDS 
+
+o	Parameter=3 
+In this case the example search for a specific file inside the data set. For the 
+time being the output of the search is the complete path of the files. 
+The starting path is used as selection of the primary particle, or the process, 
+or the secondary particle (if any). 
+
+o	Parameter=4 
+The required file is read and the retrieved data are dumped on the screen.
