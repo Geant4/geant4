@@ -1,4 +1,4 @@
-$Id: History,v 1.8 1999-06-05 15:13:05 johna Exp $
+$Id: History,v 1.9 1999-07-21 16:43:45 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21st July 1999  John Allison
+- Added G4PlacedPolyhedron, which includes G4PlacedPolyhedronList.
 
 greps-01-00-08  5th June John Allison
 - Added virtual operator = and overrides to G4Circle and G4Square.
