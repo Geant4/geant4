@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.70 2001-10-26 09:49:24 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.71 2001-10-26 13:58:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -348,7 +348,10 @@ void G4LowEnergyIonisation::BuildLossTable(
 	}
 
         G4double coeff = 0.0;
-        if(eAverage > 0.) coeff = cross/eAverage;
+        if(eAverage > 0.) {
+          coeff = cross/eAverage;
+          eAverage /= cross;
+	}
 
         if(verboseLevel > 1) {
             G4cout << "Ksi Coefficient for Z= " << Z
