@@ -246,7 +246,7 @@ G4double G4BigBanger::xProbability(G4double x, G4int ia) const {
 }
 
 G4double G4BigBanger::maxProbability(G4double a) const {
-  return xProbability(1.0 / (a - 1.0) / 1.5, dynamic_cast<int>(a + 0.1));
+  return xProbability(1.0 / (a - 1.0) / 1.5, dynamic_cast<G4int>(a + 0.1));
 }
 
 G4double G4BigBanger::generateX(G4int ia, G4double a, G4double promax) const {
