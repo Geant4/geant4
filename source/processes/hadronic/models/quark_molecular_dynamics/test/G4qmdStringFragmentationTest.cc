@@ -2,27 +2,13 @@
 #include "G4ios.hh"
 #include "G4qmdStringFragmentation.hh"
 
-#include "G4KineticTrack.hh"
-#include "G4KineticTrackVector.hh"
-
-#include "G4ExcitedString.hh"
-#include "G4ExcitedStringVector.hh"
-
-#include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTypes.hh"
-
-#include "G4ShortLivedConstructor.hh"
-#include "G4ShortLivedTable.hh"
-
-#include "G4VDecayChannel.hh"
-#include "G4DecayTable.hh"
-
-
 int main()
 {
 	G4ShortLivedConstructor ShortLived;
 	ShortLived.ConstructParticle();
+
+	G4BosonConstructor Boson;
+	Boson.ConstructParticle();
 
 	G4ExcitedStringVector * qmdInitialState = new G4ExcitedStringVector();
 	G4KineticTrackVector * ResultingHadrons = new G4KineticTrackVector();
@@ -34,7 +20,7 @@ int main()
 //--- pair 1:
 
 	G4Parton* Quark = new G4Parton(1);
-	G4Parton* AntiQuark = new G4Parton(-2);
+	G4Parton* AntiQuark = new G4Parton(-1);
 
 	G4ThreeVector quarkposition(0,0,1);
 	G4int quarkcolour = 1;
@@ -53,7 +39,7 @@ int main()
 //--- pair 2:
 
 	G4Parton* Quark2 = new G4Parton(3);
-	G4Parton* AntiQuark2 = new G4Parton(-3);
+	G4Parton* AntiQuark2 = new G4Parton(-2);
 
 	quarkposition = G4ThreeVector(0,1,0);
 	quarkcolour = 2;
@@ -106,20 +92,17 @@ int main()
 	}
 
 //
-// Start qMD and collect produced hadrons
+// Start qMD ...
 //
+
 G4qmdStringFragmentation * theRunB = new G4qmdStringFragmentation();
-theRunB->SetInputFile("Test");
+theRunB->SetOutputTimestep(0.1);
+
+//
+// ... and collect produced hadrons
+//
+
 ResultingHadrons = theRunB->FragmentStrings(qmdInitialState);
-// 
-//
-
-// 
-// G4qmdStringFragmentation theRun();
-// theRun.SetInputFile("Test");
-// ResultingHadrons = theRun.FragmentStrings(qmdInitialState);
-
-//
 
 }
 

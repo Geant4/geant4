@@ -37,13 +37,22 @@
 #include "Potentials.hh"
 #include "Quarkbox.hh"
 #include "output.hh"
+
 #include "globals.hh"
 #include "G4KineticTrack.hh"
 #include "G4KineticTrackVector.hh"
+
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
-//#include "G4ExcitedStringDecay.hh"
+
+#include "G4ShortLivedConstructor.hh"
+#include "G4ShortLivedTable.hh"
+#include "G4BosonConstructor.hh"
+
+#include "G4VDecayChannel.hh"
+#include "G4DecayTable.hh"
+
 #include "G4VStringFragmentation.hh"
 
 class Knot<ParticleType>;
@@ -58,6 +67,7 @@ class G4qmdStringFragmentation : public G4VStringFragmentation
       G4qmdStringFragmentation();
        ~G4qmdStringFragmentation();
       G4KineticTrackVector* FragmentStrings(const G4ExcitedStringVector* theStrings);
+      G4KineticTrackVector* FragmentStringsFromFile(const G4String & anInputFile);
 
   private:
       G4qmdStringFragmentation(const G4qmdStringFragmentation &right);
@@ -101,7 +111,7 @@ class G4qmdStringFragmentation : public G4VStringFragmentation
       double  theOutputTimestep;
       double  theInternalTimestep;
 
-      Colour  theQuarkSystem;
+      Colour  * theQuarkSystem;
 
 };
 

@@ -119,11 +119,22 @@ String ParticleProperties::Name() const
 
 int ParticleProperties::PDGCode() const 
 { 
-  String pdgc;
 	int PDGC = 111;
+  String pdgc;
   if ( C()<0 && B() ) 
     pdgc = "anti-";
   pdgc += Type.Name()+printCharge();
+
+	if ((pdgc == "q0") && (Iso3() > 0)) PDGC=2 ; // up
+	if ((pdgc == "q0") && (Iso3() < 0)) PDGC=1 ; // down
+	if (pdgc == "s0")  PDGC=3 ;                  // strange
+	if (pdgc == "c0")  PDGC=4 ;                  // charm
+
+	if ((pdgc == "anti-q0") && (Iso3() > 0)) PDGC=-2 ; // up
+	if ((pdgc == "anti-q0") && (Iso3() < 0)) PDGC=-1 ; // down
+	if (pdgc == "anti-s0")  PDGC=-3 ;                  // strange
+	if (pdgc == "anti-c0")  PDGC=-4 ;                  // charm
+
 
 	if (pdgc == "Delta(1620)++") PDGC=2222 ;
 	if (pdgc == "Delta(1620)+") PDGC=2122 ;
@@ -218,43 +229,42 @@ int ParticleProperties::PDGCode() const
 	if (pdgc == "N+") PDGC=2212 ;
 	if (pdgc == "N0") PDGC=2112 ;
 
-
-	if (pdgc == "anti-Delta(1620)++") PDGC=-2222 ;
-	if (pdgc == "anti-Delta(1620)+") PDGC=-2122 ;
+	if (pdgc == "anti-Delta(1620)--") PDGC=-2222 ;
+	if (pdgc == "anti-Delta(1620)-") PDGC=-2122 ;
 	if (pdgc == "anti-Delta(1620)0") PDGC=-1212 ;
-	if (pdgc == "anti-Delta(1620)-") PDGC=-1112;
-	if (pdgc == "anti-Delta(1700)++") PDGC=-12224 ;
-	if (pdgc == "anti-Delta(1700)+") PDGC=-12214 ;
+	if (pdgc == "anti-Delta(1620)+") PDGC=-1112;
+	if (pdgc == "anti-Delta(1700)--") PDGC=-12224 ;
+	if (pdgc == "anti-Delta(1700)-") PDGC=-12214 ;
 	if (pdgc == "anti-Delta(1700)0") PDGC=-12114 ;
-	if (pdgc == "anti-Delta(1700)-") PDGC=-11114 ;
-	if (pdgc == "anti-Delta(1900)++") PDGC=-2226 ;
-	if (pdgc == "anti-Delta(1900)+") PDGC=-2126 ;
+	if (pdgc == "anti-Delta(1700)+") PDGC=-11114 ;
+	if (pdgc == "anti-Delta(1900)--") PDGC=-2226 ;
+	if (pdgc == "anti-Delta(1900)-") PDGC=-2126 ;
 	if (pdgc == "anti-Delta(1900)0") PDGC=-1216 ;
-	if (pdgc == "anti-Delta(1900)-") PDGC=-1116 ;
-	if (pdgc == "anti-Delta(1905)++") PDGC=-2226 ;
-	if (pdgc == "anti-Delta(1905)+") PDGC=-2126 ;
+	if (pdgc == "anti-Delta(1900)+") PDGC=-1116 ;
+	if (pdgc == "anti-Delta(1905)--") PDGC=-2226 ;
+	if (pdgc == "anti-Delta(1905)-") PDGC=-2126 ;
 	if (pdgc == "anti-Delta(1905)0") PDGC=-1216 ;
-	if (pdgc == "anti-Delta(1905)-") PDGC=-1116 ;
-	if (pdgc == "anti-Delta(1910)++") PDGC=-22222 ;
-	if (pdgc == "anti-Delta(1910)+") PDGC=-22122 ;
+	if (pdgc == "anti-Delta(1905)+") PDGC=-1116 ;
+	if (pdgc == "anti-Delta(1910)--") PDGC=-22222 ;
+	if (pdgc == "anti-Delta(1910)-") PDGC=-22122 ;
 	if (pdgc == "anti-Delta(1910)0") PDGC=-21212 ;
-	if (pdgc == "anti-Delta(1910)-") PDGC=-21112 ;
-	if (pdgc == "anti-Delta(1920)++") PDGC=-22224 ;
-	if (pdgc == "anti-Delta(1920)+") PDGC=-22214 ;
+	if (pdgc == "anti-Delta(1910)+") PDGC=-21112 ;
+	if (pdgc == "anti-Delta(1920)--") PDGC=-22224 ;
+	if (pdgc == "anti-Delta(1920)-") PDGC=-22214 ;
 	if (pdgc == "anti-Delta(1920)0") PDGC=-22114 ;
-	if (pdgc == "anti-Delta(1920)-") PDGC=-21114 ;
-	if (pdgc == "anti-Delta(1930)++") PDGC=-12226 ;
-	if (pdgc == "anti-Delta(1930)+") PDGC=-12126 ;
+	if (pdgc == "anti-Delta(1920)+") PDGC=-21114 ;
+	if (pdgc == "anti-Delta(1930)--") PDGC=-12226 ;
+	if (pdgc == "anti-Delta(1930)-") PDGC=-12126 ;
 	if (pdgc == "anti-Delta(1930)0") PDGC=-11216 ;
-	if (pdgc == "anti-Delta(1930)-") PDGC=-11116 ;
-	if (pdgc == "anti-Delta(1950)++") PDGC=-2228 ;
-	if (pdgc == "anti-Delta(1950)+") PDGC=-2218 ;
+	if (pdgc == "anti-Delta(1930)+") PDGC=-11116 ;
+	if (pdgc == "anti-Delta(1950)--") PDGC=-2228 ;
+	if (pdgc == "anti-Delta(1950)-") PDGC=-2218 ;
 	if (pdgc == "anti-Delta(1950)0") PDGC=-2118 ;
-	if (pdgc == "anti-Delta(1950)-") PDGC=-1118 ;
-	if (pdgc == "anti-Delta++") PDGC=-2224 ;
-	if (pdgc == "anti-Delta+") PDGC=-2214 ;
+	if (pdgc == "anti-Delta(1950)+") PDGC=-1118 ;
+	if (pdgc == "anti-Delta--") PDGC=-2224 ;
+	if (pdgc == "anti-Delta-") PDGC=-2214 ;
 	if (pdgc == "anti-Delta0") PDGC=-2114 ;
-	if (pdgc == "anti-Delta-") PDGC=-1114 ;
+	if (pdgc == "anti-Delta+") PDGC=-1114 ;
 
 	if (pdgc == "anti-Lambda(1405)0") PDGC=-13122 ;
 	if (pdgc == "anti-Lambda(1520)0") PDGC=-3124 ;
@@ -269,47 +279,47 @@ int ParticleProperties::PDGCode() const
 	if (pdgc == "anti-Lambda(2100)0") PDGC=-3128 ;
 	if (pdgc == "anti-Lambda(2110)0") PDGC=-23126 ;
 
-	if (pdgc == "anti-Sigma(1385)+") PDGC=-3224 ;
+	if (pdgc == "anti-Sigma(1385)-") PDGC=-3224 ;
 	if (pdgc == "anti-Sigma(1385)0") PDGC=-3214 ;
-	if (pdgc == "anti-Sigma(1385)-") PDGC=-3114 ;
-	if (pdgc == "anti-Sigma(1660)+") PDGC=-13222 ;
+	if (pdgc == "anti-Sigma(1385)+") PDGC=-3114 ;
+	if (pdgc == "anti-Sigma(1660)-") PDGC=-13222 ;
 	if (pdgc == "anti-Sigma(1660)0") PDGC=-13212 ;
-	if (pdgc == "anti-Sigma(1660)-") PDGC=-13112 ;
-	if (pdgc == "anti-Sigma(1670)+") PDGC=-13224 ;
+	if (pdgc == "anti-Sigma(1660)+") PDGC=-13112 ;
+	if (pdgc == "anti-Sigma(1670)-") PDGC=-13224 ;
 	if (pdgc == "anti-Sigma(1670)0") PDGC=-13214 ;
-	if (pdgc == "anti-Sigma(1670)-") PDGC=-13114 ;
-	if (pdgc == "anti-Sigma(1750)+") PDGC=-23222 ;
+	if (pdgc == "anti-Sigma(1670)+") PDGC=-13114 ;
+	if (pdgc == "anti-Sigma(1750)-") PDGC=-23222 ;
 	if (pdgc == "anti-Sigma(1750)0") PDGC=-23212 ;
-	if (pdgc == "anti-Sigma(1750)-") PDGC=-23112 ;
-	if (pdgc == "anti-Sigma+") PDGC=-3222 ;
+	if (pdgc == "anti-Sigma(1750)+") PDGC=-23112 ;
+	if (pdgc == "anti-Sigma-") PDGC=-3222 ;
 	if (pdgc == "anti-Sigma0") PDGC=-3212 ;
-	if (pdgc == "anti-Sigma-") PDGC=-3112 ;
+	if (pdgc == "anti-Sigma+") PDGC=-3112 ;
 
 	if (pdgc == "anti-Xi(1530)0") PDGC=-3324 ;
-	if (pdgc == "anti-Xi(1530)-") PDGC=-3314 ;
+	if (pdgc == "anti-Xi(1530)+") PDGC=-3314 ;
 
-	if (pdgc == "anti-N(1440)+") PDGC=-12212 ;
+	if (pdgc == "anti-N(1440)-") PDGC=-12212 ;
 	if (pdgc == "anti-N(1440)0") PDGC=-12112 ;
-	if (pdgc == "anti-N(1520)+") PDGC=-2124 ;
+	if (pdgc == "anti-N(1520)-") PDGC=-2124 ;
 	if (pdgc == "anti-N(1520)0") PDGC=-1214 ;
-	if (pdgc == "anti-N(1535)+") PDGC=-32212 ;
+	if (pdgc == "anti-N(1535)-") PDGC=-32212 ;
 	if (pdgc == "anti-N(1535)0") PDGC=-32112 ;
-	if (pdgc == "anti-N(1650)+") PDGC=-32212 ;
+	if (pdgc == "anti-N(1650)-") PDGC=-32212 ;
 	if (pdgc == "anti-N(1650)0") PDGC=-32112 ;
-	if (pdgc == "anti-N(1675)+") PDGC=-2216 ;
+	if (pdgc == "anti-N(1675)-") PDGC=-2216 ;
 	if (pdgc == "anti-N(1675)0") PDGC=-2116 ;
-	if (pdgc == "anti-N(1680)+") PDGC=-12216 ;
+	if (pdgc == "anti-N(1680)-") PDGC=-12216 ;
 	if (pdgc == "anti-N(1680)0") PDGC=-12116 ;
-	if (pdgc == "anti-N(1700)+") PDGC=-22124 ;
+	if (pdgc == "anti-N(1700)-") PDGC=-22124 ;
 	if (pdgc == "anti-N(1700)0") PDGC=-21214 ;
-	if (pdgc == "anti-N(1710)+") PDGC=-42212 ;
+	if (pdgc == "anti-N(1710)-") PDGC=-42212 ;
 	if (pdgc == "anti-N(1710)0") PDGC=-42112 ;
-	if (pdgc == "anti-N(1720)+") PDGC=-32124 ;
+	if (pdgc == "anti-N(1720)-") PDGC=-32124 ;
 	if (pdgc == "anti-N(1720)0") PDGC=-31214 ;
-	if (pdgc == "anti-N(2190)+") PDGC=-2128 ;
+	if (pdgc == "anti-N(2190)-") PDGC=-2128 ;
 	if (pdgc == "anti-N(2190)0") PDGC=-1218 ;
 
-	if (pdgc == "anti-N+") PDGC=-2212 ;
+	if (pdgc == "anti-N-") PDGC=-2212 ;
 	if (pdgc == "anti-N0") PDGC=-2112 ;
 
 	if (pdgc == "Phi0") PDGC=333 ;

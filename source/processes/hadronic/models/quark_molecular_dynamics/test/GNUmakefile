@@ -17,14 +17,7 @@ include $(G4INSTALL)/config/architecture.gmk
 # Override some variables for binmake.gmk.
 #
 INCFLAGS := \
-           -I$(G4BASE)/global/management/include \
-           -I$(G4BASE)/intercoms/include \
-           -I$(G4BASE)/processes/hadronic/models/generator/string_fragmentation/include \
-           -I$(G4BASE)/processes/hadronic/models/generator/util/include \
-           -I$(G4BASE)/processes/hadronic/models/quark_molecular_dynamics/util/include \
-           -I$(G4BASE)/processes/hadronic/models/quark_molecular_dynamics/body/include 
-
-CPPFLAGS += -I$(G4BASE)/global/management/include \
+            -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPNumerics/include \
             -I$(G4BASE)/global/HEPGeometry/include \
@@ -50,5 +43,6 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/generator/string_common/include \
             -I$(G4BASE)/processes/hadronic/models/generator/string_fragmentation/include \
             -I$(G4BASE)/processes/hadronic/models/quark_molecular_dynamics/util/include \
+            -I$(G4BASE)/processes/hadronic/models/quark_molecular_dynamics/body/include 
 
 include $(G4INSTALL)/config/binmake.gmk

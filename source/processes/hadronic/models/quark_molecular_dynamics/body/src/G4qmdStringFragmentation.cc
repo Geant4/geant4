@@ -11,11 +11,6 @@
 #include "G4ios.hh"
 #include "g4std/fstream"
 #include "globals.hh"
-#include "G4KineticTrack.hh"
-#include "G4KineticTrackVector.hh"
-#include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTypes.hh"
 
 //
 // ----------- constructor ------------------------------
@@ -56,7 +51,7 @@ G4qmdStringFragmentation::G4qmdStringFragmentation()
   vector<ParticleType*> Quarks = Knot<ParticleType>::Find("SQ");
   Colour::setQuarks(Quarks);
 
-  Colour theQuarkSystem(theInternalTimestep);
+  theQuarkSystem = new Colour(theInternalTimestep);
 
 	G4cerr << "### Object of type G4qmdStringFragmentation created successfully ###"  << G4endl;
 
@@ -68,6 +63,7 @@ G4qmdStringFragmentation::G4qmdStringFragmentation(const G4qmdStringFragmentatio
 
 G4qmdStringFragmentation::~G4qmdStringFragmentation()
 {
+  delete theQuarkSystem;
 }
 
 const G4qmdStringFragmentation & G4qmdStringFragmentation::operator=(const G4qmdStringFragmentation &right)
@@ -98,13 +94,24 @@ G4KineticTrackVector * G4qmdStringFragmentation::FragmentStrings(const G4Excited
 	return theResult;
 }
 
+
+G4KineticTrackVector * G4qmdStringFragmentation::FragmentStringsFromFile(const G4String & anInputFile)
+{
+	G4KineticTrackVector * theResult = new G4KineticTrackVector();
+	SetupFromFile(anInputFile);
+	theResult = TheHadrons();
+	return theResult;
+}
+
+
 //
 // ----------- Setup from Excited String ---------------------------------
 //
+
 void G4qmdStringFragmentation::SetupFromG4ExcitedStringVector(const G4ExcitedStringVector * theStrings)
 {
   
-  Particle::Soup = &theQuarkSystem;
+  Particle::Soup = theQuarkSystem;
 
   const ParticleType& q = Knot<ParticleType>::FindKnot("q");    // u|d-quark
   const ParticleType& s = Knot<ParticleType>::FindKnot("s");    // s-quark
@@ -117,92 +124,150 @@ void G4qmdStringFragmentation::SetupFromG4ExcitedStringVector(const G4ExcitedStr
 
 		G4cerr << "Extract partons from G4ExcitedString " << StringCounter << endl;
 
-	  for (G4int QuarkCounter=0; QuarkCounter < ThePartons->length(); QuarkCounter++) {
+	  for (G4int PartonCounter=0; PartonCounter < ThePartons->length(); PartonCounter++) {
 
-			G4int flag = StringCounter*1000 + QuarkCounter;
+			G4int flag = StringCounter*1000 + PartonCounter;
 
- 		  G4Parton* ThisParton = ThePartons->at(QuarkCounter);
+ 		  G4Parton* ThisParton = ThePartons->at(PartonCounter);
 
-      const G4ThreeVector  quark_ThreeVector = ThisParton->GetPosition();
-      const G4LorentzVector  quark_4Momentum = ThisParton->Get4Momentum(); 
-			G4int quark_PDGCode = ThisParton->GetPDGcode();
-      G4int quark_Colour = ThisParton->GetColour();
-      G4double quark_SpinZ = ThisParton->GetSpinZ();
-      G4double quark_IsoSpinZ = ThisParton->GetIsoSpinZ();
-
-      Vektor3 quark_momentum = Vektor3(quark_4Momentum.x(),quark_4Momentum.y(),quark_4Momentum.z());
-      Vektor3 quark_position = Vektor3(quark_ThreeVector.x(),quark_ThreeVector.y(),quark_ThreeVector.z());
+			const G4String& parton_type = ThisParton->GetDefinition()->GetParticleType();
+			G4int parton_PDGCode = ThisParton->GetPDGcode();
+      G4int parton_Colour = ThisParton->GetColour();
+      G4double parton_SpinZ = ThisParton->GetSpinZ();
+      G4double parton_IsoSpinZ = ThisParton->GetIsoSpinZ();
+      const G4ThreeVector  parton_ThreeVector = ThisParton->GetPosition();
+      const G4LorentzVector  parton_4Momentum = ThisParton->Get4Momentum(); 
+      Vektor3 parton_momentum = Vektor3(parton_4Momentum.x(),parton_4Momentum.y(),parton_4Momentum.z());
+      Vektor3 parton_position = Vektor3(parton_ThreeVector.x(),parton_ThreeVector.y(),parton_ThreeVector.z());
 
 			G4cerr << " Parton " << flag << " with properties " << G4endl;
-      G4cerr << "    PDG-CODE:  " <<  quark_PDGCode << G4endl; 
-      G4cerr << "  x-3-Vector:  " <<  quark_ThreeVector << G4endl; 
-      G4cerr << "  p-4-Vector:  " <<  quark_4Momentum << G4endl; 
-      G4cerr << "       color:  " <<  quark_Colour << G4endl; 
-      G4cerr << "      Spin_Z:  " <<  quark_SpinZ << G4endl ;
-      G4cerr << "   Isospin_Z:  " <<  quark_IsoSpinZ << G4endl;
-      G4cerr << "  3_momentum:  " <<  quark_momentum << G4endl;
-      G4cerr << "  3_position:  " <<  quark_position << G4endl;
+      G4cerr << "        Type:  " <<  parton_type << G4endl; 
+      G4cerr << "    PDG-CODE:  " <<  parton_PDGCode << G4endl; 
+      G4cerr << "       color:  " <<  parton_Colour << G4endl; 
+      G4cerr << "      Spin_Z:  " <<  parton_SpinZ << G4endl ;
+      G4cerr << "   Isospin_Z:  " <<  parton_IsoSpinZ << G4endl;
+      G4cerr << "  x-3-Vector:  " <<  parton_ThreeVector << G4endl; 
+      G4cerr << "  p-4-Vector:  " <<  parton_4Momentum << G4endl; 
+      G4cerr << "  3_momentum:  " <<  parton_momentum << G4endl;
+      G4cerr << "  3_position:  " <<  parton_position << G4endl;
 
-//
-//  everything still missing ...
-//
+      G4cerr << "  ... now checking in:  " << G4endl;
 
-//  general scheme: sig=1 - particle, sig=-1 antiparticle
-//
-//    ParticleBase* p = makeParticle(q|s|cq, QuantumProjections(sig,col,i3,s3));
-
-//      ParticleBase* p1 = makeParticle(cq,QuantumProjections(1,RGB::RED,quark_IsoSpinZ,quark_SpinZ));  // c-quark
-//      p1->SetMomentum(quark_momentum);
-//      p1->SetCoordinates(quark_position);
-//      p1->SetFlag(i*10000+j);
-
-//    ParticleBase* p2 = makeParticle(q,QuantumProjections(-1,-RGB::RED,0.5,0.5)); // u|d-quark
-//    p2->SetMomentum(Vektor3(px,py,pz));
-//    p2->SetCoordinates(Vektor3(rx,ry,rz));
-//    p2->SetFlag(i*10000+j);
-
-
+      if (parton_type == "quarks") {
+        if (abs(parton_PDGCode) < 3) {
+ 		     	ParticleBase* p = makeParticle(q,QuantumProjections(sign(parton_Colour),parton_Colour,parton_IsoSpinZ,parton_SpinZ));  
+	 	      p->SetMomentum(parton_momentum);
+    	    p->SetCoordinates(parton_position);
+      	  p->SetFlag(flag);
+	        G4cerr << "(anti) u/d-quark created!" << G4endl;
+			  }
+  			else if ((parton_PDGCode = 3) || (parton_PDGCode = -3)) {
+        	ParticleBase* p = makeParticle(s,QuantumProjections(sign(parton_Colour),parton_Colour,parton_IsoSpinZ,parton_SpinZ));  
+	        p->SetMomentum(parton_momentum);
+  	      p->SetCoordinates(parton_position);
+    	    p->SetFlag(flag);
+  	      G4cerr << "(anti) s-quark created!" << G4endl;
+	  		}
+		  	else if ((parton_PDGCode = 4) || (parton_PDGCode = -4)) {
+        	ParticleBase* p = makeParticle(cq,QuantumProjections(sign(parton_Colour),parton_Colour,parton_IsoSpinZ,parton_SpinZ));  
+  	      p->SetMomentum(parton_momentum);
+    	    p->SetCoordinates(parton_position);
+      	  p->SetFlag(flag);
+	        G4cerr << "(anti) c-quark created!" << G4endl;
+			  }
+  			else {
+	        G4cerr << "3th generation (b or t) quark - ignored!" << G4endl;
+		  	}
+      }
+			else if (parton_type == "gluons") {
+	      G4cerr << "gluon - ignored!" << G4endl;
+			}
+			else if (parton_type == "diquarks") {
+	      G4cerr << "Diquark - ignored!" << G4endl;
+			}
+  		else {
+	      G4cerr << "ERRROR: Particle with PDGCode " << parton_PDGCode << " is not a vild parton!" << G4endl;
+      }
 		}
 
 	}
+  
+  theQuarkSystem->setup();
 
 }
 
+//
+// ----------- Setup from file ---------------------------------
+//
+
+void G4qmdStringFragmentation::SetupFromFile(const G4String & anInputFile)
+{
+  if (anInputFile == "") {
+    theInputFile = "/afs/cern.ch/user/s/sscherer/public/qmd/data/line_120.dat";
+  }
+  else {
+    theInputFile = anInputFile;
+  }
+
+  G4std::istream* readIn = 0;
+  readIn = new G4std::ifstream(theInputFile);
+
+
+  Particle::Soup = theQuarkSystem;
+
+  const ParticleType& q = Knot<ParticleType>::FindKnot("q");    // u|d-quark
+  const ParticleType& s = Knot<ParticleType>::FindKnot("s");    // s-quark
+  const ParticleType& cq = Knot<ParticleType>::FindKnot("c");   // c-quark
+
+  if ( readIn ) {
+
+    theQuarkSystem->setTime(readEvent(*readIn));
+
+  }
+
+	theQuarkSystem->setup();
+
+}
+
+
+//
+// ----------- Run the code ---------------------------------
+//
 
 G4KineticTrackVector * G4qmdStringFragmentation::TheHadrons()
 {
 	G4KineticTrackVector * theHadrons = new G4KineticTrackVector();
   try {
 
-    theQuarkSystem.print(cout);
+    theQuarkSystem->print(cout);
  
-    while ( ((theFinalTime < 0) && (theQuarkSystem.Nquark > 0)) || (theQuarkSystem.Time() < theFinalTime) ) {
+    while ( ((theFinalTime < 0) && (theQuarkSystem->Nquark > 0)) || (theQuarkSystem->Time() < theFinalTime) ) {
 
-      double t1 = theQuarkSystem.Time()+theOutputTimestep;
+      double t1 = theQuarkSystem->Time()+theOutputTimestep;
       if ( theFinalTime>0 ) 
         t1 = G4std::min(t1,(double)theFinalTime);
 
-      if ( theQuarkSystem.Nquark ) {
-        while ( theQuarkSystem.Time() < t1 && ( theQuarkSystem.Nquark>0 || theFinalTime>0 ) ) {
-          theQuarkSystem.one_step();
-          G4cerr << theQuarkSystem.Time() << " : " << "  " 
-                 << theQuarkSystem.Etot() << "  "
-                 << theQuarkSystem.Npart << "  " << -theQuarkSystem.Nquark+theQuarkSystem.Npart << endl;
+      if ( theQuarkSystem->Nquark ) {
+        while ( theQuarkSystem->Time() < t1 && ( theQuarkSystem->Nquark>0 || theFinalTime>0 ) ) {
+          theQuarkSystem->one_step();
+          G4cerr << theQuarkSystem->Time() << " : " << "  " 
+                 << theQuarkSystem->Etot() << "  "
+                 << theQuarkSystem->Npart << "  " << -theQuarkSystem->Nquark+theQuarkSystem->Npart << endl;
         }
       }
       else {
-        theQuarkSystem.setTime(t1);
+        theQuarkSystem->setTime(t1);
         CollisionTab::perform(t1);
       }
-      theQuarkSystem.print(cout);
+      theQuarkSystem->print(cout);
     }
     if ( theFinalHadronDecay == "yes" ) {
       CollisionTab::perform(1000,(theForcedHadronDecay == "yes"));
       cout << "# final\n";
-      theQuarkSystem.print(cout);
+      theQuarkSystem->print(cout);
     }
 
-		theHadrons = theQuarkSystem.GetNewHadrons();
+		theHadrons = theQuarkSystem->GetNewHadrons();
 
   }
   catch ( char *s ) {
@@ -216,8 +281,6 @@ G4KineticTrackVector * G4qmdStringFragmentation::TheHadrons()
 		       << " originating at " << ThisTrack->GetInitialCoordinates() 
 		       << endl;
 	}
-
-
 
 	return theHadrons;
 
@@ -332,34 +395,6 @@ double G4qmdStringFragmentation::readEvent(istream& in)
     return time;
   else
     return 0.0;
-}
-
-
-void G4qmdStringFragmentation::SetupFromFile(const G4String & anInputFile)
-{
-  if (anInputFile == "") {
-    theInputFile = "/afs/cern.ch/user/s/sscherer/public/qmd/data/line_120.dat";
-  }
-  else {
-    theInputFile = anInputFile;
-  }
-
-  G4std::istream* readIn = 0;
-  readIn = new G4std::ifstream(theInputFile);
-
-
-  Particle::Soup = &theQuarkSystem;
-
-  const ParticleType& q = Knot<ParticleType>::FindKnot("q");
-  const ParticleType& s = Knot<ParticleType>::FindKnot("s");
-
-  if ( readIn ) {
-
-    theQuarkSystem.setTime(readEvent(*readIn));
-    theQuarkSystem.setup();
-
-  }
-
 }
 
 
