@@ -1,4 +1,4 @@
-$Id: History,v 1.46 2002-08-13 10:07:45 dressel Exp $
+$Id: History,v 1.47 2002-08-13 10:09:06 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -22,6 +22,7 @@ Aug  13th, 2002 M.Dressel transport-V04-01-01
 - added G4CellStoreScorer,  G4VTrackTerminator and changed the sampler
   classes in order to use the G4VTrackTerminator (if necessary) to
   kill a track. 
+- coworks with geombias-V04-01-01
 
 July 18th, 2002 M.Dressel 
 -------------------------

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceScoreSampler.cc,v 1.1 2002-05-31 10:16:02 dressel Exp $
+// $Id: G4MassImportanceScoreSampler.cc,v 1.2 2002-08-13 10:07:47 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -56,5 +56,7 @@ G4MassImportanceScoreSampler::~G4MassImportanceScoreSampler()
 void G4MassImportanceScoreSampler::Initialize()
 {
   fMassScoreSampler->Initialize();
+  fMassImportanceSampler->SetTrackTerminator(fMassScoreSampler->
+					     GetTrackTerminator());
   fMassImportanceSampler->Initialize();
 }

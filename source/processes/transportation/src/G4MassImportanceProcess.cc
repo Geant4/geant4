@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceProcess.cc,v 1.3 2002-04-09 17:40:15 gcosmo Exp $
+// $Id: G4MassImportanceProcess.cc,v 1.4 2002-08-13 10:07:47 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -39,11 +39,17 @@
 G4MassImportanceProcess::
 G4MassImportanceProcess(const G4VImportanceAlgorithm &aImportanceAlgorithm,
 			const G4VIStore &aIstore,
+			G4VTrackTerminator *TrackTerminator,
 			const G4String &aName)
  : G4VProcess(aName),
+   fTrackTerminator(TrackTerminator),
    fImportanceAlgorithm(aImportanceAlgorithm),
    fImportanceFinder(new G4ImportanceFinder(aIstore))
 {
+  if (fTrackTerminator==0) fTrackTerminator = this;
+  fImportancePostStepDoIt = new 
+    G4ImportancePostStepDoIt(*fTrackTerminator);
+  
   fParticleChange = new G4ParticleChange;
   G4VProcess::pParticleChange = fParticleChange;
 }
@@ -52,6 +58,7 @@ G4MassImportanceProcess::~G4MassImportanceProcess()
 {
   delete fImportanceFinder;
   delete fParticleChange;
+  delete &fImportancePostStepDoIt;
 }
 
 G4double G4MassImportanceProcess::
@@ -87,7 +94,11 @@ G4MassImportanceProcess::PostStepDoIt(const G4Track &aTrack,
       Calculate(fImportanceFinder->
 		GetIPre_over_IPost(prekey, postkey),
 		aTrack.GetWeight());
-    fImportancePostStepDoIt.DoIt(aTrack, fParticleChange, nw);
+    fImportancePostStepDoIt->DoIt(aTrack, fParticleChange, nw);
   }
   return fParticleChange;
+}
+
+void G4MassImportanceProcess::KillTrack(){
+  fParticleChange->SetStatusChange(fStopAndKill);
 }

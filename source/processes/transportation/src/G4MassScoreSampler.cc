@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassScoreSampler.cc,v 1.1 2002-05-31 10:16:02 dressel Exp $
+// $Id: G4MassScoreSampler.cc,v 1.2 2002-08-13 10:07:47 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -65,3 +65,7 @@ void G4MassScoreSampler::Initialize()
   G4ProcessPlacer placer(fParticleName);
   placer.AddProcessAsSecondDoIt(CreateMassScoreProcess());
 }
+
+G4VTrackTerminator *G4MassScoreSampler::GetTrackTerminator(){
+  return fMScoreProcess;
+};

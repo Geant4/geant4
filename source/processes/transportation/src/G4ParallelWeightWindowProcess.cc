@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWeightWindowProcess.cc,v 1.3 2002-05-31 14:50:38 dressel Exp $
+// $Id: G4ParallelWeightWindowProcess.cc,v 1.4 2002-08-13 10:07:47 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -35,20 +35,29 @@
 #include "G4VIStore.hh"
 #include "G4VParallelStepper.hh"
 #include "G4VWeightWindowAlgorithm.hh"
+#include "G4VTrackTerminator.hh"
+#include "G4ImportancePostStepDoIt.hh"
 
 #include "G4Pstring.hh"
 
-G4ParallelWeightWindowProcess::G4ParallelWeightWindowProcess(G4VIStore &aIstore,
-					       G4VParallelStepper &aStepper,
-					       G4VWeightWindowAlgorithm &aWWAlgorithm,
-					       const G4String &aName)
+G4ParallelWeightWindowProcess::
+G4ParallelWeightWindowProcess(G4VIStore &aIstore,
+			      G4VParallelStepper &aStepper,
+			      G4VWeightWindowAlgorithm &aWWAlgorithm,
+			      G4VTrackTerminator *TrackTerminator,
+			      const G4String &aName)
   : G4VProcess(aName), 
   fIStore(aIstore),
   fPStepper(aStepper),
   fWWAlgorithm(aWWAlgorithm),
+  fTrackTerminator(TrackTerminator),
   fNsplit_Weight(G4Nsplit_Weight(0,0)),
   fInitStep(false)
 {
+  if (!fTrackTerminator) {
+    G4Exception("G4ParallelWeightWindowProcess: no G4VTrackTerminator");    
+  }
+  fImportancePostStepDoIt = new G4ImportancePostStepDoIt(*fTrackTerminator);
   fParticleChange = new G4ParticleChange;
   G4VProcess::pParticleChange = fParticleChange;
 }
@@ -56,6 +65,7 @@ G4ParallelWeightWindowProcess::G4ParallelWeightWindowProcess(G4VIStore &aIstore,
 G4ParallelWeightWindowProcess::~G4ParallelWeightWindowProcess()
 {
   delete fParticleChange;
+  delete fImportancePostStepDoIt;
 }
 
 void G4ParallelWeightWindowProcess::StartTracking(){
@@ -95,7 +105,7 @@ G4ParallelWeightWindowProcess::PostStepDoIt(const G4Track& aTrack,
 {
   fParticleChange->Initialize(aTrack);
 
-  fImportancePostStepDoIt.DoIt(aTrack, fParticleChange, fNsplit_Weight);
+  fImportancePostStepDoIt->DoIt(aTrack, fParticleChange, fNsplit_Weight);
   
   return fParticleChange;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PScoreProcess.hh,v 1.3 2002-04-10 13:14:16 dressel Exp $
+// $Id: G4PScoreProcess.hh,v 1.4 2002-08-13 10:07:46 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -43,11 +43,12 @@
 #define G4PScoreProcess_hh G4PScoreProcess_hh
 
 #include "G4VProcess.hh"
+#include "G4VTrackTerminator.hh"
 
 class G4VParallelStepper;
 class G4VPScorer;
 
-class G4PScoreProcess : public G4VProcess
+class G4PScoreProcess : public G4VProcess, public G4VTrackTerminator
 {
 
 public:  // with description
@@ -57,19 +58,25 @@ public:  // with description
 		  const G4String &aName = "PScoreProcess");
     // create a G4ParticleChange
 
-  virtual ~G4PScoreProcess();
+  ~G4PScoreProcess();
     // delete the G4ParticleChange
 
-  virtual G4double 
+  G4double 
   PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
 				       G4double   previousStepSize,
 				       G4ForceCondition* condition);
     // make the process beeing forced
 
-  virtual G4VParticleChange * PostStepDoIt(const G4Track&, 
-					   const G4Step&);
+  G4VParticleChange * PostStepDoIt(const G4Track&, 
+				   const G4Step&);
     // get G4PStep and G4Step and message "scorer"
-  
+
+  void KillTrack(){
+    fKillTrack = true;
+  }
+    // to be called by the importance process if the track should
+    // be killed after scoring
+ 
 public:  // without description
 
   //  no operation in  AtRestDoIt and  AlongStepDoIt
@@ -93,6 +100,8 @@ private:
 
   G4VParallelStepper &fPstepper;
   G4VPScorer &fScorer;  
+
+  G4bool fKillTrack;
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportancePostStepDoIt.cc,v 1.5 2002-05-31 08:06:34 dressel Exp $
+// $Id: G4ImportancePostStepDoIt.cc,v 1.6 2002-08-13 10:07:46 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -38,8 +38,14 @@
 #include "G4ParticleChange.hh"
 #include "G4VImportanceSplitExaminer.hh"
 #include "G4Nsplit_Weight.hh"
+#include "G4VTrackTerminator.hh"
 
-G4ImportancePostStepDoIt::G4ImportancePostStepDoIt(){}
+
+G4ImportancePostStepDoIt::
+G4ImportancePostStepDoIt(G4VTrackTerminator &TrackTerminator)
+  :
+  fTrackTerminator(TrackTerminator)
+{}
 G4ImportancePostStepDoIt::~G4ImportancePostStepDoIt(){}
 
 void G4ImportancePostStepDoIt::DoIt(const G4Track& aTrack, 
@@ -57,7 +63,7 @@ void G4ImportancePostStepDoIt::DoIt(const G4Track& aTrack,
   }
   else if (nw.fN==0) {
     // kill track
-    aParticleChange->SetStatusChange(fStopAndKill);
+    fTrackTerminator.KillTrack();
   }
   else {
     // wrong answer

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceProcess.hh,v 1.3 2002-04-10 13:14:16 dressel Exp $
+// $Id: G4MassImportanceProcess.hh,v 1.4 2002-08-13 10:07:45 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -41,31 +41,36 @@
 
 #include "G4VProcess.hh"
 #include "G4ImportancePostStepDoIt.hh"
+#include "G4VTrackTerminator.hh"
 
 class G4VImportanceAlgorithm;
 class G4ImportanceFinder;
 class G4VIStore;
 
-class G4MassImportanceProcess : public G4VProcess
+class G4MassImportanceProcess : public G4VProcess, public G4VTrackTerminator
 {
 
 public:  // with description
 
   G4MassImportanceProcess(const G4VImportanceAlgorithm &aImportanceAlgorithm,
 			  const G4VIStore &aIstore,
+			  G4VTrackTerminator *TrackTerminator,
 			  const G4String &aName = "MassImportanceProcess");
     // creates a G4ParticleChange
 
   ~G4MassImportanceProcess();
     // delete the G4ParticleChange
 
-  virtual G4double 
+  G4double 
   PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
 				       G4double   previousStepSize,
 				       G4ForceCondition* condition);
     // make process beeing forced
-  virtual G4VParticleChange *PostStepDoIt(const G4Track&, const G4Step&);
+  G4VParticleChange *PostStepDoIt(const G4Track&, const G4Step&);
     // manage the importance sampling in the "mass" geometry
+
+  void KillTrack();
+    // used in case no scoring process follows that does the killing
 
 public:  // without description
 
@@ -91,9 +96,10 @@ private:
 private:
 
   G4ParticleChange *fParticleChange;
-  G4ImportancePostStepDoIt fImportancePostStepDoIt;
+  G4VTrackTerminator *fTrackTerminator;
   const G4VImportanceAlgorithm &fImportanceAlgorithm;
   G4ImportanceFinder *fImportanceFinder;
+  G4ImportancePostStepDoIt *fImportancePostStepDoIt;
 };
 
 #endif

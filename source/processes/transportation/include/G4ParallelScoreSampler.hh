@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelScoreSampler.hh,v 1.1 2002-05-31 10:16:01 dressel Exp $
+// $Id: G4ParallelScoreSampler.hh,v 1.2 2002-08-13 10:07:46 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -70,6 +70,7 @@ public:  // with description
   void Initialize();
     // the G4ParallelScoreSampler has to be initialised after
     // the initialisation of the G4RunManager !
+
 
 private:
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceSampler.cc,v 1.1 2002-05-31 10:16:02 dressel Exp $
+// $Id: G4ParallelImportanceSampler.cc,v 1.2 2002-08-13 10:07:47 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -39,13 +39,17 @@
 #include "G4ParallelImportanceProcess.hh"
 #include "G4ProcessPlacer.hh"
 #include "G4ImportanceAlgorithm.hh"
+#include "G4VTrackTerminator.hh"
+
 
 G4ParallelImportanceSampler::
 G4ParallelImportanceSampler(G4VIStore &is,
 			    const G4String &particlename,
 			    const G4VImportanceAlgorithm *ialg)
-  :fParticleName(particlename), 
+  :
+  fParticleName(particlename), 
   fParallelWorld(*(new G4ParallelWorld(is.GetWorldVolume()))),
+  fTrackTerminator(0),
   fCreatedPW(true),
   fDeleteAlg( ( ! ialg) ),
   fIalgorithm(( (fDeleteAlg) ? 
@@ -61,9 +65,11 @@ G4ParallelImportanceSampler::
 G4ParallelImportanceSampler(G4VIStore &is,
 			    const G4String &pname,
 			    G4ParallelWorld &pworld,
-			    const G4VImportanceAlgorithm *ialg) : 
+			    const G4VImportanceAlgorithm *ialg) 
+  :
   fParticleName(pname), 
   fParallelWorld(pworld),
+  fTrackTerminator(0),
   fCreatedPW(false),
   fDeleteAlg( ( ! ialg) ),
   fIalgorithm(( (fDeleteAlg) ? 
@@ -86,7 +92,8 @@ G4ParallelImportanceSampler::CreateParallelImportanceProcess()
 				      fParallelWorld.
 				      GetGeoDriver(), 
 				      fParallelWorld.
-				      GetParallelStepper());
+				      GetParallelStepper(),
+				      fTrackTerminator);
   }
   return fParallelImportanceProcess;
 }

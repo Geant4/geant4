@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceProcess.cc,v 1.3 2002-05-31 08:06:34 dressel Exp $
+// $Id: G4ParallelImportanceProcess.cc,v 1.4 2002-08-13 10:07:47 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -34,17 +34,30 @@
 #include "G4ParallelImportanceProcess.hh"
 #include "G4VImportanceSplitExaminer.hh"
 #include "g4std/strstream"
+#include "G4VTrackTerminator.hh"
 
 G4ParallelImportanceProcess::
 G4ParallelImportanceProcess(const G4VImportanceSplitExaminer &aImportanceSplitExaminer,
-		    G4VPGeoDriver &pgeodriver,
-		    G4VParallelStepper &aStepper, 
-		    const G4String &aName)
- : G4ParallelTransport(pgeodriver, aStepper, aName),
-   fParticleChange(G4ParallelTransport::fParticleChange),
-   fImportanceSplitExaminer(aImportanceSplitExaminer)
-{}
+			    G4VPGeoDriver &pgeodriver,
+			    G4VParallelStepper &aStepper, 
+			    G4VTrackTerminator *TrackTerminator,
+			    const G4String &aName)
+ : 
+  G4ParallelTransport(pgeodriver, aStepper, aName),
+  fTrackTerminator(TrackTerminator),
+  fParticleChange(G4ParallelTransport::fParticleChange),
+  fImportanceSplitExaminer(aImportanceSplitExaminer)
+{
+  if (fTrackTerminator==0) fTrackTerminator = this;
+  fImportancePostStepDoIt = new 
+    G4ImportancePostStepDoIt(*fTrackTerminator);
 
+}
+
+G4ParallelImportanceProcess::~G4ParallelImportanceProcess()
+{
+  delete fImportancePostStepDoIt;
+}
 
 G4VParticleChange *G4ParallelImportanceProcess::
 PostStepDoIt(const G4Track& aTrack, const G4Step &aStep)
@@ -57,7 +70,7 @@ PostStepDoIt(const G4Track& aTrack, const G4Step &aStep)
   // get new weight and number of clones
   G4Nsplit_Weight nw(fImportanceSplitExaminer.Examine(aTrack.GetWeight()));
 
-  fImportancePostStepDoIt.DoIt(aTrack, fParticleChange, nw);
+  fImportancePostStepDoIt->DoIt(aTrack, fParticleChange, nw);
   return fParticleChange;
 }
   
@@ -65,4 +78,10 @@ void G4ParallelImportanceProcess::Error(const G4String &m)
 {
   G4cout << "ERROR - G4ImportanceProcess::" << m << G4endl;
   G4Exception("Program aborted.");
+}
+
+
+
+void G4ParallelImportanceProcess::KillTrack(){
+  fParticleChange->SetStatusChange(fStopAndKill);
 }

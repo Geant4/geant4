@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MScoreProcess.hh,v 1.3 2002-04-10 13:14:16 dressel Exp $
+// $Id: G4MScoreProcess.hh,v 1.4 2002-08-13 10:07:45 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -39,10 +39,12 @@
 #define G4MScoreProcess_hh G4MScoreProcess_hh 
 
 #include "G4VProcess.hh"
+#include "G4VTrackTerminator.hh"
 
 class G4VPScorer;
 
-class G4MScoreProcess : public G4VProcess
+class G4MScoreProcess : public G4VProcess, public G4VTrackTerminator
+
 {
 
 public:  // with description
@@ -52,18 +54,24 @@ public:  // with description
     // take reference to scorer and coppy particle name and
     // create a G4ParticleChange
 
-  virtual ~G4MScoreProcess();
+  ~G4MScoreProcess();
     // delete the G4ParticleChange
 
-  virtual G4double 
+  G4double 
   PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
 				       G4double   previousStepSize,
 				       G4ForceCondition* condition);
     // make processed being forced
 
-  virtual G4VParticleChange * PostStepDoIt(const G4Track&, const G4Step&);
+  G4VParticleChange * PostStepDoIt(const G4Track&, const G4Step&);
     // message "scorer" with  G4Step and a G4PStep from the "mass" 
     // geometry
+
+  void KillTrack(){
+    fKillTrack = true;
+  }
+    // to be called by the importance process if the track should
+    // be killed after scoring
 
 public:  // without description
 
@@ -93,6 +101,7 @@ private:
 private:
 
   G4VPScorer &fScorer;  
+  G4bool fKillTrack;
 };
 
 #endif

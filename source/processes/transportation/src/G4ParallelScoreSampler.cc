@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelScoreSampler.cc,v 1.2 2002-05-31 13:49:46 dressel Exp $
+// $Id: G4ParallelScoreSampler.cc,v 1.3 2002-08-13 10:07:47 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -36,6 +36,7 @@
 #include "G4ProcessPlacer.hh"
 #include "G4ParallelWorld.hh"
 #include "G4ParallelTransport.hh"
+
 
 G4ParallelScoreSampler::
 G4ParallelScoreSampler(G4VPhysicalVolume &worldvolume,
@@ -86,3 +87,7 @@ void G4ParallelScoreSampler::Initialize()
   placer.AddProcessAsSecondDoIt(CreateParallelScoreProcess());
   placer.AddProcessAsSecondDoIt(CreateParallelTransport());
 }
+
+
+
+

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PImportanceWWindowScoreSampler.cc,v 1.1 2002-05-31 10:16:02 dressel Exp $
+// $Id: G4PImportanceWWindowScoreSampler.cc,v 1.2 2002-08-13 10:07:47 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -97,7 +97,8 @@ G4PImportanceWWindowScoreSampler::CreateWeightWindowProcess()
       new G4ParallelWeightWindowProcess(fIstore,
 					fParallelWorld.
 					GetParallelStepper(),
-					fWWAlgorithm);
+					fWWAlgorithm,
+					fPScoreProcess);
   }
   return fPWeightWindowProcess;
 }
@@ -106,6 +107,7 @@ void G4PImportanceWWindowScoreSampler::Initialize()
 {
   G4ProcessPlacer placer(fParticleName);
   placer.AddProcessAsSecondDoIt(CreateParallelScoreProcess());
+  fParallelImportanceSampler.SetTrackTerminator(fPScoreProcess);
   fParallelImportanceSampler.Initialize();
   placer.AddProcessAsSecondDoIt(CreateWeightWindowProcess());
 }

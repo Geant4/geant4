@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MScoreProcess.cc,v 1.3 2002-04-09 17:40:15 gcosmo Exp $
+// $Id: G4MScoreProcess.cc,v 1.4 2002-08-13 10:07:47 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -38,8 +38,10 @@
 
 G4MScoreProcess::G4MScoreProcess(G4VPScorer &aScorer,
 				 const G4String &aName)
- : G4VProcess(aName), 
-   fScorer(aScorer)
+ : 
+  G4VProcess(aName), 
+  fScorer(aScorer),
+  fKillTrack(false)
 {
   G4VProcess::pParticleChange = new G4ParticleChange;
 }
@@ -80,5 +82,11 @@ G4MScoreProcess::PostStepDoIt(const G4Track& aTrack, const G4Step &aStep)
   
     fScorer.Score(aStep, pstep); 
   }
+
+  if (fKillTrack) {
+    fKillTrack = false;
+    pParticleChange->SetStatusChange(fStopAndKill);
+  }
+
   return G4VProcess::pParticleChange;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassScoreSampler.hh,v 1.1 2002-05-31 10:16:01 dressel Exp $
+// $Id: G4MassScoreSampler.hh,v 1.2 2002-08-13 10:07:45 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -43,6 +43,7 @@
 class G4VProcess;
 class G4VPScorer;
 class G4MScoreProcess;
+class G4VTrackTerminator;
 
 class G4MassScoreSampler : public G4VSampler
 {
@@ -58,6 +59,9 @@ public:  // with description
   G4MScoreProcess *CreateMassScoreProcess();
     // create the mass score process 
     // don't use it if you use Initialize()
+
+  G4VTrackTerminator *GetTrackTerminator();
+    // used internally by G4MassImportanceScoreSampler
 
   void Initialize();
     // the G4MassScoreSampler has to be initialised after

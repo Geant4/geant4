@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportancePostStepDoIt.hh,v 1.4 2002-05-31 08:06:34 dressel Exp $
+// $Id: G4ImportancePostStepDoIt.hh,v 1.5 2002-08-13 10:07:45 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -43,13 +43,15 @@ class G4ParticleChange;
 class G4Track;
 class G4Step;
 class G4Nsplit_Weight;
+class G4VTrackTerminator;
+
 
 class G4ImportancePostStepDoIt
 {
 
 public:  // with description
 
-  G4ImportancePostStepDoIt();
+  G4ImportancePostStepDoIt(G4VTrackTerminator &TrackTerminator);
     // simply construct
 
   ~G4ImportancePostStepDoIt();
@@ -62,6 +64,7 @@ public:  // with description
     // "mass" and "parallel" geometry.
   
 private:
+  G4VTrackTerminator &fTrackTerminator;
 
   void Split(const G4Track &aTrack,
 	     const G4Nsplit_Weight &nw,

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceSampler.hh,v 1.1 2002-05-31 10:16:01 dressel Exp $
+// $Id: G4ParallelImportanceSampler.hh,v 1.2 2002-08-13 10:07:46 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -47,6 +47,7 @@ class G4VIStore;
 class G4VImportanceAlgorithm;
 class G4VImportanceSplitExaminer;
 class G4ParallelImportanceProcess;
+class G4VTrackTerminator;
 
 class G4ParallelImportanceSampler : public G4VSampler
 {
@@ -79,11 +80,15 @@ public:  // with description
     // create the parallel importance process 
     // don't use it if you use Initialize()
 
-   void Initialize();
+  void Initialize();
     // the G4ParallelImportanceSampler has to be initialised after
     // the initialisation of the G4RunManager !
   
-private:
+  void SetTrackTerminator(G4VTrackTerminator *tt){
+    fTrackTerminator = tt;
+  }
+  
+ private:
 
   G4ParallelImportanceSampler(const G4ParallelImportanceSampler &);
   G4ParallelImportanceSampler &operator=(const G4ParallelImportanceSampler &);
@@ -92,6 +97,7 @@ private:
 
   G4String fParticleName;
   G4ParallelWorld &fParallelWorld;
+  G4VTrackTerminator *fTrackTerminator;
   G4bool fCreatedPW;
 
   G4bool fDeleteAlg;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceSampler.cc,v 1.1 2002-05-31 10:16:02 dressel Exp $
+// $Id: G4MassImportanceSampler.cc,v 1.2 2002-08-13 10:07:47 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -35,13 +35,14 @@
 #include "G4MassImportanceProcess.hh"
 #include "G4ProcessPlacer.hh"
 #include "G4ImportanceAlgorithm.hh"
-
+#include "G4VTrackTerminator.hh"
 
 G4MassImportanceSampler::
 G4MassImportanceSampler(G4VIStore &aIstore,
 			const G4String &particlename,
 			const G4VImportanceAlgorithm *algorithm)
  : fIStore(aIstore),
+   fTrackTerminator(0),
    fParticleName(particlename),
    fMassImportanceProcess(0),
    fCreatedAlgorithm( ( ! algorithm) ),
@@ -64,7 +65,9 @@ G4MassImportanceProcess *G4MassImportanceSampler::CreateMassImportanceProcess()
 {
   if (!fMassImportanceProcess) {
     fMassImportanceProcess =
-      new G4MassImportanceProcess(*fAlgorithm, fIStore);
+      new G4MassImportanceProcess(*fAlgorithm, 
+				  fIStore, 
+				  fTrackTerminator);
   }
   return fMassImportanceProcess;
 }
