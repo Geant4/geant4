@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Cons2.cc,v 1.9 2003-11-12 10:24:59 grichine Exp $
+// $Id: testG4Cons2.cc,v 1.10 2004-01-24 15:19:01 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Simple test of G4Cons
@@ -140,14 +140,70 @@ int main(void)
                            10*cm, 10*deg, 300*deg ); 
 
   G4ThreeVector pct10(60,0,0);
+  G4ThreeVector pct10mx(-50,0,0);
   G4ThreeVector pct10phi1(60*cos(10.*degree),60*sin(10*degree),0);
   G4ThreeVector pct10phi2(60*cos(50.*degree),-60*sin(50*degree),0);
 
-	G4ThreeVector norm,*pNorm;
-	G4bool *pgoodNorm,goodNorm,calcNorm=true;
+  G4ThreeVector pct10e1(-691-500,174,      404 );
+
+  G4ThreeVector pct10e2( 400-500, 20.9,     5.89 );
+
+  G4ThreeVector pct10e3( 456-500, 13,    -14.7 );
+
+  G4ThreeVector pct10e4( 537-500, 1.67,    -44.1 );
+  // point P is outside
+  G4ThreeVector pct10e5(537, 1.67,    -44.1);
+
+  G4ThreeVector pct10e6(1e+03, -63.5,     -213 );
+
+  G4double a1,a2,a3,am;
+
+  a1=pct10e2.x()-pct10e1.x();
+  a2=pct10e2.y()-pct10e1.y();
+  a3=pct10e2.z()-pct10e1.z();
+  am=sqrt(a1*a1+a2*a2+a3*a3);
+  G4ThreeVector  d1(a1/am,a2/am,a3/am);
+  G4cout<<d1.x()<<"\t"<<d1.y()<<"\t"<<d1.z()<<G4endl;
+
+  a1=pct10e3.x()-pct10e2.x();
+  a2=pct10e3.y()-pct10e2.y();
+  a3=pct10e3.z()-pct10e2.z();
+  am=sqrt(a1*a1+a2*a2+a3*a3);
+  G4ThreeVector  d2(a1/am,a2/am,a3/am);
+  G4cout<<d2.x()<<"\t"<<d2.y()<<"\t"<<d2.z()<<G4endl;
+
+  a1=pct10e4.x()-pct10e3.x();
+  a2=pct10e4.y()-pct10e3.y();
+  a3=pct10e4.z()-pct10e3.z();
+  am=sqrt(a1*a1+a2*a2+a3*a3);
+  G4ThreeVector  d3(a1/am,a2/am,a3/am);
+  G4cout<<d3.x()<<"\t"<<d3.y()<<"\t"<<d3.z()<<G4endl;
+
+
+  // 19.01.04 modified test10 info:
+
+  G4ThreeVector  pt10s1(  6.454731216775542,
+			-90.42080754048007,
+                        100.                 );
+
+  G4ThreeVector  pt10s2( 22.65282328600368,
+                        -69.34877585931267, 
+                         76.51600623610082 );
+
+  G4ThreeVector  pt10s3( 51.28206938732319,
+			-32.10510677306267,
+                         35.00932544708616 );
+
+  G4ThreeVector    vt10d( 0.4567090876640433 , 
+                          0.5941309830320264, 
+                         -0.6621368319663807 );
+
+
+  G4ThreeVector norm,*pNorm;
+  G4bool *pgoodNorm,goodNorm,calcNorm=true;
 	
-	pNorm=&norm;
-	pgoodNorm=&goodNorm;
+  pNorm=&norm;
+  pgoodNorm=&goodNorm;
 
 	r90X.rotateX(halfpi);
 	r90Y.rotateY(halfpi);
@@ -157,8 +213,40 @@ int main(void)
 	//	G4cout << "G4Cons:"<< c4.GetName()
 	//   << " ID=" << c4.GetIdentifier() << "\n";
 
-        G4cout.precision(16) ;
-	G4cout << "Testing G4Cons::Inside...\n";
+  EInside in;
+  G4cout.precision(16) ;
+  G4cout << "Testing G4Cons::Inside...\n";
+
+  in = ctest10.Inside(pct10e1);
+  G4cout << "ctest10.Inside(pct10e1) = " <<OutputInside(in)<< G4endl;
+
+  in = ctest10.Inside(pct10e2);
+  G4cout << "ctest10.Inside(pct10e2) = " <<OutputInside(in)<< G4endl;
+
+  in = ctest10.Inside(pct10e3);
+  G4cout << "ctest10.Inside(pct10e3) = " <<OutputInside(in)<< G4endl;
+
+  in = ctest10.Inside(pct10e4);
+  G4cout << "ctest10.Inside(pct10e4) = " <<OutputInside(in)<< G4endl;
+
+  in = ctest10.Inside(pct10e5);
+  G4cout << "ctest10.Inside(pct10e5) = " <<OutputInside(in)<< G4endl;
+
+  in = ctest10.Inside(pct10e6);
+  G4cout << "ctest10.Inside(pct10e6) = " <<OutputInside(in)<< G4endl;
+
+  in = ctest10.Inside(pct10mx);
+  G4cout << "ctest10.Inside(pct10mx) = " <<OutputInside(in)<< G4endl;
+
+  in = ctest10.Inside(pt10s1);
+  G4cout << "ctest10.Inside(pt10s1) = " <<OutputInside(in)<< G4endl;
+
+  in = ctest10.Inside(pt10s2);
+  G4cout << "ctest10.Inside(pt10s2) = " <<OutputInside(in)<< G4endl;
+
+  in = ctest10.Inside(pt10s3);
+  G4cout << "ctest10.Inside(pt10s3) = " <<OutputInside(in)<< G4endl;
+
 	if (c1.Inside(pzero)!=kOutside)
 		G4cout << "Error A" << G4endl;
 	if (c6.Inside(pzero)!=kInside)
@@ -504,6 +592,20 @@ G4cout<<"Error:c9.Out((1e3*kRadTolerance,0,50),vx2mz,...) = " <<dist << G4endl;
 	if (OutRange(dist,0.))
  G4cout<<"cms2.DistanceToOut(G4ThreeVector(-344.13684 ... = "<<dist<<G4endl;
 
+	dist=ctest10.DistanceToOut(pct10e2,
+                              d1,calcNorm,pgoodNorm,pNorm);
+	*pNorm=pNorm->unit();
+	if (OutRange(dist,111.8033988)||
+	    !*pgoodNorm||
+	    OutRange(*pNorm,G4ThreeVector(0,0,-1.0)))
+       G4cout << "ctest10.DistanceToOut(pct10e2,d1,...) = " <<dist << G4endl;
+	dist=ctest10.DistanceToOut(pct10e3,
+                              d1,calcNorm,pgoodNorm,pNorm);
+	*pNorm=pNorm->unit();
+	if (OutRange(dist,111.8033988)||
+	    !*pgoodNorm||
+	    OutRange(*pNorm,G4ThreeVector(0,0,-1.0)))
+       G4cout << "ctest10.DistanceToOut(pct10e3,d1,...) = " <<dist << G4endl;
 
 	/////////////////////////////////////////////
 	//
@@ -790,6 +892,44 @@ G4cout<<"Error:c9.Out((1e3*kRadTolerance,0,50),vx2mz,...) = " <<dist << G4endl;
 	dist=ctest10.DistanceToIn(pct10phi2,vmz);
 	if (OutRange(dist,kInfinity))
 	    G4cout << "ctest10.DistanceToIn(pct10phi2,vmz) = " << dist << G4endl;
+
+	dist=ctest10.DistanceToIn(pct10mx,vx);
+	if (OutRange(dist,kInfinity))
+	    G4cout << "ctest10.DistanceToIn(pct10mx,vx) = " << dist << G4endl;
+
+	dist=ctest10.DistanceToIn(pct10mx,vmx);
+	if (OutRange(dist,0))
+	    G4cout << "ctest10.DistanceToIn(pct10mx,vmx) = " << dist << G4endl;
+
+	dist=ctest10.DistanceToIn(pct10mx,vy);
+	if (OutRange(dist,77.78352))
+	    G4cout << "ctest10.DistanceToIn(pct10mx,vy) = " << dist << G4endl;
+
+	dist=ctest10.DistanceToIn(pct10mx,vmy);
+	if (OutRange(dist,0))
+	    G4cout << "ctest10.DistanceToIn(pct10mx,vmy) = " << dist << G4endl;
+
+	dist=ctest10.DistanceToIn(pct10mx,vz);
+	if (OutRange(dist,33.3333))
+	    G4cout << "ctest10.DistanceToIn(pct10mx,vz) = " << dist << G4endl;
+
+	dist=ctest10.DistanceToIn(pct10mx,vmz);
+	if (OutRange(dist,kInfinity))
+	    G4cout << "ctest10.DistanceToIn(pct10mx,vmz) = " << dist << G4endl;
+
+
+
+	dist=ctest10.DistanceToIn(pct10e1,d1);
+	if (OutRange(dist,kInfinity))
+	    G4cout << "ctest10.DistanceToIn(pct10e1,d1) = " << dist << G4endl;
+
+	dist=ctest10.DistanceToIn(pct10e4,d1);
+	if (OutRange(dist,kInfinity))
+	    G4cout << "ctest10.DistanceToIn(pct10e4,d1) = " << dist << G4endl;
+
+	dist=ctest10.DistanceToIn(pt10s2,vt10d);
+	// if (OutRange(dist,kInfinity))
+	    G4cout << "ctest10.DistanceToIn(pt10s2,vt10d) = " << dist << G4endl;
 
 	G4cout << "NOT Checking G4Cons::ScopeCar...\n";
 	G4cout << "NOT Checking G4Cons::ScopePhi...\n";
