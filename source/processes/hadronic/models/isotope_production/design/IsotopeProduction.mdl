@@ -168,7 +168,7 @@
 			quidu      	"3712312ACAD8")))
 	    (object Class "G4VIsotopeProduction"
 		quid       	"371232040AC0")
-	    (object Class "G4DefaultIsotopeProduction"
+	    (object Class "G4ProtonIsotopeProduction"
 		quid       	"371336B3C010"
 		superclasses 	(list inheritance_relationship_list
 		    (object Inheritance_Relationship
@@ -717,22 +717,36 @@
 			    justify    	0
 			    label      	"G4VDiscreteProcess")
 			icon_style 	"Icon"
+			line_color 	4194368
+			fill_color 	16777215
 			quidu      	"37122F4C9453"
 			width      	498
 			height     	146)
 		    (object ClassView "Class" "Logical View::G4NeutronIsotopeProduction" @35
 			IncludeAttribute 	TRUE
 			IncludeOperation 	TRUE
-			location   	(703, 1227)
+			location   	(696, 1226)
 			label      	(object ItemLabel
 			    Parent_View 	@35
-			    location   	(355, 1142)
+			    location   	(348, 1141)
 			    nlines     	1
 			    max_width  	697
 			    justify    	0
 			    label      	"G4NeutronIsotopeProduction")
 			icon_style 	"Icon"
+			line_color 	4194368
+			fill_color 	16777215
 			quidu      	"37122F4C9450"
+			compartment 	(object Compartment
+			    Parent_View 	@35
+			    location   	(348, 1217)
+			    font       	(object Font
+				size       	10
+				charSet    	1)
+			    icon_style 	"Icon"
+			    anchor     	2
+			    nlines     	2
+			    max_width  	703)
 			width      	715
 			height     	202)
 		    (object ClassView "Class" "Logical View::G4HadronInelasticProcess" @36
@@ -741,14 +755,13 @@
 			label      	(object ItemLabel
 			    Parent_View 	@36
 			    location   	(1889, 120)
-			    fill_color 	13434879
 			    nlines     	1
 			    max_width  	609
 			    justify    	0
 			    label      	"G4HadronInelasticProcess")
 			icon_style 	"Icon"
-			line_color 	3342489
-			fill_color 	13434879
+			line_color 	4194368
+			fill_color 	16777215
 			quidu      	"37123137D930"
 			width      	627
 			height     	133)
@@ -758,96 +771,88 @@
 			label      	(object ItemLabel
 			    Parent_View 	@37
 			    location   	(1956, 400)
-			    fill_color 	13434879
 			    nlines     	1
 			    max_width  	508
 			    justify    	0
 			    label      	"G4FissionProcess")
 			icon_style 	"Icon"
-			line_color 	3342489
-			fill_color 	13434879
+			line_color 	4194368
+			fill_color 	16777215
 			quidu      	"371231642870"
 			width      	526
 			height     	133)
-		    (object Label @38
-			location   	(1190, 450)
-			nlines     	2
-			max_width  	613
-			label      	"use static swich to toggle for all processes at once")
-		    (object ClassView "Class" "Logical View::G4HadronicProcess" @39
+		    (object ClassView "Class" "Logical View::G4HadronicProcess" @38
 			ShowCompartmentStereotypes 	TRUE
 			location   	(1057, 217)
 			label      	(object ItemLabel
-			    Parent_View 	@39
+			    Parent_View 	@38
 			    location   	(816, 163)
-			    fill_color 	13434879
 			    nlines     	1
 			    max_width  	482
 			    justify    	0
 			    label      	"G4HadronicProcess")
 			icon_style 	"Icon"
-			line_color 	3342489
-			fill_color 	13434879
+			line_color 	4194368
+			fill_color 	16777215
 			quidu      	"3712312ACAD8"
 			width      	500
 			height     	140)
-		    (object InheritView "" @40
+		    (object InheritView "" @39
 			stereotype 	TRUE
-			line_color 	3342489
+			line_color 	4194368
 			quidu      	"37123157C940"
-			client     	@39
+			client     	@38
 			supplier   	@34
 			line_style 	0)
-		    (object ClassView "Class" "Logical View::G4VIsotopeProduction" @41
+		    (object ClassView "Class" "Logical View::G4VIsotopeProduction" @40
 			ShowCompartmentStereotypes 	TRUE
 			location   	(1050, 793)
 			label      	(object ItemLabel
-			    Parent_View 	@41
+			    Parent_View 	@40
 			    location   	(796, 746)
-			    fill_color 	13434879
 			    nlines     	1
 			    max_width  	509
 			    justify    	0
 			    label      	"G4VIsotopeProduction")
 			icon_style 	"Icon"
-			line_color 	3342489
-			fill_color 	13434879
+			line_color 	4194368
+			fill_color 	16777215
 			quidu      	"371232040AC0"
 			width      	527
 			height     	127)
-		    (object InheritView "" @42
+		    (object InheritView "" @41
 			stereotype 	TRUE
-			line_color 	3342489
+			line_color 	4194368
 			quidu      	"37123222ED20"
 			client     	@35
-			supplier   	@41
+			supplier   	@40
 			line_style 	0)
-		    (object AssociationViewNew "$UNNAMED$11" @43
+		    (object AssociationViewNew "$UNNAMED$11" @42
 			location   	(1053, 508)
 			stereotype 	TRUE
-			line_color 	3342489
+			line_color 	4194368
 			quidu      	"371232257148"
 			roleview_list 	(list RoleViews
-			    (object RoleView "$UNNAMED$12" @44
-				Parent_View 	@43
+			    (object RoleView "$UNNAMED$12" @43
+				Parent_View 	@42
 				location   	(-663, -528)
 				stereotype 	TRUE
 				line_color 	3342489
 				quidu      	"3712322630D0"
-				client     	@43
-				supplier   	@39
+				client     	@42
+				supplier   	@38
 				line_style 	0)
-			    (object RoleView "$UNNAMED$13" @45
-				Parent_View 	@43
+			    (object RoleView "$UNNAMED$13" @44
+				Parent_View 	@42
 				location   	(-663, -528)
 				stereotype 	TRUE
 				line_color 	3342489
 				quidu      	"37123226D358"
-				client     	@43
-				supplier   	@41
+				client     	@42
+				supplier   	@40
 				line_style 	0
-				label      	(object SegLabel @46
-				    Parent_View 	@45
+				label      	(object SegLabel @45
+				    Parent_View 	@44
 				    location   	(1104, 708)
 				    font       	(object Font
 					size       	10
@@ -861,48 +866,42 @@
 				    pctDist    	0.900000
 				    height     	54
 				    orientation 	0))))
-		    (object InheritView "" @47
+		    (object InheritView "" @46
 			stereotype 	TRUE
-			line_color 	3342489
+			line_color 	4194368
 			quidu      	"3712319DDBD8"
 			client     	@37
-			supplier   	@39
+			supplier   	@38
 			line_style 	0)
-		    (object InheritView "" @48
+		    (object InheritView "" @47
 			stereotype 	TRUE
-			line_color 	3342489
+			line_color 	4194368
 			quidu      	"3712315CA1E0"
 			client     	@36
-			supplier   	@39
+			supplier   	@38
 			line_style 	0)
-		    (object Label @49
-			location   	(1437, 733)
-			nlines     	2
-			max_width  	706
-			label      	"use local 3-position swich to swich off for individual processes")
-		    (object ClassView "Class" "Logical View::G4DefaultIsotopeProduction" @50
+		    (object ClassView "Class" "Logical View::G4ProtonIsotopeProduction" @48
 			ShowCompartmentStereotypes 	TRUE
-			location   	(1783, 1250)
+			location   	(1796, 1200)
 			label      	(object ItemLabel
-			    Parent_View 	@50
-			    location   	(1462, 1206)
-			    fill_color 	13434879
+			    Parent_View 	@48
+			    location   	(1475, 1156)
 			    nlines     	1
 			    max_width  	642
 			    justify    	0
-			    label      	"G4DefaultIsotopeProduction")
+			    label      	"G4ProtonIsotopeProduction")
 			icon_style 	"Icon"
-			line_color 	3342489
-			fill_color 	13434879
+			line_color 	4194368
+			fill_color 	16777215
 			quidu      	"371336B3C010"
 			width      	660
 			height     	120)
-		    (object InheritView "" @51
+		    (object InheritView "" @49
 			stereotype 	TRUE
-			line_color 	3342489
+			line_color 	4194368
 			quidu      	"37133E5CD718"
-			client     	@50
-			supplier   	@41
+			client     	@48
+			supplier   	@40
 			line_style 	0)))))
     root_subsystem 	(object SubSystem "Component View"
 	quid       	"37122F4AC7E2"
