@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.24 2002-10-24 15:11:20 johna Exp $
+// $Id: G4VSceneHandler.cc,v 1.25 2002-11-11 18:37:13 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,6 +52,7 @@
 #include "G4Visible.hh"
 #include "G4VisAttributes.hh"
 #include "G4VModel.hh"
+#include "G4TrajectoriesModel.hh"
 #include "G4Box.hh"
 #include "G4Cons.hh"
 #include "G4Tubs.hh"
@@ -182,7 +183,8 @@ void G4VSceneHandler::AddThis (const G4VSolid& solid) {
 }
 
 void G4VSceneHandler::AddThis (const G4VTrajectory& traj) {
-  traj.DrawTrajectory();
+  
+  traj.DrawTrajectory(((G4TrajectoriesModel*)fpModel)->GetDrawingMode());
 }
 
 void G4VSceneHandler::AddThis (const G4VHit& hit) {
@@ -204,7 +206,7 @@ void G4VSceneHandler::BeginModeling () {
 
 void G4VSceneHandler::BeginPrimitives
 (const G4Transform3D& objectTransformation) {
-  if (!GetModel ()) G4Exception ("G4VSceneHandler::BeginPrimitives: NO MODEL!!!");
+  if (!fpModel) G4Exception ("G4VSceneHandler::BeginPrimitives: NO MODEL!!!");
   fpObjectTransformation = &objectTransformation;
 }
 
@@ -370,12 +372,12 @@ void G4VSceneHandler::SetScene (G4Scene* pScene) {
 }
 
 void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
-  if (!GetModel ())
+  if (!fpModel)
     G4Exception ("G4VSceneHandler::RequestPrimitives: NO MODEL!!!");
   G4Polyhedron* pPolyhedron;
   G4NURBS*      pNURBS;
   BeginPrimitives (*fpObjectTransformation);
-  switch (GetModel () -> GetModelingParameters () -> GetRepStyle ()) {
+  switch (fpModel -> GetModelingParameters () -> GetRepStyle ()) {
   case G4ModelingParameters::nurbs:
     pNURBS = solid.CreateNURBS ();
     if (pNURBS) {
@@ -400,7 +402,7 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
   case G4ModelingParameters::polyhedron:
   default:
     G4Polyhedron::SetNumberOfRotationSteps
-	(GetModel () -> GetModelingParameters () -> GetNoOfSides ());
+	(fpModel -> GetModelingParameters () -> GetNoOfSides ());
     pPolyhedron = solid.CreatePolyhedron ();
     G4Polyhedron::ResetNumberOfRotationSteps ();
     if (pPolyhedron) {
