@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FukuiRendererSceneHandler.cc,v 1.3 1999-12-15 14:54:01 gunter Exp $
+// $Id: G4FukuiRendererSceneHandler.cc,v 1.4 2000-04-12 13:08:22 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,6 +33,7 @@
 #include "G4FukuiRendererViewer.hh"
 #include "G4Point3D.hh"
 #include "G4VisAttributes.hh"
+#include "G4Scene.hh"
 #include "G4Transform3D.hh"
 #include "G4Polyhedron.hh"
 #include "G4Box.hh"
@@ -40,6 +41,10 @@
 #include "G4Polyline.hh"
 #include "G4Trd.hh"
 #include "G4Tubs.hh"
+#include "G4Trap.hh"
+#include "G4Torus.hh"
+#include "G4Sphere.hh"
+#include "G4Para.hh"
 #include "G4Text.hh"
 #include "G4Circle.hh"
 #include "G4Square.hh"
