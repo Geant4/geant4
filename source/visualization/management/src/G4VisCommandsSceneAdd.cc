@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.50 2005-03-15 12:57:03 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.51 2005-03-16 17:17:10 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -720,14 +720,8 @@ G4VisCommandSceneAddLogo::G4Logo::~G4Logo() {
 
 void G4VisCommandSceneAddLogo::G4Logo::operator()
   (const G4Transform3D& transform) {
-  /*
-  G4Transform3D transformG(transform * G4Translate3D(-0.55*fHeight,0.,0.));
-  fpVisManager->Draw(*fpLogoG,*fpVisAtts,transformG);
-  G4Transform3D transform4(transform * G4Translate3D(0.55*fHeight,0.,0.));
-  fpVisManager->Draw(*fpLogo4,*fpVisAtts,transform4);
-  */
-  fpVisManager->Draw(*fpG,transform);
-  fpVisManager->Draw(*fp4,transform);
+  G4VisCommandSceneAddLogo::fpVisManager->Draw(*fpG,transform);
+  G4VisCommandSceneAddLogo::fpVisManager->Draw(*fp4,transform);
 }
 
 ////////////// /vis/scene/add/scale //////////////////////////////////
