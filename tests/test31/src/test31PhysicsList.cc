@@ -33,6 +33,7 @@
 #include "test31GeneralPhysics.hh"
 #include "test31StandardEM.hh"
 #include "test31ModelEM.hh"
+#include "test31ModelEMnew.hh"
 #include "test31LowEPhysicsList.hh"
 #include "test31HadronElastic.hh"
 #include "test31PreCompound.hh"
@@ -101,12 +102,25 @@ void test31PhysicsList::AddPhysicsList(const G4String& name)
 
     if (emPhysicsListIsRegistered) {
 
-      G4cout << "test31PhysicsList::AddPhysicsList: <" << name << ">" 
+      G4cout << "test31PhysicsList::AddPhysicsList: <" << name << ">"
              << " cannot be register additionally to existing one"
              << G4endl;
     } else {
 
       RegisterPhysics( new test31ModelEM(name) );
+      emPhysicsListIsRegistered = true;
+    }
+  
+  } else if("modelnew" == name) {
+
+    if (emPhysicsListIsRegistered) {
+
+      G4cout << "test31PhysicsList::AddPhysicsList: <" << name << ">"
+             << " cannot be register additionally to existing one"
+             << G4endl;
+    } else {
+
+      RegisterPhysics( new test31ModelEMnew(name) );
       emPhysicsListIsRegistered = true;
     }
 
