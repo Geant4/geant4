@@ -1,3 +1,15 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4RTOutBitStream.hh,v 1.4 2000-03-09 15:36:34 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+
 #ifndef G4RTOutBitStream_H
 #define G4RTOutBitStream_H 1
 #include "G4RTJpeg.hh"
