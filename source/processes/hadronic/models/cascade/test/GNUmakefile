@@ -76,6 +76,9 @@ p5:	# ::: problem 5 (Al) too many n's in medium energy ::: hunt using history da
 p7:	# ::: problem 7 (H)  missing pions ::: CRITICAL, TO BE DONE
 	rm -r cascade.out; cascade 1000 1 585 1 1 > cascade.out; make a; 
 
+d:	# ::: study cascade model parameters
+	rm data; make data; rm -f data.out; data > data.out; cat data.out ; # make da;
+
 h:	# ::: compare h2 h1
 	make h2; make h1
 
@@ -102,6 +105,9 @@ leak:	# ::: find memory leaks
 
 time: 	# :: timing for target t
 	time -v gmake t
+
+da:
+	rm -f data.eps; root -b -q data.C; gv data.eps;
 
 a: 	# ::: a(nalysis) of data in  cascade.dat with batch run of Root
 	rm -f cascade.eps; root -b -q cascade.C; gv cascade.eps; 
