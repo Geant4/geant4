@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5DetectorConstruction.cc,v 1.7 2001-10-16 11:56:28 maire Exp $
+// $Id: Em5DetectorConstruction.cc,v 1.8 2003-02-10 17:30:04 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -265,11 +265,11 @@ G4VPhysicalVolume* Em5DetectorConstruction::ConstructCalorimeter()
                           
   logicAbsorber = new G4LogicalVolume(solidAbsorber,    //its solid
     	                  AbsorberMaterial,             //its material
-   	                 "Absorber");                   //its name
+   	                  AbsorberMaterial->GetName()); //its name
       			                  
   physiAbsorber = new G4PVPlacement(0,		   //no rotation
       		  G4ThreeVector(XposAbs,0.,0.),    //its position
-                                "Absorber",        //its name
+                                AbsorberMaterial->GetName(), //its name
                                 logicAbsorber,     //its logical volume
                                 physiWorld,        //its mother
                                 false,             //no boulean operat
