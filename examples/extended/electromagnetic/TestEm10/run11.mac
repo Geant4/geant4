@@ -1,7 +1,5 @@
 #
-# Macro file 'run11.mac' for the initialization phase of "TestEm8.cc"
-#
-# It creates the default geometry (simple absorber cylinder )        
+# Macro file 'run11.mac' for the initialization phase of "TestEm10.cc"       
 #
 /control/verbose 2
 #
@@ -9,36 +7,49 @@
 #
 /run/verbose 2
 #
-/run/initialize
+#/run/initialize
 #
-#/calor/setAbsMat Xenon
-#  
-#/calor/setAbsThick  20.0 mm 
+# Parameters of MWPC detector: material and its thickness
+# Xe55He15CH4, Xe10CH4, Xe20CH4, Xe5CH4, Xe20CO2, Kr20CO2
+# Kr7CH4, Ar7CH4, XeArCH4
+#
+/XTRdetector/setAbsMat Xe20CO2 
+/XTRdetector/setAbsThick 3.0 mm
+/XTRdetector/setWorldZ 4000.0 mm
+#
+# Parameters of Radiator (default mm)
+# TRT_CH2, Radiator, CarbonFiber, Li, Be, Mylar, Kapton ?, CH2
+# Air, CO2, He, Ne, Kr, Ar, Xe, 
+#
+/XTRdetector/setRadMat CH2
+/XTRdetector/setWorldMat Air
+/XTRdetector/setRadThick 0.02 mm
+/XTRdetector/setGasGapThick 0.2 mm
+/XTRdetector/setFoilNum 200
 # 
-#/calor/setAbsRad 100.0 mm
+# Selection of XTR parametrisation model: 1-10
+# TRmodel/XTRdEdx: Foam 1/2, GamDistr 3/4, Irr 5/6, Plate 7/8, Reg 9/10 
 #
-#/calor/update
+/XTRdetector/setModel 10
 #
-#  hist file name
+# Update geometry after changing its parametrs
+#
+#/XTRdetector/update
+# window: Myalr 51 micron
+#  PLOT: energy deposit distribution in absorber (g4.11)
 #
 /plots/sethistName g4.p11
-#
-#  PLOT: energy deposit distribution in absorber
-#
-/plots/setnbinEn 95
+/plots/setnbinEn 40
 /plots/setEnlow 0.0 MeV
-/plots/setEnhigh 0.1  MeV  
+/plots/setEnhigh 0.02  MeV  
 #
-#/calor/cutG 3.0 mm    
-#
-#/calor/cutE 3.0 mm
 #
 /run/initialize
 /run/particle/dumpCutValues
 #
+# Particle and its energy
+#
 /gun/particle e-
-# 
-#/gun/energy 200.00 GeV
 #
 /gun/energy 40000.0 MeV
 #
@@ -48,6 +59,8 @@
 /run/beamOn 1000
 #
 #
+
+
 
 
 
