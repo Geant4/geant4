@@ -1,12 +1,12 @@
 # NOTE:  '#' in column 0 is a comment.
 
 local 0
-#localhost 1 - >slave1.out
-#localhost 1 - >slave2.out
+localhost 1 - >slave1.out
+localhost 1 - >slave2.out
 
-lxplus015.cern.ch 1 - >slave1.out
-lxplus016.cern.ch 1 - >slave2.out
-lxplus017.cern.ch 1 - >slave2.out
+# lxplus015.cern.ch 1 - >slave1.out
+# lxplus016.cern.ch 1 - >slave2.out
+# xplus017.cern.ch 1 - >slave2.out
 
 # The general format is that "local 0" (required) implies creation of a master.
 # Otherwise there is one line per slave.
