@@ -22,7 +22,7 @@
 //
 //
 //
-// $Id: SoDetectorTreeKit.cc,v 1.8 2004-12-15 15:43:01 gunter Exp $
+// $Id: SoDetectorTreeKit.cc,v 1.9 2004-12-16 12:33:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*-----------------------------HEPVis----------------------------------------*/
@@ -33,7 +33,10 @@
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
 
+#ifdef G4VIS_BUILD_OI_DRIVER
+
 // this :
+
 #include "HEPVis/nodekits/SoDetectorTreeKit.h"
 
 #include <cmath>

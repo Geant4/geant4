@@ -22,7 +22,7 @@
 //
 //
 //
-// $Id: SoBox.cc,v 1.6 2004-12-15 15:42:58 gunter Exp $
+// $Id: SoBox.cc,v 1.7 2004-12-16 12:33:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*----------------------------HEPVis----------------------------------------*/
@@ -32,6 +32,8 @@
 /* Author:           Joe Boudreau Nov 11 1996                               */
 /*                                                                          */
 /*--------------------------------------------------------------------------*/
+
+#ifdef G4VIS_BUILD_OI_DRIVER
 
 // this :
 #include "HEPVis/nodes/SoBox.h"

@@ -22,7 +22,7 @@
 //
 //
 //
-// $Id: SoTrd.cc,v 1.6 2004-12-15 15:43:08 gunter Exp $
+// $Id: SoTrd.cc,v 1.7 2004-12-16 12:33:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*-----------------------------HEPVis---------------------------------------*/
@@ -32,6 +32,9 @@
 /* Author:           Joe Boudreau Nov 11 1996                               */
 /*                                                                          */
 /*--------------------------------------------------------------------------*/
+
+#ifdef G4VIS_BUILD_OI_DRIVER
+
 #include <assert.h>
 #include <cmath>
 
