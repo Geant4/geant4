@@ -1,4 +1,4 @@
-$Id: History,v 1.79 2000-05-19 09:17:14 johna Exp $
+$Id: History,v 1.80 2000-05-22 08:46:41 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,13 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+22nd May 2000  John Allison  (vis-V01-01-05)
+- Many bug fixes in OpenGL (opengl-V01-01-00) - see OpenGL/History.  Main
+  feature: workaround for bug in Mesa which slowed OpenGLXm.
+- modeling-V01-01-00: Added G4VTreeGraphicsScene (DTREE).
+- G4Scene::IsEmpty if empty of RunDurationModels - VisManager adds world in
+  this case.
 
 18th/19th May 2000  John Allison
 - Introduced some /vis/viewer/set commands.
