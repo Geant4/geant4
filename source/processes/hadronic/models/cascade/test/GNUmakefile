@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2002-11-06 18:51:42 miheikki Exp $
+# $Id: GNUmakefile,v 1.5 2002-11-06 19:59:07 miheikki Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------

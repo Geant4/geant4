@@ -11,20 +11,21 @@ gROOT->Reset();
 ifstream in;
 // we assume a file basic.dat in the current directory
 // this file has 3 columns of float data
-in.open("basic.dat", ios::in);
+in.open("cascade.out", ios::in);
 
-Float_t x,y,z;
+
+Float_t   nEvents, nPart, nProton, nNeutron, nucKinE, pKinE, nKinE, nPi, piKinE;
 Int_t nlines = 0;
-TFile *f = new TFile("basic.root","RECREATE");
-TH1F *h1 = new TH1F("h1","x distribution",100,-4,4);
-TNtuple *ntuple = new TNtuple("ntuple","data from ascii file","x:y:z");
+TFile *f = new TFile("cascade.root","RECREATE");
+TH1F *h1 = new TH1F("h1","nucKinE",100,-4,4);
+TNtuple *ntuple = new TNtuple("ntuple","data from cascade.out","nEvents:nPart:nProton:nNeutron:nucKinE:pKinE:nKinE:nPi:piKinE");
 
 while (1) {
-  in >> x >> y >> z;
+  in >> nEvents >> nPart >> nProton >> nNeutron >> nucKinE >> pKinE >> nKinE >> nPi >> piKinE;
   if (!in.good()) break;
-  if (nlines < 5) printf("x=%8f, y=%8f, z=%8f\n",x,y,z);
-  h1->Fill(x);
-  ntuple->Fill(x,y,z);
+  if (nlines < 5) printf("nPart=%8f, nProton=%8f, nNeutron=%8f\n",nPart,nProton,nNeutron);
+  h1->Fill(nucKinE);
+  ntuple->Fill(nEvents, nPart, nProton, nNeutron, nucKinE, pKinE, nKinE, nPi, piKinE);
   nlines++;
 }
 printf(" found %d points\n",nlines);

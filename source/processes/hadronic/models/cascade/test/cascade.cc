@@ -31,7 +31,7 @@ int main() {
   G4int nrain = 100; // number of interactions to be generated
   G4double eMin  = 0.5; // minimun energy for bullet
   G4double eMax  = 5.5;   // maximum energy for bullet
-  G4int    eBins = 5;   // bullet energy bins
+  G4int    eBins = 1;   // bullet energy bins
   G4double eStep = (eMax-eMin)/eBins;
   for(G4int e = 0; e < eBins; e++) { // Scan with different energy
  
