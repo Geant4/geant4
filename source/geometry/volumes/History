@@ -1,4 +1,4 @@
-$Id: History,v 1.58 2001-12-06 15:48:37 gcosmo Exp $
+$Id: History,v 1.59 2001-12-06 18:15:03 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,7 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
 Dec  6th, 2001       R. Chytracek - geomvol-V03-02-04
 - G4Navigator:
   o Fixed mirroring of the input argument for global direction into
