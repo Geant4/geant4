@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering52.icc,v 1.1 2003-08-08 11:31:24 vnivanch Exp $
+// $Id: G4MultipleScattering52.icc,v 1.1 2004-11-19 19:19:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------ G4MultipleScattering52 physics process ---------------------------

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.cc,v 1.22 2004-11-03 14:56:01 urban Exp $
+// $Id: G4MscModel.cc,v 1.1 2004-11-19 19:21:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
