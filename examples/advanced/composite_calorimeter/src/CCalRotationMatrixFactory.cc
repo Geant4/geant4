@@ -272,15 +272,20 @@ CCalRotationMatrixFactory::CCalRotationMatrixFactory():theMatrices(){
   G4cout << "       "  << theMatrices.size() << " rotation matrices read in." << G4endl;
 }
 
-std::ostream& operator<<(std::ostream& os , const G4RotationMatrix & rot){
-  //  os << "( " << rot.xx() << tab << rot.xy() << tab << rot.xz() << " )" << G4endl;
-  //  os << "( " << rot.yx() << tab << rot.yy() << tab << rot.yz() << " )" << G4endl;
-  //  os << "( " << rot.zx() << tab << rot.zy() << tab << rot.zz() << " )" << G4endl;
 
-  os << "[" 
-     << rot.thetaX()/deg << tab << rot.phiX()/deg << tab
-     << rot.thetaY()/deg << tab << rot.phiY()/deg << tab
-     << rot.thetaZ()/deg << tab << rot.phiZ()/deg << "]"
-     << G4endl;
-  return os;
-}
+// 29-Jan-2004 A.R. : commented to avoid clashes with CLHEP.
+//                    Streaming operators for rotation matrices are
+//                    already defined in CLHEP::HepRotation.
+// std::ostream& operator<<(std::ostream& os , const G4RotationMatrix & rot){
+//   //  os << "( " << rot.xx() << tab << rot.xy() << tab << rot.xz() << " )" << G4endl;
+//   //  os << "( " << rot.yx() << tab << rot.yy() << tab << rot.yz() << " )" << G4endl;
+//   //  os << "( " << rot.zx() << tab << rot.zy() << tab << rot.zz() << " )" << G4endl;
+// 
+//   os << "[" 
+//      << rot.thetaX()/deg << tab << rot.phiX()/deg << tab
+//      << rot.thetaY()/deg << tab << rot.phiY()/deg << tab
+//      << rot.thetaZ()/deg << tab << rot.phiZ()/deg << "]"
+//      << G4endl;
+// 
+//   return os;
+// }

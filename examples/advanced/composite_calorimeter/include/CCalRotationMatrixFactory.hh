@@ -63,5 +63,8 @@ private:
   G4RotationMatrixTable theMatrices; //Where the matrices are stored.
 };
 
-std::ostream& operator<<(std::ostream&, const G4RotationMatrix &);
+// 29-Jan-2004 A.R. : commented to avoid clashes with CLHEP.
+//                    Streaming operators for rotation matrices are
+//                    already defined in CLHEP::HepRotation.
+// std::ostream& operator<<(std::ostream&, const G4RotationMatrix &);
 #endif
