@@ -1,0 +1,10 @@
+May 19th G.Cosmo (global-01-00-02)
+- templates.hh: added definition of DBL_EPSILON and FLT_EPSILON.
+  Added 'F' to single precision literal constants.
+- Updates to STLInterface wrappers from the STL task-force. Added
+  AIX-xlC STL wrappers.
+  *** STLInterface module still under development ***
+ 
+May 17th J.Allison
+- Added #undef os_times in G4Timer.hh to avoid clash with
+  ObjectSpace when using STLInterface on Sun.
