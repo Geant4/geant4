@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItcsh.hh,v 1.3 2001-07-11 10:01:20 gunter Exp $
+// $Id: G4UItcsh.hh,v 1.4 2001-11-24 18:55:52 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -125,7 +125,7 @@ public:
 
 inline G4bool G4UItcsh::IsCursorLast() const
 {
-  if(cursorPosition == commandLine.length()+1) return TRUE;
+  if(cursorPosition == G4int(commandLine.length()+1)) return TRUE;
   else return FALSE;
 }
 

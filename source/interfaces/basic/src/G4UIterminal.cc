@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIterminal.cc,v 1.15 2001-07-11 10:01:21 gunter Exp $
+// $Id: G4UIterminal.cc,v 1.16 2001-11-24 18:55:52 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -118,7 +118,7 @@ void G4UIterminal::ExecuteCommand(G4String aCommand)
   case fCommandSucceeded:
     break;
   case fCommandNotFound:
-    G4cerr << "command <" << aCommand << "> not found" << G4endl;
+    G4cerr << "command <" << UI->SolveAlias(aCommand) << "> not found" << G4endl;
     if( aCommand.index("@@") != G4String::npos) {
       G4cout << "@@G4UIterminal" << G4endl;
     }
@@ -142,6 +142,7 @@ void G4UIterminal::ExecuteCommand(G4String aCommand)
   case fParameterUnreadable:
     G4cerr << "Parameter is wrong type and/or is not omittable (index " << paramIndex << ")" << G4endl;
     break;
+  case fAliasNotFound:
   default:
     G4cerr << "command refused (" << commandStatus << ")" << G4endl;
   }
