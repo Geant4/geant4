@@ -1,4 +1,4 @@
-$Id: History,v 1.7 1999-05-21 19:38:32 japost Exp $
+$Id: History,v 1.8 2000-01-20 10:55:24 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jan  19, 2000  Gabriele Cosmo                geometry-V01-00-00
+
+- Sycronized file versions with HEAD after ISO-C++ migration.
+  Collecting subtags: field-V01-00-00, geomsolids-V01-00-00,
+                      geommng-V01-00-00 and geomvol-V01-00-00.
+
+===============================================================================
+  Geant4 1.0  , 1st STL-based release. 
+===============================================================================
+
 May  21,  98   John Apostolakis              geometry-01-00-05
 
 - Tagged.
