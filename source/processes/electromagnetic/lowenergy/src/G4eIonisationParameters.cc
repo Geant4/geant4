@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationParameters.cc,v 1.10 2001-10-25 02:30:54 pia Exp $
+// $Id: G4eIonisationParameters.cc,v 1.11 2001-10-25 09:32:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -66,6 +66,7 @@ G4eIonisationParameters::~G4eIonisationParameters()
       counter ++;
       G4VEMDataSet* dataSet = (*pos).second;
       //      param.erase(pos);
+      /*
       if (dataSet != 0) 
 	{ 
 	  G4cout << "counter = " << counter << G4endl;
@@ -75,6 +76,7 @@ G4eIonisationParameters::~G4eIonisationParameters()
 	{
 	  G4cout << "---- 0 ---- Z = " << counter << G4endl;
 	}
+	*/
       delete dataSet;
       dataSet = 0;
     }
@@ -156,10 +158,7 @@ void G4eIonisationParameters::LoadData()
   pathString += "/ioni/io-co-";  
   
   G4double energy;
-  G4DataVector  q;
-  G4std::vector<G4DataVector*> a;
-  G4std::vector<G4VEMDataSet*> p;
-  a.resize(length);
+  // a.resize(length);
   //  p.resize(length);
   // q.resize(length);
   
@@ -182,26 +181,30 @@ void G4eIonisationParameters::LoadData()
       G4Exception(excep);
     }
 
-    // - MGP - Is the following comment correct? Or is it just copied from another file?
     // - MGP - Please add some documentation about the parameters read
-    // The file is organized into two columns:
+    // The file is organized into...:
     // 1st column is the energy
-    // 2nd column is the corresponding value
     // The file terminates with the pattern: -1   -1
 
-    for (size_t j=0; j<length; j++) 
-      {
-	a[j] = new G4DataVector;
-      } 
+    G4std::vector<G4VEMDataSet*> p;
     for (size_t k=0; k<length; k++) 
       {
 	G4VDataSetAlgorithm* interpolation = new G4SemiLogInterpolation();
-	G4VEMDataSet* composite = new G4CompositeEMDataSet(interpolation, 1., 1.);
+	G4VEMDataSet* composite = new G4CompositeEMDataSet(interpolation,1.,1.);
 	p.push_back(composite);
       }
 
     G4int shell = 0;
+    G4std::vector<G4DataVector*> a;
+    for (size_t j=0; j<length; j++) 
+      {
+	G4DataVector* aa = new G4DataVector();
+	a.push_back(aa);
+      } 
     G4DataVector e;
+    G4DataVector q;
+    e.clear();
+    q.clear();
     do {
       file >> energy;
       if (energy == -2) break;
@@ -222,6 +225,7 @@ void G4eIonisationParameters::LoadData()
 	{
 	  a[j]->push_back(q[j]);
 	}
+      q.clear();
 
       // End of set for a shell, fill the map
       if (energy < 0) 
@@ -230,7 +234,6 @@ void G4eIonisationParameters::LoadData()
 	    {
 	      G4int id = Z*20 + k;
 	      G4VDataSetAlgorithm* interpolation  = new G4SemiLogInterpolation();
-	      // - MGP - fix: each DataSet requires its own e
 	      G4DataVector* eVector = new G4DataVector;
 	      size_t eSize = e.size();
 	      for (size_t s=0; s<eSize; s++)
@@ -238,6 +241,8 @@ void G4eIonisationParameters::LoadData()
 		  eVector->push_back(e[s]);
 		}
 	      G4VEMDataSet* set = new G4EMDataSet(id, eVector, a[k], interpolation, 1., 1.);
+              set->PrintData();
+
 	      p[k]->AddComponent(set);
 	    } 
 	  
@@ -247,6 +252,7 @@ void G4eIonisationParameters::LoadData()
 	    a[j2] = new G4DataVector();
 	  } 
         shell++;
+        e.clear();
 	}
     } while (energy > -2);
     
@@ -257,12 +263,13 @@ void G4eIonisationParameters::LoadData()
 	G4int id = Z*20 + kk;
 	param[id] = p[kk];
       }
-
+    /*
     // remove the last vectors because they are not used
     for (size_t j1=0; j1<length; j1++) 
       {
-	//	delete  a[j1];
-      } 
+	delete  a[j1];
+      }
+      */ 
   }
 }
 
