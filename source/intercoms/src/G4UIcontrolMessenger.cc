@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcontrolMessenger.cc,v 1.3 2001-07-11 10:01:16 gunter Exp $
+// $Id: G4UIcontrolMessenger.cc,v 1.4 2001-07-18 17:59:05 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -31,6 +31,7 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithoutParameter.hh"
+#include "G4StateManager.hh"
 #include "G4ios.hh"
 
 G4UIcontrolMessenger::G4UIcontrolMessenger()
@@ -42,6 +43,17 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   ExecuteCommand->SetGuidance("Execute a macro file.");
   ExecuteCommand->SetParameterName("fileName",false);
   
+  suppressAbortionCommand = new G4UIcmdWithAnInteger("/control/suppressAbortion",this);
+  suppressAbortionCommand->SetGuidance("Suppress the program abortion caused by G4Exception.");
+  suppressAbortionCommand->SetGuidance("Suppression level = 0 : no suppression");
+  suppressAbortionCommand->SetGuidance("                  = 1 : suppress during EventProc state");
+  suppressAbortionCommand->SetGuidance("                  = 2 : full suppression, i.e. no abortion by G4Exception");
+  suppressAbortionCommand->SetGuidance("When abortion is suppressed, you will get error messages issued by G4Exception,");
+  suppressAbortionCommand->SetGuidance("and there is NO guarantee for the correct result after the G4Exception error message.");
+  suppressAbortionCommand->SetParameterName("level",true);
+  suppressAbortionCommand->SetRange("level >= 0 && level <= 2");
+  suppressAbortionCommand->SetDefaultValue(0);
+
   verboseCommand = new G4UIcmdWithAnInteger("/control/verbose",this);
   verboseCommand->SetGuidance("Applied command will also be shown on screen.");
   verboseCommand->SetGuidance("This command is useful with MACRO file.");
@@ -72,6 +84,7 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
 G4UIcontrolMessenger::~G4UIcontrolMessenger()
 {
   delete ExecuteCommand;
+  delete suppressAbortionCommand;
   delete verboseCommand;
   delete historyCommand;
   delete stopStoreHistoryCommand;
@@ -87,6 +100,10 @@ void G4UIcontrolMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   if(command==ExecuteCommand)
   {
     UI->ExecuteMacroFile(newValue);
+  }
+  if(command==suppressAbortionCommand)
+  {
+    G4StateManager::GetStateManager()->SetSuppressAbortion(suppressAbortionCommand->GetNewIntValue(newValue));
   }
   if(command==verboseCommand)
   {
@@ -114,6 +131,10 @@ G4String G4UIcontrolMessenger::GetCurrentValue(G4UIcommand * command)
   if(command==verboseCommand)
   {
     currentValue = verboseCommand->ConvertToString(UI->GetVerboseLevel());
+  }
+  if(command==suppressAbortionCommand)
+  {
+    currentValue = suppressAbortionCommand->ConvertToString(G4StateManager::GetStateManager()->GetSuppressAbortion());
   }
   
   return currentValue;

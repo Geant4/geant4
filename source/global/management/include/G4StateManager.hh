@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StateManager.hh,v 1.4 2001-07-11 10:00:51 gunter Exp $
+// $Id: G4StateManager.hh,v 1.5 2001-07-18 17:59:22 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -120,6 +120,11 @@ private:
   G4ApplicationState thePreviousState;
   G4std::vector<G4VStateDependent*> theDependentsList;
   G4VStateDependent* theBottomDependent;
+  G4int suppressAbortion;
+
+public:
+  inline void SetSuppressAbortion(G4int i) { suppressAbortion = i; }
+  inline G4int GetSuppressAbortion() const { return suppressAbortion; }
 
 };
 

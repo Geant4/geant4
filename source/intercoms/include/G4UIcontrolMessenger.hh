@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcontrolMessenger.hh,v 1.4 2001-07-11 10:01:14 gunter Exp $
+// $Id: G4UIcontrolMessenger.hh,v 1.5 2001-07-18 17:59:04 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -41,6 +41,7 @@ class G4UIcmdWithoutParameter;
 // this messenger are
 //   /control/ 
 //   /control/execute
+//   /control/suppressAbortion
 //   /control/verbose
 //   /control/saveHistory
 //   /control/stopSavingHistory
@@ -57,6 +58,7 @@ class G4UIcontrolMessenger : public G4UImessenger
   private:
       G4UIdirectory * controlDirectory;
       G4UIcmdWithAString * ExecuteCommand;
+      G4UIcmdWithAnInteger * suppressAbortionCommand;
       G4UIcmdWithAnInteger * verboseCommand;
       G4UIcmdWithAString * historyCommand;
       G4UIcmdWithoutParameter * stopStoreHistoryCommand;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Exception.cc,v 1.10 2001-07-11 10:00:56 gunter Exp $
+// $Id: G4Exception.cc,v 1.11 2001-07-18 17:59:23 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,9 +45,13 @@ void G4Exception(const char* s)
 	{
 	    G4cerr << s << G4endl;
 	}
-   G4cerr << G4endl << "*** G4Exception: Aborting execution ***" << G4endl;
-   G4StateManager::GetStateManager()->SetNewState(Abort);
-   abort();
+   if(G4StateManager::GetStateManager()->SetNewState(Abort)) {
+     G4cerr << G4endl << "*** G4Exception: Aborting execution ***" << G4endl;
+     abort();
+   } else {
+     G4cerr << G4endl << "*** G4Exception: Abortion suppressed ***"
+            << G4endl << "*** No guarantee for further execution ***" << G4endl;
+   }
 }
 
 void G4Exception(G4std::string s)
