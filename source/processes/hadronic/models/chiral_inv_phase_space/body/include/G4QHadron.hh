@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.hh,v 1.15 2001-11-26 14:11:45 hpw Exp $
+// $Id: G4QHadron.hh,v 1.16 2002-12-11 12:41:30 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -54,7 +54,7 @@ public:
   G4QHadron(G4QParticle* pPart, G4double maxM);     // Constructor for a resonance with RANDOM m
   G4QHadron(const G4QHadron& right);                // Copy constructor by object
   G4QHadron(G4QHadron* right);                      // Copy constructor by pointer
-  ~G4QHadron();                                     // Destructor
+  virtual ~G4QHadron();                                     // Destructor
   // Operators
   const G4QHadron& operator=(const G4QHadron& right);
   G4int           operator==(const G4QHadron& right) const;
