@@ -50,7 +50,7 @@ print 'Release = ', Release
 # ---------------- Particle type ---------------
 ParticleType = ""
 dictParticle = { 'mu-':'mu-'   , 'mu+':'mu+'  ,
-                 'e-':'e-'     , 'e+':'e+'    ,
+                 'e-':'e-'     , 'e+':'e+'    , 'gamma':'gamma' ,
                  'pi+':'pi+'   , 'pi-':'pi-'  ,
                  'k+':'kaon+'  , 'k-':'kaon-' , 'k0L':'kaon0L' ,
                  'n':'neutron' , 'p':'proton' }
