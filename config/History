@@ -1,4 +1,4 @@
-$Id: History,v 1.229 2003-11-11 16:37:51 gcosmo Exp $
+$Id: History,v 1.230 2003-11-13 09:54:41 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,9 +16,6 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
-11th November 2003  Gabriele Cosmo
-- Added visualization/BlineTracer module in G4VIS_BUILD.gmk and G4VIS_USE.gmk.
 
 4th November 2003  Gabriele Cosmo (config-V05-02-04)
 - Include removal of OPACS setup. Cowork with tags "interfaces-V05-02-00"

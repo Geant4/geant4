@@ -1,4 +1,4 @@
-# $Id: G4VIS_USE.gmk,v 1.19 2003-11-11 16:37:51 gcosmo Exp $
+# $Id: G4VIS_USE.gmk,v 1.20 2003-11-13 09:54:41 gcosmo Exp $
 # -------------------------------------------------------------
 # GNUmakefile for CPPFLAGS for visualization USE phase.
 #   John Allison, 24th January 1998.
@@ -24,9 +24,6 @@ VISLIBS  += -lG4visHepRep
 CPPFLAGS += -DG4VIS_USE_RAYTRACER
 VISLIBS  += -lG4RayTracer
 
-CPPFLAGS += -DG4VIS_USE_BLINETRACER
-VISLIBS  += -lG4BlineTracer
-
 CPPFLAGS += -DG4VIS_USE_VRMLFILE
 VISLIBS  += -lG4VRML
 
@@ -38,7 +35,6 @@ ifneq ($(G4INCLUDE_EXEC),1)
   CPPFLAGS += -I$(G4BASE)/visualization/FukuiRenderer/include
   CPPFLAGS += -I$(G4BASE)/visualization/HepRep/include
   CPPFLAGS += -I$(G4BASE)/visualization/RayTracer/include
-  CPPFLAGS += -I$(G4BASE)/visualization/BlineTracer/include
   CPPFLAGS += -I$(G4BASE)/visualization/VRML/include
   CPPFLAGS += -I$(G4BASE)/visualization/Tree/include
 endif
