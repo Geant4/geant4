@@ -1,4 +1,4 @@
-$Id: History,v 1.39 2001-02-21 15:47:36 gcosmo Exp $
+$Id: History,v 1.40 2001-04-18 17:13:17 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr 18,   01   V. Grichine               geom-solids-csg-V03-01-00
+- G4Trap.cc:
+  o Fixed memory leak in CalculateExtent() for creation of vertices in
+    case of finite rotation. (courtesy of D.Williams)
+  o Removed useless inclusion of math.h.
 
 Feb 21,   01   V. Grichine               geom-solids-csg-V03-00-03
 - G4Tubs.cc:
