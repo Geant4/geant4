@@ -1,4 +1,4 @@
-$Id: History,v 1.67 2002-11-29 23:22:59 japost Exp $
+$Id: History,v 1.68 2002-12-06 19:22:56 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 06th, 2002     G. Cosmo - field-V04-01-05
+---------------------------
+- Merged changes by Makoto for migration to new G4ApplicationState in
+  messengers of unit tests.
 
 Nov 29th, 2002     J. Apostolakis - field-V04-01-04
 ---------------------------------
