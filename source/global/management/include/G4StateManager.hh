@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StateManager.hh,v 1.6 2002-04-16 18:19:13 asaim Exp $
+// $Id: G4StateManager.hh,v 1.7 2002-08-19 18:20:11 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,6 +53,7 @@
 #include "globals.hh"
 #include "G4ApplicationState.hh"
 #include "G4VStateDependent.hh"
+#include "G4VExceptionHandler.hh"
 
 class G4StateManager
 {
@@ -127,12 +128,14 @@ private:
   G4VStateDependent* theBottomDependent;
   G4int suppressAbortion;
   const char* msgptr;
+  G4VExceptionHandler* exceptionHandler;
 
 public:
   inline void SetSuppressAbortion(G4int i) { suppressAbortion = i; }
   inline G4int GetSuppressAbortion() const { return suppressAbortion; }
   inline const char* GetMessage() const { return msgptr; }
-
+  inline void SetExceptionHandler(G4VExceptionHandler* eh) { exceptionHandler = eh; }
+  inline G4VExceptionHandler* GetExceptionHandler() const { return exceptionHandler; }
 };
 
 #endif

@@ -1,4 +1,4 @@
-$Id: History,v 1.102 2002-07-03 15:28:08 gcosmo Exp $
+$Id: History,v 1.103 2002-08-19 18:20:11 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+August 19, 2002 M.Asai (global-V04-01-01)
+- Introducing a new G4Exception scheme.
+ Added : G4VStateDependent.hh G4VStateDependent.cc G4ExceptionSeverity.hh
+ Modified : G4Exception.cc G4StateManager.hh globals.hh
 
 June 21, 2002 G.Cosmo (global-V04-01-00)
 - G4Allocator.hh: changed definition of page size to become data-member of

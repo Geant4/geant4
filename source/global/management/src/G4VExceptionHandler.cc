@@ -21,65 +21,48 @@
 // ********************************************************************
 //
 //
-// $Id: G4Exception.cc,v 1.14 2002-08-19 18:20:12 asaim Exp $
+// $Id: G4VExceptionHandler.cc,v 1.1 2002-08-19 18:20:12 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// ----------------------------------------------------------------------
-// G4Exception
+// ------------------------------------------------------------
+//      GEANT 4 class implementation file 
 //
-// Global error function prints string to G4cerr, and aborts
-// program
-//
-// History:
-// 30.06.95 P.Kent
+//      ---------------- G4VExceptionHandler ----------------
+//             by Makoto Asai (August 2002)
+// ------------------------------------------------------------
 
-#include "G4ios.hh"
-#include <stdlib.h>
-#include "G4String.hh"
+#include "G4VExceptionHandler.hh"
 #include "G4StateManager.hh"
 
-void G4Exception(const char* s)
+G4VExceptionHandler::G4VExceptionHandler() 
 {
-   if(s)
-	{
-	    G4cerr << s << G4endl;
-	}
-   if(G4StateManager::GetStateManager()->SetNewState(Abort,s)) {
-     G4cerr << G4endl << "*** G4Exception: Aborting execution ***" << G4endl;
-     abort();
-   } else {
-     G4cerr << G4endl << "*** G4Exception: Abortion suppressed ***"
-            << G4endl << "*** No guarantee for further execution ***" << G4endl;
-   }
+  G4StateManager * stateManager = G4StateManager::GetStateManager();
+  stateManager->SetExceptionHandler(this);
 }
 
-void G4Exception(const char* originOfException,
-                        const char* exceptionCode,
-                        G4ExceptionSeverity severity,
-                        const char* description)
+G4VExceptionHandler::~G4VExceptionHandler()
 {
-  G4bool toBeAborted = 
-    G4StateManager::GetStateManager()->GetExceptionHandler()
-     ->Notify(originOfException,exceptionCode,severity,description);
-  if(toBeAborted)
-  {
-   if(G4StateManager::GetStateManager()->SetNewState(Abort)) {
-     G4cerr << G4endl << "*** G4Exception: Aborting execution ***" << G4endl;
-     abort();
-   } else {
-     G4cerr << G4endl << "*** G4Exception: Abortion suppressed ***"
-            << G4endl << "*** No guarantee for further execution ***" << G4endl;
-   }
-  }
 }
 
-void G4Exception(G4std::string s)
+G4VExceptionHandler::G4VExceptionHandler(const G4VExceptionHandler &right)
 {
-  G4Exception(s.c_str());
+   *this = right;
 }
 
-void G4Exception(G4String s)
+G4VExceptionHandler& G4VExceptionHandler::operator=(const G4VExceptionHandler &right)
 {
-  G4Exception(s.c_str());
+   if (&right == this) return *this;
+   *this = right;
+   return *this;
+}
+
+G4int G4VExceptionHandler::operator==(const G4VExceptionHandler &right) const
+{
+   return (this == &right);
+}
+
+G4int G4VExceptionHandler::operator!=(const G4VExceptionHandler &right) const
+{
+   return (this != &right);
 }

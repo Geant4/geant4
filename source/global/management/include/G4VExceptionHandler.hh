@@ -21,65 +21,61 @@
 // ********************************************************************
 //
 //
-// $Id: G4Exception.cc,v 1.14 2002-08-19 18:20:12 asaim Exp $
+// $Id: G4VExceptionHandler.hh,v 1.1 2002-08-19 18:20:11 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// ----------------------------------------------------------------------
-// G4Exception
+// ------------------------------------------------------------
+//      GEANT 4 class header file 
 //
-// Global error function prints string to G4cerr, and aborts
-// program
 //
-// History:
-// 30.06.95 P.Kent
+//      ---------------- G4VExceptionHandler ----------------
+//
+// Authors: M.Asai - August 2002
+//
+// ------------------------------------------------------------
+//
+// Class description:
+//
+// Abstract base class which need to be notified when G4Exception occurs.
+// The concrete class object derived from this base class will be automatically 
+// registered to G4StateManager and the virtual method Notify() will be invoked 
+// when G4Exception occurs.
 
-#include "G4ios.hh"
-#include <stdlib.h>
-#include "G4String.hh"
-#include "G4StateManager.hh"
+// ------------------------------------------------------------
 
-void G4Exception(const char* s)
+#ifndef G4VExceptionHandler_h
+#define G4VExceptionHandler_h 1
+
+#include "globals.hh"
+#include "G4ExceptionSeverity.hh"
+
+class G4VExceptionHandler
 {
-   if(s)
-	{
-	    G4cerr << s << G4endl;
-	}
-   if(G4StateManager::GetStateManager()->SetNewState(Abort,s)) {
-     G4cerr << G4endl << "*** G4Exception: Aborting execution ***" << G4endl;
-     abort();
-   } else {
-     G4cerr << G4endl << "*** G4Exception: Abortion suppressed ***"
-            << G4endl << "*** No guarantee for further execution ***" << G4endl;
-   }
-}
 
-void G4Exception(const char* originOfException,
+public:
+
+  G4VExceptionHandler();
+  virtual ~G4VExceptionHandler();
+  G4int operator==(const G4VExceptionHandler &right) const;
+  G4int operator!=(const G4VExceptionHandler &right) const;
+
+public: // with description
+
+  virtual G4bool Notify(const char* originOfException,
                         const char* exceptionCode,
                         G4ExceptionSeverity severity,
-                        const char* description)
-{
-  G4bool toBeAborted = 
-    G4StateManager::GetStateManager()->GetExceptionHandler()
-     ->Notify(originOfException,exceptionCode,severity,description);
-  if(toBeAborted)
-  {
-   if(G4StateManager::GetStateManager()->SetNewState(Abort)) {
-     G4cerr << G4endl << "*** G4Exception: Aborting execution ***" << G4endl;
-     abort();
-   } else {
-     G4cerr << G4endl << "*** G4Exception: Abortion suppressed ***"
-            << G4endl << "*** No guarantee for further execution ***" << G4endl;
-   }
-  }
-}
+                        const char* description) = 0;
+    // Pure virtual method which will be invoked by G4StateManager when
+    // G4Exception occurs.
+    // If TRUE returned, core dump will be generated, while FALSE returned,
+    // program execution continues.
 
-void G4Exception(G4std::string s)
-{
-  G4Exception(s.c_str());
-}
+private:
 
-void G4Exception(G4String s)
-{
-  G4Exception(s.c_str());
-}
+  G4VExceptionHandler(const G4VExceptionHandler &right);
+  G4VExceptionHandler& operator=(const G4VExceptionHandler &right);
+
+};
+
+#endif
