@@ -36,17 +36,19 @@ gr/h/symb X Y 28 21 0.2
  
      ve/create X1(40) R 1.5 2.5 3.5 4.5 5.5 6.5 7.5 8.5 9.5 10.5 11.5 12.5 13.5 14.5 15.5 16.5 17.5 18.5 19.5 25 35 45 55 65 75   85 95 105 115 125 135 145 155 165 175 185 195 205 225 245 
 ve/create Y1(40) R 3.93 4.43 3.01 2.39 1.85 1.39 1.11 0.96 0.83 0.72 0.65 0.57 0.55 0.53 0.46 0.46 0.43 0.43 0.43 0.33 0.27 0.24 0.23 0.21 0.19  0.17 0.14 0.12 0.094 0.077 0.058 0.043 0.029 0.018 0.011 0.0062 0.0062 0.0019 0.0002 0.00008 
-gr/h/symb X1 Y1 38 25 0.2
+gr/h/symb X1 Y1 40 25 0.2
 
  exe ../prf n_a2 eps
 
  null 0 250 0.01 100
  atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr)'
+ 
+   gr/h/symb X Y 28 21 0.2
+gr/h/symb X1 Y1 40 25 0.2
 
   hi/file 1 par.paw
  set dmod 3
  hi/pl 30 shist
-* itx 20 200 'proton 256 MeV on Al secondary neutrons at theta=60 degree'
  line 100 1.8 110 1.8
  itx 115 60 'LEPAR'
  close 1
@@ -58,9 +60,6 @@ gr/h/symb X1 Y1 38 25 0.2
  itx 115 22 'CHIPS'
  close 1
  
-  gr/h/symb X Y 28 21 0.2
-gr/h/symb X1 Y1 38 25 0.2
-
  exe ../prf nk_a2 eps
 
  opt liny
