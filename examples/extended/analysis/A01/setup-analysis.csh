@@ -41,11 +41,13 @@ switch ($G4SYSTEM)
     case "Linux*":
         setenv LD_LIBRARY_PATH $JDK_HOME/jre/lib/i386:${LD_LIBRARY_PATH}
         setenv LD_LIBRARY_PATH $JDK_HOME/jre/lib/i386/client:${LD_LIBRARY_PATH}
+        setenv LD_LIBRARY_PATH ${GEANT4_HOME}/extlib/${G4SYSTEM}:${LD_LIBRARY_PATH}
         setenv G4ANALYSIS_AIDA_CONFIG_LIBS "$G4ANALYSIS_AIDA_CONFIG_LIBS -L$JDK_HOME/jre/lib/i386/client -ljvm"
         breaksw
     case "SUN*":
         setenv LD_LIBRARY_PATH $JDK_HOME/jre/lib/sparc:${LD_LIBRARY_PATH}
         setenv LD_LIBRARY_PATH $JDK_HOME/jre/lib/sparc/client:${LD_LIBRARY_PATH}
+        setenv LD_LIBRARY_PATH ${GEANT4_HOME}/extlib/${G4SYSTEM}:${LD_LIBRARY_PATH}
         setenv G4ANALYSIS_AIDA_CONFIG_LIBS "$G4ANALYSIS_AIDA_CONFIG_LIBS -L$JDK_HOME/jre/lib/sparc -ljvm"
         breaksw
     case "Darwin*":
