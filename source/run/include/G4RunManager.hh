@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.20 2001-10-24 15:25:19 gcosmo Exp $
+// $Id: G4RunManager.hh,v 1.21 2001-11-20 23:29:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -212,6 +212,7 @@ class G4RunManager
 
     G4int storeRandomNumberStatus;
     G4String randomNumberStatusDir;
+    G4String versionString;
 
   public:
     virtual void StoreRandomNumberStatus(G4int eventID=-1);
@@ -271,6 +272,9 @@ class G4RunManager
       // This method must be invoked at PreInit, Init or Idle states.
       // Once the user set the number of additional waiting stacks,
       // he/she can use the corresponding ENUM in G4ClassificationOfNewTrack.
+
+    inline G4String GetVersionString() const
+    { return versionString; }
 
   public:
     inline void SetRandomNumberStore(G4int i)
