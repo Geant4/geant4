@@ -1,4 +1,4 @@
-$Id: History,v 1.49 2002-12-04 22:45:58 tsasaki Exp $
+$Id: History,v 1.50 2002-12-16 11:59:36 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-Dec. 04, 02  T.Sasaki(track-V04-01-03)
+
+Dec. 16, 02  G.Cosmo  (track-V05-00-00)
+- Merged branch "geant4-04-01-ref-02-cuts-branch" to HEAD.
+  Included development for 'cuts-by-region':
+  o Updated G4Track, G4Step, G4StepPoint and G4ParticleChangeForTransport
+    to properly handle new G4MaterialCutsCouple.
+
+Dec. 04, 02  T.Sasaki (track-V04-01-03)
 - Initial value for fCharge is given in the constuctor 
   of G4StepPoint.
 Nov. 20, 02   G.Cosmo (track-V04-01-02)
