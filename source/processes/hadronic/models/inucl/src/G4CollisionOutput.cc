@@ -22,12 +22,12 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet, G4InuclParticle* tar
   G4double pnc = sqrt(mon_non_cons[1] * mon_non_cons[1] + 
      mon_non_cons[2] * mon_non_cons[2] + mon_non_cons[3] * mon_non_cons[3]);
   setRemainingExitationEnergy();       
-#ifdef DEBUG
+  if(verboseLevel > 2){
   printCollisionOutput();
   G4cout << " momentum non conservation: " << endl << " e " << mon_non_cons[0]
        << " p " << pnc << G4endl;
   G4cout << " remaining exitation " << eex_rest << G4endl;
-#endif
+  }
 
   if(fabs(mon_non_cons[0]) > accuracy || pnc > accuracy) { // renormalization
     int npart = outgoingParticles.size();
@@ -49,11 +49,11 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet, G4InuclParticle* tar
     for(G4int i = 0; i < 4; i++) mon_non_cons[i] = ini_mom[i] - out_mom[i];
     pnc = sqrt(mon_non_cons[1] * mon_non_cons[1] + 
        mon_non_cons[2] * mon_non_cons[2] + mon_non_cons[3] * mon_non_cons[3]);
-#ifdef DEBUG
+    if(verboseLevel > 2){
     printCollisionOutput();
     G4cout << " momentum non conservation after (1): " << G4endl << " e " << mon_non_cons[0]
          << " p " << pnc << G4endl;
-#endif    
+    }
     G4bool need_hard_tuning = true;
     
     if(nucleiFragments.size() > 0) {
@@ -76,10 +76,10 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet, G4InuclParticle* tar
       pair<pair<G4int, G4int>, G4int> tune_par = selectPairToTune(mon_non_cons[0]);
       pair<G4int, G4int> tune_particles = tune_par.first;
       int mom_ind = tune_par.second;
-#ifdef DEBUG
+      if(verboseLevel > 2) {
       G4cout << " p1 " << tune_particles.first << " p2 " << tune_particles.second
            << " ind " << mom_ind << G4endl;
-#endif
+      }
       if(tune_particles.first >= 0 && tune_particles.second >= 0 &&
                                        mom_ind >= 1) { // tunning possible
         vector<G4double> mom1 = outgoingParticles[tune_particles.first].getMomentum();
@@ -105,7 +105,7 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet, G4InuclParticle* tar
 	      };
 	    };  
 	    if(!xset && x2 > 0.0) {
-	      if(R + Q*x2 >= 0.0) {
+	      if(R + Q * x2 >= 0.0) {
 	        x = x2;
 	        xset = true;
 	      };
@@ -135,28 +135,28 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet, G4InuclParticle* tar
             for(G4int i = 0; i < 4; i++) mon_non_cons[i] = ini_mom[i] - out_mom[i];
             pnc = sqrt(mon_non_cons[1] * mon_non_cons[1] + 
               mon_non_cons[2] * mon_non_cons[2] + mon_non_cons[3] * mon_non_cons[3]);
-#ifdef DEBUG
+	    if(verboseLevel > 2){
             G4cout << " momentum non conservation tuning: " << G4endl 
 	      << " e " << mon_non_cons[0] << " p " << pnc << G4endl;
-#endif
+	    }
             if(fabs(mon_non_cons[0]) < accuracy || pnc < accuracy) on_shell = true;
 	  }
 	   else {
-#ifdef DEBUG
+	    if(verboseLevel > 2){
 	    G4cout << " no appropriate solution found " << G4endl;
-#endif
+	    }
 	  }; 
         }
          else {
-#ifdef DEBUG
+	    if(verboseLevel > 2){
           G4cout << " DET < 0 " << G4endl;
-#endif
+	    }
         };   
       }
        else { 
-#ifdef DEBUG
+	    if(verboseLevel > 2){
         G4cout << " tuning impossible " << G4endl;
-#endif
+	    }
       };   
     }
      else {
