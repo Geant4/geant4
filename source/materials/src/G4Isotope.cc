@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.cc,v 1.12 2002-02-26 17:34:34 maire Exp $
+// $Id: G4Isotope.cc,v 1.13 2002-11-25 14:02:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -92,7 +92,7 @@ G4Isotope & G4Isotope::operator=(const G4Isotope& right)
   {
     fName = right.fName;
     fZ = right.fZ;
-    fN = right.fZ;
+    fN = right.fN;
     fA = right.fA;
   }
   return *this;
