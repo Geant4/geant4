@@ -22,7 +22,7 @@
 //
 // --------------------------------------------------------------------
 ///
-// $Id: G4LowEnergyGammaConversion.cc,v 1.29 2003-03-25 12:26:46 flongo Exp $
+// $Id: G4LowEnergyGammaConversion.cc,v 1.30 2003-04-24 14:19:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,6 +42,7 @@
 // 27.07.01 F.Longo correct bug in energy distribution
 // 21.01.03 V.Ivanchenko Cut per region
 // 25.03.03 F.Longo fix in angular distribution of e+/e-
+// 24.04.03 V.Ivanchenko - Cut per region mfpt
 //
 // --------------------------------------------------------------
 
@@ -314,8 +315,8 @@ G4double G4LowEnergyGammaConversion::GetMeanFreePath(const G4Track& track,
 {
   const G4DynamicParticle* photon = track.GetDynamicParticle();
   G4double energy = photon->GetKineticEnergy();
-  G4Material* material = track.GetMaterial();
-  size_t materialIndex = material->GetIndex();
+  const G4MaterialCutsCouple* couple = track.GetMaterialCutsCouple();
+  size_t materialIndex = couple->GetIndex();
 
   G4double meanFreePath;
   if (energy > highEnergyLimit) meanFreePath = meanFreePathTable->FindValue(highEnergyLimit,materialIndex);

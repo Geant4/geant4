@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlung.cc,v 1.3 2003-03-28 11:16:29 gcosmo Exp $
+// $Id: G4PenelopeBremsstrahlung.cc,v 1.4 2003-04-24 14:19:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -30,6 +30,9 @@
 // Author:        Luciano Pandola
 // 
 // Creation date: February 2003
+//
+// Modifications:
+// 24.04.2003 V.Ivanchenko - Cut per region mfpt
 //
 //----------------------------------------------------------------
 
@@ -85,7 +88,7 @@ void G4PenelopeBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aPa
     G4cout << "G4PenelopeBremsstrahlung::BuildPhysicsTable start"
            << G4endl;
   }
-   
+
   cutForSecondaryPhotons.clear();
 
   // Create and fill BremsstrahlungParameters once
@@ -398,9 +401,9 @@ void G4PenelopeBremsstrahlung::PrintInfoDefinition()
   comments += "\n      It can be used for electrons and positrons";
   comments += "in the energy range [250eV,100GeV].";
   comments += "\n      The process must work with G4LowEnergyIonisation.";
-  
+
   G4cout << G4endl << GetProcessName() << ":  " << comments << G4endl;
-}         
+}
 
 G4bool G4PenelopeBremsstrahlung::IsApplicable(const G4ParticleDefinition& particle)
 {
@@ -413,7 +416,7 @@ G4double G4PenelopeBremsstrahlung::GetMeanFreePath(const G4Track& track,
 						    G4ForceCondition* cond)
 {
   //*cond = NotForced;
-  G4int index = (track.GetMaterial())->GetIndex();
+  G4int index = (track.GetMaterialCutsCouple())->GetIndex();
   const G4VEMDataSet* data = theMeanFreePath->GetComponent(index);
   G4double meanFreePath = data->FindValue(track.GetKineticEnergy());
   return meanFreePath; 

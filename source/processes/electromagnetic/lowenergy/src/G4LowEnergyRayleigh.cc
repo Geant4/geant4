@@ -22,7 +22,7 @@
 //
 // --------------------------------------------------------------------
 //
-// $Id: G4LowEnergyRayleigh.cc,v 1.31 2003-01-22 18:47:29 vnivanch Exp $
+// $Id: G4LowEnergyRayleigh.cc,v 1.32 2003-04-24 14:19:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -39,8 +39,9 @@
 // 11.08.2001 MGP - Major revision according to a design iteration
 // 06.10.2001 MGP - Added strategy to test range for secondary generation
 // 05.06.2002 F.Longo and G.Depaola  - bug fixed in angular distribution
-// 20.10.2002 G. Depaola - Change sampling method of theta
-// 22.01.2003 V.Ivanchenko Cut per region
+// 20.10.2002 G. Depaola   - Change sampling method of theta
+// 22.01.2003 V.Ivanchenko - Cut per region
+// 24.04.2003 V.Ivanchenko - Cut per region mfpt
 //
 // --------------------------------------------------------------------
 
@@ -196,8 +197,8 @@ G4double G4LowEnergyRayleigh::GetMeanFreePath(const G4Track& track,
 {
   const G4DynamicParticle* photon = track.GetDynamicParticle();
   G4double energy = photon->GetKineticEnergy();
-  G4Material* material = track.GetMaterial();
-  size_t materialIndex = material->GetIndex();
+  const G4MaterialCutsCouple* couple = track.GetMaterialCutsCouple();
+  size_t materialIndex = couple->GetIndex();
 
   G4double meanFreePath;
   if (energy > highEnergyLimit) meanFreePath = meanFreePathTable->FindValue(highEnergyLimit,materialIndex);

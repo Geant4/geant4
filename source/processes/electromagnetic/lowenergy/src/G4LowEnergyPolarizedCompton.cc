@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPolarizedCompton.cc,v 1.14 2003-01-22 18:47:28 vnivanch Exp $
+// $Id: G4LowEnergyPolarizedCompton.cc,v 1.15 2003-04-24 14:19:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -45,6 +45,7 @@
 //                            - better description of parallelism
 //                            - system of ref change method improved
 // 22 January  2003 - V.Ivanchenko Cut per region
+// 24 April    2003 - V.Ivanchenko Cut per region mfpt
 //
 //
 // ************************************************************
@@ -147,12 +148,12 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
 
   aParticleChange.Initialize(aTrack);
 
-  // Dynamic particle quantities  
+  // Dynamic particle quantities
   const G4DynamicParticle* incidentPhoton = aTrack.GetDynamicParticle();
   G4double gammaEnergy0 = incidentPhoton->GetKineticEnergy();
-  G4ThreeVector gammaPolarization0 = incidentPhoton->GetPolarization(); 
+  G4ThreeVector gammaPolarization0 = incidentPhoton->GetPolarization();
 
-  //  gammaPolarization0 = gammaPolarization0.unit(); // 
+  //  gammaPolarization0 = gammaPolarization0.unit(); //
 
   // Protection: a polarisation parallel to the
   // direction causes problems;
@@ -221,28 +222,28 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
 	epsilonSq = epsilon0Sq + (1.- epsilon0Sq)*G4UniformRand();
 	epsilon   = sqrt(epsilonSq);
       }
-    
+
     onecost = (1.- epsilon)/(epsilon*E0_m);
     sinThetaSqr   = onecost*(2.-onecost);
-    
+
     // Protection
     if (sinThetaSqr > 1.)
       {
-	if (verboseLevel>0) G4cout 
+	if (verboseLevel>0) G4cout
 	  << " -- Warning -- G4LowEnergyPolarizedCompton::PostStepDoIt "
-	  << "sin(theta)**2 = " 
+	  << "sin(theta)**2 = "
 	  << sinThetaSqr
-	  << "; set to 1" 
+	  << "; set to 1"
 	  << G4endl;
 	sinThetaSqr = 1.;
       }
     if (sinThetaSqr < 0.)
       {
-	if (verboseLevel>0) G4cout 
+	if (verboseLevel>0) G4cout
 	  << " -- Warning -- G4LowEnergyPolarizedCompton::PostStepDoIt "
-	  << "sin(theta)**2 = " 
+	  << "sin(theta)**2 = "
 	  << sinThetaSqr
-	  << "; set to 0" 
+	  << "; set to 0"
 	  << G4endl;
 	sinThetaSqr = 0.;
       }
@@ -250,32 +251,32 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
 
     G4double x =  sqrt(onecost/2.) / (wlGamma/cm);;
     G4double scatteringFunction = scatterFunctionData->FindValue(x,Z-1);
-    greject = (1. - epsilon*sinThetaSqr/(1.+ epsilonSq))*scatteringFunction;    
-        
+    greject = (1. - epsilon*sinThetaSqr/(1.+ epsilonSq))*scatteringFunction;
+
   } while(greject < G4UniformRand()*Z);
-    
-  
+
+
   // ****************************************************
   //		Phi determination
   // ****************************************************
-  
+
   G4double phi = SetPhi(epsilon,sinThetaSqr);
-  
+
   //
   // scattered gamma angles. ( Z - axis along the parent gamma)
   //
-  
+
   G4double cosTheta = 1. - onecost;
-  
+
   // Protection
-  
+
   if (cosTheta > 1.)
     {
-      if (verboseLevel>0) G4cout 
+      if (verboseLevel>0) G4cout
 	<< " -- Warning -- G4LowEnergyPolarizedCompton::PostStepDoIt "
-	<< "cosTheta = " 
+	<< "cosTheta = "
 	<< cosTheta
-	<< "; set to 1" 
+	<< "; set to 1"
 	<< G4endl;
       cosTheta = 1.;
     }
@@ -301,7 +302,7 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
 	<< " -- Warning -- G4LowEnergyPolarizedCompton::PostStepDoIt "
 	<< "sinTheta = " 
 	<< sinTheta
-	<< "; set to 1" 
+	<< "; set to 1"
 	<< G4endl;
       sinTheta = 1.;
     }
@@ -395,7 +396,7 @@ G4double G4LowEnergyPolarizedCompton::SetPhi(G4double energyRate,
   G4double phiProbability;
   G4double phi;
   G4double a, b;
-  
+
   do
     {
       rand1 = G4UniformRand();
@@ -473,7 +474,7 @@ G4ThreeVector G4LowEnergyPolarizedCompton::GetPerpendicularPolarization
 }
 
 
-G4ThreeVector G4LowEnergyPolarizedCompton::SetNewPolarization(G4double epsilon, 
+G4ThreeVector G4LowEnergyPolarizedCompton::SetNewPolarization(G4double epsilon,
 							      G4double sinSqrTh, 
 							      G4double phi,
 							      G4double costheta) 
@@ -505,7 +506,7 @@ G4ThreeVector G4LowEnergyPolarizedCompton::SetNewPolarization(G4double epsilon,
       a = 4*normalisation*normalisation;
       b = (epsilon + 1/epsilon) - 2;
       thetaProbability = (b + a*cos(theta)*cos(theta))/(a+b);
-      cosTheta = cos(theta);       
+      cosTheta = cos(theta);
     }
   while ( rand2 > thetaProbability );
   
@@ -513,14 +514,14 @@ G4ThreeVector G4LowEnergyPolarizedCompton::SetNewPolarization(G4double epsilon,
   G4double sinBeta = sqrt(1-cosBeta*cosBeta);
   
   G4ThreeVector gammaPolarization1;
-  
+
   G4double xParallel = normalisation*cosBeta;
   G4double yParallel = -(sinSqrTh*cosPhi*sinPhi)*cosBeta/normalisation;
   G4double zParallel = -(costheta*sinTheta*cosPhi)*cosBeta/normalisation;
   G4double xPerpendicular = 0.;
   G4double yPerpendicular = (costheta)*sinBeta/normalisation;
   G4double zPerpendicular = -(sinTheta*sinPhi)*sinBeta/normalisation;
-  
+
   G4double xTotal = (xParallel + xPerpendicular);
   G4double yTotal = (yParallel + yPerpendicular);
   G4double zTotal = (zParallel + zPerpendicular);
@@ -555,7 +556,7 @@ void G4LowEnergyPolarizedCompton::SystemOfRefChange
   G4double polarization_x = polarization1.getX();
   G4double polarization_y = polarization1.getY();
   G4double polarization_z = polarization1.getZ();
-  
+
   polarization1 =(polarization_x*Axis_X0+polarization_y*Axis_Y0+polarization_z*Axis_Z0).unit();
 
 }
@@ -567,14 +568,14 @@ G4bool G4LowEnergyPolarizedCompton::IsApplicable(const G4ParticleDefinition& par
 }
 
 
-G4double G4LowEnergyPolarizedCompton::GetMeanFreePath(const G4Track& track, 
+G4double G4LowEnergyPolarizedCompton::GetMeanFreePath(const G4Track& track,
 						      G4double previousStepSize,
 						      G4ForceCondition*)
 {
   const G4DynamicParticle* photon = track.GetDynamicParticle();
   G4double energy = photon->GetKineticEnergy();
-  G4Material* material = track.GetMaterial();
-  size_t materialIndex = material->GetIndex();
+  const G4MaterialCutsCouple* couple = track.GetMaterialCutsCouple();
+  size_t materialIndex = couple->GetIndex();
   G4double meanFreePath;
   if (energy > highEnergyLimit) meanFreePath = meanFreePathTable->FindValue(highEnergyLimit,materialIndex);
   else if (energy < lowEnergyLimit) meanFreePath = DBL_MAX;

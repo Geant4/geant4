@@ -21,11 +21,9 @@
 // ********************************************************************
 //
 // --------------------------------------------------------------------
-///
-// $Id: G4PenelopeGammaConversion.cc,v 1.5 2003-03-25 15:16:38 pandola Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
+//
+//
 // --------------------------------------------------------------
 //
 // Author: L.Pandola
@@ -34,8 +32,9 @@
 // 02 Dec 2002 L.Pandola    1st implementation
 // 12 Feb 2003   MG Pia     Migration to "cuts per region"
 // 10 Mar 2003 V.Ivanchenko Remove CutPerMaterial warning
-// 13 Mar 2003 L.Pandola    Code "cleaned"  
+// 13 Mar 2003 L.Pandola    Code "cleaned"
 // 25 Mar 2003 L.Pandola    Changed the name of the database file to read
+// 24 Apr 2003 V.Ivanchenko Cut per region mfpt
 // --------------------------------------------------------------
 
 #include "G4PenelopeGammaConversion.hh"
@@ -195,7 +194,7 @@ G4VParticleChange* G4PenelopeGammaConversion::PostStepDoIt(const G4Track& aTrack
 
   G4double electronTotEnergy;
   G4double positronTotEnergy;
-  
+
   electronTotEnergy = eps*photonEnergy;
   positronTotEnergy = (1.0-eps)*photonEnergy;
   
@@ -206,31 +205,31 @@ G4VParticleChange* G4PenelopeGammaConversion::PostStepDoIt(const G4Track& aTrack
   G4double phi_el,phi_po;
   G4double electronKineEnergy = G4std::max(0.,electronTotEnergy - electron_mass_c2) ; 
   costheta_el = G4UniformRand()*2.0-1.0;
-  G4double kk = sqrt(electronKineEnergy*(electronKineEnergy+2*electron_mass_c2));
+  G4double kk = sqrt(electronKineEnergy*(electronKineEnergy+2.*electron_mass_c2));
   costheta_el = (costheta_el*electronTotEnergy+kk)/(electronTotEnergy+costheta_el*kk);
   phi_el  = twopi * G4UniformRand() ;
-  G4double dirX_el = sqrt(1-costheta_el*costheta_el) * cos(phi_el);
-  G4double dirY_el = sqrt(1-costheta_el*costheta_el) * sin(phi_el);
+  G4double dirX_el = sqrt(1.-costheta_el*costheta_el) * cos(phi_el);
+  G4double dirY_el = sqrt(1.-costheta_el*costheta_el) * sin(phi_el);
   G4double dirZ_el = costheta_el;
 
   //positron kinematics
-  G4double positronKineEnergy = G4std::max(0.,positronTotEnergy - electron_mass_c2) ; 
+  G4double positronKineEnergy = G4std::max(0.,positronTotEnergy - electron_mass_c2) ;
   costheta_po = G4UniformRand()*2.0-1.0;
-  kk = sqrt(positronKineEnergy*(positronKineEnergy+2*electron_mass_c2));
+  kk = sqrt(positronKineEnergy*(positronKineEnergy+2.*electron_mass_c2));
   costheta_po = (costheta_po*positronTotEnergy+kk)/(positronTotEnergy+costheta_po*kk);
   phi_po  = twopi * G4UniformRand() ;
-  G4double dirX_po = sqrt(1-costheta_po*costheta_po) * cos(phi_po);
-  G4double dirY_po = sqrt(1-costheta_po*costheta_po) * sin(phi_po);
+  G4double dirX_po = sqrt(1.-costheta_po*costheta_po) * cos(phi_po);
+  G4double dirY_po = sqrt(1.-costheta_po*costheta_po) * sin(phi_po);
   G4double dirZ_po = costheta_po;
 
 // Kinematics of the created pair:
-// the electron and positron are assumed to have a symetric angular 
+// the electron and positron are assumed to have a symetric angular
 // distribution with respect to the Z axis along the parent photon
 
   G4double localEnergyDeposit = 0. ;
-  
-  aParticleChange.SetNumberOfSecondaries(2) ; 
- 
+
+  aParticleChange.SetNumberOfSecondaries(2) ;
+
 
   // Generate the electron only if with large enough range w.r.t. cuts and safety
 
@@ -239,36 +238,36 @@ G4VParticleChange* G4PenelopeGammaConversion::PostStepDoIt(const G4Track& aTrack
   if (rangeTest->Escape(G4Electron::Electron(),couple,electronKineEnergy,safety))
     {
       G4ThreeVector electronDirection ( dirX_el, dirY_el, dirZ_el);
-      electronDirection.rotateUz(photonDirection);   
+      electronDirection.rotateUz(photonDirection);
       G4DynamicParticle* particle1 = new G4DynamicParticle (G4Electron::Electron(),
-							    electronDirection, 
+							    electronDirection,
 							    electronKineEnergy);
-      aParticleChange.AddSecondary(particle1) ; 
+      aParticleChange.AddSecondary(particle1) ;
     }
   else
-    { 
-      localEnergyDeposit += electronKineEnergy ; 
+    {
+      localEnergyDeposit += electronKineEnergy ;
     }
 
- 
+
   if (! (rangeTest->Escape(G4Positron::Positron(),couple,positronKineEnergy,safety)))
     {
       localEnergyDeposit += positronKineEnergy ;
       positronKineEnergy = 0. ;
     }
   G4ThreeVector positronDirection(dirX_po,dirY_po,dirZ_po);
-  positronDirection.rotateUz(photonDirection);   
- 
-  // Create G4DynamicParticle object for the particle2 
+  positronDirection.rotateUz(photonDirection);
+
+  // Create G4DynamicParticle object for the particle2
   G4DynamicParticle* particle2 = new G4DynamicParticle(G4Positron::Positron(),
 						       positronDirection, positronKineEnergy);
-  aParticleChange.AddSecondary(particle2) ; 
+  aParticleChange.AddSecondary(particle2) ;
 
   aParticleChange.SetLocalEnergyDeposit(localEnergyDeposit) ;
-  
-  // Kill the incident photon 
+
+  // Kill the incident photon
   aParticleChange.SetMomentumChange(0.,0.,0.) ;
-  aParticleChange.SetEnergyChange(0.) ; 
+  aParticleChange.SetEnergyChange(0.) ;
   aParticleChange.SetStatusChange(fStopAndKill) ;
 
   //  Reset NbOfInteractionLengthLeft and return aParticleChange
@@ -277,17 +276,17 @@ G4VParticleChange* G4PenelopeGammaConversion::PostStepDoIt(const G4Track& aTrack
 
 G4bool G4PenelopeGammaConversion::IsApplicable(const G4ParticleDefinition& particle)
 {
-  return ( &particle == G4Gamma::Gamma() ); 
+  return ( &particle == G4Gamma::Gamma() );
 }
 
-G4double G4PenelopeGammaConversion::GetMeanFreePath(const G4Track& track, 
-						     G4double previousStepSize, 
+G4double G4PenelopeGammaConversion::GetMeanFreePath(const G4Track& track,
+						     G4double previousStepSize,
 						     G4ForceCondition*)
 {
   const G4DynamicParticle* photon = track.GetDynamicParticle();
   G4double energy = photon->GetKineticEnergy();
-  G4Material* material = track.GetMaterial();
-  size_t materialIndex = material->GetIndex();
+  const G4MaterialCutsCouple* couple = track.GetMaterialCutsCouple();
+  size_t materialIndex = couple->GetIndex();
 
   G4double meanFreePath;
   if (energy > highEnergyLimit) meanFreePath = meanFreePathTable->FindValue(highEnergyLimit,materialIndex);

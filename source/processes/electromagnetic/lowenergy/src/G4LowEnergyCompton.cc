@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyCompton.cc,v 1.35 2003-03-10 12:18:34 vnivanch Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.36 2003-04-24 14:19:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -36,7 +36,8 @@
 // 24.04.2001 V.Ivanchenko - Remove RogueWave
 // 06.08.2001 MGP          - Revised according to a design iteration
 // 22.01.2003 V.Ivanchenko - Cut per region
-// 10.03.2003 V.Ivanchenko   Remome CutPerMaterial warning
+// 10.03.2003 V.Ivanchenko - Remove CutPerMaterial warning
+// 24.04.2003 V.Ivanchenko - Cut per region mfpt
 //
 // -------------------------------------------------------------------
 
@@ -60,6 +61,7 @@
 #include "G4LogLogInterpolation.hh"
 #include "G4VRangeTest.hh"
 #include "G4RangeTest.hh"
+#include "G4MaterialCutsCouple.hh"
 
 
 G4LowEnergyCompton::G4LowEnergyCompton(const G4String& processName)
@@ -239,17 +241,17 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack,
 
 G4bool G4LowEnergyCompton::IsApplicable(const G4ParticleDefinition& particle)
 {
-  return ( &particle == G4Gamma::Gamma() ); 
+  return ( &particle == G4Gamma::Gamma() );
 }
 
-G4double G4LowEnergyCompton::GetMeanFreePath(const G4Track& track, 
-					     G4double previousStepSize, 
+G4double G4LowEnergyCompton::GetMeanFreePath(const G4Track& track,
+					     G4double previousStepSize,
 					     G4ForceCondition*)
 {
   const G4DynamicParticle* photon = track.GetDynamicParticle();
   G4double energy = photon->GetKineticEnergy();
-  G4Material* material = track.GetMaterial();
-  size_t materialIndex = material->GetIndex();
+  const G4MaterialCutsCouple* couple = track.GetMaterialCutsCouple();
+  size_t materialIndex = couple->GetIndex();
 
   G4double meanFreePath;
   if (energy > highEnergyLimit) meanFreePath = meanFreePathTable->FindValue(highEnergyLimit,materialIndex);
