@@ -1,4 +1,4 @@
-$Id: History,v 1.49 2004-08-02 15:39:39 maire Exp $
+$Id: History,v 1.50 2004-09-07 16:05:07 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07-09-04 V.Ivant (testem5-V06-02-01)
+- fix a minor problem is energy deposit
 
 28-07-04 mma (testem5-V06-02-00)
 - print stopping power.

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.14 2004-08-13 10:37:49 maire Exp $
+// $Id: RunAction.cc,v 1.15 2004-09-07 16:05:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,7 +34,7 @@
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
-///#include "G4EmCalculator.hh"
+#include "G4EmCalculator.hh"
 
 #include "Randomize.hh"
 #include <iomanip>
@@ -139,11 +139,19 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
                                           ->GetParticleDefinition();
   G4String partName = particle->GetParticleName();
   G4double energy = primary->GetParticleGun()->GetParticleEnergy();
-  
-  ///G4EmCalculator emCalculator;
+  G4double energyAvr = energy;
+
+  G4EmCalculator emCalculator;
   G4double dEdxTable = 0.;
-  ///if (particle->GetPDGCharge()!= 0.) 
-  ///  dEdxTable = emCalculator.GetDEDX(particle,material,energy);
+  if (particle->GetPDGCharge()!= 0.) { 
+    dEdxTable = emCalculator.GetDEDX(particle,material,energy);
+    G4double e2 = energy - dEdxTable*length;
+    if(e2 > 0.) {
+      energyAvr = 0.5*(e2 + energy); 
+      dEdxTable = 0.5*(dEdxTable + emCalculator.GetDEDX(particle,material,e2));
+      //dEdxTable = emCalculator.ComputeDEDX(particle,material,"hIoni",energyAvr);
+    }
+  }
   G4double stopTable = dEdxTable/density;
   
   //Stopping Power from simulation.
@@ -164,13 +172,16 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout.precision(4);
   G4cout << "\n Total energy deposit in absorber per event = "
          << G4BestUnit(EnergyDeposit,"Energy") << " +- "
-         << G4BestUnit(rmsEdep,      "Energy") << G4endl;
+         << G4BestUnit(rmsEdep,      "Energy") 
+         << "  meanEinAbs= " 
+         << G4BestUnit(energyAvr,      "Energy") 
+         << G4endl;
 	 
-  G4cout << "\n Mean dE/dx = " << meandEdx/(MeV/cm) << " MeV/cm"
+  G4cout << "\n Mean dE/dx  = " << meandEdx/(MeV/cm) << " MeV/cm"
          << "\t stopping Power = " << stopPower/(MeV*cm2/g) << " MeV*cm2/g"
 	 << G4endl;
 	 	 
-  G4cout << " (fromTable = " << dEdxTable/(MeV/cm) << " MeV/cm)"
+  G4cout << " (from Table = " << dEdxTable/(MeV/cm) << " MeV/cm)"
          << "\t (from Table    = " << stopTable/(MeV*cm2/g) << " MeV*cm2/g)"
 	 << G4endl;
 	 
