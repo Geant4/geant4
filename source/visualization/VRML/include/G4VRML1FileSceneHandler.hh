@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML1FileSceneHandler.hh,v 1.2 1999-05-10 15:39:06 johna Exp $
+// $Id: G4VRML1FileSceneHandler.hh,v 1.3 1999-10-01 02:45:18 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML1FileSceneHandler.hh
@@ -16,7 +16,7 @@
 #ifndef G4VRML1FILE_SCENE_HANDLER_HH
 #define G4VRML1FILE_SCENE_HANDLER_HH
 
-#include <rw/tvhdict.h>
+//#include <rw/tvhdict.h>
 #include <fstream.h>
 
 #include "globals.hh"
