@@ -11,6 +11,7 @@
 /calor/setAbsThick 4.005 mm  
 /calor/setAbsYZ 10. cm
 /calor/update
+/gun/setDefault
 #
 #
 #  hist file name
