@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Mag_EqRhs.cc,v 1.3 2000-11-01 15:15:53 gcosmo Exp $
+// $Id: G4Mag_EqRhs.cc,v 1.4 2001-02-19 16:51:49 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  This is the standard right-hand side for equation of motion  
@@ -35,7 +35,8 @@ G4Mag_EqRhs::SetChargeMomentumMass( G4double particleCharge, // e+ units
 			            G4double MomentumXc,
                                     G4double particleMass)
 {
-   fCof_val = fUnitConstant*particleCharge/MomentumXc; //  B must be in Tesla
+   fCof_val = particleCharge ; //  B must be in Tesla
+   //  fCof_val = fUnitConstant*particleCharge/MomentumXc; //  B must be in Tesla
    // fMass = particleMass;
 }
 
