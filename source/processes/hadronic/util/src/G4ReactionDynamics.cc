@@ -233,9 +233,9 @@
             forwardEnergy += vec[i]->GetMass()/GeV;
             for( G4int j=i; j<(vecLen-1); j++ )*vec[j] = *vec[j+1];    // shift up
             --forwardCount;
-            forwardParticlesLeft = 1;
-            //G4ReactionProduct *temp = vec[vecLen];
-            //delete temp;
+            forwardParticlesLeft = 1;  
+            G4ReactionProduct *temp = vec[vecLen-1];
+            delete temp;
             if( --vecLen == 0 )return false;  // all the secondaries have been eliminated
             break;  // --+
           }         //   |
@@ -250,8 +250,8 @@
         // above two lines modified 20-oct-97: were just simple equalities
         --forwardCount;
         for( G4int j=0; j<(vecLen-1); ++j )*vec[j] = *vec[j+1];
-        //G4ReactionProduct *temp = vec[vecLen];
-        //delete temp;
+        G4ReactionProduct *temp = vec[vecLen-1];
+        delete temp;
         if( --vecLen == 0 )return false;  // all the secondaries have been eliminated
         break;
       }
@@ -278,8 +278,8 @@
             for( G4int j=i; j<(vecLen-1); ++j )*vec[j] = *vec[j+1];   // shift up
             --backwardCount;
             backwardParticlesLeft = 1;
-            //G4ReactionProduct *temp = vec[vecLen];
-            //delete temp;
+            G4ReactionProduct *temp = vec[vecLen-1];
+            delete temp;
             if( --vecLen == 0 )return false;  // all the secondaries have been eliminated
             break;
           }
@@ -292,8 +292,8 @@
         targetParticle = *vec[0];
         --backwardCount;
         for( G4int j=0; j<(vecLen-1); ++j )*vec[j] = *vec[j+1];
-        //G4ReactionProduct *temp = vec[vecLen];
-        //delete temp;
+        G4ReactionProduct *temp = vec[vecLen-1];
+        delete temp;
         if( --vecLen == 0 )return false;  // all the secondaries have been eliminated
         break;
       }
@@ -345,6 +345,7 @@
                          1.43,1.67,2.0,2.5,3.33,5.00,10.00};
     G4int backwardNucleonCount = 0;       // number of nucleons in backward hemisphere
     G4double totalEnergy, kineticEnergy, vecMass;
+
     for( i=(vecLen-1); i>=0; --i )
     {
       if( vec[i]->GetNewlyAdded() )           // added from intranuclear cascade
@@ -581,8 +582,8 @@
           backwardEnergy += vecMass;
         }
         for( G4int j=i; j<(vecLen-1); ++j )*vec[j] = *vec[j+1];    // shift up
-        //G4ReactionProduct *temp = vec[vecLen];
-        //delete temp;
+        G4ReactionProduct *temp = vec[vecLen-1];
+        delete temp;
         // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
         if( --vecLen == 0 )return false;  // all the secondaries have been eliminated
         pseudoParticle[6] = pseudoParticle[4] + pseudoParticle[5];
@@ -594,6 +595,7 @@
         if( phi < 0.0 )phi = twopi - phi;
       }
     }   // closes main for loop
+
     //
     //  for the incident particle:  it was placed in the forward hemisphere
     //   set pt and phi values, they are changed somewhat in the iteration loop

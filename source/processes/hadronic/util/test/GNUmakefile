@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999-01-08 16:33:47 gunter Exp $
+# $Id: GNUmakefile,v 1.2 2001-04-05 10:08:33 hpw Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -14,18 +14,5 @@ endif
 G4EXEC_BUILD = true
 
 include $(G4INSTALL)/config/architecture.gmk
-
-# Override some variables for binmake.gmk.
-#
-INCFLAGS := \
-	-I$(G4BASE)/processes/hadronic/util/include \
-	-I$(G4BASE)/global/management/include
-	
-LDLIBS   := \
-	    -lG4hadronic_util \
-            -lG4global
-
-LDFLAGS  += $(EXTRALIBDIR)
-LOADLIBS += $(EXTRALIBS)
 
 include $(G4INSTALL)/config/binmake.gmk
