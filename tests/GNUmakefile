@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.30 2000-07-27 02:31:19 stesting Exp $
+# $Id: GNUmakefile,v 1.31 2000-07-27 11:26:17 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -195,6 +195,8 @@ clean_examples_links_source:
 	  done; \
 	  rm -f $$testdir; \
 	done;:
+	@rm -f test601/test601.in test601/test601.out test601;:
+	@rm -f test602/test602.in test602/test602.out test602;:
 
 clean_examples_links_binaries:
 	@for nn in $(EXAMPLES); do \
