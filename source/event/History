@@ -1,4 +1,4 @@
-$Id: History,v 1.32 2001-10-19 16:48:28 flei Exp $
+$Id: History,v 1.33 2001-11-12 05:45:56 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 10 2001, M.Asai (event-V03-02-07)
+- Tagged.
 
 Oct 19 2001, F. Lei
 - Code changes to remove compilation warnings un gcc-2.95.2
