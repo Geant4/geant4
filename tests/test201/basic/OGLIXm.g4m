@@ -1,0 +1,5 @@
+/vis/sceneHandler/create OGLIXm
+/vis/viewer/create
+/vis/sceneHandler/attach
+/vis/scene/notifyHandlers
+/vis/viewer/update
