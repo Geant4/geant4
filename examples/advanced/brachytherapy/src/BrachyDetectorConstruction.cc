@@ -36,7 +36,7 @@
 //    *                                      *
 //    ****************************************
 //
-// $Id: BrachyDetectorConstruction.cc,v 1.14 2003-05-09 07:19:08 gcosmo Exp $
+// $Id: BrachyDetectorConstruction.cc,v 1.15 2003-05-09 09:39:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPhantomROGeometry.hh"
@@ -83,92 +83,53 @@ BrachyDetectorConstruction::BrachyDetectorConstruction(G4String &SDName)
   ExpHall(0), ExpHallLog(0), ExpHallPhys(0),
   Phantom(0), PhantomLog(0), PhantomPhys(0)
 {
-m_BoxDimX=30*cm ;
-m_BoxDimY=30*cm;
-m_BoxDimZ=30*cm;
+  m_BoxDimX=30*cm ;
+  m_BoxDimY=30*cm;
+  m_BoxDimZ=30*cm;
 
-NumVoxelX=300;
-NumVoxelZ=300;
+  NumVoxelX=300;
+  NumVoxelZ=300;
 
-ComputeDimVoxel();
+  ComputeDimVoxel();
 
-ExpHall_x = 4.0*m;
-ExpHall_y = 4.0*m;
-ExpHall_z = 4.0*m;
+  ExpHall_x = 4.0*m;
+  ExpHall_y = 4.0*m;
+  ExpHall_z = 4.0*m;
 
-m_SDName = SDName;//pointer to sensitive detector
+  m_SDName = SDName;//pointer to sensitive detector
 
-detectorMessenger = new BrachyDetectorMessenger(this);
+  detectorMessenger = new BrachyDetectorMessenger(this);
 
+  factoryIr=new BrachyFactoryIr();
 
-G4Colour  white   (1.0, 1.0, 1.0) ;
-G4Colour  grey    (0.5, 0.5, 0.5) ;
-G4Colour  lgrey   (.75, .75, .75) ;
-G4Colour  red     (1.0, 0.0, 0.0) ;
-G4Colour  blue    (0.0, 0.0, 1.0) ;
-G4Colour  cyan    (0.0, 1.0, 1.0) ;
-G4Colour  magenta (1.0, 0.0, 1.0) ; 
-G4Colour  yellow  (1.0, 1.0, 0.0) ;
-G4Colour  lblue   (0.0, 0.0, .75);
-
-factoryIr=new BrachyFactoryIr();
-
-pMat= new BrachyMaterial();
-
+  pMat= new BrachyMaterial();
 }
 
 
 BrachyDetectorConstruction::~BrachyDetectorConstruction()
 { 
+  delete pMat;
+  delete factoryIr;
+  delete detectorMessenger;
 
-delete pMat;
-delete factoryIr;
-delete detectorMessenger;
-
-if (factoryLeipzig) delete factoryLeipzig;
-if (factoryI) delete factoryI;
+  if (factoryLeipzig) delete factoryLeipzig;
+  if (factoryI) delete factoryI;
 }
 
 //....
 G4VPhysicalVolume* BrachyDetectorConstruction::Construct()
-{ pMat-> DefineMaterials();
-
-if (ExpHallPhys==0)
 {
-  ConstructPhantom(); }
-
-switch(detectorChoice)
-{ 
-  case 1:
-	 factoryI=new BrachyFactoryI();
-	 factoryI->CreateSource(PhantomPhys);
-
-   break;
-
-
-  case 2:
-         factoryLeipzig=new BrachyFactoryLeipzig();
-         factoryLeipzig->CreateSource(PhantomPhys);
-   break;
-
-case 3:
-       factoryIr->CreateSource(PhantomPhys);
-   break;
-
-default:
-
+  pMat-> DefineMaterials();
+  ConstructPhantom();
   factoryIr->CreateSource(PhantomPhys);
+  ConstructSensitiveDetector();
+
+  return ExpHallPhys;
 }
 
-
- ConstructSensitiveDetector();
-
-return ExpHallPhys;
-
-}
 void BrachyDetectorConstruction::SwitchDetector()
 {
-factoryIr->CleanSource();
+//factoryIr->CleanSource();
 switch(detectorChoice)
 { 
 case 1:
@@ -190,19 +151,9 @@ default:
   factoryIr->CreateSource(PhantomPhys);
 }
 
-// Notify run manager that the new geometry has been built
+  // Notify run manager that the new geometry has been built
 
-G4RunManager::GetRunManager()->DefineWorldVolume( ExpHallPhys );
-G4RunManager::GetRunManager()->GeometryHasBeenModified();
-
-// Let the navigator to know about the new top of the new geometry
-G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->SetWorldVolume(ExpHallPhys);
-// We have to tweak the navigator's state. By the following dummy call we ensure that navigator's
-// state is reset properly
-G4ThreeVector center(0,0,0);
-G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->LocateGlobalPointAndSetup(center,0,false);
-
-
+  G4RunManager::GetRunManager()->DefineWorldVolume( ExpHallPhys );
 }
 
 void BrachyDetectorConstruction::SelectDetector(G4String val)
@@ -214,43 +165,42 @@ void BrachyDetectorConstruction::SelectDetector(G4String val)
 
    G4cout << "Now Detector is " << val << G4endl;
 }
+
 void BrachyDetectorConstruction::ConstructPhantom()
-
 {
-G4Colour  white   (1.0, 1.0, 1.0) ;
-G4Colour  grey    (0.5, 0.5, 0.5) ;
-G4Colour  lgrey   (.75, .75, .75) ;
-G4Colour  red     (1.0, 0.0, 0.0) ;
-G4Colour  blue    (0.0, 0.0, 1.0) ;
-G4Colour  cyan    (0.0, 1.0, 1.0) ;
-G4Colour  magenta (1.0, 0.0, 1.0) ; 
-G4Colour  yellow  (1.0, 1.0, 0.0) ;
-G4Colour  lblue   (0.0, 0.0, .75);
+  G4Colour  white   (1.0, 1.0, 1.0) ;
+  G4Colour  grey    (0.5, 0.5, 0.5) ;
+  G4Colour  lgrey   (.75, .75, .75) ;
+  G4Colour  red     (1.0, 0.0, 0.0) ;
+  G4Colour  blue    (0.0, 0.0, 1.0) ;
+  G4Colour  cyan    (0.0, 1.0, 1.0) ;
+  G4Colour  magenta (1.0, 0.0, 1.0) ; 
+  G4Colour  yellow  (1.0, 1.0, 0.0) ;
+  G4Colour  lblue   (0.0, 0.0, .75);
 
-G4Material* air=pMat->GetMat("Air") ;
-G4Material* soft=pMat->GetMat("tissue");
+  G4Material* air=pMat->GetMat("Air") ;
+  G4Material* soft=pMat->GetMat("tissue");
 
-ComputeDimVoxel();
+  ComputeDimVoxel();
 
-//World volume
-ExpHall = new G4Box("ExpHall",ExpHall_x,ExpHall_y,ExpHall_z);
-ExpHallLog = new G4LogicalVolume(ExpHall,air,"ExpHallLog",0,0,0);
-ExpHallPhys = new G4PVPlacement(0,G4ThreeVector(),"ExpHallPhys",ExpHallLog,NULL,false,0);
+  //World volume
+  ExpHall = new G4Box("ExpHall",ExpHall_x,ExpHall_y,ExpHall_z);
+  ExpHallLog = new G4LogicalVolume(ExpHall,air,"ExpHallLog",0,0,0);
+  ExpHallPhys = new G4PVPlacement(0,G4ThreeVector(),"ExpHallPhys",ExpHallLog,0,false,0);
 
-// Water Box
-Phantom = new G4Box("Phantom",m_BoxDimX/2,m_BoxDimY/2,m_BoxDimZ/2);
-PhantomLog = new G4LogicalVolume(Phantom,soft,"PhantomLog",0,0,0);
+  // Water Box
+  Phantom = new G4Box("Phantom",m_BoxDimX/2,m_BoxDimY/2,m_BoxDimZ/2);
+  PhantomLog = new G4LogicalVolume(Phantom,soft,"PhantomLog",0,0,0);
 
-PhantomPhys = new G4PVPlacement(0,G4ThreeVector(),"PhantomPhys",PhantomLog,ExpHallPhys,false,0); 
+  PhantomPhys = new G4PVPlacement(0,G4ThreeVector(),"PhantomPhys",PhantomLog,ExpHallPhys,false,0); 
 
-ExpHallLog->SetVisAttributes (G4VisAttributes::Invisible);
+  ExpHallLog->SetVisAttributes (G4VisAttributes::Invisible);
 
-G4VisAttributes* simpleBoxVisAtt= new G4VisAttributes(lblue);
-simpleBoxVisAtt->SetVisibility(true);
-simpleBoxVisAtt->SetForceWireframe(true);
+  G4VisAttributes* simpleBoxVisAtt= new G4VisAttributes(lblue);
+  simpleBoxVisAtt->SetVisibility(true);
+  simpleBoxVisAtt->SetForceWireframe(true);
 
-PhantomLog->SetVisAttributes(simpleBoxVisAtt);
-
+  PhantomLog->SetVisAttributes(simpleBoxVisAtt);
 }
 
 void  BrachyDetectorConstruction::ConstructSensitiveDetector()
@@ -324,20 +274,3 @@ if (pttoMaterial)
  } 
 else G4cout<<"that's not avaiable!"<<G4endl;            
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
