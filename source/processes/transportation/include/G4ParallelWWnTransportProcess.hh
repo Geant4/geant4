@@ -21,53 +21,74 @@
 // ********************************************************************
 //
 //
-// $Id: G4MWeightWindowConfigurator.hh,v 1.2 2003-08-19 15:17:40 dressel Exp $
+// $Id: G4ParallelWWnTransportProcess.hh,v 1.1 2003-08-19 15:18:22 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4MWeightWindowConfigurator
+// Class G4ParallelWWnTransportProcess
 //
 // Class description:
-
+//
+// Used internally by importance sampling in a "parallel" geometry.
+// This is a G4ParallelTransport that also does importance
+// sampling in the "parallel" geometry.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
+#ifndef G4ParallelWWnTransportProcess_hh
+#define G4ParallelWWnTransportProcess_hh G4ParallelWWnTransportProcess_hh
 
-#ifndef G4MWeightWindowConfigurator_hh
-#define G4MWeightWindowConfigurator_hh G4MWeightWindowConfigurator_hh
+#include "G4ParallelTransport.hh"
+#include "G4VTrackTerminator.hh"
 
-#include "globals.hh"
-#include "G4ProcessPlacer.hh"
-#include "G4VSamplerConfigurator.hh"
-#include "G4PlaceOfAction.hh"
-#include "G4MassWeightWindowProcess.hh"
+class G4ImportancePostStepDoIt;
+class G4VWeightWindowExaminer;
+class G4Nsplit_Weight;
 
-class G4VWeightWindowStore;
-class G4VWeightWindowAlgorithm;
 
-class G4MWeightWindowConfigurator : public G4VSamplerConfigurator{
-public:
-  G4MWeightWindowConfigurator(const G4String &particlename,
-			      G4VWeightWindowStore &wwstore,
-			      const G4VWeightWindowAlgorithm *wwAlg,
-			      G4PlaceOfAction placeOfAction);
+class G4ParallelWWnTransportProcess : public G4ParallelTransport, public G4VTrackTerminator
+{
 
-  virtual ~G4MWeightWindowConfigurator();
-  virtual void Configure(G4VSamplerConfigurator *preConf);
-  virtual const G4VTrackTerminator *GetTrackTerminator() const;
+public:  // with description
+
+  G4ParallelWWnTransportProcess(const G4VWeightWindowExaminer 
+				&aWeightWindowExaminer,
+				G4VPGeoDriver &pgeodriver, 
+				G4VParallelStepper &aStepper,
+				const G4VTrackTerminator *TrackTerminator,
+				const G4String &aName = 
+				"ParallelWWnTransportProcess");  
+    // initialise G4ParallelTransport and members
+
+  virtual ~G4ParallelWWnTransportProcess();
+
+
+  virtual G4VParticleChange *PostStepDoIt(const G4Track&,
+					  const G4Step&);
+    // do the "parallel transport" and importance sampling.
+
+  virtual void KillTrack() const;
+    // used in case no scoring process follows that does the killing
+
+  virtual const G4String &GetName() const;
+
 
 private:
-  G4MWeightWindowConfigurator(const G4MWeightWindowConfigurator &);
-  G4MWeightWindowConfigurator &
-  operator=(const G4MWeightWindowConfigurator &);
 
-  G4ProcessPlacer fPlacer;
-  G4VWeightWindowStore &fWeightWindowStore;
-  G4bool fDeleteWWalg;
-  const G4VWeightWindowAlgorithm *fWWalgorithm;
-  G4MassWeightWindowProcess *fMassWeightWindowProcess;
-  G4PlaceOfAction fPlaceOfAction;
+  G4ParallelWWnTransportProcess(const G4ParallelWWnTransportProcess &);
+  G4ParallelWWnTransportProcess &operator=(const G4ParallelWWnTransportProcess &);
+  
+  virtual void Error(const G4String &m);
+
+private:
+
+  G4ParticleChange *fParticleChange;
+  const G4VWeightWindowExaminer &fWeightWindowExaminer;  
+  G4ImportancePostStepDoIt *fImportancePostStepDoIt;
 };
 
-
 #endif
+
+
+
+

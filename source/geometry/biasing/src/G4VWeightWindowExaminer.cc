@@ -21,53 +21,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4MWeightWindowConfigurator.hh,v 1.2 2003-08-19 15:17:40 dressel Exp $
+// $Id: G4VWeightWindowExaminer.cc,v 1.1 2003-08-19 15:17:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4MWeightWindowConfigurator
+// GEANT 4 class source file
 //
-// Class description:
-
-
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
+// G4VWeightWindowExaminer.cc
+//
 // ----------------------------------------------------------------------
 
-#ifndef G4MWeightWindowConfigurator_hh
-#define G4MWeightWindowConfigurator_hh G4MWeightWindowConfigurator_hh
+#include "G4VWeightWindowExaminer.hh"
 
-#include "globals.hh"
-#include "G4ProcessPlacer.hh"
-#include "G4VSamplerConfigurator.hh"
-#include "G4PlaceOfAction.hh"
-#include "G4MassWeightWindowProcess.hh"
+G4VWeightWindowExaminer::G4VWeightWindowExaminer()
+{}
 
-class G4VWeightWindowStore;
-class G4VWeightWindowAlgorithm;
-
-class G4MWeightWindowConfigurator : public G4VSamplerConfigurator{
-public:
-  G4MWeightWindowConfigurator(const G4String &particlename,
-			      G4VWeightWindowStore &wwstore,
-			      const G4VWeightWindowAlgorithm *wwAlg,
-			      G4PlaceOfAction placeOfAction);
-
-  virtual ~G4MWeightWindowConfigurator();
-  virtual void Configure(G4VSamplerConfigurator *preConf);
-  virtual const G4VTrackTerminator *GetTrackTerminator() const;
-
-private:
-  G4MWeightWindowConfigurator(const G4MWeightWindowConfigurator &);
-  G4MWeightWindowConfigurator &
-  operator=(const G4MWeightWindowConfigurator &);
-
-  G4ProcessPlacer fPlacer;
-  G4VWeightWindowStore &fWeightWindowStore;
-  G4bool fDeleteWWalg;
-  const G4VWeightWindowAlgorithm *fWWalgorithm;
-  G4MassWeightWindowProcess *fMassWeightWindowProcess;
-  G4PlaceOfAction fPlaceOfAction;
-};
-
-
-#endif
+G4VWeightWindowExaminer::~G4VWeightWindowExaminer()
+{}

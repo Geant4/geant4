@@ -21,52 +21,53 @@
 // ********************************************************************
 //
 //
-// $Id: G4MWeightWindowConfigurator.hh,v 1.2 2003-08-19 15:17:40 dressel Exp $
+// $Id: G4WeightWindowExaminer.hh,v 1.1 2003-08-19 15:17:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4MWeightWindowConfigurator
+// Class G4WeightWindowExaminer
 //
 // Class description:
-
+//
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
+#ifndef G4WeightWindowExaminer_hh
+#define G4WeightWindowExaminer_hh G4WeightWindowExaminer_hh
 
-#ifndef G4MWeightWindowConfigurator_hh
-#define G4MWeightWindowConfigurator_hh G4MWeightWindowConfigurator_hh
+#include "G4VWeightWindowExaminer.hh"
 
-#include "globals.hh"
-#include "G4ProcessPlacer.hh"
-#include "G4VSamplerConfigurator.hh"
-#include "G4PlaceOfAction.hh"
-#include "G4MassWeightWindowProcess.hh"
-
-class G4VWeightWindowStore;
 class G4VWeightWindowAlgorithm;
+class G4VParallelStepper;
+class G4VWeightWindowStore;
 
-class G4MWeightWindowConfigurator : public G4VSamplerConfigurator{
-public:
-  G4MWeightWindowConfigurator(const G4String &particlename,
-			      G4VWeightWindowStore &wwstore,
-			      const G4VWeightWindowAlgorithm *wwAlg,
-			      G4PlaceOfAction placeOfAction);
+class G4WeightWindowExaminer: public G4VWeightWindowExaminer
+{
 
-  virtual ~G4MWeightWindowConfigurator();
-  virtual void Configure(G4VSamplerConfigurator *preConf);
-  virtual const G4VTrackTerminator *GetTrackTerminator() const;
+public:  // with description
+
+  G4WeightWindowExaminer(const G4VWeightWindowAlgorithm &aWWalg,
+			 const G4VParallelStepper &astepper,
+			 const G4VWeightWindowStore &wwstore);
+    // initialisation and construct G4ImportanceFinder
+
+  virtual ~G4WeightWindowExaminer();
+    // delete G4ImportanceFinder
+
+  virtual G4Nsplit_Weight Examine(G4double w, G4double energy) const; 
+    // Get  G4Nsplit_Weight for a given mother track weight.
+  
 
 private:
-  G4MWeightWindowConfigurator(const G4MWeightWindowConfigurator &);
-  G4MWeightWindowConfigurator &
-  operator=(const G4MWeightWindowConfigurator &);
 
-  G4ProcessPlacer fPlacer;
-  G4VWeightWindowStore &fWeightWindowStore;
-  G4bool fDeleteWWalg;
-  const G4VWeightWindowAlgorithm *fWWalgorithm;
-  G4MassWeightWindowProcess *fMassWeightWindowProcess;
-  G4PlaceOfAction fPlaceOfAction;
+  G4WeightWindowExaminer(const G4WeightWindowExaminer &);
+  G4WeightWindowExaminer &operator=(const G4WeightWindowExaminer &);
+
+private:
+
+  const G4VWeightWindowAlgorithm &fWWalgorithm;
+  const G4VParallelStepper &fPStepper;
+  const G4VWeightWindowStore &fWWStore;
 };
 
 

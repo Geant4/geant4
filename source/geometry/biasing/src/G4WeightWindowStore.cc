@@ -1,6 +1,8 @@
 #include "G4WeightWindowStore.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
+#include "G4GeometryCellStepStream.hh"
+
 
 G4WeightWindowStore::
 G4WeightWindowStore(const G4VPhysicalVolume &worldvolume) :
@@ -23,14 +25,19 @@ G4double G4WeightWindowStore::GetLowerWeitgh(const G4GeometryCell &gCell,
   G4UpperEnergyToLowerWeightMap upEnLoWeiPairs =
     fCurrentIterator->second;
   G4double lowerWeight = -1;
+  G4bool found = false;
   for (G4UpperEnergyToLowerWeightMap::iterator it = 
 	 upEnLoWeiPairs.begin(); it != upEnLoWeiPairs.end(); it++) {
     if (partEnergy < it->first) {
       lowerWeight = it->second;
+      found = true;
       break;
     }
   }
-
+  if (!found) {
+    G4cout << "energy: " << partEnergy << G4endl;
+    Error("GetLowerWitgh: couldn't find lower weight bound");
+  }
   return lowerWeight;
 
 

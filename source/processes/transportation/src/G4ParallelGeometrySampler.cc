@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelGeometrySampler.cc,v 1.8 2003-08-15 15:36:06 dressel Exp $
+// $Id: G4ParallelGeometrySampler.cc,v 1.9 2003-08-19 15:17:40 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -35,6 +35,7 @@
 #include "G4ParallelGeometrySampler.hh"
 
 #include "G4VIStore.hh"
+#include "G4WeightWindowStore.hh"
 #include "G4VScorer.hh"
 
 #include "G4ParallelTransportConfigurator.hh"
@@ -42,6 +43,7 @@
 #include "G4PImportanceConfigurator.hh"
 #include "G4WeightCutOffConfigurator.hh"
 #include "G4ParallelGCellFinder.hh"
+#include "G4PWeightWindowConfigurator.hh"
 
 G4ParallelGeometrySampler::
 G4ParallelGeometrySampler(G4VPhysicalVolume &worldvolume,
@@ -55,6 +57,8 @@ G4ParallelGeometrySampler(G4VPhysicalVolume &worldvolume,
   fGCellFinder(0),
   fWeightCutOffConfigurator(0),
   fIStore(0),
+  fPWeightWindowConfigurator(0),
+  fWWStore(0),
   fIsConfigured(false)
 {}
 
@@ -66,6 +70,10 @@ void G4ParallelGeometrySampler::ClearSampling() {
   if (fParallelTransportConfigurator) {
     delete fParallelTransportConfigurator;
     fParallelTransportConfigurator = 0;
+  }
+  if (fPWeightWindowConfigurator) {
+    delete fPWeightWindowConfigurator;
+    fPWeightWindowConfigurator = 0;
   }
   if (fPImportanceConfigurator) {
     delete fPImportanceConfigurator;
@@ -150,6 +158,22 @@ void G4ParallelGeometrySampler::
 PrepareWeightWindow(G4VWeightWindowStore *wwstore,
 		    G4VWeightWindowAlgorithm *wwAlg,
 		    G4PlaceOfAction placeOfAction){
+
+  if (placeOfAction != onBoundary) {
+    // an additional paralel transport is needed
+    // to cause a step on parallel boundaries
+    fParallelTransportConfigurator = 
+      new G4ParallelTransportConfigurator(fParticleName,
+					  fParallelWorld);    
+  }
+  
+  fWWStore = wwstore;
+  fPWeightWindowConfigurator = 
+    new G4PWeightWindowConfigurator(fParticleName,
+				    fParallelWorld,
+				    *wwstore,
+				    wwAlg,
+				    placeOfAction);
 }
 
 
@@ -163,6 +187,12 @@ void G4ParallelGeometrySampler::Configure(){
     }
     if (fPImportanceConfigurator) {
       fConfigurators.push_back(fPImportanceConfigurator);
+    }
+    else if (fPWeightWindowConfigurator) {
+      fConfigurators.push_back(fPWeightWindowConfigurator);
+      if (fParallelTransportConfigurator) {
+	fConfigurators.push_back(fParallelTransportConfigurator);
+      }
     }
     else {
       fParallelTransportConfigurator = 

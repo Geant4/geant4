@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4MWeightWindowConfigurator.hh,v 1.2 2003-08-19 15:17:40 dressel Exp $
+// $Id: G4PWeightWindowConfigurator.hh,v 1.1 2003-08-19 15:18:22 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4MWeightWindowConfigurator
+// Class G4PWeightWindowConfigurator
 //
 // Class description:
 
@@ -33,40 +33,45 @@
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 
-#ifndef G4MWeightWindowConfigurator_hh
-#define G4MWeightWindowConfigurator_hh G4MWeightWindowConfigurator_hh
+#ifndef G4PWeightWindowConfigurator_hh
+#define G4PWeightWindowConfigurator_hh G4PWeightWindowConfigurator_hh
 
 #include "globals.hh"
 #include "G4ProcessPlacer.hh"
 #include "G4VSamplerConfigurator.hh"
 #include "G4PlaceOfAction.hh"
-#include "G4MassWeightWindowProcess.hh"
+#include "G4ParallelWeightWindowProcess.hh"
+#include "G4WeightWindowExaminer.hh"
 
 class G4VWeightWindowStore;
 class G4VWeightWindowAlgorithm;
+class G4ParallelWorld;
 
-class G4MWeightWindowConfigurator : public G4VSamplerConfigurator{
+class G4PWeightWindowConfigurator : public G4VSamplerConfigurator{
 public:
-  G4MWeightWindowConfigurator(const G4String &particlename,
+  G4PWeightWindowConfigurator(const G4String &particlename,
+			      G4ParallelWorld &parallelWorld,
 			      G4VWeightWindowStore &wwstore,
 			      const G4VWeightWindowAlgorithm *wwAlg,
 			      G4PlaceOfAction placeOfAction);
 
-  virtual ~G4MWeightWindowConfigurator();
+  virtual ~G4PWeightWindowConfigurator();
   virtual void Configure(G4VSamplerConfigurator *preConf);
   virtual const G4VTrackTerminator *GetTrackTerminator() const;
 
 private:
-  G4MWeightWindowConfigurator(const G4MWeightWindowConfigurator &);
-  G4MWeightWindowConfigurator &
-  operator=(const G4MWeightWindowConfigurator &);
+  G4PWeightWindowConfigurator(const G4PWeightWindowConfigurator &);
+  G4PWeightWindowConfigurator &
+  operator=(const G4PWeightWindowConfigurator &);
 
   G4ProcessPlacer fPlacer;
-  G4VWeightWindowStore &fWeightWindowStore;
+  G4ParallelWorld &fPWorld;
   G4bool fDeleteWWalg;
   const G4VWeightWindowAlgorithm *fWWalgorithm;
-  G4MassWeightWindowProcess *fMassWeightWindowProcess;
+  G4WeightWindowExaminer fExaminer;
+  G4VProcess *fParallelWWProcess;
   G4PlaceOfAction fPlaceOfAction;
+  G4VTrackTerminator *fTrackTerminator;
 };
 
 

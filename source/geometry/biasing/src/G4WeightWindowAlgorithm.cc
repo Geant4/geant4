@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightWindowAlgorithm.cc,v 1.6 2003-08-15 15:34:45 dressel Exp $
+// $Id: G4WeightWindowAlgorithm.cc,v 1.7 2003-08-19 15:16:56 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -91,7 +91,7 @@ G4WeightWindowAlgorithm::Calculate(G4double init_w,
   } else if (init_w < lowerWeightBound) {
     // Russian roulette
     G4double wi_ws = init_w/survivalWeight;
-    G4double p = std::min(wi_ws,1./fMaxNumberOfSplits);
+    G4double p = std::max(wi_ws,1./fMaxNumberOfSplits);
     G4double r = G4UniformRand();
     if (r<p){
       nw.fW = init_w/p;

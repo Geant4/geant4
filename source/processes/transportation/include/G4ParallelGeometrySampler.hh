@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelGeometrySampler.hh,v 1.5 2003-08-15 15:36:06 dressel Exp $
+// $Id: G4ParallelGeometrySampler.hh,v 1.6 2003-08-19 15:17:40 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -53,6 +53,8 @@ class G4PScoreConfigurator;
 class G4PImportanceConfigurator;
 class G4WeightCutOffConfigurator;
 class G4VGCellFinder;
+class G4PWeightWindowConfigurator;
+class G4WeightWindowStore;
 
 class G4ParallelGeometrySampler : public G4VSampler{
 
@@ -96,6 +98,8 @@ private:
   G4VGCellFinder *fGCellFinder;
   G4WeightCutOffConfigurator *fWeightCutOffConfigurator;
   G4VIStore *fIStore;
+  G4PWeightWindowConfigurator *fPWeightWindowConfigurator;
+  G4VWeightWindowStore *fWWStore;
   G4bool fIsConfigured;
   G4Configurators fConfigurators;
 };

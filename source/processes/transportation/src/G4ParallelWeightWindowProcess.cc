@@ -21,37 +21,39 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassWeightWindowProcess.cc,v 1.2 2003-08-19 15:17:40 dressel Exp $
+// $Id: G4ParallelWeightWindowProcess.cc,v 1.8 2003-08-19 15:18:22 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
 //
-// G4MassWeightWindowProcess.cc
+// G4ParallelWeightWindowProcess.cc
 //
 // ----------------------------------------------------------------------
 
-#include "G4MassWeightWindowProcess.hh"
-#include "G4VWeightWindowAlgorithm.hh"
-#include "G4GeometryCell.hh"
-#include "G4ImportancePostStepDoIt.hh"
+#include "G4Types.hh"
+#include <strstream>
+#include "G4ParallelWeightWindowProcess.hh"
+#include "G4VWeightWindowExaminer.hh"
 #include "G4VTrackTerminator.hh"
-#include "G4PlaceOfAction.hh"
-#include "G4VWeightWindowStore.hh"
+#include "G4ImportancePostStepDoIt.hh"
+#include "G4VParallelStepper.hh"
 
-
-G4MassWeightWindowProcess::
-G4MassWeightWindowProcess(const G4VWeightWindowAlgorithm &aWeightWindowAlgorithm,
-			  const G4VWeightWindowStore &aWWStore,
-			  const G4VTrackTerminator *TrackTerminator,
-			  G4PlaceOfAction placeOfAction,
-			  const G4String &aName)
- : G4VProcess(aName),
-   fParticleChange(new G4ParticleChange),
-   fWeightWindowAlgorithm(aWeightWindowAlgorithm),
-   fWeightWindowStore(aWWStore),
-   fImportancePostStepDoIt(0),
-   fPlaceOfAction(placeOfAction)
+G4ParallelWeightWindowProcess::
+G4ParallelWeightWindowProcess(const G4VWeightWindowExaminer 
+			      &aWeightWindowExaminer,
+			      G4VParallelStepper &aStepper,
+			      const G4VTrackTerminator *TrackTerminator,
+			      G4PlaceOfAction placeOfAction,
+			      const G4String &aName) 
+  : 
+  G4VProcess(aName),
+  fParticleChange(new G4ParticleChange),
+  fWeightWindowExaminer(aWeightWindowExaminer),
+  fStepper(aStepper),
+  fImportancePostStepDoIt(0),
+  fPlaceOfAction(placeOfAction)
+  
 {
   if (TrackTerminator) {
     fImportancePostStepDoIt = new G4ImportancePostStepDoIt(*TrackTerminator);
@@ -59,66 +61,69 @@ G4MassWeightWindowProcess(const G4VWeightWindowAlgorithm &aWeightWindowAlgorithm
   else {
     fImportancePostStepDoIt = new G4ImportancePostStepDoIt(*this);
   }
-  if (!fParticleChange) {
-    G4Exception("ERROR:G4MassWeightWindowProcess::G4MassWeightWindowProcess: new failed to create G4ParticleChange!");
-  }
-  G4VProcess::pParticleChange = fParticleChange;
+
 }
 
-G4MassWeightWindowProcess::~G4MassWeightWindowProcess()
+G4ParallelWeightWindowProcess::~G4ParallelWeightWindowProcess()
 {
-  delete fImportancePostStepDoIt;
   delete fParticleChange;
+  delete fImportancePostStepDoIt;
 }
 
-G4double G4MassWeightWindowProcess::
+G4double G4ParallelWeightWindowProcess::
 PostStepGetPhysicalInteractionLength(const G4Track& ,
-				     G4double   ,
-				     G4ForceCondition* condition)
-{
+				     G4double  ,
+				     G4ForceCondition* condition){
   *condition = Forced;
   return kInfinity;
 }
-  
-G4VParticleChange *
-G4MassWeightWindowProcess::PostStepDoIt(const G4Track &aTrack,
-				      const G4Step &aStep)
+
+
+G4VParticleChange *G4ParallelWeightWindowProcess::
+PostStepDoIt(const G4Track& aTrack, const G4Step &aStep)
 {
-  fParticleChange->Initialize(aTrack);
-  if (aStep.GetStepLength() > kCarTolerance) {
-    if (( fPlaceOfAction == onBoundaryAndCollision) ||
-	(fPlaceOfAction == onBoundary && 
-	 aStep.GetPostStepPoint()->GetStepStatus() == fGeomBoundary) ||
-	(fPlaceOfAction == onCollision && 
-	 aStep.GetPostStepPoint()->GetStepStatus() != fGeomBoundary)) {
-
-      G4StepPoint *postpoint = aStep.GetPostStepPoint();
+  if (aTrack.GetTrackStatus()==fStopAndKill) {
+    G4cout << "G4ParallelWeightWindowProcess::PostStepDoIt StopAndKill" << G4endl;
+  }
   
+  fParticleChange->Initialize(aTrack);
+  
+  if (aStep.GetPostStepPoint()->GetStepStatus() != fGeomBoundary) {
 
-      G4GeometryCell postCell(*(postpoint->GetPhysicalVolume()), 
-			     postpoint->GetTouchable()->
-			     GetReplicaNumber());
-
-      G4Nsplit_Weight nw = fWeightWindowAlgorithm.
-	Calculate(aTrack.GetWeight(),
-		  fWeightWindowStore.GetLowerWeitgh(postCell,
-						    aTrack.
-						    GetKineticEnergy()));
+    if (! (fStepper.GetPStep().GetCrossBoundary() &&
+	   fPlaceOfAction == onCollision) ) {
+      // get new weight and number of clones
+      G4Nsplit_Weight nw(fWeightWindowExaminer.
+			 Examine(aTrack.GetWeight(),
+				 aTrack.
+				 GetKineticEnergy()));
+      
       fImportancePostStepDoIt->DoIt(aTrack, fParticleChange, nw);
     }
+
   }
+  
   return fParticleChange;
 }
+  
+void G4ParallelWeightWindowProcess::Error(const G4String &m)
+{
+  G4cout << "ERROR - G4WeightWindowProcess::" << m << G4endl;
+  G4Exception("Program aborted.");
+}
 
-void G4MassWeightWindowProcess::KillTrack() const {
+
+
+void G4ParallelWeightWindowProcess::KillTrack() const{
   fParticleChange->SetStatusChange(fStopAndKill);
 }
 
-const G4String &G4MassWeightWindowProcess::GetName() const {
-  return G4VProcess::GetProcessName();
+
+const G4String &G4ParallelWeightWindowProcess::GetName() const {
+  return theProcessName;
 }
 
-G4double G4MassWeightWindowProcess::
+G4double G4ParallelWeightWindowProcess::
 AlongStepGetPhysicalInteractionLength(const G4Track&,
 				      G4double  ,
 				      G4double  ,
@@ -127,20 +132,20 @@ AlongStepGetPhysicalInteractionLength(const G4Track&,
   return -1.0;
 }
 
-G4double G4MassWeightWindowProcess::
+G4double G4ParallelWeightWindowProcess::
 AtRestGetPhysicalInteractionLength(const G4Track& ,
 				   G4ForceCondition*) 
 {
   return -1.0;
 }
   
-G4VParticleChange* G4MassWeightWindowProcess::
+G4VParticleChange* G4ParallelWeightWindowProcess::
 AtRestDoIt(const G4Track&, const G4Step&) 
 {
   return 0;
 }
 
-G4VParticleChange* G4MassWeightWindowProcess::
+G4VParticleChange* G4ParallelWeightWindowProcess::
 AlongStepDoIt(const G4Track&, const G4Step&) {
   return 0;
 }
