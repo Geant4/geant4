@@ -1,0 +1,5 @@
+ - globlib.gmk: moved contruction of libmap for G4ODBMS to
+                source/GNUmakefile
+ - common.gmk: introduced G4ODBMS_DEPEND and G4SKIP_DEPEND for
+               better handling of dependencies
+ - globlib.gmk: use G4ODBMS_DEPEND, automatic rebuilding of libmap
