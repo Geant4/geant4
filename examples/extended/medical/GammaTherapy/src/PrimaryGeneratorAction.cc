@@ -67,6 +67,7 @@ void PrimaryGeneratorAction::InitializeMe()
   sigmaY = 1.5*mm;
   sigmaZ = 0.0;
   sigmaE = 0.0;
+  rMax2  = 2.5*2.5*mm*mm;
   sigmaTheta = 0.0;
 //  sigmaTheta = 0.17*degree;
   minCosTheta = 2.0;
@@ -97,8 +98,10 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double x = x0;
   G4double y = y0;
   G4double z = fDetector->GetGeneratorPosZ();
-  if(0.0 < sigmaX) x += G4RandGauss::shoot(0.0,sigmaX);
-  if(0.0 < sigmaY) y += G4RandGauss::shoot(0.0,sigmaY);
+  do {
+    if(0.0 < sigmaX) x += G4RandGauss::shoot(0.0,sigmaX);
+    if(0.0 < sigmaY) y += G4RandGauss::shoot(0.0,sigmaY);
+  } while (x*x + y*y > rMax2);
 
   position  = G4ThreeVector(x,y,z);
   particleGun->SetParticlePosition(position);

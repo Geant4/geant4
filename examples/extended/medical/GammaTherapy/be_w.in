@@ -8,7 +8,7 @@
 /event/verbose 0
 /testem/verbose 0
 #
-/testem/phys/setCuts          0.01 mm
+/testem/phys/setCuts          1 mm
 #
 /testem/phys/addPhysics       standard
 #/testem/phys/addPhysics        g4v52
@@ -20,10 +20,9 @@
 /testem/target1Z              9 mm
 /testem/target2Z              6 mm
 #
-/testem/histoName            results_paw/1262sepbe_w_st.paw
-#/testem/histoName            results_paw/762sepbe_w_bn.paw
-#/testem/histoName            results_paw/be_w_52.paw
-#/testem/histoName            results_paw/be_w_le.paw
+/testem/histoName             be_w_st.paw
+#/testem/histoName            be_w_52.paw
+#/testem/histoName            be_w_le.paw
 #
 /gun/particle e-
 /gun/energy 50.0 MeV
