@@ -27,10 +27,9 @@
 // 
 // with:
 //          if (posthe != 0. && posthe != pi) 
-//             posphi = acos(tx/sin(posthe)); 
+//           { posphi = acos(tx/sin(posthe)); }
 //          else 
-//             posphi = 0.0;
-//          endif
+//           { posphi = 0.0;}
 //
 // 10-Nov-2000, F. Lei
 //    some bug fixing:
@@ -1122,10 +1121,9 @@ void G4GeneralParticleSource::GenerateIsotropicFlux()
   //  G4cout << "unit position " << tx << " " << ty << " " << tz << G4endl;
   posthe = acos(tz);
   if (posthe != 0. && posthe != pi) 
-    posphi = acos(tx/sin(posthe)); 
+  { posphi = acos(tx/sin(posthe)); }
   else 
-    posphi = 0.0;
-  endif
+  { posphi = 0.0;}
   //  G4cout << "Posthe and posphi " << posthe << " " << posphi << G4endl;
   G4double finx, finy, finz;
   finx = (px*cos(posthe)*cos(posphi)) - (py*sin(posphi)) + (pz*sin(posthe)*cos(posphi));
