@@ -57,9 +57,10 @@ Official platforms:
 <UL>
 <LI>SUN Solaris 5.8, C++ CC-5.4 Patch 111715-02.</LI>
 <LI>Linux, gcc 3.2.3.<BR>
-    This configuration was tested with the RedHat Scientific Linux (SCL3)
-    distribution (based on RedHat Enterprise 3) and RedHat 7.3,
-    versions of Geant4 have also been compiled successfully on other
+    This configuration was tested on <I>32 bits architectures</I> with
+    the RedHat Scientific Linux (SCL3) distribution (based on RedHat Linux
+    Enterprise 3) and also with RedHat 7.3.
+    Versions of Geant4 have also been compiled successfully on other
     Linux distributions, like Debian, Suse or more recent RedHat systems.
     The default RedHat compiler gcc-2.96 distributed in RedHat 7.X is NOT
     supported. It has been verified that it produces incorrect binaries,
@@ -219,7 +220,18 @@ As part of this migration also standard headers like:
        &lt;math.h&gt;, &lt;limits.h&gt;, &lt;stdlib.h&gt;
     </PRE>
 are no longer indirectly included. This may require the user code to include
-them if/where necessary.
+them if/where necessary.<BR>
+To be noticed also that this migration involves also the <I>removal</I> of
+usage of the ad-hoc template function originally defined in CLHEP:
+    <PRE>
+       T abs(T) 
+    </PRE>
+So the definition of this function will not be any longer available in a
+indirect way. The standard mathematical function: 
+    <PRE>
+       std::abs()
+    </PRE>
+will have to be used instead.
 
 <P> </P>
 <B>New Installation procedure for the <TT>Configure</TT> script</B>
@@ -237,8 +249,8 @@ Guide</A> for the details.
 <B>Migration for usage of the <TT>G4VParticleChange</TT> class</B>
 <P> </P>
 An interface change to the class <TT>G4VParticleChange</TT> is implemented
-in Geant4 7.0. The required changes are already.<BR>
-The following methods have been removed:
+in Geant4 7.0. Advanced users, who have implemented a physics process should
+be aware that the following methods have been removed:
 <PRE>
       void  SetTrueStepLength(G4double truePathLength);
       void  SetLocalEnergyDeposit(G4double anEnergyPart);
@@ -267,21 +279,19 @@ Up to the previous release, step limitation due to the maximum step length
 of <TT>G4UserLimits</TT> was directly dealt by <TT>G4SteppingManager</TT>,
 while all other limits (<TT>maxTrackLength</TT>, <TT>maxStepNumber</TT>,
 <TT>MinKinEnergy</TT> and <TT>minRemainRange</TT>) were dealt by
-<TT>G4UserSpecialCuts</TT> process. To solve such an inconsistency, 
+<TT>G4UserSpecialCuts</TT> process. To solve this inconsistency, 
 to provide a better performance for the application which is not utilizing the 
 step limitation, and to give more usability to the user, we introduce a new 
 process <TT>G4StepLimiter</TT> and move the step limitation procedure in 
 <TT>G4SteppingManager</TT> to this new process. 
 <UL>
-<LI><TT>G4UserLimits</TT> class is kept as it is.</LI>
+<LI><TT>G4UserLimits</TT> class is kept as it is, and can specify all limits as before.</LI>
 <LI><TT>G4UserSpecialCuts</TT> is kept as it is. This is the process which kills
     a track once a track comes to a limit specified by <TT>G4UserLimits</TT> (as
     it did previously). This is a kind of "tracking cut" to be utilized intentionally
     by the user.</LI>
 <LI>The new process, <TT>G4StepLimiter</TT>, limits the step size specified by
-    <TT>G4UserLimits</TT>, but this new process will not kill a track.
-    The main use-case of this new process is to limit the step length for the sake
-    of, for example, drawing a smooth curve of a trajectory.</LI>
+    <TT>G4UserLimits</TT>, but will not kill a track.</LI>
 <LI>Given no process took place for max step length limitation in the old design, 
     <TT>G4StepPoint::GetProcessDefinedStep()</TT> method returned <TT>NULL</TT>.
     On the other hand in this new scheme, if a step is limited by the maximum step
@@ -292,15 +302,17 @@ The user who is using the step length limitation MUST include the new <TT>G4Step
 process in the physics-list explicitly. This new process may be assigned only to the
 selected particle types (e.g. only to the charged particles) instead of setting it to
 all particle types.<BR>
-No change is required for the user who is NOT using <TT>G4UserLimits</TT> for the 
+No change is required for the user who is NOT using <TT>G4UserLimits</TT> for the
 purpose of maximum step limitation.
 
 <P> </P>
 <B>Killing of a particle</B>
 <P> </P>
-Energy-loss processes do not change any longer the track status for <TT>AlongStep</TT>.
-In order to kill a particle in the <TT>AlongStepDoIt()</TT> it is now just required
-to propose zero kinetic energy for the particle.
+Energy-loss processes no longer change the track status as part of their <TT>AlongStepDoIt()</TT>
+action. For user-defined processes with "continuous" component, in order to kill a particle in
+their <TT>AlongStepDoIt()</TT> method, it is now just required to propose zero kinetic energy
+for the particle itself, or contribute to the particles arriving at zero energy as a result
+of the action of two or more processes.
 
 <P> </P>
 <B>Future migration for <TT>G4GeneralParticleSource</TT> class</B>
@@ -324,6 +336,11 @@ last patched public release (for the detailed list of fixes/additions,
 please refer to the related History files provided in most packages):
 
 <P> </P>
+
+<UL>
+<LI>Implemented migration to <TT>&lt;cmath&gt;</TT> for standard mathematical
+    functions.</LI>
+</UL>
 
 <A NAME="conf-notes">
 <H3><I>Configuration</I></H3></A>
@@ -362,17 +379,27 @@ please refer to the related History files provided in most packages):
     Bremsstrhalung low energy edge of the spectrum.</LI>
 <LI>Revision of G4LowEnergyPhotoelectric to allow for new development of
     precise angular distributions.</LI>
-<LI>Paul&Sacher PIXE model becomes the default one.</LI>
+<LI>Improved parameterised PIXE model based on Paul & Sacher review; it 
+    becomes the default one.</LI>
 <LI>Software improvement in G4PenelopeCompton.</LI>
 <LI>Implemented migration of processes to new <TT>G4VParticleChange</TT>
-    schema.</LI>
+    interfaces.</LI>
 </UL>
 
 <A NAME="emstd-notes">
 <H3><I>Electromagnetic Processes (Standard)</I></H3></A>
 <UL>
+<LI>Added new process: positron annihilation to pion pair (<TT>G4eeToHadrons</TT>).</LI>
+<LI>Added new utility class: <TT>G4EmCalculator</TT>, to access/calculate dedx, range,
+    cross sections of EM processes.</LI>
+<LI>Migrated to new scheme for store/retrieve Physics Tables:
+    new sequence of initialisation of EnergyLoss process: first PreparePhysicsTable,
+    then BuildPhysicsTable or RetreivePhysicsTable. Do not rebuild G4PhysicsVector if
+    cuts were not changed for given <TT>G4MaterialCutsCouple</TT>.</LI>
+<LI>Restructured subdirectories: multiple-scattering and other concrete models have
+    been moved from utils to standard and a new package (<TT>highenergy</TT>) has been
+    created.</LI>    
 <LI>Migrated processes to new interface for <TT>G4VParticleChange</TT>.</LI>
-<LI>Migrated to new scheme for <TT>G4ParticleDefinition</TT>.</LI>
 <LI><B>Multiple Scattering</B>
    <UL>
    <LI>Changes in the angle distribution (slightly modified Highland formula for the
@@ -380,7 +407,7 @@ please refer to the related History files provided in most packages):
        parameters) ---> approximately step independent distribution.</LI>
    <LI>Correction in <TT>SampleCosineTheta</TT> in order to avoid numerical precision
        problems at high energy/small step.</LI>
-   <LI>Fix precision problem for very high energy ions in gases(or with
+   <LI>Fix precision problem for very high energy ions in gases (or with
        small stepsize) has been solved in <TT>G4MscModel</TT>.</LI>
    </UL></LI>   
 <LI><B>proton Ionization</B>
@@ -419,7 +446,7 @@ please refer to the related History files provided in most packages):
    </UL></LI>   
 <LI><B>eBremsstrahlung</B>
    <UL>
-   <LI>Added a threshold for <TT>G4eBremsstrahlung</TT> process, if emmitted gamma is 
+   <LI>Added a threshold for <TT>G4eBremsstrahlung</TT> process, if emitted gamma is 
        above the threshold, incoming track is killed and is added to the list of 
        secondary particles.</LI>
    </UL></LI>   
@@ -427,36 +454,23 @@ please refer to the related History files provided in most packages):
    <UL>
    <LI>Improved <TT>totalCrossSection</TT> parameterisation below <TT>15 keV</TT>.</LI>
    </UL></LI>   
-<LI>Added new process: positron annihilation to pion pair (<TT>G4eeToHadrons</TT>).</LI>
-<LI>Added new utility class: <TT>G4EmCalculator</TT>, to access/calculate dedx, range,
-    cross sections of EM processes.</LI>
-<LI>Migrated to new scheme for store/retrieve Physics Tables:
-    new sequence of initialisation of EnergyLoss process: first PreparePhysicsTable,
-    then BuildPhysicsTable or RetreivePhysicsTable. Do not rebuild G4PhysicsVector if
-    cuts were not changed for given <TT>G4MaterialCutsCouple</TT>.</LI>
-<LI>Restructured subdirectories: multiple-scattering and other concrete modeles have
-    been moved from utils to standard and a new package (<TT>highenergy</TT>) has been
-    created.</LI>    
 </UL>
 
 <A NAME="evt-notes">
 <H3><I>Event</I></H3></A>
 <UL>
-<LI>Made <TT>G4PrimaryTransformer</TT> a base class.</LI>
+<LI>Made <TT>G4PrimaryTransformer</TT> a base class to allow for users to customize treatment
+    of particle types, especially those exotic to Geant4.</LI>
 <LI>Added treatment of <TT>G4UnknownParticle</TT> to
     <TT>G4PrimaryTransformer</TT>.</LI>
 <LI><TT>G4GeneralParticleSource</TT>: added new features, focused beam and
-    multiple verteces.</LI>
-<LI>Implemented migration to <TT>&lt;cmath&gt;</TT> for standard mathematical
-    functions.</LI>
+    multiple vertices.</LI>
 </UL>
 
 <A NAME="gen-notes">
 <H3><I>General Processes, Parameterisation, Cuts, Decay, Optical</I></H3></A>
 <UL>
 <LI>Migrated processes to new interface for <TT>G4VParticleChange</TT>.</LI>
-<LI>Implemented migration to <TT>&lt;cmath&gt;</TT> for standard mathematical
-    functions.</LI>
 <LI><B>Cuts</B>:
     <UL>
     <LI>Added <TT>G4PhysicsTableHelper</TT> class in order to assist
@@ -500,8 +514,6 @@ please refer to the related History files provided in most packages):
 <A NAME="geo-notes">
 <H3><I>Geometry</I></H3></A>
 <UL>
-<LI>Implemented migration to <TT>&lt;cmath&gt;</TT> for standard mathematical
-    functions.</LI>
 <LI><B>Magnetic Field</B>
     <UL>
     <LI>Added <TT>Set/GetAnomaly()</TT> methods in <TT>G4Mag_SpinEqRhs</TT>
@@ -532,7 +544,7 @@ please refer to the related History files provided in most packages):
             The mass is computed from the estimated geometrical volume of each solid
             and material's density associated to the logical volume and its daughters.
             The returned value is cached and can be used for successive calls (default),
-            unless recomputation is forced by providing 'true' as the first boolean
+            unless recomputation is forced by providing <TT>true</TT> as the first boolean
             argument in input. Computation should be forced if the geometry setup has
             changed after the previous call. An optional argument to specify a material
             is provided; it is implicitely used for geometrical parameterisations by
@@ -597,21 +609,19 @@ please refer to the related History files provided in most packages):
 <UL>
 <LI>New implementation of <TT>G4Allocator</TT> based on a pool of memory-chunks.
     The size of a single chunk is kept at 1Kb as for the old allocator.
-    This implementation replaces the old <TT>G4Allocator</TT> based on pages and
-    no longer portable on the gcc-3.4.X compiler.
+    This implementation replaces the old <TT>G4Allocator</TT> which was based on
+    pages and no longer portable on the gcc-3.4.X compilers.
     The new allocator also supports the standard interface required for STL
     containers, in case it will be used as alternative allocator instead of
-    the default <TT>std::allocator</TT>.
-    New classes: <TT>G4AllocatorPool</TT>.
-    Removed classes: <TT>G4AllocatorPage</TT>, <TT>G4AllocatorUnit</TT>.</LI>
+    the default <TT>std::allocator</TT>.<BR>
+    Added inclusion of <TT>&lt;cstddef&gt;</TT> to <TT>G4Allocator.hh</TT> to make the
+    header self-consistent.</LI>
 <LI>Migrated code to use <TT>std</TT> namespace for mathematical functions
     included from <TT>&lt;cmath&gt;</TT>. Removed explicit inclusion of <TT>CLHEP.h</TT> and
     therefore also implicit inclusions of system headers <TT>&lt;math.h&gt;</TT>,
     <TT>&lt;stdlib.h&gt;</TT> and <TT>&lt;limits.h&gt;</TT>.</LI>
 <LI>Removed implicit inclusion of CLHEP's template function <TT>abs()</TT>, use
     now standard function <TT>std::abs()</TT> instead.</LI>
-<LI>Added inclusion of <TT>&lt;cstddef&gt;</TT> to <TT>G4Allocator.hh</TT> to make the
-    header self-consistent.</LI>
 <LI><TT>G4PhysicsTable</TT>:
     <UL>
     <LI>Added collection of flags and related methods. The collection of boolean
@@ -627,39 +637,84 @@ please refer to the related History files provided in most packages):
 <A NAME="greps-notes">
 <H3><I>Graphical Representations</I></H3></A>
 <UL>
-<LI>Introduced force auxiliary edge visible in <TT>G4VisAttributes</TT>.</LI>
+<LI>Introduced forced auxiliary edge visible in <TT>G4VisAttributes</TT>.</LI>
 <LI>Removed <TT>G4Polymarker::line</TT>. Use <TT>G4Polyline</TT> instead.</LI>
-<LI>Reviewed comments in <TT>G4AttDef</TT>.</LI>
-<LI>Implemented migration to <TT>&lt;cmath&gt;</TT> for standard mathematical
-    functions.</LI>
 <LI><TT>HepPolyhedron</TT>, <TT>BooleanProcessor</TT>: replaced occurences of
     <TT>HepStd</TT> with <TT>std</TT>.</LI>
-</UL>
-
-<A NAME="mat-notes">
-<H3><I>Materials</I></H3></A>
-<UL>
-<LI>Implemented migration to <TT>&lt;cmath&gt;</TT> for standard mathematical
-    functions.</LI>
 </UL>
 
 <A NAME="had-notes">
 <H3><I>Hadronic Processes</I></H3></A>
 <UL>
-<LI>Implemented migration to <TT>&lt;cmath&gt;</TT> for standard mathematical
-    functions.</LI>
+<LI>Migrated processes to new interface for <TT>G4VParticleChange</TT>.</LI>
+<LI>Improved treatment of cross-sections, and neutrons to improve on the ATLAS/HEC
+    shower-shape description for the QGSP physics list.</LI>
+<LI>cross_sections
+    <UL>
+    <LI>Updating pion cross-sections for copper, to be more closely consistent
+        with data.</LI>
+    </UL></LI>
+<LI>management
+    <UL>
+    <LI>Changed the framework classes, so that the <TT>G4TouchableHandle</TT> from the
+        parent <TT>G4Track</TT> is now carried forward to the secondary tracks in
+        all cases.</LI>
+    </UL></LI>
+<LI>stopping
+    <UL>
+    <LI>Changed process classes, so that the <TT>G4TouchableHandle</TT> from the parent 
+        <TT>G4Track</TT> is now carried forward to the secondary tracks in all cases.</LI>
+    </UL></LI>
 <LI>models/binary_cascade
     <UL>
-    <LI>Cleared debug run-time output</LI>
+    <LI>Resonance potentials now consistently treated under the assumption that
+        they are zero.</LI>
+    <LI>Introduced a new more selective system of debug printout steering.</LI>
+    <LI>Cleared debug run-time output.</LI>
+    </UL></LI>
+<LI>models/cascade
+    <UL>
+    <LI>Fixed a memory fault, and some minor cleanup.</LI>
     </UL></LI>
 <LI>models/chiral_inv_phase_space/body
     <UL>
-    <LI>Fixed unnecessary debug messages affecting unit-test.</LI>
+    <LI>Fixed unnecessary debug messages affecting unit-test.</LI> 
+    <LI>Changed problem related print-out.</LI>
+    </UL></LI>
+<LI>models/high_energy
+    <UL>
+    <LI>Removed a phi asymmetry in the high energy neutral pion distributions.</LI>
+    </UL></LI>
+<LI>models/leading_particle
+    <UL>
+    <LI>Added clarification notice with respect to the nature of the code,
+        to be printed at start-up.</LI>
+    <LI>Corrected treatment of secondaries in the creation of particle change.</LI>
+    </UL></LI>
+<LI>models/low_energy
+    <UL>
+    <LI>Fixed an energy non-conservation problem of few <TT>MeV</TT> size, 
+        in relations to phase-space sampling.</LI>
+    </UL></LI>
+<LI>models/muon_nuclear
+    <UL>
+    <LI>Changed process name to be consistent with other muon processes.</LI>
+    <LI>Changed memory allocation policy in the hadronic vertex to avoid a platform
+        dependency that can lead to a crash on exit.</LI>
     </UL></LI>
 <LI>models/radioactive_decay
     <UL>
     <LI>Added G4MshellECDecay class and changed <TT>G4RadioactiveDecay</TT>
         accordingly.</LI>
+    <LI>Added better handling of incomplete data files.</LI>
+    <LI>Corrected treatment of metastables as initial tracks in VR mode.</LI>
+    <LI>Default decay window in VR model set to 9.9x109 - 1010 seconds.</LI>
+    <LI>Added individual time stamp for splitted isotope</LI>
+    <LI>Fixed problem reports #396 and #662.</LI>
+    <LI>Applying now atomic relaxation only to <TT>5 < z < 101</TT>.</LI>
+    <LI>No more fast/slow beta decay mode with a faster 3-body decay implementation.</LI>
+    <LI><TT>G4RIsotopeTable</TT>: no longer reset the excitation energy.</LI>
+    <LI>Added <TT>touchableHandle</TT> to secondary tracks.</LI>
     </UL></LI>
 </UL>
 
@@ -669,8 +724,6 @@ please refer to the related History files provided in most packages):
 <LI>New <B>gflash</B> submodule for fast shower parameterisation, contribution
     of CMS and ATLAS.</LI>
 <LI>Moved original TRD classes to <TT>trd_models</TT> submodule.</LI>
-<LI>Implemented migration to <TT>&lt;cmath&gt;</TT> for standard mathematical
-    functions.</LI>
 </UL>
 
 <A NAME="part-notes">
@@ -680,15 +733,11 @@ please refer to the related History files provided in most packages):
 <LI>Introduced <TT>G4MuonDecayChannelWithSpin</TT> class.</LI>
 <LI>Removed obsolete dependency to G4Material from <TT>G4ParticleDefinition</TT> and
     related class.</LI>
-<LI>Implemented migration to <TT>&lt;cmath&gt;</TT> for standard mathematical
-    functions.</LI>
 </UL>
 
 <A NAME="run-notes">
 <H3><I>Run and Interfaces</I></H3></A>
 <UL>
-<LI>Implemented migration to <TT>&lt;cmath&gt;</TT> for standard mathematical
-    functions.</LI>
 <LI><B>Interfaces</B>:
     <UL>
     <LI><TT>G4UIXm</TT>: define default resources in case <TT>XENVIRONMENT</TT>
@@ -738,19 +787,15 @@ please refer to the related History files provided in most packages):
         added HepRep attribute for magnitude of momentum.</LI>
     <LI>Fix in <TT>G4SteppingManager::InvokePSDIP()</TT> for completing migration
         to new <TT>G4VParticleChange</TT> interface.
-    <LI>Implemented migration to <TT>&lt;cmath&gt;</TT> for standard mathematical
-        functions.</LI>
     </UL></LI>
 </UL>
 
 <A NAME="vis-notes">
 <H3><I>Visualization</I></H3></A>
 <UL>
-<LI>Implemented migration to <TT>&lt;cmath&gt;</TT> for standard mathematical
-    functions.</LI>
 <LI><B>Management</B>
     <UL>
-    <LI>Correction to guidance of <TT>vis/viewer/set/hiddenEdge</TT></LI>.
+    <LI>Correction to guidance of <TT>vis/viewer/set/hiddenEdge</TT>.</LI>
     <LI>Removed deprecated commands:
       <PRE>
         /vis/viewer/show               (use /vis/viewer/update)
@@ -764,7 +809,7 @@ please refer to the related History files provided in most packages):
         genuine edges of the volume.  They may be in a curved surface made
         out of polygons, for example, or in plane surface of complicated
         shape that has to be broken down into simpler polygons.
-        HepPolyhedron breaks all surfaces into triangles or quadrilaterals.
+        <TT>HepPolyhedron</TT> breaks all surfaces into triangles or quadrilaterals.
         There will be auxiliary edges for any volumes with a curved surface,
         such as a tube or a sphere, or a volume resulting from a Boolean
         operation.  Normally, they are not shown, but sometimes it is useful
@@ -780,17 +825,17 @@ please refer to the related History files provided in most packages):
     <LI>Removed <TT>GetDrawingStyle()</TT> method. Instead, developer has to:
         <UL>
         <LI>Get vis attributes (pick up defaults if none):
-            <PRE>
-              const G4VisAttributes* pVA =
-                    fpViewer -> GetApplicableVisAttributes (v.GetVisAttributes ());
-            </PRE>
+        <PRE>
+           const G4VisAttributes* pVA =
+                 fpViewer -> GetApplicableVisAttributes (v.GetVisAttributes ());
+        </PRE>
             where v is the visible object (polyline, circle, polyhedron, etc.).</LI>
         <LI>Get view parameters that the user can force through the vis
             attributes, thereby over-riding the current view parameter:
-            <PRE>
-              G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (pVA);
-              G4bool isAuxEdgeVisible = GetAuxEdgeVisible (pVA);
-            </PRE>
+        <PRE>
+           G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (pVA);
+           G4bool isAuxEdgeVisible = GetAuxEdgeVisible (pVA);
+        </PRE>
             Most developers do this anyway, so the removed routine was redundant
             and resulting code is more efficient and transparent.<BR>
             To get colour, the developer can pick up directly from the vis attributes,
@@ -864,8 +909,8 @@ please refer to the related History files provided in most packages):
     </UL></LI>
 </UL>
 
-<A NAME="emlst-notes">
-<H3><I>Electromagnetic physics-lists</I></H3></A>
+<A NAME="lst-notes">
+<H3><I>Physics lists</I></H3></A>
 <UL>
 <LI>Imported hadronic lists and electromagnetic lists from top-level
     to new module <TT>physics_lists</TT>.
@@ -889,13 +934,6 @@ please refer to the related History files provided in most packages):
 <UL>
 <LI>New version of MOMO integrating GAG and Gain.</LI>
 <LI>Added new example and removed obsolete files.</LI>
-</UL>
-
-<A NAME="g3tog4-notes">
-<H3><I>G3toG4 Tool</I></H3></A>
-<UL>
-<LI>Implemented migration to <TT>&lt;cmath&gt;</TT> for standard mathematical
-    functions.</LI>
 </UL>
 
 <A NAME="ex-notes">

@@ -143,10 +143,52 @@ processes/electromagnetic/xrays                  xrays-V06-02-05
 processes/hadronic                               ghad-V06-02-12
 ------------------
 - Implemented migration to <cmath>.
-- models/binary_cascade (ghad-bin-V06-02-01)
+- cross_sections 
+  o Updated pion cross-sections for copper, to be more closely consistent
+    with data.
+- management 
+  o Changed framework classes, so that the G4TouchableHandle from the parent 
+    G4Track is now carried forward to the secondary tracks in all cases.
+- models/binary_cascade
+  o Resonance potentials now consistently treated under the assumption
+    that they are zero.
+  o Introduced a new more selective system of debug printout steering.
   o Cleared debug run-time output.
-- models/chiral_inv_phase_space/body (ghad-chips-body-V06-02-04a)
-  o Fixed unnecessary debug messages affecting unit-test test23.
+- models/cascade 
+  o Fixed a memory fault and minor cleanup. 
+- models/chiral_inv_phase_space/body 
+  o Fixed unnecessary debug messages affecting unit-test. 
+  o Changed problem related print-out.
+- models/leading_particle 
+  o Added clarification notice with respect to the nature of the code,
+    to be printed at start-up.
+  o Corrected the treatment of secondaries in the creation of particle
+    change.
+- models/low_energy 
+  o Fixed energy non-conservation problem of a few MeV size, in relation
+    to phase-space sampling.
+- models/muon_nuclear:
+  o Changed process name to be consistent with other muon processes.
+  o Changed memory allocation policy in the hadronic vertex
+    to avoid a platform dependency that can lead to a crash on exit.
+- models/radioactive_decay:
+  o Added G4MshellECDecayChannel and changed G4RadioactiveDecay
+    accordingly.
+  o Added better handling for incomplete data files.
+  o Corrected treatment of metastables as initial tracks in VR mode.
+  o Default decay window in VR model set to 9.9x109 - 1010 seconds.
+  o Added individual time stamp for splitted isotope.
+  o Fixed problem reports #396 and #662.
+  o Applying now atomic relaxation only to 5 < z < 101.
+  o No more fast/slow beta decay mode with a faster 3-body decay
+    implementation.
+  o G4RIsotopeTable: no longer reset the excitation energy.
+  o Added touchableHandle to secondary tracks.
+- models/high_energy
+  o removed a phi asymmetry in the high energy neutral pion distributions.
+- stopping 
+  o Changed process classes, so that the G4TouchableHandle from the parent 
+    G4Track is now carried forward to the secondary tracks in all cases.
 
 processes/management                             procman-V06-02-03
 --------------------
