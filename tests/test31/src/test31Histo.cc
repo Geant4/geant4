@@ -298,7 +298,7 @@ void test31Histo::AddParticleBack(const G4DynamicParticle* dp)
 void test31Histo::TableControl()
 {
   G4EmCalculator cal;
-  cal.SetVerbose(2);
+  cal.SetVerbose(0);
   // parameters
   G4double tmin = 1.*keV;
   G4double tmax = 1.*GeV;
@@ -313,8 +313,8 @@ void test31Histo::TableControl()
   // cal.PrintInverseRangeTable(part);
 
   //  G4String part_name = "proton";
-  //     G4String part_name = "alpha";
-   G4String part_name = "C12[0.0]";
+     G4String part_name = "alpha";
+     // G4String part_name = "C12[0.0]";
    //   G4String mat_name  = "Tangsten";
     G4String mat_name  = "Aluminum";
    //     G4String mat_name  = "Silicon";

@@ -10,12 +10,13 @@
 #
 /testem/phys/setCuts         100000. mm
 #/testem/phys/stepMax        0.1 mm
-#/testem/phys/addPhysics      standard
+/testem/phys/addPhysics      standard
 #/testem/phys/addPhysics      standard70
 #/testem/phys/addPhysics      lowenergy
-/testem/phys/addPhysics      lowenergyMA
+#/testem/phys/addPhysics      lowenergyMA
 #/test31/AbsorberMaterial     Beryllium
-/test31/AbsorberMaterial     Tangsten
+/test31/AbsorberMaterial     Iron
+#/test31/AbsorberMaterial     Tangsten
 /test31/AbsorberThick        10 mm
 /test31/NumberOfAbsorbers    60
 /test31/maxDeltaEnergy       1.0 MeV
@@ -31,12 +32,14 @@
 #/gun/particle e+
 #/gun/particle gamma
 #/gun/particle proton
-/gun/particle alpha
+#/gun/particle alpha
+/gun/particle ion
+/gun/ion 6 12
 /test31/gun/beamE 0.01 MeV
 #
 /run/beamOn 1
 #
-/testem/histo/fileName       dedx_21.aida
+/testem/histo/fileName       dedx_31.aida
 /testem/histo/fileType       xml
 /testem/calc/verbose 1
 /testem/calc/hist  proton Beryllium hIoni dedx 1

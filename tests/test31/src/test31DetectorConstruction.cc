@@ -161,6 +161,11 @@ void test31DetectorConstruction::DefineMaterials()
 //
 // define simple materials
 //
+
+  density = 0.001*g/cm3;
+  a = 4.0*g/mole;
+  ma = new G4Material(name="Helium", z=2., a, density);
+
   density = 1.848*g/cm3;
   a = 9.01*g/mole;
   ma = new G4Material(name="Beryllium", z=4., a, density);

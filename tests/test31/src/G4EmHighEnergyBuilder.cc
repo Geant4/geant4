@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmHighEnergyBuilder.cc,v 1.2 2004-09-22 08:40:47 vnivanch Exp $
+// $Id: G4EmHighEnergyBuilder.cc,v 1.3 2004-11-03 12:36:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -83,7 +83,7 @@ void G4EmHighEnergyBuilder::ConstructParticle()
 
 void G4EmHighEnergyBuilder::ConstructProcess()
 {
-  G4double factor = 1000.0;
+  G4double factor = 10000.0;
   // Add standard EM Processes for gamma
   G4ParticleDefinition* particle = G4Gamma::Gamma();
   G4ProcessManager* pmanager = particle->GetProcessManager();
