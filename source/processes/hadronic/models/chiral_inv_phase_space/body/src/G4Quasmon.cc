@@ -23,7 +23,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.65 2003-11-28 08:45:42 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.66 2003-12-03 15:08:04 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -2434,9 +2434,10 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
       }
       else if(tmM<sum || !G4QHadron(q4Mom).DecayIn2(r4Mom, s4Mom))
       {
+#ifdef debug
         G4cerr<<"***G4Q::HQ:M="<<tmM<<"=>rPDG="<<rPDG<<"(rM="<<reMass<<")+sPDG="
               <<sPDG<<"(sM="<<sMass<<")="<<sum<<G4endl;
-
+#endif
         if(sPDG==311 && tmpQPDG.GetCharge()>0)     // Can switch from K0 to K+
         {
           G4QContent crQC=tmpQPDG.GetQuarkContent()-KpQC+K0QC; // new hadrr's QC
