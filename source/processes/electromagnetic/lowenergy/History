@@ -1,4 +1,4 @@
-$Id: History,v 1.24 2000-07-18 10:40:54 vnivanch Exp $
+$Id: History,v 1.25 2000-07-18 11:01:25 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-18.07.2000 - V.Ivanchenko, tag emlowen-V02-00-??
-             Bug fix in G4hLowEnergyIonisation in AlongStepDoIt
+18.07.2000 - MGP, tag emlowen-V02-00-01
+             V.Ivanchenko: bug fix in G4hLowEnergyIonisation in AlongStepDoIt
 
 11.07.2000 - MGP, tag emlowen-V02-00-00
              Improvements in G4BremsstrahlungTest and G4eIonisationTest
