@@ -241,9 +241,9 @@ G4VParticleChange* PadHpdPhotoElectricEffect::PostStepDoIt(const G4Track& aTrack
 
   // Kill the incident photon when it has converted to photoelectron.
 
-   aParticleChange.SetLocalEnergyDeposit(PhotonEnergy);
-   aParticleChange.SetEnergyChange(0.);  
-   aParticleChange.SetStatusChange(fStopAndKill); 
+   aParticleChange.ProposeLocalEnergyDeposit(PhotonEnergy);
+   aParticleChange.ProposeEnergy(0.);  
+   aParticleChange.ProposeTrackStatus(fStopAndKill); 
   }
   //photon is not killed if it is not converted to photoelectron
   //SE 26-09-01.
