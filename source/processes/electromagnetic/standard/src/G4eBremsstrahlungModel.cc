@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.cc,v 1.20 2005-03-18 12:48:25 vnivanch Exp $
+// $Id: G4eBremsstrahlungModel.cc,v 1.21 2005-03-18 14:03:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -612,7 +612,7 @@ G4DataVector* G4eBremsstrahlungModel::ComputePartialSumSigma(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4DynamicParticle* G4eBremsstrahlungModel::SampleSecondary(
+std::vector<G4DynamicParticle*>* G4eBremsstrahlungModel::SampleSecondaries(
                              const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* dp,
                                    G4double tmin,
@@ -629,6 +629,7 @@ G4DynamicParticle* G4eBremsstrahlungModel::SampleSecondary(
 // A modified version of the random number techniques of Butcher & Messel is used
 //    (Nuc Phys 20(1960),15).
 {
+  std::vector<G4DynamicParticle*>* newp = new std::vector<G4DynamicParticle*>;
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double tmax = min(maxEnergy, kineticEnergy);
   if(tmin > tmax) tmin = tmax;
@@ -815,13 +816,13 @@ G4DynamicParticle* G4eBremsstrahlungModel::SampleSecondary(
   
   // create G4DynamicParticle object for the Gamma
   G4DynamicParticle* g = new G4DynamicParticle(theGamma,gammaDirection,gammaEnergy);
-
-  return g;
+  newp->push_back(g);
+  return newp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-vector<G4DynamicParticle*>* G4eBremsstrahlungModel::SampleSecondaries(
+G4DynamicParticle* G4eBremsstrahlungModel::SampleSecondary(
                              const G4MaterialCutsCouple*,
                              const G4DynamicParticle*,
                                    G4double,
