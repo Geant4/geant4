@@ -179,6 +179,7 @@
    G4bool &targetHasChanged,
    G4bool quasiElastic )
   {
+    what = originalIncident->GetMomentum();
     theReactionDynamics.ProduceStrangeParticlePairs( vec, vecLen,
                                                      modifiedOriginal, originalTarget,
                                                      currentParticle, targetParticle,
@@ -316,7 +317,7 @@
    for( i=0; i<vecLen; ++i )
    {
      G4ThreeVector momentum = vec[i]->GetMomentum();
-     momentum = momentum.rotateZ(rotation);
+     momentum = momentum.rotate(rotation, what);
      vec[i]->SetMomentum(momentum);
    }
  }      
@@ -394,7 +395,7 @@
       G4DynamicParticle *p1 = new G4DynamicParticle;
       p1->SetDefinition( targetParticle.GetDefinition() );
       G4ThreeVector momentum = targetParticle.GetMomentum();
-      momentum = momentum.rotateZ(cache);
+      momentum = momentum.rotate(cache, what);
       p1->SetMomentum( momentum );
       theParticleChange.AddSecondary( p1 );
     }
