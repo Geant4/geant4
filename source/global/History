@@ -1,4 +1,4 @@
-$Id: History,v 1.77 2001-04-03 12:41:14 gcosmo Exp $
+$Id: History,v 1.78 2001-04-05 09:05:37 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 05, 2001 G.Cosmo (global-V03-00-11)
+- Added patch to management/GNUmakefile for allowing compilation of G4UnitsTable.cc
+  on SUN-CC5 (CC 5.2 Patch 109508-02), removing optimisation.
 
 April 03, 2001 G.Cosmo (global-V03-00-10)
 - Fixed minor bug in constructor of G4PhysicsLinearVector, G4PhysicsLnVector
