@@ -27,8 +27,12 @@ void G4RTSteppingAction::UserSteppingAction(const G4Step* aStep)
   const G4LogicalVolume* postVolume_log = postVolume_phys->GetLogicalVolume();
   const G4VisAttributes* postVisAtt = postVolume_log -> GetVisAttributes();
   G4VisManager* visManager = G4VisManager::GetInstance();
-  if(visManager) postVisAtt = visManager->GetCurrentViewer()->GetApplicableVisAttributes(postVisAtt);
-
+  if(visManager) {
+    G4VViewer* viewer = visManager->GetCurrentViewer();
+    if (viewer) {
+      postVisAtt = viewer->GetApplicableVisAttributes(postVisAtt);
+    }
+  }
   if((!postVisAtt) || (!(postVisAtt->IsVisible()))) return; // Invisible volume, continue tracking
 
   if((postVisAtt->IsForceDrawingStyle())

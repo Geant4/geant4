@@ -56,14 +56,24 @@ void G4RayTrajectory::AppendStep(const G4Step* aStep)
   G4VPhysicalVolume* prePhys = aStep->GetPreStepPoint()->GetPhysicalVolume();
   const G4VisAttributes* preVisAtt = prePhys->GetLogicalVolume()->GetVisAttributes();
   G4VisManager* visManager = G4VisManager::GetInstance();
-  if(visManager) preVisAtt = visManager->GetCurrentViewer()->GetApplicableVisAttributes(preVisAtt);
+  if(visManager) {
+    G4VViewer* viewer = visManager->GetCurrentViewer();
+    if (viewer) {
+      preVisAtt = viewer->GetApplicableVisAttributes(preVisAtt);
+    }
+  }
   trajectoryPoint->SetPreStepAtt(preVisAtt);
 
   const G4VPhysicalVolume* postPhys = aStep->GetPostStepPoint()->GetPhysicalVolume();
   const G4VisAttributes* postVisAtt = NULL;
   if(postPhys) {
     postVisAtt = postPhys->GetLogicalVolume()->GetVisAttributes();
-    if(visManager) postVisAtt = visManager->GetCurrentViewer()->GetApplicableVisAttributes(postVisAtt);
+    if(visManager) {
+      G4VViewer* viewer = visManager->GetCurrentViewer();
+      if (viewer) {
+	postVisAtt = viewer->GetApplicableVisAttributes(postVisAtt);
+      }
+    }
   }
   trajectoryPoint->SetPostStepAtt(postVisAtt);
 
