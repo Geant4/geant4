@@ -3,22 +3,22 @@
 #                                                             all/test.../
 #                                                                 all/test...
 #                                  absent=incremental 1=remove previous build
-# dcosf01  dev2   deb_NONISO    geant4-01-00-ref-02-tags4-try2-dcosf01  all all all all  1
-# dcosf01  dev2   opt_ISO    geant4-01-00-ref-02-tags4-try2-dcosf01  all all all all  1
-dxplus01 dev2   deb_ISO    geant4-01-00-ref-02-tags4-try2  all all all all  1
-dxplus02 dev2   opt_ISO    geant4-01-00-ref-02-tags4-try2  all all all all  1
-dxplus03 dev2   deb_NONISO geant4-01-00-ref-02-tags4-try2  all all all all  1
-dxplus04 dev2   opt_NONISO geant4-01-00-ref-02-tags4-try2  all all all all  1
-hpplus01 dev2   deb        geant4-01-00-ref-02-tags4-try2  all all all all  1
-hpplus02 dev2   opt        geant4-01-00-ref-02-tags4-try2  all all all all  1
-# rsplus05 dev2 deb        geant4-01-00-ref-02-tags4-try2  all all all all  1
-# rsplus06 dev2 opt        geant4-01-00-ref-02-tags4-try2  all all all all  1
-# sgmedia dev2  deb        geant4-01-00-ref-02-tags4-try2  all all all all  1
-# sgmedia dev2  opt        geant4-01-00-ref-02-tags4-try2  all all all all  1
-sungeant dev2   deb_ISO    geant4-01-00-ref-02-tags4-try2  all all all all  1
+# dcosf01  dev2   deb_NONISO    geant4-01-00-ref-04-tags7-dcosf01  all all all all  1
+# dcosf01  dev2   opt_ISO    geant4-01-00-ref-04-tags7-dcosf01  all all all all  1
+dxplus01 dev2   deb_ISO    geant4-01-00-ref-04-tags7  all all all all  1
+dxplus02 dev2   opt_ISO    geant4-01-00-ref-04-tags7  all all all all  1
+dxplus03 dev2   deb_NONISO geant4-01-00-ref-04-tags7  all all all all  1
+dxplus04 dev2   opt_NONISO geant4-01-00-ref-04-tags7  all all all all  1
+hpplus01 dev2   deb        geant4-01-00-ref-04-tags7  all all all all  1
+hpplus02 dev2   opt        geant4-01-00-ref-04-tags7  all all all all  1
+# rsplus05 dev2 deb        geant4-01-00-ref-04-tags7  all all all all  1
+# rsplus06 dev2 opt        geant4-01-00-ref-04-tags7  all all all all  1
+# sgmedia dev2  deb        geant4-01-00-ref-04-tags7  all all all all  1
+# sgmedia dev2  opt        geant4-01-00-ref-04-tags7  all all all all  1
+sungeant dev2   deb_ISO    geant4-01-00-ref-04-tags7  all all all all  1
 # SUN 5.0 optimised ISO hangs...
-# sungeant dev2   opt_ISO    geant4-01-00-ref-02-tags4-try2  all all all all  1
-sungeant dev2   deb_NONISO geant4-01-00-ref-02-tags4-try2  all all all all  1
-sungeant dev2   opt_NONISO geant4-01-00-ref-02-tags4-try2  all all all all  1
-pcgeant  dev2   deb        geant4-01-00-ref-02-tags4-try2  all all all all  1
-pcgeant  dev2   opt        geant4-01-00-ref-02-tags4-try2  all all all all  1
+# sungeant dev2   opt_ISO    geant4-01-00-ref-04-tags7  all all all all  1
+sungeant dev2   deb_NONISO geant4-01-00-ref-04-tags7  all all all all  1
+sungeant dev2   opt_NONISO geant4-01-00-ref-04-tags7  all all all all  1
+pcgeant  dev2   deb        geant4-01-00-ref-04-tags7  all all all all  1
+pcgeant  dev2   opt        geant4-01-00-ref-04-tags7  all all all all  1
