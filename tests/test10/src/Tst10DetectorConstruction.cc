@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst10DetectorConstruction.cc,v 1.9 2004-01-26 16:17:24 gcosmo Exp $
+// $Id: Tst10DetectorConstruction.cc,v 1.10 2004-11-12 14:42:56 link Exp $
 // ------------------------------------------------------------
 //  GEANT 4 class header file 
 //
@@ -47,6 +47,8 @@
 #include "G4Trd.hh"
 #include "G4Polyhedra.hh"
 #include "G4Polycone.hh"
+#include "G4TwistedBox.hh"
+#include "G4TwistedTrap.hh"
 #include "G4LogicalBorderSurface.hh"
 #include "G4OpticalSurface.hh"
 #include "G4LogicalVolume.hh"
@@ -136,6 +138,14 @@ Tst10DetectorConstruction::SelectDetector( const G4String& val )
     G4double rInner[2] = { 2.*cm,  6.*cm };
     G4double rOuter[2] = { 10.*cm, 12.*cm };
     aVolume = new G4Polycone("aPcone",0*deg,360*deg,2,zPlane,rInner,rOuter);
+  }
+  else if (val == "TwistedBox")
+  {
+    aVolume = new G4TwistedBox("aTwistedBox",40*deg,5*cm,10*cm,15*cm);
+  }
+  else if (val == "TwistedTrap")
+  {
+    aVolume = new G4TwistedTrap("aTwistedTrap",40*deg,5*cm,10*cm,8*cm,15*cm);
   }
   else
   {

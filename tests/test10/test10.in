@@ -47,4 +47,12 @@
 # Polycone
 /mydet/SelectDetector Polycone
 /run/beamOn 10
+#
+# TwistedBox
+/mydet/SelectDetector TwistedBox
+/run/beamOn 10
+#
+# TwistedTrap
+/mydet/SelectDetector TwistedTrap
+/run/beamOn 10
 
