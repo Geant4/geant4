@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyGammaConversion.cc,v 1.14 2000-08-03 08:23:35 gcosmo Exp $
+// $Id: G4LowEnergyGammaConversion.cc,v 1.15 2000-09-04 18:18:08 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,6 +29,8 @@
 #include "G4LowEnergyGammaConversion.hh"
 
 // Collaborating Class Headers
+#include "globals.hh"
+#include "Randomize.hh"
 #include "G4EnergyLossTables.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
