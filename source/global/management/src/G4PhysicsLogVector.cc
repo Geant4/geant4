@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsLogVector.cc,v 1.7 2001-03-09 03:39:31 kurasige Exp $
+// $Id: G4PhysicsLogVector.cc,v 1.8 2001-04-03 09:15:24 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -79,8 +79,6 @@ G4PhysicsLogVector::G4PhysicsLogVector(G4double theEmin,
     binVector.push_back(pow(10., log10(theEmin)+i*dBin));
     dataVector.push_back(0.0);
   }
-  binVector.push_back(0.0);
-  dataVector.push_back(0.0);
 
   edgeMin = binVector[0];
   edgeMax = binVector[numberOfBin-1];
