@@ -20,6 +20,8 @@
 
 #define voxel_width 0;
 
+#define G4DrawVoxelsDebug
+
 typedef RWTPtrOrderedVector<const G4LogicalVolume> G4LogicalVolumeList;
 //***************************************************************************************************
 
@@ -57,7 +59,8 @@ public:
   //if lv is a member of the listlogical volumes, draws lv's voxels using the specified colors
   //Otherwise does nothing. 
   void G4DrawVoxels::DrawVoxels(const G4LogicalVolume* lv) {
-	DrawVoxels(lv,lv->GetVoxelHeader(),G4VoxelLimits());}
+        G4VoxelLimits limits;  // Working object for recursive call.
+	DrawVoxels(lv,lv->GetVoxelHeader(),limits);}
   //const G4Colour& boundingbox_color=G4Colour(0.,1.,0.),
   //const G4Colour& slices_color=G4Colour(1.,0.,0.)
 
