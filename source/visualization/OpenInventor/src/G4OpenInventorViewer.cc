@@ -195,13 +195,57 @@ void G4OpenInventorViewer::SetView () {
 	       (float)up.y(),
 	       (float)up.z());
   sbUp.normalize();
-  //SGI : not in the API :  fSoCamera->pointAt(sbTarget,sbUp);
-  fSoCamera->pointAt(sbTarget);
+  // Need Coin's fSoCamera->pointAt(sbTarget,sbUp); not in the SGI API
+  // Coin's code stole
+  pointAt(sbTarget,sbUp);
 
   //fSoCamera->height.setValue(10);
   //fSoCamera->nearDistance.setValue((float)pnear);
   //fSoCamera->farDistance.setValue((float)pfar);
   //fSoCamera->focalDistance.setValue((float)cameraDistance);
+}
+
+//COIN_FUNCTION_EXTENSION
+void
+G4OpenInventorViewer::pointAt(const SbVec3f & targetpoint, const SbVec3f & upvector)
+{
+  SbVec3f dir = targetpoint - fSoCamera->position.getValue();
+  if (dir.normalize() == 0.0f) return;
+  this->lookAt(dir, upvector);
+}
+
+//COIN_FUNCTION
+// Private method that calculates a new orientation based on camera
+// direction and camera up vector. Vectors must be unit length.
+void
+G4OpenInventorViewer::lookAt(const SbVec3f & dir, const SbVec3f & up)
+{
+  SbVec3f z = -dir;
+  SbVec3f y = up;
+  SbVec3f x = y.cross(z);
+
+  // recompute y to create a valid coordinate system
+  y = z.cross(x);
+
+  // normalize x and y to create an orthonormal coord system
+  y.normalize();
+  x.normalize();
+
+  // create a rotation matrix
+  SbMatrix rot = SbMatrix::identity();
+  rot[0][0] = x[0];
+  rot[0][1] = x[1];
+  rot[0][2] = x[2];
+
+  rot[1][0] = y[0];
+  rot[1][1] = y[1];
+  rot[1][2] = y[2];
+
+  rot[2][0] = z[0];
+  rot[2][1] = z[1];
+  rot[2][2] = z[2];
+
+  fSoCamera->orientation.setValue(SbRotation(rot));
 }
 
 void G4OpenInventorViewer::DrawView () {

@@ -40,6 +40,7 @@ class Geant4_SoImageWriter;
 class Geant4_SoGL2PSAction;
 class G4OpenInventorSceneHandler;
 class G4VInteractorManager;
+class SbVec3f;
 
 //
 // Base class for various OpenInventorView classes.
@@ -75,6 +76,8 @@ private:
   static void SelectionCB(void*,SoPath*);
   //static void DeselectionCB(void*,SoPath*);
   static void CameraSensorCB(void*,SoSensor*);
+  void pointAt(const SbVec3f & targetpoint, const SbVec3f & upvector);
+  void lookAt(const SbVec3f & dir, const SbVec3f & up);
 private:
   G4bool CompareForKernelVisit(G4ViewParameters&);
   void DrawDetector();
