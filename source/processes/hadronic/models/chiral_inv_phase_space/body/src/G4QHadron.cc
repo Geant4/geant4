@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QHadron.cc,v 1.5 2000-09-13 09:25:41 mkossov Exp $
+// $Id: G4QHadron.cc,v 1.6 2000-09-13 14:24:17 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------
@@ -67,7 +67,10 @@ G4QHadron::G4QHadron(G4QPDGCode QPDG, G4LorentzVector p) :
 // Make sense Chipolino or Quasmon
 G4QHadron::G4QHadron(G4QContent QC, G4LorentzVector p) :
   valQ(QC),theMomentum(p),nFragm(0)
-{};
+{
+  G4int curPDG=valQ.GetSPDGCode();
+  if(curPDG&&curPDG!=10) theQPDG.SetPDGCode(curPDG);
+};
 
 G4QHadron::G4QHadron(G4int PDGCode, G4double aMass, G4QContent QC) :
   theQPDG(PDGCode),theMomentum(0.,0.,0., aMass),valQ(QC),nFragm(0)

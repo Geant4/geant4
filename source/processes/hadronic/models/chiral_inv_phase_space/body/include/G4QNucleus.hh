@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QNucleus.hh,v 1.3 2000-09-10 13:58:55 mkossov Exp $
+// $Id: G4QNucleus.hh,v 1.4 2000-09-13 14:24:16 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -72,7 +72,7 @@ public:
   G4QNucleus operator-=(const G4QNucleus& rhs);            // Subtract a cluster from a nucleus
   G4QNucleus operator*=(const G4int& rhs);                 // Multiplication of the Nucleus
   // Static functions
-  static void SetParameters(G4double fN, G4double fD, G4double cP);
+  static void SetParameters(G4double fN, G4double fD, G4double cP, G4double mR=1.);
   // Specific General Functions
   void  UpdateClusters(G4int maxCls=0);                    // Calculate a#of b-clusters (prob.)
 
@@ -86,6 +86,7 @@ private:
   static G4double freeNuc;      // probability of the quasi-free baryon on surface
   static G4double freeDib;      // probability of the quasi-free dibaryon on surface
   static G4double clustProb;    // clusterization probability in dense region
+  static G4double mediRatio;    // relative vacuum hadronization probability
   // The basic  
   G4int Z;                      // Z of the Nucleus
   G4int N;                      // N of the Nucleus

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Quasmon.cc,v 1.12 2000-09-13 09:25:41 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.13 2000-09-13 14:24:17 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -136,19 +136,16 @@ G4Quasmon::~G4Quasmon()
 G4double G4Quasmon::Temperature=180.;  
 G4double G4Quasmon::SSin2Gluons=0.1;  
 G4double G4Quasmon::EtaEtaprime=0.3;
-G4double G4Quasmon::MediumRatio=1.0;
 // Fill the private static parameters
-void G4Quasmon::SetParameters(G4double temperature, G4double ssin2g, G4double etaetap, G4double rmedium)
-{//  ===================================================================================================
+void G4Quasmon::SetParameters(G4double temperature, G4double ssin2g, G4double etaetap)
+{//  =================================================================================
   Temperature=temperature; 
   SSin2Gluons=ssin2g; 
   EtaEtaprime=etaetap;
-  MediumRatio=rmedium;
 }
 void G4Quasmon::SetTemper(G4double temperature) {Temperature=temperature;}
 void G4Quasmon::SetSOverU(G4double ssin2g)      {SSin2Gluons=ssin2g;}
 void G4Quasmon::SetEtaSup(G4double etaetap)     {EtaEtaprime=etaetap;}
-void G4Quasmon::SetMedium(G4double rmedium)     {MediumRatio=rmedium;}
 
 const G4Quasmon& G4Quasmon::operator=(const G4Quasmon& right)
 { //=========================================================
@@ -413,7 +410,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
       qEnv=theEnvironment;
       return theQHadrons;
 	}
-    else if(totBN>1&&iniQM>quasM&&totMass>totM&&iniPDG!=1114&&iniPDG!=2224&&totS>=0)
+    else if(totBN>1&&iniQM>quasM&&totMass>totM&&iniPDG!=1114&&iniPDG!=2224&&totS>=0&&envPDG>NUCPDG)
 	{
 #ifdef ppdebug
       G4cout<<"G4Quasm::HadrQuasm:NEEDS-EVAPORATION-1: Q4M="<<q4Mom<<", QEnv="<<theEnvironment<<G4endl;
@@ -668,7 +665,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
 	{
       if(j)                                      // normally j>0 except for "nothing is found"
       {
-        if(totBN>1&&totMass>totM&&totS>=0)
+        if(totBN>1&&totMass>totM&&totS>=0&&envPDG>NUCPDG)
 	    {
 #ifdef ppdebug
           G4cout<<"G4Quasm::HadrQuasm:NEEDS-EVAPORATION-3: Q4M="<<q4Mom<<", QEnv="<<theEnvironment<<G4endl;
@@ -1143,7 +1140,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
         G4double   tmpQM=totM-tmpNM;                 // Bound Mass of newQuasmon
         G4double   tmpM =tmpQPDG.GetMass();          // Minimum free mass for newQ
         if(tmpQM<tmpM) tmpM=tmpQM;
-        if(totBN>1&&totMass>totM&&totS>=0)
+        if(totBN>1&&totMass>totM&&totS>=0&&envPDG>NUCPDG)
 		{
 #ifdef ppdebug
           G4cout<<"G4Quasm::HadrQuasm:NEEDS-EVAPORATION-4: Q4M="<<q4Mom<<", QEnv="<<theEnvironment<<G4endl;
@@ -1194,7 +1191,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
         else reMass=G4QPDGCode(rPDG).GetMass();    // Get Nuclear Cluster mass
         //if(reMass+sMass>quasM)                   // Cann't decay Quasmon (mass is too small)
 		//if(totBN>1&&totMass>totM&&totS>=0)
-		if(totBN>1&&totMass>totM&&totS>=0||reMass+sMass>quasM)
+		if((totBN>1&&totMass>totM&&totS>=0||reMass+sMass>quasM)&&envPDG>NUCPDG)
         {
 #ifdef ppdebug
           G4cout<<"G4Quasm::HadrQuasm:NEEDS-EVAPORATION-5: Q4M="<<q4Mom<<", QEnv="<<theEnvironment<<G4endl;

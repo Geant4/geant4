@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QNucleus.cc,v 1.4 2000-09-10 13:58:58 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.5 2000-09-13 14:24:17 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------
@@ -131,12 +131,14 @@ G4QNucleus::~G4QNucleus() {}
 G4double G4QNucleus::freeNuc=0.1;  
 G4double G4QNucleus::freeDib=.05;  
 G4double G4QNucleus::clustProb=4.;
+G4double G4QNucleus::mediRatio=1.;
 // Fill the private parameters
-void G4QNucleus::SetParameters(G4double fN, G4double fD, G4double cP)
-{//  ================================================================
+void G4QNucleus::SetParameters(G4double fN, G4double fD, G4double cP, G4double mR)
+{//  =============================================================================
   freeNuc=fN; 
   freeDib=fD; 
   clustProb=cP;
+  mediRatio=mR;
 }
 
 // Assignment operator
@@ -213,12 +215,12 @@ void G4QNucleus::UpdateClusters(G4int maxCls)
   //static const G4double r0 = 1.1;               // fm, for nuclear radius: r=r0*A^(1/3)
   //static const G4double del= .55;               // fm, for a difused surface of the nucleus
   //static const G4double rCl= 2.0;               // clusterization radius @@??
-  //static const G4double freeibuc = 0.10;         // probab. of the quasi-free baryon on surface
+  //static const G4double freeibuc = 0.10;        // probab. of the quasi-free baryon on surface
   //static const G4double freeDib = 0.05;         // probab. of the quasi-free dibar. on surface
   //static const G4double clustProb = 4.0;        // clusterization probability in dense region
-  static const G4double prQ = 1.0;                // relative probability for a Quasmon
-  //static const G4double prQ = 0.;                //@@for pi@@relative probability for Quasmon
-  probVect[0]=prQ;
+  //static const G4double prQ = 1.0;              // relative probability for a Quasmon
+  //static const G4double prQ = 0.;               //@@for pi@@relative probability for Quasmon
+  probVect[0]=mediRatio;
   maxClust=maxCls;
   if(maxClust<0) maxClust=0;
 #ifdef debug
@@ -241,6 +243,7 @@ void G4QNucleus::UpdateClusters(G4int maxCls)
 #ifdef debug
   cout<<"G4QNucleus::UpdateClusters:dA="<<dA<<",totA="<<A<<",sf="<<surf<<",ints="<<sA<<endl;
 #endif
+  G4int maxi=1;                                  // A#of elements filled by the progran
   G4double pA=0.;
   G4double uA=0.;
   if(surf>0.)
@@ -252,10 +255,12 @@ void G4QNucleus::UpdateClusters(G4int maxCls)
   {
     maxClust=1;
     probVect[1]= (uA+dA)/A;                      // a#of quasi-free nucleons (correct)
+    maxi=2;
     probVect[254]= 0;                            // a#of dense nucleons (correct)
     if(A>1 && pA>0.)
     {
       probVect[2]= (pA+pA)/A/(A-1);              // a#of quasi-free "dibaryons" (correct)
+      maxi=3;
       probVect[255]= 0;                          // a#of dense "dibaryons" (correct)
       maxClust=2;
 	}
@@ -277,6 +282,7 @@ void G4QNucleus::UpdateClusters(G4int maxCls)
     rd*=wrd*(dA-1.)/2;
     G4double comb=A*(A-1)/2.;
     probVect[2]= (rd+pA)/comb;                   // a#of quasi-free "dibaryons" (correct)
+    maxi=3;
     probVect[255]= rd/comb;                      // a#of dense "dibaryons" (correct)
 #ifdef debug
 	cout<<"G4QNucleus::UpdateClusters:p1="<<probVect[1]<<", p2="<<probVect[2]<<",sA="<<sA
@@ -289,6 +295,7 @@ void G4QNucleus::UpdateClusters(G4int maxCls)
       {
         rd*=wrd;
         probVect[i]=rd;                          // Combinations are included for N,Z,&S later
+        maxi=i+1;
 #ifdef debug
         cout<<"G4QNucleus::UpdateClusters: cluster of "<<i<<" baryons, pV="<<probVect[i]<<endl;
 #endif
@@ -298,6 +305,8 @@ void G4QNucleus::UpdateClusters(G4int maxCls)
     dZ = static_cast<int>(static_cast<double>((dA-dS)*Z)/(Z+N) + 0.5);
     dN = dA - dZ;
   }
+  for (G4int j=maxi; j<255; j++) probVect[j]=0.; // Make the rest to be 0
+
 }
 
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QEnvironment.cc,v 1.5 2000-09-13 09:43:39 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.6 2000-09-13 14:24:17 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -63,14 +63,15 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
     {
       G4QHadron* curHadr=projHadrons[ih];     // Pointer to current projectile Hadron
       G4int hNFrag = curHadr->GetNFragments();// #0 means intermediate (skip)
-      if(!hNFrag)                             // => Final hadron case
+      if(!hNFrag)                             // => "Final hadron" case
 	  {
-        if(theEnvironment.GetPDG()==90000000)
+        if(theEnvironment.GetPDG()==90000000) // Vacuum case
         {
           G4int hPDG  = curHadr->GetPDGCode();// A PDG Code of the projQHadron
           if(!hPDG||hPDG==10)                 // Check for the validity of the QHadron
           {
-            G4cout<<"***G4QEnvironment::Constructor: wrong PDG("<<ih<<")="<<hPDG<<G4endl;
+            G4cout<<"***G4QEnvironment::Constructor: wrong PDG("<<ih<<")="<<hPDG
+                  <<", HQC="<<curHadr->GetQC()<<", HM="<<curHadr->GetMass()<<G4endl;
             G4Exception("***G4QEnvironment::Constructor: Can not construct QEnvironment");
           }
           else
@@ -83,7 +84,8 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
 	        }
             else
             {
-              theQHadrons.insert(curHadr);  // This is a real hadron and can be filled
+              G4QHadron* newHadr = new G4QHadron(curHadr);
+              theQHadrons.insert(newHadr);  // This is a real hadron and can be filled
             } // End of Q-Code check
           } // End of proper PDG for i-th Hadron
         }
@@ -183,7 +185,7 @@ G4QEnvironment::~G4QEnvironment()
 #endif
   theQuasmons.clearAndDestroy();
 #ifdef debug
-  G4cout<<"~G4QEnvironment: before theQHadrons"<<G4endl;
+  G4cout<<"~G4QEnvironment: before theQHadrons nH="<<theQHadrons.entries()<<G4endl;
 #endif
   theQHadrons.clearAndDestroy();
 #ifdef debug
@@ -273,7 +275,7 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
     G4int envS=theEnvironment.GetS();            // A#of lambdas in the nucleus
     G4int nP  =theWorld.GetQPEntries();          // A#of initialized particles in CHIPS World
     G4int nCl =nP-73;                            // A#of initialized clusters in CHIPS World
-    if(nCl<0)G4cerr<<"***G4QEnv::CreateQ: nP="<<nP<<" for NuclTarg="<<targPDG<<G4endl;
+    if(nCl<0)G4cout<<"***G4QEnv::CreateQ: nP="<<nP<<" for NuclTarg="<<targPDG<<G4endl;
     if     (nCl<3) nBarClust=1;                  // Fix the maximum Baryon Number for clusters
     else if(nCl<9) nBarClust=2;
     else
@@ -406,8 +408,7 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
         G4double QTemper=fakeQ.GetTemper();        // Temperature defined by user for Quasmons
         G4double QSOverU=fakeQ.GetSOverU();        // S/U defined by user for Quasmons
         G4double QEtaSup=fakeQ.GetEtaSup();        // Eta Suppresion defined by user for Quasmons
-        G4double QMedium=1.;        // Eta Suppresion defined by user for Quasmons
-        G4Quasmon::SetParameters(180.,.1,.3,1.);   //@@Hardwired parameters for N-barN annihilation
+        G4Quasmon::SetParameters(180.,.1,.3);      //@@Hardwired parameters for N-barN annihilation
         G4QEnvironment* muq = new G4QEnvironment(input,theEnvironment.GetPDG());
 #ifdef pdebug
 	    G4cout<<"G4QEnvironment::CreateQ: before input.clearAndDestroy()"<<G4endl;
@@ -419,7 +420,7 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
 	    G4cout<<"G4QEnvironment::CreateQ: before delete muq"<<G4endl;
 #endif
         delete muq;
-        G4Quasmon::SetParameters(QTemper,QSOverU,QEtaSup,QMedium); // Recover user's parameters for Quasmons
+        G4Quasmon::SetParameters(QTemper,QSOverU,QEtaSup); // Recover user's parameters for Quasmons
 	    G4int nMQ = outQ->entries();               // A#of Quasmons in MultyQuasmon output
 #ifdef pdebug
 	    G4cout<<"G4QEnvironment::CreateQ: after GetQuasmon nMQ="<<nMQ<<G4endl;
@@ -455,6 +456,11 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
 #ifdef pdebug
 	G4cout<<"G4QEnvironment::CreateQ: nC="<<nCandid<<", maxP="<<maxP<<", totP="<<totP<<G4endl;
 #endif
+    if (!totP)
+    {
+	  G4cerr<<"***G4QEnv::CreateQ: nC="<<nCandid<<", maxP="<<maxP<<", QE="<<theEnvironment<<G4endl;
+      G4Exception("***G4QEnvironment::CreateQ: Can not select a cluster");
+	}
     G4int i=0;
     while(theQCandidates[i]->GetIntegProbability()<totP) i++;
     G4QCandidate* curCand = theQCandidates[i];     // Pointer to selected cluster to interact
@@ -536,19 +542,20 @@ void G4QEnvironment::PrepareInteractionProbabilities(const G4QContent& projQC)
       //else if(!rPDG||qC<0||pC>0&&ac==1&&cPDG!=2112||d>1) probab=0.;     // positive on any
       //if     (!rPDG||qC<-1||pC<0&&ac==1&&cPDG!=2212||d>1) probab=0.;    // negative on any
       //else if(!rPDG||qC<-1||pC>0&&ac==1&&cPDG!=2112||d>1) probab=0.;    // positive on any
-      if     (!rPDG||qC<-1||pC<0&&ac==1&&cPDG!=2212||dq>2) probab=0.;    // negative on any
-      else if(pC>0&&ac==1&&cPDG!=2112) probab=0.;    // positive on any
+      //OLD//if     (!rPDG||qC<-1||pC<0&&ac==1&&cPDG!=2212||dq>2) probab=0.;    // negative on any
+      //OLD//else if(pC>0&&ac==1&&cPDG!=2112) probab=0.;    // positive on any
       //if     (!rPDG||qC<-1||pC<0&&ac==1&&cPDG!=2212||d>1||ac>1) probab=0.;  // negative on any
       //else if(!rPDG||qC<-1||pC>0&&ac==1&&cPDG!=2112||d>1) probab=0.;    // positive on any
       //if(!rPDG||ac<2||qC<0) probab=0.;       // A>1
       //if(!rPDG||ac<2||qC<-1) probab=0.;       // A>1 Chipolino
       //else      probab=nOfCl*ac; // Isotopic focusing (use together with d>1 above)
-      else      probab=nOfCl*ac*fact; // Isotopic focusing (use together with d>1 above)
+      //OLD//else      probab=nOfCl*ac*fact; // Isotopic focusing (use together with d>1 above)
       //else      probab=nOfCl*fact; // Isotopic focusing (use together with d>1 above)
       //else      probab=nOfCl; // Isotopic focusing (use together with d>1 above)
       //else      probab=dOfCl; // Isotopic focusing (use together with d>1 above)
       //else      probab=dOfCl*fact; // Isotopic focusing (use together with d>1 above)
       //else      probab=dOfCl*ac*fact; // Isotopic focusing (use together with d>1 above)
+      probab=nOfCl*ac*fact; //@@Always@@ Isotopic focusing (use together with d>1 above)
 #ifdef sdebug
 	  G4cout<<"G4QEnvironment::PrepareInteractionProbabilities:C="<<cPDG<<",P="<<probab<<",ac="
             <<ac<<",dq="<<dq<<",qC="<<qC<<",rPDG="<<rPDG<<",b="<<baryn<<",c="<<charge<<G4endl;
@@ -628,6 +635,9 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
 	{
 	  G4QHadronVector* output=theQuasmons[iq]->Fragment(vE); // **!!DESTROY!!**
       G4int nHadrons = output->entries();
+#ifdef pdebug
+      G4cout<<"G4QEnv::HadrQEnv:Vacuum Q#"<<iq<<", nHadr="<<nHadrons<<G4endl;
+#endif
       if(nHadrons>0)                             // Transfer QHadrons from Quasmon to Output
 	  {
     	for (G4int ih=0; ih<nHadrons; ih++)
@@ -637,9 +647,15 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
           delete output->at(ih);
         }
         delete output;
-        return theQHadrons;
+	  }
+      else
+	  {
+		G4cerr<<"***G4QEnv::HadrQE: nH="<<nHadrons<<", QQC="<<theQuasmons[iq]->GetQC()
+              <<",QM="<<theQuasmons[iq]->Get4Momentum().m()<<G4endl;
+        G4Exception("G4QEnvironment::HadronizeQEnvironment: Vacuum Quasmon in NOTHING");
 	  }
 	}
+    return theQHadrons;
   }
   else                                           // ==> "Nuclear environment" case
   {
@@ -804,7 +820,7 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
                 else
 			    {
 #ifdef pdebug
-		          G4cerr<<"***G4QEnv::HadrQEnv: Cann't resolve PANIC, try to Evaporate"<<G4endl;
+		          G4cout<<"***G4QEnv::HadrQEnv: Cann't resolve PANIC, try to Evaporate"<<G4endl;
 #endif
                   force=true;
                   break;
@@ -1130,7 +1146,7 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
         else                                     // "Last decay was fatal" case
 		{
 #ifdef pdebug
-		  G4cerr<<"***G4QEnv::HadrQE: M="<<totMass<<",dM="<<dM<<",nQ="<<nQuasmons<<G4endl;
+		  G4cout<<"***G4QEnv::HadrQE: M="<<totMass<<",dM="<<dM<<",nQ="<<nQuasmons<<G4endl;
 #endif
           G4int          nOfOUT  = theQHadrons.entries();
           while(nOfOUT)
@@ -1241,7 +1257,7 @@ void G4QEnvironment::PrepareClusters()
           else if(zc==1&&nc==1) pos*=ze*ne;
           else if(zc==1&&sc==1) pos*=ze*se;
           else if(sc==1&&nc==1) pos*=se*ne;
-          else G4cerr<<"***G4QEnvironment::PrepClust:z="<<zc<<",n="<<nc<<",s="<<sc<<G4endl;
+          else G4cout<<"***G4QEnvironment::PrepClust:z="<<zc<<",n="<<nc<<",s="<<sc<<G4endl;
 		}
       }
       else
@@ -1394,10 +1410,10 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH)
             delete HadrB;                      // Delete "new fHadr"
             delete HadrR;                      // Delete "new sHadr"
             theQHadrons.insert(qH);            // No decay
-            G4cerr<<"G4QEnv::EvapResid: rP="<<pResPDG<<",rN="<<nResPDG<<",rL="<<lResPDG<<",nN="
+            G4cout<<"G4QEnv::EvapResid: rP="<<pResPDG<<",rN="<<nResPDG<<",rL="<<lResPDG<<",nN="
                   <<nN<<",nZ="<<nZ<<",nL="<<nS<<",totM="<<totMass<<",n="<<totMass-nResM-mNeut
                   <<",p="<<totMass-pResM-mProt<<",l="<<totMass-lResM-mLamb<<G4endl;
-            G4cerr<<"***G4QEnv::EvapResid: Decay failed bPDG="<<barPDG<<", rPDG="<<resPDG<<G4endl;
+            G4cout<<"***G4QEnv::EvapResid: Decay failed bPDG="<<barPDG<<", rPDG="<<resPDG<<G4endl;
 	      }
           else
           {
@@ -1478,7 +1494,7 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH)
   }
   else
   {
-    G4cerr<<"***G4QEnv::EvapResid: inputHadron="<<qH<<", PDG="<<thePDG<<G4endl;
+    G4cout<<"***G4QEnv::EvapResid: inputHadron="<<qH<<", PDG="<<thePDG<<G4endl;
     if(!thePDG&&thePDG!=10&&thePDG<NUCPDG) theQHadrons.insert(qH);
     else
     {
