@@ -2,41 +2,38 @@
 #define OCTREE_NODE_H
 #include "globals.hh"
 
-//---------------------------------------------------------------------------
 class Octree;
-//---------------------------------------------------------------------------
+
 enum OctreeNodeType { MIDDLE_NODE, TERMINAL_NODE };
-//---------------------------------------------------------------------------
-/// \brief OctreeNode represents a single node in the octree.
-///
-/// Longer description.
+
+//  OctreeNode represents a single node in the octree.
+
 class OctreeNode
 {
-    friend class Octree;
-
 public:
-    OctreeNode();
-    OctreeNode( OctreeNode* pParent );
-    virtual ~OctreeNode();
 
-    float& Density();
+  OctreeNode();
+  ~OctreeNode();
+  OctreeNode( OctreeNode* pParent );
+  
+  G4double Density(){return mDensity;}
 
-    virtual OctreeNode*& operator []( G4int index ) = 0;
+  virtual OctreeNode*& operator []( G4int index ) = 0;
 
-    virtual OctreeNodeType Type() = 0;
+  virtual OctreeNodeType Type() = 0;
 
-    const OctreeNode* Parent();
+  const OctreeNode* Parent(){ return mParent; }
 
-    virtual G4int FindChild( const OctreeNode* pNode ) = 0;
+  virtual G4int FindChild( const OctreeNode* pNode ) = 0;
 
-    static G4int InstanceCounter();
+  static G4int InstanceCounter() { return mInstanceCounter; }
 
-    virtual G4int MemSize() = 0;
+  virtual G4int MemSize() = 0;
 
 private:
-    static G4int mInstanceCounter;
-    OctreeNode* mParent;
-    float mDensity;
+  static G4int mInstanceCounter;
+  OctreeNode* mParent;
+  G4double  mDensity;
 };
 
 //---------------------------------------------------------------------------

@@ -7,7 +7,7 @@ G4int OctreeNode::mInstanceCounter = 0;
 
 OctreeNode::OctreeNode()
 {
-  mParent = NULL;
+  mParent = 0;
   mInstanceCounter++;
 }
 
@@ -20,21 +20,6 @@ OctreeNode::OctreeNode( OctreeNode* pParent )
 {
   mParent = pParent;
   mInstanceCounter++;
-}
-
-float& OctreeNode::Density()
-{
-  return mDensity;
-}
-
-const OctreeNode* OctreeNode::Parent()
-{
-  return mParent;
-}
-
-G4int OctreeNode::InstanceCounter()
-{
-  return mInstanceCounter;
 }
 
 OctreeNode* TerminalNode::mNull = NULL;
