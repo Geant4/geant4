@@ -123,6 +123,12 @@ G4FermiConfiguration G4FermiConfigurationList::ChooseConfiguration(void)
     }
   else 
     {
+#ifndef G4NO_ISO_VECDIST
+      std::vector<G4double>::difference_type n = 0;
+      std::distance(NormalizedWeights.begin(),thisConfig,n);
+      return *(Configurations[n]);
+#else
       return *(Configurations[std::distance(NormalizedWeights.begin(),thisConfig)]);
+#endif
     }
 }

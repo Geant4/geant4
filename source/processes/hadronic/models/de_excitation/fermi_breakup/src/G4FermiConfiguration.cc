@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FermiConfiguration.cc,v 1.4 2003-11-04 11:13:53 lara Exp $
+// $Id: G4FermiConfiguration.cc,v 1.5 2003-11-10 12:10:23 lara Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -162,9 +162,14 @@ G4FragmentVector * G4FermiConfiguration::GetFragments(const G4Fragment & theNucl
   for (std::vector<const G4VFermiFragment*>::iterator i = Configuration.begin(); 
        i != Configuration.end(); ++i) 
     {
+#ifdef G4NO_ISO_VECDIST
+      std::vector<const G4VFermiFragment*>::difference_type n = 0;
+      std::distance(Configuration.begin(), i, n);
+      G4LorentzVector FourMomentum(*(MomentumComponents->operator[](n)));
+#else
       G4LorentzVector FourMomentum(*(MomentumComponents->
 				     operator[](std::distance(Configuration.begin(),i))));
-      
+#endif
     
       // Lorentz boost
       FourMomentum.boost(boostVector);
