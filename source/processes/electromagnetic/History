@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2000-03-02 14:04:55 maire Exp $
+$Id: History,v 1.5 2000-04-26 11:18:36 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+26 apr 00 mma  (em-V01-01-00)
+- all EnergyLoss classes renamed G4V... 
+  Most classes in standard and muons affected.
+- G4Muls moved in utils
+- bugs fixe in MuPairProduction  
+- cowork with geant4-01-01-ref-02
      
 02 mar 00 mma  (em-V01-00-00)
 - new G4VEnergyLoss class and related structure
