@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.19 2003-06-16 16:53:38 gunter Exp $
+// $Id: G4Sphere.cc,v 1.20 2003-08-17 15:40:20 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -2471,10 +2471,30 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
         G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
         G4cout << "Proposed distance :" << G4endl << G4endl;
         G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
-        G4Exception("G4Sphere::DistanceToOut() - Invalid enum");
+        G4Exception("G4Sphere::DistanceToOut(p,v,...) - Invalid enum");
         break;
     }
   }
+  if (snxt == kInfinity)
+  {
+    G4cout.precision(16);
+    G4cout << G4endl;
+    DumpInfo();
+    G4cout << "Position:"  << G4endl << G4endl;
+    G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl;
+    G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
+    G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl;
+    G4cout << "Rp = "<< sqrt( p.x()*p.x()+p.x()*p.x()+p.x()*p.x() )/mm << " mm" 
+           << G4endl << G4endl;
+    G4cout << "Direction:" << G4endl << G4endl;
+    G4cout << "v.x() = "   << v.x() << G4endl;
+    G4cout << "v.y() = "   << v.y() << G4endl;
+    G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
+    G4cout << "Proposed distance :" << G4endl << G4endl;
+    G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
+    G4cout<<"G4Sphere::DistanceToOut(p,v,...): snxt = kInfinity    ???"<<G4endl;
+  }
+
   return snxt;
 }
 
