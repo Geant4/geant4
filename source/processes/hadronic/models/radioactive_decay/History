@@ -13,6 +13,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+07 Mar 2005 Fan Lei (radioactive_decay-V07-00-00)
+- added line 457, G4NuclearDeceyChannel.cc to fix bug #711
+
 10 Nov 2004 Fan Lei (radioactive_decay-V06-02-01)
 - added G4MshellECDecayChannel.hh and changed G4RadioactiveDecay.cc accordingly.
 

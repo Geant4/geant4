@@ -456,6 +456,8 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
       // f.lei (03/01/03) this is needed to fix the crach in test18 
       if (finalDaughterExcitation <= 1.0*keV) finalDaughterExcitation = 0 ;
       G4IonTable *theIonTable =  (G4IonTable*)(G4ParticleTable::GetParticleTable()->GetIonTable());
+      // f.lei (07/03/05) added the delete to fix bug#711
+      if (dynamicDaughter) delete dynamicDaughter;
       dynamicDaughter = new G4DynamicParticle
 	(theIonTable->GetIon(daughterZ,daughterA,finalDaughterExcitation),
 	 daughterMomentum1);
