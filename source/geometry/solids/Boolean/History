@@ -1,5 +1,5 @@
 
-$Id: History,v 1.5 2000-01-19 19:24:25 gcosmo Exp $
+$Id: History,v 1.6 2000-04-11 16:05:06 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ Apr 11   2000   J. Allison
+
+- CreatePolyhedron implemented for BooleanSolids.
+- G4DisplacedSolid: reversed implementation of GetFrameRotation and
+    GetObjectRotation, removing inappropriate invertion.
+- G4DisplacedSolid::GetConstituentMovedSolid() made const.
 
  Gen 19   2000	Gabriele Cosmo		geom-solid-bool-V01-00-00
 

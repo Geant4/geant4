@@ -18,7 +18,6 @@
 #include "G4Polyhedron.hh"
 #include "G4NURBS.hh"
 #include "G4NURBSbox.hh"
-#include "G4VisExtent.hh"
 
 ////////////////////////////////////////////////////////////////
 //
@@ -87,7 +86,7 @@ const G4DisplacedSolid* G4DisplacedSolid::GetDisplacedSolidPtr() const
       G4DisplacedSolid* G4DisplacedSolid::GetDisplacedSolidPtr() 
 { return this; }
 
-G4VSolid* G4DisplacedSolid::GetConstituentMovedSolid()
+G4VSolid* G4DisplacedSolid::GetConstituentMovedSolid() const
 { return fPtrSolid; } 
 
 G4AffineTransform  G4DisplacedSolid::GetTransform() const
@@ -104,8 +103,7 @@ G4AffineTransform  G4DisplacedSolid::GetDirectTransform() const
 
 G4RotationMatrix G4DisplacedSolid::GetFrameRotation() const
 {
-   G4RotationMatrix InvRotation= fPtrTransform->NetRotation();
-   InvRotation.invert();
+   G4RotationMatrix InvRotation= fDirectTransform->NetRotation();
    return InvRotation;
 }
 
@@ -117,7 +115,7 @@ G4ThreeVector  G4DisplacedSolid::GetFrameTranslation() const
 ///////////////////////////////////////////////////////////////
 G4RotationMatrix G4DisplacedSolid::GetObjectRotation() const
 {
-   G4RotationMatrix Rotation= fDirectTransform->NetRotation();
+   G4RotationMatrix Rotation= fPtrTransform->NetRotation();
    return Rotation;
 }
 
@@ -245,17 +243,7 @@ G4DisplacedSolid::ComputeDimensions( G4VPVParameterisation* p,
 void 
 G4DisplacedSolid::DescribeYourselfTo ( G4VGraphicsScene& scene ) const 
 {
-  fPtrSolid->DescribeYourselfTo(scene) ;
-}
-
-/////////////////////////////////////////////////////////////
-//
-//
-
-G4VisExtent   
-G4DisplacedSolid::GetExtent        () const 
-{
-  return fPtrSolid->GetExtent()  ;
+  scene.AddThis (*this);
 }
 
 ////////////////////////////////////////////////////
@@ -265,7 +253,10 @@ G4DisplacedSolid::GetExtent        () const
 G4Polyhedron* 
 G4DisplacedSolid::CreatePolyhedron () const 
 {
-  return fPtrSolid->CreatePolyhedron() ;
+  G4Polyhedron* polyhedron = fPtrSolid->CreatePolyhedron();
+  polyhedron->Transform
+    (G4Transform3D(GetObjectRotation(),GetObjectTranslation()));
+  return polyhedron;
 }
 
 /////////////////////////////////////////////////////////
@@ -275,10 +266,7 @@ G4DisplacedSolid::CreatePolyhedron () const
 G4NURBS*      
 G4DisplacedSolid::CreateNURBS      () const 
 {
-  return fPtrSolid->CreateNURBS() ;
+  // Take into account local transformation - see CreatePolyhedron.
+  // return fPtrSolid->CreateNURBS() ;
+  return 0;
 }
-
-
-
-
-

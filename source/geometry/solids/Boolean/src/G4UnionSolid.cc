@@ -22,7 +22,6 @@
 #include "G4Polyhedron.hh"
 #include "G4NURBS.hh"
 #include "G4NURBSbox.hh"
-#include "G4VisExtent.hh"
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -321,17 +320,7 @@ G4UnionSolid::ComputeDimensions( G4VPVParameterisation* p,
 void 
 G4UnionSolid::DescribeYourselfTo ( G4VGraphicsScene& scene ) const 
 {
-  return ;
-}
-
-/////////////////////////////////////////////////////////////
-//
-//
-
-G4VisExtent   
-G4UnionSolid::GetExtent        () const 
-{
-  return   G4VisExtent(-1.0,1.0,-1.0,1.0,-1.0,1.0) ;
+  scene.AddThis (*this);
 }
 
 ////////////////////////////////////////////////////
@@ -341,7 +330,12 @@ G4UnionSolid::GetExtent        () const
 G4Polyhedron* 
 G4UnionSolid::CreatePolyhedron () const 
 {
-  return new G4PolyhedronBox (1.0, 1.0, 1.0);
+  G4Polyhedron* pA = fPtrSolidA->CreatePolyhedron();
+  G4Polyhedron* pB = fPtrSolidB->CreatePolyhedron();
+  G4Polyhedron* resultant = new G4Polyhedron (pA->add(*pB));
+  delete pB;
+  delete pA;
+  return resultant;
 }
 
 /////////////////////////////////////////////////////////
@@ -351,10 +345,7 @@ G4UnionSolid::CreatePolyhedron () const
 G4NURBS*      
 G4UnionSolid::CreateNURBS      () const 
 {
-  return new G4NURBSbox (1.0, 1.0, 1.0);
+  // Take into account boolean operation - see CreatePolyhedron.
+  // return new G4NURBSbox (1.0, 1.0, 1.0);
+  return 0;
 }
-
-
-
-
-

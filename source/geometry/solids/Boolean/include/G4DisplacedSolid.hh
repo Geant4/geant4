@@ -79,7 +79,7 @@ public:  // With description
     virtual       G4DisplacedSolid* GetDisplacedSolidPtr();
 
     // Access methods
-    G4VSolid*                GetConstituentMovedSolid();
+    G4VSolid*                GetConstituentMovedSolid() const;
     G4AffineTransform        GetTransform() const; 
     G4AffineTransform        GetDirectTransform() const; 
     
@@ -94,7 +94,6 @@ public:  // With description
 public:
     // For creating graphical representations   (ie for visualisation)
     void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;
-    G4VisExtent   GetExtent        () const ;
     G4Polyhedron* CreatePolyhedron () const ;
     G4NURBS*      CreateNURBS      () const ;
 

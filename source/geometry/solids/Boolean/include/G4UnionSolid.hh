@@ -69,7 +69,6 @@ public:
     { return G4String("G4UnionSolid"); }
 
     void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;
-    G4VisExtent   GetExtent        () const ;
     G4Polyhedron* CreatePolyhedron () const ;
     G4NURBS*      CreateNURBS      () const ;
 
