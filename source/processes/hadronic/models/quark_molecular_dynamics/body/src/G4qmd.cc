@@ -266,6 +266,16 @@ G4KineticTrackVector * G4qmd::TheHadrons()
     G4cerr << "ERROR: " << s << G4endl;
   }
 
+	for (G4int i=0; i<theHadrons->length(); i++) {
+ 		G4KineticTrack * ThisTrack = (*theHadrons)[i];
+		G4cerr << "Track "      << i 
+		       << ", particle " << ThisTrack->GetDefinition()->GetPDGEncoding()
+		       << " originating at " << ThisTrack->GetInitialCoordinates() 
+		       << endl;
+	}
+
+
+
 	return theHadrons;
 
 }

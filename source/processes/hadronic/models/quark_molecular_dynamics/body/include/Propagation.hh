@@ -16,6 +16,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
+#include "G4ShortLivedConstructor.hh"
 
 struct connect
 {

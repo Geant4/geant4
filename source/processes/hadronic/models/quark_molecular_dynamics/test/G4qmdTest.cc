@@ -1,9 +1,15 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include "G4qmd.hh"
+#include "G4KineticTrack.hh"
+#include "G4KineticTrackVector.hh"
+#include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTypes.hh"
 
 int main()
 {
+	G4KineticTrackVector * ResultingHadrons = new G4KineticTrackVector();
 
   G4String & InitialFile = "";
   G4double OutputStepping = 0.5;
@@ -28,7 +34,8 @@ int main()
 
   theRun.SetupFromFile();
   theRun.SetOutputTimestep(OutputStepping);
-  theRun.justRun();
+
+  ResultingHadrons = theRun.TheHadrons();
 
 
 }

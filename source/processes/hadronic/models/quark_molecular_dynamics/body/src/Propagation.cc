@@ -1,10 +1,22 @@
 #include "G4ios.hh"
 #include "g4std/fstream"
+
 #include "G4KineticTrack.hh"
 #include "G4KineticTrackVector.hh"
+
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
+
+#include "G4ShortLivedConstructor.hh"
+#include "G4ShortLivedTable.hh"
+
+#include "G4VDecayChannel.hh"
+#include "G4DecayTable.hh"
+
+#include "G4MesonConstructor.hh"
+#include "G4BaryonConstructor.hh"
+
 #include <algo.h>
 #include "newvector.hh"
 #include "Random.hh"
@@ -284,7 +296,18 @@ Colour::Colour(double h)
 	Nquark = Npart;
 	NquarkEver = Npart;
 
-	TheNewHadrons = new  G4KineticTrackVector();
+
+  G4MesonConstructor Mesons;
+  Mesons.ConstructParticle();
+
+  G4BaryonConstructor Baryons;
+  Baryons.ConstructParticle();
+
+  G4ShortLivedConstructor ShortLived;
+  ShortLived.ConstructParticle();
+
+
+	TheNewHadrons = new G4KineticTrackVector();
 
   //  vector<ParticleType*> Q=Knot<ParticleType>::Find("SQ");
   //  vector<ParticleType*> D=Knot<ParticleType>::Find("DQ");
@@ -762,13 +785,23 @@ void Colour::one_step()
             G4ParticleDefinition * NewHadronDefinition = 
                  G4ParticleTable::GetParticleTable()->FindParticle(NewHadron.GetPDGCode());
 
+						G4cerr << "- PDG-Code from NewHadronDefinition: " << NewHadronDefinition->GetPDGEncoding()
+						       << " (particle type "                      << NewHadronDefinition->GetParticleType() 
+						       << ")" << G4endl;
+
             G4KineticTrack * NewHadronTrack = 
                  new G4KineticTrack(NewHadronDefinition, NewHadron.GetFormationTime(),NewHadron.GetPosition(),NewHadron.Get4Momentum());
 
-            G4cerr << " remaining lifetime: " << NewHadronTrack->SampleResidualLifetime()
-                   << G4endl;
- 
+						G4cerr << "- Formation time from NewHadronTrack: " << NewHadronTrack->GetFormationTime() 
+						       << " (remaining lifetime "                  << NewHadronTrack->SampleResidualLifetime() 
+						       << ")" << G4endl;
+
+						G4cerr << " KineticTrackVector is empty? - " << TheNewHadrons->isEmpty() << G4endl;
+						G4cerr << " KineticTrackVector has size " << TheNewHadrons->length() << G4endl;
+
             TheNewHadrons->insert(NewHadronTrack);
+
+						G4cerr << " KineticTrackVector has size " << TheNewHadrons->length() << G4endl;
 
       	    NhadronEver++;
 //
