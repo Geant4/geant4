@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PDGCodeChecker.cc,v 1.3 1999-12-15 14:51:14 gunter Exp $
+// $Id: G4PDGCodeChecker.cc,v 1.4 2001-04-06 06:19:07 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -89,6 +89,15 @@ G4int G4PDGCodeChecker::CheckForBaryons()
   if (abs(tempPDGcode)%10000 == 3122) { 
     // Lambda
     quark2=2;  quark3 = 1; spin = 1;
+  } else if (abs(tempPDGcode)%10000 == 3124) { 
+    // Lambda*
+    quark2=2;  quark3 = 1; spin = 3;
+  } else if (abs(tempPDGcode)%10000 == 3126) { 
+    // Lambda*
+    quark2=2;  quark3 = 1; spin = 5;
+  } else if (abs(tempPDGcode)%10000 == 3128) { 
+    // Lambda*
+    quark2=2;  quark3 = 1; spin = 7;
   } else if (abs(tempPDGcode)%10000 == 4122) { 
     // Lambda_c
     quark2=2;  quark3 = 1; spin = 1;
