@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SandiaTable.cc,v 1.5 1999-12-15 14:50:51 gunter Exp $
+// $Id: G4SandiaTable.cc,v 1.6 2000-08-03 14:28:31 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -27,12 +27,14 @@ G4double G4SandiaTable::fSandiaCofPerAtom[4];
 
 G4SandiaTable::G4SandiaTable(G4int matIndex)
 { 
-   fMatSandiaMatrix = NULL ; 
+  fMatSandiaMatrix = 0 ; 
+  fPhotoAbsorptionCof = 0 ;
 }
 
 G4SandiaTable::G4SandiaTable(G4Material* material)
 :fMaterial(material)
 {
+  fPhotoAbsorptionCof = 0 ;
   //build the CumulInterval array
   fCumulInterval[0] = 1;
   for (G4int Z=1; Z<101; Z++)
@@ -47,7 +49,11 @@ G4SandiaTable::G4SandiaTable(G4Material* material)
 G4SandiaTable::~G4SandiaTable()
 { 
   if(fMatSandiaMatrix) delete fMatSandiaMatrix ;
-  if(fPhotoAbsorptionCof) delete fPhotoAbsorptionCof ;
+  if(fPhotoAbsorptionCof)
+  {
+    for(G4int i = 0 ; i < fMaxInterval ; i++)  delete[] fPhotoAbsorptionCof[i] ;
+    delete fPhotoAbsorptionCof ;
+  }
 }
 						 	
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
