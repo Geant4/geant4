@@ -802,18 +802,16 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   // ......................................................................
   // attach user limits ...................................................
 
-  G4double RoomTimeCut = 10000. * s;
-
   world_log->SetUserLimits
-    (new G4UserLimits(theMaxStepSize,DBL_MAX,RoomTimeCut));
+    (new G4UserLimits(theMaxStepSize,DBL_MAX,theRoomTimeCut));
   lab_log->SetUserLimits
-    (new G4UserLimits(theMaxStepSize,DBL_MAX,RoomTimeCut));
+    (new G4UserLimits(theMaxStepSize,DBL_MAX,theRoomTimeCut));
   jacket_log->SetUserLimits
-    (new G4UserLimits(theMaxStepSize,DBL_MAX,RoomTimeCut));
+    (new G4UserLimits(theMaxStepSize,DBL_MAX,theRoomTimeCut));
   vacuum_log->SetUserLimits
-    (new G4UserLimits(theMaxStepSize,DBL_MAX,RoomTimeCut));
+    (new G4UserLimits(theMaxStepSize,DBL_MAX,theRoomTimeCut));
   vessel_log->SetUserLimits
-    (new G4UserLimits(theMaxStepSize,DBL_MAX,RoomTimeCut));
+    (new G4UserLimits(theMaxStepSize,DBL_MAX,theRoomTimeCut));
   detector_log->SetUserLimits
     (new G4UserLimits(theMaxStepSize,DBL_MAX,theMaxTimeCuts));
   liqPhase_log->SetUserLimits
