@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.4 2000-12-13 03:39:15 sadilov Exp $
+# $Id: Configure,v 1.5 2000-12-13 20:08:49 sadilov Exp $
 #
-# Generated on Wed Dec 13 06:31:31 MSK 2000 [metaconfig 3.0 PL70]
+# Generated on Wed Dec 13 23:05:14 MSK 2000 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -757,11 +757,11 @@ esac
 : script used to extract .SH files with variable substitutions
 cat >extract <<'EOS'
 CONFIG=true
-echo "Doing variable substitutions on .SH files..."
+#echo "Doing variable substitutions on .SH files..."
 if test -f $src/MANIFEST; then
 	set x `awk '{print $1}' <$src/MANIFEST | grep '\.SH'`
 else
-	echo "(Looking for .SH files under the source directory.)"
+#	echo "(Looking for .SH files under the source directory.)"
 	set x `(cd $src; find . -name "*.SH" -print)`
 fi
 shift
@@ -796,27 +796,27 @@ for file in $*; do
 			file_SH=`expr X$file : 'X.*/\(.*\)'`
 			file_EX=`expr X$file : 'X.*/\(.*\).SH'`
 			(cd $dir && . ./$file_SH && mkdir -p $abssrc/bin/$g4system && mv $file_EX $abssrc/bin/$g4system)
-			echo Sergei_1
-			echo "file_SH=$file_SH"
-			echo "file_EX=$file_EX"
-			echo "file=$file"
-			echo "dir=$dir"
-			echo "src=$src"
-			echo "g4system=$g4system"
-			echo Sergei_1
+#			echo Sergei_1
+#			echo "file_SH=$file_SH"
+#			echo "file_EX=$file_EX"
+#			echo "file=$file"
+#			echo "dir=$dir"
+#			echo "src=$src"
+#			echo "g4system=$g4system"
+#			echo Sergei_1
 			;;
 		*)
 			file_SH=`expr X$file : 'X.*/\(.*\)'`
 			file_EX=`expr X$file : 'X.*/\(.*\).SH'`
 			(. ./$file && mkdir -p $abssrc/bin/$g4system && mv file-SH $abssrc/bin/$g4system)
-			echo Sergei_2
-			echo "file_SH=$file_SH"
-			echo "file_EX=$file_EX"
-			echo "file=$file"
-			echo "dir=$dir"
-			echo "src=$src"
-			echo "g4system=$g4system"
-			echo Sergei_2
+#			echo Sergei_2
+#			echo "file_SH=$file_SH"
+#			echo "file_EX=$file_EX"
+#			echo "file=$file"
+#			echo "dir=$dir"
+#			echo "src=$src"
+#			echo "g4system=$g4system"
+#			echo Sergei_2
 			;;
 		esac
 		;;
@@ -830,11 +830,11 @@ for file in $*; do
 
 			(sh <$src/$dir/$file_SH && mkdir -p $src/bin/$g4system && mv $file_EX $src/bin/$g4system)
 
-			echo Sergei_3
-			echo "dir=$dir"
-			echo "file=$file"
+#			echo Sergei_3
+#			echo "dir=$dir"
+#			echo "file=$file"
 
-			echo Sergei_3
+#			echo Sergei_3
 			;;
 		*)
 			file_SH=`expr X$file : 'X.*/\(.*\)'`
@@ -882,6 +882,7 @@ esac
 : Eunice requires " " instead of "", can you believe it
 echo " "
 : Here we go...
+if [ X$install = Xyes ] ; then
 echo " "
 echo " "
 echo " "
@@ -890,6 +891,16 @@ echo " "
 echo " "
 echo " "
 echo " "
+else
+echo " "
+echo " "
+echo " "
+echo "                --- Geant4 Toolkit Installation  ---"
+echo "                  (setting environments for USER )"
+echo " "
+echo " "
+echo " "
+fi
 
 trap 'echo " "; test -d ../UU && rm -rf X $rmlist; exit 1' 1 2 3 15
 
@@ -909,6 +920,7 @@ user=`(logname) 2>/dev/null`
 case "$user" in
 '') user=`whoami 2>&1`;;
 esac
+if [ X$install = Xyes ] ; then
 if $contains "^$user\$" ../.config/instruct >/dev/null 2>&1; then
 	firsttime=false
 	echo " "
@@ -920,6 +932,12 @@ if $contains "^$user\$" ../.config/instruct >/dev/null 2>&1; then
 	*) needman=false;;
 	esac
 fi
+fi
+
+if [ X$install = X ] ; then
+needman=false
+fi
+
 if $needman; then
 	cat <<EOH
  
@@ -1476,6 +1494,7 @@ cd ..
 		;;
 	esac
 
+if [ X$install = Xnever ] ; then
 	$cat <<EOM
 
 You may give one or more space-separated answers, or "none" if appropriate.
@@ -1509,6 +1528,7 @@ EOM
 			done
 		fi
 	done
+fi
 
 	hint=recommended
 	: Remember our hint file for later.
@@ -1566,7 +1586,7 @@ case  "$g4compiler" in
 	esac
 esac
 
-
+if [ X$install = Xy ] ; then
 while test 1 = 1  ; do
 
 g4message=`cat << EOM
@@ -1684,6 +1704,7 @@ EOM
 		;;
 	esac
 done
+fi
 
 #
 # Ask about compiler used. 
@@ -1721,7 +1742,12 @@ EOM
 	$rm -rf UU
 	exit 1
 else
-	echo "USER-notOK"
+	echo " "
+	echo "WARNING: Geant4 is NOT installed yet!"
+	echo "You (or the administrator if you have not enough privileges)"
+	echo "should start with \$G4INSTALL/config/Configure -install."
+	echo "(where \$G4INSTALL is Geant4 install directory)."
+	echo " "
 	$rm -rf UU
 	exit 1
 	fi
@@ -2119,75 +2145,64 @@ case "$g4workdir" in
 	;;
 esac
 
+case "$g4includes_flag" in
+'')
+	g4includes_flag=n
+	;;
+esac
+
 case "$g4include" in
 '')
 	g4include=$g4install/include
 	;;
 esac
 
-while test 1 = 1  ; do
-
 g4message=`cat << EOM
 
-G4INSTALL is where Geant4 installed.
-G4INCLUDE can be defined to copy all Geant4 headers 
-in one directory.
-
-
-1) G4INSTALL:		$g4install
-
-2) G4INCLUDE:		$g4include	(toggle by selection!)
-
-
-Select from list above (e.g. 1) 
+Where is Geant4 installed?
 EOM`
 
 #dflt="NO DEFAULT ANSWER"
-dflt="Press [Enter] for default settings"
+dflt=$g4install
+fn='d~'
+rp=$g4message
+. ./myread
+g4install=$ans
+g4workdir=$g4install
+
+g4message=`cat << EOM
+
+Do you want to copy all Geant4 headers 
+in one directory?
+EOM`
+
+#dflt="NO DEFAULT ANSWER"
+dflt=$g4includes_flag
 #fn='d~'
 rp=$g4message
 . ./myread
-gans=$ans
+g4includes_flag=$ans
 
+if [ X$g4includes_flag = Xy ] ; then
 
-	case $gans in
+g4message=`cat << EOM
 
-	1) 
-		dflt=$g4install
-		fn='d~'
-		rp="Where are Geant4 sources installed?"
-		. ./getfile
-		g4install=$ans
-		g4workdir=$g4install
-		;;
-	2) 
-		if test "X$g4include" = "X[NOT DEFINED]" ; then
-		g4include="1"
-		else
-		g4include="[NOT DEFINED]"
-		fi
-		;;
-#	2) 
-#		dflt=$g4workdir
-#		fn='d~'
-#		rp="Where will be your working directory?"
-#		. ./getfile
-#		g4workdir=$ans
-#		;;
-#	[eE]) 
-#		break
-#		;;
-	*) 
-		break
-#		echo " "
-		;;
-	esac
-done
+Where will be directory to copy all Geant4 headers?
+EOM`
+
+#dflt="NO DEFAULT ANSWER"
+dflt=$g4include
+fn='d~'
+rp=$g4message
+. ./myread
+g4include=$ans
+
+fi
 
 g4base=$g4install/source
-if test "X$g4include" = "X[NOT DEFINED]" ; then
-g4include=""
-fi
+#if test "X$g4include" = "X[NOT DEFINED]" ; then
+#g4include=""
+#fi
 
 echo " "
 
@@ -2299,13 +2314,13 @@ g4message=`cat << EOM
 
 Please, specify where CLHEP is installed:
 
-1)  G4CLHEP_BASE_DIR:		$g4clhep_base_dir
+1)  CLHEP_BASE_DIR:		$g4clhep_base_dir
 
 According to it will be set:
 
-G4CLHEP_INCLUDE_DIR:		\\$G4CLHEP_BASE_DIR/include
-G4CLHEP_LIB_DIR:		\\$G4CLHEP_BASE_DIR/lib
-G4CLHEP_LIB:			CLHEP
+CLHEP_INCLUDE_DIR:		\\$CLHEP_BASE_DIR/include
+CLHEP_LIB_DIR:			\\$CLHEP_BASE_DIR/lib
+CLHEP_LIB:			CLHEP
 
 If you need to change one of those last three you can do it by editing
 the generated config.sh at the end of this session.
@@ -2406,7 +2421,7 @@ Data which is not part of the default Geant4 distribution:
 
 3) G4LEDATA:			$g4ledata
 
-4) G4NeutronHPCrossSections:	$g4neutronhpcrosssections
+4) NeutronHPCrossSections:	$g4neutronhpcrosssections
 
 Select from list above (e.g. 2) 
 EOM`
@@ -2626,7 +2641,7 @@ gans=$ans
 		break
 		;;
 	y*|Y*) 
-		g4lib_use_granular=1
+		g4lib_use_granular=y
 		break
 		;;
 #	[eE]) 
@@ -3101,7 +3116,7 @@ If you'd like to make any change to the $g4conf/config.sh file before the final
 configuration, do it as a shell escape now (e.g. !vi $g4conf/config.sh).
 
 EOM
-	rp="Press return or use a shell escape to edit config.sh:"
+	rp="Press [Enter] to start installation or use a shell escape to edit config.sh:"
 	. UU/myread
 	nostick=''
 	case "$ans" in
@@ -3148,14 +3163,15 @@ elif test -f [Mm]akefile; then
 	echo "Now you must run a make."
 elif test -f $g4conf/install.sh; then
 	echo " "
-	echo "Now starting Geant4 libraries installation."
+	echo "Now starting Geant4 libraries installation..."
 	echo " "
 	. $g4conf/install.sh
 else
 	echo " "
 	echo "WARNING: Geant4 is NOT installed yet!"
 	echo "You (or the administrator if you have not enough privileges)"
-	echo "should start with $g4install/config/Configure."
+	echo "should start with \$G4INSTALL/config/Configure -install"
+	echo "(where \$G4INSTALL is Geant4 install directory)."
 	echo " "
 fi
 
