@@ -7,12 +7,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPChannel.hh,v 1.3 1999-07-02 09:58:30 johna Exp $
+// $Id: G4NeutronHPChannel.hh,v 1.4 1999-07-06 16:56:21 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
  // Builds and has the Cross-section data for one element and channel.
+//
+// Bug fixes and workarounds in the destructor, F.W.Jones 06-Jul-1999
  
 #ifndef G4NeutronHPChannel_h
 #define G4NeutronHPChannel_h 1
@@ -48,17 +50,23 @@ public:
   {
     delete theChannelData; 
     G4int i;
-    if(theBuffer != NULL) delete theBuffer; 
+    // Following statement disabled to avoid SEGV
+    // theBuffer is also deleted as "theChannelData" in
+    // ~G4NeutronHPIsoData.  FWJ 06-Jul-1999
+    //if(theBuffer != NULL) delete theBuffer; 
     if(theIsotopeWiseData != NULL) delete [] theIsotopeWiseData;
-    if(theFinalStates != NULL)
-    {
-      for(i=0; i<niso; i++)
-      {
-        delete theFinalStates[i];
-      }
-      delete [] theFinalStates;
-    }
-    if(active!=NULL) delete [] active;
+    // Deletion of FinalStates disabled to avoid endless looping
+    // in the destructor heirarchy.  FWJ 06-Jul-1999
+    //if(theFinalStates != NULL)
+    //{
+    //  for(i=0; i<niso; i++)
+    //  {
+    //    delete theFinalStates[i];
+    //  }
+    //  delete [] theFinalStates;
+    //}
+    // FWJ experiment
+    //if(active!=NULL) delete [] active;
     
   }
   
