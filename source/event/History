@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2001-07-19 12:39:13 flei Exp $
+$Id: History,v 1.28 2001-07-19 15:46:30 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 19 2001, M.Asai (event-V03-02-03)
+- Tagged 
+
 July 19 2001, F.Lei 
 - Most commands under G4ParticleGun class are now available under GPS
 
@@ -32,37 +35,6 @@ implemented internally in the older version gps.
 Source angular distribution coupled with positional distribution can lead to
 rather strange combinations. To avoid this I used a simple scheme in this
 implementation:
-
-    First it is necessary to introduced G4bool UserAngRef   (default false)
-        i) It automatically set to true when a user defines a co-ordinates
-            for angular distribution
-        ii) The user can change its state explicitly via the gps messenger.
-
-    This is use in deciding which  reference system an angular distribution
-    should use.
-
-    For Isotropic and Cos-law angular distribution:
-
-        i) for Point and Volume position distribution:
-            if (UserAngRef)
-                Use user defined co-ordinates
-            else
-                Use the world co-ordinates
-        ii) for Plane and Surface position distribution:
-            if (UserangRef)
-                Use user defined co-ordinates
-            else
-                Use surface-normal co-ordinates
-
-     For UserDefined angular distribution:
-
-           if (/gps/surfnorm true)  // available in the older version
-              Use surface-normal co-ordinates
-           else
-                if (UserAngRef)
-                    Use user defined co-ord
-                else
-                    Use world co-ord.
 
 - For cos-law angular distribution the default maxtheta is set to pi/2.
     instead of pi. The user can of course re-set this to any number between
