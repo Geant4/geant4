@@ -5,30 +5,31 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: SystemOfUnits.SI.h,v 1.1 1999-03-10 16:55:45 maire Exp $
+// $Id: SystemOfUnits.SI.h,v 1.2 1999-03-17 12:22:56 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -*- C++ -*-
 // 
 // ----------------------------------------------------------------------
-// HEP coherent system of Units
 //
-// This file has been provided by Geant4 (simulation toolkit for HEP).
+// This file is a modified version of SystemOfUnits.h
+// It is provided for checking the overall 'units coherence' of the
+// Geant4 kernel.
+// -------
+// Warning: if you use it, do not forget to recompile the whole Geant4 kernel
+// ------- 
+// The basic units are those of the International System:
 //
-// The basic units are :
-//  		millimeter              (millimeter)
-// 		nanosecond              (nanosecond)
-// 		Mega electron Volt      (MeV)
-// 		positron charge         (eplus)
-// 		degree Kelvin           (kelvin)
+//  		meter             
+// 		second             
+// 		kilogram      
+// 		ampere         
+// 		degree kelvin          
 //              the amount of substance (mole)
 //              luminous intensity      (candela)
-// 		radian                  (radian)
-//              steradian               (steradian)
+// 		radian                  
+//              steradian              
 //
-// Below is a non exhaustive List of derived and pratical units
-// (i.e. mostly the SI units).
-// You can add your own units.
 //
 // The SI numerical value of the positron charge is defined here,
 // as it is needed for conversion factor : positron charge = e_SI (coulomb)
@@ -40,13 +41,7 @@
 //
 // History:
 //
-// 06.02.96   Created.
-// 28.03.96   Added miscellaneous constants.
-// 05.12.97   E.Tcherniaev: Redefined pascal (to avoid warnings on WinNT)
-// 20.05.98   names: meter, second, gram, radian, degree. (from Blasiuk (STAR))
-//            Added luminous units.
-// 05.08.98   angstrom,picobarn,microsecond,picosecond,petaelectronvolt
-// 10.03.99   SI based units.    
+// 10.03.99   created    
 
 #ifndef HEP_SYSTEM_OF_UNITS_H
 #define HEP_SYSTEM_OF_UNITS_H
