@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc,v 1.24 2001-11-30 17:36:18 japost Exp $
+// $Id: G4ChordFinder.cc,v 1.25 2002-05-03 16:10:06 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -184,7 +184,10 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
      stepForChord = NewStep(stepTrial, dChordStep, fLastStepEstimate_Unconstrained );
 
      if( ! validEndPoint ) {
-	 stepTrial = stepForChord;
+        if( stepForChord <= oldStepTrial )
+	   stepTrial = stepForChord;
+        else
+ 	   stepTrial *= 0.1;
 #if 0
          // Possible complementary approach:
 	 //  Get the driver to calculate the new step size, if it is needed
@@ -258,6 +261,9 @@ G4double G4ChordFinder::NewStep(G4double  stepTrialOld,
 
   if ( dChordStep < threshold * fDeltaChord ){
      stepTrial= stepTrialOld *  multiplier;    
+  }
+  if( stepTrial == 0.0 ){
+     stepTrial= stepTrialOld * 0.3;
   }
 
   lastStepTrial = stepTrialOld; 
