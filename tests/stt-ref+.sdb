@@ -1,4 +1,4 @@
-# $Id: stt-ref+.sdb,v 1.11 1999-04-19 15:57:06 stesting Exp $
+# $Id: stt-ref+.sdb,v 1.12 1999-04-21 10:35:39 stesting Exp $
 # .sdb files are read by checkout.sh and update.sh
 # Lines beginning "# " are ignored (the space after the '#' is important!
 # Blank lines are not allowed!
@@ -14,23 +14,23 @@ geant4/source/GNUmakefile      geant4-00-ref-02
 geant4/source/digits+hits      geant4-00-ref-02
 geant4/source/event            geant4-00-ref-02
 geant4/source/g3tog4           geant4-00-ref-02
-geant4/source/geometry/GNUmakefile   geant4-00-ref-02
-geant4/source/geometry/History       geant4-00-ref-02
-geant4/source/geometry/magneticfield geant4-00-ref-02
-geant4/source/geometry/management    geant4-00-ref-02
-geant4/source/geometry/solids        geant4-00-ref-02
-geant4/source/geometry/volumes       geant4-00-ref-02
+geant4/source/geometry/GNUmakefile   geometry-01-00-02
+geant4/source/geometry/History       geometry-01-00-02
+geant4/source/geometry/magneticfield geometry-01-00-02
+geant4/source/geometry/management    geometry-01-00-02
+geant4/source/geometry/solids        geometry-01-00-02
+geant4/source/geometry/volumes       geometry-01-00-02
 geant4/source/global           geant4-00-ref-02
 geant4/source/graphics_reps    geant4-00-ref-02
 geant4/source/intercoms        geant4-00-ref-02
 geant4/source/interfaces       geant4-00-ref-02
 geant4/source/materials        materials-01-00-02
-geant4/source/particles        particles-01-00-05a
+geant4/source/particles        geant4-00-ref-02
 geant4/source/persistency      geant4-00-ref-02
 geant4/source/processes/GNUmakefile         geant4-00-ref-02
 geant4/source/processes/History             geant4-00-ref-02
 geant4/source/processes/decay	            decay-01-00-02
-geant4/source/processes/electromagnetic	    geant4-00-ref-02
+geant4/source/processes/electromagnetic	    em-01-00-03
 geant4/source/processes/hadronic            geant4-00-ref-02
 geant4/source/processes/hadronic/util       geant4-00-ref-02
 geant4/source/processes/management          procman-01-00-02a
