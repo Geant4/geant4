@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpRayleigh.cc,v 1.11 2004-10-19 02:15:08 gum Exp $
+// $Id: G4OpRayleigh.cc,v 1.12 2004-12-02 23:10:57 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -127,8 +127,8 @@ G4OpRayleigh::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 	G4double rand = G4UniformRand();
 
-	G4double CosTheta = pow(rand, 1./3.);
-	G4double SinTheta = sqrt(1.-CosTheta*CosTheta);
+	G4double CosTheta = std::pow(rand, 1./3.);
+	G4double SinTheta = std::sqrt(1.-CosTheta*CosTheta);
 
         if(G4UniformRand() < 0.5)CosTheta = -CosTheta;
 
@@ -137,8 +137,8 @@ G4OpRayleigh::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	rand = G4UniformRand();
 
 	G4double Phi = twopi*rand;
-	G4double SinPhi = sin(Phi); 
-	G4double CosPhi = cos(Phi); 
+	G4double SinPhi = std::sin(Phi); 
+	G4double CosPhi = std::cos(Phi); 
 	
 	G4double unit_x = SinTheta * CosPhi; 
 	G4double unit_y = SinTheta * SinPhi;  
@@ -332,8 +332,8 @@ G4OpRayleigh::RayleighAttenuationLengthGenerator(G4MaterialPropertiesTable *aMPT
 		}
 
                 c1 = 1 / (6.0 * pi);
-                c2 = pow((2.0 * pi / xlambda), 4);
-                c3 = pow( ( (refsq - 1.0) * (refsq + 2.0) / 3.0 ), 2);
+                c2 = std::pow((2.0 * pi / xlambda), 4);
+                c3 = std::pow( ( (refsq - 1.0) * (refsq + 2.0) / 3.0 ), 2);
                 c4 = betat * temp * kboltz;
 
                 Dist = 1.0 / (c1*c2*c3*c4);

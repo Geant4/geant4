@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+02nd December 2004 Peter Gumplinger (op-V06-02-05)
+                migration to cmath
+
 28th October 2004 Gabriele Cosmo (op-V06-02-04)
                 Added G4OPTICAL_DEBUG flag for debug printout.
 

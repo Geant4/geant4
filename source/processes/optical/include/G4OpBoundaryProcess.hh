@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpBoundaryProcess.hh,v 1.11 2004-10-19 02:14:43 gum Exp $
+// $Id: G4OpBoundaryProcess.hh,v 1.12 2004-12-02 23:10:36 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -308,8 +308,8 @@ G4ThreeVector G4OpBoundaryProcess::
   G4ThreeVector vec2 = vec1.cross(normal);
 
   G4double phi = twopi*G4UniformRand();
-  G4double cosphi = cos(phi);
-  G4double sinphi = sin(phi);
+  G4double cosphi = std::cos(phi);
+  G4double sinphi = std::sin(phi);
 
   return cosphi * vec1 + sinphi * vec2;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpWLS.cc,v 1.3 2004-10-19 02:15:00 gum Exp $
+// $Id: G4OpWLS.cc,v 1.4 2004-12-02 23:11:05 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -145,11 +145,11 @@ G4OpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
     // Generate random photon direction
     
     G4double cost = 1. - 2.*G4UniformRand();
-    G4double sint = sqrt((1.-cost)*(1.+cost));
+    G4double sint = std::sqrt((1.-cost)*(1.+cost));
 
     G4double phi = 2*M_PI*G4UniformRand();
-    G4double sinp = sin(phi);
-    G4double cosp = cos(phi);
+    G4double sinp = std::sin(phi);
+    G4double cosp = std::cos(phi);
     
     G4double px = sint*cosp;
     G4double py = sint*sinp;
@@ -170,8 +170,8 @@ G4OpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
     G4ThreeVector perp = photonMomentum.cross(photonPolarization);
     
     phi = 2*M_PI*G4UniformRand();
-    sinp = sin(phi);
-    cosp = cos(phi);
+    sinp = std::sin(phi);
+    cosp = std::cos(phi);
     
     photonPolarization = cosp * photonPolarization + sinp * perp;
     
