@@ -21,11 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4GRSVolume.cc,v 1.4 2001-07-11 10:00:32 gunter Exp $
+// $Id: G4GRSVolume.cc,v 1.5 2002-08-06 08:23:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4GRSVolume Implementation
+//
+// ********************************************************************
 
 #include "G4GRSVolume.hh"
 

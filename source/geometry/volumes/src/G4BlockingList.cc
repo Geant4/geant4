@@ -21,33 +21,34 @@
 // ********************************************************************
 //
 //
-// $Id: G4BlockingList.cc,v 1.5 2002-04-19 08:22:08 gcosmo Exp $
+// $Id: G4BlockingList.cc,v 1.6 2002-08-06 08:23:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4BlockingList Implementation
 //
+// ********************************************************************
 
 #include "G4BlockingList.hh"
 
-G4BlockingList::G4BlockingList(G4int maxDefault,G4int stride)
+G4BlockingList::G4BlockingList(G4int maxDefault, G4int stride)
   : fStride(stride), fBlockingList(maxDefault,0)
 {
 }
 
 // Do nothing destructor
+//
 G4BlockingList::~G4BlockingList()
 {
 }
 
 // Clear List and reset tag
-// Fix: Out of line for HP-CC
+//
 void G4BlockingList::FullyReset()
 {
-	fBlockTagNo=1;
-	for (G4int i=fBlockingList.size()-1;i>=0;i--)
-		{
-			fBlockingList[i]=0;
-		}	
-	
+  fBlockTagNo = 1;
+  for ( G4int i=fBlockingList.size()-1; i>=0; i-- )
+  {
+    fBlockingList[i] = 0;
+  }  
 }

@@ -21,65 +21,60 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalSkinSurface.cc,v 1.7 2001-07-11 10:00:32 gunter Exp $
+// $Id: G4LogicalSkinSurface.cc,v 1.8 2002-08-06 08:23:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-////////////////////////////////////////////////////////////////////////
+// --------------------------------------------------------------------
 // G4LogicalSkinSurface Implementation
-////////////////////////////////////////////////////////////////////////
+// --------------------------------------------------------------------
 //
-// File:        G4LogicalSkinSurface.cc
-// Description: A Logical Surface class for the surface  
-//                surrounding a single logical volume.
-// Version:     1.0
+// A Logical Surface class for the surface surrounding a single
+// logical volume.
+//
 // Created:     1997-06-26
-// Author:      John Apostolakis
-// mail:        John.Apostolakis@cern.ch
+// Author:      John Apostolakis (John.Apostolakis@cern.ch)
 // Modified:    1997-06-26  John Apostolakis
 //
-// CVS Id tag:  
-////////////////////////////////////////////////////////////////////////
+// ********************************************************************
 
 #include "G4LogicalSkinSurface.hh"
 #include "G4ios.hh"
-// #include "G4OpticalSurface.hh"
 
 G4LogicalSkinSurfaceTable G4LogicalSkinSurface::theSurfaceTable;
 
-/////////////////////////
-// Class Implementation
-/////////////////////////
-
-  /////////////////
-  // Constructors
-  /////////////////
+//
+// Constructors & destructor
+//
 
 G4LogicalSkinSurface::G4LogicalSkinSurface(const G4String&   name,
-					   G4LogicalVolume*  logicalVolume,
-					   G4OpticalSurface* opticalSurface)
+                                           G4LogicalVolume*  logicalVolume,
+                                           G4OpticalSurface* opticalSurface)
   : G4LogicalSurface(name, opticalSurface),
     LogVolume(logicalVolume)
 {
   // Store in the table of Surfaces
+  //
   theSurfaceTable.push_back(this);
 }
 
-G4LogicalSkinSurface::G4LogicalSkinSurface(const G4LogicalSkinSurface &right)
+G4LogicalSkinSurface::G4LogicalSkinSurface(const G4LogicalSkinSurface& right)
   : G4LogicalSurface(right.GetName(), right.GetOpticalSurface())
 {
-    SetTransitionRadiationSurface(right.GetTransitionRadiationSurface());
-    LogVolume = right.LogVolume;
-    theSurfaceTable = right.theSurfaceTable;
+  SetTransitionRadiationSurface(right.GetTransitionRadiationSurface());
+  LogVolume = right.LogVolume;
+  theSurfaceTable = right.theSurfaceTable;
 }
 
-G4LogicalSkinSurface::~G4LogicalSkinSurface(){}
+G4LogicalSkinSurface::~G4LogicalSkinSurface()
+{
+}
 
-  //////////////
-  // Operators
-  //////////////
+//
+// Operators
+//
 
 const G4LogicalSkinSurface&
-G4LogicalSkinSurface::operator=(const G4LogicalSkinSurface &right)
+G4LogicalSkinSurface::operator=(const G4LogicalSkinSurface& right)
 {
   if (&right == this) return *this;
   if (&right)
@@ -94,70 +89,51 @@ G4LogicalSkinSurface::operator=(const G4LogicalSkinSurface &right)
 }
 
 G4int
-G4LogicalSkinSurface::operator==(const G4LogicalSkinSurface &right) const
+G4LogicalSkinSurface::operator==(const G4LogicalSkinSurface& right) const
 {
-	return (this == (G4LogicalSkinSurface *) &right);
+  return (this == (G4LogicalSkinSurface *) &right);
 }
 
 G4int
-G4LogicalSkinSurface::operator!=(const G4LogicalSkinSurface &right) const
+G4LogicalSkinSurface::operator!=(const G4LogicalSkinSurface& right) const
 {
-	return (this != (G4LogicalSkinSurface *) &right);
+  return (this != (G4LogicalSkinSurface *) &right);
 }
-  ////////////
-  // Methods
-  ////////////
+
+//
+// Methods
+//
 
 size_t G4LogicalSkinSurface::GetNumberOfSkinSurfaces()
 {
-	return theSurfaceTable.size();
+  return theSurfaceTable.size();
 }
 
 G4LogicalSkinSurface*
 G4LogicalSkinSurface::GetSurface(const G4LogicalVolume* vol)
 {
-	for (size_t i=0; i<theSurfaceTable.size(); i++) {
-		if(theSurfaceTable[i]->GetLogicalVolume() == vol)
-			return theSurfaceTable[i];
-	}
-	return NULL;
+  for (size_t i=0; i<theSurfaceTable.size(); i++)
+  {
+    if(theSurfaceTable[i]->GetLogicalVolume() == vol)
+      return theSurfaceTable[i];
+  }
+  return NULL;
 }
 
+// Dump info for known surfaces
+//
 void G4LogicalSkinSurface::DumpInfo() 
 {
-
-    // Dump info for known surfaces
-
     G4cout << "***** Surface Table : Nb of Surfaces = "
            << GetNumberOfSkinSurfaces() << " *****" << G4endl;
 
-    for (size_t i=0; i<theSurfaceTable.size(); i++) {
-      G4LogicalSkinSurface *pSkinSurface= theSurfaceTable[i];
-      G4cout << theSurfaceTable[i]->GetName() << " : " << G4endl <<
-	" Skin of logical volume " << pSkinSurface->GetLogicalVolume()->GetName  ()
-//	<< G4endl <<
-//	" Optical Surface Ptr  = " << (long)(pSkinSurface->GetOpticalSurface() )
-	<< G4endl;
-
-#ifdef PRINT_INFO
-      //  DOES NOT COMPILE without including "G4OpticalSurface.hh"
-    
-      //  G4cout << pSkinSurface->GetOpticalSurface() << G4endl ;
-      G4pticalSurface opticalSurface= pSkinSurface->GetOpticalSurface(); 
-      G4cout << 
-          "  Surface type   = " << opticalSurface->GetType()   << G4endl <<
-          "  Surface finish = " << opticalSurface->GetFinish() << G4endl <<
-	  "  Surface model  = " << opticalSurface->GetModel()  << G4endl;
-
-/* 
-        operator << ( G4OpticalSurface opticalSurface ) should exist 
-	   and do something like:
-          "  Surface type   = " << opticalSurface->GetType()   << G4endl <<
-          "  Surface finish = " << opticalSurface->GetFinish() << G4endl <<
-	  "  Surface model  = " << opticalSurface->GetModel()  << G4endl;
- */
-#endif 
-
+    for (size_t i=0; i<theSurfaceTable.size(); i++)
+    {
+      G4LogicalSkinSurface* pSkinSurface = theSurfaceTable[i];
+      G4cout << theSurfaceTable[i]->GetName() << " : " << G4endl
+             << " Skin of logical volume "
+             << pSkinSurface->GetLogicalVolume()->GetName()
+             << G4endl;
     }
     G4cout << G4endl;
 }

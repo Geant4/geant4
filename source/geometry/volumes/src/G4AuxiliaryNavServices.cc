@@ -20,12 +20,17 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4AuxiliaryNavServices.cc,v 1.3 2002-08-06 08:23:37 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ********************************************************************
+
 #include "G4AuxiliaryNavServices.hh"
 #include "globals.hh"
 
 // This method currently exists only to allow compilers to find
-//  the inline method (which are the core of this class)
-
+// the inline method (which are the core of this class)
+//
 G4bool G4AuxiliaryNavServices::testOne()
 {
   return true;

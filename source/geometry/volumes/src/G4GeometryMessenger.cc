@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryMessenger.cc,v 1.6 2002-04-03 11:51:29 gcosmo Exp $
+// $Id: G4GeometryMessenger.cc,v 1.7 2002-08-06 08:23:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -30,6 +30,8 @@
 // G4GeometryMessenger
 //
 // Author: G.Cosmo, CERN.
+//
+// ********************************************************************
 
 #include "g4std/iomanip"
 #include "G4GeometryMessenger.hh"
@@ -120,7 +122,6 @@ G4GeometryMessenger::G4GeometryMessenger(G4TransportationManager* tman)
   runCmd->SetGuidance( "Same as the grid_test command." );
 }
 
-
 //
 // Destructor
 //
@@ -141,7 +142,6 @@ G4GeometryMessenger::~G4GeometryMessenger()
   delete tvolume;
   delete tlogger;
 }
-
 
 //
 // Init
@@ -208,7 +208,6 @@ G4GeometryMessenger::SetNewValue( G4UIcommand* command, G4String newValues )
     CylinderTest();
   }
 }
-
 
 //
 // GetCurrentValue
@@ -362,4 +361,3 @@ G4GeometryMessenger::CylinderTest()
   //
   tvolume->ReportErrors();
 }
-
