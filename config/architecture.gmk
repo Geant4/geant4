@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.29 1999-05-26 15:28:19 gunter Exp $
+# $Id: architecture.gmk,v 1.30 1999-05-27 03:17:06 stesting Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -52,10 +52,10 @@ ifndef G4SYSTEM
 endif
 
 # If not specified, the default path for G4 installation G4INSTALL is
-# set to $HOME/geant4beta ...
+# set to $HOME/geant4 ...
 #
 ifndef G4INSTALL
-  G4INSTALL := $(HOME)/geant4beta
+  G4INSTALL := $(HOME)/geant4
 endif
 
 # If not specified, the default path for G4 source G4BASE is
