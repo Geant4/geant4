@@ -1056,19 +1056,57 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
 // as in Glandz in Geant3.
 {
    static const G4double minLoss = 1.*eV ;
-   static const G4double probLim = 0.01 ;
-   static const G4double sumaLim = -log(probLim) ;
-   static const G4double alim = 10.;
    static const G4double kappa = 10. ;
 
-
-// check if the material has changed ( cache mechanism) - is not used 
-//  if (material != lastMaterial)
-//    {
-//      lastMaterial = material;
-
   G4int    imat        = material->GetIndex(); 
-//G4double excEnergy   = material->GetIonisation()->GetMeanExcitationEnergy();
+  G4double ipotFluct   = material->GetIonisation()->GetMeanExcitationEnergy();
+
+  // get particle data
+  G4double tkin   = particle->GetKineticEnergy();
+  G4double particleMass = particle->GetMass() ;
+  G4double deltaCutInKineticEnergyNow = deltaCutInKineticEnergy[imat];
+  G4double mLoss = meanLoss/chargeSquare;
+
+  // shortcut for very very small loss 
+  if(mLoss < minLoss) return meanLoss ;
+
+  // Validity range for delta electron cross section
+  G4double threshold = G4std::max(deltaCutInKineticEnergyNow,ipotFluct);
+  G4double loss, siga;
+
+  G4double rmass = electron_mass_c2/particleMass;
+  G4double tau   = tkin/particleMass; 
+  G4double tau1 = tau+1.0; 
+  G4double tau2 = tau*(tau+2.);
+  G4double tmax    = 2.*electron_mass_c2*tau2/(1.+2.*tau1*rmass+rmass*rmass);
+
+  if (tmax <= ipotFluct) tmax = ipotFluct ;
+  
+  if(tmax > threshold) tmax = threshold;
+  G4double beta2 = tau2/(tau1*tau1);
+
+  // Gaussian fluctuation 
+  if(mLoss > kappa*tmax)
+  {
+    siga = sqrt(mLoss*tmax*(1.-0.5*beta2)) ;
+    loss = G4RandGauss::shoot(mLoss,siga) ;
+    if(loss < 0.) loss = 0. ;
+    loss *= chargeSquare ;
+    return loss ;
+  }
+
+  // Non Gaussian fluctuation 
+  static const G4double probLim = 0.01 ;
+  static const G4double sumaLim = -log(probLim) ;
+  static const G4double alim = 10.;
+
+  G4double suma,w1,w2,C,e0,lossc,w;
+  G4double a1,a2,a3;
+  G4int p1,p2,p3;
+  G4int nb;
+  G4double corrfac, na,alfa,rfac,namean,sa,alfa1,ea,sea;
+  G4double dp1,dp3;
+
   G4double f1Fluct     = material->GetIonisation()->GetF1fluct();
   G4double f2Fluct     = material->GetIonisation()->GetF2fluct();
   G4double e1Fluct     = material->GetIonisation()->GetEnergy1fluct();
@@ -1076,60 +1114,17 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
   G4double e1LogFluct  = material->GetIonisation()->GetLogEnergy1fluct();
   G4double e2LogFluct  = material->GetIonisation()->GetLogEnergy2fluct();
   G4double rateFluct   = material->GetIonisation()->GetRateionexcfluct();
-  G4double ipotFluct   = material->GetIonisation()->GetMeanExcitationEnergy();
   G4double ipotLogFluct= material->GetIonisation()->GetLogMeanExcEnergy();
-//    }
-  G4double threshold,w1,w2,C,
-           beta2,suma,e0,loss,lossc ,w;
-  G4double a1,a2,a3;
-  G4int p1,p2,p3;
-  G4int nb;
-  G4double Corrfac, na,alfa,rfac,namean,sa,alfa1,ea,sea;
-  G4double dp1,dp3;
-  G4double siga ;
 
-  // get particle data
-  G4double Tkin   = particle->GetKineticEnergy();
-  G4double ParticleMass = particle->GetMass() ;
-  G4double DeltaCutInKineticEnergyNow = 
-           deltaCutInKineticEnergy[material->GetIndex()];
-  G4double MeanLoss = meanLoss/chargeSquare;
-
-  // shortcut for very very small loss 
-  if(MeanLoss < minLoss) return MeanLoss ;
-
-  // Validity range for delta electron cross section
-  threshold = G4std::max(DeltaCutInKineticEnergyNow,ipotFluct);
-
-  G4double rmass = electron_mass_c2/ParticleMass;
-  G4double tau   = Tkin/ParticleMass, tau1 = tau+1., tau2 = tau*(tau+2.);
-  G4double Tm    = 2.*electron_mass_c2*tau2/(1.+2.*tau1*rmass+rmass*rmass);
-
-  if (Tm <= ipotFluct) Tm = ipotFluct ;
-  
-  if(Tm > threshold) Tm = threshold;
-  beta2 = tau2/(tau1*tau1);
-
-  // Gaussian fluctuation 
-  if(MeanLoss >= kappa*Tm)
-  {
-    siga = sqrt(MeanLoss*Tm*(1.-0.5*beta2)) ;
-    loss = G4RandGauss::shoot(MeanLoss,siga) ;
-    if(loss < 0.) loss = 0. ;
-    loss *= chargeSquare ;
-    return loss ;
-  }
-
-  // Non Gaussian fluctuation 
-  w1 = Tm/ipotFluct;
+  w1 = tmax/ipotFluct;
   w2 = log(2.*electron_mass_c2*tau2);
 
-  C = MeanLoss*(1.-rateFluct)/(w2-ipotLogFluct-beta2);
+  C = mLoss*(1.-rateFluct)/(w2-ipotLogFluct-beta2);
 
   a1 = C*f1Fluct*(w2-e1LogFluct-beta2)/e1Fluct;
   a2 = C*f2Fluct*(w2-e2LogFluct-beta2)/e2Fluct;
-  if(Tm > ipotFluct)
-    a3 = rateFluct*MeanLoss*(Tm-ipotFluct)/(ipotFluct*Tm*log(w1));
+  if(tmax > ipotFluct)
+    a3 = rateFluct*mLoss*(tmax-ipotFluct)/(ipotFluct*tmax*log(w1));
   else
   {
      a1 /= 1.-rateFluct ;
@@ -1145,9 +1140,9 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
     {
       e0 = material->GetIonisation()->GetEnergy0fluct();
 
-      if(Tm == ipotFluct)
+      if(tmax == ipotFluct)
       {
-        a3 = MeanLoss/e0;
+        a3 = mLoss/e0;
 
         if(a3>alim)
         {
@@ -1165,8 +1160,8 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
       }
       else
       {
-        Tm = Tm-ipotFluct+e0 ;
-        a3 = MeanLoss*(Tm-e0)/(Tm*e0*log(Tm/e0));
+        tmax = tmax-ipotFluct+e0 ;
+        a3 = mLoss*(tmax-e0)/(tmax*e0*log(tmax/e0));
 
         if(a3>alim)
         {
@@ -1178,18 +1173,18 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
 
         if(p3 > 0)
         {
-          w = (Tm-e0)/Tm ;
+          w = (tmax-e0)/tmax ;
           if(p3 > nmaxCont2)
           {
             dp3 = G4float(p3) ;
-            Corrfac = dp3/G4float(nmaxCont2) ;
+            corrfac = dp3/G4float(nmaxCont2) ;
             p3 = nmaxCont2 ;
           }
           else
-            Corrfac = 1. ;
+            corrfac = 1. ;
 
           for(G4int i=0; i<p3; i++) loss += 1./(1.-w*G4UniformRand()) ;
-          loss *= e0*Corrfac ;  
+          loss *= e0*corrfac ;  
         }        
       }
     }
@@ -1260,7 +1255,7 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
         if (nb > 0)
         {
           w2 = alfa*ipotFluct;
-          w  = (Tm-w2)/Tm;      
+          w  = (tmax-w2)/tmax;      
           for (G4int k=0; k<nb; k++) lossc += w2/(1.-w*G4UniformRand());
         }
       }        
