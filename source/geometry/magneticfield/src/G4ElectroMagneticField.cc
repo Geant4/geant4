@@ -21,39 +21,29 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroMagneticField.hh,v 1.7 2003-04-02 08:49:19 gcosmo Exp $
+// $Id: G4ElectroMagneticField.cc,v 1.1 2003-04-02 08:49:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
-// class G4ElectroMagneticField
-//
-// Class description:
-//
-// A full Electromagnetic field, containing both electric and magnetic fields.
-// It is an abstract class, and a derived type of this field must be
-// created by the user to describe his/her field configuration.
+// --------------------------------------------------------------------
 
-// History:
-// - Created: J.Apostolakis, November 12th, 1998                   
+#include "G4ElectroMagneticField.hh"
 
-#ifndef G4ELECTROMAGNETIC_FIELD_DEF
-#define G4ELECTROMAGNETIC_FIELD_DEF
-
-#include "G4MagneticField.hh"
-
-class G4ElectroMagneticField : public G4MagneticField
+G4ElectroMagneticField::G4ElectroMagneticField()
 {
-  public:  // with description
+}
 
-     G4ElectroMagneticField();
-     virtual ~G4ElectroMagneticField();
+G4ElectroMagneticField::~G4ElectroMagneticField()
+{
+}
 
-     G4ElectroMagneticField(const G4ElectroMagneticField &r);
-     G4ElectroMagneticField& operator = (const G4ElectroMagneticField &p);
-       // Copy constructor & assignment operators.
+G4ElectroMagneticField::G4ElectroMagneticField(const G4ElectroMagneticField &r)
+  : G4MagneticField(r)
+{
+}
 
-     virtual void  GetFieldValue(const G4double Point[4],
-                                       G4double *Bfield ) const = 0;
-};
-
-#endif /* G4ELECTROMAGNETIC_FIELD_DEF */
+G4ElectroMagneticField& 
+G4ElectroMagneticField::operator = (const G4ElectroMagneticField &p)
+{
+  if (&p == this) return *this;
+  *this = p; return *this;
+}
