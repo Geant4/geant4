@@ -43,7 +43,7 @@
    --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
    --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
 
- Material: Galactic  density:  0.000 mg/cm3  temperature:   2.73 K  pressure:   0.00 atm  RadLength: 6317232936888469300000.000  km
+ Material: Galactic  density:  0.000 mg/cm3  temperature:   2.73 K  pressure:   0.00 atm  RadLength: 6317232936888469234686909429987059695616.000  fm
    --->  Element: Galactic      Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:     Beam  density:  0.010 mg/cm3  temperature: 273.15 K  pressure:   0.02 atm  RadLength:  36.786  km
@@ -112,7 +112,7 @@ MuPairProd:  cross sections from R. Kokoulin
           Good description up to 1000 TeV.
     PhysicsTables from 1 GeV to 1e+03 PeV in 50 bins. 
 #
-# Macro file for the initialization phase of "exampleN02.cc"
+# Macro file for the initialization phase of "exampleN03.cc"
 #
 # Sets some default verbose
 # and initializes the graphic.
@@ -122,22 +122,22 @@ MuPairProd:  cross sections from R. Kokoulin
 #
 /run/particle/dumpCutValues
 ============= The cut Energy ==============================
-                          gamma          e-         mu-      proton     neutron
-Cut in range [mm]             2           2           2           2           2
-Cut in energy [KeV]
-          Aluminium         9.6       1e+03     7.4e+03     1.9e+04        0.99
-        liquidArgon         8.6     5.6e+02     4.8e+03     1.2e+04        0.99
-             Copper          36     2.7e+03     1.3e+04     3.4e+04        0.99
-               Lead     1.2e+02     2.6e+03     1.3e+04     3.2e+04        0.99
-              Water         3.9     5.7e+02       5e+03     1.3e+04        0.99
-       Scintillator         3.1     5.8e+02       5e+03     1.3e+04        0.99
-             quartz         7.6     9.1e+02     6.9e+03     1.8e+04        0.99
-                Air        0.99        0.99          82     1.7e+02        0.99
-            Aerogel         2.3     1.8e+02     1.9e+03     4.8e+03        0.99
-        CarbonicGas        0.99          54       6e+02     1.3e+03        0.99
-         WaterSteam        0.99        0.99          30          45        0.99
-           Galactic        0.99        0.99        0.99        0.99        0.99
-               Beam        0.99        0.99        0.99        0.99        0.99
+                            gamma              e-             mu-          proton         neutron    
+Cut in range                  2  mm           2  mm           2  mm           2  mm           2  mm
+Cut in energy
+          Aluminium        9.56 keV        1.03 MeV        7.44 MeV        19.4 MeV         990  eV
+        liquidArgon        8.59 keV         561 keV        4.78 MeV        12.3 MeV         990  eV
+             Copper        35.7 keV        2.68 MeV        13.3 MeV        34.3 MeV         990  eV
+               Lead         121 keV        2.61 MeV        12.6 MeV        31.8 MeV         990  eV
+              Water        3.89 keV         568 keV        4.96 MeV        13.1 MeV         990  eV
+       Scintillator        3.07 keV         575 keV        5.02 MeV        13.4 MeV         990  eV
+             quartz        7.59 keV         907 keV        6.91 MeV        18.1 MeV         990  eV
+                Air         990  eV         990  eV        82.2 keV         174 keV         990  eV
+            Aerogel        2.32 keV         181 keV         1.9 MeV        4.84 MeV         990  eV
+        CarbonicGas         990  eV        54.1 keV         597 keV        1.34 MeV         990  eV
+         WaterSteam         990  eV         990  eV        29.6 keV          45 keV         990  eV
+           Galactic         990  eV         990  eV         990  eV         990  eV         990  eV
+               Beam         990  eV         990  eV         990  eV         990  eV         990  eV
 ===================================================
 #
 # Edit the next line(s) to choose another graphic system
@@ -152,22 +152,22 @@ Cut in energy [KeV]
 /tracking/storeTrajectory 1
 Idle> /run/particle/dumpCutValues
 ============= The cut Energy ==============================
-                          gamma          e-         mu-      proton     neutron
-Cut in range [mm]             2           2           2           2           2
-Cut in energy [KeV]
-          Aluminium         9.6       1e+03     7.4e+03     1.9e+04        0.99
-        liquidArgon         8.6     5.6e+02     4.8e+03     1.2e+04        0.99
-             Copper          36     2.7e+03     1.3e+04     3.4e+04        0.99
-               Lead     1.2e+02     2.6e+03     1.3e+04     3.2e+04        0.99
-              Water         3.9     5.7e+02       5e+03     1.3e+04        0.99
-       Scintillator         3.1     5.8e+02       5e+03     1.3e+04        0.99
-             quartz         7.6     9.1e+02     6.9e+03     1.8e+04        0.99
-                Air        0.99        0.99          82     1.7e+02        0.99
-            Aerogel         2.3     1.8e+02     1.9e+03     4.8e+03        0.99
-        CarbonicGas        0.99          54       6e+02     1.3e+03        0.99
-         WaterSteam        0.99        0.99          30          45        0.99
-           Galactic        0.99        0.99        0.99        0.99        0.99
-               Beam        0.99        0.99        0.99        0.99        0.99
+                            gamma              e-             mu-          proton         neutron    
+Cut in range                  2  mm           2  mm           2  mm           2  mm           2  mm
+Cut in energy
+          Aluminium        9.56 keV        1.03 MeV        7.44 MeV        19.4 MeV         990  eV
+        liquidArgon        8.59 keV         561 keV        4.78 MeV        12.3 MeV         990  eV
+             Copper        35.7 keV        2.68 MeV        13.3 MeV        34.3 MeV         990  eV
+               Lead         121 keV        2.61 MeV        12.6 MeV        31.8 MeV         990  eV
+              Water        3.89 keV         568 keV        4.96 MeV        13.1 MeV         990  eV
+       Scintillator        3.07 keV         575 keV        5.02 MeV        13.4 MeV         990  eV
+             quartz        7.59 keV         907 keV        6.91 MeV        18.1 MeV         990  eV
+                Air         990  eV         990  eV        82.2 keV         174 keV         990  eV
+            Aerogel        2.32 keV         181 keV         1.9 MeV        4.84 MeV         990  eV
+        CarbonicGas         990  eV        54.1 keV         597 keV        1.34 MeV         990  eV
+         WaterSteam         990  eV         990  eV        29.6 keV          45 keV         990  eV
+           Galactic         990  eV         990  eV         990  eV         990  eV         990  eV
+               Beam         990  eV         990  eV         990  eV         990  eV         990  eV
 ===================================================
 Idle> # e+ 300MeV 
 Idle> /gun/particle e+
@@ -177,41 +177,39 @@ Idle> /run/beamOn 1
 Start closing geometry.
 Start Run processing.
 >>> Event 0
-     10 hits are stored in ExN03CalorHitsCollection.
-   Absorber: total energy: 2.9e+02 MeV       total track length:      16  cm
-        Gap: total energy:      10 MeV       total track length:     4.4  cm
-    185 trajectories stored in this event.
+     8 hits are stored in ExN03CalorHitsCollection.
+   Absorber: total energy: 2.8e+02 MeV       total track length:      15  cm
+        Gap: total energy:      15 MeV       total track length:     6.9  cm
+    193 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.12s Real=0.13s Sys=0.033s
+  User=0.31s Real=0.38s Sys=0.05s
 Idle> #
 Idle> # list the existing physics processes
 Idle> /process/list
-     Transportation,                msc,              hIoni,              eIoni
-              eBrem,            annihil,             MuIoni,            MuBrems
-         MuPairProd,               phot,              compt,               conv
+     Transportation,                msc,              hIoni,             MuIoni
+            MuBrems,         MuPairProd,              eIoni,              eBrem
+            annihil,               phot,              compt,               conv
               Decay
 Idle> #
 Idle> # switch off MultipleScattering
-Idle> /process/inactivate MultipleScattering
- illegal process (or type) name 
+Idle> /process/inactivate msc
 Idle> /run/beamOn 1
 ### Run 1 start.
 Start Run processing.
 >>> Event 0
-     9 hits are stored in ExN03CalorHitsCollection.
-   Absorber: total energy: 2.8e+02 MeV       total track length:      16  cm
-        Gap: total energy:      12 MeV       total track length:     5.8  cm
-    187 trajectories stored in this event.
+     10 hits are stored in ExN03CalorHitsCollection.
+   Absorber: total energy: 2.8e+02 MeV       total track length:      15  cm
+        Gap: total energy:      17 MeV       total track length:     7.7  cm
+    191 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.12s Real=0.13s Sys=0.017s
+  User=0.31s Real=0.31s Sys=0s
 Idle> #
 Idle> # switch on MultipleScattering
-Idle> /process/activate MultipleScattering
- illegal process (or type) name 
+Idle> /process/activate msc
 Idle> #
 Idle> # change detector parameter
 Idle> /calor/setAbsMat Aluminium
@@ -235,14 +233,14 @@ Idle> /run/beamOn 1
 Start closing geometry.
 Start Run processing.
 >>> Event 0
-     30 hits are stored in ExN03CalorHitsCollection.
-   Absorber: total energy: 3.8e+02 MeV       total track length:      86  cm
-        Gap: total energy:      86 MeV       total track length:     2.4   m
-    212 trajectories stored in this event.
+     0 hits are stored in ExN03CalorHitsCollection.
+   Absorber: total energy:       0  eV       total track length:       0  fm
+        Gap: total energy:       0  eV       total track length:       0  fm
+    1 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.32s Real=0.35s Sys=0.033s
+  User=0.02s Real=0.02s Sys=0s
 Idle> G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.
