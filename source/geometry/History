@@ -1,4 +1,4 @@
-$Id: History,v 1.11 2000-04-11 16:18:49 johna Exp $
+$Id: History,v 1.12 2000-04-12 08:54:58 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,17 +17,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Apr 11, 2000   J. Allison
--------------------------
-- Made virtual G4VisExtent G4VSolid::GetExtent() non-pure and implemented
-    a default in terms of CalculateExtent.
-- Removed implementations of GetExtent in most sub-classes of G4VSolid.
-- All implementations of DescribeYourselfTo (G4VGraphicsScene& scene) const
-    now correctly written: scene.AddThis(*this);
-- CreatePolyhedron implemented for BooleanSolids.
-- G4DisplacedSolid: reversed implementation of GetFrameRotation and
+Apr 11, 2000   John Allison                 geometry-V01-01-01
+---------------------------
+- management:
+  o made virtual G4VisExtent G4VSolid::GetExtent() non-pure and
+    implemented a default in terms of CalculateExtent.
+- solids:
+  o removed implementations of GetExtent in most sub-classes of G4VSolid.
+  o all implementations of DescribeYourselfTo (G4VGraphicsScene& scene) const
+    now correctly written: scene.AddThis(*this).
+- solids/Boolean:
+  o CreatePolyhedron implemented for BooleanSolids.
+  o G4DisplacedSolid: reversed implementation of GetFrameRotation and
     GetObjectRotation, removing inappropriate invertion.
-- G4DisplacedSolid::GetConstituentMovedSolid() made const.
+  o G4DisplacedSolid::GetConstituentMovedSolid() made const.
 
 Apr 05, 2000  Gabriele Cosmo                geometry-V01-01-00
 ----------------------------
