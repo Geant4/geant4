@@ -449,12 +449,11 @@ int main(int argc,char* argv[]) {
   Colour::deconfined = deconf;
 
   InverseFunction::reducePrecision = false;
-  FileRead<ParticleType> Groups("/afs/cern.ch/user/s/sscherer/qmd_geant/Input/Groups.dat");
-  FileRead<ParticleType> Particles("/afs/cern.ch/user/s/sscherer/qmd_geant/Input/Particles_Radiation.dat");
+
+  FileRead<ParticleType> Groups("/afs/cern.ch/user/s/sscherer/qmd_geant/test/Groups.dat");
+  FileRead<ParticleType> Particles("/afs/cern.ch/user/s/sscherer/qmd_geant/test/Particles_Radiation.dat");
   Knot<ParticleType>::Root->printTree(cerr);
-  //  G4cerr << "-----\n";
-  FileRead<CollisionType> Collisions("/afs/cern.ch/user/s/sscherer/qmd_geant/Input/Collisions.dat");
-  //  Knot<CollisionType>::Root->printTree(cerr);
+  FileRead<CollisionType> Collisions("/afs/cern.ch/user/s/sscherer/qmd_geant/test/Collisions.dat");
 
   double tau = 1.0;   // fm, formation time of QGP
   double tau_c = 0.1; // fm, formation tiem of c-cbar
