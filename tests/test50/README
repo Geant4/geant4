@@ -67,9 +67,10 @@ dimensions are:
 --------> Output <----------
 
 test50.xml
-Output format: DataPoint 
+Output format: AIDA DataPoint 
 
-In the following section measure units for each particular test
+Example of an output
+In the following sections measurement units for each particular test
 
 1) CSDA range and Stopping Power test for e-,p 
 
@@ -117,7 +118,7 @@ physics set-up: no multiple scattering
                 /physics/cutE 1. m : no secondaries
 
 tune parameters: /target/setMaxStep ->important!!
-                 at least 10 steps to calculate CSDA range and StoppingPower 
+                 at least 10 [steps] to calculate CSDA range and StoppingPower 
 
   
 example of file.in for e- test: - test_input_files/SP_lowE_electron.in
@@ -140,7 +141,7 @@ experimental set-up: a monochromatic gamma beam impinges a slab filled up
 physics set-up: all gamma processes must be defined
 
 tune parameters: target/setTargetThick -> defines the thickness of the target
-                 /physics/cutE -> defines the secondaries' production thereshold 
+                 /physics/cutE -> defines the secondaries' production threshold 
 
 example of file.in for gamma test: 
                                   - test_input_files/gamma_standard.in
@@ -164,7 +165,7 @@ example of file.in for gamma cross section  test:
                    - test_input_files/gamma_cross_lowE.in*
                    - test_input_files/gamma_cross_penelope.in*
 
-*example for photoelectric cross section, analogue for other gamma processes.
+*example for photoelectric cross section, similar for other gamma processes.
 
 
 4) e- backscattering
