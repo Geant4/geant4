@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyPhantomROGeometry.hh,v 1.4 2003-05-22 17:20:41 guatelli Exp $
+// $Id: BrachyPhantomROGeometry.hh,v 1.5 2003-05-27 08:37:54 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    ************************************
@@ -53,6 +53,7 @@ private:
   const G4double phantomDimensionX;
   const G4double phantomDimensionZ;
   const G4int numberOfVoxelsAlongX;
-  const G4int numberOfVoxelsAlongZ;
+  const G4int numberOfVoxelsAlongZ; 
+  G4VPhysicalVolume *ROPhantomYDivisionPhys;
 };
 #endif

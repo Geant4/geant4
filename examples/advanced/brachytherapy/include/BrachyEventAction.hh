@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyEventAction.hh,v 1.12 2003-05-22 17:20:41 guatelli Exp $
+// $Id: BrachyEventAction.hh,v 1.13 2003-05-27 08:37:54 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Code developed by:
@@ -54,7 +54,9 @@ public:
 private:
   G4String drawFlag; //Visualisation flag
   G4int hitsCollectionID; 
-  BrachyDetectorConstruction* detector;     
+  BrachyDetectorConstruction* detector;
+  G4int numberOfVoxelZ; 
+  G4double voxelWidthZ;     
 };
 
 #endif

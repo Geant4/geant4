@@ -74,7 +74,6 @@
 #include "G4UImanager.hh"
 #include "G4UImessenger.hh"
 
-
 int main(int argc ,char ** argv)
 
 {
@@ -109,25 +108,16 @@ int main(int argc ,char ** argv)
 	 << G4endl;
 #endif
   
-  // uncomment if interactive mode is needed ... 
-  /* 
-  G4UIsession* session=0;
-
-
-  if (argc==1)   // Define UI session for interactive mode.
+  G4UIsession* session = 0;
+  if (argc == 1)   // Define UI session for interactive mode.
     {
-      // G4UIterminal is a (dumb) terminal.
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);      
-#else
       session = new G4UIterminal();
-#endif
     }
-  */
-  BrachyEventAction *pEventAction=new BrachyEventAction(sensitiveDetectorName);
+
+  BrachyEventAction *pEventAction = new BrachyEventAction(sensitiveDetectorName);
   pRunManager->SetUserAction(pEventAction );
 
-  BrachyRunAction *pRunAction=new BrachyRunAction(sensitiveDetectorName);
+  BrachyRunAction *pRunAction = new BrachyRunAction(sensitiveDetectorName);
   pRunManager->SetUserAction(pRunAction);
 
   //Initialize G4 kernel
@@ -135,11 +125,9 @@ int main(int argc ,char ** argv)
 
   // get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  
- 
-  // uncomment if interactive mode is needed ...
-  /*
   if (session)   // Define UI session for interactive mode.
-    {    
+    { 
+      G4cout<<" UI session starts ..."<< G4endl;    
       session->SessionStart();
       delete session;
     }
@@ -149,10 +137,6 @@ int main(int argc ,char ** argv)
       G4String fileName = argv[1];
       UI->ApplyCommand(command+fileName);
     }  
-  */
-  
-  // comment if interactive mode is needed ...
-  pRunManager -> BeamOn(100);
   
   // Job termination
 #ifdef G4VIS_USE

@@ -30,7 +30,7 @@
 //    *                              *
 //    ********************************
 //
-// $Id: BrachyPhantomHit.cc,v 1.4 2003-05-22 17:20:43 guatelli Exp $
+// $Id: BrachyPhantomHit.cc,v 1.5 2003-05-27 08:37:55 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPhantomHit.hh"
@@ -53,6 +53,7 @@ BrachyPhantomHit::~BrachyPhantomHit()
 }
 
 BrachyPhantomHit::BrachyPhantomHit(const BrachyPhantomHit &right)
+  : G4VHit()
 {
  xHitPosition = right.xHitPosition;
  zHitPosition = right.zHitPosition;

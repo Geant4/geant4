@@ -29,7 +29,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyMaterial.cc,v 1.3 2003-05-22 17:20:43 guatelli Exp $
+// $Id: BrachyMaterial.cc,v 1.4 2003-05-27 08:37:54 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -116,11 +116,11 @@ void BrachyMaterial::DefineMaterials()
  
   A = 183.84* g/mole;
   d = 19.3*g/cm3;
-  G4Material* matW = new G4Material("Tungsten",Z = 74.,A,d);
+  matW = new G4Material("Tungsten",Z = 74.,A,d);
 
    // Perspex, plexiglass, lucite 
   d = 1.19*g/cm3;
-  G4Material* matplexiglass = new G4Material("Plexiglass",d,3);
+  matplexiglass = new G4Material("Plexiglass",d,3);
   matplexiglass->AddElement(elH,0.08);
   matplexiglass->AddElement(elC,0.60);
   matplexiglass->AddElement(elO,0.32);
@@ -129,18 +129,18 @@ void BrachyMaterial::DefineMaterials()
   A = 207.19*g/mole;
   Z = 82;
   d = 11.35*g/cm3;
-  G4Material* matPb = new G4Material("Lead",Z,A,d);
+  matPb = new G4Material("Lead",Z,A,d);
 
   // Iridium (Medical Physics, Vol 25, No 10, Oct 1998)
   d = 22.42*g/cm3;
   A = 191.96260*g/mole ;
   Z = 77;
-  G4Material* matir192 = new G4Material("Iridium",Z,A,d);
+  matir192 = new G4Material("Iridium",Z,A,d);
 
   //titanium
   A = 47.88*g/mole;
   d = 4.50*g/cm3;
-  G4Material* Titanium = new G4Material("titanium" ,Z = 22.,A,d);
+  Titanium = new G4Material("titanium" ,Z = 22.,A,d);
  
   // Air material
   d = 1.290*mg/cm3;
@@ -150,13 +150,13 @@ void BrachyMaterial::DefineMaterials()
 
   // Water
   d = 1.000*g/cm3;
-  G4Material* matH2O = new G4Material("Water",d,2);
+  matH2O = new G4Material("Water",d,2);
   matH2O->AddElement(elH,2);
   matH2O->AddElement(elO,1);
 
   //soft tissue(http://www.nist.gov)
   d = 1.0*g/cm3;
-  G4Material* soft = new G4Material("tissue",d,13);
+  soft = new G4Material("tissue",d,13);
   soft->AddElement(elH,0.104472);
   soft->AddElement(elC,0.23219);
   soft->AddElement(elN,0.02488);
@@ -173,7 +173,7 @@ void BrachyMaterial::DefineMaterials()
  
   // Stainless steel (Medical Physics, Vol 25, No 10, Oct 1998)
   d = 8.02*g/cm3 ;
-  G4Material* matsteel = new G4Material("Stainless steel",d,5);
+  matsteel = new G4Material("Stainless steel",d,5);
   matsteel->AddElement(elMn, 0.02);
   matsteel->AddElement(elSi, 0.01);
   matsteel->AddElement(elCr, 0.19);
@@ -183,16 +183,16 @@ void BrachyMaterial::DefineMaterials()
   //gold(chimica degli elementi N.N Greenwood,A.Earnshaw)
   A = 196.97*g/mole;
   d = 19.32*g/cm3;
-  G4Material* gold = new G4Material("gold",Z = 79.,A,d);
+  gold = new G4Material("gold",Z = 79.,A,d);
 
   //IodiumCore(chimica degli elementi N.N Greenwood,A.Earnshaw)
   A = 124.9*g/mole;
   d = 4.862*g/cm3;
-  G4Material* matI = new G4Material("Iodium",Z = 53.,A,d);
+  matI = new G4Material("Iodium",Z = 53.,A,d);
 
   //ceramic(Medical Physics, May 2000)
   d = 2.88*g/cm3;
-  G4Material* ceramic = new G4Material("allumina",d,2);
+  ceramic = new G4Material("allumina",d,2);
   ceramic->AddElement(elAl,2);
   ceramic->AddElement(elO,3);
 
@@ -200,12 +200,12 @@ void BrachyMaterial::DefineMaterials()
   G4double pressure = 3.e-18*pascal;
   G4double temperature = 2.73*kelvin;
   A=1.01*g/mole;
-  G4Material*Vacuum = new G4Material("Galactic", Z = 1., A,
+  Vacuum = new G4Material("Galactic", Z = 1., A,
 				     density,kStateGas,temperature,pressure);
   
   //compact bone (http://www.NIST.gov)
   d = 1.85*g/cm3;
-  G4Material* bone = new G4Material("bone",d,8);
+  bone = new G4Material("bone",d,8);
   bone->AddElement(elH,0.063984);
   bone->AddElement(elC,0.278);
   bone->AddElement(elN,0.027);
@@ -216,7 +216,7 @@ void BrachyMaterial::DefineMaterials()
   bone->AddElement(elCa,0.147);
 
   //muscle(http://www.NIST.gov)
-  G4Material* muscle = new G4Material("muscle",d,9);
+  muscle = new G4Material("muscle",d,9);
   muscle->AddElement(elH,0.101997);
   muscle->AddElement(elC,0.123);
   muscle->AddElement(elN,0.035);
@@ -231,5 +231,5 @@ void BrachyMaterial::DefineMaterials()
 G4Material* BrachyMaterial::GetMat(G4String material)
 {
   G4Material* pttoMaterial = G4Material::GetMaterial(material); 
-  if (pttoMaterial) return pttoMaterial; 
+  return pttoMaterial; 
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyMaterial.hh,v 1.4 2003-05-26 09:20:13 guatelli Exp $
+// $Id: BrachyMaterial.hh,v 1.5 2003-05-27 08:37:54 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    **********************************
@@ -49,5 +49,22 @@ public:
 public:
   void  DefineMaterials();
   G4Material* GetMat(G4String); //returns the material
+
+private:
+  G4Material* matW; 
+  G4Material* matplexiglass;
+  G4Material* matPb;
+  G4Material* matir192;
+  G4Material* Titanium;
+  G4Material* matAir;
+  G4Material* matH2O;
+  G4Material* soft;
+  G4Material* matsteel;
+  G4Material* gold;
+  G4Material* matI; 
+  G4Material* ceramic;
+  G4Material*Vacuum; 
+  G4Material* bone;
+  G4Material* muscle;
 };
 #endif

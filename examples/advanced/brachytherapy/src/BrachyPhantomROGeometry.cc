@@ -30,7 +30,7 @@
 //    *                                  *
 //    ************************************
 //
-// $Id: BrachyPhantomROGeometry.cc,v 1.5 2003-05-26 09:20:14 guatelli Exp $
+// $Id: BrachyPhantomROGeometry.cc,v 1.6 2003-05-27 08:37:55 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPhantomROGeometry.hh"
@@ -175,7 +175,7 @@ G4VPhysicalVolume* BrachyPhantomROGeometry::Build()
 							       "ROPhantomYDivisionLog",
 							       0,0,0);
  
-  G4VPhysicalVolume *ROPhantomYDivisionPhys = new G4PVReplica("ROPhantomYDivisionPhys",
+  ROPhantomYDivisionPhys = new G4PVReplica("ROPhantomYDivisionPhys",
 							      ROPhantomYDivisionLog,
 							      ROPhantomZDivisionPhys,
 							      kYAxis,
