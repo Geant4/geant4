@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.25 2001-10-20 02:01:21 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.26 2001-10-23 02:36:38 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -798,7 +798,7 @@ void G4VUserPhysicsList::DumpCutValuesTable() const
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
   size_t numberOfMaterials = G4Material::GetNumberOfMaterials();
   // line 4
-  G4cout << "Cut in range       ";
+  G4cout << "Cut in range       " << G4endl;
   for (size_t I=0; I<numberOfMaterials; I++) {
     G4cout << " " << G4std::setw(18) << ((*materialTable)[I])->GetName();
     for (idx=0; idx <size_display; idx++) {
