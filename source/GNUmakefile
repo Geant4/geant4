@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.49 2004-06-02 07:27:54 gcosmo Exp $
+# $Id: GNUmakefile,v 1.50 2004-06-02 07:34:08 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -89,7 +89,7 @@ libmap: $(G4LIBDIR)/liblist
 	@rm -f /tmp/G4libname.map.starter.$(unique);
 
 $(G4LIBDIR)/liblist: $(G4INSTALL)/config/liblist.c
-	@echo "Compiling liblist.c ..."
+	@echo "Building library management utility liblist ..."
 	@if [ ! -d $(G4LIBDIR) ] ; then mkdir $(G4LIBDIR) ;fi
 	@$(CC) $(CCFLAGS) -o $(G4LIBDIR)/liblist $(G4INSTALL)/config/liblist.c
 
@@ -105,7 +105,7 @@ endif
 
 win32def: $(G4INSTALL)/config/win32def.c
 ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
-	@echo "Compiling win32def.c ..."
+	@echo "Building DLL management utility win32def ..."
 	@$(CXX) /nologo /Fe$(G4LIBDIR)/win32def.exe $(G4INSTALL)/config/win32def.c
 else
 	@echo ""
