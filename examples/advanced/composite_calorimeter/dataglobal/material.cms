@@ -1,0 +1,2139 @@
+*.-- material.tz
+*LOG  OFF
+*DO  GMAT   0 -u -A4CW -c1/80      #.          GPUR
+  #.list of pure materials
+  #.           S      A        Z       dens         X_0          abs_l
+"Hydrogen"     H      1.00794  1.0     0.708E-1     865.54      717.51
+"Deuterium"    D      2.01     1.0     0.162        756.79      337.65
+"Helium"       He     4.0026   2.0     0.125        754.56      520.80
+"Lithium"      Li     6.9410   3.0     0.534        154.98      137.45
+"Beryllium"    Be     9.0122   4.0      1.8480      35.276      40.690
+"Bor 10"       B10    10.      5.0      2.34        21.0209     0.0
+"Bor 11"       B11    11.      5.0      2.34        23.1229     0.0
+"Carbon"       C      12.011   6.0      2.2650      18.850      38.102
+"Nitrogen"     N      14.007   7.0     0.808        47.017     108.660
+"Oxygen"       O      15.999   8.0     0.143E-2     23944.      63636.
+"Fluorine"     F      18.998   9.0      1.1080      29.925      0.0
+"Neon"         Ne     20.180   10.      1.2070      23.977      80.033
+"Sodium"       Na     22.990   11.      0.969       28.8675     0.0
+"Magnesium"    Mg     24.305   12.      1.735       0.0         0.0
+"Aluminium"    Al     26.980   13.      2.7         8.8926      39.407
+"Silicon"      Si     28.090   14.      2.33        9.3648      45.494
+"Phosphor"     P      30.974   15.      1.82        0.0         0.0
+"Sulfur"       S      32.066   16.      2.07        0.0         0.0
+"Chlorine"     Cl     35.450   17.      1.56        0.0         0.0
+"Argon"        Ar     39.948   18.     0.16390E-2   10983.    65842.69
+"Potassium"    K      39.098   19.      0.860       0.0         0.0
+"Calcium"      Ca     40.078   20.      1.55        0.0         0.0
+"Scandium"     Sc     44.956   21.      2.98        0.0         0.0
+"Titanium"     Ti     47.880   22.      4.53        3.5617      27.511
+"Vanadium"     V      50.941   23.      6.10        0.0         0.0
+"Chromium"     Cr     51.996   24.      7.18        0.0         0.0
+"Manganese"    Mn     54.938   25.      7.43        0.0         0.0
+"Iron"         Fe     55.850   26.      7.87        1.7585      16.760
+"Cobalt"       Co     58.933   27.      8.90        0.0         0.0
+"Nickel"       Ni     58.693   28.      8.876       0.0         0.0
+"Copper"       Cu     63.546   29.      8.96        1.4353      15.056
+"Zinc"         Zn     65.390   30.      7.112       0.0         0.0
+"Gallium"      Ga     69.723   31.      5.877       0.0         0.0
+"Germanium"    Ge     72.610   32.      5.3230      2.3013      26.395
+"Arsenic"      As     74.922   33.      5.72        0.0         0.0
+"Selenium"     Se     78.960   34.      4.78        0.0         0.0
+"Bromine"      Br     79.904   35.      3.11        0.0         0.0
+"Krypton"      Kr     83.8     36.      2.60        0.0         0.0
+"Rubidium"     Rb     85.4678  37.      1.529       0.0         0.0
+"Strontium"    Sr     87.62    38.      2.54        0.0         0.0
+"Yttrium"      Y      88.9059  39.      4.456       0.0         0.0
+"Zirconium"    Zr     91.22    40.      6.494       0.0         0.0
+"Niobium"      Nb     92.906   41.      8.55        0.0         0.0
+"Molybdenum"   Mo     95.940   42.      10.20       0.0         0.0
+"Technetium"   Yv     98.0     43.      11.48       0.0         0.0
+"Ruthenium"    Ru     101.07   44.      12.39       0.0         0.0
+"Rhodium"      Rh     102.9055 45.      12.39       0.0         0.0
+"Palladium"    Pd     106.42   46.      12.00       0.0         0.0
+"Silver"       Ag     107.87   47.      10.48       0.0         0.0
+"Cadmium"      Cd     112.41   48.      8.63        0.0         0.0
+"Indium"       In     114.82   49.      7.30        0.0         0.0
+"Tin"          Sn     118.69   50.      7.31        1.2066      22.30
+"Antimony"     Sb     121.75   51.      6.679       0.0         0.0
+"Tellurium"    Te     127.60   52.      6.23        0.0         0.0
+"Iodine"       I      114.82   53.      7.30        0.0         0.0
+"Xenon"        Xe     131.29   54.      3.057       2.7740      55.28
+"Cesium"       Cs     132.9054 55.      1.870       4.52        0.0
+"Barium"       Ba     137.33   56.      3.50       29.581    9999.0
+"Lanthanum"    La     138.9055 57.      6.127       0.0         0.0
+"Cerium"       Ce     140.12   58.      6.637       0.0         0.0
+"Praseodymium" Pr     140.9077 59.      0.0         0.0         0.0
+"Neodymium"    Nm     144.24   60.      0.0         0.0         0.0
+"Tungsten"     W      183.85   74.      19.3       0.35         9.5855
+"Gold"         Au     196.97   79.      18.85       0.0         0.0
+"Lead"         Pb     207.19   82.      11.350     0.56120      17.092
+"Bismuth"      Bi     208.98   83.      9.37        0.0         0.0
+"Uranium"      U      238.03   92.      18.950     0.31662      10.501
+*ENDDO
+
+*DO  GMIX   0 -U -A4CW -c1/50      #.          GMIX
+  #. list of mixtures
+"Boron"                  2     2.34           #. comp.no. dens   GMIX
+          "Bor 10"             -.20           #. Atomic proportions 
+          "Bor 11"             -.80
+"B_2 O_3"                2     2.34           #. comp.no. dens   GMIX
+          "Boron"             -2.             #. Atomic proportions 
+          "Oxygen"            -3.  
+"Al_2 O_3"               2    -1.0            #. comp.no. dens   GMIX
+          "Aluminium"         -2.0            #. Atomic proportions 
+          "Oxygen"            -3.0 
+"Fe_2 O_3"               2    -1.0            #. comp.no. dens   GMIX
+          "Iron"              -2.0            #. Atomic proportions 
+          "Oxygen"            -3.0 
+"S_2 O_3"                2    -1.0            #. comp.no. dens   GMIX
+          "Sulfur"            -2.0            #. Atomic proportions 
+          "Oxygen"            -3.0 
+"Barium sulfate"         3    -1.0            #. comp.no. dens   GMIX
+          "Barium"            -1.0            #. Atomic proportions 
+          "Sulfur"            -1.0 
+          "Oxygen"            -4.0 
+"Ni_2 O_3"               2    -1.0            #. comp.no. dens   GMIX
+          "Nickel"            -2.0            #. Atomic proportions 
+          "Oxygen"            -3.0 
+"C O_2"                  2    1.8182E-3       #. comp.no. dens   GMIX
+          "Carbon"            -1.0            #. Atomic proportions 
+          "Oxygen"            -2.0 
+"Ti_2 O_3"               2     4.6            #.
+          "Titanium"          -2.0
+          "Oxygen"            -3.0
+"C F_4"                  2    3.7037E-3       #. comp.no. dens   GMIX
+          "Carbon"            -1.0            #. Atomic proportions 
+          "Fluorine"          -4.0 
+"Si O_2"                 2     2.64           #. comp.no. dens   GMIX
+          "Silicon"           -1.0            #. Atomic proportions 
+          "Oxygen"            -2.0 
+"Quartz"                 2     2.64           #. comp.no. dens   GMIX
+          "Silicon"           -1.0            #. Atomic proportions 
+          "Oxygen"            -2.0 
+"QuartzFibers"           1     2.64           #. comp.no. dens   GMIX
+          "Quartz"            -1.0 
+"Doped Quartz"           3     2.5            #. comp.no dens
+          "Silicon"           -1.0000         #. Atomic proportions 
+          "Oxygen"            -2.0000
+          "Fluorine"          -2.0000
+"PhotoCathode"           1     1.87
+          "Cesium"            -1.0
+"Ca O"                   2    -1.0            #. comp.no. dens   GMIX
+          "Calcium"           -1.0            #. Atomic proportions 
+          "Oxygen"            -1.0 
+"Mg O"                   2    -1.0            #. comp.no. dens   GMIX
+          "Magnesium"         -1.0            #. Atomic proportions 
+          "Oxygen"            -1.0 
+"Mn O"                   2    -1.0            #. comp.no. dens   GMIX
+          "Manganese"         -1.0            #. Atomic proportions 
+          "Oxygen"            -1.0 
+"Ba O"                   2    -1.0            #. comp.no. dens   GMIX
+          "Barium"            -1.0            #. Atomic proportions 
+          "Oxygen"            -1.0 
+"Na_2 O"                 2    -1.0            #. comp.no. dens   GMIX
+          "Sodium"            -2.0            #. Atomic proportions 
+          "Oxygen"            -1.0 
+"K_2 O"                  2    -1.0            #. comp.no. dens   GMIX
+          "Potassium"         -2.0            #. Atomic proportions 
+          "Oxygen"            -1.0 
+"Water"                  2     1.0            #. comp.no. dens   GMIX
+          "Hydrogen"          -2.0            #. Atomic proportions 
+          "Oxygen"            -1.0 
+"Air"                    4    1.214e-3        #. Huhtinen, Air 18 degr.C and 58% humidity
+          "Nitrogen"         74.94            #. Weight fraction
+          "Oxygen"           23.69            #. Weight fraction
+          "Argon"             1.29            #. Weight fraction
+          "Hydrogen"          0.08            #. Weight fraction
+"Wood"                   2     0.5            #. comp.no. dens   GMIX
+          "Hydrogen"          -21.            #. Atomic proportions 
+          "Oxygen"            -10. 
+"Gas"                    3    0.19573E-2      #. comp.no. dens   GMIX
+          "Carbon"           -0.52            #. Atomic proportions 
+          "Oxygen"           -0.40 
+          "Hydrogen"         -0.08 
+"Freon-12"               3    0.493E-2        #. comp.no. dens   GMIX
+          "Carbon"            -1.0            #. Atomic proportions 
+          "Chlorine"          -2.0 
+          "Fluorine"          -2.0 
+"RPC Gas"                3    1.8768520E-3    #. comp.no. dens   GMIX
+          "Argon"            -0.02            #. Atomic proportions 
+          "Freon-12"         -0.02 
+          "C O_2"            -0.96 
+"Kapton"                 3     1.11           #. comp.no. dens   GMIX
+          "Carbon"            -5.0            #. Atomic proportions 
+          "Hydrogen"          -8.0 
+          "Oxygen"            -2.0 
+"StainlessSteel"         5    8.02            #. AISI Cr-Ni steel,default is type 304
+          "Iron"              69.96           #. Weight fractions SDC definition
+          "Carbon"             0.04 
+          "Manganese"          1.00 
+          "Chromium"          19.00 
+          "Nickel"            10.00 
+"Methane"                2    0.71700E-3      #. comp.no. dens   GMIX
+          "Carbon"            -1.0            #. Atomic proportions 
+          "Hydrogen"          -4.0 
+"Ethane"                 2   1.35600E-3       #. comp.no. dens   GMIX
+          "Carbon"            -2.0            #. Atomic proportions 
+          "Hydrogen"          -6.0 
+"Carbon fibre str."      3     1.69           #. comp.no. dens   GMIX
+          "Carbon"            -10.            #. Atomic proportions 
+          "Hydrogen"          -6.0 
+          "Oxygen"            -1.0 
+     #. ECAL Carbon fiber mixture parameters from  Jean-Pierre VIALLE
+"Carbon fib.str."        2     1.45               #. comp.no. dens   GMIX
+          "Carbon"            -2.0                #. Atomic proportions 
+          "Hydrogen"             -13.0 
+"Rohacell"                   1    0.7             #. comp.no. dens   GMIX
+          "Carbon fibre str."     -1.0
+"Foam"                       2    0.10            #. comp.no. dens   GMIX
+          "Carbon"                -1.0            #. Atomic proportions 
+          "Hydrogen"              -2.0 
+"Al support"                 1    0.254           #. comp.no. dens   GMIX
+          "Aluminium"             -1.0            #. Atomic proportions 
+"Insulation"                 6     1.69           #. comp.no. dens   GMIX
+          "Helium"               -0.250E-1        #. Atomic proportions 
+          "Carbon"               -0.450E-1
+          "Hydrogen"             -0.360E-1
+          "Oxygen"               -0.180E-1
+          "Aluminium"            -0.500E-1
+          "Iron"                 -0.18 
+"Epoxy"                      3     1.3            #. comp.no. dens   GMIX
+          "Carbon"                -15.            #. Atomic proportions 
+          "Hydrogen"              -44. 
+          "Oxygen"                -7.0 
+"Al-MMC"                     1     1.84           #. comp.no. dens   GMIX
+          "Aluminium"             -1.0            #. Atomic proportion 
+"Mg-MMC"                     1     1.52           #. comp.no. dens   GMIX
+          "Magnesium"             -1.0            #. Atomic proportion 
+"Polystyrene"                2     1.032          #. comp.no  dens
+          "Carbon"               -19.000         #. Atomic proportions
+          "Hydrogen"              -21.000
+"Scintillator"               1     1.0320         #. comp.no. dens   GMIX
+          "Polystyrene"           -1.0 
+"NEMA G10 plate"             3     1.7      #. from rho=1.7=>1.57 for X_0=19.4
+          "Si O_2"               -0.773           #. Atomic proportions 
+          "Epoxy"                -0.147
+          "Chlorine"             -0.080
+"Polyethylene"               2     0.95
+          "Carbon"                -1.0            #. Atomic proportions 
+          "Hydrogen"              -2.0 
+"DropsPolyethylene"          1     0.45
+          "Polyethylene"          -1.0            #. Atomic proportion 
+"Noryl"                      1     1.0            #. should be checked
+          "Polyethylene"         -1.00000
+"Polymer Concrete"           2     0.45     #. from rho=1.7=>1.57 for X_0=19.4
+          "Si O_2"               -0.853           #. Atomic proportions 
+          "Epoxy"                -0.147
+"FrontEnd Electronics"      -3    -1.0            #. comp.no.  dens     GMIX
+          "Air"                  -0.750           #. Volume fractions 
+          "Silicon"              -0.200 
+          "Lead"                 -0.050 
+"Plexiglas"                  3     1.18           #. comp.no. dens   GMIX
+          "Hydrogen"              -8.0            #. Atomic proportions 
+          "Carbon"                -5.0 
+          "Oxygen"                -2.0 
+"Ar CO_2 gas 50:50"          2    -1.0            #. comp.no. dens   GMIX
+          "Argon"                 -1.0            #. Atomic proportions 
+          "C O_2"                 -1.0 
+"CF_4 CO_2 50:50"            2    -1.0            #. comp.no. dens   GMIX
+          "C F_4"                 -0.5            #. Atomic proportions 
+          "C O_2"                 -0.5 
+"Argon CF_4 CO_2"           -3    -1.0            #. comp.no. dens   GMIX
+          "Argon"                 -0.3            #. Atomic proportions 
+          "C F_4"                 -0.2 
+          "C O_2"                 -0.5 
+"Argon 50% CF_4 CO_2"        3    -1.0            #. comp.no. dens   GMIX
+          "Argon"                 -0.5            #. Atomic proportions 
+          "C F_4"                 -0.2 
+          "C O_2"                 -0.3 
+"Isobutane"                  2    0.267E-2        #. comp.no. dens   GMIX
+          "Carbon"                -4.0            #. Atomic proportions 
+          "Hydrogen"              -10. 
+"80% Argon + 20% CO_2"       2    -1.0            #. comp.no. dens   GMIX
+          "Argon"                 -0.8            #. Atomic proportions 
+          "C O_2"                 -0.2 
+"DTBX gas"                   2    0.0018194
+          "Argon"                 -5.4800
+          "C O_2"                -94.5200
+"Honeycomb"                  1    0.28            #. comp.no. dens   GMIX
+          "Aluminium"            -1.0             #. Atomic proportions 
+"Aluminium honeycomb"       -2   -1.0             #. 0.050
+          "Aluminium"            -1.850           #. Volume fractions 
+          "Air"                 -98.150 
+"Glass"                      3    2.23        #. Borisilcate glass (Pyrex)
+          "Si O_2"               -0.800       #. Atomic fraction
+          "B_2 O_3"              -0.120       #. Atomic fraction
+          "Na_2 O"               -0.080       #. Atomic fraction
+#. *DO  GMIX   0 -U -A4CW -c1/50      #.          GMIX
+#.
+"Ca C O_3"               2    -1.0            #. comp.no.             dens     GMIX
+          "Ca O"              -1.0            #. Atomic fraction
+          "C O_2"             -1.0            #. Atomic fraction
+"Stand.Concrete"         9     2.35
+          "Hydrogen"           0.6            #. Weight fraction
+          "Carbon"             3.0            #. Weight fraction
+          "Oxygen"            50.0            #. Weight fraction
+          "Sodium"             1.0            #. Weight fraction
+          "Aluminium"          3.0            #. Weight fraction
+          "Silicon"           20.0            #. Weight fraction
+          "Potassium"          1.0            #. Weight fraction
+          "Calcium"           20.0            #. Weight fraction
+          "Iron"               1.4            #. Weight fraction
+#. *DO  GMIX   0 -U -A4CW -c1/50      #.          GMIX
+ #.
+ #.  John Rutherfoord: REPORT ON THE FIRST GEM NOBLE LIQUID MONITORING 
+ #.  WORKING GROUP MEETING 6/18/93
+ #.                         LAr (89K)       LKr (123K)
+ #.  rho (density)           1.38 g/cm^3      2.39 g/cm^3
+ #.  (1/rho)d(rho)/dT        0.458%/K         0.324%/K
+ #.  (1/rho)d(rho)/dP        0.03%/bar        0.02%/bar
+"Liquid Argon"               1     1.39           #. comp.no. dens   GMIX
+          "Argon"                 -1.0            #. Atomic proportions 
+"Liquid Ar Detector"         1     1.39           #. comp.no. dens   GMIX
+          "Argon"                 -1.0            #. Atomic proportions 
+"Liquid Krypton"             1     2.39           #. comp.no. dens   GMIX
+          "Krypton"               -1.0            #. Atomic proportions 
+"Liquid Kr Detector"         1     2.39           #. comp.no. dens   GMIX
+          "Krypton"               -1.0            #. Atomic proportions 
+"Bakelite"                   3     1.3            #. comp.no. dens   GMIX
+          "Hydrogen"              -8.0            #. Atomic proportions 
+          "Carbon"                -7.0 
+          "Oxygen"                -1.0 
+"Borated Polyethyl."         5     0.95       #. 5%-borated polyethylene (BPE)
+          "Hydrogen"               11.6       #. C.R.Wuest  SSCL-GEM TN 92-172.
+          "Carbon"                 61.2       #.  composition of "Reactor Experiments, Inc."
+          "Bor 11"                  4.0       #. Weight fraction               GMIX
+          "Bor 10"                  1.0       #. Weight fraction               GMIX
+          "Oxygen"                 22.2       #. Weight fraction               GMIX
+"Lithium Polyethyl."         4     0.95       #. 
+          "Hydrogen"               11.3       #.
+          "Carbon"                 59.6       #.
+          "Lithium"                 7.5       #. Weight fraction     GMIX
+          "Oxygen"                 21.6       #. Weight fraction     GMIX
+"Lucite"                     3     1.16           #. comp.no. dens   GMIX
+          "Carbon"                -5.0            #. Atomic proportions 
+          "Hydrogen"              -8.0 
+          "Oxygen"                -2.0 
+"Mylar"                      3     1.39           #. comp.no. dens   GMIX
+          "Carbon"                -5.0            #. Atomic proportions 
+          "Hydrogen"              -4.0 
+          "Oxygen"                -2.0 
+"Aluminized Mylar"          -2    -1.0            #. comp.no. dens   GMIX
+          "Mylar"                 -5.0            #. Atomic proportions 
+          "Aluminium"             -1.0000
+"Hexel for CSC"              3     0.1650         #. comp.no. dens   GMIX
+                                                  #. 2cm Hexel+G10+2*17mkm Cu
+          "Copper"               -0.00170         #. Atomic proportions 
+          "NEMA G10 plate"       -1.   
+          "Epoxy"                -1.10 
+"Transmission line"          1     1.5            #. comp.no. dens   GMIX
+          "Si O_2"                -1.0            #. Atomic proportion 
+"Quartz support"             1     2.64           #. comp.no. dens   GMIX
+          "Si O_2"                -1.0            #. Atomic proportion 
+"Super Conductor"           -4   -1.0             #. comp.no. dens   GMIX
+          "Copper"               -0.45            #. Atomic proportions 
+          "Niobium"              -0.450E-1
+          "Titanium"             -0.105
+          "Helium"               -0.40 
+"Magnet Conductor"           6     3.1570         #. comp.no. dens   GMIX
+          "Copper"               -0.458E-1        #. Atomic proportions 
+          "Niobium"              -0.460E-2
+          "Titanium"             -0.107E-1
+          "Helium"               -0.407E-1
+          "Aluminium"            -0.84110
+          "Iron"                 -0.572E-1
+"Graphite Epoxy suprt"       3     1.3830         #. comp.no. dens   GMIX
+          "Carbon"                -18.450         #. Atomic proportions 
+          "Hydrogen"              -20. 
+          "Oxygen"                -2.0 
+"Graph.Epoxy Sup."           3    0.13830         #. comp.no. dens   GMIX
+          "Carbon"                -18.450         #. Atomic proportions 
+          "Hydrogen"              -20. 
+          "Oxygen"                -2.0 
+"CO2Ar Freon"                5    0.204E-2        #. comp.no. dens   GMIX
+          "Argon"                -0.200E-1        #. Atomic proportions 
+          "Carbon"               -0.98 
+          "Chlorine"             -0.400E-1
+          "Fluorine"             -0.400E-1
+          "Oxygen"                -1.98
+"Marble"                     2     2.35           #. comp.no. dens   GMIX
+          "Si O_2"                -.95            #. Atomic proportions 
+          "Water"                 -.05 
+"CSC Electronics"           -2    -1.0            #. comp.no.   dens GMIX
+          "FrontEnd Electronics" -10.0            #. Volume fractions 
+          "Aluminium"            -1.50  
+"Nomex for CSC"              1     0.0289         #. comp.no. dens   GMIX
+          "Lucite"               -1.              #. Atomic proportion 
+"NEMA FR4 plate"             4     1.025   #. from rho=1.7=>1.025 for X_0=19.4
+          "Si O_2"               -0.613           #. Atomic proportions 
+          "Epoxy"                -0.147
+          "Bromine"              -0.080
+          "Oxygen"               -0.160
+"HV Light Guides"           -2    1.32            #. Volume fraction
+          "Quartz"               -0.50
+          "Air"                  -0.50
+"Polycarbonate"              1     0.0070         #. comp.no. dens   GMIX
+          "Lucite"               -1.              #. Atomic proportions 
+#. *DO  GMIX   0 -U -A4CW -c1/50                     #.          GMIX
+"Kr/Pb mixture for EM"      -6   -1.0         #. comp.no.             dens     GMIX
+          "Liquid Krypton"       -0.20        #. Volume fraction
+          "Lead"                 -0.05        #. Volume fraction
+          "Iron"                 -0.02        #. Volume fraction
+          "NEMA FR4 plate"       -0.01        #. Volume fraction
+          "Kapton"               -0.01950     #. Volume fraction
+          "Copper"               -0.00050     #. Volume fraction
+"Kr/Pb mixture for HD"      -6   -1.0         #. comp.no.             dens     GMIX
+          "Liquid Krypton"       -0.20        #. Volume fraction
+          "Lead"                 -0.90        #. Volume fraction
+          "Iron"                 -0.02        #. Volume fraction
+          "NEMA FR4 plate"       -0.10        #. Volume fraction
+          "Kapton"               -0.01950     #. Volume fraction
+          "Copper"               -0.00050     #. Volume fraction
+"Kr/Cu mixture for HD"      -5   -1.0         #. comp.no.             dens     GMIX
+          "Liquid Krypton"       -0.20        #. Volume fraction
+          "Iron"                 -0.02        #. Volume fraction
+          "NEMA FR4 plate"       -0.10        #. Volume fraction
+          "Kapton"               -0.01950     #. Volume fraction
+          "Copper"               -0.90050     #. Volume fraction
+"Ar/Pb mixture for EM"      -6   -1.0         #. comp.no.             dens     GMIX
+          "Liquid Argon"         -0.20        #. Volume fraction
+          "Lead"                 -0.05        #. Volume fraction
+          "Iron"                 -0.02        #. Volume fraction
+          "NEMA FR4 plate"       -0.01        #. Volume fraction
+          "Kapton"               -0.01950     #. Volume fraction
+          "Copper"               -0.00050     #. Volume fraction
+"Ar/Cu mixture for EM"      -5   -1.0         #. comp.no.             dens     GMIX
+          "Liquid Argon"         -0.20        #. Volume fraction
+          "Copper"               -0.05050     #. Volume fraction
+          "Iron"                 -0.02        #. Volume fraction
+          "NEMA FR4 plate"       -0.01        #. Volume fraction
+          "Kapton"               -0.01950     #. Volume fraction
+"Ar/Cu mixture for HD"      -5   -1.0         #. comp.no.             dens     GMIX
+          "Liquid Argon"         -0.20        #. Volume fraction
+          "Copper"               -0.90050     #. Volume fraction
+          "Iron"                 -0.02        #. Volume fraction
+          "NEMA FR4 plate"       -0.10        #. Volume fraction
+          "Kapton"               -0.01950     #. Volume fraction
+"Ar/Cu mixt. for Cors"      -5   -1.0         #. comp.no.             dens     GMIX
+          "Liquid Argon"         -0.20        #. Volume fraction
+          "Copper"               -0.90050     #. Volume fraction
+          "Iron"                 -0.02        #. Volume fraction
+          "NEMA FR4 plate"       -0.10        #. Volume fraction
+          "Kapton"               -0.01950     #. Volume fraction
+"Pb/Sci spaghetti mix"      -2   -1.0         #. comp.no.             dens     GMIX
+          "Scintillator"         -0.185       #. Volume fraction
+          "Lead"                 -0.80        #. Volume fraction
+"Cu/Sci spaghetti mix"      -3   -1.0         #. comp.no.             dens     GMIX
+          "Scintillator"           -.52       #. Volume fraction
+          "Borated Polyethyl."     -.8        #. Volume fraction
+          "Copper"                 -8.3       #. Volume fraction
+"W/Sci  spaghetti mix"      -3   -1.0         #. comp.no.             dens     GMIX
+          "Scintillator"           -.52       #. Volume fraction
+          "Borated Polyethyl."     -.8        #. Volume fraction
+          "Tungsten"               -8.3       #. Volume fraction
+"Ar/W  mixt. for E.M."      -2   -1.0         #. comp.no.             dens     GMIX
+          "Liquid Argon"          -.001       #. Volume fraction
+          "Tungsten"              -.749       #. Volume fraction
+"Ar/W Hadron section"       -2   -1.0         #. comp.no.             dens     GMIX
+          "Liquid Argon"          -.001       #. Volume fraction
+          "Tungsten"              -.749       #. Volume fraction
+"Ar/W Catcher section"      -2   -1.0         #. comp.no.             dens     GMIX
+          "Liquid Argon"          -.001       #. Volume fraction
+          "Tungsten"              -.749       #. Volume fraction
+"Cu/Scintillator/PolB"      -3   -1.0         #. comp.no.             dens     GMIX
+          "Scintillator"          -0.06       #. Volume fraction
+          "Copper"                -0.83       #. Volume fraction
+          "Borated Polyethyl."    -0.08       #. Volume fraction
+"Cu/Quartz"                 -3   -1.0         #. comp.no.             dens
+          "Si O_2"                -0.0560     #. Volume fraction
+          "Polystyrene"           -0.0107     #. Volume fraction
+          "Copper"                -0.9330     #. Volume fraction
+#. *DO  GMIX   0 -U -A4CW -c1/50      #.          GMIX
+"AQBB borated concre"        6     2.1350         #. comp.no. dens   GMIX
+          "Fe_2 O_3"              -1.660          #. Atomic proportions 
+          "Al_2 O_3"             -21.810
+          "Si O_2"               -10.550
+          "Ca O"                 -28.8 
+          "B_2 O_3"               -7.  
+          "Water"                -30.190
+"BET2a concrete +Poly"       7     1.7            #. comp.no. dens   GMIX
+          "Polystyrene"          -55.870
+          "Si O_2"                -5.750          #. Atomic proportions 
+          "Ca O"                 -14.850
+          "Al_2 O_3"             -12.550
+          "Fe_2 O_3"              -0.870
+          "B_2 O_3"               -3.550
+          "Water"                 -6.560
+"BET2b concrete +Poly"       7     1.35           #. comp.no. dens   GMIX
+          "Polystyrene"          -81.420
+          "Si O_2"                -2.430          #. Atomic proportions 
+          "Ca O"                  -6.180
+          "Al_2 O_3"              -5.230
+          "Fe_2 O_3"              -0.340
+          "B_2 O_3"               -1.540
+          "Water"                 -2.850
+"Standard Serpentine"        9     2.302          #. comp.no. dens   GMIX#
+          "Water"                -25.31           #. Atomic proportions 
+          "Si O_2"               -61.23
+          "Al_2 O_3"              -5.36
+          "Fe_2 O_3"              -1.07
+          "Ca O"                  -3.74
+          "Mg O"                  -0.28
+          "C O_2"                 -0.42
+          "Na_2 O"                -1.79
+          "K_2 O"                 -0.85
+"Serpentine 2"               9     2.01           #. comp.no. dens   GMIX#
+          "Water"                -37.25           #. Atomic proportions 
+          "Si O_2"               -34.93
+          "Al_2 O_3"              -2.32
+          "Fe_2 O_3"              -2.17
+          "Ca O"                  -5.31
+          "Mg O"                 -17.38
+          "C O_2"                 -0.39
+          "K_2 O"                 -0.24
+          "Ni_2 O_3"              -0.07
+"Serpentine - Iron"          9    3.765           #. comp.no. dens   GMIX#
+          "Water"                -21.66           #. Atomic proportions 
+          "Si O_2"               -19.43
+          "Al_2 O_3"              -1.62
+          "S_2 O_3"               -0.18
+          "Fe_2 O_3"              -1.91
+          "Ca O"                  -5.95
+          "Mg O"                 -17.  
+          "C O_2"                 -0.62
+          "Iron"                 -31.62
+"Limonite"                   6     2.96           #. comp.no. dens   GMIX#
+          "Water"                -41.66           #. Atomic proportions 
+          "Si O_2"                -3.84
+          "Al_2 O_3"              -1.30
+          "Fe_2 O_3"             -44.03
+          "Ca O"                  -7.58
+          "Mg O"                  -0.33
+"Magetite"                   7     3.12           #. comp.no. dens   GMIX#
+          "Water"                -32.98           #. Atomic proportions 
+          "Oxygen"                -1.47
+          "Si O_2"                -4.02
+          "Al_2 O_3"              -1.44
+          "Fe_2 O_3"             -51.88
+          "Ca O"                  -7.85
+          "Mg O"                  -0.36
+"Limonite magetite"          6     3.41           #. comp.no. dens   GMIX#
+          "Water"                -25.31           #. Atomic proportions 
+          "Si O_2"                -4.15
+          "Al_2 O_3"              -1.35
+          "Fe_2 O_3"             -60.79
+          "Ca O"                  -8.  
+          "Mg O"                  -0.40
+"Limonite Iron"              8     4.16       #. comp.no.             dens     GMIX#
+          "Water"                -23.94       #. Atomic fraction
+          "Si O_2"                -7.91       #. Atomic fraction
+          "Al_2 O_3"              -2.38       #. Atomic fraction
+          "Fe_2 O_3"             -13.22       #. Atomic fraction
+          "Ca O"                  -9.63       #. Atomic fraction
+          "Mg O"                  -0.53       #. Atomic fraction
+          "Mn O"                  -0.12       #. Atomic fraction
+          "Iron"                 -42.27       #. Atomic fraction
+"Barite"                     8     3.20           #. comp.no. dens   GMIX#
+          "Water"                -28.07           #. Atomic proportions 
+          "Si O_2"                -2.88
+          "Al_2 O_3"              -1.  
+          "Fe_2 O_3"              -5.55
+          "Ca O"                  -6.46
+          "Mg O"                  -0.22
+          "Barium sulfate"       -52.30
+          "B_2 O_3"               -5.61
+"Boron-Barite"              10     3.20       #. comp.no.             dens     GMIX#
+          "Water"                -31.31       #. Atomic fraction
+          "Si O_2"                -4.65       #. Atomic fraction
+          "Al_2 O_3"              -1.40       #. Atomic fraction
+          "Fe_2 O_3"              -1.14       #. Atomic fraction
+          "Ca O"                 -10.45       #. Atomic fraction
+          "Mg O"                  -0.45       #. Atomic fraction
+          "Na_2 O"                -0.18       #. Atomic fraction
+          "Mn O"                  -0.01       #. Atomic fraction
+          "B_2 O_3"               -5.61       #. Atomic fraction
+          "Barium sulfate"       -30.87       #. Atomic fraction
+"Colmanite Barite"          11     3.20       #. comp.no.             dens     GMIX#
+          "Water"                -22.26       #. Atomic fraction
+          "Si O_2"                -9.44       #. Atomic fraction
+          "Al_2 O_3"              -1.58       #. Atomic fraction
+          "Fe_2 O_3"              -2.62       #. Atomic fraction
+          "Ca O"                  -8.34       #. Atomic fraction
+          "Mg O"                  -0.51       #. Atomic fraction
+          "Na_2 O"                -2.11       #. Atomic fraction
+          "K_2 O"                 -0.10       #. Atomic fraction
+          "Mn O"                  -0.02       #. Atomic fraction
+          "B_2 O_3"               -6.42       #. Atomic fraction
+          "Barium sulfate"       -46.59       #. Atomic fraction
+"Boron_frits-Lumnite"       11     3.10       #. comp.no.             dens     GMIX#
+          "Water"                -37.15       #. Atomic fraction
+          "Si O_2"                -2.35       #. Atomic fraction
+          "Al_2 O_3"              -3.73       #. Atomic fraction
+          "Fe_2 O_3"              -3.15       #. Atomic fraction
+          "Ca O"                  -6.26       #. Atomic fraction
+          "Mg O"                  -0.26       #. Atomic fraction
+          "Na_2 O"                -0.16       #. Atomic fraction
+          "Mn O"                  -0.10       #. Atomic fraction
+          "B_2 O_3"               -4.66       #. Atomic fraction
+          "Ti_2 O_3"              -1.52       #. Atomic fraction
+          "Barium sulfate"       -40.64       #. Atomic fraction
+#. *DO  GMIX   0 -U -A4CW -c1/50      #.Title created on 941013 at 0034            GMIX
+"MagnetiteBoron"            9     3.637           #. comp.no.    dens     GMIX#
+          "Hydrogen"              0.70            #. Weight fractions 
+          "Bor 10"                0.26  
+          "Bor 11"                1.04  
+          "Oxygen"               35.00  
+          "Sodium"                1.30  
+          "Aluminium"             2.00  
+          "Silicon"               2.00  
+          "Calcium"               2.70  
+          "Iron"                 55.00  
+"MagnetiteConc"             9     3.65            #. comp.no.    dens     GMIX#
+          "Hydrogen"              0.35            #. Weight fractions
+          "Bor 10"                0.26  
+          "Bor 11"                1.04  
+          "Oxygen"               35.12
+          "Sodium"                1.31
+          "Aluminium"             2.01
+          "Silicon"               2.01
+          "Calcium"               2.71
+          "Iron"                 55.19
+"Steel-008"                   9     7.8           #. comp.no. dens   GMIX#
+          "Carbon"                 -.416
+          "Silicon"                -.316
+          "Manganese"              -.434
+          "Sulfur"                 -.031
+          "Phosphor"               -.023
+          "Nickel"                 -.009
+          "Copper"                 -.026
+          "Aluminium"              -.144
+          "Iron"                  -98.599
+"YokeSteel"                    6     7.87     #. M.Huhtinen 21-Sep-96
+          "Carbon"                  0.10      #. Weight fractions     GMIX
+          "Silicon"                 0.10 
+          "Manganese"               0.40 
+          "Nickel"                  1.00 
+          "Copper"                  0.15 
+          "Iron"                   98.25 
+"Steel-light"                  1    0.52
+           "Steel-008"              1.0
+#. *DO  GMIX   0 -U -A4CW -c1/50      #.Title created on 941013 at 0034 GMIX
+"Polyvinylchloride"          3    1.38        #. CH_2 : CHCl density from SDC
+           "Carbon"              -2.0         #. Atomic fraction
+           "Hydrogen"            -3.0         #. Atomic fraction
+           "Chlorine"            -1.0         #. Atomic fraction
+"Low Tension cables"         -2    -1.0           #. comp.no. dens   GMIX
+                            #. Area/cable (cm^2)
+          "Aluminium"            -0.105           #. Volume fractions 
+          "Polyethylene"         -0.006 
+"High Tension cables"        -3    -1.0           #. comp.no. dens   GMIX
+                                 #. Area/cable (mm^2)
+          "Aluminium"            -1.51            #. core + armour + screen
+          "Polyethylene"         -4.406           #. PE + sheath
+          "Mylar"                -0.47            #. PET
+"Optical fibre"              1     1.05
+          "Polystyrene"          -0.0625          #. area/fibre
+"Pipe with Water"           -3   -1.0             #. Cooling pipe : water, 
+                                                  #. Al (500mkm) + 500 mkm insulation
+          "Polyethylene"         -0.4765          #. Total cross section = 3.46 cm^2
+          "Aluminium"            -0.4565
+          "Water"                -2.5270
+"Flushing gas"              -2   -1.0             #. Gas + 200 mkm of Al
+          "Air"                  -0.5246          #. Total cross section = 0.7 cm^2
+          "Aluminium"            -0.1654
+"Pipe with gas"             -2   -1.0             #. Gas + 200 mkm of Al
+          "Argon CF_4 CO_2"      -2.0295          #. Total cross section = 2.21 cm^2
+          "Aluminium"            -0.1805
+"Cable_0"                   -6   -1.0             #. Cable+Water+Gas for wheels 0-4
+          "Low Tension cables"   -2.10            #. xs = 10.44 cm^2
+          "High Tension cables"  -1.63
+          "Optical fibre"        -0.34
+          "Pipe with Water"      -3.46
+          "Flushing gas"         -0.70
+          "Pipe with gas"        -2.21
+"Cable_Si_1"                 -5  -1.0         #. Si Cable + Water + Gas for wheels 5,7,9
+          "Low Tension cables"   -0.62            #. xs = 5.69 cm^2
+          "High Tension cables"  -0.21
+          "Optical fibre"        -0.12
+          "Pipe with Water"      -2.73
+          "Flushing gas"         -2.01
+"Cable_MSGC_2"               -6  -1.0      #. MSGC Cable + Water + Gas for wheels 5,7
+          "Low Tension cables"   -1.14     #. for wheels 5,7   xs = 8.83 cm^2
+          "High Tension cables"  -0.33     #. for wheels 6,8,9 xs = 7.06 cm^2
+          "Optical fibre"        -0.15
+          "Pipe with Water"      -3.42
+          "Flushing gas"         -0.25
+          "Pipe with gas"        -3.54
+"Cable_MSGC_3"               -6  -1.0      #. MSGC Cable + Water + Gas
+          "Low Tension cables"   -1.58     #. for wheels 10,12,14 xs = 10.26 cm^2
+          "High Tension cables"  -0.37     #. for wheels 11,13    xs =  8.21 cm^2
+          "Optical fibre"        -0.20     #.            15,17    xs =  7.27 cm^2
+          "Pipe with Water"      -3.86     #.            16,18    xs = 10.08 cm^2
+          "Flushing gas"         -0.28
+          "Pipe with gas"        -3.97
+"Cables"                     4    2.68        #.  2.68
+          "Copper"               58.600       #. Weight fractions 
+          "Carbon"               25.900 
+          "Oxygen"               13.800 
+          "Hydrogen"              1.700 
+"CT Cu cable"               -4   -1.0         #. comp.no. dens   GMIX
+          "Copper"               -0.38            #. Volume fractions 
+          "Carbon"               -0.21  
+          "Hydrogen"             -0.33  
+          "Oxygen"               -0.800E-1 
+"CT Al cable"              -4    -1.0             #. comp.no. dens   GMIX
+          "Aluminium"            -0.38            #. Volume fractions 
+          "Carbon"               -0.21  
+          "Hydrogen"             -0.33  
+          "Oxygen"               -0.800E-1 
+#. *DO  GMIX   0 -U -A4CW -c1/50                     #.          GMIX
+"Coil average"              -2    -1.0            #. comp.no. dens   GMIX#
+          "Copper"                -0.564          #. Volume fractions 
+          "Helium"                -0.436 
+"Hcal sci"                   2    1.032           #. comp.no. dens   GMIX
+          "Carbon"                -0.5            #. Atomic proportions 
+          "Hydrogen"              -0.5 
+"Hcal average"              -4    -1.0            #. comp.no. dens   GMIX#
+          "Copper"                -0.90           #. Volume fractions 
+          "Air"                   -0.02 
+          "Carbon"                -0.04 
+          "Hydrogen"              -0.04 
+"Vcal CO2"                   1    0.00198         #. comp.no. dens   GMIX#
+          "C O_2"                  1.0            #. Atomic proportion 
+"Vcal C4H10"                 2    0.00267         #. comp.no. dens   GMIX#
+          "Carbon"                -4.             #. Atomic proportions 
+          "Hydrogen"              -10. 
+"Vcal average"               2    7.55            #. comp.no. dens   GMIX#
+          "Steel-008"             -1.750          #. Atomic proportions 
+          "Vcal C4H10"            -0.075
+"Bi_4 Ge_3 O_12"             3    7.1             #. comp.no. dens   GMIX#
+          "Bismuth"               -4.             #. Atomic proportions 
+          "Germanium"             -3.  
+          "Oxygen"               -12.  
+"Ce F_3"                     2   6.16
+          "Cerium"               -1.0
+          "Fluorine"             -3.0
+"Pb W O_4"                   3   8.28
+          "Lead"                 -1.0
+          "Tungsten"             -1.0
+          "Oxygen"               -4.0
+"Siliecal"                   2   1.0859
+          "Carbon"               -0.3
+          "Polyethylene"         -2.0
+"Muon Al"                    1    2.7
+          "Aluminium"             1.0
+"Ar(40%)+Ethane(60%)"        2   1.46920E-3
+          "Argon"                 -.40
+          "Ethane"                -.60
+"Muon average"              -2    -1.0            #. comp.no. dens   GMIX#
+          "Ar(40%)+Ethane(60%)"   -1.0            #. Volume fractions 
+          "Aluminium"             -0.2  
+#. *DO  GMIX   0 -U -A4CW -c1/50      #.          GMIX
+"Alumina"                     2   3.52             #. comp.no. dens   GMIX#
+          "Aluminium"           -2.0               #. Atomic proportions 
+          "Oxygen"              -3.0    
+"Ceramic"                     2   3.96525          #. comp.no.
+          "Aluminium"           -2.0               #. Atomic proportions 
+          "Oxygen"              -3.0    
+"Beryllia"                    2   2.63             #. comp.no. dens   GMIX#
+          "Beryllium"           -1.0               #. Atomic proportions 
+          "Oxygen"              -1.0    
+#. *DO  GMIX   0 -U -A4CW -c1/80      #.          GMIX
+"M_Copper"                    1   8.96            #. 
+          "Copper"                -1.
+"M_NEMA FR4 plate"            1   1.7             #.
+          "NEMA FR4 plate"        -1.
+"LeadLoadedPolymerCon"      9     3.53            #. M.Huhtinen CMS IN 1997/024
+          "Hydrogen"              2.351270        #. Weight fractions
+          "Lithium"               4.164310
+          "Iron"                 11.416400
+          "Carbon"               10.198300
+          "Oxygen"                8.781870
+          "Aluminium"             1.869690
+          "Silicon"               0.283286
+          "Calcium"               1.303120
+          "Lead"                 59.631700
+"E_PbWO4"                     3    8.28     #. Lead tungstate for crystals
+          "Lead"                 -1.00
+          "Tungsten"             -1.00
+          "Oxygen"               -4.00
+"E_Air"                      -1     0.12050E-02
+          "Air"                  -1.0
+"E_Aluminium"                 1     2.7000
+          "Aluminium"            -1.0
+"E_Carbon Fibre"              2     1.45 
+          "Carbon"                0.65  
+          "Hydrogen"              0.35  
+"E_Polythene"                 1     0.95
+          "Polyethylene"         -1.0
+#. Barrel Muon materials
+"M_B_Air"               1     0.12050E-02   
+	"Air"          		1.0  	#. Weight fraction
+"M_Air"               	1     0.12050E-02   
+	"Air"          		1.0  	#. Weight fraction
+"M_Aluminium"           1     8.9000        
+	"Aluminium"    		1.0  	#. Weight fraction
+"M_Cables"              1     2.68   
+	"Cables"          	1.0  	#. Weight fraction
+"M_DTBX_Gas"            1     0.0018194     
+	"DTBX gas"     		1.0  	#. Weight fraction
+"M_RPC_Bakelite"        1     1.3           
+	"Bakelite"     		1.0  	#. Weight fraction
+"M_Electronics_averag"  1     1.3           
+	"Bakelite"     		1.0  	#. Weight fraction
+"M_RPC_Gas"             1     1.8768520E-3  
+	"RPC Gas"      		1.0  	#. Weight fraction
+"M_YokeSteel"           1     7.800         
+	"YokeSteel"    		1.0  	#. Weight fraction
+"M_Steel-008"           1     7.800         
+	"Steel-008"   		-1.0
+"M_Thick_Steel-008"     1     7.800         
+	"Steel-008"   		-1.0
+"M_honeycomb"          -2    -1.000         
+	"Aluminium"   		-1.85 	#. Volume fraction
+	"Air"        		-98.15 	#. Volume fraction
+#. Forward Muon material
+"AISI-1045-Steel"	5     7.87    
+          "Carbon"                  0.50  
+          "Manganese"               0.90
+          "Phosphor"                0.04
+          "Sulfur"                  0.05
+          "Iron"                   98.51
+#. Required for HCal
+ "Brass"                2     8.53
+          "Copper"                0.70
+          "Zinc"                  0.30
+ "QuartzBundle"        -4   1.30515      
+        "Quartz"                 -0.3000 
+        "Polystyrene"            -0.0600 
+        "Doped Quartz"           -0.0600 
+        "Air"                    -0.5800 
+ "LeadBPolymer"         8     3.53       
+          "Hydrogen"              2.30 
+          "Boron"                 2.00
+          "Fluorine"             11.40
+          "Carbon"               10.20
+          "Oxygen"                8.80
+          "Aluminium"             2.20
+          "Calcium"               1.30
+          "Lead"                 61.80
+##. *DO  GMIX   0 -U -A4CW -c1/50                     #.          GMIX
+"Teflon"                      2    2.20
+          "Carbon"               -33.0
+          "Fluorine"             -66.0
+"Ne30_DME70"                  4   1.7E-3
+          "Neon"                 -3.0
+          "Carbon"               -14.0
+          "Oxygen"               -7.0
+          "Hydrogen"             -42.0
+"Peek"                        1    1.32
+          "Epoxy"                -100.
+"c_Peek"                      2  1.8
+          "Epoxy"                -0.50
+          "Si O_2"               -0.50
+"Hybrids"                    -2    1.785
+          "Aluminium"            -42.86
+          "Kapton"               -57.14
+"Connector"                  -3    1.119
+          "Peek"                 -20.00
+          "Copper"               -10.00
+          "Air"                  -70.00
+"Tk_CF_supp"                  1   1.69 
+          "Carbon fibre str."    -100.
+"Tk_CF_supp_sili"             1   1.69 
+          "Carbon fibre str."    -100.
+"T_Carbon fibre str."         1   1.69 
+          "Carbon fibre str."    -100.
+"T_Kapton"                   -1    1.40
+           "Kapton"              -100.
+"T_PIXEL-Average"             1    8.00    
+          "Silicon"               1.00
+"T_SITRA-Average"             1    7.00
+          "Silicon"               1.00
+"T_MSGC-Average"              2    0.23
+          "Carbon"                0.80
+          "Silicon"               0.20
+"T_Silicon Detector"          1     2.3300
+          "Silicon"                -1.000
+"T_Argon CF_4 CO_2"          -1    2.14160E-3
+          "Argon CF_4 CO_2"       -1.0
+"Nomex"                      -2      0.032
+          "Air"                  -97.8
+          "T_Kapton"             -2.20
+"Aluminium silicate"          3     3.156
+          "Aluminium"            -6.0
+          "Silicon"              -2.0 
+          "Oxygen"               -13.0
+"Al-silicate + Zi"            2    3.3196
+           "Aluminium silicate"  0.9
+           "Zinc"                0.1
+"HFE"                         4     1.52     
+          "Hydrogen"             -3.
+          "Oxygen"               -1.
+          "Carbon"               -5.
+          "Fluorine"             -9.
+"Silica"                      2      2.20
+           "Silicon"              -1.0
+           "Oxygen"               -2.0
+"SMD_metal"                  -3     10.20
+           "Nickel"               -5.00
+           "Silver"              -75.00
+           "Tin"                 -20.00
+"Tk_CCU_board"               -8      1.71279
+          "SMD_metal"            -0.190
+          "Copper"               -1.695
+          "Alumina"              -0.912
+          "Aluminium"            -14.229
+          "Silicon"              -1.433
+          "Carbon"               -0.608
+          "Carbon fibre str."    -47.429
+          "T_Kapton"             -33.504
+"Tk_IO_board"                -8     2.303   
+          "SMD_metal"            -0.192
+          "Copper"               -1.727
+          "Alumina"              -20.247
+          "Aluminium"            -11.994
+          "Silicon"              -5.228
+          "Carbon"               -0.513
+          "Carbon fibre str."    -39.981
+          "T_Kapton"             -20.119
+"O_Hybrid"                   -8     2.838
+          "Silver"               -2.972
+          "SMD_metal"            -2.378
+          "Copper"               -3.535
+          "Al-silicate + Zi"     -23.779
+          "Alumina"              -6.341
+          "Silicon"              -7.728
+          "Carbon"               -3.171
+          "T_Kapton"             -50.095
+"Pigtails"                   -2     3.145
+          "Copper"               -23.077
+          "T_Kapton"             -76.923
+"G_conntr"                   -2      2.007
+          "Copper"               -8.100
+          "T_Kapton"             -91.900
+"P_pipes"                    -2      2.3285
+          "Steel-008"            -12.884
+          "T_Kapton"             -87.116
+"Outer_pipes"                -2     2.533
+          "Iron"                 -15.974
+          "HFE"                  -84.026
+"G10"                        -2     1.7
+          "Epoxy"                -0.40
+          "Si O_2"               -0.60
+"ICB"                        -2     2.309
+          "Copper"               -6.367
+          "G10"                  -93.633
+"Coolant"                     4     1.52
+          "Hydrogen"             -3.
+          "Oxygen"               -1.
+          "Carbon"               -5.
+          "Fluorine"             -9.
+"C6F14"                       2     1.76
+          "Carbon"               -6.0
+          "Fluorine"            -14.0
+"T_FR4"                       1     1.7
+          "NEMA FR4 plate"     -100.
+"T_Bronze"                    2     8.89
+          "Copper"               95.0
+          "Tin"                   6.0
+"MS_Al60"                    -3       0.866
+          "Aluminium"            -14.165
+          "Polyethylene"         -85.451
+          "Silver"                -0.384
+"MS_Al48"                    -3       0.877
+          "Aluminium"            -13.033
+          "Polyethylene"         -86.593
+          "Silver"                -0.374
+"MS_Al36"                    -3       0.901
+          "Aluminium"            -12.218
+          "Polyethylene"         -87.403
+          "Silver"                -0.379
+"MS_cntrl_cable"             -2       1.467
+          "Copper"               -10.000
+          "Polyethylene"         -90.000
+"MS_cntr"                    -3   2.049    
+          "Iron"                 -8.306
+          "Aluminium"            -31.894
+          "T_Kapton"             -59.801
+"T_OPC"                      -3    1.05917
+          "Iron"                 -5.739
+          "Polyethylene"         -63.943
+          "Air"                  -30.318
+"Tk_Opt_Ribbon"              -2    1.07852
+          "Quartz"               -10.144
+          "Polyethylene"         -89.856
+"Fibre_connector"            -3    1.05917
+          "Iron"                 -5.739
+          "Polyethylene"         -63.943
+          "Air"                  -30.318
+"Fibre_Ribbon"               -2    1.219
+          "Quartz"               -15.835
+          "Polyethylene"         -84.165
+"T_OP_cable"                 -3    0.601463
+          "Quartz"               -0.690
+          "Polyethylene"         -61.673
+          "Air"                  -37.637
+"MS_Al_cable"                -2    1.95062
+          "Aluminium"            -44.465
+          "Polyethylene"         -55.535
+"MS_Cu_cable"                -2    9.4537 
+          "Copper"               -52.830
+          "Polyethylene"         -47.170
+"Px_cool_pipe"               -2    2.72629
+          "Iron"                 -18.997
+          "HFE"                  -81.003
+"Tk_cool_pipe"               -2    2.53663
+          "Iron"                 -15.999
+          "HFE"                  -84.001
+"Tk_op_boxes"                -3    0.173214
+          "Aluminium"            -30.947
+          "T_OPC"                -68.357
+          "Tk_Opt_Ribbon"        -0.696
+"Tk_panels_in"               -1    0.1525  
+          "MS_Al_cable"          -100.
+"Tk_panels_mid1"             -2    0.165       
+         "Carbon fibre str."      -3.837
+          "Nomex"                -96.163
+"Tk_panels_mid2"             -3    1.1085      
+          "MS_cntr"              -18.361
+          "Carbon fibre str."     -6.048
+          "Nomex"                -75.592
+"Tk_panels_mid3"             -3    0.166       
+          "Silver"                -0.020
+          "Carbon fibre str."     -3.845
+          "Nomex"                -96.135
+"Tk_panels_out"              -1   0.591 
+          "MS_Cu_cable"         -100.0
+"Tk_panels_up"               -3    0.1203   
+          "Outer_pipes"          -38.678
+          "MS_Al_cable"          -55.743
+          "Fibre_Ribbon"          -5.579
+"Tk_Cable_1"                 -7    0.9428  
+          "MS_Cu_cable"          -14.204
+          "Px_cool_pipe"          -0.873
+          "Tk_cool_pipe"         -12.569
+          "Aluminium"             -8.846
+          "MS_Al_cable"          -15.173
+          "Peek"                  -1.208
+          "Fibre_Ribbon"         -47.127
+"Tk_square_bundles"          -7    0.9710
+          "MS_Cu_cable"          -14.865
+          "Px_cool_pipe"          -0.913
+          "Tk_cool_pipe"         -13.153
+          "Aluminium"             -4.605
+          "MS_Al_cable"          -15.879
+          "Peek"                  -1.264
+          "Fibre_Ribbon"         -49.320
+"Tk_support"                 -1    5.25617
+          "Iron"                   -100.
+"Pix_Bar_Det"             -1   2.33 
+          "Silicon"          -1.0
+"Pix_Bar_Readout"         -1   2.33
+          "Silicon"          -1.0
+"Pix_Bar_Cable"           -3   -1.0 
+          "Kapton"          -0.0100 
+          "Copper"          -0.0002 
+          "Aluminium"       -0.0040 
+"Pix_Bar_Hybrid"          -6   -1.0 
+          "Carbon fibre str." -0.045
+          "Si O_2"          -0.0046 
+          "Epoxy"           -0.0100 
+          "Tin"             -0.0001 
+          "Copper"          -0.0006 
+          "Kapton"          -0.0050 
+"Pix_Bar_Ring"            -2   -1.0 
+          "Carbon fibre str."   -0.0520
+          "Carbon fibre str."   -0.0150
+"Pix_Bar_Cool"            -2   -1.0 
+          "Coolant"          -9.61 
+          "Aluminium"        -2.64 
+"Pix_Bar_Water"           -2   -1.0
+          "Coolant"         -0.25  
+          "Peek"            -0.24  
+"Pix_Bar_Conn1"           -5   -1.0
+          "NEMA G10 plate"   -38.5 
+          "Copper"           -10.7 
+          "Tin"               -0.45
+          "Epoxy"             -5.65
+          "Kapton"           -48.6 
+"Pix_Bar_Conn2"           -8   -1.0
+          "Carbon fibre str." -159.8
+          "NEMA G10 plate"   -77.0 
+          "Copper"           -12.0 
+          "Tin"              -0.45 
+          "Epoxy"            -11.3 
+          "Kapton"           -74.6 
+          "Aluminium"        -44.4 
+          "Coolant"         -126.7 
+"Pix_Bar_Services"        -6   -1.0
+          "Carbon fibre str."   -5.8
+          "Coolant"          -4.5 
+          "Copper"          -0.02 
+          "Aluminium"       -4.20 
+          "Optical fibre"   -0.13 
+          "Polyethylene"    -0.23 
+"Carbon fibre st_b"         1   1.69
+          "Carbon fibre str."    -100.
+"Aluminium Pix_b"           1   2.70
+          "Aluminium"            -100.
+"Pixel Cables"             -2    -1.0 
+          "Aluminium"            -0.050
+          "Kapton"               -0.150
+"Barrel PixelCables"       -2    -1.0   
+          "Pixel Cables"         -0.400 
+          "Coolant"              -0.600
+"Pix_Fwd_Det"              -1   2.33 
+          "Silicon"          -1.0
+"Pix_Fwd_Readout"          -1   2.33 
+          "Silicon"          -1.0
+"Pix_Fwd_Ring"             -2   -1.0 
+          "Carbon fibre str." -0.14 
+          "Air"               -0.36 
+"Pix_Fwd_Cool"             -2   -1.0  
+          "Coolant"           -12.0 
+          "Aluminium"         -3.2  
+"Pix_Fwd_Blade"            -5   -1.0 
+          "Carbon fibre str." -0.0250
+          "Copper"            -0.0003
+          "Aluminium"         -0.0029
+          "Epoxy"             -0.0043
+          "Kapton"            -0.0026
+"Pix_Fwd_PortCard"           -8   -1.0
+          "NEMA G10 plate"   -0.0340 
+          "Copper"           -0.0020 
+          "Aluminium"        -0.0094 
+          "Epoxy"            -0.0038 
+          "Kapton"           -0.1038 
+          "Iron"             -0.0032 
+          "Silicon"          -0.0008 
+          "Air"              -0.8430 
+"Pix_Fwd_Services_1"      -5   -1.0  
+          "Carbon fibre str." -0.0100
+          "Coolant"           -0.0175
+          "Aluminium"         -0.0170
+          "Optical fibre"     -0.0009
+          "Air"               -0.8430
+"Pix_Fwd_Services_2"      -5   -1.0  
+          "Carbon fibre str." -0.0100
+          "Coolant"           -0.0350
+          "Aluminium"         -0.0240
+          "Optical fibre"     -0.0018
+          "Air"               -0.8292
+"Pix_Fwd_Services_3"      -5   -1.0  
+          "Carbon fibre str." -0.0230
+          "Coolant"           -0.0350
+          "Aluminium"         -0.0240
+          "Optical fibre"     -0.0018
+          "Air"               -0.8162
+"Forw.Pixel Cooling"       -2    -1.0
+          "Aluminium"            -0.200
+          "Coolant"              -0.800
+"ForwardPixelCables"       -2    -1.0 
+          "Pixel Cables"         -0.575
+          "Coolant"              -0.425
+"TIB_Wafer"           1   2.33
+          "Silicon"            -100.
+"TIB_Silicon"         1   2.33
+          "Silicon"            -100.
+"TIB_sid_rail1"      -3       1.554
+          "Carbon fibre str."    -79.033
+          "T_Kapton"             -19.616
+          "Copper"                -1.351
+"TIB_sid_rail2"      -2       1.419
+          "Carbon fibre str."    -81.818
+          "T_Kapton"             -18.182
+"TIB_ledge_side"     -2      15.002
+          "Aluminium"            -65.240
+          "Carbon fibre str."    -34.760
+"TIB_ledge_hybrid"   -2      23.813
+          "Aluminium"            -82.963
+          "Carbon fibre str."    -17.037
+"TIB_ledge_bss"      -3       5.828
+          "Aluminium"            -59.155
+          "T_Kapton"              -2.981
+          "Carbon fibre str."    -37.864
+"TIB_ledge_bds"      -3       6.870
+          "Aluminium"            -57.338
+          "T_Kapton"              -3.114
+          "Carbon fibre str."    -39.548
+"TIB_PA_rphi"        -3       1.730
+          "Silica"               -44.836
+          "Carbon fibre str."    -44.320
+          "Alumina"              -10.843
+"TIB_PA_ster"        -3       1.640
+          "Silica"               -42.582
+          "Carbon fibre str."    -46.131
+          "Alumina"              -11.286
+"TIB_mod_spacer1"    -1       2.7
+          "Aluminium"            -100.
+"TIB_mod_spacer2"    -3       2.051
+          "Aluminium"            -27.979
+          "T_Kapton"              -7.254
+          "Carbon fibre str."    -64.767
+"TIB_mother_cable"   -4       3.341
+          "T_Kapton"             -56.925
+          "Copper"               -20.458
+          "Quartz"                -0.452
+          "Polyethylene"         -22.165
+"TIB_mod_cool"       -2       1.938
+          "Aluminium"            -18.953
+          "C6F14"                -81.047
+"TIB_outer_supp"     -1       1.69
+          "Carbon fibre str."  -100.
+"TIB_cylinder"       -1     0.865
+          "Carbon fibre str."  -100.
+"TIB_cent_supp"      -3       0.703
+          "Aluminium"            -13.374
+          "C6F14"                -25.300
+          "Carbon fibre str."    -61.326
+"TIB_connector"      -2       0.404
+          "T_Kapton"             -82.547
+          "Copper"               -17.453
+"TIB_disk"           -6       0.214
+          "Carbon fibre str."    -13.848
+          "T_Kapton"             -65.072
+          "Copper"                -4.461
+          "T_FR4"                -10.505
+          "T_Bronze"              -2.526
+          "G10"                   -3.588
+"TIB_rib0"           -2       1.131
+          "Carbon fibre str."    -35.815
+          "Aluminium"            -64.185
+"TIB_rib1"           -2       0.379
+          "Carbon fibre str."    -42.713
+          "Aluminium"            -57.287
+"TIB_rib2"           -2       0.518
+          "Carbon fibre str."    -41.610
+          "Aluminium"            -58.390
+"TIB_rib3"           -2       0.508
+          "Carbon fibre str."    -39.761
+          "Aluminium"            -60.239
+"TIB_rib4"           -2       0.922
+          "Carbon fibre str."    -39.698
+          "Aluminium"            -60.302
+"TIB_cab_rad1"       -6       0.979
+          "T_Kapton"             -16.894
+          "Copper"                -4.827
+          "Fibre_Ribbon"          -3.479
+          "Aluminium"             -8.137
+          "C6F14"                -26.479
+          "MS_cntrl_cable"       -40.184
+"TIB_cab_rad2"       -6       0.976
+          "T_Kapton"             -15.903
+          "Copper"                -4.796
+          "Fibre_Ribbon"          -3.457
+          "Aluminium"             -8.936
+          "C6F14"                -29.080
+          "MS_cntrl_cable"       -37.827
+"TIB_cab_rad3"       -6       0.546
+          "T_Kapton"             -19.015
+          "Copper"               -10.413
+          "Fibre_Ribbon"          -2.502
+          "Aluminium"            -10.685
+          "C6F14"                -34.771
+          "MS_cntrl_cable"       -22.615
+"TIB_cab_rad4"       -6       0.501
+          "T_Kapton"             -21.045
+          "Copper"               -11.596
+          "Fibre_Ribbon"          -2.786
+          "Aluminium"            -10.136
+          "C6F14"                -32.984
+          "MS_cntrl_cable"       -21.453
+"TIB_cables_ax"      -6       0.652
+          "T_Kapton"             -17.809
+          "Copper"                -7.281
+          "Fibre_Ribbon"          -3.140
+          "Aluminium"             -9.317
+          "C6F14"                -30.319
+          "MS_cntrl_cable"       -32.134
+"TIB_cables_ax_out"  -6       1.098
+          "Fibre_Ribbon"          -0.913
+          "Aluminium"             -2.708
+          "C6F14"                 -8.813
+          "MS_cntrl_cable"        -9.341
+          "MS_Al36"              -57.971
+          "MS_Al48"              -20.253
+"TIB_Rib_in1"        -1       1.640
+          "Carbon fibre str."   -100.000
+"TIB_Rib_in2"        -1       1.640    
+          "Carbon fibre str."   -100.000
+"TIB_Rib_in3"        -1       1.640    
+          "Carbon fibre str."   -100.000
+"TIB_Rib_in4"        -1       1.640    
+          "Carbon fibre str."   -100.000
+"TIB_ele1"           -6       2.774
+          "Alumina"              -44.700
+          "Gold"                  -2.244
+          "Carbon"                -0.410
+          "SMD_metal"             -0.467
+          "Silicon"               -8.934
+          "Carbon fibre str."    -43.245
+"TIB_ele2"           -6       2.774
+          "Alumina"              -44.700
+          "Gold"                  -2.244
+          "Carbon"                -0.410
+          "SMD_metal"             -0.467
+          "Silicon"               -8.934
+          "Carbon fibre str."    -43.245
+"TIB_ele3"           -6       2.781
+          "Alumina"              -43.778
+          "Gold"                  -2.202
+          "Carbon"                -0.362
+          "SMD_metal"             -0.410
+          "Silicon"               -5.990
+          "Carbon fibre str."    -47.257
+"TIB_ele4"           -6       2.781
+          "Alumina"              -43.778
+          "Gold"                  -2.202
+          "Carbon"                -0.362
+          "SMD_metal"             -0.410
+          "Silicon"               -5.990
+          "Carbon fibre str."    -47.257
+"TIB_ICC1"           -8       1.083
+          "T_FR4"                -19.019
+          "T_Kapton"             -69.278
+          "Copper"                -6.702
+          "T_Bronze"              -1.241
+          "Alumina"               -0.933
+          "Carbon"                -0.439
+          "SMD_metal"             -0.239
+          "Silicon"               -2.148
+"TIB_ICC2"           -8       2.133
+          "T_FR4"                -16.175
+          "T_Kapton"             -70.875
+          "Copper"                -6.857
+          "T_Bronze"              -1.270
+          "Alumina"               -0.955
+          "Carbon"                -0.449
+          "SMD_metal"             -0.244
+          "Silicon"               -3.175
+"TIB_ICC_ledge1"     -1       3.241
+          "Aluminium"           -100.000
+"TIB_ICC_ledge2"     -1       3.497
+          "Aluminium"           -100.000
+"TIB_CCUM"           -8       1.124
+          "T_FR4"                -34.050
+          "Copper"                -0.824
+          "T_Kapton"             -52.894
+          "SMD_metal"             -0.384
+          "Alumina"               -0.014
+          "Carbon"                -0.027
+          "T_Bronze"              -2.540
+          "Aluminium"             -9.268
+"TIE_Side_Wafer"      1       2.33
+          "Silicon"            -100.
+"TIE_in_cable"       -3       6.285
+          "Outer_pipes"          -34.927
+          "MS_Al_cable"          -59.618
+          "Fibre_Ribbon"         -5.455
+"TIE_ax_cable"       -3       6.285
+          "Outer_pipes"          -34.927
+          "MS_Al_cable"          -59.618
+          "Fibre_Ribbon"         -5.455
+"TIE_rad_cable"      -3      13.552
+          "Steel-008"            -35.902
+          "Quartz"               -0.535
+          "HFE"                  -63.562
+"TIE_mech"           -2       0.091
+          "Carbon fibre str."    -3.614
+          "Nomex"                -96.386
+"TIE_ele1"           -7      14.745
+          "SMD_metal"            -0.591
+          "Alumina"              -6.942
+          "Aluminium"            -44.940
+          "Silicon"              -4.697
+          "Carbon"               -1.688
+          "Carbon fibre str."    -31.648
+          "T_Kapton"             -9.494
+"TIE_ele2"           -7      14.745
+          "SMD_metal"            -0.591
+          "Alumina"              -6.942
+          "Aluminium"            -44.940
+          "Silicon"              -4.697
+          "Carbon"               -1.688
+          "Carbon fibre str."    -31.648
+          "T_Kapton"             -9.494
+"TIE_ele3"           -7      20.3739
+          "SMD_metal"            -0.380
+          "Alumina"              -4.704
+          "Aluminium"            -60.338
+          "Silicon"              -2.429
+          "Carbon"               -1.267
+          "Carbon fibre str."    -23.755
+          "T_Kapton"             -7.127
+"TIE_ICC1"           -7       1.074
+          "Pigtails"             -7.434
+          "O_Hybrid"             -14.433
+          "P_pipes"              -19.163
+          "ICB"                  -32.022
+          "G_conntr"             -13.152
+          "Quartz"               -0.073
+          "Carbon"               -13.724
+"TIE_ICC2"           -7       3.46
+          "Pigtails"             -4.991
+          "O_Hybrid"             -9.691
+          "P_pipes"              -21.227
+          "Aluminium"            -45.050
+          "G_conntr"             -8.831
+          "Quartz"               -0.074
+          "Carbon"               -10.136
+"TIE_ICC3"          -11       3.534
+          "Steel-008"            -4.000
+          "Pigtails"             -0.695
+          "O_Hybrid"             -1.080
+          "Aluminium"            -7.918
+          "P_pipes"              -2.788
+          "Quartz"               -8.898
+          "G_conntr"             -1.995
+          "Quartz"               -0.008
+          "Tk_CCU_board"         -2.504
+          "Carbon"               -1.540
+          "Fibre_connector"      -68.574
+"TIE_Wafer"           1       2.33
+          "Silicon"            -100.
+"TIE_frame_light"    -2       2.33 
+          "Aluminium"            -28.121
+          "Carbon fibre str."    -71.879
+"TIE_frame_light_back"     -1     1.4378
+          "Carbon fibre str."   -100.00
+"TIE_PitchAdapter"   -2       5.0505
+          "Silica"               -27.149
+          "Carbon fibre str."    -72.851
+"TIE_petal"          -4       0.1958
+          "Aluminium"            -0.376
+          "ICB"                  -2.484
+          "Carbon fibre str."    -5.497
+          "Nomex"                -91.643
+"TIE_Fixframe"       -2     100. 
+          "Iron"                 -6.421
+          "Aluminium"            -93.579
+"TIE_Connector"      -2       0.303
+          "T_Kapton"             -95.052
+          "Copper"                -4.948
+"active_screen"      -2      11.197 
+          "HFE"                  -58.824
+          "Carbon fibre str."    -41.176
+"Tk_SO_FC_G"         -1     1.69
+          "Carbon fibre str."  -100.
+"TOB_rail"           -1     1.69
+          "Carbon fibre str."    -100.0
+"TIB_rail"           -1     1.69
+          "Carbon fibre str."    -100.0
+"TOB_CuNi"            2     8.94
+          "Copper"                70.0
+          "Nickel"                30.0
+"TOB_Brass"           2     8.5
+          "Copper"                63.0
+          "Zinc"                  37.0
+"TOB_cool_solder"     3     9.0
+          "Tin"                   62.0
+          "Lead"                  36.0
+          "Silver"                 2.0
+"TOB_CF_Str"         -1     1.69
+          "Carbon fibre str."    -100.0
+"TOB_Nomex"           -1     0.032
+          "Nomex"                -100.0
+"TOB_Epoxy"           -1     1.32
+          "Epoxy"                -100.0
+"TOB_Aluminium"       -1     2.7
+          "Aluminium"            -100.0
+"TOB_cool_SS"         -2       3.083
+          "TOB_CuNi"             -18.421
+          "C6F14"                -81.579
+"TOB_cool_DS"         -2       2.871
+          "TOB_CuNi"             -15.479
+          "C6F14"                -84.521
+"TOB_optfib_SS"       -3       2.156
+          "Aluminium"             -4.441
+          "Polyethylene"         -93.796
+          "Quartz"                -1.763
+"TOB_optfib_DS"       -3       3.926
+          "Aluminium"             -2.360
+          "Polyethylene"         -95.768
+          "Quartz"                -1.873
+"TOB_plate_A"         -1       0.674
+          "Aluminium"            -100.0
+"TOB_plate_B"         -1       2.7 
+          "Aluminium"            -100.0
+"TOB_plate_C"         -1       2.7 
+          "Aluminium"            -100.0
+"TOB_coolmanifold1"   -4       2.379
+          "TOB_CuNi"             -12.379
+          "C6F14"                -83.763
+          "TOB_Brass"             -3.128
+          "TOB_cool_solder"       -0.730
+"TOB_coolmanifold2"  -4       2.382
+          "TOB_CuNi"             -12.374
+          "C6F14"                -83.730
+          "TOB_Brass"             -3.159
+          "TOB_cool_solder"       -0.737
+"TOB_coolmanifold3"  -4       2.384
+          "TOB_CuNi"             -12.370
+          "C6F14"                -83.701
+          "TOB_Brass"             -3.186
+          "TOB_cool_solder"       -0.743
+"TOB_coolmanifold4"  -4       2.386
+          "TOB_CuNi"             -12.367
+          "C6F14"                -83.680
+          "TOB_Brass"             -3.205
+          "TOB_cool_solder"       -0.748
+"TOB_coolmanifold5"  -4       2.384
+          "TOB_CuNi"             -12.369
+          "C6F14"                -83.696
+          "TOB_Brass"             -3.190
+          "TOB_cool_solder"       -0.744
+"TOB_coolmanifold6"  -4       2.386
+          "TOB_CuNi"             -12.366
+          "C6F14"                -83.676
+          "TOB_Brass"             -3.209
+          "TOB_cool_solder"       -0.749
+"TOB_ele5"           -5       4.879
+          "Alumina"              -84.767
+          "Gold"                  -3.977
+          "Carbon"                -0.525
+          "SMD_metal"             -0.597
+          "Silicon"              -10.134
+"TOB_ele6"           -5       4.879
+          "Alumina"              -84.767
+          "Gold"                  -3.977
+          "Carbon"                -0.525
+          "SMD_metal"             -0.597
+          "Silicon"              -10.134
+"TOB_ele7"           -5       4.818
+          "Alumina"              -86.460
+          "Gold"                  -4.059
+          "Carbon"                -0.507
+          "SMD_metal"             -0.575
+          "Silicon"               -8.398
+"TOB_ele8"           -5       4.818
+          "Alumina"              -86.460
+          "Gold"                  -4.059
+          "Carbon"                -0.507
+          "SMD_metal"             -0.575
+          "Silicon"               -8.398
+"TOB_ele9"           -5       4.939
+          "Alumina"              -83.141
+          "Gold"                  -3.899
+          "Carbon"                -0.541
+          "SMD_metal"             -0.617
+          "Silicon"              -11.801
+"TOB_ele10"          -5       4.939
+          "Alumina"              -83.141
+          "Gold"                  -3.899
+          "Carbon"                -0.541
+          "SMD_metal"             -0.617
+          "Silicon"              -11.801
+"TOB_rod"              -1       1.796
+          "Carbon fibre str."   -100.000
+"TOB_sid_rail1"      -6       1.604
+          "Carbon fibre str."    -79.484
+          "T_Kapton"             -18.571
+          "Copper"                -0.371
+          "Alumina"               -0.696
+          "SMD_metal"             -0.260
+          "Carbon"                -0.617
+"TOB_sid_rail2"      -3       1.504
+          "Carbon fibre str."    -82.454
+          "T_Kapton"             -17.338
+          "Copper"                -0.208
+"TOB_frame_ele"      -1       1.690
+          "Carbon fibre str."   -100.000
+"TOB_hybrid_supp"    -1       1.726
+          "Carbon fibre str."   -100.000
+"TOB_PA_rphi"        -3       1.549
+          "Silica"               -29.864
+          "TOB_Nomex"            -19.827
+          "Carbon fibre str."    -50.310
+"TOB_PA_ster"        -2       2.057
+          "Silica"               -52.199
+          "Carbon fibre str."    -47.801
+"TOB_mod_cool_1"     -3      6.634
+          "Aluminium"            -42.182
+          "Carbon fibre str."    -54.545
+          "Steel-008"             -3.273
+"TOB_mod_cool_2"     -2       5.341
+          "Aluminium"            -39.024
+          "Carbon fibre str."    -60.976
+"TOB_mod_cool_3"     -4       6.422
+          "Aluminium"            -44.127
+          "Carbon fibre str."    -48.670
+          "Steel-008"             -2.920
+          "Copper"                -4.283
+"TOB_mod_cool_4"     -3       5.436
+          "Aluminium"            -41.547
+          "Carbon fibre str."    -53.725
+          "Copper"                -4.728
+"TOB_rib1"           -3       0.460
+          "T_Kapton"             -85.326
+          "Copper"               -10.050
+          "G10"                   -4.624
+"TOB_rib2"           -3       0.461
+          "T_Kapton"             -85.382
+          "Copper"               -10.046
+          "G10"                   -4.572
+"TOB_rib3"           -3       0.261
+          "T_Kapton"             -74.349
+          "Copper"               -15.862
+          "G10"                   -9.789
+"TOB_rib4"           -3       0.260
+          "T_Kapton"             -74.496
+          "Copper"               -15.861
+          "G10"                   -9.643
+"TOB_rib5"           -3       0.457
+          "T_Kapton"             -85.347
+          "Copper"               -10.048
+          "G10"                   -4.605
+"TOB_rib6"           -3       0.457
+          "T_Kapton"             -85.457
+          "Copper"               -10.040
+          "G10"                   -4.503
+"TOB_rad_cable1"     -5       0.334
+          "MS_Al60"              -82.817
+          "MS_cntrl_cable"        -6.579
+          "Fibre_Ribbon"          -1.270
+          "TOB_CuNi"              -1.580
+          "C6F14"                 -7.754
+"TOB_rad_cable2"     -5       0.321
+          "MS_Al60"              -84.501
+          "MS_cntrl_cable"        -5.873
+          "Fibre_Ribbon"          -1.292
+          "TOB_CuNi"              -1.411
+          "C6F14"                 -6.923
+"TOB_rad_cable3"     -5       0.260
+          "MS_Al36"              -85.182
+          "MS_cntrl_cable"        -7.279
+          "Fibre_Ribbon"          -0.654
+          "TOB_CuNi"              -1.166
+          "C6F14"                 -5.720
+"TOB_rad_cable4"     -5       0.265
+          "MS_Al36"              -85.251
+          "MS_cntrl_cable"        -5.828
+          "Fibre_Ribbon"          -0.652
+          "TOB_CuNi"              -1.400
+          "C6F14"                 -6.869
+"TOB_rad_cable5"     -5       0.265
+          "MS_Al36"              -83.842
+          "MS_cntrl_cable"        -7.816
+          "Fibre_Ribbon"          -0.949
+          "TOB_CuNi"              -1.252
+          "C6F14"                 -6.141
+"TOB_rad_cable6"     -5       0.253
+          "MS_Al36"              -86.264
+          "MS_cntrl_cable"        -5.977
+          "Fibre_Ribbon"          -0.975
+          "TOB_CuNi"              -1.149
+          "C6F14"                 -5.636
+"TOB_ax_cable"       -6       7.930
+          "MS_Al60"              -25.704
+          "MS_Al36"              -59.007
+          "MS_cntrl_cable"        -6.551
+          "Fibre_Ribbon"          -0.964
+          "TOB_CuNi"              -1.316
+          "C6F14"                 -6.458
+"TOB_middle_ribs"     -1     1.69
+          "Carbon fibre str."    -100.
+"TOB_ICB"            -2       2.327
+          "G10"                  -93.458
+          "Copper"                -6.542
+"TOB_ICC1"           -9       1.056
+          "Carbon fibre str."    -25.970
+          "G10"                  -39.167
+          "Copper"                -5.068
+          "T_Kapton"             -18.835
+          "T_FR4"                 -5.309
+          "Silicon"               -0.808
+          "Alumina"               -4.425
+          "Carbon"                -0.248
+          "SMD_metal"             -0.169
+"TOB_ICC2"           -9       1.067
+          "Carbon fibre str."    -17.218
+          "G10"                  -40.404
+          "Copper"                -5.953
+          "T_Kapton"             -22.550
+          "T_FR4"                 -7.040
+          "Silicon"               -1.071
+          "Alumina"               -5.249
+          "Carbon"                -0.311
+          "SMD_metal"             -0.204
+"TOB_ICC3"           -9       0.877
+          "Carbon fibre str."    -30.211
+          "G10"                  -45.563
+          "Copper"                -4.281
+          "T_Kapton"             -13.083
+          "T_FR4"                 -3.088
+          "Silicon"               -0.380
+          "Alumina"               -3.115
+          "Carbon"                -0.165
+          "SMD_metal"             -0.113
+"TOB_ICC4"           -9       0.835
+          "Carbon fibre str."    -21.158
+          "G10"                  -49.650
+          "Copper"                -5.044
+          "T_Kapton"             -15.345
+          "T_FR4"                 -4.326
+          "Silicon"               -0.533
+          "Alumina"               -3.605
+          "Carbon"                -0.202
+          "SMD_metal"             -0.138
+"TOB_ICC5"           -9       0.879
+          "Carbon fibre str."    -30.157
+          "G10"                  -45.482
+          "Copper"                -4.273
+          "T_Kapton"             -13.060
+          "T_FR4"                 -3.083
+          "Silicon"               -0.558
+          "Alumina"               -3.110
+          "Carbon"                -0.164
+          "SMD_metal"             -0.113
+"TOB_ICC6"           -9       0.837
+          "Carbon fibre str."    -21.105
+          "G10"                  -49.526
+          "Copper"                -5.032
+          "T_Kapton"             -15.306
+          "T_FR4"                 -4.315
+          "Silicon"               -0.782
+          "Alumina"               -3.596
+          "Carbon"                -0.201
+          "SMD_metal"             -0.138
+"TOB_CCUM1"          -6       0.200
+          "G10"                  -48.211
+          "Copper"                -4.714
+          "T_Kapton"             -46.489
+          "SMD_metal"             -0.529
+          "Alumina"               -0.019
+          "Carbon"                -0.038
+"TOB_CCUM2"          -6       0.200
+          "G10"                  -48.211
+          "Copper"                -4.714
+          "T_Kapton"             -46.489
+          "SMD_metal"             -0.529
+          "Alumina"               -0.019
+          "Carbon"                -0.038
+"TOB_CCUM3"          -6       0.200
+          "G10"                  -48.211
+          "Copper"                -4.714
+          "T_Kapton"             -46.489
+          "SMD_metal"             -0.529
+          "Alumina"               -0.019
+          "Carbon"                -0.038
+"TOB_CONN1"          -4       2.326
+          "Carbon fibre str."    -24.941
+          "Aluminium"             -7.876
+          "T_Kapton"             -63.859
+          "Copper"                -3.324
+"TOB_CONN2"          -4       1.567
+          "Carbon fibre str."    -37.556
+          "Aluminium"            -11.860
+          "T_Kapton"             -48.081
+          "Copper"                -2.503
+"TOB_CONN3"          -4       1.567
+          "Carbon fibre str."    -37.556
+          "Aluminium"            -11.860
+          "T_Kapton"             -48.081
+          "Copper"                -2.503
+"TOB_Silicon"         -1    2.33
+          "Silicon"              -100.0
+"TOB_Wafer"           -1    2.33
+          "Silicon"              -100.0
+"TOE_ax_cable"        -2     1.499 
+          "MS_Al_cable"          -87.932
+          "Fibre_Ribbon"         -12.068
+"TOE_rad_cable"       -3    21.5813
+          "Steel-008"            -35.635
+          "Quartz"               -1.275
+          "HFE"                  -63.090
+"TOE_Wafer"           -1    2.33
+          "Silicon"              -100.0
+"TOE_ele1"        -7        14.745 
+          "SMD_metal"            -0.591
+          "Alumina"              -6.942
+          "Aluminium"            -44.940
+          "Silicon"              -4.697
+          "Carbon"               -1.688
+          "Carbon fibre str."    -31.648
+          "T_Kapton"             -9.494
+"TOE_ele2"        -7        14.745
+          "SMD_metal"            -0.591
+          "Alumina"              -6.942
+          "Aluminium"            -44.940
+          "Silicon"              -4.697
+          "Carbon"               -1.688
+          "Carbon fibre str."    -31.648
+          "T_Kapton"             -9.494
+"TOE_ele3"        -7        20.37
+          "SMD_metal"            -0.380
+          "Alumina"              -4.704
+          "Aluminium"            -60.338
+          "Silicon"              -2.429
+          "Carbon"               -1.267
+          "Carbon fibre str."    -23.755
+          "T_Kapton"             -7.127
+"TOE_ele4"        -7        20.37        
+          "SMD_metal"            -0.380
+          "Alumina"              -4.704
+          "Aluminium"            -60.338
+          "Silicon"              -2.429
+          "Carbon"               -1.267
+          "Carbon fibre str."    -23.755
+          "T_Kapton"             -7.127
+"TOE_ele5"        -7        14.745
+          "SMD_metal"            -0.591
+          "Alumina"              -6.942
+          "Aluminium"            -44.940
+          "Silicon"              -4.697
+          "Carbon"               -1.688
+          "Carbon fibre str."    -31.648
+          "T_Kapton"             -9.494
+"TOE_ele6"        -7        20.37 
+          "SMD_metal"            -0.380
+          "Alumina"              -4.704
+          "Aluminium"            -60.338
+          "Silicon"              -2.429
+          "Carbon"               -1.267
+          "Carbon fibre str."    -23.755
+          "T_Kapton"             -7.127
+"TOE_ele7"        -7        20.37    
+          "SMD_metal"            -0.380
+          "Alumina"              -4.704
+          "Aluminium"            -60.338
+          "Silicon"              -2.429
+          "Carbon"               -1.267
+          "Carbon fibre str."    -23.755
+          "T_Kapton"             -7.127
+"TOE_ICC1"             -7    1.074   
+          "Pigtails"             -7.434
+          "O_Hybrid"             -14.433
+          "P_pipes"              -19.163
+          "ICB"                  -32.022
+          "G_conntr"             -13.152
+          "Quartz"               -0.073
+          "Carbon"               -13.724
+"TOE_ICC2"             -1    0.001214
+           "Air"                 -100.00
+"TOE_ICC3"             -7    0.826 
+          "Pigtails"             -4.991
+          "O_Hybrid"             -9.691
+          "P_pipes"              -21.227
+          "ICB"                  -45.050
+          "G_conntr"             -8.831
+          "Quartz"               -0.074
+          "Carbon"               -10.136
+"TOE_ICC4"             -7    0.6177
+          "Pigtails"             -3.966
+          "O_Hybrid"             -6.160
+          "P_pipes"              -24.085
+          "ICB"                  -44.905
+          "G_conntr"             -8.891
+          "Quartz"               -0.044
+          "Carbon"               -11.949
+"TOE_ICC5"             -7    0.659 
+          "Pigtails"             -3.834
+          "O_Hybrid"             -6.381
+          "P_pipes"              -20.294
+          "ICB"                  -51.908
+          "G_conntr"             -7.815
+          "Quartz"               -0.061
+          "Carbon"               -9.708
+"TOE_ICC6"             -7    0.964 
+          "Pigtails"             -6.112
+          "O_Hybrid"             -10.680
+          "P_pipes"              -18.346
+          "ICB"                  -46.639
+          "G_conntr"             -11.679
+          "Quartz"               -0.113
+          "Carbon"               -6.432
+"TOE_ICC7"            -11    0.7616
+          "Steel-008"            -3.421
+          "Pigtails"             -0.832
+          "O_Hybrid"             -1.385
+          "Aluminium"            -6.773
+          "P_pipes"              -6.443
+          "ICB"                  -15.954
+          "G_conntr"             -1.485
+          "Quartz"               -0.012
+          "Tk_CCU_board"         -2.142
+          "Carbon"               -2.898
+          "Fibre_connector"      -58.655
+"TOE_rods"            -2     2.379 
+          "Outer_pipes"          -70.691
+          "Carbon fibre str."    -29.309
+"TOE_mech"            -2     0.091 
+          "Carbon fibre str."    -3.614
+          "Nomex"                -96.386 
+"Tk_SO_FC_A"          -1    1.69 
+          "Carbon fibre str."    -100.0
+"Tk_SO_FC_B"          -1    1.69 
+          "Carbon fibre str."    -100.0
+"Tk_SO_FC_C"          -1    1.69 
+          "Carbon fibre str."    -100.0
+"Tk_SO_FC_D"          -1    1.69 
+          "Carbon fibre str."    -100.0
+"Tk_SO_FC_E"          -1    1.69 
+          "Carbon fibre str."    -100.0
+"Tk_SO_FC_F"          -1    1.69 
+          "Carbon fibre str."    -100.0
+"TOE_Side_Wafer"       1    2.33
+          "Silicon"            -100.
+"TOE_frame_light"           -2     2.33 
+          "Aluminium"            -28.121
+          "Carbon fibre str."    -71.879
+"TOE_frame_heavy"           -2     1.96 
+          "Aluminium"            -11.906
+          "Carbon fibre str."    -88.094 
+"TOE_frame_light_back"   -1     1.4378
+          "Carbon fibre str."    -100.0
+"TOE_frame_heavy_back"   -1     1.6137
+          "Carbon fibre str."    -100.0
+"TOE_PitchAdapter"    -2    4.36854
+          "Silica"               -27.149
+          "Carbon fibre str."    -72.851
+"TOE_petal"           -4     0.1958
+          "Aluminium"            -0.376
+          "ICB"                  -2.484
+          "Carbon fibre str."    -5.497
+          "Nomex"                -91.643
+"TOE_Fixframe"        -2    100.
+          "Iron"                 -6.421
+          "Aluminium"            -93.579
+"TEC_Nomex"           -1       0.029
+          "Nomex"                -100.00
+"TEC_ax_cable"        -5       7.038
+          "Fibre_Ribbon"          -1.046
+          "MS_Al36"              -73.003
+          "MS_cntrl_cable"       -14.037
+          "Steel-008"             -1.903
+          "C6F14"                -10.011
+"TEC_rad_cable"       -2       1.072
+          "Quartz"                -1.998
+          "Polyethylene"         -98.002
+"TEC_Wafer"           -1    2.33
+          "Silicon"              -100.0
+"TEC_ele1"            -5       4.939
+          "Alumina"              -83.141
+          "Gold"                  -3.899
+          "Carbon"                -0.541
+          "SMD_metal"             -0.617
+          "Silicon"              -11.801
+"TEC_ele2"           -5       4.939
+          "Alumina"              -83.141
+          "Gold"                  -3.899
+          "Carbon"                -0.541
+          "SMD_metal"             -0.617
+          "Silicon"              -11.801
+"TEC_ele3"           -5       4.818
+          "Alumina"              -86.460
+          "Gold"                  -4.059
+          "Carbon"                -0.507
+          "SMD_metal"             -0.575
+          "Silicon"               -8.398
+"TEC_ele4"           -5       4.818
+          "Alumina"              -86.460
+          "Gold"                  -4.059
+          "Carbon"                -0.507
+          "SMD_metal"             -0.575
+          "Silicon"               -8.398
+"TEC_ele5"           -5       4.939
+          "Alumina"              -83.141
+          "Gold"                  -3.899
+          "Carbon"                -0.541
+          "SMD_metal"             -0.617
+          "Silicon"              -11.801
+"TEC_ele6"           -5       4.818
+          "Alumina"              -86.460
+          "Gold"                  -4.059
+          "Carbon"                -0.507
+          "SMD_metal"             -0.575
+          "Silicon"               -8.398
+"TEC_ele7"           -5       4.818
+          "Alumina"              -86.460
+          "Gold"                  -4.059
+          "Carbon"                -0.507
+          "SMD_metal"             -0.575
+          "Silicon"               -8.398
+"TEC_ICC11"          -3       1.803
+          "T_FR4"                -91.273
+          "Copper"                -4.655
+          "Aluminium"             -4.072
+"TEC_ICC21"          -1    1.214e-3 
+           "Air"                 -100.00
+"TEC_ICC1B1"         -4       1.696 
+          "T_FR4"                -81.860
+          "Copper"                -5.124
+          "T_Kapton"             -10.761
+          "Aluminium"             -2.256
+"TEC_ICC2B1"         -4       2.910
+          "T_FR4"                -76.524
+          "Copper"                -5.233
+          "T_Kapton"             -15.081
+          "Aluminium"             -3.162
+"TEC_ICC12"          -4       2.804
+          "T_FR4"                -55.705
+          "Copper"                -8.520
+          "T_Kapton"             -34.072
+          "Aluminium"             -1.704
+"TEC_ICC22"          -4       2.103
+          "T_FR4"                -70.535
+          "Copper"                -7.001
+          "T_Kapton"             -20.422
+          "Aluminium"             -2.042
+"TEC_ICC13"          -4       2.165
+          "T_FR4"                -66.874
+          "Copper"                -7.481
+          "T_Kapton"             -24.424
+          "Aluminium"             -1.221
+"TEC_ICC23"          -4       2.437 
+          "T_FR4"                -68.774
+          "Copper"                -7.155
+          "T_Kapton"             -21.883
+          "Aluminium"             -2.188
+"TEC_ICC1B2"         -4       1.725 
+          "T_FR4"                -79.409
+          "Copper"                -5.273
+          "T_Kapton"             -13.865
+          "Aluminium"             -1.453
+"TEC_ICC2B2"         -4       1.807 
+          "T_FR4"                -75.515
+          "Copper"                -5.377
+          "T_Kapton"             -17.296
+          "Aluminium"             -1.813
+"TEC_ICC14"          -4       1.445
+          "T_FR4"                -68.155
+          "Copper"                -7.310
+          "T_Kapton"             -23.002
+          "Aluminium"             -1.533
+"TEC_ICC24"          -4       2.960
+          "T_FR4"                -78.947
+          "Copper"                -6.267
+          "T_Kapton"             -13.442
+          "Aluminium"             -1.344
+"TEC_ICC15"          -4       2.359
+          "T_FR4"                -74.330
+          "Copper"                -6.788
+          "T_Kapton"             -17.983
+          "Aluminium"             -0.899
+"TEC_ICC25"          -4       1.896
+          "T_FR4"                -75.399
+          "Copper"                -6.650
+          "T_Kapton"             -16.829
+          "Aluminium"             -1.122
+"TEC_ICC1B3"         -4       1.822
+          "T_FR4"                -91.498
+          "Copper"                -4.927
+          "T_Kapton"              -2.955
+          "Aluminium"             -0.620
+"TEC_ICC2B3"         -4       2.217
+          "T_FR4"                -92.218
+          "Copper"                -4.912
+          "T_Kapton"              -2.373
+          "Aluminium"             -0.497
+"TEC_ICC16"          -4       2.191
+          "T_FR4"                -65.940
+          "Copper"                -7.666
+          "T_Kapton"             -25.820
+          "Aluminium"             -0.574
+"TEC_ICC26"          -4       2.309
+          "T_FR4"                -65.429
+          "Copper"                -7.730
+          "T_Kapton"             -26.362
+          "Aluminium"             -0.479
+"TEC_ICC17"          -4       1.809
+          "T_FR4"                -76.806
+          "Copper"                -6.558
+          "T_Kapton"             -15.844
+          "Aluminium"             -0.792
+"TEC_ICC27"          -4       1.859
+          "T_FR4"                -75.755
+          "Copper"                -6.618
+          "T_Kapton"             -16.526
+          "Aluminium"             -1.102
+"TEC_ICC1B4"         -8       1.994
+          "T_FR4"                -73.941
+          "Copper"                -4.791
+          "Aluminium"             -0.644
+          "G10"                  -10.434
+          "T_Kapton"             -10.062
+          "SMD_metal"             -0.115
+          "Alumina"               -0.004
+          "Carbon"                -0.008
+"TEC_ICC2B4"         -8       2.057
+          "T_FR4"                -74.587
+          "Copper"                -4.793
+          "Aluminium"             -0.625
+          "G10"                  -10.117
+          "T_Kapton"              -9.755
+          "SMD_metal"             -0.111
+          "Alumina"               -0.004
+          "Carbon"                -0.008
+"TEC_rods"           -1       0.275
+          "Carbon fibre str."   -100.000
+"TEC_wheel_CF"       -1       1.124
+          "Carbon fibre str."   -100.000
+"TEC_wheel_Nomex"    -1       0.019
+          "TEC_Nomex"           -100.000
+"TEC_wheelinsert"    -1       3.162
+          "Aluminium"           -100.000
+"TEC_SO_FC_A"        -1       1.69 
+          "Carbon fibre str."    -100.0
+"TEC_SO_FC_B"        -2       0.076
+          "Carbon fibre str."     -2.696
+          "TEC_Nomex"            -97.304
+"TEC_SO_FC_C"        -2       0.152
+          "Carbon fibre str."     -7.407
+          "TEC_Nomex"            -92.593
+"TEC_SO_FC_D"        -1    1.69 
+          "Carbon fibre str."    -100.0
+"TEC_SO_FC_E"        -1    1.69 
+          "Carbon fibre str."    -100.0
+"TEC_SO_FC_F"        -1    1.69 
+          "Carbon fibre str."    -100.0
+"TEC_Side_Wafer"       1    2.33
+          "Silicon"            -100.
+"TEC_frame_side"     -3       2.231
+          "Carbon fibre str."    -81.845
+          "T_Kapton"             -17.857
+          "Copper"                -0.298
+"TEC_frame_top"      -1       1.521
+          "Carbon fibre str."   -100.000
+"TEC_PitchAdapter"   -1       2.200
+          "Silica"              -100.000
+"TEC_petal"          -4       0.238
+          "TEC_Nomex"            -89.894
+          "Carbon fibre str."     -7.191
+          "Titanium"              -0.554
+          "C6F14"                 -2.361
+"TEC_Fixframe"       -2       3.068
+          "Aluminium"            -93.535
+          "Steel-008"             -6.465
+"TEC_FixServ"        -2       3.050
+          "Aluminium"            -94.553
+          "Steel-008"             -5.447
+"TEC_Cool"           -2       3.925
+          "Aluminium"            -99.417
+          "Silver"                -0.583
+"TEC_OptoH"          -9       1.590
+          "T_Kapton"             -22.642
+          "Copper"                -4.867
+          "T_FR4"                -23.234
+          "Alumina"               -3.549
+          "Carbon"                -0.620
+          "SMD_metal"             -0.337
+          "Silicon"               -3.536
+          "Aluminium"            -40.879
+          "Silver"                -0.337
+"TEC_PetalCon"       -4       5.283
+          "Aluminium"            -20.274
+          "Steel-008"            -28.053
+          "T_Kapton"             -42.915
+          "Copper"                -8.758
+"TEC_OptoCon"        -2       1.638
+          "T_Kapton"             -97.113
+          "Copper"                -2.887
+"TEC_periscopes"     -3       0.749
+          "Silica"                -3.197
+          "Carbon fibre str."    -91.597
+          "Aluminium"             -5.206
+"TEC_tiltmeter"      -1       8.960
+          "Copper"              -100.000
+*ENDDO

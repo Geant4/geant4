@@ -1,0 +1,287 @@
+///////////////////////////////////////////////////////////////////////////////
+// File: CMSRotationMatrixFactory.cc
+// Date: 03/98 I. Gonzalez
+// Modification: 27/03/00 S.B. In OSCAR
+///////////////////////////////////////////////////////////////////////////////
+#include "CMSRotationMatrixFactory.hh"
+
+#include "utils.hh"
+
+#include <fstream.h>
+#include <stdlib.h>
+
+//#define debug
+//#define ddebug
+
+CMSRotationMatrixFactory * CMSRotationMatrixFactory::instance = 0;
+G4String CMSRotationMatrixFactory::file="";
+
+CMSRotationMatrixFactory* CMSRotationMatrixFactory::getInstance(const G4String & rotfile){
+  if (rotfile=="" || rotfile==file)
+    return getInstance();
+  else if (file="") {
+    file=rotfile;
+    return getInstance();
+  }
+  else {
+    cerr << "ERROR: Trying to get Rotation Matrices from " << rotfile 
+	 << " when previously were retrieved from " << file <<"." << endl;
+    return 0;
+  }
+}
+
+
+CMSRotationMatrixFactory* CMSRotationMatrixFactory::getInstance(){
+  if (file=="") {
+    cerr << "ERROR: You haven't defined which file to use for materials in CMSRotationMatrixFactory::getInstance(G4String)" << endl;
+    return 0;
+  }
+
+  if (instance==0) {
+    instance = new CMSRotationMatrixFactory;
+    return instance;
+  }
+  else
+    return instance;
+}
+
+void CMSRotationMatrixFactory::setFileName(const G4String& rotfile) {
+  if (rotfile!=file && file!="") {
+    cerr << "ERROR: Trying to change Rotation Matrices file name to " << rotfile << "." 
+	 << endl;
+    cerr << "       Using previous file: " << file << endl;
+  }
+  file=rotfile;
+}
+
+CMSRotationMatrixFactory::~CMSRotationMatrixFactory(){
+  G4RotationMatrixTableIterator i;
+  for(i=theMatrices.begin(); i != theMatrices.end(); ++i) {
+    delete (*i).second;
+  };
+  theMatrices.clear();
+}
+
+G4RotationMatrix* CMSRotationMatrixFactory::findMatrix(const G4String & rot) {
+  G4RotationMatrix* retrot=0;
+  //Rotation :NULL is no rotation so a null pointer is returned
+  if (rot != ":NULL") {
+    //retrot untouched if rot not found!!!
+    G4RotationMatrixTableIterator it = theMatrices.find(rot);
+    if (it != theMatrices.end())
+      retrot = (*it).second;
+  }
+  
+  return retrot; //!!!Maybe a treatment on not-found case needed.
+}
+
+G4RotationMatrix* CMSRotationMatrixFactory::AddMatrix(const G4String& name, 
+						      G4double th1, G4double phi1, 
+						      G4double th2, G4double phi2, 
+						      G4double th3, G4double phi3){
+		G4double sinth1, sinth2,  sinth3, costh1, costh2, costh3;
+		G4double sinph1, sinph2, sinph3, cosph1, cosph2, cosph3;
+		G4double TH1 = th1/deg, TH2 = th2/deg, TH3 = th3/deg;
+		G4double PH1 = phi1/deg, PH2 = phi2/deg, PH3 = phi3/deg;
+		
+		if (TH1 == 0.0 || TH1 == 360) {
+			sinth1 = 0.0; costh1 = 1.0;
+		} else 
+		if (TH1 == 90.0 || TH1 == -270) {
+			sinth1 = 1.0; costh1 = 0.0;
+		} else
+		if (TH1 == 180.0 || TH1 == -180.0) {
+			sinth1 = 0.0; costh1 = -1.0;
+		} else 
+		if (TH1 == 270.0 || TH1 == -90.0) {
+			sinth1 = -1.0; costh1 = 0.0;
+		} else {
+			sinth1 = sin(th1); costh1 = cos(th1);
+		}
+
+		if (TH2 == 0.0 || TH2 == 360) {
+			sinth2 = 0.0; costh2 = 1.0;
+		} else 
+		if (TH2 == 90.0 || TH2 == -270) {
+			sinth2 = 1.0; costh2 = 0.0;
+		} else
+		if (TH2 == 180.0 || TH2 == -180.0) {
+			sinth2 = 0.0; costh2 = -1.0;
+		} else 
+		if (TH2 == 270.0 || TH2 == -90.0) {
+			sinth2 = -1.0; costh2 = 0.0;
+		} else {
+			sinth2 = sin(th2); costh2 = cos(th2);
+		}
+		
+		if (TH3 == 0.0 || TH3 == 360) {
+			sinth3 = 0.0; costh3 = 1.0;
+		} else 
+		if (TH3 == 90.0 || TH2 == -270) {
+			sinth3 = 1.0; costh3 = 0.0;
+		} else
+		if (TH3 == 180.0 || TH3 == -180.0) {
+			sinth3 = 0.0; costh3 = -1.0;
+		} else 
+		if (TH3 == 270.0 || TH3 == -90.0) {
+			sinth3 = -1.0; costh3 = 0.0;
+		} else {
+			sinth3 = sin(th3); costh3 = cos(th3);
+		}
+
+      
+		if (PH1 == 0.0 || PH1 == 360) {
+			sinph1 = 0.0; cosph1 = 1.0;
+		} else 
+		if (PH1 == 90.0 || PH1 == -270) {
+			sinph1 = 1.0; cosph1 = 0.0;
+		} else
+		if (PH1 == 180.0 || PH1 == -180.0) {
+			sinph1 = 0.0; cosph1 = -1.0;
+		} else 
+		if (PH1 == 270.0 || PH1 == -90.0) {
+			sinph1 = -1.0; cosph1 = 0.0;
+		} else {
+			sinph1 = sin(phi1); cosph1 = cos(phi1);
+		}
+
+		if (PH2 == 0.0 || PH2 == 360) {
+			sinph2 = 0.0; cosph2 = 1.0;
+		} else 
+		if (PH2 == 90.0 || PH2 == -270) {
+			sinph2 = 1.0; cosph2 = 0.0;
+		} else
+		if (PH2 == 180.0 || PH2 == -180.0) {
+			sinph2 = 0.0; cosph2 = -1.0;
+		} else 
+		if (PH2 == 270.0 || PH2 == -90.0) {
+			sinph2 = -1.0; cosph2 = 0.0;
+		} else {
+			sinph2 = sin(phi2); cosph2 = cos(phi2);
+		}
+		
+		if (PH3 == 0.0 || PH3 == 360) {
+			sinph3 = 0.0; cosph3 = 1.0;
+		} else 
+		if (PH3 == 90.0 || PH3 == -270) {
+			sinph3 = 1.0; cosph3 = 0.0;
+		} else
+		if (PH3 == 180.0 || PH3 == -180.0) {
+			sinph3 = 0.0; cosph3 = -1.0;
+		} else 
+		if (PH3 == 270.0 || PH3 == -90.0) {
+			sinph3 = -1.0; cosph3 = 0.0;
+		} else {
+			sinph3 = sin(phi3); cosph3 = cos(phi3);
+		}
+	    
+		  
+			
+				    
+      //xprime axis coordinates
+      Hep3Vector xprime(sinth1*cosph1,sinth1*sinph1,costh1);
+      //yprime axis coordinates
+      Hep3Vector yprime(sinth2*cosph2,sinth2*sinph2,costh2);
+      //zprime axis coordinates
+      Hep3Vector zprime(sinth3*cosph3,sinth3*sinph3,costh3);
+
+
+#ifdef ddebug
+      cout << xprime << '\t';      cout << yprime << '\t';      cout << zprime << endl;
+#endif
+      G4RotationMatrix *rotMat = new G4RotationMatrix();
+      rotMat->rotateAxes(xprime, yprime, zprime);
+      if (*rotMat == G4RotationMatrix()) {
+	//	cerr << "WARNING: Matrix " << name << " will not be created as a rotation matrix." 
+	cerr << "WARNING: Matrix " << name << " is = identity matrix. It will not be created as a rotation matrix." 
+	     << endl;
+	delete rotMat;
+	rotMat=0;
+      }
+      else {
+	rotMat->invert();
+	theMatrices[name]=rotMat;
+#ifdef ddebug
+	cout << *rotMat << endl;
+#endif
+      }
+
+      return rotMat;
+}
+
+CMSRotationMatrixFactory::CMSRotationMatrixFactory():theMatrices(){
+
+  G4String path = getenv("OSCARGLOBALPATH");
+  cout << " ==> Opening file " << file << "..." << endl;
+  ifstream is;
+  bool ok = openGeomFile(is, path, file);
+  if (!ok) {
+    cerr << "ERROR: Could not open file " << file << " ... Exiting!" << endl;
+    exit(-1);
+  }
+
+  //////////////////////////////////////////////////
+  // Find *DO ROTM
+  findDO(is, G4String("ROTM"));
+
+  char rubish[256];
+  G4String name;
+
+#ifdef debug
+  cout << "     ==> Reading Rotation Matrices... " << endl;
+  cout << "       Name\tTheta1\tPhi1\tTheta2\tPhi2\tTheta3\tPhi3"<< endl;
+#endif
+  
+  is >> name;
+  while(name!="*ENDDO") { 
+    if (name.index("#.")==0) { //It is a comment.Skip line.
+      is.getline(rubish,256,'\n');
+    }
+    else {
+#ifdef debug
+      cout << "       " << name <<'\t';
+#endif
+      G4double th1, phi1, th2, phi2, th3, phi3;
+      //Get xprime axis angles
+      is >> th1 >> phi1;
+#ifdef debug
+      cout << th1 << '\t' << phi1 << '\t';
+#endif
+      //Get yprime axis angles
+      is >> th2 >> phi2;
+#ifdef debug
+      cout << th2 << '\t' << phi2 << '\t';
+#endif
+      //Get zprime axis angles
+      is >> th3 >> phi3;
+#ifdef debug
+      cout << th3 << '\t' << phi3 << '\t';
+#endif
+
+      is.getline(rubish,256,'\n');
+#ifdef debug
+      cout << rubish << endl;
+#endif
+
+      AddMatrix(name, th1*deg, phi1*deg, th2*deg, phi2*deg, th3*deg, phi3*deg);
+    }
+
+    is >> name;
+  };
+
+  is.close();
+  cout << "       "  << theMatrices.size() << " rotation matrices read in." << endl;
+}
+
+ostream& operator<<(ostream& os , const G4RotationMatrix & rot){
+  //  os << "( " << rot.xx() << tab << rot.xy() << tab << rot.xz() << " )" << endl;
+  //  os << "( " << rot.yx() << tab << rot.yy() << tab << rot.yz() << " )" << endl;
+  //  os << "( " << rot.zx() << tab << rot.zy() << tab << rot.zz() << " )" << endl;
+
+  os << "[" 
+     << rot.thetaX()/deg << tab << rot.phiX()/deg << tab
+     << rot.thetaY()/deg << tab << rot.phiY()/deg << tab
+     << rot.thetaZ()/deg << tab << rot.phiZ()/deg << "]"
+     << endl;
+  return os;
+}
