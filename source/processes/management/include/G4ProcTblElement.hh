@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcTblElement.hh,v 1.6 2000-03-02 01:16:05 kurasige Exp $
+// $Id: G4ProcTblElement.hh,v 1.7 2000-03-02 01:45:10 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,7 +68,10 @@ class G4ProcTblElement
     const G4String&   GetProcessName() const;
  
     G4ProcessManager* GetProcessManager(G4int index) const;
-    const G4ProcMgrVector*   GetProcMgrVector() const;
+
+    inline 
+     const G4ProcMgrVector*   GetProcMgrVector() const
+      { return pProcMgrVector;}
   
     G4int      GetIndex(const G4ProcessManager* pManager) const ;
     G4bool     Contains(const G4ProcessManager* pManager) const ;

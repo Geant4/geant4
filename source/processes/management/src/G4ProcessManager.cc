@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessManager.cc,v 1.12 2000-03-02 01:16:06 kurasige Exp $
+// $Id: G4ProcessManager.cc,v 1.13 2000-03-02 01:45:10 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -788,16 +788,6 @@ G4VProcess* G4ProcessManager::InActivateProcess(G4int index)
       }
     } 
     pAttr->isActive = false;
-
-  } else { 
-#ifdef G4VERBOSE
-    if (GetVerboseLevel()>0) {
-      G4cout << aErrorMessage;
-      G4cout << "particle["<<theParticleType->GetParticleName()<<"] " ;
-      G4cout << "process["<<pProcess->GetProcessName()<<"]   " ;
-      G4cout << "The process is already inactive" << G4endl;
-    }
-#endif
   }
   return pProcess;
 } 
@@ -831,14 +821,7 @@ G4VProcess* G4ProcessManager::ActivateProcess(G4int index)
 
   const G4String aErrorMessage(" G4ProcessManager::ActivateProcess():");
 
-  if (pAttr->isActive) {
-#ifdef G4VERBOSE
-    if (GetVerboseLevel()>0) {
-      G4cout << aErrorMessage << G4endl;
-      G4cout << "The process is already active" << G4endl;
-    }
-#endif
-  } else { 
+  if (!pAttr->isActive) {
     // remove process from vectors if the process is active
     for (G4int i=0; i<SizeOfProcVectorArray; i++) {
       G4ProcessVector* pVector = theProcVector[i];

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcTblElement.icc,v 1.4 2000-03-02 01:16:05 kurasige Exp $
+// $Id: G4ProcTblElement.icc,v 1.5 2000-03-02 01:45:10 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,14 +19,7 @@
 // ------------------------------------------------------------
 //   Use STL vector instead of RW vector    1. Mar 00 H.Kurashige
 
-//////////////////////////
-inline 
- const G4ProcTblElement::G4ProcMgrVector*   G4ProcTblElement::GetProcMgrVector() const 
-{ 
-  return pProcMgrVector; 
-}
-  
-//////////////////////////
+/////////////
 inline 
  G4bool G4ProcTblElement::Contains(const G4ProcessManager* pManager) const
 {
