@@ -4,7 +4,8 @@
 #include "globals.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4ParticleTable.hh"
-#include "G4Quasmon.hh"
+#include "G4QEnvironment.hh"
+//#include "G4Quasmon.hh"
 #include "G4QNucleus.hh"
 #include "G4QHadronVector.hh"
 #include "G4ParticleChange.hh"
@@ -38,11 +39,13 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
   G4int targetZ = G4int(aTargetNucleus.GetZ()+0.5);
   G4int targetA = G4int(aTargetNucleus.GetN()+0.5);
   G4int targetPDGCode = 90000000 + 1000*targetZ + (targetA-targetZ);
+  // NOT NECESSARY ______________
   G4double targetMass = G4ParticleTable::GetParticleTable()->GetIonTable()
                                                            ->GetIonMass(targetZ, targetA);
   G4LorentzVector targ4Mom(0.,0.,0.,targetMass);  
-  
-  G4int nop = 223; // ??????
+  // END OF NOT NECESSARY^^^^^^^^
+
+  G4int nop = 223; // nuclear clusters up to A=21
   G4double fractionOfSingleQuasiFreeNucleons = 0.15;
   G4double fractionOfPairedQuasiFreeNucleons = 0.01;
   G4double clusteringCoefficient = 5.;
@@ -51,6 +54,7 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
   G4double etaToEtaPrime = 0.3;
   
   // construct and fragment the quasmon
+  G4QCHIPSWorld aWorld(nop);              // Create CHIPS World of nop particles
   G4QNucleus::SetParameters(fractionOfSingleQuasiFreeNucleons,
                             fractionOfPairedQuasiFreeNucleons,
 			    clusteringCoefficient);
@@ -62,8 +66,13 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
 //	 << 1./MeV*proj4Mom<<" "
 //	 << 1./MeV*targ4Mom << " "
 //	 << nop << G4endl;
-  G4Quasmon* pan= new G4Quasmon(projectilePDGCode, targetPDGCode, 1./MeV*proj4Mom, 1./MeV*targ4Mom, nop);
-  G4QHadronVector * output = pan->Fragment();
+  G4QHadronVector projHV;
+  G4QHadron* iH = new G4QHadron(projectilePDGCode, 1./MeV*proj4Mom);
+  projHV.insert(iH);
+  G4QEnvironment* pan= new G4QEnvironment(projHV, targetPDGCode);
+  projHV.clearAndDestroy();
+  //G4Quasmon* pan= new G4Quasmon(projectilePDGCode, targetPDGCode, 1./MeV*proj4Mom, 1./MeV*targ4Mom, nop);
+  G4QHadronVector* output = pan->Fragment();
   delete pan;
   
   // Fill the particle change.

@@ -119,6 +119,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4double targetMass = theNucleus->GetMass();
   targetMass -= hitMass;
   G4double targetEnergy = sqrt(hitMomentum.mag2()+targetMass*targetMass);
+  // !! @@ Target should be at rest: hitMomentum=(0,0,0) @@ !! M.K.
   G4LorentzVector targ4Mom(-1.*hitMomentum, targetEnergy);
   
   // construct the quasmon
@@ -143,7 +144,15 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4cout << "The Target PDG code = "<<targetPDGCode<<G4endl;
   G4cout << "The projectile momentum = "<<1./MeV*proj4Mom<<G4endl;
   G4cout << "The target momentum = "<<1./MeV*targ4Mom<<G4endl;
-  G4Quasmon* pan= new G4Quasmon(theProjectiles, targetPDGCode, 1./MeV*proj4Mom, 1./MeV*targ4Mom, nop);
+  // Necessary change___________________________________________
+  G4QCHIPSWorld aWorld(nop);              // Create CHIPS World of nop particles
+  G4QHadronVector projHV;
+  G4QHadron* iH = new G4QHadron(theProjectiles, 1./MeV*proj4Mom);
+  projHV.insert(iH);
+  G4QEnvironment* pan= new G4QEnvironment(projHV, targetPDGCode);
+  projHV.clearAndDestroy();
+  //G4Quasmon* pan= new G4Quasmon(theProjectiles, targetPDGCode, 1./MeV*proj4Mom, 1./MeV*targ4Mom, nop);
+  // End of necessary change ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   // now call chips with this info in place
   G4QHadronVector * output = 0;
