@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: exampleN03.cc,v 1.4 1999-05-19 09:12:09 stesting Exp $
+// $Id: exampleN03.cc,v 1.5 1999-05-31 12:30:34 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,6 +23,7 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
+#include "G4UIXm.hh"
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
@@ -71,7 +72,11 @@ int main(int argc,char** argv) {
   if (argc==1)   // Define UI session for interactive mode.
     {
       // G4UIterminal is a (dumb) terminal.
-      G4UIsession * session = new G4UIterminal;
+#ifdef G4UI_USE_XM
+      G4UIsession* session = new G4UIXm(argc,argv);
+#else
+      G4UIsession* session = new G4UIterminal;
+#endif
       UI->ApplyCommand("/control/execute prerunN03.mac");    
       session->SessionStart();
       delete session;
