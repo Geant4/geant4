@@ -1,4 +1,4 @@
-$Id: History,v 1.119 2001-10-28 12:00:49 pia Exp $
+$Id: History,v 1.120 2001-10-30 08:39:04 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29.10.2001 - MGP, tag emlowen-V03-02-38
+             Bug fixes in new code
+             Generic unit test for e/photon processes in test/processTest
+             (analysis still to be added)
 
 28.10.2001 - MGP, tag emlowen-V03-02-37
              Fixed compilation warnings on Linux and HP
