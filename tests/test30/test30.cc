@@ -101,6 +101,12 @@ int main(int argc, char** argv)
   G4double theStep   = 0.01*micrometer;
   G4double range     = 1.0*micrometer;
   G4Material* material = 0; 
+
+  // Track 
+  G4ThreeVector aPosition = G4ThreeVector(0.,0.,0.);
+  G4double      aTime     = 0. ;
+  G4ThreeVector aDirection      = G4ThreeVector(0.0,0.0,1.0);
+  G4double nx = 0.0, ny = 0.0, nz = 0.0;
  
 
   G4cout.setf( ios::scientific, ios::floatfield );
@@ -152,6 +158,9 @@ int main(int argc, char** argv)
   G4cout << "#generator" << G4endl;
   G4cout << "#paw" << G4endl;
   G4cout << "#verbose" << G4endl;
+  G4cout << "#position(mm)" << G4endl;
+  G4cout << "#direction" << G4endl;
+  G4cout << "#time(ns)" << G4endl;
   G4cout << "#run" << G4endl;
   G4cout << "#exit" << G4endl;
 
@@ -191,6 +200,18 @@ int main(int argc, char** argv)
         break;
       } else if(line == "#verbose") {
         (*fin) >> verbose;
+      } else if(line == "#position(mm)") {
+        (*fin) >> nx >> ny >> nz;
+        aPosition = G4ThreeVector(nx*mm, ny*mm, nz*mm);
+      } else if(line == "#direction") {
+        (*fin) >> nx >> ny >> nz;
+        if(nx*nx + ny*ny + nz*nz > 0.0) {
+          aDirection = G4ThreeVector(nx, ny, nz);
+          aDirection = aDirection.unit();
+	}
+      } else if(line == "#time(ns)") {
+        (*fin) >> aTime;
+        aTime *= ns;
       } else if(line == "#exit") {
         end = false;
         break;
@@ -230,14 +251,17 @@ int main(int argc, char** argv)
 	     exit(1);
     }
 		
-    G4cout << "The particle: " << part->GetParticleName() << G4endl;
-    G4cout << "The material: " << material->GetName() << G4endl;
-    G4cout << "The step:     " << theStep/mm << " mm" << G4endl;
+    G4cout << "The particle:  " << part->GetParticleName() << G4endl;
+    G4cout << "The material:  " << material->GetName() << G4endl;
+    G4cout << "The step:      " << theStep/mm << " mm" << G4endl;
+    G4cout << "The position:  " << aPosition/mm << " mm" << G4endl;
+    G4cout << "The direction: " << aDirection << G4endl;
+    G4cout << "The time:      " << aTime/ns << " ns" << G4endl;
  
 
     // -------------------------------------------------------------------
     // ---- HBOOK initialization
-    HepHistogram* h[23];
+    HepHistogram* h[24];
     G4double mass = part->GetPDGMass();
     G4double pmax = sqrt(energy*(energy + 2.0*mass));
 		
@@ -274,6 +298,8 @@ int main(int argc, char** argv)
       
       h[21]=hbookManager->histogram("E(MeV) protons",nbins,0.,energy);
       h[22]=hbookManager->histogram("E(MeV) neutrons",nbins,0.,energy);
+
+      h[23]=hbookManager->histogram("Phi(degrees) of neutrons",90,-180.0,180.0);
       	
       G4cout << "Histograms is initialised nbins=" << nbins
              << "  h[21]= " << h[21] 
@@ -281,8 +307,7 @@ int main(int argc, char** argv)
     }		
     // Create a DynamicParticle  
   
-    G4ParticleMomentum gDir(0.0,0.0,1.0);
-    G4DynamicParticle dParticle(part,gDir,energy);
+    G4DynamicParticle dParticle(part,aDirection,energy);
 
     G4double cross_sec = (G4HadronCrossSections::Instance())->
       GetInelasticCrossSection(&dParticle, material->GetElement(0));
@@ -290,9 +315,6 @@ int main(int argc, char** argv)
     G4cout << "### factor= " << factor 
            << "  cross(b)= " << cross_sec/barn << G4endl;
 
-    // Track 
-    G4ThreeVector aPosition(0.,0.,0.);
-    G4double aTime = 0. ;
 
     G4Track* gTrack;
     gTrack = new G4Track(&dParticle,aTime,aPosition);
@@ -312,10 +334,19 @@ int main(int argc, char** argv)
     step->SetPreStepPoint(aPoint);
 
     bPoint = aPoint;
-    G4ThreeVector bPosition(0.,0.,theStep);
+    G4ThreeVector bPosition = aDirection*theStep;
+    bPosition += aPosition;
     bPoint->SetPosition(bPosition);
     step->SetPostStepPoint(bPoint);
     step->SetStepLength(theStep);
+
+    G4RotationMatrix* rot  = new G4RotationMatrix();
+    G4double phi0 = aDirection.phi();
+    G4double theta0 = aDirection.theta();
+    rot->rotateZ(-phi0);
+    rot->rotateY(-theta0);
+
+    G4cout << "Test rotation= " << (*rot)*(aDirection) << G4endl;
 
     G4Timer* timer = new G4Timer();
     timer->Start();
@@ -370,14 +401,17 @@ int main(int argc, char** argv)
         m  = pd->GetPDGMass();
         fm = G4LorentzVector(mom, e + m);
         labv -= fm;
+        mom = (*rot)*mom;
         px = mom.x();
         py = mom.y();
         pz = mom.z();
         p  = sqrt(px*px +py*py + pz*pz);
         pt = sqrt(px*px +py*py);
 				
-	if(usepaw && e > 0.0 && pt > 0.0) h[2]->accumulate(mom.phi()/degree,1.0);
-					
+	if(usepaw && e > 0.0 && pt > 0.0) {
+          h[2]->accumulate(mom.phi()/degree,1.0);
+          if(pd == neutron) h[23]->accumulate(mom.phi()/degree,1.0);
+	}				
 	de += e;
         if(verbose || abs(mom.phi()/degree - 90.) < 0.01) {
           G4cout << i << "-th secondary  " 
