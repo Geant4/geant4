@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.21 2005-01-27 20:04:38 johna Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.22 2005-02-23 11:08:00 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -736,9 +736,15 @@ void G4HepRepFileSceneHandler::CheckFileOpen() {
 
 void G4HepRepFileSceneHandler::ClearTransientStore () {
   G4VSceneHandler::ClearTransientStore ();
+  /*
+  ClearTransientStore should restrict itself to its job.  In other
+  places, a draw command follows, so it is not needed here.  In fact
+  it can cause a double recursive descent into DrawView, so the following
+  has been commented out (JA - 23/Jan/05).
   if (fpViewer) {
     fpViewer -> SetView ();
     fpViewer -> ClearView ();
     fpViewer -> DrawView ();
   }
+  */
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1SceneHandlerFunc.icc,v 1.13 2005-01-27 20:05:46 johna Exp $
+// $Id: G4VRML1SceneHandlerFunc.icc,v 1.14 2005-02-23 11:08:00 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML1SceneHandlerFunc.icc
@@ -655,6 +655,11 @@ G4double  G4VRML1SCENEHANDLER::GetMarkerHalfSize ( const G4VMarker& mark )
 void G4VRML1SCENEHANDLER::ClearTransientStore() 
 {
   G4VSceneHandler::ClearTransientStore ();
+  /*
+  ClearTransientStore should restrict itself to its job.  In other
+  places, a draw command follows, so it is not needed here.  In fact
+  it can cause a double recursive descent into DrawView, so the following
+  has been commented out (JA - 23/Jan/05).
   // This is typically called after an update and before drawing hits
   // of the next event.  To simulate the clearing of "transients"
   // (hits, etc.) the detector is redrawn...
@@ -663,6 +668,7 @@ void G4VRML1SCENEHANDLER::ClearTransientStore()
     fpViewer -> ClearView ();
     fpViewer -> DrawView ();
   }
+  */
 }
 
 
